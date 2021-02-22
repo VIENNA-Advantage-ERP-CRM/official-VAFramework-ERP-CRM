@@ -61,7 +61,7 @@ namespace VAdvantage.Model
         /// <param name="parent">Request Mail Text</param>
         /// <param name="VAF_UserContact_ID">recipient user</param>
         /// <param name="mail">email</param>
-        public MVAFUserMailLog(MMailText parent, int VAF_UserContact_ID, EMail mail)
+        public MVAFUserMailLog(MVARMailTemplate parent, int VAF_UserContact_ID, EMail mail)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
 
@@ -80,30 +80,8 @@ namespace VAdvantage.Model
             }
         }
 
-        /// <summary>
-        /// Parent Constructor
-        /// </summary>
-        /// <param name="parent">Mail message</param>
-        /// <param name="VAF_UserContact_ID">recipient user</param>
-        /// <param name="mail"> email</param>
-        public MVAFUserMailLog(MMailMsg parent, int VAF_UserContact_ID, EMail mail)
-            : this(parent.GetCtx(), 0, parent.Get_TrxName())
-        {
-
-            SetClientOrg(parent);
-            SetVAF_UserContact_ID(VAF_UserContact_ID);
-            SetW_MailMsg_ID(parent.GetW_MailMsg_ID());
-            //
-            if (mail.IsSentOK())
-            {
-                SetMessageID(mail.GetMessageID());
-            }
-            else
-            {
-                SetMessageID(mail.GetSentMsg());
-                SetIsDelivered(ISDELIVERED_No);
-            }
-        }
+       
+       
 
         /// <summary>
         /// New User Mail (no trx)

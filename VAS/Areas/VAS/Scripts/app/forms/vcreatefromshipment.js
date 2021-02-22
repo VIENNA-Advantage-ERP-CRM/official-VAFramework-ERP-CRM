@@ -254,7 +254,7 @@
         }
 
         var isBaseLangs = "";
-        var mProductID = "";
+        var MVAMProductID = "";
         if (VIS.Env.isBaseLanguage(ctx, "VAB_UOM")) {
 
             isBaseLangs = "FROM VAB_UOM uom INNER JOIN VAB_InvoiceLine l ON (l.VAB_UOM_ID=uom.VAB_UOM_ID) ";
@@ -264,7 +264,7 @@
                + VIS.Env.getVAF_Language(ctx) + "') ";
         }
         if (VAM_Product_ID != null) {
-            mProductID = " AND l.VAM_Product_ID = " + VAM_Product_ID;
+            MVAMProductID = " AND l.VAM_Product_ID = " + VAM_Product_ID;
         }
 
         if (!pNo) {
@@ -283,7 +283,7 @@
 
                 isBaseLangss: isBaseLangs,
                 cInvoiceID: VAB_Invoice_ID,
-                mProductIDs: mProductID
+                MVAMProductIDs: MVAMProductID
             },
             error: function (e) {
                 alert(VIS.Msg.getMsg('ErrorWhileGettingData'));

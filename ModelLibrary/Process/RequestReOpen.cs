@@ -60,7 +60,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	/// <returns>message</returns>
 	protected override String DoIt()
 	{
-		MRequest request = new MRequest (GetCtx(), _VAR_Request_ID, Get_TrxName());
+		MVARRequest request = new MVARRequest (GetCtx(), _VAR_Request_ID, Get_TrxName());
 		log.Info(request.ToString());
         if (request.Get_ID() == 0)
         {

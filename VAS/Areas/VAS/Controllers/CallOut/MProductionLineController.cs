@@ -10,7 +10,7 @@ using VIS.Models;
 
 namespace VIS.Controllers
 {
-    public class MProductionLineController : Controller
+    public class MVAMProductionLineController : Controller
     {
         public ActionResult Index()
         {
@@ -20,7 +20,7 @@ namespace VIS.Controllers
         public JsonResult GetChargeAmt(string fields)
         {
             Ctx ct = Session["ctx"] as Ctx;
-            MProductionLineModel productionLine = new MProductionLineModel();
+            MVAMProductionLineModel productionLine = new MVAMProductionLineModel();
             return Json(JsonConvert.SerializeObject(productionLine.GetChargeAmount(fields)), JsonRequestBehavior.AllowGet);
         }
 
@@ -32,7 +32,7 @@ namespace VIS.Controllers
         public JsonResult GetAttributeSetInstance(string fields)
         {
             Ctx ct = Session["ctx"] as Ctx;
-            MProductionLineModel productionLine = new MProductionLineModel();
+            MVAMProductionLineModel productionLine = new MVAMProductionLineModel();
             return Json(JsonConvert.SerializeObject(productionLine.GetAttributeSetInstance(ct, fields)), JsonRequestBehavior.AllowGet);
         }
 
@@ -44,7 +44,7 @@ namespace VIS.Controllers
         public JsonResult GetBOM(string fields)
         {
             Ctx ct = Session["ctx"] as Ctx;
-            MProductionLineModel productionLine = new MProductionLineModel();
+            MVAMProductionLineModel productionLine = new MVAMProductionLineModel();
             return Json(JsonConvert.SerializeObject(productionLine.GetBOM(ct, fields)), JsonRequestBehavior.AllowGet);
         }
     }

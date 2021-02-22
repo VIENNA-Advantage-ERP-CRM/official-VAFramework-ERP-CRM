@@ -45,19 +45,19 @@ namespace VIS.Controllers
         /// <param name="forInvoicees"></param>
         /// <param name="C_Ord_IDs"></param>
         /// <param name="isBaseLangess"></param>
-        /// <param name="MProductIDss"></param>
+        /// <param name="MVAMProductIDss"></param>
         /// <param name="DelivDates"></param>
         /// <param name="adOrgIDSs"></param>
         /// <returns></returns>
-        public JsonResult GetOrdersDataCommon(string keyColumnName, string tableName, int recordID, int pageNo, bool forInvoicees, int C_Ord_IDs, string isBaseLangess, string MProductIDss, string DelivDates, int adOrgIDSs)
+        public JsonResult GetOrdersDataCommon(string keyColumnName, string tableName, int recordID, int pageNo, bool forInvoicees, int C_Ord_IDs, string isBaseLangess, string MVAMProductIDss, string DelivDates, int adOrgIDSs)
         {
             var ctx = Session["ctx"] as Ctx;
             CommonModel obj = new CommonModel();
-            string sql = VcreateFormSqlQry(forInvoicees, C_Ord_IDs, isBaseLangess, MProductIDss, DelivDates, adOrgIDSs);
+            string sql = VcreateFormSqlQry(forInvoicees, C_Ord_IDs, isBaseLangess, MVAMProductIDss, DelivDates, adOrgIDSs);
             var stValue = obj.GetData(sql, keyColumnName, tableName, recordID, pageNo, ctx);
             return Json(JsonConvert.SerializeObject(stValue), JsonRequestBehavior.AllowGet);
         }
-        private string VcreateFormSqlQry(bool forInvoicees, int C_Ord_IDs, string isBaseLangess, string MProductIDss, string DelivDates, int adOrgIDSs)
+        private string VcreateFormSqlQry(bool forInvoicees, int C_Ord_IDs, string isBaseLangess, string MVAMProductIDss, string DelivDates, int adOrgIDSs)
         {
             var sql = "SELECT "
                         + "(l.QtyOrdered-SUM(COALESCE(m.Qty,0))) * "
@@ -91,9 +91,9 @@ namespace VIS.Controllers
             sql += " LEFT OUTER JOIN VAM_PFeature_SetInstance ins ON (ins.VAM_PFeature_SetInstance_ID =l.VAM_PFeature_SetInstance_ID) "
              + " WHERE l.VAB_Order_ID=" + C_Ord_IDs;
 
-            if (MProductIDss != "")
+            if (MVAMProductIDss != "")
             {
-                sql += " " + MProductIDss;
+                sql += " " + MVAMProductIDss;
             }
             if (DelivDates != "")
             {
@@ -120,14 +120,14 @@ namespace VIS.Controllers
         /// <param name="forInvoicees">true if open from Invoice window</param>
         /// <param name="C_Ord_IDs">Order ID</param>
         /// <param name="isBaseLangess">true if Base Language</param>
-        /// <param name="MProductIDss">Order ID</param>
+        /// <param name="MVAMProductIDss">Order ID</param>
         /// <param name="DelivDates">Delivery Date</param>
         /// <returns>Data in Json Format</returns>
-        public JsonResult GetOrdersDataCommonOrg(string keyColumnName, string tableName, int recordID, int pageNo, bool forInvoicees, int? C_Ord_IDs, string isBaseLangess, string MProductIDss, string DelivDates)
+        public JsonResult GetOrdersDataCommonOrg(string keyColumnName, string tableName, int recordID, int pageNo, bool forInvoicees, int? C_Ord_IDs, string isBaseLangess, string MVAMProductIDss, string DelivDates)
         {
             var ctx = Session["ctx"] as Ctx;
             CommonModel obj = new CommonModel();
-            string sql = VcreateFormSqlQryOrg(forInvoicees, C_Ord_IDs, isBaseLangess, MProductIDss, DelivDates);
+            string sql = VcreateFormSqlQryOrg(forInvoicees, C_Ord_IDs, isBaseLangess, MVAMProductIDss, DelivDates);
             var stValue = obj.GetData(sql, keyColumnName, tableName, recordID, pageNo, ctx);
             return Json(JsonConvert.SerializeObject(stValue), JsonRequestBehavior.AllowGet);
         }
@@ -138,10 +138,10 @@ namespace VIS.Controllers
         /// <param name="forInvoicees">true if open from Invoice window</param>
         /// <param name="C_Ord_IDs">Order ID</param>
         /// <param name="isBaseLangess">true if Base Language</param>
-        /// <param name="MProductIDss">Product ID</param>
+        /// <param name="MVAMProductIDss">Product ID</param>
         /// <param name="DelivDates">Delivery Date</param>
         /// <returns>String, Query</returns>
-        private string VcreateFormSqlQryOrg(bool forInvoicees, int? C_Ord_IDs, string isBaseLangess, string MProductIDss, string DelivDates)
+        private string VcreateFormSqlQryOrg(bool forInvoicees, int? C_Ord_IDs, string isBaseLangess, string MVAMProductIDss, string DelivDates)
         {
             var ctx = Session["ctx"] as Ctx;
             bool isAllownonItem = Util.GetValueOfString(ctx.GetContext("$AllowNonItem")).Equals("Y");
@@ -201,9 +201,9 @@ namespace VIS.Controllers
                 sql.Append(" AND p.ProductType='I' ");
             }
 
-            if (MProductIDss != "")
+            if (MVAMProductIDss != "")
             {
-                sql.Append(MProductIDss);
+                sql.Append(MVAMProductIDss);
             }
             if (DelivDates != "")
             {
@@ -432,13 +432,13 @@ namespace VIS.Controllers
         /// <param name="pageNo"></param>
         /// <param name="MVAMInvInOutId"></param>
         /// <param name="isBaseLanguages"></param>
-        /// <param name="mProductIDD"></param>
+        /// <param name="MVAMProductIDD"></param>
         /// <returns></returns>
-        public JsonResult GetDataVCreateFrom(string keyColumnName, string tableName, int recordID, int pageNo, string MVAMInvInOutId, string isBaseLanguages, string mProductIDD)
+        public JsonResult GetDataVCreateFrom(string keyColumnName, string tableName, int recordID, int pageNo, string MVAMInvInOutId, string isBaseLanguages, string MVAMProductIDD)
         {
             var ctx = Session["ctx"] as Ctx;
             CommonModel obj = new CommonModel();
-            var sql = GetDataSqlQueries(MVAMInvInOutId, isBaseLanguages, mProductIDD);
+            var sql = GetDataSqlQueries(MVAMInvInOutId, isBaseLanguages, MVAMProductIDD);
             var stValue = obj.GetData(sql, keyColumnName, tableName, recordID, pageNo, ctx);
             return Json(JsonConvert.SerializeObject(stValue), JsonRequestBehavior.AllowGet);
         }
@@ -447,9 +447,9 @@ namespace VIS.Controllers
         /// </summary>
         /// <param name="MVAMInvInOutId"></param>
         /// <param name="isBaseLanguages"></param>
-        /// <param name="mProductIDD"></param>
+        /// <param name="MVAMProductIDD"></param>
         /// <returns></returns>
-        private string GetDataSqlQueries(string MVAMInvInOutId, string isBaseLanguages, string mProductIDD)
+        private string GetDataSqlQueries(string MVAMInvInOutId, string isBaseLanguages, string MVAMProductIDD)
         {
             var ctx = Session["ctx"] as Ctx;
             bool isAllownonItem = Util.GetValueOfString(ctx.GetContext("$AllowNonItem")).Equals("Y");
@@ -491,9 +491,9 @@ namespace VIS.Controllers
                 + "WHERE i.DocStatus NOT IN ('VO','RE')) mi ON (l.VAM_Inv_InOutLine_ID=mi.VAM_Inv_InOutLine_ID) "
                 + "LEFT OUTER JOIN VAM_PFeature_SetInstance ins ON (ins.VAM_PFeature_SetInstance_ID =l.VAM_PFeature_SetInstance_ID) "
                 + "WHERE l.VAM_Inv_InOut_ID=" + MVAMInvInOutId; // #1
-            if (mProductIDD != "")
+            if (MVAMProductIDD != "")
             {
-                sql += mProductIDD + " ";
+                sql += MVAMProductIDD + " ";
             }
             sql += " GROUP BY l.MovementQty, l.QtyEntered," + "l.VAB_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name),"
                 + "l.VAM_Product_ID,p.Name,p.Value, l.VAM_Inv_InOutLine_ID,l.Line,l.VAB_OrderLine_ID,l.VAM_PFeature_SetInstance_ID,ins.description , o.VAB_PaymentTerm_ID , pt.Name ";
@@ -539,9 +539,9 @@ namespace VIS.Controllers
                     + "WHERE i.DocStatus NOT IN ('VO','RE')) mi ON (l.VAM_Inv_InOutLine_ID=mi.VAM_Inv_InOutLine_ID) "
                     + "LEFT OUTER JOIN VAM_PFeature_SetInstance ins ON (ins.VAM_PFeature_SetInstance_ID =l.VAM_PFeature_SetInstance_ID) "
                     + "WHERE l.VAM_Inv_InOut_ID=" + MVAMInvInOutId; // #1
-                if (mProductIDD != "")
+                if (MVAMProductIDD != "")
                 {
-                    sql += mProductIDD + " ";
+                    sql += MVAMProductIDD + " ";
                 }
                 sql += " GROUP BY l.MovementQty, l.QtyEntered," + "l.VAB_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name),"
                     + "l.VAM_Product_ID,c.Name,c.Value, l.VAM_Inv_InOutLine_ID,l.Line,l.VAB_OrderLine_ID,l.VAM_PFeature_SetInstance_ID,ins.description , o.VAB_PaymentTerm_ID , pt.Name ";
@@ -600,13 +600,13 @@ namespace VIS.Controllers
         /// <param name="pageNo"></param>
         /// <param name="isBaseLangss"></param>
         /// <param name="cInvoiceID"></param>
-        /// <param name="mProductIDs"></param>
+        /// <param name="MVAMProductIDs"></param>
         /// <returns></returns>
-        public JsonResult GetInvoicesDataVCreate(string keyColumnName, string tableName, int recordID, int pageNo, string isBaseLangss, int cInvoiceID, string mProductIDs)
+        public JsonResult GetInvoicesDataVCreate(string keyColumnName, string tableName, int recordID, int pageNo, string isBaseLangss, int cInvoiceID, string MVAMProductIDs)
         {
             var ctx = Session["ctx"] as Ctx;
             CommonModel obj = new CommonModel();
-            string sql = getSQlforGetInvoicesData(isBaseLangss, cInvoiceID, mProductIDs);
+            string sql = getSQlforGetInvoicesData(isBaseLangss, cInvoiceID, MVAMProductIDs);
             var stValue = obj.GetData(sql, keyColumnName, tableName, recordID, pageNo, ctx);
             return Json(JsonConvert.SerializeObject(stValue), JsonRequestBehavior.AllowGet);
         }
@@ -615,9 +615,9 @@ namespace VIS.Controllers
         /// </summary>
         /// <param name="isBaseLangss"></param>
         /// <param name="cInvoiceID"></param>
-        /// <param name="mProductIDs"></param>
+        /// <param name="MVAMProductIDs"></param>
         /// <returns></returns>
-        private string getSQlforGetInvoicesData(string isBaseLangss, int cInvoiceID, string mProductIDs)
+        private string getSQlforGetInvoicesData(string isBaseLangss, int cInvoiceID, string MVAMProductIDs)
         {
             #region[Commented By Sukhwinder on 17-Nov-2017 and updated the query below to prevent displaying product with "Cost adjustment on loss" with already MR.]
             //string sql = "SELECT "
@@ -644,9 +644,9 @@ namespace VIS.Controllers
             //    + "LEFT OUTER JOIN VAM_MatchInvoice mi ON (l.VAB_InvoiceLine_ID=mi.VAB_InvoiceLine_ID) "
             //    + "LEFT OUTER JOIN VAM_PFeature_SetInstance ins ON (ins.VAM_PFeature_SetInstance_ID =l.VAM_PFeature_SetInstance_ID) "
             //    + "WHERE l.VAB_Invoice_ID=" + cInvoiceID;
-            //if (mProductIDs != "")
+            //if (MVAMProductIDs != "")
             //{
-            //    sql += " " + mProductIDs + " ";
+            //    sql += " " + MVAMProductIDs + " ";
             //}
             //sql += " GROUP BY l.QtyInvoiced,l.QtyEntered, l.VAB_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name),"
             //    + "l.VAM_Product_ID,p.Name, l.VAB_InvoiceLine_ID,l.Line,l.VAB_OrderLine_ID,l.VAM_PFeature_SetInstance_ID,ins.description "
@@ -718,9 +718,9 @@ namespace VIS.Controllers
              + " LEFT OUTER JOIN VAM_PFeature_SetInstance ins ON (ins.VAM_PFeature_SetInstance_ID =l.VAM_PFeature_SetInstance_ID) "
              + " WHERE l.VAB_Invoice_ID=" + cInvoiceID + " AND l.VAM_Product_ID>0");
 
-            if (mProductIDs != "")
+            if (MVAMProductIDs != "")
             {
-                sql.Append(mProductIDs);
+                sql.Append(MVAMProductIDs);
             }
             sql.Append(" GROUP BY l.QtyInvoiced,l.QtyEntered, l.VAB_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name),"
                 + " l.VAM_Product_ID,p.Name, p.Value, l.VAB_InvoiceLine_ID,l.Line,l.VAB_OrderLine_ID,l.VAM_PFeature_SetInstance_ID,ins.description, "

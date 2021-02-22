@@ -661,8 +661,8 @@ namespace VAdvantage.Model
             if (Env.HasModulePrefix("DTD001_", out mInfo))
             {
                 MVAMInvTrfLine movementLine = null;
-                MRequisitionLine requisitionLine = null;
-                MStorage storage = null;
+                MVAMRequisitionLine requisitionLine = null;
+                MVAMStorage storage = null;
                 for (int i = 0; i < lines.Length; i++)
                 {
                     MVAMInvTrfLineConfirm confirm = lines[i];
@@ -671,7 +671,7 @@ namespace VAdvantage.Model
                         movementLine = new MVAMInvTrfLine(GetCtx(), confirm.GetVAM_InvTrf_Line_ID(), Get_Trx());
                         if (movementLine.GetVAM_RequisitionLine_ID() > 0)
                         {
-                            requisitionLine = new MRequisitionLine(GetCtx(), movementLine.GetVAM_RequisitionLine_ID(), Get_Trx());
+                            requisitionLine = new MVAMRequisitionLine(GetCtx(), movementLine.GetVAM_RequisitionLine_ID(), Get_Trx());
                             requisitionLine.SetDTD001_ReservedQty(decimal.Subtract(requisitionLine.GetDTD001_ReservedQty(), confirm.GetDifferenceQty()));
                             if (!requisitionLine.Save(Get_Trx()))
                             {
@@ -679,10 +679,10 @@ namespace VAdvantage.Model
                                 // _processMsg = "Requisitionline not updated";
                                 return DocActionVariables.STATUS_INVALID;
                             }
-                            storage = MStorage.Get(GetCtx(), movementLine.GetVAM_Locator_ID(), movementLine.GetVAM_Product_ID(), movementLine.GetVAM_PFeature_SetInstance_ID(), Get_Trx());
+                            storage = MVAMStorage.Get(GetCtx(), movementLine.GetVAM_Locator_ID(), movementLine.GetVAM_Product_ID(), movementLine.GetVAM_PFeature_SetInstance_ID(), Get_Trx());
                             if (storage == null)
                             {
-                                storage = MStorage.Get(GetCtx(), movementLine.GetVAM_Locator_ID(), movementLine.GetVAM_Product_ID(), 0, Get_Trx());
+                                storage = MVAMStorage.Get(GetCtx(), movementLine.GetVAM_Locator_ID(), movementLine.GetVAM_Product_ID(), 0, Get_Trx());
                             }
                             storage.SetQtyReserved(decimal.Subtract(storage.GetQtyReserved(), confirm.GetDifferenceQty()));
                             if (!storage.Save(Get_Trx()))
@@ -1093,7 +1093,7 @@ namespace VAdvantage.Model
         /// <returns>VAB_Currency_ID</returns>
         public int GetVAB_Currency_ID()
         {
-            //	MPriceList pl = MPriceList.Get(GetCtx(), GetVAM_PriceList_ID());
+            //	MVAMPriceList pl = MVAMPriceList.Get(GetCtx(), GetVAM_PriceList_ID());
             //	return pl.GetVAB_Currency_ID();
             return 0;
         }

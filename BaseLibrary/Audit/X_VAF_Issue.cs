@@ -25,7 +25,7 @@ SetIssueSummary (null);
 SetName (null);	// .
 SetProcessed (false);	// N
 SetReleaseNo (null);	// .
-SetSystemStatus (null);	// E
+SetSysteMVARReqStatus (null);	// E
 SetUserName (null);	// .
 SetVersion (null);	// .
 }
@@ -40,7 +40,7 @@ SetIssueSummary (null);
 SetName (null);	// .
 SetProcessed (false);	// N
 SetReleaseNo (null);	// .
-SetSystemStatus (null);	// E
+SetSysteMVARReqStatus (null);	// E
 SetUserName (null);	// .
 SetVersion (null);	// .
 }
@@ -842,40 +842,40 @@ public String GetSupportEMail()
 return (String)Get_Value("SupportEMail");
 }
 
-/** SystemStatus VAF_Control_Ref_ID=374 */
-public static int SYSTEMSTATUS_VAF_Control_Ref_ID=374;
+/** SysteMVARReqStatus VAF_Control_Ref_ID=374 */
+public static int SYSTEMVARReqStatus_VAF_Control_Ref_ID=374;
 /** Evaluation = E */
-public static String SYSTEMSTATUS_Evaluation = "E";
+public static String SYSTEMVARReqStatus_Evaluation = "E";
 /** Implementation = I */
-public static String SYSTEMSTATUS_Implementation = "I";
+public static String SYSTEMVARReqStatus_Implementation = "I";
 /** Production = P */
-public static String SYSTEMSTATUS_Production = "P";
+public static String SYSTEMVARReqStatus_Production = "P";
 /** Is test a valid value.
 @param test testvalue
 @returns true if valid **/
-public bool IsSystemStatusValid (String test)
+public bool IsSysteMVARReqStatusValid (String test)
 {
 return test.Equals("E") || test.Equals("I") || test.Equals("P");
 }
 /** Set System Status.
-@param SystemStatus Status of the system - Support priority depends on system status */
-public void SetSystemStatus (String SystemStatus)
+@param SysteMVARReqStatus Status of the system - Support priority depends on system status */
+public void SetSysteMVARReqStatus (String SysteMVARReqStatus)
 {
-if (SystemStatus == null) throw new ArgumentException ("SystemStatus is mandatory");
-if (!IsSystemStatusValid(SystemStatus))
-throw new ArgumentException ("SystemStatus Invalid value - " + SystemStatus + " - Reference_ID=374 - E - I - P");
-if (SystemStatus.Length > 1)
+if (SysteMVARReqStatus == null) throw new ArgumentException ("SysteMVARReqStatus is mandatory");
+if (!IsSysteMVARReqStatusValid(SysteMVARReqStatus))
+throw new ArgumentException ("SysteMVARReqStatus Invalid value - " + SysteMVARReqStatus + " - Reference_ID=374 - E - I - P");
+if (SysteMVARReqStatus.Length > 1)
 {
 log.Warning("Length > 1 - truncated");
-SystemStatus = SystemStatus.Substring(0,1);
+SysteMVARReqStatus = SysteMVARReqStatus.Substring(0,1);
 }
-Set_Value ("SystemStatus", SystemStatus);
+Set_Value ("SysteMVARReqStatus", SysteMVARReqStatus);
 }
 /** Get System Status.
 @return Status of the system - Support priority depends on system status */
-public String GetSystemStatus() 
+public String GetSysteMVARReqStatus() 
 {
-return (String)Get_Value("SystemStatus");
+return (String)Get_Value("SysteMVARReqStatus");
 }
 /** Set Registered EMail.
 @param UserName Email of the responsible for the System */

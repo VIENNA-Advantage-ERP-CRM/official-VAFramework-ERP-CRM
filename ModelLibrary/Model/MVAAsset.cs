@@ -32,7 +32,7 @@ namespace VAdvantage.Model
         //	Logger							
         private static VLogger _log = VLogger.GetVLogger(typeof(MVAAsset).FullName);
         //	Product Info					
-        private MProduct _product = null;
+        private MVAMProduct _product = null;
         #endregion
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace VAdvantage.Model
                 _log.Warning("Cannot create Trial - No Entity Type");
                 return null;
             }
-            MProduct product = MProduct.GetTrial(ctx, entityType);
+            MVAMProduct product = MVAMProduct.GetTrial(ctx, entityType);
             if (product == null)
             {
                 _log.Warning("No Trial for Entity Type=" + entityType);
@@ -107,7 +107,7 @@ namespace VAdvantage.Model
             if (value.Length > 40 - documentNo.Length)
                 value = value.Substring(0, 40 - documentNo.Length) + documentNo;
             asset.SetValue(value);
-            //	Name		MProduct.afterSave
+            //	Name		MVAMProduct.afterSave
             String name = "Trial " + partner.GetName() + " - " + product.GetName();
             if (name.Length > 60)
             {
@@ -207,7 +207,7 @@ namespace VAdvantage.Model
             SetAssetServiceDate(shipment.GetDateAcct());
 
             //	Line
-            MProduct product = shipLine.GetProduct();
+            MVAMProduct product = shipLine.GetProduct();
             SetVAM_Product_ID(product.GetVAM_Product_ID());
             SetVAA_AssetGroup_ID(product.GetVAA_AssetGroup_ID());
 
@@ -278,7 +278,7 @@ namespace VAdvantage.Model
         */
         public void SetValueNameDescription(MVAMInvInOut shipment, MVAMInvInOutLine line, int deliveryCount)
         {
-            MProduct product = line.GetProduct();
+            MVAMProduct product = line.GetProduct();
             MVABBusinessPartner partner = shipment.GetBPartner();
             SetValueNameDescription(shipment, deliveryCount, product, partner);
         }
@@ -291,7 +291,7 @@ namespace VAdvantage.Model
         *	@param partner partner
         */
         public void SetValueNameDescription(MVAMInvInOut shipment,
-            int deliveryCount, MProduct product, MVABBusinessPartner partner)
+            int deliveryCount, MVAMProduct product, MVABBusinessPartner partner)
         {
             String documentNo = "_" + shipment.GetDocumentNo();
             if (deliveryCount > 1)
@@ -304,7 +304,7 @@ namespace VAdvantage.Model
             // SetValue(value);
 
             // Change to set only name of product as value in Asset 
-            //	Name		MProduct.afterSave
+            //	Name		MVAMProduct.afterSave
             // String name = partner.GetName() + " - " + product.GetName();
 
             String name = product.GetName();
@@ -357,7 +357,7 @@ namespace VAdvantage.Model
 
 
             //	Line
-            MProduct product = invoiceline.GetProduct();
+            MVAMProduct product = invoiceline.GetProduct();
             SetVAM_Product_ID(product.GetVAM_Product_ID());
             SetVAA_AssetGroup_ID(product.GetVAA_AssetGroup_ID());
 
@@ -428,7 +428,7 @@ namespace VAdvantage.Model
         */
         public void SetValueNameDescription(MVABInvoice invoice, MVABInvoiceLine line, int deliveryCount)
         {
-            MProduct product = line.GetProduct();
+            MVAMProduct product = line.GetProduct();
             MVABBusinessPartner partner = new MVABBusinessPartner(GetCtx(), invoice.GetVAB_BusinessPartner_ID(), null);
             SetValueNameDescription(invoice, deliveryCount, product, partner);
         }
@@ -441,7 +441,7 @@ namespace VAdvantage.Model
         *	@param partner partner
         */
         public void SetValueNameDescription(MVABInvoice invoice,
-            int deliveryCount, MProduct product, MVABBusinessPartner partner)
+            int deliveryCount, MVAMProduct product, MVABBusinessPartner partner)
         {
             String documentNo = "_" + invoice.GetDocumentNo();
             if (deliveryCount > 1)
@@ -454,7 +454,7 @@ namespace VAdvantage.Model
             // SetValue(value);
 
             // Change to set only name of product as value in Asset 
-            //	Name		MProduct.afterSave
+            //	Name		MVAMProduct.afterSave
             // String name = partner.GetName() + " - " + product.GetName();
 
             String name = product.GetName();
@@ -633,17 +633,17 @@ namespace VAdvantage.Model
          * 	Get Product Info
          * 	@return product
          */
-        private MProduct GetProduct()
+        private MVAMProduct GetProduct()
         {
             if (_product == null)
-                _product = MProduct.Get(GetCtx(), GetVAM_Product_ID());
+                _product = MVAMProduct.Get(GetCtx(), GetVAM_Product_ID());
             return _product;
         }
 
         /* 	Get Active Addl. Product Downloads
         *	@return array of downloads
         */
-        public MProductDownload[] GetProductDownloads()
+        public MVAMProductDownload[] GetProductDownloads()
         {
             if (_product == null)
                 GetProduct();
@@ -658,7 +658,7 @@ namespace VAdvantage.Model
          */
         public String[] GetDownloadNames()
         {
-            MProductDownload[] dls = GetProductDownloads();
+            MVAMProductDownload[] dls = GetProductDownloads();
             if (dls != null && dls.Length > 0)
             {
                 String[] retValue = new String[dls.Length];
@@ -676,7 +676,7 @@ namespace VAdvantage.Model
          */
         public String[] GetDownloadURLs()
         {
-            MProductDownload[] dls = GetProductDownloads();
+            MVAMProductDownload[] dls = GetProductDownloads();
             if (dls != null && dls.Length > 0)
             {
                 String[] retValue = new String[dls.Length];
@@ -723,7 +723,7 @@ namespace VAdvantage.Model
             if (newRecord && astGrp.Get_ColumnIndex("VAM_CtlSerialNo_ID") > 0)
             {
                 string name = "";
-                MSerNoCtl ctl = new MSerNoCtl(GetCtx(), astGrp.GetVAM_CtlSerialNo_ID(), Get_TrxName());
+                MVAMCtlSerialNo ctl = new MVAMCtlSerialNo(GetCtx(), astGrp.GetVAM_CtlSerialNo_ID(), Get_TrxName());
 
                 // if Organization level check box is true on Serila No Control, then Get Current next from Serila No tab.
                 if (ctl.Get_ColumnIndex("IsOrgLevelSequence") >= 0)
@@ -889,10 +889,10 @@ namespace VAdvantage.Model
             //                        for (int k = 0; k < _dsAsset.Tables[0].Rows.Count; k++)
             //                        {
             //                            MVAMInvInOutLine _inOutLine = new MVAMInvInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_TrxName());
-            //                            MProduct _product = MProduct.Get(GetCtx(), GetVAM_Product_ID());
-            //                            MVAMProductCostElement _costElement = new MVAMProductCostElement(GetCtx(), Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["VAM_ProductCostElement_ID"]), Get_TrxName());
+            //                            MVAMProduct _product = MVAMProduct.Get(GetCtx(), GetVAM_Product_ID());
+            //                            MVAMVAMProductCostElement _costElement = new MVAMVAMProductCostElement(GetCtx(), Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["VAM_ProductCostElement_ID"]), Get_TrxName());
             //                            MAcctSchema _acctsch = null;
-            //                            MVAMProductCost _cost = null;
+            //                            MVAMVAMProductCost _cost = null;
             //                            if (GetVAM_Inv_InOutLine_ID() > 0)
             //                            {
             //                                if (_inOutLine.GetVAB_OrderLine_ID() > 0)
@@ -900,7 +900,7 @@ namespace VAdvantage.Model
             //                                    if (_costElement.IsLastPOPrice() || _costElement.IsAveragePO())
             //                                    {
             //                                        _acctsch = new MAcctSchema(GetCtx(), Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["VAB_ACCOUNTBOOK_ID"]), Get_TrxName());
-            //                                        _cost = new MVAMProductCost(_product, Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["VAM_PFeature_SetInstance_ID"]),
+            //                                        _cost = new MVAMVAMProductCost(_product, Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["VAM_PFeature_SetInstance_ID"]),
             //                                            _acctsch, Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["VAF_ORG_ID"]),
             //                                            Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["VAM_ProductCostElement_ID"]),
             //                                            GetA_Asset_ID());
@@ -920,7 +920,7 @@ namespace VAdvantage.Model
             //                                    if (_costElement.IsFifo() || _costElement.IsLifo() || _costElement.IsStandardCosting() || _costElement.IsAveragePO() || _costElement.IsAverageInvoice())
             //                                    {
             //                                        _acctsch = new MAcctSchema(GetCtx(), Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["VAB_ACCOUNTBOOK_ID"]), Get_TrxName());
-            //                                        _cost = new MVAMProductCost(_product, Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["VAM_PFeature_SetInstance_ID"]),
+            //                                        _cost = new MVAMVAMProductCost(_product, Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["VAM_PFeature_SetInstance_ID"]),
             //                                            _acctsch, Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["VAF_ORG_ID"]),
             //                                            Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["VAM_ProductCostElement_ID"]),
             //                                            GetA_Asset_ID());
@@ -943,7 +943,7 @@ namespace VAdvantage.Model
             //                                if (_costElement.IsLastPOPrice() || _costElement.IsAveragePO() || _costElement.IsFifo() || _costElement.IsLifo() || _costElement.IsStandardCosting() || _costElement.IsLastInvoice() || _costElement.IsAverageInvoice())
             //                                {
             //                                    _acctsch = new MAcctSchema(GetCtx(), Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["VAB_ACCOUNTBOOK_ID"]), Get_TrxName());
-            //                                    _cost = new MVAMProductCost(_product, Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["VAM_PFeature_SetInstance_ID"]),
+            //                                    _cost = new MVAMVAMProductCost(_product, Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["VAM_PFeature_SetInstance_ID"]),
             //                                        _acctsch, Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["VAF_ORG_ID"]),
             //                                        Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["VAM_ProductCostElement_ID"]),
             //                                        GetA_Asset_ID());

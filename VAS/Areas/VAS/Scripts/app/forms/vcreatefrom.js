@@ -2034,7 +2034,7 @@
         }
         if ($self.relatedToOrg.getValue()) {
             var isBaseLanges = "";
-            var MProductIDs = "";
+            var MVAMProductIDs = "";
             var DelivDate = "";
             var dateCret = "";
             if (!pNo) {
@@ -2048,7 +2048,7 @@
                 isBaseLanges = " LEFT OUTER JOIN VAB_UOM_TL uom ON (l.VAB_UOM_ID=uom.VAB_UOM_ID AND uom.VAF_Language='" + VIS.Env.getVAF_Language(ctx).concat("')");
             }
             if (VAM_Product_ID != null) {
-                MProductIDs = " AND l.VAM_Product_ID=" + VAM_Product_ID;
+                MVAMProductIDs = " AND l.VAM_Product_ID=" + VAM_Product_ID;
             }
             if (DeliveryDate != null) {
                 var date = VIS.DB.to_date(DeliveryDate, true);
@@ -2070,7 +2070,7 @@
                     forInvoicees: forInvoice,
                     C_Ord_IDs: VAB_Order_ID,
                     isBaseLangess: isBaseLanges,
-                    MProductIDss: MProductIDs,
+                    MVAMProductIDss: MVAMProductIDs,
                     DelivDates: DelivDate,
                     adOrgIDSs: adOrgIDS,
                 },
@@ -2096,7 +2096,7 @@
         }
         else {
             var isBaseLanges = "";
-            var MProductIDs = "";
+            var MVAMProductIDs = "";
             var DelivDate = "";
             var dateCret = "";
 
@@ -2108,7 +2108,7 @@
                 isBaseLanges = " LEFT OUTER JOIN VAB_UOM_TL uom ON (l.VAB_UOM_ID=uom.VAB_UOM_ID AND uom.VAF_Language='" + VIS.Env.getVAF_Language(ctx) + "') INNER JOIN VAB_UOM uom1 ON uom1.VAB_UOM_ID = uom.VAB_UOM_ID ";
             }
             if (VAM_Product_ID > 0) {
-                MProductIDs = " AND l.VAM_Product_ID=" + VAM_Product_ID;
+                MVAMProductIDs = " AND l.VAM_Product_ID=" + VAM_Product_ID;
             }
             if (DeliveryDate != null) {
                 var date = VIS.DB.to_date(DeliveryDate, true);
@@ -2131,7 +2131,7 @@
                     forInvoicees: forInvoice,
                     C_Ord_IDs: VAB_Order_ID,
                     isBaseLangess: isBaseLanges,
-                    MProductIDss: MProductIDs,
+                    MVAMProductIDss: MVAMProductIDs,
                     DelivDates: DelivDate,
                 },
                 error: function (e) {
@@ -2998,14 +2998,14 @@
         //    if ($self.dGrid.columns[e.column].field == "VAM_PFeature_SetInstance_ID") {
         //        var mattsetid = 0;
 
-        //        var mProductidK = $self.dGrid.records[e.recid - 1]["VAM_Product_ID_K"]
+        //        var MVAMProductidK = $self.dGrid.records[e.recid - 1]["VAM_Product_ID_K"]
         //        $.ajax({
         //            url: VIS.Application.contextUrl + "VCreateFrom/GetMattSetIDCommon",
         //            dataType: "json",
         //            type: "POST",
         //            async: false,
         //            data: {
-        //                VAM_Product_ID_Ks: mProductidK,
+        //                VAM_Product_ID_Ks: MVAMProductidK,
         //            },
         //            error: function () {
         //                alert(VIS.Msg.getMsg('ErrorWhileGettingData'));

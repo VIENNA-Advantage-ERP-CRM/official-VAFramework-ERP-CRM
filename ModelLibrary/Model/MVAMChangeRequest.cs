@@ -49,7 +49,7 @@ namespace VAdvantage.Model
          *	@param request request
          *	@param group request group
          */
-        public MVAMChangeRequest(MRequest request, MVARGroup group)
+        public MVAMChangeRequest(MVARRequest request, MVARGroup group)
             : this(request.GetCtx(), 0, request.Get_Trx())
         {
 
@@ -77,7 +77,7 @@ namespace VAdvantage.Model
          * 	Get CRM Requests of Change Requests
          *	@return requests
          */
-        public MRequest[] GetRequests()
+        public MVARRequest[] GetRequests()
         {
            // String sql = "SELECT * FROM VAR_Request WHERE M_ChangeRequest_ID=?";//Code not found by raghu 3-march-2011
             return null;

@@ -166,7 +166,7 @@ namespace VAdvantage.Model
             }
             StringBuilder sb = new StringBuilder();
             //	Instance Attribute Values
-            MVAMProductFeature[] attributes = _mas.GetMAttributes(true);
+            MVAMVAMProductFeature[] attributes = _mas.GetMAttributes(true);
             for (int i = 0; i < attributes.Length; i++)
             {
                 MVAMPFeatueInstance mai = attributes[i].GetMVAMPFeatueInstance(GetVAM_PFeature_SetInstance_ID());
@@ -309,7 +309,7 @@ namespace VAdvantage.Model
                 int VAM_CtlSerialNo_ID = GetMVAMPFeatureSet().GetVAM_CtlSerialNo_ID();
                 if (VAM_CtlSerialNo_ID != 0)
                 {
-                    MSerNoCtl ctl = new MSerNoCtl(GetCtx(), VAM_CtlSerialNo_ID, Get_TrxName());
+                    MVAMCtlSerialNo ctl = new MVAMCtlSerialNo(GetCtx(), VAM_CtlSerialNo_ID, Get_TrxName());
                     SetSerNo(ctl.CreateSerNo());
                 }
             }

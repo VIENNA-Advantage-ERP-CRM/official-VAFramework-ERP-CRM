@@ -328,7 +328,7 @@ namespace VIS.Models
         /// <param name="page"></param>
         /// <param name="size"></param>
         /// <returns></returns>
-        public List<MoveContainer> GetProductContainerFromTransaction(int container, DateTime? movementDate, int VAF_Org_ID, int locator, int page, int size)
+        public List<MoveContainer> GetProductContainerFroMVAMInvTrx(int container, DateTime? movementDate, int VAF_Org_ID, int locator, int page, int size)
         {
             int countRecord = 0;
             List<MoveContainer> moveContainer = new List<MoveContainer>();
@@ -450,7 +450,7 @@ namespace VIS.Models
 
             moveFullContainer:
                 MVAMInvTrfLine moveline = null;
-                MProduct product = null;
+                MVAMProduct product = null;
                 int moveId = 0;
                 for (int i = 0; i < mData.Count; i++)
                 {
@@ -506,7 +506,7 @@ namespace VIS.Models
                     if (!moveline.Save(trx))
                     {
                         #region Save error catch and rollback
-                        product = MProduct.Get(_ctx, Util.GetValueOfInt(mData[i]["VAM_Product_ID"]));
+                        product = MVAMProduct.Get(_ctx, Util.GetValueOfInt(mData[i]["VAM_Product_ID"]));
                         ValueNamePair pp = VLogger.RetrieveError();
                         if (pp != null)
                         {
@@ -662,7 +662,7 @@ namespace VIS.Models
             {
                 int movementlineId = 0;
                 MVAMInvTrfLine moveline = null;
-                MProduct product = null;
+                MVAMProduct product = null;
                 for (int i = 0; i < dsRecords.Tables[0].Rows.Count; i++)
                 {
                     movementlineId = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT NVL(VAM_InvTrf_Line_ID, 0) AS VAM_InventoryTransfer_ID FROM VAM_InvTrf_Line WHERE 
@@ -721,7 +721,7 @@ namespace VIS.Models
                     if (!moveline.Save(trx))
                     {
                         #region Save error catch and rollback
-                        product = MProduct.Get(_ctx, Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["VAM_Product_ID"]));
+                        product = MVAMProduct.Get(_ctx, Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["VAM_Product_ID"]));
                         ValueNamePair pp = VLogger.RetrieveError();
                         if (pp != null)
                         {
@@ -902,7 +902,7 @@ namespace VIS.Models
             }
 
             // Create Product Container in Locator Organization
-            MProductContainer container = new MProductContainer(_ctx, 0, null);
+            MVAMProductContainer container = new MVAMProductContainer(_ctx, 0, null);
             container.SetVAF_Org_ID(VAM_Locator.GetVAF_Org_ID());
             container.SetValue(value);
             container.SetName(name);

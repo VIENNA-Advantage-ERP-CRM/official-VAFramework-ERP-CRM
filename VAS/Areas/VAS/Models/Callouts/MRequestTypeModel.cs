@@ -7,7 +7,7 @@ using VAdvantage.Utility;
 
 namespace VIS.Models
 {
-    public class MRequestTypeModel
+    public class MVARRequestTypeModel
     {
         /// <summary>
         /// GetDefault VAR_Req_Status_ID
@@ -24,7 +24,7 @@ namespace VIS.Models
             VAR_Req_Type_ID = Util.GetValueOfInt(paramValue[0].ToString());
             //End Assign parameter value
 
-            MRequestType rt = MRequestType.Get(ctx, VAR_Req_Type_ID);
+            MVARRequestType rt = MVARRequestType.Get(ctx, VAR_Req_Type_ID);
             int VAR_Req_Status_ID = rt.GetDefaultVAR_Req_Status_ID();
             return VAR_Req_Status_ID;
         }

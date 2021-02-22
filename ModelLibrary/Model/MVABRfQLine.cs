@@ -178,7 +178,7 @@ namespace VAdvantage.Model
                 return "";
             }
             StringBuilder sb = new StringBuilder();
-            MProduct product = MProduct.Get(GetCtx(), GetVAM_Product_ID());
+            MVAMProduct product = MVAMProduct.Get(GetCtx(), GetVAM_Product_ID());
             sb.Append(product.GetName());
             if (product.GetDescription() != null && product.GetDescription().Length > 0)
             {

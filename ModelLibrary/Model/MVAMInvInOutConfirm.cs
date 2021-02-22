@@ -1002,7 +1002,7 @@ namespace VAdvantage.Model
                 /* Update QtyEntered/Qtymovement on Shipment Line to whom we are splitting*/
                 /** Otherwise system can not save splited line because system founf mote qty to be shipped from Ordered Qty **/
                 oldLine.AddDescription("Splitted: from " + oldLine.GetMovementQty());
-                MProduct Product_ = new MProduct(GetCtx(), splitLine.GetVAM_Product_ID(), Get_TrxName());
+                MVAMProduct Product_ = new MVAMProduct(GetCtx(), splitLine.GetVAM_Product_ID(), Get_TrxName());
                 if (Product_.GetVAB_UOM_ID() != splitLine.GetVAB_UOM_ID())
                 {
                     oldLine.SetQty(Decimal.Subtract(oldLine.GetQtyEntered(), differenceQty));
@@ -1115,7 +1115,7 @@ namespace VAdvantage.Model
                 //line.SetQty(confirm.GetDifferenceQty());	//	Entered/Invoiced
                 //Arpit for invoice --qty should be converted while saving on invoice line
                 MVAMInvInOutLine iol = new MVAMInvInOutLine(GetCtx(), confirm.GetVAM_Inv_InOutLine_ID(), Get_TrxName());
-                MProduct _Pro = new MProduct(GetCtx(), iol.GetVAM_Product_ID(), Get_TrxName());
+                MVAMProduct _Pro = new MVAMProduct(GetCtx(), iol.GetVAM_Product_ID(), Get_TrxName());
                 if (confirm.GetVAB_UOM_ID() != _Pro.GetVAB_UOM_ID())
                 {
                     decimal? pc = MVABUOMConversion.ConvertProductFrom(GetCtx(), iol.GetVAM_Product_ID(), confirm.GetVAB_UOM_ID(), confirm.GetDifferenceQty());
@@ -1422,7 +1422,7 @@ namespace VAdvantage.Model
          */
         public int GetVAB_Currency_ID()
         {
-            //	MPriceList pl = MPriceList.get(getCtx(), getVAM_PriceList_ID());
+            //	MVAMPriceList pl = MVAMPriceList.get(getCtx(), getVAM_PriceList_ID());
             //	return pl.getVAB_Currency_ID();
             return 0;
         }

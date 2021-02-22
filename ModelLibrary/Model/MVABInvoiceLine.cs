@@ -35,14 +35,14 @@ namespace VAdvantage.Model
         private int _VAB_BPart_Location_ID = 0;
         private Boolean _IsSOTrx = true;
         private Boolean _priceSet = false;
-        private MProduct _product = null;
+        private MVAMProduct _product = null;
 
         /**	Cached Name of the line		*/
         private String _name = null;
         /** Cached Precision			*/
         private int? _precision = null;
         /** Product Pricing				*/
-        private MProductPricing _productPricing = null;
+        private MVAMProductPricing _productPricing = null;
         /** Parent						*/
         private MVABInvoice _parent = null;
         private Decimal _PriceList = Env.ZERO;
@@ -377,7 +377,7 @@ namespace VAdvantage.Model
         private void SetPriceForAttribute(int _VAM_Product_ID, int _VAM_PriceListVersion_ID, int _VAM_PFeature_SetInstance_ID)
         {
             string sql = "SELECT bomPriceStdAttr(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID) AS PriceStd,"	//	1
-                    + " bomPriceListAttr(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID) AS PriceList,"		//	2
+                    + " boMVAMPriceListAttr(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID) AS PriceList,"		//	2
                     + " bomPriceLimitAttr(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID) AS PriceLimit"	//	3
                     + " FROM VAM_Product p"
                     + " INNER JOIN VAM_ProductPrice pp ON (p.VAM_Product_ID=pp.VAM_Product_ID)"
@@ -407,7 +407,7 @@ namespace VAdvantage.Model
         private void SetPriceForUOM(int _VAM_Product_ID, int _VAM_PriceListVersion_ID, int _VAM_PFeature_SetInstance_ID, int UOM)
         {
             string sql = "SELECT bomPriceStdUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceStd,"	//	1
-                          + " bomPriceListUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceList,"		//	2
+                          + " boMVAMPriceListUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceList,"		//	2
                           + " bomPriceLimitUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceLimit,"	//	3
                           + " p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.VAM_ProductCategory_ID,"	//	4..7
                           + " pl.EnforcePriceLimit, pl.IsTaxIncluded "	// 8..9
@@ -517,7 +517,7 @@ namespace VAdvantage.Model
                     return;
                 //
                 log.Fine("VAM_PriceList_ID=" + VAM_PriceList_ID);
-                _productPricing = new MProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
+                _productPricing = new MVAMProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
                     GetVAM_Product_ID(), VAB_BusinessPartner_ID, GetQtyInvoiced(), _IsSOTrx);
                 _productPricing.SetVAM_PriceList_ID(VAM_PriceList_ID);
                 _productPricing.SetPriceDate(_DateInvoiced);
@@ -625,7 +625,7 @@ namespace VAdvantage.Model
                     //    sql = @"SELECT VATAX_TaxType_ID FROM VAB_BusinessPartner WHERE VAB_BusinessPartner_ID =" + inv.GetVAB_BusinessPartner_ID() + " AND IsActive = 'Y'";
                     //    taxType = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                     //}
-                    //MProduct prod = new MProduct(Env.GetCtx(), System.Convert.ToInt32(GetVAM_Product_ID()), null);
+                    //MVAMProduct prod = new MVAMProduct(Env.GetCtx(), System.Convert.ToInt32(GetVAM_Product_ID()), null);
                     //sql = "SELECT VAB_TaxRate_ID FROM VATAX_TaxCatRate WHERE VAB_TaxCategory_ID = " + prod.GetVAB_TaxCategory_ID() + " AND IsActive ='Y' AND VATAX_TaxType_ID =" + taxType;
                     //int taxId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                     //if (taxId > 0)
@@ -647,7 +647,7 @@ namespace VAdvantage.Model
                         }
                         if (GetVAM_Product_ID() > 0)
                         {
-                            MProduct prod = new MProduct(Env.GetCtx(), GetVAM_Product_ID(), Get_TrxName());
+                            MVAMProduct prod = new MVAMProduct(Env.GetCtx(), GetVAM_Product_ID(), Get_TrxName());
                             taxCategory = Util.GetValueOfInt(prod.GetVAB_TaxCategory_ID());
                         }
                         if (GetVAB_Charge_ID() > 0)
@@ -829,7 +829,7 @@ namespace VAdvantage.Model
                             sql = @"SELECT VATAX_TaxType_ID FROM VAB_BusinessPartner WHERE VAB_BusinessPartner_ID =" + inv.GetVAB_BusinessPartner_ID() + " AND IsActive = 'Y'";
                             taxType = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                         }
-                        MProduct prod = new MProduct(Env.GetCtx(), System.Convert.ToInt32(GetVAM_Product_ID()), Get_TrxName());
+                        MVAMProduct prod = new MVAMProduct(Env.GetCtx(), System.Convert.ToInt32(GetVAM_Product_ID()), Get_TrxName());
                         sql = "SELECT VAB_TaxRate_ID FROM VATAX_TaxCatRate WHERE VAB_TaxCategory_ID = " + prod.GetVAB_TaxCategory_ID() + " AND IsActive ='Y' AND VATAX_TaxType_ID =" + taxType;
                         int taxId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                         if (taxId > 0)
@@ -1143,7 +1143,7 @@ namespace VAdvantage.Model
             {
                 #region Set Discount Values
                 MVABInvoice invoice = new MVABInvoice(GetCtx(), Util.GetValueOfInt(GetVAB_Invoice_ID()), null);
-                MProduct product = new MProduct(GetCtx(), Util.GetValueOfInt(GetVAM_Product_ID()), null);
+                MVAMProduct product = new MVAMProduct(GetCtx(), Util.GetValueOfInt(GetVAM_Product_ID()), null);
                 MVABBusinessPartner bPartner = new MVABBusinessPartner(GetCtx(), invoice.GetVAB_BusinessPartner_ID(), null);
                 MVAMDiscountCalculation discountSchema = new MVAMDiscountCalculation(GetCtx(), bPartner.GetVAM_DiscountCalculation_ID(), null);
                 int precision = MVABCurrency.GetStdPrecision(GetCtx(), invoice.GetVAB_Currency_ID());
@@ -2695,10 +2695,10 @@ namespace VAdvantage.Model
                 //
                 log.Fine("VAM_PriceList_ID=" + VAM_PriceList_ID);
 
-                MProduct product = MProduct.Get(GetCtx(), GetVAM_Product_ID());
+                MVAMProduct product = MVAMProduct.Get(GetCtx(), GetVAM_Product_ID());
                 DataSet ds = new DataSet();
                 String sql = @"SELECT bomPriceStdUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceStd,
-                                bomPriceListUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID)     AS PriceList,
+                                boMVAMPriceListUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID)     AS PriceList,
                                 bomPriceLimitUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID)    AS PriceLimit,
                                 p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.VAM_ProductCategory_ID,pl.EnforcePriceLimit,pl.IsTaxIncluded
                                 FROM VAM_Product p INNER JOIN VAM_ProductPrice pp ON (p.VAM_Product_ID=pp.VAM_Product_ID) INNER JOIN VAM_PriceListVersion pv
@@ -2817,7 +2817,7 @@ namespace VAdvantage.Model
         {
             try
             {
-                MProduct product = GetProduct();
+                MVAMProduct product = GetProduct();
                 if (QtyInvoiced != null && product != null)
                 {
                     int precision = product.GetUOMPrecision();
@@ -2835,7 +2835,7 @@ namespace VAdvantage.Model
          * 	Set Product
          *	@param product product
          */
-        public void SetProduct(MProduct product)
+        public void SetProduct(MVAMProduct product)
         {
             try
             {
@@ -2869,7 +2869,7 @@ namespace VAdvantage.Model
             try
             {
                 if (SetUOM)
-                    SetProduct(MProduct.Get(GetCtx(), VAM_Product_ID));
+                    SetProduct(MVAMProduct.Get(GetCtx(), VAM_Product_ID));
                 else
                     base.SetVAM_Product_ID(VAM_Product_ID);
                 SetVAM_PFeature_SetInstance_ID(0);
@@ -2903,13 +2903,13 @@ namespace VAdvantage.Model
          * 	Get Product
          *	@return product or null
          */
-        public MProduct GetProduct()
+        public MVAMProduct GetProduct()
         {
             try
             {
                 if (_product == null && GetVAM_Product_ID() != 0)
                 {
-                    _product = MProduct.Get(GetCtx(), GetVAM_Product_ID());
+                    _product = MVAMProduct.Get(GetCtx(), GetVAM_Product_ID());
                 }
             }
             catch (Exception ex)
@@ -3172,7 +3172,7 @@ namespace VAdvantage.Model
                     "SELECT VAM_PriceList_ID FROM VAB_Invoice WHERE VAB_Invoice_ID=@param1",
                     GetVAB_Invoice_ID());
             }
-            MPriceList pl = MPriceList.Get(GetCtx(), _VAM_PriceList_ID, Get_TrxName());
+            MVAMPriceList pl = MVAMPriceList.Get(GetCtx(), _VAM_PriceList_ID, Get_TrxName());
             // }
             // catch (Exception ex)
             //{
@@ -3194,12 +3194,12 @@ namespace VAdvantage.Model
                 String summary = "Purchased: " + _product.GetName()
                     + " - " + GetQtyEntered() + " * " + GetPriceEntered();
                 //
-                MSource source = MSource.Get(GetCtx(), _product.GetVAR_Source_ID());
+                MVARSource source = MVARSource.Get(GetCtx(), _product.GetVAR_Source_ID());
                 //	Create Request
-                if (MSource.SOURCECREATETYPE_Both.Equals(source.GetSourceCreateType())
-                    || MSource.SOURCECREATETYPE_Request.Equals(source.GetSourceCreateType()))
+                if (MVARSource.SOURCECREATETYPE_Both.Equals(source.GetSourceCreateType())
+                    || MVARSource.SOURCECREATETYPE_Request.Equals(source.GetSourceCreateType()))
                 {
-                    MRequest request = new MRequest(GetCtx(), 0, Get_TrxName());
+                    MVARRequest request = new MVARRequest(GetCtx(), 0, Get_TrxName());
                     request.SetClientOrg(this);
                     request.SetSummary(summary);
                     request.SetVAF_UserContact_ID(invoice.GetVAF_UserContact_ID());
@@ -3215,8 +3215,8 @@ namespace VAdvantage.Model
                     request.Save();
                 }
                 //	Create Lead
-                if (MSource.SOURCECREATETYPE_Both.Equals(source.GetSourceCreateType())
-                    || MSource.SOURCECREATETYPE_Lead.Equals(source.GetSourceCreateType()))
+                if (MVARSource.SOURCECREATETYPE_Both.Equals(source.GetSourceCreateType())
+                    || MVARSource.SOURCECREATETYPE_Lead.Equals(source.GetSourceCreateType()))
                 {
                     MVABLead lead = new MVABLead(GetCtx(), 0, Get_TrxName());
                     lead.SetClientOrg(this);
@@ -3382,7 +3382,7 @@ namespace VAdvantage.Model
                 if (newRecord || (Is_ValueChanged("VAM_Product_ID")) || (Is_ValueChanged("VAM_PFeature_SetInstance_ID")))
                 {
 
-                    decimal currentcostprice = MVAMProductCost.GetproductCosts(GetVAF_Client_ID(), GetVAF_Org_ID(), GetVAM_Product_ID(), Util.GetValueOfInt(GetVAM_PFeature_SetInstance_ID()), Get_Trx());
+                    decimal currentcostprice = MVAMVAMProductCost.GetproductCosts(GetVAF_Client_ID(), GetVAF_Org_ID(), GetVAM_Product_ID(), Util.GetValueOfInt(GetVAM_PFeature_SetInstance_ID()), Get_Trx());
                     primaryAcctSchemaCurrency = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VAB_Currency_ID from VAB_AccountBook WHERE VAB_AccountBook_ID = 
                                             (SELECT VAB_AccountBook1_id FROM VAF_ClientDetail WHERE vaf_client_id = " + GetVAF_Client_ID() + ")", null, Get_Trx()));
                     if (inv.GetVAB_Currency_ID() != primaryAcctSchemaCurrency)
@@ -3403,7 +3403,7 @@ namespace VAdvantage.Model
                 if (!inv.IsSOTrx())
                 {
                     _IsSOTrx = inv.IsSOTrx();
-                    //MProduct pro = new MProduct(GetCtx(), GetVAM_Product_ID(), null);
+                    //MVAMProduct pro = new MVAMProduct(GetCtx(), GetVAM_Product_ID(), null);
                     //String qryUom = "SELECT vdr.VAB_UOM_ID FROM VAM_Product p LEFT JOIN VAM_Product_PO vdr ON p.VAM_Product_ID= vdr.VAM_Product_ID WHERE p.VAM_Product_ID=" + GetVAM_Product_ID() + " AND vdr.VAB_BusinessPartner_ID = " + inv.GetVAB_BusinessPartner_ID();
                     //int uom = Util.GetValueOfInt(DB.ExecuteScalar(qryUom));
                     //if (pro.GetVAB_UOM_ID() != 0)
@@ -3586,7 +3586,7 @@ namespace VAdvantage.Model
                         //                    if (PriceEntered == null)
                         //                        PriceEntered = PriceActual;
 
-                        //                    MProduct prod = new MProduct(Env.GetCtx(), Util.GetValueOfInt(GetVAM_Product_ID()), null);
+                        //                    MVAMProduct prod = new MVAMProduct(Env.GetCtx(), Util.GetValueOfInt(GetVAM_Product_ID()), null);
                         //                    sql.Clear();
                         //                    sql.Append(@"SELECT PriceList FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID = " + Util.GetValueOfInt(GetVAM_Product_ID())
                         //                           + " AND VAM_PriceListVersion_ID = " + _Version_ID
@@ -5562,7 +5562,7 @@ namespace VAdvantage.Model
                 {
                     int VAB_UOM_To_ID = GetVAB_UOM_ID();
                     QtyInvoiced = GetQtyInvoiced();
-                    int precision = MProduct.Get(GetCtx(), VAM_Product_ID).GetUOMPrecision();
+                    int precision = MVAMProduct.Get(GetCtx(), VAM_Product_ID).GetUOMPrecision();
                     Decimal QtyInvoiced1 = Decimal.Round(QtyInvoiced, precision, MidpointRounding.AwayFromZero);
                     if (QtyInvoiced.CompareTo(QtyInvoiced1) != 0)
                     {
@@ -5612,7 +5612,7 @@ namespace VAdvantage.Model
                 int VAB_UOM_To_ID = GetVAB_UOM_ID();
                 int VAM_Product_ID = GetVAM_Product_ID();
                 int VAM_PriceList_ID = GetCtx().GetContextAsInt(WindowNo, "VAM_PriceList_ID");
-                int StdPrecision = MPriceList.GetPricePrecision(GetCtx(), VAM_PriceList_ID);
+                int StdPrecision = MVAMPriceList.GetPricePrecision(GetCtx(), VAM_PriceList_ID);
                 Decimal PriceActual, PriceEntered, PriceLimit, PriceList, Discount;
                 Decimal? QtyEntered, QtyInvoiced;
                 //	Get values
@@ -5641,7 +5641,7 @@ namespace VAdvantage.Model
                     if (QtyInvoiced == null)
                         QtyInvoiced = QtyEntered;
                     bool IsSOTrx = GetCtx().IsSOTrx(WindowNo);
-                    MProductPricing pp = new MProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
+                    MVAMProductPricing pp = new MVAMProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
                             VAM_Product_ID, VAB_BusinessPartner_ID, QtyInvoiced, IsSOTrx);
                     pp.SetVAM_PriceList_ID(VAM_PriceList_ID);
                     int VAM_PriceListVersion_ID = GetCtx().GetContextAsInt(WindowNo, "VAM_PriceListVersion_ID");
@@ -5956,7 +5956,7 @@ namespace VAdvantage.Model
             bool IsSOTrx = GetCtx().IsSOTrx(WindowNo);
             int VAB_BusinessPartner_ID = GetCtx().GetContextAsInt(WindowNo, "VAB_BusinessPartner_ID");
             Decimal Qty = GetQtyInvoiced();
-            MProductPricing pp = new MProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
+            MVAMProductPricing pp = new MVAMProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
                     VAM_Product_ID, VAB_BusinessPartner_ID, Qty, IsSOTrx);
             //
             int VAM_PriceList_ID = GetCtx().GetContextAsInt(WindowNo, "VAM_PriceList_ID");

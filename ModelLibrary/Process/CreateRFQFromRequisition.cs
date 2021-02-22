@@ -11,7 +11,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Process
 {
-    class CreateRFQFromRequisition : SvrProcess
+    class CreateRFQFroMVAMRequisition : SvrProcess
     {
         private int VAF_Org_ID = 0; // Variable for rfq organization input.
         private int Requisition_Org_ID = 0; // Variable for filtering requisition by organization.

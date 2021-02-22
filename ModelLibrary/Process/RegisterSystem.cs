@@ -70,7 +70,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 			throw new Exception("Set Password (as in Web Store) in System Record");
         }
 		//	Registration
-		M_Registration reg = new M_Registration (GetCtx(), AD_Registration_ID, Get_TrxName());
+		M_VAFRegistration reg = new M_VAFRegistration (GetCtx(), AD_Registration_ID, Get_TrxName());
 		//	Location
 		MVABAddress loc = null;
 		if (reg.GetVAB_Address_ID() > 0)
@@ -134,7 +134,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 					DataBase.DB.GetSQLValue(null, "SELECT Count(*) FROM VAB_BusinessPartner")),UTF8Encoding.UTF8))
 				.Append("&NumUser=").Append(HttpUtility.UrlEncode(Convert.ToString(
 					DataBase.DB.GetSQLValue(null, "SELECT Count(*) FROM VAF_UserContact")), UTF8Encoding.UTF8))
-				.Append("&NumProduct=").Append(HttpUtility.UrlEncode(Convert.ToString(
+				.Append("&NuMVAMProduct=").Append(HttpUtility.UrlEncode(Convert.ToString(
 					DataBase.DB.GetSQLValue(null, "SELECT Count(*) FROM VAM_Product")), UTF8Encoding.UTF8))
 				.Append("&NuMVABInvoice=").Append(HttpUtility.UrlEncode(Convert.ToString(
 					DataBase.DB.GetSQLValue(null, "SELECT Count(*) FROM VAB_Invoice")), UTF8Encoding.UTF8));

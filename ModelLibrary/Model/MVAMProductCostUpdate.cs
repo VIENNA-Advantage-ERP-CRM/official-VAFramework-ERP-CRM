@@ -14,10 +14,10 @@ using VAdvantage.VOS;
 
 namespace VAdvantage.Model
 {
-    public class MVAMProductCostUpdate : X_VAM_ProductCostUpdate
+    public class MVAMVAMProductCostUpdate : X_VAM_ProductCostUpdate
     {
         #region Private Variables
-        //Logger for class MVAMProductCostUpdate 
+        //Logger for class MVAMVAMProductCostUpdate 
        // private static long serialVersionUID = 1L;
         #endregion
 
@@ -27,7 +27,7 @@ namespace VAdvantage.Model
 	 *  @param  VAB_Order_ID    order to load, (0 create new order)
 	 *  @param trx p_trx name
 	 */
-        public MVAMProductCostUpdate(Ctx ctx, int VAM_ProductCostUpdate_ID, Trx trx)
+        public MVAMVAMProductCostUpdate(Ctx ctx, int VAM_ProductCostUpdate_ID, Trx trx)
             : base(ctx, VAM_ProductCostUpdate_ID, trx)
         {
 
@@ -40,7 +40,7 @@ namespace VAdvantage.Model
          *  @param rs result set record
          *  @param trx transaction
          */
-        public MVAMProductCostUpdate(Ctx ctx, DataRow dr, Trx trx)
+        public MVAMVAMProductCostUpdate(Ctx ctx, DataRow dr, Trx trx)
             : base(ctx, dr, trx)
         {
 
@@ -63,9 +63,9 @@ namespace VAdvantage.Model
             return true;
         }
 
-        public MVAMProductCostUpdateLine[] GetLines()
+        public MVAMVAMProductCostUpdateLine[] GetLines()
         {
-            List<MVAMProductCostUpdateLine> list = new List<MVAMProductCostUpdateLine>();
+            List<MVAMVAMProductCostUpdateLine> list = new List<MVAMVAMProductCostUpdateLine>();
             StringBuilder sql = new StringBuilder("SELECT * FROM VAM_ProductCostUpdateLine WHERE VAM_ProductCostUpdate_ID=" + this.GetVAM_ProductCostUpdate_ID());
             IDataReader idr = null;
             try
@@ -76,7 +76,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
-                    MVAMProductCostUpdateLine ol = new MVAMProductCostUpdateLine(GetCtx(), dt.Rows[i], Get_Trx());
+                    MVAMVAMProductCostUpdateLine ol = new MVAMVAMProductCostUpdateLine(GetCtx(), dt.Rows[i], Get_Trx());
                     list.Add(ol);
                 }
             }
@@ -93,7 +93,7 @@ namespace VAdvantage.Model
                 }
             }
             //
-            MVAMProductCostUpdateLine[] lines = new MVAMProductCostUpdateLine[list.Count];
+            MVAMVAMProductCostUpdateLine[] lines = new MVAMVAMProductCostUpdateLine[list.Count];
             lines = list.ToArray();
             return lines;
         }

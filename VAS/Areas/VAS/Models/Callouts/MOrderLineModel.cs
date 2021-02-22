@@ -119,7 +119,7 @@ namespace VIS.Models
             }
             if (VAM_Product_ID > 0)
             {
-                MProduct prod = new MProduct(ctx, VAM_Product_ID, null);
+                MVAMProduct prod = new MVAMProduct(ctx, VAM_Product_ID, null);
                 taxCategory = Util.GetValueOfInt(prod.GetVAB_TaxCategory_ID());
             }
             if (VAB_Charge_ID > 0)
@@ -587,7 +587,7 @@ namespace VIS.Models
             }
             if (VAM_Product_ID > 0)
             {
-                MProduct prod = new MProduct(ctx, VAM_Product_ID, null);
+                MVAMProduct prod = new MVAMProduct(ctx, VAM_Product_ID, null);
                 taxCategory = Util.GetValueOfInt(prod.GetVAB_TaxCategory_ID());
             }
             if (VAB_Charge_ID > 0)
@@ -1023,7 +1023,7 @@ namespace VIS.Models
                 MOrderModel objOrder = new MOrderModel();
                 _VAM_PriceList_ID = objOrder.GetVAM_PriceList(ctx, _VAB_Order_Id.ToString());
 
-                MPriceListVersionModel objPLV = new MPriceListVersionModel();
+                MVAMPriceListVersionModel objPLV = new MVAMPriceListVersionModel();
                 _priceListVersion_Id = objPLV.GetVAM_PriceListVersion_ID(ctx, _VAM_PriceList_ID.ToString());
 
 
@@ -1098,7 +1098,7 @@ namespace VIS.Models
                     {
                         // get uom from product
                         var paramStr = _VAM_Product_Id.ToString();
-                        MProductModel objProduct = new MProductModel();
+                        MVAMProductModel objProduct = new MVAMProductModel();
                         var prodVAB_UOM_ID = objProduct.GetVAB_UOM_ID(ctx, paramStr);
                         sql.Clear();
                         if (_VAM_PFeature_SetInstance_Id > 0)
@@ -1214,7 +1214,7 @@ namespace VIS.Models
             MOrderModel objOrder = new MOrderModel();
             _VAM_PriceList_ID = objOrder.GetVAM_PriceList(ctx, _VAB_Order_ID.ToString());
 
-            MPriceListVersionModel objPLV = new MPriceListVersionModel();
+            MVAMPriceListVersionModel objPLV = new MVAMPriceListVersionModel();
             _priceListVersion_Id = objPLV.GetVAM_PriceListVersion_ID(ctx, _VAM_PriceList_ID.ToString());
 
             MBPartnerModel objBPartner = new MBPartnerModel();
@@ -1335,7 +1335,7 @@ namespace VIS.Models
                 {
                     // get uom from product
                     var paramStr = _VAM_Product_Id.ToString();
-                    MProductModel objProduct = new MProductModel();
+                    MVAMProductModel objProduct = new MVAMProductModel();
                     var prodVAB_UOM_ID = objProduct.GetVAB_UOM_ID(ctx, paramStr);
                     sql.Clear();
                     if (countEd011 > 0)
@@ -1467,7 +1467,7 @@ namespace VIS.Models
             MOrderModel objOrder = new MOrderModel();
             int _VAM_PriceList_ID = objOrder.GetVAM_PriceList(ctx, _VAB_Order_ID.ToString());
 
-            MPriceListVersionModel objPLV = new MPriceListVersionModel();
+            MVAMPriceListVersionModel objPLV = new MVAMPriceListVersionModel();
             int _priceListVersion_Id = objPLV.GetVAM_PriceListVersion_ID(ctx, _VAM_PriceList_ID.ToString());
 
             string sql;
@@ -1580,7 +1580,7 @@ namespace VIS.Models
                 MOrderModel objOrder = new MOrderModel();
                 _VAM_PriceList_ID = objOrder.GetVAM_PriceList(ctx, _VAB_Order_ID.ToString());
 
-                MPriceListVersionModel objPLV = new MPriceListVersionModel();
+                MVAMPriceListVersionModel objPLV = new MVAMPriceListVersionModel();
                 _priceListVersion_Id = objPLV.GetVAM_PriceListVersion_ID(ctx, _VAM_PriceList_ID.ToString());
 
                 sql = "SELECT PriceList , PriceStd , PriceLimit FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID = " + _VAM_Product_Id
@@ -1661,13 +1661,13 @@ namespace VIS.Models
             int _VAM_PriceList_ID = 0;
             int _standardPrecision = 0;
 
-            MProductModel objProduct = new MProductModel();
+            MVAMProductModel objProduct = new MVAMProductModel();
             _VAB_UOM_Id = objProduct.GetVAB_UOM_ID(ctx, _VAM_Product_Id.ToString());
 
             MOrderModel objOrder = new MOrderModel();
             _VAM_PriceList_ID = objOrder.GetVAM_PriceList(ctx, _VAB_Order_Id.ToString());
 
-            MPriceListVersionModel objPLV = new MPriceListVersionModel();
+            MVAMPriceListVersionModel objPLV = new MVAMPriceListVersionModel();
             _priceListVersion_Id = objPLV.GetVAM_PriceListVersion_ID(ctx, _VAM_PriceList_ID.ToString());
 
             MUOMModel objUOM = new MUOMModel();
@@ -2038,7 +2038,7 @@ namespace VIS.Models
                         taxType = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                     }
 
-                    MProductModel objProduct = new MProductModel();
+                    MVAMProductModel objProduct = new MVAMProductModel();
                     var prodtaxCategory = objProduct.GetTaxCategory(ctx, _VAM_Product_Id.ToString());
                     sql = "SELECT VAB_TaxRate_ID FROM VATAX_TaxCatRate WHERE VAB_TaxCategory_ID = " + prodtaxCategory + " AND IsActive ='Y' AND VATAX_TaxType_ID =" + taxType;
                     taxId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));

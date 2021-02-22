@@ -24,7 +24,7 @@ namespace ViennaAdvantageServer.Process
         private string sql = "";
         private DataSet dsTransaction = null;
         private DataSet dsAllTransactionRecord = null;
-        VAdvantage.Model.MTransaction transaction = null;
+        VAdvantage.Model.MVAMInvTrx transaction = null;
 
         protected override void Prepare()
         {
@@ -73,7 +73,7 @@ namespace ViennaAdvantageServer.Process
                                 {
                                     for (j = 0; j < dr.GetLength(0) - 1; j++)
                                     {
-                                        transaction = new VAdvantage.Model.MTransaction(GetCtx(), Util.GetValueOfInt(dr[0]["VAM_Inv_Trx_id"]), Get_Trx());
+                                        transaction = new VAdvantage.Model.MVAMInvTrx(GetCtx(), Util.GetValueOfInt(dr[0]["VAM_Inv_Trx_id"]), Get_Trx());
                                         transaction.Delete(true, Get_Trx());
                                         Commit();
                                     }

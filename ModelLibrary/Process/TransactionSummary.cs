@@ -27,7 +27,7 @@ namespace VAdvantage.Process
         private decimal _moveQty = 0;
         private string _moveType = "";
         private DateTime? _moveDate = null;
-        MTransactionSummary Trs = null;
+        MVAMInvTrxSummary Trs = null;
 
         protected override void Prepare()
         {
@@ -110,7 +110,7 @@ namespace VAdvantage.Process
                                 int VAM_Inv_TrxSummary_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString()));
                                 if (VAM_Inv_TrxSummary_ID > 0)
                                 {
-                                    Trs = new MTransactionSummary(GetCtx(), VAM_Inv_TrxSummary_ID, Get_TrxName());
+                                    Trs = new MVAMInvTrxSummary(GetCtx(), VAM_Inv_TrxSummary_ID, Get_TrxName());
                                     Trs.SetClosingStock(_currentQty);
                                 }
                                 else
@@ -132,54 +132,54 @@ namespace VAdvantage.Process
                                     }
                                     OpeningStock = Util.GetValueOfDecimal(DB.ExecuteScalar(Qry));
                                     MVAMLocator loc = new MVAMLocator(GetCtx(), _VAM_Locator_ID, Get_TrxName());
-                                    Trs = new MTransactionSummary(GetCtx(), loc.GetVAF_Org_ID(), _VAM_Locator_ID, _VAM_Product_ID, _VAM_PFeature_SetInstance_ID,
+                                    Trs = new MVAMInvTrxSummary(GetCtx(), loc.GetVAF_Org_ID(), _VAM_Locator_ID, _VAM_Product_ID, _VAM_PFeature_SetInstance_ID,
                                             OpeningStock, _currentQty, _moveDate, Get_TrxName());
                                 }
-                                if (_moveType == MTransaction.MOVEMENTTYPE_CustomerReturns)
+                                if (_moveType == MVAMInvTrx.MOVEMENTTYPE_CustomerReturns)
                                 {
                                     Trs.SetQtyCustReturn(Trs.GetQtyCustReturn() + _moveQty);
                                 }
-                                else if (_moveType == MTransaction.MOVEMENTTYPE_CustomerShipment)
+                                else if (_moveType == MVAMInvTrx.MOVEMENTTYPE_CustomerShipment)
                                 {
                                     Trs.SetQtyCustShipment(Trs.GetQtyCustShipment() + _moveQty);
                                 }
-                                else if (_moveType == MTransaction.MOVEMENTTYPE_InventoryIn)
+                                else if (_moveType == MVAMInvTrx.MOVEMENTTYPE_InventoryIn)
                                 {
                                     Trs.SetQtyInventoryIn(Trs.GetQtyInventoryIn() + _moveQty);
                                 }
-                                else if (_moveType == MTransaction.MOVEMENTTYPE_InventoryOut)
+                                else if (_moveType == MVAMInvTrx.MOVEMENTTYPE_InventoryOut)
                                 {
                                     Trs.SetQtyInventoryOut(Trs.GetQtyInventoryOut() + _moveQty);
                                 }
-                                else if (_moveType == MTransaction.MOVEMENTTYPE_MovementFrom)
+                                else if (_moveType == MVAMInvTrx.MOVEMENTTYPE_MovementFrom)
                                 {
                                     Trs.SetQtyMoveOut(Trs.GetQtyMoveOut() + _moveQty);
                                 }
-                                else if (_moveType == MTransaction.MOVEMENTTYPE_MovementTo)
+                                else if (_moveType == MVAMInvTrx.MOVEMENTTYPE_MovementTo)
                                 {
                                     Trs.SetQtyMoveTo(Trs.GetQtyMoveTo() + _moveQty);
                                 }
-                                else if (_moveType == MTransaction.MOVEMENTTYPE_Production_)
+                                else if (_moveType == MVAMInvTrx.MOVEMENTTYPE_Production_)
                                 {
                                     Trs.SetQtyProductionOut(Trs.GetQtyProductionOut() + _moveQty);
                                 }
-                                else if (_moveType == MTransaction.MOVEMENTTYPE_ProductionPlus)
+                                else if (_moveType == MVAMInvTrx.MOVEMENTTYPE_ProductionPlus)
                                 {
                                     Trs.SetQtyProductionIn(Trs.GetQtyProductionIn() + _moveQty);
                                 }
-                                else if (_moveType == MTransaction.MOVEMENTTYPE_VendorReceipts)
+                                else if (_moveType == MVAMInvTrx.MOVEMENTTYPE_VendorReceipts)
                                 {
                                     Trs.SetQtyMaterialIn(Trs.GetQtyMaterialIn() + _moveQty);
                                 }
-                                else if (_moveType == MTransaction.MOVEMENTTYPE_VendorReturns)
+                                else if (_moveType == MVAMInvTrx.MOVEMENTTYPE_VendorReturns)
                                 {
                                     Trs.SetQtyMaterialOut(Trs.GetQtyMaterialOut() + _moveQty);
                                 }
-                                else if (_moveType == MTransaction.MOVEMENTTYPE_WorkOrderPlus)
+                                else if (_moveType == MVAMInvTrx.MOVEMENTTYPE_WorkOrderPlus)
                                 {
                                     Trs.SetQtyWorkOrderIn(Trs.GetQtyWorkOrderIn() + _moveQty);
                                 }
-                                else if (_moveType == MTransaction.MOVEMENTTYPE_WorkOrder_)
+                                else if (_moveType == MVAMInvTrx.MOVEMENTTYPE_WorkOrder_)
                                 {
                                     Trs.SetQtyWorkOrderOut(Trs.GetQtyWorkOrderOut() + _moveQty);
                                 }

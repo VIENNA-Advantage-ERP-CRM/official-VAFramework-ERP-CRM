@@ -36,7 +36,7 @@ namespace VAdvantage.Model
         /// 
         private static VLogger _log = VLogger.GetVLogger(typeof(MVAMPackaging).FullName); //Arpit
 
-        public static MVAMPackaging Create(MVAMInvInOut shipment, MShipper shipper, DateTime? shipDate, Trx trxName)
+        public static MVAMPackaging Create(MVAMInvInOut shipment, MVAMShippingMethod shipper, DateTime? shipDate, Trx trxName)
         {
             MVAMPackaging retValue = new MVAMPackaging(shipment, shipper);
             if (shipDate != null)
@@ -111,7 +111,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="shipment">shipment</param>
         /// <param name="shipper">shipper</param>
-        public MVAMPackaging(MVAMInvInOut shipment, MShipper shipper)
+        public MVAMPackaging(MVAMInvInOut shipment, MVAMShippingMethod shipper)
             : this(shipment.GetCtx(), 0, shipment.Get_TrxName())
         {
             SetClientOrg(shipment);

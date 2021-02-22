@@ -382,7 +382,7 @@ namespace VAdvantage.Model
         }
         public static Boolean checkStock(Ctx ctx, int VAM_Locator_ID, Trx trx)
         {
-            //ArrayList<MStorage> list = new ArrayList<MStorage>();
+            //ArrayList<MVAMStorage> list = new ArrayList<MVAMStorage>();
             String sql = "SELECT COALESCE(SUM(CASE WHEN QtyType LIKE 'H' THEN Qty ELSE 0 END), 0) QtyOnHand, " +
                                 "COALESCE(SUM(CASE WHEN QtyType LIKE 'O' THEN Qty ELSE 0 END), 0) QtyOrdered, " +
                                 "COALESCE(SUM(CASE WHEN QtyType LIKE 'R' THEN Qty ELSE 0 END), 0) QtyReserved " +

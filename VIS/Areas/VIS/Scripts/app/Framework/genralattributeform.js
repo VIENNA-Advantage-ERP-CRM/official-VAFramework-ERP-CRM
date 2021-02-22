@@ -202,7 +202,7 @@
             cancelbtn = null;
             MVAMLocatorId = null;
             MVAMPFeatureSetInstanceName = null;
-            mProductId = null;
+            MVAMProductId = null;
             cBPartnerId = null;
             adColumnId = null;
             windowNoParent = null;

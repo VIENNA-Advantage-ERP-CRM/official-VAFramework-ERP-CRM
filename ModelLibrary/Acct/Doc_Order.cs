@@ -175,7 +175,7 @@ namespace VAdvantage.Acct
                 idr = DataBase.DB.ExecuteReader(sql, null, null);
                 while (idr.Read())
                 {
-                    MRequisitionLine line = new MRequisitionLine(GetCtx(), idr, null);
+                    MVAMRequisitionLine line = new MVAMRequisitionLine(GetCtx(), idr, null);
                     DocLine docLine = new DocLine(line, this);
                     //	Quantity - not more then OrderLine
                     //	Issue: Split of Requisition to multiple POs & different price

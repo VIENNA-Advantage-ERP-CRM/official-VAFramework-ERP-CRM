@@ -755,7 +755,7 @@ namespace VAdvantage.Model
             //	Add default conversion
             if (list.Count == 0)
             {
-                MVABUOMConversion defRate = new MVABUOMConversion(MProduct.Get(ctx, VAM_Product_ID));
+                MVABUOMConversion defRate = new MVABUOMConversion(MVAMProduct.Get(ctx, VAM_Product_ID));
                 list.Add(defRate);
             }
 
@@ -810,7 +810,7 @@ namespace VAdvantage.Model
         /// Parent Constructor
         /// </summary>
         /// <param name="parent"></param>
-        public MVABUOMConversion(MProduct parent)
+        public MVABUOMConversion(MVAMProduct parent)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
@@ -844,7 +844,7 @@ namespace VAdvantage.Model
             //	Enforce Product UOM
             if (GetVAM_Product_ID() != 0 && (newRecord || Is_ValueChanged("VAM_Product_ID")))
             {
-                MProduct product = MProduct.Get(GetCtx(), GetVAM_Product_ID());
+                MVAMProduct product = MVAMProduct.Get(GetCtx(), GetVAM_Product_ID());
                 if (product.GetVAB_UOM_ID() != GetVAB_UOM_ID())
                 {
                     MVABUOM uom = MVABUOM.Get(GetCtx(), product.GetVAB_UOM_ID());
@@ -867,7 +867,7 @@ namespace VAdvantage.Model
                 //int manu_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                 //if (manu_ID != 0 && manu_ID != GetVAM_Product_ID())
 
-                int manu_ID = MProduct.UpcUniqueClientWise(GetVAF_Client_ID(), GetUPC());
+                int manu_ID = MVAMProduct.UpcUniqueClientWise(GetVAF_Client_ID(), GetUPC());
                 if (manu_ID > 0)
                 {
                     _log.SaveError("UPCUnique", "");

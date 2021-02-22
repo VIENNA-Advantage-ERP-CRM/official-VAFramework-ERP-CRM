@@ -64,10 +64,10 @@ namespace ViennaAdvantageServer.Process
 
                         //Neha---Commented code because object created but not used in further class---04 Sep,2018
 
-                        //VAdvantage.Model.MProductPricing pp = new VAdvantage.Model.MProductPricing(GetCtx().GetVAF_Client_ID(), GetCtx().GetVAF_Org_ID(),
+                        //VAdvantage.Model.MVAMProductPricing pp = new VAdvantage.Model.MVAMProductPricing(GetCtx().GetVAF_Client_ID(), GetCtx().GetVAF_Org_ID(),
                         //    line.GetVAM_Product_ID(), order.GetVAB_BusinessPartner_ID(), line.GetQtyOrdered(), true);                        
                         //pp.SetVAM_PriceList_ID(VAM_PriceList_ID);
-                        //VAdvantage.Model.MProduct prd = new VAdvantage.Model.MProduct(GetCtx(), line.GetVAM_Product_ID(), null);
+                        //VAdvantage.Model.MVAMProduct prd = new VAdvantage.Model.MVAMProduct(GetCtx(), line.GetVAM_Product_ID(), null);
                         //pp.SetVAB_UOM_ID(prd.GetVAB_UOM_ID());
 
                         string sql = "SELECT pl.IsTaxIncluded,pl.EnforcePriceLimit,pl.VAB_Currency_ID,c.StdPrecision,"
@@ -253,7 +253,7 @@ namespace ViennaAdvantageServer.Process
           int VAB_BusinessPartner_ID = ctx.GetContextAsInt(WindowNo, "VAB_BusinessPartner_ID");
                 Decimal Qty = Util.GetValueOfDecimal(mTab.GetValue("QtyOrdered"));
                 bool isSOTrx = ctx.GetContext(WindowNo, "IsSOTrx").Equals("Y");
-                MProductPricing pp = new MProductPricing(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID(),
+                MVAMProductPricing pp = new MVAMProductPricing(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID(),
                         VAM_Product_ID, VAB_BusinessPartner_ID, Qty, isSOTrx);
                 int VAM_PriceList_ID = ctx.GetContextAsInt(WindowNo, "VAM_PriceList_ID");
                 pp.SetVAM_PriceList_ID(VAM_PriceList_ID);

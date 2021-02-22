@@ -143,7 +143,7 @@ namespace VAdvantage.Model
                 {
                     GetCtx().SetContext("DifferenceQty_", VAdvantage.Utility.Util.GetValueOfString(GetDifferenceQty()));
                 }
-                MProduct _pro = new MProduct(GetCtx(), line.GetVAM_Product_ID(), Get_TrxName());
+                MVAMProduct _pro = new MVAMProduct(GetCtx(), line.GetVAM_Product_ID(), Get_TrxName());
                 if (_pro.GetVAB_UOM_ID() != line.GetVAB_UOM_ID())
                 {
                     decimal? pc = null;

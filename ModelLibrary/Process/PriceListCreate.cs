@@ -26,7 +26,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         // Price List Version			
         private int _VAM_PriceListVersion_ID = 0;
         // Price List Version			
-        private MPriceListVersion _plv = null;
+        private MVAMPriceListVersion _plv = null;
 
         /// <summary>
         /// Prepare - e.g., get Parameters
@@ -61,7 +61,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             log.Info("VAM_PriceListVersion_ID=" + _VAM_PriceListVersion_ID
                     + ", DeleteOld=" + _deleteOld);
-            _plv = new MPriceListVersion(GetCtx(), _VAM_PriceListVersion_ID, Get_TrxName());
+            _plv = new MVAMPriceListVersion(GetCtx(), _VAM_PriceListVersion_ID, Get_TrxName());
             if (_plv.Get_ID() == 0 || _plv.Get_ID() != _VAM_PriceListVersion_ID)
             {
                 throw new Exception("@NotFound@  @VAM_PriceListVersion_ID@=" + _VAM_PriceListVersion_ID);
@@ -128,7 +128,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 int VAM_Product_ID = 0;
                 foreach (DataRow dr in dt.Rows)
                 {
-                    MProductPO po = new MProductPO(GetCtx(), dr, Get_TrxName());
+                    MVAMProductPO po = new MVAMProductPO(GetCtx(), dr, Get_TrxName());
                     if (VAM_Product_ID != po.GetVAM_Product_ID())
                     {
                         VAM_Product_ID = po.GetVAM_Product_ID();
@@ -185,7 +185,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
 
             int VAM_PriceListVersion_Base_ID = _plv.GetVAM_PriceListVersion_Base_ID();
-            MPriceList pl = _plv.GetPriceList();
+            MVAMPriceList pl = _plv.GetPriceList();
             int curPrecision = pl.GetStandardPrecision();
 
             /**
@@ -330,12 +330,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 }
 
                 /** Calculations	**/
-                MProductPrice[] pp = _plv.GetProductPrice(
+                MVAMProductPrice[] pp = _plv.GetProductPrice(
                     "AND EXISTS (SELECT * FROM VAT_Selection s "
                     + "WHERE s.VAT_Selection_ID=VAM_ProductPrice.VAM_Product_ID)");
                 for (int j = 0; j < pp.Length; j++)
                 {
-                    MProductPrice price = pp[j];
+                    MVAMProductPrice price = pp[j];
                     Decimal priceList = price.GetPriceList();
                     Decimal priceStd = price.GetPriceStd();
                     Decimal priceLimit = price.GetPriceLimit();
@@ -363,7 +363,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 AddLog(message);
             }	//	for all lines
 
-            MProductPrice[] ppl = _plv.GetProductPrice(true);
+            MVAMProductPrice[] ppl = _plv.GetProductPrice(true);
             info.Append(" - @Records@=").Append(ppl.Length);
             return info.ToString();
         }

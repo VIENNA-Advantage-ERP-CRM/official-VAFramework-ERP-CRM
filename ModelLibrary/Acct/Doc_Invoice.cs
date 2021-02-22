@@ -1040,7 +1040,7 @@ namespace VAdvantage.Acct
                             if (!IsPosted())
                             {
 
-                                MVAMProductCostDetail.CreateInvoice(as1, line.GetVAF_Org_ID(),
+                                MVAMVAMProductCostDetail.CreateInvoice(as1, line.GetVAF_Org_ID(),
                                     line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(),
                                     line.Get_ID(), 0,		//	No Cost Element
                                     line.GetAmtSource(), line.GetQty().Value,
@@ -1208,7 +1208,7 @@ namespace VAdvantage.Acct
                             if (!IsPosted())
                             {
 
-                                MVAMProductCostDetail.CreateInvoice(as1, line.GetVAF_Org_ID(),
+                                MVAMVAMProductCostDetail.CreateInvoice(as1, line.GetVAF_Org_ID(),
                                     line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(),
                                     line.Get_ID(), 0,		//	No Cost Element
                                     Decimal.Negate(line.GetAmtSource()), line.GetQty().Value,
@@ -1487,7 +1487,7 @@ namespace VAdvantage.Acct
                 if (!IsPosted())
                 {
 
-                    MVAMProductCostDetail cd = new MVAMProductCostDetail(as1, lca.GetVAF_Org_ID(),
+                    MVAMVAMProductCostDetail cd = new MVAMVAMProductCostDetail(as1, lca.GetVAF_Org_ID(),
                         lca.GetVAM_Product_ID(), lca.GetVAM_PFeature_SetInstance_ID(),
                         lca.GetVAM_ProductCostElement_ID(),
                         allocationAmt, lca.GetQty(),		//	Qty

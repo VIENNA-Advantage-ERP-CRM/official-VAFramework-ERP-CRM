@@ -32,12 +32,12 @@ namespace ViennaAdvantageServer.Process
         private int _VAM_Locator_ID = 0;
         private int _VAM_PFeature_SetInstance_ID = 0;
         private decimal _currentQty = 0;
-        VAdvantage.Model.MTransaction transaction = null;
+        VAdvantage.Model.MVAMInvTrx transaction = null;
         //ViennaAdvantage.Model.MVAMInventoryLine inventoryLine = null;
-        //ViennaAdvantage.Model.MStorage storage = null;
+        //ViennaAdvantage.Model.MVAMStorage storage = null;
         //ViennaAdvantage.Model.MVAMInventory inventory = null;
         MVAMInventoryLine inventoryLine = null;
-        MStorage storage = null;
+        MVAMStorage storage = null;
         MVAMInventory inventory = null;
 
 
@@ -121,7 +121,7 @@ namespace ViennaAdvantageServer.Process
                                         }
 
                                         // update movement Qty at Transaction for the same record
-                                        transaction = new VAdvantage.Model.MTransaction(GetCtx(), Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Inv_Trx_ID"]), Get_Trx());
+                                        transaction = new VAdvantage.Model.MVAMInvTrx(GetCtx(), Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Inv_Trx_ID"]), Get_Trx());
                                        // transaction.SetMovementQty(Decimal.Subtract(inventoryLine.GetQtyCount(), _currentQty));
                                         transaction.SetMovementQty(Decimal.Negate(Decimal.Subtract(_currentQty, Util.GetValueOfDecimal(dsTransaction.Tables[0].Rows[i]["CurrentQty"]))));
                                         if (!transaction.Save())
@@ -137,7 +137,7 @@ namespace ViennaAdvantageServer.Process
                                     }
                                     else
                                     {
-                                        transaction = new VAdvantage.Model.MTransaction(GetCtx(), Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Inv_Trx_ID"]), Get_Trx());
+                                        transaction = new VAdvantage.Model.MVAMInvTrx(GetCtx(), Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Inv_Trx_ID"]), Get_Trx());
                                         transaction.SetCurrentQty(Decimal.Add(_currentQty, Util.GetValueOfDecimal(dsTransaction.Tables[0].Rows[i]["MovementQty"])));
                                         if (!transaction.Save())
                                         {
@@ -169,7 +169,7 @@ namespace ViennaAdvantageServer.Process
                                           _VAM_Locator_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]) &&
                                           _VAM_PFeature_SetInstance_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]))
                                 {
-                                    transaction = new VAdvantage.Model.MTransaction(GetCtx(), Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Inv_Trx_ID"]), Get_Trx());
+                                    transaction = new VAdvantage.Model.MVAMInvTrx(GetCtx(), Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Inv_Trx_ID"]), Get_Trx());
                                     transaction.SetCurrentQty(Decimal.Add(_currentQty, Util.GetValueOfDecimal(dsTransaction.Tables[0].Rows[i]["MovementQty"])));
                                     if (!transaction.Save())
                                     {
@@ -347,7 +347,7 @@ namespace ViennaAdvantageServer.Process
             //                                          _VAM_Locator_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]) &&
             //                                          _VAM_PFeature_SetInstance_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]))
             //                                {
-            //                                    transaction = new VAdvantage.Model.MTransaction(GetCtx(), Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Inv_Trx_ID"]), null);
+            //                                    transaction = new VAdvantage.Model.MVAMInvTrx(GetCtx(), Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Inv_Trx_ID"]), null);
             //                                    transaction.SetCurrentQty(Decimal.Add(_currentQty, Util.GetValueOfDecimal(dsTransaction.Tables[0].Rows[i]["MovementQty"])));
             //                                    if (!transaction.Save())
             //                                    {
@@ -452,10 +452,10 @@ namespace ViennaAdvantageServer.Process
 
         private void UpdateStorage(int VAM_Product_ID, int VAM_Locator_ID, int VAM_PFeatue_Instance_ID, decimal QtyOnHand)
         {
-            storage = MStorage.Get(GetCtx(), VAM_Locator_ID,
+            storage = MVAMStorage.Get(GetCtx(), VAM_Locator_ID,
                                VAM_Product_ID, VAM_PFeatue_Instance_ID, Get_Trx());
             if (storage == null)
-                storage = MStorage.GetCreate(GetCtx(), VAM_Locator_ID,
+                storage = MVAMStorage.GetCreate(GetCtx(), VAM_Locator_ID,
                    VAM_Product_ID, 0, Get_Trx());
             storage.SetQtyOnHand(QtyOnHand);
             if (!storage.Save())

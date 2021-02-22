@@ -59,7 +59,7 @@ namespace VIS.Models
 				new InfoColumn(s_headerPriceList, "VAM_PriceListVersion_ID",true, "plv.Name", DisplayType.Amount).Seq(50),
                 new InfoColumn(s_headerWarehouse, "VAM_Warehouse_ID",true, "w.Name", DisplayType.String).Seq(60),
 				new InfoColumn(Msg.Translate(ctx, "PriceList"), "PriceList",true,
-					"bomPriceList(p.VAM_Product_ID, pr.VAM_PriceListVersion_ID) AS PriceList",  DisplayType.Amount).Seq(70),
+					"boMVAMPriceList(p.VAM_Product_ID, pr.VAM_PriceListVersion_ID) AS PriceList",  DisplayType.Amount).Seq(70),
 				new InfoColumn(Msg.Translate(ctx, "PriceStd"), "PriceStd",true,
 					"bomPriceStd(p.VAM_Product_ID, pr.VAM_PriceListVersion_ID) AS PriceStd", DisplayType.Amount).Seq(80),
 				new InfoColumn("Einzel MWSt", "",true,
@@ -114,14 +114,14 @@ namespace VIS.Models
                     if (Env.HasModulePrefix("ED011_", out aInfo))
                     {
                         list.Add(new InfoColumn(Msg.Translate(ctx, "PriceList"), "PriceList", true,
-                        "bomPriceListUom(p.VAM_Product_ID, pr.VAM_PriceListVersion_ID,pr.VAM_PFeature_SetInstance_ID,pr.VAB_UOM_ID) AS PriceList", DisplayType.Amount).Seq(120));
+                        "boMVAMPriceListUom(p.VAM_Product_ID, pr.VAM_PriceListVersion_ID,pr.VAM_PFeature_SetInstance_ID,pr.VAB_UOM_ID) AS PriceList", DisplayType.Amount).Seq(120));
                         list.Add(new InfoColumn(Msg.Translate(ctx, "PriceStd"), "PriceStd", true,
                         "bomPriceStdUom(p.VAM_Product_ID, pr.VAM_PriceListVersion_ID,pr.VAM_PFeature_SetInstance_ID,pr.VAB_UOM_ID) AS PriceStd", DisplayType.Amount).Seq(130));
                     }
                     else
                     {
                         list.Add(new InfoColumn(Msg.Translate(ctx, "PriceList"), "PriceList", true,
-                            "bomPriceListAttr(p.VAM_Product_ID, pr.VAM_PriceListVersion_ID,pr.VAM_PFeature_SetInstance_ID) AS PriceList", DisplayType.Amount).Seq(120));
+                            "boMVAMPriceListAttr(p.VAM_Product_ID, pr.VAM_PriceListVersion_ID,pr.VAM_PFeature_SetInstance_ID) AS PriceList", DisplayType.Amount).Seq(120));
                         list.Add(new InfoColumn(Msg.Translate(ctx, "PriceStd"), "PriceStd", true,
                             "bomPriceStdAttr(p.VAM_Product_ID, pr.VAM_PriceListVersion_ID,pr.VAM_PFeature_SetInstance_ID) AS PriceStd", DisplayType.Amount).Seq(130));
                     }
@@ -129,7 +129,7 @@ namespace VIS.Models
                 else
                 {
                     list.Add(new InfoColumn(Msg.Translate(ctx, "PriceList"), "PriceList", true,
-                        "bomPriceList(p.VAM_Product_ID, pr.VAM_PriceListVersion_ID) AS PriceList", DisplayType.Amount).Seq(120));
+                        "boMVAMPriceList(p.VAM_Product_ID, pr.VAM_PriceListVersion_ID) AS PriceList", DisplayType.Amount).Seq(120));
                     list.Add(new InfoColumn(Msg.Translate(ctx, "PriceStd"), "PriceStd", true,
                         "bomPriceStd(p.VAM_Product_ID, pr.VAM_PriceListVersion_ID) AS PriceStd", DisplayType.Amount).Seq(130));
                 }
@@ -414,7 +414,7 @@ namespace VIS.Models
                 }
                 else if (keyColName.ToUpper().Trim() == "VAM_Requisition_ID")
                 {
-                    MRequisition req = new MRequisition(ctx, recordID, null);
+                    MVAMRequisition req = new MVAMRequisition(ctx, recordID, null);
                     _Version_ID = GetPLVID(req.GetVAM_PriceList_ID());
                     VAF_Client_ID = req.GetVAF_Client_ID();
                     VAF_Org_ID = req.GetVAF_Org_ID();
@@ -1126,7 +1126,7 @@ namespace VIS.Models
                     int _VAM_Product_ID = Util.GetValueOfInt(product[i]);
                     int _attribute_ID = Util.GetValueOfInt(attribute[i]);
                     int _uom_ID = Util.GetValueOfInt(uoms[i]);
-                    MProductPrice pr = null;
+                    MVAMProductPrice pr = null;
                     string sql = "SELECT * FROM VAM_ProductPrice WHERE VAM_PriceListVersion_ID=" + recordID + " AND VAM_Product_ID=" + _VAM_Product_ID;
                     if (Env.IsModuleInstalled("VAPRC_"))
                     {
@@ -1143,7 +1143,7 @@ namespace VIS.Models
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
                             DataRow dr = ds.Tables[0].Rows[0];
-                            pr = new MProductPrice(ctx, dr, null);
+                            pr = new MVAMProductPrice(ctx, dr, null);
                         }
                         ds = null;
                     }
@@ -1154,7 +1154,7 @@ namespace VIS.Models
 
                     if (pr == null)
                     {
-                        pr = new MProductPrice(ctx, recordID, _VAM_Product_ID, null);
+                        pr = new MVAMProductPrice(ctx, recordID, _VAM_Product_ID, null);
                         if (Env.IsModuleInstalled("VAPRC_"))
                         {
                             pr.SetVAM_PFeature_SetInstance_ID(_attribute_ID);
@@ -1180,7 +1180,7 @@ namespace VIS.Models
             else if (keyColName.ToUpper().Trim() == "VAM_Requisition_ID")
             {
                 tbl = new MVAFTableView(ctx, 703, null);
-                MRequisition inv = new MRequisition(ctx, recordID, null);
+                MVAMRequisition inv = new MVAMRequisition(ctx, recordID, null);
 
                 for (int i = 0; i < product.Count; i++)
                 {

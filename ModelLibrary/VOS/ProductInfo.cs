@@ -21,7 +21,7 @@ namespace VAdvantage.VOS
         public String quantity;
         public String supplyType;
         public String fieldIdentifier; // identifer composed of bom component ID + bom level
-        public int VAM_BOMProduct_ID;
+        public int VAM_BOMVAMProduct_ID;
         public int operationSeqNo;
         private static VLogger log = VLogger.GetVLogger(typeof(ProductInfo).FullName);
         #endregion
@@ -38,12 +38,12 @@ namespace VAdvantage.VOS
         /// <param name="newBomType"></param>
         /// <param name="newQuantity"></param>
         /// <param name="newSupplyType"></param>
-        /// <param name="newVAM_BOMProduct_ID"></param>
+        /// <param name="newVAM_BOMVAMProduct_ID"></param>
         /// <param name="newOperationSeqNo"></param>
         /// <param name="newFieldIdentifier"></param>
         public ProductInfo(int newVAM_Product_ID,
             String newName, String newTitle, String newGroupName, String newBomType, String newQuantity,
-            String newSupplyType, int newVAM_BOMProduct_ID, int newOperationSeqNo, String newFieldIdentifier)
+            String newSupplyType, int newVAM_BOMVAMProduct_ID, int newOperationSeqNo, String newFieldIdentifier)
             : base(newName)
         {
             VAM_Product_ID = newVAM_Product_ID;
@@ -53,7 +53,7 @@ namespace VAdvantage.VOS
             bomType = newBomType;
             quantity = newQuantity;
             supplyType = newSupplyType;
-            VAM_BOMProduct_ID = newVAM_BOMProduct_ID;
+            VAM_BOMVAMProduct_ID = newVAM_BOMVAMProduct_ID;
             operationSeqNo = newOperationSeqNo;
             fieldIdentifier = newFieldIdentifier;
         }
@@ -73,9 +73,9 @@ namespace VAdvantage.VOS
             return operationSeqNo;
         }
 
-        public int GetVAM_BOMProduct_ID()
+        public int GetVAM_BOMVAMProduct_ID()
         {
-            return VAM_BOMProduct_ID;
+            return VAM_BOMVAMProduct_ID;
         }
 
         /// <summary>

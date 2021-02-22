@@ -8,7 +8,7 @@ using VAdvantage.Utility;
 
 namespace VIS.Models
 {
-    public class MPriceListVersionModel
+    public class MVAMPriceListVersionModel
     {
         private string sql = "";
 
@@ -35,9 +35,9 @@ namespace VIS.Models
         {
             int VAM_PriceListVersion_ID = Util.GetValueOfInt(fields);
             Dictionary<string, int> retDic = new Dictionary<string, int>();
-            MPriceListVersion ver = new MPriceListVersion(ctx, VAM_PriceListVersion_ID, null);
+            MVAMPriceListVersion ver = new MVAMPriceListVersion(ctx, VAM_PriceListVersion_ID, null);
             retDic["VAM_PriceList_ID"] = ver.GetVAM_PriceList_ID();
-            MPriceList list = new MPriceList(ctx, ver.GetVAM_PriceList_ID(), null);
+            MVAMPriceList list = new MVAMPriceList(ctx, ver.GetVAM_PriceList_ID(), null);
             retDic["VAB_Currency_ID"] = list.GetVAB_Currency_ID();
             return retDic;
         }

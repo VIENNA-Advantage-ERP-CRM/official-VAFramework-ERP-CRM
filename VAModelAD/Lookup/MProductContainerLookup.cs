@@ -9,7 +9,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MProductContainerLookup : Lookup
+    public class MVAMProductContainerLookup : Lookup
     {
 
         private static KeyNamePair NO_INSTANCE = new KeyNamePair(0, "");
@@ -19,7 +19,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="WindowNo"></param>
-        public MProductContainerLookup(Ctx ctx, int windowNo)
+        public MVAMProductContainerLookup(Ctx ctx, int windowNo)
             : base(ctx, windowNo, DisplayType.ProductContainer)
         {
 

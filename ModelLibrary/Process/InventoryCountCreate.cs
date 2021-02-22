@@ -87,7 +87,7 @@ namespace VAdvantage.Process
         protected override String DoIt()
         {
             // is used to check Container applicable into system
-            isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
+            isContainerApplicable = MVAMInvTrx.ProductContainerApplicable(GetCtx());
 
             log.Info("VAM_Inventory_ID=" + _VAM_Inventory_ID
                 + ", VAM_Locator_ID=" + _VAM_Locator_ID + ", LocatorValue=" + _locatorValue
@@ -334,7 +334,7 @@ namespace VAdvantage.Process
                 }
                 if (line.Get_ColumnIndex("VAB_UOM_ID") > 0)
                 {
-                    MProduct prd = new MProduct(GetCtx(), VAM_Product_ID, Get_Trx());
+                    MVAMProduct prd = new MVAMProduct(GetCtx(), VAM_Product_ID, Get_Trx());
                     line.Set_Value("VAB_UOM_ID", prd.GetVAB_UOM_ID());
                 }
 
@@ -376,7 +376,7 @@ namespace VAdvantage.Process
                     }
                     if (_line.Get_ColumnIndex("VAB_UOM_ID") > 0)
                     {
-                        MProduct prd = new MProduct(GetCtx(), VAM_Product_ID, Get_Trx());
+                        MVAMProduct prd = new MVAMProduct(GetCtx(), VAM_Product_ID, Get_Trx());
                         _line.Set_Value("VAB_UOM_ID", prd.GetVAB_UOM_ID());
                     }
                     if (isContainerApplicable && _line.Get_ColumnIndex("VAM_ProductContainer_ID") > 0)
@@ -417,7 +417,7 @@ namespace VAdvantage.Process
                 }
                 if (_line.Get_ColumnIndex("VAB_UOM_ID") > 0)
                 {
-                    MProduct prd = new MProduct(GetCtx(), VAM_Product_ID, Get_Trx());
+                    MVAMProduct prd = new MVAMProduct(GetCtx(), VAM_Product_ID, Get_Trx());
                     _line.Set_Value("VAB_UOM_ID", prd.GetVAB_UOM_ID());
                 }
                 if (isContainerApplicable && _line.Get_ColumnIndex("VAM_ProductContainer_ID") > 0)
@@ -453,7 +453,7 @@ namespace VAdvantage.Process
             }
             if (_line.Get_ColumnIndex("VAB_UOM_ID") > 0)
             {
-                MProduct prd = new MProduct(GetCtx(), VAM_Product_ID, Get_Trx());
+                MVAMProduct prd = new MVAMProduct(GetCtx(), VAM_Product_ID, Get_Trx());
                 _line.Set_Value("VAB_UOM_ID", prd.GetVAB_UOM_ID());
             }
             if (isContainerApplicable && _line.Get_ColumnIndex("VAM_ProductContainer_ID") > 0)
@@ -495,7 +495,7 @@ namespace VAdvantage.Process
                     return "";
                 }
             }
-            MProduct product = MProduct.Get(GetCtx(), VAM_Product_ID);
+            MVAMProduct product = MVAMProduct.Get(GetCtx(), VAM_Product_ID);
             if (product != null)
             {
                 int precision = product.GetUOMPrecision();

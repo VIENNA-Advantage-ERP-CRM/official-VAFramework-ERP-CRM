@@ -210,7 +210,7 @@ namespace VAdvantage.Process
 
                     // To check weather future date records are available in Transaction window
                     // this check implement after "SetCompletedDocumentNo" function, because this function overwrit movement date
-                    string _processMsg = MTransaction.CheckFutureDateRecord(productionTo.GetMovementDate(),
+                    string _processMsg = MVAMInvTrx.CheckFutureDateRecord(productionTo.GetMovementDate(),
                                            productionTo.Get_TableName(), productionTo.GetVAM_Production_ID(), production.Get_Trx());
                     if (!string.IsNullOrEmpty(_processMsg))
                     {
@@ -268,10 +268,10 @@ namespace VAdvantage.Process
         private bool CheckQtyAvailablity(Ctx ctx, int VAM_Warehouse_ID, int VAM_Locator_ID, int VAM_ProductContainer_ID, int VAM_Product_ID, int VAM_PFeature_SetInstance_ID, Decimal? MovementQty, Trx trxName)
         {
             MWarehouse wh = MWarehouse.Get(ctx, VAM_Warehouse_ID);
-            MProduct product = null;
+            MVAMProduct product = null;
             if (wh.IsDisallowNegativeInv() && VAM_Product_ID > 0)
             {
-                product = MProduct.Get(ctx, VAM_Product_ID);
+                product = MVAMProduct.Get(ctx, VAM_Product_ID);
                 string qry = "SELECT NVL(SUM(NVL(QtyOnHand,0)),0) AS QtyOnHand FROM VAM_Storage where VAM_Locator_id=" + VAM_Locator_ID + @" and VAM_Product_id=" + VAM_Product_ID;
                 qry += " AND NVL(VAM_PFeature_SetInstance_ID, 0) =" + VAM_PFeature_SetInstance_ID;
                 if (VAM_ProductContainer_ID > 0)

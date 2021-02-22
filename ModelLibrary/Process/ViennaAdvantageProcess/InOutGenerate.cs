@@ -58,13 +58,13 @@ namespace ViennaAdvantage.Process
         //The Query sql		
         StringBuilder _sql = new StringBuilder();
         // Storages temp space				
-        //private HashMap<SParameter,MStorage[]> _map = new HashMap<SParameter,MStorage[]>();
-        Dictionary<SParameter, MStorage[]> _map = new Dictionary<SParameter, MStorage[]>();
+        //private HashMap<SParameter,MVAMStorage[]> _map = new HashMap<SParameter,MVAMStorage[]>();
+        Dictionary<SParameter, MVAMStorage[]> _map = new Dictionary<SParameter, MVAMStorage[]>();
         Dictionary<SParameter, X_VAM_ContainerStorage[]> _mapContainer = new Dictionary<SParameter, X_VAM_ContainerStorage[]>();
         // Last Parameter					
         private SParameter _lastPP = null;
         // Last Storage					
-        private MStorage[] _lastStorages = null;
+        private MVAMStorage[] _lastStorages = null;
         private X_VAM_ContainerStorage[] _lastContainerStorages = null;
         //StringBuilder
         private StringBuilder _msg = new StringBuilder();
@@ -141,7 +141,7 @@ namespace ViennaAdvantage.Process
         protected override String DoIt()
         {
             // check container functionality applicable into system or not
-            isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
+            isContainerApplicable = MVAMInvTrx.ProductContainerApplicable(GetCtx());
 
             // check Allow Non Item type Product setting on Tenant
             isAllowNonItem = Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("Y");
@@ -367,7 +367,7 @@ namespace ViennaAdvantage.Process
                         Decimal QtyNotDelivered = Util.GetValueOfDecimal(DB.ExecuteScalar(@"SELECT SUM(MovementQty) FROM VAM_Inv_InOut i INNER JOIN VAM_Inv_InOutLine il ON i.VAM_Inv_InOut_ID = il.VAM_Inv_InOut_ID
                             WHERE il.VAB_OrderLine_ID = " + line.GetVAB_OrderLine_ID() + @" AND il.Isactive = 'Y' AND i.docstatus NOT IN ('RE' , 'VO' , 'CL' , 'CO')", null, Get_Trx()));
                         toDeliver -= QtyNotDelivered;
-                        MProduct product = line.GetProduct();
+                        MVAMProduct product = line.GetProduct();
                         //	Nothing to Deliver
                         if (product != null && Env.Signum(toDeliver) == 0)
                         {
@@ -418,7 +418,7 @@ namespace ViennaAdvantage.Process
                         }
 
                         //	Stored Product
-                        MProductCategory pc = MProductCategory.Get(order.GetCtx(), product.GetVAM_ProductCategory_ID());
+                        MVAMProductCategory pc = MVAMProductCategory.Get(order.GetCtx(), product.GetVAM_ProductCategory_ID());
                         String MMPolicy = pc.GetMMPolicy();
                         if (MMPolicy == null || MMPolicy.Length == 0)
                         {
@@ -521,14 +521,14 @@ namespace ViennaAdvantage.Process
                         {
                             if (line.GetVAM_Warehouse_ID() != _VAM_Warehouse_ID)
                                 continue;
-                            MProduct product = line.GetProduct();
+                            MVAMProduct product = line.GetProduct();
                             Decimal toDeliver = Decimal.Subtract(line.GetQtyOrdered(), line.GetQtyDelivered());
                             //
                             dynamic[] storages = null;
                             String MMPolicy = null;
                             if (product != null && product.IsStocked())
                             {
-                                MProductCategory pc = MProductCategory.Get(order.GetCtx(), product.GetVAM_ProductCategory_ID());
+                                MVAMProductCategory pc = MVAMProductCategory.Get(order.GetCtx(), product.GetVAM_ProductCategory_ID());
                                 MMPolicy = pc.GetMMPolicy();
                                 if (MMPolicy == null || MMPolicy.Length == 0)
                                 {
@@ -653,7 +653,7 @@ namespace ViennaAdvantage.Process
             }
 
             //	Product
-            MProduct product = orderLine.GetProduct();
+            MVAMProduct product = orderLine.GetProduct();
             bool linePerASI = false;
 
             // need to consolidate record every time when locator and product container matched
@@ -779,7 +779,7 @@ namespace ViennaAdvantage.Process
                 Decimal toDeliver = qty;
                 for (int i = 0; i < storages.Length; i++)
                 {
-                    MStorage storage = storages[i];
+                    MVAMStorage storage = storages[i];
                     Decimal deliver = toDeliver;
                     //	Not enough On Hand
                     if (deliver.CompareTo(storage.GetQtyOnHand()) > 0
@@ -879,7 +879,7 @@ namespace ViennaAdvantage.Process
         /// <param name="minGuaranteeDate"></param>
         /// <param name="FiFo"></param>
         /// <returns>storages</returns>
-        private MStorage[] GetStorages(int VAM_Warehouse_ID,
+        private MVAMStorage[] GetStorages(int VAM_Warehouse_ID,
             int VAM_Product_ID, int VAM_PFeature_SetInstance_ID, int VAM_PFeature_Set_ID,
             bool allAttributeInstances, DateTime? minGuaranteeDate,
             bool FiFo)
@@ -900,7 +900,7 @@ namespace ViennaAdvantage.Process
 
             if (_lastStorages == null)
             {
-                _lastStorages = MStorage.GetWarehouse(GetCtx(),
+                _lastStorages = MVAMStorage.GetWarehouse(GetCtx(),
                     VAM_Warehouse_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
                     VAM_PFeature_Set_ID, allAttributeInstances, minGuaranteeDate,
                     FiFo, Get_TrxName());
@@ -951,7 +951,7 @@ namespace ViennaAdvantage.Process
 
             if (_lastContainerStorages == null)
             {
-                _lastContainerStorages = MProductContainer.GetContainerStorage(GetCtx(), VAM_Warehouse_ID, 0, 0,
+                _lastContainerStorages = MVAMProductContainer.GetContainerStorage(GetCtx(), VAM_Warehouse_ID, 0, 0,
                               VAM_Product_ID, VAM_PFeature_SetInstance_ID,
                               VAM_PFeature_Set_ID,
                               allAttributeInstances,
@@ -1012,7 +1012,7 @@ namespace ViennaAdvantage.Process
                 }
                 else
                 {
-                    _map = new Dictionary<SParameter, MStorage[]>();
+                    _map = new Dictionary<SParameter, MVAMStorage[]>();
                     if (_lastPP != null && _lastStorages != null)
                     {
                         _map.Add(_lastPP, _lastStorages);

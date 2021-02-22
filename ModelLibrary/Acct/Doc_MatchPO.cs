@@ -155,7 +155,7 @@ namespace VAdvantage.Acct
             if (!IsPosted())
             {
                 //	Create PO Cost Detail Record firs
-                MVAMProductCostDetail.CreateOrder(as1, _oLine.GetVAF_Org_ID(),
+                MVAMVAMProductCostDetail.CreateOrder(as1, _oLine.GetVAF_Org_ID(),
                         GetVAM_Product_ID(), _VAM_PFeature_SetInstance_ID,
                         _VAB_OrderLine_ID, 0,		//	no cost element
                         isReturnTrx ? Decimal.Negate(poCost) : poCost, isReturnTrx ? Decimal.Negate(Utility.Util.GetValueOfDecimal(GetQty())) : Utility.Util.GetValueOfDecimal(GetQty()),			//	Delivered
@@ -165,8 +165,8 @@ namespace VAdvantage.Acct
 
             //	Current Costs
             String costingMethod = as1.GetCostingMethod();
-            MProduct product = MProduct.Get(GetCtx(), GetVAM_Product_ID());
-            MProductCategoryAcct pca = MProductCategoryAcct.Get(GetCtx(),
+            MVAMProduct product = MVAMProduct.Get(GetCtx(), GetVAM_Product_ID());
+            MVAMProductCategoryAcct pca = MVAMProductCategoryAcct.Get(GetCtx(),
                 product.GetVAM_ProductCategory_ID(), as1.GetVAB_AccountBook_ID(), GetTrx());
             if (pca.GetCostingMethod() != null)
             {

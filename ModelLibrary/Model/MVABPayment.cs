@@ -3795,36 +3795,36 @@ namespace VAdvantage.Model
         //                    {
         //                        DrCostAllocationLine = DsAllocationRecord.Tables[0].Select("BaseCurrency=" + Convert.ToString(DtCurrency.Rows[i]["BaseCurrency"]));
         //                    }
-        //                    MVAMProductCostAllocation ObjMVAMProductCostAllocation = new MVAMProductCostAllocation(GetCtx(), 0, trx);
-        //                    ObjMVAMProductCostAllocation.SetVAB_DocTypes_ID(Convert.ToInt32(DrCostAllocationLine[0]["DocumentType"]));
-        //                    ObjMVAMProductCostAllocation.SetVAB_Invoice_ID(Convert.ToInt32(DrCostAllocationLine[0]["InvoiceNo"]));
-        //                    ObjMVAMProductCostAllocation.SetVAB_Payment_ID(Convert.ToInt32(DrCostAllocationLine[0]["PaymentNo"]));
-        //                    ObjMVAMProductCostAllocation.SetVAB_Currency_ID(Convert.ToInt32(DtCurrency.Rows[i]["BaseCurrency"]));
-        //                    ObjMVAMProductCostAllocation.SetDocStatus(Convert.ToString(DrCostAllocationLine[0]["DocStatus"]));
-        //                    ObjMVAMProductCostAllocation.SetVAF_Org_ID(VAF_Org_ID);
+        //                    MVAMVAMProductCostAllocation ObjMVAMVAMProductCostAllocation = new MVAMVAMProductCostAllocation(GetCtx(), 0, trx);
+        //                    ObjMVAMVAMProductCostAllocation.SetVAB_DocTypes_ID(Convert.ToInt32(DrCostAllocationLine[0]["DocumentType"]));
+        //                    ObjMVAMVAMProductCostAllocation.SetVAB_Invoice_ID(Convert.ToInt32(DrCostAllocationLine[0]["InvoiceNo"]));
+        //                    ObjMVAMVAMProductCostAllocation.SetVAB_Payment_ID(Convert.ToInt32(DrCostAllocationLine[0]["PaymentNo"]));
+        //                    ObjMVAMVAMProductCostAllocation.SetVAB_Currency_ID(Convert.ToInt32(DtCurrency.Rows[i]["BaseCurrency"]));
+        //                    ObjMVAMVAMProductCostAllocation.SetDocStatus(Convert.ToString(DrCostAllocationLine[0]["DocStatus"]));
+        //                    ObjMVAMVAMProductCostAllocation.SetVAF_Org_ID(VAF_Org_ID);
         //                    if (DocStatus.Equals("CO"))
         //                    {
-        //                        ObjMVAMProductCostAllocation.CompleteIt();
-        //                        ObjMVAMProductCostAllocation.SetIsProcessed(true);
-        //                        ObjMVAMProductCostAllocation.SetDocAction(DOCACTION_Close);
-        //                        ObjMVAMProductCostAllocation.SetDocStatus(DOCACTION_Complete);
+        //                        ObjMVAMVAMProductCostAllocation.CompleteIt();
+        //                        ObjMVAMVAMProductCostAllocation.SetIsProcessed(true);
+        //                        ObjMVAMVAMProductCostAllocation.SetDocAction(DOCACTION_Close);
+        //                        ObjMVAMVAMProductCostAllocation.SetDocStatus(DOCACTION_Complete);
         //                    }
 
-        //                    if (ObjMVAMProductCostAllocation.Save(trx))
+        //                    if (ObjMVAMVAMProductCostAllocation.Save(trx))
         //                    {
         //                        if (DrCostAllocationLine.Length > 0)
         //                        {
         //                            for (int j = 0; j < DrCostAllocationLine.Length; j++)
         //                            {
         //                                CostAllocationAmount += Convert.ToDecimal(DrCostAllocationLine[j]["TotalAllocationAmount"]);
-        //                                MVAMProductCostAllocationLine ObjMVAMProductCostAllocationLine = new MVAMProductCostAllocationLine(GetCtx(), 0, trx);
-        //                                ObjMVAMProductCostAllocationLine.SetVAM_ProductCostAllocation_ID(ObjMVAMProductCostAllocation.Get_ID());
-        //                                ObjMVAMProductCostAllocationLine.SetVAB_InvoiceLine_ID(Convert.ToInt32(DrCostAllocationLine[j]["InvoiceLineID"]));
-        //                                ObjMVAMProductCostAllocationLine.SetVAM_Product_ID(Convert.ToInt32(DrCostAllocationLine[j]["ProductID"]));
-        //                                ObjMVAMProductCostAllocationLine.SetAmount(Convert.ToDecimal(DrCostAllocationLine[j]["TotalAllocationAmount"]));
-        //                                ObjMVAMProductCostAllocationLine.SetAllocationType(Convert.ToString(DrCostAllocationLine[j]["partialType"]));
-        //                                ObjMVAMProductCostAllocationLine.SetVAF_Org_ID(VAF_Org_ID);
-        //                                if (!ObjMVAMProductCostAllocationLine.Save(trx))
+        //                                MVAMVAMProductCostAllocationLine ObjMVAMVAMProductCostAllocationLine = new MVAMVAMProductCostAllocationLine(GetCtx(), 0, trx);
+        //                                ObjMVAMVAMProductCostAllocationLine.SetVAM_ProductCostAllocation_ID(ObjMVAMVAMProductCostAllocation.Get_ID());
+        //                                ObjMVAMVAMProductCostAllocationLine.SetVAB_InvoiceLine_ID(Convert.ToInt32(DrCostAllocationLine[j]["InvoiceLineID"]));
+        //                                ObjMVAMVAMProductCostAllocationLine.SetVAM_Product_ID(Convert.ToInt32(DrCostAllocationLine[j]["ProductID"]));
+        //                                ObjMVAMVAMProductCostAllocationLine.SetAmount(Convert.ToDecimal(DrCostAllocationLine[j]["TotalAllocationAmount"]));
+        //                                ObjMVAMVAMProductCostAllocationLine.SetAllocationType(Convert.ToString(DrCostAllocationLine[j]["partialType"]));
+        //                                ObjMVAMVAMProductCostAllocationLine.SetVAF_Org_ID(VAF_Org_ID);
+        //                                if (!ObjMVAMVAMProductCostAllocationLine.Save(trx))
         //                                {
         //                                    CheckExecution = false;
         //                                    Msg = "Error Occured when try to Save record on Cost Allocation Line";
@@ -3837,8 +3837,8 @@ namespace VAdvantage.Model
         //                                break;
         //                            }
         //                            // Update CostAllocationAmount on CostAllocation generated from sum of All Amount in CostAllocationLine................
-        //                            ObjMVAMProductCostAllocation.SetAllocationAmt(CostAllocationAmount);
-        //                            if (!ObjMVAMProductCostAllocation.Save(trx))
+        //                            ObjMVAMVAMProductCostAllocation.SetAllocationAmt(CostAllocationAmount);
+        //                            if (!ObjMVAMVAMProductCostAllocation.Save(trx))
         //                            {
         //                                CheckExecution = false;
         //                                Msg = "Error Occured when try to Save record on Cost Allocation";
@@ -3847,7 +3847,7 @@ namespace VAdvantage.Model
 
         //                            //  update CostAllocationID on Allocation Line against generated Allocation Line.........
         //                            MAllocationLine objMAllocationLine = new MAllocationLine(GetCtx(), Convert.ToInt32(DrCostAllocationLine[0]["AllocationLineID"]), trx);
-        //                            objMAllocationLine.SetVAM_ProductCostAllocation_ID(ObjMVAMProductCostAllocation.Get_ID());
+        //                            objMAllocationLine.SetVAM_ProductCostAllocation_ID(ObjMVAMVAMProductCostAllocation.Get_ID());
         //                            if (!objMAllocationLine.Save(trx))
         //                            {
         //                                CheckExecution = false;
@@ -5653,8 +5653,8 @@ namespace VAdvantage.Model
 
             //if (GetCostAllocationID() != 0)
             //{
-            //    MVAMProductCostAllocation objMVAMProductCost = new MVAMProductCostAllocation(GetCtx(), GetCostAllocationID(), Get_Trx());
-            //    objMVAMProductCost.ReverseCorrectIt();
+            //    MVAMVAMProductCostAllocation objMVAMVAMProductCost = new MVAMVAMProductCostAllocation(GetCtx(), GetCostAllocationID(), Get_Trx());
+            //    objMVAMVAMProductCost.ReverseCorrectIt();
             //}
 
             //Arpit--update UnMatched Balance In Case of Invoice Or Order Or Indepent Payment

@@ -33,7 +33,7 @@ namespace VAdvantage.Model
         private Decimal? containerQty = 0;
         private Decimal? containerQtyTo = 0;
         private decimal qtyReserved = 0;
-        private MStorage storage = null;
+        private MVAMStorage storage = null;
         //private decimal qtyAvailable = 0;
         private int _mvlOldAttId = 0, _mvlNewAttId = 0;
         /// <summary>
@@ -113,10 +113,10 @@ namespace VAdvantage.Model
         /// Get Product
         /// </summary>
         /// <returns>product or null if not defined</returns>
-        public MProduct GetProduct()
+        public MVAMProduct GetProduct()
         {
             if (GetVAM_Product_ID() != 0)
-                return MProduct.Get(GetCtx(), GetVAM_Product_ID());
+                return MVAMProduct.Get(GetCtx(), GetVAM_Product_ID());
             return null;
         }
 
@@ -151,7 +151,7 @@ namespace VAdvantage.Model
         {
             if (movementQty != null)
             {
-                MProduct product = GetProduct();
+                MVAMProduct product = GetProduct();
                 if (product != null)
                 {
                     int precision = product.GetUOMPrecision();
@@ -169,7 +169,7 @@ namespace VAdvantage.Model
         {
             if (movementQty != null)
             {
-                MProduct product = GetProduct();
+                MVAMProduct product = GetProduct();
                 if (product != null)
                 {
                     int precision = product.GetUOMPrecision();
@@ -200,10 +200,10 @@ namespace VAdvantage.Model
         protected override Boolean BeforeSave(Boolean newRecord)
         {
             Decimal VA024_ProvisionPrice = 0;
-            MProduct product = MProduct.Get(GetCtx(), GetVAM_Product_ID());
+            MVAMProduct product = MVAMProduct.Get(GetCtx(), GetVAM_Product_ID());
 
             // chck pallet Functionality applicable or not
-            bool isContainrApplicable = MTransaction.ProductContainerApplicable(GetCtx());
+            bool isContainrApplicable = MVAMInvTrx.ProductContainerApplicable(GetCtx());
 
             // Get Old Value of AttributeSetInstance_ID
             _mvlOldAttId = Util.GetValueOfInt(Get_ValueOld("VAM_PFeature_SetInstance_ID"));
@@ -287,7 +287,7 @@ namespace VAdvantage.Model
             {
                 if (GetVAM_RequisitionLine_ID() > 0)
                 {
-                    MRequisitionLine reqline = new MRequisitionLine(GetCtx(), GetVAM_RequisitionLine_ID(), Get_Trx());        // Trx used to handle query stuck problem
+                    MVAMRequisitionLine reqline = new MVAMRequisitionLine(GetCtx(), GetVAM_RequisitionLine_ID(), Get_Trx());        // Trx used to handle query stuck problem
                     if (GetVAM_PFeature_SetInstance_ID() != reqline.GetVAM_PFeature_SetInstance_ID())
                     {
                         log.SaveError("Message", Msg.GetMsg(GetCtx(), "VA203_AttributeInstanceMustBeSame"));
@@ -448,7 +448,7 @@ namespace VAdvantage.Model
                     SetVA024_UnitPrice(Util.GetValueOfDecimal(VA024_ProvisionPrice * GetMovementQty()));
 
                     // is used to get cost of binded cost method / costing level of primary accounting schema
-                    Decimal cost = MVAMProductCost.GetproductCosts(move.GetVAF_Client_ID(), move.GetVAF_Org_ID(), GetVAM_Product_ID(),
+                    Decimal cost = MVAMVAMProductCost.GetproductCosts(move.GetVAF_Client_ID(), move.GetVAF_Org_ID(), GetVAM_Product_ID(),
                          GetVAM_PFeature_SetInstance_ID(), Get_Trx(), move.GetDTD001_MWarehouseSource_ID());
                     SetVA024_CostPrice((cost - VA024_ProvisionPrice) * GetMovementQty());
                 }
@@ -463,7 +463,7 @@ namespace VAdvantage.Model
                 {
                     if (Env.HasModulePrefix("DTD001_", out mInfo))
                     {
-                        //MProduct product = GetProduct();
+                        //MVAMProduct product = GetProduct();
                         if (product != null
                             && product.GetVAM_PFeature_Set_ID() != 0)
                         {
@@ -544,7 +544,7 @@ namespace VAdvantage.Model
                     }
                     else
                     {
-                        //MProduct product = GetProduct();
+                        //MVAMProduct product = GetProduct();
                         if (product != null
                             && product.GetVAM_PFeature_Set_ID() != 0)
                         {
@@ -572,10 +572,10 @@ namespace VAdvantage.Model
                 if (_mvlOldAttId != _mvlNewAttId && !newRecord && GetVAM_RequisitionLine_ID() != 0)
                 {
                     //  Set QtyReserved On Storage Correspng to New attributesetinstc_id
-                    storage = MStorage.Get(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), Get_Trx());      // Trx used to handle query stuck problem
+                    storage = MVAMStorage.Get(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), Get_Trx());      // Trx used to handle query stuck problem
                     if (storage == null)
                     {
-                        storage = MStorage.GetCreate(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), Get_Trx());     // Trx used to handle query stuck problem
+                        storage = MVAMStorage.GetCreate(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), Get_Trx());     // Trx used to handle query stuck problem
                     }
                     storage.SetQtyReserved(storage.GetQtyReserved() + qtyReserved);
                     if (!storage.Save())
@@ -583,10 +583,10 @@ namespace VAdvantage.Model
                         return false;
                     }
 
-                    storage = MStorage.Get(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), _mvlOldAttId, Get_Trx());            // Trx used to handle query stuck problem
+                    storage = MVAMStorage.Get(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), _mvlOldAttId, Get_Trx());            // Trx used to handle query stuck problem
                     if (storage == null)
                     {
-                        storage = MStorage.GetCreate(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), _mvlOldAttId, Get_Trx());             // Trx used to handle query stuck problem
+                        storage = MVAMStorage.GetCreate(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), _mvlOldAttId, Get_Trx());             // Trx used to handle query stuck problem
                     }
                     storage.SetQtyReserved(storage.GetQtyReserved() - qtyReserved);
                     if (!storage.Save())
@@ -597,16 +597,16 @@ namespace VAdvantage.Model
 
                 if (!newRecord && GetVAM_RequisitionLine_ID() != 0 && GetConfirmedQty() == 0 && String.IsNullOrEmpty(GetDescription()))
                 {
-                    MRequisitionLine requisition = new MRequisitionLine(GetCtx(), GetVAM_RequisitionLine_ID(), Get_Trx());        // Trx used to handle query stuck problem
+                    MVAMRequisitionLine requisition = new MVAMRequisitionLine(GetCtx(), GetVAM_RequisitionLine_ID(), Get_Trx());        // Trx used to handle query stuck problem
                     requisition.SetDTD001_ReservedQty(requisition.GetDTD001_ReservedQty() + (GetMovementQty() - qtyReserved));
                     if (!requisition.Save())
                     {
                         return false;
                     }
-                    storage = MStorage.Get(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), Get_Trx());      // Trx used to handle query stuck problem
+                    storage = MVAMStorage.Get(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), Get_Trx());      // Trx used to handle query stuck problem
                     if (storage == null)
                     {
-                        storage = MStorage.GetCreate(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), Get_Trx());             // Trx used to handle query stuck problem
+                        storage = MVAMStorage.GetCreate(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), Get_Trx());             // Trx used to handle query stuck problem
                     }
                     storage.SetQtyReserved(storage.GetQtyReserved() + (GetMovementQty() - qtyReserved));
                     if (!storage.Save())
@@ -617,16 +617,16 @@ namespace VAdvantage.Model
 
                 if (newRecord && GetVAM_RequisitionLine_ID() != 0 && GetDescription() != "RC")
                 {
-                    MRequisitionLine requisition = new MRequisitionLine(GetCtx(), GetVAM_RequisitionLine_ID(), Get_Trx());            // Trx used to handle query stuck problem
+                    MVAMRequisitionLine requisition = new MVAMRequisitionLine(GetCtx(), GetVAM_RequisitionLine_ID(), Get_Trx());            // Trx used to handle query stuck problem
                     requisition.SetDTD001_ReservedQty(requisition.GetDTD001_ReservedQty() + GetMovementQty());
                     if (!requisition.Save())
                     {
                         return false;
                     }
-                    storage = MStorage.Get(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), Get_Trx());      // Trx used to handle query stuck problem
+                    storage = MVAMStorage.Get(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), Get_Trx());      // Trx used to handle query stuck problem
                     if (storage == null)
                     {
-                        storage = MStorage.GetCreate(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), Get_Trx());         // Trx used to handle query stuck problem
+                        storage = MVAMStorage.GetCreate(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), Get_Trx());         // Trx used to handle query stuck problem
                     }
                     storage.SetQtyReserved(storage.GetQtyReserved() + GetMovementQty());
                     if (!storage.Save())
@@ -673,16 +673,16 @@ namespace VAdvantage.Model
             {
                 if (GetVAM_RequisitionLine_ID() != 0)
                 {
-                    MRequisitionLine requisition = new MRequisitionLine(GetCtx(), GetVAM_RequisitionLine_ID(), Get_Trx());        // Trx used to handle query stuck problem
+                    MVAMRequisitionLine requisition = new MVAMRequisitionLine(GetCtx(), GetVAM_RequisitionLine_ID(), Get_Trx());        // Trx used to handle query stuck problem
                     requisition.SetDTD001_ReservedQty(requisition.GetDTD001_ReservedQty() - qtyReserved);
                     if (!requisition.Save())
                     {
                         return false;
                     }
-                    storage = MStorage.Get(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), Get_Trx());      // Trx used to handle query stuck problem
+                    storage = MVAMStorage.Get(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), Get_Trx());      // Trx used to handle query stuck problem
                     if (storage == null)
                     {
-                        storage = MStorage.GetCreate(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), 0, Get_Trx());         // Trx used to handle query stuck problem
+                        storage = MVAMStorage.GetCreate(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), 0, Get_Trx());         // Trx used to handle query stuck problem
                     }
                     storage.SetQtyReserved(storage.GetQtyReserved() - qtyReserved);
                     if (!storage.Save())
@@ -728,7 +728,7 @@ namespace VAdvantage.Model
                 return GetMovementQty();
             else if (MVABLCost.LANDEDCOSTDISTRIBUTION_Volume.Equals(CostDistribution))
             {
-                MProduct product = GetProduct();
+                MVAMProduct product = GetProduct();
                 if (product == null)
                 {
                     log.Severe("No Product");
@@ -738,7 +738,7 @@ namespace VAdvantage.Model
             }
             else if (MVABLCost.LANDEDCOSTDISTRIBUTION_Weight.Equals(CostDistribution))
             {
-                MProduct product = GetProduct();
+                MVAMProduct product = GetProduct();
                 if (product == null)
                 {
                     log.Severe("No Product");

@@ -193,7 +193,7 @@ namespace VAdvantage.Model
             //set verified on Product as False when we change BOMType AND BOMUse
             if (newRecord || Is_ValueChanged("BOMType") || Is_ValueChanged("BOMUse") || Is_ValueChanged("IsActive") || Is_ValueChanged("VAM_PFeature_SetInstance_ID"))
             {
-                MProduct product = new MProduct(GetCtx(), GetVAM_Product_ID(), Get_Trx());
+                MVAMProduct product = new MVAMProduct(GetCtx(), GetVAM_Product_ID(), Get_Trx());
                 product.SetIsVerified(false);
                 if (!product.Save())
                 {
@@ -206,7 +206,7 @@ namespace VAdvantage.Model
         protected override bool AfterDelete(bool success)
         {
             // when we delete BOM, then set IsVerified False on Product
-            MProduct product = new MProduct(GetCtx(), GetVAM_Product_ID(), Get_Trx());
+            MVAMProduct product = new MVAMProduct(GetCtx(), GetVAM_Product_ID(), Get_Trx());
             product.SetIsVerified(false);
             if (!product.Save())
             {

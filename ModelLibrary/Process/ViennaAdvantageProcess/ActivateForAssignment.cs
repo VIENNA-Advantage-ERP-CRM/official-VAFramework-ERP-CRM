@@ -43,7 +43,7 @@ namespace ViennaAdvantage.Process
             {
                 throw new ArgumentException("VAB_Project_ID == 0");
             }
-            VAdvantage.Model.MResource Resource = new VAdvantage.Model.MResource(GetCtx(), VAS_Resource_ID, Get_Trx());
+            VAdvantage.Model.MVASResource Resource = new VAdvantage.Model.MVASResource(GetCtx(), VAS_Resource_ID, Get_Trx());
             string sql = "select ProfileType from VAS_Resource where VAS_Resource_ID=" + VAS_Resource_ID + "";
             string ProfileType = VAdvantage.Utility.Util.GetValueOfString(DB.ExecuteScalar(sql));
             VAdvantage.Model.X_VAF_UserContact user = new VAdvantage.Model.X_VAF_UserContact(GetCtx(), 0, Get_Trx());

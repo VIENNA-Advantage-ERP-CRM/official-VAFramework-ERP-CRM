@@ -125,7 +125,7 @@ namespace VAdvantage.Model
                 }
                 else if (GetVAM_ProductCategory_ID() != 0)
                 {
-                    MProductCategory category = MProductCategory.Get(GetCtx(), GetVAM_ProductCategory_ID());
+                    MVAMProductCategory category = MVAMProductCategory.Get(GetCtx(), GetVAM_ProductCategory_ID());
                     Decimal marginEach = category.GetPlannedMargin();
                     SetPlannedMarginAmt(Decimal.Multiply(marginEach, GetPlannedQty()));
                 }
@@ -179,8 +179,8 @@ namespace VAdvantage.Model
             if (GetProject() == null)
                 return limitPrice;
             bool isSOTrx = true;
-            MProduct prd = new MProduct(GetCtx(), GetVAM_Product_ID(), null);
-            MProductPricing pp = new MProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
+            MVAMProduct prd = new MVAMProduct(GetCtx(), GetVAM_Product_ID(), null);
+            MVAMProductPricing pp = new MVAMProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
                 GetVAM_Product_ID(), _parent.GetVAB_BusinessPartner_ID(), GetPlannedQty(), isSOTrx);
             pp.SetVAM_PriceList_ID(_parent.GetVAM_PriceList_ID());
             pp.SetVAM_PriceListVersion_ID(_parent.GetVAM_PriceListVersion_ID());
@@ -345,7 +345,7 @@ namespace VAdvantage.Model
             int VAB_BusinessPartner_ID = GetCtx().GetContextAsInt(windowNo, "VAB_BusinessPartner_ID");
             Decimal Qty = GetPlannedQty();
             bool IsSOTrx = true;
-            MProductPricing pp = new MProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
+            MVAMProductPricing pp = new MVAMProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
                     VAM_Product_ID, VAB_BusinessPartner_ID, Qty, IsSOTrx);
             pp.SetVAM_PriceListVersion_ID(VAM_PriceListVersion_ID);
             DateTime? date = GetPlannedDate();

@@ -1080,8 +1080,8 @@
                             line['VAB_BusinessPartner_ID_K'] = res[i].CBPartnerID;
                             line['Line'] = res[i].Line;
                             line['Line_K'] = res[i].Line_K;
-                            line['VAM_Product_ID'] = res[i].MProductIDK;
-                            line['VAM_Product_ID_K'] = res[i].MProductID;
+                            line['VAM_Product_ID'] = res[i].MVAMProductIDK;
+                            line['VAM_Product_ID_K'] = res[i].MVAMProductID;
                             line['Qty'] = res[i].Qty;
                             line['Matched'] = res[i].Matched;
                             line['recid'] = count;

@@ -28,7 +28,7 @@ namespace VAdvantage.Model
     {
         #region variables
         //	Product					
-        private MProduct _product = null;
+        private MVAMProduct _product = null;
         // Warehouse			
         private int _VAM_Warehouse_ID = 0;
         //Parent				
@@ -225,7 +225,7 @@ namespace VAdvantage.Model
             SetVAB_OrderLine_ID(oLine.GetVAB_OrderLine_ID());
             SetLine(oLine.GetLine());
             SetVAB_UOM_ID(oLine.GetVAB_UOM_ID());
-            MProduct product = oLine.GetProduct();
+            MVAMProduct product = oLine.GetProduct();
             if (product == null)
             {
                 SetVAM_Product_ID(0);
@@ -391,14 +391,14 @@ namespace VAdvantage.Model
             }
 
             //	Get existing Location
-            int VAM_Locator_ID = MStorage.GetVAM_Locator_ID(GetVAM_Warehouse_ID(),
+            int VAM_Locator_ID = MVAMStorage.GetVAM_Locator_ID(GetVAM_Warehouse_ID(),
                     GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(),
                     Qty, Get_TrxName());
             //	Get default Location
             if (VAM_Locator_ID == 0)
             {
-                MProduct product = MProduct.Get(GetCtx(), GetVAM_Product_ID());
-                VAM_Locator_ID = MProductLocator.GetFirstVAM_Locator_ID(product, GetVAM_Warehouse_ID());
+                MVAMProduct product = MVAMProduct.Get(GetCtx(), GetVAM_Product_ID());
+                VAM_Locator_ID = MVAMProductLocator.GetFirstVAM_Locator_ID(product, GetVAM_Warehouse_ID());
                 if (VAM_Locator_ID == 0)
                 {
                     MWarehouse wh = MWarehouse.Get(GetCtx(), GetVAM_Warehouse_ID());
@@ -438,7 +438,7 @@ namespace VAdvantage.Model
          */
         public void SetMovementQty(Decimal MovementQty)
         {
-            MProduct product = GetProduct();
+            MVAMProduct product = GetProduct();
             if (MovementQty != 0 && product != null)
             {
                 int precision = product.GetUOMPrecision();
@@ -452,17 +452,17 @@ namespace VAdvantage.Model
         * 	Get Product
         *	@return product or null
         */
-        public MProduct GetProduct()
+        public MVAMProduct GetProduct()
         {
             if (_product == null && GetVAM_Product_ID() != 0)
-                _product = MProduct.Get(GetCtx(), GetVAM_Product_ID());
+                _product = MVAMProduct.Get(GetCtx(), GetVAM_Product_ID());
             return _product;
         }
 
         /*	Set Product
         *	@param product product
         */
-        public void SetProduct(MProduct product)
+        public void SetProduct(MVAMProduct product)
         {
             _product = product;
             if (_product != null)
@@ -486,7 +486,7 @@ namespace VAdvantage.Model
         public void SetVAM_Product_ID(int VAM_Product_ID, bool setUOM)
         {
             if (setUOM)
-                SetProduct(MProduct.Get(GetCtx(), VAM_Product_ID));
+                SetProduct(MVAMProduct.Get(GetCtx(), VAM_Product_ID));
             else
                 base.SetVAM_Product_ID(VAM_Product_ID);
             SetVAM_PFeature_SetInstance_ID(0);
@@ -566,7 +566,7 @@ namespace VAdvantage.Model
                 return;
 
             //	PO - Set UOM/Locator/Qty
-            MProduct product = GetProduct();
+            MVAMProduct product = GetProduct();
             SetVAB_UOM_ID(product.GetVAB_UOM_ID());
             Decimal QtyEntered = GetQtyEntered();
             SetMovementQty(QtyEntered);
@@ -577,7 +577,7 @@ namespace VAdvantage.Model
             else
             {
                 int VAM_Warehouse_ID = GetCtx().GetContextAsInt(windowNo, "VAM_Warehouse_ID");
-                VAM_Locator_ID = MProductLocator.GetFirstVAM_Locator_ID(product, VAM_Warehouse_ID);
+                VAM_Locator_ID = MVAMProductLocator.GetFirstVAM_Locator_ID(product, VAM_Warehouse_ID);
                 if (VAM_Locator_ID != 0)
                     SetVAM_Locator_ID(VAM_Locator_ID);
                 else
@@ -761,7 +761,7 @@ namespace VAdvantage.Model
             else if (columnName.Equals("MovementQty"))
             {
                 MovementQty = GetMovementQty();
-                int precision = MProduct.Get(GetCtx(), VAM_Product_ID).GetUOMPrecision();
+                int precision = MVAMProduct.Get(GetCtx(), VAM_Product_ID).GetUOMPrecision();
                 //Decimal MovementQty1 = MovementQty.setScale(precision, Decimal.ROUND_HALF_UP);
                 Decimal MovementQty1 = Decimal.Round(MovementQty, precision, MidpointRounding.AwayFromZero);// Env.Scale(MovementQty);
                 if (MovementQty.CompareTo(MovementQty1) != 0)
@@ -1012,7 +1012,7 @@ namespace VAdvantage.Model
         protected override bool BeforeSave(bool newRecord)
         {
             // chck pallet Functionality applicable or not
-            bool isContainrApplicable = MTransaction.ProductContainerApplicable(GetCtx());
+            bool isContainrApplicable = MVAMInvTrx.ProductContainerApplicable(GetCtx());
 
             Decimal? movementQty, QtyEntered, VA024_ProvisionPrice = 0;
             QtyEntered = GetQtyEntered();
@@ -1068,12 +1068,12 @@ namespace VAdvantage.Model
             //Checking for conversion of UOM 
             MVAMInvInOut inO = new MVAMInvInOut(GetCtx(), GetVAM_Inv_InOut_ID(), Get_TrxName());
             MVABDocTypes dt = new MVABDocTypes(GetCtx(), inO.GetVAB_DocTypes_ID(), Get_TrxName());
-            MProduct _Product = null;
+            MVAMProduct _Product = null;
 
             // Check if Product_ID is non zero then only create the object
             if (GetVAM_Product_ID() > 0)
             {
-                _Product = new MProduct(GetCtx(), GetVAM_Product_ID(), Get_TrxName());
+                _Product = new MVAMProduct(GetCtx(), GetVAM_Product_ID(), Get_TrxName());
             }
 
             if (_Product != null && GetVAB_UOM_ID() != _Product.GetVAB_UOM_ID())
@@ -1108,7 +1108,7 @@ namespace VAdvantage.Model
             String qry1 = "";
 
             // for Service Type Product or Charge set value in Locator field
-            if (((_Product != null && _Product.GetProductType() != MProduct.PRODUCTTYPE_Item) || GetVAB_Charge_ID() > 0) && GetVAM_Locator_ID() == 0)
+            if (((_Product != null && _Product.GetProductType() != MVAMProduct.PRODUCTTYPE_Item) || GetVAB_Charge_ID() > 0) && GetVAM_Locator_ID() == 0)
             {
                 qry1 = "SELECT VAM_Locator_ID FROM VAM_Locator WHERE VAM_Warehouse_ID=" + inO.GetVAM_Warehouse_ID() + " AND IsDefault = 'Y'";
                 int il = Util.GetValueOfInt(DB.ExecuteScalar(qry1, null, Get_TrxName()));
@@ -1274,7 +1274,7 @@ namespace VAdvantage.Model
                     SetVA024_UnitPrice(Util.GetValueOfDecimal(VA024_ProvisionPrice * GetMovementQty()));
 
                     // is used to get cost of binded cost method / costing level of primary accounting schema
-                    Decimal cost = MVAMProductCost.GetproductCosts(inO.GetVAF_Client_ID(), inO.GetVAF_Org_ID(), GetVAM_Product_ID(),
+                    Decimal cost = MVAMVAMProductCost.GetproductCosts(inO.GetVAF_Client_ID(), inO.GetVAF_Org_ID(), GetVAM_Product_ID(),
                          GetVAM_PFeature_SetInstance_ID(), Get_Trx(), inO.GetVAM_Warehouse_ID());
                     SetVA024_CostPrice((cost - VA024_ProvisionPrice) * GetMovementQty());
                 }
@@ -1287,7 +1287,7 @@ namespace VAdvantage.Model
                     SetVAM_PFeature_SetInstance_ID(GetVAM_PFeature_SetInstance_ID());
                 else
                 {
-                    MProduct product = GetProduct();
+                    MVAMProduct product = GetProduct();
                     if (product != null
                         && product.GetVAM_PFeature_Set_ID() != 0)
                     {
@@ -1411,7 +1411,7 @@ namespace VAdvantage.Model
                 return GetMovementQty();
             else if (MVABLCost.LANDEDCOSTDISTRIBUTION_Volume.Equals(CostDistribution))
             {
-                MProduct product = GetProduct();
+                MVAMProduct product = GetProduct();
                 if (product == null)
                 {
                     log.Severe("No Product");
@@ -1421,7 +1421,7 @@ namespace VAdvantage.Model
             }
             else if (MVABLCost.LANDEDCOSTDISTRIBUTION_Weight.Equals(CostDistribution))
             {
-                MProduct product = GetProduct();
+                MVAMProduct product = GetProduct();
                 if (product == null)
                 {
                     log.Severe("No Product");

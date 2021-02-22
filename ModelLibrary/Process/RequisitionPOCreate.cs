@@ -136,12 +136,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             if (_VAM_Requisition_ID != 0)
             {
                 log.Info("VAM_Requisition_ID=" + _VAM_Requisition_ID);
-                MRequisition req = new MRequisition(GetCtx(), _VAM_Requisition_ID, Get_TrxName());
-                if (!MRequisition.DOCSTATUS_Completed.Equals(req.GetDocStatus()))
+                MVAMRequisition req = new MVAMRequisition(GetCtx(), _VAM_Requisition_ID, Get_TrxName());
+                if (!MVAMRequisition.DOCSTATUS_Completed.Equals(req.GetDocStatus()))
                 {
                     throw new Exception("@DocStatus@ = " + req.GetDocStatus());
                 }
-                MRequisitionLine[] lines = req.GetLines();
+                MVAMRequisitionLine[] lines = req.GetLines();
                 for (int i = 0; i < lines.Length; i++)
                 {
                     if (lines[i].GetVAB_OrderLine_ID() == 0)
@@ -235,7 +235,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    Process(new MRequisitionLine(GetCtx(), dr, Get_TrxName()));
+                    Process(new MVAMRequisitionLine(GetCtx(), dr, Get_TrxName()));
                 }
 
             }
@@ -264,7 +264,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         ///	  	Process Line
         /// </summary>
         /// <param name="rLine">request line</param>
-        private void Process(MRequisitionLine rLine)
+        private void Process(MVAMRequisitionLine rLine)
         {
             if (rLine.GetVAM_Product_ID() == 0 && rLine.GetVAB_Charge_ID() == 0)
             {
@@ -302,7 +302,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// Create new Order
         /// </summary>
         /// <param name="rLine">request line</param>
-        private void NewOrder(MRequisitionLine rLine, int VAB_BusinessPartner_ID)
+        private void NewOrder(MVAMRequisitionLine rLine, int VAB_BusinessPartner_ID)
         {
             if (_order != null)
             {
@@ -368,7 +368,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// New Order Line (different Product)
         /// </summary>
         /// <param name="rLine">request line</param>
-        private void NewLine(MRequisitionLine rLine)
+        private void NewLine(MVAMRequisitionLine rLine)
         {
             if (_orderLine != null)
             {
@@ -378,7 +378,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 }
             }
             _orderLine = null;
-            MProduct product = null;
+            MVAMProduct product = null;
 
             //	Get Business Partner
             int VAB_BusinessPartner_ID = rLine.GetVAB_BusinessPartner_ID();
@@ -398,8 +398,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             else
             {
                 //	Find Vendor from Produt
-                product = MProduct.Get(GetCtx(), rLine.GetVAM_Product_ID());
-                MProductPO[] ppos = MProductPO.GetOfProduct(GetCtx(), product.GetVAM_Product_ID(), null);
+                product = MVAMProduct.Get(GetCtx(), rLine.GetVAM_Product_ID());
+                MVAMProductPO[] ppos = MVAMProductPO.GetOfProduct(GetCtx(), product.GetVAM_Product_ID(), null);
                 for (int i = 0; i < ppos.Length; i++)
                 {
                     if (ppos[i].IsCurrentVendor() && ppos[i].GetVAB_BusinessPartner_ID() != 0)

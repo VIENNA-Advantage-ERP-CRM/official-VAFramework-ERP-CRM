@@ -62,7 +62,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             throw new SystemException(retValue);
         }
 		lead.Save();
-		MRequest request = lead.GetRequest();
+		MVARRequest request = lead.GetRequest();
 		//
 		return "@VAR_Request_ID@ " + request.GetDocumentNo();
 	}	//	doIt

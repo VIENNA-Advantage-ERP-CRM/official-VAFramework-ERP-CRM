@@ -45,7 +45,7 @@ namespace VAdvantage.Process
                 {
 
                     VAdvantage.Model.X_VAB_Contract contact = new VAdvantage.Model.X_VAB_Contract(GetCtx(), 0, null);
-                    VAdvantage.Model.MProductPricing pp = new VAdvantage.Model.MProductPricing(GetCtx().GetVAF_Client_ID(), GetCtx().GetVAF_Org_ID(),
+                    VAdvantage.Model.MVAMProductPricing pp = new VAdvantage.Model.MVAMProductPricing(GetCtx().GetVAF_Client_ID(), GetCtx().GetVAF_Org_ID(),
                         line.GetVAM_Product_ID(), order.GetVAB_BusinessPartner_ID(), line.GetQtyOrdered(), true);
                     int VAM_PriceList_ID = Util.GetValueOfInt(order.GetVAM_PriceList_ID());
                     pp.SetVAM_PriceList_ID(VAM_PriceList_ID);
@@ -175,7 +175,7 @@ namespace VAdvantage.Process
           int VAB_BusinessPartner_ID = ctx.GetContextAsInt(WindowNo, "VAB_BusinessPartner_ID");
                 Decimal Qty = Util.GetValueOfDecimal(mTab.GetValue("QtyOrdered"));
                 bool isSOTrx = ctx.GetContext(WindowNo, "IsSOTrx").Equals("Y");
-                MProductPricing pp = new MProductPricing(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID(),
+                MVAMProductPricing pp = new MVAMProductPricing(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID(),
                         VAM_Product_ID, VAB_BusinessPartner_ID, Qty, isSOTrx);
                 int VAM_PriceList_ID = ctx.GetContextAsInt(WindowNo, "VAM_PriceList_ID");
                 pp.SetVAM_PriceList_ID(VAM_PriceList_ID);

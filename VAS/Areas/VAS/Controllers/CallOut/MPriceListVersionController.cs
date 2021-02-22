@@ -9,7 +9,7 @@ using VIS.Models;
 
 namespace VIS.Controllers
 {
-    public class MPriceListVersionController : Controller
+    public class MVAMPriceListVersionController : Controller
     {
         public ActionResult Index()
         {
@@ -23,7 +23,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MPriceListVersionModel objPriceList = new MPriceListVersionModel();
+                MVAMPriceListVersionModel objPriceList = new MVAMPriceListVersionModel();
                 retJSON = JsonConvert.SerializeObject(objPriceList.GetVAM_PriceListVersion_ID(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -36,7 +36,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MPriceListVersionModel objPriceList = new MPriceListVersionModel();
+                MVAMPriceListVersionModel objPriceList = new MVAMPriceListVersionModel();
                 retJSON = JsonConvert.SerializeObject(objPriceList.GetPriceList(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);

@@ -121,7 +121,7 @@ namespace VAdvantage.Acct
 
             MVABProject project = new MVABProject(GetCtx(), _issue.GetVAB_Project_ID(), null);
             String ProjectCategory = project.GetProjectCategory();
-            MProduct product = MProduct.Get(GetCtx(), _issue.GetVAM_Product_ID());
+            MVAMProduct product = MVAMProduct.Get(GetCtx(), _issue.GetVAM_Product_ID());
 
             //  Line pointers
             FactLine dr = null;

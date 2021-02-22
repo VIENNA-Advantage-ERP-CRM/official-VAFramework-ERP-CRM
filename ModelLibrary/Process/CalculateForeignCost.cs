@@ -62,7 +62,7 @@ namespace VAdvantage.Process
                         {
                             invoice = new MVABInvoice(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Invoice_id"]), Get_Trx());
                             invoiceLine = new MVABInvoiceLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_InvoiceLine_id"]), Get_Trx());
-                            if (!MVAMProductCostForeignCurrency.InsertForeignCostAverageInvoice(GetCtx(), invoice, invoiceLine, Get_Trx()))
+                            if (!MVAMVAMProductCostForeignCurrency.InsertForeignCostAverageInvoice(GetCtx(), invoice, invoiceLine, Get_Trx()))
                             {
                                 Get_Trx().Rollback();
                                 ValueNamePair pp = VLogger.RetrieveError();
@@ -100,7 +100,7 @@ namespace VAdvantage.Process
                             orderLine = new MVABOrderLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Orderline_id"]), Get_Trx());
                             order = new MVABOrder(GetCtx(), orderLine.GetVAB_Order_ID(), Get_Trx());
                             inoutLine = new MVAMInvInOutLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Inv_InOutLine_id"]), Get_Trx());
-                            if (!MVAMProductCostForeignCurrency.InsertForeignCostAveragePO(GetCtx(), order, orderLine, inoutLine, Get_Trx()))
+                            if (!MVAMVAMProductCostForeignCurrency.InsertForeignCostAveragePO(GetCtx(), order, orderLine, inoutLine, Get_Trx()))
                             {
                                 Get_Trx().Rollback();
                                 ValueNamePair pp = VLogger.RetrieveError();

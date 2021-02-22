@@ -22,7 +22,7 @@ namespace VIS.Models
         //Logger			
         private static VLogger log = VLogger.GetVLogger(typeof(VBOMDropModel).FullName);
         //	Product to create BOMs from	
-        private MProduct _product;
+        private MVAMProduct _product;
         // BOM Qty						
         private Decimal _qty = 1;
         //	Line Counter				
@@ -165,7 +165,7 @@ namespace VIS.Models
         {
            
             String title = Msg.GetMsg(ctx, "SelectProduct");
-            _product = new MProduct(ctx, productID, null);
+            _product = new MVAMProduct(ctx, productID, null);
             if (_product != null && _product.Get_ID() > 0)
             {
                 title = _product.GetName();
@@ -179,16 +179,16 @@ namespace VIS.Models
             return lstBOMLines;
         }
 
-        private void BomLines(Ctx ctx,MProduct product, Decimal qty)
+        private void BomLines(Ctx ctx,MVAMProduct product, Decimal qty)
         {
                 lstBOMLines = new List<BOMLines>();
-                MProductBOM[] bomLines = null;          
-                bomLines = MProductBOM.GetBOMLines(product);
-                MProduct objproduct=null;
+                MVAMProductBOM[] bomLines = null;          
+                bomLines = MVAMProductBOM.GetBOMLines(product);
+                MVAMProduct objproduct=null;
                 for (int i = 0; i < bomLines.Length; i++)
                 {
                     AddBOMLine(ctx,bomLines[i], qty);
-                    objproduct = new MProduct(ctx, Util.GetValueOfInt(bomLines[i].GetVAM_ProductBOM_ID()), null);
+                    objproduct = new MVAMProduct(ctx, Util.GetValueOfInt(bomLines[i].GetVAM_ProductBOM_ID()), null);
                     lstBOMLines.Add(new BOMLines()
                     {
                             BOMType=Util.GetValueOfString(bomLines[i].GetBOMType()),
@@ -210,7 +210,7 @@ namespace VIS.Models
         /// </summary>
         /// <param name="line">BOM Line</param>
         /// <param name="qty">quantity</param>
-        private void AddBOMLine(Ctx ctx,MProductBOM line, Decimal qty)
+        private void AddBOMLine(Ctx ctx,MVAMProductBOM line, Decimal qty)
         {
             
             // Envs.SetBusyIndicator(true);
@@ -218,11 +218,11 @@ namespace VIS.Models
             String bomType = line.GetBOMType();
             if (bomType == null)
             {
-                bomType = MProductBOM.BOMTYPE_StandardPart;
+                bomType = MVAMProductBOM.BOMTYPE_StandardPart;
             }
             //
             Decimal lineQty = Decimal.Multiply(line.GetBOMQty(), qty);
-            MProduct product = line.GetProduct();
+            MVAMProduct product = line.GetProduct();
             if (product == null)
             {
                 return;

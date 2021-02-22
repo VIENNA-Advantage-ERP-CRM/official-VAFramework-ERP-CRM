@@ -1038,7 +1038,7 @@ namespace VAdvantage.Model
             if (ii == 0)
                 ii = GetBPGroup().GetVAM_ReturnRule_ID();
             if (ii == 0)
-                ii = MReturnPolicy.GetDefault(GetCtx());
+                ii = MVAMReturnRule.GetDefault(GetCtx());
             return ii;
         }
 
@@ -1052,7 +1052,7 @@ namespace VAdvantage.Model
             if (ii == 0)
                 ii = GetBPGroup().GetPO_ReturnPolicy_ID();
             if (ii == 0)
-                ii = MReturnPolicy.GetDefault(GetCtx());
+                ii = MVAMReturnRule.GetDefault(GetCtx());
             return ii;
         }
 

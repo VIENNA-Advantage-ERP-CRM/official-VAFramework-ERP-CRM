@@ -1218,7 +1218,7 @@ namespace VAdvantage.Model
         */
         public new void SetVAM_PriceList_ID(int VAM_PriceList_ID)
         {
-            MPriceList pl = MPriceList.Get(GetCtx(), VAM_PriceList_ID, null);
+            MVAMPriceList pl = MVAMPriceList.Get(GetCtx(), VAM_PriceList_ID, null);
             if (pl.Get_ID() == VAM_PriceList_ID)
             {
                 base.SetVAM_PriceList_ID(VAM_PriceList_ID);
@@ -1923,7 +1923,7 @@ namespace VAdvantage.Model
         private void CalculateAndUpdateTaxes()
         {
             // PriceList Object
-            MPriceList priceList = MPriceList.Get(GetCtx(), GetVAM_PriceList_ID(), Get_Trx());
+            MVAMPriceList priceList = MVAMPriceList.Get(GetCtx(), GetVAM_PriceList_ID(), Get_Trx());
             // Currency Object
             MVABCurrency currency = MVABCurrency.Get(GetCtx(), priceList.GetVAB_Currency_ID());
             //Tax Object 
@@ -2213,14 +2213,14 @@ namespace VAdvantage.Model
         //        for (int i = 0; i < lines.Length; i++)
         //        {
         //            MVABOrderLine line = lines[i];
-        //            MProduct product = MProduct.Get(GetCtx(), line.GetVAM_Product_ID());
+        //            MVAMProduct product = MVAMProduct.Get(GetCtx(), line.GetVAM_Product_ID());
         //            log.Fine(product.GetName());
         //            //	New Lines
         //            int lineNo = line.GetLine();
-        //            MProductBOM[] boms = MProductBOM.GetBOMLines(product);
+        //            MVAMProductBOM[] boms = MVAMProductBOM.GetBOMLines(product);
         //            for (int j = 0; j < boms.Length; j++)
         //            {
-        //                MProductBOM bom = boms[j];
+        //                MVAMProductBOM bom = boms[j];
         //                MVABOrderLine newLine = new MVABOrderLine(this);
         //                newLine.SetLine(++lineNo);
         //                newLine.SetVAM_Product_ID(bom.GetProduct()
@@ -2312,7 +2312,7 @@ namespace VAdvantage.Model
         //            Decimal difference = Decimal.Subtract(Decimal.Subtract(target, line.GetQtyReserved()), line.GetQtyDelivered());
         //            if (Env.Signum(difference) == 0)
         //            {
-        //                MProduct product = line.GetProduct();
+        //                MVAMProduct product = line.GetProduct();
         //                if (product != null)
         //                {
         //                    Volume = Decimal.Add(Volume, (Decimal.Multiply((Decimal)product.GetVolume(), line.GetQtyOrdered())));
@@ -2327,7 +2327,7 @@ namespace VAdvantage.Model
         //                + ",Reserved=" + line.GetQtyReserved() + ",Delivered=" + line.GetQtyDelivered());
 
         //            //	Check Product - Stocked and Item
-        //            MProduct product1 = line.GetProduct();
+        //            MVAMProduct product1 = line.GetProduct();
         //            if (product1 != null)
         //            {
         //                if (product1.IsStocked())
@@ -2337,7 +2337,7 @@ namespace VAdvantage.Model
         //                    int VAM_Locator_ID = 0;
         //                    //	Get Locator to reserve
         //                    if (line.GetVAM_PFeature_SetInstance_ID() != 0)	//	Get existing Location
-        //                        VAM_Locator_ID = MStorage.GetVAM_Locator_ID(line.GetVAM_Warehouse_ID(),
+        //                        VAM_Locator_ID = MVAMStorage.GetVAM_Locator_ID(line.GetVAM_Warehouse_ID(),
         //                            line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(),
         //                            ordered, Get_TrxName());
         //                    //	Get default Location
@@ -2347,7 +2347,7 @@ namespace VAdvantage.Model
         //                        VAM_Locator_ID = wh.GetDefaultVAM_Locator_ID();
         //                    }
         //                    //	Update Storage
-        //                    if (!MStorage.Add(GetCtx(), line.GetVAM_Warehouse_ID(), VAM_Locator_ID,
+        //                    if (!MVAMStorage.Add(GetCtx(), line.GetVAM_Warehouse_ID(), VAM_Locator_ID,
         //                        line.GetVAM_Product_ID(),
         //                        line.GetVAM_PFeature_SetInstance_ID(), line.GetVAM_PFeature_SetInstance_ID(),
         //                        Env.ZERO, reserved, ordered, Get_TrxName()))
@@ -2606,14 +2606,14 @@ namespace VAdvantage.Model
         //            //	Qty = Ordered - Delivered
         //            Decimal MovementQty = Decimal.Subtract(oLine.GetQtyOrdered(), oLine.GetQtyDelivered());
         //            //	Location
-        //            int VAM_Locator_ID = MStorage.GetVAM_Locator_ID(oLine.GetVAM_Warehouse_ID(),
+        //            int VAM_Locator_ID = MVAMStorage.GetVAM_Locator_ID(oLine.GetVAM_Warehouse_ID(),
         //                    oLine.GetVAM_Product_ID(), oLine.GetVAM_PFeature_SetInstance_ID(),
         //                    MovementQty, Get_TrxName());
         //            if (VAM_Locator_ID == 0)		//	Get default Location
         //            {
-        //                MProduct product = ioLine.GetProduct();
+        //                MVAMProduct product = ioLine.GetProduct();
         //                int VAM_Warehouse_ID = oLine.GetVAM_Warehouse_ID();
-        //                VAM_Locator_ID = MProductLocator.GetFirstVAM_Locator_ID(product, VAM_Warehouse_ID);
+        //                VAM_Locator_ID = MVAMProductLocator.GetFirstVAM_Locator_ID(product, VAM_Warehouse_ID);
         //                if (VAM_Locator_ID == 0)
         //                {
         //                    MWarehouse wh = MWarehouse.Get(GetCtx(), VAM_Warehouse_ID);

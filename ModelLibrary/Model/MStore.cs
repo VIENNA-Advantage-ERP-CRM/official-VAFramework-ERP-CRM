@@ -764,8 +764,8 @@ namespace VAdvantage.Model
 				"Request", 
 				"Request ",
 				"Dear ",
-				"\nThank you for your request: " + MRequest.SEPARATOR,
-				MRequest.SEPARATOR + "\nPlease check back for updates."},
+				"\nThank you for your request: " + MVARRequest.SEPARATOR,
+				MVARRequest.SEPARATOR + "\nPlease check back for updates."},
 				
 			new String[]{MMailMsg.MAILMSGTYPE_UserAccount,
 				"Welcome Message", 

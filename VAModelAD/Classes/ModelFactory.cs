@@ -45,9 +45,9 @@ namespace VAModelAD.Classes
         /**	Special Classes				*/
         private static String[] _special = new String[] {
         "VAF_ColumnDic", "VAdvantage.Model.M_Element",
-        "AD_Registration", "VAdvantage.Model.M_Registration",
+        "AD_Registration", "VAdvantage.Model.M_VAFRegistration",
         "VAF_TreeInfo", "VAdvantage.Model.MTree_Base",
-        "VAR_Category", "VAdvantage.Model.MRequestCategory",
+        "VAR_Category", "VAdvantage.Model.MVARCategory",
         "VAGL_Group", "VAdvantage.Model.MVAGLGroup",
         "K_Category", "VAdvantage.Model.MKCategory",
         "VAB_Acct_ValidParameter", "VAdvantage.Model.MVABAccount",

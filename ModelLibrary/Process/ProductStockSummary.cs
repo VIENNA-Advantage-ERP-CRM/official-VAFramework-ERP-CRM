@@ -28,7 +28,7 @@ namespace VAdvantage.Process
         private string _moveType = "";
         private int existOld = 0;
         private DateTime? _moveDate = null;
-        MProductStockSummary Trs = null;
+        MVAMProdStockSummary Trs = null;
 
         protected override void Prepare()
         {
@@ -109,7 +109,7 @@ namespace VAdvantage.Process
                                 int VAM_Prod_StockSummary_ID = Util.GetValueOfInt(DB.ExecuteScalar(Qry.ToString(), null, Get_Trx()));
                                 if (VAM_Prod_StockSummary_ID > 0)
                                 {
-                                    Trs = new MProductStockSummary(GetCtx(), VAM_Prod_StockSummary_ID, Get_TrxName());
+                                    Trs = new MVAMProdStockSummary(GetCtx(), VAM_Prod_StockSummary_ID, Get_TrxName());
                                     Trs.SetQtyCloseStockOrg(Trs.GetQtyCloseStockOrg() + _moveQty);
                                 }
                                 else
@@ -123,7 +123,7 @@ namespace VAdvantage.Process
                                             " AND VAF_Org_ID = " + _vaf_org_ID + " AND MovementFromDate < " + GlobalVariable.TO_DATE(_moveDate, true) + " ORDER BY MovementFromDate DESC";
                                         OpeningStock = Util.GetValueOfDecimal(DB.ExecuteScalar(Qry, null, Get_Trx()));
                                     }
-                                    Trs = new MProductStockSummary(GetCtx(), _vaf_org_ID, _VAM_Product_ID,
+                                    Trs = new MVAMProdStockSummary(GetCtx(), _vaf_org_ID, _VAM_Product_ID,
                                             OpeningStock, OpeningStock + _moveQty, _moveDate, Get_TrxName());
                                     Trs.SetIsStockSummarized(true);
                                 }                                
@@ -139,7 +139,7 @@ namespace VAdvantage.Process
                                         Qry = "SELECT VAM_Prod_StockSummary_ID FROM VAM_Prod_StockSummary WHERE IsActive = 'Y' AND VAM_Product_ID = " + _VAM_Product_ID +
                                                     " AND VAF_Org_ID = " + _vaf_org_ID + " AND MovementFromDate < " + GlobalVariable.TO_DATE(_moveDate, true) + " ORDER BY MovementFromDate DESC";
                                         int oldSummary_ID = Util.GetValueOfInt(DB.ExecuteScalar(Qry.ToString(), null, Get_Trx()));
-                                        MProductStockSummary oldTrs = new MProductStockSummary(GetCtx(), oldSummary_ID, Get_Trx());
+                                        MVAMProdStockSummary oldTrs = new MVAMProdStockSummary(GetCtx(), oldSummary_ID, Get_Trx());
                                         oldTrs.SetMovementToDate(Convert.ToDateTime(_moveDate).AddDays(-1));
                                         if (!oldTrs.Save())
                                         {

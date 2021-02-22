@@ -11,7 +11,7 @@ using VIS.Models;
 
 namespace VIS.Controllers
 {
-    public class MRequestTypeController: Controller
+    public class MVARRequestTypeController: Controller
     {
 
 
@@ -27,7 +27,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MRequestTypeModel rt = new MRequestTypeModel();
+                MVARRequestTypeModel rt = new MVARRequestTypeModel();
                 int VAR_Req_Status_ID = rt.GetDefaultVAR_Req_Status_ID(ctx,fields);
                 retJSON = JsonConvert.SerializeObject(VAR_Req_Status_ID);
             }        

@@ -64,7 +64,7 @@ namespace VAdvantage.Process
         /// <returns>info</returns>
         protected override String DoIt()
         {
-            isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
+            isContainerApplicable = MVAMInvTrx.ProductContainerApplicable(GetCtx());
 
             log.Info("VAM_Inventory_ID=" + _VAM_Inventory_ID);
             inventory = new MVAMInventory(GetCtx(), _VAM_Inventory_ID, Get_TrxName());
@@ -339,11 +339,11 @@ namespace VAdvantage.Process
                 {
                     MVAMInventoryLine il = new MVAMInventoryLine(GetCtx(), dr, Get_TrxName());
                     Decimal onHand = Env.ZERO;
-                    MStorage[] storages = MStorage.GetAll(GetCtx(), il.GetVAM_Product_ID(), il.GetVAM_Locator_ID(), Get_TrxName());
+                    MVAMStorage[] storages = MVAMStorage.GetAll(GetCtx(), il.GetVAM_Product_ID(), il.GetVAM_Locator_ID(), Get_TrxName());
                     MVAMInventoryLineMP ma = null;
                     for (int i = 0; i < storages.Length; i++)
                     {
-                        MStorage storage = storages[i];
+                        MVAMStorage storage = storages[i];
                         if (Env.Signum(storage.GetQtyOnHand()) == 0)
                             continue;
                         onHand = Decimal.Add(onHand, storage.GetQtyOnHand());
@@ -394,7 +394,7 @@ namespace VAdvantage.Process
                     return "";
                 }
             }
-            MProduct product = MProduct.Get(GetCtx(), VAM_Product_ID);
+            MVAMProduct product = MVAMProduct.Get(GetCtx(), VAM_Product_ID);
             if (product != null)
             {
                 int precision = product.GetUOMPrecision();

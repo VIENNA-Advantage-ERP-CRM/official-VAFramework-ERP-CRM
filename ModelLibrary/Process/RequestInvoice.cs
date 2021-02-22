@@ -100,7 +100,7 @@ namespace VAdvantage.Process
                 + ", VAR_Category_ID=" + _VAR_Category_ID + ", VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID
                 + ", _VAM_Product_ID=" + _VAM_Product_ID);
 
-            MRequestType type = MRequestType.Get(GetCtx(), _VAR_Req_Type_ID);
+            MVARRequestType type = MVARRequestType.Get(GetCtx(), _VAR_Req_Type_ID);
             if (type.Get_ID() == 0)
             {
                 throw new Exception("@VAR_Req_Type_ID@ @NotFound@ " + _VAR_Req_Type_ID);
@@ -164,7 +164,7 @@ namespace VAdvantage.Process
                 int oldVAB_BusinessPartner_ID = 0;
                 foreach (DataRow dr in dt.Rows)
                 {
-                    MRequest request = new MRequest(GetCtx(), dr, Get_TrxName());
+                    MVARRequest request = new MVARRequest(GetCtx(), dr, Get_TrxName());
                     if (!request.IsInvoiced())
                     {
                         continue;
@@ -234,7 +234,7 @@ namespace VAdvantage.Process
         ///	New Invoice
         /// </summary>
         /// <param name="request">request</param>
-        private void InvoiceNew(MRequest request)
+        private void InvoiceNew(MVARRequest request)
         {
             _m_invoice = new MVABInvoice(GetCtx(), 0, Get_TrxName());
             _m_invoice.SetVAB_DocTypesTarget_ID(MVABMasterDocType.DOCBASETYPE_ARINVOICE);
@@ -264,9 +264,9 @@ namespace VAdvantage.Process
         /// Invoice Line
         /// </summary>
         /// <param name="request">request</param>
-        private void InvoiceLine(MRequest request)
+        private void InvoiceLine(MVARRequest request)
         {
-            MRequestUpdate[] updates = request.GetUpdatedRecord(null);
+            MVARRequestUpdate[] updates = request.GetUpdatedRecord(null);
 
             for (int i = 0; i < updates.Length; i++)
             {

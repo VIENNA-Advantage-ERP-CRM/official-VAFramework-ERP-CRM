@@ -101,10 +101,10 @@ namespace VAdvantage.Process
                 throw new Exception("@NotFound@: @VAR_MailTemplate_ID@");
             }
             String subject = "";
-            MMailText mText = null;
+            MVARMailTemplate mText = null;
             if (_EMailPDF)
             {
-                mText = new MMailText(GetCtx(), _VAR_MailTemplate_ID, Get_TrxName());
+                mText = new MVARMailTemplate(GetCtx(), _VAR_MailTemplate_ID, Get_TrxName());
                 if (_EMailPDF && mText.Get_ID() == 0)
                 {
                     throw new Exception("@NotFound@: @VAR_MailTemplate_ID@ - " + _VAR_MailTemplate_ID);

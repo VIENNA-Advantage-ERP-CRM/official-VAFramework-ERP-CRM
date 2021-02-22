@@ -870,12 +870,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 //ResultSet rs = pstmt.executeQuery ();
                 idr = DataBase.DB.ExecuteReader(sql.ToString(), null, Get_TrxName());
                // String oldDocumentNo = "";
-                MRequest request = null;
+                MVARRequest request = null;
 
                 while (idr.Read())
                 {
                     X_I_Request imp = new X_I_Request(GetCtx(), idr, Get_TrxName());
-                    request = new MRequest(imp);
+                    request = new MVARRequest(imp);
 
                     // Save Request
                     if (!request.Save())

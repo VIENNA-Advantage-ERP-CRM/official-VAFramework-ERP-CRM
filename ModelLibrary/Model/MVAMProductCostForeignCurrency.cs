@@ -21,19 +21,19 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MVAMProductCostForeignCurrency : X_VAM_ProductCost_ForeignCurrency
+    public class MVAMVAMProductCostForeignCurrency : X_VAM_ProductCost_ForeignCurrency
     {
 
-        private static VLogger _log = VLogger.GetVLogger(typeof(MVAMProductCostForeignCurrency).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVAMVAMProductCostForeignCurrency).FullName);
 
 
-        public MVAMProductCostForeignCurrency(Ctx ctx, int VAM_ProductCost_ForeignCurrency_ID, Trx trxName)
+        public MVAMVAMProductCostForeignCurrency(Ctx ctx, int VAM_ProductCost_ForeignCurrency_ID, Trx trxName)
             : base(ctx, VAM_ProductCost_ForeignCurrency_ID, trxName)
         {
 
         }
 
-        public MVAMProductCostForeignCurrency(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAMVAMProductCostForeignCurrency(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 
@@ -49,7 +49,7 @@ namespace VAdvantage.Model
             return true;
         }
 
-        public MVAMProductCostForeignCurrency(int VAF_Org_ID, MProduct product, int VAM_PFeature_SetInstance_ID,
+        public MVAMVAMProductCostForeignCurrency(int VAF_Org_ID, MVAMProduct product, int VAM_PFeature_SetInstance_ID,
               int VAM_ProductCostElement_ID, int VAB_BusinessPartner_ID, int VAB_Currency_ID)
             : this(product.GetCtx(), 0, product.Get_TrxName())
         {
@@ -61,10 +61,10 @@ namespace VAdvantage.Model
             SetVAB_Currency_ID(VAB_Currency_ID);
         }
 
-        public static MVAMProductCostForeignCurrency Get(MProduct product, int VAM_PFeature_SetInstance_ID, int VAF_Org_ID, int VAM_ProductCostElement_ID,
+        public static MVAMVAMProductCostForeignCurrency Get(MVAMProduct product, int VAM_PFeature_SetInstance_ID, int VAF_Org_ID, int VAM_ProductCostElement_ID,
             int VAB_BusinessPartner_ID, int VAB_Currency_ID)
         {
-            MVAMProductCostForeignCurrency foreignCurrency = null;
+            MVAMVAMProductCostForeignCurrency foreignCurrency = null;
             String sql = "SELECT * "
                 + "FROM VAM_ProductCost_ForeignCurrency c "
                 + "WHERE VAF_Client_ID=" + product.GetVAF_Client_ID() + " AND VAF_Org_ID=" + VAF_Org_ID
@@ -83,7 +83,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    foreignCurrency = new MVAMProductCostForeignCurrency(product.GetCtx(), dr, product.Get_TrxName());
+                    foreignCurrency = new MVAMVAMProductCostForeignCurrency(product.GetCtx(), dr, product.Get_TrxName());
                 }
             }
             catch (Exception e)
@@ -98,7 +98,7 @@ namespace VAdvantage.Model
 
             //	New
             if (foreignCurrency == null)
-                foreignCurrency = new MVAMProductCostForeignCurrency(VAF_Org_ID, product, VAM_PFeature_SetInstance_ID,
+                foreignCurrency = new MVAMVAMProductCostForeignCurrency(VAF_Org_ID, product, VAM_PFeature_SetInstance_ID,
                      VAM_ProductCostElement_ID, VAB_BusinessPartner_ID, VAB_Currency_ID);
             return foreignCurrency;
         }
@@ -109,9 +109,9 @@ namespace VAdvantage.Model
             int VAM_ProductCostElement_ID = 0;
             int VAF_Org_ID = 0;
             int M_ASI_ID = 0;
-            MProduct product = null;
+            MVAMProduct product = null;
             MVABAccountBook acctSchema = null;
-            MVAMProductCostForeignCurrency foreignCost = null;
+            MVAMVAMProductCostForeignCurrency foreignCost = null;
             dynamic pc = null;
             String cl = null;
             try
@@ -130,11 +130,11 @@ namespace VAdvantage.Model
                     VAM_ProductCostElement_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VAM_ProductCostElement_ID FROM VAM_ProductCostElement WHERE VAF_Client_ID = "
                                        + invoice.GetVAF_Client_ID() + " AND IsActive = 'Y' AND CostingMethod = 'I'"));
 
-                    product = new MProduct(ctx, invoiceLine.GetVAM_Product_ID(), trx);
+                    product = new MVAMProduct(ctx, invoiceLine.GetVAM_Product_ID(), trx);
 
                     if (product != null && product.GetProductType() == "I" && product.GetVAM_Product_ID() > 0) // for Item Type product
                     {
-                        pc = MProductCategory.Get(product.GetCtx(), product.GetVAM_ProductCategory_ID());
+                        pc = MVAMProductCategory.Get(product.GetCtx(), product.GetVAM_ProductCategory_ID());
 
                         // Get Costing Level
                         if (pc != null)
@@ -161,7 +161,7 @@ namespace VAdvantage.Model
                             M_ASI_ID = invoiceLine.GetVAM_PFeature_SetInstance_ID();
                         }
 
-                        foreignCost = MVAMProductCostForeignCurrency.Get(product, M_ASI_ID, VAF_Org_ID, VAM_ProductCostElement_ID, invoice.GetVAB_BusinessPartner_ID(), invoice.GetVAB_Currency_ID());
+                        foreignCost = MVAMVAMProductCostForeignCurrency.Get(product, M_ASI_ID, VAF_Org_ID, VAM_ProductCostElement_ID, invoice.GetVAB_BusinessPartner_ID(), invoice.GetVAB_Currency_ID());
                         foreignCost.SetVAB_Invoice_ID(invoice.GetVAB_Invoice_ID());
                         foreignCost.SetCumulatedQty(Decimal.Add(foreignCost.GetCumulatedQty(), invoiceLine.GetQtyInvoiced()));
                         foreignCost.SetCumulatedAmt(Decimal.Add(foreignCost.GetCumulatedAmt(), invoiceLine.GetLineNetAmt()));
@@ -210,9 +210,9 @@ namespace VAdvantage.Model
             int VAM_ProductCostElement_ID = 0;
             int VAF_Org_ID = 0;
             int M_ASI_ID = 0;
-            MProduct product = null;
+            MVAMProduct product = null;
             MVABAccountBook acctSchema = null;
-            MVAMProductCostForeignCurrency foreignCost = null;
+            MVAMVAMProductCostForeignCurrency foreignCost = null;
             dynamic pc = null;
             String cl = null;
             try
@@ -231,11 +231,11 @@ namespace VAdvantage.Model
                     VAM_ProductCostElement_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VAM_ProductCostElement_ID FROM VAM_ProductCostElement WHERE VAF_Client_ID = "
                                        + order.GetVAF_Client_ID() + " AND IsActive = 'Y' AND CostingMethod = 'A'"));
 
-                    product = new MProduct(ctx, orderLine.GetVAM_Product_ID(), trx);
+                    product = new MVAMProduct(ctx, orderLine.GetVAM_Product_ID(), trx);
 
                     if (product != null && product.GetProductType() == "I" && product.GetVAM_Product_ID() > 0) // for Item Type product
                     {
-                        pc = MProductCategory.Get(product.GetCtx(), product.GetVAM_ProductCategory_ID());
+                        pc = MVAMProductCategory.Get(product.GetCtx(), product.GetVAM_ProductCategory_ID());
 
                         // Get Costing Level
                         if (pc != null)
@@ -262,7 +262,7 @@ namespace VAdvantage.Model
                             M_ASI_ID = orderLine.GetVAM_PFeature_SetInstance_ID();
                         }
 
-                        foreignCost = MVAMProductCostForeignCurrency.Get(product, M_ASI_ID, VAF_Org_ID, VAM_ProductCostElement_ID, order.GetVAB_BusinessPartner_ID(), order.GetVAB_Currency_ID());
+                        foreignCost = MVAMVAMProductCostForeignCurrency.Get(product, M_ASI_ID, VAF_Org_ID, VAM_ProductCostElement_ID, order.GetVAB_BusinessPartner_ID(), order.GetVAB_Currency_ID());
                         foreignCost.SetVAB_Order_ID(order.GetVAB_Order_ID());
                         foreignCost.SetCumulatedQty(Decimal.Add(foreignCost.GetCumulatedQty(), inoutLine.GetMovementQty()));
                         foreignCost.SetCumulatedAmt(Decimal.Add(foreignCost.GetCumulatedAmt(),
@@ -312,9 +312,9 @@ namespace VAdvantage.Model
             int VAM_ProductCostElement_ID = 0;
             int VAF_Org_ID = 0;
             int M_ASI_ID = 0;
-            MProduct product = null;
+            MVAMProduct product = null;
             MVABAccountBook acctSchema = null;
-            MVAMProductCostForeignCurrency foreignCost = null;
+            MVAMVAMProductCostForeignCurrency foreignCost = null;
             dynamic pc = null;
             String cl = null;
             MVABInvoice invoice = null;
@@ -338,11 +338,11 @@ namespace VAdvantage.Model
                         VAM_ProductCostElement_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VAM_ProductCostElement_ID FROM VAM_ProductCostElement WHERE VAF_Client_ID = "
                                            + invoice.GetVAF_Client_ID() + " AND IsActive = 'Y' AND CostingMethod = 'I'"));
 
-                        product = new MProduct(ctx, invoiceLine.GetVAM_Product_ID(), trx);
+                        product = new MVAMProduct(ctx, invoiceLine.GetVAM_Product_ID(), trx);
 
                         if (product != null && product.GetProductType() == "I" && product.GetVAM_Product_ID() > 0) // for Item Type product
                         {
-                            pc = MProductCategory.Get(product.GetCtx(), product.GetVAM_ProductCategory_ID());
+                            pc = MVAMProductCategory.Get(product.GetCtx(), product.GetVAM_ProductCategory_ID());
 
                             // Get Costing Level
                             if (pc != null)
@@ -369,7 +369,7 @@ namespace VAdvantage.Model
                                 M_ASI_ID = ASI;
                             }
 
-                            foreignCost = MVAMProductCostForeignCurrency.Get(product, M_ASI_ID, VAF_Org_ID, VAM_ProductCostElement_ID, invoice.GetVAB_BusinessPartner_ID(), invoice.GetVAB_Currency_ID());
+                            foreignCost = MVAMVAMProductCostForeignCurrency.Get(product, M_ASI_ID, VAF_Org_ID, VAM_ProductCostElement_ID, invoice.GetVAB_BusinessPartner_ID(), invoice.GetVAB_Currency_ID());
                             foreignCost.SetVAB_Invoice_ID(invoice.GetVAB_Invoice_ID());
                             foreignCost.SetCumulatedQty(Decimal.Add(foreignCost.GetCumulatedQty(), matchQty));
                             foreignCost.SetCumulatedAmt(Decimal.Add(foreignCost.GetCumulatedAmt(), Decimal.Multiply(invoiceLine.GetPriceActual(), matchQty)));
@@ -407,9 +407,9 @@ namespace VAdvantage.Model
             int VAM_ProductCostElement_ID = 0;
             int VAF_Org_ID = 0;
             int M_ASI_ID = 0;
-            MProduct product = null;
+            MVAMProduct product = null;
             MVABAccountBook acctSchema = null;
-            MVAMProductCostForeignCurrency foreignCost = null;
+            MVAMVAMProductCostForeignCurrency foreignCost = null;
             dynamic pc = null;
             String cl = null;
             MVABOrder order = null;
@@ -429,11 +429,11 @@ namespace VAdvantage.Model
                         VAM_ProductCostElement_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VAM_ProductCostElement_ID FROM VAM_ProductCostElement WHERE VAF_Client_ID = "
                                            + order.GetVAF_Client_ID() + " AND IsActive = 'Y' AND CostingMethod = 'A'"));
 
-                        product = new MProduct(ctx, orderLine.GetVAM_Product_ID(), trx);
+                        product = new MVAMProduct(ctx, orderLine.GetVAM_Product_ID(), trx);
 
                         if (product != null && product.GetProductType() == "I" && product.GetVAM_Product_ID() > 0) // for Item Type product
                         {
-                            pc = MProductCategory.Get(product.GetCtx(), product.GetVAM_ProductCategory_ID());
+                            pc = MVAMProductCategory.Get(product.GetCtx(), product.GetVAM_ProductCategory_ID());
 
                             // Get Costing Level
                             if (pc != null)
@@ -460,7 +460,7 @@ namespace VAdvantage.Model
                                 M_ASI_ID = ASI;
                             }
 
-                            foreignCost = MVAMProductCostForeignCurrency.Get(product, M_ASI_ID, VAF_Org_ID, VAM_ProductCostElement_ID, order.GetVAB_BusinessPartner_ID(), order.GetVAB_Currency_ID());
+                            foreignCost = MVAMVAMProductCostForeignCurrency.Get(product, M_ASI_ID, VAF_Org_ID, VAM_ProductCostElement_ID, order.GetVAB_BusinessPartner_ID(), order.GetVAB_Currency_ID());
                             foreignCost.SetVAB_Order_ID(order.GetVAB_Order_ID());
                             foreignCost.SetCumulatedQty(Decimal.Add(foreignCost.GetCumulatedQty(), matchQty));
                             foreignCost.SetCumulatedAmt(Decimal.Add(foreignCost.GetCumulatedAmt(), Decimal.Multiply(orderLine.GetPriceActual(), matchQty)));

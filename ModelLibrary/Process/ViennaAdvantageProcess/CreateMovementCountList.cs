@@ -95,7 +95,7 @@ namespace ViennaAdvantage.Process
                 throw new SystemException("@VAM_InventoryTransfer_ID@ @Processed@");
 
             // is used to check Container applicable into system
-            isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
+            isContainerApplicable = MVAMInvTrx.ProductContainerApplicable(GetCtx());
 
             //
             String sqlQry = "";
@@ -197,7 +197,7 @@ ORDER BY s.VAM_Locator_ID, s.VAM_Product_ID, s.Qty DESC, s.VAM_PFeature_SetInsta
             int count = 0;
             IDataReader idr = null;
             DataTable dt = null;
-            MProduct product = null;
+            MVAMProduct product = null;
             try
             {
                 idr = DB.ExecuteReader(sql.ToString(), null, Get_Trx());
@@ -208,7 +208,7 @@ ORDER BY s.VAM_Locator_ID, s.VAM_Product_ID, s.Qty DESC, s.VAM_PFeature_SetInsta
                    // while (idr.Read())
                 {
                     int VAM_Product_ID = Util.GetValueOfInt(dr[0]);
-                    product = MProduct.Get(GetCtx(), VAM_Product_ID);
+                    product = MVAMProduct.Get(GetCtx(), VAM_Product_ID);
                     int VAM_Locator_ID = Util.GetValueOfInt(dr[1]);
                     int VAM_PFeature_SetInstance_ID = Util.GetValueOfInt(dr[2]);
                     Decimal qtyOnHand = Util.GetValueOfDecimal(dr[3]);

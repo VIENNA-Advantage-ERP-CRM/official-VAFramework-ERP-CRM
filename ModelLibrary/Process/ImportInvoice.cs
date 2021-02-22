@@ -624,7 +624,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         invoice.SetVAB_PaymentTerm_ID(imp.GetVAB_PaymentTerm_ID());
                         invoice.SetVAM_PriceList_ID(imp.GetVAM_PriceList_ID());
 
-                        MPriceList pl = MPriceList.Get(GetCtx(), imp.GetVAM_PriceList_ID(), Get_TrxName());
+                        MVAMPriceList pl = MVAMPriceList.Get(GetCtx(), imp.GetVAM_PriceList_ID(), Get_TrxName());
                         invoice.SetIsTaxIncluded(pl.IsTaxIncluded());
 
                         //	SalesRep from Import or the person running the import

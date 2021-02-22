@@ -48,10 +48,10 @@ namespace VIS.Models
             AttributesObjects obj = new AttributesObjects();
 
             MVAMPFeatureSet aset = null;
-            MVAMProductFeature[] attributes = null;
+            MVAMVAMProductFeature[] attributes = null;
             //	Get Model
             MVAMPFeatureSetInstance _masi = MVAMPFeatureSetInstance.Get(ctx, _VAM_PFeature_SetInstance_ID, _VAM_Product_ID);
-            MProduct _prd = new MProduct(ctx, _VAM_Product_ID, null);
+            MVAMProduct _prd = new MVAMProduct(ctx, _VAM_Product_ID, null);
             if (_masi == null)
             {
                 obj.IsReturnNull = true;
@@ -281,7 +281,7 @@ namespace VIS.Models
                 //	New SerNo Button
                 if (_masi.GetMVAMPFeatureSet().GetVAM_CtlSerialNo_ID() != 0)
                 {
-                    if (MVAFRole.GetDefault(ctx).IsTableAccess(MSerNoCtl.Table_ID, false))
+                    if (MVAFRole.GetDefault(ctx).IsTableAccess(MVAMCtlSerialNo.Table_ID, false))
                     {
                         if (!_masi.IsExcludeSerNo(VAF_Column_ID, IsSOTrx))//_windowNoParent
                         {
@@ -399,7 +399,7 @@ namespace VIS.Models
 
             StringBuilder sql = new StringBuilder();
             MVAMPFeatureSet aset = null;
-            MVAMProductFeature[] attributes = null;
+            MVAMVAMProductFeature[] attributes = null;
             string attrsetQry = "";
             int attributeSet = 0;
             MVAMPFeatureSetInstance _masi = MVAMPFeatureSetInstance.Get(ctx, _VAM_PFeature_SetInstance_ID, _VAM_Product_ID);
@@ -530,7 +530,7 @@ namespace VIS.Models
 
             StringBuilder sql = new StringBuilder();
             MVAMPFeatureSet aset = null;
-            MVAMProductFeature[] attributes = null;
+            MVAMVAMProductFeature[] attributes = null;
             string attrsetQry = "";
             int attributeSet = 0;
             MVAMPFeatureSetInstance _masi = MVAMPFeatureSetInstance.Get(ctx, _VAM_PFeature_SetInstance_ID, _VAM_Product_ID);
@@ -666,7 +666,7 @@ namespace VIS.Models
         /// <param name="attribute"></param>
         /// <param name="product"></param>
         /// <param name="readOnly"></param>
-        private string AddAttributeLine(MVAMProductFeature attribute, int VAM_PFeature_SetInstance_ID, bool product, bool readOnly, int windowNo, AttributesObjects obj, int count)
+        private string AddAttributeLine(MVAMVAMProductFeature attribute, int VAM_PFeature_SetInstance_ID, bool product, bool readOnly, int windowNo, AttributesObjects obj, int count)
         {
             log.Fine(attribute + ", Product=" + product + ", R/O=" + readOnly);
             //Column 1
@@ -688,7 +688,7 @@ namespace VIS.Models
 
             MVAMPFeatueInstance instance = attribute.GetMVAMPFeatueInstance(VAM_PFeature_SetInstance_ID);
 
-            if (MVAMProductFeature.ATTRIBUTEVALUETYPE_List.Equals(attribute.GetAttributeValueType()))
+            if (MVAMVAMProductFeature.ATTRIBUTEVALUETYPE_List.Equals(attribute.GetAttributeValueType()))
             {
                 MVAMPFeatureValue[] values = attribute.GetMVAMPFeatureValues();
                 //Column 2
@@ -752,7 +752,7 @@ namespace VIS.Models
                     log.Fine("Attribute=" + attribute.GetName() + " #" + values.Length + " no instance");
                 }
             }
-            else if (MVAMProductFeature.ATTRIBUTEVALUETYPE_Number.Equals(attribute.GetAttributeValueType()))
+            else if (MVAMVAMProductFeature.ATTRIBUTEVALUETYPE_Number.Equals(attribute.GetAttributeValueType()))
             {
                 string value = null;
                 if (instance != null)
@@ -825,7 +825,7 @@ namespace VIS.Models
         public bool GetExcludeEntry(int productId, int adColumn, int windowNo, Ctx ctx)
         {
             bool exclude = true;
-            VAdvantage.Model.MProduct product = VAdvantage.Model.MProduct.Get(ctx, productId);
+            VAdvantage.Model.MVAMProduct product = VAdvantage.Model.MVAMProduct.Get(ctx, productId);
             int VAM_PFeature_Set_ID = product.GetVAM_PFeature_Set_ID();
             if (VAM_PFeature_Set_ID != 0)
             {
@@ -845,7 +845,7 @@ namespace VIS.Models
         /// <param name="strAttrCodeC">Attribute Code</param>
         /// <param name="productWindow">The parent Window is Product Window or Not</param>
         /// <param name="MVAMPFeatureSetInstanceId">Attribute Set Instance ID</param>
-        /// <param name="mProductId">Product ID</param>
+        /// <param name="MVAMProductId">Product ID</param>
         /// <param name="windowNo">Window No for Control</param>
         /// <param name="description">Description</param>
         /// <param name="isEdited">Attribute set Instance is Edited or Not</param>
@@ -853,7 +853,7 @@ namespace VIS.Models
         /// <param name="ctx">Context</param>
         /// <returns>VAM_PFeature_SetInstance_ID, Attribute Description, Error Message</returns>
         public AttributeInstance SaveAttribute(int windowNoParent, string strLotStringC, string strSerNoC, string dtGuaranteeDateC, string strAttrCodeC,
-           bool productWindow, int MVAMPFeatureSetInstanceId, int mProductId, int windowNo, string description, bool isEdited, List<KeyNamePair> values, Ctx ctx)
+           bool productWindow, int MVAMPFeatureSetInstanceId, int MVAMProductId, int windowNo, string description, bool isEdited, List<KeyNamePair> values, Ctx ctx)
         {
             var editors = values;
             AttributeInstance obj = new AttributeInstance();
@@ -900,10 +900,10 @@ namespace VIS.Models
                 }
 
                 MVAMPFeatureSet aset = null;
-                MVAMProductFeature[] attributes = null;
+                MVAMVAMProductFeature[] attributes = null;
                 String mandatory = "";
 
-                MProduct product = MProduct.Get(ctx, mProductId);
+                MVAMProduct product = MVAMProduct.Get(ctx, MVAMProductId);
 
                 if (isEdited)
                 {
@@ -949,7 +949,7 @@ namespace VIS.Models
                             pAttribute_ID = Util.GetValueOfInt(DB.ExecuteScalar(qryAttr.ToString()));
                             if (pAttribute_ID != 0)
                             {
-                                MProductAttributes patr = new MProductAttributes(ctx, pAttribute_ID, trx);
+                                MVAMProductFeatures patr = new MVAMProductFeatures(ctx, pAttribute_ID, trx);
                                 attributeID = patr.GetVAM_PFeature_SetInstance_ID();
                                 product_id = patr.GetVAM_Product_ID();
                             }
@@ -1038,10 +1038,10 @@ namespace VIS.Models
                 //}
                 //sql.Append(" ORDER BY ats.VAM_PFeature_SetInstance_ID");
 
-                Dictionary<MVAMProductFeature, object> lst = new Dictionary<MVAMProductFeature, object>();
+                Dictionary<MVAMVAMProductFeature, object> lst = new Dictionary<MVAMVAMProductFeature, object>();
                 for (int i = 0; i < attributes.Length; i++)
                 {
-                    if (MVAMProductFeature.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
+                    if (MVAMVAMProductFeature.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
                     {
                         object editor = editors[i];
                         MVAMPFeatureValue value = null;
@@ -1058,7 +1058,7 @@ namespace VIS.Models
                         lst[attributes[i]] = value;
                         //attributes[i].SetMVAMPFeatueInstance(MVAMPFeatureSetInstanceId, value);
                     }
-                    else if (MVAMProductFeature.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
+                    else if (MVAMVAMProductFeature.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
                     {
                         object editor = editors[i].Name;
                         string value = Util.GetValueOfString(editor);
@@ -1258,7 +1258,7 @@ namespace VIS.Models
 
                     for (int i = 0; i < attributes.Length; i++)
                     {
-                        if (MVAMProductFeature.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
+                        if (MVAMVAMProductFeature.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
                         {
                             MVAMPFeatureValue value = lst[attributes[i]] != null ? lst[attributes[i]] as MVAMPFeatureValue : null;
                             if (value == null)
@@ -1267,7 +1267,7 @@ namespace VIS.Models
                             }
                             attributes[i].SetMVAMPFeatueInstance(MVAMPFeatureSetInstanceId, value);
                         }
-                        else if (MVAMProductFeature.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
+                        else if (MVAMVAMProductFeature.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
                         {
                             if (Convert.ToDecimal(lst[attributes[i]]) == 0)
                             {
@@ -1289,19 +1289,19 @@ namespace VIS.Models
                     {
                         sql.Clear();
                         sql.Append("SELECT VAM_ProductFeatures_ID FROM VAM_ProductFeatures WHERE VAM_PFeature_SetInstance_ID = " + MVAMPFeatureSetInstanceId + " AND VAM_Product_ID = "
-                            + mProductId + " AND UPC IS NULL");
+                            + MVAMProductId + " AND UPC IS NULL");
                         pAttribute_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString()));
 
                         if (pAttribute_ID == 0)
                         {
-                            MProductAttributes pAttr = new MProductAttributes(ctx, 0, trx);
+                            MVAMProductFeatures pAttr = new MVAMProductFeatures(ctx, 0, trx);
                             pAttr.SetVAF_Org_ID(product.GetVAF_Org_ID());
                             pAttr.SetUPC("");
-                            pAttr.SetVAM_Product_ID(mProductId);
+                            pAttr.SetVAM_Product_ID(MVAMProductId);
                             pAttr.SetVAM_PFeature_SetInstance_ID(MVAMPFeatureSetInstanceId);
                             if (!pAttr.Save())
                             {
-                                obj.Error = Msg.GetMsg(ctx, "NotSaved") + " - " + MProductAttributes.Table_Name;
+                                obj.Error = Msg.GetMsg(ctx, "NotSaved") + " - " + MVAMProductFeatures.Table_Name;
                                 trx.Rollback();
                             }
 
@@ -1334,14 +1334,14 @@ namespace VIS.Models
                     {
                         if (attributeID == 0 && strAttrCode != "")
                         {
-                            MProductAttributes pAttr = new MProductAttributes(ctx, 0, trx);
+                            MVAMProductFeatures pAttr = new MVAMProductFeatures(ctx, 0, trx);
                             pAttr.SetVAF_Org_ID(product.GetVAF_Org_ID());
                             pAttr.SetUPC(strAttrCode);
-                            pAttr.SetVAM_Product_ID(mProductId);
+                            pAttr.SetVAM_Product_ID(MVAMProductId);
                             pAttr.SetVAM_PFeature_SetInstance_ID(MVAMPFeatureSetInstanceId);
                             if (!pAttr.Save())
                             {
-                                obj.Error = Msg.GetMsg(ctx, "NotSaved") + " - " + MProductAttributes.Table_Name;
+                                obj.Error = Msg.GetMsg(ctx, "NotSaved") + " - " + MVAMProductFeatures.Table_Name;
                                 trx.Rollback();
                             }
                         }
@@ -1356,7 +1356,7 @@ namespace VIS.Models
                         obj.VAM_PFeature_SetInstanceName = _masi.GetDescription();
                         obj.attrCode = strAttrCode;
                         //
-                        if (attributeID != 0 && (attributeID != MVAMPFeatureSetInstanceId || product_id != mProductId))
+                        if (attributeID != 0 && (attributeID != MVAMPFeatureSetInstanceId || product_id != MVAMProductId))
                         {
                             obj.Error = Msg.GetMsg(ctx, "AttributeCodeExists");
                         }
@@ -1389,7 +1389,7 @@ namespace VIS.Models
 
         // Change GSI Barcode
         public AttributeInstance SaveAttributeMR(int windowNoParent, string strLotStringC, string strSerNoC, string dtGuaranteeDateC, string strAttrCodeC,
-          bool productWindow, int MVAMPFeatureSetInstanceId, int mProductId, int windowNo, List<KeyNamePair> values, Ctx ctx)
+          bool productWindow, int MVAMPFeatureSetInstanceId, int MVAMProductId, int windowNo, List<KeyNamePair> values, Ctx ctx)
         {
             var editors = values;
             AttributeInstance obj = new AttributeInstance();
@@ -1435,10 +1435,10 @@ namespace VIS.Models
             }
 
             MVAMPFeatureSet aset = null;
-            MVAMProductFeature[] attributes = null;
+            MVAMVAMProductFeature[] attributes = null;
             String mandatory = "";
-            var _masi = MVAMPFeatureSetInstance.Get(ctx, 0, mProductId);
-            MProduct product = MProduct.Get(ctx, mProductId);
+            var _masi = MVAMPFeatureSetInstance.Get(ctx, 0, MVAMProductId);
+            MVAMProduct product = MVAMProduct.Get(ctx, MVAMProductId);
             string attrCodeQry = "SELECT Count(*) FROM VAF_Column WHERE VAF_TableView_ID = 559 AND ColumnName = 'Value'";
             int codeCount = Util.GetValueOfInt(DB.ExecuteScalar(attrCodeQry));
             bool hasValue = codeCount > 0 ? true : false;
@@ -1474,7 +1474,7 @@ namespace VIS.Models
                         pAttribute_ID = Util.GetValueOfInt(DB.ExecuteScalar(qryAttr.ToString()));
                         if (pAttribute_ID != 0)
                         {
-                            MProductAttributes patr = new MProductAttributes(ctx, pAttribute_ID, null);
+                            MVAMProductFeatures patr = new MVAMProductFeatures(ctx, pAttribute_ID, null);
                             attributeID = patr.GetVAM_PFeature_SetInstance_ID();
                             product_id = patr.GetVAM_Product_ID();
                         }
@@ -1563,10 +1563,10 @@ namespace VIS.Models
             }
             sql.Append(" ORDER BY ats.VAM_PFeature_SetInstance_id");
 
-            Dictionary<MVAMProductFeature, object> lst = new Dictionary<MVAMProductFeature, object>();
+            Dictionary<MVAMVAMProductFeature, object> lst = new Dictionary<MVAMVAMProductFeature, object>();
             for (int i = 0; i < attributes.Length; i++)
             {
-                if (MVAMProductFeature.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
+                if (MVAMVAMProductFeature.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
                 {
                     object editor = editors[i];
                     MVAMPFeatureValue value = null;
@@ -1583,7 +1583,7 @@ namespace VIS.Models
                     lst[attributes[i]] = value;
                     //attributes[i].SetMVAMPFeatueInstance(MVAMPFeatureSetInstanceId, value);
                 }
-                else if (MVAMProductFeature.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
+                else if (MVAMVAMProductFeature.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
                 {
                     object editor = editors[i].Name;
                     decimal value = Convert.ToDecimal(editor);
@@ -1784,7 +1784,7 @@ namespace VIS.Models
 
                 for (int i = 0; i < attributes.Length; i++)
                 {
-                    if (MVAMProductFeature.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
+                    if (MVAMVAMProductFeature.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
                     {
                         MVAMPFeatureValue value = lst[attributes[i]] != null ? lst[attributes[i]] as MVAMPFeatureValue : null;
 
@@ -1795,7 +1795,7 @@ namespace VIS.Models
                         //}
                         attributes[i].SetMVAMPFeatueInstance(MVAMPFeatureSetInstanceId, value);
                     }
-                    else if (MVAMProductFeature.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
+                    else if (MVAMVAMProductFeature.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
                     {
                         if (Convert.ToDecimal(lst[attributes[i]]) == 0)
                         {
@@ -1815,12 +1815,12 @@ namespace VIS.Models
                 if (hasValue)
                 {
                     sql.Clear();
-                    sql.Append("SELECT VAM_ProductFeatures_ID FROM VAM_ProductFeatures WHERE VAM_PFeature_SetInstance_ID = " + MVAMPFeatureSetInstanceId + " AND VAM_Product_ID = " + mProductId + " AND UPC IS NULL");
+                    sql.Append("SELECT VAM_ProductFeatures_ID FROM VAM_ProductFeatures WHERE VAM_PFeature_SetInstance_ID = " + MVAMPFeatureSetInstanceId + " AND VAM_Product_ID = " + MVAMProductId + " AND UPC IS NULL");
                     pAttribute_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString()));
 
                     if (pAttribute_ID == 0)
                     {
-                        MProductAttributes pAttr = new MProductAttributes(ctx, 0, null);
+                        MVAMProductFeatures pAttr = new MVAMProductFeatures(ctx, 0, null);
                         pAttr.SetVAF_Org_ID(product.GetVAF_Org_ID());
                         if (strAttrCodeC != "")
                         {
@@ -1830,7 +1830,7 @@ namespace VIS.Models
                         {
                             pAttr.SetUPC("");
                         }
-                        pAttr.SetVAM_Product_ID(mProductId);
+                        pAttr.SetVAM_Product_ID(MVAMProductId);
                         pAttr.SetVAM_PFeature_SetInstance_ID(MVAMPFeatureSetInstanceId);
                         pAttr.Save();
                     }
@@ -1858,10 +1858,10 @@ namespace VIS.Models
                 {
                     if (attributeID == 0 && strAttrCode != "")
                     {
-                        MProductAttributes pAttr = new MProductAttributes(ctx, 0, null);
+                        MVAMProductFeatures pAttr = new MVAMProductFeatures(ctx, 0, null);
                         pAttr.SetVAF_Org_ID(product.GetVAF_Org_ID());
                         pAttr.SetUPC(strAttrCode);
-                        pAttr.SetVAM_Product_ID(mProductId);
+                        pAttr.SetVAM_Product_ID(MVAMProductId);
                         pAttr.SetVAM_PFeature_SetInstance_ID(MVAMPFeatureSetInstanceId);
                         pAttr.Save();
                     }
@@ -1873,7 +1873,7 @@ namespace VIS.Models
                     obj.VAM_PFeature_SetInstanceName = _masi.GetDescription();
                     obj.attrCode = strAttrCode;
                     //
-                    if (attributeID != 0 && (attributeID != MVAMPFeatureSetInstanceId || product_id != mProductId))
+                    if (attributeID != 0 && (attributeID != MVAMPFeatureSetInstanceId || product_id != MVAMProductId))
                     {
                         obj.Error = Msg.GetMsg(ctx, "AttributeCodeExists");
                     }
@@ -1901,13 +1901,13 @@ namespace VIS.Models
         }
 
         // Added by Bharat on 01 June 2017
-        public Dictionary<string, object> GetBPData(int mProductID, int VAB_BusinessPartner_ID, Ctx ctx)
+        public Dictionary<string, object> GetBPData(int MVAMProductID, int VAB_BusinessPartner_ID, Ctx ctx)
         {
             Dictionary<string, object> retBP = null;
             string sql = "SELECT bp.ShelfLifeMinPct, bpp.ShelfLifeMinPct AS PCT, bpp.ShelfLifeMinDays "
                     + "FROM VAB_BusinessPartner bp "
                     + " LEFT OUTER JOIN VAB_BPart_Product bpp"
-                    + " ON (bp.VAB_BusinessPartner_ID=bpp.VAB_BusinessPartner_ID AND bpp.VAM_Product_ID=" + mProductID + ") "
+                    + " ON (bp.VAB_BusinessPartner_ID=bpp.VAB_BusinessPartner_ID AND bpp.VAM_Product_ID=" + MVAMProductID + ") "
                     + "WHERE bp.VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID;
 
             DataSet ds = DB.ExecuteDataset(sql, null, null);
@@ -1963,7 +1963,7 @@ namespace VIS.Models
         }
 
         // Added by Bharat on 01 June 2017
-        public int CheckAttribute(int windowNoParent, int mProductId, string lotString, Ctx ctx)
+        public int CheckAttribute(int windowNoParent, int MVAMProductId, string lotString, Ctx ctx)
         {
             int Count = 0;
             string sql = "SELECT COUNT(VAM_Product_ID) FROM VAM_Storage s INNER JOIN VAM_Locator l ON (l.VAM_Locator_ID = s.VAM_Locator_ID) "
@@ -1972,7 +1972,7 @@ namespace VIS.Models
             StringBuilder sqlWhere = new StringBuilder();
             var VAF_Org_ID = Env.GetCtx().GetContextAsInt(windowNoParent, "VAF_Org_ID");
             var sqlChk = "SELECT IsOrganization, IsProduct, IsWarehouse FROM VAM_PFeature_Set aSet INNER JOIN VAM_Product mp on mp.VAM_PFeature_Set_ID = aset.VAM_PFeature_Set_ID"
-                + " WHERE mp.VAM_Product_ID = " + mProductId;
+                + " WHERE mp.VAM_Product_ID = " + MVAMProductId;
 
             DataSet ds = DB.ExecuteDataset(sqlChk, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -1983,7 +1983,7 @@ namespace VIS.Models
                 }
                 if (Util.GetValueOfString(ds.Tables[0].Rows[0][1]) == "Y")
                 {
-                    sqlWhere = sqlWhere.Append(" OR s.VAM_Product_ID = " + mProductId);
+                    sqlWhere = sqlWhere.Append(" OR s.VAM_Product_ID = " + MVAMProductId);
                 }
                 if (Util.GetValueOfString(ds.Tables[0].Rows[0][2]) == "Y")
                 {

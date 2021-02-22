@@ -186,7 +186,7 @@ namespace VAdvantage.Acct
                 if (line.IsProductionBOM())
                 {
                     //	Get BOM Cost - Sum of individual lines
-                    Decimal boMVAMProductCost = Env.ZERO;
+                    Decimal boMVAMVAMProductCost = Env.ZERO;
                     for (int ii = 0; ii < _lines.Length; ii++)
                     {
                         DocLine line0 = _lines[ii];
@@ -196,10 +196,10 @@ namespace VAdvantage.Acct
                         }
                         if (!line0.IsProductionBOM())
                         {
-                            boMVAMProductCost = Decimal.Add(boMVAMProductCost, line0.GetProductCosts(as1, line.GetVAF_Org_ID(), false));
+                            boMVAMVAMProductCost = Decimal.Add(boMVAMVAMProductCost, line0.GetProductCosts(as1, line.GetVAF_Org_ID(), false));
                         }
                     }
-                    costs = Decimal.Negate(boMVAMProductCost);
+                    costs = Decimal.Negate(boMVAMVAMProductCost);
                 }
                 else
                 {
@@ -231,7 +231,7 @@ namespace VAdvantage.Acct
 
                 if (!IsPosted())
                 {
-                    MVAMProductCostDetail.CreateProduction(as1, line.GetVAF_Org_ID(),
+                    MVAMVAMProductCostDetail.CreateProduction(as1, line.GetVAF_Org_ID(),
                         line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(),
                         line.Get_ID(), 0,
                        Utility.Util.GetValueOfInt(costs), line.GetQty().Value,

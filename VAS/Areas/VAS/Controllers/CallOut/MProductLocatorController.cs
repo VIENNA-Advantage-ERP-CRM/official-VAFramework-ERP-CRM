@@ -7,7 +7,7 @@ using VIS.Models;
 
 namespace VIS.Controllers
 {
-    public class MProductLocatorController:Controller
+    public class MVAMProductLocatorController:Controller
     {
     }
 }

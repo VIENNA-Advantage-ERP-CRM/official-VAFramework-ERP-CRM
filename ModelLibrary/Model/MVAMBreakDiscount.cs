@@ -100,7 +100,7 @@ namespace VAdvantage.Model
                 return GetVAM_ProductCategory_ID() == VAM_ProductCategory_ID;
 
             //	Look up Category of Product
-            return MProductCategory.IsCategory(GetVAM_ProductCategory_ID(), VAM_Product_ID);
+            return MVAMProductCategory.IsCategory(GetVAM_ProductCategory_ID(), VAM_Product_ID);
         }
 
         /// <summary>

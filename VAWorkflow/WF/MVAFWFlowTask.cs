@@ -1081,7 +1081,7 @@ namespace VAdvantage.WF
                 //  else
                 //  {
                 //   MClient client = MClient.Get(GetCtx(), GetVAF_Client_ID());
-                //   MMailText mailtext = new MMailText(GetCtx(), GetNode().GetVAR_MailTemplate_ID(), null);
+                //   MVARMailTemplate mailtext = new MVARMailTemplate(GetCtx(), GetNode().GetVAR_MailTemplate_ID(), null);
 
                 //   String subject = GetNode().GetDescription()
                 //   + ": " + mailtext.GetMailHeader();
@@ -1383,7 +1383,7 @@ namespace VAdvantage.WF
                 else
                 {
                     MVAFClient client = MVAFClient.Get(GetCtx(), GetVAF_Client_ID());
-                    MMailText mailtext = new MMailText(GetCtx(), GetNode().GetVAR_MailTemplate_ID(), null);
+                    MVARMailTemplate mailtext = new MVARMailTemplate(GetCtx(), GetNode().GetVAR_MailTemplate_ID(), null);
 
                     String subject = GetNode().GetDescription()
                     + ": " + mailtext.GetMailHeader();
@@ -1430,7 +1430,7 @@ namespace VAdvantage.WF
                 // else
                 // {
                 //    MClient client = MClient.Get(GetCtx(), GetVAF_Client_ID());
-                //    MMailText mailtext = new MMailText(GetCtx(), GetNode().GetVAR_MailTemplate_ID(), null);
+                //    MVARMailTemplate mailtext = new MVARMailTemplate(GetCtx(), GetNode().GetVAR_MailTemplate_ID(), null);
 
                 //    String subject = GetNode().GetDescription()
                 //    + ": " + mailtext.GetMailHeader();
@@ -1470,7 +1470,7 @@ namespace VAdvantage.WF
                 else
                 {
                     MVAFClient client = MVAFClient.Get(GetCtx(), GetVAF_Client_ID());
-                    MMailText mailtext = new MMailText(GetCtx(), GetNode().GetVAR_MailTemplate_ID(), null);
+                    MVARMailTemplate mailtext = new MVARMailTemplate(GetCtx(), GetNode().GetVAR_MailTemplate_ID(), null);
 
                     String subject = GetNode().GetDescription()
                     + ": " + mailtext.GetMailHeader();
@@ -1785,7 +1785,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             DocAction doc = null;
             bool isPOAsDocAction = false;
             bool hasMailTemplate = false;
-            MMailText text = null;
+            MVARMailTemplate text = null;
 
             _emails = new List<String>();
 
@@ -1864,7 +1864,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             if (_node.GetVAR_MailTemplate_ID() > 0)
             {
                 hasMailTemplate = true;
-                text = new MMailText(GetCtx(), _node.GetVAR_MailTemplate_ID(), null);
+                text = new MVARMailTemplate(GetCtx(), _node.GetVAR_MailTemplate_ID(), null);
                 text.SetPO(_po, true); //Set _Po Current value
             }
 
@@ -2753,7 +2753,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 isPOAsDocAction = true;
             }
 
-            MMailText text = new MMailText(GetCtx(), _node.GetVAR_MailTemplate_ID(), null);
+            MVARMailTemplate text = new MVARMailTemplate(GetCtx(), _node.GetVAR_MailTemplate_ID(), null);
             text.SetPO(_po, true); //Set _Po Current value
 
             int tableID = _po.Get_Table_ID();
@@ -3469,7 +3469,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         private void SendFaxEMail()
         {
             DocAction doc = (DocAction)_po;
-            MMailText text = new MMailText(GetCtx(), _node.GetVAR_MailTemplate_ID(), null);
+            MVARMailTemplate text = new MVARMailTemplate(GetCtx(), _node.GetVAR_MailTemplate_ID(), null);
             text.SetPO(_po, true);
             bool isHTML = text.IsHtml();
             //
@@ -3721,7 +3721,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                                 {
                                     string[] mnums = mobile.Split(';');
                                     DocAction doc = (DocAction)_po;
-                                    MMailText text = new MMailText(GetCtx(), _node.GetVAR_MailTemplate_ID(), null);
+                                    MVARMailTemplate text = new MVARMailTemplate(GetCtx(), _node.GetVAR_MailTemplate_ID(), null);
                                     text.SetPO(_po, true);
                                     //string msg = text.GetMailText(true) + "\n-----\n" + doc.GetDocumentInfo()
                                     //                    + "\n" + doc.GetSummary();

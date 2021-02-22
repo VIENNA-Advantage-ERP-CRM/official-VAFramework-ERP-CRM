@@ -54,7 +54,7 @@ namespace VAdvantage.DataBase
                             continue;
                         }
                     }
-                    MProduct product = MProduct.Get(ctx, VAM_Product_ID);
+                    MVAMProduct product = MVAMProduct.Get(ctx, VAM_Product_ID);
                     if (product != null)
                     {
                         int precision = product.GetUOMPrecision();
@@ -129,7 +129,7 @@ namespace VAdvantage.DataBase
                             continue;
                         }
                     }
-                    MProduct product = MProduct.Get(ctx, VAM_Product_ID);
+                    MVAMProduct product = MVAMProduct.Get(ctx, VAM_Product_ID);
                     if (product != null)
                     {
                         int precision = product.GetUOMPrecision();
@@ -201,7 +201,7 @@ namespace VAdvantage.DataBase
                     decimal AsonDateCount = Util.GetValueOfDecimal(ds.Tables[0].Rows[j][5]);
                     decimal DiffQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[j][6]);
                     decimal currentQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[j][7]);
-                    MProduct product = MProduct.Get(ctx, product_ID);
+                    MVAMProduct product = MVAMProduct.Get(ctx, product_ID);
                     if (product != null)
                     {
                         int precision = product.GetUOMPrecision();
@@ -236,7 +236,7 @@ namespace VAdvantage.DataBase
                     decimal AsonDateCount = Util.GetValueOfDecimal(ds.Tables[0].Rows[j][5]);
                     decimal DiffQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[j][6]);
                     decimal currentQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[j][7]);
-                    MProduct product = MProduct.Get(ctx, product_ID);
+                    MVAMProduct product = MVAMProduct.Get(ctx, product_ID);
                     if (product != null)
                     {
                         int precision = product.GetUOMPrecision();

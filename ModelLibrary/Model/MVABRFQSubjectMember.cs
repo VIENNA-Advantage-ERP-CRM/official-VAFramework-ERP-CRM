@@ -129,7 +129,7 @@ namespace VAdvantage.Model
                     return true;
                 }
                 //	Product Category
-                if (MProductCategory.IsCategory(restriction.GetVAM_ProductCategory_ID(), VAM_Product_ID))
+                if (MVAMProductCategory.IsCategory(restriction.GetVAM_ProductCategory_ID(), VAM_Product_ID))
                 {
                     return true;
                 }

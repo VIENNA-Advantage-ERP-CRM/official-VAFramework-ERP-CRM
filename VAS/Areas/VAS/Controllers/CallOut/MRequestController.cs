@@ -9,7 +9,7 @@ using VAdvantage.Utility;
 
 namespace VIS.Controllers
 {
-    public class MRequestController : Controller
+    public class MVARRequestController : Controller
     {
 
 
@@ -30,7 +30,7 @@ namespace VIS.Controllers
 
                 //Assign parameter value
                 VAR_Req_Type_ID = Util.GetValueOfInt(paramValue[0].ToString());
-                MRequestType rt = MRequestType.Get(ctx, VAR_Req_Type_ID);
+                MVARRequestType rt = MVARRequestType.Get(ctx, VAR_Req_Type_ID);
                 int VAR_Req_Status_ID = rt.GetDefaultVAR_Req_Status_ID();
 
 
@@ -51,7 +51,7 @@ namespace VIS.Controllers
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
                 int VAR_MailTemplate_ID;
                 VAR_MailTemplate_ID = Util.GetValueOfInt(fields);
-                MMailText mt = new MMailText(ctx, VAR_MailTemplate_ID, null);
+                MVARMailTemplate mt = new MVARMailTemplate(ctx, VAR_MailTemplate_ID, null);
                 string mailText = mt.GetMailText();
                 retJSON = JsonConvert.SerializeObject(mailText);
             }
@@ -67,7 +67,7 @@ namespace VIS.Controllers
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
                 int VAR_Req_StandardReply_ID;
                 VAR_Req_StandardReply_ID = Util.GetValueOfInt(fields);
-                MStandardResponse mt = new MStandardResponse(ctx, VAR_Req_StandardReply_ID, null);
+                MVARReqStandardReply mt = new MVARReqStandardReply(ctx, VAR_Req_StandardReply_ID, null);
                 string mailText = mt.GetResponseText();
                 retJSON = JsonConvert.SerializeObject(mailText);
             }

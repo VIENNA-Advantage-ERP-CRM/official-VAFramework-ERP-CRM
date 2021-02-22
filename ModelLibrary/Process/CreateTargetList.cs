@@ -54,7 +54,7 @@ namespace ViennaAdvantageServer.Process
             sql = "Select vaf_tableview_id from vaf_tableview where tablename='VAB_BusinessPartner'";
             int BPartnerTable_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql));
 
-            VAdvantage.Model.X_C_TargetList TList = new VAdvantage.Model.X_C_TargetList(GetCtx(), 0, null);
+            VAdvantage.Model.X_VAB_TargetList TList = new VAdvantage.Model.X_VAB_TargetList(GetCtx(), 0, null);
 
             if (Table_id == leadTable_ID)// VAB_Lead
             {

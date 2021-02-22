@@ -88,7 +88,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 throw new Exception("Cannot find Shipment ID=" + _VAM_Inv_InOut_ID);
             }
-            MShipper shipper = new MShipper(GetCtx(), _VAM_ShippingMethod_ID, Get_TrxName());
+            MVAMShippingMethod shipper = new MVAMShippingMethod(GetCtx(), _VAM_ShippingMethod_ID, Get_TrxName());
             if (shipper.Get_ID() != _VAM_ShippingMethod_ID)
             {
                 throw new Exception("Cannot find Shipper ID=" + _VAM_Inv_InOut_ID);

@@ -21,10 +21,10 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MVAMProductCostDetail : X_VAM_ProductCostDetail
+    public class MVAMVAMProductCostDetail : X_VAM_ProductCostDetail
     {
         //	Logger	
-        private static VLogger _log = VLogger.GetVLogger(typeof(MVAMProductCostDetail).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVAMVAMProductCostDetail).FullName);
         private bool _isExpectedLandeCostCalculated = false;
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAM_ProductCostDetail_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MVAMProductCostDetail(Ctx ctx, int VAM_ProductCostDetail_ID, Trx trxName)
+        public MVAMVAMProductCostDetail(Ctx ctx, int VAM_ProductCostDetail_ID, Trx trxName)
             : base(ctx, VAM_ProductCostDetail_ID, trxName)
         {
             if (VAM_ProductCostDetail_ID == 0)
@@ -59,7 +59,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="rs">result set</param>
         /// <param name="trxName">transaction</param>
-        public MVAMProductCostDetail(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAMVAMProductCostDetail(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -76,7 +76,7 @@ namespace VAdvantage.Model
         /// <param name="Qty">quantity</param>
         /// <param name="Description">optional description</param>
         /// <param name="trxName">transaction</param>
-        public MVAMProductCostDetail(MVABAccountBook mas, int VAF_Org_ID, int VAM_Product_ID, int VAM_PFeature_SetInstance_ID,
+        public MVAMVAMProductCostDetail(MVABAccountBook mas, int VAF_Org_ID, int VAM_Product_ID, int VAM_PFeature_SetInstance_ID,
             int VAM_ProductCostElement_ID, Decimal Amt, Decimal Qty, String Description, Trx trxName)
             : this(mas.GetCtx(), 0, trxName)
         {
@@ -111,15 +111,15 @@ namespace VAdvantage.Model
         /// <param name="Description">description</param>
         /// <param name="trxName">trasnaction</param>
         /// <param name="VAM_Warehouse_ID">Optional parameter -- Warehouse ID</param>
-        /// <returns>MVAMProductCostDetail Object</returns>
-        public static MVAMProductCostDetail CreateCostDetail(MVABAccountBook mas, int VAF_Org_ID, int VAM_Product_ID,
+        /// <returns>MVAMVAMProductCostDetail Object</returns>
+        public static MVAMVAMProductCostDetail CreateCostDetail(MVABAccountBook mas, int VAF_Org_ID, int VAM_Product_ID,
             int VAM_PFeature_SetInstance_ID, string WindowName, MVAMInventoryLine inventoryLine, MVAMInvInOutLine inoutline, MVAMInvTrfLine movementline,
             MVABInvoiceLine invoiceline, PO po, int VAM_ProductCostElement_ID, Decimal Amt, Decimal Qty, String Description, Trx trxName, int VAM_Warehouse_ID = 0)
         {
             try
             {
                 Amt = Decimal.Round(Amt, mas.GetCostingPrecision());
-                MVAMProductCostDetail cd = new MVAMProductCostDetail(mas, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
+                MVAMVAMProductCostDetail cd = new MVAMVAMProductCostDetail(mas, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
                     VAM_ProductCostElement_ID, Amt, Qty, Description, trxName);
                 cd.SetProcessed(true);
                 cd.SetVAM_Warehouse_ID(VAM_Warehouse_ID);
@@ -208,7 +208,7 @@ namespace VAdvantage.Model
             }
         }
 
-        public bool UpdateProductCost(String windowName, MVAMProductCostDetail cd, MVABAccountBook acctSchema, MProduct product, int M_ASI_ID, int cq_VAF_Org_ID, string optionalStrCd = "process")
+        public bool UpdateProductCost(String windowName, MVAMVAMProductCostDetail cd, MVABAccountBook acctSchema, MVAMProduct product, int M_ASI_ID, int cq_VAF_Org_ID, string optionalStrCd = "process")
         {
             int VAF_Org_ID = 0;
             // Get Org based on Costing Level
@@ -221,7 +221,7 @@ namespace VAdvantage.Model
 
             if (product != null)
             {
-                pc = MProductCategory.Get(product.GetCtx(), product.GetVAM_ProductCategory_ID());
+                pc = MVAMProductCategory.Get(product.GetCtx(), product.GetVAM_ProductCategory_ID());
                 if (pc != null)
                 {
                     cl = pc.GetCostingLevel();
@@ -249,7 +249,7 @@ namespace VAdvantage.Model
             }
 
             // set Organization for product costs
-            if (cl == MProductCategory.COSTINGLEVEL_Client || cl == MProductCategory.COSTINGLEVEL_BatchLot)
+            if (cl == MVAMProductCategory.COSTINGLEVEL_Client || cl == MVAMProductCategory.COSTINGLEVEL_BatchLot)
             {
                 VAF_Org_ID = 0;
             }
@@ -258,11 +258,11 @@ namespace VAdvantage.Model
                 VAF_Org_ID = cd.GetVAF_Org_ID();
             }
             // set ASI as ZERO in case of costing levele either "Client" or "Organization" or "Warehouse"
-            if (cl != MProductCategory.COSTINGLEVEL_BatchLot && cl != MProductCategory.COSTINGLEVEL_OrgPlusBatch && cl != MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
+            if (cl != MVAMProductCategory.COSTINGLEVEL_BatchLot && cl != MVAMProductCategory.COSTINGLEVEL_OrgPlusBatch && cl != MVAMProductCategory.COSTINGLEVEL_WarehousePlusBatch)
             {
                 M_ASI_ID = 0;
             }
-            if (cl == MProductCategory.COSTINGLEVEL_Warehouse || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
+            if (cl == MVAMProductCategory.COSTINGLEVEL_Warehouse || cl == MVAMProductCategory.COSTINGLEVEL_WarehousePlusBatch)
             {
                 VAM_Warehouse_ID = cd.GetVAM_Warehouse_ID();
             }
@@ -289,12 +289,12 @@ namespace VAdvantage.Model
             // when calculate cost from process, then no need to calculate cost for define costing method either on product category or on Accounting Schema
             if (GetVAM_ProductCostElement_ID() == 0 && optionalStrCd == "process")
             {
-                MVAMProductCostElement[] ces = MVAMProductCostElement.GetCostingMethods(this);
+                MVAMVAMProductCostElement[] ces = MVAMVAMProductCostElement.GetCostingMethods(this);
                 try
                 {
                     for (int i = 0; i < ces.Length; i++)
                     {
-                        MVAMProductCostElement ce = ces[i];
+                        MVAMVAMProductCostElement ce = ces[i];
                         if (ce.GetVAM_ProductCostElement_ID() != costElementId)
                         {
                             if (!UpdateCost(acctSchema, product, ce, VAF_Org_ID, M_ASI_ID, 0, cq_VAF_Org_ID, windowName, cd, costingMethod, costElementId, VAM_Warehouse_ID))
@@ -368,14 +368,14 @@ namespace VAdvantage.Model
             else
             {
                 // when calculate cost on completion, then calculate cost of defined costing method either on product category or on Accounting Schema
-                MVAMProductCostElement ce = null;
+                MVAMVAMProductCostElement ce = null;
                 if (optionalStrCd == "window" && GetVAM_ProductCostElement_ID() == 0)
                 {
-                    ce = MVAMProductCostElement.Get(GetCtx(), costElementId);
+                    ce = MVAMVAMProductCostElement.Get(GetCtx(), costElementId);
                 }
                 else
                 {
-                    ce = MVAMProductCostElement.Get(GetCtx(), GetVAM_ProductCostElement_ID());
+                    ce = MVAMVAMProductCostElement.Get(GetCtx(), GetVAM_ProductCostElement_ID());
                 }
                 if (!UpdateCost(acctSchema, product, ce, VAF_Org_ID, M_ASI_ID, 0, cq_VAF_Org_ID, windowName, cd, costingMethod, costElementId, VAM_Warehouse_ID))
                 {
@@ -385,24 +385,24 @@ namespace VAdvantage.Model
             return true;
         }
 
-        private bool UpdateCost(MVABAccountBook mas, MProduct product, MVAMProductCostElement ce, int Org_ID, int M_ASI_ID, int VAA_Asset_ID, int cq_VAF_Org_ID,
-                                string windowName, MVAMProductCostDetail cd, string costingMethod = "", int costCominationelement = 0, int VAM_Warehouse_ID = 0)
+        private bool UpdateCost(MVABAccountBook mas, MVAMProduct product, MVAMVAMProductCostElement ce, int Org_ID, int M_ASI_ID, int VAA_Asset_ID, int cq_VAF_Org_ID,
+                                string windowName, MVAMVAMProductCostDetail cd, string costingMethod = "", int costCominationelement = 0, int VAM_Warehouse_ID = 0)
         {
-            MVAMProductCost cost = null;
+            MVAMVAMProductCost cost = null;
             MVAMInvInOutLine inoutline = null;
             MVAMInvInOut inout = null;
             MVABInvoice invoice = null;
             MVABInvoiceLine invoiceline = null;
             MVAMInventoryTransfer movement = null;
             MVAMInvTrfLine movementline = null;
-            MVAMProductCost costFrom = null;
+            MVAMVAMProductCost costFrom = null;
             decimal amtWithSurcharge = 0;
 
             if (VAA_Asset_ID == 0)
             {
                 if (windowName == "Inventory Move")
                 {
-                    cost = MVAMProductCost.Get(product, M_ASI_ID, mas, cq_VAF_Org_ID, ce.GetVAM_ProductCostElement_ID(), VAM_Warehouse_ID);
+                    cost = MVAMVAMProductCost.Get(product, M_ASI_ID, mas, cq_VAF_Org_ID, ce.GetVAM_ProductCostElement_ID(), VAM_Warehouse_ID);
                     //change 10-5-2016
                     if (cd.GetVAM_InvTrf_Line_ID() > 0)
                     {
@@ -413,18 +413,18 @@ namespace VAdvantage.Model
                         {
                             M_SourceWarehouse_ID = MVAMLocator.Get(GetCtx(), movementlineFrom.GetVAM_Locator_ID()).GetVAM_Warehouse_ID();
                         }
-                        costFrom = MVAMProductCost.Get(product, M_ASI_ID, mas, movementlineFrom.GetVAF_Org_ID(), ce.GetVAM_ProductCostElement_ID(), M_SourceWarehouse_ID);
+                        costFrom = MVAMVAMProductCost.Get(product, M_ASI_ID, mas, movementlineFrom.GetVAF_Org_ID(), ce.GetVAM_ProductCostElement_ID(), M_SourceWarehouse_ID);
                     }
                     //end
                 }
                 else
                 {
-                    cost = MVAMProductCost.Get(product, M_ASI_ID, mas, Org_ID, ce.GetVAM_ProductCostElement_ID(), VAM_Warehouse_ID);
+                    cost = MVAMVAMProductCost.Get(product, M_ASI_ID, mas, Org_ID, ce.GetVAM_ProductCostElement_ID(), VAM_Warehouse_ID);
                 }
             }
             else
             {
-                cost = MVAMProductCost.Get(product, M_ASI_ID, mas, Org_ID, ce.GetVAM_ProductCostElement_ID(), VAA_Asset_ID, VAM_Warehouse_ID);
+                cost = MVAMVAMProductCost.Get(product, M_ASI_ID, mas, Org_ID, ce.GetVAM_ProductCostElement_ID(), VAA_Asset_ID, VAM_Warehouse_ID);
             }
 
             //Decimal qty = 0;
@@ -721,7 +721,7 @@ namespace VAdvantage.Model
 
                     decimal totalPrice = 0;
                     decimal totalQty = 0;
-                    MVAMProductCostQueue[] cQueue = MVAMProductCostQueue.GetQueue(product, M_ASI_ID,
+                    MVAMVAMProductCostQueue[] cQueue = MVAMVAMProductCostQueue.GetQueue(product, M_ASI_ID,
                         mas, Org_ID, ce, Get_TrxName(), cost.GetVAM_Warehouse_ID());
                     if (cQueue != null && cQueue.Length > 0)
                     {
@@ -741,11 +741,11 @@ namespace VAdvantage.Model
                 //change 3-5-2016
                 if (ce.IsLifo() || ce.IsFifo() || ce.IsAverageInvoice() || ce.IsLastInvoice() || ce.IsStandardCosting() || ce.IsWeightedAverageCost())
                 {
-                    //MVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
+                    //MVAMVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
                     //                                             mas, ce.GetVAM_ProductCostElement_ID(), windowName, cd, GetAmt(), GetQty());
-                    //MVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
+                    //MVAMVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
                     //                                             mas, ce.GetVAM_ProductCostElement_ID(), windowName, cd, amtWithSurcharge, GetQty());
-                    MVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
+                    MVAMVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
                                                     mas, ce.GetVAM_ProductCostElement_ID(), windowName, cd, (cost.GetCurrentCostPrice() * qty), qty);
                 }
 
@@ -870,7 +870,7 @@ namespace VAdvantage.Model
                     }
                     decimal totalPrice = 0;
                     decimal totalQty = 0;
-                    MVAMProductCostQueue[] cQueue = MVAMProductCostQueue.GetQueue(product, M_ASI_ID,
+                    MVAMVAMProductCostQueue[] cQueue = MVAMVAMProductCostQueue.GetQueue(product, M_ASI_ID,
                         mas, Org_ID, ce, Get_TrxName(), cost.GetVAM_Warehouse_ID());
                     if (cQueue != null && cQueue.Length > 0)
                     {
@@ -889,7 +889,7 @@ namespace VAdvantage.Model
                 }
                 if (ce.IsLifo() || ce.IsFifo() || ce.IsAverageInvoice() || ce.IsLastInvoice() || ce.IsStandardCosting() || ce.IsWeightedAverageCost())
                 {
-                    MVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
+                    MVAMVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
                                                     mas, ce.GetVAM_ProductCostElement_ID(), windowName, cd, (cost.GetCurrentCostPrice() * qty), qty);
                 }
 
@@ -947,7 +947,7 @@ namespace VAdvantage.Model
             //                        cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
             //                        log.Finer("Inv - WeightedAverageCost - " + cost);
 
-            //                        MVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
+            //                        MVAMVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
             //                                                           mas, ce.GetVAM_ProductCostElement_ID(), "Invoice(Vendor)", cd, cost.GetCurrentCostPrice() * qty, qty);
 
             //                        DB.ExecuteQuery("UPDATE VAM_MatchInvoice SET IsCostCalculated = 'Y' WHERE VAB_InvoiceLine_ID = " + invLineId +
@@ -1120,9 +1120,9 @@ namespace VAdvantage.Model
                     {
                         decimal totalPrice = 0;
                         decimal totalQty = 0;
-                        //MVAMProductCostQueue[] cQueue = MVAMProductCostQueue.GetQueue(product, M_ASI_ID,
+                        //MVAMVAMProductCostQueue[] cQueue = MVAMVAMProductCostQueue.GetQueue(product, M_ASI_ID,
                         //    mas, cq_VAF_Org_ID, ce, Get_TrxName());
-                        MVAMProductCostQueue[] cQueue = MVAMProductCostQueue.GetQueue(product, M_ASI_ID,
+                        MVAMVAMProductCostQueue[] cQueue = MVAMVAMProductCostQueue.GetQueue(product, M_ASI_ID,
                         mas, Org_ID, ce, Get_TrxName(), cost.GetVAM_Warehouse_ID());
                         if (cQueue != null && cQueue.Length > 0)
                         {
@@ -1142,9 +1142,9 @@ namespace VAdvantage.Model
                 //change 3-5-2016
                 if (ce.IsAveragePO() || ce.IsLastPOPrice() || ce.IsWeightedAveragePO())
                 {
-                    //MVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
+                    //MVAMVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
                     //                                             mas, ce.GetVAM_ProductCostElement_ID(), windowName, cd, amt, qty);
-                    MVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
+                    MVAMVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
                                                     mas, ce.GetVAM_ProductCostElement_ID(), windowName, cd, (cost.GetCurrentCostPrice() * qty), qty);
                 }
                 #endregion
@@ -1193,7 +1193,7 @@ namespace VAdvantage.Model
                                 cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), amt));
                             }
                             //change 3-5-2016
-                            MVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
+                            MVAMVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
                                                             mas, ce.GetVAM_ProductCostElement_ID(), "Invoice(APC)", cd, cost.GetCurrentCostPrice() * qty, qty);
                         }
                         return cost.Save();
@@ -1343,7 +1343,7 @@ namespace VAdvantage.Model
                     //	Real ASI - costing level Org
 
                     // commented by Amit because cost queue is created from complete 16-12-2015
-                    //MVAMProductCostQueue cq = MVAMProductCostQueue.Get(product, GetVAM_PFeature_SetInstance_ID(),
+                    //MVAMVAMProductCostQueue cq = MVAMVAMProductCostQueue.Get(product, GetVAM_PFeature_SetInstance_ID(),
                     //    mas, Org_ID, ce.GetVAM_ProductCostElement_ID(), Get_TrxName());
                     //cq.SetCosts(amt, qty, precision);
                     //cq.Save(Get_TrxName());
@@ -1352,7 +1352,7 @@ namespace VAdvantage.Model
                     //	Get Costs - costing level Org/ASI
                     decimal totalPrice = 0;
                     decimal totalQty = 0;
-                    MVAMProductCostQueue[] cQueue = MVAMProductCostQueue.GetQueue(product, M_ASI_ID,
+                    MVAMVAMProductCostQueue[] cQueue = MVAMVAMProductCostQueue.GetQueue(product, M_ASI_ID,
                         mas, Org_ID, ce, Get_TrxName(), cost.GetVAM_Warehouse_ID());
                     if (cQueue != null && cQueue.Length > 0)
                     {
@@ -1545,7 +1545,7 @@ namespace VAdvantage.Model
                         //        //	seed initial price
                         //        if (Env.Signum(cost.GetCurrentCostPrice()) == 0 && cost.Get_ID() == 0)
                         //        {
-                        //            cost.SetCurrentCostPrice(MVAMProductCost.GetSeedCosts(product, M_ASI_ID,
+                        //            cost.SetCurrentCostPrice(MVAMVAMProductCost.GetSeedCosts(product, M_ASI_ID,
                         //                    mas, Org_ID, ce.GetCostingMethod(), GetVAB_OrderLine_ID()));
                         //        }
                         //    }
@@ -1563,7 +1563,7 @@ namespace VAdvantage.Model
                                 //	seed initial price
                                 if (Env.Signum(cost.GetCurrentCostPrice()) == 0 && cost.Get_ID() == 0)
                                 {
-                                    cost.SetCurrentCostPrice(MVAMProductCost.GetSeedCosts(product, M_ASI_ID,
+                                    cost.SetCurrentCostPrice(MVAMVAMProductCost.GetSeedCosts(product, M_ASI_ID,
                                             mas, Org_ID, ce.GetCostingMethod(), GetVAB_OrderLine_ID()));
                                 }
                             }
@@ -1591,7 +1591,7 @@ namespace VAdvantage.Model
                     // when expected cost already calculated, then not to add qty 
                     //Decimal qty1 = Decimal.Add(cost.GetCurrentQty(), GetExpectedCostCalculated() ? 0 : qty);
 
-                    Decimal qty1 = MVAMProductCost.GetproductCostAndQtyMaterial(cd.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), cost.GetVAM_Product_ID()
+                    Decimal qty1 = MVAMVAMProductCost.GetproductCostAndQtyMaterial(cd.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), cost.GetVAM_Product_ID()
                         , cost.GetVAM_PFeature_SetInstance_ID(), cost.Get_Trx(), cost.GetVAM_Warehouse_ID(), true);
                     if (qty1.CompareTo(Decimal.Zero) == 0)
                     {
@@ -1613,15 +1613,15 @@ namespace VAdvantage.Model
                 //change 3-5-2016
                 if (ce.IsWeightedAverageCost() && windowName != "Invoice(Customer)")
                 {
-                    MVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
+                    MVAMVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
                                                     mas, ce.GetVAM_ProductCostElement_ID(), windowName, cd, (cost.GetCurrentCostPrice() * qty), qty);
                 }
                 else if ((ce.IsFifo() || ce.IsLifo() || ce.IsStandardCosting() || ce.IsLastInvoice() || ce.IsAverageInvoice()) && windowName != "Invoice(Customer)")
                 {
-                    //MVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
+                    //MVAMVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
                     //                                mas, ce.GetVAM_ProductCostElement_ID(), windowName, cd, amt, qty);
 
-                    MVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
+                    MVAMVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
                                                     mas, ce.GetVAM_ProductCostElement_ID(), windowName, cd, (cost.GetCurrentCostPrice() * qty), qty);
                 }
                 #endregion
@@ -1789,7 +1789,7 @@ namespace VAdvantage.Model
                             if (ce.GetVAM_ProductCostElement_ID() == costCominationelement)
                             {
                                 // get cost based on Accounting Schema
-                                decimal costCombination = MVAMProductCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), costFrom.GetVAM_Product_ID(),
+                                decimal costCombination = MVAMVAMProductCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), costFrom.GetVAM_Product_ID(),
                                    costFrom.GetVAM_PFeature_SetInstance_ID(), costFrom.Get_Trx(), costFrom.GetVAM_Warehouse_ID());
                                 //if (primaryActSchemaCurrencyID != mas.GetVAB_Currency_ID())
                                 //{
@@ -1862,7 +1862,7 @@ namespace VAdvantage.Model
                         // now we will get cost(CurrentCostPrice) from the document line itself - product come with that price on To Warehouse
                         //if (ce.GetVAM_ProductCostElement_ID() == costCominationelement)
                         //{
-                        //    decimal costCombination = MVAMProductCost.GetproductCostBasedonAcctSchema(cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), cost.GetVAM_Product_ID(),
+                        //    decimal costCombination = MVAMVAMProductCost.GetproductCostBasedonAcctSchema(cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), cost.GetVAM_Product_ID(),
                         //       cost.GetVAM_PFeature_SetInstance_ID(), cost.Get_Trx(), cost.GetVAM_Warehouse_ID());
                         //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
                         //}
@@ -2062,7 +2062,7 @@ namespace VAdvantage.Model
                             cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
                             if (ce.GetVAM_ProductCostElement_ID() == costCominationelement)
                             {
-                                decimal costCombination = MVAMProductCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), costFrom.GetVAM_Product_ID(),
+                                decimal costCombination = MVAMVAMProductCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), costFrom.GetVAM_Product_ID(),
                                    costFrom.GetVAM_PFeature_SetInstance_ID(), costFrom.Get_Trx(), costFrom.GetVAM_Warehouse_ID());
                                 cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
 
@@ -2212,7 +2212,7 @@ namespace VAdvantage.Model
 
                         //if (ce.GetVAM_ProductCostElement_ID() == costCominationelement)
                         //{
-                        //    decimal costCombination = MVAMProductCost.GetproductCostBasedonAcctSchema(cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), cost.GetVAM_Product_ID(),
+                        //    decimal costCombination = MVAMVAMProductCost.GetproductCostBasedonAcctSchema(cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), cost.GetVAM_Product_ID(),
                         //       cost.GetVAM_PFeature_SetInstance_ID(), cost.Get_Trx(), cost.GetVAM_Warehouse_ID());
                         //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
 
@@ -2385,7 +2385,7 @@ namespace VAdvantage.Model
                             cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
                             if (ce.GetVAM_ProductCostElement_ID() == costCominationelement)
                             {
-                                decimal costCombination = MVAMProductCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), costFrom.GetVAM_Product_ID(),
+                                decimal costCombination = MVAMVAMProductCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), costFrom.GetVAM_Product_ID(),
                                    costFrom.GetVAM_PFeature_SetInstance_ID(), costFrom.Get_Trx(), costFrom.GetVAM_Warehouse_ID());
                                 cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
                             }
@@ -2465,7 +2465,7 @@ namespace VAdvantage.Model
 
                         //if (ce.GetVAM_ProductCostElement_ID() == costCominationelement)
                         //{
-                        //    decimal costCombination = MVAMProductCost.GetproductCostBasedonAcctSchema(cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), cost.GetVAM_Product_ID(),
+                        //    decimal costCombination = MVAMVAMProductCost.GetproductCostBasedonAcctSchema(cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), cost.GetVAM_Product_ID(),
                         //       cost.GetVAM_PFeature_SetInstance_ID(), cost.Get_Trx(), cost.GetVAM_Warehouse_ID());
                         //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
                         //}
@@ -2666,7 +2666,7 @@ namespace VAdvantage.Model
                             cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
                             if (ce.GetVAM_ProductCostElement_ID() == costCominationelement)
                             {
-                                decimal costCombination = MVAMProductCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), costFrom.GetVAM_Product_ID(),
+                                decimal costCombination = MVAMVAMProductCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), costFrom.GetVAM_Product_ID(),
                                    costFrom.GetVAM_PFeature_SetInstance_ID(), costFrom.Get_Trx(), costFrom.GetVAM_Warehouse_ID());
                                 cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
 
@@ -2931,7 +2931,7 @@ namespace VAdvantage.Model
                             cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
                             if (ce.GetVAM_ProductCostElement_ID() == costCominationelement)
                             {
-                                decimal costCombination = MVAMProductCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), costFrom.GetVAM_Product_ID(),
+                                decimal costCombination = MVAMVAMProductCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), costFrom.GetVAM_Product_ID(),
                                    costFrom.GetVAM_PFeature_SetInstance_ID(), costFrom.Get_Trx(), costFrom.GetVAM_Warehouse_ID());
                                 cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
                             }
@@ -2951,7 +2951,7 @@ namespace VAdvantage.Model
                         }
                         //	Real ASI - costing level Org
                         // commented by Amit because cost queue is created from complete 16-12-2015
-                        //MVAMProductCostQueue cq = MVAMProductCostQueue.Get(product, GetVAM_PFeature_SetInstance_ID(),
+                        //MVAMVAMProductCostQueue cq = MVAMVAMProductCostQueue.Get(product, GetVAM_PFeature_SetInstance_ID(),
                         //    mas, Org_ID, ce.GetVAM_ProductCostElement_ID(), Get_TrxName());
                         //cq.SetCosts(amt, qty, precision);
                         //cq.Save();
@@ -3005,7 +3005,7 @@ namespace VAdvantage.Model
 
                         //if (ce.GetVAM_ProductCostElement_ID() == costCominationelement)
                         //{
-                        //    decimal costCombination = MVAMProductCost.GetproductCostBasedonAcctSchema(cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), cost.GetVAM_Product_ID(),
+                        //    decimal costCombination = MVAMVAMProductCost.GetproductCostBasedonAcctSchema(cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), cost.GetVAM_Product_ID(),
                         //       cost.GetVAM_PFeature_SetInstance_ID(), cost.Get_Trx(), cost.GetVAM_Warehouse_ID());
                         //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
                         //}
@@ -3039,21 +3039,21 @@ namespace VAdvantage.Model
                         }
                         //	Adjust Queue - costing level Org/ASI
                         // commented by Amit because cost queue is created from complete 16-12-2015
-                        //MVAMProductCostQueue.AdjustQty(product, M_ASI_ID,
+                        //MVAMVAMProductCostQueue.AdjustQty(product, M_ASI_ID,
                         //    mas, Org_ID, ce, Decimal.Negate(qty), Get_TrxName());
                     }
                     //	Get Costs - costing level Org/ASI
                     decimal totalPrice = 0;
                     decimal totalQty = 0;
-                    MVAMProductCostQueue[] cQueue;
+                    MVAMVAMProductCostQueue[] cQueue;
                     if (windowName == "Inventory Move")
                     {
-                        cQueue = MVAMProductCostQueue.GetQueue(product, M_ASI_ID,
+                        cQueue = MVAMVAMProductCostQueue.GetQueue(product, M_ASI_ID,
                             mas, cq_VAF_Org_ID, ce, Get_TrxName(), cost.GetVAM_Warehouse_ID());
                     }
                     else
                     {
-                        cQueue = MVAMProductCostQueue.GetQueue(product, M_ASI_ID,
+                        cQueue = MVAMVAMProductCostQueue.GetQueue(product, M_ASI_ID,
                             mas, Org_ID, ce, Get_TrxName(), cost.GetVAM_Warehouse_ID());
                     }
                     if (cQueue != null && cQueue.Length > 0)
@@ -3174,7 +3174,7 @@ namespace VAdvantage.Model
                             cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
                             if (ce.GetVAM_ProductCostElement_ID() == costCominationelement)
                             {
-                                decimal costCombination = MVAMProductCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), costFrom.GetVAM_Product_ID(),
+                                decimal costCombination = MVAMVAMProductCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), costFrom.GetVAM_Product_ID(),
                                    costFrom.GetVAM_PFeature_SetInstance_ID(), costFrom.Get_Trx(), costFrom.GetVAM_Warehouse_ID());
                                 cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
                             }
@@ -3233,7 +3233,7 @@ namespace VAdvantage.Model
 
                         //if (ce.GetVAM_ProductCostElement_ID() == costCominationelement)
                         //{
-                        //    decimal costCombination = MVAMProductCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), costFrom.GetVAM_Product_ID(),
+                        //    decimal costCombination = MVAMVAMProductCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), costFrom.GetVAM_Product_ID(),
                         //       costFrom.GetVAM_PFeature_SetInstance_ID(), costFrom.Get_Trx(), costFrom.GetVAM_Warehouse_ID());
                         //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
                         //}
@@ -3364,7 +3364,7 @@ namespace VAdvantage.Model
                             cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
                             if (ce.GetVAM_ProductCostElement_ID() == costCominationelement)
                             {
-                                decimal costCombination = MVAMProductCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), costFrom.GetVAM_Product_ID(),
+                                decimal costCombination = MVAMVAMProductCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), costFrom.GetVAM_Product_ID(),
                                    costFrom.GetVAM_PFeature_SetInstance_ID(), costFrom.Get_Trx(), costFrom.GetVAM_Warehouse_ID());
                                 cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
                             }
@@ -3424,7 +3424,7 @@ namespace VAdvantage.Model
 
                         //if (ce.GetVAM_ProductCostElement_ID() == costCominationelement)
                         //{
-                        //    decimal costCombination = MVAMProductCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), costFrom.GetVAM_Product_ID(),
+                        //    decimal costCombination = MVAMVAMProductCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), costFrom.GetVAM_Product_ID(),
                         //       costFrom.GetVAM_PFeature_SetInstance_ID(), costFrom.Get_Trx(), costFrom.GetVAM_Warehouse_ID());
                         //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
                         //}
@@ -3572,7 +3572,7 @@ namespace VAdvantage.Model
                             cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
                             if (ce.GetVAM_ProductCostElement_ID() == costCominationelement)
                             {
-                                decimal costCombination = MVAMProductCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), costFrom.GetVAM_Product_ID(),
+                                decimal costCombination = MVAMVAMProductCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), costFrom.GetVAM_Product_ID(),
                                    costFrom.GetVAM_PFeature_SetInstance_ID(), costFrom.Get_Trx(), costFrom.GetVAM_Warehouse_ID());
                                 cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
                             }
@@ -3649,7 +3649,7 @@ namespace VAdvantage.Model
 
                         //if (ce.GetVAM_ProductCostElement_ID() == costCominationelement)
                         //{
-                        //    decimal costCombination = MVAMProductCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), costFrom.GetVAM_Product_ID(),
+                        //    decimal costCombination = MVAMVAMProductCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetVAB_AccountBook_ID(), costFrom.GetVAM_Product_ID(),
                         //       costFrom.GetVAM_PFeature_SetInstance_ID(), costFrom.Get_Trx(), costFrom.GetVAM_Warehouse_ID());
                         //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
                         //}
@@ -3734,12 +3734,12 @@ namespace VAdvantage.Model
 
                 if (ce.IsLastInvoice() || ce.IsLastPOPrice() || ce.IsWeightedAverageCost() || ce.IsWeightedAveragePO())
                 {
-                    MVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
+                    MVAMVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
                                                     mas, ce.GetVAM_ProductCostElement_ID(), windowName, cd, (cost.GetCurrentCostPrice() * qty), qty);
                 }
                 else if (!ce.IsWeightedAverageCost())
                 {
-                    MVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
+                    MVAMVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
                                                     mas, ce.GetVAM_ProductCostElement_ID(), windowName, cd, amt, qty);
                 }
             }
@@ -3766,21 +3766,21 @@ namespace VAdvantage.Model
         /// <param name="windowName">window name</param>
         /// <param name="optionalStrcc">optional para : process or window</param>
         /// <returns>true, when calculated</returns>
-        public bool CreateCostForCombination(MVAMProductCostDetail cd, MVABAccountBook acctSchema, MProduct product, int M_ASI_ID, int cq_VAF_Org_ID, string windowName, string optionalStrcc = "process")
+        public bool CreateCostForCombination(MVAMVAMProductCostDetail cd, MVABAccountBook acctSchema, MVAMProduct product, int M_ASI_ID, int cq_VAF_Org_ID, string windowName, string optionalStrcc = "process")
         {
             string sql;
             int VAF_Org_ID = 0;
             // Get Org based on Costing Level
             dynamic pc = null;
             String cl = null;
-            MVAMProductCostElement ce = null;
+            MVAMVAMProductCostElement ce = null;
             string costingMethod = null;
             int costElementId1 = 0;
             Decimal AccQty = 0;
             int VAM_Warehouse_ID = 0;
             if (product != null)
             {
-                pc = MProductCategory.Get(product.GetCtx(), product.GetVAM_ProductCategory_ID());
+                pc = MVAMProductCategory.Get(product.GetCtx(), product.GetVAM_ProductCategory_ID());
                 if (pc != null)
                 {
                     cl = pc.GetCostingLevel();
@@ -3803,7 +3803,7 @@ namespace VAdvantage.Model
                     costElementId1 = acctSchema.GetVAM_ProductCostElement_ID();
                 }
             }
-            if (cl == MProductCategory.COSTINGLEVEL_Client || cl == MProductCategory.COSTINGLEVEL_BatchLot)
+            if (cl == MVAMProductCategory.COSTINGLEVEL_Client || cl == MVAMProductCategory.COSTINGLEVEL_BatchLot)
             {
                 VAF_Org_ID = 0;
                 // during Inventory Move, not to calculate cost combination
@@ -3814,11 +3814,11 @@ namespace VAdvantage.Model
             {
                 VAF_Org_ID = cd.GetVAF_Org_ID();
             }
-            if (cl != MProductCategory.COSTINGLEVEL_BatchLot && cl != MProductCategory.COSTINGLEVEL_OrgPlusBatch && cl != MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
+            if (cl != MVAMProductCategory.COSTINGLEVEL_BatchLot && cl != MVAMProductCategory.COSTINGLEVEL_OrgPlusBatch && cl != MVAMProductCategory.COSTINGLEVEL_WarehousePlusBatch)
             {
                 M_ASI_ID = 0;
             }
-            if (cl == MProductCategory.COSTINGLEVEL_Warehouse || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
+            if (cl == MVAMProductCategory.COSTINGLEVEL_Warehouse || cl == MVAMProductCategory.COSTINGLEVEL_WarehousePlusBatch)
             {
                 VAM_Warehouse_ID = cd.GetVAM_Warehouse_ID();
             }
@@ -3850,8 +3850,8 @@ namespace VAdvantage.Model
             ds = DB.ExecuteDataset(sql, null, null);
             try
             {
-                MVAMProductCost costCombination = null;
-                MVAMProductCost cost = null;
+                MVAMVAMProductCost costCombination = null;
+                MVAMVAMProductCost cost = null;
                 int costElementId = 0;
                 bool isCurrentCostprice = true; // is used to calculate - Current cost price for combination cost or not
 
@@ -3890,7 +3890,7 @@ namespace VAdvantage.Model
 
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        costCombination = MVAMProductCost.Get(product, M_ASI_ID, acctSchema, VAF_Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_ProductCostElement_ID"]), VAM_Warehouse_ID);
+                        costCombination = MVAMVAMProductCost.Get(product, M_ASI_ID, acctSchema, VAF_Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_ProductCostElement_ID"]), VAM_Warehouse_ID);
 
                         //If cost combination is already calculated on completion, then not to re-calculate through process
                         if (windowName.Equals("LandedCostAllocation"))
@@ -3917,18 +3917,18 @@ namespace VAdvantage.Model
                         if (costElementId != Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_ProductCostElement_ID"]))
                         {
                             if (windowName == "Inventory Move" &&
-                                (cl.Equals(MProductCategory.COSTINGLEVEL_Client) || cl.Equals(MProductCategory.COSTINGLEVEL_BatchLot)))
+                                (cl.Equals(MVAMProductCategory.COSTINGLEVEL_Client) || cl.Equals(MVAMProductCategory.COSTINGLEVEL_BatchLot)))
                             {
                                 // do not create Cost combination entry in case of ineventory move and costing level is client or Batch/lot
                             }
                             else if (windowName.Equals("LandedCostAllocation") && (cl == "C" || cl == "B"))
                             {
-                                MVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), 0, product, M_ASI_ID,
+                                MVAMVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), 0, product, M_ASI_ID,
                                               acctSchema, costElementId, "Cost Comination", cd, (costCombination.GetCurrentCostPrice() * cd.GetQty()), cd.GetQty());
                             }
                             else
                             {
-                                MVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
+                                MVAMVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
                                                acctSchema, costElementId, "Cost Comination", cd, (costCombination.GetCurrentCostPrice() * cd.GetQty()), cd.GetQty());
                             }
                         }
@@ -3941,10 +3941,10 @@ namespace VAdvantage.Model
                         }
 
                         // created object of Cost elemnt for checking iscalculated = true/ false
-                        ce = MVAMProductCostElement.Get(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["m_ref_costelement"]));
+                        ce = MVAMVAMProductCostElement.Get(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["m_ref_costelement"]));
 
-                        costCombination = MVAMProductCost.Get(product, M_ASI_ID, acctSchema, VAF_Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_ProductCostElement_ID"]), VAM_Warehouse_ID);
-                        cost = MVAMProductCost.Get(product, M_ASI_ID, acctSchema, VAF_Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["m_ref_costelement"]), VAM_Warehouse_ID);
+                        costCombination = MVAMVAMProductCost.Get(product, M_ASI_ID, acctSchema, VAF_Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_ProductCostElement_ID"]), VAM_Warehouse_ID);
+                        cost = MVAMVAMProductCost.Get(product, M_ASI_ID, acctSchema, VAF_Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["m_ref_costelement"]), VAM_Warehouse_ID);
                         if (Util.GetValueOfInt(ds.Tables[0].Rows[i]["iscostMethod"]) == 1)
                         {
                             AccQty = cost.GetCurrentQty();
@@ -3964,7 +3964,7 @@ namespace VAdvantage.Model
 
                         costCombination.SetCumulatedAmt(Decimal.Add(costCombination.GetCumulatedAmt(), cost.GetCumulatedAmt()));
                         // if calculated = true then we added qty else not and costing method is Standard Costing
-                        if (ce.IsCalculated() || ce.GetCostingMethod() == MVAMProductCostElement.COSTINGMETHOD_StandardCosting)
+                        if (ce.IsCalculated() || ce.GetCostingMethod() == MVAMVAMProductCostElement.COSTINGMETHOD_StandardCosting)
                         {
                             costCombination.SetCurrentQty(Decimal.Add(costCombination.GetCurrentQty(), cost.GetCurrentQty()));
                             costCombination.SetCumulatedQty(Decimal.Add(costCombination.GetCumulatedQty(), cost.GetCumulatedQty()));
@@ -3978,12 +3978,12 @@ namespace VAdvantage.Model
                             }
                             else if (windowName == "LandedCostAllocation" && (cl == "C" || cl == "B"))
                             {
-                                MVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), 0, product, M_ASI_ID,
+                                MVAMVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), 0, product, M_ASI_ID,
                                               acctSchema, costElementId, "Cost Comination", cd, (costCombination.GetCurrentCostPrice() * cd.GetQty()), cd.GetQty());
                             }
                             else
                             {
-                                MVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
+                                MVAMVAMProductCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
                                            acctSchema, costElementId, "Cost Comination", cd, (costCombination.GetCurrentCostPrice() * cd.GetQty()), cd.GetQty());
                             }
                         }
@@ -4009,10 +4009,10 @@ namespace VAdvantage.Model
         /// <param name="M_ASI_ID">Attribute set instance</param>
         /// <param name="VAM_Warehouse_ID">warehouse reference</param>
         /// <returns>true when success</returns>
-        public bool FreightDistribution(String windowName, MVAMProductCostDetail cd, MVABAccountBook acctSchema, int VAF_Org_ID, MProduct product, int M_ASI_ID, int VAM_Warehouse_ID)
+        public bool FreightDistribution(String windowName, MVAMVAMProductCostDetail cd, MVABAccountBook acctSchema, int VAF_Org_ID, MVAMProduct product, int M_ASI_ID, int VAM_Warehouse_ID)
         {
             // is used to get current qty of defined costing method on Product category or Accounting schema
-            Decimal Qty = MVAMProductCost.GetproductCostAndQtyMaterial(cd.GetVAF_Client_ID(), VAF_Org_ID, product.GetVAM_Product_ID(), M_ASI_ID, cd.Get_Trx(), VAM_Warehouse_ID, true);
+            Decimal Qty = MVAMVAMProductCost.GetproductCostAndQtyMaterial(cd.GetVAF_Client_ID(), VAF_Org_ID, product.GetVAM_Product_ID(), M_ASI_ID, cd.Get_Trx(), VAM_Warehouse_ID, true);
             if (Qty == 0 && cd.GetVAM_ProductCostElement_ID() > 0)
             {
                 // check, is this kind of Custome or Freight (bypass)
@@ -4032,16 +4032,16 @@ namespace VAdvantage.Model
             }
 
             // Get Element which belongs to Landed Cost
-            String sql = "SELECT VAM_ProductCostElement_ID , Name FROM VAM_ProductCostElement WHERE CostElementType = '" + MVAMProductCostElement.COSTELEMENTTYPE_Material +
+            String sql = "SELECT VAM_ProductCostElement_ID , Name FROM VAM_ProductCostElement WHERE CostElementType = '" + MVAMVAMProductCostElement.COSTELEMENTTYPE_Material +
                         @"' AND CostingMethod IS NULL AND IsActive = 'Y' AND VAF_Client_ID = " + cd.GetVAF_Client_ID();
             DataSet ds = DB.ExecuteDataset(sql, null, cd.Get_Trx());
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
-                MVAMProductCost cost = null;
+                MVAMVAMProductCost cost = null;
                 Decimal currentCost = 0.0M;
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    cost = MVAMProductCost.Get(product, M_ASI_ID, acctSchema, VAF_Org_ID, Convert.ToInt32(ds.Tables[0].Rows[i]["VAM_ProductCostElement_ID"]), VAM_Warehouse_ID);
+                    cost = MVAMVAMProductCost.Get(product, M_ASI_ID, acctSchema, VAF_Org_ID, Convert.ToInt32(ds.Tables[0].Rows[i]["VAM_ProductCostElement_ID"]), VAM_Warehouse_ID);
                     if ((cd.GetQty() < 0 ||
                         windowName.Equals("Internal Use Inventory") ||
                         windowName.Equals("AssetDisposal") ||
@@ -4102,9 +4102,9 @@ namespace VAdvantage.Model
         /// <param name="M_ASI_ID">Attribute Set Instance, whose cost is to be calculated</param>
         /// <param name="windowName">consume/Increase by which window</param>
         /// <returns>true or false</returns>
-        public bool UpdateFreightWithActualQty(DataSet dsCostElementLine, int VAF_Org_ID, MVAMProductCostDetail cd, MVABAccountBook acctSchema, MProduct product, int M_ASI_ID, string windowName, int VAM_Warehouse_ID = 0)
+        public bool UpdateFreightWithActualQty(DataSet dsCostElementLine, int VAF_Org_ID, MVAMVAMProductCostDetail cd, MVABAccountBook acctSchema, MVAMProduct product, int M_ASI_ID, string windowName, int VAM_Warehouse_ID = 0)
         {
-            MVAMProductCost cost = null;
+            MVAMVAMProductCost cost = null;
             for (int i = 0; i < dsCostElementLine.Tables[0].Rows.Count; i++)
             {
                 // when costing method is not of landed cost type, then continue.
@@ -4121,7 +4121,7 @@ namespace VAdvantage.Model
                 }
 
                 // object of Landed cost allocation - cost element
-                cost = MVAMProductCost.Get(product, M_ASI_ID, acctSchema, VAF_Org_ID, landedVAM_ProductCostElement_ID, VAM_Warehouse_ID);
+                cost = MVAMVAMProductCost.Get(product, M_ASI_ID, acctSchema, VAF_Org_ID, landedVAM_ProductCostElement_ID, VAM_Warehouse_ID);
                 if (cost.GetCumulatedQty() <= 0)
                 {
                     cost.Save();
@@ -4174,7 +4174,7 @@ namespace VAdvantage.Model
         /// <param name="qty">qty which is to be affected or reduce from freight</param>
         /// <returns>record save or not</returns>
         /// <writer>Amit Bansal</writer>
-        public bool CreateFreightImpacts(string windowName, MVAMProductCostDetail cd, Decimal qty, int landedVAM_ProductCostElement_ID)
+        public bool CreateFreightImpacts(string windowName, MVAMVAMProductCostDetail cd, Decimal qty, int landedVAM_ProductCostElement_ID)
         {
             int tableId = 0;
             int recordId = 0;
@@ -4228,7 +4228,7 @@ namespace VAdvantage.Model
         /// <param name="cd">cost detail record against line</param>
         /// <returns>qty - which is to be reduce from the landed cost allocation</returns>
         /// <writer>Amit Bansal</writer>
-        public Decimal GetFreightImpactQty(string windowName, MVAMProductCostDetail cd)
+        public Decimal GetFreightImpactQty(string windowName, MVAMVAMProductCostDetail cd)
         {
             Decimal qty = 0.0M;
             int tableId = 0;
@@ -4270,7 +4270,7 @@ namespace VAdvantage.Model
         /// <param name="cd">cost detail record for getting detial</param>
         /// <param name="landedVAM_ProductCostElement_ID">landed cost element detail</param>
         /// <returns>VAM_FreightImpact_ID</returns>
-        public int IsAlreadyFreightImpacted(string windowName, MVAMProductCostDetail cd, int landedVAM_ProductCostElement_ID)
+        public int IsAlreadyFreightImpacted(string windowName, MVAMVAMProductCostDetail cd, int landedVAM_ProductCostElement_ID)
         {
             int tableId = 0;
             int recordId = 0;
@@ -4377,12 +4377,12 @@ namespace VAdvantage.Model
             {
                 _log.Config("Deleted #" + no);
             }
-            MVAMProductCostDetail cd = Get(mas.GetCtx(), "VAM_InventoryLine_ID=@param1 AND VAM_PFeature_SetInstance_ID=@param2",
+            MVAMVAMProductCostDetail cd = Get(mas.GetCtx(), "VAM_InventoryLine_ID=@param1 AND VAM_PFeature_SetInstance_ID=@param2",
                 VAM_InventoryLine_ID, VAM_PFeature_SetInstance_ID, trxName);
             //
             if (cd == null)		//	createNew
             {
-                cd = new MVAMProductCostDetail(mas, VAF_Org_ID,
+                cd = new MVAMVAMProductCostDetail(mas, VAF_Org_ID,
                     VAM_Product_ID, VAM_PFeature_SetInstance_ID,
                     VAM_ProductCostElement_ID,
                     Amt, Qty, Description, trxName);
@@ -4395,7 +4395,7 @@ namespace VAdvantage.Model
                     cd.SetProcessed(false);
                     if (cd.Delete(true, trxName))
                     {
-                        cd = new MVAMProductCostDetail(mas, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
+                        cd = new MVAMVAMProductCostDetail(mas, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
                             VAM_ProductCostElement_ID, Amt, Qty, Description, trxName);
                     }
                     //CostSetByProcess(cd, mas, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, VAM_ProductCostElement_ID, Amt, Qty, Description, trxName, RectifyPostedRecords);
@@ -4459,12 +4459,12 @@ namespace VAdvantage.Model
             {
                 _log.Config("Deleted #" + no);
             }
-            MVAMProductCostDetail cd = Get(mas.GetCtx(), "VAB_InvoiceLine_ID=@param1 AND VAM_PFeature_SetInstance_ID=@param2",
+            MVAMVAMProductCostDetail cd = Get(mas.GetCtx(), "VAB_InvoiceLine_ID=@param1 AND VAM_PFeature_SetInstance_ID=@param2",
                 VAB_InvoiceLine_ID, VAM_PFeature_SetInstance_ID, trxName);
             //
             if (cd == null)		//	createNew
             {
-                cd = new MVAMProductCostDetail(mas, VAF_Org_ID,
+                cd = new MVAMVAMProductCostDetail(mas, VAF_Org_ID,
                     VAM_Product_ID, VAM_PFeature_SetInstance_ID,
                     VAM_ProductCostElement_ID,
                     Amt, Qty, Description, trxName);
@@ -4477,7 +4477,7 @@ namespace VAdvantage.Model
                     cd.SetProcessed(false);
                     if (cd.Delete(true, trxName))
                     {
-                        cd = new MVAMProductCostDetail(mas, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
+                        cd = new MVAMVAMProductCostDetail(mas, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
                             VAM_ProductCostElement_ID, Amt, Qty, Description, trxName);
                     }
                     //CostSetByProcess(cd, mas, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,                              VAM_ProductCostElement_ID, Amt, Qty, Description, trxName, RectifyPostedRecords);
@@ -4541,13 +4541,13 @@ namespace VAdvantage.Model
             {
                 _log.Config("Deleted #" + no);
             }
-            MVAMProductCostDetail cd = Get(mas.GetCtx(), "VAM_InvTrf_Line_ID=@param1 AND VAM_PFeature_SetInstance_ID=@param2 AND IsSOTrx="
+            MVAMVAMProductCostDetail cd = Get(mas.GetCtx(), "VAM_InvTrf_Line_ID=@param1 AND VAM_PFeature_SetInstance_ID=@param2 AND IsSOTrx="
                 + (from ? "'Y'" : "'N'"),
                 VAM_InvTrf_Line_ID, VAM_PFeature_SetInstance_ID, trxName);
             //
             if (cd == null)		//	createNew
             {
-                cd = new MVAMProductCostDetail(mas, VAF_Org_ID,
+                cd = new MVAMVAMProductCostDetail(mas, VAF_Org_ID,
                     VAM_Product_ID, VAM_PFeature_SetInstance_ID,
                     VAM_ProductCostElement_ID,
                     Amt, Qty, Description, trxName);
@@ -4561,7 +4561,7 @@ namespace VAdvantage.Model
                     cd.SetProcessed(false);
                     if (cd.Delete(true, trxName))
                     {
-                        cd = new MVAMProductCostDetail(mas, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
+                        cd = new MVAMVAMProductCostDetail(mas, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
                             VAM_ProductCostElement_ID, Amt, Qty, Description, trxName);
                     }
                     //CostSetByProcess(cd, mas, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,                        VAM_ProductCostElement_ID, Amt, Qty, Description, trxName, RectifyPostedRecords);
@@ -4625,12 +4625,12 @@ namespace VAdvantage.Model
             {
                 _log.Config("Deleted #" + no);
             }
-            MVAMProductCostDetail cd = Get(mas.GetCtx(), "VAB_OrderLine_ID=@param1 AND VAM_PFeature_SetInstance_ID=@param2",
+            MVAMVAMProductCostDetail cd = Get(mas.GetCtx(), "VAB_OrderLine_ID=@param1 AND VAM_PFeature_SetInstance_ID=@param2",
                 VAB_OrderLine_ID, VAM_PFeature_SetInstance_ID, trxName);
             //
             if (cd == null)		//	createNew cost deatil for selected product
             {
-                cd = new MVAMProductCostDetail(mas, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
+                cd = new MVAMVAMProductCostDetail(mas, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
                     VAM_ProductCostElement_ID, Amt, Qty, Description, trxName);
                 cd.SetVAB_OrderLine_ID(VAB_OrderLine_ID);
             }
@@ -4641,7 +4641,7 @@ namespace VAdvantage.Model
                     cd.SetProcessed(false);
                     if (cd.Delete(true, trxName))
                     {
-                        cd = new MVAMProductCostDetail(mas, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
+                        cd = new MVAMVAMProductCostDetail(mas, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
                             VAM_ProductCostElement_ID, Amt, Qty, Description, trxName);
                     }
                     //CostSetByProcess(cd, mas, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, VAM_ProductCostElement_ID, Amt, Qty, Description, trxName, RectifyPostedRecords);
@@ -4695,7 +4695,7 @@ namespace VAdvantage.Model
         /// <param name="trxName"></param>
         /// <param name="RectifyPostedRecords"></param>
         /// <param name="Id"></param>
-        //private static void CostSetByProcess(MVAMProductCostDetail cd, MAcctSchema mas, int VAF_Org_ID, int VAM_Product_ID,
+        //private static void CostSetByProcess(MVAMVAMProductCostDetail cd, MAcctSchema mas, int VAF_Org_ID, int VAM_Product_ID,
         //    int VAM_PFeature_SetInstance_ID, int VAM_ProductCostElement_ID, Decimal Amt, Decimal Qty,
         //    String Description, Trx trx, bool RectifyPostedRecords)
         //{
@@ -4704,7 +4704,7 @@ namespace VAdvantage.Model
         //        cd.SetProcessed(false);
         //        if (cd.Delete(true, trxName))
         //        {
-        //            cd = new MVAMProductCostDetail(mas, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
+        //            cd = new MVAMVAMProductCostDetail(mas, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
         //                VAM_ProductCostElement_ID, Amt, Qty, Description, trxName);
         //        }
         //    }
@@ -4739,12 +4739,12 @@ namespace VAdvantage.Model
             {
                 _log.Config("Deleted #" + no);
             }
-            MVAMProductCostDetail cd = Get(mas.GetCtx(), "VAM_ProductionLine_ID=@param1 AND VAM_PFeature_SetInstance_ID=@param2",
+            MVAMVAMProductCostDetail cd = Get(mas.GetCtx(), "VAM_ProductionLine_ID=@param1 AND VAM_PFeature_SetInstance_ID=@param2",
                 VAM_ProductionLine_ID, VAM_PFeature_SetInstance_ID, trxName);
             //
             if (cd == null)		//	createNew
             {
-                cd = new MVAMProductCostDetail(mas, VAF_Org_ID,
+                cd = new MVAMVAMProductCostDetail(mas, VAF_Org_ID,
                     VAM_Product_ID, VAM_PFeature_SetInstance_ID,
                     VAM_ProductCostElement_ID,
                     Amt, Qty, Description, trxName);
@@ -4757,7 +4757,7 @@ namespace VAdvantage.Model
                     cd.SetProcessed(false);
                     if (cd.Delete(true, trxName))
                     {
-                        cd = new MVAMProductCostDetail(mas, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
+                        cd = new MVAMVAMProductCostDetail(mas, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
                             VAM_ProductCostElement_ID, Amt, Qty, Description, trxName);
                     }
                     //CostSetByProcess(cd, mas, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, VAM_ProductCostElement_ID, Amt, Qty, Description, trxName, RectifyPostedRecords);
@@ -4820,12 +4820,12 @@ namespace VAdvantage.Model
             {
                 _log.Config("Deleted #" + no);
             }
-            MVAMProductCostDetail cd = Get(mas.GetCtx(), "VAM_Inv_InOutLine_ID=@param1 AND VAM_PFeature_SetInstance_ID=@param2",
+            MVAMVAMProductCostDetail cd = Get(mas.GetCtx(), "VAM_Inv_InOutLine_ID=@param1 AND VAM_PFeature_SetInstance_ID=@param2",
                 VAM_Inv_InOutLine_ID, VAM_PFeature_SetInstance_ID, trxName);
             //
             if (cd == null)		//	createNew
             {
-                cd = new MVAMProductCostDetail(mas, VAF_Org_ID,
+                cd = new MVAMVAMProductCostDetail(mas, VAF_Org_ID,
                     VAM_Product_ID, VAM_PFeature_SetInstance_ID,
                     VAM_ProductCostElement_ID,
                     Amt, Qty, Description, trxName);
@@ -4839,7 +4839,7 @@ namespace VAdvantage.Model
                     cd.SetProcessed(false);
                     if (cd.Delete(true, trxName))
                     {
-                        cd = new MVAMProductCostDetail(mas, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
+                        cd = new MVAMVAMProductCostDetail(mas, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
                             VAM_ProductCostElement_ID, Amt, Qty, Description, trxName);
                     }
                     //CostSetByProcess(cd, mas, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, VAM_ProductCostElement_ID, Amt, Qty, Description, trxName, RectifyPostedRecords);
@@ -4882,11 +4882,11 @@ namespace VAdvantage.Model
         /// <param name="VAM_PFeature_SetInstance_ID">attribute set instance</param>
         /// <param name="trxName">transaction</param>
         /// <returns>cost detail</returns>
-        private static MVAMProductCostDetail Get(Ctx ctx, String whereClause, int ID,
+        private static MVAMVAMProductCostDetail Get(Ctx ctx, String whereClause, int ID,
             int VAM_PFeature_SetInstance_ID, Trx trxName)
         {
             String sql = "SELECT * FROM VAM_ProductCostDetail WHERE " + whereClause;
-            MVAMProductCostDetail retValue = null;
+            MVAMVAMProductCostDetail retValue = null;
             try
             {
                 SqlParameter[] param = new SqlParameter[2];
@@ -4897,7 +4897,7 @@ namespace VAdvantage.Model
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        retValue = new MVAMProductCostDetail(ctx, dr, trxName);
+                        retValue = new MVAMVAMProductCostDetail(ctx, dr, trxName);
                     }
                 }
             }
@@ -4914,7 +4914,7 @@ namespace VAdvantage.Model
         /// <param name="product">product</param>
         /// <param name="trxName">transaction</param>
         /// <returns>true if no error</returns>
-        public static bool ProcessProduct(MProduct product, Trx trxName)
+        public static bool ProcessProduct(MVAMProduct product, Trx trxName)
         {
             String sql = "SELECT * FROM VAM_ProductCostDetail "
                 + "WHERE VAM_Product_ID=" + product.GetVAM_Product_ID()
@@ -4929,7 +4929,7 @@ namespace VAdvantage.Model
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        MVAMProductCostDetail cd = new MVAMProductCostDetail(product.GetCtx(), dr, trxName);
+                        MVAMVAMProductCostDetail cd = new MVAMVAMProductCostDetail(product.GetCtx(), dr, trxName);
                         if (cd.Process())	//	saves
                             counterOK++;
                         else
@@ -5021,7 +5021,7 @@ namespace VAdvantage.Model
             //	get costing level for product
             MVABAccountBook mas = new MVABAccountBook(GetCtx(), GetVAB_AccountBook_ID(), null);
             String CostingLevel = mas.GetCostingLevel();
-            MProduct product = MProduct.Get(GetCtx(), GetVAM_Product_ID());
+            MVAMProduct product = MVAMProduct.Get(GetCtx(), GetVAM_Product_ID());
 
 
 
@@ -5029,7 +5029,7 @@ namespace VAdvantage.Model
             dynamic pca = null;
             if (mas.GetFRPT_LocAcct_ID() > 0)
             {
-                pca = MProductCategory.Get(GetCtx(), product.GetVAM_ProductCategory_ID());
+                pca = MVAMProductCategory.Get(GetCtx(), product.GetVAM_ProductCategory_ID());
                 if (pca != null)
                 {
                     //if (pca.GetFRPT_CostingLevel() != null)
@@ -5040,7 +5040,7 @@ namespace VAdvantage.Model
             }
             else
             {
-                pca = MProductCategoryAcct.Get(GetCtx(),
+                pca = MVAMProductCategoryAcct.Get(GetCtx(),
                    product.GetVAM_ProductCategory_ID(), GetVAB_AccountBook_ID(), null);
                 if (pca != null)
                 {
@@ -5065,12 +5065,12 @@ namespace VAdvantage.Model
             //	Create Material Cost elements
             if (GetVAM_ProductCostElement_ID() == 0)
             {
-                MVAMProductCostElement[] ces = MVAMProductCostElement.GetCostingMethods(this);
+                MVAMVAMProductCostElement[] ces = MVAMVAMProductCostElement.GetCostingMethods(this);
                 try
                 {
                     for (int i = 0; i < ces.Length; i++)
                     {
-                        MVAMProductCostElement ce = ces[i];
+                        MVAMVAMProductCostElement ce = ces[i];
                         ok = Process(mas, product, ce, Org_ID, M_ASI_ID);
                         if (!ok)
                             break;
@@ -5080,7 +5080,7 @@ namespace VAdvantage.Model
             }	//	Material Cost elements
             else
             {
-                MVAMProductCostElement ce = MVAMProductCostElement.Get(GetCtx(), GetVAM_ProductCostElement_ID());
+                MVAMVAMProductCostElement ce = MVAMVAMProductCostElement.Get(GetCtx(), GetVAM_ProductCostElement_ID());
                 ok = Process(mas, product, ce, Org_ID, M_ASI_ID);
             }
 
@@ -5105,7 +5105,7 @@ namespace VAdvantage.Model
         /// <param name="Org_ID">org - corrected for costing level</param>
         /// <param name="M_ASI_ID">asi corrected for costing level</param>
         /// <returns>true if cost ok</returns>
-        private bool Process(MVABAccountBook mas, MProduct product, MVAMProductCostElement ce,
+        private bool Process(MVABAccountBook mas, MVAMProduct product, MVAMVAMProductCostElement ce,
             int Org_ID, int M_ASI_ID)
         {
             string qry = "";
@@ -5150,19 +5150,19 @@ namespace VAdvantage.Model
             }
         }
 
-        private bool SaveCost(MVABAccountBook mas, MProduct product, MVAMProductCostElement ce, int Org_ID, int M_ASI_ID, int VAA_Asset_ID)
+        private bool SaveCost(MVABAccountBook mas, MVAMProduct product, MVAMVAMProductCostElement ce, int Org_ID, int M_ASI_ID, int VAA_Asset_ID)
         {
-            MVAMProductCost cost = null;
+            MVAMVAMProductCost cost = null;
             if (VAA_Asset_ID == 0)
             {
-                cost = MVAMProductCost.Get(product, M_ASI_ID, mas, Org_ID, ce.GetVAM_ProductCostElement_ID());
+                cost = MVAMVAMProductCost.Get(product, M_ASI_ID, mas, Org_ID, ce.GetVAM_ProductCostElement_ID());
             }
             else
             {
-                cost = MVAMProductCost.Get(product, M_ASI_ID, mas, Org_ID, ce.GetVAM_ProductCostElement_ID(), VAA_Asset_ID);
+                cost = MVAMVAMProductCost.Get(product, M_ASI_ID, mas, Org_ID, ce.GetVAM_ProductCostElement_ID(), VAA_Asset_ID);
             }
             //	if (cost == null)
-            //		cost = new MVAMProductCost(product, M_ASI_ID, 
+            //		cost = new MVAMVAMProductCost(product, M_ASI_ID, 
             //			as, Org_ID, ce.getVAM_ProductCostElement_ID());
 
             Decimal qty = GetQty();
@@ -5272,14 +5272,14 @@ namespace VAdvantage.Model
                     //	Real ASI - costing level Org
 
                     // commented by Amit because cost queue is created from complete 16-12-2015
-                    //MVAMProductCostQueue cq = MVAMProductCostQueue.Get(product, GetVAM_PFeature_SetInstance_ID(),
+                    //MVAMVAMProductCostQueue cq = MVAMVAMProductCostQueue.Get(product, GetVAM_PFeature_SetInstance_ID(),
                     //    mas, Org_ID, ce.GetVAM_ProductCostElement_ID(), Get_TrxName());
                     //cq.SetCosts(amt, qty, precision);
                     //cq.Save(Get_TrxName());
 
                     //end
                     //	Get Costs - costing level Org/ASI
-                    MVAMProductCostQueue[] cQueue = MVAMProductCostQueue.GetQueue(product, M_ASI_ID,
+                    MVAMVAMProductCostQueue[] cQueue = MVAMVAMProductCostQueue.GetQueue(product, M_ASI_ID,
                         mas, Org_ID, ce, Get_TrxName());
                     if (cQueue != null && cQueue.Length > 0)
                         cost.SetCurrentCostPrice(cQueue[0].GetCurrentCostPrice());
@@ -5309,7 +5309,7 @@ namespace VAdvantage.Model
                         //	seed initial price
                         if (Env.Signum(cost.GetCurrentCostPrice()) == 0 && cost.Get_ID() == 0)
                         {
-                            cost.SetCurrentCostPrice(MVAMProductCost.GetSeedCosts(product, M_ASI_ID,
+                            cost.SetCurrentCostPrice(MVAMVAMProductCost.GetSeedCosts(product, M_ASI_ID,
                                     mas, Org_ID, ce.GetCostingMethod(), GetVAB_OrderLine_ID()));
                         }
                     }
@@ -5407,7 +5407,7 @@ namespace VAdvantage.Model
                     {
                         //	Real ASI - costing level Org
                         // commented by Amit because cost queue is created from complete 16-12-2015
-                        //MVAMProductCostQueue cq = MVAMProductCostQueue.Get(product, GetVAM_PFeature_SetInstance_ID(),
+                        //MVAMVAMProductCostQueue cq = MVAMVAMProductCostQueue.Get(product, GetVAM_PFeature_SetInstance_ID(),
                         //    mas, Org_ID, ce.GetVAM_ProductCostElement_ID(), Get_TrxName());
                         //cq.SetCosts(amt, qty, precision);
                         //cq.Save();
@@ -5416,11 +5416,11 @@ namespace VAdvantage.Model
                     {
                         //	Adjust Queue - costing level Org/ASI
                         // commented by Amit because cost queue is created from complete 16-12-2015
-                        //MVAMProductCostQueue.AdjustQty(product, M_ASI_ID,
+                        //MVAMVAMProductCostQueue.AdjustQty(product, M_ASI_ID,
                         //    mas, Org_ID, ce, Decimal.Negate(qty), Get_TrxName());
                     }
                     //	Get Costs - costing level Org/ASI
-                    MVAMProductCostQueue[] cQueue = MVAMProductCostQueue.GetQueue(product, M_ASI_ID,
+                    MVAMVAMProductCostQueue[] cQueue = MVAMVAMProductCostQueue.GetQueue(product, M_ASI_ID,
                         mas, Org_ID, ce, Get_TrxName());
                     if (cQueue != null && cQueue.Length > 0)
                         cost.SetCurrentCostPrice(cQueue[0].GetCurrentCostPrice());
@@ -5516,7 +5516,7 @@ namespace VAdvantage.Model
         /// <returns>info</returns>
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MVAMProductCostDetail[");
+            StringBuilder sb = new StringBuilder("MVAMVAMProductCostDetail[");
             sb.Append(Get_ID());
             if (GetVAB_OrderLine_ID() != 0)
                 sb.Append(",VAB_OrderLine_ID=").Append(GetVAB_OrderLine_ID());
@@ -5550,12 +5550,12 @@ namespace VAdvantage.Model
         /// <param name="Org_ID">org - corrected for costing level</param>
         /// <param name="M_ASI_ID">asi corrected for costing level</param>
         /// <returns>true if cost ok</returns>
-        public bool ProcessReversedCost(VAdvantage.Model.MVABAccountBook mas, MProduct product, VAdvantage.Model.MVAMProductCostElement ce,
+        public bool ProcessReversedCost(VAdvantage.Model.MVABAccountBook mas, MVAMProduct product, VAdvantage.Model.MVAMVAMProductCostElement ce,
             int Org_ID, int M_ASI_ID)
         {
-            MVAMProductCost cost = MVAMProductCost.Get(product, M_ASI_ID, mas, Org_ID, ce.GetVAM_ProductCostElement_ID());
+            MVAMVAMProductCost cost = MVAMVAMProductCost.Get(product, M_ASI_ID, mas, Org_ID, ce.GetVAM_ProductCostElement_ID());
             //	if (cost == null)
-            //		cost = new MVAMProductCost(product, M_ASI_ID, 
+            //		cost = new MVAMVAMProductCost(product, M_ASI_ID, 
             //			as1, Org_ID, ce.getVAM_ProductCostElement_ID());
 
             Decimal qty = GetQty();
@@ -5669,12 +5669,12 @@ namespace VAdvantage.Model
                 {
                     //	Real ASI - costing level Org
                     // commented by Amit because cost queue is created from complete 16-12-2015
-                    //MVAMProductCostQueue cq = MVAMProductCostQueue.Get(product, GetVAM_PFeature_SetInstance_ID(),
+                    //MVAMVAMProductCostQueue cq = MVAMVAMProductCostQueue.Get(product, GetVAM_PFeature_SetInstance_ID(),
                     //    mas, Org_ID, ce.GetVAM_ProductCostElement_ID(), Get_TrxName());
                     //cq.SetCosts(amt, qty, precision);
                     //cq.Save();
                     //	Get Costs - costing level Org/ASI
-                    MVAMProductCostQueue[] cQueue = MVAMProductCostQueue.GetQueue(product, M_ASI_ID,
+                    MVAMVAMProductCostQueue[] cQueue = MVAMVAMProductCostQueue.GetQueue(product, M_ASI_ID,
                         mas, Org_ID, ce, Get_TrxName());
                     if (cQueue != null && cQueue.Length > 0)
                     {
@@ -5712,7 +5712,7 @@ namespace VAdvantage.Model
                         //	seed initial price
                         if (Env.Signum(cost.GetCurrentCostPrice()) == 0 && cost.Get_ID() == 0)
                         {
-                            cost.SetCurrentCostPrice(MVAMProductCost.GetSeedCosts(product, M_ASI_ID,
+                            cost.SetCurrentCostPrice(MVAMVAMProductCost.GetSeedCosts(product, M_ASI_ID,
                                     mas, Org_ID, ce.GetCostingMethod(), GetVAB_OrderLine_ID()));
                         }
                     }
@@ -5799,7 +5799,7 @@ namespace VAdvantage.Model
                     {
                         //	Real ASI - costing level Org
                         // commented by Amit because cost queue is created from complete 16-12-2015
-                        //MVAMProductCostQueue cq = MVAMProductCostQueue.Get(product, GetVAM_PFeature_SetInstance_ID(),
+                        //MVAMVAMProductCostQueue cq = MVAMVAMProductCostQueue.Get(product, GetVAM_PFeature_SetInstance_ID(),
                         //    mas, Org_ID, ce.GetVAM_ProductCostElement_ID(), Get_TrxName());
                         //cq.SetCosts(amt, qty, precision);
                         //cq.Save();
@@ -5808,11 +5808,11 @@ namespace VAdvantage.Model
                     {
                         //	Adjust Queue - costing level Org/ASI
                         // commented by Amit because cost queue is created from complete 16-12-2015
-                        //MVAMProductCostQueue.AdjustQty(product, M_ASI_ID,
+                        //MVAMVAMProductCostQueue.AdjustQty(product, M_ASI_ID,
                         //    mas, Org_ID, ce, Decimal.Negate(qty), Get_TrxName());
                     }
                     //	Get Costs - costing level Org/ASI
-                    MVAMProductCostQueue[] cQueue = MVAMProductCostQueue.GetQueue(product, M_ASI_ID,
+                    MVAMVAMProductCostQueue[] cQueue = MVAMVAMProductCostQueue.GetQueue(product, M_ASI_ID,
                         mas, Org_ID, ce, Get_TrxName());
                     if (cQueue != null && cQueue.Length > 0)
                         cost.SetCurrentCostPrice(cQueue[0].GetCurrentCostPrice());
@@ -5908,12 +5908,12 @@ namespace VAdvantage.Model
             int no = DB.ExecuteQuery(sql, null, trx);
             if (no != 0)
                 _log.Config("Deleted #" + no);
-            MVAMProductCostDetail cd = Get(as1.GetCtx(), "M_WorkOrderResourceTxnLine_ID=@param1 AND VAM_PFeature_SetInstance_ID=@param2",
+            MVAMVAMProductCostDetail cd = Get(as1.GetCtx(), "M_WorkOrderResourceTxnLine_ID=@param1 AND VAM_PFeature_SetInstance_ID=@param2",
                     M_WorkOrderResourceTransactionLine_ID, VAM_PFeature_SetInstance_ID, trx);
             //
             if (cd == null)		//	createNew
             {
-                cd = new MVAMProductCostDetail(as1, VAF_Org_ID,
+                cd = new MVAMVAMProductCostDetail(as1, VAF_Org_ID,
                     VAM_Product_ID, VAM_PFeature_SetInstance_ID, VAM_ProductCostElement_ID, Amt, Qty, Description, trx);
                 cd.SetM_WorkOrderResourceTxnLine_ID(M_WorkOrderResourceTransactionLine_ID);
                 cd.SetIsSOTrx(IsSOTrx);
@@ -5925,7 +5925,7 @@ namespace VAdvantage.Model
                     cd.SetProcessed(false);
                     if (cd.Delete(true, trx))
                     {
-                        cd = new MVAMProductCostDetail(as1, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
+                        cd = new MVAMVAMProductCostDetail(as1, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
                             VAM_ProductCostElement_ID, Amt, Qty, Description, trx);
                     }
                     // CostSetByProcess(cd, as1, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, VAM_ProductCostElement_ID, Amt, Qty, Description, trx, RectifyPostedRecords);
@@ -5994,12 +5994,12 @@ namespace VAdvantage.Model
             if (no != 0)
                 _log.Config("Deleted #" + no);
 
-            MVAMProductCostDetail cd = Get(as1.GetCtx(), "M_WorkOrderTransactionLine_ID=@param1 AND VAM_PFeature_SetInstance_ID=@param2",
+            MVAMVAMProductCostDetail cd = Get(as1.GetCtx(), "M_WorkOrderTransactionLine_ID=@param1 AND VAM_PFeature_SetInstance_ID=@param2",
                     M_WorkOrderTransactionLine_ID, VAM_PFeature_SetInstance_ID, trx);
             //
             if (cd == null)		//	createNew
             {
-                cd = new MVAMProductCostDetail(as1, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
+                cd = new MVAMVAMProductCostDetail(as1, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
                     VAM_ProductCostElement_ID, Amt, Qty, Description, trx);
 
                 cd.SetM_WorkOrderTransactionLine_ID(M_WorkOrderTransactionLine_ID);
@@ -6012,7 +6012,7 @@ namespace VAdvantage.Model
                     cd.SetProcessed(false);
                     if (cd.Delete(true, trx))
                     {
-                        cd = new MVAMProductCostDetail(as1, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
+                        cd = new MVAMVAMProductCostDetail(as1, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
                             VAM_ProductCostElement_ID, Amt, Qty, Description, trx);
                     }
                     //CostSetByProcess(cd, as1, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, VAM_ProductCostElement_ID, Amt, Qty, Description, trx, RectifyPostedRecords);
@@ -6083,11 +6083,11 @@ namespace VAdvantage.Model
             if (no != 0)
                 _log.Config("Deleted #" + no);
 
-            MVAMProductCostDetail cd = Get(as1.GetCtx(), costLineColName + "=@param1 AND VAM_PFeature_SetInstance_ID=@param2", ID, VAM_PFeature_SetInstance_ID, trx);
+            MVAMVAMProductCostDetail cd = Get(as1.GetCtx(), costLineColName + "=@param1 AND VAM_PFeature_SetInstance_ID=@param2", ID, VAM_PFeature_SetInstance_ID, trx);
             //
             if (cd == null)		//	createNew
             {
-                cd = new MVAMProductCostDetail(as1, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, VAM_ProductCostElement_ID, Amt, Qty, Description, trx);
+                cd = new MVAMVAMProductCostDetail(as1, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, VAM_ProductCostElement_ID, Amt, Qty, Description, trx);
                 cd.Set_CustomColumn(costLineColName, ID);
                 cd.SetIsSOTrx(IsSOTrx);
             }
@@ -6098,7 +6098,7 @@ namespace VAdvantage.Model
                     cd.SetProcessed(false);
                     if (cd.Delete(true, trx))
                     {
-                        cd = new MVAMProductCostDetail(as1, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
+                        cd = new MVAMVAMProductCostDetail(as1, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
                             VAM_ProductCostElement_ID, Amt, Qty, Description, trx);
                     }
                     cd.Set_CustomColumn(costLineColName, ID);

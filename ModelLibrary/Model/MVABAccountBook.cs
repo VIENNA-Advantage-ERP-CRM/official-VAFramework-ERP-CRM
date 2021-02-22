@@ -369,7 +369,7 @@ namespace VAdvantage.Model
             //	Create Cost Type
             if (GetVAM_ProductCostType_ID() == 0)
             {
-                MVAMProductCostType ct = new MVAMProductCostType(GetCtx(), 0, Get_TrxName());
+                MVAMVAMProductCostType ct = new MVAMVAMProductCostType(GetCtx(), 0, Get_TrxName());
                 ct.SetClientOrg(GetVAF_Client_ID(), 0);
                 ct.SetName(GetName());
                 ct.Save();
@@ -377,7 +377,7 @@ namespace VAdvantage.Model
             }
 
             //	Create Cost Elements
-            MVAMProductCostElement.GetMaterialCostElement(this, GetCostingMethod());
+            MVAMVAMProductCostElement.GetMaterialCostElement(this, GetCostingMethod());
 
             //	Default Costing Level
             if (GetCostingLevel() == null)

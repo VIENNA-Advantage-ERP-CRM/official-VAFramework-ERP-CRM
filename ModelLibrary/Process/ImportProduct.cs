@@ -477,7 +477,7 @@ namespace VAdvantage.Process
                     //	Product
                     if (newProduct)			//	Insert new Product
                     {
-                        MProduct product = new MProduct(imp);
+                        MVAMProduct product = new MVAMProduct(imp);
                         product.SetVAB_TaxCategory_ID(VAB_TaxCategory_ID);
                         if (product.Save())
                         {
@@ -617,10 +617,10 @@ namespace VAdvantage.Process
                         Decimal PriceLimit = imp.GetPriceLimit();
                         if (Env.Signum(PriceStd) != 0 && Env.Signum(PriceLimit) != 0 && Env.Signum(PriceList) != 0)
                         {
-                            MProductPrice pp = MProductPrice.Get(GetCtx(),
+                            MVAMProductPrice pp = MVAMProductPrice.Get(GetCtx(),
                                 _VAM_PriceListVersion_ID, VAM_Product_ID, Get_TrxName());
                             if (pp == null)
-                                pp = new MProductPrice(GetCtx(),
+                                pp = new MVAMProductPrice(GetCtx(),
                                     _VAM_PriceListVersion_ID, VAM_Product_ID, Get_TrxName());
                             pp.SetPrices(PriceList, PriceStd, PriceLimit);
                             pp.Save();

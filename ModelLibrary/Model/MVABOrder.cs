@@ -145,7 +145,7 @@ namespace VAdvantage.Model
                 if (from.GetCounterBPartner() != null)
                     to.SetBPartner(from.GetCounterBPartner());
 
-                MPriceList pl = MPriceList.Get(from.GetCtx(), to.GetVAM_PriceList_ID(), trxName);
+                MVAMPriceList pl = MVAMPriceList.Get(from.GetCtx(), to.GetVAM_PriceList_ID(), trxName);
                 //when record is of SO then price list must be Sale price list and vice versa
                 if (from.GetCounterBPartner() != null && ((to.IsSOTrx() && !pl.IsSOPriceList()) || (!to.IsSOTrx() && pl.IsSOPriceList())))
                 {
@@ -1450,7 +1450,7 @@ namespace VAdvantage.Model
         */
         public new void SetVAM_PriceList_ID(int VAM_PriceList_ID)
         {
-            MPriceList pl = MPriceList.Get(GetCtx(), VAM_PriceList_ID, null);
+            MVAMPriceList pl = MVAMPriceList.Get(GetCtx(), VAM_PriceList_ID, null);
             if (pl.Get_ID() == VAM_PriceList_ID)
             {
                 base.SetVAM_PriceList_ID(VAM_PriceList_ID);
@@ -2447,7 +2447,7 @@ namespace VAdvantage.Model
                     if (GetVAM_ReturnRule_ID() != 0)
                     {
                         MVAMInvInOut origInOut = new MVAMInvInOut(GetCtx(), GetOrig_InOut_ID(), null);
-                        MReturnPolicy rpolicy = new MReturnPolicy(GetCtx(), GetVAM_ReturnRule_ID(), null);
+                        MVAMReturnRule rpolicy = new MVAMReturnRule(GetCtx(), GetVAM_ReturnRule_ID(), null);
                         log.Fine("RMA Date : " + GetDateOrdered() + " Shipment Date : " + origInOut.GetMovementDate());
                         withinPolicy = rpolicy.CheckReturnPolicy(origInOut.GetMovementDate(), GetDateOrdered());
                     }
@@ -2953,14 +2953,14 @@ namespace VAdvantage.Model
                 for (int i = 0; i < lines.Length; i++)
                 {
                     MVABOrderLine line = lines[i];
-                    MProduct product = MProduct.Get(GetCtx(), line.GetVAM_Product_ID());
+                    MVAMProduct product = MVAMProduct.Get(GetCtx(), line.GetVAM_Product_ID());
                     log.Fine(product.GetName());
                     //	New Lines
                     int lineNo = line.GetLine();
-                    MProductBOM[] boms = MProductBOM.GetBOMLines(product);
+                    MVAMProductBOM[] boms = MVAMProductBOM.GetBOMLines(product);
                     for (int j = 0; j < boms.Length; j++)
                     {
-                        MProductBOM bom = boms[j];
+                        MVAMProductBOM bom = boms[j];
                         MVABOrderLine newLine = new MVABOrderLine(this);
                         newLine.SetLine(++lineNo);
                         newLine.SetVAM_Product_ID(bom.GetProduct()
@@ -3085,7 +3085,7 @@ namespace VAdvantage.Model
 
                     if (Env.Signum(difference) == 0)
                     {
-                        MProduct product = line.GetProduct();
+                        MVAMProduct product = line.GetProduct();
                         if (product != null)
                         {
                             Volume = Decimal.Add(Volume, (Decimal.Multiply((Decimal)product.GetVolume(), line.GetQtyOrdered())));
@@ -3103,7 +3103,7 @@ namespace VAdvantage.Model
                                 Decimal ordered = isSOTrx ? Env.ZERO : line.GetQtyReserved();
                                 Decimal reserved = isSOTrx ? line.GetQtyReserved() : Env.ZERO;
                                 VAM_Locator_ID = wh.GetDefaultVAM_Locator_ID();
-                                if (!MStorage.Add(GetCtx(), line.GetVAM_Warehouse_ID(), VAM_Locator_ID,
+                                if (!MVAMStorage.Add(GetCtx(), line.GetVAM_Warehouse_ID(), VAM_Locator_ID,
                                             line.GetVAM_Product_ID(),
                                             line.GetVAM_PFeature_SetInstance_ID(), reserved,
                                             ordered, Get_TrxName()))
@@ -3122,7 +3122,7 @@ namespace VAdvantage.Model
                         + ",Reserved=" + line.GetQtyReserved() + ",Delivered=" + line.GetQtyDelivered());
 
                     //	Check Product - Stocked and Item
-                    MProduct product1 = line.GetProduct();
+                    MVAMProduct product1 = line.GetProduct();
                     if (product1 != null)
                     {
                         if (product1.IsStocked())
@@ -3142,7 +3142,7 @@ namespace VAdvantage.Model
                             {
                                 //	Get Locator to reserve
                                 if (line.GetVAM_PFeature_SetInstance_ID() != 0)	//	Get existing Location
-                                    VAM_Locator_ID = MStorage.GetVAM_Locator_ID(line.GetVAM_Warehouse_ID(),
+                                    VAM_Locator_ID = MVAMStorage.GetVAM_Locator_ID(line.GetVAM_Warehouse_ID(),
                                         line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(),
                                         ordered, Get_TrxName());
                                 //	Get default Location
@@ -3159,7 +3159,7 @@ namespace VAdvantage.Model
                                 if (VAM_Locator_ID == 0)
                                 {
                                     if (line.GetVAM_PFeature_SetInstance_ID() != 0)	//	Get existing Location
-                                        VAM_Locator_ID = MStorage.GetVAM_Locator_ID(line.GetVAM_Warehouse_ID(),
+                                        VAM_Locator_ID = MVAMStorage.GetVAM_Locator_ID(line.GetVAM_Warehouse_ID(),
                                             line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(),
                                             ordered, Get_TrxName());
                                 }
@@ -3178,7 +3178,7 @@ namespace VAdvantage.Model
                             else
                             {
                                 //	Update Storage
-                                if (!MStorage.Add(GetCtx(), line.GetVAM_Warehouse_ID(), VAM_Locator_ID,
+                                if (!MVAMStorage.Add(GetCtx(), line.GetVAM_Warehouse_ID(), VAM_Locator_ID,
                                     line.GetVAM_Product_ID(),
                                     line.GetVAM_PFeature_SetInstance_ID(), line.GetVAM_PFeature_SetInstance_ID(),
                                     Env.ZERO, reserved, ordered, Get_TrxName()))
@@ -3395,7 +3395,7 @@ namespace VAdvantage.Model
         public String CompleteIt()
         {
             // chck pallet Functionality applicable or not
-            isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
+            isContainerApplicable = MVAMInvTrx.ProductContainerApplicable(GetCtx());
 
             try
             {
@@ -3657,7 +3657,7 @@ namespace VAdvantage.Model
                 //JID_1126: System will check the selected Vendor and product to update the price on Purchasing tab.
                 if (!IsSOTrx() && !IsReturnTrx() && dt.GetDocBaseType() == "POO")
                 {
-                    MProductPO po = null;
+                    MVAMProductPO po = null;
 
                     for (int i = 0; i < _lines.Length; i++)
                     {
@@ -3665,7 +3665,7 @@ namespace VAdvantage.Model
                         {
                             continue;
                         }
-                        po = MProductPO.GetOfVendorProduct(GetCtx(), GetVAB_BusinessPartner_ID(), _lines[i].GetVAM_Product_ID(), Get_Trx());
+                        po = MVAMProductPO.GetOfVendorProduct(GetCtx(), GetVAB_BusinessPartner_ID(), _lines[i].GetVAM_Product_ID(), Get_Trx());
                         if (po != null)
                         {
                             po.SetPriceLastPO(_lines[i].GetPriceEntered());
@@ -3843,7 +3843,7 @@ namespace VAdvantage.Model
                 //    int countVAPOS = Util.GetValueOfInt(DB.ExecuteScalar("Select count(*) from VAF_ModuleInfo Where Prefix='VAPOS_'"));
                 //    if (countVAPOS > 0)
                 //    {
-                //        MPriceList priceLst = new MPriceList(GetCtx(), GetVAM_PriceList_ID(), null);
+                //        MVAMPriceList priceLst = new MVAMPriceList(GetCtx(), GetVAM_PriceList_ID(), null);
                 //        bool taxInclusive = priceLst.IsTaxIncluded();
                 //        int VAPOS_POSTertminal_ID = Util.GetValueOfInt(DB.ExecuteScalar("Select VAPOS_POSTerminal_ID from VAB_Order Where VAB_Order_ID=" + GetVAB_Order_ID()));
                 //        if (VAPOS_POSTertminal_ID > 0)
@@ -4765,14 +4765,14 @@ namespace VAdvantage.Model
                         //	Qty = Ordered - Delivered
                         Decimal MovementQty = Decimal.Subtract(oLine.GetQtyOrdered(), oLine.GetQtyDelivered());
                         //	Location
-                        int VAM_Locator_ID = MStorage.GetVAM_Locator_ID(oLine.GetVAM_Warehouse_ID(),
+                        int VAM_Locator_ID = MVAMStorage.GetVAM_Locator_ID(oLine.GetVAM_Warehouse_ID(),
                                 oLine.GetVAM_Product_ID(), oLine.GetVAM_PFeature_SetInstance_ID(),
                                 MovementQty, Get_TrxName());
                         if (VAM_Locator_ID == 0)      //	Get default Location
                         {
-                            MProduct product = ioLine.GetProduct();
+                            MVAMProduct product = ioLine.GetProduct();
                             int VAM_Warehouse_ID = oLine.GetVAM_Warehouse_ID();
-                            VAM_Locator_ID = MProductLocator.GetFirstVAM_Locator_ID(product, VAM_Warehouse_ID);
+                            VAM_Locator_ID = MVAMProductLocator.GetFirstVAM_Locator_ID(product, VAM_Warehouse_ID);
                             if (VAM_Locator_ID == 0)
                             {
                                 wh = MWarehouse.Get(GetCtx(), VAM_Warehouse_ID);
@@ -4800,10 +4800,10 @@ namespace VAdvantage.Model
                     else
                     {
                         // when order line created with charge OR with Product which is not of "item type" then not to create shipment line against this.
-                        MProduct oproduct = oLine.GetProduct();
+                        MVAMProduct oproduct = oLine.GetProduct();
 
                         //Create Lines for Charge / (Resource - Service - Expense) type product based on setting on Tenant to "Allow Non Item type".
-                        if ((oproduct == null || !(oproduct != null && oproduct.GetProductType() == MProduct.PRODUCTTYPE_Item))
+                        if ((oproduct == null || !(oproduct != null && oproduct.GetProductType() == MVAMProduct.PRODUCTTYPE_Item))
                             && (Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("N")))
                             continue;
 
@@ -4817,13 +4817,13 @@ namespace VAdvantage.Model
                         Decimal MovementQty = Decimal.Subtract(oLine.GetQtyOrdered(), oLine.GetQtyDelivered());
 
                         //	Location
-                        int VAM_Locator_ID = MStorage.GetVAM_Locator_ID(oLine.GetVAM_Warehouse_ID(),
+                        int VAM_Locator_ID = MVAMStorage.GetVAM_Locator_ID(oLine.GetVAM_Warehouse_ID(),
                                 oLine.GetVAM_Product_ID(), oLine.GetVAM_PFeature_SetInstance_ID(),
                                 MovementQty, Get_TrxName());
                         if (VAM_Locator_ID == 0)      //	Get default Location
                         {
-                            MProduct product = ioLine.GetProduct();
-                            VAM_Locator_ID = MProductLocator.GetFirstVAM_Locator_ID(product, VAM_Warehouse_ID);
+                            MVAMProduct product = ioLine.GetProduct();
+                            VAM_Locator_ID = MVAMProductLocator.GetFirstVAM_Locator_ID(product, VAM_Warehouse_ID);
                             if (VAM_Locator_ID == 0)
                             {
                                 wh = MWarehouse.Get(GetCtx(), VAM_Warehouse_ID);
@@ -4831,7 +4831,7 @@ namespace VAdvantage.Model
                             }
                         }
 
-                        Decimal? QtyAvail = MStorage.GetQtyAvailable(VAM_Warehouse_ID, oLine.GetVAM_Product_ID(), oLine.GetVAM_PFeature_SetInstance_ID(), Get_Trx());
+                        Decimal? QtyAvail = MVAMStorage.GetQtyAvailable(VAM_Warehouse_ID, oLine.GetVAM_Product_ID(), oLine.GetVAM_PFeature_SetInstance_ID(), Get_Trx());
                         if (MovementQty > 0)
                             QtyAvail += MovementQty;
 
@@ -4999,15 +4999,15 @@ namespace VAdvantage.Model
         /// <param name="Qty"></param>
         /// <param name="oproduct"></param>
         /// <returns></returns>
-        private String CreateShipmentLineContainer(MVAMInvInOut inout, MVAMInvInOutLine ioLine, MVABOrderLine oLine, int VAM_Locator_ID, Decimal Qty, bool disalowNegativeInventory, MProduct oproduct)
+        private String CreateShipmentLineContainer(MVAMInvInOut inout, MVAMInvInOutLine ioLine, MVABOrderLine oLine, int VAM_Locator_ID, Decimal Qty, bool disalowNegativeInventory, MVAMProduct oproduct)
         {
             String pMsg = null;
             List<RecordContainer> shipLine = new List<RecordContainer>();
 
             // JID_1746: Create Lines for Charge / (Resource - Service - Expense) type product based on setting on Tenant to "Allow Non Item type".
-            if (oproduct != null && oproduct.GetProductType() == MProduct.PRODUCTTYPE_Item)
+            if (oproduct != null && oproduct.GetProductType() == MVAMProduct.PRODUCTTYPE_Item)
             {
-                MProductCategory productCategory = MProductCategory.GetOfProduct(GetCtx(), oLine.GetVAM_Product_ID());
+                MVAMProductCategory productCategory = MVAMProductCategory.GetOfProduct(GetCtx(), oLine.GetVAM_Product_ID());
 
                 RecordContainer recordContainer = null;
                 bool existingRecord = false;

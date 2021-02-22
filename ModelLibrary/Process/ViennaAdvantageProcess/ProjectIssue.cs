@@ -240,14 +240,14 @@ namespace ViennaAdvantage.Process
         private String IssueExpense()
         {
             //	Get Expense Report
-            MTimeExpense expense = new MTimeExpense(GetCtx(), m_VAS_ExpenseReport_ID, Get_TrxName());
+            MVASExpenseReport expense = new MVASExpenseReport(GetCtx(), m_VAS_ExpenseReport_ID, Get_TrxName());
             if (!expense.IsProcessed())
             {
                 throw new ArgumentException("Time+Expense not processed - " + expense);
             }
 
             //	for all expense lines
-            MTimeExpenseLine[] expenseLines = expense.GetLines(false);
+            MVASExpenseReportLine[] expenseLines = expense.GetLines(false);
             int counter = 0;
             for (int i = 0; i < expenseLines.Length; i++)
             {
@@ -266,9 +266,9 @@ namespace ViennaAdvantage.Process
 
                 //	Find Location
                 int VAM_Locator_ID = 0;
-                //	MProduct product = new MProduct (getCtx(), expenseLines[i].getVAM_Product_ID());
+                //	MVAMProduct product = new MVAMProduct (getCtx(), expenseLines[i].getVAM_Product_ID());
                 //	if (product.isStocked())
-                VAM_Locator_ID = MStorage.GetVAM_Locator_ID(expense.GetVAM_Warehouse_ID(),
+                VAM_Locator_ID = MVAMStorage.GetVAM_Locator_ID(expense.GetVAM_Warehouse_ID(),
                     expenseLines[i].GetVAM_Product_ID(), 0, 	//	no ASI
                     expenseLines[i].GetQty(), null);
                 if (VAM_Locator_ID == 0)	//	Service/Expense - get default (and fallback)

@@ -17,8 +17,8 @@ namespace VAdvantage.Process
 {
     class SendRequestNotification : SvrProcess
     {
-        private MRequest _req = null;
-        private MRequestAction _reqAction = null;
+        private MVARRequest _req = null;
+        private MVARReqHistory _reqAction = null;
         StringBuilder message = null;
         public const String SEPARATOR =
           "\n---------.----------.----------.----------.----------.----------\n";
@@ -32,13 +32,13 @@ namespace VAdvantage.Process
         private String subject = "";
         protected override string DoIt()
         {
-            _req = new MRequest(GetCtx(), GetRecord_ID(), null);
+            _req = new MVARRequest(GetCtx(), GetRecord_ID(), null);
 
             // check mail template if found on request or request type.
             mailText_ID = _req.GetVAR_MailTemplate_ID();
             if (mailText_ID == 0)
             {
-                MRequestType reqType = new MRequestType(GetCtx(), _req.GetVAR_Req_Type_ID(), null);
+                MVARRequestType reqType = new MVARRequestType(GetCtx(), _req.GetVAR_Req_Type_ID(), null);
                 if (reqType.GetVAR_MailTemplate_ID() > 0)
                 {
                     mailText_ID = reqType.GetVAR_MailTemplate_ID();
@@ -340,7 +340,7 @@ namespace VAdvantage.Process
             _reqAction_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql));
             if (_reqAction_ID > 0)
             {
-                _reqAction = new MRequestAction(GetCtx(), _reqAction_ID, null);
+                _reqAction = new MVARReqHistory(GetCtx(), _reqAction_ID, null);
             }
 
         }
@@ -391,7 +391,7 @@ namespace VAdvantage.Process
             {
                 message = new StringBuilder();
 
-                MMailText text = new MMailText(GetCtx(), mailText_ID, null);
+                MVARMailTemplate text = new MVARMailTemplate(GetCtx(), mailText_ID, null);
                 text.SetPO(_req, true); //Set _Po Current value
                 subject += _req.GetDocumentNo() + ": " + text.GetMailHeader();
 

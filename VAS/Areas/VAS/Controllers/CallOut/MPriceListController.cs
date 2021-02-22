@@ -10,7 +10,7 @@ using VIS.Models;
 
 namespace VIS.Controllers
 {
-    public class MPriceListController:Controller
+    public class MVAMPriceListController:Controller
     {
 
 
@@ -25,7 +25,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MPriceListModel objPriceList = new MPriceListModel();
+                MVAMPriceListModel objPriceList = new MVAMPriceListModel();
                 retJSON = JsonConvert.SerializeObject(objPriceList.GetPriceList(ctx,fields));
             }          
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -44,7 +44,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MPriceListModel objPriceList = new MPriceListModel();
+                MVAMPriceListModel objPriceList = new MVAMPriceListModel();
                 retJSON = JsonConvert.SerializeObject(objPriceList.GetPriceListData(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);

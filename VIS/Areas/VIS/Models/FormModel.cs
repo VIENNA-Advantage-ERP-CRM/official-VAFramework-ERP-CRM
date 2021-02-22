@@ -47,7 +47,7 @@ namespace VIS.Models
                 m_where += " OR VAB_Payment_ID=" + Record_ID;
             }
             else if (VAF_TableView_ID == 208)
-            {//MProduct.Table_ID){
+            {//MVAMProduct.Table_ID){
                 m_where += " OR VAM_Product_ID=" + Record_ID;
             }
             else if (VAF_TableView_ID == 203)

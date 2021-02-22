@@ -223,7 +223,7 @@ namespace VAdvantage.Acct
 
                     if (Env.Signum(costs) == 0)	//	zero costs OK
                     {
-                        MProduct product = line.GetProduct();
+                        MVAMProduct product = line.GetProduct();
                         if (product.IsStocked())
                         {
                             _error = "No Costs for " + line.GetProduct().GetName();
@@ -304,7 +304,7 @@ namespace VAdvantage.Acct
                     {
                         if (!IsPosted())
                         {
-                            MVAMProductCostDetail.CreateShipment(as1, line.GetVAF_Org_ID(),
+                            MVAMVAMProductCostDetail.CreateShipment(as1, line.GetVAF_Org_ID(),
                                 line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(),
                                 line.Get_ID(), 0,
                                 costs, IsReturnTrx() ? Decimal.Negate(line.GetQty().Value) : line.GetQty().Value,
@@ -326,12 +326,12 @@ namespace VAdvantage.Acct
                 {
                     Decimal costs = 0;
                     DocLine line = _lines[i];
-                    MProduct product = line.GetProduct();
+                    MVAMProduct product = line.GetProduct();
                     /***********************************************************/
                     //05,Sep,2011
                     //Special Check to restic Price varience posting in case of
                     //AvarageInvoice Selected on product Category.Then Neglact the AverageInvoice Cost
-                    MProductCategoryAcct pca = MProductCategoryAcct.Get(product.GetCtx(),
+                    MVAMProductCategoryAcct pca = MVAMProductCategoryAcct.Get(product.GetCtx(),
                 product.GetVAM_ProductCategory_ID(), as1.GetVAB_AccountBook_ID(), null);
                     try
                     {

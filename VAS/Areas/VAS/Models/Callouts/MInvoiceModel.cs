@@ -71,7 +71,7 @@ namespace VIS.Models
             }
             if (VAM_Product_ID > 0)
             {
-                MProduct prod = new MProduct(ctx, VAM_Product_ID, null);
+                MVAMProduct prod = new MVAMProduct(ctx, VAM_Product_ID, null);
                 taxCategory = Util.GetValueOfInt(prod.GetVAB_TaxCategory_ID());
             }
             if (VAB_Charge_ID > 0)
@@ -553,7 +553,7 @@ namespace VIS.Models
                         taxType = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                     }
 
-                    MProductModel objProduct = new MProductModel();
+                    MVAMProductModel objProduct = new MVAMProductModel();
                     var prodtaxCategory = objProduct.GetTaxCategory(ctx, VAM_Product_ID.ToString());
                     sql = "SELECT VAB_TaxRate_ID FROM VATAX_TaxCatRate WHERE VAB_TaxCategory_ID = " + prodtaxCategory + " AND IsActive ='Y' AND VATAX_TaxType_ID =" + taxType;
                     taxId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
@@ -595,7 +595,7 @@ namespace VIS.Models
             }
             if (VAM_Product_ID > 0)
             {
-                MProduct prod = new MProduct(ctx, VAM_Product_ID, null);
+                MVAMProduct prod = new MVAMProduct(ctx, VAM_Product_ID, null);
                 taxCategory = Util.GetValueOfInt(prod.GetVAB_TaxCategory_ID());
             }
             if (VAB_Charge_ID > 0)
@@ -1175,7 +1175,7 @@ namespace VIS.Models
                 MVABOrderLineModel objOrd = new MVABOrderLineModel();
                 _VAM_PriceList_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAM_PriceList_ID FROM VAB_Invoice WHERE VAB_Invoice_ID = " + _VAB_Invoice_Id, null, null));
 
-                MPriceListVersionModel objPLV = new MPriceListVersionModel();
+                MVAMPriceListVersionModel objPLV = new MVAMPriceListVersionModel();
                 _priceListVersion_Id = objPLV.GetVAM_PriceListVersion_ID(ctx, _VAM_PriceList_ID.ToString());
 
 
@@ -1252,7 +1252,7 @@ namespace VIS.Models
                     {
                         // get uom from product
                         var paramStr = _VAM_Product_Id.ToString();
-                        MProductModel objProduct = new MProductModel();
+                        MVAMProductModel objProduct = new MVAMProductModel();
                         var prodVAB_UOM_ID = objProduct.GetVAB_UOM_ID(ctx, paramStr);
                         sql.Clear();
                         if (_VAM_PFeature_SetInstance_Id > 0)

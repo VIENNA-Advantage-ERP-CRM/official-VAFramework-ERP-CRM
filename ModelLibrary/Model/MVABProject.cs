@@ -479,7 +479,7 @@ namespace VAdvantage.Model
             //	Set Currency
             if (Is_ValueChanged("VAM_PriceListVersion_ID") && GetVAM_PriceListVersion_ID() != 0)
             {
-                MPriceList pl = MPriceList.Get(GetCtx(), GetVAM_PriceList_ID(), null);
+                MVAMPriceList pl = MVAMPriceList.Get(GetCtx(), GetVAM_PriceList_ID(), null);
                 if (pl != null && pl.Get_ID() != 0)
                     SetVAB_Currency_ID(pl.GetVAB_Currency_ID());
             }

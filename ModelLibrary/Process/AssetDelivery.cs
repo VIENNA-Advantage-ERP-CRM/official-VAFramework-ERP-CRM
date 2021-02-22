@@ -35,7 +35,7 @@ namespace VAdvantage.Process
 	private int			_NoGuarantee_MailText_ID = 0;
 	private bool		_AttachAsset = false;
 	//
-	private VAdvantage.Model.MMailText	_MailText = null;
+	private VAdvantage.Model.MVARMailTemplate	_MailText = null;
 
 
 	/// <summary>
@@ -185,7 +185,7 @@ namespace VAdvantage.Process
 		if (user.GetEMail() == null || user.GetEMail().Length == 0)
 			return "** No Asset User Email";
 		if (_MailText == null || _MailText.GetVAR_MailTemplate_ID() != VAR_MailTemplate_ID)
-			_MailText = new VAdvantage.Model.MMailText (GetCtx(), VAR_MailTemplate_ID, Get_Trx());
+			_MailText = new VAdvantage.Model.MVARMailTemplate (GetCtx(), VAR_MailTemplate_ID, Get_Trx());
 		if (_MailText.GetMailHeader() == null || _MailText.GetMailHeader().Length == 0)
 			return "** No Subject";
 
@@ -231,7 +231,7 @@ namespace VAdvantage.Process
 		if (asset.GetProductVAR_MailTemplate_ID() == 0)
 			return "** Product Mail Text";
 		if (_MailText == null || _MailText.GetVAR_MailTemplate_ID() != asset.GetProductVAR_MailTemplate_ID())
-			_MailText = new VAdvantage.Model.MMailText (GetCtx(), asset.GetProductVAR_MailTemplate_ID(), Get_Trx());
+			_MailText = new VAdvantage.Model.MVARMailTemplate (GetCtx(), asset.GetProductVAR_MailTemplate_ID(), Get_Trx());
 		if (_MailText.GetMailHeader() == null || _MailText.GetMailHeader().Length == 0)
 			return "** No Subject";
 
@@ -257,10 +257,10 @@ namespace VAdvantage.Process
 		}
 		if (_AttachAsset)
 		{
-			MProductDownload[] pdls = asset.GetProductDownloads();
+			MVAMProductDownload[] pdls = asset.GetProductDownloads();
 			if (pdls != null)
 			{
-				foreach (MProductDownload element in pdls) 
+				foreach (MVAMProductDownload element in pdls) 
                 { 
 					//URL url = element.getDownloadURL(m_client.getDocumentDir());
                     Url url = element.GetDownloadURL(_client.GetDocumentDir());

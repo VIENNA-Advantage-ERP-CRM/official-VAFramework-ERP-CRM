@@ -29,7 +29,7 @@ namespace ViennaAdvantageWeb.Areas.VIS.Controllers
 
                 //Assign parameter value
                 VAM_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
-                MProduct product = MProduct.Get(ctx, VAM_Product_ID);
+                MVAMProduct product = MVAMProduct.Get(ctx, VAM_Product_ID);
 
 
                 Dictionary<String, String> retPDic = new Dictionary<string, string>();
@@ -71,7 +71,7 @@ namespace ViennaAdvantageWeb.Areas.VIS.Controllers
                 //Decimal? QtyOrdered = (Decimal?)MUOMConversion.ConvertProductTo(ctx, VAM_Product_ID,
                 //      VAB_UOM_To_ID, QtyEntered);
 
-                int retValue = MProduct.Get(ctx, VAM_Product_ID).GetUOMPrecision();
+                int retValue = MVAMProduct.Get(ctx, VAM_Product_ID).GetUOMPrecision();
 
                 List<int> retlst = new List<int>();
 

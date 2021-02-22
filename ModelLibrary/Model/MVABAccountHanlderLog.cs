@@ -64,7 +64,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="parent"></param>
         /// <param name="summary"></param>
-        public MVABAccountHanlderLog(MVA_AccountHanlder parent, String summary)
+        public MVABAccountHanlderLog(MVABAccountHanlder parent, String summary)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);

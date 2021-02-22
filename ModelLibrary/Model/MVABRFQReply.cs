@@ -238,7 +238,7 @@ namespace VAdvantage.Model
             {
                 MVAFUserContact to = MVAFUserContact.Get(GetCtx(), GetVAF_UserContact_ID());
                 MVAFClient client = MVAFClient.Get(GetCtx());
-                MMailText mtext = new MMailText(GetCtx(), GetRfQ().GetVAR_MailTemplate_ID(), Get_TrxName());
+                MVARMailTemplate mtext = new MVARMailTemplate(GetCtx(), GetRfQ().GetVAR_MailTemplate_ID(), Get_TrxName());
 
                 if (to.Get_ID() == 0 || to.GetEMail() == null || to.GetEMail().Length == 0)
                 {
@@ -252,7 +252,7 @@ namespace VAdvantage.Model
                     MVABRFQSubject mRfQTopic = new MVABRFQSubject(GetCtx(), GetRfQ().GetVAB_RFQ_Subject_ID(), Get_TrxName());
                     if (mRfQTopic.GetVAB_RFQ_Subject_ID() > 0)
                     {
-                        mtext = new MMailText(GetCtx(), mRfQTopic.GetVAR_MailTemplate_ID(), Get_TrxName());
+                        mtext = new MVARMailTemplate(GetCtx(), mRfQTopic.GetVAR_MailTemplate_ID(), Get_TrxName());
                     }
                 }
 

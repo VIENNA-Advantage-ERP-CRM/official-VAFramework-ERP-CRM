@@ -53,7 +53,7 @@ namespace VAdvantage.DBPort
             s_ms.Add("\\bacctBalance\\b",      "dbo.acctBalance");
             s_ms.Add("\\baddDays\\b",      "dbo.addDays");
             s_ms.Add("\\bbomPriceLimit\\b",      "dbo.bomPriceLimit");
-            s_ms.Add("\\bbomPriceList\\b",      "dbo.bomPriceList");
+            s_ms.Add("\\bboMVAMPriceList\\b",      "dbo.boMVAMPriceList");
             s_ms.Add("\\bbomPriceStd\\b",      "dbo.bomPriceStd");
             s_ms.Add("\\bbomQtyAvailable\\b",      "dbo.bomQtyAvailable");
             s_ms.Add("\\bbomQtyOnHand\\b",      "dbo.bomQtyOnHand");
@@ -82,7 +82,7 @@ namespace VAdvantage.DBPort
             s_ms.Add("\\bacctBalance\\b", "[viennadb].ACCTBALANCE");
             s_ms.Add("\\baddDays\\b", "[viennadb].ADDDAYS");
             s_ms.Add("\\bbomPriceLimit\\b", "[viennadb].BOMPRICELIMIT");
-            s_ms.Add("\\bbomPriceList\\b", "[viennadb].BOMPRICELIST");
+            s_ms.Add("\\bboMVAMPriceList\\b", "[viennadb].BOMVAMPriceList");
             s_ms.Add("\\bbomPriceStd\\b", "[viennadb].BOMPRICESTD");
             s_ms.Add("\\bbomQtyAvailable\\b", "[viennadb].BOMQTYAVAILABLE");
             s_ms.Add("\\bbomQtyOnHand\\b", "[viennadb].BOMQTYONHAND");

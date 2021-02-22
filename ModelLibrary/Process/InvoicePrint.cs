@@ -128,10 +128,10 @@ namespace VAdvantage.Process
 			+ ", DocumentNo=" + _DocumentNo_From + "-" + _DocumentNo_To
 			+ ", IncludeDrafts="+_IncludeDraftInvoices);
 		
-		MMailText mText = null;
+		MVARMailTemplate mText = null;
 		if (_VAR_MailTemplate_ID != 0)
 		{
-			mText = new MMailText(GetCtx(), _VAR_MailTemplate_ID, Get_TrxName());
+			mText = new MVARMailTemplate(GetCtx(), _VAR_MailTemplate_ID, Get_TrxName());
             if (mText.Get_ID() != _VAR_MailTemplate_ID)
             {
                 throw new Exception("@NotFound@: @VAR_MailTemplate_ID@ - " + _VAR_MailTemplate_ID);

@@ -40,7 +40,7 @@ namespace VIS.Controllers
 
                 //End Assign parameter value
 
-                MProductPricing pp = new MProductPricing(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID(),
+                MVAMProductPricing pp = new MVAMProductPricing(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID(),
                             VAM_Product_ID, VAB_BusinessPartner_ID, Qty, isSOTrx);
 
                 //var VAM_PriceList_ID = ctx.GetContextAsInt(WindowNo, "VAM_PriceList_ID");
@@ -53,7 +53,7 @@ namespace VIS.Controllers
                 pp.SetPriceDate(orderDate);
 
                 //Get product stock
-                MProduct product = MProduct.Get(ctx, VAM_Product_ID);
+                MVAMProduct product = MVAMProduct.Get(ctx, VAM_Product_ID);
 
 
                 VIS.DataContracts.ProductDataOut objInfo = new VIS.DataContracts.ProductDataOut
@@ -104,7 +104,7 @@ namespace VIS.Controllers
                 //var QtyOrdered = Utility.Util.getValueOfDecimal(mTab.getValue("QtyOrdered"));
                 //var VAM_Warehouse_ID = ctx.getContextAsInt(WindowNo, "VAM_Warehouse_ID");
                 //var VAM_PFeature_SetInstance_ID = ctx.getContextAsInt(WindowNo, "VAM_PFeature_SetInstance_ID");
-                Decimal? available = MStorage.GetQtyAvailable(VAM_Warehouse_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, null);
+                Decimal? available = MVAMStorage.GetQtyAvailable(VAM_Warehouse_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, null);
                 
                 Decimal notReserved = MVABOrderLine.GetNotReserved(ctx,
                                 VAM_Warehouse_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,

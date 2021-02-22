@@ -8,7 +8,7 @@ using VAdvantage.Utility;
 
 namespace VIS.Models
 {
-    public class MProductionLineModel
+    public class MVAMProductionLineModel
     {
         public Dictionary<string, decimal> GetChargeAmount(string charge_ID)
         {

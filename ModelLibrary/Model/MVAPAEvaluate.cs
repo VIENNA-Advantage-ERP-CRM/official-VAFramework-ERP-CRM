@@ -331,7 +331,7 @@ namespace VAdvantage.Model
                     role = MVAFRole.GetDefault(GetCtx(), false);	//	could result in wrong data
                 //
                 Decimal? ManualActual = null;
-                MRequestType rt = MRequestType.Get(GetCtx(), GetVAR_Req_Type_ID());
+                MVARRequestType rt = MVARRequestType.Get(GetCtx(), GetVAR_Req_Type_ID());
                 String sql = rt.GetSqlPI(goal.GetRestrictions(false),
                     goal.GetMeasureScope(), GetMeasureDataType(), null, role);
                 //PreparedStatement pstmt = null;

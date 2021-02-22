@@ -66,7 +66,7 @@ namespace ViennaAdvantageServer.Process
             DateTime? CDate = null;
             DateTime OldStart, Start, endDate;
 
-            MPriceList priceList = null;
+            MVAMPriceList priceList = null;
             MVABTaxRate tax = null;
             X_VAB_Contract contact = null;
             X_VAB_Contract New = null;
@@ -115,7 +115,7 @@ namespace ViennaAdvantageServer.Process
                         {
                             // JID_1124:  System has to pick the Pricelist in Service Contract as defined in Renewal Pricelist. also need to pick Price from Latest Valid From Date Version
                             New.SetVAM_PriceList_ID(contact.GetRef_PriceList_ID());
-                            priceList = new MPriceList(GetCtx(), contact.GetRef_PriceList_ID(), Get_TrxName());
+                            priceList = new MVAMPriceList(GetCtx(), contact.GetRef_PriceList_ID(), Get_TrxName());
                             Sql.Clear();
                             Sql.Append("SELECT pp.PriceList, pp.PriceStd FROM VAM_ProductPrice pp INNER JOIN VAM_PriceListVersion plv ON pp.VAM_PriceListVersion_ID = plv.VAM_PriceListVersion_ID"
                                 + " WHERE pp.VAM_Product_ID=" + contact.GetVAM_Product_ID() + " AND plv.IsActive='Y' AND plv.VAM_PriceList_ID=" + contact.GetRef_PriceList_ID()
@@ -149,7 +149,7 @@ namespace ViennaAdvantageServer.Process
                         }
                         else
                         {
-                            priceList = new MPriceList(GetCtx(), contact.GetVAM_PriceList_ID(), Get_TrxName());
+                            priceList = new MVAMPriceList(GetCtx(), contact.GetVAM_PriceList_ID(), Get_TrxName());
                             New.SetVAM_PriceList_ID(contact.GetVAM_PriceList_ID());
                             New.SetPriceEntered(contact.GetPriceEntered());
                             New.SetPriceActual(contact.GetPriceActual());
@@ -305,7 +305,7 @@ namespace ViennaAdvantageServer.Process
                             }
                             New.SetVAM_PriceList_ID(contact.GetRef_PriceList_ID());
 
-                            priceList = new MPriceList(GetCtx(), contact.GetRef_PriceList_ID(), Get_TrxName());
+                            priceList = new MVAMPriceList(GetCtx(), contact.GetRef_PriceList_ID(), Get_TrxName());
                             Sql.Clear();
                             Sql.Append("SELECT pp.PriceList, pp.PriceStd FROM VAM_ProductPrice pp INNER JOIN VAM_PriceListVersion plv ON pp.VAM_PriceListVersion_ID = plv.VAM_PriceListVersion_ID"
                                 + " WHERE pp.VAM_Product_ID=" + contact.GetVAM_Product_ID() + " AND plv.IsActive='Y' AND plv.VAM_PriceList_ID=" + contact.GetRef_PriceList_ID()
@@ -340,7 +340,7 @@ namespace ViennaAdvantageServer.Process
                         }
                         else
                         {
-                            priceList = new MPriceList(GetCtx(), contact.GetVAM_PriceList_ID(), Get_TrxName());
+                            priceList = new MVAMPriceList(GetCtx(), contact.GetVAM_PriceList_ID(), Get_TrxName());
                             New.SetVAM_PriceList_ID(contact.GetVAM_PriceList_ID());
                             New.SetPriceActual(contact.GetPriceActual());
                             New.SetPriceList(contact.GetPriceList());

@@ -108,7 +108,7 @@ namespace VAdvantage.Process
             }
 
             //	PO Record
-            MProductPO[] pos = MProductPO.GetOfProduct(GetCtx(), projectLine.GetVAM_Product_ID(), Get_TrxName());
+            MVAMProductPO[] pos = MVAMProductPO.GetOfProduct(GetCtx(), projectLine.GetVAM_Product_ID(), Get_TrxName());
             if (pos == null || pos.Length == 0)
             {
                 AddLog(projectLine.GetLine(), null, null, "Product has no PO record");

@@ -718,39 +718,39 @@ namespace VAdvantage.Model
             return (String)Get_Value("SerNo");
         }
 
-        /** SystemStatus VAF_Control_Ref_ID=374 */
-        public static int SYSTEMSTATUS_VAF_Control_Ref_ID = 374;
+        /** SysteMVARReqStatus VAF_Control_Ref_ID=374 */
+        public static int SYSTEMVARReqStatus_VAF_Control_Ref_ID = 374;
         /** Evaluation = E */
-        public static String SYSTEMSTATUS_Evaluation = "E";
+        public static String SYSTEMVARReqStatus_Evaluation = "E";
         /** Implementation = I */
-        public static String SYSTEMSTATUS_Implementation = "I";
+        public static String SYSTEMVARReqStatus_Implementation = "I";
         /** Production = P */
-        public static String SYSTEMSTATUS_Production = "P";
+        public static String SYSTEMVARReqStatus_Production = "P";
         /** Is test a valid value.
         @param test testvalue
         @returns true if valid **/
-        public bool IsSystemStatusValid(String test)
+        public bool IsSysteMVARReqStatusValid(String test)
         {
             return test == null || test.Equals("E") || test.Equals("I") || test.Equals("P");
         }
         /** Set System Status.
-        @param SystemStatus Status of the system - Support priority depends on system status */
-        public void SetSystemStatus(String SystemStatus)
+        @param SysteMVARReqStatus Status of the system - Support priority depends on system status */
+        public void SetSysteMVARReqStatus(String SysteMVARReqStatus)
         {
-            if (!IsSystemStatusValid(SystemStatus))
-                throw new ArgumentException("SystemStatus Invalid value - " + SystemStatus + " - Reference_ID=374 - E - I - P");
-            if (SystemStatus != null && SystemStatus.Length > 1)
+            if (!IsSysteMVARReqStatusValid(SysteMVARReqStatus))
+                throw new ArgumentException("SysteMVARReqStatus Invalid value - " + SysteMVARReqStatus + " - Reference_ID=374 - E - I - P");
+            if (SysteMVARReqStatus != null && SysteMVARReqStatus.Length > 1)
             {
                 log.Warning("Length > 1 - truncated");
-                SystemStatus = SystemStatus.Substring(0, 1);
+                SysteMVARReqStatus = SysteMVARReqStatus.Substring(0, 1);
             }
-            Set_Value("SystemStatus", SystemStatus);
+            Set_Value("SysteMVARReqStatus", SysteMVARReqStatus);
         }
         /** Get System Status.
         @return Status of the system - Support priority depends on system status */
-        public String GetSystemStatus()
+        public String GetSysteMVARReqStatus()
         {
-            return (String)Get_Value("SystemStatus");
+            return (String)Get_Value("SysteMVARReqStatus");
         }
         /** Set Usable Life - Months.
         @param UseLifeMonths Months of the usable life of the asset */

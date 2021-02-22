@@ -152,7 +152,7 @@ namespace VAdvantage.Acct
                 if (dr.GetVAF_Org_ID() != cr.GetVAF_Org_ID())
                 {
                     String costingLevel = as1.GetCostingLevel();
-                    MProductCategoryAcct pca = MProductCategoryAcct.Get(GetCtx(),
+                    MVAMProductCategoryAcct pca = MVAMProductCategoryAcct.Get(GetCtx(),
                         line.GetProduct().GetVAM_ProductCategory_ID(),
                         as1.GetVAB_AccountBook_ID(), GetTrx());
                     if (pca.GetCostingLevel() != null)
@@ -173,7 +173,7 @@ namespace VAdvantage.Acct
                     {
 
                         //	Cost Detail From
-                        MVAMProductCostDetail.CreateMovement(as1, dr.GetVAF_Org_ID(), 	//	locator org
+                        MVAMVAMProductCostDetail.CreateMovement(as1, dr.GetVAF_Org_ID(), 	//	locator org
                             line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(),
                             line.Get_ID(), 0,
                             Decimal.Negate(costs), Decimal.Negate(line.GetQty().Value), true,
@@ -181,7 +181,7 @@ namespace VAdvantage.Acct
 
 
                         //	Cost Detail To
-                        MVAMProductCostDetail.CreateMovement(as1, cr.GetVAF_Org_ID(),	//	locator org 
+                        MVAMVAMProductCostDetail.CreateMovement(as1, cr.GetVAF_Org_ID(),	//	locator org 
                             line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(),
                             line.Get_ID(), 0,
                             costs, line.GetQty().Value, false,

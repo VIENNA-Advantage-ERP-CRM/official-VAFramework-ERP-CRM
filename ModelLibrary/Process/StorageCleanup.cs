@@ -99,7 +99,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    lines += Move(new MStorage(GetCtx(), dr, Get_Trx()));
+                    lines += Move(new MVAMStorage(GetCtx(), dr, Get_Trx()));
                 }
             }
             catch (Exception e)
@@ -127,7 +127,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// </summary>
         /// <param name="target">storage</param>
         /// <returns>no of movements</returns>
-        private int Move(MStorage target)
+        private int Move(MVAMStorage target)
         {
             log.Info(target.ToString());
             Decimal qty = Decimal.Negate(target.GetQtyOnHand());//.negate();
@@ -142,10 +142,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
 
             int lines = 0;
-            MStorage[] sources = GetSources(target.GetVAM_Product_ID(), target.GetVAM_Locator_ID());
+            MVAMStorage[] sources = GetSources(target.GetVAM_Product_ID(), target.GetVAM_Locator_ID());
             for (int i = 0; i < sources.Length; i++)
             {
-                MStorage source = sources[i];
+                MVAMStorage source = sources[i];
 
                 //	Movement Line
                 MVAMInvTrfLine ml = new MVAMInvTrfLine(mh);
@@ -194,13 +194,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// Eliminate Reserved/Ordered
         /// </summary>
         /// <param name="target">target Storage</param>
-        private void EliminateReservation(MStorage target)
+        private void EliminateReservation(MVAMStorage target)
         {
             //	Negative Ordered / Reserved Qty
             if (Env.Signum(target.GetQtyReserved()) != 0 || Env.Signum(target.GetQtyOrdered()) != 0)
             {
                 int VAM_Locator_ID = target.GetVAM_Locator_ID();
-                MStorage storage0 = MStorage.Get(GetCtx(), VAM_Locator_ID,
+                MVAMStorage storage0 = MVAMStorage.Get(GetCtx(), VAM_Locator_ID,
                     target.GetVAM_Product_ID(), 0, Get_Trx());
                 if (storage0 == null)
                 {
@@ -208,7 +208,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     if (VAM_Locator_ID != defaultLoc.GetVAM_Locator_ID())
                     {
                         VAM_Locator_ID = defaultLoc.GetVAM_Locator_ID();
-                        storage0 = MStorage.Get(GetCtx(), VAM_Locator_ID,
+                        storage0 = MVAMStorage.Get(GetCtx(), VAM_Locator_ID,
                             target.GetVAM_Product_ID(), 0, Get_Trx());
                     }
                 }
@@ -227,12 +227,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     //	Eliminate Reservation
                     if (Env.Signum(reserved) != 0 || Env.Signum(ordered) != 0)
                     {
-                        if (MStorage.Add(GetCtx(), target.GetVAM_Warehouse_ID(), target.GetVAM_Locator_ID(),
+                        if (MVAMStorage.Add(GetCtx(), target.GetVAM_Warehouse_ID(), target.GetVAM_Locator_ID(),
                             target.GetVAM_Product_ID(),
                             target.GetVAM_PFeature_SetInstance_ID(), target.GetVAM_PFeature_SetInstance_ID(),
                             Env.ZERO, Decimal.Negate(reserved), Decimal.Negate(ordered), Get_Trx()))
                         {
-                            if (MStorage.Add(GetCtx(), storage0.GetVAM_Warehouse_ID(), storage0.GetVAM_Locator_ID(),
+                            if (MVAMStorage.Add(GetCtx(), storage0.GetVAM_Warehouse_ID(), storage0.GetVAM_Locator_ID(),
                                 storage0.GetVAM_Product_ID(),
                                 storage0.GetVAM_PFeature_SetInstance_ID(), storage0.GetVAM_PFeature_SetInstance_ID(),
                                 Env.ZERO, reserved, ordered, Get_Trx()))
@@ -259,9 +259,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <param name="VAM_Product_ID">product</param>
         /// <param name="VAM_Locator_ID">locator</param>
         /// <returns>sources</returns>
-        private MStorage[] GetSources(int VAM_Product_ID, int VAM_Locator_ID)
+        private MVAMStorage[] GetSources(int VAM_Product_ID, int VAM_Locator_ID)
         {
-            List<MStorage> list = new List<MStorage>();
+            List<MVAMStorage> list = new List<MVAMStorage>();
             String sql = "SELECT * "
                 + "FROM VAM_Storage s "
                 + "WHERE QtyOnHand > 0"
@@ -288,7 +288,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MStorage(GetCtx(), dr, Get_Trx()));
+                    list.Add(new MVAMStorage(GetCtx(), dr, Get_Trx()));
                 }
             }
             catch (Exception e)
@@ -308,7 +308,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 }
             }
 
-            MStorage[] retValue = new MStorage[list.Count];
+            MVAMStorage[] retValue = new MVAMStorage[list.Count];
             retValue = list.ToArray();
             return retValue;
         }

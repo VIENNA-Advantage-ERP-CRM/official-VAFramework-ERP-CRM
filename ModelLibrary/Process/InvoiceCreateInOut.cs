@@ -131,12 +131,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 MVABInvoiceLine invoiceLine = invoiceLines[i];
 
-                MProduct product = invoiceLine.GetProduct();
+                MVAMProduct product = invoiceLine.GetProduct();
                 //	Nothing to Deliver
 
                 // Get the lines of Invoice based on the setting taken on Tenant to allow non item Product         
                 if (Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("N")
-                    && ((product != null && product.GetProductType() != MProduct.PRODUCTTYPE_Item) || invoiceLine.GetVAB_Charge_ID() != 0))
+                    && ((product != null && product.GetProductType() != MVAMProduct.PRODUCTTYPE_Item) || invoiceLine.GetVAB_Charge_ID() != 0))
                 {
                     continue;
                 }

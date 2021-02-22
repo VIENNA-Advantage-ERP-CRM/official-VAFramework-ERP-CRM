@@ -235,17 +235,17 @@ namespace VAdvantage.Model
                 {
                     String summary = "Subscribe: " + ia.GetName();
                     //
-                    MSource source = MSource.Get(GetCtx(), ia.GetVAR_Source_ID());
+                    MVARSource source = MVARSource.Get(GetCtx(), ia.GetVAR_Source_ID());
                     MVAFUserContact user = null;
                     if (Get_TrxName() == null)
                         user = MVAFUserContact.Get(GetCtx(), GetVAF_UserContact_ID());
                     else
                         user = new MVAFUserContact(GetCtx(), GetVAF_UserContact_ID(), Get_TrxName());
                     //	Create Request
-                    if (MSource.SOURCECREATETYPE_Both.Equals(source.GetSourceCreateType())
-                        || MSource.SOURCECREATETYPE_Request.Equals(source.GetSourceCreateType()))
+                    if (MVARSource.SOURCECREATETYPE_Both.Equals(source.GetSourceCreateType())
+                        || MVARSource.SOURCECREATETYPE_Request.Equals(source.GetSourceCreateType()))
                     {
-                        MRequest request = new MRequest(GetCtx(), 0, Get_TrxName());
+                        MVARRequest request = new MVARRequest(GetCtx(), 0, Get_TrxName());
                         request.SetClientOrg(this);
                         request.SetSummary(summary);
                         request.SetVAF_UserContact_ID(GetVAF_UserContact_ID());
@@ -254,8 +254,8 @@ namespace VAdvantage.Model
                         request.Save();
                     }
                     //	Create Lead
-                    if (MSource.SOURCECREATETYPE_Both.Equals(source.GetSourceCreateType())
-                        || MSource.SOURCECREATETYPE_Lead.Equals(source.GetSourceCreateType()))
+                    if (MVARSource.SOURCECREATETYPE_Both.Equals(source.GetSourceCreateType())
+                        || MVARSource.SOURCECREATETYPE_Lead.Equals(source.GetSourceCreateType()))
                     {
                         MVABLead lead = new MVABLead(GetCtx(), 0, Get_TrxName());
                         lead.SetClientOrg(this);

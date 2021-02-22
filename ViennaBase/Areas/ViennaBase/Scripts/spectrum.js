@@ -303,7 +303,7 @@
                 appendTo.append(container);
             }
 
-            updateSelectionPaletteFromStorage();
+            updateSelectionPaletteFroMVAMStorage();
 
             offsetElement.bind("click.spectrum touchstart.spectrum", function (e) {
                 if (!disabled) {
@@ -477,7 +477,7 @@
             initialColorContainer.delegate(".sp-thumb-el:nth-child(1)", paletteEvent, { ignore: true }, paletteElementClick);
         }
 
-        function updateSelectionPaletteFromStorage() {
+        function updateSelectionPaletteFroMVAMStorage() {
 
             if (localStorageKey && window.localStorage) {
 
@@ -542,7 +542,7 @@
                 return paletteTemplate(palette, currentColor, "sp-palette-row sp-palette-row-" + i, opts);
             });
 
-            updateSelectionPaletteFromStorage();
+            updateSelectionPaletteFroMVAMStorage();
 
             if (selectionPalette) {
                 html.push(paletteTemplate(getUniqueSelectionPalette(), currentColor, "sp-palette-row sp-palette-row-selection", opts));

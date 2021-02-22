@@ -2368,23 +2368,23 @@
 
 
     ////3. Product Container Lookup
-    function MProductContainerLookup(ctx, windowNo) {
+    function MVAMProductContainerLookup(ctx, windowNo) {
 
         Lookup.call(this, null, null, ctx, windowNo, VIS.DisplayType.ProductContainer);
 
-        this.log = VIS.Logging.VLogger.getVLogger("MProductContainerLookup");
+        this.log = VIS.Logging.VLogger.getVLogger("MVAMProductContainerLookup");
 
         this.lookup = {};
     };
 
 
-    VIS.Utility.inheritPrototype(MProductContainerLookup, Lookup);//Inherit
+    VIS.Utility.inheritPrototype(MVAMProductContainerLookup, Lookup);//Inherit
 
 
-    MProductContainerLookup.prototype.cacheLookup = null;
+    MVAMProductContainerLookup.prototype.cacheLookup = null;
 
 
-    MProductContainerLookup.prototype.getDisplay = function (value) {
+    MVAMProductContainerLookup.prototype.getDisplay = function (value) {
         if (value == null)
             return "";
         var pp = this.get(value);
@@ -2397,7 +2397,7 @@
      *  @param value value
      *  @return Object or null
      */
-    MProductContainerLookup.prototype.get = function (value) {
+    MVAMProductContainerLookup.prototype.get = function (value) {
         if (value == null)
             return null;
         var VAM_ProductContainer_ID = 0;
@@ -2468,12 +2468,12 @@
             return null;
         return { "Key": VAM_ProductContainer_ID, "Name": description };
     };	//	get
-    MProductContainerLookup.prototype.getColumnName = function () {
+    MVAMProductContainerLookup.prototype.getColumnName = function () {
         return "VAM_ProductContainer_ID";
     };
 
 
-    MProductContainerLookup.prototype.dispose = function () {
+    MVAMProductContainerLookup.prototype.dispose = function () {
         this.lstLatLng = null;
         this.$super.dispose.call(this);
         this.lookup = null;
@@ -2492,7 +2492,7 @@
     VIS.MGAttributeLookup = MGAttributeLookup;
     VIS.MVAMLocatorLookup = MVAMLocatorLookup;
     VIS.MAmtDivLookup = MAmtDivLookup;
-    VIS.MProductContainerLookup = MProductContainerLookup;
+    VIS.MVAMProductContainerLookup = MVAMProductContainerLookup;
 
     /* END */
 })(VIS, jQuery);

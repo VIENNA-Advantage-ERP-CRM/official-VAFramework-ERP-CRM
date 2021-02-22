@@ -10,7 +10,7 @@ using VIS.Models;
 
 namespace VIS.Controllers
 {
-    public class MProductController:Controller
+    public class MVAMProductController:Controller
     {
         public ActionResult Index()
         {
@@ -24,7 +24,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MProductModel objProduct = new MProductModel();
+                MVAMProductModel objProduct = new MVAMProductModel();
                 retJSON = JsonConvert.SerializeObject(objProduct.GetProduct(ctx,fields));
             }          
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -36,7 +36,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MProductModel objProduct = new MProductModel();
+                MVAMProductModel objProduct = new MVAMProductModel();
                 retJSON = JsonConvert.SerializeObject(objProduct.GetUOMPrecision(ctx, fields));
             }           
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -48,7 +48,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MProductModel objProduct = new MProductModel();
+                MVAMProductModel objProduct = new MVAMProductModel();
                 retJSON = JsonConvert.SerializeObject(objProduct.GetVAB_UOM_ID(ctx,fields));
             }            
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -60,7 +60,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MProductModel objProduct = new MProductModel();
+                MVAMProductModel objProduct = new MVAMProductModel();
                 retJSON = JsonConvert.SerializeObject(objProduct.GetProductType(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -72,7 +72,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MProductModel objProduct = new MProductModel();
+                MVAMProductModel objProduct = new MVAMProductModel();
                 retJSON = JsonConvert.SerializeObject(objProduct.GetTaxCategory(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -90,7 +90,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 Ctx ctx = Session["ctx"] as Ctx;
-                MProductModel objProduct = new MProductModel();
+                MVAMProductModel objProduct = new MVAMProductModel();
                 retJSON = JsonConvert.SerializeObject(objProduct.GetRevenuRecognition(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);

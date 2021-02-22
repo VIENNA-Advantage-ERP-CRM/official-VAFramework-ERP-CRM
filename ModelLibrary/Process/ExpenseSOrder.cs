@@ -38,7 +38,7 @@ namespace VAdvantage.Process
         private MVABOrder _order = null;
         private string message="";
         // Time Expense Line
-        MTimeExpenseLine tel=null;
+        MVASExpenseReportLine tel=null;
 
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace VAdvantage.Process
             //
             MVABBusinessPartner oldBPartner = null;
             int old_Project_ID = -1;
-            MTimeExpense te = null;
+            MVASExpenseReport te = null;
             //
             SqlParameter[] param = new SqlParameter[index];
             IDataReader idr = null;
@@ -148,7 +148,7 @@ namespace VAdvantage.Process
                 {
                     foreach (DataRow dr in dt.Rows)             //	********* Expense Line Loop
                     {
-                         tel = new MTimeExpenseLine(GetCtx(), dr, Get_TrxName());
+                         tel = new MVASExpenseReportLine(GetCtx(), dr, Get_TrxName());
                         if (!tel.IsInvoiced())
                         {
                             continue;
@@ -168,7 +168,7 @@ namespace VAdvantage.Process
                             old_Project_ID = tel.GetVAB_Project_ID();
                         }
                         if (te == null || te.GetVAS_ExpenseReport_ID() != tel.GetVAS_ExpenseReport_ID())
-                            te = new MTimeExpense(GetCtx(), tel.GetVAS_ExpenseReport_ID(), Get_TrxName());
+                            te = new MVASExpenseReport(GetCtx(), tel.GetVAS_ExpenseReport_ID(), Get_TrxName());
                         //
                         ProcessLine(te, tel, oldBPartner);
 
@@ -225,7 +225,7 @@ namespace VAdvantage.Process
         /// <param name="te">header</param>
         /// <param name="tel">line</param>
         /// <param name="bp">bp</param>
-        private void ProcessLine(MTimeExpense te, MTimeExpenseLine tel, MVABBusinessPartner bp)
+        private void ProcessLine(MVASExpenseReport te, MVASExpenseReportLine tel, MVABBusinessPartner bp)
         {
             if (_order == null)
             {

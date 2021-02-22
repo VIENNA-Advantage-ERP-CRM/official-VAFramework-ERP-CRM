@@ -10,7 +10,7 @@ using VIS.DBase;
 
 namespace VIS.Models
 {
-    public class MPriceListModel
+    public class MVAMPriceListModel
     {
         /// <summary>
         /// GetPriceList
@@ -29,7 +29,7 @@ namespace VIS.Models
                 VAM_PriceList_ID = Util.GetValueOfInt(paramValue[0].ToString());
                 //End Assign parameter value
 
-                MPriceList prcLst = new MPriceList(ctx, VAM_PriceList_ID, null);
+                MVAMPriceList prcLst = new MVAMPriceList(ctx, VAM_PriceList_ID, null);
                 Dictionary<String, String> retDic = new Dictionary<string, string>();
                 // Reset Orig Shipment
                 MVABCurrency crncy = new MVABCurrency(ctx, prcLst.GetVAB_Currency_ID(), null);

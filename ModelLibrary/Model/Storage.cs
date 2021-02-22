@@ -95,9 +95,9 @@ namespace VAdvantage.Model
         public class Record
         {
             #region Private Variables
-            private Dictionary<String, MStorage> storageMap = new Dictionary<String, MStorage>();
+            private Dictionary<String, MVAMStorage> storageMap = new Dictionary<String, MVAMStorage>();
             // reference storage detail for location, product and ASI info
-            private MStorage refDetail;
+            private MVAMStorage refDetail;
 
             #endregion
 
@@ -108,8 +108,8 @@ namespace VAdvantage.Model
                 {
                     throw new Exception("Quantity types must not be null or empty");
                 }
-                List<MStorage> storages = MStorage.GetMultipleForUpdate(ctx, VAM_Locator_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, types, trx);
-                foreach (MStorage storage in storages)
+                List<MVAMStorage> storages = MVAMStorage.GetMultipleForUpdate(ctx, VAM_Locator_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, types, trx);
+                foreach (MVAMStorage storage in storages)
                 {
                     //storageMap.put(X_Ref_Quantity_Type.getEnum(storage.getQtyType()), storage);
                     storageMap[X_Ref_Quantity_Type.GetEnum(storage.GetQtyType())] = storage;
@@ -117,9 +117,9 @@ namespace VAdvantage.Model
                 }
             }
 
-            public Record(List<MStorage> storageDetails)
+            public Record(List<MVAMStorage> storageDetails)
             {
-                foreach (MStorage storage in storageDetails)
+                foreach (MVAMStorage storage in storageDetails)
                 {
                     storageMap[X_Ref_Quantity_Type.GetEnum(storage.GetQtyType())] = storage;
                     refDetail = storage;
@@ -132,7 +132,7 @@ namespace VAdvantage.Model
             /// </summary>
             /// <param name="qtyType">quantity type to get</param>
             /// <returns>storage detail for the quantity type</returns>
-            public MStorage GetDetail(String qtyType)
+            public MVAMStorage GetDetail(String qtyType)
             {
                 return GetDetail(qtyType, true);
             }
@@ -143,18 +143,18 @@ namespace VAdvantage.Model
             /// <param name="qtyType">Quantity type to get</param>
             /// <param name="toCreate">if true, create detail if not found</param>
             /// <returns>storage detail for the quantity type</returns>
-            public MStorage GetDetail(String qtyType, Boolean toCreate)
+            public MVAMStorage GetDetail(String qtyType, Boolean toCreate)
             {
-                MStorage detail = storageMap[qtyType];
+                MVAMStorage detail = storageMap[qtyType];
                 if (detail == null)
                 {
-                    detail = MStorage.GetForRead(refDetail.GetCtx(), refDetail.GetVAM_Locator_ID(),
+                    detail = MVAMStorage.GetForRead(refDetail.GetCtx(), refDetail.GetVAM_Locator_ID(),
                             refDetail.GetVAM_Product_ID(), refDetail.GetVAM_PFeature_SetInstance_ID(),
                             qtyType, refDetail.Get_Trx());
 
                     if (detail == null && toCreate)
                     {
-                        detail = MStorage.GetCreate(refDetail.GetCtx(), refDetail.GetVAM_Locator_ID(),
+                        detail = MVAMStorage.GetCreate(refDetail.GetCtx(), refDetail.GetVAM_Locator_ID(),
                                 refDetail.GetVAM_Product_ID(), refDetail.GetVAM_PFeature_SetInstance_ID(),
                                  refDetail.Get_Trx());// qtyType, refDetail.Get_Trx());
 
@@ -197,13 +197,13 @@ namespace VAdvantage.Model
 
             public Decimal GetQty(String qtyType)
             {
-                MStorage detail = storageMap[qtyType];
+                MVAMStorage detail = storageMap[qtyType];
                 return ((detail == null) ? Env.ZERO : detail.GetQty());
             }
 
             public void SetDetailsBulkUpdate(Boolean bulkUpdate)
             {
-                foreach (MStorage storage in storageMap.Values)
+                foreach (MVAMStorage storage in storageMap.Values)
                 {
                     //storage.SetIsBulkUpdate(bulkUpdate);
                     //MessageBox.Show("bulkUpdate of StorageClass");
@@ -300,14 +300,14 @@ namespace VAdvantage.Model
         /// <param name="qtyTypeToGet"></param>
         /// <param name="trx"></param>
         /// <returns></returns>
-        public static MStorage GetCreateDetails(Ctx ctx, int VAM_Locator_ID,
+        public static MVAMStorage GetCreateDetails(Ctx ctx, int VAM_Locator_ID,
             int VAM_Product_ID, int VAM_PFeature_SetInstance_ID, String qtyTypeToGet, Trx trx)
         {
-            MStorage detailToGet = null;
+            MVAMStorage detailToGet = null;
             // create storage for all qty types
             foreach (var qtyType in X_Ref_Quantity_Type.Get())
             {
-                MStorage detail = MStorage.GetCreate(ctx, VAM_Locator_ID, VAM_Product_ID,
+                MVAMStorage detail = MVAMStorage.GetCreate(ctx, VAM_Locator_ID, VAM_Product_ID,
                         VAM_PFeature_SetInstance_ID, trx);// VAM_PFeature_SetInstance_ID, qtyType, trx);
                 detail.Save(trx);
                 if (qtyType == qtyTypeToGet)
@@ -328,11 +328,11 @@ namespace VAdvantage.Model
         public static Storage.Record GetCreateRecord(Ctx ctx, int VAM_Locator_ID,
             int VAM_Product_ID, int VAM_PFeature_SetInstance_ID, Trx trx)
         {
-            List<MStorage> details = new List<MStorage>();
+            List<MVAMStorage> details = new List<MVAMStorage>();
             // create storage for all qty types
             foreach (var qtyType in X_Ref_Quantity_Type.Get())
             {
-                MStorage detail = MStorage.GetCreate(ctx, VAM_Locator_ID, VAM_Product_ID,
+                MVAMStorage detail = MVAMStorage.GetCreate(ctx, VAM_Locator_ID, VAM_Product_ID,
                         VAM_PFeature_SetInstance_ID, trx);//VAM_PFeature_SetInstance_ID, qtyType, trx);
                 detail.Save(trx);
                 details.Add(detail);
@@ -354,7 +354,7 @@ namespace VAdvantage.Model
         public static List<Storage.Record> GetAll(Ctx ctx,
                 int VAM_Product_ID, int VAM_Locator_ID, Decimal qtyToDeliver, Trx trx)
         {
-            List<MStorage> details = new List<MStorage>();
+            List<MVAMStorage> details = new List<MVAMStorage>();
             List<Storage.Record> storages = new List<Storage.Record>();
 
             String sql = "select s.* "
@@ -387,7 +387,7 @@ namespace VAdvantage.Model
                 foreach (DataRow dr in dt.Rows)
                 {
 
-                    MStorage detail = new MStorage(ctx, dr, trx);
+                    MVAMStorage detail = new MVAMStorage(ctx, dr, trx);
                     if (prevASI == -1)
                     {
                         prevASI = detail.GetVAM_PFeature_SetInstance_ID();
@@ -453,7 +453,7 @@ namespace VAdvantage.Model
         public static List<Storage.Record> GetAllWithASI(Ctx ctx, int VAM_Product_ID, int VAM_Locator_ID,
                 Boolean FiFo, Decimal qtyToDeliver, Trx trx)
         {
-            List<MStorage> details = new List<MStorage>();
+            List<MVAMStorage> details = new List<MVAMStorage>();
             List<Storage.Record> storages = new List<Storage.Record>();
             //String sql = "select s.* "
             //    + " from VAM_StorageDETAIL  s "
@@ -504,7 +504,7 @@ namespace VAdvantage.Model
                 int prevASI = -1;
                 foreach (DataRow dr in dt.Rows)
                 {
-                    //MStorage detail = new MStorage(ctx, dr, trx);
+                    //MVAMStorage detail = new MVAMStorage(ctx, dr, trx);
                     //if (prevASI == -1)
                     //{
                     //    prevASI = detail.GetVAM_PFeature_SetInstance_ID();
@@ -518,7 +518,7 @@ namespace VAdvantage.Model
                     //    prevASI = detail.GetVAM_PFeature_SetInstance_ID();
                     //}
                     //details.Add(detail);
-                    MStorage detail = new MStorage(ctx, dr, trx);
+                    MVAMStorage detail = new MVAMStorage(ctx, dr, trx);
                     if (prevASI == -1)
                     {
                         prevASI = detail.GetVAM_PFeature_SetInstance_ID();
@@ -929,7 +929,7 @@ namespace VAdvantage.Model
         {
             if (diffQtyOnHand.CompareTo(Env.ZERO) != 0)
             {
-                if (!MStorage.Add(ctx, VAM_Warehouse_ID, VAM_Locator_ID, VAM_Product_ID,
+                if (!MVAMStorage.Add(ctx, VAM_Warehouse_ID, VAM_Locator_ID, VAM_Product_ID,
                         VAM_PFeature_SetInstance_ID,
                         reservationAttributeSetInstance_ID, diffQtyOnHand, 0, 0
                         , trx))
@@ -937,7 +937,7 @@ namespace VAdvantage.Model
             }
             if ( diffQtyReserved.CompareTo(Env.ZERO) != 0)
             {
-                if (!MStorage.Add(ctx, VAM_Warehouse_ID, VAM_Locator_ID, VAM_Product_ID,
+                if (!MVAMStorage.Add(ctx, VAM_Warehouse_ID, VAM_Locator_ID, VAM_Product_ID,
                         VAM_PFeature_SetInstance_ID,
                         reservationAttributeSetInstance_ID, 0, diffQtyReserved, 0
                         , trx))
@@ -945,7 +945,7 @@ namespace VAdvantage.Model
             }
             if (diffQtyOrdered.CompareTo(Env.ZERO) != 0)
             {
-                if (!MStorage.Add(ctx, VAM_Warehouse_ID, VAM_Locator_ID, VAM_Product_ID,
+                if (!MVAMStorage.Add(ctx, VAM_Warehouse_ID, VAM_Locator_ID, VAM_Product_ID,
                         VAM_PFeature_SetInstance_ID,
                         reservationAttributeSetInstance_ID, 0, 0, diffQtyOrdered,
                          trx))
@@ -953,7 +953,7 @@ namespace VAdvantage.Model
             }
             if ( diffQtyDedicated.CompareTo(Env.ZERO) != 0)
             {
-                //if (!MStorage.Add(ctx, VAM_Warehouse_ID, VAM_Locator_ID, VAM_Product_ID,
+                //if (!MVAMStorage.Add(ctx, VAM_Warehouse_ID, VAM_Locator_ID, VAM_Product_ID,
                 //        VAM_PFeature_SetInstance_ID,
                 //        reservationAttributeSetInstance_ID, diffQtyDedicated,
                 //        X_Ref_Quantity_Type.DEDICATED, trx))
@@ -963,7 +963,7 @@ namespace VAdvantage.Model
             }
             if (diffQtyAllocated.CompareTo(Env.ZERO) != 0)
             {
-                //if (!MStorage.Add(ctx, VAM_Warehouse_ID, VAM_Locator_ID, VAM_Product_ID,
+                //if (!MVAMStorage.Add(ctx, VAM_Warehouse_ID, VAM_Locator_ID, VAM_Product_ID,
                 //        VAM_PFeature_SetInstance_ID,
                 //        reservationAttributeSetInstance_ID, diffQtyAllocated,
                 //        X_Ref_Quantity_Type.ALLOCATED, trx))
@@ -973,7 +973,7 @@ namespace VAdvantage.Model
             }
             if ( diffQtyExpected.CompareTo(Env.ZERO) != 0)
             {
-                //if (!MStorage.Add(ctx, VAM_Warehouse_ID, VAM_Locator_ID, VAM_Product_ID,
+                //if (!MVAMStorage.Add(ctx, VAM_Warehouse_ID, VAM_Locator_ID, VAM_Product_ID,
                 //        VAM_PFeature_SetInstance_ID,
                 //        reservationAttributeSetInstance_ID, diffQtyExpected,
                 //        X_Ref_Quantity_Type.EXPECTED, trx))

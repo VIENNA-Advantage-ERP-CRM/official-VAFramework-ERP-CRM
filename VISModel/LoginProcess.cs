@@ -40,8 +40,8 @@ namespace VAdvantage.Login
         /** The Current Org		*/
         private KeyNamePair m_org = null;
         /** Web Store Login		*/
-        //private X_W_Store m_store = null;
-        private X_W_Store m_store = null;
+        private object m_store = null;
+       
 
 
 
@@ -637,8 +637,8 @@ namespace VAdvantage.Login
             if (client == null)
                 throw new ArgumentException("Client missing");
             //	Web Store Login
-            if (m_store != null)
-                return new KeyNamePair[] { new KeyNamePair(m_store.GetVAF_Org_ID(), m_store.GetName() + " Org") };
+            //if (m_store != null)
+            //    return new KeyNamePair[] { new KeyNamePair(m_store.GetVAF_Org_ID(), m_store.GetName() + " Org") };
 
             if (m_ctx.GetContext("#VAF_Role_ID").Length == 0)	//	could be number 0
                 throw new Exception("Missing Context #VAF_Role_ID");
@@ -794,8 +794,8 @@ namespace VAdvantage.Login
             if (org == null)
                 throw new Exception("Org missing");
             m_org = org;
-            if (m_store != null)
-                return new KeyNamePair[] { new KeyNamePair(m_store.GetVAM_Warehouse_ID(), m_store.GetName() + " Warehouse") };
+            //if (m_store != null)
+            //    return new KeyNamePair[] { new KeyNamePair(m_store.GetVAM_Warehouse_ID(), m_store.GetName() + " Warehouse") };
 
             //	s_log.info("loadWarehouses - Org: " + org.toStringX());
 

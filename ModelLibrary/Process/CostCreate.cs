@@ -65,13 +65,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 throw new Exception("@NotFound@: @VAM_Product_ID@ = " + _VAM_Product_ID);
             }
-            MProduct product = MProduct.Get(GetCtx(), _VAM_Product_ID);
+            MVAMProduct product = MVAMProduct.Get(GetCtx(), _VAM_Product_ID);
             if (product.Get_ID() != _VAM_Product_ID)
             {
                 throw new Exception("@NotFound@: @VAM_Product_ID@ = " + _VAM_Product_ID);
             }
             //
-            if (MVAMProductCostDetail.ProcessProduct(product, Get_Trx()))
+            if (MVAMVAMProductCostDetail.ProcessProduct(product, Get_Trx()))
             {
                 return "@OK@";
             }

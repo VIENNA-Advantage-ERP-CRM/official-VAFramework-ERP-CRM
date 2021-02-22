@@ -137,7 +137,7 @@ namespace VAdvantage.Model
             //}
             //else if (_vo.displayType == DisplayType.ProductContainer)    //  not cached
             //{
-            //    MProductContainerLoopup pa = new MProductContainerLoopup(_vo.GetCtx(), _vo.windowNo);
+            //    MVAMProductContainerLoopup pa = new MVAMProductContainerLoopup(_vo.GetCtx(), _vo.windowNo);
             //    _lookup = pa;
             //}
         }

@@ -35,9 +35,9 @@ namespace VAdvantage.Process
         private bool _IsReValidate = false;
 
         //	Product				
-        private MProduct _product = null;
+        private MVAMProduct _product = null;
         //	List of Products	
-        private List<MProduct> _products = null;
+        private List<MVAMProduct> _products = null;
 
         // Manufacturing Module exist or not
         int count = 0;
@@ -80,7 +80,7 @@ namespace VAdvantage.Process
             if (_VAM_Product_ID != 0)
             {
                 log.Info("VAM_Product_ID=" + _VAM_Product_ID);
-                return ValidateProduct(new MProduct(GetCtx(), _VAM_Product_ID, Get_Trx()));
+                return ValidateProduct(new MVAMProduct(GetCtx(), _VAM_Product_ID, Get_Trx()));
             }
             log.Info("VAM_ProductCategory_ID=" + _VAM_ProductCategory_ID
                 + ", IsReValidate=" + _IsReValidate);
@@ -113,7 +113,7 @@ namespace VAdvantage.Process
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    String info = ValidateProduct(new MProduct(GetCtx(), dr, Get_Trx()));
+                    String info = ValidateProduct(new MVAMProduct(GetCtx(), dr, Get_Trx()));
                     AddLog(0, null, null, info);
                     counter++;
                 }
@@ -145,7 +145,7 @@ namespace VAdvantage.Process
         /// </summary>
         /// <param name="product">product</param>
         /// <returns>Info</returns>
-        private String ValidateProduct(MProduct product)
+        private String ValidateProduct(MVAMProduct product)
         {
             count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM VAF_MODULEINFO WHERE IsActive = 'Y' AND PREFIX ='VAMFG_'"));
 
@@ -156,7 +156,7 @@ namespace VAdvantage.Process
             _product = product;
             //	Check Old Product BOM Structure
             log.Config(_product.GetName());
-            _products = new List<MProduct>();
+            _products = new List<MVAMProduct>();
             if (!ValidateOldProduct(_product))
             {
                 _product.SetIsVerified(false);
@@ -175,7 +175,7 @@ namespace VAdvantage.Process
             }
             for (int i = 0; i < boms.Length; i++)
             {
-                _products = new List<MProduct>();
+                _products = new List<MVAMProduct>();
                 if (!ValidateBOM(boms[i]))
                 {
                     _product.SetIsVerified(false);
@@ -196,7 +196,7 @@ namespace VAdvantage.Process
         /// </summary>
         /// <param name="product">product</param>
         /// <returns>true if valid</returns>
-        private bool ValidateOldProduct(MProduct product)
+        private bool ValidateOldProduct(MVAMProduct product)
         {
             count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM VAF_MODULEINFO WHERE IsActive = 'Y' AND PREFIX ='VAMFG_'"));
             if (!product.IsBOM())
@@ -212,7 +212,7 @@ namespace VAdvantage.Process
             _products.Add(product);
             log.Fine(product.GetName());
             //
-            MProductBOM[] productsBOMs = MProductBOM.GetBOMLines(product);
+            MVAMProductBOM[] productsBOMs = MVAMProductBOM.GetBOMLines(product);
             // if manufacturing module not exist and Product BOM not containany record against this product thennot to verify BOM
             if (count <= 0 && productsBOMs.Length == 0)
             {
@@ -220,8 +220,8 @@ namespace VAdvantage.Process
             }
             for (int i = 0; i < productsBOMs.Length; i++)
             {
-                MProductBOM productsBOM = productsBOMs[i];
-                MProduct pp = new MProduct(GetCtx(), productsBOM.GetVAM_ProductBOM_ID(), Get_Trx());
+                MVAMProductBOM productsBOM = productsBOMs[i];
+                MVAMProduct pp = new MVAMProduct(GetCtx(), productsBOM.GetVAM_ProductBOM_ID(), Get_Trx());
                 if (!pp.IsBOM())
                 {
                     log.Finer(pp.GetName());
@@ -242,16 +242,16 @@ namespace VAdvantage.Process
         private bool ValidateBOM(MVAMBOM bom)
         {
             count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM VAF_MODULEINFO WHERE IsActive = 'Y' AND PREFIX ='VAMFG_'"));
-            MVAMBOMProduct[] BOMproducts = MVAMBOMProduct.GetOfBOM(bom);
+            MVAMBOMVAMProduct[] BOMVAMProducts = MVAMBOMVAMProduct.GetOfBOM(bom);
             // if manufacturing module  exist and  BOM Componet not contain any record against this BOM then not to verify Product
-            if (count > 0 && BOMproducts.Length == 0)
+            if (count > 0 && BOMVAMProducts.Length == 0)
             {
                 return false;
             }
-            for (int i = 0; i < BOMproducts.Length; i++)
+            for (int i = 0; i < BOMVAMProducts.Length; i++)
             {
-                MVAMBOMProduct BOMproduct = BOMproducts[i];
-                MProduct pp = new MProduct(GetCtx(), BOMproduct.GetVAM_BOMProduct_ID(), Get_Trx());
+                MVAMBOMVAMProduct BOMVAMProduct = BOMVAMProducts[i];
+                MVAMProduct pp = new MVAMProduct(GetCtx(), BOMVAMProduct.GetVAM_BOMVAMProduct_ID(), Get_Trx());
                 if (pp.IsBOM())
                 {
                     return ValidateProduct(pp, bom.GetBOMType(), bom.GetBOMUse());
@@ -267,7 +267,7 @@ namespace VAdvantage.Process
         /// <param name="BOMType"></param>
         /// <param name="BOMUse"></param>
         /// <returns>true if valid</returns>
-        private bool ValidateProduct(MProduct product, String BOMType, String BOMUse)
+        private bool ValidateProduct(MVAMProduct product, String BOMType, String BOMUse)
         {
             if (!product.IsBOM())
             {
@@ -291,11 +291,11 @@ namespace VAdvantage.Process
             log.Fine(product.GetName());
             //
             MVAMBOM bom = boms[0];
-            MVAMBOMProduct[] BOMproducts = MVAMBOMProduct.GetOfBOM(bom);
-            for (int i = 0; i < BOMproducts.Length; i++)
+            MVAMBOMVAMProduct[] BOMVAMProducts = MVAMBOMVAMProduct.GetOfBOM(bom);
+            for (int i = 0; i < BOMVAMProducts.Length; i++)
             {
-                MVAMBOMProduct BOMproduct = BOMproducts[i];
-                MProduct pp = new MProduct(GetCtx(), BOMproduct.GetVAM_BOMProduct_ID(), Get_Trx());
+                MVAMBOMVAMProduct BOMVAMProduct = BOMVAMProducts[i];
+                MVAMProduct pp = new MVAMProduct(GetCtx(), BOMVAMProduct.GetVAM_BOMVAMProduct_ID(), Get_Trx());
                 if (pp.IsBOM())
                 {
                     return ValidateProduct(pp, bom.GetBOMType(), bom.GetBOMUse());

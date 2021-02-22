@@ -266,7 +266,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     int VAM_PFeature_SetInstance_ID = 0;
                     if (imp.GetLot() != null || imp.GetSerNo() != null)
                     {
-                        MProduct product = MProduct.Get(GetCtx(), imp.GetVAM_Product_ID());
+                        MVAMProduct product = MVAMProduct.Get(GetCtx(), imp.GetVAM_Product_ID());
                         if (product.IsInstanceAttribute())
                         {
                             MVAMPFeatureSet mas = product.GetAttributeSet();

@@ -11,37 +11,37 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for VAM_BOMProduct
+    /** Generated Model for VAM_BOMVAMProduct
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_VAM_BOMProduct : PO
+    public class X_VAM_BOMVAMProduct : PO
     {
-        public X_VAM_BOMProduct(Context ctx, int VAM_BOMProduct_ID, Trx trxName)
-            : base(ctx, VAM_BOMProduct_ID, trxName)
+        public X_VAM_BOMVAMProduct(Context ctx, int VAM_BOMVAMProduct_ID, Trx trxName)
+            : base(ctx, VAM_BOMVAMProduct_ID, trxName)
         {
-            /** if (VAM_BOMProduct_ID == 0)
+            /** if (VAM_BOMVAMProduct_ID == 0)
             {
-            SetBOMProductType (null);	// S
+            SetBOMVAMProductType (null);	// S
             SetBOMQty (0.0);	// 1
             SetIsPhantom (false);
             SetLeadTimeOffset (0);
-            SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM VAM_BOMProduct WHERE VAM_BOM_ID=@VAM_BOM_ID@
-            SetVAM_BOMProduct_ID (0);
+            SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM VAM_BOMVAMProduct WHERE VAM_BOM_ID=@VAM_BOM_ID@
+            SetVAM_BOMVAMProduct_ID (0);
             SetVAM_BOM_ID (0);
             }
              */
         }
-        public X_VAM_BOMProduct(Ctx ctx, int VAM_BOMProduct_ID, Trx trxName)
-            : base(ctx, VAM_BOMProduct_ID, trxName)
+        public X_VAM_BOMVAMProduct(Ctx ctx, int VAM_BOMVAMProduct_ID, Trx trxName)
+            : base(ctx, VAM_BOMVAMProduct_ID, trxName)
         {
-            /** if (VAM_BOMProduct_ID == 0)
+            /** if (VAM_BOMVAMProduct_ID == 0)
             {
-            SetBOMProductType (null);	// S
+            SetBOMVAMProductType (null);	// S
             SetBOMQty (0.0);	// 1
             SetIsPhantom (false);
             SetLeadTimeOffset (0);
-            SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM VAM_BOMProduct WHERE VAM_BOM_ID=@VAM_BOM_ID@
-            SetVAM_BOMProduct_ID (0);
+            SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM VAM_BOMVAMProduct WHERE VAM_BOM_ID=@VAM_BOM_ID@
+            SetVAM_BOMVAMProduct_ID (0);
             SetVAM_BOM_ID (0);
             }
              */
@@ -51,7 +51,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_VAM_BOMProduct(Context ctx, DataRow rs, Trx trxName)
+        public X_VAM_BOMVAMProduct(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -60,7 +60,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_VAM_BOMProduct(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAM_BOMVAMProduct(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -69,14 +69,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_VAM_BOMProduct(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAM_BOMVAMProduct(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_VAM_BOMProduct()
+        static X_VAM_BOMVAMProduct()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -89,8 +89,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =801;
 
-        /** TableName=VAM_BOMProduct */
-        public static String Table_Name = "VAM_BOMProduct";
+        /** TableName=VAM_BOMVAMProduct */
+        public static String Table_Name = "VAM_BOMVAMProduct";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);
@@ -124,48 +124,48 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_VAM_BOMProduct[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAM_BOMVAMProduct[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
 
-        /** BOMProductType VAF_Control_Ref_ID=349 */
-        public static int BOMPRODUCTTYPE_VAF_Control_Ref_ID = 349;
+        /** BOMVAMProductType VAF_Control_Ref_ID=349 */
+        public static int BOMVAMProductTYPE_VAF_Control_Ref_ID = 349;
         /** Alternative = A */
-        public static String BOMPRODUCTTYPE_Alternative = "A";
+        public static String BOMVAMProductTYPE_Alternative = "A";
         /** Alternative (Default) = D */
-        public static String BOMPRODUCTTYPE_AlternativeDefault = "D";
+        public static String BOMVAMProductTYPE_AlternativeDefault = "D";
         /** Optional Product = O */
-        public static String BOMPRODUCTTYPE_OptionalProduct = "O";
+        public static String BOMVAMProductTYPE_OptionalProduct = "O";
         /** Standard Product = S */
-        public static String BOMPRODUCTTYPE_StandardProduct = "S";
+        public static String BOMVAMProductTYPE_StandardProduct = "S";
         /** Outside Processing = X */
-        public static String BOMPRODUCTTYPE_OutsideProcessing = "X";
+        public static String BOMVAMProductTYPE_OutsideProcessing = "X";
         /** Is test a valid value.
         @param test testvalue
         @returns true if valid **/
-        public bool IsBOMProductTypeValid(String test)
+        public bool IsBOMVAMProductTypeValid(String test)
         {
             return test.Equals("A") || test.Equals("D") || test.Equals("O") || test.Equals("S") || test.Equals("X");
         }
         /** Set Component Type.
-        @param BOMProductType BOM Product Type */
-        public void SetBOMProductType(String BOMProductType)
+        @param BOMVAMProductType BOM Product Type */
+        public void SetBOMVAMProductType(String BOMVAMProductType)
         {
-            if (BOMProductType == null) throw new ArgumentException("BOMProductType is mandatory");
-            if (!IsBOMProductTypeValid(BOMProductType))
-                throw new ArgumentException("BOMProductType Invalid value - " + BOMProductType + " - Reference_ID=349 - A - D - O - S - X");
-            if (BOMProductType.Length > 1)
+            if (BOMVAMProductType == null) throw new ArgumentException("BOMVAMProductType is mandatory");
+            if (!IsBOMVAMProductTypeValid(BOMVAMProductType))
+                throw new ArgumentException("BOMVAMProductType Invalid value - " + BOMVAMProductType + " - Reference_ID=349 - A - D - O - S - X");
+            if (BOMVAMProductType.Length > 1)
             {
                 log.Warning("Length > 1 - truncated");
-                BOMProductType = BOMProductType.Substring(0, 1);
+                BOMVAMProductType = BOMVAMProductType.Substring(0, 1);
             }
-            Set_Value("BOMProductType", BOMProductType);
+            Set_Value("BOMVAMProductType", BOMVAMProductType);
         }
         /** Get Component Type.
         @return BOM Product Type */
-        public String GetBOMProductType()
+        public String GetBOMVAMProductType()
         {
-            return (String)Get_Value("BOMProductType");
+            return (String)Get_Value("BOMVAMProductType");
         }
         /** Set BOM Quantity.
         @param BOMQty Bill of Materials Quantity */
@@ -301,17 +301,17 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set BOM Component.
-        @param VAM_BOMProduct_ID Bill of Material Component (Product) */
-        public void SetVAM_BOMProduct_ID(int VAM_BOMProduct_ID)
+        @param VAM_BOMVAMProduct_ID Bill of Material Component (Product) */
+        public void SetVAM_BOMVAMProduct_ID(int VAM_BOMVAMProduct_ID)
         {
-            if (VAM_BOMProduct_ID < 1) throw new ArgumentException("VAM_BOMProduct_ID is mandatory.");
-            Set_ValueNoCheck("VAM_BOMProduct_ID", VAM_BOMProduct_ID);
+            if (VAM_BOMVAMProduct_ID < 1) throw new ArgumentException("VAM_BOMVAMProduct_ID is mandatory.");
+            Set_ValueNoCheck("VAM_BOMVAMProduct_ID", VAM_BOMVAMProduct_ID);
         }
         /** Get BOM Component.
         @return Bill of Material Component (Product) */
-        public int GetVAM_BOMProduct_ID()
+        public int GetVAM_BOMVAMProduct_ID()
         {
-            Object ii = Get_Value("VAM_BOMProduct_ID");
+            Object ii = Get_Value("VAM_BOMVAMProduct_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

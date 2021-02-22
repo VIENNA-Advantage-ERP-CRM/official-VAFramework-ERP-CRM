@@ -21,44 +21,44 @@ namespace VAdvantage.Acct
     public class Doc_CostUpdate : Doc
     {
         #region Private Variables
-        private MProductCategory mpc = null;
-        private MVAMProductCostElement m_ce;
+        private MVAMProductCategory mpc = null;
+        private MVAMVAMProductCostElement m_ce;
         private String costingMethod;
         private String costingLevel;
-        MVAMProductCostUpdate costupdate;
+        MVAMVAMProductCostUpdate costupdate;
 
         #endregion
 
         public Doc_CostUpdate(MVABAccountBook[] ass, DataRow dr, Trx trx)
-            : base(ass, typeof(MVAMProductCostUpdate), dr, MVABMasterDocType.DOCBASETYPE_STANDARDCOSTUPDATE, trx)
+            : base(ass, typeof(MVAMVAMProductCostUpdate), dr, MVABMasterDocType.DOCBASETYPE_STANDARDCOSTUPDATE, trx)
         {
         }
 
         public Doc_CostUpdate(MVABAccountBook[] ass, IDataReader idr, Trx trx)
-            : base(ass, typeof(MVAMProductCostUpdate), idr, MVABMasterDocType.DOCBASETYPE_STANDARDCOSTUPDATE, trx)
+            : base(ass, typeof(MVAMVAMProductCostUpdate), idr, MVABMasterDocType.DOCBASETYPE_STANDARDCOSTUPDATE, trx)
         {
         }
 
         public override String LoadDocumentDetails()
         {
-            costupdate = (MVAMProductCostUpdate)GetPO();
+            costupdate = (MVAMVAMProductCostUpdate)GetPO();
             if (costupdate.GetVAM_ProductCategory_ID() != 0)
-                mpc = MProductCategory.Get(GetCtx(), costupdate.GetVAM_ProductCategory_ID());
+                mpc = MVAMProductCategory.Get(GetCtx(), costupdate.GetVAM_ProductCategory_ID());
 
             _lines = LoadLines(costupdate);
-            m_ce = MVAMProductCostElement.GetMaterialCostElement(MVAFClient.Get(GetCtx()), X_VAB_AccountBook.COSTINGMETHOD_StandardCosting);
+            m_ce = MVAMVAMProductCostElement.GetMaterialCostElement(MVAFClient.Get(GetCtx()), X_VAB_AccountBook.COSTINGMETHOD_StandardCosting);
             SetDateAcct(costupdate.GetDateAcct());
             SetDateDoc(costupdate.GetDateAcct());
             return null;
         }
 
-        private DocLine[] LoadLines(MVAMProductCostUpdate costupdate)
+        private DocLine[] LoadLines(MVAMVAMProductCostUpdate costupdate)
         {
             List<DocLine> list = new List<DocLine>();
-            MVAMProductCostUpdateLine[] lines = costupdate.GetLines();
+            MVAMVAMProductCostUpdateLine[] lines = costupdate.GetLines();
             for (int i = 0; i < lines.Length; i++)
             {
-                MVAMProductCostUpdateLine line = lines[i];
+                MVAMVAMProductCostUpdateLine line = lines[i];
                 DocLine docLine = new DocLine(line, this);
                 list.Add(docLine);
             }
@@ -76,14 +76,14 @@ namespace VAdvantage.Acct
         public override List<Fact> CreateFacts(MVABAccountBook as1)
         {
             List<Fact> facts = new List<Fact>();
-            MProductCategoryAcct pca = null;
+            MVAMProductCategoryAcct pca = null;
             String costingMethodOfSchema = as1.GetCostingMethod();
             String costingLevelOfSchema = as1.GetCostingLevel();
 
             // Get the costing method and the costing level of the product Category for the current accounting schema.
             if (mpc != null)
             {
-                pca = MProductCategoryAcct.Get(GetCtx(), mpc.GetVAM_ProductCategory_ID(), as1.GetVAB_AccountBook_ID(), null);
+                pca = MVAMProductCategoryAcct.Get(GetCtx(), mpc.GetVAM_ProductCategory_ID(), as1.GetVAB_AccountBook_ID(), null);
                 if (pca.GetCostingMethod() != null)
                     costingMethod = pca.GetCostingMethod();
                 else
@@ -110,7 +110,7 @@ namespace VAdvantage.Acct
 
                 if (mpc == null)
                 {
-                    pca = MProductCategoryAcct.Get(GetCtx(), MProduct.Get(GetCtx(), line.GetVAM_Product_ID()).
+                    pca = MVAMProductCategoryAcct.Get(GetCtx(), MVAMProduct.Get(GetCtx(), line.GetVAM_Product_ID()).
                                                    GetVAM_ProductCategory_ID(),
                                                    as1.GetVAB_AccountBook_ID(), null);
                     if (pca.GetCostingMethod() != null)

@@ -10,7 +10,7 @@ using VIS.Models;
 
 namespace VIS.Controllers
 {
-    public class MStorageController:Controller
+    public class MVAMStorageController:Controller
     {
         public ActionResult Index()
         {
@@ -24,7 +24,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MStorageModel objStorageModel = new MStorageModel();
+                MVAMStorageModel objStorageModel = new MVAMStorageModel();
                 retJSON = JsonConvert.SerializeObject(objStorageModel.GetQtyAvailable(ctx,fields));
             }       
             return Json(retJSON, JsonRequestBehavior.AllowGet);

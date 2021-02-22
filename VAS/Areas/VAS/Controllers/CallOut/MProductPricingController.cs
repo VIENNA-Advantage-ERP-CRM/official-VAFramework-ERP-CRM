@@ -11,7 +11,7 @@ using VIS.Models;
 
 namespace VIS.Controllers
 {
-    public class MProductPricingController:Controller
+    public class MVAMProductPricingController:Controller
     {
         public ActionResult Index()
         {
@@ -24,7 +24,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MProductPricingModel objProductPricing = new MProductPricingModel();
+                MVAMProductPricingModel objProductPricing = new MVAMProductPricingModel();
                 retJSON = JsonConvert.SerializeObject(objProductPricing.GetProductPricing(ctx,fields));
             }          
             // return Json(new { result = retJSON, error = retError }, JsonRequestBehavior.AllowGet);

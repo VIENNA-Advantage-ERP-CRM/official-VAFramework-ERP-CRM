@@ -408,16 +408,16 @@ namespace VAdvantage.Model
         /// Get System Status
         /// </summary>
         /// <returns>system status</returns>
-        public new String GetSystemStatus()
+        public new String GetSysteMVARReqStatus()
         {
             String ss = null;
-            if (Get_ColumnIndex("SystemStatus") != -1)
+            if (Get_ColumnIndex("SysteMVARReqStatus") != -1)
             {
-                ss = base.GetSystemStatus();
+                ss = base.GetSysteMVARReqStatus();
             }
             if (ss == null)
             {
-                ss = SYSTEMSTATUS_Evaluation;
+                ss = SYSTEMVARReqStatus_Evaluation;
             }
             return ss;
         }

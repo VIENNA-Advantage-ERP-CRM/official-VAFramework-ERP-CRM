@@ -54,7 +54,7 @@ namespace ViennaAdvantageServer.Process
                 contact = new VAdvantage.Model.X_VAB_Contract(GetCtx(), 0, Get_TrxName());
                 //Neha---Commented code because object created but not used in further class---17 Sep,2018
 
-                //VAdvantage.Model.MProductPricing pp = new VAdvantage.Model.MProductPricing(GetCtx().GetVAF_Client_ID(), GetCtx().GetVAF_Org_ID(),
+                //VAdvantage.Model.MVAMProductPricing pp = new VAdvantage.Model.MVAMProductPricing(GetCtx().GetVAF_Client_ID(), GetCtx().GetVAF_Org_ID(),
                 //    line.GetVAM_Product_ID(), order.GetVAB_BusinessPartner_ID(), line.GetQtyOrdered(), true);
                 int VAM_PriceList_ID = Util.GetValueOfInt(order.GetVAM_PriceList_ID());
                 //pp.SetVAM_PriceList_ID(VAM_PriceList_ID);

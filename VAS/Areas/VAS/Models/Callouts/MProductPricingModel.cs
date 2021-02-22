@@ -11,7 +11,7 @@ using VIS.Controllers;
 
 namespace VIS.Models
 {
-    public class MProductPricingModel
+    public class MVAMProductPricingModel
     {
         /// <summary>
         /// GetProductPricing
@@ -58,7 +58,7 @@ namespace VIS.Models
 
             //End Assign parameter value
 
-            MProductPricing pp = new MProductPricing(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID(),
+            MVAMProductPricing pp = new MVAMProductPricing(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID(),
                         VAM_Product_ID, VAB_BusinessPartner_ID, Qty, isSOTrx);
 
             //var VAM_PriceList_ID = ctx.GetContextAsInt(WindowNo, "VAM_PriceList_ID");
@@ -82,7 +82,7 @@ namespace VIS.Models
             }
 
             //Get product stock
-            MProduct product = MProduct.Get(ctx, VAM_Product_ID);
+            MVAMProduct product = MVAMProduct.Get(ctx, VAM_Product_ID);
 
 
             ProductDataOut objInfo = new ProductDataOut

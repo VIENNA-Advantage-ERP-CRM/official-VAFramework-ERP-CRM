@@ -122,7 +122,7 @@
     <Compile Include="ModelAD\html\MVAFRole.cs" />
     <Compile Include="ModelAD\html\MVAFTableViewRights.cs" />
     <Compile Include="ModelAD\html\MVAFTreeInfo.cs" />
-    <Compile Include="ModelAD\MAccessLog.cs" />
+    <Compile Include="ModelAD\MVAFRightsLog.cs" />
     <Compile Include="ModelAD\MAppointment.cs" />
     <Compile Include="ModelAD\MAppointmentsInfo.cs" />
     <Compile Include="ModelAD\MVAFArchive.cs" />
@@ -164,8 +164,7 @@
     <Compile Include="ModelAD\MVAFQuickSearchWindow.cs" />
     <Compile Include="ModelAD\MVAFLanguage.cs" />
     <Compile Include="ModelAD\MMailAttachment1.cs" />
-    <Compile Include="ModelAD\MMailMsg.cs" />
-    <Compile Include="ModelAD\MMailText.cs" />
+    <Compile Include="ModelAD\MVARMailTemplate.cs" />
     <Compile Include="ModelAD\MVAFMenuConfig.cs" />
     <Compile Include="ModelAD\MVAFMsgLable.cs" />
     <Compile Include="ModelAD\MVAFModuleDBSchema.cs" />
@@ -224,7 +223,7 @@
     <Compile Include="ModelAD\MVAFScreen.cs" />
     <Compile Include="ModelAD\MVAFScreenRights.cs" />
     <Compile Include="ModelAD\M_VAF_ColumnDic.cs" />
-    <Compile Include="ModelAD\M_Registration.cs" />
+    <Compile Include="ModelAD\M_VAFRegistration.cs" />
     <Compile Include="ModelAD\RColumn.cs" />
     <Compile Include="ModelAD\RModel.cs" />
     <Compile Include="ModelAD\RModelData.cs" />

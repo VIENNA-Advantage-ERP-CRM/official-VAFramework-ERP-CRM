@@ -63,7 +63,7 @@ namespace VAdvantage.Model
          *	Assignment Constructor
          *  @param assignment MAssignment
          */
-        public MAssignmentSlot(MResourceAssignment assignment)
+        public MAssignmentSlot(MVASResAssignment assignment)
         {
             SetStatus(assignment.IsConfirmed() ? STATUS_Confirmed : STATUS_NotConfirmed);
             SetMAssignment(assignment);
@@ -106,7 +106,7 @@ namespace VAdvantage.Model
         private int _xMax = 1;
 
         /**	The assignment					*/
-        private MResourceAssignment _mAssignment;
+        private MVASResAssignment _mAssignment;
 
         /**	Language used for formatting			*/
         private Login.Language _language = Login.Language.GetLoginLanguage();
@@ -244,7 +244,7 @@ namespace VAdvantage.Model
          * 	Set Assignment
          * 	@param assignment MAssignment
          */
-        public void SetMAssignment(MResourceAssignment assignment)
+        public void SetMAssignment(MVASResAssignment assignment)
         {
             if (assignment == null)
                 return;
@@ -263,7 +263,7 @@ namespace VAdvantage.Model
          * 	Get Assugnment
          * 	@return assignment
          */
-        public MResourceAssignment GetMAssignment()
+        public MVASResAssignment GetMAssignment()
         {
             return _mAssignment;
         }	//	getAssignment

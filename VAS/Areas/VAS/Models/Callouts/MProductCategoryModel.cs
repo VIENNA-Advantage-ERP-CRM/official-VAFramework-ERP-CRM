@@ -7,7 +7,7 @@ using VAdvantage.Utility;
 
 namespace VIS.Models
 {
-    public class MProductCategoryModel
+    public class MVAMProductCategoryModel
     {
         /// <summary>
         /// GetProductCategory
@@ -21,7 +21,7 @@ namespace VIS.Models
             int VAM_ProductCategory_ID;
 
             VAM_ProductCategory_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            MProductCategory pc = new MProductCategory(ctx, VAM_ProductCategory_ID, null);
+            MVAMProductCategory pc = new MVAMProductCategory(ctx, VAM_ProductCategory_ID, null);
             //   mTab.setValue("IsPurchasedToOrder", pc.IsPurchasedToOrder());
             bool IsPurchasedToOrder = false;//= pc.IsPurchasedToOrder();  //Temporay Commented BY sarab 
             Dictionary<string, string> retDic = new Dictionary<string, string>();
@@ -35,7 +35,7 @@ namespace VIS.Models
             string[] paramValue = fields.Split(',');
             int VAM_ProductCategory_ID = 0;
             VAM_ProductCategory_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            MProductCategory pc = new MProductCategory(ctx, VAM_ProductCategory_ID, null);
+            MVAMProductCategory pc = new MVAMProductCategory(ctx, VAM_ProductCategory_ID, null);
             Dictionary<string, string> retDic = new Dictionary<string, string>();
             if (pc.Get_ColumnIndex("ProductType") > 0)
             {

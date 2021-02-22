@@ -32,11 +32,11 @@ namespace VAdvantage.Model
         /** User				*/
         private MVAFUserContact _user = null;
         /** Request				*/
-        private MRequest _request = null;
+        private MVARRequest _request = null;
         /** Project				*/
         private MVABProject _project = null;
         /** Request Status		*/
-        private MStatus _Status = null;
+        private MVARReqStatus _Status = null;
         #endregion
 
         /**
@@ -170,13 +170,13 @@ namespace VAdvantage.Model
          * 	Get Request
          *	@return request
          */
-        public MRequest GetRequest()
+        public MVARRequest GetRequest()
         {
             if (GetVAR_Request_ID() == 0)
                 _request = null;
             else if (_request == null
                 || _request.GetVAR_Request_ID() != GetVAR_Request_ID())
-                _request = new MRequest(GetCtx(), GetVAR_Request_ID(), Get_TrxName());
+                _request = new MVARRequest(GetCtx(), GetVAR_Request_ID(), Get_TrxName());
             return _request;
         }
 
@@ -204,7 +204,7 @@ namespace VAdvantage.Model
             if (VAR_Req_Status_ID == 0)
                 return true;
 
-            _Status = MStatus.Get(GetCtx(), VAR_Req_Status_ID);
+            _Status = MVARReqStatus.Get(GetCtx(), VAR_Req_Status_ID);
             int VAR_Req_StatusCategory_ID = _Status.GetVAR_Req_StatusCategory_ID();
             //
             int VAR_Req_Type_ID = GetVAR_Req_Type_ID();
@@ -213,7 +213,7 @@ namespace VAdvantage.Model
                 log.Warning("No Client Request Type");
                 return false;
             }
-            MRequestType rt = MRequestType.Get(GetCtx(), VAR_Req_Type_ID);
+            MVARRequestType rt = MVARRequestType.Get(GetCtx(), VAR_Req_Type_ID);
             if (rt.GetVAR_Req_StatusCategory_ID() != VAR_Req_StatusCategory_ID)
             {
                 log.Warning("Status Category different - Status("
@@ -237,7 +237,7 @@ namespace VAdvantage.Model
             log.Warning("Set Request Type in Window Client Info");
 
             //	Default
-            MRequestType rt = MRequestType.GetDefault(GetCtx());
+            MVARRequestType rt = MVARRequestType.GetDefault(GetCtx());
             if (rt != null)
             {
                 VAR_Req_Type_ID = rt.GetVAR_Req_Type_ID();
@@ -253,13 +253,13 @@ namespace VAdvantage.Model
          * 	Get Status
          *	@return status or null
          */
-        public new MStatus GetStatus()
+        public new MVARReqStatus GetStatus()
         {
             if (GetVAR_Req_Status_ID() == 0)
                 _Status = null;
             else if (_Status == null
                 || _Status.GetVAR_Req_Status_ID() != GetVAR_Req_Status_ID())
-                _Status = MStatus.Get(GetCtx(), GetVAR_Req_Status_ID());
+                _Status = MVARReqStatus.Get(GetCtx(), GetVAR_Req_Status_ID());
             return _Status;
         }
 
@@ -632,7 +632,7 @@ namespace VAdvantage.Model
                 if (retValue != null)
                     return retValue;
             }
-            _request = new MRequest(GetCtx(), 0, Get_TrxName());
+            _request = new MVARRequest(GetCtx(), 0, Get_TrxName());
             _request.SetVAF_Org_ID(GetVAF_Org_ID());
             String summary = GetName();
             if (summary == null)

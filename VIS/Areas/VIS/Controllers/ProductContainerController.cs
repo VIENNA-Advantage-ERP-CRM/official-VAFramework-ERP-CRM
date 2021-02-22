@@ -97,7 +97,7 @@ namespace VIS.Controllers
         {
             Ctx ctx = Session["ctx"] as Ctx;
             ProductContainerModel model = new ProductContainerModel(ctx);
-            return Json(JsonConvert.SerializeObject(model.GetProductContainerFromTransaction(container, movementDate, VAF_Org_ID, locator, page, size)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(model.GetProductContainerFroMVAMInvTrx(container, movementDate, VAF_Org_ID, locator, page, size)), JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>

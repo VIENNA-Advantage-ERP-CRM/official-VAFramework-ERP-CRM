@@ -102,7 +102,7 @@ namespace VAdvantage.Model
 		if (VAF_Issue_ID == 0)
 		{
 			SetProcessed (false);	// N
-			SetSystemStatus(SYSTEMSTATUS_Evaluation);
+			SetSysteMVARReqStatus(SYSTEMVARReqStatus_Evaluation);
 			try
 			{
 				Init(ctx);
@@ -199,7 +199,7 @@ namespace VAdvantage.Model
 		SetName(system.GetName());
 		SetUserName(system.GetUserName());
 		SetDBAddress(system.GetDBAddress(true));
-		SetSystemStatus(system.GetSystemStatus());
+		SetSysteMVARReqStatus(system.GetSysteMVARReqStatus());
 		SetReleaseNo(system.GetReleaseNo());	//	DB
 		
 		//setDatabaseInfo(DataBase.getDatabaseInfo());
@@ -362,13 +362,13 @@ namespace VAdvantage.Model
 	/// Get System Status
 	/// </summary>
     /// <returns>system status</returns>
-	public new String GetSystemStatus ()
+	public new String GetSysteMVARReqStatus ()
 	{
-		String s = base.GetSystemStatus ();
+		String s = base.GetSysteMVARReqStatus ();
 		if (s == null || s.Length == 0)
-			s = SYSTEMSTATUS_Evaluation;
+			s = SYSTEMVARReqStatus_Evaluation;
 		return s;
-	}	//	getSystemStatus
+	}	//	getSysteMVARReqStatus
 	
 	
 	/// <summary>

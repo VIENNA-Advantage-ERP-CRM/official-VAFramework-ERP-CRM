@@ -288,8 +288,8 @@ namespace VAdvantage.Model
             dr =DataBase.DB.ExecuteReader(sql,param,trxName);
 			while (dr.Read())
 			{
-				MResourceAssignment mAssignment = 
-					new MResourceAssignment(_ctx, Utility.Util.GetValueOfInt(dr[0]), trxName);
+				MVASResAssignment mAssignment = 
+					new MVASResAssignment(_ctx, Utility.Util.GetValueOfInt(dr[0]), trxName);
 				ma = new MAssignmentSlot (mAssignment);
 				if (!getAll)
 					break;

@@ -7,7 +7,7 @@ using VAdvantage.Utility;
 
 namespace VIS.Models
 {
-    public class MStorageModel
+    public class MVAMStorageModel
     {
         /// <summary>
         /// GetQtyAvailable
@@ -24,7 +24,7 @@ namespace VIS.Models
             int VAM_PFeature_SetInstance_ID = Util.GetValueOfInt(paramValue[2].ToString());
             //End Assign parameter value
 
-            return MStorage.GetQtyAvailable(VAM_Warehouse_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, null);
+            return MVAMStorage.GetQtyAvailable(VAM_Warehouse_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, null);
            
         }
     }

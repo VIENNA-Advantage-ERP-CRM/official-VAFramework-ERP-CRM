@@ -21,13 +21,13 @@ namespace VIS.Controllers
             return PartialView();
         }
 
-        public JsonResult Load(int MVAMPFeatureSetInstanceId, int mProductId, bool productWindow, int windowNo, int VAF_Column_ID, int window_ID, bool IsSOTrx, string IsInternalUse)
+        public JsonResult Load(int MVAMPFeatureSetInstanceId, int MVAMProductId, bool productWindow, int windowNo, int VAF_Column_ID, int window_ID, bool IsSOTrx, string IsInternalUse)
         {
             PAttributesModel obj = new PAttributesModel();
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
-                var value = obj.LoadInit(MVAMPFeatureSetInstanceId, mProductId, productWindow, windowNo, ctx, VAF_Column_ID, window_ID, IsSOTrx, IsInternalUse);
+                var value = obj.LoadInit(MVAMPFeatureSetInstanceId, MVAMProductId, productWindow, windowNo, ctx, VAF_Column_ID, window_ID, IsSOTrx, IsInternalUse);
                 return Json(new { result = value }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { result = false }, JsonRequestBehavior.AllowGet);
@@ -42,52 +42,52 @@ namespace VIS.Controllers
 
         [HttpPost]
         public JsonResult Save(int windowNoParent, string strLotString, string strSerNo, string dtGuaranteeDate, string strAttrCode,
-           bool productWindow, int MVAMPFeatureSetInstanceId, int mProductId, int windowNo, string description, bool isEdited, List<KeyNamePair> lst)
+           bool productWindow, int MVAMPFeatureSetInstanceId, int MVAMProductId, int windowNo, string description, bool isEdited, List<KeyNamePair> lst)
         {
             PAttributesModel obj = new PAttributesModel();
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
                 var value = obj.SaveAttribute(windowNoParent, strLotString, strSerNo, dtGuaranteeDate, strAttrCode,
-                 productWindow, MVAMPFeatureSetInstanceId, mProductId, windowNo, description, isEdited, lst, ctx);
+                 productWindow, MVAMPFeatureSetInstanceId, MVAMProductId, windowNo, description, isEdited, lst, ctx);
                 return Json(new { result = value }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { result = false }, JsonRequestBehavior.AllowGet);
         }
 
 
-        public JsonResult GetSerNo(int MVAMPFeatureSetInstanceId, int mProductId)
+        public JsonResult GetSerNo(int MVAMPFeatureSetInstanceId, int MVAMProductId)
         {
             PAttributesModel obj = new PAttributesModel();
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
-                var value = obj.GetSerNo(ctx, MVAMPFeatureSetInstanceId, mProductId);
+                var value = obj.GetSerNo(ctx, MVAMPFeatureSetInstanceId, MVAMProductId);
                 return Json(new { result = value }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { result = false }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult CreateLot(int MVAMPFeatureSetInstanceId, int mProductId)
+        public JsonResult CreateLot(int MVAMPFeatureSetInstanceId, int MVAMProductId)
         {
             PAttributesModel obj = new PAttributesModel();
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
-                var value = obj.CreateLot(ctx, MVAMPFeatureSetInstanceId, mProductId);
+                var value = obj.CreateLot(ctx, MVAMPFeatureSetInstanceId, MVAMProductId);
                 return Json(new { result = value }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { result = false }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetAttribute(int MVAMPFeatureSetInstanceId, int mProductId, bool productWindow, int windowNo, int VAF_Column_ID, string attrcode)
+        public JsonResult GetAttribute(int MVAMPFeatureSetInstanceId, int MVAMProductId, bool productWindow, int windowNo, int VAF_Column_ID, string attrcode)
         {
             PAttributesModel obj = new PAttributesModel();
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
-                var AttrValue = obj.GetAttribute(MVAMPFeatureSetInstanceId, mProductId, productWindow, windowNo, ctx, VAF_Column_ID, attrcode);
-                var value = obj.GetAttributeInstance(MVAMPFeatureSetInstanceId, mProductId, productWindow, windowNo, ctx, VAF_Column_ID, attrcode);
+                var AttrValue = obj.GetAttribute(MVAMPFeatureSetInstanceId, MVAMProductId, productWindow, windowNo, ctx, VAF_Column_ID, attrcode);
+                var value = obj.GetAttributeInstance(MVAMPFeatureSetInstanceId, MVAMProductId, productWindow, windowNo, ctx, VAF_Column_ID, attrcode);
                 if (value != null)
                 {
                     return Json(JsonConvert.SerializeObject(new { result = AttrValue, lot = value[0], serial = value[1], gdate = value[2] }), JsonRequestBehavior.AllowGet);

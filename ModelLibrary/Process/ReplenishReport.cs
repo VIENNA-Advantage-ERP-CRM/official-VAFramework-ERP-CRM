@@ -519,7 +519,7 @@ namespace VAdvantage.Process
             int noReqs = 0;
             String info = "";
             //
-            MRequisition requisition = null;
+            MVAMRequisition requisition = null;
             MWarehouse wh = null;
             X_VAT_Restock[] replenishs = GetReplenish(_M_WareSource);
             for (int i = 0; i < replenishs.Length; i++)
@@ -533,7 +533,7 @@ namespace VAdvantage.Process
                 if (requisition == null
                     || requisition.GetVAM_Warehouse_ID() != replenish.GetVAM_Warehouse_ID())
                 {
-                    requisition = new MRequisition(GetCtx(), 0, Get_TrxName());
+                    requisition = new MVAMRequisition(GetCtx(), 0, Get_TrxName());
                     requisition.SetVAF_UserContact_ID(GetVAF_UserContact_ID());
                     requisition.SetVAB_DocTypes_ID(_VAB_DocTypes_ID);
                     requisition.SetDescription(Msg.GetMsg(GetCtx(), "Replenishment"));
@@ -556,7 +556,7 @@ namespace VAdvantage.Process
                     info += " - " + requisition.GetDocumentNo();
                 }
                 //
-                MRequisitionLine line = new MRequisitionLine(requisition);
+                MVAMRequisitionLine line = new MVAMRequisitionLine(requisition);
                 line.SetVAM_Product_ID(replenish.GetVAM_Product_ID());
                 line.SetVAB_BusinessPartner_ID(replenish.GetVAB_BusinessPartner_ID());
                 line.SetQty(replenish.GetQtyToOrder());
@@ -630,19 +630,19 @@ namespace VAdvantage.Process
                     noMoves++;
                     info += " - " + move.GetDocumentNo();
                 }
-                MProduct product = MProduct.Get(GetCtx(), replenish.GetVAM_Product_ID());
+                MVAMProduct product = MVAMProduct.Get(GetCtx(), replenish.GetVAM_Product_ID());
                 //	To
                 int VAM_LocatorTo_ID = GetLocator_ID(product, whTarget);
 
                 //	From: Look-up Storage
-                MProductCategory pc = MProductCategory.Get(GetCtx(), product.GetVAM_ProductCategory_ID());
+                MVAMProductCategory pc = MVAMProductCategory.Get(GetCtx(), product.GetVAM_ProductCategory_ID());
                 String MMPolicy = pc.GetMMPolicy();
                 if (MMPolicy == null || MMPolicy.Length == 0)
                 {
                     MMPolicy = client.GetMMPolicy();
                 }
                 //
-                MStorage[] storages = MStorage.GetWarehouse(GetCtx(),
+                MVAMStorage[] storages = MVAMStorage.GetWarehouse(GetCtx(),
                     whSource.GetVAM_Warehouse_ID(), replenish.GetVAM_Product_ID(), 0, 0,
                     true, null,
                     MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy), Get_TrxName());
@@ -656,7 +656,7 @@ namespace VAdvantage.Process
                 Decimal target = replenish.GetQtyToOrder();
                 for (int j = 0; j < storages.Length; j++)
                 {
-                    MStorage storage = storages[j];
+                    MVAMStorage storage = storages[j];
                     //if (storage.GetQtyOnHand().signum() <= 0)
                     if (Env.Signum(storage.GetQtyOnHand()) <= 0)
                     {
@@ -713,11 +713,11 @@ namespace VAdvantage.Process
         /// <param name="product"> product </param>
         /// <param name="wh">warehouse</param>
         /// <returns>locator with highest priority</returns>
-        private int GetLocator_ID(MProduct product, MWarehouse wh)
+        private int GetLocator_ID(MVAMProduct product, MWarehouse wh)
         {
-            int VAM_Locator_ID = MProductLocator.GetFirstVAM_Locator_ID(product, wh.GetVAM_Warehouse_ID());
+            int VAM_Locator_ID = MVAMProductLocator.GetFirstVAM_Locator_ID(product, wh.GetVAM_Warehouse_ID());
             /**	
-            MVAMLocator[] locators = MProductLocator.getLocators (product, wh.getVAM_Warehouse_ID());
+            MVAMLocator[] locators = MVAMProductLocator.getLocators (product, wh.getVAM_Warehouse_ID());
             for (int i = 0; i < locators.length; i++)
             {
                 MVAMLocator locator = locators[i];

@@ -11,7 +11,7 @@
         var MVAMPFeatureSetInstanceId = null;
         var MVAMLocatorId = null;
         var MVAMPFeatureSetInstanceName = null;
-        var mProductId = null;
+        var MVAMProductId = null;
         var cBPartnerId = null;
         var adColumnId = null;
         var windowNoParent = null;
@@ -37,7 +37,7 @@
 
         //constructor load
         MVAMPFeatureSetInstanceId = VAM_PFeature_SetInstance_ID;
-        mProductId = VAM_Product_ID;
+        MVAMProductId = VAM_Product_ID;
         cBPartnerId = VAB_BusinessPartner_ID;
         productWindow = proWindow;
         adColumnId = VAF_Column_ID;
@@ -56,7 +56,7 @@
         }
         //productid is must for this form dependency
         //call InitAttributes in the load function
-        if (mProductId == 0) {
+        if (MVAMProductId == 0) {
             return;
         }
         this.hasAttribute = true;
@@ -151,7 +151,7 @@
                 async: false,
                 data: {
                     MVAMPFeatureSetInstanceId: MVAMPFeatureSetInstanceId,
-                    mProductId: mProductId,
+                    MVAMProductId: MVAMProductId,
                     productWindow: productWindow,
                     windowNo: windowNo,
                     VAF_Column_ID: VAF_Column_ID,
@@ -302,7 +302,7 @@
                     strAttrCode: txtAttrCode.val(),
                     productWindow: productWindow,
                     MVAMPFeatureSetInstanceId: MVAMPFeatureSetInstanceId,
-                    mProductId: VAM_Product_ID,
+                    MVAMProductId: VAM_Product_ID,
                     windowNo: windowNo,
                     description: txtDescription.val(),
                     isEdited: chkEdit.prop("checked"),
@@ -348,7 +348,7 @@
 
             //	Get Text
             //var sql = "SELECT p.Name, w.Name FROM VAM_Product p, VAM_Warehouse w "
-            //    + "WHERE p.VAM_Product_ID=" + mProductId + " AND w.VAM_Warehouse_ID=" + VAM_Warehouse_ID;
+            //    + "WHERE p.VAM_Product_ID=" + MVAMProductId + " AND w.VAM_Warehouse_ID=" + VAM_Warehouse_ID;
 
             //var dr = null;
             try {
@@ -358,7 +358,7 @@
                 //}
                 //dr.close();
                 //dr = null;
-                title = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "PAttributes/GetTitle", { "Warehouse_ID": VAM_Warehouse_ID, "Product_ID": mProductId }, null);
+                title = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "PAttributes/GetTitle", { "Warehouse_ID": VAM_Warehouse_ID, "Product_ID": MVAMProductId }, null);
             }
             catch (e) {
                 //if (dr != null) {
@@ -371,7 +371,7 @@
             var AttributeSetInstance_ID = -1;
             //open new form
             // Added by Manjot To implement Search Functionality on Grid 10 May 2018 google Sheet ID SI_0607
-            var obj = new VIS.PAttributeInstance(title, VAM_Warehouse_ID, MVAMLocatorId, mProductId, cBPartnerId, txtSerNo.val(), txtLotString.val(), dtGuaranteeDate.val(), IsSOTrx);
+            var obj = new VIS.PAttributeInstance(title, VAM_Warehouse_ID, MVAMLocatorId, MVAMProductId, cBPartnerId, txtSerNo.val(), txtLotString.val(), dtGuaranteeDate.val(), IsSOTrx);
             obj.showDialog();
 
             //JID_1140: On OK of select existing record  pop up system should not close the control Of ASI should only close the Select existing record control.
@@ -567,7 +567,7 @@
             var check = false;
             //var dr = null;
             try {
-                var checkProd = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "PAttributes/CheckAttribute", { "Window_No": windowNoParent, "Product_ID": mProductId, "LotNumber": lotString }, null);
+                var checkProd = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "PAttributes/CheckAttribute", { "Window_No": windowNoParent, "Product_ID": MVAMProductId, "LotNumber": lotString }, null);
                 if (checkProd > 0) {
                     check = true;
                 }
@@ -579,7 +579,7 @@
                 //var VAF_Org_ID = VIS.Env.getCtx().getContextAsInt(windowNoParent, "VAF_Org_ID");
 
                 //var sqlChk = "SELECT IsOrganization, IsProduct, IsWarehouse FROM VAM_PFeature_Set aSet INNER JOIN VAM_Product mp on mp.VAM_PFeature_Set_ID = aset.VAM_PFeature_Set_ID"
-                //    + " WHERE mp.VAM_Product_ID = " + mProductId;
+                //    + " WHERE mp.VAM_Product_ID = " + MVAMProductId;
 
                 //dr = VIS.DB.executeReader(sqlChk, null);
                 //if (dr.read()) {
@@ -587,7 +587,7 @@
                 //        sqlWhere = sqlWhere.concat(" OR s.VAF_Org_ID = " + VAF_Org_ID);
                 //    }
                 //    if (dr.getString(1).toUpper() == "Y") {
-                //        sqlWhere = sqlWhere.concat(" OR s.VAM_Product_ID = " + mProductId);
+                //        sqlWhere = sqlWhere.concat(" OR s.VAM_Product_ID = " + MVAMProductId);
                 //    }
                 //    if (dr.getString(2).toUpper() == "Y") {
                 //        var VAM_Warehouse_ID = 0;
@@ -655,7 +655,7 @@
                 //async: false,
                 data: {
                     MVAMPFeatureSetInstanceId: MVAMPFeatureSetInstanceId,
-                    mProductId: mProductId,
+                    MVAMProductId: MVAMProductId,
                     productWindow: productWindow,
                     windowNo: windowNo,
                     VAF_Column_ID: VAF_Column_ID,
@@ -751,7 +751,7 @@
                         async: false,
                         data: {
                             MVAMPFeatureSetInstanceId: MVAMPFeatureSetInstanceId,
-                            mProductId: mProductId
+                            MVAMProductId: MVAMProductId
                         },
                         success: function (data) {
                             returnValue = data.result;
@@ -769,7 +769,7 @@
                         async: false,
                         data: {
                             MVAMPFeatureSetInstanceId: MVAMPFeatureSetInstanceId,
-                            mProductId: mProductId
+                            MVAMProductId: MVAMProductId
                         },
                         success: function (data) {
                             returnValue = data.result;
@@ -823,7 +823,7 @@
 
             MVAMLocatorId = null;
             MVAMPFeatureSetInstanceName = null;
-            mProductId = null;
+            MVAMProductId = null;
             cBPartnerId = null;
             adColumnId = null;
             windowNoParent = null;

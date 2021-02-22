@@ -124,13 +124,13 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="VAB_Order_ID">order id</param>
         /// <returns>order lines</returns>
-        public MVABOrderLine[] GetLinesItemProduct(int VAB_Order_ID)
+        public MVABOrderLine[] GetLinesIteMVAMProduct(int VAB_Order_ID)
         {
             List<MVABOrderLine> list = new List<MVABOrderLine>();
             StringBuilder sql = new StringBuilder(@"SELECT * FROM VAB_OrderLine ol
                                                         INNER JOIN VAM_Product p ON p.VAM_Product_id = ol.VAM_Product_id
                                                         WHERE ol.VAB_Order_ID =" + VAB_Order_ID + @" AND ol.isactive = 'Y' 
-                                                        AND  p.ProductType  = '" + MProduct.PRODUCTTYPE_Item + "'");
+                                                        AND  p.ProductType  = '" + MVAMProduct.PRODUCTTYPE_Item + "'");
             IDataReader idr = null;
             try
             {
@@ -181,7 +181,7 @@ namespace VAdvantage.Model
             }
 
             // get order lines having only product
-            MVABOrderLine[] orderLines = GetLinesItemProduct(GetVAB_Order_ID());
+            MVABOrderLine[] orderLines = GetLinesIteMVAMProduct(GetVAB_Order_ID());
 
             // create expected cost distribution lines
             if (orderLines != null && orderLines.Length > 0)

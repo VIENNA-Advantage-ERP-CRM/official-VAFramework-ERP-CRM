@@ -9,7 +9,7 @@
 
         var mWarehouseID = VAM_Warehouse_ID;
         var MVAMLocatorID = VAM_Locator_ID;
-        var mProductID = VAM_Product_ID;
+        var MVAMProductID = VAM_Product_ID;
         var mCBPartnerID = VAB_BusinessPartner_ID;
         var mtitle = title;
         var issotrx = isSOTrx;
@@ -66,12 +66,12 @@
                 //var sql = "SELECT bp.ShelfLifeMinPct, bpp.ShelfLifeMinPct, bpp.ShelfLifeMinDays "
                 //    + "FROM VAB_BusinessPartner bp "
                 //    + " LEFT OUTER JOIN VAB_BPart_Product bpp"
-                //    + " ON (bp.VAB_BusinessPartner_ID=bpp.VAB_BusinessPartner_ID AND bpp.VAM_Product_ID=" + mProductID + ") "
+                //    + " ON (bp.VAB_BusinessPartner_ID=bpp.VAB_BusinessPartner_ID AND bpp.VAM_Product_ID=" + MVAMProductID + ") "
                 //    + "WHERE bp.VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID;
 
                 var dr = null;
                 try {
-                    dr = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "PAttributes/GetBPData", { "Product_ID": mProductID, "BPartner_ID": VAB_BusinessPartner_ID }, null);
+                    dr = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "PAttributes/GetBPData", { "Product_ID": MVAMProductID, "BPartner_ID": VAB_BusinessPartner_ID }, null);
                     if (dr != null) {
                         shelfLifeMinPct = dr["ShelfLifeMinPct"];
                         var pct = dr["PCT"];
@@ -172,7 +172,7 @@
 
             try {
                 var _sql = VIS.secureEngine.encrypt(sql);
-                dr = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "PAttributes/GetAttributeData", { "Sq1Atribute": _sql, "Product_ID": mProductID }, null);
+                dr = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "PAttributes/GetAttributeData", { "Sq1Atribute": _sql, "Product_ID": MVAMProductID }, null);
                 if (dr != null && dr.length > 0) {
                     var count = 1;
                     for (var i in dr) {
@@ -198,7 +198,7 @@
                 }
 
                 //var param = [];
-                //param[0] = new VIS.DB.SqlParam("@VAM_Product_ID", mProductID);
+                //param[0] = new VIS.DB.SqlParam("@VAM_Product_ID", MVAMProductID);
                 //var dr = VIS.DB.executeReader(sql, param);
                 //var count = 1;
                 //while (dr.read()) {
@@ -387,7 +387,7 @@
 
             mWarehouseID = null;
             MVAMLocatorID = null;
-            mProductID = null;
+            MVAMProductID = null;
             mCBPartnerID = null;
             mtitle = null;
             issotrx = null;

@@ -280,7 +280,7 @@ namespace VAdvantage.Process
         //IDataReader dr = DB.ExecuteReader(query);
         //while (dr.Read())
         //{
-        //     X_C_TargetList TList = new X_C_TargetList(GetCtx(), Util.GetValueOfInt(dr[0]), Get_Trx());
+        //     X_VAB_TargetList TList = new X_VAB_TargetList(GetCtx(), Util.GetValueOfInt(dr[0]), Get_Trx());
 
         //     if (TList.GetVAB_BusinessPartner_ID()!=0)
         //     {

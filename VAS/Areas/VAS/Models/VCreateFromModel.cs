@@ -496,8 +496,8 @@ namespace VIS.Models
                     obj.CBPartnerIDK = Util.GetValueOfString(ds.Tables[0].Rows[i]["BPNames"]);
                     obj.Line = Util.GetValueOfString(ds.Tables[0].Rows[i]["Lines"]);
                     obj.Line_K = Util.GetValueOfString(ds.Tables[0].Rows[i]["Linek"]);
-                    obj.MProductID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["Productk"]);
-                    obj.MProductIDK = Util.GetValueOfString(ds.Tables[0].Rows[i]["Product"]);
+                    obj.MVAMProductID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["Productk"]);
+                    obj.MVAMProductIDK = Util.GetValueOfString(ds.Tables[0].Rows[i]["Product"]);
                     obj.Qty = Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["qty"]);
                     obj.Matched = Util.GetValueOfString(ds.Tables[0].Rows[i]["MATCH"]);
                     objj.Add(obj);
@@ -589,8 +589,8 @@ namespace VIS.Models
         public string CBPartnerIDK { get; set; }
         public string Line { get; set; }
         public string Line_K { get; set; }
-        public int MProductID { get; set; }
-        public string MProductIDK { get; set; }
+        public int MVAMProductID { get; set; }
+        public string MVAMProductIDK { get; set; }
         public decimal Qty { get; set; }
         public string Matched { get; set; }
     }

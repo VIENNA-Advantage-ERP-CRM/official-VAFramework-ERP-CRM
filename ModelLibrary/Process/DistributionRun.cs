@@ -427,7 +427,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //
             MVABBusinessPartner bp = null;
             MVABOrder singleOrder = null;
-            MProduct product = null;
+            MVAMProduct product = null;
             //	Consolidated Order
             if (_run.IsCreateSingleOrder())
             {
@@ -530,7 +530,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
                 //	Line
                 if (product == null || product.GetVAM_Product_ID() != detail.GetVAM_Product_ID())
-                    product = MProduct.Get(GetCtx(), detail.GetVAM_Product_ID());
+                    product = MVAMProduct.Get(GetCtx(), detail.GetVAM_Product_ID());
                 if (_IsTest)
                 {
                     AddLog(0, null, detail.GetActualAllocation(),

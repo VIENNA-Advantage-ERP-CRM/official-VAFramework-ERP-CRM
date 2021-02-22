@@ -105,7 +105,7 @@ namespace VAdvantage.Process
                 {
                     try
                     {
-                        pricelist = MPriceList.GetDefault(GetCtx(), false).Get_ID();
+                        pricelist = MVAMPriceList.GetDefault(GetCtx(), false).Get_ID();
                     }
                     catch
                     {

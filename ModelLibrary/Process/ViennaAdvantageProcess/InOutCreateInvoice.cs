@@ -344,20 +344,20 @@ namespace ViennaAdvantage.Process
                         {
                             if (line.GetVAM_Product_ID() > 0)
                             {
-                                //MProduct pro = new MProduct(GetCtx(), sLine.GetVAM_Product_ID(), Get_TrxName());
+                                //MVAMProduct pro = new MVAMProduct(GetCtx(), sLine.GetVAM_Product_ID(), Get_TrxName());
                                 int VA038_AmortizationTemplate_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VA038_AmortizationTemplate_ID 
                                      FROM VAM_Product WHERE VAM_Product_ID = " + sLine.GetVAM_Product_ID(), null, Get_Trx()));
                                 if (VA038_AmortizationTemplate_ID > 0)
                                 {
                                     line.Set_Value("VA038_AmortizationTemplate_ID", VA038_AmortizationTemplate_ID);
-                                    DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + VA038_AmortizationTemplate_ID);
+                                    DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TerMVARSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + VA038_AmortizationTemplate_ID);
                                     AmortStartDate = null;
                                     AmortEndDate = null;
-                                    if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "A")
+                                    if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TerMVARSource"]) == "A")
                                     {
                                         AmortStartDate = invoice.GetDateAcct();
                                     }
-                                    if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "T")
+                                    if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TerMVARSource"]) == "T")
                                     {
                                         AmortStartDate = invoice.GetDateInvoiced();
                                     }
@@ -386,14 +386,14 @@ namespace ViennaAdvantage.Process
                                 if (VA038_AmortizationTemplate_ID > 0)
                                 {
                                     line.Set_Value("VA038_AmortizationTemplate_ID", VA038_AmortizationTemplate_ID);
-                                    DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + VA038_AmortizationTemplate_ID);
+                                    DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TerMVARSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + VA038_AmortizationTemplate_ID);
                                     AmortStartDate = null;
                                     AmortEndDate = null;
-                                    if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "A")
+                                    if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TerMVARSource"]) == "A")
                                     {
                                         AmortStartDate = invoice.GetDateAcct();
                                     }
-                                    if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "T")
+                                    if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TerMVARSource"]) == "T")
                                     {
                                         AmortStartDate = invoice.GetDateInvoiced();
                                     }
@@ -446,20 +446,20 @@ namespace ViennaAdvantage.Process
                     {
                         if (line.GetVAM_Product_ID() > 0)
                         {
-                            //MProduct pro = new MProduct(GetCtx(), sLine.GetVAM_Product_ID(), Get_TrxName());
+                            //MVAMProduct pro = new MVAMProduct(GetCtx(), sLine.GetVAM_Product_ID(), Get_TrxName());
                             int VA038_AmortizationTemplate_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VA038_AmortizationTemplate_ID 
                                      FROM VAM_Product WHERE VAM_Product_ID = " + sLine.GetVAM_Product_ID(), null, Get_Trx()));
                             if (VA038_AmortizationTemplate_ID > 0)
                             {
                                 line.Set_Value("VA038_AmortizationTemplate_ID", VA038_AmortizationTemplate_ID);
-                                DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + VA038_AmortizationTemplate_ID);
+                                DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TerMVARSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + VA038_AmortizationTemplate_ID);
                                 AmortStartDate = null;
                                 AmortEndDate = null;
-                                if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "A")
+                                if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TerMVARSource"]) == "A")
                                 {
                                     AmortStartDate = invoice.GetDateAcct();
                                 }
-                                if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "T")
+                                if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TerMVARSource"]) == "T")
                                 {
                                     AmortStartDate = invoice.GetDateInvoiced();
                                 }
@@ -488,14 +488,14 @@ namespace ViennaAdvantage.Process
                             if (VA038_AmortizationTemplate_ID > 0)
                             {
                                 line.Set_Value("VA038_AmortizationTemplate_ID", VA038_AmortizationTemplate_ID);
-                                DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + VA038_AmortizationTemplate_ID);
+                                DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TerMVARSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + VA038_AmortizationTemplate_ID);
                                 AmortStartDate = null;
                                 AmortEndDate = null;
-                                if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "A")
+                                if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TerMVARSource"]) == "A")
                                 {
                                     AmortStartDate = invoice.GetDateAcct();
                                 }
-                                if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "T")
+                                if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TerMVARSource"]) == "T")
                                 {
                                     AmortStartDate = invoice.GetDateInvoiced();
                                 }
@@ -618,14 +618,14 @@ namespace ViennaAdvantage.Process
                                         if (Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
                                         {
                                             line.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
-                                            DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
+                                            DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TerMVARSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
                                             AmortStartDate = null;
                                             AmortEndDate = null;
-                                            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "A")
+                                            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TerMVARSource"]) == "A")
                                             {
                                                 AmortStartDate = invoice.GetDateAcct();
                                             }
-                                            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "T")
+                                            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TerMVARSource"]) == "T")
                                             {
                                                 AmortStartDate = invoice.GetDateInvoiced();
                                             }

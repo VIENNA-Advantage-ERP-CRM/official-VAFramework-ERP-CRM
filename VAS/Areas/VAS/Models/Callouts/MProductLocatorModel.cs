@@ -5,7 +5,7 @@ using System.Web;
 
 namespace VIS.Models
 {
-    public class MProductLocatorModel
+    public class MVAMProductLocatorModel
     {
     }
 }

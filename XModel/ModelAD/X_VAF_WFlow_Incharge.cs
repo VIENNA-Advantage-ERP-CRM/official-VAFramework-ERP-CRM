@@ -241,7 +241,7 @@ SetResponsibleType (null);
         /** Role = R */
         public static String RESPONSIBLETYPE_Role = "R";
         /** System Resource = S */
-        public static String RESPONSIBLETYPE_SystemResource = "S";
+        public static String RESPONSIBLETYPE_SysteMVASResource = "S";
         /** Is test a valid value.
 @param test testvalue
 @returns true if valid **/

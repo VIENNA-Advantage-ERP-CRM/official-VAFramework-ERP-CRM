@@ -29,11 +29,11 @@ namespace VAdvantage.Model
         /** Parent							*/
         private MVAMInventory _parent = null;
         /** Product							*/
-        private MProduct _product = null;
+        private MVAMProduct _product = null;
         public Decimal? OnHandQty = 0;
         private Decimal? containerQty = 0;
         private decimal qtyReserved = 0;
-        private MStorage storage = null;
+        private MVAMStorage storage = null;
         /// <summary>
         /// Standard Constructor
         /// </summary>
@@ -183,16 +183,16 @@ namespace VAdvantage.Model
                 {
                     if (!newRecord && GetVAM_RequisitionLine_ID() != 0)
                     {
-                        MRequisitionLine requisition = new MRequisitionLine(GetCtx(), GetVAM_RequisitionLine_ID(), Get_Trx());
+                        MVAMRequisitionLine requisition = new MVAMRequisitionLine(GetCtx(), GetVAM_RequisitionLine_ID(), Get_Trx());
                         requisition.SetDTD001_ReservedQty(requisition.GetDTD001_ReservedQty() + (GetQtyInternalUse() - qtyReserved));
                         if (!requisition.Save())
                         {
                             return false;
                         }
-                        storage = MStorage.Get(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), Get_Trx());
+                        storage = MVAMStorage.Get(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), Get_Trx());
                         if (storage == null)
                         {
-                            storage = MStorage.GetCreate(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), Get_Trx());
+                            storage = MVAMStorage.GetCreate(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), Get_Trx());
                         }
                         storage.SetQtyReserved(storage.GetQtyReserved() + (GetQtyInternalUse() - qtyReserved));
                         if (!storage.Save())
@@ -203,16 +203,16 @@ namespace VAdvantage.Model
 
                     if (newRecord && GetVAM_RequisitionLine_ID() != 0 && GetDescription() != "RC")
                     {
-                        MRequisitionLine requisition = new MRequisitionLine(GetCtx(), GetVAM_RequisitionLine_ID(), Get_Trx());
+                        MVAMRequisitionLine requisition = new MVAMRequisitionLine(GetCtx(), GetVAM_RequisitionLine_ID(), Get_Trx());
                         requisition.SetDTD001_ReservedQty(requisition.GetDTD001_ReservedQty() + GetQtyInternalUse());
                         if (!requisition.Save())
                         {
                             return false;
                         }
-                        storage = MStorage.Get(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), Get_Trx());
+                        storage = MVAMStorage.Get(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), Get_Trx());
                         if (storage == null)
                         {
-                            storage = MStorage.GetCreate(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), Get_Trx());
+                            storage = MVAMStorage.GetCreate(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), Get_Trx());
                         }
                         storage.SetQtyReserved(storage.GetQtyReserved() + GetQtyInternalUse());
                         if (!storage.Save())
@@ -251,16 +251,16 @@ namespace VAdvantage.Model
             {
                 if (GetVAM_RequisitionLine_ID() != 0)
                 {
-                    MRequisitionLine requisition = new MRequisitionLine(GetCtx(), GetVAM_RequisitionLine_ID(), Get_Trx());        // Trx used to handle query stuck problem
+                    MVAMRequisitionLine requisition = new MVAMRequisitionLine(GetCtx(), GetVAM_RequisitionLine_ID(), Get_Trx());        // Trx used to handle query stuck problem
                     requisition.SetDTD001_ReservedQty(requisition.GetDTD001_ReservedQty() - qtyReserved);
                     if (!requisition.Save())
                     {
                         return false;
                     }
-                    storage = MStorage.Get(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), Get_Trx());      // Trx used to handle query stuck problem
+                    storage = MVAMStorage.Get(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), Get_Trx());      // Trx used to handle query stuck problem
                     if (storage == null)
                     {
-                        storage = MStorage.GetCreate(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), Get_Trx());         // Trx used to handle query stuck problem
+                        storage = MVAMStorage.GetCreate(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), Get_Trx());         // Trx used to handle query stuck problem
                     }
                     storage.SetQtyReserved(storage.GetQtyReserved() - qtyReserved);
                     if (!storage.Save())
@@ -280,11 +280,11 @@ namespace VAdvantage.Model
         protected override bool BeforeSave(bool newRecord)
         {
             // chck pallet Functionality applicable or not
-            bool isContainrApplicable = MTransaction.ProductContainerApplicable(GetCtx());
+            bool isContainrApplicable = MVAMInvTrx.ProductContainerApplicable(GetCtx());
 
             Decimal VA024_ProvisionPrice = 0;
             MVAMInventory inventory = new MVAMInventory(GetCtx(), GetVAM_Inventory_ID(), Get_Trx());
-            MProduct product = MProduct.Get(GetCtx(), GetVAM_Product_ID());
+            MVAMProduct product = MVAMProduct.Get(GetCtx(), GetVAM_Product_ID());
             if (newRecord && _isManualEntry)
             {
                 //	Product requires ASI
@@ -552,7 +552,7 @@ namespace VAdvantage.Model
             int delMA = MVAMInventoryLineMP.DeleteInventoryLineMA(GetVAM_InventoryLine_ID(), Get_TrxName());
             log.Info("DeletedMA=" + delMA);
 
-            MStorage[] storages = MStorage.GetAll(GetCtx(), GetVAM_Product_ID(),
+            MVAMStorage[] storages = MVAMStorage.GetAll(GetCtx(), GetVAM_Product_ID(),
                 GetVAM_Locator_ID(), Get_TrxName());
             bool allZeroASI = true;
             for (int i = 0; i < storages.Length; i++)
@@ -570,7 +570,7 @@ namespace VAdvantage.Model
             Decimal sum = Env.ZERO;
             for (int i = 0; i < storages.Length; i++)
             {
-                MStorage storage = storages[i];
+                MVAMStorage storage = storages[i];
                 // nnayak - ignore negative layers
                 if (Env.Signum(storage.GetQtyOnHand()) <= 0)
                 {
@@ -614,7 +614,7 @@ namespace VAdvantage.Model
         /// Get Product
         /// </summary>
         /// <returns>product or null if not defined</returns>
-        public MProduct GetProduct()
+        public MVAMProduct GetProduct()
         {
             int VAM_Product_ID = GetVAM_Product_ID();
             if (VAM_Product_ID == 0)
@@ -622,7 +622,7 @@ namespace VAdvantage.Model
             if (_product != null && _product.GetVAM_Product_ID() != VAM_Product_ID)
                 _product = null;	//	reset
             if (_product == null)
-                _product = MProduct.Get(GetCtx(), VAM_Product_ID);
+                _product = MVAMProduct.Get(GetCtx(), VAM_Product_ID);
             return _product;
         }
 
@@ -797,7 +797,7 @@ namespace VAdvantage.Model
         {
             if (qtyCount != null)
             {
-                MProduct product = GetProduct();
+                MVAMProduct product = GetProduct();
                 if (product != null)
                 {
                     int precision = product.GetUOMPrecision();
@@ -815,7 +815,7 @@ namespace VAdvantage.Model
         {
             if (qtyInternalUse != null)
             {
-                MProduct product = GetProduct();
+                MVAMProduct product = GetProduct();
                 if (product != null)
                 {
                     int precision = product.GetUOMPrecision();

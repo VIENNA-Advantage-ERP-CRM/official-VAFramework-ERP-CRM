@@ -38,11 +38,11 @@ namespace VAdvantage.Model
         private bool _IsReturnTrx = true;
         private static VLogger _log = VLogger.GetVLogger(typeof(MVABOrderLine).FullName);
         //	Product Pricing
-        private MProductPricing _productPrice = null;
+        private MVAMProductPricing _productPrice = null;
         //Cached Currency Precision	
         private int? _precision = null;
         //	Product					
-        private MProduct _product = null;
+        private MVAMProduct _product = null;
         //Parent					
         private MVABOrder _parent = null;
 
@@ -324,9 +324,9 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="VAM_PriceList_ID">id</param>
         /// <returns>product pricing</returns>
-        private MProductPricing GetProductPricing(int VAM_PriceList_ID)
+        private MVAMProductPricing GetProductPricing(int VAM_PriceList_ID)
         {
-            _productPrice = new MProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
+            _productPrice = new MVAMProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
                 GetVAM_Product_ID(), GetVAB_BusinessPartner_ID(), GetQtyOrdered(), _IsSOTrx);
             _productPrice.SetVAM_PriceList_ID(VAM_PriceList_ID);
             //Amit 24-nov-2014
@@ -379,7 +379,7 @@ namespace VAdvantage.Model
                     }
                     if (GetVAM_Product_ID() > 0)
                     {
-                        MProduct prod = new MProduct(Env.GetCtx(), GetVAM_Product_ID(), Get_TrxName());
+                        MVAMProduct prod = new MVAMProduct(Env.GetCtx(), GetVAM_Product_ID(), Get_TrxName());
                         taxCategory = Util.GetValueOfInt(prod.GetVAB_TaxCategory_ID());
                     }
                     if (GetVAB_Charge_ID() > 0)
@@ -588,7 +588,7 @@ namespace VAdvantage.Model
                         }
                         #endregion
                     }
-                    MProduct prod = new MProduct(Env.GetCtx(), System.Convert.ToInt32(GetVAM_Product_ID()), Get_TrxName());
+                    MVAMProduct prod = new MVAMProduct(Env.GetCtx(), System.Convert.ToInt32(GetVAM_Product_ID()), Get_TrxName());
                     sql = "SELECT VAB_TaxRate_ID FROM VATAX_TaxCatRate WHERE VAB_TaxCategory_ID = " + prod.GetVAB_TaxCategory_ID() + " AND IsActive ='Y' AND VATAX_TaxType_ID =" + taxType;
                     int taxId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                     if (taxId > 0)
@@ -962,7 +962,7 @@ namespace VAdvantage.Model
                 {
                     #region Set Discount Values
                     MVABOrder order = new MVABOrder(GetCtx(), Util.GetValueOfInt(GetVAB_Order_ID()), null);
-                    MProduct product = new MProduct(GetCtx(), Util.GetValueOfInt(GetVAM_Product_ID()), null);
+                    MVAMProduct product = new MVAMProduct(GetCtx(), Util.GetValueOfInt(GetVAM_Product_ID()), null);
                     MVABBusinessPartner bPartner = new MVABBusinessPartner(GetCtx(), order.GetVAB_BusinessPartner_ID(), null);
                     MVAMDiscountCalculation discountSchema = new MVAMDiscountCalculation(GetCtx(), bPartner.GetVAM_DiscountCalculation_ID(), null);
                     int precision = MVABCurrency.GetStdPrecision(GetCtx(), order.GetVAB_Currency_ID());
@@ -2492,7 +2492,7 @@ namespace VAdvantage.Model
         /// Set Product
         /// </summary>
         /// <param name="product">product</param>
-        public void SetProduct(MProduct product)
+        public void SetProduct(MVAMProduct product)
         {
             _product = product;
             if (_product != null)
@@ -2516,7 +2516,7 @@ namespace VAdvantage.Model
         public void SetVAM_Product_ID(int VAM_Product_ID, bool setUOM)
         {
             if (setUOM)
-                SetProduct(MProduct.Get(GetCtx(), VAM_Product_ID));
+                SetProduct(MVAMProduct.Get(GetCtx(), VAM_Product_ID));
             else
                 base.SetVAM_Product_ID(VAM_Product_ID);
             SetVAM_PFeature_SetInstance_ID(0);
@@ -2572,7 +2572,7 @@ namespace VAdvantage.Model
             int VAB_BusinessPartner_ID = GetCtx().GetContextAsInt(windowNo, "VAB_BusinessPartner_ID");
             Decimal Qty = GetQtyOrdered();
             bool IsSOTrx = GetCtx().IsSOTrx(windowNo);
-            MProductPricing pp = new MProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
+            MVAMProductPricing pp = new MVAMProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
                     VAM_Product_ID, VAB_BusinessPartner_ID, Qty, IsSOTrx);
             //
             int VAM_PriceList_ID = GetCtx().GetContextAsInt(windowNo, "VAM_PriceList_ID");
@@ -2611,13 +2611,13 @@ namespace VAdvantage.Model
 
             if (IsSOTrx)
             {
-                MProduct product = GetProduct();
+                MVAMProduct product = GetProduct();
                 if (product.IsStocked())
                 {
                     Decimal qtyOrdered = GetQtyOrdered();
                     int VAM_Warehouse_ID = GetVAM_Warehouse_ID();
                     VAM_PFeature_SetInstance_ID = GetVAM_PFeature_SetInstance_ID();
-                    Decimal available = (Decimal)MStorage.GetQtyAvailable
+                    Decimal available = (Decimal)MVAMStorage.GetQtyAvailable
                         (VAM_Warehouse_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, null);
                     if (available == null)
                         available = Env.ZERO;
@@ -2656,10 +2656,10 @@ namespace VAdvantage.Model
         /// Get Product
         /// </summary>
         /// <returns>product or null</returns>
-        public MProduct GetProduct()
+        public MVAMProduct GetProduct()
         {
             if (_product == null && GetVAM_Product_ID() != 0)
-                _product = MProduct.Get(GetCtx(), GetVAM_Product_ID());
+                _product = MVAMProduct.Get(GetCtx(), GetVAM_Product_ID());
             return _product;
         }
 
@@ -2725,7 +2725,7 @@ namespace VAdvantage.Model
                 return GetQtyOrdered();
             else if (MVABLCost.LANDEDCOSTDISTRIBUTION_Volume.Equals(CostDistribution))
             {
-                MProduct product = GetProduct();
+                MVAMProduct product = GetProduct();
                 if (product == null)
                 {
                     log.Severe("No Product");
@@ -2735,7 +2735,7 @@ namespace VAdvantage.Model
             }
             else if (MVABLCost.LANDEDCOSTDISTRIBUTION_Weight.Equals(CostDistribution))
             {
-                MProduct product = GetProduct();
+                MVAMProduct product = GetProduct();
                 if (product == null)
                 {
                     log.Severe("No Product");
@@ -3002,7 +3002,7 @@ namespace VAdvantage.Model
             int VAB_UOM_To_ID = GetVAB_UOM_ID();
             int VAM_Product_ID = GetVAM_Product_ID();
             int VAM_PriceList_ID = GetCtx().GetContextAsInt(windowNo, "VAM_PriceList_ID");
-            int StdPrecision = MPriceList.GetPricePrecision(GetCtx(), VAM_PriceList_ID);
+            int StdPrecision = MVAMPriceList.GetPricePrecision(GetCtx(), VAM_PriceList_ID);
             Decimal qtyEntered, qtyOrdered, priceEntered, priceActual, PriceLimit, Discount, PriceList;
             //	get values
             qtyEntered = GetQtyEntered();
@@ -3029,7 +3029,7 @@ namespace VAdvantage.Model
                 if (qtyOrdered == null)
                     qtyOrdered = qtyEntered;
                 bool IsSOTrx = GetCtx().IsSOTrx(windowNo);
-                MProductPricing pp = new MProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
+                MVAMProductPricing pp = new MVAMProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
                         VAM_Product_ID, VAB_BusinessPartner_ID, qtyOrdered, IsSOTrx);
                 pp.SetVAM_PriceList_ID(VAM_PriceList_ID);
                 int VAM_PriceListVersion_ID = GetCtx().GetContextAsInt(windowNo, "VAM_PriceListVersion_ID");
@@ -3326,12 +3326,12 @@ namespace VAdvantage.Model
             //	Storage
             if (VAM_Product_ID != 0 && GetCtx().IsSOTrx(windowNo) && qtyOrdered > 0 && !isReturnTrx)		//	no negative (returns)
             {
-                MProduct product = GetProduct();
+                MVAMProduct product = GetProduct();
                 if (product.IsStocked())
                 {
                     int VAM_Warehouse_ID = GetVAM_Warehouse_ID();
                     int VAM_PFeature_SetInstance_ID = GetVAM_PFeature_SetInstance_ID();
-                    Decimal available = (Decimal)MStorage.GetQtyAvailable(VAM_Warehouse_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, null);
+                    Decimal available = (Decimal)MVAMStorage.GetQtyAvailable(VAM_Warehouse_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, null);
                     if (available == null)
                     {
                         available = Env.ZERO;
@@ -3645,7 +3645,7 @@ namespace VAdvantage.Model
             {
                 _VAM_PriceList_ID = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteScalar("SELECT VAM_PriceList_ID FROM VAB_Order WHERE VAB_Order_ID=" + GetVAB_Order_ID(), null, Get_TrxName()));
             }
-            MPriceList pl = MPriceList.Get(GetCtx(), _VAM_PriceList_ID, Get_TrxName());
+            MVAMPriceList pl = MVAMPriceList.Get(GetCtx(), _VAM_PriceList_ID, Get_TrxName());
             return pl.IsTaxIncluded();
         }
 
@@ -3680,7 +3680,7 @@ namespace VAdvantage.Model
         /// <param name="qtyOrdered"></param>
         public new void SetQtyOrdered(Decimal qtyOrdered)
         {
-            MProduct product = GetProduct();
+            MVAMProduct product = GetProduct();
             if (qtyOrdered != null && product != null)
             {
                 int precision = product.GetUOMPrecision();
@@ -3902,7 +3902,7 @@ namespace VAdvantage.Model
                 decimal currentcostprice = 0;
                 if (!Ord.IsReturnTrx())
                 {
-                    currentcostprice = MVAMProductCost.GetproductCosts(GetVAF_Client_ID(), GetVAF_Org_ID(), GetVAM_Product_ID(), Util.GetValueOfInt(GetVAM_PFeature_SetInstance_ID()), Get_Trx(), Ord.GetVAM_Warehouse_ID());
+                    currentcostprice = MVAMVAMProductCost.GetproductCosts(GetVAF_Client_ID(), GetVAF_Org_ID(), GetVAM_Product_ID(), Util.GetValueOfInt(GetVAM_PFeature_SetInstance_ID()), Get_Trx(), Ord.GetVAM_Warehouse_ID());
                     primaryAcctSchemaCurrency = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VAB_Currency_ID from VAB_AccountBook WHERE VAB_AccountBook_ID = 
                                             (SELECT VAB_AccountBook1_id FROM VAF_ClientDetail WHERE vaf_client_id = " + GetVAF_Client_ID() + ")", null, Get_Trx()));
                     if (Ord.GetVAB_Currency_ID() != primaryAcctSchemaCurrency)
@@ -3984,7 +3984,7 @@ namespace VAdvantage.Model
                     || Is_ValueChanged("VAM_PFeature_SetInstance_ID")
                     || Is_ValueChanged("VAM_Warehouse_ID")))
             {
-                MProduct product = GetProduct();
+                MVAMProduct product = GetProduct();
                 if (product.IsStocked())
                 {
                     int VAM_PFeature_Set_ID = product.GetVAM_PFeature_Set_ID();
@@ -3997,7 +3997,7 @@ namespace VAdvantage.Model
                     //	Max
                     if (isInstance)
                     {
-                        MStorage[] storages = MStorage.GetWarehouse(GetCtx(),
+                        MVAMStorage[] storages = MVAMStorage.GetWarehouse(GetCtx(),
                             GetVAM_Warehouse_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(),
                             VAM_PFeature_Set_ID, false, null, true, Get_TrxName());
                         Decimal qty = Env.ZERO;
@@ -4020,7 +4020,7 @@ namespace VAdvantage.Model
             }	//	SO instance
             //else
             //{
-            //    MProduct pro = new MProduct(GetCtx(), GetVAM_Product_ID(), null);
+            //    MVAMProduct pro = new MVAMProduct(GetCtx(), GetVAM_Product_ID(), null);
             //    String qryUom = "SELECT vdr.VAB_UOM_ID FROM VAM_Product p LEFT JOIN VAM_Product_PO vdr ON p.VAM_Product_ID= vdr.VAM_Product_ID WHERE p.VAM_Product_ID=" + GetVAM_Product_ID() + " AND vdr.VAB_BusinessPartner_ID = " + Ord.GetVAB_BusinessPartner_ID();
             //    int uom = Util.GetValueOfInt(DB.ExecuteScalar(qryUom));
             //    if (pro.GetVAB_UOM_ID() != 0)
@@ -4293,7 +4293,7 @@ namespace VAdvantage.Model
                 {
                     ////////////////////////////////////////////////////////////
                     MVAMInvInOut origInOut = new MVAMInvInOut(GetCtx(), order.GetOrig_InOut_ID(), Get_TrxName());
-                    MReturnPolicy rpolicy = new MReturnPolicy(GetCtx(), order.GetVAM_ReturnRule_ID(), Get_TrxName());
+                    MVAMReturnRule rpolicy = new MVAMReturnRule(GetCtx(), order.GetVAM_ReturnRule_ID(), Get_TrxName());
 
                     log.Fine("RMA Date : " + order.GetDateOrdered() + " Shipment Date : " + origInOut.GetMovementDate());
                     withinPolicy = rpolicy.CheckReturnPolicy(origInOut.GetMovementDate(), order.GetDateOrdered(), GetVAM_Product_ID());
@@ -4359,7 +4359,7 @@ namespace VAdvantage.Model
                 if (GetVAM_Product_ID() != 0)
                 {
                     Decimal difference = Decimal.Negate(GetQtyReserved());
-                    MProduct product = GetProduct();
+                    MVAMProduct product = GetProduct();
                     if (product.IsStocked())
                     {
                         if (GetQtyReserved() > 0)
@@ -4375,7 +4375,7 @@ namespace VAdvantage.Model
                             if (VAM_Locator_ID == 0)
                             {
                                 if (GetVAM_PFeature_SetInstance_ID() != 0)	//	Get existing Location
-                                    VAM_Locator_ID = MStorage.GetVAM_Locator_ID(GetVAM_Warehouse_ID(),
+                                    VAM_Locator_ID = MVAMStorage.GetVAM_Locator_ID(GetVAM_Warehouse_ID(),
                                         GetVAM_Product_ID(), Util.GetValueOfInt(Get_ValueOld("VAM_PFeature_SetInstance_ID")),
                                         ordered, Get_TrxName());
                             }
@@ -4385,7 +4385,7 @@ namespace VAdvantage.Model
                                 VAM_Locator_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                             }
                             //	Update Storage
-                            MStorage.Add(GetCtx(), GetVAM_Warehouse_ID(), VAM_Locator_ID,
+                            MVAMStorage.Add(GetCtx(), GetVAM_Warehouse_ID(), VAM_Locator_ID,
                                 GetVAM_Product_ID(),
                                 Util.GetValueOfInt(Get_ValueOld("VAM_PFeature_SetInstance_ID")), Util.GetValueOfInt(Get_ValueOld("VAM_PFeature_SetInstance_ID")),
                                 Env.ZERO, reserved, ordered, Get_TrxName());
@@ -4559,7 +4559,7 @@ namespace VAdvantage.Model
                 MVABOrder Ord = new MVABOrder(GetCtx(), GetVAB_Order_ID(), Get_Trx());
                 if (Ord.IsSOTrx() && !Ord.IsReturnTrx() && GetVAM_Product_ID() > 0)
                 {
-                    MProduct prd = new MProduct(GetCtx(), GetVAM_Product_ID(), Get_Trx());
+                    MVAMProduct prd = new MVAMProduct(GetCtx(), GetVAM_Product_ID(), Get_Trx());
                     if (prd.GetProductType() == "I" && GetPriceEntered() < GetCurrentCostPrice())
                     {
                         log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "VIS_PrcEntCantlessPrdCost"));
@@ -4604,7 +4604,7 @@ namespace VAdvantage.Model
             if (GetVAS_Res_Assignment_ID() != 0)
             {
                 /////////////////////////////////////////////////////////////
-                MResourceAssignment ra = new MResourceAssignment(GetCtx(), GetVAS_Res_Assignment_ID(), Get_TrxName());
+                MVASResAssignment ra = new MVASResAssignment(GetCtx(), GetVAS_Res_Assignment_ID(), Get_TrxName());
                 ra.Delete(true);
             }
 

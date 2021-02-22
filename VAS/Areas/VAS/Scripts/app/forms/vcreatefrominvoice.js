@@ -230,7 +230,7 @@
         }
 
         var isBaseLangage = "";
-        var mProductIDs = "";
+        var MVAMProductIDs = "";
         if (VIS.Env.isBaseLanguage(ctx, "VAB_UOM")) {
             isBaseLangage = "FROM VAB_UOM uom INNER JOIN VAM_Inv_InOutLine l ON (l.VAB_UOM_ID=uom.VAB_UOM_ID) ";
         }
@@ -238,7 +238,7 @@
             isBaseLangage = "FROM VAB_UOM_TL uom Left join VAB_UOM uom1 on (uom1.VAB_UOM_ID=uom.VAB_UOM_ID)  INNER JOIN VAM_Inv_InOutLine l ON (l.VAB_UOM_ID=uom.VAB_UOM_ID AND uom.VAF_Language='" + VIS.Env.getVAF_Language(ctx) + "') ";
         }
         if (VAM_Product_ID != null) {
-            mProductIDs = " AND l.VAM_Product_ID=" + VAM_Product_ID;
+            MVAMProductIDs = " AND l.VAM_Product_ID=" + VAM_Product_ID;
         }
         if (!pNo) {
             pNo = 1;
@@ -256,7 +256,7 @@
 
                 MVAMInvInOutId: VAM_Inv_InOut_ID,
                 isBaseLanguages: isBaseLangage,
-                mProductIDD: mProductIDs,
+                MVAMProductIDD: MVAMProductIDs,
             },
             error: function (e) {
                 alert(VIS.Msg.getMsg('ErrorWhileGettingData'));

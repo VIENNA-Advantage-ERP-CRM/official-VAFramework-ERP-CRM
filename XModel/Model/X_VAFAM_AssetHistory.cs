@@ -722,16 +722,16 @@ public String GetSerNo()
 return (String)Get_Value("SerNo");
 }
 /** Set System Status.
-@param SystemStatus Status of the system - Support priority depends on system status */
-public void SetSystemStatus (Boolean SystemStatus)
+@param SysteMVARReqStatus Status of the system - Support priority depends on system status */
+public void SetSysteMVARReqStatus (Boolean SysteMVARReqStatus)
 {
-Set_Value ("SystemStatus", SystemStatus);
+Set_Value ("SysteMVARReqStatus", SysteMVARReqStatus);
 }
 /** Get System Status.
 @return Status of the system - Support priority depends on system status */
-public Boolean IsSystemStatus() 
+public Boolean IsSysteMVARReqStatus() 
 {
-Object oo = Get_Value("SystemStatus");
+Object oo = Get_Value("SysteMVARReqStatus");
 if (oo != null) 
 {
  if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo);

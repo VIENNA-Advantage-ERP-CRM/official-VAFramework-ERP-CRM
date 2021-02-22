@@ -592,7 +592,7 @@ namespace VAdvantage.Acct
                     if (as1.IsAccrual())
                     {
                         IDataReader idr = DB.ExecuteReader(sql);
-                        MProduct product = null;
+                        MVAMProduct product = null;
                         Decimal value = Env.ZERO;
                         value = line.GetAmtSource();
                         Decimal postedValue = Util.GetValueOfDecimal(DB.ExecuteScalar(newsql));
@@ -1551,7 +1551,7 @@ namespace VAdvantage.Acct
 //                //string sql = "select VAM_Product_id from VAB_InvoiceLine WHERE VAB_Invoice_id=" + line.GetVAB_Invoice_ID() + " and Rownum=" + (i + 1);
 //                ////logic for View Allocation-21march2011by raghu
 //                //int id = DB.GetSQLValue(null, sql);
-//                //MProduct product = MProduct.Get(Env.GetCtx(), id);
+//                //MVAMProduct product = MVAMProduct.Get(Env.GetCtx(), id);
 //                //if (product.GetProductType().ToUpper() == "I")
 //                //{
 //                //    _allLinesService = false;
@@ -1749,7 +1749,7 @@ namespace VAdvantage.Acct
 //                        try
 //                        {
 //                            idr = DB.ExecuteReader(sql);
-//                            MProduct product = null;
+//                            MVAMProduct product = null;
 //                            int receivables_ID = GetValidCombination_ID(Doc.ACCTTYPE_C_Receivable, as1);
 //                            int receivablesServices_ID = GetValidCombination_ID(Doc.ACCTTYPE_C_Receivable_Services, as1);
 //                            Decimal value = Env.ZERO;
@@ -2349,7 +2349,7 @@ namespace VAdvantage.Acct
 //        //                        " GROUP BY prod.producttype";
 
 //        //                IDataReader idr = DB.ExecuteReader(sql);
-//        //                MProduct product = null;
+//        //                MVAMProduct product = null;
 //        //                int receivables_ID = GetValidCombination_ID(Doc.ACCTTYPE_C_Receivable, as1);
 //        //                int receivablesServices_ID = GetValidCombination_ID(Doc.ACCTTYPE_C_Receivable_Services, as1);
 //        //                while (idr.Read())

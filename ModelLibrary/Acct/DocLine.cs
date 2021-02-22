@@ -660,7 +660,7 @@ namespace VAdvantage.Acct
             _isItem = false;
             if (GetVAM_Product_ID() != 0)
             {
-                MProduct product = MProduct.Get(_po.GetCtx(), GetVAM_Product_ID());
+                MVAMProduct product = MVAMProduct.Get(_po.GetCtx(), GetVAM_Product_ID());
                 if (product.Get_ID() == GetVAM_Product_ID() && product.IsItem())
                 {
                     _isItem = true;
@@ -849,7 +849,7 @@ namespace VAdvantage.Acct
         /// 	Get Product 
         /// </summary>
         /// <returns>product or null if no product</returns>
-        public MProduct GetProduct()
+        public MVAMProduct GetProduct()
         {
             if (_productCost == null)
             {
@@ -869,7 +869,7 @@ namespace VAdvantage.Acct
         /// <returns>VAB_Rev_Recognition_ID or 0</returns>
         public int GetVAB_Rev_Recognition_ID()
         {
-            MProduct product = GetProduct();
+            MVAMProduct product = GetProduct();
             if (product != null)
             {
                 return product.GetVAB_Rev_Recognition_ID();
@@ -894,7 +894,7 @@ namespace VAdvantage.Acct
                 }
             }
             //  Storage UOM
-            MProduct product = GetProduct();
+            MVAMProduct product = GetProduct();
             if (product != null)
             {
                 return product.GetVAB_UOM_ID();

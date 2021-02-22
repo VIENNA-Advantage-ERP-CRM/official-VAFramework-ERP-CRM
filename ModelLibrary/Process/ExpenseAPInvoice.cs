@@ -109,7 +109,7 @@ namespace VAdvantage.Process
             //
             int old_BPartner_ID = -1;
             MVABInvoice invoice = null;
-            MTimeExpense te = null;
+            MVASExpenseReport te = null;
             //
             //PreparedStatement pstmt = null;
             SqlParameter[] param = new SqlParameter[index];
@@ -149,7 +149,7 @@ namespace VAdvantage.Process
                     foreach (DataRow dr in dt.Rows)
                     //	********* Expense Line Loop
                     {
-                        te = new MTimeExpense(GetCtx(), dr, Get_TrxName());
+                        te = new MVASExpenseReport(GetCtx(), dr, Get_TrxName());
 
                         //	New BPartner - New Order
                         // 
@@ -332,10 +332,10 @@ namespace VAdvantage.Process
                                 + DisplayType.GetDateFormat(DisplayType.Date).Format(te.GetDateReport());
                             invoice.SetDescription(descr);
                         }
-                        MTimeExpenseLine[] tel = te.GetLines(false);
+                        MVASExpenseReportLine[] tel = te.GetLines(false);
                         for (int i = 0; i < tel.Length; i++)
                         {
-                            MTimeExpenseLine line = tel[i];
+                            MVASExpenseReportLine line = tel[i];
 
                             //	Already Invoiced or nothing to be reimbursed
                             if (line.GetVAB_InvoiceLine_ID() != 0
@@ -473,7 +473,7 @@ namespace VAdvantage.Process
         /// </summary>
         /// <param name="te">TimeExpense</param>
         /// <returns></returns>
-        public int GetPaymentMethod(MTimeExpense te)
+        public int GetPaymentMethod(MVASExpenseReport te)
         {
             //JID_1783_1 add isActive Check
             sqlqry = "SELECT VA009_PaymentMethod_ID FROM VA009_PaymentMethod WHERE VA009_PAYMENTBASETYPE='S' AND VAF_Client_ID= " + te.GetVAF_Client_ID() + " AND VAF_Org_ID IN(0," + te.GetVAF_Org_ID() + ") AND IsActive='Y' ORDER BY VAF_Org_ID DESC, VA009_PAYMENTMETHOD_ID DESC FETCH NEXT 1 ROWS ONLY";
@@ -486,7 +486,7 @@ namespace VAdvantage.Process
         /// </summary>
         /// <param name="te">TimeExpense</param>
         /// <returns></returns>
-        public int GetPaymentTerm(MTimeExpense te)
+        public int GetPaymentTerm(MVASExpenseReport te)
         {
             //JID_1783_1 add isActive Check
             sqlqry1 = "SELECT VAB_PaymentTerm_ID FROM VAB_PaymentTerm WHERE ISDEFAULT='Y' AND VAF_Client_ID= " + te.GetVAF_Client_ID() + "  AND VAF_Org_ID IN(0, " + te.GetVAF_Org_ID() + " ) AND IsActive='Y' ORDER BY VAF_Org_ID DESC, VAB_PaymentTerm_ID DESC FETCH NEXT 1 ROWS ONLY";
@@ -498,7 +498,7 @@ namespace VAdvantage.Process
         /// Complete Invoice
         /// </summary>
         /// <param name="invoice">invoice</param>
-        private void CompleteInvoice(MVABInvoice invoice, MTimeExpense te)
+        private void CompleteInvoice(MVABInvoice invoice, MVASExpenseReport te)
         {
             if (invoice == null)
             {

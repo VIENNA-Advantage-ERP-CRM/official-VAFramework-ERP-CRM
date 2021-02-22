@@ -256,7 +256,7 @@ namespace VIS.Controllers
             {
                 var ctx = Session["ctx"] as Ctx;
                 List<AttributeGrid> lst = new List<AttributeGrid>();
-                var value = MVAMProductFeature.GetOfClient(ctx, true, true);
+                var value = MVAMVAMProductFeature.GetOfClient(ctx, true, true);
 
                 for (int i = 0; i < value.Length; i++)
                 {
@@ -499,7 +499,7 @@ namespace VIS.Controllers
                 idr = null;
                 foreach (DataRow dr in dt.Rows)
                 {
-                    MProduct product = new MProduct(Env.GetContext(), dr, null);
+                    MVAMProduct product = new MVAMProduct(Env.GetContext(), dr, null);
                     panel.Append(AddProduct(product, VAM_PriceListVersion_ID, VAM_Warehouse_ID, windowNo));
                     noProducts++;
                 }
@@ -524,7 +524,7 @@ namespace VIS.Controllers
             return panel.ToString();
         }
 
-        private string AddProduct(MProduct product, int VAM_PriceListVersion_ID, int VAM_Warehouse_ID, string windowNo)
+        private string AddProduct(MVAMProduct product, int VAM_PriceListVersion_ID, int VAM_Warehouse_ID, string windowNo)
         {
             int VAM_Product_ID = product.GetVAM_Product_ID();
             StringBuilder obj = new StringBuilder();
@@ -537,7 +537,7 @@ namespace VIS.Controllers
             String formatted = "";
             if (VAM_PriceListVersion_ID != 0)
             {
-                MProductPrice pp = MProductPrice.Get(Env.GetContext(), VAM_PriceListVersion_ID, VAM_Product_ID, null);
+                MVAMProductPrice pp = MVAMProductPrice.Get(Env.GetContext(), VAM_PriceListVersion_ID, VAM_Product_ID, null);
                 if (pp != null)
                 {
                     Decimal price = pp.GetPriceStd();
@@ -565,7 +565,7 @@ namespace VIS.Controllers
             formatted = "";
             if (VAM_Warehouse_ID != 0)
             {
-                Decimal qty = Util.GetValueOfDecimal(MStorage.GetQtyAvailable(VAM_Warehouse_ID, VAM_Product_ID, 0, null));
+                Decimal qty = Util.GetValueOfDecimal(MVAMStorage.GetQtyAvailable(VAM_Warehouse_ID, VAM_Product_ID, 0, null));
                 if (qty == null)
                 {
                     formatted = "-";
@@ -960,7 +960,7 @@ namespace VIS.Controllers
         public bool SaveShipmentData(Ctx ctx, List<Dictionary<string, string>> model, string selectedItems, int VAB_Order_ID, int VAB_Invoice_ID, int VAM_Locator_ID, int VAM_Inv_InOut_ID, int Container_ID)
         {
             // chck pallet Functionality applicable or not
-            bool isContainerApplicable = MTransaction.ProductContainerApplicable(ctx);
+            bool isContainerApplicable = MVAMInvTrx.ProductContainerApplicable(ctx);
 
             MVABOrder _order = null;
             if (VAB_Order_ID > 0)
@@ -1026,7 +1026,7 @@ namespace VIS.Controllers
                     int precsn = 2;
                     if (VAM_Product_ID != 0)
                     {
-                        MProduct product = MProduct.Get(ctx, VAM_Product_ID);
+                        MVAMProduct product = MVAMProduct.Get(ctx, VAM_Product_ID);
                         precsn = product.GetUOMPrecision();
                     }
                     QtyEnt = Decimal.Round(QtyEnt, precsn, MidpointRounding.AwayFromZero);
@@ -1040,7 +1040,7 @@ namespace VIS.Controllers
                         //Arpit to Set Quality Plan if existed the module 
                         if (countVA010 > 0)
                         {
-                            MProduct Product_ = MProduct.Get(ctx, VAM_Product_ID);
+                            MVAMProduct Product_ = MVAMProduct.Get(ctx, VAM_Product_ID);
                             QualityPlan_ID = Util.GetValueOfInt(Product_.Get_Value("VA010_QualityPlan_ID"));
                         }
                     }
@@ -1153,7 +1153,7 @@ namespace VIS.Controllers
                     //Arpit to Set Quality Plan if existed the module 
                     if (countVA010 > 0)
                     {
-                        MProduct Product_ = MProduct.Get(ctx, VAM_Product_ID);
+                        MVAMProduct Product_ = MVAMProduct.Get(ctx, VAM_Product_ID);
                         QualityPlan_ID = Util.GetValueOfInt(Product_.Get_Value("VA010_QualityPlan_ID"));
                     }
 
@@ -1179,7 +1179,7 @@ namespace VIS.Controllers
                 int precision = 2;
                 if (VAM_Product_ID != 0)
                 {
-                    MProduct product = MProduct.Get(ctx, VAM_Product_ID);
+                    MVAMProduct product = MVAMProduct.Get(ctx, VAM_Product_ID);
                     precision = product.GetUOMPrecision();
                 }
                 QtyEntered = Decimal.Round(QtyEntered, precision, MidpointRounding.AwayFromZero);
@@ -1589,7 +1589,7 @@ namespace VIS.Controllers
                 int precision = 2;
                 if (VAM_Product_ID != 0)
                 {
-                    MProduct product = MProduct.Get(ctx, VAM_Product_ID);
+                    MVAMProduct product = MVAMProduct.Get(ctx, VAM_Product_ID);
                     precision = product.GetUOMPrecision();
                 }
 
@@ -1661,18 +1661,18 @@ namespace VIS.Controllers
 
                         //    if (Util.GetValueOfInt(inoutLine.GetVAM_Product_ID()) > 0)
                         //    {
-                        //        MProduct pro = new MProduct(ctx, inoutLine.GetVAM_Product_ID(), null);
+                        //        MVAMProduct pro = new MVAMProduct(ctx, inoutLine.GetVAM_Product_ID(), null);
                         //        if (Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
                         //        {
                         //            invoiceLine.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")));
-                        //            DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")));
+                        //            DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TerMVARSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")));
                         //            AmortStartDate = null;
                         //            AmortEndDate = null;
-                        //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "A")
+                        //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TerMVARSource"]) == "A")
                         //            {
                         //                AmortStartDate = _invoice.GetDateAcct();
                         //            }
-                        //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "T")
+                        //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TerMVARSource"]) == "T")
                         //            {
                         //                AmortStartDate = _invoice.GetDateInvoiced();
                         //            }
@@ -1699,14 +1699,14 @@ namespace VIS.Controllers
                         //        if (Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
                         //        {
                         //            invoiceLine.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
-                        //            DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
+                        //            DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TerMVARSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
                         //            AmortStartDate = null;
                         //            AmortEndDate = null;
-                        //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "A")
+                        //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TerMVARSource"]) == "A")
                         //            {
                         //                AmortStartDate = _invoice.GetDateAcct();
                         //            }
-                        //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "T")
+                        //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TerMVARSource"]) == "T")
                         //            {
                         //                AmortStartDate = _invoice.GetDateInvoiced();
                         //            }
@@ -1761,18 +1761,18 @@ namespace VIS.Controllers
                     //{
                     //    if (Util.GetValueOfInt(orderLine.GetVAM_Product_ID()) > 0)
                     //    {
-                    //        MProduct pro = new MProduct(ctx, orderLine.GetVAM_Product_ID(), null);
+                    //        MVAMProduct pro = new MVAMProduct(ctx, orderLine.GetVAM_Product_ID(), null);
                     //        if (Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
                     //        {
                     //            invoiceLine.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")));
-                    //            DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")));
+                    //            DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TerMVARSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")));
                     //            AmortStartDate = null;
                     //            AmortEndDate = null;
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "A")
+                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TerMVARSource"]) == "A")
                     //            {
                     //                AmortStartDate = _invoice.GetDateAcct();
                     //            }
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "T")
+                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TerMVARSource"]) == "T")
                     //            {
                     //                AmortStartDate = _invoice.GetDateInvoiced();
                     //            }
@@ -1799,14 +1799,14 @@ namespace VIS.Controllers
                     //        if (Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
                     //        {
                     //            invoiceLine.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
-                    //            DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
+                    //            DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TerMVARSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
                     //            AmortStartDate = null;
                     //            AmortEndDate = null;
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "A")
+                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TerMVARSource"]) == "A")
                     //            {
                     //                AmortStartDate = _invoice.GetDateAcct();
                     //            }
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "T")
+                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TerMVARSource"]) == "T")
                     //            {
                     //                AmortStartDate = _invoice.GetDateInvoiced();
                     //            }
@@ -1852,18 +1852,18 @@ namespace VIS.Controllers
                     //{
                     //    if (Util.GetValueOfInt(inoutLine.GetVAM_Product_ID()) > 0)
                     //    {
-                    //        MProduct pro = new MProduct(ctx, inoutLine.GetVAM_Product_ID(), null);
+                    //        MVAMProduct pro = new MVAMProduct(ctx, inoutLine.GetVAM_Product_ID(), null);
                     //        if (Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
                     //        {
                     //            invoiceLine.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")));
-                    //            DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")));
+                    //            DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TerMVARSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")));
                     //            AmortStartDate = null;
                     //            AmortEndDate = null;
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "A")
+                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TerMVARSource"]) == "A")
                     //            {
                     //                AmortStartDate = _invoice.GetDateAcct();
                     //            }
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "T")
+                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TerMVARSource"]) == "T")
                     //            {
                     //                AmortStartDate = _invoice.GetDateInvoiced();
                     //            }
@@ -1890,14 +1890,14 @@ namespace VIS.Controllers
                     //        if (Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
                     //        {
                     //            invoiceLine.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
-                    //            DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
+                    //            DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TerMVARSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
                     //            AmortStartDate = null;
                     //            AmortEndDate = null;
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "A")
+                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TerMVARSource"]) == "A")
                     //            {
                     //                AmortStartDate = _invoice.GetDateAcct();
                     //            }
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "T")
+                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TerMVARSource"]) == "T")
                     //            {
                     //                AmortStartDate = _invoice.GetDateInvoiced();
                     //            }
@@ -2440,10 +2440,10 @@ namespace VIS.Controllers
                                     if (iLine.GetVAB_OrderLine_ID() == 0 && !iLine.IsCostCalculated())
                                     {
                                         // updated by Amit 31-12-2015
-                                        MProduct product = new MProduct(ctx, match.GetVAM_Product_ID(), trx);
+                                        MVAMProduct product = new MVAMProduct(ctx, match.GetVAM_Product_ID(), trx);
 
                                         // Not returning any value as No effect
-                                        MVAMProductCostQueue.CreateProductCostsDetails(ctx, match.GetVAF_Client_ID(), match.GetVAF_Org_ID(), product,
+                                        MVAMVAMProductCostQueue.CreateProductCostsDetails(ctx, match.GetVAF_Client_ID(), match.GetVAF_Org_ID(), product,
                                              match.GetVAM_PFeature_SetInstance_ID(), "Match IV", null, sLine, null, iLine, null,
                                              Decimal.Multiply(Decimal.Divide(iLine.GetLineNetAmt(), iLine.GetQtyInvoiced()), match.GetQty()),
                                              match.GetQty(), trx, out conversionNotFoundMatch, "window");
@@ -2479,10 +2479,10 @@ namespace VIS.Controllers
                                 {
                                     MatchedPO_ID = matchPO.GetDocumentNo();
                                     // updated by Amit 31-12-2015
-                                    MProduct product = new MProduct(ctx, matchPO.GetVAM_Product_ID(), trx);
+                                    MVAMProduct product = new MVAMProduct(ctx, matchPO.GetVAM_Product_ID(), trx);
 
                                     // Not returning any value as No effect
-                                    MVAMProductCostQueue.CreateProductCostsDetails(ctx, matchPO.GetVAF_Client_ID(), matchPO.GetVAF_Org_ID(), product,
+                                    MVAMVAMProductCostQueue.CreateProductCostsDetails(ctx, matchPO.GetVAF_Client_ID(), matchPO.GetVAF_Org_ID(), product,
                                           matchPO.GetVAM_PFeature_SetInstance_ID(), "Match IV", null, sLine, null, iLine, null,
                                           Decimal.Multiply(Decimal.Divide(iLine.GetLineNetAmt(), iLine.GetQtyInvoiced()), matchPO.GetQty()),
                                           matchPO.GetQty(), trx, out conversionNotFoundMatch, "window");
@@ -2538,10 +2538,10 @@ namespace VIS.Controllers
                                     success = true;
                                     MatchedPO_ID = match.GetDocumentNo();
                                     // updated by Amit 23-12-2015
-                                    MProduct product = new MProduct(ctx, match.GetVAM_Product_ID(), trx);
+                                    MVAMProduct product = new MVAMProduct(ctx, match.GetVAM_Product_ID(), trx);
 
                                     // Not returning any value as No effect
-                                    MVAMProductCostQueue.CreateProductCostsDetails(ctx, match.GetVAF_Client_ID(), match.GetVAF_Org_ID(), product, match.GetVAM_PFeature_SetInstance_ID(),
+                                    MVAMVAMProductCostQueue.CreateProductCostsDetails(ctx, match.GetVAF_Client_ID(), match.GetVAF_Org_ID(), product, match.GetVAM_PFeature_SetInstance_ID(),
                                         "Match PO", null, sLine, null, null, null, oLine.GetVAB_OrderLine_ID(), match.GetQty(), trx, out conversionNotFoundMatch, "window");
                                     if (!string.IsNullOrEmpty(conversionNotFoundMatch))
                                     {
@@ -2558,7 +2558,7 @@ namespace VIS.Controllers
 
                                     //	Correct Ordered Qty for Stocked Products (see MOrder.reserveStock / MVAMInvInOut.processIt)
                                     if (success && sLine.GetProduct() != null && sLine.GetProduct().IsStocked())
-                                        success = MStorage.Add(ctx, sLine.GetVAM_Warehouse_ID(),
+                                        success = MVAMStorage.Add(ctx, sLine.GetVAM_Warehouse_ID(),
                                             sLine.GetVAM_Locator_ID(),
                                             sLine.GetVAM_Product_ID(),
                                             sLine.GetVAM_PFeature_SetInstance_ID(), oLine.GetVAM_PFeature_SetInstance_ID(),
@@ -3120,9 +3120,9 @@ namespace VIS.Controllers
         {
             string st = "SELECT VAM_PFeature_Set_ID FROM VAM_Product WHERE VAM_Product_ID = " + VAM_Product_ID_Ks;
 
-            int mproductIDk = Util.GetValueOfInt(DB.ExecuteScalar(st));
+            int MVAMProductIDk = Util.GetValueOfInt(DB.ExecuteScalar(st));
 
-            return mproductIDk;
+            return MVAMProductIDk;
         }
 
         /// Added by Sukhwinder on 05/Dec/2017
@@ -3445,8 +3445,8 @@ namespace VIS.Controllers
         public string CBPartnerIDK { get; set; }
         public string Line { get; set; }
         public string Line_K { get; set; }
-        public int MProductID { get; set; }
-        public string MProductIDK { get; set; }
+        public int MVAMProductID { get; set; }
+        public string MVAMProductIDK { get; set; }
         public decimal Qty { get; set; }
         public string Matched { get; set; }
     }

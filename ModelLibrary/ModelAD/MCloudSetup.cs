@@ -345,10 +345,10 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, "UserRole ClientUser+Admin NOT inserted");
 
             //	Processors
-            MVA_AccountHanlder ap = new MVA_AccountHanlder(m_client, VAF_UserContact_ID);
+            MVABAccountHanlder ap = new MVABAccountHanlder(m_client, VAF_UserContact_ID);
             ap.Save();
 
-            MRequestProcessor rp = new MRequestProcessor(m_client, VAF_UserContact_ID);
+            MVARReqHandler rp = new MVARReqHandler(m_client, VAF_UserContact_ID);
             rp.Save();
 
             log.Info("fini");
@@ -625,12 +625,12 @@ namespace VAdvantage.Model
             //	Processors
             if (lstTableName.Contains("VAB_AccountHanlder")) // Update by Paramjeet Singh
             {
-                MVA_AccountHanlder ap = new MVA_AccountHanlder(m_client, VAF_UserContact_ID);
+                MVABAccountHanlder ap = new MVABAccountHanlder(m_client, VAF_UserContact_ID);
                 ap.Save();
             }
             if (lstTableName.Contains("VAR_Req_Handler")) // Update by Paramjeet Singh
             {
-                MRequestProcessor rp = new MRequestProcessor(m_client, VAF_UserContact_ID);
+                MVARReqHandler rp = new MVARReqHandler(m_client, VAF_UserContact_ID);
                 rp.Save();
             }
 
@@ -1881,10 +1881,10 @@ namespace VAdvantage.Model
             if (ds != null)
             {
 
-                MVAMProductCostElement cost = null;
+                MVAMVAMProductCostElement cost = null;
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    cost = new MVAMProductCostElement(m_ctx, 0, m_trx);
+                    cost = new MVAMVAMProductCostElement(m_ctx, 0, m_trx);
                     //tableName = cost.Get_TableName();
                     //if (lstTableName.Contains(tableName))
                     //{
@@ -3228,7 +3228,7 @@ namespace VAdvantage.Model
             //  Location for Standard BP
             MVABAddress bpLoc = new MVABAddress(m_ctx, VAB_Country_ID, VAB_RegionState_ID, City, m_trx);
             bpLoc.Save();
-            MProduct product = null;
+            MVAMProduct product = null;
             if (lstTableName.Contains("VAM_Product") && bp != null) // Update by Paramjeet Singh
             {
 
@@ -3253,7 +3253,7 @@ namespace VAdvantage.Model
                  *  Product
                  */
                 //  Create Product Category
-                MProductCategory pc = new MProductCategory(m_ctx, 0, m_trx);
+                MVAMProductCategory pc = new MVAMProductCategory(m_ctx, 0, m_trx);
                 pc.SetValue(defaultName);
                 pc.SetName(defaultName);
                 pc.SetIsDefault(true);
@@ -3289,7 +3289,7 @@ namespace VAdvantage.Model
                     log.Log(Level.SEVERE, "Tax NOT inserted");
 
                 //	Create Product
-                product = new MProduct(m_ctx, 0, m_trx);
+                product = new MVAMProduct(m_ctx, 0, m_trx);
                 product.SetValue(defaultName);
                 product.SetName(defaultName);
                 product.SetVAB_UOM_ID(VAB_UOM_ID);
@@ -3390,7 +3390,7 @@ namespace VAdvantage.Model
 
             if (lstTableName.Contains("VAM_PriceList"))
             {
-                MPriceList pl = new MPriceList(m_ctx, 0, m_trx);
+                MVAMPriceList pl = new MVAMPriceList(m_ctx, 0, m_trx);
                 pl.SetName(defaultName);
                 pl.SetVAB_Currency_ID(VAB_Currency_ID);
                 pl.SetIsDefault(true);
@@ -3403,13 +3403,13 @@ namespace VAdvantage.Model
                 if (!ds.Save())
                     log.Log(Level.SEVERE, "DiscountSchema NOT inserted");
                 //  PriceList Version
-                MPriceListVersion plv = new MPriceListVersion(pl);
+                MVAMPriceListVersion plv = new MVAMPriceListVersion(pl);
                 plv.SetName();
                 plv.SetVAM_DiscountCalculation_ID(ds.GetVAM_DiscountCalculation_ID());
                 if (!plv.Save())
                     log.Log(Level.SEVERE, "PriceList_Version NOT inserted");
                 //  ProductPrice
-                MProductPrice pp = new MProductPrice(plv, product.GetVAM_Product_ID(),
+                MVAMProductPrice pp = new MVAMProductPrice(plv, product.GetVAM_Product_ID(),
                     Env.ONE, Env.ONE, Env.ONE);
                 if (!pp.Save())
                     log.Log(Level.SEVERE, "ProductPrice NOT inserted");

@@ -39,12 +39,12 @@ namespace VAdvantage.Acct
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
         public Doc_Requisition(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
-            : base(ass, typeof(MRequisition), idr, MVABMasterDocType.DOCBASETYPE_PURCHASEREQUISITION, trxName)
+            : base(ass, typeof(MVAMRequisition), idr, MVABMasterDocType.DOCBASETYPE_PURCHASEREQUISITION, trxName)
         {
 
         }
         public Doc_Requisition(MVABAccountBook[] ass, DataRow dr, Trx trxName)
-            : base(ass, typeof(MRequisition), dr, MVABMasterDocType.DOCBASETYPE_PURCHASEREQUISITION, trxName)
+            : base(ass, typeof(MVAMRequisition), dr, MVABMasterDocType.DOCBASETYPE_PURCHASEREQUISITION, trxName)
         {
 
         }
@@ -56,7 +56,7 @@ namespace VAdvantage.Acct
         public override String LoadDocumentDetails()
         {
             SetVAB_Currency_ID(NO_CURRENCY);
-            MRequisition req = (MRequisition)GetPO();
+            MVAMRequisition req = (MVAMRequisition)GetPO();
             SetDateDoc(req.GetDateDoc());
             SetDateAcct(req.GetDateDoc());
             // Amounts
@@ -73,13 +73,13 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="req">requisition</param>
         /// <returns>DocLine Array</returns>
-        private DocLine[] LoadLines(MRequisition req)
+        private DocLine[] LoadLines(MVAMRequisition req)
         {
             List<DocLine> list = new List<DocLine>();
-            MRequisitionLine[] lines = req.GetLines();
+            MVAMRequisitionLine[] lines = req.GetLines();
             for (int i = 0; i < lines.Length; i++)
             {
-                MRequisitionLine line = lines[i];
+                MVAMRequisitionLine line = lines[i];
                 DocLine docLine = new DocLine(line, this);
                 Decimal Qty = line.GetQty();
                 docLine.SetQty(Qty, false);

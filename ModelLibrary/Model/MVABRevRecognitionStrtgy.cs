@@ -133,7 +133,7 @@ namespace VAdvantage.Model
             SetVAB_InvoiceLine_ID(invoiceLine.GetVAB_InvoiceLine_ID());
             SetVAB_Rev_Recognition_ID(VAB_Rev_Recognition_ID);
             // when tax include into price list, then reduce tax from Line Net Amount
-            bool isTaxIncide = (new MPriceList(invoice.GetCtx(), invoice.GetVAM_PriceList_ID(), invoice.Get_Trx())).IsTaxIncluded();
+            bool isTaxIncide = (new MVAMPriceList(invoice.GetCtx(), invoice.GetVAM_PriceList_ID(), invoice.Get_Trx())).IsTaxIncluded();
             Decimal Amount = invoiceLine.GetLineNetAmt() - (isTaxIncide ? (invoiceLine.GetTaxAmt() + invoiceLine.GetSurchargeAmt()) : 0);
             if (invoice.GetVAB_Currency_ID() != ToCurrency)
             {

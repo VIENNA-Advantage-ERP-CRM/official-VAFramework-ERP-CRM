@@ -30,7 +30,7 @@ namespace VAdvantage.Model
     {
         #region private variable
         //Product						
-        private MProduct _product = null;
+        private MVAMProduct _product = null;
         //	Actual Qty					
         private Decimal _actualQty = Env.ZERO;
         //	Actual Min					
@@ -205,11 +205,11 @@ namespace VAdvantage.Model
         /// Get Product
         /// </summary>
         /// <returns>product</returns>
-        public MProduct GetProduct()
+        public MVAMProduct GetProduct()
         {
             if (_product == null)
             {
-                _product = MProduct.Get(GetCtx(), GetVAM_Product_ID());
+                _product = MVAMProduct.Get(GetCtx(), GetVAM_Product_ID());
             }
             return _product;
         }

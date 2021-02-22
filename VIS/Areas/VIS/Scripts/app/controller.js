@@ -5335,7 +5335,7 @@
                 m_lookup = new VIS.MAmtDivLookup(VIS.context, gField._vo.windowNo);
             }
             else if (gField._vo.displayType == VIS.DisplayType.ProductContainer) {
-                m_lookup = new VIS.MProductContainerLookup(VIS.context, gField._vo.windowNo);
+                m_lookup = new VIS.MVAMProductContainerLookup(VIS.context, gField._vo.windowNo);
             }
         }
 

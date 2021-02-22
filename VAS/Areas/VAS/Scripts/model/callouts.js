@@ -1802,7 +1802,7 @@
                 // JID_1744 The Precision Shpould as per Currency precision
                 var stdPrecision = VIS.dataContext.getJSONRecord("MOrder/GetPrecision", mTab.getValue("VAB_Order_ID").toString());
 
-                dr = VIS.dataContext.getJSONRecord("MProductPricing/GetProductPricing", paramString);
+                dr = VIS.dataContext.getJSONRecord("MVAMProductPricing/GetProductPricing", paramString);
                 if (dr != null) {
                     mTab.setValue("PriceList", dr["PriceList"]);
                     mTab.setValue("PriceLimit", dr.PriceLimit);
@@ -1846,7 +1846,7 @@
 
                     if (ctx.isSOTrx()) {
 
-                        //MProduct product = MProduct.get(ctx, VAM_Product_ID);
+                        //MVAMProduct product = MVAMProduct.get(ctx, VAM_Product_ID);
                         //Check product Stock
                         //var dr = null;
                         // dr = VIS.dataContext.getJSONRecord("CalloutOrder/GetProductStock", VAM_Product_ID.toString());
@@ -1870,7 +1870,7 @@
                             VAM_PFeature_SetInstance_ID.toString(), ",", //3
                             VAB_OrderLine_ID.toString()); //4
 
-                        var available = VIS.dataContext.getJSONRecord("MStorage/GetQtyAvailable", paramString);
+                        var available = VIS.dataContext.getJSONRecord("MVAMStorage/GetQtyAvailable", paramString);
 
                         if (available == null)
                             available = VIS.Env.ZERO;
@@ -2093,7 +2093,7 @@
                 //        sql = "SELECT VATAX_TaxType_ID FROM VAB_BusinessPartner WHERE VAB_BusinessPartner_ID =" + Util.getValueOfInt(order["VAB_BusinessPartner_ID"]) + " AND IsActive = 'Y'";
                 //        taxType = Util.getValueOfInt(VIS.DB.executeScalar(sql));
                 //    }
-                //    var prodtaxCategory = VIS.dataContext.getJSONRecord("MProduct/GetTaxCategory", value.toString());
+                //    var prodtaxCategory = VIS.dataContext.getJSONRecord("MVAMProduct/GetTaxCategory", value.toString());
                 //    sql = "SELECT VAB_TaxRate_ID FROM VATAX_TaxCatRate WHERE VAB_TaxCategory_ID = " + prodtaxCategory + " AND IsActive ='Y' AND VATAX_TaxType_ID =" + taxType;
                 //    taxId = Util.getValueOfInt(VIS.DB.executeScalar(sql));
                 //}
@@ -2268,7 +2268,7 @@
 
             //Get product price information
             var dr;
-            dr = VIS.dataContext.getJSONRecord("MPriceList/GetPriceList", VAM_PriceList_ID.toString());
+            dr = VIS.dataContext.getJSONRecord("MVAMPriceList/GetPriceList", VAM_PriceList_ID.toString());
 
 
             var StdPrecision = Util.getValueOfInt(dr["StdPrecision"]);
@@ -2359,7 +2359,7 @@
 
                     //Get product price information
                     var pp = null;
-                    pp = VIS.dataContext.getJSONRecord("MProductPricing/GetProductPricing", paramStr);
+                    pp = VIS.dataContext.getJSONRecord("MVAMProductPricing/GetProductPricing", paramStr);
                     var stdPrice = pp.PriceStd;
 
                     if (countEd011 <= 0 && countVAPRC <= 0) {
@@ -2880,7 +2880,7 @@
             if (isQuotationOrderLine) { isBlanketOrderLine = isQuotationOrderLine }
             var VAB_BusinessPartner_ID = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID", false);
             var bpartner = VIS.dataContext.getJSONRecord("MBPartner/GetBPartner", VAB_BusinessPartner_ID.toString());
-            var prodVAB_UOM_ID = VIS.dataContext.getJSONRecord("MProduct/GetVAB_UOM_ID", VAM_Product_ID.toString());
+            var prodVAB_UOM_ID = VIS.dataContext.getJSONRecord("MVAMProduct/GetVAB_UOM_ID", VAM_Product_ID.toString());
             //	No Product
             if (VAM_Product_ID == 0) {
                 QtyEntered = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
@@ -3177,9 +3177,9 @@
                 QtyOrdered = Util.getValueOfDecimal(value);
 
                 paramStr = VAM_Product_ID.toString().concat(","); //1
-                var gp = VIS.dataContext.getJSONRecord("MProduct/GetUOMPrecision", paramStr);
+                var gp = VIS.dataContext.getJSONRecord("MVAMProduct/GetUOMPrecision", paramStr);
 
-                var precision = gp;//MProduct.get(ctx, VAM_Product_ID).getUOMPrecision();
+                var precision = gp;//MVAMProduct.get(ctx, VAM_Product_ID).getUOMPrecision();
 
                 var QtyOrdered1 = QtyOrdered.toFixed(precision);
 
@@ -3374,7 +3374,7 @@
                 //var VAM_PriceList_ID = VIS.dataContext.getJSONRecord("MOrder/GetVAM_PriceList", paramString);
 
                 ////Get PriceListversion based on Pricelist
-                //var _priceListVersion_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetVAM_PriceListVersion_ID", VAM_PriceList_ID.toString());
+                //var _priceListVersion_ID = VIS.dataContext.getJSONRecord("MVAMPriceListVersion/GetVAM_PriceListVersion_ID", VAM_PriceList_ID.toString());
 
                 //var VAB_BusinessPartner_ID1 = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID", false);
                 //var bpartner1 = VIS.dataContext.getJSONRecord("MBPartner/GetBPartner", VAB_BusinessPartner_ID1.toString());
@@ -3516,7 +3516,7 @@
                 //                        mTab.setValue("PriceEntered", PriceEntered);
 
                 //                        paramStr = VAM_Product_ID.toString();
-                //                        var prodVAB_UOM_ID = VIS.dataContext.getJSONRecord("MProduct/GetVAB_UOM_ID", paramStr);                                       
+                //                        var prodVAB_UOM_ID = VIS.dataContext.getJSONRecord("MVAMProduct/GetVAB_UOM_ID", paramStr);                                       
 
                 //                        // SI_0605: not to update price when blanket order line exist
                 //                        if (!isBlanketOrderLine) {
@@ -3608,8 +3608,8 @@
                 && !isReturnTrx)		//	no negative (returns)
             {
 
-                var pi = VIS.dataContext.getJSONRecord("MProduct/GetProduct", VAM_Product_ID.toString());
-                //MProduct product = MProduct.get(ctx, VAM_Product_ID);
+                var pi = VIS.dataContext.getJSONRecord("MVAMProduct/GetProduct", VAM_Product_ID.toString());
+                //MVAMProduct product = MVAMProduct.get(ctx, VAM_Product_ID);
                 var VAB_OrderLine_ID = 0;
 
                 if (Util.getValueOfBoolean(pi.IsStocked)) {
@@ -3617,7 +3617,7 @@
                     var VAM_PFeature_SetInstance_ID = ctx.getContextAsInt(windowNo, "VAM_PFeature_SetInstance_ID");
 
 
-                    //Decimal? available = MStorage.getQtyAvailable(VAM_Warehouse_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, null);
+                    //Decimal? available = MVAMStorage.getQtyAvailable(VAM_Warehouse_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, null);
                     //Get Qty information from server side
                     var paramString = VAM_Product_ID.toString().concat(",", VAM_Warehouse_ID.toString(), ",", //2
                         VAM_PFeature_SetInstance_ID.toString(), ",", //3
@@ -3625,7 +3625,7 @@
 
                     //Get product price information
                     var dr = null;
-                    var available = VIS.dataContext.getJSONRecord("MStorage/GetQtyAvailable", paramString);
+                    var available = VIS.dataContext.getJSONRecord("MVAMStorage/GetQtyAvailable", paramString);
 
                     // var available = dr.available;//getQtyAvailable(VAM_Warehouse_ID, VAM_Product_ID, VAM_PFeature_SetI
 
@@ -3856,7 +3856,7 @@
             // mTab.setValue("Discount", Util.getValueOfDecimal(orderline.Discount));
             var VAM_PriceList_ID = ctx.getContextAsInt(windowNo, "VAM_PriceList_ID");
             var dr;
-            dr = VIS.dataContext.getJSONRecord("MPriceList/GetPriceList", VAM_PriceList_ID.toString());
+            dr = VIS.dataContext.getJSONRecord("MVAMPriceList/GetPriceList", VAM_PriceList_ID.toString());
 
 
             var StdPrecision = Util.getValueOfInt(dr["StdPrecision"]);
@@ -4982,12 +4982,12 @@
         //Get MVAMInventoryLine Information
         //Get product price information
         var dr = null;
-        dr = VIS.dataContext.getJSONRecord("MProductCategory/GetProductCategory", paramString);
+        dr = VIS.dataContext.getJSONRecord("MVAMProductCategory/GetProductCategory", paramString);
 
         //var VAM_Product_ID = dr.VAM_Product_ID;//getQtyAvailable(VAM_Warehouse_ID, VAM_Product_ID, VAM_PFeature_SetI
         //var VAM_Locator_ID=dr.VAM_Locator_ID;     
         var IsPurchasedToOrder = dr.IsPurchasedToOrder;
-        //  MProductCategory pc = new MProductCategory(ctx, VAM_ProductCategory_ID, null);
+        //  MVAMProductCategory pc = new MVAMProductCategory(ctx, VAM_ProductCategory_ID, null);
         mTab.setValue("IsPurchasedToOrder", IsPurchasedToOrder);
         pc = null;
         ctx = windowNo = mTab = mField = value = oldValue = null;
@@ -5243,7 +5243,7 @@
         var VAB_BusinessPartner_ID = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID");
         var Qty = Util.getValueOfDecimal(mTab.getValue("PlannedQty"));
         var IsSOTrx = true;
-        //MProductPricing pp = new MProductPricing(ctx.getVAF_Client_ID(), ctx.getVAF_Org_ID(),
+        //MVAMProductPricing pp = new MVAMProductPricing(ctx.getVAF_Client_ID(), ctx.getVAF_Org_ID(),
         //    Util.getValueOfInt(VAM_Product_ID), VAB_BusinessPartner_ID, Qty, IsSOTrx);
         //pp.SetVAM_PriceListVersion_ID(VAM_PriceListVersion_ID);
         var date = Util.getValueOfDateTime(mTab.getValue("PlannedDate"));
@@ -5286,13 +5286,13 @@
 
             //Get product price information
             var dr = null;
-            dr = VIS.dataContext.getJSONRecord("MProductPricing/GetProductPricing", paramString);
+            dr = VIS.dataContext.getJSONRecord("MVAMProductPricing/GetProductPricing", paramString);
 
 
             var rowDataDB = null;
 
 
-            // MProductPricing pp = new MProductPricing(ctx.getVAF_Client_ID(), ctx.getVAF_Org_ID(),
+            // MVAMProductPricing pp = new MVAMProductPricing(ctx.getVAF_Client_ID(), ctx.getVAF_Org_ID(),
             //     VAM_Product_ID, VAB_BusinessPartner_ID, Qty, isSOTrx);
 
 
@@ -12411,7 +12411,7 @@
 
             //set VAB_Rev_Recognition_ID if InvoiceLine Tab Contains REVENUERECOGNITION field
             if (mTab.findColumn("VAB_Rev_Recognition_ID") > -1) {
-                var revReg_ID = VIS.dataContext.getJSONRecord("MProduct/GetRevenuRecognition", VAM_Product_ID);
+                var revReg_ID = VIS.dataContext.getJSONRecord("MVAMProduct/GetRevenuRecognition", VAM_Product_ID);
                 mTab.setValue("VAB_Rev_Recognition_ID", revReg_ID);
             }
 
@@ -12490,13 +12490,13 @@
 
             //Get product price information
             var dr = null;
-            dr = VIS.dataContext.getJSONRecord("MProductPricing/GetProductPricing", paramString);
+            dr = VIS.dataContext.getJSONRecord("MVAMProductPricing/GetProductPricing", paramString);
 
 
             var rowDataDB = null;
 
             var stdPrecision = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency", dr.VAB_Currency_ID);
-            // MProductPricing pp = new MProductPricing(ctx.getVAF_Client_ID(), ctx.getVAF_Org_ID(),
+            // MVAMProductPricing pp = new MVAMProductPricing(ctx.getVAF_Client_ID(), ctx.getVAF_Org_ID(),
             //     VAM_Product_ID, VAB_BusinessPartner_ID, Qty, isSOTrx);
 
             //		
@@ -12515,13 +12515,13 @@
             if (countEd011 > 0 && purchasingUom > 0 && isSOTrx == false) {
                 //Get UOM from Product
                 var paramString = VAM_Product_ID.toString();
-                var VAB_UOM_ID = VIS.dataContext.getJSONRecord("MProduct/GetVAB_UOM_ID", paramString);
+                var VAB_UOM_ID = VIS.dataContext.getJSONRecord("MVAMProduct/GetVAB_UOM_ID", paramString);
 
                 //Get priceList From SO/PO
                 var VAM_PriceList_ID = Util.getValueOfInt(invoiceRecord["VAM_PriceList_ID"]);
 
                 //Get PriceListversion based on Pricelist
-                var _priceListVersion_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetVAM_PriceListVersion_ID", VAM_PriceList_ID.toString());
+                var _priceListVersion_ID = VIS.dataContext.getJSONRecord("MVAMPriceListVersion/GetVAM_PriceListVersion_ID", VAM_PriceList_ID.toString());
 
                 //Get StandardPrecision From UOM
                 var standardPrecision = VIS.dataContext.getJSONRecord("MUOM/GetPrecision", VAB_UOM_ID.toString());
@@ -12616,16 +12616,16 @@
             //        if (ds1.getTables()[0].getRows().length > 0) {
             //            if (Util.getValueOfInt(ds1.getTables()[0].getRows()[0].getCell("VA038_AmortizationTemplate_ID")) > 0) {
             //                mTab.setValue("VA038_AmortizationTemplate_ID", Util.getValueOfInt(ds1.getTables()[0].getRows()[0].getCell("VA038_AmortizationTemplate_ID")));
-            //                var Sql = "SELECT VA038_PeriodType,VA038_AMORTIZATIONPERIOD,VA038_TERMSOURCE from VA038_Amortizationtemplate WHERE VA038_Amortizationtemplate_ID=" + VIS.Utility.Util.getValueOfInt(mTab.getValue("VA038_AmortizationTemplate_ID"));
+            //                var Sql = "SELECT VA038_PeriodType,VA038_AMORTIZATIONPERIOD,VA038_TERMVARSource from VA038_Amortizationtemplate WHERE VA038_Amortizationtemplate_ID=" + VIS.Utility.Util.getValueOfInt(mTab.getValue("VA038_AmortizationTemplate_ID"));
             //                var ds2 = VIS.DB.executeDataSet(Sql);
             //                Sql = "";
             //                if (ds2.getTables()[0].getRows().length > 0) {
-            //                    if (VIS.Utility.Util.getValueOfString(ds2.getTables()[0].getRows()[0].getCell("VA038_TERMSOURCE")) == "A") {
+            //                    if (VIS.Utility.Util.getValueOfString(ds2.getTables()[0].getRows()[0].getCell("VA038_TERMVARSource")) == "A") {
             //                        Sql = "SELECT DATEINVOICED FROM VAB_Invoice WHERE VAB_Invoice_ID=" + mTab.getValue("VAB_Invoice_ID");
             //                        StartDate = Util.getValueOfDate(VIS.DB.executeScalar(Sql));
             //                        Sql = "";
             //                    }
-            //                    if (VIS.Utility.Util.getValueOfString(ds2.getTables()[0].getRows()[0].getCell("VA038_TERMSOURCE")) == "T") {
+            //                    if (VIS.Utility.Util.getValueOfString(ds2.getTables()[0].getRows()[0].getCell("VA038_TERMVARSource")) == "T") {
             //                        Sql = "SELECT DATEINVOICED FROM VAB_Invoice WHERE VAB_Invoice_ID=" + mTab.getValue("VAB_Invoice_ID");
             //                        StartDate = Util.getValueOfDate(VIS.DB.executeScalar(Sql));
             //                        Sql = "";
@@ -12957,7 +12957,7 @@
                 //        sql = "select vatax_taxtype_id from VAB_BusinessPartner where VAB_BusinessPartner_id =" + util.getvalueofint(invoice["VAB_BusinessPartner_id"]) + " and isactive = 'Y'";
                 //        taxtype = Util.getValueOfInt(VIS.DB.executeScalar(sql));
                 //    }
-                //    var prodtaxcategory = vis.datacontext.getjsonrecord("MProduct/GetTaxCategory", value.tostring());
+                //    var prodtaxcategory = vis.datacontext.getjsonrecord("MVAMProduct/GetTaxCategory", value.tostring());
                 //    sql = "select VAB_TaxRate_id from vatax_taxcatrate where VAB_TaxCategory_id = " + prodtaxcategory + " and isactive ='Y' and vatax_taxtype_id =" + taxtype;
                 //    taxid = Util.getValueOfInt(VIS.DB.executeScalar(sql));
                 //}
@@ -13097,7 +13097,7 @@
 
             //Get product price information
             var dr;
-            dr = VIS.dataContext.getJSONRecord("MPriceList/GetPriceList", paramStr);
+            dr = VIS.dataContext.getJSONRecord("MVAMPriceList/GetPriceList", paramStr);
 
 
             var StdPrecision = dr["StdPrecision"];;
@@ -13146,7 +13146,7 @@
                 //var invoiceRecord = VIS.dataContext.getJSONRecord("MVABInvoice/GetInvoice", paramString);
 
                 ////Get PriceListversion based on Pricelist
-                //var _priceListVersion_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetVAM_PriceListVersion_ID", invoiceRecord["VAM_PriceList_ID"].toString());
+                //var _priceListVersion_ID = VIS.dataContext.getJSONRecord("MVAMPriceListVersion/GetVAM_PriceListVersion_ID", invoiceRecord["VAM_PriceList_ID"].toString());
 
                 //var VAB_BusinessPartner_ID1 = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID", false);
                 //var bpartner1 = VIS.dataContext.getJSONRecord("MBPartner/GetBPartner", VAB_BusinessPartner_ID1.toString());
@@ -13231,7 +13231,7 @@
                 //    else {
                 //        // get uom from product
                 //        var paramStr = VAM_Product_ID.toString();
-                //        var prodVAB_UOM_ID = VIS.dataContext.getJSONRecord("MProduct/GetVAB_UOM_ID", paramStr);
+                //        var prodVAB_UOM_ID = VIS.dataContext.getJSONRecord("MVAMProduct/GetVAB_UOM_ID", paramStr);
 
                 //        if (Util.getValueOfInt(mTab.getValue("VAM_PFeature_SetInstance_ID")) > 0) {
                 //            sql = "SELECT PriceStd , PriceList FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID = " + Util.getValueOfInt(mTab.getValue("VAM_Product_ID"))
@@ -13311,7 +13311,7 @@
                 var invoiceRecord = VIS.dataContext.getJSONRecord("MVABInvoice/GetInvoice", (mTab.getValue("VAB_Invoice_ID")).toString());
 
                 //Get PriceListversion based on Pricelist
-                var _priceListVersion_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetVAM_PriceListVersion_ID", invoiceRecord["VAM_PriceList_ID"].toString());
+                var _priceListVersion_ID = VIS.dataContext.getJSONRecord("MVAMPriceListVersion/GetVAM_PriceListVersion_ID", invoiceRecord["VAM_PriceList_ID"].toString());
 
                 if (orderline_ID == 0) {
 
@@ -13337,7 +13337,7 @@
 
                     //Get product price information
                     var dr = null;
-                    dr = VIS.dataContext.getJSONRecord("MProductPricing/GetProductPricing", paramString);
+                    dr = VIS.dataContext.getJSONRecord("MVAMProductPricing/GetProductPricing", paramString);
 
                     if (countEd011 <= 0) {
                         //make parameter string
@@ -13365,7 +13365,7 @@
                         //var invoiceRecord = VIS.dataContext.getJSONRecord("MVABInvoice/GetInvoice", paramString);
 
                         ////Get PriceListversion based on Pricelist
-                        //var _priceListVersion_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetVAM_PriceListVersion_ID", invoiceRecord["VAM_PriceList_ID"].toString());
+                        //var _priceListVersion_ID = VIS.dataContext.getJSONRecord("MVAMPriceListVersion/GetVAM_PriceListVersion_ID", invoiceRecord["VAM_PriceList_ID"].toString());
 
                         //var VAB_BusinessPartner_ID1 = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID", false);
                         //var bpartner1 = VIS.dataContext.getJSONRecord("MBPartner/GetBPartner", VAB_BusinessPartner_ID1.toString());
@@ -13448,7 +13448,7 @@
                         //else {
                         //    // get uom from product
                         //    var paramStr = VAM_Product_ID.toString();
-                        //    var prodVAB_UOM_ID = VIS.dataContext.getJSONRecord("MProduct/GetVAB_UOM_ID", paramStr);
+                        //    var prodVAB_UOM_ID = VIS.dataContext.getJSONRecord("MVAMProduct/GetVAB_UOM_ID", paramStr);
 
                         //    if (Util.getValueOfInt(mTab.getValue("VAM_PFeature_SetInstance_ID")) > 0) {
                         //        sql = "SELECT PriceStd , PriceList FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID = " + Util.getValueOfInt(mTab.getValue("VAM_Product_ID"))
@@ -13853,7 +13853,7 @@
                 //    var invoiceRecord = VIS.dataContext.getJSONRecord("MVABInvoice/GetInvoice", paramString);
 
                 //    //Get PriceListversion based on Pricelist
-                //    var _priceListVersion_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetVAM_PriceListVersion_ID", invoiceRecord["VAM_PriceList_ID"].toString());
+                //    var _priceListVersion_ID = VIS.dataContext.getJSONRecord("MVAMPriceListVersion/GetVAM_PriceListVersion_ID", invoiceRecord["VAM_PriceList_ID"].toString());
 
                 //    //standard Precision
                 //    // var standardPrecision = VIS.dataContext.getJSONRecord("MUOM/GetPrecision", VAB_UOM_To_ID.toString());
@@ -13957,7 +13957,7 @@
                 //            mTab.setValue("PriceEntered", PriceEntered);
 
                 //            paramStr = VAM_Product_ID.toString();
-                //            var prodVAB_UOM_ID = VIS.dataContext.getJSONRecord("MProduct/GetVAB_UOM_ID", paramStr);
+                //            var prodVAB_UOM_ID = VIS.dataContext.getJSONRecord("MVAMProduct/GetVAB_UOM_ID", paramStr);
 
                 //            sql = "SELECT PriceList FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID = " + Util.getValueOfInt(mTab.getValue("VAM_Product_ID"))
                 //                       + " AND VAM_PriceListVersion_ID = " + _priceListVersion_ID
@@ -14090,9 +14090,9 @@
 
                 QtyInvoiced = value;
 
-                //  var precision = MProduct.Get(ctx, VAM_Product_ID).GetUOMPrecision();
+                //  var precision = MVAMProduct.Get(ctx, VAM_Product_ID).GetUOMPrecision();
                 var paramString = VAM_Product_ID.toString();
-                var precision = VIS.dataContext.getJSONRecord("MProduct/GetUOMPrecision", paramString);
+                var precision = VIS.dataContext.getJSONRecord("MVAMProduct/GetUOMPrecision", paramString);
 
                 var QtyInvoiced1 = null;
 
@@ -15290,7 +15290,7 @@
         this.setCalloutActive(true);
         try {
             var paramString = value.toString();;
-            var asi = VIS.dataContext.getJSONRecord("MProductionLine/GetAttributeSetInstance", paramString);
+            var asi = VIS.dataContext.getJSONRecord("MVAMProductionLine/GetAttributeSetInstance", paramString);
             mTab.setValue("VAM_PFeature_SetInstance_ID", asi);
         }
         catch (err) {
@@ -15326,7 +15326,7 @@
             else if (mField.getColumnName().equals("VAM_PFeature_SetInstance_ID")) {
                 paramString = mTab.getValue("VAM_Product_ID").toString().concat(",", value.toString())
             }
-            var bom = VIS.dataContext.getJSONRecord("MProductionLine/GetBOM", paramString);
+            var bom = VIS.dataContext.getJSONRecord("MVAMProductionLine/GetBOM", paramString);
             mTab.setValue("VAM_BOM_ID", bom);
         }
         catch (err) {
@@ -15472,8 +15472,8 @@
 
         //Get BankAccount information
 
-        var VAR_Req_Status_ID = VIS.dataContext.getJSONRecord("MRequestType/GetDefaultVAR_Req_Status_ID", paramString);
-        //MRequestType rt = MRequestType.Get(ctx, VAR_Req_Type_ID);
+        var VAR_Req_Status_ID = VIS.dataContext.getJSONRecord("MVARRequestType/GetDefaultVAR_Req_Status_ID", paramString);
+        //MVARRequestType rt = MVARRequestType.Get(ctx, VAR_Req_Type_ID);
         // var VAR_Req_Status_ID = rt.GetDefaultVAR_Req_Status_ID();
         if (VAR_Req_Status_ID != 0) {
             //mTab.setValue("VAR_Req_Status_ID", new Integer(VAR_Req_Status_ID));
@@ -15551,7 +15551,7 @@
             var VAB_BusinessPartner_ID = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID");
             var qty = mTab.getValue("Qty");
             var isSOTrx = false;
-            //  MProductPricing pp = new MProductPricing(ctx.getVAF_Client_ID(), ctx.getVAF_Org_ID(),
+            //  MVAMProductPricing pp = new MVAMProductPricing(ctx.getVAF_Client_ID(), ctx.getVAF_Org_ID(),
             //     VAM_Product_ID, VAB_BusinessPartner_ID, qty, isSOTrx);
             //
             var VAM_PriceList_ID = ctx.getContextAsInt(windowNo, "VAM_PriceList_ID");
@@ -15566,7 +15566,7 @@
             var sql = "SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='ED011_'";
             var existEd011 = Util.getValueOfInt(VIS.DB.executeScalar(sql));
             var paramString;
-            var VAB_UOM_ID = VIS.dataContext.getJSONRecord("MProduct/GetVAB_UOM_ID", VAM_Product_ID);
+            var VAB_UOM_ID = VIS.dataContext.getJSONRecord("MVAMProduct/GetVAB_UOM_ID", VAM_Product_ID);
             if (existEd011 > 0) {
                 paramString = VAM_Product_ID.toString().concat(",", VAB_BusinessPartner_ID, ",", //2
                     qty, ",", //3
@@ -15587,7 +15587,7 @@
 
             //Get product price information
             var dr = null;
-            dr = VIS.dataContext.getJSONRecord("MProductPricing/GetProductPricing", paramString);
+            dr = VIS.dataContext.getJSONRecord("MVAMProductPricing/GetProductPricing", paramString);
             mTab.setValue("PriceActual", dr["PriceActual"]);
 
             //		
@@ -15669,7 +15669,7 @@
 
                 //Get product price information
                 var dr = null;
-                dr = VIS.dataContext.getJSONRecord("MProductPricing/GetProductPricing", paramString);
+                dr = VIS.dataContext.getJSONRecord("MVAMProductPricing/GetProductPricing", paramString);
 
 
                 //var rowDataDB = null;
@@ -15698,7 +15698,7 @@
 
 
 
-                //MProductPricing pp = new MProductPricing(ctx.getVAF_Client_ID(), ctx.getVAF_Org_ID(),
+                //MVAMProductPricing pp = new MVAMProductPricing(ctx.getVAF_Client_ID(), ctx.getVAF_Org_ID(),
                 //    VAM_Product_ID, VAB_BusinessPartner_ID, qty, isSOTrx);
                 //
 
@@ -15794,7 +15794,7 @@
                     VAB_UOM_To_ID, ",", countEd011);
                 //Get product price information
                 dr = null;
-                dr = VIS.dataContext.getJSONRecord("MProductPricing/GetProductPricing", paramStr);
+                dr = VIS.dataContext.getJSONRecord("MVAMProductPricing/GetProductPricing", paramStr);
                 if (dr != null) {
                     PriceActual = dr["PriceActual"];
                 }
@@ -16187,7 +16187,7 @@
             var StdPrecision = 0;
             var IsTaxIncluded = false;
 
-            var currency = VIS.dataContext.getJSONRecord("MPriceList/GetPriceListData", mTab.getValue("VAM_PriceList_ID").toString());
+            var currency = VIS.dataContext.getJSONRecord("MVAMPriceList/GetPriceListData", mTab.getValue("VAM_PriceList_ID").toString());
             if (currency != null) {
                 StdPrecision = currency["StdPrecision"];
                 IsTaxIncluded = "Y" == currency["IsTaxIncluded"];
@@ -16474,7 +16474,7 @@
 
             //	Search Pricelist for current version
             sql = "SELECT bomPriceStd(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceStd,"
-                + "bomPriceList(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceList,"
+                + "boMVAMPriceList(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceList,"
                 + "bomPriceLimit(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceLimit,"
                 + "p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID "
                 + "FROM VAM_Product p, VAM_ProductPrice pp, VAM_PriceList pl, VAM_PriceListVersion pv "
@@ -16523,7 +16523,7 @@
             if (noPrice) {
                 //	Find if via Base Pricelist
                 sql = "SELECT bomPriceStd(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceStd,"
-                    + "bomPriceList(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceList,"
+                    + "boMVAMPriceList(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceList,"
                     + "bomPriceLimit(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceLimit,"
                     + "p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID "
                     + "FROM VAM_Product p, VAM_ProductPrice pp, VAM_PriceList pl, VAM_PriceList bpl, VAM_PriceListVersion pv "
@@ -16781,7 +16781,7 @@
             var StdPrecision = 0;
             var IsTaxIncluded = false;
 
-            var currency = VIS.dataContext.getJSONRecord("MPriceList/GetPriceListData", mTab.getValue("VAM_PriceList_ID").toString());
+            var currency = VIS.dataContext.getJSONRecord("MVAMPriceList/GetPriceListData", mTab.getValue("VAM_PriceList_ID").toString());
             if (currency != null) {
                 StdPrecision = currency["StdPrecision"];
                 IsTaxIncluded = "Y" == currency["IsTaxIncluded"];
@@ -17497,10 +17497,10 @@
 
             //	PO - Set UOM/Locator/Qty
 
-            //MProduct product = MProduct.Get(ctx, VAM_Product_ID);
+            //MVAMProduct product = MVAMProduct.Get(ctx, VAM_Product_ID);
             //mTab.setValue("VAB_UOM_ID", Util.getValueOfInt(product.GetVAB_UOM_ID().toString()));
             var paramString = VAM_Product_ID.toString();
-            var VAB_UOM_ID = VIS.dataContext.getJSONRecord("MProduct/GetVAB_UOM_ID", paramString);
+            var VAB_UOM_ID = VIS.dataContext.getJSONRecord("MVAMProduct/GetVAB_UOM_ID", paramString);
             mTab.setValue("VAB_UOM_ID", VAB_UOM_ID);
             var qtyEntered = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
             mTab.setValue("MovementQty", qtyEntered);
@@ -17625,7 +17625,7 @@
                 var VAB_UOM_To_ID = ctx.getContextAsInt(windowNo, "VAB_UOM_ID");
                 qtyEntered = Util.getValueOfDecimal(value);
                 paramString = VAM_Product_ID.toString();
-                precision = VIS.dataContext.getJSONRecord("MProduct/GetUOMPrecision", paramString);
+                precision = VIS.dataContext.getJSONRecord("MVAMProduct/GetUOMPrecision", paramString);
 
                 // JID_0681: If we copy the MR lines using copy from button system is only copy the Qty only before decimal.
                 var QtyEntered1 = Util.getValueOfDecimal(qtyEntered.toFixed(precision));
@@ -17658,7 +17658,7 @@
                 movementQty = Util.getValueOfDecimal(value);
 
                 paramString = VAM_Product_ID.toString();
-                precision = VIS.dataContext.getJSONRecord("MProduct/GetUOMPrecision", paramString);
+                precision = VIS.dataContext.getJSONRecord("MVAMProduct/GetUOMPrecision", paramString);
 
                 // JID_0681: If we copy the MR lines using copy from button system is only copy the Qty only before decimal.
                 var MovementQty1 = Util.getValueOfDecimal(movementQty.toFixed(precision));
@@ -19786,13 +19786,13 @@
             var VAB_BusinessPartner_ID = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID");
             var Qty = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
             var isSOTrx = ctx.getWindowContext(windowNo, "IsSOTrx", true) == "Y";
-            //MProductPricing pp = new MProductPricing(ctx.getVAF_Client_ID(), ctx.getVAF_Org_ID(),
+            //MVAMProductPricing pp = new MVAMProductPricing(ctx.getVAF_Client_ID(), ctx.getVAF_Org_ID(),
             //        VAM_Product_ID, VAB_BusinessPartner_ID, Qty, isSOTrx);
             var VAM_PriceList_ID = ctx.getContextAsInt(windowNo, "VAM_PriceList_ID");
             // pp.SetVAM_PriceList_ID(VAM_PriceList_ID);
 
             //Get PriceListversion based on Pricelist
-            var VAM_PriceListVersion_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetVAM_PriceListVersion_ID", VAM_PriceList_ID.toString());
+            var VAM_PriceListVersion_ID = VIS.dataContext.getJSONRecord("MVAMPriceListVersion/GetVAM_PriceListVersion_ID", VAM_PriceList_ID.toString());
 
             /** PLV is only accurate if PL selected in header */
             if (VAM_PriceListVersion_ID == 0) {
@@ -19843,7 +19843,7 @@
             //                                           null, ",", null, ",", null); //7
             /*** Bharat Done ***/
             var dr = null;
-            dr = VIS.dataContext.getJSONRecord("MProductPricing/GetProductPricing", paramString);
+            dr = VIS.dataContext.getJSONRecord("MVAMProductPricing/GetProductPricing", paramString);
 
 
             //mTab.setValue("PriceList", pp.GetPriceList());
@@ -19884,16 +19884,16 @@
 
             //if (ctx.getContext("IsSOTrx"))
             if (ctx.getWindowContext(windowNo, "IsSOTrx", true) == "Y") {
-                //  MProduct product = MProduct.Get(ctx, VAM_Product_ID);
+                //  MVAMProduct product = MVAMProduct.Get(ctx, VAM_Product_ID);
                 var paramString = VAM_Product_ID.toString() + ",0";
-                var isStocked = VIS.dataContext.getJSONRecord("MProduct/GetProduct", paramString);
+                var isStocked = VIS.dataContext.getJSONRecord("MVAMProduct/GetProduct", paramString);
                 if (isStocked) {
                     var QtyEntered = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
                     var VAM_Warehouse_ID = ctx.getContextAsInt(windowNo, "VAM_Warehouse_ID");
                     var VAM_PFeature_SetInstance_ID = ctx.getContextAsInt(windowNo, "VAM_PFeature_SetInstance_ID");
                     var paramString = VAM_Warehouse_ID + "," + VAM_Product_ID + "," + VAM_PFeature_SetInstance_ID;
-                    var available = VIS.dataContext.getJSONRecord("MStorage/GetQtyAvailable", paramString);
-                    //var available = MStorage.GetQtyAvailable(VAM_Warehouse_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, null);
+                    var available = VIS.dataContext.getJSONRecord("MVAMStorage/GetQtyAvailable", paramString);
+                    //var available = MVAMStorage.GetQtyAvailable(VAM_Warehouse_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, null);
                     if (available == null)
                         available = VIS.Env.ZERO;
                     if (available == 0) {
@@ -19980,9 +19980,9 @@
             var VAM_Product_ID = ctx.getContextAsInt(windowNo, "VAM_Product_ID");
             var VAM_PriceList_ID = ctx.getContextAsInt(windowNo, "VAM_PriceList_ID");
             var aparam = VAM_PriceList_ID.toString();
-            var dr = VIS.dataContext.getJSONRecord("MPriceList/GetPriceList", aparam);
+            var dr = VIS.dataContext.getJSONRecord("MVAMPriceList/GetPriceList", aparam);
             var StdPrecision = Util.getValueOfInt(dr["StdPrecision"]);//Neha--GetPriceList Method's Dictionary returns string value--06 Sep,2018
-            //var StdPrecision = MPriceList.GetPricePrecision(ctx, VAM_PriceList_ID);
+            //var StdPrecision = MVAMPriceList.GetPricePrecision(ctx, VAM_PriceList_ID);
             var QtyEntered, PriceEntered, PriceActual, PriceLimit, Discount, PriceList;
             //	get values
             QtyEntered = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
@@ -20016,7 +20016,7 @@
                 //  QtyEntered = QtyEntered;
                 var isSOTrx = ctx.getWindowContext(windowNo, "IsSOTrx", true) == "Y";
 
-                var VAM_PriceListVersion_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetVAM_PriceListVersion_ID", VAM_PriceList_ID.toString());
+                var VAM_PriceListVersion_ID = VIS.dataContext.getJSONRecord("MVAMPriceListVersion/GetVAM_PriceListVersion_ID", VAM_PriceList_ID.toString());
                 if (VAM_PriceListVersion_ID == 0) {
                     VAM_PriceListVersion_ID = ctx.getContextAsInt(windowNo, "VAM_PriceListVersion_ID");
                 }
@@ -20062,11 +20062,11 @@
                 //                                            null, ",", null, ",", null); //7
 
                 var dr = null;
-                dr = VIS.dataContext.getJSONRecord("MProductPricing/GetProductPricing", paramString);
+                dr = VIS.dataContext.getJSONRecord("MVAMProductPricing/GetProductPricing", paramString);
 
 
 
-                //MProductPricing pp = new MProductPricing(ctx.getVAF_Client_ID(), ctx.getVAF_Org_ID(),
+                //MVAMProductPricing pp = new MVAMProductPricing(ctx.getVAF_Client_ID(), ctx.getVAF_Org_ID(),
                 //        VAM_Product_ID, VAB_BusinessPartner_ID, QtyEntered, isSOTrx);
                 //pp.SetVAM_PriceList_ID(VAM_PriceList_ID);
                 //var VAM_PriceListVersion_ID = ctx.getContextAsInt(windowNo, "VAM_PriceListVersion_ID");
@@ -20680,11 +20680,11 @@
         try {
             var VAM_Product_ID = ctx.getContextAsInt(windowNo, "VAM_Product_ID");
             var paramStr = VAM_Product_ID.toString().concat(","); //1
-            var productType = VIS.dataContext.getJSONRecord("MProduct/GetProductType", paramStr);
+            var productType = VIS.dataContext.getJSONRecord("MVAMProduct/GetProductType", paramStr);
 
-            // var precision = gp;//MProduct.get(ctx, VAM_Product_ID).getUOMPrecision();
+            // var precision = gp;//MVAMProduct.get(ctx, VAM_Product_ID).getUOMPrecision();
 
-            // MProduct prod = new MProduct(ctx, VAM_Product_ID, null);
+            // MVAMProduct prod = new MVAMProduct(ctx, VAM_Product_ID, null);
             if (productType == "S") {
                 mTab.getField("IsContract").setReadOnly(false);
             }
@@ -21166,14 +21166,14 @@
     VIS.Model.CalloutMCampaign = CalloutMCampaign;
     //*************CalloutMCampaign Ends*************
 
-    //*************CalloutMRequest Starts***********
-    function CalloutMRequest() {
-        VIS.CalloutEngine.call(this, "VIS.CalloutMRequest");//must call
+    //*************CalloutMVARRequest Starts***********
+    function CalloutMVARRequest() {
+        VIS.CalloutEngine.call(this, "VIS.CalloutMVARRequest");//must call
     };
-    VIS.Utility.inheritPrototype(CalloutMRequest, VIS.CalloutEngine); //inherit prototype
+    VIS.Utility.inheritPrototype(CalloutMVARRequest, VIS.CalloutEngine); //inherit prototype
 
 
-    CalloutMRequest.prototype.DateRequired = function (ctx, windowNo, mTab, mField, value, oldValue) {
+    CalloutMVARRequest.prototype.DateRequired = function (ctx, windowNo, mTab, mField, value, oldValue) {
 
         if (this.isCalloutActive() || value == null || value.toString() == "") {
             return "";
@@ -21200,7 +21200,7 @@
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";
     };
-    CalloutMRequest.prototype.PlanDateRequired = function (ctx, windowNo, mTab, mField, value, oldValue) {
+    CalloutMVARRequest.prototype.PlanDateRequired = function (ctx, windowNo, mTab, mField, value, oldValue) {
         if (this.isCalloutActive() || value == null || value.toString() == "") {
             return "";
         }
@@ -21228,8 +21228,8 @@
         return "";
     };
 
-    VIS.Model.CalloutMRequest = CalloutMRequest;
-    //*************CalloutMRequest Ends*************
+    VIS.Model.CalloutMVARRequest = CalloutMVARRequest;
+    //*************CalloutMVARRequest Ends*************
     //****CalloutOrder Start
     function CalloutModuleMgmt() {
         VIS.CalloutEngine.call(this, "VIS.CalloutModuleMgmt");
@@ -21936,7 +21936,7 @@
         this.setCalloutActive(true);
         try {
             var paramString = value.toString();;
-            var dr = VIS.dataContext.getJSONRecord("MProductionLine/GetChargeAmt", paramString);
+            var dr = VIS.dataContext.getJSONRecord("MVAMProductionLine/GetChargeAmt", paramString);
             if (dr != null) {
                 mTab.setValue("Amt", dr["ChargeAmt"]);
                 mTab.setValue("VAM_Product_ID", null);

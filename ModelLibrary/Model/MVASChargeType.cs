@@ -27,7 +27,7 @@ namespace VAdvantage.Model
     public class MVASChargeType : X_VAS_ChargeType
     {
         // Cached Product			
-        private MProduct _product = null;
+        private MVAMProduct _product = null;
 
         /* 	Default Constructor
         *	@param ctx context
@@ -56,11 +56,11 @@ namespace VAdvantage.Model
          * 	Get Product
          *	@return product
          */
-        public MProduct GetProduct()
+        public MVAMProduct GetProduct()
         {
             if (_product == null)
             {
-                MProduct[] products = MProduct.Get(GetCtx(), "VAS_ChargeType_ID=" + GetVAS_ChargeType_ID(), Get_TrxName());
+                MVAMProduct[] products = MVAMProduct.Get(GetCtx(), "VAS_ChargeType_ID=" + GetVAS_ChargeType_ID(), Get_TrxName());
                 if (products.Length > 0)
                     _product = products[0];
             }
@@ -80,7 +80,7 @@ namespace VAdvantage.Model
                 //commented by arpit on 5 Jan,2015 Mentis issue no. 0000274
                 //if (GetValue() == null || GetValue().Length == 0)
                 //    SetValue(GetName());
-                //_product = new MProduct(this);
+                //_product = new MVAMProduct(this);
                 //return _product.Save(Get_TrxName());
             }
             return true;
@@ -97,14 +97,14 @@ namespace VAdvantage.Model
             if (!success)
                 return success;
             //added by arpit on Jan 5,2015 Mentis issue no. 0000274       
-            _product = new MProduct(this);
+            _product = new MVAMProduct(this);
             _product.SetVAS_ChargeType_ID(GetVAS_ChargeType_ID());
             if (!_product.Save(Get_TrxName()))
             {
 
             }
 
-            MProduct prod = GetProduct();
+            MVAMProduct prod = GetProduct();
             if (prod.SetExpenseType(this))
                 prod.Save(Get_TrxName());
 

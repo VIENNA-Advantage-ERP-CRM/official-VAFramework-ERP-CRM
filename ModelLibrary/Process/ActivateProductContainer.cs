@@ -107,7 +107,7 @@ namespace VAdvantage.Process
                             else
                             {
                                 // Quantity Out
-                                ConsumeQtyFromStorage(dr);
+                                ConsumeQtyFroMVAMStorage(dr);
                             }
                         }
                     }
@@ -258,7 +258,7 @@ namespace VAdvantage.Process
         /// </summary>
         /// <param name="dr">data row object</param>
         /// <returns>true/false</returns>
-        private bool ConsumeQtyFromStorage(DataRow dr)
+        private bool ConsumeQtyFroMVAMStorage(DataRow dr)
         {
             Decimal Qty = Math.Abs(Convert.ToDecimal(dr["MovementQty"]));
             int no;
@@ -266,7 +266,7 @@ namespace VAdvantage.Process
                                AND VAM_Locator_ID = " + Convert.ToInt32(dr["VAM_Locator_ID"]) +
                             @" AND VAM_Product_ID = " + Convert.ToInt32(dr["VAM_Product_ID"]) +
                             @" AND NVL(VAM_PFeature_SetInstance_ID , 0) = " + Convert.ToInt32(dr["VAM_PFeature_SetInstance_ID"]);
-            if (Convert.ToString(dr["MMPolicy"]).Equals(MProductCategory.MMPOLICY_LiFo))
+            if (Convert.ToString(dr["MMPolicy"]).Equals(MVAMProductCategory.MMPOLICY_LiFo))
             {
                 sql += " ORDER BY MMPolicyDate  DESC , VAM_ContainerStorage_ID DESC";
             }
