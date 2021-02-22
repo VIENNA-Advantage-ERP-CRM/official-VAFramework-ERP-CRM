@@ -108,7 +108,7 @@ namespace VAdvantage.Model
             // Work done for Purchase Price and Mergin calculation
             if (Env.IsModuleInstalled("VA077_") && Get_ColumnIndex("VA077_PurchasePrice") >= 0 && Util.GetValueOfDecimal(Get_Value("VA077_PurchasePrice")).Equals(0))
             {
-                if (GetProject() != null  && _parent.IsOpportunity() && Util.GetValueOfInt(_parent.Get_Value("PO_PriceList_ID")) > 0)
+                if (GetProject() != null && _parent.IsOpportunity() && Util.GetValueOfInt(_parent.Get_Value("PO_PriceList_ID")) > 0)
                 {
                     Set_Value("VA077_PurchasePrice", GetPurchasePrice());
 
@@ -119,20 +119,20 @@ namespace VAdvantage.Model
                         purchaseAmt = Decimal.Round(purchaseAmt, GetCurPrecision(), MidpointRounding.AwayFromZero);
                     }
                     Set_Value("VA077_PurchaseAmt", purchaseAmt);
-
-                    // Calculate Margin Amount
-                    Decimal marginEach = Decimal.Subtract(GetPlannedPrice(), Util.GetValueOfDecimal(Get_Value("VA077_PurchasePrice")));
-                    Set_Value("VA077_MarginAmt", Decimal.Multiply(marginEach, GetPlannedQty()));
-
-                    // Calculate Margin Percentage
-                    Decimal marginPer = 0;
-                    if (GetPlannedPrice() > 0)
-                    {
-                        marginPer = Decimal.Round(Decimal.Multiply(Decimal.Divide(marginEach, GetPlannedPrice())
-                        , Env.ONEHUNDRED), GetCurPrecision(), MidpointRounding.AwayFromZero);
-                    }
-                    Set_Value("VA077_MarginPercent", marginPer);
                 }
+
+                // Calculate Margin Amount
+                Decimal marginEach = Decimal.Subtract(GetPlannedPrice(), Util.GetValueOfDecimal(Get_Value("VA077_PurchasePrice")));
+                Set_Value("VA077_MarginAmt", Decimal.Multiply(marginEach, GetPlannedQty()));
+
+                // Calculate Margin Percentage
+                Decimal marginPer = 0;
+                if (GetPlannedPrice() > 0)
+                {
+                    marginPer = Decimal.Round(Decimal.Multiply(Decimal.Divide(marginEach, GetPlannedPrice())
+                    , Env.ONEHUNDRED), GetCurPrecision(), MidpointRounding.AwayFromZero);
+                }
+                Set_Value("VA077_MarginPercent", marginPer);
             }
 
             //	Planned Amount	- Currency Precision

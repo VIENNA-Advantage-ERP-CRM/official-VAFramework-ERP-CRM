@@ -4487,6 +4487,44 @@ namespace VAdvantage.Model
 
                 Set_Value("VA077_MarginAmt", margin);
                 Set_Value("VA077_MarginPercent", marginper);
+
+                // Set Values from Product when saving the Quotation Line
+                if (newRecord && GetM_Product_ID() > 0)
+                {
+                    string str = @"SELECT VA077_SNErweiterbar, VA077_ShowOldSN, VA077_ContractProduct, VA077_ShowCNAutodesk,
+                    VA077_NonContractProd, Description, DocumentNote, VA077_DestinationOrg, VA077_AdditionalInfo, VA077_UpdateVersion,
+                    VA077_RegEmail FROM M_Product WHERE M_Product_ID=" + GetM_Product_ID();
+
+                    DataSet dt = DB.ExecuteDataset(str, null, Get_Trx());
+                    if (dt != null && dt.Tables[0].Rows.Count > 0)
+                    {
+                        bool snerw = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_SNErweiterbar"]).Equals("Y");
+                        bool showoldsn = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_ShowOldSN"]).Equals("Y");
+                        bool contract = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_ContractProduct"]).Equals("Y");
+                        bool autodesk = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_ShowCNAutodesk"]).Equals("Y");
+                        bool noncontract = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_NonContractProd"]).Equals("Y");
+                        string desc = Util.GetValueOfString(dt.Tables[0].Rows[0]["Description"]);
+                        string notes = Util.GetValueOfString(dt.Tables[0].Rows[0]["DocumentNote"]);
+                        int org = Util.GetValueOfInt(dt.Tables[0].Rows[0]["VA077_DestinationOrg"]);
+                        bool addInfo = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_AdditionalInfo"]).Equals("Y");
+                        bool updateversion = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_UpdateVersion"]).Equals("Y");
+                        bool regemail = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_RegEmail"]).Equals("Y");
+
+                        Set_Value("VA077_DestinationOrg", org);
+                        Set_Value("Description", desc + " " + notes);
+
+                        Set_Value("VA077_SNErweiterbar", snerw);
+                        Set_Value("VA077_ShowOldSN", showoldsn);
+
+                        Set_Value("VA077_ContractProduct", contract);
+                        Set_Value("VA077_NonContractProd", noncontract);
+
+                        Set_Value("VA077_ShowCNAutodesk", autodesk);
+                        Set_Value("VA077_UpdateVersion", updateversion);
+                        Set_Value("VA077_AdditionalInfo", addInfo);
+                        Set_Value("VA077_ChkRegEmail", regemail);
+                    }
+                }
             }
             return true;
         }
