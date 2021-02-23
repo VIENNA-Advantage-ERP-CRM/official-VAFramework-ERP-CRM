@@ -1263,7 +1263,7 @@ namespace BaseLibrary.CloudService {
         
         private string[] globalIpField;
         
-        private int[] a_Asset_IDField;
+        private int[] vAA_Asset_IDField;
         
         private string[] serverTypeField;
         
@@ -1297,10 +1297,10 @@ namespace BaseLibrary.CloudService {
         [System.Xml.Serialization.XmlArrayAttribute(Order=2)]
         public int[] VAA_Asset_ID {
             get {
-                return this.a_Asset_IDField;
+                return this.vAA_Asset_IDField;
             }
             set {
-                this.a_Asset_IDField = value;
+                this.vAA_Asset_IDField = value;
                 this.RaisePropertyChanged("VAA_Asset_ID");
             }
         }
@@ -2355,9 +2355,9 @@ namespace BaseLibrary.CloudService {
         
         private int[] zoneMasterServerField;
         
-        private int[] VAM_Product_IDField;
+        private int[] vAM_Product_IDField;
         
-        private int[] a_Asset_IDField;
+        private int[] vAA_Asset_IDField;
         
         private bool[] isDBServerCreatedField;
         
@@ -2383,10 +2383,10 @@ namespace BaseLibrary.CloudService {
         [System.Xml.Serialization.XmlArrayAttribute(Order=1)]
         public int[] VAM_Product_ID {
             get {
-                return this.VAM_Product_IDField;
+                return this.vAM_Product_IDField;
             }
             set {
-                this.VAM_Product_IDField = value;
+                this.vAM_Product_IDField = value;
                 this.RaisePropertyChanged("VAM_Product_ID");
             }
         }
@@ -2395,10 +2395,10 @@ namespace BaseLibrary.CloudService {
         [System.Xml.Serialization.XmlArrayAttribute(Order=2)]
         public int[] VAA_Asset_ID {
             get {
-                return this.a_Asset_IDField;
+                return this.vAA_Asset_IDField;
             }
             set {
-                this.a_Asset_IDField = value;
+                this.vAA_Asset_IDField = value;
                 this.RaisePropertyChanged("VAA_Asset_ID");
             }
         }
@@ -2883,7 +2883,7 @@ namespace BaseLibrary.CloudService {
         
         private string cS_ZoneMasterServer_IDField;
         
-        private string VAM_Product_IDField;
+        private string vAM_Product_IDField;
         
         private string cS_ZoneClientServer_IDField;
         
@@ -3013,10 +3013,10 @@ namespace BaseLibrary.CloudService {
         [System.Xml.Serialization.XmlElementAttribute(Order=10)]
         public string VAM_Product_ID {
             get {
-                return this.VAM_Product_IDField;
+                return this.vAM_Product_IDField;
             }
             set {
-                this.VAM_Product_IDField = value;
+                this.vAM_Product_IDField = value;
                 this.RaisePropertyChanged("VAM_Product_ID");
             }
         }
@@ -3143,7 +3143,7 @@ namespace BaseLibrary.CloudService {
         
         private string[] cS_ZoneMasterServer_IDField;
         
-        private string[] VAM_Product_IDField;
+        private string[] vAM_Product_IDField;
         
         private string[] cS_ZoneClientServer_IDField;
         
@@ -3273,10 +3273,10 @@ namespace BaseLibrary.CloudService {
         [System.Xml.Serialization.XmlArrayAttribute(Order=10)]
         public string[] VAM_Product_ID {
             get {
-                return this.VAM_Product_IDField;
+                return this.vAM_Product_IDField;
             }
             set {
-                this.VAM_Product_IDField = value;
+                this.vAM_Product_IDField = value;
                 this.RaisePropertyChanged("VAM_Product_ID");
             }
         }
@@ -3403,11 +3403,11 @@ namespace BaseLibrary.CloudService {
         
         private string[] zoneMasterIDField;
         
-        private string[] VAM_Product_IDField;
+        private string[] vAM_Product_IDField;
         
-        private string[] a_Asset_IDField;
+        private string[] vAA_Asset_IDField;
         
-        private string[] VAF_UserContact_IDField;
+        private string[] vAF_UserContact_IDField;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Order=0)]
@@ -3449,10 +3449,10 @@ namespace BaseLibrary.CloudService {
         [System.Xml.Serialization.XmlArrayAttribute(Order=3)]
         public string[] VAM_Product_ID {
             get {
-                return this.VAM_Product_IDField;
+                return this.vAM_Product_IDField;
             }
             set {
-                this.VAM_Product_IDField = value;
+                this.vAM_Product_IDField = value;
                 this.RaisePropertyChanged("VAM_Product_ID");
             }
         }
@@ -3461,10 +3461,10 @@ namespace BaseLibrary.CloudService {
         [System.Xml.Serialization.XmlArrayAttribute(Order=4)]
         public string[] VAA_Asset_ID {
             get {
-                return this.a_Asset_IDField;
+                return this.vAA_Asset_IDField;
             }
             set {
-                this.a_Asset_IDField = value;
+                this.vAA_Asset_IDField = value;
                 this.RaisePropertyChanged("VAA_Asset_ID");
             }
         }
@@ -3473,10 +3473,10 @@ namespace BaseLibrary.CloudService {
         [System.Xml.Serialization.XmlArrayAttribute(Order=5)]
         public string[] VAF_UserContact_ID {
             get {
-                return this.VAF_UserContact_IDField;
+                return this.vAF_UserContact_IDField;
             }
             set {
-                this.VAF_UserContact_IDField = value;
+                this.vAF_UserContact_IDField = value;
                 this.RaisePropertyChanged("VAF_UserContact_ID");
             }
         }
@@ -4973,11 +4973,11 @@ namespace BaseLibrary.CloudService {
         
         private int requestIDField;
         
-        private int VAF_UserContact_IDField;
+        private int vAF_UserContact_IDField;
         
         private string modtypeField;
         
-        private int[] vaf_client_IDsField;
+        private int[] vAF_Client_IDsField;
         
         private string[] langIDsField;
         
@@ -5025,10 +5025,10 @@ namespace BaseLibrary.CloudService {
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public int VAF_UserContact_ID {
             get {
-                return this.VAF_UserContact_IDField;
+                return this.vAF_UserContact_IDField;
             }
             set {
-                this.VAF_UserContact_IDField = value;
+                this.vAF_UserContact_IDField = value;
                 this.RaisePropertyChanged("VAF_UserContact_ID");
             }
         }
@@ -5049,10 +5049,10 @@ namespace BaseLibrary.CloudService {
         [System.Xml.Serialization.XmlArrayAttribute(Order=5)]
         public int[] VAF_Client_IDs {
             get {
-                return this.vaf_client_IDsField;
+                return this.vAF_Client_IDsField;
             }
             set {
-                this.vaf_client_IDsField = value;
+                this.vAF_Client_IDsField = value;
                 this.RaisePropertyChanged("VAF_Client_IDs");
             }
         }
@@ -5111,7 +5111,7 @@ namespace BaseLibrary.CloudService {
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
     public partial class AssetNotInUse : object, System.ComponentModel.INotifyPropertyChanged {
         
-        private int a_Asset_IDField;
+        private int vAA_Asset_IDField;
         
         private System.Nullable<System.DateTime> dateLastLoginField;
         
@@ -5127,10 +5127,10 @@ namespace BaseLibrary.CloudService {
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public int VAA_Asset_ID {
             get {
-                return this.a_Asset_IDField;
+                return this.vAA_Asset_IDField;
             }
             set {
-                this.a_Asset_IDField = value;
+                this.vAA_Asset_IDField = value;
                 this.RaisePropertyChanged("VAA_Asset_ID");
             }
         }
