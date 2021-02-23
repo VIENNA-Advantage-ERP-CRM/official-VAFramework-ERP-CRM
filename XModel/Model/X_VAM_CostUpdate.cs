@@ -14,9 +14,9 @@
     /** Generated Model for VAM_ProductCostUpdate
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_VAM_ProductCostUpdate : PO
+    public class X_VAM_CostUpdate : PO
     {
-        public X_VAM_ProductCostUpdate(Context ctx, int VAM_ProductCostUpdate_ID, Trx trxName)
+        public X_VAM_CostUpdate(Context ctx, int VAM_ProductCostUpdate_ID, Trx trxName)
             : base(ctx, VAM_ProductCostUpdate_ID, trxName)
         {
             /** if (VAM_ProductCostUpdate_ID == 0)
@@ -32,7 +32,7 @@
             }
              */
         }
-        public X_VAM_ProductCostUpdate(Ctx ctx, int VAM_ProductCostUpdate_ID, Trx trxName)
+        public X_VAM_CostUpdate(Ctx ctx, int VAM_ProductCostUpdate_ID, Trx trxName)
             : base(ctx, VAM_ProductCostUpdate_ID, trxName)
         {
             /** if (VAM_ProductCostUpdate_ID == 0)
@@ -53,7 +53,7 @@
         @param rs result set 
         @param trxName transaction
         */
-        public X_VAM_ProductCostUpdate(Context ctx, DataRow rs, Trx trxName)
+        public X_VAM_CostUpdate(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -62,7 +62,7 @@
         @param rs result set 
         @param trxName transaction
         */
-        public X_VAM_ProductCostUpdate(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAM_CostUpdate(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -71,14 +71,14 @@
         @param rs result set 
         @param trxName transaction
         */
-        public X_VAM_ProductCostUpdate(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAM_CostUpdate(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_VAM_ProductCostUpdate()
+        static X_VAM_CostUpdate()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);

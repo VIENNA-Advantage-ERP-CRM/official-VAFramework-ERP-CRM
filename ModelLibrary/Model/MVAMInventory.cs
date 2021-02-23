@@ -48,7 +48,7 @@ namespace VAdvantage.Model
         string conversionNotFoundInOut = "";
         string conversionNotFoundInventory = "";
         string conversionNotFoundInventory1 = "";
-        MVAMVAMProductCostElement costElement = null;
+        MVAMProductCostElement costElement = null;
         ValueNamePair pp = null;
 
         /**is container applicable */
@@ -1687,7 +1687,7 @@ namespace VAdvantage.Model
                         if (!IsInternalUse()) // Physical Inventory
                         {
                             quantity = Decimal.Subtract(line.GetQtyCount(), line.GetQtyBook());
-                            if (!MVAMVAMProductCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product1, line.GetVAM_PFeature_SetInstance_ID(),
+                            if (!MVAMProductCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product1, line.GetVAM_PFeature_SetInstance_ID(),
                            "Physical Inventory", line, null, null, null, null, 0, quantity, Get_TrxName(), out conversionNotFoundInOut, optionalstr: "window"))
                             {
                                 if (!conversionNotFoundInventory1.Contains(conversionNotFoundInventory))
@@ -1719,7 +1719,7 @@ namespace VAdvantage.Model
                         else // Internal Use Inventory
                         {
                             quantity = Decimal.Negate(line.GetQtyInternalUse());
-                            if (!MVAMVAMProductCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product1, line.GetVAM_PFeature_SetInstance_ID(),
+                            if (!MVAMProductCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product1, line.GetVAM_PFeature_SetInstance_ID(),
                            "Internal Use Inventory", line, null, null, null, null, 0, quantity, Get_TrxName(), out conversionNotFoundInOut, optionalstr: "window"))
                             {
                                 if (!conversionNotFoundInventory1.Contains(conversionNotFoundInventory))
@@ -1951,17 +1951,17 @@ namespace VAdvantage.Model
 
         // amit not used 24-12-2015
         private void updateCostQueue(MVAMProduct product, int M_ASI_ID, MVABAccountBook mas,
-           int Org_ID, MVAMVAMProductCostElement ce, decimal movementQty)
+           int Org_ID, MVAMProductCostElement ce, decimal movementQty)
         {
             //MVAMVAMProductCostQueue[] cQueue = MVAMVAMProductCostQueue.GetQueue(product1, sLine.GetVAM_PFeature_SetInstance_ID(), acctSchema, GetVAF_Org_ID(), costElement, null);
-            MVAMVAMProductCostQueue[] cQueue = MVAMVAMProductCostQueue.GetQueue(product, M_ASI_ID, mas, Org_ID, ce, null);
+            MVAMProductCostQueue[] cQueue = MVAMProductCostQueue.GetQueue(product, M_ASI_ID, mas, Org_ID, ce, null);
             if (cQueue != null && cQueue.Length > 0)
             {
                 Decimal qty = movementQty;
                 bool value = false;
                 for (int cq = 0; cq < cQueue.Length; cq++)
                 {
-                    MVAMVAMProductCostQueue queue = cQueue[cq];
+                    MVAMProductCostQueue queue = cQueue[cq];
                     if (queue.GetCurrentQty() < 0) continue;
                     if (queue.GetCurrentQty() > qty)
                     {
@@ -1971,7 +1971,7 @@ namespace VAdvantage.Model
                     {
                         value = false;
                     }
-                    qty = MVAMVAMProductCostQueue.Quantity(queue.GetCurrentQty(), qty);
+                    qty = MVAMProductCostQueue.Quantity(queue.GetCurrentQty(), qty);
                     //if (cq == cQueue.Length - 1 && qty < 0) // last record
                     //{
                     //    queue.SetCurrentQty(qty);

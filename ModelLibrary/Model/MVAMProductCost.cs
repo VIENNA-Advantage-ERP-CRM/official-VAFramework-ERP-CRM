@@ -318,7 +318,7 @@ namespace VAdvantage.Model
                 VAF_Org_ID = 0;
 
             //	Create/Update Costs
-            MVAMVAMProductCostDetail.ProcessProduct(product, trxName);
+            MVAMProductCostDetail.ProcessProduct(product, trxName);
 
             return Util.GetValueOfDecimal(GetCurrentCost(
                 product, VAM_PFeature_SetInstance_ID,
@@ -537,16 +537,16 @@ namespace VAdvantage.Model
             //	Material Costs
             Decimal materialCost = Decimal.Multiply(materialCostEach, qty);
             //	Standard costs - just Material Costs
-            if (VAdvantage.Model.MVAMVAMProductCostElement.COSTINGMETHOD_StandardCosting.Equals(costingMethod))
+            if (VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_StandardCosting.Equals(costingMethod))
             {
                 _log.Finer("MaterialCosts = " + materialCost);
                 return materialCost;
             }
-            if (VAdvantage.Model.MVAMVAMProductCostElement.COSTINGMETHOD_Fifo.Equals(costingMethod)
-                || VAdvantage.Model.MVAMVAMProductCostElement.COSTINGMETHOD_Lifo.Equals(costingMethod))
+            if (VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_Fifo.Equals(costingMethod)
+                || VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_Lifo.Equals(costingMethod))
             {
-                VAdvantage.Model.MVAMVAMProductCostElement ce = VAdvantage.Model.MVAMVAMProductCostElement.GetMaterialCostElement(as1, costingMethod);
-                materialCost = Util.GetValueOfDecimal(MVAMVAMProductCostQueue.GetCosts(product, M_ASI_ID, as1, Org_ID, ce, qty, trxName));
+                VAdvantage.Model.MVAMProductCostElement ce = VAdvantage.Model.MVAMProductCostElement.GetMaterialCostElement(as1, costingMethod);
+                materialCost = Util.GetValueOfDecimal(MVAMProductCostQueue.GetCosts(product, M_ASI_ID, as1, Org_ID, ce, qty, trxName));
             }
 
             //	Other Costs
@@ -599,24 +599,24 @@ namespace VAdvantage.Model
         {
             Decimal? retValue = null;
             //	Direct Data
-            if (VAdvantage.Model.MVAMVAMProductCostElement.COSTINGMETHOD_AverageInvoice.Equals(costingMethod))
+            if (VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_AverageInvoice.Equals(costingMethod))
                 retValue = CalculateAverageInv(product, M_ASI_ID, as1, Org_ID);
-            else if (VAdvantage.Model.MVAMVAMProductCostElement.COSTINGMETHOD_AveragePO.Equals(costingMethod))
+            else if (VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_AveragePO.Equals(costingMethod))
                 retValue = CalculateAveragePO(product, M_ASI_ID, as1, Org_ID);
-            else if (VAdvantage.Model.MVAMVAMProductCostElement.COSTINGMETHOD_Fifo.Equals(costingMethod))
+            else if (VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_Fifo.Equals(costingMethod))
                 retValue = CalculateFiFo(product, M_ASI_ID, as1, Org_ID);
-            else if (VAdvantage.Model.MVAMVAMProductCostElement.COSTINGMETHOD_Lifo.Equals(costingMethod))
+            else if (VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_Lifo.Equals(costingMethod))
                 retValue = CalculateLiFo(product, M_ASI_ID, as1, Org_ID);
-            else if (VAdvantage.Model.MVAMVAMProductCostElement.COSTINGMETHOD_LastInvoice.Equals(costingMethod))
+            else if (VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_LastInvoice.Equals(costingMethod))
                 retValue = GetLastInvoicePrice(product, M_ASI_ID, Org_ID, as1.GetVAB_Currency_ID());
-            else if (VAdvantage.Model.MVAMVAMProductCostElement.COSTINGMETHOD_LastPOPrice.Equals(costingMethod))
+            else if (VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_LastPOPrice.Equals(costingMethod))
             {
                 if (VAB_OrderLine_ID != 0)
                     retValue = GetPOPrice(product, VAB_OrderLine_ID, as1.GetVAB_Currency_ID());
                 if (retValue == null || Env.Signum((Decimal)retValue) == 0)
                     retValue = GetLastPOPrice(product, M_ASI_ID, Org_ID, as1.GetVAB_Currency_ID());
             }
-            else if (VAdvantage.Model.MVAMVAMProductCostElement.COSTINGMETHOD_StandardCosting.Equals(costingMethod))
+            else if (VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_StandardCosting.Equals(costingMethod))
             {
                 //	migrate old costs
                 MVAMProductCosting pc = MVAMProductCosting.Get(product.GetCtx(), product.GetVAM_Product_ID(),
@@ -624,11 +624,11 @@ namespace VAdvantage.Model
                 if (pc != null)
                     retValue = pc.GetCurrentCostPrice();
             }
-            else if (VAdvantage.Model.MVAMVAMProductCostElement.COSTINGMETHOD_UserDefined.Equals(costingMethod))
+            else if (VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_UserDefined.Equals(costingMethod))
             {
                 ;
             }
-            else if (VAdvantage.Model.MVAMVAMProductCostElement.COSTINGMETHOD_CostCombination.Equals(costingMethod))
+            else if (VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_CostCombination.Equals(costingMethod))
             {
                 return 0;
             }
@@ -652,9 +652,9 @@ namespace VAdvantage.Model
             }
 
             //	Look for Standard Costs first
-            if (!VAdvantage.Model.MVAMVAMProductCostElement.COSTINGMETHOD_StandardCosting.Equals(costingMethod))
+            if (!VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_StandardCosting.Equals(costingMethod))
             {
-                VAdvantage.Model.MVAMVAMProductCostElement ce = VAdvantage.Model.MVAMVAMProductCostElement.GetMaterialCostElement(as1, VAdvantage.Model.MVAMVAMProductCostElement.COSTINGMETHOD_StandardCosting);
+                VAdvantage.Model.MVAMProductCostElement ce = VAdvantage.Model.MVAMProductCostElement.GetMaterialCostElement(as1, VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_StandardCosting);
                 MVAMVAMProductCost cost = Get(product, M_ASI_ID, as1, Org_ID, ce.GetVAM_ProductCostElement_ID());
                 if (cost != null && Env.Signum(cost.GetCurrentCostPrice()) != 0)
                 {
@@ -665,9 +665,9 @@ namespace VAdvantage.Model
 
             //	We do not have a price
             //	VAdvantage.Model.PO first
-            if (VAdvantage.Model.MVAMVAMProductCostElement.COSTINGMETHOD_AveragePO.Equals(costingMethod)
-                || VAdvantage.Model.MVAMVAMProductCostElement.COSTINGMETHOD_LastPOPrice.Equals(costingMethod)
-                || VAdvantage.Model.MVAMVAMProductCostElement.COSTINGMETHOD_StandardCosting.Equals(costingMethod))
+            if (VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_AveragePO.Equals(costingMethod)
+                || VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_LastPOPrice.Equals(costingMethod)
+                || VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_StandardCosting.Equals(costingMethod))
             {
                 //	try Last VAdvantage.Model.PO
                 retValue = GetLastPOPrice(product, M_ASI_ID, Org_ID, as1.GetVAB_Currency_ID());
@@ -694,9 +694,9 @@ namespace VAdvantage.Model
 
             //	Still Nothing
             //	Inv second
-            if (VAdvantage.Model.MVAMVAMProductCostElement.COSTINGMETHOD_AveragePO.Equals(costingMethod)
-                || VAdvantage.Model.MVAMVAMProductCostElement.COSTINGMETHOD_LastPOPrice.Equals(costingMethod)
-                || VAdvantage.Model.MVAMVAMProductCostElement.COSTINGMETHOD_StandardCosting.Equals(costingMethod))
+            if (VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_AveragePO.Equals(costingMethod)
+                || VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_LastPOPrice.Equals(costingMethod)
+                || VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_StandardCosting.Equals(costingMethod))
             {
                 //	try last Inv
                 retValue = GetLastInvoicePrice(product, M_ASI_ID, Org_ID, as1.GetVAB_Currency_ID());
@@ -997,11 +997,11 @@ namespace VAdvantage.Model
         {
             _log.Config(product.GetName());
             //	Cost Elements
-            VAdvantage.Model.MVAMVAMProductCostElement[] ces = VAdvantage.Model.MVAMVAMProductCostElement.GetCostingMethods(product);
-            VAdvantage.Model.MVAMVAMProductCostElement ce = null;
+            VAdvantage.Model.MVAMProductCostElement[] ces = VAdvantage.Model.MVAMProductCostElement.GetCostingMethods(product);
+            VAdvantage.Model.MVAMProductCostElement ce = null;
             for (int i = 0; i < ces.Length; i++)
             {
-                if (VAdvantage.Model.MVAMVAMProductCostElement.COSTINGMETHOD_StandardCosting.Equals(ces[i].GetCostingMethod()))
+                if (VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_StandardCosting.Equals(ces[i].GetCostingMethod()))
                 {
                     ce = ces[i];
                     break;
@@ -1100,8 +1100,8 @@ namespace VAdvantage.Model
         {
             _log.Config(product.GetName());
             //	Cost Elements
-            VAdvantage.Model.MVAMVAMProductCostElement[] ces = VAdvantage.Model.MVAMVAMProductCostElement.GetCostingMethods(product);
-            VAdvantage.Model.MVAMVAMProductCostElement ce = null;
+            VAdvantage.Model.MVAMProductCostElement[] ces = VAdvantage.Model.MVAMProductCostElement.GetCostingMethods(product);
+            VAdvantage.Model.MVAMProductCostElement ce = null;
             for (int j = 0; j < ces.Length; j++)
             {
                 ce = ces[j];
@@ -2360,12 +2360,12 @@ namespace VAdvantage.Model
          * 	Get Cost Element
          *	@return cost element
          */
-        public VAdvantage.Model.MVAMVAMProductCostElement GetCostElement()
+        public VAdvantage.Model.MVAMProductCostElement GetCostElement()
         {
             int VAM_ProductCostElement_ID = GetVAM_ProductCostElement_ID();
             if (VAM_ProductCostElement_ID == 0)
                 return null;
-            return VAdvantage.Model.MVAMVAMProductCostElement.Get(GetCtx(), VAM_ProductCostElement_ID);
+            return VAdvantage.Model.MVAMProductCostElement.Get(GetCtx(), VAM_ProductCostElement_ID);
         }
 
         /**
@@ -2375,7 +2375,7 @@ namespace VAdvantage.Model
          */
         protected override bool BeforeSave(bool newRecord)
         {
-            VAdvantage.Model.MVAMVAMProductCostElement ce = GetCostElement();
+            VAdvantage.Model.MVAMProductCostElement ce = GetCostElement();
             //	Check if data entry makes sense
             if (_manual)
             {
@@ -2446,7 +2446,7 @@ namespace VAdvantage.Model
             if (ce != null)
             {
                 if (ce.IsCalculated()
-                    || VAdvantage.Model.MVAMVAMProductCostElement.COSTELEMENTTYPE_Material.Equals(ce.GetCostElementType())
+                    || VAdvantage.Model.MVAMProductCostElement.COSTELEMENTTYPE_Material.Equals(ce.GetCostElementType())
                     && Env.Signum(GetPercentCost()) != 0)
                     SetPercentCost(Env.ZERO);
             }

@@ -279,17 +279,17 @@ namespace VAdvantage.Model
         {
             if (IsCostCalculated() || IsCostImmediate())
             {
-                X_VAM_MatchInvoiceoiceCostTrack costTrack = null;
+                X_VAM_MatchInvoiceCostTrack costTrack = null;
                 int VAM_MatchInvoiceoiceCostTrack_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAM_MatchInvoiceoiceCostTrack_ID FROM VAM_MatchInvoiceoiceCostTrack WHERE VAM_MatchInvoice_ID = " + GetVAM_MatchInvoice_ID()));
                 if (VAM_MatchInvoiceoiceCostTrack_ID > 0)
                 {
-                    costTrack = new X_VAM_MatchInvoiceoiceCostTrack(GetCtx(), VAM_MatchInvoiceoiceCostTrack_ID, null);
+                    costTrack = new X_VAM_MatchInvoiceCostTrack(GetCtx(), VAM_MatchInvoiceoiceCostTrack_ID, null);
                     costTrack.SetIsCostCalculated(IsCostCalculated());
                     costTrack.SetIsCostImmediate(IsCostImmediate());
                 }
                 else
                 {
-                     costTrack = new X_VAM_MatchInvoiceoiceCostTrack(GetCtx(), 0, null);
+                     costTrack = new X_VAM_MatchInvoiceCostTrack(GetCtx(), 0, null);
                      costTrack.SetVAM_MatchInvoice_ID(GetVAM_MatchInvoice_ID());
                      costTrack.SetVAM_Inv_InOutLine_ID(GetVAM_Inv_InOutLine_ID());
                      costTrack.SetVAB_InvoiceLine_ID(GetVAB_InvoiceLine_ID());

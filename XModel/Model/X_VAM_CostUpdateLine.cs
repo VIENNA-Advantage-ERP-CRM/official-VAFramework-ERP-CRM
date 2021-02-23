@@ -14,9 +14,9 @@
     /** Generated Model for VAM_ProductCostUpdateLine
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_VAM_ProductCostUpdateLine : PO
+    public class X_VAM_CostUpdateLine : PO
     {
-        public X_VAM_ProductCostUpdateLine(Context ctx, int VAM_ProductCostUpdateLine_ID, Trx trxName)
+        public X_VAM_CostUpdateLine(Context ctx, int VAM_ProductCostUpdateLine_ID, Trx trxName)
             : base(ctx, VAM_ProductCostUpdateLine_ID, trxName)
         {
             /** if (VAM_ProductCostUpdateLine_ID == 0)
@@ -29,7 +29,7 @@
             }
              */
         }
-        public X_VAM_ProductCostUpdateLine(Ctx ctx, int VAM_ProductCostUpdateLine_ID, Trx trxName)
+        public X_VAM_CostUpdateLine(Ctx ctx, int VAM_ProductCostUpdateLine_ID, Trx trxName)
             : base(ctx, VAM_ProductCostUpdateLine_ID, trxName)
         {
             /** if (VAM_ProductCostUpdateLine_ID == 0)
@@ -47,7 +47,7 @@
         @param rs result set 
         @param trxName transaction
         */
-        public X_VAM_ProductCostUpdateLine(Context ctx, DataRow rs, Trx trxName)
+        public X_VAM_CostUpdateLine(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -56,7 +56,7 @@
         @param rs result set 
         @param trxName transaction
         */
-        public X_VAM_ProductCostUpdateLine(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAM_CostUpdateLine(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -65,14 +65,14 @@
         @param rs result set 
         @param trxName transaction
         */
-        public X_VAM_ProductCostUpdateLine(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAM_CostUpdateLine(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_VAM_ProductCostUpdateLine()
+        static X_VAM_CostUpdateLine()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);

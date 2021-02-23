@@ -3,27 +3,27 @@ namespace VAdvantage.Model{
 using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for VAM_ProductCost_ForeignCurrency
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_VAM_ProductCost_ForeignCurrency : PO{public X_VAM_ProductCost_ForeignCurrency (Context ctx, int VAM_ProductCost_ForeignCurrency_ID, Trx trxName) : base (ctx, VAM_ProductCost_ForeignCurrency_ID, trxName){/** if (VAM_ProductCost_ForeignCurrency_ID == 0){SetVAM_ProductCost_ForeignCurrency_ID (0);} */
-}public X_VAM_ProductCost_ForeignCurrency (Ctx ctx, int VAM_ProductCost_ForeignCurrency_ID, Trx trxName) : base (ctx, VAM_ProductCost_ForeignCurrency_ID, trxName){/** if (VAM_ProductCost_ForeignCurrency_ID == 0){SetVAM_ProductCost_ForeignCurrency_ID (0);} */
+public class X_VAM_Cost_ForeignCurrency : PO{public X_VAM_Cost_ForeignCurrency (Context ctx, int VAM_ProductCost_ForeignCurrency_ID, Trx trxName) : base (ctx, VAM_ProductCost_ForeignCurrency_ID, trxName){/** if (VAM_ProductCost_ForeignCurrency_ID == 0){SetVAM_ProductCost_ForeignCurrency_ID (0);} */
+}public X_VAM_Cost_ForeignCurrency (Ctx ctx, int VAM_ProductCost_ForeignCurrency_ID, Trx trxName) : base (ctx, VAM_ProductCost_ForeignCurrency_ID, trxName){/** if (VAM_ProductCost_ForeignCurrency_ID == 0){SetVAM_ProductCost_ForeignCurrency_ID (0);} */
 }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction  
 */
-public X_VAM_ProductCost_ForeignCurrency (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
+public X_VAM_Cost_ForeignCurrency (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_VAM_ProductCost_ForeignCurrency (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
+public X_VAM_Cost_ForeignCurrency (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_VAM_ProductCost_ForeignCurrency (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName){}/** Static Constructor 
+public X_VAM_Cost_ForeignCurrency (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName){}/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_VAM_ProductCost_ForeignCurrency(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
+static X_VAM_Cost_ForeignCurrency(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27763325247458L;/** Last Updated Timestamp 12/8/2016 5:55:30 PM */
 public static long updatedMS = 1481199930669L;/** VAF_TableView_ID=1000686 */
 public static int Table_ID; // =1000686;

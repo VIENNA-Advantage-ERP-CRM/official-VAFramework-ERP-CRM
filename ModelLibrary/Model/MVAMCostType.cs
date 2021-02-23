@@ -11,15 +11,15 @@ using System.Data;
 
 namespace VAdvantage.Model
 {
-    public class MVAMVAMProductCostType : X_VAM_ProductCostType
+    public class MVAMCostType : X_VAM_CostType
     {
-        public MVAMVAMProductCostType(Ctx ctx, int VAM_ProductCostType_ID, Trx trxName)
+        public MVAMCostType(Ctx ctx, int VAM_ProductCostType_ID, Trx trxName)
             : base(ctx, VAM_ProductCostType_ID, trxName)
         {
 
         }	//	MVAMVAMProductCostType
 
-        public MVAMVAMProductCostType(Ctx ctx, DataRow rs, Trx trxName)
+        public MVAMCostType(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
 

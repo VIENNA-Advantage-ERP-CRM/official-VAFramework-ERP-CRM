@@ -49,11 +49,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         private static String TO_LastPOPrice = "p";
         private static String TO_OldStandardCost = "x";
         //Standard Cost Element		
-        private MVAMVAMProductCostElement _ce = null;
+        private MVAMProductCostElement _ce = null;
         // Client Accounting SChema	
         private MVABAccountBook[] _ass = null;
         // Map of Cost Elements		
-        private Dictionary<String, MVAMVAMProductCostElement> _ces = new Dictionary<String, MVAMVAMProductCostElement>();
+        private Dictionary<String, MVAMProductCostElement> _ces = new Dictionary<String, MVAMProductCostElement>();
         #endregion
 
         /// <summary>
@@ -135,7 +135,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Prepare
             MVAFClient client = MVAFClient.Get(GetCtx());
-            _ce = MVAMVAMProductCostElement.GetMaterialCostElement(client, MVABAccountBook.COSTINGMETHOD_StandardCosting);
+            _ce = MVAMProductCostElement.GetMaterialCostElement(client, MVABAccountBook.COSTINGMETHOD_StandardCosting);
             if (_ce.Get_ID() == 0)
             {
                 throw new Exception("@NotFound@ @VAM_ProductCostElement_ID@ (StdCost)");
@@ -186,7 +186,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 || to.Equals(TO_LiFo)
                 || to.Equals(TO_StandardCost))
             {
-                MVAMVAMProductCostElement ce = GetCostElement(_SetFutureCostTo);
+                MVAMProductCostElement ce = GetCostElement(_SetFutureCostTo);
                 return ce != null;
             }
             return true;
@@ -393,7 +393,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Average Invoice
             if (to.Equals(TO_AverageInvoice))
             {
-                MVAMVAMProductCostElement ce = GetCostElement(TO_AverageInvoice);
+                MVAMProductCostElement ce = GetCostElement(TO_AverageInvoice);
                 if (ce == null)
                 {
                     throw new Exception("CostElement not found: " + TO_AverageInvoice);
@@ -407,7 +407,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Average Invoice History
             else if (to.Equals(TO_AverageInvoiceHistory))
             {
-                MVAMVAMProductCostElement ce = GetCostElement(TO_AverageInvoice);
+                MVAMProductCostElement ce = GetCostElement(TO_AverageInvoice);
                 if (ce == null)
                 {
                     throw new Exception("CostElement not found: " + TO_AverageInvoice);
@@ -422,7 +422,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Average PO
             else if (to.Equals(TO_AveragePO))
             {
-                MVAMVAMProductCostElement ce = GetCostElement(TO_AveragePO);
+                MVAMProductCostElement ce = GetCostElement(TO_AveragePO);
                 if (ce == null)
                 {
                     throw new Exception("CostElement not found: " + TO_AveragePO);
@@ -436,7 +436,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Average PO History
             else if (to.Equals(TO_AveragePOHistory))
             {
-                MVAMVAMProductCostElement ce = GetCostElement(TO_AveragePO);
+                MVAMProductCostElement ce = GetCostElement(TO_AveragePO);
                 if (ce == null)
                 {
                     throw new Exception("CostElement not found: " + TO_AveragePO);
@@ -451,7 +451,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	FiFo
             else if (to.Equals(TO_FiFo))
             {
-                MVAMVAMProductCostElement ce = GetCostElement(TO_FiFo);
+                MVAMProductCostElement ce = GetCostElement(TO_FiFo);
                 if (ce == null)
                 {
                     throw new Exception("CostElement not found: " + TO_FiFo);
@@ -472,7 +472,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Last Inv Price
             else if (to.Equals(TO_LastInvoicePrice))
             {
-                MVAMVAMProductCostElement ce = GetCostElement(TO_LastInvoicePrice);
+                MVAMProductCostElement ce = GetCostElement(TO_LastInvoicePrice);
                 if (ce != null)
                 {
                     MVAMVAMProductCost xCost = MVAMVAMProductCost.Get(GetCtx(), cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), cost.GetVAM_Product_ID(), cost.GetVAM_ProductCostType_ID(), cost.GetVAB_AccountBook_ID(), ce.GetVAM_ProductCostElement_ID(), cost.GetVAM_PFeature_SetInstance_ID());
@@ -493,7 +493,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Last PO Price
             else if (to.Equals(TO_LastPOPrice))
             {
-                MVAMVAMProductCostElement ce = GetCostElement(TO_LastPOPrice);
+                MVAMProductCostElement ce = GetCostElement(TO_LastPOPrice);
                 if (ce != null)
                 {
                     MVAMVAMProductCost xCost = MVAMVAMProductCost.Get(GetCtx(), cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), cost.GetVAM_Product_ID(), cost.GetVAM_ProductCostType_ID(), cost.GetVAB_AccountBook_ID(), ce.GetVAM_ProductCostElement_ID(), cost.GetVAM_PFeature_SetInstance_ID());
@@ -514,7 +514,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	FiFo
             else if (to.Equals(TO_LiFo))
             {
-                MVAMVAMProductCostElement ce = GetCostElement(TO_LiFo);
+                MVAMProductCostElement ce = GetCostElement(TO_LiFo);
                 if (ce == null)
                 {
                     throw new Exception("CostElement not found: " + TO_LiFo);
@@ -552,9 +552,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// </summary>
         /// <param name="CostingMethod">method</param>
         /// <returns>costing element or null</returns>
-        private MVAMVAMProductCostElement GetCostElement(String CostingMethod)
+        private MVAMProductCostElement GetCostElement(String CostingMethod)
         {
-            MVAMVAMProductCostElement ce = null;
+            MVAMProductCostElement ce = null;
             //if (_ces.Count == 0)
             //{
             //    ce = null;
@@ -569,7 +569,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
             if (ce == null)
             {
-                ce = MVAMVAMProductCostElement.GetMaterialCostElement(GetCtx(), CostingMethod);
+                ce = MVAMProductCostElement.GetMaterialCostElement(GetCtx(), CostingMethod);
                 //_ces.put(CostingMethod, ce);
                 _ces.Add(CostingMethod, ce);
             }

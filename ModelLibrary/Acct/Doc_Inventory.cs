@@ -181,7 +181,7 @@ namespace VAdvantage.Acct
                 if (!IsPosted())
                 {
                     //	Cost Detail
-                    MVAMVAMProductCostDetail.CreateInventory(as1, line.GetVAF_Org_ID(),
+                    MVAMProductCostDetail.CreateInventory(as1, line.GetVAF_Org_ID(),
                         line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(),
                         line.Get_ID(), 0,
                         costs, line.GetQty().Value,

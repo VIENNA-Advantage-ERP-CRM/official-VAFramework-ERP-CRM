@@ -12,13 +12,13 @@ namespace VAdvantage.Model
     using System.Data;/** Generated Model for VAM_MatchInvoiceoiceCostTrack
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_VAM_MatchInvoiceoiceCostTrack : PO
+    public class X_VAM_MatchInvoiceCostTrack : PO
     {
-        public X_VAM_MatchInvoiceoiceCostTrack(Context ctx, int VAM_MatchInvoiceoiceCostTrack_ID, Trx trxName)
+        public X_VAM_MatchInvoiceCostTrack(Context ctx, int VAM_MatchInvoiceoiceCostTrack_ID, Trx trxName)
             : base(ctx, VAM_MatchInvoiceoiceCostTrack_ID, trxName)
         {/** if (VAM_MatchInvoiceoiceCostTrack_ID == 0){SetVAM_MatchInvoiceoiceCostTrack_ID (0);} */
         }
-        public X_VAM_MatchInvoiceoiceCostTrack(Ctx ctx, int VAM_MatchInvoiceoiceCostTrack_ID, Trx trxName)
+        public X_VAM_MatchInvoiceCostTrack(Ctx ctx, int VAM_MatchInvoiceoiceCostTrack_ID, Trx trxName)
             : base(ctx, VAM_MatchInvoiceoiceCostTrack_ID, trxName)
         {/** if (VAM_MatchInvoiceoiceCostTrack_ID == 0){SetVAM_MatchInvoiceoiceCostTrack_ID (0);} */
         }/** Load Constructor 
@@ -26,20 +26,20 @@ namespace VAdvantage.Model
 @param rs result set 
 @param trxName transaction
 */
-        public X_VAM_MatchInvoiceoiceCostTrack(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAM_MatchInvoiceCostTrack(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_VAM_MatchInvoiceoiceCostTrack(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAM_MatchInvoiceCostTrack(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_VAM_MatchInvoiceoiceCostTrack(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
+        public X_VAM_MatchInvoiceCostTrack(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-        static X_VAM_MatchInvoiceoiceCostTrack() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
+        static X_VAM_MatchInvoiceCostTrack() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27793156050767L;/** Last Updated Timestamp 11/19/2017 12:15:34 AM */
         public static long updatedMS = 1511030733978L;/** VAF_TableView_ID=1000806 */
         public static int Table_ID; // =1000806;

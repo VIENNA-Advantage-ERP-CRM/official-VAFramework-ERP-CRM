@@ -14,18 +14,9 @@ using System.Data;
 /** Generated Model for VAM_ProductCostType
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_VAM_ProductCostType : PO
+public class X_VAM_CostType : PO
 {
-public X_VAM_ProductCostType (Context ctx, int VAM_ProductCostType_ID, Trx trxName) : base (ctx, VAM_ProductCostType_ID, trxName)
-{
-/** if (VAM_ProductCostType_ID == 0)
-{
-SetVAM_ProductCostType_ID (0);
-SetName (null);
-}
- */
-}
-public X_VAM_ProductCostType (Ctx ctx, int VAM_ProductCostType_ID, Trx trxName) : base (ctx, VAM_ProductCostType_ID, trxName)
+public X_VAM_CostType (Context ctx, int VAM_ProductCostType_ID, Trx trxName) : base (ctx, VAM_ProductCostType_ID, trxName)
 {
 /** if (VAM_ProductCostType_ID == 0)
 {
@@ -34,12 +25,21 @@ SetName (null);
 }
  */
 }
+public X_VAM_CostType (Ctx ctx, int VAM_ProductCostType_ID, Trx trxName) : base (ctx, VAM_ProductCostType_ID, trxName)
+{
+/** if (VAM_ProductCostType_ID == 0)
+{
+SetVAM_ProductCostType_ID (0);
+SetName (null);
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_VAM_ProductCostType (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_CostType (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_VAM_ProductCostType (Context ctx, DataRow rs, Trx trxName) : base(ctx, 
 @param rs result set 
 @param trxName transaction
 */
-public X_VAM_ProductCostType (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_CostType (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_VAM_ProductCostType (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_VAM_ProductCostType (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_CostType (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_VAM_ProductCostType()
+static X_VAM_CostType()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);

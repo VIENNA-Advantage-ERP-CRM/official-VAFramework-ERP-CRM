@@ -19,21 +19,21 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MVAMVAMProductCostElementLine : X_VAM_ProductCostElementLine
+    public class MVAMCostElementLine : X_VAM_CostElementLine
     {
-        private static VLogger _log = VLogger.GetVLogger(typeof(MVAMVAMProductCostElementLine).FullName);
-        private MVAMVAMProductCostElement costElement = null;
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVAMCostElementLine).FullName);
+        private MVAMProductCostElement costElement = null;
         private String costingMethod = null;
         private StringBuilder sql = new StringBuilder();
         private int countRecord = 0;
 
-        public MVAMVAMProductCostElementLine(Ctx ctx, int VAM_ProductCostElementLine_ID, Trx trxName)
+        public MVAMCostElementLine(Ctx ctx, int VAM_ProductCostElementLine_ID, Trx trxName)
             : base(ctx, VAM_ProductCostElementLine_ID, trxName)
         {
 
         }
 
-        public MVAMVAMProductCostElementLine(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAMCostElementLine(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 
@@ -43,7 +43,7 @@ namespace VAdvantage.Model
         {
             try
             {
-                costElement = new MVAMVAMProductCostElement(GetCtx(), GetM_Ref_CostElement(), null);
+                costElement = new MVAMProductCostElement(GetCtx(), GetM_Ref_CostElement(), null);
                 costingMethod = costElement.GetCostingMethod();
                 if (string.IsNullOrEmpty(costingMethod))
                 {

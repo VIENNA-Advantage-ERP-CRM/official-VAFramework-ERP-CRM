@@ -253,13 +253,13 @@
     <Compile Include="Model\MVAMProductCost.cs" />
     <Compile Include="Model\MVAMProductCostDetail.cs" />
     <Compile Include="Model\MVAMProductCostElement.cs" />
-    <Compile Include="Model\MVAMProductCostElementDetail.cs" />
-    <Compile Include="Model\MVAMProductCostElementLine.cs" />
-    <Compile Include="Model\MVAMProductCostForeignCurrency.cs" />
+    <Compile Include="Model\MVAMCostElementDetail.cs" />
+    <Compile Include="Model\MVAMCostElementLine.cs" />
+    <Compile Include="Model\MVAMCostForeignCurrency.cs" />
     <Compile Include="Model\MVAMProductCostQueue.cs" />
-    <Compile Include="Model\MVAMProductCostType.cs" />
-    <Compile Include="Model\MVAMProductCostUpdate.cs" />
-    <Compile Include="Model\MVAMProductCostUpdateLine.cs" />
+    <Compile Include="Model\MVAMCostType.cs" />
+    <Compile Include="Model\MVAMCostUpdate.cs" />
+    <Compile Include="Model\MVAMCostUpdateLine.cs" />
     <Compile Include="Model\MVABCountry.cs" />
     <Compile Include="Model\MVAFContextScope.cs" />
     <Compile Include="Model\MVABCurrency.cs" />
@@ -500,7 +500,6 @@
     <Compile Include="Process\CopyFromOrder.cs" />
     <Compile Include="Process\CopyFromProject.cs" />
     <Compile Include="Process\CopyOrder.cs" />
-    <Compile Include="Process\CopyTranslationEntries.cs" />
     <Compile Include="Process\CostCreate.cs" />
     <Compile Include="Process\CostingCalculation.cs" />
     <Compile Include="Process\CostUpdate.cs" />
@@ -509,7 +508,6 @@
     <Compile Include="Process\CreateConversionEntries.cs" />
     <Compile Include="Process\CreateCurrencySourceEntries.cs" />
     <Compile Include="Process\CreateInviteeList.cs" />
-    <Compile Include="Process\CreatePendingTranslations.cs" />
     <Compile Include="Process\CreateReleaseDocFromBO.cs" />
     <Compile Include="Process\CreateRFQFromRequisition.cs" />
     <Compile Include="Process\CreateSalesContract.cs" />

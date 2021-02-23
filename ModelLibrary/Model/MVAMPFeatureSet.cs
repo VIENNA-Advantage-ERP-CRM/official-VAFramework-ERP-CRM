@@ -29,9 +29,9 @@ namespace VAdvantage.Model
     {
         #region Private Variables
         //	Instance Attributes					
-        private MVAMVAMProductFeature[] _instanceAttributes = null;
+        private MVAMProductFeature[] _instanceAttributes = null;
         //	Instance Attributes					
-        private MVAMVAMProductFeature[] _productAttributes = null;
+        private MVAMProductFeature[] _productAttributes = null;
         // Entry Exclude						
         private X_VAM_PFeature_SetExclude[] _excludes = null;
         // Lot create Exclude					
@@ -100,7 +100,7 @@ namespace VAdvantage.Model
          * 	@param instanceAttributes true if for instance
          *	@return instance or product attribute array
          */
-        public MVAMVAMProductFeature[] GetMAttributes(bool instanceAttributes)
+        public MVAMProductFeature[] GetMAttributes(bool instanceAttributes)
         {
             if ((_instanceAttributes == null && instanceAttributes)
                 || _productAttributes == null && !instanceAttributes)
@@ -112,7 +112,7 @@ namespace VAdvantage.Model
                     + " AND mau.VAM_PFeature_Set_ID=" + GetVAM_PFeature_Set_ID() + " AND ma.IsInstanceAttribute= " +
                     ((instanceAttributes) ? "'Y'" : "'N'").ToString()
                     + " ORDER BY mau.VAM_ProductFeature_ID";
-                List<MVAMVAMProductFeature> list = new List<MVAMVAMProductFeature>();
+                List<MVAMProductFeature> list = new List<MVAMProductFeature>();
                 DataTable dt = null;
                 IDataReader idr = DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
                 dt = new DataTable();
@@ -124,7 +124,7 @@ namespace VAdvantage.Model
                     foreach (DataRow dr in dt.Rows)
                     {
                         //DataRow dr = ds.Tables[0].Rows[i];
-                        MVAMVAMProductFeature ma = new MVAMVAMProductFeature(GetCtx(), Convert.ToInt32(dr[0]), Get_TrxName());
+                        MVAMProductFeature ma = new MVAMProductFeature(GetCtx(), Convert.ToInt32(dr[0]), Get_TrxName());
                         list.Add(ma);
                     }
                 }
@@ -143,12 +143,12 @@ namespace VAdvantage.Model
                 //	Differentiate attributes
                 if (instanceAttributes)
                 {
-                    _instanceAttributes = new MVAMVAMProductFeature[list.Count];
+                    _instanceAttributes = new MVAMProductFeature[list.Count];
                     _instanceAttributes = list.ToArray();
                 }
                 else
                 {
-                    _productAttributes = new MVAMVAMProductFeature[list.Count];
+                    _productAttributes = new MVAMProductFeature[list.Count];
                     _productAttributes = list.ToArray();
                 }
             }

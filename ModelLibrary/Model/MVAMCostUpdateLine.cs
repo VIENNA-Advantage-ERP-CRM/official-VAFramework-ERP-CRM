@@ -13,7 +13,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MVAMVAMProductCostUpdateLine : X_VAM_ProductCostUpdateLine
+    public class MVAMCostUpdateLine : X_VAM_CostUpdateLine
     {
         #region Private Variables
         //Logger for class MVAMVAMProductCostUpdate 
@@ -26,7 +26,7 @@ namespace VAdvantage.Model
 	 *  @param  VAB_Order_ID    order to load, (0 create new order)
 	 *  @param trx p_trx name
 	 */
-        public MVAMVAMProductCostUpdateLine(Ctx ctx, int VAM_ProductCostUpdateLine_ID, Trx trx)
+        public MVAMCostUpdateLine(Ctx ctx, int VAM_ProductCostUpdateLine_ID, Trx trx)
             : base(ctx, VAM_ProductCostUpdateLine_ID, trx)
         {
 
@@ -39,13 +39,13 @@ namespace VAdvantage.Model
          *  @param rs result set record
          *  @param trx transaction
          */
-        public MVAMVAMProductCostUpdateLine(Ctx ctx, DataRow dr, Trx trx)
+        public MVAMCostUpdateLine(Ctx ctx, DataRow dr, Trx trx)
             : base(ctx, dr, trx)
         {
 
         }
 
-        public MVAMVAMProductCostUpdateLine(Ctx ctx, MVAMVAMProductCostUpdate costupdate, Trx trx)
+        public MVAMCostUpdateLine(Ctx ctx, MVAMCostUpdate costupdate, Trx trx)
             : base(ctx, 0, trx)
         {
             SetVAM_ProductCostUpdate_ID(costupdate.GetVAM_ProductCostUpdate_ID());

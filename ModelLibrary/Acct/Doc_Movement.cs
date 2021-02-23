@@ -173,7 +173,7 @@ namespace VAdvantage.Acct
                     {
 
                         //	Cost Detail From
-                        MVAMVAMProductCostDetail.CreateMovement(as1, dr.GetVAF_Org_ID(), 	//	locator org
+                        MVAMProductCostDetail.CreateMovement(as1, dr.GetVAF_Org_ID(), 	//	locator org
                             line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(),
                             line.Get_ID(), 0,
                             Decimal.Negate(costs), Decimal.Negate(line.GetQty().Value), true,
@@ -181,7 +181,7 @@ namespace VAdvantage.Acct
 
 
                         //	Cost Detail To
-                        MVAMVAMProductCostDetail.CreateMovement(as1, cr.GetVAF_Org_ID(),	//	locator org 
+                        MVAMProductCostDetail.CreateMovement(as1, cr.GetVAF_Org_ID(),	//	locator org 
                             line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(),
                             line.Get_ID(), 0,
                             costs, line.GetQty().Value, false,

@@ -155,7 +155,7 @@ namespace VAdvantage.Acct
             if (!IsPosted())
             {
                 //	Create PO Cost Detail Record firs
-                MVAMVAMProductCostDetail.CreateOrder(as1, _oLine.GetVAF_Org_ID(),
+                MVAMProductCostDetail.CreateOrder(as1, _oLine.GetVAF_Org_ID(),
                         GetVAM_Product_ID(), _VAM_PFeature_SetInstance_ID,
                         _VAB_OrderLine_ID, 0,		//	no cost element
                         isReturnTrx ? Decimal.Negate(poCost) : poCost, isReturnTrx ? Decimal.Negate(Utility.Util.GetValueOfDecimal(GetQty())) : Utility.Util.GetValueOfDecimal(GetQty()),			//	Delivered

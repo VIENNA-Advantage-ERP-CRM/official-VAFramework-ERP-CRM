@@ -27,7 +27,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MVAMVAMProductFeature : X_VAM_ProductFeature
+    public class MVAMProductFeature : X_VAM_ProductFeature
     {
         /// <summary>
         /// Get Attributes Of Client
@@ -36,9 +36,9 @@ namespace VAdvantage.Model
         /// <param name="onlyProductAttributes">only Product Attributes</param>
         /// <param name="onlyListAttributes">st Attributes</param>
         /// <returns>array of attributes</returns>
-        public static MVAMVAMProductFeature[] GetOfClient(Ctx ctx, bool onlyProductAttributes, bool onlyListAttributes)
+        public static MVAMProductFeature[] GetOfClient(Ctx ctx, bool onlyProductAttributes, bool onlyListAttributes)
         {
-            List<MVAMVAMProductFeature> list = new List<MVAMVAMProductFeature>();
+            List<MVAMProductFeature> list = new List<MVAMProductFeature>();
             int VAF_Client_ID = ctx.GetVAF_Client_ID();
             String sql = "SELECT * FROM VAM_ProductFeature "
                 + "WHERE VAF_Client_ID=" + VAF_Client_ID + " AND IsActive='Y'";
@@ -54,7 +54,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow dr = ds.Tables[0].Rows[i];
-                    list.Add(new MVAMVAMProductFeature(ctx, dr, null));
+                    list.Add(new MVAMProductFeature(ctx, dr, null));
                 }
                 ds = null;
             }
@@ -63,7 +63,7 @@ namespace VAdvantage.Model
                 _log.Log(Level.SEVERE, sql, e);
             }
 
-            MVAMVAMProductFeature[] retValue = new MVAMVAMProductFeature[list.Count];
+            MVAMProductFeature[] retValue = new MVAMProductFeature[list.Count];
             retValue = list.ToArray();
             _log.Fine("VAF_Client_ID=" + VAF_Client_ID + " - #" + retValue.Length);
             return retValue;
@@ -71,7 +71,7 @@ namespace VAdvantage.Model
 
         //Logger
         // private static CLogger s_log = CLogger.GetCLogger(typeof(MVAMVAMProductFeature));
-        private static VLogger _log = VLogger.GetVLogger(typeof(MVAMVAMProductFeature).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVAMProductFeature).FullName);
 
         /// <summary>
         /// 	Standard Constructor
@@ -79,7 +79,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAM_ProductFeature_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MVAMVAMProductFeature(Ctx ctx, int VAM_ProductFeature_ID, Trx trxName)
+        public MVAMProductFeature(Ctx ctx, int VAM_ProductFeature_ID, Trx trxName)
             : base(ctx, VAM_ProductFeature_ID, trxName)
         {
             if (VAM_ProductFeature_ID == 0)
@@ -96,7 +96,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">set</param>
         /// <param name="trxName">transaction</param>
-        public MVAMVAMProductFeature(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAMProductFeature(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }

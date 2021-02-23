@@ -48,7 +48,7 @@ namespace VIS.Models
             AttributesObjects obj = new AttributesObjects();
 
             MVAMPFeatureSet aset = null;
-            MVAMVAMProductFeature[] attributes = null;
+            MVAMProductFeature[] attributes = null;
             //	Get Model
             MVAMPFeatureSetInstance _masi = MVAMPFeatureSetInstance.Get(ctx, _VAM_PFeature_SetInstance_ID, _VAM_Product_ID);
             MVAMProduct _prd = new MVAMProduct(ctx, _VAM_Product_ID, null);
@@ -399,7 +399,7 @@ namespace VIS.Models
 
             StringBuilder sql = new StringBuilder();
             MVAMPFeatureSet aset = null;
-            MVAMVAMProductFeature[] attributes = null;
+            MVAMProductFeature[] attributes = null;
             string attrsetQry = "";
             int attributeSet = 0;
             MVAMPFeatureSetInstance _masi = MVAMPFeatureSetInstance.Get(ctx, _VAM_PFeature_SetInstance_ID, _VAM_Product_ID);
@@ -530,7 +530,7 @@ namespace VIS.Models
 
             StringBuilder sql = new StringBuilder();
             MVAMPFeatureSet aset = null;
-            MVAMVAMProductFeature[] attributes = null;
+            MVAMProductFeature[] attributes = null;
             string attrsetQry = "";
             int attributeSet = 0;
             MVAMPFeatureSetInstance _masi = MVAMPFeatureSetInstance.Get(ctx, _VAM_PFeature_SetInstance_ID, _VAM_Product_ID);
@@ -666,7 +666,7 @@ namespace VIS.Models
         /// <param name="attribute"></param>
         /// <param name="product"></param>
         /// <param name="readOnly"></param>
-        private string AddAttributeLine(MVAMVAMProductFeature attribute, int VAM_PFeature_SetInstance_ID, bool product, bool readOnly, int windowNo, AttributesObjects obj, int count)
+        private string AddAttributeLine(MVAMProductFeature attribute, int VAM_PFeature_SetInstance_ID, bool product, bool readOnly, int windowNo, AttributesObjects obj, int count)
         {
             log.Fine(attribute + ", Product=" + product + ", R/O=" + readOnly);
             //Column 1
@@ -688,7 +688,7 @@ namespace VIS.Models
 
             MVAMPFeatueInstance instance = attribute.GetMVAMPFeatueInstance(VAM_PFeature_SetInstance_ID);
 
-            if (MVAMVAMProductFeature.ATTRIBUTEVALUETYPE_List.Equals(attribute.GetAttributeValueType()))
+            if (MVAMProductFeature.ATTRIBUTEVALUETYPE_List.Equals(attribute.GetAttributeValueType()))
             {
                 MVAMPFeatureValue[] values = attribute.GetMVAMPFeatureValues();
                 //Column 2
@@ -752,7 +752,7 @@ namespace VIS.Models
                     log.Fine("Attribute=" + attribute.GetName() + " #" + values.Length + " no instance");
                 }
             }
-            else if (MVAMVAMProductFeature.ATTRIBUTEVALUETYPE_Number.Equals(attribute.GetAttributeValueType()))
+            else if (MVAMProductFeature.ATTRIBUTEVALUETYPE_Number.Equals(attribute.GetAttributeValueType()))
             {
                 string value = null;
                 if (instance != null)
@@ -900,7 +900,7 @@ namespace VIS.Models
                 }
 
                 MVAMPFeatureSet aset = null;
-                MVAMVAMProductFeature[] attributes = null;
+                MVAMProductFeature[] attributes = null;
                 String mandatory = "";
 
                 MVAMProduct product = MVAMProduct.Get(ctx, MVAMProductId);
@@ -1038,10 +1038,10 @@ namespace VIS.Models
                 //}
                 //sql.Append(" ORDER BY ats.VAM_PFeature_SetInstance_ID");
 
-                Dictionary<MVAMVAMProductFeature, object> lst = new Dictionary<MVAMVAMProductFeature, object>();
+                Dictionary<MVAMProductFeature, object> lst = new Dictionary<MVAMProductFeature, object>();
                 for (int i = 0; i < attributes.Length; i++)
                 {
-                    if (MVAMVAMProductFeature.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
+                    if (MVAMProductFeature.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
                     {
                         object editor = editors[i];
                         MVAMPFeatureValue value = null;
@@ -1058,7 +1058,7 @@ namespace VIS.Models
                         lst[attributes[i]] = value;
                         //attributes[i].SetMVAMPFeatueInstance(MVAMPFeatureSetInstanceId, value);
                     }
-                    else if (MVAMVAMProductFeature.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
+                    else if (MVAMProductFeature.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
                     {
                         object editor = editors[i].Name;
                         string value = Util.GetValueOfString(editor);
@@ -1258,7 +1258,7 @@ namespace VIS.Models
 
                     for (int i = 0; i < attributes.Length; i++)
                     {
-                        if (MVAMVAMProductFeature.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
+                        if (MVAMProductFeature.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
                         {
                             MVAMPFeatureValue value = lst[attributes[i]] != null ? lst[attributes[i]] as MVAMPFeatureValue : null;
                             if (value == null)
@@ -1267,7 +1267,7 @@ namespace VIS.Models
                             }
                             attributes[i].SetMVAMPFeatueInstance(MVAMPFeatureSetInstanceId, value);
                         }
-                        else if (MVAMVAMProductFeature.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
+                        else if (MVAMProductFeature.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
                         {
                             if (Convert.ToDecimal(lst[attributes[i]]) == 0)
                             {
@@ -1435,7 +1435,7 @@ namespace VIS.Models
             }
 
             MVAMPFeatureSet aset = null;
-            MVAMVAMProductFeature[] attributes = null;
+            MVAMProductFeature[] attributes = null;
             String mandatory = "";
             var _masi = MVAMPFeatureSetInstance.Get(ctx, 0, MVAMProductId);
             MVAMProduct product = MVAMProduct.Get(ctx, MVAMProductId);
@@ -1563,10 +1563,10 @@ namespace VIS.Models
             }
             sql.Append(" ORDER BY ats.VAM_PFeature_SetInstance_id");
 
-            Dictionary<MVAMVAMProductFeature, object> lst = new Dictionary<MVAMVAMProductFeature, object>();
+            Dictionary<MVAMProductFeature, object> lst = new Dictionary<MVAMProductFeature, object>();
             for (int i = 0; i < attributes.Length; i++)
             {
-                if (MVAMVAMProductFeature.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
+                if (MVAMProductFeature.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
                 {
                     object editor = editors[i];
                     MVAMPFeatureValue value = null;
@@ -1583,7 +1583,7 @@ namespace VIS.Models
                     lst[attributes[i]] = value;
                     //attributes[i].SetMVAMPFeatueInstance(MVAMPFeatureSetInstanceId, value);
                 }
-                else if (MVAMVAMProductFeature.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
+                else if (MVAMProductFeature.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
                 {
                     object editor = editors[i].Name;
                     decimal value = Convert.ToDecimal(editor);
@@ -1784,7 +1784,7 @@ namespace VIS.Models
 
                 for (int i = 0; i < attributes.Length; i++)
                 {
-                    if (MVAMVAMProductFeature.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
+                    if (MVAMProductFeature.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
                     {
                         MVAMPFeatureValue value = lst[attributes[i]] != null ? lst[attributes[i]] as MVAMPFeatureValue : null;
 
@@ -1795,7 +1795,7 @@ namespace VIS.Models
                         //}
                         attributes[i].SetMVAMPFeatueInstance(MVAMPFeatureSetInstanceId, value);
                     }
-                    else if (MVAMVAMProductFeature.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
+                    else if (MVAMProductFeature.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
                     {
                         if (Convert.ToDecimal(lst[attributes[i]]) == 0)
                         {

@@ -250,7 +250,7 @@ namespace VAdvantage.Acct
             if (!IsPosted())
             {
                 //	Cost Detail Record - data from Expense/IncClearing (CR) record
-                MVAMVAMProductCostDetail.CreateInvoice(as1, GetVAF_Org_ID(),
+                MVAMProductCostDetail.CreateInvoice(as1, GetVAF_Org_ID(),
                     GetVAM_Product_ID(), matchInv.GetVAM_PFeature_SetInstance_ID(),
                     _invoiceLine.GetVAB_InvoiceLine_ID(), 0,		//	No cost element
                     Decimal.Negate(cr.GetAcctBalance()), isReturnTrx ? Decimal.Negate(Utility.Util.GetValueOfDecimal(GetQty())) : Utility.Util.GetValueOfDecimal(GetQty()),		//	correcting

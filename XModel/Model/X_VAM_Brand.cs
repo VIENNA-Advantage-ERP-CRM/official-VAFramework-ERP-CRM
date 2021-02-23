@@ -12,13 +12,13 @@ namespace VAdvantage.Model
     using System.Data;/** Generated Model for M_Brand
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_M_Brand : PO
+    public class X_VAM_Brand : PO
     {
-        public X_M_Brand(Context ctx, int M_Brand_ID, Trx trxName)
+        public X_VAM_Brand(Context ctx, int M_Brand_ID, Trx trxName)
             : base(ctx, M_Brand_ID, trxName)
         {/** if (M_Brand_ID == 0){SetM_Brand_ID (0);} */
         }
-        public X_M_Brand(Ctx ctx, int M_Brand_ID, Trx trxName)
+        public X_VAM_Brand(Ctx ctx, int M_Brand_ID, Trx trxName)
             : base(ctx, M_Brand_ID, trxName)
         {/** if (M_Brand_ID == 0){SetM_Brand_ID (0);} */
         }/** Load Constructor 
@@ -26,20 +26,20 @@ namespace VAdvantage.Model
 @param rs result set 
 @param trxName transaction
 */
-        public X_M_Brand(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAM_Brand(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_M_Brand(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAM_Brand(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_M_Brand(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
+        public X_VAM_Brand(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-        static X_M_Brand() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
+        static X_VAM_Brand() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27797191401445L;/** Last Updated Timestamp 1/4/2018 5:11:24 PM */
         public static long updatedMS = 1515066084656L;/** AD_Table_ID=1000514 */
         public static int Table_ID; // =1000514;

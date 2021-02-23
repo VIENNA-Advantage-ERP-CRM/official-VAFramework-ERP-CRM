@@ -301,7 +301,7 @@ namespace VAdvantage.Model
             if (dbt.Equals(DOCBASETYPE_WORKORDERTRANSACTION))
                 return X_M_WorkOrderTransaction.Table_ID;
             if (dbt.Equals(DOCBASETYPE_STANDARDCOSTUPDATE))
-                return X_VAM_ProductCostUpdate.Table_ID;
+                return X_VAM_CostUpdate.Table_ID;
             /*********Manafacturing*************/
             //	Error
             log.Warning("No VAF_TableView_ID for " + GetName() + " (DocBaseType=" + dbt + ")");
@@ -354,8 +354,8 @@ namespace VAdvantage.Model
                 return X_M_WorkOrder.Table_Name;
             if (VAF_TableView_ID == X_M_WorkOrderTransaction.Table_ID)
                 return X_M_WorkOrderTransaction.Table_Name;
-            if (VAF_TableView_ID == X_VAM_ProductCostUpdate.Table_ID)
-                return X_VAM_ProductCostUpdate.Table_Name;
+            if (VAF_TableView_ID == X_VAM_CostUpdate.Table_ID)
+                return X_VAM_CostUpdate.Table_Name;
             /*********Manafacturing*************/
             //
             return MVAFTableView.GetTableName(GetCtx(), VAF_TableView_ID);

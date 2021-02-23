@@ -1881,10 +1881,10 @@ namespace VAdvantage.Model
             if (ds != null)
             {
 
-                MVAMVAMProductCostElement cost = null;
+                MVAMProductCostElement cost = null;
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    cost = new MVAMVAMProductCostElement(m_ctx, 0, m_trx);
+                    cost = new MVAMProductCostElement(m_ctx, 0, m_trx);
                     //tableName = cost.Get_TableName();
                     //if (lstTableName.Contains(tableName))
                     //{

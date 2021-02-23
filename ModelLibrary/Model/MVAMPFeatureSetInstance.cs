@@ -166,7 +166,7 @@ namespace VAdvantage.Model
             }
             StringBuilder sb = new StringBuilder();
             //	Instance Attribute Values
-            MVAMVAMProductFeature[] attributes = _mas.GetMAttributes(true);
+            MVAMProductFeature[] attributes = _mas.GetMAttributes(true);
             for (int i = 0; i < attributes.Length; i++)
             {
                 MVAMPFeatueInstance mai = attributes[i].GetMVAMPFeatueInstance(GetVAM_PFeature_SetInstance_ID());

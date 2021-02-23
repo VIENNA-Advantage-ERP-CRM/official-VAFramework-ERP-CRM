@@ -71,7 +71,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 throw new Exception("@NotFound@: @VAM_Product_ID@ = " + _VAM_Product_ID);
             }
             //
-            if (MVAMVAMProductCostDetail.ProcessProduct(product, Get_Trx()))
+            if (MVAMProductCostDetail.ProcessProduct(product, Get_Trx()))
             {
                 return "@OK@";
             }

@@ -12,13 +12,13 @@ namespace VAdvantage.Model
     using System.Data;/** Generated Model for VAM_ProductCostElementDetail
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_VAM_ProductCostElementDetail : PO
+    public class X_VAM_CostElementDetail : PO
     {
-        public X_VAM_ProductCostElementDetail(Context ctx, int VAM_ProductCostElementDetail_ID, Trx trxName)
+        public X_VAM_CostElementDetail(Context ctx, int VAM_ProductCostElementDetail_ID, Trx trxName)
             : base(ctx, VAM_ProductCostElementDetail_ID, trxName)
         {/** if (VAM_ProductCostElementDetail_ID == 0){SetAmt (0.0);SetVAB_AccountBook_ID (0);SetVAM_ProductCostElementDetail_ID (0);SetVAM_ProductCostElement_ID (0);SetVAM_Product_ID (0);SetQty (0.0);} */
         }
-        public X_VAM_ProductCostElementDetail(Ctx ctx, int VAM_ProductCostElementDetail_ID, Trx trxName)
+        public X_VAM_CostElementDetail(Ctx ctx, int VAM_ProductCostElementDetail_ID, Trx trxName)
             : base(ctx, VAM_ProductCostElementDetail_ID, trxName)
         {/** if (VAM_ProductCostElementDetail_ID == 0){SetAmt (0.0);SetVAB_AccountBook_ID (0);SetVAM_ProductCostElementDetail_ID (0);SetVAM_ProductCostElement_ID (0);SetVAM_Product_ID (0);SetQty (0.0);} */
         }/** Load Constructor 
@@ -26,20 +26,20 @@ namespace VAdvantage.Model
 @param rs result set 
 @param trxName transaction
 */
-        public X_VAM_ProductCostElementDetail(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAM_CostElementDetail(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_VAM_ProductCostElementDetail(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAM_CostElementDetail(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_VAM_ProductCostElementDetail(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
+        public X_VAM_CostElementDetail(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-        static X_VAM_ProductCostElementDetail() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
+        static X_VAM_CostElementDetail() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27744376170769L;/** Last Updated Timestamp 5/3/2016 10:17:33 AM */
         public static long updatedMS = 1462250853980L;/** VAF_TableView_ID=1000643 */
         public static int Table_ID; // =1000643;

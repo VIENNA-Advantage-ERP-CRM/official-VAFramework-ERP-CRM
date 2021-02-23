@@ -256,7 +256,7 @@ namespace VIS.Controllers
             {
                 var ctx = Session["ctx"] as Ctx;
                 List<AttributeGrid> lst = new List<AttributeGrid>();
-                var value = MVAMVAMProductFeature.GetOfClient(ctx, true, true);
+                var value = MVAMProductFeature.GetOfClient(ctx, true, true);
 
                 for (int i = 0; i < value.Length; i++)
                 {
@@ -2443,7 +2443,7 @@ namespace VIS.Controllers
                                         MVAMProduct product = new MVAMProduct(ctx, match.GetVAM_Product_ID(), trx);
 
                                         // Not returning any value as No effect
-                                        MVAMVAMProductCostQueue.CreateProductCostsDetails(ctx, match.GetVAF_Client_ID(), match.GetVAF_Org_ID(), product,
+                                        MVAMProductCostQueue.CreateProductCostsDetails(ctx, match.GetVAF_Client_ID(), match.GetVAF_Org_ID(), product,
                                              match.GetVAM_PFeature_SetInstance_ID(), "Match IV", null, sLine, null, iLine, null,
                                              Decimal.Multiply(Decimal.Divide(iLine.GetLineNetAmt(), iLine.GetQtyInvoiced()), match.GetQty()),
                                              match.GetQty(), trx, out conversionNotFoundMatch, "window");
@@ -2482,7 +2482,7 @@ namespace VIS.Controllers
                                     MVAMProduct product = new MVAMProduct(ctx, matchPO.GetVAM_Product_ID(), trx);
 
                                     // Not returning any value as No effect
-                                    MVAMVAMProductCostQueue.CreateProductCostsDetails(ctx, matchPO.GetVAF_Client_ID(), matchPO.GetVAF_Org_ID(), product,
+                                    MVAMProductCostQueue.CreateProductCostsDetails(ctx, matchPO.GetVAF_Client_ID(), matchPO.GetVAF_Org_ID(), product,
                                           matchPO.GetVAM_PFeature_SetInstance_ID(), "Match IV", null, sLine, null, iLine, null,
                                           Decimal.Multiply(Decimal.Divide(iLine.GetLineNetAmt(), iLine.GetQtyInvoiced()), matchPO.GetQty()),
                                           matchPO.GetQty(), trx, out conversionNotFoundMatch, "window");
@@ -2541,7 +2541,7 @@ namespace VIS.Controllers
                                     MVAMProduct product = new MVAMProduct(ctx, match.GetVAM_Product_ID(), trx);
 
                                     // Not returning any value as No effect
-                                    MVAMVAMProductCostQueue.CreateProductCostsDetails(ctx, match.GetVAF_Client_ID(), match.GetVAF_Org_ID(), product, match.GetVAM_PFeature_SetInstance_ID(),
+                                    MVAMProductCostQueue.CreateProductCostsDetails(ctx, match.GetVAF_Client_ID(), match.GetVAF_Org_ID(), product, match.GetVAM_PFeature_SetInstance_ID(),
                                         "Match PO", null, sLine, null, null, null, oLine.GetVAB_OrderLine_ID(), match.GetQty(), trx, out conversionNotFoundMatch, "window");
                                     if (!string.IsNullOrEmpty(conversionNotFoundMatch))
                                     {

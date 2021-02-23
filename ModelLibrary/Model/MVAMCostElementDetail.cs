@@ -20,17 +20,17 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MVAMVAMProductCostElementDetail : X_VAM_ProductCostElementDetail
+    public class MVAMCostElementDetail : X_VAM_CostElementDetail
     {
-        private static VLogger _log = VLogger.GetVLogger(typeof(MVAMVAMProductCostElementDetail).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVAMCostElementDetail).FullName);
 
-        public MVAMVAMProductCostElementDetail(Ctx ctx, int VAM_ProductCostElementDetail_ID, Trx trxName)
+        public MVAMCostElementDetail(Ctx ctx, int VAM_ProductCostElementDetail_ID, Trx trxName)
             : base(ctx, VAM_ProductCostElementDetail_ID, trxName)
         {
 
         }
 
-        public MVAMVAMProductCostElementDetail(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAMCostElementDetail(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 
@@ -47,11 +47,11 @@ namespace VAdvantage.Model
         }
 
         public static bool CreateCostElementDetail(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID, MVAMProduct Product, int M_ASI_ID,
-                                                     MVABAccountBook mas, int VAM_ProductCostElement_ID, string windowName, MVAMVAMProductCostDetail cd, decimal amt, decimal qty)
+                                                     MVABAccountBook mas, int VAM_ProductCostElement_ID, string windowName, MVAMProductCostDetail cd, decimal amt, decimal qty)
         {
             try
             {
-                MVAMVAMProductCostElementDetail ced = new MVAMVAMProductCostElementDetail(ctx, 0, cd.Get_Trx());
+                MVAMCostElementDetail ced = new MVAMCostElementDetail(ctx, 0, cd.Get_Trx());
                 ced.SetVAF_Client_ID(VAF_Client_ID);
                 ced.SetVAF_Org_ID(VAF_Org_ID);
                 ced.SetVAB_AccountBook_ID(mas.GetVAB_AccountBook_ID());
