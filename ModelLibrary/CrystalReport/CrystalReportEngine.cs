@@ -302,6 +302,11 @@ namespace VAdvantage.CrystalReport
                                             sb.Append(paramName).Append(" IN (")
                                                 .Append(paramValue.ToString()).Append(")");
                                         }
+                                        else if (DisplayType.IsID(Convert.ToInt32(dsPara.Tables[0].Rows[c]["AD_Reference_ID"])))
+                                        {
+                                            sb.Append(paramName).Append(" = ")
+                                                .Append(paramValue.ToString());
+                                        }
                                         else
                                         {
                                             sb.Append("Upper(").Append(paramName).Append(")").Append(" = Upper(")
@@ -1149,6 +1154,11 @@ namespace VAdvantage.CrystalReport
                                             sb.Append(paramName).Append(" IN (")
                                                 .Append(paramValue.ToString()).Append(")");
                                         }
+                                        else if (DisplayType.IsID(Convert.ToInt32(dsPara.Tables[0].Rows[c]["AD_Reference_ID"])))
+                                        {
+                                            sb.Append(paramName).Append(" = ")
+                                                .Append(paramValue.ToString());
+                                        }
                                         else
                                         {
                                             sb.Append("Upper(").Append(paramName).Append(")").Append(" = Upper(")
@@ -1530,7 +1540,7 @@ namespace VAdvantage.CrystalReport
                     string Name = col.GetColumnName();
                     if (sql.Contains(Name) && !MRole.GetDefault(_ctx).IsColumnAccess(col.GetAD_Table_ID(), col.GetAD_Column_ID(), false))
                     {
-                        string obscureColumn = DBFunctionCollection.GetObscureColumn(col.GetObscureType(), tableName, Name) + " as " + Name ;
+                        string obscureColumn = DBFunctionCollection.GetObscureColumn(col.GetObscureType(), tableName, Name) + " as " + Name;
                         sql = sql.Replace(Name, obscureColumn);
                     }
                 }
