@@ -12,7 +12,10 @@ namespace VAdvantage.Model
         public MGenAttributeUse(Ctx ctx, int C_GenAttributeValue_ID, Trx trxName)
             : base(ctx, C_GenAttributeValue_ID, trxName)
         {
-
+            if (C_GenAttributeValue_ID != 0)
+            {
+                throw new Exception("Multi-Key");
+            }
         }
 
          /// <summary>
@@ -21,7 +24,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
-        public MGenAttributeUse(Ctx ctx, IDataReader idr, Trx trxName)
+        public MGenAttributeUse(Ctx ctx, DataRow idr, Trx trxName)
             : base(ctx, idr, trxName)
         {
 
