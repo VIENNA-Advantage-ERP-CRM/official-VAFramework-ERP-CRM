@@ -1032,14 +1032,7 @@ namespace VAdvantage.Model
                 }
                 /**End**/
 
-                //Lakhwinder 24feb2021
-                //UPdate delived qty on respective Order line 
-                if (Util.GetValueOfInt(DB.ExecuteQuery("UPDATE C_OrderLine Set QtyDelivered=QtyDelivered-" + differenceQty + " Where C_OrderLine_id=" + oldLine.GetC_OrderLine_ID(), null, Get_Trx())) == -1)
-                {
-                    _processMsg = "Cannot Update Order Line";
-                    throw new Exception(_processMsg);
-                }
-
+                
                 // Now save Splitted Document
                 if (!splitLine.Save(Get_TrxName()))
                 {
