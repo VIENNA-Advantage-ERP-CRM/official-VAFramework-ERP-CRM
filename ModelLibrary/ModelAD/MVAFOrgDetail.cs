@@ -96,7 +96,7 @@ namespace VAdvantage.Model
             if (VAM_Warehouse_ID != 0)
                 return VAM_Warehouse_ID;
             //
-            MWarehouse[] whss = MWarehouse.GetForOrg(GetCtx(), GetVAF_Org_ID());
+            MVAMWarehouse[] whss = MVAMWarehouse.GetForOrg(GetCtx(), GetVAF_Org_ID());
             if (whss.Length > 0)
             {
                 VAM_Warehouse_ID = whss[0].GetVAM_Warehouse_ID();

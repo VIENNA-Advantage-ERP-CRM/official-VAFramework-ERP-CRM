@@ -23,6 +23,6 @@ namespace VAdvantage.Interface
         /// <param name="replenish">temporary replenishment</param>
         /// <returns>qty to order</returns>
 
-        Decimal GetQtyToOrder(VAdvantage.Model.MWarehouse wh, VAdvantage.Model.X_VAT_Restock replenish);
+        Decimal GetQtyToOrder(VAdvantage.Model.MVAMWarehouse wh, VAdvantage.Model.X_VAT_Restock replenish);
     }
 }

@@ -2212,11 +2212,11 @@ namespace VAdvantage.Model
                 }
 
                 //	Warehouse Org
-                MWarehouse wh = null;
+                MVAMWarehouse wh = null;
                 if (newRecord
                     || Is_ValueChanged("VAF_Org_ID") || Is_ValueChanged("VAM_Warehouse_ID"))
                 {
-                    wh = MWarehouse.Get(GetCtx(), GetVAM_Warehouse_ID());
+                    wh = MVAMWarehouse.Get(GetCtx(), GetVAM_Warehouse_ID());
                     if (wh.GetVAF_Org_ID() != GetVAF_Org_ID())
                     {
                         //Arpit 20th Nov,2017 issue No.115 -Not to save record if WareHouse is conflictiong with Organization
@@ -2231,7 +2231,7 @@ namespace VAdvantage.Model
                 {
                     if (wh == null)
                     {
-                        wh = MWarehouse.Get(GetCtx(), GetVAM_Warehouse_ID());
+                        wh = MVAMWarehouse.Get(GetCtx(), GetVAM_Warehouse_ID());
                     }
                     if (wh.IsDisallowNegativeInv())
                     {
@@ -3058,7 +3058,7 @@ namespace VAdvantage.Model
                 {
                     MVABOrderLine line = lines[i];
                     int VAM_Locator_ID = 0;
-                    MWarehouse wh = MWarehouse.Get(GetCtx(), line.GetVAM_Warehouse_ID());
+                    MVAMWarehouse wh = MVAMWarehouse.Get(GetCtx(), line.GetVAM_Warehouse_ID());
                     //	Check/set WH/Org
                     if (header_VAM_Warehouse_ID != 0)	//	enforce WH
                     {
@@ -4752,7 +4752,7 @@ namespace VAdvantage.Model
                 }
                 //
                 String posStatus = "";
-                MWarehouse wh = null;
+                MVAMWarehouse wh = null;
                 MVABOrderLine[] oLines = GetLines(true, null);
                 for (int i = 0; i < oLines.Length; i++)
                 {
@@ -4775,7 +4775,7 @@ namespace VAdvantage.Model
                             VAM_Locator_ID = MVAMProductLocator.GetFirstVAM_Locator_ID(product, VAM_Warehouse_ID);
                             if (VAM_Locator_ID == 0)
                             {
-                                wh = MWarehouse.Get(GetCtx(), VAM_Warehouse_ID);
+                                wh = MVAMWarehouse.Get(GetCtx(), VAM_Warehouse_ID);
                                 VAM_Locator_ID = wh.GetDefaultVAM_Locator_ID();
                             }
                         }
@@ -4809,7 +4809,7 @@ namespace VAdvantage.Model
 
                         //
                         int VAM_Warehouse_ID = oLine.GetVAM_Warehouse_ID();
-                        wh = MWarehouse.Get(GetCtx(), VAM_Warehouse_ID);
+                        wh = MVAMWarehouse.Get(GetCtx(), VAM_Warehouse_ID);
 
                         MVAMInvInOutLine ioLine = new MVAMInvInOutLine(shipment);
 
@@ -4826,7 +4826,7 @@ namespace VAdvantage.Model
                             VAM_Locator_ID = MVAMProductLocator.GetFirstVAM_Locator_ID(product, VAM_Warehouse_ID);
                             if (VAM_Locator_ID == 0)
                             {
-                                wh = MWarehouse.Get(GetCtx(), VAM_Warehouse_ID);
+                                wh = MVAMWarehouse.Get(GetCtx(), VAM_Warehouse_ID);
                                 VAM_Locator_ID = wh.GetDefaultVAM_Locator_ID();
                             }
                         }

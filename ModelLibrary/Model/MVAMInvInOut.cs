@@ -1362,7 +1362,7 @@ namespace VAdvantage.Model
             }
             base.SetVAM_Warehouse_ID(VAM_Warehouse_ID);
             //
-            MWarehouse wh = MWarehouse.Get(GetCtx(), GetVAM_Warehouse_ID());
+            MVAMWarehouse wh = MVAMWarehouse.Get(GetCtx(), GetVAM_Warehouse_ID());
             if (wh.GetVAF_Org_ID() != GetVAF_Org_ID())
             {
                 log.Warning("VAM_Warehouse_ID=" + VAM_Warehouse_ID
@@ -1496,7 +1496,7 @@ namespace VAdvantage.Model
             //	Warehouse Org
             if (newRecord)
             {
-                MWarehouse wh = MWarehouse.Get(GetCtx(), GetVAM_Warehouse_ID());
+                MVAMWarehouse wh = MVAMWarehouse.Get(GetCtx(), GetVAM_Warehouse_ID());
                 if (wh.GetVAF_Org_ID() != GetVAF_Org_ID())
                 {
                     log.SaveError("WarehouseOrgConflict", "");
@@ -5004,7 +5004,7 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    locatorId = MWarehouse.Get(GetCtx(), counter.GetVAM_Warehouse_ID()).GetDefaultVAM_Locator_ID();
+                    locatorId = MVAMWarehouse.Get(GetCtx(), counter.GetVAM_Warehouse_ID()).GetDefaultVAM_Locator_ID();
                 }
                 //counterLine.SetVAM_Locator_ID(Convert.ToInt32(inTrx ? Env.ZERO : counterLine.GetMovementQty()));
                 counterLine.SetVAM_Locator_ID(locatorId);

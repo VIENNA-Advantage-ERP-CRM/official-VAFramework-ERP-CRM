@@ -2275,7 +2275,7 @@ namespace VAdvantage.Model
                             {
                                 VAM_Warehouse_Id = MVAMLocator.Get(ctx, movementline.GetVAM_LocatorTo_ID()).GetVAM_Warehouse_ID();
                             }
-                            VAF_Org_ID = (MWarehouse.Get(ctx, VAM_Warehouse_Id)).GetVAF_Org_ID();
+                            VAF_Org_ID = (MVAMWarehouse.Get(ctx, VAM_Warehouse_Id)).GetVAF_Org_ID();
                             #endregion
                         }
 
@@ -2364,7 +2364,7 @@ namespace VAdvantage.Model
                                         // get warehouse org -- freight record to be created in warehouse org
                                         if (VAM_Warehouse_Id > 0)
                                         {
-                                            VAF_Org_ID = MWarehouse.Get(ctx, VAM_Warehouse_Id).GetVAF_Org_ID();
+                                            VAF_Org_ID = MVAMWarehouse.Get(ctx, VAM_Warehouse_Id).GetVAF_Org_ID();
                                         }
                                         cd = MVAMProductCostDetail.CreateCostDetail(acctSchema, VAF_Org_ID, inoutline.GetVAM_Product_ID(),
                                             inoutline.GetVAM_PFeature_SetInstance_ID(), windowName, inventoryLine, inoutline, movementline,
@@ -2505,7 +2505,7 @@ namespace VAdvantage.Model
                                         // get warehouse org -- freight record to be created in warehouse org
                                         if (VAM_Warehouse_Id > 0)
                                         {
-                                            VAF_Org_ID = MWarehouse.Get(ctx, VAM_Warehouse_Id).GetVAF_Org_ID();
+                                            VAF_Org_ID = MVAMWarehouse.Get(ctx, VAM_Warehouse_Id).GetVAF_Org_ID();
                                         }
                                         cd = MVAMProductCostDetail.CreateCostDetail(acctSchema, VAF_Org_ID, Util.GetValueOfInt(dsLandedCostAllocation.Tables[0].Rows[lca]["VAM_Product_ID"]),
                                             Util.GetValueOfInt(dsLandedCostAllocation.Tables[0].Rows[lca]["VAM_PFeature_SetInstance_ID"]), windowName, inventoryLine, inoutline, movementline,

@@ -23,7 +23,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Report
 {
-    public class MReport : X_VAPA_FinancialReport
+    public class MVAPAFinancialReport : X_VAPA_FinancialReport
     {
         /// <summary>
         ///  Constructor
@@ -31,7 +31,7 @@ namespace VAdvantage.Report
         /// <param name="ctx">context</param>
         /// <param name="VAPA_FinancialReport_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MReport(Ctx ctx, int VAPA_FinancialReport_ID, Trx trxName)
+        public MVAPAFinancialReport(Ctx ctx, int VAPA_FinancialReport_ID, Trx trxName)
             : base(ctx, VAPA_FinancialReport_ID, trxName)
         {
 
@@ -45,8 +45,8 @@ namespace VAdvantage.Report
             }
             else
             {
-                _columnSet = new MReportColumnSet(ctx, GetVAPA_FR_ColumnSet_ID(), trxName);
-                _lineSet = new MReportLineSet(ctx, GetVAPA_FR_RowSet_ID(), trxName);
+                _columnSet = new MVAPAFRColumnSet(ctx, GetVAPA_FR_ColumnSet_ID(), trxName);
+                _lineSet = new MVAPAFRRowSet(ctx, GetVAPA_FR_RowSet_ID(), trxName);
             }
         }	//	MReport
 
@@ -56,15 +56,15 @@ namespace VAdvantage.Report
         /// <param name="ctx">context</param>
         /// <param name="rs">datarow</param>
         /// <param name="trxName">transaction</param>
-        public MReport(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAPAFinancialReport(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {            
-            _columnSet = new MReportColumnSet(ctx, GetVAPA_FR_ColumnSet_ID(), trxName);
-            _lineSet = new MReportLineSet(ctx, GetVAPA_FR_RowSet_ID(), trxName);
+            _columnSet = new MVAPAFRColumnSet(ctx, GetVAPA_FR_ColumnSet_ID(), trxName);
+            _lineSet = new MVAPAFRRowSet(ctx, GetVAPA_FR_RowSet_ID(), trxName);
         }	//	MReport
 
-        private MReportColumnSet _columnSet = null;
-        private MReportLineSet _lineSet = null;
+        private MVAPAFRColumnSet _columnSet = null;
+        private MVAPAFRRowSet _lineSet = null;
 
         /// <summary>
         ///	List Info
@@ -120,7 +120,7 @@ namespace VAdvantage.Report
        /// 	Get Column Set
        /// </summary>
         /// <returns> Column Set</returns>
-        public MReportColumnSet GetColumnSet()
+        public MVAPAFRColumnSet GetColumnSet()
         {
             return _columnSet;
         }
@@ -129,7 +129,7 @@ namespace VAdvantage.Report
         /// Get Line Set
         /// </summary>
         /// <returns>Line Set</returns>
-        public MReportLineSet GetLineSet()
+        public MVAPAFRRowSet GetLineSet()
         {
             return _lineSet;
         }

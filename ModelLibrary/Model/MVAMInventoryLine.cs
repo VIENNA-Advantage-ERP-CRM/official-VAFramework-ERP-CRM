@@ -386,11 +386,11 @@ namespace VAdvantage.Model
             // no need to check when record is in processing
             if (!inventory.IsProcessing() || newRecord)
             {
-                int VAM_Warehouse_ID = 0; MWarehouse wh = null;
+                int VAM_Warehouse_ID = 0; MVAMWarehouse wh = null;
                 string qry = "select VAM_Warehouse_id from VAM_Locator where VAM_Locator_id=" + GetVAM_Locator_ID();
                 VAM_Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, Get_TrxName()));
 
-                wh = MWarehouse.Get(GetCtx(), VAM_Warehouse_ID);
+                wh = MVAMWarehouse.Get(GetCtx(), VAM_Warehouse_ID);
                 qry = "SELECT QtyOnHand FROM VAM_Storage where VAM_Locator_id=" + GetVAM_Locator_ID() + " and VAM_Product_id=" + GetVAM_Product_ID() +
                       " AND NVL(VAM_PFeature_SetInstance_ID, 0)=" + GetVAM_PFeature_SetInstance_ID();
                 OnHandQty = Convert.ToDecimal(DB.ExecuteScalar(qry, null, Get_TrxName()));

@@ -12,9 +12,9 @@ namespace VAdvantage.Model
     using System.Data;/** Generated Model for VAPA_FR_ColumnSet
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class VAPA_FR_Column : PO
+    public class X_VAPA_FR_Column : PO
     {
-        public VAPA_FR_Column(Context ctx, int VAPA_FR_ColumnSet_ID, Trx trxName)
+        public X_VAPA_FR_Column(Context ctx, int VAPA_FR_ColumnSet_ID, Trx trxName)
             : base(ctx, VAPA_FR_ColumnSet_ID, trxName)
         {/** if (VAPA_FR_ColumnSet_ID == 0){SetColumnType (null);// R
 SetIsPrinted (true);// Y
@@ -22,7 +22,7 @@ SetName (null);SetVAPA_FR_ColumnSet_ID (0);SetVAPA_FR_ColumnSet_ID (0);SetPostin
 SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM VAPA_FR_ColumnSet WHERE VAPA_FR_ColumnSet_ID=@VAPA_FR_ColumnSet_ID@
 } */
         }
-        public VAPA_FR_Column(Ctx ctx, int VAPA_FR_ColumnSet_ID, Trx trxName)
+        public X_VAPA_FR_Column(Ctx ctx, int VAPA_FR_ColumnSet_ID, Trx trxName)
             : base(ctx, VAPA_FR_ColumnSet_ID, trxName)
         {/** if (VAPA_FR_ColumnSet_ID == 0){SetColumnType (null);// R
 SetIsPrinted (true);// Y
@@ -34,20 +34,20 @@ SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM VAPA_FR_Co
 @param rs result set 
 @param trxName transaction
 */
-        public VAPA_FR_Column(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAPA_FR_Column(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public VAPA_FR_Column(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAPA_FR_Column(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public VAPA_FR_Column(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
+        public X_VAPA_FR_Column(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-        static VAPA_FR_Column() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
+        static X_VAPA_FR_Column() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27741621420744L;/** Last Updated Timestamp 4/1/2016 1:05:03 PM */
         public static long updatedMS = 1459496103955L;/** VAF_TableView_ID=446 */
         public static int Table_ID; // =446;

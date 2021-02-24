@@ -620,7 +620,7 @@ namespace VAdvantage.Model
                     int xVAM_Locator_ID = MVAMProductLocator.GetFirstVAM_Locator_ID(product, VAM_Warehouse_ID);
                     if (xVAM_Locator_ID == 0)
                     {
-                        MWarehouse wh = MWarehouse.Get(Ctx, VAM_Warehouse_ID);
+                        MVAMWarehouse wh = MVAMWarehouse.Get(Ctx, VAM_Warehouse_ID);
                         xVAM_Locator_ID = wh.GetDefaultVAM_Locator_ID();
                     }
                     storageASI = GetCreate(Ctx, xVAM_Locator_ID,
@@ -667,7 +667,7 @@ namespace VAdvantage.Model
                     storageASI.Save(trxName);		//	No AttributeSetInstance (reserved/ordered)
                 if (Env.HasModulePrefix("VAMFG_", out mInfo1))
                 {
-                    MWarehouse wh = new MWarehouse(Env.GetCtx(), VAM_Warehouse_ID, trxName);
+                    MVAMWarehouse wh = new MVAMWarehouse(Env.GetCtx(), VAM_Warehouse_ID, trxName);
                     if (wh.IsDisallowNegativeInv())
                     {
                         if (qtyOnHandChanged)
@@ -743,7 +743,7 @@ namespace VAdvantage.Model
                 int reservationVAM_Locator_ID = VAM_Locator_ID;
                 if (reservationAttributeSetInstance_ID == 0)
                 {
-                    MWarehouse wh = MWarehouse.Get(Ctx, VAM_Warehouse_ID);
+                    MVAMWarehouse wh = MVAMWarehouse.Get(Ctx, VAM_Warehouse_ID);
                     reservationVAM_Locator_ID = wh.GetDefaultVAM_Locator_ID();
                 }
                 storageASI = Get(Ctx, reservationVAM_Locator_ID, VAM_Product_ID, reservationAttributeSetInstance_ID, trxName);
@@ -753,7 +753,7 @@ namespace VAdvantage.Model
                     int xVAM_Locator_ID = MVAMProductLocator.GetFirstVAM_Locator_ID(product, VAM_Warehouse_ID);
                     if (xVAM_Locator_ID == 0)
                     {
-                        MWarehouse wh = MWarehouse.Get(Ctx, VAM_Warehouse_ID);
+                        MVAMWarehouse wh = MVAMWarehouse.Get(Ctx, VAM_Warehouse_ID);
                         xVAM_Locator_ID = wh.GetDefaultVAM_Locator_ID();
                     }
                     storageASI = GetCreate(Ctx, xVAM_Locator_ID,
@@ -877,7 +877,7 @@ namespace VAdvantage.Model
             {
                 if (Ord_Warehouse_ID != 0)
                 {
-                    MWarehouse wh = MWarehouse.Get(Ctx, Ord_Warehouse_ID);
+                    MVAMWarehouse wh = MVAMWarehouse.Get(Ctx, Ord_Warehouse_ID);
                     int Ord_Locator_ID = GetResLocator_ID(Ord_Warehouse_ID, VAM_Product_ID, reservationAttributeSetInstance_ID, diffQtyReserved.Value, trxName);
                     // JID_0982: On shipment completion if system system does not find enough reserved qty to decraese it will give message "Not enough reserved quanity in warehouse for product"
                     if (Ord_Locator_ID == 0)
@@ -914,7 +914,7 @@ namespace VAdvantage.Model
             {
                 if (Ord_Warehouse_ID != 0)
                 {
-                    MWarehouse wh = MWarehouse.Get(Ctx, Ord_Warehouse_ID);
+                    MVAMWarehouse wh = MVAMWarehouse.Get(Ctx, Ord_Warehouse_ID);
                     int Ord_Locator_ID = GetLocator_ID(Ord_Warehouse_ID, VAM_Product_ID, reservationAttributeSetInstance_ID, diffQtyOrdered.Value, trxName);
                     // JID_0982: On Receipt completion if system system does not find enough ordered qty to decraese it will give message "Not enough ordered quanity in warehouse for product"
                     if (Ord_Locator_ID == 0)
@@ -981,7 +981,7 @@ namespace VAdvantage.Model
                 int reservationVAM_Locator_ID = VAM_Locator_ID;
                 if (reservationAttributeSetInstance_ID == 0)
                 {
-                    MWarehouse wh = MWarehouse.Get(Ctx, VAM_Warehouse_ID);
+                    MVAMWarehouse wh = MVAMWarehouse.Get(Ctx, VAM_Warehouse_ID);
                     reservationVAM_Locator_ID = wh.GetDefaultVAM_Locator_ID();
                 }
                 storageASI = Get(Ctx, reservationVAM_Locator_ID, VAM_Product_ID, reservationAttributeSetInstance_ID, trxName);
@@ -991,7 +991,7 @@ namespace VAdvantage.Model
                     int xVAM_Locator_ID = MVAMProductLocator.GetFirstVAM_Locator_ID(product, VAM_Warehouse_ID);
                     if (xVAM_Locator_ID == 0)
                     {
-                        MWarehouse wh = MWarehouse.Get(Ctx, VAM_Warehouse_ID);
+                        MVAMWarehouse wh = MVAMWarehouse.Get(Ctx, VAM_Warehouse_ID);
                         xVAM_Locator_ID = wh.GetDefaultVAM_Locator_ID();
                     }
                     storageASI = GetCreate(Ctx, xVAM_Locator_ID,
@@ -1002,7 +1002,7 @@ namespace VAdvantage.Model
             bool qtyOnHandChanged = true;
             if (diffQtyOnHand != null && diffQtyOnHand != 0)
             {
-                MWarehouse wh = new MWarehouse(Env.GetCtx(), VAM_Warehouse_ID, trxName);
+                MVAMWarehouse wh = new MVAMWarehouse(Env.GetCtx(), VAM_Warehouse_ID, trxName);
                 int a = 0;
                 if (wh.IsDisallowNegativeInv())
                 {
@@ -1132,7 +1132,7 @@ namespace VAdvantage.Model
                 int reservationVAM_Locator_ID = VAM_Locator_ID;
                 if (reservationAttributeSetInstance_ID == 0)
                 {
-                    MWarehouse wh = MWarehouse.Get(Ctx, VAM_Warehouse_ID);
+                    MVAMWarehouse wh = MVAMWarehouse.Get(Ctx, VAM_Warehouse_ID);
                     reservationVAM_Locator_ID = wh.GetDefaultVAM_Locator_ID();
                 }
                 storageASI = Get(Ctx, reservationVAM_Locator_ID, VAM_Product_ID, reservationAttributeSetInstance_ID, trxName);
@@ -1142,7 +1142,7 @@ namespace VAdvantage.Model
                     int xVAM_Locator_ID = MVAMProductLocator.GetFirstVAM_Locator_ID(product, VAM_Warehouse_ID);
                     if (xVAM_Locator_ID == 0)
                     {
-                        MWarehouse wh = MWarehouse.Get(Ctx, VAM_Warehouse_ID);
+                        MVAMWarehouse wh = MVAMWarehouse.Get(Ctx, VAM_Warehouse_ID);
                         xVAM_Locator_ID = wh.GetDefaultVAM_Locator_ID();
                     }
                     storageASI = GetCreate(Ctx, xVAM_Locator_ID,
@@ -1316,7 +1316,7 @@ namespace VAdvantage.Model
             {
                 if (Ord_Warehouse_ID != 0)
                 {
-                    MWarehouse wh = MWarehouse.Get(Ctx, Ord_Warehouse_ID);
+                    MVAMWarehouse wh = MVAMWarehouse.Get(Ctx, Ord_Warehouse_ID);
                     // JID_0982: On Receipt completion if system system does not find enough ordered qty to decraese it will give message "Not enough ordered quanity in warehouse for product"
                     int Ord_Locator_ID = GetLocator_ID(Ord_Warehouse_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, diffQtyOrdered.Value, trxName);
                     if (Ord_Locator_ID == 0)
@@ -1799,7 +1799,7 @@ namespace VAdvantage.Model
                          || Is_ValueChanged("QtyAllocated")
                       ))
             {
-                MWarehouse wh = MWarehouse.Get(GetCtx(), GetVAM_Warehouse_ID());
+                MVAMWarehouse wh = MVAMWarehouse.Get(GetCtx(), GetVAM_Warehouse_ID());
 
                 if (wh.IsDisallowNegativeInv())
                 {

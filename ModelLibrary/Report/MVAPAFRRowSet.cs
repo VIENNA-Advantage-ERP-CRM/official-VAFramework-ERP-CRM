@@ -1,8 +1,8 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MReportColumnSet
- * Purpose        : Report Column Set Model
- * Class Used     : X_VAPA_FR_ColumnSet
+ * Class Name     : MReportLineSet
+ * Purpose        : Report Line Set Model
+ * Class Used     : X_VAPA_FR_RowSet
  * Chronological    Development
  * Deepak           18-Jan-2010
   ******************************************************/
@@ -22,51 +22,51 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Report
 {
-    public class MReportColumnSet : X_VAPA_FR_ColumnSet
+    public class MVAPAFRRowSet : X_VAPA_FR_RowSet
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="VAPA_FR_ColumnSet_ID">id</param>
+        /// <param name="VAPA_FR_RowSet_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MReportColumnSet(Ctx ctx, int VAPA_FR_ColumnSet_ID, Trx trxName)
-            : base(ctx, VAPA_FR_ColumnSet_ID, trxName)
+        public MVAPAFRRowSet(Ctx ctx, int VAPA_FR_RowSet_ID, Trx trxName):base(ctx, VAPA_FR_RowSet_ID, trxName)
         {
-
-            if (VAPA_FR_ColumnSet_ID == 0)
+            
+            if (VAPA_FR_RowSet_ID == 0)
             {
             }
             else
-            {
-                LoadColumns();
-            }
-        }	//	MReportColumnSet
+                LoadLines();
+        }	//	MReportLineSet
 
-        /** Contained Columns		*/
-        private MReportColumn[] _columns = null;
+        /**	Contained Lines			*/
+        private MVAPARFRow[] _lines = null;
 
         /// <summary>
-        /// Load contained columns
+        ///	Load Lines
         /// </summary>
-        private void LoadColumns()
+        private void LoadLines()
         {
-            List<MReportColumn> list = new List<MReportColumn>();
-            String sql = "SELECT * FROM VAPA_FR_ColumnSet WHERE VAPA_FR_ColumnSet_ID=@param AND IsActive='Y' ORDER BY SeqNo";
+            List<MVAPARFRow> list = new List<MVAPARFRow>();
+            String sql = "SELECT * FROM VAPA_FR_Row "
+                + "WHERE VAPA_FR_RowSet_ID=@param AND IsActive='Y' "
+                + "ORDER BY SeqNo";
             SqlParameter[] param = new SqlParameter[1];
             IDataReader idr = null;
             DataTable dt = null;
             try
             {
                 //pstmt = DataBase.prepareStatement(sql, get_TrxName());
-                param[0] = new SqlParameter("@param", GetVAPA_FR_ColumnSet_ID());
+                //pstmt.setInt(1, getVAPA_FR_RowSet_ID());
+                param[0] = new SqlParameter("@param", GetVAPA_FR_RowSet_ID());
                 idr = DataBase.DB.ExecuteReader(sql, param, Get_TrxName());
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MReportColumn(GetCtx(), dr, null));
+                    list.Add(new MVAPARFRow(GetCtx(), dr, Get_TrxName()));
                 }
                 dt = null;
             }
@@ -93,52 +93,52 @@ namespace VAdvantage.Report
                     dt = null;
                 }
             }
+            
             //
-            _columns = new MReportColumn[list.Count];
-            _columns = list.ToArray();
-            log.Finest("ID=" + GetVAPA_FR_ColumnSet_ID()
+            _lines = new MVAPARFRow[list.Count];
+            _lines=list.ToArray();
+            log.Finest("ID=" + GetVAPA_FR_RowSet_ID()
                 + " - Size=" + list.Count);
         }	//	loadColumns
 
         /// <summary>
-        /// Get Columns
+        /// Get Liness
         /// </summary>
-        /// <returns>columns</returns>
-        public MReportColumn[] GetColumns()
+        /// <returns>array of lines</returns>
+        public MVAPARFRow[] GetLiness()
         {
-            return _columns;
-        }	//	getColumns
+            return _lines;
+        }	//	getLines
 
         /// <summary>
         ///	List Info
         /// </summary>
         public void List()
+	{
+		//System.out.println(toString());
+        System.Console.WriteLine(ToString());
+        if (_lines == null)
         {
-            //System.out.println(toString());
-            System.Console.WriteLine(ToString());
-            if (_columns == null)
-            {
-                return;
-            }
-            for (int i = 0; i < _columns.Length; i++)
-            {
-                //System.out.println("- " + _columns[i].toString());
-                System.Console.WriteLine("- " + _columns[i].ToString());
-            }
-        }	//	list
+            return;
+        }
+        for (int i = 0; i < _lines.Length; i++)
+        {
+            _lines[i].List();
+        } 
+	}	//	list
 
         /// <summary>
-        /// String Representation
+        ///	String representation
         /// </summary>
         /// <returns>info</returns>
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MReportColumnSet[")
+            StringBuilder sb = new StringBuilder("MReportLineSet[")
                 .Append(Get_ID()).Append(" - ").Append(GetName())
                 .Append("]");
             return sb.ToString();
         }
 
-    }	//	MReportColumnSet
+    }	//	MReportLineSet
 
 }

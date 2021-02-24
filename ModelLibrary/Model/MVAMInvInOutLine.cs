@@ -401,7 +401,7 @@ namespace VAdvantage.Model
                 VAM_Locator_ID = MVAMProductLocator.GetFirstVAM_Locator_ID(product, GetVAM_Warehouse_ID());
                 if (VAM_Locator_ID == 0)
                 {
-                    MWarehouse wh = MWarehouse.Get(GetCtx(), GetVAM_Warehouse_ID());
+                    MVAMWarehouse wh = MVAMWarehouse.Get(GetCtx(), GetVAM_Warehouse_ID());
                     VAM_Locator_ID = wh.GetDefaultVAM_Locator_ID();
                 }
             }
@@ -582,7 +582,7 @@ namespace VAdvantage.Model
                     SetVAM_Locator_ID(VAM_Locator_ID);
                 else
                 {
-                    MWarehouse wh = MWarehouse.Get(GetCtx(), VAM_Warehouse_ID);
+                    MVAMWarehouse wh = MVAMWarehouse.Get(GetCtx(), VAM_Warehouse_ID);
                     SetVAM_Locator_ID(wh.GetDefaultVAM_Locator_ID());
                 }
             }
@@ -1138,12 +1138,12 @@ namespace VAdvantage.Model
             // on Ship/Receipt, do not check qty in warehouse for Lines of Charge.
             if ((!inO.IsProcessing() || newRecord) && _Product != null && _Product.IsStocked())
             {
-                int VAM_Warehouse_ID = 0; MWarehouse wh = null;
+                int VAM_Warehouse_ID = 0; MVAMWarehouse wh = null;
                 StringBuilder qry = new StringBuilder();
                 qry.Append("select VAM_Warehouse_id from VAM_Locator where VAM_Locator_id=" + GetVAM_Locator_ID());
                 VAM_Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry.ToString()));
 
-                wh = MWarehouse.Get(GetCtx(), VAM_Warehouse_ID);
+                wh = MVAMWarehouse.Get(GetCtx(), VAM_Warehouse_ID);
                 qry.Clear();
                 qry.Append("SELECT QtyOnHand FROM VAM_Storage where VAM_Locator_id=" + GetVAM_Locator_ID() + " and VAM_Product_id=" + GetVAM_Product_ID());
                 if (GetVAM_PFeature_SetInstance_ID() != 0)

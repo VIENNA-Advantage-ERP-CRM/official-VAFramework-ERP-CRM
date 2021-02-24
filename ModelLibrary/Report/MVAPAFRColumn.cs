@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MReportColumn
+ * Class Name     : MVAPAFRColumn
  * Purpose        : Report Column Model
  * Class Used     : X_VAPA_FR_ColumnSet
  * Chronological    Development
@@ -22,7 +22,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Report
 {
-    public class MReportColumn: VAPA_FR_Column
+    public class MVAPAFRColumn : X_VAPA_FR_Column
 	{
    /// <summary>
    /// 	Copy
@@ -34,11 +34,11 @@ namespace VAdvantage.Report
    /// <param name="source">copy source</param>
    /// <param name="trxName">transaction</param>
    /// <returns>report column</returns>
-	public static MReportColumn Copy (Ctx ctx, int VAF_Client_ID, int VAF_Org_ID, 
-		int VAPA_FR_ColumnSet_ID, MReportColumn source, Trx trxName)
+	public static MVAPAFRColumn Copy (Ctx ctx, int VAF_Client_ID, int VAF_Org_ID, 
+		int VAPA_FR_ColumnSet_ID, MVAPAFRColumn source, Trx trxName)
 	{
-		MReportColumn retValue = new MReportColumn (ctx, 0, trxName);
-		MReportColumn.CopyValues(source, retValue, VAF_Client_ID, VAF_Org_ID);
+		MVAPAFRColumn retValue = new MVAPAFRColumn (ctx, 0, trxName);
+		MVAPAFRColumn.CopyValues(source, retValue, VAF_Client_ID, VAF_Org_ID);
 		//
 		retValue.SetVAPA_FR_ColumnSet_ID(VAPA_FR_ColumnSet_ID);	//	parent
 		retValue.SetOper_1_ID(0);
@@ -53,7 +53,7 @@ namespace VAdvantage.Report
 	/// <param name="ctx">context</param>
 	/// <param name="VAPA_FR_ColumnSet_ID">id</param>
 	/// <param name="trxName">transction</param>
-	public MReportColumn(Ctx ctx, int VAPA_FR_ColumnSet_ID, Trx trxName):base(ctx, VAPA_FR_ColumnSet_ID, trxName)
+	public MVAPAFRColumn(Ctx ctx, int VAPA_FR_ColumnSet_ID, Trx trxName):base(ctx, VAPA_FR_ColumnSet_ID, trxName)
 	{
 		
 		if (VAPA_FR_ColumnSet_ID == 0)
@@ -61,7 +61,7 @@ namespace VAdvantage.Report
 			SetIsPrinted (true);
 			SetSeqNo (0);
 		}
-	}	//	MReportColumn
+	}	//	MVAPAFRColumn
 
 	/// <summary>
 	/// Constructor
@@ -69,10 +69,10 @@ namespace VAdvantage.Report
 	/// <param name="ctx">context</param>
 	/// <param name="rs">datarow</param>
 	/// <param name="trxName">transaction</param>
-	public MReportColumn (Ctx ctx,DataRow dr, Trx trxName):base(ctx,dr, trxName)
+	public MVAPAFRColumn (Ctx ctx,DataRow dr, Trx trxName):base(ctx,dr, trxName)
 	{
 		
-	}	//	MReportColumn
+	}	//	MVAPAFRColumn
 
 	/// <summary>
 	///	Get Column SQL Select Clause.
@@ -173,35 +173,35 @@ namespace VAdvantage.Report
 		
 		String et = GetElementType();
 		int ID = 0;
-		if (MReportColumn.ELEMENTTYPE_Organization.Equals(et))
+		if (MVAPAFRColumn.ELEMENTTYPE_Organization.Equals(et))
 			ID = GetOrg_ID();
-		else if (MReportColumn.ELEMENTTYPE_BPartner.Equals(et))
+		else if (MVAPAFRColumn.ELEMENTTYPE_BPartner.Equals(et))
 			ID = GetVAB_BusinessPartner_ID();
-		else if (MReportColumn.ELEMENTTYPE_Product.Equals(et))
+		else if (MVAPAFRColumn.ELEMENTTYPE_Product.Equals(et))
 			ID = GetVAM_Product_ID();
-		else if (MReportColumn.ELEMENTTYPE_Project.Equals(et))
+		else if (MVAPAFRColumn.ELEMENTTYPE_Project.Equals(et))
 			ID = GetVAB_Project_ID();
-		else if (MReportColumn.ELEMENTTYPE_Activity.Equals(et))
+		else if (MVAPAFRColumn.ELEMENTTYPE_Activity.Equals(et))
 			ID = GetVAB_BillingCode_ID();
-		else if (MReportColumn.ELEMENTTYPE_Campaign.Equals(et))
+		else if (MVAPAFRColumn.ELEMENTTYPE_Campaign.Equals(et))
 			ID = GetVAB_Promotion_ID();
-		else if (MReportColumn.ELEMENTTYPE_LocationFrom.Equals(et))
+		else if (MVAPAFRColumn.ELEMENTTYPE_LocationFrom.Equals(et))
 			ID = GetVAB_Address_ID();
-		else if (MReportColumn.ELEMENTTYPE_LocationTo.Equals(et))
+		else if (MVAPAFRColumn.ELEMENTTYPE_LocationTo.Equals(et))
 			ID = GetVAB_Address_ID();
-		else if (MReportColumn.ELEMENTTYPE_OrgTrx.Equals(et))
+		else if (MVAPAFRColumn.ELEMENTTYPE_OrgTrx.Equals(et))
 			ID = GetOrg_ID();
-		else if (MReportColumn.ELEMENTTYPE_SalesRegion.Equals(et))
+		else if (MVAPAFRColumn.ELEMENTTYPE_SalesRegion.Equals(et))
 			ID = GetVAB_SalesRegionState_ID();
-		else if (MReportColumn.ELEMENTTYPE_Account.Equals(et))
+		else if (MVAPAFRColumn.ELEMENTTYPE_Account.Equals(et))
 			ID = GetVAB_Acct_Element_ID();
-		else if (MReportColumn.ELEMENTTYPE_UserList1.Equals(et))
+		else if (MVAPAFRColumn.ELEMENTTYPE_UserList1.Equals(et))
 			ID = GetVAB_Acct_Element_ID();
-		else if (MReportColumn.ELEMENTTYPE_UserList2.Equals(et))
+		else if (MVAPAFRColumn.ELEMENTTYPE_UserList2.Equals(et))
 			ID = GetVAB_Acct_Element_ID();
-	//	else if (MReportColumn.ELEMENTTYPE_UserElement1.equals(et))
+	//	else if (MVAPAFRColumn.ELEMENTTYPE_UserElement1.equals(et))
 	//		ID = getVAB_Acct_Element_ID();
-	//	else if (MReportColumn.ELEMENTTYPE_UserElement2.equals(et))
+	//	else if (MVAPAFRColumn.ELEMENTTYPE_UserElement2.equals(et))
 	//		ID = getVAB_Acct_Element_ID();
 		else
 			log.Warning("Unsupported Element Type=" + et);
@@ -220,7 +220,7 @@ namespace VAdvantage.Report
 	/// <returns> String Representation</returns>
 	public override String ToString ()
 	{
-		StringBuilder sb = new StringBuilder ("MReportColumn[")
+		StringBuilder sb = new StringBuilder ("MVAPAFRColumn[")
 			.Append(Get_ID()).Append(" - ").Append(GetName()).Append(" - ").Append(GetDescription())
 			.Append(", SeqNo=").Append(GetSeqNo()).Append(", AmountType=").Append(GetAmountType())
 			.Append(", CurrencyType=").Append(GetCurrencyType()).Append("/").Append(GetVAB_Currency_ID())
@@ -389,6 +389,6 @@ namespace VAdvantage.Report
 		return true;
 	}	//	beforeSave
 
-}	//	MReportColumn
+}	//	MVAPAFRColumn
 
 }

@@ -18,16 +18,16 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MWarehouse : X_VAM_Warehouse
+    public class MVAMWarehouse : X_VAM_Warehouse
     {
         //	Cache
-        private static CCache<int, MWarehouse> cache = new CCache<int, MWarehouse>("MWarehouse", 5);
+        private static CCache<int, MVAMWarehouse> cache = new CCache<int, MVAMWarehouse>("MVAMWarehouse", 5);
         //	Warehouse Locators
         private MVAMLocator[] locators = null;
         //	Default Locator
         private int VAM_Locator_ID = -1;
         //	Static Logger	
-        private static VLogger _log = VLogger.GetVLogger(typeof(MWarehouse).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVAMWarehouse).FullName);
 
         /// <summary>
         /// Standard Constructor
@@ -35,7 +35,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAM_Warehouse_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MWarehouse(Ctx ctx, int VAM_Warehouse_ID, Trx trxName)
+        public MVAMWarehouse(Ctx ctx, int VAM_Warehouse_ID, Trx trxName)
             : base(ctx, VAM_Warehouse_ID, trxName)
         {
             if (VAM_Warehouse_ID == 0)
@@ -53,7 +53,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">data row</param>
         /// <param name="trxName">transaction</param>
-        public MWarehouse(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAMWarehouse(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -62,7 +62,7 @@ namespace VAdvantage.Model
         /// Organization Constructor
         /// </summary>
         /// <param name="org">org</param>
-        public MWarehouse(MVAFOrg org)
+        public MVAMWarehouse(MVAFOrg org)
             : this(org.GetCtx(), 0, org.Get_TrxName())
         {
             SetClientOrg(org);
@@ -78,18 +78,18 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAM_Warehouse_ID">id</param>
         /// <returns>warehouse</returns>
-        public static MWarehouse Get(Ctx ctx, int VAM_Warehouse_ID)
+        public static MVAMWarehouse Get(Ctx ctx, int VAM_Warehouse_ID)
         {
             int key = VAM_Warehouse_ID;
-            MWarehouse retValue = null;
+            MVAMWarehouse retValue = null;
             if (cache.ContainsKey(key))
             {
-                retValue = (MWarehouse)cache[key];
+                retValue = (MVAMWarehouse)cache[key];
             }
             if (retValue != null)
                 return retValue;
             //
-            retValue = new MWarehouse(ctx, VAM_Warehouse_ID, null);
+            retValue = new MVAMWarehouse(ctx, VAM_Warehouse_ID, null);
             cache.Add(key, retValue);
             return retValue;
         }
@@ -100,9 +100,9 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAF_Org_ID">id</param>
         /// <returns>warehouse</returns>
-        public static MWarehouse[] GetForOrg(Ctx ctx, int VAF_Org_ID)
+        public static MVAMWarehouse[] GetForOrg(Ctx ctx, int VAF_Org_ID)
         {
-            List<MWarehouse> list = new List<MWarehouse>();
+            List<MVAMWarehouse> list = new List<MVAMWarehouse>();
             String sql = "SELECT * FROM VAM_Warehouse WHERE VAF_Org_ID=" + VAF_Org_ID + " ORDER BY Created";
             try
             {
@@ -114,7 +114,7 @@ namespace VAdvantage.Model
                     for (int i = 0; i < totCount; i++)
                     {
                         dr = ds.Tables[0].Rows[i];
-                        list.Add(new MWarehouse(ctx, dr, null));
+                        list.Add(new MVAMWarehouse(ctx, dr, null));
                     }
                 }
             }
@@ -123,7 +123,7 @@ namespace VAdvantage.Model
                 _log.Log(Level.SEVERE, sql, e);
             }
 
-            MWarehouse[] retValue = new MWarehouse[list.Count];
+            MVAMWarehouse[] retValue = new MVAMWarehouse[list.Count];
             retValue = list.ToArray();
             return retValue;
         }

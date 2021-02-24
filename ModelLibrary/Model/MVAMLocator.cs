@@ -62,7 +62,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="warehouse">parent</param>
         /// <param name="value">value</param>
-        public MVAMLocator(MWarehouse warehouse, String value)
+        public MVAMLocator(MVAMWarehouse warehouse, String value)
             : this(warehouse.GetCtx(), 0, warehouse.Get_TrxName())
         {
             SetClientOrg(warehouse);
@@ -99,7 +99,7 @@ namespace VAdvantage.Model
         /// <returns>name</returns>
         public String GetWarehouseName()
         {
-            MWarehouse wh = MWarehouse.Get(GetCtx(), GetVAM_Warehouse_ID());
+            MVAMWarehouse wh = MVAMWarehouse.Get(GetCtx(), GetVAM_Warehouse_ID());
             if (wh.Get_ID() == 0)
                 return "<" + GetVAM_Warehouse_ID() + ">";
             return wh.GetName();
@@ -164,7 +164,7 @@ namespace VAdvantage.Model
             if (retValue == null)
             {
 
-                MWarehouse wh = MWarehouse.Get(ctx, VAM_Warehouse_ID);
+                MVAMWarehouse wh = MVAMWarehouse.Get(ctx, VAM_Warehouse_ID);
                 retValue = new MVAMLocator(wh, HttpUtility.HtmlEncode(value));
                 retValue.SetXYZ(HttpUtility.HtmlEncode(X), HttpUtility.HtmlEncode(Y), HttpUtility.HtmlEncode(Z));
                 if (!retValue.Save())
@@ -301,7 +301,7 @@ namespace VAdvantage.Model
                         || Is_ValueChanged("POSITION")
                         || Is_ValueChanged("Bin"))
                 {
-                    MWarehouse wh = new MWarehouse(GetCtx(), GetVAM_Warehouse_ID(), Get_TrxName());
+                    MVAMWarehouse wh = new MVAMWarehouse(GetCtx(), GetVAM_Warehouse_ID(), Get_TrxName());
 
                     //if (GetBin() != null && GetPOSITION() != null || GetPOSITION()==null)
                     //{
@@ -464,7 +464,7 @@ namespace VAdvantage.Model
             //
             if (retValue == null)
             {
-                MWarehouse wh = MWarehouse.Get(ctx, VAM_Warehouse_ID);
+                MVAMWarehouse wh = MVAMWarehouse.Get(ctx, VAM_Warehouse_ID);
                 retValue = new MVAMLocator(wh, value);
                 retValue.SetXYZ(X, Y, Z, Position, Bin);
                 if (!retValue.Save())

@@ -134,10 +134,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         }
 		
 		//	Create Warehouse
-		MWarehouse wh = null;
+		MVAMWarehouse wh = null;
 		if (!newOrg)
 		{
-			MWarehouse[] whs = MWarehouse.GetForOrg(GetCtx(), _VAF_Org_ID);
+			MVAMWarehouse[] whs = MVAMWarehouse.GetForOrg(GetCtx(), _VAF_Org_ID);
             if (whs != null && whs.Length > 0)
             {
                 wh = whs[0];	//	pick first
@@ -146,7 +146,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		//	New Warehouse
 		if (wh == null)
 		{
-			wh = new MWarehouse(org);
+			wh = new MVAMWarehouse(org);
             if (!wh.Save())
             {
                 return GetRetrievedError(wh, "Warehouse not saved");

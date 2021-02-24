@@ -784,7 +784,7 @@ namespace VAdvantage.Model
 
                 if (_inventoryFrom == null)
                 {
-                    MWarehouse wh = MWarehouse.Get(GetCtx(), loc.GetVAM_Warehouse_ID());
+                    MVAMWarehouse wh = MVAMWarehouse.Get(GetCtx(), loc.GetVAM_Warehouse_ID());
                     _inventoryFrom = new MVAMInventory(wh);
                     _inventoryFrom.SetDescription(Msg.Translate(GetCtx(), "VAM_InvTrf_Confirm_ID") + " " + GetDocumentNo());
                     if (!_inventoryFrom.Save(Get_TrxName()))
@@ -838,7 +838,7 @@ namespace VAdvantage.Model
 
                 if (_inventoryTo == null)
                 {
-                    MWarehouse wh = MWarehouse.Get(GetCtx(), loc.GetVAM_Warehouse_ID());
+                    MVAMWarehouse wh = MVAMWarehouse.Get(GetCtx(), loc.GetVAM_Warehouse_ID());
                     _inventoryTo = new MVAMInventory(wh);
                     _inventoryTo.SetDescription(Msg.Translate(GetCtx(), "VAM_InvTrf_Confirm_ID") + " " + GetDocumentNo());
                     if (!_inventoryTo.Save(Get_TrxName()))

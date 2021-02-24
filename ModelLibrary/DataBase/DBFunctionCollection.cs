@@ -46,7 +46,7 @@ namespace VAdvantage.DataBase
                     int line_ID = DB.GetNextID(ctx, "VAM_InventoryLine", trx);
                     string qry = "select VAM_Warehouse_id from VAM_Locator where VAM_Locator_id=" + VAM_Locator_ID;
                     int VAM_Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, trx));
-                    MWarehouse wh = MWarehouse.Get(ctx, VAM_Warehouse_ID);
+                    MVAMWarehouse wh = MVAMWarehouse.Get(ctx, VAM_Warehouse_ID);
                     if (wh.IsDisallowNegativeInv() == true)
                     {
                         if (currentQty < 0)
@@ -121,7 +121,7 @@ namespace VAdvantage.DataBase
                     int line_ID = DB.GetNextID(ctx, "VAM_InventoryLine", trx);
                     string qry = "select VAM_Warehouse_id from VAM_Locator where VAM_Locator_id=" + VAM_Locator_ID;
                     int VAM_Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, trx));
-                    MWarehouse wh = MWarehouse.Get(ctx, VAM_Warehouse_ID);
+                    MVAMWarehouse wh = MVAMWarehouse.Get(ctx, VAM_Warehouse_ID);
                     if (wh.IsDisallowNegativeInv() == true)
                     {
                         if (currentQty < 0)

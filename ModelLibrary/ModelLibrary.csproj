@@ -460,7 +460,7 @@
     <Compile Include="Model\MVAFAMAssetHistory.cs" />
     <Compile Include="Model\MVAFDataValRule.cs" />
     <Compile Include="Model\MVASCAppointmentsInfo.cs" />
-    <Compile Include="Model\MWarehouse.cs" />
+    <Compile Include="Model\MVAMWarehouse.cs" />
     <Compile Include="Model\MVABWithholding.cs" />
     <Compile Include="Model\MVABYear.cs" />
     <Compile Include="Model\NaturalAccountMap.cs" />
@@ -659,12 +659,12 @@
     <Compile Include="Report\FinReport.cs" />
     <Compile Include="Report\FinReportPeriod.cs" />
     <Compile Include="Report\FinStatement.cs" />
-    <Compile Include="Report\MReport.cs" />
-    <Compile Include="Report\MReportColumn.cs" />
-    <Compile Include="Report\MReportColumnSet.cs" />
-    <Compile Include="Report\MReportLine.cs" />
-    <Compile Include="Report\MReportLineSet.cs" />
-    <Compile Include="Report\MReportSource.cs" />
+    <Compile Include="Report\MVAPAFinancialReport.cs" />
+    <Compile Include="Report\MVAPAFRColumn.cs" />
+    <Compile Include="Report\MVAPAFRColumnSet.cs" />
+    <Compile Include="Report\MVAPARFRow.cs" />
+    <Compile Include="Report\MVAPAFRRowSet.cs" />
+    <Compile Include="Report\MVAPAFVARSource.cs" />
     <Compile Include="Report\MReportTree.cs" />
     <Compile Include="Report\TrialBalance.cs" />
     <Compile Include="Service References\AcctService\Reference.cs">

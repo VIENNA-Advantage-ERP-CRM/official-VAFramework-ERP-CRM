@@ -3785,7 +3785,7 @@ namespace VAdvantage.Model
         /// <returns>true if it can be saved</returns>
         protected override bool BeforeSave(bool newRecord)
         {
-            MWarehouse wHouse = null;
+            MVAMWarehouse wHouse = null;
             if (GetVAM_Product_ID() == 0 && GetVAB_Charge_ID() == 0)
             {
                 log.SaveError("VIS_NOProductOrCharge", "");
@@ -3869,7 +3869,7 @@ namespace VAdvantage.Model
             // Check if order line is drop ship type then set drop ship type of warehouse at order line
             if (Ord.IsSOTrx())
             {
-                wHouse = new MWarehouse(GetCtx(), Ord.GetVAM_Warehouse_ID(), Get_Trx());
+                wHouse = new MVAMWarehouse(GetCtx(), Ord.GetVAM_Warehouse_ID(), Get_Trx());
                 if (IsDropShip())
                 {
                     if (!wHouse.IsDropShip())
@@ -4368,7 +4368,7 @@ namespace VAdvantage.Model
                             Decimal reserved = _IsSOTrx ? difference : Env.ZERO;
                             int VAM_Locator_ID = 0;
                             //	Get default Location'
-                            MWarehouse wh = MWarehouse.Get(GetCtx(), GetVAM_Warehouse_ID());
+                            MVAMWarehouse wh = MVAMWarehouse.Get(GetCtx(), GetVAM_Warehouse_ID());
                             VAM_Locator_ID = wh.GetDefaultVAM_Locator_ID();
 
                             //	Get Locator to reserve
@@ -4767,7 +4767,7 @@ namespace VAdvantage.Model
         /// <returns>Warehouse ID</returns>
         private int CreateDropShipWareHouse()
         {
-            MWarehouse wh = new MWarehouse(GetCtx(), 0, Get_Trx());
+            MVAMWarehouse wh = new MVAMWarehouse(GetCtx(), 0, Get_Trx());
             MVAFOrg org = new MVAFOrg(GetCtx(), GetVAF_Org_ID(), Get_Trx());
             wh.SetVAF_Client_ID(GetVAF_Client_ID());
             wh.SetVAF_Org_ID(GetVAF_Org_ID());
@@ -4783,7 +4783,7 @@ namespace VAdvantage.Model
             if (_Location_ID == 0)
             {
                 int _wID = Util.GetValueOfInt(DB.ExecuteScalar("Select VAM_Warehouse_ID From VAB_Order Where VAB_Order_ID=" + GetVAB_Order_ID()));
-                MWarehouse wareH = new MWarehouse(GetCtx(), _wID, Get_Trx());
+                MVAMWarehouse wareH = new MVAMWarehouse(GetCtx(), _wID, Get_Trx());
                 _Location_ID = wareH.GetVAB_Address_ID();
             }
             wh.SetVAB_Address_ID(_Location_ID);

@@ -172,7 +172,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                retJSON = JsonConvert.SerializeObject(MWarehouse.Get(ctx, Util.GetValueOfInt(fields)).GetDefaultVAM_Locator_ID());
+                retJSON = JsonConvert.SerializeObject(MVAMWarehouse.Get(ctx, Util.GetValueOfInt(fields)).GetDefaultVAM_Locator_ID());
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }

@@ -110,7 +110,7 @@ namespace VAdvantage.Model
 
             // system will check - if container qty goes negative then not to save Transaction
             MVAMLocator locator = MVAMLocator.Get(GetCtx(), GetVAM_Locator_ID());
-            MWarehouse warehouse = MWarehouse.Get(GetCtx(), locator.GetVAM_Warehouse_ID());
+            MVAMWarehouse warehouse = MVAMWarehouse.Get(GetCtx(), locator.GetVAM_Warehouse_ID());
             if (isContainerApplicable && warehouse.IsDisallowNegativeInv() && Get_ColumnIndex("ContainerCurrentQty") >= 0 && GetContainerCurrentQty() < 0)
             {
                 log.SaveError("Info", Msg.GetMsg(GetCtx(), "VIS_FutureContainerQtygoesNegative"));

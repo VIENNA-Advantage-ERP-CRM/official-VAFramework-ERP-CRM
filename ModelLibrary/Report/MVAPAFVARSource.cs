@@ -22,7 +22,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Report
 {
-    public class MReportSource : X_VAPA_FVAR_Source
+    public class MVAPAFVARSource : X_VAPA_FVAR_Source
     {
         /// <summary>
         /// Constructor
@@ -30,7 +30,7 @@ namespace VAdvantage.Report
         /// <param name="ctx">context</param>
         /// <param name="VAPA_FVAR_Source_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MReportSource(Ctx ctx, int VAPA_FVAR_Source_ID, Trx trxName):base(ctx, VAPA_FVAR_Source_ID, trxName)
+        public MVAPAFVARSource(Ctx ctx, int VAPA_FVAR_Source_ID, Trx trxName):base(ctx, VAPA_FVAR_Source_ID, trxName)
         {
             
             if (VAPA_FVAR_Source_ID == 0)
@@ -44,7 +44,7 @@ namespace VAdvantage.Report
         /// <param name="ctx">context</param>
         /// <param name="dr">datarow</param>
         /// <param name="trxName">transaction</param>
-        public MReportSource(Ctx ctx,DataRow dr, Trx trxName): base(ctx, dr, trxName)
+        public MVAPAFVARSource(Ctx ctx,DataRow dr, Trx trxName): base(ctx, dr, trxName)
         {
            
         }	//	MReportSource
@@ -151,11 +151,11 @@ namespace VAdvantage.Report
         /// <param name="source">copy source</param>
         /// <param name="trxName">transaction</param>
         /// <returns>Report Source</returns>
-        public static MReportSource Copy(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID,
-            int VAPA_FR_Row_ID, MReportSource source, Trx trxName)
+        public static MVAPAFVARSource Copy(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID,
+            int VAPA_FR_Row_ID, MVAPAFVARSource source, Trx trxName)
         {
-            MReportSource retValue = new MReportSource(ctx, 0, trxName);
-            MReportSource.CopyValues(source, retValue, VAF_Client_ID, VAF_Org_ID);
+            MVAPAFVARSource retValue = new MVAPAFVARSource(ctx, 0, trxName);
+            MVAPAFVARSource.CopyValues(source, retValue, VAF_Client_ID, VAF_Org_ID);
             retValue.SetVAPA_FR_Row_ID(VAPA_FR_Row_ID);
             return retValue;
         }	//	copy

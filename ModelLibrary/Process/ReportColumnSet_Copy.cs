@@ -76,12 +76,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 throw new Exception(msgSaveErrorRowNotFound);
             }
             //
-            //MReportColumnSet to = new MReportColumnSet(GetCtx(), to_ID, Get_TrxName());
-            //MReportColumnSet rcSet = new MReportColumnSet(GetCtx(), _VAPA_FR_ColumnSet_ID, Get_TrxName());
-            //MReportColumn[] rcs = rcSet.GetColumns();
+            //MVAPAFRColumnSet to = new MVAPAFRColumnSet(GetCtx(), to_ID, Get_TrxName());
+            //MVAPAFRColumnSet rcSet = new MVAPAFRColumnSet(GetCtx(), _VAPA_FR_ColumnSet_ID, Get_TrxName());
+            //MVAPAFRColumn[] rcs = rcSet.GetColumns();
             //for (int i = 0; i < rcs.Length; i++)
             //{
-            //    MReportColumn rc = MReportColumn.Copy(GetCtx(), to.GetVAF_Client_ID(), to.GetVAF_Org_ID(), to_ID, rcs[i], Get_TrxName());
+            //    MVAPAFRColumn rc = MVAPAFRColumn.Copy(GetCtx(), to.GetVAF_Client_ID(), to.GetVAF_Org_ID(), to_ID, rcs[i], Get_TrxName());
             //    rc.Save();
             //}
             //	Oper 1/2 were set to Null !

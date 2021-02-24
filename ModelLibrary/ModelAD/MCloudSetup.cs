@@ -3327,7 +3327,7 @@ namespace VAdvantage.Model
             CreatePreference("VAB_Country_ID", VAB_Country_ID.ToString(), 0);
 
             //  Default Warehouse
-            MWarehouse wh = new MWarehouse(m_ctx, 0, m_trx);
+            MVAMWarehouse wh = new MVAMWarehouse(m_ctx, 0, m_trx);
             wh.SetValue(defaultName);
             wh.SetName(defaultName);
             wh.SetVAB_Address_ID(loc.GetVAB_Address_ID());

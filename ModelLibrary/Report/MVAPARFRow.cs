@@ -22,7 +22,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Report
 {
-    public class MReportLine : X_VAPA_FR_Row
+    public class MVAPARFRow : X_VAPA_FR_Row
     {
         /// <summary>
         /// Constructor
@@ -30,7 +30,7 @@ namespace VAdvantage.Report
         /// <param name="ctx">context </param>
         /// <param name="VAPA_FR_Row_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MReportLine(Ctx ctx, int VAPA_FR_Row_ID, Trx trxName)
+        public MVAPARFRow(Ctx ctx, int VAPA_FR_Row_ID, Trx trxName)
             : base(ctx, VAPA_FR_Row_ID, trxName)
         {
 
@@ -52,7 +52,7 @@ namespace VAdvantage.Report
         /// <param name="ctx">context</param>
         /// <param name="rs">datarow</param>
         /// <param name="trxName">transaction</param>
-        public MReportLine(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAPARFRow(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 
@@ -60,7 +60,7 @@ namespace VAdvantage.Report
         }	//	MReportLine
 
         /**	Containt Sources				*/
-        private MReportSource[] _sources = null;
+        private MVAPAFVARSource[] _sources = null;
         /** Cache result					*/
         private String _whereClause = null;
 
@@ -121,7 +121,7 @@ namespace VAdvantage.Report
 
         private void LoadSources()
         {
-            List<MReportSource> list = new List<MReportSource>();
+            List<MVAPAFVARSource> list = new List<MVAPAFVARSource>();
             String sql = "";
 
             //if (GetFRPT_LinkWith() == FRPT_LINKWITH_LedgerCode)
@@ -151,7 +151,7 @@ namespace VAdvantage.Report
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MReportSource(GetCtx(), dr, null));
+                    list.Add(new MVAPAFVARSource(GetCtx(), dr, null));
                 }
                 dt = null;
             }
@@ -179,7 +179,7 @@ namespace VAdvantage.Report
                 }
             }
             //
-            _sources = new MReportSource[list.Count];
+            _sources = new MVAPAFVARSource[list.Count];
             _sources = list.ToArray();
             log.Finest("ID=" + GetVAPA_FR_Row_ID()
                 + " - Size=" + list.Count);
@@ -193,13 +193,13 @@ namespace VAdvantage.Report
         ///	Get Sources
         /// </summary>
         /// <returns>sources</returns>
-        public MReportSource[] GetSources()
+        public MVAPAFVARSource[] GetSources()
         {
             if (LINETYPE_SegmentValue.Equals(GetLineType()))
             {
                 return _sources;
             }
-            return new MReportSource[0];
+            return new MVAPAFVARSource[0];
         }	//	getSources
 
         /// <summary>
@@ -530,11 +530,11 @@ namespace VAdvantage.Report
         /// <param name="source">copy source</param>
         /// <param name="trxName">transaction</param>
         /// <returns>report line</returns>
-        public static MReportLine Copy(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID,
-            int VAPA_FR_RowSet_ID, MReportLine source, Trx trxName)
+        public static MVAPARFRow Copy(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID,
+            int VAPA_FR_RowSet_ID, MVAPARFRow source, Trx trxName)
         {
-            MReportLine retValue = new MReportLine(ctx, 0, trxName);
-            MReportLine.CopyValues(source, retValue, VAF_Client_ID, VAF_Org_ID);
+            MVAPARFRow retValue = new MVAPARFRow(ctx, 0, trxName);
+            MVAPARFRow.CopyValues(source, retValue, VAF_Client_ID, VAF_Org_ID);
             //
             retValue.SetVAPA_FR_RowSet_ID(VAPA_FR_RowSet_ID);
             retValue.SetOper_1_ID(0);

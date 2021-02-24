@@ -267,7 +267,7 @@ namespace VAdvantage.Process
         /// <returns>TRUE/False</returns>
         private bool CheckQtyAvailablity(Ctx ctx, int VAM_Warehouse_ID, int VAM_Locator_ID, int VAM_ProductContainer_ID, int VAM_Product_ID, int VAM_PFeature_SetInstance_ID, Decimal? MovementQty, Trx trxName)
         {
-            MWarehouse wh = MWarehouse.Get(ctx, VAM_Warehouse_ID);
+            MVAMWarehouse wh = MVAMWarehouse.Get(ctx, VAM_Warehouse_ID);
             MVAMProduct product = null;
             if (wh.IsDisallowNegativeInv() && VAM_Product_ID > 0)
             {

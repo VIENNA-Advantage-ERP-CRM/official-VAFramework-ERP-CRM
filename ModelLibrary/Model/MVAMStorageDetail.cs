@@ -109,7 +109,7 @@ namespace VAdvantage.Model
                 )
             {
 
-                MWarehouse wh = MWarehouse.Get(GetCtx(), GetVAM_Warehouse_ID());
+                MVAMWarehouse wh = MVAMWarehouse.Get(GetCtx(), GetVAM_Warehouse_ID());
 
                 if (wh.IsDisallowNegativeInv())
                 {
@@ -661,7 +661,7 @@ namespace VAdvantage.Model
                 int reservationVAM_Locator_ID = VAM_Locator_ID;
                 if (reservationAttributeSetInstance_ID == 0)
                 {
-                    MWarehouse wh = MWarehouse.Get(ctx, VAM_Warehouse_ID);
+                    MVAMWarehouse wh = MVAMWarehouse.Get(ctx, VAM_Warehouse_ID);
                     reservationVAM_Locator_ID = wh.GetDefaultVAM_Locator_ID();
                 }
                 storageASI = MVAMStorageDetail.Get(ctx, reservationVAM_Locator_ID,
@@ -673,7 +673,7 @@ namespace VAdvantage.Model
                     int xVAM_Locator_ID = MVAMProductLocator.GetFirstVAM_Locator_ID(product, VAM_Warehouse_ID);
                     if (xVAM_Locator_ID == 0)
                     {
-                        MWarehouse wh = MWarehouse.Get(ctx, VAM_Warehouse_ID);
+                        MVAMWarehouse wh = MVAMWarehouse.Get(ctx, VAM_Warehouse_ID);
                         xVAM_Locator_ID = wh.GetDefaultVAM_Locator_ID();
                     }
                     storageASI = MVAMStorageDetail.GetCreate(ctx, xVAM_Locator_ID,

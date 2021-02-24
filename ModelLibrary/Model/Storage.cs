@@ -212,7 +212,7 @@ namespace VAdvantage.Model
 
             public Boolean Validate()
             {
-                MWarehouse wh = MWarehouse.Get(refDetail.GetCtx(), GetVAM_Warehouse_ID());
+                MVAMWarehouse wh = MVAMWarehouse.Get(refDetail.GetCtx(), GetVAM_Warehouse_ID());
 
                 if (wh.IsDisallowNegativeInv())
                 {

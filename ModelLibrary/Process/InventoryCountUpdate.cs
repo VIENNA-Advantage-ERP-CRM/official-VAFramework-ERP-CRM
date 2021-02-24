@@ -386,7 +386,7 @@ namespace VAdvantage.Process
         {
             string qry = "select VAM_Warehouse_id from VAM_Locator where VAM_Locator_id=" + VAM_Locator_ID;
             int VAM_Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, Get_Trx()));
-            MWarehouse wh = MWarehouse.Get(GetCtx(), VAM_Warehouse_ID);
+            MVAMWarehouse wh = MVAMWarehouse.Get(GetCtx(), VAM_Warehouse_ID);
             if (wh.IsDisallowNegativeInv() == true)
             {
                 if (currentQty < 0)

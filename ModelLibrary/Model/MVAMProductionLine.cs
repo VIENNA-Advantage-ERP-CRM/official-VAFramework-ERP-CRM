@@ -27,7 +27,7 @@ namespace VAdvantage.Model
     public class MVAMProductionLine : X_VAM_ProductionLine
     {
 
-        private MWarehouse wh = null;
+        private MVAMWarehouse wh = null;
         private MVAMProduct product = null;
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace VAdvantage.Model
             }
 
             // when warehouse disallow negative inventory is false then on hand qty can't be in negative
-            wh = MWarehouse.Get(GetCtx(), GetVAM_Warehouse_ID());
+            wh = MVAMWarehouse.Get(GetCtx(), GetVAM_Warehouse_ID());
             if (wh.IsDisallowNegativeInv() && GetVAM_Product_ID() > 0)
             {
                 product = MVAMProduct.Get(GetCtx(), GetVAM_Product_ID());

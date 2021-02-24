@@ -80,7 +80,7 @@ namespace VAdvantage.Process
                 + ",VAM_PriceListVersion_ID=" + _VAM_PriceListVersion_ID
                 + ",VAM_ProductCostElement_ID=" + _VAM_ProductCostElement_ID);
 
-            MWarehouse wh = MWarehouse.Get(GetCtx(), _VAM_Warehouse_ID);
+            MVAMWarehouse wh = MVAMWarehouse.Get(GetCtx(), _VAM_Warehouse_ID);
             MVAFClient c = MVAFClient.Get(GetCtx(), wh.GetVAF_Client_ID());
             MVABAccountBook mas = c.GetAcctSchema();
 

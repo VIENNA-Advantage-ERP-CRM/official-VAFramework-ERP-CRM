@@ -25,7 +25,7 @@ namespace VIS.Models
             VAM_Warehouse_ID = Util.GetValueOfInt(paramValue[0].ToString());
             //Assign parameter value
 
-            MWarehouse wh = MWarehouse.Get(ctx, VAM_Warehouse_ID);
+            MVAMWarehouse wh = MVAMWarehouse.Get(ctx, VAM_Warehouse_ID);
             Dictionary<string, string> result = new Dictionary<string, string>();
             result["VAM_Locator_ID"] = wh.GetDefaultVAM_Locator_ID().ToString();
             return result;

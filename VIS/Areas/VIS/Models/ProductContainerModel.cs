@@ -867,7 +867,7 @@ namespace VIS.Models
         public string SaveProductContainer(int warehouseId, int locatorId, string value, string name, Decimal height, Decimal width, int parentContainerId)
         {
             MVAMLocator VAM_Locator = null;
-            MWarehouse VAM_Warehouse = null;
+            MVAMWarehouse VAM_Warehouse = null;
 
             // when warehouse ID is ZERO, then extract it from Locator
             if (warehouseId == 0 && locatorId > 0)
@@ -880,7 +880,7 @@ namespace VIS.Models
             {
                 if (parentContainerId == 0)
                 {
-                    VAM_Warehouse = MWarehouse.Get(_ctx, warehouseId);
+                    VAM_Warehouse = MVAMWarehouse.Get(_ctx, warehouseId);
                     locatorId = VAM_Warehouse.GetDefaultVAM_Locator_ID();
                 }
                 else
@@ -890,7 +890,7 @@ namespace VIS.Models
             }
 
             // need to check warehouse and locator shoyld be active during ceation of Product Container
-            VAM_Warehouse = MWarehouse.Get(_ctx, warehouseId);
+            VAM_Warehouse = MVAMWarehouse.Get(_ctx, warehouseId);
             VAM_Locator = MVAMLocator.Get(_ctx, locatorId);
             if (!VAM_Warehouse.IsActive())
             {

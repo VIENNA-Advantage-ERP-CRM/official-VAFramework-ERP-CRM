@@ -1139,7 +1139,7 @@ namespace VAdvantage.Model
                 {
                     //MWarehouse wh = MWarehouse.Get(GetCtx(), inout.GetVAM_Warehouse_ID());
 
-                    MWarehouse wh = new MWarehouse(GetCtx(), inout.GetVAM_Warehouse_ID(), Get_TrxName());
+                    MVAMWarehouse wh = new MVAMWarehouse(GetCtx(), inout.GetVAM_Warehouse_ID(), Get_TrxName());
 
                     _inventory = new MVAMInventory(wh);
                     _inventory.SetDescription(Msg.Translate(GetCtx(),

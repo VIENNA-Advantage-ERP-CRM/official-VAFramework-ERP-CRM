@@ -324,9 +324,9 @@ namespace VAdvantage.Model
             string qry;
             if (!mov.IsProcessing() || newRecord)
             {
-                MWarehouse wh = null; MWarehouse whTo = null;
-                wh = MWarehouse.Get(GetCtx(), mov.GetDTD001_MWarehouseSource_ID());
-                whTo = MWarehouse.Get(GetCtx(), MVAMLocator.Get(GetCtx(), GetVAM_LocatorTo_ID()).GetVAM_Warehouse_ID());
+                MVAMWarehouse wh = null; MVAMWarehouse whTo = null;
+                wh = MVAMWarehouse.Get(GetCtx(), mov.GetDTD001_MWarehouseSource_ID());
+                whTo = MVAMWarehouse.Get(GetCtx(), MVAMLocator.Get(GetCtx(), GetVAM_LocatorTo_ID()).GetVAM_Warehouse_ID());
 
                 qry = "SELECT NVL(SUM(NVL(QtyOnHand,0)),0) AS QtyOnHand FROM VAM_Storage where VAM_Locator_id=" + GetVAM_Locator_ID() + " and VAM_Product_id=" + GetVAM_Product_ID();
                 if (GetDTD001_AttributeNumber() == null || GetVAM_PFeature_SetInstance_ID() > 0)

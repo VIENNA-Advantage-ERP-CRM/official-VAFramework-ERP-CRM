@@ -53,7 +53,7 @@ namespace VAdvantage.Report
     private long 				_start =CommonFunctions.CurrentTimeMillis();//  System.currentTimeMillis();
 
     /**	Report Definition				*/
-    private MReport				_report = null;
+    private MVAPAFinancialReport				_report = null;
     /**	Periods in Calendar				*/
     private FinReportPeriod[]	_periods = null;
     /**	Index of m_VAB_YearPeriod_ID in _periods		**/
@@ -61,9 +61,9 @@ namespace VAdvantage.Report
     /**	Parameter Where Clause			*/
     private StringBuilder		m_parameterWhere = new StringBuilder();
     /**	The Report Columns				*/
-    private MReportColumn[] 	_columns;
+    private MVAPAFRColumn[] 	_columns;
     /** The Report Lines				*/
-    private MReportLine[] 		_lines;
+    private MVAPARFRow[] 		_lines;
     /** Balance Aggregation             */
     private int p_Actual_Accumulation_ID;
 
@@ -181,7 +181,7 @@ namespace VAdvantage.Report
         }
 
         //	Load Report Definition
-        _report = new MReport (GetCtx(), GetRecord_ID(), null);
+        _report = new MVAPAFinancialReport (GetCtx(), GetRecord_ID(), null);
         sb.Append(" - ").Append(_report);
         //
         SetPeriods();
@@ -1050,7 +1050,7 @@ namespace VAdvantage.Report
     private void InsertLineTrx (int line, String variable)
     {
         log.Info("Line=" + line + " - Variable=" + variable);
-        MReportLine rLine = _lines[line];
+        MVAPARFRow rLine = _lines[line];
 
         //	Insert
         StringBuilder insert = new StringBuilder("INSERT INTO VAT_Report "
@@ -1071,7 +1071,7 @@ namespace VAdvantage.Report
         for (int col = 0; col < _columns.Length; col++)
         {
             insert.Append(", ");
-            MReportColumn column = _columns[col]; 
+            MVAPAFRColumn column = _columns[col]; 
 
             //	Segment Values
             if (column.IsColumnTypeSegmentValue())

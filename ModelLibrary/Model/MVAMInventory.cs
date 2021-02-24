@@ -117,7 +117,7 @@ namespace VAdvantage.Model
          * 	Warehouse Constructor
          *	@param wh warehouse
          */
-        public MVAMInventory(MWarehouse wh)
+        public MVAMInventory(MVAMWarehouse wh)
             : this(wh.GetCtx(), 0, wh.Get_TrxName())
         {
             SetClientOrg(wh);
@@ -296,7 +296,7 @@ namespace VAdvantage.Model
             if (newRecord
                 || Is_ValueChanged("VAF_Org_ID") || Is_ValueChanged("VAM_Warehouse_ID"))
             {
-                MWarehouse wh = MWarehouse.Get(GetCtx(), GetVAM_Warehouse_ID());
+                MVAMWarehouse wh = MVAMWarehouse.Get(GetCtx(), GetVAM_Warehouse_ID());
                 if (wh.GetVAF_Org_ID() != GetVAF_Org_ID())
                 {
                     log.SaveError("WarehouseOrgConflict", "");
@@ -1916,7 +1916,7 @@ namespace VAdvantage.Model
         {
             string qry = "select VAM_Warehouse_id from VAM_Locator where VAM_Locator_id=" + VAM_Locator_ID;
             int VAM_Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, Get_Trx()));
-            MWarehouse wh = MWarehouse.Get(GetCtx(), VAM_Warehouse_ID);
+            MVAMWarehouse wh = MVAMWarehouse.Get(GetCtx(), VAM_Warehouse_ID);
             if (wh.IsDisallowNegativeInv() == true)
             {
                 if (currentQty < 0)

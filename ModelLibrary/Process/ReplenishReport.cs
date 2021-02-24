@@ -93,7 +93,7 @@ namespace VAdvantage.Process
             }
             
 
-            MWarehouse wh = MWarehouse.Get(GetCtx(), _VAM_Warehouse_ID);
+            MVAMWarehouse wh = MVAMWarehouse.Get(GetCtx(), _VAM_Warehouse_ID);
             if (wh.Get_ID() == 0)
             {
                 throw new Exception("@FillMandatory@ @VAM_Warehouse_ID@");
@@ -217,7 +217,7 @@ namespace VAdvantage.Process
         /// Fill Table
         /// </summary>
         /// <param name="wh">warehouse</param>
-        private void FillTable(MWarehouse wh)
+        private void FillTable(MVAMWarehouse wh)
         {
             String sql = "INSERT INTO VAT_Restock "
                 + "(VAF_JInstance_ID, VAM_Warehouse_ID, VAM_Product_ID, VAF_Client_ID, VAF_Org_ID,"
@@ -468,14 +468,14 @@ namespace VAdvantage.Process
             String info = "";
             //
             MVABOrder order = null;
-            MWarehouse wh = null;
+            MVAMWarehouse wh = null;
             X_VAT_Restock[] replenishs = GetReplenish(_M_WareSource);
             for (int i = 0; i < replenishs.Length; i++)
             {
                 X_VAT_Restock replenish = replenishs[i];
                 if (wh == null || wh.GetVAM_Warehouse_ID() != replenish.GetVAM_Warehouse_ID())
                 {
-                    wh = MWarehouse.Get(GetCtx(), replenish.GetVAM_Warehouse_ID());
+                    wh = MVAMWarehouse.Get(GetCtx(), replenish.GetVAM_Warehouse_ID());
                 }
                 //
                 if (order == null
@@ -520,14 +520,14 @@ namespace VAdvantage.Process
             String info = "";
             //
             MVAMRequisition requisition = null;
-            MWarehouse wh = null;
+            MVAMWarehouse wh = null;
             X_VAT_Restock[] replenishs = GetReplenish(_M_WareSource);
             for (int i = 0; i < replenishs.Length; i++)
             {
                 X_VAT_Restock replenish = replenishs[i];
                 if (wh == null || wh.GetVAM_Warehouse_ID() != replenish.GetVAM_Warehouse_ID())
                 {
-                    wh = MWarehouse.Get(GetCtx(), replenish.GetVAM_Warehouse_ID());
+                    wh = MVAMWarehouse.Get(GetCtx(), replenish.GetVAM_Warehouse_ID());
                 }
                 //
                 if (requisition == null
@@ -580,8 +580,8 @@ namespace VAdvantage.Process
             MVAMInventoryTransfer move = null;
             int VAM_Warehouse_ID = 0;
             int VAM_WarehouseSource_ID = 0;
-            MWarehouse whSource = null;
-            MWarehouse whTarget = null;
+            MVAMWarehouse whSource = null;
+            MVAMWarehouse whTarget = null;
 
             string param = "";
             if (_M_WareSource != null)
@@ -598,11 +598,11 @@ namespace VAdvantage.Process
                 X_VAT_Restock replenish = replenishs[i];
                 if (whSource == null || whSource.GetVAM_WarehouseSource_ID() != replenish.GetVAM_WarehouseSource_ID())
                 {
-                    whSource = MWarehouse.Get(GetCtx(), replenish.GetVAM_WarehouseSource_ID());
+                    whSource = MVAMWarehouse.Get(GetCtx(), replenish.GetVAM_WarehouseSource_ID());
                 }
                 if (whTarget == null || whTarget.GetVAM_Warehouse_ID() != replenish.GetVAM_Warehouse_ID())
                 {
-                    whTarget = MWarehouse.Get(GetCtx(), replenish.GetVAM_Warehouse_ID());
+                    whTarget = MVAMWarehouse.Get(GetCtx(), replenish.GetVAM_Warehouse_ID());
                 }
                 if (client == null || client.GetVAF_Client_ID() != whSource.GetVAF_Client_ID())
                 {
@@ -713,7 +713,7 @@ namespace VAdvantage.Process
         /// <param name="product"> product </param>
         /// <param name="wh">warehouse</param>
         /// <returns>locator with highest priority</returns>
-        private int GetLocator_ID(MVAMProduct product, MWarehouse wh)
+        private int GetLocator_ID(MVAMProduct product, MVAMWarehouse wh)
         {
             int VAM_Locator_ID = MVAMProductLocator.GetFirstVAM_Locator_ID(product, wh.GetVAM_Warehouse_ID());
             /**	
