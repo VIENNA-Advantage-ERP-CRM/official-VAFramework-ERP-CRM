@@ -84,6 +84,7 @@ namespace VIS.Models
             //return Util.GetValueOfInt(DB.ExecuteScalar(sql));
         }
 
+        /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
         /// <summary>
         /// Get Price List Version on ValidFrom Date
         /// </summary>
@@ -98,6 +99,7 @@ namespace VIS.Models
             return GetM_PriceList_Version_ID(ctx, fields);
         }
 
+        /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
         /// <summary>
         /// Set Screen Table And ColumnName
         /// </summary>
@@ -142,6 +144,7 @@ namespace VIS.Models
             }
         }
 
+        /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
         /// <summary>
         /// Get Price List Version on ValidFrom Date
         /// </summary>
@@ -247,7 +250,7 @@ namespace VIS.Models
         /// <param name="ctx">context</param>
         /// <param name="fields">parameters</param>
         /// <returns></returns>
-        public int GetM_PriceList_Version_ID_Contract(Ctx ctx, string fields)
+        public int GetM_PriceList_Version_ID_On_Transaction_Date(Ctx ctx, string fields)
         {
             /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
             int M_PriceList_ID = 0, productId = 0, priceListVersionId= 0, uomId = 0, attrSetInstId = 0;

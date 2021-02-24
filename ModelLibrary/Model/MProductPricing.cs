@@ -196,6 +196,8 @@ namespace VAdvantage.Model
         private bool CalculatePLV()
         {
             String sql = "";
+            /** Price List - Ensuring valid Uom id ** Dt:01/02/2021 ** Modified By: Kumar **/
+            const int UOM_EACH = 100;
             if (_M_Product_ID == 0 || _M_PriceList_Version_ID == 0)
                 return false;
             // Check For Advance Pricing Module
@@ -205,11 +207,15 @@ namespace VAdvantage.Model
                 Tuple<String, String, String> mInfo1 = null;
                 if (Env.HasModulePrefix("ED011_", out mInfo1))
                 {
-                    //vikas  mantis Issue ( 0000517)
-                    string _sql = null;
-                    _sql = "SELECT C_UOM_ID FROM M_Product WHERE  M_Product_ID=" + _M_Product_ID;
-                    _C_UOM_ID = Util.GetValueOfInt(DB.ExecuteScalar(_sql));
-                    //end
+                    /** Price List - Ensuring valid Uom id ** Dt:01/02/2021 ** Modified By: Kumar **/
+                    if (_C_UOM_ID <= UOM_EACH)
+                    {
+                        //vikas  mantis Issue ( 0000517)
+                        string _sql = null;
+                        _sql = "SELECT C_UOM_ID FROM M_Product WHERE  M_Product_ID=" + _M_Product_ID;
+                        _C_UOM_ID = Util.GetValueOfInt(DB.ExecuteScalar(_sql));
+                        //end
+                    }
                     sql = "SELECT bomPriceStdUOM(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID , pp.C_UOM_ID) AS PriceStd,"	//	1
                        + " bomPriceListUOM(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID , pp.C_UOM_ID) AS PriceList,"		//	2
                        + " bomPriceLimitUOM(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID , pp.C_UOM_ID) AS PriceLimit,"	//	3
