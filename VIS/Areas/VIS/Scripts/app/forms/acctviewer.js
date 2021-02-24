@@ -11,7 +11,8 @@
         this.ASchema = [];
         // Create Log
         this.log = VIS.Logging.VLogger.getVLogger("AccountViewer");
-
+        //paging variables
+        var divPaging, ulPaging, liFirstPage, liPrevPage, liCurrPage, liNextPage, liLastPage, cmbPage;
 
         this.dataByData = null;
         this._elements = [];
@@ -531,7 +532,7 @@
     //    return retValue;
     //}
 
-    AcctViewerData.prototype.Query = function (AD_Client_ID, callbackGetDataModel) {
+    AcctViewerData.prototype.Query = function (AD_Client_ID, callbackGetDataModel, resetPageCtrls, pNo) {
         //  Set Where Clause
         var whereClause = "";
         //  Add Organization
@@ -622,13 +623,16 @@
         if (orderClause.length == 0) {
             orderClause = orderClause.concat(this.TABLE_ALIAS).concat(".Fact_Acct_ID");
         }
+        if (!pNo) {
+            pNo = 1;
+        }
 
-        this.getDataModel(AD_Client_ID, whereClause, orderClause, this.group1, this.group2, this.group3, this.group4, this.sortBy1, this.sortBy2, this.sortBy3, this.sortBy4, this.displayDocumentInfo, this.displaySourceAmt, this.displayQty, callbackGetDataModel);
+        this.getDataModel(AD_Client_ID, whereClause, orderClause, this.group1, this.group2, this.group3, this.group4, this.sortBy1, this.sortBy2, this.sortBy3, this.sortBy4, this.displayDocumentInfo, this.displaySourceAmt, this.displayQty, callbackGetDataModel, resetPageCtrls, pNo);
         //var val = this.dataByData;
         //return val;
     }
 
-    AcctViewerData.prototype.getDataModel = function (AD_Client_ID, whereClause, orderClause, gr1, gr2, gr3, gr4, sort1, sort2, sort3, sort4, displayDocInfo, displaySrcAmt, displayqty, callbackGetDataModel) {
+    AcctViewerData.prototype.getDataModel = function (AD_Client_ID, whereClause, orderClause, gr1, gr2, gr3, gr4, sort1, sort2, sort3, sort4, displayDocInfo, displaySrcAmt, displayqty, callbackGetDataModel, resetPageCtrls, pNo) {
         var obj = this;
         $.ajax({
             url: VIS.Application.contextUrl + "Common/GetDataQuery",
@@ -649,10 +653,12 @@
                 sort4: sort4,
                 displayDocInfo: displayDocInfo,
                 displaySrcAmt: displaySrcAmt,
-                displayqty: displayqty
+                displayqty: displayqty,
+                pageNo: pNo
             },
             success: function (data) {
                 obj.dataByData = data.result;
+                resetPageCtrls(data.result.pSetting);
                 callbackGetDataModel(data.result);
                 //return data.result;
             }
@@ -859,6 +865,7 @@
             tabT1.css("font-size", "1rem").css("color", "rgba(var(--v-c-primary), 1)");
             rightSideDiv.show();
             leftSideDiv.show();
+            ulPaging.css("display", "none");
             resultDiv.css("display", "none");
             btnRePost.hide();
             chkforcePost.hide();
@@ -875,6 +882,8 @@
             tabT2.css("font-size", "1rem").css("color", "rgba(var(--v-c-primary), 1)");
             rightSideDiv.hide();
             leftSideDiv.hide();
+            ulPaging.css("display", "block");
+            bottumDiv.append(ulPaging);
             resultDiv.css("display", "block");
             if (notShowPosted) {
                 btnRePost.hide();
@@ -886,6 +895,56 @@
             }
             lblAccSchemaFilter.getControl().show();
             cmbAccSchemaFilter.getControl().show();
+        }
+        createPageSettings();
+        //bottumDiv.append(ulPaging);
+        //Paging UI
+        function createPageSettings() {
+            ulPaging = $('<ul class="vis-statusbar-ul">');
+
+            liFirstPage = $('<li style="opacity: 1;"><div><i class="vis vis-shiftleft" title="' + VIS.Msg.getMsg("FirstPage") + '" style="opacity: 0.6;"></i></div></li>');
+
+            liPrevPage = $('<li style="opacity: 1;"><div><i class="vis vis-pageup" title="' + VIS.Msg.getMsg("PageUp") + '" style="opacity: 0.6;"></i></div></li>');
+
+            cmbPage = $("<select>");
+
+            liCurrPage = $('<li>').append(cmbPage);
+
+            liNextPage = $('<li style="opacity: 1;"><div><i class="vis vis-pagedown" title="' + VIS.Msg.getMsg("PageDown") + '" style="opacity: 0.6;"></i></div></li>');
+
+            liLastPage = $('<li style="opacity: 1;"><div><i class="vis vis-shiftright" title="' + VIS.Msg.getMsg("LastPage") + '" style="opacity: 0.6;"></i></div></li>');
+
+
+            ulPaging.append(liFirstPage).append(liPrevPage).append(liCurrPage).append(liNextPage).append(liLastPage);
+            pageEvents();
+        }
+        //Paging events
+        function pageEvents() {
+            liFirstPage.on("click", function () {
+                if ($(this).css("opacity") == "1") {
+                    a
+                    _data.Query(AD_Client_ID, callbackGetDataModel, resetPageCtrls, 1);
+                }
+            });
+            liPrevPage.on("click", function () {
+                if ($(this).css("opacity") == "1") {
+                    _data.Query(AD_Client_ID, callbackGetDataModel, resetPageCtrls, parseInt(cmbPage.val()) - 1);
+                }
+            });
+            liNextPage.on("click", function () {
+                if ($(this).css("opacity") == "1") {
+                    _data.Query(AD_Client_ID, callbackGetDataModel, resetPageCtrls, parseInt(cmbPage.val()) + 1);
+                }
+            });
+            liLastPage.on("click", function () {
+                if ($(this).css("opacity") == "1") {
+                    _data.Query(AD_Client_ID, callbackGetDataModel, resetPageCtrls, parseInt(cmbPage.find("Option:last").val()));
+                }
+            });
+            cmbPage.on("change", function () {
+                _data.Query(AD_Client_ID, callbackGetDataModel, resetPageCtrls, cmbPage.val());
+            });
+
         }
 
         function setBusy(isBusy) {
@@ -936,7 +995,7 @@
                         }
                         else if (row[j] != null && typeof (row[j]) == "number" &&
                             (VIS.translatedTexts.AmtAcctCr == dataObj.Columns[j] ||
-                            VIS.translatedTexts.AmtAcctDr == dataObj.Columns[j])) {
+                                VIS.translatedTexts.AmtAcctDr == dataObj.Columns[j])) {
                             line[dataObj.Columns[j]] = parseFloat(row[j]).toLocaleString();
                         }
                         else {
@@ -955,6 +1014,9 @@
             $self.dGrid = $(resultDiv).w2grid({
                 name: "gridAccViewer" + windowNo,
                 recordHeight: 40,
+                show: {
+                    lineNumbers: true  // indicates if line numbers column is visible
+                },
                 columns: $self.arrListColumns,
                 records: data
             });
@@ -997,7 +1059,8 @@
                     _data.C_AcctSchema_ID = cmbAccSchemaFilter.getControl().find('option:selected').val();
                     setTimeout(function () {
                         //var dataValue = _data.Query(AD_Client_ID , callbackGetDataModel);
-                        _data.Query(AD_Client_ID, callbackGetDataModel);
+                        var pNo = 1;
+                        _data.Query(AD_Client_ID, callbackGetDataModel, resetPageCtrls, pNo);
                         //if (dataValues != null) {
                         //    setModel(dataValues);
                         //}
@@ -1266,14 +1329,14 @@
             $FrmInputWrap.append($FrmControlWrap);
             $FrmControlWrap.append(chkSelectDoc);
 
-             tr = $("<tr>");
+            tr = $("<tr>");
 
             td = $("<td>");
             var $FrmInputWrap = $('<div class="input-group vis-input-wrap">');
             var $FrmControlWrap = $('<div class="vis-control-wrap">');
             var $FrmCtrlBtnWrap = $('<div class="input-group-append">');
 
-             tble.append(tr);
+            tble.append(tr);
 
             tr.append(td);
             td.append($FrmInputWrap);
@@ -1535,7 +1598,9 @@
 
             //Bottum Div
 
-            bottumDiv = $("<div class='vis-acctviewerbottdiv'>");
+            bottumDiv = $("<div class='vis-acctviewerbottdiv' 'style='margin-top: 1%;'>");
+            //createPageSettings();
+            //bottumDiv.append(ulPaging);
             //bottumDiv.css("height", 50);
             /** dont show repost butoon if form is opened from menu. **/
             if (!$self.getIsMenu()) {
@@ -1825,7 +1890,8 @@
 
             //setTimeout(function () {
             // var dataValue = _data.Query(AD_Client_ID);
-            _data.Query(AD_Client_ID, callbackGetDataModel);
+            var pNo = 1;
+            _data.Query(AD_Client_ID, callbackGetDataModel, resetPageCtrls, pNo);
             //if (dataValues != null) {
             if (_data.C_AcctSchema_ID > 0) {
                 cmbAccSchemaFilter.setValue(_data.C_AcctSchema_ID);
@@ -1845,6 +1911,50 @@
             };
             setBusy(false);
         };
+        //reset Page controls
+        function resetPageCtrls(psetting) {
+
+            cmbPage.empty();
+            if (psetting.TotalPage > 0) {
+                for (var i = 0; i < psetting.TotalPage; i++) {
+                    cmbPage.append($("<option value=" + (i + 1) + ">" + (i + 1) + "</option>"))
+                }
+                cmbPage.val(psetting.CurrentPage);
+
+
+                if (psetting.TotalPage > psetting.CurrentPage) {
+                    liNextPage.css("opacity", "1");
+                    liLastPage.css("opacity", "1");
+                }
+                else {
+                    liNextPage.css("opacity", "0.6");
+                    liLastPage.css("opacity", "0.6");
+                }
+
+                if (psetting.CurrentPage > 1) {
+                    liFirstPage.css("opacity", "1");
+                    liPrevPage.css("opacity", "1");
+                }
+                else {
+                    liFirstPage.css("opacity", "0.6");
+                    liPrevPage.css("opacity", "0.6");
+                }
+
+                if (psetting.TotalPage == 1) {
+                    liFirstPage.css("opacity", "0.6");
+                    liPrevPage.css("opacity", "0.6");
+                    liNextPage.css("opacity", "0.6");
+                    liLastPage.css("opacity", "0.6");
+                }
+
+            }
+            else {
+                liFirstPage.css("opacity", "0.6");
+                liPrevPage.css("opacity", "0.6");
+                liNextPage.css("opacity", "0.6");
+                liLastPage.css("opacity", "0.6");
+            }
+        }
 
         function actionDocument() {
             var doc = chkSelectDoc.find('input').prop("checked");
