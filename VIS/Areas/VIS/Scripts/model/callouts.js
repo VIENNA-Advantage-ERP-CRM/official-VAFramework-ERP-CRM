@@ -16716,7 +16716,6 @@
     VIS.Utility.inheritPrototype(CalloutTeamForcast, VIS.CalloutEngine); //inherit prototype
     CalloutTeamForcast.prototype.ProductInfo = function (ctx, windowNo, mTab, mField, value, oldValue) {
         //  
-        debugger;
         if (value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {
             return "";
         }
@@ -16754,7 +16753,6 @@
     };
     CalloutTeamForcast.prototype.CalculatePrice = function (ctx, windowNo, mTab, mField, value, oldValue) {
         // 
-        debugger;
         if (value == null || value.toString() == "" || Util.getValueOfInt(value) <= 0) {
             return "";
         }
@@ -16775,15 +16773,17 @@
      * @param {any} oldValue
      */
     CalloutTeamForcast.prototype.Qty = function (ctx, windowNo, mTab, mField, value, oldValue) {  
-        debugger;
-        if (value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {
+        if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {          
             return "";
-        }
+        }  
+        this.setCalloutActive(true);
         var C_UOM_ID = mTab.getValue("C_UOM_ID");
+        if (C_UOM_ID == null) {
+            C_UOM_ID = ctx.getContextAsInt(windowNo, "C_UOM_ID")  
+        }
         var M_Product_ID = mTab.getValue("M_Product_ID");
         var Qty = mTab.getValue("BaseQty");
-        var paramStr = M_Product_ID.toString().concat(",", C_UOM_ID.toString(), ",", //2
-            Qty.toString()); //3
+        var paramStr = M_Product_ID.toString().concat(",", C_UOM_ID.toString(), ",", Qty.toString()); 
         var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
         if (pc != null) {
             mTab.setValue("QtyEntered", pc);
@@ -16791,23 +16791,70 @@
         else {
             mTab.setValue("QtyEntered", Qty);
         }
- 
+
+        this.setCalloutActive(false);
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";
     };
 
+    /**
+     * set currency on the basis of Pricelist
+     * @param {any} ctx
+     * @param {any} windowNo
+     * @param {any} mTab
+     * @param {any} mField
+     * @param {any} value
+     * @param {any} oldValue
+     */
     CalloutTeamForcast.prototype.Currency = function (ctx, windowNo, mTab, mField, value, oldValue) {
-        debugger;
-        if (value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {
-            mTab.setValue("C_Currency_ID", ctx.getContextAsInt(windowNo, "C_Currency_ID"));
+        if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {
             return "";
         }
-
+        this.setCalloutActive(true);
+        //get currency from pricelist
         var pricelist = VIS.dataContext.getJSONRecord("MPriceList/GetPriceListData", Util.getValueOfString( mTab.getValue("M_PriceList_ID")));
         if (pricelist["C_Currency_ID"] != null) {
             mTab.setValue("C_Currency_ID", pricelist["C_Currency_ID"]);
         }
-      
+
+        this.setCalloutActive(false);
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
+    /**
+     *Set Std price 
+     * @param {any} ctx
+     * @param {any} windowNo
+     * @param {any} mTab
+     * @param {any} mField
+     * @param {any} value
+     * @param {any} oldValue
+     */
+    CalloutTeamForcast.prototype.ProductPrice = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {
+            //set values to 0 if no product is selected
+            mTab.setValue("PriceStd", 0);
+            mTab.setValue("UnitPrice", 0);
+            mTab.setValue("QtyEntered", 0);
+            mTab.setValue("BaseQty", 0);
+            return "";
+        }
+        this.setCalloutActive(true);
+        if (ctx.getContextAsInt(windowNo, "M_PriceList_ID") > 0) {
+            var paramString = Util.getValueOfString(mTab.getValue("M_Product_ID")).concat(",", Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")), ",",
+                Util.getValueOfString(ctx.getContextAsInt(windowNo, "M_PriceList_ID")), ",", 
+                Util.getValueOfString(mTab.getValue("C_UOM_ID")))
+                
+            //get the price from product price inly if pricelist is selected
+            var stdPrice = VIS.dataContext.getJSONRecord("MProductPricing/GetProductdata", paramString);
+            mTab.setValue("PriceStd", stdPrice);
+            mTab.setValue("UnitPrice", stdPrice);
+            mTab.setValue("PriceStd", (stdPrice * Util.getValueOfDecimal(mTab.getValue("BaseQty"))));
+
+        }
+
+        this.setCalloutActive(false);
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";
     };
@@ -16816,6 +16863,46 @@
    
     VIS.Model.CalloutTeamForcast = CalloutTeamForcast;
     //************CalloutTeamForcast End****************
+
+
+
+     //************CalloutMasterForecast Start***************
+    function CalloutMasterForecast() {
+        VIS.CalloutEngine.call(this, "VIS.CalloutMasterForecast");//must call
+    };
+    VIS.Utility.inheritPrototype(CalloutMasterForecast, VIS.CalloutEngine); //inherit prototype
+    /**
+     * set currency 
+     * @param {any} ctx
+     * @param {any} windowNo
+     * @param {any} mTab
+     * @param {any} mField
+     * @param {any} value
+     * @param {any} oldValue
+     */
+    CalloutMasterForecast.prototype.Currency = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (this.isCalloutActive()|| value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {
+            mTab.setValue("C_Currency_ID", Util.getValueOfInt(ctx.getContext("$C_Currency_ID")));
+            return "";
+        }
+        this.setCalloutActive(true);
+
+        var pricelist = VIS.dataContext.getJSONRecord("MPriceList/GetPriceListData", Util.getValueOfString(mTab.getValue("M_PriceList_ID")));
+        if (pricelist["C_Currency_ID"] != null) {
+            mTab.setValue("C_Currency_ID", pricelist["C_Currency_ID"]);
+        }
+
+        this.setCalloutActive(false);
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
+    VIS.Model.CalloutMasterForecast = CalloutMasterForecast;
+    //************CalloutMasterForecast END***************
+
+
+
+
 
 
     //************CalloutTaxAmt Start***************
