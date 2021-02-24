@@ -227,6 +227,127 @@ namespace VAdvantage.Model
             return cost;
         }
 
+        public enum windowName
+        {
+            M_InOutLine_ID = 0, M_InventoryLine_ID, M_MovementLine_ID, C_ProjectIssue_ID,
+            VAFAM_AssetDisposal_ID, VAMFG_M_WrkOdrRscTxnLine_ID, VAMFG_M_WrkOdrTrnsctionLine_ID
+        }
+
+
+        public static Decimal GetLifoAndFifoCurrentCostFromCostQueueTransaction(Ctx ctx, int AD_Client_ID, int AD_Org_ID, int M_Product_ID,
+            int M_ASI_ID, int WindowName, int RecordLine_ID, string costingMethod, int M_Warehouse_ID, bool IsFreightIncluded, Trx trxName)
+        {
+            Decimal Cost = 0;
+            String sql = "";
+            try
+            {
+                sql = @"SELECT  
+                            ROUND(SUM(ABS(M_CostQueueTransaction.MovementQty) * M_CostQueue.CurrentCostPrice) / 
+                                  SUM(ABS(M_CostQueueTransaction.MovementQty)), 10) As currentCost
+                            FROM M_CostQueue inner join M_CostQueueTransaction
+                            ON M_CostQueue.M_CostQueue_ID = m_costQueuetransaction.M_CostQueue_ID
+                            INNER JOIN M_CostElement ON M_CostQueue.M_CostElement_ID = M_CostElement.M_CostElement_ID
+                            WHERE M_CostElement.costingMethod = '" + costingMethod + @"' AND M_CostQueueTransaction.MovementQty <> 0 
+                            AND M_CostQueue.C_ACCTSCHEMA_ID = (SELECT c_acctschema1_id FROM AD_ClientInfo WHERE AD_Client_ID =M_CostQueue.AD_Client_ID)";
+                if (WindowName == (int)windowName.M_InventoryLine_ID)
+                {
+                    sql += "AND M_InventoryLine_ID = " + RecordLine_ID;
+                }
+                else if (WindowName == (int)windowName.M_InOutLine_ID)
+                {
+                    sql += "AND M_InOutLine_ID = " + RecordLine_ID;
+                }
+                else if (WindowName == (int)windowName.M_MovementLine_ID)
+                {
+                    sql += "AND M_MovementLine_ID = " + RecordLine_ID + " AND M_CostQueue.M_Warehouse_ID IN (0,  " + M_Warehouse_ID + @")
+                            AND M_CostQueue.AD_Org_ID IN (0, " + AD_Org_ID + ")";
+                }
+                else if (WindowName == (int)windowName.C_ProjectIssue_ID)
+                {
+                    sql += "AND C_ProjectIssue_ID = " + RecordLine_ID;
+                }
+                else if (WindowName == (int)windowName.VAFAM_AssetDisposal_ID)
+                {
+                    sql += "AND VAFAM_AssetDisposal_ID = " + RecordLine_ID;
+                }
+                else if (WindowName == (int)windowName.VAMFG_M_WrkOdrRscTxnLine_ID)
+                {
+                    sql += "AND VAMFG_M_WrkOdrRscTxnLine_ID = " + RecordLine_ID;
+                }
+                else if (WindowName == (int)windowName.VAMFG_M_WrkOdrTrnsctionLine_ID)
+                {
+                    sql += "AND VAMFG_M_WrkOdrTrnsctionLine_ID = " + RecordLine_ID;
+                }
+                Cost = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, trxName));
+
+                // added Freight Cost
+                if (IsFreightIncluded)
+                {
+                    Cost += GetFreightCostAgainstCostCombination(ctx, ctx.GetContextAsInt("$C_AcctSchema_ID"), AD_Client_ID, AD_Org_ID, M_Product_ID, M_ASI_ID, M_Warehouse_ID, trxName);
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.Log(Level.SEVERE, sql, ex);
+                throw new ArgumentException("Costing Engine : Exception in getting cost from GetLifoAndFifoCurrentCostFromCostQueueTransaction " + ex.Message);
+            }
+            return Cost;
+        }
+
+        public static Decimal GetFreightCostAgainstCostCombination(Ctx ctx, int C_AcctSchema_ID, int AD_Client_ID, int AD_Org_ID, int M_Product_ID,
+            int M_ASI_ID, int M_Warehouse_ID, Trx trxName)
+        {
+            Decimal Cost = 0;
+            string sql = "";
+            try
+            {
+                sql = @"SELECT CASE WHEN M_Product_Category.CostingMethod IS NOT NULL THEN  NVL(M_Product_Category.M_CostElement_ID, 0)
+                                    WHEN C_AcctSchema.CostingMethod  IS NOT NULL THEN  NVL(C_AcctSchema.M_CostElement_ID, 0) ELSE 0 END AS costElement
+                        FROM  M_Product 
+                            INNER JOIN M_Product_Category ON M_Product_Category.M_Product_Category_ID = M_Product.M_Product_Category_ID
+                            INNER JOIN C_AcctSchema ON C_AcctSchema.C_AcctSchema_ID = " + C_AcctSchema_ID + @" 
+                        WHERE M_Product.M_Product_ID = " + M_Product_ID;
+                int M_CostElement_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, trxName));
+                if (M_CostElement_ID > 0)
+                {
+                    sql = @"SELECT ROUND(SUM(NVL(CST.CURRENTCOSTPRICE, 0)), 10) as FreightAmt   FROM M_PRODUCT P  
+                                INNER JOIN M_COST CST   ON P.M_PRODUCT_ID=CST.M_PRODUCT_ID
+                               LEFT JOIN M_PRODUCT_CATEGORY PC   ON P.M_PRODUCT_CATEGORY_ID=PC.M_PRODUCT_CATEGORY_ID
+                               INNER JOIN C_ACCTSCHEMA ACC   ON CST.C_ACCTSCHEMA_ID=ACC.C_ACCTSCHEMA_ID
+                               INNER JOIN M_CostType ct ON ct.M_CostType_ID = acc.M_CostType_ID
+                               INNER JOIN M_COSTELEMENT CE  ON CST.M_COSTELEMENT_ID=CE.M_COSTELEMENT_ID
+                              WHERE ce.M_COSTELEMENT_id IN (SELECT  CAST(cel.M_Ref_CostElement AS INTEGER)
+                                    FROM M_CostElement ce INNER JOIN m_costelementline cel ON ce.M_CostElement_ID = cel.M_CostElement_ID 
+                                    INNER JOIN M_CostElement ON M_CostElement.M_CostElement_ID = CAST(cel.M_Ref_CostElement AS INTEGER)
+                                    WHERE ce.AD_Client_ID=" + AD_Client_ID + @"
+                                    AND ce.IsActive='Y' AND ce.CostElementType='C' AND cel.IsActive='Y'  
+                                    AND ce.M_CostElement_ID = " + M_CostElement_ID + @" and  M_CostElement.costingmethod IS NULL)
+                             AND (( CASE WHEN PC.COSTINGLEVEL IS NOT NULL  AND PC.COSTINGLEVEL   IN ('A' , 'O' , 'W' , 'D')  THEN " + AD_Org_ID + @"
+                                            WHEN PC.COSTINGLEVEL IS NOT NULL  AND PC.COSTINGLEVEL   IN ('B' , 'C')  THEN 0 
+                                            WHEN ACC.COSTINGLEVEL IS NOT NULL AND ACC.COSTINGLEVEL   IN ('A' , 'O' , 'W' , 'D') THEN " + AD_Org_ID + @"
+                                            ELSE 0  END) = CST.AD_Org_ID)
+                             AND (( CASE WHEN PC.COSTINGLEVEL IS NOT NULL  AND PC.COSTINGLEVEL   IN ('A' , 'B', 'D')  THEN " + M_ASI_ID + @"
+                                            WHEN PC.COSTINGLEVEL IS NOT NULL  AND PC.COSTINGLEVEL   IN ('C' , 'O', 'W')  THEN 0 
+                                            WHEN ACC.COSTINGLEVEL IS NOT NULL AND ACC.COSTINGLEVEL   IN ('A' , 'B', 'D') THEN " + M_ASI_ID + @"
+                                            ELSE 0   END) = NVL(CST.M_AttributeSetInstance_ID , 0))
+                             AND (( CASE WHEN PC.COSTINGLEVEL IS NOT NULL  AND PC.COSTINGLEVEL   IN ('W' ,'D')  THEN " + M_Warehouse_ID + @"
+                                             WHEN PC.COSTINGLEVEL IS NOT NULL  AND PC.COSTINGLEVEL   IN ('A' ,'B' , 'C' ,'O')  THEN 0 
+                                            WHEN ACC.COSTINGLEVEL IS NOT NULL AND ACC.COSTINGLEVEL   IN ('W' ,'D') THEN " + M_Warehouse_ID + @"
+                                            ELSE 0   END) = NVL(CST.M_Warehouse_ID , 0))
+                            AND P.M_PRODUCT_ID      =" + M_Product_ID + @"
+                            AND CST.C_ACCTSCHEMA_ID =" + C_AcctSchema_ID;
+                    Cost = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, trxName));
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.Log(Level.SEVERE, sql, ex);
+                throw new ArgumentException("Costing Engine : Exception in getting Freight cost from GetFreightCostAgainstCostCombination " + ex.Message);
+            }
+            return Cost;
+        }
+
+
         /* 	Retrieve/Calculate Current Cost Price
         *	@param product product
         *	@param M_AttributeSetInstance_ID real asi

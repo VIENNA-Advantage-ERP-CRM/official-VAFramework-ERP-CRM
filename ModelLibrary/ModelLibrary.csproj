@@ -794,6 +794,7 @@
     <Compile Include="Model\MCostElementLine.cs" />
     <Compile Include="Model\MCostForeignCurrency.cs" />
     <Compile Include="Model\MCostQueue.cs" />
+    <Compile Include="Model\MCostQueueTransaction.cs" />
     <Compile Include="Model\MCostType.cs" />
     <Compile Include="Model\MCostUpdate.cs" />
     <Compile Include="Model\MCostUpdateLine.cs" />
@@ -1354,6 +1355,7 @@
     <Compile Include="Model\X_M_CostElementDetail.cs" />
     <Compile Include="Model\X_M_CostElementLine.cs" />
     <Compile Include="Model\X_M_CostQueue.cs" />
+    <Compile Include="Model\X_M_CostQueueTransaction.cs" />
     <Compile Include="Model\X_M_CostType.cs" />
     <Compile Include="Model\X_M_CostUpdate.cs" />
     <Compile Include="Model\X_M_CostUpdateLine.cs" />

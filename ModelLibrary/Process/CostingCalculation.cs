@@ -104,6 +104,8 @@ namespace VAdvantage.Process
         string conversionNotFoundProductionExecution1 = "";
         string conversionNotFound = "";
 
+        private String costingMethod = string.Empty;
+
         protected override void Prepare()
         {
             ;

@@ -114,6 +114,8 @@ namespace VAdvantage.Process
         List<ReCalculateRecord> ListReCalculatedRecords = new List<ReCalculateRecord>();
         public enum windowName { Shipment = 0, CustomerReturn, ReturnVendor, MaterialReceipt, MatchInvoice, Inventory, Movement, CreditMemo, AssetDisposal }
 
+        private String costingMethod = string.Empty;
+
         protected override void Prepare()
         {
             ProcessInfoParameter[] para = GetParameter();
@@ -501,6 +503,21 @@ namespace VAdvantage.Process
                                                                     {
                                                                         invoiceLine.SetIsReversedCostCalculated(true);
                                                                     }
+                                                                    if (invoiceLine.GetM_InOutLine_ID() > 0)
+                                                                    {
+                                                                        DataSet ds = DB.ExecuteDataset(@"SELECT M_InOutLine.CurrentCostPrice, M_InOut.M_Warehouse_ID 
+                                                                                    FROM M_InOutLine INNER JOIN M_InOut ON M_InOut.M_InOut_ID = M_InOutLine.M_InOut_ID
+                                                                                    WHERE M_InOutLine.M_InOutLIne_ID = " + invoiceLine.GetM_InOutLine_ID(), null, Get_Trx());
+                                                                        if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                                                                        {
+                                                                            invoiceLine.SetCurrentCostPrice(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["CurrentCostPrice"]));
+
+                                                                            currentCostPrice = MCost.GetproductCosts(invoiceLine.GetAD_Client_ID(), invoiceLine.GetAD_Org_ID(),
+                                                                                                       invoiceLine.GetM_Product_ID(), invoiceLine.GetM_AttributeSetInstance_ID(), Get_Trx(),
+                                                                                                       Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_Warehouse_ID"]));
+                                                                            invoiceLine.SetPostCurrentCostPrice(currentCostPrice);
+                                                                        }
+                                                                    }
                                                                     invoiceLine.SetIsCostCalculated(true);
                                                                     if (client.IsCostImmediate() && !invoiceLine.IsCostImmediate())
                                                                     {
@@ -620,6 +637,21 @@ namespace VAdvantage.Process
                                                                     if (invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
                                                                     {
                                                                         invoiceLine.SetIsReversedCostCalculated(true);
+                                                                    }
+                                                                    if (invoiceLine.GetM_InOutLine_ID() > 0)
+                                                                    {
+                                                                        DataSet ds = DB.ExecuteDataset(@"SELECT M_InOutLine.CurrentCostPrice, M_InOut.M_Warehouse_ID 
+                                                                                    FROM M_InOutLine INNER JOIN M_InOut ON M_InOut.M_InOut_ID = M_InOutLine.M_InOut_ID
+                                                                                    WHERE M_InOutLine.M_InOutLIne_ID = " + invoiceLine.GetM_InOutLine_ID(), null, Get_Trx());
+                                                                        if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                                                                        {
+                                                                            invoiceLine.SetCurrentCostPrice(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["CurrentCostPrice"]));
+
+                                                                            currentCostPrice = MCost.GetproductCostAndQtyMaterial(invoiceLine.GetAD_Client_ID(), invoiceLine.GetAD_Org_ID(),
+                                                                                                       invoiceLine.GetM_Product_ID(), invoiceLine.GetM_AttributeSetInstance_ID(), Get_Trx(),
+                                                                                                       Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_Warehouse_ID"]), false);
+                                                                            invoiceLine.SetPostCurrentCostPrice(currentCostPrice);
+                                                                        }
                                                                     }
                                                                     invoiceLine.SetIsCostCalculated(true);
                                                                     if (client.IsCostImmediate() && !invoiceLine.IsCostImmediate())
@@ -810,6 +842,21 @@ namespace VAdvantage.Process
                                                                 {
                                                                     invoiceLine.SetIsReversedCostCalculated(true);
                                                                 }
+                                                                if (invoiceLine.GetM_InOutLine_ID() > 0)
+                                                                {
+                                                                    DataSet ds = DB.ExecuteDataset(@"SELECT M_InOutLine.CurrentCostPrice, M_InOut.M_Warehouse_ID 
+                                                                                FROM M_InOutLine INNER JOIN M_InOut ON M_InOut.M_InOut_ID = M_InOutLine.M_InOut_ID
+                                                                                WHERE M_InOutLine.M_InOutLIne_ID = " + invoiceLine.GetM_InOutLine_ID(), null, Get_Trx());
+                                                                    if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                                                                    {
+                                                                        invoiceLine.SetCurrentCostPrice(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["CurrentCostPrice"]));
+
+                                                                        currentCostPrice = MCost.GetproductCostAndQtyMaterial(invoiceLine.GetAD_Client_ID(), invoiceLine.GetAD_Org_ID(),
+                                                                                                   invoiceLine.GetM_Product_ID(), invoiceLine.GetM_AttributeSetInstance_ID(), Get_Trx(),
+                                                                                                   Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_Warehouse_ID"]), false);
+                                                                        invoiceLine.SetPostCurrentCostPrice(currentCostPrice);
+                                                                    }
+                                                                }
                                                                 invoiceLine.SetIsCostCalculated(true);
                                                                 if (client.IsCostImmediate() && !invoiceLine.IsCostImmediate())
                                                                 {
@@ -926,6 +973,21 @@ namespace VAdvantage.Process
                                                                 if (invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
                                                                 {
                                                                     invoiceLine.SetIsReversedCostCalculated(true);
+                                                                }
+                                                                if (invoiceLine.GetM_InOutLine_ID() > 0)
+                                                                {
+                                                                    DataSet ds = DB.ExecuteDataset(@"SELECT M_InOutLine.CurrentCostPrice, M_InOut.M_Warehouse_ID 
+                                                                                FROM M_InOutLine INNER JOIN M_InOut ON M_InOut.M_InOut_ID = M_InOutLine.M_InOut_ID
+                                                                                WHERE M_InOutLine.M_InOutLIne_ID = " + invoiceLine.GetM_InOutLine_ID(), null, Get_Trx());
+                                                                    if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                                                                    {
+                                                                        invoiceLine.SetCurrentCostPrice(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["CurrentCostPrice"]));
+
+                                                                        currentCostPrice = MCost.GetproductCostAndQtyMaterial(invoiceLine.GetAD_Client_ID(), invoiceLine.GetAD_Org_ID(),
+                                                                                                   invoiceLine.GetM_Product_ID(), invoiceLine.GetM_AttributeSetInstance_ID(), Get_Trx(),
+                                                                                                   Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_Warehouse_ID"]), false);
+                                                                        invoiceLine.SetPostCurrentCostPrice(currentCostPrice);
+                                                                    }
                                                                 }
                                                                 invoiceLine.SetIsCostCalculated(true);
                                                                 if (client.IsCostImmediate() && !invoiceLine.IsCostImmediate())
@@ -1130,7 +1192,6 @@ namespace VAdvantage.Process
                             }
                             catch { }
                             #endregion
-
 
                             #region Cost Calculation for Inventory Move --
                             try
@@ -1677,6 +1738,21 @@ namespace VAdvantage.Process
                                                                     {
                                                                         invoiceLine.SetIsReversedCostCalculated(true);
                                                                     }
+                                                                    if (invoiceLine.GetM_InOutLine_ID() > 0)
+                                                                    {
+                                                                        DataSet ds = DB.ExecuteDataset(@"SELECT M_InOutLine.CurrentCostPrice, M_InOut.M_Warehouse_ID 
+                                                                                FROM M_InOutLine INNER JOIN M_InOut ON M_InOut.M_InOut_ID = M_InOutLine.M_InOut_ID
+                                                                                WHERE M_InOutLine.M_InOutLIne_ID = " + invoiceLine.GetM_InOutLine_ID(), null, Get_Trx());
+                                                                        if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                                                                        {
+                                                                            invoiceLine.SetCurrentCostPrice(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["CurrentCostPrice"]));
+
+                                                                            currentCostPrice = MCost.GetproductCostAndQtyMaterial(invoiceLine.GetAD_Client_ID(), invoiceLine.GetAD_Org_ID(),
+                                                                                                       invoiceLine.GetM_Product_ID(), invoiceLine.GetM_AttributeSetInstance_ID(), Get_Trx(),
+                                                                                                       Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_Warehouse_ID"]), false);
+                                                                            invoiceLine.SetPostCurrentCostPrice(currentCostPrice);
+                                                                        }
+                                                                    }
                                                                     invoiceLine.SetIsCostCalculated(true);
                                                                     if (client.IsCostImmediate() && !invoiceLine.IsCostImmediate())
                                                                     {
@@ -1761,6 +1837,21 @@ namespace VAdvantage.Process
                                                                     if (invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
                                                                     {
                                                                         invoiceLine.SetIsReversedCostCalculated(true);
+                                                                    }
+                                                                    if (invoiceLine.GetM_InOutLine_ID() > 0)
+                                                                    {
+                                                                        DataSet ds = DB.ExecuteDataset(@"SELECT M_InOutLine.CurrentCostPrice, M_InOut.M_Warehouse_ID 
+                                                                                FROM M_InOutLine INNER JOIN M_InOut ON M_InOut.M_InOut_ID = M_InOutLine.M_InOut_ID
+                                                                                WHERE M_InOutLine.M_InOutLIne_ID = " + invoiceLine.GetM_InOutLine_ID(), null, Get_Trx());
+                                                                        if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                                                                        {
+                                                                            invoiceLine.SetCurrentCostPrice(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["CurrentCostPrice"]));
+
+                                                                            currentCostPrice = MCost.GetproductCostAndQtyMaterial(invoiceLine.GetAD_Client_ID(), invoiceLine.GetAD_Org_ID(),
+                                                                                                       invoiceLine.GetM_Product_ID(), invoiceLine.GetM_AttributeSetInstance_ID(), Get_Trx(),
+                                                                                                       Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_Warehouse_ID"]), false);
+                                                                            invoiceLine.SetPostCurrentCostPrice(currentCostPrice);
+                                                                        }
                                                                     }
                                                                     invoiceLine.SetIsCostCalculated(true);
                                                                     if (client.IsCostImmediate() && !invoiceLine.IsCostImmediate())
@@ -2438,6 +2529,8 @@ namespace VAdvantage.Process
                                    (SELECT M_Product_ID FROM M_Product WHERE M_Product_Category_ID IN (" + productCategoryID + " ) )", null, Get_Trx());
                 DB.ExecuteQuery(@"delete from m_costdetail  where m_product_id IN 
                                    (SELECT M_Product_ID FROM M_Product WHERE M_Product_Category_ID IN (" + productCategoryID + " ) )", null, Get_Trx());
+                DB.ExecuteQuery(@"delete from M_CostQueueTransaction WHERE  m_product_id IN 
+                                   (SELECT M_Product_ID FROM M_Product WHERE M_Product_Category_ID IN (" + productCategoryID + " ) )", null, Get_Trx());
                 DB.ExecuteQuery(@"delete from m_costqueue  where m_product_id IN 
                                    (SELECT M_Product_ID FROM M_Product WHERE M_Product_Category_ID IN (" + productCategoryID + " ) )", null, Get_Trx());
                 DB.ExecuteQuery(@"delete from m_costelementdetail  where m_product_id IN 
@@ -2538,6 +2631,7 @@ namespace VAdvantage.Process
                 // Delete Query 
                 DB.ExecuteQuery(@"delete from m_cost where m_product_id IN  (" + productID + " )", null, Get_Trx());
                 DB.ExecuteQuery(@"delete from m_costdetail  where m_product_id IN  (" + productID + " ) ", null, Get_Trx());
+                DB.ExecuteQuery(@"delete from M_CostQueueTransaction WHERE  m_product_id IN (" + productID + " )", null, Get_Trx());
                 DB.ExecuteQuery(@"delete from m_costqueue  where m_product_id IN  (" + productID + " )", null, Get_Trx());
                 DB.ExecuteQuery(@"delete from m_costelementdetail  where m_product_id IN  (" + productID + " )", null, Get_Trx());
                 #endregion
@@ -2594,6 +2688,7 @@ namespace VAdvantage.Process
                 // Delete Query 
                 DB.ExecuteQuery(@"delete from m_cost WHERE AD_client_ID =  " + GetAD_Client_ID(), null, Get_Trx());
                 DB.ExecuteQuery(@"delete from m_costdetail WHERE AD_client_ID =  " + GetAD_Client_ID(), null, Get_Trx());
+                DB.ExecuteQuery(@"delete from M_CostQueueTransaction WHERE AD_client_ID =  " + GetAD_Client_ID(), null, Get_Trx());
                 DB.ExecuteQuery(@"delete from m_costqueue WHERE AD_client_ID =  " + GetAD_Client_ID(), null, Get_Trx());
                 DB.ExecuteQuery(@"delete from m_costelementdetail WHERE AD_client_ID =  " + GetAD_Client_ID(), null, Get_Trx());
                 #endregion
@@ -2671,6 +2766,8 @@ namespace VAdvantage.Process
                                     break;
                                 }
 
+                                costingMethod = MCostElement.CheckLifoOrFifoMethod(GetCtx(), GetAD_Client_ID(), product.GetM_Product_ID(), Get_Trx());
+
                                 #region get price from m_cost (Current Cost Price)
                                 if (!client.IsCostImmediate() || inoutLine.GetCurrentCostPrice() == 0)
                                 {
@@ -2706,6 +2803,16 @@ namespace VAdvantage.Process
                                             inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inout.GetM_Warehouse_ID());
                                         inoutLine.SetCurrentCostPrice(currentCostPrice);
                                     }
+
+                                    // when costing method is LIFO or FIFO
+                                    if (costingMethod != "")
+                                    {
+                                        currentCostPrice = MCost.GetLifoAndFifoCurrentCostFromCostQueueTransaction(GetCtx(), inoutLine.GetAD_Client_ID(),
+                                            inoutLine.GetAD_Org_ID(), inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), 0,
+                                            inoutLine.GetM_InOutLine_ID(), costingMethod, inout.GetM_Warehouse_ID(), true, Get_Trx());
+                                        inoutLine.SetCurrentCostPrice(currentCostPrice);
+                                    }
+
                                     if (inout.GetDescription() != null && inout.GetDescription().Contains("{->"))
                                     {
                                         inoutLine.SetIsReversedCostCalculated(true);
@@ -2833,6 +2940,8 @@ namespace VAdvantage.Process
                                     break;
                                 }
 
+                                costingMethod = MCostElement.CheckLifoOrFifoMethod(GetCtx(), GetAD_Client_ID(), product.GetM_Product_ID(), Get_Trx());
+
                                 #region get price from m_cost (Current Cost Price)
                                 if (!client.IsCostImmediate() || inoutLine.GetCurrentCostPrice() == 0)
                                 {
@@ -2868,6 +2977,16 @@ namespace VAdvantage.Process
                                             inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inout.GetM_Warehouse_ID(), false);
                                         inoutLine.SetCurrentCostPrice(currentCostPrice);
                                     }
+
+                                    // when costing method is LIFO or FIFO
+                                    if (costingMethod != "")
+                                    {
+                                        currentCostPrice = MCost.GetLifoAndFifoCurrentCostFromCostQueueTransaction(GetCtx(), inoutLine.GetAD_Client_ID(),
+                                            inoutLine.GetAD_Org_ID(), inoutLine.GetM_Product_ID(), inoutLine.GetM_AttributeSetInstance_ID(), 0,
+                                            inoutLine.GetM_InOutLine_ID(), costingMethod, inout.GetM_Warehouse_ID(), false, Get_Trx());
+                                        inoutLine.SetCurrentCostPrice(currentCostPrice);
+                                    }
+
                                     if (inout.GetDescription() != null && inout.GetDescription().Contains("{->"))
                                     {
                                         inoutLine.SetIsReversedCostCalculated(true);
@@ -3725,7 +3844,8 @@ namespace VAdvantage.Process
                         if (inoutLine.GetCurrentCostPrice() == 0)
                         {
                             _log.Info("product cost " + inoutLine.GetM_Product_ID() + " - " + currentCostPrice);
-                            DB.ExecuteQuery("UPDATE M_Inoutline SET CurrentCostPrice = " + currentCostPrice + " WHERE M_Inoutline_ID = " + inoutLine.GetM_InOutLine_ID(), null, Get_Trx());
+                            //DB.ExecuteQuery("UPDATE M_Inoutline SET CurrentCostPrice = " + currentCostPrice + " WHERE M_Inoutline_ID = " + inoutLine.GetM_InOutLine_ID(), null, Get_Trx());
+                            inoutLine.SetCurrentCostPrice(currentCostPrice);
                         }
                         if (isUpdatePostCurrentcostPriceFromMR && inoutLine.GetPostCurrentCostPrice() == 0)
                         {
@@ -3750,11 +3870,11 @@ namespace VAdvantage.Process
                 if (matchInvoice.Get_ColumnIndex("CurrentCostPrice") >= 0)
                 {
                     // get pre cost before invoice cost calculation and update on match invoice
-                    currentCostPrice = MCost.GetproductCostAndQtyMaterial(invoiceLine.GetAD_Client_ID(), invoiceLine.GetAD_Org_ID(),
-                                                                    product.GetM_Product_ID(), invoiceLine.GetM_AttributeSetInstance_ID(), Get_Trx(), M_Warehouse_Id, false);
-                    DB.ExecuteQuery(@"UPDATE M_MatchInv SET CurrentCostPrice = 
-                                                              CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
-                                     @" END WHERE M_MatchInv_ID = " + matchInvoice.GetM_MatchInv_ID(), null, Get_Trx());
+                    //currentCostPrice = MCost.GetproductCostAndQtyMaterial(invoiceLine.GetAD_Client_ID(), invoiceLine.GetAD_Org_ID(),
+                    //                                                product.GetM_Product_ID(), invoiceLine.GetM_AttributeSetInstance_ID(), Get_Trx(), M_Warehouse_Id, false);
+                    //DB.ExecuteQuery(@"UPDATE M_MatchInv SET CurrentCostPrice = 
+                    //                                          CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
+                    //                 @" END WHERE M_MatchInv_ID = " + matchInvoice.GetM_MatchInv_ID(), null, Get_Trx());
                 }
 
                 // when isCostAdjustableOnLost = true on product and movement qty on MR is less than invoice qty then consider MR qty else invoice qty
@@ -3777,6 +3897,18 @@ namespace VAdvantage.Process
                     {
                         invoiceLine.SetIsReversedCostCalculated(true);
                     }
+
+                    invoiceLine.SetCurrentCostPrice(currentCostPrice);
+
+                    // get cost from Product Cost after cost calculation
+                    currentCostPrice = MCost.GetproductCostAndQtyMaterial(GetAD_Client_ID(), GetAD_Org_ID(),
+                                                             product.GetM_Product_ID(), invoiceLine.GetM_AttributeSetInstance_ID(), Get_Trx(), M_Warehouse_Id, false);
+                    invoiceLine.SetPostCurrentCostPrice(currentCostPrice);
+                    if (!isUpdatePostCurrentcostPriceFromMR)
+                    {
+                        invoiceLine.SetCurrentCostPrice(currentCostPrice);
+                    }
+
                     invoiceLine.SetIsCostCalculated(true);
                     if (client.IsCostImmediate() && !invoiceLine.IsCostImmediate())
                     {
@@ -3797,8 +3929,8 @@ namespace VAdvantage.Process
                         if (matchInvoice.Get_ColumnIndex("PostCurrentCostPrice") >= 0)
                         {
                             // get post cost after invoice cost calculation and update on match invoice
-                            currentCostPrice = MCost.GetproductCostAndQtyMaterial(invoiceLine.GetAD_Client_ID(), invoiceLine.GetAD_Org_ID(),
-                                                                            product.GetM_Product_ID(), invoiceLine.GetM_AttributeSetInstance_ID(), Get_Trx(), M_Warehouse_Id, false);
+                            //currentCostPrice = MCost.GetproductCostAndQtyMaterial(invoiceLine.GetAD_Client_ID(), invoiceLine.GetAD_Org_ID(),
+                            //                                                product.GetM_Product_ID(), invoiceLine.GetM_AttributeSetInstance_ID(), Get_Trx(), M_Warehouse_Id, false);
                             matchInvoice.SetPostCurrentCostPrice(currentCostPrice);
                         }
                         // set is cost calculation true on match invoice
@@ -3819,6 +3951,16 @@ namespace VAdvantage.Process
                                 DB.ExecuteQuery("UPDATE M_InoutLine SET PostCurrentCostPrice = " + matchInvoice.GetPostCurrentCostPrice() +
                                         @" WHERE M_InoutLine_ID = " + inoutLine.GetM_InOutLine_ID(), null, Get_Trx());
                                 Get_Trx().Commit();
+                            }
+
+                            // calculate Pre Cost - means cost before updation price impact of current record
+                            if (matchInvoice != null && matchInvoice.GetM_MatchInv_ID() > 0 && matchInvoice.Get_ColumnIndex("CurrentCostPrice") >= 0)
+                            {
+                                currentCostPrice = Util.GetValueOfDecimal(DB.ExecuteScalar(@"SELECT M_InOutLine.PostCurrentCostPrice FROM M_InOutLine 
+                                                WHERE M_InOutLine.M_InOutLIne_ID = " + inoutLine.GetM_InOutLine_ID(), null, Get_Trx()));
+                                DB.ExecuteQuery("UPDATE M_MatchInv SET CurrentCostPrice = " + currentCostPrice +
+                                                 @" WHERE M_MatchInv_ID = " + matchInvoice.GetM_MatchInv_ID(), null, Get_Trx());
+
                             }
                         }
                     }
@@ -3952,6 +4094,7 @@ namespace VAdvantage.Process
                     inventoryLine = new MInventoryLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_InventoryLine_ID"]), Get_Trx());
                     if (product.GetProductType() == "I") // for Item Type product
                     {
+                        costingMethod = MCostElement.CheckLifoOrFifoMethod(GetCtx(), GetAD_Client_ID(), product.GetM_Product_ID(), Get_Trx());
                         quantity = 0;
                         if (inventory.IsInternalUse())
                         {
@@ -3983,14 +4126,15 @@ namespace VAdvantage.Process
                             }
                             else
                             {
-                                //if (inventoryLine.GetCurrentCostPrice() == 0)
-                                //{
-                                //    // get price from m_cost (Current Cost Price)
-                                //    currentCostPrice = 0;
-                                //    currentCostPrice = MCost.GetproductCosts(inventoryLine.GetAD_Client_ID(), inventoryLine.GetAD_Org_ID(),
-                                //        inventoryLine.GetM_Product_ID(), inventoryLine.GetM_AttributeSetInstance_ID(), Get_Trx(), inventory.GetM_Warehouse_ID());
-                                //    inventoryLine.SetCurrentCostPrice(currentCostPrice);
-                                //}
+                                if (costingMethod != "" && quantity < 0)
+                                {
+                                    currentCostPrice = MCost.GetLifoAndFifoCurrentCostFromCostQueueTransaction(GetCtx(), inventoryLine.GetAD_Client_ID(), inventoryLine.GetAD_Org_ID(),
+                                                       inventoryLine.GetM_Product_ID(), inventoryLine.GetM_AttributeSetInstance_ID(), 1,
+                                                       inventoryLine.GetM_InventoryLine_ID(), costingMethod,
+                                                       inventory.GetM_Warehouse_ID(), true, Get_Trx());
+                                    inventoryLine.SetCurrentCostPrice(currentCostPrice);
+                                }
+
                                 // when post current cost price is ZERO, than need to update cost here 
                                 if (inventoryLine.GetPostCurrentCostPrice() == 0)
                                 {
@@ -4060,6 +4204,15 @@ namespace VAdvantage.Process
                             }
                             else
                             {
+                                if (costingMethod != "" && quantity < 0)
+                                {
+                                    currentCostPrice = MCost.GetLifoAndFifoCurrentCostFromCostQueueTransaction(GetCtx(), inventoryLine.GetAD_Client_ID(), inventoryLine.GetAD_Org_ID(),
+                                                       inventoryLine.GetM_Product_ID(), inventoryLine.GetM_AttributeSetInstance_ID(), 1,
+                                                       inventoryLine.GetM_InventoryLine_ID(), costingMethod,
+                                                       inventory.GetM_Warehouse_ID(), true, Get_Trx());
+                                    inventoryLine.SetCurrentCostPrice(currentCostPrice);
+                                }
+
                                 // when post current cost price is ZERO, than need to update cost here 
                                 if (inventoryLine.GetPostCurrentCostPrice() == 0)
                                 {
@@ -4220,6 +4373,7 @@ namespace VAdvantage.Process
                     product = new MProduct(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_Product_ID"]), Get_Trx());
                     movementLine = new MMovementLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_MovementLine_ID"]), Get_Trx());
                     locatorTo = MLocator.Get(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_LocatorTo_ID"]));
+                    costingMethod = MCostElement.CheckLifoOrFifoMethod(GetCtx(), GetAD_Client_ID(), product.GetM_Product_ID(), Get_Trx());
 
                     #region get price from m_cost (Current Cost Price)
                     if (!client.IsCostImmediate() || movementLine.GetCurrentCostPrice() == 0 || movementLine.GetToCurrentCostPrice() == 0)
@@ -4259,6 +4413,25 @@ namespace VAdvantage.Process
                             }
                             else
                             {
+                                if (!String.IsNullOrEmpty(costingMethod))
+                                {
+                                    if (movementLine.GetMovementQty() > 0)
+                                    {
+                                        currentCostPrice = MCost.GetLifoAndFifoCurrentCostFromCostQueueTransaction(GetCtx(), movementLine.GetAD_Client_ID(), movementLine.GetAD_Org_ID(),
+                                                           movementLine.GetM_Product_ID(), movementLine.GetM_AttributeSetInstance_ID(), 2, movementLine.GetM_MovementLine_ID(), costingMethod,
+                                                           movement.GetDTD001_MWarehouseSource_ID(), true, Get_Trx());
+                                        movementLine.SetCurrentCostPrice(currentCostPrice);
+                                    }
+
+                                    if (movementLine.GetMovementQty() < 0)
+                                    {
+                                        toCurrentCostPrice = MCost.GetLifoAndFifoCurrentCostFromCostQueueTransaction(GetCtx(), movementLine.GetAD_Client_ID(), movementLine.GetAD_Org_ID(),
+                                                               movementLine.GetM_Product_ID(), movementLine.GetM_AttributeSetInstance_ID(), 2, movementLine.GetM_MovementLine_ID(), costingMethod,
+                                                               locatorTo.GetM_Warehouse_ID(), true, Get_Trx());
+                                        movementLine.SetToCurrentCostPrice(currentCostPrice);
+                                    }
+                                }
+
                                 if (movementLine.GetPostCurrentCostPrice() == 0)
                                 {
                                     // For From warehouse

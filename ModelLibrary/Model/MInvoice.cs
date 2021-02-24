@@ -148,7 +148,7 @@ namespace VAdvantage.Model
             to.SetDateAcct(dateDoc);
             to.SetDatePrinted(null);
             to.SetIsPrinted(false);
-                        
+
             //    
             to.SetIsApproved(false);
             to.SetC_Payment_ID(0);
@@ -1218,7 +1218,7 @@ namespace VAdvantage.Model
          *	@return pay schedule is valid
          */
         public bool ValidatePaySchedule()
-        {            
+        {
             MInvoicePaySchedule[] schedule = MInvoicePaySchedule.GetInvoicePaySchedule
                 (GetCtx(), GetC_Invoice_ID(), 0, Get_Trx());
             log.Fine("#" + schedule.Length);
@@ -1266,7 +1266,7 @@ namespace VAdvantage.Model
         /// <param name="newRecord">newRecord new</param>
         /// <returns>true</returns>
         protected override bool BeforeSave(bool newRecord)
-        {            
+        {
             /** Adhoc Payment - Validating DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
             if (Get_ColumnIndex("DueDate") >= 0 && GetDueDate() != null && Util.GetValueOfDateTime(GetDueDate()) < Util.GetValueOfDateTime(GetDateInvoiced()))
             {
@@ -2184,10 +2184,10 @@ namespace VAdvantage.Model
             {
                 SetWithholdingAmount(this);
             }
-            
-                // not crating schedule in prepare stage, to be created in completed stage
-                // Create Invoice schedule
-                if (!CreatePaySchedule())
+
+            // not crating schedule in prepare stage, to be created in completed stage
+            // Create Invoice schedule
+            if (!CreatePaySchedule())
             {
                 ValueNamePair pp = VLogger.RetrieveError();
                 if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
@@ -2244,31 +2244,31 @@ namespace VAdvantage.Model
                     MBPartnerLocation bpl = new MBPartnerLocation(GetCtx(), GetC_BPartner_Location_ID(), null);
                     string retMsg = "";
                     bool crdAll = false;
-                    
+
                     if (Env.IsModuleInstalled("VA077_"))
                     {
-                       
+
                         DateTime validate = new DateTime();
-                        string CreditStatusSettingOn =bp.GetCreditStatusSettingOn();
-                       
+                        string CreditStatusSettingOn = bp.GetCreditStatusSettingOn();
+
                         if (CreditStatusSettingOn.Contains("CL"))
                         {
-                          
+
                             validate = Util.GetValueOfDateTime(bpl.Get_Value("VA077_ValidityDate")).Value;
 
                         }
                         else
-                        {                           
+                        {
 
-                            validate =Util.GetValueOfDateTime(bp.Get_Value("VA077_ValidityDate")).Value;
-                           
+                            validate = Util.GetValueOfDateTime(bp.Get_Value("VA077_ValidityDate")).Value;
+
                         }
 
-                       if (validate.Date < DateTime.Now.Date)
+                        if (validate.Date < DateTime.Now.Date)
 
                         {
-                                                                                   
-                            int RecCount = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_Invoice_ID) FROM C_Invoice WHERE C_BPartner_ID =" + GetC_BPartner_ID() + " and DocStatus in('CO','CL') and DateInvoiced BETWEEN " + GlobalVariable.TO_DATE(DateTime.Now.Date.AddDays(-730), true) + " AND " + GlobalVariable.TO_DATE(DateTime.Now.Date,true) +""));
+
+                            int RecCount = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_Invoice_ID) FROM C_Invoice WHERE C_BPartner_ID =" + GetC_BPartner_ID() + " and DocStatus in('CO','CL') and DateInvoiced BETWEEN " + GlobalVariable.TO_DATE(DateTime.Now.Date.AddDays(-730), true) + " AND " + GlobalVariable.TO_DATE(DateTime.Now.Date, true) + ""));
 
                             if (RecCount > 0)
                             {
@@ -2294,7 +2294,7 @@ namespace VAdvantage.Model
 
                         else
                         {
-                            
+
                             retMsg = "";
                             crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), invAmt, out retMsg);
                             if (!crdAll)
@@ -2579,7 +2579,7 @@ namespace VAdvantage.Model
          *	@return true if valid schedule
          */
         private bool CreatePaySchedule()
-        { 
+        {
             if (GetC_PaymentTerm_ID() == 0)
                 return false;
             MPaymentTerm pt = new MPaymentTerm(GetCtx(), GetC_PaymentTerm_ID(), Get_TrxName());
@@ -3266,6 +3266,21 @@ namespace VAdvantage.Model
                                         }
                                         else
                                         {
+                                            if (line.GetM_InOutLine_ID() > 0)
+                                            {
+                                                DataSet ds = DB.ExecuteDataset(@"SELECT M_InOutLine.CurrentCostPrice, M_InOut.M_Warehouse_ID 
+                                                FROM M_InOutLine INNER JOIN M_InOut ON M_InOut.M_InOut_ID = M_InOutLine.M_InOut_ID
+                                                WHERE M_InOutLine.M_InOutLIne_ID = " + line.GetM_InOutLine_ID(), null, Get_Trx());
+                                                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                                                {
+                                                    line.SetCurrentCostPrice(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["CurrentCostPrice"]));
+
+                                                    currentCostPrice = MCost.GetproductCosts(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
+                                                                               line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(),
+                                                                               Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_Warehouse_ID"]));
+                                                    line.SetPostCurrentCostPrice(currentCostPrice);
+                                                }
+                                            }
                                             line.SetIsCostImmediate(true);
                                             line.Save();
                                         }
@@ -3326,17 +3341,6 @@ namespace VAdvantage.Model
                                                 matchInvQty = decimal.Negate(matchInvQty);
                                             }
 
-                                            // calculate Pre Cost - means cost before updation price impact of current record
-                                            if (inv != null && inv.GetM_MatchInv_ID() > 0 && inv.Get_ColumnIndex("CurrentCostPrice") >= 0)
-                                            {
-                                                // get cost from Product Cost before cost calculation
-                                                currentCostPrice = MCost.GetproductCostAndQtyMaterial(GetAD_Client_ID(), GetAD_Org_ID(),
-                                                                                         product1.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), m_Warehouse_Id, false);
-                                                DB.ExecuteQuery("UPDATE M_MatchInv SET CurrentCostPrice = " + currentCostPrice +
-                                                                 @" WHERE M_MatchInv_ID = " + inv.GetM_MatchInv_ID(), null, Get_Trx());
-
-                                            }
-
                                             // calculate invoice line costing after calculating costing of linked MR line 
                                             if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
                                                   "Invoice(Vendor)", null, sLine, null, line, null,
@@ -3357,6 +3361,17 @@ namespace VAdvantage.Model
                                             }
                                             else
                                             {
+                                                line.SetCurrentCostPrice(currentCostPrice);
+
+                                                // get cost from Product Cost after cost calculation
+                                                currentCostPrice = MCost.GetproductCostAndQtyMaterial(GetAD_Client_ID(), GetAD_Org_ID(),
+                                                                                         product1.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), m_Warehouse_Id, false);
+                                                line.SetPostCurrentCostPrice(currentCostPrice);
+
+                                                if (!isUpdatePostCurrentcostPriceFromMR)
+                                                {
+                                                    line.SetCurrentCostPrice(currentCostPrice);
+                                                }
                                                 line.SetIsCostImmediate(true);
                                                 line.Save(Get_Trx());
 
@@ -3365,8 +3380,8 @@ namespace VAdvantage.Model
                                                     if (inv.Get_ColumnIndex("PostCurrentCostPrice") >= 0)
                                                     {
                                                         // get cost from Product Cost after cost calculation
-                                                        currentCostPrice = MCost.GetproductCostAndQtyMaterial(GetAD_Client_ID(), GetAD_Org_ID(),
-                                                                                                 product1.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), m_Warehouse_Id, false);
+                                                        //currentCostPrice = MCost.GetproductCostAndQtyMaterial(GetAD_Client_ID(), GetAD_Org_ID(),
+                                                        //                                         product1.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), m_Warehouse_Id, false);
                                                         inv.SetPostCurrentCostPrice(currentCostPrice);
                                                     }
                                                     inv.SetIsCostImmediate(true);
@@ -3391,6 +3406,18 @@ namespace VAdvantage.Model
                                                     }
                                                 }
 
+                                                // calculate Pre Cost - means cost before updation price impact of current record
+                                                if (inv != null && inv.GetM_MatchInv_ID() > 0 && inv.Get_ColumnIndex("CurrentCostPrice") >= 0)
+                                                {
+                                                    // get cost from Product Cost before cost calculation
+                                                    //currentCostPrice = MCost.GetproductCostAndQtyMaterial(GetAD_Client_ID(), GetAD_Org_ID(),
+                                                    //                                         product1.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), m_Warehouse_Id, false);
+                                                    currentCostPrice = Util.GetValueOfDecimal(DB.ExecuteScalar(@"SELECT M_InOutLine.PostCurrentCostPrice FROM M_InOutLine 
+                                                WHERE M_InOutLine.M_InOutLIne_ID = " + line.GetM_InOutLine_ID(), null, Get_Trx()));
+                                                    DB.ExecuteQuery("UPDATE M_MatchInv SET CurrentCostPrice = " + currentCostPrice +
+                                                                     @" WHERE M_MatchInv_ID = " + inv.GetM_MatchInv_ID(), null, Get_Trx());
+
+                                                }
                                             }
                                         }
                                         #endregion
@@ -3414,6 +3441,21 @@ namespace VAdvantage.Model
                                         }
                                         else
                                         {
+                                            if (line.GetM_InOutLine_ID() > 0)
+                                            {
+                                                DataSet ds = DB.ExecuteDataset(@"SELECT M_InOutLine.CurrentCostPrice, M_InOut.M_Warehouse_ID 
+                                                FROM M_InOutLine INNER JOIN M_InOut ON M_InOut.M_InOut_ID = M_InOutLine.M_InOut_ID
+                                                WHERE M_InOutLine.M_InOutLIne_ID = " + line.GetM_InOutLine_ID(), null, Get_Trx());
+                                                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                                                {
+                                                    line.SetCurrentCostPrice(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["CurrentCostPrice"]));
+
+                                                    currentCostPrice = MCost.GetproductCostAndQtyMaterial(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
+                                                                               line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(),
+                                                                               Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_Warehouse_ID"]), false);
+                                                    line.SetPostCurrentCostPrice(currentCostPrice);
+                                                }
+                                            }
                                             line.SetIsCostImmediate(true);
                                             line.Save();
                                         }
@@ -3474,17 +3516,6 @@ namespace VAdvantage.Model
                                                     matchInvQty = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(QTY) FROM M_MatchInvCostTrack WHERE Rev_C_InvoiceLine_ID = " + line.GetC_InvoiceLine_ID(), null, Get_Trx()));
                                                 }
 
-                                                // calculate Pre Cost - means cost before updation price impact of current record
-                                                if (inv != null && inv.GetM_MatchInv_ID() > 0 && inv.Get_ColumnIndex("CurrentCostPrice") >= 0)
-                                                {
-                                                    // get cost from Product Cost before cost calculation
-                                                    currentCostPrice = MCost.GetproductCosts(GetAD_Client_ID(), GetAD_Org_ID(),
-                                                                                             product1.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), m_Warehouse_Id);
-                                                    DB.ExecuteQuery("UPDATE M_MatchInv SET CurrentCostPrice = " + currentCostPrice +
-                                                                     @" WHERE M_MatchInv_ID = " + inv.GetM_MatchInv_ID(), null, Get_Trx());
-
-                                                }
-
                                                 if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
                                                   "Invoice(Vendor)-Return", null, sLine, null, line, null,
                                                   count > 0 && isCostAdjustableOnLost &&
@@ -3529,6 +3560,10 @@ namespace VAdvantage.Model
                                                 }
                                                 else
                                                 {
+                                                    // get cost from Product Cost after cost calculation
+                                                    currentCostPrice = MCost.GetproductCosts(GetAD_Client_ID(), GetAD_Org_ID(),
+                                                                                             product1.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), m_Warehouse_Id);
+                                                    line.SetPostCurrentCostPrice(currentCostPrice);
                                                     line.SetIsCostImmediate(true);
                                                     line.Save();
 
@@ -3536,9 +3571,6 @@ namespace VAdvantage.Model
                                                     {
                                                         if (inv.Get_ColumnIndex("PostCurrentCostPrice") >= 0)
                                                         {
-                                                            // get cost from Product Cost after cost calculation
-                                                            currentCostPrice = MCost.GetproductCosts(GetAD_Client_ID(), GetAD_Org_ID(),
-                                                                                                     product1.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), m_Warehouse_Id);
                                                             inv.SetPostCurrentCostPrice(currentCostPrice);
                                                         }
                                                         inv.SetIsCostImmediate(true);
@@ -3555,6 +3587,19 @@ namespace VAdvantage.Model
                                                     {
                                                         int no = DB.ExecuteQuery("UPDATE M_MatchInvCostTrack SET IsReversedCostCalculated = 'Y' WHERE Rev_C_InvoiceLine_ID = " + line.GetC_InvoiceLine_ID(), null, Get_Trx());
                                                     }
+
+                                                    // calculate Pre Cost - means cost before updation price impact of current record
+                                                    if (inv != null && inv.GetM_MatchInv_ID() > 0 && inv.Get_ColumnIndex("CurrentCostPrice") >= 0)
+                                                    {
+                                                        currentCostPrice = Util.GetValueOfDecimal(DB.ExecuteScalar(@"SELECT M_InOutLine.PostCurrentCostPrice FROM M_InOutLine 
+                                                                                            WHERE M_InOutLine.M_InOutLIne_ID = " + line.GetM_InOutLine_ID(), null, Get_Trx()));
+                                                        DB.ExecuteQuery("UPDATE M_MatchInv SET CurrentCostPrice = " + currentCostPrice +
+                                                                         @" WHERE M_MatchInv_ID = " + inv.GetM_MatchInv_ID(), null, Get_Trx());
+                                                        DB.ExecuteQuery("UPDATE C_InvoiceLine SET CurrentCostPrice = " + currentCostPrice +
+                                                                   @" WHERE C_InvoiceLine = " + line.GetC_InvoiceLine_ID(), null, Get_Trx());
+
+                                                    }
+
                                                 }
                                             }
                                         }
@@ -3642,6 +3687,21 @@ namespace VAdvantage.Model
                                     }
                                     else
                                     {
+                                        if (line.GetM_InOutLine_ID() > 0)
+                                        {
+                                            DataSet ds = DB.ExecuteDataset(@"SELECT M_InOutLine.CurrentCostPrice, M_InOut.M_Warehouse_ID 
+                                                FROM M_InOutLine INNER JOIN M_InOut ON M_InOut.M_InOut_ID = M_InOutLine.M_InOut_ID
+                                                WHERE M_InOutLine.M_InOutLIne_ID = " + line.GetM_InOutLine_ID(), null, Get_Trx());
+                                            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                                            {
+                                                line.SetCurrentCostPrice(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["CurrentCostPrice"]));
+
+                                                currentCostPrice = MCost.GetproductCosts(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
+                                                                           line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(),
+                                                                           Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_Warehouse_ID"]));
+                                                line.SetPostCurrentCostPrice(currentCostPrice);
+                                            }
+                                        }
                                         line.SetIsCostImmediate(true);
                                         line.Save();
                                     }
@@ -3698,16 +3758,6 @@ namespace VAdvantage.Model
 
                                     if (line.GetM_InOutLine_ID() > 0 && sLine.IsCostImmediate())
                                     {
-                                        // calculate Pre Cost - means cost before updation price impact of current record
-                                        if (inv != null && inv.GetM_MatchInv_ID() > 0 && inv.Get_ColumnIndex("CurrentCostPrice") >= 0)
-                                        {
-                                            // get cost from Product Cost before cost calculation
-                                            currentCostPrice = MCost.GetproductCostAndQtyMaterial(GetAD_Client_ID(), GetAD_Org_ID(),
-                                                                                     product1.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), m_Warehouse_Id, false);
-                                            DB.ExecuteQuery("UPDATE M_MatchInv SET CurrentCostPrice = " + currentCostPrice +
-                                                             @" WHERE M_MatchInv_ID = " + inv.GetM_MatchInv_ID(), null, Get_Trx());
-
-                                        }
 
                                         // when isCostAdjustableOnLost = true on product and movement qty on MR is less than invoice qty then consider MR qty else invoice qty
                                         if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
@@ -3728,6 +3778,17 @@ namespace VAdvantage.Model
                                         }
                                         else
                                         {
+                                            line.SetCurrentCostPrice(currentCostPrice);
+
+                                            // get cost from Product Cost after cost calculation
+                                            currentCostPrice = MCost.GetproductCostAndQtyMaterial(GetAD_Client_ID(), GetAD_Org_ID(),
+                                                                                     product1.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), m_Warehouse_Id, false);
+                                            line.SetPostCurrentCostPrice(currentCostPrice);
+
+                                            if (!isUpdatePostCurrentcostPriceFromMR)
+                                            {
+                                                line.SetCurrentCostPrice(currentCostPrice);
+                                            }
                                             line.SetIsCostImmediate(true);
                                             line.Save(Get_Trx());
 
@@ -3736,8 +3797,8 @@ namespace VAdvantage.Model
                                                 if (inv.Get_ColumnIndex("PostCurrentCostPrice") >= 0)
                                                 {
                                                     // get cost from Product Cost after cost calculation
-                                                    currentCostPrice = MCost.GetproductCostAndQtyMaterial(GetAD_Client_ID(), GetAD_Org_ID(),
-                                                                                             product1.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), m_Warehouse_Id, false);
+                                                    //currentCostPrice = MCost.GetproductCostAndQtyMaterial(GetAD_Client_ID(), GetAD_Org_ID(),
+                                                    //                                         product1.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), m_Warehouse_Id, false);
                                                     inv.SetPostCurrentCostPrice(currentCostPrice);
                                                 }
                                                 inv.SetIsCostImmediate(true);
@@ -3761,6 +3822,15 @@ namespace VAdvantage.Model
                                                                                 Rev_C_InvoiceLine_ID =  " + line.GetC_InvoiceLine_ID() + " ) ", null, Get_Trx());
                                                 }
                                             }
+                                            if (inv != null && inv.GetM_MatchInv_ID() > 0 && inv.Get_ColumnIndex("CurrentCostPrice") >= 0)
+                                            {
+                                                // get cost from Product Cost before cost calculation
+                                                currentCostPrice = Util.GetValueOfDecimal(DB.ExecuteScalar(@"SELECT M_InOutLine.PostCurrentCostPrice FROM M_InOutLine 
+                                                WHERE M_InOutLine.M_InOutLIne_ID = " + line.GetM_InOutLine_ID(), null, Get_Trx()));
+                                                DB.ExecuteQuery("UPDATE M_MatchInv SET CurrentCostPrice = " + currentCostPrice +
+                                                                 @" WHERE M_MatchInv_ID = " + inv.GetM_MatchInv_ID(), null, Get_Trx());
+
+                                            }
                                         }
                                     }
                                 }
@@ -3782,6 +3852,21 @@ namespace VAdvantage.Model
                                     }
                                     else
                                     {
+                                        if (line.GetM_InOutLine_ID() > 0)
+                                        {
+                                            DataSet ds = DB.ExecuteDataset(@"SELECT M_InOutLine.CurrentCostPrice, M_InOut.M_Warehouse_ID 
+                                                FROM M_InOutLine INNER JOIN M_InOut ON M_InOut.M_InOut_ID = M_InOutLine.M_InOut_ID
+                                                WHERE M_InOutLine.M_InOutLIne_ID = " + line.GetM_InOutLine_ID(), null, Get_Trx());
+                                            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                                            {
+                                                line.SetCurrentCostPrice(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["CurrentCostPrice"]));
+
+                                                currentCostPrice = MCost.GetproductCostAndQtyMaterial(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
+                                                                           line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(),
+                                                                           Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_Warehouse_ID"]), false);
+                                                line.SetPostCurrentCostPrice(currentCostPrice);
+                                            }
+                                        }
                                         line.SetIsCostImmediate(true);
                                         line.Save();
                                     }
@@ -3840,17 +3925,6 @@ namespace VAdvantage.Model
                                                 matchInvQty = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(QTY) FROM M_MatchInvCostTrack WHERE Rev_C_InvoiceLine_ID = " + line.GetC_InvoiceLine_ID(), null, Get_Trx()));
                                             }
 
-                                            // calculate Pre Cost - means cost before updation price impact of current record
-                                            if (inv != null && inv.GetM_MatchInv_ID() > 0 && inv.Get_ColumnIndex("CurrentCostPrice") >= 0)
-                                            {
-                                                // get cost from Product Cost before cost calculation
-                                                currentCostPrice = MCost.GetproductCosts(GetAD_Client_ID(), GetAD_Org_ID(),
-                                                                                         product1.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), m_Warehouse_Id);
-                                                DB.ExecuteQuery("UPDATE M_MatchInv SET CurrentCostPrice = " + currentCostPrice +
-                                                                 @" WHERE M_MatchInv_ID = " + inv.GetM_MatchInv_ID(), null, Get_Trx());
-
-                                            }
-
                                             if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
                                               "Invoice(Vendor)-Return", null, sLine, null, line, null,
                                               count > 0 && isCostAdjustableOnLost &&
@@ -3889,6 +3963,10 @@ namespace VAdvantage.Model
                                             }
                                             else
                                             {
+                                                // get cost from Product Cost after cost calculation
+                                                currentCostPrice = MCost.GetproductCosts(GetAD_Client_ID(), GetAD_Org_ID(),
+                                                                                         product1.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), m_Warehouse_Id);
+                                                line.SetPostCurrentCostPrice(currentCostPrice);
                                                 line.SetIsCostImmediate(true);
                                                 line.Save();
 
@@ -3897,8 +3975,8 @@ namespace VAdvantage.Model
                                                     if (inv.Get_ColumnIndex("PostCurrentCostPrice") >= 0)
                                                     {
                                                         // get cost from Product Cost after cost calculation
-                                                        currentCostPrice = MCost.GetproductCosts(GetAD_Client_ID(), GetAD_Org_ID(),
-                                                                                                 product1.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), m_Warehouse_Id);
+                                                        //currentCostPrice = MCost.GetproductCosts(GetAD_Client_ID(), GetAD_Org_ID(),
+                                                        //                                         product1.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), m_Warehouse_Id);
                                                         inv.SetPostCurrentCostPrice(currentCostPrice);
                                                     }
                                                     inv.SetIsCostImmediate(true);
@@ -3914,6 +3992,19 @@ namespace VAdvantage.Model
                                                 else if (GetDescription() != null && GetDescription().Contains("{->"))
                                                 {
                                                     int no = DB.ExecuteQuery("UPDATE M_MatchInvCostTrack SET IsReversedCostCalculated = 'Y' WHERE Rev_C_InvoiceLine_ID = " + line.GetC_InvoiceLine_ID(), null, Get_Trx());
+                                                }
+
+                                                // calculate Pre Cost - means cost before updation price impact of current record
+                                                if (inv != null && inv.GetM_MatchInv_ID() > 0 && inv.Get_ColumnIndex("CurrentCostPrice") >= 0)
+                                                {
+                                                    // get cost from Product Cost before cost calculation
+                                                    currentCostPrice = Util.GetValueOfDecimal(DB.ExecuteScalar(@"SELECT M_InOutLine.PostCurrentCostPrice FROM M_InOutLine 
+                                                                                            WHERE M_InOutLine.M_InOutLIne_ID = " + line.GetM_InOutLine_ID(), null, Get_Trx()));
+                                                    DB.ExecuteQuery("UPDATE M_MatchInv SET CurrentCostPrice = " + currentCostPrice +
+                                                                     @" WHERE M_MatchInv_ID = " + inv.GetM_MatchInv_ID(), null, Get_Trx());
+                                                    DB.ExecuteQuery("UPDATE C_InvoiceLine SET CurrentCostPrice = " + currentCostPrice +
+                                                                    @" WHERE C_InvoiceLine = " + line.GetC_InvoiceLine_ID(), null, Get_Trx());
+
                                                 }
                                             }
                                         }
@@ -4260,10 +4351,9 @@ namespace VAdvantage.Model
                 SetProcessed(true);
                 SetDocAction(DOCACTION_Close);
             }
-            catch
+            catch (Exception ex)
             {
-                ValueNamePair pp = VLogger.RetrieveError();
-                _log.Info("Error found at Invoice Completion. Invoice Document no = " + GetDocumentNo() + " Error Name is " + pp.GetName());
+                _log.Severe("Error found at Invoice Completion. Invoice Document no = " + GetDocumentNo() + " " + ex.Message);
                 return DocActionVariables.STATUS_INVALID;
             }
 
@@ -4974,7 +5064,7 @@ namespace VAdvantage.Model
                 C_DocTypeTarget_ID, true, Get_TrxName(), true);
             //	Refernces (Should not be required)
             counter.SetSalesRep_ID(GetSalesRep_ID());
-                        
+
             /** Adhoc Payment - Setting DueDate for Counter Doc ** Dt: 18/01/2021 ** Modified By: Kumar **/
             if (Get_ColumnIndex("DueDate") >= 0 && GetDueDate() != null)
                 counter.SetDueDate(GetDueDate());
@@ -6239,6 +6329,6 @@ namespace VAdvantage.Model
         }
 
         #endregion
-               
+
     }
 }
