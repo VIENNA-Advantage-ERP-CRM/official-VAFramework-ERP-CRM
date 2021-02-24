@@ -671,7 +671,7 @@ namespace VAdvantage.Model
                         log.Log(Level.SEVERE, "completeIt - Scrapped=" + confirm.GetScrappedQty()
                             + " - Difference=" + confirm.GetDifferenceQty());
 
-                        _processMsg = "Differnce Doc not created";
+                        //_processMsg = "Differnce Doc not created";
                         return DocActionVariables.STATUS_INVALID;
                     }
                 }
@@ -810,7 +810,7 @@ namespace VAdvantage.Model
 
 
             //Lakhwinder
-            
+
             int differenceDoc = 0;
             int scrapDoc = 0;
             //	Difference - Create Inventory Difference for Source Location
@@ -819,8 +819,8 @@ namespace VAdvantage.Model
 
                 //Lakhwinder
                 //15Feb2021 Create InventoryMove as Per setting on DoctType
-                int inventorySetting = CheckAssociateDocTypeSetting(move.GetC_DocType_ID(), true,out differenceDoc);
-               
+                int inventorySetting = CheckAssociateDocTypeSetting(move.GetC_DocType_ID(), true, out differenceDoc);
+
                 if (inventorySetting == 3)
                 {
                     if (momementDiffrence == null)
@@ -930,10 +930,16 @@ namespace VAdvantage.Model
                     if (_inventoryFrom.IsInternalUse())
                     {
                         line.SetIsInternalUse(true);
-                        //line.SetQtyInternalUse(confirm.GetDifferenceQty());
+                        line.SetQtyInternalUse(confirm.GetDifferenceQty());
                         if (Env.IsModuleInstalled("DTD001_"))
                         {
-                            line.SetC_Charge_ID(Util.GetValueOfInt(DB.ExecuteScalar("SELECT MAX(C_Charge_ID) FROM C_Charge WHERE DTD001_ChargeType='INV' AND IsActive='Y' AND AD_Org_ID IN (0,"+GetAD_Org_ID()+") AND AD_Client_ID="+GetAD_Client_ID(), null, Get_Trx())));
+                            int chrgID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT MAX(C_Charge_ID) FROM C_Charge WHERE DTD001_ChargeType='INV' AND IsActive='Y' AND AD_Org_ID IN (0," + GetAD_Org_ID() + ") AND AD_Client_ID=" + GetAD_Client_ID(), null, Get_Trx()));
+                            if (chrgID == 0)
+                            {
+                                _processMsg += "InvChargeNotThere";
+                                return false;
+                            }
+                            line.SetC_Charge_ID(chrgID);
                         }
                     }
 
@@ -954,7 +960,7 @@ namespace VAdvantage.Model
 
                 //Lakhwinder
                 //15Feb2021 Create InventoryMove as Per setting on DoctType
-                int inventorySetting = CheckAssociateDocTypeSetting(move.GetC_DocType_ID(), false,out scrapDoc);
+                int inventorySetting = CheckAssociateDocTypeSetting(move.GetC_DocType_ID(), false, out scrapDoc);
                 if (inventorySetting == 3)
                 {
                     if (movementScrap == null)
@@ -997,7 +1003,7 @@ namespace VAdvantage.Model
                     mmLine.SetDTD001_AttributeNumber(mLine.GetDTD001_AttributeNumber());
                     //mmLine.SetTargetQty(mLine.GetTargetQty());
                     // mmLine.SetScrappedQty(confirm.GetScrappedQty());
-                   // mmLine.SetConfirmedQty(mLine.GetConfirmedQty());
+                    // mmLine.SetConfirmedQty(mLine.GetConfirmedQty());
                     mmLine.SetPostCurrentCostPrice(mLine.GetPostCurrentCostPrice());
                     mmLine.SetToCurrentCostPrice(mLine.GetToCurrentCostPrice());
                     mmLine.SetToPostCurrentCostPrice(mLine.GetToPostCurrentCostPrice());
@@ -1032,7 +1038,7 @@ namespace VAdvantage.Model
                         if (inventorySetting == 1)
                         {
                             _inventoryTo.SetIsInternalUse(true);
-                       }
+                        }
                         if (!_inventoryTo.Save(Get_TrxName()))
                         {
                             _processMsg += "Inventory not created";
@@ -1064,10 +1070,16 @@ namespace VAdvantage.Model
                     if (_inventoryTo.IsInternalUse())
                     {
                         line.SetIsInternalUse(true);
-                        //line.SetQtyInternalUse(confirm.GetScrappedQty());
+                        line.SetQtyInternalUse(confirm.GetScrappedQty());
                         if (Env.IsModuleInstalled("DTD001_"))
                         {
-                            line.SetC_Charge_ID(Util.GetValueOfInt(DB.ExecuteScalar("SELECT MAX(C_Charge_ID) FROM C_Charge WHERE DTD001_ChargeType='INV' AND IsActive='Y'  AND AD_Org_ID IN (0," + GetAD_Org_ID() + ")  AND AD_Client_ID=" + GetAD_Client_ID(), null, Get_Trx())));
+                            int chrgID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT MAX(C_Charge_ID) FROM C_Charge WHERE DTD001_ChargeType='INV' AND IsActive='Y' AND AD_Org_ID IN (0," + GetAD_Org_ID() + ") AND AD_Client_ID=" + GetAD_Client_ID(), null, Get_Trx()));
+                            if (chrgID == 0)
+                            {
+                                _processMsg += "InvChargeNotThere";
+                                return false;
+                            }
+                            line.SetC_Charge_ID(chrgID);
                         }
                     }
 
@@ -1089,6 +1101,8 @@ namespace VAdvantage.Model
                 }
             }	//	Scrapped
 
+            mLine.SetQtyEntered(confirm.GetConfirmedQty()+confirm.GetScrappedQty());
+            mLine.Save(Get_Trx());
             return true;
         }
 
@@ -1102,7 +1116,7 @@ namespace VAdvantage.Model
         /// return 1 for Internal Use inventory
         /// return 3 for Inventory Move
         /// </returns>
-        private int CheckAssociateDocTypeSetting(int DocTypeID, bool isDiff,out int docTypeAssociate)
+        private int CheckAssociateDocTypeSetting(int DocTypeID, bool isDiff, out int docTypeAssociate)
         {
             docTypeAssociate = 0;
             MDocType docType = MDocType.Get(GetCtx(), DocTypeID);
