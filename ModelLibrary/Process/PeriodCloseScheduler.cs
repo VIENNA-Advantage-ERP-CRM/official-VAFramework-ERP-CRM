@@ -66,7 +66,8 @@ namespace VAdvantage.Process
                      "WHERE p.IsActive='Y' AND y.C_Calendar_ID=" + calendar_id + " AND Startdate=" + GlobalVariable.TO_DATE(lastMonth, true) + ") AND DocBaseType NOT IN ('" + MDocBaseType.DOCBASETYPE_GLJOURNAL + "')" +
                     " AND PeriodStatus<>'" + MPeriodControl.PERIODSTATUS_PermanentlyClosed + "' AND AD_Org_ID IN (" + OrgId + ")";
 
-                //  sql = MRole.GetDefault(GetCtx()).AddAccessSQL(sql, "C_PeriodControl", true, true); // fully qualified - RO
+              //  sql = MRole.GetDefault(GetCtx()).AddAccessSQL(sql, "C_PeriodControl", true, true); // fully qualified - RO
+
 
                 if (Util.GetValueOfInt(DB.ExecuteQuery(sql, null, null)) == 0)
                 {

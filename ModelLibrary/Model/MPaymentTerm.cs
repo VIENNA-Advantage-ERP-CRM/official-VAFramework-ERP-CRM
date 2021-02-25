@@ -508,7 +508,7 @@ namespace VAdvantage.Model
                             /** Adhoc Payment - Setting DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
                             if (invoice.Get_ColumnIndex("DueDate") >= 0 && Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
                             {
-                                schedule.SetDiscountDate(invoice.GetDueDate());
+                                schedule.SetDiscountDate(invoice.GetDateInvoiced());
                             }
                             else
                             {
@@ -851,7 +851,7 @@ namespace VAdvantage.Model
                 if (invoice.Get_ColumnIndex("DueDate") >= 0 && Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
                 {
                     schedule.SetDueDate(invoice.GetDueDate());
-                    schedule.SetDiscountDate(invoice.GetDueDate());
+                    schedule.SetDiscountDate(invoice.GetDateInvoiced());
                 }
                 else
                 {
@@ -1170,6 +1170,13 @@ namespace VAdvantage.Model
                     return false;
                 }
             }
+            
+            //** If schedule lines are present, system should not allow to save header with week day ** Dt: 02/04/2021 ** Modified By: Kumar ** //
+            if (Util.GetValueOfInt(GetNetDay()) > 0 && count > 0)
+            {
+                log.SaveError("VIS_ScheduleExistForWeekDay", string.Empty);
+                return false;
+            }
 
             if (!newRecord || !IsValid())
                 Validate();
@@ -1279,7 +1286,7 @@ namespace VAdvantage.Model
                 /** Adhoc Payment - Setting DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
                 if (invoice.Get_ColumnIndex("DueDate") >= 0 && Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
                 {
-                    schedule.SetDiscountDate(invoice.GetDueDate());
+                    schedule.SetDiscountDate(invoice.GetDateInvoiced());
                 }
                 else
                 {
@@ -1300,7 +1307,7 @@ namespace VAdvantage.Model
                 /** Adhoc Payment - Setting DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
                 if (invoice.Get_ColumnIndex("DueDate") >= 0 && Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
                 {
-                    schedule.SetDiscountDays2(invoice.GetDueDate());
+                    schedule.SetDiscountDays2(invoice.GetDateInvoiced());
                 }
                 else
                 {
@@ -1426,7 +1433,7 @@ namespace VAdvantage.Model
             if (invoice.Get_ColumnIndex("DueDate") >= 0 && Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
             {
                 schedule.SetDueDate(invoice.GetDueDate());
-                schedule.SetDiscountDate(Util.GetValueOfDateTime(invoice.GetDueDate()));
+                schedule.SetDiscountDate(Util.GetValueOfDateTime(invoice.GetDateInvoiced()));
             }
             else
             {
@@ -1503,7 +1510,7 @@ namespace VAdvantage.Model
             /** Adhoc Payment - Setting DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
             if (invoice.Get_ColumnIndex("DueDate") >= 0 && Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
             {
-                schedule.SetDiscountDays2(Util.GetValueOfDateTime(invoice.GetDueDate()));
+                schedule.SetDiscountDays2(Util.GetValueOfDateTime(invoice.GetDateInvoiced()));
                 schedule.SetVA009_PlannedDueDate(Util.GetValueOfDateTime(invoice.GetDueDate()));
                 schedule.SetVA009_FollowupDate(Util.GetValueOfDateTime(invoice.GetDueDate()));
             }

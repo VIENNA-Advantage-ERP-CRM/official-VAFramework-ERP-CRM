@@ -90,5 +90,10 @@ namespace VAdvantage.DataBase
         {
             throw new NotImplementedException();
         }
+
+        public int GetNextID(string Name)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

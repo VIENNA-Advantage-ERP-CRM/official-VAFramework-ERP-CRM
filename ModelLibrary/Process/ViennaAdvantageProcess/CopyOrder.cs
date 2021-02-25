@@ -41,6 +41,7 @@ namespace ViennaAdvantage.Process
         private bool _IsCloseDocument = false;
         int newid = 0;
         int neworg_id = 0;
+        string docNo;
         #endregion
 
         /// <summary>
@@ -109,10 +110,11 @@ namespace ViennaAdvantage.Process
             }
 
             //Develop by Deekshant For check VA077 Module For spilt the Sales Order
+           
             if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
             {
                 //Check Destination Organization in c_orderline
-                string str = "SELECT DISTINCT(VA077_DestinationOrg) FROM C_OrderLine WHERE C_Order_ID=" + _C_Order_ID;
+                string str = "SELECT DISTINCT(VA077_DestinationOrg), AD_Org_Id FROM C_OrderLine WHERE C_Order_ID=" + _C_Order_ID;
                 DataSet dts = DB.ExecuteDataset(str, null, Get_Trx());
                 if (dts != null && dts.Tables[0].Rows.Count > 0)
                 {
@@ -120,16 +122,19 @@ namespace ViennaAdvantage.Process
                     {
                         int destinationorg = Util.GetValueOfInt(dts.Tables[0].Rows[i]["VA077_DestinationOrg"]);
                         // VAdvantage.Model.MOrder newOrder = new VAdvantage.Model.MOrder(GetCtx(), 0, Get_Trx());
-                        AddHeader(destinationorg);
-                        Addline(destinationorg, GetAD_Org_ID());
+                        int orgId = Util.GetValueOfInt(dts.Tables[0].Rows[i]["AD_Org_Id"]);
+                        AddHeader(destinationorg, orgId);
+                        Addline(destinationorg, orgId);
                     }
                 }
+                               
             }
             else
             {
                 //JID_1799 fromCreateSo is true if DOCBASETYPE='BOO'
                 VAdvantage.Model.MOrder newOrder = VAdvantage.Model.MOrder.CopyFrom(from, _DateDoc, dt.GetC_DocType_ID(), false, true, null,
                 dt.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_BLANKETSALESORDER) ? true : false);     //	copy ASI 
+
                 newOrder.SetC_DocTypeTarget_ID(_C_DocType_ID);
                 int C_Bpartner_ID = newOrder.GetC_BPartner_ID();
                 newOrder.Set_Value("IsSalesQuotation", false);
@@ -214,17 +219,16 @@ namespace ViennaAdvantage.Process
                     original.ProcessIt(VAdvantage.Model.MOrder.DOCACTION_Close);
                     original.Save();
                 }
+                docNo = newOrder.GetDocumentNo();
             }
             //+ ": " + newOrder.GetDocumentNo()
-            return Msg.GetMsg(GetCtx(), "OrderCreatedSuccessfully") + " - " + dt.GetName();
+            return Msg.GetMsg(GetCtx(), "OrderCreatedSuccessfully") + " - " + dt.GetName() + ": " + docNo;
         }
-        /// <summary>
-        /// Add Sales Order Header for VA077 Module
-        /// </summary>
-        /// <param name="newOrder">Moder Object</param>
+        /// <summary>Add Sales Order Header for VA077 Module</summary>
         /// <param name="destinationorg">Destination Orgnaization id</param>
+        /// <param name="orgId">Organization Id</param>
         /// <returns>bool</returns>
-        public bool AddHeader(int destinationorg)
+        public bool AddHeader(int destinationorg, int orgId)
         {
             VAdvantage.Model.MDocType dt = VAdvantage.Model.MDocType.Get(GetCtx(), _C_DocType_ID);
             MOrder newOrder = new VAdvantage.Model.MOrder(GetCtx(), 0, Get_Trx());
@@ -236,7 +240,7 @@ namespace ViennaAdvantage.Process
             }
             else
             {
-                newOrder.SetAD_Org_ID(GetAD_Org_ID());
+                newOrder.SetAD_Org_ID(orgId);
             }
             newOrder.SetC_BPartner_ID(morder.GetC_BPartner_ID());
             newOrder.SetC_BPartner_Location_ID(morder.GetC_BPartner_Location_ID());
@@ -252,6 +256,7 @@ namespace ViennaAdvantage.Process
             //newOrder.SetM_Warehouse_ID(morder.GetM_Warehouse_ID());
             newOrder.SetC_PaymentTerm_ID(morder.GetC_PaymentTerm_ID());
             newOrder.SetC_Payment_ID(morder.GetC_Payment_ID());
+            newOrder.SetVA009_PaymentMethod_ID(morder.GetVA009_PaymentMethod_ID());
             newOrder.SetC_IncoTerm_ID(morder.GetC_IncoTerm_ID());
             newOrder.SetC_Campaign_ID(morder.GetC_Campaign_ID());
             newOrder.SetC_ProjectRef_ID(morder.GetC_Campaign_ID());
@@ -273,6 +278,7 @@ namespace ViennaAdvantage.Process
             newOrder.Set_Value("VA077_TotalPurchaseAmt", morder.Get_Value("VA077_TotalPurchaseAmt"));
             newOrder.Set_Value("VA077_TotalSalesAmt", morder.Get_Value("VA077_TotalSalesAmt"));
             newOrder.Set_Value("VA077_MarginPercent", morder.Get_Value("VA077_MarginPercent"));
+            newOrder.Set_Value("VA077_IsLegalEntity", morder.Get_Value("VA077_IsLegalEntity"));
             newOrder.SetC_DocTypeTarget_ID(_C_DocType_ID);
             int C_Bpartner_ID = newOrder.GetC_BPartner_ID();
             newOrder.Set_Value("IsSalesQuotation", false);
@@ -361,6 +367,7 @@ namespace ViennaAdvantage.Process
                 original.Save();
             }
 
+            docNo = newOrder.GetDocumentNo();
             return true;
         }
         /// <summary>
@@ -380,7 +387,8 @@ namespace ViennaAdvantage.Process
             }
             else
             {
-                str = "SELECT VA077_DestinationOrg,C_OrderLine_ID FROM C_OrderLine WHERE C_Order_ID = " + _C_Order_ID + " AND VA077_DestinationOrg IS null AND AD_Org_ID=" + org;
+              
+                str = "SELECT VA077_DestinationOrg,C_OrderLine_ID FROM C_OrderLine WHERE C_Order_ID = " + _C_Order_ID + " AND (NVL(VA077_DestinationOrg,0)=0) AND AD_Org_ID=" + org;
             }
             DataSet st = DB.ExecuteDataset(str, null, Get_Trx());
             if (st != null && st.Tables[0].Rows.Count > 0)
@@ -396,7 +404,7 @@ namespace ViennaAdvantage.Process
                     }
                     else
                     {
-                        orderLine.SetAD_Org_ID(GetAD_Org_ID());
+                        orderLine.SetAD_Org_ID(org);
                     }
                     orderLine.SetAD_Client_ID(GetAD_Client_ID());
                     orderLine.SetC_Order_ID(newid);

@@ -1212,17 +1212,17 @@
         function createPageSettings() {
             ulPaging = $('<ul class="vis-statusbar-ul vis-toppaging">');
 
-            liFirstPage = $('<li style="opacity: 1;"><div><i class="vis vis-shiftleft" aria-hidden="true" title="First Page"></i></div></li>');
+            liFirstPage = $('<li style="opacity: 1;"><div><i class="vis vis-shiftleft" aria-hidden="true" title="'+ VIS.Msg.getMsg("FirstPage")+'"></i ></div ></li > ');
 
-            liPrevPage = $('<li style="opacity: 1;"><div><i class="vis vis-arrow-left" aria-hidden="true" title="Page Up"></i></div></li>');
+            liPrevPage = $('<li style="opacity: 1;"><div><i class="vis vis-arrow-left" aria-hidden="true" title="' + VIS.Msg.getMsg("PageUp") +'"></i></div></li>');
 
             cmbPage = $("<select>");
 
             liCurrPage = $('<li>').append(cmbPage);
 
-            liNextPage = $('<li style="opacity: 1;"><div><i class="vis vis-arrow-right" aria-hidden="true" title="Page down"></i></div></li>');
+            liNextPage = $('<li style="opacity: 1;"><div><i class="vis vis-arrow-right" aria-hidden="true" title="' + VIS.Msg.getMsg("PageDown") +'"></i></div></li>');
 
-            liLastPage = $('<li style="opacity: 1;"><div><i class="vis vis-shiftright" aria-hidden="true" title="Last Page"></i></div></li>');
+            liLastPage = $('<li style="opacity: 1;"><div><i class="vis vis-shiftright" aria-hidden="true" title="' + VIS.Msg.getMsg("LastPage") +'"></i></div></li>');
 
 
             ulPaging.append(liFirstPage).append(liPrevPage).append(liCurrPage).append(liNextPage).append(liLastPage);
