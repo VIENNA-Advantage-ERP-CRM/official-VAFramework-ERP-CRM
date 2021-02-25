@@ -16833,11 +16833,13 @@
      */
     CalloutTeamForcast.prototype.ProductPrice = function (ctx, windowNo, mTab, mField, value, oldValue) {
         if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {
-            //set values to 0 if no product is selected
-            mTab.setValue("PriceStd", 0);
-            mTab.setValue("UnitPrice", 0);
-            mTab.setValue("QtyEntered", 0);
-            mTab.setValue("BaseQty", 0);
+            if (mTab.getValue("M_Product_ID") == null) {
+                //set values to 0 if no product is selected
+                mTab.setValue("PriceStd", 0);
+                mTab.setValue("UnitPrice", 0);
+                mTab.setValue("QtyEntered", 0);
+                mTab.setValue("BaseQty", 0);
+            }
             return "";
         }
         this.setCalloutActive(true);
@@ -16881,8 +16883,10 @@
      * @param {any} oldValue
      */
     CalloutMasterForecast.prototype.Currency = function (ctx, windowNo, mTab, mField, value, oldValue) {
-        if (this.isCalloutActive()|| value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {
-            mTab.setValue("C_Currency_ID", Util.getValueOfInt(ctx.getContext("$C_Currency_ID")));
+        if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {
+            if (mTab.getValue("M_PriceList_ID") == null) {
+                mTab.setValue("C_Currency_ID", Util.getValueOfInt(ctx.getContext("$C_Currency_ID")));
+            }
             return "";
         }
         this.setCalloutActive(true);

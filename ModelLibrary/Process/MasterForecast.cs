@@ -78,7 +78,7 @@ namespace ViennaAdvantageServer.Process
             // int count = DB.ExecuteQuery(sql, null, null);
             if (C_Period_ID != 0)
             {
-                sql = "SELECT COUNT(*) FROM c_masterforecastline WHERE c_masterforecast_id = " + GetRecord_ID();
+                sql = "SELECT COUNT(C_MasterForecastLine_ID) FROM c_masterforecastline WHERE c_masterforecast_id = " + GetRecord_ID();
                 int count = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                 if (count > 0)
                 {
