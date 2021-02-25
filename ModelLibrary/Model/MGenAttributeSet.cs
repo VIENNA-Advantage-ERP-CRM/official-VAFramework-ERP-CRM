@@ -53,7 +53,8 @@ namespace VAdvantage.Model
                     + "WHERE mau.IsActive='Y' AND ma.IsActive='Y'"
                     + " AND mau.C_GenAttributeSet_ID=" + GetC_GenAttributeSet_ID() + " AND ma.IsInstanceAttribute= " +
                     ((instanceAttributes) ? "'Y'" : "'N'").ToString()
-                    + " ORDER BY mau.C_GenAttribute_ID";      // change done by Bharat
+                     + " ORDER BY mau.SeqNo, mau.C_GenAttribute_ID";      
+
                 List<MGenAttribute> list = new List<MGenAttribute>();
                 DataTable dt = null;
                 IDataReader idr = DB.ExecuteReader(sql, null, Get_TrxName());
