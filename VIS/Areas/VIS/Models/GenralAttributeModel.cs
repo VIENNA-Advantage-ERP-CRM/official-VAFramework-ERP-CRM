@@ -468,7 +468,6 @@ namespace VIS.Models
                                     where.Append(" AND (cg.C_GenattributeValue_ID IS NULL ").Append(" AND cg.C_GenAttribute_ID=").Append(attributes[i].GetC_GenAttribute_ID() + ")");
                                 }
                             }
-
                             else if (i > 0 && sql.Length > 0)
                             {
                                 sql.Append(" JOIN C_GenAttributeInstance cg" + i + " ON cg" + i + ".C_GenAttributeSetInstance_ID = cg.C_GenAttributeSetInstance_ID AND cg" + i + ".IsActive='Y'");
@@ -503,7 +502,6 @@ namespace VIS.Models
                                 sql.Append("SELECT DISTINCT cg.C_GenAttributeSetInstance_ID FROM C_GenAttributeInstance cg");
                                 where.Append(" WHERE cg.IsActive='Y' AND (cg.VALUENUMBER=").Append(value).Append(" AND cg.C_GenAttribute_ID=").Append(attributes[i].GetC_GenAttribute_ID() + ")");
                             }
-
                             else if (i > 0 && sql.Length > 0)
                             {
                                 sql.Append(" JOIN C_GenAttributeInstance cg" + i + " ON cg" + i + ".C_GenAttributeSetInstance_ID = cg.C_GenAttributeSetInstance_ID AND cg" + i + ".IsActive='Y'");
@@ -531,7 +529,6 @@ namespace VIS.Models
                                 sql.Append("SELECT DISTINCT cg.C_GenAttributeSetInstance_ID FROM C_GenAttributeInstance cg");
                                 where.Append(" WHERE cg.IsActive='Y' AND (upper(cg.VALUE)=upper('").Append(value).Append("') AND cg.C_GenAttribute_ID=").Append(attributes[i].GetC_GenAttribute_ID() + ")");
                             }
-
                             else if (i > 0 && sql.Length > 0)
                             {
                                 sql.Append(" JOIN C_GenAttributeInstance cg" + i + " ON cg" + i + ".C_GenAttributeSetInstance_ID = cg.C_GenAttributeSetInstance_ID AND cg" + i + ".IsActive='Y'");

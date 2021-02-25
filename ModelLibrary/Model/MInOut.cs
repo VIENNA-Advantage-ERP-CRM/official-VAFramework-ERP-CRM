@@ -1866,6 +1866,22 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
+        /// Check DocTypeConfimation
+        /// </summary>
+        /// <param name="dt">DocumentType</param>
+        /// <returns>error Message if Confiramtion Doct Tpye not Selected</returns>
+        private string CheckConfimationDocType(MDocType dt)
+        {
+            if (dt.Get_ColumnIndex("C_DocTypeConfrimation_ID") > -1)
+            {
+                int conDocType = Util.GetValueOfInt(dt.Get_Value("C_DocTypeConfrimation_ID"));
+                if (conDocType == 0)
+                { return Msg.GetMsg(GetCtx(), "VIS_ConfirmationDocNotFound"); }
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Approve Document
         /// </summary>
         /// <returns>true if success </returns>
@@ -2151,6 +2167,20 @@ namespace VAdvantage.Model
                 tableId1 = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, null));
             }
 
+
+            //Lakhwinder 10 Feb 2021
+            //Show Error if Confiramtion Doct Tpye not Selected on DocType
+            MDocType docType = MDocType.Get(GetCtx(), GetC_DocType_ID());
+            if (docType.IsShipConfirm())
+            {
+                string s = CheckConfimationDocType(docType);
+                if (!String.IsNullOrEmpty(s))
+                {
+                    _processMsg = s;
+                    SetProcessMsg(_processMsg);
+                    return DocActionVariables.STATUS_INVALID;
+                }
+            }
 
             // for checking - costing calculate on completion or not
             // IsCostImmediate = true - calculate cost on completion

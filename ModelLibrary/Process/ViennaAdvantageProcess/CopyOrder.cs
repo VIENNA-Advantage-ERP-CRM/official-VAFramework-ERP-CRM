@@ -110,6 +110,7 @@ namespace ViennaAdvantage.Process
             }
 
             //Develop by Deekshant For check VA077 Module For spilt the Sales Order
+           
             if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
             {
                 //Check Destination Organization in c_orderline
@@ -126,12 +127,14 @@ namespace ViennaAdvantage.Process
                         Addline(destinationorg, orgId);
                     }
                 }
+                               
             }
             else
             {
                 //JID_1799 fromCreateSo is true if DOCBASETYPE='BOO'
                 VAdvantage.Model.MOrder newOrder = VAdvantage.Model.MOrder.CopyFrom(from, _DateDoc, dt.GetC_DocType_ID(), false, true, null,
                 dt.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_BLANKETSALESORDER) ? true : false);     //	copy ASI 
+
                 newOrder.SetC_DocTypeTarget_ID(_C_DocType_ID);
                 int C_Bpartner_ID = newOrder.GetC_BPartner_ID();
                 newOrder.Set_Value("IsSalesQuotation", false);
@@ -384,7 +387,8 @@ namespace ViennaAdvantage.Process
             }
             else
             {
-                str = "SELECT VA077_DestinationOrg,C_OrderLine_ID FROM C_OrderLine WHERE C_Order_ID = " + _C_Order_ID + " AND VA077_DestinationOrg IS null AND AD_Org_ID=" + org;
+              
+                str = "SELECT VA077_DestinationOrg,C_OrderLine_ID FROM C_OrderLine WHERE C_Order_ID = " + _C_Order_ID + " AND (NVL(VA077_DestinationOrg,0)=0) AND AD_Org_ID=" + org;
             }
             DataSet st = DB.ExecuteDataset(str, null, Get_Trx());
             if (st != null && st.Tables[0].Rows.Count > 0)

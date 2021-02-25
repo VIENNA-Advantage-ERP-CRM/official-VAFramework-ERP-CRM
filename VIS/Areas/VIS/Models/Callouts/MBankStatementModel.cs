@@ -41,7 +41,8 @@ namespace VIS.Models
             //Assign parameter value
             int c_payment_ID = Util.GetValueOfInt(paramValue[0]);
             int CurTo_ID = Util.GetValueOfInt(paramValue[1]);
-            //DateTime? convDate = Util.GetValueOfDateTime(paramValue[2]);
+            //Conversion based on Bank StatementLine Date
+            DateTime? convDate = Util.GetValueOfDateTime(paramValue[2]);
             Decimal rate = 0;
             //End Assign parameter value
 
@@ -52,8 +53,10 @@ namespace VIS.Models
                 decimal payAmt = Util.GetValueOfDecimal(ds.Tables[0].Rows[0][0]);
                 int c_currency_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0][1]);
                 int c_conversionType_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0][2]);
-                DateTime? dateAcct = Util.GetValueOfDateTime(ds.Tables[0].Rows[0][3]);          // JID_0333: Currency conversion should be based on Payment Account Date and Currency type
-                rate = MConversionRate.Convert(ctx, payAmt, c_currency_ID, CurTo_ID, dateAcct, c_conversionType_ID, ctx.GetAD_Client_ID(), ctx.GetAD_Org_ID());
+                //DateTime? dateAcct = Util.GetValueOfDateTime(ds.Tables[0].Rows[0][3]);          // JID_0333: Currency conversion should be based on Payment Account Date and Currency type
+                //rate = MConversionRate.Convert(ctx, payAmt, c_currency_ID, CurTo_ID, dateAcct, c_conversionType_ID, ctx.GetAD_Client_ID(), ctx.GetAD_Org_ID());
+                // Conversion Rate should be based on StatementLine Date Requirement by Ranvir
+                rate = MConversionRate.Convert(ctx, payAmt, c_currency_ID, CurTo_ID, convDate, c_conversionType_ID, ctx.GetAD_Client_ID(), ctx.GetAD_Org_ID());
             }
             return rate;
         }
