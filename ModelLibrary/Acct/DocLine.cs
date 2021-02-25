@@ -1424,9 +1424,9 @@ namespace VAdvantage.Acct
             return sb.ToString();
         }
 
-        public int GetM_WorkOrderOperation_ID()
+        public int GetVAM_WorkOrderOperation_ID()
         {
-            int index = _po.Get_ColumnIndex("VAMFG_M_WorkOrderOperation_ID");
+            int index = _po.Get_ColumnIndex("VAMFG_VAM_WorkOrderOperation_ID");
             if (index != -1)
             {
                 int ii = Util.GetValueOfInt(_po.Get_Value(index));

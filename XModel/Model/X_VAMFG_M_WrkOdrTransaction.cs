@@ -33,7 +33,7 @@ SetProcessed (false);	// N
 SetVAMFG_DateAcct (DateTime.Now);	// @#Date@
 SetVAMFG_IsOptionalFrom (false);	// N
 SetVAMFG_IsOptionalTo (false);	// N
-SetVAMFG_M_WorkOrder_ID (0);
+SetVAMFG_VAM_WorkOrder_ID (0);
 SetVAMFG_M_WrkOdrTransaction_ID (0);
 SetVAMFG_NewWOBarcode (null);	// CO
 SetVAMFG_QtyEntered (0.0);	// 1
@@ -60,7 +60,7 @@ SetProcessed (false);	// N
 SetVAMFG_DateAcct (DateTime.Now);	// @#Date@
 SetVAMFG_IsOptionalFrom (false);	// N
 SetVAMFG_IsOptionalTo (false);	// N
-SetVAMFG_M_WorkOrder_ID (0);
+SetVAMFG_VAM_WorkOrder_ID (0);
 SetVAMFG_M_WrkOdrTransaction_ID (0);
 SetVAMFG_NewWOBarcode (null);	// CO
 SetVAMFG_QtyEntered (0.0);	// 1
@@ -858,17 +858,17 @@ if (oo != null)
 return false;
 }
 /** Set Work Order.
-@param VAMFG_M_WorkOrder_ID Work Order */
-public void SetVAMFG_M_WorkOrder_ID (int VAMFG_M_WorkOrder_ID)
+@param VAMFG_VAM_WorkOrder_ID Work Order */
+public void SetVAMFG_VAM_WorkOrder_ID (int VAMFG_VAM_WorkOrder_ID)
 {
-if (VAMFG_M_WorkOrder_ID < 1) throw new ArgumentException ("VAMFG_M_WorkOrder_ID is mandatory.");
-Set_Value ("VAMFG_M_WorkOrder_ID", VAMFG_M_WorkOrder_ID);
+if (VAMFG_VAM_WorkOrder_ID < 1) throw new ArgumentException ("VAMFG_VAM_WorkOrder_ID is mandatory.");
+Set_Value ("VAMFG_VAM_WorkOrder_ID", VAMFG_VAM_WorkOrder_ID);
 }
 /** Get Work Order.
 @return Work Order */
-public int GetVAMFG_M_WorkOrder_ID() 
+public int GetVAMFG_VAM_WorkOrder_ID() 
 {
-Object ii = Get_Value("VAMFG_M_WorkOrder_ID");
+Object ii = Get_Value("VAMFG_VAM_WorkOrder_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

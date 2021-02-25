@@ -14,18 +14,9 @@ using System.Data;
 /** Generated Model for C_ResourceTime
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_ResourceTime : PO
+public class X_VAB_ResourceTime : PO
 {
-public X_C_ResourceTime (Context ctx, int C_ResourceTime_ID, Trx trxName) : base (ctx, C_ResourceTime_ID, trxName)
-{
-/** if (C_ResourceTime_ID == 0)
-{
-SetC_ResourcePeriod_ID (0);
-SetC_ResourceTime_ID (0);
-}
- */
-}
-public X_C_ResourceTime (Ctx ctx, int C_ResourceTime_ID, Trx trxName) : base (ctx, C_ResourceTime_ID, trxName)
+public X_VAB_ResourceTime (Context ctx, int C_ResourceTime_ID, Trx trxName) : base (ctx, C_ResourceTime_ID, trxName)
 {
 /** if (C_ResourceTime_ID == 0)
 {
@@ -34,12 +25,21 @@ SetC_ResourceTime_ID (0);
 }
  */
 }
+public X_VAB_ResourceTime (Ctx ctx, int C_ResourceTime_ID, Trx trxName) : base (ctx, C_ResourceTime_ID, trxName)
+{
+/** if (C_ResourceTime_ID == 0)
+{
+SetC_ResourcePeriod_ID (0);
+SetC_ResourceTime_ID (0);
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_C_ResourceTime (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_ResourceTime (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_C_ResourceTime (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_C_ResourceTime (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_ResourceTime (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_C_ResourceTime (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_C_ResourceTime (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_ResourceTime (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_ResourceTime()
+static X_VAB_ResourceTime()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);

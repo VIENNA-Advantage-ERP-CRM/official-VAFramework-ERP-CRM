@@ -261,7 +261,7 @@ namespace VAdvantage.Process
             {
                 docBaseType = " IN ( '" + MVABMasterDocType.DOCBASETYPE_PDCPAYABLE + "' ,'" + MVABMasterDocType.DOCBASETYPE_PDCRECEIVABLE + "' )";
             }
-            else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAMFG_M_WorkOrder") || VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAMFG_M_WrkOdrTransaction"))
+            else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAMFG_VAM_WorkOrder") || VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAMFG_M_WrkOdrTransaction"))
             {
                 bypass = true;
                 docBaseType = null;

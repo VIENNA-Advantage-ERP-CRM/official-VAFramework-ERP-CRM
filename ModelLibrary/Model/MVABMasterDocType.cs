@@ -293,13 +293,13 @@ namespace VAdvantage.Model
             if (dbt.Equals(DOCBASETYPE_PURCHASEREQUISITION))
                 return X_VAM_Requisition.Table_ID;
             /*********Manafacturing*************/
-            if (dbt.Equals(DOCBASETYPE_MATERIALPICK) || dbt.Equals(DOCBASETYPE_MATERIALPUTAWAY)
-                || dbt.Equals(DOCBASETYPE_MATERIALREPLENISHMENT))
-                return X_VAM_WarehouseTask.Table_ID;
-            if (dbt.Equals(DOCBASETYPE_WORKORDER))
-                return X_M_WorkOrder.Table_ID;
-            if (dbt.Equals(DOCBASETYPE_WORKORDERTRANSACTION))
-                return X_M_WorkOrderTransaction.Table_ID;
+            //if (dbt.Equals(DOCBASETYPE_MATERIALPICK) || dbt.Equals(DOCBASETYPE_MATERIALPUTAWAY)
+            //    || dbt.Equals(DOCBASETYPE_MATERIALREPLENISHMENT))
+            //    return X_VAM_WarehouseTask.Table_ID;
+            //if (dbt.Equals(DOCBASETYPE_WORKORDER))
+            //    return X_VAM_WorkOrder.Table_ID;
+            //if (dbt.Equals(DOCBASETYPE_WORKORDERTRANSACTION))
+            //    return X_VAM_WorkOrderTransaction.Table_ID;
             if (dbt.Equals(DOCBASETYPE_STANDARDCOSTUPDATE))
                 return X_VAM_CostUpdate.Table_ID;
             /*********Manafacturing*************/
@@ -348,12 +348,12 @@ namespace VAdvantage.Model
                 return X_VAM_Requisition.Table_Name;
 
             /*********Manafacturing*************/
-            if (VAF_TableView_ID == X_VAM_WarehouseTask.Table_ID)
-                return X_VAM_WarehouseTask.Table_Name;
-            if (VAF_TableView_ID == X_M_WorkOrder.Table_ID)
-                return X_M_WorkOrder.Table_Name;
-            if (VAF_TableView_ID == X_M_WorkOrderTransaction.Table_ID)
-                return X_M_WorkOrderTransaction.Table_Name;
+            //if (VAF_TableView_ID == X_VAM_WarehouseTask.Table_ID)
+            //    return X_VAM_WarehouseTask.Table_Name;
+            //if (VAF_TableView_ID == X_VAM_WorkOrder.Table_ID)
+            //    return X_VAM_WorkOrder.Table_Name;
+            //if (VAF_TableView_ID == X_VAM_WorkOrderTransaction.Table_ID)
+            //    return X_VAM_WorkOrderTransaction.Table_Name;
             if (VAF_TableView_ID == X_VAM_CostUpdate.Table_ID)
                 return X_VAM_CostUpdate.Table_Name;
             /*********Manafacturing*************/

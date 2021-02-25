@@ -1464,29 +1464,29 @@ namespace VAdvantage.Acct
             else if (AcctType == ACCTTYPE_WOMaterialAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_Material_Acct, b.WO_Material_Acct) "
-                    + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
+                    + " FROM VAMFG_VAM_WorkOrderClass_Acct woclass "
                     + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
-                    + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
-                para_1 = GetM_WorkOrder_ID();
+                    + ", VAMFG_VAM_WorkOrder wo "
+                    + "WHERE wo.VAMFG_VAM_WorkOrder_ID = @param1 AND woclass.VAMFG_VAM_WorkOrderClass_ID = wo.VAMFG_VAM_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
+                para_1 = GetVAM_WorkOrder_ID();
             }
             else if (AcctType == ACCTTYPE_WOMaterialOverhdAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_MaterialOverhd_Acct, b.WO_MaterialOverhd_Acct) "
-                    + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
+                    + " FROM VAMFG_VAM_WorkOrderClass_Acct woclass "
                     + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
-                    + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
-                para_1 = GetM_WorkOrder_ID();
+                    + ", VAMFG_VAM_WorkOrder wo "
+                    + "WHERE wo.VAMFG_VAM_WorkOrder_ID = @param1 AND woclass.VAMFG_VAM_WorkOrderClass_ID = wo.VAMFG_VAM_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
+                para_1 = GetVAM_WorkOrder_ID();
             }
             else if (AcctType == ACCTTYPE_WOResourceAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_Resource_Acct, b.WO_Resource_Acct) "
-                    + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
+                    + " FROM VAMFG_VAM_WorkOrderClass_Acct woclass "
                     + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
-                    + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
-                para_1 = GetM_WorkOrder_ID();
+                    + ", VAMFG_VAM_WorkOrder wo "
+                    + "WHERE wo.VAMFG_VAM_WorkOrder_ID = @param1 AND woclass.VAMFG_VAM_WorkOrderClass_ID = wo.VAMFG_VAM_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
+                para_1 = GetVAM_WorkOrder_ID();
             }
             else if (AcctType == ACCTTYPE_WCOverhdAcct)
             {
@@ -1499,47 +1499,47 @@ namespace VAdvantage.Acct
             else if (AcctType == ACCTTYPE_WOMaterialVarianceAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_MaterialVariance_Acct, b.WO_MaterialVariance_Acct) "
-                    + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
+                    + " FROM VAMFG_VAM_WorkOrderClass_Acct woclass "
                     + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
-                    + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
-                para_1 = GetM_WorkOrder_ID();
+                    + ", VAMFG_VAM_WorkOrder wo "
+                    + "WHERE wo.VAMFG_VAM_WorkOrder_ID = @param1 AND woclass.VAMFG_VAM_WorkOrderClass_ID = wo.VAMFG_VAM_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
+                para_1 = GetVAM_WorkOrder_ID();
             }
             else if (AcctType == ACCTTYPE_WOMaterialOverhdVarianceAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_MaterialOverhdVariance_Acct, b.WO_MaterialOverhdVariance_Acct) "
-                    + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
+                    + " FROM VAMFG_VAM_WorkOrderClass_Acct woclass "
                     + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
-                    + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
-                para_1 = GetM_WorkOrder_ID();
+                    + ", VAMFG_VAM_WorkOrder wo "
+                    + "WHERE wo.VAMFG_VAM_WorkOrder_ID = @param1 AND woclass.VAMFG_VAM_WorkOrderClass_ID = wo.VAMFG_VAM_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
+                para_1 = GetVAM_WorkOrder_ID();
             }
             else if (AcctType == ACCTTYPE_WOResoureVarianceAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_ResourceVariance_Acct, b.WO_ResourceVariance_Acct) "
-                    + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
+                    + " FROM VAMFG_VAM_WorkOrderClass_Acct woclass "
                     + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
-                    + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
-                para_1 = GetM_WorkOrder_ID();
+                    + ", VAMFG_VAM_WorkOrder wo "
+                    + "WHERE wo.VAMFG_VAM_WorkOrder_ID = @param1 AND woclass.VAMFG_VAM_WorkOrderClass_ID = wo.VAMFG_VAM_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
+                para_1 = GetVAM_WorkOrder_ID();
             }
             else if (AcctType == ACCTTYPE_WOOverhdVarianceAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_OverhdVariance_Acct, b.WO_OverhdVariance_Acct) "
-                    + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
+                    + " FROM VAMFG_VAM_WorkOrderClass_Acct woclass "
                     + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
-                    + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
-                para_1 = GetM_WorkOrder_ID();
+                    + ", VAMFG_VAM_WorkOrder wo "
+                    + "WHERE wo.VAMFG_VAM_WorkOrder_ID = @param1 AND woclass.VAMFG_VAM_WorkOrderClass_ID = wo.VAMFG_VAM_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
+                para_1 = GetVAM_WorkOrder_ID();
             }
             else if (AcctType == ACCTTYPE_WOScrapAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_Scrap_Acct, b.WO_Scrap_Acct) "
-                    + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
+                    + " FROM VAMFG_VAM_WorkOrderClass_Acct woclass "
                     + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
-                    + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
-                para_1 = GetM_WorkOrder_ID();
+                    + ", VAMFG_VAM_WorkOrder wo "
+                    + "WHERE wo.VAMFG_VAM_WorkOrder_ID = @param1 AND woclass.VAMFG_VAM_WorkOrderClass_ID = wo.VAMFG_VAM_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
+                para_1 = GetVAM_WorkOrder_ID();
             }
 
             else if (AcctType == ACCTTYPE_OverhdAbsorptionAcct)
@@ -1812,29 +1812,29 @@ namespace VAdvantage.Acct
             else if (AcctType == ACCTTYPE_WOMaterialAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_Material_Acct, b.WO_Material_Acct) "
-                    + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
+                    + " FROM VAMFG_VAM_WorkOrderClass_Acct woclass "
                     + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
-                    + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
-                para_1 = GetM_WorkOrder_ID();
+                    + ", VAMFG_VAM_WorkOrder wo "
+                    + "WHERE wo.VAMFG_VAM_WorkOrder_ID = @param1 AND woclass.VAMFG_VAM_WorkOrderClass_ID = wo.VAMFG_VAM_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
+                para_1 = GetVAM_WorkOrder_ID();
             }
             else if (AcctType == ACCTTYPE_WOMaterialOverhdAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_MaterialOverhd_Acct, b.WO_MaterialOverhd_Acct) "
-                    + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
+                    + " FROM VAMFG_VAM_WorkOrderClass_Acct woclass "
                     + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
-                    + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
-                para_1 = GetM_WorkOrder_ID();
+                    + ", VAMFG_VAM_WorkOrder wo "
+                    + "WHERE wo.VAMFG_VAM_WorkOrder_ID = @param1 AND woclass.VAMFG_VAM_WorkOrderClass_ID = wo.VAMFG_VAM_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
+                para_1 = GetVAM_WorkOrder_ID();
             }
             else if (AcctType == ACCTTYPE_WOResourceAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_Resource_Acct, b.WO_Resource_Acct) "
-                    + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
+                    + " FROM VAMFG_VAM_WorkOrderClass_Acct woclass "
                     + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
-                    + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
-                para_1 = GetM_WorkOrder_ID();
+                    + ", VAMFG_VAM_WorkOrder wo "
+                    + "WHERE wo.VAMFG_VAM_WorkOrder_ID = @param1 AND woclass.VAMFG_VAM_WorkOrderClass_ID = wo.VAMFG_VAM_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
+                para_1 = GetVAM_WorkOrder_ID();
             }
             else if (AcctType == ACCTTYPE_WCOverhdAcct)
             {
@@ -1847,47 +1847,47 @@ namespace VAdvantage.Acct
             else if (AcctType == ACCTTYPE_WOMaterialVarianceAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_MaterialVariance_Acct, b.WO_MaterialVariance_Acct) "
-                    + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
+                    + " FROM VAMFG_VAM_WorkOrderClass_Acct woclass "
                     + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
-                    + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
-                para_1 = GetM_WorkOrder_ID();
+                    + ", VAMFG_VAM_WorkOrder wo "
+                    + "WHERE wo.VAMFG_VAM_WorkOrder_ID = @param1 AND woclass.VAMFG_VAM_WorkOrderClass_ID = wo.VAMFG_VAM_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
+                para_1 = GetVAM_WorkOrder_ID();
             }
             else if (AcctType == ACCTTYPE_WOMaterialOverhdVarianceAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_MaterialOverhdVariance_Acct, b.WO_MaterialOverhdVariance_Acct) "
-                    + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
+                    + " FROM VAMFG_VAM_WorkOrderClass_Acct woclass "
                     + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
-                    + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
-                para_1 = GetM_WorkOrder_ID();
+                    + ", VAMFG_VAM_WorkOrder wo "
+                    + "WHERE wo.VAMFG_VAM_WorkOrder_ID = @param1 AND woclass.VAMFG_VAM_WorkOrderClass_ID = wo.VAMFG_VAM_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
+                para_1 = GetVAM_WorkOrder_ID();
             }
             else if (AcctType == ACCTTYPE_WOResoureVarianceAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_ResourceVariance_Acct, b.WO_ResourceVariance_Acct) "
-                    + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
+                    + " FROM VAMFG_VAM_WorkOrderClass_Acct woclass "
                     + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
-                    + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
-                para_1 = GetM_WorkOrder_ID();
+                    + ", VAMFG_VAM_WorkOrder wo "
+                    + "WHERE wo.VAMFG_VAM_WorkOrder_ID = @param1 AND woclass.VAMFG_VAM_WorkOrderClass_ID = wo.VAMFG_VAM_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
+                para_1 = GetVAM_WorkOrder_ID();
             }
             else if (AcctType == ACCTTYPE_WOOverhdVarianceAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_OverhdVariance_Acct, b.WO_OverhdVariance_Acct) "
-                    + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
+                    + " FROM VAMFG_VAM_WorkOrderClass_Acct woclass "
                     + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
-                    + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
-                para_1 = GetM_WorkOrder_ID();
+                    + ", VAMFG_VAM_WorkOrder wo "
+                    + "WHERE wo.VAMFG_VAM_WorkOrder_ID = @param1 AND woclass.VAMFG_VAM_WorkOrderClass_ID = wo.VAMFG_VAM_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
+                para_1 = GetVAM_WorkOrder_ID();
             }
             else if (AcctType == ACCTTYPE_WOScrapAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_Scrap_Acct, b.WO_Scrap_Acct) "
-                    + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
+                    + " FROM VAMFG_VAM_WorkOrderClass_Acct woclass "
                     + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
-                    + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
-                para_1 = GetM_WorkOrder_ID();
+                    + ", VAMFG_VAM_WorkOrder wo "
+                    + "WHERE wo.VAMFG_VAM_WorkOrder_ID = @param1 AND woclass.VAMFG_VAM_WorkOrderClass_ID = wo.VAMFG_VAM_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
+                para_1 = GetVAM_WorkOrder_ID();
             }
 
             else if (AcctType == ACCTTYPE_OverhdAbsorptionAcct)
@@ -1991,14 +1991,14 @@ namespace VAdvantage.Acct
 
         #region Manfacturing
         /// <summary>
-        /// Get M_WorkOrderClass_ID
+        /// Get VAM_WorkOrderClass_ID
         /// </summary>
         /// <returns>WorkOrderClass</returns>
-        public int GetM_WorkOrder_ID()
+        public int GetVAM_WorkOrder_ID()
         {
             if (_workorder_id == -1)
             {
-                int index = _po.Get_ColumnIndex("VAMFG_M_WorkOrder_ID");
+                int index = _po.Get_ColumnIndex("VAMFG_VAM_WorkOrder_ID");
                 if (index != -1)
                 {
                     int ii = Util.GetValueOfInt(_po.Get_Value(index));

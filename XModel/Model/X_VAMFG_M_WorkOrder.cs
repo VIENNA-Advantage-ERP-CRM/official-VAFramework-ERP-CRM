@@ -11,42 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for VAMFG_M_WorkOrder
+/** Generated Model for VAMFG_VAM_WorkOrder
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_VAMFG_M_WorkOrder : PO
+public class X_VAMFG_VAM_WorkOrder : PO
 {
-public X_VAMFG_M_WorkOrder (Context ctx, int VAMFG_M_WorkOrder_ID, Trx trxName) : base (ctx, VAMFG_M_WorkOrder_ID, trxName)
+public X_VAMFG_VAM_WorkOrder (Context ctx, int VAMFG_VAM_WorkOrder_ID, Trx trxName) : base (ctx, VAMFG_VAM_WorkOrder_ID, trxName)
 {
-/** if (VAMFG_M_WorkOrder_ID == 0)
-{
-SetVAB_DocTypes_ID (0);
-SetVAB_UOM_ID (0);
-SetDocAction (null);	// PR
-SetDocStatus (null);	// DR
-SetDocumentNo (null);
-SetIsApproved (false);	// @IsApproved@
-SetIsSOTrx (true);	// Y
-SetVAM_Product_ID (0);
-SetVAM_Warehouse_ID (0);	// @#VAM_Warehouse_ID@
-SetProcessed (false);	// N
-SetSupervisor_ID (0);
-SetVAMFG_DateAcct (DateTime.Now);	// @#Date@
-SetVAMFG_M_WorkOrderClass_ID (0);
-SetVAMFG_M_WorkOrder_ID (0);
-SetVAMFG_PriorityRule (null);	// 5
-SetVAMFG_QtyAssembled (0.0);	// 0
-SetVAMFG_QtyAvailable (0.0);	// 0
-SetVAMFG_QtyEntered (0.0);	// 1
-SetVAMFG_QtyScrapped (0.0);	// 0
-SetVAMFG_SendEMail (false);	// N
-SetVAMFG_WOType (null);	// S
-}
- */
-}
-public X_VAMFG_M_WorkOrder (Ctx ctx, int VAMFG_M_WorkOrder_ID, Trx trxName) : base (ctx, VAMFG_M_WorkOrder_ID, trxName)
-{
-/** if (VAMFG_M_WorkOrder_ID == 0)
+/** if (VAMFG_VAM_WorkOrder_ID == 0)
 {
 SetVAB_DocTypes_ID (0);
 SetVAB_UOM_ID (0);
@@ -60,8 +32,36 @@ SetVAM_Warehouse_ID (0);	// @#VAM_Warehouse_ID@
 SetProcessed (false);	// N
 SetSupervisor_ID (0);
 SetVAMFG_DateAcct (DateTime.Now);	// @#Date@
-SetVAMFG_M_WorkOrderClass_ID (0);
-SetVAMFG_M_WorkOrder_ID (0);
+SetVAMFG_VAM_WorkOrderClass_ID (0);
+SetVAMFG_VAM_WorkOrder_ID (0);
+SetVAMFG_PriorityRule (null);	// 5
+SetVAMFG_QtyAssembled (0.0);	// 0
+SetVAMFG_QtyAvailable (0.0);	// 0
+SetVAMFG_QtyEntered (0.0);	// 1
+SetVAMFG_QtyScrapped (0.0);	// 0
+SetVAMFG_SendEMail (false);	// N
+SetVAMFG_WOType (null);	// S
+}
+ */
+}
+public X_VAMFG_VAM_WorkOrder (Ctx ctx, int VAMFG_VAM_WorkOrder_ID, Trx trxName) : base (ctx, VAMFG_VAM_WorkOrder_ID, trxName)
+{
+/** if (VAMFG_VAM_WorkOrder_ID == 0)
+{
+SetVAB_DocTypes_ID (0);
+SetVAB_UOM_ID (0);
+SetDocAction (null);	// PR
+SetDocStatus (null);	// DR
+SetDocumentNo (null);
+SetIsApproved (false);	// @IsApproved@
+SetIsSOTrx (true);	// Y
+SetVAM_Product_ID (0);
+SetVAM_Warehouse_ID (0);	// @#VAM_Warehouse_ID@
+SetProcessed (false);	// N
+SetSupervisor_ID (0);
+SetVAMFG_DateAcct (DateTime.Now);	// @#Date@
+SetVAMFG_VAM_WorkOrderClass_ID (0);
+SetVAMFG_VAM_WorkOrder_ID (0);
 SetVAMFG_PriorityRule (null);	// 5
 SetVAMFG_QtyAssembled (0.0);	// 0
 SetVAMFG_QtyAvailable (0.0);	// 0
@@ -77,7 +77,7 @@ SetVAMFG_WOType (null);	// S
 @param rs result set 
 @param trxName transaction
 */
-public X_VAMFG_M_WorkOrder (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAMFG_VAM_WorkOrder (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -85,7 +85,7 @@ public X_VAMFG_M_WorkOrder (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_VAMFG_M_WorkOrder (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAMFG_VAM_WorkOrder (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -93,13 +93,13 @@ public X_VAMFG_M_WorkOrder (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_VAMFG_M_WorkOrder (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAMFG_VAM_WorkOrder (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_VAMFG_M_WorkOrder()
+static X_VAMFG_VAM_WorkOrder()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -112,8 +112,8 @@ public static long updatedMS = 1356677335273L;
 public static int Table_ID;
  // =1000404;
 
-/** TableName=VAMFG_M_WorkOrder */
-public static String Table_Name="VAMFG_M_WorkOrder";
+/** TableName=VAMFG_VAM_WorkOrder */
+public static String Table_Name="VAMFG_VAM_WorkOrder";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(1);
@@ -147,7 +147,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_VAMFG_M_WorkOrder[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAMFG_VAM_WorkOrder[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
@@ -835,32 +835,32 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Work Order Class.
-@param VAMFG_M_WorkOrderClass_ID Indicates the document types and accounts to be used for a work order. */
-public void SetVAMFG_M_WorkOrderClass_ID (int VAMFG_M_WorkOrderClass_ID)
+@param VAMFG_VAM_WorkOrderClass_ID Indicates the document types and accounts to be used for a work order. */
+public void SetVAMFG_VAM_WorkOrderClass_ID (int VAMFG_VAM_WorkOrderClass_ID)
 {
-if (VAMFG_M_WorkOrderClass_ID < 1) throw new ArgumentException ("VAMFG_M_WorkOrderClass_ID is mandatory.");
-Set_Value ("VAMFG_M_WorkOrderClass_ID", VAMFG_M_WorkOrderClass_ID);
+if (VAMFG_VAM_WorkOrderClass_ID < 1) throw new ArgumentException ("VAMFG_VAM_WorkOrderClass_ID is mandatory.");
+Set_Value ("VAMFG_VAM_WorkOrderClass_ID", VAMFG_VAM_WorkOrderClass_ID);
 }
 /** Get Work Order Class.
 @return Indicates the document types and accounts to be used for a work order. */
-public int GetVAMFG_M_WorkOrderClass_ID() 
+public int GetVAMFG_VAM_WorkOrderClass_ID() 
 {
-Object ii = Get_Value("VAMFG_M_WorkOrderClass_ID");
+Object ii = Get_Value("VAMFG_VAM_WorkOrderClass_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Work Order.
-@param VAMFG_M_WorkOrder_ID Work Order */
-public void SetVAMFG_M_WorkOrder_ID (int VAMFG_M_WorkOrder_ID)
+@param VAMFG_VAM_WorkOrder_ID Work Order */
+public void SetVAMFG_VAM_WorkOrder_ID (int VAMFG_VAM_WorkOrder_ID)
 {
-if (VAMFG_M_WorkOrder_ID < 1) throw new ArgumentException ("VAMFG_M_WorkOrder_ID is mandatory.");
-Set_ValueNoCheck ("VAMFG_M_WorkOrder_ID", VAMFG_M_WorkOrder_ID);
+if (VAMFG_VAM_WorkOrder_ID < 1) throw new ArgumentException ("VAMFG_VAM_WorkOrder_ID is mandatory.");
+Set_ValueNoCheck ("VAMFG_VAM_WorkOrder_ID", VAMFG_VAM_WorkOrder_ID);
 }
 /** Get Work Order.
 @return Work Order */
-public int GetVAMFG_M_WorkOrder_ID() 
+public int GetVAMFG_VAM_WorkOrder_ID() 
 {
-Object ii = Get_Value("VAMFG_M_WorkOrder_ID");
+Object ii = Get_Value("VAMFG_VAM_WorkOrder_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

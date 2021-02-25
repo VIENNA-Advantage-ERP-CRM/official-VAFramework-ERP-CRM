@@ -940,7 +940,7 @@ namespace VAdvantage.Common
             if (!canSave.Equals("Y"))
                 return;
 
-            string reportTypeForLog = MActionLog.ACTIONTYPE_View;
+            string reportTypeForLog = MVAFActionLog.ACTIONTYPE_View;
             string descriptonForLog = "Report Viewed";
 
             if (!string.IsNullOrEmpty(description))
@@ -954,22 +954,22 @@ namespace VAdvantage.Common
             // As PDF viewed in Browser, so PDF report Viewed message will be saved.
             else if (fileType.Equals(ProcessCtl.ReportType_PDF))
             {
-                reportTypeForLog = MActionLog.ACTIONTYPE_View;
+                reportTypeForLog = MVAFActionLog.ACTIONTYPE_View;
                 descriptonForLog = "PDF Report Viewed";
             }
             else if (fileType.Equals(ProcessCtl.ReportType_CSV))
             {
-                reportTypeForLog = MActionLog.ACTIONTYPE_Download;
+                reportTypeForLog = MVAFActionLog.ACTIONTYPE_Download;
                 descriptonForLog = "CSV Report Downloaded";
             }
             else if (fileType.Equals(ProcessCtl.ReportType_RTF))
             {
-                reportTypeForLog = MActionLog.ACTIONTYPE_Download;
+                reportTypeForLog = MVAFActionLog.ACTIONTYPE_Download;
                 descriptonForLog = "RTF Report Downloaded";
             }
             else if (fileType.Equals(ProcessCtl.ReportType_HTML))
             {
-                reportTypeForLog = MActionLog.ACTIONTYPE_View;
+                reportTypeForLog = MVAFActionLog.ACTIONTYPE_View;
                 descriptonForLog = "Report Viewed";
             }
             if (processID > 0)

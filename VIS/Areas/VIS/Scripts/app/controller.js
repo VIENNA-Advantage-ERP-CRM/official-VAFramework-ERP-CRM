@@ -1571,16 +1571,16 @@
                 + ", Query=" + query);
             return query.getWhereClause();
         }
-        //else if(tableName.equals("M_WorkOrderComponent") && tabKeyColumn.equals("M_WorkOrder_ID")){
-        //Object[][] results = QueryUtil.executeQuery((Trx)null, "SELECT M_WorkOrderOperation_ID FROM M_WorkOrderComponent WHERE "+query.getWhereClause(),new Object[]{});
-        //int M_WorkOrderOperation_ID = 0;
+        //else if(tableName.equals("VAM_WorkOrderComponent") && tabKeyColumn.equals("VAM_WorkOrder_ID")){
+        //Object[][] results = QueryUtil.executeQuery((Trx)null, "SELECT VAM_WorkOrderOperation_ID FROM VAM_WorkOrderComponent WHERE "+query.getWhereClause(),new Object[]{});
+        //int VAM_WorkOrderOperation_ID = 0;
         //if(results != null && results.length>0 && results[0].length>0)
         //    if(results[0][0] instanceof BigDecimal)
-        //        M_WorkOrderOperation_ID = ((BigDecimal)results[0][0]).intValue();
+        //        VAM_WorkOrderOperation_ID = ((BigDecimal)results[0][0]).intValue();
         //    else if(results[0][0] instanceof Integer)
-        //        M_WorkOrderOperation_ID = (Integer)results[0][0];
+        //        VAM_WorkOrderOperation_ID = (Integer)results[0][0];
         //query.setTableName("xx");
-        //String result = "EXISTS (SELECT * FROM M_WorkOrderOperation xx WHERE xx.M_WorkOrderOperation_ID="+M_WorkOrderOperation_ID+" AND xx.M_WorkOrder_ID=M_WorkOrder.M_WorkOrder_ID)";
+        //String result = "EXISTS (SELECT * FROM VAM_WorkOrderOperation xx WHERE xx.VAM_WorkOrderOperation_ID="+VAM_WorkOrderOperation_ID+" AND xx.VAM_WorkOrder_ID=VAM_WorkOrder.VAM_WorkOrder_ID)";
         //return result;
         //}
 

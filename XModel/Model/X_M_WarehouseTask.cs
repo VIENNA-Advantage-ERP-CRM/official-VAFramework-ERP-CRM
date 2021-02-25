@@ -600,48 +600,48 @@
             return Convert.ToInt32(ii);
         }
         /** Set Work Order Component.
-        @param M_WorkOrderComponent_ID Work Order Component */
-        public void SetM_WorkOrderComponent_ID(int M_WorkOrderComponent_ID)
+        @param VAM_WorkOrderComponent_ID Work Order Component */
+        public void SetVAM_WorkOrderComponent_ID(int VAM_WorkOrderComponent_ID)
         {
-            if (M_WorkOrderComponent_ID <= 0) Set_Value("M_WorkOrderComponent_ID", null);
+            if (VAM_WorkOrderComponent_ID <= 0) Set_Value("VAM_WorkOrderComponent_ID", null);
             else
-                Set_Value("M_WorkOrderComponent_ID", M_WorkOrderComponent_ID);
+                Set_Value("VAM_WorkOrderComponent_ID", VAM_WorkOrderComponent_ID);
         }
         /** Get Work Order Component.
         @return Work Order Component */
-        public int GetM_WorkOrderComponent_ID()
+        public int GetVAM_WorkOrderComponent_ID()
         {
-            Object ii = Get_Value("M_WorkOrderComponent_ID");
+            Object ii = Get_Value("VAM_WorkOrderComponent_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Work Order Transaction Line.
-        @param M_WorkOrderTransactionLine_ID Work Order Transaction Line */
-        public void SetM_WorkOrderTransactionLine_ID(int M_WorkOrderTransactionLine_ID)
+        @param VAM_WorkOrderTransactionLine_ID Work Order Transaction Line */
+        public void SetVAM_WorkOrderTransactionLine_ID(int VAM_WorkOrderTransactionLine_ID)
         {
-            if (M_WorkOrderTransactionLine_ID <= 0) Set_Value("M_WorkOrderTransactionLine_ID", null);
+            if (VAM_WorkOrderTransactionLine_ID <= 0) Set_Value("VAM_WorkOrderTransactionLine_ID", null);
             else
-                Set_Value("M_WorkOrderTransactionLine_ID", M_WorkOrderTransactionLine_ID);
+                Set_Value("VAM_WorkOrderTransactionLine_ID", VAM_WorkOrderTransactionLine_ID);
         }
         /** Get Work Order Transaction Line.
         @return Work Order Transaction Line */
-        public int GetM_WorkOrderTransactionLine_ID()
+        public int GetVAM_WorkOrderTransactionLine_ID()
         {
-            Object ii = Get_Value("M_WorkOrderTransactionLine_ID");
+            Object ii = Get_Value("VAM_WorkOrderTransactionLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Work Order.
-        @param M_WorkOrder_ID Work Order */
-        public void SetM_WorkOrder_ID(int M_WorkOrder_ID)
+        @param VAM_WorkOrder_ID Work Order */
+        public void SetVAM_WorkOrder_ID(int VAM_WorkOrder_ID)
         {
-            throw new ArgumentException("M_WorkOrder_ID Is virtual column");
+            throw new ArgumentException("VAM_WorkOrder_ID Is virtual column");
         }
         /** Get Work Order.
         @return Work Order */
-        public int GetM_WorkOrder_ID()
+        public int GetVAM_WorkOrder_ID()
         {
-            Object ii = Get_Value("M_WorkOrder_ID");
+            Object ii = Get_Value("VAM_WorkOrder_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

@@ -4416,7 +4416,7 @@ namespace VAdvantage.Process
                                 continue;
                             }
 
-                            currentCostPrice = GetCostForProductionFinishedGood(Util.GetValueOfInt(po_WrkOdrTransaction.Get_Value("VAMFG_M_WorkOrder_ID")), Get_Trx());
+                            currentCostPrice = GetCostForProductionFinishedGood(Util.GetValueOfInt(po_WrkOdrTransaction.Get_Value("VAMFG_VAM_WorkOrder_ID")), Get_Trx());
 
                             // if currentCostPrice is ZERO, then not to calculate cost of finished Good
                             if (currentCostPrice == 0)
@@ -4558,7 +4558,7 @@ namespace VAdvantage.Process
                                                                 Util.GetValueOfInt(po_WrkOdrTransaction.Get_Value("VAF_Org_ID")),
                                                                 Util.GetValueOfInt(po_WrkOdrTransaction.Get_Value("VAM_Product_ID")),
                                                                 Util.GetValueOfInt(po_WrkOdrTransaction.Get_Value("VAM_PFeature_SetInstance_ID")),
-                                                                Util.GetValueOfInt(po_WrkOdrTransaction.Get_Value("VAMFG_M_WorkOrder_ID")),
+                                                                Util.GetValueOfInt(po_WrkOdrTransaction.Get_Value("VAMFG_VAM_WorkOrder_ID")),
                                                                 Util.GetValueOfString(po_WrkOdrTransaction.Get_Value("GOM01_BatchNo")),
                                                                 Util.GetValueOfDecimal(po_WrkOdrTransaction.Get_Value("GOM01_ActualLiter")),
                                                                 Get_Trx() };
@@ -4605,9 +4605,9 @@ namespace VAdvantage.Process
                 // after that  we multiple density with  (sum of (qty * cost of each line) / Actual Qty in Kg from Production Execution Header)
                 var sql1 = @"SELECT ROUND( wot.GOM01_ActualDensity * (SUM(wotl.GOM01_ActualQuantity * wotl.CurrentCostPrice) / wot.GOM01_ActualQuantity) , 10) as Currenctcost
                                                          FROM VAMFG_M_WrkOdrTransaction wot
-                                                         INNER JOIN VAMFG_M_WorkOrder wo ON wo.VAMFG_M_WorkOrder_ID = wot.VAMFG_M_WorkOrder_ID
+                                                         INNER JOIN VAMFG_VAM_WorkOrder wo ON wo.VAMFG_VAM_WorkOrder_ID = wot.VAMFG_VAM_WorkOrder_ID
                                                          INNER JOIN VAMFG_M_WrkOdrTrnsctionLine wotl ON wot.VAMFG_M_WrkOdrTransaction_ID = wotl.VAMFG_M_WrkOdrTransaction_ID
-                                                         WHERE wotl.IsActive = 'Y' AND wot.VAMFG_M_WorkOrder_ID = " + (int)po_WrkOdrTransaction.Get_Value("VAMFG_M_WorkOrder_ID") +
+                                                         WHERE wotl.IsActive = 'Y' AND wot.VAMFG_VAM_WorkOrder_ID = " + (int)po_WrkOdrTransaction.Get_Value("VAMFG_VAM_WorkOrder_ID") +
                              @" AND wot.VAMFG_WorkOrderTxnType = 'CI' " +
                               " AND wot.GOM01_BatchNo = '" + Util.GetValueOfString(po_WrkOdrTransaction.Get_Value("GOM01_BatchNo")) + @"' GROUP BY wot.GOM01_ActualQuantity ,  wot.GOM01_ActualDensity";
                 decimal currentcostprice = VAdvantage.Utility.Util.GetValueOfDecimal(DB.ExecuteScalar(sql1, null, Get_TrxName()));
@@ -4656,28 +4656,28 @@ namespace VAdvantage.Process
         /// <summary>
         /// Get - sum of all component whose available on "Component Issue To Work Order" transaction
         /// </summary>
-        /// <param name="VAMFG_M_WorkOrder_ID">production Order</param>
+        /// <param name="VAMFG_VAM_WorkOrder_ID">production Order</param>
         /// <param name="trxName">transaction</param>
         /// <returns>cost of finished good</returns>
-        private Decimal GetCostForProductionFinishedGood(int VAMFG_M_WorkOrder_ID, Trx trxName)
+        private Decimal GetCostForProductionFinishedGood(int VAMFG_VAM_WorkOrder_ID, Trx trxName)
         {
             decimal currentcostprice = 0;
 
             // check any record havoing Zero cost, then return with ZERO Value
             String sql = @"SELECT COUNT(VAMFG_M_WrkOdrTrnsctionLine_ID) as NotFoundCurrentCost
                              FROM VAMFG_M_WrkOdrTransaction wot
-                             INNER JOIN VAMFG_M_WorkOrder wo ON wo.VAMFG_M_WorkOrder_ID = wot.VAMFG_M_WorkOrder_ID
+                             INNER JOIN VAMFG_VAM_WorkOrder wo ON wo.VAMFG_VAM_WorkOrder_ID = wot.VAMFG_VAM_WorkOrder_ID
                              INNER JOIN VAMFG_M_WrkOdrTrnsctionLine wotl ON wot.VAMFG_M_WrkOdrTransaction_ID = wotl.VAMFG_M_WrkOdrTransaction_ID
-                           WHERE wotl.IsActive = 'Y' AND wot.VAMFG_M_WorkOrder_ID = " + VAMFG_M_WorkOrder_ID +
+                           WHERE wotl.IsActive = 'Y' AND wot.VAMFG_VAM_WorkOrder_ID = " + VAMFG_VAM_WorkOrder_ID +
                              @" AND wot.VAMFG_WorkOrderTxnType = 'CI' AND NVL(wotl.currentcostprice , 0) = 0 AND wot.DocStatus IN ('CO'  , 'CL') GROUP BY wot.VAMFG_QtyEntered ";
             if (VAdvantage.Utility.Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, trxName)) == 0)
             {
                 // sum of all component whose available on "Component Issue To Work Order" transaction
                 sql = @"SELECT ROUND((SUM(wotl.VAMFG_QtyEntered * wotl.CurrentCostPrice) / wot.VAMFG_QtyEntered) , 10) as Currenctcost
                              FROM VAMFG_M_WrkOdrTransaction wot
-                             INNER JOIN VAMFG_M_WorkOrder wo ON wo.VAMFG_M_WorkOrder_ID = wot.VAMFG_M_WorkOrder_ID
+                             INNER JOIN VAMFG_VAM_WorkOrder wo ON wo.VAMFG_VAM_WorkOrder_ID = wot.VAMFG_VAM_WorkOrder_ID
                              INNER JOIN VAMFG_M_WrkOdrTrnsctionLine wotl ON wot.VAMFG_M_WrkOdrTransaction_ID = wotl.VAMFG_M_WrkOdrTransaction_ID
-                           WHERE wotl.IsActive = 'Y' AND wot.VAMFG_M_WorkOrder_ID = " + VAMFG_M_WorkOrder_ID +
+                           WHERE wotl.IsActive = 'Y' AND wot.VAMFG_VAM_WorkOrder_ID = " + VAMFG_VAM_WorkOrder_ID +
                                  @" AND wot.VAMFG_WorkOrderTxnType = 'CI' AND wot.DocStatus IN ('CO'  , 'CL') GROUP BY wot.VAMFG_QtyEntered ";
                 currentcostprice = VAdvantage.Utility.Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, trxName));
             }

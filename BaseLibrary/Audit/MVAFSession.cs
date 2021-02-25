@@ -573,16 +573,16 @@ namespace VAdvantage.Model
         /// <param name="VAF_TableView_ID">table id</param>
         /// <param name="Record_ID">record id</param>
         /// <returns></returns>
-        public MActionLog ActionLog(Ctx ctx, int VAF_Session_ID,
+        public MVAFActionLog ActionLog(Ctx ctx, int VAF_Session_ID,
     int VAF_Client_ID, int VAF_Org_ID,
     String actionOrigin, string actionType, String OriginName, string desc, int VAF_TableView_ID, int Record_ID = 0)
         {
 
 
-            MActionLog alog = null;
+            MVAFActionLog alog = null;
             try
             {
-                alog = new MActionLog(GetCtx(), GetVAF_Session_ID(),
+                alog = new MVAFActionLog(GetCtx(), GetVAF_Session_ID(),
                     VAF_Client_ID, VAF_Org_ID, actionOrigin, actionType, OriginName, desc, VAF_TableView_ID, Record_ID);
 
                 alog.Save();

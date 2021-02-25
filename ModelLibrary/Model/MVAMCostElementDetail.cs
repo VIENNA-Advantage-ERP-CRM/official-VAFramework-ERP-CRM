@@ -78,8 +78,8 @@ namespace VAdvantage.Model
                 ced.SetIsSOTrx(cd.IsSOTrx());
                 ced.SetA_Asset_ID(cd.GetA_Asset_ID());
                 ced.SetVAM_ProductionLine_ID(cd.GetVAM_ProductionLine_ID());
-                ced.SetM_WorkOrderResourceTxnLine_ID(cd.GetM_WorkOrderResourceTxnLine_ID());
-                ced.SetM_WorkOrderTransactionLine_ID(cd.GetM_WorkOrderTransactionLine_ID());
+                ced.SetVAM_WorkOrderResourceTxnLine_ID(cd.GetVAM_WorkOrderResourceTxnLine_ID());
+                ced.SetVAM_WorkOrderTransactionLine_ID(cd.GetVAM_WorkOrderTransactionLine_ID());
                 if (Env.IsModuleInstalled("VAMFG_"))
                 {
                     if (ced.Get_ColumnIndex("VAMFG_M_WrkOdrRscTxnLine_ID") > -1)

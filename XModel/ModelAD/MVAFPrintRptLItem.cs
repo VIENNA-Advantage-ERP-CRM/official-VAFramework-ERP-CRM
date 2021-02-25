@@ -282,18 +282,18 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Graph.
-@param AD_PrintGraph_ID Graph included in Reports */
-public void SetAD_PrintGraph_ID (int AD_PrintGraph_ID)
+@param VAF_Print_Rpt_Graph_ID Graph included in Reports */
+public void SetVAF_Print_Rpt_Graph_ID (int VAF_Print_Rpt_Graph_ID)
 {
-if (AD_PrintGraph_ID <= 0) Set_Value ("AD_PrintGraph_ID", null);
+if (VAF_Print_Rpt_Graph_ID <= 0) Set_Value ("VAF_Print_Rpt_Graph_ID", null);
 else
-Set_Value ("AD_PrintGraph_ID", AD_PrintGraph_ID);
+Set_Value ("VAF_Print_Rpt_Graph_ID", VAF_Print_Rpt_Graph_ID);
 }
 /** Get Graph.
 @return Graph included in Reports */
-public int GetAD_PrintGraph_ID() 
+public int GetVAF_Print_Rpt_Graph_ID() 
 {
-Object ii = Get_Value("AD_PrintGraph_ID");
+Object ii = Get_Value("VAF_Print_Rpt_Graph_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

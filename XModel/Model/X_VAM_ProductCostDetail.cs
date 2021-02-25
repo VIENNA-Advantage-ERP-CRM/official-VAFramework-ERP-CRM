@@ -443,34 +443,34 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
         /** Set Work Order Transaction Line.
-@param M_WorkOrderTransactionLine_ID Work Order Transaction Line */
-        public void SetM_WorkOrderTransactionLine_ID(int M_WorkOrderTransactionLine_ID)
+@param VAM_WorkOrderTransactionLine_ID Work Order Transaction Line */
+        public void SetVAM_WorkOrderTransactionLine_ID(int VAM_WorkOrderTransactionLine_ID)
         {
-            if (M_WorkOrderTransactionLine_ID <= 0) Set_Value("M_WorkOrderTransactionLine_ID", null);
+            if (VAM_WorkOrderTransactionLine_ID <= 0) Set_Value("VAM_WorkOrderTransactionLine_ID", null);
             else
-                Set_Value("M_WorkOrderTransactionLine_ID", M_WorkOrderTransactionLine_ID);
+                Set_Value("VAM_WorkOrderTransactionLine_ID", VAM_WorkOrderTransactionLine_ID);
         }
         /** Get Work Order Transaction Line.
         @return Work Order Transaction Line */
-        public int GetM_WorkOrderTransactionLine_ID()
+        public int GetVAM_WorkOrderTransactionLine_ID()
         {
-            Object ii = Get_Value("M_WorkOrderTransactionLine_ID");
+            Object ii = Get_Value("VAM_WorkOrderTransactionLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Work Order Resource Transaction Line.
-@param M_WorkOrderResourceTxnLine_ID Identifies the production resource detail lines in a work order transaction */
-        public void SetM_WorkOrderResourceTxnLine_ID(int M_WorkOrderResourceTxnLine_ID)
+@param VAM_WorkOrderResourceTxnLine_ID Identifies the production resource detail lines in a work order transaction */
+        public void SetVAM_WorkOrderResourceTxnLine_ID(int VAM_WorkOrderResourceTxnLine_ID)
         {
-            if (M_WorkOrderResourceTxnLine_ID <= 0) Set_Value("M_WorkOrderResourceTxnLine_ID", null);
+            if (VAM_WorkOrderResourceTxnLine_ID <= 0) Set_Value("VAM_WorkOrderResourceTxnLine_ID", null);
             else
-                Set_Value("M_WorkOrderResourceTxnLine_ID", M_WorkOrderResourceTxnLine_ID);
+                Set_Value("VAM_WorkOrderResourceTxnLine_ID", VAM_WorkOrderResourceTxnLine_ID);
         }
         /** Get Work Order Resource Transaction Line.
         @return Identifies the production resource detail lines in a work order transaction */
-        public int GetM_WorkOrderResourceTxnLine_ID()
+        public int GetVAM_WorkOrderResourceTxnLine_ID()
         {
-            Object ii = Get_Value("M_WorkOrderResourceTxnLine_ID");
+            Object ii = Get_Value("VAM_WorkOrderResourceTxnLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

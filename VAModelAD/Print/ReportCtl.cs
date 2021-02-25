@@ -93,11 +93,11 @@ namespace VAdvantage.Print
                 return StartDocumentPrint(ctx, ReportEngine_N.INVENTORY, pi.GetRecord_ID(), IsDirectPrint);
             /*****************Manfacturing*******************/
 
-            else if (pi.GetVAF_Job_ID() == VAF_JobWorkOrder_ID)		//	M_WorkOrder415
+            else if (pi.GetVAF_Job_ID() == VAF_JobWorkOrder_ID)		//	VAM_WorkOrder415
             {
                 return StartDocumentPrint(ctx, ReportEngine_N.WORKORDER, pi.GetRecord_ID(), IsDirectPrint);
             }
-            else if (pi.GetVAF_Job_ID() == VAF_JobWorkOrderTrxn_ID)		//	M_WorkOrderTransaction 1481
+            else if (pi.GetVAF_Job_ID() == VAF_JobWorkOrderTrxn_ID)		//	VAM_WorkOrderTransaction 1481
                 return StartDocumentPrint(ctx, ReportEngine_N.WORKORDERTXN, pi.GetRecord_ID(), IsDirectPrint);
             else if (pi.GetVAF_Job_ID() == VAF_JobStandardopration_ID)		//	M_StandardOperation//1504
                 return StartDocumentPrint(ctx, ReportEngine_N.STANDARDOPERATION, pi.GetRecord_ID(), IsDirectPrint);

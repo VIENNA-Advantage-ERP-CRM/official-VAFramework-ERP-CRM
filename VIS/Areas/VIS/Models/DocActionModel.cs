@@ -292,7 +292,7 @@ namespace VIS.Models
             /********************
          *  Work Order New Add by raghu 11 april,2011
          */
-            else if (VAF_TableView_ID == ViennaAdvantage.Model.X_VAMFG_M_WorkOrder.Table_ID)
+            else if (VAF_TableView_ID == ViennaAdvantage.Model.X_VAMFG_VAM_WorkOrder.Table_ID)
             {
                 //	Draft                       ..  DR/IP/IN
                 if (docStatus.Equals(DocActionVariables.STATUS_DRAFTED)

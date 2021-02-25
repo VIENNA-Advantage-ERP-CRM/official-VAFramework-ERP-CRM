@@ -372,18 +372,18 @@ namespace VAdvantage.Model
 
         // Amit 31-7-2015 MRP
         /** Set Work Order.
-          @param VAMFG_M_WorkOrder_ID Work Order */
-        public void SetVAMFG_M_WorkOrder_ID(int VAMFG_M_WorkOrder_ID)
+          @param VAMFG_VAM_WorkOrder_ID Work Order */
+        public void SetVAMFG_VAM_WorkOrder_ID(int VAMFG_VAM_WorkOrder_ID)
         {
-            if (VAMFG_M_WorkOrder_ID <= 0) Set_ValueNoCheck("VAMFG_M_WorkOrder_ID", null);
+            if (VAMFG_VAM_WorkOrder_ID <= 0) Set_ValueNoCheck("VAMFG_VAM_WorkOrder_ID", null);
             else
-                Set_ValueNoCheck("VAMFG_M_WorkOrder_ID", VAMFG_M_WorkOrder_ID);
+                Set_ValueNoCheck("VAMFG_VAM_WorkOrder_ID", VAMFG_VAM_WorkOrder_ID);
         }
         /** Get Work Order .
         @return Work Order */
-        public int GetVAMFG_M_WorkOrder_ID()
+        public int GetVAMFG_VAM_WorkOrder_ID()
         {
-            Object ii = Get_Value("VAMFG_M_WorkOrder_ID");
+            Object ii = Get_Value("VAMFG_VAM_WorkOrder_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

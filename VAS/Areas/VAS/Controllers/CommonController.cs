@@ -2960,7 +2960,7 @@ namespace VIS.Controllers
             MVAFSession sess = MVAFSession.Get(ctx);
 
             //Save Action Log
-            VAdvantage.Common.Common.SaveActionLog(ctx, MActionLog.ACTION_Form, "Archive Viewer", ar.GetVAF_TableView_ID(), ar.GetRecord_ID(), 0, "", "", "Report Downloaded:->" + ar.GetName(), MActionLog.ACTIONTYPE_Download);
+            VAdvantage.Common.Common.SaveActionLog(ctx, MVAFActionLog.ACTION_Form, "Archive Viewer", ar.GetVAF_TableView_ID(), ar.GetRecord_ID(), 0, "", "", "Report Downloaded:->" + ar.GetName(), MVAFActionLog.ACTIONTYPE_Download);
 
             byte[] report = ar.GetBinaryData();
             //if (report != null && (report.Length > 1048576))

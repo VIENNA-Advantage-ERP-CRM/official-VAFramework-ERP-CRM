@@ -1632,9 +1632,9 @@ namespace VAdvantage.Model
                 || GetVAM_InventoryLine_ID() != 0
                 || GetVAM_ProductionLine_ID() != 0
                 || GetVAB_ProjectSupply_ID() != 0
-                || GetM_WorkOrderTransactionLine_ID() != 0
+                || GetVAM_WorkOrderTransactionLine_ID() != 0
                 || GetVAMFG_M_WrkOdrTrnsctionLine_ID() != 0
-                || GetM_WorkOrderResourceTxnLine_ID() != 0
+                || GetVAM_WorkOrderResourceTxnLine_ID() != 0
                 || Util.GetValueOfInt(Get_Value("VAFAM_AssetDisposal_ID")) != 0)
             {
                 bool addition = Env.Signum(qty) > 0;
@@ -5348,8 +5348,8 @@ namespace VAdvantage.Model
                 || GetVAM_InventoryLine_ID() != 0
                 || GetVAM_ProductionLine_ID() != 0
                 || GetVAB_ProjectSupply_ID() != 0
-                || GetM_WorkOrderTransactionLine_ID() != 0
-                || GetM_WorkOrderResourceTxnLine_ID() != 0)
+                || GetVAM_WorkOrderTransactionLine_ID() != 0
+                || GetVAM_WorkOrderResourceTxnLine_ID() != 0)
             {
                 bool addition = Env.Signum(qty) > 0;
                 //
@@ -5742,8 +5742,8 @@ namespace VAdvantage.Model
                 || GetVAM_InventoryLine_ID() != 0
                 || GetVAM_ProductionLine_ID() != 0
                 || GetVAB_ProjectSupply_ID() != 0
-                || GetM_WorkOrderTransactionLine_ID() != 0
-                || GetM_WorkOrderResourceTxnLine_ID() != 0)
+                || GetVAM_WorkOrderTransactionLine_ID() != 0
+                || GetVAM_WorkOrderResourceTxnLine_ID() != 0)
             {
                 bool addition = Env.Signum(qty) > 0;
                 //
@@ -5894,13 +5894,13 @@ namespace VAdvantage.Model
        */
         public static Boolean CreateWorkOrderResourceTransaction(MVABAccountBook as1, int VAF_Org_ID,
             int VAM_Product_ID, int VAM_PFeature_SetInstance_ID,
-            int M_WorkOrderResourceTransactionLine_ID, int VAM_ProductCostElement_ID,
+            int VAM_WorkOrderResourceTransactionLine_ID, int VAM_ProductCostElement_ID,
             Decimal Amt, Decimal Qty, String Description, Boolean IsSOTrx, Trx trx, bool RectifyPostedRecords)
         {
             //	Delete Unprocessed zero Differences
             String sql = "DELETE FROM VAM_ProductCostDetail "
                 + "WHERE Processed='N' AND COALESCE(DeltaAmt,0)=0 AND COALESCE(DeltaQty,0)=0"
-                + " AND M_WorkOrderResourceTxnLine_ID= " + M_WorkOrderResourceTransactionLine_ID
+                + " AND VAM_WorkOrderResourceTxnLine_ID= " + VAM_WorkOrderResourceTransactionLine_ID
                 + " AND VAM_PFeature_SetInstance_ID=" + VAM_PFeature_SetInstance_ID
                 + " AND VAB_AccountBook_ID = " + as1.GetVAB_AccountBook_ID();
 
@@ -5908,14 +5908,14 @@ namespace VAdvantage.Model
             int no = DB.ExecuteQuery(sql, null, trx);
             if (no != 0)
                 _log.Config("Deleted #" + no);
-            MVAMProductCostDetail cd = Get(as1.GetCtx(), "M_WorkOrderResourceTxnLine_ID=@param1 AND VAM_PFeature_SetInstance_ID=@param2",
-                    M_WorkOrderResourceTransactionLine_ID, VAM_PFeature_SetInstance_ID, trx);
+            MVAMProductCostDetail cd = Get(as1.GetCtx(), "VAM_WorkOrderResourceTxnLine_ID=@param1 AND VAM_PFeature_SetInstance_ID=@param2",
+                    VAM_WorkOrderResourceTransactionLine_ID, VAM_PFeature_SetInstance_ID, trx);
             //
             if (cd == null)		//	createNew
             {
                 cd = new MVAMProductCostDetail(as1, VAF_Org_ID,
                     VAM_Product_ID, VAM_PFeature_SetInstance_ID, VAM_ProductCostElement_ID, Amt, Qty, Description, trx);
-                cd.SetM_WorkOrderResourceTxnLine_ID(M_WorkOrderResourceTransactionLine_ID);
+                cd.SetVAM_WorkOrderResourceTxnLine_ID(VAM_WorkOrderResourceTransactionLine_ID);
                 cd.SetIsSOTrx(IsSOTrx);
             }
             else
@@ -5930,7 +5930,7 @@ namespace VAdvantage.Model
                     }
                     // CostSetByProcess(cd, as1, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, VAM_ProductCostElement_ID, Amt, Qty, Description, trx, RectifyPostedRecords);
 
-                    cd.SetM_WorkOrderResourceTxnLine_ID(M_WorkOrderResourceTransactionLine_ID);
+                    cd.SetVAM_WorkOrderResourceTxnLine_ID(VAM_WorkOrderResourceTransactionLine_ID);
                     cd.SetIsSOTrx(IsSOTrx);
                     /*****************************************/
                     cd.SetVAB_AccountBook_ID(as1.GetVAB_AccountBook_ID());
@@ -5969,7 +5969,7 @@ namespace VAdvantage.Model
         /// <param name="VAF_Org_ID"></param>
         /// <param name="VAM_Product_ID"></param>
         /// <param name="VAM_PFeature_SetInstance_ID"></param>
-        /// <param name="M_WorkOrderTransactionLine_ID"></param>
+        /// <param name="VAM_WorkOrderTransactionLine_ID"></param>
         /// <param name="VAM_ProductCostElement_ID">optional cost element for Freight</param>
         /// <param name="Amt">amt</param>
         /// <param name="Qty">qty</param>
@@ -5979,13 +5979,13 @@ namespace VAdvantage.Model
         /// <returns>true if no error</returns>
         public static Boolean CreateWorkOrderTransaction(MVABAccountBook as1, int VAF_Org_ID,
             int VAM_Product_ID, int VAM_PFeature_SetInstance_ID,
-            int M_WorkOrderTransactionLine_ID, int VAM_ProductCostElement_ID,
+            int VAM_WorkOrderTransactionLine_ID, int VAM_ProductCostElement_ID,
             Decimal Amt, Decimal Qty, String Description, Boolean IsSOTrx, Trx trx, bool RectifyPostedRecords)
         {
             //	Delete Unprocessed zero Differences
             String sql = "DELETE FROM VAM_ProductCostDetail "
                 + "WHERE Processed='N' AND COALESCE(DeltaAmt,0)=0 AND COALESCE(DeltaQty,0)=0"
-                + " AND M_WorkOrderTransactionLine_ID= " + M_WorkOrderTransactionLine_ID
+                + " AND VAM_WorkOrderTransactionLine_ID= " + VAM_WorkOrderTransactionLine_ID
                 + " AND VAM_PFeature_SetInstance_ID=" + VAM_PFeature_SetInstance_ID
                 + " AND VAB_AccountBook_ID = " + as1.GetVAB_AccountBook_ID()
                 + " AND VAM_ProductCostElement_ID = " + VAM_ProductCostElement_ID;
@@ -5994,15 +5994,15 @@ namespace VAdvantage.Model
             if (no != 0)
                 _log.Config("Deleted #" + no);
 
-            MVAMProductCostDetail cd = Get(as1.GetCtx(), "M_WorkOrderTransactionLine_ID=@param1 AND VAM_PFeature_SetInstance_ID=@param2",
-                    M_WorkOrderTransactionLine_ID, VAM_PFeature_SetInstance_ID, trx);
+            MVAMProductCostDetail cd = Get(as1.GetCtx(), "VAM_WorkOrderTransactionLine_ID=@param1 AND VAM_PFeature_SetInstance_ID=@param2",
+                    VAM_WorkOrderTransactionLine_ID, VAM_PFeature_SetInstance_ID, trx);
             //
             if (cd == null)		//	createNew
             {
                 cd = new MVAMProductCostDetail(as1, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
                     VAM_ProductCostElement_ID, Amt, Qty, Description, trx);
 
-                cd.SetM_WorkOrderTransactionLine_ID(M_WorkOrderTransactionLine_ID);
+                cd.SetVAM_WorkOrderTransactionLine_ID(VAM_WorkOrderTransactionLine_ID);
                 cd.SetIsSOTrx(IsSOTrx);
             }
             else
@@ -6017,7 +6017,7 @@ namespace VAdvantage.Model
                     }
                     //CostSetByProcess(cd, as1, VAF_Org_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, VAM_ProductCostElement_ID, Amt, Qty, Description, trx, RectifyPostedRecords);
 
-                    cd.SetM_WorkOrderTransactionLine_ID(M_WorkOrderTransactionLine_ID);
+                    cd.SetVAM_WorkOrderTransactionLine_ID(VAM_WorkOrderTransactionLine_ID);
                     cd.SetIsSOTrx(IsSOTrx);
                     /*****************************************/
                     cd.SetVAB_AccountBook_ID(as1.GetVAB_AccountBook_ID());

@@ -6,7 +6,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MActionLog : X_AD_ActionLog
+    public class MVAFActionLog : X_VAF_ActionLog
     {
         /// <summary>
         /// Standard Constructor
@@ -14,7 +14,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="AD_ActionLog_ID">id</param>
         /// <param name="trxName">trx</param>
-        public MActionLog(Ctx ctx, int AD_ActionLog_ID, Trx trxName)
+        public MVAFActionLog(Ctx ctx, int AD_ActionLog_ID, Trx trxName)
             : base(ctx, AD_ActionLog_ID, trxName)
         {
             //super(ctx, VAF_DBQueryLog_ID, trxName);
@@ -38,7 +38,7 @@ namespace VAdvantage.Model
         /// <param name="desc">additional info</param>
         /// <param name="VAF_TableView_ID">table id</param>
         /// <param name="Record_ID">record id</param>
-        public MActionLog(Ctx ctx, int VAF_Session_ID,
+        public MVAFActionLog(Ctx ctx, int VAF_Session_ID,
     int VAF_Client_ID, int VAF_Org_ID,
     String action, string actionType, String actionOrigin, string desc, int VAF_TableView_ID, int Record_ID)
         : this(ctx, 0, null)

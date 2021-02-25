@@ -637,8 +637,8 @@ namespace VAdvantage.Print
 		"VAB_PaymentOptionCheck_vt", "VAB_PaymentOptionCheck_vt",  
 		"VAB_DunningExeEntry_v", "VAM_InventoryTransfer", "VAM_Inventory" ,
         /******************Manufacturing**************/
-        "M_WorkOrder_Header_v", "M_TaskList",
-		"M_WorkOrderTxn_Header_V", "M_StandardOperation_Header_v", "M_Routing_Header_v"
+        "VAVAM_WorkOrder_Header_v", "VAM_TaskList",
+		"VAVAM_WorkOrderTxn_Header_V", "VAM_StandardOperation_Header_v", "VAM_Routing_Header_v"
         /******************Manufacturing**************/
         };
         private static String[] DOC_BASETABLES = new String[] {
@@ -647,8 +647,8 @@ namespace VAdvantage.Print
 		"VAB_PaymentOptionCheck", "VAB_PaymentOptionCheck", 
 		"VAB_DunningExeEntry", "VAM_InventoryTransfer", "VAM_Inventory" ,
         /******************Manufacturing**************/
-         "M_WorkOrder", "M_TaskList",
-		"M_WorkOrderTransaction", "M_StandardOperation", "M_Routing"
+         "VAVAM_WorkOrder", "VAM_TaskList",
+		"VAVAM_WorkOrderTransaction", "VAM_StandardOperation", "VAM_Routing"
         /******************Manufacturing**************/
         
         };
@@ -658,8 +658,8 @@ namespace VAdvantage.Print
 		"VAB_PaymentOptionCheck_ID", "VAB_PaymentOptionCheck_ID", 
 		"VAB_DunningExeEntry_ID", "VAM_InventoryTransfer_ID",  "VAM_Inventory_ID" ,
          /******************Manufacturing**************/
-          "M_WorkOrder_ID", "M_TaskList_ID",
-		"M_WorkOrderTransaction_ID", "M_StandardOperation_ID", "M_Routing_ID"
+  //        "VAVAM_WorkOrder_ID", "VAM_TaskList_ID",
+		//"VAVAM_WorkOrderTransaction_ID", "VAM_StandardOperation_ID", "VAM_Routing_ID"
           /******************Manufacturing**************/
         
         };
@@ -669,8 +669,8 @@ namespace VAdvantage.Print
 		X_VAB_PaymentOptionCheck.Table_ID, X_VAB_PaymentOptionCheck.Table_ID, 
 		X_VAB_DunningExeEntry.Table_ID, X_VAM_InventoryTransfer.Table_ID, X_VAM_Inventory.Table_ID ,
         /******************Manufacturing**************/
-         X_M_WorkOrder.Table_ID, X_M_TaskList.Table_ID,
-		X_M_WorkOrderTransaction.Table_ID, X_M_StandardOperation.Table_ID, X_M_Routing.Table_ID
+  //       X_VAVAM_WorkOrder.Table_ID, X_VAM_TaskList.Table_ID,
+		//X_VAVAM_WorkOrderTransaction.Table_ID, X_VAM_StandardOperation.Table_ID, X_VAM_Routing.Table_ID
         /******************Manufacturing**************/
         
         };
@@ -1029,42 +1029,42 @@ namespace VAdvantage.Print
                 sql = "SELECT COALESCE(dt.VAF_Print_Rpt_Layout_ID,pf.WorkOrder_PrintFormat_ID), "
                     + " c.IsMultiLingualDocument, COALESCE(dt.DocumentCopies,0), "
                     + " dt.VAF_Print_Rpt_Layout_ID "
-                    + "FROM M_WorkOrder d"
+                    + "FROM VAVAM_WorkOrder d"
                     + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
                     + " INNER JOIN VAF_Print_Rpt_Page pf ON (d.VAF_Client_ID=pf.VAF_Client_ID OR pf.VAF_Client_ID=0)"
                     + " LEFT OUTER JOIN VAB_DocTypes dt ON (d.VAB_DocTypes_ID=dt.VAB_DocTypes_ID) "
-                    + "WHERE d.M_WorkOrder_ID=@recordid"                 //  info from PrintForm
+                    + "WHERE d.VAVAM_WorkOrder_ID=@recordid"                 //  info from PrintForm
                     + " AND pf.VAF_Org_ID IN (0,d.VAF_Org_ID) "
                     + "ORDER BY pf.VAF_Client_ID DESC,  pf.VAF_Org_ID DESC";
             else if (type == WORKORDERTXN)
                 sql = "SELECT COALESCE(dt.VAF_Print_Rpt_Layout_ID,pf.WorkOrderTxn_PrintFormat_ID), "
                     + " c.IsMultiLingualDocument, COALESCE(dt.DocumentCopies,0), "
                     + " dt.VAF_Print_Rpt_Layout_ID "
-                    + "FROM M_WorkOrderTransaction d"
+                    + "FROM VAVAM_WorkOrderTransaction d"
                     + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
                     + " INNER JOIN VAF_Print_Rpt_Page pf ON (d.VAF_Client_ID=pf.VAF_Client_ID OR pf.VAF_Client_ID=0)"
                     + " LEFT OUTER JOIN VAB_DocTypes dt ON (d.VAB_DocTypes_ID=dt.VAB_DocTypes_ID) "
-                    + "WHERE d.M_WorkOrderTransaction_ID=@recordid"                 //  info from PrintForm
+                    + "WHERE d.VAVAM_WorkOrderTransaction_ID=@recordid"                 //  info from PrintForm
                     + " AND pf.VAF_Org_ID IN (0,d.VAF_Org_ID) "
                     + "ORDER BY pf.VAF_Client_ID DESC,  pf.VAF_Org_ID DESC";
             else if (type == STANDARDOPERATION)
                 sql = "SELECT pf.StdOperation_PrintFormat_ID, "
                     + " c.IsMultiLingualDocument"
-                    + " FROM M_StandardOperation d"
+                    + " FROM VAM_StandardOperation d"
                     + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
                     + " INNER JOIN VAF_Print_Rpt_Page pf ON (d.VAF_Client_ID=pf.VAF_Client_ID OR pf.VAF_Client_ID=0)"
                     + " INNER JOIN M_Operation op ON (d.M_Operation_ID=op.M_Operation_ID) "
-                    + " WHERE d.M_StandardOperation_ID=@recordid" // info from PrintForm
+                    + " WHERE d.VAM_StandardOperation_ID=@recordid" // info from PrintForm
                     + " AND pf.VAF_Org_ID IN (0,d.VAF_Org_ID) "
                     + "ORDER BY pf.VAF_Client_ID DESC, pf.VAF_Org_ID DESC";
             else if (type == ROUTING)
                 sql = "SELECT pf.Routing_PrintFormat_ID, "
                     + " c.IsMultiLingualDocument"
-                    + " FROM M_Routing d"
+                    + " FROM VAM_Routing d"
                     + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
                     + " INNER JOIN VAF_Print_Rpt_Page pf ON (d.VAF_Client_ID=pf.VAF_Client_ID OR pf.VAF_Client_ID=0)"
-                    + " LEFT OUTER JOIN M_RoutingOperation ro ON (d.M_Routing_ID=ro.M_Routing_ID) "
-                    + " WHERE d.M_Routing_ID=@recordid" // info from PrintForm
+                    + " LEFT OUTER JOIN VAM_RoutingOperation ro ON (d.VAM_Routing_ID=ro.VAM_Routing_ID) "
+                    + " WHERE d.VAM_Routing_ID=@recordid" // info from PrintForm
                     + " AND pf.VAF_Org_ID IN (0,d.VAF_Org_ID) "
                     + "ORDER BY pf.VAF_Client_ID DESC, pf.VAF_Org_ID DESC";
             else if (type == TASKLIST)
@@ -1073,11 +1073,11 @@ namespace VAdvantage.Print
                     + " pf.PCK_OrdTList_PrintFormat_ID, M.PickMethod, "					//5..6
                     + " c.IsMultiLingualDocument, COALESCE(dt.DocumentCopies,0), "		//7..8
                     + " dt.VAF_Print_Rpt_Layout_ID"											//9
-                    + " FROM M_TaskList M "
+                    + " FROM VAM_TaskList M "
                     + " INNER JOIN VAF_Client c ON (M.VAF_Client_ID=c.VAF_Client_ID)"
                     + " INNER JOIN VAF_Print_Rpt_Page pf ON (M.VAF_Client_ID=pf.VAF_Client_ID OR pf.VAF_Client_ID=0)"
                     + " LEFT OUTER JOIN VAB_DocTypes dt ON (M.VAB_DocTypes_ID=dt.VAB_DocTypes_ID) "
-                    + " WHERE M.M_TaskList_ID=@recordid"
+                    + " WHERE M.VAM_TaskList_ID=@recordid"
                     + " AND pf.VAF_Org_ID IN (0,M.VAF_Org_ID) "
                     + " ORDER BY pf.VAF_Client_ID DESC,  pf.VAF_Org_ID DESC";
             /****************Manfacturing***********************/

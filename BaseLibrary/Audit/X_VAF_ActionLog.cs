@@ -11,32 +11,32 @@ namespace VAdvantage.Model
     using System.Data;/** Generated Model for AD_ActionLog
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_ActionLog : PO
+    public class X_VAF_ActionLog : PO
     {
-        public X_AD_ActionLog(Context ctx, int AD_ActionLog_ID, Trx trxName) : base(ctx, AD_ActionLog_ID, trxName)
+        public X_VAF_ActionLog(Context ctx, int AD_ActionLog_ID, Trx trxName) : base(ctx, AD_ActionLog_ID, trxName)
         {/** if (AD_ActionLog_ID == 0){SetAD_ActionLog_ID (0);} */
         }
-        public X_AD_ActionLog(Ctx ctx, int AD_ActionLog_ID, Trx trxName) : base(ctx, AD_ActionLog_ID, trxName)
+        public X_VAF_ActionLog(Ctx ctx, int AD_ActionLog_ID, Trx trxName) : base(ctx, AD_ActionLog_ID, trxName)
         {/** if (AD_ActionLog_ID == 0){SetAD_ActionLog_ID (0);} */
         }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_AD_ActionLog(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAF_ActionLog(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_AD_ActionLog(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAF_ActionLog(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_AD_ActionLog(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
+        public X_VAF_ActionLog(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-        static X_AD_ActionLog() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
+        static X_VAF_ActionLog() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27883142468540L;/** Last Updated Timestamp 9/25/2020 8:59:12 AM */
         public static long updatedMS = 1601017151751L;/** VAF_TableView_ID=1001065 */
         public static int Table_ID; // =1001065;
