@@ -705,7 +705,7 @@
 
         var btnRefresh = $("<button id='" + "btnRefresh_" + windowNo + "'style='margin-top: 0;' class='VIS_Pref_btn-2'><i class='vis vis-refresh'></i></button>");
         var btnPrint = $("<button class='VIS_Pref_btn-2' id='" + "btnPrint_" + windowNo + "' style='margin-top: 0px; margin-left: 10px;'><i class='vis vis-print'></button>");
-        var btnRePost = $("<button class='VIS_Pref_btn-2' id='" + "btnRePost_" + windowNo + "' style='margin-top: 0px;'><img src='" + src + "'/></button>");
+        var btnRePost = $("<button class='VIS_Pref_btn-2' id='" + "btnRePost_" + windowNo + "' style='margin-top: 10px;'><img src='" + src + "'/></button>");
 
 
         var btnSelctDoc = $("<button class='input-group-text' Name='btnSelctDoc' id='" + "btnSelctDoc_" + windowNo + "'><i class='vis vis-find'></i></button>");
@@ -782,6 +782,7 @@
         var chkforcePost = $("<input id='" + "chkforcePost_" + windowNo + "' type='checkbox' class='VIS_Pref_automatic' style='display: inline-block;margin-left: 20px; margin-top: 0;'>" +
             "<span><label id='" + "lblforcePost_" + windowNo + "' class='VIS_Pref_Label_Font'>chkforcePost</label></span>");
 
+        var DrAndCr = $("<span style='margin-left: 20px;'><label id='" + "lblDrAndCR_" + windowNo + "' class='VIS_Pref_Label_Font'></label></span>");
 
         var chkDisDocinfo = $("<input id='" + "chkDisDocinfo_" + windowNo + "' type='checkbox' class='VIS_Pref_automatic'>" +
             "<span><label id='" + "lblDisDocinfo_" + windowNo + "' class='VIS_Pref_Label_Font'>chkDisDocinfo</label></span>");
@@ -866,9 +867,13 @@
             rightSideDiv.show();
             leftSideDiv.show();
             ulPaging.css("display", "none");
+            divPaging.css("display", "none");
             resultDiv.css("display", "none");
             btnRePost.hide();
             chkforcePost.hide();
+            btnRefresh.show();
+            lblstatusLine.getControl().show();
+            DrAndCr.hide();
             lblAccSchemaFilter.getControl().hide();
             cmbAccSchemaFilter.getControl().hide();
 
@@ -883,7 +888,12 @@
             rightSideDiv.hide();
             leftSideDiv.hide();
             ulPaging.css("display", "block");
-            bottumDiv.append(ulPaging);
+            divPaging.css("display", "block");
+            DrAndCr.show();
+            btnRefresh.hide();
+            lblstatusLine.getControl().hide();
+            divPaging.append(ulPaging);
+            bottumDiv.append(divPaging);
             resultDiv.css("display", "block");
             if (notShowPosted) {
                 btnRePost.hide();
@@ -900,6 +910,7 @@
         //bottumDiv.append(ulPaging);
         //Paging UI
         function createPageSettings() {
+            divPaging = $('<div class="vis-info-pagingwrp" style="text-align: right; flex: 1;">');
             ulPaging = $('<ul class="vis-statusbar-ul">');
 
             liFirstPage = $('<li style="opacity: 1;"><div><i class="vis vis-shiftleft" title="' + VIS.Msg.getMsg("FirstPage") + '" style="opacity: 0.6;"></i></div></li>');
@@ -922,26 +933,30 @@
         function pageEvents() {
             liFirstPage.on("click", function () {
                 if ($(this).css("opacity") == "1") {
-                    a
+                    setBusy(true);
                     _data.Query(AD_Client_ID, callbackGetDataModel, resetPageCtrls, 1);
                 }
             });
             liPrevPage.on("click", function () {
                 if ($(this).css("opacity") == "1") {
+                    setBusy(true);
                     _data.Query(AD_Client_ID, callbackGetDataModel, resetPageCtrls, parseInt(cmbPage.val()) - 1);
                 }
             });
             liNextPage.on("click", function () {
                 if ($(this).css("opacity") == "1") {
+                    setBusy(true);
                     _data.Query(AD_Client_ID, callbackGetDataModel, resetPageCtrls, parseInt(cmbPage.val()) + 1);
                 }
             });
             liLastPage.on("click", function () {
                 if ($(this).css("opacity") == "1") {
+                    setBusy(true);
                     _data.Query(AD_Client_ID, callbackGetDataModel, resetPageCtrls, parseInt(cmbPage.find("Option:last").val()));
                 }
             });
             cmbPage.on("change", function () {
+                setBusy(true);
                 _data.Query(AD_Client_ID, callbackGetDataModel, resetPageCtrls, cmbPage.val());
             });
 
@@ -963,6 +978,7 @@
             var count = 1;
             for (var i = 0; i < dataObj.Data.length; i++) {
                 var row = dataObj.Data[i];
+                DrAndCr.text(dataObj.DebitandCredit);
                 var line = {};
                 for (var j = 0; j < dataObj.Columns.length; j++) {
                     if ($self.arrListColumns.length != dataObj.Columns.length) {
@@ -1013,10 +1029,10 @@
 
             $self.dGrid = $(resultDiv).w2grid({
                 name: "gridAccViewer" + windowNo,
-                recordHeight: 40,
-                show: {
-                    lineNumbers: true  // indicates if line numbers column is visible
-                },
+                recordHeight: 37,
+                //show: {
+                //    lineNumbers: true  // indicates if line numbers column is visible
+                //},
                 columns: $self.arrListColumns,
                 records: data
             });
@@ -1598,14 +1614,14 @@
 
             //Bottum Div
 
-            bottumDiv = $("<div class='vis-acctviewerbottdiv' 'style='margin-top: 1%;'>");
+            bottumDiv = $("<div class='vis-acctviewerbottdiv'>");
             //createPageSettings();
             //bottumDiv.append(ulPaging);
             //bottumDiv.css("height", 50);
             /** dont show repost butoon if form is opened from menu. **/
             if (!$self.getIsMenu()) {
                 bottumDiv.append(btnRePost);
-                bottumDiv.append(chkforcePost);
+                bottumDiv.append(chkforcePost).append(DrAndCr);
             }
 
             bottumDiv.append(lblstatusLine.getControl().addClass("VIS_Pref_Label_Font"));

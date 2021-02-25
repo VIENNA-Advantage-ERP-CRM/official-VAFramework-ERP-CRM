@@ -32,10 +32,10 @@ namespace VAdvantage.Model
 
         //The Rows                        
         public List<List<Object>> rows = new List<List<Object>>();
-        
+
         //The temporary Rows              
         private List<List<Object>> _rows = new List<List<Object>>();
-        
+
         //The Row MetaData   
         public List<Object> rowsMeta = new List<Object>();
         // The Column Definitions         
@@ -80,6 +80,7 @@ namespace VAdvantage.Model
             cols.Clear();
         }
 
+
         /// <summary>
         /// Query
         /// </summary>
@@ -87,6 +88,17 @@ namespace VAdvantage.Model
         /// <param name="whereClause">the SQL where clause (w/o the WHERE)</param>
         /// <param name="orderClause"></param>
         public void Query(Ctx ctx, String whereClause, String orderClause)
+        {
+            Query(ctx, whereClause, orderClause, 0);
+        }
+        /// <summary>
+        /// Query
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="whereClause">the SQL where clause (w/o the WHERE)</param>
+        /// <param name="orderClause"></param>
+        /// <param name="pageNo"></param>
+        public void Query(Ctx ctx, String whereClause, String orderClause, int pageNo = 0)
         {
             RColumn rc = null;
             //  Create SQL
@@ -123,7 +135,7 @@ namespace VAdvantage.Model
                 //Statement stmt = DataBase.createStatement();
                 //ResultSet rs = stmt.executeQuery(finalSQL);
                 //idr = DataBase.DB.ExecuteReader(finalSQL, null, null);
-                DataSet ds = DataBase.DB.ExecuteDataset(finalSQL, null, null);
+                DataSet ds = DB.GetDatabase().ExecuteDatasetPaging(finalSQL, pageNo, 50, 0);
                 #region  Commented
                 //while (idr.Read())
                 //{
@@ -261,7 +273,7 @@ namespace VAdvantage.Model
         private void Process()
         {
             log.Fine("Start Rows=" + _rows.Count);
-             
+
             //  Row level Funcions
             //  would come here
 
@@ -381,7 +393,7 @@ namespace VAdvantage.Model
 
                                     continue;
                                 }
-                               
+
                             }
                             else
                             {
@@ -770,7 +782,7 @@ namespace VAdvantage.Model
     //            funcCols[index] = Utility.Util.GetValueOfInt(((int)key));//.intValue();
     //            //funcFuns[index] = functions[key].ToString();
     //            funcFuns[index] =Convert.ToString( this.functions[(int)key]);
-              
+
     //            log.Fine("Function " + funcFuns[index] + " col=" + funcCols[index]);
     //            index++;
     //        }
@@ -983,7 +995,7 @@ namespace VAdvantage.Model
     //        {
     //            throw new ArgumentException("Row to invalid");
     //        }
-           
+
     //        //  Move Data
     //        //ArrayList<Object> temp = rows.get(from);
     //        List<Object> temp = (List<Object>)rows[from];

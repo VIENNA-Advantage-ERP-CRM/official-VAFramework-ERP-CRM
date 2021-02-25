@@ -745,7 +745,7 @@ namespace VIS.Controllers
                     item.M_Product_ID = Util.GetValueOfString(data.Tables[0].Rows[i]["product"]);
                     item.M_AttributeSetInstance_ID = Util.GetValueOfInt(data.Tables[0].Rows[i]["m_attributesetinstance_id"]);
                     //Product search key added
-                    item.M_Product_SearchKey= Util.GetValueOfString(data.Tables[0].Rows[i]["productsearchkey"]); 
+                    item.M_Product_SearchKey = Util.GetValueOfString(data.Tables[0].Rows[i]["productsearchkey"]);
 
                     //
                     if (data.Tables[0].Columns.Contains("C_PaymentTerm_ID"))
@@ -900,7 +900,7 @@ namespace VIS.Controllers
                         item.C_Order_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["c_orderline_id"]);
                         item.M_InOut_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["m_inoutline_id"]);
                         item.C_Invoice_ID_K = 0;
-                    }                 
+                    }
 
                     item.QuantityPending = item.QuantityEntered;
                     item.C_UOM_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["c_uom_id"]);
@@ -1542,7 +1542,7 @@ namespace VIS.Controllers
                                 " , IsDefault, AD_Theme_ID  FROM AD_Theme WHERE IsActive='Y'";
             DataSet ds = DB.ExecuteDataset(qry);
 
-            if(ds != null && ds.Tables.Count >0)
+            if (ds != null && ds.Tables.Count > 0)
             {
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
@@ -1555,7 +1555,7 @@ namespace VIS.Controllers
                     obj.IsDefault = Util.GetValueOfString(dr["IsDefault"]);
                     retObj.Add(obj);
                 }
-                
+
             }
             return retObj;
         }
@@ -2730,10 +2730,36 @@ namespace VIS.Controllers
         /// <param name="displayDocInfo">display Doc Info</param>
         /// <param name="displaySrcAmt">Display Source amount</param>
         /// <param name="displayqty">displacy Quantity</param>
+        /// <returns>List</returns>
+        public AccountViewClass GetDataQuery(Ctx ctx, int AD_Client_ID, string whereClause, string orderClause, bool gr1, bool gr2, bool gr3, bool gr4,
+            String sort1, String sort2, String sort3, String sort4, bool displayDocInfo, bool displaySrcAmt, bool displayqty)
+        {
+            return GetDataQuery(ctx, AD_Client_ID, whereClause, orderClause, gr1, gr2, gr3, gr4,
+             sort1, sort2, sort3, sort4, displayDocInfo, displaySrcAmt, displayqty, 0);
+        }
+
+        /// <summary>
+        /// Get Account Viewer Data
+        /// </summary>
+        /// <param name="ctx">Context</param>
+        /// <param name="AD_Client_ID">AD_Client_ID</param>
+        /// <param name="whereClause">Where Clause</param>
+        /// <param name="orderClause">Order Clause</param>
+        /// <param name="gr1">group 1</param>
+        /// <param name="gr2">group 2</param>
+        /// <param name="gr3">group 3</param>
+        /// <param name="gr4">group 4</param>
+        /// <param name="sort1">sort 1</param>
+        /// <param name="sort2">sort 2</param>
+        /// <param name="sort3">sort 3</param>
+        /// <param name="sort4">sort 4</param>
+        /// <param name="displayDocInfo">display Doc Info</param>
+        /// <param name="displaySrcAmt">Display Source amount</param>
+        /// <param name="displayqty">displacy Quantity</param>
         /// <param name="pageNo">Page No</param>
         /// <returns>List</returns>
         public AccountViewClass GetDataQuery(Ctx ctx, int AD_Client_ID, string whereClause, string orderClause, bool gr1, bool gr2, bool gr3, bool gr4,
-            String sort1, String sort2, String sort3, String sort4, bool displayDocInfo, bool displaySrcAmt, bool displayqty, int pageNo)
+        String sort1, String sort2, String sort3, String sort4, bool displayDocInfo, bool displaySrcAmt, bool displayqty, int pageNo)
         {
             group1 = gr1; group2 = gr2; group3 = gr3; group4 = gr4;
             sortBy1 = sort1; sortBy2 = sort2; sortBy3 = sort3; sortBy4 = sort4;
@@ -2768,7 +2794,7 @@ namespace VIS.Controllers
             rm.SetFunction("AmtAcctDr", RModel.FUNCTION_SUM);
             rm.SetFunction("AmtAcctCr", RModel.FUNCTION_SUM);
 
-            rm.Query(ctx, whereClause.ToString(), orderClause.ToString());
+            rm.Query(ctx, whereClause.ToString(), orderClause.ToString(), pageNo);
 
             //return rm;
 
@@ -2784,12 +2810,34 @@ namespace VIS.Controllers
             obj.Data = rm._data.rows;
             if (obj.Data != null)
             {
-                int totalRec = rm._data.rows.Count;
-                int pageSize = 50;
-                PageSetting pSetting = new PageSetting();
-                pSetting.CurrentPage = pageNo;
-                pSetting.TotalPage = (totalRec % pageSize) == 0 ? (totalRec / pageSize) : ((totalRec / pageSize) + 1);
-                obj.pSetting = pSetting;
+                StringBuilder sql = new StringBuilder(@"SELECT COUNT(Fact_Acct_ID) AS TotalRecord, 
+                                    NVL(SUM(AMTACCTCR), 0) AS AMTACCTCR  , NVL(SUM(AMTACCTDR), 0) AS AMTACCTDR ");
+                sql.Append(" FROM ").Append(rm.GetTableName()).Append(" ").Append(RModel.TABLE_ALIAS);
+                if (whereClause != null && whereClause.Length > 0)
+                {
+                    sql.Append(" WHERE ").Append(whereClause);
+                }
+                String finalSQL = MRole.GetDefault(ctx, false).AddAccessSQL(
+                    sql.ToString(), RModel.TABLE_ALIAS, MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+                if (orderClause != null && orderClause.Length > 0)
+                {
+                    finalSQL += " ORDER BY " + orderClause;
+                }
+
+                DataSet dsFactAcct = DB.ExecuteDataset(sql.ToString());
+                if (dsFactAcct != null && dsFactAcct.Tables.Count > 0 && dsFactAcct.Tables[0].Rows.Count > 0)
+                {
+                    int totalRec = Util.GetValueOfInt(dsFactAcct.Tables[0].Rows[0]["TotalRecord"]);
+                    decimal amtAcctCr = Util.GetValueOfDecimal(dsFactAcct.Tables[0].Rows[0]["AMTACCTCR"]);
+                    decimal amtAcctDr = Util.GetValueOfDecimal(dsFactAcct.Tables[0].Rows[0]["AMTACCTDR"]);
+                    obj.DebitandCredit = Msg.GetMsg(ctx, "TotalDRandCR") + DisplayType.GetNumberFormat(DisplayType.Amount).GetFormatAmount(amtAcctDr, ctx.GetContext("#ClientLanguage"))
+                        + " / " + DisplayType.GetNumberFormat(DisplayType.Amount).GetFormatAmount(amtAcctCr, ctx.GetContext("#ClientLanguage"));
+                    int pageSize = 50;
+                    PageSetting pSetting = new PageSetting();
+                    pSetting.CurrentPage = pageNo;
+                    pSetting.TotalPage = (totalRec % pageSize) == 0 ? (totalRec / pageSize) : ((totalRec / pageSize) + 1);
+                    obj.pSetting = pSetting;
+                }
             }
             return obj;
         }
@@ -3045,7 +3093,7 @@ namespace VIS.Controllers
         {
             MArchive ar = new MArchive(_ctx, archiveId, null);//  m_archives[m_index];
             MSession sess = MSession.Get(_ctx);
-            
+
             //Save Action Log
             VAdvantage.Common.Common.SaveActionLog(_ctx, MActionLog.ACTION_Form, "Archive Viewer", ar.GetAD_Table_ID(), ar.GetRecord_ID(), 0, "", "", "Report Downloaded:->" + ar.GetName(), MActionLog.ACTIONTYPE_Download);
 
@@ -3561,6 +3609,7 @@ namespace VIS.Controllers
         public List<String> Columns { get; set; }
         public List<List<object>> Data { get; set; }
         public CommonModel.PageSetting pSetting { get; internal set; }
+        public string DebitandCredit { get; set; }
     }
 
     public class GetOrderDataCommonsProperties
