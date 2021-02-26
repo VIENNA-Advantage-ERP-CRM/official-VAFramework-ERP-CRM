@@ -2555,16 +2555,16 @@ namespace VAdvantage.Model
 
                         MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_Trx());
                         string retMsg = "";
-                           
-                                bool crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), grandTotal, out retMsg);
-                                if (!crdAll)
-                                    log.SaveWarning("Warning", retMsg);
-                                else if (bp.IsCreditWatch(GetC_BPartner_Location_ID()))
-                                {
-                                    log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "VIS_BPCreditWatch"));
-                                }
-                            
-                       
+
+                        bool crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), grandTotal, out retMsg);
+                        if (!crdAll)
+                            log.SaveWarning("Warning", retMsg);
+                        else if (bp.IsCreditWatch(GetC_BPartner_Location_ID()))
+                        {
+                            log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "VIS_BPCreditWatch"));
+                        }
+
+
                     }
                 }
             }
@@ -2944,44 +2944,41 @@ namespace VAdvantage.Model
                         //}
 
                         string retMsg = "";
-                        bool crdAll=false;
+                        bool crdAll = true;
                         //written by sandeep
-                       
+
                         if (Env.IsModuleInstalled("VA077_"))
                         {
-                           
-                            DateTime validate = new DateTime();
-                            string CreditStatusSettingOn = bp.GetCreditStatusSettingOn();
-                            MBPartnerLocation bpl = new MBPartnerLocation(GetCtx(), GetC_BPartner_Location_ID(), null);
-                            if (CreditStatusSettingOn.Contains("CL"))
+                            // Skip Credit Check validation in case of Advance Order
+                            if (Util.GetValueOfString(DB.ExecuteScalar(@"SELECT VA009_Advance FROM C_PaymentTerm
+                                            WHERE C_PaymentTerm_ID = " + GetC_PaymentTerm_ID(), null, Get_TrxName())).Equals("N"))
                             {
-                              
-                                validate = Util.GetValueOfDateTime(bpl.Get_Value("VA077_ValidityDate")).Value;
-                            }
-                            else
-                            {
-                                validate = Util.GetValueOfDateTime(bp.Get_Value("VA077_ValidityDate")).Value;
-
-                            }
+                                DateTime validate = new DateTime();
+                                string CreditStatusSettingOn = bp.GetCreditStatusSettingOn();
+                                MBPartnerLocation bpl = new MBPartnerLocation(GetCtx(), GetC_BPartner_Location_ID(), null);
+                                if (CreditStatusSettingOn.Contains("CL"))
+                                {
+                                    validate = Util.GetValueOfDateTime(bpl.Get_Value("VA077_ValidityDate")).Value;
+                                }
+                                else
+                                {
+                                    validate = Util.GetValueOfDateTime(bp.Get_Value("VA077_ValidityDate")).Value;
+                                }
 
                                 if (validate.Date < DateTime.Now.Date)
-
                                 {
+                                    int RecCount = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_Invoice_ID) FROM C_Invoice WHERE IsSOTrx='Y' AND IsReturnTrx='N' AND C_BPartner_ID =" + GetC_BPartner_ID() + " and DocStatus in('CO','CL') and DateInvoiced BETWEEN " + GlobalVariable.TO_DATE(DateTime.Now.Date.AddDays(-730), true) + " AND " + GlobalVariable.TO_DATE(DateTime.Now.Date, true) + ""));
 
-                                int RecCount = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_Invoice_ID) FROM C_Invoice WHERE IsSOTrx='Y' AND IsReturnTrx='N' AND C_BPartner_ID =" + GetC_BPartner_ID() + " and DocStatus in('CO','CL') and DateInvoiced BETWEEN " + GlobalVariable.TO_DATE(DateTime.Now.Date.AddDays(-730), true) + " AND " + GlobalVariable.TO_DATE(DateTime.Now.Date, true) + ""));
-
-                                if (RecCount > 0)
+                                    if (RecCount > 0)
                                     {
-
                                         crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), grandTotal, out retMsg);
                                     }
                                     else
                                     {
                                         _processMsg = Msg.GetMsg(GetCtx(), "VA077_CrChkExpired");
                                         return DocActionVariables.STATUS_INVALID;
+                                    }
                                 }
-                                }
-
                                 else
                                 {
                                     crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), grandTotal, out retMsg);
@@ -2989,15 +2986,13 @@ namespace VAdvantage.Model
                                     {
                                         _processMsg = Msg.GetMsg(GetCtx(), "VA077_CrChkExpired");
                                         return DocActionVariables.STATUS_INVALID;
+                                    }
                                 }
-
                             }
                         }
-
                         else
                         {
                             crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), grandTotal, out retMsg);
-
                         }
                         if (!crdAll)
                         {
