@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using VAdvantage.Model;
 using VAdvantage.Utility;
@@ -36,7 +37,7 @@ namespace VIS.Models
             M_PriceList_Version_ID = Util.GetValueOfInt(paramValue[5].ToString());
             DateTime? orderDate = Util.GetValueOfDateTime(paramValue[6]);
             DateTime? orderDate1 = Util.GetValueOfDateTime(paramValue[7]);
-
+                    
             //if (paramValue.Length > 8)    
             if (paramValue.Length == 9 || paramValue.Length == 11)
             {
@@ -55,6 +56,19 @@ namespace VIS.Models
                     C_UOM_ID = Util.GetValueOfInt(paramValue[8].ToString());
                     countED011 = Util.GetValueOfInt(paramValue[9].ToString());
                 }
+            }
+
+            /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
+            if (!string.IsNullOrEmpty(Util.GetValueOfString(orderDate)))
+            {
+                StringBuilder sbparams = new StringBuilder();
+                sbparams.Append(Util.GetValueOfInt(M_PriceList_ID));
+                sbparams.Append(",").Append(Convert.ToDateTime(orderDate).ToString("MM-dd-yyyy"));
+                sbparams.Append(",").Append(Util.GetValueOfInt(M_Product_ID));
+                sbparams.Append(",").Append(Util.GetValueOfInt(C_UOM_ID));
+                sbparams.Append(",").Append(Util.GetValueOfInt(M_AttributeSetInstance_ID));
+                MPriceListVersionModel objPriceList = new MPriceListVersionModel();
+                M_PriceList_Version_ID = objPriceList.GetM_PriceList_Version_ID_On_Transaction_Date(ctx, sbparams.ToString());
             }
 
             //End Assign parameter value
