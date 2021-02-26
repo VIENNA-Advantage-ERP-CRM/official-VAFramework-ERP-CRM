@@ -62,7 +62,7 @@ namespace VIS.Models
             {
                 StringBuilder sbparams = new StringBuilder();
                 sbparams.Append(Util.GetValueOfInt(M_PriceList_ID));
-                sbparams.Append(",").Append(Util.GetValueOfString(Convert.ToDateTime(orderDate).ToString("MM-dd-yyyy")));
+                sbparams.Append(",").Append(Convert.ToDateTime(orderDate).ToString("MM-dd-yyyy"));
                 sbparams.Append(",").Append(Util.GetValueOfInt(M_Product_ID));
                 sbparams.Append(",").Append(Util.GetValueOfInt(C_UOM_ID));
                 sbparams.Append(",").Append(Util.GetValueOfInt(M_AttributeSetInstance_ID));

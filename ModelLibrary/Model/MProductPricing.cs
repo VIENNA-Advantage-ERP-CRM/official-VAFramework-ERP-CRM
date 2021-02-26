@@ -195,9 +195,7 @@ namespace VAdvantage.Model
         /// <returns>true if calculated</returns>
         private bool CalculatePLV()
         {
-            String sql = "";
-            /** Price List - Ensuring valid Uom id ** Dt:01/02/2021 ** Modified By: Kumar **/
-            const int UOM_EACH = 100;
+            String sql = "";            
             if (_M_Product_ID == 0 || _M_PriceList_Version_ID == 0)
                 return false;
             // Check For Advance Pricing Module
@@ -208,7 +206,7 @@ namespace VAdvantage.Model
                 if (Env.HasModulePrefix("ED011_", out mInfo1))
                 {
                     /** Price List - Ensuring valid Uom id ** Dt:01/02/2021 ** Modified By: Kumar **/
-                    if (_C_UOM_ID <= UOM_EACH)
+                    if (_C_UOM_ID <= 0)
                     {
                         //vikas  mantis Issue ( 0000517)
                         string _sql = null;
