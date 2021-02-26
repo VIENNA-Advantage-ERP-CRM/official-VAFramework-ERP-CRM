@@ -3971,7 +3971,7 @@ namespace VAdvantage.Model
                         Char IsCont = Convert.ToChar(orderlines.Tables[0].Rows[i]["IsContract"]);
                         if (IsCont == 'Y')
                         {
-                            MOrder mo = new MOrder(GetCtx(), GetC_Order_ID(), null);
+                            MOrder mo = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
                             mo.SetIsContract(true);
                             mo.Save();
                         }
