@@ -11,6 +11,7 @@ using VAdvantage.Utility;
 using ViennaAdvantageWeb.Areas.VIS.Models;
 using VIS.Filters;
 using System.Web.SessionState;
+using VIS.DataContracts;
 
 namespace VIS.Controllers
 {
@@ -35,7 +36,7 @@ namespace VIS.Controllers
 
 
         [HttpPost]
-        public JsonResult SendMail(string mails, int AD_User_ID, int AD_Client_ID, int AD_Org_ID, int attachment_ID, string fileNamesFornNewAttach, string fileNamesForopenFormat, string mailFormat, bool notify,string strDocAttach)
+        public JsonResult SendMail(string mails, int AD_User_ID, int AD_Client_ID, int AD_Org_ID, int attachment_ID, string fileNamesFornNewAttach, string fileNamesForopenFormat, string mailFormat, bool notify, string strDocAttach)
         {
             List<int> lstDoc = new List<int>();
             Ctx ct = Session["ctx"] as Ctx;
@@ -219,9 +220,9 @@ namespace VIS.Controllers
 
         // Added by Bharat on 09 June 2017
         public JsonResult GetUser(int BPartner_ID)
-        {            
-            Ctx ct = Session["ctx"] as Ctx;            
-            EmailModel model = new EmailModel(ct);            
+        {
+            Ctx ct = Session["ctx"] as Ctx;
+            EmailModel model = new EmailModel(ct);
             return Json(JsonConvert.SerializeObject(model.GetUser(BPartner_ID)), JsonRequestBehavior.AllowGet);
         }
 
@@ -232,6 +233,48 @@ namespace VIS.Controllers
             EmailModel model = new EmailModel(ct);
             return Json(JsonConvert.SerializeObject(model.GetMailFormat(Window_ID, ct)), JsonRequestBehavior.AllowGet);
         }
+
+        //Lakhwinder 23 feb 2021
+        //Enhancement to provide facility to attacht print format directlty for selected record
+        [HttpPost]
+        public JsonResult AttachPrintFormat(int windowNo, int tableID, int processID, string recID, string fileType, string folderKey)
+        {
+            Ctx ct = Session["ctx"] as Ctx;
+            EmailModel model = new EmailModel(ct);
+            ProcessReportInfo rep = model.AttachPrintFormat( tableID, processID, recID, windowNo, fileType, "");
+            try
+            {
+                if (!Directory.Exists(Path.Combine(Server.MapPath("~/TempDownload"), folderKey)))
+                {
+                    Directory.CreateDirectory(Path.Combine(Server.MapPath("~/TempDownload"), folderKey));
+                }
+                if (!string.IsNullOrEmpty(rep.ReportFilePath))
+                {
+                    string appHostingPath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath;
+                    string rptFileName = rep.ReportFilePath.Substring(rep.ReportFilePath.LastIndexOf('\\')+1);
+                    FileInfo file = new FileInfo(Path.Combine(appHostingPath, rep.ReportFilePath));
+                    rep.Result= file.Length.ToString();
+                    rep.Report = null;
+                    System.IO.File.Move(Path.Combine(appHostingPath,rep.ReportFilePath),Path.Combine( appHostingPath, "TempDownload",folderKey, rptFileName));
+                    rep.ReportFilePath = rptFileName;
+                }
+
+            }
+            catch(Exception ex) {
+                rep.Message = ex.Message;
+            }
+
+            return Json(JsonConvert.SerializeObject(rep), JsonRequestBehavior.AllowGet);
+
+        }
+        [HttpPost]
+        public JsonResult GetReportFileTypes(int processID)
+        {
+            Ctx ctx = Session["ctx"] as Ctx;
+            EmailModel model = new EmailModel(ctx);
+            return Json(JsonConvert.SerializeObject(model.GetReportFileTypes(processID)), JsonRequestBehavior.AllowGet);
+        }
+
 
 
         //public JsonResult SavedAttachmentForFormat(int textTemplate_ID)

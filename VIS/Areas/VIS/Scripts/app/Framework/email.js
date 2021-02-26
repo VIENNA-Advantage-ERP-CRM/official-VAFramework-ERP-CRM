@@ -3,6 +3,7 @@
 
     function Email(to, _curtab, _curGC, Record_ID, isEmail, isWindowForm, tableID, body, subject, attchID) {
 
+
         //local variables          
         this.frame = null;
         this.windowNo = VIS.Env.getWindowNo();
@@ -60,6 +61,8 @@
         var $textAreakeno = null;
         //contains dynmic display checkbox and rest
         var $leftfootArea = null;
+        //Attach Printformat
+        var $btnHdrPrint = null;
         // preview button
         var $btnHdrPreview = null;
         //send Button
@@ -137,6 +140,16 @@
         var $dmsheader = null;
         var $divlbNav;
         // var $divlbNav;
+
+        //printformat
+        var printFormatFileSize = 0;
+        //display print option
+        var $overlayroot = $('<div class="vis-reportrootdiv">');
+        var $menu = $("<ul class='vis-apanel-rb-ul'  style='width:100%;height:100%'>");
+        $overlayroot.append($menu);
+        var lstPFFiles = [];
+
+
 
         var $SubjectTextChange = 0;
 
@@ -235,6 +248,7 @@
             //createDesign();
 
             eventhandlers();
+            createattachmentcontainer();
         };
 
         this.getRoot = function () {
@@ -257,6 +271,10 @@
             //$btnHdrCancel = $('<img  style="margin-top:10px;margin-right:20px;cursor: pointer;float:right" title="' + VIS.Msg.getMsg("Cancel").replace('&', '') + '" src="' + VIS.Application.contextUrl + 'Areas/vis/Images/cancel.png"> </img>');
             //$toolbarDiv.append($btnHdrCancel);
             if (!callingFromOutsideofWindow) {
+
+                $btnHdrPrint = $('<i class="vis-email-btns vis vis-print"  title="' + VIS.Msg.getMsg("VIS_AttachPrintFormat").replace('&', '') + '" ></i>');
+                $toolbarDiv.append($btnHdrPrint);
+
                 $btnHdrPreview = $('<i class="vis-email-btns vis vis-viewdocument"  title="' + VIS.Msg.getMsg("Preview").replace('&', '') + '" ></i>');
                 $toolbarDiv.append($btnHdrPreview);
 
@@ -415,47 +433,47 @@
             try {
                 $txtArea.kendoEditor({
                     tools: [
-        "bold",
-        "italic",
-        "underline",
-        "strikethrough",
-        "justifyLeft",
-        "justifyCenter",
-        "justifyRight",
-        "justifyFull",
-        "insertUnorderedList",
-        "insertOrderedList",
-        "indent",
-        "outdent",
-        "createLink",
-        "unlink",
-        "insertImage",
-        "insertFile",
-        "subscript",
-        "superscript",
-        "createTable",
-        "addRowAbove",
-        "addRowBelow",
-        "addColumnLeft",
-        "addColumnRight",
-        "deleteRow",
-        "deleteColumn",
-        "viewHtml",
-        "formatting",
-        "cleanFormatting",
-        "fontName",
-        {
-            name: "fontSize",
-            items: [].concat(
-               [{ text: "8px", value: "8px" }],
-              [{ text: "12px", value: "12px" }],
-              [{ text: "16px", value: "16px" }],
-              [{ text: "20px", value: "20px" }],
-                [{ text: "24px", value: "24px" }]
-            )
-        },
-        "foreColor",
-        "backColor"
+                        "bold",
+                        "italic",
+                        "underline",
+                        "strikethrough",
+                        "justifyLeft",
+                        "justifyCenter",
+                        "justifyRight",
+                        "justifyFull",
+                        "insertUnorderedList",
+                        "insertOrderedList",
+                        "indent",
+                        "outdent",
+                        "createLink",
+                        "unlink",
+                        "insertImage",
+                        "insertFile",
+                        "subscript",
+                        "superscript",
+                        "createTable",
+                        "addRowAbove",
+                        "addRowBelow",
+                        "addColumnLeft",
+                        "addColumnRight",
+                        "deleteRow",
+                        "deleteColumn",
+                        "viewHtml",
+                        "formatting",
+                        "cleanFormatting",
+                        "fontName",
+                        {
+                            name: "fontSize",
+                            items: [].concat(
+                                [{ text: "8px", value: "8px" }],
+                                [{ text: "12px", value: "12px" }],
+                                [{ text: "16px", value: "16px" }],
+                                [{ text: "20px", value: "20px" }],
+                                [{ text: "24px", value: "24px" }]
+                            )
+                        },
+                        "foreColor",
+                        "backColor"
                     ],
                     keyup: getTextChange,
                     encoded: false
@@ -554,7 +572,7 @@
                     var ID = rowsSingleView[_curtab.getKeyColumnName().toLower()];
 
                     $bccChkList.append('<li class="vis-list-li-bcc" data-email="' + rowsSingleView["email"] + '"><input id="' + self.windowNo + '_' + rowsSingleView["email"] + '_CheckBoxList1" type="checkbox" value="' + rowsSingleView["email"]
-                           + '" checked /><label class="vis-chcklist-label" for="' + self.windowNo + '_' + rowsSingleView["email"] + '_CheckBoxList1">' + rowsSingleView["email"] + '(' + ID + ')</label></li>');
+                        + '" checked /><label class="vis-chcklist-label" for="' + self.windowNo + '_' + rowsSingleView["email"] + '_CheckBoxList1">' + rowsSingleView["email"] + '(' + ID + ')</label></li>');
                 }
             }
         };
@@ -734,7 +752,7 @@
                             }
 
                             htm += '<li  class="vis-list-li-bcc"><input data-currentrec="N" data-recid="' + prID[i] + '" id="' + self.windowNo + '_' + ds[j]["Email"] + '_CheckBoxList1" type="checkbox"  value="' + ds[j]["Email"]
-                                 + '" checked/><label class="vis-chcklist-label"  for="' + self.windowNo + '_' + ds[j]["Email"] + '_CheckBoxList1">' + ds[j]["Email"] + '(' + prID[i] + ')</label></li>';
+                                + '" checked/><label class="vis-chcklist-label"  for="' + self.windowNo + '_' + ds[j]["Email"] + '_CheckBoxList1">' + ds[j]["Email"] + '(' + prID[i] + ')</label></li>';
                             // }
                         }
                     }
@@ -932,7 +950,8 @@
                 $btnHdrSave.on("click", save);
                 //$btnHdrCancel.on("click", cancel);
                 $imgAction.trigger('click');
-
+                // $btnHdrPrint.on('click', attachtPrintFormat);
+                $btnHdrPrint.on('click', showPrintOption);
             }
             else {
                 $root.find('.vis-Email-CcBcc').on("click", showBccpanel);
@@ -1107,39 +1126,37 @@
 
                 if (!$root.find('.vis-email-attachmentContainer').is(":visible")) {
                     var conheight = $root.find('.vis-Email-ContentArea').height();
-
-
-                    // if (attachmentContainerOpen == false) {
-                    if (fileBrowser == null || fileBrowser == undefined) {
-
-                        createattachmentcontainer();
-                        fileBrowser = $("<input type='file' multiple='true' style='display:none;'>");
-                        //Add file to Latest File Content
-                        fileBrowser.change(function () {
-                            if (this.files.length < 1) {
-                                return;
-                            }
-                            $root.find('.vis-email-attachmentContainer').show();
-                            AppendFile(this);
-                            //if ($root.find('.vis-email-attachmentContainer').is(':visible')) {
-                            //    $root.find(".vis-Email-textarea-div").height($root.find(".vis-Email-textarea-div").height() - ($root.find(".vis-email-attachmentContainer").height() + 13));
-                            //}
-                            if (callingFromOutsideofWindow) {
-                                $root.find(".vis-Email-textarea-div").height($root.find('.vis-Email-ContentArea').height() - ($root.find('.vis-form-horizontal').height() + 30));
-                            }
-                            else {
-                                $root.find(".vis-Email-textarea-div").height($root.find('.vis-Email-ContentArea').height() - ($root.find('.vis-form-horizontal').height() + 50));
-                            }
-
-
-
-
-
-                            UploadFiles();
-                        });
-                    }
-
                 }
+                
+                if (fileBrowser == null || fileBrowser == undefined) {
+
+                    // createattachmentcontainer();
+                    fileBrowser = $("<input type='file' multiple='true' style='display:none;'>");
+                    //Add file to Latest File Content
+                    fileBrowser.change(function () {
+                        if (this.files.length < 1) {
+                            return;
+                        }
+                        $root.find('.vis-email-attachmentContainer').show();
+                        AppendFile(this);
+                        //if ($root.find('.vis-email-attachmentContainer').is(':visible')) {
+                        //    $root.find(".vis-Email-textarea-div").height($root.find(".vis-Email-textarea-div").height() - ($root.find(".vis-email-attachmentContainer").height() + 13));
+                        //}
+                        if (callingFromOutsideofWindow) {
+                            $root.find(".vis-Email-textarea-div").height($root.find('.vis-Email-ContentArea').height() - ($root.find('.vis-form-horizontal').height() + 30));
+                        }
+                        else {
+                            $root.find(".vis-Email-textarea-div").height($root.find('.vis-Email-ContentArea').height() - ($root.find('.vis-form-horizontal').height() + 50));
+                        }
+
+
+
+
+
+                        UploadFiles();
+                    });
+                }
+
                 fileBrowser.trigger('click');
             }
             //  attachmentContainerOpen = true;
@@ -1183,6 +1200,8 @@
                 });
             }
         };
+
+
 
         var showProgress = function (show) {
             if (show) {
@@ -1265,94 +1284,95 @@
 
 
 
-                var fileInfo = {};
-                var dAWrap = $("<div style='margin-bottom:3px' class='vis-attach-file-wrapla'>");
-                dLAContent.children(0).append(dAWrap);
+                //var fileInfo = {};
+                //var dAWrap = $("<div style='margin-bottom:3px' class='vis-attach-file-wrapla'>");
+                //dLAContent.children(0).append(dAWrap);
 
-                var dTop = $("<div class='vis-attach-file-top'>");
-                var btnRemove = $("<a class='vis-file-close-ico'><i class='vis vis-mark'></i></a>");
-                dTop.append(btnRemove);
-                dAWrap.append(dTop);
-                dLAContent.show();
+                //var dTop = $("<div class='vis-attach-file-top'>");
+                //var btnRemove = $("<a class='vis-file-close-ico'><i class='vis vis-mark'></i></a>");
+                //dTop.append(btnRemove);
+                //dAWrap.append(dTop);
+                //dLAContent.show();
 
-                btnRemove.on("click", function () {
+                //btnRemove.on("click", function () {
 
-                    var c = null;
-                    var divFInfo = $($(this).parent()).parent();
-                    // divFInfo.css("display", "none");
-                    var html = divFInfo.html();
-                    divFInfo.remove();
-                    divFInfo = null;
-                    for (var itm in lstLatestFiles) {
-                        if ((String(html).indexOf(lstLatestFiles[itm].name)) > -1) {
-                            totalChunks = totalChunks - itm.size;
-                            lstLatestFiles.splice(itm, 1);
-                            break;
-                        }
-                    }
+                //    var c = null;
+                //    var divFInfo = $($(this).parent()).parent();
+                //    // divFInfo.css("display", "none");
+                //    var html = divFInfo.html();
+                //    divFInfo.remove();
+                //    divFInfo = null;
+                //    for (var itm in lstLatestFiles) {
+                //        if ((String(html).indexOf(lstLatestFiles[itm].name)) > -1) {
+                //            totalChunks = totalChunks - itm.size;
+                //            lstLatestFiles.splice(itm, 1);
+                //            break;
+                //        }
+                //    }
 
-                    filesforAttachmentforNewAttachment.splice(0, filesforAttachmentforNewAttachment.length);
+                //    filesforAttachmentforNewAttachment.splice(0, filesforAttachmentforNewAttachment.length);
 
-                    for (var itm in lstLatestFiles) {
-                        filesforAttachmentforNewAttachment.push(lstLatestFiles[itm].name);
-                    }
+                //    for (var itm in lstLatestFiles) {
+                //        filesforAttachmentforNewAttachment.push(lstLatestFiles[itm].name);
+                //    }
 
-                    if (!hasScrollBar()) {
-                        $root.find('.vis-attach-content-wrap').height(83);
+                //    if (!hasScrollBar()) {
+                //        $root.find('.vis-attach-content-wrap').height(83);
 
-                        $root.find('.vis-email-attachmentContainer').height(90);
-                        if (callingFromOutsideofWindow) {
-                            $root.find(".vis-Email-textarea-div").height($('.vis-Email-ContentArea').height() - ($('.vis-form-horizontal').height() + 30));
-                        }
-                        else {
-                            $root.find(".vis-Email-textarea-div").height($('.vis-Email-ContentArea').height() - ($('.vis-form-horizontal').height() + 50));
-                        }
-                    }
+                //        $root.find('.vis-email-attachmentContainer').height(90);
+                //        if (callingFromOutsideofWindow) {
+                //            $root.find(".vis-Email-textarea-div").height($('.vis-Email-ContentArea').height() - ($('.vis-form-horizontal').height() + 30));
+                //        }
+                //        else {
+                //            $root.find(".vis-Email-textarea-div").height($('.vis-Email-ContentArea').height() - ($('.vis-form-horizontal').height() + 50));
+                //        }
+                //    }
 
-                    if (lstLatestFiles.length == 0) {
-                        $root.find('.vis-email-attachmentContainer').hide();
-                        $root.find('.vis-email-attachmentContainer').height(90);
-                        $root.find('.vis-attach-content-wrap').height(83);
-                        if (callingFromOutsideofWindow) {
-                            $root.find(".vis-Email-textarea-div").height($('.vis-Email-ContentArea').height() - ($('.vis-form-horizontal').height() + 30));
-                        }
-                        else {
-                            $root.find(".vis-Email-textarea-div").height($('.vis-Email-ContentArea').height() - ($('.vis-form-horizontal').height() + 50));
-                        }
-                    }
-                    currentFile--;
-                });
+                //    if (lstLatestFiles.length == 0) {
+                //        $root.find('.vis-email-attachmentContainer').hide();
+                //        $root.find('.vis-email-attachmentContainer').height(90);
+                //        $root.find('.vis-attach-content-wrap').height(83);
+                //        if (callingFromOutsideofWindow) {
+                //            $root.find(".vis-Email-textarea-div").height($('.vis-Email-ContentArea').height() - ($('.vis-form-horizontal').height() + 30));
+                //        }
+                //        else {
+                //            $root.find(".vis-Email-textarea-div").height($('.vis-Email-ContentArea').height() - ($('.vis-form-horizontal').height() + 50));
+                //        }
+                //    }
+                //    currentFile--;
+                //});
 
-                var dAContent = $("<div class='vis-attach-file-content'>");
-                dAWrap.append(dAContent);
+                //var dAContent = $("<div class='vis-attach-file-content'>");
+                //dAWrap.append(dAContent);
 
-                var dIcon = $("<div class='vis-attach-file-icon'>");
-                var imgsrc = getImageUrl(file.name);
-                dIcon.append($("<img src='" + imgsrc + "'>"));
-                dAContent.append(dIcon);
+                //var dIcon = $("<div class='vis-attach-file-icon'>");
+                //var imgsrc = getImageUrl(file.name);
+                //dIcon.append($("<img src='" + imgsrc + "'>"));
+                //dAContent.append(dIcon);
 
-                var dfInfo = $("<div class='vis-attach-file-text' style='margin-bottom:10px'>");
-                var shortName = '';
-                var lblFName = $("<p>");
-                if (file.name.length > 17) {
-                    shortName = file.name.toString().substr(0, 17);
-                    lblFName.append(shortName);
-                    var aFName = $("<a href='javascript:void(0)' class='VIS_Pref_tooltip'>").append('...');
-                    var span = $("<span style='width: inherit;'>");
-                    span.append($("<img class='VIS_Pref_callout'>").attr('src', VIS.Application.contextUrl + "Areas/VIS/Images/email-ccc.png").append("ToolTip Text"));
-                    span.append($("<label class='VIS_Pref_Label_Font'>").append(file.name));
-                    aFName.append(span);
-                    lblFName.append(aFName);
-                }
-                else {
-                    lblFName.append(file.name);
-                }
-                // dfInfo.append($("<p>").append(shortName));
-                dfInfo.append(lblFName);
-                dfInfo.append($("<p>").append((Number(file.size) / 1024).toFixed(2) + "KB"));
-                dAContent.append(dfInfo);
-                fileInfo.Name = file.name;
-                fileInfo.Size = file.size;
+                //var dfInfo = $("<div class='vis-attach-file-text' style='margin-bottom:10px'>");
+                //var shortName = '';
+                //var lblFName = $("<p>");
+                //if (file.name.length > 17) {
+                //    shortName = file.name.toString().substr(0, 17);
+                //    lblFName.append(shortName);
+                //    var aFName = $("<a href='javascript:void(0)' class='VIS_Pref_tooltip'>").append('...');
+                //    var span = $("<span style='width: inherit;'>");
+                //    span.append($("<img class='VIS_Pref_callout'>").attr('src', VIS.Application.contextUrl + "Areas/VIS/Images/email-ccc.png").append("ToolTip Text"));
+                //    span.append($("<label class='VIS_Pref_Label_Font'>").append(file.name));
+                //    aFName.append(span);
+                //    lblFName.append(aFName);
+                //}
+                //else {
+                //    lblFName.append(file.name);
+                //}
+                //// dfInfo.append($("<p>").append(shortName));
+                //dfInfo.append(lblFName);
+                //dfInfo.append($("<p>").append((Number(file.size) / 1024).toFixed(2) + "KB"));
+                //dAContent.append(dfInfo);
+                showFileInAttachment(file.name, file.size);
+                // fileInfo.Name = file.name;
+                // fileInfo.Size = file.size;
                 lstLatestFiles.push(file);
 
                 if (hasScrollBar()) {
@@ -1547,6 +1567,11 @@
                 fileInfo.Size = lstLatestFiles[itm].size;
                 filesInfo.push(fileInfo);
             }
+
+            //Lakhwinder
+            //Add file size if print format attached;
+            totalSize += printFormatFileSize;
+
 
 
             if (totalSize > (chunkSize * 24)) {
@@ -1929,7 +1954,7 @@
 
                 mail.push(mailInfo);
             }
-                //for dynamic mails
+            //for dynamic mails
             else {
                 selectedValues = [];
                 var selectedRecs = [];
@@ -1951,7 +1976,7 @@
                         }
                     }
 
-                    for (var z = 0; z < selectedValues.length ; z++) {
+                    for (var z = 0; z < selectedValues.length; z++) {
 
                         if (_curGC.singleRow == true && rowsSource.length == 0) {
                             var mailRes = createDynmicmails(rowsSingleView, 0);
@@ -1980,7 +2005,7 @@
                         }
                     }
                 }
-                else if(hsaValidinputmails){
+                else if (hsaValidinputmails) {
                     if (_curGC.singleRow == true && rowsSource.length == 0) {
                         var mailRes = createDynmicmails(rowsSingleView, 0);
                         if (mailRes == null || mailRes == undefined) {
@@ -2080,7 +2105,7 @@
         }
 
         function saveAttachment(e) {
-            debugger;
+
             var subj = $subject.val();
 
             if (subj == null || subj == "" || subj.trim().length == 0) {
@@ -2375,6 +2400,193 @@
         };
 
 
+        //Lakhwinder
+        //Add functionality to attach printformat on email
+        function attachtPrintFormat(filetype) {
+
+            var rowsSource = _curGC.getSelectedRows();
+            var recIds = '';
+            for (var i = 0; i < rowsSource.length; i++) {
+                if (i > 0) { recIds += ',' }
+                recIds += rowsSource[i][_curtab.getKeyColumnName().toLower()];
+
+            }
+            $bsyDiv[0].style.visibility = "visible";
+            $.ajax({
+                url: VIS.Application.contextUrl + "Email/AttachPrintFormat",
+                datatype: "json",
+                type: "post",
+                cache: false,
+                data: { windowNo: 0, tableID: _curtab.getAD_Table_ID(), processID: _curtab.getAD_Process_ID(), recID: recIds, fileType: filetype, folderKey: folder },
+                success: function (data) {
+                    $bsyDiv[0].style.visibility = "hidden";
+                    var result = JSON.parse(data);
+                    if (result.Message != null) {
+                        VIS.ADialog.info(result.Message);
+                        return;
+                    }
+                    if (result.ErrorText != null) {
+                        VIS.ADialog.info(result.ErrorText);
+                        return;
+                    }
+                    showFileInAttachment(result.ReportFilePath, parseInt(result.Result));
+                    printFormatFileSize = parseInt(result.Result);
+                    filesforAttachmentforNewAttachment.push(result.ReportFilePath);
+                    lstPFFiles.push(result.ReportFilePath);
+                    // $btnHdrPrint.off('click');
+                    // $btnHdrPrint.addClass("vis-ev-col-readonly");
+                },
+                error: function (err) {
+                    $bsyDiv[0].style.visibility = "hidden";
+                    console.log(err);
+                }
+            });
+        };
+
+
+        function showFileInAttachment(fileName, fileSize) {
+
+            $root.find('.vis-email-attachmentContainer').show();
+            var dAWrap = $("<div style='margin-bottom:3px' class='vis-attach-file-wrapla'>");
+            dLAContent.children(0).append(dAWrap);
+
+            var dTop = $("<div class='vis-attach-file-top'>");
+            var btnRemove = $("<a class='vis-file-close-ico'><i class='vis vis-mark'></i></a>");
+            dTop.append(btnRemove);
+            dAWrap.append(dTop);
+            dLAContent.show();
+
+            btnRemove.on("click", function () {
+
+                var c = null;
+                var divFInfo = $($(this).parent()).parent();
+                // divFInfo.css("display", "none");
+                var html = divFInfo.html();
+                divFInfo.remove();
+                divFInfo = null;
+                for (var itm in lstLatestFiles) {
+                    if ((String(html).indexOf(lstLatestFiles[itm].name)) > -1) {
+                        totalChunks = totalChunks - itm.size;
+                        lstLatestFiles.splice(itm, 1);
+                        break;
+                    }
+                }
+
+               ///////////
+                ???????
+                    ??????????? /
+                        //////// To be continue...
+
+                filesforAttachmentforNewAttachment.splice(0, filesforAttachmentforNewAttachment.length);
+
+                for (var itm in lstLatestFiles) {
+                    filesforAttachmentforNewAttachment.push(lstLatestFiles[itm].name);
+                }
+
+                if (!hasScrollBar()) {
+                    $root.find('.vis-attach-content-wrap').height(83);
+
+                    $root.find('.vis-email-attachmentContainer').height(90);
+                    if (callingFromOutsideofWindow) {
+                        $root.find(".vis-Email-textarea-div").height($('.vis-Email-ContentArea').height() - ($('.vis-form-horizontal').height() + 30));
+                    }
+                    else {
+                        $root.find(".vis-Email-textarea-div").height($('.vis-Email-ContentArea').height() - ($('.vis-form-horizontal').height() + 50));
+                    }
+                }
+
+                if (lstLatestFiles.length == 0) {
+                    $root.find('.vis-email-attachmentContainer').hide();
+                    $root.find('.vis-email-attachmentContainer').height(90);
+                    $root.find('.vis-attach-content-wrap').height(83);
+                    if (callingFromOutsideofWindow) {
+                        $root.find(".vis-Email-textarea-div").height($('.vis-Email-ContentArea').height() - ($('.vis-form-horizontal').height() + 30));
+                    }
+                    else {
+                        $root.find(".vis-Email-textarea-div").height($('.vis-Email-ContentArea').height() - ($('.vis-form-horizontal').height() + 50));
+                    }
+                }
+                currentFile--;
+            });
+
+            var dAContent = $("<div class='vis-attach-file-content'>");
+            dAWrap.append(dAContent);
+
+            var dIcon = $("<div class='vis-attach-file-icon'>");
+            var imgsrc = getImageUrl(fileName);
+            dIcon.append($("<img src='" + imgsrc + "'>"));
+            dAContent.append(dIcon);
+
+            var dfInfo = $("<div class='vis-attach-file-text' style='margin-bottom:10px'>");
+            var shortName = '';
+            var lblFName = $("<p>");
+            if (fileName.length > 17) {
+                shortName = fileName.toString().substr(0, 17);
+                lblFName.append(shortName);
+                var aFName = $("<a href='javascript:void(0)' class='VIS_Pref_tooltip'>").append('...');
+                var span = $("<span style='width: inherit;'>");
+                span.append($("<img class='VIS_Pref_callout'>").attr('src', VIS.Application.contextUrl + "Areas/VIS/Images/email-ccc.png").append("ToolTip Text"));
+                span.append($("<label class='VIS_Pref_Label_Font'>").append(fileName));
+                aFName.append(span);
+                lblFName.append(aFName);
+            }
+            else {
+                lblFName.append(fileName);
+            }
+            // dfInfo.append($("<p>").append(shortName));
+            dfInfo.append(lblFName);
+            dfInfo.append($("<p>").append((Number(fileSize) / 1024).toFixed(2) + "KB"));
+            dAContent.append(dfInfo);
+            //fileInfo.Name = file.name;
+            //fileInfo.Size = file.size;
+
+        };
+
+        function showPrintOption() {
+
+            $menu.empty();
+            $menu.off("click");
+            $menu.on("click", "LI", function (e) {
+                var filetype = $(e.target).data("val");
+                attachtPrintFormat(filetype);
+            });
+
+            $.ajax({
+                url: VIS.Application.contextUrl + "Email/GetReportFileTypes",
+                datatype: "json",
+                type: "post",
+                cache: false,
+                data: {
+                    processID: _curtab.getAD_Process_ID()
+                },
+                success: function (data) {
+                    if (data == null) {
+                        return;
+                    }
+                    var d = jQuery.parseJSON(data);
+
+                    if (d.length == 0) {
+
+                        return;
+                    }
+                    for (var i = 0; i < d.length; i++) {
+                        var li = '';
+                        if (i == 0) {
+                            li = $("<li tabindex=" + i + " data-val=" + d[i].Key + " class='vis-selected-li-print'>" + d[i].Name + "</li>");
+                        }
+                        else {
+                            li = $("<li tabindex=" + i + " data-val=" + d[i].Key + ">" + d[i].Name + "</li>");
+                        }
+
+                        $menu.append(li);
+                        li = null;
+                    }
+
+                    $btnHdrPrint.w2overlay($overlayroot.clone(true), { css: { height: '300px' } });
+                }
+            });
+        };
+
         //Refresh Email IDs..
         function refresh(e) {
             $bccChkList.empty();        //Create already added mail address.
@@ -2472,7 +2684,7 @@
             }
         };
 
-        function createDynmicmails(source, i,email) {
+        function createDynmicmails(source, i, email) {
             var hasMail = false;
 
             var mailInfo = {};
@@ -2493,8 +2705,7 @@
                 }
             }
 
-            if (email)
-            {
+            if (email) {
                 if (!validateEmail(email)) {
                     window.setTimeout(function () {
                         VIS.ADialog.info("NotValidEmail", true, ":" + email);
@@ -2504,7 +2715,7 @@
                 mailInfo.Bcc.push(email);
                 hasMail = true;
             }
-           else if ($bccChkList != null && $bccChkList != undefined) {
+            else if ($bccChkList != null && $bccChkList != undefined) {
                 if (Object.keys(source).indexOf("email") > -1 && selectedValues.indexOf(source['email']) > -1) {
                     //var lis = $bccChkList.children('li');
                     //if (lis.length > 0) {
@@ -2578,9 +2789,9 @@
                         }
                     }
                     else if (VIS.DisplayType.IsDate(_curtab.getField(columnName).getDisplayType())) {
-                        var displayType= _curtab.getField(columnName).getDisplayType()
+                        var displayType = _curtab.getField(columnName).getDisplayType()
                         fieldValue = _curtab.getField(columnName).value;
-                       
+
                         if (VIS.DisplayType.Date == displayType) {
                             fieldValue = new Date(fieldValue).toLocaleDateString();
                         }
@@ -2646,7 +2857,7 @@
                                 fieldValue = rowsSource[0][columnName.toLower()];
                             }
                             else
-                            fieldValue = rowsSingleView[columnName.toLower()];
+                                fieldValue = rowsSingleView[columnName.toLower()];
                         }
                     }
                 }
@@ -2899,6 +3110,8 @@
                     $dynamicDisplay.remove();
                 if ($txtArea != null)
                     $txtArea.remove();
+                if ($btnHdrPrint != null)
+                    $btnHdrPrint.off('click');
             }
             if ($btnHdrSend != null) {
                 $btnHdrSend.off('click');
@@ -2960,7 +3173,7 @@
             $btnHdrOpen = null;
             $btnHdrSave = null;
             $btnHdrSaveAs = null;
-
+            $btnHdrOpen = null;
             //self = null;
         };
 

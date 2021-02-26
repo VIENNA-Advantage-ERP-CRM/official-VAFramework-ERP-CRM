@@ -27,6 +27,8 @@ using VAdvantage.Utility;
 
 using iTextSharp.text.html.simpleparser;
 using VAdvantage.Classes;
+using VIS.DataContracts;
+using VIS.Helpers;
 
 namespace VIS.Models
 {
@@ -872,6 +874,95 @@ namespace VIS.Models
         }
 
 
+        public ProcessReportInfo AttachPrintFormat( int tableID, int processID,string recID,int windowNo,string fileType,string windowName)
+        {
+
+          
+            string[] records = recID.Split(',');
+            int Record_ID = Convert.ToInt32(records[0]);
+            int pID = GetDoctypeBasedReport( tableID, Record_ID);
+            if (pID > 0)
+            {
+                ctx.SetContext("FetchingDocReport", "Y");
+                processID = pID;
+            }
+            ProcessReportInfo rep = null;
+            if (records.Length<2)
+            { rep= ProcessHelper.GeneratePrint(ctx, processID, "Print", tableID, Record_ID, windowNo, "", fileType, "W", windowName);
+            }
+            else { rep = ProcessHelper.GeneratePrint(ctx, processID, "Print", tableID, 0, windowNo, recID, fileType, "W", windowName); }
+            ctx.SetContext("FetchingDocReport", "N");
+            return rep;
+        
+        }
+        /// <summary>
+        /// Select report info based on Document type selected in that particular record.
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="tableID"></param>
+        /// <param name="record_ID"></param>
+        /// <returns></returns>
+        private int GetDoctypeBasedReport( int tableID, int record_ID)
+        {
+            #region To Override Default Process With Process Linked To Document Type
+
+            string colName = "C_DocTypeTarget_ID";
+
+
+            string sql1 = "SELECT COUNT(*) FROM AD_Column WHERE AD_Table_ID=" + tableID + " AND ColumnName   ='C_DocTypeTarget_ID'";
+            int id = Util.GetValueOfInt(DB.ExecuteScalar(sql1));
+            if (id < 1)
+            {
+                colName = "C_DocType_ID";
+                sql1 = "SELECT COUNT(*) FROM AD_Column WHERE AD_Table_ID=" + tableID + " AND ColumnName   ='C_DocType_ID'";
+                id = Util.GetValueOfInt(DB.ExecuteScalar(sql1));
+            }
+
+            if (id > 0)
+            {
+
+                string tableName = MTable.GetTableName(ctx, tableID);
+                sql1 = "SELECT " + colName + ", AD_Org_ID FROM " + tableName + " WHERE " + tableName + "_ID =" + Util.GetValueOfString(record_ID);
+                DataSet ds = DB.ExecuteDataset(sql1);
+
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    // Check if Document Sequence has organization Level checked, if yes then get report from there.
+                    // If Not, then try to get report from Document Type.
+                    sql1 = @"SELECT AD_Sequence_No.Report_ID
+                                From Ad_Sequence Ad_Sequence
+                                JOIN C_Doctype C_Doctype
+                                ON (C_Doctype.Docnosequence_Id =Ad_Sequence.Ad_Sequence_Id 
+                                AND C_DocType.ISDOCNOCONTROLLED='Y')  
+                                JOIN AD_Sequence_No AD_Sequence_No
+                                On (Ad_Sequence_No.Ad_Sequence_Id=Ad_Sequence.Ad_Sequence_Id
+                                AND Ad_Sequence_No.AD_Org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["AD_Org_ID"]) + @")
+                                JOIN AD_Process ON AD_Process.AD_Process_ID=AD_Sequence_No.Report_ID
+                                Where C_Doctype.C_Doctype_Id     = " + Convert.ToInt32(ds.Tables[0].Rows[0][0]) + @"
+                                And Ad_Sequence.Isorglevelsequence='Y' AND Ad_Sequence.IsActive='Y' AND AD_Process.IsActive='Y'";
+
+                    object processID = DB.ExecuteScalar(sql1);
+                    if (processID == DBNull.Value || processID == null || Convert.ToInt32(processID) == 0)
+                    {
+                        sql1 = "select Report_ID FRoM C_Doctype WHERE C_Doctype_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0][0]);
+                        processID = DB.ExecuteScalar(sql1);
+                    }
+                    if (processID != DBNull.Value && processID != null && Convert.ToInt32(processID) > 0)
+                    {
+                        return Convert.ToInt32(processID);
+                    }
+                }
+            }
+            return 0;
+
+            #endregion
+        }
+        public List<ValueNamePair> GetReportFileTypes( int processID)
+        {
+            //int processID = GetDoctypeBasedReport( tableID, recID);
+            return  ProcessHelper.GetReportFileTypes(ctx,processID);
+            
+        }
 
     }
 
