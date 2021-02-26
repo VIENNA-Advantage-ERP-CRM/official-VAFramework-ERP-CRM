@@ -4700,6 +4700,8 @@ namespace VAdvantage.Model
                     DateTime? StartDate = null;
                     DateTime? EndDate = null;
                     Decimal AnnualValue = 0.00m;
+                    StringBuilder qry = new StringBuilder();
+
                     if (contDS != null && contDS.Tables[0].Rows.Count > 0)
                     {
                         HCDate = Util.GetValueOfDateTime(contDS.Tables[0].Rows[0]["VA077_HistoricContractDate"]);
@@ -4707,7 +4709,8 @@ namespace VAdvantage.Model
                         EndDate = Util.GetValueOfDateTime(contDS.Tables[0].Rows[0]["VA077_ContractCPEndDate"]);
                         AnnualValue = Util.GetValueOfDecimal(contDS.Tables[0].Rows[0]["VA077_AnnualValue"]);
 
-                        sql = @"UPDATE C_Order  p SET VA077_TotalMarginAmt=(SELECT COALESCE(SUM(pl.VA077_MarginAmt),0) FROM C_OrderLine pl 
+                        qry.Clear();
+                        qry.Append(@"UPDATE C_Order  p SET VA077_TotalMarginAmt=(SELECT COALESCE(SUM(pl.VA077_MarginAmt),0) FROM C_OrderLine pl 
                             WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
                             VA077_TotalPurchaseAmt=(SELECT ROUND(COALESCE(SUM(pl.VA077_PurchasePrice * QtyEntered),0),2) FROM C_OrderLine pl  
                             WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
@@ -4715,23 +4718,37 @@ namespace VAdvantage.Model
                             ROUND(COALESCE(((Sum(LineNetAmt)- Sum(NVL(VA077_PurchasePrice,0) * QtyEntered))/Sum(LineNetAmt)*100),0),2) ELSE 0  END 
                             FROM C_OrderLine pl WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
                             VA077_TotalSalesAmt=(SELECT COALESCE(SUM(pl.LineNetAmt),0) FROM C_OrderLine pl 
-                            WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_HistoricContractDate=" + GlobalVariable.TO_DATE(HCDate, true) + @",
-                            VA077_ContractCPStartDate = " + GlobalVariable.TO_DATE(StartDate, true) + @", 
-                            VA077_ContractCPEndDate= " + GlobalVariable.TO_DATE(EndDate, true) + @",
-                            VA077_OldAnnualContractTotal= " + AnnualValue + @",
-                            VA077_ChangeStartDate = " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("VA077_StartDate")), true) + @",
-                            VA077_PartialAmtCatchUp =(SELECT COALESCE(SUM(pl.LineNetAmt),0) FROM C_OrderLine pl 
-                            WHERE pl.IsActive = 'Y' AND pl.VA077_ContractProduct='Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_AdditionalAnnualCharge =(SELECT COALESCE(SUM(pl.PriceActual),0) FROM C_OrderLine pl 
-                            WHERE pl.IsActive = 'Y' AND pl.VA077_ServiceContract_ID IS NOT NULL AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + COALESCE(SUM(pl.LineNetAmt),0) FROM C_OrderLine pl 
-                            WHERE pl.IsActive = 'Y' AND pl.VA077_ServiceContract_ID IS NOT NULL AND pl.C_Order_ID = " + GetC_Order_ID() + @")
-                            WHERE p.C_Order_ID=" + GetC_Order_ID();
+                            WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @")");
+                        if (contDS.Tables[0].Rows[0]["VA077_HistoricContractDate"] != null)
+                        {
+                            qry.Append(",VA077_HistoricContractDate=" + GlobalVariable.TO_DATE(HCDate, true) + @"");
+                        }
+                        if (contDS.Tables[0].Rows[0]["VA077_ContractCPStartDate"] != null)
+                        {
+                            qry.Append(",VA077_ContractCPStartDate = " + GlobalVariable.TO_DATE(StartDate, true) + @"");
+                        }
+                        if (contDS.Tables[0].Rows[0]["VA077_ContractCPEndDate"] != null)
+                        {
+                            qry.Append(",VA077_ContractCPEndDate= " + GlobalVariable.TO_DATE(EndDate, true) + @"");
+                        }
+                        if (Get_Value("VA077_StartDate") != null)
+                        {
+                            qry.Append(",VA077_ChangeStartDate = " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("VA077_StartDate")), true) + @"");
+                        }
+
+                        qry.Append(",VA077_OldAnnualContractTotal= " + AnnualValue + @",                            
+                                     VA077_PartialAmtCatchUp =(SELECT COALESCE(SUM(pl.LineNetAmt),0) FROM C_OrderLine pl 
+                                     WHERE pl.IsActive = 'Y' AND pl.VA077_ContractProduct='Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                                     VA077_AdditionalAnnualCharge =(SELECT COALESCE(SUM(pl.PriceActual),0) FROM C_OrderLine pl 
+                                     WHERE pl.IsActive = 'Y' AND pl.VA077_ServiceContract_ID IS NOT NULL AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                                     VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + COALESCE(SUM(pl.LineNetAmt),0) FROM C_OrderLine pl 
+                                     WHERE pl.IsActive = 'Y' AND pl.VA077_ServiceContract_ID IS NOT NULL AND pl.C_Order_ID = " + GetC_Order_ID() + @")
+                                     WHERE p.C_Order_ID=" + GetC_Order_ID() + "");
                     }
                     else
-                    {
-                        sql = @"UPDATE C_Order  p SET VA077_TotalMarginAmt=(SELECT COALESCE(SUM(pl.VA077_MarginAmt),0) FROM C_OrderLine pl 
+                    {                        
+                        qry.Clear();
+                        qry.Append(@"UPDATE C_Order  p SET VA077_TotalMarginAmt=(SELECT COALESCE(SUM(pl.VA077_MarginAmt),0) FROM C_OrderLine pl 
                             WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
                             VA077_TotalPurchaseAmt=(SELECT ROUND(COALESCE(SUM(pl.VA077_PurchasePrice * QtyEntered),0),2) FROM C_OrderLine pl  
                             WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
@@ -4741,12 +4758,16 @@ namespace VAdvantage.Model
                             VA077_TotalSalesAmt=(SELECT COALESCE(SUM(pl.LineNetAmt),0) FROM C_OrderLine pl 
                             WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
                             VA077_PartialAmtCatchUp =(SELECT COALESCE(SUM(pl.LineNetAmt),0) FROM C_OrderLine pl 
-                            WHERE pl.IsActive = 'Y' AND pl.VA077_ContractProduct='Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_ChangeStartDate = " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("VA077_StartDate")), true) + @"
-                            WHERE p.C_Order_ID=" + GetC_Order_ID();
+                            WHERE pl.IsActive = 'Y' AND pl.VA077_ContractProduct='Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @")");
+                        if (Get_Value("VA077_StartDate") != null)
+                        {
+                            qry.Append(",VA077_ChangeStartDate = " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("VA077_StartDate")), true) + @"");
+                        }
+
+                        qry.Append(" WHERE p.C_Order_ID=" + GetC_Order_ID() + "");
                     }
 
-                    int no = DB.ExecuteQuery(sql, null, Get_TrxName());
+                    int no = DB.ExecuteQuery(qry.ToString(), null, Get_TrxName());
                     if (no <= 0)
                     {
                         log.SaveWarning("", Msg.GetMsg(GetCtx(), "VIS_NotUpdated"));
