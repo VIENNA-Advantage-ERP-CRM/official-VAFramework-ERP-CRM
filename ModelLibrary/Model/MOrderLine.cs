@@ -4573,10 +4573,11 @@ namespace VAdvantage.Model
             }
 
             // when document is other that Drafted stage, then we cannot delete documnet line
+            // But allowed to delete lines from Quotation.
             MOrder order = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
-            if (order.GetDocStatus() != "DR")
+            if (order.GetDocStatus() != "DR" && !order.IsSalesQuotation())
             {
-                log.SaveError("DeleteError", Msg.GetMsg(GetCtx(), "VIS_CantBeDeleted"));
+                log.SaveError("DeleteError", Msg.GetMsg(GetCtx(), "CannotDeleteTrx"));
                 return false;
             }
             return true;
