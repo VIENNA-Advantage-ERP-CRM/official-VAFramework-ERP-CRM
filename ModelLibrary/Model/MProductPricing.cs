@@ -206,7 +206,7 @@ namespace VAdvantage.Model
                 if (Env.HasModulePrefix("ED011_", out mInfo1))
                 {
                     /** Price List - Ensuring valid Uom id ** Dt:01/02/2021 ** Modified By: Kumar **/
-                    if (_C_UOM_ID <= 0)
+                    if (Util.GetValueOfInt(_C_UOM_ID) <= 0)
                     {
                         //vikas  mantis Issue ( 0000517)
                         string _sql = null;
