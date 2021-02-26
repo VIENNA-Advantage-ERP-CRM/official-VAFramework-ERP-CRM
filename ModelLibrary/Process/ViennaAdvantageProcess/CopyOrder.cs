@@ -41,7 +41,7 @@ namespace ViennaAdvantage.Process
         private bool _IsCloseDocument = false;
         int newid = 0;
         int neworg_id = 0;
-        string docNo;
+        StringBuilder docNo = new StringBuilder();
         #endregion
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace ViennaAdvantage.Process
             }
 
             //Develop by Deekshant For check VA077 Module For spilt the Sales Order
-           
+            docNo.Clear();
             if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
             {
                 //Check Destination Organization in c_orderline
@@ -123,11 +123,13 @@ namespace ViennaAdvantage.Process
                         int destinationorg = Util.GetValueOfInt(dts.Tables[0].Rows[i]["VA077_DestinationOrg"]);
                         // VAdvantage.Model.MOrder newOrder = new VAdvantage.Model.MOrder(GetCtx(), 0, Get_Trx());
                         int orgId = Util.GetValueOfInt(dts.Tables[0].Rows[i]["AD_Org_Id"]);
+                        if (i > 0)
+                            docNo.Append(", ");
                         AddHeader(destinationorg, orgId);
-                        Addline(destinationorg, orgId);
-                    }
+                        Addline(destinationorg, orgId);                        
+                    }                    
                 }
-                               
+
             }
             else
             {
@@ -219,10 +221,10 @@ namespace ViennaAdvantage.Process
                     original.ProcessIt(VAdvantage.Model.MOrder.DOCACTION_Close);
                     original.Save();
                 }
-                docNo = newOrder.GetDocumentNo();
+                docNo.Append(newOrder.GetDocumentNo());
             }
             //+ ": " + newOrder.GetDocumentNo()
-            return Msg.GetMsg(GetCtx(), "OrderCreatedSuccessfully") + " - " + dt.GetName() + ": " + docNo;
+            return Msg.GetMsg(GetCtx(), "OrderCreatedSuccessfully") + " - " + dt.GetName() + ": " + docNo.ToString();
         }
         /// <summary>Add Sales Order Header for VA077 Module</summary>
         /// <param name="destinationorg">Destination Orgnaization id</param>
@@ -259,7 +261,7 @@ namespace ViennaAdvantage.Process
             newOrder.SetVA009_PaymentMethod_ID(morder.GetVA009_PaymentMethod_ID());
             newOrder.SetC_IncoTerm_ID(morder.GetC_IncoTerm_ID());
             newOrder.SetC_Campaign_ID(morder.GetC_Campaign_ID());
-            newOrder.SetC_ProjectRef_ID(morder.GetC_Campaign_ID());
+            newOrder.SetC_ProjectRef_ID(morder.GetC_ProjectRef_ID());
             newOrder.SetGrandTotal(morder.GetGrandTotal());
             newOrder.SetTotalLines(morder.GetTotalLines());
             newOrder.Set_Value("VA077_HistoricContractDate", morder.Get_Value("VA077_HistoricContractDate"));
@@ -367,7 +369,7 @@ namespace ViennaAdvantage.Process
                 original.Save();
             }
 
-            docNo = newOrder.GetDocumentNo();
+            docNo.Append(newOrder.GetDocumentNo());
             return true;
         }
         /// <summary>
@@ -387,7 +389,7 @@ namespace ViennaAdvantage.Process
             }
             else
             {
-              
+
                 str = "SELECT VA077_DestinationOrg,C_OrderLine_ID FROM C_OrderLine WHERE C_Order_ID = " + _C_Order_ID + " AND (NVL(VA077_DestinationOrg,0)=0) AND AD_Org_ID=" + org;
             }
             DataSet st = DB.ExecuteDataset(str, null, Get_Trx());
@@ -432,8 +434,8 @@ namespace ViennaAdvantage.Process
                     orderLine.Set_Value("VA077_OldSN", mOrderLine.Get_Value("VA077_OldSN"));
                     orderLine.Set_Value("VA077_ContractProduct", mOrderLine.Get_Value("VA077_ContractProduct"));
                     orderLine.Set_Value("VA077_UserRef_ID", mOrderLine.Get_Value("VA077_UserRef_ID"));
-                    orderLine.Set_Value("StartDate", mOrderLine.Get_Value("StartDate"));
-                    orderLine.Set_Value("EndDate", mOrderLine.Get_Value("EndDate"));
+                    orderLine.Set_Value("VA077_StartDate", mOrderLine.Get_Value("VA077_StartDate"));
+                    orderLine.Set_Value("VA077_EndDate", mOrderLine.Get_Value("VA077_EndDate"));
                     orderLine.Set_Value("VA077_Duration", mOrderLine.Get_Value("VA077_Duration"));
                     orderLine.Set_Value("VA077_ShowWISYCN", mOrderLine.Get_Value("VA077_ShowWISYCN"));
                     orderLine.Set_Value("VA077_IsOfferApproved", mOrderLine.Get_Value("VA077_IsOfferApproved"));
@@ -447,6 +449,7 @@ namespace ViennaAdvantage.Process
                     orderLine.Set_Value("VA077_MarginAmt", mOrderLine.Get_Value("VA077_MarginAmt"));
                     orderLine.Set_Value("VA077_PurchasePrice", mOrderLine.Get_Value("VA077_PurchasePrice"));
                     orderLine.Set_Value("VA077_RegEmail", mOrderLine.Get_Value("VA077_RegEmail"));
+                    orderLine.Set_Value("VA077_ProductInfo", mOrderLine.Get_Value("VA077_ProductInfo"));
                     orderLine.Set_Value("VA077_IsContract", mOrderLine.Get_Value("VA077_IsContract"));
 
                     // Set Quotation Ref on Line
