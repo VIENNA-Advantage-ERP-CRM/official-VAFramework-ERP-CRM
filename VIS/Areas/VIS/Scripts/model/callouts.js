@@ -654,7 +654,6 @@
             return "";
         }
         try {
-
             var C_BPartner_ID = 0;
             var isvendor = 'N';
             var isCustomer = 'N';
@@ -702,7 +701,11 @@
                     //        mTab.setValue("M_PriceList_ID", i1);
                     //}
                 }
-
+                //Inco Term
+                var IncoTerm = Util.getValueOfInt(isSOTrx ? dr["C_IncoTerm_ID"] : dr["C_IncoTermPO_ID"]);
+                if (IncoTerm > 0) {
+                    mTab.setValue("C_IncoTerm_ID", IncoTerm);
+                }
                 //	Bill-To BPartner
                 mTab.setValue("Bill_BPartner_ID", C_BPartner_ID);
                 var bill_Location_ID = Util.getValueOfInt(dr["Bill_Location_ID"]);
@@ -12013,7 +12016,6 @@
             return "";
         }
         try {
-
             var C_BPartner_ID = Util.getValueOfInt(value);//(int)value;
             if (C_BPartner_ID == null || C_BPartner_ID == 0) {
                 return "";
@@ -12035,7 +12037,7 @@
             //-----------------ANuj----Code----------
             var sql = "SELECT p.AD_Language,p.C_PaymentTerm_ID,"
                 + " COALESCE(p.M_PriceList_ID,g.M_PriceList_ID) AS M_PriceList_ID, p.PaymentRule,p.POReference,"
-                + " p.SO_Description,p.IsDiscountPrinted,";
+                + " p.SO_Description,p.IsDiscountPrinted, p.C_IncoTerm_ID,p.C_IncoTermPO_ID, ";
 
             var _CountVA009 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
             if (_CountVA009 > 0) {
@@ -12077,6 +12079,12 @@
                     //}
 
                     //	PaymentRule
+                    //Inco Term
+                    var IncoTerm = Util.getValueOfInt(dr.get(isSOTrx ? "C_IncoTerm_ID" : "C_IncoTermPO_ID"));
+                    if (IncoTerm > 0) {
+                        mTab.setValue("C_IncoTerm_ID", IncoTerm);
+                    }
+
                     var s = Util.getValueOfString(dr.get(isSOTrx ? "paymentrule" : "paymentrulepo"));
                     if (s != null && s.length != 0) {
                         if (ctx.getContext("DocBaseType").toString().endsWith("C"))	//	Credits are Payment Term
@@ -12371,7 +12379,6 @@
             mTab.setValue("VA038_AmortizationTemplate_ID", 0);
             return "";
         }
-        debugger;
 
         var M_Product_ID = value;
         if (M_Product_ID == null || M_Product_ID == 0)
@@ -15958,6 +15965,23 @@
         return "";
     };
 
+    //CalloutRequisition.prototype.BPartner = function (ctx, windowNo, mTab, mField, value, oldValue) {
+    //    if (this.isCalloutActive() || value == null || value.toString() == "") {
+    //        return "";
+    //    }
+    //    this.setCalloutActive(true);
+    //    try {
+    //        var C_BPartner_ID = value;
+            
+    //    }
+    //    catch (err) {
+    //        this.log.severe(err.toString());
+    //    };
+    //    this.setCalloutActive(false);
+    //    ctx = windowNo = mTab = mField = value = oldvalue = null;
+    //    return "";
+    //};
+
     VIS.Model.CalloutRequisition = CalloutRequisition;
     //*********** CalloutRequisition End *******
 
@@ -16749,7 +16773,7 @@
         return "";
     };
     CalloutTeamForcast.prototype.CalculatePrice = function (ctx, windowNo, mTab, mField, value, oldValue) {
-        //  
+        // 
         if (value == null || value.toString() == "" || Util.getValueOfInt(value) <= 0) {
             return "";
         }
@@ -16760,8 +16784,150 @@
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";
     };
+    /**
+     * UOM Conversion
+     * @param {any} ctx
+     * @param {any} windowNo
+     * @param {any} mTab
+     * @param {any} mField
+     * @param {any} value
+     * @param {any} oldValue
+     */
+    CalloutTeamForcast.prototype.Qty = function (ctx, windowNo, mTab, mField, value, oldValue) {  
+        if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {          
+            return "";
+        }  
+        this.setCalloutActive(true);
+        var C_UOM_ID = mTab.getValue("C_UOM_ID");
+        if (C_UOM_ID == null) {
+            C_UOM_ID = ctx.getContextAsInt(windowNo, "C_UOM_ID")  
+        }
+        var M_Product_ID = mTab.getValue("M_Product_ID");
+        var Qty = mTab.getValue("BaseQty");
+        var paramStr = M_Product_ID.toString().concat(",", C_UOM_ID.toString(), ",", Qty.toString()); 
+        var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
+        if (pc != null) {
+            mTab.setValue("QtyEntered", pc);
+        }
+        else {
+            mTab.setValue("QtyEntered", Qty);
+        }
+
+        this.setCalloutActive(false);
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
+    /**
+     * set currency on the basis of Pricelist
+     * @param {any} ctx
+     * @param {any} windowNo
+     * @param {any} mTab
+     * @param {any} mField
+     * @param {any} value
+     * @param {any} oldValue
+     */
+    CalloutTeamForcast.prototype.Currency = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {
+            return "";
+        }
+        this.setCalloutActive(true);
+        //get currency from pricelist
+        var pricelist = VIS.dataContext.getJSONRecord("MPriceList/GetPriceListData", Util.getValueOfString( mTab.getValue("M_PriceList_ID")));
+        if (pricelist["C_Currency_ID"] != null) {
+            mTab.setValue("C_Currency_ID", pricelist["C_Currency_ID"]);
+        }
+
+        this.setCalloutActive(false);
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
+    /**
+     *Set Std price 
+     * @param {any} ctx
+     * @param {any} windowNo
+     * @param {any} mTab
+     * @param {any} mField
+     * @param {any} value
+     * @param {any} oldValue
+     */
+    CalloutTeamForcast.prototype.ProductPrice = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {
+            if (mTab.getValue("M_Product_ID") == null) {
+                //set values to 0 if no product is selected
+                mTab.setValue("PriceStd", 0);
+                mTab.setValue("UnitPrice", 0);
+                mTab.setValue("QtyEntered", 0);
+                mTab.setValue("BaseQty", 0);
+            }
+            return "";
+        }
+        this.setCalloutActive(true);
+        if (ctx.getContextAsInt(windowNo, "M_PriceList_ID") > 0) {
+            var paramString = Util.getValueOfString(mTab.getValue("M_Product_ID")).concat(",", Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")), ",",
+                Util.getValueOfString(ctx.getContextAsInt(windowNo, "M_PriceList_ID")), ",", 
+                Util.getValueOfString(mTab.getValue("C_UOM_ID")))
+                
+            //get the price from product price inly if pricelist is selected
+            var stdPrice = VIS.dataContext.getJSONRecord("MProductPricing/GetProductdata", paramString);
+            mTab.setValue("PriceStd", stdPrice);
+            mTab.setValue("UnitPrice", stdPrice);
+            mTab.setValue("PriceStd", (stdPrice * Util.getValueOfDecimal(mTab.getValue("BaseQty"))));
+
+        }
+
+        this.setCalloutActive(false);
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
+
+   
     VIS.Model.CalloutTeamForcast = CalloutTeamForcast;
     //************CalloutTeamForcast End****************
+
+
+
+     //************CalloutMasterForecast Start***************
+    function CalloutMasterForecast() {
+        VIS.CalloutEngine.call(this, "VIS.CalloutMasterForecast");//must call
+    };
+    VIS.Utility.inheritPrototype(CalloutMasterForecast, VIS.CalloutEngine); //inherit prototype
+    /**
+     * set currency 
+     * @param {any} ctx
+     * @param {any} windowNo
+     * @param {any} mTab
+     * @param {any} mField
+     * @param {any} value
+     * @param {any} oldValue
+     */
+    CalloutMasterForecast.prototype.Currency = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {
+            if (mTab.getValue("M_PriceList_ID") == null) {
+                mTab.setValue("C_Currency_ID", Util.getValueOfInt(ctx.getContext("$C_Currency_ID")));
+            }
+            return "";
+        }
+        this.setCalloutActive(true);
+
+        var pricelist = VIS.dataContext.getJSONRecord("MPriceList/GetPriceListData", Util.getValueOfString(mTab.getValue("M_PriceList_ID")));
+        if (pricelist["C_Currency_ID"] != null) {
+            mTab.setValue("C_Currency_ID", pricelist["C_Currency_ID"]);
+        }
+
+        this.setCalloutActive(false);
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
+    VIS.Model.CalloutMasterForecast = CalloutMasterForecast;
+    //************CalloutMasterForecast END***************
+
+
+
+
 
 
     //************CalloutTaxAmt Start***************
@@ -17261,6 +17427,8 @@
             }
 
             var isReturnTrx = mTab.getValue("IsReturnTrx");
+            var isSOTrx = mTab.getValue("IsSOTrx");
+
 
             //	sraval: source forge bug # 1503219
             var order = mTab.getValue("C_Order_ID");
@@ -17274,7 +17442,7 @@
             //    + "WHERE p.C_BPartner_ID=" + C_BPartner_ID;		//	1
             sql = "SELECT p.AD_Language, p.POReference,"
                 + "p.CreditStatusSettingOn,p.SO_CreditLimit, NVL(p.SO_CreditLimit,0) - NVL(p.SO_CreditUsed,0) AS CreditAvailable,"
-                + "l.C_BPartner_Location_ID, c.AD_User_ID , p.SOCreditStatus "
+                + "l.C_BPartner_Location_ID, c.AD_User_ID , p.SOCreditStatus,p.C_IncoTerm_ID,p.C_IncoTermPO_ID "
                 + "FROM C_BPartner p"
                 + " LEFT OUTER JOIN C_BPartner_Location l ON (p.C_BPartner_ID=l.C_BPartner_ID)"
                 + " LEFT OUTER JOIN AD_User c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
@@ -17303,6 +17471,12 @@
                 }
                 else {
                     mTab.setValue("AD_User_ID", ii);
+                }
+
+                //Inco Term
+                var IncoTerm = Util.getValueOfInt(idr.get(isSOTrx ? "C_IncoTerm_ID" : "C_IncoTermPO_ID"));
+                if (IncoTerm > 0) {
+                    mTab.setValue("C_IncoTerm_ID", IncoTerm);
                 }
 
                 // Skip credit check for returns
@@ -17461,9 +17635,10 @@
         try {
             //	Get Details
             var paramString = C_OrderLine_ID.toString();
+            var DataPrefix = VIS.dataContext.getJSONRecord("ModulePrefix/GetModulePrefix", "VA077_");
             var dr = VIS.dataContext.getJSONRecord("MOrderLine/GetOrderLine", paramString);
             // MOrderLine ol = new MOrderLine(ctx, C_OrderLine_ID, null);
-
+            
             //	Get Details
             if (Util.getValueOfInt(dr["GetID"]) != 0) {
 
@@ -17509,6 +17684,24 @@
                 else {
                     mTab.setValue("IsDropShip", false);
                 }
+
+                if (DataPrefix["VA077_"])
+                {
+                    mTab.setValue("VA077_CNAutodesk", Util.getValueOfString(dr["VA077_CNAutodesk"]));
+                    mTab.setValue("VA077_Duration", Util.getValueOfString(dr["VA077_Duration"]));
+                    mTab.setValue("VA077_MarginAmt", Util.getValueOfDecimal(dr["VA077_MarginAmt"]));
+                    mTab.setValue("VA077_MarginPercent", Util.getValueOfDecimal(dr["VA077_MarginPercent"]));
+                    mTab.setValue("VA077_OldSN", Util.getValueOfString(dr["VA077_OldSN"]));
+                    mTab.setValue("VA077_ProductInfo", Util.getValueOfString(dr["VA077_ProductInfo"]));
+                    mTab.setValue("VA077_PurchasePrice", Util.getValueOfDecimal(dr["VA077_PurchasePrice"]));
+                    mTab.setValue("VA077_RegEmail", Util.getValueOfString(dr["VA077_RegEmail"]));
+                    mTab.setValue("VA077_SerialNo", Util.getValueOfString(dr["VA077_SerialNo"]));
+                    mTab.setValue("VA077_UpdateFromVersn", Util.getValueOfString(dr["VA077_UpdateFromVersn"]));
+                    mTab.setValue("VA077_UserRef_ID", Util.getValueOfInt(dr["VA077_UserRef_ID"]));
+                    mTab.setValue("VA077_ServiceContract_ID", Util.getValueOfInt(dr["VA077_ServiceContract_ID"]));
+
+                }
+
             }
         }
         catch (err) {
@@ -22526,5 +22719,27 @@
         return "";
     }
     VIS.Model.CalloutRFQ = CalloutRFQ;
+
+    //** clearing WeekDay value when FixDueDate checkbox is true ** Dt: 02/04/2021 ** Modified By: Kumar ** //
+    //*************CalloutPaymentTerm Start**************
+    function CalloutPaymentTerm() {
+        VIS.CalloutEngine.call(this, "VIS.CalloutPaymentTerm");//must call
+    };
+    VIS.Utility.inheritPrototype(CalloutPaymentTerm, VIS.CalloutEngine); //inherit prototype
+    CalloutPaymentTerm.prototype.ClearWeekDay = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (this.isCalloutActive() || value == null || value.toString() == "") {
+            return "";
+        }
+        this.setCalloutActive(true);
+        if (value == true) {
+            mTab.setValue("NetDay", "");
+            mTab.setValue("WeekOffset", VIS.Env.ZERO);
+        }
+
+        this.setCalloutActive(false);
+        return "";
+    };
+    VIS.Model.CalloutPaymentTerm = CalloutPaymentTerm;
+    //**************CalloutPaymentTerm End*************
 
 })(VIS, jQuery);

@@ -342,6 +342,41 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
+        /// Get Purchase Price if exists
+        /// </summary>
+        /// <returns>limit</returns>
+        public Decimal GetPurchasePrice(int M_PriceList_ID)
+        {
+            //VA077_PurchasePrice
+            Decimal purchasePrice = 0;
+            if (GetM_Product_ID() == 0)
+                return purchasePrice;
+            bool isSOTrx = false;
+            MProduct prd = new MProduct(GetCtx(), GetM_Product_ID(), null);
+            MProductPricing pp = new MProductPricing(GetAD_Client_ID(), GetAD_Org_ID(),
+                GetM_Product_ID(), _parent.GetC_BPartner_ID(), GetQtyEntered(), isSOTrx);
+            pp.SetM_PriceList_ID(M_PriceList_ID);
+
+            DateTime? validFrom = GetDateOrdered();
+            if (validFrom == null)
+            {
+                validFrom = DateTime.Now.Date;
+            }
+
+            int M_PriceList_Version_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT M_PriceList_Version_ID FROM M_PriceList_Version WHERE IsActive = 'Y' 
+                        AND M_PriceList_ID = " + Util.GetValueOfInt(_parent.Get_Value("PO_PriceList_ID")) + @" AND ValidFrom <= "
+                        + DB.TO_DATE(validFrom, true) + " ORDER BY ValidFrom DESC"));
+
+            pp.SetM_PriceList_Version_ID(M_PriceList_Version_ID);
+            pp.SetM_AttributeSetInstance_ID(GetM_AttributeSetInstance_ID());
+            pp.SetC_UOM_ID(GetC_UOM_ID());
+
+            if (pp.CalculatePrice())
+                purchasePrice = pp.GetPriceStd();
+            return purchasePrice;
+        }
+
+        /// <summary>
         /// Set Tax
         /// </summary>
         /// <returns>true if tax is set</returns>        
@@ -4428,18 +4463,68 @@ namespace VAdvantage.Model
                 }
                 resetTotalAmtDim = true;
             }
-            // Develop By Deekshant For Calculation
-            if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
+            //  Work done for Purchase price and Margin Calculation
+            if (Env.IsModuleInstalled("VA077_") && Ord.IsSOTrx() && !Ord.IsReturnTrx())
             {
                 decimal marginper = 0;
                 decimal margin = 0;
+
+                if (Util.GetValueOfDecimal(Get_Value("VA077_PurchasePrice")).Equals(0))
+                {
+                    int po_PriceList_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT PO_PriceList_ID FROM C_BPartner WHERE C_BPartner_ID = " + GetParent().GetC_BPartner_ID(), null, Get_Trx()));
+                    if (po_PriceList_ID > 0)
+                    {
+                        Set_Value("VA077_PurchasePrice", GetPurchasePrice(po_PriceList_ID));
+                    }
+                }
+
                 if (GetPriceEntered() != 0)
                 {
-                    margin = GetPriceEntered() - Util.GetValueOfDecimal(Get_Value("VA077_PurchasePrice"));
-                    marginper = (margin / GetPriceEntered()) * 100;
+                    margin = Decimal.Subtract(GetPriceEntered(), Util.GetValueOfDecimal(Get_Value("VA077_PurchasePrice"))) * GetQtyEntered();
+                    marginper = Decimal.Round(Decimal.Multiply(Decimal.Divide(margin, (GetPriceEntered() * GetQtyEntered()))
+                        , Env.ONEHUNDRED), GetPrecision(), MidpointRounding.AwayFromZero);
                 }
+
                 Set_Value("VA077_MarginAmt", margin);
                 Set_Value("VA077_MarginPercent", marginper);
+
+                // Set Values from Product when saving the Quotation Line
+                if (GetM_Product_ID() > 0)
+                {
+                    string str = @"SELECT VA077_SNErweiterbar, VA077_ShowOldSN, VA077_ContractProduct, VA077_ShowCNAutodesk,
+                    VA077_NonContractProd, Description, DocumentNote, VA077_DestinationOrg, VA077_AdditionalInfo, VA077_UpdateVersion,
+                    VA077_RegEmail FROM M_Product WHERE M_Product_ID=" + GetM_Product_ID();
+
+                    DataSet dt = DB.ExecuteDataset(str, null, Get_Trx());
+                    if (dt != null && dt.Tables[0].Rows.Count > 0)
+                    {
+                        bool snerw = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_SNErweiterbar"]).Equals("Y");
+                        bool showoldsn = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_ShowOldSN"]).Equals("Y");
+                        bool contract = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_ContractProduct"]).Equals("Y");
+                        bool autodesk = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_ShowCNAutodesk"]).Equals("Y");
+                        bool noncontract = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_NonContractProd"]).Equals("Y");
+                        string desc = Util.GetValueOfString(dt.Tables[0].Rows[0]["Description"]);
+                        string notes = Util.GetValueOfString(dt.Tables[0].Rows[0]["DocumentNote"]);
+                        int org = Util.GetValueOfInt(dt.Tables[0].Rows[0]["VA077_DestinationOrg"]);
+                        bool addInfo = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_AdditionalInfo"]).Equals("Y");
+                        bool updateversion = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_UpdateVersion"]).Equals("Y");
+                        bool regemail = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_RegEmail"]).Equals("Y");
+
+                        Set_Value("VA077_DestinationOrg", org);
+                        Set_Value("Description", desc + " " + notes);
+
+                        Set_Value("VA077_SNErweiterbar", snerw);
+                        Set_Value("VA077_ShowOldSN", showoldsn);
+
+                        Set_Value("VA077_ContractProduct", contract);
+                        Set_Value("VA077_NonContractProd", noncontract);
+
+                        Set_Value("VA077_ShowCNAutodesk", autodesk);
+                        Set_Value("VA077_UpdateVersion", updateversion);
+                        Set_Value("VA077_AdditionalInfo", addInfo);
+                        Set_Value("VA077_ChkRegEmail", regemail);
+                    }
+                }
             }
             return true;
         }
@@ -4624,11 +4709,12 @@ namespace VAdvantage.Model
 
                         sql = @"UPDATE C_Order  p SET VA077_TotalMarginAmt=(SELECT COALESCE(SUM(pl.VA077_MarginAmt),0) FROM C_OrderLine pl 
                             WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_TotalPurchaseAmt=(SELECT COALESCE(SUM(pl.VA077_PurchasePrice),0) FROM C_OrderLine pl 
+                            VA077_TotalPurchaseAmt=(SELECT ROUND(COALESCE(SUM(pl.VA077_PurchasePrice * QtyEntered),0),2) FROM C_OrderLine pl  
                             WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_MarginPercent=(SELECT ROUND(COALESCE(SUM(pl.VA077_MarginPercent),0),2) FROM C_OrderLine pl 
-                            WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_TotalSalesAmt=(SELECT COALESCE(SUM(pl.PriceEntered),0) FROM C_OrderLine pl 
+                            VA077_MarginPercent=(SELECT CASE WHEN Sum(LineNetAmt) > 0 Then 
+                            ROUND(COALESCE(((Sum(LineNetAmt)- Sum(VA077_PurchasePrice * QtyEntered))/Sum(LineNetAmt)*100),0),2) ELSE 0  END 
+                            FROM C_OrderLine pl WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                            VA077_TotalSalesAmt=(SELECT COALESCE(SUM(pl.LineNetAmt),0) FROM C_OrderLine pl 
                             WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
                             VA077_HistoricContractDate=" + GlobalVariable.TO_DATE(HCDate, true) + @",
                             VA077_ContractCPStartDate = " + GlobalVariable.TO_DATE(StartDate, true) + @", 
@@ -4647,11 +4733,12 @@ namespace VAdvantage.Model
                     {
                         sql = @"UPDATE C_Order  p SET VA077_TotalMarginAmt=(SELECT COALESCE(SUM(pl.VA077_MarginAmt),0) FROM C_OrderLine pl 
                             WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_TotalPurchaseAmt=(SELECT COALESCE(SUM(pl.VA077_PurchasePrice),0) FROM C_OrderLine pl 
+                            VA077_TotalPurchaseAmt=(SELECT ROUND(COALESCE(SUM(pl.VA077_PurchasePrice * QtyEntered),0),2) FROM C_OrderLine pl  
                             WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_MarginPercent=(SELECT ROUND(COALESCE(SUM(pl.VA077_MarginPercent),0),2) FROM C_OrderLine pl 
-                            WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_TotalSalesAmt=(SELECT COALESCE(SUM(pl.PriceEntered),0) FROM C_OrderLine pl 
+                            VA077_MarginPercent=(SELECT CASE WHEN Sum(LineNetAmt) > 0 Then 
+                            ROUND(COALESCE(((Sum(LineNetAmt)- Sum(VA077_PurchasePrice * QtyEntered))/Sum(LineNetAmt)*100),0),2) ELSE 0  END 
+                            FROM C_OrderLine pl WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                            VA077_TotalSalesAmt=(SELECT COALESCE(SUM(pl.LineNetAmt),0) FROM C_OrderLine pl 
                             WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
                             VA077_ChangeStartDate = " + GlobalVariable.TO_DATE(GetStartDate(), true) + @"
                             WHERE p.C_Order_ID=" + GetC_Order_ID();

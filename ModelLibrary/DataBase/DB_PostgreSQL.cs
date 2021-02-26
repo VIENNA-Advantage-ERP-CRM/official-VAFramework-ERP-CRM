@@ -331,14 +331,42 @@ namespace VAdvantage.DataBase
             return result.ToString();
         }
 
+        /// <summary>
+        /// Get next ID fromm Sequence
+        /// </summary>
+        /// <param name="Name"></param>
+        /// <returns></returns>
         public int GetNextID(string Name)
         {
-            throw new NotImplementedException();
+            int m_sequence_id = DB.GetSQLValue(null, "SELECT nextval('" + Name.ToUpper() + "')");
+            return m_sequence_id;
         }
 
+        /// <summary>
+        /// Drop Existing if any and create new Sequence.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="increment"></param>
+        /// <param name="minvalue"></param>
+        /// <param name="maxvalue"></param>
+        /// <param name="start"></param>
+        /// <param name="trxName"></param>
+        /// <returns></returns>
         public bool CreateSequence(string name, int increment, int minvalue, int maxvalue, int start, Trx trxName)
         {
-            throw new NotImplementedException();
+            int no = DB.ExecuteQuery("DROP SEQUENCE " + name.ToUpper() + "_SEQ", null, trxName);
+            string sql= "CREATE SEQUENCE " + name.ToUpper() + "_SEQ"
+                                + " MINVALUE " + minvalue
+                                + " MAXVALUE " + maxvalue
+                                + " START WITH " + start
+                                + " INCREMENT BY " + increment;
+
+            no = DB.ExecuteQuery(sql, null, trxName);
+
+            if (no == -1)
+                return false;
+            else
+                return true;
         }
 
 
