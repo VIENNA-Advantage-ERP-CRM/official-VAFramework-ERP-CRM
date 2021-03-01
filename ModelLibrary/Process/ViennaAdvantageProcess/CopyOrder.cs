@@ -448,6 +448,15 @@ namespace ViennaAdvantage.Process
                     orderLine.Set_Value("VA077_PurchasePrice", mOrderLine.Get_Value("VA077_PurchasePrice"));
                     orderLine.Set_Value("VA077_RegEmail", mOrderLine.Get_Value("VA077_RegEmail"));
                     orderLine.Set_Value("VA077_IsContract", mOrderLine.Get_Value("VA077_IsContract"));
+
+                    // Set Quotation Ref on Line
+                    // Added by Bharat on 06 Jan 2018 to set Values on Sales Order from Sales Quotation.
+                    if (orderLine.Get_ColumnIndex("C_Quotation_Line_ID") >= 0)
+                        orderLine.Set_Value("C_Quotation_Line_ID", mOrderLine.GetC_OrderLine_ID());
+                    // Added by Bharat on 06 Jan 2018 to set Values on Sales Order from Sales Quotation.
+                    if (orderLine.Get_ColumnIndex("C_Order_Quotation") >= 0)
+                        orderLine.Set_Value("C_Order_Quotation", mOrderLine.GetC_Order_ID());
+
                     if (!orderLine.Save())
                     {
                         Get_Trx().Rollback();
