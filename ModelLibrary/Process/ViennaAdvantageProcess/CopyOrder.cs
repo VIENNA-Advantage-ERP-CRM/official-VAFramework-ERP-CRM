@@ -459,7 +459,7 @@ namespace ViennaAdvantage.Process
                     // Added by Bharat on 06 Jan 2018 to set Values on Sales Order from Sales Quotation.
                     if (orderLine.Get_ColumnIndex("C_Order_Quotation") >= 0)
                         orderLine.Set_Value("C_Order_Quotation", mOrderLine.GetC_Order_ID());
-
+                    orderLine.SetLine(mOrderLine.GetLine());
                     if (!orderLine.Save())
                     {
                         Get_Trx().Rollback();
