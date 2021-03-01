@@ -114,7 +114,7 @@ namespace ViennaAdvantage.Process
             if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
             {
                 //Check Destination Organization in c_orderline
-                string str = "SELECT DISTINCT(VA077_DestinationOrg), AD_Org_Id FROM C_OrderLine WHERE C_Order_ID=" + _C_Order_ID;
+                string str = "SELECT DISTINCT(VA077_DestinationOrg), AD_Org_Id FROM C_OrderLine WHERE C_Order_ID=" + _C_Order_ID + " ORDER BY Line";
                 DataSet dts = DB.ExecuteDataset(str, null, Get_Trx());
                 if (dts != null && dts.Tables[0].Rows.Count > 0)
                 {
@@ -385,12 +385,12 @@ namespace ViennaAdvantage.Process
             VAdvantage.Model.MOrderLine mOrderLine = null;
             if (destinationorg != 0)
             {
-                str = "SELECT VA077_DestinationOrg,C_OrderLine_ID FROM C_OrderLine WHERE C_Order_ID=" + _C_Order_ID + " AND VA077_DestinationOrg=" + destinationorg;
+                str = "SELECT VA077_DestinationOrg,C_OrderLine_ID FROM C_OrderLine WHERE C_Order_ID=" + _C_Order_ID + " AND VA077_DestinationOrg=" + destinationorg + " ORDER BY Line";
             }
             else
             {
 
-                str = "SELECT VA077_DestinationOrg,C_OrderLine_ID FROM C_OrderLine WHERE C_Order_ID = " + _C_Order_ID + " AND (NVL(VA077_DestinationOrg,0)=0) AND AD_Org_ID=" + org;
+                str = "SELECT VA077_DestinationOrg,C_OrderLine_ID FROM C_OrderLine WHERE C_Order_ID = " + _C_Order_ID + " AND (NVL(VA077_DestinationOrg,0)=0) AND AD_Org_ID=" + org + " ORDER BY Line";
             }
             DataSet st = DB.ExecuteDataset(str, null, Get_Trx());
             if (st != null && st.Tables[0].Rows.Count > 0)
@@ -459,6 +459,8 @@ namespace ViennaAdvantage.Process
                     // Added by Bharat on 06 Jan 2018 to set Values on Sales Order from Sales Quotation.
                     if (orderLine.Get_ColumnIndex("C_Order_Quotation") >= 0)
                         orderLine.Set_Value("C_Order_Quotation", mOrderLine.GetC_Order_ID());
+
+                    orderLine.SetLine(mOrderLine.GetLine());
 
                     if (!orderLine.Save())
                     {
