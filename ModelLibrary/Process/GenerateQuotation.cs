@@ -204,6 +204,7 @@ namespace ViennaAdvantageServer.Process
                     order.Set_Value("VA077_TotalPurchaseAmt", fromProject.Get_Value("VA077_TotalPurchaseAmt"));
                     order.Set_Value("VA077_TotalSalesAmt", fromProject.Get_Value("VA077_TotalSalesAmt"));
                     order.Set_Value("VA077_MarginPercent", fromProject.Get_Value("VA077_MarginPercent"));
+                    order.Set_Value("VA077_OrderRef", fromProject.GetPOReference());
                 }
 
                 if (!order.Save())

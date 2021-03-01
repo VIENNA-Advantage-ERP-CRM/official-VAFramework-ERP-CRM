@@ -1801,7 +1801,7 @@ namespace VAdvantage.Model
                     {
                         if (Util.GetValueOfInt(DB.ExecuteScalar("Select Count(*) From VA009_OrderPaySchedule Where C_Order_ID=" + GetC_Order_ID() + " AND VA009_Ispaid='Y'")) != _countschedule)
                         {
-                            _processMsg = "Please Do Advance Payment against order";
+                            _processMsg = Msg.GetMsg(Env.GetCtx(), "VIS_PayAdvance"); // "Please Do Advance Payment against order";
                             return DocActionVariables.STATUS_INVALID;
                         }
                     }

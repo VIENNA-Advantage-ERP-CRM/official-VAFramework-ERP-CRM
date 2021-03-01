@@ -565,7 +565,7 @@ namespace VAdvantage.Model
                             VA077_TotalPurchaseAmt=(SELECT ROUND(Sum(VA077_PurchaseAmt),2) FROM C_ProjectLine 
                             WHERE C_PROJECT_ID=" + projID + @" AND IsActive='Y'),
                             VA077_MarginPercent=(SELECT CASE WHEN Sum(PlannedAmt) > 0 Then 
-                                                 ROUND(((Sum(PlannedAmt)- Sum(VA077_PurchaseAmt))/Sum(PlannedAmt)*100),2) ELSE 0  END 
+                                                 ROUND(((Sum(PlannedAmt)- Sum(NVL(VA077_PurchaseAmt,0)))/Sum(PlannedAmt)*100),2) ELSE 0  END 
                                                  FROM C_ProjectLine WHERE C_PROJECT_ID=" + projID + @" AND IsActive='Y') 
                             WHERE C_Project_ID=" + projID;
 
