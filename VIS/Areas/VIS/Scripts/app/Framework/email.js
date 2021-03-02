@@ -1568,12 +1568,7 @@
                 filesInfo.push(fileInfo);
             }
 
-            //Lakhwinder
-            //Add file size if print format attached;
-            totalSize += printFormatFileSize;
-
-
-
+          
             if (totalSize > (chunkSize * 24)) {
                 return;
             }
@@ -1701,6 +1696,27 @@
         };
 
         function send(e) {
+
+
+
+            //Stop sending email if totalsize is more than 25 MB
+            var tSize = 0;
+
+            for (var itm in lstPFFiles) {
+                tSize = tSize + (lstPFFiles[itm].Size);
+            }
+            for (var itm in lstLatestFiles) {                
+                tSize = tSize + (lstLatestFiles[itm].size);
+            }
+            if (tSize > 24 * chunkSize) {
+                window.setTimeout(function () {
+                    VIS.ADialog.info("MaxFileSize25MB");
+                }, 2);
+                return;
+            }
+
+
+
             var subj = $subject.val();
             var body = $textAreakeno.value();
 
@@ -2429,12 +2445,12 @@
                         VIS.ADialog.info(result.ErrorText);
                         return;
                     }
-                    showFileInAttachment(result.ReportFilePath, parseInt(result.Result));
-                    printFormatFileSize = parseInt(result.Result);
-                    filesforAttachmentforNewAttachment.push(result.ReportFilePath);
-                    lstPFFiles.push(result.ReportFilePath);
-                    // $btnHdrPrint.off('click');
-                    // $btnHdrPrint.addClass("vis-ev-col-readonly");
+                    var fileInfo = {};
+                    fileInfo.Name = result.ReportFilePath;
+                    fileInfo.Size = parseInt(result.Result);
+                    showFileInAttachment(fileInfo.Name, fileInfo.Size);
+                    filesforAttachmentforNewAttachment.push(fileInfo.Name);
+                    lstPFFiles.push(fileInfo);
                 },
                 error: function (err) {
                     $bsyDiv[0].style.visibility = "hidden";
@@ -2472,15 +2488,22 @@
                     }
                 }
 
-               ///////////
-                ???????
-                    ??????????? /
-                        //////// To be continue...
-
                 filesforAttachmentforNewAttachment.splice(0, filesforAttachmentforNewAttachment.length);
-
                 for (var itm in lstLatestFiles) {
                     filesforAttachmentforNewAttachment.push(lstLatestFiles[itm].name);
+                }
+
+                //Lakhwinder
+                //remove form printformatfilelist
+                for (var itm in lstPFFiles) {
+                    if ((String(html).indexOf(lstPFFiles[itm].Name)) > -1) {
+                        lstPFFiles.splice(itm, 1);
+                        break;
+                    }
+                }
+                //Add file name to sendingList 
+                for (var itm in lstPFFiles) {
+                    filesforAttachmentforNewAttachment.push(lstPFFiles[itm].Name);
                 }
 
                 if (!hasScrollBar()) {
@@ -2552,12 +2575,12 @@
             });
 
             $.ajax({
-                url: VIS.Application.contextUrl + "Email/GetReportFileTypes",
+                url: VIS.Application.contextUrl + "JsonData/GetReportFileTypes",
                 datatype: "json",
                 type: "post",
                 cache: false,
                 data: {
-                    processID: _curtab.getAD_Process_ID()
+                    AD_Process_ID: _curtab.getAD_Process_ID()
                 },
                 success: function (data) {
                     if (data == null) {

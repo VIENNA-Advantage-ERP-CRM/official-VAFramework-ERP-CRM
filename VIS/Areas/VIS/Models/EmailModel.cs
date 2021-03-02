@@ -957,12 +957,7 @@ namespace VIS.Models
 
             #endregion
         }
-        public List<ValueNamePair> GetReportFileTypes( int processID)
-        {
-            //int processID = GetDoctypeBasedReport( tableID, recID);
-            return  ProcessHelper.GetReportFileTypes(ctx,processID);
-            
-        }
+       
 
     }
 

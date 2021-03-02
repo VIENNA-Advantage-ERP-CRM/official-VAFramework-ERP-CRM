@@ -267,13 +267,7 @@ namespace VIS.Controllers
             return Json(JsonConvert.SerializeObject(rep), JsonRequestBehavior.AllowGet);
 
         }
-        [HttpPost]
-        public JsonResult GetReportFileTypes(int processID)
-        {
-            Ctx ctx = Session["ctx"] as Ctx;
-            EmailModel model = new EmailModel(ctx);
-            return Json(JsonConvert.SerializeObject(model.GetReportFileTypes(processID)), JsonRequestBehavior.AllowGet);
-        }
+        
 
 
 
