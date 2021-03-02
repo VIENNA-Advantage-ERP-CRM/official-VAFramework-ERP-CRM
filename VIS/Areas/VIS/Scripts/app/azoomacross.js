@@ -168,10 +168,10 @@
                     li.on('click', function (e) {
                         e.stopImmediatePropagation();
                        
-                        var ad_window_Id = $(this).data('id');
+                        var VAF_Screen_Id = $(this).data('id');
                         var zoomQuery = new VIS.Query();
                         zoomQuery.addRestriction(KeyCol, VIS.Query.prototype.EQUAL, Record_ID);
-                        VIS.viewManager.startWindow(ad_window_Id, zoomQuery);
+                        VIS.viewManager.startWindow(VAF_Screen_Id, zoomQuery);
                         var overlay = $('#w2ui-overlay-main');
                         overlay.hide();
                         overlay = null;

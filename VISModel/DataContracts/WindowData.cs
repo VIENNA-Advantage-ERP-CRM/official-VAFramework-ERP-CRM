@@ -10,7 +10,7 @@ namespace VIS.DataContracts
     {
         public int Record_ID { get; set; }
         public int VAF_TableView_ID { get; set; }
-        public int AD_WIndow_ID { get; set; }
+        public int VAF_Screen_ID { get; set; }
 
         public int VAF_Client_ID { get; set; }
         public int VAF_Org_ID { get; set; }

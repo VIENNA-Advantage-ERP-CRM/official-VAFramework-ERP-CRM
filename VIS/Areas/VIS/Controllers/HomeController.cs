@@ -185,7 +185,7 @@ namespace VIS.Controllers
                     model.Login2Model.Role = ctx.GetVAF_Role_ID().ToString();
                     model.Login2Model.Client = ctx.GetVAF_Client_ID().ToString();
                     model.Login2Model.Org = ctx.GetVAF_Org_ID().ToString();
-                    model.Login2Model.Warehouse = ctx.GetAD_Warehouse_ID().ToString();
+                    model.Login2Model.Warehouse = ctx.GetVAF_Warehouse_ID().ToString();
 
 
                     var RoleList = new List<KeyNamePair>();
@@ -250,7 +250,7 @@ namespace VIS.Controllers
 
                     ClientList = LoginHelper.GetClients(ctx.GetVAF_Role_ID());// .Add(new KeyNamePair(ctx.GetVAF_Client_ID(), ctx.GetVAF_Client_Name()));
                     OrgList = LoginHelper.GetOrgs(ctx.GetVAF_Role_ID(), ctx.GetVAF_UserContact_ID(), ctx.GetVAF_Client_ID());// .Add(new KeyNamePair(ctx.GetVAF_Org_ID(), ctx.GetVAF_Org_Name()));
-                    WareHouseList = LoginHelper.GetWarehouse(ctx.GetVAF_Org_ID());// .Add(new KeyNamePair(ctx.GetAD_Warehouse_ID(), ctx.GetContext("#VAM_Warehouse_Name")));
+                    WareHouseList = LoginHelper.GetWarehouse(ctx.GetVAF_Org_ID());// .Add(new KeyNamePair(ctx.GetVAF_Warehouse_ID(), ctx.GetContext("#VAM_Warehouse_Name")));
 
 
                     ViewBag.RoleList = RoleList;

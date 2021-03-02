@@ -984,7 +984,7 @@ namespace VIS.Helpers
                 InsRecord_ID = Util.GetValueOfInt(inn.VerRecID);
                 versionInfo.VAF_TableView_ID = VAF_TableView_ID;
                 versionInfo.Record_ID = Record_ID;
-                versionInfo.VAF_Screen_ID = inn.AD_WIndow_ID;
+                versionInfo.VAF_Screen_ID = inn.VAF_Screen_ID;
                 versionInfo.ImmediateSave = inn.ImmediateSave;
                 versionInfo.TableName = inn.TableName;
 
@@ -1004,7 +1004,7 @@ namespace VIS.Helpers
                     {
                         trxMas = Trx.Get("VerTrx" + System.DateTime.Now.Ticks);
                         ctx.SetContext("VerifyVersionRecord", "Y");
-                        int parentWinID = inn.AD_WIndow_ID;
+                        int parentWinID = inn.VAF_Screen_ID;
                         PO poMas = GetPO(ctx, VAF_TableView_ID, Record_ID, whereClause, trxMas, parentWinID, inn.VAF_TableView_ID, true, out parentWinID);
                         //	No Persistent Object
 
@@ -1113,7 +1113,7 @@ namespace VIS.Helpers
             }
 
             int Ver_Window_ID = 0;
-            PO po = GetPO(ctx, InsVAF_TableView_ID, InsRecord_ID, whereClause, trx, inn.AD_WIndow_ID, inn.VAF_TableView_ID, inn.MaintainVersions, out Ver_Window_ID);
+            PO po = GetPO(ctx, InsVAF_TableView_ID, InsRecord_ID, whereClause, trx, inn.VAF_Screen_ID, inn.VAF_TableView_ID, inn.MaintainVersions, out Ver_Window_ID);
             //	No Persistent Object
             if (po == null)
             {
@@ -1121,7 +1121,7 @@ namespace VIS.Helpers
             }
 
             // vinay bhatt window id
-            po.SetVAF_Screen_ID(inn.AD_WIndow_ID);
+            po.SetVAF_Screen_ID(inn.VAF_Screen_ID);
             //      
             // check and set field values based on Master Versions 
             // else execute normally
@@ -1186,7 +1186,7 @@ namespace VIS.Helpers
             if (inn.MaintainVersions)
             {
                 var masDet = po.GetMasterDetails();
-                po = GetPO(ctx, VAF_TableView_ID, masDet.Record_ID, whereClause, trx, inn.AD_WIndow_ID, inn.VAF_TableView_ID, true, out Ver_Window_ID);
+                po = GetPO(ctx, VAF_TableView_ID, masDet.Record_ID, whereClause, trx, inn.VAF_Screen_ID, inn.VAF_TableView_ID, true, out Ver_Window_ID);
                 //	No Persistent Object
                 if (po == null)
                 {

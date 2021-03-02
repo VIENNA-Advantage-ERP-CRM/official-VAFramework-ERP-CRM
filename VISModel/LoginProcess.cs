@@ -819,9 +819,9 @@ namespace VAdvantage.Login
                 //  load Warehouses
                 do
                 {
-                    int AD_Warehouse_ID = Utility.Util.GetValueOfInt(dr[0].ToString());
+                    int VAF_Warehouse_ID = Utility.Util.GetValueOfInt(dr[0].ToString());
                     String Name = dr[1].ToString();
-                    KeyNamePair p = new KeyNamePair(AD_Warehouse_ID, Name);
+                    KeyNamePair p = new KeyNamePair(VAF_Warehouse_ID, Name);
                     list.Add(p);
                 }
                 while (dr.Read());

@@ -408,12 +408,12 @@ namespace VAdvantage.Classes
         /// <summary>
         ///	Org Access constructor
         /// </summary>
-        /// <param name="ad_Window_ID">window</param>
+        /// <param name="VAF_Screen_ID">window</param>
         /// <param name="name">Window Name</param>
         /// <param name="where">Where Clause on the first tab of the window </param>
-        public WindowWhereClause(int ad_Window_ID, String name, String where)
+        public WindowWhereClause(int VAF_Screen_ID, String name, String where)
         {
-            this.VAF_Screen_ID = ad_Window_ID;
+            this.VAF_Screen_ID = VAF_Screen_ID;
             this.windowName = name;
             this.whereClause = where;
         }

@@ -18,11 +18,11 @@ namespace VIS.Controllers
             return View();
         }
 
-        public JsonResult GetCardView(int ad_Window_ID, int vaf_tab_ID)
+        public JsonResult GetCardView(int VAF_Screen_ID, int vaf_tab_ID)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             CardViewModel objCardViewModel = new CardViewModel();
-            List<CardViewPropeties> lstCardView = objCardViewModel.GetCardView(ad_Window_ID, vaf_tab_ID, ctx);
+            List<CardViewPropeties> lstCardView = objCardViewModel.GetCardView(VAF_Screen_ID, vaf_tab_ID, ctx);
             List<RolePropeties> lstRole = objCardViewModel.GetAllRoles(ctx);
             List<List<RolePropeties>> lstCardViewRole = new List<List<RolePropeties>>();
             List<CardViewConditionPropeties> lstCVConditon = new List<CardViewConditionPropeties>();

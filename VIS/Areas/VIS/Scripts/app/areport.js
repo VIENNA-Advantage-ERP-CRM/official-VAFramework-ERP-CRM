@@ -1038,7 +1038,7 @@
                                     updateCreateBar(100);
                                     showCreateMessage(VIS.Msg.getMsg("Generated"));
                                     $('<form>', {
-                                        'id': 'download_form',
+                                        'id': 'downloVAF_Page',
                                         'html': formlinks,
                                         'action': '#',
                                         'Class': 'hide'
@@ -1113,7 +1113,7 @@
                                     updateCreateBar(100);
                                     showCreateMessage(VIS.Msg.getMsg("Generated"));
                                     $('<form>', {
-                                        'id': 'download_form',
+                                        'id': 'downloVAF_Page',
                                         'html': formlinks,
                                         'action': '#',
                                         'Class': 'hide'

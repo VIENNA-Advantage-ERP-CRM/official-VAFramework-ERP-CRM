@@ -432,7 +432,7 @@ namespace VAdvantage.Controller
             StringBuilder sql = new StringBuilder("SELECT ");
 
 
-            //w.ad_window_id, u.vaf_client_id, u.VAF_Role_id AS userdef_role_id, u.VAF_UserContact_id,u.VAF_UserCustom_Win_id, u.customizationname, COALESCE(u.name, w.name) AS name,")
+            //w.VAF_Screen_id, u.vaf_client_id, u.VAF_Role_id AS userdef_role_id, u.VAF_UserContact_id,u.VAF_UserCustom_Win_id, u.customizationname, COALESCE(u.name, w.name) AS name,")
             // .Append("COALESCE(u.description, w.description) AS description, COALESCE(u.help, w.help) AS help, w.windowtype, w.ad_color_id, w.VAF_Image_id, COALESCE(u.winheight, w.winheight) AS winheight,")
             // .Append("COALESCE(u.winwidth, w.winwidth) AS winwidth, w.VAF_ContextScope_id,'Y' AS IsSOTrx,'Y' AS IsReadWrite, w.isdefault ");
 

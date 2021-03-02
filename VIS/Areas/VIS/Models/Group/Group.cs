@@ -855,9 +855,9 @@ namespace VIS.Models
             }
 
 
-            sql = @"SELECT AD_WIndow.Name FROM VAF_Group_Window  JOIN AD_WIndow
+            sql = @"SELECT VAF_Screen.Name FROM VAF_Group_Window  JOIN VAF_Screen
                          ON VAF_Group_Window.VAF_Screen_ID=VAF_Screen.VAF_Screen_ID
-                         WHERE VAF_Group_Window.IsActive='Y' AND VAF_Group_Window.VAF_GroupInfo_ID=" + groupID + " ORDER BY AD_WIndow.Name";
+                         WHERE VAF_Group_Window.IsActive='Y' AND VAF_Group_Window.VAF_GroupInfo_ID=" + groupID + " ORDER BY VAF_Screen.Name";
 
             ds = DB.ExecuteDataset(sql);
 

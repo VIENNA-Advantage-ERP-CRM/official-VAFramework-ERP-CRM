@@ -103,7 +103,7 @@ namespace VAdvantage.ProcessEngine
         Object _TransientObject = null;  //27
 
         // vinay bhatt for window id
-        int _ad_window_ID = 0;    ///28
+        int _VAF_Screen_ID = 0;    ///28
         string _dynamicAction;
         int _pageSize = 100;
         int _totalPage = 1;
@@ -155,7 +155,7 @@ namespace VAdvantage.ProcessEngine
             lst.Add("TotalPage", _totalPage);                           //24
             lst.Add("FileType", _fileType);                           //25
             lst.Add("PageNo", _pageNo);
-            lst.Add("VAF_Screen_ID", _ad_window_ID);
+            lst.Add("VAF_Screen_ID", _VAF_Screen_ID);
             lst.Add("WindowNo", _windowNo);
             lst.Add("PrintFormatTableName", _VAF_Print_Rpt_Layout_TableName);
             lst.Add("VAF_ReportView_ID", _VAF_ReportView_ID);
@@ -201,7 +201,7 @@ namespace VAdvantage.ProcessEngine
 
             info._pageNo = Util.GetValueOfInt(lst["PageNo"]);
 
-            info._ad_window_ID = Util.GetValueOfInt(lst["VAF_Screen_ID"]);
+            info._VAF_Screen_ID = Util.GetValueOfInt(lst["VAF_Screen_ID"]);
             info._windowNo = Util.GetValueOfInt(lst["WindowNo"]);
             info.ActionOrigin = Util.GetValueOfString(lst["ActionOrigin"]);
             info.OriginName = Util.GetValueOfString(lst["OriginName"]);
@@ -239,12 +239,12 @@ namespace VAdvantage.ProcessEngine
 
         public int GetVAF_Screen_ID()
         {
-            return _ad_window_ID;
+            return _VAF_Screen_ID;
         }
 
         public void SetVAF_Screen_ID(int VAF_Screen_ID)
         {
-            _ad_window_ID = VAF_Screen_ID;
+            _VAF_Screen_ID = VAF_Screen_ID;
         }
         //
         public override string ToString()

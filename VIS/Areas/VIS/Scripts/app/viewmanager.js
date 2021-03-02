@@ -341,7 +341,7 @@
         };
 
         /* show window from cache 
-        @param AD_window_ID if of window
+        @param VAF_Screen_ID if of window
         */
         function showWindow(VAF_Screen_ID) {
             for (var i = 0; i < s_hiddenWindows.length; i++) {

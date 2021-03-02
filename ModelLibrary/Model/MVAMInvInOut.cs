@@ -1357,7 +1357,7 @@ namespace VAdvantage.Model
         {
             if (VAM_Warehouse_ID == 0)
             {
-                log.Severe("Ignored - Cannot set AD_Warehouse_ID to 0");
+                log.Severe("Ignored - Cannot set VAF_Warehouse_ID to 0");
                 return;
             }
             base.SetVAM_Warehouse_ID(VAM_Warehouse_ID);

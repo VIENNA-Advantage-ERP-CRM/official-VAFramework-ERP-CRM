@@ -628,16 +628,16 @@ namespace VAdvantage.Controller
         /// <param name="newCtx">context</param>
         /// <param name="windowNo">windoe number</param>
         /// <param name="tabNo">tab number</param>
-        /// <param name="ad_Window_ID">windoe _id</param>
+        /// <param name="VAF_Screen_ID">windoe _id</param>
         /// <param name="vaf_tab_ID">tab id</param>
         /// <param name="TabReadOnly">ia tab readonly</param>
         public GridFieldVO(Ctx newCtx, int windowNm, int tabNm,
-            int ad_Window_ID, int vaf_tab_ID, bool TabReadOnly)
+            int VAF_Screen_ID, int vaf_tab_ID, bool TabReadOnly)
         {
             ctx = newCtx;
             windowNo = windowNm;
             tabNo = tabNm;
-            VAF_Screen_ID = ad_Window_ID;
+            VAF_Screen_ID = VAF_Screen_ID;
             VAF_Tab_ID = vaf_tab_ID;
             tabReadOnly = TabReadOnly;
         }   //  MFieldVO
@@ -752,16 +752,16 @@ namespace VAdvantage.Controller
         /// <param name="Ctx">context</param>
         /// <param name="windowNo">window number</param>
         /// <param name="tabNo">tab number</param>
-        /// <param name="ad_Window_ID">window_id</param>
+        /// <param name="VAF_Screen_ID">window_id</param>
         /// <param name="vaf_tab_ID">tab_ id</param>
         /// <param name="TabReadOnly">is tabreadonly</param>
         /// <returns>this object</returns>
         public GridFieldVO Clone(Ctx ctx, int windowNo, int tabNo,
-            int ad_Window_ID, int vaf_tab_ID,
+            int VAF_Screen_ID, int vaf_tab_ID,
             bool TabReadOnly)
         {
             GridFieldVO clone = new GridFieldVO(ctx, windowNo, tabNo,
-            ad_Window_ID, vaf_tab_ID, TabReadOnly);
+            VAF_Screen_ID, vaf_tab_ID, TabReadOnly);
 
             clone.isProcess = false;
             //  Database Fields

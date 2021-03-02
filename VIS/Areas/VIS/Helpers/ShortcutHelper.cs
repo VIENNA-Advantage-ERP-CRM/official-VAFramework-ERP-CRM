@@ -76,7 +76,7 @@ namespace VIS.Helpers
             sql.Append(" WHERE o.VAF_Client_ID = 0 AND o.IsActive ='Y' AND o.IsChild = 'N' ");
 
             sql.Append(@"AND (o.VAF_Screen_ID IS NULL OR EXISTS (SELECT * FROM VAF_Screen_Rights w WHERE w.VAF_Screen_ID=o.VAF_Screen_ID AND w.IsReadWrite='Y' and VAF_Role_ID=" + ctx.GetVAF_Role_ID() + @"))
-                        AND (o.VAF_Page_ID IS NULL OR EXISTS (SELECT * FROM VAF_Page_Rights f WHERE f.ad_form_id=o.VAF_Page_ID AND f.isreadwrite='Y' and VAF_Role_ID=" + ctx.GetVAF_Role_ID() + @"))
+                        AND (o.VAF_Page_ID IS NULL OR EXISTS (SELECT * FROM VAF_Page_Rights f WHERE f.VAF_Page_id=o.VAF_Page_ID AND f.isreadwrite='Y' and VAF_Role_ID=" + ctx.GetVAF_Role_ID() + @"))
                         AND (o.VAF_Job_ID IS NULL OR EXISTS (SELECT * FROM VAF_Job_Rights p WHERE p.VAF_Job_id=o.VAF_Job_ID AND p.isreadwrite='Y' and VAF_Role_ID=" + ctx.GetVAF_Role_ID() + @"))");
             sql.Append("  ORDER BY SeqNo");
 
@@ -283,7 +283,7 @@ namespace VIS.Helpers
                                   (
                                   CASE
                                     WHEN o.action = 'W'
-                                    THEN o.ad_window_id
+                                    THEN o.VAF_Screen_id
                                     WHEN o.action='P'
                                     OR o.action  ='R'
                                     THEN o.VAF_Job_id
@@ -292,7 +292,7 @@ namespace VIS.Helpers
                                     WHEN o.action = 'T'
                                     THEN o.VAF_Task_id
                                     WHEN o.action = 'X'
-                                    THEN o.ad_form_id
+                                    THEN o.VAF_Page_id
                                     WHEN o.action ='F'
                                     THEN o.VAF_Workflow_id
                                     ELSE 0

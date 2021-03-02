@@ -896,20 +896,20 @@
 
             $btnEmailConfig.on("click", function () {
                 //get windowId for User Window
-                //var sql = "select ad_window_id from ad_window where name='Mail Configuration'";// Upper( name)=Upper('user' )
-                var ad_window_Id = 0;
+                //var sql = "select VAF_Screen_id from VAF_Screen where name='Mail Configuration'";// Upper( name)=Upper('user' )
+                var VAF_Screen_Id = 0;
                 try {
                     //var dr = VIS.DB.executeDataReader(sql);
                     //if (dr.read()) {
-                    //    ad_window_Id = dr.getInt(0);
+                    //    VAF_Screen_Id = dr.getInt(0);
                     //}
                     //dr.dispose();
                     // Added by Bharat on 12 June 2017 to remove client side queries
-                    ad_window_Id = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "UserPreference/GetWindowID", { "WindowName": "Mail Configuration" }, null); // spelling corrected by vinay bhatt on 18 oct 2018
-                    if (ad_window_Id > 0) {
+                    VAF_Screen_Id = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "UserPreference/GetWindowID", { "WindowName": "Mail Configuration" }, null); // spelling corrected by vinay bhatt on 18 oct 2018
+                    if (VAF_Screen_Id > 0) {
                         var zoomQuery = new VIS.Query();
                         zoomQuery.addRestriction("VAF_UserContact_ID", VIS.Query.prototype.EQUAL, VIS.context.getVAF_UserContact_ID());
-                        VIS.viewManager.startWindow(ad_window_Id, zoomQuery);
+                        VIS.viewManager.startWindow(VAF_Screen_Id, zoomQuery);
                     }
                 }
                 catch (e) {
@@ -920,20 +920,20 @@
 
             $btnSubstitute.on("click", function () {
                 //get windowId for User Window
-                //var sql = "select ad_window_id from ad_window where name='User Substitute'";// Upper( name)=Upper('user' )
-                var ad_window_Id = 0;
+                //var sql = "select VAF_Screen_id from VAF_Screen where name='User Substitute'";// Upper( name)=Upper('user' )
+                var VAF_Screen_Id = 0;
                 try {
                     //var dr = VIS.DB.executeDataReader(sql);
                     //if (dr.read()) {
-                    //    ad_window_Id = dr.getInt(0);
+                    //    VAF_Screen_Id = dr.getInt(0);
                     //}
                     //dr.dispose();
                     // Added by Bharat on 12 June 2017 to remove client side queries
-                    ad_window_Id = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "UserPreference/GetWindowID", { "WindowName": "User Substitute" }, null); // spelling corrected by vinay bhatt on 18 oct 2018
-                    if (ad_window_Id > 0) {
+                    VAF_Screen_Id = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "UserPreference/GetWindowID", { "WindowName": "User Substitute" }, null); // spelling corrected by vinay bhatt on 18 oct 2018
+                    if (VAF_Screen_Id > 0) {
                         var zoomQuery = new VIS.Query();
                         zoomQuery.addRestriction("VAF_UserContact_ID", VIS.Query.prototype.EQUAL, VIS.context.getVAF_UserContact_ID());
-                        VIS.viewManager.startWindow(ad_window_Id, zoomQuery);
+                        VIS.viewManager.startWindow(VAF_Screen_Id, zoomQuery);
                     }
                 }
                 catch (e) {

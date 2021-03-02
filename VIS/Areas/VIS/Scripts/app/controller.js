@@ -4250,7 +4250,7 @@
             VAF_Client_ID: VAF_Client_ID,
             VAF_Org_ID: VAF_Org_ID,
             SelectSQL: VIS.secureEngine.encrypt(this.SQL_Select),
-            AD_WIndow_ID: m_fields[0].getVAF_Screen_ID(), // vinay bhatt window id
+            VAF_Screen_ID: m_fields[0].getVAF_Screen_ID(), // vinay bhatt window id
             MaintainVersions: false,
             UnqFields: this.gFieldUnique
             //ImmediateSave: true,

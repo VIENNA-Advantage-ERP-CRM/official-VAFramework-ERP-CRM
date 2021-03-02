@@ -3786,7 +3786,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             //StringBuilder result = new StringBuilder("");
 
             IDataReader idr = null;
-            idr = VAdvantage.DataBase.DB.ExecuteReader("select * from ad_smsconfiguration WHERE isactive='Y'");
+            idr = VAdvantage.DataBase.DB.ExecuteReader("select * from VAF_SmsConfiguration WHERE isactive='Y'");
             DataTable dt = new DataTable();
             dt.Load(idr);
             idr.Close();

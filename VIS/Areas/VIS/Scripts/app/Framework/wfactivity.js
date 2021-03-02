@@ -1230,13 +1230,13 @@
             var sql = "SELECT TableName, VAF_Screen_ID, PO_Window_ID FROM VAF_TableView WHERE VAF_TableView_ID=" + fulldata[index].VAF_TableView_ID;
 
 
-            //var sql = "select ad_window_id from ad_window where name='Mail Configuration'";// Upper( name)=Upper('user' )
-            var ad_window_Id = -1;
+            //var sql = "select VAF_Screen_id from VAF_Screen where name='Mail Configuration'";// Upper( name)=Upper('user' )
+            var VAF_Screen_Id = -1;
             var tableName = '';
             try {
                 var dr = VIS.DB.executeDataReader(sql);
                 if (dr.read()) {
-                    ad_window_Id = dr.getInt(1);
+                    VAF_Screen_Id = dr.getInt(1);
                     tableName = dr.get(0);
                 }
                 dr.dispose();
@@ -1247,7 +1247,7 @@
 
             var zoomQuery = new VIS.Query();
             zoomQuery.addRestriction(tableName + "_ID", VIS.Query.prototype.EQUAL, fulldata[index].Record_ID);
-            VIS.viewManager.startWindow(ad_window_Id, zoomQuery);
+            VIS.viewManager.startWindow(VAF_Screen_Id, zoomQuery);
             */
         };
 

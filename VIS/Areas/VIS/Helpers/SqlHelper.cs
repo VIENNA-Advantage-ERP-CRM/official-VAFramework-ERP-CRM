@@ -251,7 +251,7 @@ namespace VIS.Helpers
             if (sql.ToUpper().IndexOf("DELETE") > -1)
             {
                 sql = sql.Substring(sql.ToUpper().IndexOf("FROM") + 5).Split(' ')[0];
-                if (sql.Trim().StartsWith("AD_"))
+                if (sql.Trim().StartsWith("VAF_"))
                 {
                     return false;
                 }
@@ -363,7 +363,7 @@ namespace VIS.Helpers
             {
                 string tableName = tables[i];
 
-                if (string.IsNullOrEmpty(tableName) || tableName.Trim().StartsWith("AD_"))
+                if (string.IsNullOrEmpty(tableName) || tableName.Trim().StartsWith("VAF_"))
                 {
                     continue;
                 }

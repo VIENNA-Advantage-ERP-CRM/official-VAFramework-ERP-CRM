@@ -4004,7 +4004,7 @@ namespace VAdvantage.Model
         /// <returns>DataSet of Posting Records</returns>
         private DataSet BudgetControlling()
         {
-            int ad_window_id = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_Screen_ID FROM VAF_Screen WHERE  Export_ID = 'VIS_181'")); // Purchase Order
+            int VAF_Screen_id = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_Screen_ID FROM VAF_Screen WHERE  Export_ID = 'VIS_181'")); // Purchase Order
             DataSet result = new DataSet();
             Type type = null;
             MethodInfo methodInfo = null;
@@ -4024,7 +4024,7 @@ namespace VAdvantage.Model
                                                                 Util.GetValueOfInt(GetVAB_Order_ID()),
                                                                 true,
                                                                 Util.GetValueOfInt(GetVAF_Org_ID()),
-                                                                ad_window_id,
+                                                                VAF_Screen_id,
                                                                 Util.GetValueOfInt(GetVAB_DocTypesTarget_ID()) };
                         result = (DataSet)methodInfo.Invoke(null, parametersArray);
                     }

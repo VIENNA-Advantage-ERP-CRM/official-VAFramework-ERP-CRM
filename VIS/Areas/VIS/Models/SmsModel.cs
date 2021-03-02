@@ -40,7 +40,7 @@ namespace VIS.Models
             SmsResponse reponse = new SmsResponse();
             reponse.Response = new List<SmsResponsehelper>();
             IDataReader idr = null;
-            idr = VAdvantage.DataBase.DB.ExecuteReader("select * from ad_smsconfiguration WHERE isactive='Y'");
+            idr = VAdvantage.DataBase.DB.ExecuteReader("select * from VAF_SmsConfiguration WHERE isactive='Y'");
             DataTable dt = new DataTable();
             dt.Load(idr);
             idr.Close();

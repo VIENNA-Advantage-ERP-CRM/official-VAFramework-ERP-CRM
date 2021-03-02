@@ -47,7 +47,7 @@ namespace VAdvantage.Utility
             string strUrl = "";
             //get value from Sms config table
             IDataReader idr = null;
-            idr = DataBase.DB.ExecuteReader("select * from ad_smsconfiguration WHERE isactive='Y'");
+            idr = DataBase.DB.ExecuteReader("select * from VAF_SmsConfiguration WHERE isactive='Y'");
             //DataTable dt = new DataTable();
             //dt.Load(idr);
             //idr.Close();

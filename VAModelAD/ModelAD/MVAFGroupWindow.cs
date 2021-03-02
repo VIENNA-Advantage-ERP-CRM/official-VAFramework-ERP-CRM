@@ -62,7 +62,7 @@ namespace VAdvantage.Model
             {
                 DB.ExecuteQuery(@"UPDATE VAF_Screen_Rights
                                     SET IsActive      ='Y',IsReadWrite='Y'
-                                    WHERE ad_window_id=" + GetVAF_Screen_ID() + @"
+                                    WHERE VAF_Screen_id=" + GetVAF_Screen_ID() + @"
                                     AND VAF_Role_ID   IN
                                       ( SELECT VAF_Role_ID FROM VAF_Role_Group WHERE VAF_Groupinfo_id=" + GetVAF_GroupInfo_ID() + ")");
             }
@@ -70,7 +70,7 @@ namespace VAdvantage.Model
             {
                 DB.ExecuteQuery(@"UPDATE VAF_Screen_Rights
                                     SET IsActive      ='N',IsReadWrite='N'
-                                    WHERE ad_window_id=" + GetVAF_Screen_ID() + @"
+                                    WHERE VAF_Screen_id=" + GetVAF_Screen_ID() + @"
                                     AND VAF_Role_ID   IN
                                       ( SELECT VAF_Role_ID FROM VAF_Role_Group WHERE VAF_Groupinfo_id=" + GetVAF_GroupInfo_ID() + ")");
             }

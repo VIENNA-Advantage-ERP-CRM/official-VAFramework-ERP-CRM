@@ -294,7 +294,7 @@
                 url: url,
                 dataType: "json",
                 contentType: 'application/json; charset=utf-8',
-                data: { ad_Window_ID: VAF_Screen_ID, vaf_tab_ID: VAF_Tab_ID },
+                data: { VAF_Screen_ID: VAF_Screen_ID, vaf_tab_ID: VAF_Tab_ID },
                 success: function (data) {
                     dbResult = JSON.parse(data);
                     cardViewInfo = dbResult[0].lstCardViewData;

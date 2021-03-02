@@ -164,7 +164,7 @@ namespace VIS.Helpers
                          .Append("  JOIN VACM_Subscribe CS  ON (CMH.vaf_tableview_id= CS.vaf_tableview_id) AND (CMH.record_id = CS.record_id)")
                          .Append(" Join VAF_UserContact Au on au.VAF_UserContact_id= CH.createdBy")
                          .Append(" left outer JOIN VAF_Image AI on(ai.VAF_Image_id=au.VAF_Image_id)")
-                         .Append("  join ad_window AW on(cs.ad_window_id= aw.ad_window_id) left outer  JOIN VAF_Image adi on(adi.VAF_Image_id= aw.VAF_Image_id)  where cs.createdby=" + ctx.GetVAF_UserContact_ID())
+                         .Append("  join VAF_Screen AW on(cs.VAF_Screen_id= aw.VAF_Screen_id) left outer  JOIN VAF_Image adi on(adi.VAF_Image_id= aw.VAF_Image_id)  where cs.createdby=" + ctx.GetVAF_UserContact_ID())
                          .Append(" and ch.VACM_ChatLine_ID =(Select max(VACM_ChatLine_ID) from VACM_ChatLine where VACM_Chat_ID= ch.VACM_Chat_ID)")
                          .Append("  order by inn.EntryID desc,ch.VACM_ChatLine_ID asc");
                 dsData = new DataSet();
@@ -456,7 +456,7 @@ namespace VIS.Helpers
                      .Append("  JOIN VACM_Subscribe CS  ON (CMH.vaf_tableview_id= CS.vaf_tableview_id) AND (CMH.record_id = CS.record_id)")
                      .Append(" Join VAF_UserContact Au on au.VAF_UserContact_id= CH.createdBy")
                      .Append(" left outer JOIN VAF_Image AI on(ai.VAF_Image_id=au.VAF_Image_id)")
-                     .Append("  join ad_window AW on(cs.ad_window_id= aw.ad_window_id) left outer  JOIN VAF_Image adi on(adi.VAF_Image_id= aw.VAF_Image_id)  where cs.createdby=" + ctx.GetVAF_UserContact_ID())
+                     .Append("  join VAF_Screen AW on(cs.VAF_Screen_id= aw.VAF_Screen_id) left outer  JOIN VAF_Image adi on(adi.VAF_Image_id= aw.VAF_Image_id)  where cs.createdby=" + ctx.GetVAF_UserContact_ID())
                      .Append(" and ch.VACM_ChatLine_ID =(Select max(VACM_ChatLine_ID) from VACM_ChatLine where VACM_Chat_ID= ch.VACM_Chat_ID)")
                      .Append("  order by inn.EntryID desc,ch.VACM_ChatLine_ID asc");
             try
@@ -502,7 +502,7 @@ namespace VIS.Helpers
                         .Append("  Join VAF_UserContact Au on au.VAF_UserContact_id= CH.createdBy")
                         .Append("  Join vaf_tableview At on at.vaf_tableview_id= CS.vaf_tableview_id")
                         .Append("  left outer JOIN VAF_Image AI on(ai.VAF_Image_id=au.VAF_Image_id)")
-                        .Append("  join ad_window AW on(cs.ad_window_id= aw.ad_window_id) left outer  JOIN VAF_Image adi on(adi.VAF_Image_id= aw.VAF_Image_id)")
+                        .Append("  join VAF_Screen AW on(cs.VAF_Screen_id= aw.VAF_Screen_id) left outer  JOIN VAF_Image adi on(adi.VAF_Image_id= aw.VAF_Image_id)")
                         .Append("  where cs.createdby=" + ctx.GetVAF_UserContact_ID())
                         .Append("  and ch.VACM_ChatLine_ID =(Select max(VACM_ChatLine_ID) from VACM_ChatLine where VACM_Chat_ID= ch.VACM_Chat_ID)")
                         .Append("  order by inn.EntryID desc,ch.VACM_ChatLine_ID asc");
@@ -640,7 +640,7 @@ namespace VIS.Helpers
                         .Append("  Join VAF_UserContact Au on au.VAF_UserContact_id= CH.createdBy")
                         .Append("  Join vaf_tableview At on at.vaf_tableview_id= CS.vaf_tableview_id")
                         .Append("  left outer JOIN VAF_Image AI on(ai.VAF_Image_id=au.VAF_Image_id)")
-                        .Append("  join ad_window AW on(cs.ad_window_id= aw.ad_window_id) left outer  JOIN VAF_Image adi on(adi.VAF_Image_id= aw.VAF_Image_id)")
+                        .Append("  join VAF_Screen AW on(cs.VAF_Screen_id= aw.VAF_Screen_id) left outer  JOIN VAF_Image adi on(adi.VAF_Image_id= aw.VAF_Image_id)")
                         .Append("  where cs.createdby=" + ctx.GetVAF_UserContact_ID())
                         .Append("  and ch.VACM_ChatLine_ID =(Select max(VACM_ChatLine_ID) from VACM_ChatLine where VACM_Chat_ID= ch.VACM_Chat_ID)")
                         .Append("  order by inn.EntryID desc,ch.VACM_ChatLine_ID asc");
@@ -739,7 +739,7 @@ namespace VIS.Helpers
                         .Append("  JOIN VACM_Subscribe CS  ON (CMH.vaf_tableview_id= CS.vaf_tableview_id) AND (CMH.record_id = CS.record_id)")
                         .Append("  Join VAF_UserContact Au on au.VAF_UserContact_id= CH.createdBy")
                         .Append("  left outer JOIN VAF_Image AI on(ai.VAF_Image_id=au.VAF_Image_id)")
-                        .Append("  join ad_window AW on(cs.ad_window_id= aw.ad_window_id) left outer  JOIN VAF_Image adi on(adi.VAF_Image_id= aw.VAF_Image_id)  where cs.createdby=" + ctx.GetVAF_UserContact_ID())
+                        .Append("  join VAF_Screen AW on(cs.VAF_Screen_id= aw.VAF_Screen_id) left outer  JOIN VAF_Image adi on(adi.VAF_Image_id= aw.VAF_Image_id)  where cs.createdby=" + ctx.GetVAF_UserContact_ID())
                         .Append("  AND cmh.VACM_Chat_ID=" + ChatID)
                         .Append("  order by inn.EntryID desc,ch.VACM_ChatLine_ID asc");
 
@@ -876,7 +876,7 @@ namespace VIS.Helpers
                 //                            VAF_Notice.VAF_TableView_ID , 
                 //                            VAF_Notice.Record_ID,
                 //                            (SELECT  VAF_TableView.TableName FROM  VAF_TableView WHERE  VAF_TableView.TableName='VAF_Notice') TableName,
-                //                            (SELECT  VAF_TableView.Ad_Window_ID FROM  VAF_TableView WHERE  VAF_TableView.TableName='VAF_Notice') VAF_Screen_ID,
+                //                            (SELECT  VAF_TableView.VAF_Screen_ID FROM  VAF_TableView WHERE  VAF_TableView.TableName='VAF_Notice') VAF_Screen_ID,
                 //                            VAF_Notice.VAF_Notice_ID
                 //                            FROM VAF_Notice INNER JOIN VAF_Msg_Lable ON VAF_Msg_Lable.VAF_Msg_Lable_ID=VAF_Notice.VAF_Msg_Lable_ID";
                 strQuery = @"SELECT SUBSTR(VAF_Notice.textmsg,0,100) AS Title,
@@ -887,7 +887,7 @@ namespace VIS.Helpers
                               VAF_Notice.Record_ID,
                               (SELECT VAF_TableView.TableName FROM VAF_TableView WHERE VAF_TableView.TableName='VAF_Notice'
                               ) TableName,
-                              (SELECT VAF_TableView.Ad_Window_ID
+                              (SELECT VAF_TableView.VAF_Screen_ID
                               FROM VAF_TableView
                               WHERE VAF_TableView.TableName='VAF_Notice'
                               ) VAF_Screen_ID,
@@ -1011,7 +1011,7 @@ namespace VIS.Helpers
             //strQuery = "SELECT VAB_BusinessPartner.Name ,rt.Name As CaseType,VAR_Request.DocumentNo , VAR_Request.Summary ,VAR_Request.StartDate ,VAR_Request.DateNextAction,VAR_Request.Created,"
             //+ "VAR_Request.VAR_Request_ID,VAR_Request.Priority as PriorityID,adl.Name as Priority,rs.name As Status,"
             //+ "(SELECT  VAF_TableView.TableName FROM  VAF_TableView WHERE  VAF_TableView.TableName='VAR_Request') TableName,"
-            //+ "(SELECT  VAF_TableView.Ad_Window_ID FROM  VAF_TableView WHERE  VAF_TableView.TableName='VAR_Request') VAF_Screen_ID  FROM VAR_Request"
+            //+ "(SELECT  VAF_TableView.VAF_Screen_ID FROM  VAF_TableView WHERE  VAF_TableView.TableName='VAR_Request') VAF_Screen_ID  FROM VAR_Request"
             //+ " INNER JOIN VAB_BusinessPartner on VAR_Request.VAB_BusinessPartner_ID=VAB_BusinessPartner.VAB_BusinessPartner_ID"
             //+ " INNER JOIN VAR_Req_Type rt ON VAR_Request.VAR_Req_Type_id = rt.VAR_Req_Type_ID"
             //+ " Left outer JOIN  VAR_Req_Status rs on rs.VAR_Req_Status_ID=VAR_Request.VAR_Req_Status_ID"
@@ -1031,7 +1031,7 @@ namespace VIS.Helpers
             //                          rs.name            AS Status,
             //                          (SELECT VAF_TableView.TableName FROM VAF_TableView WHERE VAF_TableView.TableName='VAR_Request'
             //                          ) TableName,
-            //                          (SELECT VAF_TableView.Ad_Window_ID
+            //                          (SELECT VAF_TableView.VAF_Screen_ID
             //                          FROM VAF_TableView
             //                          WHERE VAF_TableView.TableName='VAR_Request'
             //                          ) VAF_Screen_ID
@@ -1061,7 +1061,7 @@ namespace VIS.Helpers
                           rs.name            AS Status,
                           (SELECT VAF_TableView.TableName FROM VAF_TableView WHERE VAF_TableView.TableName='VAR_Request'
                           ) TableName,
-                          (SELECT VAF_TableView.Ad_Window_ID
+                          (SELECT VAF_TableView.VAF_Screen_ID
                           FROM VAF_TableView
                           WHERE VAF_TableView.TableName='VAR_Request'
                           ) VAF_Screen_ID

@@ -46,8 +46,8 @@ namespace VIS.Models
             // If window is selected or search text is available..
             if (VAF_Screen_ID > 0 || (!string.IsNullOrEmpty(searchText) && searchText.Length > 0))
             {
-                sql = @"SELECT DISTINCT tabl.vaf_tableview_ID,Tab.VAF_Tab_ID FROM Ad_Window Wind Join vaf_tab Tab 
-                    ON Wind.Ad_Window_Id=Tab.Ad_Window_Id JOIN  vaf_tableview Tabl On Tab.vaf_tableview_Id=Tabl.vaf_tableview_Id 
+                sql = @"SELECT DISTINCT tabl.vaf_tableview_ID,Tab.VAF_Tab_ID FROM VAF_Screen Wind Join vaf_tab Tab 
+                    ON Wind.VAF_Screen_Id=Tab.VAF_Screen_Id JOIN  vaf_tableview Tabl On Tab.vaf_tableview_Id=Tabl.vaf_tableview_Id 
                     WHERE Tab.IsActive    ='Y'";
 
                 sql += " AND wind.VAF_Screen_ID=" + VAF_Screen_ID + " and tab.vaf_tableview_ID IN (Select Distinct VAF_TableView_ID FROM VAF_WFlow_Task where VAF_Screen_ID=" + VAF_Screen_ID + ") ORDER BY Tab.VAF_Tab_ID Asc";
@@ -966,9 +966,9 @@ OR
             string sql = "";
             if (baseLang)
             {
-                sql = @"SELECT DISTINCT VAF_Screen.AD_window_ID,  VAF_Screen.DisplayName  || ' (' || VAF_WFlow_Node.Name || ')' As Name,VAF_WFLOW_NODEVAF_WFlow_Node_Para
+                sql = @"SELECT DISTINCT VAF_Screen.VAF_Screen_ID,  VAF_Screen.DisplayName  || ' (' || VAF_WFlow_Node.Name || ')' As Name,VAF_WFLOW_NODEVAF_WFlow_Node_Para
 .VAF_WFLOW_NODE_ID FROM VAF_WFlow_Task VAF_WFlow_Task
-                            JOIN VAF_Screen VAF_Screen ON VAF_WFlow_Task.Ad_Window_Id = VAF_Screen.Ad_Window_Id
+                            JOIN VAF_Screen VAF_Screen ON VAF_WFlow_Task.VAF_Screen_Id = VAF_Screen.VAF_Screen_Id
                             JOIN VAF_WFLOW_NODE VAF_WFLOW_NODE ON VAF_WFLOW_NODE.VAF_WFLOW_NODE_ID=VAF_WFlow_Task.VAF_WFLOW_NODE_ID
                             WHERE VAF_Screen.IsActive ='Y'  AND VAF_WFlow_Task.Processed = 'N'  AND VAF_WFlow_Task.WFState      ='OS' ";
                 sql += " AND VAF_WFlow_Task.VAF_Client_ID =" + ctx.GetVAF_Client_ID() + @" 
@@ -1031,13 +1031,13 @@ OR
             }
             else
             {
-                sql = @"SELECT DISTINCT Ad_Window.Ad_Window_Id,
+                sql = @"SELECT DISTINCT VAF_Screen.VAF_Screen_Id,
                         VAF_Screen_TL.Name || ' (' || VAF_WFlow_Node.Name || ')' As Name,VAF_WFLOW_NODE.VAF_WFLOW_NODE_ID
                         FROM VAF_WFlow_Task VAF_WFlow_Task
                         JOIN VAF_Screen VAF_Screen
-                        ON VAF_WFlow_Task.Ad_Window_Id = Ad_Window.Ad_Window_Id
+                        ON VAF_WFlow_Task.VAF_Screen_Id = VAF_Screen.VAF_Screen_Id
                         JOIN VAF_Screen_TL VAF_Screen_TL
-                        ON VAF_Screen_TL.VAF_Screen_ID=AD_window.AD_window_ID
+                        ON VAF_Screen_TL.VAF_Screen_ID=VAF_Screen.VAF_Screen_ID
                         JOIN VAF_WFLOW_NODE VAF_WFLOW_NODE ON VAF_WFLOW_NODE.VAF_WFLOW_NODE_ID=VAF_WFlow_Task.VAF_WFLOW_NODE_ID
                         WHERE VAF_Screen.IsActive     ='Y'
                         AND VAF_WFlow_Task.Processed = 'N'

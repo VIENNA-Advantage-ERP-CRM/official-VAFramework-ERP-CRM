@@ -3806,9 +3806,9 @@
 
             //if(bindornot == false)
             //{
-            var getIdes = "SELECT VAF_MenuConfig_id FROM VAF_MenuConfig WHERE ad_window_id IN (SELECT ad_window_id FROM ad_window WHERE name IN ('Role','Tenant','Tree'))";
+            var getIdes = "SELECT VAF_MenuConfig_id FROM VAF_MenuConfig WHERE VAF_Screen_id IN (SELECT VAF_Screen_id FROM VAF_Screen WHERE name IN ('Role','Tenant','Tree'))";
 
-            var formID = "SELECT VAF_MenuConfig_id FROM VAF_MenuConfig WHERE ad_form_id IN (SELECT ad_form_id FROM ad_form WHERE name IN ('Tree Maintenance'))";
+            var formID = "SELECT VAF_MenuConfig_id FROM VAF_MenuConfig WHERE VAF_Page_id IN (SELECT VAF_Page_id FROM VAF_Page WHERE name IN ('Tree Maintenance'))";
 
 
 
