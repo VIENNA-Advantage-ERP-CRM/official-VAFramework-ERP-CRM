@@ -4505,12 +4505,13 @@ namespace VAdvantage.Model
                         bool noncontract = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_NonContractProd"]).Equals("Y");
                         string desc = Util.GetValueOfString(dt.Tables[0].Rows[0]["Description"]);
                         string notes = Util.GetValueOfString(dt.Tables[0].Rows[0]["DocumentNote"]);
-                        int org = Util.GetValueOfInt(dt.Tables[0].Rows[0]["VA077_DestinationOrg"]);
+                        string org = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_DestinationOrg"]);
                         bool addInfo = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_AdditionalInfo"]).Equals("Y");
                         bool updateversion = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_UpdateVersion"]).Equals("Y");
                         bool regemail = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_RegEmail"]).Equals("Y");
 
-                        Set_Value("VA077_DestinationOrg", org);
+                        if (org != "")
+                            Set_Value("VA077_DestinationOrg", Util.GetValueOfInt(org));
                         Set_Value("Description", desc + " " + notes);
 
                         Set_Value("VA077_SNErweiterbar", snerw);
@@ -4747,7 +4748,7 @@ namespace VAdvantage.Model
                                      WHERE p.C_Order_ID=" + GetC_Order_ID() + "");
                     }
                     else
-                    {                        
+                    {
                         qry.Clear();
                         qry.Append(@"UPDATE C_Order  p SET VA077_TotalMarginAmt=(SELECT COALESCE(SUM(pl.VA077_MarginAmt),0) FROM C_OrderLine pl 
                             WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
