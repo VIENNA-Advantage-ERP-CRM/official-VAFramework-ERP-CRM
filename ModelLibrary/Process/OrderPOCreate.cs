@@ -36,7 +36,7 @@ namespace VAdvantage.Process
         private DateTime? _DateOrdered_To = null;
         //Customer			
         private int _C_BPartner_ID;
-        //Vendor			
+        //Current Vendor			
         private int _Vendor_ID;
         //Sales Order		
         private string _C_Order_ID;
@@ -50,6 +50,8 @@ namespace VAdvantage.Process
         //List<ConsolidatePOLine> listConsolidatePOLine = new List<ConsolidatePOLine>();
         // Display error Message
         StringBuilder messageErrorOrSetting = new StringBuilder();
+        // New Vendor
+        private int _C_RefVendor_ID;
         #endregion
 
         /// <summary>
@@ -92,6 +94,10 @@ namespace VAdvantage.Process
                 {
                     _IsConsolidatedPO = "Y".Equals(para[i].GetParameter());
                 }
+                else if (name.Equals("C_RefBPartner_ID"))
+                {
+                    _C_RefVendor_ID = Utility.Util.GetValueOfInt(para[i].GetParameter());//.intValue();
+                }
                 else
                 {
                     log.Log(Level.SEVERE, "Unknown Parameter: " + name);
@@ -106,11 +112,11 @@ namespace VAdvantage.Process
         protected override String DoIt()
         {
             log.Info("DateOrdered=" + _DateOrdered_From + " - " + _DateOrdered_To
-                + " - C_BPartner_ID=" + _C_BPartner_ID + " - Vendor_ID=" + _Vendor_ID
-                + " - IsDropShip=" + _IsDropShip + " - C_Order_ID=" + _C_Order_ID);
+                + " - C_BPartner_ID=" + _C_BPartner_ID + " - Current Vendor_ID=" + _Vendor_ID
+                + " - IsDropShip=" + _IsDropShip + " - C_Order_ID=" + _C_Order_ID + " - Vendor_ID=" + _C_RefVendor_ID);
             if (string.IsNullOrEmpty(_C_Order_ID) && _IsDropShip == null
                 && _DateOrdered_From == null && _DateOrdered_To == null
-                && _C_BPartner_ID == 0 && _Vendor_ID == 0)
+                && _C_BPartner_ID == 0 && _Vendor_ID == 0 && _C_RefVendor_ID == 0)
             {
                 throw new Exception("You need to restrict selection");
             }
@@ -142,7 +148,10 @@ namespace VAdvantage.Process
                 //{
                 //    sql += " AND o.IsDropShip='" + _IsDropShip+"'";
                 //}
-                if (_Vendor_ID != 0)
+
+                // Done by Rakesh kumar 25/02/2020
+                // When Current vendor selected and vendor not selected
+                if (_Vendor_ID != 0 && _C_RefVendor_ID == 0)
                 {
                     sql += " AND EXISTS (SELECT * FROM C_OrderLine ol"
                         + " INNER JOIN M_Product_PO po ON (ol.M_Product_ID=po.M_Product_ID) "
@@ -172,7 +181,15 @@ namespace VAdvantage.Process
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    counter += CreatePOFromSO(new MOrder(GetCtx(), dr, Get_TrxName()));
+                    // Done by Rakesh kumar 26/Feb/2021 to fetch record based on vendor selected instead of current vendor
+                    if (_C_RefVendor_ID > 0)
+                    {
+                        counter += CreatePOFromSORefVendor(new MOrder(GetCtx(), dr, Get_TrxName()));
+                    }
+                    else
+                    {
+                        counter += CreatePOFromSO(new MOrder(GetCtx(), dr, Get_TrxName()));
+                    }
                 }
                 // display price with document no
                 if (listConsolidatePO.Count > 0)
@@ -363,7 +380,7 @@ namespace VAdvantage.Process
                                 poLine.SetDatePromised(soLines[i].GetDatePromised());
                                 poLine.SetIsDropShip(soLines[i].IsDropShip());
                                 poLine.SetPrice();
-                                
+
                                 // Set value in Property From Process to check on Before Save.
                                 poLine.SetFromProcess(true);
                                 if (!poLine.Save())
@@ -411,6 +428,195 @@ namespace VAdvantage.Process
             return counter;
         }
 
+        /// <summary>
+        /// Created By: Rakesh Kumar
+        /// Created Date: 26/Feb/2021
+        /// Purpose: Create PO From SO When Vendor is selected
+        /// </summary>
+        /// <param name="so">sales order</param>
+        /// <returns>number of POs created basesd on vendor selected instead of current vendor under product(purchasing tab)</returns>
+        private int CreatePOFromSORefVendor(MOrder so)
+        {
+            StringBuilder sql = new StringBuilder();
+            StringBuilder sqlErrorMessage = new StringBuilder();
+            sqlErrorMessage.Clear();
+            string _Dropship = "";
+            log.Info(so.ToString());
+            MOrderLine[] soLines = so.GetLines(true, null);
+            if (soLines == null || soLines.Length == 0)
+            {
+                log.Warning("No Lines - " + so);
+                return 0;
+            }
+            //
+            int counter = 0;
+            //	Get Order Lines with a Product
+            sql.Append(@"SELECT DISTINCT OL.M_PRODUCT_ID ,OL.ISDROPSHIP
+                FROM C_ORDERLINE OL
+                INNER JOIN M_PRODUCT PRD ON (PRD.M_PRODUCT_ID=OL.M_PRODUCT_ID ");
+
+            // Added by Vivek on  20/09/2017 Assigned By Pradeep for drop shipment
+            // if drop ship parameter is true then get all records true drop ship lines
+            if (_IsDropShip == "Y")
+            {
+                sql.Append(@"AND Ol.Isdropship='Y' ");
+            }
+            // if drop ship parameter is false then get all records false drop ship lines
+            else if (_IsDropShip == "N")
+            {
+                sql.Append(@"AND Ol.Isdropship='N' ");
+            }
+
+            // changes don eby Bharat on 26 June 2018 to handle If purchased Checkbox is false on Finished Good Product, System should not generate Purchase Order.
+            sql.Append(@") WHERE ol.C_Order_ID=" + so.GetC_Order_ID() + @" AND prd.IsPurchased='Y'");
+            sql.Append(@" ORDER BY ol.Isdropship ");
+
+            IDataReader idr = null;
+            DataTable dt = null;
+            MOrder po = null;
+            ConsolidatePO consolidatePO = null;
+            //ConsolidatePOLine consolidatePOLine = null;
+            try
+            {
+                idr = DataBase.DB.ExecuteReader(sql.ToString(), null, Get_TrxName());
+                dt = new DataTable();
+                dt.Load(idr);
+                idr.Close();
+                int M_Product_ID;
+                foreach (DataRow dr in dt.Rows)
+                {
+                    //	New Order                    
+                    // Check ANY PO created with same Business Partner and Drop Shipment
+                    if (_IsConsolidatedPO && listConsolidatePO.Count > 0)
+                    {
+                        ConsolidatePO poRecord;
+                        if (listConsolidatePO.Exists(x => (x.C_BPartner_ID == _C_RefVendor_ID) && (x.IsDropShip == Utility.Util.GetValueOfString(dr[1]))))
+                        {
+                            poRecord = listConsolidatePO.Find(x => (x.C_BPartner_ID == _C_RefVendor_ID) && (x.IsDropShip == Utility.Util.GetValueOfString(dr[1])));
+                            if (poRecord != null)
+                            {
+                                po = new MOrder(GetCtx(), poRecord.C_Order_ID, Get_Trx());
+                                _Dropship = po.IsDropShip() ? "Y" : "N";
+                            }
+                        }
+                    }
+
+                    // Drop Shipment fucntionality added by Vivek on 20/09/2017 Assigned By Pradeep 
+                    if (po == null || po.GetBill_BPartner_ID() != _C_RefVendor_ID || _Dropship != Utility.Util.GetValueOfString(dr[1]))
+                    {
+                        po = CreatePOForVendor(_C_RefVendor_ID, so, Utility.Util.GetValueOfString(dr[1]));
+                        if (po == null)
+                            return counter;
+                        // AddLog(0, null, null, po.GetDocumentNo());
+                        counter++;
+
+                        // maintain list
+                        if (po != null && po.GetC_Order_ID() > 0)
+                        {
+                            consolidatePO = new ConsolidatePO();
+                            consolidatePO.C_Order_ID = po.GetC_Order_ID();
+                            consolidatePO.C_BPartner_ID = _C_RefVendor_ID;
+                            consolidatePO.IsDropShip = Utility.Util.GetValueOfString(dr[1]);
+                            listConsolidatePO.Add(consolidatePO);
+                        }
+                    }
+
+                    _Dropship = Utility.Util.GetValueOfString(dr[1]);
+                    //	Line
+                    M_Product_ID = Utility.Util.GetValueOfInt(dr[0]);//.getInt(2);
+                    for (int i = 0; i < soLines.Length; i++)
+                    {
+                        // When Drop ship parameter is yes but SO line does not contains any drop shipment product
+                        if (_IsDropShip == "Y" && Util.GetValueOfBool(soLines[i].IsDropShip()) == false)
+                        {
+                            continue;
+                        }
+                        // When Drop ship parameter is NO but SO line contains drop shipment product then it also does not generate any 
+                        else if (_IsDropShip == "N" && Util.GetValueOfBool(soLines[i].IsDropShip()) == true)
+                        {
+                            continue;
+                        }
+                        //When Drop ship parameter is yes and SO line also contains drop shipment product
+                        else
+                        {
+                            String _Drop = "N";
+                            if (Util.GetValueOfBool(soLines[i].IsDropShip()))
+                            {
+                                _Drop = "Y";
+                            }
+                            if (soLines[i].GetM_Product_ID() == M_Product_ID && _Drop == _Dropship)
+                            {
+                                MOrderLine poLine = new MOrderLine(po);
+                                poLine.SetRef_OrderLine_ID(soLines[i].GetC_OrderLine_ID());
+                                poLine.SetM_Product_ID(soLines[i].GetM_Product_ID());
+                                poLine.SetM_AttributeSetInstance_ID(soLines[i].GetM_AttributeSetInstance_ID());
+                                poLine.SetC_UOM_ID(soLines[i].GetC_UOM_ID());
+                                poLine.SetQtyEntered(soLines[i].GetQtyEntered());
+                                poLine.SetQtyOrdered(soLines[i].GetQtyOrdered());
+                                poLine.SetDescription(soLines[i].GetDescription());
+                                poLine.SetDatePromised(soLines[i].GetDatePromised());
+                                poLine.SetIsDropShip(soLines[i].IsDropShip());
+                                poLine.SetPrice();
+
+                                // Set value in Property From Process to check on Before Save.
+                                poLine.SetFromProcess(true);
+                                if (!poLine.Save())
+                                {
+                                    ValueNamePair pp = VLogger.RetrieveError();
+                                    string msg = string.Empty;
+                                    if (pp != null)
+                                    {
+                                        msg = pp.GetName();
+                                        //if GetName is Empty then it will check GetValue
+                                        if (string.IsNullOrEmpty(msg))
+                                            msg = Msg.GetMsg("", pp.GetValue());
+                                    }
+                                    if (string.IsNullOrEmpty(msg))
+                                        msg = Msg.GetMsg(GetCtx(), "RecordNotSaved");
+
+
+                                    log.Info("CreatePOfromSORefVendor : Not Saved. Error Value : " + msg);
+                                    AddLog(0, null, null, msg + " : @C_BPartner_ID@ : " + so.GetDocumentNo());
+                                }
+                                //else
+                                //{
+                                //    if (poLine != null && poLine.GetC_OrderLine_ID() > 0)
+                                //    {
+                                //        consolidatePOLine = new ConsolidatePOLine();
+                                //        consolidatePOLine.C_Order_ID = poLine.GetC_Order_ID();
+                                //        consolidatePOLine.C_OrderLine_ID = poLine.GetC_OrderLine_ID();
+                                //        consolidatePOLine.M_Product_ID = poLine.GetM_Product_ID();
+                                //        consolidatePOLine.M_AttributeSetInstance_ID = poLine.GetM_AttributeSetInstance_ID();
+                                //        consolidatePOLine.C_UOM_ID = poLine.GetC_UOM_ID();
+                                //        consolidatePOLine.IsDropShip = soLines[i].IsDropShip() ? "Y" : "N";
+                                //        listConsolidatePOLine.Add(consolidatePOLine);
+                                //    }
+                                //}
+                            }
+                        }
+                    }
+
+                }
+                //idr.Close();
+            }
+            catch (Exception e)
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                }
+                log.Log(Level.SEVERE, sql.ToString(), e);
+            }
+
+
+            //	Set Reference to PO
+            if (po != null)
+            {
+                so.SetRef_Order_ID(po.GetC_Order_ID());
+                so.Save();
+            }
+            return counter;
+        }
         /// <summary>
         /// Create PO for Vendor
         /// </summary>
