@@ -4509,13 +4509,13 @@ namespace VAdvantage.Model
                         bool addInfo = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_AdditionalInfo"]).Equals("Y");
                         bool updateversion = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_UpdateVersion"]).Equals("Y");
                         bool regemail = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_RegEmail"]).Equals("Y");
-
-                        Set_Value("VA077_DestinationOrg", org);
+                        if (org !=0)
+                        {
+                            Set_Value("VA077_DestinationOrg", org);
+                        }
                         Set_Value("Description", desc + " " + notes);
-
                         Set_Value("VA077_SNErweiterbar", snerw);
                         Set_Value("VA077_ShowOldSN", showoldsn);
-
                         Set_Value("VA077_ContractProduct", contract);
                         Set_Value("VA077_NonContractProd", noncontract);
 
