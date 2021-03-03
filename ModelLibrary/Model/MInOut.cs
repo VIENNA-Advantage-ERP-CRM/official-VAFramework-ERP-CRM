@@ -1801,7 +1801,7 @@ namespace VAdvantage.Model
                     {
                         if (Util.GetValueOfInt(DB.ExecuteScalar("Select Count(*) From VA009_OrderPaySchedule Where C_Order_ID=" + GetC_Order_ID() + " AND VA009_Ispaid='Y'")) != _countschedule)
                         {
-                            _processMsg = "Please Do Advance Payment against order";
+                            _processMsg = Msg.GetMsg(Env.GetCtx(), "VIS_PayAdvance"); // "Please Do Advance Payment against order";
                             return DocActionVariables.STATUS_INVALID;
                         }
                     }
@@ -1863,6 +1863,22 @@ namespace VAdvantage.Model
             if (!DOCACTION_Complete.Equals(GetDocAction()))
                 SetDocAction(DOCACTION_Complete);
             return DocActionVariables.STATUS_INPROGRESS;
+        }
+
+        /// <summary>
+        /// Check DocTypeConfimation
+        /// </summary>
+        /// <param name="dt">DocumentType</param>
+        /// <returns>error Message if Confiramtion Doct Tpye not Selected</returns>
+        private string CheckConfimationDocType(MDocType dt)
+        {
+            if (dt.Get_ColumnIndex("C_DocTypeConfrimation_ID") > -1)
+            {
+                int conDocType = Util.GetValueOfInt(dt.Get_Value("C_DocTypeConfrimation_ID"));
+                if (conDocType == 0)
+                { return Msg.GetMsg(GetCtx(), "VIS_ConfirmationDocNotFound"); }
+            }
+            return null;
         }
 
         /// <summary>
@@ -1957,8 +1973,8 @@ namespace VAdvantage.Model
                                             " AND t.M_Product_ID = " + iol.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + iol.GetM_AttributeSetInstance_ID() +
                                             " AND NVL(t.M_ProductContainer_ID, 0) = " + iol.GetM_ProductContainer_ID());
                                 }
-                                int qty = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
-                                int qtyToMove = Util.GetValueOfInt(iol.GetMovementQty());
+                                decimal qty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
+                                decimal qtyToMove = iol.GetMovementQty();
                                 if (qty < qtyToMove)
                                 {
                                     check = true;
@@ -1982,8 +1998,8 @@ namespace VAdvantage.Model
                                             " AND t.M_Product_ID = " + iol.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + iol.GetM_AttributeSetInstance_ID() +
                                             " AND NVL(t.M_ProductContainer_ID, 0) = " + iol.GetM_ProductContainer_ID());
                                 }
-                                int qty = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
-                                int qtyToMove = Util.GetValueOfInt(iol.GetMovementQty());
+                                decimal qty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
+                                decimal qtyToMove = iol.GetMovementQty();
                                 if (qty < qtyToMove)
                                 {
                                     check = true;
@@ -2152,6 +2168,20 @@ namespace VAdvantage.Model
             }
 
 
+            //Lakhwinder 10 Feb 2021
+            //Show Error if Confiramtion Doct Tpye not Selected on DocType
+            MDocType docType = MDocType.Get(GetCtx(), GetC_DocType_ID());
+            if (docType.IsShipConfirm())
+            {
+                string s = CheckConfimationDocType(docType);
+                if (!String.IsNullOrEmpty(s))
+                {
+                    _processMsg = s;
+                    SetProcessMsg(_processMsg);
+                    return DocActionVariables.STATUS_INVALID;
+                }
+            }
+
             // for checking - costing calculate on completion or not
             // IsCostImmediate = true - calculate cost on completion
             MClient client = MClient.Get(GetCtx(), GetAD_Client_ID());
@@ -2267,7 +2297,7 @@ namespace VAdvantage.Model
                         }
                         else
                         {
-                            if (IsSOTrx() && !IsReturnTrx() && pc.GetA_Asset_Group_ID() > 0 && sLine.GetA_Asset_ID() == 0)
+                            if (IsSOTrx() && !IsReturnTrx() && pc.GetA_Asset_Group_ID() > 0 && sLine.GetA_Asset_ID() == 0 && !Env.IsModuleInstalled("VA077_"))
                             {
                                 _processMsg = "AssetNotSetONShipmentLine: LineNo" + sLine.GetLine() + " :-->" + sLine.GetDescription();
                                 return DocActionVariables.STATUS_INPROGRESS;
@@ -3531,8 +3561,10 @@ namespace VAdvantage.Model
                 {
                     //	Create Asset during receiving
                     // JID_1251:On Material receipt system will generate the asset for Items type product for which asset group linked with Product Category.
-                    if (product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item && product.IsCreateAsset() && sLine.GetMovementQty() > 0
-                       && !IsReversal() && !IsReturnTrx() && !IsSOTrx() && sLine.GetA_Asset_ID() == 0)
+                    if ((product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item && product.IsCreateAsset() && sLine.GetMovementQty() > 0
+                       && !IsReversal() && !IsReturnTrx() && !IsSOTrx() && sLine.GetA_Asset_ID() == 0) ||
+                       (Env.IsModuleInstalled("VA077_") && product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item && product.IsCreateAsset() && sLine.GetMovementQty() > 0
+                       && !IsReversal() && !IsReturnTrx() && IsSOTrx() && sLine.GetA_Asset_ID() == 0))
                     {
                         log.Fine("Asset");
                         Info.Append("@A_Asset_ID@: ");
@@ -3814,14 +3846,14 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
             }
 
-            _processMsg = Info.ToString();           
+            _processMsg = Info.ToString();
 
 
             #region Added by vikas 29 August 2016 cost sheet
             try
             {
                 if (Env.IsModuleInstalled("VA033_"))
-                {                    
+                {
                     if (GetVA033_CostSheet_ID() > 0 && IsSOTrx() == false && IsReturnTrx() == false)
                     {
                         if (IsReversal())
@@ -3885,7 +3917,7 @@ namespace VAdvantage.Model
             SetDateReceived(GetMovementDate());
             SetPickDate(DateTime.Now);
             SetProcessed(true);
-            SetDocAction(DOCACTION_Close);            
+            SetDocAction(DOCACTION_Close);
             return DocActionVariables.STATUS_COMPLETED;
         }
 

@@ -1175,8 +1175,16 @@ namespace VIS.Models
                 MOrderLineModel objOrd = new MOrderLineModel();
                 _m_PriceList_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_PriceList_ID FROM C_Invoice WHERE C_Invoice_ID = " + _c_invoice_Id, null, null));
 
+                /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
+                StringBuilder sbparams = new StringBuilder();
+                sbparams.Append(Util.GetValueOfInt(_m_PriceList_ID));
+                sbparams.Append(",").Append(Util.GetValueOfInt(_c_invoice_Id));
+                sbparams.Append(",").Append(Util.GetValueOfInt(_m_Product_Id));
+                sbparams.Append(",").Append(Util.GetValueOfInt(_c_Uom_Id));
+                sbparams.Append(",").Append(Util.GetValueOfInt(_m_AttributeSetInstance_Id));
+
                 MPriceListVersionModel objPLV = new MPriceListVersionModel();
-                _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, _m_PriceList_ID.ToString());
+                _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, sbparams.ToString(), ScreenType.Invoice);
 
 
                 MBPartnerModel objBPartner = new MBPartnerModel();

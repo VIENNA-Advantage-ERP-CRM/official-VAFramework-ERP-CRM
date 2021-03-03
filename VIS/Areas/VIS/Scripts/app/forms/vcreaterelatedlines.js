@@ -19,8 +19,12 @@
         var lookupRelatedType = null;
         var ctrlRelatedType = null;
         var prdCtrl;
+        var puomLookup = null;
+        var pruomLookup = null;
         var PAttrCtrl;
-        var PRAttrCtrl;        
+        var PRAttrCtrl;
+        var PUomCtrl = null;
+        var PRUomCtrl = null;
         var ProductGrid;
         var $DivProductGrid;
         var RelatedGrid;
@@ -29,7 +33,7 @@
         var relType = "";
         var BPartner_ID = 0;
         var isSOTrx;
-        var PriceList_ID = 0;       
+        var PriceList_ID = 0;
         var precision = 2;
         VIS.translatedTexts = null;
         var format = VIS.DisplayType.GetNumberFormat(VIS.DisplayType.Amount);
@@ -78,8 +82,8 @@
             _ProductCtrl = $root.find("#VIS_Product_" + $self.windowNo);
             _CmbRelatedType = $root.find("#VIS_RelatedType_" + $self.windowNo);
             $DivProductGrid = $root.find("#VIS_ProductGrd_" + $self.windowNo);
-            $DivRelatedGrid = $root.find("#VIS_RelatedGrd_" + $self.windowNo);            
-            LoadControls();            
+            $DivRelatedGrid = $root.find("#VIS_RelatedGrd_" + $self.windowNo);
+            LoadControls();
             InitEvents();
             $bsyDiv[0].style.visibility = "hidden";
         };
@@ -103,20 +107,29 @@
             _ProductBtnWrap.append(prdCtrl.getBtn(0));
             _ProductBtnWrap.append(prdCtrl.getBtn(1));
 
+            VIS.Env.getCtx().setContext($self.windowNo, "M_Product_ID", null);
+
             pattrLookup = new VIS.MPAttributeLookup(VIS.context, $self.windowNo);
             PAttrCtrl = new VIS.Controls.VPAttribute("M_AttributeSetInstance_ID", false, false, true, VIS.DisplayType.PAttribute, pattrLookup, $self.windowNo, false, false, false, true);
             PRAttrCtrl = new VIS.Controls.VPAttribute("M_AttributeSetInstance_ID", false, false, true, VIS.DisplayType.PAttribute, pattrLookup, $self.windowNo, false, false, false, true);
 
+            // UOM Control
+            puomLookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), $self.windowNo, 2222, VIS.DisplayType.TableDir);
+            pruomLookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), $self.windowNo, 2222, VIS.DisplayType.TableDir);
+            PUomCtrl = new VIS.Controls.VComboBox("C_UOM_ID", true, false, true, puomLookup, 50);
+            PRUomCtrl = new VIS.Controls.VComboBox("C_UOM_ID", true, false, true, pruomLookup, 50);
+
             BPartner_ID = VIS.Env.getCtx().getContextAsInt($self.windowNo, "C_BPartner_ID", false);
             isSOTrx = VIS.Env.getCtx().getWindowContext($self.windowNo, "IsSOTrx", true) == "Y";
-            PriceList_ID = VIS.Env.getCtx().getContextAsInt($self.windowNo, "M_PriceList_ID", false);            
-        };        
+            PriceList_ID = VIS.Env.getCtx().getContextAsInt($self.windowNo, "M_PriceList_ID", false);
+        };
 
         // load Details of selected Product
-        function GetProductDetails(product_ID, attribute_ID, pricelist_ID) {
+        function GetProductDetails(product_ID, attribute_ID, uom_ID, pricelist_ID) {
 
             VIS.dataContext.getJSONData(VIS.Application.contextUrl + "RelatedProduct/GetProductData", {
-                "M_Product_ID": product_ID, "M_AttributeSetInstance_ID": attribute_ID, "M_PriceList_ID": pricelist_ID, "Table_ID": $self.Table_ID, "Record_ID": $self.Record_ID
+                "M_Product_ID": product_ID, "M_AttributeSetInstance_ID": attribute_ID, "C_UOM_ID": uom_ID,
+                "M_PriceList_ID": pricelist_ID, "Table_ID": $self.Table_ID, "Record_ID": $self.Record_ID
             }, CallbackProductDetails);
         };
 
@@ -125,13 +138,13 @@
             if (data != null) {
                 ProductGrid.add(data);
             }
-            GetRelatedProducts(product_ID, 0, PriceList_ID)
+            GetRelatedProducts(product_ID, 0, 0, PriceList_ID)
         };
 
         // load Related Products of selected product
-        function GetRelatedProducts(product_ID, attribute_ID, pricelist_ID) {
+        function GetRelatedProducts(product_ID, attribute_ID, uom_ID, pricelist_ID) {
             VIS.dataContext.getJSONData(VIS.Application.contextUrl + "RelatedProduct/GetRelatedProduct", {
-                "M_Product_ID": product_ID, "M_AttributeSetInstance_ID": attribute_ID, "M_PriceList_ID": pricelist_ID,
+                "M_Product_ID": product_ID, "M_AttributeSetInstance_ID": attribute_ID, "C_UOM_ID": uom_ID, "M_PriceList_ID": pricelist_ID,
                 "RelatedProductType": relType, "Table_ID": $self.Table_ID, "Record_ID": $self.Record_ID
             }, CallbackRelatedProduct);
         };
@@ -161,7 +174,7 @@
                     product_ID = prdCtrl.value;
                     ProductGrid.clear();
                     RelatedGrid.clear();
-                    GetProductDetails(product_ID, 0, PriceList_ID);
+                    GetProductDetails(product_ID, 0, 0, PriceList_ID);
                 }
                 else {
                     product_ID = 0;
@@ -170,11 +183,11 @@
                 }
             };
 
-           ctrlRelatedType.fireValueChanged = function (e) {
+            ctrlRelatedType.fireValueChanged = function (e) {
                 $bsyDiv[0].style.visibility = "visible";
                 relType = ctrlRelatedType.getValue();
                 RelatedGrid.clear();
-                GetRelatedProducts(product_ID, 0, PriceList_ID);
+                GetRelatedProducts(product_ID, 0, 0, PriceList_ID);
             };
 
             $OkBtn.on("click touchstart", function (ev) {
@@ -265,10 +278,23 @@
                         }
                     },
                     {
-                        field: 'UOM', caption: VIS.translatedTexts.C_UOM_ID, size: '120px'
+                        //field: 'UOM', caption: VIS.translatedTexts.C_UOM_ID, size: '120px'
+                        field: "UOM_ID", caption: VIS.translatedTexts.C_UOM_ID, sortable: false, size: '120px', editable: { type: 'custom', ctrl: PUomCtrl, showAll: true },
+                        render: function (record, index, col_index) {
+                            var l = puomLookup;
+                            var val = record["UOM_ID"];
+                            if (record.changes && typeof record.changes["UOM_ID"] != 'undefined') {
+                                val = record.changes["UOM_ID"];
+                            }
+                            var d;
+                            if (l) {
+                                d = l.getDisplay(val);
+                            }
+                            return d;
+                        }
                     },
                     {
-                        field: 'UOM_ID', caption: VIS.translatedTexts.C_UOM_ID, size: '20%', display: false
+                        field: 'UOM', caption: VIS.translatedTexts.C_UOM_ID, size: '20%', display: false
                     },
                     {
                         field: "QtyEntered", caption: '<div ><span>' + VIS.translatedTexts.QtyEntered + '</span></div>', sortable: false, size: '120px', min: 80, hidden: false, editable: { type: 'number' },
@@ -349,7 +375,25 @@
                             ProductGrid.records[event.index]["M_AttributeSetInstance_ID"] = event.value_new;
 
                             VIS.dataContext.getJSONData(VIS.Application.contextUrl + "RelatedProduct/GetProductData", {
-                                "M_Product_ID": product_ID, "M_AttributeSetInstance_ID": event.value_new, "M_PriceList_ID": PriceList_ID, "Table_ID": $self.Table_ID, "Record_ID": $self.Record_ID
+                                "M_Product_ID": product_ID, "M_AttributeSetInstance_ID": event.value_new, "C_UOM_ID": VIS.Utility.Util.getValueOfInt(ProductGrid.records[event.index]["UOM_ID"]),
+                                "M_PriceList_ID": PriceList_ID, "Table_ID": $self.Table_ID, "Record_ID": $self.Record_ID
+                            }, function (data) {
+                                if (data != null) {
+                                    ProductGrid.records[event.index]["PriceStd"] = data.PriceStd;
+                                    ProductGrid.records[event.index]["PriceList"] = data.PriceList;
+                                    ProductGrid.refreshCell(event.recid, "PriceStd");
+                                    ProductGrid.refreshCell(event.recid, "PriceList");
+                                }
+                            });
+                        }
+                    }
+                    else if (event.column == 4) {
+                        if (event.value_new != null) {
+                            ProductGrid.records[event.index]["UOM_ID"] = event.value_new;
+
+                            VIS.dataContext.getJSONData(VIS.Application.contextUrl + "RelatedProduct/GetProductData", {
+                                "M_Product_ID": product_ID, "M_AttributeSetInstance_ID": VIS.Utility.Util.getValueOfInt(ProductGrid.records[event.index]["M_AttributeSetInstance_ID"]),
+                                "C_UOM_ID": event.value_new, "M_PriceList_ID": PriceList_ID, "Table_ID": $self.Table_ID, "Record_ID": $self.Record_ID
                             }, function (data) {
                                 if (data != null) {
                                     ProductGrid.records[event.index]["PriceStd"] = data.PriceStd;
@@ -368,7 +412,7 @@
             });
             ProductGrid.hideColumn('Product_ID');
             //ProductGrid.hideColumn('AttributeSetInstance_ID');
-            ProductGrid.hideColumn('UOM_ID');
+            ProductGrid.hideColumn('UOM');
         };
 
         // load related product grid
@@ -422,10 +466,23 @@
                         }
                     },
                     {
-                        field: 'UOM', caption: VIS.translatedTexts.C_UOM_ID, size: '100px'
+                        //field: 'UOM', caption: VIS.translatedTexts.C_UOM_ID, size: '100px'
+                        field: "UOM_ID", caption: VIS.translatedTexts.C_UOM_ID, sortable: false, size: '100px', editable: { type: 'custom', ctrl: PRUomCtrl, showAll: true },
+                        render: function (record, index, col_index) {
+                            var l = pruomLookup;
+                            var val = record["UOM_ID"];
+                            if (record.changes && typeof record.changes["UOM_ID"] != 'undefined') {
+                                val = record.changes["UOM_ID"];
+                            }
+                            var d;
+                            if (l) {
+                                d = l.getDisplay(val);
+                            }
+                            return d;
+                        }
                     },
                     {
-                        field: 'UOM_ID', caption: VIS.translatedTexts.C_UOM_ID, size: '20%', display: false
+                        field: 'UOM', caption: VIS.translatedTexts.C_UOM_ID, size: '20%', display: false
                     },
                     {
                         field: "QtyEntered", caption: '<div ><span>' + VIS.translatedTexts.QtyEntered + '</span></div>', sortable: false, size: '100px', min: 80, hidden: false, editable: { type: 'number' },
@@ -530,7 +587,25 @@
                             RelatedGrid.records[event.index]["M_AttributeSetInstance_ID"] = event.value_new;
 
                             VIS.dataContext.getJSONData(VIS.Application.contextUrl + "RelatedProduct/GetProductData", {
-                                "M_Product_ID": RelatedGrid.records[event.index]["Product_ID"], "M_AttributeSetInstance_ID": event.value_new, "M_PriceList_ID": PriceList_ID, "Table_ID": $self.Table_ID, "Record_ID": $self.Record_ID
+                                "M_Product_ID": RelatedGrid.records[event.index]["Product_ID"], "M_AttributeSetInstance_ID": event.value_new,
+                                "C_UOM_ID": VIS.Utility.Util.getValueOfInt(RelatedGrid.records[event.index]["UOM_ID"]), "M_PriceList_ID": PriceList_ID, "Table_ID": $self.Table_ID, "Record_ID": $self.Record_ID
+                            }, function (data) {
+                                if (data != null) {
+                                    RelatedGrid.records[event.index]["PriceStd"] = data.PriceStd;
+                                    RelatedGrid.records[event.index]["PriceList"] = data.PriceList;
+                                    RelatedGrid.refreshCell(event.recid, "PriceStd");
+                                    RelatedGrid.refreshCell(event.recid, "PriceList");
+                                }
+                            });
+                        }
+                    }
+                    else if (event.column == 6) {
+                        if (event.value_new != null) {
+                            RelatedGrid.records[event.index]["UOM_ID"] = event.value_new;
+
+                            VIS.dataContext.getJSONData(VIS.Application.contextUrl + "RelatedProduct/GetProductData", {
+                                "M_Product_ID": RelatedGrid.records[event.index]["Product_ID"], "M_AttributeSetInstance_ID": VIS.Utility.Util.getValueOfInt(RelatedGrid.records[event.index]["M_AttributeSetInstance_ID"]),
+                                "C_UOM_ID": event.value_new, "M_PriceList_ID": PriceList_ID, "Table_ID": $self.Table_ID, "Record_ID": $self.Record_ID
                             }, function (data) {
                                 if (data != null) {
                                     RelatedGrid.records[event.index]["PriceStd"] = data.PriceStd;
@@ -550,7 +625,7 @@
 
             RelatedGrid.hideColumn('RelatedProductType');
             RelatedGrid.hideColumn('Product_ID');
-            RelatedGrid.hideColumn('UOM_ID');
+            RelatedGrid.hideColumn('UOM');
         };
 
         // Get selected records from Grid
@@ -719,6 +794,10 @@
         $root = null;
         _ProductLookUp = null;
         pattrLookup = null;
+        puomLookup = null;
+        pruomLookup = null;
+        PUomCtrl = null;
+        PRUomCtrl = null;
         _ProductCtrl = null;
         _CmbRelatedType = null;
         lookupRelatedType = null;

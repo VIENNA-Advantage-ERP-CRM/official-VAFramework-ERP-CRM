@@ -332,6 +332,16 @@ namespace VAdvantage.Model
             SetClientOrg(ship);
             SetM_InOut_ID(ship.GetM_InOut_ID());
             SetConfirmType(confirmType);
+
+            //Lakhwinder 1Feb2021
+            //Shipment and Inventory Move Module Changes
+            //Solution Proposed Puneed 
+            //STandard changes Analysed in Gull Implementation
+            MDocType dt = MDocType.Get(GetCtx(), ship.GetC_DocType_ID());
+            if (Get_ColumnIndex("C_DocType_ID") > -1 && dt.Get_ColumnIndex("C_DocTypeConfrimation_ID") > -1)
+            {
+                SetC_DocType_ID(Util.GetValueOfInt(dt.Get_Value("C_DocTypeConfrimation_ID")));
+            }
         }
 
 
@@ -877,20 +887,22 @@ namespace VAdvantage.Model
             //To freeze Quality Control Lines
             FreezeQualityControlLines();
 
+            //Lakhwinder 17Feb 2021
+            //Stop Inventory to get completed
             //Arpit to complete the internal inventory if found any
-            if (internalInventory && Util.GetValueOfInt(GetM_Inventory_ID()) > 0)
-            {
-                MInventory intInv = new MInventory(GetCtx(), GetM_Inventory_ID(), Get_TrxName());
-                intInv.CompleteIt();
-                intInv.SetDocStatus(DOCSTATUS_Completed);
-                intInv.SetDocAction(DOCACTION_Close);
-                if (!intInv.Save(Get_TrxName()))
-                {
-                    GetCtx().SetContext("DifferenceQty_", "0");
-                    Get_TrxName().Rollback();
-                    return DocActionVariables.STATUS_INVALID;
-                }
-            }
+            //if (internalInventory && Util.GetValueOfInt(GetM_Inventory_ID()) > 0)
+            //{
+            //    MInventory intInv = new MInventory(GetCtx(), GetM_Inventory_ID(), Get_TrxName());
+            //    intInv.CompleteIt();
+            //    intInv.SetDocStatus(DOCSTATUS_Completed);
+            //    intInv.SetDocAction(DOCACTION_Close);
+            //    if (!intInv.Save(Get_TrxName()))
+            //    {
+            //        GetCtx().SetContext("DifferenceQty_", "0");
+            //        Get_TrxName().Rollback();
+            //        return DocActionVariables.STATUS_INVALID;
+            //    }
+            //}
             //End Here 
             if (_creditMemo != null)
                 _processMsg += " @C_Invoice_ID@=" + _creditMemo.GetDocumentNo();
@@ -1020,6 +1032,7 @@ namespace VAdvantage.Model
                 }
                 /**End**/
 
+                
                 // Now save Splitted Document
                 if (!splitLine.Save(Get_TrxName()))
                 {
@@ -1144,8 +1157,15 @@ namespace VAdvantage.Model
                     _inventory = new MInventory(wh);
                     _inventory.SetDescription(Msg.Translate(GetCtx(),
                         "M_InOutConfirm_ID") + " " + GetDocumentNo());
+
+                    //Lakhwinder
+                    // Set InternalUser true if Internal User Inventory
+                    int doctypeSetting = CheckAssociateDocTypeSetting(inout.GetC_DocType_ID(), false);
+                    if (doctypeSetting == 1)
+                    { _inventory.SetIsInternalUse(true); }
+                    else { _inventory.SetIsInternalUse(false); }
                     //vikas  new 13 jan 2016 1
-                    _inventory.SetIsInternalUse(true);
+                    // _inventory.SetIsInternalUse(true);
                     if (_inventory.GetC_DocType_ID() == 0)
                     {
                         MDocType[] types = MDocType.GetOfDocBaseType(GetCtx(), MDocBaseType.DOCBASETYPE_MATERIALPHYSICALINVENTORY);
@@ -1193,7 +1213,14 @@ namespace VAdvantage.Model
                 line.Set_Value("QtyEntered", line.GetQtyBook());
                 line.SetQtyInternalUse(line.GetQtyBook());
                 line.SetQtyBook(0);
-                line.SetIsInternalUse(true);
+
+
+                //Lakhwinder
+                //Behave as per setting on Doctype
+                if (_inventory.IsInternalUse())
+                {
+                    line.SetIsInternalUse(true);
+                }
                 Tuple<String, String, String> mInfo = null;
                 if (Env.HasModulePrefix("DTD001_", out mInfo))
                 {
@@ -1225,6 +1252,52 @@ namespace VAdvantage.Model
             }
             return true;
         }
+
+
+        /// <summary>
+        /// Check Settings on Document Type Whether we need to create Physical Inventory, Internal User Inventory or Physical Inventory
+        /// </summary>
+        /// <param name="DocTypeID"> Document Type</param>
+        /// <param name="isDiff"> Is Differnece Qty</param>
+        /// <returns>  
+        /// return 0,2 for PhysicalInventory
+        /// return 1 for Internal Use inventory
+        /// return 3 for MM Reciept
+        /// </returns>
+        private int CheckAssociateDocTypeSetting(int DocTypeID, bool isDiff)
+        {
+
+
+            MDocType docType = MDocType.Get(GetCtx(), DocTypeID);
+            if (docType.Get_ColumnIndex("C_DocTypeScrap_ID") < 0 && docType.Get_ColumnIndex("C_DocTypeDifference_ID") < 0)
+            { return 0; }
+
+            int docTypeAssociate = 0;
+            if (!isDiff)
+            {
+                docTypeAssociate = Util.GetValueOfInt(docType.Get_Value("C_DocTypeScrap_ID"));
+                if (docTypeAssociate > 0)
+                {
+                    docType = MDocType.Get(GetCtx(), docTypeAssociate);
+                    if (Util.GetValueOfBool(docType.Get_Value("IsInternalUse"))) //Internal Use Inventory
+                    {
+                        return 1;
+                    }
+                    else { return 2; }//Physical Inventory
+                }
+            }
+            else
+            {
+                if (docType.IsSplitWhenDifference())
+                {
+                    docTypeAssociate = Util.GetValueOfInt(docType.Get_Value("C_DocTypeDifference_ID"));
+                    if (docTypeAssociate > 0) { return 3; }
+                }
+            }
+            return 0;
+        }
+
+
 
         /**
          * 	Void Document.

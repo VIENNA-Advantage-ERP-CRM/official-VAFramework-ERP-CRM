@@ -920,6 +920,25 @@ namespace VAdvantage.Model
                 MRequisitionLine[] lines = GetLines();
                 Decimal totalLines = Env.ZERO;
                 MProduct product = null;
+
+                //If there Reserved Qty on Requisition line, system should not allow to close the record.
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(M_RequisitionLine_ID) FROM M_RequisitionLine WHERE M_Requisition_ID =" + GetM_Requisition_ID()
+                    + " AND DTD001_ReservedQty > 0", null, Get_TrxName())) > 0)
+                {
+                    _processMsg = Msg.GetMsg(GetCtx(), "VIS_CannotClose");
+                    return false;
+                }
+
+                // If there is any PO line reference is available on Req line and that PO is in drafted and in Progress stage 
+                // then system will not allow to close the record.
+                if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(rl.M_RequisitionLine_ID) FROM M_RequisitionLine rl INNER JOIN C_OrderLine ol ON  rl.C_OrderLine_ID = ol.C_OrderLine_ID
+                    INNER JOIN C_Order o ON o.C_Order_ID=ol.C_Order_ID WHERE rl.M_Requisition_ID = " + GetM_Requisition_ID()
+                    + " AND o.DocStatus IN ('DR', 'IP')", null, Get_TrxName())) > 0)
+                {
+                    _processMsg = Msg.GetMsg(GetCtx(), "VIS_DraftedOrder");
+                    return false;
+                }
+
                 for (int i = 0; i < lines.Length; i++)
                 {
                     MRequisitionLine line = lines[i];
@@ -928,6 +947,7 @@ namespace VAdvantage.Model
                         product = MProduct.Get(GetCtx(), line.GetM_Product_ID());
 
                     Decimal finalQty = line.GetQty();
+                    Decimal unprocessQty = 0;
                     if (line.GetC_OrderLine_ID() == 0)
                     {
                         finalQty = Env.ZERO;
@@ -937,20 +957,19 @@ namespace VAdvantage.Model
                         MOrderLine ol = new MOrderLine(GetCtx(), line.GetC_OrderLine_ID(), Get_TrxName());
                         finalQty = ol.GetQtyOrdered();
                     }
-                    Tuple<String, String, String> mInfo = null;
-                    if (Env.HasModulePrefix("DTD001_", out mInfo))
+
+                    if (Env.IsModuleInstalled("DTD001_"))
                     {
-                        int quant = Util.GetValueOfInt(line.GetQty() - line.GetDTD001_DeliveredQty());
+                        unprocessQty = line.GetQty() - line.GetDTD001_DeliveredQty();
                         // new 6jan  0
                         int _count = Util.GetValueOfInt(DB.ExecuteScalar(" SELECT Count(*) FROM AD_Column WHERE columnname = 'DTD001_SourceReserve' "));
 
-                        //Update storage requisition reserved qty
-                        //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA203_'", null, null)) > 0)
+                        //Update storage requisition reserved qty                        
                         if (Env.IsModuleInstalled("VA203_") && product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item)
                         {
                             if (GetDocAction() != "VO" && GetDocStatus() != "DR")
                             {
-                                if (quant > 0)
+                                if (unprocessQty > 0)
                                 {
                                     //int loc_id = GetLocation(GetM_Warehouse_ID());
                                     int loc_id = line.GetOrderLocator_ID();
@@ -959,7 +978,7 @@ namespace VAdvantage.Model
                                     {
                                         storage = MStorage.GetCreate(GetCtx(), loc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
                                     }
-                                    storage.SetDTD001_QtyReserved((Decimal.Subtract(storage.GetDTD001_QtyReserved(), (Decimal)quant)));
+                                    storage.SetDTD001_QtyReserved(Decimal.Subtract(storage.GetDTD001_QtyReserved(), unprocessQty));
                                     storage.Save();
                                     //new 6jan 5
                                     if (_count > 0)
@@ -971,7 +990,7 @@ namespace VAdvantage.Model
                                         {
                                             Swhstorage = MStorage.GetCreate(GetCtx(), Swhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
                                         }
-                                        Swhstorage.SetDTD001_SourceReserve((Decimal.Subtract(Swhstorage.GetDTD001_SourceReserve(), (Decimal)quant)));
+                                        Swhstorage.SetDTD001_SourceReserve(Decimal.Subtract(Swhstorage.GetDTD001_SourceReserve(), unprocessQty));
                                         Swhstorage.Save();
                                     }
                                     //end
@@ -980,7 +999,7 @@ namespace VAdvantage.Model
                         }
                         else if (GetDocAction() != "VO" && GetDocStatus() != "DR" && product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item)
                         {
-                            if (quant > 0)
+                            if (unprocessQty > 0)
                             {
                                 int loc_id = 0;
                                 if (line.Get_ColumnIndex("OrderLocator_ID") > 0)
@@ -996,7 +1015,7 @@ namespace VAdvantage.Model
                                 {
                                     storage = MStorage.GetCreate(GetCtx(), loc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
                                 }
-                                storage.SetDTD001_QtyReserved((Decimal.Subtract(storage.GetDTD001_QtyReserved(), (Decimal)quant)));
+                                storage.SetDTD001_QtyReserved(Decimal.Subtract(storage.GetDTD001_QtyReserved(), unprocessQty));
                                 storage.Save();
 
                                 //new 6jan 6
@@ -1016,27 +1035,42 @@ namespace VAdvantage.Model
                                     {
                                         Swhstorage = MStorage.GetCreate(GetCtx(), Swhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
                                     }
-                                    Swhstorage.SetDTD001_SourceReserve((Decimal.Subtract(Swhstorage.GetDTD001_SourceReserve(), (Decimal)quant)));
+                                    Swhstorage.SetDTD001_SourceReserve(Decimal.Subtract(Swhstorage.GetDTD001_SourceReserve(), unprocessQty));
                                     Swhstorage.Save();
                                 }
                                 //end
                             }
                         }
                     }
-                    //	final qty is not line qty
-                    if (finalQty.CompareTo(line.GetQty()) != 0)
+
+                    // Set UnProcesses Qty on Requisition Line.
+                    if (line.Get_ColumnIndex("UnProcessQty") >= 0 && unprocessQty > 0)
                     {
                         String description = line.GetDescription();
                         if (description == null)
                             description = "";
-                        description += " [" + line.GetQty() + "]";
+                        description += " [" + line.GetDTD001_DeliveredQty() + "]";
                         line.SetDescription(description);
-                        // Amit 9-feb-2015 
-                        // line.SetQty(finalQty);
-                        //Amit
-                        line.SetLineNetAmt();
+                        line.SetUnProcessQty(unprocessQty);
+                        line.SetLineNetAmt(Decimal.Multiply(line.GetDTD001_DeliveredQty(), line.GetPriceActual()));
                         line.Save();
                     }
+
+                    //	final qty is not line qty
+                    //if (finalQty.CompareTo(line.GetQty()) != 0)
+                    //{
+                    //    String description = line.GetDescription();
+                    //    if (description == null)
+                    //        description = "";
+                    //    description += " [" + line.GetQty() + "]";
+                    //    line.SetDescription(description);
+                    //    // Amit 9-feb-2015 
+                    //    // line.SetQty(finalQty);
+                    //    //Amit
+                    //    line.SetLineNetAmt();
+                    //    line.Save();
+                    //}
+
                     //get Grand Total or SubTotal
                     totalLines = Decimal.Add(totalLines, line.GetLineNetAmt());
                 }

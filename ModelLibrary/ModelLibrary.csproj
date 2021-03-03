@@ -402,6 +402,7 @@
     <Compile Include="ModelAD\MGroupWindow.cs" />
     <Compile Include="ModelAD\MGroupWorkflow.cs" />
     <Compile Include="ModelAD\MModuleTable.cs" />
+    <Compile Include="ModelAD\MSysConfig.cs" />
     <Compile Include="ModelAD\MTabPanel.cs" />
     <Compile Include="ModelAD\X_AD_ActionLog.cs" />
     <Compile Include="ModelAD\X_AD_AlertRuleCondition.cs" />
@@ -431,6 +432,7 @@
     <Compile Include="ModelAD\X_AD_ReportItem.cs" />
     <Compile Include="ModelAD\X_AD_ReportTable.cs" />
     <Compile Include="ModelAD\X_AD_Role_Group.cs" />
+    <Compile Include="ModelAD\X_AD_SysConfig.cs" />
     <Compile Include="ModelAD\X_AD_TabPanel.cs" />
     <Compile Include="ModelAD\X_AD_Theme.cs" />
     <Compile Include="ModelAD\X_AD_UserHomePageSetting.cs" />
@@ -1632,6 +1634,7 @@
     <Compile Include="ProcessAD\MasterVersionFields.cs" />
     <Compile Include="ProcessAD\MasterVersions.cs" />
     <Compile Include="ProcessAD\MasterVersionSchedules.cs" />
+    <Compile Include="ProcessAD\NativeSequence.cs" />
     <Compile Include="ProcessAD\PO_LOB.cs" />
     <Compile Include="ProcessAD\RoleAccessUpdate.cs" />
     <Compile Include="ProcessAD\SchedulerRun.cs" />
@@ -1782,6 +1785,7 @@
     <Compile Include="Process\PaymentTermValidate.cs" />
     <Compile Include="Process\PaySelectionCreateCheck.cs" />
     <Compile Include="Process\PaySelectionCreateFrom.cs" />
+    <Compile Include="Process\PeriodCloseScheduler.cs" />
     <Compile Include="Process\PeriodControlStatus.cs" />
     <Compile Include="Process\PeriodStatus.cs" />
     <Compile Include="ProcessAD\PrepareModuleSchema.cs" />

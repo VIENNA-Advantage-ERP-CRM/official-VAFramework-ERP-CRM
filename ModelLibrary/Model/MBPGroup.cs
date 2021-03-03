@@ -195,8 +195,8 @@ namespace VAdvantage.Model
         {
             //Decimal bd = base.GetCreditWatchPercent();
             Object bd = Get_Value("CreditWatchPercent");
-            if (bd != null)
-                return Decimal.Round(Decimal.Divide(Convert.ToDecimal(bd), Env.ONEHUNDRED), 2, MidpointRounding.AwayFromZero);
+            if (bd!= null &&  Util.GetValueOfDecimal(bd) > 0)
+            return Decimal.Round(Decimal.Divide(Convert.ToDecimal(bd), Env.ONEHUNDRED), 2, MidpointRounding.AwayFromZero);
             return new Decimal(0.90);
         }
 

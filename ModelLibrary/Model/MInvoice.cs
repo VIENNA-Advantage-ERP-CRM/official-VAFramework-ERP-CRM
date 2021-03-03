@@ -148,6 +148,7 @@ namespace VAdvantage.Model
             to.SetDateAcct(dateDoc);
             to.SetDatePrinted(null);
             to.SetIsPrinted(false);
+                        
             //    
             to.SetIsApproved(false);
             to.SetC_Payment_ID(0);
@@ -1217,7 +1218,7 @@ namespace VAdvantage.Model
          *	@return pay schedule is valid
          */
         public bool ValidatePaySchedule()
-        {
+        {            
             MInvoicePaySchedule[] schedule = MInvoicePaySchedule.GetInvoicePaySchedule
                 (GetCtx(), GetC_Invoice_ID(), 0, Get_Trx());
             log.Fine("#" + schedule.Length);
@@ -1265,7 +1266,14 @@ namespace VAdvantage.Model
         /// <param name="newRecord">newRecord new</param>
         /// <returns>true</returns>
         protected override bool BeforeSave(bool newRecord)
-        {
+        {            
+            /** Adhoc Payment - Validating DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
+            if (Get_ColumnIndex("DueDate") >= 0 && GetDueDate() != null && Util.GetValueOfDateTime(GetDueDate()) < Util.GetValueOfDateTime(GetDateInvoiced()))
+            {
+                log.SaveError("Error", Msg.GetMsg(GetCtx(), "DueDateLessThanInvoiceDate"));
+                return false;
+            }
+
             //	No Partner Info - set Template
             if (GetC_BPartner_ID() == 0)
                 SetBPartner(MBPartner.GetTemplate(GetCtx(), GetAD_Client_ID()));
@@ -2176,10 +2184,10 @@ namespace VAdvantage.Model
             {
                 SetWithholdingAmount(this);
             }
-
-            // not crating schedule in prepare stage, to be created in completed stage
-            // Create Invoice schedule
-            if (!CreatePaySchedule())
+            
+                // not crating schedule in prepare stage, to be created in completed stage
+                // Create Invoice schedule
+                if (!CreatePaySchedule())
             {
                 ValueNamePair pp = VLogger.RetrieveError();
                 if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
@@ -2232,16 +2240,86 @@ namespace VAdvantage.Model
                     //else
                     //    invAmt = Decimal.Subtract(0, invAmt);
 
-                    MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), null);
-
+                    MBPartner bp = MBPartner.Get(GetCtx(), GetC_BPartner_ID());
+                    MBPartnerLocation bpl = new MBPartnerLocation(GetCtx(), GetC_BPartner_Location_ID(), null);
                     string retMsg = "";
-                    bool crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), invAmt, out retMsg);
-                    if (!crdAll)
+                    bool crdAll = false;
+                    
+                    if (Env.IsModuleInstalled("VA077_"))
                     {
-                        if (bp.ValidateCreditValidation("C,D,F", GetC_BPartner_Location_ID()))
+                       
+                        DateTime validate = new DateTime();
+                        string CreditStatusSettingOn =bp.GetCreditStatusSettingOn();
+                       
+                        if (CreditStatusSettingOn.Contains("CL"))
                         {
-                            _processMsg = retMsg;
-                            return DocActionVariables.STATUS_INVALID;
+                          
+                            validate = Util.GetValueOfDateTime(bpl.Get_Value("VA077_ValidityDate")).Value;
+
+                        }
+                        else
+                        {                           
+
+                            validate =Util.GetValueOfDateTime(bp.Get_Value("VA077_ValidityDate")).Value;
+                           
+                        }
+
+                       if (validate.Date < DateTime.Now.Date)
+
+                        {
+                                                                                   
+                            int RecCount = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_Invoice_ID) FROM C_Invoice WHERE C_BPartner_ID =" + GetC_BPartner_ID() + " and DocStatus in('CO','CL') and DateInvoiced BETWEEN " + GlobalVariable.TO_DATE(DateTime.Now.Date.AddDays(-730), true) + " AND " + GlobalVariable.TO_DATE(DateTime.Now.Date,true) +""));
+
+                            if (RecCount > 0)
+                            {
+                                retMsg = "";
+                                crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), invAmt, out retMsg);
+                                if (!crdAll)
+                                {
+                                    if (bp.ValidateCreditValidation("C,D,F", GetC_BPartner_Location_ID()))
+                                    {
+                                        _processMsg = retMsg;
+                                        return DocActionVariables.STATUS_INVALID;
+                                    }
+                                }
+
+                            }
+                            else
+                            {
+                                _processMsg = Msg.GetMsg(GetCtx(), "VA077_CrChkExpired");
+                                return DocActionVariables.STATUS_INVALID;
+                            }
+
+                        }
+
+                        else
+                        {
+                            
+                            retMsg = "";
+                            crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), invAmt, out retMsg);
+                            if (!crdAll)
+                            {
+                                if (bp.ValidateCreditValidation("C,D,F", GetC_BPartner_Location_ID()))
+                                {
+                                    _processMsg = retMsg;
+                                    return DocActionVariables.STATUS_INVALID;
+                                }
+                            }
+                        }
+
+
+                    }
+                    else
+                    {
+                        retMsg = "";
+                        crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), invAmt, out retMsg);
+                        if (!crdAll)
+                        {
+                            if (bp.ValidateCreditValidation("C,D,F", GetC_BPartner_Location_ID()))
+                            {
+                                _processMsg = retMsg;
+                                return DocActionVariables.STATUS_INVALID;
+                            }
                         }
                     }
                 }
@@ -2501,7 +2579,7 @@ namespace VAdvantage.Model
          *	@return true if valid schedule
          */
         private bool CreatePaySchedule()
-        {
+        { 
             if (GetC_PaymentTerm_ID() == 0)
                 return false;
             MPaymentTerm pt = new MPaymentTerm(GetCtx(), GetC_PaymentTerm_ID(), Get_TrxName());
@@ -3002,7 +3080,8 @@ namespace VAdvantage.Model
                             //                                _processMsg = "Asset Cost Not Found";
                             //                                return DocActionVariables.STATUS_INVALID;
                             //                            }
-                            Decimal lineAmt = MConversionRate.ConvertBase(GetCtx(), line.GetLineTotalAmt(), GetC_Currency_ID(), GetDateAcct(), 0, GetAD_Client_ID(), GetAD_Org_ID());
+                            //Ned to get conversion based on selected conversion type on Invoice.
+                            Decimal lineAmt = MConversionRate.ConvertBase(GetCtx(), line.GetLineTotalAmt(), GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
                             //Pratap: Added check to update asset cost only in case of Capital/Expense=Capital
                             if (Util.GetValueOfString(line.Get_Value("VAFAM_CapitalExpense")) == "C")
                             {
@@ -3031,8 +3110,9 @@ namespace VAdvantage.Model
                                 po.Set_Value("Qty", line.GetQtyEntered());
                                 po.Set_Value("VAFAM_CapitalExpense", line.Get_Value("VAFAM_CapitalExpense"));
 
-                                Decimal LineTotalAmt_ = MConversionRate.ConvertBase(GetCtx(), line.GetLineTotalAmt(), GetC_Currency_ID(), GetDateAcct(), 0, GetAD_Client_ID(), GetAD_Org_ID());
-                                Decimal PriceActual_ = MConversionRate.ConvertBase(GetCtx(), line.GetPriceActual(), GetC_Currency_ID(), GetDateAcct(), 0, GetAD_Client_ID(), GetAD_Org_ID());
+                                //Ned to get conversion based on selected conversion type on Invoice.
+                                Decimal LineTotalAmt_ = MConversionRate.ConvertBase(GetCtx(), line.GetLineTotalAmt(), GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+                                Decimal PriceActual_ = MConversionRate.ConvertBase(GetCtx(), line.GetPriceActual(), GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
                                 po.Set_Value("Amount", LineTotalAmt_);
                                 po.Set_Value("Price", PriceActual_);
 
@@ -3051,7 +3131,8 @@ namespace VAdvantage.Model
                                         //Update Asset Gross Value in Case of Capital Expense
                                         if (asst.Get_ColumnIndex("VAFAM_AssetGrossValue") > 0)
                                         {
-                                            Decimal LineNetAmt_ = MConversionRate.ConvertBase(GetCtx(), line.GetLineNetAmt(), GetC_Currency_ID(), GetDateAcct(), 0, GetAD_Client_ID(), GetAD_Org_ID());
+                                            //Ned to get conversion based on selected conversion type on Invoice.
+                                            Decimal LineNetAmt_ = MConversionRate.ConvertBase(GetCtx(), line.GetLineNetAmt(), GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
                                             asst.Set_Value("VAFAM_AssetGrossValue", Decimal.Add(Util.GetValueOfDecimal(asst.Get_Value("VAFAM_AssetGrossValue")), LineNetAmt_));
                                             if (!asst.Save(Get_TrxName()))
                                             {
@@ -3908,14 +3989,15 @@ namespace VAdvantage.Model
                 //	Update BP Statistics
                 bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_TrxName());
                 //	Update total revenue and balance / credit limit (reversed on AllocationLine.processIt)
+                //Ned to get conversion based on selected conversion type on Invoice.
                 Decimal invAmt = MConversionRate.ConvertBase(GetCtx(), GetGrandTotal(true),	//	CM adjusted 
-                    GetC_Currency_ID(), GetDateAcct(), 0, GetAD_Client_ID(), GetAD_Org_ID());
+                    GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
 
                 //Added by Vivek for Credit Limit on 24/08/2016
 
                 // JID_0556 :: // Change by Lokesh Chauhan to validate watch % from BP Group, 
                 // if it is 0 on BP Group then default to 90 // 12 July 2019
-               // MBPGroup bpg = new MBPGroup(GetCtx(), bp.GetC_BP_Group_ID(), Get_TrxName());
+                //MBPGroup bpg = new MBPGroup(GetCtx(), bp.GetC_BP_Group_ID(), Get_TrxName());
                 //Decimal? watchPerBP = bp.GetCreditWatchPercent();
                 ////if (watchPer == 0)
                 ////    watchPer = 90;
@@ -4892,6 +4974,10 @@ namespace VAdvantage.Model
                 C_DocTypeTarget_ID, true, Get_TrxName(), true);
             //	Refernces (Should not be required)
             counter.SetSalesRep_ID(GetSalesRep_ID());
+                        
+            /** Adhoc Payment - Setting DueDate for Counter Doc ** Dt: 18/01/2021 ** Modified By: Kumar **/
+            if (Get_ColumnIndex("DueDate") >= 0 && GetDueDate() != null)
+                counter.SetDueDate(GetDueDate());
             //
             counter.SetProcessing(false);
             counter.Save(Get_TrxName());
@@ -5409,7 +5495,8 @@ namespace VAdvantage.Model
                 //Update Asset Gross Value in Case of Capital Expense
                 if (asst.Get_ColumnIndex("VAFAM_AssetGrossValue") > 0)
                 {
-                    Decimal LineNetAmt_ = MConversionRate.ConvertBase(GetCtx(), rLine.GetLineNetAmt(), GetC_Currency_ID(), GetDateAcct(), 0, GetAD_Client_ID(), GetAD_Org_ID());
+                    //Ned to get conversion based on selected conversion type on Invoice.
+                    Decimal LineNetAmt_ = MConversionRate.ConvertBase(GetCtx(), rLine.GetLineNetAmt(), GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
                     asst.Set_Value("VAFAM_AssetGrossValue", Decimal.Add(Util.GetValueOfDecimal(asst.Get_Value("VAFAM_AssetGrossValue")), LineNetAmt_));
                     if (!asst.Save(Get_TrxName()))
                     {
@@ -5437,8 +5524,9 @@ namespace VAdvantage.Model
             po.Set_Value("Qty", rLine.GetQtyEntered());
             po.Set_Value("VAFAM_CapitalExpense", rLine.Get_Value("VAFAM_CapitalExpense"));
 
-            Decimal LineTotalAmt_ = MConversionRate.ConvertBase(GetCtx(), rLine.GetLineTotalAmt(), GetC_Currency_ID(), GetDateAcct(), 0, GetAD_Client_ID(), GetAD_Org_ID());
-            Decimal PriceActual_ = MConversionRate.ConvertBase(GetCtx(), rLine.GetPriceActual(), GetC_Currency_ID(), GetDateAcct(), 0, GetAD_Client_ID(), GetAD_Org_ID());
+            //Ned to get conversion based on selected conversion type on Invoice.
+            Decimal LineTotalAmt_ = MConversionRate.ConvertBase(GetCtx(), rLine.GetLineTotalAmt(), GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+            Decimal PriceActual_ = MConversionRate.ConvertBase(GetCtx(), rLine.GetPriceActual(), GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
             po.Set_Value("Amount", LineTotalAmt_);
             po.Set_Value("Price", PriceActual_);
 
@@ -6151,6 +6239,6 @@ namespace VAdvantage.Model
         }
 
         #endregion
-
+               
     }
 }

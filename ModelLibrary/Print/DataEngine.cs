@@ -353,7 +353,7 @@ namespace VAdvantage.Print
                             sqlSelfTableRef = _synonym + "." + tr.KeyColumn;
                         }
                         sqlFROM.Append(tr.TableName).Append(" ").Append(_synonym).Append(" ON (");
-                        if (!ColumnName.EndsWith("_ID") && DatabaseType.IsPostgre)
+                        if (!ColumnName.EndsWith("_ID") && DatabaseType.IsPostgre && !ColumnName.ToUpper().Equals("AD_LANGUAGE") && !ColumnName.ToUpper().Equals("ENTITYTYPE"))
                         {
                             sqlFROM.Append("TO_NUMBER(").Append(tableName).Append(".").Append(ColumnName).Append(",'99G99')").Append("=");
                             //TO_NUMBER()

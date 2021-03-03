@@ -247,6 +247,16 @@ namespace VAdvantage.Model
                 }
             }
 
+            //Lakhwinder 1Feb2021
+            //Shipment and Inventory Move Module Changes
+            //Solution Proposed Puneet 
+            //STandard changes Analysed in Gull Implementation
+            if (MDocType.Get(GetCtx(), GetC_DocType_ID()).IsInTransit() && GetM_Warehouse_ID() == 0)
+            {
+                log.SaveError("VIS_ToWarehouseCantNull", "");
+                return false;
+            }
+
             return true;
         }
 
@@ -360,6 +370,20 @@ namespace VAdvantage.Model
                 }
             }
 
+
+            //Lakhwinder 10 Feb 2021
+            //Show Error If Confirmation Doc Type not found.
+            if (dt.IsInTransit())
+            {
+                string s = CheckConfimationDocType(dt);
+                if (!String.IsNullOrEmpty(s))
+                {
+                    _processMsg = s;
+                    SetProcessMsg(_processMsg);
+                    return DocActionVariables.STATUS_INVALID;
+                }
+            }
+
             //	Confirmation
             if (GetDescription() != null)
             {
@@ -374,6 +398,8 @@ namespace VAdvantage.Model
                 if (dt.IsInTransit())
                     CreateConfirmation();
             }
+
+
 
             _justPrepared = true;
             if (!DOCACTION_Complete.Equals(GetDocAction()))
@@ -392,6 +418,21 @@ namespace VAdvantage.Model
 
             //	Create Confirmation
             MMovementConfirm.Create(this, false);
+        }
+        /// <summary>
+        /// Check DocTypeConfimation
+        /// </summary>
+        /// <param name="dt">DocumentType</param>
+        /// <returns>error Message if Confiramtion Doct Tpye not Selected</returns>
+        private string CheckConfimationDocType(MDocType dt)
+        {
+            if (dt.Get_ColumnIndex("C_DocTypeConfrimation_ID") > -1)
+            {
+                int conDocType = Util.GetValueOfInt(dt.Get_Value("C_DocTypeConfrimation_ID"));
+                if (conDocType == 0)
+                { return Msg.GetMsg(GetCtx(), "VIS_ConfirmationDocNotFound"); }
+            }
+            return null;
         }
 
         /// <summary>
@@ -464,8 +505,8 @@ namespace VAdvantage.Model
                                    " AND t.M_Product_ID = " + mmLine.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + mmLine.GetM_AttributeSetInstance_ID() +
                                    " AND NVL(t.M_ProductContainer_ID, 0) = " + mmLine.GetM_ProductContainer_ID();
                             }
-                            int qty = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
-                            int qtyToMove = Util.GetValueOfInt(mmLine.GetMovementQty());
+                            decimal qty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_TrxName()));
+                            decimal qtyToMove = mmLine.GetMovementQty();
                             if (qty < qtyToMove)
                             {
                                 check = true;
@@ -489,8 +530,8 @@ namespace VAdvantage.Model
                                  " AND t.M_Product_ID = " + mmLine.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + mmLine.GetM_AttributeSetInstance_ID() +
                                  " AND NVL(t.M_ProductContainer_ID, 0) = " + mmLine.GetM_ProductContainer_ID();
                             }
-                            int qty = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
-                            int qtyToMove = Util.GetValueOfInt(mmLine.GetMovementQty());
+                            decimal qty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_TrxName()));
+                            decimal qtyToMove = mmLine.GetMovementQty();
                             if (qty < qtyToMove)
                             {
                                 check = true;
@@ -1016,7 +1057,7 @@ namespace VAdvantage.Model
                                 //if (Util.GetValueOfInt(DB.ExecuteScalar(sql)) > 0)
 
                                 // Check Asset ID instead of Asset Group to consider Asset Movement.
-                                if(line.GetA_Asset_ID() > 0)
+                                if (line.GetA_Asset_ID() > 0)
                                 {
                                     isAsset = true;
                                 }
