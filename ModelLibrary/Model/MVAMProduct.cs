@@ -241,7 +241,7 @@ namespace VAdvantage.Model
          * 	Import Constructor
          *	@param impP import
          */
-        public MVAMProduct(X_I_Product impP)
+        public MVAMProduct(X_VAI_Product impP)
             : this(impP.GetCtx(), 0, impP.Get_TrxName())
         {
             PO.CopyValues(impP, this, impP.GetVAF_Client_ID(), impP.GetVAF_Org_ID());

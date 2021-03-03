@@ -235,7 +235,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 idr = DataBase.DB.ExecuteReader(sql.ToString(), null, Get_TrxName());
                 while (idr.Read())
                 {
-                    X_I_Conversion_Rate imp = new X_I_Conversion_Rate(GetCtx(), idr, Get_TrxName());
+                    X_VAI_CurrencyExchangeRate imp = new X_VAI_CurrencyExchangeRate(GetCtx(), idr, Get_TrxName());
                     MVABExchangeRate rate = new MVABExchangeRate(imp,
                         imp.GetVAB_CurrencyType_ID(),
                         imp.GetVAB_Currency_ID(), imp.GetVAB_Currency_To_ID(),
@@ -245,7 +245,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     if (rate.Save())
                     {
                         imp.SetVAB_ExchangeRate_ID(rate.GetVAB_ExchangeRate_ID());
-                        imp.SetI_IsImported(X_I_Conversion_Rate.I_ISIMPORTED_Yes);
+                        imp.SetI_IsImported(X_VAI_CurrencyExchangeRate.I_ISIMPORTED_Yes);
                         imp.SetProcessed(true);
                         imp.Save();
                         noInsert++;

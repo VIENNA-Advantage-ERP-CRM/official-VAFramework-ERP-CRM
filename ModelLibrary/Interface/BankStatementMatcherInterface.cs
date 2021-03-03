@@ -42,7 +42,7 @@ namespace VAdvantage.Interface
         /// </summary>
         /// <param name="ibs">bank statement import line</param>
         /// <returns>found matches or null</returns>
-         BankStatementMatchInfo FindMatch(X_I_BankStatement ibs);
+         BankStatementMatchInfo FindMatch(X_VAI_BankJRNL ibs);
 
     }
 }

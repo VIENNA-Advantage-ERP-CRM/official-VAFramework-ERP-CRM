@@ -14,18 +14,9 @@ using System.Data;
 /** Generated Model for I_ElementValue
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_I_ElementValue : PO
+public class X_VAI_Acct : PO
 {
-public X_I_ElementValue (Context ctx, int I_ElementValue_ID, Trx trxName) : base (ctx, I_ElementValue_ID, trxName)
-{
-/** if (I_ElementValue_ID == 0)
-{
-SetI_ElementValue_ID (0);
-SetI_IsImported (null);	// N
-}
- */
-}
-public X_I_ElementValue (Ctx ctx, int I_ElementValue_ID, Trx trxName) : base (ctx, I_ElementValue_ID, trxName)
+public X_VAI_Acct (Context ctx, int I_ElementValue_ID, Trx trxName) : base (ctx, I_ElementValue_ID, trxName)
 {
 /** if (I_ElementValue_ID == 0)
 {
@@ -34,12 +25,21 @@ SetI_IsImported (null);	// N
 }
  */
 }
+public X_VAI_Acct (Ctx ctx, int I_ElementValue_ID, Trx trxName) : base (ctx, I_ElementValue_ID, trxName)
+{
+/** if (I_ElementValue_ID == 0)
+{
+SetI_ElementValue_ID (0);
+SetI_IsImported (null);	// N
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_I_ElementValue (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAI_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_I_ElementValue (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_I_ElementValue (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAI_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_I_ElementValue (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_I_ElementValue (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAI_Acct (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_I_ElementValue()
+static X_VAI_Acct()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);

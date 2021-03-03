@@ -407,7 +407,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
                 while (idr.Read())
                 {
-                    X_I_Payment imp = new X_I_Payment(_ctx, idr, Get_TrxName());
+                    X_VAI_Payment imp = new X_VAI_Payment(_ctx, idr, Get_TrxName());
                     //	Get the bank account
                     if (account == null || account.GetVAB_Bank_Acct_ID() != imp.GetVAB_Bank_Acct_ID())
                     {
@@ -480,7 +480,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     if (payment.Save())
                     {
                         imp.SetVAB_Payment_ID(payment.GetVAB_Payment_ID());
-                        imp.SetI_IsImported(X_I_Payment.I_ISIMPORTED_Yes);
+                        imp.SetI_IsImported(X_VAI_Payment.I_ISIMPORTED_Yes);
                         imp.SetProcessed(true);
                         imp.Save();
                         noInsert++;

@@ -69,9 +69,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             log.Info("doIt - Table_ID=" + Table_ID + ", Record_ID=" + Record_ID
                 + ", Matchers=" + _matchers.Length);
 
-            if (Table_ID == X_I_BankStatement.Table_ID)
+            if (Table_ID == X_VAI_BankJRNL.Table_ID)
             {
-                return Match(new X_I_BankStatement(GetCtx(), Record_ID, Get_Trx()));
+                return Match(new X_VAI_BankJRNL(GetCtx(), Record_ID, Get_Trx()));
             }
             else if (Table_ID == MVABBankingJRNL.Table_ID)
             {
@@ -90,7 +90,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// </summary>
         /// <param name="ibs">import bank statement line</param>
         /// <returns>Message</returns>
-        private String Match(X_I_BankStatement ibs)
+        private String Match(X_VAI_BankJRNL ibs)
         {
             if (_matchers == null || ibs == null || ibs.GetVAB_Payment_ID() != 0)
             {

@@ -139,7 +139,7 @@ namespace VAdvantage.Model
          * 	Import Constructor
          *	@param imp import
          */
-        public MVARRequest(X_I_Request imp)
+        public MVARRequest(X_VAI_Request imp)
             : this(imp.GetCtx(), 0, imp.Get_TrxName())
         {
 

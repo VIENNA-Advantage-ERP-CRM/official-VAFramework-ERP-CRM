@@ -239,7 +239,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 DateTime? x_MovementDate = null;
                 while (idr.Read())
                 {
-                    X_I_Inventory imp = new X_I_Inventory(GetCtx(), idr, Get_TrxName());
+                    X_VAI_Inventory imp = new X_VAI_Inventory(GetCtx(), idr, Get_TrxName());
                     DateTime? MovementDate = TimeUtil.GetDay(imp.GetMovementDate());
 
                     if (inventory == null
@@ -285,7 +285,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         imp.GetQtyBook(), imp.GetQtyCount());
                     if (line.Save())
                     {
-                        imp.SetI_IsImported(X_I_Inventory.I_ISIMPORTED_Yes);
+                        imp.SetI_IsImported(X_VAI_Inventory.I_ISIMPORTED_Yes);
                         imp.SetVAM_Inventory_ID(line.GetVAM_Inventory_ID());
                         imp.SetVAM_InventoryLine_ID(line.GetVAM_InventoryLine_ID());
                         imp.SetProcessed(true);

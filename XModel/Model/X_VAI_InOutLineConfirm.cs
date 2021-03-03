@@ -14,19 +14,9 @@ using System.Data;
 /** Generated Model for I_InOutLineConfirm
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_I_InOutLineConfirm : PO
+public class X_VAI_InOutLineConfirm : PO
 {
-public X_I_InOutLineConfirm (Context ctx, int I_InOutLineConfirm_ID, Trx trxName) : base (ctx, I_InOutLineConfirm_ID, trxName)
-{
-/** if (I_InOutLineConfirm_ID == 0)
-{
-SetI_InOutLineConfirm_ID (0);
-SetI_IsImported (null);	// N
-SetProcessed (false);	// N
-}
- */
-}
-public X_I_InOutLineConfirm (Ctx ctx, int I_InOutLineConfirm_ID, Trx trxName) : base (ctx, I_InOutLineConfirm_ID, trxName)
+public X_VAI_InOutLineConfirm (Context ctx, int I_InOutLineConfirm_ID, Trx trxName) : base (ctx, I_InOutLineConfirm_ID, trxName)
 {
 /** if (I_InOutLineConfirm_ID == 0)
 {
@@ -36,12 +26,22 @@ SetProcessed (false);	// N
 }
  */
 }
+public X_VAI_InOutLineConfirm (Ctx ctx, int I_InOutLineConfirm_ID, Trx trxName) : base (ctx, I_InOutLineConfirm_ID, trxName)
+{
+/** if (I_InOutLineConfirm_ID == 0)
+{
+SetI_InOutLineConfirm_ID (0);
+SetI_IsImported (null);	// N
+SetProcessed (false);	// N
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_I_InOutLineConfirm (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAI_InOutLineConfirm (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_I_InOutLineConfirm (Context ctx, DataRow rs, Trx trxName) : base(ctx, r
 @param rs result set 
 @param trxName transaction
 */
-public X_I_InOutLineConfirm (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAI_InOutLineConfirm (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_I_InOutLineConfirm (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_I_InOutLineConfirm (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAI_InOutLineConfirm (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_I_InOutLineConfirm()
+static X_VAI_InOutLineConfirm()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);

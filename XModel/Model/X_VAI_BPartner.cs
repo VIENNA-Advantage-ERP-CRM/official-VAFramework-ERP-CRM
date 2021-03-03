@@ -14,18 +14,9 @@ using System.Data;
 /** Generated Model for I_BPartner
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_I_BPartner : PO
+public class X_VAI_BPartner : PO
 {
-public X_I_BPartner (Context ctx, int I_BPartner_ID, Trx trxName) : base (ctx, I_BPartner_ID, trxName)
-{
-/** if (I_BPartner_ID == 0)
-{
-SetI_BPartner_ID (0);
-SetI_IsImported (null);	// N
-}
- */
-}
-public X_I_BPartner (Ctx ctx, int I_BPartner_ID, Trx trxName) : base (ctx, I_BPartner_ID, trxName)
+public X_VAI_BPartner (Context ctx, int I_BPartner_ID, Trx trxName) : base (ctx, I_BPartner_ID, trxName)
 {
 /** if (I_BPartner_ID == 0)
 {
@@ -34,12 +25,21 @@ SetI_IsImported (null);	// N
 }
  */
 }
+public X_VAI_BPartner (Ctx ctx, int I_BPartner_ID, Trx trxName) : base (ctx, I_BPartner_ID, trxName)
+{
+/** if (I_BPartner_ID == 0)
+{
+SetI_BPartner_ID (0);
+SetI_IsImported (null);	// N
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_I_BPartner (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAI_BPartner (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_I_BPartner (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_I_BPartner (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAI_BPartner (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_I_BPartner (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_I_BPartner (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAI_BPartner (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_I_BPartner()
+static X_VAI_BPartner()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);

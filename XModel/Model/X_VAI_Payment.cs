@@ -14,9 +14,9 @@ namespace VAdvantage.Model
     /** Generated Model for I_Payment
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_I_Payment : PO
+    public class X_VAI_Payment : PO
     {
-        public X_I_Payment(Context ctx, int I_Payment_ID, Trx trxName)
+        public X_VAI_Payment(Context ctx, int I_Payment_ID, Trx trxName)
             : base(ctx, I_Payment_ID, trxName)
         {
             /** if (I_Payment_ID == 0)
@@ -26,7 +26,7 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_I_Payment(Ctx ctx, int I_Payment_ID, Trx trxName)
+        public X_VAI_Payment(Ctx ctx, int I_Payment_ID, Trx trxName)
             : base(ctx, I_Payment_ID, trxName)
         {
             /** if (I_Payment_ID == 0)
@@ -41,7 +41,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_I_Payment(Context ctx, DataRow rs, Trx trxName)
+        public X_VAI_Payment(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -50,7 +50,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_I_Payment(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAI_Payment(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -59,14 +59,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_I_Payment(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAI_Payment(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_I_Payment()
+        static X_VAI_Payment()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);

@@ -14,18 +14,9 @@ using System.Data;
 /** Generated Model for I_Product
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_I_Product : PO
+public class X_VAI_Product : PO
 {
-public X_I_Product (Context ctx, int I_Product_ID, Trx trxName) : base (ctx, I_Product_ID, trxName)
-{
-/** if (I_Product_ID == 0)
-{
-SetI_IsImported (null);	// N
-SetI_Product_ID (0);
-}
- */
-}
-public X_I_Product (Ctx ctx, int I_Product_ID, Trx trxName) : base (ctx, I_Product_ID, trxName)
+public X_VAI_Product (Context ctx, int I_Product_ID, Trx trxName) : base (ctx, I_Product_ID, trxName)
 {
 /** if (I_Product_ID == 0)
 {
@@ -34,12 +25,21 @@ SetI_Product_ID (0);
 }
  */
 }
+public X_VAI_Product (Ctx ctx, int I_Product_ID, Trx trxName) : base (ctx, I_Product_ID, trxName)
+{
+/** if (I_Product_ID == 0)
+{
+SetI_IsImported (null);	// N
+SetI_Product_ID (0);
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_I_Product (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAI_Product (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_I_Product (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_I_Product (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAI_Product (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_I_Product (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_I_Product (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAI_Product (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_I_Product()
+static X_VAI_Product()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);

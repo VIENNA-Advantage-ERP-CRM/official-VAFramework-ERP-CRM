@@ -14,18 +14,9 @@ using System.Data;
 /** Generated Model for I_BankStatement
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_I_BankStatement : PO
+public class X_VAI_BankJRNL : PO
 {
-public X_I_BankStatement (Context ctx, int I_BankStatement_ID, Trx trxName) : base (ctx, I_BankStatement_ID, trxName)
-{
-/** if (I_BankStatement_ID == 0)
-{
-SetI_BankStatement_ID (0);
-SetI_IsImported (null);	// N
-}
- */
-}
-public X_I_BankStatement (Ctx ctx, int I_BankStatement_ID, Trx trxName) : base (ctx, I_BankStatement_ID, trxName)
+public X_VAI_BankJRNL (Context ctx, int I_BankStatement_ID, Trx trxName) : base (ctx, I_BankStatement_ID, trxName)
 {
 /** if (I_BankStatement_ID == 0)
 {
@@ -34,12 +25,21 @@ SetI_IsImported (null);	// N
 }
  */
 }
+public X_VAI_BankJRNL (Ctx ctx, int I_BankStatement_ID, Trx trxName) : base (ctx, I_BankStatement_ID, trxName)
+{
+/** if (I_BankStatement_ID == 0)
+{
+SetI_BankStatement_ID (0);
+SetI_IsImported (null);	// N
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_I_BankStatement (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAI_BankJRNL (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_I_BankStatement (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_I_BankStatement (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAI_BankJRNL (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_I_BankStatement (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_I_BankStatement (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAI_BankJRNL (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_I_BankStatement()
+static X_VAI_BankJRNL()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);

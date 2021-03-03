@@ -107,7 +107,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 idr = DataBase.DB.ExecuteReader(sql0, param, Get_TrxName());
                 while (idr.Read())
                 {
-                    if (this.Process(new X_I_Contact(GetCtx(), idr, Get_TrxName())))
+                    if (this.Process(new X_VAI_Contact(GetCtx(), idr, Get_TrxName())))
                         noProcessed++;
                 }
                 idr.Close();
@@ -129,7 +129,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// </summary>
         /// <param name="imp">import</param>
         /// <returns>true if processed</returns>
-        private bool Process(X_I_Contact imp)
+        private bool Process(X_VAI_Contact imp)
         {
             if (imp.GetEMail() == null || imp.GetEMail().Length == 0)
                 return ProcessFail(imp, "No EMail");
@@ -213,7 +213,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <param name="imp">import</param>
         /// <param name="errorMsg">error message</param>
         /// <returns>false</returns>
-        private bool ProcessFail(X_I_Contact imp, String errorMsg)
+        private bool ProcessFail(X_VAI_Contact imp, String errorMsg)
         {
             imp.SetI_IsImported(false);
             imp.SetI_ErrorMsg(errorMsg);

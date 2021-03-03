@@ -371,7 +371,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
                 while (idr.Read())
                 {
-                    X_I_BankStatement imp = new X_I_BankStatement(_ctx, idr, Get_TrxName());
+                    X_VAI_BankJRNL imp = new X_VAI_BankJRNL(_ctx, idr, Get_TrxName());
                     //	Get the bank account for the first statement
                     if (account == null)
                     {
@@ -484,7 +484,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     {
                         imp.SetVAB_BankingJRNL_ID(statement.GetVAB_BankingJRNL_ID());
                         imp.SetVAB_BankingJRNLLine_ID(line.GetVAB_BankingJRNLLine_ID());
-                        imp.SetI_IsImported(X_I_BankStatement.I_ISIMPORTED_Yes);
+                        imp.SetI_IsImported(X_VAI_BankJRNL.I_ISIMPORTED_Yes);
                         imp.SetProcessed(true);
                         imp.Save();
                         noInsertLine++;

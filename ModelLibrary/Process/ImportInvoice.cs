@@ -437,7 +437,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 idr = DataBase.DB.ExecuteReader(sql.ToString(), null, Get_TrxName());
                 while (idr.Read())
                 {
-                    X_I_Invoice imp = new X_I_Invoice(GetCtx(), idr, Get_TrxName());
+                    X_VAI_Invoice imp = new X_VAI_Invoice(GetCtx(), idr, Get_TrxName());
                     if (imp.GetBPartnerValue() == null)
                     {
                         if (imp.GetEMail() != null)
@@ -585,7 +585,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 int lineNo = 0;
                 while (idr.Read())
                 {
-                    X_I_Invoice imp = new X_I_Invoice(GetCtx(), idr, null);
+                    X_VAI_Invoice imp = new X_VAI_Invoice(GetCtx(), idr, null);
                     String cmpDocumentNo = imp.GetDocumentNo();
                     if (cmpDocumentNo == null)
                         cmpDocumentNo = "";
@@ -678,7 +678,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     line.Save();
                     //
                     imp.SetVAB_InvoiceLine_ID(line.GetVAB_InvoiceLine_ID());
-                    imp.SetI_IsImported(X_I_Invoice.I_ISIMPORTED_Yes);
+                    imp.SetI_IsImported(X_VAI_Invoice.I_ISIMPORTED_Yes);
                     imp.SetProcessed(true);
                     //
                     if (imp.Save())

@@ -14,18 +14,9 @@ using System.Data;
 /** Generated Model for I_Conversion_Rate
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_I_Conversion_Rate : PO
+public class X_VAI_CurrencyExchangeRate : PO
 {
-public X_I_Conversion_Rate (Context ctx, int I_Conversion_Rate_ID, Trx trxName) : base (ctx, I_Conversion_Rate_ID, trxName)
-{
-/** if (I_Conversion_Rate_ID == 0)
-{
-SetI_Conversion_Rate_ID (0);
-SetI_IsImported (null);	// N
-}
- */
-}
-public X_I_Conversion_Rate (Ctx ctx, int I_Conversion_Rate_ID, Trx trxName) : base (ctx, I_Conversion_Rate_ID, trxName)
+public X_VAI_CurrencyExchangeRate (Context ctx, int I_Conversion_Rate_ID, Trx trxName) : base (ctx, I_Conversion_Rate_ID, trxName)
 {
 /** if (I_Conversion_Rate_ID == 0)
 {
@@ -34,12 +25,21 @@ SetI_IsImported (null);	// N
 }
  */
 }
+public X_VAI_CurrencyExchangeRate (Ctx ctx, int I_Conversion_Rate_ID, Trx trxName) : base (ctx, I_Conversion_Rate_ID, trxName)
+{
+/** if (I_Conversion_Rate_ID == 0)
+{
+SetI_Conversion_Rate_ID (0);
+SetI_IsImported (null);	// N
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_I_Conversion_Rate (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAI_CurrencyExchangeRate (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_I_Conversion_Rate (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_I_Conversion_Rate (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAI_CurrencyExchangeRate (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_I_Conversion_Rate (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_I_Conversion_Rate (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAI_CurrencyExchangeRate (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_I_Conversion_Rate()
+static X_VAI_CurrencyExchangeRate()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);

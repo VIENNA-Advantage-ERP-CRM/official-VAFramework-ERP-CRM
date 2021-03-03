@@ -874,7 +874,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
                 while (idr.Read())
                 {
-                    X_I_Request imp = new X_I_Request(GetCtx(), idr, Get_TrxName());
+                    X_VAI_Request imp = new X_VAI_Request(GetCtx(), idr, Get_TrxName());
                     request = new MVARRequest(imp);
 
                     // Save Request
@@ -891,7 +891,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
                     noProcessed++;
                     imp.SetVAR_Request_ID(request.GetVAR_Request_ID());
-                    imp.SetI_IsImported(X_I_Order.I_ISIMPORTED_Yes);
+                    imp.SetI_IsImported(X_VAI_Order.I_ISIMPORTED_Yes);
                     imp.SetProcessed(true);
                     imp.Save();
                 }

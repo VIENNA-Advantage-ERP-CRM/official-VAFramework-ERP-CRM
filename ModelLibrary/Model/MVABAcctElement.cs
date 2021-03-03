@@ -97,7 +97,7 @@ namespace VAdvantage.Model
         /// Import Constructor
         /// </summary>
         /// <param name="imp">imp import</param>
-        public MVABAcctElement(X_I_ElementValue imp)
+        public MVABAcctElement(X_VAI_Acct imp)
             : this(imp.GetCtx(), 0, imp.Get_TrxName())
         {
             SetClientOrg(imp);
@@ -108,7 +108,7 @@ namespace VAdvantage.Model
         /// Set/Update Settings from import
         /// </summary>
         /// <param name="imp">import</param>
-        public void Set(X_I_ElementValue imp)
+        public void Set(X_VAI_Acct imp)
         {
             SetValue(imp.GetValue());
             SetName(imp.GetName());

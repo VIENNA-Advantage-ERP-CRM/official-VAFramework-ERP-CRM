@@ -308,7 +308,7 @@ namespace VAdvantage.Model
         /// Import Contstructor
         /// </summary>
         /// <param name="impBP">import</param>
-        public MVABBusinessPartner(X_I_BPartner impBP)
+        public MVABBusinessPartner(X_VAI_BPartner impBP)
             : this(impBP.GetCtx(), 0, impBP.Get_TrxName())
         {
 

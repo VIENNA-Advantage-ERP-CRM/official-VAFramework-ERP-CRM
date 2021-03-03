@@ -257,7 +257,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 idr = DataBase.DB.ExecuteReader(sql.ToString(), null, Get_TrxName());
                 while (idr.Read())
                 {
-                    X_I_ElementValue impEV = new X_I_ElementValue(GetCtx(), idr, Get_TrxName());
+                    X_VAI_Acct impEV = new X_VAI_Acct(GetCtx(), idr, Get_TrxName());
                     int VAB_Acct_Element_ID = impEV.GetVAB_Acct_Element_ID();
                     int I_ElementValue_ID = impEV.GetI_ElementValue_ID();
 
@@ -269,7 +269,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         {
                             noInsert++;
                             impEV.SetVAB_Acct_Element_ID(ev.GetVAB_Acct_Element_ID());
-                            impEV.SetI_IsImported(X_I_ElementValue.I_ISIMPORTED_Yes);
+                            impEV.SetI_IsImported(X_VAI_Acct.I_ISIMPORTED_Yes);
                             impEV.Save();
                         }
                         else
@@ -290,7 +290,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         if (ev.Save())
                         {
                             noUpdate++;
-                            impEV.SetI_IsImported(X_I_ElementValue.I_ISIMPORTED_Yes);
+                            impEV.SetI_IsImported(X_VAI_Acct.I_ISIMPORTED_Yes);
                             impEV.Save();
                         }
                         else

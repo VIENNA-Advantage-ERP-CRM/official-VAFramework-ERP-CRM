@@ -60,9 +60,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             int Record_ID = GetRecord_ID();
             log.Info("Table_ID=" + Table_ID + ", Record_ID=" + Record_ID);
 
-            if (Table_ID == X_I_BankStatement.Table_ID)
+            if (Table_ID == X_VAI_BankJRNL.Table_ID)
             {
-                return CreatePayment(new X_I_BankStatement(GetCtx(), Record_ID, Get_Trx()));
+                return CreatePayment(new X_VAI_BankJRNL(GetCtx(), Record_ID, Get_Trx()));
             }
             else if (Table_ID == MVABBankingJRNLLine.Table_ID)
             {
@@ -77,7 +77,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// </summary>
         /// <param name="ibs">import bank statement</param>
         /// <returns></returns>
-        private String CreatePayment(X_I_BankStatement ibs)
+        private String CreatePayment(X_VAI_BankJRNL ibs)
         {
             if (ibs == null || ibs.GetVAB_Payment_ID() != 0)
             {

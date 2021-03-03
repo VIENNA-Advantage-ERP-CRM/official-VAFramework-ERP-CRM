@@ -141,13 +141,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 idr = DataBase.DB.ExecuteReader(sql.ToString(), null, Get_TrxName());
                 while (idr.Read())
                 {
-                    X_I_InOutLineConfirm importLine = new X_I_InOutLineConfirm(GetCtx(), idr, Get_TrxName());
+                    X_VAI_InOutLineConfirm importLine = new X_VAI_InOutLineConfirm(GetCtx(), idr, Get_TrxName());
                     MVAMInvInOutLineConfirm confirmLine = new MVAMInvInOutLineConfirm(GetCtx(),
                         importLine.GetVAM_Inv_InOutLineConfirm_ID(), Get_TrxName());
                     if (confirmLine.Get_ID() == 0
                         || confirmLine.Get_ID() != importLine.GetVAM_Inv_InOutLineConfirm_ID())
                     {
-                        importLine.SetI_IsImported(X_I_InOutLineConfirm.I_ISIMPORTED_No);
+                        importLine.SetI_IsImported(X_VAI_InOutLineConfirm.I_ISIMPORTED_No);
                         importLine.SetI_ErrorMsg("ID Not Found");
                         importLine.Save();
                     }
@@ -161,7 +161,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         if (confirmLine.Save())
                         {
                             //	Import
-                            importLine.SetI_IsImported(X_I_InOutLineConfirm.I_ISIMPORTED_Yes);
+                            importLine.SetI_IsImported(X_VAI_InOutLineConfirm.I_ISIMPORTED_Yes);
                             importLine.SetProcessed(true);
                             if (importLine.Save())
                                 no++;

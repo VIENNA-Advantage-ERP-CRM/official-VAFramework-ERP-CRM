@@ -11,28 +11,28 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for I_Order
+    /** Generated Model for I_Invoice
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_I_Order : PO
+    public class X_VAI_Invoice : PO
     {
-        public X_I_Order(Context ctx, int I_Order_ID, Trx trxName)
-            : base(ctx, I_Order_ID, trxName)
+        public X_VAI_Invoice(Context ctx, int I_Invoice_ID, Trx trxName)
+            : base(ctx, I_Invoice_ID, trxName)
         {
-            /** if (I_Order_ID == 0)
+            /** if (I_Invoice_ID == 0)
             {
+            SetI_Invoice_ID (0);
             SetI_IsImported (null);	// N
-            SetI_Order_ID (0);
             }
              */
         }
-        public X_I_Order(Ctx ctx, int I_Order_ID, Trx trxName)
-            : base(ctx, I_Order_ID, trxName)
+        public X_VAI_Invoice(Ctx ctx, int I_Invoice_ID, Trx trxName)
+            : base(ctx, I_Invoice_ID, trxName)
         {
-            /** if (I_Order_ID == 0)
+            /** if (I_Invoice_ID == 0)
             {
+            SetI_Invoice_ID (0);
             SetI_IsImported (null);	// N
-            SetI_Order_ID (0);
             }
              */
         }
@@ -41,7 +41,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_I_Order(Context ctx, DataRow rs, Trx trxName)
+        public X_VAI_Invoice(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -50,7 +50,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_I_Order(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAI_Invoice(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -59,28 +59,28 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_I_Order(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAI_Invoice(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_I_Order()
+        static X_VAI_Invoice()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
         }
         /** Serial Version No */
-        //static long serialVersionUID 27562514377343L;
+        //static long serialVersionUID 27562514377218L;
         /** Last Updated Timestamp 7/29/2010 1:07:40 PM */
-        public static long updatedMS = 1280389060554L;
-        /** VAF_TableView_ID=591 */
+        public static long updatedMS = 1280389060429L;
+        /** VAF_TableView_ID=598 */
         public static int Table_ID;
-        // =591;
+        // =598;
 
-        /** TableName=I_Order */
-        public static String Table_Name = "I_Order";
+        /** TableName=I_Invoice */
+        public static String Table_Name = "I_Invoice";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(2);
@@ -114,7 +114,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_I_Order[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_I_Invoice[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
 
@@ -202,25 +202,6 @@ namespace VAdvantage.Model
         public String GetBPartnerValue()
         {
             return (String)Get_Value("BPartnerValue");
-        }
-
-        /** BillTo_ID VAF_Control_Ref_ID=159 */
-        public static int BILLTO_ID_VAF_Control_Ref_ID = 159;
-        /** Set Invoice To.
-        @param BillTo_ID Bill to Address */
-        public void SetBillTo_ID(int BillTo_ID)
-        {
-            if (BillTo_ID <= 0) Set_Value("BillTo_ID", null);
-            else
-                Set_Value("BillTo_ID", BillTo_ID);
-        }
-        /** Get Invoice To.
-        @return Bill to Address */
-        public int GetBillTo_ID()
-        {
-            Object ii = Get_Value("BillTo_ID");
-            if (ii == null) return 0;
-            return Convert.ToInt32(ii);
         }
         /** Set Activity.
         @param VAB_BillingCode_ID Business Activity */
@@ -334,6 +315,38 @@ namespace VAdvantage.Model
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
+        /** Set Invoice Line.
+        @param VAB_InvoiceLine_ID Invoice Detail Line */
+        public void SetVAB_InvoiceLine_ID(int VAB_InvoiceLine_ID)
+        {
+            if (VAB_InvoiceLine_ID <= 0) Set_Value("VAB_InvoiceLine_ID", null);
+            else
+                Set_Value("VAB_InvoiceLine_ID", VAB_InvoiceLine_ID);
+        }
+        /** Get Invoice Line.
+        @return Invoice Detail Line */
+        public int GetVAB_InvoiceLine_ID()
+        {
+            Object ii = Get_Value("VAB_InvoiceLine_ID");
+            if (ii == null) return 0;
+            return Convert.ToInt32(ii);
+        }
+        /** Set Invoice.
+        @param VAB_Invoice_ID Invoice Identifier */
+        public void SetVAB_Invoice_ID(int VAB_Invoice_ID)
+        {
+            if (VAB_Invoice_ID <= 0) Set_Value("VAB_Invoice_ID", null);
+            else
+                Set_Value("VAB_Invoice_ID", VAB_Invoice_ID);
+        }
+        /** Get Invoice.
+        @return Invoice Identifier */
+        public int GetVAB_Invoice_ID()
+        {
+            Object ii = Get_Value("VAB_Invoice_ID");
+            if (ii == null) return 0;
+            return Convert.ToInt32(ii);
+        }
         /** Set Address.
         @param VAB_Address_ID Location or Address */
         public void SetVAB_Address_ID(int VAB_Address_ID)
@@ -347,38 +360,6 @@ namespace VAdvantage.Model
         public int GetVAB_Address_ID()
         {
             Object ii = Get_Value("VAB_Address_ID");
-            if (ii == null) return 0;
-            return Convert.ToInt32(ii);
-        }
-        /** Set Order Line.
-        @param VAB_OrderLine_ID Order Line */
-        public void SetVAB_OrderLine_ID(int VAB_OrderLine_ID)
-        {
-            if (VAB_OrderLine_ID <= 0) Set_Value("VAB_OrderLine_ID", null);
-            else
-                Set_Value("VAB_OrderLine_ID", VAB_OrderLine_ID);
-        }
-        /** Get Order Line.
-        @return Order Line */
-        public int GetVAB_OrderLine_ID()
-        {
-            Object ii = Get_Value("VAB_OrderLine_ID");
-            if (ii == null) return 0;
-            return Convert.ToInt32(ii);
-        }
-        /** Set Order.
-        @param VAB_Order_ID Order */
-        public void SetVAB_Order_ID(int VAB_Order_ID)
-        {
-            if (VAB_Order_ID <= 0) Set_Value("VAB_Order_ID", null);
-            else
-                Set_Value("VAB_Order_ID", VAB_Order_ID);
-        }
-        /** Get Order.
-        @return Order */
-        public int GetVAB_Order_ID()
-        {
-            Object ii = Get_Value("VAB_Order_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -446,22 +427,6 @@ namespace VAdvantage.Model
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
-        /** Set UOM.
-        @param VAB_UOM_ID Unit of Measure */
-        public void SetVAB_UOM_ID(int VAB_UOM_ID)
-        {
-            if (VAB_UOM_ID <= 0) Set_Value("VAB_UOM_ID", null);
-            else
-                Set_Value("VAB_UOM_ID", VAB_UOM_ID);
-        }
-        /** Get UOM.
-        @return Unit of Measure */
-        public int GetVAB_UOM_ID()
-        {
-            Object ii = Get_Value("VAB_UOM_ID");
-            if (ii == null) return 0;
-            return Convert.ToInt32(ii);
-        }
         /** Set City.
         @param City Identifies a City */
         public void SetCity(String City)
@@ -525,17 +490,17 @@ namespace VAdvantage.Model
         {
             return (DateTime?)Get_Value("DateAcct");
         }
-        /** Set Date Ordered.
-        @param DateOrdered Date of Order */
-        public void SetDateOrdered(DateTime? DateOrdered)
+        /** Set Date Invoiced.
+        @param DateInvoiced Date printed on Invoice */
+        public void SetDateInvoiced(DateTime? DateInvoiced)
         {
-            Set_Value("DateOrdered", (DateTime?)DateOrdered);
+            Set_Value("DateInvoiced", (DateTime?)DateInvoiced);
         }
-        /** Get Date Ordered.
-        @return Date of Order */
-        public DateTime? GetDateOrdered()
+        /** Get Date Invoiced.
+        @return Date printed on Invoice */
+        public DateTime? GetDateInvoiced()
         {
-            return (DateTime?)Get_Value("DateOrdered");
+            return (DateTime?)Get_Value("DateInvoiced");
         }
         /** Set Description.
         @param Description Optional short description of the record */
@@ -605,20 +570,6 @@ namespace VAdvantage.Model
         {
             return (String)Get_Value("EMail");
         }
-        /** Set Freight Amount.
-        @param FreightAmt Freight Amount */
-        public void SetFreightAmt(Decimal? FreightAmt)
-        {
-            Set_Value("FreightAmt", (Decimal?)FreightAmt);
-        }
-        /** Get Freight Amount.
-        @return Freight Amount */
-        public Decimal GetFreightAmt()
-        {
-            Object bd = Get_Value("FreightAmt");
-            if (bd == null) return Env.ZERO;
-            return Convert.ToDecimal(bd);
-        }
         /** Set Import Error Message.
         @param I_ErrorMsg Messages generated from import process */
         public void SetI_ErrorMsg(String I_ErrorMsg)
@@ -635,6 +586,21 @@ namespace VAdvantage.Model
         public String GetI_ErrorMsg()
         {
             return (String)Get_Value("I_ErrorMsg");
+        }
+        /** Set Import Invoice.
+        @param I_Invoice_ID Import Invoice */
+        public void SetI_Invoice_ID(int I_Invoice_ID)
+        {
+            if (I_Invoice_ID < 1) throw new ArgumentException("I_Invoice_ID is mandatory.");
+            Set_ValueNoCheck("I_Invoice_ID", I_Invoice_ID);
+        }
+        /** Get Import Invoice.
+        @return Import Invoice */
+        public int GetI_Invoice_ID()
+        {
+            Object ii = Get_Value("I_Invoice_ID");
+            if (ii == null) return 0;
+            return Convert.ToInt32(ii);
         }
 
         /** I_IsImported VAF_Control_Ref_ID=420 */
@@ -671,21 +637,6 @@ namespace VAdvantage.Model
         public String GetI_IsImported()
         {
             return (String)Get_Value("I_IsImported");
-        }
-        /** Set Import Order.
-        @param I_Order_ID Import Orders */
-        public void SetI_Order_ID(int I_Order_ID)
-        {
-            if (I_Order_ID < 1) throw new ArgumentException("I_Order_ID is mandatory.");
-            Set_ValueNoCheck("I_Order_ID", I_Order_ID);
-        }
-        /** Get Import Order.
-        @return Import Orders */
-        public int GetI_Order_ID()
-        {
-            Object ii = Get_Value("I_Order_ID");
-            if (ii == null) return 0;
-            return Convert.ToInt32(ii);
         }
         /** Set Sales Transaction.
         @param IsSOTrx This is a Sales Transaction */
@@ -754,38 +705,6 @@ namespace VAdvantage.Model
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
-        /** Set Freight Carrier.
-        @param VAM_ShippingMethod_ID Method or manner of product delivery */
-        public void SetVAM_ShippingMethod_ID(int VAM_ShippingMethod_ID)
-        {
-            if (VAM_ShippingMethod_ID <= 0) Set_Value("VAM_ShippingMethod_ID", null);
-            else
-                Set_Value("VAM_ShippingMethod_ID", VAM_ShippingMethod_ID);
-        }
-        /** Get Freight Carrier.
-        @return Method or manner of product delivery */
-        public int GetVAM_ShippingMethod_ID()
-        {
-            Object ii = Get_Value("VAM_ShippingMethod_ID");
-            if (ii == null) return 0;
-            return Convert.ToInt32(ii);
-        }
-        /** Set Warehouse.
-        @param VAM_Warehouse_ID Storage Warehouse and Service Point */
-        public void SetVAM_Warehouse_ID(int VAM_Warehouse_ID)
-        {
-            if (VAM_Warehouse_ID <= 0) Set_Value("VAM_Warehouse_ID", null);
-            else
-                Set_Value("VAM_Warehouse_ID", VAM_Warehouse_ID);
-        }
-        /** Get Warehouse.
-        @return Storage Warehouse and Service Point */
-        public int GetVAM_Warehouse_ID()
-        {
-            Object ii = Get_Value("VAM_Warehouse_ID");
-            if (ii == null) return 0;
-            return Convert.ToInt32(ii);
-        }
         /** Set Name.
         @param Name Alphanumeric identifier of the entity */
         public void SetName(String Name)
@@ -830,7 +749,7 @@ namespace VAdvantage.Model
         public void SetPaymentRule(String PaymentRule)
         {
             //if (!IsPaymentRuleValid(PaymentRule))
-            //throw new ArgumentException ("PaymentRule Invalid value - " + PaymentRule + " - Reference_ID=195 - B - D - K - P - S - T");
+            //    throw new ArgumentException("PaymentRule Invalid value - " + PaymentRule + " - Reference_ID=195 - B - D - K - P - S - T");
             if (PaymentRule != null && PaymentRule.Length > 1)
             {
                 log.Warning("Length > 1 - truncated");

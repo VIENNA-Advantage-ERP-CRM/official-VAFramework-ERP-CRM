@@ -582,7 +582,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 idr = DataBase.DB.ExecuteReader(sql.ToString(), null, Get_TrxName());
                 while (idr.Read())
                 {
-                    X_I_GLJournal imp = new X_I_GLJournal(GetCtx(), idr, Get_TrxName());
+                    X_VAI_GLJRNL imp = new X_VAI_GLJRNL(GetCtx(), idr, Get_TrxName());
 
                     //	New Batch if Batch Document No changes
                     String impBatchDocumentNo = imp.GetBatchDocumentNo();
@@ -703,7 +703,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         if (acct == null || acct.Get_ID() == 0)
                         {
                             imp.SetI_ErrorMsg("ERROR creating Account");
-                            imp.SetI_IsImported(X_I_GLJournal.I_ISIMPORTED_No);
+                            imp.SetI_IsImported(X_VAI_GLJRNL.I_ISIMPORTED_No);
                             imp.Save();
                             continue;
                         }
@@ -730,7 +730,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         imp.SetVAGL_BatchJRNL_ID(batch.GetVAGL_BatchJRNL_ID());
                         imp.SetVAGL_JRNL_ID(journal.GetVAGL_JRNL_ID());
                         imp.SetVAGL_JRNLLine_ID(line.GetVAGL_JRNLLine_ID());
-                        imp.SetI_IsImported(X_I_GLJournal.I_ISIMPORTED_Yes);
+                        imp.SetI_IsImported(X_VAI_GLJRNL.I_ISIMPORTED_Yes);
                         imp.SetProcessed(true);
                         if (imp.Save())
                             noInsertLine++;

@@ -261,7 +261,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 idr = DataBase.DB.ExecuteReader(sql.ToString(), null, Get_TrxName());
                 while (idr.Read())
                 {
-                    X_I_BPartner impBP = new X_I_BPartner(GetCtx(), idr, Get_TrxName());
+                    X_VAI_BPartner impBP = new X_VAI_BPartner(GetCtx(), idr, Get_TrxName());
                     log.Fine("I_BPartner_ID=" + impBP.GetI_BPartner_ID()
                         + ", VAB_BusinessPartner_ID=" + impBP.GetVAB_BusinessPartner_ID()
                         + ", VAB_BPart_Location_ID=" + impBP.GetVAB_BPart_Location_ID()
@@ -506,7 +506,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         ci.Save();		//	don't subscribe or re-activate
                     }
                     //
-                    impBP.SetI_IsImported(X_I_BPartner.I_ISIMPORTED_Yes);
+                    impBP.SetI_IsImported(X_VAI_BPartner.I_ISIMPORTED_Yes);
                     impBP.SetProcessed(true);
                     impBP.SetProcessing(false);
                     impBP.Save();

@@ -169,7 +169,7 @@ namespace VAdvantage.Model
         {
             log.Info("MBankStatementLoader.importLine");
             bool result = false;
-            X_I_BankStatement imp = new X_I_BankStatement(GetCtx(), 0, Get_TrxName());
+            X_VAI_BankJRNL imp = new X_VAI_BankJRNL(GetCtx(), 0, Get_TrxName());
             if (_loader == null)
             {
                 errorMessage = "LoadError";
@@ -228,7 +228,7 @@ namespace VAdvantage.Model
             log.Config("MBankStatementLoader.importLine Charge Amount=" + _loader.GetChargeAmt());
             imp.SetChargeAmt(_loader.GetChargeAmt());
             imp.SetProcessed(false);
-            imp.SetI_IsImported(X_I_BankStatement.I_ISIMPORTED_No);
+            imp.SetI_IsImported(X_VAI_BankJRNL.I_ISIMPORTED_No);
 
             result = imp.Save();
             if (result)

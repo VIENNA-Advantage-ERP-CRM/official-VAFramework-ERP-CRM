@@ -466,7 +466,7 @@ namespace VAdvantage.Process
                 idr = DataBase.DB.ExecuteReader(sql.ToString(), null, Get_TrxName());
                 while (idr.Read())
                 {
-                    X_I_Product imp = new X_I_Product(GetCtx(), idr, Get_TrxName());
+                    X_VAI_Product imp = new X_VAI_Product(GetCtx(), idr, Get_TrxName());
                     int I_Product_ID = imp.GetI_Product_ID();
                     int VAM_Product_ID = imp.GetVAM_Product_ID();
                     int VAB_BusinessPartner_ID = imp.GetVAB_BusinessPartner_ID();
