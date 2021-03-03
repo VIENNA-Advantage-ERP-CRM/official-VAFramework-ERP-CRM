@@ -592,7 +592,7 @@ namespace VAdvantage.Model
                                            " AND t.M_Product_ID = " + inLine.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + inLine.GetM_AttributeSetInstance_ID() +
                                            " AND NVL(t.M_ProductContainer_ID, 0) = " + inLine.GetM_ProductContainer_ID();
                         }
-                        int qty = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
+                        decimal qty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_TrxName()));
                         //int qtyToMove = Util.GetValueOfInt(inLine.GetQtyInternalUse());
                         if (inLine.IsInternalUse())
                         {
@@ -624,7 +624,7 @@ namespace VAdvantage.Model
                                          " AND t.M_Product_ID = " + inLine.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + inLine.GetM_AttributeSetInstance_ID() +
                                          " AND NVL(t.M_ProductContainer_ID, 0) = " + inLine.GetM_ProductContainer_ID();
                         }
-                        int qty = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
+                        decimal qty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_TrxName()));
                         //int qtyToMove = Util.GetValueOfInt(inLine.GetQtyInternalUse());
                         if (inLine.IsInternalUse())
                         {

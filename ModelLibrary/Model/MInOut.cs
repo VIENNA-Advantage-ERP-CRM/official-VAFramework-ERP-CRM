@@ -1973,8 +1973,8 @@ namespace VAdvantage.Model
                                             " AND t.M_Product_ID = " + iol.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + iol.GetM_AttributeSetInstance_ID() +
                                             " AND NVL(t.M_ProductContainer_ID, 0) = " + iol.GetM_ProductContainer_ID());
                                 }
-                                int qty = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
-                                int qtyToMove = Util.GetValueOfInt(iol.GetMovementQty());
+                                decimal qty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
+                                decimal qtyToMove = iol.GetMovementQty();
                                 if (qty < qtyToMove)
                                 {
                                     check = true;
@@ -1998,8 +1998,8 @@ namespace VAdvantage.Model
                                             " AND t.M_Product_ID = " + iol.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + iol.GetM_AttributeSetInstance_ID() +
                                             " AND NVL(t.M_ProductContainer_ID, 0) = " + iol.GetM_ProductContainer_ID());
                                 }
-                                int qty = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
-                                int qtyToMove = Util.GetValueOfInt(iol.GetMovementQty());
+                                decimal qty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
+                                decimal qtyToMove = iol.GetMovementQty();
                                 if (qty < qtyToMove)
                                 {
                                     check = true;
