@@ -3024,6 +3024,13 @@
             $btnHdrSave = null;
             $btnHdrSaveAs = null;
 
+            if ($chkBSendPFasAtt != null) {
+                $chkBSendPFasAtt.off("click");
+                $chkBSendPFasAtt = null;
+            }
+            if ($cmbPfFiletype != null) {                
+                $cmbPfFiletype = null;
+            }
             //self = null;
         };
 
