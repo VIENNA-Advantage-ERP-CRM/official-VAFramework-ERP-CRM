@@ -2395,6 +2395,10 @@ namespace VAdvantage.Model
                     }
                 }
 
+                //	Default Conversion Type
+                if (GetC_ConversionType_ID() == 0)
+                    SetC_ConversionType_ID(MConversionType.GetDefault(GetAD_Client_ID()));
+
                 //Added by Bharat for Credit Limit on 24/08/2016
                 //if (IsSOTrx())
                 //{
