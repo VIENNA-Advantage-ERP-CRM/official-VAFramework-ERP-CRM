@@ -4520,6 +4520,9 @@ namespace VAdvantage.Model
                         Set_Value("VA077_ContractProduct", contract);
                         Set_Value("VA077_NonContractProd", noncontract);
 
+                        if(contract)
+                            Set_Value("VA077_IsContract", contract);
+
                         Set_Value("VA077_ShowCNAutodesk", autodesk);
                         Set_Value("VA077_UpdateVersion", updateversion);
                         Set_Value("VA077_AdditionalInfo", addInfo);
