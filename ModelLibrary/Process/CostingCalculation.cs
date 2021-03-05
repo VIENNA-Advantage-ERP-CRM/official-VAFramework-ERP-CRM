@@ -515,12 +515,12 @@ namespace VAdvantage.Process
                                     if (invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
                                     {
                                         sql.Append("SELECT * FROM C_InvoiceLine WHERE IsActive = 'Y' AND iscostcalculated = 'Y' AND IsReversedCostCalculated = 'N' " +
-                                                     " AND C_Invoice_ID = " + invoice.GetC_Invoice_ID() + " ORDER BY M_Product_ID DESC ");
+                                                     " AND C_Invoice_ID = " + invoice.GetC_Invoice_ID() + " ORDER BY Line ");/*M_Product_ID DESC*/
                                     }
                                     else
                                     {
                                         sql.Append("SELECT * FROM C_InvoiceLine WHERE IsActive = 'Y' AND iscostcalculated = 'N' " +
-                                                     " AND C_Invoice_ID = " + invoice.GetC_Invoice_ID() + " ORDER BY M_Product_ID DESC ");
+                                                     " AND C_Invoice_ID = " + invoice.GetC_Invoice_ID() + " ORDER BY Line "); /* M_Product_ID DESC */
                                     }
                                     dsChildRecord = DB.ExecuteDataset(sql.ToString(), null, Get_Trx());
                                     if (dsChildRecord != null && dsChildRecord.Tables.Count > 0 && dsChildRecord.Tables[0].Rows.Count > 0)
@@ -4350,12 +4350,12 @@ namespace VAdvantage.Process
                                     if (invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
                                     {
                                         sql.Append("SELECT * FROM C_InvoiceLine WHERE IsActive = 'Y' AND iscostcalculated = 'Y' AND IsReversedCostCalculated = 'N' " +
-                                                     " AND C_Invoice_ID = " + invoice.GetC_Invoice_ID() + " ORDER BY M_Product_ID DESC ");
+                                                     " AND C_Invoice_ID = " + invoice.GetC_Invoice_ID() + " ORDER BY  Line ");/*M_Product_ID DESC*/
                                     }
                                     else
                                     {
                                         sql.Append("SELECT * FROM C_InvoiceLine WHERE IsActive = 'Y' AND iscostcalculated = 'N' " +
-                                                     " AND C_Invoice_ID = " + invoice.GetC_Invoice_ID() + " ORDER BY M_Product_ID DESC ");
+                                                     " AND C_Invoice_ID = " + invoice.GetC_Invoice_ID() + " ORDER BY Line ");/*M_Product_ID DESC*/
                                     }
                                     dsChildRecord = DB.ExecuteDataset(sql.ToString(), null, Get_Trx());
                                     if (dsChildRecord != null && dsChildRecord.Tables.Count > 0 && dsChildRecord.Tables[0].Rows.Count > 0)

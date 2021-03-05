@@ -6482,6 +6482,16 @@ namespace VAdvantage.Model
             return quantity;
         }
 
+        /// <summary>
+        /// This function is used to add the qty on respective cost queue reference against which we reduce the stock 
+        /// </summary>
+        /// <param name="cd">cost detail</param>
+        /// <param name="windowName">window name</param>
+        /// <param name="costElement">cost element</param>
+        /// <param name="Qty">qty to be added</param>
+        /// <param name="IsReversedDocument">Is Reversal Document</param>
+        /// <param name="M_Warehouse_ID">Warehouse ID</param>
+        /// <returns>True when success</returns>
         public static bool ReturnStockReAssignedToCostQueue(MCostDetail cd, String windowName, MCostElement costElement, Decimal Qty, bool IsReversedDocument, int M_Warehouse_ID)
         {
             String sql = "";
@@ -6581,6 +6591,16 @@ namespace VAdvantage.Model
             return true;
         }
 
+        /// <summary>
+        /// This function is reduce the stock from cost queue against Orginal transaction
+        /// </summary>
+        /// <param name="cd">Cost Detail</param>
+        /// <param name="windowName">window Name</param>
+        /// <param name="costElement">cost Element</param>
+        /// <param name="Qty">qty to be reduced</param>
+        /// <param name="IsReversedDocument">Is Reversed Document or not</param>
+        /// <param name="M_Warehouse_ID">Warehouse Id</param>
+        /// <returns>true when success</returns>
         public static bool ReturnStockReduceFromCostQueue(MCostDetail cd, String windowName, MCostElement costElement, Decimal Qty, bool IsReversedDocument, int M_Warehouse_ID)
         {
             String sql = "";

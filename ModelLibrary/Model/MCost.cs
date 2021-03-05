@@ -233,7 +233,22 @@ namespace VAdvantage.Model
             VAFAM_AssetDisposal_ID, VAMFG_M_WrkOdrRscTxnLine_ID, VAMFG_M_WrkOdrTrnsctionLine_ID
         }
 
-
+        /// <summary>
+        /// This function is used to get the LIFO and FIFO Cost based on Cost Queue
+        /// Also, we can include Freight charges or not based on parameter into cost
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="AD_Client_ID">Client ID</param>
+        /// <param name="AD_Org_ID">Org ID</param>
+        /// <param name="M_Product_ID">Product ID</param>
+        /// <param name="M_ASI_ID">AttributeSetInstancce ID</param>
+        /// <param name="WindowName">window Name</param>
+        /// <param name="RecordLine_ID">Transaction Document reference ID</param>
+        /// <param name="costingMethod">Costing Method</param>
+        /// <param name="M_Warehouse_ID">Warehouse ID</param>
+        /// <param name="IsFreightIncluded">Is Freight to be added or not into cost</param>
+        /// <param name="trxName">Transaction</param>
+        /// <returns>LIFO or FIFO Cost</returns>
         public static Decimal GetLifoAndFifoCurrentCostFromCostQueueTransaction(Ctx ctx, int AD_Client_ID, int AD_Org_ID, int M_Product_ID,
             int M_ASI_ID, int WindowName, int RecordLine_ID, string costingMethod, int M_Warehouse_ID, bool IsFreightIncluded, Trx trxName)
         {
@@ -294,6 +309,18 @@ namespace VAdvantage.Model
             return Cost;
         }
 
+        /// <summary>
+        /// This function is used to get the sum of Feight amount from Product Costs 
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="C_AcctSchema_ID">Accounting Schema</param>
+        /// <param name="AD_Client_ID">Client ID</param>
+        /// <param name="AD_Org_ID">Organization ID</param>
+        /// <param name="M_Product_ID">Product ID</param>
+        /// <param name="M_ASI_ID">Attributeset Insatnce ID</param>
+        /// <param name="M_Warehouse_ID">warehouse ID</param>
+        /// <param name="trxName">Transaction</param>
+        /// <returns>Freight Amount</returns>
         public static Decimal GetFreightCostAgainstCostCombination(Ctx ctx, int C_AcctSchema_ID, int AD_Client_ID, int AD_Org_ID, int M_Product_ID,
             int M_ASI_ID, int M_Warehouse_ID, Trx trxName)
         {

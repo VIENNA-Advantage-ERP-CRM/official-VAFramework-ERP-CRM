@@ -241,7 +241,7 @@ namespace VAdvantage.Process
                            AND mi.updated >= " + GlobalVariable.TO_DATE(minDateRecord, true) + @" AND mi.updated < " + GlobalVariable.TO_DATE(minDateRecord.Value.AddDays(1), true) + @"  AND i.isactive        = 'Y' AND (i.docstatus       IN ('RE' , 'VO') )
 
                         UNION
-                         SELECT DISTINCT il.ad_client_id ,il.ad_org_id ,il.isactive ,to_char(i.created, 'DD-MON-YY HH24:MI:SS') as created ,   i.createdby , TO_CHAR(i.updated, 'DD-MON-YY HH24:MI:SS') AS updated ,
+                         SELECT DISTINCT il.ad_client_id ,il.ad_org_id ,il.isactive ,to_char(LCA.created, 'DD-MON-YY HH24:MI:SS') as created ,   i.createdby , TO_CHAR(i.updated, 'DD-MON-YY HH24:MI:SS') AS updated ,
                               i.updatedby , I.DOCUMENTNO , LCA.C_LANDEDCOSTALLOCATION_ID AS RECORD_ID ,   '' AS ISSOTRX , '' AS ISRETURNTRX , '' AS ISINTERNALUSE,
                               'LandedCost' as TABLENAME,  I.DOCSTATUS, DATEACCT as DATEACCT , LCA.ISCOSTCALCULATED , 'N' as ISREVERSEDCOSTCALCULATED
                         FROM C_LANDEDCOSTALLOCATION LCA INNER JOIN C_INVOICELINE IL ON IL.C_INVOICELINE_ID = LCA.C_INVOICELINE_ID
