@@ -159,7 +159,7 @@ namespace VIS
 
 
 
-                   "~/Areas/VIS/Scripts/tabpanels/verinfo.js",                   
+                   "~/Areas/VIS/Scripts/tabpanels/verinfo.js",
                   "~/Areas/VIS/Scripts/TestPanel.js");
 
 
@@ -214,14 +214,13 @@ namespace VIS
                          "~/Areas/VIS/Content/F20/Media.css",
                          "~/Areas/VIS/Content/F20/ThemeCnfgtr.css"
                 );
-
-
-            //style.Include("~/Areas/VIS/Content/VIS.rtl.css");
+            style.Include("~/Areas/VIS/Content/VIS.rtl.css");
 
             //style.Include("~/Areas/VIS/Content/VIS.all.min.css");
             //modScript.Include("~/Areas/VIS/Scripts/VIS.all.min.js");
             //modScript_v1.Include("~/Areas/VIS/Scripts/VIS1_0.min.js");
             //modScript_v2.Include("~/Areas/VIS/Scripts/VIS2_0.min.js");
+
 
 
 

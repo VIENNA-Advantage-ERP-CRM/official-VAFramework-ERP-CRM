@@ -147,9 +147,13 @@ public Boolean IsProcessing() {Object oo = Get_Value("Processing");if (oo != nul
 @param VA009_Advance Advance */
 public void SetVA009_Advance (Boolean VA009_Advance){Set_Value ("VA009_Advance", VA009_Advance);}/** Get Advance.
 @return Advance */
-public Boolean IsVA009_Advance() {Object oo = Get_Value("VA009_Advance");if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo);}return false;}/** Set Search Key.
+public Boolean IsVA009_Advance() {Object oo = Get_Value("VA009_Advance");if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo);}return false;} /** Set Week Offset.
+@param WeekOffset Number of weeks (0=same, 1=following) */
+public void SetWeekOffset(int WeekOffset) { Set_Value("WeekOffset", WeekOffset); }/** Get Week Offset.
+@return Number of weeks (0=same, 1=following) */
+public int GetWeekOffset() { Object ii = Get_Value("WeekOffset"); if (ii == null) return 0; return Convert.ToInt32(ii); } /** Set Search Key.
 @param Value Search key for the record in the format required - must be unique */
-public void SetValue (String Value){if (Value == null) throw new ArgumentException ("Value is mandatory.");if (Value.Length > 40){log.Warning("Length > 40 - truncated");Value = Value.Substring(0,40);}Set_Value ("Value", Value);}/** Get Search Key.
+    public void SetValue (String Value){if (Value == null) throw new ArgumentException ("Value is mandatory.");if (Value.Length > 40){log.Warning("Length > 40 - truncated");Value = Value.Substring(0,40);}Set_Value ("Value", Value);}/** Get Search Key.
 @return Search key for the record in the format required - must be unique */
 public String GetValue() {return (String)Get_Value("Value");}}
 }

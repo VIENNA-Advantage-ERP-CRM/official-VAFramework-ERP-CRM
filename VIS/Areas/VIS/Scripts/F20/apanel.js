@@ -2284,10 +2284,11 @@
                                 var orgID = Number(VIS.context.getWindowTabContext(curWindowNo, 0, "AD_Org_ID"));
                                 var winID = curTab.getAD_Window_ID();
                                 var docTypeID = Number(VIS.context.getWindowTabContext(curWindowNo, 0, "C_DocType_ID"));
-                                var postObj = FRPT.PostingLogic(curWindowNo, curTab.getAD_Table_ID(), curTab.getRecord_ID(), force, orgID, winID, docTypeID);
-                                curGC.dataRefresh();
-                                aPanel.setBusy(false, true);
-                                return;
+                                var postObj = FRPT.PostingLogic(curWindowNo, curTab.getAD_Table_ID(), curTab.getRecord_ID(), force, orgID, winID, docTypeID, function () {
+                                    curGC.dataRefresh();
+                                    aPanel.setBusy(false, true);
+                                    return;
+                                });
                             }
                             else {
                                 $.ajax({

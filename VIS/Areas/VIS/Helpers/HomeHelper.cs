@@ -193,11 +193,11 @@ namespace VIS.Helpers
 
                 #region Appointments Count
 
-                strQuery = "SELECT COUNT( AppointmentsInfo.ID)  FROM (SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID"
+                strQuery = "SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID"
                     //+ "  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N' AND  AppointmentsInfo.CreatedBy  !=" + ctx.GetAD_User_ID() + " AND AppointmentsInfo.AD_User_ID  = " + ctx.GetAD_User_ID() + ""
-                          + "  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = " + ctx.GetAD_User_ID() + ""
-                         + "  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo"
-                         + "  JOIN AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = " + ctx.GetAD_User_ID() + " )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('";
+                          + "  FROM AppointmentsInfo AppointmentsInfo JOIN AD_User AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = " + ctx.GetAD_User_ID() + ""
+                         + "  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID from AppointmentsInfo AppointmentsInfo "
+                         + "  JOIN AD_User AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = " + ctx.GetAD_User_ID() + " )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('";
                 //DateTime.Now.ToShortDateString()
                 strQuery += DateTime.Now.AddDays(-1).ToString("M/dd/yy");
                 // Use current time
@@ -205,9 +205,11 @@ namespace VIS.Helpers
                 strQuery += DateTime.Now.AddDays(7).ToString("M/dd/yy");
                 //DateTime.UtcNow.AddDays(1).ToShortDateString() 
                 strQuery += " 23.59','mm/dd/yy HH24:MI') "
-                          + "  OR  to_date('" + DateTime.Now.ToString("M/dd/yy") + "','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=" + ctx.GetAD_User_ID() + " AND AppointmentsInfo.AD_User_ID  = " + ctx.GetAD_User_ID() + ") AppointmentsInfo";
+                          + "  OR  to_date('" + DateTime.Now.ToString("M/dd/yy") + "','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=" + ctx.GetAD_User_ID() + " AND AppointmentsInfo.AD_User_ID  = " + ctx.GetAD_User_ID() ;
                 strQuery = MRole.Get(ctx, ctx.GetAD_Role_ID()).AddAccessSQL(strQuery, "AppointmentsInfo", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
 
+
+                strQuery = "SELECT COUNT( AppointmentsInfo.ID)  FROM (" + strQuery + ") AppointmentsInfo";
                 dsData = new DataSet();
                 dsData = DB.ExecuteDataset(strQuery);
                 int nTotalAppnt = 0;

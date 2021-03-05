@@ -389,6 +389,20 @@ if (oo != null)
 }
 return false;
 }
-}
+        /** Set Document Type.
+   @param C_DocType_ID Document type or rules */
+        public void SetC_DocType_ID(int C_DocType_ID)
+        {
+            Set_Value("C_DocType_ID", C_DocType_ID);
+        }
+        /** Get Document Type.
+        @return Document type or rules */
+        public int GetC_DocType_ID()
+        {
+            Object ii = Get_Value("C_DocType_ID");
+            if (ii == null) return 0;
+            return Convert.ToInt32(ii);
+        }
+    }
 
 }

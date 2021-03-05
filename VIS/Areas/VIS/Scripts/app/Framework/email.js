@@ -1662,6 +1662,7 @@
         };
 
         function attachDynamicPF(e) {
+
             if (this.checked) {
                 $cmbPfFiletype.parent().show();
                 //in ase of dynmic mail, to, bccc and cc will be enabled only for single record.
@@ -1684,6 +1685,8 @@
                     $bcc.prop('disabled', false);
                 }
             }
+
+            
         };
 
         function addPrintOption() {

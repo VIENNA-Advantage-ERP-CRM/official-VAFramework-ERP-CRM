@@ -178,7 +178,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
                         whereClause.Clear();
 
                         // Amount = 0;
-                       
+
                         VAdvantage.Model.MOrderLine ol = new VAdvantage.Model.MOrderLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_OrderLine_ID"]), _trx);
                         M_Product_ID = ol.GetM_Product_ID();
                         int Account_ID = 0;
@@ -1145,7 +1145,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
             }
             set
             {
-                _trx= value;
+                _trx = value;
             }
         }
 
@@ -1171,7 +1171,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
         /// </summary>
         /// <param name="BudgetControlIds">Budget Control Ids</param>
         /// <returns>dataset of Dimension applicable</returns>
-        public  DataSet GetBudgetDimension(String BudgetControlIds)
+        public DataSet GetBudgetDimension(String BudgetControlIds)
         {
             DataSet dsBudgetControl = null;
             String sql = @"SELECT DISTINCT GL_BudgetControl.GL_Budget_ID, GL_BudgetControl.GL_BudgetControl_ID, GL_BudgetControlDimension.ElementType, 
@@ -1225,7 +1225,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
         /// <param name="order">isOrder</param>
         /// <param name="OrderId">Order ID</param>
         /// <returns>listBudgetControl</returns>
-        public  List<BudgetControl> GetBudgetControlValue(DataRow drDataRecord, DataRow drBUdgetControl, DataRow[] drBudgetComtrolDimension,
+        public List<BudgetControl> GetBudgetControlValue(DataRow drDataRecord, DataRow drBUdgetControl, DataRow[] drBudgetComtrolDimension,
             DateTime? date, List<BudgetControl> _listBudgetControl, Trx trxName, char order, int OrderId)
         {
             BudgetControl budgetControl = null;
@@ -1302,6 +1302,12 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
                     budgetControl.UserElement8_ID = dsBudgetControlAmount.Tables[0].Columns.Contains("UserElement8_ID") ? Util.GetValueOfInt(dsBudgetControlAmount.Tables[0].Rows[i]["UserElement8_ID"]) : 0;
                     budgetControl.UserElement9_ID = dsBudgetControlAmount.Tables[0].Columns.Contains("UserElement9_ID") ? Util.GetValueOfInt(dsBudgetControlAmount.Tables[0].Rows[i]["UserElement9_ID"]) : 0;
                     budgetControl.ControlledAmount = dsBudgetControlAmount.Tables[0].Columns.Contains("ControlledAmount") ? Util.GetValueOfDecimal(dsBudgetControlAmount.Tables[0].Rows[i]["ControlledAmount"]) : 0;
+                    // Control budget breach by percentage (if percentage defined get amount of percentage defined)
+                    // implemented by rakesh kumar 18/Feb/2020
+                    if (Util.GetValueOfDecimal(drBUdgetControl["BudgetBreachPercent"]) > 0)
+                    {
+                        budgetControl.ControlledAmount = (budgetControl.ControlledAmount * Util.GetValueOfDecimal(drBUdgetControl["BudgetBreachPercent"]) / 100);
+                    }
                     budgetControl.WhereClause = Where + whereDimension;
                     _listBudgetControl.Add(budgetControl);
                 }
@@ -1353,7 +1359,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
         /// <param name="AlreadyAllocatedAmount">amount (Actual - Commitment - Reservation)</param>
         /// <param name="_listBudgetControl">list of budget control</param>
         /// <returns></returns>
-        public  List<BudgetControl> ReduceAmountFromBudget(DataRow drDataRecord, DataRow drBUdgetControl,
+        public List<BudgetControl> ReduceAmountFromBudget(DataRow drDataRecord, DataRow drBUdgetControl,
                         DataRow[] drBudgetComtrolDimension, Decimal AlreadyAllocatedAmount, List<BudgetControl> _listBudgetControl)
         {
             VLogger _log = VLogger.GetVLogger(typeof(MOrder).FullName);
