@@ -1646,7 +1646,7 @@
                 if ($leftDiv.width() != 40) {
                     shrinkLeftDiv();
                 }
-                if (isEmail == true && _curGC.singleRow == false && rowsSource.length > 1) {
+                if (isEmail == true && _curGC.singleRow == false && rowsSource.length > 1 && $chkBSendPFasAtt.prop("checked") == false) {
                     $to.prop('disabled', false);
                     $cc.prop('disabled', false);
                     $bcc.prop('disabled', false);
@@ -1662,8 +1662,28 @@
         };
 
         function attachDynamicPF(e) {
-            if (this.checked) { $cmbPfFiletype.parent().show(); }
-            else { $cmbPfFiletype.parent().hide(); }
+            if (this.checked) {
+                $cmbPfFiletype.parent().show();
+                //in ase of dynmic mail, to, bccc and cc will be enabled only for single record.
+                //otherwise disable them.
+
+                if (isEmail == true && _curGC.singleRow == false && rowsSource.length > 1) {
+                    $to.val('');
+                    $to.prop('disabled', true);
+                    $cc.val('');
+                    $cc.prop('disabled', true);
+                    $bcc.val('');
+                    $bcc.prop('disabled', true);
+                }
+            }
+            else {
+                $cmbPfFiletype.parent().hide();
+                if (isEmail == true && _curGC.singleRow == false && rowsSource.length > 1 && $dynamicDisplay.prop("checked")==false) {
+                    $to.prop('disabled', false);
+                    $cc.prop('disabled', false);
+                    $bcc.prop('disabled', false);
+                }
+            }
         };
 
         function addPrintOption() {
