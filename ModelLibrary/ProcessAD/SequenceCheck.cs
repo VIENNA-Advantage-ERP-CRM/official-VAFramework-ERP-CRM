@@ -200,7 +200,7 @@ namespace VAdvantage.Process
                     ds = DataBase.DB.ExecuteDataset(sql, null, trxName);
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        //int curVal = DB.GetSQLValue(trxName, "select "+ ds.Tables[0].Rows[i]["Name"].ToString()+ "_SEQ.currval+1 from DUAL");
+                        //Get Max value from Table_ID or AD_Sequence and update.
                         sql = @"Update AD_Sequence set updatedby=" + ctx.GetAD_User_ID() + ", updated=getdate(), CurrentNext=(SELECT max(maximum) FROM ( SELECT max(" + ds.Tables[0].Rows[i]["Name"].ToString() + @"_ID)+1 as maximum from " + ds.Tables[0].Rows[i]["Name"].ToString() +
                          @" Union
                          SELECT currentnext AS maximum FROM AD_Sequence WHERE Name = '" + ds.Tables[0].Rows[i]["Name"].ToString() + "') ";
