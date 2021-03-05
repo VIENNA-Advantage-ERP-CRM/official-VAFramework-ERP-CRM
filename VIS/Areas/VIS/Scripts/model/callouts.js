@@ -17285,9 +17285,10 @@
             }
             var paramString = C_Order_ID.toString();
             var dr = VIS.dataContext.getJSONRecord("MOrder/GetOrder", paramString);
+            var DataPrefix = VIS.dataContext.getJSONRecord("ModulePrefix/GetModulePrefix", "VA077_");
 
-
-            if (Util.getValueOfInt(dr["ID"]) != 0) {
+            if (Util.getValueOfInt(dr["ID"]) != 0)
+            {
                 mTab.setValue("DateOrdered", dr["DateOrdered"]);
                 mTab.setValue("POReference", dr["POReference"]);
                 mTab.setValue("AD_Org_ID", Util.getValueOfInt(dr["AD_Org_ID"]));
@@ -17327,6 +17328,24 @@
                     }
                 }
                 mTab.setValue("M_Warehouse_ID", Util.getValueOfInt(dr["M_Warehouse_ID"]));
+
+                if (DataPrefix["VA077_"]) {
+                    mTab.setValue("VA077_HistoricContractDate", Util.getValueOfDate(dr["VA077_HistoricContractDate"]));
+                    mTab.setValue("VA077_ChangeStartDate", Util.getValueOfDate(dr["VA077_ChangeStartDate"]));
+                    mTab.setValue("VA077_ContractCPStartDate", Util.getValueOfDate(dr["VA077_ContractCPStartDate"]));
+                    mTab.setValue("VA077_ContractCPEndDate", Util.getValueOfDate(dr["VA077_ContractCPEndDate"]));
+                    mTab.setValue("VA077_PartialAmtCatchUp", Util.getValueOfDecimal(dr["VA077_PartialAmtCatchUp"]));
+                    mTab.setValue("VA077_OldAnnualContractTotal", Util.getValueOfDecimal(dr["VA077_OldAnnualContractTotal"]));
+                    mTab.setValue("VA077_AdditionalAnnualCharge", Util.getValueOfDecimal(dr["VA077_AdditionalAnnualCharge"]));
+                    mTab.setValue("VA077_NewAnnualContractTotal", Util.getValueOfDecimal(dr["VA077_NewAnnualContractTotal"]));
+                    mTab.setValue("VA077_SalesCoWorker", Util.getValueOfDecimal(dr["VA077_SalesCoWorker"]));
+                    mTab.setValue("VA077_SalesCoWorkerPer", Util.getValueOfDecimal(dr["VA077_SalesCoWorkerPer"]));
+                    mTab.setValue("VA077_TotalMarginAmt", Util.getValueOfDecimal(dr["VA077_TotalMarginAmt"]));
+                    mTab.setValue("VA077_TotalPurchaseAmt", Util.getValueOfDecimal(dr["VA077_TotalPurchaseAmt"]));
+                    mTab.setValue("VA077_TotalSalesAmt", Util.getValueOfDecimal(dr["VA077_TotalSalesAmt"]));
+                    mTab.setValue("VA077_MarginPercent", Util.getValueOfDecimal(dr["VA077_MarginPercent"]));
+                }
+
             }
         }
         catch (err) {
@@ -17709,6 +17728,8 @@
                     mTab.setValue("VA077_UpdateFromVersn", Util.getValueOfString(dr["VA077_UpdateFromVersn"]));
                     mTab.setValue("VA077_UserRef_ID", Util.getValueOfInt(dr["VA077_UserRef_ID"]));
                     mTab.setValue("VA077_ServiceContract_ID", Util.getValueOfInt(dr["VA077_ServiceContract_ID"]));
+                    mTab.setValue("VA077_StartDate", Util.getValueOfDate(dr["VA077_StartDate"]));
+                    mTab.setValue("VA077_EndDate", Util.getValueOfDate(dr["VA077_EndDate"]));
 
                 }
 
