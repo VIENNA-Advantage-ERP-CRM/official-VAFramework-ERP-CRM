@@ -4245,15 +4245,32 @@ namespace VAdvantage.Model
                 int ii = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteScalar(sql, null, Get_TrxName()));
                 SetLine(ii);
             }
+          
 
-            //	Calculations & Rounding
-            SetLineNetAmt();	//	extended Amount with or without tax
+            if (Env.IsModuleInstalled("VA077_"))
+            {
+                if (newRecord)
+                {
+                    //Calculations & Rounding            	    
+                    SetLineNetAmt(); //extended Amount with or without tax
+                    
+                    // if change the Quantity then recalculate tax and surcharge amount.
+                    if (((Decimal)GetTaxAmt()).CompareTo(Env.ZERO) == 0 || (Get_ColumnIndex("SurchargeAmt") > 0 && GetSurchargeAmt().CompareTo(Env.ZERO) == 0) || Is_ValueChanged("QtyEntered"))
+                        SetTaxAmt();
+                }
+            }
+            else
+            {
+                //Calculations & Rounding            	    
+                SetLineNetAmt(); //extended Amount with or without tax
+
+                // if change the Quantity then recalculate tax and surcharge amount.
+                if (((Decimal)GetTaxAmt()).CompareTo(Env.ZERO) == 0 || (Get_ColumnIndex("SurchargeAmt") > 0 && GetSurchargeAmt().CompareTo(Env.ZERO) == 0) || Is_ValueChanged("QtyEntered"))
+                    SetTaxAmt();
+            }
+
             SetDiscount();
-
-            // if change the Quantity then recalculate tax and surcharge amount.
-            if (((Decimal)GetTaxAmt()).CompareTo(Env.ZERO) == 0 || (Get_ColumnIndex("SurchargeAmt") > 0 && GetSurchargeAmt().CompareTo(Env.ZERO) == 0) || Is_ValueChanged("QtyEntered"))
-                SetTaxAmt();
-
+            
             // set Tax Amount in base currency
             if (Get_ColumnIndex("TaxBaseAmt") > 0)
             {
@@ -4520,7 +4537,7 @@ namespace VAdvantage.Model
                         Set_Value("VA077_ContractProduct", contract);
                         Set_Value("VA077_NonContractProd", noncontract);
 
-                        if(contract)
+                        if (contract)
                             Set_Value("VA077_IsContract", contract);
 
                         Set_Value("VA077_ShowCNAutodesk", autodesk);
