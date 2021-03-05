@@ -101,7 +101,9 @@ namespace VIS.Controllers
                 return RedirectPermanent(url);
             }
 
+
             VAdvantage.DataBase.DBConn.SetConnectionString();//Init database conection
+            Language.GetLanguages();
             LoginModel model = null;
             if (User.Identity.IsAuthenticated)
             {

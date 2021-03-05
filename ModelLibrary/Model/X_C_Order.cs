@@ -2940,8 +2940,16 @@ namespace VAdvantage.Model
          @param IsCreditFailNotice Credit Fail Notice */
         public void SetIsCreditFailNotice(Boolean IsCreditFailNotice) { Set_Value("IsCreditFailNotice", IsCreditFailNotice); }/** Get Credit Fail Notice.
             @return Credit Fail Notice */
-        public Boolean IsCreditFailNotice() { Object oo = Get_Value("IsCreditFailNotice"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
-
+        public Boolean IsCreditFailNotice() { Object oo = Get_Value("IsCreditFailNotice"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }/** Set Budget Breach.
+        @param IsBudgetBreach This checkbox indicates the budget is breached */
+        public void SetIsBudgetBreach(Boolean IsBudgetBreach) { Set_Value("IsBudgetBreach", IsBudgetBreach); }/** Get Budget Breach.
+        @return This checkbox indicates the budget is breached */
+        public Boolean IsBudgetBreach() { Object oo = Get_Value("IsBudgetBreach"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }/** Set Budget Breach Approved.
+        @param IsBudgetBreachApproved This checkbox indicates Budget Breach is approved */
+        public void SetIsBudgetBreachApproved(Boolean IsBudgetBreachApproved) { Set_Value("IsBudgetBreachApproved", IsBudgetBreachApproved); }/** Get Budget Breach Approved.
+        @return This checkbox indicates Budget Breach is approved */
+        public Boolean IsBudgetBreachApproved() { Object oo = Get_Value("IsBudgetBreachApproved"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
+      
         /** Set Additional Annual Charge.
 @param VA077_AdditionalAnnualCharge Additional Annual Charge */
         public void SetVA077_AdditionalAnnualCharge(Decimal? VA077_AdditionalAnnualCharge) { Set_Value("VA077_AdditionalAnnualCharge", (Decimal?)VA077_AdditionalAnnualCharge); }/** Get Additional Annual Charge.

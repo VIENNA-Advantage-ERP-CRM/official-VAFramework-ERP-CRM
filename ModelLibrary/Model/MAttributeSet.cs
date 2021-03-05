@@ -111,7 +111,7 @@ namespace VAdvantage.Model
                     + "WHERE mau.IsActive='Y' AND ma.IsActive='Y'"
                     + " AND mau.M_AttributeSet_ID=" + GetM_AttributeSet_ID() + " AND ma.IsInstanceAttribute= " +
                     ((instanceAttributes) ? "'Y'" : "'N'").ToString()
-                    + " ORDER BY mau.M_Attribute_ID";
+                    + " ORDER BY mau.SeqNo, mau.M_Attribute_ID";
                 List<MAttribute> list = new List<MAttribute>();
                 DataTable dt = null;
                 IDataReader idr = DataBase.DB.ExecuteReader(sql, null, Get_TrxName());

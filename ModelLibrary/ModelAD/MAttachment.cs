@@ -1303,7 +1303,7 @@ namespace VAdvantage.Model
                 return "False";
             }
             return "";
-        }        
+        }
         private bool SaveFromFS(string outputfileName, string folderKey, string fileName, string newFileName, int AD_AttachmentLine_ID)
         {
             try
@@ -1478,6 +1478,7 @@ namespace VAdvantage.Model
                     }
                     return true;
                 }
+
 
                 Directory.CreateDirectory(zipinput);
 
@@ -1829,7 +1830,7 @@ namespace VAdvantage.Model
                         }
                         else
                         {
-                            cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx()); 
+                            cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
                         }
 
                         string documentURI = GetDocumentURI(AD_Attachment_ID);
@@ -1866,7 +1867,6 @@ namespace VAdvantage.Model
                         }
                         return "";
                     }
-
                     //unzipfile
                     ICSharpCode.SharpZipLib.Zip.FastZip z = new ICSharpCode.SharpZipLib.Zip.FastZip();
                     ICSharpCode.SharpZipLib.Zip.ZipConstants.DefaultCodePage = 720;

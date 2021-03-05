@@ -233,7 +233,7 @@ namespace VAdvantage.Model
 
         /** Web Service = WS */
         public static String FILELOCATION_WebService = "WS";
-
+        
         /** IDP = ID */
         public static String FILELOCATION_IDP = "ID";
 

@@ -2395,6 +2395,10 @@ namespace VAdvantage.Model
                     }
                 }
 
+                //	Default Conversion Type
+                if (GetC_ConversionType_ID() == 0)
+                    SetC_ConversionType_ID(MConversionType.GetDefault(GetAD_Client_ID()));
+
                 //Added by Bharat for Credit Limit on 24/08/2016
                 //if (IsSOTrx())
                 //{
@@ -2555,16 +2559,16 @@ namespace VAdvantage.Model
 
                         MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_Trx());
                         string retMsg = "";
-                           
-                                bool crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), grandTotal, out retMsg);
-                                if (!crdAll)
-                                    log.SaveWarning("Warning", retMsg);
-                                else if (bp.IsCreditWatch(GetC_BPartner_Location_ID()))
-                                {
-                                    log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "VIS_BPCreditWatch"));
-                                }
-                            
-                       
+
+                        bool crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), grandTotal, out retMsg);
+                        if (!crdAll)
+                            log.SaveWarning("Warning", retMsg);
+                        else if (bp.IsCreditWatch(GetC_BPartner_Location_ID()))
+                        {
+                            log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "VIS_BPCreditWatch"));
+                        }
+
+
                     }
                 }
             }
@@ -2944,35 +2948,33 @@ namespace VAdvantage.Model
                         //}
 
                         string retMsg = "";
-                        bool crdAll=false;
+                        bool crdAll = true;
                         //written by sandeep
-                       
+
                         if (Env.IsModuleInstalled("VA077_"))
                         {
-                           
-                            DateTime validate = new DateTime();
-                            string CreditStatusSettingOn = bp.GetCreditStatusSettingOn();
-                            MBPartnerLocation bpl = new MBPartnerLocation(GetCtx(), GetC_BPartner_Location_ID(), null);
-                            if (CreditStatusSettingOn.Contains("CL"))
+                            // Skip Credit Check validation in case of Advance Order
+                            if (Util.GetValueOfString(DB.ExecuteScalar(@"SELECT VA009_Advance FROM C_PaymentTerm
+                                            WHERE C_PaymentTerm_ID = " + GetC_PaymentTerm_ID(), null, Get_TrxName())).Equals("N"))
                             {
-                              
-                                validate = Util.GetValueOfDateTime(bpl.Get_Value("VA077_ValidityDate")).Value;
-                            }
-                            else
-                            {
-                                validate = Util.GetValueOfDateTime(bp.Get_Value("VA077_ValidityDate")).Value;
-
-                            }
+                                DateTime validate = new DateTime();
+                                string CreditStatusSettingOn = bp.GetCreditStatusSettingOn();
+                                MBPartnerLocation bpl = new MBPartnerLocation(GetCtx(), GetC_BPartner_Location_ID(), null);
+                                if (CreditStatusSettingOn.Contains("CL"))
+                                {
+                                    validate = Util.GetValueOfDateTime(bpl.Get_Value("VA077_ValidityDate")).Value;
+                                }
+                                else
+                                {
+                                    validate = Util.GetValueOfDateTime(bp.Get_Value("VA077_ValidityDate")).Value;
+                                }
 
                                 if (validate.Date < DateTime.Now.Date)
-
                                 {
+                                    int RecCount = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_Invoice_ID) FROM C_Invoice WHERE IsSOTrx='Y' AND IsReturnTrx='N' AND C_BPartner_ID =" + GetC_BPartner_ID() + " and DocStatus in('CO','CL') and DateInvoiced BETWEEN " + GlobalVariable.TO_DATE(DateTime.Now.Date.AddDays(-730), true) + " AND " + GlobalVariable.TO_DATE(DateTime.Now.Date, true) + ""));
 
-                                int RecCount = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_Order_ID) FROM C_Order WHERE C_BPartner_ID =" + GetC_BPartner_ID() + " and DocStatus in('CO','CL') and DateOrdered BETWEEN " + GlobalVariable.TO_DATE(DateTime.Now.Date.AddDays(-730), true) + " AND " + GlobalVariable.TO_DATE(DateTime.Now.Date, true) + ""));
-
-                                if (RecCount > 0)
+                                    if (RecCount > 0)
                                     {
-
                                         crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), grandTotal, out retMsg);
                                     }
                                     else
@@ -2981,19 +2983,20 @@ namespace VAdvantage.Model
                                         return DocActionVariables.STATUS_INVALID;
                                     }
                                 }
-
                                 else
                                 {
                                     crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), grandTotal, out retMsg);
-
-
+                                    if (!crdAll)
+                                    {
+                                        _processMsg = Msg.GetMsg(GetCtx(), "VA077_CrChkExpired");
+                                        return DocActionVariables.STATUS_INVALID;
+                                    }
                                 }
+                            }
                         }
-
                         else
                         {
                             crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), grandTotal, out retMsg);
-
                         }
                         if (!crdAll)
                         {
@@ -3777,24 +3780,35 @@ namespace VAdvantage.Model
                 // Handle Budget Control
                 if (Env.IsModuleInstalled("FRPT_") && !IsSOTrx() && !IsReturnTrx())
                 {
-                    // budget control functionality work when Financial Managemt Module Available
-                    try
+                    // Once budget breach approved do not check budget breach functionality again
+                    if (!IsBudgetBreachApproved())
                     {
-                        log.Info("Budget Control Start for PO Document No  " + GetDocumentNo());
-                        EvaluateBudgetControlData();
-                        if (_budgetMessage.Length > 0)
+                        // budget control functionality work when Financial Managemt Module Available
+                        try
                         {
-                            _processMsg = Msg.GetMsg(GetCtx(), "BudgetExceedFor") + _budgetMessage;
+
+                            log.Info("Budget Control Start for PO Document No  " + GetDocumentNo());
+                            EvaluateBudgetControlData();
+                            if (_budgetMessage.Length > 0)
+                            {
+                                _processMsg = Msg.GetMsg(GetCtx(), "BudgetExceedFor") + _budgetMessage;
+                                SetProcessed(false);
+                                // Done by rakesh 18/Feb/2020
+                                SetIsBudgetBreach(true);
+                                SetIsBudgetBreachApproved(false);
+                                return DocActionVariables.STATUS_INPROGRESS;
+                            }
+                            SetIsBudgetBreach(false);
+                            SetIsBudgetBreachApproved(true);
+                            log.Info("Budget Control Completed for PO Document No  " + GetDocumentNo());
+                        }
+                        catch (Exception ex)
+                        {
+                            log.Severe("Budget Control Issue " + ex.Message);
                             SetProcessed(false);
+                            SetIsBudgetBreach(false);
                             return DocActionVariables.STATUS_INPROGRESS;
                         }
-                        log.Info("Budget Control Completed for PO Document No  " + GetDocumentNo());
-                    }
-                    catch (Exception ex)
-                    {
-                        log.Severe("Budget Control Issue " + ex.Message);
-                        SetProcessed(false);
-                        return DocActionVariables.STATUS_INPROGRESS;
                     }
                 }
 
@@ -3967,7 +3981,7 @@ namespace VAdvantage.Model
                         Char IsCont = Convert.ToChar(orderlines.Tables[0].Rows[i]["IsContract"]);
                         if (IsCont == 'Y')
                         {
-                            MOrder mo = new MOrder(GetCtx(), GetC_Order_ID(), null);
+                            MOrder mo = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
                             mo.SetIsContract(true);
                             mo.Save();
                         }
@@ -4117,8 +4131,9 @@ namespace VAdvantage.Model
 
             sql.Clear();
             sql.Append(@"SELECT GL_Budget.GL_Budget_ID , GL_Budget.BudgetControlBasis, GL_Budget.C_Year_ID , GL_Budget.C_Period_ID,GL_Budget.Name As BudgetName, 
-                  GL_BudgetControl.C_AcctSchema_ID, GL_BudgetControl.CommitmentType, GL_BudgetControl.BudgetControlScope,  GL_BudgetControl.GL_BudgetControl_ID, GL_BudgetControl.Name AS ControlName 
-                FROM GL_Budget INNER JOIN GL_BudgetControl ON GL_Budget.GL_Budget_ID = GL_BudgetControl.GL_Budget_ID
+                  GL_BudgetControl.C_AcctSchema_ID, GL_BudgetControl.CommitmentType, GL_BudgetControl.BudgetControlScope,  GL_BudgetControl.GL_BudgetControl_ID, GL_BudgetControl.Name AS ControlName,GL_BudgetControl.BudgetBreachPercent
+                FROM GL_Budget 
+                INNER JOIN GL_BudgetControl ON GL_Budget.GL_Budget_ID = GL_BudgetControl.GL_Budget_ID
                 INNER JOIN Ad_ClientInfo ON Ad_ClientInfo.AD_Client_ID = GL_Budget.AD_Client_ID
                 WHERE GL_BudgetControl.IsActive = 'Y' AND GL_Budget.IsActive = 'Y' AND GL_BudgetControl.AD_Org_ID IN (0 , " + GetAD_Org_ID() + @")
                    AND GL_BudgetControl.CommitmentType IN('B', 'C') AND
@@ -5714,7 +5729,7 @@ namespace VAdvantage.Model
             }
 
             // JID_0658: After Creating PO from Open Requisition, & the PO record is Void, PO line reference is not getting removed from Requisition Line.
-            DB.ExecuteQuery("UPDATE M_RequisitionLine SET C_OrderLine_ID = 0 WHERE C_OrderLine_ID IN (SELECT C_OrderLine_ID FROM C_Order WHERE C_Order_ID = " + GetC_Order_ID() + ")", null, Get_TrxName());
+            DB.ExecuteQuery("UPDATE M_RequisitionLine SET C_OrderLine_ID = NULL WHERE C_OrderLine_ID IN (SELECT C_OrderLine_ID FROM C_OrderLine WHERE C_Order_ID = " + GetC_Order_ID() + ")", null, Get_TrxName());
 
             SetProcessed(true);
             SetDocAction(DOCACTION_None);
@@ -6124,6 +6139,13 @@ namespace VAdvantage.Model
 
                 SetDocAction(DOCACTION_Complete);
                 SetProcessed(false);
+                // In case of purchase order reverse budget breach
+                // Done by Rakesh Kumar 18/Feb/2020
+                if (Env.IsModuleInstalled("FRPT_") && !IsSOTrx() && !IsReturnTrx() && !IsSalesQuotation() && !Util.GetValueOfBool(Get_Value("IsBlanketTrx")))
+                {
+                    SetIsBudgetBreach(false);
+                    SetIsBudgetBreachApproved(false);
+                }
             }
             catch
             {

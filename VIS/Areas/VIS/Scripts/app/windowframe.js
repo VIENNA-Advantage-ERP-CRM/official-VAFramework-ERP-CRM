@@ -4530,6 +4530,8 @@
         //{
 
         //}
+
+      
         var email = new VIS.Email("", this.curTab, this.curGC, record_ID, true);
 
         var c = new VIS.CFrame();

@@ -105,6 +105,36 @@ namespace VAdvantage.Model
             if (GetLine() == 0)
                 SetLine();
 
+            // Work done for Purchase Price and Mergin calculation
+            if (Env.IsModuleInstalled("VA077_") && Get_ColumnIndex("VA077_PurchasePrice") >= 0 && Util.GetValueOfDecimal(Get_Value("VA077_PurchasePrice")).Equals(0))
+            {
+                if (GetProject() != null && _parent.IsOpportunity() && Util.GetValueOfInt(_parent.Get_Value("PO_PriceList_ID")) > 0)
+                {
+                    Set_Value("VA077_PurchasePrice", GetPurchasePrice());
+
+                    // Calculate Purchase Amount
+                    Decimal purchaseAmt = Decimal.Multiply(GetPlannedQty(), Util.GetValueOfDecimal(Get_Value("VA077_PurchasePrice")));
+                    if (Env.Scale(purchaseAmt) > GetCurPrecision())
+                    {
+                        purchaseAmt = Decimal.Round(purchaseAmt, GetCurPrecision(), MidpointRounding.AwayFromZero);
+                    }
+                    Set_Value("VA077_PurchaseAmt", purchaseAmt);
+                }
+
+                // Calculate Margin Amount
+                Decimal marginEach = Decimal.Subtract(GetPlannedPrice(), Util.GetValueOfDecimal(Get_Value("VA077_PurchasePrice")));
+                Set_Value("VA077_MarginAmt", Decimal.Multiply(marginEach, GetPlannedQty()));
+
+                // Calculate Margin Percentage
+                Decimal marginPer = 0;
+                if (GetPlannedPrice() > 0)
+                {
+                    marginPer = Decimal.Round(Decimal.Multiply(Decimal.Divide(marginEach, GetPlannedPrice())
+                    , Env.ONEHUNDRED), GetCurPrecision(), MidpointRounding.AwayFromZero);
+                }
+                Set_Value("VA077_MarginPercent", marginPer);
+            }
+
             //	Planned Amount	- Currency Precision
             Decimal plannedAmt = Decimal.Multiply(GetPlannedQty(), GetPlannedPrice());
             if (Env.Scale(plannedAmt) > GetCurPrecision())
@@ -195,6 +225,54 @@ namespace VAdvantage.Model
             if (pp.CalculatePrice())
                 limitPrice = pp.GetPriceLimit();
             return limitPrice;
+        }
+
+        /// <summary>
+        /// Get Purchase Price if exists
+        /// </summary>
+        /// <returns>limit</returns>
+        public Decimal GetPurchasePrice()
+        {
+            //VA077_PurchasePrice
+            Decimal purchasePrice = 0;
+            if (GetM_Product_ID() == 0)
+                return purchasePrice;
+            bool isSOTrx = false;
+            MProduct prd = new MProduct(GetCtx(), GetM_Product_ID(), null);
+            MProductPricing pp = new MProductPricing(GetAD_Client_ID(), GetAD_Org_ID(),
+                GetM_Product_ID(), _parent.GetC_BPartner_ID(), GetPlannedQty(), isSOTrx);
+            pp.SetM_PriceList_ID(Util.GetValueOfInt(_parent.Get_Value("PO_PriceList_ID")));
+
+            DateTime? validFrom = null;     // _parent.GetDateContract();
+            if (validFrom == null)
+            {
+                validFrom = DateTime.Now.Date;
+            }
+
+            int M_PriceList_Version_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT M_PriceList_Version_ID FROM M_PriceList_Version WHERE IsActive = 'Y' 
+                        AND M_PriceList_ID = " + Util.GetValueOfInt(_parent.Get_Value("PO_PriceList_ID")) + @" AND ValidFrom <= "
+                        + DB.TO_DATE(validFrom, true) + " ORDER BY ValidFrom DESC"));
+
+            pp.SetM_PriceList_Version_ID(M_PriceList_Version_ID);
+
+            // Get Price according to Attribute set instance if selected on Project line
+            if (Get_ColumnIndex("M_AttributeSetInstance_ID") >= 0)
+            {
+                pp.SetM_AttributeSetInstance_ID(GetM_AttributeSetInstance_ID());
+            }
+
+            // Get Price according to UOM if selected on Project line
+            if (Get_ColumnIndex("C_UOM_ID") >= 0)
+            {
+                pp.SetC_UOM_ID(Util.GetValueOfInt(Get_Value("C_UOM_ID")));
+            }
+            else
+            {
+                pp.SetC_UOM_ID(prd.GetC_UOM_ID());
+            }
+            if (pp.CalculatePrice())
+                purchasePrice = pp.GetPriceStd();
+            return purchasePrice;
         }
 
         /// <summary>
@@ -487,7 +565,7 @@ namespace VAdvantage.Model
                             VA077_TotalPurchaseAmt=(SELECT ROUND(Sum(VA077_PurchaseAmt),2) FROM C_ProjectLine 
                             WHERE C_PROJECT_ID=" + projID + @" AND IsActive='Y'),
                             VA077_MarginPercent=(SELECT CASE WHEN Sum(PlannedAmt) > 0 Then 
-                                                 ROUND(((Sum(PlannedAmt)- Sum(VA077_PurchaseAmt))/Sum(PlannedAmt)*100),2) ELSE 0  END 
+                                                 ROUND(((Sum(PlannedAmt)- Sum(NVL(VA077_PurchaseAmt,0)))/Sum(PlannedAmt)*100),2) ELSE 0  END 
                                                  FROM C_ProjectLine WHERE C_PROJECT_ID=" + projID + @" AND IsActive='Y') 
                             WHERE C_Project_ID=" + projID;
 
