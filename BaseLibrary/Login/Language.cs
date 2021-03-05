@@ -144,7 +144,7 @@ namespace VAdvantage.Login
 
         // [MethodImpl(MethodImplOptions.Synchronized)]
         static object _lock = new object();
-        public static void FillLanguage(DataTable dtLang)
+        public static void FillLanguage()
         {
             if (_languages.Count > 0)
             {
@@ -159,7 +159,7 @@ namespace VAdvantage.Login
                 }
 
                 langList.Clear();
-                DataTable dt = dtLang;// MLanguage.GetSystemLanguage();
+                DataTable dt =GetSystemLanguage();
                 _languages.Add(0, new Language("English", VAF_Language_en_US, new System.Globalization.CultureInfo("en-US"), null, "", MediaSize.NA.LETTER));
                 langList.Add(new ValueNamePair("en_US", "English"));
                 _loginLanguage = _languages[0];
@@ -186,7 +186,13 @@ namespace VAdvantage.Login
         }
 
 
-
+        public static DataTable GetSystemLanguage()
+        {
+            DataSet ds = DB.ExecuteDataset("SELECT VAF_Language,Name,Name AS DisplayName FROM VAF_Language WHERE IsSystemLanguage = 'Y' AND IsActive='Y' Order BY  Name asc");
+            if (ds != null)
+                return ds.Tables[0];
+            return null;
+        }
         //static Language()
         //{
         //    FillLanguage();
@@ -229,7 +235,7 @@ namespace VAdvantage.Login
         public static Language GetLanguage(String langInfo)
         {
             String lang = langInfo;
-            FillLanguage(GetSystemLanguage());
+            FillLanguage();
 
             //	Search existing Languages
             for (int i = 0; i < _languages.Count; i++)
@@ -243,9 +249,9 @@ namespace VAdvantage.Login
             return _loginLanguage;
         }
 
-        public static List<ValueNamePair> GetLanguages(DataTable dt)
+        public static List<ValueNamePair> GetLanguages()
         {
-            FillLanguage(dt);
+            FillLanguage();
             return langList;
         }
 
@@ -273,7 +279,7 @@ namespace VAdvantage.Login
         /// <returns>Base Language</returns>
         public static Language GetBaseLanguage()
         {
-            FillLanguage(GetSystemLanguage());
+            FillLanguage();
             return _languages[0];
         }   //  getBase
 
@@ -804,15 +810,6 @@ namespace VAdvantage.Login
             //return sb.ToString();
             return "";
         }   //  toString
-
-        public static DataTable GetSystemLanguage()
-        {
-            DataSet ds = DB.ExecuteDataset("SELECT VAF_Language,Name,Name AS DisplayName FROM VAF_Language WHERE IsSystemLanguage = 'Y' AND IsActive='Y' Order BY  Name asc");
-            if (ds != null)
-                return ds.Tables[0];
-            return null;
-        }
-
-
     }
 }
+

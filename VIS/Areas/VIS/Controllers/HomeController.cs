@@ -88,6 +88,7 @@ namespace VIS.Controllers
             }
 
             VAdvantage.DataBase.DBConn.SetConnectionString();//Init database conection
+            Language.GetLanguages();
             LoginModel model = null;
             if (User.Identity.IsAuthenticated)
             {
@@ -357,7 +358,8 @@ namespace VIS.Controllers
                 ViewBag.WarehouseList = new List<KeyNamePair>();
                 ViewBag.ClientList = new List<KeyNamePair>();
 
-                ViewBag.Languages = Language.GetLanguages(MVAFLanguage.GetSystemLanguage());
+                ViewBag.Languages = Language.GetLanguages();
+                //ViewBag.Languages = Language.GetLanguages(MVFLanguage.GetSystemLanguage());
 
                 Session["ctx"] = null;
                 ViewBag.direction = "ltr";
