@@ -677,6 +677,8 @@ namespace ViennaAdvantage.Process
 
                     line.Set_Value("VA077_MarginAmt", orderLine.Get_Value("VA077_MarginAmt"));
                     line.Set_Value("VA077_PurchasePrice", orderLine.Get_Value("VA077_PurchasePrice"));
+                    line.Set_Value("VA077_StartDate", orderLine.Get_Value("VA077_StartDate"));
+                    line.Set_Value("VA077_EndDate", orderLine.Get_Value("VA077_EndDate"));
 
                 }
 
@@ -806,6 +808,8 @@ namespace ViennaAdvantage.Process
 
                         line.Set_Value("VA077_MarginAmt", orderLine.Get_Value("VA077_MarginAmt"));
                         line.Set_Value("VA077_PurchasePrice", orderLine.Get_Value("VA077_PurchasePrice"));
+                        line.Set_Value("VA077_StartDate", orderLine.Get_Value("VA077_StartDate"));
+                        line.Set_Value("VA077_EndDate", orderLine.Get_Value("VA077_EndDate"));
 
                     }
 
@@ -919,6 +923,8 @@ namespace ViennaAdvantage.Process
 
                         line.Set_Value("VA077_MarginAmt", orderLine.Get_Value("VA077_MarginAmt"));
                         line.Set_Value("VA077_PurchasePrice", orderLine.Get_Value("VA077_PurchasePrice"));
+                        line.Set_Value("VA077_StartDate", orderLine.Get_Value("VA077_StartDate"));
+                        line.Set_Value("VA077_EndDate", orderLine.Get_Value("VA077_EndDate"));
 
                     }
 
