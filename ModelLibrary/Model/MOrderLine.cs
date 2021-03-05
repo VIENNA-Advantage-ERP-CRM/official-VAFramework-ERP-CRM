@@ -4506,6 +4506,26 @@ namespace VAdvantage.Model
                         margin = Decimal.Round(Decimal.Subtract(sp, pp), GetPrecision(), MidpointRounding.AwayFromZero);
                         marginper = Decimal.Round(Decimal.Multiply(Decimal.Divide(margin, sp)
                             , Env.ONEHUNDRED), GetPrecision(), MidpointRounding.AwayFromZero);
+
+
+                        SetLineNetAmt(Decimal.Round(sp, 2));
+                        decimal taxAmt;
+                        decimal lineTotalAmt;
+
+                        MOrderTax tax = MOrderTax.Get(this, GetPrecision(), false, Get_TrxName());
+                        MTax taxRate = tax.GetTax();
+                        if (taxRate.GetRate() != 0)
+                        {
+                            taxAmt = ((GetPriceEntered() * GetQtyEntered()) * (taxRate.GetRate() / 100) * Util.GetValueOfDecimal(duration)) / 12;
+                        }
+                        else
+                        {
+                            taxAmt = 0;
+                        }
+                        SetTaxAmt(Decimal.Round(taxAmt, 2));
+                        lineTotalAmt = sp + taxAmt;
+
+                        SetLineTotalAmt(Decimal.Round(lineTotalAmt, 2));
                     }
                     else
                     {
@@ -4779,7 +4799,9 @@ namespace VAdvantage.Model
                         }
                         if (Get_Value("VA077_StartDate") != null)
                         {
-                            qry.Append(",VA077_ChangeStartDate = " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("VA077_StartDate")), true) + @"");
+                            qry.Append(@",VA077_ChangeStartDate = NVL(VA077_ChangeStartDate," + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("VA077_StartDate")), true) + @")");
+                            //qry.Append(@",VA077_ChangeStartDate = (SELECT MIN(VA077_StartDate) FROM C_OrderLine pl WHERE pl.IsActive = 'Y' 
+                                         // AND pl.C_Order_ID = " + GetC_Order_ID() + @")");
                         }
 
                         qry.Append(",VA077_OldAnnualContractTotal= " + AnnualValue + @",                            
@@ -4819,10 +4841,12 @@ namespace VAdvantage.Model
                             WHERE pl.IsActive = 'Y' AND pl.VA077_ContractProduct='Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
                             VA077_PartialAmtCatchUp =(SELECT COALESCE(SUM(pl.LineNetAmt),0) FROM C_OrderLine pl 
                             WHERE pl.IsActive = 'Y' AND pl.VA077_ContractProduct='Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @")");
-                                                                       
+
                         if (Get_Value("VA077_StartDate") != null)
                         {
-                            qry.Append(",VA077_ChangeStartDate = " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("VA077_StartDate")), true) + @"");
+                            qry.Append(@",VA077_ChangeStartDate = NVL(VA077_ChangeStartDate," + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("VA077_StartDate")), true) + @")");
+                            //qry.Append(@",VA077_ChangeStartDate = (SELECT MIN(VA077_StartDate) FROM C_OrderLine pl WHERE pl.IsActive = 'Y' 
+                            //              AND pl.C_Order_ID = " + GetC_Order_ID() + @")");
                         }
 
                         qry.Append(" WHERE p.C_Order_ID=" + GetC_Order_ID() + "");
