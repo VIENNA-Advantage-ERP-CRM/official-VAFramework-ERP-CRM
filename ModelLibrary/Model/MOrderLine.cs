@@ -4796,15 +4796,11 @@ namespace VAdvantage.Model
                         if (contDS.Tables[0].Rows[0]["VA077_ContractCPEndDate"] != null)
                         {
                             qry.Append(",VA077_ContractCPEndDate= " + GlobalVariable.TO_DATE(EndDate, true) + @"");
-                        }
-                        if (Get_Value("VA077_StartDate") != null)
-                        {
-                            qry.Append(@",VA077_ChangeStartDate = NVL(VA077_ChangeStartDate," + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("VA077_StartDate")), true) + @")");
-                            //qry.Append(@",VA077_ChangeStartDate = (SELECT MIN(VA077_StartDate) FROM C_OrderLine pl WHERE pl.IsActive = 'Y' 
-                                         // AND pl.C_Order_ID = " + GetC_Order_ID() + @")");
-                        }
+                        }                        
 
-                        qry.Append(",VA077_OldAnnualContractTotal= " + AnnualValue + @",                            
+                        qry.Append(",VA077_OldAnnualContractTotal= " + AnnualValue + @", 
+                                     VA077_ChangeStartDate = (SELECT MIN(VA077_StartDate) FROM C_OrderLine pl WHERE pl.IsActive = 'Y' 
+                                     AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
                                      VA077_PartialAmtCatchUp =(SELECT COALESCE(SUM(pl.LineNetAmt),0) FROM C_OrderLine pl 
                                      WHERE pl.IsActive = 'Y' AND pl.VA077_ContractProduct='Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
                                      VA077_AdditionalAnnualCharge =(SELECT ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0),2) FROM C_OrderLine pl 
@@ -4835,6 +4831,8 @@ namespace VAdvantage.Model
                                                                             pl.VA077_PurchasePrice * QtyEntered * VA077_Duration/12
                                                                             END),0),2) FROM C_OrderLine pl  
                             WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                            VA077_ChangeStartDate = (SELECT MIN(VA077_StartDate) FROM C_OrderLine pl WHERE pl.IsActive = 'Y' 
+                            AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
                             VA077_AdditionalAnnualCharge =(SELECT ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0),2) FROM C_OrderLine pl 
                             WHERE pl.IsActive = 'Y' AND pl.VA077_ContractProduct='Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
                             VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0),2) FROM C_OrderLine pl 
@@ -4842,12 +4840,12 @@ namespace VAdvantage.Model
                             VA077_PartialAmtCatchUp =(SELECT COALESCE(SUM(pl.LineNetAmt),0) FROM C_OrderLine pl 
                             WHERE pl.IsActive = 'Y' AND pl.VA077_ContractProduct='Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @")");
 
-                        if (Get_Value("VA077_StartDate") != null)
-                        {
-                            qry.Append(@",VA077_ChangeStartDate = NVL(VA077_ChangeStartDate," + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("VA077_StartDate")), true) + @")");
-                            //qry.Append(@",VA077_ChangeStartDate = (SELECT MIN(VA077_StartDate) FROM C_OrderLine pl WHERE pl.IsActive = 'Y' 
-                            //              AND pl.C_Order_ID = " + GetC_Order_ID() + @")");
-                        }
+                        //if (Get_Value("VA077_StartDate") != null)
+                        //{
+                        //    //qry.Append(@",VA077_ChangeStartDate = NVL(VA077_ChangeStartDate," + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("VA077_StartDate")), true) + @")");
+                        //    //qry.Append(@",VA077_ChangeStartDate = (SELECT MIN(VA077_StartDate) FROM C_OrderLine pl WHERE pl.IsActive = 'Y' 
+                        //    //              AND pl.C_Order_ID = " + GetC_Order_ID() + @")");
+                        //}
 
                         qry.Append(" WHERE p.C_Order_ID=" + GetC_Order_ID() + "");
                     }
