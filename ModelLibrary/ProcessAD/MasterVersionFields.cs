@@ -421,6 +421,17 @@ namespace VAdvantage.Process
                     if (AD_FieldGroup_ID > 0)
                         verFld.SetAD_FieldGroup_ID(AD_FieldGroup_ID);
                     verFld.SetSeqNo(SeqNo);
+                    //"VersionValidFrom", "IsVersionApproved", "ProcessedVersion", "RecordVersion", "Processed", "Processing", "VersionLog", "OldVersion"
+                    if (listDefVerCols[i].ToString() == "VersionValidFrom")
+                    {
+                        verFld.SetMRIsDisplayed("Y");
+                        verFld.SetMRSeqNo(5);
+                    }
+                    if (listDefVerCols[i].ToString() == "RecordVersion")
+                    {
+                        verFld.SetMRIsDisplayed("Y");
+                        verFld.SetMRSeqNo(2);
+                    }
                     if (!verFld.Save())
                     {
                         log.Log(Level.SEVERE, "Version Field not saved :: " + verFld.GetName());
