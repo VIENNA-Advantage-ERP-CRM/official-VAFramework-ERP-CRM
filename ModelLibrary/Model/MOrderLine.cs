@@ -4508,7 +4508,7 @@ namespace VAdvantage.Model
                             , Env.ONEHUNDRED), GetPrecision(), MidpointRounding.AwayFromZero);
 
 
-                        SetLineNetAmt(Decimal.Round(sp, 2));
+                        SetLineNetAmt(Decimal.Round(sp, GetPrecision()));
                         decimal taxAmt;
                         decimal lineTotalAmt;
 
@@ -4522,10 +4522,10 @@ namespace VAdvantage.Model
                         {
                             taxAmt = 0;
                         }
-                        SetTaxAmt(Decimal.Round(taxAmt, 2));
+                        SetTaxAmt(Decimal.Round(taxAmt, GetPrecision()));
                         lineTotalAmt = sp + taxAmt;
 
-                        SetLineTotalAmt(Decimal.Round(lineTotalAmt, 2));
+                        SetLineTotalAmt(Decimal.Round(lineTotalAmt, GetPrecision()));
                     }
                     else
                     {
@@ -4771,20 +4771,24 @@ namespace VAdvantage.Model
                             VA077_MarginPercent=(SELECT CASE WHEN Sum(LineNetAmt) > 0 Then 
                             ROUND(COALESCE(((Sum(LineNetAmt) - Sum(
                                                                 CASE WHEN VA077_Duration is null THEN
-                                                                    NVL(VA077_PurchasePrice, 0) * QtyEntered
+                                                                    COALESCE(VA077_PurchasePrice, 0) * QtyEntered
                                                                     WHEN VA077_Duration > 0 THEN
-                                                                    NVL(VA077_PurchasePrice, 0) * QtyEntered * VA077_Duration/12 
-                                                                END)) / Sum(LineNetAmt) * 100), 0), 2) 
+                                                                    COALESCE(VA077_PurchasePrice, 0) * QtyEntered * VA077_Duration/12 
+                                                                END)) / Sum(LineNetAmt) * 100), 0), " + GetPrecision() + @") 
                             ELSE 0  END FROM C_OrderLine pl WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_TotalPurchaseAmt=(SELECT ROUND(COALESCE(SUM(
-                                                                            CASE WHEN VA077_Duration is null THEN
-                                                                            pl.VA077_PurchasePrice * QtyEntered
-                                                                            WHEN VA077_Duration > 0 THEN
-                                                                            pl.VA077_PurchasePrice * QtyEntered * VA077_Duration/12
-                                                                            END),0),2) FROM C_OrderLine pl  
-                            WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_TotalSalesAmt=(SELECT COALESCE(SUM(pl.LineNetAmt),0) FROM C_OrderLine pl 
-                            WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @")");
+                            VA077_TotalPurchaseAmt = (SELECT ROUND(COALESCE(SUM(
+                                                                              CASE WHEN VA077_Duration is null THEN
+  
+                                                                              pl.VA077_PurchasePrice * QtyEntered
+  
+                                                                              WHEN VA077_Duration > 0 THEN
+  
+                                                                              pl.VA077_PurchasePrice * QtyEntered * VA077_Duration / 12
+  
+                                                                              END), 0), " + GetPrecision() + @") FROM C_OrderLine pl
+                                WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                            VA077_TotalSalesAmt = (SELECT COALESCE(SUM(pl.LineNetAmt), 0) FROM C_OrderLine pl
+                               WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @")");
                         if (contDS.Tables[0].Rows[0]["VA077_HistoricContractDate"] != null)
                         {
                             qry.Append(",VA077_HistoricContractDate=" + GlobalVariable.TO_DATE(HCDate, true) + @"");
@@ -4796,16 +4800,16 @@ namespace VAdvantage.Model
                         if (contDS.Tables[0].Rows[0]["VA077_ContractCPEndDate"] != null)
                         {
                             qry.Append(",VA077_ContractCPEndDate= " + GlobalVariable.TO_DATE(EndDate, true) + @"");
-                        }                        
+                        }
 
                         qry.Append(",VA077_OldAnnualContractTotal= " + AnnualValue + @", 
                                      VA077_ChangeStartDate = (SELECT MIN(VA077_StartDate) FROM C_OrderLine pl WHERE pl.IsActive = 'Y' 
                                      AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
                                      VA077_PartialAmtCatchUp =(SELECT COALESCE(SUM(pl.LineNetAmt),0) FROM C_OrderLine pl 
                                      WHERE pl.IsActive = 'Y' AND pl.VA077_ContractProduct='Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                                     VA077_AdditionalAnnualCharge =(SELECT ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0),2) FROM C_OrderLine pl 
+                                     VA077_AdditionalAnnualCharge =(SELECT ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0)," + GetPrecision() + @") FROM C_OrderLine pl 
                                      WHERE pl.IsActive = 'Y' AND pl.VA077_ContractProduct='Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                                     VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0),2) FROM C_OrderLine pl 
+                                     VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0)," + GetPrecision() + @") FROM C_OrderLine pl 
                                      WHERE pl.IsActive = 'Y' AND pl.VA077_ContractProduct='Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @")
                                      WHERE p.C_Order_ID=" + GetC_Order_ID() + "");
                     }
@@ -4819,34 +4823,27 @@ namespace VAdvantage.Model
                             VA077_MarginPercent=(SELECT CASE WHEN Sum(LineNetAmt) > 0 Then 
                             ROUND(COALESCE(((Sum(LineNetAmt) - Sum(
                                                                 CASE WHEN VA077_Duration is null THEN
-                                                                    NVL(VA077_PurchasePrice, 0) * QtyEntered
+                                                                    COALESCE(VA077_PurchasePrice, 0) * QtyEntered
                                                                     WHEN VA077_Duration > 0 THEN
-                                                                    NVL(VA077_PurchasePrice, 0) * QtyEntered * VA077_Duration/12 
-                                                                END)) / Sum(LineNetAmt) * 100), 0), 2) 
+                                                                    COALESCE(VA077_PurchasePrice, 0) * QtyEntered * VA077_Duration/12 
+                                                                END)) / Sum(LineNetAmt) * 100), 0), " + GetPrecision() + @") 
                             ELSE 0  END FROM C_OrderLine pl WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
                             VA077_TotalPurchaseAmt=(SELECT ROUND(COALESCE(SUM(
                                                                             CASE WHEN VA077_Duration is null THEN
                                                                             pl.VA077_PurchasePrice * QtyEntered
                                                                             WHEN VA077_Duration > 0 THEN
                                                                             pl.VA077_PurchasePrice * QtyEntered * VA077_Duration/12
-                                                                            END),0),2) FROM C_OrderLine pl  
+                                                                            END),0)," + GetPrecision() + @") FROM C_OrderLine pl  
                             WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
                             VA077_ChangeStartDate = (SELECT MIN(VA077_StartDate) FROM C_OrderLine pl WHERE pl.IsActive = 'Y' 
                             AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_AdditionalAnnualCharge =(SELECT ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0),2) FROM C_OrderLine pl 
+                            VA077_AdditionalAnnualCharge =(SELECT ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0)," + GetPrecision() + @") FROM C_OrderLine pl 
                             WHERE pl.IsActive = 'Y' AND pl.VA077_ContractProduct='Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0),2) FROM C_OrderLine pl 
+                            VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0)," + GetPrecision() + @") FROM C_OrderLine pl 
                             WHERE pl.IsActive = 'Y' AND pl.VA077_ContractProduct='Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
                             VA077_PartialAmtCatchUp =(SELECT COALESCE(SUM(pl.LineNetAmt),0) FROM C_OrderLine pl 
                             WHERE pl.IsActive = 'Y' AND pl.VA077_ContractProduct='Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @")");
-
-                        //if (Get_Value("VA077_StartDate") != null)
-                        //{
-                        //    //qry.Append(@",VA077_ChangeStartDate = NVL(VA077_ChangeStartDate," + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("VA077_StartDate")), true) + @")");
-                        //    //qry.Append(@",VA077_ChangeStartDate = (SELECT MIN(VA077_StartDate) FROM C_OrderLine pl WHERE pl.IsActive = 'Y' 
-                        //    //              AND pl.C_Order_ID = " + GetC_Order_ID() + @")");
-                        //}
-
+                        
                         qry.Append(" WHERE p.C_Order_ID=" + GetC_Order_ID() + "");
                     }
 
