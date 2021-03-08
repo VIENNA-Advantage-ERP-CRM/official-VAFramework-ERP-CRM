@@ -4245,15 +4245,32 @@ namespace VAdvantage.Model
                 int ii = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteScalar(sql, null, Get_TrxName()));
                 SetLine(ii);
             }
+          
 
-            //	Calculations & Rounding
-            SetLineNetAmt();	//	extended Amount with or without tax
+            if (Env.IsModuleInstalled("VA077_"))
+            {
+                if (newRecord)
+                {
+                    //Calculations & Rounding            	    
+                    SetLineNetAmt(); //extended Amount with or without tax
+                    
+                    // if change the Quantity then recalculate tax and surcharge amount.
+                    if (((Decimal)GetTaxAmt()).CompareTo(Env.ZERO) == 0 || (Get_ColumnIndex("SurchargeAmt") > 0 && GetSurchargeAmt().CompareTo(Env.ZERO) == 0) || Is_ValueChanged("QtyEntered"))
+                        SetTaxAmt();
+                }
+            }
+            else
+            {
+                //Calculations & Rounding            	    
+                SetLineNetAmt(); //extended Amount with or without tax
+
+                // if change the Quantity then recalculate tax and surcharge amount.
+                if (((Decimal)GetTaxAmt()).CompareTo(Env.ZERO) == 0 || (Get_ColumnIndex("SurchargeAmt") > 0 && GetSurchargeAmt().CompareTo(Env.ZERO) == 0) || Is_ValueChanged("QtyEntered"))
+                    SetTaxAmt();
+            }
+
             SetDiscount();
-
-            // if change the Quantity then recalculate tax and surcharge amount.
-            if (((Decimal)GetTaxAmt()).CompareTo(Env.ZERO) == 0 || (Get_ColumnIndex("SurchargeAmt") > 0 && GetSurchargeAmt().CompareTo(Env.ZERO) == 0) || Is_ValueChanged("QtyEntered"))
-                SetTaxAmt();
-
+            
             // set Tax Amount in base currency
             if (Get_ColumnIndex("TaxBaseAmt") > 0)
             {
@@ -4505,12 +4522,13 @@ namespace VAdvantage.Model
                         bool noncontract = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_NonContractProd"]).Equals("Y");
                         string desc = Util.GetValueOfString(dt.Tables[0].Rows[0]["Description"]);
                         string notes = Util.GetValueOfString(dt.Tables[0].Rows[0]["DocumentNote"]);
-                        int org = Util.GetValueOfInt(dt.Tables[0].Rows[0]["VA077_DestinationOrg"]);
+                        string org = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_DestinationOrg"]);
                         bool addInfo = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_AdditionalInfo"]).Equals("Y");
                         bool updateversion = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_UpdateVersion"]).Equals("Y");
                         bool regemail = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_RegEmail"]).Equals("Y");
 
-                        Set_Value("VA077_DestinationOrg", org);
+                        if (org != "")
+                            Set_Value("VA077_DestinationOrg", Util.GetValueOfInt(org));
                         Set_Value("Description", desc + " " + notes);
 
                         Set_Value("VA077_SNErweiterbar", snerw);
@@ -4518,6 +4536,9 @@ namespace VAdvantage.Model
 
                         Set_Value("VA077_ContractProduct", contract);
                         Set_Value("VA077_NonContractProd", noncontract);
+
+                        if (contract)
+                            Set_Value("VA077_IsContract", contract);
 
                         Set_Value("VA077_ShowCNAutodesk", autodesk);
                         Set_Value("VA077_UpdateVersion", updateversion);
@@ -4747,7 +4768,7 @@ namespace VAdvantage.Model
                                      WHERE p.C_Order_ID=" + GetC_Order_ID() + "");
                     }
                     else
-                    {                        
+                    {
                         qry.Clear();
                         qry.Append(@"UPDATE C_Order  p SET VA077_TotalMarginAmt=(SELECT COALESCE(SUM(pl.VA077_MarginAmt),0) FROM C_OrderLine pl 
                             WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),

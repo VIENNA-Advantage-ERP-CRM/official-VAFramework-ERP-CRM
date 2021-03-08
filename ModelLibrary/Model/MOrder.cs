@@ -2395,6 +2395,10 @@ namespace VAdvantage.Model
                     }
                 }
 
+                //	Default Conversion Type
+                if (GetC_ConversionType_ID() == 0)
+                    SetC_ConversionType_ID(MConversionType.GetDefault(GetAD_Client_ID()));
+
                 //Added by Bharat for Credit Limit on 24/08/2016
                 //if (IsSOTrx())
                 //{
@@ -5713,7 +5717,7 @@ namespace VAdvantage.Model
             }
 
             // JID_0658: After Creating PO from Open Requisition, & the PO record is Void, PO line reference is not getting removed from Requisition Line.
-            DB.ExecuteQuery("UPDATE M_RequisitionLine SET C_OrderLine_ID = 0 WHERE C_OrderLine_ID IN (SELECT C_OrderLine_ID FROM C_Order WHERE C_Order_ID = " + GetC_Order_ID() + ")", null, Get_TrxName());
+            DB.ExecuteQuery("UPDATE M_RequisitionLine SET C_OrderLine_ID = NULL WHERE C_OrderLine_ID IN (SELECT C_OrderLine_ID FROM C_OrderLine WHERE C_Order_ID = " + GetC_Order_ID() + ")", null, Get_TrxName());
 
             SetProcessed(true);
             SetDocAction(DOCACTION_None);

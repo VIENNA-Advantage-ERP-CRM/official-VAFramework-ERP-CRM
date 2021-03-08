@@ -253,6 +253,7 @@ namespace ViennaAdvantage.Process
             newOrder.SetBill_User_ID(morder.GetBill_User_ID());
             newOrder.SetM_PriceList_ID(morder.GetM_PriceList_ID());
             newOrder.SetC_Currency_ID(morder.GetC_Currency_ID());
+            newOrder.SetC_ConversionType_ID(morder.GetC_ConversionType_ID());
             newOrder.SetSalesRep_ID(morder.GetSalesRep_ID());
             newOrder.SetDescription(morder.GetDescription());
             //newOrder.SetM_Warehouse_ID(morder.GetM_Warehouse_ID());
@@ -281,6 +282,7 @@ namespace ViennaAdvantage.Process
             newOrder.Set_Value("VA077_TotalSalesAmt", morder.Get_Value("VA077_TotalSalesAmt"));
             newOrder.Set_Value("VA077_MarginPercent", morder.Get_Value("VA077_MarginPercent"));
             newOrder.Set_Value("VA077_IsLegalEntity", morder.Get_Value("VA077_IsLegalEntity"));
+            newOrder.Set_Value("VA077_IsContract", morder.Get_Value("VA077_IsContract"));
             newOrder.SetC_DocTypeTarget_ID(_C_DocType_ID);
             int C_Bpartner_ID = newOrder.GetC_BPartner_ID();
             newOrder.Set_Value("IsSalesQuotation", false);
