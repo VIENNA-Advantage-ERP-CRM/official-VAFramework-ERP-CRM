@@ -4032,7 +4032,7 @@ namespace VAdvantage.Model
                 string sql = @"SELECT VA077_ServiceContract_ID, VA077_HistoricContractDate, VA077_ContractCPStartDate, DocumentNo,
                                    C_Frequency_ID, VA077_ContractCPEndDate, VA077_AnnualValue FROM VA077_ServiceContract 
                                    WHERE VA077_ServiceContract_ID IN (SELECT MAX(VA077_ServiceContract_ID) FROM C_InvoiceLine 
-                                   WHERE C_Invoice_ID =" + GetC_Invoice_ID() + " AND VA077_ServiceContract_ID IS NOT NULL)";
+                                   WHERE IsActive = 'Y' AND C_Invoice_ID =" + GetC_Invoice_ID() + " AND VA077_ServiceContract_ID IS NOT NULL)";
                 contDS = DB.ExecuteDataset(sql);
                 DateTime? HCDate = null;
                 DateTime? StartDate = null;
