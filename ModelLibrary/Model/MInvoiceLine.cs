@@ -4050,10 +4050,20 @@ namespace VAdvantage.Model
                     qry.Clear();
                     qry.Append(@"UPDATE C_Invoice  p SET VA077_TotalMarginAmt=(SELECT COALESCE(SUM(pl.VA077_MarginAmt),0) FROM C_InvoiceLine pl 
                             WHERE pl.IsActive = 'Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @"),
-                            VA077_TotalPurchaseAmt=(SELECT ROUND(COALESCE(SUM(pl.VA077_PurchasePrice * QtyEntered),0),2) FROM C_InvoiceLine pl  
+                            VA077_TotalPurchaseAmt=(SELECT ROUND(COALESCE(SUM(
+                                                                              CASE WHEN VA077_Duration is null THEN  
+                                                                              pl.VA077_PurchasePrice * QtyEntered  
+                                                                              WHEN VA077_Duration > 0 THEN  
+                                                                              pl.VA077_PurchasePrice * QtyEntered * VA077_Duration / 12  
+                                                                              END), 0), " + GetPrecision() + @") FROM C_InvoiceLine pl  
                             WHERE pl.IsActive = 'Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @"),
                             VA077_MarginPercent=(SELECT CASE WHEN Sum(LineNetAmt) > 0 Then 
-                            ROUND(COALESCE(((Sum(LineNetAmt)- Sum(NVL(VA077_PurchasePrice,0) * QtyEntered))/Sum(LineNetAmt)*100),0),2) ELSE 0  END 
+                                                 ROUND(COALESCE(((Sum(LineNetAmt) - Sum(
+                                                                CASE WHEN VA077_Duration is null THEN
+                                                                    COALESCE(VA077_PurchasePrice, 0) * QtyEntered
+                                                                    WHEN VA077_Duration > 0 THEN
+                                                                    COALESCE(VA077_PurchasePrice, 0) * QtyEntered * VA077_Duration/12 
+                                                                END)) / Sum(LineNetAmt) * 100), 0), " + GetPrecision() + @") ELSE 0  END 
                             FROM C_InvoiceLine pl WHERE pl.IsActive = 'Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @"),
                             VA077_TotalSalesAmt=(SELECT COALESCE(SUM(pl.LineNetAmt),0) FROM C_InvoiceLine pl 
                             WHERE pl.IsActive = 'Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @")");
@@ -4069,34 +4079,39 @@ namespace VAdvantage.Model
                     {
                         qry.Append(",VA077_ContractCPEndDate= " + GlobalVariable.TO_DATE(EndDate, true) + @"");
                     }
-                    if (Get_Value("VA077_StartDate") != null)
-                    {
-                        qry.Append(",VA077_ChangeStartDate = " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("VA077_StartDate")), true) + @"");
-                    }
+                    //if (Get_Value("VA077_StartDate") != null)
+                    //{
+                    //    qry.Append(",VA077_ChangeStartDate = " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("VA077_StartDate")), true) + @"");
+                    //}
 
                     if (GetC_OrderLine_ID() > 0)
                     {
                         qry.Append(",VA077_OldAnnualContractTotal= " + AnnualValue + @",                            
+                                     VA077_ChangeStartDate = (SELECT MIN(VA077_StartDate) FROM C_InvoiceLine pl WHERE pl.IsActive = 'Y' 
+                                     AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @"),
                                      VA077_PartialAmtCatchUp =(SELECT COALESCE(SUM(pl.LineNetAmt),0) FROM C_InvoiceLine pl INNER JOIN C_OrderLine ol ON (ol.C_OrderLine_ID = pl.C_OrderLine_ID) 
                                      WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @"),
-                                     VA077_AdditionalAnnualCharge =(SELECT COALESCE(SUM(pl.PriceActual),0) FROM C_InvoiceLine pl INNER JOIN C_OrderLine ol ON (ol.C_OrderLine_ID = pl.C_OrderLine_ID)
+                                     VA077_AdditionalAnnualCharge =(SELECT ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0)," + GetPrecision() + @") FROM C_InvoiceLine pl INNER JOIN C_OrderLine ol ON (ol.C_OrderLine_ID = pl.C_OrderLine_ID)
                                      WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @"),
-                                     VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + COALESCE(SUM(pl.LineNetAmt),0) FROM C_InvoiceLine pl INNER JOIN C_OrderLine ol ON (ol.C_OrderLine_ID = pl.C_OrderLine_ID)
+                                     VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0)," + GetPrecision() + @")
+                                     FROM C_InvoiceLine pl INNER JOIN C_OrderLine ol ON (ol.C_OrderLine_ID = pl.C_OrderLine_ID)
                                      WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @")
                                      WHERE p.C_Invoice_ID=" + GetC_Invoice_ID() + "");
                     }
                     else if (GetM_InOutLine_ID() > 0)
                     {
-                        qry.Append(",VA077_OldAnnualContractTotal= " + AnnualValue + @",                            
+                        qry.Append(",VA077_OldAnnualContractTotal= " + AnnualValue + @",  
+                                     VA077_ChangeStartDate = (SELECT MIN(VA077_StartDate) FROM C_InvoiceLine pl WHERE pl.IsActive = 'Y' 
+                                     AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @"),
                                      VA077_PartialAmtCatchUp =(SELECT COALESCE(SUM(pl.LineNetAmt),0) FROM C_InvoiceLine pl 
                                      INNER JOIN M_InOutLine il ON (pl.M_InOutLine_Id = il.M_InOutLine_ID)                                     
                                      INNER JOIN C_OrderLine ol ON (ol.C_OrderLine_ID = pl.C_OrderLine_ID) 
                                      WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @"),
-                                     VA077_AdditionalAnnualCharge =(SELECT COALESCE(SUM(pl.PriceActual),0) FROM C_InvoiceLine pl 
+                                     VA077_AdditionalAnnualCharge =(SELECT ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0)," + GetPrecision() + @") FROM C_InvoiceLine pl 
                                      INNER JOIN M_InOutLine il ON (pl.M_InOutLine_Id = il.M_InOutLine_ID)                                     
                                      INNER JOIN C_OrderLine ol ON (ol.C_OrderLine_ID = pl.C_OrderLine_ID)
                                      WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @"),
-                                     VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + COALESCE(SUM(pl.LineNetAmt),0) FROM C_InvoiceLine pl 
+                                     VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0)," + GetPrecision() + @") FROM C_InvoiceLine pl 
                                      INNER JOIN M_InOutLine il ON (pl.M_InOutLine_Id = il.M_InOutLine_ID)                                                                          
                                      INNER JOIN C_OrderLine ol ON (ol.C_OrderLine_ID = pl.C_OrderLine_ID)
                                      WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @")
@@ -4108,30 +4123,54 @@ namespace VAdvantage.Model
                     qry.Clear();
                     qry.Append(@"UPDATE C_Invoice  p SET VA077_TotalMarginAmt=(SELECT COALESCE(SUM(pl.VA077_MarginAmt),0) FROM C_InvoiceLine pl 
                             WHERE pl.IsActive = 'Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @"),
-                            VA077_TotalPurchaseAmt=(SELECT ROUND(COALESCE(SUM(pl.VA077_PurchasePrice * QtyEntered),0),2) FROM C_InvoiceLine pl  
+                            VA077_TotalPurchaseAmt=(SELECT ROUND(COALESCE(SUM(
+                                                                              CASE WHEN VA077_Duration is null THEN  
+                                                                              pl.VA077_PurchasePrice * QtyEntered  
+                                                                              WHEN VA077_Duration > 0 THEN  
+                                                                              pl.VA077_PurchasePrice * QtyEntered * VA077_Duration / 12  
+                                                                              END), 0), " + GetPrecision() + @") FROM C_InvoiceLine pl  
                             WHERE pl.IsActive = 'Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @"),
                             VA077_MarginPercent=(SELECT CASE WHEN Sum(LineNetAmt) > 0 Then 
-                            ROUND(COALESCE(((Sum(LineNetAmt)- Sum(NVL(VA077_PurchasePrice,0) * QtyEntered))/Sum(LineNetAmt)*100),0),2) ELSE 0  END 
+                                                 ROUND(COALESCE(((Sum(LineNetAmt) - Sum(
+                                                                CASE WHEN VA077_Duration is null THEN
+                                                                    COALESCE(VA077_PurchasePrice, 0) * QtyEntered
+                                                                    WHEN VA077_Duration > 0 THEN
+                                                                    COALESCE(VA077_PurchasePrice, 0) * QtyEntered * VA077_Duration/12 
+                                                                END)) / Sum(LineNetAmt) * 100), 0), " + GetPrecision() + @") ELSE 0  END  
                             FROM C_InvoiceLine pl WHERE pl.IsActive = 'Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @"),
+                            VA077_ChangeStartDate = (SELECT MIN(VA077_StartDate) FROM C_InvoiceLine pl WHERE pl.IsActive = 'Y' 
+                            AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @"),
                             VA077_TotalSalesAmt=(SELECT COALESCE(SUM(pl.LineNetAmt),0) FROM C_InvoiceLine pl 
                             WHERE pl.IsActive = 'Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @")");
                     if (GetC_OrderLine_ID() > 0)
                     {
                         qry.Append(@", VA077_PartialAmtCatchUp = (SELECT COALESCE(SUM(pl.LineNetAmt), 0) FROM C_InvoiceLine pl INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_Id = ol.C_OrderLine_ID)
-                                  WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct = 'Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @")");
+                                     WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct = 'Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @",
+                                     VA077_AdditionalAnnualCharge =(SELECT ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0)," + GetPrecision() + @") FROM C_InvoiceLine pl INNER JOIN C_OrderLine ol ON (ol.C_OrderLine_ID = pl.C_OrderLine_ID)
+                                     WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @"),
+                                     VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0)," + GetPrecision() + @")
+                                     FROM C_InvoiceLine pl INNER JOIN C_OrderLine ol ON (ol.C_OrderLine_ID = pl.C_OrderLine_ID)
+                                     WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @")
+                                     WHERE p.C_Invoice_ID=" + GetC_Invoice_ID() + ")");
                     }
                     else if (GetM_InOutLine_ID() > 0)
                     {
                         qry.Append(@", VA077_PartialAmtCatchUp = (SELECT COALESCE(SUM(pl.LineNetAmt), 0) FROM C_InvoiceLine pl 
                                   INNER JOIN M_InOutLine il ON (pl.M_InOutLine_Id = il.M_InOutLine_ID)
                                   INNER JOIN C_OrderLine ol ON (il.C_OrderLine_Id = ol.C_OrderLine_ID)
-                                  WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct = 'Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @")");
+                                  WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct = 'Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @",
+                                  VA077_AdditionalAnnualCharge =(SELECT ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0)," + GetPrecision() + @") 
+                                  FROM C_InvoiceLine pl 
+                                  INNER JOIN M_InOutLine il ON (pl.M_InOutLine_Id = il.M_InOutLine_ID)
+                                  INNER JOIN C_OrderLine ol ON (il.C_OrderLine_Id = ol.C_OrderLine_ID)
+                                  WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @"),
+                                  VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0)," + GetPrecision() + @")
+                                  FROM C_InvoiceLine pl 
+                                  INNER JOIN M_InOutLine il ON (pl.M_InOutLine_Id = il.M_InOutLine_ID)
+                                  INNER JOIN C_OrderLine ol ON (il.C_OrderLine_Id = ol.C_OrderLine_ID)
+                                  WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @")");
                     }
-                    if (Get_Value("VA077_StartDate") != null)
-                    {
-                        qry.Append(",VA077_ChangeStartDate = " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("VA077_StartDate")), true) + @"");
-                    }
-
+                   
                     qry.Append(" WHERE p.C_Invoice_ID=" + GetC_Invoice_ID() + "");
                 }
 
