@@ -150,21 +150,82 @@ namespace VAdvantage.Model
             if (fromPhase == null)
                 return 0;
             int count = 0;
+            int tasklinecount = 0;
             //	Copy Type Tasks
             MProjectTypeTask[] fromTasks = fromPhase.GetTasks();
             for (int i = 0; i < fromTasks.Length; i++)
             {
                 MProjectTask toTask = new MProjectTask(this, fromTasks[i]);
                 if (toTask.Save())
+                {
+                    // check if table exists then only it will copy the task lines
+                    if (PO.Get_Table_ID("C_TaskLine") > 0)
+                        tasklinecount = CopyMTaskLines(fromTasks[i].GetC_Task_ID(), toTask.GetC_ProjectTask_ID());
                     count++;
+                }
             }
-            log.Fine("#" + count + " - " + fromPhase);
+            log.Fine("#" + count + " - " + fromPhase + ", #" + tasklinecount);
             if (fromTasks.Length != count)
             {
                 log.Log(Level.SEVERE, "Count difference - TypePhase=" + fromTasks.Length + " <> Saved=" + count);
             }
 
             return count;
+        }
+
+        /// <summary>
+        /// To copy the task lines from project template Standard Task lines tab
+        /// </summary>
+        /// <param name="Task_ID">ID of tasks</param>
+        /// <param name="C_ProjectTask_ID">Project task ID</param>
+        /// <returns>No of lines created</returns>
+        public int CopyMTaskLines(int Task_ID, int C_ProjectTask_ID)
+        {
+            MProjectLine taskline = null;
+            int tasklinecount = 0;
+            StringBuilder msg = new StringBuilder();
+            String sql = "SELECT M_Product_ID, Description, StandardQty, SeqNo FROM C_TaskLine WHERE C_Task_ID =" + Task_ID + " ORDER BY SeqNo";
+            try
+            {
+                DataSet ds = DataBase.DB.ExecuteDataset(sql, null, Get_TrxName());
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        taskline = new MProjectLine(GetCtx(), 0, Get_TrxName());
+                        taskline.SetC_ProjectTask_ID(C_ProjectTask_ID);
+                        taskline.SetDescription(ds.Tables[0].Rows[i]["Description"].ToString());
+                        taskline.SetM_Product_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]));
+                        taskline.SetPlannedQty(Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["StandardQty"]));
+                        taskline.Set_ValueNoCheck("TaskLineNo", Util.GetValueOfInt(ds.Tables[0].Rows[i]["SeqNo"]));
+                        if (taskline.Save())
+                        {
+                            tasklinecount++;
+                        }
+                        else
+                        {
+                            ValueNamePair pp = VLogger.RetrieveError();
+                            if (pp != null)
+                            {
+                                msg.Append(pp.GetName());
+                                //if GetName is Empty then it will check GetValue
+                                if (string.IsNullOrEmpty(msg.ToString()))
+                                    msg.Append(Msg.GetMsg("", pp.GetValue()));
+                            }
+                            if (string.IsNullOrEmpty(msg.ToString()))
+                                msg.Append(Msg.GetMsg(GetCtx(), "VIS_TaskLineNotSaved"));
+                            else
+                                msg.Append(Msg.GetMsg(GetCtx(), "VIS_TaskLineNotSaved") + "," + msg.ToString());
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Log(Level.SEVERE, sql, ex);
+            }
+            //
+            return tasklinecount;
         }
 
         /// <summary>
