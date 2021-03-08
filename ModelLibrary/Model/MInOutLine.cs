@@ -1492,13 +1492,13 @@ namespace VAdvantage.Model
                                                                     WHEN ol.VA077_Duration > 0 THEN
                                                                     COALESCE(ol.VA077_PurchasePrice, 0) * ol.QtyEntered * ol.VA077_Duration/12 
                                                                 END)) / Sum(ol.LineNetAmt) * 100), 0), 2) ELSE 0  END  
-                            FROM C_OrderLine pl WHERE pl.IsActive = 'Y' AND pl.M_InOut_ID = " + GetM_InOut_ID() + @"),
+                            FROM M_InOutLine pl INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID) WHERE pl.IsActive = 'Y' AND pl.M_InOut_ID = " + GetM_InOut_ID() + @"),
                             VA077_TotalSalesAmt=(SELECT COALESCE(SUM(ol.LineNetAmt),0) FROM M_InOutLine pl INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID) 
                             WHERE pl.IsActive = 'Y' AND pl.M_InOut_ID = " + GetM_InOut_ID() + @"),
                             VA077_ChangeStartDate = (SELECT MIN(ol.VA077_StartDate) FROM M_InOutLine pl INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID) 
                             WHERE pl.IsActive = 'Y' AND pl.M_InOut_ID = " + GetM_InOut_ID() + @"),
                             VA077_PartialAmtCatchUp =(SELECT COALESCE(SUM(ol.LineNetAmt),0) FROM M_InOutLine pl INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID) 
-                            WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.M_InOut_ID = " + GetM_InOut_ID() + @",
+                            WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.M_InOut_ID = " + GetM_InOut_ID() + @"),
                             VA077_AdditionalAnnualCharge =(SELECT ROUND(COALESCE(SUM(ol.PriceEntered * ol.QtyEntered),0),2) FROM M_InOutLine pl 
                             INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID)
                             WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.M_InOut_ID = " + GetM_InOut_ID() + @"),

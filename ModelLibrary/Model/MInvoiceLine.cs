@@ -4052,9 +4052,9 @@ namespace VAdvantage.Model
                             WHERE pl.IsActive = 'Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @"),
                             VA077_TotalPurchaseAmt=(SELECT ROUND(COALESCE(SUM(
                                                                               CASE WHEN VA077_Duration is null THEN  
-                                                                              pl.VA077_PurchasePrice * QtyEntered  
+                                                                              pl.VA077_PurchasePrice * pl.QtyEntered  
                                                                               WHEN VA077_Duration > 0 THEN  
-                                                                              pl.VA077_PurchasePrice * QtyEntered * VA077_Duration / 12  
+                                                                              pl.VA077_PurchasePrice * pl.QtyEntered * pl.VA077_Duration / 12  
                                                                               END), 0), " + GetPrecision() + @") FROM C_InvoiceLine pl  
                             WHERE pl.IsActive = 'Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @"),
                             VA077_MarginPercent=(SELECT CASE WHEN Sum(LineNetAmt) > 0 Then 
@@ -4091,9 +4091,9 @@ namespace VAdvantage.Model
                                      AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @"),
                                      VA077_PartialAmtCatchUp =(SELECT COALESCE(SUM(pl.LineNetAmt),0) FROM C_InvoiceLine pl INNER JOIN C_OrderLine ol ON (ol.C_OrderLine_ID = pl.C_OrderLine_ID) 
                                      WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @"),
-                                     VA077_AdditionalAnnualCharge =(SELECT ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0)," + GetPrecision() + @") FROM C_InvoiceLine pl INNER JOIN C_OrderLine ol ON (ol.C_OrderLine_ID = pl.C_OrderLine_ID)
+                                     VA077_AdditionalAnnualCharge =(SELECT ROUND(COALESCE(SUM(pl.PriceEntered * pl.QtyEntered),0)," + GetPrecision() + @") FROM C_InvoiceLine pl INNER JOIN C_OrderLine ol ON (ol.C_OrderLine_ID = pl.C_OrderLine_ID)
                                      WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @"),
-                                     VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0)," + GetPrecision() + @")
+                                     VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + ROUND(COALESCE(SUM(pl.PriceEntered * pl.QtyEntered),0)," + GetPrecision() + @")
                                      FROM C_InvoiceLine pl INNER JOIN C_OrderLine ol ON (ol.C_OrderLine_ID = pl.C_OrderLine_ID)
                                      WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @")
                                      WHERE p.C_Invoice_ID=" + GetC_Invoice_ID() + "");
@@ -4107,11 +4107,11 @@ namespace VAdvantage.Model
                                      INNER JOIN M_InOutLine il ON (pl.M_InOutLine_Id = il.M_InOutLine_ID)                                     
                                      INNER JOIN C_OrderLine ol ON (ol.C_OrderLine_ID = pl.C_OrderLine_ID) 
                                      WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @"),
-                                     VA077_AdditionalAnnualCharge =(SELECT ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0)," + GetPrecision() + @") FROM C_InvoiceLine pl 
+                                     VA077_AdditionalAnnualCharge =(SELECT ROUND(COALESCE(SUM(pl.PriceEntered * pl.QtyEntered),0)," + GetPrecision() + @") FROM C_InvoiceLine pl 
                                      INNER JOIN M_InOutLine il ON (pl.M_InOutLine_Id = il.M_InOutLine_ID)                                     
                                      INNER JOIN C_OrderLine ol ON (ol.C_OrderLine_ID = pl.C_OrderLine_ID)
                                      WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @"),
-                                     VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0)," + GetPrecision() + @") FROM C_InvoiceLine pl 
+                                     VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + ROUND(COALESCE(SUM(pl.PriceEntered * pl.QtyEntered),0)," + GetPrecision() + @") FROM C_InvoiceLine pl 
                                      INNER JOIN M_InOutLine il ON (pl.M_InOutLine_Id = il.M_InOutLine_ID)                                                                          
                                      INNER JOIN C_OrderLine ol ON (ol.C_OrderLine_ID = pl.C_OrderLine_ID)
                                      WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @")
@@ -4146,9 +4146,9 @@ namespace VAdvantage.Model
                     {
                         qry.Append(@", VA077_PartialAmtCatchUp = (SELECT COALESCE(SUM(pl.LineNetAmt), 0) FROM C_InvoiceLine pl INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_Id = ol.C_OrderLine_ID)
                                      WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct = 'Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @",
-                                     VA077_AdditionalAnnualCharge =(SELECT ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0)," + GetPrecision() + @") FROM C_InvoiceLine pl INNER JOIN C_OrderLine ol ON (ol.C_OrderLine_ID = pl.C_OrderLine_ID)
+                                     VA077_AdditionalAnnualCharge =(SELECT ROUND(COALESCE(SUM(pl.PriceEntered * pl.QtyEntered),0)," + GetPrecision() + @") FROM C_InvoiceLine pl INNER JOIN C_OrderLine ol ON (ol.C_OrderLine_ID = pl.C_OrderLine_ID)
                                      WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @"),
-                                     VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0)," + GetPrecision() + @")
+                                     VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + ROUND(COALESCE(SUM(pl.PriceEntered * pl.QtyEntered),0)," + GetPrecision() + @")
                                      FROM C_InvoiceLine pl INNER JOIN C_OrderLine ol ON (ol.C_OrderLine_ID = pl.C_OrderLine_ID)
                                      WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @")
                                      WHERE p.C_Invoice_ID=" + GetC_Invoice_ID() + ")");
@@ -4159,12 +4159,12 @@ namespace VAdvantage.Model
                                   INNER JOIN M_InOutLine il ON (pl.M_InOutLine_Id = il.M_InOutLine_ID)
                                   INNER JOIN C_OrderLine ol ON (il.C_OrderLine_Id = ol.C_OrderLine_ID)
                                   WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct = 'Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @",
-                                  VA077_AdditionalAnnualCharge =(SELECT ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0)," + GetPrecision() + @") 
+                                  VA077_AdditionalAnnualCharge =(SELECT ROUND(COALESCE(SUM(pl.PriceEntered * pl.QtyEntered),0)," + GetPrecision() + @") 
                                   FROM C_InvoiceLine pl 
                                   INNER JOIN M_InOutLine il ON (pl.M_InOutLine_Id = il.M_InOutLine_ID)
                                   INNER JOIN C_OrderLine ol ON (il.C_OrderLine_Id = ol.C_OrderLine_ID)
                                   WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @"),
-                                  VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0)," + GetPrecision() + @")
+                                  VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + ROUND(COALESCE(SUM(pl.PriceEntered * pl.QtyEntered),0)," + GetPrecision() + @")
                                   FROM C_InvoiceLine pl 
                                   INNER JOIN M_InOutLine il ON (pl.M_InOutLine_Id = il.M_InOutLine_ID)
                                   INNER JOIN C_OrderLine ol ON (il.C_OrderLine_Id = ol.C_OrderLine_ID)
