@@ -36,7 +36,7 @@ namespace VIS.Helpers
                                     OR o.Action  ='R'
                                     THEN o.VAF_Job_ID
                                     WHEN o.Action = 'B'
-                                    THEN o.AD_Workbench_ID
+                                    THEN o.VAF_WorkBench_ID
                                     WHEN o.Action = 'T'
                                     THEN o.VAF_Task_ID
                                     WHEN o.Action = 'X'
@@ -288,7 +288,8 @@ namespace VIS.Helpers
                                     OR o.action  ='R'
                                     THEN o.VAF_Job_id
                                     WHEN o.action = 'B'
-                                    THEN o.ad_workbench_id
+                                    THEN o.
+workbench_id
                                     WHEN o.action = 'T'
                                     THEN o.VAF_Task_id
                                     WHEN o.action = 'X'

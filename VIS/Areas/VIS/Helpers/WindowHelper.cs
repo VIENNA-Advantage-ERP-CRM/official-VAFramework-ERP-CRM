@@ -2780,7 +2780,7 @@ namespace VIS.Helpers
             cv.IncludedCols = new List<int>();
             cv.Conditions = new List<CardViewCondition>();
 
-            int AD_CV_ID = -1;
+            int VAF_CV_ID = -1;
 
             string sql = "SELECT VAF_CardView_ID,VAF_Field_ID FROM VAF_CardView WHERE VAF_Screen_ID = " + VAF_Screen_ID + " AND VAF_Tab_ID = " + VAF_Tab_ID + " AND VAF_USERCONTACT_ID=" + ctx.GetVAF_UserContact_ID()
                             + " AND VAF_Client_ID = " + ctx.GetVAF_Client_ID() + " ORDER BY VAF_USERCONTACT_ID  ";
@@ -2790,9 +2790,9 @@ namespace VIS.Helpers
                 dr = DB.ExecuteReader(sql);
                 if (dr.Read())
                 {
-                    AD_CV_ID = Convert.ToInt32(dr[0]);
+                    VAF_CV_ID = Convert.ToInt32(dr[0]);
                     cv.FieldGroupID = VAdvantage.Utility.Util.GetValueOfInt(dr[1]);
-                    cv.VAF_CardView_ID = AD_CV_ID;
+                    cv.VAF_CardView_ID = VAF_CV_ID;
                 }
                 else
                 {
@@ -2802,16 +2802,16 @@ namespace VIS.Helpers
                     dr = DB.ExecuteReader(sql);
                     if (dr.Read())
                     {
-                        AD_CV_ID = Convert.ToInt32(dr[0]);
+                        VAF_CV_ID = Convert.ToInt32(dr[0]);
                         cv.FieldGroupID = VAdvantage.Utility.Util.GetValueOfInt(dr[1]);
-                        cv.VAF_CardView_ID = AD_CV_ID;
+                        cv.VAF_CardView_ID = VAF_CV_ID;
                     }
                 }
                 dr.Close();
 
-                if (AD_CV_ID > 0)
+                if (VAF_CV_ID > 0)
                 {
-                    sql = "SELECT VAF_Field_ID FROM VAF_CardView_Column WHERE IsActive='Y' AND VAF_CardView_ID = " + AD_CV_ID + " ORDER BY SeqNo";
+                    sql = "SELECT VAF_Field_ID FROM VAF_CardView_Column WHERE IsActive='Y' AND VAF_CardView_ID = " + VAF_CV_ID + " ORDER BY SeqNo";
                     dr = DB.ExecuteReader(sql);
                     while (dr.Read())
                     {
@@ -2819,9 +2819,9 @@ namespace VIS.Helpers
                     }
                     dr.Close();
                 }
-                if (AD_CV_ID > 0)
+                if (VAF_CV_ID > 0)
                 {
-                    sql = "SELECT ConditionValue,Color  FROM VAF_CardView_Condition WHERE IsActive='Y' AND VAF_CardView_ID = " + AD_CV_ID + " ORDER BY VAF_CardView_Condition_ID ";
+                    sql = "SELECT ConditionValue,Color  FROM VAF_CardView_Condition WHERE IsActive='Y' AND VAF_CardView_ID = " + VAF_CV_ID + " ORDER BY VAF_CardView_Condition_ID ";
                     dr = DB.ExecuteReader(sql);
                     while (dr.Read())
                     {

@@ -112,18 +112,18 @@ StringBuilder sb = new StringBuilder ("X_VAF_ExportData[").Append(Get_ID()).Appe
 return sb.ToString();
 }
 /** Set Primay Col 1.
-@param AD_ColOne_ID Primay Col 1 */
-public void SetAD_ColOne_ID (int AD_ColOne_ID)
+@param VAF_ColOne_ID Primay Col 1 */
+public void SetVAF_ColOne_ID (int VAF_ColOne_ID)
 {
-if (AD_ColOne_ID <= 0) Set_Value ("AD_ColOne_ID", null);
+if (VAF_ColOne_ID <= 0) Set_Value ("VAF_ColOne_ID", null);
 else
-Set_Value ("AD_ColOne_ID", AD_ColOne_ID);
+Set_Value ("VAF_ColOne_ID", VAF_ColOne_ID);
 }
 /** Get Primay Col 1.
 @return Primay Col 1 */
-public int GetAD_ColOne_ID() 
+public int GetVAF_ColOne_ID() 
 {
-Object ii = Get_Value("AD_ColOne_ID");
+Object ii = Get_Value("VAF_ColOne_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

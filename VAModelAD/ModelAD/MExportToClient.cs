@@ -21,7 +21,7 @@ namespace VAdvantage.Model
 
         public static int Get(int Record_ID_1, int Record_ID_2, int Table_ID)
         {
-            String sql = "Select VAF_ExportData_ID from VAF_ExportData where Record_ID = " + Record_ID_1 + " AND AD_COLONE_ID = " + Record_ID_2 + " AND VAF_TableView_ID = " + Table_ID;
+            String sql = "Select VAF_ExportData_ID from VAF_ExportData where Record_ID = " + Record_ID_1 + " AND VAF_ColOne_ID = " + Record_ID_2 + " AND VAF_TableView_ID = " + Table_ID;
 
             int id = 0;
             int imex = 0;
@@ -34,7 +34,7 @@ namespace VAdvantage.Model
             dr.Close();
             if (id > 0)
             {
-                sql = "delete from VAF_ExportData where Record_ID = " + Record_ID_1 + " AND AD_COLONE_ID = " + Record_ID_2 + " AND VAF_TableView_ID = " + Table_ID;
+                sql = "delete from VAF_ExportData where Record_ID = " + Record_ID_1 + " AND VAF_ColOne_ID = " + Record_ID_2 + " AND VAF_TableView_ID = " + Table_ID;
                 int res = CoreLibrary.DataBase.DB.ExecuteQuery(sql);
                 if (res == 1)
                     imex = 1;
@@ -43,7 +43,7 @@ namespace VAdvantage.Model
             {
                 MExportToClient mex = new MExportToClient(Env.GetCtx(), id, null);
                 mex.SetRecord_ID(Record_ID_1);
-                mex.SetAD_ColOne_ID(Record_ID_2);
+                mex.SetVAF_ColOne_ID(Record_ID_2);
                 mex.SetVAF_TableView_ID(Table_ID);
                 blReturn = mex.Save();
 

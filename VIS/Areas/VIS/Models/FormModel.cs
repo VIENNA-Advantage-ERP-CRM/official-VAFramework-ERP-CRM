@@ -778,7 +778,7 @@ namespace VIS.Models
 
             if (ServerValues.IsExportData)
             {
-                sqlArray.Add("SELECT VAF_ExportData_ID,RECORD_ID, AD_ColOne_ID FROM VAF_ExportData WHERE VAF_TableView_ID=" + ServerValues.VAF_TableView_ID);
+                sqlArray.Add("SELECT VAF_ExportData_ID,RECORD_ID, VAF_ColOne_ID FROM VAF_ExportData WHERE VAF_TableView_ID=" + ServerValues.VAF_TableView_ID);
             }
             if (ServerValues.IsAttachment)
             {

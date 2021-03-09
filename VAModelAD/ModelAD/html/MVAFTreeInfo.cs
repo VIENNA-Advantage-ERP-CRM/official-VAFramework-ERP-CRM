@@ -775,11 +775,11 @@ namespace VAdvantage.Model
                 sourceTable = "VAF_MenuConfig";
                 if (baseLang)
                     sqlNode.Append("SELECT VAF_MenuConfig.VAF_MenuConfig_ID, VAF_MenuConfig.Name,VAF_MenuConfig.Description,VAF_MenuConfig.IsSummary,VAF_MenuConfig.Action, "
-                        + "VAF_MenuConfig.VAF_Screen_ID, VAF_MenuConfig.VAF_Job_ID, VAF_MenuConfig.VAF_Page_ID, VAF_MenuConfig.VAF_Workflow_ID, VAF_MenuConfig.VAF_Task_ID, VAF_MenuConfig.AD_Workbench_ID "
+                        + "VAF_MenuConfig.VAF_Screen_ID, VAF_MenuConfig.VAF_Job_ID, VAF_MenuConfig.VAF_Page_ID, VAF_MenuConfig.VAF_Workflow_ID, VAF_MenuConfig.VAF_Task_ID, VAF_MenuConfig.VAF_WorkBench_ID "
                         + "FROM VAF_MenuConfig VAF_MenuConfig");
                 else
                     sqlNode.Append("SELECT VAF_MenuConfig.VAF_MenuConfig_ID,  t.Name,t.Description,VAF_MenuConfig.IsSummary,VAF_MenuConfig.Action, "
-                        + "VAF_MenuConfig.VAF_Screen_ID, VAF_MenuConfig.VAF_Job_ID, VAF_MenuConfig.VAF_Page_ID, VAF_MenuConfig.VAF_Workflow_ID, VAF_MenuConfig.VAF_Task_ID, VAF_MenuConfig.AD_Workbench_ID "
+                        + "VAF_MenuConfig.VAF_Screen_ID, VAF_MenuConfig.VAF_Job_ID, VAF_MenuConfig.VAF_Page_ID, VAF_MenuConfig.VAF_Workflow_ID, VAF_MenuConfig.VAF_Task_ID, VAF_MenuConfig.VAF_WorkBench_ID "
                         + "FROM VAF_MenuConfig VAF_MenuConfig JOIN  VAF_MenuConfig_TL t ON VAF_MenuConfig.VAF_MenuConfig_ID=t.VAF_MenuConfig_ID ");
                 if (!baseLang)
                 {
@@ -1281,7 +1281,7 @@ namespace VAdvantage.Model
             int VAF_Page_ID = 0;
             int VAF_Workflow_ID = 0;
             int VAF_Task_ID = 0;
-            int AD_Workbench_ID = 0;
+            int VAF_WorkBench_ID = 0;
 
             VTreeNode retValue = null;
 
@@ -1319,7 +1319,7 @@ namespace VAdvantage.Model
                         index++;
                         VAF_Task_ID = Utility.Util.GetValueOfInt(dr[index]);
                         index++;
-                        AD_Workbench_ID = Utility.Util.GetValueOfInt(dr[index]);
+                        VAF_WorkBench_ID = Utility.Util.GetValueOfInt(dr[index]);
                         index++;
                         //
                         MVAFRole role = MVAFRole.GetDefault(GetCtx(), false);
@@ -1374,7 +1374,7 @@ namespace VAdvantage.Model
                 retValue.VAF_Page_ID = VAF_Page_ID;
                 retValue.VAF_Workflow_ID = VAF_Workflow_ID;
                 retValue.VAF_Task_ID = VAF_Task_ID;
-                retValue.AD_Workbench_ID = AD_Workbench_ID;
+                retValue.VAF_WorkBench_ID = VAF_WorkBench_ID;
             }
             return retValue;
         }
@@ -1817,7 +1817,7 @@ namespace VAdvantage.Model
         //    int VAF_Page_ID = 0;
         //    int VAF_Workflow_ID = 0;
         //    int VAF_Task_ID = 0;
-        //    int AD_Workbench_ID = 0;
+        //    int VAF_WorkBench_ID = 0;
 
         //    VToolStripMenuItem retValue = null;
 
@@ -1855,7 +1855,7 @@ namespace VAdvantage.Model
         //                index++;
         //                VAF_Task_ID = Utility.Util.GetValueOfInt(dr[index]);
         //                index++;
-        //                AD_Workbench_ID = Utility.Util.GetValueOfInt(dr[index]);
+        //                VAF_WorkBench_ID = Utility.Util.GetValueOfInt(dr[index]);
         //                index++;
         //                //
         //                MRole role = MRole.GetDefault(GetCtx(), false);
@@ -1910,7 +1910,7 @@ namespace VAdvantage.Model
         //        retValue.VAF_Page_ID = VAF_Page_ID;
         //        retValue.VAF_Workflow_ID = VAF_Workflow_ID;
         //        retValue.VAF_Task_ID = VAF_Task_ID;
-        //        retValue.AD_Workbench_ID = AD_Workbench_ID;
+        //        retValue.VAF_WorkBench_ID = VAF_WorkBench_ID;
         //    }
         //    return retValue;
         //}

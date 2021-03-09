@@ -2794,8 +2794,8 @@
         //    tableIndex.VAF_ExportData = sb.length;
         //    ServerValues.IsExportData = true;
         //    sb.push("");
-        //    //sb.push("SELECT VAF_ExportData_ID,RECORD_ID, AD_ColOne_ID FROM VAF_ExportData WHERE VAF_TableView_ID=" + this.getVAF_TableView_ID());
-        //    //sb.push("SELECT VAF_ExportData_ID,RECORD_ID, AD_ColOne_ID FROM VAF_ExportData WHERE VAF_TableView_ID=" + this.getVAF_TableView_ID());
+        //    //sb.push("SELECT VAF_ExportData_ID,RECORD_ID, VAF_ColOne_ID FROM VAF_ExportData WHERE VAF_TableView_ID=" + this.getVAF_TableView_ID());
+        //    //sb.push("SELECT VAF_ExportData_ID,RECORD_ID, VAF_ColOne_ID FROM VAF_ExportData WHERE VAF_TableView_ID=" + this.getVAF_TableView_ID());
 
         //}
 

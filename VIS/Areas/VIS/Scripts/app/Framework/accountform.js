@@ -1537,7 +1537,7 @@
                     UserElement9_ID = f_UserElement9_ID.getValue();
 
                 var VAF_Org_ID = f_VAF_Org_ID.getValue();
-                var AD_Account_ID = f_Account_ID.getValue();
+                var VAF_Account_ID = f_Account_ID.getValue();
 
 
                 //Ajex to save Account onto database 
@@ -1577,7 +1577,7 @@
                         VAF_Client_ID: VIS.Env.getCtx().getVAF_Client_ID(),
                         VAF_Org_ID: VAF_Org_ID,
                         VAB_AccountBook_ID: VAB_AccountBook_ID,
-                        AD_Account_ID: AD_Account_ID,
+                        VAF_Account_ID: VAF_Account_ID,
                         VAB_SubAcct_ID: VAB_SubAcct_ID,
                         VAM_Product_ID: VAM_Product_ID,
                         VAB_BusinessPartner_ID: VAB_BusinessPartner_ID,

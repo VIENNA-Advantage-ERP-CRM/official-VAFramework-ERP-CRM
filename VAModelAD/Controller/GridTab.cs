@@ -1974,7 +1974,7 @@ namespace VAdvantage.Model
 
             if (_wVo.IsMarkToExport)
             {
-                sql = " SELECT VAF_ExportData_ID,RECORD_ID, AD_ColOne_ID FROM VAF_ExportData WHERE VAF_TableView_ID=" + _vo.VAF_TableView_ID;
+                sql = " SELECT VAF_ExportData_ID,RECORD_ID, VAF_ColOne_ID FROM VAF_ExportData WHERE VAF_TableView_ID=" + _vo.VAF_TableView_ID;
                 ds = DB.ExecuteDataset(sql);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {

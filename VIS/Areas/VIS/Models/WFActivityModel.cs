@@ -35,9 +35,9 @@ namespace VIS.Models
         /// <param name="VAF_Screen_ID"> Window ID based on which serach Activities </param>
         /// <param name="dateFrom">Activities Start From</param>
         /// <param name="dateTo"> Activities Date To </param>
-        /// <param name="AD_Node_ID">Window ID based on which serach Activities</param>
+        /// <param name="VAF_Node_ID">Window ID based on which serach Activities</param>
         /// <returns></returns>
-        public WFInfo GetActivities(Ctx ctx, int VAF_UserContact_ID, int VAF_Client_ID, int pageNo, int pageSize, bool refresh, string searchText, int VAF_Screen_ID, DateTime? dateFrom, DateTime? dateTo, int AD_Node_ID)
+        public WFInfo GetActivities(Ctx ctx, int VAF_UserContact_ID, int VAF_Client_ID, int pageNo, int pageSize, bool refresh, string searchText, int VAF_Screen_ID, DateTime? dateFrom, DateTime? dateTo, int VAF_Node_ID)
         {
             string sql = "";
             List<MVAFTableView> mtable = new List<MVAFTableView>();
@@ -64,7 +64,7 @@ namespace VIS.Models
                         MVAFTableView table = new MVAFTableView(ctx, Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_TableView_ID"]), null);
 
                         GetFromClause(ctx, table.GetTableName(), "", "", "");
-                        GetWhereClause(ctx, table, searchText, VAF_Screen_ID, AD_Node_ID);
+                        GetWhereClause(ctx, table, searchText, VAF_Screen_ID, VAF_Node_ID);
                         SynonymNext();
                     }
                 }
@@ -73,7 +73,7 @@ namespace VIS.Models
 
             if (count == 0)
             {
-                GetWhereClause(ctx, null, searchText, VAF_Screen_ID, AD_Node_ID);
+                GetWhereClause(ctx, null, searchText, VAF_Screen_ID, VAF_Node_ID);
             }
 
             GetDateWiseWhereClause(dateFrom, dateTo, searchText);
@@ -218,7 +218,7 @@ OR
                     itm.VAF_UserContact_ID = Util.GetValueOfInt(dr["VAF_UserContact_ID"]);
                     itm.VAF_WFlow_Task_ID = Util.GetValueOfInt(dr["VAF_WFlow_Task_ID"]);
 
-                    itm.AD_Node_ID = Util.GetValueOfInt(dr["VAF_WFlow_Node_ID"]);
+                    itm.VAF_Node_ID = Util.GetValueOfInt(dr["VAF_WFlow_Node_ID"]);
                     itm.VAF_WFlow_Handler_ID = Util.GetValueOfInt(dr["VAF_WFlow_Handler_ID"]);
                     itm.VAF_WFlow_Incharge_ID = Util.GetValueOfInt(dr["VAF_WFlow_Incharge_ID"]);
                     itm.VAF_Workflow_ID = Util.GetValueOfInt(dr["VAF_Workflow_ID"]);
@@ -386,7 +386,7 @@ OR
         /// <param name="table"></param>
         /// <param name="searchText"></param>
         /// <param name="VAF_Screen_ID"></param>
-        private void GetWhereClause(Ctx ctx, MVAFTableView table, string searchText, int VAF_Screen_ID, int AD_Node_ID)
+        private void GetWhereClause(Ctx ctx, MVAFTableView table, string searchText, int VAF_Screen_ID, int VAF_Node_ID)
         {
             if (whereClause.Length > 7 && searchText.Length > 0)
             {
@@ -397,7 +397,7 @@ OR
                 whereClause = " WHERE ";
                 if (VAF_Screen_ID > 0)
                 {
-                    whereClause += " MyTable.VAF_Screen_ID=" + VAF_Screen_ID + " AND MyTable.VAF_WFLOW_NODE_ID=" + AD_Node_ID;
+                    whereClause += " MyTable.VAF_Screen_ID=" + VAF_Screen_ID + " AND MyTable.VAF_WFLOW_NODE_ID=" + VAF_Node_ID;
                 }
             }
 
@@ -1112,7 +1112,7 @@ OR
                     WorkflowWindowList wwl = new WorkflowWindowList();
                     wwl.WindowName = Convert.ToString(ds.Tables[0].Rows[i]["Name"]);
                     wwl.VAF_Screen_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Screen_ID"]);
-                    wwl.AD_Node_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_WFLOW_NODE_ID"]);
+                    wwl.VAF_Node_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_WFLOW_NODE_ID"]);
                     list.Add(wwl);
                 }
             }
@@ -1124,7 +1124,7 @@ OR
     {
         public int VAF_Screen_ID { get; set; }
         public string WindowName { get; set; }
-        public int AD_Node_ID { get; set; }
+        public int VAF_Node_ID { get; set; }
     }
 
     public class WFInfo
@@ -1160,7 +1160,7 @@ OR
             get;
             set;
         }
-        public int AD_Node_ID
+        public int VAF_Node_ID
         {
             get;
             set;

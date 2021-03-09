@@ -82,7 +82,7 @@ namespace VAdvantage.Model
     /** Task ID         */
     private int         VAF_Task_ID;
     /** Workbench ID    */
-    private int         AD_Workbench_ID;
+    private int         VAF_WorkBench_ID;
 	/** Index to Icon               */
 	private int 		m_imageIndex = 0;
 	/**	On Bar			*/
@@ -225,18 +225,18 @@ namespace VAdvantage.Model
     /**
      * Get Workbench ID
      */
-    public int GetAD_Workbench_ID()
+    public int GetVAF_WorkBench_ID()
     {
-        return AD_Workbench_ID;
+        return VAF_WorkBench_ID;
     }
     
     /**
      * Set Workbench ID
      * @param int workbenchID
      */
-    public void SetAD_Workbench_ID(int workbenchID)
+    public void SetVAF_WorkBench_ID(int workbenchID)
     {
-        this.AD_Workbench_ID = workbenchID;
+        this.VAF_WorkBench_ID = workbenchID;
     }
 
 	/**

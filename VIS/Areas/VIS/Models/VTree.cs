@@ -239,7 +239,7 @@ namespace VAdvantage.Classes
             int VAF_Page_ID = 0;
             int VAF_Workflow_ID = 0;
             int VAF_Task_ID = 0;
-            int AD_Workbench_ID = 0;
+            int VAF_WorkBench_ID = 0;
 
             VTreeNode retValue = null;
             
@@ -289,7 +289,7 @@ namespace VAdvantage.Classes
                         index++;
                         VAF_Task_ID = (dr[index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dr[index].ToString());
                         index++;
-                        AD_Workbench_ID = (dr[index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dr[index].ToString());
+                        VAF_WorkBench_ID = (dr[index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dr[index].ToString());
                         index++;
                         MVAFRole role = MVAFRole.GetDefault(ctx);
                         if (VTreeNode.ACTION_WINDOW.Equals(actionColor))
@@ -339,7 +339,7 @@ namespace VAdvantage.Classes
                 retValue.VAF_Page_ID = VAF_Page_ID;
                 retValue.VAF_Workflow_ID = VAF_Workflow_ID;
                 retValue.VAF_Task_ID = VAF_Task_ID;
-                retValue.AD_Workbench_ID = AD_Workbench_ID;
+                retValue.VAF_WorkBench_ID = VAF_WorkBench_ID;
             }
             return retValue;
         }
@@ -405,13 +405,13 @@ namespace VAdvantage.Classes
                  if (isBase)
                  {
                      strSql = @"SELECT m.VAF_MenuConfig_ID, m.Name,m.Description,m.IsSummary,m.Action, m.VAF_Screen_ID,
-                       m.VAF_Job_ID, m.VAF_Page_ID, m.VAF_Workflow_ID, m.VAF_Task_ID, m.AD_Workbench_ID 
+                       m.VAF_Job_ID, m.VAF_Page_ID, m.VAF_Workflow_ID, m.VAF_Task_ID, m.VAF_WorkBench_ID 
                        FROM VAF_MenuConfig m WHERE";
                  }
                  else
                  {
                      strSql = @"SELECT m.VAF_MenuConfig_ID, t.Name,t.Description,m.IsSummary,m.Action, m.VAF_Screen_ID,
-                        m.VAF_Job_ID, m.VAF_Page_ID, m.VAF_Workflow_ID, m.VAF_Task_ID, m.AD_Workbench_ID 
+                        m.VAF_Job_ID, m.VAF_Page_ID, m.VAF_Workflow_ID, m.VAF_Task_ID, m.VAF_WorkBench_ID 
                       FROM VAF_MenuConfig m, VAF_MenuConfig_TL t WHERE m.VAF_MenuConfig_ID=t.VAF_MenuConfig_ID AND t.VAF_Language='" + Utility.Env.GetVAF_Language(ctx) + "' And";
                  }
                  if (!_editable)
@@ -668,7 +668,7 @@ namespace VAdvantage.Classes
     //           index++;
     //           VAF_Task_ID = (dt.Rows[i][index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dt.Rows[i][index].ToString());
     //           index++;
-    //           AD_Workbench_ID = (dt.Rows[i][index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dt.Rows[i][index].ToString());
+    //           VAF_WorkBench_ID = (dt.Rows[i][index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dt.Rows[i][index].ToString());
     //           index++;
 
     //           if (!isSummary)

@@ -47,7 +47,7 @@ namespace VAdvantage.Process
         /// <param name="tmpDs">Dataset whose records are to be saved in Base dataset</param>
         /// <param name="tableName">Name of the table which is to be imported</param>
         /// <param name="recordid">Primary key value of the row</param>
-        public static void AddOrCopy(this DataSet ds, DataSet tmpDs, string tableName, int recordid, int AD_colone_ID, string[] dss, int rowNum)
+        public static void AddOrCopy(this DataSet ds, DataSet tmpDs, string tableName, int recordid, int VAF_ColOne_ID, string[] dss, int rowNum)
         {
             if (ds.Tables.Contains(tableName))
             {
@@ -61,7 +61,7 @@ namespace VAdvantage.Process
 
                 foreach (DataRow copyRow in copyRows)
                 {
-                    if (AD_colone_ID <= 0)
+                    if (VAF_ColOne_ID <= 0)
                     {
                         Pid = Convert.ToInt32(copyRow[s + "_ID"].ToString());
 
@@ -91,9 +91,9 @@ namespace VAdvantage.Process
             newrow[0] = rowNum;
             newrow[1] = tableName;
             newrow[2] = recordid;
-            if (AD_colone_ID > 0)
+            if (VAF_ColOne_ID > 0)
             {
-                newrow[3] = AD_colone_ID;
+                newrow[3] = VAF_ColOne_ID;
             }
 
             //DataRow[] rows = ds.Tables["ExportTableSequence"].Select("TableName = '" + tableName + "' AND Record_ID = " + recordid);

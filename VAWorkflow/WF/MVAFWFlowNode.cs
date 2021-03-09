@@ -560,8 +560,8 @@ namespace VAdvantage.WF
             }
             //else if (action.equals(ACTION_UserWorkbench)) 
             //{
-            //&& getAD_Workbench_ID() == 0)
-            //    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "AD_Workbench_ID"));
+            //&& getVAF_WorkBench_ID() == 0)
+            //    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "VAF_WorkBench_ID"));
             //    return false;
             //}
 

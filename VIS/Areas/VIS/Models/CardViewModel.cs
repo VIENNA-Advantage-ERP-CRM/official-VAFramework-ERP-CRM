@@ -389,14 +389,14 @@ namespace VIS.Models
 
             string sql = "SELECT VAF_DefaultCardView_ID FROM VAF_DefaultCardView WHERE VAF_Tab_ID=" + VAF_Tab_ID + " AND VAF_UserContact_ID=" + ctx.GetVAF_UserContact_ID();
             object id = DB.ExecuteScalar(sql);
-            int AD_DefaultcarView_ID = 0;
+            int VAF_DefaultcarView_ID = 0;
             if (id != null && id != DBNull.Value)
             {
-                AD_DefaultcarView_ID = Convert.ToInt32(id);
+                VAF_DefaultcarView_ID = Convert.ToInt32(id);
             }
 
 
-            X_VAF_DefaultCardView userQuery = new X_VAF_DefaultCardView(ctx, AD_DefaultcarView_ID, null);
+            X_VAF_DefaultCardView userQuery = new X_VAF_DefaultCardView(ctx, VAF_DefaultcarView_ID, null);
             userQuery.SetVAF_Tab_ID(VAF_Tab_ID);
             userQuery.SetVAF_UserContact_ID(ctx.GetVAF_UserContact_ID());
             userQuery.SetVAF_CardView_ID(cardView);

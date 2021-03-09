@@ -112,7 +112,7 @@ namespace VAdvantage.Process
                 SeqTable.Columns.Add("RowNum");
                 SeqTable.Columns.Add("TableName");
                 SeqTable.Columns.Add("Record_ID");
-                SeqTable.Columns.Add("AD_ColOne_ID");
+                SeqTable.Columns.Add("VAF_ColOne_ID");
                 ds.Tables.Add(SeqTable);
 
                 //Parse through the marked record one by one
@@ -164,9 +164,9 @@ namespace VAdvantage.Process
 
                         File.AppendAllText(HostingEnvironment.ApplicationPhysicalPath + "\\log\\XMLLog.txt", str);
 
-                        if (r["AD_ColOne_ID"] != DBNull.Value && r["AD_ColOne_ID"] != null && r["AD_ColOne_ID"].ToString() != "")
+                        if (r["VAF_ColOne_ID"] != DBNull.Value && r["VAF_ColOne_ID"] != null && r["VAF_ColOne_ID"].ToString() != "")
                         {
-                            str += " and AD_ColOne_ID=" + Util.GetValueOfString(r["AD_ColOne_ID"]);
+                            str += " and VAF_ColOne_ID=" + Util.GetValueOfString(r["VAF_ColOne_ID"]);
                         }
                         DataRow[] row = ds.Tables[0].Select(str);
                         int findmax = Convert.ToInt32(row[row.Count() - 1]["RowNum"]);
@@ -244,7 +244,7 @@ namespace VAdvantage.Process
         }
 
 
-        private String ManageExportID(int recordID, int AD_Colone_ID, String tableName, int _table_ID)
+        private String ManageExportID(int recordID, int VAF_ColOne_ID, String tableName, int _table_ID)
         {
             try
             {
@@ -275,8 +275,8 @@ namespace VAdvantage.Process
 
                 if (ds.Length > 1)
                 {
-                    //_updateSql += " and " + ds.Tables[0].Rows[1]["ColumnName"].ToString() + " =" + AD_Colone_ID;
-                    _updateSql += " and " + ds[1] + " =" + AD_Colone_ID;
+                    //_updateSql += " and " + ds.Tables[0].Rows[1]["ColumnName"].ToString() + " =" + VAF_ColOne_ID;
+                    _updateSql += " and " + ds[1] + " =" + VAF_ColOne_ID;
                 }
 
                 int result = DB.ExecuteQuery(_updateSql);
@@ -404,7 +404,7 @@ namespace VAdvantage.Process
                 //check if the record is already exported. 
                 var res = _ExecutedRecordList.Where((a) => a.VAF_TableView_ID == exportdata.VAF_TableView_ID)
                                              .Where((a) => a.Record_ID == exportdata.Record_ID)
-                                             .Where((a) => a.AD_ColOne_ID == exportdata.AD_ColOne_ID);
+                                             .Where((a) => a.VAF_ColOne_ID == exportdata.VAF_ColOne_ID);
 
                 //if (res.Count() <= 0)
                 {
@@ -415,7 +415,7 @@ namespace VAdvantage.Process
                     if (!_ExceptionTables.Contains(tableName))
                     {
 
-                        if (exportdata.AD_ColOne_ID == 0)
+                        if (exportdata.VAF_ColOne_ID == 0)
                         {
                             File.AppendAllText(HostingEnvironment.ApplicationPhysicalPath + "\\log\\XMLLog.txt", tableName + " : " + exportdata.Record_ID);
                             int found = 0;
@@ -544,10 +544,10 @@ namespace VAdvantage.Process
 
                                 if (tmpDS.Tables[0].Rows[0]["Export_ID"].Equals(DBNull.Value))
                                 {
-                                    tmpDS.Tables[0].Rows[0]["Export_ID"] = ManageExportID(exportdata.Record_ID, exportdata.AD_ColOne_ID, tableName, currentTable.GetVAF_TableView_ID());
+                                    tmpDS.Tables[0].Rows[0]["Export_ID"] = ManageExportID(exportdata.Record_ID, exportdata.VAF_ColOne_ID, tableName, currentTable.GetVAF_TableView_ID());
                                 }
 
-                                ds.AddOrCopy(tmpDS, tableName, exportdata.Record_ID, exportdata.AD_ColOne_ID, GetParentColumns(currentTable.GetVAF_TableView_ID()), rowNum++);     //add or copy 
+                                ds.AddOrCopy(tmpDS, tableName, exportdata.Record_ID, exportdata.VAF_ColOne_ID, GetParentColumns(currentTable.GetVAF_TableView_ID()), rowNum++);     //add or copy 
 
                                 for (int cols = 0; cols <= columns.Length - 1; cols++)
                                 {
@@ -604,7 +604,7 @@ namespace VAdvantage.Process
         /// Check colName has suffix end with (_1,_2_3)
         /// </summary>
         /// <param name="colName"></param>
-        /// <example> AD_AccountSubGroup_ID_1 </example>
+        /// <example> VAF_AccountSubGroup_ID_1 </example>
         /// <returns> true if contain</returns>
         private bool ColNameEndsWithID(string colName)
         {
@@ -659,8 +659,8 @@ namespace VAdvantage.Process
 
                 if (ds.Length > 1)
                 {
-                    // _Sql += " and " + ds.Tables[0].Rows[1]["ColumnName"].ToString() + " =" + export.AD_ColOne_ID;
-                    _Sql += " and " + ds[1] + " =" + export.AD_ColOne_ID;
+                    // _Sql += " and " + ds.Tables[0].Rows[1]["ColumnName"].ToString() + " =" + export.VAF_ColOne_ID;
+                    _Sql += " and " + ds[1] + " =" + export.VAF_ColOne_ID;
                 }
             }
             catch
@@ -681,7 +681,7 @@ namespace VAdvantage.Process
         {
             List<ExportDataRecords> list = new List<ExportDataRecords>();
 
-            String _sql = "SELECT VAF_TableView_ID, Record_ID,AD_ColOne_ID FROM VAF_ExportData WHERE IsActive = 'Y' AND VAF_ModuleInfo_ID = @VAF_ModuleInfo_ID ";
+            String _sql = "SELECT VAF_TableView_ID, Record_ID,VAF_ColOne_ID FROM VAF_ExportData WHERE IsActive = 'Y' AND VAF_ModuleInfo_ID = @VAF_ModuleInfo_ID ";
 
             SqlParameter[] param = new SqlParameter[1];
             param[0] = new SqlParameter("@VAF_ModuleInfo_ID", _VAF_ModuleInfo_ID);
@@ -693,13 +693,13 @@ namespace VAdvantage.Process
                 ExportDataRecords records = new ExportDataRecords();
                 records.VAF_TableView_ID = int.Parse(dr["VAF_TableView_ID"].ToString());
                 records.Record_ID = int.Parse(dr["Record_ID"].ToString());
-                if (dr["AD_ColOne_ID"] != DBNull.Value && dr["AD_ColOne_ID"] != null)
+                if (dr["VAF_ColOne_ID"] != DBNull.Value && dr["VAF_ColOne_ID"] != null)
                 {
-                    records.AD_ColOne_ID = Convert.ToInt32(dr["AD_ColOne_ID"]);
+                    records.VAF_ColOne_ID = Convert.ToInt32(dr["VAF_ColOne_ID"]);
                 }
                 else
                 {
-                    records.AD_ColOne_ID = 0;
+                    records.VAF_ColOne_ID = 0;
                 }
 
                 list.Add(records);
@@ -741,12 +741,12 @@ namespace VAdvantage.Process
             set { _Record_ID = value; }
         }
 
-        private int _AD_ColOne_ID = 0;
+        private int _VAF_ColOne_ID = 0;
 
-        public int AD_ColOne_ID
+        public int VAF_ColOne_ID
         {
-            get { return _AD_ColOne_ID; }
-            set { _AD_ColOne_ID = value; }
+            get { return _VAF_ColOne_ID; }
+            set { _VAF_ColOne_ID = value; }
         }
     }
 }

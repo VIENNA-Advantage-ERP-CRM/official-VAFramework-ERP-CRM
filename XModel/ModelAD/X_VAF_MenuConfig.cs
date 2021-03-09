@@ -203,18 +203,18 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Workbench.
-        @param AD_Workbench_ID Collection of windows, reports */
-        public void SetAD_Workbench_ID(int AD_Workbench_ID)
+        @param VAF_WorkBench_ID Collection of windows, reports */
+        public void SetVAF_WorkBench_ID(int VAF_WorkBench_ID)
         {
-            if (AD_Workbench_ID <= 0) Set_Value("AD_Workbench_ID", null);
+            if (VAF_WorkBench_ID <= 0) Set_Value("VAF_WorkBench_ID", null);
             else
-                Set_Value("AD_Workbench_ID", AD_Workbench_ID);
+                Set_Value("VAF_WorkBench_ID", VAF_WorkBench_ID);
         }
         /** Get Workbench.
         @return Collection of windows, reports */
-        public int GetAD_Workbench_ID()
+        public int GetVAF_WorkBench_ID()
         {
-            Object ii = Get_Value("AD_Workbench_ID");
+            Object ii = Get_Value("VAF_WorkBench_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

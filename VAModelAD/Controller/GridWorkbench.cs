@@ -43,7 +43,7 @@ namespace VAdvantage.Model
         /** List of windows */
         private List<WBWindow> _windows = new List<WBWindow>();
 
-        private int AD_Workbench_ID = 0;
+        private int VAF_WorkBench_ID = 0;
         private String Name = "";
         private String Description = "";
         private String Help = "";
@@ -59,29 +59,29 @@ namespace VAdvantage.Model
         /// <summary>
         ///  Init Workbench
         /// </summary>
-        /// <param name="ad_Workbench_ID"></param>
+        /// <param name="VAF_WorkBench_ID"></param>
         /// <returns></returns>
-        public bool InitWorkbench(int ad_Workbench_ID)
+        public bool InitWorkbench(int VAF_WorkBench_ID)
         {
-            AD_Workbench_ID = ad_Workbench_ID;
+            VAF_WorkBench_ID = VAF_WorkBench_ID;
             //  Get WB info
             String sql = null;
-            if (Env.IsBaseLanguage(_ctx, "AD_Workbench"))
+            if (Env.IsBaseLanguage(_ctx, "VAF_WorkBench"))
                 sql = "SELECT w.Name,w.Description,w.Help,"                         //  1..3
                     + " w.VAF_Column_ID,w.VAF_Image_ID,w.VAF_Colour_ID,w.VAPA_Target_ID,"   //  4..7
                     + " c.ColumnName "                                              //  8
-                    + "FROM AD_Workbench w, VAF_Column c "
-                    + "WHERE w.AD_Workbench_ID=" + AD_Workbench_ID.ToString()                   //  #1
+                    + "FROM VAF_WorkBench w, VAF_Column c "
+                    + "WHERE w.VAF_WorkBench_ID=" + VAF_WorkBench_ID.ToString()                   //  #1
                     + " AND w.IsActive='Y'"
                     + " AND w.VAF_Column_ID=c.VAF_Column_ID";
             else
                 sql = "SELECT t.Name,t.Description,t.Help,"
                     + " w.VAF_Column_ID,w.VAF_Image_ID,w.VAF_Colour_ID,w.VAPA_Target_ID,"
                     + " c.ColumnName "
-                    + "FROM AD_Workbench w, AD_Workbench_Trl t, VAF_Column c "
-                    + "WHERE w.AD_Workbench_ID=" + AD_Workbench_ID.ToString()                   //  #1
+                    + "FROM VAF_WorkBench w, VAF_WorkBench_Trl t, VAF_Column c "
+                    + "WHERE w.VAF_WorkBench_ID=" + VAF_WorkBench_ID.ToString()                   //  #1
                     + " AND w.IsActive='Y'"
-                    + " AND w.AD_Workbench_ID=t.AD_Workbench_ID"
+                    + " AND w.VAF_WorkBench_ID=t.VAF_WorkBench_ID"
                     + " AND t.VAF_Language='" + Env.GetVAF_Language(_ctx) + "'"
                     + " AND w.VAF_Column_ID=c.VAF_Column_ID";
 
@@ -107,7 +107,7 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    AD_Workbench_ID = 0;
+                    VAF_WorkBench_ID = 0;
                 }
                 dr.Close();
                 dr = null;
@@ -122,7 +122,7 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, sql, e);
             }
 
-            if (AD_Workbench_ID == 0)
+            if (VAF_WorkBench_ID == 0)
                 return false;
             return InitWorkbenchWindows();
         }
@@ -133,7 +133,7 @@ namespace VAdvantage.Model
          */
         public override  String ToString()
         {
-            return "MWorkbench ID=" + AD_Workbench_ID + " " + Name
+            return "MWorkbench ID=" + VAF_WorkBench_ID + " " + Name
                 + ", windows=" + _windows.Count.ToString() + ", LinkColumn=" + ColumnName;
         }
 
@@ -162,9 +162,9 @@ namespace VAdvantage.Model
         ///Get Workbench
         /// </summary>
         /// <returns></returns>
-        public int GetAD_Workbench_ID()
+        public int GetVAF_WorkBench_ID()
         {
-            return AD_Workbench_ID;
+            return VAF_WorkBench_ID;
         }
 
         /// <summary>
@@ -248,8 +248,8 @@ namespace VAdvantage.Model
         private bool InitWorkbenchWindows()
         {
             String sql = "SELECT VAF_Screen_ID, VAF_Page_ID, VAF_Job_ID, VAF_Task_ID "
-                + "FROM AD_WorkbenchWindow "
-                + "WHERE AD_Workbench_ID=" + AD_Workbench_ID.ToString() + " AND IsActive='Y'"
+                + "FROM VAF_WorkBenchWindow "
+                + "WHERE VAF_WorkBench_ID=" + VAF_WorkBench_ID.ToString() + " AND IsActive='Y'"
                 + "ORDER BY SeqNo";
             IDataReader dr = null;
             try

@@ -116,8 +116,8 @@ namespace VAdvantage.Model
                 SetVAF_Page_ID(0);
             if (GetVAF_Workflow_ID() != 0 && !action.Equals(ACTION_WorkFlow))
                 SetVAF_Workflow_ID(0);
-            if (GetAD_Workbench_ID() != 0 && !action.Equals(ACTION_Workbench))
-                SetAD_Workbench_ID(0);
+            if (GetVAF_WorkBench_ID() != 0 && !action.Equals(ACTION_Workbench))
+                SetVAF_WorkBench_ID(0);
             if (GetVAF_Task_ID() != 0 && !action.Equals(ACTION_Task))
                 SetVAF_Task_ID(0);
             if (GetVAF_Job_ID() != 0

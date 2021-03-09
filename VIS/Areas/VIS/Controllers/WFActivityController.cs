@@ -21,11 +21,11 @@ namespace VIS.Controllers
         }
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]
-        public JsonResult GetActivities(int pageNo, int pageSize, bool refresh, string searchText, int VAF_Screen_ID, DateTime? dateFrom, DateTime? dateTo,int AD_Node_ID)
+        public JsonResult GetActivities(int pageNo, int pageSize, bool refresh, string searchText, int VAF_Screen_ID, DateTime? dateFrom, DateTime? dateTo,int VAF_Node_ID)
         {
             WFActivityModel model = new WFActivityModel();
             Ctx ctx = Session["ctx"] as Ctx;
-            return Json(new { result = model.GetActivities(ctx, ctx.GetVAF_UserContact_ID(), ctx.GetVAF_Client_ID(), pageNo, pageSize, refresh, searchText, VAF_Screen_ID, dateFrom, dateTo, AD_Node_ID) }, JsonRequestBehavior.AllowGet);
+            return Json(new { result = model.GetActivities(ctx, ctx.GetVAF_UserContact_ID(), ctx.GetVAF_Client_ID(), pageNo, pageSize, refresh, searchText, VAF_Screen_ID, dateFrom, dateTo, VAF_Node_ID) }, JsonRequestBehavior.AllowGet);
         }
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]

@@ -74,8 +74,8 @@ namespace VIS.Models
                                             VAF_QuickSearchColumn.VAF_Control_Ref_Value_ID,
                                             VAF_QuickSearchColumn.IsQueryCriteria,
                                             VAF_QuickSearchColumn.SelectClause,
-                                            VAF_QuickSearchColumn.AD_SetValue,
-                                            VAF_QuickSearchColumn.AD_Condition,
+                                            VAF_QuickSearchColumn.VAF_SetValue,
+                                            VAF_QuickSearchColumn.VAF_Condition,
                                             IW.FromClause,
                                             IW.OTHERCLAUSE,
                                             VAF_COLUMNDIC.ColumnName,
@@ -103,8 +103,8 @@ namespace VIS.Models
                                                               VAF_QuickSearchColumn.VAF_Control_Ref_Value_ID,
                                                               VAF_QuickSearchColumn.IsQueryCriteria,
                                                               VAF_QuickSearchColumn.SelectClause,
-                                                              VAF_QuickSearchColumn.AD_SetValue,
-                                                              VAF_QuickSearchColumn.AD_Condition,
+                                                              VAF_QuickSearchColumn.VAF_SetValue,
+                                                              VAF_QuickSearchColumn.VAF_Condition,
                                                               IW.FromClause,
                                                               IW.OTHERCLAUSE,
                                                               VAF_COLUMNDIC.ColumnName,
@@ -208,15 +208,15 @@ namespace VIS.Models
                     {
                         schema.SelectClause = (ds.Tables[0].Rows[i]["SelectClause"]).ToString();
                     }
-                    if (ds.Tables[0].Rows[i]["AD_SetValue"] != null &&
-                      ds.Tables[0].Rows[i]["AD_SetValue"] != DBNull.Value)
+                    if (ds.Tables[0].Rows[i]["VAF_SetValue"] != null &&
+                      ds.Tables[0].Rows[i]["VAF_SetValue"] != DBNull.Value)
                     {
-                        schema.SetValue = (ds.Tables[0].Rows[i]["AD_SetValue"]).ToString();
+                        schema.SetValue = (ds.Tables[0].Rows[i]["VAF_SetValue"]).ToString();
                     }
-                    if (ds.Tables[0].Rows[i]["AD_Condition"] != null &&
-                    ds.Tables[0].Rows[i]["AD_Condition"] != DBNull.Value)
+                    if (ds.Tables[0].Rows[i]["VAF_Condition"] != null &&
+                    ds.Tables[0].Rows[i]["VAF_Condition"] != DBNull.Value)
                     {
-                        schema.Condition = (ds.Tables[0].Rows[i]["AD_Condition"]).ToString();
+                        schema.Condition = (ds.Tables[0].Rows[i]["VAF_Condition"]).ToString();
                     }
                     if (ds.Tables[0].Rows[i]["FromClause"] != null &&
                        ds.Tables[0].Rows[i]["FromClause"] != DBNull.Value)

@@ -104,8 +104,8 @@
                         if (result && result.length > 0) {
                             var windowExist = false;
                             for (var i = 0; i < result.length; i++) {
-                                $cmbWindows.append('<option value="' + result[i].VAF_Screen_ID + '_' + result[i].AD_Node_ID + '">' + result[i].WindowName + '</option>');
-                                if (result[i].VAF_Screen_ID + '_' + result[i].AD_Node_ID == winNideID) {
+                                $cmbWindows.append('<option value="' + result[i].VAF_Screen_ID + '_' + result[i].VAF_Node_ID + '">' + result[i].WindowName + '</option>');
+                                if (result[i].VAF_Screen_ID + '_' + result[i].VAF_Node_ID == winNideID) {
                                     windowExist = true;
                                 }
                             }
@@ -342,7 +342,7 @@
 
             $.ajax({
                 url: VIS.Application.contextUrl + "WFActivity/GetActivities",
-                data: { pageNo: 1, pageSize: 10, refresh: true, searchText: $txtSearch.val(), "VAF_Screen_ID": windowID, "dateFrom": $dateFrom.val(), "dateTo": $dateTo.val(), "AD_Node_ID": nodeID },
+                data: { pageNo: 1, pageSize: 10, refresh: true, searchText: $txtSearch.val(), "VAF_Screen_ID": windowID, "dateFrom": $dateFrom.val(), "dateTo": $dateTo.val(), "VAF_Node_ID": nodeID },
                 dataType: "json",
                 type: "POST",
 
@@ -435,7 +435,7 @@
 
             $.ajax({
                 url: VIS.Application.contextUrl + "WFActivity/GetActivities",
-                data: { pageNo: pageNo, pageSize: paeSize, refresh: refresh, searchText: $txtSearch.val(), "VAF_Screen_ID": windowID, "dateFrom": $dateFrom.val(), "dateTo": $dateTo.val(), "AD_Node_ID": nodeID },
+                data: { pageNo: pageNo, pageSize: paeSize, refresh: refresh, searchText: $txtSearch.val(), "VAF_Screen_ID": windowID, "dateFrom": $dateFrom.val(), "dateTo": $dateTo.val(), "VAF_Node_ID": nodeID },
                 dataType: "json",
                 type: "POST",
                 error: function () {
@@ -565,7 +565,7 @@
                 var divActions = $("<div class='vis-feedTitleBar'>");
 
                 // create checkbox to be added in header on workflow activities
-                var chkSelect = $('<input class="wfActivity-selectchk" type="checkbox" style="float:left;margin-right:5px" data-ids="' + data[item].VAF_Screen_ID + "_" + data[item].AD_Node_ID + "_" + data[item].VAF_WFlow_Task_ID + '" ></input>');
+                var chkSelect = $('<input class="wfActivity-selectchk" type="checkbox" style="float:left;margin-right:5px" data-ids="' + data[item].VAF_Screen_ID + "_" + data[item].VAF_Node_ID + "_" + data[item].VAF_WFlow_Task_ID + '" ></input>');
 
                 var header = $("<h3>");
                 header.css('font-weight', 'normal');
@@ -792,7 +792,7 @@
                 async: async,
                 data: {
                     activityID: wfActivityID,
-                    nodeID: fulldata[index].AD_Node_ID,
+                    nodeID: fulldata[index].VAF_Node_ID,
                     wfProcessID: fulldata[index].VAF_WFlow_Handler_ID
                 },
                 error: function () {
@@ -836,7 +836,7 @@
             lstDetailCtrls = [];
             detailCtrl.Index = index;
             var docnameval;
-            // var info = (VIS.dataContext.getJSONData(VIS.Application.contextUrl + "WFActivity/GetActivityInfo", { "activityID": wfActivityID, "nodeID": data[index].AD_Node_ID, "wfProcessID": data[index].VAF_WFlow_Handler_ID })).result;
+            // var info = (VIS.dataContext.getJSONData(VIS.Application.contextUrl + "WFActivity/GetActivityInfo", { "activityID": wfActivityID, "nodeID": data[index].VAF_Node_ID, "wfProcessID": data[index].VAF_WFlow_Handler_ID })).result;
 
 
             divDetail.empty();
@@ -1267,7 +1267,7 @@
                             }
 
                             //var info = (VIS.dataContext.getJSONData(VIS.Application.contextUrl + "WFActivity/ApproveIt",
-                            //    { "activityID": fulldata[index].VAF_WFlow_Task_ID, "nodeID": fulldata[index].AD_Node_ID, "txtMsg": msg, "fwd": fwdTo, "answer": answer })).result;
+                            //    { "activityID": fulldata[index].VAF_WFlow_Task_ID, "nodeID": fulldata[index].VAF_Node_ID, "txtMsg": msg, "fwd": fwdTo, "answer": answer })).result;
 
                             var activitIDs = "";
                             // if checkbox is selected, then join activity ID using comma splitter.
@@ -1287,7 +1287,7 @@
                             windowID = fulldata[index].VAF_Screen_ID;
 
                             VIS.dataContext.getJSONData(VIS.Application.contextUrl + "WFActivity/ApproveIt",
-                                { "activityID": activitIDs, "nodeID": fulldata[index].AD_Node_ID, "txtMsg": msg, "fwd": fwdTo, "answer": answer, "VAF_Screen_ID": windowID }, function apprvoIt(info) {
+                                { "activityID": activitIDs, "nodeID": fulldata[index].VAF_Node_ID, "txtMsg": msg, "fwd": fwdTo, "answer": answer, "VAF_Screen_ID": windowID }, function apprvoIt(info) {
 
                                     if (info.result == '') {
                                         //refresh
