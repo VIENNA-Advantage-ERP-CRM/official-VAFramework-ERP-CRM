@@ -991,6 +991,7 @@
     <Compile Include="Model\MStorageDetail.cs" />
     <Compile Include="Model\MStore.cs" />
     <Compile Include="Model\MTargetList.cs" />
+    <Compile Include="ModelAD\MTaskLine.cs" />
     <Compile Include="Model\MTax.cs" />
     <Compile Include="Model\MTaxCategory.cs" />
     <Compile Include="Model\MTaxDeclaration.cs" />
@@ -1257,6 +1258,7 @@
     <Compile Include="Model\X_C_SubscriptionType.cs" />
     <Compile Include="Model\X_C_Subscription_Delivery.cs" />
     <Compile Include="Model\X_C_Task.cs" />
+    <Compile Include="Model\X_C_TaskLine.cs" />
     <Compile Include="Model\X_C_Tax.cs" />
     <Compile Include="Model\X_C_TaxCategory.cs" />
     <Compile Include="Model\X_C_TaxDeclaration.cs" />

@@ -812,12 +812,15 @@ namespace VAdvantage.Model
         public static String PROJECTLINELEVEL_Project = "P";
         /** Task = T */
         public static String PROJECTLINELEVEL_Task = "T";
+        //Added new value taskline in project line level sugested by Mukesh sir
+        /** Task Line = Y */
+        public static String PROJECTLINELEVEL_TaskLine = "Y";
         /** Is test a valid value.
         @param test testvalue
         @returns true if valid **/
         public bool IsProjectLineLevelValid(String test)
         {
-            return test.Equals("A") || test.Equals("P") || test.Equals("T");
+            return test.Equals("A") || test.Equals("P") || test.Equals("T") || test.Equals("Y");
         }
         /** Set Line Level.
         @param ProjectLineLevel Project Line Level */
@@ -825,7 +828,7 @@ namespace VAdvantage.Model
         {
             if (ProjectLineLevel == null) throw new ArgumentException("ProjectLineLevel is mandatory");
             if (!IsProjectLineLevelValid(ProjectLineLevel))
-                throw new ArgumentException("ProjectLineLevel Invalid value - " + ProjectLineLevel + " - Reference_ID=384 - A - P - T");
+                throw new ArgumentException("ProjectLineLevel Invalid value - " + ProjectLineLevel + " - Reference_ID=384 - A - P - T - Y");
             if (ProjectLineLevel.Length > 1)
             {
                 log.Warning("Length > 1 - truncated");
