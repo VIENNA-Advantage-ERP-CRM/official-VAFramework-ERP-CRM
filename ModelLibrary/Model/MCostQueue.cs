@@ -3578,7 +3578,7 @@ namespace VAdvantage.Model
             }
             catch (Exception ex)
             {
-                _log.Severe("Error Occured during costing " + ex.ToString());
+                _log.Severe("Error Occured during costing " + ex.Message);
                 if (ds != null)
                 {
                     ds.Dispose();
@@ -6052,6 +6052,11 @@ namespace VAdvantage.Model
                     " ( SELECT MMPolicy FROM M_Product_Category WHERE IsActive = 'Y' AND M_Product_Category_ID = " +
                     " (SELECT M_Product_Category_ID FROM M_Product WHERE IsActive = 'Y' AND M_Product_ID = " + product.GetM_Product_ID() + " )) AND AD_Client_ID = " + AD_Client_ID;
                 M_CostElement_ID = (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null)));
+                if (M_CostElement_ID == 0)
+                {
+                    _log.Info("Cost Element missing");
+                    return false;
+                }
                 costQueue.SetM_CostElement_ID(M_CostElement_ID);
                 costQueue.SetM_AttributeSetInstance_ID(M_ASI_ID);
                 costQueue.SetM_Warehouse_ID(cd.GetM_Warehouse_ID());
@@ -6078,7 +6083,7 @@ namespace VAdvantage.Model
                 if (!costQueue.Save())
                 {
                     ValueNamePair pp = VLogger.RetrieveError();
-                    _log.Info("Cost Queue not saved for  <===> " + product.GetM_Product_ID() + " Error Type is : " + pp.GetName());
+                    _log.Info("Cost Queue not saved for  <===> " + product.GetM_Product_ID() + " Error Type is : " + (pp != null ? pp.GetName() : ""));
                     return false;
                 }
                 else
@@ -6154,6 +6159,11 @@ namespace VAdvantage.Model
                 costQueue.SetM_CostType_ID(acctSchema.GetM_CostType_ID());
                 costQueue.SetM_Product_ID(product.GetM_Product_ID());
                 M_CostElement_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                if (M_CostElement_ID == 0)
+                {
+                    _log.Info("Cost Element missing");
+                    return false;
+                }
                 costQueue.SetM_CostElement_ID(M_CostElement_ID);
                 costQueue.SetM_AttributeSetInstance_ID(M_ASI_ID);
                 costQueue.SetM_Warehouse_ID(cd.GetM_Warehouse_ID());
@@ -6183,7 +6193,7 @@ namespace VAdvantage.Model
                     if (queueRecordId > 0)
                         DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID = " + queueRecordId, null, trxName);
                     ValueNamePair pp = VLogger.RetrieveError();
-                    _log.Info("Cost Queue not saved for  <===> " + product.GetM_Product_ID() + " Error Type is : " + pp.GetName());
+                    _log.Info("Cost Queue not saved for  <===> " + product.GetM_Product_ID() + " Error Type is : " + (pp != null ? pp.GetName() : ""));
                     return false;
                 }
                 else
@@ -6240,7 +6250,8 @@ namespace VAdvantage.Model
             catch (Exception ex)
             {
                 ValueNamePair pp = VLogger.RetrieveError();
-                _log.Info("Error occured Cost Queue not saved. Error Value :  " + pp.GetValue() + " AND Error Name : " + pp.GetName() +
+                _log.Info("Error occured Cost Queue not saved. Error Value :  " + (pp != null ? pp.GetValue() : "") 
+                    + " AND Error Name : " + (pp != null ? pp.GetName() : "") +
                            " And Exception message : " + ex.Message.ToString());
                 return false;
             }
@@ -6439,7 +6450,7 @@ namespace VAdvantage.Model
                         if (!queue.Save())
                         {
                             ValueNamePair pp = VLogger.RetrieveError();
-                            _log.Severe("Cost Queue not updated as current qty 0, by updateCostQueue for product  <===> " + product.GetM_Product_ID() + " Error Type is : " + pp.GetName());
+                            _log.Severe("Cost Queue not updated as current qty 0, by updateCostQueue for product  <===> " + product.GetM_Product_ID() + " Error Type is : " + (pp != null ? pp.GetName() : ""));
                         }
                         else if (cd != null)
                         {
@@ -6457,7 +6468,7 @@ namespace VAdvantage.Model
                         if (!queue.Save())
                         {
                             ValueNamePair pp = VLogger.RetrieveError();
-                            _log.Severe("Cost Queue not updated by updateCostQueue for product  <===> " + product.GetM_Product_ID() + " Error Type is : " + pp.GetName());
+                            _log.Severe("Cost Queue not updated by updateCostQueue for product  <===> " + product.GetM_Product_ID() + " Error Type is : " + (pp != null ? pp.GetName() : ""));
                         }
                         else if (cd != null)
                         {
