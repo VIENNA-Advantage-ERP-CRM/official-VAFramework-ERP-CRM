@@ -17286,7 +17286,6 @@
             var paramString = C_Order_ID.toString();
             var dr = VIS.dataContext.getJSONRecord("MOrder/GetOrder", paramString);
             var DataPrefix = VIS.dataContext.getJSONRecord("ModulePrefix/GetModulePrefix", "VA077_");
-
             if (Util.getValueOfInt(dr["ID"]) != 0)
             {
                 mTab.setValue("DateOrdered", dr["DateOrdered"]);

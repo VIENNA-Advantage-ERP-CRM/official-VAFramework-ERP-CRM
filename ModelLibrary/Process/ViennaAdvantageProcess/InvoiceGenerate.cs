@@ -654,7 +654,6 @@ namespace ViennaAdvantage.Process
                     _invoice.Set_Value("VA077_NewAnnualContractTotal", order.Get_Value("VA077_NewAnnualContractTotal"));
                     _invoice.Set_Value("VA077_OldAnnualContractTotal", order.Get_Value("VA077_OldAnnualContractTotal"));
                     _invoice.Set_Value("VA077_PartialAmtCatchUp", order.Get_Value("VA077_PartialAmtCatchUp"));
-
                     _invoice.Set_Value("VA077_SalesCoWorker", order.Get_Value("VA077_SalesCoWorker"));
                     _invoice.Set_Value("VA077_SalesCoWorkerPer", order.Get_Value("VA077_SalesCoWorkerPer"));
                     _invoice.Set_Value("VA077_TotalMarginAmt", order.Get_Value("VA077_TotalMarginAmt"));

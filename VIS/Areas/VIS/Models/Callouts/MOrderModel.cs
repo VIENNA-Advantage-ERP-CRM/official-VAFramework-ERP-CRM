@@ -112,8 +112,7 @@ namespace VIS.Models
                 retDic["VA077_TotalPurchaseAmt"] = Util.GetValueOfString(order.Get_Value("VA077_TotalPurchaseAmt"));
                 retDic["VA077_TotalSalesAmt"] = Util.GetValueOfString(order.Get_Value("VA077_TotalSalesAmt"));
                 retDic["VA077_MarginPercent"] = Util.GetValueOfString(order.Get_Value("VA077_MarginPercent"));
-
-            }
+             }
 
             return retDic;
         }
