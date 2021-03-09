@@ -182,9 +182,10 @@ namespace VAdvantage.Model
         public int CopyMTaskLines(int Task_ID, int C_ProjectTask_ID)
         {
             MProjectLine taskline = null;
-            int tasklinecount = 0;
+            ValueNamePair pp = null;
+           int tasklinecount = 0;
             StringBuilder msg = new StringBuilder();
-            String sql = "SELECT M_Product_ID, Description, StandardQty, SeqNo FROM C_TaskLine WHERE C_Task_ID =" + Task_ID + " ORDER BY SeqNo";
+            String sql = "SELECT M_Product_ID, Description, StandardQty, SeqNo FROM C_TaskLine WHERE IsActive='Y' AND C_Task_ID =" + Task_ID + " ORDER BY SeqNo";
             try
             {
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, null, Get_TrxName());
@@ -194,7 +195,7 @@ namespace VAdvantage.Model
                     {
                         taskline = new MProjectLine(GetCtx(), 0, Get_TrxName());
                         taskline.SetC_ProjectTask_ID(C_ProjectTask_ID);
-                        taskline.SetDescription(ds.Tables[0].Rows[i]["Description"].ToString());
+                        taskline.SetDescription(Util.GetValueOfString(ds.Tables[0].Rows[i]["Description"]));
                         taskline.SetM_Product_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]));
                         taskline.SetPlannedQty(Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["StandardQty"]));
                         taskline.Set_ValueNoCheck("TaskLineNo", Util.GetValueOfInt(ds.Tables[0].Rows[i]["SeqNo"]));
@@ -204,7 +205,7 @@ namespace VAdvantage.Model
                         }
                         else
                         {
-                            ValueNamePair pp = VLogger.RetrieveError();
+                            pp = VLogger.RetrieveError();
                             if (pp != null)
                             {
                                 msg.Append(pp.GetName());
