@@ -1814,7 +1814,9 @@ namespace VIS.Controllers
                         invoiceLine.Set_Value("VA077_SerialNo", orderLine.Get_Value("VA077_SerialNo"));
                         invoiceLine.Set_Value("VA077_UpdateFromVersn", orderLine.Get_Value("VA077_UpdateFromVersn"));
                         invoiceLine.Set_Value("VA077_UserRef_ID", orderLine.Get_Value("VA077_UserRef_ID"));
-
+                        invoiceLine.Set_Value("VA077_StartDate", orderLine.Get_Value("VA077_StartDate"));
+                        invoiceLine.Set_Value("VA077_EndDate", orderLine.Get_Value("VA077_EndDate"));
+                        
                     }
 
 
