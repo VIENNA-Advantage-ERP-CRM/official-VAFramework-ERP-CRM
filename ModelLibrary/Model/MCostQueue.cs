@@ -366,6 +366,18 @@ namespace VAdvantage.Model
             return costQ;
         }
 
+        /// <summary>
+        /// This function is used to get the Current Cost from Cost Queue
+        /// </summary>
+        /// <param name="AD_Client_ID">client id</param>
+        /// <param name="Org_ID">organization id</param>
+        /// <param name="M_Product">product id</param>
+        /// <param name="M_ASI_ID">Attribute Set Instance ID</param>
+        /// <param name="mas">accounting Schema Reference</param>
+        /// <param name="M_Warehouse_ID">warehouse id</param>
+        /// <param name="isFifo">isFifo</param>
+        /// <param name="trxName">transaction</param>
+        /// <returns>Current Cost</returns>
         public static Decimal GetLifoAndFifoCurrentCostFromCostQueue(int AD_Client_ID, int Org_ID, int M_Product, int M_ASI_ID, MAcctSchema mas,
              int M_Warehouse_ID, bool isFifo, Trx trxName)
         {
