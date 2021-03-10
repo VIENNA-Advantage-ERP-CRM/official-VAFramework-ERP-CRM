@@ -4803,7 +4803,7 @@ namespace VAdvantage.Model
                                    C_Frequency_ID, VA077_ContractCPEndDate, VA077_AnnualValue FROM VA077_ServiceContract 
                                    WHERE VA077_ServiceContract_ID IN(SELECT MAX(VA077_ServiceContract_ID) FROM C_OrderLine 
                                    WHERE C_Order_ID =" + GetC_Order_ID() + " AND VA077_ServiceContract_ID IS NOT NULL)";
-                contDS = DB.ExecuteDataset(sql);
+                contDS = DB.ExecuteDataset(sql, null, Get_TrxName());
                 DateTime? HCDate = null;
                 DateTime? StartDate = null;
                 DateTime? EndDate = null;
