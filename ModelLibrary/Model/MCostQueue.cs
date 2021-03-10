@@ -6452,7 +6452,7 @@ namespace VAdvantage.Model
                             ValueNamePair pp = VLogger.RetrieveError();
                             _log.Severe("Cost Queue not updated as current qty 0, by updateCostQueue for product  <===> " + product.GetM_Product_ID() + " Error Type is : " + (pp != null ? pp.GetName() : ""));
                         }
-                        else if (cd != null)
+                        else if (cd != null && QueueQtyAffected != 0)
                         {
                             // Create Cost Queue Transactional Record
                             MCostQueueTransaction.CreateCostQueueTransaction(cd.GetCtx(), queue.GetAD_Client_ID(), queue.GetAD_Org_ID(), queue.GetM_CostQueue_ID(), cd, Decimal.Negate(QueueQtyAffected));
@@ -6470,7 +6470,7 @@ namespace VAdvantage.Model
                             ValueNamePair pp = VLogger.RetrieveError();
                             _log.Severe("Cost Queue not updated by updateCostQueue for product  <===> " + product.GetM_Product_ID() + " Error Type is : " + (pp != null ? pp.GetName() : ""));
                         }
-                        else if (cd != null)
+                        else if (cd != null && QueueQtyAffected != 0)
                         {
                             // Create Cost Queue Transactional Record
                             MCostQueueTransaction.CreateCostQueueTransaction(cd.GetCtx(), queue.GetAD_Client_ID(), queue.GetAD_Org_ID(), queue.GetM_CostQueue_ID(), cd, Decimal.Negate(QueueQtyAffected));
