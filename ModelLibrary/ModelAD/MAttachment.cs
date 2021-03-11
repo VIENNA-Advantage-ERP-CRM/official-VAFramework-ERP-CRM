@@ -1405,6 +1405,81 @@ namespace VAdvantage.Model
                     return true;
                 }
 
+                // If file saving location is Identity provider
+                if (GetFileLocation() == FILELOCATION_IDP)
+                {
+                    try
+                    {
+                        SetFileLocation(FILELOCATION_IDP);
+
+                        // Create client info object
+                        if (cInfo == null)
+                        {
+                            if (AD_Client_ID > 0)
+                            {
+                                cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                            }
+                            else
+                            {
+                                cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                            }
+                        }
+
+                        // Get file information
+                        FileInfo fInfo = new FileInfo(filePath + "\\" + folderKey + "\\" + fileName);
+                        byte[] bytes = System.IO.File.ReadAllBytes(filePath + "\\" + folderKey + "\\" + fileName);
+                        string file = Convert.ToBase64String(bytes);
+
+                        var DocumentData = new ExtApiDocumentData()
+                        {
+                            filename = fInfo.Name,
+                            fileBytes = file,
+                            fileExtension = fInfo.Extension,
+                            documentUri = ""
+                        };
+
+                        // Call external idp server to get token and upload using external api
+
+                        // Sync call
+                        string resURI = new ExternalWebMethod().SaveFileApi(
+                            GetCtx(),
+                            cInfo.GetAD_IDPServerURL(),
+                            cInfo.GetAD_IDPServerClient(),// password, accesskey, dmstoken
+                            cInfo.GetAD_WebServiceURL(),
+                            cInfo.GetAD_WebServiceToken(),
+                            DocumentData
+                            );
+
+                        // Add resURI to attachment table
+                        MAttachmentReference attRef = new MAttachmentReference(GetCtx(), 0, Get_Trx());
+
+                        attRef.SetAD_AttachmentLine_ID(AD_AttachmentLine_ID);
+                        attRef.SetAD_AttachmentRef(resURI);
+                        if (!attRef.Save(Get_Trx()))
+                        {
+                            log.Severe("MAttachmentReference not saved " + VLogger.RetrieveError().Name);
+                            return false;
+                        }
+
+                        return true;
+                    }
+                    catch (Exception e)
+                    {
+                        log.Severe("IDP Location->" + e.Message);
+                        error.Append(e.Message);
+                        if (!Force)
+                        {
+                            return false;
+                        }
+                    }
+                    finally
+                    {
+                        CleanUp(filePath + "\\" + folderKey, filePath + "\\" + folderKey + "\\" + fileName, filePath + "\\" + fileName, null);
+                    }
+                    return true;
+                }
+
+
                 Directory.CreateDirectory(zipinput);
 
                 System.IO.File.Copy(filePath + "\\" + folderKey + "\\" + fileName, zipinput + "\\" + newFileName);
@@ -1742,7 +1817,56 @@ namespace VAdvantage.Model
                         }
                         return "";
                     }
+                    // If file saving location is Identity provider
+                    else if (fileLocation == X_AD_Attachment.FILELOCATION_IDP)
+                    {
+                        // Get file from web service and save it in temp folder
 
+                        // Create client info object
+                        MClientInfo cInfo = null;
+                        if (AD_Client_ID > 0)
+                        {
+                            cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                        }
+                        else
+                        {
+                            cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                        }
+
+                        string documentURI = GetDocumentURI(AD_Attachment_ID);
+
+                        if (!string.IsNullOrEmpty(documentURI))
+                        {
+                            // Get file information
+                            var DocumentData = new ExtApiDocumentData()
+                            {
+                                filename = Util.GetValueOfString(ds.Tables[0].Rows[0]["FileName"]),
+                                fileBytes = null,
+                                fileExtension = null,
+                                documentUri = documentURI
+                            };
+
+                            // Call api to get file based on URI (Sync call)
+                            string resFile = new ExternalWebMethod().GetFileApi(
+                            GetCtx(),
+                            cInfo.GetAD_IDPServerURL(),
+                            cInfo.GetAD_IDPServerClient(),// password, accesskey, dmstoken
+                            cInfo.GetAD_WebServiceURL(),
+                            cInfo.GetAD_WebServiceToken(),
+                            DocumentData);
+
+                            byte[] byteData = Convert.FromBase64String(resFile);
+
+                            string savedFile = Path.Combine(filePath, "TempDownload", folder, Util.GetValueOfString(ds.Tables[0].Rows[0]["FileName"]));
+
+                            using (FileStream fs = new FileStream(savedFile, FileMode.Create, FileAccess.Write))
+                            {
+                                fs.Write(byteData, 0, byteData.Length);
+                            }
+                            return folder;
+                        }
+                        return "";
+                    }
                     //unzipfile
                     ICSharpCode.SharpZipLib.Zip.FastZip z = new ICSharpCode.SharpZipLib.Zip.FastZip();
                     ICSharpCode.SharpZipLib.Zip.ZipConstants.DefaultCodePage = 720;

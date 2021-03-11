@@ -640,6 +640,24 @@ namespace VAdvantage.Model
         }/** Get Costing Method.
 @return Indicates how Costs will be calculated */
         public String GetCostingMethod() { return (String)Get_Value("CostingMethod"); }
+        /** Set Serial No Control.
+        @param M_SerNoCtl_ID Product Serial Number Control */
+        public void SetM_SerNoCtl_ID(int M_SerNoCtl_ID)
+        {
+            if (M_SerNoCtl_ID <= 0)
+                Set_Value("M_SerNoCtl_ID", null);
+            else
+                Set_Value("M_SerNoCtl_ID", M_SerNoCtl_ID);
+        }
+        /** Get Serial No Control.
+        @return Product Serial Number Control */
+        public int GetM_SerNoCtl_ID()
+        {
+            Object ii = Get_Value("M_SerNoCtl_ID");
+            if (ii == null)
+                return 0;
+            return Convert.ToInt32(ii);
+        }
     }
 
 }

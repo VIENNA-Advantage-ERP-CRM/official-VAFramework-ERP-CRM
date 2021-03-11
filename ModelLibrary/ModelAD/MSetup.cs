@@ -65,6 +65,7 @@ namespace VAdvantage.Model
         private bool m_hasSRegion = false;
         /** Account Creation OK		*/
         private bool m_accountsOK = false;
+        private const string InternalUseInventory = "Internal Use Inventory";
 
 
         /// <summary>
@@ -3116,6 +3117,11 @@ namespace VAdvantage.Model
                     MDocBaseType.DOCBASETYPE_PROJECTISSUE, null, 0, 0,
                     640000, GL_MM, MDocType.POSTINGCODE_PROJECTISSUE);
 
+                //If Change name here, then change at other places also.
+                CreateDocType(InternalUseInventory, Msg.GetElement(m_ctx, "M_Inventory_ID", false),
+                    MDocBaseType.DOCBASETYPE_MATERIALPHYSICALINVENTORY, null, 0, 0,
+                    620000, GL_MM, MDocType.POSTINGCODE_PHYSICALINVENTORY);
+
                 //  Order Entry
                 //CreateDocType("Binding offer", "Quotation",
                 //    MDocBaseType.DOCBASETYPE_SALESORDER, MDocType.DOCSUBTYPESO_Quotation, 0, 0,
@@ -3162,6 +3168,60 @@ namespace VAdvantage.Model
                 int DT = CreateDocType("POS Order", "Order Confirmation",
                     MDocBaseType.DOCBASETYPE_SALESORDER, MDocType.DOCSUBTYPESO_POSOrder, DT_SI, DT_II,
                     80000, GL_None, MDocType.POSTINGCODE_POSORDER);    // Bar
+
+
+                #region Lakhwinder 29Jan2020
+                //Adding new DocBaseType
+                int docBasetypeID = Util.GetValueOfInt(DB.ExecuteScalar("Select C_DocBaseType_ID from C_DocBaseType WHERE docbasetype='MMC'", null,m_trx));
+                if (docBasetypeID < 1)//INSERT DocBaseType
+                {
+                   
+                    DB.ExecuteQuery(@"INSERT INTO C_DocBaseType (AD_Client_ID,AD_Org_ID,C_DocBaseType_ID,Created,CreatedBy,Description,DocBaseType,EntityType,IsActive,Name,Updated,UpdatedBy) VALUES (
+                                            0,
+                                            0,
+                                            (SELECT MAX(C_DOCBASETYPE_ID) + 1 FROM C_DocBaseType),
+                                           "+ GlobalVariable.TO_DATE(DateTime.Now, false) + @",
+                                             " + m_ctx.GetAD_User_ID() + @",
+                                            '*** System Maintained ***',
+                                            '" + MDocBaseType.DOCBASETYPE_MoveConfirmation+ @"',
+                                            'D',
+                                            'Y',
+                                            'Move Confirmation',
+                                             " + GlobalVariable.TO_DATE(DateTime.Now, false) + @",
+                                            " + m_ctx.GetAD_User_ID() + @",
+                                        ) ", null,m_trx);
+                    
+                
+                }
+                CreateDocType("Move Confirmation", "Move Confirmation",
+                    MDocBaseType.DOCBASETYPE_MoveConfirmation, null, 0, 0,
+                    0, GL_MM,String.Empty);
+
+                docBasetypeID = Util.GetValueOfInt(DB.ExecuteScalar("Select C_DocBaseType_ID from C_DocBaseType WHERE docbasetype='SRC'", null, m_trx));
+                if (docBasetypeID < 1)//INSERT DocBaseType
+                {
+
+                    DB.ExecuteQuery(@"INSERT INTO C_DocBaseType (AD_Client_ID,AD_Org_ID,C_DocBaseType_ID,Created,CreatedBy,Description,DocBaseType,EntityType,IsActive,Name,Updated,UpdatedBy) VALUES (
+                                            0,
+                                            0,
+                                            (SELECT MAX(C_DOCBASETYPE_ID) + 1 FROM C_DocBaseType),
+                                             " + GlobalVariable.TO_DATE(DateTime.Now, false) + @",
+                                            "+m_ctx.GetAD_User_ID()+@",
+                                            '*** System Maintained ***',
+                                            '" + MDocBaseType.DOCBASETYPE_ShipReceiptConfirmation + @"',
+                                            'D',
+                                            'Y',
+                                            'Ship/Receipt Confirmation',
+                                             " + GlobalVariable.TO_DATE(DateTime.Now, false) + @",
+                                            100
+                                        ) ", null, m_trx);                 
+
+                }
+                CreateDocType("Ship/Receipt Confirmation", "Ship/Receipt Confirmation",
+                   MDocBaseType.DOCBASETYPE_ShipReceiptConfirmation, null, 0, 0,
+                   0, GL_MM, String.Empty);
+
+                #endregion
                 //	POS As Default for window SO
                 //CreatePreference("C_DocTypeTarGet_ID", DT.ToString(), 143);
                 CreatePreference("C_DocTypeTarget_ID", DT.ToString(), 143);//13feb2013 lakhwinder
@@ -3304,6 +3364,8 @@ namespace VAdvantage.Model
                 dt.SetPrintName(PrintName);	//	Defaults to Name
             if (DocSubTypeSO != null)
                 dt.SetDocSubTypeSO(DocSubTypeSO);
+
+            
             // For Blanket Order Set Document Type of Release
             if (C_DocTypeShipment_ID != 0)
             {
@@ -3330,6 +3392,12 @@ namespace VAdvantage.Model
             dt.SetIsSOTrx();
             dt.SetIsReturnTrx(isReturnTrx);
             dt.SetIsCreateCounter(IsCreateCounter);
+
+            //Set Is Internal Use checked for Internal Use Inventory 
+            if (Name.Equals(InternalUseInventory))
+            {
+                dt.SetIsInternalUse(true);
+            }
 
             // Set Blanket Transaction for Blanket Order
             if (DocBaseType.Equals(MDocBaseType.DOCBASETYPE_BLANKETSALESORDER))

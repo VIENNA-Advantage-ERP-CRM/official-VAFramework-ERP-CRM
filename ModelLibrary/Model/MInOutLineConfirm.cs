@@ -150,7 +150,11 @@ namespace VAdvantage.Model
                     pc = MUOMConversion.ConvertProductFrom(GetCtx(), line.GetM_Product_ID(), GetC_UOM_ID(), GetTargetQty());
                     line.SetTargetQty(Util.GetValueOfDecimal( pc)); //TargetQty
 
-                    Decimal qty = GetConfirmedQty();
+                    //Lakhwinder 24feb 2021
+                    //Change Movement qty
+                    //Decimal qty = GetConfirmedQty();
+                    Decimal qty = GetConfirmedQty()+GetScrappedQty();
+
                     Boolean isReturnTrx = line.GetParent().IsReturnTrx();
                     /* In PO receipts and SO Returns, we have the responsibility 
                      * for scrapped quantity
@@ -170,7 +174,12 @@ namespace VAdvantage.Model
                 else
                 {
                     line.SetTargetQty(GetTargetQty());
-                    Decimal qty = GetConfirmedQty();
+
+                    //Lakhwinder 24feb 2021
+                    //Change Movement qty
+                    //Decimal qty = GetConfirmedQty();
+                    Decimal qty = GetConfirmedQty() + GetScrappedQty();
+
                     Boolean isReturnTrx = line.GetParent().IsReturnTrx();
 
                     /* In PO receipts and SO Returns, we have the responsibility 

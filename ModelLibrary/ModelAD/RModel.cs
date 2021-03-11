@@ -156,15 +156,29 @@ namespace VAdvantage.Model
             return -1;
         }
 
+
         /// <summary>
         /// Query
         /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="whereClause"></param>
-        /// <param name="orderClause"></param>
+        /// <param name="ctx">context</param>
+        /// <param name="whereClause">where clause</param>
+        /// <param name="orderClause">order clause</param>
         public void Query(Ctx ctx, String whereClause, String orderClause)
         {
             _data.Query(ctx, whereClause, orderClause);
+        }
+
+
+        /// <summary>
+        /// Query
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="whereClause">where clause</param>
+        /// <param name="orderClause">order clause</param>
+        /// <param name="pageno">page no</param>
+        public void Query(Ctx ctx, String whereClause, String orderClause, int pageno =0)
+        {
+            _data.Query(ctx, whereClause, orderClause, pageno);
         }
 
         /// <summary>
