@@ -1018,6 +1018,13 @@ namespace VIS.Models
             //int _m_DiscountSchema_ID = Util.GetValueOfInt(paramValue[5].ToString());
             //decimal _flatDiscount = Util.GetValueOfInt(paramValue[6].ToString());
             decimal _qtyEntered = Util.GetValueOfInt(paramValue[6].ToString());
+            /** Price List - ValidFrom date validation ** Dt:11/03/2021 ** Modified By: Kumar **/
+            string _transactionDate = string.Empty;
+            if (paramValue.Length > 7)
+                _transactionDate = Util.GetValueOfString(paramValue[7].ToString());
+            int _mPriceListID = 0;
+            if (paramValue.Length > 8)
+                _mPriceListID = Util.GetValueOfInt(paramValue[8].ToString());
             //End Assign parameter value
 
             StringBuilder sql = new StringBuilder();
@@ -1039,18 +1046,27 @@ namespace VIS.Models
             if (countEd011 > 0)
             {
                 MOrderModel objOrder = new MOrderModel();
-                _m_PriceList_ID = objOrder.GetM_PriceList(ctx, _C_Order_Id.ToString());
+                /** Price List - ValidFrom date validation ** Dt:11/03/2021 ** Modified By: Kumar **/
+                _m_PriceList_ID = (_mPriceListID > 0) ? _mPriceListID : objOrder.GetM_PriceList(ctx, _C_Order_Id.ToString());
 
                 /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
                 StringBuilder sbparams = new StringBuilder();
                 sbparams.Append(Util.GetValueOfInt(_m_PriceList_ID));
-                sbparams.Append(",").Append(Util.GetValueOfInt(_C_Order_Id));
+                /** Price List - ValidFrom date validation ** Dt:11/03/2021 ** Modified By: Kumar **/
+                if (Util.GetValueOfDateTime(_transactionDate) != null)
+                    sbparams.Append(",").Append(Util.GetValueOfString(_transactionDate));
+                else
+                    sbparams.Append(",").Append(Util.GetValueOfInt(_C_Order_Id));
                 sbparams.Append(",").Append(Util.GetValueOfInt(_m_Product_Id));
                 sbparams.Append(",").Append(Util.GetValueOfInt(_c_Uom_Id));
                 sbparams.Append(",").Append(Util.GetValueOfInt(_m_AttributeSetInstance_Id));
 
                 MPriceListVersionModel objPLV = new MPriceListVersionModel();
-                _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, sbparams.ToString(), ScreenType.Order);
+                /** Price List - ValidFrom date validation ** Dt:11/03/2021 ** Modified By: Kumar **/
+                if (Util.GetValueOfDateTime(_transactionDate) != null)
+                    _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID_On_Transaction_Date(ctx, sbparams.ToString());
+                else
+                    _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, sbparams.ToString(), ScreenType.Order);
 
                 MBPartnerModel objBPartner = new MBPartnerModel();
                 Dictionary<String, String> bpartner1 = objBPartner.GetBPartner(ctx, _c_BPartner_Id.ToString());
@@ -1225,6 +1241,14 @@ namespace VIS.Models
             decimal _qtyEntered = Util.GetValueOfInt(paramValue[6].ToString());
             int countEd011 = Util.GetValueOfInt(paramValue[7].ToString());
             int countVAPRC = Util.GetValueOfInt(paramValue[8].ToString());
+            
+            /** Price List - ValidFrom date validation ** Dt:11/03/2021 ** Modified By: Kumar **/
+            string _transactionDate = string.Empty;
+            if (paramValue.Length > 9)
+                _transactionDate = Util.GetValueOfString(paramValue[9].ToString());
+            int _mPriceListID = 0;
+            if (paramValue.Length > 10)
+                _mPriceListID = Util.GetValueOfInt(paramValue[10].ToString());
 
             //End Assign parameter value
             StringBuilder sql = new StringBuilder();
@@ -1237,18 +1261,27 @@ namespace VIS.Models
             decimal _flatDiscount = 0;
 
             MOrderModel objOrder = new MOrderModel();
-            _m_PriceList_ID = objOrder.GetM_PriceList(ctx, _c_Order_ID.ToString());
+            /** Price List - ValidFrom date validation ** Dt:11/03/2021 ** Modified By: Kumar **/
+            _m_PriceList_ID = (_mPriceListID > 0) ? _mPriceListID : objOrder.GetM_PriceList(ctx, _c_Order_ID.ToString());
 
             /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
             StringBuilder sbparams = new StringBuilder();
             sbparams.Append(Util.GetValueOfInt(_m_PriceList_ID));
-            sbparams.Append(",").Append(Util.GetValueOfInt(_c_Order_ID));
+            /** Price List - ValidFrom date validation ** Dt:11/03/2021 ** Modified By: Kumar **/
+            if (Util.GetValueOfDateTime(_transactionDate) != null)
+                sbparams.Append(",").Append(Util.GetValueOfString(_transactionDate));
+            else
+                sbparams.Append(",").Append(Util.GetValueOfInt(_c_Order_ID));
             sbparams.Append(",").Append(Util.GetValueOfInt(_m_Product_Id));
             sbparams.Append(",").Append(Util.GetValueOfInt(_c_Uom_Id));
             sbparams.Append(",").Append(Util.GetValueOfInt(_m_AttributeSetInstance_Id));
 
             MPriceListVersionModel objPLV = new MPriceListVersionModel();
-            _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, sbparams.ToString(), ScreenType.Order);
+            /** Price List - ValidFrom date validation ** Dt:11/03/2021 ** Modified By: Kumar **/
+            if (Util.GetValueOfDateTime(_transactionDate) != null)
+                _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID_On_Transaction_Date(ctx, sbparams.ToString());
+            else
+                _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, sbparams.ToString(), ScreenType.Order);
 
             MBPartnerModel objBPartner = new MBPartnerModel();
             Dictionary<String, String> bpartner1 = objBPartner.GetBPartner(ctx, _c_BPartner_Id.ToString());
@@ -1600,6 +1633,13 @@ namespace VIS.Models
             int _ad_Client_Id = Util.GetValueOfInt(paramValue[4].ToString());
             int _m_Product_Id = Util.GetValueOfInt(paramValue[5].ToString());
             decimal _qtyEntered = Util.GetValueOfDecimal(paramValue[6].ToString());
+            /** Price List - ValidFrom date validation ** Dt:11/03/2021 ** Modified By: Kumar **/
+            string _transactionDate = string.Empty;
+            if (paramValue.Length > 7)
+                _transactionDate = Util.GetValueOfString(paramValue[7].ToString());
+            int _mPriceListID = 0;
+            if (paramValue.Length > 8)
+                _mPriceListID = Util.GetValueOfInt(paramValue[8].ToString());
             //End Assign parameter value
 
             string sql;
@@ -1618,19 +1658,30 @@ namespace VIS.Models
                 MBPartnerModel objBPartner = new MBPartnerModel();
                 Dictionary<String, String> bpartner = objBPartner.GetBPartner(ctx, _c_BPartner_ID.ToString());
 
+
                 MOrderModel objOrder = new MOrderModel();
-                _m_PriceList_ID = objOrder.GetM_PriceList(ctx, _c_Order_ID.ToString());
+                /** Price List - ValidFrom date validation ** Dt:11/03/2021 ** Modified By: Kumar **/
+                _m_PriceList_ID = (_mPriceListID > 0) ? _mPriceListID : objOrder.GetM_PriceList(ctx, _c_Order_ID.ToString());
 
                 /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
                 StringBuilder sbparams = new StringBuilder();
                 sbparams.Append(Util.GetValueOfInt(_m_PriceList_ID));
-                sbparams.Append(",").Append(Util.GetValueOfInt(_c_Order_ID));
+                /** Price List - ValidFrom date validation ** Dt:11/03/2021 ** Modified By: Kumar **/
+                if (Util.GetValueOfDateTime(_transactionDate) != null)
+                    sbparams.Append(",").Append(Util.GetValueOfString(_transactionDate));
+                else                    
+                    sbparams.Append(",").Append(Util.GetValueOfInt(_c_Order_ID));
+
                 sbparams.Append(",").Append(Util.GetValueOfInt(_m_Product_Id));
                 sbparams.Append(",").Append(Util.GetValueOfInt(_c_UOM_To_ID));
                 sbparams.Append(",").Append(Util.GetValueOfInt(_m_AttributeSetInstance_Id));
 
                 MPriceListVersionModel objPLV = new MPriceListVersionModel();
-                _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, sbparams.ToString(), ScreenType.Order);
+                /** Price List - ValidFrom date validation ** Dt:11/03/2021 ** Modified By: Kumar **/
+                if (Util.GetValueOfDateTime(_transactionDate) != null)
+                    _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID_On_Transaction_Date(ctx, sbparams.ToString());
+                else
+                    _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, sbparams.ToString(), ScreenType.Order);
 
                 sql = "SELECT PriceList , PriceStd , PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
                                       + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
