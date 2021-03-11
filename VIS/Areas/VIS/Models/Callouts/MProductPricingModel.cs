@@ -8,6 +8,7 @@ using VAdvantage.Utility;
 using VIS.DataContracts;
 using VIS.Controllers;
 using VAdvantage.DataBase;
+using System.Data;
 
 //using ViennaAdvantageWeb.Areas.VIS.DataContracts;
 
@@ -15,6 +16,8 @@ namespace VIS.Models
 {
     public class MProductPricingModel
     {
+        Dictionary<string, object> retDic = null;
+
         /// <summary>
         /// GetProductPricing
         /// </summary>
@@ -131,17 +134,17 @@ namespace VIS.Models
         /// <param name="ctx">Context</param>
         /// <param name="fields">Fields</param>
         /// <returns>StdPrice</returns>
-        public Decimal GetProductdata(Ctx ctx, string fields)
+        public Dictionary<String, Object> GetProductdata(Ctx ctx, string fields)
         {
-            int UOM=0, M_Product_ID = 0, Attribute=0, M_PriceList_ID=0;
+            int UOM = 0, M_Product_ID = 0, Attribute = 0, M_PriceList_ID = 0;
             string[] paramValue = fields.Split(',');
             M_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
             Attribute = Util.GetValueOfInt(paramValue[1].ToString());
             M_PriceList_ID = Util.GetValueOfInt(paramValue[2].ToString());
             UOM = Util.GetValueOfInt(paramValue[3].ToString());
-           
-            string sql = "SELECT PriceStd FROM M_ProductPrice WHERE M_PriceList_Version_ID = (SELECT MAX(M_PriceList_Version_ID) FROM M_PriceList_Version WHERE IsActive = 'Y'" +
-                "AND M_PriceList_ID ="+M_PriceList_ID +") AND M_Product_id=" + M_Product_ID;
+
+            string sql = "SELECT PriceStd ,C_UOM_ID FROM M_ProductPrice WHERE M_PriceList_Version_ID = (SELECT MAX(M_PriceList_Version_ID) FROM M_PriceList_Version WHERE IsActive = 'Y'" +
+                "AND M_PriceList_ID =" + M_PriceList_ID + ") AND M_Product_id=" + M_Product_ID;
 
             if (Attribute > 0)
             {
@@ -151,8 +154,19 @@ namespace VIS.Models
             {
                 sql += " AND C_UOM_ID=" + UOM;
             }
+            else
+            {
+                sql += " AND C_UOM_ID =(SELECT C_UOM_ID FROM M_Product WHERE M_Product_ID=" + M_Product_ID+")";
+            }
 
-            return Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
+            DataSet ds = DB.ExecuteDataset(sql, null, null);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                retDic = new Dictionary<string, object>();
+                retDic["PriceStd"] = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceStd"]);
+                retDic["C_UOM_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_UOM_ID"]);
+            }
+            return retDic;
         }
     }
 }

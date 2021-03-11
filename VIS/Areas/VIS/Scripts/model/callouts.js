@@ -16774,13 +16774,15 @@
     };
     CalloutTeamForcast.prototype.CalculatePrice = function (ctx, windowNo, mTab, mField, value, oldValue) {
         // 
-        if (value == null || value.toString() == "" || Util.getValueOfInt(value) <= 0) {
+        if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) <= 0) {
             return "";
         }
-
-        var price = Util.getValueOfDecimal(mTab.getValue("UnitPrice")) * Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
+        this.setCalloutActive(true);
+        var price = Util.getValueOfDecimal(mTab.getValue("UnitPrice")) * Util.getValueOfDecimal(mTab.getValue("BaseQty"));
         // ForcastLine.SetQtyEntered(price);
         mTab.setValue("PriceStd", price);
+
+        this.setCalloutActive(false);
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";
     };
@@ -16812,7 +16814,9 @@
         else {
             mTab.setValue("QtyEntered", Qty);
         }
-
+        if (Util.getValueOfDecimal(mTab.getValue("UnitPrice")) != 0 && Qty != 0) {
+            mTab.setValue("PriceStd", Qty * mTab.getValue("UnitPrice"))
+        }
         this.setCalloutActive(false);
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";
@@ -16870,11 +16874,17 @@
                 Util.getValueOfString(mTab.getValue("C_UOM_ID")))
                 
             //get the price from product price inly if pricelist is selected
-            var stdPrice = VIS.dataContext.getJSONRecord("MProductPricing/GetProductdata", paramString);
-            mTab.setValue("PriceStd", stdPrice);
-            mTab.setValue("UnitPrice", stdPrice);
-            mTab.setValue("PriceStd", (stdPrice * Util.getValueOfDecimal(mTab.getValue("BaseQty"))));
+            var ProductData = VIS.dataContext.getJSONRecord("MProductPricing/GetProductdata", paramString);
+            if (ProductData != null) {
+                mTab.setValue("PriceStd", ProductData["PriceStd"]);
+                mTab.setValue("UnitPrice", ProductData["PriceStd"]);
+                mTab.setValue("PriceStd", (ProductData["PriceStd"] * Util.getValueOfDecimal(mTab.getValue("BaseQty"))));
 
+                if (Util.getValueOfInt(mTab.getValue("C_UOM_ID")) == 0) {
+                    mTab.setValue("C_UOM_ID", ProductData["C_UOM_ID"]);
+                }
+
+            } 
         }
 
         this.setCalloutActive(false);
