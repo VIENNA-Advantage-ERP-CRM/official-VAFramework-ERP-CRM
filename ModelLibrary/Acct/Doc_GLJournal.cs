@@ -90,7 +90,9 @@ namespace VAdvantage.Acct
                 {
                     DocLine docLine = new DocLine(line, this);
                     //  --  Source Amounts
-                    docLine.SetAmount(line.GetAmtAcctDr(), line.GetAmtAcctCr());
+                    docLine.SetAmount(line.GetAmtSourceDr(), line.GetAmtSourceCr());
+                    docLine.SetC_Currency_ID(line.GetC_Currency_ID());
+                    docLine.SetConversionRate(line.GetCurrencyRate() == 0 ? 1 : line.GetCurrencyRate());
                     //  --  Converted Amounts
                     // no need to update converted amount here
                     //docLine.SetConvertedAmt(_C_AcctSchema_ID, line.GetAmtAcctDr(), line.GetAmtAcctCr());
@@ -300,10 +302,21 @@ namespace VAdvantage.Acct
                     //if (_lines[i].GetC_AcctSchema_ID() == as1.GetC_AcctSchema_ID())
                     //{
                     // set conversion rate on line, so that amount to be converted based on that multiply rate 
-                    _lines[i].SetConversionRate(conversionRate);
+                    if (as1.GetC_AcctSchema_ID() != _C_AcctSchema_ID && _lines[i].GetC_Currency_ID() != as1.GetC_Currency_ID())
+                    {
+                        conversionRate= MConversionRate.GetRate(_lines[i].GetC_Currency_ID(), as1.GetC_Currency_ID(),
+                            _lines[i].GetDateAcct(), _lines[i].GetC_ConversionType_ID(),
+                            as1.GetAD_Client_ID(), _lines[i].GetAD_Org_ID());
+                        _lines[i].SetConversionRate(conversionRate);
+                    }
+                    else if (as1.GetC_AcctSchema_ID() != _C_AcctSchema_ID)
+                    {
+                        _lines[i].SetConversionRate(conversionRate);
+                    }
+
                     fact.CreateLine(_lines[i],
                                     _lines[i].GetAccount(),
-                                    GetC_Currency_ID(),
+                                    _lines[i].GetC_Currency_ID(),
                                     _lines[i].GetAmtSourceDr(),
                                     _lines[i].GetAmtSourceCr());
                     //}
