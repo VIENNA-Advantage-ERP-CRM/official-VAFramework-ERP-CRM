@@ -386,6 +386,8 @@ namespace VAdvantage.Model
                 MProjectPhase[] myPhases = GetPhases();
                 MProjectPhase[] fromPhases = fromProject.GetPhases();
                 int C_Phase_ID = 0; bool exists = false;
+                MProjectPhase toPhase = null;
+                MProjectLine[] fromLines = null;
                 //	Copy Phases
                 for (int i = 0; i < fromPhases.Length; i++)
                 {
@@ -412,7 +414,7 @@ namespace VAdvantage.Model
                     }
                     else
                     {
-                        MProjectPhase toPhase = new MProjectPhase(GetCtx(), 0, Get_TrxName());
+                        toPhase = new MProjectPhase(GetCtx(), 0, Get_TrxName());
                         PO.CopyValues(fromPhases[i], toPhase, GetAD_Client_ID(), GetAD_Org_ID());
                         toPhase.SetC_Project_ID(toProject.GetC_Project_ID());
                         toPhase.SetC_Order_ID(0);
@@ -426,8 +428,7 @@ namespace VAdvantage.Model
                             }
                             else
                             {
-                                MProjectLine[] fromLines = null;
-                                List<MProjectLine> list = new List<MProjectLine>();
+                               
 
                                 DataSet projDs = DB.ExecuteDataset(" SELECT C_ProjectLine_ID FROM C_ProjectLine WHERE " +
                                     " C_ProjectPhase_ID=" + fromPhases[i].GetC_ProjectPhase_ID() + " AND " +
@@ -435,6 +436,7 @@ namespace VAdvantage.Model
 
                                 if (projDs != null && projDs.Tables[0].Rows.Count > 0)
                                 {
+                                    List<MProjectLine> list = new List<MProjectLine>();
                                     for (int k = 0; k < projDs.Tables[0].Rows.Count; k++)
                                     {
                                         list.Add(new MProjectLine(GetCtx(), Util.GetValueOfInt(projDs.Tables[0].Rows[k]["C_ProjectLine_ID"]), Get_TrxName()));
