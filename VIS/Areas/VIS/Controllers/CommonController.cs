@@ -1584,6 +1584,23 @@ namespace VIS.Controllers
                 {
                     _invoice.SetC_IncoTerm_ID(_order.GetC_IncoTerm_ID());
                 }
+
+                if (Env.IsModuleInstalled("VA077_"))
+                {
+                    _invoice.Set_Value("VA077_ChangeStartDate", _order.Get_Value("VA077_ChangeStartDate"));
+                    _invoice.Set_Value("VA077_PartialAmtCatchUp", _order.Get_Value("VA077_PartialAmtCatchUp"));
+                    _invoice.Set_Value("VA077_OldAnnualContractTotal", _order.Get_Value("VA077_OldAnnualContractTotal"));
+                    _invoice.Set_Value("VA077_AdditionalAnnualCharge", _order.Get_Value("VA077_AdditionalAnnualCharge"));
+                    _invoice.Set_Value("VA077_NewAnnualContractTotal", _order.Get_Value("VA077_NewAnnualContractTotal"));
+                    _invoice.Set_Value("VA077_SalesCoWorker", _order.Get_Value("VA077_SalesCoWorker"));
+                    _invoice.Set_Value("VA077_SalesCoWorkerPer", _order.Get_Value("VA077_SalesCoWorkerPer"));
+                    _invoice.Set_Value("VA077_TotalMarginAmt", _order.Get_Value("VA077_TotalMarginAmt"));
+                    _invoice.Set_Value("VA077_TotalPurchaseAmt", _order.Get_Value("VA077_TotalPurchaseAmt"));
+                    _invoice.Set_Value("VA077_TotalSalesAmt", _order.Get_Value("VA077_TotalSalesAmt"));
+                    _invoice.Set_Value("VA077_MarginPercent", _order.Get_Value("VA077_MarginPercent"));
+                    
+                }
+
                 _invoice.Save();
             }
             if (_inout != null && _inout.GetM_InOut_ID() != 0
@@ -1908,7 +1925,6 @@ namespace VIS.Controllers
                     if (inoutLine != null)
                     {
                         invoiceLine.SetClientOrg(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID());
-
 
                         if (Env.IsModuleInstalled("VA077_"))
                         {
