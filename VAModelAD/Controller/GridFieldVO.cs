@@ -632,12 +632,12 @@ namespace VAdvantage.Controller
         /// <param name="vaf_tab_ID">tab id</param>
         /// <param name="TabReadOnly">ia tab readonly</param>
         public GridFieldVO(Ctx newCtx, int windowNm, int tabNm,
-            int VAF_Screen_ID, int vaf_tab_ID, bool TabReadOnly)
+            int vaf_Screen_ID, int vaf_tab_ID, bool TabReadOnly)
         {
             ctx = newCtx;
             windowNo = windowNm;
             tabNo = tabNm;
-            VAF_Screen_ID = VAF_Screen_ID;
+            VAF_Screen_ID = vaf_Screen_ID;
             VAF_Tab_ID = vaf_tab_ID;
             tabReadOnly = TabReadOnly;
         }   //  MFieldVO
