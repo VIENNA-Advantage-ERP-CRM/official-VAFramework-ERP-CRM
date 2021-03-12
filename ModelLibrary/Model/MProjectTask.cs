@@ -109,18 +109,21 @@ namespace VAdvantage.Model
             string isOpp = "";
             string Sql = "SELECT C_Project_ID FROM C_ProjectPhase WHERE C_ProjectPhase_ID in(select C_ProjectPhase_ID FROM" +
                     " C_ProjectTask WHERE C_ProjectTask_ID =" + GetC_ProjectTask_ID() + ")";
-            projID = Util.GetValueOfInt(DB.ExecuteScalar(Sql, null, null));
+            //Used transaction object because total was not updating on header
+            projID = Util.GetValueOfInt(DB.ExecuteScalar(Sql, null, Get_TrxName()));
             
             if (projID != 0)
             {
-                isOpp = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsOpportunity FROM C_Project WHERE C_Project_ID = " + projID));
-                isCam = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsCampaign FROM C_Project WHERE C_Project_ID = " + projID));
+                //Used transaction object because total was not updating on header
+                isOpp = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsOpportunity FROM C_Project WHERE C_Project_ID = " + projID,null, Get_TrxName()));
+                isCam = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsCampaign FROM C_Project WHERE C_Project_ID = " + projID,null, Get_TrxName()));
             }
             if (isCam.Equals("Y"))                             // Campaign Window
             {
+                //Used transaction object because total was not updating on header
                 MProject prj = new MProject(GetCtx(), projID, null);
                 decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(PlannedAmt),0)  FROM C_ProjectTask WHERE IsActive = 'Y' AND " +
-                    "C_ProjectPhase_ID in (SELECT C_ProjectPhase_ID FROM C_ProjectPhase WHERE C_Project_ID = " + projID + ")"));
+                    "C_ProjectPhase_ID in (SELECT C_ProjectPhase_ID FROM C_ProjectPhase WHERE C_Project_ID = " + projID + ")",null, Get_TrxName()));
                 prj.SetPlannedAmt(plnAmt);
                 prj.Save();
             }
@@ -128,9 +131,9 @@ namespace VAdvantage.Model
             else if (isOpp.Equals("N") && isCam.Equals("N"))
             {
                 // set sum of total amount of task tab to phase tab, similalary Commitment amount
-                MProjectPhase phase = new MProjectPhase(GetCtx(), GetC_ProjectPhase_ID(), null);
-                phase.SetPlannedAmt(Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_ProjectTask pl WHERE pl.IsActive = 'Y' AND pl.C_ProjectPhase_ID = " + GetC_ProjectPhase_ID())));
-                phase.SetCommittedAmt(Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.CommittedAmt),0)  FROM C_ProjectTask pl WHERE pl.IsActive = 'Y' AND pl.C_ProjectPhase_ID = " + GetC_ProjectPhase_ID())));
+                MProjectPhase phase = new MProjectPhase(GetCtx(), GetC_ProjectPhase_ID(), Get_TrxName());
+                phase.SetPlannedAmt(Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_ProjectTask pl WHERE pl.IsActive = 'Y' AND pl.C_ProjectPhase_ID = " + GetC_ProjectPhase_ID(),null, Get_TrxName())));
+                phase.SetCommittedAmt(Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.CommittedAmt),0)  FROM C_ProjectTask pl WHERE pl.IsActive = 'Y' AND pl.C_ProjectPhase_ID = " + GetC_ProjectPhase_ID(),null, Get_TrxName())));
                 if (!phase.Save())
                 {
 

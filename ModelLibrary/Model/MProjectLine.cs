@@ -527,34 +527,39 @@ namespace VAdvantage.Model
             }
             else
             {
+                //Used transaction because total was not updating on header
                 string Sql = "SELECT C_Project_ID FROM C_ProjectPhase WHERE C_ProjectPhase_ID in(select C_ProjectPhase_ID FROM" +
                         " C_ProjectTask WHERE C_ProjectTask_ID =" + id + ")";
-                projID = Util.GetValueOfInt(DB.ExecuteScalar(Sql, null, null));
+                projID = Util.GetValueOfInt(DB.ExecuteScalar(Sql, null, Get_TrxName()));
             }
+            //Used transaction because total was not updating on header
             string sql = "SELECT IsOpportunity FROM C_Project WHERE C_Project_ID = " + projID;
-            string isOpp = Util.GetValueOfString(DB.ExecuteScalar(sql, null, null));
+            string isOpp = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_TrxName()));
             //Amit
-            string isCam = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsCampaign FROM C_Project WHERE C_Project_ID = " + projID));
+            string isCam = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsCampaign FROM C_Project WHERE C_Project_ID = " + projID, null, Get_TrxName()));
             if (isOpp.Equals("N") && isCam.Equals("N") && id != 0)
             {
                 // set sum of planned Amount from task line to task
                 MProjectTask tsk = new MProjectTask(GetCtx(), id, Get_Trx());
-                decimal plannedAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.C_ProjectTask_ID = " + id));
+                //Used transaction because total was not updating on header
+                decimal plannedAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.C_ProjectTask_ID = " + id, null, Get_TrxName()));
                 tsk.SetPlannedAmt(plannedAmt);
                 tsk.Save();
             }
             //Amit
             else if (isOpp.Equals("N") && isCam.Equals("N") && id == 0 && GetC_ProjectPhase_ID() != 0)
             {
-                MProjectPhase projectPhase = new MProjectPhase(GetCtx(), GetC_ProjectPhase_ID(), null);
-                decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.C_ProjectPhase_ID = " + GetC_ProjectPhase_ID() + " AND pl.C_Project_ID = " + projID));
+                //Used transaction because total was not updating on header
+                MProjectPhase projectPhase = new MProjectPhase(GetCtx(), GetC_ProjectPhase_ID(), Get_TrxName());
+                decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.C_ProjectPhase_ID = " + GetC_ProjectPhase_ID() + " AND pl.C_Project_ID = " + projID, null, Get_TrxName()));
                 projectPhase.SetPlannedAmt(plnAmt);
                 projectPhase.Save();
             }
             else if (isOpp.Equals("Y"))                             // Opportunity Window
             {
+                //Used transaction because total was not updating on header
                 MProject prj = new MProject(GetCtx(), projID, Get_TrxName());
-                decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.C_Project_ID = " + projID));
+                decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.C_Project_ID = " + projID, null, Get_TrxName()));
                 prj.SetPlannedAmt(plnAmt);
                 prj.Save();
 
@@ -579,7 +584,8 @@ namespace VAdvantage.Model
             else if (id != 0)
             {
                 MProjectTask tsk = new MProjectTask(GetCtx(), id, Get_TrxName());
-                decimal plannedAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.C_ProjectTask_ID = " + id));
+                //Used transaction because total was not updating on header
+                decimal plannedAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.C_ProjectTask_ID = " + id, null, Get_TrxName()));
                 tsk.SetPlannedAmt(plannedAmt);
                 tsk.Save();
             }

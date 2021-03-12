@@ -15,7 +15,7 @@ using VAdvantage.Classes;
 using VAdvantage.Common;
 using VAdvantage.Process;
 using System.Windows.Forms;
-using VAdvantage.Model; 
+using VAdvantage.Model;
 using VAdvantage.DataBase;
 using VAdvantage.SqlExec;
 using VAdvantage.Utility;
@@ -68,7 +68,7 @@ namespace VAdvantage.Model
             return to;
         }
 
-       
+
         /*****
          * 	Standard Constructor
          *	@param ctx context
@@ -132,7 +132,7 @@ namespace VAdvantage.Model
             }
             catch (Exception ex)
             {
-               log.Log(Level.SEVERE, pj, ex);
+                log.Log(Level.SEVERE, pj, ex);
             }
             return C_ProjectType_ID;
         }
@@ -215,9 +215,10 @@ namespace VAdvantage.Model
                 {
                     idr.Close();
                 }
-               log.Log(Level.SEVERE, sql, ex);
+                log.Log(Level.SEVERE, sql, ex);
             }
-            finally {
+            finally
+            {
                 if (idr != null)
                 {
                     idr.Close();
@@ -257,9 +258,10 @@ namespace VAdvantage.Model
                 {
                     idr.Close();
                 }
-               log.Log(Level.SEVERE, sql, ex);
+                log.Log(Level.SEVERE, sql, ex);
             }
-            finally {
+            finally
+            {
                 if (idr != null)
                 {
                     idr.Close();
@@ -298,7 +300,7 @@ namespace VAdvantage.Model
                 {
                     idr.Close();
                 }
-               log.Log(Level.SEVERE, sql, ex);
+                log.Log(Level.SEVERE, sql, ex);
             }
             finally
             {
@@ -326,6 +328,181 @@ namespace VAdvantage.Model
                 return 0;
             int count = CopyLinesFrom(project)
                 + CopyPhasesFrom(project);
+            return count;
+        }
+
+        /// <summary>
+        /// To copy details from one project to another 
+        /// </summary>
+        /// <param name="fromProject">From Project</param>
+        /// <param name="toProject">To Project</param>
+        /// <returns>No Of Lines copied</returns>
+        public int CopyDetailsFrom(MProject fromProject, MProject toProject)
+        {
+            if (IsProcessed() || fromProject == null || toProject == null)
+                return 0;
+            int count = 0; ValueNamePair pp = null; StringBuilder msg = new StringBuilder();
+
+            #region create lines for project
+            if (toProject.GetProjectLineLevel().Equals(PROJECTLINELEVEL_Project))
+            {
+                MProjectLine[] fromLines = fromProject.GetLines();
+                MProjectLine line = null;
+                for (int i = 0; i < fromLines.Length; i++)
+                {
+                    line = new MProjectLine(GetCtx(), 0, fromProject.Get_TrxName());
+                    PO.CopyValues(fromLines[i], line, GetAD_Client_ID(), GetAD_Org_ID());
+                    line.SetC_Project_ID(toProject.GetC_Project_ID());
+                    line.SetInvoicedAmt(Env.ZERO);
+                    line.SetInvoicedQty(Env.ZERO);
+                    line.SetC_OrderPO_ID(0);
+                    line.SetC_Order_ID(0);
+                    line.SetProcessed(false);
+                    if (line.Save())
+                        count++;
+                    else
+                    {
+                        pp = VLogger.RetrieveError();
+                        if (pp != null)
+                        {
+                            msg.Append(pp.GetName());
+                            //if GetName is Empty then it will check GetValue
+                            if (string.IsNullOrEmpty(msg.ToString()))
+                                msg.Append(Msg.GetMsg("", pp.GetValue()));
+                        }
+                        if (string.IsNullOrEmpty(msg.ToString()))
+                            msg.Append(Msg.GetMsg(GetCtx(), "VIS_LineNotSaved"));
+                        else
+                            msg.Append(Msg.GetMsg(GetCtx(), "VIS_LineNotSaved") + "," + msg.ToString());
+                    }
+                }
+            }
+            #endregion
+
+            if (toProject.GetProjectLineLevel().Equals(PROJECTLINELEVEL_Phase) || toProject.GetProjectLineLevel().Equals(PROJECTLINELEVEL_Task)
+                || toProject.GetProjectLineLevel().Equals(PROJECTLINELEVEL_TaskLine))
+            {
+                #region if project line level is Project then create lines for phase only
+                MProjectPhase[] myPhases = GetPhases();
+                MProjectPhase[] fromPhases = fromProject.GetPhases();
+                int C_Phase_ID = 0; bool exists = false;
+                //	Copy Phases
+                for (int i = 0; i < fromPhases.Length; i++)
+                {
+                    //	Check if Phase already exists
+                    C_Phase_ID = fromPhases[i].GetC_Phase_ID();
+                    exists = false;
+                    if (C_Phase_ID == 0)
+                        exists = false;
+                    else
+                    {
+                        for (int ii = 0; ii < myPhases.Length; ii++)
+                        {
+                            if (myPhases[ii].GetC_Phase_ID() == C_Phase_ID)
+                            {
+                                exists = true;
+                                break;
+                            }
+                        }
+                    }
+                    //	Phase exist
+                    if (exists)
+                    {
+                        log.Info("Phase already exists here, ignored - " + fromPhases[i]);
+                    }
+                    else
+                    {
+                        MProjectPhase toPhase = new MProjectPhase(GetCtx(), 0, Get_TrxName());
+                        PO.CopyValues(fromPhases[i], toPhase, GetAD_Client_ID(), GetAD_Org_ID());
+                        toPhase.SetC_Project_ID(toProject.GetC_Project_ID());
+                        toPhase.SetC_Order_ID(0);
+                        toPhase.SetIsComplete(false);
+                        if (toPhase.Save())
+                        {
+                            count++;
+                            if (toProject.GetProjectLineLevel().Equals(PROJECTLINELEVEL_Task) || toProject.GetProjectLineLevel().Equals(PROJECTLINELEVEL_TaskLine))
+                            {
+                                toPhase.CopyTasksFrom(fromPhases[i], toPhase);
+                            }
+                            else
+                            {
+                                MProjectLine[] fromLines = null;
+                                List<MProjectLine> list = new List<MProjectLine>();
+
+                                DataSet projDs = DB.ExecuteDataset(" SELECT C_ProjectLine_ID FROM C_ProjectLine WHERE " +
+                                    " C_ProjectPhase_ID=" + fromPhases[i].GetC_ProjectPhase_ID() + " AND " +
+                                    " C_Project_ID = " + fromPhases[i].GetC_Project_ID() + " ORDER BY Line ");
+
+                                if (projDs != null && projDs.Tables[0].Rows.Count > 0)
+                                {
+                                    for (int k = 0; k < projDs.Tables[0].Rows.Count; k++)
+                                    {
+                                        list.Add(new MProjectLine(GetCtx(), Util.GetValueOfInt(projDs.Tables[0].Rows[k]["C_ProjectLine_ID"]), Get_TrxName()));
+                                    }
+                                    fromLines = new MProjectLine[list.Count];
+                                    fromLines = list.ToArray();
+
+                                }
+
+                                if (fromLines != null && fromLines.Length > 0)
+                                {
+                                    MProjectLine line = null;
+                                    for (int j = 0; j < fromLines.Length; j++)
+                                    {
+                                        line = new MProjectLine(GetCtx(), 0, fromProject.Get_TrxName());
+                                        PO.CopyValues(fromLines[j], line, GetAD_Client_ID(), GetAD_Org_ID());
+                                        line.SetC_Project_ID(toProject.GetC_Project_ID());
+                                        line.SetC_ProjectPhase_ID(toPhase.GetC_ProjectPhase_ID());
+                                        line.SetInvoicedAmt(Env.ZERO);
+                                        line.SetInvoicedQty(Env.ZERO);
+                                        line.SetC_OrderPO_ID(0);
+                                        line.SetC_Order_ID(0);
+                                        line.SetProcessed(false);
+                                        if (line.Save())
+                                            count++;
+                                        else
+                                        {
+                                            pp = VLogger.RetrieveError();
+                                            if (pp != null)
+                                            {
+                                                msg.Append(pp.GetName());
+                                                //if GetName is Empty then it will check GetValue
+                                                if (string.IsNullOrEmpty(msg.ToString()))
+                                                    msg.Append(Msg.GetMsg("", pp.GetValue()));
+                                            }
+                                            if (string.IsNullOrEmpty(msg.ToString()))
+                                                msg.Append(Msg.GetMsg(GetCtx(), "VIS_LineNotSaved"));
+                                            else
+                                                msg.Append(Msg.GetMsg(GetCtx(), "VIS_LineNotSaved") + "," + msg.ToString());
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            pp = VLogger.RetrieveError();
+                            if (pp != null)
+                            {
+                                msg.Append(pp.GetName());
+                                //if GetName is Empty then it will check GetValue
+                                if (string.IsNullOrEmpty(msg.ToString()))
+                                    msg.Append(Msg.GetMsg("", pp.GetValue()));
+                            }
+                            if (string.IsNullOrEmpty(msg.ToString()))
+                                msg.Append(Msg.GetMsg(GetCtx(), "VIS_LineNotSaved"));
+                            else
+                                msg.Append(Msg.GetMsg(GetCtx(), "VIS_LineNotSaved") + "," + msg.ToString());
+                        }
+                    }
+                }
+                #endregion
+            }
+
+
+
+            //    count = CopyLinesFrom(fromProject)
+            //+ CopyPhasesFrom(fromProject);
             return count;
         }
 
@@ -415,7 +592,7 @@ namespace VAdvantage.Model
             }
             if (fromPhases.Length != count)
             {
-                  log.Warning("Count difference - Project=" + fromPhases.Length + " <> Saved=" + count);
+                log.Warning("Count difference - Project=" + fromPhases.Length + " <> Saved=" + count);
             }
 
             return count + taskCount;
@@ -433,8 +610,8 @@ namespace VAdvantage.Model
             SetC_ProjectType_ID(type.GetC_ProjectType_ID());
             SetProjectCategory(type.GetProjectCategory());
             //vikas  Mantis Issue 0000529 5 dec 2014
-        //    if (PROJECTCATEGORY_ServiceChargeProject.Equals(GetProjectCategory()))
-                CopyPhasesFrom(type);
+            //    if (PROJECTCATEGORY_ServiceChargeProject.Equals(GetProjectCategory()))
+            CopyPhasesFrom(type);
         }
 
         /**
@@ -457,11 +634,11 @@ namespace VAdvantage.Model
                     taskCount += toPhase.CopyTasksFrom(typePhases[i]);
                 }
             }
-           log.Fine("#" + count + "/" + taskCount
-               + " - " + type);
+            log.Fine("#" + count + "/" + taskCount
+                + " - " + type);
             if (typePhases.Length != count)
             {
-               log.Log(Level.SEVERE, "Count difference - Type=" + typePhases.Length + " <> Saved=" + count);
+                log.Log(Level.SEVERE, "Count difference - Type=" + typePhases.Length + " <> Saved=" + count);
             }
             return count;
         }
@@ -473,7 +650,7 @@ namespace VAdvantage.Model
          */
         protected override bool BeforeSave(bool newRecord)
         {
-            if (GetAD_User_ID() == -1)	//	Summary Project in Dimensions
+            if (GetAD_User_ID() == -1)  //	Summary Project in Dimensions
                 SetAD_User_ID(0);
 
             //	Set Currency
@@ -550,13 +727,13 @@ namespace VAdvantage.Model
             }
             else if (newRecord & success && (String.IsNullOrEmpty(GetCtx().GetContext("#DEFAULT_ACCOUNTING_APPLICABLE")) || Util.GetValueOfString(GetCtx().GetContext("#DEFAULT_ACCOUNTING_APPLICABLE")) == "Y"))
             {
-              bool sucs=  Insert_Accounting("C_Project_Acct", "C_AcctSchema_Default", null);
-              //Karan. work done to show message if data not saved in accounting tab. but will save data in current tab.
-              // Before this, data was being saved but giving message "record not saved".
-              if (!sucs)
-              {
-                  log.SaveWarning("AcctNotSaved", "");
-              }
+                bool sucs = Insert_Accounting("C_Project_Acct", "C_AcctSchema_Default", null);
+                //Karan. work done to show message if data not saved in accounting tab. but will save data in current tab.
+                // Before this, data was being saved but giving message "record not saved".
+                if (!sucs)
+                {
+                    log.SaveWarning("AcctNotSaved", "");
+                }
             }
 
             //	Value/Name change
@@ -566,18 +743,21 @@ namespace VAdvantage.Model
                 MAccount.UpdateValueDescription(GetCtx(), "C_Project_ID=" + GetC_Project_ID(), Get_TrxName());
             if (GetC_Campaign_ID() != 0)
             {
-                MCampaign cam = new MCampaign(GetCtx(), GetC_Campaign_ID(), null);
-                decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_Project pl WHERE pl.IsActive = 'Y' AND pl.C_Campaign_ID = " + GetC_Campaign_ID()));
+                //Used transaction because total was not updating on header
+                MCampaign cam = new MCampaign(GetCtx(), GetC_Campaign_ID(), Get_TrxName());
+                decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_Project pl WHERE pl.IsActive = 'Y' AND pl.C_Campaign_ID = " + GetC_Campaign_ID(),null, Get_TrxName()));
                 cam.SetCosts(plnAmt);
                 cam.Save();
             }
             else
-            {                
-                prjph = new MProject(GetCtx(), GetC_Project_ID(), Get_Trx());
+            {
+                //Used transaction because total was not updating on header
+                prjph = new MProject(GetCtx(), GetC_Project_ID(), Get_TrxName());
                 if (!prjph.IsOpportunity())
                 {
-                    decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(PlannedAmt),0) FROM C_ProjectPhase WHERE IsActive= 'Y' AND C_Project_ID= " + GetC_Project_ID()));
-                    DB.ExecuteQuery("UPDATE C_Project SET PlannedAmt=" + plnAmt + " WHERE C_Project_ID=" + GetC_Project_ID(), null, Get_Trx());
+                    //Used transaction because total was not updating on header
+                    decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(PlannedAmt),0) FROM C_ProjectPhase WHERE IsActive= 'Y' AND C_Project_ID= " + GetC_Project_ID(), null, Get_TrxName()));
+                    DB.ExecuteQuery("UPDATE C_Project SET PlannedAmt=" + plnAmt + " WHERE C_Project_ID=" + GetC_Project_ID(), null, Get_TrxName());
                 }
             }
             return success;
