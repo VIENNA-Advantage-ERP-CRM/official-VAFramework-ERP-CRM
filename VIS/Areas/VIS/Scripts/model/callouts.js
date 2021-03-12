@@ -2893,7 +2893,7 @@
             }
             /** Price List - ValidFrom date validation ** Dt:11/03/2021 ** Modified By: Kumar **/
             //	UOM Changed - convert from Entered -> Product
-            else if (mField.getColumnName() == "C_UOM_ID" || mField.getColumnName() == "M_AttributeSetInstance_ID") {
+            else if (mField.getColumnName() == "C_UOM_ID" || mField.getColumnName() == "M_AttributeSetInstance_ID" || mField.getColumnName() == "StartDate") {
                 var C_UOM_To_ID = Util.getValueOfInt(mTab.getValue("C_UOM_ID"));
                 QtyEntered = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
 
