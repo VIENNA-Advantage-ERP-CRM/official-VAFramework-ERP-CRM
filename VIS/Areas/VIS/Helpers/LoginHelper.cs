@@ -590,9 +590,9 @@ namespace VIS.Helpers
                 //  load Warehouses
                 do
                 {
-                    int VAF_Warehouse_ID = Util.GetValueOfInt(dr[0].ToString());
+                    int VAM_Warehouse_ID = Util.GetValueOfInt(dr[0].ToString());
                     String Name = dr[1].ToString();
-                    KeyNamePair p = new KeyNamePair(VAF_Warehouse_ID, Name);
+                    KeyNamePair p = new KeyNamePair(VAM_Warehouse_ID, Name);
                     list.Add(p);
                 }
                 while (dr.Read());
@@ -647,7 +647,7 @@ namespace VIS.Helpers
             //    __VAF_Org_ID = model.Login2Model.Org,
             //    __VAF_Org_Name = model.Login2Model.OrgName,
 
-            //    __VAF_Warehouse_ID = model.Login2Model.Warehouse,
+            //    __VAM_Warehouse_ID = model.Login2Model.Warehouse,
             //    __VAF_Warehouse_Name = model.Login2Model.WarehouseName,
             //    __Date = model.Login2Model.Date
 

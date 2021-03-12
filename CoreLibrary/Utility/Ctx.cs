@@ -1241,7 +1241,7 @@ namespace VAdvantage.Utility
         /// Get Warehouse Id from List
         /// </summary>
         /// <returns></returns>
-        public int GetVAF_Warehouse_ID()
+        public int GetVAM_Warehouse_ID()
         {
             return GetContextAsInt("#VAM_Warehouse_ID");
         }

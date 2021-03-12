@@ -802,6 +802,25 @@ namespace VAdvantage.Utility
             return DB.GetSQLValue(null, sql);
         }
 
+
+        /// <summary>
+        /// check name is qulifiled for module 
+        /// </summary>
+        /// <param name="name">name of table</param>
+        /// <returns></returns>
+
+        private static bool IsModQualiFiledName(string name)
+        {
+            if (name != null && name.Contains("_"))
+            {
+                if (name.IndexOf('_') > 4)
+                    return true;
+                if (!name.StartsWith("VA") && name.IndexOf('_')>2)
+                    return true;
+            }
+            return false;
+        }
+
         //Module
         /// <summary>
         /// Check given name has module prefix
@@ -818,7 +837,7 @@ namespace VAdvantage.Utility
 
             LoadAllModules();
 
-            if (name != null && name.Contains("_") && name.IndexOf('_') > 2)
+           if(IsModQualiFiledName(name))
             {
                 string prefix = name.Substring(0, name.IndexOf('_') + 1);
                 if (_cacheModules.ContainsKey(prefix))
@@ -834,7 +853,7 @@ namespace VAdvantage.Utility
             ///* Tuple */
             ///* [Assembly Name, Vesion=version] , [Namespace]  */
            
-            //if (name != null && name.Contains("_") && name.IndexOf('_') > 2)
+            //if (name != null && name.Contains("_") && name.IndexOf('_') > 3)
             //{
             //    /* prefix */
             //    string prefix = name.Substring(0, name.IndexOf('_') + 1);
@@ -895,7 +914,7 @@ namespace VAdvantage.Utility
             nspace = "";
             LoadAllModules();
 
-            if (name != null && name.Contains("_") && name.IndexOf('_') > 2)
+            if (IsModQualiFiledName(name))
             {
                 string prefix = name.Substring(0, name.IndexOf('_') + 1);
                 if (_cacheModules.ContainsKey(prefix))
@@ -912,7 +931,7 @@ namespace VAdvantage.Utility
             ///* Tuple */
             ///* [Assembly Name, Vesion=version] , [Namespace]  */
 
-            //if (name != null && name.Contains("_") && name.IndexOf('_') > 2)
+            //if (name != null && name.Contains("_") && name.IndexOf('_') > 3)
             //{
             //    /* prefix */
             //    string prefix = name.Substring(0, name.IndexOf('_') + 1);
@@ -967,7 +986,7 @@ namespace VAdvantage.Utility
             bool retVal = false;
             LoadAllModules();
 
-            if (prefix != null && prefix.Contains("_") && prefix.IndexOf('_') > 2)
+            if (IsModQualiFiledName(name))
             {
                 if (_cacheModules.ContainsKey(prefix))
                 {
@@ -1114,7 +1133,7 @@ namespace VAdvantage.Utility
         public static string TrimModulePrefix(string name)
         {
 
-            if (name != null && name.Contains("_") && name.IndexOf('_') > 2)
+            if (IsModQualiFiledName(name))
             {
                 try
                 {

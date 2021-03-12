@@ -330,9 +330,9 @@ namespace VAdvantage.Classes
         /// Get Warehouse Id from List
         /// </summary>
         /// <returns></returns>
-        public int GetVAF_Warehouse_ID()
+        public int GetVAM_Warehouse_ID()
         {
-            return GetContextAsInt("#VAF_Warehouse_ID");
+            return GetContextAsInt("#VAM_Warehouse_ID");
         }
 
         /// <summary>

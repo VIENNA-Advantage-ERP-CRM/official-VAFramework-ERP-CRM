@@ -44,18 +44,18 @@ namespace VAModelAD.Classes
 
         /**	Special Classes				*/
         private static String[] _special = new String[] {
-        "VAF_ColumnDic", "VAdvantage.Model.M_Element",
-        "AD_Registration", "VAdvantage.Model.M_VAFRegistration",
+        "VAF_ColumnDic", "VAdvantage.Model.M_VAF_ColumnDic",
+        "VAF_Registration", "VAdvantage.Model.M_VAFRegistration",
         "VAF_TreeInfo", "VAdvantage.Model.MTree_Base",
         "VAR_Category", "VAdvantage.Model.MVARCategory",
         "VAGL_Group", "VAdvantage.Model.MVAGLGroup",
-        "K_Category", "VAdvantage.Model.MKCategory",
+        //"VAKK_Category", "VAdvantage.Model.MVAKCategory",
         "VAB_Acct_ValidParameter", "VAdvantage.Model.MVABAccount",
         "VAB_Std_Stage", "VAdvantage.Model.MVABProjectTypeStage",
         "VAB_Std_Task", "VAdvantage.Model.MVABProjectTypeTask",
-        "K_Source", "VAdvantage.Model.X_K_Source",
-        "VARC_ViewColumn","VAdvantage.Model.X_VARC_ViewColumn",
-	//	AD_Attribute_Value, VAF_TreeInfoChild
+        //"VAKK_Source", "VAdvantage.Model.X_VAK_Source",
+        "VARC_ViewColumn","VAdvantage.Model.X_VARC_ViewColumn"
+	//	VAF_Attribute_Value, VAF_TreeInfoChild
 	    };
 
         private static String[] _projectClasses = new String[]{
@@ -64,7 +64,13 @@ namespace VAModelAD.Classes
             "ViennaAdvantage.CMFG.Model.M",
             "ViennaAdvantage.CMRP.Model.M",
             "ViennaAdvantage.CWMS.Model.M",
-            "ViennaAdvantage.Model.X_"
+            "ViennaAdvantage.Model.X_",
+            "VAS.Model.M",
+            "VAS.Process.M",
+            "VAS.CMFG.Model.M",
+            "VAS.CMRP.Model.M",
+            "VAS.CWMS.Model.M",
+            "VAS.Model.X_"
 
         };
 
@@ -103,7 +109,7 @@ namespace VAModelAD.Classes
         public Type GetClass(string tableName)
         {
             //	Not supported
-            if (tableName == null || tableName.EndsWith("_Trl"))
+            if (tableName == null || tableName.EndsWith("_TL"))
                 return null;
             //check cache
             Type cache = s_classCache[tableName];
@@ -113,7 +119,7 @@ namespace VAModelAD.Classes
             }
 		
             //	Import Tables (Name conflict)
-            if (tableName.StartsWith("I_"))
+            if (tableName.StartsWith("VAI_"))
             {
                 Type className = GetPOclass("VAdvantage.Process.X_" + tableName);
                 if (className != null)
@@ -140,27 +146,24 @@ namespace VAModelAD.Classes
                 }
             }
 
-            //	Strip table name prefix (e.g. AD_) Customizations are 3/4
+            //	Strip table name prefix (e.g. VA_) Customizations are 3/4
             String classNm = tableName;
             int index = classNm.IndexOf('_');
             if (index > 0)
             {
-                if (index < 3)		//	AD_, A_
+                if (index < 3)		//	VA_, A_
                     classNm = classNm.Substring(index + 1);
                 else
                 {
                     String prefix = classNm.Substring(0, index);
-                    if (prefix.Equals("Fact"))		//	keep custom prefix
+                    if (prefix.Equals("Actual"))		//	keep custom prefix
                         classNm = classNm.Substring(index + 1);
                 }
             }
             //	Remove underlines
             classNm = classNm.Replace("_", "");
 
-            //	Search packages
-            //String[] packages = getPackages(GetCtx());
-            //for (int i = 0; i < packages.length; i++)
-            //{
+           
 
             string namspace = "";
 
@@ -382,8 +385,11 @@ namespace VAModelAD.Classes
                 {
                     type = Type.GetType(className);
                 }
-
-                Type baseClass = type.BaseType;
+                Type baseClass = null;
+                if (type != null)
+                {
+                    baseClass = type.BaseType;
+                }
 
                 while (baseClass != null)
                 {
