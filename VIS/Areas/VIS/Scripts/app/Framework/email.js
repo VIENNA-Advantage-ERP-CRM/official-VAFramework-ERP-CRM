@@ -2642,7 +2642,7 @@
                         }
                         else {
                             if (rowsSource && rowsSource.length > 0) {
-                                fieldValue = rowsSource[0][columnName.toLower()]; ``
+                                fieldValue = rowsSource[0][columnName.toLower()]; 
                             }
                             else
                                 fieldValue = rowsSingleView[columnName.toLower()];
