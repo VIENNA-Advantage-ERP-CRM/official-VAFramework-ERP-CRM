@@ -4837,7 +4837,7 @@ namespace VAdvantage.Model
                 DateTime? HCDate = null;
                 DateTime? StartDate = null;
                 DateTime? EndDate = null;
-                Decimal AnnualValue = 0.00m;
+                Decimal AnnualValue = 0;
                 StringBuilder qry = new StringBuilder();
 
                 if (contDS != null && contDS.Tables[0].Rows.Count > 0)
