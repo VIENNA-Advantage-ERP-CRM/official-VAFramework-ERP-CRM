@@ -347,7 +347,10 @@ namespace ViennaAdvantageServer.Process
                     "(NVL(pl.plannedqty,0) * NVL(pl.plannedprice,0)) AS Price,pl.M_AttributeSetInstance_ID " +
                     " FROM C_Project p " +
                     "INNER JOIN C_ProjectLine pl ON p.C_Project_ID = pl.C_Project_ID" +
-                    " WHERE p.c_order_id IS NULL AND p.ref_order_id IS NULL AND c_period_id = " + C_Period_ID;
+                    " WHERE p.c_order_id IS NULL AND p.ref_order_id IS NULL AND c_period_id = " + C_Period_ID + " AND p.AD_Org_ID = " + mf.GetAD_Org_ID()  +
+                    " AND C_ProjectLine_ID NOT IN (SELECT C_ProjectLine_ID FROM va073_masterforecastlinedetail WHERE " +
+                    "AD_Org_ID = "+mf.GetAD_Org_ID()+" AND C_Period_ID="+C_Period_ID+") AND NVL(pl.M_Product_ID,0)>0 ";
+                    
 
                 sql = MRole.GetDefault(GetCtx()).AddAccessSQL(sql, "C_Project", true, true); // fully qualified - RO
 
@@ -430,6 +433,10 @@ namespace ViennaAdvantageServer.Process
 
                     }
                 }
+                else
+                {
+                    log.Log(Level.INFO, Msg.GetMsg(GetCtx(), "NoRecordFoundOpportunity"));
+                }
             }
             return Count;
         }
@@ -446,9 +453,11 @@ namespace ViennaAdvantageServer.Process
                  " INNER JOIN C_Doctype d ON o.c_DocTypeTarget_ID = d.C_Doctype_ID   " +
                  " WHERE d.DocBaseType='" + MDocBaseType.DOCBASETYPE_SALESORDER + "' " +
                  " AND d.DocSubTypeSo NOT IN ('" + MDocType.DOCSUBTYPESO_BlanketOrder + "','" + MDocType.DOCSUBTYPESO_Proposal + "')" +
-                 " AND o.IsSOTrx='Y' AND o.IsReturnTrx='N'" +
+                 " AND o.IsSOTrx='Y' AND o.IsReturnTrx='N' AND o.AD_Org_ID = " + mf.GetAD_Org_ID()  +
                  " AND o.DateOrdered BETWEEN (SELECT startdate FROM C_Period WHERE C_Period_ID = " + C_Period_ID + ")  " +
-                 " AND (SELECT enddate FROM C_Period WHERE C_Period_ID = " + C_Period_ID + ") AND ol.QtyOrdered > ol.QtyDelivered ";
+                 " AND (SELECT enddate FROM C_Period WHERE C_Period_ID = " + C_Period_ID + ") AND ol.QtyOrdered > ol.QtyDelivered "+
+                 " AND ol.C_OrderLine_ID NOT IN (SELECT C_OrderLine_ID FROM va073_masterforecastlinedetail WHERE "+
+                 "AD_Org_ID = " + mf.GetAD_Org_ID() + " AND C_Period_ID=" + C_Period_ID + ") AND NVL(ol.M_Product_ID,0)>0 ";
 
             sql = MRole.GetDefault(GetCtx()).AddAccessSQL(sql, "C_Order", true, true); // fully qualified - RO
 
@@ -525,6 +534,10 @@ namespace ViennaAdvantageServer.Process
 
                 }
             }
+            else
+            {
+                log.Log(Level.INFO, Msg.GetMsg(GetCtx(), "NoRecordFoundSalesOrder"));
+            }
             return Count;
         }
 
@@ -539,8 +552,10 @@ namespace ViennaAdvantageServer.Process
                     C_ForecastLine_ID,f.C_Period_ID,fl.C_UOM_ID,NVL(pricestd,0) AS Price,f.C_Currency_ID
                     FROM C_Forecast f " +
                     " INNER JOIN C_Forecastline fl ON fl.c_forecast_id = f.c_forecast_id " +
-                    " WHERE f.c_period_id = " + C_Period_ID + " AND " +
-                    " f.isactive = 'Y' AND f.processed = 'Y'";
+                    " WHERE f.c_period_id = " + C_Period_ID + " AND f.AD_Org_ID = " + mf.GetAD_Org_ID()  +
+                    " AND f.isactive = 'Y' AND f.processed = 'Y'" +
+                    " AND C_ForecastLine_ID NOT IN (SELECT C_ForecastLine_ID FROM VA073_MasterForecastlinedetail WHERE "+
+                    "AD_Org_ID = " + mf.GetAD_Org_ID() + " AND C_Period_ID=" + C_Period_ID + ") AND NVL(fl.M_Product_ID,0)>0 ";
 
             sql = MRole.GetDefault(mf.GetCtx()).AddAccessSQL(sql, "C_Forecast", true, true); // fully qualified - RO
 
@@ -615,6 +630,10 @@ namespace ViennaAdvantageServer.Process
 
                 }
             }
+            else
+            {
+                log.Log(Level.INFO, Msg.GetMsg(GetCtx(), "NoRecordFoundForecast"));
+            }
             return Count;
         }
 
@@ -666,8 +685,8 @@ namespace ViennaAdvantageServer.Process
             //object of VA073_MasterForecastLineDetails
             po = tbl.GetPO(mf.GetCtx(), 0, mf.Get_Trx());
             //LineNo = Util.GetValueOfInt(DB.ExecuteScalar("SELECT NVL(MAX(LineNo), 0) AS DefaultValue FROM VA073_MasterForecastLineDetail WHERE C_MasterForecastLine_ID=" + Parent.GetC_MasterForecastLine_ID(), null, mf.Get_Trx()));
-            po.Set_Value("AD_Client_ID", Parent.GetAD_Client_ID());
-            po.Set_Value("AD_Org_ID", Parent.GetAD_Org_ID());
+            po.SetAD_Client_ID(Parent.GetAD_Client_ID());
+            po.SetAD_Org_ID(Parent.GetAD_Org_ID());
             po.Set_Value("LineNo", LineNo);
             po.Set_Value("C_MasterForecastLine_ID", Parent.GetC_MasterForecastLine_ID());
             po.Set_Value("C_Order_ID", Order_ID);
