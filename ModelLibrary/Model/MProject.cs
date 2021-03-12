@@ -388,6 +388,7 @@ namespace VAdvantage.Model
                 int C_Phase_ID = 0; bool exists = false;
                 MProjectPhase toPhase = null;
                 MProjectLine[] fromLines = null;
+                List<MProjectLine> list = null;
                 //	Copy Phases
                 for (int i = 0; i < fromPhases.Length; i++)
                 {
@@ -428,7 +429,7 @@ namespace VAdvantage.Model
                             }
                             else
                             {
-                               
+
 
                                 DataSet projDs = DB.ExecuteDataset(" SELECT C_ProjectLine_ID FROM C_ProjectLine WHERE " +
                                     " C_ProjectPhase_ID=" + fromPhases[i].GetC_ProjectPhase_ID() + " AND " +
@@ -436,7 +437,7 @@ namespace VAdvantage.Model
 
                                 if (projDs != null && projDs.Tables[0].Rows.Count > 0)
                                 {
-                                    List<MProjectLine> list = new List<MProjectLine>();
+                                    list = new List<MProjectLine>();
                                     for (int k = 0; k < projDs.Tables[0].Rows.Count; k++)
                                     {
                                         list.Add(new MProjectLine(GetCtx(), Util.GetValueOfInt(projDs.Tables[0].Rows[k]["C_ProjectLine_ID"]), Get_TrxName()));
@@ -747,7 +748,7 @@ namespace VAdvantage.Model
             {
                 //Used transaction because total was not updating on header
                 MCampaign cam = new MCampaign(GetCtx(), GetC_Campaign_ID(), Get_TrxName());
-                decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_Project pl WHERE pl.IsActive = 'Y' AND pl.C_Campaign_ID = " + GetC_Campaign_ID(),null, Get_TrxName()));
+                decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_Project pl WHERE pl.IsActive = 'Y' AND pl.C_Campaign_ID = " + GetC_Campaign_ID(), null, Get_TrxName()));
                 cam.SetCosts(plnAmt);
                 cam.Save();
             }
