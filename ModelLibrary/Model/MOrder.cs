@@ -4215,12 +4215,13 @@ namespace VAdvantage.Model
                 _budgetControl.ControlledAmount = Decimal.Subtract(_budgetControl.ControlledAmount, Util.GetValueOfDecimal(drDataRecord["Debit"]));
                 if (_budgetControl.ControlledAmount < 0)
                 {
+                    // When budget breached keep adding message to error message
                     if (!_budgetMessage.Contains(Util.GetValueOfString(drBUdgetControl["BudgetName"])))
                     {
                         _budgetMessage += Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
                                             + Util.GetValueOfString(drBUdgetControl["ControlName"]) + ", ";
                     }
-                    log.Info("Budget control Exceed - " + Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
+                    log.Info("Budget Breached - " + Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
                                         + Util.GetValueOfString(drBUdgetControl["ControlName"]) + " - (" + _budgetControl.ControlledAmount + ") - Table ID : " +
                                         Util.GetValueOfInt(drDataRecord["LineTable_ID"]) + " - Record ID : " + Util.GetValueOfInt(drDataRecord["Line_ID"]));
                 }
@@ -4232,12 +4233,13 @@ namespace VAdvantage.Model
                                              (x.Account_ID == Util.GetValueOfInt(drDataRecord["Account_ID"]))
                                             ))
                 {
+                    // If budget not defiend for respective control keep adding in budget error message
                     if (!_budgetMessage.Contains(Util.GetValueOfString(drBUdgetControl["BudgetName"])))
                     {
                         _budgetMessage += Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
                                             + Util.GetValueOfString(drBUdgetControl["ControlName"]) + ", ";
                     }
-                    log.Info("Budget control not defined for - " + Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
+                    log.Info("Budget not defined for - " + Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
                                         + Util.GetValueOfString(drBUdgetControl["ControlName"]) + " - Table ID : " +
                                         Util.GetValueOfInt(drDataRecord["LineTable_ID"]) + " - Record ID : " + Util.GetValueOfInt(drDataRecord["Line_ID"]) +
                                         " - Account ID : " + Util.GetValueOfInt(drDataRecord["Account_ID"]));
