@@ -4526,6 +4526,36 @@ namespace VAdvantage.Model
                         lineTotalAmt = sp + taxAmt;
 
                         SetLineTotalAmt(Decimal.Round(lineTotalAmt, GetPrecision()));
+
+
+                        // set Tax Amount in base currency
+                        if (Get_ColumnIndex("TaxBaseAmt") > 0)
+                        {
+                            primaryAcctSchemaCurrency = GetCtx().GetContextAsInt("$C_Currency_ID");
+                            if (Ord.GetC_Currency_ID() != primaryAcctSchemaCurrency)
+                            {
+                                taxAmt = MConversionRate.Convert(GetCtx(), GetTaxAmt(), primaryAcctSchemaCurrency, Ord.GetC_Currency_ID(),
+                                                                                           Ord.GetDateAcct(), Ord.GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+                            }
+                            else
+                            {
+                                taxAmt = GetTaxAmt();
+                            }
+                            SetTaxBaseAmt(taxAmt);
+                        }
+
+                        // set Taxable Amount -- (Line Total-Tax Amount)
+                        if (Get_ColumnIndex("TaxAbleAmt") >= 0)
+                        {
+                            if (Get_ColumnIndex("SurchargeAmt") > 0)
+                            {
+                                SetTaxAbleAmt(Decimal.Subtract(Decimal.Subtract(GetLineTotalAmt(), GetTaxAmt()), GetSurchargeAmt()));
+                            }
+                            else
+                            {
+                                SetTaxAbleAmt(Decimal.Subtract(GetLineTotalAmt(), GetTaxAmt()));
+                            }
+                        }
                     }
                     else
                     {
