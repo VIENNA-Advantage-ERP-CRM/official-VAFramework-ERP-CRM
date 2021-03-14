@@ -135,7 +135,7 @@ namespace VAdvantage.Process
                     tblVer.SetName(tableName + " Ver");
                     tblVer.Set_Value("Export_ID", null);
                     tblVer.Set_Value("AD_Window_ID", null);
-                    tblVer.SetIsDeleteable(false);
+                    tblVer.SetIsDeleteable(true);
                     tblVer.SetDescription("Table for maintaining versions of " + tableName);
                     tblVer.SetHelp("Table for maintaining versions of " + tableName);
                     tblVer.SetIsMaintainVersions(false);
