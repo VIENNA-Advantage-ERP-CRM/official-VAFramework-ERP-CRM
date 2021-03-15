@@ -1802,6 +1802,9 @@ namespace VAdvantage.Model
                     // create object of To Locator where we are moving products
                     MLocator locatorTo = MLocator.Get(GetCtx(), line.GetM_LocatorTo_ID());
 
+                    // check costing method is LIFO or FIFO
+                    String costingMethod = MCostElement.CheckLifoOrFifoMethod(GetCtx(), GetAD_Client_ID(), line.GetM_Product_ID(), Get_Trx());
+
                     // is used to maintain cost of "move to" 
                     Decimal toCurrentCostPrice = 0;
 
@@ -1820,15 +1823,6 @@ namespace VAdvantage.Model
                         // For To Warehouse
                         toCurrentCostPrice = MCost.GetproductCosts(line.GetAD_Client_ID(), locatorTo.GetAD_Org_ID(),
                            line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), locatorTo.GetM_Warehouse_ID());
-
-                        //line.SetCurrentCostPrice(currentCostPrice);
-                        //if (!line.Save(Get_Trx()))
-                        //{
-                        //    ValueNamePair pp = VLogger.RetrieveError();
-                        //    log.Info("Error found for Movement Line for this Line ID = " + line.GetM_MovementLine_ID() +
-                        //               " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
-                        //    //Get_Trx().Rollback();
-                        //}
 
                         DB.ExecuteQuery("UPDATE M_MovementLine SET CurrentCostPrice = " + currentCostPrice + @" , ToCurrentCostPrice = " + toCurrentCostPrice + @"
                                                 WHERE M_MovementLine_ID = " + line.GetM_MovementLine_ID(), null, Get_Trx());
@@ -1858,15 +1852,38 @@ namespace VAdvantage.Model
                         }
                         else if (!IsReversal()) // not to update cost for reversed document
                         {
+                            if (!String.IsNullOrEmpty(costingMethod))
+                            {
+                                if (line.GetMovementQty() > 0)
+                                {
+                                    currentCostPrice = MCost.GetLifoAndFifoCurrentCostFromCostQueueTransaction(GetCtx(), line.GetAD_Client_ID(), line.GetAD_Org_ID(),
+                                                       line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), 2, line.GetM_MovementLine_ID(), costingMethod,
+                                                       GetDTD001_MWarehouseSource_ID(), true, Get_Trx());
+                                }
+
+                                if (line.GetMovementQty() < 0)
+                                {
+                                    toCurrentCostPrice = MCost.GetLifoAndFifoCurrentCostFromCostQueueTransaction(GetCtx(), line.GetAD_Client_ID(), line.GetAD_Org_ID(),
+                                                           line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), 2, line.GetM_MovementLine_ID(), costingMethod,
+                                                           locatorTo.GetM_Warehouse_ID(), true, Get_Trx());
+                                }
+
+                                DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice =  CASE WHEN MovementQty < 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
+                                                 @" END , ToCurrentCostPrice = CASE WHEN MovementQty > 0 THEN ToCurrentCostPrice ELSE" + toCurrentCostPrice + @" END
+                                                 , IsCostImmediate = 'Y'
+                                                WHERE M_InoutLine_ID = " + line.GetM_MovementLine_ID(), null, Get_Trx());
+                            }
+
                             currentCostPrice = MCost.GetproductCosts(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
-                         line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), GetDTD001_MWarehouseSource_ID());
+                                                line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), GetDTD001_MWarehouseSource_ID());
 
                             toCurrentCostPrice = MCost.GetproductCosts(line.GetAD_Client_ID(), locatorTo.GetAD_Org_ID(),
-                           line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), locatorTo.GetM_Warehouse_ID());
+                                                 line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), locatorTo.GetM_Warehouse_ID());
 
                             DB.ExecuteQuery("UPDATE M_MovementLine SET PostCurrentCostPrice = " + currentCostPrice +
                                                 @" , ToPostCurrentCostPrice = " + toCurrentCostPrice + @" , IsCostImmediate = 'Y' 
                                                 WHERE M_MovementLine_ID = " + line.GetM_MovementLine_ID(), null, Get_Trx());
+
                         }
                     }
                     //}

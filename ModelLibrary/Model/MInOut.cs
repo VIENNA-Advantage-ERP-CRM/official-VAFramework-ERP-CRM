@@ -3179,6 +3179,7 @@ namespace VAdvantage.Model
                     #region Manage Cost Queue
                     bool isCostAdjustableOnLost = false;
                     int count = 0;
+                    String costingMethod = MCostElement.CheckLifoOrFifoMethod(GetCtx(), GetAD_Client_ID(), sLine.GetM_Product_ID(), Get_Trx());
 
                     productCQ = new MProduct(GetCtx(), sLine.GetM_Product_ID(), Get_Trx());
                     if (productCQ.GetProductType() == "I") // for Item Type product
@@ -3203,14 +3204,6 @@ namespace VAdvantage.Model
                         }
                         DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice = " + currentCostPrice +
                                                           @" WHERE M_InoutLine_ID = " + sLine.GetM_InOutLine_ID(), null, Get_Trx());
-                        //sLine.SetCurrentCostPrice(currentCostPrice);
-                        //if (!sLine.Save(Get_Trx()))
-                        //{
-                        //    ValueNamePair pp = VLogger.RetrieveError();
-                        //    _log.Info("Error found for Material Receipt for this Line ID = " + sLine.GetM_InOutLine_ID() +
-                        //               " Error Name is " + pp.GetName());
-                        //}
-                        //}
 
                         _partner = new MBPartner(GetCtx(), GetC_BPartner_ID(), null);
                         orderLine = new MOrderLine(GetCtx(), lines[lineIndex].GetC_OrderLine_ID(), null);
@@ -3235,8 +3228,17 @@ namespace VAdvantage.Model
                                 }
                                 else
                                 {
+                                    //if (costingMethod != "")
+                                    //{
+                                    //    currentCostPrice = MCost.GetLifoAndFifoCurrentCostFromCostQueueTransaction(GetCtx(), sLine.GetAD_Client_ID(), sLine.GetAD_Org_ID(),
+                                    //                   sLine.GetM_Product_ID(), sLine.GetM_AttributeSetInstance_ID(), 0, sLine.GetM_InOutLine_ID(), costingMethod,
+                                    //                   GetM_Warehouse_ID(), false, Get_Trx());
+                                    //    DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice =  " + currentCostPrice +
+                                    //                       @" WHERE M_InoutLine_ID = " + sLine.GetM_InOutLine_ID(), null, Get_Trx());
+                                    //}
+
                                     currentCostPrice = MCost.GetproductCostAndQtyMaterial(sLine.GetAD_Client_ID(), sLine.GetAD_Org_ID(),
-                                                                             sLine.GetM_Product_ID(), sLine.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID(), false);
+                                                                         sLine.GetM_Product_ID(), sLine.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID(), false);
                                     DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice = CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
                                                                       @" END , IsCostImmediate = 'Y' , 
                                                      PostCurrentCostPrice = CASE WHEN 1 = " + (isUpdatePostCurrentcostPriceFromMR ? 1 : 0) +
@@ -3307,13 +3309,25 @@ namespace VAdvantage.Model
                                 }
                                 else
                                 {
+                                    //if (costingMethod != "")
+                                    //{
+                                    //    currentCostPrice = MCost.GetLifoAndFifoCurrentCostFromCostQueueTransaction(GetCtx(), sLine.GetAD_Client_ID(), sLine.GetAD_Org_ID(),
+                                    //                   sLine.GetM_Product_ID(), sLine.GetM_AttributeSetInstance_ID(), 0, sLine.GetM_InOutLine_ID(), costingMethod,
+                                    //                   GetM_Warehouse_ID(), false, Get_Trx());
+                                    //    DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice =  " + currentCostPrice +
+                                    //                       @"  , IsCostImmediate = 'Y'
+                                    //                        WHERE M_InoutLine_ID = " + sLine.GetM_InOutLine_ID(), null, Get_Trx());
+                                    //}
+                                    //else
+                                    //{
                                     currentCostPrice = MCost.GetproductCostAndQtyMaterial(sLine.GetAD_Client_ID(), sLine.GetAD_Org_ID(),
-                                                                             sLine.GetM_Product_ID(), sLine.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID(), false);
+                                                                         sLine.GetM_Product_ID(), sLine.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID(), false);
                                     DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice = CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
                                                                      @" END , IsCostImmediate = 'Y' ,
                                                       PostCurrentCostPrice = CASE WHEN 1 = " + (isUpdatePostCurrentcostPriceFromMR ? 1 : 0) +
                                                       @" THEN " + currentCostPrice + @" ELSE PostCurrentCostPrice END 
                                                     WHERE M_InoutLine_ID = " + sLine.GetM_InOutLine_ID(), null, Get_Trx());
+                                    //}
 
                                     // calculate cost of Invoice if invoice created before this MR
                                     if (matchedInvoice.Count > 0)
@@ -3368,7 +3382,7 @@ namespace VAdvantage.Model
                                                 if (!isUpdatePostCurrentcostPriceFromMR)
                                                 {
                                                     DB.ExecuteQuery("UPDATE M_InoutLine SET PostCurrentCostPrice =  " + currentCostPrice +
-                                                                     @"  WHERE M_InoutLine_ID = " + matchedInvoice[mi].GetM_InOutLine_ID(), null, Get_Trx());
+                                                                 @"  WHERE M_InoutLine_ID = " + matchedInvoice[mi].GetM_InOutLine_ID(), null, Get_Trx());
                                                 }
                                             }
                                         }
@@ -3407,10 +3421,20 @@ namespace VAdvantage.Model
                             }
                             else
                             {
-                                currentCostPrice = MCost.GetproductCostAndQtyMaterial(sLine.GetAD_Client_ID(), sLine.GetAD_Org_ID(),
-                               sLine.GetM_Product_ID(), sLine.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID(), false);
-                                DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice = CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
-                                                                     @" END , IsCostImmediate = 'Y' WHERE M_InoutLine_ID = " + sLine.GetM_InOutLine_ID(), null, Get_Trx());
+                                if (costingMethod != "")
+                                {
+                                    currentCostPrice = MCost.GetLifoAndFifoCurrentCostFromCostQueueTransaction(GetCtx(), sLine.GetAD_Client_ID(), sLine.GetAD_Org_ID(), sLine.GetM_Product_ID(),
+                                        sLine.GetM_AttributeSetInstance_ID(), 0, sLine.GetM_InOutLine_ID(), costingMethod, GetM_Warehouse_ID(), false, Get_Trx());
+                                    DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice =  " + currentCostPrice +
+                                                                         @"  , IsCostImmediate = 'Y' WHERE M_InoutLine_ID = " + sLine.GetM_InOutLine_ID(), null, Get_Trx());
+                                }
+                                else
+                                {
+                                    currentCostPrice = MCost.GetproductCostAndQtyMaterial(sLine.GetAD_Client_ID(), sLine.GetAD_Org_ID(),
+                                                         sLine.GetM_Product_ID(), sLine.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID(), false);
+                                    DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice = CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
+                                                                         @" END , IsCostImmediate = 'Y' WHERE M_InoutLine_ID = " + sLine.GetM_InOutLine_ID(), null, Get_Trx());
+                                }
                             }
                             #endregion
                         }
@@ -3442,10 +3466,21 @@ namespace VAdvantage.Model
                             }
                             else
                             {
-                                currentCostPrice = MCost.GetproductCosts(sLine.GetAD_Client_ID(), sLine.GetAD_Org_ID(),
-                               sLine.GetM_Product_ID(), sLine.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID());
-                                DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice = CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
-                                                                     @" END , IsCostImmediate = 'Y' WHERE M_InoutLine_ID = " + sLine.GetM_InOutLine_ID(), null, Get_Trx());
+                                if (costingMethod != "")
+                                {
+                                    currentCostPrice = MCost.GetLifoAndFifoCurrentCostFromCostQueueTransaction(GetCtx(), sLine.GetAD_Client_ID(), sLine.GetAD_Org_ID(),
+                                        sLine.GetM_Product_ID(), sLine.GetM_AttributeSetInstance_ID(), 0, sLine.GetM_InOutLine_ID(), costingMethod,
+                                        GetM_Warehouse_ID(), true, Get_Trx());
+                                    DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice =  " + currentCostPrice +
+                                                                         @"  , IsCostImmediate = 'Y' WHERE M_InoutLine_ID = " + sLine.GetM_InOutLine_ID(), null, Get_Trx());
+                                }
+                                else
+                                {
+                                    currentCostPrice = MCost.GetproductCosts(sLine.GetAD_Client_ID(), sLine.GetAD_Org_ID(),
+                                   sLine.GetM_Product_ID(), sLine.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID());
+                                    DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice = CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
+                                                                         @" END , IsCostImmediate = 'Y' WHERE M_InoutLine_ID = " + sLine.GetM_InOutLine_ID(), null, Get_Trx());
+                                }
                             }
                             #endregion
                         }
@@ -3470,12 +3505,21 @@ namespace VAdvantage.Model
                                 }
                                 else
                                 {
-                                    currentCostPrice = MCost.GetproductCosts(sLine.GetAD_Client_ID(), sLine.GetAD_Org_ID(),
-                               sLine.GetM_Product_ID(), sLine.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID());
-                                    DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice = CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
-                                                                      @" END , IsCostImmediate = 'Y' WHERE M_InoutLine_ID = " + sLine.GetM_InOutLine_ID(), null, Get_Trx());
-                                    //sLine.SetIsCostImmediate(true);
-                                    //sLine.Save();
+                                    //if (costingMethod != "")
+                                    //{
+                                    //    currentCostPrice = MCost.GetLifoAndFifoCurrentCostFromCostQueueTransaction(GetCtx(), sLine.GetAD_Client_ID(), sLine.GetAD_Org_ID(),
+                                    //        sLine.GetM_Product_ID(), sLine.GetM_AttributeSetInstance_ID(), 0, sLine.GetM_InOutLine_ID(), costingMethod,
+                                    //        GetM_Warehouse_ID(), true, Get_Trx());
+                                    //    DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice =  " + currentCostPrice +
+                                    //                                         @"  , IsCostImmediate = 'Y' WHERE M_InoutLine_ID = " + sLine.GetM_InOutLine_ID(), null, Get_Trx());
+                                    //}
+                                    //else
+                                    {
+                                        currentCostPrice = MCost.GetproductCosts(sLine.GetAD_Client_ID(), sLine.GetAD_Org_ID(),
+                                                            sLine.GetM_Product_ID(), sLine.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID());
+                                        DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice = CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
+                                                                          @" END , IsCostImmediate = 'Y' WHERE M_InoutLine_ID = " + sLine.GetM_InOutLine_ID(), null, Get_Trx());
+                                    }
                                 }
                                 #endregion
                             }
@@ -3541,12 +3585,21 @@ namespace VAdvantage.Model
                                 }
                                 else
                                 {
+                                    //     if (!String.IsNullOrEmpty(costingMethod))
+                                    //     {
+                                    //         currentCostPrice = MCost.GetLifoAndFifoCurrentCostFromCostQueueTransaction(GetCtx(), sLine.GetAD_Client_ID(), sLine.GetAD_Org_ID(),
+                                    //sLine.GetM_Product_ID(), sLine.GetM_AttributeSetInstance_ID(), 0, sLine.GetM_InOutLine_ID(), costingMethod,
+                                    //GetM_Warehouse_ID(), true, Get_Trx());
+                                    //         DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice =  " + currentCostPrice +
+                                    //                                              @"  , IsCostImmediate = 'Y' WHERE M_InoutLine_ID = " + sLine.GetM_InOutLine_ID(), null, Get_Trx());
+                                    //     }
+                                    //     else
+                                    //{
                                     currentCostPrice = MCost.GetproductCosts(sLine.GetAD_Client_ID(), sLine.GetAD_Org_ID(),
-                               sLine.GetM_Product_ID(), sLine.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID());
+                           sLine.GetM_Product_ID(), sLine.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID());
                                     DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice = CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
                                                                      @" END , IsCostImmediate = 'Y' WHERE M_InoutLine_ID = " + sLine.GetM_InOutLine_ID(), null, Get_Trx());
-                                    //sLine.SetIsCostImmediate(true);
-                                    //sLine.Save();
+                                    //}
                                 }
                                 #endregion
                             }

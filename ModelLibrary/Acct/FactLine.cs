@@ -974,7 +974,14 @@ namespace VAdvantage.Acct
             //    SetAmtSourceCr(Env.ZERO);
             //}
             //
-            return Decimal.Subtract(GetAmtSourceDr(), GetAmtSourceCr());
+            if (_doc != null && _doc is Doc_GLJournal)
+            {
+                return Decimal.Subtract(GetAmtAcctDr(), GetAmtAcctCr());
+            }
+            else
+            {
+                return Decimal.Subtract(GetAmtSourceDr(), GetAmtSourceCr());
+            }
         }
 
         /// <summary>

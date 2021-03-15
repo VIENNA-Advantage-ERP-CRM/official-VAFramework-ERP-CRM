@@ -162,6 +162,11 @@ namespace VAdvantage.Acct
             return _C_Currency_ID;
         }
 
+        public void SetC_Currency_ID(int C_Currency_ID)
+        {
+            _C_Currency_ID = C_Currency_ID;
+        }
+
         /// <summary>
         /// Get Conversion Type
         /// </summary>
@@ -1191,7 +1196,7 @@ namespace VAdvantage.Acct
         public void SetConversionRate(Decimal conversionRate)
         {
             _ConversionRate = conversionRate;
-        } 
+        }
 
         /// <summary>
         /// Get User Element 1
