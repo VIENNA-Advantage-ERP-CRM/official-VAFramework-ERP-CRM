@@ -540,6 +540,7 @@ namespace VAdvantage.Model
                     _Sql.Append("UPDATE C_BankStatement bs"
                   + " SET StatementDifference=(StatementDifference-(SELECT COALESCE( SUM(StmtAmt), 0 ) FROM C_BankStatementLine bsl "
                   + " WHERE bsl.C_BankStatement_ID=bs.C_BankStatement_ID AND bsl.IsActive='Y' AND bsl.C_BankStatementLine_ID=" + GetC_BankStatementLine_ID() + ")) "
+                  + ", StatementDate=(SELECT MAX(DateAcct) FROM C_BankStatementLine WHERE IsActive = 'Y' AND C_BankStatement_ID = " + GetC_BankStatement_ID()+")"
                   + " WHERE C_BankStatement_ID=" + GetC_BankStatement_ID());
 
                 }
@@ -548,6 +549,7 @@ namespace VAdvantage.Model
                     _Sql.Append("UPDATE C_BankStatement bs"
                    + " SET StatementDifference=(SELECT COALESCE( SUM(StmtAmt), 0 ) FROM C_BankStatementLine bsl "
                        + "WHERE bsl.C_BankStatement_ID=bs.C_BankStatement_ID AND bsl.IsActive='Y') "
+                       + ", StatementDate=(SELECT MAX(DateAcct) FROM C_BankStatementLine WHERE IsActive = 'Y' AND C_BankStatement_ID = " + GetC_BankStatement_ID() + ")"
                    + "WHERE C_BankStatement_ID=" + GetC_BankStatement_ID());
                 }
 

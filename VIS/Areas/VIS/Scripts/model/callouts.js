@@ -15825,8 +15825,9 @@
                 mTab.setValue("Qty", QtyRequired);
             }
             //	UOM Changed - convert from Entered -> Product
-            else if (mField.getColumnName() == "C_UOM_ID") {
-                var C_UOM_To_ID = Util.getValueOfInt(value);
+            /** Price List - Ensuring valid Uom id ** Dt:01/02/2021 ** Modified By: Kumar **/
+            else if (mField.getColumnName() == "C_UOM_ID" || mField.getColumnName() == "M_AttributeSetInstance_ID") {
+                var C_UOM_To_ID = Util.getValueOfInt(mTab.getValue("C_UOM_ID"));
                 QtyEntered = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
                 var dr = VIS.dataContext.getJSONRecord("ModulePrefix/GetModulePrefix", "VA009_");
                 var countEd011 = 0;
@@ -15834,7 +15835,15 @@
                     countEd011 = dr["VA009_"] ? 1 : 0;
                 }
                 var C_BPartner_ID = ctx.getContextAsInt(windowNo, "C_BPartner_ID");
-                var M_AttributeSetInstance_ID = ctx.getContextAsInt(windowNo, "M_AttributeSetInstance_ID");
+                var M_AttributeSetInstance_ID;
+                /** Price List - Ensuring valid Uom id ** Dt:01/02/2021 ** Modified By: Kumar **/
+                if (mField.getColumnName() == "M_AttributeSetInstance_ID") {
+                    M_AttributeSetInstance_ID = Util.getValueOfInt(mTab.getValue("M_AttributeSetInstance_ID"));
+                }
+                else {
+                    M_AttributeSetInstance_ID = ctx.getContextAsInt(windowNo, "M_AttributeSetInstance_ID");
+                }
+
                 var isSOTrx = false;
                 var M_PriceList_ID = ctx.getContextAsInt(windowNo, "M_PriceList_ID");
                 var M_PriceList_Version_ID = ctx.getContextAsInt(windowNo, "M_PriceList_Version_ID");
@@ -15852,6 +15861,10 @@
                 dr = VIS.dataContext.getJSONRecord("MProductPricing/GetProductPricing", paramStr);
                 if (dr != null) {
                     PriceActual = dr["PriceActual"];
+                    /** Price List - Ensuring valid Uom id ** Dt:01/02/2021 ** Modified By: Kumar **/
+                    if (mField.getColumnName() == "M_AttributeSetInstance_ID") {
+                        mTab.setValue("PriceActual", Util.getValueOfInt(PriceActual));
+                    }
                 }
                 //Get precision from server side
                 paramStr = C_UOM_To_ID.toString().concat(",");
@@ -16760,19 +16773,171 @@
         return "";
     };
     CalloutTeamForcast.prototype.CalculatePrice = function (ctx, windowNo, mTab, mField, value, oldValue) {
-        //  
-        if (value == null || value.toString() == "" || Util.getValueOfInt(value) <= 0) {
+        // 
+        if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) <= 0) {
             return "";
         }
-
-        var price = Util.getValueOfDecimal(mTab.getValue("UnitPrice")) * Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
+        this.setCalloutActive(true);
+        var price = Util.getValueOfDecimal(mTab.getValue("UnitPrice")) * Util.getValueOfDecimal(mTab.getValue("BaseQty"));
         // ForcastLine.SetQtyEntered(price);
         mTab.setValue("PriceStd", price);
+
+        this.setCalloutActive(false);
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";
     };
+    /**
+     * UOM Conversion
+     * @param {any} ctx
+     * @param {any} windowNo
+     * @param {any} mTab
+     * @param {any} mField
+     * @param {any} value
+     * @param {any} oldValue
+     */
+    CalloutTeamForcast.prototype.Qty = function (ctx, windowNo, mTab, mField, value, oldValue) {  
+        if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {          
+            return "";
+        }  
+        this.setCalloutActive(true);
+        var C_UOM_ID = mTab.getValue("C_UOM_ID");
+        if (C_UOM_ID == null) {
+            C_UOM_ID = ctx.getContextAsInt(windowNo, "C_UOM_ID")  
+        }
+        var M_Product_ID = mTab.getValue("M_Product_ID");
+        var Qty = mTab.getValue("BaseQty");
+        var paramStr = M_Product_ID.toString().concat(",", C_UOM_ID.toString(), ",", Qty.toString()); 
+        var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
+        if (pc != null) {
+            mTab.setValue("QtyEntered", pc);
+        }
+        else {
+            mTab.setValue("QtyEntered", Qty);
+        }
+        if (Util.getValueOfDecimal(mTab.getValue("UnitPrice")) != 0 && Qty != 0) {
+            mTab.setValue("PriceStd", Qty * mTab.getValue("UnitPrice"))
+        }
+        this.setCalloutActive(false);
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
+    /**
+     * set currency on the basis of Pricelist
+     * @param {any} ctx
+     * @param {any} windowNo
+     * @param {any} mTab
+     * @param {any} mField
+     * @param {any} value
+     * @param {any} oldValue
+     */
+    CalloutTeamForcast.prototype.Currency = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {
+            return "";
+        }
+        this.setCalloutActive(true);
+        //get currency from pricelist
+        var pricelist = VIS.dataContext.getJSONRecord("MPriceList/GetPriceListData", Util.getValueOfString( mTab.getValue("M_PriceList_ID")));
+        if (pricelist["C_Currency_ID"] != null) {
+            mTab.setValue("C_Currency_ID", pricelist["C_Currency_ID"]);
+        }
+
+        this.setCalloutActive(false);
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
+    /**
+     *Set Std price 
+     * @param {any} ctx
+     * @param {any} windowNo
+     * @param {any} mTab
+     * @param {any} mField
+     * @param {any} value
+     * @param {any} oldValue
+     */
+    CalloutTeamForcast.prototype.ProductPrice = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {
+            if (mTab.getValue("M_Product_ID") == null) {
+                //set values to 0 if no product is selected
+                mTab.setValue("PriceStd", 0);
+                mTab.setValue("UnitPrice", 0);
+                mTab.setValue("QtyEntered", 0);
+                mTab.setValue("BaseQty", 0);
+            }
+            return "";
+        }
+        this.setCalloutActive(true);
+        if (ctx.getContextAsInt(windowNo, "M_PriceList_ID") > 0) {
+            var paramString = Util.getValueOfString(mTab.getValue("M_Product_ID")).concat(",", Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")), ",",
+                Util.getValueOfString(ctx.getContextAsInt(windowNo, "M_PriceList_ID")), ",", 
+                Util.getValueOfString(mTab.getValue("C_UOM_ID")))
+                
+            //get the price from product price inly if pricelist is selected
+            var ProductData = VIS.dataContext.getJSONRecord("MProductPricing/GetProductdata", paramString);
+            if (ProductData != null) {
+                mTab.setValue("PriceStd", ProductData["PriceStd"]);
+                mTab.setValue("UnitPrice", ProductData["PriceStd"]);
+                mTab.setValue("PriceStd", (ProductData["PriceStd"] * Util.getValueOfDecimal(mTab.getValue("BaseQty"))));
+
+                if (Util.getValueOfInt(mTab.getValue("C_UOM_ID")) == 0) {
+                    mTab.setValue("C_UOM_ID", ProductData["C_UOM_ID"]);
+                }
+
+            } 
+        }
+
+        this.setCalloutActive(false);
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
+
+   
     VIS.Model.CalloutTeamForcast = CalloutTeamForcast;
     //************CalloutTeamForcast End****************
+
+
+
+     //************CalloutMasterForecast Start***************
+    function CalloutMasterForecast() {
+        VIS.CalloutEngine.call(this, "VIS.CalloutMasterForecast");//must call
+    };
+    VIS.Utility.inheritPrototype(CalloutMasterForecast, VIS.CalloutEngine); //inherit prototype
+    /**
+     * set currency 
+     * @param {any} ctx
+     * @param {any} windowNo
+     * @param {any} mTab
+     * @param {any} mField
+     * @param {any} value
+     * @param {any} oldValue
+     */
+    CalloutMasterForecast.prototype.Currency = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {
+            if (mTab.getValue("M_PriceList_ID") == null) {
+                mTab.setValue("C_Currency_ID", Util.getValueOfInt(ctx.getContext("$C_Currency_ID")));
+            }
+            return "";
+        }
+        this.setCalloutActive(true);
+
+        var pricelist = VIS.dataContext.getJSONRecord("MPriceList/GetPriceListData", Util.getValueOfString(mTab.getValue("M_PriceList_ID")));
+        if (pricelist["C_Currency_ID"] != null) {
+            mTab.setValue("C_Currency_ID", pricelist["C_Currency_ID"]);
+        }
+
+        this.setCalloutActive(false);
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
+    VIS.Model.CalloutMasterForecast = CalloutMasterForecast;
+    //************CalloutMasterForecast END***************
+
+
+
+
 
 
     //************CalloutTaxAmt Start***************
@@ -19937,13 +20102,13 @@
             var M_PriceList_ID = ctx.getContextAsInt(windowNo, "M_PriceList_ID");
             // pp.SetM_PriceList_ID(M_PriceList_ID);
 
+            /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
+            var paramFields = M_PriceList_ID.toString().concat(",", Util.getValueOfString(mTab.getValue("StartDate")), ",", //2
+                Util.getValueOfString(mTab.getValue("M_Product_ID")), ",", Util.getValueOfInt(mTab.getValue("C_UOM_ID")), ",", Util.getValueOfInt(mTab.getValue("M_AttributeSetInstance_ID")));
             //Get PriceListversion based on Pricelist
-            var M_PriceList_Version_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetM_PriceList_Version_ID", M_PriceList_ID.toString());
+            /** Price List - Ensuring valid Uom id ** Dt:01/02/2021 ** Modified By: Kumar **/
+            var M_PriceList_Version_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetM_PriceList_Version_ID_On_Transaction_Date", paramFields);
 
-            /** PLV is only accurate if PL selected in header */
-            if (M_PriceList_Version_ID == 0) {
-                M_PriceList_Version_ID = ctx.getContextAsInt(windowNo, "M_PriceList_Version_ID");
-            }
             //pp.SetM_PriceList_Version_ID(M_PriceList_Version_ID);
             var orderDate = mTab.getValue("DateOrdered");
             //pp.SetPriceDate(orderDate);
@@ -19988,35 +20153,37 @@
             //                                           M_PriceList_Version_ID.toString(), ",", //6
             //                                           null, ",", null, ",", null); //7
             /*** Bharat Done ***/
-            var dr = null;
-            dr = VIS.dataContext.getJSONRecord("MProductPricing/GetProductPricing", paramString);
+            /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
+            if (Util.getValueOfInt(M_PriceList_Version_ID) > 0) {
+                var dr = null;
+                dr = VIS.dataContext.getJSONRecord("MProductPricing/GetProductPricing", paramString);
 
 
-            //mTab.setValue("PriceList", pp.GetPriceList());
-            //mTab.setValue("PriceLimit", pp.GetPriceLimit());
-            //mTab.setValue("PriceActual", pp.GetPriceStd());
-            //mTab.setValue("PriceEntered", pp.GetPriceStd());
-            //mTab.setValue("C_Currency_ID", Util.getValueOfInt(pp.GetC_Currency_ID()));
-            //mTab.setValue("Discount", pp.GetDiscount());
-            //mTab.setValue("C_UOM_ID", Util.getValueOfInt(pp.GetC_UOM_ID()));
-            //mTab.setValue("QtyEntered", mTab.getValue("QtyEntered"));
-            //ctx.setContext(windowNo, "EnforcePriceLimit", pp.IsEnforcePriceLimit() ? "Y" : "N");
-            //ctx.setContext(windowNo, "DiscountSchema", pp.IsDiscountSchema() ? "Y" : "N");
+                //mTab.setValue("PriceList", pp.GetPriceList());
+                //mTab.setValue("PriceLimit", pp.GetPriceLimit());
+                //mTab.setValue("PriceActual", pp.GetPriceStd());
+                //mTab.setValue("PriceEntered", pp.GetPriceStd());
+                //mTab.setValue("C_Currency_ID", Util.getValueOfInt(pp.GetC_Currency_ID()));
+                //mTab.setValue("Discount", pp.GetDiscount());
+                //mTab.setValue("C_UOM_ID", Util.getValueOfInt(pp.GetC_UOM_ID()));
+                //mTab.setValue("QtyEntered", mTab.getValue("QtyEntered"));
+                //ctx.setContext(windowNo, "EnforcePriceLimit", pp.IsEnforcePriceLimit() ? "Y" : "N");
+                //ctx.setContext(windowNo, "DiscountSchema", pp.IsDiscountSchema() ? "Y" : "N");
 
 
-            mTab.setValue("PriceList", dr["PriceList"]);
-            mTab.setValue("PriceLimit", dr.PriceLimit);
-            mTab.setValue("PriceActual", dr.PriceActual);
-            mTab.setValue("PriceEntered", dr.PriceEntered);
-            if (Util.getValueOfInt(dr.C_Currency_ID) > 0) {
-                mTab.setValue("C_Currency_ID", Util.getValueOfInt(dr.C_Currency_ID));
+                mTab.setValue("PriceList", dr["PriceList"]);
+                mTab.setValue("PriceLimit", dr.PriceLimit);
+                mTab.setValue("PriceActual", dr.PriceActual);
+                mTab.setValue("PriceEntered", dr.PriceEntered);
+                if (Util.getValueOfInt(dr.C_Currency_ID) > 0) {
+                    mTab.setValue("C_Currency_ID", Util.getValueOfInt(dr.C_Currency_ID));
+                }
+                mTab.setValue("Discount", dr.Discount);
+                mTab.setValue("C_UOM_ID", Util.getValueOfInt(dr.C_UOM_ID));
+                mTab.setValue("QtyOrdered", mTab.getValue("QtyEntered"));
+                ctx.setContext(windowNo, "EnforcePriceLimit", dr.IsEnforcePriceLimit ? "Y" : "N");
+                ctx.setContext(windowNo, "DiscountSchema", dr.IsDiscountSchema ? "Y" : "N");
             }
-            mTab.setValue("Discount", dr.Discount);
-            mTab.setValue("C_UOM_ID", Util.getValueOfInt(dr.C_UOM_ID));
-            mTab.setValue("QtyOrdered", mTab.getValue("QtyEntered"));
-            ctx.setContext(windowNo, "EnforcePriceLimit", dr.IsEnforcePriceLimit ? "Y" : "N");
-            ctx.setContext(windowNo, "DiscountSchema", dr.IsDiscountSchema ? "Y" : "N");
-
 
 
             //	Check/Update Warehouse Setting
@@ -20162,10 +20329,13 @@
                 //  QtyEntered = QtyEntered;
                 var isSOTrx = ctx.getWindowContext(windowNo, "IsSOTrx", true) == "Y";
 
-                var M_PriceList_Version_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetM_PriceList_Version_ID", M_PriceList_ID.toString());
-                if (M_PriceList_Version_ID == 0) {
-                    M_PriceList_Version_ID = ctx.getContextAsInt(windowNo, "M_PriceList_Version_ID");
-                }
+                /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
+                var paramFields = M_PriceList_ID.toString().concat(",", Util.getValueOfString(mTab.getValue("StartDate")), ",", //2
+                    Util.getValueOfString(mTab.getValue("M_Product_ID")), ",", Util.getValueOfInt(mTab.getValue("C_UOM_ID")), ",", Util.getValueOfInt(mTab.getValue("M_AttributeSetInstance_ID")));
+                //Get PriceListversion based on Pricelist
+                /** Price List - Ensuring valid Uom id ** Dt:01/02/2021 ** Modified By: Kumar **/
+                var M_PriceList_Version_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetM_PriceList_Version_ID_On_Transaction_Date", paramFields);
+                
                 //var date = mTab.getValue("DateOrdered");
                 //if (date == null) {
                 //    date = Date.now();
@@ -20207,36 +20377,39 @@
                 //                                            M_PriceList_Version_ID.toString(), ",", //6
                 //                                            null, ",", null, ",", null); //7
 
-                var dr = null;
-                dr = VIS.dataContext.getJSONRecord("MProductPricing/GetProductPricing", paramString);
+                /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
+                if (Util.getValueOfInt(M_PriceList_Version_ID) > 0) {
+                    var dr = null;
+                    dr = VIS.dataContext.getJSONRecord("MProductPricing/GetProductPricing", paramString);
 
 
 
-                //MProductPricing pp = new MProductPricing(ctx.getAD_Client_ID(), ctx.getAD_Org_ID(),
-                //        M_Product_ID, C_BPartner_ID, QtyEntered, isSOTrx);
-                //pp.SetM_PriceList_ID(M_PriceList_ID);
-                //var M_PriceList_Version_ID = ctx.getContextAsInt(windowNo, "M_PriceList_Version_ID");
-                //pp.SetM_PriceList_Version_ID(M_PriceList_Version_ID);
-                //var date = Util.getValueOfDateTime(mTab.getValue("DateOrdered"));
-                //pp.SetPriceDate(date);
-                ////
+                    //MProductPricing pp = new MProductPricing(ctx.getAD_Client_ID(), ctx.getAD_Org_ID(),
+                    //        M_Product_ID, C_BPartner_ID, QtyEntered, isSOTrx);
+                    //pp.SetM_PriceList_ID(M_PriceList_ID);
+                    //var M_PriceList_Version_ID = ctx.getContextAsInt(windowNo, "M_PriceList_Version_ID");
+                    //pp.SetM_PriceList_Version_ID(M_PriceList_Version_ID);
+                    //var date = Util.getValueOfDateTime(mTab.getValue("DateOrdered"));
+                    //pp.SetPriceDate(date);
+                    ////
 
-                paramString = M_Product_ID.toString() + "," + C_UOM_To_ID.toString() + "," + dr.PriceStd.toString();
+                    paramString = M_Product_ID.toString() + "," + C_UOM_To_ID.toString() + "," + dr.PriceStd.toString();
 
-                PriceEntered = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramString));
+                    PriceEntered = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramString));
 
-                //PriceEntered = (Decimal?)MUOMConversion.ConvertProductFrom(ctx, M_Product_ID,
-                //    C_UOM_To_ID, pp.GetPriceStd());
-                if (PriceEntered == null || PriceEntered == 0)//Neha--PriceEntered is decimal so It can't be null.--06 Sep,2018
-                    PriceEntered = dr.PriceStd;
-                //
-                this.log.fine("QtyChanged -> PriceActual=" + dr.PriceStd
-                    + ", PriceEntered=" + PriceEntered + ", Discount=" + dr.Discount);
-                PriceActual = dr.PriceStd;
-                mTab.setValue("PriceActual", dr.PriceActual);
-                mTab.setValue("Discount", dr.Discount);
-                mTab.setValue("PriceEntered", dr.PriceEntered);
-                ctx.setContext(windowNo, "DiscountSchema", dr.DiscountSchema ? "Y" : "N");
+                    //PriceEntered = (Decimal?)MUOMConversion.ConvertProductFrom(ctx, M_Product_ID,
+                    //    C_UOM_To_ID, pp.GetPriceStd());
+                    if (PriceEntered == null || PriceEntered == 0)//Neha--PriceEntered is decimal so It can't be null.--06 Sep,2018
+                        PriceEntered = dr.PriceStd;
+                    //
+                    this.log.fine("QtyChanged -> PriceActual=" + dr.PriceStd
+                        + ", PriceEntered=" + PriceEntered + ", Discount=" + dr.Discount);
+                    PriceActual = dr.PriceStd;
+                    mTab.setValue("PriceActual", dr.PriceActual);
+                    mTab.setValue("Discount", dr.Discount);
+                    mTab.setValue("PriceEntered", dr.PriceEntered);
+                    ctx.setContext(windowNo, "DiscountSchema", dr.DiscountSchema ? "Y" : "N");
+                }
             }
             else if (mField.getColumnName().toString().equals("PriceActual")) {
                 PriceActual = Util.getValueOfDecimal(value);

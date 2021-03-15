@@ -181,7 +181,7 @@ namespace VAdvantage.Model
                     if (unqConstraints.Length == 0)
                     {
                         unqConstraints.Append(", CONSTRAINT UK").Append(GetAD_Table_ID())
-                        .Append(" UNIQUE (").Append(column.GetColumnName()); 
+                        .Append(" UNIQUE (").Append(column.GetColumnName());
                     }
                     else
                         unqConstraints.Append(",").Append(column.GetColumnName());
@@ -889,7 +889,9 @@ namespace VAdvantage.Model
                     type = Type.GetType(className);
                 }
 
-                Type baseClass = type.BaseType;
+                Type baseClass = null;
+                if (type != null)
+                    baseClass = type.BaseType;
 
                 while (baseClass != null)
                 {

@@ -30,5 +30,24 @@ namespace VIS.Controllers
             // return Json(new { result = retJSON, error = retError }, JsonRequestBehavior.AllowGet);
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
+
+
+        /// <summary>
+        /// Get product std Price 
+        /// </summary>
+        /// <param name="fields">fields</param>
+        /// <returns>Data in JSON Format</returns>
+        public JsonResult GetProductdata(string fields)
+        {
+
+            string retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
+                MProductPricingModel objProductPricing = new MProductPricingModel();
+                retJSON = JsonConvert.SerializeObject(objProductPricing.GetProductdata(ctx, fields));
+            }
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
     }
 }

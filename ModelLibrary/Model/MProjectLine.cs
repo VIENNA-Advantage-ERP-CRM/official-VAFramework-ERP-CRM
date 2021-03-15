@@ -108,7 +108,7 @@ namespace VAdvantage.Model
             // Work done for Purchase Price and Mergin calculation
             if (Env.IsModuleInstalled("VA077_") && Get_ColumnIndex("VA077_PurchasePrice") >= 0 && Util.GetValueOfDecimal(Get_Value("VA077_PurchasePrice")).Equals(0))
             {
-                if (GetProject() != null  && _parent.IsOpportunity() && Util.GetValueOfInt(_parent.Get_Value("PO_PriceList_ID")) > 0)
+                if (GetProject() != null && _parent.IsOpportunity() && Util.GetValueOfInt(_parent.Get_Value("PO_PriceList_ID")) > 0)
                 {
                     Set_Value("VA077_PurchasePrice", GetPurchasePrice());
 
@@ -119,20 +119,20 @@ namespace VAdvantage.Model
                         purchaseAmt = Decimal.Round(purchaseAmt, GetCurPrecision(), MidpointRounding.AwayFromZero);
                     }
                     Set_Value("VA077_PurchaseAmt", purchaseAmt);
-
-                    // Calculate Margin Amount
-                    Decimal marginEach = Decimal.Subtract(GetPlannedPrice(), Util.GetValueOfDecimal(Get_Value("VA077_PurchasePrice")));
-                    Set_Value("VA077_MarginAmt", Decimal.Multiply(marginEach, GetPlannedQty()));
-
-                    // Calculate Margin Percentage
-                    Decimal marginPer = 0;
-                    if (GetPlannedPrice() > 0)
-                    {
-                        marginPer = Decimal.Round(Decimal.Multiply(Decimal.Divide(marginEach, GetPlannedPrice())
-                        , Env.ONEHUNDRED), GetCurPrecision(), MidpointRounding.AwayFromZero);
-                    }
-                    Set_Value("VA077_MarginPercent", marginPer);
                 }
+
+                // Calculate Margin Amount
+                Decimal marginEach = Decimal.Subtract(GetPlannedPrice(), Util.GetValueOfDecimal(Get_Value("VA077_PurchasePrice")));
+                Set_Value("VA077_MarginAmt", Decimal.Multiply(marginEach, GetPlannedQty()));
+
+                // Calculate Margin Percentage
+                Decimal marginPer = 0;
+                if (GetPlannedPrice() > 0)
+                {
+                    marginPer = Decimal.Round(Decimal.Multiply(Decimal.Divide(marginEach, GetPlannedPrice())
+                    , Env.ONEHUNDRED), GetCurPrecision(), MidpointRounding.AwayFromZero);
+                }
+                Set_Value("VA077_MarginPercent", marginPer);
             }
 
             //	Planned Amount	- Currency Precision
@@ -527,34 +527,39 @@ namespace VAdvantage.Model
             }
             else
             {
+                //Used transaction because total was not updating on header
                 string Sql = "SELECT C_Project_ID FROM C_ProjectPhase WHERE C_ProjectPhase_ID in(select C_ProjectPhase_ID FROM" +
                         " C_ProjectTask WHERE C_ProjectTask_ID =" + id + ")";
-                projID = Util.GetValueOfInt(DB.ExecuteScalar(Sql, null, null));
+                projID = Util.GetValueOfInt(DB.ExecuteScalar(Sql, null, Get_TrxName()));
             }
+            //Used transaction because total was not updating on header
             string sql = "SELECT IsOpportunity FROM C_Project WHERE C_Project_ID = " + projID;
-            string isOpp = Util.GetValueOfString(DB.ExecuteScalar(sql, null, null));
+            string isOpp = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_TrxName()));
             //Amit
-            string isCam = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsCampaign FROM C_Project WHERE C_Project_ID = " + projID));
+            string isCam = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsCampaign FROM C_Project WHERE C_Project_ID = " + projID, null, Get_TrxName()));
             if (isOpp.Equals("N") && isCam.Equals("N") && id != 0)
             {
                 // set sum of planned Amount from task line to task
                 MProjectTask tsk = new MProjectTask(GetCtx(), id, Get_Trx());
-                decimal plannedAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.C_ProjectTask_ID = " + id));
+                //Used transaction because total was not updating on header
+                decimal plannedAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.C_ProjectTask_ID = " + id, null, Get_TrxName()));
                 tsk.SetPlannedAmt(plannedAmt);
                 tsk.Save();
             }
             //Amit
             else if (isOpp.Equals("N") && isCam.Equals("N") && id == 0 && GetC_ProjectPhase_ID() != 0)
             {
-                MProjectPhase projectPhase = new MProjectPhase(GetCtx(), GetC_ProjectPhase_ID(), null);
-                decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.C_ProjectPhase_ID = " + GetC_ProjectPhase_ID() + " AND pl.C_Project_ID = " + projID));
+                //Used transaction because total was not updating on header
+                MProjectPhase projectPhase = new MProjectPhase(GetCtx(), GetC_ProjectPhase_ID(), Get_TrxName());
+                decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.C_ProjectPhase_ID = " + GetC_ProjectPhase_ID() + " AND pl.C_Project_ID = " + projID, null, Get_TrxName()));
                 projectPhase.SetPlannedAmt(plnAmt);
                 projectPhase.Save();
             }
             else if (isOpp.Equals("Y"))                             // Opportunity Window
             {
+                //Used transaction because total was not updating on header
                 MProject prj = new MProject(GetCtx(), projID, Get_TrxName());
-                decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.C_Project_ID = " + projID));
+                decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.C_Project_ID = " + projID, null, Get_TrxName()));
                 prj.SetPlannedAmt(plnAmt);
                 prj.Save();
 
@@ -565,7 +570,7 @@ namespace VAdvantage.Model
                             VA077_TotalPurchaseAmt=(SELECT ROUND(Sum(VA077_PurchaseAmt),2) FROM C_ProjectLine 
                             WHERE C_PROJECT_ID=" + projID + @" AND IsActive='Y'),
                             VA077_MarginPercent=(SELECT CASE WHEN Sum(PlannedAmt) > 0 Then 
-                                                 ROUND(((Sum(PlannedAmt)- Sum(VA077_PurchaseAmt))/Sum(PlannedAmt)*100),2) ELSE 0  END 
+                                                 ROUND(((Sum(PlannedAmt)- Sum(NVL(VA077_PurchaseAmt,0)))/Sum(PlannedAmt)*100),2) ELSE 0  END 
                                                  FROM C_ProjectLine WHERE C_PROJECT_ID=" + projID + @" AND IsActive='Y') 
                             WHERE C_Project_ID=" + projID;
 
@@ -579,7 +584,8 @@ namespace VAdvantage.Model
             else if (id != 0)
             {
                 MProjectTask tsk = new MProjectTask(GetCtx(), id, Get_TrxName());
-                decimal plannedAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.C_ProjectTask_ID = " + id));
+                //Used transaction because total was not updating on header
+                decimal plannedAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.C_ProjectTask_ID = " + id, null, Get_TrxName()));
                 tsk.SetPlannedAmt(plannedAmt);
                 tsk.Save();
             }

@@ -1032,6 +1032,7 @@ namespace VAdvantage.Model
                 }
                 /**End**/
 
+                
                 // Now save Splitted Document
                 if (!splitLine.Save(Get_TrxName()))
                 {
@@ -1212,7 +1213,14 @@ namespace VAdvantage.Model
                 line.Set_Value("QtyEntered", line.GetQtyBook());
                 line.SetQtyInternalUse(line.GetQtyBook());
                 line.SetQtyBook(0);
-                line.SetIsInternalUse(true);
+
+
+                //Lakhwinder
+                //Behave as per setting on Doctype
+                if (_inventory.IsInternalUse())
+                {
+                    line.SetIsInternalUse(true);
+                }
                 Tuple<String, String, String> mInfo = null;
                 if (Env.HasModulePrefix("DTD001_", out mInfo))
                 {

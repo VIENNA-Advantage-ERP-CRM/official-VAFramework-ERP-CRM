@@ -19,11 +19,12 @@
         var lookupRelatedType = null;
         var ctrlRelatedType = null;
         var prdCtrl;
-        var puomLookup;
+        var puomLookup = null;
+        var pruomLookup = null;
         var PAttrCtrl;
         var PRAttrCtrl;
-        var PUomCtrl;
-        var PRUomCtrl;
+        var PUomCtrl = null;
+        var PRUomCtrl = null;
         var ProductGrid;
         var $DivProductGrid;
         var RelatedGrid;
@@ -106,14 +107,17 @@
             _ProductBtnWrap.append(prdCtrl.getBtn(0));
             _ProductBtnWrap.append(prdCtrl.getBtn(1));
 
+            VIS.Env.getCtx().setContext($self.windowNo, "M_Product_ID", null);
+
             pattrLookup = new VIS.MPAttributeLookup(VIS.context, $self.windowNo);
             PAttrCtrl = new VIS.Controls.VPAttribute("M_AttributeSetInstance_ID", false, false, true, VIS.DisplayType.PAttribute, pattrLookup, $self.windowNo, false, false, false, true);
             PRAttrCtrl = new VIS.Controls.VPAttribute("M_AttributeSetInstance_ID", false, false, true, VIS.DisplayType.PAttribute, pattrLookup, $self.windowNo, false, false, false, true);
 
             // UOM Control
             puomLookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), $self.windowNo, 2222, VIS.DisplayType.TableDir);
+            pruomLookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), $self.windowNo, 2222, VIS.DisplayType.TableDir);
             PUomCtrl = new VIS.Controls.VComboBox("C_UOM_ID", true, false, true, puomLookup, 50);
-            PRUomCtrl = new VIS.Controls.VComboBox("C_UOM_ID", true, false, true, puomLookup, 50);
+            PRUomCtrl = new VIS.Controls.VComboBox("C_UOM_ID", true, false, true, pruomLookup, 50);
 
             BPartner_ID = VIS.Env.getCtx().getContextAsInt($self.windowNo, "C_BPartner_ID", false);
             isSOTrx = VIS.Env.getCtx().getWindowContext($self.windowNo, "IsSOTrx", true) == "Y";
@@ -465,7 +469,7 @@
                         //field: 'UOM', caption: VIS.translatedTexts.C_UOM_ID, size: '100px'
                         field: "UOM_ID", caption: VIS.translatedTexts.C_UOM_ID, sortable: false, size: '100px', editable: { type: 'custom', ctrl: PRUomCtrl, showAll: true },
                         render: function (record, index, col_index) {
-                            var l = puomLookup;
+                            var l = pruomLookup;
                             var val = record["UOM_ID"];
                             if (record.changes && typeof record.changes["UOM_ID"] != 'undefined') {
                                 val = record.changes["UOM_ID"];
@@ -790,6 +794,10 @@
         $root = null;
         _ProductLookUp = null;
         pattrLookup = null;
+        puomLookup = null;
+        pruomLookup = null;
+        PUomCtrl = null;
+        PRUomCtrl = null;
         _ProductCtrl = null;
         _CmbRelatedType = null;
         lookupRelatedType = null;
