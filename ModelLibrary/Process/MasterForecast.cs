@@ -457,7 +457,7 @@ namespace ViennaAdvantageServer.Process
                  " AND o.DateOrdered BETWEEN (SELECT startdate FROM C_Period WHERE C_Period_ID = " + C_Period_ID + ")  " +
                  " AND (SELECT enddate FROM C_Period WHERE C_Period_ID = " + C_Period_ID + ") AND ol.QtyOrdered > ol.QtyDelivered "+
                  " AND ol.C_OrderLine_ID NOT IN (SELECT C_OrderLine_ID FROM va073_masterforecastlinedetail WHERE "+
-                 "AD_Org_ID = " + mf.GetAD_Org_ID() + " AND C_Period_ID=" + C_Period_ID + ") AND NVL(ol.M_Product_ID,0)>0 ";
+                 "AD_Org_ID = " + mf.GetAD_Org_ID() + " AND C_Period_ID=" + C_Period_ID + ") AND NVL(ol.M_Product_ID,0)>0 AND o.DocStatus IN('CO','CL') ";
 
             sql = MRole.GetDefault(GetCtx()).AddAccessSQL(sql, "C_Order", true, true); // fully qualified - RO
 
