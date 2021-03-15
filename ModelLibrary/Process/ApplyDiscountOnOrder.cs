@@ -100,6 +100,20 @@ namespace VAdvantage.Process
                     // this value represent discount on unit price of 1 qty
                     discountAmountOnTotal = Decimal.Round(Decimal.Divide(discountAmountOnTotal, ln.GetQtyEntered()), precision);
 
+                    if (discountPercentageOnTotalAmount != 0 && _DiscountAmt != 0)
+                    {
+                        if (i != lines.Length - 1)
+                        {
+                            // reduce discounted amount from total discount
+                            _DiscountAmt -= discountAmountOnTotal;
+                        }
+                        else if (i == lines.Length - 1)
+                        {
+                            // when last iteration, set remaning amount
+                            discountAmountOnTotal = _DiscountAmt;
+                        }
+                    }
+
                     ln.SetAmountAfterApplyDiscount(Decimal.Add(ln.GetAmountAfterApplyDiscount(), discountAmountOnTotal));
                     ln.SetPriceActual(Decimal.Round(Decimal.Subtract(ln.GetPriceActual(), discountAmountOnTotal), precision));
                     ln.SetPriceEntered(Decimal.Round(Decimal.Subtract(ln.GetPriceEntered(), discountAmountOnTotal), precision));
