@@ -582,6 +582,8 @@ namespace ViennaAdvantage.Process
                 line.Set_Value("VA077_SerialNo", orderLine.Get_Value("VA077_SerialNo"));
                 line.Set_Value("VA077_UpdateFromVersn", orderLine.Get_Value("VA077_UpdateFromVersn"));
                 line.Set_Value("VA077_UserRef_ID", orderLine.Get_Value("VA077_UserRef_ID"));
+                line.Set_Value("VA077_StartDate", orderLine.Get_Value("VA077_StartDate"));
+                line.Set_Value("VA077_EndDate", orderLine.Get_Value("VA077_EndDate"));
 
             }
 
@@ -652,7 +654,6 @@ namespace ViennaAdvantage.Process
                     _invoice.Set_Value("VA077_NewAnnualContractTotal", order.Get_Value("VA077_NewAnnualContractTotal"));
                     _invoice.Set_Value("VA077_OldAnnualContractTotal", order.Get_Value("VA077_OldAnnualContractTotal"));
                     _invoice.Set_Value("VA077_PartialAmtCatchUp", order.Get_Value("VA077_PartialAmtCatchUp"));
-
                     _invoice.Set_Value("VA077_SalesCoWorker", order.Get_Value("VA077_SalesCoWorker"));
                     _invoice.Set_Value("VA077_SalesCoWorkerPer", order.Get_Value("VA077_SalesCoWorkerPer"));
                     _invoice.Set_Value("VA077_TotalMarginAmt", order.Get_Value("VA077_TotalMarginAmt"));
@@ -774,7 +775,8 @@ namespace ViennaAdvantage.Process
                 line1.Set_Value("VA077_SerialNo", sLine.Get_Value("VA077_SerialNo"));
                 line1.Set_Value("VA077_UpdateFromVersn", sLine.Get_Value("VA077_UpdateFromVersn"));
                 line1.Set_Value("VA077_UserRef_ID", sLine.Get_Value("VA077_UserRef_ID"));
-
+                line1.Set_Value("VA077_EndDate", sLine.Get_Value("VA077_EndDate"));
+                line1.Set_Value("VA077_StartDate", sLine.Get_Value("VA077_StartDate"));
             }
 
 

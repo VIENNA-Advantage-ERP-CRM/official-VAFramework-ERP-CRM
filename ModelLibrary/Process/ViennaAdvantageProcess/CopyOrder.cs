@@ -457,6 +457,8 @@ namespace ViennaAdvantage.Process
                     orderLine.Set_Value("VA077_RegEmail", mOrderLine.Get_Value("VA077_RegEmail"));
                     orderLine.Set_Value("VA077_ProductInfo", mOrderLine.Get_Value("VA077_ProductInfo"));
                     orderLine.Set_Value("VA077_IsContract", mOrderLine.Get_Value("VA077_IsContract"));
+                    orderLine.Set_Value("VA077_StartDate", mOrderLine.Get_Value("VA077_StartDate"));
+                    orderLine.Set_Value("VA077_EndDate", mOrderLine.Get_Value("VA077_EndDate"));
 
                     // Set Quotation Ref on Line
                     // Added by Bharat on 06 Jan 2018 to set Values on Sales Order from Sales Quotation.
