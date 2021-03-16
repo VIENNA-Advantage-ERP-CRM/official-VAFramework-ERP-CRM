@@ -832,7 +832,8 @@ namespace VIS.Models
         public List<Dictionary<string, object>> GetUser(int bpartner)
         {
             List<Dictionary<string, object>> retDic = null;
-            string sql = "Select AD_User_ID, Email FROM AD_User WHERE IsEmail='Y' AND C_BPartner_ID=" + bpartner;
+            //Lakhwinder 16Mar2021 BugFix IsActive check
+            string sql = "Select AD_User_ID, Email FROM AD_User WHERE IsEmail='Y' AND IsActive='Y' AND C_BPartner_ID=" + bpartner;
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
