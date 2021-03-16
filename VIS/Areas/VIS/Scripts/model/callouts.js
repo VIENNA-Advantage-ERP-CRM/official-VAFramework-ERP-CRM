@@ -17327,19 +17327,18 @@
                     }
                 }
                 mTab.setValue("M_Warehouse_ID", Util.getValueOfInt(dr["M_Warehouse_ID"]));
-
                 if (DataPrefix["VA077_"]) {
                     if (dr["VA077_HistoricContractDate"] != "") {
-                        mTab.setValue("VA077_HistoricContractDate", Util.getValueOfDate(dr["VA077_HistoricContractDate"]));
+                      mTab.setValue("VA077_HistoricContractDate", Dateoffset(dr["VA077_HistoricContractDate"]));
                     }
                     if (dr["VA077_ChangeStartDate"] != "") {
-                        mTab.setValue("VA077_ChangeStartDate", Util.getValueOfDate(dr["VA077_ChangeStartDate"]));
+                        mTab.setValue("VA077_ChangeStartDate", Dateoffset(dr["VA077_ChangeStartDate"]));
                     }
                     if (dr["VA077_ContractCPStartDate"] != "") {
-                        mTab.setValue("VA077_ContractCPStartDate", Util.getValueOfDate(dr["VA077_ContractCPStartDate"]));
+                        mTab.setValue("VA077_ContractCPStartDate", Dateoffset(dr["VA077_ContractCPStartDate"]));
                     }
                     if (dr["VA077_ContractCPEndDate"] != "") {
-                        mTab.setValue("VA077_ContractCPEndDate", Util.getValueOfDate(dr["VA077_ContractCPEndDate"]));
+                        mTab.setValue("VA077_ContractCPEndDate", Dateoffset(dr["VA077_ContractCPEndDate"]));
                     }
                     mTab.setValue("VA077_PartialAmtCatchUp", Util.getValueOfDecimal(dr["VA077_PartialAmtCatchUp"]));
                     mTab.setValue("VA077_OldAnnualContractTotal", Util.getValueOfDecimal(dr["VA077_OldAnnualContractTotal"]));
@@ -17363,7 +17362,7 @@
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";
     };
-
+        
     /// <summary>
     /// InOut - DocType.
     /// - sets MovementType
@@ -17736,10 +17735,10 @@
                     mTab.setValue("VA077_UserRef_ID", Util.getValueOfInt(dr["VA077_UserRef_ID"]));
                     mTab.setValue("VA077_ServiceContract_ID", Util.getValueOfInt(dr["VA077_ServiceContract_ID"]));
                     if (dr["VA077_StartDate"] != "") {
-                        mTab.setValue("VA077_StartDate", Util.getValueOfDate(dr["VA077_StartDate"]));
+                        mTab.setValue("VA077_StartDate", Dateoffset(dr["VA077_StartDate"]));
                     }
                     if (dr["VA077_EndDate"] != "") {
-                        mTab.setValue("VA077_EndDate", Util.getValueOfDate(dr["VA077_EndDate"]));
+                        mTab.setValue("VA077_EndDate", Dateoffset(dr["VA077_EndDate"]));
                     }
 
                 }
