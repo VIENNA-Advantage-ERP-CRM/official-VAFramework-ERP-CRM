@@ -272,10 +272,26 @@ namespace VAdvantage.Model
             //Check if the Software Industry module installed, update following fields on Asset window
             if (Env.IsModuleInstalled("VA077_"))
             {
+                //Set default values
+                SetIsInPosession(false);
+                SetIsOwned(false);
+                SetIsActive(true);
+                SetIsDisposed(false);
+                
                 Set_Value("VA077_SerialNo", shipLine.Get_Value("VA077_SerialNo"));
-                Set_Value("VA077_AutodeskContractNumber", shipLine.Get_Value("VA077_CNAutodesk"));                   
+                Set_Value("VA077_CNAutodesk", shipLine.Get_Value("VA077_CNAutodesk"));
                 Set_Value("VA077_RegEmail", shipLine.Get_Value("VA077_RegEmail"));
                 Set_Value("VA077_IsCustAsset", "Y");
+                Set_Value("VA077_OldSN", shipLine.Get_Value("VA077_OldSN"));
+                Set_Value("VA077_UserRef_ID", shipLine.Get_Value("VA077_UserRef_ID"));
+                Set_Value("VA077_ProductInfo", shipLine.Get_Value("VA077_ProductInfo"));
+                Set_Value("VA077_ServiceContract_ID", shipLine.Get_Value("VA077_ServiceContract_ID"));
+                Set_Value("AD_OrgTrx_ID", shipLine.Get_Value("AD_OrgTrx_ID"));
+
+                if (Util.GetValueOfBool(product.Get_Value("VA077_LicenceTracked")))
+                    Set_Value("VA077_LicenceTracked", "Y");
+                else
+                    Set_Value("VA077_LicenceTracked", "N");
             }
         }
 
@@ -800,7 +816,7 @@ namespace VAdvantage.Model
                         " From FRPT_Asset_Group_Acct PCA " +
                         " inner join frpt_acctdefault ACC ON acc.frpt_acctdefault_id= PCA.frpt_acctdefault_id " +
                         " where PCA.A_Asset_Group_ID=" + assetGroupId +
-                        " and acc.frpt_relatedto='" + _RelatedToProduct + 
+                        " and acc.frpt_relatedto='" + _RelatedToProduct +
                         "' AND PCA.IsActive = 'Y' AND PCA.AD_Client_ID = " + GetAD_Client_ID());
 
                     DataSet ds = DB.ExecuteDataset(_sql.ToString());

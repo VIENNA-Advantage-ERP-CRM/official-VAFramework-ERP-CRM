@@ -3587,8 +3587,11 @@ namespace VAdvantage.Model
                                     return DocActionVariables.STATUS_INVALID;
                                 }
                                 else
-                                {
-                                    asset.SetName(asset.GetName() + "_" + asset.GetValue());
+                                {                                    
+                                    if (Env.IsModuleInstalled("VA077_"))                                    
+                                        asset.SetName(asset.GetName());
+                                    else
+                                        asset.SetName(asset.GetName() + "_" + asset.GetValue());
                                     asset.Save(Get_TrxName());
                                 }
                                 Info.Append(asset.GetValue());
@@ -3607,7 +3610,10 @@ namespace VAdvantage.Model
                                 }
                                 else
                                 {
-                                    asset.SetName(asset.GetName() + "_" + asset.GetValue());
+                                    if (Env.IsModuleInstalled("VA077_"))
+                                        asset.SetName(asset.GetName());
+                                    else
+                                        asset.SetName(asset.GetName() + "_" + asset.GetValue());
                                     asset.Save(Get_TrxName());
                                 }
                                 Info.Append(asset.GetValue());
