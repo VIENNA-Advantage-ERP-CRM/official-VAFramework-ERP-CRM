@@ -17327,7 +17327,6 @@
                     }
                 }
                 mTab.setValue("M_Warehouse_ID", Util.getValueOfInt(dr["M_Warehouse_ID"]));
-                //mTab.setValue("DateOrdered", Dateoffset(result["DateOrdered"]));
                 if (DataPrefix["VA077_"]) {
                     if (dr["VA077_HistoricContractDate"] != "") {
                       mTab.setValue("VA077_HistoricContractDate", Dateoffset(dr["VA077_HistoricContractDate"]));
