@@ -1124,6 +1124,55 @@ namespace VAdvantage.Model
         {
             Object ii = Get_Value("Ref_BPartner_ID"); if (ii == null) return 0; return Convert.ToInt32(ii);
         }
+
+        /** Set Estimated Closing Date.
+        @param VA077_EstClosingDate Use to identify the estimated Invoice date*/
+        public void SetVA077_EstClosingDate(DateTime? VA077_EstClosingDate) { Set_Value("VA077_EstClosingDate", (DateTime?)VA077_EstClosingDate); }/** Get Estimated Closing Date.
+@return Use to identify the estimated Invoice date */
+        public DateTime? GetVA077_EstClosingDate() { return (DateTime?)Get_Value("VA077_EstClosingDate"); }/** Set Margin %.
+@param VA077_MarginPercent It’s margin amount in percentage */
+        public void SetVA077_MarginPercent(Decimal? VA077_MarginPercent) { Set_Value("VA077_MarginPercent", (Decimal?)VA077_MarginPercent); }/** Get Margin %.
+@return It’s margin amount in percentage */
+        public Decimal GetVA077_MarginPercent() { Object bd = Get_Value("VA077_MarginPercent"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
+        /** VA077_ProposalStatus AD_Reference_ID=1001024 */
+        public static int VA077_PROPOSALSTATUS_AD_Reference_ID = 1001024;/** Deal Made = DM */
+        public static String VA077_PROPOSALSTATUS_DealMade = "DM";/** Not Interested = NI */
+        public static String VA077_PROPOSALSTATUS_NotInterested = "NI";/** Is test a valid value.
+@param test testvalue
+@returns true if valid **/
+        public bool IsVA077_ProposalStatusValid(String test) { return test == null || test.Equals("DM") || test.Equals("NI"); }/** Set Proposal Status.
+@param VA077_ProposalStatus Identifies the status of proposal */
+        public void SetVA077_ProposalStatus(String VA077_ProposalStatus)
+        {
+            if (!IsVA077_ProposalStatusValid(VA077_ProposalStatus))
+                throw new ArgumentException("VA077_ProposalStatus Invalid value - " + VA077_ProposalStatus + " - Reference_ID=1001024 - DM - NI"); if (VA077_ProposalStatus != null && VA077_ProposalStatus.Length > 2) { log.Warning("Length > 2 - truncated"); VA077_ProposalStatus = VA077_ProposalStatus.Substring(0, 2); }
+            Set_Value("VA077_ProposalStatus", VA077_ProposalStatus);
+        }/** Get Proposal Status.
+@return Identifies the status of proposal */
+        public String GetVA077_ProposalStatus() { return (String)Get_Value("VA077_ProposalStatus"); }
+        /** VA077_SalesCoWorker AD_Reference_ID=1001025 */
+        public static int VA077_SALESCOWORKER_AD_Reference_ID = 1001025;/** Set Sales co-worker.
+@param VA077_SalesCoWorker Sales co-worker */
+        public void SetVA077_SalesCoWorker(int VA077_SalesCoWorker) { Set_Value("VA077_SalesCoWorker", VA077_SalesCoWorker); }/** Get Sales co-worker.
+@return Sales co-worker */
+        public int GetVA077_SalesCoWorker() { Object ii = Get_Value("VA077_SalesCoWorker"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Sales Co-worker %.
+@param VA077_SalesCoWorkerPer Identify the share of second sales person  */
+        public void SetVA077_SalesCoWorkerPer(Decimal? VA077_SalesCoWorkerPer) { Set_Value("VA077_SalesCoWorkerPer", (Decimal?)VA077_SalesCoWorkerPer); }/** Get Sales Co-worker %.
+@return Identify the share of second sales person  */
+        public Decimal GetVA077_SalesCoWorkerPer() { Object bd = Get_Value("VA077_SalesCoWorkerPer"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }/** Set Total Margin Amount.
+@param VA077_TotalMarginAmt Indicate the total margin amount */
+        public void SetVA077_TotalMarginAmt(Decimal? VA077_TotalMarginAmt) { Set_Value("VA077_TotalMarginAmt", (Decimal?)VA077_TotalMarginAmt); }/** Get Total Margin Amount.
+@return Indicate the total margin amount */
+        public Decimal GetVA077_TotalMarginAmt() { Object bd = Get_Value("VA077_TotalMarginAmt"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }/** Set Total Purchase Amount.
+@param VA077_TotalPurchaseAmt Total Purchase Amount */
+        public void SetVA077_TotalPurchaseAmt(Decimal? VA077_TotalPurchaseAmt) { Set_Value("VA077_TotalPurchaseAmt", (Decimal?)VA077_TotalPurchaseAmt); }/** Get Total Purchase Amount.
+@return Total Purchase Amount */
+        public Decimal GetVA077_TotalPurchaseAmt() { Object bd = Get_Value("VA077_TotalPurchaseAmt"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }/** Set Total Sales Amount.
+@param VA077_TotalSalesAmt Total Sales Amount */
+        public void SetVA077_TotalSalesAmt(Decimal? VA077_TotalSalesAmt) { Set_Value("VA077_TotalSalesAmt", (Decimal?)VA077_TotalSalesAmt); }/** Get Total Sales Amount.
+@return Total Sales Amount */
+        public Decimal GetVA077_TotalSalesAmt() { Object bd = Get_Value("VA077_TotalSalesAmt"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
+
     }
 
 }

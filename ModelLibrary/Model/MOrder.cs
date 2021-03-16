@@ -2555,6 +2555,7 @@ namespace VAdvantage.Model
 
                         MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_Trx());
                         string retMsg = "";
+
                         bool crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), grandTotal, out retMsg);
                         if (!crdAll)
                             log.SaveWarning("Warning", retMsg);
@@ -2562,6 +2563,8 @@ namespace VAdvantage.Model
                         {
                             log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "VIS_BPCreditWatch"));
                         }
+
+
                     }
                 }
             }
@@ -2729,6 +2732,28 @@ namespace VAdvantage.Model
             {
                 _processMsg = "@NoLines@";
                 return DocActionVariables.STATUS_INVALID;
+            }
+
+            // In case of blanket transaction or sales quotation no need to  check curency conversion.
+            if (!Util.GetValueOfBool(Get_Value("IsBlanketTrx")) && !IsSalesQuotation())
+            {
+                // GNZ_1027: if conversion not found system will give message Message: Could not convert currency to base currency - Conversion type: XXXX
+                Decimal ordAmt = GetGrandTotal();
+                // If Amount is ZERO then no need to check currency conversion
+                if (!ordAmt.Equals(Env.ZERO))
+                {
+                    ordAmt = MConversionRate.ConvertBase(GetCtx(), GetGrandTotal(), //	CM adjusted 
+                 GetC_Currency_ID(), GetDateOrdered(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+
+                    if (ordAmt == 0)
+                    {
+                        MConversionType conv = new MConversionType(GetCtx(), GetC_ConversionType_ID(), Get_TrxName());
+                        _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
+                            + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+
+                        return DocActionVariables.STATUS_INVALID;
+                    }
+                }
             }
 
             //	Convert DocType to Target
@@ -2919,7 +2944,56 @@ namespace VAdvantage.Model
                         //}
 
                         string retMsg = "";
-                        bool crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), grandTotal, out retMsg);
+                        bool crdAll = true;
+                        //written by sandeep
+
+                        if (Env.IsModuleInstalled("VA077_"))
+                        {
+                            // Skip Credit Check validation in case of Advance Order
+                            if (Util.GetValueOfString(DB.ExecuteScalar(@"SELECT VA009_Advance FROM C_PaymentTerm
+                                            WHERE C_PaymentTerm_ID = " + GetC_PaymentTerm_ID(), null, Get_TrxName())).Equals("N"))
+                            {
+                                DateTime validate = new DateTime();
+                                string CreditStatusSettingOn = bp.GetCreditStatusSettingOn();
+                                MBPartnerLocation bpl = new MBPartnerLocation(GetCtx(), GetC_BPartner_Location_ID(), null);
+                                if (CreditStatusSettingOn.Contains("CL"))
+                                {
+                                    validate = Util.GetValueOfDateTime(bpl.Get_Value("VA077_ValidityDate")).Value;
+                                }
+                                else
+                                {
+                                    validate = Util.GetValueOfDateTime(bp.Get_Value("VA077_ValidityDate")).Value;
+                                }
+
+                                if (validate.Date < DateTime.Now.Date)
+                                {
+                                    int RecCount = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_Invoice_ID) FROM C_Invoice WHERE IsSOTrx='Y' AND IsReturnTrx='N' AND C_BPartner_ID =" + GetC_BPartner_ID() + " and DocStatus in('CO','CL') and DateInvoiced BETWEEN " + GlobalVariable.TO_DATE(DateTime.Now.Date.AddDays(-730), true) + " AND " + GlobalVariable.TO_DATE(DateTime.Now.Date, true) + ""));
+
+                                    if (RecCount > 0)
+                                    {
+                                        crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), grandTotal, out retMsg);
+                                    }
+                                    else
+                                    {
+                                        _processMsg = Msg.GetMsg(GetCtx(), "VA077_CrChkExpired");
+                                        return DocActionVariables.STATUS_INVALID;
+                                    }
+                                }
+                                else
+                                {
+                                    crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), grandTotal, out retMsg);
+                                    if (!crdAll)
+                                    {
+                                        _processMsg = Msg.GetMsg(GetCtx(), "VA077_CrChkExpired");
+                                        return DocActionVariables.STATUS_INVALID;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), grandTotal, out retMsg);
+                        }
                         if (!crdAll)
                         {
                             if (bp.ValidateCreditValidation("A,D,E", GetC_BPartner_Location_ID()))
@@ -3903,7 +3977,7 @@ namespace VAdvantage.Model
                         Char IsCont = Convert.ToChar(orderlines.Tables[0].Rows[i]["IsContract"]);
                         if (IsCont == 'Y')
                         {
-                            MOrder mo = new MOrder(GetCtx(), GetC_Order_ID(), null);
+                            MOrder mo = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
                             mo.SetIsContract(true);
                             mo.Save();
                         }
@@ -3922,6 +3996,24 @@ namespace VAdvantage.Model
                                 if (!asset.Save())
                                     log.SaveError("Error", "WhileSavingDataOnAssetWindow_VA052");
 
+                            }
+                        }
+                    }
+
+                    //Set VA077_IsContract check if VA077 module installed and VA077_IsContract selected on order line
+                    if (Env.IsModuleInstalled("VA077_"))
+                    {
+                        if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(VA077_IsContract) FROM 
+                                                                  C_OrderLine WHERE C_Order_ID = " + GetC_Order_ID() + @" AND 
+                                                                  VA077_IsContract = 'Y' AND IsActive = 'Y' ")) > 0)
+                        {
+
+                            Qry = @"UPDATE C_Order SET VA077_IsContract='Y', VA077_CreateServiceContract='N'                            
+                                    WHERE C_Order_ID=" + GetC_Order_ID();
+                            int no = DB.ExecuteQuery(Qry, null, Get_TrxName());
+                            if (no <= 0)
+                            {
+                                log.SaveWarning("", Msg.GetMsg(GetCtx(), "VIS_NotUpdated"));
                             }
                         }
                     }
@@ -5633,7 +5725,7 @@ namespace VAdvantage.Model
             }
 
             // JID_0658: After Creating PO from Open Requisition, & the PO record is Void, PO line reference is not getting removed from Requisition Line.
-            DB.ExecuteQuery("UPDATE M_RequisitionLine SET C_OrderLine_ID = 0 WHERE C_OrderLine_ID IN (SELECT C_OrderLine_ID FROM C_Order WHERE C_Order_ID = " + GetC_Order_ID() + ")", null, Get_TrxName());
+            DB.ExecuteQuery("UPDATE M_RequisitionLine SET C_OrderLine_ID = NULL WHERE C_OrderLine_ID IN (SELECT C_OrderLine_ID FROM C_OrderLine WHERE C_Order_ID = " + GetC_Order_ID() + ")", null, Get_TrxName());
 
             SetProcessed(true);
             SetDocAction(DOCACTION_None);
@@ -6250,6 +6342,12 @@ namespace VAdvantage.Model
             }
             else
             {
+                //to save the payment which is created by POS DocType Order because we need to save the payment in Drafted stage.
+                if (Get_Trx() != null)
+                {
+                    Get_Trx().Commit();
+                }
+
                 if (_payment.CompleteIt().Equals(DOCACTION_Complete))
                 {
                     _payment.SetProcessed(true);
@@ -6263,6 +6361,8 @@ namespace VAdvantage.Model
                 else
                 {
                     info.Append(" & @C_Payment_ID@: " + _payment.GetDocumentNo() + " (" + _payment.GetProcessMsg() + ")");
+                    //TO reverse the eftects of completion  of payment because Alocation is generating always if we don't rolback it will set invoice as Paid
+                    Get_Trx().Rollback();
                 }
                 _processMsg = "";
             }

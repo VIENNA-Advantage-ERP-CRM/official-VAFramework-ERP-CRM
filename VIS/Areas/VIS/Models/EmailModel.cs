@@ -27,6 +27,8 @@ using VAdvantage.Utility;
 
 using iTextSharp.text.html.simpleparser;
 using VAdvantage.Classes;
+using VIS.DataContracts;
+using VIS.Helpers;
 
 namespace VIS.Models
 {
@@ -56,7 +58,8 @@ namespace VIS.Models
         /// <param name="mailFormat"></param>
         /// <param name="notify"></param>
         /// <returns></returns>
-        public string SendMails(List<NewMailMessage> mails, int AD_User_ID, int AD_Client_ID, int AD_Org_ID, int attachment_ID, List<string> fileNames, List<string> fileNameForOpenFormat, string mailFormat, bool notify, List<int> lstDocumentIds)
+        public string SendMails(List<NewMailMessage> mails, int AD_User_ID, int AD_Client_ID, int AD_Org_ID, int attachment_ID, List<string> fileNames,
+            List<string> fileNameForOpenFormat, string mailFormat, bool notify, List<int> lstDocumentIds, int AD_Process_ID, string printformatfileType)
         {
 
 
@@ -77,13 +80,13 @@ namespace VIS.Models
             {
                 System.Threading.ThreadPool.QueueUserWorkItem(delegate
                 {
-                    SendMailstart(mails, AD_User_ID, AD_Client_ID, AD_Org_ID, attachment_ID, fileNames, fileNameForOpenFormat, mailFormat, notify, sendmail, lstDocumentIds);
+                    SendMailstart(mails, AD_User_ID, AD_Client_ID, AD_Org_ID, attachment_ID, fileNames, fileNameForOpenFormat, mailFormat, notify, sendmail, lstDocumentIds, AD_Process_ID, printformatfileType);
                 });
                 return "";
             }
             else
             {
-                return SendMailstart(mails, AD_User_ID, AD_Client_ID, AD_Org_ID, attachment_ID, fileNames, fileNameForOpenFormat, mailFormat, notify, sendmail, lstDocumentIds);
+                return SendMailstart(mails, AD_User_ID, AD_Client_ID, AD_Org_ID, attachment_ID, fileNames, fileNameForOpenFormat, mailFormat, notify, sendmail, lstDocumentIds, AD_Process_ID, printformatfileType);
             }
         }
 
@@ -100,7 +103,9 @@ namespace VIS.Models
         /// <param name="mailFormat"></param>
         /// <param name="notify"></param>
         /// <returns></returns>
-        public string SendMailstart(List<NewMailMessage> mails, int AD_User_ID, int AD_Client_ID, int AD_Org_ID, int attachment_ID, List<string> fileNames, List<string> fileNameForOpenFormat, string mailFormat, bool notify, VAdvantage.Utility.EMail sendmails, List<int> documentID)
+        public string SendMailstart(List<NewMailMessage> mails, int AD_User_ID, int AD_Client_ID, int AD_Org_ID, int attachment_ID,
+            List<string> fileNames, List<string> fileNameForOpenFormat, string mailFormat, bool notify, VAdvantage.Utility.EMail sendmails,
+            List<int> documentID, int Ad_Process_ID,  string printformatfileType)
         {
 
 
@@ -250,6 +255,19 @@ namespace VIS.Models
                 }
 
 
+                //Lakhwinder
+                //AttachPrintFormat
+                if (!string.IsNullOrEmpty(printformatfileType) && printformatfileType != "X")
+                {
+                    ProcessReportInfo rep = AttachPrintFormat(mails[j].TableID, Ad_Process_ID, mails[j].Recordids, 0, printformatfileType);
+                    if (!string.IsNullOrEmpty(rep.ReportFilePath))
+                    {
+                        FileStream attachmentStream = File.OpenRead(Path.Combine(HostingEnvironment.ApplicationPhysicalPath, rep.ReportFilePath));
+                        BinaryReader binary = new BinaryReader(attachmentStream);
+                        byte[] buffer = binary.ReadBytes((int)attachmentStream.Length);
+                        sendmail.AddAttachment(buffer, rep.ReportFilePath.Substring(rep.ReportFilePath.LastIndexOf('\\') + 1));
+                    }
+                }
 
                 if (to != null)
                 {
@@ -661,7 +679,7 @@ namespace VIS.Models
                             if ((htmlElement is iTextSharp.text.pdf.PdfPTable) && (htmlElement as iTextSharp.text.pdf.PdfPTable).Rows != null &&
                                 (htmlElement as iTextSharp.text.pdf.PdfPTable).Rows.Count > 0)
                             {
-                                (htmlElement as iTextSharp.text.pdf.PdfPTable).SpacingBefore= 5;
+                                (htmlElement as iTextSharp.text.pdf.PdfPTable).SpacingBefore = 5;
                                 //(htmlElement as iTextSharp.text.pdf.PdfPTable).DefaultCell.PaddingBottom = 5;
                                 foreach (var row in (htmlElement as iTextSharp.text.pdf.PdfPTable).Rows)
                                 {
@@ -871,6 +889,100 @@ namespace VIS.Models
             return obj;
         }
 
+        /// <summary>
+        /// Enhancement to provide facility to attacht print format directlty for selected record
+        /// </summary>
+        /// <param name="tableID"></param>
+        /// <param name="processID"></param>
+        /// <param name="recID"></param>
+        /// <param name="windowNo"></param>
+        /// <param name="fileType"></param>
+        /// <param name="windowName"></param>
+        /// <returns>details of print format file</returns>
+        private ProcessReportInfo AttachPrintFormat(int tableID, int processID, string recID, int windowNo, string fileType)
+        {
+
+
+            string[] records = recID.Split(',');
+            int Record_ID = Convert.ToInt32(records[0]);
+            int pID = GetDoctypeBasedReport(tableID, Record_ID);
+            if (pID > 0)
+            {
+                ctx.SetContext("FetchingDocReport", "Y");
+                processID = pID;
+            }
+            ProcessReportInfo rep = null;
+            if (records.Length < 2)
+            {
+                rep = ProcessHelper.GeneratePrint(ctx, processID, "Print", tableID, Record_ID, windowNo, "", fileType, "W", "");
+            }
+            else { rep = ProcessHelper.GeneratePrint(ctx, processID, "Print", tableID, 0, windowNo, recID, fileType, "W", ""); }
+            ctx.SetContext("FetchingDocReport", "N");
+            return rep;
+
+        }
+        /// <summary>
+        /// Select report info based on Document type selected in that particular record.
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="tableID"></param>
+        /// <param name="record_ID"></param>
+        /// <returns>print format id on priority based on binded DocBaseType,DocumentType and Tab</returns>
+        private int GetDoctypeBasedReport(int tableID, int record_ID)
+        {
+            #region To Override Default Process With Process Linked To Document Type
+
+            string colName = "C_DocTypeTarget_ID";
+
+
+            string sql1 = "SELECT COUNT(*) FROM AD_Column WHERE AD_Table_ID=" + tableID + " AND ColumnName   ='C_DocTypeTarget_ID'";
+            int id = Util.GetValueOfInt(DB.ExecuteScalar(sql1));
+            if (id < 1)
+            {
+                colName = "C_DocType_ID";
+                sql1 = "SELECT COUNT(*) FROM AD_Column WHERE AD_Table_ID=" + tableID + " AND ColumnName   ='C_DocType_ID'";
+                id = Util.GetValueOfInt(DB.ExecuteScalar(sql1));
+            }
+
+            if (id > 0)
+            {
+
+                string tableName = MTable.GetTableName(ctx, tableID);
+                sql1 = "SELECT " + colName + ", AD_Org_ID FROM " + tableName + " WHERE " + tableName + "_ID =" + Util.GetValueOfString(record_ID);
+                DataSet ds = DB.ExecuteDataset(sql1);
+
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    // Check if Document Sequence has organization Level checked, if yes then get report from there.
+                    // If Not, then try to get report from Document Type.
+                    sql1 = @"SELECT AD_Sequence_No.Report_ID
+                                From Ad_Sequence Ad_Sequence
+                                JOIN C_Doctype C_Doctype
+                                ON (C_Doctype.Docnosequence_Id =Ad_Sequence.Ad_Sequence_Id 
+                                AND C_DocType.ISDOCNOCONTROLLED='Y')  
+                                JOIN AD_Sequence_No AD_Sequence_No
+                                On (Ad_Sequence_No.Ad_Sequence_Id=Ad_Sequence.Ad_Sequence_Id
+                                AND Ad_Sequence_No.AD_Org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["AD_Org_ID"]) + @")
+                                JOIN AD_Process ON AD_Process.AD_Process_ID=AD_Sequence_No.Report_ID
+                                Where C_Doctype.C_Doctype_Id     = " + Convert.ToInt32(ds.Tables[0].Rows[0][0]) + @"
+                                And Ad_Sequence.Isorglevelsequence='Y' AND Ad_Sequence.IsActive='Y' AND AD_Process.IsActive='Y'";
+
+                    object processID = DB.ExecuteScalar(sql1);
+                    if (processID == DBNull.Value || processID == null || Convert.ToInt32(processID) == 0)
+                    {
+                        sql1 = "select Report_ID FRoM C_Doctype WHERE C_Doctype_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0][0]);
+                        processID = DB.ExecuteScalar(sql1);
+                    }
+                    if (processID != DBNull.Value && processID != null && Convert.ToInt32(processID) > 0)
+                    {
+                        return Convert.ToInt32(processID);
+                    }
+                }
+            }
+            return 0;
+
+            #endregion
+        }
 
 
     }

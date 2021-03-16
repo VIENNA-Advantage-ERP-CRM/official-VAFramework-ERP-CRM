@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using VIS.DataContracts;
 using VIS.Controllers;
+using VAdvantage.DataBase;
 
 //using ViennaAdvantageWeb.Areas.VIS.DataContracts;
 
@@ -35,7 +37,7 @@ namespace VIS.Models
             M_PriceList_Version_ID = Util.GetValueOfInt(paramValue[5].ToString());
             DateTime? orderDate = Util.GetValueOfDateTime(paramValue[6]);
             DateTime? orderDate1 = Util.GetValueOfDateTime(paramValue[7]);
-
+                    
             //if (paramValue.Length > 8)    
             if (paramValue.Length == 9 || paramValue.Length == 11)
             {
@@ -54,6 +56,19 @@ namespace VIS.Models
                     C_UOM_ID = Util.GetValueOfInt(paramValue[8].ToString());
                     countED011 = Util.GetValueOfInt(paramValue[9].ToString());
                 }
+            }
+
+            /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
+            if (!string.IsNullOrEmpty(Util.GetValueOfString(orderDate)))
+            {
+                StringBuilder sbparams = new StringBuilder();
+                sbparams.Append(Util.GetValueOfInt(M_PriceList_ID));
+                sbparams.Append(",").Append(Convert.ToDateTime(orderDate).ToString("MM-dd-yyyy"));
+                sbparams.Append(",").Append(Util.GetValueOfInt(M_Product_ID));
+                sbparams.Append(",").Append(Util.GetValueOfInt(C_UOM_ID));
+                sbparams.Append(",").Append(Util.GetValueOfInt(M_AttributeSetInstance_ID));
+                MPriceListVersionModel objPriceList = new MPriceListVersionModel();
+                M_PriceList_Version_ID = objPriceList.GetM_PriceList_Version_ID_On_Transaction_Date(ctx, sbparams.ToString());
             }
 
             //End Assign parameter value
@@ -107,6 +122,37 @@ namespace VIS.Models
             product = null;
             pp = null;
             return objInfo;
+        }
+
+
+        /// <summary>
+        /// Get StdPrice from Product Price
+        /// </summary>
+        /// <param name="ctx">Context</param>
+        /// <param name="fields">Fields</param>
+        /// <returns>StdPrice</returns>
+        public Decimal GetProductdata(Ctx ctx, string fields)
+        {
+            int UOM=0, M_Product_ID = 0, Attribute=0, M_PriceList_ID=0;
+            string[] paramValue = fields.Split(',');
+            M_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            Attribute = Util.GetValueOfInt(paramValue[1].ToString());
+            M_PriceList_ID = Util.GetValueOfInt(paramValue[2].ToString());
+            UOM = Util.GetValueOfInt(paramValue[3].ToString());
+           
+            string sql = "SELECT PriceStd FROM M_ProductPrice WHERE M_PriceList_Version_ID = (SELECT MAX(M_PriceList_Version_ID) FROM M_PriceList_Version WHERE IsActive = 'Y'" +
+                "AND M_PriceList_ID ="+M_PriceList_ID +") AND M_Product_id=" + M_Product_ID;
+
+            if (Attribute > 0)
+            {
+                sql += " AND M_AttributeSetInstance_ID=" + Attribute;
+            }
+            if (UOM > 0)
+            {
+                sql += " AND C_UOM_ID=" + UOM;
+            }
+
+            return Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
         }
     }
 }

@@ -117,6 +117,10 @@ namespace VAdvantage.Model
         // Blanket Sales Order = SOO */
         public const String DOCBASETYPE_BLANKETSALESORDER = "BOO";  // Update on 17 July, 2017 by Sukhwinder.
 
+        //Lakhwinder 29Jan2021
+        public const String DOCBASETYPE_MoveConfirmation = "MMC";
+        public const String DOCBASETYPE_ShipReceiptConfirmation = "SRC";
+
         #endregion
 
         /// <summary>

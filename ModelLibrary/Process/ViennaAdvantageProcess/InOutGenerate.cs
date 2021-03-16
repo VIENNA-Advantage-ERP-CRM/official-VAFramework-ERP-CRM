@@ -601,6 +601,33 @@ namespace ViennaAdvantage.Process
                     _shipment.SetC_IncoTerm_ID(order.GetC_IncoTerm_ID());
                 }
 
+                if (Env.IsModuleInstalled("VA077_"))
+                {
+                    //shipment  fields copied
+                    _shipment.Set_Value("VA077_HistoricContractDate", order.Get_Value("VA077_HistoricContractDate"));
+                   _shipment.Set_Value("VA077_ChangeStartDate",order.Get_Value("VA077_ChangeStartDate"));
+                    _shipment.Set_Value("VA077_ContractCPStartDate",order.Get_Value("VA077_ContractCPStartDate"));
+                    _shipment.Set_Value("VA077_ContractCPEndDate",order.Get_Value("VA077_ContractCPEndDate"));
+                    _shipment.Set_Value("VA077_PartialAmtCatchUp",order.Get_Value("VA077_PartialAmtCatchUp"));
+
+                    _shipment.Set_Value("VA077_OldAnnualContractTotal", order.Get_Value("VA077_OldAnnualContractTotal"));
+                    _shipment.Set_Value("VA077_AdditionalAnnualCharge", order.Get_Value("VA077_AdditionalAnnualCharge"));
+                    _shipment.Set_Value("VA077_NewAnnualContractTotal", order.Get_Value("VA077_NewAnnualContractTotal"));
+                    _shipment.Set_Value("VA077_SalesCoWorker", order.Get_Value("VA077_SalesCoWorker"));
+
+                    _shipment.Set_Value("VA077_SalesCoWorkerPer", order.Get_Value("VA077_SalesCoWorkerPer"));
+                    _shipment.Set_Value("VA077_TotalMarginAmt", order.Get_Value("VA077_TotalMarginAmt"));
+                    _shipment.Set_Value("VA077_TotalPurchaseAmt", order.Get_Value("VA077_TotalPurchaseAmt"));
+                    _shipment.Set_Value("VA077_TotalSalesAmt", order.Get_Value("VA077_TotalSalesAmt"));
+                  
+                    _shipment.Set_Value("VA077_MarginPercent", order.Get_Value("VA077_MarginPercent"));
+                    _shipment.Set_Value("VA077_IsLegalEntity", order.Get_Value("VA077_IsLegalEntity"));
+                                                          
+                }
+
+
+
+
                 if (!_shipment.Save())
                 {
                     //throw new Exception("Could not create Shipment");
@@ -634,7 +661,26 @@ namespace ViennaAdvantage.Process
                 {
                     line.SetDTD001_IsAttributeNo(true);
                 }
-                if (!line.Save())
+                if (Env.IsModuleInstalled("VA077_"))
+                {
+                    line.Set_Value("VA077_SerialNo", orderLine.Get_Value("VA077_SerialNo"));
+                    line.Set_Value("VA077_OldSN", orderLine.Get_Value("VA077_OldSN"));
+                    line.Set_Value("VA077_ServiceContract_ID", orderLine.Get_Value("VA077_ServiceContract_ID"));
+                    line.Set_Value("VA077_UserRef_ID", orderLine.Get_Value("VA077_UserRef_ID"));
+                    line.Set_Value("VA077_Duration", orderLine.Get_Value("VA077_Duration"));
+
+                    line.Set_Value("VA077_CNAutodesk", orderLine.Get_Value("VA077_CNAutodesk"));
+                    line.Set_Value("VA077_RegEmail", orderLine.Get_Value("VA077_RegEmail"));
+                    line.Set_Value("VA077_UpdateFromVersn", orderLine.Get_Value("VA077_UpdateFromVersn"));
+                    line.Set_Value("VA077_ProductInfo", orderLine.Get_Value("VA077_ProductInfo"));
+                    line.Set_Value("VA077_MarginPercent", orderLine.Get_Value("VA077_MarginPercent"));
+
+                    line.Set_Value("VA077_MarginAmt", orderLine.Get_Value("VA077_MarginAmt"));
+                    line.Set_Value("VA077_PurchasePrice", orderLine.Get_Value("VA077_PurchasePrice"));
+
+                }
+
+                    if (!line.Save())
                 {
                     //throw new Exception("Could not create Shipment Line");
                     log.Fine("Failed: Could not create Shipment Line against Order No : " + order.GetDocumentNo() + " for orderline id : " + orderLine.GetC_OrderLine_ID());
@@ -744,6 +790,25 @@ namespace ViennaAdvantage.Process
                         line.SetDTD001_IsAttributeNo(true);
                     }
 
+                    if (Env.IsModuleInstalled("VA077_"))
+                    {
+                        line.Set_Value("VA077_SerialNo", orderLine.Get_Value("VA077_SerialNo"));
+                        line.Set_Value("VA077_OldSN", orderLine.Get_Value("VA077_OldSN"));
+                        line.Set_Value("VA077_ServiceContract_ID", orderLine.Get_Value("VA077_ServiceContract_ID"));
+                        line.Set_Value("VA077_UserRef_ID", orderLine.Get_Value("VA077_UserRef_ID"));
+                        line.Set_Value("VA077_Duration", orderLine.Get_Value("VA077_Duration"));
+
+                        line.Set_Value("VA077_CNAutodesk", orderLine.Get_Value("VA077_CNAutodesk"));
+                        line.Set_Value("VA077_RegEmail", orderLine.Get_Value("VA077_RegEmail"));
+                        line.Set_Value("VA077_UpdateFromVersn", orderLine.Get_Value("VA077_UpdateFromVersn"));
+                        line.Set_Value("VA077_ProductInfo", orderLine.Get_Value("VA077_ProductInfo"));
+                        line.Set_Value("VA077_MarginPercent", orderLine.Get_Value("VA077_MarginPercent"));
+
+                        line.Set_Value("VA077_MarginAmt", orderLine.Get_Value("VA077_MarginAmt"));
+                        line.Set_Value("VA077_PurchasePrice", orderLine.Get_Value("VA077_PurchasePrice"));
+
+                    }
+
                     if (!line.Save())
                     {
                         log.Fine("Failed: Could not create Shipment Line against Order No : " + order.GetDocumentNo() + " for orderline id : " + orderLine.GetC_OrderLine_ID());
@@ -836,6 +901,25 @@ namespace ViennaAdvantage.Process
                     if (Env.IsModuleInstalled("DTD001_"))
                     {
                         line.SetDTD001_IsAttributeNo(true);
+                    }
+
+                    if (Env.IsModuleInstalled("VA077_"))
+                    {
+                        line.Set_Value("VA077_SerialNo", orderLine.Get_Value("VA077_SerialNo"));
+                        line.Set_Value("VA077_OldSN", orderLine.Get_Value("VA077_OldSN"));
+                        line.Set_Value("VA077_ServiceContract_ID", orderLine.Get_Value("VA077_ServiceContract_ID"));
+                        line.Set_Value("VA077_UserRef_ID", orderLine.Get_Value("VA077_UserRef_ID"));
+                        line.Set_Value("VA077_Duration", orderLine.Get_Value("VA077_Duration"));
+
+                        line.Set_Value("VA077_CNAutodesk", orderLine.Get_Value("VA077_CNAutodesk"));
+                        line.Set_Value("VA077_RegEmail", orderLine.Get_Value("VA077_RegEmail"));
+                        line.Set_Value("VA077_UpdateFromVersn", orderLine.Get_Value("VA077_UpdateFromVersn"));
+                        line.Set_Value("VA077_ProductInfo", orderLine.Get_Value("VA077_ProductInfo"));
+                        line.Set_Value("VA077_MarginPercent", orderLine.Get_Value("VA077_MarginPercent"));
+
+                        line.Set_Value("VA077_MarginAmt", orderLine.Get_Value("VA077_MarginAmt"));
+                        line.Set_Value("VA077_PurchasePrice", orderLine.Get_Value("VA077_PurchasePrice"));
+
                     }
 
                     if (!line.Save())
