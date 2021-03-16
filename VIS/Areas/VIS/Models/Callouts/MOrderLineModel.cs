@@ -1052,7 +1052,7 @@ namespace VIS.Models
                 /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
                 StringBuilder sbparams = new StringBuilder();
                 sbparams.Append(Util.GetValueOfInt(_m_PriceList_ID));
-                /** Price List - ValidFrom date validation ** Dt:11/03/2021 ** Modified By: Kumar **/
+                /** Price List - getting price list version based on start date for contract screen as order id is not available yet ** Dt:11/03/2021 ** Modified By: Kumar **/
                 if (Util.GetValueOfDateTime(_transactionDate) != null)
                     sbparams.Append(",").Append(Util.GetValueOfString(_transactionDate));
                 else

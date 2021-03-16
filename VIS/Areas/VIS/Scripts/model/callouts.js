@@ -2898,7 +2898,7 @@
                 QtyEntered = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
 
                 /*** Start Amit ***/
-                /** Price List - ValidFrom date validation ** Dt:11/03/2021 ** Modified By: Kumar **/
+                /** Price List - getting price list version based on start date for contract screen as order id is not available yet ** Dt:11/03/2021 ** Modified By: Kumar **/
                 var params = Util.getValueOfString(C_BPartner_ID).concat(",", Util.getValueOfString(mTab.getValue("C_Order_ID")) +
                     "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
                     "," + Util.getValueOfString(C_UOM_To_ID) + "," + Util.getValueOfString(ctx.getAD_Client_ID()) +
