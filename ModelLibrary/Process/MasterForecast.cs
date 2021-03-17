@@ -276,8 +276,11 @@ namespace ViennaAdvantageServer.Process
                         "FROM c_projectline pl " +
                         "INNER JOIN c_project p ON p.c_project_id = pl.c_project_id " +
                         "WHERE p.c_order_id IS NULL"
+                        //       + " AND (SELECT enddate FROM c_period WHERE c_period_id = " + C_Period_ID + ") " +
                         + " AND p.ref_order_id IS NULL AND pl.m_product_id NOT IN (SELECT m_product_id FROM c_masterforecastline WHERE isactive = 'Y'" +
                         " AND c_masterforecast_id = " + GetRecord_ID() + ") AND p.AD_CLient_ID= " +mf.GetAD_Client_ID()+
+                        " AND pl.planneddate BETWEEN (SELECT startdate FROM c_period WHERE c_period_id = " + C_Period_ID + ") "+
+                        " AND (SELECT enddate FROM c_period WHERE c_period_id = " + C_Period_ID + ") " +
                         " GROUP BY C_Currency_ID,pl.C_UOM_ID,pl.m_product_id";
 
                 //IDataReader idr = null;
