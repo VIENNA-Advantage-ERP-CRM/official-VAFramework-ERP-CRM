@@ -89,7 +89,7 @@ namespace VAdvantage.Model
                          " WHERE NVL(M_Product_ID,0) = " + M_Product_ID +
                          " AND NVL(C_MasterForecast_ID,0) =" + ForeCast.GetC_MasterForecast_ID();
 
-            if (Env.IsModuleInstalled("_VA073"))
+            if (Env.IsModuleInstalled("VA073_"))
             {
                 sql+= " AND NVL(M_AttributeSetInstance_ID,0)=" + M_AttributeSetInstance_ID;
             }
