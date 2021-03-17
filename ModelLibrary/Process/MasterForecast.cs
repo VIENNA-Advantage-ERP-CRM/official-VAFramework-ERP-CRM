@@ -160,10 +160,15 @@ namespace ViennaAdvantageServer.Process
                                              Util.GetValueOfInt(dsOpp.Tables[0].Rows[0]["C_Currency_ID"]), Currency,
                                              Util.GetValueOfDateTime(mf.Get_Value("TRXDATE")),
                                              Util.GetValueOfInt(mf.Get_Value("C_ConversionType_ID")), mf.GetAD_Client_ID(), mf.GetAD_Org_ID());
+                                                                             
                                         //Conversion from BaseUOM to UOM on Project Line
                                         totalQtyOpp = MUOMConversion.ConvertProductFrom(mf.GetCtx(), Util.GetValueOfInt(dsForecast.Tables[0].Rows[i]["M_Product_ID"]),
                                         Util.GetValueOfInt(dsOpp.Tables[0].Rows[0]["C_UOM_ID"]), Util.GetValueOfDecimal(dsOpp.Tables[0].Rows[0]["Quantity"]));
 
+                                        if (totalQtyOpp == null)
+                                        {
+                                            totalQtyOpp = Util.GetValueOfDecimal(dsOpp.Tables[0].Rows[0]["Quantity"]);
+                                        }
                                     }
                                 }
 
