@@ -86,11 +86,13 @@ namespace VAdvantage.Model
         {
             MMasterForecastLine retValue = null;
             String sql = "SELECT * FROM C_MasterForecastLine " +
-                         " WHERE  M_Product_ID = " + M_Product_ID +
-                         " AND M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID +
-                         " AND C_MasterForecast_ID =" + ForeCast.GetC_MasterForecast_ID();
+                         " WHERE NVL(M_Product_ID,0) = " + M_Product_ID +
+                         " AND NVL(C_MasterForecast_ID,0) =" + ForeCast.GetC_MasterForecast_ID();
 
-
+            if (Env.IsModuleInstalled("_VA073"))
+            {
+                sql+= " AND NVL(M_AttributeSetInstance_ID,0)=" + M_AttributeSetInstance_ID;
+            }
             DataTable dt = null;
             IDataReader idr = null;
             try
