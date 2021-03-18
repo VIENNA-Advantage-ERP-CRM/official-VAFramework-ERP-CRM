@@ -32,10 +32,10 @@ namespace VAdvantage.Model
 
         //The Rows                        
         public List<List<Object>> rows = new List<List<Object>>();
-        
+
         //The temporary Rows              
         private List<List<Object>> _rows = new List<List<Object>>();
-        
+
         //The Row MetaData   
         public List<Object> rowsMeta = new List<Object>();
         // The Column Definitions         
@@ -80,6 +80,7 @@ namespace VAdvantage.Model
             cols.Clear();
         }
 
+
         /// <summary>
         /// Query
         /// </summary>
@@ -87,6 +88,17 @@ namespace VAdvantage.Model
         /// <param name="whereClause">the SQL where clause (w/o the WHERE)</param>
         /// <param name="orderClause"></param>
         public void Query(Ctx ctx, String whereClause, String orderClause)
+        {
+            Query(ctx, whereClause, orderClause, 0);
+        }
+        /// <summary>
+        /// Query
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="whereClause">the SQL where clause (w/o the WHERE)</param>
+        /// <param name="orderClause"></param>
+        /// <param name="pageNo"></param>
+        public void Query(Ctx ctx, String whereClause, String orderClause, int pageNo = 0)
         {
             RColumn rc = null;
             //  Create SQL
@@ -117,14 +129,70 @@ namespace VAdvantage.Model
             //  FillData
             int index = 0;      //  rowset index
             _rows.Clear();
-            IDataReader idr = null;
+            //IDataReader idr = null;
             try
             {
                 //Statement stmt = DataBase.createStatement();
                 //ResultSet rs = stmt.executeQuery(finalSQL);
-                idr = DataBase.DB.ExecuteReader(finalSQL, null, null);
-                DataSet ds = DataBase.DB.ExecuteDataset(finalSQL, null, null);
-                while (idr.Read())
+                //idr = DataBase.DB.ExecuteReader(finalSQL, null, null);
+                DataSet ds = DB.GetDatabase().ExecuteDatasetPaging(finalSQL, pageNo, 50, 0);
+                #region  Commented
+                //while (idr.Read())
+                //{
+                //    List<Object> row = new List<Object>(size);
+                //    //index = 1;
+                //    index = 0;
+                //    //  Columns
+                //    for (int i = 0; i < size; i++)
+                //    {
+                //        rc = (RColumn)cols[i];
+                //        //  Get ID
+                //        if (rc.IsIDcol())
+                //        {
+                //            //row.add(new KeyNamePair(rs.getInt(index++), rs.getString(index++)));
+                //            row.Add(new KeyNamePair(Utility.Util.GetValueOfInt(idr[index++]), Utility.Util.GetValueOfString(idr[index++])));
+                //        }
+                //        //  Null check
+                //        else if (idr[index] == null)
+                //        {
+                //            index++;
+                //            row.Add(null);
+                //        }
+                //        else if (rc.GetColClass() == typeof(String))
+                //        {
+                //            row.Add(Utility.Util.GetValueOfString(idr[index++]));
+                //        }
+                //        else if (rc.GetColClass() == typeof(Decimal))
+                //        {
+                //            row.Add(Utility.Util.GetValueOfDecimal(idr[index++]));
+                //        }
+                //        else if (rc.GetColClass() == typeof(Double))
+                //        {
+                //            row.Add(Utility.Util.GetValueOfDouble(idr[index++]));
+                //        }
+                //        else if (rc.GetColClass() == typeof(int))
+                //        {
+                //            row.Add(Utility.Util.GetValueOfInt(idr[index++]));
+                //        }
+                //        else if (rc.GetColClass() == typeof(DateTime))
+                //        {
+                //            row.Add(Utility.Util.GetValueOfDateTime(idr[index++]));
+                //        }
+                //        else if (rc.GetColClass() == typeof(Boolean))
+                //        {
+                //            row.Add(Utility.Util.GetValueOfBool("Y".Equals(idr[index++])));
+                //        }
+                //        else    //  should not happen
+                //        {
+                //            row.Add(Utility.Util.GetValueOfString(idr[index++]));
+                //        }
+                //    }
+                //    _rows.Add(row);
+                //}
+                //idr.Close();
+                #endregion
+                //used for instead of While and used DataSet instead of DataReader
+                for (int j = 0; j < ds.Tables[0].Rows.Count; j++)
                 {
                     List<Object> row = new List<Object>(size);
                     //index = 1;
@@ -137,54 +205,54 @@ namespace VAdvantage.Model
                         if (rc.IsIDcol())
                         {
                             //row.add(new KeyNamePair(rs.getInt(index++), rs.getString(index++)));
-                            row.Add(new KeyNamePair(Utility.Util.GetValueOfInt(idr[index++]), Utility.Util.GetValueOfString(idr[index++])));
+                            row.Add(new KeyNamePair(Utility.Util.GetValueOfInt(ds.Tables[0].Rows[j][index++]), Utility.Util.GetValueOfString(ds.Tables[0].Rows[j][index++])));
                         }
                         //  Null check
-                        else if (idr[index] == null)
+                        else if (ds.Tables[0].Rows[j][index] == null)
                         {
                             index++;
                             row.Add(null);
                         }
                         else if (rc.GetColClass() == typeof(String))
                         {
-                            row.Add(Utility.Util.GetValueOfString(idr[index++]));
+                            row.Add(Utility.Util.GetValueOfString(ds.Tables[0].Rows[j][index++]));
                         }
                         else if (rc.GetColClass() == typeof(Decimal))
                         {
-                            row.Add(Utility.Util.GetValueOfDecimal(idr[index++]));
+                            row.Add(Utility.Util.GetValueOfDecimal(ds.Tables[0].Rows[j][index++]));
                         }
                         else if (rc.GetColClass() == typeof(Double))
                         {
-                            row.Add(Utility.Util.GetValueOfDouble(idr[index++]));
+                            row.Add(Utility.Util.GetValueOfDouble(ds.Tables[0].Rows[j][index++]));
                         }
                         else if (rc.GetColClass() == typeof(int))
                         {
-                            row.Add(Utility.Util.GetValueOfInt(idr[index++]));
+                            row.Add(Utility.Util.GetValueOfInt(ds.Tables[0].Rows[j][index++]));
                         }
                         else if (rc.GetColClass() == typeof(DateTime))
                         {
-                            row.Add(Utility.Util.GetValueOfDateTime(idr[index++]));
+                            row.Add(Utility.Util.GetValueOfDateTime(ds.Tables[0].Rows[j][index++]));
                         }
                         else if (rc.GetColClass() == typeof(Boolean))
                         {
-                            row.Add(Utility.Util.GetValueOfBool("Y".Equals(idr[index++])));
+                            row.Add(Utility.Util.GetValueOfBool("Y".Equals(ds.Tables[0].Rows[j][index++])));
                         }
                         else    //  should not happen
                         {
-                            row.Add(Utility.Util.GetValueOfString(idr[index++]));
+                            row.Add(Utility.Util.GetValueOfString(ds.Tables[0].Rows[j][index++]));
                         }
                     }
                     _rows.Add(row);
                 }
-                idr.Close();
+
             }
             catch (Exception e)
             {
-                if (idr != null)
-                {
-                    idr.Close();
-                    idr = null;
-                }
+                //if (idr != null)
+                //{
+                //    idr.Close();
+                //    idr = null;
+                //}
                 if (index == 0)
                 {
                     log.Log(Level.SEVERE, finalSQL, e);
@@ -205,7 +273,7 @@ namespace VAdvantage.Model
         private void Process()
         {
             log.Fine("Start Rows=" + _rows.Count);
-             
+
             //  Row level Funcions
             //  would come here
 
@@ -325,7 +393,7 @@ namespace VAdvantage.Model
 
                                     continue;
                                 }
-                               
+
                             }
                             else
                             {
@@ -714,7 +782,7 @@ namespace VAdvantage.Model
     //            funcCols[index] = Utility.Util.GetValueOfInt(((int)key));//.intValue();
     //            //funcFuns[index] = functions[key].ToString();
     //            funcFuns[index] =Convert.ToString( this.functions[(int)key]);
-              
+
     //            log.Fine("Function " + funcFuns[index] + " col=" + funcCols[index]);
     //            index++;
     //        }
@@ -927,7 +995,7 @@ namespace VAdvantage.Model
     //        {
     //            throw new ArgumentException("Row to invalid");
     //        }
-           
+
     //        //  Move Data
     //        //ArrayList<Object> temp = rows.get(from);
     //        List<Object> temp = (List<Object>)rows[from];

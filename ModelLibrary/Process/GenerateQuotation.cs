@@ -204,6 +204,7 @@ namespace ViennaAdvantageServer.Process
                     order.Set_Value("VA077_TotalPurchaseAmt", fromProject.Get_Value("VA077_TotalPurchaseAmt"));
                     order.Set_Value("VA077_TotalSalesAmt", fromProject.Get_Value("VA077_TotalSalesAmt"));
                     order.Set_Value("VA077_MarginPercent", fromProject.Get_Value("VA077_MarginPercent"));
+                    order.Set_Value("VA077_OrderRef", fromProject.GetPOReference());
                 }
 
                 if (!order.Save())
@@ -236,7 +237,18 @@ namespace ViennaAdvantageServer.Process
                     ol.SetPriceEntered(lines[i].GetPlannedPrice());
                     ol.SetPriceActual(lines[i].GetPlannedPrice());
                     ol.SetPriceList(lines[i].GetPriceList());
-                    
+
+                    // Set Attribute and UOM from Opportunity Lines
+                    if (lines[i].Get_ColumnIndex("M_AttributeSetInstance_ID") >= 0)
+                    {
+                        ol.SetM_AttributeSetInstance_ID(lines[i].GetM_AttributeSetInstance_ID());
+                    }
+
+                    if (lines[i].Get_ColumnIndex("C_UOM_ID") >= 0)
+                    {
+                        ol.SetC_UOM_ID(Util.GetValueOfInt(lines[i].Get_Value("C_UOM_ID")));
+                    }
+
                     //Set VA077 values on line level
                     if (Env.IsModuleInstalled("VA077_"))
                     {

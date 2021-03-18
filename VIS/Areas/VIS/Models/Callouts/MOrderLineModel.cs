@@ -69,6 +69,24 @@ namespace VIS.Models
             retDic["QtyReleased"] = Util.GetValueOfString(orderline.GetQtyReleased());
             retDic["IsDropShip"] = orderline.IsDropShip() ? "Y" : "N";
 
+            if (Env.IsModuleInstalled("VA077_"))
+            {
+                retDic["VA077_CNAutodesk"]= Util.GetValueOfString(orderline.Get_Value("VA077_CNAutodesk"));
+                retDic["VA077_Duration"]= Util.GetValueOfString(orderline.Get_Value("VA077_Duration"));
+                retDic["VA077_MarginAmt"]= Util.GetValueOfString(orderline.Get_Value("VA077_MarginAmt"));
+                retDic["VA077_MarginPercent"]= Util.GetValueOfString(orderline.Get_Value("VA077_MarginPercent"));
+                retDic["VA077_OldSN"]= Util.GetValueOfString(orderline.Get_Value("VA077_OldSN"));
+                retDic["VA077_ProductInfo"]= Util.GetValueOfString(orderline.Get_Value("VA077_ProductInfo"));
+                retDic["VA077_PurchasePrice"]= Util.GetValueOfString(orderline.Get_Value("VA077_PurchasePrice"));
+                retDic["VA077_RegEmail"]= Util.GetValueOfString(orderline.Get_Value("VA077_RegEmail"));
+                retDic["VA077_SerialNo"]= Util.GetValueOfString(orderline.Get_Value("VA077_SerialNo"));
+                retDic["VA077_UpdateFromVersn"]= Util.GetValueOfString(orderline.Get_Value("VA077_UpdateFromVersn"));
+                retDic["VA077_UserRef_ID"]= Util.GetValueOfString(orderline.Get_Value("VA077_UserRef_ID"));
+                retDic["VA077_ServiceContract_ID"]= Util.GetValueOfString(orderline.Get_Value("VA077_ServiceContract_ID"));
+                retDic["VA077_StartDate"] = Util.GetValueOfString(orderline.Get_Value("VA077_StartDate"));
+                retDic["VA077_EndDate"] = Util.GetValueOfString(orderline.Get_Value("VA077_EndDate"));
+             }
+
             return retDic;
         }
         /// <summary>

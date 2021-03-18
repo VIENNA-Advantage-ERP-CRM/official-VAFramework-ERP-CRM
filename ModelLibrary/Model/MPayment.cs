@@ -662,49 +662,20 @@ namespace VAdvantage.Model
                 }
 
                 //	Prepayment: No charge and order or project (not as acct dimension)
-                // new change to set prepayment false when payment is for order schedules
-                // done by Vivek Kumar on 05/07/2017 as per discussion with Mandeep sir
-                //JID_1469 prepayment should be true in case of order and independent business partner.
-                if ((GetC_BPartner_ID() != 0 && GetC_Invoice_ID() == 0 && GetC_Charge_ID() == 0 && GetC_Project_ID()==0)) 
-                {
-                    SetIsPrepayment(true);
-                }
-                else
-                {
-                    if (newRecord
-                        || Is_ValueChanged("C_Charge_ID") || Is_ValueChanged("C_Invoice_ID")
-                        || Is_ValueChanged("C_Order_ID") || Is_ValueChanged("C_Project_ID"))
-                        SetIsPrepayment(GetC_Charge_ID() == 0
-                            && GetC_BPartner_ID() != 0
-                            && (GetC_Order_ID() != 0
-                                || (GetC_Project_ID() != 0 && GetC_Invoice_ID() == 0)));
-                }
-                //if (Env.HasModulePrefix("VA009_", out asmInfo))
+                //set prepayment as TRUE, when payment created with order/order schedule reference
+                //if (hasVA009Module && (GetVA009_OrderPaySchedule_ID() > 0))
                 //{
-                //    if (GetVA009_OrderPaySchedule_ID() > 0)
-                //    {
-                //        SetIsPrepayment(false);
-                //    }
-                //    else
-                //    {
-                //        if (newRecord
-                //        || Is_ValueChanged("C_Charge_ID") || Is_ValueChanged("C_Invoice_ID")
-                //        || Is_ValueChanged("C_Order_ID") || Is_ValueChanged("C_Project_ID"))
-                //            SetIsPrepayment(GetC_Charge_ID() == 0
-                //                && GetC_BPartner_ID() != 0
-                //                && (GetC_Order_ID() != 0
-                //                    || (GetC_Project_ID() != 0 && GetC_Invoice_ID() == 0)));
-                //    }
+                //    SetIsPrepayment(true);
                 //}
                 //else
                 //{
-                //    if (newRecord
-                //    || Is_ValueChanged("C_Charge_ID") || Is_ValueChanged("C_Invoice_ID")
-                //    || Is_ValueChanged("C_Order_ID") || Is_ValueChanged("C_Project_ID"))
-                //        SetIsPrepayment(GetC_Charge_ID() == 0
-                //            && GetC_BPartner_ID() != 0
-                //            && (GetC_Order_ID() != 0
-                //                || (GetC_Project_ID() != 0 && GetC_Invoice_ID() == 0)));
+                if (newRecord
+                    || Is_ValueChanged("C_Charge_ID") || Is_ValueChanged("C_Invoice_ID")
+                    || Is_ValueChanged("C_Order_ID") || Is_ValueChanged("C_Project_ID"))
+                    SetIsPrepayment(GetC_Charge_ID() == 0
+                        && GetC_BPartner_ID() != 0
+                        && (GetC_Order_ID() != 0
+                            || (GetC_Project_ID() != 0 && GetC_Invoice_ID() == 0)));
                 //}
 
                 if (GetC_Charge_ID() != 0)
@@ -4641,7 +4612,7 @@ namespace VAdvantage.Model
             if (GetC_Order_ID() != 0)
             {
                 string orderType = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocSubTypeSO FROM C_Order o INNER JOIN C_DocType dt ON o.C_DocTypeTarget_ID = dt.C_DocType_ID WHERE o.IsActive='Y' AND  C_Order_ID = " + GetC_Order_ID(), null, Get_Trx()));
-                if (orderType.Equals(X_C_DocType.DOCSUBTYPESO_PrepayOrder)) 
+                if (orderType.Equals(X_C_DocType.DOCSUBTYPESO_PrepayOrder))
                 {
                     return AllocateOrder();
                 }
@@ -4896,7 +4867,7 @@ namespace VAdvantage.Model
                         aLine.SetC_InvoicePaySchedule_ID(Util.GetValueOfInt(_ds.Tables[0].Rows[0]["C_InvoicePaySchedule_ID"]));
                         aLine.SetC_Invoice_ID(Util.GetValueOfInt(_ds.Tables[0].Rows[0]["C_Invoice_ID"]));
                     }
-                    else 
+                    else
                     {
                         //not found invoice for this Order
                         _AllocMsg = Msg.GetMsg(GetCtx(), "NotfoundInv");

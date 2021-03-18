@@ -4246,13 +4246,30 @@ namespace VAdvantage.Model
                 SetLine(ii);
             }
 
-            //	Calculations & Rounding
-            SetLineNetAmt();	//	extended Amount with or without tax
-            SetDiscount();
 
-            // if change the Quantity then recalculate tax and surcharge amount.
-            if (((Decimal)GetTaxAmt()).CompareTo(Env.ZERO) == 0 || (Get_ColumnIndex("SurchargeAmt") > 0 && GetSurchargeAmt().CompareTo(Env.ZERO) == 0) || Is_ValueChanged("QtyEntered"))
-                SetTaxAmt();
+            if (Env.IsModuleInstalled("VA077_"))
+            {
+                if (newRecord)
+                {
+                    //Calculations & Rounding            	    
+                    SetLineNetAmt(); //extended Amount with or without tax
+
+                    // if change the Quantity then recalculate tax and surcharge amount.
+                    if (((Decimal)GetTaxAmt()).CompareTo(Env.ZERO) == 0 || (Get_ColumnIndex("SurchargeAmt") > 0 && GetSurchargeAmt().CompareTo(Env.ZERO) == 0) || Is_ValueChanged("QtyEntered"))
+                        SetTaxAmt();
+                }
+            }
+            else
+            {
+                //Calculations & Rounding            	    
+                SetLineNetAmt(); //extended Amount with or without tax
+
+                // if change the Quantity then recalculate tax and surcharge amount.
+                if (((Decimal)GetTaxAmt()).CompareTo(Env.ZERO) == 0 || (Get_ColumnIndex("SurchargeAmt") > 0 && GetSurchargeAmt().CompareTo(Env.ZERO) == 0) || Is_ValueChanged("QtyEntered"))
+                    SetTaxAmt();
+            }
+
+            SetDiscount();
 
             // set Tax Amount in base currency
             if (Get_ColumnIndex("TaxBaseAmt") > 0)
@@ -4469,6 +4486,8 @@ namespace VAdvantage.Model
                 decimal marginper = 0;
                 decimal margin = 0;
 
+                var duration = Util.GetValueOfString(Get_Value("VA077_Duration"));
+
                 if (Util.GetValueOfDecimal(Get_Value("VA077_PurchasePrice")).Equals(0))
                 {
                     int po_PriceList_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT PO_PriceList_ID FROM C_BPartner WHERE C_BPartner_ID = " + GetParent().GetC_BPartner_ID(), null, Get_Trx()));
@@ -4480,13 +4499,117 @@ namespace VAdvantage.Model
 
                 if (GetPriceEntered() != 0)
                 {
-                    margin = Decimal.Subtract(GetPriceEntered(), Util.GetValueOfDecimal(Get_Value("VA077_PurchasePrice"))) * GetQtyEntered();
-                    marginper = Decimal.Round(Decimal.Multiply(Decimal.Divide(margin, (GetPriceEntered() * GetQtyEntered()))
-                        , Env.ONEHUNDRED), GetPrecision(), MidpointRounding.AwayFromZero);
+                    if (duration != "")
+                    {
+                        decimal sp = (GetPriceEntered() * GetQtyEntered() * Util.GetValueOfDecimal(duration)) / 12;
+                        decimal pp = (Util.GetValueOfDecimal(Get_Value("VA077_PurchasePrice")) * GetQtyEntered() * Util.GetValueOfDecimal(duration)) / 12;
+                        margin = Decimal.Round(Decimal.Subtract(sp, pp), GetPrecision(), MidpointRounding.AwayFromZero);
+                        marginper = Decimal.Round(Decimal.Multiply(Decimal.Divide(margin, sp)
+                            , Env.ONEHUNDRED), GetPrecision(), MidpointRounding.AwayFromZero);
+
+
+                        SetLineNetAmt(Decimal.Round(sp, GetPrecision()));
+                        decimal taxAmt;
+                        decimal lineTotalAmt;
+
+                        MOrderTax tax = MOrderTax.Get(this, GetPrecision(), false, Get_TrxName());
+                        MTax taxRate = tax.GetTax();
+                        if (taxRate.GetRate() != 0)
+                        {
+                            taxAmt = ((GetPriceEntered() * GetQtyEntered()) * (taxRate.GetRate() / 100) * Util.GetValueOfDecimal(duration)) / 12;
+                        }
+                        else
+                        {
+                            taxAmt = 0;
+                        }
+                        SetTaxAmt(Decimal.Round(taxAmt, GetPrecision()));
+                        lineTotalAmt = sp + taxAmt;
+
+                        SetLineTotalAmt(Decimal.Round(lineTotalAmt, GetPrecision()));
+
+
+                        // set Tax Amount in base currency
+                        if (Get_ColumnIndex("TaxBaseAmt") > 0)
+                        {
+                            primaryAcctSchemaCurrency = GetCtx().GetContextAsInt("$C_Currency_ID");
+                            if (Ord.GetC_Currency_ID() != primaryAcctSchemaCurrency)
+                            {
+                                taxAmt = MConversionRate.Convert(GetCtx(), GetTaxAmt(), primaryAcctSchemaCurrency, Ord.GetC_Currency_ID(),
+                                                                                           Ord.GetDateAcct(), Ord.GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+                            }
+                            else
+                            {
+                                taxAmt = GetTaxAmt();
+                            }
+                            SetTaxBaseAmt(taxAmt);
+                        }
+
+                        // set Taxable Amount -- (Line Total-Tax Amount)
+                        if (Get_ColumnIndex("TaxAbleAmt") >= 0)
+                        {
+                            if (Get_ColumnIndex("SurchargeAmt") > 0)
+                            {
+                                SetTaxAbleAmt(Decimal.Subtract(Decimal.Subtract(GetLineTotalAmt(), GetTaxAmt()), GetSurchargeAmt()));
+                            }
+                            else
+                            {
+                                SetTaxAbleAmt(Decimal.Subtract(GetLineTotalAmt(), GetTaxAmt()));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        margin = Decimal.Subtract(GetPriceEntered(), Util.GetValueOfDecimal(Get_Value("VA077_PurchasePrice"))) * GetQtyEntered();
+                        margin = Decimal.Round(margin, GetPrecision(), MidpointRounding.AwayFromZero);
+                        marginper = Decimal.Round(Decimal.Multiply(Decimal.Divide(margin, (GetPriceEntered() * GetQtyEntered()))
+                            , Env.ONEHUNDRED), GetPrecision(), MidpointRounding.AwayFromZero);
+                    }
                 }
 
                 Set_Value("VA077_MarginAmt", margin);
                 Set_Value("VA077_MarginPercent", marginper);
+
+                // Set Values from Product when saving the Quotation Line
+                if (newRecord && GetM_Product_ID() > 0)
+                {
+                    string str = @"SELECT VA077_SNErweiterbar, VA077_ShowOldSN, VA077_ContractProduct, VA077_ShowCNAutodesk,
+                    VA077_NonContractProd, Description, DocumentNote, VA077_DestinationOrg, VA077_AdditionalInfo, VA077_UpdateVersion,
+                    VA077_RegEmail FROM M_Product WHERE M_Product_ID=" + GetM_Product_ID();
+
+                    DataSet dt = DB.ExecuteDataset(str, null, Get_Trx());
+                    if (dt != null && dt.Tables[0].Rows.Count > 0)
+                    {
+                        bool snerw = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_SNErweiterbar"]).Equals("Y");
+                        bool showoldsn = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_ShowOldSN"]).Equals("Y");
+                        bool contract = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_ContractProduct"]).Equals("Y");
+                        bool autodesk = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_ShowCNAutodesk"]).Equals("Y");
+                        bool noncontract = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_NonContractProd"]).Equals("Y");
+                        string desc = Util.GetValueOfString(dt.Tables[0].Rows[0]["Description"]);
+                        string notes = Util.GetValueOfString(dt.Tables[0].Rows[0]["DocumentNote"]);
+                        string org = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_DestinationOrg"]);
+                        bool addInfo = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_AdditionalInfo"]).Equals("Y");
+                        bool updateversion = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_UpdateVersion"]).Equals("Y");
+                        bool regemail = Util.GetValueOfString(dt.Tables[0].Rows[0]["VA077_RegEmail"]).Equals("Y");
+
+                        if (org != "")
+                            Set_Value("VA077_DestinationOrg", Util.GetValueOfInt(org));
+                        Set_Value("Description", desc + " " + notes);
+
+                        Set_Value("VA077_SNErweiterbar", snerw);
+                        Set_Value("VA077_ShowOldSN", showoldsn);
+
+                        Set_Value("VA077_ContractProduct", contract);
+                        Set_Value("VA077_NonContractProd", noncontract);
+
+                        if (contract)
+                            Set_Value("VA077_IsContract", contract);
+
+                        Set_Value("VA077_ShowCNAutodesk", autodesk);
+                        Set_Value("VA077_UpdateVersion", updateversion);
+                        Set_Value("VA077_AdditionalInfo", addInfo);
+                        Set_Value("VA077_ChkRegEmail", regemail);
+                    }
+                }
             }
             return true;
         }
@@ -4535,10 +4658,11 @@ namespace VAdvantage.Model
             }
 
             // when document is other that Drafted stage, then we cannot delete documnet line
+            // But allowed to delete lines from Quotation.
             MOrder order = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
-            if (order.GetDocStatus() != "DR")
+            if (order.GetDocStatus() != "DR" && !order.IsSalesQuotation())
             {
-                log.SaveError("DeleteError", Msg.GetMsg(GetCtx(), "VIS_CantBeDeleted"));
+                log.SaveError("DeleteError", Msg.GetMsg(GetCtx(), "CannotDeleteTrx"));
                 return false;
             }
             return true;
@@ -4649,69 +4773,10 @@ namespace VAdvantage.Model
             //Develop by Deekshant For VA077 Module for calculating purchase,sales,margin
             if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
             {
-                if (GetC_Order_ID() > 0)
+                if (!UpdateMargins())
                 {
-                    DataSet contDS = null;
-
-                    string sql = @"SELECT VA077_ServiceContract_ID, VA077_HistoricContractDate, VA077_ContractCPStartDate, DocumentNo,
-                                   C_Frequency_ID, VA077_ContractCPEndDate, VA077_AnnualValue FROM VA077_ServiceContract 
-                                   WHERE VA077_ServiceContract_ID IN(SELECT MAX(VA077_ServiceContract_ID) FROM C_OrderLine 
-                                   WHERE C_Order_ID =" + GetC_Order_ID() + " AND VA077_ServiceContract_ID IS NOT NULL)";
-                    contDS = DB.ExecuteDataset(sql);
-                    DateTime? HCDate = null;
-                    DateTime? StartDate = null;
-                    DateTime? EndDate = null;
-                    Decimal AnnualValue = 0.00m;
-                    if (contDS != null && contDS.Tables[0].Rows.Count > 0)
-                    {
-                        HCDate = Util.GetValueOfDateTime(contDS.Tables[0].Rows[0]["VA077_HistoricContractDate"]);
-                        StartDate = Util.GetValueOfDateTime(contDS.Tables[0].Rows[0]["VA077_ContractCPStartDate"]);
-                        EndDate = Util.GetValueOfDateTime(contDS.Tables[0].Rows[0]["VA077_ContractCPEndDate"]);
-                        AnnualValue = Util.GetValueOfDecimal(contDS.Tables[0].Rows[0]["VA077_AnnualValue"]);
-
-                        sql = @"UPDATE C_Order  p SET VA077_TotalMarginAmt=(SELECT COALESCE(SUM(pl.VA077_MarginAmt),0) FROM C_OrderLine pl 
-                            WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_TotalPurchaseAmt=(SELECT ROUND(COALESCE(SUM(pl.VA077_PurchasePrice * QtyEntered),0),2) FROM C_OrderLine pl  
-                            WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_MarginPercent=(SELECT CASE WHEN Sum(LineNetAmt) > 0 Then 
-                            ROUND(COALESCE(((Sum(LineNetAmt)- Sum(VA077_PurchasePrice * QtyEntered))/Sum(LineNetAmt)*100),0),2) ELSE 0  END 
-                            FROM C_OrderLine pl WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_TotalSalesAmt=(SELECT COALESCE(SUM(pl.LineNetAmt),0) FROM C_OrderLine pl 
-                            WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_HistoricContractDate=" + GlobalVariable.TO_DATE(HCDate, true) + @",
-                            VA077_ContractCPStartDate = " + GlobalVariable.TO_DATE(StartDate, true) + @", 
-                            VA077_ContractCPEndDate= " + GlobalVariable.TO_DATE(EndDate, true) + @",
-                            VA077_OldAnnualContractTotal= " + AnnualValue + @",
-                            VA077_ChangeStartDate = " + GlobalVariable.TO_DATE(GetStartDate(), true) + @",
-                            VA077_PartialAmtCatchUp =(SELECT COALESCE(SUM(pl.LineNetAmt),0) FROM C_OrderLine pl 
-                            WHERE pl.IsActive = 'Y' AND pl.VA077_ServiceContract_ID IS NOT NULL AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_AdditionalAnnualCharge =(SELECT COALESCE(SUM(pl.PriceActual),0) FROM C_OrderLine pl 
-                            WHERE pl.IsActive = 'Y' AND pl.VA077_ServiceContract_ID IS NOT NULL AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + COALESCE(SUM(pl.LineNetAmt),0) FROM C_OrderLine pl 
-                            WHERE pl.IsActive = 'Y' AND pl.VA077_ServiceContract_ID IS NOT NULL AND pl.C_Order_ID = " + GetC_Order_ID() + @")
-                            WHERE p.C_Order_ID=" + GetC_Order_ID();
-                    }
-                    else
-                    {
-                        sql = @"UPDATE C_Order  p SET VA077_TotalMarginAmt=(SELECT COALESCE(SUM(pl.VA077_MarginAmt),0) FROM C_OrderLine pl 
-                            WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_TotalPurchaseAmt=(SELECT ROUND(COALESCE(SUM(pl.VA077_PurchasePrice * QtyEntered),0),2) FROM C_OrderLine pl  
-                            WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_MarginPercent=(SELECT CASE WHEN Sum(LineNetAmt) > 0 Then 
-                            ROUND(COALESCE(((Sum(LineNetAmt)- Sum(VA077_PurchasePrice * QtyEntered))/Sum(LineNetAmt)*100),0),2) ELSE 0  END 
-                            FROM C_OrderLine pl WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_TotalSalesAmt=(SELECT COALESCE(SUM(pl.LineNetAmt),0) FROM C_OrderLine pl 
-                            WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_ChangeStartDate = " + GlobalVariable.TO_DATE(GetStartDate(), true) + @"
-                            WHERE p.C_Order_ID=" + GetC_Order_ID();
-                    }
-
-                    int no = DB.ExecuteQuery(sql, null, Get_TrxName());
-                    if (no <= 0)
-                    {
-                        log.SaveWarning("", Msg.GetMsg(GetCtx(), "VIS_NotUpdated"));
-                        return false;
-                    }
+                    log.SaveWarning("", Msg.GetMsg(GetCtx(), "VIS_NotUpdated"));
+                    return false;
                 }
             }
             return true;
@@ -4742,9 +4807,133 @@ namespace VAdvantage.Model
                 resetTotalAmtDim = true;
             }
 
+            //Develop by Deekshant For VA077 Module for calculating purchase,sales,margin
+            if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
+            {
+                if (!UpdateMargins())
+                {
+                    return false;
+                }
+            }
+
             return UpdateHeaderTax();
         }
 
+        /// <summary>
+        /// Update margins and other fields on header based on the lines saved
+        /// </summary>
+        /// <returns>true/false</returns>
+        private bool UpdateMargins()
+        {
+            if (GetC_Order_ID() > 0)
+            {
+                DataSet contDS = null;
+
+                string sql = @"SELECT VA077_ServiceContract_ID, VA077_HistoricContractDate, VA077_ContractCPStartDate, DocumentNo,
+                                   C_Frequency_ID, VA077_ContractCPEndDate, VA077_AnnualValue FROM VA077_ServiceContract 
+                                   WHERE VA077_ServiceContract_ID IN(SELECT MAX(VA077_ServiceContract_ID) FROM C_OrderLine 
+                                   WHERE C_Order_ID =" + GetC_Order_ID() + " AND VA077_ServiceContract_ID IS NOT NULL)";
+                contDS = DB.ExecuteDataset(sql, null, Get_TrxName());
+                DateTime? HCDate = null;
+                DateTime? StartDate = null;
+                DateTime? EndDate = null;
+                Decimal AnnualValue = 0;
+                StringBuilder qry = new StringBuilder();
+
+                if (contDS != null && contDS.Tables[0].Rows.Count > 0)
+                {
+                    HCDate = Util.GetValueOfDateTime(contDS.Tables[0].Rows[0]["VA077_HistoricContractDate"]);
+                    StartDate = Util.GetValueOfDateTime(contDS.Tables[0].Rows[0]["VA077_ContractCPStartDate"]);
+                    EndDate = Util.GetValueOfDateTime(contDS.Tables[0].Rows[0]["VA077_ContractCPEndDate"]);
+                    AnnualValue = Util.GetValueOfDecimal(contDS.Tables[0].Rows[0]["VA077_AnnualValue"]);
+
+                    qry.Clear();
+                    qry.Append(@"UPDATE C_Order  p SET VA077_TotalMarginAmt=(SELECT COALESCE(SUM(pl.VA077_MarginAmt),0) FROM C_OrderLine pl 
+                            WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                            VA077_MarginPercent=(SELECT CASE WHEN Sum(LineNetAmt) > 0 Then 
+                            ROUND(COALESCE(((Sum(LineNetAmt) - Sum(
+                                                                CASE WHEN VA077_Duration is null THEN
+                                                                    COALESCE(VA077_PurchasePrice, 0) * QtyEntered
+                                                                    WHEN VA077_Duration > 0 THEN
+                                                                    COALESCE(VA077_PurchasePrice, 0) * QtyEntered * VA077_Duration/12 
+                                                                END)) / Sum(LineNetAmt) * 100), 0), " + GetPrecision() + @") 
+                            ELSE 0  END FROM C_OrderLine pl WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                            VA077_TotalPurchaseAmt = (SELECT ROUND(COALESCE(SUM(
+                                                                              CASE WHEN VA077_Duration is null THEN  
+                                                                              pl.VA077_PurchasePrice * QtyEntered  
+                                                                              WHEN VA077_Duration > 0 THEN  
+                                                                              pl.VA077_PurchasePrice * QtyEntered * VA077_Duration / 12  
+                                                                              END), 0), " + GetPrecision() + @") FROM C_OrderLine pl
+                                WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                            VA077_TotalSalesAmt = (SELECT COALESCE(SUM(pl.LineNetAmt), 0) FROM C_OrderLine pl
+                               WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @")");
+                    if (contDS.Tables[0].Rows[0]["VA077_HistoricContractDate"] != null)
+                    {
+                        qry.Append(",VA077_HistoricContractDate=" + GlobalVariable.TO_DATE(HCDate, true) + @"");
+                    }
+                    if (contDS.Tables[0].Rows[0]["VA077_ContractCPStartDate"] != null)
+                    {
+                        qry.Append(",VA077_ContractCPStartDate = " + GlobalVariable.TO_DATE(StartDate, true) + @"");
+                    }
+                    if (contDS.Tables[0].Rows[0]["VA077_ContractCPEndDate"] != null)
+                    {
+                        qry.Append(",VA077_ContractCPEndDate= " + GlobalVariable.TO_DATE(EndDate, true) + @"");
+                    }
+
+                    qry.Append(",VA077_OldAnnualContractTotal= " + AnnualValue + @", 
+                                     VA077_ChangeStartDate = (SELECT MIN(VA077_StartDate) FROM C_OrderLine pl WHERE pl.IsActive = 'Y' 
+                                     AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                                     VA077_PartialAmtCatchUp =(SELECT COALESCE(SUM(pl.LineNetAmt),0) FROM C_OrderLine pl 
+                                     WHERE pl.IsActive = 'Y' AND pl.VA077_ContractProduct='Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                                     VA077_AdditionalAnnualCharge =(SELECT ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0)," + GetPrecision() + @") FROM C_OrderLine pl 
+                                     WHERE pl.IsActive = 'Y' AND pl.VA077_ContractProduct='Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                                     VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0)," + GetPrecision() + @") FROM C_OrderLine pl 
+                                     WHERE pl.IsActive = 'Y' AND pl.VA077_ContractProduct='Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @")
+                                     WHERE p.C_Order_ID=" + GetC_Order_ID() + "");
+                }
+                else
+                {
+                    qry.Clear();
+                    qry.Append(@"UPDATE C_Order  p SET VA077_TotalMarginAmt=(SELECT COALESCE(SUM(pl.VA077_MarginAmt),0) FROM C_OrderLine pl 
+                            WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),                                                        
+                            VA077_TotalSalesAmt=(SELECT COALESCE(SUM(pl.LineNetAmt),0) FROM C_OrderLine pl 
+                            WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                            VA077_MarginPercent=(SELECT CASE WHEN Sum(LineNetAmt) > 0 Then 
+                            ROUND(COALESCE(((Sum(LineNetAmt) - Sum(
+                                                                CASE WHEN VA077_Duration is null THEN
+                                                                    COALESCE(VA077_PurchasePrice, 0) * QtyEntered
+                                                                    WHEN VA077_Duration > 0 THEN
+                                                                    COALESCE(VA077_PurchasePrice, 0) * QtyEntered * VA077_Duration/12 
+                                                                END)) / Sum(LineNetAmt) * 100), 0), " + GetPrecision() + @") 
+                            ELSE 0  END FROM C_OrderLine pl WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                            VA077_TotalPurchaseAmt=(SELECT ROUND(COALESCE(SUM(
+                                                                            CASE WHEN VA077_Duration is null THEN
+                                                                            pl.VA077_PurchasePrice * QtyEntered
+                                                                            WHEN VA077_Duration > 0 THEN
+                                                                            pl.VA077_PurchasePrice * QtyEntered * VA077_Duration/12
+                                                                            END),0)," + GetPrecision() + @") FROM C_OrderLine pl  
+                            WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                            VA077_ChangeStartDate = (SELECT MIN(VA077_StartDate) FROM C_OrderLine pl WHERE pl.IsActive = 'Y' 
+                            AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                            VA077_AdditionalAnnualCharge =(SELECT ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0)," + GetPrecision() + @") FROM C_OrderLine pl 
+                            WHERE pl.IsActive = 'Y' AND pl.VA077_ContractProduct='Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                            VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + ROUND(COALESCE(SUM(pl.PriceEntered * QtyEntered),0)," + GetPrecision() + @") FROM C_OrderLine pl 
+                            WHERE pl.IsActive = 'Y' AND pl.VA077_ContractProduct='Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                            VA077_PartialAmtCatchUp =(SELECT COALESCE(SUM(pl.LineNetAmt),0) FROM C_OrderLine pl 
+                            WHERE pl.IsActive = 'Y' AND pl.VA077_ContractProduct='Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @")");
+
+                    qry.Append(" WHERE p.C_Order_ID=" + GetC_Order_ID() + "");
+                }
+
+                int no = DB.ExecuteQuery(qry.ToString(), null, Get_TrxName());
+                if (no <= 0)
+                {
+                    log.SaveWarning("", Msg.GetMsg(GetCtx(), "VIS_NotUpdated"));
+                    return false;
+                }
+            }
+            return true;
+        }
 
         /// <summary>
         /// Update Tax & Header

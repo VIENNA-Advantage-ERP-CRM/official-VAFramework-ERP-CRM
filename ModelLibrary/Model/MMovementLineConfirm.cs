@@ -108,10 +108,24 @@ namespace VAdvantage.Model
         {
             MMovementLine line = GetLine();
 
-            line.SetTargetQty(GetTargetQty());
-            line.SetMovementQty(GetConfirmedQty());
-            line.SetConfirmedQty(GetConfirmedQty());
-            line.SetScrappedQty(GetScrappedQty());
+            //Lakhwinder
+            //Apply UOM Conversion Logic
+            MProduct _Pro = new MProduct(GetCtx(),line.GetM_Product_ID(), Get_TrxName());
+            if (GetC_UOM_ID() != _Pro.GetC_UOM_ID())
+            {
+               
+                line.SetTargetQty(Util.GetValueOfDecimal(MUOMConversion.ConvertProductFrom(GetCtx(), line.GetM_Product_ID(), GetC_UOM_ID(), GetTargetQty())));
+                line.SetMovementQty(Util.GetValueOfDecimal(MUOMConversion.ConvertProductFrom(GetCtx(), line.GetM_Product_ID(), GetC_UOM_ID(), GetConfirmedQty())));
+                line.SetConfirmedQty(Util.GetValueOfDecimal(MUOMConversion.ConvertProductFrom(GetCtx(), line.GetM_Product_ID(), GetC_UOM_ID(), GetConfirmedQty())));
+                line.SetScrappedQty(Util.GetValueOfDecimal(MUOMConversion.ConvertProductFrom(GetCtx(), line.GetM_Product_ID(), GetC_UOM_ID(), GetScrappedQty())));
+            }
+            else
+            {
+                line.SetTargetQty(GetTargetQty());
+                line.SetMovementQty(GetConfirmedQty());
+                line.SetConfirmedQty(GetConfirmedQty());
+                line.SetScrappedQty(GetScrappedQty());
+            }
 
             return line.Save(Get_TrxName());
         }
