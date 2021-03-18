@@ -169,7 +169,7 @@ namespace ViennaAdvantageServer.Process
 
                                             if (ConvertedQty == null)
                                             {
-                                                totalQtyOpp+= Util.GetValueOfDecimal(dsOpp.Tables[0].Rows[0]["Quantity"]);
+                                                totalQtyOpp+= Util.GetValueOfDecimal(dsOpp.Tables[0].Rows[k]["Quantity"]);
                                             }
                                             else
                                             {
@@ -681,12 +681,14 @@ namespace ViennaAdvantageServer.Process
             mfLine.SetOppQty(totalQtyOpp + mfLine.GetOppQty());
             Decimal? total = Decimal.Add(totalQtyOpp.Value, totalQtyTeam.Value);
             mfLine.SetTotalQty(total + mfLine.GetTotalQty());
+            //calculate average price for opportunit case only 
             if (totalQtyOpp>0 && totalQtyTeam==0) 
             {
-                Decimal? avgprice = ((mfLine.GetPrice() * qty) + (avgPrice * totalQtyOpp)) / mfLine.GetTotalQty();
-                avgprice = Decimal.Round(avgprice.Value, StdPrecision, MidpointRounding.AwayFromZero);
-                mfLine.SetPrice(avgprice); 
+                avgPrice = ((mfLine.GetPrice() * qty) + (avgPrice * totalQtyOpp)) / mfLine.GetTotalQty();
+                avgPrice = Decimal.Round(avgPrice.Value, StdPrecision, MidpointRounding.AwayFromZero);
+                mfLine.SetPrice(avgPrice); 
             }
+            //Team Forecast case
             else
             {
                 mfLine.SetPrice(avgPrice);
@@ -695,7 +697,6 @@ namespace ViennaAdvantageServer.Process
             mfLine.SetPlannedRevenue(planRevenue);
 
             return mfLine;
-
 
         }
 
