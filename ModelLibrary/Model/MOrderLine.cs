@@ -300,16 +300,19 @@ namespace VAdvantage.Model
             SetPriceActual(_productPrice.GetPriceStd());
             SetPriceList(_productPrice.GetPriceList());
             SetPriceLimit(_productPrice.GetPriceLimit());
-            //
-            if (GetQtyEntered().CompareTo(GetQtyOrdered()) == 0)
-            {
-                SetPriceEntered(GetPriceActual());
-            }
-            else
-            {
-                //SetPriceEntered(GetPriceActual().multiply(getQtyOrdered().divide(getQtyEntered(), 12, BigDecimal.ROUND_HALF_UP)));	//	recision
-                SetPriceEntered(Decimal.Multiply(GetPriceActual(), Decimal.Divide(GetQtyOrdered(), Decimal.Round(GetQtyEntered(), 12, MidpointRounding.AwayFromZero))));
-            }
+            // Set price entered by rakesh kumar on 17/Mar/2021
+            SetPriceEntered(GetPriceActual());
+            
+            // Commented by rakesh kumar on 17/Mar/2021 price handled in product pricing
+            //if (GetQtyEntered().CompareTo(GetQtyOrdered()) == 0)
+            //{
+            //    SetPriceEntered(GetPriceActual());
+            //}
+            //else
+            //{
+            //    //SetPriceEntered(GetPriceActual().multiply(getQtyOrdered().divide(getQtyEntered(), 12, BigDecimal.ROUND_HALF_UP)));	//	recision
+            //    //SetPriceEntered(Decimal.Multiply(GetPriceActual(), Decimal.Divide(GetQtyOrdered(), Decimal.Round(GetQtyEntered(), 12, MidpointRounding.AwayFromZero))));
+            //}
             //	Calculate Discount
             SetDiscount(_productPrice.GetDiscount());
 
@@ -337,6 +340,8 @@ namespace VAdvantage.Model
             //Amit
             _productPrice.SetPriceDate(GetDateOrdered());
             _productPrice.SetC_UOM_ID(GetC_UOM_ID());
+            //Set AttributeInstanceId by rakesh kumar 17/Mar/2021
+            _productPrice.SetM_AttributeSetInstance_ID(GetM_AttributeSetInstance_ID());
             _productPrice.CalculatePrice();
             return _productPrice;
         }
