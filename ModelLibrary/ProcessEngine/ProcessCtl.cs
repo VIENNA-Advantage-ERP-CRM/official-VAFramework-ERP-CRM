@@ -804,6 +804,11 @@ namespace VAdvantage.ProcessEngine
             report = null;
             if (IsReport)
             {
+
+                string lang = ctx.GetAD_Language().Replace("_", "-");
+                System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(lang);
+                System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(lang);
+
                 if (procedureName.Length > 0)
                 {
                     if (!StartDBProcess(procedureName))

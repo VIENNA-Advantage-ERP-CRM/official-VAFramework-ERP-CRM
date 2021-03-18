@@ -231,6 +231,11 @@ namespace VAdvantage.Common
             //  start report code
             ///	Start Report	-----------------------------------------------
             ///	
+            System.Globalization.CultureInfo original = System.Threading.Thread.CurrentThread.CurrentCulture;
+            string langu = p_ctx.GetAD_Language().Replace("_", "-");
+            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(langu);
+            System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(langu);
+
             IReportEngine rpe = null;
             bool isDocxFile = false;
             int AD_ReportFormat_ID = _pi.GetAD_ReportFormat_ID();
@@ -310,7 +315,8 @@ namespace VAdvantage.Common
             }
 
             _pi.SetSummary("Report", rpe != null);
-
+            System.Threading.Thread.CurrentThread.CurrentCulture = original;
+            System.Threading.Thread.CurrentThread.CurrentUICulture = original;
             //ReportCtl.Report = re;
             return rpe;
         }
