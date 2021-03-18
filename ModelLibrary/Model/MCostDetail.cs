@@ -725,12 +725,13 @@ namespace VAdvantage.Model
                         mas, Org_ID, ce, Get_TrxName(), cost.GetM_Warehouse_ID());
                     if (cQueue != null && cQueue.Length > 0)
                     {
-                        for (int j = 0; j < cQueue.Length; j++)
-                        {
-                            totalPrice += Decimal.Multiply(cQueue[j].GetCurrentCostPrice(), cQueue[j].GetCurrentQty());
-                            totalQty += cQueue[j].GetCurrentQty();
-                        }
-                        cost.SetCurrentCostPrice(Decimal.Round((totalPrice / totalQty), precision));
+                        //for (int j = 0; j < cQueue.Length; j++)
+                        //{
+                        //    totalPrice += Decimal.Multiply(cQueue[j].GetCurrentCostPrice(), cQueue[j].GetCurrentQty());
+                        //    totalQty += cQueue[j].GetCurrentQty();
+                        //}
+                        //cost.SetCurrentCostPrice(Decimal.Round((totalPrice / totalQty), precision));
+                        cost.SetCurrentCostPrice(Decimal.Round(cQueue[0].GetCurrentCostPrice(), precision));
                     }
                     else if (cQueue.Length == 0)
                     {
@@ -874,12 +875,13 @@ namespace VAdvantage.Model
                         mas, Org_ID, ce, Get_TrxName(), cost.GetM_Warehouse_ID());
                     if (cQueue != null && cQueue.Length > 0)
                     {
-                        for (int j = 0; j < cQueue.Length; j++)
-                        {
-                            totalPrice += Decimal.Multiply(cQueue[j].GetCurrentCostPrice(), cQueue[j].GetCurrentQty());
-                            totalQty += cQueue[j].GetCurrentQty();
-                        }
-                        cost.SetCurrentCostPrice(Decimal.Round((totalPrice / totalQty), precision));
+                        //for (int j = 0; j < cQueue.Length; j++)
+                        //{
+                        //    totalPrice += Decimal.Multiply(cQueue[j].GetCurrentCostPrice(), cQueue[j].GetCurrentQty());
+                        //    totalQty += cQueue[j].GetCurrentQty();
+                        //}
+                        //cost.SetCurrentCostPrice(Decimal.Round((totalPrice / totalQty), precision));
+                        cost.SetCurrentCostPrice(Decimal.Round(cQueue[0].GetCurrentCostPrice(), precision));
                     }
                     else if (cQueue.Length == 0)
                     {
@@ -1126,12 +1128,13 @@ namespace VAdvantage.Model
                         mas, Org_ID, ce, Get_TrxName(), cost.GetM_Warehouse_ID());
                         if (cQueue != null && cQueue.Length > 0)
                         {
-                            for (int j = 0; j < cQueue.Length; j++)
-                            {
-                                totalPrice += Decimal.Multiply(cQueue[j].GetCurrentCostPrice(), cQueue[j].GetCurrentQty());
-                                totalQty += cQueue[j].GetCurrentQty();
-                            }
-                            cost.SetCurrentCostPrice(Decimal.Round((totalPrice / totalQty), precision));
+                            //for (int j = 0; j < cQueue.Length; j++)
+                            //{
+                            //    totalPrice += Decimal.Multiply(cQueue[j].GetCurrentCostPrice(), cQueue[j].GetCurrentQty());
+                            //    totalQty += cQueue[j].GetCurrentQty();
+                            //}
+                            //cost.SetCurrentCostPrice(Decimal.Round((totalPrice / totalQty), precision));
+                            cost.SetCurrentCostPrice(Decimal.Round(cQueue[0].GetCurrentCostPrice(), precision));
                         }
                         else if (cQueue.Length == 0)
                         {
@@ -1356,12 +1359,13 @@ namespace VAdvantage.Model
                         mas, Org_ID, ce, Get_TrxName(), cost.GetM_Warehouse_ID());
                     if (cQueue != null && cQueue.Length > 0)
                     {
-                        for (int j = 0; j < cQueue.Length; j++)
-                        {
-                            totalPrice += Decimal.Multiply(cQueue[j].GetCurrentCostPrice(), cQueue[j].GetCurrentQty());
-                            totalQty += cQueue[j].GetCurrentQty();
-                        }
-                        cost.SetCurrentCostPrice(Decimal.Round((totalPrice / totalQty), precision));
+                        //for (int j = 0; j < cQueue.Length; j++)
+                        //{
+                        //    totalPrice += Decimal.Multiply(cQueue[j].GetCurrentCostPrice(), cQueue[j].GetCurrentQty());
+                        //    totalQty += cQueue[j].GetCurrentQty();
+                        //}
+                        //cost.SetCurrentCostPrice(Decimal.Round((totalPrice / totalQty), precision));
+                        cost.SetCurrentCostPrice(Decimal.Round(cQueue[0].GetCurrentCostPrice(), precision));
                     }
                     if (cQueue.Length == 0)
                     {
@@ -1654,7 +1658,7 @@ namespace VAdvantage.Model
                 {
                     amt = cost.GetCurrentCostPrice() * qty;
                 }
-                else if (windowName.Equals("Invoice(Vendor)-Return"))
+                else if (windowName.Equals("Invoice(Vendor)-Return") || windowName.Equals("Material Receipt"))
                 {
                     // In case of Invoice against Return To Vendor - impacts come with Invoice Amount
                     amt = GetAmt();
@@ -2347,7 +2351,7 @@ namespace VAdvantage.Model
                             {
                                 cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                             }
-                        }                    
+                        }
                         else if (windowName.Equals("Production Execution"))
                         {
                             if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
@@ -2893,7 +2897,7 @@ namespace VAdvantage.Model
                             {
                                 cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                             }
-                        }                    
+                        }
                         else if (windowName.Equals("Production Execution"))
                         {
                             if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
@@ -2943,7 +2947,7 @@ namespace VAdvantage.Model
                         else if (!windowName.Equals("Invoice(Vendor)-Return"))
                         {
                             // if current cost price avialble then add that amount else the same scenario
-                            if (cost.GetCurrentCostPrice() != 0)
+                            if (amt == 0 && cost.GetCurrentCostPrice() != 0)
                             {
                                 amt = cost.GetCurrentCostPrice() * qty;
                             }
@@ -3058,12 +3062,15 @@ namespace VAdvantage.Model
                     }
                     if (cQueue != null && cQueue.Length > 0)
                     {
-                        for (int j = 0; j < cQueue.Length; j++)
-                        {
-                            totalPrice += Decimal.Multiply(cQueue[j].GetCurrentCostPrice(), cQueue[j].GetCurrentQty());
-                            totalQty += cQueue[j].GetCurrentQty();
-                        }
-                        cost.SetCurrentCostPrice(Decimal.Round(Decimal.Divide(totalPrice, totalQty), precision));
+                        //for (int j = 0; j < cQueue.Length; j++)
+                        //{
+                        //    totalPrice += Decimal.Multiply(cQueue[j].GetCurrentCostPrice(), cQueue[j].GetCurrentQty());
+                        //    totalQty += cQueue[j].GetCurrentQty();
+                        //}
+                        //cost.SetCurrentCostPrice(Decimal.Round(Decimal.Divide(totalPrice, totalQty), precision));
+
+                        // we have to update current cost price either of first record having current qty <> 0 (IN FIFO) and vice versa for LIFO
+                        cost.SetCurrentCostPrice(Decimal.Round(cQueue[0].GetCurrentCostPrice(), precision));
                     }
                     else
                     {
@@ -3126,7 +3133,7 @@ namespace VAdvantage.Model
                                 cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), amt));
                             }
                         }
-                        else if (windowName.Equals("Internal Use Inventory")|| windowName.Equals("AssetDisposal"))
+                        else if (windowName.Equals("Internal Use Inventory") || windowName.Equals("AssetDisposal"))
                         {
                             if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                             {
@@ -3136,7 +3143,7 @@ namespace VAdvantage.Model
                             {
                                 cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                             }
-                        }                     
+                        }
                         else if (windowName.Equals("Production Execution"))
                         {
                             if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
@@ -3316,7 +3323,7 @@ namespace VAdvantage.Model
                                 }
                             }
                         }
-                        else if (windowName.Equals("Internal Use Inventory")|| windowName.Equals("AssetDisposal"))
+                        else if (windowName.Equals("Internal Use Inventory") || windowName.Equals("AssetDisposal"))
                         {
                             if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                             {
@@ -3326,7 +3333,7 @@ namespace VAdvantage.Model
                             {
                                 cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                             }
-                        }                    
+                        }
                         else if (windowName.Equals("Production Execution"))
                         {
                             if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
@@ -3534,7 +3541,7 @@ namespace VAdvantage.Model
                                 cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                             }
                         }
-                      
+
                         else if (windowName.Equals("Production Execution"))
                         {
                             if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
@@ -3942,6 +3949,7 @@ namespace VAdvantage.Model
 
                         // created object of Cost elemnt for checking iscalculated = true/ false
                         ce = MCostElement.Get(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["m_ref_costelement"]));
+                        // if m_ref_costelement is of Freight type then current cost against this record is :: 
 
                         costCombination = MCost.Get(product, M_ASI_ID, acctSchema, AD_Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_CostElement_ID"]), M_Warehouse_ID);
                         cost = MCost.Get(product, M_ASI_ID, acctSchema, AD_Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["m_ref_costelement"]), M_Warehouse_ID);

@@ -797,7 +797,7 @@ namespace VAdvantage.Model
                         _budgetMessage += Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
                                             + Util.GetValueOfString(drBUdgetControl["ControlName"]) + ", ";
                     }
-                    log.Info("Budget control Exceed - " + Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
+                    log.Info("Budget Exceed - " + Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
                                         + Util.GetValueOfString(drBUdgetControl["ControlName"]) + " - (" + _budgetControl.ControlledAmount + ") - Table ID : " +
                                         Util.GetValueOfInt(drDataRecord["LineTable_ID"]) + " - Record ID : " + Util.GetValueOfInt(drDataRecord["Line_ID"]));
                 }
@@ -809,12 +809,14 @@ namespace VAdvantage.Model
                                              (x.Account_ID == Util.GetValueOfInt(drDataRecord["Account_ID"]))
                                             ))
                 {
+                    // If budget not defined then add error message in budget message variable
+                    // Done by rakesh on 17/Mar/2021
                     if (!_budgetMessage.Contains(Util.GetValueOfString(drBUdgetControl["BudgetName"])))
                     {
                         _budgetMessage += Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
                                             + Util.GetValueOfString(drBUdgetControl["ControlName"]) + ", ";
                     }
-                    log.Info("Budget control not defined for - " + Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
+                    log.Info("Budget not defined for - " + Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
                                         + Util.GetValueOfString(drBUdgetControl["ControlName"]) + " - Table ID : " +
                                         Util.GetValueOfInt(drDataRecord["LineTable_ID"]) + " - Record ID : " + Util.GetValueOfInt(drDataRecord["Line_ID"]) +
                                         " - Account ID : " + Util.GetValueOfInt(drDataRecord["Account_ID"]));

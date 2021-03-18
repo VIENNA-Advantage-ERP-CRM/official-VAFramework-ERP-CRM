@@ -761,6 +761,16 @@ namespace VAdvantage.Acct
                     return STATUS_Error;
                 }
 
+                //  balanceAccounting
+                if (!fact.IsAcctBalanced())
+                {
+                    fact.BalanceAccounting();
+                    if (!fact.IsAcctBalanced())
+                    {
+                        return STATUS_NotBalanced;
+                    }
+                }
+
                 //  balanceSource
                 if (!fact.IsSourceBalanced())
                 {
@@ -787,15 +797,7 @@ namespace VAdvantage.Acct
                     }
                 }
 
-                //  balanceAccounting
-                if (!fact.IsAcctBalanced())
-                {
-                    fact.BalanceAccounting();
-                    if (!fact.IsAcctBalanced())
-                    {
-                        return STATUS_NotBalanced;
-                    }
-                }
+                
 
             }	//	for all facts
 

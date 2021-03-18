@@ -639,5 +639,62 @@ namespace VAdvantage.Model
 
             return isPOcostingMethod;
         }
+
+        /// <summary>
+        /// This Function is used to check, is selected costing method for respective product is LIFO or FIFO
+        /// First we check costing method on Product category, if not found then we will check on Primary Accounting Schema
+        /// </summary>
+        /// <param name="ctx">current context</param>
+        /// <param name="AD_Client_ID">Client reference</param>
+        /// <param name="M_Product_ID">Product whose costing method is to be determine</param>
+        /// <param name="trxName">Transaction</param>
+        /// <returns>selected Costing Method</returns>
+        public static String CheckLifoOrFifoMethod(Ctx ctx, int AD_Client_ID, int M_Product_ID, Trx trxName)
+        {
+            String bindedCostingMethod = "";
+            String costingMethod = null;
+            String sql = "";
+            if (M_Product_ID > 0)
+            {
+                sql = @"With AcctSchema AS (SELECT AD_Client_ID, CASE WHEN C_AcctSchema.costingMethod = 'C'
+                            THEN (SELECT costingmethod FROM M_CostElement WHERE M_CostElement_ID IN 
+                            (SELECT CAST(M_Ref_CostElement AS INTEGER) FROM M_CostElementLine WHERE M_CostElement_ID=C_AcctSchema.M_CostElement_ID )
+                            AND CostingMethod IS NOT NULL)
+                            else C_AcctSchema.costingMethod end as AschcostingMethod
+                            from C_AcctSchema  WHERE C_AcctSchema_ID = (SELECT c_acctschema1_id FROM AD_ClientInfo WHERE AD_Client_ID =" + AD_Client_ID + @"))
+                            SELECT   CASE WHEN M_Product_category.costingMethod = 'C'
+                            THEN (SELECT costingmethod FROM M_CostElement WHERE M_CostElement_ID IN 
+                            (SELECT CAST(M_Ref_CostElement AS INTEGER) FROM M_CostElementLine WHERE M_CostElement_ID=M_Product_category.M_CostElement_ID )
+                            AND CostingMethod IS NOT NULL)
+                            ELSE M_Product_category.costingMethod end as costingMethod, AcctSchema.AschcostingMethod
+                            from M_Product INNER JOIN M_Product_Category ON 
+                            M_Product_Category.M_Product_Category_ID = M_Product.M_Product_Category_ID
+                            INNER JOIN AcctSchema on  AcctSchema.AD_Client_ID = M_Product.AD_Client_ID 
+                        WHERE M_Product.M_Product_ID = " + M_Product_ID;
+                DataSet ds = DB.ExecuteDataset(sql, null, trxName);
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    costingMethod = Util.GetValueOfString(ds.Tables[0].Rows[0]["costingMethod"]);
+                    if (String.IsNullOrEmpty(costingMethod))
+                    {
+                        costingMethod = Util.GetValueOfString(ds.Tables[0].Rows[0]["AschcostingMethod"]);
+                    }
+                }
+            }
+            if (costingMethod.Equals(COSTINGMETHOD_Lifo))
+            {
+                bindedCostingMethod = COSTINGMETHOD_Lifo;
+            }
+            else if (costingMethod.Equals(COSTINGMETHOD_Fifo))
+            {
+                bindedCostingMethod = COSTINGMETHOD_Fifo;
+            }
+            else
+            {
+                bindedCostingMethod = "";
+            }
+
+            return bindedCostingMethod;
+        }
     }
 }

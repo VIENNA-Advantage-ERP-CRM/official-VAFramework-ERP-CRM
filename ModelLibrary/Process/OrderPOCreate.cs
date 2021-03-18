@@ -122,7 +122,7 @@ namespace VAdvantage.Process
             }
             // Get Completed Order
             String sql = "SELECT * FROM C_Order o "
-                + "WHERE o.IsSOTrx='Y' AND o.IsReturnTrx='N' AND o.IsSalesQuotation = 'N' AND O.DocStatus='"+ X_C_Order.DOCACTION_Complete + "'"
+                + "WHERE o.IsSOTrx='Y' AND o.IsReturnTrx='N' AND o.IsSalesQuotation = 'N' AND O.DocStatus='" + X_C_Order.DOCACTION_Complete + "'"
                 //	No Duplicates
                 //	" AND o.Ref_Order_ID IS NULL"
                 + " AND NOT EXISTS (SELECT * FROM C_OrderLine ol WHERE o.C_Order_ID=ol.C_Order_ID AND ol.Ref_OrderLine_ID IS NOT NULL)"
@@ -461,7 +461,7 @@ namespace VAdvantage.Process
             }
             return counter;
         }
-       
+
         /// <summary>
         /// Create PO for Vendor
         /// </summary>
@@ -581,8 +581,26 @@ namespace VAdvantage.Process
             po.SetC_Project_ID(so.GetC_Project_ID());
             po.SetUser1_ID(so.GetUser1_ID());
             po.SetUser2_ID(so.GetUser2_ID());
-            //
-            po.Save();
+
+            // Handle error done by rakesh kumar on 17/Mar/2021
+            if (!po.Save())
+            {
+                ValueNamePair pp = VLogger.RetrieveError();
+                string msg = string.Empty;
+                if (pp != null)
+                {
+                    msg = pp.GetName();
+                    //if GetName is Empty then it will check GetValue
+                    if (string.IsNullOrEmpty(msg))
+                        msg = Msg.GetMsg("", pp.GetValue());
+                }
+                if (string.IsNullOrEmpty(msg))
+                    msg = Msg.GetMsg(GetCtx(), "RecordNotSaved");
+
+
+                log.Info("CreatePOfromSO : Not Saved. Error Value : " + msg);
+                AddLog(0, null, null, msg + " : @DocumentNo@ : " + so.GetDocumentNo());
+            }
             return po;
         }
 
