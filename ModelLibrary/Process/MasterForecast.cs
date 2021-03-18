@@ -155,19 +155,26 @@ namespace ViennaAdvantageServer.Process
                                     dsOpp = DB.ExecuteDataset(sql, null, mf.Get_Trx());
                                     if (dsOpp != null && dsOpp.Tables[0].Rows.Count > 0)
                                     {
-                                        //Conversion from Project to MasterForecast Currency
-                                        totalPriceOpp = MConversionRate.Convert(mf.GetCtx(), Util.GetValueOfDecimal(dsOpp.Tables[0].Rows[0]["Price"]),
-                                             Util.GetValueOfInt(dsOpp.Tables[0].Rows[0]["C_Currency_ID"]), Currency,
-                                             Util.GetValueOfDateTime(mf.Get_Value("TRXDATE")),
-                                             Util.GetValueOfInt(mf.Get_Value("C_ConversionType_ID")), mf.GetAD_Client_ID(), mf.GetAD_Org_ID());
-                                                                             
-                                        //Conversion from BaseUOM to UOM on Project Line
-                                        totalQtyOpp = MUOMConversion.ConvertProductFrom(mf.GetCtx(), Util.GetValueOfInt(dsForecast.Tables[0].Rows[i]["M_Product_ID"]),
-                                        Util.GetValueOfInt(dsOpp.Tables[0].Rows[0]["C_UOM_ID"]), Util.GetValueOfDecimal(dsOpp.Tables[0].Rows[0]["Quantity"]));
-
-                                        if (totalQtyOpp == null)
+                                        for (int k = 0; k < dsOpp.Tables[0].Rows.Count; k++)
                                         {
-                                            totalQtyOpp = Util.GetValueOfDecimal(dsOpp.Tables[0].Rows[0]["Quantity"]);
+                                            //Conversion from Project to MasterForecast Currency
+                                            totalPriceOpp+= MConversionRate.Convert(mf.GetCtx(), Util.GetValueOfDecimal(dsOpp.Tables[0].Rows[k]["Price"]),
+                                                 Util.GetValueOfInt(dsOpp.Tables[0].Rows[k]["C_Currency_ID"]), Currency,
+                                                 Util.GetValueOfDateTime(mf.Get_Value("TRXDATE")),
+                                                 Util.GetValueOfInt(mf.Get_Value("C_ConversionType_ID")), mf.GetAD_Client_ID(), mf.GetAD_Org_ID());
+
+                                            //Conversion from BaseUOM to UOM on Project Line
+                                            decimal? ConvertedQty= MUOMConversion.ConvertProductFrom(mf.GetCtx(), Util.GetValueOfInt(dsForecast.Tables[0].Rows[k]["M_Product_ID"]),
+                                            Util.GetValueOfInt(dsOpp.Tables[0].Rows[k]["C_UOM_ID"]), Util.GetValueOfDecimal(dsOpp.Tables[0].Rows[k]["Quantity"]));
+
+                                            if (ConvertedQty == null)
+                                            {
+                                                totalQtyOpp+= Util.GetValueOfDecimal(dsOpp.Tables[0].Rows[k]["Quantity"]);
+                                            }
+                                            else
+                                            {
+                                                totalQtyOpp += ConvertedQty;
+                                            }
                                         }
                                     }
                                 }
@@ -180,7 +187,7 @@ namespace ViennaAdvantageServer.Process
                                 if (totalQty.Value > 0)
                                 {
                                     Decimal? avgPrice = Decimal.Divide(totalPrice.Value, totalQty.Value);
-                                    avgPrice = Decimal.Round(avgPrice.Value, 2, MidpointRounding.AwayFromZero);
+                                    avgPrice = Decimal.Round(avgPrice.Value, StdPrecision, MidpointRounding.AwayFromZero);
 
                                     mfLine = GenerateMasterForecast(Util.GetValueOfInt(dsForecast.Tables[0].Rows[i]["M_Product_ID"]), 0, totalQtyTeam, totalQtyOpp, avgPrice);
                                     if (!mfLine.Save())
@@ -328,7 +335,7 @@ namespace ViennaAdvantageServer.Process
                             if (totalQtyOpp.Value > 0)
                             {
                                 Decimal? avgPrice = Decimal.Divide(totalPriceOpp.Value, totalQtyOpp.Value);
-                                avgPrice = Decimal.Round(avgPrice.Value, 2, MidpointRounding.AwayFromZero);
+                                avgPrice = Decimal.Round(avgPrice.Value, StdPrecision, MidpointRounding.AwayFromZero);
 
                                 mfLine = GenerateMasterForecast(Util.GetValueOfInt(dsOpp.Tables[0].Rows[i]["M_Product_ID"]), 0, Util.GetValueOfDecimal(Decimal.Zero), totalQtyOpp, avgPrice);
                                 if (!mfLine.Save())
@@ -668,17 +675,28 @@ namespace ViennaAdvantageServer.Process
         private MMasterForecastLine GenerateMasterForecast(int M_Product_ID, int M_AttributeSetInstance, decimal? totalQtyTeam, Decimal? totalQtyOpp, decimal? avgPrice)
         {
             MMasterForecastLine mfLine = MMasterForecastLine.GetOrCreate(mf, M_Product_ID, M_AttributeSetInstance);
+            Decimal? qty = mfLine.GetOppQty();
             mfLine.SetC_MasterForecast_ID(mf.GetC_MasterForecast_ID());
             mfLine.SetForcastQty(totalQtyTeam);
             mfLine.SetOppQty(totalQtyOpp + mfLine.GetOppQty());
             Decimal? total = Decimal.Add(totalQtyOpp.Value, totalQtyTeam.Value);
             mfLine.SetTotalQty(total + mfLine.GetTotalQty());
-            mfLine.SetPrice(avgPrice + mfLine.GetPrice());
+            //calculate average price for opportunit case only 
+            if (totalQtyOpp>0 && totalQtyTeam==0) 
+            {
+                avgPrice = ((mfLine.GetPrice() * qty) + (avgPrice * totalQtyOpp)) / mfLine.GetTotalQty();
+                avgPrice = Decimal.Round(avgPrice.Value, StdPrecision, MidpointRounding.AwayFromZero);
+                mfLine.SetPrice(avgPrice); 
+            }
+            //Team Forecast case
+            else
+            {
+                mfLine.SetPrice(avgPrice);
+            }
             Decimal? planRevenue = Decimal.Round(Decimal.Multiply(mfLine.GetPrice(), mfLine.GetTotalQty()), StdPrecision, MidpointRounding.AwayFromZero);
             mfLine.SetPlannedRevenue(planRevenue);
 
             return mfLine;
-
 
         }
 
