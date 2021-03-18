@@ -668,15 +668,15 @@ namespace ViennaAdvantage.Process
                     line.Set_Value("VA077_ServiceContract_ID", orderLine.Get_Value("VA077_ServiceContract_ID"));
                     line.Set_Value("VA077_UserRef_ID", orderLine.Get_Value("VA077_UserRef_ID"));
                     line.Set_Value("VA077_Duration", orderLine.Get_Value("VA077_Duration"));
-
                     line.Set_Value("VA077_CNAutodesk", orderLine.Get_Value("VA077_CNAutodesk"));
                     line.Set_Value("VA077_RegEmail", orderLine.Get_Value("VA077_RegEmail"));
                     line.Set_Value("VA077_UpdateFromVersn", orderLine.Get_Value("VA077_UpdateFromVersn"));
                     line.Set_Value("VA077_ProductInfo", orderLine.Get_Value("VA077_ProductInfo"));
                     line.Set_Value("VA077_MarginPercent", orderLine.Get_Value("VA077_MarginPercent"));
-
                     line.Set_Value("VA077_MarginAmt", orderLine.Get_Value("VA077_MarginAmt"));
                     line.Set_Value("VA077_PurchasePrice", orderLine.Get_Value("VA077_PurchasePrice"));
+                    line.Set_Value("VA077_StartDate", orderLine.Get_Value("VA077_StartDate"));
+                    line.Set_Value("VA077_EndDate", orderLine.Get_Value("VA077_EndDate"));
 
                 }
 
@@ -806,6 +806,8 @@ namespace ViennaAdvantage.Process
 
                         line.Set_Value("VA077_MarginAmt", orderLine.Get_Value("VA077_MarginAmt"));
                         line.Set_Value("VA077_PurchasePrice", orderLine.Get_Value("VA077_PurchasePrice"));
+                        line.Set_Value("VA077_StartDate", orderLine.Get_Value("VA077_StartDate"));
+                        line.Set_Value("VA077_EndDate", orderLine.Get_Value("VA077_EndDate"));
 
                     }
 
@@ -919,6 +921,8 @@ namespace ViennaAdvantage.Process
 
                         line.Set_Value("VA077_MarginAmt", orderLine.Get_Value("VA077_MarginAmt"));
                         line.Set_Value("VA077_PurchasePrice", orderLine.Get_Value("VA077_PurchasePrice"));
+                        line.Set_Value("VA077_StartDate", orderLine.Get_Value("VA077_StartDate"));
+                        line.Set_Value("VA077_EndDate", orderLine.Get_Value("VA077_EndDate"));
 
                     }
 

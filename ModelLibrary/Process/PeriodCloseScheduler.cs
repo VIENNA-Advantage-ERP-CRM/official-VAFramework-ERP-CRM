@@ -68,6 +68,7 @@ namespace VAdvantage.Process
 
               //  sql = MRole.GetDefault(GetCtx()).AddAccessSQL(sql, "C_PeriodControl", true, true); // fully qualified - RO
 
+
                 if (Util.GetValueOfInt(DB.ExecuteQuery(sql, null, null)) == 0)
                 {
                     log.Log(Level.SEVERE, sql);

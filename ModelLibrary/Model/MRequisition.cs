@@ -392,24 +392,34 @@ namespace VAdvantage.Model
 
                 if (Env.IsModuleInstalled("FRPT_"))
                 {
-                    // budget control functionality work when Financial Managemt Module Available
-                    try
+                    // Once budget breach approved do not check budget breach functionality again
+                    if (!IsBudgetBreachApproved())
                     {
-                        log.Info("Budget Control Start for Rquisition Document No  " + GetDocumentNo());
-                        EvaluateBudgetControlData();
-                        if (_budgetMessage.Length > 0)
+                        // budget control functionality work when Financial Managemt Module Available
+                        try
                         {
-                            _processMsg = Msg.GetMsg(GetCtx(), "BudgetExceedFor") + _budgetMessage;
+                            log.Info("Budget Control Start for Rquisition Document No  " + GetDocumentNo());
+                            EvaluateBudgetControlData();
+                            if (_budgetMessage.Length > 0)
+                            {
+                                _processMsg = Msg.GetMsg(GetCtx(), "BudgetExceedFor") + _budgetMessage;
+                                SetProcessed(false);
+                                // Done by rakesh 19/Feb/2020
+                                SetIsBudgetBreach(true);
+                                SetIsBudgetBreachApproved(false);
+                                return DocActionVariables.STATUS_INPROGRESS;
+                            }
+                            SetIsBudgetBreach(false);
+                            SetIsBudgetBreachApproved(true);
+                            log.Info("Budget Control Completed for Rquisition Document No  " + GetDocumentNo());
+                        }
+                        catch (Exception ex)
+                        {
+                            log.Severe("Budget Control Issue " + ex.Message);
                             SetProcessed(false);
+                            SetIsBudgetBreach(false);
                             return DocActionVariables.STATUS_INPROGRESS;
                         }
-                        log.Info("Budget Control Completed for Rquisition Document No  " + GetDocumentNo());
-                    }
-                    catch (Exception ex)
-                    {
-                        log.Severe("Budget Control Issue " + ex.Message);
-                        SetProcessed(false);
-                        return DocActionVariables.STATUS_INPROGRESS;
                     }
                 }
 
@@ -604,7 +614,7 @@ namespace VAdvantage.Model
 
             sql.Clear();
             sql.Append(@"SELECT GL_Budget.GL_Budget_ID , GL_Budget.BudgetControlBasis, GL_Budget.C_Year_ID , GL_Budget.C_Period_ID,GL_Budget.Name As BudgetName, 
-                  GL_BudgetControl.C_AcctSchema_ID, GL_BudgetControl.CommitmentType, GL_BudgetControl.BudgetControlScope,  GL_BudgetControl.GL_BudgetControl_ID, GL_BudgetControl.Name AS ControlName 
+                  GL_BudgetControl.C_AcctSchema_ID, GL_BudgetControl.CommitmentType, GL_BudgetControl.BudgetControlScope,  GL_BudgetControl.GL_BudgetControl_ID, GL_BudgetControl.Name AS ControlName,GL_BudgetControl.BudgetBreachPercent
                 FROM GL_Budget INNER JOIN GL_BudgetControl ON GL_Budget.GL_Budget_ID = GL_BudgetControl.GL_Budget_ID
                 INNER JOIN Ad_ClientInfo ON Ad_ClientInfo.AD_Client_ID = GL_Budget.AD_Client_ID
                 WHERE GL_BudgetControl.IsActive = 'Y' AND GL_Budget.IsActive = 'Y' AND GL_BudgetControl.AD_Org_ID IN (0 , " + GetAD_Org_ID() + @")  
@@ -1106,6 +1116,13 @@ namespace VAdvantage.Model
         {
             log.Info("reActivateIt - " + ToString());
             //	setProcessed(false);
+            // In case of purchase order reverse budget breach
+            // Done by Rakesh Kumar 19/Feb/2020
+            if (Env.IsModuleInstalled("FRPT_"))
+            {
+                SetIsBudgetBreach(false);
+                SetIsBudgetBreachApproved(false);
+            }
             if (ReverseCorrectIt())
             {
                 return true;

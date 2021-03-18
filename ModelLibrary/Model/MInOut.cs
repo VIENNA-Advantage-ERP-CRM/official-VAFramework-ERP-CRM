@@ -3563,7 +3563,9 @@ namespace VAdvantage.Model
                     // JID_1251:On Material receipt system will generate the asset for Items type product for which asset group linked with Product Category.
                     if ((product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item && product.IsCreateAsset() && sLine.GetMovementQty() > 0
                        && !IsReversal() && !IsReturnTrx() && !IsSOTrx() && sLine.GetA_Asset_ID() == 0) ||
-                       (Env.IsModuleInstalled("VA077_") && product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item && product.IsCreateAsset() && sLine.GetMovementQty() > 0
+                       (Env.IsModuleInstalled("VA077_") && product != null 
+                       && (product.GetProductType() == X_M_Product.PRODUCTTYPE_Item || product.GetProductType() == X_M_Product.PRODUCTTYPE_Service)
+                       && product.IsCreateAsset() && sLine.GetMovementQty() > 0
                        && !IsReversal() && !IsReturnTrx() && IsSOTrx() && sLine.GetA_Asset_ID() == 0))
                     {
                         log.Fine("Asset");
@@ -3587,8 +3589,11 @@ namespace VAdvantage.Model
                                     return DocActionVariables.STATUS_INVALID;
                                 }
                                 else
-                                {
-                                    asset.SetName(asset.GetName() + "_" + asset.GetValue());
+                                {                                    
+                                    if (Env.IsModuleInstalled("VA077_"))                                    
+                                        asset.SetName(asset.GetName());
+                                    else
+                                        asset.SetName(asset.GetName() + "_" + asset.GetValue());
                                     asset.Save(Get_TrxName());
                                 }
                                 Info.Append(asset.GetValue());
@@ -3607,7 +3612,10 @@ namespace VAdvantage.Model
                                 }
                                 else
                                 {
-                                    asset.SetName(asset.GetName() + "_" + asset.GetValue());
+                                    if (Env.IsModuleInstalled("VA077_"))
+                                        asset.SetName(asset.GetName());
+                                    else
+                                        asset.SetName(asset.GetName() + "_" + asset.GetValue());
                                     asset.Save(Get_TrxName());
                                 }
                                 Info.Append(asset.GetValue());

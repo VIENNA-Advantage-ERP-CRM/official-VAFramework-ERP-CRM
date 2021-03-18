@@ -123,11 +123,14 @@ namespace ViennaAdvantage.Process
                         int destinationorg = Util.GetValueOfInt(dts.Tables[0].Rows[i]["VA077_DestinationOrg"]);
                         // VAdvantage.Model.MOrder newOrder = new VAdvantage.Model.MOrder(GetCtx(), 0, Get_Trx());
                         int orgId = Util.GetValueOfInt(dts.Tables[0].Rows[i]["AD_Org_Id"]);
-                        if (i > 0)
-                            docNo.Append(", ");
-                        AddHeader(destinationorg, orgId);
-                        Addline(destinationorg, orgId);                        
-                    }                    
+                        if (orgId != destinationorg)
+                        {
+                            if (i > 0)
+                                docNo.Append(", ");
+                            AddHeader(destinationorg, orgId);
+                            Addline(destinationorg, orgId);
+                        }
+                    }
                 }
 
             }
@@ -392,7 +395,7 @@ namespace ViennaAdvantage.Process
             else
             {
 
-                str = "SELECT VA077_DestinationOrg,C_OrderLine_ID FROM C_OrderLine WHERE C_Order_ID = " + _C_Order_ID + " AND (NVL(VA077_DestinationOrg,0)=0) AND AD_Org_ID=" + org + " ORDER BY Line";
+                str = "SELECT VA077_DestinationOrg,C_OrderLine_ID FROM C_OrderLine WHERE C_Order_ID = " + _C_Order_ID + " AND ((NVL(VA077_DestinationOrg,0)=0) OR VA077_DestinationOrg=AD_Org_ID) AND AD_Org_ID=" + org + " ORDER BY Line";
             }
             DataSet st = DB.ExecuteDataset(str, null, Get_Trx());
             if (st != null && st.Tables[0].Rows.Count > 0)
@@ -410,6 +413,7 @@ namespace ViennaAdvantage.Process
                     {
                         orderLine.SetAD_Org_ID(org);
                     }
+                    
                     orderLine.SetAD_Client_ID(GetAD_Client_ID());
                     orderLine.SetC_Order_ID(newid);
                     orderLine.SetDescription(mOrderLine.GetDescription());
@@ -461,7 +465,9 @@ namespace ViennaAdvantage.Process
                     // Added by Bharat on 06 Jan 2018 to set Values on Sales Order from Sales Quotation.
                     if (orderLine.Get_ColumnIndex("C_Order_Quotation") >= 0)
                         orderLine.Set_Value("C_Order_Quotation", mOrderLine.GetC_Order_ID());
-                    orderLine.SetLine(mOrderLine.GetLine());
+                                        
+                    orderLine.SetLine((i + 1) * 10);
+                    
                     if (!orderLine.Save())
                     {
                         Get_Trx().Rollback();

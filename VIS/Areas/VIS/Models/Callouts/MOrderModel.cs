@@ -95,6 +95,25 @@ namespace VIS.Models
             {
                 retDic["C_IncoTerm_ID"] = Util.GetValueOfString(order.GetC_IncoTerm_ID());
             }
+
+            if (Env.IsModuleInstalled("VA077_"))
+            {
+                retDic["VA077_HistoricContractDate"] = Util.GetValueOfString(order.Get_Value("VA077_HistoricContractDate"));
+                retDic["VA077_ChangeStartDate"] = Util.GetValueOfString(order.Get_Value("VA077_ChangeStartDate"));
+                retDic["VA077_ContractCPStartDate"] = Util.GetValueOfString(order.Get_Value("VA077_ContractCPStartDate"));
+                retDic["VA077_ContractCPEndDate"] = Util.GetValueOfString(order.Get_Value("VA077_ContractCPEndDate"));
+                retDic["VA077_PartialAmtCatchUp"] = Util.GetValueOfString(order.Get_Value("VA077_PartialAmtCatchUp"));
+                retDic["VA077_OldAnnualContractTotal"] = Util.GetValueOfString(order.Get_Value("VA077_OldAnnualContractTotal"));
+                retDic["VA077_AdditionalAnnualCharge"] = Util.GetValueOfString(order.Get_Value("VA077_AdditionalAnnualCharge"));
+                retDic["VA077_NewAnnualContractTotal"] = Util.GetValueOfString(order.Get_Value("VA077_NewAnnualContractTotal"));
+                retDic["VA077_SalesCoWorker"] = Util.GetValueOfString(order.Get_Value("VA077_SalesCoWorker"));
+                retDic["VA077_SalesCoWorkerPer"] = Util.GetValueOfString(order.Get_Value("VA077_SalesCoWorkerPer"));
+                retDic["VA077_TotalMarginAmt"] = Util.GetValueOfString(order.Get_Value("VA077_TotalMarginAmt"));
+                retDic["VA077_TotalPurchaseAmt"] = Util.GetValueOfString(order.Get_Value("VA077_TotalPurchaseAmt"));
+                retDic["VA077_TotalSalesAmt"] = Util.GetValueOfString(order.Get_Value("VA077_TotalSalesAmt"));
+                retDic["VA077_MarginPercent"] = Util.GetValueOfString(order.Get_Value("VA077_MarginPercent"));
+             }
+
             return retDic;
         }
 

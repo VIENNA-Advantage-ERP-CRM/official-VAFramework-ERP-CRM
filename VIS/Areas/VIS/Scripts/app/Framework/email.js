@@ -141,6 +141,11 @@
         var $SubjectTextChange = 0;
 
 
+        //Lakhwinder
+        //send printformats as attachment Dynamically
+        var $chkBSendPFasAtt = null;
+        var $cmbPfFiletype = null;
+
         initEmail();
 
         function initEmail() {
@@ -230,6 +235,7 @@
 
             if (!callingFromOutsideofWindow) {
                 loadFields(false);
+                addPrintOption();
             }
             //  loadTextArea();
             //createDesign();
@@ -300,6 +306,10 @@
             $root.append($(data));
             var middleDivWidth = 0;
             $dynamicDisplay = $root.find('#' + self.windowNo + "_dyndis");
+            
+            $chkBSendPFasAtt = $root.find('#' + self.windowNo + "_dynPF");
+            $cmbPfFiletype = $root.find('#' + self.windowNo + "_dynPFType");
+
             $root.find('.vis-email-attachmentContainer').hide();
 
             $leftDiv = $root.find('.vis-email-leftDiv');
@@ -351,6 +361,13 @@
                 $dynamicDisplay.prop('checked', false);
                 $root.find('.vis-Email-topinputWrap').css('overflow', 'auto');
                 $dynamicDisplay.hide();
+
+
+                $chkBSendPFasAtt.prop('checked', false);
+                $chkBSendPFasAtt.parent().hide();
+                $cmbPfFiletype.prop('checked', false);
+                $cmbPfFiletype.parent().hide();
+
                 if (to != undefined && to != null) {
                     $to.val(to);
                 }
@@ -415,47 +432,47 @@
             try {
                 $txtArea.kendoEditor({
                     tools: [
-        "bold",
-        "italic",
-        "underline",
-        "strikethrough",
-        "justifyLeft",
-        "justifyCenter",
-        "justifyRight",
-        "justifyFull",
-        "insertUnorderedList",
-        "insertOrderedList",
-        "indent",
-        "outdent",
-        "createLink",
-        "unlink",
-        "insertImage",
-        "insertFile",
-        "subscript",
-        "superscript",
-        "createTable",
-        "addRowAbove",
-        "addRowBelow",
-        "addColumnLeft",
-        "addColumnRight",
-        "deleteRow",
-        "deleteColumn",
-        "viewHtml",
-        "formatting",
-        "cleanFormatting",
-        "fontName",
-        {
-            name: "fontSize",
-            items: [].concat(
-               [{ text: "8px", value: "8px" }],
-              [{ text: "12px", value: "12px" }],
-              [{ text: "16px", value: "16px" }],
-              [{ text: "20px", value: "20px" }],
-                [{ text: "24px", value: "24px" }]
-            )
-        },
-        "foreColor",
-        "backColor"
+                        "bold",
+                        "italic",
+                        "underline",
+                        "strikethrough",
+                        "justifyLeft",
+                        "justifyCenter",
+                        "justifyRight",
+                        "justifyFull",
+                        "insertUnorderedList",
+                        "insertOrderedList",
+                        "indent",
+                        "outdent",
+                        "createLink",
+                        "unlink",
+                        "insertImage",
+                        "insertFile",
+                        "subscript",
+                        "superscript",
+                        "createTable",
+                        "addRowAbove",
+                        "addRowBelow",
+                        "addColumnLeft",
+                        "addColumnRight",
+                        "deleteRow",
+                        "deleteColumn",
+                        "viewHtml",
+                        "formatting",
+                        "cleanFormatting",
+                        "fontName",
+                        {
+                            name: "fontSize",
+                            items: [].concat(
+                                [{ text: "8px", value: "8px" }],
+                                [{ text: "12px", value: "12px" }],
+                                [{ text: "16px", value: "16px" }],
+                                [{ text: "20px", value: "20px" }],
+                                [{ text: "24px", value: "24px" }]
+                            )
+                        },
+                        "foreColor",
+                        "backColor"
                     ],
                     keyup: getTextChange,
                     encoded: false
@@ -554,7 +571,7 @@
                     var ID = rowsSingleView[_curtab.getKeyColumnName().toLower()];
 
                     $bccChkList.append('<li class="vis-list-li-bcc" data-email="' + rowsSingleView["email"] + '"><input id="' + self.windowNo + '_' + rowsSingleView["email"] + '_CheckBoxList1" type="checkbox" value="' + rowsSingleView["email"]
-                           + '" checked /><label class="vis-chcklist-label" for="' + self.windowNo + '_' + rowsSingleView["email"] + '_CheckBoxList1">' + rowsSingleView["email"] + '(' + ID + ')</label></li>');
+                        + '" checked /><label class="vis-chcklist-label" for="' + self.windowNo + '_' + rowsSingleView["email"] + '_CheckBoxList1">' + rowsSingleView["email"] + '(' + ID + ')</label></li>');
                 }
             }
         };
@@ -734,7 +751,7 @@
                             }
 
                             htm += '<li  class="vis-list-li-bcc"><input data-currentrec="N" data-recid="' + prID[i] + '" id="' + self.windowNo + '_' + ds[j]["Email"] + '_CheckBoxList1" type="checkbox"  value="' + ds[j]["Email"]
-                                 + '" checked/><label class="vis-chcklist-label"  for="' + self.windowNo + '_' + ds[j]["Email"] + '_CheckBoxList1">' + ds[j]["Email"] + '(' + prID[i] + ')</label></li>';
+                                + '" checked/><label class="vis-chcklist-label"  for="' + self.windowNo + '_' + ds[j]["Email"] + '_CheckBoxList1">' + ds[j]["Email"] + '(' + prID[i] + ')</label></li>';
                             // }
                         }
                     }
@@ -932,6 +949,8 @@
                 $btnHdrSave.on("click", save);
                 //$btnHdrCancel.on("click", cancel);
                 $imgAction.trigger('click');
+
+                $chkBSendPFasAtt.on("click", attachDynamicPF);
 
             }
             else {
@@ -1627,7 +1646,7 @@
                 if ($leftDiv.width() != 40) {
                     shrinkLeftDiv();
                 }
-                if (isEmail == true && _curGC.singleRow == false && rowsSource.length > 1) {
+                if (isEmail == true && _curGC.singleRow == false && rowsSource.length > 1 && $chkBSendPFasAtt.prop("checked") == false) {
                     $to.prop('disabled', false);
                     $cc.prop('disabled', false);
                     $bcc.prop('disabled', false);
@@ -1640,6 +1659,62 @@
                 }
             }
 
+        };
+
+        function attachDynamicPF(e) {
+
+            if (this.checked) {
+                $cmbPfFiletype.parent().show();
+                //in ase of dynmic mail, to, bccc and cc will be enabled only for single record.
+                //otherwise disable them.
+
+                if (isEmail == true && _curGC.singleRow == false && rowsSource.length > 1) {
+                    $to.val('');
+                    $to.prop('disabled', true);
+                    $cc.val('');
+                    $cc.prop('disabled', true);
+                    $bcc.val('');
+                    $bcc.prop('disabled', true);
+                }
+            }
+            else {
+                $cmbPfFiletype.parent().hide();
+                if (isEmail == true && _curGC.singleRow == false && rowsSource.length > 1 && $dynamicDisplay.prop("checked")==false) {
+                    $to.prop('disabled', false);
+                    $cc.prop('disabled', false);
+                    $bcc.prop('disabled', false);
+                }
+            }
+
+            
+        };
+
+        function addPrintOption() {
+
+           
+            $.ajax({
+                url: VIS.Application.contextUrl + "JsonData/GetReportFileTypes",
+                datatype: "json",
+                type: "post",
+                cache: false,
+                data: {
+                    AD_Process_ID: _curtab.getAD_Process_ID()
+                },
+                success: function (data) {
+                    if (data == null) {
+                        return;
+                    }
+                    var d = jQuery.parseJSON(data);
+
+                    if (d.length == 0) {
+
+                        return;
+                    }
+                    for (var i = 0; i < d.length; i++) {
+                        $cmbPfFiletype.append( $("<option value=" + d[i].Key + ">" + d[i].Name + "</option>"));
+                    }
+                }
+            });
         };
 
         function insertSelectedField(e) {
@@ -1831,7 +1906,7 @@
             //for static mails
             var mail = [];
 
-            if ($dynamicDisplay.prop("checked") == false) {
+            if ($dynamicDisplay.prop("checked") == false && $chkBSendPFasAtt.prop("checked")==false) {
                 var hasMailID = false;
                 var mailInfo = {};
 
@@ -1929,7 +2004,7 @@
 
                 mail.push(mailInfo);
             }
-                //for dynamic mails
+            //for dynamic mails
             else {
                 selectedValues = [];
                 var selectedRecs = [];
@@ -1951,7 +2026,7 @@
                         }
                     }
 
-                    for (var z = 0; z < selectedValues.length ; z++) {
+                    for (var z = 0; z < selectedValues.length; z++) {
 
                         if (_curGC.singleRow == true && rowsSource.length == 0) {
                             var mailRes = createDynmicmails(rowsSingleView, 0);
@@ -1980,7 +2055,7 @@
                         }
                     }
                 }
-                else if(hsaValidinputmails){
+                else if (hsaValidinputmails) {
                     if (_curGC.singleRow == true && rowsSource.length == 0) {
                         var mailRes = createDynmicmails(rowsSingleView, 0);
                         if (mailRes == null || mailRes == undefined) {
@@ -2028,6 +2103,12 @@
             var mails = JSON.stringify(mail);
             var wantNotification = false;
 
+            var pfFiletype = 'X';// no Action
+            if ($chkBSendPFasAtt.prop("checked")) {
+                pfFiletype = $cmbPfFiletype.val();
+            }
+
+
             VIS.ADialog.confirm("WantAlertMessage", true, "", "Confirm", function (result) {
                 if (result) {
                     wantNotification = true;
@@ -2035,7 +2116,13 @@
 
 
                 $bsyDiv[0].style.visibility = "visible";
-                var datainit = { mails: VIS.Utility.encodeText(mails), AD_User_ID: ctx.getAD_User_ID(), AD_Client_ID: ctx.getAD_Client_ID(), AD_Org_ID: ctx.getAD_Org_ID(), attachment_ID: attachmentID, fileNamesFornNewAttach: JSON.stringify(filesforAttachmentforNewAttachment), fileNamesForopenFormat: JSON.stringify(filesforAttachmentforOpenFormat), mailFormat: VIS.Utility.encodeText($textAreakeno.value()), notify: wantNotification, strDocAttach: VIS.context.getContext("DocumentAttachViaEmail_" + self.windowNo) };
+                var datainit = {
+                    mails: VIS.Utility.encodeText(mails), AD_User_ID: ctx.getAD_User_ID(), AD_Client_ID: ctx.getAD_Client_ID(),
+                    AD_Org_ID: ctx.getAD_Org_ID(), attachment_ID: attachmentID, fileNamesFornNewAttach: JSON.stringify(filesforAttachmentforNewAttachment),
+                    fileNamesForopenFormat: JSON.stringify(filesforAttachmentforOpenFormat), mailFormat: VIS.Utility.encodeText($textAreakeno.value()),
+                    notify: wantNotification, strDocAttach: VIS.context.getContext("DocumentAttachViaEmail_" + self.windowNo),
+                    AD_Process_ID: _curtab.getAD_Process_ID(), printformatfileType: pfFiletype
+                };
                 $.ajax({
                     url: VIS.Application.contextUrl + "Email/SendMail",
                     data: datainit,
@@ -2472,7 +2559,7 @@
             }
         };
 
-        function createDynmicmails(source, i,email) {
+        function createDynmicmails(source, i, email) {
             var hasMail = false;
 
             var mailInfo = {};
@@ -2493,8 +2580,7 @@
                 }
             }
 
-            if (email)
-            {
+            if (email) {
                 if (!validateEmail(email)) {
                     window.setTimeout(function () {
                         VIS.ADialog.info("NotValidEmail", true, ":" + email);
@@ -2504,7 +2590,7 @@
                 mailInfo.Bcc.push(email);
                 hasMail = true;
             }
-           else if ($bccChkList != null && $bccChkList != undefined) {
+            else if ($bccChkList != null && $bccChkList != undefined) {
                 if (Object.keys(source).indexOf("email") > -1 && selectedValues.indexOf(source['email']) > -1) {
                     //var lis = $bccChkList.children('li');
                     //if (lis.length > 0) {
@@ -2578,9 +2664,9 @@
                         }
                     }
                     else if (VIS.DisplayType.IsDate(_curtab.getField(columnName).getDisplayType())) {
-                        var displayType= _curtab.getField(columnName).getDisplayType()
+                        var displayType = _curtab.getField(columnName).getDisplayType()
                         fieldValue = _curtab.getField(columnName).value;
-                       
+
                         if (VIS.DisplayType.Date == displayType) {
                             fieldValue = new Date(fieldValue).toLocaleDateString();
                         }
@@ -2646,7 +2732,7 @@
                                 fieldValue = rowsSource[0][columnName.toLower()];
                             }
                             else
-                            fieldValue = rowsSingleView[columnName.toLower()];
+                                fieldValue = rowsSingleView[columnName.toLower()];
                         }
                     }
                 }
@@ -2961,6 +3047,13 @@
             $btnHdrSave = null;
             $btnHdrSaveAs = null;
 
+            if ($chkBSendPFasAtt != null) {
+                $chkBSendPFasAtt.off("click");
+                $chkBSendPFasAtt = null;
+            }
+            if ($cmbPfFiletype != null) {                
+                $cmbPfFiletype = null;
+            }
             //self = null;
         };
 

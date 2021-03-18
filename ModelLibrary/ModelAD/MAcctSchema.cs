@@ -352,7 +352,12 @@ namespace VAdvantage.Model
                 SetAD_Org_ID(0);
             if (base.GetTaxCorrectionType() == null)
                 SetTaxCorrectionType(IsDiscountCorrectsTax() ? TAXCORRECTIONTYPE_Write_OffAndDiscount : TAXCORRECTIONTYPE_None);
-            CheckCosting();
+
+            // Applied check for Table to enable support with Framework database.
+            if (PO.Get_Table_ID("M_CostType") > 0)
+            {
+                CheckCosting();
+            }
             //	Check Primary
             if (GetAD_OrgOnly_ID() != 0)
             {
