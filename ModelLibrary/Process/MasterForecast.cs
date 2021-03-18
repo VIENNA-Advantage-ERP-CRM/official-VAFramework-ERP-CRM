@@ -151,10 +151,11 @@ namespace ViennaAdvantageServer.Process
                                     //    + " AND (SELECT enddate FROM c_period WHERE c_period_id = " + C_Period_ID + ") " +
                                     //    " AND pl.m_product_id =  " + Util.GetValueOfInt(idr[0]) +
                                     //    " AND p.c_order_id IS NULL AND p.ref_order_id IS NULL AND pl.isactive = 'Y' AND p.ad_client_id = " + mf.GetAD_Client_ID();
-
+                                    totalQtyOpp = 0;
+                                    totalPriceOpp = 0;
                                     dsOpp = DB.ExecuteDataset(sql, null, mf.Get_Trx());
                                     if (dsOpp != null && dsOpp.Tables[0].Rows.Count > 0)
-                                    {
+                                    {                                     
                                         for (int k = 0; k < dsOpp.Tables[0].Rows.Count; k++)
                                         {
                                             //Conversion from Project to MasterForecast Currency
@@ -164,7 +165,7 @@ namespace ViennaAdvantageServer.Process
                                                  Util.GetValueOfInt(mf.Get_Value("C_ConversionType_ID")), mf.GetAD_Client_ID(), mf.GetAD_Org_ID());
 
                                             //Conversion from BaseUOM to UOM on Project Line
-                                            decimal? ConvertedQty= MUOMConversion.ConvertProductFrom(mf.GetCtx(), Util.GetValueOfInt(dsForecast.Tables[0].Rows[k]["M_Product_ID"]),
+                                            decimal? ConvertedQty= MUOMConversion.ConvertProductFrom(mf.GetCtx(), Util.GetValueOfInt(dsForecast.Tables[0].Rows[i]["M_Product_ID"]),
                                             Util.GetValueOfInt(dsOpp.Tables[0].Rows[k]["C_UOM_ID"]), Util.GetValueOfDecimal(dsOpp.Tables[0].Rows[k]["Quantity"]));
 
                                             if (ConvertedQty == null)
