@@ -5127,6 +5127,14 @@
         }
 
         var query = "SELECT PriceLimit FROM M_ProductPrice WHERE M_PriceList_Version_ID = (SELECT c.m_pricelist_version_id FROM  c_project c WHERE c.c_project_Id=" + projID + ")  AND M_Product_id=" + Util.getValueOfInt(mTab.getValue("M_Product_ID"));
+
+        //get price on the basis of Attribute and UOM if selected
+        if (mTab.findColumn("M_AttributeSetInstance_ID") > 0) {
+            query +=" AND M_AttributeSetInstance_ID="+ Util.getValueOfInt(mTab.getValue("M_AttributeSetInstance_ID"));
+        }
+        if (mTab.findColumn("C_UOM_ID") > 0) {
+            query += " AND C_UOM_ID="+ Util.getValueOfInt(mTab.getValue("C_UOM_ID"));
+        }
         var PriceLimit = Util.getValueOfDecimal(VIS.DB.executeScalar(query, null, null));
 
         PlannedQty = Util.getValueOfDecimal(mTab.getValue("PlannedQty"));
@@ -17122,7 +17130,6 @@
     };
     VIS.Utility.inheritPrototype(CalloutProductToOpportunity, VIS.CalloutEngine); //inherit prototype
     CalloutProductToOpportunity.prototype.ProductInfo = function (ctx, windowNo, mTab, mField, value, oldValue) {
-        //  
 
         if (value == null || value.toString() == "") {
             return "";
@@ -17133,8 +17140,17 @@
         var phaseID = Util.getValueOfInt(mTab.getValue("C_ProjectPhase_ID"));
         var projID = Util.getValueOfInt(mTab.getValue("C_Project_ID"));
         var productID = Util.getValueOfInt(mTab.getValue("M_Product_ID"));
-
-        var paramString = taskID.toString() + "," + phaseID.toString() + "," + projID.toString() + "," + productID.toString();
+        var attributeID =0;
+        var uomID = 0;
+        //get price on the basis of Attribute and UOM if selected
+        if (mTab.findColumn("M_AttributeSetInstance_ID") > 0) {
+             attributeID = Util.getValueOfInt(mTab.getValue("M_AttributeSetInstance_ID"));
+        }
+        if (mTab.findColumn("C_UOM_ID") > 0) {
+             uomID = Util.getValueOfInt(mTab.getValue("C_UOM_ID"));
+        }
+        //
+        var paramString = taskID.toString() + "," + phaseID.toString() + "," + projID.toString() + "," + productID.toString() + "," + attributeID.toString() + "," + uomID.toString();
 
         //var id = Util.getValueOfInt(mTab.getValue("C_ProjectTask_ID"));
 
@@ -17207,6 +17223,14 @@
 
             mTab.setValue("PlannedMarginAmt", (PriceStd - PriceLimit));
             // oppLine.SetPlannedMarginAmt( Decimal.Subtract(PriceStd, PriceLimit));
+        }
+        else {
+            //if no data found then set prices as 0
+            mTab.setValue("PriceList", 0);
+            mTab.setValue("PlannedPrice", 0);
+            mTab.setValue("Discount", 0)
+            mTab.setValue("PlannedMarginAmt", 0);
+            mTab.setValue("PlannedAmt",0);
         }
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";
