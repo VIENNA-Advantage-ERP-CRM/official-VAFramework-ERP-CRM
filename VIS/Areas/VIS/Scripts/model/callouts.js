@@ -5129,11 +5129,22 @@
         var query = "SELECT PriceLimit FROM M_ProductPrice WHERE M_PriceList_Version_ID = (SELECT c.m_pricelist_version_id FROM  c_project c WHERE c.c_project_Id=" + projID + ")  AND M_Product_id=" + Util.getValueOfInt(mTab.getValue("M_Product_ID"));
 
         //get price on the basis of Attribute and UOM if selected
-        if (mTab.findColumn("M_AttributeSetInstance_ID") > 0) {
-            query +=" AND M_AttributeSetInstance_ID="+ Util.getValueOfInt(mTab.getValue("M_AttributeSetInstance_ID"));
+        if (mTab.findColumn("M_AttributeSetInstance_ID") > 0)
+        {
+            query += " AND NVL(M_AttributeSetInstance_ID,0)=" + Util.getValueOfInt(mTab.getValue("M_AttributeSetInstance_ID"));
         }
-        if (mTab.findColumn("C_UOM_ID") > 0) {
-            query += " AND C_UOM_ID="+ Util.getValueOfInt(mTab.getValue("C_UOM_ID"));
+       
+        if (mTab.findColumn("C_UOM_ID") > 0)
+        {
+             //if uom is not selected then get baseUom
+            if (Util.getValueOfInt(mTab.getValue("C_UOM_ID")) > 0)
+            {
+                query += " AND C_UOM_ID =" + Util.getValueOfInt(mTab.getValue("C_UOM_ID"));
+            }
+            else
+            {
+                query += " AND C_UOM_ID = (SELECT C_UOM_ID FROM M_Product WHERE M_Product_ID=" + Util.getValueOfInt(mTab.getValue("M_Product_ID")) + ")";
+            }
         }
         var PriceLimit = Util.getValueOfDecimal(VIS.DB.executeScalar(query, null, null));
 
