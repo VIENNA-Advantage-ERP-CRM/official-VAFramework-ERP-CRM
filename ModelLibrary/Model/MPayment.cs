@@ -3430,7 +3430,11 @@ namespace VAdvantage.Model
                     string checkNo = GetChecknumber(GetVA009_PaymentMethod_ID(), GetC_BankAccount_ID(), Get_Trx());
                     if (!string.IsNullOrEmpty(checkNo))
                     {
-                        DB.ExecuteQuery("UPDATE C_Payment SET CheckNo='" + checkNo + "' WHERE C_Payment_ID=" + GetC_Payment_ID(), null, Get_Trx());
+                        //update the check Date with Account Date if CheckDate is null
+                        DateTime? checkDate = GetCheckDate() != null ? GetCheckDate() : GetDateAcct();
+                        DB.ExecuteQuery("UPDATE C_Payment SET CheckDate=" + GlobalVariable.TO_DATE(checkDate, true) + ", CheckNo='" + checkNo + "' WHERE C_Payment_ID=" + GetC_Payment_ID(), null, Get_Trx());
+                        //commented and updated qry above line
+                        //DB.ExecuteQuery("UPDATE C_Payment SET CheckNo='" + checkNo + "' WHERE C_Payment_ID=" + GetC_Payment_ID(), null, Get_Trx());
                     }
                     else
                     {
