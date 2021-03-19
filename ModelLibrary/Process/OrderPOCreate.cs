@@ -393,7 +393,9 @@ namespace VAdvantage.Process
                                 poLine.SetQtyEntered(soLines[i].GetQtyEntered());
                                 poLine.SetQtyOrdered(soLines[i].GetQtyOrdered());
                                 poLine.SetDescription(soLines[i].GetDescription());
-                                poLine.SetDatePromised(soLines[i].GetDatePromised());
+                                //poLine.SetDatePromised(soLines[i].GetDatePromised());
+                                // Set date promised current date by Rakesh Kumar on 19/Mar/2021 suggested by Mandeep Singh
+                                poLine.SetDatePromised(Convert.ToDateTime(DateTime.Now));
                                 poLine.SetIsDropShip(soLines[i].IsDropShip());
                                 poLine.SetPrice();
 
