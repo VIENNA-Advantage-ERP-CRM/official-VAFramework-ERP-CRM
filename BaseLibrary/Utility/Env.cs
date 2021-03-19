@@ -986,7 +986,7 @@ namespace VAdvantage.Utility
             bool retVal = false;
             LoadAllModules();
 
-            if (IsModQualiFiledName(name))
+            if (IsModQualiFiledName(prefix))
             {
                 if (_cacheModules.ContainsKey(prefix))
                 {
