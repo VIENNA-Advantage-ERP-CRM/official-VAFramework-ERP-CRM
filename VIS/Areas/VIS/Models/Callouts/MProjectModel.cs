@@ -47,11 +47,8 @@ namespace VIS.Models
             //Issue ID= SI_0468 Reported by Ankita Work Done by Manjot 
             //To get the actual value from the right field
             Sql = "SELECT PriceList, PriceStd, PriceLimit FROM M_ProductPrice WHERE M_PriceList_Version_ID = (SELECT c.M_PriceList_Version_ID FROM C_Project c WHERE c.C_Project_ID = "
-                + projID + ")  AND M_Product_ID=" + ProductID;
-            if (Attribute_ID > 0)
-            {
-                Sql += " AND M_AttributeSetInstance_ID=" + Attribute_ID;
-            }
+                + projID + ")  AND M_Product_ID=" + ProductID + " AND NVL(M_AttributeSetInstance_ID,0)=" + Attribute_ID;
+            
             if (UOM_ID > 0)
             {
                 Sql += " AND C_UOM_ID=" + UOM_ID;
