@@ -20,11 +20,13 @@ namespace VIS.Models
         public Dictionary<string, object> GetProjectDetail(Ctx ctx, string fields)
         {
             string[] paramValue = fields.Split(',');
-            int TaskID = 0, phaseID = 0, projID = 0, ProductID = 0;
+            int TaskID = 0, phaseID = 0, projID = 0, ProductID = 0,Attribute_ID=0,UOM_ID=0;
             TaskID = Util.GetValueOfInt(paramValue[0].ToString());
             phaseID = Util.GetValueOfInt(paramValue[1].ToString());
             projID = Util.GetValueOfInt(paramValue[2].ToString());
             ProductID = Util.GetValueOfInt(paramValue[3].ToString());
+            Attribute_ID= Util.GetValueOfInt(paramValue[4].ToString());
+            UOM_ID= Util.GetValueOfInt(paramValue[5].ToString());
             Dictionary<string, object> result = null;
             string Sql = "SELECT C_Project_ID FROM C_ProjectPhase WHERE C_ProjectPhase_ID IN (SELECT C_ProjectPhase_ID FROM" +
                     " C_ProjectTask WHERE C_ProjectTask_ID = " + TaskID + ")";
@@ -45,7 +47,17 @@ namespace VIS.Models
             //Issue ID= SI_0468 Reported by Ankita Work Done by Manjot 
             //To get the actual value from the right field
             Sql = "SELECT PriceList, PriceStd, PriceLimit FROM M_ProductPrice WHERE M_PriceList_Version_ID = (SELECT c.M_PriceList_Version_ID FROM C_Project c WHERE c.C_Project_ID = "
-                + projID + ")  AND M_Product_ID=" + ProductID;
+                + projID + ")  AND M_Product_ID=" + ProductID + " AND NVL(M_AttributeSetInstance_ID,0)=" + Attribute_ID;
+            
+            if (UOM_ID > 0)
+            {
+                Sql += " AND C_UOM_ID=" + UOM_ID;
+            }
+            //baseUOM
+            else
+            {
+                Sql += " AND C_UOM_ID = (SELECT C_UOM_ID FROM M_Product WHERE M_Product_ID=" + ProductID + ")";
+            }
             DataSet ds = DB.ExecuteDataset(Sql, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
