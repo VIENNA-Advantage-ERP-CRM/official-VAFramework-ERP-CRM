@@ -1470,7 +1470,8 @@ namespace VAdvantage.Model
                                      VA077_AdditionalAnnualCharge =(SELECT ROUND(COALESCE(SUM(ol.PriceEntered * ol.QtyEntered),0),2) FROM M_InOutLine pl INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID)
                                      WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.M_InOut_ID = " + GetM_InOut_ID() + @"),
                                      VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + ROUND(COALESCE(SUM(ol.PriceEntered * ol.QtyEntered),0),2) FROM M_InOutLine pl INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID) 
-                                     WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.M_InOut_ID = " + GetM_InOut_ID() + @")
+                                     WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.M_InOut_ID = " + GetM_InOut_ID() + @"),
+                                     VA077_OrderRef = (SELECT VA077_OrderRef FROM C_Order WHERE C_Order_Id = (SELECT C_Order_Id FROM M_InOut WHERE M_InOut_ID=" + GetM_InOut_ID() + @")) 
                                      WHERE p.M_InOut_ID=" + GetM_InOut_ID() + "");
                 }
                 else
@@ -1503,7 +1504,9 @@ namespace VAdvantage.Model
                             INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID)
                             WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.M_InOut_ID = " + GetM_InOut_ID() + @"),
                             VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + ROUND(COALESCE(SUM(ol.PriceEntered * ol.QtyEntered),0),2) FROM M_InOutLine pl INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID) 
-                            WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.M_InOut_ID = " + GetM_InOut_ID() + @")");
+                            WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.M_InOut_ID = " + GetM_InOut_ID() + @"),
+                            VA077_OrderRef = (SELECT VA077_OrderRef FROM C_Order WHERE C_Order_Id = (SELECT C_Order_Id FROM M_InOut 
+                            WHERE M_InOut_ID=" + GetM_InOut_ID() + @"))");
                    
                     qry.Append(" WHERE p.M_InOut_ID=" + GetM_InOut_ID() + "");
                 }
