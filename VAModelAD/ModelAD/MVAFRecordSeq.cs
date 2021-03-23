@@ -294,9 +294,14 @@ namespace VAdvantage.Model
                         {
                             retValue = -1;
                         }
+                        else
+                            retValue = 0;
                     }
                     if (retValue == -1)
-                        trx.Rollback();
+                    {
+                        if (trx != null)
+                            trx.Rollback();
+                    }
                     else
                     {
                         if (trx != null)
