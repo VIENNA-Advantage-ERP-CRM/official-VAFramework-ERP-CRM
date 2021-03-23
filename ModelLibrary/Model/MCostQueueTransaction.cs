@@ -10,7 +10,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    class MCostQueueTransaction : X_M_CostQueueTransaction
+    public class MCostQueueTransaction : X_M_CostQueueTransaction
     {
         private static VLogger _log = VLogger.GetVLogger(typeof(MCostQueueTransaction).FullName);
 

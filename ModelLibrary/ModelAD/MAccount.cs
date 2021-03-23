@@ -279,7 +279,7 @@ namespace VAdvantage.Model
                 sql.Append(" AND C_BPartner_ID=" + C_BPartner_ID);
             }
 
-         
+
 
             if (AD_OrgTrx_ID == 0)
             {
@@ -480,7 +480,7 @@ namespace VAdvantage.Model
             newAccount.SetUserElement7_ID(UserElement7_ID);
             newAccount.SetUserElement8_ID(UserElement8_ID);
             newAccount.SetUserElement9_ID(UserElement9_ID);
-            
+
             //
             if (!newAccount.Save())
             {
@@ -854,7 +854,7 @@ namespace VAdvantage.Model
                     {
                         combiStr = "*";
                         descrStr = "*";
-                        fullyQualified = false;                        
+                        fullyQualified = false;
                     }
                 }
                 else if (MAcctSchemaElement.ELEMENTTYPE_Account.Equals(element.GetElementType()))
@@ -1029,7 +1029,7 @@ namespace VAdvantage.Model
                 {
                     if (GetUserElement1_ID() != 0 && element.GetAD_Column_ID() > 0)
                     {
-                        string qry = "SELECT tab.TableName, tab.AD_Table_ID, col.ColumnName FROM AD_Column col INNER JOIN AD_Table tab ON col.AD_Table_ID = tab.AD_Table_ID WHERE AD_Column_ID = " + element.GetAD_Column_ID();
+                        string qry = DBFunctionCollection.GetTableAndColumnName(element.GetAD_Column_ID());
                         DataSet ds = DB.ExecuteDataset(qry);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
@@ -1045,6 +1045,12 @@ namespace VAdvantage.Model
                             else
                             {
                                 combiStr = Util.GetValueOfString(GetUserElement1_ID());
+                                if (!String.IsNullOrEmpty(Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"])))
+                                {
+                                    qry = "SELECT " + Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"]) +
+                                        " FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement1_ID();
+                                    combiStr = Util.GetValueOfString(DB.ExecuteScalar(qry));
+                                }
                             }
                             qry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID =" + tableID + " AND ColumnName='Name'";
                             if (Util.GetValueOfInt(DB.ExecuteScalar(qry)) > 0)
@@ -1055,6 +1061,12 @@ namespace VAdvantage.Model
                             else
                             {
                                 descrStr = Util.GetValueOfString(GetUserElement1_ID());
+                                if (!String.IsNullOrEmpty(Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"])))
+                                {
+                                    qry = "SELECT " + Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"]) +
+                                        " FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement1_ID();
+                                    descrStr = Util.GetValueOfString(DB.ExecuteScalar(qry));
+                                }
                             }
                         }
                     }
@@ -1063,7 +1075,7 @@ namespace VAdvantage.Model
                 {
                     if (GetUserElement2_ID() != 0 && element.GetAD_Column_ID() > 0)
                     {
-                        string qry = "SELECT tab.TableName, tab.AD_Table_ID, col.ColumnName FROM AD_Column col INNER JOIN AD_Table tab ON col.AD_Table_ID = tab.AD_Table_ID WHERE AD_Column_ID = " + element.GetAD_Column_ID();
+                        string qry = DBFunctionCollection.GetTableAndColumnName(element.GetAD_Column_ID());
                         DataSet ds = DB.ExecuteDataset(qry);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
@@ -1079,6 +1091,12 @@ namespace VAdvantage.Model
                             else
                             {
                                 combiStr = Util.GetValueOfString(GetUserElement2_ID());
+                                if (!String.IsNullOrEmpty(Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"])))
+                                {
+                                    qry = "SELECT " + Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"]) +
+                                        " FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement2_ID();
+                                    combiStr = Util.GetValueOfString(DB.ExecuteScalar(qry));
+                                }
                             }
                             qry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID =" + tableID + " AND ColumnName='Name'";
                             if (Util.GetValueOfInt(DB.ExecuteScalar(qry)) > 0)
@@ -1089,6 +1107,12 @@ namespace VAdvantage.Model
                             else
                             {
                                 descrStr = Util.GetValueOfString(GetUserElement2_ID());
+                                if (!String.IsNullOrEmpty(Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"])))
+                                {
+                                    qry = "SELECT " + Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"]) +
+                                        " FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement2_ID();
+                                    descrStr = Util.GetValueOfString(DB.ExecuteScalar(qry));
+                                }
                             }
                         }
                     }
@@ -1097,7 +1121,7 @@ namespace VAdvantage.Model
                 {
                     if (GetUserElement3_ID() != 0 && element.GetAD_Column_ID() > 0)
                     {
-                        string qry = "SELECT tab.TableName, tab.AD_Table_ID, col.ColumnName FROM AD_Column col INNER JOIN AD_Table tab ON col.AD_Table_ID = tab.AD_Table_ID WHERE AD_Column_ID = " + element.GetAD_Column_ID();
+                        string qry = DBFunctionCollection.GetTableAndColumnName(element.GetAD_Column_ID());
                         DataSet ds = DB.ExecuteDataset(qry);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
@@ -1113,6 +1137,12 @@ namespace VAdvantage.Model
                             else
                             {
                                 combiStr = Util.GetValueOfString(GetUserElement3_ID());
+                                if (!String.IsNullOrEmpty(Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"])))
+                                {
+                                    qry = "SELECT " + Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"]) +
+                                        " FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement3_ID();
+                                    combiStr = Util.GetValueOfString(DB.ExecuteScalar(qry));
+                                }
                             }
                             qry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID =" + tableID + " AND ColumnName='Name'";
                             if (Util.GetValueOfInt(DB.ExecuteScalar(qry)) > 0)
@@ -1123,6 +1153,12 @@ namespace VAdvantage.Model
                             else
                             {
                                 descrStr = Util.GetValueOfString(GetUserElement3_ID());
+                                if (!String.IsNullOrEmpty(Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"])))
+                                {
+                                    qry = "SELECT " + Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"]) +
+                                        " FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement3_ID();
+                                    descrStr = Util.GetValueOfString(DB.ExecuteScalar(qry));
+                                }
                             }
                         }
                     }
@@ -1131,7 +1167,7 @@ namespace VAdvantage.Model
                 {
                     if (GetUserElement4_ID() != 0 && element.GetAD_Column_ID() > 0)
                     {
-                        string qry = "SELECT tab.TableName, tab.AD_Table_ID, col.ColumnName FROM AD_Column col INNER JOIN AD_Table tab ON col.AD_Table_ID = tab.AD_Table_ID WHERE AD_Column_ID = " + element.GetAD_Column_ID();
+                        string qry = DBFunctionCollection.GetTableAndColumnName(element.GetAD_Column_ID());
                         DataSet ds = DB.ExecuteDataset(qry);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
@@ -1147,6 +1183,12 @@ namespace VAdvantage.Model
                             else
                             {
                                 combiStr = Util.GetValueOfString(GetUserElement4_ID());
+                                if (!String.IsNullOrEmpty(Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"])))
+                                {
+                                    qry = "SELECT " + Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"]) +
+                                        " FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement4_ID();
+                                    combiStr = Util.GetValueOfString(DB.ExecuteScalar(qry));
+                                }
                             }
                             qry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID =" + tableID + " AND ColumnName='Name'";
                             if (Util.GetValueOfInt(DB.ExecuteScalar(qry)) > 0)
@@ -1157,6 +1199,12 @@ namespace VAdvantage.Model
                             else
                             {
                                 descrStr = Util.GetValueOfString(GetUserElement4_ID());
+                                if (!String.IsNullOrEmpty(Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"])))
+                                {
+                                    qry = "SELECT " + Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"]) +
+                                        " FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement4_ID();
+                                    descrStr = Util.GetValueOfString(DB.ExecuteScalar(qry));
+                                }
                             }
                         }
                     }
@@ -1165,7 +1213,7 @@ namespace VAdvantage.Model
                 {
                     if (GetUserElement5_ID() != 0 && element.GetAD_Column_ID() > 0)
                     {
-                        string qry = "SELECT tab.TableName, tab.AD_Table_ID, col.ColumnName FROM AD_Column col INNER JOIN AD_Table tab ON col.AD_Table_ID = tab.AD_Table_ID WHERE AD_Column_ID = " + element.GetAD_Column_ID();
+                        string qry = DBFunctionCollection.GetTableAndColumnName(element.GetAD_Column_ID());
                         DataSet ds = DB.ExecuteDataset(qry);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
@@ -1181,6 +1229,12 @@ namespace VAdvantage.Model
                             else
                             {
                                 combiStr = Util.GetValueOfString(GetUserElement5_ID());
+                                if (!String.IsNullOrEmpty(Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"])))
+                                {
+                                    qry = "SELECT " + Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"]) +
+                                        " FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement5_ID();
+                                    combiStr = Util.GetValueOfString(DB.ExecuteScalar(qry));
+                                }
                             }
                             qry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID =" + tableID + " AND ColumnName='Name'";
                             if (Util.GetValueOfInt(DB.ExecuteScalar(qry)) > 0)
@@ -1191,6 +1245,12 @@ namespace VAdvantage.Model
                             else
                             {
                                 descrStr = Util.GetValueOfString(GetUserElement5_ID());
+                                if (!String.IsNullOrEmpty(Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"])))
+                                {
+                                    qry = "SELECT " + Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"]) +
+                                        " FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement5_ID();
+                                    descrStr = Util.GetValueOfString(DB.ExecuteScalar(qry));
+                                }
                             }
                         }
                     }
@@ -1199,7 +1259,7 @@ namespace VAdvantage.Model
                 {
                     if (GetUserElement6_ID() != 0 && element.GetAD_Column_ID() > 0)
                     {
-                        string qry = "SELECT tab.TableName, tab.AD_Table_ID, col.ColumnName FROM AD_Column col INNER JOIN AD_Table tab ON col.AD_Table_ID = tab.AD_Table_ID WHERE AD_Column_ID = " + element.GetAD_Column_ID();
+                        string qry = DBFunctionCollection.GetTableAndColumnName(element.GetAD_Column_ID());
                         DataSet ds = DB.ExecuteDataset(qry);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
@@ -1215,6 +1275,12 @@ namespace VAdvantage.Model
                             else
                             {
                                 combiStr = Util.GetValueOfString(GetUserElement6_ID());
+                                if (!String.IsNullOrEmpty(Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"])))
+                                {
+                                    qry = "SELECT " + Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"]) +
+                                        " FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement6_ID();
+                                    combiStr = Util.GetValueOfString(DB.ExecuteScalar(qry));
+                                }
                             }
                             qry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID =" + tableID + " AND ColumnName='Name'";
                             if (Util.GetValueOfInt(DB.ExecuteScalar(qry)) > 0)
@@ -1225,6 +1291,12 @@ namespace VAdvantage.Model
                             else
                             {
                                 descrStr = Util.GetValueOfString(GetUserElement6_ID());
+                                if (!String.IsNullOrEmpty(Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"])))
+                                {
+                                    qry = "SELECT " + Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"]) +
+                                        " FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement6_ID();
+                                    descrStr = Util.GetValueOfString(DB.ExecuteScalar(qry));
+                                }
                             }
                         }
                     }
@@ -1233,7 +1305,7 @@ namespace VAdvantage.Model
                 {
                     if (GetUserElement7_ID() != 0 && element.GetAD_Column_ID() > 0)
                     {
-                        string qry = "SELECT tab.TableName, tab.AD_Table_ID, col.ColumnName FROM AD_Column col INNER JOIN AD_Table tab ON col.AD_Table_ID = tab.AD_Table_ID WHERE AD_Column_ID = " + element.GetAD_Column_ID();
+                        string qry = DBFunctionCollection.GetTableAndColumnName(element.GetAD_Column_ID());
                         DataSet ds = DB.ExecuteDataset(qry);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
@@ -1249,6 +1321,12 @@ namespace VAdvantage.Model
                             else
                             {
                                 combiStr = Util.GetValueOfString(GetUserElement7_ID());
+                                if (!String.IsNullOrEmpty(Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"])))
+                                {
+                                    qry = "SELECT " + Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"]) +
+                                        " FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement7_ID();
+                                    combiStr = Util.GetValueOfString(DB.ExecuteScalar(qry));
+                                }
                             }
                             qry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID =" + tableID + " AND ColumnName='Name'";
                             if (Util.GetValueOfInt(DB.ExecuteScalar(qry)) > 0)
@@ -1259,6 +1337,12 @@ namespace VAdvantage.Model
                             else
                             {
                                 descrStr = Util.GetValueOfString(GetUserElement7_ID());
+                                if (!String.IsNullOrEmpty(Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"])))
+                                {
+                                    qry = "SELECT " + Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"]) +
+                                        " FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement7_ID();
+                                    descrStr = Util.GetValueOfString(DB.ExecuteScalar(qry));
+                                }
                             }
                         }
                     }
@@ -1267,7 +1351,7 @@ namespace VAdvantage.Model
                 {
                     if (GetUserElement8_ID() != 0 && element.GetAD_Column_ID() > 0)
                     {
-                        string qry = "SELECT tab.TableName, tab.AD_Table_ID, col.ColumnName FROM AD_Column col INNER JOIN AD_Table tab ON col.AD_Table_ID = tab.AD_Table_ID WHERE AD_Column_ID = " + element.GetAD_Column_ID();
+                        string qry = DBFunctionCollection.GetTableAndColumnName(element.GetAD_Column_ID());
                         DataSet ds = DB.ExecuteDataset(qry);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
@@ -1283,6 +1367,12 @@ namespace VAdvantage.Model
                             else
                             {
                                 combiStr = Util.GetValueOfString(GetUserElement8_ID());
+                                if (!String.IsNullOrEmpty(Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"])))
+                                {
+                                    qry = "SELECT " + Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"]) +
+                                        " FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement8_ID();
+                                    combiStr = Util.GetValueOfString(DB.ExecuteScalar(qry));
+                                }
                             }
                             qry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID =" + tableID + " AND ColumnName='Name'";
                             if (Util.GetValueOfInt(DB.ExecuteScalar(qry)) > 0)
@@ -1293,6 +1383,12 @@ namespace VAdvantage.Model
                             else
                             {
                                 descrStr = Util.GetValueOfString(GetUserElement8_ID());
+                                if (!String.IsNullOrEmpty(Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"])))
+                                {
+                                    qry = "SELECT " + Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"]) +
+                                        " FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement8_ID();
+                                    descrStr = Util.GetValueOfString(DB.ExecuteScalar(qry));
+                                }
                             }
                         }
                     }
@@ -1301,7 +1397,7 @@ namespace VAdvantage.Model
                 {
                     if (GetUserElement9_ID() != 0 && element.GetAD_Column_ID() > 0)
                     {
-                        string qry = "SELECT tab.TableName, tab.AD_Table_ID, col.ColumnName FROM AD_Column col INNER JOIN AD_Table tab ON col.AD_Table_ID = tab.AD_Table_ID WHERE AD_Column_ID = " + element.GetAD_Column_ID();
+                        string qry = DBFunctionCollection.GetTableAndColumnName(element.GetAD_Column_ID());
                         DataSet ds = DB.ExecuteDataset(qry);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
@@ -1317,6 +1413,12 @@ namespace VAdvantage.Model
                             else
                             {
                                 combiStr = Util.GetValueOfString(GetUserElement9_ID());
+                                if (!String.IsNullOrEmpty(Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"])))
+                                {
+                                    qry = "SELECT " + Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"]) +
+                                        " FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement9_ID();
+                                    combiStr = Util.GetValueOfString(DB.ExecuteScalar(qry));
+                                }
                             }
                             qry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID =" + tableID + " AND ColumnName='Name'";
                             if (Util.GetValueOfInt(DB.ExecuteScalar(qry)) > 0)
@@ -1327,6 +1429,12 @@ namespace VAdvantage.Model
                             else
                             {
                                 descrStr = Util.GetValueOfString(GetUserElement9_ID());
+                                if (!String.IsNullOrEmpty(Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"])))
+                                {
+                                    qry = "SELECT " + Util.GetValueOfString(ds.Tables[0].Rows[0]["identfierColumnName"]) +
+                                        " FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement9_ID();
+                                    descrStr = Util.GetValueOfString(DB.ExecuteScalar(qry));
+                                }
                             }
                         }
                     }
