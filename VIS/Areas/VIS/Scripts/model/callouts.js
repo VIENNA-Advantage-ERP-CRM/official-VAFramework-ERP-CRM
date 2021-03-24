@@ -17154,6 +17154,15 @@
     CalloutProductToOpportunity.prototype.ProductInfo = function (ctx, windowNo, mTab, mField, value, oldValue) {
 
         if (value == null || value.toString() == "") {
+            if (Util.getValueOfInt(mTab.getValue("M_Product_ID")) == 0)
+            {
+                //set prices and quantities 0 if product is deselected
+                mTab.setValue("PriceList", 0);
+                mTab.setValue("PlannedPrice", 0);
+                mTab.setValue("Discount", 0)
+                mTab.setValue("PlannedMarginAmt", 0);
+                mTab.setValue("PlannedAmt", 0);
+            }
             return "";
         }
 
@@ -17202,7 +17211,7 @@
             mTab.setValue("PlannedPrice", PriceStd);
             mTab.setValue("PlannedQty", 1);
             var PriceLimit = Util.getValueOfDecimal(dr["PriceLimit"]);
-
+          
 
             //var priceList_Version_ID = Util.getValueOfInt(dr["M_PriceList_Version_ID"]);
             // X_C_Project proj = new X_C_Project(ctx, projID, null);
@@ -17245,6 +17254,11 @@
 
             mTab.setValue("PlannedMarginAmt", (PriceStd - PriceLimit));
             // oppLine.SetPlannedMarginAmt( Decimal.Subtract(PriceStd, PriceLimit));
+
+            //set base UOM if not selected
+            if (Util.getValueOfInt(mTab.getValue("C_UOM_ID")) == 0) {
+                mTab.setValue("C_UOM_ID", dr["C_UOM_ID"]);
+            }
         }
         else {
             //if no data found then set prices as 0
