@@ -184,12 +184,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             }
                             else
                             {
-                                // JID_1064  only Submitted responce will set rank
-                                if(lastAmt.Value.Equals(Env.ZERO))
-                                {
-                                    lastRank = rank;
-                                }
-                                else if (lastAmt.Value.CompareTo(netAmt.Value) != 0)
+                                if (lastAmt.Value.CompareTo(netAmt.Value) != 0)
                                 {
                                     lastRank = rank + 1;
                                     lastAmt = qty.GetNetAmt();
