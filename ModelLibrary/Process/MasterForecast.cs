@@ -672,16 +672,24 @@ namespace ViennaAdvantageServer.Process
         /// <param name="totalQtyOpp">Opportunity Qty</param>
         /// <param name="avgPrice">Price</param>
         /// <param name="totalQtySO">Total </param>
-        /// <returns>odject</returns>
+        /// <returns>object</returns>
         private MMasterForecastLine GenerateMasterForecast(int M_Product_ID, int M_AttributeSetInstance, decimal? totalQtyTeam, Decimal? totalQtyOpp, decimal? avgPrice)
         {
             MMasterForecastLine mfLine = MMasterForecastLine.GetOrCreate(mf, M_Product_ID, M_AttributeSetInstance);
             Decimal? qty = mfLine.GetOppQty();
             mfLine.SetC_MasterForecast_ID(mf.GetC_MasterForecast_ID());
-            mfLine.SetForcastQty(totalQtyTeam);
-            mfLine.SetOppQty(totalQtyOpp + mfLine.GetOppQty());
-            Decimal? total = Decimal.Add(totalQtyOpp.Value, totalQtyTeam.Value);
-            mfLine.SetTotalQty(total + mfLine.GetTotalQty());
+            if (totalQtyOpp > 0 && totalQtyTeam > 0)
+            {
+                mfLine.SetForcastQty(totalQtyTeam+mfLine.GetForcastQty());
+                mfLine.SetOppQty(totalQtyOpp);
+            }
+            else
+            {
+                mfLine.SetForcastQty(totalQtyTeam );
+                mfLine.SetOppQty(totalQtyOpp + mfLine.GetOppQty());
+            }
+            //Decimal? totalqty = Decimal.Add(mfLine.GetForcastQty(), mfLine.GetOppQty());
+            mfLine.SetTotalQty(mfLine.GetForcastQty()+mfLine.GetOppQty());
             //calculate average price for opportunit case only 
             if (totalQtyOpp>0 && totalQtyTeam==0) 
             {
