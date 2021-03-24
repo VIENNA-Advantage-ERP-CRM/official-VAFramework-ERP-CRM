@@ -302,7 +302,7 @@ namespace VAdvantage.Model
             SetPriceLimit(_productPrice.GetPriceLimit());
             // Set price entered by rakesh kumar on 17/Mar/2021
             SetPriceEntered(GetPriceActual());
-            
+
             // Commented by rakesh kumar on 17/Mar/2021 price handled in product pricing
             //if (GetQtyEntered().CompareTo(GetQtyOrdered()) == 0)
             //{
@@ -4775,6 +4775,21 @@ namespace VAdvantage.Model
             //Develop by Deekshant For VA077 Module for calculating purchase,sales,margin
             if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
             {
+                //Check if the SO created from SQ
+                if (Util.GetValueOfInt(Get_Value("C_Quotation_Line_ID")) > 0)
+                {
+                    // Copy the VA077_IsContract from SQ and update to SO 
+                    string qry = @"UPDATE C_OrderLine 
+                                   SET VA077_IsContract=(SELECT VA077_IsContract 
+                                   FROM C_OrderLine WHERE C_OrderLine_Id =" + Util.GetValueOfInt(Get_Value("C_Quotation_Line_ID")) + @")                          
+                                   WHERE C_OrderLine_Id=" + GetC_OrderLine_ID();
+                    int no = DB.ExecuteQuery(qry, null, Get_TrxName());
+                    if (no <= 0)
+                    {
+                        log.SaveWarning("", Msg.GetMsg(GetCtx(), "VIS_NotUpdated"));
+                    }
+                }
+
                 if (!UpdateMargins())
                 {
                     log.SaveWarning("", Msg.GetMsg(GetCtx(), "VIS_NotUpdated"));
