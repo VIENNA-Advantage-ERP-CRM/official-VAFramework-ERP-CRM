@@ -1315,7 +1315,7 @@
 
     function APrint(AD_Process_ID, table_ID, record_ID, WindowNo, recIds, curTab, isShowRTF) {
         //var overla = null;
-        var windowID = curTab.getAD_Window_ID();
+        var windowID = curTab == null ? 0 : curTab.getAD_Window_ID();
         $menu.off("click");
         $menu.on("click", "LI", function (e) {
             var filetype = $(e.target).data("val");
