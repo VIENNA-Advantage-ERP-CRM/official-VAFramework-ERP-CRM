@@ -584,6 +584,20 @@ namespace VAdvantage.Process
             po.SetUser1_ID(so.GetUser1_ID());
             po.SetUser2_ID(so.GetUser2_ID());
 
+            //Set VA077 values on header level
+            if (Env.IsModuleInstalled("VA077_"))
+            {
+                //Get the org count of legal entity org
+                string sql = @"SELECT Count(AD_Org_ID) FROM AD_Org WHERE IsActive='Y' 
+                           AND (IsProfitCenter ='Y' OR IsCostCenter ='Y') AND 
+                           AD_Client_Id=" + so.GetAD_Client_ID() + @" AND LegalEntityOrg = " + so.GetAD_Org_ID();
+                int result = Util.GetValueOfInt(DB.ExecuteScalar(sql));
+                if (result > 0)
+                {
+                    po.SetVA077_IsLegalEntity(true);
+                }               
+            }
+
             // Handle error done by rakesh kumar on 17/Mar/2021
             if (!po.Save())
             {
