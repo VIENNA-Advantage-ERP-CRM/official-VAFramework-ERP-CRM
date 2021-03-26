@@ -144,12 +144,8 @@ namespace VIS.Models
             UOM = Util.GetValueOfInt(paramValue[3].ToString());
 
             string sql = "SELECT PriceStd ,C_UOM_ID FROM M_ProductPrice WHERE M_PriceList_Version_ID = (SELECT MAX(M_PriceList_Version_ID) FROM M_PriceList_Version WHERE IsActive = 'Y'" +
-                "AND M_PriceList_ID =" + M_PriceList_ID + ") AND M_Product_id=" + M_Product_ID;
-
-            if (Attribute > 0)
-            {
-                sql += " AND M_AttributeSetInstance_ID=" + Attribute;
-            }
+                "AND M_PriceList_ID =" + M_PriceList_ID + ") AND M_Product_ID=" + M_Product_ID+  " AND NVL(M_AttributeSetInstance_ID,0)=" + Attribute;
+  
             if (UOM > 0)
             {
                 sql += " AND C_UOM_ID=" + UOM;
