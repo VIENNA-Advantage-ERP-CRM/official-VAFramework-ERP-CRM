@@ -90,7 +90,9 @@ namespace VAdvantage.Acct
                 {
                     DocLine docLine = new DocLine(line, this);
                     //  --  Source Amounts
-                    docLine.SetAmount(line.GetAmtAcctDr(), line.GetAmtAcctCr());
+                    docLine.SetAmount(line.GetAmtSourceDr(), line.GetAmtSourceCr());
+                    docLine.SetC_Currency_ID(line.GetC_Currency_ID());
+                    docLine.SetConversionRate(line.GetCurrencyRate() == 0 ? 1 : line.GetCurrencyRate());
                     //  --  Converted Amounts
                     // no need to update converted amount here
                     //docLine.SetConvertedAmt(_C_AcctSchema_ID, line.GetAmtAcctDr(), line.GetAmtAcctCr());
@@ -118,44 +120,52 @@ namespace VAdvantage.Acct
                     DataSet ds = DB.ExecuteDataset(sql);
                     if (ds != null && ds.Tables[0].Rows.Count > 0)
                     {
+                        DataRow dr = null;
+                        X_GL_LineDimension lDim = null;
+                        DocLine docLine = null;
+                        MAccount account = null;
                         for (int m = 0; m < ds.Tables[0].Rows.Count; m++)
                         {
-                            DataRow dr = ds.Tables[0].Rows[m];
-                            X_GL_LineDimension lDim = new X_GL_LineDimension(GetCtx(), dr, null);
+                            dr = ds.Tables[0].Rows[m];
+                            lDim = new X_GL_LineDimension(GetCtx(), dr, null);
 
-                            DocLine docLine = new DocLine(lDim, this);
+                            docLine = new DocLine(lDim, this);
                             //  --  Source Amounts
 
 
-                            decimal cRate = line.GetCurrencyRate();
-                            if (cRate == 0)
-                            {
-                                cRate = 1;
-                            }
-                            decimal amtAcctCr = 0;
-                            decimal amtAcctDr = 0;
+                            //decimal cRate = line.GetCurrencyRate();
+                            //if (cRate == 0)
+                            //{
+                            //    cRate = 1;
+                            //}
+                            //decimal amtAcctCr = 0;
+                            //decimal amtAcctDr = 0;
 
                             //MAcctSchema mSc = new MAcctSchema(GetCtx(), _C_AcctSchema_ID, null);
 
 
                             if (line.GetAmtSourceDr() != 0)
                             {
-                                amtAcctDr = lDim.GetAmount() * cRate;
-                                docLine.SetAmount(amtAcctDr, 0);
-                                amtAcctDr = Decimal.Round(amtAcctDr, mSc.GetStdPrecision());
+                                //amtAcctDr = lDim.GetAmount() * cRate;
+                                docLine.SetAmount(lDim.GetAmount(), 0);
+                                //amtAcctDr = Decimal.Round(amtAcctDr, mSc.GetStdPrecision());
 
                             }
                             else
                             {
-                                amtAcctCr = lDim.GetAmount() * cRate;
-                                docLine.SetAmount(0, amtAcctCr);
-                                amtAcctCr = Decimal.Round(amtAcctCr, mSc.GetStdPrecision());
+                                //amtAcctCr = lDim.GetAmount() * cRate;
+                                docLine.SetAmount(0, lDim.GetAmount());
+                                //amtAcctCr = Decimal.Round(lDim.GetAmount(), mSc.GetStdPrecision());
                             }
+
+                            docLine.SetC_Currency_ID(line.GetC_Currency_ID());
+                            docLine.SetConversionRate(line.GetCurrencyRate() == 0 ? 1 : line.GetCurrencyRate());
+
                             //  --  Converted Amounts
                             // no need to update converted amount here
                             //docLine.SetConvertedAmt(_C_AcctSchema_ID, amtAcctDr, amtAcctCr);
                             //  --  Account
-                            MAccount account = line.GetAccount();
+                            account = line.GetAccount();
 
 
                             docLine.SetAccount(account);
@@ -300,10 +310,21 @@ namespace VAdvantage.Acct
                     //if (_lines[i].GetC_AcctSchema_ID() == as1.GetC_AcctSchema_ID())
                     //{
                     // set conversion rate on line, so that amount to be converted based on that multiply rate 
-                    _lines[i].SetConversionRate(conversionRate);
+                    if (as1.GetC_AcctSchema_ID() != _C_AcctSchema_ID && _lines[i].GetC_Currency_ID() != as1.GetC_Currency_ID())
+                    {
+                        conversionRate = MConversionRate.GetRate(_lines[i].GetC_Currency_ID(), as1.GetC_Currency_ID(),
+                            _lines[i].GetDateAcct(), _lines[i].GetC_ConversionType_ID(),
+                            as1.GetAD_Client_ID(), _lines[i].GetAD_Org_ID());
+                        _lines[i].SetConversionRate(conversionRate);
+                    }
+                    else if (as1.GetC_AcctSchema_ID() != _C_AcctSchema_ID)
+                    {
+                        _lines[i].SetConversionRate(conversionRate);
+                    }
+
                     fact.CreateLine(_lines[i],
                                     _lines[i].GetAccount(),
-                                    GetC_Currency_ID(),
+                                    _lines[i].GetC_Currency_ID(),
                                     _lines[i].GetAmtSourceDr(),
                                     _lines[i].GetAmtSourceCr());
                     //}

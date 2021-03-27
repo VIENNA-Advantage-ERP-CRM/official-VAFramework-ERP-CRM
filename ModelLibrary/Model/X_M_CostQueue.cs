@@ -278,6 +278,11 @@ namespace VAdvantage.Model
         {
             Object ii = Get_Value("M_Warehouse_ID"); if (ii == null) return 0; return Convert.ToInt32(ii);
         }
+
+        /** Set Actual Quantity.@param ActualQty The actual quantity */
+        public void SetActualQty(Decimal? ActualQty) { Set_Value("ActualQty", (Decimal?)ActualQty); }
+        /** Get Actual Quantity.@return The actual quantity */
+        public Decimal GetActualQty() { Object bd = Get_Value("ActualQty"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
     }
 
 }

@@ -306,7 +306,7 @@ namespace VAdvantage.Model
             if (M_Warehouse_ID != 0)
                 sql += " AND NVL(M_Warehouse_ID, 0) = " + M_Warehouse_ID;
             if (M_ASI_ID != 0)
-                sql += " AND M_AttributeSetInstance_ID=@asi";
+                sql += " AND NVL(M_AttributeSetInstance_ID, 0)=@asi";
             sql += " AND CurrentQty<>0 ";
             sql += "ORDER BY queuedate ";
             if (!ce.IsFifo())
@@ -364,6 +364,81 @@ namespace VAdvantage.Model
             MCostQueue[] costQ = new MCostQueue[list.Count];
             costQ = list.ToArray();
             return costQ;
+        }
+
+        /// <summary>
+        /// This function is used to get the Current Cost from Cost Queue
+        /// </summary>
+        /// <param name="AD_Client_ID">client id</param>
+        /// <param name="Org_ID">organization id</param>
+        /// <param name="M_Product">product id</param>
+        /// <param name="M_ASI_ID">Attribute Set Instance ID</param>
+        /// <param name="mas">accounting Schema Reference</param>
+        /// <param name="M_Warehouse_ID">warehouse id</param>
+        /// <param name="isFifo">isFifo</param>
+        /// <param name="trxName">transaction</param>
+        /// <returns>Current Cost</returns>
+        public static Decimal GetLifoAndFifoCurrentCostFromCostQueue(int AD_Client_ID, int Org_ID, int M_Product, int M_ASI_ID, MAcctSchema mas,
+             int M_Warehouse_ID, bool isFifo, Trx trxName)
+        {
+            Decimal currentCost = 0;
+            StringBuilder sql = new StringBuilder("SELECT CurrentCostPrice FROM M_CostQueue "
+                + "WHERE AD_Client_ID=@client "
+                + " AND M_Product_ID=@prod"
+                + " AND M_CostType_ID=@ct AND C_AcctSchema_ID=@accs"
+                + " AND M_CostElement_ID=( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = '" + (isFifo ? "F" : " L") + "' AND AD_Client_ID = " + AD_Client_ID + ")");
+            if (Org_ID != 0)
+                sql.Append(" AND AD_Org_ID=@org");
+            if (M_Warehouse_ID != 0)
+                sql.Append(" AND NVL(M_Warehouse_ID, 0) = " + M_Warehouse_ID);
+            if (M_ASI_ID != 0)
+                sql.Append(" AND NVL(M_AttributeSetInstance_ID, 0)=@asi");
+            sql.Append(" AND CurrentQty<>0 ");
+            sql.Append("ORDER BY queuedate ");
+            if (!isFifo)
+                sql.Append("DESC ");
+            sql.Append(" , M_AttributeSetInstance_ID ");
+            if (!isFifo)
+                sql.Append("DESC");
+            try
+            {
+                SqlParameter[] param = null;
+                if (M_ASI_ID != 0 && Org_ID != 0)
+                {
+                    param = new SqlParameter[6];
+                }
+                else if (M_ASI_ID == 0 && Org_ID == 0)
+                {
+                    param = new SqlParameter[4];
+                }
+                else
+                {
+                    param = new SqlParameter[5];
+                }
+                param[0] = new SqlParameter("@client", AD_Client_ID);
+                param[1] = new SqlParameter("@prod", M_Product);
+                param[2] = new SqlParameter("@ct", mas.GetM_CostType_ID());
+                param[3] = new SqlParameter("@accs", mas.GetC_AcctSchema_ID());
+                if (M_ASI_ID != 0 && Org_ID != 0)
+                {
+                    param[4] = new SqlParameter("@org", Org_ID);
+                    param[5] = new SqlParameter("@asi", M_ASI_ID);
+                }
+                else if (Org_ID != 0)
+                {
+                    param[4] = new SqlParameter("@org", Org_ID);
+                }
+                else if (M_ASI_ID != 0)
+                {
+                    param[4] = new SqlParameter("@asi", M_ASI_ID);
+                }
+                currentCost = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), param, trxName));
+            }
+            catch (Exception e)
+            {
+                _log.Log(Level.SEVERE, sql.ToString(), e);
+            }
+            return currentCost;
         }
 
         /// <summary>
@@ -436,6 +511,7 @@ namespace VAdvantage.Model
             int SourceM_Warehouse_Id = 0; // is used to manage costing at warehouse level during Inventory Move
             MLocator loc = null; // is used to get warehouse id to manager costing levelev - Warehouse + Batch 
             String costLevel = null; // is used to check costing level binded for calculation of costing
+            bool backwardCompatabilitySupport = false;
             try
             {
                 if (product != null)
@@ -2668,14 +2744,26 @@ namespace VAdvantage.Model
                                      " (SELECT M_Product_Category_ID FROM M_Product WHERE IsActive = 'Y' AND M_Product_ID = " + product.GetM_Product_ID() + " )) AND AD_Client_ID = " + AD_Client_ID);
                             costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
                             costElement = new MCostElement(ctx, costingElementId, null);
-
+                        backwardInOut:
                             if (windowName == "Physical Inventory" || windowName == "Internal Use Inventory")
                             {
                                 #region Phy. Inventory / Internal Use Inventory
                                 if (Qty > 0)
                                 {
-                                    result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, inventoryLine.GetAD_Org_ID(), Price / Qty, Qty, windowName,
-                                          inventoryLine, inoutline, movementline, invoiceline, cd, trxName, out costQueuseIds);
+                                    if (inventoryLine.GetReversalDoc_ID() > 0)
+                                    {
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                        if (backwardCompatabilitySupport)
+                                        {
+                                            result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, inventoryLine.GetAD_Org_ID(), Price / Qty, Qty, windowName,
+                                                  inventoryLine, inoutline, movementline, invoiceline, cd, trxName, out costQueuseIds);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, inventoryLine.GetAD_Org_ID(), Price / Qty, Qty, windowName,
+                                              inventoryLine, inoutline, movementline, invoiceline, cd, trxName, out costQueuseIds);
+                                    }
                                     if (!result)
                                     {
                                         if (optionalstr != "window")
@@ -2690,11 +2778,38 @@ namespace VAdvantage.Model
                                         _log.Severe("Error occured during CreateCostQueue for M_inventory_ID = " + inventoryLine.GetM_InventoryLine_ID());
                                         return false;
                                     }
+
+                                    if (inventoryLine.GetReversalDoc_ID() > 0 && !backwardCompatabilitySupport)
+                                    {
+                                        //2nd either for Fifo or lifo opposite of 1st entry
+                                        query.Clear();
+                                        query.Append(@"SELECT M_CostElement_ID FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = '"
+                                        + (costElement.GetCostingMethod().Equals(MCostElement.COSTINGMETHOD_Fifo) ? MCostElement.COSTINGMETHOD_Lifo :
+                                            MCostElement.COSTINGMETHOD_Fifo) + "' AND AD_Client_ID = " + AD_Client_ID);
+                                        costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
+                                        costElement = new MCostElement(ctx, costingElementId, null);
+
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                        if (!result)
+                                        {
+                                            if (optionalstr != "window")
+                                            {
+                                                trxName.Rollback();
+                                            }
+                                            else
+                                            {
+                                                DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
+                                                DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                            }
+                                            _log.Severe("Error occured during CreateCostQueue for M_inventory_ID = " + inventoryLine.GetM_InventoryLine_ID());
+                                            return false;
+                                        }
+                                    }
                                 }
                                 else
                                 {
                                     //1st entry either of FIFO of LIFO 
-                                    updateCostQueue(product, M_ASI_ID, acctSchema, inventoryLine.GetAD_Org_ID(), costElement, Decimal.Negate(Qty), M_Warehouse_Id);
+                                    updateCostQueue(product, M_ASI_ID, acctSchema, inventoryLine.GetAD_Org_ID(), costElement, Decimal.Negate(Qty), M_Warehouse_Id, cd);
 
                                     //2nd either for Fifo or lifo opposite of 1st entry
                                     if (costElement.GetCostingMethod() == "F")
@@ -2709,17 +2824,30 @@ namespace VAdvantage.Model
                                     }
                                     costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
                                     costElement = new MCostElement(ctx, costingElementId, null);
-                                    updateCostQueue(product, M_ASI_ID, acctSchema, inventoryLine.GetAD_Org_ID(), costElement, Decimal.Negate(Qty), M_Warehouse_Id);
+                                    updateCostQueue(product, M_ASI_ID, acctSchema, inventoryLine.GetAD_Org_ID(), costElement, Decimal.Negate(Qty), M_Warehouse_Id, cd);
                                 }
                                 #endregion
                             }
+
                             if (windowName == "AssetDisposal")
                             {
                                 #region AssetDisposal
                                 if (Qty > 0)
                                 {
-                                    result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")), Price / Qty, Qty, windowName,
+                                    if (po.Get_ValueAsInt("ReversalDoc_ID") > 0)
+                                    {
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                        if (backwardCompatabilitySupport)
+                                        {
+                                            result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")), Price / Qty, Qty, windowName,
+                                             inventoryLine, inoutline, movementline, invoiceline, cd, trxName, out costQueuseIds);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")), Price / Qty, Qty, windowName,
                                           inventoryLine, inoutline, movementline, invoiceline, cd, trxName, out costQueuseIds);
+                                    }
                                     if (!result)
                                     {
                                         if (optionalstr != "window")
@@ -2734,11 +2862,38 @@ namespace VAdvantage.Model
                                         _log.Severe("Error occured during CreateCostQueue for VAFAM_AssetDisposal_ID = " + Util.GetValueOfInt(po.Get_Value("VAFAM_AssetDisposal_ID")));
                                         return false;
                                     }
+
+                                    if (po.Get_ValueAsInt("ReversalDoc_ID") > 0 && !backwardCompatabilitySupport)
+                                    {
+                                        //2nd either for Fifo or lifo opposite of 1st entry
+                                        query.Clear();
+                                        query.Append(@"SELECT M_CostElement_ID FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = '"
+                                        + (costElement.GetCostingMethod().Equals(MCostElement.COSTINGMETHOD_Fifo) ? MCostElement.COSTINGMETHOD_Lifo :
+                                            MCostElement.COSTINGMETHOD_Fifo) + "' AND AD_Client_ID = " + AD_Client_ID);
+                                        costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
+                                        costElement = new MCostElement(ctx, costingElementId, null);
+
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                        if (!result)
+                                        {
+                                            if (optionalstr != "window")
+                                            {
+                                                trxName.Rollback();
+                                            }
+                                            else
+                                            {
+                                                DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
+                                                DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                            }
+                                            _log.Severe("Error occured during CreateCostQueue for VAFAM_AssetDisposal_ID = " + Util.GetValueOfInt(po.Get_Value("VAFAM_AssetDisposal_ID")));
+                                            return false;
+                                        }
+                                    }
                                 }
                                 else
                                 {
                                     //1st entry either of FIFO of LIFO 
-                                    updateCostQueue(product, M_ASI_ID, acctSchema, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")), costElement, Decimal.Negate(Qty), M_Warehouse_Id);
+                                    updateCostQueue(product, M_ASI_ID, acctSchema, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")), costElement, Decimal.Negate(Qty), M_Warehouse_Id, cd);
 
                                     //2nd either for Fifo or lifo opposite of 1st entry
                                     if (costElement.GetCostingMethod() == "F")
@@ -2753,17 +2908,30 @@ namespace VAdvantage.Model
                                     }
                                     costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
                                     costElement = new MCostElement(ctx, costingElementId, null);
-                                    updateCostQueue(product, M_ASI_ID, acctSchema, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")), costElement, Decimal.Negate(Qty), M_Warehouse_Id);
+                                    updateCostQueue(product, M_ASI_ID, acctSchema, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")), costElement, Decimal.Negate(Qty), M_Warehouse_Id, cd);
                                 }
                                 #endregion
                             }
+
                             else if (windowName == "Production Execution" || windowName.Equals("PE-FinishGood"))
                             {
                                 #region Production Execution
                                 if (Qty > 0)
                                 {
-                                    result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")),
+                                    if (po.Get_ValueAsInt("ReversalDoc_ID") > 0 || po.Get_ValueAsInt("VAMFG_OrigWrkOdrTrxLine_ID_1") > 0)
+                                    {
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                        if (backwardCompatabilitySupport)
+                                        {
+                                            result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")),
                                         Price / Qty, Qty, windowName, inventoryLine, inoutline, movementline, invoiceline, cd, trxName, out costQueuseIds);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")),
+                                        Price / Qty, Qty, windowName, inventoryLine, inoutline, movementline, invoiceline, cd, trxName, out costQueuseIds);
+                                    }
                                     if (!result)
                                     {
                                         if (optionalstr == "process")
@@ -2778,31 +2946,110 @@ namespace VAdvantage.Model
                                         _log.Severe("Error occured during CreateCostQueue for Production Execution line = " + Util.GetValueOfInt(po.Get_Value("VAMFG_M_WrkOdrTrnsctionLine_ID")));
                                         return false;
                                     }
+
+                                    if ((po.Get_ValueAsInt("ReversalDoc_ID") > 0 || po.Get_ValueAsInt("VAMFG_OrigWrkOdrTrxLine_ID_1") > 0) && !backwardCompatabilitySupport)
+                                    {
+                                        //2nd either for Fifo or lifo opposite of 1st entry
+                                        query.Clear();
+                                        query.Append(@"SELECT M_CostElement_ID FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = '"
+                                        + (costElement.GetCostingMethod().Equals(MCostElement.COSTINGMETHOD_Fifo) ? MCostElement.COSTINGMETHOD_Lifo :
+                                            MCostElement.COSTINGMETHOD_Fifo) + "' AND AD_Client_ID = " + AD_Client_ID);
+                                        costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
+                                        costElement = new MCostElement(ctx, costingElementId, null);
+
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                        if (!result)
+                                        {
+                                            if (optionalstr == "process")
+                                            {
+                                                trxName.Rollback();
+                                            }
+                                            else
+                                            {
+                                                DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
+                                            }
+                                            _log.Severe("Error occured during CreateCostQueue for Production Execution line = " + Util.GetValueOfInt(po.Get_Value("VAMFG_M_WrkOdrTrnsctionLine_ID")));
+                                            return false;
+                                        }
+                                    }
                                 }
                                 else
                                 {
+                                backwardSupportPE:
                                     //1st entry either of FIFO of LIFO 
-                                    updateCostQueue(product, M_ASI_ID, acctSchema, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")), costElement, Decimal.Negate(Qty), M_Warehouse_Id);
-
-                                    //2nd either for Fifo or lifo opposite of 1st entry
-                                    if (costElement.GetCostingMethod() == "F")
+                                    if (po.Get_ValueAsInt("ReversalDoc_ID") > 0 && !backwardCompatabilitySupport)
                                     {
+                                        result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Decimal.Negate(Qty),
+                                                                                  true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                        if (backwardCompatabilitySupport)
+                                        {
+                                            goto backwardSupportPE;
+                                        }
+                                        if (!result)
+                                        {
+                                            if (optionalstr != "window")
+                                            {
+                                                trxName.Rollback();
+                                            }
+                                            else
+                                            {
+                                                DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
+                                            }
+                                            _log.Severe("Error occured during ReturnStockReduceFromCostQueue for Production Execution line = " + Util.GetValueOfInt(po.Get_Value("VAMFG_M_WrkOdrTrnsctionLine_ID")));
+                                            return false;
+                                        }
+
+                                        //2nd either for Fifo or lifo opposite of 1st entry
                                         query.Clear();
-                                        query.Append(@"SELECT M_CostElement_ID FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'L' AND AD_Client_ID = " + AD_Client_ID);
+                                        query.Append(@"SELECT M_CostElement_ID FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = '"
+                                        + (costElement.GetCostingMethod().Equals(MCostElement.COSTINGMETHOD_Fifo) ? MCostElement.COSTINGMETHOD_Lifo :
+                                            MCostElement.COSTINGMETHOD_Fifo) + "' AND AD_Client_ID = " + AD_Client_ID);
+                                        costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
+                                        costElement = new MCostElement(ctx, costingElementId, null);
+
+                                        result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Decimal.Negate(Qty),
+                                                                                   true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                        if (!result)
+                                        {
+                                            if (optionalstr != "window")
+                                            {
+                                                trxName.Rollback();
+                                            }
+                                            else
+                                            {
+                                                DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
+                                            }
+                                            _log.Severe("Error occured during ReturnStockReduceFromCostQueue for Production Execution line = " + Util.GetValueOfInt(po.Get_Value("VAMFG_M_WrkOdrTrnsctionLine_ID")));
+                                            return false;
+                                        }
                                     }
                                     else
                                     {
-                                        query.Clear();
-                                        query.Append(@"SELECT M_CostElement_ID FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'F' AND AD_Client_ID = " + AD_Client_ID);
+                                        //1st entry either of FIFO of LIFO 
+                                        updateCostQueue(product, M_ASI_ID, acctSchema, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")), costElement, Decimal.Negate(Qty), M_Warehouse_Id, cd);
+
+                                        //2nd either for Fifo or lifo opposite of 1st entry
+                                        if (costElement.GetCostingMethod() == "F")
+                                        {
+                                            query.Clear();
+                                            query.Append(@"SELECT M_CostElement_ID FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'L' AND AD_Client_ID = " + AD_Client_ID);
+                                        }
+                                        else
+                                        {
+                                            query.Clear();
+                                            query.Append(@"SELECT M_CostElement_ID FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'F' AND AD_Client_ID = " + AD_Client_ID);
+                                        }
+                                        costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
+                                        costElement = new MCostElement(ctx, costingElementId, null);
+                                        updateCostQueue(product, M_ASI_ID, acctSchema, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")), costElement, Decimal.Negate(Qty), M_Warehouse_Id, cd);
                                     }
-                                    costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
-                                    costElement = new MCostElement(ctx, costingElementId, null);
-                                    updateCostQueue(product, M_ASI_ID, acctSchema, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")), costElement, Decimal.Negate(Qty), M_Warehouse_Id);
                                 }
                                 #endregion
                             }
 
-                            else if (windowName == "Material Receipt" || windowName == "Customer Return" || windowName == "Shipment" || windowName == "Return To Vendor")
+                            else if (inoutline != null && ((inoutline.GetReversalDoc_ID() == 0 &&
+                                ((windowName.Equals("Material Receipt") || windowName.Equals("Shipment")) ||
+                                (inoutline.GetC_OrderLine_ID() == 0 && windowName.Equals("Return To Vendor")))) || backwardCompatabilitySupport)) // windowName == "Customer Return"
                             {
                                 #region Sales / Purchase / Return
                                 if (Qty > 0)
@@ -2827,7 +3074,7 @@ namespace VAdvantage.Model
                                 else
                                 {
                                     //1st entry either of FIFO of LIFO 
-                                    updateCostQueue(product, M_ASI_ID, acctSchema, inoutline.GetAD_Org_ID(), costElement, Decimal.Negate(Qty), M_Warehouse_Id);
+                                    updateCostQueue(product, M_ASI_ID, acctSchema, inoutline.GetAD_Org_ID(), costElement, Decimal.Negate(Qty), M_Warehouse_Id, cd);
 
                                     //2nd either for Fifo or lifo opposite of 1st entry
                                     if (costElement.GetCostingMethod() == "F")
@@ -2842,17 +3089,135 @@ namespace VAdvantage.Model
                                     }
                                     costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
                                     costElement = new MCostElement(ctx, costingElementId, null);
-                                    updateCostQueue(product, M_ASI_ID, acctSchema, inoutline.GetAD_Org_ID(), costElement, Decimal.Negate(Qty), M_Warehouse_Id);
+                                    updateCostQueue(product, M_ASI_ID, acctSchema, inoutline.GetAD_Org_ID(), costElement, Decimal.Negate(Qty), M_Warehouse_Id, cd);
                                 }
                                 #endregion
                             }
+
+                            else if (!backwardCompatabilitySupport && (windowName == "Customer Return" ||
+                                windowName == "Return To Vendor" ||
+                                (inoutline != null && inoutline.GetReversalDoc_ID() != 0 &&
+                                (windowName.Equals("Material Receipt") || windowName.Equals("Shipment")))))
+                            {
+                                #region  Returns
+                                if (Qty > 0)
+                                {
+                                    result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty,
+                                             inoutline.GetReversalDoc_ID() != 0 ? true : false, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                    if (backwardCompatabilitySupport)
+                                    {
+                                        goto backwardInOut;
+                                    }
+                                    if (!result)
+                                    {
+                                        if (optionalstr != "window")
+                                        {
+                                            trxName.Rollback();
+                                        }
+                                        else
+                                        {
+                                            DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
+                                            DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                        }
+                                        _log.Severe("Error occured during CreateCostQueue for M_Inout_ID = " + inoutline.GetM_InOutLine_ID());
+                                        return false;
+                                    }
+
+                                    // 2nd either for Fifo or lifo opposite of 1st entry
+                                    query.Clear();
+                                    query.Append(@"SELECT M_CostElement_ID FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = '"
+                                    + (costElement.GetCostingMethod().Equals(MCostElement.COSTINGMETHOD_Fifo) ? MCostElement.COSTINGMETHOD_Lifo :
+                                        MCostElement.COSTINGMETHOD_Fifo) + "' AND AD_Client_ID = " + AD_Client_ID);
+                                    costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
+                                    costElement = new MCostElement(ctx, costingElementId, null);
+
+                                    result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty,
+                                                                                        inoutline.GetReversalDoc_ID() != 0 ? true : false, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                    if (!result)
+                                    {
+                                        if (optionalstr != "window")
+                                        {
+                                            trxName.Rollback();
+                                        }
+                                        else
+                                        {
+                                            DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
+                                            DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                        }
+                                        _log.Severe("Error occured during CreateCostQueue for M_Inout_ID = " + inoutline.GetM_InOutLine_ID());
+                                        return false;
+                                    }
+                                }
+                                else
+                                {
+                                    //1st entry either of FIFO of LIFO 
+                                    result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Decimal.Negate(Qty),
+                                                                                        inoutline.GetReversalDoc_ID() != 0 ? true : false, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                    if (backwardCompatabilitySupport)
+                                    {
+                                        goto backwardInOut;
+                                    }
+                                    if (!result)
+                                    {
+                                        if (optionalstr != "window")
+                                        {
+                                            trxName.Rollback();
+                                        }
+                                        else
+                                        {
+                                            DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
+                                        }
+                                        _log.Severe("Error occured during ReturnStockReduceFromCostQueue for M_Inout_ID = " + inoutline.GetM_InOutLine_ID());
+                                        return false;
+                                    }
+
+                                    //2nd either for Fifo or lifo opposite of 1st entry
+                                    query.Clear();
+                                    query.Append(@"SELECT M_CostElement_ID FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = '"
+                                    + (costElement.GetCostingMethod().Equals(MCostElement.COSTINGMETHOD_Fifo) ? MCostElement.COSTINGMETHOD_Lifo :
+                                        MCostElement.COSTINGMETHOD_Fifo) + "' AND AD_Client_ID = " + AD_Client_ID);
+                                    costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
+                                    costElement = new MCostElement(ctx, costingElementId, null);
+
+                                    result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Decimal.Negate(Qty),
+                                                                                        inoutline.GetReversalDoc_ID() != 0 ? true : false, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                    if (!result)
+                                    {
+                                        if (optionalstr != "window")
+                                        {
+                                            trxName.Rollback();
+                                        }
+                                        else
+                                        {
+                                            DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
+                                        }
+                                        _log.Severe("Error occured during ReturnStockReduceFromCostQueue for M_Inout_ID = " + inoutline.GetM_InOutLine_ID());
+                                        return false;
+                                    }
+                                }
+                                #endregion
+                            }
+
                             else if (windowName == "Inventory Move")
                             {
                                 #region Inventory Move
                                 if (Qty > 0)
                                 {
-                                    result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, AD_Org_ID, Price / Qty, Qty, windowName,
+                                    if (movementline.GetReversalDoc_ID() > 0)
+                                    {
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                        if (backwardCompatabilitySupport)
+                                        {
+                                            result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, AD_Org_ID, Price / Qty, Qty, windowName,
+                                             inventoryLine, inoutline, movementline, invoiceline, cd, trxName, out costQueuseIds);
+                                            backwardCompatabilitySupport = false;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, AD_Org_ID, Price / Qty, Qty, windowName,
                                          inventoryLine, inoutline, movementline, invoiceline, cd, trxName, out costQueuseIds);
+                                    }
                                     if (!result)
                                     {
                                         if (optionalstr != "window")
@@ -2869,7 +3234,18 @@ namespace VAdvantage.Model
                                     }
 
                                     //1st entry either of FIFO of LIFO 
-                                    updateCostQueue(product, M_ASI_ID, acctSchema, movementline.GetAD_Org_ID(), costElement, Qty, SourceM_Warehouse_Id);
+                                    if (movementline.GetReversalDoc_ID() > 0)
+                                    {
+                                        result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Qty, true, SourceM_Warehouse_Id, out backwardCompatabilitySupport);
+                                        if (backwardCompatabilitySupport)
+                                        {
+                                            updateCostQueue(product, M_ASI_ID, acctSchema, movementline.GetAD_Org_ID(), costElement, Qty, SourceM_Warehouse_Id, cd);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        updateCostQueue(product, M_ASI_ID, acctSchema, movementline.GetAD_Org_ID(), costElement, Qty, SourceM_Warehouse_Id, cd);
+                                    }
 
                                     //2nd either for Fifo or lifo opposite of 1st entry
                                     if (costElement.GetCostingMethod() == "F")
@@ -2884,13 +3260,53 @@ namespace VAdvantage.Model
                                     }
                                     costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
                                     costElement = new MCostElement(ctx, costingElementId, null);
-                                    updateCostQueue(product, M_ASI_ID, acctSchema, movementline.GetAD_Org_ID(), costElement, Qty, SourceM_Warehouse_Id);
+
+                                    if (movementline.GetReversalDoc_ID() > 0)
+                                    {
+                                        result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Qty, true, SourceM_Warehouse_Id, out backwardCompatabilitySupport);
+                                        if (backwardCompatabilitySupport)
+                                        {
+                                            updateCostQueue(product, M_ASI_ID, acctSchema, movementline.GetAD_Org_ID(), costElement, Qty, SourceM_Warehouse_Id, cd);
+                                        }
+
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                        if (!result)
+                                        {
+                                            if (optionalstr != "window")
+                                            {
+                                                trxName.Rollback();
+                                            }
+                                            else
+                                            {
+                                                DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
+                                                DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                            }
+                                            _log.Severe("Error occured during CreateCostQueue for m_MovementLime_ID = " + movementline.GetM_MovementLine_ID());
+                                            return false;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        updateCostQueue(product, M_ASI_ID, acctSchema, movementline.GetAD_Org_ID(), costElement, Qty, SourceM_Warehouse_Id, cd);
+                                    }
                                 }
                                 else
                                 {
                                     // change refsrence from cd to cdSourceWarehouse -- bcz we are incresing stock in "Source Warehouse"
-                                    result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, movementline.GetAD_Org_ID(), Price / Qty, Decimal.Negate(Qty), windowName,
+                                    if (movementline.GetReversalDoc_ID() > 0)
+                                    {
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Decimal.Negate(Qty), true, cdSourceWarehouse.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                        if (backwardCompatabilitySupport)
+                                        {
+                                            result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, movementline.GetAD_Org_ID(), Price / Qty, Decimal.Negate(Qty), windowName,
+                                           inventoryLine, inoutline, movementline, invoiceline, cdSourceWarehouse, trxName, out costQueuseIds);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, movementline.GetAD_Org_ID(), Price / Qty, Decimal.Negate(Qty), windowName,
                                         inventoryLine, inoutline, movementline, invoiceline, cdSourceWarehouse, trxName, out costQueuseIds);
+                                    }
                                     if (!result)
                                     {
                                         if (optionalstr != "window")
@@ -2908,7 +3324,18 @@ namespace VAdvantage.Model
 
                                     // M_Warehouse_Id -- reduce stock from "To Warehouse"
                                     //1st entry either of FIFO of LIFO   
-                                    updateCostQueue(product, M_ASI_ID, acctSchema, AD_Org_ID, costElement, Decimal.Negate(Qty), M_Warehouse_Id);
+                                    if (movementline.GetReversalDoc_ID() > 0)
+                                    {
+                                        result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Decimal.Negate(Qty), true, M_Warehouse_Id, out backwardCompatabilitySupport);
+                                        if (backwardCompatabilitySupport)
+                                        {
+                                            updateCostQueue(product, M_ASI_ID, acctSchema, AD_Org_ID, costElement, Decimal.Negate(Qty), M_Warehouse_Id, cd);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        updateCostQueue(product, M_ASI_ID, acctSchema, AD_Org_ID, costElement, Decimal.Negate(Qty), M_Warehouse_Id, cd);
+                                    }
 
                                     //2nd either for Fifo or lifo opposite of 1st entry
                                     if (costElement.GetCostingMethod() == "F")
@@ -2923,10 +3350,39 @@ namespace VAdvantage.Model
                                     }
                                     costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
                                     costElement = new MCostElement(ctx, costingElementId, null);
-                                    updateCostQueue(product, M_ASI_ID, acctSchema, AD_Org_ID, costElement, Decimal.Negate(Qty), M_Warehouse_Id);
+
+                                    if (movementline.GetReversalDoc_ID() > 0)
+                                    {
+                                        result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Decimal.Negate(Qty), true, M_Warehouse_Id, out backwardCompatabilitySupport);
+                                        if (backwardCompatabilitySupport)
+                                        {
+                                            updateCostQueue(product, M_ASI_ID, acctSchema, AD_Org_ID, costElement, Decimal.Negate(Qty), M_Warehouse_Id, cd);
+                                        }
+
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Decimal.Negate(Qty), true, cdSourceWarehouse.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                        if (!result)
+                                        {
+                                            if (optionalstr != "window")
+                                            {
+                                                trxName.Rollback();
+                                            }
+                                            else
+                                            {
+                                                DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
+                                                DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                            }
+                                            _log.Severe("Error occured during CreateCostQueue for M_MovementLine_ID = " + movementline.GetM_MovementLine_ID());
+                                            return false;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        updateCostQueue(product, M_ASI_ID, acctSchema, AD_Org_ID, costElement, Decimal.Negate(Qty), M_Warehouse_Id, cd);
+                                    }
                                 }
                                 #endregion
                             }
+
                             else if (windowName == "Invoice(Vendor)")
                             {
                                 #region update cost on cost Queue / M_Cost
@@ -3190,7 +3646,7 @@ namespace VAdvantage.Model
             }
             catch (Exception ex)
             {
-                _log.Severe("Error Occured during costing " + ex.ToString());
+                _log.Severe("Error Occured during costing " + ex.Message);
                 if (ds != null)
                 {
                     ds.Dispose();
@@ -5348,95 +5804,35 @@ namespace VAdvantage.Model
                         M_SourceWarehouse_ID = Convert.ToInt32(DB.ExecuteScalar("SELECT DTD001_MWarehouseSource_ID FROM M_Movement WHERE M_Movement_ID = " + movementline.GetM_Movement_ID(), null, trxName));
                     }
 
-                    #region fifo cost
-                    if (cl == MProductCategory.COSTINGLEVEL_BatchLot)
+                    if (Price == 0)
                     {
-                        sql = "SELECT CurrentCostPrice FROM M_Cost WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
-                               " AND M_Product_ID = " + product.GetM_Product_ID() + " AND NVL(M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + " AND  M_CostElement_ID = " +
-                               " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'F' AND AD_Client_ID = " + AD_Client_ID + ") " +
-                               " AND AD_Client_ID = " + AD_Client_ID + " AND AD_Org_ID = 0";
-                    }
-                    else if (cl == MProductCategory.COSTINGLEVEL_Client)
-                    {
-                        sql = "SELECT CurrentCostPrice FROM M_Cost WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
-                                  " AND M_Product_ID = " + product.GetM_Product_ID() + "  AND M_CostElement_ID = " +
-                                  " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'F' AND AD_Client_ID = " + AD_Client_ID + ") " +
-                                  " AND AD_Client_ID = " + AD_Client_ID + " AND AD_Org_ID = 0";
-                    }
-                    else if (cl == MProductCategory.COSTINGLEVEL_Organization)
-                    {
-                        if (windowName == "Inventory Move")
-                        {
-                            sql = "SELECT CurrentCostPrice FROM M_Cost WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
-                                     " AND M_Product_ID = " + product.GetM_Product_ID() + " AND M_CostElement_ID = " +
-                                     " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'F' AND AD_Client_ID = " + AD_Client_ID + ") " +
-                                     " AND AD_Client_ID = " + AD_Client_ID + " AND AD_Org_ID = " + movementline.GetAD_Org_ID();
-                        }
-                        else
-                        {
-                            sql = "SELECT CurrentCostPrice FROM M_Cost WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
-                                      " AND M_Product_ID = " + product.GetM_Product_ID() + " AND M_CostElement_ID = " +
-                                      " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'F' AND AD_Client_ID = " + AD_Client_ID + ") " +
-                                      " AND AD_Client_ID = " + AD_Client_ID + " AND AD_Org_ID = " + AD_Org_ID;
-                        }
-                    }
-                    else if (cl == MProductCategory.COSTINGLEVEL_OrgPlusBatch || cl == MProductCategory.COSTINGLEVEL_Warehouse || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
-                    {
-                        if (windowName == "Inventory Move")
-                        {
-                            sql = "SELECT CurrentCostPrice FROM M_Cost WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
-                                " AND M_Product_ID = " + product.GetM_Product_ID() + " AND NVL(M_AttributeSetInstance_ID , 0) = " + (cl == MProductCategory.COSTINGLEVEL_Warehouse ? 0 : M_ASI_ID) +
-                                " AND M_CostElement_ID = " +
-                                     " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'F' AND AD_Client_ID = " + AD_Client_ID + ") " +
-                                     " AND AD_Client_ID = " + AD_Client_ID + " AND AD_Org_ID = " + movementline.GetAD_Org_ID();
-                            if (cl == MProductCategory.COSTINGLEVEL_Warehouse || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
-                            {
-                                sql += " AND M_Warehouse_ID = " + M_SourceWarehouse_ID;//cd.GetM_Warehouse_ID();
-                            }
-                        }
-                        else
-                        {
-                            sql = "SELECT CurrentCostPrice FROM M_Cost WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
-                                      " AND M_Product_ID = " + product.GetM_Product_ID() + " AND NVL(M_AttributeSetInstance_ID , 0) = " + (cl == MProductCategory.COSTINGLEVEL_Warehouse ? 0 : M_ASI_ID) + " AND M_CostElement_ID = " +
-                                      " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'F' AND AD_Client_ID = " + AD_Client_ID + ") " +
-                                      " AND AD_Client_ID = " + AD_Client_ID + " AND AD_Org_ID = " + AD_Org_ID;
-                            if (cl == MProductCategory.COSTINGLEVEL_Warehouse || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
-                            {
-                                sql += " AND M_Warehouse_ID = " + cd.GetM_Warehouse_ID();
-                            }
-                        }
-                    }
-                    priceFifo = Util.GetValueOfDecimal(DB.ExecuteScalar(sql));
-
-                    #region on fly calculation
-                    if (priceFifo <= 0)
-                    {
+                        #region fifo cost
                         if (cl == MProductCategory.COSTINGLEVEL_BatchLot)
                         {
-                            sql = "SELECT ROUND(sum(currentcostprice * currentqty)/ sum(currentqty) , " + acctSchema.GetCostingPrecision() + @") FROM m_costqueue WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
+                            sql = "SELECT CurrentCostPrice FROM M_Cost WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
                                    " AND M_Product_ID = " + product.GetM_Product_ID() + " AND NVL(M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + " AND  M_CostElement_ID = " +
                                    " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'F' AND AD_Client_ID = " + AD_Client_ID + ") " +
-                                   " AND AD_Client_ID = " + AD_Client_ID;
+                                   " AND AD_Client_ID = " + AD_Client_ID + " AND AD_Org_ID = 0";
                         }
                         else if (cl == MProductCategory.COSTINGLEVEL_Client)
                         {
-                            sql = "SELECT ROUND(sum(currentcostprice * currentqty)/ sum(currentqty) , " + acctSchema.GetCostingPrecision() + @") FROM m_costqueue WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
+                            sql = "SELECT CurrentCostPrice FROM M_Cost WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
                                       " AND M_Product_ID = " + product.GetM_Product_ID() + "  AND M_CostElement_ID = " +
                                       " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'F' AND AD_Client_ID = " + AD_Client_ID + ") " +
-                                      " AND AD_Client_ID = " + AD_Client_ID;
+                                      " AND AD_Client_ID = " + AD_Client_ID + " AND AD_Org_ID = 0";
                         }
                         else if (cl == MProductCategory.COSTINGLEVEL_Organization)
                         {
                             if (windowName == "Inventory Move")
                             {
-                                sql = "SELECT ROUND(sum(currentcostprice * currentqty)/ sum(currentqty) , " + acctSchema.GetCostingPrecision() + @") FROM m_costqueue WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
+                                sql = "SELECT CurrentCostPrice FROM M_Cost WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
                                          " AND M_Product_ID = " + product.GetM_Product_ID() + " AND M_CostElement_ID = " +
                                          " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'F' AND AD_Client_ID = " + AD_Client_ID + ") " +
                                          " AND AD_Client_ID = " + AD_Client_ID + " AND AD_Org_ID = " + movementline.GetAD_Org_ID();
                             }
                             else
                             {
-                                sql = "SELECT ROUND(sum(currentcostprice * currentqty)/ sum(currentqty) , " + acctSchema.GetCostingPrecision() + @") FROM m_costqueue WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
+                                sql = "SELECT CurrentCostPrice FROM M_Cost WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
                                           " AND M_Product_ID = " + product.GetM_Product_ID() + " AND M_CostElement_ID = " +
                                           " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'F' AND AD_Client_ID = " + AD_Client_ID + ") " +
                                           " AND AD_Client_ID = " + AD_Client_ID + " AND AD_Org_ID = " + AD_Org_ID;
@@ -5446,8 +5842,9 @@ namespace VAdvantage.Model
                         {
                             if (windowName == "Inventory Move")
                             {
-                                sql = "SELECT ROUND(sum(currentcostprice * currentqty)/ sum(currentqty) , " + acctSchema.GetCostingPrecision() + @") FROM m_costqueue WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
-                                         " AND M_Product_ID = " + product.GetM_Product_ID() + " AND NVL(M_AttributeSetInstance_ID , 0) = " + (cl == MProductCategory.COSTINGLEVEL_Warehouse ? 0 : M_ASI_ID) + " AND M_CostElement_ID = " +
+                                sql = "SELECT CurrentCostPrice FROM M_Cost WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
+                                    " AND M_Product_ID = " + product.GetM_Product_ID() + " AND NVL(M_AttributeSetInstance_ID , 0) = " + (cl == MProductCategory.COSTINGLEVEL_Warehouse ? 0 : M_ASI_ID) +
+                                    " AND M_CostElement_ID = " +
                                          " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'F' AND AD_Client_ID = " + AD_Client_ID + ") " +
                                          " AND AD_Client_ID = " + AD_Client_ID + " AND AD_Org_ID = " + movementline.GetAD_Org_ID();
                                 if (cl == MProductCategory.COSTINGLEVEL_Warehouse || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
@@ -5457,7 +5854,7 @@ namespace VAdvantage.Model
                             }
                             else
                             {
-                                sql = "SELECT ROUND(sum(currentcostprice * currentqty)/ sum(currentqty) , " + acctSchema.GetCostingPrecision() + @") FROM m_costqueue WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
+                                sql = "SELECT CurrentCostPrice FROM M_Cost WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
                                           " AND M_Product_ID = " + product.GetM_Product_ID() + " AND NVL(M_AttributeSetInstance_ID , 0) = " + (cl == MProductCategory.COSTINGLEVEL_Warehouse ? 0 : M_ASI_ID) + " AND M_CostElement_ID = " +
                                           " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'F' AND AD_Client_ID = " + AD_Client_ID + ") " +
                                           " AND AD_Client_ID = " + AD_Client_ID + " AND AD_Org_ID = " + AD_Org_ID;
@@ -5468,83 +5865,93 @@ namespace VAdvantage.Model
                             }
                         }
                         priceFifo = Util.GetValueOfDecimal(DB.ExecuteScalar(sql));
-                        priceFifo = Decimal.Round(priceFifo, acctSchema.GetCostingPrecision());
-                    }
-                    #endregion
-                    #endregion
 
-                    #region lifo cost
-                    if (cl == MProductCategory.COSTINGLEVEL_BatchLot)
-                    {
-                        sql = "SELECT CurrentCostPrice FROM M_Cost WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
-                               " AND M_Product_ID = " + product.GetM_Product_ID() + " AND NVL(M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + " AND  M_CostElement_ID = " +
-                               " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'L' AND AD_Client_ID = " + AD_Client_ID + ") " +
-                               " AND AD_Client_ID = " + AD_Client_ID;
-                    }
-                    else if (cl == MProductCategory.COSTINGLEVEL_Client)
-                    {
-                        sql = "SELECT CurrentCostPrice FROM M_Cost WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
-                                  " AND M_Product_ID = " + product.GetM_Product_ID() + "  AND M_CostElement_ID = " +
-                                  " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'L' AND AD_Client_ID = " + AD_Client_ID + ") " +
-                                  " AND AD_Client_ID = " + AD_Client_ID;
-                    }
-                    else if (cl == MProductCategory.COSTINGLEVEL_Organization)
-                    {
-                        if (windowName == "Inventory Move")
+                        #region on fly calculation
+                        if (priceFifo <= 0)
                         {
-                            sql = "SELECT CurrentCostPrice FROM M_Cost WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
-                                     " AND M_Product_ID = " + product.GetM_Product_ID() + " AND M_CostElement_ID = " +
-                                     " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'L' AND AD_Client_ID = " + AD_Client_ID + ") " +
-                                     " AND AD_Client_ID = " + AD_Client_ID + " AND AD_Org_ID = " + movementline.GetAD_Org_ID();
-                        }
-                        else
-                        {
-                            sql = "SELECT CurrentCostPrice FROM M_Cost WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
-                                      " AND M_Product_ID = " + product.GetM_Product_ID() + " AND M_CostElement_ID = " +
-                                      " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'L' AND AD_Client_ID = " + AD_Client_ID + ") " +
-                                      " AND AD_Client_ID = " + AD_Client_ID + " AND AD_Org_ID = " + AD_Org_ID;
-                        }
-                    }
-                    else if (cl == MProductCategory.COSTINGLEVEL_OrgPlusBatch || cl == MProductCategory.COSTINGLEVEL_Warehouse || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
-                    {
-                        if (windowName == "Inventory Move")
-                        {
-                            sql = "SELECT CurrentCostPrice FROM M_Cost WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
-                                     " AND M_Product_ID = " + product.GetM_Product_ID() + " AND NVL(M_AttributeSetInstance_ID , 0) = " + (cl == MProductCategory.COSTINGLEVEL_Warehouse ? 0 : M_ASI_ID) + " AND M_CostElement_ID = " +
-                                     " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'L' AND AD_Client_ID = " + AD_Client_ID + ") " +
-                                     " AND AD_Client_ID = " + AD_Client_ID + " AND AD_Org_ID = " + movementline.GetAD_Org_ID();
-                            if (cl == MProductCategory.COSTINGLEVEL_Warehouse || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
+                            if (cl == MProductCategory.COSTINGLEVEL_BatchLot)
                             {
-                                sql += " AND M_Warehouse_ID = " + M_SourceWarehouse_ID;//cd.GetM_Warehouse_ID();
+                                //sql = "SELECT ROUND(sum(currentcostprice * currentqty)/ sum(currentqty) , " + acctSchema.GetCostingPrecision() + @") FROM m_costqueue WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
+                                //       " AND M_Product_ID = " + product.GetM_Product_ID() + " AND NVL(M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + " AND  M_CostElement_ID = " +
+                                //       " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'F' AND AD_Client_ID = " + AD_Client_ID + ") " +
+                                //       " AND AD_Client_ID = " + AD_Client_ID;
+                                priceFifo = GetLifoAndFifoCurrentCostFromCostQueue(AD_Client_ID, 0, product.GetM_Product_ID(), M_ASI_ID, acctSchema, 0, true, cd.Get_Trx());
                             }
-                        }
-                        else
-                        {
-                            sql = "SELECT CurrentCostPrice FROM M_Cost WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
-                                      " AND M_Product_ID = " + product.GetM_Product_ID() + " AND NVL(M_AttributeSetInstance_ID , 0) = " + (cl == MProductCategory.COSTINGLEVEL_Warehouse ? 0 : M_ASI_ID) + " AND M_CostElement_ID = " +
-                                      " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'L' AND AD_Client_ID = " + AD_Client_ID + ") " +
-                                      " AND AD_Client_ID = " + AD_Client_ID + " AND AD_Org_ID = " + AD_Org_ID;
-                            if (cl == MProductCategory.COSTINGLEVEL_Warehouse || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
+                            else if (cl == MProductCategory.COSTINGLEVEL_Client)
                             {
-                                sql += " AND M_Warehouse_ID = " + cd.GetM_Warehouse_ID();
+                                //sql = "SELECT ROUND(sum(currentcostprice * currentqty)/ sum(currentqty) , " + acctSchema.GetCostingPrecision() + @") FROM m_costqueue WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
+                                //          " AND M_Product_ID = " + product.GetM_Product_ID() + "  AND M_CostElement_ID = " +
+                                //          " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'F' AND AD_Client_ID = " + AD_Client_ID + ") " +
+                                //          " AND AD_Client_ID = " + AD_Client_ID;
+                                priceFifo = GetLifoAndFifoCurrentCostFromCostQueue(AD_Client_ID, 0, product.GetM_Product_ID(), 0, acctSchema, 0, true, cd.Get_Trx());
                             }
+                            else if (cl == MProductCategory.COSTINGLEVEL_Organization)
+                            {
+                                if (windowName == "Inventory Move")
+                                {
+                                    //sql = "SELECT ROUND(sum(currentcostprice * currentqty)/ sum(currentqty) , " + acctSchema.GetCostingPrecision() + @") FROM m_costqueue WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
+                                    //         " AND M_Product_ID = " + product.GetM_Product_ID() + " AND M_CostElement_ID = " +
+                                    //         " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'F' AND AD_Client_ID = " + AD_Client_ID + ") " +
+                                    //         " AND AD_Client_ID = " + AD_Client_ID + " AND AD_Org_ID = " + movementline.GetAD_Org_ID();
+                                    priceFifo = GetLifoAndFifoCurrentCostFromCostQueue(AD_Client_ID, movementline.GetAD_Org_ID(), product.GetM_Product_ID(), 0, acctSchema, 0, true, cd.Get_Trx());
+                                }
+                                else
+                                {
+                                    //sql = "SELECT ROUND(sum(currentcostprice * currentqty)/ sum(currentqty) , " + acctSchema.GetCostingPrecision() + @") FROM m_costqueue WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
+                                    //          " AND M_Product_ID = " + product.GetM_Product_ID() + " AND M_CostElement_ID = " +
+                                    //          " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'F' AND AD_Client_ID = " + AD_Client_ID + ") " +
+                                    //          " AND AD_Client_ID = " + AD_Client_ID + " AND AD_Org_ID = " + AD_Org_ID;
+                                    priceFifo = GetLifoAndFifoCurrentCostFromCostQueue(AD_Client_ID, AD_Org_ID, product.GetM_Product_ID(), 0, acctSchema, 0, true, cd.Get_Trx());
+                                }
+                            }
+                            else if (cl == MProductCategory.COSTINGLEVEL_OrgPlusBatch || cl == MProductCategory.COSTINGLEVEL_Warehouse || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
+                            {
+                                if (windowName == "Inventory Move")
+                                {
+                                    //sql = "SELECT ROUND(sum(currentcostprice * currentqty)/ sum(currentqty) , " + acctSchema.GetCostingPrecision() + @") FROM m_costqueue WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
+                                    //         " AND M_Product_ID = " + product.GetM_Product_ID() + " AND NVL(M_AttributeSetInstance_ID , 0) = " + (cl == MProductCategory.COSTINGLEVEL_Warehouse ? 0 : M_ASI_ID) + " AND M_CostElement_ID = " +
+                                    //         " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'F' AND AD_Client_ID = " + AD_Client_ID + ") " +
+                                    //         " AND AD_Client_ID = " + AD_Client_ID + " AND AD_Org_ID = " + movementline.GetAD_Org_ID();
+                                    //if (cl == MProductCategory.COSTINGLEVEL_Warehouse || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
+                                    //{
+                                    //    sql += " AND M_Warehouse_ID = " + M_SourceWarehouse_ID;//cd.GetM_Warehouse_ID();
+                                    //}
+                                    priceFifo = GetLifoAndFifoCurrentCostFromCostQueue(AD_Client_ID, movementline.GetAD_Org_ID(),
+                                        product.GetM_Product_ID(), (cl == MProductCategory.COSTINGLEVEL_Warehouse ? 0 : M_ASI_ID), acctSchema,
+                                        ((cl == MProductCategory.COSTINGLEVEL_Warehouse || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch) ? M_SourceWarehouse_ID : 0), true, cd.Get_Trx());
+                                }
+                                else
+                                {
+                                    //sql = "SELECT ROUND(sum(currentcostprice * currentqty)/ sum(currentqty) , " + acctSchema.GetCostingPrecision() + @") FROM m_costqueue WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
+                                    //          " AND M_Product_ID = " + product.GetM_Product_ID() + " AND NVL(M_AttributeSetInstance_ID , 0) = " + (cl == MProductCategory.COSTINGLEVEL_Warehouse ? 0 : M_ASI_ID) + " AND M_CostElement_ID = " +
+                                    //          " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'F' AND AD_Client_ID = " + AD_Client_ID + ") " +
+                                    //          " AND AD_Client_ID = " + AD_Client_ID + " AND AD_Org_ID = " + AD_Org_ID;
+                                    //if (cl == MProductCategory.COSTINGLEVEL_Warehouse || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
+                                    //{
+                                    //    sql += " AND M_Warehouse_ID = " + cd.GetM_Warehouse_ID();
+                                    //}
+                                    priceFifo = GetLifoAndFifoCurrentCostFromCostQueue(AD_Client_ID, AD_Org_ID,
+                                       product.GetM_Product_ID(), (cl == MProductCategory.COSTINGLEVEL_Warehouse ? 0 : M_ASI_ID), acctSchema,
+                                       ((cl == MProductCategory.COSTINGLEVEL_Warehouse || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch) ? cd.GetM_Warehouse_ID() : 0), true, cd.Get_Trx());
+                                }
+                            }
+                            //priceFifo = Util.GetValueOfDecimal(DB.ExecuteScalar(sql));
+                            priceFifo = Decimal.Round(priceFifo, acctSchema.GetCostingPrecision());
                         }
-                    }
-                    priceLifo = Util.GetValueOfDecimal(DB.ExecuteScalar(sql));
+                        #endregion
+                        #endregion
 
-                    #region on fly calculation from cost queue
-                    if (priceLifo <= 0)
-                    {
+                        #region lifo cost
                         if (cl == MProductCategory.COSTINGLEVEL_BatchLot)
                         {
-                            sql = "SELECT ROUND(sum(currentcostprice * currentqty)/ sum(currentqty) , " + acctSchema.GetCostingPrecision() + @") FROM M_CostQueue WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
+                            sql = "SELECT CurrentCostPrice FROM M_Cost WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
                                    " AND M_Product_ID = " + product.GetM_Product_ID() + " AND NVL(M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + " AND  M_CostElement_ID = " +
                                    " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'L' AND AD_Client_ID = " + AD_Client_ID + ") " +
                                    " AND AD_Client_ID = " + AD_Client_ID;
                         }
                         else if (cl == MProductCategory.COSTINGLEVEL_Client)
                         {
-                            sql = "SELECT ROUND(sum(currentcostprice * currentqty)/ sum(currentqty) , " + acctSchema.GetCostingPrecision() + @") FROM M_CostQueue WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
+                            sql = "SELECT CurrentCostPrice FROM M_Cost WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
                                       " AND M_Product_ID = " + product.GetM_Product_ID() + "  AND M_CostElement_ID = " +
                                       " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'L' AND AD_Client_ID = " + AD_Client_ID + ") " +
                                       " AND AD_Client_ID = " + AD_Client_ID;
@@ -5553,14 +5960,14 @@ namespace VAdvantage.Model
                         {
                             if (windowName == "Inventory Move")
                             {
-                                sql = "SELECT ROUND(sum(currentcostprice * currentqty)/ sum(currentqty) , " + acctSchema.GetCostingPrecision() + @") FROM M_CostQueue WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
+                                sql = "SELECT CurrentCostPrice FROM M_Cost WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
                                          " AND M_Product_ID = " + product.GetM_Product_ID() + " AND M_CostElement_ID = " +
                                          " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'L' AND AD_Client_ID = " + AD_Client_ID + ") " +
                                          " AND AD_Client_ID = " + AD_Client_ID + " AND AD_Org_ID = " + movementline.GetAD_Org_ID();
                             }
                             else
                             {
-                                sql = "SELECT ROUND(sum(currentcostprice * currentqty)/ sum(currentqty) , " + acctSchema.GetCostingPrecision() + @") FROM M_CostQueue WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
+                                sql = "SELECT CurrentCostPrice FROM M_Cost WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
                                           " AND M_Product_ID = " + product.GetM_Product_ID() + " AND M_CostElement_ID = " +
                                           " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'L' AND AD_Client_ID = " + AD_Client_ID + ") " +
                                           " AND AD_Client_ID = " + AD_Client_ID + " AND AD_Org_ID = " + AD_Org_ID;
@@ -5570,18 +5977,18 @@ namespace VAdvantage.Model
                         {
                             if (windowName == "Inventory Move")
                             {
-                                sql = "SELECT ROUND(sum(currentcostprice * currentqty)/ sum(currentqty) , " + acctSchema.GetCostingPrecision() + @") FROM M_CostQueue WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
+                                sql = "SELECT CurrentCostPrice FROM M_Cost WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
                                          " AND M_Product_ID = " + product.GetM_Product_ID() + " AND NVL(M_AttributeSetInstance_ID , 0) = " + (cl == MProductCategory.COSTINGLEVEL_Warehouse ? 0 : M_ASI_ID) + " AND M_CostElement_ID = " +
                                          " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'L' AND AD_Client_ID = " + AD_Client_ID + ") " +
                                          " AND AD_Client_ID = " + AD_Client_ID + " AND AD_Org_ID = " + movementline.GetAD_Org_ID();
                                 if (cl == MProductCategory.COSTINGLEVEL_Warehouse || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
                                 {
-                                    sql += " AND M_Warehouse_ID = " + M_SourceWarehouse_ID;// cd.GetM_Warehouse_ID();
+                                    sql += " AND M_Warehouse_ID = " + M_SourceWarehouse_ID;//cd.GetM_Warehouse_ID();
                                 }
                             }
                             else
                             {
-                                sql = "SELECT ROUND(sum(currentcostprice * currentqty)/ sum(currentqty) , " + acctSchema.GetCostingPrecision() + @") FROM M_CostQueue WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
+                                sql = "SELECT CurrentCostPrice FROM M_Cost WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
                                           " AND M_Product_ID = " + product.GetM_Product_ID() + " AND NVL(M_AttributeSetInstance_ID , 0) = " + (cl == MProductCategory.COSTINGLEVEL_Warehouse ? 0 : M_ASI_ID) + " AND M_CostElement_ID = " +
                                           " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'L' AND AD_Client_ID = " + AD_Client_ID + ") " +
                                           " AND AD_Client_ID = " + AD_Client_ID + " AND AD_Org_ID = " + AD_Org_ID;
@@ -5592,11 +5999,83 @@ namespace VAdvantage.Model
                             }
                         }
                         priceLifo = Util.GetValueOfDecimal(DB.ExecuteScalar(sql));
-                        priceLifo = Decimal.Round(priceLifo, acctSchema.GetCostingPrecision());
-                    }
-                    #endregion
 
-                    #endregion
+                        #region on fly calculation from cost queue
+                        if (priceLifo <= 0)
+                        {
+                            if (cl == MProductCategory.COSTINGLEVEL_BatchLot)
+                            {
+                                //sql = "SELECT ROUND(sum(currentcostprice * currentqty)/ sum(currentqty) , " + acctSchema.GetCostingPrecision() + @") FROM M_CostQueue WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
+                                //       " AND M_Product_ID = " + product.GetM_Product_ID() + " AND NVL(M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + " AND  M_CostElement_ID = " +
+                                //       " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'L' AND AD_Client_ID = " + AD_Client_ID + ") " +
+                                //       " AND AD_Client_ID = " + AD_Client_ID;
+                                priceLifo = GetLifoAndFifoCurrentCostFromCostQueue(AD_Client_ID, 0, product.GetM_Product_ID(), M_ASI_ID, acctSchema, 0, false, cd.Get_Trx());
+                            }
+                            else if (cl == MProductCategory.COSTINGLEVEL_Client)
+                            {
+                                //sql = "SELECT ROUND(sum(currentcostprice * currentqty)/ sum(currentqty) , " + acctSchema.GetCostingPrecision() + @") FROM M_CostQueue WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
+                                //          " AND M_Product_ID = " + product.GetM_Product_ID() + "  AND M_CostElement_ID = " +
+                                //          " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'L' AND AD_Client_ID = " + AD_Client_ID + ") " +
+                                //          " AND AD_Client_ID = " + AD_Client_ID;
+                                priceLifo = GetLifoAndFifoCurrentCostFromCostQueue(AD_Client_ID, 0, product.GetM_Product_ID(), 0, acctSchema, 0, false, cd.Get_Trx());
+                            }
+                            else if (cl == MProductCategory.COSTINGLEVEL_Organization)
+                            {
+                                if (windowName == "Inventory Move")
+                                {
+                                    //sql = "SELECT ROUND(sum(currentcostprice * currentqty)/ sum(currentqty) , " + acctSchema.GetCostingPrecision() + @") FROM M_CostQueue WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
+                                    //         " AND M_Product_ID = " + product.GetM_Product_ID() + " AND M_CostElement_ID = " +
+                                    //         " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'L' AND AD_Client_ID = " + AD_Client_ID + ") " +
+                                    //         " AND AD_Client_ID = " + AD_Client_ID + " AND AD_Org_ID = " + movementline.GetAD_Org_ID();
+                                    priceLifo = GetLifoAndFifoCurrentCostFromCostQueue(AD_Client_ID, movementline.GetAD_Org_ID(), product.GetM_Product_ID(), 0, acctSchema, 0, false, cd.Get_Trx());
+                                }
+                                else
+                                {
+                                    //sql = "SELECT ROUND(sum(currentcostprice * currentqty)/ sum(currentqty) , " + acctSchema.GetCostingPrecision() + @") FROM M_CostQueue WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
+                                    //          " AND M_Product_ID = " + product.GetM_Product_ID() + " AND M_CostElement_ID = " +
+                                    //          " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'L' AND AD_Client_ID = " + AD_Client_ID + ") " +
+                                    //          " AND AD_Client_ID = " + AD_Client_ID + " AND AD_Org_ID = " + AD_Org_ID;
+                                    priceLifo = GetLifoAndFifoCurrentCostFromCostQueue(AD_Client_ID, AD_Org_ID, product.GetM_Product_ID(), 0, acctSchema, 0, false, cd.Get_Trx());
+                                }
+                            }
+                            else if (cl == MProductCategory.COSTINGLEVEL_OrgPlusBatch || cl == MProductCategory.COSTINGLEVEL_Warehouse || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
+                            {
+                                if (windowName == "Inventory Move")
+                                {
+                                    //sql = "SELECT ROUND(sum(currentcostprice * currentqty)/ sum(currentqty) , " + acctSchema.GetCostingPrecision() + @") FROM M_CostQueue WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
+                                    //         " AND M_Product_ID = " + product.GetM_Product_ID() + " AND NVL(M_AttributeSetInstance_ID , 0) = " + (cl == MProductCategory.COSTINGLEVEL_Warehouse ? 0 : M_ASI_ID) + " AND M_CostElement_ID = " +
+                                    //         " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'L' AND AD_Client_ID = " + AD_Client_ID + ") " +
+                                    //         " AND AD_Client_ID = " + AD_Client_ID + " AND AD_Org_ID = " + movementline.GetAD_Org_ID();
+                                    //if (cl == MProductCategory.COSTINGLEVEL_Warehouse || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
+                                    //{
+                                    //    sql += " AND M_Warehouse_ID = " + M_SourceWarehouse_ID;// cd.GetM_Warehouse_ID();
+                                    //}
+                                    priceLifo = GetLifoAndFifoCurrentCostFromCostQueue(AD_Client_ID, movementline.GetAD_Org_ID(),
+                                      product.GetM_Product_ID(), (cl == MProductCategory.COSTINGLEVEL_Warehouse ? 0 : M_ASI_ID), acctSchema,
+                                      ((cl == MProductCategory.COSTINGLEVEL_Warehouse || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch) ? M_SourceWarehouse_ID : 0), false, cd.Get_Trx());
+                                }
+                                else
+                                {
+                                    //sql = "SELECT ROUND(sum(currentcostprice * currentqty)/ sum(currentqty) , " + acctSchema.GetCostingPrecision() + @") FROM M_CostQueue WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() +
+                                    //          " AND M_Product_ID = " + product.GetM_Product_ID() + " AND NVL(M_AttributeSetInstance_ID , 0) = " + (cl == MProductCategory.COSTINGLEVEL_Warehouse ? 0 : M_ASI_ID) + " AND M_CostElement_ID = " +
+                                    //          " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'L' AND AD_Client_ID = " + AD_Client_ID + ") " +
+                                    //          " AND AD_Client_ID = " + AD_Client_ID + " AND AD_Org_ID = " + AD_Org_ID;
+                                    //if (cl == MProductCategory.COSTINGLEVEL_Warehouse || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
+                                    //{
+                                    //    sql += " AND M_Warehouse_ID = " + cd.GetM_Warehouse_ID();
+                                    //}
+                                    priceLifo = GetLifoAndFifoCurrentCostFromCostQueue(AD_Client_ID, AD_Org_ID,
+                                      product.GetM_Product_ID(), (cl == MProductCategory.COSTINGLEVEL_Warehouse ? 0 : M_ASI_ID), acctSchema,
+                                      ((cl == MProductCategory.COSTINGLEVEL_Warehouse || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch) ? cd.GetM_Warehouse_ID() : 0), false, cd.Get_Trx());
+                                }
+                            }
+                            //priceLifo = Util.GetValueOfDecimal(DB.ExecuteScalar(sql));
+                            priceLifo = Decimal.Round(priceLifo, acctSchema.GetCostingPrecision());
+                        }
+                        #endregion
+
+                        #endregion
+                    }
                 }
             }
             catch (Exception ex)
@@ -5641,12 +6120,24 @@ namespace VAdvantage.Model
                     " ( SELECT MMPolicy FROM M_Product_Category WHERE IsActive = 'Y' AND M_Product_Category_ID = " +
                     " (SELECT M_Product_Category_ID FROM M_Product WHERE IsActive = 'Y' AND M_Product_ID = " + product.GetM_Product_ID() + " )) AND AD_Client_ID = " + AD_Client_ID;
                 M_CostElement_ID = (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null)));
+                if (M_CostElement_ID == 0)
+                {
+                    _log.Info("Cost Element missing");
+                    return false;
+                }
                 costQueue.SetM_CostElement_ID(M_CostElement_ID);
                 costQueue.SetM_AttributeSetInstance_ID(M_ASI_ID);
                 costQueue.SetM_Warehouse_ID(cd.GetM_Warehouse_ID());
                 costQueue.SetCurrentQty(Qty);
+                costQueue.SetActualQty(Qty);
                 // change 2-5-2016
-                if (policy == "F" && priceFifo > 0)
+                if (Price != 0)
+                {
+                    ce = MCostElement.Get(ctx, M_CostElement_ID);
+                    amtWithSurcharge = Decimal.Add(Price, Decimal.Round(Decimal.Divide(Decimal.Multiply(Price, ce.GetSurchargePercentage()), 100), acctSchema.GetCostingPrecision()));
+                    costQueue.SetCurrentCostPrice(amtWithSurcharge);
+                }
+                else if (policy == "F" && priceFifo > 0)
                 {
                     costQueue.SetCurrentCostPrice(priceFifo);
                 }
@@ -5654,22 +6145,23 @@ namespace VAdvantage.Model
                 {
                     costQueue.SetCurrentCostPrice(priceLifo);
                 }
-                else
-                {
-                    ce = MCostElement.Get(ctx, M_CostElement_ID);
-                    amtWithSurcharge = Decimal.Add(Price, Decimal.Round(Decimal.Divide(Decimal.Multiply(Price, ce.GetSurchargePercentage()), 100), acctSchema.GetCostingPrecision()));
-                    costQueue.SetCurrentCostPrice(amtWithSurcharge);
-                }
+
                 //end
                 costQueue.SetQueueDate(System.DateTime.Now.ToLocalTime());
                 if (!costQueue.Save())
                 {
                     ValueNamePair pp = VLogger.RetrieveError();
-                    _log.Info("Cost Queue not saved for  <===> " + product.GetM_Product_ID() + " Error Type is : " + pp.GetName());
+                    _log.Info("Cost Queue not saved for  <===> " + product.GetM_Product_ID() + " Error Type is : " + (pp != null ? pp.GetName() : ""));
                     return false;
                 }
                 else
                 {
+                    // Create Cost Queue Transactional Record
+                    if (!MCostQueueTransaction.CreateCostQueueTransaction(ctx, AD_Client_ID, AD_Org_ID, costQueue.GetM_CostQueue_ID(), cd, Qty))
+                    {
+                        return false;
+                    }
+
                     costQueueIds += costQueue.GetM_CostQueue_ID();
                     tempCostDetail = new X_T_Temp_CostDetail(ctx, 0, null);
                     tempCostDetail.SetAD_Client_ID(AD_Client_ID);
@@ -5692,10 +6184,14 @@ namespace VAdvantage.Model
                     tempCostDetail.SetM_Product_ID(product.GetM_Product_ID());
                     tempCostDetail.SetM_AttributeSetInstance_ID(M_ASI_ID);
                     tempCostDetail.SetM_Warehouse_ID(cd.GetM_Warehouse_ID());
-                    tempCostDetail.Set_Value("VAFAM_AssetDisposal_ID",cd.Get_Value("VAFAM_AssetDisposal_ID"));
+                    tempCostDetail.Set_Value("VAFAM_AssetDisposal_ID", cd.Get_Value("VAFAM_AssetDisposal_ID"));
 
                     // change 2-5-2016
-                    if (policy == "F" && priceFifo > 0)
+                    if (amtWithSurcharge != 0)
+                    {
+                        tempCostDetail.SetAmt(amtWithSurcharge);
+                    }
+                    else if (policy == "F" && priceFifo > 0)
                     {
                         policy = "L";
                         tempCostDetail.SetAmt(priceFifo);
@@ -5705,10 +6201,7 @@ namespace VAdvantage.Model
                         policy = "F";
                         tempCostDetail.SetAmt(priceLifo);
                     }
-                    else
-                    {
-                        tempCostDetail.SetAmt(amtWithSurcharge);
-                    }
+
                     //end
                     //tempCostDetail.SetC_Currency_ID(acctSchema.GetC_Currency_ID());
                     tempCostDetail.Save();
@@ -5734,12 +6227,24 @@ namespace VAdvantage.Model
                 costQueue.SetM_CostType_ID(acctSchema.GetM_CostType_ID());
                 costQueue.SetM_Product_ID(product.GetM_Product_ID());
                 M_CostElement_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                if (M_CostElement_ID == 0)
+                {
+                    _log.Info("Cost Element missing");
+                    return false;
+                }
                 costQueue.SetM_CostElement_ID(M_CostElement_ID);
                 costQueue.SetM_AttributeSetInstance_ID(M_ASI_ID);
                 costQueue.SetM_Warehouse_ID(cd.GetM_Warehouse_ID());
                 costQueue.SetCurrentQty(Qty);
+                costQueue.SetActualQty(Qty);
                 // change 2-5-2016
-                if (policy == "F" && priceFifo > 0)
+                if (Price != 0)
+                {
+                    ce = MCostElement.Get(ctx, M_CostElement_ID);
+                    amtWithSurcharge = Decimal.Add(Price, Decimal.Round(Decimal.Divide(Decimal.Multiply(Price, ce.GetSurchargePercentage()), 100), acctSchema.GetCostingPrecision()));
+                    costQueue.SetCurrentCostPrice(amtWithSurcharge);
+                }
+                else if (policy == "F" && priceFifo > 0)
                 {
                     costQueue.SetCurrentCostPrice(priceFifo);
                 }
@@ -5747,13 +6252,7 @@ namespace VAdvantage.Model
                 {
                     costQueue.SetCurrentCostPrice(priceLifo);
                 }
-                else
-                {
-                    ce = MCostElement.Get(ctx, M_CostElement_ID);
-                    amtWithSurcharge = Decimal.Add(Price, Decimal.Round(Decimal.Divide(Decimal.Multiply(Price, ce.GetSurchargePercentage()), 100), acctSchema.GetCostingPrecision()));
-                    costQueue.SetCurrentCostPrice(amtWithSurcharge);
-                    //costQueue.SetCurrentCostPrice(Price);
-                }
+
                 //end
                 costQueue.SetQueueDate(System.DateTime.Now.ToLocalTime());
                 if (!costQueue.Save())
@@ -5762,11 +6261,17 @@ namespace VAdvantage.Model
                     if (queueRecordId > 0)
                         DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID = " + queueRecordId, null, trxName);
                     ValueNamePair pp = VLogger.RetrieveError();
-                    _log.Info("Cost Queue not saved for  <===> " + product.GetM_Product_ID() + " Error Type is : " + pp.GetName());
+                    _log.Info("Cost Queue not saved for  <===> " + product.GetM_Product_ID() + " Error Type is : " + (pp != null ? pp.GetName() : ""));
                     return false;
                 }
                 else
                 {
+                    // Create Cost Queue Transactional Record
+                    if (!MCostQueueTransaction.CreateCostQueueTransaction(ctx, AD_Client_ID, AD_Org_ID, costQueue.GetM_CostQueue_ID(), cd, Qty))
+                    {
+                        return false;
+                    }
+
                     costQueueIds += " , " + costQueue.GetM_CostQueue_ID();
                     tempCostDetail = new X_T_Temp_CostDetail(ctx, 0, null);
                     tempCostDetail.SetAD_Client_ID(AD_Client_ID);
@@ -5790,7 +6295,11 @@ namespace VAdvantage.Model
                     tempCostDetail.SetM_AttributeSetInstance_ID(M_ASI_ID);
                     tempCostDetail.SetM_Warehouse_ID(cd.GetM_Warehouse_ID());
                     // change 2-5-2016
-                    if (policy == "F" && priceFifo > 0)
+                    if (amtWithSurcharge != 0)
+                    {
+                        tempCostDetail.SetAmt(amtWithSurcharge);
+                    }
+                    else if (policy == "F" && priceFifo > 0)
                     {
                         tempCostDetail.SetAmt(priceFifo);
                     }
@@ -5798,11 +6307,7 @@ namespace VAdvantage.Model
                     {
                         tempCostDetail.SetAmt(priceLifo);
                     }
-                    else
-                    {
-                        tempCostDetail.SetAmt(amtWithSurcharge);
-                        //tempCostDetail.SetAmt(Price);
-                    }
+
                     //end
                     //tempCostDetail.SetC_Currency_ID(acctSchema.GetC_Currency_ID());
                     tempCostDetail.Save();
@@ -5813,7 +6318,8 @@ namespace VAdvantage.Model
             catch (Exception ex)
             {
                 ValueNamePair pp = VLogger.RetrieveError();
-                _log.Info("Error occured Cost Queue not saved. Error Value :  " + pp.GetValue() + " AND Error Name : " + pp.GetName() +
+                _log.Info("Error occured Cost Queue not saved. Error Value :  " + (pp != null ? pp.GetValue() : "")
+                    + " AND Error Name : " + (pp != null ? pp.GetName() : "") +
                            " And Exception message : " + ex.Message.ToString());
                 return false;
             }
@@ -5881,6 +6387,12 @@ namespace VAdvantage.Model
                 }
                 else
                 {
+                    // Create Cost Queue Transactional Record
+                    //if (!MCostQueueTransaction.CreateCostQueueTransaction(ctx, AD_Client_ID, AD_Org_ID, costQueue.GetM_CostQueue_ID(), cd, Qty))
+                    //{
+                    //    return false;
+                    //}
+
                     tempCostDetail = new X_T_Temp_CostDetail(ctx, 0, null);
                     tempCostDetail.SetAD_Client_ID(AD_Client_ID);
                     tempCostDetail.SetAD_Org_ID(AD_Org_ID);
@@ -5964,9 +6476,10 @@ namespace VAdvantage.Model
         }
 
         private static void updateCostQueue(MProduct product, int M_ASI_ID, MAcctSchema mas,
-         int Org_ID, MCostElement ce, decimal movementQty, int M_Warehouse_ID = 0)
+         int Org_ID, MCostElement ce, decimal movementQty, int M_Warehouse_ID = 0, MCostDetail cd = null)
         {
             Decimal qty = movementQty;
+            Decimal QueueQtyAffected = 0;
             #region Org Specific
 
             // get Costing level
@@ -5996,20 +6509,40 @@ namespace VAdvantage.Model
                     {
                         value = false;
                     }
+                    QueueQtyAffected = queue.GetCurrentQty();
                     qty = MCostQueue.Quantity(queue.GetCurrentQty(), qty);
                     if (qty <= 0)
                     {
-                        queue.Delete(false);
+                        //queue.Delete(false);
+                        queue.SetCurrentQty(0);
+                        if (!queue.Save())
+                        {
+                            ValueNamePair pp = VLogger.RetrieveError();
+                            _log.Severe("Cost Queue not updated as current qty 0, by updateCostQueue for product  <===> " + product.GetM_Product_ID() + " Error Type is : " + (pp != null ? pp.GetName() : ""));
+                        }
+                        else if (cd != null && QueueQtyAffected != 0)
+                        {
+                            // Create Cost Queue Transactional Record
+                            MCostQueueTransaction.CreateCostQueueTransaction(cd.GetCtx(), queue.GetAD_Client_ID(), queue.GetAD_Org_ID(), queue.GetM_CostQueue_ID(), cd, Decimal.Negate(QueueQtyAffected));
+                        }
                         qty = Decimal.Negate(qty);
                     }
                     else
                     {
+                        // affected qty which is to be reduce from cost queue
+                        QueueQtyAffected -= qty;
                         queue.SetCurrentQty(qty);
                         qty = 0;
                         if (!queue.Save())
                         {
                             ValueNamePair pp = VLogger.RetrieveError();
-                            _log.Severe("Cost Queue not updated by updateCostQueue for product  <===> " + product.GetM_Product_ID() + " Error Type is : " + pp.GetName());
+                            _log.Severe("Cost Queue not updated by updateCostQueue for product  <===> " + product.GetM_Product_ID() + " Error Type is : " + (pp != null ? pp.GetName() : ""));
+                        }
+                        else if (cd != null && QueueQtyAffected != 0)
+                        {
+                            // Create Cost Queue Transactional Record
+                            MCostQueueTransaction.CreateCostQueueTransaction(cd.GetCtx(), queue.GetAD_Client_ID(), queue.GetAD_Org_ID(), queue.GetM_CostQueue_ID(), cd, Decimal.Negate(QueueQtyAffected));
+
                         }
                     }
                     if (value)
@@ -6028,6 +6561,226 @@ namespace VAdvantage.Model
             return quantity;
         }
 
+        /// <summary>
+        /// This function is used to add the qty on respective cost queue reference against which we reduce the stock 
+        /// </summary>
+        /// <param name="cd">cost detail</param>
+        /// <param name="windowName">window name</param>
+        /// <param name="costElement">cost element</param>
+        /// <param name="Qty">qty to be added</param>
+        /// <param name="IsReversedDocument">Is Reversal Document</param>
+        /// <param name="M_Warehouse_ID">Warehouse ID</param>
+        /// <returns>True when success</returns>
+        public static bool ReturnStockReAssignedToCostQueue(MCostDetail cd, String windowName, MCostElement costElement, Decimal Qty, bool IsReversedDocument, int M_Warehouse_ID, out bool backwardCompatabilitySupport)
+        {
+            String sql = "";
+            backwardCompatabilitySupport = false;
+            sql = @"SELECT  M_CostQueueTransaction.M_CostQueueTransaction_ID, M_CostQueue.M_CostQueue_ID, M_CostQueueTransaction.MovementQty, M_CostQueue.AD_Org_ID
+                            FROM M_CostQueue INNER JOIN M_CostQueueTransaction
+                            ON M_CostQueue.M_CostQueue_ID = m_costQueuetransaction.M_CostQueue_ID
+                            INNER JOIN M_CostElement ON M_CostQueue.M_CostElement_ID = M_CostElement.M_CostElement_ID
+                            WHERE  M_CostQueueTransaction.MovementQty <> 0 AND M_CostQueue.M_CostElement_ID = " + costElement.GetM_CostElement_ID() + @"
+                            AND M_CostQueue.C_ACCTSCHEMA_ID = " + cd.GetC_AcctSchema_ID();
+
+            if (windowName.Equals("Customer Return") ||
+                (windowName.Equals("Return To Vendor") && cd.GetC_OrderLine_ID() > 0 && !IsReversedDocument))
+            {
+                // get reference of Orignal Document
+                sql += @" AND M_InoutLine_ID = (SELECT NVL(C_OrderLine.Orig_InOutLine_ID, 0) FROM M_InoutLine 
+                                INNER JOIN C_OrderLine ON M_InoutLine.C_OrderLine_ID = C_OrderLine.C_OrderLine_ID 
+                        WHERE  M_InoutLine.M_InoutLine_ID = " + cd.GetM_InOutLine_ID() + ")";
+            }
+            else if (windowName.Equals("Return To Vendor") && (cd.GetC_OrderLine_ID() == 0 || IsReversedDocument))
+            {
+                // get reference of Orignal Document
+                sql += @" AND M_InoutLine_ID = (SELECT NVL(M_InoutLine.Reversaldoc_ID, 0) FROM M_InoutLine 
+                          WHERE M_InoutLine.M_InoutLine_ID = " + cd.GetM_InOutLine_ID() + ")";
+            }
+            else if (windowName.Equals("Internal Use Inventory"))
+            {
+                sql += @" AND M_InventoryLine_ID = (SELECT NVL(M_InventoryLine.Reversaldoc_ID, 0) FROM M_InventoryLine  
+                        WHERE  M_InventoryLine.M_InventoryLine_ID = " + cd.GetM_InventoryLine_ID() + ")";
+            }
+            else if (windowName.Equals("AssetDisposal"))
+            {
+                sql += @" AND VAFAM_AssetDisposal_ID = (SELECT NVL(VAFAM_AssetDisposal.Reversaldoc_ID, 0) FROM VAFAM_AssetDisposal  
+                        WHERE  VAFAM_AssetDisposal.VAFAM_AssetDisposal_ID = " + cd.Get_ValueAsInt("VAFAM_AssetDisposal_ID") + ")";
+            }
+            else if (windowName.Equals("Material Receipt") || windowName.Equals("Shipment"))
+            {
+                sql += @" AND M_InoutLine_ID = (SELECT NVL(M_InoutLine.Reversaldoc_ID, " + cd.GetM_InOutLine_ID() + @") FROM M_InoutLine 
+                          WHERE M_InoutLine.M_InoutLine_ID = " + cd.GetM_InOutLine_ID() + ")";
+            }
+            else if (windowName.Equals("Inventory Move"))
+            {
+                sql += @" AND M_CostQueue.M_Warehouse_ID = " + M_Warehouse_ID + @" AND M_CostQueueTransaction.M_MovementLine_ID = 
+                          (SELECT NVL(M_MovementLine.Reversaldoc_ID, " + cd.GetM_MovementLine_ID() + @") FROM M_MovementLine 
+                          WHERE M_MovementLine.M_MovementLine_ID = " + cd.GetM_MovementLine_ID() + ")";
+            }
+            else if (windowName.Equals("Production Execution"))
+            {
+                sql += @" AND VAMFG_M_WrkOdrTrnsctionLine_ID = (SELECT COALESCE(VAMFG_M_WrkOdrTrnsctionLine.Reversaldoc_ID ,
+                            NVL(VAMFG_M_WrkOdrTrnsctionLine.VAMFG_OrigWrkOdrTrxLine_ID_1, 0)) FROM VAMFG_M_WrkOdrTrnsctionLine 
+                          WHERE VAMFG_M_WrkOdrTrnsctionLine.VAMFG_M_WrkOdrTrnsctionLine_ID = " + cd.GetVAMFG_M_WrkOdrTrnsctionLine_ID() + ")";
+            }
+
+            sql += @" ORDER BY CASE WHEN M_CostElement.CostingMethod = 'F' THEN M_CostQueueTransaction.M_CostQueueTransaction_ID END Desc,
+                               CASE WHEN M_CostElement.CostingMethod = 'L' THEN M_CostQueueTransaction.M_CostQueueTransaction_ID END ASC";
+            DataSet dsCostQueue = DB.ExecuteDataset(sql, null, cd.Get_Trx());
+            if (dsCostQueue != null && dsCostQueue.Tables.Count > 0 && dsCostQueue.Tables[0].Rows.Count > 0)
+            {
+                for (int i = 0; i < dsCostQueue.Tables[0].Rows.Count; i++)
+                {
+                    // when qty on Queue Transaction is greaterthan or Equal to 
+                    if (Math.Abs(Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["MovementQty"])) >= Qty)
+                    {
+                        DB.ExecuteQuery("UPDATE M_CostQueue SET CurrentQty = CurrentQty + " + Qty +
+                            @" WHERE M_CostQueue_ID = " + Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["M_CostQueue_ID"]), null, cd.Get_Trx());
+
+                        // Create Cost Queue Transactional Record
+                        if (!MCostQueueTransaction.CreateCostQueueTransaction(cd.GetCtx(), cd.GetAD_Client_ID(),
+                            Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["AD_Org_ID"]), Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["M_CostQueue_ID"]), cd, Qty))
+                        {
+                            return false;
+                        }
+                        break;
+                    }
+                    // when qty on Queue Transaction is less than 
+                    else if (Math.Abs(Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["MovementQty"])) < Qty)
+                    {
+                        DB.ExecuteQuery("UPDATE M_CostQueue SET CurrentQty = CurrentQty + " + Math.Abs(Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["MovementQty"])) +
+                            @" WHERE M_CostQueue_ID = " + Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["M_CostQueue_ID"]), null, cd.Get_Trx());
+                        Qty -= Math.Abs(Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["MovementQty"]));
+
+                        // Create Cost Queue Transactional Record
+                        if (!MCostQueueTransaction.CreateCostQueueTransaction(cd.GetCtx(), cd.GetAD_Client_ID(),
+                            Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["AD_Org_ID"]), Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["M_CostQueue_ID"]), cd,
+                            Math.Abs(Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["MovementQty"]))))
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // TO-DO when return orignal records not found
+                _log.Info("Costing Engine: Record not found for ReAssigned Stock -> " + sql);
+                backwardCompatabilitySupport = true;
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// This function is reduce the stock from cost queue against Orginal transaction
+        /// </summary>
+        /// <param name="cd">Cost Detail</param>
+        /// <param name="windowName">window Name</param>
+        /// <param name="costElement">cost Element</param>
+        /// <param name="Qty">qty to be reduced</param>
+        /// <param name="IsReversedDocument">Is Reversed Document or not</param>
+        /// <param name="M_Warehouse_ID">Warehouse Id</param>
+        /// <returns>true when success</returns>
+        public static bool ReturnStockReduceFromCostQueue(MCostDetail cd, String windowName, MCostElement costElement, Decimal Qty, bool IsReversedDocument, int M_Warehouse_ID, out bool backwardCompatabilitySupport)
+        {
+            String sql = "";
+            backwardCompatabilitySupport = false;
+            String selectStatement = @"SELECT  M_CostQueueTransaction.M_CostQueueTransaction_ID, M_CostQueue.M_CostQueue_ID, M_CostQueueTransaction.MovementQty,
+                            M_CostQueue.CurrentQty, M_CostQueue.AD_Org_ID ";
+
+            sql = @" FROM M_CostQueue INNER JOIN M_CostQueueTransaction
+                            ON M_CostQueue.M_CostQueue_ID = m_costQueuetransaction.M_CostQueue_ID
+                            INNER JOIN M_CostElement ON M_CostQueue.M_CostElement_ID = M_CostElement.M_CostElement_ID
+                            WHERE  M_CostQueueTransaction.MovementQty <> 0 AND M_CostQueue.M_CostElement_ID = " + costElement.GetM_CostElement_ID() + @"
+                            AND M_CostQueue.C_ACCTSCHEMA_ID = " + cd.GetC_AcctSchema_ID();
+
+            if (windowName.Equals("Customer Return") ||
+                windowName.Equals("Material Receipt") ||
+                windowName.Equals("Shipment") ||
+                (windowName.Equals("Return To Vendor") && (cd.GetC_OrderLine_ID() == 0 || IsReversedDocument)))
+            {
+                sql += @" AND M_InoutLine_ID = (SELECT NVL(M_InoutLine.Reversaldoc_ID, " + cd.GetM_InOutLine_ID() + @") FROM M_InoutLine 
+                          WHERE M_InoutLine.M_InoutLine_ID = " + cd.GetM_InOutLine_ID() + ")";
+            }
+            else if (windowName.Equals("Return To Vendor") && cd.GetC_OrderLine_ID() > 0 && !IsReversedDocument)
+            {
+                // get reference of Orignal Document
+                sql += @" AND M_InoutLine_ID = (SELECT NVL(C_OrderLine.Orig_InOutLine_ID, 0) FROM M_InoutLine 
+                                INNER JOIN C_OrderLine ON M_InoutLine.C_OrderLine_ID = C_OrderLine.C_OrderLine_ID 
+                        WHERE  M_InoutLine.M_InoutLine_ID = " + cd.GetM_InOutLine_ID() + ")";
+            }
+            else if (windowName.Equals("Inventory Move"))
+            {
+                sql += @" AND M_CostQueue.M_Warehouse_ID = " + M_Warehouse_ID + @" AND M_CostQueueTransaction.M_MovementLine_ID = 
+                          (SELECT NVL(M_MovementLine.Reversaldoc_ID, " + cd.GetM_MovementLine_ID() + @") FROM M_MovementLine 
+                          WHERE M_MovementLine.M_MovementLine_ID = " + cd.GetM_MovementLine_ID() + ")";
+            }
+            else if (windowName.Equals("Production Execution") || windowName.Equals("PE-FinishGood"))
+            {
+                sql += @" AND VAMFG_M_WrkOdrTrnsctionLine_ID = (SELECT COALESCE(VAMFG_M_WrkOdrTrnsctionLine.Reversaldoc_ID, 0) FROM VAMFG_M_WrkOdrTrnsctionLine 
+                          WHERE VAMFG_M_WrkOdrTrnsctionLine.VAMFG_M_WrkOdrTrnsctionLine_ID = " + cd.GetVAMFG_M_WrkOdrTrnsctionLine_ID() + ")";
+            }
+
+            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(M_CostQueue.M_CostQueue_ID) " + sql +
+                @" AND  M_CostQueue.CurrentQty < CASE WHEN " + Math.Abs(Qty) + " <  M_CostQueueTransaction.MovementQty THEN " + Math.Abs(Qty) +
+                " ELSE M_CostQueueTransaction.MovementQty END")) > 0)
+            {
+                _log.Info("SELECT COUNT(M_CostQueue.M_CostQueue_ID) " + sql + " AND  M_CostQueue.CurrentQty < CASE WHEN " + Math.Abs(Qty) + " <  M_CostQueueTransaction.MovementQty THEN " + Math.Abs(Qty) +
+                " ELSE M_CostQueueTransaction.MovementQty END");
+                _log.Info("Costing Engine : Current Qty is less than Movement Qty on cost Queue Transaction. window Name  = " + windowName);
+                return false;
+            }
+
+            sql += @" ORDER BY CASE WHEN M_CostElement.CostingMethod = 'F' THEN M_CostQueueTransaction.M_CostQueueTransaction_ID END Desc,
+                               CASE WHEN M_CostElement.CostingMethod = 'L' THEN M_CostQueueTransaction.M_CostQueueTransaction_ID END ASC";
+
+            DataSet dsCostQueue = DB.ExecuteDataset(selectStatement + sql, null, cd.Get_Trx());
+            if (dsCostQueue != null && dsCostQueue.Tables.Count > 0 && dsCostQueue.Tables[0].Rows.Count > 0)
+            {
+                for (int i = 0; i < dsCostQueue.Tables[0].Rows.Count; i++)
+                {
+                    // when qty on Queue Transaction is greaterthan or Equal to 
+                    if (Math.Abs(Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["MovementQty"])) >= Qty)
+                    {
+                        int no = DB.ExecuteQuery("UPDATE M_CostQueue SET CurrentQty = CurrentQty - " + Qty +
+                             @" WHERE M_CostQueue_ID = " + Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["M_CostQueue_ID"]), null, cd.Get_Trx());
+
+                        // Create Cost Queue Transactional Record
+                        if (!MCostQueueTransaction.CreateCostQueueTransaction(cd.GetCtx(), cd.GetAD_Client_ID(),
+                            Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["AD_Org_ID"]), Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["M_CostQueue_ID"]),
+                            cd, Decimal.Negate(Qty)))
+                        {
+                            return false;
+                        }
+                        break;
+                    }
+                    // when qty on Queue Transaction is less than 
+                    else if (Math.Abs(Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["MovementQty"])) < Qty)
+                    {
+                        int no = DB.ExecuteQuery("UPDATE M_CostQueue SET CurrentQty = CurrentQty - " + Math.Abs(Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["MovementQty"])) +
+                            @" WHERE M_CostQueue_ID = " + Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["M_CostQueue_ID"]), null, cd.Get_Trx());
+                        Qty -= Math.Abs(Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["MovementQty"]));
+
+                        // Create Cost Queue Transactional Record
+                        if (!MCostQueueTransaction.CreateCostQueueTransaction(cd.GetCtx(), cd.GetAD_Client_ID(),
+                            Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["AD_Org_ID"]), Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["M_CostQueue_ID"]), cd,
+                            Decimal.Negate(Math.Abs(Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["MovementQty"])))))
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // TO-DO when return orignal records not found
+                _log.Info("Costing Engine: Record not found for Reduce Stock -> " + (selectStatement + sql));
+                backwardCompatabilitySupport = true;
+                return false;
+            }
+            return true;
+        }
         //end
     }
 }

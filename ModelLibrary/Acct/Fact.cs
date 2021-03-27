@@ -377,11 +377,11 @@ namespace VAdvantage.Acct
             //  Amount
             if (Env.Signum(diff) < 0)   //  negative balance => DR
             {
-                line.SetAmtSource(_doc.GetC_Currency_ID(), Math.Abs(diff), Env.ZERO);
+                line.SetAmtSource(_doc is Doc_GLJournal ? _acctSchema.GetC_Currency_ID() : _doc.GetC_Currency_ID(), Math.Abs(diff), Env.ZERO);
             }
             else                                //  positive balance => CR
             {
-                line.SetAmtSource(_doc.GetC_Currency_ID(), Env.ZERO, diff);
+                line.SetAmtSource(_doc is Doc_GLJournal ? _acctSchema.GetC_Currency_ID() : _doc.GetC_Currency_ID(), Env.ZERO, diff);
             }
 
             //	Account
