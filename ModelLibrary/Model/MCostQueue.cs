@@ -306,7 +306,7 @@ namespace VAdvantage.Model
             if (M_Warehouse_ID != 0)
                 sql += " AND NVL(M_Warehouse_ID, 0) = " + M_Warehouse_ID;
             if (M_ASI_ID != 0)
-                sql += " AND M_AttributeSetInstance_ID=@asi";
+                sql += " AND NVL(M_AttributeSetInstance_ID, 0)=@asi";
             sql += " AND CurrentQty<>0 ";
             sql += "ORDER BY queuedate ";
             if (!ce.IsFifo())
@@ -392,7 +392,7 @@ namespace VAdvantage.Model
             if (M_Warehouse_ID != 0)
                 sql.Append(" AND NVL(M_Warehouse_ID, 0) = " + M_Warehouse_ID);
             if (M_ASI_ID != 0)
-                sql.Append(" AND M_AttributeSetInstance_ID=@asi");
+                sql.Append(" AND NVL(M_AttributeSetInstance_ID, 0)=@asi");
             sql.Append(" AND CurrentQty<>0 ");
             sql.Append("ORDER BY queuedate ");
             if (!isFifo)
@@ -511,6 +511,7 @@ namespace VAdvantage.Model
             int SourceM_Warehouse_Id = 0; // is used to manage costing at warehouse level during Inventory Move
             MLocator loc = null; // is used to get warehouse id to manager costing levelev - Warehouse + Batch 
             String costLevel = null; // is used to check costing level binded for calculation of costing
+            bool backwardCompatabilitySupport = false;
             try
             {
                 if (product != null)
@@ -2743,7 +2744,7 @@ namespace VAdvantage.Model
                                      " (SELECT M_Product_Category_ID FROM M_Product WHERE IsActive = 'Y' AND M_Product_ID = " + product.GetM_Product_ID() + " )) AND AD_Client_ID = " + AD_Client_ID);
                             costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
                             costElement = new MCostElement(ctx, costingElementId, null);
-
+                        backwardInOut:
                             if (windowName == "Physical Inventory" || windowName == "Internal Use Inventory")
                             {
                                 #region Phy. Inventory / Internal Use Inventory
@@ -2751,7 +2752,12 @@ namespace VAdvantage.Model
                                 {
                                     if (inventoryLine.GetReversalDoc_ID() > 0)
                                     {
-                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID());
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                        if (backwardCompatabilitySupport)
+                                        {
+                                            result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, inventoryLine.GetAD_Org_ID(), Price / Qty, Qty, windowName,
+                                                  inventoryLine, inoutline, movementline, invoiceline, cd, trxName, out costQueuseIds);
+                                        }
                                     }
                                     else
                                     {
@@ -2773,7 +2779,7 @@ namespace VAdvantage.Model
                                         return false;
                                     }
 
-                                    if (inventoryLine.GetReversalDoc_ID() > 0)
+                                    if (inventoryLine.GetReversalDoc_ID() > 0 && !backwardCompatabilitySupport)
                                     {
                                         //2nd either for Fifo or lifo opposite of 1st entry
                                         query.Clear();
@@ -2783,7 +2789,7 @@ namespace VAdvantage.Model
                                         costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
                                         costElement = new MCostElement(ctx, costingElementId, null);
 
-                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID());
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
                                         if (!result)
                                         {
                                             if (optionalstr != "window")
@@ -2795,7 +2801,7 @@ namespace VAdvantage.Model
                                                 DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
                                                 DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
                                             }
-                                            _log.Severe("Error occured during CreateCostQueue for M_Inout_ID = " + inoutline.GetM_InOutLine_ID());
+                                            _log.Severe("Error occured during CreateCostQueue for M_inventory_ID = " + inventoryLine.GetM_InventoryLine_ID());
                                             return false;
                                         }
                                     }
@@ -2830,7 +2836,12 @@ namespace VAdvantage.Model
                                 {
                                     if (po.Get_ValueAsInt("ReversalDoc_ID") > 0)
                                     {
-                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID());
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                        if (backwardCompatabilitySupport)
+                                        {
+                                            result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")), Price / Qty, Qty, windowName,
+                                             inventoryLine, inoutline, movementline, invoiceline, cd, trxName, out costQueuseIds);
+                                        }
                                     }
                                     else
                                     {
@@ -2852,7 +2863,7 @@ namespace VAdvantage.Model
                                         return false;
                                     }
 
-                                    if (po.Get_ValueAsInt("ReversalDoc_ID") > 0)
+                                    if (po.Get_ValueAsInt("ReversalDoc_ID") > 0 && !backwardCompatabilitySupport)
                                     {
                                         //2nd either for Fifo or lifo opposite of 1st entry
                                         query.Clear();
@@ -2862,7 +2873,7 @@ namespace VAdvantage.Model
                                         costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
                                         costElement = new MCostElement(ctx, costingElementId, null);
 
-                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID());
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
                                         if (!result)
                                         {
                                             if (optionalstr != "window")
@@ -2909,7 +2920,12 @@ namespace VAdvantage.Model
                                 {
                                     if (po.Get_ValueAsInt("ReversalDoc_ID") > 0 || po.Get_ValueAsInt("VAMFG_OrigWrkOdrTrxLine_ID_1") > 0)
                                     {
-                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID());
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                        if (backwardCompatabilitySupport)
+                                        {
+                                            result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")),
+                                        Price / Qty, Qty, windowName, inventoryLine, inoutline, movementline, invoiceline, cd, trxName, out costQueuseIds);
+                                        }
                                     }
                                     else
                                     {
@@ -2931,7 +2947,7 @@ namespace VAdvantage.Model
                                         return false;
                                     }
 
-                                    if (po.Get_ValueAsInt("ReversalDoc_ID") > 0 || po.Get_ValueAsInt("VAMFG_OrigWrkOdrTrxLine_ID_1") > 0)
+                                    if ((po.Get_ValueAsInt("ReversalDoc_ID") > 0 || po.Get_ValueAsInt("VAMFG_OrigWrkOdrTrxLine_ID_1") > 0) && !backwardCompatabilitySupport)
                                     {
                                         //2nd either for Fifo or lifo opposite of 1st entry
                                         query.Clear();
@@ -2941,7 +2957,7 @@ namespace VAdvantage.Model
                                         costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
                                         costElement = new MCostElement(ctx, costingElementId, null);
 
-                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID());
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
                                         if (!result)
                                         {
                                             if (optionalstr == "process")
@@ -2959,11 +2975,16 @@ namespace VAdvantage.Model
                                 }
                                 else
                                 {
+                                backwardSupportPE:
                                     //1st entry either of FIFO of LIFO 
-                                    if (po.Get_ValueAsInt("ReversalDoc_ID") > 0)
+                                    if (po.Get_ValueAsInt("ReversalDoc_ID") > 0 && !backwardCompatabilitySupport)
                                     {
                                         result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Decimal.Negate(Qty),
-                                                                                  true, cd.GetM_Warehouse_ID());
+                                                                                  true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                        if (backwardCompatabilitySupport)
+                                        {
+                                            goto backwardSupportPE;
+                                        }
                                         if (!result)
                                         {
                                             if (optionalstr != "window")
@@ -2974,7 +2995,7 @@ namespace VAdvantage.Model
                                             {
                                                 DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
                                             }
-                                            _log.Severe("Error occured during ReturnStockReduceFromCostQueue for M_Inout_ID = " + inoutline.GetM_InOutLine_ID());
+                                            _log.Severe("Error occured during ReturnStockReduceFromCostQueue for Production Execution line = " + Util.GetValueOfInt(po.Get_Value("VAMFG_M_WrkOdrTrnsctionLine_ID")));
                                             return false;
                                         }
 
@@ -2987,7 +3008,7 @@ namespace VAdvantage.Model
                                         costElement = new MCostElement(ctx, costingElementId, null);
 
                                         result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Decimal.Negate(Qty),
-                                                                                   true, cd.GetM_Warehouse_ID());
+                                                                                   true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
                                         if (!result)
                                         {
                                             if (optionalstr != "window")
@@ -2998,7 +3019,7 @@ namespace VAdvantage.Model
                                             {
                                                 DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
                                             }
-                                            _log.Severe("Error occured during ReturnStockReduceFromCostQueue for M_Inout_ID = " + inoutline.GetM_InOutLine_ID());
+                                            _log.Severe("Error occured during ReturnStockReduceFromCostQueue for Production Execution line = " + Util.GetValueOfInt(po.Get_Value("VAMFG_M_WrkOdrTrnsctionLine_ID")));
                                             return false;
                                         }
                                     }
@@ -3026,9 +3047,9 @@ namespace VAdvantage.Model
                                 #endregion
                             }
 
-                            else if (inoutline != null && inoutline.GetReversalDoc_ID() == 0 &&
+                            else if (inoutline != null && ((inoutline.GetReversalDoc_ID() == 0 &&
                                 ((windowName.Equals("Material Receipt") || windowName.Equals("Shipment")) ||
-                                (inoutline.GetC_OrderLine_ID() == 0 && windowName.Equals("Return To Vendor")))) // windowName == "Customer Return"
+                                (inoutline.GetC_OrderLine_ID() == 0 && windowName.Equals("Return To Vendor")))) || backwardCompatabilitySupport)) // windowName == "Customer Return"
                             {
                                 #region Sales / Purchase / Return
                                 if (Qty > 0)
@@ -3073,16 +3094,20 @@ namespace VAdvantage.Model
                                 #endregion
                             }
 
-                            else if (windowName == "Customer Return" ||
+                            else if (!backwardCompatabilitySupport && (windowName == "Customer Return" ||
                                 windowName == "Return To Vendor" ||
                                 (inoutline != null && inoutline.GetReversalDoc_ID() != 0 &&
-                                (windowName.Equals("Material Receipt") || windowName.Equals("Shipment"))))
+                                (windowName.Equals("Material Receipt") || windowName.Equals("Shipment")))))
                             {
                                 #region  Returns
                                 if (Qty > 0)
                                 {
                                     result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty,
-                                                                                        inoutline.GetReversalDoc_ID() != 0 ? true : false, cd.GetM_Warehouse_ID());
+                                             inoutline.GetReversalDoc_ID() != 0 ? true : false, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                    if (backwardCompatabilitySupport)
+                                    {
+                                        goto backwardInOut;
+                                    }
                                     if (!result)
                                     {
                                         if (optionalstr != "window")
@@ -3107,7 +3132,7 @@ namespace VAdvantage.Model
                                     costElement = new MCostElement(ctx, costingElementId, null);
 
                                     result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty,
-                                                                                        inoutline.GetReversalDoc_ID() != 0 ? true : false, cd.GetM_Warehouse_ID());
+                                                                                        inoutline.GetReversalDoc_ID() != 0 ? true : false, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
                                     if (!result)
                                     {
                                         if (optionalstr != "window")
@@ -3127,7 +3152,11 @@ namespace VAdvantage.Model
                                 {
                                     //1st entry either of FIFO of LIFO 
                                     result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Decimal.Negate(Qty),
-                                                                                        inoutline.GetReversalDoc_ID() != 0 ? true : false, cd.GetM_Warehouse_ID());
+                                                                                        inoutline.GetReversalDoc_ID() != 0 ? true : false, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                    if (backwardCompatabilitySupport)
+                                    {
+                                        goto backwardInOut;
+                                    }
                                     if (!result)
                                     {
                                         if (optionalstr != "window")
@@ -3151,7 +3180,7 @@ namespace VAdvantage.Model
                                     costElement = new MCostElement(ctx, costingElementId, null);
 
                                     result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Decimal.Negate(Qty),
-                                                                                        inoutline.GetReversalDoc_ID() != 0 ? true : false, cd.GetM_Warehouse_ID());
+                                                                                        inoutline.GetReversalDoc_ID() != 0 ? true : false, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
                                     if (!result)
                                     {
                                         if (optionalstr != "window")
@@ -3176,7 +3205,13 @@ namespace VAdvantage.Model
                                 {
                                     if (movementline.GetReversalDoc_ID() > 0)
                                     {
-                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID());
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                        if (backwardCompatabilitySupport)
+                                        {
+                                            result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, AD_Org_ID, Price / Qty, Qty, windowName,
+                                             inventoryLine, inoutline, movementline, invoiceline, cd, trxName, out costQueuseIds);
+                                            backwardCompatabilitySupport = false;
+                                        }
                                     }
                                     else
                                     {
@@ -3201,7 +3236,11 @@ namespace VAdvantage.Model
                                     //1st entry either of FIFO of LIFO 
                                     if (movementline.GetReversalDoc_ID() > 0)
                                     {
-                                        result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Qty, true, SourceM_Warehouse_Id);
+                                        result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Qty, true, SourceM_Warehouse_Id, out backwardCompatabilitySupport);
+                                        if (backwardCompatabilitySupport)
+                                        {
+                                            updateCostQueue(product, M_ASI_ID, acctSchema, movementline.GetAD_Org_ID(), costElement, Qty, SourceM_Warehouse_Id, cd);
+                                        }
                                     }
                                     else
                                     {
@@ -3224,9 +3263,13 @@ namespace VAdvantage.Model
 
                                     if (movementline.GetReversalDoc_ID() > 0)
                                     {
-                                        result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Qty, true, SourceM_Warehouse_Id);
+                                        result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Qty, true, SourceM_Warehouse_Id, out backwardCompatabilitySupport);
+                                        if (backwardCompatabilitySupport)
+                                        {
+                                            updateCostQueue(product, M_ASI_ID, acctSchema, movementline.GetAD_Org_ID(), costElement, Qty, SourceM_Warehouse_Id, cd);
+                                        }
 
-                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID());
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
                                         if (!result)
                                         {
                                             if (optionalstr != "window")
@@ -3238,7 +3281,7 @@ namespace VAdvantage.Model
                                                 DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
                                                 DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
                                             }
-                                            _log.Severe("Error occured during CreateCostQueue for M_Inout_ID = " + inoutline.GetM_InOutLine_ID());
+                                            _log.Severe("Error occured during CreateCostQueue for m_MovementLime_ID = " + movementline.GetM_MovementLine_ID());
                                             return false;
                                         }
                                     }
@@ -3252,7 +3295,12 @@ namespace VAdvantage.Model
                                     // change refsrence from cd to cdSourceWarehouse -- bcz we are incresing stock in "Source Warehouse"
                                     if (movementline.GetReversalDoc_ID() > 0)
                                     {
-                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Decimal.Negate(Qty), true, cdSourceWarehouse.GetM_Warehouse_ID());
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Decimal.Negate(Qty), true, cdSourceWarehouse.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                        if (backwardCompatabilitySupport)
+                                        {
+                                            result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, movementline.GetAD_Org_ID(), Price / Qty, Decimal.Negate(Qty), windowName,
+                                           inventoryLine, inoutline, movementline, invoiceline, cdSourceWarehouse, trxName, out costQueuseIds);
+                                        }
                                     }
                                     else
                                     {
@@ -3278,7 +3326,11 @@ namespace VAdvantage.Model
                                     //1st entry either of FIFO of LIFO   
                                     if (movementline.GetReversalDoc_ID() > 0)
                                     {
-                                        result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Decimal.Negate(Qty), true, M_Warehouse_Id);
+                                        result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Decimal.Negate(Qty), true, M_Warehouse_Id, out backwardCompatabilitySupport);
+                                        if (backwardCompatabilitySupport)
+                                        {
+                                            updateCostQueue(product, M_ASI_ID, acctSchema, AD_Org_ID, costElement, Decimal.Negate(Qty), M_Warehouse_Id, cd);
+                                        }
                                     }
                                     else
                                     {
@@ -3301,9 +3353,13 @@ namespace VAdvantage.Model
 
                                     if (movementline.GetReversalDoc_ID() > 0)
                                     {
-                                        result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Decimal.Negate(Qty), true, M_Warehouse_Id);
+                                        result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Decimal.Negate(Qty), true, M_Warehouse_Id, out backwardCompatabilitySupport);
+                                        if (backwardCompatabilitySupport)
+                                        {
+                                            updateCostQueue(product, M_ASI_ID, acctSchema, AD_Org_ID, costElement, Decimal.Negate(Qty), M_Warehouse_Id, cd);
+                                        }
 
-                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Decimal.Negate(Qty), true, cdSourceWarehouse.GetM_Warehouse_ID());
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Decimal.Negate(Qty), true, cdSourceWarehouse.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
                                         if (!result)
                                         {
                                             if (optionalstr != "window")
@@ -3315,7 +3371,7 @@ namespace VAdvantage.Model
                                                 DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
                                                 DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
                                             }
-                                            _log.Severe("Error occured during CreateCostQueue for M_Inout_ID = " + inoutline.GetM_InOutLine_ID());
+                                            _log.Severe("Error occured during CreateCostQueue for M_MovementLine_ID = " + movementline.GetM_MovementLine_ID());
                                             return false;
                                         }
                                     }
@@ -6262,7 +6318,7 @@ namespace VAdvantage.Model
             catch (Exception ex)
             {
                 ValueNamePair pp = VLogger.RetrieveError();
-                _log.Info("Error occured Cost Queue not saved. Error Value :  " + (pp != null ? pp.GetValue() : "") 
+                _log.Info("Error occured Cost Queue not saved. Error Value :  " + (pp != null ? pp.GetValue() : "")
                     + " AND Error Name : " + (pp != null ? pp.GetName() : "") +
                            " And Exception message : " + ex.Message.ToString());
                 return false;
@@ -6515,9 +6571,10 @@ namespace VAdvantage.Model
         /// <param name="IsReversedDocument">Is Reversal Document</param>
         /// <param name="M_Warehouse_ID">Warehouse ID</param>
         /// <returns>True when success</returns>
-        public static bool ReturnStockReAssignedToCostQueue(MCostDetail cd, String windowName, MCostElement costElement, Decimal Qty, bool IsReversedDocument, int M_Warehouse_ID)
+        public static bool ReturnStockReAssignedToCostQueue(MCostDetail cd, String windowName, MCostElement costElement, Decimal Qty, bool IsReversedDocument, int M_Warehouse_ID, out bool backwardCompatabilitySupport)
         {
             String sql = "";
+            backwardCompatabilitySupport = false;
             sql = @"SELECT  M_CostQueueTransaction.M_CostQueueTransaction_ID, M_CostQueue.M_CostQueue_ID, M_CostQueueTransaction.MovementQty, M_CostQueue.AD_Org_ID
                             FROM M_CostQueue INNER JOIN M_CostQueueTransaction
                             ON M_CostQueue.M_CostQueue_ID = m_costQueuetransaction.M_CostQueue_ID
@@ -6609,6 +6666,7 @@ namespace VAdvantage.Model
             {
                 // TO-DO when return orignal records not found
                 _log.Info("Costing Engine: Record not found for ReAssigned Stock -> " + sql);
+                backwardCompatabilitySupport = true;
                 return false;
             }
             return true;
@@ -6624,9 +6682,10 @@ namespace VAdvantage.Model
         /// <param name="IsReversedDocument">Is Reversed Document or not</param>
         /// <param name="M_Warehouse_ID">Warehouse Id</param>
         /// <returns>true when success</returns>
-        public static bool ReturnStockReduceFromCostQueue(MCostDetail cd, String windowName, MCostElement costElement, Decimal Qty, bool IsReversedDocument, int M_Warehouse_ID)
+        public static bool ReturnStockReduceFromCostQueue(MCostDetail cd, String windowName, MCostElement costElement, Decimal Qty, bool IsReversedDocument, int M_Warehouse_ID, out bool backwardCompatabilitySupport)
         {
             String sql = "";
+            backwardCompatabilitySupport = false;
             String selectStatement = @"SELECT  M_CostQueueTransaction.M_CostQueueTransaction_ID, M_CostQueue.M_CostQueue_ID, M_CostQueueTransaction.MovementQty,
                             M_CostQueue.CurrentQty, M_CostQueue.AD_Org_ID ";
 
@@ -6717,6 +6776,7 @@ namespace VAdvantage.Model
             {
                 // TO-DO when return orignal records not found
                 _log.Info("Costing Engine: Record not found for Reduce Stock -> " + (selectStatement + sql));
+                backwardCompatabilitySupport = true;
                 return false;
             }
             return true;

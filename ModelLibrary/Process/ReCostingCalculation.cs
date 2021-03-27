@@ -280,7 +280,7 @@ namespace VAdvantage.Process
                                             AND m_product_id = VAMFG_M_WrkOdrTransaction.m_product_id) > 0 THEN 'Y'
                                       WHEN (SELECT COUNT(*) FROM m_product WHERE m_product_ID IN (" + (String.IsNullOrEmpty(productID) ? 0.ToString() : productID) + @") 
                                             AND m_product_id = VAMFG_M_WrkOdrTransaction.m_product_id) > 0 THEN 'Y' END AS issotrx ,
-                                '' AS isreturntrx  , '' AS IsInternalUse,  'VAMFG_M_WrkOdisreturntrxrTransaction'  AS TableName,
+                                '' AS isreturntrx  , '' AS IsInternalUse,  'VAMFG_M_WrkOdrTransaction'  AS TableName,
                                 docstatus, vamfg_dateacct AS DateAcct , iscostcalculated ,  isreversedcostcalculated 
                          FROM VAMFG_M_WrkOdrTransaction WHERE VAMFG_WorkOrderTxnType IN ('CI', 'CR' , 'AR' , 'AI') AND vamfg_dateacct = " + GlobalVariable.TO_DATE(minDateRecord, true) + @" 
                               AND isactive  = 'Y' AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N' ) OR (docstatus IN ('RE') AND iscostcalculated = 'Y'
@@ -296,7 +296,7 @@ namespace VAdvantage.Process
                               AND ((docstatus   IN ('CO' , 'CL') AND iscostcalculated = 'N' ) OR (docstatus IN ('RE' , 'VO') AND iscostcalculated ='Y'
                               AND ISREVERSEDCOSTCALCULATED= 'N' AND ReversalDoc_ID!= 0) )");
                     }
-                    sql.Append(@" ) t order by dateacct , created");
+                    sql.Append(@" ) t WHERE AD_Client_ID = " + GetCtx().GetAD_Client_ID() + "  order by dateacct , created");
                     dsRecord = DB.ExecuteDataset(sql.ToString(), null, Get_Trx());
 
                     // Complete Record
@@ -2341,11 +2341,11 @@ namespace VAdvantage.Process
             try
             {
                 sql.Clear();
-                sql.Append("SELECT Min(MovementDate) FROM m_Inventory WHERE isactive = 'Y' AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR (docstatus IN ('RE') AND iscostcalculated = 'Y' AND ISREVERSEDCOSTCALCULATED= 'N' AND description like '%{->%'))");
+                sql.Append("SELECT Min(MovementDate) FROM m_Inventory WHERE isactive = 'Y' AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR (docstatus IN ('RE') AND iscostcalculated = 'Y' AND ISREVERSEDCOSTCALCULATED= 'N' AND description like '%{->%')) AND AD_Client_ID = " + GetCtx().GetAD_Client_ID());
                 minDate = Util.GetValueOfDateTime(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
 
                 sql.Clear();
-                sql.Append("SELECT Min(MovementDate) FROM m_movement WHERE isactive = 'Y' AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR (docstatus IN ('RE') AND iscostcalculated = 'Y' AND ISREVERSEDCOSTCALCULATED= 'N' AND description like '%{->%'))");
+                sql.Append("SELECT Min(MovementDate) FROM m_movement WHERE isactive = 'Y' AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR (docstatus IN ('RE') AND iscostcalculated = 'Y' AND ISREVERSEDCOSTCALCULATED= 'N' AND description like '%{->%'))  AND AD_Client_ID = " + GetCtx().GetAD_Client_ID());
                 tempDate = Util.GetValueOfDateTime(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
                 if (minDate == null || (Util.GetValueOfDateTime(minDate) > Util.GetValueOfDateTime(tempDate) && tempDate != null))
                 {
@@ -2356,7 +2356,7 @@ namespace VAdvantage.Process
                 sql.Clear();
                 sql.Append(@"SELECT Min(MovementDate) FROM M_Production WHERE isactive = 'Y' AND 
                               ((PROCESSED = 'Y' AND iscostcalculated = 'N' AND IsReversed = 'N' ) OR 
-                               (PROCESSED = 'Y' AND iscostcalculated  = 'Y' AND ISREVERSEDCOSTCALCULATED= 'N' AND IsReversed = 'Y' AND Name LIKE '%{->%'))");
+                               (PROCESSED = 'Y' AND iscostcalculated  = 'Y' AND ISREVERSEDCOSTCALCULATED= 'N' AND IsReversed = 'Y' AND Name LIKE '%{->%'))  AND AD_Client_ID = " + GetCtx().GetAD_Client_ID());
                 tempDate = Util.GetValueOfDateTime(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
                 if (minDate == null || (Util.GetValueOfDateTime(minDate) > Util.GetValueOfDateTime(tempDate) && tempDate != null))
                 {
@@ -2364,7 +2364,7 @@ namespace VAdvantage.Process
                 }
 
                 sql.Clear();
-                sql.Append("SELECT Min(DateAcct) FROM m_matchinv WHERE isactive = 'Y' AND iscostcalculated = 'N'");
+                sql.Append("SELECT Min(DateAcct) FROM m_matchinv WHERE isactive = 'Y' AND iscostcalculated = 'N'  AND AD_Client_ID = " + GetCtx().GetAD_Client_ID());
                 tempDate = Util.GetValueOfDateTime(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
                 if (minDate == null || (Util.GetValueOfDateTime(minDate) > Util.GetValueOfDateTime(tempDate) && tempDate != null))
                 {
@@ -2374,7 +2374,7 @@ namespace VAdvantage.Process
                 try
                 {
                     sql.Clear();
-                    sql.Append("SELECT Min(Updated) FROM M_MatchInvCostTrack WHERE isactive = 'Y'");
+                    sql.Append("SELECT Min(Updated) FROM M_MatchInvCostTrack WHERE isactive = 'Y'  AND AD_Client_ID = " + GetCtx().GetAD_Client_ID());
                     tempDate = Util.GetValueOfDateTime(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
                     if (minDate == null || (Util.GetValueOfDateTime(minDate) > Util.GetValueOfDateTime(tempDate) && tempDate != null))
                     {
@@ -2385,7 +2385,7 @@ namespace VAdvantage.Process
                 try
                 {
                     sql.Clear();
-                    sql.Append("SELECT Min(VAFAM_trxdate) FROM VAFAM_AssetDisposal WHERE isactive = 'Y' AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR (docstatus IN ('RE') AND iscostcalculated = 'Y' AND ISREVERSEDCOSTCALCULATED= 'N'))");
+                    sql.Append("SELECT Min(VAFAM_trxdate) FROM VAFAM_AssetDisposal WHERE isactive = 'Y' AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR (docstatus IN ('RE') AND iscostcalculated = 'Y' AND ISREVERSEDCOSTCALCULATED= 'N'))  AND AD_Client_ID = " + GetCtx().GetAD_Client_ID());
                     tempDate = Util.GetValueOfDateTime(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
                     if (minDate == null || (Util.GetValueOfDateTime(minDate) > Util.GetValueOfDateTime(tempDate) && tempDate != null))
                     {
@@ -2395,7 +2395,7 @@ namespace VAdvantage.Process
                 catch { }
 
                 sql.Clear();
-                sql.Append("SELECT Min(DateAcct) FROM C_Invoice WHERE isactive = 'Y' AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR (docstatus IN ('RE') AND iscostcalculated = 'Y' AND ISREVERSEDCOSTCALCULATED= 'N' AND description like '%{->%'))");
+                sql.Append("SELECT Min(DateAcct) FROM C_Invoice WHERE isactive = 'Y' AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR (docstatus IN ('RE') AND iscostcalculated = 'Y' AND ISREVERSEDCOSTCALCULATED= 'N' AND description like '%{->%'))  AND AD_Client_ID = " + GetCtx().GetAD_Client_ID());
                 tempDate = Util.GetValueOfDateTime(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
                 if (minDate == null || (Util.GetValueOfDateTime(minDate) > Util.GetValueOfDateTime(tempDate) && tempDate != null))
                 {
@@ -2403,7 +2403,7 @@ namespace VAdvantage.Process
                 }
 
                 sql.Clear();
-                sql.Append("SELECT Min(DateAcct) FROM m_inout WHERE isactive = 'Y' AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR (docstatus IN ('RE') AND iscostcalculated = 'Y' AND ISREVERSEDCOSTCALCULATED= 'N' AND description like '%{->%'))");
+                sql.Append("SELECT Min(DateAcct) FROM m_inout WHERE isactive = 'Y' AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR (docstatus IN ('RE') AND iscostcalculated = 'Y' AND ISREVERSEDCOSTCALCULATED= 'N' AND description like '%{->%'))  AND AD_Client_ID = " + GetCtx().GetAD_Client_ID());
                 tempDate = Util.GetValueOfDateTime(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
                 if (minDate == null || (Util.GetValueOfDateTime(minDate) > Util.GetValueOfDateTime(tempDate) && tempDate != null))
                 {
@@ -2418,7 +2418,7 @@ namespace VAdvantage.Process
                         sql.Clear();
                         sql.Append(@"SELECT Min(VAMFG_DateAcct) FROM VAMFG_M_WrkOdrTransaction WHERE VAMFG_WorkOrderTxnType IN ('CI', 'CR') AND  isactive = 'Y' AND
                              ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') 
-                             OR (docstatus IN ('RE') AND iscostcalculated = 'Y' AND ISREVERSEDCOSTCALCULATED= 'N' AND VAMFG_description like '%{->%'))");
+                             OR (docstatus IN ('RE') AND iscostcalculated = 'Y' AND ISREVERSEDCOSTCALCULATED= 'N' AND VAMFG_description like '%{->%'))  AND AD_Client_ID = " + GetCtx().GetAD_Client_ID());
                         tempDate = Util.GetValueOfDateTime(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
                     }
                     catch { }
@@ -4329,7 +4329,7 @@ namespace VAdvantage.Process
                     quantity = 0;
                     quantity = Decimal.Negate(Util.GetValueOfDecimal(po_AssetDisposal.Get_Value("VAFAM_Qty")));
                     if (!MCostQueue.CreateProductCostsDetails(GetCtx(), Util.GetValueOfInt(po_AssetDisposal.Get_Value("AD_Client_ID")), Util.GetValueOfInt(po_AssetDisposal.Get_Value("AD_Org_ID")),
-                        product, Util.GetValueOfInt(po_AssetDisposal.Get_Value("GetM_AttributeSetInstance_ID")), "AssetDisposal", null, null, null, null, po_AssetDisposal, 0, quantity, Get_Trx(), out conversionNotFoundInventory))
+                        product, Util.GetValueOfInt(po_AssetDisposal.Get_Value("M_AttributeSetInstance_ID")), "AssetDisposal", null, null, null, null, po_AssetDisposal, 0, quantity, Get_Trx(), out conversionNotFoundInventory))
                     {
                         _log.Info("Cost not Calculated for Asset Dispose ID = " + VAFAM_AssetDisposal_ID);
                         ListReCalculatedRecords.Add(new ReCalculateRecord { WindowName = (int)windowName.AssetDisposal, HeaderId = VAFAM_AssetDisposal_ID, LineId = VAFAM_AssetDisposal_ID, IsReversal = false });
