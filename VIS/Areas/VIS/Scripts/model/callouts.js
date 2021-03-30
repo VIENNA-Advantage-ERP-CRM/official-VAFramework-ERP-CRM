@@ -17787,6 +17787,11 @@
                         mTab.setValue("VA077_EndDate", Dateoffset(dr["VA077_EndDate"]));
                     }
 
+                    if (Util.getValueOfBoolean(dr["VA077_LicenceTracked"]))
+                        mTab.setValue("VA077_LicenceTracked", true);
+                    else
+                        mTab.setValue("VA077_LicenceTracked", false);
+
                 }
 
             }
