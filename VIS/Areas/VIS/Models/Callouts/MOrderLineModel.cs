@@ -85,7 +85,12 @@ namespace VIS.Models
                 retDic["VA077_ServiceContract_ID"]= Util.GetValueOfString(orderline.Get_Value("VA077_ServiceContract_ID"));
                 retDic["VA077_StartDate"] = Util.GetValueOfString(orderline.Get_Value("VA077_StartDate"));
                 retDic["VA077_EndDate"] = Util.GetValueOfString(orderline.Get_Value("VA077_EndDate"));
-             }
+
+                //Get Product information
+                MProduct prod = new MProduct(ctx, orderline.GetM_Product_ID(), null);
+                retDic["VA077_LicenceTracked"] = Util.GetValueOfString(prod.Get_Value("VA077_LicenceTracked"));
+
+            }
 
             return retDic;
         }
