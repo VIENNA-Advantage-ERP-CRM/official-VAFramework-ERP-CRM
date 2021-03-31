@@ -295,6 +295,17 @@ namespace VAdvantage.Model
         public static MCostQueue[] GetQueue(MProduct product, int M_ASI_ID, MAcctSchema mas,
             int Org_ID, MCostElement ce, Trx trxName, int M_Warehouse_ID = 0)
         {
+            string costingLevel = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT 
+                        CASE WHEN M_Product_Category.CostingLevel IS NOT NULL THEN M_Product_Category.CostingLevel
+                             WHEN C_AcctSchema.CostingLevel IS NOT NULL THEN C_AcctSchema.CostingLevel END AS CostingLevel
+                        FROM M_Product
+                              INNER JOIN M_Product_Category ON M_Product_Category.M_Product_Category_ID = M_Product.M_Product_Category_ID
+                              INNER JOIN C_AcctSchema ON C_AcctSchema.C_AcctSchema_ID = " + mas.GetC_AcctSchema_ID() + @"
+                        WHERE M_Product.M_Product_ID = " + product.GetM_Product_ID()));
+            bool attributeApplicable = (costingLevel == X_C_AcctSchema.COSTINGLEVEL_BatchLot
+                                        || costingLevel == X_C_AcctSchema.COSTINGLEVEL_OrgPlusBatch
+                                        || costingLevel == X_C_AcctSchema.COSTINGLEVEL_WarehousePlusBatch);
+
             List<MCostQueue> list = new List<MCostQueue>();
             String sql = "SELECT * FROM M_CostQueue "
                 + "WHERE AD_Client_ID=@client "
@@ -305,8 +316,10 @@ namespace VAdvantage.Model
                 sql += " AND AD_Org_ID=@org";
             if (M_Warehouse_ID != 0)
                 sql += " AND NVL(M_Warehouse_ID, 0) = " + M_Warehouse_ID;
-            if (M_ASI_ID != 0)
+            if (attributeApplicable)//M_ASI_ID != 0 && 
+            {
                 sql += " AND NVL(M_AttributeSetInstance_ID, 0)=@asi";
+            }
             sql += " AND CurrentQty<>0 ";
             sql += "ORDER BY queuedate ";
             if (!ce.IsFifo())
@@ -317,11 +330,15 @@ namespace VAdvantage.Model
             try
             {
                 SqlParameter[] param = null;
-                if (M_ASI_ID != 0 && Org_ID != 0)
+                if (attributeApplicable && Org_ID != 0)
                 {
                     param = new SqlParameter[7];
                 }
-                else if (M_ASI_ID == 0 && Org_ID == 0)
+                else if (M_ASI_ID == 0 && Org_ID == 0 && attributeApplicable)
+                {
+                    param = new SqlParameter[6];
+                }
+                else if (M_ASI_ID == 0 && Org_ID == 0 && !attributeApplicable)
                 {
                     param = new SqlParameter[5];
                 }
@@ -334,7 +351,7 @@ namespace VAdvantage.Model
                 param[2] = new SqlParameter("@ct", mas.GetM_CostType_ID());
                 param[3] = new SqlParameter("@accs", mas.GetC_AcctSchema_ID());
                 param[4] = new SqlParameter("@ce", ce.GetM_CostElement_ID());
-                if (M_ASI_ID != 0 && Org_ID != 0)
+                if (attributeApplicable && Org_ID != 0)
                 {
                     param[5] = new SqlParameter("@org", Org_ID);
                     param[6] = new SqlParameter("@asi", M_ASI_ID);
@@ -343,7 +360,7 @@ namespace VAdvantage.Model
                 {
                     param[5] = new SqlParameter("@org", Org_ID);
                 }
-                else if (M_ASI_ID != 0)
+                else if (attributeApplicable)
                 {
                     param[5] = new SqlParameter("@asi", M_ASI_ID);
                 }
@@ -381,6 +398,18 @@ namespace VAdvantage.Model
         public static Decimal GetLifoAndFifoCurrentCostFromCostQueue(int AD_Client_ID, int Org_ID, int M_Product, int M_ASI_ID, MAcctSchema mas,
              int M_Warehouse_ID, bool isFifo, Trx trxName)
         {
+            // check costing is raleted to batch/lot or not
+            string costingLevel = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT 
+                        CASE WHEN M_Product_Category.CostingLevel IS NOT NULL THEN M_Product_Category.CostingLevel
+                             WHEN C_AcctSchema.CostingLevel IS NOT NULL THEN C_AcctSchema.CostingLevel END AS CostingLevel
+                        FROM M_Product
+                              INNER JOIN M_Product_Category ON M_Product_Category.M_Product_Category_ID = M_Product.M_Product_Category_ID
+                              INNER JOIN C_AcctSchema ON C_AcctSchema.C_AcctSchema_ID = " + mas.GetC_AcctSchema_ID() + @"
+                        WHERE M_Product.M_Product_ID = " + M_Product));
+            bool attributeApplicable = (costingLevel == X_C_AcctSchema.COSTINGLEVEL_BatchLot
+                                        || costingLevel == X_C_AcctSchema.COSTINGLEVEL_OrgPlusBatch
+                                        || costingLevel == X_C_AcctSchema.COSTINGLEVEL_WarehousePlusBatch);
+
             Decimal currentCost = 0;
             StringBuilder sql = new StringBuilder("SELECT CurrentCostPrice FROM M_CostQueue "
                 + "WHERE AD_Client_ID=@client "
@@ -391,7 +420,7 @@ namespace VAdvantage.Model
                 sql.Append(" AND AD_Org_ID=@org");
             if (M_Warehouse_ID != 0)
                 sql.Append(" AND NVL(M_Warehouse_ID, 0) = " + M_Warehouse_ID);
-            if (M_ASI_ID != 0)
+            if (attributeApplicable)
                 sql.Append(" AND NVL(M_AttributeSetInstance_ID, 0)=@asi");
             sql.Append(" AND CurrentQty<>0 ");
             sql.Append("ORDER BY queuedate ");
@@ -403,11 +432,15 @@ namespace VAdvantage.Model
             try
             {
                 SqlParameter[] param = null;
-                if (M_ASI_ID != 0 && Org_ID != 0)
+                if (attributeApplicable && Org_ID != 0)
                 {
                     param = new SqlParameter[6];
                 }
-                else if (M_ASI_ID == 0 && Org_ID == 0)
+                else if (Org_ID == 0 && attributeApplicable)
+                {
+                    param = new SqlParameter[5];
+                }
+                else if (M_ASI_ID == 0 && Org_ID == 0 && !attributeApplicable)
                 {
                     param = new SqlParameter[4];
                 }
@@ -419,7 +452,7 @@ namespace VAdvantage.Model
                 param[1] = new SqlParameter("@prod", M_Product);
                 param[2] = new SqlParameter("@ct", mas.GetM_CostType_ID());
                 param[3] = new SqlParameter("@accs", mas.GetC_AcctSchema_ID());
-                if (M_ASI_ID != 0 && Org_ID != 0)
+                if (attributeApplicable && Org_ID != 0)
                 {
                     param[4] = new SqlParameter("@org", Org_ID);
                     param[5] = new SqlParameter("@asi", M_ASI_ID);
@@ -428,7 +461,7 @@ namespace VAdvantage.Model
                 {
                     param[4] = new SqlParameter("@org", Org_ID);
                 }
-                else if (M_ASI_ID != 0)
+                else if (attributeApplicable)
                 {
                     param[4] = new SqlParameter("@asi", M_ASI_ID);
                 }
