@@ -1637,7 +1637,7 @@ namespace VAdvantage.Model
             {
                 return;
             }
-            DataSet ds = DB.ExecuteDataset("select * from ad_ref_list where value in ('A','F','I','p','i') and ad_reference_id=122");
+            DataSet ds = DB.ExecuteDataset("select * from ad_ref_list where value in ('A','F','I','p','i','L','O','W') and ad_reference_id=122");
             if (ds != null)
             {
 
