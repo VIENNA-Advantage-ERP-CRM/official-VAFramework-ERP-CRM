@@ -303,6 +303,14 @@ namespace VAdvantage.Model
                 }
             }
 
+            // when Element Type is "Cost Combination" then costing method will be "Cost Combination"
+            if (COSTELEMENTTYPE_CostCombination.Equals(GetCostElementType()) &&
+                !COSTINGMETHOD_CostCombination.Equals(GetCostingMethod()))
+            {
+                log.SaveError("WrongCostMethod", "");
+                return false;
+            }
+
             //	Maintain Calclated
             if (COSTELEMENTTYPE_Material.Equals(GetCostElementType()))
             {
