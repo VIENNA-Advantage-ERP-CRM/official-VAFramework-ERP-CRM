@@ -138,6 +138,8 @@ namespace VIS.DataContracts
         public bool IsTelerikReport { get; set; }
         public bool IsJasperReport { get; set; }
 
+        public bool IsBiHTMlReport { get; set; }
+
         public string RecordIDs
         {
             get;

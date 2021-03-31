@@ -22,6 +22,7 @@
         this.AD_PrintFormat_Table_ID = 0;
         this.AD_PrintFormat_ID = 0;
         this.isReportFormat = false;
+        this.isBiHtml = false;
         this.isCrystal = false;
         this.totalrecords = 0;
         this.isTelerikReport = false;
@@ -326,6 +327,15 @@
 
     ProcessInfo.prototype.getIsReportFormat = function () {
         return this.isReportFormat;
+    };
+
+
+    ProcessInfo.prototype.setIsBiHtml = function (isRF) {
+        this.isBiHtml = isRF;
+    };
+
+    ProcessInfo.prototype.getIsBiHtml = function () {
+        return this.isBiHtml;
     };
 
     ProcessInfo.prototype.getTotalRecord = function () {

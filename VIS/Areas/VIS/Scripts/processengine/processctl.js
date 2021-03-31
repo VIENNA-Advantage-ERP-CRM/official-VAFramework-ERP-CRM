@@ -38,6 +38,7 @@
     ProcessCtl.prototype.REPORT_TYPE_CSV = "C";
     ProcessCtl.prototype.REPORT_TYPE_PDF = "P";
     ProcessCtl.prototype.REPORT_TYPE_RTF = "R";
+    ProcessCtl.prototype.REPORT_TYPE_BIHTML = "B";
 
     ProcessCtl.prototype.ORIGIN_WINDOW = "W";
     ProcessCtl.prototype.ORIGIN_FORM = "F";
@@ -121,7 +122,7 @@
     ProcessCtl.prototype.complete = function (jObject) {
         this.jObjectFromServer = jObject;
         this.pi.setAD_PInstance_ID(jObject.AD_PInstance_ID);
-
+        this.pi.setIsBiHtml(jObject.IsBiHTMlReport)
         // Change Lokesh Chauhan
         this.pi.setCustomHTML(jObject.CustomHTML);
         this.pi.set_AD_PrintFormat_ID(jObject.AD_PrintFormat_ID);
@@ -218,7 +219,7 @@
                                 this.parent.showReport(pdfViewer, jObject, this)
                             }
                             else if (jObject.ReportFilePath && jObject.ReportFilePath.length > 0) {
-                                pdfViewer = new VIS.PdfViewer(jObject.ReportFilePath)
+                                pdfViewer = new VIS.PdfViewer(jObject.ReportFilePath, this.pi)
                                 ispdf = true;
                                 this.parent.showReport(pdfViewer, jObject, this)
                             }
@@ -469,6 +470,14 @@
                 $rightDiv.append($innerRightDiv);
 
                 $innerRightDiv.html(rptName);
+            }
+            else if (pi.getIsBiHtml())
+            {
+                $object = $("<iframe style = 'width:100%;height:99.4%;'>");
+                $object.attr("src", VIS.Application.contextUrl + "BiPanel/GetHTMLReport?info=" + window.encodeURIComponent( rptName));
+                $rightDiv.css('height', '100%');
+                $rightDiv.css('width', '100%');
+                $rightDiv.append($object);
             }
             else {
                 $object = $("<iframe style = 'width:100%;height:99.4%;' pluginspage='http://www.adobe.com/products/acrobat/readstep2.html'>");

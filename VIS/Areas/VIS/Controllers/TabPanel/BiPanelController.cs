@@ -59,5 +59,35 @@ namespace VIS.Controllers
             //}
             //return Json(JsonConvert.SerializeObject("4"), JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult GetHTMLReport(string info)
+        {
+            Ctx ctx = Session["ctx"] as Ctx;
+            int outvalue = 0;
+            if (!int.TryParse(info, out outvalue))
+            {
+                ViewBag.scriptt = info;
+            }
+            else
+            {
+                if (outvalue == 1)
+                {
+                    ViewBag.Message = Msg.GetMsg(ctx, "VA037_BIToolMembership");
+                }
+                else if (outvalue == 2)
+                {
+                    ViewBag.Message = Msg.GetMsg(ctx, "VA037_BIUrlNotFound");
+                }
+                else if (outvalue == 3)
+                {
+                    ViewBag.Message = Msg.GetMsg(ctx, "VA037_NotBIUser");
+                }
+                else if (outvalue == 4)
+                {
+                    ViewBag.Message = Msg.GetMsg(ctx, "VA037_BICallingError");
+                }
+            }
+            return View();
+        }
     }
 }

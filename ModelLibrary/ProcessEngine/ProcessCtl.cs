@@ -21,6 +21,7 @@ using System.ComponentModel;
 using System.IO;
 using VAdvantage.Model;
 using Npgsql;
+using VAdvantage.BiReport;
 
 namespace VAdvantage.ProcessEngine
 {
@@ -31,7 +32,8 @@ namespace VAdvantage.ProcessEngine
         public const string ReportType_CSV = "C";
         public const string ReportType_PDF = "P";
         public const string ReportType_RTF = "R";
-        public const string ReportType_HTML = "S";
+        public const string ReportType_HTML = "S";//HTML Report of Print Format
+        public const string ReportType_BIHTML = "B";//HTML Scripts returned by BI
 
 
 
@@ -989,6 +991,13 @@ namespace VAdvantage.ProcessEngine
                     {
                         reportFilePath = re.GetRtfReportFilePath(reportFilePath);
                     }
+                    else if (_pi.GetFileType() == ReportType_BIHTML)
+                    {
+                        BiReportEngine com = new BiReportEngine();
+                        reportFilePath = com.GetReportString(ctx, log, pi);
+                        //reportFilePath = re.GetHTMLScript(reportFilePath);
+                    }
+
                 }
             }
             else

@@ -366,7 +366,6 @@ namespace VIS.Helpers
             {
                 pi.IsArabicReportFromOutside = false;
                 ProcessCtl ctl = new ProcessCtl();
-
                 Dictionary<string, object> d = ctl.Process(pi, ctx, out report, out rptFilePath);
                 rep = new ProcessReportInfo();
                 rep.ReportProcessInfo = d;
@@ -382,6 +381,7 @@ namespace VIS.Helpers
                 rep.AD_PrintFormat_ID = pi.Get_AD_PrintFormat_ID();
                 ctl.ReportString = null;
                 rep.HTML = ctl.GetRptHtml();
+                rep.IsBiHTMlReport =  pi.GetFileType().Equals(ProcessCtl.ReportType_BIHTML);
 
                 // Change Lokesh Chauhan
                 rep.CustomHTML = pi.GetCustomHTML();
@@ -1015,8 +1015,35 @@ namespace VIS.Helpers
 
             }
 
+            bool isHtmlSupported = IsHtmlSupported(AD_Process_ID);
+
+            if (!isHtmlSupported)
+            {
+                foreach (ValueNamePair v in list)
+                {
+                    if (v.Key.Equals("H"))
+                    {
+                        list.Remove(v);
+                        break;
+                    }
+                }
+            }
+
             return list;
 
+        }
+
+        /// <summary>
+        /// Check if report Type Support HTML reposonse(Only Supprted in BI Reports for now)
+        /// </summary>
+        /// <param name="AD_Process_ID"></param>
+        /// <returns></returns>
+        private static bool IsHtmlSupported(int AD_Process_ID)
+        {
+            object val = DB.ExecuteScalar("SELECT IsCrystalReport FROM AD_Process WHERE AD_Process_ID=" + AD_Process_ID);
+            if(val!=DBNull.Value && val!=null && val.Equals("B"))
+                return true;
+            return false;
         }
 
         /// <summary>
