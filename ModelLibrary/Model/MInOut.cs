@@ -250,13 +250,24 @@ namespace VAdvantage.Model
             retValue.SetIsDropShip(true);
             //	Check if we can create the lines
             MInOutLine[] iolines = inout.GetLines(false);
-
+            int AttributeSetInstance_ID = 0;
             //MOrderLine[] oLines = order.GetLines('
             for (int i = 0; i < iolines.Length; i++)
             {
                 MOrderLine ol = new MOrderLine(inout.GetCtx(), iolines[i].GetC_OrderLine_ID(), inout.Get_Trx());
                 MOrderLine olines = new MOrderLine(inout.GetCtx(), ol.GetRef_OrderLine_ID(), inout.Get_Trx());
                 Decimal qty = olines.GetQtyEntered();
+                // Done by Rakesh Kumar 31/Mar/2021 suggested by Mandeep Singh and Bharat Singla
+                // When AttributeInstanceId set on Orderline
+                if (olines.GetM_AttributeSetInstance_ID() > 0)
+                {
+                    AttributeSetInstance_ID = olines.GetM_AttributeSetInstance_ID();
+                }
+                else if(iolines[i].GetM_AttributeSetInstance_ID() > 0)
+                {
+                    // When AttributeInstanceId set on Material Receipt Line
+                    AttributeSetInstance_ID = iolines[i].GetM_AttributeSetInstance_ID();
+                }
                 //	Nothing to deliver
                 if (qty == 0)
                 {
@@ -275,7 +286,7 @@ namespace VAdvantage.Model
                         MMPolicy = client.GetMMPolicy();
                     }
                     storages = MStorage.GetWarehouse(order.GetCtx(), M_Warehouse_ID,
-                        olines.GetM_Product_ID(), olines.GetM_AttributeSetInstance_ID(),
+                        olines.GetM_Product_ID(), AttributeSetInstance_ID,
                         product.GetM_AttributeSet_ID(),
                         allAttributeInstances, minGuaranteeDate,
                         MClient.MMPOLICY_FiFo.Equals(MMPolicy), trxName);
@@ -310,6 +321,12 @@ namespace VAdvantage.Model
 
                     line.SetOrderLine(olines, storages[ll].GetM_Locator_ID(),
                         order.IsSOTrx() ? lineQty : Env.ZERO);
+                    // Done by Rakesh Kumar 30/Mar/2021 suggested by Mandeep Singh and Bharat Singla
+                    // Set AttributeInstanceId on Material Receipt Line
+                    if (AttributeSetInstance_ID > 0)
+                    {
+                        line.SetM_AttributeSetInstance_ID(AttributeSetInstance_ID);
+                    }
                     line.SetQty(lineQty);	//	Correct UOM for QtyEntered
                     if (olines.GetQtyEntered().CompareTo(olines.GetQtyEntered()) != 0)
                     {
