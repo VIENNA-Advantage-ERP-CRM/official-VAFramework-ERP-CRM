@@ -149,7 +149,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 return _message;
             }
             //Update Bank StatementLine
-            _message = bsl.SetPayments(payment);
+            //Created new Object for Payment to get Updated Payment Record
+            MPayment mPayment = new MPayment(GetCtx(), payment.GetC_Payment_ID(), payment.Get_Trx());
+            _message = bsl.SetPayments(mPayment);
             if (string.IsNullOrEmpty(_message))
             {
                 if (!bsl.Save(Get_Trx()))
@@ -169,10 +171,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 }
                 else 
                 {
-                    String retString = "@C_Payment_ID@ = " + payment.GetDocumentNo();
+                    String retString = "@C_Payment_ID@ = " + mPayment.GetDocumentNo();
                     if (Env.Signum(payment.GetOverUnderAmt()) != 0)
                     {
-                        retString += " - @OverUnderAmt@=" + payment.GetOverUnderAmt();
+                        retString += " - @OverUnderAmt@=" + mPayment.GetOverUnderAmt();
                     }
                     Get_Trx().Commit();
                     return retString;
@@ -226,7 +228,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             MPayment payment = new MPayment(GetCtx(), 0, Get_Trx());
             payment.SetAD_Org_ID(AD_Org_ID);
             payment.SetC_BankAccount_ID(C_BankAccount_ID);
-            payment.SetTenderType(MPayment.TENDERTYPE_Check);
+            //payment.SetTenderType(MPayment.TENDERTYPE_Check);//not required it will update on MPayment class
             //Get the C_ConversionType_ID from BankStatementLine and Set C_ConversionType_ID for Payment 
             payment.SetC_ConversionType_ID(C_ConversionType_ID);
             if (dateTrx != null)
@@ -264,6 +266,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
                 if (_ds != null && _ds.Tables[0].Rows.Count == 1)
                 {
+                    payment.SetC_Invoice_ID(invoice.GetC_Invoice_ID());//set Invoice Reference
                     payment.SetC_InvoicePaySchedule_ID(Util.GetValueOfInt(_ds.Tables[0].Rows[0]["C_INVOICEPAYSCHEDULE_ID"]));
                     _dueAmt = Util.GetValueOfDecimal(_ds.Tables[0].Rows[0]["DUEAMT"]);
 
@@ -290,14 +293,16 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     }
                     else
                     {
-                        for (int i = 0; i < _ds.Tables[0].Rows.Count; i++)
+                        //Initialize the Object for MPaymentAllocate class
+                        MPaymentAllocate PayAlocate = null;
+                        for (int i = 0; _ds.Tables[0].Rows.Count > i; i++)
                         {
-
-                            MPaymentAllocate PayAlocate = new MPaymentAllocate(GetCtx(), 0, Get_Trx());
+                            //Create the Object for MPaymentAllocate class for every Iteration
+                            PayAlocate = new MPaymentAllocate(GetCtx(), 0, Get_Trx());
                             PayAlocate.SetC_Payment_ID(payment.GetC_Payment_ID());
                             PayAlocate.SetAD_Client_ID(payment.GetAD_Client_ID());
                             //set Organization with the reference of Bank Account
-                            PayAlocate.SetAD_Org_ID(invoice.GetAD_Org_ID());
+                            PayAlocate.SetAD_Org_ID(payment.GetAD_Org_ID());//set Org_ID from the Header 
                             PayAlocate.SetC_Invoice_ID(invoice.GetC_Invoice_ID());
                             PayAlocate.SetC_InvoicePaySchedule_ID(Util.GetValueOfInt(_ds.Tables[0].Rows[i]["C_INVOICEPAYSCHEDULE_ID"]));
 
@@ -326,30 +331,6 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                                 }
                                 _message = !string.IsNullOrEmpty(error) ? error : "VA012_PaymentNotSaved";
                                 return null;
-                            }
-                            else
-                            {
-                                payment.SetPayAmt(payment.GetPayAmt() + PayAlocate.GetAmount());
-                                if (payment.Get_ColumnIndex("IsPaymentAllocate") > 0)
-                                {
-                                    payment.Set_Value("IsPaymentAllocate", true);
-                                }
-                                if (!payment.Save(Get_Trx()))
-                                {
-                                    Get_Trx().Rollback();
-                                    ValueNamePair pp = VLogger.RetrieveError();
-                                    string error = pp != null ? pp.GetValue() : "";
-                                    if (string.IsNullOrEmpty(error))
-                                    {
-                                        error = pp != null ? pp.GetName() : "";
-                                        if (string.IsNullOrEmpty(error))
-                                        {
-                                            error = pp != null ? pp.ToString() : "";
-                                        }
-                                    }
-                                    _message = !string.IsNullOrEmpty(error) ? error : "VA012_PaymentNotSaved";
-                                    return null;
-                                }
                             }
                         }
                     }

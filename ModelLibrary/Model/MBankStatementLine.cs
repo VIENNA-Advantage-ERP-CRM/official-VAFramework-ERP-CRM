@@ -167,11 +167,11 @@ namespace VAdvantage.Model
                 }
                 if (_InvCount > 0 || payment.GetC_Order_ID() > 0)
                 {
-                    SetVA012_VoucherType("M");
+                    SetVA012_VoucherType("M"); // 'M' indicates VA012_VoucherType as Payment
                 }
                 else if (payment.GetC_Charge_ID() > 0)
                 {
-                    SetVA012_VoucherType("V");
+                    SetVA012_VoucherType("V"); // 'V' indicates VA012_VoucherType as Voucher
                 }
             }
             return "";
