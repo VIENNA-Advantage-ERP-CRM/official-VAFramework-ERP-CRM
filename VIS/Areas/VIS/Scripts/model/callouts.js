@@ -5519,7 +5519,7 @@
 
         //JID_0084: if the Payment currency is different from the bank statement currency it will add the converted amount based in the currency conversion available for selected date.
         var C_Currency_ID = mTab.getValue("C_Currency_ID");
-        var statementDate = mTab.getValue("ValutaDate");
+        var statementDate = mTab.getValue("ValutaDate"); 
 
         // JID_1418: When select payment on Bank statement line, system gives an error meassage
         if (statementDate == null) {
@@ -5532,11 +5532,18 @@
         try {
             var paramStr = C_Payment_ID.toString() + "," + C_Currency_ID.toString() + "," + statementDate.toString();
             var payAmt = VIS.dataContext.getJSONRecord("MBankStatement/GetPayment", paramStr);
-            mTab.setValue("TrxAmt", payAmt);
-            if (stmt == 0) {
-                mTab.setValue("StmtAmt", payAmt);
+            //Update the BankStatementLine fields
+            if (payAmt != null && payAmt.length > 0) {
+                mTab.setValue("TrxAmt", payAmt[0]["payAmt"]);
+                if (stmt == 0) {
+                    mTab.setValue("StmtAmt", payAmt[0]["payAmt"]);
+                }
+                //to Avoid Exception if Column not exists Used findColumn()
+                if (mTab.findColumn("C_ConversionType_ID") >= 0) {
+                    mTab.setValue("C_ConversionType_ID", payAmt[0]["C_ConversionType_ID"]);
+                }
+                mTab.setValue("DateAcct", new Date(payAmt[0]["DateAcct"]));
             }
-
             //param[0] = new VIS.DB.SqlParam("@C_Payment_ID", C_Payment_ID);
             //dr = VIS.DB.executeReader(sql, param, null);
             //if (dr.read())/// if (rs.next())
@@ -5582,7 +5589,7 @@
         //}
 
         var C_Currency_ID = mTab.getValue("C_Currency_ID");
-        var acctDate = mTab.getValue("DateAcct");
+        var acctDate = mTab.getValue("ValutaDate");
 
         try {
             var paramStr = C_Payment_ID.toString() + "," + C_Currency_ID.toString() + "," + acctDate.toString();
