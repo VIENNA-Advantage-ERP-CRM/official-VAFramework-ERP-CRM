@@ -873,14 +873,14 @@ namespace ViennaAdvantageServer.Process
                 mfLine.SetPrice(avgPrice); 
             }
             //calculate average price for Team forecast case only 
-            if (totalQtyOpp == 0 && totalQtyTeam > 0 && qty==0)
+            else if (totalQtyOpp == 0 && totalQtyTeam > 0 && qty==0)
             {
                 avgPrice = ((mfLine.GetPrice() * Util.GetValueOfDecimal(mfLine.Get_ValueOld("ForcastQty"))) + (avgPrice * totalQtyTeam)) / mfLine.GetTotalQty();
                 avgPrice = Decimal.Round(avgPrice.Value, StdPrecision, MidpointRounding.AwayFromZero);
                 mfLine.SetPrice(avgPrice);
             }  
             //calculate average price for multi currency case. if oppqty exist previously and currently it returns 0
-            if(totalQtyOpp == 0 && totalQtyTeam > 0 && qty>0)
+            else if(totalQtyOpp == 0 && totalQtyTeam > 0 && qty>0)
             {
                 avgPrice = ((mfLine.GetPrice() * Util.GetValueOfDecimal(mfLine.Get_ValueOld("TotalQty"))) + (avgPrice * totalQtyTeam)) / mfLine.GetTotalQty();
                 avgPrice = Decimal.Round(avgPrice.Value, StdPrecision, MidpointRounding.AwayFromZero);
