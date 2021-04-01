@@ -3138,7 +3138,7 @@ namespace VAdvantage.Model
                                             {
                                                 _log.Info("Asset Expense Not Updated For Asset ");
                                             }
-                                            else if (asst.Get_ColumnIndex("VAFAM_ISComponent") >= 0 && Util.GetValueOfBool(asst.Get_Value("VAFAM_ISComponent")))
+                                            else if (asst.Get_ColumnIndex("VAFAM_IsComponent") >= 0 && Util.GetValueOfBool(asst.Get_Value("VAFAM_IsComponent")))
                                             {
                                                 int Asset_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT A_Asset_ID FROM VAFAM_ComponentAsset WHERE VAFAM_AssetComponent_ID = "
                                                     + line.GetA_Asset_ID(), null, Get_TrxName()));
