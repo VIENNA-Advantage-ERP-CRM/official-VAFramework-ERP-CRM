@@ -106,12 +106,13 @@ namespace VIS.Models
             ProductDataOut objInfo = new ProductDataOut
             {
 
+                //** Price List - ValidFrom date : return 0 when plv is not available ** Dt:03/26/2021 ** Modified By: Kumar **//
 
-                PriceList = pp.GetPriceList(),
-                PriceLimit = pp.GetPriceLimit(),
-                PriceActual = pp.GetPriceStd(),
-                PriceEntered = pp.GetPriceStd(),
-                PriceStd = pp.GetPriceStd(),
+                PriceList = (M_PriceList_Version_ID==0 ? 0: pp.GetPriceList()),
+                PriceLimit = (M_PriceList_Version_ID == 0 ? 0 : pp.GetPriceLimit()),
+                PriceActual = (M_PriceList_Version_ID == 0 ? 0 : pp.GetPriceStd()),
+                PriceEntered = (M_PriceList_Version_ID == 0 ? 0 : pp.GetPriceStd()),
+                PriceStd = (M_PriceList_Version_ID == 0 ? 0 : pp.GetPriceStd()),
                 LineAmt = pp.GetLineAmt(2),
                 C_Currency_ID = System.Convert.ToInt32(pp.GetC_Currency_ID()),
                 Discount = pp.GetDiscount(),
@@ -144,12 +145,8 @@ namespace VIS.Models
             UOM = Util.GetValueOfInt(paramValue[3].ToString());
 
             string sql = "SELECT PriceStd ,C_UOM_ID FROM M_ProductPrice WHERE M_PriceList_Version_ID = (SELECT MAX(M_PriceList_Version_ID) FROM M_PriceList_Version WHERE IsActive = 'Y'" +
-                "AND M_PriceList_ID =" + M_PriceList_ID + ") AND M_Product_id=" + M_Product_ID;
-
-            if (Attribute > 0)
-            {
-                sql += " AND M_AttributeSetInstance_ID=" + Attribute;
-            }
+                "AND M_PriceList_ID =" + M_PriceList_ID + ") AND M_Product_ID=" + M_Product_ID+  " AND NVL(M_AttributeSetInstance_ID,0)=" + Attribute;
+  
             if (UOM > 0)
             {
                 sql += " AND C_UOM_ID=" + UOM;

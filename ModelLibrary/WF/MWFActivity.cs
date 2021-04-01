@@ -3128,7 +3128,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 MRole[] rl = user.GetRoles(GetAD_Org_ID());
                 // check applied if user has Org Access then only proceed to send
                 // mail or notice
-                if (rl.Length <= 0)
+                if (user.IsLoginUser() && rl.Length <= 0)
                     return;
                 //Notice
                 if (action != null && action.Equals(MWFNode.ACTION_EMailPlusFaxEMail) &&
@@ -3137,7 +3137,8 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                    MUser.NOTIFICATIONTYPE_EMailPlusFaxEMail.Equals(user.GetNotificationType())))
                 {
                     //Send Notice
-                    SendNotice(AD_User_ID, message, subject);
+                    if (user.IsLoginUser() && rl.Length > 0)
+                        SendNotice(AD_User_ID, message, subject);
                 }
 
                 email = user.GetEMail();

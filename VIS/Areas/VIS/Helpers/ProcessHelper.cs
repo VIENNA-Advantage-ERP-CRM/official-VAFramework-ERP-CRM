@@ -354,57 +354,29 @@ namespace VIS.Helpers
                 }
             }
 
-            string lang = ctx.GetAD_Language().Replace("_", "-");
+            //string lang = ctx.GetAD_Language().Replace("_", "-");
             System.Globalization.CultureInfo original = System.Threading.Thread.CurrentThread.CurrentCulture;
-
-            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(lang);
-            System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(lang);
+            //System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(lang);
+            //System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(lang);
 
             byte[] report = null;
             string rptFilePath = null;
             ProcessReportInfo rep = new ProcessReportInfo();
             try
             {
-                //ProcessInfo pi = new ProcessInfo(Name, AD_Process_ID, AD_Table_ID, Record_ID);
-                //pi.SetAD_User_ID(ctx.GetAD_User_ID());
-                //pi.SetAD_Client_ID(ctx.GetAD_Client_ID());
-                //pi.SetAD_PInstance_ID(AD_PInstance_ID);
-                //pi.SetAD_Window_ID(AD_Window_ID);
-                //pi.FileType = fileType;
-                //report = null;
-
                 pi.IsArabicReportFromOutside = false;
                 ProcessCtl ctl = new ProcessCtl();
 
-                //ctl.SetIsPrintCsv(csv);
-                //ctl.SetFileType(fileType);
-                //if (fileType == "P")
-                //{
-                //    ctl.SetIsPrintFormat(true);
-                //}
                 Dictionary<string, object> d = ctl.Process(pi, ctx, out report, out rptFilePath);
                 rep = new ProcessReportInfo();
                 rep.ReportProcessInfo = d;
                 rep.Report = report;
 
-                //if (rep.Report != null)
-                //{
-                //    rep.byteString = Convert.ToBase64String(rep.Report);
-                //}
 
                 rep.ReportString = ctl.ReportString;
                 //rep.AD_ReportView_ID = ctl.GetAD_ReportView_ID();
                 rep.ReportFilePath = rptFilePath;
-                // rep.IsRCReport = ctl.IsRCReport();
-                // rep.TotalRecords = pi.GetTotalRecords();
-                // rep.IsReportFormat = pi.GetIsReportFormat();
-                // rep.IsTelerikReport = pi.GetIsTelerik();
-                // rep.IsJasperReport = pi.GetIsJasperReport();
-                //  rep.AD_PrintFormat_ID = ctl.GetAD_PrintFormat_ID();
-                // if (d.ContainsKey("AD_PrintFormat_ID"))
-                // {
-                //    rep.AD_PrintFormat_ID = Convert.ToInt32(d["AD_PrintFormat_ID"]);
-                // }
+                
                 rep.AD_PInstance_ID = pi.GetAD_PInstance_ID();
                 rep.Result = pi.GetSummary();
                 rep.AD_PrintFormat_ID = pi.Get_AD_PrintFormat_ID();
@@ -413,10 +385,7 @@ namespace VIS.Helpers
 
                 // Change Lokesh Chauhan
                 rep.CustomHTML = pi.GetCustomHTML();
-                //rep.AD_Table_ID = ctl.GetReprortTableID();
-
-
-                //Env.GetCtx().Clear();
+                
             }
             catch (Exception e)
             {
