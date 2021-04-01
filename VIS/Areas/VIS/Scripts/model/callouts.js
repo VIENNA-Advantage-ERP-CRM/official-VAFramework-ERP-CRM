@@ -15652,6 +15652,18 @@
             var existEd011 = Util.getValueOfInt(VIS.DB.executeScalar(sql));
             var paramString;
             var C_UOM_ID = VIS.dataContext.getJSONRecord("MProduct/GetC_UOM_ID", M_Product_ID);
+
+            //** Price List - ValidFrom date validation ** Dt:03/26/2021 ** Modified By: Kumar **//
+            var paramsPrice;
+            paramsPrice = Util.getValueOfString(M_PriceList_ID).concat(",", Util.getValueOfString(mTab.getValue("M_Requisition_ID")), ",",
+                Util.getValueOfString(M_Product_ID), ",",
+                Util.getValueOfString(C_UOM_ID), ",",
+                Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")), ",",
+                "3");
+
+            //Get PriceListversion based on Pricelist
+            var M_PriceList_Version_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetM_PriceList_Version_ID", paramsPrice);
+
             if (existEd011 > 0) {
                 paramString = M_Product_ID.toString().concat(",", C_BPartner_ID, ",", //2
                     qty, ",", //3

@@ -106,12 +106,13 @@ namespace VIS.Models
             ProductDataOut objInfo = new ProductDataOut
             {
 
+                //** Price List - ValidFrom date : return 0 when plv is not available ** Dt:03/26/2021 ** Modified By: Kumar **//
 
-                PriceList = pp.GetPriceList(),
-                PriceLimit = pp.GetPriceLimit(),
-                PriceActual = pp.GetPriceStd(),
-                PriceEntered = pp.GetPriceStd(),
-                PriceStd = pp.GetPriceStd(),
+                PriceList = (M_PriceList_Version_ID==0 ? 0: pp.GetPriceList()),
+                PriceLimit = (M_PriceList_Version_ID == 0 ? 0 : pp.GetPriceLimit()),
+                PriceActual = (M_PriceList_Version_ID == 0 ? 0 : pp.GetPriceStd()),
+                PriceEntered = (M_PriceList_Version_ID == 0 ? 0 : pp.GetPriceStd()),
+                PriceStd = (M_PriceList_Version_ID == 0 ? 0 : pp.GetPriceStd()),
                 LineAmt = pp.GetLineAmt(2),
                 C_Currency_ID = System.Convert.ToInt32(pp.GetC_Currency_ID()),
                 Discount = pp.GetDiscount(),
