@@ -114,6 +114,70 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
+        /// Set Statement Line 
+        /// </summary>
+        /// <param name="payment">Payment</param>
+        /// <returns>Message</returns>
+        public string SetPayments(MPayment payment)
+        {
+            SetC_Payment_ID(payment.GetC_Payment_ID());
+            //SetC_Currency_ID(payment.GetC_Currency_ID());
+            Decimal amt = payment.GetPayAmt(true);
+            //Currency Conversion to BankStatementLine Currency
+            if (GetC_Currency_ID() != payment.GetC_Currency_ID())
+            {
+                int conversionType = Get_ColumnIndex("C_ConversionType_ID") > 0 ? Get_ValueAsInt("C_ConversionType_ID") : payment.GetC_ConversionType_ID();
+                amt = MConversionRate.Convert(GetCtx(), amt, payment.GetC_Currency_ID(), GetC_Currency_ID(), GetValutaDate(), conversionType, GetAD_Client_ID(), GetAD_Org_ID());
+            }
+            if (amt != 0)
+            {
+                SetTrxAmt(amt);
+                if (GetStmtAmt() == 0)
+                {
+                    SetStmtAmt(amt);
+                }
+                else // Incase of Uncociled StatementLine have existing Amount
+                {
+                    decimal _diffAmt = GetStmtAmt() - GetTrxAmt();
+                    SetChargeAmt(_diffAmt - GetInterestAmt());
+                }
+                SetDescription(payment.GetDescription());
+            }
+            else 
+            {
+                return Msg.GetMsg(GetCtx(), "NoCurrencyConversion");
+            }
+            //Set VA012_VoucherType
+            if (Env.IsModuleInstalled("VA012_"))
+            {
+                bool _IsPaymentAllocate = false;
+                int _InvCount;
+                //When Payment have Multiple InvoicePaySchedules
+                if (payment.Get_ColumnIndex("IsPaymentAllocate") > 0) 
+                {
+                    _IsPaymentAllocate = Util.GetValueOfBool(payment.Get_Value("IsPaymentAllocate"));
+                }
+                if (_IsPaymentAllocate)
+                {
+                    _InvCount = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(C_PaymentAllocate_ID) FROM C_PaymentAllocate WHERE IsActive='Y' AND C_Payment_ID=" + payment.GetC_Payment_ID(), null, null));
+                }
+                else 
+                {
+                    _InvCount = payment.GetC_Invoice_ID();
+                }
+                if (_InvCount > 0 || payment.GetC_Order_ID() > 0)
+                {
+                    SetVA012_VoucherType("M"); // 'M' indicates VA012_VoucherType as Payment
+                }
+                else if (payment.GetC_Charge_ID() > 0)
+                {
+                    SetVA012_VoucherType("V"); // 'V' indicates VA012_VoucherType as Voucher
+                }
+            }
+            return "";
+        }
+
+        /// <summary>
         /// Add to Description
         /// </summary>
         /// <param name="description">text</param>
