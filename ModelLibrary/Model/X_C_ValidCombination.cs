@@ -353,10 +353,10 @@ return Convert.ToInt32(ii);
 @param Combination Unique combination of account elements */
 public void SetCombination (String Combination)
 {
-if (Combination != null && Combination.Length > 60)
+if (Combination != null && Combination.Length > 255)
 {
-log.Warning("Length > 60 - truncated");
-Combination = Combination.Substring(0,60);
+log.Warning("Length > 255 - truncated");
+Combination = Combination.Substring(0,255);
 }
 Set_ValueNoCheck ("Combination", Combination);
 }
