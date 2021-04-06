@@ -4603,7 +4603,7 @@
                     || columnName.equals("IsActive")
                     //
                     || columnName.startsWith("Created") || columnName.startsWith("Updated")
-                    || columnName.equals("EntityType") || columnName.equals("DocumentNo")
+                    || columnName.equals("RecordType") || columnName.equals("DocumentNo")
                     || columnName.equals("Processed") || columnName.equals("IsSelfService")
                     || columnName.equals("DocAction") || columnName.equals("DocStatus")
                     || columnName.startsWith("Ref_")
@@ -5606,7 +5606,7 @@
             var keyColumn = ctx.getWindowTabContext(_vo.windowNo, _vo.tabNo, "KeyColumnName");
             var VAF_Screen_ID = _vo.VAF_Screen_ID;
 
-            if ("EntityType".equals(keyColumn))
+            if ("RecordType".equals(keyColumn))
                 keyColumn = "VAF_RecrodType_ID";
             if (!keyColumn.toUpperCase().endsWith("_ID"))
                 keyColumn += "_ID";			//	VAF_Language_ID

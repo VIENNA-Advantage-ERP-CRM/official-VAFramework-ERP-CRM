@@ -219,7 +219,7 @@ namespace VAdvantage.Model
             {
                 //	setVAF_Control_Ref_ID (0);
                 //	setVAF_CtrlRef_List_ID (0);
-                SetEntityType(ENTITYTYPE_UserMaintained);	// U
+                SetRecordType(RecordType_UserMaintained);	// U
                 //	setName (null);
                 //	setValue (null);
             }

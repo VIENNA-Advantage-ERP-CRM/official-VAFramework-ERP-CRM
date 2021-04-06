@@ -26,7 +26,7 @@ namespace VAdvantage.Model
             SetAction (null);	// N
             SetDuration (0);
             SetDurationLimit (0);
-            SetEntityType (null);	// U
+            SetRecordType (null);	// U
             SetIsCentrallyMaintained (true);	// Y
             SetJoinElement (null);	// X
             SetName (null);
@@ -48,7 +48,7 @@ namespace VAdvantage.Model
             SetAction (null);	// N
             SetDuration (0);
             SetDurationLimit (0);
-            SetEntityType (null);	// U
+            SetRecordType (null);	// U
             SetIsCentrallyMaintained (true);	// Y
             SetJoinElement (null);	// X
             SetName (null);
@@ -714,26 +714,26 @@ namespace VAdvantage.Model
             return (String)Get_Value("EMailRecipient");
         }
 
-        /** EntityType VAF_Control_Ref_ID=389 */
-        public static int ENTITYTYPE_VAF_Control_Ref_ID = 389;
+        /** RecordType VAF_Control_Ref_ID=389 */
+        public static int RecordType_VAF_Control_Ref_ID = 389;
         /** Set Entity Type.
-        @param EntityType Dictionary Entity Type;
+        @param RecordType Dictionary Entity Type;
          Determines ownership and synchronization */
-        public void SetEntityType(String EntityType)
+        public void SetRecordType(String RecordType)
         {
-            if (EntityType.Length > 4)
+            if (RecordType.Length > 4)
             {
                 log.Warning("Length > 4 - truncated");
-                EntityType = EntityType.Substring(0, 4);
+                RecordType = RecordType.Substring(0, 4);
             }
-            Set_Value("EntityType", EntityType);
+            Set_Value("RecordType", RecordType);
         }
         /** Get Entity Type.
         @return Dictionary Entity Type;
          Determines ownership and synchronization */
-        public String GetEntityType()
+        public String GetRecordType()
         {
-            return (String)Get_Value("EntityType");
+            return (String)Get_Value("RecordType");
         }
         /** Set Export.
         @param Export_ID Export */

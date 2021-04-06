@@ -839,7 +839,7 @@ namespace VAdvantage.Model
                 DisplayType = displayType;
 
                 if (columnName.Equals("VAF_Language")
-                || columnName.Equals("EntityType")
+                || columnName.Equals("RecordType")
                 || columnName.Equals("DocBaseType"))
                 {
                     DisplayType = VAdvantage.Classes.DisplayType.String;

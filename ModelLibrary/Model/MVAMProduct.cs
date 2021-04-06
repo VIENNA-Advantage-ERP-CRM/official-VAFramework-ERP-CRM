@@ -108,20 +108,20 @@ namespace VAdvantage.Model
         /// Get Trial Products for Entity Type
         /// </summary>
         /// <param name="ctx">ctx</param>
-        /// <param name="entityType">entity type</param>
+        /// <param name="recordType">entity type</param>
         /// <returns>trial product or null</returns>
-        public static MVAMProduct GetTrial(Ctx ctx, String entityType)
+        public static MVAMProduct GetTrial(Ctx ctx, String recordType)
         {
-            if (Utility.Util.IsEmpty(entityType))
+            if (Utility.Util.IsEmpty(recordType))
             {
                 _log.Warning("No Entity Type");
                 return null;
             }
             MVAMProduct retValue = null;
             String sql = "SELECT * FROM VAM_Product "
-                + "WHERE LicenseInfo LIKE '%" + entityType + "%' AND TrialPhaseDays > 0 AND IsActive='Y'";
-            //String entityTypeLike = "%" + entityType + "%";
-            //pstmt.setString(1, entityTypeLike);
+                + "WHERE LicenseInfo LIKE '%" + recordType + "%' AND TrialPhaseDays > 0 AND IsActive='Y'";
+            //String RecordTypeLike = "%" + recordType + "%";
+            //pstmt.setString(1, RecordTypeLike);
             DataSet ds = new DataSet();
             try
             {
@@ -149,7 +149,7 @@ namespace VAdvantage.Model
             }
             if (retValue == null)
             {
-                _log.Warning("No Product for EntityType - " + entityType);
+                _log.Warning("No Product for RecordType - " + recordType);
             }
             return retValue;
         }

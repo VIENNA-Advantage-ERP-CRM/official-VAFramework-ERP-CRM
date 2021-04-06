@@ -21,7 +21,7 @@ public X_VAF_DataVal_Rule (Context ctx, int VAF_DataVal_Rule_ID, Trx trxName) : 
 /** if (VAF_DataVal_Rule_ID == 0)
 {
 SetVAF_DataVal_Rule_ID (0);
-SetEntityType (null);	// U
+SetRecordType (null);	// U
 SetName (null);
 SetType (null);
 }
@@ -32,7 +32,7 @@ public X_VAF_DataVal_Rule (Ctx ctx, int VAF_DataVal_Rule_ID, Trx trxName) : base
 /** if (VAF_DataVal_Rule_ID == 0)
 {
 SetVAF_DataVal_Rule_ID (0);
-SetEntityType (null);	// U
+SetRecordType (null);	// U
 SetName (null);
 SetType (null);
 }
@@ -166,26 +166,26 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** EntityType VAF_Control_Ref_ID=389 */
-public static int ENTITYTYPE_VAF_Control_Ref_ID=389;
+/** RecordType VAF_Control_Ref_ID=389 */
+public static int RecordType_VAF_Control_Ref_ID=389;
 /** Set Entity Type.
-@param EntityType Dictionary Entity Type;
+@param RecordType Dictionary Entity Type;
  Determines ownership and synchronization */
-public void SetEntityType (String EntityType)
+public void SetRecordType (String RecordType)
 {
-if (EntityType.Length > 4)
+if (RecordType.Length > 4)
 {
 log.Warning("Length > 4 - truncated");
-EntityType = EntityType.Substring(0,4);
+RecordType = RecordType.Substring(0,4);
 }
-Set_Value ("EntityType", EntityType);
+Set_Value ("RecordType", RecordType);
 }
 /** Get Entity Type.
 @return Dictionary Entity Type;
  Determines ownership and synchronization */
-public String GetEntityType() 
+public String GetRecordType() 
 {
-return (String)Get_Value("EntityType");
+return (String)Get_Value("RecordType");
 }
 /** Set Name.
 @param Name Alphanumeric identifier of the entity */

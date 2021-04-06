@@ -28,7 +28,7 @@ namespace ViennaAdvantage.Tool.Model
         /// <returns></returns>
         public DataSet GetEntity()
         {
-            string strQuery = "select VAF_RecrodType_id, entitytype, name from VAF_RecrodType";
+            string strQuery = "select VAF_RecrodType_id, recordtype, name from VAF_RecrodType";
             //execute
             return DB.ExecuteDataset(strQuery, null);
         }

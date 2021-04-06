@@ -67,7 +67,7 @@ namespace VAdvantage.WF
                 SetAction(ACTION_WaitSleep);
                 SetCost(0);
                 SetDuration(0);
-                SetEntityType(ENTITYTYPE_UserMaintained);	// U
+                SetRecordType(RecordType_UserMaintained);	// U
                 SetIsCentrallyMaintained(true);	// Y
                 SetJoinElement(JOINELEMENT_XOR);	// X
                 SetDurationLimit(0);

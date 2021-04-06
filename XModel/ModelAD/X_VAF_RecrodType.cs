@@ -21,7 +21,7 @@ public X_VAF_RecrodType (Context ctx, int VAF_RecrodType_ID, Trx trxName) : base
 /** if (VAF_RecrodType_ID == 0)
 {
 SetVAF_RecrodType_ID (0);	// @SQL=SELECT NVL(MAX(VAF_RecrodType_ID),999999)+1 FROM VAF_RecrodType WHERE VAF_RecrodType_ID > 1000
-SetEntityType (null);	// U
+SetRecordType (null);	// U
 SetName (null);
 }
  */
@@ -31,7 +31,7 @@ public X_VAF_RecrodType (Ctx ctx, int VAF_RecrodType_ID, Trx trxName) : base (ct
 /** if (VAF_RecrodType_ID == 0)
 {
 SetVAF_RecrodType_ID (0);	// @SQL=SELECT NVL(MAX(VAF_RecrodType_ID),999999)+1 FROM VAF_RecrodType WHERE VAF_RecrodType_ID > 1000
-SetEntityType (null);	// U
+SetRecordType (null);	// U
 SetName (null);
 }
  */
@@ -193,24 +193,24 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 /** Set Entity Type.
-@param EntityType Dictionary Entity Type;
+@param RecordType Dictionary Entity Type;
  Determines ownership and synchronization */
-public void SetEntityType (String EntityType)
+public void SetRecordType (String RecordType)
 {
-if (EntityType == null) throw new ArgumentException ("EntityType is mandatory.");
-if (EntityType.Length > 4)
+if (RecordType == null) throw new ArgumentException ("RecordType is mandatory.");
+if (RecordType.Length > 4)
 {
 log.Warning("Length > 4 - truncated");
-EntityType = EntityType.Substring(0,4);
+RecordType = RecordType.Substring(0,4);
 }
-Set_ValueNoCheck ("EntityType", EntityType);
+Set_ValueNoCheck ("RecordType", RecordType);
 }
 /** Get Entity Type.
 @return Dictionary Entity Type;
  Determines ownership and synchronization */
-public String GetEntityType() 
+public String GetRecordType() 
 {
-return (String)Get_Value("EntityType");
+return (String)Get_Value("RecordType");
 }
 /** Set Comment.
 @param Help Comment, Help or Hint */

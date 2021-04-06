@@ -43,7 +43,7 @@ namespace VAdvantage.WF
             {
                 //	setAD_WF_Next_ID (0);
                 //	setVAF_WFlow_Node_ID (0);
-                SetEntityType(ENTITYTYPE_UserMaintained);	// U
+                SetRecordType(RecordType_UserMaintained);	// U
                 SetIsStdUserWorkflow(false);
                 SetSeqNo(10);	// 10
             }

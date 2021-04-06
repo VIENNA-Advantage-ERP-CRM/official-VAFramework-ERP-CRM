@@ -59,9 +59,9 @@ namespace VAdvantage.Model
 
 
 
-        static protected String ENTITYTYPE_UserMaintained = "U";
+        static protected String RecordType_UserMaintained = "U";
         /** Dictionary Maintained Entity Type		*/
-        static protected String ENTITYTYPE_Dictionary = "D";
+        static protected String RecordType_Dictionary = "D";
 
         /** Accounting Columns			*/
         private List<String> acctColumns = null;
@@ -2364,7 +2364,7 @@ namespace VAdvantage.Model
         {
             //trans = DB.GerServerTransaction();
 
-            if (_mIDs.Length == 1 && p_info.hasKeyColumn() && _mKeyColumns[0].EndsWith("_ID"))	//	VAF_Language, EntityType
+            if (_mIDs.Length == 1 && p_info.hasKeyColumn() && _mKeyColumns[0].EndsWith("_ID"))	//	VAF_Language, RecordType
             {
                 int no = SaveNew_GetID();
                 if (no <= 0)
@@ -4350,7 +4350,7 @@ namespace VAdvantage.Model
             String[] keyColumns = Get_KeyColumns();
             //  Set ID for single key - Multi-Key values need explicitly be set previously
             if (_mIDs.Length == 1 && p_info.hasKeyColumn()
-                    && keyColumns[0].ToUpper().EndsWith("_ID"))	//	VAF_Language, EntityType
+                    && keyColumns[0].ToUpper().EndsWith("_ID"))	//	VAF_Language, RecordType
             {
                 int no = SaveNew_GetID();
                 if (no <= 0)

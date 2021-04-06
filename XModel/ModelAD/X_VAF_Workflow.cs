@@ -24,7 +24,7 @@ SetVAF_Workflow_ID (0);
 SetAccessLevel (null);
 SetAuthor (null);
 SetDuration (0);
-SetEntityType (null);	// U
+SetRecordType (null);	// U
 SetIsDefault (false);
 SetIsValid (false);
 SetName (null);
@@ -45,7 +45,7 @@ SetVAF_Workflow_ID (0);
 SetAccessLevel (null);
 SetAuthor (null);
 SetDuration (0);
-SetEntityType (null);	// U
+SetRecordType (null);	// U
 SetIsDefault (false);
 SetIsValid (false);
 SetName (null);
@@ -393,26 +393,26 @@ public String GetDurationUnit()
 return (String)Get_Value("DurationUnit");
 }
 
-/** EntityType VAF_Control_Ref_ID=389 */
-public static int ENTITYTYPE_VAF_Control_Ref_ID=389;
+/** RecordType VAF_Control_Ref_ID=389 */
+public static int RecordType_VAF_Control_Ref_ID=389;
 /** Set Entity Type.
-@param EntityType Dictionary Entity Type;
+@param RecordType Dictionary Entity Type;
  Determines ownership and synchronization */
-public void SetEntityType (String EntityType)
+public void SetRecordType (String RecordType)
 {
-if (EntityType.Length > 4)
+if (RecordType.Length > 4)
 {
 log.Warning("Length > 4 - truncated");
-EntityType = EntityType.Substring(0,4);
+RecordType = RecordType.Substring(0,4);
 }
-Set_Value ("EntityType", EntityType);
+Set_Value ("RecordType", RecordType);
 }
 /** Get Entity Type.
 @return Dictionary Entity Type;
  Determines ownership and synchronization */
-public String GetEntityType() 
+public String GetRecordType() 
 {
-return (String)Get_Value("EntityType");
+return (String)Get_Value("RecordType");
 }
 /** Set Comment.
 @param Help Comment, Help or Hint */

@@ -74,7 +74,7 @@ namespace VAdvantage.Model
         {
             if (VAF_MenuConfig_ID == 0)
             {
-                SetEntityType(ENTITYTYPE_UserMaintained);	// U
+                SetRecordType(RecordType_UserMaintained);	// U
                 SetIsReadOnly(false);	// N
                 SetIsSummary(false);
                 //	setName (null);

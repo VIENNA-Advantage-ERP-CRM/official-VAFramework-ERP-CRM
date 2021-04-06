@@ -51,7 +51,7 @@ namespace VAdvantage.Model
                 //	setVAF_Tab_ID (0);	//	parent
                 //	setVAF_Column_ID (0);
                 //	setName (null);
-                SetEntityType(ENTITYTYPE_UserMaintained);	// U
+                SetRecordType(RecordType_UserMaintained);	// U
                 SetIsCentrallyMaintained(true);	// Y
                 SetIsDisplayed(true);	// Y
                 SetIsEncrypted(false);
@@ -88,7 +88,7 @@ namespace VAdvantage.Model
             // copyValues(from, this);
             SetClientOrg(parent);
             SetVAF_Tab_ID(parent.GetVAF_Tab_ID());
-            SetEntityType(parent.GetEntityType());
+            SetRecordType(parent.GetRecordType());
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace VAdvantage.Model
             SetDescription(column.GetDescription());
             SetHelp(column.GetHelp());
             SetDisplayLength(column.GetFieldLength());
-            SetEntityType(column.GetEntityType());
+            SetRecordType(column.GetRecordType());
         }
 
         /// <summary>

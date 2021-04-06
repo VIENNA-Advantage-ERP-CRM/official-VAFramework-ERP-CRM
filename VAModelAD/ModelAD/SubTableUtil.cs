@@ -317,7 +317,7 @@ namespace VAdvantage.Model
                     M_VAFColumnDic ele = M_VAFColumnDic.Get(m_ctx, keyColumnName, target.Get_TrxName());
                     if (ele == null)
                     {
-                        ele = new M_VAFColumnDic(m_ctx, keyColumnName, target.GetEntityType(), null);
+                        ele = new M_VAFColumnDic(m_ctx, keyColumnName, target.GetRecordType(), null);
                         ele.Save();
                     }
                     key.SetVAF_ColumnDic_ID(ele.GetVAF_ColumnDic_ID());
@@ -410,13 +410,13 @@ namespace VAdvantage.Model
         /// Check Existence of Std columns and create them in AD and DB
         /// </summary>
         /// <param name="table">name of the table</param>
-        /// <param name="EntityType">Entity Type</param>
-        public static void CheckStandardColumns(MVAFTableView table, String EntityType)
+        /// <param name="RecordType">Entity Type</param>
+        public static void CheckStandardColumns(MVAFTableView table, String RecordType)
         {
             if (table == null)
                 return;
-            if (Utility.Util.IsEmpty(EntityType))
-                EntityType = table.GetEntityType();
+            if (Utility.Util.IsEmpty(RecordType))
+                RecordType = table.GetRecordType();
             table.GetColumns(true);		//	get new columns
             //	Key Column
             String colName = table.GetTableName() + "_ID";
@@ -428,7 +428,7 @@ namespace VAdvantage.Model
                 col.SetIsKey(true);
                 col.SetIsUpdateable(false);
                 col.SetIsMandatory(true);
-                col.SetEntityType(EntityType);
+                col.SetRecordType(RecordType);
                 col.SetIsCopy(false);           // By Default isCopy check box should be False on this Column.
                 CreateColumn(col, table, true);
             }
@@ -443,7 +443,7 @@ namespace VAdvantage.Model
                 col.SetVAF_DataVal_Rule_ID(116);	//	Client Login
                 col.SetDefaultValue("@#VAF_Client_ID@");
                 col.SetConstraintType(X_VAF_Column.CONSTRAINTTYPE_Restrict);
-                col.SetEntityType(EntityType);
+                col.SetRecordType(RecordType);
                 col.SetIsCopy(true);            // By Default isCopy check box should be true on this Column.
                 CreateColumn(col, table, true);
             }
@@ -459,7 +459,7 @@ namespace VAdvantage.Model
                 col.SetVAF_DataVal_Rule_ID(104);	//	Org Security
                 col.SetDefaultValue("@#VAF_Org_ID@");
                 col.SetConstraintType(X_VAF_Column.CONSTRAINTTYPE_Restrict);
-                col.SetEntityType(EntityType);
+                col.SetRecordType(RecordType);
                 col.SetIsCopy(true);            // By Default isCopy check box should be true on this Column.
                 CreateColumn(col, table, true);
             }
@@ -471,7 +471,7 @@ namespace VAdvantage.Model
                 col.SetVAF_Control_Ref_ID(DisplayType.DateTime);
                 col.SetIsUpdateable(false);
                 col.SetIsMandatory(true);
-                col.SetEntityType(EntityType);
+                col.SetRecordType(RecordType);
                 col.SetIsCopy(false);           // By Default isCopy check box should be False on this Column.
                 CreateColumn(col, table, true);
             }
@@ -483,7 +483,7 @@ namespace VAdvantage.Model
                 col.SetVAF_Control_Ref_ID(DisplayType.DateTime);
                 col.SetIsUpdateable(false);
                 col.SetIsMandatory(true);
-                col.SetEntityType(EntityType);
+                col.SetRecordType(RecordType);
                 col.SetIsCopy(false);           // By Default isCopy check box should be False on this Column.
                 CreateColumn(col, table, true);
             }
@@ -497,7 +497,7 @@ namespace VAdvantage.Model
                 col.SetConstraintType(X_VAF_Column.CONSTRAINTTYPE_DoNOTCreate);
                 col.SetIsUpdateable(false);
                 col.SetIsMandatory(true);
-                col.SetEntityType(EntityType);
+                col.SetRecordType(RecordType);
                 col.SetIsCopy(false);           // By Default isCopy check box should be False on this Column.
                 CreateColumn(col, table, true);
             }
@@ -511,7 +511,7 @@ namespace VAdvantage.Model
                 col.SetConstraintType(X_VAF_Column.CONSTRAINTTYPE_DoNOTCreate);
                 col.SetIsUpdateable(false);
                 col.SetIsMandatory(true);
-                col.SetEntityType(EntityType);
+                col.SetRecordType(RecordType);
                 col.SetIsCopy(false);           // By Default isCopy check box should be False on this Column.
                 CreateColumn(col, table, true);
             }
@@ -524,7 +524,7 @@ namespace VAdvantage.Model
                 col.SetDefaultValue("Y");
                 col.SetIsUpdateable(true);
                 col.SetIsMandatory(true);
-                col.SetEntityType(EntityType);
+                col.SetRecordType(RecordType);
                 col.SetIsCopy(false);           // By Default isCopy check box should be False on this Column.
                 CreateColumn(col, table, true);
             }
@@ -536,7 +536,7 @@ namespace VAdvantage.Model
                 col.SetVAF_Control_Ref_ID(DisplayType.String);
                 col.SetIsUpdateable(true);
                 col.SetIsMandatory(false);
-                col.SetEntityType(EntityType);
+                col.SetRecordType(RecordType);
                 col.SetFieldLength(50);
                 col.SetIsCopy(false);           // By Default isCopy check box should be False on this Column.
                 CreateColumn(col, table, true);
@@ -557,7 +557,7 @@ namespace VAdvantage.Model
             M_VAFColumnDic element = M_VAFColumnDic.Get(col.GetCtx(), col.GetColumnName(), col.Get_TrxName());
             if (element == null)
             {
-                element = new M_VAFColumnDic(col.GetCtx(), col.GetColumnName(), col.GetEntityType(), null);
+                element = new M_VAFColumnDic(col.GetCtx(), col.GetColumnName(), col.GetRecordType(), null);
                 if (!element.Save())
                     return false;
                 log.Info("Created Element: " + element.GetColumnName());

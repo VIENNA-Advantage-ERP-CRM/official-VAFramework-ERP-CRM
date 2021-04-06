@@ -55,7 +55,7 @@ namespace VAdvantage.Model
                 //	setName (null);
                 //	setTableName (null);
                 SetAccessLevel(ACCESSLEVEL_SystemOnly);	// 4
-                SetEntityType(ENTITYTYPE_UserMaintained);	// U
+                SetRecordType(RecordType_UserMaintained);	// U
                 SetIsChangeLog(false);
                 SetIsDeleteable(false);
                 SetIsHighVolume(false);

@@ -47,7 +47,7 @@ namespace VAdvantage.Process
             log.Info("Adding missing Elements");
             try
             {
-                sql = "SELECT DISTINCT ColumnName, Name, Description, Help, EntityType  " +
+                sql = "SELECT DISTINCT ColumnName, Name, Description, Help, RecordType  " +
                         "FROM	VAF_Column c  " +
                         "WHERE NOT EXISTS  " +
                         "	(SELECT * FROM VAF_ColumnDic e  " +
@@ -63,11 +63,11 @@ namespace VAdvantage.Process
                             sql = "INSERT INTO VAF_ColumnDic"
                                     + " (VAF_ColumnDic_ID, VAF_Client_ID, VAF_Org_ID,"
                                     + " IsActive, Created, CreatedBy, Updated, UpdatedBy,"
-                                    + " ColumnName, Name, PrintName, Description, Help, EntityType)"
+                                    + " ColumnName, Name, PrintName, Description, Help, RecordType)"
                                     + " VALUES"
                                     + " (@param1, 0, 0,"  //1, NextNo
                                     + " 'Y', CURRENT_TIMESTAMP, 0, CURRENT_TIMESTAMP, 0,"
-                                    + " @param2, @param3, @param4, @param5, @param6, @param7)"; //2-7 CC.ColumnName, CC.Name, CC.Name, CC.Description, CC.Help, CC.EntityType	
+                                    + " @param2, @param3, @param4, @param5, @param6, @param7)"; //2-7 CC.ColumnName, CC.Name, CC.Name, CC.Description, CC.Help, CC.RecordType	
 
                         }
 
@@ -122,7 +122,7 @@ namespace VAdvantage.Process
             steps++;
             try
             {
-                sql = "SELECT DISTINCT ColumnName, Name, Description, Help, EntityType " +
+                sql = "SELECT DISTINCT ColumnName, Name, Description, Help, RecordType " +
                         "FROM	VAF_Job_Para p " +
                         "WHERE NOT EXISTS " +
                         "	(SELECT * FROM VAF_ColumnDic e " +
@@ -138,11 +138,11 @@ namespace VAdvantage.Process
                             sql = "INSERT INTO VAF_ColumnDic"
                                     + " (VAF_ColumnDic_ID, VAF_Client_ID, VAF_Org_ID,"
                                     + " IsActive, Created, CreatedBy, Updated, UpdatedBy,"
-                                    + " ColumnName, Name, PrintName, Description, Help, EntityType)"
+                                    + " ColumnName, Name, PrintName, Description, Help, RecordType)"
                                     + " VALUES"
                                     + " (@param1, 0, 0,"  //1, NextNo
                                     + " 'Y', CURRENT_TIMESTAMP, 0, CURRENT_TIMESTAMP, 0,"
-                                    + " @param2, @param3, @param4, @param5, @param6, @param7)"; //2-7 CC.ColumnName, CC.Name, CC.Name, CC.Description, CC.Help, CC.EntityType	
+                                    + " @param2, @param3, @param4, @param5, @param6, @param7)"; //2-7 CC.ColumnName, CC.Name, CC.Name, CC.Description, CC.Help, CC.RecordType	
 
                         }
                         int id = DataBase.DB.GetNextID(GetVAF_Client_ID(), "VAF_ColumnDic", Get_Trx());

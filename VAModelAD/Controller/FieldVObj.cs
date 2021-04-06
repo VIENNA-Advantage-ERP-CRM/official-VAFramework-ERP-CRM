@@ -366,7 +366,7 @@ namespace VAdvantage.Controller
             //		int VAF_Client_ID = ctx.getVAF_Client_ID(windowNo);
             //		int VAF_Org_ID = ctx.getVAF_Org_ID(windowNo);
             //		String keyColumn = tabKeyColumn;
-            //		if ("EntityType".Equals(keyColumn))
+            //		if ("RecordType".Equals(keyColumn))
             //			keyColumn = "VAF_RecrodType_ID";
             //		if (!keyColumn.endsWith("_ID"))
             //			keyColumn += "_ID";			//	VAF_Language_ID

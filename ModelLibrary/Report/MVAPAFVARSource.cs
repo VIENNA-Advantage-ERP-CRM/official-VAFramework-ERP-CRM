@@ -119,7 +119,7 @@ namespace VAdvantage.Report
             //			ID = getUserElement2_ID ();
             if (ID == 0)
             {
-                log.Fine("No Restrictions - No ID for EntityType=" + et);
+                log.Fine("No Restrictions - No ID for RecordType=" + et);
                 return "";
             }
             //

@@ -26,7 +26,7 @@ namespace VAdvantage.Model
         {
             SetClientOrg(parent);
             SetVAF_TableView_ID(parent.GetVAF_TableView_ID());
-            SetEntityType(parent.GetEntityType());
+            SetRecordType(parent.GetRecordType());
         }	//	M_Column
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace VAdvantage.Model
                 //	setVAF_Control_Ref_ID (0);
                 //	setColumnName (null);
                 //	setName (null);
-                //	setEntityType (null);	// U
+                //	setRecordType (null);	// U
                 SetIsAlwaysUpdateable(false);	// N
                 SetIsEncrypted("N");
                 SetIsIdentifier(false);
@@ -428,7 +428,7 @@ namespace VAdvantage.Model
                             || DisplayType.List == dt
                             || DisplayType.YesNo == dt
                             || (DisplayType.Button == dt && !columnName.EndsWith("_ID"))
-                            || columnName.Equals("EntityType")
+                            || columnName.Equals("RecordType")
                             || columnName.Equals("VAF_Language")
                             || columnName.Equals("DocBaseType")
                             )

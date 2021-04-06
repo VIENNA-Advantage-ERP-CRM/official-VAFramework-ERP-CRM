@@ -185,9 +185,9 @@ namespace VAdvantage.Model
                     + " ||'I'||(SELECT " + count + " FROM VAB_Invoice)"
                     + " ||'L'||(SELECT " + count + " FROM VAB_InvoiceLine)"
                     + " ||'M'||(SELECT " + count + " FROM VAM_Inv_Trx)"
-                    + " ||'c'||(SELECT " + count + " FROM VAF_Column WHERE EntityType NOT IN ('C','D'))"
-                    + " ||'t'||(SELECT " + count + " FROM VAF_TableView WHERE EntityType NOT IN ('C','D'))"
-                    + " ||'f'||(SELECT " + count + " FROM VAF_Field WHERE EntityType NOT IN ('C','D'))"
+                    + " ||'c'||(SELECT " + count + " FROM VAF_Column WHERE RecordType NOT IN ('C','D'))"
+                    + " ||'t'||(SELECT " + count + " FROM VAF_TableView WHERE RecordType NOT IN ('C','D'))"
+                    + " ||'f'||(SELECT " + count + " FROM VAF_Field WHERE RecordType NOT IN ('C','D'))"
                     + " FROM VAF_System";
                 IDataReader idr = null;
                 try

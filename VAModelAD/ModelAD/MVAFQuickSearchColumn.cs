@@ -30,7 +30,7 @@ namespace VAdvantage.Model
         {
             if (VAF_QuickSearchColumn_ID == 0)
             {
-                SetEntityType(ENTITYTYPE_UserMaintained);	// U
+                SetRecordType(RecordType_UserMaintained);	// U
                 SetIsDisplayed(true);	// Y
                 SetIsQueryCriteria(false);
                 SetSeqNo(0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM VAF_QuickSearchColumn WHERE VAF_QuickSearchWindow_ID=@VAF_QuickSearchWindow_ID@

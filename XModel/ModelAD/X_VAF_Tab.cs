@@ -3,14 +3,14 @@ namespace VAdvantage.Model{
 using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for VAF_Tab
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_VAF_Tab : PO{public X_VAF_Tab (Context ctx, int VAF_Tab_ID, Trx trxName) : base (ctx, VAF_Tab_ID, trxName){/** if (VAF_Tab_ID == 0){SetVAF_Tab_ID (0);SetVAF_TableView_ID (0);SetVAF_Screen_ID (0);SetEntityType (null);// U
+public class X_VAF_Tab : PO{public X_VAF_Tab (Context ctx, int VAF_Tab_ID, Trx trxName) : base (ctx, VAF_Tab_ID, trxName){/** if (VAF_Tab_ID == 0){SetVAF_Tab_ID (0);SetVAF_TableView_ID (0);SetVAF_Screen_ID (0);SetRecordType (null);// U
 SetHasTree (false);SetIsAdvancedTab (false);// N
 SetIsDisplayed (true);// Y
 SetIsInsertRecord (true);// Y
 SetIsReadOnly (false);SetIsSingleRow (false);SetIsSortTab (false);// N
 SetIsTranslationTab (false);SetName (null);SetSeqNo (0);// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM VAF_Tab WHERE VAF_Screen_ID=@VAF_Screen_ID@
 SetTabLevel (0);} */
-}public X_VAF_Tab (Ctx ctx, int VAF_Tab_ID, Trx trxName) : base (ctx, VAF_Tab_ID, trxName){/** if (VAF_Tab_ID == 0){SetVAF_Tab_ID (0);SetVAF_TableView_ID (0);SetVAF_Screen_ID (0);SetEntityType (null);// U
+}public X_VAF_Tab (Ctx ctx, int VAF_Tab_ID, Trx trxName) : base (ctx, VAF_Tab_ID, trxName){/** if (VAF_Tab_ID == 0){SetVAF_Tab_ID (0);SetVAF_TableView_ID (0);SetVAF_Screen_ID (0);SetRecordType (null);// U
 SetHasTree (false);SetIsAdvancedTab (false);// N
 SetIsDisplayed (true);// Y
 SetIsInsertRecord (true);// Y
@@ -125,12 +125,12 @@ public String GetDescription() {return (String)Get_Value("Description");}/** Set
 public void SetDisplayLogic (String DisplayLogic){if (DisplayLogic != null && DisplayLogic.Length > 2000){log.Warning("Length > 2000 - truncated");DisplayLogic = DisplayLogic.Substring(0,2000);}Set_Value ("DisplayLogic", DisplayLogic);}/** Get Display Logic.
 @return If the Field is displayed, the result determines if the field is actually displayed */
 public String GetDisplayLogic() {return (String)Get_Value("DisplayLogic");}
-/** EntityType VAF_Control_Ref_ID=389 */
-public static int ENTITYTYPE_VAF_Control_Ref_ID=389;/** Set Entity Type.
-@param EntityType Dictionary Entity Type; Determines ownership and synchronization */
-public void SetEntityType (String EntityType){if (EntityType.Length > 4){log.Warning("Length > 4 - truncated");EntityType = EntityType.Substring(0,4);}Set_Value ("EntityType", EntityType);}/** Get Entity Type.
+/** RecordType VAF_Control_Ref_ID=389 */
+public static int RecordType_VAF_Control_Ref_ID=389;/** Set Entity Type.
+@param RecordType Dictionary Entity Type; Determines ownership and synchronization */
+public void SetRecordType (String RecordType){if (RecordType.Length > 4){log.Warning("Length > 4 - truncated");RecordType = RecordType.Substring(0,4);}Set_Value ("RecordType", RecordType);}/** Get Entity Type.
 @return Dictionary Entity Type; Determines ownership and synchronization */
-public String GetEntityType() {return (String)Get_Value("EntityType");}/** Set Export.
+public String GetRecordType() {return (String)Get_Value("RecordType");}/** Set Export.
 @param Export_ID Export */
 public void SetExport_ID (String Export_ID){if (Export_ID != null && Export_ID.Length > 50){log.Warning("Length > 50 - truncated");Export_ID = Export_ID.Substring(0,50);}Set_ValueNoCheck ("Export_ID", Export_ID);}/** Get Export.
 @return Export */

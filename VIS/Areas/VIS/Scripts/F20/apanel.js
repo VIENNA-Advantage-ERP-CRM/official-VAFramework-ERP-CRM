@@ -2111,8 +2111,8 @@
             var id = curTab.getValue("VAF_AlterLog_ID");
             record_ID = id;
         }
-        //	Record_ID - EntityType
-        if (record_ID == -1 && curTab.getKeyColumnName().equals("EntityType")) {
+        //	Record_ID - RecordType
+        if (record_ID == -1 && curTab.getKeyColumnName().equals("RecordType")) {
             record_ID = curTab.getValue("VAF_RecrodType_ID");
         }
         //	Ensure it's saved

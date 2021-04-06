@@ -41,7 +41,7 @@ namespace VAdvantage.Model
                 SetIsCentrallyMaintained(true);
                 SetIsRange(false);
                 SetIsMandatory(false);
-                SetEntityType(ENTITYTYPE_UserMaintained);
+                SetRecordType(RecordType_UserMaintained);
             }
         }	//	MProcessPara
 

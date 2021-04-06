@@ -707,7 +707,7 @@ namespace VAdvantage.Model
                 int VAF_Client_ID = _vo.GetCtx().GetContextAsInt(_vo.windowNo, _vo.tabNo, "VAF_Client_ID");
                 int VAF_Org_ID = _vo.GetCtx().GetContextAsInt(_vo.windowNo, _vo.tabNo, "VAF_Org_ID");
                 String keyColumn = _vo.GetCtx().GetContext(_vo.windowNo, _vo.tabNo, "KeyColumnName");
-                if ("EntityType".Equals(keyColumn))
+                if ("RecordType".Equals(keyColumn))
                     keyColumn = "VAF_RecrodType_ID";
                 if (!keyColumn.EndsWith("_ID"))
                     keyColumn += "_ID";			//	VAF_Language_ID

@@ -354,7 +354,7 @@ namespace VAdvantage.Print
                             sqlSelfTableRef = _synonym + "." + tr.KeyColumn;
                         }
                         sqlFROM.Append(tr.TableName).Append(" ").Append(_synonym).Append(" ON (");
-                        if (!ColumnName.EndsWith("_ID") && DatabaseType.IsPostgre && !ColumnName.ToUpper().Equals("AD_LANGUAGE") && !ColumnName.ToUpper().Equals("ENTITYTYPE"))
+                        if (!ColumnName.EndsWith("_ID") && DatabaseType.IsPostgre && !ColumnName.ToUpper().Equals("VAF_Language") && !ColumnName.ToUpper().Equals("RECORDTYPE"))
                         {
                             sqlFROM.Append("TO_NUMBER(").Append(tableName).Append(".").Append(ColumnName).Append(",'99G99')").Append("=");
                             //TO_NUMBER()
@@ -400,7 +400,7 @@ namespace VAdvantage.Print
                             sqlGROUP.Append(_synonym).Append(".Name,");
                             orderName = _synonym + "Name";
 
-                            //	LEFT OUTER JOIN VAF_CtrlRef_List XA ON (VAF_TableView.EntityType=XA.Value AND XA.VAF_Control_Ref_ID=245)
+                            //	LEFT OUTER JOIN VAF_CtrlRef_List XA ON (VAF_TableView.RecordType=XA.Value AND XA.VAF_Control_Ref_ID=245)
                             //	LEFT OUTER JOIN VAF_CtrlRef_TL A ON (XA.VAF_CtrlRef_List_ID=A.VAF_CtrlRef_List_ID AND A.VAF_Language='de_DE')
                             if (IsMandatory)
                                 sqlFROM.Append(" INNER JOIN ");

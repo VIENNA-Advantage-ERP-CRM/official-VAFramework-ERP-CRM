@@ -70,25 +70,25 @@ namespace VAdvantage.Model
          * 	Create Trial Asset
          *	@param ctx context
          *	@param user user
-         *	@param entityType entity type
+         *	@param recordType entity type
          *	@return asset or null if no product found
          */
-        public static MVAAsset GetTrial(Ctx ctx, MVAFUserContact user, String entityType)
+        public static MVAAsset GetTrial(Ctx ctx, MVAFUserContact user, String recordType)
         {
             if (user == null)
             {
                 _log.Warning("Cannot create Trial - No User");
                 return null;
             }
-            if (Utility.Util.IsEmpty(entityType))
+            if (Utility.Util.IsEmpty(recordType))
             {
                 _log.Warning("Cannot create Trial - No Entity Type");
                 return null;
             }
-            MVAMProduct product = MVAMProduct.GetTrial(ctx, entityType);
+            MVAMProduct product = MVAMProduct.GetTrial(ctx, recordType);
             if (product == null)
             {
-                _log.Warning("No Trial for Entity Type=" + entityType);
+                _log.Warning("No Trial for Entity Type=" + recordType);
                 return null;
             }
             //

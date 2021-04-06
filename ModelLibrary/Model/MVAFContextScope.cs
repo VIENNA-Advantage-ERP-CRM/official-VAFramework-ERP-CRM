@@ -30,7 +30,7 @@ namespace VAdvantage.Model
         {
             if (VAF_ContextScope_ID == 0)
             {
-                SetEntityType(ENTITYTYPE_UserMaintained); // U
+                SetRecordType(RecordType_UserMaintained); // U
                 SetIsSOTrx(false);
             }
         }
@@ -41,7 +41,7 @@ namespace VAdvantage.Model
         {
             if (VAF_ContextScope_ID == 0)
             {
-                SetEntityType(ENTITYTYPE_UserMaintained); // U
+                SetRecordType(RecordType_UserMaintained); // U
                 SetIsSOTrx(false);
             }
         }

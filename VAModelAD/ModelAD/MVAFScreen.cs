@@ -98,7 +98,7 @@ namespace VAdvantage.Model
             if (VAF_Screen_ID == 0)
             {
                 SetWindowType(WINDOWTYPE_Maintain);	// M
-                SetEntityType(ENTITYTYPE_UserMaintained);	// U
+                SetRecordType(RecordType_UserMaintained);	// U
                 SetIsBetaFunctionality(false);
                 SetIsDefault(false);
                 SetIsCustomDefault(false);

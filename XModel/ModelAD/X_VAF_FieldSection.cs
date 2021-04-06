@@ -21,7 +21,7 @@ public X_VAF_FieldSection (Context ctx, int VAF_FieldSection_ID, Trx trxName) : 
 /** if (VAF_FieldSection_ID == 0)
 {
 SetVAF_FieldSection_ID (0);
-SetEntityType (null);	// U
+SetRecordType (null);	// U
 SetName (null);
 }
  */
@@ -31,7 +31,7 @@ public X_VAF_FieldSection (Ctx ctx, int VAF_FieldSection_ID, Trx trxName) : base
 /** if (VAF_FieldSection_ID == 0)
 {
 SetVAF_FieldSection_ID (0);
-SetEntityType (null);	// U
+SetRecordType (null);	// U
 SetName (null);
 }
  */
@@ -130,26 +130,26 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** EntityType VAF_Control_Ref_ID=389 */
-public static int ENTITYTYPE_VAF_Control_Ref_ID=389;
+/** RecordType VAF_Control_Ref_ID=389 */
+public static int RecordType_VAF_Control_Ref_ID=389;
 /** Set Entity Type.
-@param EntityType Dictionary Entity Type;
+@param RecordType Dictionary Entity Type;
  Determines ownership and synchronization */
-public void SetEntityType (String EntityType)
+public void SetRecordType (String RecordType)
 {
-if (EntityType.Length > 4)
+if (RecordType.Length > 4)
 {
 log.Warning("Length > 4 - truncated");
-EntityType = EntityType.Substring(0,4);
+RecordType = RecordType.Substring(0,4);
 }
-Set_Value ("EntityType", EntityType);
+Set_Value ("RecordType", RecordType);
 }
 /** Get Entity Type.
 @return Dictionary Entity Type;
  Determines ownership and synchronization */
-public String GetEntityType() 
+public String GetRecordType() 
 {
-return (String)Get_Value("EntityType");
+return (String)Get_Value("RecordType");
 }
 /** Set Name.
 @param Name Alphanumeric identifier of the entity */

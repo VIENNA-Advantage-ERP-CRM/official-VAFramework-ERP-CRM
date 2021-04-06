@@ -60,7 +60,7 @@ namespace VAdvantage.Model
                 //	setVAF_Screen_ID (0);
                 //	setVAF_TableView_ID (0);
                 //	setName (null);
-                SetEntityType(ENTITYTYPE_UserMaintained);	// U
+                SetRecordType(RecordType_UserMaintained);	// U
                 SetHasTree(false);
                 SetIsReadOnly(false);
                 SetIsSingleRow(false);
@@ -101,7 +101,7 @@ namespace VAdvantage.Model
             ///this(parent.getCtx(), 0, parent.get_TrxName());
             SetClientOrg(parent);
             SetVAF_Screen_ID(parent.GetVAF_Screen_ID());
-            SetEntityType(parent.GetEntityType());
+            SetRecordType(parent.GetRecordType());
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace VAdvantage.Model
             CopyValues(from, this);
             SetClientOrg(parent);
             SetVAF_Screen_ID(parent.GetVAF_Screen_ID());
-            SetEntityType(parent.GetEntityType());
+            SetRecordType(parent.GetRecordType());
         }
 
         /// <summary>

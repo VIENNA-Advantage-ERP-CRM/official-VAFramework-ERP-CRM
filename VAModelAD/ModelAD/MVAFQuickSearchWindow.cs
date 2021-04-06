@@ -37,7 +37,7 @@ namespace VAdvantage.Model
         {
             if (VAF_QuickSearchWindow_ID == 0)
             {
-                SetEntityType(ENTITYTYPE_UserMaintained);	// U
+                SetRecordType(RecordType_UserMaintained);	// U
                 SetIsCustomDefault(false);
             }
         }

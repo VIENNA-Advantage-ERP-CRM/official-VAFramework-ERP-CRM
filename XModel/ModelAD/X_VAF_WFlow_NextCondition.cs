@@ -24,7 +24,7 @@ SetVAF_Column_ID (0);
 SetVAF_WFlow_NextCondition_ID (0);
 SetVAF_WFlow_NextNode_ID (0);
 SetAndOr (null);	// O
-SetEntityType (null);	// U
+SetRecordType (null);	// U
 SetOperation (null);
 SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM VAF_WFlow_NextCondition WHERE VAF_WFlow_NextNode_ID=@VAF_WFlow_NextNode_ID@
 SetValue (null);
@@ -39,7 +39,7 @@ SetVAF_Column_ID (0);
 SetVAF_WFlow_NextCondition_ID (0);
 SetVAF_WFlow_NextNode_ID (0);
 SetAndOr (null);	// O
-SetEntityType (null);	// U
+SetRecordType (null);	// U
 SetOperation (null);
 SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM VAF_WFlow_NextCondition WHERE VAF_WFlow_NextNode_ID=@VAF_WFlow_NextNode_ID@
 SetValue (null);
@@ -204,26 +204,26 @@ public String GetAndOr()
 return (String)Get_Value("AndOr");
 }
 
-/** EntityType VAF_Control_Ref_ID=389 */
-public static int ENTITYTYPE_VAF_Control_Ref_ID=389;
+/** RecordType VAF_Control_Ref_ID=389 */
+public static int RecordType_VAF_Control_Ref_ID=389;
 /** Set Entity Type.
-@param EntityType Dictionary Entity Type;
+@param RecordType Dictionary Entity Type;
  Determines ownership and synchronization */
-public void SetEntityType (String EntityType)
+public void SetRecordType (String RecordType)
 {
-if (EntityType.Length > 4)
+if (RecordType.Length > 4)
 {
 log.Warning("Length > 4 - truncated");
-EntityType = EntityType.Substring(0,4);
+RecordType = RecordType.Substring(0,4);
 }
-Set_Value ("EntityType", EntityType);
+Set_Value ("RecordType", RecordType);
 }
 /** Get Entity Type.
 @return Dictionary Entity Type;
  Determines ownership and synchronization */
-public String GetEntityType() 
+public String GetRecordType() 
 {
-return (String)Get_Value("EntityType");
+return (String)Get_Value("RecordType");
 }
 
 /** Operation VAF_Control_Ref_ID=205 */

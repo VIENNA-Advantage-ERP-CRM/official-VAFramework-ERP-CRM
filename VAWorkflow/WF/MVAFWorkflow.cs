@@ -68,7 +68,7 @@ namespace VAdvantage.WF
                 SetAuthor("Vienna, Inc.");
                 SetDurationUnit(DURATIONUNIT_Day);
                 SetDuration(1);
-                SetEntityType(ENTITYTYPE_UserMaintained);	// U
+                SetRecordType(RecordType_UserMaintained);	// U
                 SetIsDefault(false);
                 SetPublishStatus(PUBLISHSTATUS_UnderRevision);	// U
                 SetVersion(0);

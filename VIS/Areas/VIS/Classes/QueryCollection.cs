@@ -347,7 +347,7 @@ namespace VIS.Classes
                     + "FROM VAB_DimAmt "
                     + "WHERE VAB_DimAmt_ID=@VAB_DimAmt_ID";
 
-            queryList.VIS_100 = "SELECT VAF_Job_ID,name,CLASSNAME,ENTITYTYPE FROM VAF_Job WHERE value=@processName AND ISACTIVE='Y'";
+            queryList.VIS_100 = "SELECT VAF_Job_ID,name,CLASSNAME,RECORDTYPE FROM VAF_Job WHERE value=@processName AND ISACTIVE='Y'";
 
             queryList.VIS_101 = "SELECT count(*) FROM VAF_TableView t "
         + "INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID) "
@@ -472,7 +472,7 @@ namespace VIS.Classes
 
             queryList.VIS_129 = "SELECT VAF_Screen_ID FROM VAF_Screen WHERE Name='All Requests'";
 
-            queryList.VIS_130 = "select VAF_RecrodType_id, entitytype, name from VAF_RecrodType";
+            queryList.VIS_130 = "select VAF_RecrodType_id, recordtype, name from VAF_RecrodType";
 
             queryList.VIS_131 = "SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'";
 

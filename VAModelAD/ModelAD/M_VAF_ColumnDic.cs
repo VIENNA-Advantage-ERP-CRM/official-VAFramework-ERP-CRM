@@ -167,7 +167,7 @@ namespace VAdvantage.Model
             if (VAF_ColumnDic_ID == 0)
             {
                 //	setColumnName (null);
-                //	setEntityType (null);	// U
+                //	setRecordType (null);	// U
                 //	setName (null);
                 //	setPrintName (null);
             }
@@ -190,15 +190,15 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="columnName">column</param>
-        /// <param name="EntityType">entity type</param>
+        /// <param name="RecordType">entity type</param>
         /// <param name="trxName">trx</param>
-        public M_VAFColumnDic(Ctx ctx, string columnName, string entityType, Trx trxName)
+        public M_VAFColumnDic(Ctx ctx, string columnName, string recordType, Trx trxName)
             : base(ctx, 0, trxName)
         {
             SetColumnName(columnName);
             SetName(columnName);
             SetPrintName(columnName);
-            SetEntityType(entityType);	// U
+            SetRecordType(recordType);	// U
         }
 
         /// <summary>

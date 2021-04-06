@@ -52,7 +52,7 @@
 
                         '<div style="width: 400px;float: left; display: none;">' +
                             '<div style="width: 100px;float: left;">' +
-                            '<span>' + VIS.Msg.getMsg("VISPRO_EntityType") + '</span>' +
+                            '<span>' + VIS.Msg.getMsg("VISPRO_RecordType") + '</span>' +
                             '</div>' +
                             '<div style="width: 300px;float: left;">' +
                             '<input id="chkClassType_@windowNo" type="checkbox" />' +

@@ -171,7 +171,7 @@ namespace VAdvantage.Model
         //        SetIsReport(false);
         //        SetIsServerProcess(false);
         //        SetAccessLevel(ACCESSLEVEL_All);
-        //        SetEntityType(ENTITYTYPE_UserMaintained);
+        //        SetRecordType(RecordType_UserMaintained);
         //        SetIsBetaFunctionality(false);
         //    }
         //}
@@ -192,7 +192,7 @@ namespace VAdvantage.Model
                 SetIsReport(false);
                 SetIsServerProcess(false);
                 SetAccessLevel(ACCESSLEVEL_All);
-                SetEntityType(ENTITYTYPE_UserMaintained);
+                SetRecordType(RecordType_UserMaintained);
                 SetIsBetaFunctionality(false);
             }
         }

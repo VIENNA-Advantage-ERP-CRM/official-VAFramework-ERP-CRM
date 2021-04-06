@@ -25,7 +25,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class TableCreateColumns : ProcessEngine.SvrProcess
     {
         /** Entity Type			*/
-        private String p_EntityType = "C";	//	ENTITYTYPE_Customization
+        private String p_RecordType = "C";	//	RecordType_Customization
         /** Table				*/
         private int p_VAF_TableView_ID = 0;
         /** CheckAllDBTables	*/
@@ -46,8 +46,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 String name = element.GetParameterName();
                 if (element.GetParameter() == null)
                 { }
-                else if (name.Equals("EntityType"))
-                    p_EntityType = (String)element.GetParameter();
+                else if (name.Equals("RecordType"))
+                    p_RecordType = (String)element.GetParameter();
                 else if (name.Equals("AllTables"))
                     p_AllTables = "Y".Equals(element.GetParameter());
                 else
@@ -65,7 +65,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
            if (p_VAF_TableView_ID == 0)
                 throw new Exception("@NotFound@ @VAF_TableView_ID@ " + p_VAF_TableView_ID);
-            log.Info("EntityType=" + p_EntityType
+            log.Info("RecordType=" + p_RecordType
                 + ", AllTables=" + p_AllTables
                 + ", VAF_TableView_ID=" + p_VAF_TableView_ID);
 
@@ -84,13 +84,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 MVAFTableView table = new MVAFTableView(GetCtx(), p_VAF_TableView_ID, Get_Trx());
                 if ((table == null) || (table.Get_ID() == 0))
                     throw new Exception("@NotFound@ @VAF_TableView_ID@ " + p_VAF_TableView_ID);
-                log.Info(table.GetTableName() + ", EntityType=" + p_EntityType);
+                log.Info(table.GetTableName() + ", RecordType=" + p_RecordType);
                 String tableName = table.GetTableName();
                 
                 //tableName = tableName.ToUpper();
                 DataSet rs = md.GetColumns(catalog, schema, tableName.ToUpper());
-                AddTableColumn(GetCtx(), rs, table, p_EntityType);
-                SubTableUtil.CheckStandardColumns(table, p_EntityType);
+                AddTableColumn(GetCtx(), rs, table, p_RecordType);
+                SubTableUtil.CheckStandardColumns(table, p_RecordType);
             }
             md.Dispose();
             trx.Close();
@@ -138,7 +138,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
                     //	Create New
                     table = new MVAFTableView(GetCtx(), 0, Get_Trx());
-                    table.SetEntityType(p_EntityType);
+                    table.SetRecordType(p_RecordType);
                     table.SetName(tableName);
                     table.SetTableName(tableName);
                     table.SetIsView("VIEW".Equals(tableType));
@@ -148,8 +148,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 //	Check Columns
                 tableName = tableName.ToUpper();
                 DataSet rsC = md.GetColumns(catalog, schema, tableName);
-                //addTableColumn(GetCtx(), rsC, table, p_EntityType);
-                //SubTableUtil.checkStandardColumns(table, p_EntityType);
+                //addTableColumn(GetCtx(), rsC, table, p_RecordType);
+                //SubTableUtil.checkStandardColumns(table, p_RecordType);
             }
         }	//	addTable
 
@@ -159,9 +159,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <param name="ctx">Ctx</param>
         /// <param name="rs">Dataset</param>
         /// <param name="table">Table Object</param>
-        /// <param name="entityType">Entity type</param>
+        /// <param name="recordType">Entity type</param>
         /// <returns></returns>
-        protected List<String> AddTableColumn(Ctx ctx, DataSet rs, MVAFTableView table, String entityType)
+        protected List<String> AddTableColumn(Ctx ctx, DataSet rs, MVAFTableView table, String recordType)
         {
             //MVAFClientShare
             List<String> colName = new List<String>();
@@ -191,12 +191,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         + digits);
                     //
                     column = new MVAFColumn(table);
-                    column.SetEntityType(entityType);
+                    column.SetRecordType(recordType);
                     //	Element
                     M_VAFColumnDic element = M_VAFColumnDic.Get(ctx, columnName, Get_Trx());
                     if (element == null)
                     {
-                        element = new M_VAFColumnDic(ctx, columnName, entityType, Get_Trx());
+                        element = new M_VAFColumnDic(ctx, columnName, recordType, Get_Trx());
                         element.Save();
                     }
                     //	Column Sync
@@ -261,13 +261,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         column.SetIsCopy(false);
                     }
                     //	Entity Type
-                    else if (columnName.Equals("EntityType", StringComparison.OrdinalIgnoreCase))
+                    else if (columnName.Equals("RecordType", StringComparison.OrdinalIgnoreCase))
                     {
                         column.SetVAF_Control_Ref_ID(DisplayType.Table);
                         column.SetVAF_Control_Ref_Value_ID(389);
                         column.SetDefaultValue("U");
                         column.SetConstraintType(X_VAF_Column.CONSTRAINTTYPE_Restrict);
-                        column.SetReadOnlyLogic("@EntityType@=D");
+                        column.SetReadOnlyLogic("@RecordType@=D");
                     }
                     // CLOB
                     else if (typeName == Types.CLOB)

@@ -2833,7 +2833,7 @@ namespace VAdvantage.Model
                         || columnName.Equals("VAF_Client_ID")
                         //
                         || columnName.StartsWith("Created") || columnName.StartsWith("Updated")
-                        || columnName.Equals("EntityType") || columnName.Equals("DocumentNo")
+                        || columnName.Equals("RecordType") || columnName.Equals("DocumentNo")
                         || columnName.Equals("Processed") || columnName.Equals("IsSelfService")
                         || columnName.Equals("DocAction") || columnName.Equals("DocStatus")
                         || columnName.StartsWith("Ref_")

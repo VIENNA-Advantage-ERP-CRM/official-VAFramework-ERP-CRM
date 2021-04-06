@@ -37,7 +37,7 @@ namespace VAdvantage.Model
             if (VAF_Control_Ref_ID == 0)
             {
                 //	setVAF_TableView_ID (0);
-                SetEntityType(ENTITYTYPE_UserMaintained);	// U
+                SetRecordType(RecordType_UserMaintained);	// U
                 SetIsValueDisplayed(false);
             }
         }

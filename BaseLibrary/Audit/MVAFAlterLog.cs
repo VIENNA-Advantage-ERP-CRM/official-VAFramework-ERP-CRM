@@ -147,7 +147,7 @@ namespace VAdvantage.Model
             String sql = "SELECT t.VAF_TableView_ID ,t.ChangeLogLevel FROM VAF_TableView t "
                 + "WHERE (t.IsChangeLog='Y' AND (t.ChangeLogLevel='A' or t.ChangeLogLevel='U') )"					//	also inactive
                 + " OR EXISTS (SELECT * FROM VAF_Column c "
-                    + "WHERE t.VAF_TableView_ID=c.VAF_TableView_ID AND c.ColumnName='EntityType') "
+                    + "WHERE t.VAF_TableView_ID=c.VAF_TableView_ID AND c.ColumnName='RecordType') "
                 + "ORDER BY t.VAF_TableView_ID";
             DataTable dt = null;
             IDataReader idr = null;

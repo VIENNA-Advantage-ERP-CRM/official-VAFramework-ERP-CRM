@@ -397,9 +397,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		int updateNo = 0;
 		//	Get Tables
 		sql = "SELECT * FROM VAF_TableView t "
-		//	Table with EntityType
+		//	Table with RecordType
 			+ "WHERE EXISTS (SELECT * FROM VAF_Column c "
-				+ "WHERE t.VAF_TableView_ID=c.VAF_TableView_ID AND c.ColumnName='EntityType')"
+				+ "WHERE t.VAF_TableView_ID=c.VAF_TableView_ID AND c.ColumnName='RecordType')"
 		//	Changed Tables
 			+ " AND EXISTS (SELECT * FROM VAF_AlterLog l "
 				+ "WHERE t.VAF_TableView_ID=l.VAF_TableView_ID)";
@@ -427,7 +427,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 				update.Append (" AND Record_ID IN (SELECT ")
 					.Append (columnName)
 					.Append (" FROM ").Append(tableName)
-					.Append (" WHERE EntityType IN ('D','C'))");
+					.Append (" WHERE RecordType IN ('D','C'))");
 				int no = DataBase.DB.ExecuteQuery(update.ToString(),null, Get_Trx());
 				log.Config(table.GetTableName() + " = " + no);
 				updateNo += no;

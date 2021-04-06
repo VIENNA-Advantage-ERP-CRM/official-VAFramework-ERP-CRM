@@ -61,7 +61,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             return sin;
         }
         private String SQLfile = null;
-        private String entityType = null;
+        private String recordType = null;
         private int _VAF_TableView_ID = 0;
 
         /// <summary>
@@ -77,9 +77,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("EntityType"))
+                else if (name.Equals("RecordType"))
                 {
-                    entityType = (String)element.GetParameter();
+                    recordType = (String)element.GetParameter();
                 }
                 else if (name.Equals("SQLfile"))
                     SQLfile = (String)element.GetParameter();
@@ -177,7 +177,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 MVAFTableView targetTable = MVAFTableView.Get(Env.GetCtx(), _VAF_TableView_ID);
                 targetViewName = targetTable.GetTableName();
-                entityType = targetTable.GetEntityType();
+                recordType = targetTable.GetRecordType();
             }
             try
             {
@@ -293,7 +293,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             //mt.setVAF_Org_ID(0);
                             //mt.setVAF_Client_ID(0); also updatedby, createdby. jz: all default is 0 in PO
                             mt.SetAccessLevel(X_VAF_TableView.ACCESSLEVEL_ClientPlusOrganization);
-                            mt.SetEntityType(entityType);
+                            mt.SetRecordType(recordType);
                             mt.SetIsActive(true);
                             mt.SetIsView(true);
                             mt.SetName("View_" + tableName);
@@ -441,7 +441,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             mvc.SetVAF_TableView_ID(mt.Get_ID());
                             mvc.SetSeqNo((i + 1) * 10);
                             mvc.SetIsActive(true);
-                            mvc.SetEntityType(entityType);
+                            mvc.SetRecordType(recordType);
                             //mvc.setVAF_Org_ID(0);
                             //mvc.setReferenced_Table_ID(mt.get_ID());
                             String from1 = from.Substring(5);
@@ -477,7 +477,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                                 //mvcol.setVAF_Org_ID(0);
                                 mvcol.SetVAF_DBViewElement_ID(mvc.Get_ID());
                                 mvcol.SetIsActive(true);
-                                mvcol.SetEntityType(entityType);
+                                mvcol.SetRecordType(recordType);
                                 log.Info("Importing View " + tableName + "(i,j) = (" + i + ", " + j + ")");
                                 mvcol.SetDBDataType(colType[j]);//.get(j));
                                 mvcol.SetColumnName(colName[j]);//.get(j));

@@ -21,7 +21,7 @@
         this.windowNo = windowNop;
         this.processId = null;
         this.name = null;
-        this.entityType = null;
+        this.recordType = null;
         this.pInstanceId = 0;
         this.className = null;
         this.fields = null;
@@ -307,7 +307,7 @@
     ParameterDialog.prototype.initDialog = function (processIDp, namep, typep, classNamep, asyn) {
         this.processId = processIDp;
         this.name = namep;
-        this.entityType = typep;
+        this.recordType = typep;
         this.className = classNamep;
         if (typeof asyn != 'undefined') {
             this.asyncProcess = asyn;

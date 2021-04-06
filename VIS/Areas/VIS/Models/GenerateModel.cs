@@ -409,7 +409,7 @@ namespace VAdvantage.Tool
             }
             //	String Key
             else if (columnName.Equals("VAF_Language", StringComparison.InvariantCultureIgnoreCase)
-                || columnName.Equals("EntityType", StringComparison.InvariantCultureIgnoreCase)
+                || columnName.Equals("RecordType", StringComparison.InvariantCultureIgnoreCase)
                 || columnName.Equals("DocBaseType", StringComparison.InvariantCultureIgnoreCase))
             {
                 clazz = typeof(String);
@@ -784,7 +784,7 @@ namespace VAdvantage.Tool
                 .Append(" Invalid value - \" + ").Append(columnName)
                 .Append(" + \" - ").Append(values).Append("\");");
             //
-            if (found && !columnName.Equals("EntityType"))
+            if (found && !columnName.Equals("RecordType"))
                 sb.Append(statement);
             //
             if (isRealList)
@@ -824,18 +824,18 @@ namespace VAdvantage.Tool
             }
 
             //third parameter
-            string entityType;// = "'U','A'";	//	User, Application
+            string recordType;// = "'U','A'";	//	User, Application
 
             if (getChekboxStatus == false)
             {
-                entityType = "'D'";	//	User, Application
+                recordType = "'D'";	//	User, Application
             }
             else
             {
-                entityType = classType;// "'U','A'";	//	User, Application 
-                // entityType = "'U'";
+                recordType = classType;// "'U','A'";	//	User, Application 
+                // recordType = "'U'";
             }
-            if (string.IsNullOrEmpty(entityType))
+            if (string.IsNullOrEmpty(recordType))
             {
                 sbTextCopy = sbTextCopy1;
                 fileName = fileName1;
@@ -843,7 +843,7 @@ namespace VAdvantage.Tool
             }
 
             //StringBuilder sql = new StringBuilder("");
-            StringBuilder sql = new StringBuilder("EntityType IN (").Append(entityType).Append(")");
+            StringBuilder sql = new StringBuilder("RecordType IN (").Append(recordType).Append(")");
             int count = 0;
             if (getChekboxStatus == false)
             {
