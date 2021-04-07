@@ -2051,4 +2051,22 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
     padding: 7px;
     cursor: pointer;
 }
+
+.vis-apanel-sorttab-cont {
+    display: flex;
+    height: calc(100% - 21px);
+}
+
+    .vis-apanel-sorttab-cont ul.vis-sortTab-select {
+        margin: 0 20px;
+        flex: 1;
+    }
+
+    .vis-apanel-sorttab-cont ul li {
+        padding: 3px 15px;
+    }
+
+        .vis-apanel-sorttab-cont ul li:nth-child(odd) {
+            background: rgba(var(--v-c-secondary), .5);
+        }
 /**********************END Filter Panel*/
