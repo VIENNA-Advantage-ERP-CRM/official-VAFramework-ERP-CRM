@@ -106,7 +106,7 @@ namespace VAdvantage.BiReport
                 int rID = GetReportID(ctx, biRepID.ToString());
 
                 string filters = GetReportParameters(ctx, rID, pi.GetAD_PInstance_ID(), pi);
-                reportFilePath = result[1] + "JsAPI?clientOrg=" + MClient.Get(ctx).GetValue() + "&reportUUID=" + biRepID + "&token=" + result[0]+ "&showFilters=false&showInfo=false" + filters;
+                reportFilePath = result[1] + "JsAPI/v3?clientOrg=" + MClient.Get(ctx).GetValue() + "&reportUUID=" + biRepID + "&token=" + result[0]+ "&showFilters=false&showInfo=false" + filters;
             }
             else
             {
