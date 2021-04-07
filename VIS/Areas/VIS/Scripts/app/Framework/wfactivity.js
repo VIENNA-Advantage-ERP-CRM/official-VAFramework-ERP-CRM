@@ -410,10 +410,10 @@
 
         function loadOnScroll(e) {
             var thisscroll = this;
-            clearTimeout($.data(this, 'scrollTimer'));
+            clearTimeout($.data(this, 'scrollTimer'));//Clear scroll timer to wait next scroll event happens after 250 ms
             $.data(this, 'scrollTimer', setTimeout(function () {
                 // do something
-                if ($(thisscroll).scrollTop() + $(thisscroll).innerHeight() >= (thisscroll.scrollHeight * 0.75)) {
+                if ($(thisscroll).scrollTop() + $(thisscroll).innerHeight() >= (thisscroll.scrollHeight * 0.75)) {//Condition true when 75 scroll is done
                     tabdataLastPage = parseInt($divActivity.html());
                     tabdatacntpage = pageNo * PageSize;
                     if (tabdatacntpage <= tabdataLastPage) {

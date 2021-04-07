@@ -721,9 +721,9 @@
                 /* Start Bind Scroll of main data contianer of tab menu */
                 WelcomeTabDatacontainers.bind('scroll', function () {
                     var thisscroll = this;
-                    clearTimeout($.data(this, 'scrollTimer'));
+                    clearTimeout($.data(this, 'scrollTimer'));//Clear scroll timer to wait next scroll event happens after 250 ms
                     $.data(this, 'scrollTimer', setTimeout(function () {
-                        if ($(thisscroll).scrollTop() + $(thisscroll).innerHeight() >= (thisscroll.scrollHeight * .75)) {
+                        if ($(thisscroll).scrollTop() + $(thisscroll).innerHeight() >= (thisscroll.scrollHeight * .75)) {//Condition true when 75 scroll is done
                         isTabscroll = true;
                         isTabDataRef = false;
                         if (activeTabType == WorkflowType) {
@@ -907,9 +907,9 @@
                 //Bind Scroll evnt on Follups
                 FllUpsMain.bind('scroll', function () {
                     var thisscroll = this;
-                    clearTimeout($.data(this, 'scrollTimer'));
+                    clearTimeout($.data(this, 'scrollTimer'));//Clear scroll timer to wait next scroll event happens after 250 ms
                     $.data(this, 'scrollTimer', setTimeout(function () {
-                        if ($(thisscroll).scrollTop() + $(thisscroll).innerHeight() >= (thisscroll.scrollHeight * .75)) {
+                        if ($(thisscroll).scrollTop() + $(thisscroll).innerHeight() >= (thisscroll.scrollHeight * .75)) {//Condition true when 75 scroll is done
                         isRef = false;
                         fllLastPage = $FllupsCnt.text();
 
