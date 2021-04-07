@@ -715,75 +715,80 @@
 
                         }
                     }
-                });
-                /* End  bind click event of Main data container of Tab Menu */
-
+                });/* End  bind click event of Main data container of Tab Menu */
+                
+                var welcomeTabScroll = true;
+                
                 /* Start Bind Scroll of main data contianer of tab menu */
                 WelcomeTabDatacontainers.bind('scroll', function () {
-                    var thisscroll = this;
-                    clearTimeout($.data(this, 'scrollTimer'));//Clear scroll timer to wait next scroll event happens after 250 ms
-                    $.data(this, 'scrollTimer', setTimeout(function () {
-                        if ($(thisscroll).scrollTop() + $(thisscroll).innerHeight() >= (thisscroll.scrollHeight * .75)) {//Condition true when 75 scroll is done
+                    //var thisscroll = this;
+                    //clearTimeout($.data(this, 'scrollTimer'));//Clear scroll timer to wait next scroll event happens after 250 ms
+                    //$.data(this, 'scrollTimer', setTimeout(function () {
+                    if ($(this).scrollTop() + $(this).innerHeight() >= (this.scrollHeight * .75) && welcomeTabScroll) {//Condition true when 75 scroll is done
+                        welcomeTabScroll = false;
+                        setTimeout(function () {
+                            welcomeTabScroll = true;
+                        }, 100);
                         isTabscroll = true;
-                        isTabDataRef = false;
-                        if (activeTabType == WorkflowType) {
-                            tabdataLastPage = parseInt($("#divfActivity").html());
-                            tabdatacntpage = tabdataPage * tabdataPageSize;
-                            if (tabdatacntpage <= tabdataLastPage && activity != null) {
+                            isTabDataRef = false;
+                            if (activeTabType == WorkflowType) {
+                                tabdataLastPage = parseInt($("#divfActivity").html());
+                                tabdatacntpage = tabdataPage * tabdataPageSize;
+                                if (tabdatacntpage <= tabdataLastPage && activity != null) {
+                                    tabdataPage += 1;
+                                    activity.AppendRecord(tabdataPage, tabdataPageSize);
+                                }
+                                else {
+                                    return;
+                                }
+                            }
+                            else if (activeTabType == NoticeType) {
+                                tabdataLastPage = parseInt($divNoticeCount.text());
+                                tabdatacntpage = tabdataPage * tabdataPageSize;
                                 tabdataPage += 1;
-                                activity.AppendRecord(tabdataPage, tabdataPageSize);
+                                if (tabdatacntpage <= tabdataLastPage) {
+                                    LoadHomeNotice();
+                                }
+                                else {
+                                    return;
+                                }
                             }
-                            else {
-                                return;
-                            }
-                        }
-                        else if (activeTabType == NoticeType) {
-                            tabdataLastPage = parseInt($divNoticeCount.text());
-                            tabdatacntpage = tabdataPage * tabdataPageSize;
-                            tabdataPage += 1;
-                            if (tabdatacntpage <= tabdataLastPage) {
-                                LoadHomeNotice();
-                            }
-                            else {
-                                return;
-                            }
-                        }
-                        else if (activeTabType == RequestType) {
-                            tabdataLastPage = parseInt($divRequestCount.text());
-                            tabdatacntpage = tabdataPage * tabdataPageSize;
-                            tabdataPage += 1;
-                            if (tabdatacntpage <= tabdataLastPage) {
-                                LoadHomeRequest();
-                            }
-                            else {
-                                return;
-                            }
-                        }
-                        else if (activeTabType == AppointmentsType) {
-                            tabdataLastPage = parseInt($divAptCount.text());
-                            tabdatacntpage = tabdataPage * tabdataPageSize;
-                            tabdataPage += 1;
-                            if (tabdatacntpage <= tabdataLastPage) {
-                                WSP.wspHomeMgr.doScrollWSPHome(AppointmentsType, tabdataPage, tabdataPageSize);
-                            }
-                            else {
-                                return;
-                            }
-                        }
-                        else if (activeTabType == NotesType) {
-                            tabdataLastPage = parseInt($divNotesCount.text());
-                            tabdatacntpage = tabdataPage * tabdataPageSize;
-                            if (tabdatacntpage <= tabdataLastPage) {
+                            else if (activeTabType == RequestType) {
+                                tabdataLastPage = parseInt($divRequestCount.text());
+                                tabdatacntpage = tabdataPage * tabdataPageSize;
                                 tabdataPage += 1;
-                                WSP.wspHomeMgr.doScrollWSPHome(NotesType, tabdataPage, tabdataPageSize);
+                                if (tabdatacntpage <= tabdataLastPage) {
+                                    LoadHomeRequest();
+                                }
+                                else {
+                                    return;
+                                }
                             }
-                            else {
-                                return;
+                            else if (activeTabType == AppointmentsType) {
+                                tabdataLastPage = parseInt($divAptCount.text());
+                                tabdatacntpage = tabdataPage * tabdataPageSize;
+                                tabdataPage += 1;
+                                if (tabdatacntpage <= tabdataLastPage) {
+                                    WSP.wspHomeMgr.doScrollWSPHome(AppointmentsType, tabdataPage, tabdataPageSize);
+                                }
+                                else {
+                                    return;
+                                }
                             }
-                        }
+                            else if (activeTabType == NotesType) {
+                                tabdataLastPage = parseInt($divNotesCount.text());
+                                tabdatacntpage = tabdataPage * tabdataPageSize;
+                                if (tabdatacntpage <= tabdataLastPage) {
+                                    tabdataPage += 1;
+                                    WSP.wspHomeMgr.doScrollWSPHome(NotesType, tabdataPage, tabdataPageSize);
+                                }
+                                else {
+                                    return;
+                                }
+                            }
 
-                    }
-                }, 200));
+                        }
+                    //}, 200));
                 });
                 /* End Bind Scroll of main data contianer of tab menu    */
 
@@ -904,13 +909,15 @@
                         }
                     }
                 });
+                var followUpScroll = true;
                 //Bind Scroll evnt on Follups
                 FllUpsMain.bind('scroll', function () {
-                    var thisscroll = this;
-                    clearTimeout($.data(this, 'scrollTimer'));//Clear scroll timer to wait next scroll event happens after 250 ms
-                    $.data(this, 'scrollTimer', setTimeout(function () {
-                        if ($(thisscroll).scrollTop() + $(thisscroll).innerHeight() >= (thisscroll.scrollHeight * .75)) {//Condition true when 75 scroll is done
+                    //var thisscroll = this;
+                    //clearTimeout($.data(this, 'scrollTimer'));//Clear scroll timer to wait next scroll event happens after 250 ms
+                    //$.data(this, 'scrollTimer', setTimeout(function () {
+                    if ($(this).scrollTop() + $(this).innerHeight() >= (this.scrollHeight * .75) && followUpScroll) {//Condition true when 75 scroll is done
                         isRef = false;
+                        followUpScroll = false;
                         fllLastPage = $FllupsCnt.text();
 
                         if (fllLastPage > fllPageSize) {
@@ -920,11 +927,13 @@
                                 getFllUps(fllPageSize, fllPage, isRef);
                             }
                             else {
+                                followUpScroll = true;
                                 return;
                             }
                         }
-                        }
-                    }, 200));
+                        followUpScroll = true;
+                    }
+                    //}, 200));
                 });
                 //To refresh fllups
                 $FllUpsRefresh.on("click", function () {
@@ -1030,9 +1039,11 @@
                                 }
                             }
                             isfllBusy = false;
+                            followUpScroll = true;
                             $FllMainLoder.hide();
                         },
                         error: function () {
+                            followUpScroll = true;
                         }
                     });
                 }
