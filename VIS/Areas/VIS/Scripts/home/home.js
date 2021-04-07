@@ -720,11 +720,10 @@
 
                 /* Start Bind Scroll of main data contianer of tab menu */
                 WelcomeTabDatacontainers.bind('scroll', function () {
-                    var innerheight = $(this).scrollTop();
-                    if (innerheight && innerheight > 0) {
-                        innerheight = (innerheight * 25) / 100;
-                    }
-                    if ($(this).scrollTop() + $(this).innerHeight() + innerheight >= this.scrollHeight) {
+                    var thisscroll = this;
+                    clearTimeout($.data(this, 'scrollTimer'));
+                    $.data(this, 'scrollTimer', setTimeout(function () {
+                        if ($(thisscroll).scrollTop() + $(thisscroll).innerHeight() >= (thisscroll.scrollHeight * .75)) {
                         isTabscroll = true;
                         isTabDataRef = false;
                         if (activeTabType == WorkflowType) {
@@ -784,6 +783,7 @@
                         }
 
                     }
+                }, 200));
                 });
                 /* End Bind Scroll of main data contianer of tab menu    */
 
@@ -906,11 +906,10 @@
                 });
                 //Bind Scroll evnt on Follups
                 FllUpsMain.bind('scroll', function () {
-                    var innerheight = $(this).scrollTop();
-                    if (innerheight && innerheight > 0) {
-                        innerheight = (innerheight * 25) / 100;
-                    }
-                    if ($(this).scrollTop() + $(this).innerHeight() + innerheight >= this.scrollHeight) {
+                    var thisscroll = this;
+                    clearTimeout($.data(this, 'scrollTimer'));
+                    $.data(this, 'scrollTimer', setTimeout(function () {
+                        if ($(thisscroll).scrollTop() + $(thisscroll).innerHeight() >= (thisscroll.scrollHeight * .75)) {
                         isRef = false;
                         fllLastPage = $FllupsCnt.text();
 
@@ -924,7 +923,8 @@
                                 return;
                             }
                         }
-                    }
+                        }
+                    }, 200));
                 });
                 //To refresh fllups
                 $FllUpsRefresh.on("click", function () {

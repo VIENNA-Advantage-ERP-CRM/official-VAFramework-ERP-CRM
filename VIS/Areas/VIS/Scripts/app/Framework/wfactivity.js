@@ -409,21 +409,25 @@
         };
 
         function loadOnScroll(e) {
-            var innerheight = $(this).scrollTop();
-            if (innerheight && innerheight > 0) {
-                innerheight = (innerheight * 25) / 100;
-            }
-            if ($(this).scrollTop() + $(this).innerHeight() + innerheight >= this.scrollHeight) {
-                tabdataLastPage = parseInt($divActivity.html());
-                tabdatacntpage = pageNo * PageSize;
-                if (tabdatacntpage <= tabdataLastPage) {
-                    pageNo += 1;
-                    self.AppendRecord(pageNo, PageSize);
+            var thisscroll = this;
+            clearTimeout($.data(this, 'scrollTimer'));
+            $.data(this, 'scrollTimer', setTimeout(function () {
+                // do something
+                if ($(thisscroll).scrollTop() + $(thisscroll).innerHeight() >= (thisscroll.scrollHeight * 0.75)) {
+                    tabdataLastPage = parseInt($divActivity.html());
+                    tabdatacntpage = pageNo * PageSize;
+                    if (tabdatacntpage <= tabdataLastPage) {
+                        pageNo += 1;
+                        self.AppendRecord(pageNo, PageSize);
+                    }
+                    else {
+                        return;
+                    }
                 }
-                else {
-                    return;
-                }
-            }
+            }, 200));
+            
+                
+            
         };
 
         this.AppendRecord = function (pageNo, paeSize, refresh) {
