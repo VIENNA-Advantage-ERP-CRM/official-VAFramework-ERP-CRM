@@ -720,7 +720,11 @@
 
                 /* Start Bind Scroll of main data contianer of tab menu */
                 WelcomeTabDatacontainers.bind('scroll', function () {
-                    if ($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {
+                    var innerheight = $(this).scrollTop();
+                    if (innerheight && innerheight > 0) {
+                        innerheight = (innerheight * 25) / 100;
+                    }
+                    if ($(this).scrollTop() + $(this).innerHeight() + innerheight >= this.scrollHeight) {
                         isTabscroll = true;
                         isTabDataRef = false;
                         if (activeTabType == WorkflowType) {
@@ -902,7 +906,11 @@
                 });
                 //Bind Scroll evnt on Follups
                 FllUpsMain.bind('scroll', function () {
-                    if ($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {
+                    var innerheight = $(this).scrollTop();
+                    if (innerheight && innerheight > 0) {
+                        innerheight = (innerheight * 25) / 100;
+                    }
+                    if ($(this).scrollTop() + $(this).innerHeight() + innerheight >= this.scrollHeight) {
                         isRef = false;
                         fllLastPage = $FllupsCnt.text();
 

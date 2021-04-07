@@ -409,7 +409,11 @@
         };
 
         function loadOnScroll(e) {
-            if ($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {
+            var innerheight = $(this).scrollTop();
+            if (innerheight && innerheight > 0) {
+                innerheight = (innerheight * 25) / 100;
+            }
+            if ($(this).scrollTop() + $(this).innerHeight() + innerheight >= this.scrollHeight) {
                 tabdataLastPage = parseInt($divActivity.html());
                 tabdatacntpage = pageNo * PageSize;
                 if (tabdatacntpage <= tabdataLastPage) {
