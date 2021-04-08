@@ -445,11 +445,12 @@
 }
 
 .vis-apanel-sorttab-td-inner {
-    display: inline-block;
+    display: inline-flex;
     position: relative;
     min-width: 250px;
-    width: 40%;
-    height: 60%;
+    width: 45%;
+    height: 75%;
+    flex-direction: column;
 }
 
 /* END */
