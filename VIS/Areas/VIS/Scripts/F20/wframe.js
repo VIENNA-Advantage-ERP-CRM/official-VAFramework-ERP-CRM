@@ -1515,10 +1515,10 @@
             //$noDiv = $("<div class='vis-apanel-sorttab-div' " + (isReadOnly ? " disabled" : "") + ">");
             //$yesDiv = $("<div class='vis-apanel-sorttab-div' " + (isReadOnly ? " disabled" : "") + " >");
 
-            $btnLeft = $("<button" + (isReadOnly ? " disabled" : "") + " ><img src='" + path + "Left32.png" + "' /></button");
-            $btnRight = $("<button" + (isReadOnly ? " disabled" : "") + " ><img src='" + path + "Right32.png" + "' /></button");
-            $btnUp = $("<button" + (isReadOnly ? " disabled" : "") + " ><img src='" + path + "Up32.png" + "' /></button");
-            $btnDown = $("<button" + (isReadOnly ? " disabled" : "") + " ><img src='" + path + "Down32.png" + "' /></button");
+            $btnLeft = $("<button" + (isReadOnly ? " disabled" : "") + " ><i class='fa fa-arrow-left'></i></button");
+            $btnRight = $("<button" + (isReadOnly ? " disabled" : "") + " ><i class='fa fa-arrow-right'></i></button");
+            $btnUp = $("<button" + (isReadOnly ? " disabled" : "") + " ><i class='fa fa-arrow-up'></i></button");
+            $btnDown = $("<button" + (isReadOnly ? " disabled" : "") + " ><i class='fa fa-arrow-down'></i></button");
 
             $tblRoot = $("<table class='vis-apanel-sorttab' style='display:none;'>");
             //$tabControl = $("<ul class='vis-gc-tabs-ul'>");
@@ -1526,11 +1526,15 @@
             //$tblRoot.append($("<tr>").append($("<td>").append($tabControl)));
 
             var $td = $("<td class='vis-apanel-sorttab-td'>");
-            $td.append($("<div class='vis-apanel-sorttab-td-inner'>").append($lblNo).append($lstNo)
-                .append($("<div class='vis-apanel-sorttab-td-right'>").append($btnRight).append($btnLeft)));
+            var $divLeftContainer = $('<div class="vis-apanel-sorttab-cont">');
 
-            $td.append($("<div class='vis-apanel-sorttab-td-inner'>").append($lblYes).append($lstYes)
-                .append($("<div class='vis-apanel-sorttab-td-right'>").append($btnUp).append($btnDown)));
+            $divLeftContainer.append($lstNo).append($("<div class='vis-apanel-sorttab-td-right'>").append($btnRight).append($btnLeft));
+
+            $td.append($("<div class='vis-apanel-sorttab-td-inner'>").append($lblNo).append($divLeftContainer));
+
+            var $divRightContainer = $('<div class="vis-apanel-sorttab-cont">');
+            $divRightContainer.append($lstYes).append($("<div class='vis-apanel-sorttab-td-right'>").append($btnUp).append($btnDown));
+            $td.append($("<div class='vis-apanel-sorttab-td-inner'>").append($lblYes).append($divRightContainer));
 
             $tblRoot.append($("<tr>").append($td));
         }

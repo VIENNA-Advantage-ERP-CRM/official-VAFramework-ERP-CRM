@@ -390,7 +390,7 @@
         position: relative;
         border: 1px solid gray;
         width: 70%;
-        height: 220px;
+        height: 100%;
         list-style: none;
         margin: 0;
         padding: 0;
@@ -405,18 +405,21 @@
         }
 
             .vis-apanel-sorttab-td ul li:hover {
-                background-color: lightblue;
+                background-color: rgba(var(--v-c-primary), .3);
             }
 
 .vis-apanel-sorttab-selected {
     color: white;
-    background-color: rgba(var(--v-c-primary), 1);
+    background-color: rgba(var(--v-c-primary), 1) !important;
 }
 
 .vis-apanel-sorttab-td button {
-    width: auto;
-    height: auto;
+    width: 40px;
+    height: 40px;
     margin-bottom: 15px;
+    border-color: rgba(var(--v-c-on-secondary), .2);
+    font-size: 1.2rem;
+    color: rgba(var(--v-c-on-secondary), 1);
 }
 
     .vis-apanel-sorttab-td button img {
@@ -427,21 +430,26 @@
 
 .vis-apanel-sorttab-td span {
     display: block;
+    width: calc(100% - 45px);
+    padding: 0 20px;
 }
 
 .vis-apanel-sorttab-td-right {
     width: 45px;
-    display: block;
+    display: flex;
     float: right;
-    height: 90%;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .vis-apanel-sorttab-td-inner {
     display: inline-block;
     position: relative;
     min-width: 250px;
-    width: 20%;
-    height: 250px;
+    width: 40%;
+    height: 60%;
 }
 
 /* END */
