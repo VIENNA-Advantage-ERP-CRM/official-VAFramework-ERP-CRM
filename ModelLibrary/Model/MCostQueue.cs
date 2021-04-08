@@ -815,7 +815,7 @@ namespace VAdvantage.Model
                                 {
                                     trxName.Rollback();
                                 }
-                                conversionNotFound = inout.GetDocumentNo();
+                                conversionNotFound = invoice.GetDocumentNo();
                                 return false;
                             }
                             #endregion
@@ -1502,29 +1502,6 @@ namespace VAdvantage.Model
                             ceLifo = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_CostElement_ID from M_costElement where costingMethod = 'L' AND IsActive = 'Y' AND AD_Client_ID = " + inoutline.GetAD_Client_ID()));
 
                             #region MR Price against LIFO / FIFO
-                            //                            if (cl != "B")
-                            //                            {
-                            //                                query.Clear();
-                            //                                query.Append(@"SELECT  Amt/Qty as currentCostAmount  FROM m_costelementdetail ced 
-                            //                                    where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
-                            //                                     AND ced.C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = 0 " +
-                            //                                     " AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = " + MatchPO_OrderLineId + 
-                            //                                     @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 and 
-                            //                                     ced.M_CostElement_ID = (SELECT M_CostElement_ID from M_costElement where costingMethod = 'L' AND IsActive = 'Y'
-                            //                                     AND AD_Client_ID = " + inoutline.GetAD_Client_ID() + " ) AND ced.AD_Client_ID = " + inoutline.GetAD_Client_ID());
-                            //                            }
-                            //                            else
-                            //                            {
-                            //                                query.Clear();
-                            //                                query.Append(@"SELECT  Amt/Qty as currentCostAmount  FROM m_costelementdetail ced 
-                            //                                    where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
-                            //                                     AND ced.C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + @" 
-                            //                                     AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = " + MatchPO_OrderLineId + 
-                            //                                     @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 and 
-                            //                                     ced.M_CostElement_ID = (SELECT M_CostElement_ID from M_costElement where costingMethod = 'L' AND IsActive = 'Y' 
-                            //                                     AND AD_Client_ID = " + inoutline.GetAD_Client_ID() + " ) AND ced.AD_Client_ID = " + inoutline.GetAD_Client_ID());
-                            //                            }
-                            //                            MRPriceLifo = Util.GetValueOfDecimal(DB.ExecuteScalar(query.ToString()));
                             if (MRPriceLifo == 0)
                             {
                                 if (cl == MProductCategory.COSTINGLEVEL_Client || cl == MProductCategory.COSTINGLEVEL_Warehouse
@@ -1533,7 +1510,7 @@ namespace VAdvantage.Model
                                     query.Clear();
                                     query.Append(@"SELECT  Amt as currentCostAmount  FROM T_Temp_CostDetail ced INNER JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id 
                                     where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" AND cq.M_CostElement_ID = " + ceLifo + @" 
-                                     AND ced.C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = 0 " +
+                                     AND ced.C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) IN (0, " + M_ASI_ID + ") " +
                                          " AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = " + MatchPO_OrderLineId +
                                          @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 AND ced.AD_Client_ID = " + inoutline.GetAD_Client_ID());
                                 }
@@ -1561,7 +1538,7 @@ namespace VAdvantage.Model
                                         query.Clear();
                                         query.Append(@"SELECT  Amt as currentCostAmount  FROM T_Temp_CostDetail ced INNER JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id 
                                     where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" AND cq.M_CostElement_ID = " + ceLifo + @" 
-                                     AND ced.C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = 0 " +
+                                     AND ced.C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0)  IN (0, " + M_ASI_ID + ") " +
                                              " AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 " +
                                              @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 AND ced.AD_Client_ID = " + inoutline.GetAD_Client_ID());
                                     }
@@ -1579,26 +1556,6 @@ namespace VAdvantage.Model
                                 }
                             }
 
-
-                            //                            if (cl != "B")
-                            //                            {
-                            //                                query.Clear();
-                            //                                query.Append(@"SELECT  Amt/Qty as currentCostAmount  FROM m_costelementdetail ced 
-                            //                                    where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
-                            //                                     AND ced.C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = 0 " +
-                            //                                     " AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = " + MatchPO_OrderLineId + @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 and 
-                            //                                     ced.M_CostElement_ID = (SELECT M_CostElement_ID from M_costElement where costingMethod = 'F' AND IsActive = 'Y' AND AD_Client_ID = " + inoutline.GetAD_Client_ID() + " ) AND ced.AD_Client_ID = " + inoutline.GetAD_Client_ID());
-                            //                            }
-                            //                            else
-                            //                            {
-                            //                                query.Clear();
-                            //                                query.Append(@"SELECT  Amt/Qty as currentCostAmount  FROM m_costelementdetail ced 
-                            //                                    where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
-                            //                                     AND ced.C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + @" 
-                            //                                     AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = " + MatchPO_OrderLineId + @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 and 
-                            //                                     ced.M_CostElement_ID = (SELECT M_CostElement_ID from M_costElement where costingMethod = 'F' AND IsActive = 'Y' AND AD_Client_ID = " + inoutline.GetAD_Client_ID() + " ) AND ced.AD_Client_ID = " + inoutline.GetAD_Client_ID());
-                            //                            }
-                            //                            MRPriceFifo = Util.GetValueOfDecimal(DB.ExecuteScalar(query.ToString()));
                             if (MRPriceFifo == 0)
                             {
                                 if (cl == MProductCategory.COSTINGLEVEL_Client || cl == MProductCategory.COSTINGLEVEL_Warehouse
@@ -1607,7 +1564,7 @@ namespace VAdvantage.Model
                                     query.Clear();
                                     query.Append(@"SELECT  Amt as currentCostAmount  FROM T_Temp_CostDetail ced INNER JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id 
                                     where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" AND cq.M_CostElement_ID = " + ceFifo + @" 
-                                     AND ced.C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = 0 " +
+                                     AND ced.C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0)  IN (0, " + M_ASI_ID + ") " +
                                          " AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = " + MatchPO_OrderLineId +
                                          @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 AND ced.AD_Client_ID = " + inoutline.GetAD_Client_ID());
                                 }
@@ -1635,7 +1592,7 @@ namespace VAdvantage.Model
                                         query.Clear();
                                         query.Append(@"SELECT  Amt as currentCostAmount  FROM T_Temp_CostDetail ced INNER JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id 
                                     where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" AND cq.M_CostElement_ID = " + ceFifo + @" 
-                                     AND ced.C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = 0 " +
+                                     AND ced.C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0)  IN (0, " + M_ASI_ID + ") " +
                                              " AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 " +
                                              @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 AND ced.AD_Client_ID = " + inoutline.GetAD_Client_ID());
                                     }
