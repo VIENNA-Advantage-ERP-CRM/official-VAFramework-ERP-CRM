@@ -764,7 +764,7 @@
                                     return;
                                 }
                             }
-                            else if (activeTabType == AppointmentsType) {
+                            else if (activeTabType == AppointmentsType && window.WSP) {
                                 tabdataLastPage = parseInt($divAptCount.text());
                                 tabdatacntpage = tabdataPage * tabdataPageSize;
                                 tabdataPage += 1;
@@ -775,7 +775,7 @@
                                     return;
                                 }
                             }
-                            else if (activeTabType == NotesType) {
+                            else if (activeTabType == NotesType && window.WSP) {
                                 tabdataLastPage = parseInt($divNotesCount.text());
                                 tabdatacntpage = tabdataPage * tabdataPageSize;
                                 if (tabdatacntpage <= tabdataLastPage) {
@@ -1470,16 +1470,13 @@
 
 
                     $('.vis-welcomeScreen-Data').hide('fast');
-                    $('.vis-welcomeScreenFeeds').fadeIn('fast', function () {
-                        setTimeout(function () {
-                            //  WelcomeTabDatacontainers.scroll();
-                        }, 0);
-                    });
+                    $('.vis-welcomeScreenFeeds').fadeIn('fast');
                     $sAlrtTxtType.html("");
                     $spanWelcomeTabtopHdr.show();
                     $sAlrtTxtType.html(VIS.Msg.getMsg("KPI"));
                     $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-kpi");// .css("background-position", "0px -537px");
                     WelcomeTabDatacontainers.css({ "text-align": "", "margin-top": "" });
+                    activeTabType = kPIType;
                     if (window.VADB && window.VADB != null && VADB.Apps.KpiHomeScreen != undefined) {
 
                         WelcomeTabDatacontainers.css({ "text-align": "auto" });
@@ -1534,11 +1531,7 @@
                     $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-userfeed");//  .css("background-position", "0px -76px");
                     $('.vis-welcomeScreenTab-notificationBubbles').removeClass('vis-feedsAlert').addClass('blank');
                     $('.vis-welcomeScreen-Data').hide('slow');
-                    $('.vis-welcomeScreenFeeds').fadeIn('fast', function () {
-                        setTimeout(function () {
-                            // WelcomeTabDatacontainers.scroll();
-                        }, 0);
-                    });
+                    $('.vis-welcomeScreenFeeds').fadeIn('fast');
                     $workflowActivity.hide();
                     adjustDivSize();
                     $welcomeNewRecord.hide();
@@ -1570,11 +1563,8 @@
                     $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-notice");//$spanWelcomeTabtopHdr.css("background-position", "0px -143px");
                     $('.vis-welcomeScreenTab-notificationBubbles').removeClass('vis-feedsAlert').addClass('blank');
                     $('.vis-welcomeScreen-Data').hide('slow');
-                    $('.vis-welcomeScreenFeeds').fadeIn('fast', function () {
-                        setTimeout(function () {
-                            // WelcomeTabDatacontainers.scroll();
-                        }, 0);
-                    });
+                    $('.vis-welcomeScreenFeeds').fadeIn('fast');
+                   
                     $sAlrtTxtType.html(VIS.Msg.getMsg("Notice"));
                     $welcomeNewRecord.hide();
                     $wfSearchShow.hide();
@@ -1592,15 +1582,12 @@
                 }
                 else if (datatab === "mytask") {
                     $('.vis-welcomeScreen-Data').hide('slow');
-                    $('.vis-welcomeScreenFeeds').fadeIn('fast', function () {
-                        setTimeout(function () {
-                            // WelcomeTabDatacontainers.scroll();
-                        }, 0);
-                    });
+                    $('.vis-welcomeScreenFeeds').fadeIn('fast');
                     $sAlrtTxtType.html("");
                     $sAlrtTxtType.html(VIS.Msg.getMsg("MyTask"));
                     $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-mytasks");//$spanWelcomeTabtopHdr.css("background-position", "0px -406px");
                     WelcomeTabDatacontainers.css({ "text-align": "", "margin-top": "" });
+                    activeTabType = MyTaskType;
                     if (isWsp) {
                         WelcomeTabDatacontainers.css({ "text-align": "auto" });
                         $ulHomeTabMenu.off("click");
@@ -1643,17 +1630,14 @@
                 }
                 else if (datatab === "taskassignbyme") {
                     $('.vis-welcomeScreen-Data').hide('slow');
-                    $('.vis-welcomeScreenFeeds').fadeIn('fast', function () {
-                        setTimeout(function () {
-                            // WelcomeTabDatacontainers.scroll();
-                        }, 0);
-                    });
+                    $('.vis-welcomeScreenFeeds').fadeIn('fast');
 
 
                     $sAlrtTxtType.html("");
                     $sAlrtTxtType.html(VIS.Msg.getMsg("TaskAssignByMe"));
                     $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-taskassigned");//$spanWelcomeTabtopHdr.css("background-position", "0px -340px");
                     WelcomeTabDatacontainers.css({ "text-align": "", "margin-top": "" });
+                     activeTabType = TaskAssignByme;
                     if (isWsp) {
                         WelcomeTabDatacontainers.css({ "text-align": "auto" });
                         $spanWelcomeTabtopHdr.show();
@@ -1710,11 +1694,7 @@
                     $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-document");//$spanWelcomeTabtopHdr.css("background-position-y", "-603px");
                     $('.vis-welcomeScreenTab-notificationBubbles').removeClass('vis-feedsAlert').addClass('blank');
                     $('.vis-welcomeScreen-Data').hide('slow');
-                    $('.vis-welcomeScreenFeeds').fadeIn('fast', function () {
-                        setTimeout(function () {
-                            // WelcomeTabDatacontainers.scroll();
-                        }, 0);
-                    });
+                    $('.vis-welcomeScreenFeeds').fadeIn('fast');
                     emptyWelcomeTabDatacontainers();;
                     var str = "<p style=' margin-top:200px;text-align:center'>" + VIS.Msg.getMsg('PleaseInstallDMSModule') + "</p>";
                     WelcomeTabDatacontainers.html(str);
@@ -1732,12 +1712,7 @@
                     $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon fa fa-bell-o");//$spanWelcomeTabtopHdr.css("background-position", "0px -209px");
                     $('.vis-welcomeScreenTab-notificationBubbles').removeClass('vis-feedsAlert').addClass('blank');
                     $('.vis-welcomeScreen-Data').hide('slow');
-                    $('.vis-welcomeScreenFeeds').fadeIn('fast', function () {
-                        setTimeout(function () {
-                            //WelcomeTabDatacontainers.scroll();
-                        }, 0);
-
-                    });
+                    $('.vis-welcomeScreenFeeds').fadeIn('fast');
                     //$welcomeNewRecord.hide();
                     $welcomeNewRecord.show();
                     $wfSearchShow.hide();
@@ -1767,15 +1742,12 @@
                 }
                 else if (datatab === "appointments") {
                     $('.vis-welcomeScreen-Data').hide('slow');
-                    $('.vis-welcomeScreenFeeds').fadeIn('fast', function () {
-                        setTimeout(function () {
-                            // WelcomeTabDatacontainers.scroll();
-                        }, 0);
-                    });
+                    $('.vis-welcomeScreenFeeds').fadeIn('fast');
                     $sAlrtTxtType.html("");
                     $sAlrtTxtType.html(VIS.Msg.getMsg("Appointment"));
                     $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-appointment");//$spanWelcomeTabtopHdr.css("background-position", "0px -275px");
                     WelcomeTabDatacontainers.css({ "text-align": "", "margin-top": "" });
+                    activeTabType = AppointmentsType;
                     if (isWsp) {
                         WelcomeTabDatacontainers.css({ "text-align": "auto" });
                         $ulHomeTabMenu.off("click");
@@ -1815,15 +1787,12 @@
                 }
                 else if (datatab === "notes") {
                     $('.vis-welcomeScreen-Data').hide('slow');
-                    $('.vis-welcomeScreenFeeds').fadeIn('fast', function () {
-                        setTimeout(function () {
-                            //  WelcomeTabDatacontainers.scroll();
-                        }, 0);
-                    });
+                    $('.vis-welcomeScreenFeeds').fadeIn('fast');
                     $sAlrtTxtType.html("");
                     $sAlrtTxtType.html(VIS.Msg.getMsg("MyNotes"));
                     $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-contacts");//  .css("background-position", "0px -473px");
                     WelcomeTabDatacontainers.css({ "text-align": "", "margin-top": "" });
+                    activeTabType = NotesType;
                     if (isWsp) {
                         WelcomeTabDatacontainers.css({ "text-align": "auto" });
                         $ulHomeTabMenu.off("click");
