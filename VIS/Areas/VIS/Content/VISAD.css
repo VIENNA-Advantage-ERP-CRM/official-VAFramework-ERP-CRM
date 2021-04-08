@@ -449,7 +449,7 @@
     position: relative;
     min-width: 250px;
     width: 45%;
-    height: 75%;
+    height: 350px;
     flex-direction: column;
 }
 
