@@ -8,7 +8,7 @@ using VIS.Areas.VIS.Models;
 using System.Collections.Generic;
 using VAdvantage.Utility;
 
-namespace ViennaAdvantage.Tool.Model
+namespace VAdvantage.Tool.Model
 {
     public class GenerateXModelModel
     {

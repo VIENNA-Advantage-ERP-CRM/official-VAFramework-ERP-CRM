@@ -8,7 +8,7 @@ using VAdvantage.DataBase;
 using VAdvantage.Model;
 using System.Text;
 using VAdvantage.Classes;
-using VIS.Areas.VIS.Models;
+
 using VAdvantage.Logging;
 
 

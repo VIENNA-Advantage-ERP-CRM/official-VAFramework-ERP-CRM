@@ -12,7 +12,6 @@ using VAdvantage.Model;
 using VAdvantage.Utility;
 using ViennaAdvantage.Model;
 
-
 namespace VIS.Models
 {
     public class UserSetting

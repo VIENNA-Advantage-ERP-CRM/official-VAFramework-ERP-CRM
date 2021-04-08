@@ -13,7 +13,7 @@ namespace VIS.Models
     public class ThemeModel
     {
 
-        internal static List<ThemeData> GetThemeData()
+        public static List<ThemeData> GetThemeData()
         {
             List<ThemeData> tml = new List<ThemeData>();
             string sql = "SELECT Name, PrimaryColor, OnPrimaryColor, SecondaryColor,OnSecondaryColor, IsDefault, VAF_Theme_ID FROM VAF_Theme";
@@ -36,7 +36,7 @@ namespace VIS.Models
             return tml;
         }
 
-        internal int SaveTheme(ThemeData thd)
+        public int SaveTheme(ThemeData thd)
         {
             if (thd.IsDefault)
             {
@@ -57,25 +57,25 @@ namespace VIS.Models
                 return -1;
         }
 
-        internal bool SetDefaultTheme(int id)
+        public bool SetDefaultTheme(int id)
         {
             DBase.DB.ExecuteQuery("UPDATE VAF_Theme SET IsDefault='N'", null, null);
             DBase.DB.ExecuteQuery("UPDATE VAF_Theme SET IsDefault='Y' WHERE VAF_Theme_ID = " + id, null, null);
             return true;
         }
 
-        internal bool Delete(int id)
+        public bool Delete(int id)
         {
             DBase.DB.ExecuteQuery("DELETE FROM VAF_Theme WHERE VAF_Theme_ID = " + id, null, null);
             return true;
         }
 
-        internal bool UpdateForUser(int id, int uid)
+        public bool UpdateForUser(int id, int uid)
         {
             DBase.DB.ExecuteQuery("UPDATE VAF_UserContact SET VAF_Theme_ID =  " + id + " WHERE VAF_UserContact_ID = " + uid, null, null);
             return true;
         }
-        internal bool UpdateForClient(int id, int tid)
+        public bool UpdateForClient(int id, int tid)
         {
             DBase.DB.ExecuteQuery("UPDATE VAF_Client SET VAF_Theme_ID = " + id + " WHERE VAF_Client_ID = " + tid, null, null);
             return true;

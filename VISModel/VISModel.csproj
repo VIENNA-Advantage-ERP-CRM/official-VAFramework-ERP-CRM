@@ -70,14 +70,45 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttachmentHelper.cs" />
+    <Compile Include="Classes\LookupHelper.cs" />
+    <Compile Include="Classes\QueryCollection.cs" />
     <Compile Include="ContactsInfo.cs" />
+    <Compile Include="DataContracts\FormData.cs" />
+    <Compile Include="DataContracts\InfoData.cs" />
+    <Compile Include="DataContracts\ProcessData.cs" />
+    <Compile Include="DataContracts\ThemeData.cs" />
     <Compile Include="Filters\AjaxAuthorizeAttribute.cs" />
     <Compile Include="Filters\AjaxSessionFilterAttribute.cs" />
     <Compile Include="Filters\AjaxValidateAntiForgeryTokenAttribute.cs" />
     <Compile Include="LoginProcess.cs" />
     <Compile Include="DataContracts\CommonClasses.cs" />
     <Compile Include="DataContracts\WindowData.cs" />
-    <Compile Include="Model\PAttributesModel.cs" />
+    <Compile Include="Models\AmountDivisionModel.cs" />
+    <Compile Include="Models\ASearchModel.cs" />
+    <Compile Include="Models\AttachmentHistoryModel.cs" />
+    <Compile Include="Models\AttachmentModel.cs" />
+    <Compile Include="Models\CardViewModel.cs" />
+    <Compile Include="Models\Chat\ChatModel.cs" />
+    <Compile Include="Models\GenerateModel.cs" />
+    <Compile Include="Models\GenerateXModelModel.cs" />
+    <Compile Include="Models\GenralAttributeModel.cs" />
+    <Compile Include="Models\HomeModels.cs" />
+    <Compile Include="Models\InfoGeneralModel.cs" />
+    <Compile Include="Models\InfoMenuModel.cs" />
+    <Compile Include="Models\InfoProductModel.cs" />
+    <Compile Include="Models\InfoWindowModel.cs" />
+    <Compile Include="Models\LocatorModel.cs" />
+    <Compile Include="Models\PAttributesModel.cs" />
+    <Compile Include="Models\ProductContainerModel.cs" />
+    <Compile Include="Models\RecordAccessModel.cs" />
+    <Compile Include="Models\ShortcutModel.cs" />
+    <Compile Include="Models\SmsModel.cs" />
+    <Compile Include="Models\Subscribe\SubscribeModel.cs" />
+    <Compile Include="Models\TabPanels\BiPanelModel.cs" />
+    <Compile Include="Models\ThemeModel.cs" />
+    <Compile Include="Models\ValuePreferenceModel.cs" />
+    <Compile Include="Models\VSetupModel.cs" />
+    <Compile Include="Models\VTreeMaintenance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -105,5 +136,6 @@
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

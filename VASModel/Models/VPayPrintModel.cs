@@ -559,7 +559,7 @@ namespace VIS.Models
             }
             fileContent.Append(line);
             string filename = "export" + DateTime.Now.Ticks + ".txt";
-            string filepath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + "TempDownload\\" + filename;
+            string filepath =  GlobalVariable.TempDowloadPath+ "\\" + filename;
             FileStream fs1 = new FileStream(filepath, FileMode.OpenOrCreate, FileAccess.Write);
             StreamWriter writer = new StreamWriter(fs1);
             writer.Write(fileContent.ToString());

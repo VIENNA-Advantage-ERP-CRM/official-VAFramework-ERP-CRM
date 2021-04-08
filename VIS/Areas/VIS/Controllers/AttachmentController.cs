@@ -7,7 +7,7 @@ using System.Web.Mvc;
 using Newtonsoft.Json;
 using VAdvantage.Model;
 using VAdvantage.Utility;
-using ViennaAdvantageWeb.Areas.VIS.Models;
+using VIS.Models;
 using VIS.Filters;
 
 namespace VIS.Controllers

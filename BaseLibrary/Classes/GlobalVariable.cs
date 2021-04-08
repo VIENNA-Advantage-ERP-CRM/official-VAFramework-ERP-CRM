@@ -86,11 +86,12 @@ namespace VAdvantage.DataBase
 
         public static String AttachmentPath = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "Attachments");
         public static String ImagePath = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "Images");
+        public static String TempDowloadPath = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "TempDownload");
+        public static String ApplicationPhysicalPath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath;
 
 
 
-       
-       
+
         #region XML Properties
         /// <summary>
         /// Contains the XML Node Name of the Host hosting the application

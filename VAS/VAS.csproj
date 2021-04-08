@@ -105,8 +105,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Areas\VAS\Classes\AcctViewerDataClass.cs" />
-    <Compile Include="Areas\VAS\Classes\VChargeModelClass.cs" />
     <Compile Include="Areas\VAS\Controllers\AccountFormController.cs" />
     <Compile Include="Areas\VAS\Controllers\AcctViewerDataController.cs" />
     <Compile Include="Areas\VAS\Controllers\CalloutOrderController.cs" />
@@ -163,55 +161,6 @@
     <Compile Include="Areas\VAS\Controllers\VPayPrintController.cs" />
     <Compile Include="Areas\VAS\Controllers\VPaySelectController.cs" />
     <Compile Include="Areas\VAS\Controllers\VTrxMaterialController.cs" />
-    <Compile Include="Areas\VAS\DataContracts\CalloutData.cs" />
-    <Compile Include="Areas\VAS\Models\AccountFormModel.cs" />
-    <Compile Include="Areas\VAS\Models\AcctViewerData.cs" />
-    <Compile Include="Areas\VAS\Models\CalloutPaymentModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MAcctSchemaModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MBankStatementModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MBPartnerModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MCashBookModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MCashJournalModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MChargeModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MConversionRateModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MCurrencyModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MDocTypeModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MInOutLineModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MInOutModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MInventoryLineModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MInventoryModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MInvoiceBatchLineModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MInvoiceModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MLocatorModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\ModulePrefixModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MOrderLineModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MOrderModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MPaymentModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MPaymentTermModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MPeriodModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MPriceListModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MPriceListVersionModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MProductCategoryModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MProductionLineModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MProductLocatorModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MProductModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MProductPricingModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MProjectModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MRequestTypeModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MStorageModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MTaxModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MUOMConversionModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MUOMModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MWarehouseModel.cs" />
-    <Compile Include="Areas\VAS\Models\PaymentAllocation.cs" />
-    <Compile Include="Areas\VAS\Models\PaymentAllocationModel.cs" />
-    <Compile Include="Areas\VAS\Models\PaymentModel.cs" />
-    <Compile Include="Areas\VAS\Models\VBOMDropModel.cs" />
-    <Compile Include="Areas\VAS\Models\VChargeModel.cs" />
-    <Compile Include="Areas\VAS\Models\VCreateFromModel.cs" />
-    <Compile Include="Areas\VAS\Models\VPayPrintModel.cs" />
-    <Compile Include="Areas\VAS\Models\VPaySelectModel.cs" />
-    <Compile Include="Areas\VAS\Models\VTrxMaterialModel.cs" />
     <Compile Include="Areas\VAS\VASAreaRegistration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -268,6 +217,10 @@
     <ProjectReference Include="..\VAPrintUtility\VAPrintLib.csproj">
       <Project>{64b1d750-7031-41a4-80d1-21bd0a88c184}</Project>
       <Name>VAPrintLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VASModel\VASModel.csproj">
+      <Project>{60b12ba6-6ec4-47c7-8a2c-9b61746de7c6}</Project>
+      <Name>VASModel</Name>
     </ProjectReference>
     <ProjectReference Include="..\VISModel\VISModel.csproj">
       <Project>{64a1254e-73bf-4c0c-a4e2-95a558f2ba3c}</Project>

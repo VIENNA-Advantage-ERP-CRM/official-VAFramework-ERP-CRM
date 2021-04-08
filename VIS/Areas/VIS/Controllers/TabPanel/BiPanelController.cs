@@ -6,7 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using VAdvantage.Model;
 using VAdvantage.Utility;
-using VIS.Model;
+using VIS.Models;
 
 namespace VIS.Controllers
 {

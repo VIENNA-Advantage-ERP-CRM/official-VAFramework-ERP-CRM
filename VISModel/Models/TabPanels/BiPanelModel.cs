@@ -8,7 +8,7 @@ using VAdvantage.Logging;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 
-namespace VIS.Model
+namespace VIS.Models
 {
 
     public class BiPanelModel

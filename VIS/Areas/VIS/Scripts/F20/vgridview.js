@@ -384,6 +384,25 @@
                 };
                 //oColumn.caption = 'class="vis-control-wrap-int-amount"';
             }
+            else if (displayType == VIS.DisplayType.Integer) {
+                oColumn.sortable = true;
+                oColumn.customFormat = VIS.DisplayType.GetNumberFormat(displayType);
+                oColumn.render = function (record, index, colIndex) {
+                    var f = oColumns[colIndex].field;
+                    var val = record[f];
+
+                    if (!val)
+                        return;
+
+                    //if (record.changes && typeof record.changes[f] != 'undefined') val = record.changes[f];
+                   // val = parseFloat(val).toLocaleString(undefined, {
+                     //   'minimumFractionDigits': oColumns[colIndex].customFormat.getMinFractionDigit(),
+                    //    'maximumFractionDigits': oColumns[colIndex].customFormat.getMaxFractionDigit()
+                  //  });
+                    return '<div data-type="int">' + val + '</div>';
+                };
+                //oColumn.caption = 'class="vis-control-wrap-int-amount"';
+            }
             else if (VIS.DisplayType.IsNumeric(displayType)) {
                 oColumn.sortable = true;
                 oColumn.customFormat = VIS.DisplayType.GetNumberFormat(displayType);

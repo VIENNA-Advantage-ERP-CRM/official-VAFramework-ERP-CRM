@@ -42,7 +42,84 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\AcctViewerDataClass.cs" />
+    <Compile Include="Classes\VChargeModelClass.cs" />
+    <Compile Include="DataContracts\CalloutData.cs" />
+    <Compile Include="Models\AccountFormModel.cs" />
+    <Compile Include="Models\AcctViewerData.cs" />
+    <Compile Include="Models\CalloutPaymentModel.cs" />
+    <Compile Include="Models\Callouts\MAcctSchemaModel.cs" />
+    <Compile Include="Models\Callouts\MBankStatementModel.cs" />
+    <Compile Include="Models\Callouts\MBPartnerModel.cs" />
+    <Compile Include="Models\Callouts\MCashBookModel.cs" />
+    <Compile Include="Models\Callouts\MCashJournalModel.cs" />
+    <Compile Include="Models\Callouts\MChargeModel.cs" />
+    <Compile Include="Models\Callouts\MConversionRateModel.cs" />
+    <Compile Include="Models\Callouts\MCurrencyModel.cs" />
+    <Compile Include="Models\Callouts\MDocTypeModel.cs" />
+    <Compile Include="Models\Callouts\MInOutLineModel.cs" />
+    <Compile Include="Models\Callouts\MInOutModel.cs" />
+    <Compile Include="Models\Callouts\MInventoryLineModel.cs" />
+    <Compile Include="Models\Callouts\MInventoryModel.cs" />
+    <Compile Include="Models\Callouts\MInvoiceBatchLineModel.cs" />
+    <Compile Include="Models\Callouts\MInvoiceModel.cs" />
+    <Compile Include="Models\Callouts\MLocatorModel.cs" />
+    <Compile Include="Models\Callouts\ModulePrefixModel.cs" />
+    <Compile Include="Models\Callouts\MOrderLineModel.cs" />
+    <Compile Include="Models\Callouts\MOrderModel.cs" />
+    <Compile Include="Models\Callouts\MPaymentModel.cs" />
+    <Compile Include="Models\Callouts\MPaymentTermModel.cs" />
+    <Compile Include="Models\Callouts\MPeriodModel.cs" />
+    <Compile Include="Models\Callouts\MPriceListModel.cs" />
+    <Compile Include="Models\Callouts\MPriceListVersionModel.cs" />
+    <Compile Include="Models\Callouts\MProductCategoryModel.cs" />
+    <Compile Include="Models\Callouts\MProductionLineModel.cs" />
+    <Compile Include="Models\Callouts\MProductLocatorModel.cs" />
+    <Compile Include="Models\Callouts\MProductModel.cs" />
+    <Compile Include="Models\Callouts\MProductPricingModel.cs" />
+    <Compile Include="Models\Callouts\MProjectModel.cs" />
+    <Compile Include="Models\Callouts\MRequestTypeModel.cs" />
+    <Compile Include="Models\Callouts\MStorageModel.cs" />
+    <Compile Include="Models\Callouts\MTaxModel.cs" />
+    <Compile Include="Models\Callouts\MUOMConversionModel.cs" />
+    <Compile Include="Models\Callouts\MUOMModel.cs" />
+    <Compile Include="Models\Callouts\MWarehouseModel.cs" />
+    <Compile Include="Models\PaymentAllocation.cs" />
+    <Compile Include="Models\PaymentAllocationModel.cs" />
+    <Compile Include="Models\PaymentModel.cs" />
+    <Compile Include="Models\VBOMDropModel.cs" />
+    <Compile Include="Models\VChargeModel.cs" />
+    <Compile Include="Models\VCreateFromModel.cs" />
+    <Compile Include="Models\VPayPrintModel.cs" />
+    <Compile Include="Models\VPaySelectModel.cs" />
+    <Compile Include="Models\VTrxMaterialModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BaseLibrary\BaseLibrary.csproj">
+      <Project>{f38800cb-fb57-4705-bfc0-123724a5da41}</Project>
+      <Name>BaseLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CoreLibrary\CoreLibrary.csproj">
+      <Project>{5065b1ec-3a50-45df-b73f-6c81b9c0a52b}</Project>
+      <Name>CoreLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ModelLibrary\ModelLibrary.csproj">
+      <Project>{f8f980fc-83ef-4495-812e-5def569b9242}</Project>
+      <Name>ModelLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VAModelAD\VAModelAD.csproj">
+      <Project>{de905ae2-56bf-45d5-b083-76050830e58b}</Project>
+      <Name>VAModelAD</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VISModel\VISModel.csproj">
+      <Project>{64a1254e-73bf-4c0c-a4e2-95a558f2ba3c}</Project>
+      <Name>VISModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XModel\XModel.csproj">
+      <Project>{383d4e75-f51a-4546-8ee2-1bf2bf57f32a}</Project>
+      <Name>XModel</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

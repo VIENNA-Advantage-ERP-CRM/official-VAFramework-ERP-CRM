@@ -10,7 +10,7 @@ using VAdvantage.DataBase;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using VIS.DataContracts;
-using VIS.Helpers;
+
 
 namespace VIS.Models
 {

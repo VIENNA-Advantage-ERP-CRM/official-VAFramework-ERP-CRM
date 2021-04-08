@@ -6,7 +6,7 @@ using VAdvantage.Model;
 using VAdvantage.Utility;
 using VIS.DBase;
 
-namespace ViennaAdvantageWeb.Areas.VIS.Models
+namespace VIS.Models
 {
     public class AttachmentModel
     {

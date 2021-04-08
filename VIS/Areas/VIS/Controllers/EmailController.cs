@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using VIS.Models;
 using VAdvantage.Model;
 using VAdvantage.Utility;
-using ViennaAdvantageWeb.Areas.VIS.Models;
+
 using VIS.Filters;
 using System.Web.SessionState;
 
