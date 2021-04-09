@@ -737,6 +737,7 @@
     <Content Include="Areas\VIS\Scripts\home\home.js" />
     <Content Include="Areas\VIS\Scripts\home\shortcut.js" />
     <Content Include="Areas\VIS\Scripts\model\calloutColumn.js" />
+    <Content Include="Areas\VIS\Scripts\model\CalloutOrder.js" />
     <Content Include="Areas\VIS\Scripts\model\callouts.js" />
     <Content Include="Areas\VIS\Scripts\processengine\processctl.js" />
     <Content Include="Areas\VIS\Scripts\processengine\processinfo.js" />
