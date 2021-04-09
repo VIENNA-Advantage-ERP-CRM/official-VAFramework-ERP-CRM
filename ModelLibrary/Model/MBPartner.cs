@@ -1330,6 +1330,7 @@ namespace VAdvantage.Model
                                 //obj = new MFRPTBPVendorAcct(GetCtx(), 0, null);
                                 obj = MTable.GetPO(GetCtx(), "FRPT_BP_Vendor_Acct", 0, null);
                                 obj.Set_ValueNoCheck("C_BPartner_ID", Vendor_ID);
+                                obj.Set_ValueNoCheck("AD_Org_ID", 0);
                                 obj.Set_ValueNoCheck("C_AcctSchema_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_AcctSchema_ID"]));
                                 obj.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ValidCombination_ID"]));
                                 obj.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
@@ -1376,6 +1377,7 @@ namespace VAdvantage.Model
                                 //obj = new MFRPTBPEmployeeAcct(GetCtx(), 0, null);
                                 var obj = MTable.GetPO(GetCtx(), "FRPT_BP_Employee_Acct", 0, null);
                                 obj.Set_ValueNoCheck("C_BPartner_ID", Employee_ID);
+                                obj.Set_ValueNoCheck("AD_Org_ID", 0);
                                 obj.Set_ValueNoCheck("C_AcctSchema_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_AcctSchema_ID"]));
                                 obj.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ValidCombination_ID"]));
                                 obj.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
