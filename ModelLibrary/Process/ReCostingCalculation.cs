@@ -2703,7 +2703,7 @@ namespace VAdvantage.Process
                 DB.ExecuteQuery(@"UPDATE m_movement  SET  iscostcalculated = 'N',  isreversedcostcalculated = 'N' WHERE AD_client_ID =  " + GetAD_Client_ID(), null, Get_Trx());
 
                 // for M_Production / M_ProductionLine
-                DB.ExecuteQuery(@"UPDATE m_productionline SET Amt = 0 WHERE AD_client_ID =  " + GetAD_Client_ID(), null, Get_Trx());
+                DB.ExecuteQuery(@"UPDATE m_productionline SET Amt = 0 WHERE NVL(C_Charge_ID,0) = 0 AND AD_client_ID =  " + GetAD_Client_ID(), null, Get_Trx());
                 DB.ExecuteQuery(@"UPDATE M_Production  SET  iscostcalculated = 'N',  isreversedcostcalculated = 'N' WHERE AD_client_ID =  " + GetAD_Client_ID(), null, Get_Trx());
 
                 // for M_MatchInv
