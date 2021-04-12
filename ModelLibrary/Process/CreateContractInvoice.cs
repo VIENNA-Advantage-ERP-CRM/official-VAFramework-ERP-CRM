@@ -37,7 +37,6 @@ namespace ViennaAdvantageServer.Process
         VAdvantage.Model.X_C_ContractSchedule contSchedule = null;
         VAdvantage.Model.MInvoice inv = null;
         MBPartner bp = null;
-        int _C_DocType_ID = 0;
         #endregion
 
         protected override void Prepare()
@@ -46,7 +45,7 @@ namespace ViennaAdvantageServer.Process
         }
 
         /// <summary>
-        /// Create AR and AP Invoices
+        /// 
         /// </summary>
         /// <returns></returns>
         protected override string DoIt()
@@ -57,14 +56,11 @@ namespace ViennaAdvantageServer.Process
                 cont = new VAdvantage.Model.X_C_Contract(GetCtx(), C_Contract_ID, Get_TrxName());
                 bp = new MBPartner(GetCtx(), cont.GetC_BPartner_ID(), Get_TrxName());
                 string date = System.DateTime.Now.ToString("dd-MMM-yyyy");
-                int[] contSch = VAdvantage.Model.X_C_ContractSchedule.GetAllIDs("C_ContractSchedule", "C_Contract_ID = " + C_Contract_ID + " AND FROMDATE <= '" + date
+                int[] contSch = VAdvantage.Model.X_C_ContractSchedule.GetAllIDs("C_ContractSchedule", "C_Contract_ID = " + C_Contract_ID + " AND FROMDATE <= '" + date 
                     + "' AND NVL(C_INVOICE_ID,0) = 0", Get_TrxName());
                 //Neha----If Not found any Invoice Schedule against the Contract then it will display the error message--11 Sep,2018
                 if (contSch != null && contSch.Length > 0)
                 {
-                    // Done by Rakesh Kumar on 01/Apr/2021
-                    // Set DocTypeId
-                    SetDocType();
                     for (int i = 0; i < contSch.Length; i++)
                     {
                         contSchedule = new VAdvantage.Model.X_C_ContractSchedule(GetCtx(), Util.GetValueOfInt(contSch[i]), Get_TrxName());
@@ -92,20 +88,17 @@ namespace ViennaAdvantageServer.Process
                     {
                         cont = new VAdvantage.Model.X_C_Contract(GetCtx(), Util.GetValueOfInt(idr[0]), Get_TrxName());
                         string date = System.DateTime.Now.ToString("dd-MMM-yyyy");
-                        int[] contSch = VAdvantage.Model.X_C_ContractSchedule.GetAllIDs("C_ContractSchedule", "C_Contract_ID = " + cont.GetC_Contract_ID() + " AND FROMDATE <= '"
+                        int[] contSch = VAdvantage.Model.X_C_ContractSchedule.GetAllIDs("C_ContractSchedule", "C_Contract_ID = " + cont.GetC_Contract_ID() + " AND FROMDATE <= '" 
                             + date + "' AND NVL(C_INVOICE_ID,0) = 0", Get_TrxName());
                         if (contSch != null)
                         {
-                            // Done by Rakesh Kumar on 01/Apr/2021
-                            // Set DocTypeId
-                            SetDocType();
                             for (int i = 0; i < contSch.Length; i++)
                             {
                                 contSchedule = new VAdvantage.Model.X_C_ContractSchedule(GetCtx(), Util.GetValueOfInt(contSch[i]), Get_TrxName());
                                 GenerateInvoice(contSchedule);
                             }
                         }
-
+                        
                         sql.Clear();
                         sql.Append("SELECT COUNT(C_ContractSchedule_ID) FROM C_ContractSchedule WHERE C_Contract_ID = " + cont.GetC_Contract_ID() + " AND NVL(C_INVOICE_ID,0) > 0");
                         string sql1 = "UPDATE C_Contract SET InvoicesGenerated = " + Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()))
@@ -147,10 +140,14 @@ namespace ViennaAdvantageServer.Process
             if (contSchedule.IsActive())
             {
                 int res = 0;
+                sql.Clear();
+                sql.Append(MRole.GetDefault(GetCtx()).AddAccessSQL("SELECT MIN(C_DOCTYPE_ID) FROM C_DocType WHERE DOCBASETYPE='ARI' AND ISACTIVE ='Y'", "C_DocType", true, true));
+                int C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
+
                 // sql = "select noofdays from c_frequency where c_frequency_id = " + cont.GetC_Frequency_ID();
                 //  Decimal? days = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
-                
                 Decimal? price = null;
+
                 if (!cont.IsCancel())
                 {
                     price = Decimal.Multiply(cont.GetPriceEntered(), cont.GetQtyEntered());
@@ -177,7 +174,7 @@ namespace ViennaAdvantageServer.Process
                             sql.Clear();
                             sql.Append("SELECT DaysBetween('" + date + "', EndDate) FROM C_ContractSchedule WHERE C_ContractSchedule_ID = " + c_contractschedule_id);
                             Decimal? diffDays = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
-
+                            
                             price = Decimal.Multiply(cont.GetPriceEntered(), cont.GetQtyEntered());
 
                             sql.Clear();
@@ -189,7 +186,7 @@ namespace ViennaAdvantageServer.Process
                             sql.Clear();
                             sql.Append("SELECT DaysBetween(CancellationDate, StartDate) FROM C_Contract WHERE C_Contract_ID = " + cont.GetC_Contract_ID());
                             Decimal? diffDays = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
-
+                            
                             price = Decimal.Multiply(cont.GetPriceEntered(), cont.GetQtyEntered());
 
                             if (diffDays > 0)
@@ -221,39 +218,27 @@ namespace ViennaAdvantageServer.Process
                 // JID_0872: System has To pick the Payment Method defined with the Business Partner against whom the Invoice is getting generated.
                 if (Env.IsModuleInstalled("VA009_"))
                 {
-                    // Done by Rakesh Kumar on 01/Apr/2021
-                    // When ContractType is Accounts Receivable
-                    if (bp.GetVA009_PaymentMethod_ID() > 0 && (cont.GetContractType() == X_C_Contract.CONTRACTTYPE_AccountsReceivable))
+                    if (bp.GetVA009_PaymentMethod_ID() > 0)
                     {
                         inv.SetVA009_PaymentMethod_ID(bp.GetVA009_PaymentMethod_ID());
-                        inv.SetIsSOTrx(true);
-                    }
-                    else if (bp.GetVA009_PO_PaymentMethod_ID() > 0 && (cont.GetContractType() == X_C_Contract.CONTRACTTYPE_AccountsPayable))
-                    {
-                        // When ContractType is Accounts Payable
-                        inv.SetVA009_PaymentMethod_ID(bp.GetVA009_PO_PaymentMethod_ID());
-                        inv.SetIsSOTrx(false);
                     }
                     else
-                    {
+                    {                        
                         throw new ArgumentException(Msg.GetMsg(GetCtx(), "VIS_PaymentMethodNotDefined") + " : " + bp.GetName());
                     }
                 }
-                inv.SetC_DocType_ID(_C_DocType_ID);
-                inv.SetC_DocTypeTarget_ID(_C_DocType_ID);
+                inv.SetC_DocType_ID(C_DocType_ID);
+                inv.SetC_DocTypeTarget_ID(C_DocType_ID);
                 inv.SetC_BPartner_Location_ID(cont.GetBill_Location_ID());
                 inv.SetC_Currency_ID(cont.GetC_Currency_ID());
                 // JID_1536_3
                 inv.SetC_ConversionType_ID(cont.GetC_ConversionType_ID());
                 inv.SetC_PaymentTerm_ID(cont.GetC_PaymentTerm_ID());
                 inv.SetC_Campaign_ID(cont.GetC_Campaign_ID());
-                
+                inv.SetIsSOTrx(true);
                 inv.SetM_PriceList_ID(cont.GetM_PriceList_ID());
                 inv.SetSalesRep_ID(cont.GetSalesRep_ID());
                 inv.SetC_Contract_ID(cont.GetC_Contract_ID());
-                // Done by rakesh kumar on 31/Mar/2021
-                // When invoice created from service contract set ServiceContract always true
-                inv.SetServiceContract(true);
                 if (!inv.Save())
                 {
                     //Neha----If Invoice not saved then will show the exception---11 Sep,2018
@@ -341,31 +326,6 @@ namespace ViennaAdvantageServer.Process
                 //Neha---Append Document No. in sb----12 Sep,2018
                 sb.Append(inv.GetDocumentNo() + ", ");
                 //_count++;
-            }
-        }
-        /// <summary>
-        /// Created By: Rakesh Kumar
-        /// Created Date: 01/Apr/2021
-        /// Purpose: Get DocType
-        /// </summary>
-        private void SetDocType()
-        {
-            _C_DocType_ID = 0;
-            // When ContractType is Accounts Receivable
-            if (cont.GetContractType() == X_C_Contract.CONTRACTTYPE_AccountsReceivable)
-            {
-                sql.Append(MRole.GetDefault(GetCtx()).AddAccessSQL("SELECT MIN(C_DOCTYPE_ID) FROM C_DocType WHERE DOCBASETYPE='ARI' AND ISACTIVE ='Y'", "C_DocType", true, true));
-                _C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
-            }
-            else if (cont.GetContractType() == X_C_Contract.CONTRACTTYPE_AccountsPayable)
-            {
-                sql.Append(MRole.GetDefault(GetCtx()).AddAccessSQL("SELECT MIN(C_DOCTYPE_ID) FROM C_DocType WHERE DOCBASETYPE='API' AND ISACTIVE ='Y'", "C_DocType", true, true));
-                _C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
-            }
-            // If ContractType not defined on Service Contract Window
-            if (_C_DocType_ID == 0)
-            {
-                throw new ArgumentException(Msg.GetMsg(GetCtx(), "ContractTypeNotDefined"));
             }
         }
     }
