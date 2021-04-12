@@ -72,6 +72,7 @@ namespace VAdvantage.Model
 
             //Lakhwinder 12 Apr 2021
             //Qty on hand has to check while completing the prodcution , It's handled in associated stored procedure
+            //Introduced Material policy tab to derive attribute based qty from storage , respective attribute  will come on production line after completion , Might need to split production line as well.
             // when warehouse disallow negative inventory is false then on hand qty can't be in negative
             //wh = MWarehouse.Get(GetCtx(), GetM_Warehouse_ID());
             //if (wh.IsDisallowNegativeInv() && GetM_Product_ID() > 0)
