@@ -1021,7 +1021,7 @@ namespace VIS.Helpers
             {
                 foreach (ValueNamePair v in list)
                 {
-                    if (v.Key.Equals("H"))
+                    if (v.Key.Equals("B"))
                     {
                         list.Remove(v);
                         break;

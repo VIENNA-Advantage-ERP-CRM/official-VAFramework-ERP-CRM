@@ -475,14 +475,14 @@
             {
                 $object = $("<iframe style = 'width:100%;height:99.4%;'>");
                 $object.attr("src", VIS.Application.contextUrl + "BiPanel/GetHTMLReport?info=" + window.encodeURIComponent( rptName));
-                $rightDiv.css('height', '100%');
+                $rightDiv.css('height', '95%');
                 $rightDiv.css('width', '100%');
                 $rightDiv.append($object);
             }
             else {
                 $object = $("<iframe style = 'width:100%;height:99.4%;' pluginspage='http://www.adobe.com/products/acrobat/readstep2.html'>");
                 $object.attr("src", VIS.Application.contextUrl + rptName);
-                $rightDiv.css('height', '100%');
+                $rightDiv.css('height', '95%');
                 $rightDiv.css('width', '100%');
                 $rightDiv.append($object);
             }
