@@ -152,12 +152,38 @@ namespace VAdvantage.WF
             int no = DB.ExecuteQuery(sql);
             return no;
         }
-        
+
+        /// <summary>
+        /// Before Save logic for 
+        /// </summary>
+        /// <param name="newRecord"></param>
+        /// <returns></returns>
+        protected override bool BeforeSave(bool newRecord)
+        {
+            if (GetEsclReminder() > 0)
+            {
+                if (!(IsEsclAppSupervisor() || GetAD_WF_Responsible_ID() > 0))
+                {
+                    log.SaveError("VIS_EsclNotProvided", "");
+                    return false;
+                }
+                if (IsEsclForward())
+                {
+                    if (IsEsclAppSupervisor() && GetAD_WF_Responsible_ID() > 0)
+                    {
+                        log.SaveError("VIS_CantSetBothEsc", "");
+                        return false;
+                    }
+                }
+            }
+            
+            return true;
+        }
+
         /**
 	 * 	Get Date Next Run
 	 *	@param requery requery
 	 *	@return date next run
 	 */
-	
     }
 }
