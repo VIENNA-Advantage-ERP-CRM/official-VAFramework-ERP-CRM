@@ -471,7 +471,7 @@
 
                 $innerRightDiv.html(rptName);
             }
-            else if (pi.getIsBiHtml())
+            else if (pi.getIsBiHtml())// if report is Bi html report, then send request to respective view
             {
                 $object = $("<iframe style = 'width:100%;height:99.4%;'>");
                 $object.attr("src", VIS.Application.contextUrl + "BiPanel/GetHTMLReport?info=" + window.encodeURIComponent( rptName));

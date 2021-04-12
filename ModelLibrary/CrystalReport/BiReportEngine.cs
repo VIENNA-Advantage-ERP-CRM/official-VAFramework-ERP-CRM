@@ -50,7 +50,14 @@ namespace VAdvantage.BiReport
             return lstString;
         }
 
-
+        /// <summary>
+        /// Load report parameter string from VA039 module.
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="reportID"></param>
+        /// <param name="AD_PInstance_ID"></param>
+        /// <param name="pi"></param>
+        /// <returns></returns>
         public string GetReportParameters(Ctx ctx, int reportID, int AD_PInstance_ID, VAdvantage.ProcessEngine.ProcessInfo pi)
         {
             object result = null;
@@ -72,6 +79,12 @@ namespace VAdvantage.BiReport
             return result.ToString();
         }
 
+        /// <summary>
+        /// Get Report ID based on reportUUID
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="reportUUID"></param>
+        /// <returns></returns>
         public int GetReportID(Ctx ctx, string reportUUID)
         {
             object result = null;
@@ -94,11 +107,19 @@ namespace VAdvantage.BiReport
             return 0;
         }
 
+        /// <summary>
+        /// Generates a url of report with parameters.
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="log"></param>
+        /// <param name="pi"></param>
+        /// <returns></returns>
         public string GetReportString(Ctx ctx, VLogger log, VAdvantage.ProcessEngine.ProcessInfo pi)
         {
             string reportFilePath = "";
             List<string> result = GetUserBILogin(ctx, log);
             int outvalue = 0;
+            // check if return result returned by login is token or interger. If int value then show respective message.
             if (!int.TryParse(result[0], out outvalue))
             {
                 object biRepID = DB.ExecuteScalar("SELECT VA039_BIREPORTID FROM AD_PRocess where AD_Process_ID=" + pi.GetAD_Process_ID());

@@ -1021,7 +1021,7 @@ namespace VIS.Helpers
             {
                 foreach (ValueNamePair v in list)
                 {
-                    if (v.Key.Equals("B"))
+                    if (v.Key.Equals("B"))//if HTML not supported then remove this key from list.
                     {
                         list.Remove(v);
                         break;
