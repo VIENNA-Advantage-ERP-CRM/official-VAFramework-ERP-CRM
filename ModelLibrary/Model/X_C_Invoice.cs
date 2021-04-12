@@ -1594,11 +1594,9 @@ namespace VAdvantage.Model
 @param BackupWithholdingAmount Backup Withholding Amount */
         public void SetBackupWithholdingAmount(Decimal? BackupWithholdingAmount) { Set_Value("BackupWithholdingAmount", (Decimal?)BackupWithholdingAmount); }/** Get Backup Withholding Amount.
 @return Backup Withholding Amount */
-        public Decimal GetBackupWithholdingAmount() { Object bd = Get_Value("BackupWithholdingAmount"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }/** Set Service Contract.
-@param ServiceContract This Checkbox is true when the Invoice is generated through the Service Contract. */
-        public void SetServiceContract(Boolean ServiceContract) { Set_Value("ServiceContract", ServiceContract); }/** Get Service Contract.
-@return This Checkbox is true when the Invoice is generated through the Service Contract. */
-        public Boolean IsServiceContract() { Object oo = Get_Value("ServiceContract"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
+        public Decimal GetBackupWithholdingAmount() { Object bd = Get_Value("BackupWithholdingAmount"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
+
+
     }
 
 }

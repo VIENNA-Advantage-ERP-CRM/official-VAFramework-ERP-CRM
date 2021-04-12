@@ -1107,26 +1107,6 @@ namespace VAdvantage.Model
                 return 0;
             return Convert.ToInt32(ii);
         }
-        /** ContractType AD_Reference_ID=1000742 */
-        public static int CONTRACTTYPE_AD_Reference_ID = 1000742;/** Accounts Payable = ASP */
-        public static String CONTRACTTYPE_AccountsPayable = "ASP";/** Accounts Receivable = ASR */
-        public static String CONTRACTTYPE_AccountsReceivable = "ASR";/** Is test a valid value.
-@param test testvalue
-@returns true if valid **/
-        public bool IsContractTypeValid(String test) { return test == null || test.Equals("ASP") || test.Equals("ASR"); }/** Set Contract Type.
-@param ContractType The list to check if the service contract is a Payable Service Contract or Receivable Service Contract */
-        public void SetContractType(String ContractType)
-        {
-            if (!IsContractTypeValid(ContractType))
-                throw new ArgumentException("ContractType Invalid value - " + ContractType + " - Reference_ID=1000742 - ASP - ASR"); if (ContractType != null && ContractType.Length > 3) { log.Warning("Length > 3 - truncated"); ContractType = ContractType.Substring(0, 3); }
-            Set_Value("ContractType", ContractType);
-        }/** Get Contract Type.
-@return The list to check if the service contract is a Payable Service Contract or Receivable Service Contract */
-        public String GetContractType() { return (String)Get_Value("ContractType"); }/** Set Approved.
-@param IsApproved Indicates if this document requires approval */
-        public void SetIsApproved(Boolean IsApproved) { Set_Value("IsApproved", IsApproved); }/** Get Approved.
-@return Indicates if this document requires approval */
-        public Boolean IsApproved() { Object oo = Get_Value("IsApproved"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
     }
 
 }
