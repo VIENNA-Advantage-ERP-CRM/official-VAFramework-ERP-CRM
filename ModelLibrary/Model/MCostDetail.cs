@@ -481,7 +481,8 @@ namespace VAdvantage.Model
                     {
                         sql = @"SELECT  Amt as currentCostAmount  FROM T_Temp_CostDetail ced INNER JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id 
                                      where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
-                                     AND ced.C_AcctSchema_ID = " + mas.GetC_AcctSchema_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) =  " + M_ASI_ID +
+                                     AND ced.C_AcctSchema_ID = " + mas.GetC_AcctSchema_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) IN (  " + M_ASI_ID +
+                                     @"," + cd.GetM_AttributeSetInstance_ID() + " )" +
                                      @" AND ced.M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 " +
                                      @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 AND cq.M_CostElement_ID = " + ce.GetM_CostElement_ID() +
                                      @" AND ced.AD_Client_ID = " + cd.GetAD_Client_ID();
@@ -490,7 +491,8 @@ namespace VAdvantage.Model
                         {
                             sql = @"SELECT  Amt as currentCostAmount  FROM T_Temp_CostDetail ced INNER JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id
                                      where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
-                                     AND ced.C_AcctSchema_ID = " + mas.GetC_AcctSchema_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) =  " + M_ASI_ID +
+                                     AND ced.C_AcctSchema_ID = " + mas.GetC_AcctSchema_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) IN (  " + M_ASI_ID +
+                                     @"," + cd.GetM_AttributeSetInstance_ID() + " )" +
                                      @" AND ced.M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) =  " + cd.GetC_OrderLine_ID() +
                                      @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 AND cq.M_CostElement_ID = " + ce.GetM_CostElement_ID() +
                                      @" AND ced.AD_Client_ID = " + cd.GetAD_Client_ID();
@@ -501,7 +503,8 @@ namespace VAdvantage.Model
                             // this is used because we remove the cost queue
                             sql = @"SELECT  Amt as currentCostAmount  FROM T_Temp_CostDetail ced LEFT JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id 
                                      where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
-                                     AND ced.C_AcctSchema_ID = " + mas.GetC_AcctSchema_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) =  " + M_ASI_ID +
+                                     AND ced.C_AcctSchema_ID = " + mas.GetC_AcctSchema_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) IN (  " + M_ASI_ID +
+                                     @"," + cd.GetM_AttributeSetInstance_ID() + " )" +
                                         @" AND ced.M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 " +
                                         @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 AND NVL(cq.M_CostElement_ID , 0)  = 0 " +
                                         @" AND ced.AD_Client_ID = " + cd.GetAD_Client_ID();
@@ -514,19 +517,22 @@ namespace VAdvantage.Model
                         // check record exist on cost element detail only for MR then consider that amount else check with invoiceline ref
                         if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM M_CostElementDetail WHERE IsActive = 'Y' AND M_Product_ID = " + product.GetM_Product_ID() +
                                      " AND C_AcctSchema_ID = " + mas.GetC_AcctSchema_ID() + " AND M_CostElement_ID = " + ce.GetM_CostElement_ID() +
-                                     " AND NVL(M_AttributeSetInstance_ID, 0) = " + M_ASI_ID + " AND M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() +
+                                     " AND NVL(M_AttributeSetInstance_ID, 0) IN (  " + M_ASI_ID +
+                                     @"," + cd.GetM_AttributeSetInstance_ID() + " )" + " AND M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() +
                                      " AND NVL(C_OrderLIne_ID , 0) = 0 AND NVL(C_InvoiceLine_ID , 0) = 0", null, Get_Trx())) > 0)
                         {
                             sql = @"SELECT Amt/Qty FROM M_CostElementDetail WHERE IsActive = 'Y' AND M_Product_ID = " + product.GetM_Product_ID() +
                                          " AND C_AcctSchema_ID = " + mas.GetC_AcctSchema_ID() + " AND M_CostElement_ID = " + ce.GetM_CostElement_ID() +
-                                         " AND NVL(M_AttributeSetInstance_ID, 0) = " + M_ASI_ID + " AND M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() +
+                                         " AND NVL(M_AttributeSetInstance_ID, 0) IN (  " + M_ASI_ID +
+                                            @"," + cd.GetM_AttributeSetInstance_ID() + " )" + " AND M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() +
                                          " AND NVL(C_OrderLIne_ID , 0) = 0 AND NVL(C_InvoiceLine_ID , 0) = 0";
                         }
                         else
                         {
                             sql = @"SELECT Amt/Qty FROM M_CostElementDetail WHERE IsActive = 'Y' AND M_Product_ID = " + product.GetM_Product_ID() +
                                              " AND C_AcctSchema_ID = " + mas.GetC_AcctSchema_ID() + " AND M_CostElement_ID = " + ce.GetM_CostElement_ID() +
-                                             " AND NVL(M_AttributeSetInstance_ID, 0) = " + M_ASI_ID + " AND M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() +
+                                             " AND NVL(M_AttributeSetInstance_ID, 0) IN (  " + M_ASI_ID +
+                                                @"," + cd.GetM_AttributeSetInstance_ID() + " )" + " AND M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() +
                                              " AND NVL(C_OrderLIne_ID , 0) = 0 AND NVL(C_InvoiceLine_ID , 0) = " + cd.GetC_InvoiceLine_ID();
                         }
                         MRPrice = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
@@ -536,13 +542,15 @@ namespace VAdvantage.Model
                             if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM M_CostElementDetail WHERE IsActive = 'Y' AND M_Product_ID = " + product.GetM_Product_ID() +
                                          " AND C_AcctSchema_ID = " + mas.GetC_AcctSchema_ID() + " AND M_CostElement_ID = " +
                                          " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'I' AND AD_Client_ID = " + ce.GetAD_Client_ID() + ")" +
-                                         " AND NVL(M_AttributeSetInstance_ID, 0) = " + M_ASI_ID + " AND M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() +
+                                         " AND NVL(M_AttributeSetInstance_ID, 0) IN (  " + M_ASI_ID +
+                                           @"," + cd.GetM_AttributeSetInstance_ID() + " )" + " AND M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() +
                                          " AND NVL(C_OrderLIne_ID , 0) = 0 AND NVL(C_InvoiceLine_ID , 0) = 0", null, Get_Trx())) > 0)
                             {
                                 sql = @"SELECT Amt/Qty FROM M_CostElementDetail WHERE IsActive = 'Y' AND M_Product_ID = " + product.GetM_Product_ID() +
                                              " AND C_AcctSchema_ID = " + mas.GetC_AcctSchema_ID() + " AND M_CostElement_ID = " +
                                              " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'I' AND AD_Client_ID = " + ce.GetAD_Client_ID() + ")" +
-                                             " AND NVL(M_AttributeSetInstance_ID, 0) = " + M_ASI_ID + " AND M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() +
+                                             " AND NVL(M_AttributeSetInstance_ID, 0) IN (  " + M_ASI_ID +
+                                             @"," + cd.GetM_AttributeSetInstance_ID() + " )" + " AND M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() +
                                              " AND NVL(C_OrderLIne_ID , 0) = 0 AND NVL(C_InvoiceLine_ID , 0) = 0";
                             }
                             else
@@ -550,7 +558,8 @@ namespace VAdvantage.Model
                                 sql = @"SELECT Amt/Qty FROM M_CostElementDetail WHERE IsActive = 'Y' AND M_Product_ID = " + product.GetM_Product_ID() +
                                                  " AND C_AcctSchema_ID = " + mas.GetC_AcctSchema_ID() + " AND M_CostElement_ID = " +
                                                  " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'I' AND AD_Client_ID = " + ce.GetAD_Client_ID() + ")" +
-                                                 " AND NVL(M_AttributeSetInstance_ID, 0) = " + M_ASI_ID + " AND M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() +
+                                                 " AND NVL(M_AttributeSetInstance_ID, 0) IN (  " + M_ASI_ID +
+                                                 @"," + cd.GetM_AttributeSetInstance_ID() + " )" + " AND M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() +
                                                  " AND NVL(C_OrderLIne_ID , 0) = 0 AND NVL(C_InvoiceLine_ID , 0) = " + cd.GetC_InvoiceLine_ID();
                             }
                             MRPrice = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));

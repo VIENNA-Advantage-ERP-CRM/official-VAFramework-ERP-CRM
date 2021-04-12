@@ -11,6 +11,7 @@ using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 //using System.Data.OracleClient;
 
 using System.Linq;
@@ -1212,23 +1213,17 @@ namespace VAdvantage.Process
                             #region Cost Calculation for Production
                             try
                             {
-                                if (Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["TableName"]) == "M_Production" && DatabaseType.IsOracle)
+                                if (Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["TableName"]) == "M_Production")
                                 {
                                     #region calculate/update cost of components (Here IsSotrx means IsReversed --> on production header)
                                     if (Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["issotrx"]).Equals("N"))
                                     {
-                                        IDbConnection dbConnection = Get_Trx().GetConnection();
-                                        if (dbConnection != null)
-                                        {
-                                            // execute procedure for updating cost of components
-                                            OracleCommand cmd = (OracleCommand)dbConnection.CreateCommand();
-                                            cmd.CommandType = CommandType.StoredProcedure;
-                                            cmd.Connection = (OracleConnection)dbConnection;
-                                            cmd.CommandText = "UpdateProductionLineWithCost";
-                                            cmd.Parameters.Add("p_Record_Id", Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]));
+                                        SqlParameter[] param = new SqlParameter[1];
+                                        param[0] = new SqlParameter("p_Record_Id", Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]));
+                                        param[0].SqlDbType = SqlDbType.Int;
+                                        param[0].Direction = ParameterDirection.Input;
 
-                                            cmd.ExecuteNonQuery();
-                                        }
+                                        DB.ExecuteProcedure("UpdateProductionLineWithCost", param, Get_Trx());
                                     }
                                     #endregion
 
@@ -1273,32 +1268,44 @@ namespace VAdvantage.Process
                                                 #region Create & Open connection and Execute Procedure
                                                 try
                                                 {
-                                                    IDbConnection dbConnection = Get_Trx().GetConnection();
-                                                    if (dbConnection != null)
-                                                    {
-                                                        // execute procedure for calculating cost
-                                                        OracleCommand cmd = (OracleCommand)dbConnection.CreateCommand();
-                                                        cmd.CommandType = CommandType.StoredProcedure;
-                                                        cmd.Connection = (OracleConnection)dbConnection;
-                                                        cmd.CommandText = "createcostqueueNotFRPT";
-                                                        cmd.Parameters.Add("p_M_Product_ID", Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_Product_ID"]));
-                                                        cmd.Parameters.Add("p_M_AttributeSetInstance_ID", Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_AttributeSetInstance_ID"]));
-                                                        cmd.Parameters.Add("p_AD_Org_ID", Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["AD_Org_ID"]));
-                                                        cmd.Parameters.Add("p_AD_Client_ID", Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["AD_Client_ID"]));
-                                                        cmd.Parameters.Add("p_Quantity", Util.GetValueOfDecimal(dsChildRecord.Tables[0].Rows[j]["MovementQty"]));
-                                                        cmd.Parameters.Add("p_M_ProductionLine_ID", Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_ProductionLine_ID"]));
-                                                        cmd.Parameters.Add("p_M_Warehouse_ID", Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_Warehouse_ID"]));
+                                                    SqlParameter[] param = new SqlParameter[7];
+                                                    param[0] = new SqlParameter("p_M_Product_ID", Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_Product_ID"]));
+                                                    param[0].SqlDbType = SqlDbType.Int;
+                                                    param[0].Direction = ParameterDirection.Input;
 
-                                                        cmd.ExecuteNonQuery();
+                                                    param[1] = new SqlParameter("p_M_AttributeSetInstance_ID", Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_AttributeSetInstance_ID"]));
+                                                    param[1].SqlDbType = SqlDbType.Int;
+                                                    param[1].Direction = ParameterDirection.Input;
 
-                                                        // update prodution header 
-                                                        if (Util.GetValueOfString(dsChildRecord.Tables[0].Rows[j]["IsCostCalculated"]).Equals("N"))
-                                                            DB.ExecuteQuery("UPDATE M_Production SET IsCostCalculated='Y' WHERE M_Production_ID= " + Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), null, Get_Trx());
+                                                    param[2] = new SqlParameter("p_AD_Org_ID", Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["AD_Org_ID"]));
+                                                    param[2].SqlDbType = SqlDbType.Int;
+                                                    param[2].Direction = ParameterDirection.Input;
 
-                                                        if (Util.GetValueOfString(dsChildRecord.Tables[0].Rows[j]["IsCostCalculated"]).Equals("Y") &&
-                                                            !Util.GetValueOfString(dsChildRecord.Tables[0].Rows[j]["IsReversedCostCalculated"]).Equals("N") && Util.GetValueOfString(dsChildRecord.Tables[0].Rows[j]["IsReversed"]).Equals("Y"))
-                                                            DB.ExecuteQuery("UPDATE M_Production SET IsReversedCostCalculated='Y' WHERE M_Production_ID= " + Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), null, Get_Trx());
-                                                    }
+                                                    param[3] = new SqlParameter("p_AD_Client_ID", Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["AD_Client_ID"]));
+                                                    param[3].SqlDbType = SqlDbType.Int;
+                                                    param[3].Direction = ParameterDirection.Input;
+
+                                                    param[4] = new SqlParameter("p_Quantity", Util.GetValueOfDecimal(dsChildRecord.Tables[0].Rows[j]["MovementQty"]));
+                                                    param[4].SqlDbType = SqlDbType.Decimal;
+                                                    param[4].Direction = ParameterDirection.Input;
+
+                                                    param[5] = new SqlParameter("p_M_ProductionLine_ID", Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_ProductionLine_ID"]));
+                                                    param[5].SqlDbType = SqlDbType.Int;
+                                                    param[5].Direction = ParameterDirection.Input;
+
+                                                    param[6] = new SqlParameter("p_M_Warehouse_ID", Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_Warehouse_ID"]));
+                                                    param[6].SqlDbType = SqlDbType.Int;
+                                                    param[6].Direction = ParameterDirection.Input;
+
+                                                    DB.ExecuteProcedure("createcostqueueNotFRPT", param, Get_Trx());
+
+                                                    // update prodution header 
+                                                    if (Util.GetValueOfString(dsChildRecord.Tables[0].Rows[j]["IsCostCalculated"]).Equals("N"))
+                                                        DB.ExecuteQuery("UPDATE M_Production SET IsCostCalculated='Y' WHERE M_Production_ID= " + Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), null, Get_Trx());
+
+                                                    if (Util.GetValueOfString(dsChildRecord.Tables[0].Rows[j]["IsCostCalculated"]).Equals("Y") &&
+                                                        !Util.GetValueOfString(dsChildRecord.Tables[0].Rows[j]["IsReversedCostCalculated"]).Equals("N") && Util.GetValueOfString(dsChildRecord.Tables[0].Rows[j]["IsReversed"]).Equals("Y"))
+                                                        DB.ExecuteQuery("UPDATE M_Production SET IsReversedCostCalculated='Y' WHERE M_Production_ID= " + Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), null, Get_Trx());
                                                 }
                                                 catch
                                                 {
@@ -2696,7 +2703,7 @@ namespace VAdvantage.Process
                 DB.ExecuteQuery(@"UPDATE m_movement  SET  iscostcalculated = 'N',  isreversedcostcalculated = 'N' WHERE AD_client_ID =  " + GetAD_Client_ID(), null, Get_Trx());
 
                 // for M_Production / M_ProductionLine
-                DB.ExecuteQuery(@"UPDATE m_productionline SET Amt = 0 WHERE AD_client_ID =  " + GetAD_Client_ID(), null, Get_Trx());
+                DB.ExecuteQuery(@"UPDATE m_productionline SET Amt = 0 WHERE NVL(C_Charge_ID,0) = 0 AND AD_client_ID =  " + GetAD_Client_ID(), null, Get_Trx());
                 DB.ExecuteQuery(@"UPDATE M_Production  SET  iscostcalculated = 'N',  isreversedcostcalculated = 'N' WHERE AD_client_ID =  " + GetAD_Client_ID(), null, Get_Trx());
 
                 // for M_MatchInv

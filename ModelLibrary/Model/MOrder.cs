@@ -6255,10 +6255,14 @@ namespace VAdvantage.Model
         private bool linkedDocument(int C_Order_ID)
         {
             // SI_0595_3 : check orderline id exist on invoiceline or inoutline. if exist then not able to reverse the current order.
+            // JID_1953 : by Amit -> when payment exist against selected Order, then not able to void transaction
             string sql = @"Select SUM(Result) From (
                            SELECT COUNT(il.c_orderline_id) AS Result FROM M_Inout i INNER JOIN m_inoutline il ON i.m_inout_id = il.m_inout_id
                            INNER JOIN c_orderline ol ON ol.c_orderline_id = il.c_orderline_id
                            WHERE ol.C_Order_ID  = " + C_Order_ID + @" AND i.DocStatus NOT IN ('RE' , 'VO')
+                         UNION ALL
+                           SELECT COUNT(C_Order_ID) AS Result FROM C_Payment WHERE 
+                                DocStatus NOT IN ('RE' , 'VO') AND C_Order_ID = " + C_Order_ID + @"
                          UNION ALL
                           SELECT COUNT(il.c_orderline_id) AS Result FROM C_Invoice i INNER JOIN C_Invoiceline il ON i.C_Invoice_id = il.C_Invoice_id
                           INNER JOIN c_orderline ol ON ol.c_orderline_id = il.c_orderline_id
