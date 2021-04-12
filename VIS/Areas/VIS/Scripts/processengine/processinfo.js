@@ -41,6 +41,7 @@
         this.isBackground = false;
         this.ActionOrigin = "";
         this.OriginName = "";
+        this.isBiHtml = false;
     };
 
     ProcessInfo.prototype.toJson = function () {
@@ -417,6 +418,14 @@
     ProcessInfo.prototype.setOriginName = function (OriginName) {
         this.OriginName = OriginName;
     }
+
+    ProcessInfo.prototype.setIsBiHtml = function (isRF) {
+        this.isBiHtml = isRF;
+    };
+
+    ProcessInfo.prototype.getIsBiHtml = function () {
+        return this.isBiHtml;
+    };
 
     ProcessInfo.prototype.setSummary = function (summary, error) {
 

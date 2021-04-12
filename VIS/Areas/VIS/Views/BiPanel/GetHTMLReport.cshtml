@@ -1,0 +1,25 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>GetHTMLReport</title>
+</head>
+<body>
+    <div>
+        @if (ViewBag.scriptt == null)
+        {
+            <h4>@ViewBag.Message</h4>;
+        }
+        else
+        {
+            <script type="text/javascript" src="@ViewBag.scriptt"></script>
+        }
+    </div>
+</body>
+</html>

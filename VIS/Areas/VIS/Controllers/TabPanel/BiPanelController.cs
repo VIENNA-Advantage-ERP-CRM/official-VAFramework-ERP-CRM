@@ -59,5 +59,19 @@ namespace VIS.Controllers
             //}
             //return Json(JsonConvert.SerializeObject("4"), JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult GetHTMLReport(string info)
+        {
+            Ctx ctx = Session["ctx"] as Ctx;
+            if (Uri.IsWellFormedUriString(info, UriKind.RelativeOrAbsolute))
+            {
+                ViewBag.scriptt = info;
+            }
+            else
+            {
+                ViewBag.Message = info;
+            }
+            return View();
+        }
     }
 }

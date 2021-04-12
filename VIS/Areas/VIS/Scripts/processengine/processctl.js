@@ -38,6 +38,7 @@
     ProcessCtl.prototype.REPORT_TYPE_CSV = "C";
     ProcessCtl.prototype.REPORT_TYPE_PDF = "P";
     ProcessCtl.prototype.REPORT_TYPE_RTF = "R";
+    ProcessCtl.prototype.REPORT_TYPE_BIHTML = "B";
 
     ProcessCtl.prototype.ORIGIN_WINDOW = "W";
     ProcessCtl.prototype.ORIGIN_FORM = "F";
@@ -121,7 +122,7 @@
     ProcessCtl.prototype.complete = function (jObject) {
         this.jObjectFromServer = jObject;
         this.pi.setAD_PInstance_ID(jObject.AD_PInstance_ID);
-
+        this.pi.setIsBiHtml(jObject.IsBiHTMlReport)
         // Change Lokesh Chauhan
         this.pi.setCustomHTML(jObject.CustomHTML);
         this.pi.set_AD_PrintFormat_ID(jObject.AD_PrintFormat_ID);
@@ -218,7 +219,7 @@
                                 this.parent.showReport(pdfViewer, jObject, this)
                             }
                             else if (jObject.ReportFilePath && jObject.ReportFilePath.length > 0) {
-                                pdfViewer = new VIS.PdfViewer(jObject.ReportFilePath)
+                                pdfViewer = new VIS.PdfViewer(jObject.ReportFilePath, this.pi)
                                 ispdf = true;
                                 this.parent.showReport(pdfViewer, jObject, this)
                             }
@@ -404,7 +405,7 @@
 	 *  Unlock UI & dispose 
 	 */
     ProcessCtl.prototype.unlock = function () {
-        var summary = this.jObjectFromServer ? this.jObjectFromServer.Result :null;
+        var summary = this.jObjectFromServer ? this.jObjectFromServer.Result : null;
         if (summary != null && summary.indexOf("@") != -1) {
             this.pi.setSummary(VIS.Msg.parseTranslation(VIS.Env.getCtx(), summary));
         }
@@ -461,7 +462,7 @@
 
             $root = $("<div class='vis-height-full'>");
             $rightDiv = $("<div class='vis-height-full'>");
-            $rightDiv.css('background-color','rgba(var(--v-c-primary), .3)');
+            $rightDiv.css('background-color', 'rgba(var(--v-c-primary), .3)');
             $innerRightDiv = $("<div class='vis-height-full' style='padding:5px;'>");
             $root.append($rightDiv);
             $root.append(bsyDiv);
@@ -470,10 +471,18 @@
 
                 $innerRightDiv.html(rptName);
             }
+            else if (pi.getIsBiHtml())// if report is Bi html report, then send request to respective view
+            {
+                $object = $("<iframe style = 'width:100%;height:99.4%;'>");
+                $object.attr("src", VIS.Application.contextUrl + "BiPanel/GetHTMLReport?info=" + window.encodeURIComponent(rptName));
+                $rightDiv.css('height', '95%');
+                $rightDiv.css('width', '100%');
+                $rightDiv.append($object);
+            }
             else {
                 $object = $("<iframe style = 'width:100%;height:99.4%;' pluginspage='http://www.adobe.com/products/acrobat/readstep2.html'>");
                 $object.attr("src", VIS.Application.contextUrl + rptName);
-                $rightDiv.css('height', '100%');
+                $rightDiv.css('height', '95%');
                 $rightDiv.css('width', '100%');
                 $rightDiv.append($object);
             }
