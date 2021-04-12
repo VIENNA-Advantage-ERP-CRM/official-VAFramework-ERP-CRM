@@ -70,31 +70,33 @@ namespace VAdvantage.Model
                 return false;
             }
 
+            //Lakhwinder 12 Apr 2021
+            //Qty on hand has to check while completing the prodcution , It's handled in associated stored procedure
             // when warehouse disallow negative inventory is false then on hand qty can't be in negative
-            wh = MWarehouse.Get(GetCtx(), GetM_Warehouse_ID());
-            if (wh.IsDisallowNegativeInv() && GetM_Product_ID() > 0)
-            {
-                product = MProduct.Get(GetCtx(), GetM_Product_ID());
-                string qry = "SELECT NVL(SUM(NVL(QtyOnHand,0)),0) AS QtyOnHand FROM M_Storage where m_locator_id=" + GetM_Locator_ID() + " and m_product_id=" + GetM_Product_ID();
-                //if (GetM_AttributeSetInstance_ID() != 0)
-                //{
-                qry += " AND NVL(M_AttributeSetInstance_ID , 0) =" + GetM_AttributeSetInstance_ID();
-                //}
-                Decimal? OnHandQty = Convert.ToDecimal(DB.ExecuteScalar(qry));
+            //wh = MWarehouse.Get(GetCtx(), GetM_Warehouse_ID());
+            //if (wh.IsDisallowNegativeInv() && GetM_Product_ID() > 0)
+            //{
+            //    product = MProduct.Get(GetCtx(), GetM_Product_ID());
+            //    string qry = "SELECT NVL(SUM(NVL(QtyOnHand,0)),0) AS QtyOnHand FROM M_Storage where m_locator_id=" + GetM_Locator_ID() + " and m_product_id=" + GetM_Product_ID();
+            //    //if (GetM_AttributeSetInstance_ID() != 0)
+            //    //{
+            //    qry += " AND NVL(M_AttributeSetInstance_ID , 0) =" + GetM_AttributeSetInstance_ID();
+            //    //}
+            //    Decimal? OnHandQty = Convert.ToDecimal(DB.ExecuteScalar(qry));
 
-                qry = @"SELECT NVL(SUM(MovementQty) , 0) FROM M_ProductionLine WHERE IsActive = 'Y' AND  M_Locator_ID=" + GetM_Locator_ID() + @" AND m_product_id=" + GetM_Product_ID() +
-                    @" AND NVL(M_AttributeSetInstance_ID , 0) =" + GetM_AttributeSetInstance_ID() + @" AND M_Production_ID = " + GetM_Production_ID();
-                if (!newRecord)
-                {
-                    qry += @" AND M_ProductionLine_ID <> " + GetM_ProductionLine_ID();
-                }
-                Decimal? moveQty = Convert.ToDecimal(DB.ExecuteScalar(qry));
-                if ((OnHandQty + GetMovementQty() + moveQty) < 0)
-                {
-                    log.SaveError("", product.GetName() + ", " + Msg.GetMsg(GetCtx(), "VIS_InsufficientQty") + OnHandQty);
-                    return false;
-                }
-            }
+            //    qry = @"SELECT NVL(SUM(MovementQty) , 0) FROM M_ProductionLine WHERE IsActive = 'Y' AND  M_Locator_ID=" + GetM_Locator_ID() + @" AND m_product_id=" + GetM_Product_ID() +
+            //        @" AND NVL(M_AttributeSetInstance_ID , 0) =" + GetM_AttributeSetInstance_ID() + @" AND M_Production_ID = " + GetM_Production_ID();
+            //    if (!newRecord)
+            //    {
+            //        qry += @" AND M_ProductionLine_ID <> " + GetM_ProductionLine_ID();
+            //    }
+            //    Decimal? moveQty = Convert.ToDecimal(DB.ExecuteScalar(qry));
+            //    if ((OnHandQty + GetMovementQty() + moveQty) < 0)
+            //    {
+            //        log.SaveError("", product.GetName() + ", " + Msg.GetMsg(GetCtx(), "VIS_InsufficientQty") + OnHandQty);
+            //        return false;
+            //    }
+            //}
 
             return true;
         }
