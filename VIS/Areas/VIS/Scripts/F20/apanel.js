@@ -102,6 +102,11 @@
         this.curTabIndex;
         /* Sort Tab */
         this.firstTabId = null;
+        this.DocActionVariables = {};
+        this.DocActionVariables.STATUS_COMPLETED = "CO";
+        this.DocActionVariables.STATUS_CLOSED = "CL";
+        this.DocActionVariables.STATUS_VOIDED = "VO";
+        this.DocActionVariables.STATUS_REVERSED = "RE";
 
         this.toolbarCreated = false;
         this.errorDisplayed = false;
@@ -2242,10 +2247,10 @@
             var processed = VIS.context.getWindowContext(curWindowNo, "Processed");//
             if (processed != "Y") {
                 var docStatus = VIS.context.getWindowContext(curWindowNo, "DocStatus");
-                if (DocActionVariables.STATUS_Completed == docStatus
-                    || DocActionVariables.STATUS_Closed == docStatus
-                    || DocActionVariables.STATUS_Reversed == docStatus
-                    || DocActionVariables.STATUS_Voided == docStatus)
+                if (this.DocActionVariables.STATUS_COMPLETED == docStatus
+                    || this.DocActionVariables.STATUS_CLOSED == docStatus
+                    || this.DocActionVariables.STATUS_REVERSED == docStatus
+                    || this.DocActionVariables.STATUS_VOIDED == docStatus)
                     ;
                 else {
                     //ADialog.error(m_curWindowNo, this, "PostDocNotComplete");

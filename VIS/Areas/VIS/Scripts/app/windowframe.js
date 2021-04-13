@@ -193,6 +193,12 @@
         var $toolDiv = null;
         this.onLoad = null;
 
+        this.DocActionVariables = {};
+        this.DocActionVariables.STATUS_COMPLETED = "CO";
+        this.DocActionVariables.STATUS_CLOSED = "CL";
+        this.DocActionVariables.STATUS_VOIDED = "VO";
+        this.DocActionVariables.STATUS_REVERSED = "RE";
+
         function initComponent() {
             // $contentGrid = $("<div class='vis-awindow-body'>");
             $table = $("<table class='vis-awindow'>");
@@ -3241,10 +3247,10 @@
             var processed = VIS.context.getWindowContext(this.curWindowNo, "Processed");//
             if (processed != "Y") {
                 var docStatus = VIS.context.getWindowContext(this.curWindowNo, "DocStatus");
-                if (DocActionVariables.STATUS_Completed == docStatus
-                    || DocActionVariables.STATUS_Closed == docStatus
-                    || DocActionVariables.STATUS_Reversed == docStatus
-                    || DocActionVariables.STATUS_Voided == docStatus)
+                if (this.DocActionVariables.STATUS_COMPLETED == docStatus
+                    || this.DocActionVariables.STATUS_CLOSED == docStatus
+                    || this.DocActionVariables.STATUS_REVERSED == docStatus
+                    || this.DocActionVariables.STATUS_VOIDED == docStatus)
                     ;
                 else {
                     //ADialog.error(m_curWindowNo, this, "PostDocNotComplete");
