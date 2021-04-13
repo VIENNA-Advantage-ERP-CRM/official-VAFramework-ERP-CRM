@@ -715,71 +715,80 @@
 
                         }
                     }
-                });
-                /* End  bind click event of Main data container of Tab Menu */
-
+                });/* End  bind click event of Main data container of Tab Menu */
+                
+                var welcomeTabScroll = true;
+                
                 /* Start Bind Scroll of main data contianer of tab menu */
                 WelcomeTabDatacontainers.bind('scroll', function () {
-                    if ($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {
+                    //var thisscroll = this;
+                    //clearTimeout($.data(this, 'scrollTimer'));//Clear scroll timer to wait next scroll event happens after 250 ms
+                    //$.data(this, 'scrollTimer', setTimeout(function () {
+                    if ($(this).scrollTop() + $(this).innerHeight() >= (this.scrollHeight * .75) && welcomeTabScroll) {//Condition true when 75 scroll is done
+                        welcomeTabScroll = false;
+                        setTimeout(function () {
+                            welcomeTabScroll = true;
+                        }, 100);
                         isTabscroll = true;
-                        isTabDataRef = false;
-                        if (activeTabType == WorkflowType) {
-                            tabdataLastPage = parseInt($("#divfActivity").html());
-                            tabdatacntpage = tabdataPage * tabdataPageSize;
-                            if (tabdatacntpage <= tabdataLastPage && activity != null) {
+                            isTabDataRef = false;
+                            if (activeTabType == WorkflowType) {
+                                tabdataLastPage = parseInt($("#divfActivity").html());
+                                tabdatacntpage = tabdataPage * tabdataPageSize;
+                                if (tabdatacntpage <= tabdataLastPage && activity != null) {
+                                    tabdataPage += 1;
+                                    activity.AppendRecord(tabdataPage, tabdataPageSize);
+                                }
+                                else {
+                                    return;
+                                }
+                            }
+                            else if (activeTabType == NoticeType) {
+                                tabdataLastPage = parseInt($divNoticeCount.text());
+                                tabdatacntpage = tabdataPage * tabdataPageSize;
                                 tabdataPage += 1;
-                                activity.AppendRecord(tabdataPage, tabdataPageSize);
+                                if (tabdatacntpage <= tabdataLastPage) {
+                                    LoadHomeNotice();
+                                }
+                                else {
+                                    return;
+                                }
                             }
-                            else {
-                                return;
-                            }
-                        }
-                        else if (activeTabType == NoticeType) {
-                            tabdataLastPage = parseInt($divNoticeCount.text());
-                            tabdatacntpage = tabdataPage * tabdataPageSize;
-                            tabdataPage += 1;
-                            if (tabdatacntpage <= tabdataLastPage) {
-                                LoadHomeNotice();
-                            }
-                            else {
-                                return;
-                            }
-                        }
-                        else if (activeTabType == RequestType) {
-                            tabdataLastPage = parseInt($divRequestCount.text());
-                            tabdatacntpage = tabdataPage * tabdataPageSize;
-                            tabdataPage += 1;
-                            if (tabdatacntpage <= tabdataLastPage) {
-                                LoadHomeRequest();
-                            }
-                            else {
-                                return;
-                            }
-                        }
-                        else if (activeTabType == AppointmentsType) {
-                            tabdataLastPage = parseInt($divAptCount.text());
-                            tabdatacntpage = tabdataPage * tabdataPageSize;
-                            tabdataPage += 1;
-                            if (tabdatacntpage <= tabdataLastPage) {
-                                WSP.wspHomeMgr.doScrollWSPHome(AppointmentsType, tabdataPage, tabdataPageSize);
-                            }
-                            else {
-                                return;
-                            }
-                        }
-                        else if (activeTabType == NotesType) {
-                            tabdataLastPage = parseInt($divNotesCount.text());
-                            tabdatacntpage = tabdataPage * tabdataPageSize;
-                            if (tabdatacntpage <= tabdataLastPage) {
+                            else if (activeTabType == RequestType) {
+                                tabdataLastPage = parseInt($divRequestCount.text());
+                                tabdatacntpage = tabdataPage * tabdataPageSize;
                                 tabdataPage += 1;
-                                WSP.wspHomeMgr.doScrollWSPHome(NotesType, tabdataPage, tabdataPageSize);
+                                if (tabdatacntpage <= tabdataLastPage) {
+                                    LoadHomeRequest();
+                                }
+                                else {
+                                    return;
+                                }
                             }
-                            else {
-                                return;
+                            else if (activeTabType == AppointmentsType && window.WSP) {
+                                tabdataLastPage = parseInt($divAptCount.text());
+                                tabdatacntpage = tabdataPage * tabdataPageSize;
+                                tabdataPage += 1;
+                                if (tabdatacntpage <= tabdataLastPage) {
+                                    WSP.wspHomeMgr.doScrollWSPHome(AppointmentsType, tabdataPage, tabdataPageSize);
+                                }
+                                else {
+                                    return;
+                                }
                             }
-                        }
+                            else if (activeTabType == NotesType && window.WSP) {
+                                tabdataLastPage = parseInt($divNotesCount.text());
+                                tabdatacntpage = tabdataPage * tabdataPageSize;
+                                if (tabdatacntpage <= tabdataLastPage) {
+                                    tabdataPage += 1;
+                                    WSP.wspHomeMgr.doScrollWSPHome(NotesType, tabdataPage, tabdataPageSize);
+                                }
+                                else {
+                                    return;
+                                }
+                            }
 
-                    }
+                        }
+                    //}, 200));
                 });
                 /* End Bind Scroll of main data contianer of tab menu    */
 
@@ -900,10 +909,15 @@
                         }
                     }
                 });
+                var followUpScroll = true;
                 //Bind Scroll evnt on Follups
                 FllUpsMain.bind('scroll', function () {
-                    if ($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {
+                    //var thisscroll = this;
+                    //clearTimeout($.data(this, 'scrollTimer'));//Clear scroll timer to wait next scroll event happens after 250 ms
+                    //$.data(this, 'scrollTimer', setTimeout(function () {
+                    if ($(this).scrollTop() + $(this).innerHeight() >= (this.scrollHeight * .75) && followUpScroll) {//Condition true when 75 scroll is done
                         isRef = false;
+                        followUpScroll = false;
                         fllLastPage = $FllupsCnt.text();
 
                         if (fllLastPage > fllPageSize) {
@@ -913,10 +927,13 @@
                                 getFllUps(fllPageSize, fllPage, isRef);
                             }
                             else {
+                                followUpScroll = true;
                                 return;
                             }
                         }
+                        followUpScroll = true;
                     }
+                    //}, 200));
                 });
                 //To refresh fllups
                 $FllUpsRefresh.on("click", function () {
@@ -1022,9 +1039,11 @@
                                 }
                             }
                             isfllBusy = false;
+                            followUpScroll = true;
                             $FllMainLoder.hide();
                         },
                         error: function () {
+                            followUpScroll = true;
                         }
                     });
                 }
@@ -1451,16 +1470,13 @@
 
 
                     $('.vis-welcomeScreen-Data').hide('fast');
-                    $('.vis-welcomeScreenFeeds').fadeIn('fast', function () {
-                        setTimeout(function () {
-                            //  WelcomeTabDatacontainers.scroll();
-                        }, 0);
-                    });
+                    $('.vis-welcomeScreenFeeds').fadeIn('fast');
                     $sAlrtTxtType.html("");
                     $spanWelcomeTabtopHdr.show();
                     $sAlrtTxtType.html(VIS.Msg.getMsg("KPI"));
                     $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-kpi");// .css("background-position", "0px -537px");
                     WelcomeTabDatacontainers.css({ "text-align": "", "margin-top": "" });
+                    activeTabType = kPIType;
                     if (window.VADB && window.VADB != null && VADB.Apps.KpiHomeScreen != undefined) {
 
                         WelcomeTabDatacontainers.css({ "text-align": "auto" });
@@ -1515,11 +1531,7 @@
                     $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-userfeed");//  .css("background-position", "0px -76px");
                     $('.vis-welcomeScreenTab-notificationBubbles').removeClass('vis-feedsAlert').addClass('blank');
                     $('.vis-welcomeScreen-Data').hide('slow');
-                    $('.vis-welcomeScreenFeeds').fadeIn('fast', function () {
-                        setTimeout(function () {
-                            // WelcomeTabDatacontainers.scroll();
-                        }, 0);
-                    });
+                    $('.vis-welcomeScreenFeeds').fadeIn('fast');
                     $workflowActivity.hide();
                     adjustDivSize();
                     $welcomeNewRecord.hide();
@@ -1551,11 +1563,8 @@
                     $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-notice");//$spanWelcomeTabtopHdr.css("background-position", "0px -143px");
                     $('.vis-welcomeScreenTab-notificationBubbles').removeClass('vis-feedsAlert').addClass('blank');
                     $('.vis-welcomeScreen-Data').hide('slow');
-                    $('.vis-welcomeScreenFeeds').fadeIn('fast', function () {
-                        setTimeout(function () {
-                            // WelcomeTabDatacontainers.scroll();
-                        }, 0);
-                    });
+                    $('.vis-welcomeScreenFeeds').fadeIn('fast');
+                   
                     $sAlrtTxtType.html(VIS.Msg.getMsg("Notice"));
                     $welcomeNewRecord.hide();
                     $wfSearchShow.hide();
@@ -1573,15 +1582,12 @@
                 }
                 else if (datatab === "mytask") {
                     $('.vis-welcomeScreen-Data').hide('slow');
-                    $('.vis-welcomeScreenFeeds').fadeIn('fast', function () {
-                        setTimeout(function () {
-                            // WelcomeTabDatacontainers.scroll();
-                        }, 0);
-                    });
+                    $('.vis-welcomeScreenFeeds').fadeIn('fast');
                     $sAlrtTxtType.html("");
                     $sAlrtTxtType.html(VIS.Msg.getMsg("MyTask"));
                     $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-mytasks");//$spanWelcomeTabtopHdr.css("background-position", "0px -406px");
                     WelcomeTabDatacontainers.css({ "text-align": "", "margin-top": "" });
+                    activeTabType = MyTaskType;
                     if (isWsp) {
                         WelcomeTabDatacontainers.css({ "text-align": "auto" });
                         $ulHomeTabMenu.off("click");
@@ -1624,17 +1630,14 @@
                 }
                 else if (datatab === "taskassignbyme") {
                     $('.vis-welcomeScreen-Data').hide('slow');
-                    $('.vis-welcomeScreenFeeds').fadeIn('fast', function () {
-                        setTimeout(function () {
-                            // WelcomeTabDatacontainers.scroll();
-                        }, 0);
-                    });
+                    $('.vis-welcomeScreenFeeds').fadeIn('fast');
 
 
                     $sAlrtTxtType.html("");
                     $sAlrtTxtType.html(VIS.Msg.getMsg("TaskAssignByMe"));
                     $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-taskassigned");//$spanWelcomeTabtopHdr.css("background-position", "0px -340px");
                     WelcomeTabDatacontainers.css({ "text-align": "", "margin-top": "" });
+                     activeTabType = TaskAssignByme;
                     if (isWsp) {
                         WelcomeTabDatacontainers.css({ "text-align": "auto" });
                         $spanWelcomeTabtopHdr.show();
@@ -1691,11 +1694,7 @@
                     $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-document");//$spanWelcomeTabtopHdr.css("background-position-y", "-603px");
                     $('.vis-welcomeScreenTab-notificationBubbles').removeClass('vis-feedsAlert').addClass('blank');
                     $('.vis-welcomeScreen-Data').hide('slow');
-                    $('.vis-welcomeScreenFeeds').fadeIn('fast', function () {
-                        setTimeout(function () {
-                            // WelcomeTabDatacontainers.scroll();
-                        }, 0);
-                    });
+                    $('.vis-welcomeScreenFeeds').fadeIn('fast');
                     emptyWelcomeTabDatacontainers();;
                     var str = "<p style=' margin-top:200px;text-align:center'>" + VIS.Msg.getMsg('PleaseInstallDMSModule') + "</p>";
                     WelcomeTabDatacontainers.html(str);
@@ -1713,12 +1712,7 @@
                     $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon fa fa-bell-o");//$spanWelcomeTabtopHdr.css("background-position", "0px -209px");
                     $('.vis-welcomeScreenTab-notificationBubbles').removeClass('vis-feedsAlert').addClass('blank');
                     $('.vis-welcomeScreen-Data').hide('slow');
-                    $('.vis-welcomeScreenFeeds').fadeIn('fast', function () {
-                        setTimeout(function () {
-                            //WelcomeTabDatacontainers.scroll();
-                        }, 0);
-
-                    });
+                    $('.vis-welcomeScreenFeeds').fadeIn('fast');
                     //$welcomeNewRecord.hide();
                     $welcomeNewRecord.show();
                     $wfSearchShow.hide();
@@ -1748,15 +1742,12 @@
                 }
                 else if (datatab === "appointments") {
                     $('.vis-welcomeScreen-Data').hide('slow');
-                    $('.vis-welcomeScreenFeeds').fadeIn('fast', function () {
-                        setTimeout(function () {
-                            // WelcomeTabDatacontainers.scroll();
-                        }, 0);
-                    });
+                    $('.vis-welcomeScreenFeeds').fadeIn('fast');
                     $sAlrtTxtType.html("");
                     $sAlrtTxtType.html(VIS.Msg.getMsg("Appointment"));
                     $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-appointment");//$spanWelcomeTabtopHdr.css("background-position", "0px -275px");
                     WelcomeTabDatacontainers.css({ "text-align": "", "margin-top": "" });
+                    activeTabType = AppointmentsType;
                     if (isWsp) {
                         WelcomeTabDatacontainers.css({ "text-align": "auto" });
                         $ulHomeTabMenu.off("click");
@@ -1796,15 +1787,12 @@
                 }
                 else if (datatab === "notes") {
                     $('.vis-welcomeScreen-Data').hide('slow');
-                    $('.vis-welcomeScreenFeeds').fadeIn('fast', function () {
-                        setTimeout(function () {
-                            //  WelcomeTabDatacontainers.scroll();
-                        }, 0);
-                    });
+                    $('.vis-welcomeScreenFeeds').fadeIn('fast');
                     $sAlrtTxtType.html("");
                     $sAlrtTxtType.html(VIS.Msg.getMsg("MyNotes"));
                     $spanWelcomeTabtopHdr.removeClass().addClass("vis-welcomeScreenContentTittle-icon vis vis-contacts");//  .css("background-position", "0px -473px");
                     WelcomeTabDatacontainers.css({ "text-align": "", "margin-top": "" });
+                    activeTabType = NotesType;
                     if (isWsp) {
                         WelcomeTabDatacontainers.css({ "text-align": "auto" });
                         $ulHomeTabMenu.off("click");

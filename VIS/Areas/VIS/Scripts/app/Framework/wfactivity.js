@@ -408,18 +408,22 @@
 
         };
 
+        var scrollWF = true;
         function loadOnScroll(e) {
-            if ($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {
-                tabdataLastPage = parseInt($divActivity.html());
-                tabdatacntpage = pageNo * PageSize;
-                if (tabdatacntpage <= tabdataLastPage) {
-                    pageNo += 1;
-                    self.AppendRecord(pageNo, PageSize);
+            
+                // do something
+            if ($(this).scrollTop() + $(this).innerHeight() >= (this.scrollHeight * 0.75) && scrollWF) {//Condition true when 75 scroll is done
+                    scrollWF = false;
+                    tabdataLastPage = parseInt($divActivity.html());
+                    tabdatacntpage = pageNo * PageSize;
+                    if (tabdatacntpage <= tabdataLastPage) {
+                        pageNo += 1;
+                        self.AppendRecord(pageNo, PageSize);
+                    }
+                    else {
+                        scrollWF = true;
+                    }
                 }
-                else {
-                    return;
-                }
-            }
         };
 
         this.AppendRecord = function (pageNo, paeSize, refresh) {
@@ -444,7 +448,7 @@
                     $busyIndicator.hide();
                     VIS.HomeMgr.BindMenuClick();
                     search = true;
-                    return;
+                    scrollWF = true;
                 },
                 success: function (dyndata) {
                     $txtSearch.val('');
@@ -488,8 +492,8 @@
                     }
                     else {
                         search = true;
-                        return;
                     }
+                    scrollWF = true;
 
                     //workflowActivityData.refresh();
                 }

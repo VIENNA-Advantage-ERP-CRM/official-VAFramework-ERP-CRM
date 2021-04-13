@@ -192,6 +192,7 @@ html[dir="rtl"] .vis-advancedSearchInput > label, html[dir="rtl"] .vis-advancedS
 }
 
 .vis-advancedSearchInput > select {
+    font-size:15px;
     /*padding: 6px;
     min-height: 30px;
     line-height: inherit !important;
