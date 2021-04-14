@@ -354,13 +354,17 @@ namespace ViennaAdvantageServer.Process
             // When ContractType is Accounts Receivable
             if (cont.GetContractType() == X_C_Contract.CONTRACTTYPE_AccountsReceivable)
             {
-                sql.Append(MRole.GetDefault(GetCtx()).AddAccessSQL("SELECT MIN(C_DOCTYPE_ID) FROM C_DocType WHERE DOCBASETYPE='ARI' AND ISACTIVE ='Y'", "C_DocType", true, true));
-                _C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
+                //	Get Doc Types first
+                var docTypes = MDocType.GetOfDocBaseType(GetCtx(), "ARI");
+                if (docTypes.Length > 0)	
+                    _C_DocType_ID = docTypes[0].GetC_DocType_ID();
             }
             else if (cont.GetContractType() == X_C_Contract.CONTRACTTYPE_AccountsPayable)
             {
-                sql.Append(MRole.GetDefault(GetCtx()).AddAccessSQL("SELECT MIN(C_DOCTYPE_ID) FROM C_DocType WHERE DOCBASETYPE='API' AND ISACTIVE ='Y'", "C_DocType", true, true));
-                _C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
+                //	Get Doc Types first
+                var docTypes = MDocType.GetOfDocBaseType(GetCtx(), "API");
+                if (docTypes.Length > 0)
+                    _C_DocType_ID = docTypes[0].GetC_DocType_ID();
             }
             // If ContractType not defined on Service Contract Window
             if (_C_DocType_ID == 0)
