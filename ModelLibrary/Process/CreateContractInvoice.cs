@@ -149,7 +149,7 @@ namespace ViennaAdvantageServer.Process
                 int res = 0;
                 // sql = "select noofdays from c_frequency where c_frequency_id = " + cont.GetC_Frequency_ID();
                 //  Decimal? days = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
-                
+
                 Decimal? price = null;
                 if (!cont.IsCancel())
                 {
@@ -223,12 +223,12 @@ namespace ViennaAdvantageServer.Process
                 {
                     // Done by Rakesh Kumar on 01/Apr/2021
                     // When ContractType is Accounts Receivable
-                    if (bp.GetVA009_PaymentMethod_ID() > 0 && (cont.GetContractType() == X_C_Contract.CONTRACTTYPE_AccountsReceivable))
+                    if (bp.GetVA009_PaymentMethod_ID() > 0 && (cont.GetContractType().Equals(X_C_Contract.CONTRACTTYPE_AccountsReceivable)))
                     {
                         inv.SetVA009_PaymentMethod_ID(bp.GetVA009_PaymentMethod_ID());
                         inv.SetIsSOTrx(true);
                     }
-                    else if (bp.GetVA009_PO_PaymentMethod_ID() > 0 && (cont.GetContractType() == X_C_Contract.CONTRACTTYPE_AccountsPayable))
+                    else if (bp.GetVA009_PO_PaymentMethod_ID() > 0 && (cont.GetContractType().Equals(X_C_Contract.CONTRACTTYPE_AccountsPayable)))
                     {
                         // When ContractType is Accounts Payable
                         inv.SetVA009_PaymentMethod_ID(bp.GetVA009_PO_PaymentMethod_ID());
@@ -247,7 +247,7 @@ namespace ViennaAdvantageServer.Process
                 inv.SetC_ConversionType_ID(cont.GetC_ConversionType_ID());
                 inv.SetC_PaymentTerm_ID(cont.GetC_PaymentTerm_ID());
                 inv.SetC_Campaign_ID(cont.GetC_Campaign_ID());
-                
+
                 inv.SetM_PriceList_ID(cont.GetM_PriceList_ID());
                 inv.SetSalesRep_ID(cont.GetSalesRep_ID());
                 inv.SetC_Contract_ID(cont.GetC_Contract_ID());
@@ -350,22 +350,23 @@ namespace ViennaAdvantageServer.Process
         /// </summary>
         private void SetDocType()
         {
+            sql.Clear();
             _C_DocType_ID = 0;
+            sql.Append("SELECT C_DocType_ID FROM C_DocType "
+                      + "WHERE AD_Client_ID=" + cont.GetAD_Client_ID() + " AND IsActive='Y' AND AD_Org_ID IN(0," + cont.GetAD_Org_ID() + ") ");
+
             // When ContractType is Accounts Receivable
-            if (cont.GetContractType() == X_C_Contract.CONTRACTTYPE_AccountsReceivable)
+            if (cont.GetContractType().Equals(X_C_Contract.CONTRACTTYPE_AccountsReceivable))
             {
-                //	Get Doc Types first
-                var docTypes = MDocType.GetOfDocBaseType(GetCtx(), "ARI");
-                if (docTypes.Length > 0)	
-                    _C_DocType_ID = docTypes[0].GetC_DocType_ID();
+                sql.Append(@" AND DocBaseType = '" + MDocBaseType.DOCBASETYPE_ARINVOICE + @"'");
             }
-            else if (cont.GetContractType() == X_C_Contract.CONTRACTTYPE_AccountsPayable)
+            else if (cont.GetContractType().Equals(X_C_Contract.CONTRACTTYPE_AccountsPayable))
             {
-                //	Get Doc Types first
-                var docTypes = MDocType.GetOfDocBaseType(GetCtx(), "API");
-                if (docTypes.Length > 0)
-                    _C_DocType_ID = docTypes[0].GetC_DocType_ID();
+                sql.Append(@" AND DocBaseType = '" + MDocBaseType.DOCBASETYPE_APINVOICE + @"'");
             }
+            sql.Append(" ORDER BY AD_Org_ID Desc");
+            _C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar(MRole.GetDefault(GetCtx()).AddAccessSQL(sql.ToString(), "C_DocType", true, true), null, Get_TrxName()));
+           
             // If ContractType not defined on Service Contract Window
             if (_C_DocType_ID == 0)
             {
