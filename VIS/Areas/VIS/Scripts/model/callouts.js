@@ -1256,6 +1256,7 @@
         return this.BPartnerBill(ctx, windowNo, mTab, mField, mTab.getValue("Bill_BPartner_ID"));
     };
 
+    
     /// <summary>
     /// Order Header - C_BPartner_Location.
     /// - C_BPartner_Location_ID
@@ -20636,6 +20637,282 @@
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";
     };
+    /// <summary>
+    /// Created By:Rakesh Kumar
+    /// Created Date: 05/Apr/2021
+    /// Service Contract Header - BPartner.
+    /// - M_PriceList_ID (+ Context)
+    /// - C_BPartner_Location_ID
+    /// - Bill_BPartner_ID/Bill_Location_ID
+    /// 	- AD_User_ID
+    /// 	- C_PaymentTerm_ID
+    /// </summary>
+    /// <param name="ctx">Context</param>
+    /// <param name="windowNo">current Window No</param>
+    /// <param name="mTab">Model Tab</param>
+    /// <param name="mField">Model Field</param>
+    /// <param name="value">The new value</param>
+    /// <returns>Error message or Set value in respective fields""</returns>
+    CalloutOrderContract.prototype.BPartnerContract = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        
+        var PaymentBasetype = null;
+        //var Util=VIS.Util;
+        //var sql = "";
+        var dr = null;
+        //var drl = null;
+        if (this.isCalloutActive() || value == null || value.toString() == "") {
+            return "";
+        }
+        try {
+            var C_BPartner_ID = 0;
+            var isvendor = 'N';
+            var isCustomer = 'N';
+            // Get Contract Type
+            var contractType = Util.getValueOfString(mTab.getValue("ContractType"));
+            if (contractType == "")
+                return "";
+            if (value != null)
+                C_BPartner_ID = Util.getValueOfInt(value.toString());
+            if (C_BPartner_ID == 0)
+                return "";
+
+            // Skip rest of steps for RMA. These fields are copied over from the orignal order instead.
+            var isReturnTrx = Util.getValueOfBoolean(mTab.getValue("IsReturnTrx"));
+            if (isReturnTrx)
+                return "";
+
+            this.setCalloutActive(true);
+
+            // Added by Bharat on 13/May/2017 to remove client side queries
+
+            var _CountVA009 = false;
+            var paramString = "VA009_";
+            var isSOTrx = (contractType == "ASR" ? true : false); //ctx.isSOTrx(windowNo);
+            var dr = VIS.dataContext.getJSONRecord("ModulePrefix/GetModulePrefix", paramString);
+            if (dr != null) {
+                _CountVA009 = dr["VA009_"];
+            }
+
+            paramString = _CountVA009.toString() + "," + C_BPartner_ID;
+            dr = VIS.dataContext.getJSONRecord("MBPartner/GetBPartnerOrderData", paramString);
+            if (dr != null) {
+                // Price List
+                var PriceListPresent = Util.getValueOfInt(mTab.getValue("M_PriceList_ID")); // from BSO/BPO window
+                var C_Order_Blanket = Util.getValueOfDecimal(mTab.getValue("C_Order_Blanket"));
+                if (PriceListPresent > 0 && C_Order_Blanket > 0) {
+                }
+                else {
+                    var ii = Util.getValueOfInt(isSOTrx ? dr["M_PriceList_ID"] : dr["PO_PriceList_ID"]);
+                    if (ii != 0) {
+                        mTab.setValue("M_PriceList_ID", ii);
+                    }
+                    // JID_0364: If price list not available at BP, user need to select it manually
+                }
+
+                //	Bill-To BPartner
+                mTab.setValue("Bill_BPartner_ID", C_BPartner_ID);
+                var bill_Location_ID = Util.getValueOfInt(dr["Bill_Location_ID"]);
+                if (bill_Location_ID == 0) {
+                    var bill_Partner_ID = Util.getValueOfInt(dr["Bill_BPartner_ID"]);
+                    if (bill_Partner_ID > 0)
+                        mTab.setValue("Bill_BPartner_ID", bill_Partner_ID);
+                }
+                else
+                    mTab.setValue("Bill_Location_ID", bill_Location_ID);
+
+                // Ship-To Location
+                var shipTo_ID = Util.getValueOfInt(dr["C_BPartner_Location_ID"]);
+                if (C_BPartner_ID.toString() == ctx.getContext("C_BPartner_ID")) {
+                    var loc = ctx.getContext("C_BPartner_Location_ID");
+                    if (loc.length > 0)
+                        shipTo_ID = Util.getValueOfInt(loc);
+                }
+                if (shipTo_ID == 0)
+                    mTab.setValue("C_BPartner_Location_ID", null);
+                else {
+                    mTab.setValue("C_BPartner_Location_ID", shipTo_ID);
+                    if ("Y" == Util.getValueOfString(dr["IsShipTo"]))	//	set the same
+                        mTab.setValue("Bill_Location_ID", shipTo_ID);
+                }
+
+                var _salerep_ID = Util.getValueOfInt(dr["SalesRep_ID"])
+                if (_salerep_ID > 0)
+                    mTab.setValue("SalesRep_ID", _salerep_ID);
+
+                if (_CountVA009) {
+                    var _PaymentMethod_ID = Util.getValueOfInt(dr["VA009_PaymentMethod_ID"]);
+                    //VA009_PO_PaymentMethod_ID added new column for enhancement.. Google Sheet ID-- SI_0036
+                    var _PO_PaymentMethod_ID = 0;
+                    var _PO_PAYMENTBASETYPE = "T";
+                    if (C_Order_Blanket <= 0) {
+
+                        var bpdtl = VIS.dataContext.getJSONRecord("MBPartner/GetBPDetails", C_BPartner_ID);
+                        if (bpdtl != null) {
+                            isvendor = Util.getValueOfString(bpdtl["IsVendor"]);
+                            isCustomer = Util.getValueOfString(bpdtl["IsCustomer"]);
+                            if (!isSOTrx) { //In case of Purchase Order
+                                if (isvendor == "Y") {
+                                    _PaymentMethod_ID = Util.getValueOfInt(bpdtl["VA009_PO_PaymentMethod_ID"]);
+                                    PaymentBasetype = Util.getValueOfString(bpdtl["VA009_PAYMENTBASETYPEPO"]);
+                                }
+                                else {
+                                    _PaymentMethod_ID = 0;
+                                    PaymentBasetype = null;
+                                }
+                            }
+                            else {
+                                if (isvendor == "Y") {
+                                    _PaymentMethod_ID = 0;
+                                    PaymentBasetype = null;
+                                    if (isCustomer == "Y") {
+                                        _PaymentMethod_ID = Util.getValueOfInt(bpdtl["VA009_PaymentMethod_ID"]);
+                                        PaymentBasetype = Util.getValueOfString(bpdtl["VA009_PAYMENTBASETYPE"]);
+                                    }
+                                }
+                                else {
+                                    if (isCustomer == "Y") {
+                                        _PaymentMethod_ID = Util.getValueOfInt(bpdtl["VA009_PaymentMethod_ID"]);
+                                        PaymentBasetype = Util.getValueOfString(bpdtl["VA009_PAYMENTBASETYPE"]);
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+
+                    if (_PaymentMethod_ID == 0) {
+                        var C_Order_Blanket = Util.getValueOfInt(mTab.getValue("C_Order_Blanket"))
+                        if (C_Order_Blanket > 0) {
+                            var paramString = _CountVA009.toString() + "," + C_Order_Blanket.toString();
+                            dr = VIS.dataContext.getJSONRecord("MOrder/GetPaymentMethod", paramString);
+                            if (dr != null) {
+                                var paymthd_id = Util.getValueOfInt(dr["VA009_PaymentMethod_ID"]);
+                                if (paymthd_id > 0) {
+                                    mTab.setValue("VA009_PaymentMethod_ID", paymthd_id);
+                                    var PaymentBasetype = Util.getValueOfString(dr["VA009_PaymentBaseType"]);
+                                    if (PaymentBasetype != "W" && PaymentBasetype != null) {
+                                        // if (PaymentBasetype != null) {
+                                        mTab.setValue("PaymentMethod", PaymentBasetype);
+                                        if (isvendor == 'N')
+                                            mTab.setValue("PaymentRule", PaymentBasetype);
+                                        else
+                                            mTab.setValue("PaymentRulePO", PaymentBasetype);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        if (_PaymentMethod_ID == 0)
+                            mTab.setValue("VA009_PaymentMethod_ID", null);
+                        else {
+                            mTab.setValue("VA009_PaymentMethod_ID", _PaymentMethod_ID);
+
+                            //PaymentBasetype = Util.getValueOfString(dr["VA009_PaymentBaseType"]);
+                            if (PaymentBasetype != "W" && PaymentBasetype != null) {
+                                //if (PaymentBasetype != null) {
+                                mTab.setValue("PaymentMethod", PaymentBasetype);
+                                if (isvendor == 'N')
+                                    mTab.setValue("PaymentRule", PaymentBasetype);
+                                else
+                                    mTab.setValue("PaymentRulePO", PaymentBasetype);
+                            }
+                            else {
+                                mTab.setValue("PaymentMethod", "T");
+                                if (isvendor == 'N')
+                                    mTab.setValue("PaymentRule", "T");
+                                else
+                                    mTab.setValue("PaymentRulePO", "T");
+                            }
+                        }
+                    }
+                }
+
+                var contID = Util.getValueOfInt(dr["AD_User_ID"]);
+                if (C_BPartner_ID.toString() == ctx.getContext("C_BPartner_ID")) {
+                    var cont = ctx.getContext("AD_User_ID");
+                    if (cont.length > 0)
+                        contID = Util.getValueOfInt(cont);
+                }
+                if (contID == 0)
+                    mTab.setValue("AD_User_ID", null);
+                else {
+                    mTab.setValue("AD_User_ID", contID);
+                    mTab.setValue("Bill_User_ID", contID);
+                }
+
+                //	CreditAvailable 
+                if (isSOTrx) {
+                    var CreditStatus = Util.getValueOfString(dr["CreditStatusSettingOn"]);
+                    if (CreditStatus == "CH") {
+                        var CreditLimit = Util.getValueOfDouble(dr["SO_CreditLimit"]);
+                        if (CreditLimit != 0) {
+                            var CreditAvailable = Util.getValueOfDouble(dr["CreditAvailable"]);
+                            if (CreditAvailable <= 0) {
+                                VIS.ADialog.info("CreditOver");
+                            }
+                        }
+                    }
+                    else {
+                        var locId = Util.getValueOfInt(mTab.getValue("C_BPartner_Location_ID"));
+                        var dr1 = VIS.dataContext.getJSONRecord("MBPartner/GetLocationData", locId.toString());
+                        if (dr1 != null) {
+                            CreditStatus = Util.getValueOfString(dr1["CreditStatusSettingOn"]);
+                            if (CreditStatus == "CL") {
+                                var CreditLimit = Util.getValueOfDouble(dr1["SO_CreditLimit"]);
+                                if (CreditLimit != 0) {
+                                    var CreditAvailable = Util.getValueOfDouble(dr1["CreditAvailable"]);
+                                    if (CreditAvailable <= 0) {
+                                        VIS.ADialog.info("CreditOver");
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch (err) {
+            //if (dr != null) {
+            //    dr.close();
+            //    dr = null;
+            //}
+            //if (drl != null) {
+            //    drl.close();
+            //    drl = null;
+            //}
+            //this.log.log(Level.SEVERE, sql, err);
+            this.setCalloutActive(false);
+            return err;
+        }
+        this.setCalloutActive(false);
+        //ctx = windowNo = mTab = mField = value =
+        oldValue = null;
+    };
+
+    /// <summary>
+    /// Created By:Rakesh Kumar
+    /// Created Date: 08/Apr/2021
+    /// Service Contract Header - ContractType.
+    /// - Change IsSOTrx based on ContractType selected
+    /// </summary>
+    /// <param name="ctx">Context</param>
+    /// <param name="windowNo">current Window No</param>
+    /// <param name="mTab">Model Tab</param>
+    /// <param name="mField">Model Field</param>
+    /// <param name="value">The new value</param>
+    /// <returns>Set value in ContractType""</returns>
+    CalloutOrderContract.prototype.UpdateIsSOTrx = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (this.isCalloutActive() || value == null || value.toString() == "" || value == false) {
+            return "";
+        }
+        this.setCalloutActive(true);
+
+        ctx.setIsSOTrx(windowNo, value == "ASR" ? true : false)
+
+        this.setCalloutActive(false);
+    }
+
     VIS.Model.CalloutOrderContract = CalloutOrderContract;
     //*********************************
 
