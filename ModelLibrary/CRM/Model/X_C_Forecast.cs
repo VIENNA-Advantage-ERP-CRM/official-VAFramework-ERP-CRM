@@ -38,8 +38,8 @@ namespace VAdvantage.Model
  Set Table ID By Table Name
  added by ->Harwinder */
         static X_C_Forecast() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
-        static long serialVersionUID = 27900599207949L;/** Last Updated Timestamp 4/15/2021 8:04:51 AM */
-        public static long updatedMS = 1618473891160L;/** AD_Table_ID=1000244 */
+        static long serialVersionUID = 27900607045154L;/** Last Updated Timestamp 4/15/2021 10:15:28 AM */
+        public static long updatedMS = 1618481728365L;/** AD_Table_ID=1000244 */
         public static int Table_ID; // =1000244;
         /** TableName=C_Forecast */
         public static String Table_Name = "C_Forecast";
@@ -131,18 +131,30 @@ namespace VAdvantage.Model
         public void SetDescription(String Description) { if (Description != null && Description.Length > 255) { log.Warning("Length > 255 - truncated"); Description = Description.Substring(0, 255); } Set_Value("Description", Description); }/** Get Description.
 @return Optional short description of the record */
         public String GetDescription() { return (String)Get_Value("Description"); }
-        /** DocAction AD_Reference_ID=1000232 */
-        public static int DOCACTION_AD_Reference_ID = 1000232;/** Complete = CO */
-        public static String DOCACTION_Complete = "CO";/** Prepare = PR */
-        public static String DOCACTION_Prepare = "PR";/** Is test a valid value.
+        /** DocAction AD_Reference_ID=135 */
+        public static int DOCACTION_AD_Reference_ID = 135;/** <None> = -- */
+        public static String DOCACTION_None = "--";/** Approve = AP */
+        public static String DOCACTION_Approve = "AP";/** Close = CL */
+        public static String DOCACTION_Close = "CL";/** Complete = CO */
+        public static String DOCACTION_Complete = "CO";/** Invalidate = IN */
+        public static String DOCACTION_Invalidate = "IN";/** Post = PO */
+        public static String DOCACTION_Post = "PO";/** Prepare = PR */
+        public static String DOCACTION_Prepare = "PR";/** Reverse - Accrual = RA */
+        public static String DOCACTION_Reverse_Accrual = "RA";/** Reverse - Correct = RC */
+        public static String DOCACTION_Reverse_Correct = "RC";/** Re-activate = RE */
+        public static String DOCACTION_Re_Activate = "RE";/** Reject = RJ */
+        public static String DOCACTION_Reject = "RJ";/** Void = VO */
+        public static String DOCACTION_Void = "VO";/** Wait Complete = WC */
+        public static String DOCACTION_WaitComplete = "WC";/** Unlock = XL */
+        public static String DOCACTION_Unlock = "XL";/** Is test a valid value.
 @param test testvalue
 @returns true if valid **/
-        public bool IsDocActionValid(String test) { return test == null || test.Equals("CO") || test.Equals("PR"); }/** Set Document Action.
+        public bool IsDocActionValid(String test) { return test == null || test.Equals("--") || test.Equals("AP") || test.Equals("CL") || test.Equals("CO") || test.Equals("IN") || test.Equals("PO") || test.Equals("PR") || test.Equals("RA") || test.Equals("RC") || test.Equals("RE") || test.Equals("RJ") || test.Equals("VO") || test.Equals("WC") || test.Equals("XL"); }/** Set Document Action.
 @param DocAction The targeted status of the document */
         public void SetDocAction(String DocAction)
         {
             if (!IsDocActionValid(DocAction))
-                throw new ArgumentException("DocAction Invalid value - " + DocAction + " - Reference_ID=1000232 - CO - PR"); if (DocAction != null && DocAction.Length > 2) { log.Warning("Length > 2 - truncated"); DocAction = DocAction.Substring(0, 2); }
+                throw new ArgumentException("DocAction Invalid value - " + DocAction + " - Reference_ID=135 - -- - AP - CL - CO - IN - PO - PR - RA - RC - RE - RJ - VO - WC - XL"); if (DocAction != null && DocAction.Length > 2) { log.Warning("Length > 2 - truncated"); DocAction = DocAction.Substring(0, 2); }
             Set_Value("DocAction", DocAction);
         }/** Get Document Action.
 @return The targeted status of the document */
@@ -184,7 +196,11 @@ namespace VAdvantage.Model
 @param GenerateLines Generate component lines for Push supply type components  */
         public void SetGenerateLines(String GenerateLines) { if (GenerateLines != null && GenerateLines.Length > 10) { log.Warning("Length > 10 - truncated"); GenerateLines = GenerateLines.Substring(0, 10); } Set_Value("GenerateLines", GenerateLines); }/** Get Create Component Txn Lines.
 @return Generate component lines for Push supply type components  */
-        public String GetGenerateLines() { return (String)Get_Value("GenerateLines"); }/** Set Price List.
+        public String GetGenerateLines() { return (String)Get_Value("GenerateLines"); }/** Set Approved.
+@param IsApproved Indicates if this document requires approval */
+        public void SetIsApproved(Boolean IsApproved) { Set_Value("IsApproved", IsApproved); }/** Get Approved.
+@return Indicates if this document requires approval */
+        public Boolean IsApproved() { Object oo = Get_Value("IsApproved"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }/** Set Price List.
 @param M_PriceList_ID Unique identifier of a Price List */
         public void SetM_PriceList_ID(int M_PriceList_ID)
         {

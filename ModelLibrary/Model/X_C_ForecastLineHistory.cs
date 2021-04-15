@@ -1,0 +1,134 @@
+namespace VAdvantage.Model{
+/** Generated Model - DO NOT CHANGE */
+using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for C_ForecastLineHistory
+ *  @author Raghu (Updated) 
+ *  @version Vienna Framework 1.1.1 - $Id$ */
+public class X_C_ForecastLineHistory : PO{public X_C_ForecastLineHistory (Context ctx, int C_ForecastLineHistory_ID, Trx trxName) : base (ctx, C_ForecastLineHistory_ID, trxName){/** if (C_ForecastLineHistory_ID == 0){SetC_ForecastLineHistory_ID (0);SetC_ForecastLine_ID (0);} */
+}public X_C_ForecastLineHistory (Ctx ctx, int C_ForecastLineHistory_ID, Trx trxName) : base (ctx, C_ForecastLineHistory_ID, trxName){/** if (C_ForecastLineHistory_ID == 0){SetC_ForecastLineHistory_ID (0);SetC_ForecastLine_ID (0);} */
+}/** Load Constructor 
+@param ctx context
+@param rs result set 
+@param trxName transaction
+*/
+public X_C_ForecastLineHistory (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
+@param ctx context
+@param rs result set 
+@param trxName transaction
+*/
+public X_C_ForecastLineHistory (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
+@param ctx context
+@param rs result set 
+@param trxName transaction
+*/
+public X_C_ForecastLineHistory (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName){}/** Static Constructor 
+ Set Table ID By Table Name
+ added by ->Harwinder */
+static X_C_ForecastLineHistory(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
+static long serialVersionUID = 27900533561157L;/** Last Updated Timestamp 4/14/2021 1:50:44 PM */
+public static long updatedMS = 1618408244368L;/** AD_Table_ID=1000549 */
+public static int Table_ID; // =1000549;
+/** TableName=C_ForecastLineHistory */
+public static String Table_Name="C_ForecastLineHistory";
+protected static KeyNamePair model;protected Decimal accessLevel = new Decimal(3);/** AccessLevel
+@return 3 - Client - Org 
+*/
+protected override int Get_AccessLevel(){return Convert.ToInt32(accessLevel.ToString());}/** Load Meta Data
+@param ctx context
+@return PO Info
+*/
+protected override POInfo InitPO (Context ctx){POInfo poi = POInfo.GetPOInfo (ctx, Table_ID);return poi;}/** Load Meta Data
+@param ctx context
+@return PO Info
+*/
+protected override POInfo InitPO (Ctx ctx){POInfo poi = POInfo.GetPOInfo (ctx, Table_ID);return poi;}/** Info
+@return info
+*/
+public override String ToString(){StringBuilder sb = new StringBuilder ("X_C_ForecastLineHistory[").Append(Get_ID()).Append("]");return sb.ToString();}
+/** BOMUse AD_Reference_ID=348 */
+public static int BOMUSE_AD_Reference_ID=348;/** Master = A */
+public static String BOMUSE_Master = "A";/** Engineering = E */
+public static String BOMUSE_Engineering = "E";/** Manufacturing = M */
+public static String BOMUSE_Manufacturing = "M";/** Maintenance = N */
+public static String BOMUSE_Maintenance = "N";/** Planning = P */
+public static String BOMUSE_Planning = "P";/** Repair = R */
+public static String BOMUSE_Repair = "R";/** Is test a valid value.
+@param test testvalue
+@returns true if valid **/
+public bool IsBOMUseValid (String test){return test == null || test.Equals("A") || test.Equals("E") || test.Equals("M") || test.Equals("N") || test.Equals("P") || test.Equals("R");}/** Set BOM Use.
+@param BOMUse The use of the Bill of Material */
+public void SetBOMUse (String BOMUse){if (!IsBOMUseValid(BOMUse))
+throw new ArgumentException ("BOMUse Invalid value - " + BOMUse + " - Reference_ID=348 - A - E - M - N - P - R");if (BOMUse != null && BOMUse.Length > 1){log.Warning("Length > 1 - truncated");BOMUse = BOMUse.Substring(0,1);}Set_Value ("BOMUse", BOMUse);}/** Get BOM Use.
+@return The use of the Bill of Material */
+public String GetBOMUse() {return (String)Get_Value("BOMUse");}/** Set Forecast Quantity.
+@param BaseQuantity Here User enters the Forecast Quantity of the Product Selected */
+public void SetBaseQuantity (Decimal? BaseQuantity){Set_Value ("BaseQuantity", (Decimal?)BaseQuantity);}/** Get Forecast Quantity.
+@return Here User enters the Forecast Quantity of the Product Selected */
+public Decimal GetBaseQuantity() {Object bd =Get_Value("BaseQuantity");if (bd == null) return Env.ZERO;return  Convert.ToDecimal(bd);}/** Set Charge.
+@param C_Charge_ID Additional document charges */
+public void SetC_Charge_ID (int C_Charge_ID){if (C_Charge_ID <= 0) Set_Value ("C_Charge_ID", null);else
+Set_Value ("C_Charge_ID", C_Charge_ID);}/** Get Charge.
+@return Additional document charges */
+public int GetC_Charge_ID() {Object ii = Get_Value("C_Charge_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set C_ForecastLineHistory_ID.
+@param C_ForecastLineHistory_ID C_ForecastLineHistory_ID */
+public void SetC_ForecastLineHistory_ID (int C_ForecastLineHistory_ID){if (C_ForecastLineHistory_ID < 1) throw new ArgumentException ("C_ForecastLineHistory_ID is mandatory.");Set_ValueNoCheck ("C_ForecastLineHistory_ID", C_ForecastLineHistory_ID);}/** Get C_ForecastLineHistory_ID.
+@return C_ForecastLineHistory_ID */
+public int GetC_ForecastLineHistory_ID() {Object ii = Get_Value("C_ForecastLineHistory_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set C_ForecastLine_ID.
+@param C_ForecastLine_ID C_ForecastLine_ID */
+public void SetC_ForecastLine_ID (int C_ForecastLine_ID){if (C_ForecastLine_ID < 1) throw new ArgumentException ("C_ForecastLine_ID is mandatory.");Set_ValueNoCheck ("C_ForecastLine_ID", C_ForecastLine_ID);}/** Get C_ForecastLine_ID.
+@return C_ForecastLine_ID */
+public int GetC_ForecastLine_ID() {Object ii = Get_Value("C_ForecastLine_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set UOM.
+@param C_UOM_ID Unit of Measure */
+public void SetC_UOM_ID (int C_UOM_ID){if (C_UOM_ID <= 0) Set_Value ("C_UOM_ID", null);else
+Set_Value ("C_UOM_ID", C_UOM_ID);}/** Get UOM.
+@return Unit of Measure */
+public int GetC_UOM_ID() {Object ii = Get_Value("C_UOM_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Description.
+@param Description Optional short description of the record */
+public void SetDescription (String Description){Set_Value ("Description", Description);}/** Get Description.
+@return Optional short description of the record */
+public String GetDescription() {return (String)Get_Value("Description");}/** Set Export.
+@param Export_ID Export */
+public void SetExport_ID (String Export_ID){if (Export_ID != null && Export_ID.Length > 50){log.Warning("Length > 50 - truncated");Export_ID = Export_ID.Substring(0,50);}Set_Value ("Export_ID", Export_ID);}/** Get Export.
+@return Export */
+public String GetExport_ID() {return (String)Get_Value("Export_ID");}/** Set Bill of Materials.
+@param IsBOM Bill of Materials */
+public void SetIsBOM (Boolean IsBOM){Set_Value ("IsBOM", IsBOM);}/** Get Bill of Materials.
+@return Bill of Materials */
+public Boolean IsBOM() {Object oo = Get_Value("IsBOM");if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo);}return false;}/** Set Line No.
+@param Line Unique line for this document */
+public void SetLine (String Line){if (Line != null && Line.Length > 200){log.Warning("Length > 200 - truncated");Line = Line.Substring(0,200);}Set_Value ("Line", Line);}/** Get Line No.
+@return Unique line for this document */
+public String GetLine() {return (String)Get_Value("Line");}/** Set Attribute Set Instance.
+@param M_AttributeSetInstance_ID Product Attribute Set Instance */
+public void SetM_AttributeSetInstance_ID (int M_AttributeSetInstance_ID){if (M_AttributeSetInstance_ID <= 0) Set_Value ("M_AttributeSetInstance_ID", null);else
+Set_Value ("M_AttributeSetInstance_ID", M_AttributeSetInstance_ID);}/** Get Attribute Set Instance.
+@return Product Attribute Set Instance */
+public int GetM_AttributeSetInstance_ID() {Object ii = Get_Value("M_AttributeSetInstance_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set BOM.
+@param M_BOM_ID Bill of Material */
+public void SetM_BOM_ID (int M_BOM_ID){if (M_BOM_ID <= 0) Set_Value ("M_BOM_ID", null);else
+Set_Value ("M_BOM_ID", M_BOM_ID);}/** Get BOM.
+@return Bill of Material */
+public int GetM_BOM_ID() {Object ii = Get_Value("M_BOM_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
+/** M_Product_ID AD_Reference_ID=1000240 */
+public static int M_PRODUCT_ID_AD_Reference_ID=1000240;/** Set Product.
+@param M_Product_ID Product, Service, Item */
+public void SetM_Product_ID (int M_Product_ID){if (M_Product_ID <= 0) Set_Value ("M_Product_ID", null);else
+Set_Value ("M_Product_ID", M_Product_ID);}/** Get Product.
+@return Product, Service, Item */
+public int GetM_Product_ID() {Object ii = Get_Value("M_Product_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Processed.
+@param Processed The document has been processed */
+public void SetProcessed (Boolean Processed){Set_Value ("Processed", Processed);}/** Get Processed.
+@return The document has been processed */
+public Boolean IsProcessed() {Object oo = Get_Value("Processed");if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo);}return false;}/** Set Quantity.
+@param QtyEntered The Quantity Entered is based on the selected UoM */
+public void SetQtyEntered (Decimal? QtyEntered){Set_Value ("QtyEntered", (Decimal?)QtyEntered);}/** Get Quantity.
+@return The Quantity Entered is based on the selected UoM */
+public Decimal GetQtyEntered() {Object bd =Get_Value("QtyEntered");if (bd == null) return Env.ZERO;return  Convert.ToDecimal(bd);}/** Set Total price.
+@param TotalPrice Displays the Total Amount calculated based on Unit Price and Base Quantity. */
+public void SetTotalPrice (Decimal? TotalPrice){Set_Value ("TotalPrice", (Decimal?)TotalPrice);}/** Get Total price.
+@return Displays the Total Amount calculated based on Unit Price and Base Quantity. */
+public Decimal GetTotalPrice() {Object bd =Get_Value("TotalPrice");if (bd == null) return Env.ZERO;return  Convert.ToDecimal(bd);}/** Set Unit Price.
+@param UnitPrice Unit Price */
+public void SetUnitPrice (Decimal? UnitPrice){Set_Value ("UnitPrice", (Decimal?)UnitPrice);}/** Get Unit Price.
+@return Unit Price */
+public Decimal GetUnitPrice() {Object bd =Get_Value("UnitPrice");if (bd == null) return Env.ZERO;return  Convert.ToDecimal(bd);}}
+}
