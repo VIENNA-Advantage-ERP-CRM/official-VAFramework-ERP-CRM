@@ -1248,7 +1248,8 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
                             AND C_Year_ID =  " + Util.GetValueOfInt(drBUdgetControl["C_Year_ID"]) + " )  AND " + GlobalVariable.TO_DATE(date, true);
             }
 
-            String sql = @"SELECT SUM(AmtAcctDr) AS ControlledAmount, ";
+            // Get Budget ControlAmount (AmtAcctDr - AmtAcctCr) Done by Rakesh on 18/Mar/2021
+            String sql = @"SELECT SUM(AmtAcctDr - AmtAcctCr) AS ControlledAmount, ";
             if (drBudgetComtrolDimension != null)
             {
                 for (int i = 0; i < drBudgetComtrolDimension.Length; i++)
@@ -1326,8 +1327,10 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
             Decimal AlreadyControlledAmount = Util.GetValueOfDecimal(DB.ExecuteScalar(query, null, trxName));
 
 
+            // Check already controlled amount for Requisition
             if (order.Equals('O') && Util.GetValueOfString(drBUdgetControl["CommitmentType"]).Equals(X_GL_BudgetControl.COMMITMENTTYPE_CommitmentReservation))
             {
+                // Get Requisition Entries based on purchase orderid
                 query = @"SELECT DISTINCT M_Requisition_ID AS Col1 FROM M_RequisitionLine WHERE C_OrderLine_ID IN ( 
                             SELECT DISTINCT C_OrderLine_ID FROM C_OrderLine WHERE M_RequisitionLine_ID > 0 AND  C_Order_ID = " + OrderId + ")";
                 DataSet ds = DB.ExecuteDataset(query, null, trxName);
@@ -1336,7 +1339,8 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
                     object[] requisitionIds = ds.Tables[0].AsEnumerable().Select(r => r.Field<object>("COL1")).ToArray();
                     string result = string.Join(",", requisitionIds);
 
-                    query = "SELECT SUM(AmtAcctDr) AS AlreadyControlledAmount FROM Fact_Acct WHERE PostingType IN ('R') AND " + Where + whereDimension +
+                    // Reduce Amount (AmtAcctDr - AmtAcctCr) Done by Rakesh on 18/Mar/2021
+                    query = "SELECT SUM(AmtAcctDr - AmtAcctCr) AS AlreadyControlledAmount FROM Fact_Acct WHERE PostingType IN ('R') AND " + Where + whereDimension +
                         @" AND Record_ID IN (" + result + " ) ";
                     AlreadyControlledAmount -= Util.GetValueOfDecimal(DB.ExecuteScalar(query, null, trxName));
                 }

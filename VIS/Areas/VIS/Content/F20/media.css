@@ -175,6 +175,12 @@
     .vis-ad-w-p-actionpanel-r .vis-ad-w-p-ap-tp-o-b-content > div {
         position: relative;
     }
+    .vis-apanel-sorttab-td-inner {
+        height: 50%;
+    }
+    .vis-apanel-sorttab-td-inner {
+        width: 75%;
+    }
 
     /*Single layout*/
 }

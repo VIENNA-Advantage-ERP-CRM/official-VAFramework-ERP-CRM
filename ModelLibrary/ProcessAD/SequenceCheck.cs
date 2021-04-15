@@ -200,12 +200,22 @@ namespace VAdvantage.Process
                     ds = DataBase.DB.ExecuteDataset(sql, null, trxName);
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        MSequence seq = new MSequence(ctx, ds.Tables[0].Rows[i], trxName);
-                        int curVal = DB.GetSQLValue(trxName, "select "+ ds.Tables[0].Rows[i]["Name"].ToString()+ "_SEQ.currval+1 from DUAL");
-                        seq.SetCurrentNext(curVal);
-                        if (seq.Save())
+
+                        //Get Max value from Table_ID or AD_Sequence and update.
+                        sql = @"Update AD_Sequence set updatedby=" + ctx.GetAD_User_ID() + ", updated=getdate(), CurrentNext=(SELECT max(maximum) FROM ( SELECT max(" + ds.Tables[0].Rows[i]["Name"].ToString() + @"_ID)+1 as maximum from " + ds.Tables[0].Rows[i]["Name"].ToString() +
+                         @" Union
+                         SELECT currentnext AS maximum FROM AD_Sequence WHERE Name = '" + ds.Tables[0].Rows[i]["Name"].ToString() + "') ";
+                        if (DB.IsPostgreSQL())
+                            sql += " foo ";
+
+                        sql += ") WHERE Name = '" + ds.Tables[0].Rows[i]["Name"].ToString() + "'";
+
+                        int curVal = DB.ExecuteQuery( sql,null, trxName);
+
+                        if (curVal>0)
                         {
-                            sp.AddLog(0, null, null, "Sequence Updated For :"+ ds.Tables[0].Rows[i]["Name"].ToString());
+                            sp.AddLog(0, null, null, "Sequence Updated For :" + ds.Tables[0].Rows[i]["Name"].ToString());
+
                             counter++;
                         }
                         else
@@ -224,6 +234,7 @@ namespace VAdvantage.Process
                 int IDRangeEnd = DataBase.DB.GetSQLValue(null,
                     "SELECT IDRangeEnd FROM AD_System");
                 if (IDRangeEnd <= 0)
+
                 {
                     IDRangeEnd = DataBase.DB.GetSQLValue(null,
                         "SELECT MIN(IDRangeStart)-1 FROM AD_Replication");
@@ -243,6 +254,7 @@ namespace VAdvantage.Process
                 }
                 try
                 {
+
                     //pstmt = DataBase.prepareStatement(sql, trxName);
                     //idr = DataBase.DB.ExecuteReader(sql, null, trxName);
                     ds = DataBase.DB.ExecuteDataset(sql, null, trxName);

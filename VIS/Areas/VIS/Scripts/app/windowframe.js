@@ -3283,10 +3283,11 @@
                                 var orgID = Number(VIS.context.getWindowTabContext(selfLocal.curWindowNo, 0, "AD_Org_ID"));
                                 var winID = selfLocal.curTab.getAD_Window_ID();
                                 var docTypeID = Number(VIS.context.getWindowTabContext(selfLocal.curWindowNo, 0, "C_DocType_ID"));
-                                var postObj = FRPT.PostingLogic(selfLocal.curWindowNo, selfLocal.curTab.getAD_Table_ID(), selfLocal.curTab.getRecord_ID(), force, orgID, winID, docTypeID);
-                                selfLocal.curGC.dataRefresh();
-                                selfLocal.setBusy(false, true);
-                                return;
+                                var postObj = FRPT.PostingLogic(selfLocal.curWindowNo, selfLocal.curTab.getAD_Table_ID(), selfLocal.curTab.getRecord_ID(), force, orgID, winID, docTypeID, function () {
+                                    selfLocal.curGC.dataRefresh();
+                                    selfLocal.setBusy(false, true);
+                                    return;
+                                });
                             }
                             else {
                                 $.ajax({
@@ -7970,11 +7971,16 @@
             //$tblRoot.append($("<tr>").append($("<td>").append($tabControl)));
 
             var $td = $("<td class='vis-apanel-sorttab-td'>");
-            $td.append($("<div class='vis-apanel-sorttab-td-inner'>").append($lblNo).append($lstNo)
-                .append($("<div class='vis-apanel-sorttab-td-right'>").append($btnRight).append($btnLeft)));
+            var $divLeftContainer = $('<div>');
 
-            $td.append($("<div class='vis-apanel-sorttab-td-inner'>").append($lblYes).append($lstYes)
-                .append($("<div class='vis-apanel-sorttab-td-right'>").append($btnUp).append($btnDown)));
+            $divLeftContainer.append($lstNo).append($("<div class='vis-apanel-sorttab-td-right'>").append($btnRight).append($btnLeft)));
+                
+            $td.append($("<div class='vis-apanel-sorttab-td-inner'>").append($lblNo)).append($divLeftContainer);
+
+            var $divRightContainer = $('<div>');
+            $divRightContainer.append($lstYes).append($("<div class='vis-apanel-sorttab-td-right'>").append($btnUp).append($btnDown));
+
+            $td.append($("<div class='vis-apanel-sorttab-td-inner'>").append($lblYes).append($divRightContainer));
 
             $tblRoot.append($("<tr>").append($td));
         }

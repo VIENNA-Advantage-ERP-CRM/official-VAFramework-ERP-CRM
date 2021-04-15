@@ -4316,7 +4316,7 @@ namespace VAdvantage.Model
                         _budgetMessage += Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
                                             + Util.GetValueOfString(drBUdgetControl["ControlName"]) + ", ";
                     }
-                    log.Info("Budget control Exceed - " + Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
+                    log.Info("Budget Exceed - " + Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
                                         + Util.GetValueOfString(drBUdgetControl["ControlName"]) + " - (" + _budgetControl.ControlledAmount + ") - Table ID : " +
                                         Util.GetValueOfInt(drDataRecord["LineTable_ID"]) + " - Record ID : " + Util.GetValueOfInt(drDataRecord["Line_ID"]));
                 }
@@ -4328,12 +4328,14 @@ namespace VAdvantage.Model
                                              (x.Account_ID == Util.GetValueOfInt(drDataRecord["Account_ID"]))
                                             ))
                 {
+                    // If budget not defined then add error message in budget message variable
+                    // Done by rakesh on 17/Mar/2021
                     if (!_budgetMessage.Contains(Util.GetValueOfString(drBUdgetControl["BudgetName"])))
                     {
                         _budgetMessage += Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
                                             + Util.GetValueOfString(drBUdgetControl["ControlName"]) + ", ";
                     }
-                    log.Info("Budget control not defined for - " + Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
+                    log.Info("Budget not defined for - " + Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
                                         + Util.GetValueOfString(drBUdgetControl["ControlName"]) + " - Table ID : " +
                                         Util.GetValueOfInt(drDataRecord["LineTable_ID"]) + " - Record ID : " + Util.GetValueOfInt(drDataRecord["Line_ID"]) +
                                         " - Account ID : " + Util.GetValueOfInt(drDataRecord["Account_ID"]));
@@ -6253,10 +6255,14 @@ namespace VAdvantage.Model
         private bool linkedDocument(int C_Order_ID)
         {
             // SI_0595_3 : check orderline id exist on invoiceline or inoutline. if exist then not able to reverse the current order.
+            // JID_1953 : by Amit -> when payment exist against selected Order, then not able to void transaction
             string sql = @"Select SUM(Result) From (
                            SELECT COUNT(il.c_orderline_id) AS Result FROM M_Inout i INNER JOIN m_inoutline il ON i.m_inout_id = il.m_inout_id
                            INNER JOIN c_orderline ol ON ol.c_orderline_id = il.c_orderline_id
                            WHERE ol.C_Order_ID  = " + C_Order_ID + @" AND i.DocStatus NOT IN ('RE' , 'VO')
+                         UNION ALL
+                           SELECT COUNT(C_Order_ID) AS Result FROM C_Payment WHERE 
+                                DocStatus NOT IN ('RE' , 'VO') AND C_Order_ID = " + C_Order_ID + @"
                          UNION ALL
                           SELECT COUNT(il.c_orderline_id) AS Result FROM C_Invoice i INNER JOIN C_Invoiceline il ON i.C_Invoice_id = il.C_Invoice_id
                           INNER JOIN c_orderline ol ON ol.c_orderline_id = il.c_orderline_id

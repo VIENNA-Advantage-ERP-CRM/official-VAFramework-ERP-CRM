@@ -924,5 +924,34 @@ namespace VAdvantage.DataBase
             return sql.ToString();
         }
 
+        /// <summary>
+        /// Query for getting Table Name and ColumnName and Identifier ColumnName
+        /// </summary>
+        /// <param name="AD_Column_ID">Ad_Column_ID</param>
+        /// <returns>query</returns>
+        public static String GetTableAndColumnName(int AD_Column_ID)
+        {
+            StringBuilder sql = new StringBuilder();
+            if (DB.IsOracle())
+            {
+                sql.Append("SELECT tab.TableName, tab.AD_Table_ID, col.ColumnName," +
+                            " (select ColumnName from  " +
+                              "(SELECT ColumnName , isactive from AD_Column where ad_table_id = tab.ad_table_id" +
+                                  " and isidentifier = 'Y' ORDER  BY seqno)t WHERE isactive = 'Y' AND ROWNUM = 1) AS identfierColumnName " +
+                            " FROM AD_Column col INNER JOIN AD_Table tab ON col.AD_Table_ID = tab.AD_Table_ID " +
+                            " WHERE AD_Column_ID = " + AD_Column_ID);
+            }
+            else if (DB.IsPostgreSQL())
+            {
+                sql.Append("SELECT tab.TableName, tab.AD_Table_ID, col.ColumnName," +
+                               " (select ColumnName from  " +
+                                 "(SELECT ColumnName , isactive from AD_Column where ad_table_id = tab.ad_table_id" +
+                                     " and isidentifier = 'Y' ORDER  BY seqno)t WHERE isactive = 'Y' LIMIT 1) AS identfierColumnName " +
+                               " FROM AD_Column col INNER JOIN AD_Table tab ON col.AD_Table_ID = tab.AD_Table_ID " +
+                               " WHERE AD_Column_ID = " + AD_Column_ID);
+            }
+            return sql.ToString();
+        }
+
     }
 }

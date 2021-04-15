@@ -32,10 +32,10 @@ namespace VIS.Models
         /// <summary>
         /// Get Payment Detail
         /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="fields"></param>
-        /// <returns></returns>
-        public Decimal GetPayment(Ctx ctx, string fields)
+        /// <param name="ctx">Context</param>
+        /// <param name="fields">Tab fields</param>
+        /// <returns>List of Payment Details</returns>
+        public List<Dictionary<string, Object>> GetPayment(Ctx ctx, string fields)
         {
             string[] paramValue = fields.Split(',');
             //Assign parameter value
@@ -45,6 +45,7 @@ namespace VIS.Models
             DateTime? convDate = Util.GetValueOfDateTime(paramValue[2]);
             Decimal rate = 0;
             //End Assign parameter value
+            List<Dictionary<string, Object>> _paymentDetails = null;
 
             string qry = "SELECT PayAmt, C_Currency_ID, C_ConversionType_ID, DateAcct FROM C_Payment_v WHERE C_Payment_ID=" + c_payment_ID;
             DataSet ds = DB.ExecuteDataset(qry, null, null);
@@ -53,12 +54,18 @@ namespace VIS.Models
                 decimal payAmt = Util.GetValueOfDecimal(ds.Tables[0].Rows[0][0]);
                 int c_currency_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0][1]);
                 int c_conversionType_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0][2]);
-                //DateTime? dateAcct = Util.GetValueOfDateTime(ds.Tables[0].Rows[0][3]);          // JID_0333: Currency conversion should be based on Payment Account Date and Currency type
+                DateTime? dateAcct = Util.GetValueOfDateTime(ds.Tables[0].Rows[0][3]);          // JID_0333: Currency conversion should be based on Payment Account Date and Currency type
                 //rate = MConversionRate.Convert(ctx, payAmt, c_currency_ID, CurTo_ID, dateAcct, c_conversionType_ID, ctx.GetAD_Client_ID(), ctx.GetAD_Org_ID());
-                // Conversion Rate should be based on StatementLine Date Requirement by Ranvir
+                // Conversion Rate should be based on StatementLine Date & StatementLine ConversionType_ID Requirement by Ranvir
                 rate = MConversionRate.Convert(ctx, payAmt, c_currency_ID, CurTo_ID, convDate, c_conversionType_ID, ctx.GetAD_Client_ID(), ctx.GetAD_Org_ID());
+                Dictionary<string, Object> _list = new Dictionary<string, object>();
+                _list.Add("C_ConversionType_ID", c_conversionType_ID);
+                _list.Add("DateAcct", dateAcct);
+                _list.Add("payAmt", rate);
+                _paymentDetails = new List<Dictionary<string, object>>();
+                _paymentDetails.Add(_list);
             }
-            return rate;
+            return _paymentDetails;
         }
 
 
