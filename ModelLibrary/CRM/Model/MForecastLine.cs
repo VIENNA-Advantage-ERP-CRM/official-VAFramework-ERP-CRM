@@ -11,6 +11,7 @@ using System.Windows;
 using VAdvantage.Utility;
 using System.Data;
 using VAdvantage.DataBase;
+using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
@@ -58,6 +59,41 @@ namespace VAdvantage.Model
             }
             string sql = "update C_Forecast set GrandTotal = (SELECT COALESCE(SUM(PriceStd),0) FROM C_ForecastLine WHERE isactive = 'Y' and C_Forecast_ID= " + GetC_Forecast_ID() + ") where C_Forecast_ID = " + GetC_Forecast_ID();
             int count = DB.ExecuteQuery(sql, null, null);
+
+            if (!newRecord)
+            {
+                MForecastLineHistory LineHistory = new MForecastLineHistory(GetCtx(), 0, Get_Trx());
+                LineHistory.SetAD_Client_ID(GetAD_Client_ID());
+                LineHistory.SetAD_Org_ID(GetAD_Org_ID());
+                LineHistory.SetC_ForecastLine_ID(GetC_ForecastLine_ID());
+                LineHistory.SetC_Charge_ID(GetC_Charge_ID());
+                LineHistory.SetM_Product_ID(GetM_Product_ID());
+                LineHistory.SetM_AttributeSetInstance_ID(GetM_AttributeSetInstance_ID());
+                LineHistory.SetIsBOM(IsBOM());
+                LineHistory.SetM_BOM_ID(GetM_BOM_ID());
+                LineHistory.SetBOMUse(GetBOMUse());
+                LineHistory.SetC_UOM_ID(GetC_UOM_ID());
+                LineHistory.SetBaseQuantity(GetBaseQty());
+                LineHistory.SetQtyEntered(GetQtyEntered());
+                LineHistory.SetUnitPrice(GetUnitPrice());
+                LineHistory.SetTotalPrice(GetTotalPrice());
+                LineHistory.SetDescription(GetDescription());
+                LineHistory.Set_Value("VAMFG_M_Routing_ID", Get_Value("VAMFG_M_Routing_ID"));
+                if (!LineHistory.Save())
+                {
+                    ValueNamePair vp = VLogger.RetrieveError();
+                    if (vp != null)
+                    {
+                        string val = vp.GetName();
+                        log.SaveWarning("", Msg.GetMsg(GetCtx(), "NotSaveLineHistory") + val);
+                    }
+                    else
+                    {
+                        log.SaveWarning("", Msg.GetMsg(GetCtx(), "NotSaveLineHistory"));
+                    }
+                }
+
+            }
             return true;
         }
     }
