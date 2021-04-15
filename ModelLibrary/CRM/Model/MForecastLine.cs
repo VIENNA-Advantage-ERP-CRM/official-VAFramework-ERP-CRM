@@ -96,5 +96,22 @@ namespace VAdvantage.Model
             }
             return true;
         }
+
+        /// <summary>
+        /// Add to Description
+        /// </summary>
+        /// <param name="description">text</param>
+        public void AddDescription(String description)
+        {
+            String desc = GetDescription();
+            if (desc == null)
+            {
+                SetDescription(description);
+            }
+            else
+            {
+                SetDescription(desc + " | " + description);
+            }
+        }
     }
 }

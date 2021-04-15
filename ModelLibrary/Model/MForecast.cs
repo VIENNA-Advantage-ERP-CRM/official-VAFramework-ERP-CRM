@@ -9,36 +9,69 @@ using System.Threading.Tasks;
 using VAdvantage.Classes;
 using VAdvantage.DataBase;
 using VAdvantage.Logging;
+using VAdvantage.Print;
 using VAdvantage.Process;
 using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MForecast : X_C_Forecast
-    {   
-        #region Private Variables
-        private static VLogger log = VLogger.GetVLogger(typeof(MForecast).FullName);
+    public class MForecast : X_C_Forecast, DocAction
+    {
 
+        #region Private Variables
+        private static VLogger _log = VLogger.GetVLogger(typeof(MForecast).FullName);
+        //	Just Prepared Flag
+        private bool _justPrepared = false;
+        // Process Message
         private string _processMsg = null;
-       
+        // Forecast Lines array
         private MForecastLine[] _lines = null;
+        //
+        ValueNamePair pp = null;
         #endregion
 
-       
+        /// <summary>
+        /// Team Forecast Constructor
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="C_Forecast_ID">Team Forecast or 0 for new</param>
+        /// <param name="trxName">trx name</param>
         public MForecast(Ctx ctx, int C_Forecast_ID, Trx trxName)
      : base(ctx, C_Forecast_ID, trxName)
         {
+            if (C_Forecast_ID == 0)
+            {
+                SetDocStatus(DOCSTATUS_Drafted);		//	Draft
+                SetDocAction(DOCACTION_Complete);
+                //
+                SetTRXDATE(DateTime.Now);
+                SetDateAcct(DateTime.Now);
+                //
+                base.SetProcessed(false);
+                SetProcessing(false);
+            }
         }
 
+        /// <summary>
+        /// Load Constructor
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="rs">datarow</param>
+        /// <param name="trxName">transaction</param>
         public MForecast(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
 
+        /// <summary>
+        /// Approve Document
+        /// </summary>
+        /// <returns></returns>
         public bool ApproveIt()
         {
-            log.Info(ToString());
-            return false;
+            _log.Info(ToString());
+            SetIsApproved(true);
+            return true;
         }
 
         /// <summary>
@@ -47,8 +80,48 @@ namespace VAdvantage.Model
         /// <returns>true if success</returns>
         public bool CloseIt()
         {
-            log.Info(ToString());
-            return false;
+            _log.Info(ToString());
+            SetProcessed(true);
+            SetDocAction(DOCACTION_None);
+            return true;
+        }
+
+        /// <summary>
+        /// Prepare Document
+        /// </summary>
+        /// <returns>new status (In Progress or Invalid)</returns>
+        public string PrepareIt()
+        {
+            _log.Info(ToString());
+            _processMsg = ModelValidationEngine.Get().FireDocValidate(this, ModalValidatorVariables.DOCTIMING_BEFORE_PREPARE);
+            if (_processMsg != null)
+                return DocActionVariables.STATUS_INVALID;
+
+            //	Std Period open?
+            if (!MPeriod.IsOpen(GetCtx(), GetTRXDATE(), GetDocBaseType(), GetAD_Org_ID()))
+            {
+                _processMsg = "@PeriodClosed@";
+                return DocActionVariables.STATUS_INVALID;
+            }
+
+            // is Non Business Day?
+            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetTRXDATE(), GetAD_Org_ID()))
+            {
+                _processMsg = VAdvantage.Common.Common.NONBUSINESSDAY;
+                return DocActionVariables.STATUS_INVALID;
+            }
+
+            MForecastLine[] lines = GetLines(false);
+            if (lines.Length == 0)
+            {
+                _processMsg = "@NoLines@";
+                return DocActionVariables.STATUS_INVALID;
+            }
+
+            _justPrepared = true;
+            if (!DOCACTION_Complete.Equals(GetDocAction()))
+                SetDocAction(DOCACTION_Complete);
+            return DocActionVariables.STATUS_INPROGRESS;
         }
 
         /// <summary>
@@ -57,6 +130,18 @@ namespace VAdvantage.Model
         /// <returns>new status (Complete, In Progress, Invalid, Waiting ..)</returns>
         public string CompleteIt()
         {
+            //	Re-Check
+            if (!_justPrepared)
+            {
+                String status = PrepareIt();
+                if (!DocActionVariables.STATUS_INPROGRESS.Equals(status))
+                    return status;
+            }
+
+            //	Implicit Approval
+            if (!IsApproved())
+                ApproveIt();
+
             String valid = ModelValidationEngine.Get().FireDocValidate(this, ModalValidatorVariables.DOCTIMING_AFTER_COMPLETE);
             if (valid != null)
             {
@@ -81,7 +166,7 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Apprival Amount
+        /// Approval Amount
         /// </summary>
         /// <returns>0</returns>
         public decimal GetApprovalAmt()
@@ -164,45 +249,9 @@ namespace VAdvantage.Model
         /// <returns>true if success</returns>
         public bool InvalidateIt()
         {
-            log.Info(ToString());
+            _log.Info(ToString());
             SetDocAction(DOCACTION_Prepare);
             return true;
-        }
-
-        /// <summary>
-        /// Prepare Document
-        /// </summary>
-        /// <returns>new status (In Progress or Invalid)</returns>
-        public string PrepareIt()
-        {
-            log.Info(ToString());
-            _processMsg = ModelValidationEngine.Get().FireDocValidate(this, ModalValidatorVariables.DOCTIMING_BEFORE_PREPARE);
-            if (_processMsg != null)
-                return DocActionVariables.STATUS_INVALID;
-
-            //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetTRXDATE(), GetDocBaseType(), GetAD_Org_ID()))
-            {
-                _processMsg = "@PeriodClosed@";
-                return DocActionVariables.STATUS_INVALID;
-            }
-
-            // is Non Business Day?
-            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetTRXDATE(), GetAD_Org_ID()))
-            {
-                _processMsg = VAdvantage.Common.Common.NONBUSINESSDAY;
-                return DocActionVariables.STATUS_INVALID;
-            }
-
-            MForecastLine[] lines = GetLines(false);
-            if (lines.Length == 0)
-            {
-                _processMsg = "@NoLines@";
-                return DocActionVariables.STATUS_INVALID;
-            }
-            if (!DOCACTION_Complete.Equals(GetDocAction()))
-                SetDocAction(DOCACTION_Complete);
-            return DocActionVariables.STATUS_INPROGRESS;
         }
 
         /// <summary>
@@ -213,7 +262,7 @@ namespace VAdvantage.Model
         public bool ProcessIt(string processAction)
         {
             _processMsg = null;
-            DocumentEngine engine = new DocumentEngine(processAction, GetDocStatus());
+            DocumentEngine engine = new DocumentEngine(this, GetDocStatus());
             return engine.ProcessIt(processAction, GetDocAction());
         }
 
@@ -223,8 +272,17 @@ namespace VAdvantage.Model
         /// <returns>false</returns>
         public bool ReActivateIt()
         {
-            log.Info(ToString());
-            return false;
+            _log.Info(ToString());
+
+            //set processed true for all child tabs
+            int no = DB.ExecuteQuery("UPDATE C_ForecastLine SET Processed = 'N'  WHERE C_Forecast_ID = " + GetC_Forecast_ID(), null, Get_Trx());
+            _log.Info("UnProccessed record from Team Forecast Line - " + no);
+
+            // Set Default Action
+            SetDocAction(DOCACTION_Complete);
+            SetProcessed(false);
+
+            return true;
         }
 
         /// <summary>
@@ -233,8 +291,9 @@ namespace VAdvantage.Model
         /// <returns>true if success</returns>
         public bool RejectIt()
         {
-            log.Info(ToString());
-            return false;
+            _log.Info(ToString());
+            SetIsApproved(false);
+            return true;
         }
 
         /// <summary>
@@ -243,7 +302,7 @@ namespace VAdvantage.Model
         /// <returns>false</returns>
         public bool ReverseAccrualIt()
         {
-            log.Info(ToString());
+            _log.Info(ToString());
             return false;
         }
 
@@ -253,14 +312,14 @@ namespace VAdvantage.Model
         /// <returns>true if success</returns>
         public bool ReverseCorrectIt()
         {
-            log.Info(ToString());
+            _log.Info(ToString());
             return false;
         }
 
 
         public bool UnlockIt()
         {
-            log.Info(ToString());
+            _log.Info(ToString());
             SetProcessing(false);
             return true;
         }
@@ -271,8 +330,69 @@ namespace VAdvantage.Model
         /// <returns>true if success</returns>
         public bool VoidIt()
         {
-            log.Info(ToString());
-            return false;
+            _log.Info(ToString());
+            if (DOCSTATUS_Closed.Equals(GetDocStatus())
+                || DOCSTATUS_Reversed.Equals(GetDocStatus())
+                || DOCSTATUS_Voided.Equals(GetDocStatus()))
+            {
+                _processMsg = "Document Closed: " + GetDocStatus();
+                SetDocAction(DOCACTION_None);
+                return false;
+            }
+            else
+            {
+                // If master forecast is generated against the team and the user is not able to void the team forecast.
+                int no = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_MasterForecast.C_MasterForecast_ID) AS CountRecord
+                            FROM C_MasterForecastLineDetails INNER JOIN C_MasterForecastLine ON 
+                            C_MasterForecastLineDetails.C_MasterForecastLine_ID = C_MasterForecastLine.C_MasterForecastLine_ID 
+                            INNER JOIN C_MasterForecast ON C_MasterForecastLine.C_MasterForecast_ID = C_MasterForecast.C_MasterForecast_ID
+                            WHERE C_MasterForecast.DocStatus NOT IN ('RE', 'VO') AND 
+                            C_MasterForecastLineDetails.C_Forecast_ID = " + GetC_Forecast_ID(), null, Get_Trx()));
+                if (no > 0)
+                {
+                    _processMsg = Msg.GetMsg(GetCtx(), "DependentDocOnMasterForecast");
+                    _log.Info("Team Foreacst Reference found on Master Forecast, TeamForecast Document : " + GetDocumentNo());
+                    return false;
+                }
+
+                // When the user selects the Void option then document should move to In Voided stage. 
+                // As a result of this event the system will update all the quantity to zero and 
+                // line history will get generated. Enter the quantity value at the description.
+                MForecastLine[] lines = GetLines(false);
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    MForecastLine line = lines[i];
+                    Decimal old = line.GetBaseQty();
+                    if (old.CompareTo(Env.ZERO) != 0)
+                    {
+                        line.SetBaseQty(Env.ZERO);
+                        line.AddDescription(Msg.GetMsg(GetCtx(), "Voided") + " (" + old + ")");
+                        if (!line.Save(Get_TrxName()))
+                        {
+                            pp = VLogger.RetrieveError();
+                            string error = string.Empty;
+                            if (pp != null)
+                            {
+                                error = pp.GetValue();
+                                if (string.IsNullOrEmpty(error))
+                                {
+                                    error = pp.GetName();
+                                    if (string.IsNullOrEmpty(error))
+                                    {
+                                        error = Msg.GetMsg(GetCtx(), "TeamForecastNotSave");
+                                    }
+                                }
+                            }
+                            _processMsg = error;
+                            return false;
+                        }
+                    }
+                }
+                AddDescription(Msg.GetMsg(GetCtx(), "Voided"));
+            }
+            SetProcessed(true);
+            SetDocAction(DOCACTION_None);
+            return true;
         }
 
         /// <summary>
@@ -299,7 +419,7 @@ namespace VAdvantage.Model
                 return _lines;
             //
             List<MForecastLine> list = new List<MForecastLine>();
-            String sql = "SELECT * FROM C_ForecastLine WHERE C_Forecast_ID = @forecastid ORDER BY LineNo";
+            String sql = "SELECT * FROM C_ForecastLine WHERE C_Forecast_ID = @forecastid ORDER BY Line";
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
@@ -313,7 +433,7 @@ namespace VAdvantage.Model
             }
             catch (Exception e)
             {
-                log.Log(Level.SEVERE, "GetLines", e.Message);
+                _log.Log(Level.SEVERE, "GetLines", e.Message);
             }
 
             _lines = new MForecastLine[list.Count];
