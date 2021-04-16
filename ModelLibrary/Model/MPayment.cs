@@ -5177,8 +5177,9 @@ namespace VAdvantage.Model
 
                     if (GetC_Payment_ID() > 0)
                     {
-                        DB.ExecuteQuery(" UPDATE C_BankStatementLine bsl SET bsl.C_Payment_ID = null WHERE" +
-                            " EXISTS(SELECT * FROM C_BankStatement bs WHERE bsl.C_BankStatement_ID = bs.C_BankStatement_ID  AND bs.DocStatus IN('DR', 'IP')) " +
+                        //changed DocStatus Condition
+                        DB.ExecuteQuery("UPDATE C_BankStatementLine bsl SET bsl.C_Payment_ID = null WHERE" +
+                            " EXISTS(SELECT * FROM C_BankStatement bs WHERE bsl.C_BankStatement_ID = bs.C_BankStatement_ID  AND bs.DocStatus NOT IN('CO', 'CL', 'RE', 'VO')) " +
                             "AND bsl.C_Payment_ID = " + GetC_Payment_ID(), null, Get_Trx());
                     }
                 }
@@ -5466,8 +5467,9 @@ namespace VAdvantage.Model
 
                 if (GetC_Payment_ID() > 0)
                 {
+                    //changed DocStatus Condition
                     DB.ExecuteQuery(" UPDATE C_BankStatementLine bsl SET bsl.C_Payment_ID = null WHERE" +
-                        " EXISTS(SELECT * FROM C_BankStatement bs WHERE bsl.C_BankStatement_ID = bs.C_BankStatement_ID  AND bs.DocStatus IN('DR', 'IP')) " +
+                        " EXISTS(SELECT * FROM C_BankStatement bs WHERE bsl.C_BankStatement_ID = bs.C_BankStatement_ID  AND bs.DocStatus NOT IN('CO', 'CL', 'RE', 'VO')) " +
                         "AND bsl.C_Payment_ID = " + GetC_Payment_ID(), null, Get_Trx());
                 }
             }
