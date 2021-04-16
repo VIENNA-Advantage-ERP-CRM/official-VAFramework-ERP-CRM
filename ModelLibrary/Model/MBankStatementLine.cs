@@ -428,6 +428,14 @@ namespace VAdvantage.Model
                 MInvoice invoice = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
                 SetC_BPartner_ID(invoice.GetC_BPartner_ID());
             }
+            //Set BPartner_ID when having Order_ID
+            if (Env.IsModuleInstalled("VA012_")) {
+                if (GetC_Order_ID() != 0 && GetC_BPartner_ID() == 0)
+                {
+                    int _bpartner_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_BPartner_ID FROM C_Order WHERE IsActive='Y' AND C_Order_ID=" + GetC_Order_ID(), null, Get_Trx()));
+                    SetC_BPartner_ID(_bpartner_ID);
+                }
+            }
             //	Calculate Charge = Statement - trx - Interest  
             Decimal amt = GetStmtAmt();
             amt = Decimal.Subtract(amt, GetTrxAmt());
