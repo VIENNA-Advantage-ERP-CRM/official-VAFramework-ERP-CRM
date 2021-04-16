@@ -167,7 +167,7 @@ namespace VAdvantage.Model
             DB.ExecuteQuery("UPDATE C_ForecastLine SET Processed = 'Y'  WHERE C_Forecast_ID = " + GetC_Forecast_ID(), null, Get_Trx());
 
             SetProcessed(true);
-            SetDocAction(DOCACTION_Complete);
+            SetDocAction(DOCACTION_Close);
             return DocActionVariables.STATUS_COMPLETED;
         }
 

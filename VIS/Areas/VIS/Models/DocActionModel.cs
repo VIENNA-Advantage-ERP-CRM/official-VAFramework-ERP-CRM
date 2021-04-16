@@ -170,7 +170,7 @@ namespace VIS.Models
                 //	Complete                    ..  CO
                 if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))
                 {
-                   // options[index++] = DocumentEngine.ACTION_VOID;
+                    // options[index++] = DocumentEngine.ACTION_VOID;
                     options[index++] = DocumentEngine.ACTION_REVERSE_CORRECT;
                 }
             }
@@ -182,7 +182,7 @@ namespace VIS.Models
                 //	Complete                    ..  CO
                 if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))
                 {
-                   // options[index++] = DocumentEngine.ACTION_VOID;
+                    // options[index++] = DocumentEngine.ACTION_VOID;
                     options[index++] = DocumentEngine.ACTION_REVERSE_CORRECT;
                 }
             }
@@ -218,7 +218,7 @@ namespace VIS.Models
                 //	Complete                    ..  CO
                 if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))
                 {
-                   // options[index++] = DocumentEngine.ACTION_VOID;
+                    // options[index++] = DocumentEngine.ACTION_VOID;
                     options[index++] = DocumentEngine.ACTION_REVERSE_CORRECT;
                 }
             }
@@ -256,8 +256,26 @@ namespace VIS.Models
                     }
                 }
             }
+            // Team Forecast
+            if (AD_Table_ID == MForecast.Table_ID)
+            {
+                if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))
+                {
+                    options[index++] = DocumentEngine.ACTION_VOID;
+                    options[index++] = DocumentEngine.ACTION_REACTIVATE;
+                }
+            }
+            // Master Forecast
+            if (AD_Table_ID == X_C_MasterForecast.Table_ID)
+            {
+                if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))
+                {
+                    options[index++] = DocumentEngine.ACTION_VOID;
+                    options[index++] = DocumentEngine.ACTION_REACTIVATE;
+                }
+            }
 
-                // Added By Arpit
+            // Added By Arpit
             else if (AD_Table_ID == MMovementConfirm.Table_ID)
             {
                 //	Complete                    ..  CO
@@ -269,7 +287,7 @@ namespace VIS.Models
             }
             //End
 
-                //    /********************
+            //    /********************
             //*  Warehouse Task  New Add by raghu 11 april,2011
             //*/
             //    else if (AD_Table_ID == X_M_WarehouseTask.Table_ID
@@ -457,7 +475,7 @@ namespace VIS.Models
             Tuple<String, String, String> moduleInfo;
             Assembly asm = null;
             string namspace = "";
-            if (Env.HasModulePrefix(mTable.GetTableName(), out  moduleInfo))
+            if (Env.HasModulePrefix(mTable.GetTableName(), out moduleInfo))
             {
                 asm = null;
                 try
