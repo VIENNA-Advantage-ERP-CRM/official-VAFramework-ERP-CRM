@@ -143,7 +143,7 @@ namespace VIS.Models
                     Env.GetCtx().GetVAF_Client_ID(), Env.GetCtx().GetVAF_Org_ID(),
                     MVABAddress.Table_ID, 0, false);
 
-            ds = DB.ExecuteDataset("Select VAB_BusinessPartnerRelation_ID, VAB_BusinessPartnerrelation_location_id from VAB_BPart_Relation where VAB_BusinessPartner_id=" + _partner.GetVAB_BusinessPartner_ID());
+            ds = DB.ExecuteDataset("Select VAB_BusinessPartnerRelation_ID, VAB_BPartRelation_Location_ID from VAB_BPart_Relation where VAB_BusinessPartner_id=" + _partner.GetVAB_BusinessPartner_ID());
 
             LoadBPartner(VAB_BusinessPartner_ID, ds);
 
@@ -209,8 +209,8 @@ namespace VIS.Models
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    bpRelationID = Convert.ToString(ds.Tables[0].Rows[i]["VAB_BusinessPartnerRelation_ID"]);
-                    bpLocationID = Convert.ToString(ds.Tables[0].Rows[i]["VAB_BusinessPartnerrelation_location_id"]);
+                    bpRelationID = Convert.ToString(ds.Tables[0].Rows[i]["VAB_BPart_Relation_ID"]);
+                    bpLocationID = Convert.ToString(ds.Tables[0].Rows[i]["VAB_BPartRelation_Location_ID"]);
                 }
             }
 
@@ -687,7 +687,7 @@ namespace VIS.Models
                         _bprelation.SetVAB_BPart_Location_ID(_pLocation.GetVAB_BPart_Location_ID());
                         _bprelation.SetVAB_BPart_Relation_ID(Util.GetValueOfInt(bpRelation));
                         _bprelation.SetVAB_BusinessPartnerRelation_ID(Util.GetValueOfInt(bpRelation));
-                        _bprelation.SetVAB_BusinessPartnerRelation_Location_ID(Util.GetValueOfInt(bpLocation));
+                        _bprelation.SetVAB_BPartRelation_Location_ID(Util.GetValueOfInt(bpLocation));
                         _bprelation.SetIsBillTo(true);
                         if (_bprelation.Save())
                         {

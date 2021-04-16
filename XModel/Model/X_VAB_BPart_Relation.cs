@@ -22,7 +22,7 @@ public X_VAB_BPart_Relation (Context ctx, int VAB_BPart_Relation_ID, Trx trxName
 {
 SetVAB_BPart_Relation_ID (0);
 SetVAB_BusinessPartnerRelation_ID (0);
-SetVAB_BusinessPartnerRelation_Location_ID (0);
+SetVAB_BPartRelation_Location_ID (0);
 SetVAB_BusinessPartner_ID (0);
 SetIsBillTo (false);
 SetIsPayFrom (false);
@@ -38,7 +38,7 @@ public X_VAB_BPart_Relation (Ctx ctx, int VAB_BPart_Relation_ID, Trx trxName) : 
 {
 SetVAB_BPart_Relation_ID (0);
 SetVAB_BusinessPartnerRelation_ID (0);
-SetVAB_BusinessPartnerRelation_Location_ID (0);
+SetVAB_BPartRelation_Location_ID (0);
 SetVAB_BusinessPartner_ID (0);
 SetIsBillTo (false);
 SetIsPayFrom (false);
@@ -160,20 +160,20 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** VAB_BusinessPartnerRelation_Location_ID VAF_Control_Ref_ID=159 */
-public static int VAB_BUSINESSPARTNERRELATION_LOCATION_ID_VAF_Control_Ref_ID=159;
+/** VAB_BPartRelation_Location_ID VAF_Control_Ref_ID=159 */
+public static int VAB_BPartRelation_Location_ID_VAF_Control_Ref_ID=159;
 /** Set Related Partner Location.
-@param VAB_BusinessPartnerRelation_Location_ID Location of the related Business Partner */
-public void SetVAB_BusinessPartnerRelation_Location_ID (int VAB_BusinessPartnerRelation_Location_ID)
+@param VAB_BPartRelation_Location_ID Location of the related Business Partner */
+public void SetVAB_BPartRelation_Location_ID (int VAB_BPartRelation_Location_ID)
 {
-if (VAB_BusinessPartnerRelation_Location_ID < 1) throw new ArgumentException ("VAB_BusinessPartnerRelation_Location_ID is mandatory.");
-Set_Value ("VAB_BusinessPartnerRelation_Location_ID", VAB_BusinessPartnerRelation_Location_ID);
+if (VAB_BPartRelation_Location_ID < 1) throw new ArgumentException ("VAB_BPartRelation_Location_ID is mandatory.");
+Set_Value ("VAB_BPartRelation_Location_ID", VAB_BPartRelation_Location_ID);
 }
 /** Get Related Partner Location.
 @return Location of the related Business Partner */
-public int GetVAB_BusinessPartnerRelation_Location_ID() 
+public int GetVAB_BPartRelation_Location_ID() 
 {
-Object ii = Get_Value("VAB_BusinessPartnerRelation_Location_ID");
+Object ii = Get_Value("VAB_BPartRelation_Location_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
