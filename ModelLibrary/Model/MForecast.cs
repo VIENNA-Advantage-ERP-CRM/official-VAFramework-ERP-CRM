@@ -76,7 +76,7 @@ namespace VAdvantage.Model
                 log.SaveError("TrxDateGreater", "");
                 return false;
             }
-            return false;
+            return true;
         }
 
         /// <summary>

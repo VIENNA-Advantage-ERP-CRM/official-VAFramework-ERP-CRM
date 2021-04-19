@@ -33,8 +33,8 @@ namespace VAdvantage.Model
         {
             if (!success)
                 return success;
-            string sql = "update C_Forecast set GrandTotal = (SELECT COALESCE(SUM(PriceStd),0) FROM C_ForecastLine WHERE isactive = 'Y' and C_Forecast_ID= " + GetC_Forecast_ID() + ") where C_Forecast_ID = " + GetC_Forecast_ID();
-            int count = DB.ExecuteQuery(sql, null, null);
+            string sql = "update C_Forecast set GrandTotal = (SELECT COALESCE(SUM(TotalPrice),0) FROM C_ForecastLine WHERE isactive = 'Y' and C_Forecast_ID= " + GetC_Forecast_ID() + ") where C_Forecast_ID = " + GetC_Forecast_ID();
+            int count = DB.ExecuteQuery(sql, null, Get_Trx());
             return true;
         }
 
@@ -57,8 +57,8 @@ namespace VAdvantage.Model
                     return false;
                 }
             }
-            string sql = "update C_Forecast set GrandTotal = (SELECT COALESCE(SUM(PriceStd),0) FROM C_ForecastLine WHERE isactive = 'Y' and C_Forecast_ID= " + GetC_Forecast_ID() + ") where C_Forecast_ID = " + GetC_Forecast_ID();
-            int count = DB.ExecuteQuery(sql, null, null);
+            string sql = "update C_Forecast set GrandTotal = (SELECT COALESCE(SUM(TotalPrice),0) FROM C_ForecastLine WHERE isactive = 'Y' and C_Forecast_ID= " + GetC_Forecast_ID() + ") where C_Forecast_ID = " + GetC_Forecast_ID();
+            int count = DB.ExecuteQuery(sql, null, Get_Trx());
 
             if (!newRecord)
             {
@@ -66,21 +66,26 @@ namespace VAdvantage.Model
                 LineHistory.SetAD_Client_ID(GetAD_Client_ID());
                 LineHistory.SetAD_Org_ID(GetAD_Org_ID());
                 LineHistory.SetC_ForecastLine_ID(GetC_ForecastLine_ID());
+                LineHistory.SetLine(Util.GetValueOfInt(Get_ValueOld("Line")));
+                LineHistory.SetC_Order_ID(Util.GetValueOfInt(Get_ValueOld("C_Order_ID")));
+                LineHistory.SetC_OrderLine_ID(Util.GetValueOfInt(Get_ValueOld("C_OrderLine_ID")));
+                LineHistory.SetC_Project_ID(Util.GetValueOfInt(Get_ValueOld("C_Project_ID")));
+                LineHistory.SetC_ProjectLine_ID(Util.GetValueOfInt(Get_ValueOld("C_ProjectLine_ID")));
                 LineHistory.SetC_Charge_ID(GetC_Charge_ID());
                 LineHistory.SetM_Product_ID(GetM_Product_ID());
-                LineHistory.SetM_AttributeSetInstance_ID(GetM_AttributeSetInstance_ID());
+                LineHistory.SetM_AttributeSetInstance_ID(Util.GetValueOfInt(Get_ValueOld("M_AttributeSetInstance_ID")));
                 LineHistory.SetIsBOM(IsBOM());
-                LineHistory.SetM_BOM_ID(GetM_BOM_ID());
-                LineHistory.SetBOMUse(GetBOMUse());
-                LineHistory.SetC_UOM_ID(GetC_UOM_ID());
-                LineHistory.SetBaseQuantity(GetBaseQty());
-                LineHistory.SetQtyEntered(GetQtyEntered());
-                LineHistory.SetUnitPrice(GetUnitPrice());
-                LineHistory.SetTotalPrice(GetTotalPrice());
-                LineHistory.SetDescription(GetDescription());
+                LineHistory.SetM_BOM_ID(Util.GetValueOfInt(Get_ValueOld("M_BOM_ID")));
+                LineHistory.SetBOMUse(Util.GetValueOfString(Get_ValueOld("BOMUse")));
+                LineHistory.SetC_UOM_ID(Util.GetValueOfInt(Get_ValueOld("C_UOM_ID")));
+                LineHistory.SetBaseQuantity(Util.GetValueOfDecimal(Get_ValueOld("BaseQty")));
+                LineHistory.SetQtyEntered(Util.GetValueOfDecimal(Get_ValueOld("QtyEntered")));
+                LineHistory.SetUnitPrice(Util.GetValueOfDecimal(Get_ValueOld("UnitPrice")));
+                LineHistory.SetTotalPrice(Util.GetValueOfDecimal(Get_ValueOld("TotalPrice")));
+                LineHistory.SetDescription(Util.GetValueOfString(Get_ValueOld("Description")));
                 if (Env.IsModuleInstalled("VAMFG_"))
                 {
-                    LineHistory.Set_Value("VAMFG_M_Routing_ID", Get_Value("VAMFG_M_Routing_ID"));
+                    LineHistory.Set_Value("VAMFG_M_Routing_ID", Get_ValueOld("VAMFG_M_Routing_ID"));
                 }
                 if (!LineHistory.Save())
                 {
