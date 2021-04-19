@@ -82,13 +82,13 @@ public void SetName (String Name){if (Name == null) throw new ArgumentException 
 public String GetName() {return (String)Get_Value("Name");}/** Get Record ID/ColumnName
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() {return new KeyNamePair(Get_ID(), GetName());}
-/** Ref_M_Container_ID VAF_Control_Ref_ID=1000205 */
-public static int REF_M_CONTAINER_ID_VAF_Control_Ref_ID=1000205;/** Set Parent Container.
-@param Ref_M_Container_ID Use to store parent container id */
-public void SetRef_M_Container_ID (int Ref_M_Container_ID){if (Ref_M_Container_ID <= 0) Set_Value ("Ref_M_Container_ID", null);else
-Set_Value ("Ref_M_Container_ID", Ref_M_Container_ID);}/** Get Parent Container.
+/** Ref_VAM_Container_ID VAF_Control_Ref_ID=1000205 */
+public static int Ref_VAM_Container_ID_VAF_Control_Ref_ID=1000205;/** Set Parent Container.
+@param Ref_VAM_Container_ID Use to store parent container id */
+public void SetRef_VAM_Container_ID (int Ref_VAM_Container_ID){if (Ref_VAM_Container_ID <= 0) Set_Value ("Ref_VAM_Container_ID", null);else
+Set_Value ("Ref_VAM_Container_ID", Ref_VAM_Container_ID);}/** Get Parent Container.
 @return Use to store parent container id */
-public int GetRef_M_Container_ID() {Object ii = Get_Value("Ref_M_Container_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Search Key.
+public int GetRef_VAM_Container_ID() {Object ii = Get_Value("Ref_VAM_Container_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Search Key.
 @param Value Search key for the record in the format required - must be unique */
 public void SetValue (String Value){if (Value != null && Value.Length > 100){log.Warning("Length > 100 - truncated");Value = Value.Substring(0,100);}Set_Value ("Value", Value);}/** Get Search Key.
 @return Search key for the record in the format required - must be unique */

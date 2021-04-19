@@ -3790,13 +3790,13 @@
             bindornot = "true";
 
             if (tablename == "VAF_MenuConfig") {
-                var rolCheck = "SELECT count(*) FROM VAF_Role WHERE VAF_TreeInfo_menu_id=" + $treeID;
+                var rolCheck = "SELECT count(*) FROM VAF_Role WHERE VAF_Tree_Menu_ID=" + $treeID;
                 var checkCount = executeScalar(rolCheck);
                 if (checkCount > 0) {
                     bindornot = "false";
                 }
                 else {
-                    var tenantCheck = "SELECT count(*) FROM VAF_ClientDetail WHERE VAF_TreeInfo_menu_id=" + $treeID;
+                    var tenantCheck = "SELECT count(*) FROM VAF_ClientDetail WHERE VAF_Tree_Menu_ID=" + $treeID;
                     var checktenant = executeScalar(tenantCheck);
                     if (checktenant > 0) {
                         bindornot = "false";

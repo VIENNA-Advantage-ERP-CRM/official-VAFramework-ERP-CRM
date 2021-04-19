@@ -2440,7 +2440,7 @@ namespace VAdvantage.Process
                                    (SELECT VAM_Product_ID FROM VAM_Product WHERE VAM_ProductCategory_ID IN (" + productCategoryID + " ) )", null, Get_Trx());
                 DB.ExecuteQuery(@"delete from VAM_ProductCostQueue  where VAM_Product_id IN 
                                    (SELECT VAM_Product_ID FROM VAM_Product WHERE VAM_ProductCategory_ID IN (" + productCategoryID + " ) )", null, Get_Trx());
-                DB.ExecuteQuery(@"delete from VAM_ProductCostElementDetail  where VAM_Product_id IN 
+                DB.ExecuteQuery(@"delete from VAM_CostElementDetail  where VAM_Product_id IN 
                                    (SELECT VAM_Product_ID FROM VAM_Product WHERE VAM_ProductCategory_ID IN (" + productCategoryID + " ) )", null, Get_Trx());
                 #endregion
             }
@@ -2539,7 +2539,7 @@ namespace VAdvantage.Process
                 DB.ExecuteQuery(@"delete from VAM_ProductCost where VAM_Product_id IN  (" + productID + " )", null, Get_Trx());
                 DB.ExecuteQuery(@"delete from VAM_ProductCostdetail  where VAM_Product_id IN  (" + productID + " ) ", null, Get_Trx());
                 DB.ExecuteQuery(@"delete from VAM_ProductCostQueue  where VAM_Product_id IN  (" + productID + " )", null, Get_Trx());
-                DB.ExecuteQuery(@"delete from VAM_ProductCostElementDetail  where VAM_Product_id IN  (" + productID + " )", null, Get_Trx());
+                DB.ExecuteQuery(@"delete from VAM_CostElementDetail  where VAM_Product_id IN  (" + productID + " )", null, Get_Trx());
                 #endregion
             }
             else if (onlyDeleteCosting.Equals("Y"))
@@ -2595,7 +2595,7 @@ namespace VAdvantage.Process
                 DB.ExecuteQuery(@"delete from VAM_ProductCost WHERE vaf_client_ID =  " + GetVAF_Client_ID(), null, Get_Trx());
                 DB.ExecuteQuery(@"delete from VAM_ProductCostdetail WHERE vaf_client_ID =  " + GetVAF_Client_ID(), null, Get_Trx());
                 DB.ExecuteQuery(@"delete from VAM_ProductCostQueue WHERE vaf_client_ID =  " + GetVAF_Client_ID(), null, Get_Trx());
-                DB.ExecuteQuery(@"delete from VAM_ProductCostElementDetail WHERE vaf_client_ID =  " + GetVAF_Client_ID(), null, Get_Trx());
+                DB.ExecuteQuery(@"delete from VAM_CostElementDetail WHERE vaf_client_ID =  " + GetVAF_Client_ID(), null, Get_Trx());
                 #endregion
             }
 

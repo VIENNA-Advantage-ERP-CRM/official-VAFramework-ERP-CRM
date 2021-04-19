@@ -44,8 +44,8 @@ namespace ViennaAdvantageServer.Process
             try
             {
                 // Get Combination Record
-                sql = @"SELECT ce.VAM_ProductCostElement_ID ,  ce.Name ,  cel.lineno ,  cel.m_ref_costelement
-                            FROM VAM_ProductCostElement ce INNER JOIN VAM_ProductCostElementLine cel ON ce.VAM_ProductCostElement_ID = cel.VAM_ProductCostElement_ID "
+                sql = @"SELECT ce.VAM_ProductCostElement_ID ,  ce.Name ,  cel.lineno ,  cel.VAM_Ref_CostElement
+                            FROM VAM_ProductCostElement ce INNER JOIN VAM_CostElementLine cel ON ce.VAM_ProductCostElement_ID = cel.VAM_ProductCostElement_ID "
                               + " WHERE ce.VAF_Client_ID=" + GetVAF_Client_ID() + " AND ce.VAM_ProductCostElement_ID = " + costElement_ID
                               + " AND ce.IsActive='Y'  AND cel.IsActive='Y'";
                 dsCostCombination = DB.ExecuteDataset(sql, null, null);
@@ -53,14 +53,14 @@ namespace ViennaAdvantageServer.Process
                 {
                     for (int i = 0; i < dsCostCombination.Tables[0].Rows.Count; i++)
                     {
-                        costElement.Add(Util.GetValueOfInt(dsCostCombination.Tables[0].Rows[i]["m_ref_costelement"]));
+                        costElement.Add(Util.GetValueOfInt(dsCostCombination.Tables[0].Rows[i]["VAM_Ref_CostElement"]));
                     }
                 }
-                //var costElementRecord = dsCostCombination.Tables[0].AsEnumerable().Select(r => r.Field<int>("m_ref_costelement")).ToList();
+                //var costElementRecord = dsCostCombination.Tables[0].AsEnumerable().Select(r => r.Field<int>("VAM_Ref_CostElement")).ToList();
 
                 // Get All Product
                 sql = @"SELECT vaf_client_id ,  vaf_org_id ,  VAM_Product_id ,  VAM_PFeature_SetInstance_id ,  VAB_AccountBook_id ,
-                           VAM_ProductCostType_id ,   VAM_ProductCostElement_id ,  cumulatedamt ,  cumulatedqty ,  currentcostprice ,  currentqty
+                           VAM_CostType_id ,   VAM_ProductCostElement_id ,  cumulatedamt ,  cumulatedqty ,  currentcostprice ,  currentqty
                       FROM VAM_ProductCost WHERE vaf_client_id = " + GetVAF_Client_ID() +
                           " ORDER BY VAM_Product_id ,   vaf_org_id ,  VAM_PFeature_SetInstance_id ,  VAB_AccountBook_id";
                 dsProductCost = DB.ExecuteDataset(sql, null, null);

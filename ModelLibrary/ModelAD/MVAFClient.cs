@@ -311,9 +311,9 @@ namespace VAdvantage.Model
                     + "WHERE l.VAF_Control_Ref_ID=120 AND l.VAF_CtrlRef_List_ID=t.VAF_CtrlRef_List_ID AND l.IsActive='Y' AND t.VAF_Language='" + language + "'";
 
             //  Tree IDs
-            int VAF_TreeInfo_Org_ID = 0, VAF_TreeInfo_BPartner_ID = 0, VAF_TreeInfo_Project_ID = 0,
-                VAF_TreeInfo_SalesRegion_ID = 0, VAF_TreeInfo_Product_ID = 0,
-                VAF_TreeInfo_Campaign_ID = 0, VAF_TreeInfo_Activity_ID = 0;
+            int VAF_Tree_Org_ID = 0, VAF_Tree_BPartner_ID = 0, VAF_Tree_Project_ID = 0,
+                VAF_Tree_SalesRegion_ID = 0, VAF_Tree_Product_ID = 0,
+                VAF_Tree_Campaign_ID = 0, VAF_Tree_Activity_ID = 0;
 
             bool success = false;
             try
@@ -327,6 +327,10 @@ namespace VAdvantage.Model
                     try
                     {
                         String treeType = dr.Tables[0].Rows[i]["Value"].ToString();
+
+                        if (treeType == "CC" || treeType == "CM" || treeType == "CS")
+                            continue;
+
                         if (treeType.Equals(X_VAF_TreeInfo.TREETYPE_Other)
                             || treeType.StartsWith("U"))
                             continue;
@@ -336,31 +340,31 @@ namespace VAdvantage.Model
                         {
                             tree = new MVAFTreeInfo(this, name, treeType);
                             success = tree.Save();
-                            VAF_TreeInfo_Org_ID = tree.GetVAF_TreeInfo_ID();
+                            VAF_Tree_Org_ID = tree.GetVAF_TreeInfo_ID();
                         }
                         else if (treeType.Equals(X_VAF_TreeInfo.TREETYPE_BPartner))
                         {
                             tree = new MVAFTreeInfo(this, name, treeType);
                             success = tree.Save();
-                            VAF_TreeInfo_BPartner_ID = tree.GetVAF_TreeInfo_ID();
+                            VAF_Tree_BPartner_ID = tree.GetVAF_TreeInfo_ID();
                         }
                         else if (treeType.Equals(X_VAF_TreeInfo.TREETYPE_Project))
                         {
                             tree = new MVAFTreeInfo(this, name, treeType);
                             success = tree.Save();
-                            VAF_TreeInfo_Project_ID = tree.GetVAF_TreeInfo_ID();
+                            VAF_Tree_Project_ID = tree.GetVAF_TreeInfo_ID();
                         }
                         else if (treeType.Equals(X_VAF_TreeInfo.TREETYPE_SalesRegion))
                         {
                             tree = new MVAFTreeInfo(this, name, treeType);
                             success = tree.Save();
-                            VAF_TreeInfo_SalesRegion_ID = tree.GetVAF_TreeInfo_ID();
+                            VAF_Tree_SalesRegion_ID = tree.GetVAF_TreeInfo_ID();
                         }
                         else if (treeType.Equals(X_VAF_TreeInfo.TREETYPE_Product))
                         {
                             tree = new MVAFTreeInfo(this, name, treeType);
                             success = tree.Save();
-                            VAF_TreeInfo_Product_ID = tree.GetVAF_TreeInfo_ID();
+                            VAF_Tree_Product_ID = tree.GetVAF_TreeInfo_ID();
                         }
                         else if (treeType.Equals(X_VAF_TreeInfo.TREETYPE_ElementValue))
                         {
@@ -368,19 +372,19 @@ namespace VAdvantage.Model
                             //do not crete Account Tree While tenant Creation
                             //tree = new MTree(this, name, treeType);
                             //success = tree.Save();
-                            //m_VAF_TreeInfo_Account_ID = tree.GetVAF_TreeInfo_ID();
+                            //m_VAF_Tree_Account_ID = tree.GetVAF_TreeInfo_ID();
                         }
                         else if (treeType.Equals(X_VAF_TreeInfo.TREETYPE_Campaign))
                         {
                             tree = new MVAFTreeInfo(this, name, treeType);
                             success = tree.Save();
-                            VAF_TreeInfo_Campaign_ID = tree.GetVAF_TreeInfo_ID();
+                            VAF_Tree_Campaign_ID = tree.GetVAF_TreeInfo_ID();
                         }
                         else if (treeType.Equals(X_VAF_TreeInfo.TREETYPE_Activity))
                         {
                             tree = new MVAFTreeInfo(this, name, treeType);
                             success = tree.Save();
-                            VAF_TreeInfo_Activity_ID = tree.GetVAF_TreeInfo_ID();
+                            VAF_Tree_Activity_ID = tree.GetVAF_TreeInfo_ID();
                         }
                         else if (treeType.Equals(X_VAF_TreeInfo.TREETYPE_Menu))	//	No Menu
                             success = true;
@@ -411,20 +415,20 @@ namespace VAdvantage.Model
 
             //	Create ClientInfo
             MVAFClientDetail clientInfo = new MVAFClientDetail(this,
-                VAF_TreeInfo_Org_ID, VAF_TreeInfo_BPartner_ID, VAF_TreeInfo_Project_ID,
-                VAF_TreeInfo_SalesRegion_ID, VAF_TreeInfo_Product_ID,
-                VAF_TreeInfo_Campaign_ID, VAF_TreeInfo_Activity_ID, Get_TrxName());
+                VAF_Tree_Org_ID, VAF_Tree_BPartner_ID, VAF_Tree_Project_ID,
+                VAF_Tree_SalesRegion_ID, VAF_Tree_Product_ID,
+                VAF_Tree_Campaign_ID, VAF_Tree_Activity_ID, Get_TrxName());
             success = clientInfo.Save();
             return success;
         }	//	createTrees
 
         /** Client Info Setup Tree for Account	*/
-        private int m_VAF_TreeInfo_Account_ID;
+        private int m_VAF_Tree_Account_ID;
 
-        public int GetSetup_VAF_TreeInfo_Account_ID()
+        public int GetSetup_VAF_Tree_Account_ID()
         {
-            return m_VAF_TreeInfo_Account_ID;
-        }	//	getSetup_VAF_TreeInfo_Account_ID
+            return m_VAF_Tree_Account_ID;
+        }	//	getSetup_VAF_Tree_Account_ID
 
 
         /**

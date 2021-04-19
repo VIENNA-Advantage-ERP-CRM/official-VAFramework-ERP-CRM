@@ -39,7 +39,7 @@ namespace VAdvantage.Model
                 //	setVAB_AccountBook_ID (0);
                 //	setVAM_PFeature_SetInstance_ID (0);
                 //	setVAM_ProductCostElement_ID (0);
-                //	setVAM_ProductCostType_ID (0);
+                //	setVAM_CostType_ID (0);
                 //	setVAM_Product_ID (0);
                 SetCurrentCostPrice(Env.ZERO);
                 SetCurrentQty(Env.ZERO);
@@ -74,7 +74,7 @@ namespace VAdvantage.Model
         {
             SetClientOrg(product.GetVAF_Client_ID(), VAF_Org_ID);
             SetVAB_AccountBook_ID(mas.GetVAB_AccountBook_ID());
-            SetVAM_ProductCostType_ID(mas.GetVAM_ProductCostType_ID());
+            SetVAM_CostType_ID(mas.GetVAM_CostType_ID());
             SetVAM_Product_ID(product.GetVAM_Product_ID());
             SetVAM_PFeature_SetInstance_ID(VAM_PFeature_SetInstance_ID);
             SetVAM_ProductCostElement_ID(VAM_ProductCostElement_ID);
@@ -167,7 +167,7 @@ namespace VAdvantage.Model
                 + "WHERE VAF_Client_ID=@client AND VAF_Org_ID=@org"
                 + " AND VAM_Product_ID=@pro"
                 + " AND VAM_PFeature_SetInstance_ID=@asi"
-                + " AND VAM_ProductCostType_ID=@ct AND VAB_AccountBook_ID=@accs"
+                + " AND VAM_CostType_ID=@ct AND VAB_AccountBook_ID=@accs"
                 + " AND VAM_ProductCostElement_ID=@ce";
             try
             {
@@ -176,7 +176,7 @@ namespace VAdvantage.Model
                 param[1] = new SqlParameter("@org", VAF_Org_ID);
                 param[2] = new SqlParameter("@pro", product.GetVAM_Product_ID());
                 param[3] = new SqlParameter("@asi", VAM_PFeature_SetInstance_ID);
-                param[4] = new SqlParameter("@ct", mas.GetVAM_ProductCostType_ID());
+                param[4] = new SqlParameter("@ct", mas.GetVAM_CostType_ID());
                 param[5] = new SqlParameter("@accs", mas.GetVAB_AccountBook_ID());
                 param[6] = new SqlParameter("@ce", VAM_ProductCostElement_ID);
 
@@ -299,7 +299,7 @@ namespace VAdvantage.Model
             String sql = "SELECT * FROM VAM_ProductCostQueue "
                 + "WHERE VAF_Client_ID=@client "
                 + " AND VAM_Product_ID=@prod"
-                + " AND VAM_ProductCostType_ID=@ct AND VAB_AccountBook_ID=@accs"
+                + " AND VAM_CostType_ID=@ct AND VAB_AccountBook_ID=@accs"
                 + " AND VAM_ProductCostElement_ID=@ce";
             if (Org_ID != 0)
                 sql += " AND VAF_Org_ID=@org";
@@ -331,7 +331,7 @@ namespace VAdvantage.Model
                 }
                 param[0] = new SqlParameter("@client", product.GetVAF_Client_ID());
                 param[1] = new SqlParameter("@prod", product.GetVAM_Product_ID());
-                param[2] = new SqlParameter("@ct", mas.GetVAM_ProductCostType_ID());
+                param[2] = new SqlParameter("@ct", mas.GetVAM_CostType_ID());
                 param[3] = new SqlParameter("@accs", mas.GetVAB_AccountBook_ID());
                 param[4] = new SqlParameter("@ce", ce.GetVAM_ProductCostElement_ID());
                 if (M_ASI_ID != 0 && Org_ID != 0)
@@ -788,12 +788,12 @@ namespace VAdvantage.Model
                                 if (costingMethodMatchPO == "C")
                                 {
                                     query.Clear();
-                                    query.Append(@" SELECT costingmethod FROM VAM_ProductCostElement WHERE VAM_ProductCostElement_id = (SELECT CAST(cel.M_Ref_CostElement AS INTEGER)
-                                    FROM VAM_ProductCostElement ce INNER JOIN VAM_ProductCostElementLine cel ON ce.VAM_ProductCostElement_ID  = cel.VAM_ProductCostElement_ID
+                                    query.Append(@" SELECT costingmethod FROM VAM_ProductCostElement WHERE VAM_ProductCostElement_id = (SELECT CAST(cel.VAM_Ref_CostElement AS INTEGER)
+                                    FROM VAM_ProductCostElement ce INNER JOIN VAM_CostElementLine cel ON ce.VAM_ProductCostElement_ID  = cel.VAM_ProductCostElement_ID
                                     WHERE ce.VAF_Client_ID   =" + product.GetVAF_Client_ID() + @" 
                                     AND ce.IsActive         ='Y' AND ce.CostElementType  ='C'
                                     AND cel.IsActive        ='Y' AND ce.VAM_ProductCostElement_ID = " + pca.GetVAM_ProductCostElement_ID() + @"
-                                    AND CAST(cel.M_Ref_CostElement AS INTEGER) IN (SELECT VAM_ProductCostElement_ID FROM VAM_ProductCostElement WHERE costingmethod IS NOT NULL  ) )
+                                    AND CAST(cel.VAM_Ref_CostElement AS INTEGER) IN (SELECT VAM_ProductCostElement_ID FROM VAM_ProductCostElement WHERE costingmethod IS NOT NULL  ) )
                                     ");
                                 }
                             }
@@ -805,12 +805,12 @@ namespace VAdvantage.Model
                                 if (costingMethodMatchPO == "C")
                                 {
                                     query.Clear();
-                                    query.Append(@" SELECT costingmethod FROM VAM_ProductCostElement WHERE VAM_ProductCostElement_id = (SELECT CAST(cel.M_Ref_CostElement AS INTEGER)
-                                    FROM VAM_ProductCostElement ce INNER JOIN VAM_ProductCostElementLine cel ON ce.VAM_ProductCostElement_ID  = cel.VAM_ProductCostElement_ID
+                                    query.Append(@" SELECT costingmethod FROM VAM_ProductCostElement WHERE VAM_ProductCostElement_id = (SELECT CAST(cel.VAM_Ref_CostElement AS INTEGER)
+                                    FROM VAM_ProductCostElement ce INNER JOIN VAM_CostElementLine cel ON ce.VAM_ProductCostElement_ID  = cel.VAM_ProductCostElement_ID
                                     WHERE ce.VAF_Client_ID   =" + product.GetVAF_Client_ID() + @" 
                                     AND ce.IsActive         ='Y' AND ce.CostElementType  ='C'
                                     AND cel.IsActive        ='Y' AND ce.VAM_ProductCostElement_ID = " + pca.GetVAM_ProductCostElement_ID() + @"
-                                    AND CAST(cel.M_Ref_CostElement AS INTEGER) IN (SELECT VAM_ProductCostElement_ID FROM VAM_ProductCostElement WHERE costingmethod IS NOT NULL  ) )
+                                    AND CAST(cel.VAM_Ref_CostElement AS INTEGER) IN (SELECT VAM_ProductCostElement_ID FROM VAM_ProductCostElement WHERE costingmethod IS NOT NULL  ) )
                                     ");
                                 }
                             }
@@ -913,7 +913,7 @@ namespace VAdvantage.Model
                                 query.Clear();
                                 if (cl == MVAMProductCategory.COSTINGLEVEL_Client || cl == MVAMProductCategory.COSTINGLEVEL_Organization)
                                 {
-                                    query.Append(@"SELECT  ROUND(Amt/Qty , 4) as currentCostAmount  FROM VAM_ProductCostElementDetail ced 
+                                    query.Append(@"SELECT  ROUND(Amt/Qty , 4) as currentCostAmount  FROM VAM_CostElementDetail ced 
                                                                 where  ced.IsActive = 'Y' AND ced.VAM_Product_ID = " + product.GetVAM_Product_ID() + @" 
                                                                  AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.VAM_PFeature_SetInstance_ID , 0) = 0" +
                                        " AND ced.VAM_Inv_InOutLine_ID =  " + inoutline.GetVAM_Inv_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) = 0 AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
@@ -921,7 +921,7 @@ namespace VAdvantage.Model
                                 }
                                 else if (cl == MVAMProductCategory.COSTINGLEVEL_BatchLot || cl == MVAMProductCategory.COSTINGLEVEL_OrgPlusBatch)
                                 {
-                                    query.Append(@"SELECT  ROUND(Amt/Qty , 4) as currentCostAmount  FROM VAM_ProductCostElementDetail ced 
+                                    query.Append(@"SELECT  ROUND(Amt/Qty , 4) as currentCostAmount  FROM VAM_CostElementDetail ced 
                                                                 where  ced.IsActive = 'Y' AND ced.VAM_Product_ID = " + product.GetVAM_Product_ID() + @" 
                                                                  AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.VAM_PFeature_SetInstance_ID , 0) = " + M_ASI_ID + @" 
                                                                  AND ced.VAM_Inv_InOutLine_ID =  " + inoutline.GetVAM_Inv_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) = 0 AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
@@ -929,7 +929,7 @@ namespace VAdvantage.Model
                                 }
                                 else if (cl == MVAMProductCategory.COSTINGLEVEL_Warehouse || cl == MVAMProductCategory.COSTINGLEVEL_WarehousePlusBatch)
                                 {
-                                    query.Append(@"SELECT  ROUND(Amt/Qty , 4) as currentCostAmount  FROM VAM_ProductCostElementDetail ced 
+                                    query.Append(@"SELECT  ROUND(Amt/Qty , 4) as currentCostAmount  FROM VAM_CostElementDetail ced 
                                                                 where  ced.IsActive = 'Y' AND ced.VAM_Product_ID = " + product.GetVAM_Product_ID() + @" AND  NVL(ced.VAM_Warehouse_ID , 0) = " + inout.GetVAM_Warehouse_ID() + @" 
                                                                  AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() +
                                                               @" AND  NVL(ced.VAM_PFeature_SetInstance_ID , 0) = " + (cl == MVAMProductCategory.COSTINGLEVEL_WarehousePlusBatch ? M_ASI_ID : 0) + @" 
@@ -941,7 +941,7 @@ namespace VAdvantage.Model
                                 query.Clear();
                                 if (cl == MVAMProductCategory.COSTINGLEVEL_Client || cl == MVAMProductCategory.COSTINGLEVEL_Organization)
                                 {
-                                    query.Append(@"SELECT  ROUND(Amt/Qty , 4) as currentCostAmount  FROM VAM_ProductCostElementDetail ced 
+                                    query.Append(@"SELECT  ROUND(Amt/Qty , 4) as currentCostAmount  FROM VAM_CostElementDetail ced 
                                                                 where  ced.IsActive = 'Y' AND ced.VAM_Product_ID = " + product.GetVAM_Product_ID() + @" 
                                                                  AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.VAM_PFeature_SetInstance_ID , 0) = 0 " +
                                                                " AND ced.VAM_Inv_InOutLine_ID =  " + inoutline.GetVAM_Inv_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) = 0 AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 AND 
@@ -949,7 +949,7 @@ namespace VAdvantage.Model
                                 }
                                 else if (cl == MVAMProductCategory.COSTINGLEVEL_BatchLot || cl == MVAMProductCategory.COSTINGLEVEL_OrgPlusBatch)
                                 {
-                                    query.Append(@"SELECT  ROUND(Amt/Qty , 4) as currentCostAmount  FROM VAM_ProductCostElementDetail ced 
+                                    query.Append(@"SELECT  ROUND(Amt/Qty , 4) as currentCostAmount  FROM VAM_CostElementDetail ced 
                                                                 where  ced.IsActive = 'Y' AND ced.VAM_Product_ID = " + product.GetVAM_Product_ID() + @" 
                                                                  AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.VAM_PFeature_SetInstance_ID , 0) = " + M_ASI_ID + @" 
                                                                  AND ced.VAM_Inv_InOutLine_ID =  " + inoutline.GetVAM_Inv_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) = 0 AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
@@ -957,7 +957,7 @@ namespace VAdvantage.Model
                                 }
                                 else if (cl == MVAMProductCategory.COSTINGLEVEL_Warehouse || cl == MVAMProductCategory.COSTINGLEVEL_WarehousePlusBatch)
                                 {
-                                    query.Append(@"SELECT  ROUND(Amt/Qty , 4) as currentCostAmount  FROM VAM_ProductCostElementDetail ced 
+                                    query.Append(@"SELECT  ROUND(Amt/Qty , 4) as currentCostAmount  FROM VAM_CostElementDetail ced 
                                                                 where  ced.IsActive = 'Y' AND ced.VAM_Product_ID = " + product.GetVAM_Product_ID() + @"  AND  NVL(ced.VAM_Warehouse_ID , 0) = " + inout.GetVAM_Warehouse_ID() + @" 
                                                                  AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() +
                                                               @" AND  NVL(ced.VAM_PFeature_SetInstance_ID , 0) = " + (cl == MVAMProductCategory.COSTINGLEVEL_WarehousePlusBatch ? M_ASI_ID : 0) + @" 
@@ -1396,7 +1396,7 @@ namespace VAdvantage.Model
                             //                            if (cl != "B")
                             //                            {
                             //                                query.Clear();
-                            //                                query.Append(@"SELECT  Amt/Qty as currentCostAmount  FROM VAM_ProductCostElementDetail ced 
+                            //                                query.Append(@"SELECT  Amt/Qty as currentCostAmount  FROM VAM_CostElementDetail ced 
                             //                                    where  ced.IsActive = 'Y' AND ced.VAM_Product_ID = " + product.GetVAM_Product_ID() + @" 
                             //                                     AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.VAM_PFeature_SetInstance_ID , 0) = 0 " +
                             //                                     " AND ced.VAM_Inv_InOutLine_ID =  " + inoutline.GetVAM_Inv_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) = " + MatchPO_OrderLineId + 
@@ -1407,7 +1407,7 @@ namespace VAdvantage.Model
                             //                            else
                             //                            {
                             //                                query.Clear();
-                            //                                query.Append(@"SELECT  Amt/Qty as currentCostAmount  FROM VAM_ProductCostElementDetail ced 
+                            //                                query.Append(@"SELECT  Amt/Qty as currentCostAmount  FROM VAM_CostElementDetail ced 
                             //                                    where  ced.IsActive = 'Y' AND ced.VAM_Product_ID = " + product.GetVAM_Product_ID() + @" 
                             //                                     AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.VAM_PFeature_SetInstance_ID , 0) = " + M_ASI_ID + @" 
                             //                                     AND ced.VAM_Inv_InOutLine_ID =  " + inoutline.GetVAM_Inv_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) = " + MatchPO_OrderLineId + 
@@ -1474,7 +1474,7 @@ namespace VAdvantage.Model
                             //                            if (cl != "B")
                             //                            {
                             //                                query.Clear();
-                            //                                query.Append(@"SELECT  Amt/Qty as currentCostAmount  FROM VAM_ProductCostElementDetail ced 
+                            //                                query.Append(@"SELECT  Amt/Qty as currentCostAmount  FROM VAM_CostElementDetail ced 
                             //                                    where  ced.IsActive = 'Y' AND ced.VAM_Product_ID = " + product.GetVAM_Product_ID() + @" 
                             //                                     AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.VAM_PFeature_SetInstance_ID , 0) = 0 " +
                             //                                     " AND ced.VAM_Inv_InOutLine_ID =  " + inoutline.GetVAM_Inv_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) = " + MatchPO_OrderLineId + @" AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
@@ -1483,7 +1483,7 @@ namespace VAdvantage.Model
                             //                            else
                             //                            {
                             //                                query.Clear();
-                            //                                query.Append(@"SELECT  Amt/Qty as currentCostAmount  FROM VAM_ProductCostElementDetail ced 
+                            //                                query.Append(@"SELECT  Amt/Qty as currentCostAmount  FROM VAM_CostElementDetail ced 
                             //                                    where  ced.IsActive = 'Y' AND ced.VAM_Product_ID = " + product.GetVAM_Product_ID() + @" 
                             //                                     AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.VAM_PFeature_SetInstance_ID , 0) = " + M_ASI_ID + @" 
                             //                                     AND ced.VAM_Inv_InOutLine_ID =  " + inoutline.GetVAM_Inv_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) = " + MatchPO_OrderLineId + @" AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
@@ -3466,7 +3466,7 @@ namespace VAdvantage.Model
                                 query.Clear();
                                 if (cl != "B")
                                 {
-                                    query.Append(@"SELECT  ROUND(Amt/Qty , 4) as currentCostAmount  FROM VAM_ProductCostElementDetail ced 
+                                    query.Append(@"SELECT  ROUND(Amt/Qty , 4) as currentCostAmount  FROM VAM_CostElementDetail ced 
                                                                 where  ced.IsActive = 'Y' AND ced.VAM_Product_ID = " + product.GetVAM_Product_ID() + @" 
                                                                  AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.VAM_PFeature_SetInstance_ID , 0) = 0" +
                                        " AND ced.VAM_Inv_InOutLine_ID =  " + inoutline.GetVAM_Inv_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) = 0 AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
@@ -3474,7 +3474,7 @@ namespace VAdvantage.Model
                                 }
                                 else
                                 {
-                                    query.Append(@"SELECT  ROUND(Amt/Qty , 4) as currentCostAmount  FROM VAM_ProductCostElementDetail ced 
+                                    query.Append(@"SELECT  ROUND(Amt/Qty , 4) as currentCostAmount  FROM VAM_CostElementDetail ced 
                                                                 where  ced.IsActive = 'Y' AND ced.VAM_Product_ID = " + product.GetVAM_Product_ID() + @" 
                                                                  AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.VAM_PFeature_SetInstance_ID , 0) = " + M_ASI_ID + @" 
                                                                  AND ced.VAM_Inv_InOutLine_ID =  " + inoutline.GetVAM_Inv_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) = 0 AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
@@ -3485,7 +3485,7 @@ namespace VAdvantage.Model
                                 query.Clear();
                                 if (cl != "B")
                                 {
-                                    query.Append(@"SELECT  ROUND(Amt/Qty , 4) as currentCostAmount  FROM VAM_ProductCostElementDetail ced 
+                                    query.Append(@"SELECT  ROUND(Amt/Qty , 4) as currentCostAmount  FROM VAM_CostElementDetail ced 
                                                                 where  ced.IsActive = 'Y' AND ced.VAM_Product_ID = " + product.GetVAM_Product_ID() + @" 
                                                                  AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.VAM_PFeature_SetInstance_ID , 0) = 0 " +
                                          " AND ced.VAM_Inv_InOutLine_ID =  " + inoutline.GetVAM_Inv_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) = 0 AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
@@ -3493,7 +3493,7 @@ namespace VAdvantage.Model
                                 }
                                 else
                                 {
-                                    query.Append(@"SELECT  ROUND(Amt/Qty , 4) as currentCostAmount  FROM VAM_ProductCostElementDetail ced 
+                                    query.Append(@"SELECT  ROUND(Amt/Qty , 4) as currentCostAmount  FROM VAM_CostElementDetail ced 
                                                                 where  ced.IsActive = 'Y' AND ced.VAM_Product_ID = " + product.GetVAM_Product_ID() + @" 
                                                                  AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.VAM_PFeature_SetInstance_ID , 0) = " + M_ASI_ID + @" 
                                                                  AND ced.VAM_Inv_InOutLine_ID =  " + inoutline.GetVAM_Inv_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) = 0 AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
@@ -3831,7 +3831,7 @@ namespace VAdvantage.Model
                             if (cl != "B")
                             {
                                 query.Clear();
-                                query.Append(@"SELECT  Amt/Qty as currentCostAmount  FROM VAM_ProductCostElementDetail ced 
+                                query.Append(@"SELECT  Amt/Qty as currentCostAmount  FROM VAM_CostElementDetail ced 
                                     where  ced.IsActive = 'Y' AND ced.VAM_Product_ID = " + product.GetVAM_Product_ID() + @" 
                                      AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.VAM_PFeature_SetInstance_ID , 0) = 0 " +
                                      " AND ced.VAM_Inv_InOutLine_ID =  " + inoutline.GetVAM_Inv_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) = " + MatchPO_OrderLineId + @" AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
@@ -3840,7 +3840,7 @@ namespace VAdvantage.Model
                             else
                             {
                                 query.Clear();
-                                query.Append(@"SELECT  Amt/Qty as currentCostAmount  FROM VAM_ProductCostElementDetail ced 
+                                query.Append(@"SELECT  Amt/Qty as currentCostAmount  FROM VAM_CostElementDetail ced 
                                     where  ced.IsActive = 'Y' AND ced.VAM_Product_ID = " + product.GetVAM_Product_ID() + @" 
                                      AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.VAM_PFeature_SetInstance_ID , 0) = " + M_ASI_ID + @" 
                                      AND ced.VAM_Inv_InOutLine_ID =  " + inoutline.GetVAM_Inv_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) = " + MatchPO_OrderLineId + @" AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
@@ -3851,7 +3851,7 @@ namespace VAdvantage.Model
                             if (cl != "B")
                             {
                                 query.Clear();
-                                query.Append(@"SELECT  Amt/Qty as currentCostAmount  FROM VAM_ProductCostElementDetail ced 
+                                query.Append(@"SELECT  Amt/Qty as currentCostAmount  FROM VAM_CostElementDetail ced 
                                     where  ced.IsActive = 'Y' AND ced.VAM_Product_ID = " + product.GetVAM_Product_ID() + @" 
                                      AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.VAM_PFeature_SetInstance_ID , 0) = 0 " +
                                      " AND ced.VAM_Inv_InOutLine_ID =  " + inoutline.GetVAM_Inv_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) = " + MatchPO_OrderLineId + @" AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
@@ -3860,7 +3860,7 @@ namespace VAdvantage.Model
                             else
                             {
                                 query.Clear();
-                                query.Append(@"SELECT  Amt/Qty as currentCostAmount  FROM VAM_ProductCostElementDetail ced 
+                                query.Append(@"SELECT  Amt/Qty as currentCostAmount  FROM VAM_CostElementDetail ced 
                                     where  ced.IsActive = 'Y' AND ced.VAM_Product_ID = " + product.GetVAM_Product_ID() + @" 
                                      AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.VAM_PFeature_SetInstance_ID , 0) = " + M_ASI_ID + @" 
                                      AND ced.VAM_Inv_InOutLine_ID =  " + inoutline.GetVAM_Inv_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) = " + MatchPO_OrderLineId + @" AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
@@ -5635,7 +5635,7 @@ namespace VAdvantage.Model
                 }
                 costQueue.SetVAF_Org_ID(VAF_Org_ID);
                 costQueue.SetVAB_AccountBook_ID(Util.GetValueOfInt(acctSchema.GetVAB_AccountBook_ID()));
-                costQueue.SetVAM_ProductCostType_ID(acctSchema.GetVAM_ProductCostType_ID());
+                costQueue.SetVAM_CostType_ID(acctSchema.GetVAM_CostType_ID());
                 costQueue.SetVAM_Product_ID(product.GetVAM_Product_ID());
                 sql = @"SELECT VAM_ProductCostElement_ID FROM VAM_ProductCostElement WHERE IsActive = 'Y' AND CostingMethod = " +
                     " ( SELECT MMPolicy FROM VAM_ProductCategory WHERE IsActive = 'Y' AND VAM_ProductCategory_ID = " +
@@ -5731,7 +5731,7 @@ namespace VAdvantage.Model
                 costQueue.SetVAF_Client_ID(VAF_Client_ID);
                 costQueue.SetVAF_Org_ID(VAF_Org_ID);
                 costQueue.SetVAB_AccountBook_ID(Util.GetValueOfInt(acctSchema.GetVAB_AccountBook_ID()));
-                costQueue.SetVAM_ProductCostType_ID(acctSchema.GetVAM_ProductCostType_ID());
+                costQueue.SetVAM_CostType_ID(acctSchema.GetVAM_CostType_ID());
                 costQueue.SetVAM_Product_ID(product.GetVAM_Product_ID());
                 VAM_ProductCostElement_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                 costQueue.SetVAM_ProductCostElement_ID(VAM_ProductCostElement_ID);
@@ -5857,7 +5857,7 @@ namespace VAdvantage.Model
                 costQueue.SetVAF_Org_ID(VAF_Org_ID);
                 costQueue.SetVAB_AccountBook_ID(Util.GetValueOfInt(acctSchema.GetVAB_AccountBook_ID()));
                 costQueue.SetVAM_Warehouse_ID(VAM_Warehouse_ID);
-                costQueue.SetVAM_ProductCostType_ID(acctSchema.GetVAM_ProductCostType_ID());
+                costQueue.SetVAM_CostType_ID(acctSchema.GetVAM_CostType_ID());
                 costQueue.SetVAM_Product_ID(product.GetVAM_Product_ID());
                 sql = @"SELECT VAM_ProductCostElement_ID FROM VAM_ProductCostElement WHERE IsActive = 'Y' AND CostingMethod = " +
                     " ( SELECT MMPolicy FROM VAM_ProductCategory WHERE IsActive = 'Y' AND VAM_ProductCategory_ID = " +
@@ -5913,7 +5913,7 @@ namespace VAdvantage.Model
                 costQueue.SetVAF_Org_ID(VAF_Org_ID);
                 costQueue.SetVAB_AccountBook_ID(Util.GetValueOfInt(acctSchema.GetVAB_AccountBook_ID()));
                 costQueue.SetVAM_Warehouse_ID(VAM_Warehouse_ID);
-                costQueue.SetVAM_ProductCostType_ID(acctSchema.GetVAM_ProductCostType_ID());
+                costQueue.SetVAM_CostType_ID(acctSchema.GetVAM_CostType_ID());
                 costQueue.SetVAM_Product_ID(product.GetVAM_Product_ID());
                 VAM_ProductCostElement_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                 costQueue.SetVAM_ProductCostElement_ID(VAM_ProductCostElement_ID);

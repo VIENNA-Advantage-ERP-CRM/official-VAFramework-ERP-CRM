@@ -644,8 +644,8 @@ namespace VAdvantage.Model
                 )
             {
                 MVABAccount.UpdateValueDescription(GetCtx(),
-                    "(C_LocFrom_ID=" + GetVAB_Address_ID()
-                    + " OR C_LocTo_ID=" + GetVAB_Address_ID() + ")", Get_TrxName());
+                    "(VAB_LocFrom_ID=" + GetVAB_Address_ID()
+                    + " OR VAB_LocTo_ID=" + GetVAB_Address_ID() + ")", Get_TrxName());
             }
             return success;
         }

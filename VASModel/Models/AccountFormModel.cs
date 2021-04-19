@@ -101,8 +101,8 @@ namespace VIS.Models
         /// <param name="VAM_Product_ID"></param>
         /// <param name="VAB_BusinessPartner_ID"></param>
         /// <param name="VAF_OrgTrx_ID"></param>
-        /// <param name="C_LocFrom_ID"></param>
-        /// <param name="C_LocTo_ID"></param>
+        /// <param name="VAB_LocFrom_ID"></param>
+        /// <param name="VAB_LocTo_ID"></param>
         /// <param name="C_SRegion_ID"></param>
         /// <param name="VAB_Project_ID"></param>
         /// <param name="VAB_Promotion_ID"></param>
@@ -112,7 +112,7 @@ namespace VIS.Models
         /// <param name="Alias"></param>
         /// <returns></returns>
         public AccountingObjects SaveAccount(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID, int VAB_AccountBook_ID, int VAF_Account_ID, int VAB_SubAcct_ID, int VAM_Product_ID,
-            int VAB_BusinessPartner_ID, int VAF_OrgTrx_ID, int C_LocFrom_ID, int C_LocTo_ID, int C_SRegion_ID, int VAB_Project_ID, int VAB_Promotion_ID,
+            int VAB_BusinessPartner_ID, int VAF_OrgTrx_ID, int VAB_LocFrom_ID, int VAB_LocTo_ID, int C_SRegion_ID, int VAB_Project_ID, int VAB_Promotion_ID,
             int VAB_BillingCode_ID, int User1_ID, int User2_ID, int UserElement1_ID, int UserElement2_ID, int UserElement3_ID, int UserElement4_ID,
             int UserElement5_ID, int UserElement6_ID, int UserElement7_ID, int UserElement8_ID, int UserElement9_ID, string Alias)
         {
@@ -122,13 +122,13 @@ namespace VIS.Models
             if (Util.GetValueOfInt(DBase.DB.ExecuteScalar(qry, null, null)) > 0)
             {
                 acct = MVABAccount.Get(ctx, VAF_Client_ID, VAF_Org_ID, VAB_AccountBook_ID, VAF_Account_ID, VAB_SubAcct_ID, VAM_Product_ID, VAB_BusinessPartner_ID, VAF_OrgTrx_ID,
-                   C_LocFrom_ID, C_LocTo_ID, C_SRegion_ID, VAB_Project_ID, VAB_Promotion_ID, VAB_BillingCode_ID, User1_ID, User2_ID, UserElement1_ID, UserElement2_ID,
+                   VAB_LocFrom_ID, VAB_LocTo_ID, C_SRegion_ID, VAB_Project_ID, VAB_Promotion_ID, VAB_BillingCode_ID, User1_ID, User2_ID, UserElement1_ID, UserElement2_ID,
                    UserElement3_ID, UserElement4_ID, UserElement5_ID, UserElement6_ID, UserElement7_ID, UserElement8_ID, UserElement9_ID);
             }
             else
             {
                 acct = MVABAccount.Get(ctx, VAF_Client_ID, VAF_Org_ID, VAB_AccountBook_ID, VAF_Account_ID, VAB_SubAcct_ID, VAM_Product_ID, VAB_BusinessPartner_ID, VAF_OrgTrx_ID,
-                    C_LocFrom_ID, C_LocTo_ID, C_SRegion_ID, VAB_Project_ID, VAB_Promotion_ID, VAB_BillingCode_ID, User1_ID, User2_ID, UserElement1_ID, UserElement2_ID);
+                    VAB_LocFrom_ID, VAB_LocTo_ID, C_SRegion_ID, VAB_Project_ID, VAB_Promotion_ID, VAB_BillingCode_ID, User1_ID, User2_ID, UserElement1_ID, UserElement2_ID);
             }
 
             if (acct != null && acct.Get_ID() == 0)
@@ -200,8 +200,8 @@ namespace VIS.Models
                     //obj.VAM_Product_ID = Convert.ToInt32(dr["VAM_Product_ID"]);
                     //obj.VAB_BusinessPartner_ID = Convert.ToInt32(dr["VAB_BusinessPartner_ID"]);
                     //obj.VAB_Promotion_ID = Convert.ToInt32(dr["VAB_Promotion_ID"]);
-                    //obj.C_LocFrom_ID = Convert.ToInt32(dr["C_LocFrom_ID"]);
-                    //obj.C_LocTo_ID = Convert.ToInt32(dr["C_LocTo_ID"]);
+                    //obj.VAB_LocFrom_ID = Convert.ToInt32(dr["VAB_LocFrom_ID"]);
+                    //obj.VAB_LocTo_ID = Convert.ToInt32(dr["VAB_LocTo_ID"]);
                     //obj.VAB_Project_ID = Convert.ToInt32(dr["VAB_Project_ID"]);
                     //obj.VAB_SalesRegionState_ID = Convert.ToInt32(dr["VAB_SalesRegionState_ID"]);
                     //obj.VAF_OrgTrx_ID = Convert.ToInt32(dr["VAF_OrgTrx_ID"]);

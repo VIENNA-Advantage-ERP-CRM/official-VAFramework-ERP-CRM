@@ -1091,13 +1091,13 @@
                 var treeName = "VAF_TreeInfo_ID";
                 if (keyColumnName.startsWith("CM")) {
                     if (keyColumnName.equals("VACM_Container_ID"))
-                        treeName = "VAF_TreeInfoCMC_ID";
+                        treeName = "VAF_TreeCMC_ID";
                     else if (keyColumnName.equals("CM_CStage_ID"))
-                        treeName = "VAF_TreeInfoCMS_ID";
+                        treeName = "VAF_TreeCMS_ID";
                     else if (keyColumnName.equals("VACM_Layout_ID"))
-                        treeName = "VAF_TreeInfoCMT_ID";
+                        treeName = "VAF_TreeCMT_ID";
                     else if (keyColumnName.equals("CM_Media_ID"))
-                        treeName = "VAF_TreeInfoCMM_ID";
+                        treeName = "VAF_TreeCMM_ID";
                 }
                 VAF_TreeInfo_ID = VIS.Env.getCtx().getWindowContextAsInt(this.windowNo, treeName);
                 //log.config(keyColumnName + " -> " + treeName + " = " + VAF_TreeInfo_ID);

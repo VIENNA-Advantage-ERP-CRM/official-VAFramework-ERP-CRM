@@ -29,7 +29,7 @@ SetIsThisLevel (null);	// Y
 SetLastCostPrice (0.0);	// 0
 SetVAM_PFeature_SetInstance_ID (0);
 SetVAM_ProductCostElement_ID (0);
-SetVAM_ProductCostType_ID (0);
+SetVAM_CostType_ID (0);
 SetVAM_Product_ID (0);
 }
  */
@@ -47,7 +47,7 @@ SetIsThisLevel (null);	// Y
 SetLastCostPrice (0.0);	// 0
 SetVAM_PFeature_SetInstance_ID (0);
 SetVAM_ProductCostElement_ID (0);
-SetVAM_ProductCostType_ID (0);
+SetVAM_CostType_ID (0);
 SetVAM_Product_ID (0);
 }
  */
@@ -487,17 +487,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Cost Type.
-@param VAM_ProductCostType_ID Type of Cost (e.g. Current, Plan, Future) */
-public void SetVAM_ProductCostType_ID (int VAM_ProductCostType_ID)
+@param VAM_CostType_ID Type of Cost (e.g. Current, Plan, Future) */
+public void SetVAM_CostType_ID (int VAM_CostType_ID)
 {
-if (VAM_ProductCostType_ID < 1) throw new ArgumentException ("VAM_ProductCostType_ID is mandatory.");
-Set_ValueNoCheck ("VAM_ProductCostType_ID", VAM_ProductCostType_ID);
+if (VAM_CostType_ID < 1) throw new ArgumentException ("VAM_CostType_ID is mandatory.");
+Set_ValueNoCheck ("VAM_CostType_ID", VAM_CostType_ID);
 }
 /** Get Cost Type.
 @return Type of Cost (e.g. Current, Plan, Future) */
-public int GetVAM_ProductCostType_ID() 
+public int GetVAM_CostType_ID() 
 {
-Object ii = Get_Value("VAM_ProductCostType_ID");
+Object ii = Get_Value("VAM_CostType_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

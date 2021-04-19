@@ -41,7 +41,7 @@ namespace VAdvantage.WF
         {
             if (VAF_WFlow_NextNode_ID == 0)
             {
-                //	setAD_WF_Next_ID (0);
+                //	setVAF_WF_Next_ID (0);
                 //	setVAF_WFlow_Node_ID (0);
                 SetRecordType(RecordType_UserMaintained);	// U
                 SetIsStdUserWorkflow(false);
@@ -65,13 +65,13 @@ namespace VAdvantage.WF
         /// Parent Constructor
         /// </summary>
         /// <param name="parent">parent</param>
-        /// <param name="AD_WF_Next_ID">next id</param>
-        public MVAFWFlowNextNode(MVAFWFlowNode parent, int AD_WF_Next_ID)
+        /// <param name="VAF_WF_Next_ID">next id</param>
+        public MVAFWFlowNextNode(MVAFWFlowNode parent, int VAF_WF_Next_ID)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
             SetVAF_WFlow_Node_ID(parent.GetVAF_WFlow_Node_ID());
-            SetAD_WF_Next_ID(AD_WF_Next_ID);
+            SetVAF_WF_Next_ID(VAF_WF_Next_ID);
         }
 
         /// <summary>
@@ -210,9 +210,9 @@ namespace VAdvantage.WF
         /// <returns>Returns the to Join And.</returns>
         public bool IsToJoinAnd()
         {
-            if (_toJoinAnd == null && GetAD_WF_Next_ID() != 0)
+            if (_toJoinAnd == null && GetVAF_WF_Next_ID() != 0)
             {
-                MVAFWFlowNode next = MVAFWFlowNode.Get(GetCtx(), GetAD_WF_Next_ID());
+                MVAFWFlowNode next = MVAFWFlowNode.Get(GetCtx(), GetVAF_WF_Next_ID());
                 SetToJoinAnd(MVAFWFlowNode.JOINELEMENT_AND.Equals(next.GetJoinElement()));
             }
             if (_toJoinAnd != null)
@@ -237,7 +237,7 @@ namespace VAdvantage.WF
         {
             StringBuilder sb = new StringBuilder("MWFNodeNext[");
             sb.Append(GetSeqNo())
-                .Append(":Node=").Append(GetVAF_WFlow_Node_ID()).Append("->Next=").Append(GetAD_WF_Next_ID());
+                .Append(":Node=").Append(GetVAF_WFlow_Node_ID()).Append("->Next=").Append(GetVAF_WF_Next_ID());
             if (_conditions != null)
                 sb.Append(",#").Append(_conditions.Length);
             if (GetDescription() != null && GetDescription().Length > 0)

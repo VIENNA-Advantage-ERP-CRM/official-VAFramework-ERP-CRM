@@ -95,9 +95,9 @@ namespace VAdvantage.Model
             else if (elementType.Equals(ELEMENTTYPE_Activity))
                 return "VAB_BillingCode_ID";
             else if (elementType.Equals(ELEMENTTYPE_LocationFrom))
-                return "C_LocFrom_ID";
+                return "VAB_LocFrom_ID";
             else if (elementType.Equals(ELEMENTTYPE_LocationTo))
-                return "C_LocTo_ID";
+                return "VAB_LocTo_ID";
             else if (elementType.Equals(ELEMENTTYPE_Campaign))
                 return "VAB_Promotion_ID";
             else if (elementType.Equals(ELEMENTTYPE_OrgTrx))

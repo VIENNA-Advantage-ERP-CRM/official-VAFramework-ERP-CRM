@@ -275,12 +275,12 @@ namespace VAdvantage.Model
             }
             else if (costingMethod == "C") // costing method on cost combination - Element line
             {
-                string sql = @"SELECT  cel.M_Ref_CostElement
-                                    FROM VAM_ProductCostElement ce INNER JOIN VAM_ProductCostElementLine cel ON ce.VAM_ProductCostElement_ID  = cel.VAM_ProductCostElement_ID
+                string sql = @"SELECT  cel.VAM_Ref_CostElement
+                                    FROM VAM_ProductCostElement ce INNER JOIN VAM_CostElementLine cel ON ce.VAM_ProductCostElement_ID  = cel.VAM_ProductCostElement_ID
                                     WHERE ce.VAF_Client_ID   =" + product.GetVAF_Client_ID() + @" 
                                     AND ce.IsActive         ='Y' AND ce.CostElementType  ='C'
                                     AND cel.IsActive        ='Y' AND ce.VAM_ProductCostElement_ID = " + costElementId + @"
-                                    AND  CAST(cel.M_Ref_CostElement AS INTEGER) IN (SELECT VAM_ProductCostElement_ID FROM VAM_ProductCostElement WHERE costingmethod IS NOT NULL  )
+                                    AND  CAST(cel.VAM_Ref_CostElement AS INTEGER) IN (SELECT VAM_ProductCostElement_ID FROM VAM_ProductCostElement WHERE costingmethod IS NOT NULL  )
                                     ORDER BY ce.VAM_ProductCostElement_ID";
                 costElementId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
             }
@@ -512,19 +512,19 @@ namespace VAdvantage.Model
                     {
                         // case handleed here as    MR Completed with 100 price,  Then Inv with MR completed with 9120 price , then run process 
                         // check record exist on cost element detail only for MR then consider that amount else check with invoiceline ref
-                        if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM VAM_ProductCostElementDetail WHERE IsActive = 'Y' AND VAM_Product_ID = " + product.GetVAM_Product_ID() +
+                        if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM VAM_CostElementDetail WHERE IsActive = 'Y' AND VAM_Product_ID = " + product.GetVAM_Product_ID() +
                                      " AND VAB_AccountBook_ID = " + mas.GetVAB_AccountBook_ID() + " AND VAM_ProductCostElement_ID = " + ce.GetVAM_ProductCostElement_ID() +
                                      " AND NVL(VAM_PFeature_SetInstance_ID, 0) = " + M_ASI_ID + " AND VAM_Inv_InOutLine_ID =  " + cd.GetVAM_Inv_InOutLine_ID() +
                                      " AND NVL(VAB_OrderLIne_ID , 0) = 0 AND NVL(VAB_InvoiceLine_ID , 0) = 0", null, Get_Trx())) > 0)
                         {
-                            sql = @"SELECT Amt/Qty FROM VAM_ProductCostElementDetail WHERE IsActive = 'Y' AND VAM_Product_ID = " + product.GetVAM_Product_ID() +
+                            sql = @"SELECT Amt/Qty FROM VAM_CostElementDetail WHERE IsActive = 'Y' AND VAM_Product_ID = " + product.GetVAM_Product_ID() +
                                          " AND VAB_AccountBook_ID = " + mas.GetVAB_AccountBook_ID() + " AND VAM_ProductCostElement_ID = " + ce.GetVAM_ProductCostElement_ID() +
                                          " AND NVL(VAM_PFeature_SetInstance_ID, 0) = " + M_ASI_ID + " AND VAM_Inv_InOutLine_ID =  " + cd.GetVAM_Inv_InOutLine_ID() +
                                          " AND NVL(VAB_OrderLIne_ID , 0) = 0 AND NVL(VAB_InvoiceLine_ID , 0) = 0";
                         }
                         else
                         {
-                            sql = @"SELECT Amt/Qty FROM VAM_ProductCostElementDetail WHERE IsActive = 'Y' AND VAM_Product_ID = " + product.GetVAM_Product_ID() +
+                            sql = @"SELECT Amt/Qty FROM VAM_CostElementDetail WHERE IsActive = 'Y' AND VAM_Product_ID = " + product.GetVAM_Product_ID() +
                                              " AND VAB_AccountBook_ID = " + mas.GetVAB_AccountBook_ID() + " AND VAM_ProductCostElement_ID = " + ce.GetVAM_ProductCostElement_ID() +
                                              " AND NVL(VAM_PFeature_SetInstance_ID, 0) = " + M_ASI_ID + " AND VAM_Inv_InOutLine_ID =  " + cd.GetVAM_Inv_InOutLine_ID() +
                                              " AND NVL(VAB_OrderLIne_ID , 0) = 0 AND NVL(VAB_InvoiceLine_ID , 0) = " + cd.GetVAB_InvoiceLine_ID();
@@ -533,13 +533,13 @@ namespace VAdvantage.Model
 
                         if (MRPrice == 0)
                         {
-                            if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM VAM_ProductCostElementDetail WHERE IsActive = 'Y' AND VAM_Product_ID = " + product.GetVAM_Product_ID() +
+                            if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM VAM_CostElementDetail WHERE IsActive = 'Y' AND VAM_Product_ID = " + product.GetVAM_Product_ID() +
                                          " AND VAB_AccountBook_ID = " + mas.GetVAB_AccountBook_ID() + " AND VAM_ProductCostElement_ID = " +
                                          " ( SELECT MIN(VAM_ProductCostElement_ID) FROM VAM_ProductCostElement WHERE IsActive = 'Y' AND CostingMethod = 'I' AND VAF_Client_ID = " + ce.GetVAF_Client_ID() + ")" +
                                          " AND NVL(VAM_PFeature_SetInstance_ID, 0) = " + M_ASI_ID + " AND VAM_Inv_InOutLine_ID =  " + cd.GetVAM_Inv_InOutLine_ID() +
                                          " AND NVL(VAB_OrderLIne_ID , 0) = 0 AND NVL(VAB_InvoiceLine_ID , 0) = 0", null, Get_Trx())) > 0)
                             {
-                                sql = @"SELECT Amt/Qty FROM VAM_ProductCostElementDetail WHERE IsActive = 'Y' AND VAM_Product_ID = " + product.GetVAM_Product_ID() +
+                                sql = @"SELECT Amt/Qty FROM VAM_CostElementDetail WHERE IsActive = 'Y' AND VAM_Product_ID = " + product.GetVAM_Product_ID() +
                                              " AND VAB_AccountBook_ID = " + mas.GetVAB_AccountBook_ID() + " AND VAM_ProductCostElement_ID = " +
                                              " ( SELECT MIN(VAM_ProductCostElement_ID) FROM VAM_ProductCostElement WHERE IsActive = 'Y' AND CostingMethod = 'I' AND VAF_Client_ID = " + ce.GetVAF_Client_ID() + ")" +
                                              " AND NVL(VAM_PFeature_SetInstance_ID, 0) = " + M_ASI_ID + " AND VAM_Inv_InOutLine_ID =  " + cd.GetVAM_Inv_InOutLine_ID() +
@@ -547,7 +547,7 @@ namespace VAdvantage.Model
                             }
                             else
                             {
-                                sql = @"SELECT Amt/Qty FROM VAM_ProductCostElementDetail WHERE IsActive = 'Y' AND VAM_Product_ID = " + product.GetVAM_Product_ID() +
+                                sql = @"SELECT Amt/Qty FROM VAM_CostElementDetail WHERE IsActive = 'Y' AND VAM_Product_ID = " + product.GetVAM_Product_ID() +
                                                  " AND VAB_AccountBook_ID = " + mas.GetVAB_AccountBook_ID() + " AND VAM_ProductCostElement_ID = " +
                                                  " ( SELECT MIN(VAM_ProductCostElement_ID) FROM VAM_ProductCostElement WHERE IsActive = 'Y' AND CostingMethod = 'I' AND VAF_Client_ID = " + ce.GetVAF_Client_ID() + ")" +
                                                  " AND NVL(VAM_PFeature_SetInstance_ID, 0) = " + M_ASI_ID + " AND VAM_Inv_InOutLine_ID =  " + cd.GetVAM_Inv_InOutLine_ID() +
@@ -632,14 +632,14 @@ namespace VAdvantage.Model
                             // if invoice found then set that invoice price else 0
                             string sql = @"select * from (
                                            SELECT ced.qty , ced.amt , ced.amt/ced.qty AS price , ced.VAB_AccountBook_id ,  ced.VAB_InvoiceLine_id , 
-                                           ced.VAM_ProductCostElementDetail_id,  ced.VAM_ProductCostElement_ID,  row_number() over(order by ced.VAM_ProductCostElementDetail_id desc nulls last) rnm
-                                           FROM VAM_ProductCostElementDetail ced inner join VAB_InvoiceLine il on il.VAB_InvoiceLine_id = ced.VAB_InvoiceLine_id
+                                           ced.VAM_CostElementDetail_id,  ced.VAM_ProductCostElement_ID,  row_number() over(order by ced.VAM_CostElementDetail_id desc nulls last) rnm
+                                           FROM VAM_CostElementDetail ced inner join VAB_InvoiceLine il on il.VAB_InvoiceLine_id = ced.VAB_InvoiceLine_id
                                            inner join VAB_Invoice i on i.VAB_Invoice_id = il.VAB_Invoice_id 
                                            WHERE ced.VAB_InvoiceLine_id > 0 AND ced.qty > 0 AND ced.VAM_ProductCostElement_ID in ( " + ce.GetVAM_ProductCostElement_ID() + @" ) 
                                            and i.docstatus in ('CO' , 'CL') AND ced.VAB_AccountBook_ID = " + GetVAB_AccountBook_ID() +
                                            @" AND ced.VAM_Product_ID = " + GetVAM_Product_ID() + @" AND ced.VAF_Org_ID = " + Org_ID +
                                            @" AND NVL(ced.VAM_PFeature_SetInstance_ID , 0) = " + M_ASI_ID + @"
-                                           ORDER BY ced.VAM_ProductCostElementDetail_id DESC ) where rnm <=1";
+                                           ORDER BY ced.VAM_CostElementDetail_id DESC ) where rnm <=1";
                             DataSet ds = DB.ExecuteDataset(sql, null, null);
                             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                             {
@@ -1067,14 +1067,14 @@ namespace VAdvantage.Model
                         {
                             string sql = @"select * from (
                                            SELECT ced.qty , ced.amt , ced.amt/ced.qty AS price , ced.VAB_AccountBook_id ,  ced.VAM_Inv_InOutLine_id , 
-                                           ced.VAM_ProductCostElementDetail_id,  ced.VAM_ProductCostElement_ID,  row_number() over(order by ced.VAM_ProductCostElementDetail_id desc nulls last) rnm
-                                           FROM VAM_ProductCostElementDetail ced inner join VAM_Inv_InOutLine il on il.VAM_Inv_InOutLine_id = ced.VAM_Inv_InOutLine_id
+                                           ced.VAM_CostElementDetail_id,  ced.VAM_ProductCostElement_ID,  row_number() over(order by ced.VAM_CostElementDetail_id desc nulls last) rnm
+                                           FROM VAM_CostElementDetail ced inner join VAM_Inv_InOutLine il on il.VAM_Inv_InOutLine_id = ced.VAM_Inv_InOutLine_id
                                            inner join VAM_Inv_InOut i on i.VAM_Inv_InOut_id = il.VAM_Inv_InOut_id 
                                            WHERE ced.VAM_Inv_InOutLine_id > 0 AND ced.VAB_Orderline_ID > 0 AND ced.qty > 0 AND ced.VAM_ProductCostElement_ID in ( " + ce.GetVAM_ProductCostElement_ID() + @" ) 
                                            and i.docstatus in ('CO' , 'CL') AND ced.VAB_AccountBook_ID = " + GetVAB_AccountBook_ID() +
                                            @" AND ced.VAM_Product_ID = " + GetVAM_Product_ID() + @" AND ced.VAF_Org_ID = " + Org_ID +
                                            @" AND NVL(ced.VAM_PFeature_SetInstance_ID , 0) = " + M_ASI_ID + @"
-                                           ORDER BY ced.VAM_ProductCostElementDetail_id DESC ) where rnm <=1";
+                                           ORDER BY ced.VAM_CostElementDetail_id DESC ) where rnm <=1";
                             DataSet ds = DB.ExecuteDataset(sql, null, null);
                             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                             {
@@ -1471,14 +1471,14 @@ namespace VAdvantage.Model
                                 {
                                     string sql = @"select * from (
                                            SELECT ced.qty , ced.amt , ced.amt/ced.qty AS price , ced.VAB_AccountBook_id ,  ced.VAB_InvoiceLine_id , 
-                                           ced.VAM_ProductCostElementDetail_id,  ced.VAM_ProductCostElement_ID,  row_number() over(order by ced.VAM_ProductCostElementDetail_id desc nulls last) rnm
-                                           FROM VAM_ProductCostElementDetail ced inner join VAB_InvoiceLine il on il.VAB_InvoiceLine_id = ced.VAB_InvoiceLine_id
+                                           ced.VAM_CostElementDetail_id,  ced.VAM_ProductCostElement_ID,  row_number() over(order by ced.VAM_CostElementDetail_id desc nulls last) rnm
+                                           FROM VAM_CostElementDetail ced inner join VAB_InvoiceLine il on il.VAB_InvoiceLine_id = ced.VAB_InvoiceLine_id
                                            inner join VAB_Invoice i on i.VAB_Invoice_id = il.VAB_Invoice_id 
                                            WHERE ced.VAB_InvoiceLine_id > 0 AND ced.VAM_Inv_InOutLine_ID > 0 AND ced.qty > 0 AND ced.VAM_ProductCostElement_ID in ( " + ce.GetVAM_ProductCostElement_ID() + @" ) 
                                            and i.docstatus in ('CO' , 'CL') AND ced.VAB_AccountBook_ID = " + GetVAB_AccountBook_ID() +
                                                    @" AND ced.VAM_Product_ID = " + GetVAM_Product_ID() + @" AND ced.VAF_Org_ID = " + Org_ID +
                                                    @" AND NVL(ced.VAM_PFeature_SetInstance_ID , 0) = " + M_ASI_ID + @"
-                                           ORDER BY ced.VAM_ProductCostElementDetail_id DESC ) where rnm <=1";
+                                           ORDER BY ced.VAM_CostElementDetail_id DESC ) where rnm <=1";
                                     DataSet ds = DB.ExecuteDataset(sql, null, null);
                                     if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                                     {
@@ -3836,9 +3836,9 @@ namespace VAdvantage.Model
             }
 
             // Get Cost element of Cost Combination type
-            sql = @"SELECT ce.VAM_ProductCostElement_ID ,  ce.Name ,  cel.lineno ,  cel.m_ref_costelement , 
-                      (SELECT CASE  WHEN costingmethod IS NOT NULL THEN 1  ELSE 0 END  FROM VAM_ProductCostElement WHERE VAM_ProductCostElement_id = CAST(cel.M_Ref_CostElement AS INTEGER) ) AS iscostMethod 
-                            FROM VAM_ProductCostElement ce INNER JOIN VAM_ProductCostElementLine cel ON ce.VAM_ProductCostElement_ID = cel.VAM_ProductCostElement_ID "
+            sql = @"SELECT ce.VAM_ProductCostElement_ID ,  ce.Name ,  cel.lineno ,  cel.VAM_Ref_CostElement , 
+                      (SELECT CASE  WHEN costingmethod IS NOT NULL THEN 1  ELSE 0 END  FROM VAM_ProductCostElement WHERE VAM_ProductCostElement_id = CAST(cel.VAM_Ref_CostElement AS INTEGER) ) AS iscostMethod 
+                            FROM VAM_ProductCostElement ce INNER JOIN VAM_CostElementLine cel ON ce.VAM_ProductCostElement_ID = cel.VAM_ProductCostElement_ID "
                           + "WHERE ce.VAF_Client_ID=" + GetVAF_Client_ID()
                           + " AND ce.IsActive='Y' AND ce.CostElementType='C' AND cel.IsActive='Y' ";
             if (optionalStrcc == "window" && costingMethod == "C")
@@ -3941,16 +3941,16 @@ namespace VAdvantage.Model
                         }
 
                         // created object of Cost elemnt for checking iscalculated = true/ false
-                        ce = MVAMProductCostElement.Get(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["m_ref_costelement"]));
+                        ce = MVAMProductCostElement.Get(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Ref_CostElement"]));
 
                         costCombination = MVAMVAMProductCost.Get(product, M_ASI_ID, acctSchema, VAF_Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_ProductCostElement_ID"]), VAM_Warehouse_ID);
-                        cost = MVAMVAMProductCost.Get(product, M_ASI_ID, acctSchema, VAF_Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["m_ref_costelement"]), VAM_Warehouse_ID);
+                        cost = MVAMVAMProductCost.Get(product, M_ASI_ID, acctSchema, VAF_Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Ref_CostElement"]), VAM_Warehouse_ID);
                         if (Util.GetValueOfInt(ds.Tables[0].Rows[i]["iscostMethod"]) == 1)
                         {
                             AccQty = cost.GetCurrentQty();
                         }
 
-                        // if m_ref_costelement is of Freight type then current cost against this record is :: 
+                        // if VAM_Ref_CostElement is of Freight type then current cost against this record is :: 
                         // Formula : (Freight Current Cost * Freight Current Qty) / Curent Qty (whose costing method is available)
                         if (isCurrentCostprice)
                         {
@@ -4111,7 +4111,7 @@ namespace VAdvantage.Model
                 if (Util.GetValueOfInt(dsCostElementLine.Tables[0].Rows[i]["iscostMethod"]) == 1)
                     continue;
 
-                int landedVAM_ProductCostElement_ID = Util.GetValueOfInt(dsCostElementLine.Tables[0].Rows[i]["m_ref_costelement"]);
+                int landedVAM_ProductCostElement_ID = Util.GetValueOfInt(dsCostElementLine.Tables[0].Rows[i]["VAM_Ref_CostElement"]);
 
                 // when we consume qty then we check, already consume qty agaisnt landed cost -- if consumend then not to take impacts
                 if (cd.GetQty() < 0)

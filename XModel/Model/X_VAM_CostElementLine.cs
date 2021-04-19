@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for VAM_ProductCostElementLine
+/** Generated Model for VAM_CostElementLine
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
 public class X_VAM_CostElementLine : PO
 {
-public X_VAM_CostElementLine (Context ctx, int VAM_ProductCostElementLine_ID, Trx trxName) : base (ctx, VAM_ProductCostElementLine_ID, trxName)
+public X_VAM_CostElementLine (Context ctx, int VAM_CostElementLine_ID, Trx trxName) : base (ctx, VAM_CostElementLine_ID, trxName)
 {
-/** if (VAM_ProductCostElementLine_ID == 0)
+/** if (VAM_CostElementLine_ID == 0)
 {
-SetVAM_ProductCostElementLine_ID (0);
+SetVAM_CostElementLine_ID (0);
 SetVAM_ProductCostElement_ID (0);
 }
  */
 }
-public X_VAM_CostElementLine(Ctx ctx, int VAM_ProductCostElementLine_ID, Trx trxName)
-    : base(ctx, VAM_ProductCostElementLine_ID, trxName)
+public X_VAM_CostElementLine(Ctx ctx, int VAM_CostElementLine_ID, Trx trxName)
+    : base(ctx, VAM_CostElementLine_ID, trxName)
 {
-/** if (VAM_ProductCostElementLine_ID == 0)
+/** if (VAM_CostElementLine_ID == 0)
 {
-SetVAM_ProductCostElementLine_ID (0);
+SetVAM_CostElementLine_ID (0);
 SetVAM_ProductCostElement_ID (0);
 }
  */
@@ -78,8 +78,8 @@ public static long updatedMS = 1460010660238L;
 public static int Table_ID;
  // =1000479;
 
-/** TableName=VAM_ProductCostElementLine */
-public static String Table_Name="VAM_ProductCostElementLine";
+/** TableName=VAM_CostElementLine */
+public static String Table_Name="VAM_CostElementLine";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -113,7 +113,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_VAM_ProductCostElementLine[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_CostElementLine[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Export.
@@ -147,18 +147,18 @@ Object ii = Get_Value("LineNo");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-/** Set VAM_ProductCostElementLine_ID.
-@param VAM_ProductCostElementLine_ID VAM_ProductCostElementLine_ID */
-public void SetVAM_ProductCostElementLine_ID (int VAM_ProductCostElementLine_ID)
+/** Set VAM_CostElementLine_ID.
+@param VAM_CostElementLine_ID VAM_CostElementLine_ID */
+public void SetVAM_CostElementLine_ID (int VAM_CostElementLine_ID)
 {
-if (VAM_ProductCostElementLine_ID < 1) throw new ArgumentException ("VAM_ProductCostElementLine_ID is mandatory.");
-Set_ValueNoCheck ("VAM_ProductCostElementLine_ID", VAM_ProductCostElementLine_ID);
+if (VAM_CostElementLine_ID < 1) throw new ArgumentException ("VAM_CostElementLine_ID is mandatory.");
+Set_ValueNoCheck ("VAM_CostElementLine_ID", VAM_CostElementLine_ID);
 }
-/** Get VAM_ProductCostElementLine_ID.
-@return VAM_ProductCostElementLine_ID */
-public int GetVAM_ProductCostElementLine_ID() 
+/** Get VAM_CostElementLine_ID.
+@return VAM_CostElementLine_ID */
+public int GetVAM_CostElementLine_ID() 
 {
-Object ii = Get_Value("VAM_ProductCostElementLine_ID");
+Object ii = Get_Value("VAM_CostElementLine_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -178,19 +178,19 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** M_Ref_CostElement VAF_Control_Ref_ID=1000170 */
-public static int M_REF_COSTELEMENT_VAF_Control_Ref_ID=1000170;
+/** VAM_Ref_CostElement VAF_Control_Ref_ID=1000170 */
+public static int VAM_Ref_CostElement_VAF_Control_Ref_ID=1000170;
 /** Set Cost Element.
-@param M_Ref_CostElement Cost Element */
-public void SetM_Ref_CostElement (int M_Ref_CostElement)
+@param VAM_Ref_CostElement Cost Element */
+public void SetVAM_Ref_CostElement (int VAM_Ref_CostElement)
 {
-Set_Value ("M_Ref_CostElement", M_Ref_CostElement);
+Set_Value ("VAM_Ref_CostElement", VAM_Ref_CostElement);
 }
 /** Get Cost Element.
 @return Cost Element */
-public int GetM_Ref_CostElement() 
+public int GetVAM_Ref_CostElement() 
 {
-Object ii = Get_Value("M_Ref_CostElement");
+Object ii = Get_Value("VAM_Ref_CostElement");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

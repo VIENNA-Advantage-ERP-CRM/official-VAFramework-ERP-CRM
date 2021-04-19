@@ -733,12 +733,12 @@ namespace VAdvantage.Login
                 return;
             }
             //	Do we look for trees?
-            if (role.GetVAF_TreeInfo_Org_ID() == 0)
+            if (role.GetVAF_Tree_Org_ID() == 0)
             {
                 return;
             }
             //	Summary Org - Get Dependents
-            MVAFTreeInfo tree = MVAFTreeInfo.Get(m_ctx, role.GetVAF_TreeInfo_Org_ID(), null);
+            MVAFTreeInfo tree = MVAFTreeInfo.Get(m_ctx, role.GetVAF_Tree_Org_ID(), null);
             String sql = "SELECT VAF_Client_ID, VAF_Org_ID, Name, IsSummary FROM VAF_Org "
                 + "WHERE IsActive='Y' AND VAF_Org_ID IN (SELECT Node_ID FROM "
                 + tree.GetNodeTableName()

@@ -22,7 +22,7 @@ public X_VAF_AllotTarget (Context ctx, int VAF_AllotTarget_ID, Trx trxName) : ba
 {
 SetVAF_AllotSet_ID (0);
 SetVAF_AllotTarget_ID (0);
-SetAD_TargetColumn_ID (0);
+SetVAF_TargetColumn_ID (0);
 SetAssignRule (null);	// A
 }
  */
@@ -33,7 +33,7 @@ public X_VAF_AllotTarget (Ctx ctx, int VAF_AllotTarget_ID, Trx trxName) : base (
 {
 SetVAF_AllotSet_ID (0);
 SetVAF_AllotTarget_ID (0);
-SetAD_TargetColumn_ID (0);
+SetVAF_TargetColumn_ID (0);
 SetAssignRule (null);	// A
 }
  */
@@ -147,20 +147,20 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** AD_TargetColumn_ID VAF_Control_Ref_ID=414 */
-public static int AD_TARGETCOLUMN_ID_VAF_Control_Ref_ID=414;
+/** VAF_TargetColumn_ID VAF_Control_Ref_ID=414 */
+public static int VAF_TargetColumn_ID_VAF_Control_Ref_ID=414;
 /** Set Target Column.
-@param AD_TargetColumn_ID Target column to be set */
-public void SetAD_TargetColumn_ID (int AD_TargetColumn_ID)
+@param VAF_TargetColumn_ID Target column to be set */
+public void SetVAF_TargetColumn_ID (int VAF_TargetColumn_ID)
 {
-if (AD_TargetColumn_ID < 1) throw new ArgumentException ("AD_TargetColumn_ID is mandatory.");
-Set_Value ("AD_TargetColumn_ID", AD_TargetColumn_ID);
+if (VAF_TargetColumn_ID < 1) throw new ArgumentException ("VAF_TargetColumn_ID is mandatory.");
+Set_Value ("VAF_TargetColumn_ID", VAF_TargetColumn_ID);
 }
 /** Get Target Column.
 @return Target column to be set */
-public int GetAD_TargetColumn_ID() 
+public int GetVAF_TargetColumn_ID() 
 {
-Object ii = Get_Value("AD_TargetColumn_ID");
+Object ii = Get_Value("VAF_TargetColumn_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -168,7 +168,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_TargetColumn_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_TargetColumn_ID().ToString());
 }
 
 /** AssignRule VAF_Control_Ref_ID=425 */

@@ -280,7 +280,7 @@ namespace VAdvantage.Report
                     + "(VAF_Client_ID, VAF_Org_ID, VAF_OrgTrx_ID, VAB_AccountBook_ID, DateAcct,"
                     + " Account_ID, PostingType, Actual_Accumulation_ID, VAM_Product_ID, VAB_BusinessPartner_ID,"
                     + "	VAB_Project_ID,	VAB_SalesRegionState_ID,VAB_BillingCode_ID,"
-                    + " VAB_Promotion_ID, C_LocTo_ID, C_LocFrom_ID, User1_ID, User2_ID, VAGL_Budget_ID,"
+                    + " VAB_Promotion_ID, VAB_LocTo_ID, VAB_LocFrom_ID, User1_ID, User2_ID, VAGL_Budget_ID,"
                     + " UserElement1_ID, UserElement2_ID, UserElement3_ID, UserElement4_ID, UserElement5_ID, UserElement6_ID,"
                     + " UserElement7_ID, UserElement8_ID,UserElement9_ID, "
                     + " AmtAcctDr, AmtAcctCr, Qty) ";
@@ -328,12 +328,12 @@ namespace VAdvantage.Report
                     select = select + " ,NULL ";
 
                 if (accum.IsLOCATIONTO())
-                    select = select + " ,C_LocTo_ID ";
+                    select = select + " ,VAB_LocTo_ID ";
                 else
                     select = select + " ,NULL ";
 
                 if (accum.IsLOCATIONFROM())
-                    select = select + " ,C_LocFrom_ID ";
+                    select = select + " ,VAB_LocFrom_ID ";
                 else
                     select = select + " ,NULL ";
 
@@ -444,9 +444,9 @@ namespace VAdvantage.Report
                 if (accum.IsCAMPAIGN())
                     groupBy = groupBy + " ,VAB_Promotion_ID ";
                 if (accum.IsLOCATIONTO())
-                    groupBy = groupBy + ", C_LocTo_ID ";
+                    groupBy = groupBy + ", VAB_LocTo_ID ";
                 if (accum.IsLOCATIONFROM())
-                    groupBy = groupBy + ", C_LocFrom_ID ";
+                    groupBy = groupBy + ", VAB_LocFrom_ID ";
                 if (accum.IsUSERLIST1())
                     groupBy = groupBy + ", User1_ID";
                 if (accum.IsUSERLIST2())

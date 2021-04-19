@@ -1364,7 +1364,7 @@ namespace VIS.Models
              bindornot = "true";            
             if (TableName == "VAF_MenuConfig")
             {
-                string rolCheck = @"SELECT count(*) FROM VAF_Role WHERE VAF_TreeInfo_menu_id=" + treeID;
+                string rolCheck = @"SELECT count(*) FROM VAF_Role WHERE VAF_Tree_Menu_ID=" + treeID;
                 int checkCount = Convert.ToInt32(DB.ExecuteScalar(rolCheck));
                 if (checkCount > 0)
                 {
@@ -1372,7 +1372,7 @@ namespace VIS.Models
                 }
                 else
                 {
-                    string tenantCheck = @"SELECT count(*) FROM VAF_ClientDetail WHERE VAF_TreeInfo_menu_id=" + treeID;
+                    string tenantCheck = @"SELECT count(*) FROM VAF_ClientDetail WHERE VAF_Tree_Menu_ID=" + treeID;
                     int checktenant = Convert.ToInt32(DB.ExecuteScalar(tenantCheck));
                     if (checktenant > 0)
                     {
@@ -1756,7 +1756,7 @@ namespace VIS.Models
             string menu_id = "";
             if (TableName == "VAF_MenuConfig")
             {
-                string rolCheck = @"SELECT count(*) FROM VAF_Role WHERE VAF_TreeInfo_menu_id=" + treeID;
+                string rolCheck = @"SELECT count(*) FROM VAF_Role WHERE VAF_Tree_Menu_ID=" + treeID;
                 int checkCount = Convert.ToInt32(DB.ExecuteScalar(rolCheck));
                 if (checkCount > 0)
                 {
@@ -1764,7 +1764,7 @@ namespace VIS.Models
                 }
                 else
                 {
-                    string tenantCheck = @"SELECT count(*) FROM VAF_ClientDetail WHERE VAF_TreeInfo_menu_id=" + treeID;
+                    string tenantCheck = @"SELECT count(*) FROM VAF_ClientDetail WHERE VAF_Tree_Menu_ID=" + treeID;
                     int checktenant = Convert.ToInt32(DB.ExecuteScalar(tenantCheck));
                     if (checktenant > 0)
                     {
@@ -1917,7 +1917,7 @@ namespace VIS.Models
 
             if (TableName == "VAF_MenuConfig")
             {
-                string rolCheck = @"SELECT count(*) FROM VAF_Role WHERE VAF_TreeInfo_menu_id=" + treeID;
+                string rolCheck = @"SELECT count(*) FROM VAF_Role WHERE VAF_Tree_Menu_ID=" + treeID;
                 int checkCount = Convert.ToInt32(DB.ExecuteScalar(rolCheck));
                 if (checkCount > 0)
                 {
@@ -1926,7 +1926,7 @@ namespace VIS.Models
                 }
                 else
                 {
-                    string tenantCheck = @"SELECT count(*) FROM VAF_ClientDetail WHERE VAF_TreeInfo_menu_id=" + treeID;
+                    string tenantCheck = @"SELECT count(*) FROM VAF_ClientDetail WHERE VAF_Tree_Menu_ID=" + treeID;
                     int checktenant = Convert.ToInt32(DB.ExecuteScalar(tenantCheck));
                     if (checktenant > 0)
                     {

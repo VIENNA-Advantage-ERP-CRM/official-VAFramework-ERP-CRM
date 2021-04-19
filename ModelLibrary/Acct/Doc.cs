@@ -75,9 +75,9 @@ namespace VAdvantage.Acct
         //Period ID					
         private int _VAB_YearPeriod_ID = 0;
         // Location From			
-        private int _C_LocFrom_ID = 0;
+        private int _VAB_LocFrom_ID = 0;
         // Location To				
-        private int _C_LocTo_ID = 0;
+        private int _VAB_LocTo_ID = 0;
         // Accounting Date			
         private DateTime? _DateAcct = null;
         // Document Date			
@@ -1550,7 +1550,7 @@ namespace VAdvantage.Acct
                     + " WHERE wcc.VAMFG_M_WorkCenter_ID = @param1 "
                     + " AND wcc.VAB_AccountBook_ID=@param2 "
                     + " AND wcc.VAM_ProductCostElement_ID = @param3 "
-                    + " AND wcc.VAM_ProductCostType_ID = @param4 ";
+                    + " AND wcc.VAM_CostType_ID = @param4 ";
                 para_1 = _workcenter_id;
             }
             /**************Manfacturing*******************///Jun,06,2011/
@@ -1587,7 +1587,7 @@ namespace VAdvantage.Acct
                         param[0] = new SqlParameter("@param1", para_1);
                         param[1] = new SqlParameter("@param2", as1.GetVAB_AccountBook_ID());
                         param[2] = new SqlParameter("@param3", _costelement_id);
-                        param[3] = new SqlParameter("@param4", as1.GetVAM_ProductCostType_ID());
+                        param[3] = new SqlParameter("@param4", as1.GetVAM_CostType_ID());
                     }
                     else
                     {
@@ -1898,7 +1898,7 @@ namespace VAdvantage.Acct
                     + " WHERE wcc.VAMFG_M_WorkCenter_ID = @param1 "
                     + " AND wcc.VAB_AccountBook_ID=@param2 "
                     + " AND wcc.VAM_ProductCostElement_ID = @param3 "
-                    + " AND wcc.VAM_ProductCostType_ID = @param4 ";
+                    + " AND wcc.VAM_CostType_ID = @param4 ";
                 para_1 = _workcenter_id;
             }
             /**************Manfacturing*******************///Jun,06,2011/
@@ -1935,7 +1935,7 @@ namespace VAdvantage.Acct
                         param[0] = new SqlParameter("@param1", para_1);
                         param[1] = new SqlParameter("@param2", as1.GetVAB_AccountBook_ID());
                         param[2] = new SqlParameter("@param3", _costelement_id);
-                        param[3] = new SqlParameter("@param4", as1.GetVAM_ProductCostType_ID());
+                        param[3] = new SqlParameter("@param4", as1.GetVAM_CostType_ID());
                     }
                     else
                     {
@@ -2765,39 +2765,39 @@ namespace VAdvantage.Acct
         }
 
         /// <summary>
-        /// Get C_LocFrom_ID
+        /// Get VAB_LocFrom_ID
         /// </summary>
         /// <returns>loc from</returns>
-        public int GetC_LocFrom_ID()
+        public int GetVAB_LocFrom_ID()
         {
-            return _C_LocFrom_ID;
+            return _VAB_LocFrom_ID;
         }
 
         /// <summary>
-        /// Set C_LocFrom_ID
+        /// Set VAB_LocFrom_ID
         /// </summary>
-        /// <param name="C_LocFrom_ID">loc from</param>
-        protected void SetC_LocFrom_ID(int C_LocFrom_ID)
+        /// <param name="VAB_LocFrom_ID">loc from</param>
+        protected void SetVAB_LocFrom_ID(int VAB_LocFrom_ID)
         {
-            _C_LocFrom_ID = C_LocFrom_ID;
+            _VAB_LocFrom_ID = VAB_LocFrom_ID;
         }
 
         /// <summary>
-        /// Get C_LocTo_ID
+        /// Get VAB_LocTo_ID
         /// </summary>
         /// <returns>loc to</returns>
-        public int GetC_LocTo_ID()
+        public int GetVAB_LocTo_ID()
         {
-            return _C_LocTo_ID;
+            return _VAB_LocTo_ID;
         }
 
         /// <summary>
-        /// Set C_LocTo_ID
+        /// Set VAB_LocTo_ID
         /// </summary>
-        /// <param name="C_LocTo_ID">loc to</param>
-        protected void SetC_LocTo_ID(int C_LocTo_ID)
+        /// <param name="VAB_LocTo_ID">loc to</param>
+        protected void SetVAB_LocTo_ID(int VAB_LocTo_ID)
         {
-            _C_LocTo_ID = C_LocTo_ID;
+            _VAB_LocTo_ID = VAB_LocTo_ID;
         }
 
         /// <summary>

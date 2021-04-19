@@ -41,8 +41,8 @@ namespace VIS.Models
             List<PContainer> listOverHead = new List<PContainer>();
             string sqlQry = @"SELECT VAM_ProductContainer_ID,
                                      Name, 
-                                     Ref_M_Container_ID ,
-                                     (SELECT NAME FROM VAM_ProductContainer ipc WHERE ipc.VAM_ProductContainer_ID=opc.Ref_M_Container_ID) AS ParentPath ,
+                                     Ref_VAM_Container_ID ,
+                                     (SELECT NAME FROM VAM_ProductContainer ipc WHERE ipc.VAM_ProductContainer_ID=opc.Ref_VAM_Container_ID) AS ParentPath ,
                                      Width, 
                                      Height 
                               FROM VAM_ProductContainer opc WHERE IsActive='Y' AND VAM_Warehouse_ID=" + WarehouseId +
@@ -62,7 +62,7 @@ namespace VIS.Models
                     objContainer.Width = Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["Width"]);
                     objContainer.Height = Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["Height"]);
                     objContainer.VAM_ProductContainer_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_ProductContainer_ID"]);
-                    objContainer.Ref_M_Container_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["Ref_M_Container_ID"]);
+                    objContainer.Ref_VAM_Container_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["Ref_VAM_Container_ID"]);
                     listOverHead.Add(objContainer);
                 }
             }
@@ -217,7 +217,7 @@ namespace VIS.Models
                 {
                     sql += " AND " + validation;
                 }
-                sql += "  START WITH NVL(ref_m_container_id,0) =0  CONNECT BY NVL(ref_m_container_id,0) = PRIOR VAM_ProductContainer_id";
+                sql += "  START WITH NVL(Ref_VAM_Container_ID,0) =0  CONNECT BY NVL(Ref_VAM_Container_ID,0) = PRIOR VAM_ProductContainer_id";
                 sql = MVAFRole.GetDefault(_ctx).AddAccessSQL(sql, "VAM_ProductContainer", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO); // fully qualidfied - RO
                 ds = DB.ExecuteDataset(sql);
             }
@@ -257,7 +257,7 @@ namespace VIS.Models
         {
             DataSet finalContainer = null;
             // Get List of parent Container
-            String sql = "SELECT VAM_ProductContainer_ID FROM VAM_ProductContainer WHERE Ref_M_Container_ID IS NULL AND IsActive = 'Y' ";
+            String sql = "SELECT VAM_ProductContainer_ID FROM VAM_ProductContainer WHERE Ref_VAM_Container_ID IS NULL AND IsActive = 'Y' ";
             if (warehouse > 0)
             {
                 sql += "  AND VAM_Warehouse_id = " + warehouse;
@@ -287,8 +287,8 @@ namespace VIS.Models
                                    t.LEVEL + 1 AS LEVEL, 
                                    (select tt.name   || '_'   || tt.value from VAM_ProductContainer tt where tt.VAM_ProductContainer_ID = t.VAM_ProductContainer_ID) as ContainerName
                                   , t.VAM_ProductContainer_ID
-                            FROM connectby('VAM_ProductContainer', 'VAM_ProductContainer_ID', 'Ref_M_Container_ID', " + parentId + @"::text,0)
-                            AS t(VAM_ProductContainer_ID int , Ref_M_Container_ID int, level int)  
+                            FROM connectby('VAM_ProductContainer', 'VAM_ProductContainer_ID', 'Ref_VAM_Container_ID', " + parentId + @"::text,0)
+                            AS t(VAM_ProductContainer_ID int , Ref_VAM_Container_ID int, level int)  
                              JOIN VAM_ProductContainer pt on pt.VAM_ProductContainer_ID =" + parentId;
                     childContainer = DB.ExecuteDataset(sql, null, null);
                     if (childContainer != null && childContainer.Tables.Count > 0 && childContainer.Tables[0].Rows.Count > 0)
@@ -562,11 +562,11 @@ namespace VIS.Models
                 sql = @"WITH RECURSIVE pops (VAM_ProductContainer_id, level, name_path) AS (
                         SELECT  VAM_ProductContainer_id, 0,  ARRAY[VAM_ProductContainer_id]
                         FROM    VAM_ProductContainer
-                        WHERE   Ref_M_Container_ID is null
+                        WHERE   Ref_VAM_Container_ID is null
                         UNION ALL
                         SELECT  p.VAM_ProductContainer_id, t0.level + 1, ARRAY_APPEND(t0.name_path, p.VAM_ProductContainer_id)
                         FROM    VAM_ProductContainer p
-                                INNER JOIN pops t0 ON t0.VAM_ProductContainer_id = p.Ref_M_Container_ID
+                                INNER JOIN pops t0 ON t0.VAM_ProductContainer_id = p.Ref_VAM_Container_ID
                     )
                     SELECT   ARRAY_TO_STRING(name_path, '->')
                     FROM    pops  where VAM_ProductContainer_id = " + fromContainerId;
@@ -576,7 +576,7 @@ namespace VIS.Models
                 sql = @"SELECT sys_connect_by_path(VAM_ProductContainer_id,'->') tree
                             FROM VAM_ProductContainer 
                            WHERE VAM_ProductContainer_id = " + fromContainerId + @"
-                            START WITH ref_m_container_id IS NULL CONNECT BY prior VAM_ProductContainer_id = ref_m_container_id
+                            START WITH Ref_VAM_Container_ID IS NULL CONNECT BY prior VAM_ProductContainer_id = Ref_VAM_Container_ID
                            ORDER BY tree ";
             }
             pathContainer = Util.GetValueOfString(DB.ExecuteScalar(sql, null, trx));
@@ -589,11 +589,11 @@ namespace VIS.Models
                     sql = @"WITH RECURSIVE pops (VAM_ProductContainer_id, level, name_path) AS (
                                 SELECT  VAM_ProductContainer_id, 0,  ARRAY[VAM_ProductContainer_id]
                                 FROM    VAM_ProductContainer
-                                WHERE   Ref_M_Container_ID is null
+                                WHERE   Ref_VAM_Container_ID is null
                                 UNION ALL
                                 SELECT  p.VAM_ProductContainer_id, t0.level + 1, ARRAY_APPEND(t0.name_path, p.VAM_ProductContainer_id)
                                 FROM    VAM_ProductContainer p
-                                        INNER JOIN pops t0 ON t0.VAM_ProductContainer_id = p.Ref_M_Container_ID )
+                                        INNER JOIN pops t0 ON t0.VAM_ProductContainer_id = p.Ref_VAM_Container_ID )
                             SELECT  VAM_ProductContainer_id, level,  ARRAY_TO_STRING(name_path, '->')
                             FROM    pops  where ARRAY_TO_STRING(name_path, '->') like '" + pathContainer + "%'";
                 }
@@ -602,8 +602,8 @@ namespace VIS.Models
                     sql = @"SELECT tree, VAM_ProductContainer_id FROM
                             (SELECT sys_connect_by_path(VAM_ProductContainer_id,'->') tree , VAM_ProductContainer_id
                              FROM VAM_ProductContainer
-                             START WITH ref_m_container_id IS NULL
-                             CONNECT BY prior VAM_ProductContainer_id = ref_m_container_id
+                             START WITH Ref_VAM_Container_ID IS NULL
+                             CONNECT BY prior VAM_ProductContainer_id = Ref_VAM_Container_ID
                              ORDER BY tree  
                              )
                            WHERE tree LIKE ('" + pathContainer + "%') ";
@@ -774,11 +774,11 @@ namespace VIS.Models
                 String sql = @"WITH RECURSIVE pops (VAM_ProductContainer_id, level, name_path) AS (
                         SELECT  VAM_ProductContainer_id, 0,  ARRAY[VAM_ProductContainer_id]
                         FROM    VAM_ProductContainer
-                        WHERE   Ref_M_Container_ID is null
+                        WHERE   Ref_VAM_Container_ID is null
                         UNION ALL
                         SELECT  p.VAM_ProductContainer_id, t0.level + 1, ARRAY_APPEND(t0.name_path, p.VAM_ProductContainer_id)
                         FROM    VAM_ProductContainer p
-                                INNER JOIN pops t0 ON t0.VAM_ProductContainer_id = p.Ref_M_Container_ID
+                                INNER JOIN pops t0 ON t0.VAM_ProductContainer_id = p.Ref_VAM_Container_ID
                     )
                         SELECT    ARRAY_TO_STRING(name_path, '->')
                         FROM    pops  where VAM_ProductContainer_id = " + toContainerId;
@@ -789,7 +789,7 @@ namespace VIS.Models
                 pathUptoToContainer = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT sys_connect_by_path(VAM_ProductContainer_id,'->') tree
                             FROM VAM_ProductContainer 
                            WHERE VAM_ProductContainer_id = " + toContainerId + @"
-                            START WITH ref_m_container_id IS NULL CONNECT BY prior VAM_ProductContainer_id = ref_m_container_id
+                            START WITH Ref_VAM_Container_ID IS NULL CONNECT BY prior VAM_ProductContainer_id = Ref_VAM_Container_ID
                            ORDER BY tree ", null, trx));
             }
             DataSet dsTragetContainer = DB.ExecuteDataset(@"SELECT DISTINCT targetcontainer_id FROM VAM_InvTrf_Line 
@@ -910,7 +910,7 @@ namespace VIS.Models
             container.SetVAM_Locator_ID(locatorId);
             container.SetHeight(height);
             container.SetWidth(width);
-            container.SetRef_M_Container_ID(parentContainerId);
+            container.SetRef_VAM_Container_ID(parentContainerId);
             if (!container.Save())
             {
                 ValueNamePair pp = VLogger.RetrieveError();
@@ -940,7 +940,7 @@ namespace VIS.Models
     public class PContainer
     {
         public int VAM_ProductContainer_ID { get; set; }
-        public int Ref_M_Container_ID { get; set; }
+        public int Ref_VAM_Container_ID { get; set; }
         public string ContainerName { get; set; }
         public string ParentPath { get; set; }
         public Decimal Width { get; set; }

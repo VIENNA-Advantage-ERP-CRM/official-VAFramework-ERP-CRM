@@ -1230,7 +1230,7 @@ namespace VAdvantage.Model
 
                 if (IsIdentifier_X() || IsString_X())
                 {
-                    MVAFColumn dateCol = MVAFColumn.Get(GetCtx(), GetAD_DateColumn_ID());
+                    MVAFColumn dateCol = MVAFColumn.Get(GetCtx(), GetVAF_DateColumn_ID());
                     sb.Append(dateCol.GetFKColumnName()).Append(" BETWEEN ");
                 }
                 else

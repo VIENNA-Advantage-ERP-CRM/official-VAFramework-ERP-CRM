@@ -108,7 +108,7 @@ namespace VAdvantage.Model
                             "pfi.ENABLE3D , " +
                             "pfi.ISACTIVE, " +
                             "pfi.NAME, " +
-                            "pfi.AD_CHART_BG_COLOR_ID, " +
+                            "pfi.VAF_Chart_BG_Color_ID, " +
                             "pfi.ISSHOWLEGEND, " +
                             "pfi.ISSHOWZEROSERIES, " +
                             "pfi.SEQNO, " +

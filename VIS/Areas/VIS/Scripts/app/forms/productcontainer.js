@@ -231,12 +231,12 @@
             grdCols.push({ field: "Height", caption: VIS.Msg.getMsg("Height"), size: "15%" });
             grdCols.push({ field: "ParentPath", caption: VIS.Msg.getMsg("ParentPath"), size: "22%" });
             grdCols.push({ field: "VAM_ProductContainer_ID", caption: VIS.Msg.getMsg("VAM_ProductContainer_ID"), hidden: true });
-            grdCols.push({ field: "Ref_M_Container_ID", caption: VIS.Msg.getMsg("Ref_M_Container_ID"), hidden: true });
+            grdCols.push({ field: "Ref_VAM_Container_ID", caption: VIS.Msg.getMsg("Ref_VAM_Container_ID"), hidden: true });
 
             for (var j = 0; j < data.length; j++) {
                 var row = {};
                 row['VAM_ProductContainer_ID'] = data[j].VAM_ProductContainer_ID;
-                row['Ref_M_Container_ID'] = data[j].Ref_M_Container_ID;
+                row['Ref_VAM_Container_ID'] = data[j].Ref_VAM_Container_ID;
                 row['ContainerName'] = data[j].ContainerName;
                 row['ParentPath'] = data[j].ParentPath;
                 row['Width'] = data[j].Width;

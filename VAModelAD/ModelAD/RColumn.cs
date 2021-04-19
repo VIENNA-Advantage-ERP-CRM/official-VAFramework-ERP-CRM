@@ -179,7 +179,7 @@ namespace VAdvantage.Model
                         language, refColumnName, RModel.TABLE_ALIAS, columnName) + ")";
                     _isIDcol = true;
                 }
-                else if (columnName.Equals("C_LocFrom_ID") || columnName.Equals("C_LocTo_ID"))
+                else if (columnName.Equals("VAB_LocFrom_ID") || columnName.Equals("VAB_LocTo_ID"))
                 {
                     _colSQL += ",(" + VLookUpFactory.GetLookup_TableDirEmbed(
                         language, "VAB_Address_ID", RModel.TABLE_ALIAS, columnName) + ")";

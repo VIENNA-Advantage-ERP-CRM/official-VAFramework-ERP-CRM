@@ -41,7 +41,7 @@ namespace VAdvantage.Model
             {
                 // System should allow to change the warehouse and locator if Container is having 0 qty
                 // when we mark container as False, then it must be blank.
-                if (Is_ValueChanged("VAM_Locator_ID") || Is_ValueChanged("Ref_M_Container_ID") || (Is_ValueChanged("IsActive") && !IsActive()))
+                if (Is_ValueChanged("VAM_Locator_ID") || Is_ValueChanged("Ref_VAM_Container_ID") || (Is_ValueChanged("IsActive") && !IsActive()))
                 {
                     string _sql = @"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.VAM_Product_ID, 
                         t.VAM_PFeature_SetInstance_ID ORDER BY t.MovementDate DESC, t.VAM_Inv_Trx_ID DESC) AS CurrentQty

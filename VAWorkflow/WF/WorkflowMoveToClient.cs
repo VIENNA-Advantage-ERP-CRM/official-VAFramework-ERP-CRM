@@ -82,7 +82,7 @@ namespace VAdvantage.WF
             sql = "UPDATE VAF_WFlow_NextNode SET VAF_Client_ID=" + p_VAF_Client_ID
                 + " WHERE VAF_Client_ID=0 AND RecordType NOT IN ('D','C')"
                 + " AND (VAF_WFlow_Node_ID IN (SELECT VAF_WFlow_Node_ID FROM VAF_WFlow_Node WHERE VAF_Workflow_ID=" + p_VAF_Workflow_ID
-                    + ") OR AD_WF_Next_ID IN (SELECT VAF_WFlow_Node_ID FROM VAF_WFlow_Node WHERE VAF_Workflow_ID=" + p_VAF_Workflow_ID
+                    + ") OR VAF_WF_Next_ID IN (SELECT VAF_WFlow_Node_ID FROM VAF_WFlow_Node WHERE VAF_Workflow_ID=" + p_VAF_Workflow_ID
                     + "))";
             no = DataBase.DB.ExecuteQuery(sql, null, Get_Trx());
             if (no == -1)
@@ -105,7 +105,7 @@ namespace VAdvantage.WF
                 + " AND VAF_WFlow_NextNode_ID IN ("
                     + "SELECT VAF_WFlow_NextNode_ID FROM VAF_WFlow_NextNode "
                     + "WHERE VAF_WFlow_Node_ID IN (SELECT VAF_WFlow_Node_ID FROM VAF_WFlow_Node WHERE VAF_Workflow_ID=" + p_VAF_Workflow_ID
-                    + ") OR AD_WF_Next_ID IN (SELECT VAF_WFlow_Node_ID FROM VAF_WFlow_Node WHERE VAF_Workflow_ID=" + p_VAF_Workflow_ID
+                    + ") OR VAF_WF_Next_ID IN (SELECT VAF_WFlow_Node_ID FROM VAF_WFlow_Node WHERE VAF_Workflow_ID=" + p_VAF_Workflow_ID
                     + "))";
             no = DataBase.DB.ExecuteQuery(sql, null, Get_Trx());
             if (no == -1)

@@ -594,7 +594,7 @@ namespace VAdvantage.Model
         private bool GetOrCreateCombination(Boolean newRecord)
         {
             int Account_ID = 0, VAB_SubAcct_ID = 0, VAM_Product_ID = 0, VAB_BusinessPartner_ID = 0, VAF_Org_ID = 0, VAF_OrgTrx_ID = 0,
-                C_LocFrom_ID = 0, C_LocTo_ID = 0, VAB_SalesRegionState_ID = 0, VAB_Project_ID = 0, VAB_Promotion_ID = 0,
+                VAB_LocFrom_ID = 0, VAB_LocTo_ID = 0, VAB_SalesRegionState_ID = 0, VAB_Project_ID = 0, VAB_Promotion_ID = 0,
                 VAB_BillingCode_ID = 0, User1_ID = 0, User2_ID = 0;
 
             if (GetVAB_Acct_ValidParameter_ID() == 0
@@ -629,10 +629,10 @@ namespace VAdvantage.Model
                         VAF_Org_ID = GetVAF_Org_ID();
                     if (MVABAccountBookElement.ELEMENTTYPE_OrgTrx.Equals(et) && Get_ColumnIndex("VAF_OrgTrx_ID") > 0)
                         VAF_OrgTrx_ID = Util.GetValueOfInt(Get_Value("VAF_OrgTrx_ID"));
-                    if (MVABAccountBookElement.ELEMENTTYPE_Product.Equals(et) && Get_ColumnIndex("C_LocFrom_ID") > 0)
-                        C_LocFrom_ID = Util.GetValueOfInt(Get_Value("C_LocFrom_ID"));
-                    if (MVABAccountBookElement.ELEMENTTYPE_Product.Equals(et) && Get_ColumnIndex("C_LocTo_ID") > 0)
-                        C_LocTo_ID = Util.GetValueOfInt(Get_Value("C_LocTo_ID"));
+                    if (MVABAccountBookElement.ELEMENTTYPE_Product.Equals(et) && Get_ColumnIndex("VAB_LocFrom_ID") > 0)
+                        VAB_LocFrom_ID = Util.GetValueOfInt(Get_Value("VAB_LocFrom_ID"));
+                    if (MVABAccountBookElement.ELEMENTTYPE_Product.Equals(et) && Get_ColumnIndex("VAB_LocTo_ID") > 0)
+                        VAB_LocTo_ID = Util.GetValueOfInt(Get_Value("VAB_LocTo_ID"));
                     if (MVABAccountBookElement.ELEMENTTYPE_Product.Equals(et) && Get_ColumnIndex("VAM_Product_ID") > 0)
                         VAM_Product_ID = Util.GetValueOfInt(Get_Value("VAM_Product_ID"));
                     if (MVABAccountBookElement.ELEMENTTYPE_Project.Equals(et) && Get_ColumnIndex("VAB_Project_ID") > 0)
@@ -648,7 +648,7 @@ namespace VAdvantage.Model
                 }
 
                 MVABAccount acct = MVABAccount.Get(GetCtx(), GetVAF_Client_ID(), VAF_Org_ID, gl.GetVAB_AccountBook_ID(), Account_ID,
-                        VAB_SubAcct_ID, VAM_Product_ID, VAB_BusinessPartner_ID, VAF_OrgTrx_ID, C_LocFrom_ID, C_LocTo_ID, VAB_SalesRegionState_ID,
+                        VAB_SubAcct_ID, VAM_Product_ID, VAB_BusinessPartner_ID, VAF_OrgTrx_ID, VAB_LocFrom_ID, VAB_LocTo_ID, VAB_SalesRegionState_ID,
                         VAB_Project_ID, VAB_Promotion_ID, VAB_BillingCode_ID, User1_ID, User2_ID, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
                 if (acct != null)
@@ -695,10 +695,10 @@ namespace VAdvantage.Model
                     Set_Value("VAF_OrgTrx_ID", combi.GetVAF_OrgTrx_ID() > 0 ? combi.GetVAF_OrgTrx_ID() : 0);
                 if (Get_ColumnIndex("VAF_Org_ID") > 0)
                     Set_Value("VAF_Org_ID", combi.GetVAF_Org_ID() > 0 ? combi.GetVAF_Org_ID() : 0);
-                if (Get_ColumnIndex("C_LocFrom_ID") > 0)
-                    Set_Value("C_LocFrom_ID", combi.GetC_LocFrom_ID() > 0 ? combi.GetC_LocFrom_ID() : 0);
-                if (Get_ColumnIndex("C_LocTo_ID") > 0)
-                    Set_Value("C_LocTo_ID", combi.GetC_LocTo_ID() > 0 ? combi.GetC_LocTo_ID() : 0);
+                if (Get_ColumnIndex("VAB_LocFrom_ID") > 0)
+                    Set_Value("VAB_LocFrom_ID", combi.GetVAB_LocFrom_ID() > 0 ? combi.GetVAB_LocFrom_ID() : 0);
+                if (Get_ColumnIndex("VAB_LocTo_ID") > 0)
+                    Set_Value("VAB_LocTo_ID", combi.GetVAB_LocTo_ID() > 0 ? combi.GetVAB_LocTo_ID() : 0);
                 if (Get_ColumnIndex("VAB_SalesRegionState_ID") > 0)
                     Set_Value("VAB_SalesRegionState_ID", combi.GetVAB_SalesRegionState_ID() > 0 ? combi.GetVAB_SalesRegionState_ID() : 0);
                 if (Get_ColumnIndex("VAB_Project_ID") > 0)

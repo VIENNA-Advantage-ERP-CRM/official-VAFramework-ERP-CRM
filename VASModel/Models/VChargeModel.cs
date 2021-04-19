@@ -123,7 +123,7 @@ namespace VIS.Controllers
                     ac.GetVAB_AccountBook_ID(),
                     VAB_Acct_Element_ID, defaultAcct.GetVAB_SubAcct_ID(),
                     defaultAcct.GetVAM_Product_ID(), defaultAcct.GetVAB_BusinessPartner_ID(), defaultAcct.GetVAF_OrgTrx_ID(),
-                    defaultAcct.GetC_LocFrom_ID(), defaultAcct.GetC_LocTo_ID(), defaultAcct.GetVAB_SalesRegionState_ID(),
+                    defaultAcct.GetVAB_LocFrom_ID(), defaultAcct.GetVAB_LocTo_ID(), defaultAcct.GetVAB_SalesRegionState_ID(),
                     defaultAcct.GetVAB_Project_ID(), defaultAcct.GetVAB_Promotion_ID(), defaultAcct.GetVAB_BillingCode_ID(),
                     defaultAcct.GetUser1_ID(), defaultAcct.GetUser2_ID(),
                     defaultAcct.GetUserElement1_ID(), defaultAcct.GetUserElement2_ID());

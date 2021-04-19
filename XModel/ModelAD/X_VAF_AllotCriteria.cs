@@ -22,7 +22,7 @@ public X_VAF_AllotCriteria (Context ctx, int VAF_AllotCriteria_ID, Trx trxName) 
 {
 SetVAF_AllotCriteria_ID (0);
 SetVAF_AllotTarget_ID (0);
-SetAD_SourceColumn_ID (0);
+SetVAF_SourceColumn_ID (0);
 SetOperation (null);
 SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM VAF_AllotCriteria WHERE VAF_AllotTarget_ID=@VAF_AllotTarget_ID@
 }
@@ -34,7 +34,7 @@ public X_VAF_AllotCriteria (Ctx ctx, int VAF_AllotCriteria_ID, Trx trxName) : ba
 {
 SetVAF_AllotCriteria_ID (0);
 SetVAF_AllotTarget_ID (0);
-SetAD_SourceColumn_ID (0);
+SetVAF_SourceColumn_ID (0);
 SetOperation (null);
 SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM VAF_AllotCriteria WHERE VAF_AllotTarget_ID=@VAF_AllotTarget_ID@
 }
@@ -149,20 +149,20 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** AD_SourceColumn_ID VAF_Control_Ref_ID=414 */
-public static int AD_SOURCECOLUMN_ID_VAF_Control_Ref_ID=414;
+/** VAF_SourceColumn_ID VAF_Control_Ref_ID=414 */
+public static int VAF_SourceColumn_ID_VAF_Control_Ref_ID=414;
 /** Set Source Column.
-@param AD_SourceColumn_ID The column used as the criteria */
-public void SetAD_SourceColumn_ID (int AD_SourceColumn_ID)
+@param VAF_SourceColumn_ID The column used as the criteria */
+public void SetVAF_SourceColumn_ID (int VAF_SourceColumn_ID)
 {
-if (AD_SourceColumn_ID < 1) throw new ArgumentException ("AD_SourceColumn_ID is mandatory.");
-Set_Value ("AD_SourceColumn_ID", AD_SourceColumn_ID);
+if (VAF_SourceColumn_ID < 1) throw new ArgumentException ("VAF_SourceColumn_ID is mandatory.");
+Set_Value ("VAF_SourceColumn_ID", VAF_SourceColumn_ID);
 }
 /** Get Source Column.
 @return The column used as the criteria */
-public int GetAD_SourceColumn_ID() 
+public int GetVAF_SourceColumn_ID() 
 {
-Object ii = Get_Value("AD_SourceColumn_ID");
+Object ii = Get_Value("VAF_SourceColumn_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

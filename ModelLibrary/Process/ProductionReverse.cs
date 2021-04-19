@@ -232,7 +232,7 @@ namespace VAdvantage.Process
 
                     //Set reversed as true, Reverse Refernce on Orignal Document
                     production.SetIsReversed(true);
-                    production.SetM_Ref_Production(productionTo.GetVAM_Production_ID());
+                    production.SetVAM_Ref_Production(productionTo.GetVAM_Production_ID());
                     if (!production.Save(production.Get_Trx()))
                     {
                         production.Get_Trx().Rollback();

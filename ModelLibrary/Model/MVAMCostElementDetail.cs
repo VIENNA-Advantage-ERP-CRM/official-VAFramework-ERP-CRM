@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : Model for Cost Element Detail.
- * Class Used     : X_VAM_ProductCostElementDetail
+ * Class Used     : X_VAM_CostElementDetail
  * Chronological    Development
  * Amit Bansal      03-May-2016
 **********************************************************/
@@ -24,8 +24,8 @@ namespace VAdvantage.Model
     {
         private static VLogger _log = VLogger.GetVLogger(typeof(MVAMCostElementDetail).FullName);
 
-        public MVAMCostElementDetail(Ctx ctx, int VAM_ProductCostElementDetail_ID, Trx trxName)
-            : base(ctx, VAM_ProductCostElementDetail_ID, trxName)
+        public MVAMCostElementDetail(Ctx ctx, int VAM_CostElementDetail_ID, Trx trxName)
+            : base(ctx, VAM_CostElementDetail_ID, trxName)
         {
 
         }

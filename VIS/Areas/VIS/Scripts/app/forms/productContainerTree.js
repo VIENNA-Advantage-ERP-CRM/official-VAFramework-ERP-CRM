@@ -68,7 +68,7 @@
 
                                             + "<div class='VIS_form-data-row' style='display: none;'>"
                                             + "<div class='VIS_form-data-col'>" //style='float: left; width: 50%; margin-bottom:10px;'
-                                            + "<label>" + VIS.Msg.translate(VIS.Env.getCtx(), "Ref_M_Container_ID") + "</label>"
+                                            + "<label>" + VIS.Msg.translate(VIS.Env.getCtx(), "Ref_VAM_Container_ID") + "</label>"
                                             + "</div>"
                                             + "</div>"
 

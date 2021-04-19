@@ -2020,7 +2020,7 @@ namespace VAdvantage.Model
                                              @" WHERE VAM_ProductContainer_ID IN (" + Util.GetValueOfString(listParentChildContainer[i].childContainer) + ")", null, Get_Trx());
 
                     // update on target container - "Parent Containr" reference where we moved this container
-                    no = DB.ExecuteQuery(@"UPDATE VAM_ProductContainer SET Ref_M_Container_ID = " + (Util.GetValueOfInt(listParentChildContainer[i].VAM_ProductContainerTo_ID) > 0
+                    no = DB.ExecuteQuery(@"UPDATE VAM_ProductContainer SET Ref_VAM_Container_ID = " + (Util.GetValueOfInt(listParentChildContainer[i].VAM_ProductContainerTo_ID) > 0
                                                                         ? Util.GetValueOfString(listParentChildContainer[i].VAM_ProductContainerTo_ID) : "null") +
                                              @" WHERE VAM_ProductContainer_ID = " + Util.GetValueOfInt(listParentChildContainer[i].TagetContainer_ID), null, Get_Trx());
                 }
@@ -2059,11 +2059,11 @@ namespace VAdvantage.Model
                         sql = @"WITH RECURSIVE pops (VAM_ProductContainer_id, level, name_path) AS (
                         SELECT  VAM_ProductContainer_id, 0,  ARRAY[VAM_ProductContainer_id]
                         FROM    VAM_ProductContainer
-                        WHERE   Ref_M_Container_ID is null
+                        WHERE   Ref_VAM_Container_ID is null
                         UNION ALL
                         SELECT  p.VAM_ProductContainer_id, t0.level + 1, ARRAY_APPEND(t0.name_path, p.VAM_ProductContainer_id)
                         FROM    VAM_ProductContainer p
-                                INNER JOIN pops t0 ON t0.VAM_ProductContainer_id = p.Ref_M_Container_ID
+                                INNER JOIN pops t0 ON t0.VAM_ProductContainer_id = p.Ref_VAM_Container_ID
                     )
                         SELECT    ARRAY_TO_STRING(name_path, '->')
                         FROM    pops  where VAM_ProductContainer_id = " + Util.GetValueOfInt(dsMovementLine.Tables[0].Rows[i]["ParentContainer"]);
@@ -2074,7 +2074,7 @@ namespace VAdvantage.Model
                         pathContainer = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT sys_connect_by_path(VAM_ProductContainer_id,'->') tree
                                             FROM VAM_ProductContainer 
                                            WHERE VAM_ProductContainer_id = " + Util.GetValueOfInt(dsMovementLine.Tables[0].Rows[i]["ParentContainer"]) + @"
-                                            START WITH ref_m_container_id IS NULL CONNECT BY prior VAM_ProductContainer_id = ref_m_container_id
+                                            START WITH Ref_VAM_Container_ID IS NULL CONNECT BY prior VAM_ProductContainer_id = Ref_VAM_Container_ID
                                            ORDER BY tree", null, Get_Trx()));
                     }
 
@@ -2085,11 +2085,11 @@ namespace VAdvantage.Model
                         sql = @"WITH RECURSIVE pops (VAM_ProductContainer_id, level, name_path) AS (
                                 SELECT  VAM_ProductContainer_id, 0,  ARRAY[VAM_ProductContainer_id]
                                 FROM    VAM_ProductContainer
-                                WHERE   Ref_M_Container_ID is null
+                                WHERE   Ref_VAM_Container_ID is null
                                 UNION ALL
                                 SELECT  p.VAM_ProductContainer_id, t0.level + 1, ARRAY_APPEND(t0.name_path, p.VAM_ProductContainer_id)
                                 FROM    VAM_ProductContainer p
-                                        INNER JOIN pops t0 ON t0.VAM_ProductContainer_id = p.Ref_M_Container_ID )
+                                        INNER JOIN pops t0 ON t0.VAM_ProductContainer_id = p.Ref_VAM_Container_ID )
                             SELECT  VAM_ProductContainer_id, level,  ARRAY_TO_STRING(name_path, '->')
                             FROM    pops  where ARRAY_TO_STRING(name_path, '->') like '" + pathContainer + "%'";
                         dsChildContainer = DB.ExecuteDataset(sql, null, Get_Trx());
@@ -2099,8 +2099,8 @@ namespace VAdvantage.Model
                         dsChildContainer = DB.ExecuteDataset(@"SELECT tree, VAM_ProductContainer_id FROM
                                                         (SELECT sys_connect_by_path(VAM_ProductContainer_id,'->') tree , VAM_ProductContainer_id
                                                          FROM VAM_ProductContainer
-                                                         START WITH ref_m_container_id IS NULL
-                                                         CONNECT BY prior VAM_ProductContainer_id = ref_m_container_id
+                                                         START WITH Ref_VAM_Container_ID IS NULL
+                                                         CONNECT BY prior VAM_ProductContainer_id = Ref_VAM_Container_ID
                                                          ORDER BY tree  
                                                          )
                                                      WHERE tree LIKE ('" + pathContainer + "%') ", null, Get_Trx());
@@ -2144,7 +2144,7 @@ namespace VAdvantage.Model
         //                            FROM VAM_ProductContainer 
         //                           WHERE (VAM_ProductContainer_id IN 
         //                            (SELECT VAM_ProductContainer_ID FROM VAM_InvTrf_Line WHERE IsParentMove= 'Y' AND VAM_InventoryTransfer_ID = " + movementId + @" ))
-        //                            START WITH ref_m_container_id IS NULL CONNECT BY prior VAM_ProductContainer_id = ref_m_container_id
+        //                            START WITH Ref_VAM_Container_ID IS NULL CONNECT BY prior VAM_ProductContainer_id = Ref_VAM_Container_ID
         //                           ORDER BY tree ";
         //            log.Finest(sql);
         //            DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
@@ -2172,8 +2172,8 @@ namespace VAdvantage.Model
         //            string sql = @"SELECT tree FROM
         //                            (SELECT sys_connect_by_path(VAM_ProductContainer_id,'->') tree
         //                             FROM VAM_ProductContainer
-        //                             START WITH ref_m_container_id IS NULL
-        //                             CONNECT BY prior VAM_ProductContainer_id = ref_m_container_id
+        //                             START WITH Ref_VAM_Container_ID IS NULL
+        //                             CONNECT BY prior VAM_ProductContainer_id = Ref_VAM_Container_ID
         //                             ORDER BY tree  
         //                             )
         //                           WHERE tree LIKE ('" + containerPath + "%') ";
@@ -2206,7 +2206,7 @@ namespace VAdvantage.Model
         //                            FROM VAM_ProductContainer 
         //                           WHERE (VAM_ProductContainer_id IN 
         //                            (SELECT Ref_VAM_ProductContainerTo_ID FROM VAM_InvTrf_Line WHERE IsParentMove= 'Y' AND VAM_InventoryTransfer_ID = " + movementId + @" ))
-        //                            START WITH ref_m_container_id IS NULL CONNECT BY prior VAM_ProductContainer_id = ref_m_container_id
+        //                            START WITH Ref_VAM_Container_ID IS NULL CONNECT BY prior VAM_ProductContainer_id = Ref_VAM_Container_ID
         //                           ORDER BY tree ";
         //            log.Finest(sql);
         //            DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());

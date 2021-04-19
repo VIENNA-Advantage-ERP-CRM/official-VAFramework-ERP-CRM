@@ -9,18 +9,18 @@ namespace VAdvantage.Model
     using VAdvantage.Process;
     using VAdvantage.Model;
     using VAdvantage.Utility;
-    using System.Data;/** Generated Model for VAM_ProductCostElementDetail
+    using System.Data;/** Generated Model for VAM_CostElementDetail
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
     public class X_VAM_CostElementDetail : PO
     {
-        public X_VAM_CostElementDetail(Context ctx, int VAM_ProductCostElementDetail_ID, Trx trxName)
-            : base(ctx, VAM_ProductCostElementDetail_ID, trxName)
-        {/** if (VAM_ProductCostElementDetail_ID == 0){SetAmt (0.0);SetVAB_AccountBook_ID (0);SetVAM_ProductCostElementDetail_ID (0);SetVAM_ProductCostElement_ID (0);SetVAM_Product_ID (0);SetQty (0.0);} */
+        public X_VAM_CostElementDetail(Context ctx, int VAM_CostElementDetail_ID, Trx trxName)
+            : base(ctx, VAM_CostElementDetail_ID, trxName)
+        {/** if (VAM_CostElementDetail_ID == 0){SetAmt (0.0);SetVAB_AccountBook_ID (0);SetVAM_CostElementDetail_ID (0);SetVAM_ProductCostElement_ID (0);SetVAM_Product_ID (0);SetQty (0.0);} */
         }
-        public X_VAM_CostElementDetail(Ctx ctx, int VAM_ProductCostElementDetail_ID, Trx trxName)
-            : base(ctx, VAM_ProductCostElementDetail_ID, trxName)
-        {/** if (VAM_ProductCostElementDetail_ID == 0){SetAmt (0.0);SetVAB_AccountBook_ID (0);SetVAM_ProductCostElementDetail_ID (0);SetVAM_ProductCostElement_ID (0);SetVAM_Product_ID (0);SetQty (0.0);} */
+        public X_VAM_CostElementDetail(Ctx ctx, int VAM_CostElementDetail_ID, Trx trxName)
+            : base(ctx, VAM_CostElementDetail_ID, trxName)
+        {/** if (VAM_CostElementDetail_ID == 0){SetAmt (0.0);SetVAB_AccountBook_ID (0);SetVAM_CostElementDetail_ID (0);SetVAM_ProductCostElement_ID (0);SetVAM_Product_ID (0);SetQty (0.0);} */
         }/** Load Constructor 
 @param ctx context
 @param rs result set 
@@ -43,8 +43,8 @@ namespace VAdvantage.Model
         static long serialVersionUID = 27744376170769L;/** Last Updated Timestamp 5/3/2016 10:17:33 AM */
         public static long updatedMS = 1462250853980L;/** VAF_TableView_ID=1000643 */
         public static int Table_ID; // =1000643;
-        /** TableName=VAM_ProductCostElementDetail */
-        public static String Table_Name = "VAM_ProductCostElementDetail";
+        /** TableName=VAM_CostElementDetail */
+        public static String Table_Name = "VAM_CostElementDetail";
         protected static KeyNamePair model; protected Decimal accessLevel = new Decimal(7);/** AccessLevel
 @return 7 - System - Client - Org 
 */
@@ -59,7 +59,7 @@ namespace VAdvantage.Model
         protected override POInfo InitPO(Ctx ctx) { POInfo poi = POInfo.GetPOInfo(ctx, Table_ID); return poi; }/** Info
 @return info
 */
-        public override String ToString() { StringBuilder sb = new StringBuilder("X_VAM_ProductCostElementDetail[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Asset.
+        public override String ToString() { StringBuilder sb = new StringBuilder("X_VAM_CostElementDetail[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Asset.
 @param VAA_Asset_ID Asset used internally or by customers */
         public void SetA_Asset_ID(int VAA_Asset_ID)
         {
@@ -136,11 +136,11 @@ namespace VAdvantage.Model
                 Set_Value("VAM_PFeature_SetInstance_ID", VAM_PFeature_SetInstance_ID);
         }/** Get Attribute Set Instance.
 @return Product Attribute Set Instance */
-        public int GetVAM_PFeature_SetInstance_ID() { Object ii = Get_Value("VAM_PFeature_SetInstance_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set VAM_ProductCostElementDetail_ID.
-@param VAM_ProductCostElementDetail_ID VAM_ProductCostElementDetail_ID */
-        public void SetVAM_ProductCostElementDetail_ID(int VAM_ProductCostElementDetail_ID) { if (VAM_ProductCostElementDetail_ID < 1) throw new ArgumentException("VAM_ProductCostElementDetail_ID is mandatory."); Set_ValueNoCheck("VAM_ProductCostElementDetail_ID", VAM_ProductCostElementDetail_ID); }/** Get VAM_ProductCostElementDetail_ID.
-@return VAM_ProductCostElementDetail_ID */
-        public int GetVAM_ProductCostElementDetail_ID() { Object ii = Get_Value("VAM_ProductCostElementDetail_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Cost Element.
+        public int GetVAM_PFeature_SetInstance_ID() { Object ii = Get_Value("VAM_PFeature_SetInstance_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set VAM_CostElementDetail_ID.
+@param VAM_CostElementDetail_ID VAM_CostElementDetail_ID */
+        public void SetVAM_CostElementDetail_ID(int VAM_CostElementDetail_ID) { if (VAM_CostElementDetail_ID < 1) throw new ArgumentException("VAM_CostElementDetail_ID is mandatory."); Set_ValueNoCheck("VAM_CostElementDetail_ID", VAM_CostElementDetail_ID); }/** Get VAM_CostElementDetail_ID.
+@return VAM_CostElementDetail_ID */
+        public int GetVAM_CostElementDetail_ID() { Object ii = Get_Value("VAM_CostElementDetail_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Cost Element.
 @param VAM_ProductCostElement_ID Product Cost Element */
         public void SetVAM_ProductCostElement_ID(int VAM_ProductCostElement_ID) { if (VAM_ProductCostElement_ID < 1) throw new ArgumentException("VAM_ProductCostElement_ID is mandatory."); Set_Value("VAM_ProductCostElement_ID", VAM_ProductCostElement_ID); }/** Get Cost Element.
 @return Product Cost Element */

@@ -42,7 +42,7 @@ namespace VAdvantage.Model
 			acct.GetVAF_Org_ID(), acct.GetAccount_ID(),
 			acct.GetVAM_Product_ID(), acct.GetVAB_BusinessPartner_ID(), acct.GetVAB_Project_ID(),
 			acct.GetVAB_Promotion_ID(), acct.GetVAB_BillingCode_ID(), acct.GetVAF_OrgTrx_ID(),
-			acct.GetVAB_SalesRegionState_ID(), acct.GetC_LocTo_ID(), acct.GetC_LocFrom_ID(),
+			acct.GetVAB_SalesRegionState_ID(), acct.GetVAB_LocTo_ID(), acct.GetVAB_LocFrom_ID(),
 			acct.GetUser1_ID(), acct.GetUser2_ID());
 	}	//	get
         /// <summary>
@@ -61,8 +61,8 @@ namespace VAdvantage.Model
         /// <param name="VAB_BillingCode_ID">activity</param>
         /// <param name="VAF_OrgTrx_ID">trx org</param>
         /// <param name="VAB_SalesRegionState_ID">VAB_SalesRegionState_ID</param>
-        /// <param name="C_LocTo_ID">location to</param>
-        /// <param name="C_LocFrom_ID">from</param>
+        /// <param name="VAB_LocTo_ID">location to</param>
+        /// <param name="VAB_LocFrom_ID">from</param>
         /// <param name="User1_ID">user 1</param>
         /// <param name="User2_ID">user 2</param>
        /// <returns>array of distributions or null</returns>
@@ -71,7 +71,7 @@ namespace VAdvantage.Model
 		int VAF_Org_ID, int Account_ID,
 		int VAM_Product_ID, int VAB_BusinessPartner_ID, int VAB_Project_ID,
 		int VAB_Promotion_ID, int VAB_BillingCode_ID, int VAF_OrgTrx_ID,
-		int VAB_SalesRegionState_ID, int C_LocTo_ID, int C_LocFrom_ID,
+		int VAB_SalesRegionState_ID, int VAB_LocTo_ID, int VAB_LocFrom_ID,
 		int User1_ID, int User2_ID)
 	{
 		MVAGLDistribution[] acctList = Get (ctx, Account_ID);
@@ -140,11 +140,11 @@ namespace VAdvantage.Model
             {
 				continue;
             }
-			if (!distribution.IsAnyLocTo() && distribution.GetC_LocTo_ID() != C_LocTo_ID)
+			if (!distribution.IsAnyLocTo() && distribution.GetVAB_LocTo_ID() != VAB_LocTo_ID)
             {
 				continue;
             }
-			if (!distribution.IsAnyLocFrom() && distribution.GetC_LocFrom_ID() != C_LocFrom_ID)
+			if (!distribution.IsAnyLocFrom() && distribution.GetVAB_LocFrom_ID() != VAB_LocFrom_ID)
             {
 				continue;
             }
@@ -498,13 +498,13 @@ namespace VAdvantage.Model
         {
 			SetVAB_Promotion_ID(0);
         }
-		if (IsAnyLocFrom() && GetC_LocFrom_ID() != 0)
+		if (IsAnyLocFrom() && GetVAB_LocFrom_ID() != 0)
         {
-			SetC_LocFrom_ID(0);
+			SetVAB_LocFrom_ID(0);
         }
-		if (IsAnyLocTo() && GetC_LocTo_ID() != 0)
+		if (IsAnyLocTo() && GetVAB_LocTo_ID() != 0)
         {
-			SetC_LocTo_ID(0);
+			SetVAB_LocTo_ID(0);
         }
 		if (IsAnyOrg() && GetOrg_ID() != 0)
         {

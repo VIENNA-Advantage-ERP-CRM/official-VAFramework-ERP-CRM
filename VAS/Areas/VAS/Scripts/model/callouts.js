@@ -22343,13 +22343,13 @@
         if (mField.getColumnName() == "VAM_Warehouse_ID") {
             if (value != oldValue) {
                 mTab.setValue("VAM_Locator_ID", "");
-                mTab.setValue("Ref_M_Container_ID", "");
+                mTab.setValue("Ref_VAM_Container_ID", "");
             }
         }
         else
             if (mField.getColumnName() == "VAM_Locator_ID") {
                 if (value != oldValue) {
-                    mTab.setValue("Ref_M_Container_ID", "");
+                    mTab.setValue("Ref_VAM_Container_ID", "");
                 }
             }
         this.setCalloutActive(false);

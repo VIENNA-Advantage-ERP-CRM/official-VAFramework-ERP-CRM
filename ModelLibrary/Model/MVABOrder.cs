@@ -4172,12 +4172,12 @@ namespace VAdvantage.Model
                     else if (Util.GetValueOfString(dsElementType.Tables[0].Rows[i]["Value"]).Equals(X_VAB_AccountBook_Element.ELEMENTTYPE_LocationFrom)
                         && !selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_LocationFrom))
                     {
-                        where += " AND NVL(C_LocFrom_ID, 0) = 0 ";
+                        where += " AND NVL(VAB_LocFrom_ID, 0) = 0 ";
                     }
                     else if (Util.GetValueOfString(dsElementType.Tables[0].Rows[i]["Value"]).Equals(X_VAB_AccountBook_Element.ELEMENTTYPE_LocationTo)
                        && !selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_LocationTo))
                     {
-                        where += " AND NVL(C_LocTo_ID, 0) = 0 ";
+                        where += " AND NVL(VAB_LocTo_ID, 0) = 0 ";
                     }
                     else if (Util.GetValueOfString(dsElementType.Tables[0].Rows[i]["Value"]).Equals(X_VAB_AccountBook_Element.ELEMENTTYPE_Campaign)
                       && !selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_Campaign))

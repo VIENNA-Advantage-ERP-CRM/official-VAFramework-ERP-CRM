@@ -2967,7 +2967,7 @@ namespace VAdvantage.Model
                             //                            DataSet _dsAsset = null;
                             //                            StringBuilder _sql = new StringBuilder();
                             //                            _sql.Append(@" SELECT VAM_ProductCost.VAF_CLIENT_ID, VAM_ProductCost.VAF_ORG_ID, VAM_ProductCost.VAM_ProductCostElement_ID,
-                            //                                       VAM_ProductCost.VAB_ACCOUNTBOOK_ID, VAM_ProductCost.VAM_ProductCostType_ID,
+                            //                                       VAM_ProductCost.VAB_ACCOUNTBOOK_ID, VAM_ProductCost.VAM_CostType_ID,
                             //                                       VAM_ProductCost.BASISTYPE, VAM_Product.VAB_UOM_ID, VAM_ProductCostElement.COSTINGMETHOD,
                             //                                       VAM_ProductCost.VAM_PFeature_SetInstance_ID, VAM_ProductCost.CURRENTCOSTPRICE, VAM_ProductCost.FUTURECOSTPRICE
                             //                                       FROM VAM_ProductCost VAM_ProductCostElement ON(VAM_ProductCostElement.VAM_ProductCostElement_ID  =VAM_ProductCost.VAM_ProductCostElement_ID)

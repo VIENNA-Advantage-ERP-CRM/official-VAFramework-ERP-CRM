@@ -57,8 +57,8 @@ namespace VAdvantage.Model
          */
         public MVAFColumn GetSourceColumn()
         {
-            if (m_column == null || m_column.GetVAF_Column_ID() != GetAD_SourceColumn_ID())
-                m_column = MVAFColumn.Get(GetCtx(), GetAD_SourceColumn_ID());
+            if (m_column == null || m_column.GetVAF_Column_ID() != GetVAF_SourceColumn_ID())
+                m_column = MVAFColumn.Get(GetCtx(), GetVAF_SourceColumn_ID());
             return m_column;
         }	//	GetSourceColumn
 
@@ -331,7 +331,7 @@ namespace VAdvantage.Model
             StringBuilder sb = new StringBuilder("MAssignCriteria[")
                 .Append(Get_ID())
                 .Append("-").Append(GetSeqNo())
-                .Append(",AD_SourceColumn_ID=").Append(GetAD_SourceColumn_ID())
+                .Append(",VAF_SourceColumn_ID=").Append(GetVAF_SourceColumn_ID())
                 .Append(",Operation=").Append(GetOperation());
             if (GetRecord_ID() != 0)
                 sb.Append(",Record_ID=").Append(GetRecord_ID());

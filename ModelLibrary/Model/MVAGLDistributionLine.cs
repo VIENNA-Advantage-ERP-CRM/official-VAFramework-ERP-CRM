@@ -121,8 +121,8 @@ namespace VAdvantage.Model
                 IsOverwriteProduct() ? GetVAM_Product_ID() : _account.GetVAM_Product_ID(),
                 IsOverwriteBPartner() ? GetVAB_BusinessPartner_ID() : _account.GetVAB_BusinessPartner_ID(),
                 IsOverwriteOrgTrx() ? GetVAF_OrgTrx_ID() : _account.GetVAF_OrgTrx_ID(),
-                IsOverwriteLocFrom() ? GetC_LocFrom_ID() : _account.GetC_LocFrom_ID(),
-                IsOverwriteLocTo() ? GetC_LocTo_ID() : _account.GetC_LocTo_ID(),
+                IsOverwriteLocFrom() ? GetVAB_LocFrom_ID() : _account.GetVAB_LocFrom_ID(),
+                IsOverwriteLocTo() ? GetVAB_LocTo_ID() : _account.GetVAB_LocTo_ID(),
                 IsOverwriteSalesRegion() ? GetVAB_SalesRegionState_ID() : _account.GetVAB_SalesRegionState_ID(),
                 IsOverwriteProject() ? GetVAB_Project_ID() : _account.GetVAB_Project_ID(),
                 IsOverwriteCampaign() ? GetVAB_Promotion_ID() : _account.GetVAB_Promotion_ID(),
@@ -198,13 +198,13 @@ namespace VAdvantage.Model
             {
                 SetVAB_Promotion_ID(0);
             }
-            if (!IsOverwriteLocFrom() && GetC_LocFrom_ID() != 0)
+            if (!IsOverwriteLocFrom() && GetVAB_LocFrom_ID() != 0)
             {
-                SetC_LocFrom_ID(0);
+                SetVAB_LocFrom_ID(0);
             }
-            if (!IsOverwriteLocTo() && GetC_LocTo_ID() != 0)
+            if (!IsOverwriteLocTo() && GetVAB_LocTo_ID() != 0)
             {
-                SetC_LocTo_ID(0);
+                SetVAB_LocTo_ID(0);
             }
             if (!IsOverwriteOrg() && GetOrg_ID() != 0)
             {

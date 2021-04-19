@@ -26,8 +26,8 @@ namespace VAdvantage.Model
 	 *  @param  VAB_Order_ID    order to load, (0 create new order)
 	 *  @param trx p_trx name
 	 */
-        public MVAMCostUpdateLine(Ctx ctx, int VAM_ProductCostUpdateLine_ID, Trx trx)
-            : base(ctx, VAM_ProductCostUpdateLine_ID, trx)
+        public MVAMCostUpdateLine(Ctx ctx, int VAM_CostUpdateLine_ID, Trx trx)
+            : base(ctx, VAM_CostUpdateLine_ID, trx)
         {
 
         }
@@ -48,7 +48,7 @@ namespace VAdvantage.Model
         public MVAMCostUpdateLine(Ctx ctx, MVAMCostUpdate costupdate, Trx trx)
             : base(ctx, 0, trx)
         {
-            SetVAM_ProductCostUpdate_ID(costupdate.GetVAM_ProductCostUpdate_ID());
+            SetVAM_CostUpdate_ID(costupdate.GetVAM_CostUpdate_ID());
         }
 
     }

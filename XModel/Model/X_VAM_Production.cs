@@ -379,12 +379,12 @@ public void SetReversedDocument(String ReversedDocument) { if (ReversedDocument 
 @return Reversed Document */
 public String GetReversedDocument() { return (String)Get_Value("ReversedDocument"); }
 
-/** M_Ref_Production VAF_Control_Ref_ID=1000191 */
-public static int M_REF_PRODUCTION_VAF_Control_Ref_ID = 1000191;/** Set Reverse Reference.
-@param M_Ref_Production Reverse Reference */
-public void SetM_Ref_Production(int M_Ref_Production) { Set_Value("M_Ref_Production", M_Ref_Production); }/** Get Reverse Reference.
+/** VAM_Ref_Production VAF_Control_Ref_ID=1000191 */
+public static int VAM_Ref_Production_VAF_Control_Ref_ID = 1000191;/** Set Reverse Reference.
+@param VAM_Ref_Production Reverse Reference */
+public void SetVAM_Ref_Production(int VAM_Ref_Production) { Set_Value("VAM_Ref_Production", VAM_Ref_Production); }/** Get Reverse Reference.
 @return Reverse Reference */
-public int GetM_Ref_Production() { Object ii = Get_Value("M_Ref_Production"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+public int GetVAM_Ref_Production() { Object ii = Get_Value("VAM_Ref_Production"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 }
 
 }

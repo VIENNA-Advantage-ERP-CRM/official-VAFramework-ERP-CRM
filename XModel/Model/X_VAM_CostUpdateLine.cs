@@ -11,32 +11,32 @@
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for VAM_ProductCostUpdateLine
+    /** Generated Model for VAM_CostUpdateLine
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
     public class X_VAM_CostUpdateLine : PO
     {
-        public X_VAM_CostUpdateLine(Context ctx, int VAM_ProductCostUpdateLine_ID, Trx trxName)
-            : base(ctx, VAM_ProductCostUpdateLine_ID, trxName)
+        public X_VAM_CostUpdateLine(Context ctx, int VAM_CostUpdateLine_ID, Trx trxName)
+            : base(ctx, VAM_CostUpdateLine_ID, trxName)
         {
-            /** if (VAM_ProductCostUpdateLine_ID == 0)
+            /** if (VAM_CostUpdateLine_ID == 0)
             {
             SetVAB_UOM_ID (0);
-            SetVAM_ProductCostUpdateLine_ID (0);
-            SetVAM_ProductCostUpdate_ID (0);
+            SetVAM_CostUpdateLine_ID (0);
+            SetVAM_CostUpdate_ID (0);
             SetVAM_Product_ID (0);
             SetProcessed (false);
             }
              */
         }
-        public X_VAM_CostUpdateLine(Ctx ctx, int VAM_ProductCostUpdateLine_ID, Trx trxName)
-            : base(ctx, VAM_ProductCostUpdateLine_ID, trxName)
+        public X_VAM_CostUpdateLine(Ctx ctx, int VAM_CostUpdateLine_ID, Trx trxName)
+            : base(ctx, VAM_CostUpdateLine_ID, trxName)
         {
-            /** if (VAM_ProductCostUpdateLine_ID == 0)
+            /** if (VAM_CostUpdateLine_ID == 0)
             {
             SetVAB_UOM_ID (0);
-            SetVAM_ProductCostUpdateLine_ID (0);
-            SetVAM_ProductCostUpdate_ID (0);
+            SetVAM_CostUpdateLine_ID (0);
+            SetVAM_CostUpdate_ID (0);
             SetVAM_Product_ID (0);
             SetProcessed (false);
             }
@@ -85,8 +85,8 @@
         public static int Table_ID;
         // =1037;
 
-        /** TableName=VAM_ProductCostUpdateLine */
-        public static String Table_Name = "VAM_ProductCostUpdateLine";
+        /** TableName=VAM_CostUpdateLine */
+        public static String Table_Name = "VAM_CostUpdateLine";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);
@@ -120,7 +120,7 @@
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_VAM_ProductCostUpdateLine[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAM_CostUpdateLine[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
 
@@ -271,32 +271,32 @@
             return Convert.ToInt32(ii);
         }
         /** Set Cost Update Line.
-        @param VAM_ProductCostUpdateLine_ID Cost Update Line */
-        public void SetVAM_ProductCostUpdateLine_ID(int VAM_ProductCostUpdateLine_ID)
+        @param VAM_CostUpdateLine_ID Cost Update Line */
+        public void SetVAM_CostUpdateLine_ID(int VAM_CostUpdateLine_ID)
         {
-            if (VAM_ProductCostUpdateLine_ID < 1) throw new ArgumentException("VAM_ProductCostUpdateLine_ID is mandatory.");
-            Set_ValueNoCheck("VAM_ProductCostUpdateLine_ID", VAM_ProductCostUpdateLine_ID);
+            if (VAM_CostUpdateLine_ID < 1) throw new ArgumentException("VAM_CostUpdateLine_ID is mandatory.");
+            Set_ValueNoCheck("VAM_CostUpdateLine_ID", VAM_CostUpdateLine_ID);
         }
         /** Get Cost Update Line.
         @return Cost Update Line */
-        public int GetVAM_ProductCostUpdateLine_ID()
+        public int GetVAM_CostUpdateLine_ID()
         {
-            Object ii = Get_Value("VAM_ProductCostUpdateLine_ID");
+            Object ii = Get_Value("VAM_CostUpdateLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Cost Update.
-        @param VAM_ProductCostUpdate_ID Cost Update */
-        public void SetVAM_ProductCostUpdate_ID(int VAM_ProductCostUpdate_ID)
+        @param VAM_CostUpdate_ID Cost Update */
+        public void SetVAM_CostUpdate_ID(int VAM_CostUpdate_ID)
         {
-            if (VAM_ProductCostUpdate_ID < 1) throw new ArgumentException("VAM_ProductCostUpdate_ID is mandatory.");
-            Set_ValueNoCheck("VAM_ProductCostUpdate_ID", VAM_ProductCostUpdate_ID);
+            if (VAM_CostUpdate_ID < 1) throw new ArgumentException("VAM_CostUpdate_ID is mandatory.");
+            Set_ValueNoCheck("VAM_CostUpdate_ID", VAM_CostUpdate_ID);
         }
         /** Get Cost Update.
         @return Cost Update */
-        public int GetVAM_ProductCostUpdate_ID()
+        public int GetVAM_CostUpdate_ID()
         {
-            Object ii = Get_Value("VAM_ProductCostUpdate_ID");
+            Object ii = Get_Value("VAM_CostUpdate_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

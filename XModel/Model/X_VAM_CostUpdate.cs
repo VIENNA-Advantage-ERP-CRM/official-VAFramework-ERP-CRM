@@ -11,38 +11,38 @@
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for VAM_ProductCostUpdate
+    /** Generated Model for VAM_CostUpdate
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
     public class X_VAM_CostUpdate : PO
     {
-        public X_VAM_CostUpdate(Context ctx, int VAM_ProductCostUpdate_ID, Trx trxName)
-            : base(ctx, VAM_ProductCostUpdate_ID, trxName)
+        public X_VAM_CostUpdate(Context ctx, int VAM_CostUpdate_ID, Trx trxName)
+            : base(ctx, VAM_CostUpdate_ID, trxName)
         {
-            /** if (VAM_ProductCostUpdate_ID == 0)
+            /** if (VAM_CostUpdate_ID == 0)
             {
             SetDateAcct (DateTime.Now);
             SetDocAction (null);
             SetDocStatus (null);
             SetDocumentNo (null);
             SetIsSOTrx (false);
-            SetVAM_ProductCostUpdate_ID (0);
+            SetVAM_CostUpdate_ID (0);
             SetPosted (false);
             SetProcessed (false);
             }
              */
         }
-        public X_VAM_CostUpdate(Ctx ctx, int VAM_ProductCostUpdate_ID, Trx trxName)
-            : base(ctx, VAM_ProductCostUpdate_ID, trxName)
+        public X_VAM_CostUpdate(Ctx ctx, int VAM_CostUpdate_ID, Trx trxName)
+            : base(ctx, VAM_CostUpdate_ID, trxName)
         {
-            /** if (VAM_ProductCostUpdate_ID == 0)
+            /** if (VAM_CostUpdate_ID == 0)
             {
             SetDateAcct (DateTime.Now);
             SetDocAction (null);
             SetDocStatus (null);
             SetDocumentNo (null);
             SetIsSOTrx (false);
-            SetVAM_ProductCostUpdate_ID (0);
+            SetVAM_CostUpdate_ID (0);
             SetPosted (false);
             SetProcessed (false);
             }
@@ -91,8 +91,8 @@
         public static int Table_ID;
         // =1036;
 
-        /** TableName=VAM_ProductCostUpdate */
-        public static String Table_Name = "VAM_ProductCostUpdate";
+        /** TableName=VAM_CostUpdate */
+        public static String Table_Name = "VAM_CostUpdate";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);
@@ -126,7 +126,7 @@
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_VAM_ProductCostUpdate[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAM_CostUpdate[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
 
@@ -331,17 +331,17 @@
             return false;
         }
         /** Set Cost Update.
-        @param VAM_ProductCostUpdate_ID Cost Update */
-        public void SetVAM_ProductCostUpdate_ID(int VAM_ProductCostUpdate_ID)
+        @param VAM_CostUpdate_ID Cost Update */
+        public void SetVAM_CostUpdate_ID(int VAM_CostUpdate_ID)
         {
-            if (VAM_ProductCostUpdate_ID < 1) throw new ArgumentException("VAM_ProductCostUpdate_ID is mandatory.");
-            Set_ValueNoCheck("VAM_ProductCostUpdate_ID", VAM_ProductCostUpdate_ID);
+            if (VAM_CostUpdate_ID < 1) throw new ArgumentException("VAM_CostUpdate_ID is mandatory.");
+            Set_ValueNoCheck("VAM_CostUpdate_ID", VAM_CostUpdate_ID);
         }
         /** Get Cost Update.
         @return Cost Update */
-        public int GetVAM_ProductCostUpdate_ID()
+        public int GetVAM_CostUpdate_ID()
         {
-            Object ii = Get_Value("VAM_ProductCostUpdate_ID");
+            Object ii = Get_Value("VAM_CostUpdate_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

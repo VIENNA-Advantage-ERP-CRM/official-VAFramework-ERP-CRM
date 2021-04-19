@@ -367,13 +367,13 @@ namespace VAdvantage.Model
         {
             log.Info(ToString());
             //	Create Cost Type
-            if (GetVAM_ProductCostType_ID() == 0)
+            if (GetVAM_CostType_ID() == 0)
             {
                 MVAMCostType ct = new MVAMCostType(GetCtx(), 0, Get_TrxName());
                 ct.SetClientOrg(GetVAF_Client_ID(), 0);
                 ct.SetName(GetName());
                 ct.Save();
-                SetVAM_ProductCostType_ID(ct.GetVAM_ProductCostType_ID());
+                SetVAM_CostType_ID(ct.GetVAM_CostType_ID());
             }
 
             //	Create Cost Elements

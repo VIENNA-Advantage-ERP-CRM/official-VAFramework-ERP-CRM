@@ -835,9 +835,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set ChangeRequest from ChangeRequestName
             sql = new StringBuilder("UPDATE I_Request r"
-                      + " SET M_ChangeRequest_ID =(SELECT M_ChangeRequest_ID FROM M_ChangeRequest c"
+                      + " SET VAM_ChangeRequest_ID =(SELECT VAM_ChangeRequest_ID FROM M_ChangeRequest c"
                       + " WHERE r.ChangeRequestName = c.Name AND r.VAF_Client_ID=c.VAF_Client_ID )"
-                      + " WHERE M_ChangeRequest_ID IS NULL AND ChangeRequestName IS NOT NULL"
+                      + " WHERE VAM_ChangeRequest_ID IS NULL AND ChangeRequestName IS NOT NULL"
                       + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set ChangeRequest from ChangeRequestName =" + no);
@@ -846,7 +846,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Request r"
                       + " SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid ChangeRequestName, ' "
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND r.M_ChangeRequest_ID IS NULL"
+                      + " AND r.VAM_ChangeRequest_ID IS NULL"
                       + " AND r.ChangeRequestName IS NOT NULL ").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)

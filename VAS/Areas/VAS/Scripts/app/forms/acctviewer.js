@@ -457,9 +457,9 @@
         else if (elementType.equals(this.ELEMENTTYPE_Activity))
             return "VAB_BillingCode_ID";
         else if (elementType.equals(this.ELEMENTTYPE_LocationFrom))
-            return "C_LocFrom_ID";
+            return "VAB_LocFrom_ID";
         else if (elementType.equals(this.ELEMENTTYPE_LocationTo))
-            return "C_LocTo_ID";
+            return "VAB_LocTo_ID";
         else if (elementType.equals(this.ELEMENTTYPE_Campaign))
             return "VAB_Promotion_ID";
         else if (elementType.equals(this.ELEMENTTYPE_OrgTrx))

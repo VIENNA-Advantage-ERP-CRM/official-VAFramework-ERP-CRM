@@ -11,25 +11,25 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for VAM_ProductCostType
+/** Generated Model for VAM_CostType
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
 public class X_VAM_CostType : PO
 {
-public X_VAM_CostType (Context ctx, int VAM_ProductCostType_ID, Trx trxName) : base (ctx, VAM_ProductCostType_ID, trxName)
+public X_VAM_CostType (Context ctx, int VAM_CostType_ID, Trx trxName) : base (ctx, VAM_CostType_ID, trxName)
 {
-/** if (VAM_ProductCostType_ID == 0)
+/** if (VAM_CostType_ID == 0)
 {
-SetVAM_ProductCostType_ID (0);
+SetVAM_CostType_ID (0);
 SetName (null);
 }
  */
 }
-public X_VAM_CostType (Ctx ctx, int VAM_ProductCostType_ID, Trx trxName) : base (ctx, VAM_ProductCostType_ID, trxName)
+public X_VAM_CostType (Ctx ctx, int VAM_CostType_ID, Trx trxName) : base (ctx, VAM_CostType_ID, trxName)
 {
-/** if (VAM_ProductCostType_ID == 0)
+/** if (VAM_CostType_ID == 0)
 {
-SetVAM_ProductCostType_ID (0);
+SetVAM_CostType_ID (0);
 SetName (null);
 }
  */
@@ -74,8 +74,8 @@ public static long updatedMS = 1280389062216L;
 public static int Table_ID;
  // =586;
 
-/** TableName=VAM_ProductCostType */
-public static String Table_Name="VAM_ProductCostType";
+/** TableName=VAM_CostType */
+public static String Table_Name="VAM_CostType";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -109,7 +109,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_VAM_ProductCostType[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_CostType[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Description.
@@ -147,17 +147,17 @@ public String GetHelp()
 return (String)Get_Value("Help");
 }
 /** Set Cost Type.
-@param VAM_ProductCostType_ID Type of Cost (e.g. Current, Plan, Future) */
-public void SetVAM_ProductCostType_ID (int VAM_ProductCostType_ID)
+@param VAM_CostType_ID Type of Cost (e.g. Current, Plan, Future) */
+public void SetVAM_CostType_ID (int VAM_CostType_ID)
 {
-if (VAM_ProductCostType_ID < 1) throw new ArgumentException ("VAM_ProductCostType_ID is mandatory.");
-Set_ValueNoCheck ("VAM_ProductCostType_ID", VAM_ProductCostType_ID);
+if (VAM_CostType_ID < 1) throw new ArgumentException ("VAM_CostType_ID is mandatory.");
+Set_ValueNoCheck ("VAM_CostType_ID", VAM_CostType_ID);
 }
 /** Get Cost Type.
 @return Type of Cost (e.g. Current, Plan, Future) */
-public int GetVAM_ProductCostType_ID() 
+public int GetVAM_CostType_ID() 
 {
-Object ii = Get_Value("VAM_ProductCostType_ID");
+Object ii = Get_Value("VAM_CostType_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

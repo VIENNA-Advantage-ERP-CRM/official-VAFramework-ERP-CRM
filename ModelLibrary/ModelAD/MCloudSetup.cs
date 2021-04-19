@@ -81,7 +81,7 @@ namespace VAdvantage.Model
         private int VAF_UserContact_U_ID;
         private String VAF_UserContact_U_Name;
         private MVABCalendar m_calendar;
-        private int m_VAF_TreeInfo_Account_ID;
+        private int m_VAF_Tree_Account_ID;
         private int VAB_ProjectCycle_ID;
         //
         private bool m_hasProject = false;
@@ -164,7 +164,7 @@ namespace VAdvantage.Model
                 m_ctx.SetContext("#VAF_UserContact_U_ID", 0);
                 return false;
             }
-            m_VAF_TreeInfo_Account_ID = m_client.GetSetup_VAF_TreeInfo_Account_ID();
+            m_VAF_Tree_Account_ID = m_client.GetSetup_VAF_Tree_Account_ID();
 
             /**
              *  Create Org
@@ -424,7 +424,7 @@ namespace VAdvantage.Model
                 m_ctx.SetContext("#VAF_UserContact_U_ID", 0);
                 return false;
             }
-            m_VAF_TreeInfo_Account_ID = m_client.GetSetup_VAF_TreeInfo_Account_ID();
+            m_VAF_Tree_Account_ID = m_client.GetSetup_VAF_Tree_Account_ID();
 
             /**
              *  Create Org
@@ -719,9 +719,9 @@ namespace VAdvantage.Model
                     {
                         role.SetSupervisor_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["Supervisor_ID"]));
                     }
-                    if (ds.Tables[0].Rows[i]["VAF_TreeInfo_Menu_ID"] != null && ds.Tables[0].Rows[i]["VAF_TreeInfo_Menu_ID"] != DBNull.Value)
+                    if (ds.Tables[0].Rows[i]["VAF_Tree_Menu_ID"] != null && ds.Tables[0].Rows[i]["VAF_Tree_Menu_ID"] != DBNull.Value)
                     {
-                        role.SetVAF_TreeInfo_Menu_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_TreeInfo_Menu_ID"]));
+                        role.SetVAF_Tree_Menu_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_Tree_Menu_ID"]));
                     }
                     if (ds.Tables[0].Rows[i]["PreferenceType"] != null && ds.Tables[0].Rows[i]["PreferenceType"] != DBNull.Value)
                     {
@@ -743,9 +743,9 @@ namespace VAdvantage.Model
                     {
                         role.SetIsUseBPRestrictions(ds.Tables[0].Rows[i]["IsUseBPRestrictions"].ToString().Equals("Y") ? true : false);
                     }
-                    if (ds.Tables[0].Rows[i]["VAF_TreeInfo_Org_ID"] != null && ds.Tables[0].Rows[i]["VAF_TreeInfo_Org_ID"] != DBNull.Value)
+                    if (ds.Tables[0].Rows[i]["VAF_Tree_Org_ID"] != null && ds.Tables[0].Rows[i]["VAF_Tree_Org_ID"] != DBNull.Value)
                     {
-                        role.SetVAF_TreeInfo_Org_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_TreeInfo_Org_ID"]));
+                        role.SetVAF_Tree_Org_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_Tree_Org_ID"]));
                     }
                     if (ds.Tables[0].Rows[i]["IsUseUserOrgAccess"] != null && ds.Tables[0].Rows[i]["IsUseUserOrgAccess"] != DBNull.Value)
                     {
@@ -2072,9 +2072,9 @@ namespace VAdvantage.Model
                         {
                             chart.SetChartType(ds.Tables[0].Rows[i]["ChartType"].ToString());
                         }
-                        if (ds.Tables[0].Rows[i]["Ad_Chart_BG_Color_ID"] != null && ds.Tables[0].Rows[i]["Ad_Chart_BG_Color_ID"] != DBNull.Value)
+                        if (ds.Tables[0].Rows[i]["VAF_Chart_BG_Color_ID"] != null && ds.Tables[0].Rows[i]["VAF_Chart_BG_Color_ID"] != DBNull.Value)
                         {
-                            chart.SetAd_Chart_BG_Color_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["Ad_Chart_BG_Color_ID"]));
+                            chart.SetVAF_Chart_BG_Color_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_Chart_BG_Color_ID"]));
                         }
                         if (ds.Tables[0].Rows[i]["Enable3D"] != null && ds.Tables[0].Rows[i]["Enable3D"] != DBNull.Value)
                         {
@@ -2137,9 +2137,9 @@ namespace VAdvantage.Model
                                     {
                                         series.SetName(dsAs.Tables[0].Rows[j]["Name"].ToString());
                                     }
-                                    if (dsAs.Tables[0].Rows[j]["AD_Series_Color_ID"] != null && dsAs.Tables[0].Rows[j]["AD_Series_Color_ID"] != DBNull.Value)
+                                    if (dsAs.Tables[0].Rows[j]["VAF_Series_Color_ID"] != null && dsAs.Tables[0].Rows[j]["VAF_Series_Color_ID"] != DBNull.Value)
                                     {
-                                        series.SetAD_Series_Color_ID(Util.GetValueOfInt(dsAs.Tables[0].Rows[j]["AD_Series_Color_ID"]));
+                                        series.SetVAF_Series_Color_ID(Util.GetValueOfInt(dsAs.Tables[0].Rows[j]["VAF_Series_Color_ID"]));
                                     }
                                     if (dsAs.Tables[0].Rows[j]["IsLogarithmic"] != null && dsAs.Tables[0].Rows[j]["IsLogarithmic"] != DBNull.Value)
                                     {
@@ -2173,9 +2173,9 @@ namespace VAdvantage.Model
                                     {
                                         series.SetDateTimeTypes(dsAs.Tables[0].Rows[j]["DateTimeTypes"].ToString());
                                     }
-                                    if (dsAs.Tables[0].Rows[j]["AD_DateColumn_ID"] != null && dsAs.Tables[0].Rows[j]["AD_DateColumn_ID"] != DBNull.Value)
+                                    if (dsAs.Tables[0].Rows[j]["VAF_DateColumn_ID"] != null && dsAs.Tables[0].Rows[j]["VAF_DateColumn_ID"] != DBNull.Value)
                                     {
-                                        series.SetAD_DateColumn_ID(Util.GetValueOfInt(dsAs.Tables[0].Rows[j]["AD_DateColumn_ID"]));
+                                        series.SetVAF_DateColumn_ID(Util.GetValueOfInt(dsAs.Tables[0].Rows[j]["VAF_DateColumn_ID"]));
                                     }
                                     if (dsAs.Tables[0].Rows[j]["DateFrom"] != null && dsAs.Tables[0].Rows[j]["DateFrom"] != DBNull.Value)
                                     {
@@ -2383,7 +2383,7 @@ namespace VAdvantage.Model
             int VAB_Element_ID = 0;
             if (lstTableName.Contains("VAB_Element")) // Update by Paramjeet Singh
             {
-                MVABElement element = new MVABElement(m_client, name, MVABElement.ELEMENTTYPE_Account, m_VAF_TreeInfo_Account_ID);
+                MVABElement element = new MVABElement(m_client, name, MVABElement.ELEMENTTYPE_Account, m_VAF_Tree_Account_ID);
 
 
 
@@ -2404,7 +2404,7 @@ namespace VAdvantage.Model
 
                 //	Create Account Values
                 m_nap = new NaturalAccountMap<String, MVABAcctElement>(m_ctx, m_trx);
-                MVAFTreeInfo tree = MVAFTreeInfo.Get(m_ctx, m_VAF_TreeInfo_Account_ID, m_trx);
+                MVAFTreeInfo tree = MVAFTreeInfo.Get(m_ctx, m_VAF_Tree_Account_ID, m_trx);
                 String errMsg = m_nap.ParseFile(AccountingFile, GetVAF_Client_ID(), GetVAF_Org_ID(), VAB_Element_ID, tree);
                 if (errMsg.Length != 0)
                 {

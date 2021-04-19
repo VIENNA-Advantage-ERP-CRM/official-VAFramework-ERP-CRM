@@ -83,8 +83,8 @@ namespace VAdvantage.Model
         /// <returns>target column</returns>
         public MVAFColumn GetTargetColumn()
         {
-            if (m_column == null || m_column.GetVAF_Column_ID() != GetAD_TargetColumn_ID())
-                m_column = MVAFColumn.Get(GetCtx(), GetAD_TargetColumn_ID());
+            if (m_column == null || m_column.GetVAF_Column_ID() != GetVAF_TargetColumn_ID())
+                m_column = MVAFColumn.Get(GetCtx(), GetVAF_TargetColumn_ID());
             return m_column;
         }	//	getTargetColumn
 
@@ -228,7 +228,7 @@ namespace VAdvantage.Model
         {
             StringBuilder sb = new StringBuilder("MAssignTarget[")
                 .Append(Get_ID())
-                .Append(",AD_TargetColumn_ID=").Append(GetAD_TargetColumn_ID());
+                .Append(",VAF_TargetColumn_ID=").Append(GetVAF_TargetColumn_ID());
             if (GetRecord_ID() != 0)
                 sb.Append(",Record_ID=").Append(GetRecord_ID());
             if (GetValueString() != null)

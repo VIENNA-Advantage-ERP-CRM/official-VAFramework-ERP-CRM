@@ -21,7 +21,7 @@ namespace VAdvantage.Model
         {
             /** if (VAF_ClientDetail_ID == 0)
             {
-            SetVAF_TreeInfo_Product_ID (0);
+            SetVAF_Tree_Product_ID (0);
             SetIsDiscountLineAmt (false);
             }
              */
@@ -31,7 +31,7 @@ namespace VAdvantage.Model
         {
             /** if (VAF_ClientDetail_ID == 0)
             {
-            SetVAF_TreeInfo_Product_ID (0);
+            SetVAF_Tree_Product_ID (0);
             SetIsDiscountLineAmt (false);
             }
              */
@@ -118,160 +118,160 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
 
-        /** VAF_TreeInfo_Activity_ID VAF_Control_Ref_ID=184 */
-        public static int VAF_TreeInfo_ACTIVITY_ID_VAF_Control_Ref_ID = 184;
+        /** VAF_Tree_Activity_ID VAF_Control_Ref_ID=184 */
+        public static int VAF_Tree_Activity_ID_VAF_Control_Ref_ID = 184;
         /** Set Activity Tree.
-        @param VAF_TreeInfo_Activity_ID Tree to determine activity hierarchy */
-        public void SetVAF_TreeInfo_Activity_ID(int VAF_TreeInfo_Activity_ID)
+        @param VAF_Tree_Activity_ID Tree to determine activity hierarchy */
+        public void SetVAF_Tree_Activity_ID(int VAF_Tree_Activity_ID)
         {
-            if (VAF_TreeInfo_Activity_ID <= 0) Set_Value("VAF_TreeInfo_Activity_ID", null);
+            if (VAF_Tree_Activity_ID <= 0) Set_Value("VAF_Tree_Activity_ID", null);
             else
-                Set_Value("VAF_TreeInfo_Activity_ID", VAF_TreeInfo_Activity_ID);
+                Set_Value("VAF_Tree_Activity_ID", VAF_Tree_Activity_ID);
         }
         /** Get Activity Tree.
         @return Tree to determine activity hierarchy */
-        public int GetVAF_TreeInfo_Activity_ID()
+        public int GetVAF_Tree_Activity_ID()
         {
-            Object ii = Get_Value("VAF_TreeInfo_Activity_ID");
+            Object ii = Get_Value("VAF_Tree_Activity_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** VAF_TreeInfo_BPartner_ID VAF_Control_Ref_ID=184 */
-        public static int VAF_TreeInfo_BPARTNER_ID_VAF_Control_Ref_ID = 184;
+        /** VAF_Tree_BPartner_ID VAF_Control_Ref_ID=184 */
+        public static int VAF_Tree_BPartner_ID_VAF_Control_Ref_ID = 184;
         /** Set BPartner Tree.
-        @param VAF_TreeInfo_BPartner_ID Tree to determine business partner hierarchy */
-        public void SetVAF_TreeInfo_BPartner_ID(int VAF_TreeInfo_BPartner_ID)
+        @param VAF_Tree_BPartner_ID Tree to determine business partner hierarchy */
+        public void SetVAF_Tree_BPartner_ID(int VAF_Tree_BPartner_ID)
         {
-            if (VAF_TreeInfo_BPartner_ID <= 0) Set_Value("VAF_TreeInfo_BPartner_ID", null);
+            if (VAF_Tree_BPartner_ID <= 0) Set_Value("VAF_Tree_BPartner_ID", null);
             else
-                Set_Value("VAF_TreeInfo_BPartner_ID", VAF_TreeInfo_BPartner_ID);
+                Set_Value("VAF_Tree_BPartner_ID", VAF_Tree_BPartner_ID);
         }
         /** Get BPartner Tree.
         @return Tree to determine business partner hierarchy */
-        public int GetVAF_TreeInfo_BPartner_ID()
+        public int GetVAF_Tree_BPartner_ID()
         {
-            Object ii = Get_Value("VAF_TreeInfo_BPartner_ID");
+            Object ii = Get_Value("VAF_Tree_BPartner_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** VAF_TreeInfo_Campaign_ID VAF_Control_Ref_ID=184 */
-        public static int VAF_TreeInfo_CAMPAIGN_ID_VAF_Control_Ref_ID = 184;
+        /** VAF_Tree_Campaign_ID VAF_Control_Ref_ID=184 */
+        public static int VAF_Tree_Campaign_ID_VAF_Control_Ref_ID = 184;
         /** Set Campaign Tree.
-        @param VAF_TreeInfo_Campaign_ID Tree to determine marketing campaign hierarchy */
-        public void SetVAF_TreeInfo_Campaign_ID(int VAF_TreeInfo_Campaign_ID)
+        @param VAF_Tree_Campaign_ID Tree to determine marketing campaign hierarchy */
+        public void SetVAF_Tree_Campaign_ID(int VAF_Tree_Campaign_ID)
         {
-            if (VAF_TreeInfo_Campaign_ID <= 0) Set_Value("VAF_TreeInfo_Campaign_ID", null);
+            if (VAF_Tree_Campaign_ID <= 0) Set_Value("VAF_Tree_Campaign_ID", null);
             else
-                Set_Value("VAF_TreeInfo_Campaign_ID", VAF_TreeInfo_Campaign_ID);
+                Set_Value("VAF_Tree_Campaign_ID", VAF_Tree_Campaign_ID);
         }
         /** Get Campaign Tree.
         @return Tree to determine marketing campaign hierarchy */
-        public int GetVAF_TreeInfo_Campaign_ID()
+        public int GetVAF_Tree_Campaign_ID()
         {
-            Object ii = Get_Value("VAF_TreeInfo_Campaign_ID");
+            Object ii = Get_Value("VAF_Tree_Campaign_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** VAF_TreeInfo_Menu_ID VAF_Control_Ref_ID=184 */
-        public static int VAF_TreeInfo_MENU_ID_VAF_Control_Ref_ID = 184;
+        /** VAF_Tree_Menu_ID VAF_Control_Ref_ID=184 */
+        public static int VAF_Tree_Menu_ID_VAF_Control_Ref_ID = 184;
         /** Set Menu Tree.
-        @param VAF_TreeInfo_Menu_ID Tree of the menu */
-        public void SetVAF_TreeInfo_Menu_ID(int VAF_TreeInfo_Menu_ID)
+        @param VAF_Tree_Menu_ID Tree of the menu */
+        public void SetVAF_Tree_Menu_ID(int VAF_Tree_Menu_ID)
         {
-            if (VAF_TreeInfo_Menu_ID <= 0) Set_Value("VAF_TreeInfo_Menu_ID", null);
+            if (VAF_Tree_Menu_ID <= 0) Set_Value("VAF_Tree_Menu_ID", null);
             else
-                Set_Value("VAF_TreeInfo_Menu_ID", VAF_TreeInfo_Menu_ID);
+                Set_Value("VAF_Tree_Menu_ID", VAF_Tree_Menu_ID);
         }
         /** Get Menu Tree.
         @return Tree of the menu */
-        public int GetVAF_TreeInfo_Menu_ID()
+        public int GetVAF_Tree_Menu_ID()
         {
-            Object ii = Get_Value("VAF_TreeInfo_Menu_ID");
+            Object ii = Get_Value("VAF_Tree_Menu_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** VAF_TreeInfo_Org_ID VAF_Control_Ref_ID=184 */
-        public static int VAF_TreeInfo_ORG_ID_VAF_Control_Ref_ID = 184;
+        /** VAF_Tree_Org_ID VAF_Control_Ref_ID=184 */
+        public static int VAF_Tree_Org_ID_VAF_Control_Ref_ID = 184;
         /** Set Organization Tree.
-        @param VAF_TreeInfo_Org_ID Tree to determine organizational hierarchy */
-        public void SetVAF_TreeInfo_Org_ID(int VAF_TreeInfo_Org_ID)
+        @param VAF_Tree_Org_ID Tree to determine organizational hierarchy */
+        public void SetVAF_Tree_Org_ID(int VAF_Tree_Org_ID)
         {
-            if (VAF_TreeInfo_Org_ID <= 0) Set_Value("VAF_TreeInfo_Org_ID", null);
+            if (VAF_Tree_Org_ID <= 0) Set_Value("VAF_Tree_Org_ID", null);
             else
-                Set_Value("VAF_TreeInfo_Org_ID", VAF_TreeInfo_Org_ID);
+                Set_Value("VAF_Tree_Org_ID", VAF_Tree_Org_ID);
         }
         /** Get Organization Tree.
         @return Tree to determine organizational hierarchy */
-        public int GetVAF_TreeInfo_Org_ID()
+        public int GetVAF_Tree_Org_ID()
         {
-            Object ii = Get_Value("VAF_TreeInfo_Org_ID");
+            Object ii = Get_Value("VAF_Tree_Org_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** VAF_TreeInfo_Product_ID VAF_Control_Ref_ID=184 */
-        public static int VAF_TreeInfo_PRODUCT_ID_VAF_Control_Ref_ID = 184;
+        /** VAF_Tree_Product_ID VAF_Control_Ref_ID=184 */
+        public static int VAF_Tree_Product_ID_VAF_Control_Ref_ID = 184;
         /** Set Product Tree.
-        @param VAF_TreeInfo_Product_ID Tree to determine product hierarchy */
-        public void SetVAF_TreeInfo_Product_ID(int VAF_TreeInfo_Product_ID)
+        @param VAF_Tree_Product_ID Tree to determine product hierarchy */
+        public void SetVAF_Tree_Product_ID(int VAF_Tree_Product_ID)
         {
-            // if (VAF_TreeInfo_Product_ID < 1) throw new ArgumentException("VAF_TreeInfo_Product_ID is mandatory.");
-            if (VAF_TreeInfo_Product_ID < 1)
+            // if (VAF_Tree_Product_ID < 1) throw new ArgumentException("VAF_Tree_Product_ID is mandatory.");
+            if (VAF_Tree_Product_ID < 1)
             {
-                Set_Value("VAF_TreeInfo_Product_ID", null);
+                Set_Value("VAF_Tree_Product_ID", null);
             }
             else
             {
-                Set_Value("VAF_TreeInfo_Product_ID", VAF_TreeInfo_Product_ID);
+                Set_Value("VAF_Tree_Product_ID", VAF_Tree_Product_ID);
             }
         }
         /** Get Product Tree.
         @return Tree to determine product hierarchy */
-        public int GetVAF_TreeInfo_Product_ID()
+        public int GetVAF_Tree_Product_ID()
         {
-            Object ii = Get_Value("VAF_TreeInfo_Product_ID");
+            Object ii = Get_Value("VAF_Tree_Product_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** VAF_TreeInfo_Project_ID VAF_Control_Ref_ID=184 */
-        public static int VAF_TreeInfo_PROJECT_ID_VAF_Control_Ref_ID = 184;
+        /** VAF_Tree_Project_ID VAF_Control_Ref_ID=184 */
+        public static int VAF_Tree_Project_ID_VAF_Control_Ref_ID = 184;
         /** Set Project Tree.
-        @param VAF_TreeInfo_Project_ID Tree to determine project hierarchy */
-        public void SetVAF_TreeInfo_Project_ID(int VAF_TreeInfo_Project_ID)
+        @param VAF_Tree_Project_ID Tree to determine project hierarchy */
+        public void SetVAF_Tree_Project_ID(int VAF_Tree_Project_ID)
         {
-            if (VAF_TreeInfo_Project_ID <= 0) Set_Value("VAF_TreeInfo_Project_ID", null);
+            if (VAF_Tree_Project_ID <= 0) Set_Value("VAF_Tree_Project_ID", null);
             else
-                Set_Value("VAF_TreeInfo_Project_ID", VAF_TreeInfo_Project_ID);
+                Set_Value("VAF_Tree_Project_ID", VAF_Tree_Project_ID);
         }
         /** Get Project Tree.
         @return Tree to determine project hierarchy */
-        public int GetVAF_TreeInfo_Project_ID()
+        public int GetVAF_Tree_Project_ID()
         {
-            Object ii = Get_Value("VAF_TreeInfo_Project_ID");
+            Object ii = Get_Value("VAF_Tree_Project_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** VAF_TreeInfo_SalesRegion_ID VAF_Control_Ref_ID=184 */
-        public static int VAF_TreeInfo_SALESREGION_ID_VAF_Control_Ref_ID = 184;
+        /** VAF_Tree_SalesRegion_ID VAF_Control_Ref_ID=184 */
+        public static int VAF_Tree_SalesRegion_ID_VAF_Control_Ref_ID = 184;
         /** Set Sales Region Tree.
-        @param VAF_TreeInfo_SalesRegion_ID Tree to determine sales regional hierarchy */
-        public void SetVAF_TreeInfo_SalesRegion_ID(int VAF_TreeInfo_SalesRegion_ID)
+        @param VAF_Tree_SalesRegion_ID Tree to determine sales regional hierarchy */
+        public void SetVAF_Tree_SalesRegion_ID(int VAF_Tree_SalesRegion_ID)
         {
-            if (VAF_TreeInfo_SalesRegion_ID <= 0) Set_Value("VAF_TreeInfo_SalesRegion_ID", null);
+            if (VAF_Tree_SalesRegion_ID <= 0) Set_Value("VAF_Tree_SalesRegion_ID", null);
             else
-                Set_Value("VAF_TreeInfo_SalesRegion_ID", VAF_TreeInfo_SalesRegion_ID);
+                Set_Value("VAF_Tree_SalesRegion_ID", VAF_Tree_SalesRegion_ID);
         }
         /** Get Sales Region Tree.
         @return Tree to determine sales regional hierarchy */
-        public int GetVAF_TreeInfo_SalesRegion_ID()
+        public int GetVAF_Tree_SalesRegion_ID()
         {
-            Object ii = Get_Value("VAF_TreeInfo_SalesRegion_ID");
+            Object ii = Get_Value("VAF_Tree_SalesRegion_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

@@ -178,59 +178,59 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** AD_DateColumn_ID VAF_Control_Ref_ID=414 */
-        public static int AD_DATECOLUMN_ID_VAF_Control_Ref_ID = 414;
+        /** VAF_DateColumn_ID VAF_Control_Ref_ID=414 */
+        public static int VAF_DateColumn_ID_VAF_Control_Ref_ID = 414;
         /** Set Date Column.
-        @param AD_DateColumn_ID Date Column */
-        public void SetAD_DateColumn_ID(int AD_DateColumn_ID)
+        @param VAF_DateColumn_ID Date Column */
+        public void SetVAF_DateColumn_ID(int VAF_DateColumn_ID)
         {
-            if (AD_DateColumn_ID <= 0) Set_Value("AD_DateColumn_ID", null);
+            if (VAF_DateColumn_ID <= 0) Set_Value("VAF_DateColumn_ID", null);
             else
-                Set_Value("AD_DateColumn_ID", AD_DateColumn_ID);
+                Set_Value("VAF_DateColumn_ID", VAF_DateColumn_ID);
         }
         /** Get Date Column.
         @return Date Column */
-        public int GetAD_DateColumn_ID()
+        public int GetVAF_DateColumn_ID()
         {
-            Object ii = Get_Value("AD_DateColumn_ID");
+            Object ii = Get_Value("VAF_DateColumn_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Gradient_Color_ID VAF_Control_Ref_ID=266 */
-        public static int AD_GRADIENT_COLOR_ID_VAF_Control_Ref_ID = 266;
+        /** VAF_Gradient_Color_ID VAF_Control_Ref_ID=266 */
+        public static int VAF_Gradient_Color_ID_VAF_Control_Ref_ID = 266;
         /** Set Series Gradient Color.
-        @param AD_Gradient_Color_ID Series Gradient Color */
-        public void SetAD_Gradient_Color_ID(int AD_Gradient_Color_ID)
+        @param VAF_Gradient_Color_ID Series Gradient Color */
+        public void SetVAF_Gradient_Color_ID(int VAF_Gradient_Color_ID)
         {
-            if (AD_Gradient_Color_ID <= 0) Set_Value("AD_Gradient_Color_ID", null);
+            if (VAF_Gradient_Color_ID <= 0) Set_Value("VAF_Gradient_Color_ID", null);
             else
-                Set_Value("AD_Gradient_Color_ID", AD_Gradient_Color_ID);
+                Set_Value("VAF_Gradient_Color_ID", VAF_Gradient_Color_ID);
         }
         /** Get Series Gradient Color.
         @return Series Gradient Color */
-        public int GetAD_Gradient_Color_ID()
+        public int GetVAF_Gradient_Color_ID()
         {
-            Object ii = Get_Value("AD_Gradient_Color_ID");
+            Object ii = Get_Value("VAF_Gradient_Color_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Series_Color_ID VAF_Control_Ref_ID=266 */
-        public static int AD_SERIES_COLOR_ID_VAF_Control_Ref_ID = 266;
+        /** VAF_Series_Color_ID VAF_Control_Ref_ID=266 */
+        public static int VAF_Series_Color_ID_VAF_Control_Ref_ID = 266;
         /** Set Series Color.
-        @param AD_Series_Color_ID Series Color */
-        public void SetAD_Series_Color_ID(int AD_Series_Color_ID)
+        @param VAF_Series_Color_ID Series Color */
+        public void SetVAF_Series_Color_ID(int VAF_Series_Color_ID)
         {
-            if (AD_Series_Color_ID <= 0) Set_Value("AD_Series_Color_ID", null);
+            if (VAF_Series_Color_ID <= 0) Set_Value("VAF_Series_Color_ID", null);
             else
-                Set_Value("AD_Series_Color_ID", AD_Series_Color_ID);
+                Set_Value("VAF_Series_Color_ID", VAF_Series_Color_ID);
         }
         /** Get Series Color.
         @return Series Color */
-        public int GetAD_Series_Color_ID()
+        public int GetVAF_Series_Color_ID()
         {
-            Object ii = Get_Value("AD_Series_Color_ID");
+            Object ii = Get_Value("VAF_Series_Color_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

@@ -342,7 +342,7 @@ namespace VAdvantage.WF
                     continue;
 
                 //	Start new Activity
-                MVAFWFlowTask activity = new MVAFWFlowTask(this, transitions[i].GetAD_WF_Next_ID());
+                MVAFWFlowTask activity = new MVAFWFlowTask(this, transitions[i].GetVAF_WF_Next_ID());
                 // set Last Activity ID property in current WF Activity
                 activity.SetLastActivity(last.GetVAF_WFlow_Task_ID());
                 // new Thread(activity).Start();

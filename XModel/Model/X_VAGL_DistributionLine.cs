@@ -229,40 +229,40 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_LocFrom_ID VAF_Control_Ref_ID=133 */
-public static int C_LOCFROM_ID_VAF_Control_Ref_ID=133;
+/** VAB_LocFrom_ID VAF_Control_Ref_ID=133 */
+public static int VAB_LocFrom_ID_VAF_Control_Ref_ID=133;
 /** Set Location From.
-@param C_LocFrom_ID Location that inventory was moved from */
-public void SetC_LocFrom_ID (int C_LocFrom_ID)
+@param VAB_LocFrom_ID Location that inventory was moved from */
+public void SetVAB_LocFrom_ID (int VAB_LocFrom_ID)
 {
-if (C_LocFrom_ID <= 0) Set_Value ("C_LocFrom_ID", null);
+if (VAB_LocFrom_ID <= 0) Set_Value ("VAB_LocFrom_ID", null);
 else
-Set_Value ("C_LocFrom_ID", C_LocFrom_ID);
+Set_Value ("VAB_LocFrom_ID", VAB_LocFrom_ID);
 }
 /** Get Location From.
 @return Location that inventory was moved from */
-public int GetC_LocFrom_ID() 
+public int GetVAB_LocFrom_ID() 
 {
-Object ii = Get_Value("C_LocFrom_ID");
+Object ii = Get_Value("VAB_LocFrom_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_LocTo_ID VAF_Control_Ref_ID=133 */
-public static int C_LOCTO_ID_VAF_Control_Ref_ID=133;
+/** VAB_LocTo_ID VAF_Control_Ref_ID=133 */
+public static int VAB_LocTo_ID_VAF_Control_Ref_ID=133;
 /** Set Location To.
-@param C_LocTo_ID Location that inventory was moved to */
-public void SetC_LocTo_ID (int C_LocTo_ID)
+@param VAB_LocTo_ID Location that inventory was moved to */
+public void SetVAB_LocTo_ID (int VAB_LocTo_ID)
 {
-if (C_LocTo_ID <= 0) Set_Value ("C_LocTo_ID", null);
+if (VAB_LocTo_ID <= 0) Set_Value ("VAB_LocTo_ID", null);
 else
-Set_Value ("C_LocTo_ID", C_LocTo_ID);
+Set_Value ("VAB_LocTo_ID", VAB_LocTo_ID);
 }
 /** Get Location To.
 @return Location that inventory was moved to */
-public int GetC_LocTo_ID() 
+public int GetVAB_LocTo_ID() 
 {
-Object ii = Get_Value("C_LocTo_ID");
+Object ii = Get_Value("VAB_LocTo_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

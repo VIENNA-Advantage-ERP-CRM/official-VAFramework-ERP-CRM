@@ -27,8 +27,8 @@ namespace VAdvantage.Model
 	 *  @param  VAB_Order_ID    order to load, (0 create new order)
 	 *  @param trx p_trx name
 	 */
-        public MVAMCostUpdate(Ctx ctx, int VAM_ProductCostUpdate_ID, Trx trx)
-            : base(ctx, VAM_ProductCostUpdate_ID, trx)
+        public MVAMCostUpdate(Ctx ctx, int VAM_CostUpdate_ID, Trx trx)
+            : base(ctx, VAM_CostUpdate_ID, trx)
         {
 
         }
@@ -66,7 +66,7 @@ namespace VAdvantage.Model
         public MVAMCostUpdateLine[] GetLines()
         {
             List<MVAMCostUpdateLine> list = new List<MVAMCostUpdateLine>();
-            StringBuilder sql = new StringBuilder("SELECT * FROM VAM_ProductCostUpdateLine WHERE VAM_ProductCostUpdate_ID=" + this.GetVAM_ProductCostUpdate_ID());
+            StringBuilder sql = new StringBuilder("SELECT * FROM VAM_CostUpdateLine WHERE VAM_CostUpdate_ID=" + this.GetVAM_CostUpdate_ID());
             IDataReader idr = null;
             try
             {

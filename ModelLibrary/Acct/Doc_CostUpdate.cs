@@ -135,7 +135,7 @@ namespace VAdvantage.Acct
                            + " FROM VAM_ProductCost WHERE VAM_Product_ID = " + line.GetVAM_Product_ID()
                            + " AND VAB_AccountBook_ID = " + as1.GetVAB_AccountBook_ID()
                            + " AND VAM_ProductCostElement_ID = " + m_ce.GetVAM_ProductCostElement_ID()
-                           + " AND VAM_ProductCostType_ID = " + as1.GetVAM_ProductCostType_ID()
+                           + " AND VAM_CostType_ID = " + as1.GetVAM_CostType_ID()
                            + " AND VAF_Client_ID = " + GetVAF_Client_ID();
                 if (costingLevel.Equals(X_VAB_AccountBook.COSTINGLEVEL_Client))
                 {

@@ -104,7 +104,7 @@ namespace VAdvantage.Model
             MVABAccount acct = MVABAccount.Get(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(),
                 GetVAB_AccountBook_ID(), GetAccount_ID(), GetVAB_SubAcct_ID(),
                 GetVAM_Product_ID(), GetVAB_BusinessPartner_ID(), GetVAF_OrgTrx_ID(),
-                GetC_LocFrom_ID(), GetC_LocTo_ID(), GetVAB_SalesRegionState_ID(),
+                GetVAB_LocFrom_ID(), GetVAB_LocTo_ID(), GetVAB_SalesRegionState_ID(),
                 GetVAB_Project_ID(), GetVAB_Promotion_ID(), GetVAB_BillingCode_ID(),
                 GetUser1_ID(), GetUser2_ID(), GetUserElement1_ID(), GetUserElement2_ID());
             if (acct != null && acct.Get_ID() == 0)

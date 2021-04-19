@@ -355,7 +355,7 @@ namespace VAdvantage.WF
             List<MVAFWFlowNode> list = new List<MVAFWFlowNode>();
             for (int i = 0; i < nexts.Length; i++)
             {
-                MVAFWFlowNode next = GetNode(nexts[i].GetAD_WF_Next_ID());
+                MVAFWFlowNode next = GetNode(nexts[i].GetVAF_WF_Next_ID());
                 if (next != null)
                     list.Add(next);
             }
@@ -427,7 +427,7 @@ namespace VAdvantage.WF
                 for (int i = 0; i < nexts.Length; i++)
                 {
                     if (nexts[i].IsActive())
-                        AddNodesDF(list, nexts[i].GetAD_WF_Next_ID(), VAF_Client_ID);
+                        AddNodesDF(list, nexts[i].GetVAF_WF_Next_ID(), VAF_Client_ID);
                 }
             }
         }
@@ -449,7 +449,7 @@ namespace VAdvantage.WF
                 MVAFWFlowNextNode[] nexts = node.GetTransitions(VAF_Client_ID);
                 for (int i = 0; i < nexts.Length; i++)
                 {
-                    MVAFWFlowNode child = GetNode(nexts[i].GetAD_WF_Next_ID());
+                    MVAFWFlowNode child = GetNode(nexts[i].GetVAF_WF_Next_ID());
                     if (!child.IsActive())
                         continue;
                     if (child.GetVAF_Client_ID() == 0
@@ -463,7 +463,7 @@ namespace VAdvantage.WF
                 for (int i = 0; i < nexts.Length; i++)
                 {
                     if (nexts[i].IsActive())
-                        AddNodesSF(list, nexts[i].GetAD_WF_Next_ID(), VAF_Client_ID);
+                        AddNodesSF(list, nexts[i].GetVAF_WF_Next_ID(), VAF_Client_ID);
                 }
             }
         }
@@ -483,7 +483,7 @@ namespace VAdvantage.WF
                 {
                     MVAFWFlowNextNode[] nexts = nodes[i].GetTransitions(VAF_Client_ID);
                     if (nexts.Length > 0)
-                        return nexts[0].GetAD_WF_Next_ID();
+                        return nexts[0].GetVAF_WF_Next_ID();
                     return 0;
                 }
             }

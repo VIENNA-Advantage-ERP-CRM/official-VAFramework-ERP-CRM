@@ -940,7 +940,7 @@ namespace VIS.Models
                 }
                 else if (type.Equals(MVABAccountBookElement.ELEMENTTYPE_LocationFrom))
                 {
-                    sql = sql.Append("C_LocFrom_ID");
+                    sql = sql.Append("VAB_LocFrom_ID");
                     if (string.IsNullOrEmpty(value))
                         sql = sql.Append(" IS NULL AND ");
                     else
@@ -948,7 +948,7 @@ namespace VIS.Models
                 }
                 else if (type.Equals(MVABAccountBookElement.ELEMENTTYPE_LocationTo))
                 {
-                    sql = sql.Append("C_LocTo_ID");
+                    sql = sql.Append("VAB_LocTo_ID");
                     if (string.IsNullOrEmpty(value))
                         sql = sql.Append(" IS NULL AND ");
                     else

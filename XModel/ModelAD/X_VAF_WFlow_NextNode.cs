@@ -20,7 +20,7 @@ public X_VAF_WFlow_NextNode (Context ctx, int VAF_WFlow_NextNode_ID, Trx trxName
 {
 /** if (VAF_WFlow_NextNode_ID == 0)
 {
-SetAD_WF_Next_ID (0);
+SetVAF_WF_Next_ID (0);
 SetVAF_WFlow_NextNode_ID (0);
 SetVAF_WFlow_Node_ID (0);
 SetRecordType (null);	// U
@@ -33,7 +33,7 @@ public X_VAF_WFlow_NextNode (Ctx ctx, int VAF_WFlow_NextNode_ID, Trx trxName) : 
 {
 /** if (VAF_WFlow_NextNode_ID == 0)
 {
-SetAD_WF_Next_ID (0);
+SetVAF_WF_Next_ID (0);
 SetVAF_WFlow_NextNode_ID (0);
 SetVAF_WFlow_Node_ID (0);
 SetRecordType (null);	// U
@@ -121,20 +121,20 @@ StringBuilder sb = new StringBuilder ("X_VAF_WFlow_NextNode[").Append(Get_ID()).
 return sb.ToString();
 }
 
-/** AD_WF_Next_ID VAF_Control_Ref_ID=109 */
-public static int AD_WF_NEXT_ID_VAF_Control_Ref_ID=109;
+/** VAF_WF_Next_ID VAF_Control_Ref_ID=109 */
+public static int VAF_WF_Next_ID_VAF_Control_Ref_ID=109;
 /** Set Next Node.
-@param AD_WF_Next_ID Next Node in workflow */
-public void SetAD_WF_Next_ID (int AD_WF_Next_ID)
+@param VAF_WF_Next_ID Next Node in workflow */
+public void SetVAF_WF_Next_ID (int VAF_WF_Next_ID)
 {
-if (AD_WF_Next_ID < 1) throw new ArgumentException ("AD_WF_Next_ID is mandatory.");
-Set_Value ("AD_WF_Next_ID", AD_WF_Next_ID);
+if (VAF_WF_Next_ID < 1) throw new ArgumentException ("VAF_WF_Next_ID is mandatory.");
+Set_Value ("VAF_WF_Next_ID", VAF_WF_Next_ID);
 }
 /** Get Next Node.
 @return Next Node in workflow */
-public int GetAD_WF_Next_ID() 
+public int GetVAF_WF_Next_ID() 
 {
-Object ii = Get_Value("AD_WF_Next_ID");
+Object ii = Get_Value("VAF_WF_Next_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -65,7 +65,7 @@ namespace VAdvantage.Model
                 sql = @"SELECT ROUND(AVG(CST.CURRENTCOSTPRICE), 10)   FROM VAM_Product P   INNER JOIN VAM_ProductCost CST   ON P.VAM_Product_ID=CST.VAM_Product_ID
                                LEFT JOIN VAM_ProductCategory PC   ON P.VAM_ProductCategory_ID=PC.VAM_ProductCategory_ID
                                INNER JOIN VAB_ACCOUNTBOOK ACC   ON CST.VAB_ACCOUNTBOOK_ID=ACC.VAB_ACCOUNTBOOK_ID
-                               INNER JOIN VAM_ProductCostType ct ON ct.VAM_ProductCostType_ID = acc.VAM_ProductCostType_ID
+                               INNER JOIN VAM_CostType ct ON ct.VAM_CostType_ID = acc.VAM_CostType_ID
                                INNER JOIN VAM_ProductCostElement CE  ON CST.VAM_ProductCostElement_ID=CE.VAM_ProductCostElement_ID
                               WHERE (( CASE WHEN PC.COSTINGMETHOD IS NOT NULL  THEN PC.COSTINGMETHOD
                                             ELSE ACC.COSTINGMETHOD  END) = CE.COSTINGMETHOD )
@@ -119,16 +119,16 @@ namespace VAdvantage.Model
                 sql = @"SELECT ROUND(" + (IsRequiredQty ? "AVG(CST.CURRENTQTY)" : "AVG(CST.CURRENTCOSTPRICE)") + @", 10)   FROM VAM_Product P   INNER JOIN VAM_ProductCost CST   ON P.VAM_Product_ID=CST.VAM_Product_ID
                                LEFT JOIN VAM_ProductCategory PC   ON P.VAM_ProductCategory_ID=PC.VAM_ProductCategory_ID
                                INNER JOIN VAB_ACCOUNTBOOK ACC   ON CST.VAB_ACCOUNTBOOK_ID=ACC.VAB_ACCOUNTBOOK_ID
-                               INNER JOIN VAM_ProductCostType ct ON ct.VAM_ProductCostType_ID = acc.VAM_ProductCostType_ID
+                               INNER JOIN VAM_CostType ct ON ct.VAM_CostType_ID = acc.VAM_CostType_ID
                                INNER JOIN VAM_ProductCostElement CE  ON CST.VAM_ProductCostElement_ID=CE.VAM_ProductCostElement_ID
-                              WHERE ((   CASE WHEN PC.COSTINGMETHOD IS NOT NULL  AND PC.COSTINGMETHOD   = 'C'  THEN (SELECT CAST( Cel.M_Ref_Costelement AS INTEGER)
-                                                  FROM VAM_ProductCostElement ced  INNER JOIN VAM_ProductCostElementLine Cel ON Ced.VAM_ProductCostElement_Id = CAST( Cel.M_Ref_Costelement AS INTEGER)
+                              WHERE ((   CASE WHEN PC.COSTINGMETHOD IS NOT NULL  AND PC.COSTINGMETHOD   = 'C'  THEN (SELECT CAST( Cel.VAM_Ref_CostElement AS INTEGER)
+                                                  FROM VAM_ProductCostElement ced  INNER JOIN VAM_CostElementLine Cel ON Ced.VAM_ProductCostElement_Id = CAST( Cel.VAM_Ref_CostElement AS INTEGER)
                                                   WHERE Ced.vaf_client_Id  =" + client_Id + @" AND Ced.Isactive ='Y' AND ced.CostElementType ='M'
                                                   AND Cel.Isactive ='Y' AND Cel.VAM_ProductCostElement_Id=PC.VAM_ProductCostElement_id AND ced.CostingMethod  IS NOT NULL )
                                             WHEN PC.COSTINGMETHOD IS NOT NULL  THEN (SELECT VAM_ProductCostElement_ID FROM VAM_ProductCostElement 
                                                   WHERE COSTINGMETHOD = pc.COSTINGMETHOD AND vaf_client_id    = " + client_Id + @" )
-                                            WHEN ACC.COSTINGMETHOD IS NOT NULL AND ACC.COSTINGMETHOD   = 'C' THEN (SELECT CAST( Cel.M_Ref_Costelement AS INTEGER)
-                                                  FROM VAM_ProductCostElement ced  INNER JOIN VAM_ProductCostElementLine Cel ON Ced.VAM_ProductCostElement_Id = CAST( Cel.M_Ref_Costelement AS INTEGER)
+                                            WHEN ACC.COSTINGMETHOD IS NOT NULL AND ACC.COSTINGMETHOD   = 'C' THEN (SELECT CAST( Cel.VAM_Ref_CostElement AS INTEGER)
+                                                  FROM VAM_ProductCostElement ced  INNER JOIN VAM_CostElementLine Cel ON Ced.VAM_ProductCostElement_Id = CAST( Cel.VAM_Ref_CostElement AS INTEGER)
                                                   WHERE Ced.vaf_client_Id  =" + client_Id + @" AND Ced.Isactive ='Y' AND ced.CostElementType ='M'
                                                   AND Cel.Isactive ='Y' AND Cel.VAM_ProductCostElement_Id= ACC.VAM_ProductCostElement_id AND ced.CostingMethod  IS NOT NULL ) 
                                             ELSE
@@ -193,7 +193,7 @@ namespace VAdvantage.Model
                 sql = @"SELECT ROUND(AVG(CST.CURRENTCOSTPRICE), 10)   FROM VAM_Product P   INNER JOIN VAM_ProductCost CST   ON P.VAM_Product_ID=CST.VAM_Product_ID
                                LEFT JOIN VAM_ProductCategory PC   ON P.VAM_ProductCategory_ID=PC.VAM_ProductCategory_ID
                                INNER JOIN VAB_ACCOUNTBOOK ACC   ON CST.VAB_ACCOUNTBOOK_ID=ACC.VAB_ACCOUNTBOOK_ID
-                               INNER JOIN VAM_ProductCostType ct ON ct.VAM_ProductCostType_ID = acc.VAM_ProductCostType_ID
+                               INNER JOIN VAM_CostType ct ON ct.VAM_CostType_ID = acc.VAM_CostType_ID
                                INNER JOIN VAM_ProductCostElement CE  ON CST.VAM_ProductCostElement_ID=CE.VAM_ProductCostElement_ID
                               WHERE (( CASE WHEN PC.COSTINGMETHOD IS NOT NULL  THEN PC.COSTINGMETHOD
                                             ELSE ACC.COSTINGMETHOD  END) = CE.COSTINGMETHOD )
@@ -322,7 +322,7 @@ namespace VAdvantage.Model
 
             return Util.GetValueOfDecimal(GetCurrentCost(
                 product, VAM_PFeature_SetInstance_ID,
-                as1, VAF_Org_ID, as1.GetVAM_ProductCostType_ID(), costingMethod, qty,
+                as1, VAF_Org_ID, as1.GetVAM_CostType_ID(), costingMethod, qty,
                 VAB_OrderLine_ID, zeroCostsOK, trxName));
         }
 
@@ -331,7 +331,7 @@ namespace VAdvantage.Model
          *	@param product product
          *	@param M_ASI_ID costing level asi
          *	@param Org_ID costing level org
-         *	@param VAM_ProductCostType_ID cost type
+         *	@param VAM_CostType_ID cost type
          *	@param as1 AcctSchema
          *	@param costingMethod method
          *	@param qty quantity
@@ -341,7 +341,7 @@ namespace VAdvantage.Model
          *	@return cost price or null
          */
         private static Decimal? GetCurrentCost(MVAMProduct product, int M_ASI_ID,
-            VAdvantage.Model.MVABAccountBook as1, int Org_ID, int VAM_ProductCostType_ID,
+            VAdvantage.Model.MVABAccountBook as1, int Org_ID, int VAM_CostType_ID,
             String costingMethod, Decimal qty, int VAB_OrderLine_ID,
             bool zeroCostsOK, Trx trxName)
         {
@@ -440,7 +440,7 @@ namespace VAdvantage.Model
             //    + "WHERE c.VAF_Client_ID=" + product.GetVAF_Client_ID() + " AND c.VAF_Org_ID=" + Org_ID		//	#1/2
             //    + " AND c.VAM_Product_ID=" + product.GetVAM_Product_ID()							//	#3
             //    + " AND (c.VAM_PFeature_SetInstance_ID=" + M_ASI_ID + " OR c.VAM_PFeature_SetInstance_ID=0)"	//	#4
-            //    + " AND c.VAM_ProductCostType_ID=" + VAM_ProductCostType_ID + " AND c.VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID()	//	#5/6
+            //    + " AND c.VAM_CostType_ID=" + VAM_CostType_ID + " AND c.VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID()	//	#5/6
             //    + " AND (ce.CostingMethod IS NULL OR ce.CostingMethod=@costingMethod) "	//	#7
             //    + "GROUP BY ce.CostElementType, ce.CostingMethod, c.PercentCost, c.VAM_ProductCostElement_ID";
             String sql = "SELECT SUM(c.CurrentCostPrice), ce.CostElementType, ce.CostingMethod,"
@@ -450,7 +450,7 @@ namespace VAdvantage.Model
                 + "WHERE c.VAF_Client_ID=" + product.GetVAF_Client_ID() + " AND c.VAF_Org_ID=" + Org_ID		//	#1/2
                 + " AND c.VAM_Product_ID=" + product.GetVAM_Product_ID()							//	#3
                 + " AND (c.VAM_PFeature_SetInstance_ID=" + M_ASI_ID + " OR c.VAM_PFeature_SetInstance_ID=0)"	//	#4
-                + " AND c.VAM_ProductCostType_ID=" + VAM_ProductCostType_ID + " AND c.VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID();	//	#5/6
+                + " AND c.VAM_CostType_ID=" + VAM_CostType_ID + " AND c.VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID();	//	#5/6
             if (!string.IsNullOrEmpty(costingMethod))
             {
                 sql += " AND (ce.CostingMethod=@costingMethod) ";	//	#7
@@ -1701,7 +1701,7 @@ namespace VAdvantage.Model
                 + "WHERE VAF_Client_ID=" + product.GetVAF_Client_ID() + " AND VAF_Org_ID=" + VAF_Org_ID
                 + " AND VAM_Product_ID=" + product.GetVAM_Product_ID()
                 + " AND VAM_PFeature_SetInstance_ID=" + VAM_PFeature_SetInstance_ID
-                + " AND VAM_ProductCostType_ID=" + as1.GetVAM_ProductCostType_ID() + " AND VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID()
+                + " AND VAM_CostType_ID=" + as1.GetVAM_CostType_ID() + " AND VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID()
                 + " AND VAM_ProductCostElement_ID=" + VAM_ProductCostElement_ID + "AND VAA_Asset_ID=" + VAA_Asset_ID + "AND ISAssetCost= 'Y'";
             sql += " AND NVL(VAM_Warehouse_ID,0) = " + VAM_Warehouse_ID;
             DataTable dt = null;
@@ -1757,7 +1757,7 @@ namespace VAdvantage.Model
                 + "WHERE VAF_Client_ID=" + product.GetVAF_Client_ID() + " AND VAF_Org_ID=" + VAF_Org_ID
                 + " AND VAM_Product_ID=" + product.GetVAM_Product_ID()
                 + " AND VAM_PFeature_SetInstance_ID=" + VAM_PFeature_SetInstance_ID
-                + " AND VAM_ProductCostType_ID=" + as1.GetVAM_ProductCostType_ID() + " AND VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID()
+                + " AND VAM_CostType_ID=" + as1.GetVAM_CostType_ID() + " AND VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID()
                 + " AND VAM_ProductCostElement_ID=" + VAM_ProductCostElement_ID + " AND ISAssetCost= 'N'";
             sql += " AND NVL(VAM_Warehouse_ID, 0) = " + VAM_Warehouse_ID;
             DataTable dt = null;
@@ -1793,7 +1793,7 @@ namespace VAdvantage.Model
         }
 
         public static MVAMVAMProductCost[] Get(int VAM_PFeature_SetInstance_ID,
-        VAdvantage.Model.MVABAccountBook as1, int VAM_ProductCostType_ID, int VAF_Org_ID, MVAMProduct product)
+        VAdvantage.Model.MVABAccountBook as1, int VAM_CostType_ID, int VAF_Org_ID, MVAMProduct product)
         {
             String CostingMethod = as1.GetCostingMethod();
             String CostingLevel = as1.GetCostingLevel();
@@ -1887,15 +1887,15 @@ namespace VAdvantage.Model
                 + "WHERE c.VAF_Client_ID=" + product.GetVAF_Client_ID() + " AND c.VAF_Org_ID=" + VAF_Org_ID
                 + " AND c.VAM_Product_ID=" + product.GetVAM_Product_ID()
                 + " AND (c.VAM_PFeature_SetInstance_ID=" + VAM_PFeature_SetInstance_ID + " OR c.VAM_PFeature_SetInstance_ID=0) ";
-            if (VAM_ProductCostType_ID == 0)
+            if (VAM_CostType_ID == 0)
             {
-                //pstmt.setInt (5, as1.GetVAM_ProductCostType_ID());
-                sql += " AND c.VAM_ProductCostType_ID=" + as1.GetVAM_ProductCostType_ID();
+                //pstmt.setInt (5, as1.GetVAM_CostType_ID());
+                sql += " AND c.VAM_CostType_ID=" + as1.GetVAM_CostType_ID();
             }
             else
             {
-                //pstmt.setInt (5, VAM_ProductCostType_ID);
-                sql += " AND c.VAM_ProductCostType_ID= " + VAM_ProductCostType_ID;
+                //pstmt.setInt (5, VAM_CostType_ID);
+                sql += " AND c.VAM_CostType_ID= " + VAM_CostType_ID;
             }
 
             //sql += " AND (ce.CostingMethod IS NULL OR ce.CostingMethod='" + X_VAM_ProductCostElement.COSTINGMETHOD_StandardCosting + "') "
@@ -1945,7 +1945,7 @@ namespace VAdvantage.Model
         }
 
         public static MVAMVAMProductCost[] Get(int VAM_PFeature_SetInstance_ID,
-       VAdvantage.Model.MVABAccountBook as1, int VAM_ProductCostType_ID, int VAF_Org_ID, int productID)
+       VAdvantage.Model.MVABAccountBook as1, int VAM_CostType_ID, int VAF_Org_ID, int productID)
         {
             MVAMProduct product = new MVAMProduct(Env.GetCtx(), productID, null);
             String CostingLevel = as1.GetCostingLevel();
@@ -2007,15 +2007,15 @@ namespace VAdvantage.Model
                 + "WHERE c.VAF_Client_ID=" + product.GetVAF_Client_ID() + " AND c.VAF_Org_ID=" + VAF_Org_ID
                 + " AND c.VAM_Product_ID=" + product.GetVAM_Product_ID()
                 + " AND (c.VAM_PFeature_SetInstance_ID=" + VAM_PFeature_SetInstance_ID + " OR c.VAM_PFeature_SetInstance_ID=0) ";
-            if (VAM_ProductCostType_ID == 0)
+            if (VAM_CostType_ID == 0)
             {
-                //pstmt.setInt (5, as1.GetVAM_ProductCostType_ID());
-                sql += " AND c.VAM_ProductCostType_ID=" + as1.GetVAM_ProductCostType_ID();
+                //pstmt.setInt (5, as1.GetVAM_CostType_ID());
+                sql += " AND c.VAM_CostType_ID=" + as1.GetVAM_CostType_ID();
             }
             else
             {
-                //pstmt.setInt (5, VAM_ProductCostType_ID);
-                sql += " AND c.VAM_ProductCostType_ID= " + VAM_ProductCostType_ID;
+                //pstmt.setInt (5, VAM_CostType_ID);
+                sql += " AND c.VAM_CostType_ID= " + VAM_CostType_ID;
             }
 
             sql += " AND (ce.CostingMethod IS NULL OR ce.CostingMethod='" + X_VAM_ProductCostElement.COSTINGMETHOD_StandardCosting + "') "
@@ -2117,20 +2117,20 @@ namespace VAdvantage.Model
          *	@param VAF_Client_ID client
          *	@param VAF_Org_ID org
          *	@param VAM_Product_ID product
-         *	@param VAM_ProductCostType_ID cost type
+         *	@param VAM_CostType_ID cost type
          *	@param VAB_AccountBook_ID as1
          *	@param VAM_ProductCostElement_ID cost element
          *	@param VAM_PFeature_SetInstance_ID asi
          *	@return cost or null
          */
         public static MVAMVAMProductCost Get(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID, int VAM_Product_ID,
-            int VAM_ProductCostType_ID, int VAB_AccountBook_ID, int VAM_ProductCostElement_ID,
+            int VAM_CostType_ID, int VAB_AccountBook_ID, int VAM_ProductCostElement_ID,
             int VAM_PFeature_SetInstance_ID)
         {
             MVAMVAMProductCost retValue = null;
             String sql = "SELECT * FROM VAM_ProductCost "
                 + "WHERE VAF_Client_ID=" + VAF_Client_ID + " AND VAF_Org_ID=" + VAF_Org_ID + " AND VAM_Product_ID=" + VAM_Product_ID
-                + " AND VAM_ProductCostType_ID=" + VAM_ProductCostType_ID + " AND VAB_AccountBook_ID=" + VAB_AccountBook_ID + " AND VAM_ProductCostElement_ID=" + VAM_ProductCostElement_ID
+                + " AND VAM_CostType_ID=" + VAM_CostType_ID + " AND VAB_AccountBook_ID=" + VAB_AccountBook_ID + " AND VAM_ProductCostElement_ID=" + VAM_ProductCostElement_ID
                 + " AND VAM_PFeature_SetInstance_ID=" + VAM_PFeature_SetInstance_ID;
             DataTable dt = null;
             IDataReader idr = null;
@@ -2171,7 +2171,7 @@ namespace VAdvantage.Model
             {
                 //	setVAB_AccountBook_ID (0);
                 //	setVAM_ProductCostElement_ID (0);
-                //	setVAM_ProductCostType_ID (0);
+                //	setVAM_CostType_ID (0);
                 //	setVAM_Product_ID (0);
                 SetVAM_PFeature_SetInstance_ID(0);
                 SetVAM_Warehouse_ID(0);// set default value on Warehouse as ZERO
@@ -2213,7 +2213,7 @@ namespace VAdvantage.Model
         {
             SetClientOrg(product.GetVAF_Client_ID(), VAF_Org_ID);
             SetVAB_AccountBook_ID(as1.GetVAB_AccountBook_ID());
-            SetVAM_ProductCostType_ID(as1.GetVAM_ProductCostType_ID());
+            SetVAM_CostType_ID(as1.GetVAM_CostType_ID());
             SetVAM_Product_ID(product.GetVAM_Product_ID());
             SetVAM_PFeature_SetInstance_ID(VAM_PFeature_SetInstance_ID);
             SetVAM_ProductCostElement_ID(VAM_ProductCostElement_ID);
@@ -2240,7 +2240,7 @@ namespace VAdvantage.Model
         {
             SetClientOrg(product.GetVAF_Client_ID(), VAF_Org_ID);
             SetVAB_AccountBook_ID(as1.GetVAB_AccountBook_ID());
-            SetVAM_ProductCostType_ID(as1.GetVAM_ProductCostType_ID());
+            SetVAM_CostType_ID(as1.GetVAM_CostType_ID());
             SetVAM_Product_ID(product.GetVAM_Product_ID());
             SetVAM_PFeature_SetInstance_ID(VAM_PFeature_SetInstance_ID);
             SetVAM_ProductCostElement_ID(VAM_ProductCostElement_ID);
@@ -2346,7 +2346,7 @@ namespace VAdvantage.Model
             if (GetVAM_PFeature_SetInstance_ID() != 0)
                 sb.Append(",AD_ASI_ID=").Append(GetVAM_PFeature_SetInstance_ID());
             //	sb.Append (",VAB_AccountBook_ID=").Append (getVAB_AccountBook_ID());
-            //	sb.Append (",VAM_ProductCostType_ID=").Append (getVAM_ProductCostType_ID());
+            //	sb.Append (",VAM_CostType_ID=").Append (getVAM_CostType_ID());
             sb.Append(",VAM_ProductCostElement_ID=").Append(GetVAM_ProductCostElement_ID());
             //
             sb.Append(", CurrentCost=").Append(GetCurrentCostPrice())

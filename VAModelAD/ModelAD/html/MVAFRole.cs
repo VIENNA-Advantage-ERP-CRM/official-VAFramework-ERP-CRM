@@ -1773,7 +1773,7 @@ namespace VAdvantage.Model
             }
             list.Add(oa);
             //	Do we look for trees?
-            if (GetVAF_TreeInfo_Org_ID() == 0)
+            if (GetVAF_Tree_Org_ID() == 0)
             {
                 return;
             }
@@ -1784,7 +1784,7 @@ namespace VAdvantage.Model
                 return;
             }
             //	Summary Org - Get Dependents
-            MVAFTreeInfo tree = MVAFTreeInfo.Get(GetCtx(), GetVAF_TreeInfo_Org_ID(), Get_TrxName());
+            MVAFTreeInfo tree = MVAFTreeInfo.Get(GetCtx(), GetVAF_Tree_Org_ID(), Get_TrxName());
             String sql = "SELECT VAF_Client_ID, VAF_Org_ID FROM VAF_Org "
                 + "WHERE IsActive='Y' AND VAF_Org_ID IN (SELECT Node_ID FROM "
                 + tree.GetNodeTableName()

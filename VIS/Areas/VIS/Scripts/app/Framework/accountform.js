@@ -16,7 +16,7 @@
         var f_Description = new VIS.Controls.VLabel();
         //  Editors for Query
         var f_Alias = null, f_Combination = null, f_VAF_Org_ID = null, f_Account_ID = null, f_SubAcct_ID = null,
-            f_VAM_Product_ID = null, f_VAB_BusinessPartner_ID = null, f_VAB_Promotion_ID = null, f_C_LocFrom_ID = null, f_C_LocTo_ID = null,
+            f_VAM_Product_ID = null, f_VAB_BusinessPartner_ID = null, f_VAB_Promotion_ID = null, f_VAB_LocFrom_ID = null, f_VAB_LocTo_ID = null,
             f_VAB_Project_ID = null, f_VAB_SalesRegionState_ID = null, f_VAF_OrgTrx_ID = null, f_VAB_BillingCode_ID = null,
             f_User1_ID = null, f_User2_ID = null, f_UserElement1_ID = null, f_UserElement2_ID = null, f_UserElement3_ID = null,
             f_UserElement4_ID = null, f_UserElement5_ID = null, f_UserElement6_ID = null, f_UserElement7_ID = null, f_UserElement8_ID = null, f_UserElement9_ID = null;
@@ -475,14 +475,14 @@
                             addLine(field, f_VAB_Promotion_ID, isMandatory, lblNames, eLEMENTTYPE_Campaign);
                         }
                         else if (type.equals(eLEMENTTYPE_LocationFrom)) {
-                            var field = _mTab.getField("C_LocFrom_ID");
-                            f_C_LocFrom_ID = VIS.VControlFactory.getControl(_mTab, field, false);
-                            addLine(field, f_C_LocFrom_ID, isMandatory, lblNames, eLEMENTTYPE_LocationFrom);
+                            var field = _mTab.getField("VAB_LocFrom_ID");
+                            f_VAB_LocFrom_ID = VIS.VControlFactory.getControl(_mTab, field, false);
+                            addLine(field, f_VAB_LocFrom_ID, isMandatory, lblNames, eLEMENTTYPE_LocationFrom);
                         }
                         else if (type.equals(eLEMENTTYPE_LocationTo)) {
-                            var field = _mTab.getField("C_LocTo_ID");
-                            f_C_LocTo_ID = VIS.VControlFactory.getControl(_mTab, field, false);
-                            addLine(field, f_C_LocTo_ID, isMandatory, lblNames, eLEMENTTYPE_LocationTo);
+                            var field = _mTab.getField("VAB_LocTo_ID");
+                            f_VAB_LocTo_ID = VIS.VControlFactory.getControl(_mTab, field, false);
+                            addLine(field, f_VAB_LocTo_ID, isMandatory, lblNames, eLEMENTTYPE_LocationTo);
                         }
                         else if (type.equals(eLEMENTTYPE_Project)) {
                             var field = _mTab.getField("VAB_Project_ID");
@@ -1011,11 +1011,11 @@
                 if (f_VAB_Promotion_ID != null && !isNull(f_VAB_Promotion_ID.getValue()))
                     localquery.addRestriction("VAB_Promotion_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_VAB_Promotion_ID.getValue()));
                 //	Loc From
-                if (f_C_LocFrom_ID != null && !isNull(f_C_LocFrom_ID.getValue()))
-                    localquery.addRestriction("C_LocFrom_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_C_LocFrom_ID.getValue()));
+                if (f_VAB_LocFrom_ID != null && !isNull(f_VAB_LocFrom_ID.getValue()))
+                    localquery.addRestriction("VAB_LocFrom_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_VAB_LocFrom_ID.getValue()));
                 //	Loc To
-                if (f_C_LocTo_ID != null && !isNull(f_C_LocTo_ID.getValue()))
-                    localquery.addRestriction("C_LocTo_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_C_LocTo_ID.getValue()));
+                if (f_VAB_LocTo_ID != null && !isNull(f_VAB_LocTo_ID.getValue()))
+                    localquery.addRestriction("VAB_LocTo_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_VAB_LocTo_ID.getValue()));
                 //	Project
                 if (f_VAB_Project_ID != null && !isNull(f_VAB_Project_ID.getValue()))
                     localquery.addRestriction("VAB_Project_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_VAB_Project_ID.getValue()));
@@ -1094,11 +1094,11 @@
                 if (f_VAB_Promotion_ID != null)
                     f_VAB_Promotion_ID.setValue(null);
                 //	Loc From
-                if (f_C_LocFrom_ID != null)
-                    f_C_LocFrom_ID.setValue(null);
+                if (f_VAB_LocFrom_ID != null)
+                    f_VAB_LocFrom_ID.setValue(null);
                 //	Loc To
-                if (f_C_LocTo_ID != null)
-                    f_C_LocTo_ID.setValue(null);
+                if (f_VAB_LocTo_ID != null)
+                    f_VAB_LocTo_ID.setValue(null);
                 //	Project
                 if (f_VAB_Project_ID != null)
                     f_VAB_Project_ID.setValue(null);
@@ -1219,16 +1219,16 @@
                 //            sql = sql.concat("=").concat(value).concat(" AND ");
                 //    }
                 //    else if (type.equals(eLEMENTTYPE_LocationFrom)) {
-                //        value = f_C_LocFrom_ID.getValue();
-                //        sql = sql.concat("C_LocFrom_ID");
+                //        value = f_VAB_LocFrom_ID.getValue();
+                //        sql = sql.concat("VAB_LocFrom_ID");
                 //        if (isNull(value))
                 //            sql = sql.concat(" IS NULL AND ");
                 //        else
                 //            sql = sql.concat("=").concat(value).concat(" AND ");
                 //    }
                 //    else if (type.equals(eLEMENTTYPE_LocationTo)) {
-                //        value = f_C_LocTo_ID.getValue();
-                //        sql = sql.concat("C_LocTo_ID");
+                //        value = f_VAB_LocTo_ID.getValue();
+                //        sql = sql.concat("VAB_LocTo_ID");
                 //        if (isNull(value))
                 //            sql = sql.concat(" IS NULL AND ");
                 //        else
@@ -1484,12 +1484,12 @@
                 var VAF_OrgTrx_ID = 0;
                 if (f_VAF_OrgTrx_ID != null && !isNull(f_VAF_OrgTrx_ID.getValue()))
                     VAF_OrgTrx_ID = f_VAF_OrgTrx_ID.getValue();
-                var C_LocFrom_ID = 0;
-                if (f_C_LocFrom_ID != null && !isNull(f_C_LocFrom_ID.getValue()))
-                    C_LocFrom_ID = f_C_LocFrom_ID.getValue();
-                var C_LocTo_ID = 0;
-                if (f_C_LocTo_ID != null && !isNull(f_C_LocTo_ID.getValue()))
-                    C_LocTo_ID = f_C_LocTo_ID.getValue();
+                var VAB_LocFrom_ID = 0;
+                if (f_VAB_LocFrom_ID != null && !isNull(f_VAB_LocFrom_ID.getValue()))
+                    VAB_LocFrom_ID = f_VAB_LocFrom_ID.getValue();
+                var VAB_LocTo_ID = 0;
+                if (f_VAB_LocTo_ID != null && !isNull(f_VAB_LocTo_ID.getValue()))
+                    VAB_LocTo_ID = f_VAB_LocTo_ID.getValue();
                 var C_SRegion_ID = 0;
                 if (f_VAB_SalesRegionState_ID != null && !isNull(f_VAB_SalesRegionState_ID.getValue()))
                     C_SRegion_ID = f_VAB_SalesRegionState_ID.getValue();
@@ -1582,8 +1582,8 @@
                         VAM_Product_ID: VAM_Product_ID,
                         VAB_BusinessPartner_ID: VAB_BusinessPartner_ID,
                         VAF_OrgTrx_ID: VAF_OrgTrx_ID,
-                        C_LocFrom_ID: C_LocFrom_ID,
-                        C_LocTo_ID: C_LocTo_ID,
+                        VAB_LocFrom_ID: VAB_LocFrom_ID,
+                        VAB_LocTo_ID: VAB_LocTo_ID,
                         C_SRegion_ID: C_SRegion_ID,
                         VAB_Project_ID: VAB_Project_ID,
                         VAB_Promotion_ID: VAB_Promotion_ID,
@@ -1645,10 +1645,10 @@
                         }
                         if (f_VAB_Promotion_ID != null)
                             f_VAB_Promotion_ID.setValue(dr.getInt("VAB_Promotion_ID"));
-                        if (f_C_LocFrom_ID != null)
-                            f_C_LocFrom_ID.setValue(dr.getInt("C_LocFrom_ID"));
-                        if (f_C_LocTo_ID != null)
-                            f_C_LocTo_ID.setValue(dr.getInt("C_LocTo_ID"));
+                        if (f_VAB_LocFrom_ID != null)
+                            f_VAB_LocFrom_ID.setValue(dr.getInt("VAB_LocFrom_ID"));
+                        if (f_VAB_LocTo_ID != null)
+                            f_VAB_LocTo_ID.setValue(dr.getInt("VAB_LocTo_ID"));
                         if (f_VAB_Project_ID != null)
                             f_VAB_Project_ID.setValue(dr.getInt("VAB_Project_ID"));
                         if (f_VAB_SalesRegionState_ID != null)
@@ -1813,7 +1813,7 @@
             f_Alias = null;
             f_Combination = null;
             f_VAF_Org_ID = null; f_Account_ID = null; f_SubAcct_ID = null;
-            f_VAM_Product_ID = null; f_VAB_BusinessPartner_ID = null; f_VAB_Promotion_ID = null; f_C_LocFrom_ID = null; f_C_LocTo_ID = null;
+            f_VAM_Product_ID = null; f_VAB_BusinessPartner_ID = null; f_VAB_Promotion_ID = null; f_VAB_LocFrom_ID = null; f_VAB_LocTo_ID = null;
             f_VAB_Project_ID = null; f_VAB_SalesRegionState_ID = null; f_VAF_OrgTrx_ID = null; f_VAB_BillingCode_ID = null;
             f_User1_ID = null; f_User2_ID = null;
             this.log = null;

@@ -863,7 +863,7 @@ namespace VAdvantage.Model
             //                                          VAM_ProductCost.VAM_ProductCostElement_ID,
             //                                          VAM_Product.VAM_Product_ID,
             //                                          VAM_ProductCost.VAB_ACCOUNTBOOK_ID,
-            //                                          VAM_ProductCost.VAM_ProductCostType_ID,
+            //                                          VAM_ProductCost.VAM_CostType_ID,
             //                                          VAM_ProductCost.BASISTYPE,
             //                                          VAM_Product.VAB_UOM_ID,
             //                                          VAM_ProductCostElement.COSTINGMETHOD,

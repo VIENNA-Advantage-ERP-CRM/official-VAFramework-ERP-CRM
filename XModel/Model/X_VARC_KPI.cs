@@ -246,21 +246,21 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** Ad_Chart_BG_Color_ID VAF_Control_Ref_ID=266 */
-        public static int AD_CHART_BG_COLOR_ID_VAF_Control_Ref_ID = 266;
+        /** VAF_Chart_BG_Color_ID VAF_Control_Ref_ID=266 */
+        public static int VAF_Chart_BG_Color_ID_VAF_Control_Ref_ID = 266;
         /** Set Chart Background Color.
-        @param Ad_Chart_BG_Color_ID Chart Background Color */
-        public void SetAd_Chart_BG_Color_ID(int Ad_Chart_BG_Color_ID)
+        @param VAF_Chart_BG_Color_ID Chart Background Color */
+        public void SetVAF_Chart_BG_Color_ID(int VAF_Chart_BG_Color_ID)
         {
-            if (Ad_Chart_BG_Color_ID <= 0) Set_Value("Ad_Chart_BG_Color_ID", null);
+            if (VAF_Chart_BG_Color_ID <= 0) Set_Value("VAF_Chart_BG_Color_ID", null);
             else
-                Set_Value("Ad_Chart_BG_Color_ID", Ad_Chart_BG_Color_ID);
+                Set_Value("VAF_Chart_BG_Color_ID", VAF_Chart_BG_Color_ID);
         }
         /** Get Chart Background Color.
         @return Chart Background Color */
-        public int GetAd_Chart_BG_Color_ID()
+        public int GetVAF_Chart_BG_Color_ID()
         {
-            Object ii = Get_Value("Ad_Chart_BG_Color_ID");
+            Object ii = Get_Value("VAF_Chart_BG_Color_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

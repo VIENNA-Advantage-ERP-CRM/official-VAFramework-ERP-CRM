@@ -75,9 +75,9 @@ namespace VAdvantage.Acct
         // Sales Region				
         private int _VAB_BusinessPartner_ID = -1;
         // Location From				
-        private int _C_LocFrom_ID = 0;
+        private int _VAB_LocFrom_ID = 0;
         // Location To					
-        private int _C_LocTo_ID = 0;
+        private int _VAB_LocTo_ID = 0;
         // Item						
         private Boolean? _isItem = null;
         // Currency					
@@ -776,39 +776,39 @@ namespace VAdvantage.Acct
         }
 
         /// <summary>
-        /// Get C_LocFrom_ID
+        /// Get VAB_LocFrom_ID
         /// </summary>
         /// <returns>loc from</returns>
-        public int GetC_LocFrom_ID()
+        public int GetVAB_LocFrom_ID()
         {
-            return _C_LocFrom_ID;
+            return _VAB_LocFrom_ID;
         }
 
         /// <summary>
-        /// Set C_LocFrom_ID
+        /// Set VAB_LocFrom_ID
         /// </summary>
-        /// <param name="C_LocFrom_ID">loc from</param>
-        public void SetC_LocFrom_ID(int C_LocFrom_ID)
+        /// <param name="VAB_LocFrom_ID">loc from</param>
+        public void SetVAB_LocFrom_ID(int VAB_LocFrom_ID)
         {
-            _C_LocFrom_ID = C_LocFrom_ID;
+            _VAB_LocFrom_ID = VAB_LocFrom_ID;
         }
 
         /// <summary>
-        /// Get C_LocTo_ID
+        /// Get VAB_LocTo_ID
         /// </summary>
         /// <returns>loc to</returns>
-        public int GetC_LocTo_ID()
+        public int GetVAB_LocTo_ID()
         {
-            return _C_LocTo_ID;
+            return _VAB_LocTo_ID;
         }
 
         /// <summary>
-        /// Set C_LocTo_ID
+        /// Set VAB_LocTo_ID
         /// </summary>
-        /// <param name="C_LocTo_ID">loc to</param>
-        public void SetC_LocTo_ID(int C_LocTo_ID)
+        /// <param name="VAB_LocTo_ID">loc to</param>
+        public void SetVAB_LocTo_ID(int VAB_LocTo_ID)
         {
-            _C_LocTo_ID = C_LocTo_ID;
+            _VAB_LocTo_ID = VAB_LocTo_ID;
         }
 
         /// <summary>

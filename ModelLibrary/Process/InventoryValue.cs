@@ -107,7 +107,7 @@ namespace VAdvantage.Process
                 + "FROM VAM_Warehouse w"
                 + " INNER JOIN VAF_ClientDetail ci ON (w.VAF_Client_ID=ci.VAF_Client_ID)"
                 + " INNER JOIN VAB_AccountBook acs ON (ci.VAB_AccountBook1_ID=acs.VAB_AccountBook_ID)"
-                + " INNER JOIN VAM_ProductCost c ON (acs.VAB_AccountBook_ID=c.VAB_AccountBook_ID AND acs.VAM_ProductCostType_ID=c.VAM_ProductCostType_ID AND c.VAF_Org_ID IN (0, w.VAF_Org_ID))"
+                + " INNER JOIN VAM_ProductCost c ON (acs.VAB_AccountBook_ID=c.VAB_AccountBook_ID AND acs.VAM_CostType_ID=c.VAM_CostType_ID AND c.VAF_Org_ID IN (0, w.VAF_Org_ID))"
                 + " INNER JOIN VAM_ProductCostElement ce ON (c.VAM_ProductCostElement_ID=ce.VAM_ProductCostElement_ID AND ce.CostingMethod='S' AND ce.CostElementType='M') "
                 + "WHERE w.VAM_Warehouse_ID=").Append(_VAM_Warehouse_ID);
             int noInsertStd = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -128,7 +128,7 @@ namespace VAdvantage.Process
                     + "FROM VAM_Warehouse w"
                     + " INNER JOIN VAF_ClientDetail ci ON (w.VAF_Client_ID=ci.VAF_Client_ID)"
                     + " INNER JOIN VAB_AccountBook acs ON (ci.VAB_AccountBook1_ID=acs.VAB_AccountBook_ID)"
-                    + " INNER JOIN VAM_ProductCost c ON (acs.VAB_AccountBook_ID=c.VAB_AccountBook_ID AND acs.VAM_ProductCostType_ID=c.VAM_ProductCostType_ID AND c.VAF_Org_ID IN (0, w.VAF_Org_ID)) "
+                    + " INNER JOIN VAM_ProductCost c ON (acs.VAB_AccountBook_ID=c.VAB_AccountBook_ID AND acs.VAM_CostType_ID=c.VAM_CostType_ID AND c.VAF_Org_ID IN (0, w.VAF_Org_ID)) "
                     + "WHERE w.VAM_Warehouse_ID=").Append(_VAM_Warehouse_ID)
                     .Append(" AND c.VAM_ProductCostElement_ID=").Append(_VAM_ProductCostElement_ID)
                     .Append(" AND NOT EXISTS (SELECT * FROM VAT_StockData iv "
@@ -146,7 +146,7 @@ namespace VAdvantage.Process
                         + " INNER JOIN VAF_ClientDetail ci ON (w.VAF_Client_ID=ci.VAF_Client_ID)"
                         + " INNER JOIN VAB_AccountBook acs ON (ci.VAB_AccountBook1_ID=acs.VAB_AccountBook_ID)"
                         + " INNER JOIN VAM_ProductCost c ON (acs.VAB_AccountBook_ID=c.VAB_AccountBook_ID"
-                            + " AND acs.VAM_ProductCostType_ID=c.VAM_ProductCostType_ID AND c.VAF_Org_ID IN (0, w.VAF_Org_ID)) "
+                            + " AND acs.VAM_CostType_ID=c.VAM_CostType_ID AND c.VAF_Org_ID IN (0, w.VAF_Org_ID)) "
                         + "WHERE c.VAM_ProductCostElement_ID=" + _VAM_ProductCostElement_ID
                         + " AND w.VAM_Warehouse_ID=iv.VAM_Warehouse_ID"
                         + " AND c.VAM_Product_ID=iv.VAM_Product_ID"

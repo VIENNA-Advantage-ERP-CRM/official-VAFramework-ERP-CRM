@@ -134,7 +134,7 @@ return Convert.ToInt32(ii);
 }
 
 /** VACM_ChatLineGrandParent_ID VAF_Control_Ref_ID=399 */
-public static int CM_CHATENTRYGRANDPARENT_ID_VAF_Control_Ref_ID=399;
+public static int VACM_ChatEntryGrandParent_ID_VAF_Control_Ref_ID=399;
 /** Set Chat Entry Grandparent.
 @param VACM_ChatLineGrandParent_ID Link to Grand Parent (root level) */
 public void SetVACM_ChatLineGrandParent_ID (int VACM_ChatLineGrandParent_ID)
@@ -153,7 +153,7 @@ return Convert.ToInt32(ii);
 }
 
 /** VACM_ChatLineParent_ID VAF_Control_Ref_ID=399 */
-public static int CM_CHATENTRYPARENT_ID_VAF_Control_Ref_ID=399;
+public static int VACM_ChatEntryParent_ID_VAF_Control_Ref_ID=399;
 /** Set Chat Entry Parent.
 @param VACM_ChatLineParent_ID Link to direct Parent */
 public void SetVACM_ChatLineParent_ID (int VACM_ChatLineParent_ID)

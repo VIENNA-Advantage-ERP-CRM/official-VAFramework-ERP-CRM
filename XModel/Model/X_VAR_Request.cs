@@ -672,37 +672,37 @@ public String GetLastResult()
 return (String)Get_Value("LastResult");
 }
 /** Set Change Request.
-@param M_ChangeRequest_ID BOM (Engineering) Change Request */
-public void SetM_ChangeRequest_ID (int M_ChangeRequest_ID)
+@param VAM_ChangeRequest_ID BOM (Engineering) Change Request */
+public void SetVAM_ChangeRequest_ID (int VAM_ChangeRequest_ID)
 {
-if (M_ChangeRequest_ID <= 0) Set_Value ("M_ChangeRequest_ID", null);
+if (VAM_ChangeRequest_ID <= 0) Set_Value ("VAM_ChangeRequest_ID", null);
 else
-Set_Value ("M_ChangeRequest_ID", M_ChangeRequest_ID);
+Set_Value ("VAM_ChangeRequest_ID", VAM_ChangeRequest_ID);
 }
 /** Get Change Request.
 @return BOM (Engineering) Change Request */
-public int GetM_ChangeRequest_ID() 
+public int GetVAM_ChangeRequest_ID() 
 {
-Object ii = Get_Value("M_ChangeRequest_ID");
+Object ii = Get_Value("VAM_ChangeRequest_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** M_FixChangeNotice_ID VAF_Control_Ref_ID=351 */
-public static int M_FIXCHANGENOTICE_ID_VAF_Control_Ref_ID=351;
+/** VAM_FixChangeNotice_ID VAF_Control_Ref_ID=351 */
+public static int VAM_FixChangeNotice_ID_VAF_Control_Ref_ID=351;
 /** Set Fixed in.
-@param M_FixChangeNotice_ID Fixed in Change Notice */
-public void SetM_FixChangeNotice_ID (int M_FixChangeNotice_ID)
+@param VAM_FixChangeNotice_ID Fixed in Change Notice */
+public void SetVAM_FixChangeNotice_ID (int VAM_FixChangeNotice_ID)
 {
-if (M_FixChangeNotice_ID <= 0) Set_Value ("M_FixChangeNotice_ID", null);
+if (VAM_FixChangeNotice_ID <= 0) Set_Value ("VAM_FixChangeNotice_ID", null);
 else
-Set_Value ("M_FixChangeNotice_ID", M_FixChangeNotice_ID);
+Set_Value ("VAM_FixChangeNotice_ID", VAM_FixChangeNotice_ID);
 }
 /** Get Fixed in.
 @return Fixed in Change Notice */
-public int GetM_FixChangeNotice_ID() 
+public int GetVAM_FixChangeNotice_ID() 
 {
-Object ii = Get_Value("M_FixChangeNotice_ID");
+Object ii = Get_Value("VAM_FixChangeNotice_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

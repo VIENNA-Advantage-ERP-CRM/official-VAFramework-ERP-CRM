@@ -81,35 +81,35 @@ namespace VAdvantage.Model
         {
             if (MVAFTreeInfo.TREETYPE_Activity.Equals(TreeType))
             {
-                return GetVAF_TreeInfo_Activity_ID();
+                return GetVAF_Tree_Activity_ID();
             }
             if (MVAFTreeInfo.TREETYPE_BPartner.Equals(TreeType))
             {
-                return GetVAF_TreeInfo_BPartner_ID();
+                return GetVAF_Tree_BPartner_ID();
             }
             if (MVAFTreeInfo.TREETYPE_Campaign.Equals(TreeType))
             {
-                return GetVAF_TreeInfo_Campaign_ID();
+                return GetVAF_Tree_Campaign_ID();
             }
             if (MVAFTreeInfo.TREETYPE_ElementValue.Equals(TreeType))
             {
-                return GetVAF_TreeInfo_Account_ID();
+                return GetVAF_Tree_Account_ID();
             }
             if (MVAFTreeInfo.TREETYPE_Organization.Equals(TreeType))
             {
-                return GetVAF_TreeInfo_Org_ID();
+                return GetVAF_Tree_Org_ID();
             }
             if (MVAFTreeInfo.TREETYPE_Product.Equals(TreeType))
             {
-                return GetVAF_TreeInfo_Product_ID();
+                return GetVAF_Tree_Product_ID();
             }
             if (MVAFTreeInfo.TREETYPE_Project.Equals(TreeType))
             {
-                return GetVAF_TreeInfo_Project_ID();
+                return GetVAF_Tree_Project_ID();
             }
             if (MVAFTreeInfo.TREETYPE_SalesRegion.Equals(TreeType))
             {
-                return GetVAF_TreeInfo_SalesRegion_ID();
+                return GetVAF_Tree_SalesRegion_ID();
             }
             //
             log.Warning("Not supported: " + TreeType);

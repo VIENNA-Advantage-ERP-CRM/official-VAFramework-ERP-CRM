@@ -695,7 +695,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         MVABAccount acct = MVABAccount.Get(GetCtx(), imp.GetVAF_Client_ID(), imp.GetVAF_Org_ID(),
                             imp.GetVAB_AccountBook_ID(), imp.GetAccount_ID(), 0,
                             imp.GetVAM_Product_ID(), imp.GetVAB_BusinessPartner_ID(), imp.GetVAF_OrgTrx_ID(),
-                            imp.GetC_LocFrom_ID(), imp.GetC_LocTo_ID(), imp.GetVAB_SalesRegionState_ID(),
+                            imp.GetVAB_LocFrom_ID(), imp.GetVAB_LocTo_ID(), imp.GetVAB_SalesRegionState_ID(),
                             imp.GetVAB_Project_ID(), imp.GetVAB_Promotion_ID(), imp.GetVAB_BillingCode_ID(),
                             imp.GetUser1_ID(), imp.GetUser2_ID(), 0, 0);
                         if (acct != null && acct.Get_ID() == 0)

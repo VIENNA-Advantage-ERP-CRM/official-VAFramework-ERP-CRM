@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : Model for Cost Element.
- * Class Used     : X_VAM_ProductCostElementLine
+ * Class Used     : X_VAM_CostElementLine
  * Chronological    Development
  * Amit Bansal      07-April-2016
 **********************************************************/
@@ -27,8 +27,8 @@ namespace VAdvantage.Model
         private StringBuilder sql = new StringBuilder();
         private int countRecord = 0;
 
-        public MVAMCostElementLine(Ctx ctx, int VAM_ProductCostElementLine_ID, Trx trxName)
-            : base(ctx, VAM_ProductCostElementLine_ID, trxName)
+        public MVAMCostElementLine(Ctx ctx, int VAM_CostElementLine_ID, Trx trxName)
+            : base(ctx, VAM_CostElementLine_ID, trxName)
         {
 
         }
@@ -43,17 +43,17 @@ namespace VAdvantage.Model
         {
             try
             {
-                costElement = new MVAMProductCostElement(GetCtx(), GetM_Ref_CostElement(), null);
+                costElement = new MVAMProductCostElement(GetCtx(), GetVAM_Ref_CostElement(), null);
                 costingMethod = costElement.GetCostingMethod();
                 if (string.IsNullOrEmpty(costingMethod))
                 {
-                    if (Util.GetValueOfInt(Get_ValueOld("M_Ref_CostElement")) == GetM_Ref_CostElement())
+                    if (Util.GetValueOfInt(Get_ValueOld("VAM_Ref_CostElement")) == GetVAM_Ref_CostElement())
                     {
                         return true;
                     }
                     sql.Clear();
-                    sql.Append(@"SELECT COUNT(*) FROM VAM_ProductCostElementLine WHERE M_Ref_CostElement =  " + GetM_Ref_CostElement()
-                                 + " AND VAF_Client_ID = " + GetVAF_Client_ID() + " AND VAM_ProductCostElement_ID = " + GetVAM_ProductCostElement_ID() + " AND VAM_ProductCostElementLine_ID != " + GetVAM_ProductCostElementLine_ID());
+                    sql.Append(@"SELECT COUNT(*) FROM VAM_CostElementLine WHERE VAM_Ref_CostElement =  " + GetVAM_Ref_CostElement()
+                                 + " AND VAF_Client_ID = " + GetVAF_Client_ID() + " AND VAM_ProductCostElement_ID = " + GetVAM_ProductCostElement_ID() + " AND VAM_CostElementLine_ID != " + GetVAM_CostElementLine_ID());
                     countRecord = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, null));
                     if (countRecord > 0)
                     {
@@ -63,15 +63,15 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    if (Util.GetValueOfInt(Get_ValueOld("M_Ref_CostElement")) == GetM_Ref_CostElement())
+                    if (Util.GetValueOfInt(Get_ValueOld("VAM_Ref_CostElement")) == GetVAM_Ref_CostElement())
                     {
                         return true;
                     }
                     sql.Clear();
-                    sql.Append(@"SELECT COUNT(*) FROM VAM_ProductCostElementLine WHERE VAF_Client_ID = " + GetVAF_Client_ID()
+                    sql.Append(@"SELECT COUNT(*) FROM VAM_CostElementLine WHERE VAF_Client_ID = " + GetVAF_Client_ID()
                                   + " AND VAM_ProductCostElement_ID = " + GetVAM_ProductCostElement_ID()
-                                  + " AND CAST(M_Ref_CostElement AS INTEGER) IN (SELECT VAM_ProductCostElement_ID FROM VAM_ProductCostElement WHERE IsActive = 'Y' AND "
-                                  + " CostingMethod IN ('A' , 'F' , 'I' , 'L' , 'S' , 'i' , 'p')) AND VAM_ProductCostElementLine_ID != " + GetVAM_ProductCostElementLine_ID());
+                                  + " AND CAST(VAM_Ref_CostElement AS INTEGER) IN (SELECT VAM_ProductCostElement_ID FROM VAM_ProductCostElement WHERE IsActive = 'Y' AND "
+                                  + " CostingMethod IN ('A' , 'F' , 'I' , 'L' , 'S' , 'i' , 'p')) AND VAM_CostElementLine_ID != " + GetVAM_CostElementLine_ID());
                     countRecord = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, null));
                     if (countRecord > 0)
                     {

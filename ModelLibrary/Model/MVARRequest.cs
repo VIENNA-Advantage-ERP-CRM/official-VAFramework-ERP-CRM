@@ -1602,12 +1602,12 @@ namespace VAdvantage.Model
             //SendNotices(new List<String>());
 
             //	ChangeRequest - created in Request Processor
-            if (GetM_ChangeRequest_ID() != 0
+            if (GetVAM_ChangeRequest_ID() != 0
                 && Is_ValueChanged("VAR_Group_ID"))	//	different ECN assignment?
             {
                 int oldID = Convert.ToInt32(Get_ValueOld("VAR_Group_ID"));
                 if (GetR_Group_ID() == 0)
-                    SetM_ChangeRequest_ID(0);	//	not effective as in afterSave
+                    SetVAM_ChangeRequest_ID(0);	//	not effective as in afterSave
                 else
                 {
                     MVARGroup oldG = MVARGroup.Get(GetCtx(), oldID);
@@ -1615,9 +1615,9 @@ namespace VAdvantage.Model
                     if (oldG.GetVAM_BOM_ID() != newG.GetVAM_BOM_ID()
                         || oldG.GetM_ChangeNotice_ID() != newG.GetM_ChangeNotice_ID())
                     {
-                        MVAMChangeRequest ecr = new MVAMChangeRequest(GetCtx(), GetM_ChangeRequest_ID(), Get_TrxName());
+                        MVAMChangeRequest ecr = new MVAMChangeRequest(GetCtx(), GetVAM_ChangeRequest_ID(), Get_TrxName());
                         if (!ecr.IsProcessed()
-                            || ecr.GetM_FixChangeNotice_ID() == 0)
+                            || ecr.GetVAM_FixChangeNotice_ID() == 0)
                         {
                             ecr.SetVAM_BOM_ID(newG.GetVAM_BOM_ID());
                             ecr.SetM_ChangeNotice_ID(newG.GetM_ChangeNotice_ID());

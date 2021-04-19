@@ -29,14 +29,14 @@ namespace VAdvantage.Model
         /**
 	 * 	Standard Constructor
 	 *	@param ctx context
-	 *	@param M_ChangeRequest_ID ix
+	 *	@param VAM_ChangeRequest_ID ix
 	 *	@param trxName trx
 	 */
-        public MVAMChangeRequest(Ctx ctx, int M_ChangeRequest_ID, Trx trxName) :
-            base(ctx, M_ChangeRequest_ID, trxName)
+        public MVAMChangeRequest(Ctx ctx, int VAM_ChangeRequest_ID, Trx trxName) :
+            base(ctx, VAM_ChangeRequest_ID, trxName)
         {
 
-            if (M_ChangeRequest_ID == 0)
+            if (VAM_ChangeRequest_ID == 0)
             {
                 //	SetName (null);
                 SetIsApproved(false);
@@ -79,7 +79,7 @@ namespace VAdvantage.Model
          */
         public MVARRequest[] GetRequests()
         {
-           // String sql = "SELECT * FROM VAR_Request WHERE M_ChangeRequest_ID=?";//Code not found by raghu 3-march-2011
+           // String sql = "SELECT * FROM VAR_Request WHERE VAM_ChangeRequest_ID=?";//Code not found by raghu 3-march-2011
             return null;
         }	//	GetRequests
 

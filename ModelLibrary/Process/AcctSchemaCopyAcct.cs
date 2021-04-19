@@ -189,8 +189,8 @@ namespace VAdvantage.Process
             int VAM_Product_ID = 0;
             int VAB_BusinessPartner_ID = 0;
             int VAF_OrgTrx_ID = 0;
-            int C_LocFrom_ID = 0;
-            int C_LocTo_ID = 0;
+            int VAB_LocFrom_ID = 0;
+            int VAB_LocTo_ID = 0;
             int VAB_SalesRegionState_ID = 0;
             int VAB_Project_ID = 0;
             int VAB_Promotion_ID = 0;
@@ -233,11 +233,11 @@ namespace VAdvantage.Process
                 }
                 else if (elementType.Equals(MVABAccountBookElement.ELEMENTTYPE_LocationFrom))
                 {
-                    C_LocFrom_ID = sourceAcct.GetC_LocFrom_ID();
+                    VAB_LocFrom_ID = sourceAcct.GetVAB_LocFrom_ID();
                 }
                 else if (elementType.Equals(MVABAccountBookElement.ELEMENTTYPE_LocationTo))
                 {
-                    C_LocTo_ID = sourceAcct.GetC_LocTo_ID();
+                    VAB_LocTo_ID = sourceAcct.GetVAB_LocTo_ID();
                 }
                 else if (elementType.Equals(MVABAccountBookElement.ELEMENTTYPE_Campaign))
                 {
@@ -277,7 +277,7 @@ namespace VAdvantage.Process
             return MVABAccount.Get(GetCtx(), VAF_Client_ID, VAF_Org_ID,
                 VAB_AccountBook_ID, Account_ID, VAB_SubAcct_ID,
                 VAM_Product_ID, VAB_BusinessPartner_ID, VAF_OrgTrx_ID,
-                C_LocFrom_ID, C_LocTo_ID, VAB_SalesRegionState_ID,
+                VAB_LocFrom_ID, VAB_LocTo_ID, VAB_SalesRegionState_ID,
                 VAB_Project_ID, VAB_Promotion_ID, VAB_BillingCode_ID,
                 User1_ID, User2_ID, UserElement1_ID, UserElement2_ID);
         }	//	createAccount

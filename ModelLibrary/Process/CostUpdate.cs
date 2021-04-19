@@ -207,7 +207,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
             String sql = "SELECT * FROM VAM_Product p "
                 + "WHERE NOT EXISTS (SELECT * FROM VAM_ProductCost c WHERE c.VAM_Product_ID=p.VAM_Product_ID"
-                + " AND c.VAM_ProductCostType_ID=" + as1.GetVAM_ProductCostType_ID() + " AND c.VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID() + " AND c.VAM_ProductCostElement_ID=" + _ce.GetVAM_ProductCostElement_ID()
+                + " AND c.VAM_CostType_ID=" + as1.GetVAM_CostType_ID() + " AND c.VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID() + " AND c.VAM_ProductCostElement_ID=" + _ce.GetVAM_ProductCostElement_ID()
                 + " AND c.VAM_PFeature_SetInstance_ID=0) "
                 + "AND VAF_Client_ID=" + as1.GetVAF_Client_ID();
             if (_VAM_ProductCategory_ID != 0)
@@ -301,7 +301,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     {
                         //	Update Costs only for default Cost Type
                         if (_ass[i].GetVAB_AccountBook_ID() == cost.GetVAB_AccountBook_ID()
-                            && _ass[i].GetVAM_ProductCostType_ID() == cost.GetVAM_ProductCostType_ID())
+                            && _ass[i].GetVAM_CostType_ID() == cost.GetVAM_CostType_ID())
                         {
                             if (Update(cost))
                             {
@@ -398,7 +398,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     throw new Exception("CostElement not found: " + TO_AverageInvoice);
                 }
-                MVAMVAMProductCost xCost = MVAMVAMProductCost.Get(GetCtx(), cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), cost.GetVAM_Product_ID(), cost.GetVAM_ProductCostType_ID(), cost.GetVAB_AccountBook_ID(), ce.GetVAM_ProductCostElement_ID(), cost.GetVAM_PFeature_SetInstance_ID());
+                MVAMVAMProductCost xCost = MVAMVAMProductCost.Get(GetCtx(), cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), cost.GetVAM_Product_ID(), cost.GetVAM_CostType_ID(), cost.GetVAB_AccountBook_ID(), ce.GetVAM_ProductCostElement_ID(), cost.GetVAM_PFeature_SetInstance_ID());
                 if (xCost != null)
                 {
                     retValue = xCost.GetCurrentCostPrice();
@@ -412,7 +412,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     throw new Exception("CostElement not found: " + TO_AverageInvoice);
                 }
-                MVAMVAMProductCost xCost = MVAMVAMProductCost.Get(GetCtx(), cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), cost.GetVAM_Product_ID(), cost.GetVAM_ProductCostType_ID(), cost.GetVAB_AccountBook_ID(), ce.GetVAM_ProductCostElement_ID(), cost.GetVAM_PFeature_SetInstance_ID());
+                MVAMVAMProductCost xCost = MVAMVAMProductCost.Get(GetCtx(), cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), cost.GetVAM_Product_ID(), cost.GetVAM_CostType_ID(), cost.GetVAB_AccountBook_ID(), ce.GetVAM_ProductCostElement_ID(), cost.GetVAM_PFeature_SetInstance_ID());
                 if (xCost != null)
                 {
                     retValue = xCost.GetHistoryAverage();
@@ -427,7 +427,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     throw new Exception("CostElement not found: " + TO_AveragePO);
                 }
-                MVAMVAMProductCost xCost = MVAMVAMProductCost.Get(GetCtx(), cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), cost.GetVAM_Product_ID(), cost.GetVAM_ProductCostType_ID(), cost.GetVAB_AccountBook_ID(), ce.GetVAM_ProductCostElement_ID(), cost.GetVAM_PFeature_SetInstance_ID());
+                MVAMVAMProductCost xCost = MVAMVAMProductCost.Get(GetCtx(), cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), cost.GetVAM_Product_ID(), cost.GetVAM_CostType_ID(), cost.GetVAB_AccountBook_ID(), ce.GetVAM_ProductCostElement_ID(), cost.GetVAM_PFeature_SetInstance_ID());
                 if (xCost != null)
                 {
                     retValue = xCost.GetCurrentCostPrice();
@@ -441,7 +441,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     throw new Exception("CostElement not found: " + TO_AveragePO);
                 }
-                MVAMVAMProductCost xCost = MVAMVAMProductCost.Get(GetCtx(), cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), cost.GetVAM_Product_ID(), cost.GetVAM_ProductCostType_ID(), cost.GetVAB_AccountBook_ID(), ce.GetVAM_ProductCostElement_ID(), cost.GetVAM_PFeature_SetInstance_ID());
+                MVAMVAMProductCost xCost = MVAMVAMProductCost.Get(GetCtx(), cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), cost.GetVAM_Product_ID(), cost.GetVAM_CostType_ID(), cost.GetVAB_AccountBook_ID(), ce.GetVAM_ProductCostElement_ID(), cost.GetVAM_PFeature_SetInstance_ID());
                 if (xCost != null)
                 {
                     retValue = xCost.GetHistoryAverage();
@@ -456,7 +456,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     throw new Exception("CostElement not found: " + TO_FiFo);
                 }
-                MVAMVAMProductCost xCost = MVAMVAMProductCost.Get(GetCtx(), cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), cost.GetVAM_Product_ID(), cost.GetVAM_ProductCostType_ID(), cost.GetVAB_AccountBook_ID(), ce.GetVAM_ProductCostElement_ID(), cost.GetVAM_PFeature_SetInstance_ID());
+                MVAMVAMProductCost xCost = MVAMVAMProductCost.Get(GetCtx(), cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), cost.GetVAM_Product_ID(), cost.GetVAM_CostType_ID(), cost.GetVAB_AccountBook_ID(), ce.GetVAM_ProductCostElement_ID(), cost.GetVAM_PFeature_SetInstance_ID());
                 if (xCost != null)
                 {
                     retValue = xCost.GetCurrentCostPrice();
@@ -475,7 +475,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 MVAMProductCostElement ce = GetCostElement(TO_LastInvoicePrice);
                 if (ce != null)
                 {
-                    MVAMVAMProductCost xCost = MVAMVAMProductCost.Get(GetCtx(), cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), cost.GetVAM_Product_ID(), cost.GetVAM_ProductCostType_ID(), cost.GetVAB_AccountBook_ID(), ce.GetVAM_ProductCostElement_ID(), cost.GetVAM_PFeature_SetInstance_ID());
+                    MVAMVAMProductCost xCost = MVAMVAMProductCost.Get(GetCtx(), cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), cost.GetVAM_Product_ID(), cost.GetVAM_CostType_ID(), cost.GetVAB_AccountBook_ID(), ce.GetVAM_ProductCostElement_ID(), cost.GetVAM_PFeature_SetInstance_ID());
                     if (xCost != null)
                     {
                         retValue = xCost.GetCurrentCostPrice();
@@ -496,7 +496,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 MVAMProductCostElement ce = GetCostElement(TO_LastPOPrice);
                 if (ce != null)
                 {
-                    MVAMVAMProductCost xCost = MVAMVAMProductCost.Get(GetCtx(), cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), cost.GetVAM_Product_ID(), cost.GetVAM_ProductCostType_ID(), cost.GetVAB_AccountBook_ID(), ce.GetVAM_ProductCostElement_ID(), cost.GetVAM_PFeature_SetInstance_ID());
+                    MVAMVAMProductCost xCost = MVAMVAMProductCost.Get(GetCtx(), cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), cost.GetVAM_Product_ID(), cost.GetVAM_CostType_ID(), cost.GetVAB_AccountBook_ID(), ce.GetVAM_ProductCostElement_ID(), cost.GetVAM_PFeature_SetInstance_ID());
                     if (xCost != null)
                     {
                         retValue = xCost.GetCurrentCostPrice();
@@ -519,7 +519,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     throw new Exception("CostElement not found: " + TO_LiFo);
                 }
-                MVAMVAMProductCost xCost = MVAMVAMProductCost.Get(GetCtx(), cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), cost.GetVAM_Product_ID(), cost.GetVAM_ProductCostType_ID(), cost.GetVAB_AccountBook_ID(), ce.GetVAM_ProductCostElement_ID(), cost.GetVAM_PFeature_SetInstance_ID());
+                MVAMVAMProductCost xCost = MVAMVAMProductCost.Get(GetCtx(), cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), cost.GetVAM_Product_ID(), cost.GetVAM_CostType_ID(), cost.GetVAB_AccountBook_ID(), ce.GetVAM_ProductCostElement_ID(), cost.GetVAM_PFeature_SetInstance_ID());
                 if (xCost != null)
                 {
                     retValue = xCost.GetCurrentCostPrice();

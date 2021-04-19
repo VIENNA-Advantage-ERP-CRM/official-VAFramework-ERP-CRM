@@ -40,7 +40,7 @@ namespace VIS.Helpers
         {
 
             int VAF_TreeInfo_ID = DB.GetSQLValue(null,
-          "SELECT COALESCE(r.VAF_TreeInfo_Menu_ID, ci.VAF_TreeInfo_Menu_ID)"
+          "SELECT COALESCE(r.VAF_Tree_Menu_ID, ci.VAF_Tree_Menu_ID)"
                           + "FROM VAF_ClientDetail ci"
                           + " INNER JOIN VAF_Role r ON (ci.VAF_Client_ID=r.VAF_Client_ID) "
                           + "WHERE VAF_Role_ID=" + _ctx.GetVAF_Role_ID());
