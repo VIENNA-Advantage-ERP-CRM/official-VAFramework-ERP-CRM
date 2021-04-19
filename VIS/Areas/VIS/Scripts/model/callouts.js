@@ -16938,6 +16938,10 @@
                     mTab.setValue("C_UOM_ID", ProductData["C_UOM_ID"]);
                 }
 
+                if (mTab.findColumn("IsBOM") > 0) {
+                    mTab.setValue("IsBOM", ProductData["IsBOM"]);
+                }
+
             } 
         }
 
