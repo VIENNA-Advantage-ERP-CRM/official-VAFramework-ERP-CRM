@@ -10,9 +10,9 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Process
 {
-    public class CopyFromForecast : SvrProcess
+    public class CopyFromMasterForecast : SvrProcess
     {
-        private int C_Forecast_ID = 0;
+        private int C_MasterForecast_ID = 0;
         protected override void Prepare()
         {
             ProcessInfoParameter[] para = GetParameter();
@@ -23,9 +23,9 @@ namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("C_Forecast_ID") )
+                else if (name.Equals("C_Forecast_ID"))
                 {
-                    C_Forecast_ID = Util.GetValueOfInt(para[i].GetParameter());
+                    C_MasterForecast_ID = Util.GetValueOfInt(para[i].GetParameter());
                 }
                 else
                 {
@@ -40,23 +40,23 @@ namespace VAdvantage.Process
         /// <returns>Message (clear text)</returns>
         protected override string DoIt()
         {
-            int To_Forecast_ID = GetRecord_ID();
-            log.Info(Msg.GetMsg(GetCtx(),"FromFrorcast") + C_Forecast_ID + " to " + To_Forecast_ID);
-            if (To_Forecast_ID == 0)
+            int To_MasterForecast_ID = GetRecord_ID();
+            log.Info(Msg.GetMsg(GetCtx(), "FromFrorcast") + C_MasterForecast_ID + " to " + To_MasterForecast_ID);
+            if (To_MasterForecast_ID == 0)
             {
-                throw new ArgumentException("Target To_Forecast_ID == 0");
+                throw new ArgumentException("Target To_MasterForecast_ID == 0");
             }
-            if (C_Forecast_ID == 0)
+            if (C_MasterForecast_ID == 0)
             {
-                throw new ArgumentException("Source C_Forecast_ID == 0");
+                throw new ArgumentException("Source C_MasterForecast_ID == 0");
             }
-            MForecast from =  new MForecast(GetCtx(), C_Forecast_ID, Get_Trx());
-            MForecast to = new MForecast(GetCtx(), To_Forecast_ID, Get_Trx());
+            MMasterForecast from = new MMasterForecast(GetCtx(), C_MasterForecast_ID, Get_Trx());
+            MMasterForecast to = new MMasterForecast(GetCtx(), To_MasterForecast_ID, Get_Trx());
 
-        
-            string no = to.CopyLinesFrom(from);       
 
-            return "@Copied@="+ no;
+            string no = to.CopyLinesFrom(from);
+
+            return "@Copied@=" + no;
         }
     }
 }

@@ -76,6 +76,7 @@ namespace VAdvantage.Model
             // return base.AfterDelete(success);
         }
 
+      
         /// <summary>
         /// Is Used to Get or Create  Instance of Master ForecastLine
         /// </summary>
@@ -128,5 +129,21 @@ namespace VAdvantage.Model
             return retValue;
         }
 
+        /// <summary>
+        /// Add to Description
+        /// </summary>
+        /// <param name="description">text</param>
+        public void AddDescription(String description)
+        {
+            String desc = GetDescription();
+            if (desc == null)
+            {
+                SetDescription(description);
+            }
+            else
+            {
+                SetDescription(desc + " | " + description);
+            }
+        }
     }
 }

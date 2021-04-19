@@ -78,7 +78,10 @@ namespace VAdvantage.Model
                 LineHistory.SetUnitPrice(GetUnitPrice());
                 LineHistory.SetTotalPrice(GetTotalPrice());
                 LineHistory.SetDescription(GetDescription());
-                LineHistory.Set_Value("VAMFG_M_Routing_ID", Get_Value("VAMFG_M_Routing_ID"));
+                if (Env.IsModuleInstalled("VAMFG_"))
+                {
+                    LineHistory.Set_Value("VAMFG_M_Routing_ID", Get_Value("VAMFG_M_Routing_ID"));
+                }
                 if (!LineHistory.Save())
                 {
                     ValueNamePair vp = VLogger.RetrieveError();

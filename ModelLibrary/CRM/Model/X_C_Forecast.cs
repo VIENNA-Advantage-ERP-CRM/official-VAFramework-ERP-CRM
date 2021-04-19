@@ -38,8 +38,8 @@ namespace VAdvantage.Model
  Set Table ID By Table Name
  added by ->Harwinder */
         static X_C_Forecast() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
-        static long serialVersionUID = 27900614213453L;/** Last Updated Timestamp 4/15/2021 12:14:56 PM */
-        public static long updatedMS = 1618488896664L;/** AD_Table_ID=1000244 */
+        static long serialVersionUID = 27900682686290L;/** Last Updated Timestamp 4/16/2021 7:16:09 AM */
+        public static long updatedMS = 1618557369501L;/** AD_Table_ID=1000244 */
         public static int Table_ID; // =1000244;
         /** TableName=C_Forecast */
         public static String Table_Name = "C_Forecast";
@@ -116,7 +116,7 @@ namespace VAdvantage.Model
 @return Team */
         public int GetC_Team_ID() { Object ii = Get_Value("C_Team_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Comments.
 @param Comments Comments or additional information */
-        public void SetComments(String Comments) { if (Comments != null && Comments.Length > 50) { log.Warning("Length > 50 - truncated"); Comments = Comments.Substring(0, 50); } Set_Value("Comments", Comments); }/** Get Comments.
+        public void SetComments(String Comments) { if (Comments != null && Comments.Length > 255) { log.Warning("Length > 255 - truncated"); Comments = Comments.Substring(0, 255); } Set_Value("Comments", Comments); }/** Get Comments.
 @return Comments or additional information */
         public String GetComments() { return (String)Get_Value("Comments"); }/** Set Copy Lines.
 @param CopyLines Copy Lines */
@@ -242,8 +242,8 @@ namespace VAdvantage.Model
 @return TRXDATE */
         public DateTime? GetTRXDATE() { return (DateTime?)Get_Value("TRXDATE"); }/** Set Temp Document No.
 @param TempDocumentNo Temp Document No for this Document */
-        public void SetTempDocumentNo(int TempDocumentNo) { Set_Value("TempDocumentNo", TempDocumentNo); }/** Get Temp Document No.
+        public void SetTempDocumentNo(String TempDocumentNo) { if (TempDocumentNo != null && TempDocumentNo.Length > 30) { log.Warning("Length > 30 - truncated"); TempDocumentNo = TempDocumentNo.Substring(0, 30); } Set_Value("TempDocumentNo", TempDocumentNo); }/** Get Temp Document No.
 @return Temp Document No for this Document */
-        public int GetTempDocumentNo() { Object ii = Get_Value("TempDocumentNo"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public String GetTempDocumentNo() { return (String)Get_Value("TempDocumentNo"); }
     }
 }

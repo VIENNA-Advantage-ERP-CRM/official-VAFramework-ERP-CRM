@@ -16812,6 +16812,7 @@
                 mTab.setValue("PriceStd", PriceStd);
                 mTab.setValue("UnitPrice", PriceStd);
                 mTab.setValue("PriceStd", (PriceStd * Util.getValueOfDecimal(mTab.getValue("QtyEntered"))));
+                mTab.setValue("TotalPrice", (PriceStd * Util.getValueOfDecimal(mTab.getValue("QtyEntered"))));
             }
         }
         else {
@@ -16830,6 +16831,7 @@
         var price = Util.getValueOfDecimal(mTab.getValue("UnitPrice")) * Util.getValueOfDecimal(mTab.getValue("BaseQty"));
         // ForcastLine.SetQtyEntered(price);
         mTab.setValue("PriceStd", price);
+        mTab.setValue("TotalPrice", price);
 
         this.setCalloutActive(false);
         ctx = windowNo = mTab = mField = value = oldValue = null;
@@ -16865,6 +16867,7 @@
         }
         if (Util.getValueOfDecimal(mTab.getValue("UnitPrice")) != 0 && Qty != 0) {
             mTab.setValue("PriceStd", Qty * mTab.getValue("UnitPrice"))
+            mTab.setValue("TotalPrice", Qty * mTab.getValue("UnitPrice"))
         }
         this.setCalloutActive(false);
         ctx = windowNo = mTab = mField = value = oldValue = null;
@@ -16909,6 +16912,7 @@
         if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {
             if (mTab.getValue("M_Product_ID") == null) {
                 //set values to 0 if no product is selected
+                mTab.setValue("PriceStd", 0);
                 mTab.setValue("TotalPrice", 0);
                 mTab.setValue("UnitPrice", 0);
                 mTab.setValue("QtyEntered", 0);
@@ -16925,8 +16929,9 @@
             //get the price from product price inly if pricelist is selected
             var ProductData = VIS.dataContext.getJSONRecord("MProductPricing/GetProductdata", paramString);
             if (ProductData != null) {
-                mTab.setValue("TotalPrice", ProductData["PriceStd"]);
+                mTab.setValue("PriceStd", ProductData["PriceStd"]);
                 mTab.setValue("UnitPrice", ProductData["PriceStd"]);
+                mTab.setValue("PriceStd", (ProductData["PriceStd"] * Util.getValueOfDecimal(mTab.getValue("BaseQty"))));
                 mTab.setValue("TotalPrice", (ProductData["PriceStd"] * Util.getValueOfDecimal(mTab.getValue("BaseQty"))));
 
                 if (Util.getValueOfInt(mTab.getValue("C_UOM_ID")) == 0) {
