@@ -29,6 +29,28 @@ namespace VAdvantage.Model
 
         }
 
+        /// <summary>
+        /// Before Delete Constraints/logics
+        /// </summary>
+        /// <returns>true, when success</returns>
+        protected override bool BeforeDelete()
+        {
+            // when document is other that Drafted stage, then we cannot delete documnet line
+            string docStatus = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT DocStatus FROM C_Forecast 
+                                WHERE C_Forecast_ID" + GetC_Forecast_ID(), null, Get_Trx()));
+            if (!docStatus.Equals(MForecast.DOCSTATUS_Drafted))
+            {
+                log.SaveError("CannotDeleteTrx", "");
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// After Delete Constraints/logics
+        /// </summary>
+        /// <param name="success"></param>
+        /// <returns>true, when success</returns>
         protected override bool AfterDelete(bool success)
         {
             if (!success)
@@ -38,6 +60,12 @@ namespace VAdvantage.Model
             return true;
         }
 
+        /// <summary>
+        /// After Save Constraints/logics
+        /// </summary>
+        /// <param name="newRecord">newRecord</param>
+        /// <param name="success">True or False</param>
+        /// <returns>true when success</returns>
         protected override bool AfterSave(bool newRecord, bool success)
         {
             if (!success)
