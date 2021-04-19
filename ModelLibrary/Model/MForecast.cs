@@ -62,6 +62,21 @@ namespace VAdvantage.Model
             : base(ctx, rs, trxName)
         {
         }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="newRecord"></param>
+        /// <returns></returns>
+        protected override bool BeforeSave(bool newRecord)
+        {
+            if (GetTRXDATE() > GetDateAcct())
+            {
+                log.SaveError("TrxDateGreater", "");
+                return false;
+            }
+            return false;
+        }
 
         /// <summary>
         /// Approve Document
@@ -445,6 +460,85 @@ namespace VAdvantage.Model
             _lines = new MForecastLine[list.Count];
             _lines = list.ToArray();
             return _lines;
+        }
+
+        /// <summary>
+        /// Copy Team Forecast Lines
+        /// </summary>
+        /// <param name="FromForecast"></param>
+        /// <returns></returns>
+        public String CopyLinesFrom(MForecast FromForecast)
+        {
+            int count = 0;
+                      try
+            {
+                if (IsProcessed() || IsPosted() || FromForecast == null)
+                {
+                    return "";
+                }
+                MForecastLine[] fromLines = FromForecast.GetLines(false);
+                string FromCurrency = Util.GetValueOfString(DB.ExecuteScalar("SELECT ISO_CODE FROM C_Currency WHERE C_Currency_ID = "+ FromForecast.GetC_Currency_ID()));
+                string ToCurrency = Util.GetValueOfString(DB.ExecuteScalar("SELECT ISO_CODE FROM C_Currency WHERE C_Currency_ID = " + GetC_Currency_ID()));
+
+
+                // MDocType docType = new MDocType(GetCtx(),GetC_DocType_ID(), Get_TrxName());
+                //string docBaseType = docType.GetDocBaseType();
+                for (int i = 0; i < fromLines.Length; i++)
+                {
+                    //donot copy the lines where order and project reference exists 
+                    if (fromLines[i].GetC_Order_ID() > 0 || fromLines[i].GetC_Project_ID() > 0)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        MForecastLine line = new MForecastLine(GetCtx(), 0, Get_Trx());
+                        PO.CopyValues(fromLines[i], line, GetAD_Client_ID(), GetAD_Org_ID());
+
+                        //price conversion
+                        line.SetUnitPrice(MConversionRate.Convert(GetCtx(), line.GetUnitPrice(), FromForecast.GetC_Currency_ID(), GetC_Currency_ID(), 
+                            GetAD_Client_ID(), GetAD_Org_ID()));
+                        if (line.GetUnitPrice() == 0)
+                        {
+                            //if conversion not found 
+                            _processMsg = Msg.GetMsg(GetCtx(), "ConversionNotFound") + " " + Msg.GetMsg(GetCtx(), "From") + " " + FromCurrency + Msg.GetMsg(GetCtx(), "To") + ToCurrency;
+                            count = 0;
+                            return count + " " + _processMsg;
+                        }
+                        line.SetTotalPrice(line.GetUnitPrice()*line.GetBaseQty());                        
+                        line.SetC_Forecast_ID(GetC_Forecast_ID());
+                        line.SetProcessed(false);
+                        if (!line.Save())
+                        {
+                            ValueNamePair vp = VLogger.RetrieveError();
+                            if (vp != null)
+                            {
+                                string val = vp.GetName();
+                                log.SaveWarning("", Msg.GetMsg(GetCtx(), "NotSaveForecastLine") + val);
+                            }
+                            else
+                            {
+                                log.SaveWarning("", Msg.GetMsg(GetCtx(), "NotSaveForecastLine"));
+                            }
+                        }
+                        else
+                        {
+                            count++;
+                        }
+
+                    }
+                }
+                if (fromLines.Length != count)
+                {
+                    log.Log(Level.SEVERE, "Lines difference - TeamForecast=" + fromLines.Length + " <> Saved=" + count);
+                }
+            }
+            catch (Exception e)
+            {
+                log.Log(Level.SEVERE, e.Message);
+            }
+         
+            return count.ToString();
         }
 
     }

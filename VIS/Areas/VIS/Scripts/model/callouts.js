@@ -16909,7 +16909,7 @@
         if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {
             if (mTab.getValue("M_Product_ID") == null) {
                 //set values to 0 if no product is selected
-                mTab.setValue("PriceStd", 0);
+                mTab.setValue("TotalPrice", 0);
                 mTab.setValue("UnitPrice", 0);
                 mTab.setValue("QtyEntered", 0);
                 mTab.setValue("BaseQty", 0);
@@ -16925,9 +16925,9 @@
             //get the price from product price inly if pricelist is selected
             var ProductData = VIS.dataContext.getJSONRecord("MProductPricing/GetProductdata", paramString);
             if (ProductData != null) {
-                mTab.setValue("PriceStd", ProductData["PriceStd"]);
+                mTab.setValue("TotalPrice", ProductData["PriceStd"]);
                 mTab.setValue("UnitPrice", ProductData["PriceStd"]);
-                mTab.setValue("PriceStd", (ProductData["PriceStd"] * Util.getValueOfDecimal(mTab.getValue("BaseQty"))));
+                mTab.setValue("TotalPrice", (ProductData["PriceStd"] * Util.getValueOfDecimal(mTab.getValue("BaseQty"))));
 
                 if (Util.getValueOfInt(mTab.getValue("C_UOM_ID")) == 0) {
                     mTab.setValue("C_UOM_ID", ProductData["C_UOM_ID"]);
@@ -16941,8 +16941,60 @@
         return "";
     };
 
+    /**
+     * Set Period
+     * @param {any} ctx
+     * @param {any} windowNo
+     * @param {any} mTab
+     * @param {any} mField
+     * @param {any} value
+     * @param {any} oldValue
+     */
+    CalloutTeamForcast.prototype.AccountDate = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (this.isCalloutActive() || value == null || value.toString() == "") {
+            return "";
+        }
+        this.setCalloutActive(true);
 
-   
+        var paramString = Util.getValueOfString(mTab.getValue("AD_Client_ID")).concat(",", Util.getValueOfString(mTab.getValue("DateAcct")), ",",
+            Util.getValueOfString(mTab.getValue("AD_Org_ID")))
+
+        //get Period
+        var Period = VIS.dataContext.getJSONRecord("MPeriod/GetPeriod", paramString);
+        if (Period != null) {
+            mTab.setValue("C_Period_ID", Period);
+        }
+        
+        this.setCalloutActive(false);
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
+    /**
+     * Set Supervisor
+     * @param {any} ctx
+     * @param {any} windowNo
+     * @param {any} mTab
+     * @param {any} mField
+     * @param {any} value
+     * @param {any} oldValue
+     */
+    CalloutTeamForcast.prototype.SuperVisor = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value)==0) {
+            return "";
+        }
+        this.setCalloutActive(true)    
+        //get supervisor
+        var SuperVisor = VIS.dataContext.getJSONRecord("MTeamForcast/GetSuperVisor", Util.getValueOfString(value));
+        if (SuperVisor != null) {
+            mTab.setValue("Supervisor_ID", SuperVisor);
+        }
+
+        this.setCalloutActive(false);
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
     VIS.Model.CalloutTeamForcast = CalloutTeamForcast;
     //************CalloutTeamForcast End****************
 

@@ -38,8 +38,8 @@ namespace VAdvantage.Model
  Set Table ID By Table Name
  added by ->Harwinder */
         static X_C_Forecast() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
-        static long serialVersionUID = 27900607045154L;/** Last Updated Timestamp 4/15/2021 10:15:28 AM */
-        public static long updatedMS = 1618481728365L;/** AD_Table_ID=1000244 */
+        static long serialVersionUID = 27900614213453L;/** Last Updated Timestamp 4/15/2021 12:14:56 PM */
+        public static long updatedMS = 1618488896664L;/** AD_Table_ID=1000244 */
         public static int Table_ID; // =1000244;
         /** TableName=C_Forecast */
         public static String Table_Name = "C_Forecast";
@@ -240,6 +240,10 @@ namespace VAdvantage.Model
 @param TRXDATE TRXDATE */
         public void SetTRXDATE(DateTime? TRXDATE) { Set_Value("TRXDATE", (DateTime?)TRXDATE); }/** Get TRXDATE.
 @return TRXDATE */
-        public DateTime? GetTRXDATE() { return (DateTime?)Get_Value("TRXDATE"); }
+        public DateTime? GetTRXDATE() { return (DateTime?)Get_Value("TRXDATE"); }/** Set Temp Document No.
+@param TempDocumentNo Temp Document No for this Document */
+        public void SetTempDocumentNo(int TempDocumentNo) { Set_Value("TempDocumentNo", TempDocumentNo); }/** Get Temp Document No.
+@return Temp Document No for this Document */
+        public int GetTempDocumentNo() { Object ii = Get_Value("TempDocumentNo"); if (ii == null) return 0; return Convert.ToInt32(ii); }
     }
 }
