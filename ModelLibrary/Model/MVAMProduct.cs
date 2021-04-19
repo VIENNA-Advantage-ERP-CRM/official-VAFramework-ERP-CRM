@@ -685,7 +685,7 @@ namespace VAdvantage.Model
             int VAM_Product_ID = 0;
             string sql = @"SELECT p.VAM_Product_ID FROM VAM_Product p LEFT JOIN VAM_Manufacturer m ON m.VAM_Product_ID = p.VAM_Product_ID 
                             LEFT JOIN VAM_ProductFeatures a ON a.VAM_Product_ID = p.VAM_Product_ID LEFT JOIN VAB_UOM_Conversion c ON c.VAM_Product_ID = p.VAM_Product_ID 
-                            LEFT JOIN VAB_UOVAM_ProductBarcode b ON b.VAM_Product_ID = p.VAM_Product_ID WHERE p.VAF_Client_ID = " + VAF_Client_ID
+                            LEFT JOIN VAB_UOM_ProductBarcode b ON b.VAM_Product_ID = p.VAM_Product_ID WHERE p.VAF_Client_ID = " + VAF_Client_ID
                             + " AND ( p.UPC = '" + upc + "' OR m.UPC = '" + upc + "' OR a.UPC = '" + upc + "' OR c.UPC = '" + upc + "' OR b.UPC = '" + upc + "')";
             VAM_Product_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
             return VAM_Product_ID;
