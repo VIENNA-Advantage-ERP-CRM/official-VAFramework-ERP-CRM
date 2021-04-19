@@ -493,6 +493,8 @@ namespace VAdvantage.Model
         public String CopyLinesFrom(MMasterForecast FromForecast)
         {
             int count = 0;
+            string FromCurrency = null;
+            string ToCurrency = null;
             try
             {
                 if (IsProcessed() || IsPosted() || FromForecast == null)
@@ -500,21 +502,26 @@ namespace VAdvantage.Model
                     return "";
                 }
                 MMasterForecastLine[] fromLines = FromForecast.GetLines(false);
-                string FromCurrency = Util.GetValueOfString(DB.ExecuteScalar("SELECT ISO_CODE FROM C_Currency WHERE C_Currency_ID = " + FromForecast.GetC_Currency_ID()));
-                string ToCurrency = Util.GetValueOfString(DB.ExecuteScalar("SELECT ISO_CODE FROM C_Currency WHERE C_Currency_ID = " + GetC_Currency_ID()));
+                DataSet _dsCurrency = DB.ExecuteDataset("SELECT ISO_CODE,C_Currency_ID FROM C_Currency WHERE C_Currency_ID IN(" + FromForecast.GetC_Currency_ID() + "," + GetC_Currency_ID() + ")");
+                if (_dsCurrency != null && _dsCurrency.Tables.Count > 0)
+                {
+                    for (int i = 0; i < _dsCurrency.Tables[0].Rows.Count; i++)
+                    {
+                        if (Util.GetValueOfInt(_dsCurrency.Tables[0].Rows[i]["C_Currency_ID"]) == GetC_Currency_ID())
+                        {
+                            ToCurrency = Util.GetValueOfString(_dsCurrency.Tables[0].Rows[i]["ISO_CODE"]);
+                        }
+                        else
+                        {
+                            FromCurrency = Util.GetValueOfString(_dsCurrency.Tables[0].Rows[i]["ISO_CODE"]);
+                        }
+                    }
+                }
 
-
-                // MDocType docType = new MDocType(GetCtx(),GetC_DocType_ID(), Get_TrxName());
-                //string docBaseType = docType.GetDocBaseType();
+              
                 for (int i = 0; i < fromLines.Length; i++)
                 {
-                    ////donot copy the lines where order and project reference exists 
-                    //if (fromLines[i].GetForcastQty() > 0 || fromLines[i].GetOppQty() > 0)
-                    //{
-                    //    continue;
-                    //}
-                    //else
-                    //{
+                   
                     MMasterForecastLine line = new MMasterForecastLine(GetCtx(), 0, Get_Trx());
                     PO.CopyValues(fromLines[i], line, GetAD_Client_ID(), GetAD_Org_ID());
 
