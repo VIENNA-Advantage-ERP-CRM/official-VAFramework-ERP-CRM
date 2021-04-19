@@ -278,6 +278,12 @@ namespace VAdvantage.Model
             int no = DB.ExecuteQuery("UPDATE C_ForecastLine SET Processed = 'N'  WHERE C_Forecast_ID = " + GetC_Forecast_ID(), null, Get_Trx());
             _log.Info("UnProccessed record from Team Forecast Line - " + no);
 
+            // Set Value in Re-Activated when record is reactivated
+            if (Get_ColumnIndex("IsReActivated") >= 0)
+            {
+                Set_Value("IsReActivated", true);
+            }
+
             // Set Default Action
             SetDocAction(DOCACTION_Complete);
             SetProcessed(false);
