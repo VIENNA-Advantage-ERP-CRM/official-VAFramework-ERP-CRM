@@ -3345,7 +3345,7 @@ namespace VAdvantage.Model
                     if (GetM_Product_ID() != 0)
                         SetM_Product_ID(0);
                 }
-                
+
                 MInvoice inv = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
 
                 // Check if new columns found on Asset table
@@ -3361,7 +3361,7 @@ namespace VAdvantage.Model
                     {
                         forComponent = Util.GetValueOfString(DB.ExecuteScalar("SELECT VAFAM_HasComponent FROM A_Asset WHERE A_Asset_ID = " +
                             GetA_Asset_ID(), null, Get_TrxName())).Equals("Y");
-                        if(forComponent && Util.GetValueOfString(Get_Value("VAFAM_CapitalExpense")).Equals("C"))
+                        if (forComponent && Util.GetValueOfString(Get_Value("VAFAM_CapitalExpense")).Equals("C"))
                         {
                             log.SaveError("VAFAM_SelAssetComps", "");
                             return false;
@@ -3845,10 +3845,83 @@ namespace VAdvantage.Model
 
                     decimal margin = 0;
                     decimal marginper = 0;
+                    var duration = Util.GetValueOfString(Get_Value("VA077_Duration"));
+
                     if (GetPriceEntered() != 0)
                     {
-                        margin = GetPriceEntered() - Util.GetValueOfDecimal(Get_Value("VA077_PurchasePrice"));
-                        marginper = (margin / GetPriceEntered()) * 100;
+                        if (duration != "")
+                        {
+                            decimal sp = (GetPriceEntered() * GetQtyEntered() * Util.GetValueOfDecimal(duration)) / 12;
+                            decimal pp = (Util.GetValueOfDecimal(Get_Value("VA077_PurchasePrice")) * GetQtyEntered() * Util.GetValueOfDecimal(duration)) / 12;
+                            margin = Decimal.Round(Decimal.Subtract(sp, pp), GetPrecision(), MidpointRounding.AwayFromZero);
+
+                            //handle divide by zero case
+                            if (sp != 0)
+                                marginper = Decimal.Round(Decimal.Multiply(Decimal.Divide(margin, sp)
+                                    , Env.ONEHUNDRED), GetPrecision(), MidpointRounding.AwayFromZero);
+                            else
+                                marginper = Env.ZERO;
+
+                            SetLineNetAmt(Decimal.Round(sp, GetPrecision()));
+                            decimal taxAmt;
+                            decimal lineTotalAmt;
+
+                            MInvoiceTax tax = MInvoiceTax.Get(this, GetPrecision(), false, Get_TrxName());
+                            MTax taxRate = tax.GetTax();
+                            if (taxRate.GetRate() != 0)
+                            {
+                                taxAmt = ((GetPriceEntered() * GetQtyEntered()) * (taxRate.GetRate() / 100) * Util.GetValueOfDecimal(duration)) / 12;
+                            }
+                            else
+                            {
+                                taxAmt = 0;
+                            }
+                            SetTaxAmt(Decimal.Round(taxAmt, GetPrecision()));
+                            lineTotalAmt = sp + taxAmt;
+
+                            SetLineTotalAmt(Decimal.Round(lineTotalAmt, GetPrecision()));
+
+                            // set Tax Amount in base currency
+                            if (Get_ColumnIndex("TaxBaseAmt") > 0)
+                            {
+                                primaryAcctSchemaCurrency = GetCtx().GetContextAsInt("$C_Currency_ID");
+                                if (inv.GetC_Currency_ID() != primaryAcctSchemaCurrency)
+                                {
+                                    taxAmt = MConversionRate.Convert(GetCtx(), GetTaxAmt(), primaryAcctSchemaCurrency, inv.GetC_Currency_ID(),
+                                                                                               inv.GetDateAcct(), inv.GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+                                }
+                                else
+                                {
+                                    taxAmt = GetTaxAmt();
+                                }
+                                SetTaxBaseAmt(taxAmt);
+                            }
+
+                            // set Taxable Amount -- (Line Total-Tax Amount)
+                            if (Get_ColumnIndex("TaxBaseAmt") >= 0)
+                            {
+                                if (Get_ColumnIndex("SurchargeAmt") > 0)
+                                {
+                                    SetTaxBaseAmt(Decimal.Subtract(Decimal.Subtract(GetLineTotalAmt(), GetTaxAmt()), GetSurchargeAmt()));
+                                }
+                                else
+                                {
+                                    SetTaxBaseAmt(Decimal.Subtract(GetLineTotalAmt(), GetTaxAmt()));
+                                }
+                            }
+                        }
+                        else
+                        {
+                            margin = Decimal.Subtract(GetPriceEntered(), Util.GetValueOfDecimal(Get_Value("VA077_PurchasePrice"))) * GetQtyEntered();
+                            margin = Decimal.Round(margin, GetPrecision(), MidpointRounding.AwayFromZero);
+
+                            //handle divide by zero case
+                            if (GetQtyEntered() != 0)
+                                marginper = Decimal.Round(Decimal.Multiply(Decimal.Divide(margin, (GetPriceEntered() * GetQtyEntered()))
+                                , Env.ONEHUNDRED), GetPrecision(), MidpointRounding.AwayFromZero);
+                            else
+                                marginper = Env.ZERO;
+                        }
                     }
                     Set_Value("VA077_MarginAmt", margin);
                     Set_Value("VA077_MarginPercent", marginper);
@@ -4064,7 +4137,8 @@ namespace VAdvantage.Model
                     HCDate = Util.GetValueOfDateTime(contDS.Tables[0].Rows[0]["VA077_HistoricContractDate"]);
                     StartDate = Util.GetValueOfDateTime(contDS.Tables[0].Rows[0]["VA077_ContractCPStartDate"]);
                     EndDate = Util.GetValueOfDateTime(contDS.Tables[0].Rows[0]["VA077_ContractCPEndDate"]);
-                    AnnualValue = Util.GetValueOfDecimal(contDS.Tables[0].Rows[0]["VA077_AnnualValue"]);
+                    if (GetQtyEntered() != 0) // In the case of void qty will be zero, so set annual value only if qty is greater than zero
+                        AnnualValue = Util.GetValueOfDecimal(contDS.Tables[0].Rows[0]["VA077_AnnualValue"]);
 
                     qry.Clear();
                     qry.Append(@"UPDATE C_Invoice  p SET VA077_TotalMarginAmt=(SELECT COALESCE(SUM(pl.VA077_MarginAmt),0) FROM C_InvoiceLine pl 
@@ -4076,7 +4150,7 @@ namespace VAdvantage.Model
                                                                               pl.VA077_PurchasePrice * pl.QtyEntered * pl.VA077_Duration / 12  
                                                                               END), 0), " + GetPrecision() + @") FROM C_InvoiceLine pl  
                             WHERE pl.IsActive = 'Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @"),
-                            VA077_MarginPercent=(SELECT CASE WHEN Sum(LineNetAmt) > 0 Then 
+                            VA077_MarginPercent=(SELECT CASE WHEN Sum(LineNetAmt) <> 0 Then 
                                                  ROUND(COALESCE(((Sum(LineNetAmt) - Sum(
                                                                 CASE WHEN VA077_Duration is null THEN
                                                                     COALESCE(VA077_PurchasePrice, 0) * QtyEntered
@@ -4153,7 +4227,7 @@ namespace VAdvantage.Model
                                                                               pl.VA077_PurchasePrice * QtyEntered * VA077_Duration / 12  
                                                                               END), 0), " + GetPrecision() + @") FROM C_InvoiceLine pl  
                             WHERE pl.IsActive = 'Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + @"),
-                            VA077_MarginPercent=(SELECT CASE WHEN Sum(LineNetAmt) > 0 Then 
+                            VA077_MarginPercent=(SELECT CASE WHEN Sum(LineNetAmt) <> 0 Then 
                                                  ROUND(COALESCE(((Sum(LineNetAmt) - Sum(
                                                                 CASE WHEN VA077_Duration is null THEN
                                                                     COALESCE(VA077_PurchasePrice, 0) * QtyEntered

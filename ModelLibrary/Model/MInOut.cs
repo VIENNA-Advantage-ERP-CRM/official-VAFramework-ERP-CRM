@@ -5175,6 +5175,12 @@ namespace VAdvantage.Model
                     {
                         line.SetQty(Env.ZERO);
                         line.AddDescription("Void (" + old + ")");
+                        if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
+                        {
+                            line.Set_Value("VA077_MarginAmt", Env.ZERO);
+                            line.Set_Value("VA077_MarginPercent", Env.ZERO);
+                        }
+                        
                         line.Save(Get_TrxName());
                         //if (countVA038 > 0)
                         //{

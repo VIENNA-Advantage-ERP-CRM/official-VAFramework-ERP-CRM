@@ -1851,7 +1851,7 @@ namespace VIS.Controllers
                         invoiceLine.Set_Value("VA077_UserRef_ID", orderLine.Get_Value("VA077_UserRef_ID"));
                         invoiceLine.Set_Value("VA077_StartDate", orderLine.Get_Value("VA077_StartDate"));
                         invoiceLine.Set_Value("VA077_EndDate", orderLine.Get_Value("VA077_EndDate"));
-                        
+                        invoiceLine.Set_Value("VA077_ServiceContract_ID", orderLine.Get_Value("VA077_ServiceContract_ID"));
                     }
 
 
@@ -1957,7 +1957,9 @@ namespace VIS.Controllers
                             invoiceLine.Set_Value("VA077_SerialNo", inoutLine.Get_Value("VA077_SerialNo"));
                             invoiceLine.Set_Value("VA077_UpdateFromVersn", inoutLine.Get_Value("VA077_UpdateFromVersn"));
                             invoiceLine.Set_Value("VA077_UserRef_ID", inoutLine.Get_Value("VA077_UserRef_ID"));
-
+                            invoiceLine.Set_Value("VA077_StartDate", inoutLine.Get_Value("VA077_StartDate"));
+                            invoiceLine.Set_Value("VA077_EndDate", inoutLine.Get_Value("VA077_EndDate"));
+                            invoiceLine.Set_Value("VA077_ServiceContract_ID", inoutLine.Get_Value("VA077_ServiceContract_ID"));
                         }
 
 

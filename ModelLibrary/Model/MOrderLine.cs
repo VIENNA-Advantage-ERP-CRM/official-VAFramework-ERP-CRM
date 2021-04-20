@@ -4509,9 +4509,13 @@ namespace VAdvantage.Model
                         decimal sp = (GetPriceEntered() * GetQtyEntered() * Util.GetValueOfDecimal(duration)) / 12;
                         decimal pp = (Util.GetValueOfDecimal(Get_Value("VA077_PurchasePrice")) * GetQtyEntered() * Util.GetValueOfDecimal(duration)) / 12;
                         margin = Decimal.Round(Decimal.Subtract(sp, pp), GetPrecision(), MidpointRounding.AwayFromZero);
-                        marginper = Decimal.Round(Decimal.Multiply(Decimal.Divide(margin, sp)
-                            , Env.ONEHUNDRED), GetPrecision(), MidpointRounding.AwayFromZero);
 
+                        //handle divide by zero case
+                        if (sp != 0)
+                            marginper = Decimal.Round(Decimal.Multiply(Decimal.Divide(margin, sp)
+                                , Env.ONEHUNDRED), GetPrecision(), MidpointRounding.AwayFromZero);
+                        else
+                            marginper = Env.ZERO;
 
                         SetLineNetAmt(Decimal.Round(sp, GetPrecision()));
                         decimal taxAmt;
@@ -4566,8 +4570,13 @@ namespace VAdvantage.Model
                     {
                         margin = Decimal.Subtract(GetPriceEntered(), Util.GetValueOfDecimal(Get_Value("VA077_PurchasePrice"))) * GetQtyEntered();
                         margin = Decimal.Round(margin, GetPrecision(), MidpointRounding.AwayFromZero);
-                        marginper = Decimal.Round(Decimal.Multiply(Decimal.Divide(margin, (GetPriceEntered() * GetQtyEntered()))
+                        
+                        //handle divide by zero case
+                        if (GetQtyEntered() != 0) 
+                            marginper = Decimal.Round(Decimal.Multiply(Decimal.Divide(margin, (GetPriceEntered() * GetQtyEntered()))
                             , Env.ONEHUNDRED), GetPrecision(), MidpointRounding.AwayFromZero);
+                        else
+                            marginper = Env.ZERO;
                     }
                 }
 
@@ -4862,12 +4871,13 @@ namespace VAdvantage.Model
                     HCDate = Util.GetValueOfDateTime(contDS.Tables[0].Rows[0]["VA077_HistoricContractDate"]);
                     StartDate = Util.GetValueOfDateTime(contDS.Tables[0].Rows[0]["VA077_ContractCPStartDate"]);
                     EndDate = Util.GetValueOfDateTime(contDS.Tables[0].Rows[0]["VA077_ContractCPEndDate"]);
-                    AnnualValue = Util.GetValueOfDecimal(contDS.Tables[0].Rows[0]["VA077_AnnualValue"]);
+                    if (GetQtyEntered() != 0) // In the case of void qty will be zero, so set annual value only if qty is greater than zero
+                        AnnualValue = Util.GetValueOfDecimal(contDS.Tables[0].Rows[0]["VA077_AnnualValue"]);
 
                     qry.Clear();
                     qry.Append(@"UPDATE C_Order  p SET VA077_TotalMarginAmt=(SELECT COALESCE(SUM(pl.VA077_MarginAmt),0) FROM C_OrderLine pl 
                             WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_MarginPercent=(SELECT CASE WHEN Sum(LineNetAmt) > 0 Then 
+                            VA077_MarginPercent=(SELECT CASE WHEN Sum(LineNetAmt) <> 0 Then 
                             ROUND(COALESCE(((Sum(LineNetAmt) - Sum(
                                                                 CASE WHEN VA077_Duration is null THEN
                                                                     COALESCE(VA077_PurchasePrice, 0) * QtyEntered
@@ -4915,7 +4925,7 @@ namespace VAdvantage.Model
                             WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),                                                        
                             VA077_TotalSalesAmt=(SELECT COALESCE(SUM(pl.LineNetAmt),0) FROM C_OrderLine pl 
                             WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_MarginPercent=(SELECT CASE WHEN Sum(LineNetAmt) > 0 Then 
+                            VA077_MarginPercent=(SELECT CASE WHEN Sum(LineNetAmt) <> 0 Then 
                             ROUND(COALESCE(((Sum(LineNetAmt) - Sum(
                                                                 CASE WHEN VA077_Duration is null THEN
                                                                     COALESCE(VA077_PurchasePrice, 0) * QtyEntered
