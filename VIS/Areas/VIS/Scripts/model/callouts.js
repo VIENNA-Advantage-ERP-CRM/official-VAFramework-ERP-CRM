@@ -5553,15 +5553,19 @@
         var statementDate = mTab.getValue("ValutaDate"); 
 
         // JID_1418: When select payment on Bank statement line, system gives an error meassage
+        //When select payment on Bank statement line with out select the statmenet Date, return error meassage
         if (statementDate == null) {
-            statementDate = new Date();
+            //statementDate = new Date();
+            mTab.setValue("C_Payment_ID", 0);
+            return VIS.Msg.getMsg("PlzSelectStmtDate");
         }
 
         //var sql = "SELECT PayAmt FROM C_Payment_v WHERE C_Payment_ID=@C_Payment_ID";		//	1
         //var dr = null;
         //var param = [];
         try {
-            var paramStr = C_Payment_ID.toString() + "," + C_Currency_ID.toString() + "," + statementDate.toString();
+            //passed statement Date as in JSON format
+            var paramStr = C_Payment_ID.toString() + "," + C_Currency_ID.toString() + "," + JSON.stringify(statementDate);
             var payAmt = VIS.dataContext.getJSONRecord("MBankStatement/GetPayment", paramStr);
             //Update the BankStatementLine fields
             if (payAmt != null && payAmt.length > 0) {
@@ -5621,6 +5625,10 @@
 
         var C_Currency_ID = mTab.getValue("C_Currency_ID");
         var acctDate = mTab.getValue("ValutaDate");
+        //When select payment on Bank statement line, system gives an error meassage
+        if (acctDate == null) {
+            return VIS.Msg.getMsg("PlzSelectStmtDate");
+        }
 
         try {
             var paramStr = C_Payment_ID.toString() + "," + C_Currency_ID.toString() + "," + acctDate.toString();
