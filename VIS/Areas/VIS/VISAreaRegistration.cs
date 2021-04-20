@@ -156,7 +156,7 @@ namespace VIS
                  "~/Areas/VIS/Scripts/model/CalloutColumn.js",
                  "~/Areas/VIS/Scripts/app/forms/glDimensionValue.js",
                  "~/Areas/VIS/Scripts/app/forms/vcreaterelatedlines.js",
-
+                 "~/Areas/VIS/Scripts/app/forms/createforecast.js",
 
 
                    "~/Areas/VIS/Scripts/tabpanels/verinfo.js",
@@ -204,7 +204,8 @@ namespace VIS
                  "~/Areas/VIS/Content/RecordAccessDialog.css",
                 "~/Areas/VIS/Content/GroupStyle.css",
                  "~/Areas/VIS/Content/ProductContainer.css",
-                "~/Areas/VIS/Content/GlJournalDimension.css"
+                "~/Areas/VIS/Content/GlJournalDimension.css",
+                "~/Areas/VIS/Content/BudgetControl.css"
                );
 
             style.Include("~/Areas/VIS/Content/F20/Color.css",

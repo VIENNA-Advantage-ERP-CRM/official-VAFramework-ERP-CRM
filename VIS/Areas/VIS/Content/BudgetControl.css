@@ -1,0 +1,34 @@
+﻿.vis-budget-main-wrap, .vis-budget-form-wrap, .vis-budget-form-row {
+    float: left;
+    width: 100%;
+    /*height: 40% !important*/
+}
+
+.vis-budget-form-row {
+    padding-top:10px;
+}
+
+    .vis-budget-form-col {
+        float: left;
+        width: 30%;
+    }
+
+    .vis-budget-form-col label {
+        font-size: 14px;
+        font-weight: normal;
+        padding-left: 7px;
+    }
+
+.vis-budget-form-col2 {
+    float: left;
+    width: 70%;
+}
+
+.vis-budget-buttons-wrap {
+    padding-top: 15px;
+}
+
+.vis-budget-buttons-wrap-span {
+    font-size: 14px;
+    padding: 6px 12px;
+}
