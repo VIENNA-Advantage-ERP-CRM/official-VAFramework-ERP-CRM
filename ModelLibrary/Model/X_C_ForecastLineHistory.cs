@@ -38,8 +38,8 @@ namespace VAdvantage.Model
  Set Table ID By Table Name
  added by ->Harwinder */
         static X_C_ForecastLineHistory() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
-        static long serialVersionUID = 27900946111193L;/** Last Updated Timestamp 4/19/2021 8:26:34 AM */
-        public static long updatedMS = 1618820794404L;/** AD_Table_ID=1000549 */
+        static long serialVersionUID = 27900950196540L;/** Last Updated Timestamp 4/19/2021 9:34:39 AM */
+        public static long updatedMS = 1618824879751L;/** AD_Table_ID=1000549 */
         public static int Table_ID; // =1000549;
         /** TableName=C_ForecastLineHistory */
         public static String Table_Name = "C_ForecastLineHistory";

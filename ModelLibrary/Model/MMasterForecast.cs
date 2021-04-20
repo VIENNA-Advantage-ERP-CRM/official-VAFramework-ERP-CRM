@@ -18,7 +18,7 @@ namespace VAdvantage.Model
     public class MMasterForecast : X_C_MasterForecast,DocAction
     {
         #region Private Variables
-        private static VLogger _log = VLogger.GetVLogger(typeof(MForecast).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MMasterForecast).FullName);
         //	Just Prepared Flag
         private bool _justPrepared = false;
         // Process Message
@@ -60,6 +60,23 @@ namespace VAdvantage.Model
         public MMasterForecast(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
+        }
+
+
+        /// <summary>
+        /// Implement beforesave logic
+        /// </summary>
+        /// <param name="newRecord"></param>
+        /// <returns></returns>
+        protected override bool BeforeSave(bool newRecord)
+        {
+            //Trxdate cant be greatwer then acctdate
+            if (GetTRXDATE() > GetDateAcct())
+            {
+                log.SaveError("TrxDateGreater", "");
+                return false;
+            }
+            return true;
         }
 
 
@@ -486,10 +503,10 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Copy Team Forecast Lines
+        /// Copy Master Forecast Lines
         /// </summary>
         /// <param name="FromForecast"></param>
-        /// <returns></returns>
+        /// <returns>info</returns>
         public String CopyLinesFrom(MMasterForecast FromForecast)
         {
             int count = 0;
@@ -502,6 +519,7 @@ namespace VAdvantage.Model
                     return "";
                 }
                 MMasterForecastLine[] fromLines = FromForecast.GetLines(false);
+               
                 DataSet _dsCurrency = DB.ExecuteDataset("SELECT ISO_CODE,C_Currency_ID FROM C_Currency WHERE C_Currency_ID IN(" + FromForecast.GetC_Currency_ID() + "," + GetC_Currency_ID() + ")");
                 if (_dsCurrency != null && _dsCurrency.Tables.Count > 0)
                 {
@@ -535,6 +553,9 @@ namespace VAdvantage.Model
                         count = 0;
                         return count + " " + _processMsg;
                     }
+                    line.SetTotalQty(line.GetForcastQty());
+                    line.SetSalesOrderQty(Env.ZERO);
+                    line.SetOppQty(Env.ZERO);
                     line.SetPlannedRevenue(line.GetPrice() * line.GetTotalQty());
                     line.SetC_MasterForecast_ID(GetC_MasterForecast_ID());
                     line.SetProcessed(false);
@@ -544,7 +565,11 @@ namespace VAdvantage.Model
                         if (vp != null)
                         {
                             string val = vp.GetName();
-                            log.SaveWarning("", Msg.GetMsg(GetCtx(), "NotSaveMasterForecastLine") + val);
+                            if (string.IsNullOrEmpty(val))
+                            {
+                                val = vp.GetValue();
+                            }
+                            log.SaveWarning("", Msg.GetMsg(GetCtx(), "NotSaveMasterForecastLine") +val);
                         }
                         else
                         {
@@ -557,7 +582,6 @@ namespace VAdvantage.Model
                     }
 
                 }
-                // }
                 if (fromLines.Length != count)
                 {
                     log.Log(Level.SEVERE, "Lines difference - MasterForecast=" + fromLines.Length + " <> Saved=" + count);
