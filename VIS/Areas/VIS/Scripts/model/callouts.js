@@ -17023,6 +17023,7 @@
         VIS.CalloutEngine.call(this, "VIS.CalloutMasterForecast");//must call
     };
     VIS.Utility.inheritPrototype(CalloutMasterForecast, VIS.CalloutEngine); //inherit prototype
+
     /**
      * set currency 
      * @param {any} ctx
@@ -17069,7 +17070,8 @@
      */
     CalloutMasterForecast.prototype.Product = function (ctx, windowNo, mTab, mField, value, oldValue) {
         if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {
-            if (mTab.getValue("M_Product_ID") == null) {
+            if (mTab.getValue("M_Product_ID") == null)
+            {
                 //set values to 0 if no product is selected
                 mTab.setValue("Price", 0);
                 mTab.setValue("PlannedRevenue", 0);
@@ -17080,7 +17082,8 @@
         }
         try {
             this.setCalloutActive(true);
-            if (ctx.getContextAsInt(windowNo, "M_PriceList_ID") > 0) {
+            if (ctx.getContextAsInt(windowNo, "M_PriceList_ID") > 0)
+            {
                 var paramString = Util.getValueOfString(mTab.getValue("M_Product_ID")).concat(",", Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")), ",",
                     Util.getValueOfString(ctx.getContextAsInt(windowNo, "M_PriceList_ID")), ",",
                     Util.getValueOfString(mTab.getValue("C_UOM_ID")))

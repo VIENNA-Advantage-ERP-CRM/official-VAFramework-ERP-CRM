@@ -35,7 +35,7 @@ namespace VAdvantage.Process
         }
 
         /// <summary>
-        /// Copy Team Forecast Lines 
+        /// Copy Master Forecast Lines 
         /// </summary>
         /// <returns>Message (clear text)</returns>
         protected override string DoIt()

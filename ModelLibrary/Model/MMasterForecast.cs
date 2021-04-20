@@ -67,10 +67,10 @@ namespace VAdvantage.Model
         /// Implement beforesave logic
         /// </summary>
         /// <param name="newRecord"></param>
-        /// <returns></returns>
+        /// <returns>true/false</returns>
         protected override bool BeforeSave(bool newRecord)
         {
-            //Trxdate cant be greatwer then acctdate
+            //Trxdate cant be greater than acctdate
             if (GetTRXDATE() > GetDateAcct())
             {
                 log.SaveError("TrxDateGreater", "");
@@ -520,6 +520,7 @@ namespace VAdvantage.Model
                 }
                 MMasterForecastLine[] fromLines = FromForecast.GetLines(false);
                
+                //get ISO CODE of Currency
                 DataSet _dsCurrency = DB.ExecuteDataset("SELECT ISO_CODE,C_Currency_ID FROM C_Currency WHERE C_Currency_ID IN(" + FromForecast.GetC_Currency_ID() + "," + GetC_Currency_ID() + ")");
                 if (_dsCurrency != null && _dsCurrency.Tables.Count > 0)
                 {
@@ -545,10 +546,10 @@ namespace VAdvantage.Model
 
                     //price conversion
                     line.SetPrice(MConversionRate.Convert(GetCtx(), line.GetPrice(), FromForecast.GetC_Currency_ID(), GetC_Currency_ID(),
-                        GetAD_Client_ID(), GetAD_Org_ID()));
+                    GetAD_Client_ID(), GetAD_Org_ID()));
                     if (line.GetPrice() == 0)
                     {
-                        //if conversion not found 
+                        //if conversion not found then display message
                         _processMsg = Msg.GetMsg(GetCtx(), "ConversionNotFound") + " " + Msg.GetMsg(GetCtx(), "From") + " " + FromCurrency + Msg.GetMsg(GetCtx(), "To") + ToCurrency;
                         count = 0;
                         return count + " " + _processMsg;

@@ -67,10 +67,10 @@ namespace VAdvantage.Model
         /// Implement beforesave logic
         /// </summary>
         /// <param name="newRecord"></param>
-        /// <returns></returns>
+        /// <returns>true/false</returns>
         protected override bool BeforeSave(bool newRecord)
         {
-            //Trxdate cant be greatwer then acctdate
+            //Trxdate cant be greater than acctdate
             if (GetTRXDATE() > GetDateAcct())
             {
                 log.SaveError("TrxDateGreater", "");
@@ -510,7 +510,7 @@ namespace VAdvantage.Model
         /// Copy Team Forecast Lines
         /// </summary>
         /// <param name="FromForecast"></param>
-        /// <returns></returns>
+        /// <returns>info</returns>
         public String CopyLinesFrom(MForecast FromForecast)
         {
             int count = 0;
@@ -523,6 +523,7 @@ namespace VAdvantage.Model
                     return "";
                 }
                 MForecastLine[] fromLines = FromForecast.GetLines(false);
+                
                 // Get Currency's ISO Code
                 DataSet _dsCurrency = DB.ExecuteDataset("SELECT ISO_CODE,C_Currency_ID FROM C_Currency WHERE C_Currency_ID IN(" + FromForecast.GetC_Currency_ID()
                                       +"," + GetC_Currency_ID()+")");
@@ -560,7 +561,7 @@ namespace VAdvantage.Model
                             GetAD_Client_ID(), GetAD_Org_ID()));
                         if (line.GetUnitPrice() == 0)
                         {
-                            //if conversion not found 
+                            //if conversion not found then display message
                             _processMsg = Msg.GetMsg(GetCtx(), "ConversionNotFound") + " " + Msg.GetMsg(GetCtx(), "From") + " " + FromCurrency + Msg.GetMsg(GetCtx(), "To") + ToCurrency;
                             count = 0;
                             return count + " " + _processMsg;
@@ -574,6 +575,10 @@ namespace VAdvantage.Model
                             if (vp != null)
                             {
                                 string val = vp.GetName();
+                                if (string.IsNullOrEmpty(val))
+                                {
+                                    val = vp.GetValue();
+                                }
                                 log.SaveWarning("", Msg.GetMsg(GetCtx(), "NotSaveForecastLine") + val);
                             }
                             else
