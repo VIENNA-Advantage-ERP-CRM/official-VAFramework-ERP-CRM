@@ -4137,8 +4137,10 @@ namespace VAdvantage.Model
                     HCDate = Util.GetValueOfDateTime(contDS.Tables[0].Rows[0]["VA077_HistoricContractDate"]);
                     StartDate = Util.GetValueOfDateTime(contDS.Tables[0].Rows[0]["VA077_ContractCPStartDate"]);
                     EndDate = Util.GetValueOfDateTime(contDS.Tables[0].Rows[0]["VA077_ContractCPEndDate"]);
-                    if (GetQtyEntered() != 0) // In the case of void qty will be zero, so set annual value only if qty is greater than zero
+                    if (GetQtyEntered() > 0) // In the case of void qty will be zero, so set annual value only if qty is greater than zero
                         AnnualValue = Util.GetValueOfDecimal(contDS.Tables[0].Rows[0]["VA077_AnnualValue"]);
+                    else if(GetQtyEntered() < 0)  // handle the reverse functionality case, make amt negative
+                        AnnualValue = Util.GetValueOfDecimal(contDS.Tables[0].Rows[0]["VA077_AnnualValue"]) * -1;
 
                     qry.Clear();
                     qry.Append(@"UPDATE C_Invoice  p SET VA077_TotalMarginAmt=(SELECT COALESCE(SUM(pl.VA077_MarginAmt),0) FROM C_InvoiceLine pl 
