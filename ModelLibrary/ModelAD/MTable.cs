@@ -923,7 +923,9 @@ namespace VAdvantage.Model
 
                 Type classObject = Type.GetType(className);
 
-                Type baseClass = classObject.BaseType;
+                Type baseClass = null;
+                if (classObject != null)
+                    baseClass = classObject.BaseType;
 
                 while (baseClass != null)
                 {
