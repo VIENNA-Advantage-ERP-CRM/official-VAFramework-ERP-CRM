@@ -994,7 +994,10 @@ namespace VIS.Helpers
                 hasDocValWF = GetDocValueWF(ctx, ctx.GetAD_Client_ID(), InsAD_Table_ID, trx);
                 versionInfo.HasDocValWF = hasDocValWF;
 
-                if (!CheckDBUpdated(ctx, m_fields, inn, outt, Record_ID, hasDocValWF, false, false, false))
+                // EmpCode : VIS0008
+                // Check applied in case of Maintain version whether anyone else changed something
+                // on the same record, if so, then return and do not save
+                if (!CheckDBUpdated(ctx, m_fields, inn, outt, Record_ID, hasDocValWF))
                     return;
 
                 // check applied, no need to check save in case of backdate entry
@@ -1305,11 +1308,8 @@ namespace VIS.Helpers
         /// <param name="outt"></param>
         /// <param name="record_ID"></param>
         /// <param name="hasDocValWF"></param>
-        /// <param name="v1"></param>
-        /// <param name="v2"></param>
-        /// <param name="v3"></param>
-        /// <returns></returns>
-        private bool CheckDBUpdated(Ctx ctx, List<WindowField> m_fields, SaveRecordIn inn, SaveRecordOut outt, int record_ID, bool hasDocValWF, bool v1, bool v2, bool v3)
+        /// <returns>True/False based on the verification at DB level</returns>
+        private bool CheckDBUpdated(Ctx ctx, List<WindowField> m_fields, SaveRecordIn inn, SaveRecordOut outt, int record_ID, bool hasDocValWF)
         {
             var rowData = inn.RowData; // new 
             var _rowData = inn.OldRowData;
@@ -1430,6 +1430,11 @@ namespace VIS.Helpers
             return true;
         }
 
+        /// <summary>
+        /// Function to check whether the record being saved is the latest version or not
+        /// </summary>
+        /// <param name="inn"></param>
+        /// <returns>True/False</returns>
         private bool CheckLatestVersion(SaveRecordIn inn)
         {
             string sqlOldVer = @"SELECT COUNT(IsActive) FROM " + inn.TableName + @"_Ver WHERE " + inn.WhereClause
