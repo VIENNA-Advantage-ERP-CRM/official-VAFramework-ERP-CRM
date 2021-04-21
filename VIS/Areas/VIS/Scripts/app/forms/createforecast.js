@@ -20,15 +20,6 @@
         var $formDataRow = null;
         var $formData = null;
 
-        // label of Fields
-        var $lblOrganization = null;
-        var $lblPeriod = null;
-        var $lblDocumentType = null;
-        var $lblOpenSalesOrder = null;
-        var $lblOpportunity = null;
-        var $lblProductCategory = null;
-        var $lblBudgetQuantity = null;
-
         // controls of fields
         var divOrganizationCtrl;
         var _OrganizationLookUp;
@@ -59,6 +50,10 @@
         var _OpportunityLookUp;
         var _OpportunityCtrl;
 
+        var divTeamForecastCtrl;
+        var _TeamForecastLookUp;
+        var _TeamForecastCtrl;
+
         var divProductCategoryCtrl;
         var _ProductCategoryLookUp;
         var _ProductCategoryCtrl;
@@ -79,11 +74,14 @@
         var AD_Org_ID = VIS.context.getWindowContextAsInt($self.windowNo, "AD_Org_ID", false);
         var AD_Client_ID = VIS.context.getWindowContextAsInt($self.windowNo, "AD_Client_ID", false);
 
+        var isMasterForecast = true;
+
         var elements = [
             "AD_Org_ID",
             "C_Period_ID",
             "C_DocType_ID",
-            "M_Product_Category_ID"
+            "M_Product_Category_ID",
+            "C_Forecast_ID"
         ];
 
         VIS.translatedTexts = VIS.Msg.translate(VIS.Env.getCtx(), elements, true);
@@ -160,6 +158,14 @@
             $formDataRow.append($formData);
             $formWrap.append($formDataRow);
 
+            // Row 8.1
+            if (isMasterForecast) {
+                $formDataRow = $('<div class="vis-budget-form-row">');
+                $formData = $('<div class="input-group vis-input-wrap" id="VIS_TeamForecast_' + $self.windowNo + '">');
+                $formDataRow.append($formData);
+                $formWrap.append($formDataRow);
+            }
+
             // Row 9
             $formDataRow = $('<div class="vis-budget-form-row">');
             $formData = $('<div class="input-group vis-input-wrap" id="VIS_ProductCategory_' + $self.windowNo + '">');
@@ -190,6 +196,7 @@
             $root.append($mainpageContent).append($bsyDiv);
         };
 
+        /**Get Controls  */
         function GetControls() {
             divOrganizationCtrl = $root.find("#VIS_Organization_" + $self.windowNo);
             divPeriodCtrl = $root.find("#VIS_Period_" + $self.windowNo);
@@ -199,11 +206,15 @@
             divOpenSalesOrderCtrl = $root.find("#VIS_OpenSalesOrder_" + $self.windowNo);
             divIncludeOpportunityCtrl = $root.find("#VIS_IncludeOpportunity_" + $self.windowNo);
             divOpportunityCtrl = $root.find("#VIS_Opportunity_" + $self.windowNo);
+            if (isMasterForecast) {
+                divTeamForecastCtrl = $root.find("#VIS_TeamForecast_" + $self.windowNo);
+            }
             divProductCategoryCtrl = $root.find("#VIS_ProductCategory_" + $self.windowNo);
             divBudgetQuantityCtrl = $root.find("#VIS_BudgetQuantity_" + $self.windowNo);
             divGenerateLines = $root.find("#VIS_GenerateLines_" + $self.windowNo);
         };
 
+        /**Load Controls */
         function loadControls() {
             // Organization
             //ctx, windowNo, column_ID, AD_Reference_ID, columnName, AD_Reference_Value_ID, isParent, validationCode
@@ -277,8 +288,8 @@
             _IncludeOpportunityCtrlWrap.append(_IncludeOpportunityCtrl.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' '));
 
 
-            validation = "C_Project.IsOpportunity = 'Y' AND C_Project.AD_Org_ID IN (0, " + AD_Org_ID + ")";
-            _OpportunityLookUp = VIS.MLookupFactory.getMLookUp(ctx, $self.windowNo, 5766, VIS.DisplayType.Search, "C_Project", 0, false, validation);
+            validation = "C_Project.IsActive = 'Y' AND C_Project.IsOpportunity = 'Y' AND C_Project.AD_Org_ID IN (0, " + AD_Org_ID + ")";
+            _OpportunityLookUp = VIS.MLookupFactory.get(ctx, $self.windowNo, 5766, VIS.DisplayType.Search, "C_Project_ID", 0, false, validation);
             _OpportunityCtrl = new VIS.Controls.VTextBoxButton("C_Project_ID", true, false, true, VIS.DisplayType.Search, _OpportunityLookUp);
             _OpportunityCtrl.getControl().prop('disabled', true);
             _OpportunityCtrl.getBtn(0).prop('disabled', true);
@@ -291,8 +302,21 @@
             _OpportunityBtnWrap.append(_OpportunityCtrl.getBtn(0));
             _OpportunityBtnWrap.append(_OpportunityCtrl.getBtn(1));
 
-            validation = " M_Product_Category_ID.AD_Org_ID IN (0, " + AD_Org_ID + ")";
-            _ProductCategoryLookUp = VIS.MLookupFactory.getMLookUp(ctx, $self.windowNo, 2012, VIS.DisplayType.Search, "M_Product_Category_ID", 0, false, validation);;
+            if (isMasterForecast) {
+                validation = " C_Forecast.AD_Org_ID IN (0, " + AD_Org_ID + ") AND C_Forecast.DocStatus IN ('CO', 'CL')";
+                _TeamForecastLookUp = VIS.MLookupFactory.get(ctx, $self.windowNo, 1004902, VIS.DisplayType.MultiKey, "C_Forecast_ID", 0, false, validation);;
+                _TeamForecastCtrl = new VIS.Controls.VTextBoxButton("C_Forecast_ID", true, false, true, VIS.DisplayType.MultiKey, _TeamForecastLookUp);
+                var _TeamForecastCtrlWrap = $('<div class="vis-control-wrap">');
+                var _TeamForecastBtnWrap = $('<div class="input-group-append">');
+                divTeamForecastCtrl.append(_TeamForecastCtrlWrap);
+                _TeamForecastCtrlWrap.append(_TeamForecastCtrl.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' ')).append('<label>' + VIS.translatedTexts.C_Forecast_ID + '</label>');
+                divTeamForecastCtrl.append(_TeamForecastBtnWrap);
+                _TeamForecastBtnWrap.append(_TeamForecastCtrl.getBtn(0));
+                _TeamForecastBtnWrap.append(_TeamForecastCtrl.getBtn(1));
+            }
+
+            validation = "M_Product_Category.IsActive = 'Y' AND M_Product_Category.AD_Org_ID IN (0, " + AD_Org_ID + ")";
+            _ProductCategoryLookUp = VIS.MLookupFactory.get(ctx, $self.windowNo, 2012, VIS.DisplayType.MultiKey, "M_Product_Category_ID", 0, false, validation);;
             _ProductCategoryCtrl = new VIS.Controls.VTextBoxButton("M_Product_Category_ID", true, false, true, VIS.DisplayType.MultiKey, _ProductCategoryLookUp);
             var _ProductCategoryCtrlWrap = $('<div class="vis-control-wrap">');
             var _ProductCategoryBtnWrap = $('<div class="input-group-append">');
@@ -479,6 +503,49 @@
             $buttons = null;
             $btnOk = null;
             $btnCancel = null;
+
+            divOrganizationCtrl = null;
+            _OrganizationLookUp = null;
+            _OrganizationCtrl = null;
+
+            divPeriodCtrl = null;
+            _PeriodLookUp = null;
+            _PeriodCtrl = null;
+
+            divIncludeSOCtrl = null;
+            _IncludeSOCtrl = null;
+
+            divDocumentTypeCtrl = null;
+            _DocumentTypeLookUp = null;
+            _DocumentTypeCtrl = null;
+
+            divIncludeOpenSalesOrderCtrl = null;
+            _IncludeOpenSalesOrderCtrl = null;
+
+            divOpenSalesOrderCtrl = null;
+            _OpenSalesOrderLookUp = null;
+            _OpenSalesOrderCtrl = null;
+
+            divIncludeOpportunityCtrl = null;
+            _IncludeOpportunityCtrl = null;
+
+            divOpportunityCtrl = null;
+            _OpportunityLookUp = null;
+            _OpportunityCtrl = null;
+
+            divTeamForecastCtrl = null;
+            _TeamForecastLookUp = null;
+            _TeamForecastCtrl = null;
+
+            divProductCategoryCtrl = null;
+            _ProductCategoryLookUp = null;
+            _ProductCategoryCtrl = null;
+
+            divBudgetQuantityCtrl = null;
+            _BudgetQuantityCtrl = null;
+
+            divGenerateLines = null;
+            _GenerateLines = null;
         };
     };
 

@@ -37,7 +37,7 @@ namespace VAdvantage.Model
         {
             // when document is other that Drafted stage, then we cannot delete documnet line
             string docStatus = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT DocStatus FROM C_Forecast 
-                                WHERE C_Forecast_ID" + GetC_Forecast_ID(), null, Get_Trx()));
+                                WHERE C_Forecast_ID = " + GetC_Forecast_ID(), null, Get_Trx()));
             if (!docStatus.Equals(MForecast.DOCSTATUS_Drafted))
             {
                 log.SaveError("CannotDeleteTrx", "");
