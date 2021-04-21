@@ -19,7 +19,7 @@
         var $formWrap = null;
         var $formDataRow = null;
         var $formData = null;
-
+         
         // label of Fields
         var $lblOrganization = null;
         var $lblPeriod = null;
@@ -76,6 +76,7 @@
         this.ad_table_ID;
         this.ad_window_ID;
         this.record_ID;
+       
         var AD_Org_ID = VIS.context.getWindowContextAsInt($self.windowNo, "AD_Org_ID", false);
         var AD_Client_ID = VIS.context.getWindowContextAsInt($self.windowNo, "AD_Client_ID", false);
 
@@ -394,9 +395,9 @@
                     ProductCategory: _ProductCategoryCtrl.getValue(),
                     BudgetQunatity: _BudgetQuantityCtrl.getValue(),
                     DeleteAndGenerateLines: _GenerateLines.getValue(),
-                    Forecast_ID: this.record_ID,
+                    Forecast_ID:$self.record_ID,
                     TeamForecast_ID: 0,
-                    Table_ID: this.ad_table_ID
+                    Table_ID: $self.ad_table_ID
 
                 },
                 success: function (result) {
