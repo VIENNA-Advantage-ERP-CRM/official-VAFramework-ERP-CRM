@@ -23,7 +23,28 @@ namespace VIS.Models
         Decimal ConvertedPrice = 0;
         ValueNamePair pp = null;
 
-        public string CreateForecastLine(Ctx ctx, int Org_ID, int Period_ID, bool IncludeSO, int DocType, bool IncludeOpenSO, string OpenOrders,bool IncludeOpportunity, 
+        /// <summary>
+        /// Load org ID and check window (Either team forecast and master Forecast) and Team Forecast reference 
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="AD_Table_ID">Table ID</param>
+        /// <param name="AD_Record_ID">Record ID</param>
+        /// <returns></returns>
+        public Dictionary<string, object> GetTableAndRecordInfo(Ctx ctx, string AD_Table_ID, string AD_Record_ID)
+        {
+            Dictionary<string, object> info = new Dictionary<string, object>();
+            info["Table_Name"] = MTable.GetTableName(ctx, Util.GetValueOfInt(AD_Table_ID));
+            info["AD_Org_ID"] = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Org_ID FROM " + Util.GetValueOfString(info["Table_Name"]) +
+                @" WHERE " + Util.GetValueOfString(info["Table_Name"]) + "_ID = " + AD_Record_ID));
+            if (Util.GetValueOfString(info["Table_Name"]).Equals(MMasterForecast.Table_Name))
+            {
+                info["TeamColumn_ID"] = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Column_ID FROM AD_Column " +
+                    @" WHERE columnname = 'C_Forecast_ID' AND AD_Table_ID = (SELECT AD_Table_ID FROM Ad_Table where TableName = '" + MForecastLine.Table_Name + "' )"));
+            }
+            return info;
+        }
+
+        public string CreateForecastLine(Ctx ctx, int Org_ID, int Period_ID, bool IncludeSO, int DocType, bool IncludeOpenSO, string OpenOrders, bool IncludeOpportunity,
             string Opportunities, string ProductCategory, Decimal? BudgetQunatity, bool DeleteAndGenerateLines, int Forecast_ID, int TeamForecast_ID, int Table_ID)
         {
             string tableName = Util.GetValueOfString(DB.ExecuteScalar("SELECT TableName FROM AD_Table WHERE AD_Table_ID =" + Table_ID));
@@ -33,24 +54,24 @@ namespace VIS.Models
             {
                 if (DeleteAndGenerateLines)
                 {
-                  int count=  DB.ExecuteQuery("DELETE FROM C_ForecastLine WHERE C_Forecast_ID=" + Forecast_ID, null, trx);
+                    int count = DB.ExecuteQuery("DELETE FROM C_ForecastLine WHERE C_Forecast_ID=" + Forecast_ID, null, trx);
                     if (count > 0)
                     {
-                        log.Log(Level.INFO,"ForecastLinesDeleted" + count);
+                        log.Log(Level.INFO, "ForecastLinesDeleted" + count);
                     }
                 }
                 if (IncludeSO || IncludeOpenSO)
                 {
-                    sql.Append( @"SELECT C_OrderLine.m_product_id,C_OrderLine.QtyOrdered AS BaseQty,C_OrderLine.M_AttributeSetInstance_ID,C_OrderLine.C_UOM_ID, C_OrderLine.C_OrderLine_ID,
+                    sql.Append(@"SELECT C_OrderLine.m_product_id,C_OrderLine.QtyOrdered AS BaseQty,C_OrderLine.M_AttributeSetInstance_ID,C_OrderLine.C_UOM_ID, C_OrderLine.C_OrderLine_ID,
                        C_Order.C_Order_ID,NVL(PriceEntered,0) AS Price, NVL(QtyEntered,0) AS ForecastQty,C_Order.C_Currency_ID,M_Product.IsBOM,C_OrderLine.C_Charge_ID
                        FROM C_Order  
                        INNER JOIN C_OrderLine  ON C_Order.C_Order_ID =  C_OrderLine.C_Order_ID 
                        INNER JOIN C_Doctype d ON C_Order.C_DocTypeTarget_ID = d.C_Doctype_ID 
                        LEFT JOIN M_Product ON M_Product.M_Product_ID=C_OrderLine.M_Product_ID
                        WHERE d.DocSubTypeSo NOT IN ('" + MDocType.DOCSUBTYPESO_BlanketOrder + "','" + MDocType.DOCSUBTYPESO_Proposal + "')" +
-                       " AND C_Order.IsSOTrx='Y' AND C_Order.IsReturnTrx='N' AND C_Order.AD_Org_ID =" + Org_ID + 
+                       " AND C_Order.IsSOTrx='Y' AND C_Order.IsReturnTrx='N' AND C_Order.AD_Org_ID =" + Org_ID +
                        " AND NVL(C_OrderLine.C_OrderLine_ID,0) NOT IN ( SELECT NVL(C_OrderLine_ID,0) FROM C_ForecastLine INNER JOIN C_Forecast ON C_Forecast.C_Forecast_ID = " +
-                       "C_ForecastLine.C_Forecast_ID WHERE C_Forecast.AD_Org_ID =" + Org_ID + 
+                       "C_ForecastLine.C_Forecast_ID WHERE C_Forecast.AD_Org_ID =" + Org_ID +
                        " AND C_Forecast.DocStatus NOT IN ('VO','RE')  ) AND C_Order.DocStatus IN('CO','CL')");
                     if (Period_ID > 0)
                     {
@@ -68,13 +89,13 @@ namespace VIS.Models
                         //if no order is selected then get all the open and fully delivered orders 
                         if (string.IsNullOrEmpty(OpenOrders))
                         {
-                            sql.Append( " AND C_OrderLine.QtyOrdered >= C_OrderLine.QtyDelivered");
+                            sql.Append(" AND C_OrderLine.QtyOrdered >= C_OrderLine.QtyDelivered");
                         }
-                        
+
                         else
                         {
                             //if order is selected then fetch all the fully delivered orders and check if selected orders are open 
-                            sql.Append( " AND C_OrderLine.QtyOrdered = C_OrderLine.QtyDelivered OR (C_Order.C_Order_ID IN (" + OpenOrders + ")" +
+                            sql.Append(" AND C_OrderLine.QtyOrdered = C_OrderLine.QtyDelivered OR (C_Order.C_Order_ID IN (" + OpenOrders + ")" +
                                 " AND C_OrderLine.QtyOrdered > C_OrderLine.QtyDelivered)");
                         }
 
@@ -93,7 +114,7 @@ namespace VIS.Models
                         {
                             sql.Append(" AND C_Order.C_Order_ID IN (" + OpenOrders + ")");
                         }
-                    }                                       
+                    }
 
                     string sql1 = MRole.GetDefault(ctx).AddAccessSQL(sql.ToString(), "C_Order", true, true);
                     DataSet ds = DB.ExecuteDataset(sql1, null, trx);
@@ -103,7 +124,7 @@ namespace VIS.Models
                         {
                             //Price conversion from Order currency to Forecast Currency
                             ConvertedPrice = MConversionRate.Convert(ctx, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["Price"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Currency_ID"]),
-                            ToCurrency, ctx.GetAD_Client_ID(), Org_ID);                       
+                            ToCurrency, ctx.GetAD_Client_ID(), Org_ID);
 
                             //create forecast lines 
                             CreateTeamForecastLines(ctx, Forecast_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Order_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_OrderLine_ID"]), 0, 0,
@@ -114,15 +135,15 @@ namespace VIS.Models
                     }
                 }
 
-                
+
                 if (IncludeOpportunity)
                 {
-                    OpportunityProducts(ctx,Org_ID, Period_ID,Forecast_ID, Opportunities);
+                    OpportunityProducts(ctx, Org_ID, Period_ID, Forecast_ID, Opportunities);
                 }
                 if (!string.IsNullOrEmpty(ProductCategory))
                 {
-                    PriceList = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_PriceList_ID FROM C_Forecast WHERE C_Forecast_ID="+Forecast_ID));
-                    ProductCategoryProducts(ctx, Org_ID,ProductCategory, BudgetQunatity, PriceList,Forecast_ID);
+                    PriceList = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_PriceList_ID FROM C_Forecast WHERE C_Forecast_ID=" + Forecast_ID));
+                    ProductCategoryProducts(ctx, Org_ID, ProductCategory, BudgetQunatity, PriceList, Forecast_ID);
                 }
 
                 if (Count > 0)
@@ -132,7 +153,7 @@ namespace VIS.Models
             }
 
 
-            return Msg.GetMsg(ctx,"LinesInsterted")+Count;
+            return Msg.GetMsg(ctx, "LinesInsterted") + Count;
         }
 
 
@@ -173,10 +194,10 @@ namespace VIS.Models
                     //Price conversion from Opportunity currency to Forecast Currency
                     ConvertedPrice = MConversionRate.Convert(ctx, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["Price"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Currency_ID"]),
                     ToCurrency, ctx.GetAD_Client_ID(), Org_ID);
-                  
+
                     //create forecast lines
-                    CreateTeamForecastLines(ctx, Forecast_ID,0,0,Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Project_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ProjectLine_ID"]),
-                    0, Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]),Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_UOM_ID"]),
+                    CreateTeamForecastLines(ctx, Forecast_ID, 0, 0, Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Project_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ProjectLine_ID"]),
+                    0, Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_UOM_ID"]),
                     Util.GetValueOfString(ds.Tables[0].Rows[i]["IsBOM"]), Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["BaseQty"]), Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["ForecastQty"]), ConvertedPrice);
                 }
             }
@@ -191,7 +212,7 @@ namespace VIS.Models
         /// <param name="BudgetQuantity"></param>
         /// <param name="PriceList"></param>
         /// <param name="Forecast_ID"></param>
-        public void ProductCategoryProducts(Ctx ctx,int Org_ID,string ProductCategories,Decimal? BudgetQuantity,int PriceList, int Forecast_ID)
+        public void ProductCategoryProducts(Ctx ctx, int Org_ID, string ProductCategories, Decimal? BudgetQuantity, int PriceList, int Forecast_ID)
         {
             sql.Clear();
             sql.Append(@"SELECT M_Product.M_Product_ID,M_Product.C_UOM_ID,M_ProductPrice.PriceStd,M_Product.M_AttributeSetInstance_ID,M_Product.IsBOM,M_Product.C_Currency_ID 
@@ -208,7 +229,7 @@ namespace VIS.Models
                     //Price conversion from Product currency to Forecast Currency
                     ConvertedPrice = MConversionRate.Convert(ctx, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PriceStd"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Currency_ID"]),
                     ToCurrency, ctx.GetAD_Client_ID(), Org_ID);
-                   
+
                     //Create forecast lines
                     CreateTeamForecastLines(ctx, Forecast_ID, 0, 0, 0, 0, 0, Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]),
                     Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_UOM_ID"]),
@@ -236,7 +257,7 @@ namespace VIS.Models
         /// <param name="Quantity"></param>
         /// <param name="UnitPrice"></param>
         /// <returns></returns>
-        public string CreateTeamForecastLines(Ctx ctx,int Forecast_ID, int Order_ID, int OrderLine_ID,int Project_ID,int ProjectLine_ID,int Charge_ID,int Org_ID,int Product_ID,int Attribute_ID, int UOM_ID ,String BOM, Decimal? BaseQuantity, Decimal? Forecastqty, decimal UnitPrice)
+        public string CreateTeamForecastLines(Ctx ctx, int Forecast_ID, int Order_ID, int OrderLine_ID, int Project_ID, int ProjectLine_ID, int Charge_ID, int Org_ID, int Product_ID, int Attribute_ID, int UOM_ID, String BOM, Decimal? BaseQuantity, Decimal? Forecastqty, decimal UnitPrice)
         {
             MForecastLine Line = new MForecastLine(ctx, 0, trx);
             Line.SetAD_Client_ID(ctx.GetAD_Client_ID());
@@ -250,12 +271,12 @@ namespace VIS.Models
             Line.SetC_Charge_ID(Charge_ID);
             Line.SetM_Product_ID(Product_ID);
             Line.SetM_AttributeSetInstance_ID(Attribute_ID);
-            Line.SetIsBOM(BOM.Equals("Y")?true:false);           
+            Line.SetIsBOM(BOM.Equals("Y") ? true : false);
             Line.SetC_UOM_ID(UOM_ID);
             Line.SetBaseQty(Forecastqty);
             Line.SetQtyEntered(BaseQuantity);
             Line.SetUnitPrice(UnitPrice);
-            Line.SetTotalPrice(UnitPrice* Forecastqty);
+            Line.SetTotalPrice(UnitPrice * Forecastqty);
 
             if (!Line.Save(trx))
             {
@@ -268,9 +289,9 @@ namespace VIS.Models
                         val = pp.GetValue();
                     }
                     log.Log(Level.SEVERE, Msg.GetMsg(ctx, "TeamForecastNot") + val);
-                   
+
                 }
-               
+
             }
             else
             {

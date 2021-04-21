@@ -53,6 +53,7 @@
         var divTeamForecastCtrl;
         var _TeamForecastLookUp;
         var _TeamForecastCtrl;
+        var _TeamForecast_ID = 0;
 
         var divProductCategoryCtrl;
         var _ProductCategoryLookUp;
@@ -74,7 +75,7 @@
         var AD_Org_ID = VIS.context.getWindowContextAsInt($self.windowNo, "AD_Org_ID", false);
         var AD_Client_ID = VIS.context.getWindowContextAsInt($self.windowNo, "AD_Client_ID", false);
 
-        var isMasterForecast = true;
+        var isMasterForecast = false;
 
         var elements = [
             "AD_Org_ID",
@@ -88,6 +89,7 @@
 
         this.Initialize = function () {
             busyDiv(true);
+            loadWindowAndRecordInfo();
             createMainView();
             GetControls();
             loadControls();
@@ -103,6 +105,18 @@
         /** set width of form */
         this.setWidth = function () {
             return 450;
+        };
+
+        /**Load org value and check window (Either team forecast and master Forecast) and Team Forecast reference  */
+        function loadWindowAndRecordInfo() {
+            var data = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "ForecastForm/GetTableAndRecordInfo", {
+                "AD_Table_ID": $self.ad_table_ID, "AD_Record_ID": $self.record_ID
+            });
+            if (data != null) {
+                AD_Org_ID = VIS.Utility.Util.getValueOfInt(data["AD_Org_ID"]);
+                isMasterForecast = VIS.Utility.Util.getValueOfString(data["Table_Name"]) == "C_Forecast" ? false : true;
+                _TeamForecast_ID = VIS.Utility.Util.getValueOfInt(data["TeamColumn_ID"]);
+            }
         };
 
         /** Is used to design Forecast Form */
@@ -198,6 +212,7 @@
 
         /**Get Controls  */
         function GetControls() {
+
             divOrganizationCtrl = $root.find("#VIS_Organization_" + $self.windowNo);
             divPeriodCtrl = $root.find("#VIS_Period_" + $self.windowNo);
             divIncludeSOCtrl = $root.find("#VIS_IncludeSO_" + $self.windowNo);
@@ -216,6 +231,7 @@
 
         /**Load Controls */
         function loadControls() {
+
             // Organization
             //ctx, windowNo, column_ID, AD_Reference_ID, columnName, AD_Reference_Value_ID, isParent, validationCode
             _OrganizationLookUp = VIS.MLookupFactory.get(ctx, $self.windowNo, AD_Org_ID, VIS.DisplayType.Search, "AD_Org_ID", 0, false, "AD_Org_ID.IsActive = 'Y'");
@@ -304,7 +320,7 @@
 
             if (isMasterForecast) {
                 validation = " C_Forecast.AD_Org_ID IN (0, " + AD_Org_ID + ") AND C_Forecast.DocStatus IN ('CO', 'CL')";
-                _TeamForecastLookUp = VIS.MLookupFactory.get(ctx, $self.windowNo, 1004902, VIS.DisplayType.MultiKey, "C_Forecast_ID", 0, false, validation);;
+                _TeamForecastLookUp = VIS.MLookupFactory.get(ctx, $self.windowNo, _TeamForecast_ID, VIS.DisplayType.MultiKey, "C_Forecast_ID", 0, false, validation);;
                 _TeamForecastCtrl = new VIS.Controls.VTextBoxButton("C_Forecast_ID", true, false, true, VIS.DisplayType.MultiKey, _TeamForecastLookUp);
                 var _TeamForecastCtrlWrap = $('<div class="vis-control-wrap">');
                 var _TeamForecastBtnWrap = $('<div class="input-group-append">');
