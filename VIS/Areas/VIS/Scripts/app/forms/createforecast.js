@@ -358,10 +358,9 @@
 
             // Create Lines
             $btnOk.on("click", function () {
-
                 busyDiv(true);
-
-                
+              
+                GenerateTeamForecastLines();
 
                 busyDiv(false);
 
@@ -375,6 +374,43 @@
                 $self.frame.close();
             });
         };
+        /** Generate Team forecast lines */
+        function GenerateTeamForecastLines() {
+            busyDiv(true);
+            $.ajax({
+                url: VIS.Application.contextUrl + "ForecastForm/CreateForecastLine",
+                type: "POST",
+                dataType: "json",
+                //  contentType: "application/json; charset=utf-8",
+                data: {
+                    Org_ID: _OrganizationCtrl.getValue(),
+                    Period_ID: _PeriodCtrl.getValue(),
+                    IncludeSO: _IncludeSOCtrl.getValue(),
+                    DocType: _DocumentTypeCtrl.getValue(),
+                    IncludeOpenSO: _IncludeOpenSalesOrderCtrl.getValue(),
+                    OpenOrders: _OpenSalesOrderCtrl.getValue(),
+                    IncludeOpportunity: _IncludeOpportunityCtrl.getValue(),
+                    Opportunity: _OpportunityCtrl.getValue(),
+                    ProductCategory: _ProductCategoryCtrl.getValue(),
+                    BudgetQunatity: _BudgetQuantityCtrl.getValue(),
+                    DeleteAndGenerateLines: _GenerateLines.getValue(),
+                    Forecast_ID: this.record_ID,
+                    TeamForecast_ID: 0,
+                    Table_ID: this.ad_table_ID
+
+                },
+                success: function (result) {
+                    VIS.ADialog.info(result, true, "");
+                    busyDiv(false);
+                },
+                error: function (ex) {
+                    console.log(ex);
+                    busyDiv(false);
+                    VIS.ADialog.error("Error");
+                }
+            });
+
+        }
 
         /** Busy Indicator */
         function busyDiv(Value) {
