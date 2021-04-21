@@ -457,9 +457,9 @@
                     ProductCategory: _ProductCategoryCtrl.getValue(),
                     BudgetQunatity: _BudgetQuantityCtrl.getValue(),
                     DeleteAndGenerateLines: _GenerateLines.getValue(),
-                    Forecast_ID: this.record_ID,
+                    Forecast_ID: $self.record_ID,
                     TeamForecast_ID: 0,
-                    Table_ID: this.ad_table_ID
+                    Table_ID: $self.ad_table_ID
 
                 },
                 success: function (result) {
