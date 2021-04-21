@@ -17127,21 +17127,17 @@
         if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) <= 0) {
             return "";
         }
-
         try {
-            this.setCalloutActive(true);
-
-            if (mTab.getColumnName().equals("ForcastQty")) {
+            this.setCalloutActive(true);           
                 //set Total Qty
                 var totalqty = Util.getValueOfDecimal(mTab.getValue("ForcastQty")) + Util.getValueOfDecimal(mTab.getValue("SalesOrderQty"))
                     + Util.getValueOfDecimal(mTab.getValue("OppQty"));
                 mTab.setValue("TotalQty", totalqty);
-            }
-            else if (mTab.getColumnName().equals("Price")) {
+                
                 //set Planned Revenue
                 var price = Util.getValueOfDecimal(mTab.getValue("Price")) * Util.getValueOfDecimal(mTab.getValue("TotalQty"));
                 mTab.setValue("PlannedRevenue", price);
-            }
+        
         }
         catch (err) {
             this.log.log(Level.SEVERE, sql, err);

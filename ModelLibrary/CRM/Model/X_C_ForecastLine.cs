@@ -38,8 +38,8 @@ namespace VAdvantage.Model
  Set Table ID By Table Name
  added by ->Harwinder */
         static X_C_ForecastLine() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
-        static long serialVersionUID = 27900607126823L;/** Last Updated Timestamp 4/15/2021 10:16:50 AM */
-        public static long updatedMS = 1618481810034L;/** AD_Table_ID=1000245 */
+        static long serialVersionUID = 27901098140688L;/** Last Updated Timestamp 4/21/2021 2:40:23 AM */
+        public static long updatedMS = 1618972823899L;/** AD_Table_ID=1000245 */
         public static int Table_ID; // =1000245;
         /** TableName=C_ForecastLine */
         public static String Table_Name = "C_ForecastLine";
@@ -116,23 +116,23 @@ namespace VAdvantage.Model
                 Set_Value("C_Order_ID", C_Order_ID);
         }/** Get Order.
 @return Sales Order */
-        public int GetC_Order_ID() { Object ii = Get_Value("C_Order_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Project Line.
+        public int GetC_Order_ID() { Object ii = Get_Value("C_Order_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Opportunity Line.
 @param C_ProjectLine_ID Task or step in a project */
         public void SetC_ProjectLine_ID(int C_ProjectLine_ID)
         {
             if (C_ProjectLine_ID <= 0) Set_Value("C_ProjectLine_ID", null);
             else
                 Set_Value("C_ProjectLine_ID", C_ProjectLine_ID);
-        }/** Get Project Line.
+        }/** Get Opportunity Line.
 @return Task or step in a project */
-        public int GetC_ProjectLine_ID() { Object ii = Get_Value("C_ProjectLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Project.
+        public int GetC_ProjectLine_ID() { Object ii = Get_Value("C_ProjectLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Opportunity.
 @param C_Project_ID Business Opportunity */
         public void SetC_Project_ID(int C_Project_ID)
         {
             if (C_Project_ID <= 0) Set_Value("C_Project_ID", null);
             else
                 Set_Value("C_Project_ID", C_Project_ID);
-        }/** Get Project.
+        }/** Get Opportunity.
 @return Business Opportunity */
         public int GetC_Project_ID() { Object ii = Get_Value("C_Project_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set UOM.
 @param C_UOM_ID Unit of Measure */
@@ -157,9 +157,9 @@ namespace VAdvantage.Model
 @return Bill of Materials */
         public Boolean IsBOM() { Object oo = Get_Value("IsBOM"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }/** Set Line No.
 @param Line Unique line for this document */
-        public void SetLine(String Line) { if (Line != null && Line.Length > 200) { log.Warning("Length > 200 - truncated"); Line = Line.Substring(0, 200); } Set_Value("Line", Line); }/** Get Line No.
+        public void SetLine(int Line) { Set_Value("Line", Line); }/** Get Line No.
 @return Unique line for this document */
-        public String GetLine() { return (String)Get_Value("Line"); }/** Set Attribute Set Instance.
+        public int GetLine() { Object ii = Get_Value("Line"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Attribute Set Instance.
 @param M_AttributeSetInstance_ID Product Attribute Set Instance */
         public void SetM_AttributeSetInstance_ID(int M_AttributeSetInstance_ID)
         {
