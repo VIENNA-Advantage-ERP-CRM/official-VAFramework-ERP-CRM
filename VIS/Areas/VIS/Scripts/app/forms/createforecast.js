@@ -294,7 +294,7 @@
 
             validation = " M_Product_Category_ID.AD_Org_ID IN (0, " + AD_Org_ID + ")";
             _ProductCategoryLookUp = VIS.MLookupFactory.getMLookUp(ctx, $self.windowNo, 2012, VIS.DisplayType.Search, "M_Product_Category_ID", 0, false, validation);;
-            _ProductCategoryCtrl = new VIS.Controls.VTextBoxButton("M_Product_Category_ID", true, false, true, VIS.DisplayType.Search, _ProductCategoryLookUp);
+            _ProductCategoryCtrl = new VIS.Controls.VTextBoxButton("M_Product_Category_ID", true, false, true, VIS.DisplayType.MultiKey, _ProductCategoryLookUp);
             var _ProductCategoryCtrlWrap = $('<div class="vis-control-wrap">');
             var _ProductCategoryBtnWrap = $('<div class="input-group-append">');
             divProductCategoryCtrl.append(_ProductCategoryCtrlWrap);
@@ -302,11 +302,16 @@
             divProductCategoryCtrl.append(_ProductCategoryBtnWrap);
             _ProductCategoryBtnWrap.append(_ProductCategoryCtrl.getBtn(0));
             _ProductCategoryBtnWrap.append(_ProductCategoryCtrl.getBtn(1));
+            _ProductCategoryCtrl.fireValueChanged = function () {
+                _ProductCategoryCtrl.getControl().trigger("change");
+            };
 
             _BudgetQuantityCtrl = new VIS.Controls.VAmountTextBox("BudgetQuantity", true, false, true, 50, 100, VIS.DisplayType.Quantity);
+            _BudgetQuantityCtrl.getControl().prop('disabled', true);
             var _BudgetQuantityCtrlWrap = $('<div class="vis-control-wrap">');
             divBudgetQuantityCtrl.append(_BudgetQuantityCtrlWrap);
             _BudgetQuantityCtrlWrap.append(_BudgetQuantityCtrl.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' ')).append('<label>' + VIS.Msg.getMsg("BudgetQuantity") + '</label>');
+
 
             //$formDataR = $('<div class="vis-budget-form-col2">');
             _GenerateLines = new VIS.Controls.VCheckBox("GenerateLines", false, false, true, VIS.Msg.getMsg("GenerateLines"), null);
@@ -331,6 +336,10 @@
                 if (!_IncludeSOCtrl.getValue()) {
                     _DocumentTypeCtrl.setValue();
                 }
+
+                // Disable Product Category, if include open SO selected as true and vice versa
+                _ProductCategoryCtrl.getControl().trigger("change");
+
             });
 
             _IncludeOpenSalesOrderCtrl.getControl().on("click", function (ev) {
@@ -343,6 +352,10 @@
                 if (!_IncludeOpenSalesOrderCtrl.getValue()) {
                     _OpenSalesOrderCtrl.setValue();
                 }
+
+                // Disable Product Category, if include open SO selected as true and vice versa
+                _ProductCategoryCtrl.getControl().trigger("change");
+
             });
 
             _IncludeOpportunityCtrl.getControl().on("click", function (ev) {
@@ -355,12 +368,38 @@
                 if (!_IncludeOpportunityCtrl.getValue()) {
                     _OpportunityCtrl.setValue();
                 }
+
+                // Disable Product Category, if include open SO selected as true and vice versa
+                _ProductCategoryCtrl.getControl().trigger("change");
+
+            });
+
+            _ProductCategoryCtrl.getControl().on("change", function (ev) {
+                // Disable Product Category, if any checbox as true and vice versa
+                _ProductCategoryCtrl.getControl().prop('disabled', (_IncludeOpenSalesOrderCtrl.getValue()
+                    || _IncludeOpportunityCtrl.getValue() || _IncludeSOCtrl.getValue()) ? true : false);
+                _ProductCategoryCtrl.getBtn(0).prop('disabled', (_IncludeOpenSalesOrderCtrl.getValue()
+                    || _IncludeOpportunityCtrl.getValue() || _IncludeSOCtrl.getValue()) ? true : false);
+                _ProductCategoryCtrl.getBtn(1).prop('disabled', (_IncludeOpenSalesOrderCtrl.getValue()
+                    || _IncludeOpportunityCtrl.getValue() || _IncludeSOCtrl.getValue()) ? true : false);
+
+                // clear Product Category Control if satisfied
+                (_IncludeOpenSalesOrderCtrl.getValue() || _IncludeOpportunityCtrl.getValue() || _IncludeSOCtrl.getValue()) ? _ProductCategoryCtrl.setValue() : "";
+
+                // when product category contains value then make the budget field as editabled and vice versa
+                if (_ProductCategoryCtrl.getValue() != undefined || VIS.Utility.Util.getValueOfString(_ProductCategoryCtrl.getValue()) != "") {
+                    _BudgetQuantityCtrl.getControl().prop('disabled', false);
+                }
+                else {
+                    _BudgetQuantityCtrl.getControl().prop('disabled', true);
+                    _BudgetQuantityCtrl.getControl().val(0);
+                }
             });
 
             // Create Lines
             $btnOk.on("click", function () {
                 busyDiv(true);
-              
+
                 GenerateTeamForecastLines();
 
                 busyDiv(false);
