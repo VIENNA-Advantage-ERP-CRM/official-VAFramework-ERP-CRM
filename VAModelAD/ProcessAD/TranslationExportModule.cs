@@ -164,7 +164,7 @@ namespace VAdvantage.Process
             if (_VAF_TableView_ID == 0)
             {
                 String sql = "SELECT * FROM VAF_TableView WHERE IsActive='Y' AND IsView='N'"
-                    + " AND TableName LIKE '%_Trl' AND TableName<>'VAF_Column_TL'";
+                    + " AND TableName LIKE '%_TL' AND TableName<>'VAF_Column_TL'";
                 if (ExportScope_Tenant.Equals(_ExportScope))
                     sql += " AND AccessLevel<>'4'";	//	System Only
                 else

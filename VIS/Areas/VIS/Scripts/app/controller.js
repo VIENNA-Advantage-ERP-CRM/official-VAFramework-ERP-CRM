@@ -4166,7 +4166,7 @@
         if (!this.inserting)
             Record_ID = this.getKeyID(this.rowChanged);
         //try {
-        //    if (!this.tableName.endsWith("_Trl"))	//	translation tables have no model
+        //    if (!this.tableName.endsWith("_TL"))	//	translation tables have no model
         //        return this.dataSavePO(Record_ID);
         //}
         //catch (e) {

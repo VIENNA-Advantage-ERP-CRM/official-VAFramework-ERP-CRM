@@ -83,7 +83,7 @@ namespace VIS.Helpers
 
             try
             {
-                if (!tableName.EndsWith("_Trl"))	//	translation tables have no model
+                if (!tableName.EndsWith("_TL"))	//	translation tables have no model
                 {
                     DataSavePO(Record_ID, gTableIn, outData, ctx);
                     return outData;

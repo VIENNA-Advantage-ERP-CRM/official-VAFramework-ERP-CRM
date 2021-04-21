@@ -421,10 +421,10 @@ namespace VAdvantage.Classes
             if (isTranslated && !Env.IsBaseLanguage(language, tableName))//  GlobalVariable.IsBaseLanguage())
             {
                 realSQL.Append(" FROM ").Append(tableName)
-                    .Append(" INNER JOIN ").Append(tableName).Append("_TRL ON (")
+                    .Append(" INNER JOIN ").Append(tableName).Append("_TL ON (")
                     .Append(tableName).Append(".").Append(keyColumn)
-                    .Append("=").Append(tableName).Append("_Trl.").Append(keyColumn)
-                    .Append(" AND ").Append(tableName).Append("_Trl.VAF_Language='")
+                    .Append("=").Append(tableName).Append("_TL.").Append(keyColumn)
+                    .Append(" AND ").Append(tableName).Append("_TL.VAF_Language='")
                     .Append(language.GetVAF_Language()).Append("')");
             }
             else	//	no translation
@@ -716,7 +716,7 @@ namespace VAdvantage.Classes
                 displayColumn.Append("NVL(");
                 //  translated
                 if (ldc.IsTranslated && !Env.IsBaseLanguage(language, tableName))//  DataBase.GlobalVariable.IsBaseLanguage())
-                    displayColumn.Append(tableName).Append("_Trl.").Append(ldc.ColumnName);
+                    displayColumn.Append(tableName).Append("_TL.").Append(ldc.ColumnName);
                 //  date
                 else if (DisplayType.IsDate(ldc.DisplayType))
                 {
@@ -861,7 +861,7 @@ namespace VAdvantage.Classes
             }
             if (displayColumn1 == null)
             {
-                displayColumn = tableName + ((isTranslated && !Env.IsBaseLanguage(language, tableName)) ? "_TRL." : ".") + displayColumn;
+                displayColumn = tableName + ((isTranslated && !Env.IsBaseLanguage(language, tableName)) ? "_TL." : ".") + displayColumn;
             }
             else
             {
@@ -885,10 +885,10 @@ namespace VAdvantage.Classes
 
                 sb.Append(",").Append(tableName).Append(".IsActive");
                 sb.Append(" FROM ").Append(tableName)
-                    .Append(" INNER JOIN ").Append(tableName).Append("_TRL ON (")
+                    .Append(" INNER JOIN ").Append(tableName).Append("_TL ON (")
                     .Append(tableName).Append(".").Append(keyColumn)
-                    .Append("=").Append(tableName).Append("_Trl.").Append(keyColumn)
-                    .Append(" AND ").Append(tableName).Append("_Trl.VAF_Language='")
+                    .Append("=").Append(tableName).Append("_TL.").Append(keyColumn)
+                    .Append(" AND ").Append(tableName).Append("_TL.VAF_Language='")
                     .Append(language.GetVAF_Language()).Append("')");
             }
             //	Not Translated
@@ -1032,13 +1032,13 @@ namespace VAdvantage.Classes
             {
                 if (isValueDisplayed)
                     embedSQL.Append(tableName).Append(".Value||'-'||");
-                embedSQL.Append(tableName).Append("_Trl.").Append(DisplayColumn);
+                embedSQL.Append(tableName).Append("_TL.").Append(DisplayColumn);
                 //
                 embedSQL.Append(" FROM ").Append(tableName)
-                    .Append(" INNER JOIN ").Append(tableName).Append("_TRL ON (")
+                    .Append(" INNER JOIN ").Append(tableName).Append("_TL ON (")
                     .Append(tableName).Append(".").Append(keyColumn)
-                    .Append("=").Append(tableName).Append("_Trl.").Append(keyColumn)
-                    .Append(" AND ").Append(tableName).Append("_Trl.VAF_Language='")
+                    .Append("=").Append(tableName).Append("_TL.").Append(keyColumn)
+                    .Append(" AND ").Append(tableName).Append("_TL.VAF_Language='")
                     .Append(language.GetVAF_Language()).Append("')");
             }
             //	Not Translated

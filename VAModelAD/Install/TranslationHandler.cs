@@ -72,7 +72,7 @@ namespace VAdvantage.Install
                 _TableName = attributes[1];  //attributes[Translation.XML_ATTRIBUTE_TABLE].Value;
                 _updateSQL = "UPDATE " + _TableName;
                 if (!_isBaseLanguage)
-                    _updateSQL += "_Trl";
+                    _updateSQL += "_TL";
                 _updateSQL += " SET ";
                 log.Fine("VAF_Language=" + _VAF_Language + ", Base=" + _isBaseLanguage + ", TableName=" + _TableName);
             }
@@ -153,7 +153,7 @@ namespace VAdvantage.Install
                     string trlTable = _TableName;
                     if (!_isBaseLanguage)
                     {
-                        trlTable = _TableName + "_Trl";
+                        trlTable = _TableName + "_TL";
                     }
 
                     _sql.Append(_TableName).Append("_ID=").Append("(").Append(" SELECT ").Append(_TableName).Append("_ID ")

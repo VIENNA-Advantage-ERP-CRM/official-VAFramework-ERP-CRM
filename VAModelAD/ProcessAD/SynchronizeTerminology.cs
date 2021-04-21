@@ -1634,7 +1634,7 @@ namespace VAdvantage.Process
               SET (Name,Description) = (SELECT e.Name||' Trl', e.Description 
                 FROM VAF_ColumnDic e 
                 WHERE SUBSTR(t.TableName,1,LENGTH(t.TableName)-4)||'_ID'=e.ColumnName)
-            WHERE TableName LIKE '%_Trl'
+            WHERE TableName LIKE '%_TL'
               AND EXISTS (SELECT * FROM VAF_ColumnDic e 
                 WHERE SUBSTR(t.TableName,1,LENGTH(t.TableName)-4)||'_ID'=e.ColumnName
                   AND t.Name<>e.Name);
@@ -1647,7 +1647,7 @@ namespace VAdvantage.Process
                      "     , Description = (SELECT  e.Description " +
                     "        FROM VAF_ColumnDic e " +
                     "        WHERE SUBSTR(t.TableName,1,LENGTH(t.TableName)-4)||'_ID'=e.ColumnName) " +
-                    "    WHERE TableName LIKE '%_Trl' " +
+                    "    WHERE TableName LIKE '%_TL' " +
                     "      AND EXISTS (SELECT * FROM VAF_ColumnDic e " +
                     "        WHERE SUBSTR(t.TableName,1,LENGTH(t.TableName)-4)||'_ID'=e.ColumnName " +
                     "          AND t.Name<>e.Name)";
@@ -1663,7 +1663,7 @@ namespace VAdvantage.Process
         FROM VAF_TableView t INNER JOIN VAF_ColumnDic ex ON (SUBSTR(t.TableName,1,LENGTH(t.TableName)-4)||'_ID'=ex.ColumnName)
           INNER JOIN VAF_ColumnDic_TL e ON (ex.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID)
         WHERE tt.VAF_TableView_ID=t.VAF_TableView_ID AND tt.VAF_Language=e.VAF_Language
-          AND t.TableName LIKE '%_Trl'
+          AND t.TableName LIKE '%_TL'
           AND tt.Name<>e.Name);
     DBMS_OUTPUT.PUT_LINE('  trl rows updated: ' || SQL%ROWCOUNT);			 */
             sql = "    UPDATE VAF_TableView_TL tt " +
@@ -1675,7 +1675,7 @@ namespace VAdvantage.Process
                     "        FROM VAF_TableView t INNER JOIN VAF_ColumnDic ex ON (SUBSTR(t.TableName,1,LENGTH(t.TableName)-4)||'_ID'=ex.ColumnName) " +
                     "          INNER JOIN VAF_ColumnDic_TL e ON (ex.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID) " +
                     "        WHERE tt.VAF_TableView_ID=t.VAF_TableView_ID AND tt.VAF_Language=e.VAF_Language " +
-                    "          AND t.TableName LIKE '%_Trl' " +
+                    "          AND t.TableName LIKE '%_TL' " +
                     "          AND tt.Name<>e.Name)";
             Execute("Synchronize VAF_TableView_TL", sql, "  rows updated: ");
 

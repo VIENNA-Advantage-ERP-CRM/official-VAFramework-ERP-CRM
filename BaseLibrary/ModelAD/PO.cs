@@ -714,7 +714,7 @@ namespace VAdvantage.Model
             int ID = (int)_mIDs[0];
             string retValue = null;
             StringBuilder sql = new StringBuilder("SELECT ").Append(columnName)
-                .Append(" FROM ").Append(p_info.GetTableName()).Append("_Trl WHERE ")
+                .Append(" FROM ").Append(p_info.GetTableName()).Append("_TL WHERE ")
                 .Append(_mKeyColumns[0]).Append("=" + ID)
                 .Append(" AND VAF_Language=" + VAF_Language);
             DataSet pstmt = null;
@@ -2989,7 +2989,7 @@ namespace VAdvantage.Model
             String tableName = p_info.GetTableName();
             String keyColumn = _mKeyColumns[0];
             StringBuilder sql = new StringBuilder("INSERT INTO ")
-                .Append(tableName).Append("_Trl (VAF_Language,")
+                .Append(tableName).Append("_TL (VAF_Language,")
                 .Append(keyColumn).Append(", ")
                 .Append(iColumns)
                 .Append(" IsTranslated,VAF_Client_ID,VAF_Org_ID,Created,CreatedBy,Updated,UpdatedBy) ")
@@ -3001,11 +3001,11 @@ namespace VAdvantage.Model
                 .Append("WHERE l.IsActive='Y' AND l.IsSystemLanguage='Y' AND l.IsBaseLanguage='N' AND t.")
                 .Append(keyColumn).Append("=").Append(Get_ID())
                 .Append(" AND NOT EXISTS (SELECT * FROM ").Append(tableName)
-                .Append("_Trl tt WHERE tt.VAF_Language=l.VAF_Language AND tt.")
+                .Append("_TL tt WHERE tt.VAF_Language=l.VAF_Language AND tt.")
                 .Append(keyColumn).Append("=t.").Append(keyColumn).Append(")");
             /* 	Alternative *
             .append(" AND EXISTS (SELECT * FROM ").append(tableName)
-            .append("_Trl tt WHERE tt.VAF_Language!=l.VAF_Language OR tt.")
+            .append("_TL tt WHERE tt.VAF_Language!=l.VAF_Language OR tt.")
             .append(keyColumn).append("!=t.").append(keyColumn).append(")");
             /** */
             int no = DB.ExecuteQuery(sql.ToString(), null, _trx);
@@ -3044,7 +3044,7 @@ namespace VAdvantage.Model
             String tableName = p_info.GetTableName();
             String keyColumn = _mKeyColumns[0];
             StringBuilder sql = new StringBuilder("UPDATE ")
-                .Append(tableName).Append("_Trl SET ");
+                .Append(tableName).Append("_TL SET ");
             //
             if (POActionEngine.Get().IsAutoUpdateTrl(GetCtx(), tableName)) // client.IsAutoUpdateTrl(tableName))
             {
@@ -3201,7 +3201,7 @@ namespace VAdvantage.Model
             String tableName = p_info.GetTableName();
             String keyColumn = _mKeyColumns[0];
             StringBuilder sql = new StringBuilder("DELETE FROM ")
-                .Append(tableName).Append("_Trl WHERE ")
+                .Append(tableName).Append("_TL WHERE ")
                 .Append(keyColumn).Append("=").Append(Get_ID());
             int no = DB.ExecuteQuery(sql.ToString(), null, trxName);
             log.Fine("#" + no.ToString());

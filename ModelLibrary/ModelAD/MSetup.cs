@@ -3392,6 +3392,7 @@ namespace VAdvantage.Model
 
         public bool CreateEntities(int VAB_Country_ID, String City, int VAB_RegionState_ID, int VAB_Currency_ID)
         {
+
             if (m_as == null && ISTENATRUNNINGFORERP)
             {
                 log.Severe("No AcctountingSChema");
@@ -3399,465 +3400,476 @@ namespace VAdvantage.Model
                 m_trx.Close();
                 return false;
             }
-            log.Info("VAB_Country_ID=" + VAB_Country_ID
-                + ", City=" + City + ", VAB_RegionState_ID=" + VAB_RegionState_ID);
-            m_info.Append("\n----\n");
-            //
-            String defaultName = Msg.Translate(m_lang, "Standard");
-            String defaultEntry = "'" + defaultName + "',";
-            StringBuilder sqlCmd = null;
-            int no = 0;
-
-            //	Create Marketing Channel/Campaign
-            tableName = "VAB_MarketingChannel";
-            if (lstTableName.Contains(tableName)) // Update by Paramjeet Singh
+            try
             {
-                int VAB_MarketingChannel_ID = GetNextID(GetVAF_Client_ID(), "VAB_MarketingChannel");
-                sqlCmd = new StringBuilder("INSERT INTO VAB_MarketingChannel ");
-                sqlCmd.Append("(VAB_MarketingChannel_ID,Name,");
-                sqlCmd.Append(m_stdColumns).Append(") VALUES (");
-                sqlCmd.Append(VAB_MarketingChannel_ID).Append(",").Append(defaultEntry);
-                sqlCmd.Append(m_stdValues).Append(")");
-                no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
-                if (no != 1)
-                    log.Log(Level.SEVERE, "Channel NOT inserted");
-                int VAB_Promotion_ID = GetNextID(GetVAF_Client_ID(), "VAB_Promotion");
-                sqlCmd = new StringBuilder("INSERT INTO VAB_Promotion ");
-                sqlCmd.Append("(VAB_Promotion_ID,VAB_MarketingChannel_ID,").Append(m_stdColumns).Append(",");
-                sqlCmd.Append(" Value,Name,Costs) VALUES (");
-                sqlCmd.Append(VAB_Promotion_ID).Append(",").Append(VAB_MarketingChannel_ID).Append(",").Append(m_stdValues).Append(",");
-                sqlCmd.Append(defaultEntry).Append(defaultEntry).Append("0)");
-                no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
-                if (no == 1)
-                    m_info.Append(Msg.Translate(m_lang, "VAB_Promotion_ID")).Append("=").Append(defaultName).Append("\n");
-                else
-                    log.Log(Level.SEVERE, "Campaign NOT inserted");
+                log.Info("VAB_Country_ID=" + VAB_Country_ID
+                    + ", City=" + City + ", VAB_RegionState_ID=" + VAB_RegionState_ID);
+                m_info.Append("\n----\n");
+                //
+                String defaultName = Msg.Translate(m_lang, "Standard");
+                String defaultEntry = "'" + defaultName + "',";
+                StringBuilder sqlCmd = null;
+                int no = 0;
 
-                if (m_hasMCampaign)
+                //	Create Marketing Channel/Campaign
+                tableName = "VAB_MarketingChannel";
+                if (lstTableName.Contains(tableName)) // Update by Paramjeet Singh
                 {
-                    //  Default
-                    if (lstTableName.Contains("VAB_AccountBook_Element"))
-                    {
-                        sqlCmd = new StringBuilder("UPDATE VAB_AccountBook_Element SET ");
-                        sqlCmd.Append("VAB_Promotion_ID=").Append(VAB_Promotion_ID);
-
-                        sqlCmd.Append(" WHERE VAB_AccountBook_ID=").Append(m_as.GetVAB_AccountBook_ID());
-                        sqlCmd.Append(" AND ElementType='MC'");
-                        no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
-                        if (no != 1)
-                            log.Log(Level.SEVERE, "AcctSchema ELement Campaign NOT updated");
-                    }
-                }
-
-                //	Create Sales Region
-                int VAB_SalesRegionState_ID = 0;
-                if (lstTableName.Contains("VAB_SalesRegionState"))
-                {
-                    VAB_SalesRegionState_ID = GetNextID(GetVAF_Client_ID(), "VAB_SalesRegionState");
-                    sqlCmd = new StringBuilder("INSERT INTO VAB_SalesRegionState ");
-                    sqlCmd.Append("(VAB_SalesRegionState_ID,").Append(m_stdColumns).Append(",");
-                    sqlCmd.Append(" Value,Name,IsSummary) VALUES (");
-                    sqlCmd.Append(VAB_SalesRegionState_ID).Append(",").Append(m_stdValues).Append(", ");
-                    sqlCmd.Append(defaultEntry).Append(defaultEntry).Append("'N')");
-                    no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
-                    if (no == 1)
-                        m_info.Append(Msg.Translate(m_lang, "VAB_SalesRegionState_ID")).Append("=").Append(defaultName).Append("\n");
-                    else
-                        log.Log(Level.SEVERE, "SalesRegion NOT inserted");
-                }
-
-                if (m_hasSRegion)
-                {
-                    //  Default
-                    if (lstTableName.Contains("VAB_SalesRegionState") && VAB_SalesRegionState_ID > 0)
-                    {
-                        sqlCmd = new StringBuilder("UPDATE VAB_AccountBook_Element SET ");
-                        sqlCmd.Append("VAB_SalesRegionState_ID=").Append(VAB_SalesRegionState_ID);
-                        sqlCmd.Append(" WHERE VAB_AccountBook_ID=").Append(m_as.GetVAB_AccountBook_ID());
-                        sqlCmd.Append(" AND ElementType='SR'");
-                        no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
-                        if (no != 1)
-                            log.Log(Level.SEVERE, "AcctSchema ELement SalesRegion NOT updated");
-                    }
-                }
-            }
-
-            /**
-             *  Business Partner
-             */
-            //  Create BP Group
-            MVABBusinessPartner bp = null;
-            MVABBPartCategory bpg = null;
-            if (lstTableName.Contains("VAB_BPart_Category"))// Update by Paramjeet Singh
-            {
-                bpg = new MVABBPartCategory(m_ctx, 0, m_trx);
-
-
-
-                bpg.SetValue(defaultName);
-                bpg.SetName(defaultName);
-                bpg.SetIsDefault(true);
-                if (bpg.Save())
-                    m_info.Append(Msg.Translate(m_lang, "VAB_BPart_Category_ID")).Append("=").Append(defaultName).Append("\n");
-                else
-                    log.Log(Level.SEVERE, "BP Group NOT inserted");
-
-                //	Create BPartner
-                bp = new MVABBusinessPartner(m_ctx, 0, m_trx);
-                bp.SetValue(defaultName);
-                bp.SetName(defaultName);
-                bp.SetBPGroup(bpg);
-                if (bp.Save())
-                    m_info.Append(Msg.Translate(m_lang, "VAB_BusinessPartner_ID")).Append("=").Append(defaultName).Append("\n");
-                else
-                    log.Log(Level.SEVERE, "BPartner NOT inserted");
-            }
-            //  Location for Standard BP
-            MVABAddress bpLoc = new MVABAddress(m_ctx, VAB_Country_ID, VAB_RegionState_ID, City, m_trx);
-            bpLoc.Save();
-            MVAMProduct product = null;
-            if (lstTableName.Contains("VAM_Product") && bp != null) // Update by Paramjeet Singh
-            {
-
-
-                MVABBPartLocation bpl = new MVABBPartLocation(bp);
-                bpl.SetVAB_Address_ID(bpLoc.GetVAB_Address_ID());
-                if (!bpl.Save())
-                    log.Log(Level.SEVERE, "BP_Location (Standard) NOT inserted");
-                //  Default
-
-                sqlCmd = new StringBuilder("UPDATE VAB_AccountBook_Element SET ");
-                sqlCmd.Append("VAB_BusinessPartner_ID=").Append(bp.GetVAB_BusinessPartner_ID());
-                sqlCmd.Append(" WHERE VAB_AccountBook_ID=").Append(m_as.GetVAB_AccountBook_ID());
-                sqlCmd.Append(" AND ElementType='BP'");
-                no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
-                if (no != 1)
-                    log.Log(Level.SEVERE, "AcctSchema Element BPartner NOT updated");
-
-                CreatePreference("VAB_BusinessPartner_ID", bp.GetVAB_BusinessPartner_ID().ToString(), 143);
-
-                /**
-                 *  Product
-                 */
-                //  Create Product Category
-                MVAMProductCategory pc = new MVAMProductCategory(m_ctx, 0, m_trx);
-                pc.SetValue(defaultName);
-                pc.SetName(defaultName);
-                pc.SetIsDefault(true);
-                if (pc.Save())
-                    m_info.Append(Msg.Translate(m_lang, "VAM_ProductCategory_ID")).Append("=").Append(defaultName).Append("\n");
-                else
-                    log.Log(Level.SEVERE, "Product Category NOT inserted");
-
-                //  UOM (EA)
-                int VAB_UOM_ID = 100;
-
-                //  TaxCategory
-                int VAB_TaxCategory_ID = GetNextID(GetVAF_Client_ID(), "VAB_TaxCategory");
-                sqlCmd = new StringBuilder("INSERT INTO VAB_TaxCategory ");
-                sqlCmd.Append("(VAB_TaxCategory_ID,").Append(m_stdColumns).Append(",");
-                sqlCmd.Append(" Name,IsDefault) VALUES (");
-                sqlCmd.Append(VAB_TaxCategory_ID).Append(",").Append(m_stdValues).Append(", ");
-                if (VAB_Country_ID == 100)    // US
-                    sqlCmd.Append("'Sales Tax','Y')");
-                else
-                    sqlCmd.Append(defaultEntry).Append("'Y')");
-                no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
-                if (no != 1)
-                    log.Log(Level.SEVERE, "TaxCategory NOT inserted");
-
-                //  Tax - Zero Rate
-                MVABTaxRate tax = new MVABTaxRate(m_ctx, "Standard", Env.ZERO, VAB_TaxCategory_ID, m_trx);
-                tax.SetIsDefault(true);
-                if (tax.Save())
-                    m_info.Append(Msg.Translate(m_lang, "VAB_TaxRate_ID"))
-                        .Append("=").Append(tax.GetName()).Append("\n");
-                else
-                    log.Log(Level.SEVERE, "Tax NOT inserted");
-
-                sqlCmd.Clear();
-                sqlCmd.Append("UPDATE VAB_TaxCategory SET VAB_TaxRate_ID=" + tax.GetVAB_TaxRate_ID() + " WHERE VAB_TaxCategory_ID=" + VAB_TaxCategory_ID);
-                no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
-                if (no != 1)
-                    log.Log(Level.SEVERE, "TaxCategory NOT Updated With Default Tax");
-
-
-                //	Create Product
-                product = new MVAMProduct(m_ctx, 0, m_trx);
-                product.SetValue(defaultName);
-                product.SetName(defaultName);
-                product.SetVAB_UOM_ID(VAB_UOM_ID);
-                product.SetVAM_ProductCategory_ID(pc.GetVAM_ProductCategory_ID());
-                product.SetVAB_TaxCategory_ID(VAB_TaxCategory_ID);
-                if (product.Save())
-                    m_info.Append(Msg.Translate(m_lang, "VAM_Product_ID")).Append("=").Append(defaultName).Append("\n");
-                else
-                    log.Log(Level.SEVERE, "Product NOT inserted");
-                //  Default
-
-                sqlCmd = new StringBuilder("UPDATE VAB_AccountBook_Element SET ");
-                sqlCmd.Append("VAM_Product_ID=").Append(product.GetVAM_Product_ID());
-                sqlCmd.Append(" WHERE VAB_AccountBook_ID=").Append(m_as.GetVAB_AccountBook_ID());
-                sqlCmd.Append(" AND ElementType='PR'");
-                no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, null);
-                if (no != 1)
-                    log.Log(Level.SEVERE, "AcctSchema Element Product NOT updated");
-            }
-
-            /**
-             *  Location, Warehouse, Locator
-             */
-            //  Location (Company)
-            MVABAddress loc = new MVABAddress(m_ctx, VAB_Country_ID, VAB_RegionState_ID, City, m_trx);
-            loc.Save();
-
-
-            sqlCmd = new StringBuilder("UPDATE VAF_OrgDetail SET VAB_Address_ID=");
-            sqlCmd.Append(loc.GetVAB_Address_ID()).Append(" WHERE VAF_Org_ID=").Append(GetVAF_Org_ID());
-            no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
-            if (no != 1)
-                log.Log(Level.SEVERE, "Location NOT inserted");
-
-            CreatePreference("VAB_Country_ID", VAB_Country_ID.ToString(), 0);
-
-            //  Default Warehouse
-            MVAMWarehouse wh = new MVAMWarehouse(m_ctx, 0, m_trx);
-            wh.SetValue(defaultName);
-            wh.SetName(defaultName);
-            wh.SetVAB_Address_ID(loc.GetVAB_Address_ID());
-            if (!wh.Save())
-            {
-                log.Log(Level.SEVERE, "Warehouse NOT inserted");
-            }
-            else
-            {
-                CoreLibrary.DataBase.DB.ExecuteQuery("UPDATE VAF_LoginSetting SET VAM_Warehouse_ID=" + wh.GetVAM_Warehouse_ID() + " WHERE VAF_Client_ID=" + m_client.GetVAF_Client_ID(), null, m_trx);
-            }
-
-            //   Locator
-            if (lstTableName.Contains("VAM_Locator") && bp != null) // Update by Paramjeet Singh
-            {
-                MVAMLocator locator = new MVAMLocator(wh, defaultName);
-                locator.SetIsDefault(true);
-                if (!locator.Save())
-                    log.Log(Level.SEVERE, "Locator NOT inserted");
-
-            }
-            //  Update ClientInfo
-            //if (lstTableName.Contains(tableName)) // Update by Paramjeet Singh
-            //{
-
-
-            if (bp != null && product != null)
-            {
-                sqlCmd = new StringBuilder("UPDATE VAF_ClientDetail SET ");
-                if (bp != null)
-                {
-                    sqlCmd.Append("VAB_BusinessPartnerCashTrx_ID=").Append(bp.GetVAB_BusinessPartner_ID());
-                }
-
-                if (product != null)
-                {
-                    sqlCmd.Append(",VAM_ProductFreight_ID=").Append(product.GetVAM_Product_ID());
-                }
-                //		sqlCmd.Append("VAB_UOM_Volume_ID=");
-                //		sqlCmd.Append(",VAB_UOM_Weight_ID=");
-                //		sqlCmd.Append(",VAB_UOM_Length_ID=");
-                //		sqlCmd.Append(",VAB_UOM_Time_ID=");
-                sqlCmd.Append(" WHERE VAF_Client_ID=").Append(GetVAF_Client_ID());
-                no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
-                if (no != 1)
-                {
-                    String err = "ClientInfo not updated";
-                    log.Log(Level.SEVERE, err);
-                    m_info.Append(err);
-                    return false;
-                }
-            }
-
-            /**
-             *  Other
-             */
-            //  PriceList
-
-            if (lstTableName.Contains("VAM_PriceList"))
-            {
-                MVAMPriceList pl = new MVAMPriceList(m_ctx, 0, m_trx);
-                pl.SetName(defaultName);
-                pl.SetVAB_Currency_ID(VAB_Currency_ID);
-                pl.SetIsDefault(true);
-                if (!pl.Save())
-                    log.Log(Level.SEVERE, "PriceList NOT inserted");
-                //  Price List
-                MVAMDiscountCalculation ds = new MVAMDiscountCalculation(m_ctx, 0, m_trx);
-                ds.SetName(defaultName);
-                ds.SetDiscountType(MVAMDiscountCalculation.DISCOUNTTYPE_Pricelist);
-                if (!ds.Save())
-                    log.Log(Level.SEVERE, "DiscountSchema NOT inserted");
-                //  PriceList Version
-                MVAMPriceListVersion plv = new MVAMPriceListVersion(pl);
-                plv.SetName();
-                plv.SetVAM_DiscountCalculation_ID(ds.GetVAM_DiscountCalculation_ID());
-                if (!plv.Save())
-                    log.Log(Level.SEVERE, "PriceList_Version NOT inserted");
-                //  ProductPrice
-                MVAMProductPrice pp = new MVAMProductPrice(plv, product.GetVAM_Product_ID(),
-                    Env.ONE, Env.ONE, Env.ONE);
-                if (!pp.Save())
-                    log.Log(Level.SEVERE, "ProductPrice NOT inserted");
-
-            }
-            //	Create Sales Rep for Client-User
-            MVABBusinessPartner bpCU = null;
-            if (lstTableName.Contains("VAB_BusinessPartner"))
-            {
-                bpCU = new MVABBusinessPartner(m_ctx, 0, m_trx);
-                bpCU.SetValue(VAF_UserContact_U_Name);
-                bpCU.SetName(VAF_UserContact_U_Name);
-
-                bpCU.SetBPGroup(bpg);
-                bpCU.SetIsEmployee(true);
-                bpCU.SetIsSalesRep(true);
-                if (bpCU.Save())
-                    m_info.Append(Msg.Translate(m_lang, "SalesRep_ID")).Append("=").Append(VAF_UserContact_U_Name).Append("\n");
-                else
-                    log.Log(Level.SEVERE, "SalesRep (User) NOT inserted");
-
-                if (lstTableName.Contains("VAB_BPart_Location"))
-                {
-                    //  Location for Client-User
-                    MVABAddress bpLocCU = new MVABAddress(m_ctx, VAB_Country_ID, VAB_RegionState_ID, City, m_trx);
-                    bpLocCU.Save();
-                    MVABBPartLocation bplCU = new MVABBPartLocation(bpCU);
-                    bplCU.SetVAB_Address_ID(bpLocCU.GetVAB_Address_ID());
-                    if (!bplCU.Save())
-                        log.Log(Level.SEVERE, "BP_Location (User) NOT inserted");
-                }
-            }
-            //  Update User
-            sqlCmd = new StringBuilder("UPDATE VAF_UserContact SET VAB_BusinessPartner_ID=");
-            if (bpCU != null)
-            {
-                sqlCmd.Append(bpCU.GetVAB_BusinessPartner_ID());
-            }
-            sqlCmd.Append(" WHERE VAF_UserContact_ID=").Append(VAF_UserContact_U_ID);
-            no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
-            if (no != 1)
-                log.Log(Level.SEVERE, "User of SalesRep (User) NOT updated");
-
-
-            //	Create Sales Rep for Client-Admin
-            MVABBusinessPartner bpCA = null;
-            if (lstTableName.Contains("VAB_BusinessPartner"))
-            {
-                bpCA = new MVABBusinessPartner(m_ctx, 0, m_trx);
-                bpCA.SetValue(VAF_UserContact_Name);
-                bpCA.SetName(VAF_UserContact_Name);
-                bpCA.SetBPGroup(bpg);
-                bpCA.SetIsEmployee(true);
-                bpCA.SetIsSalesRep(true);
-                if (bpCA.Save())
-                    m_info.Append(Msg.Translate(m_lang, "SalesRep_ID")).Append("=").Append(VAF_UserContact_Name).Append("\n");
-                else
-                    log.Log(Level.SEVERE, "SalesRep (Admin) NOT inserted");
-
-                if (lstTableName.Contains("VAB_BPart_Location"))
-                {
-                    //  Location for Client-Admin
-                    MVABAddress bpLocCA = new MVABAddress(m_ctx, VAB_Country_ID, VAB_RegionState_ID, City, m_trx);
-                    bpLocCA.Save();
-                    MVABBPartLocation bplCA = new MVABBPartLocation(bpCA);
-                    bplCA.SetVAB_Address_ID(bpLocCA.GetVAB_Address_ID());
-                    if (!bplCA.Save())
-                        log.Log(Level.SEVERE, "BP_Location (Admin) NOT inserted");
-                }
-            }
-
-            //  Update User
-            sqlCmd = new StringBuilder("UPDATE VAF_UserContact SET VAB_BusinessPartner_ID=");
-            if (bpCA != null)
-            {
-                sqlCmd.Append(bpCA.GetVAB_BusinessPartner_ID());
-            }
-            sqlCmd.Append(" WHERE VAF_UserContact_ID=").Append(VAF_UserContact_ID);
-            no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
-            if (no != 1)
-                log.Log(Level.SEVERE, "User of SalesRep (Admin) NOT updated");
-
-
-            //  Payment Term
-            if (lstTableName.Contains("VAB_PaymentTerm"))
-            {
-                int VAB_PaymentTerm_ID = GetNextID(GetVAF_Client_ID(), "VAB_PaymentTerm");
-                sqlCmd = new StringBuilder("INSERT INTO VAB_PaymentTerm ");
-                sqlCmd.Append("(VAB_PaymentTerm_ID,").Append(m_stdColumns).Append(",");
-                sqlCmd.Append("Value,Name,NetDays,GraceDays,DiscountDays,Discount,DiscountDays2,Discount2,IsDefault, IsValid) VALUES (");
-                sqlCmd.Append(VAB_PaymentTerm_ID).Append(",").Append(m_stdValues).Append(",");
-                sqlCmd.Append("'Immediate','Immediate',0,0,0,0,0,0,'Y','Y')");
-                no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
-                if (no != 1)
-                    log.Log(Level.SEVERE, "PaymentTerm NOT inserted");
-            }
-            //  Project Cycle
-            if (lstTableName.Contains("VAB_ProjectCycle"))
-            {
-                VAB_ProjectCycle_ID = GetNextID(GetVAF_Client_ID(), "VAB_ProjectCycle");
-                sqlCmd = new StringBuilder("INSERT INTO VAB_ProjectCycle ");
-                sqlCmd.Append("(VAB_ProjectCycle_ID,").Append(m_stdColumns).Append(",");
-                sqlCmd.Append(" Name,VAB_Currency_ID) VALUES (");
-                sqlCmd.Append(VAB_ProjectCycle_ID).Append(",").Append(m_stdValues).Append(", ");
-                sqlCmd.Append(defaultEntry).Append(VAB_Currency_ID).Append(")");
-                no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
-                if (no != 1)
-                    log.Log(Level.SEVERE, "Cycle NOT inserted");
-            }
-            /**
-             *  Organization level data	===========================================
-             */
-
-            //	Create Default Project
-            if (lstTableName.Contains("VAB_Project"))
-            {
-                int VAB_Project_ID = GetNextID(GetVAF_Client_ID(), "VAB_Project");
-                sqlCmd = new StringBuilder("INSERT INTO VAB_Project ");
-                sqlCmd.Append("(VAB_Project_ID,").Append(m_stdColumns).Append(",");
-                sqlCmd.Append(" Value,Name,VAB_Currency_ID,IsSummary) VALUES (");
-                sqlCmd.Append(VAB_Project_ID).Append(",").Append(m_stdValuesOrg).Append(", ");
-                sqlCmd.Append(defaultEntry).Append(defaultEntry).Append(VAB_Currency_ID).Append(",'N')");
-                no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
-                if (no == 1)
-                    m_info.Append(Msg.Translate(m_lang, "VAB_Project_ID")).Append("=").Append(defaultName).Append("\n");
-                else
-                    log.Log(Level.SEVERE, "Project NOT inserted");
-
-
-                //  Default Project
-                if (m_hasProject)
-                {
-                    sqlCmd = new StringBuilder("UPDATE VAB_AccountBook_Element SET ");
-                    sqlCmd.Append("VAB_Project_ID=").Append(VAB_Project_ID);
-                    sqlCmd.Append(" WHERE VAB_AccountBook_ID=").Append(m_as.GetVAB_AccountBook_ID());
-                    sqlCmd.Append(" AND ElementType='PJ'");
+                    int VAB_MarketingChannel_ID = GetNextID(GetVAF_Client_ID(), "VAB_MarketingChannel");
+                    sqlCmd = new StringBuilder("INSERT INTO VAB_MarketingChannel ");
+                    sqlCmd.Append("(VAB_MarketingChannel_ID,Name,");
+                    sqlCmd.Append(m_stdColumns).Append(") VALUES (");
+                    sqlCmd.Append(VAB_MarketingChannel_ID).Append(",").Append(defaultEntry);
+                    sqlCmd.Append(m_stdValues).Append(")");
                     no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
                     if (no != 1)
-                        log.Log(Level.SEVERE, "AcctSchema ELement Project NOT updated");
+                        log.Log(Level.SEVERE, "Channel NOT inserted");
+                    int VAB_Promotion_ID = GetNextID(GetVAF_Client_ID(), "VAB_Promotion");
+                    sqlCmd = new StringBuilder("INSERT INTO VAB_Promotion ");
+                    sqlCmd.Append("(VAB_Promotion_ID,VAB_MarketingChannel_ID,").Append(m_stdColumns).Append(",");
+                    sqlCmd.Append(" Value,Name,Costs) VALUES (");
+                    sqlCmd.Append(VAB_Promotion_ID).Append(",").Append(VAB_MarketingChannel_ID).Append(",").Append(m_stdValues).Append(",");
+                    sqlCmd.Append(defaultEntry).Append(defaultEntry).Append("0)");
+                    no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
+                    if (no == 1)
+                        m_info.Append(Msg.Translate(m_lang, "VAB_Promotion_ID")).Append("=").Append(defaultName).Append("\n");
+                    else
+                        log.Log(Level.SEVERE, "Campaign NOT inserted");
+
+                    if (m_hasMCampaign)
+                    {
+                        //  Default
+                        if (lstTableName.Contains("VAB_AccountBook_Element"))
+                        {
+                            sqlCmd = new StringBuilder("UPDATE VAB_AccountBook_Element SET ");
+                            sqlCmd.Append("VAB_Promotion_ID=").Append(VAB_Promotion_ID);
+
+                            sqlCmd.Append(" WHERE VAB_AccountBook_ID=").Append(m_as.GetVAB_AccountBook_ID());
+                            sqlCmd.Append(" AND ElementType='MC'");
+                            no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
+                            if (no != 1)
+                                log.Log(Level.SEVERE, "AcctSchema ELement Campaign NOT updated");
+                        }
+                    }
+
+                    //	Create Sales Region
+                    int VAB_SalesRegionState_ID = 0;
+                    if (lstTableName.Contains("VAB_SalesRegionState"))
+                    {
+                        VAB_SalesRegionState_ID = GetNextID(GetVAF_Client_ID(), "VAB_SalesRegionState");
+                        sqlCmd = new StringBuilder("INSERT INTO VAB_SalesRegionState ");
+                        sqlCmd.Append("(VAB_SalesRegionState_ID,").Append(m_stdColumns).Append(",");
+                        sqlCmd.Append(" Value,Name,IsSummary) VALUES (");
+                        sqlCmd.Append(VAB_SalesRegionState_ID).Append(",").Append(m_stdValues).Append(", ");
+                        sqlCmd.Append(defaultEntry).Append(defaultEntry).Append("'N')");
+                        no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
+                        if (no == 1)
+                            m_info.Append(Msg.Translate(m_lang, "VAB_SalesRegionState_ID")).Append("=").Append(defaultName).Append("\n");
+                        else
+                            log.Log(Level.SEVERE, "SalesRegion NOT inserted");
+                    }
+
+                    if (m_hasSRegion)
+                    {
+                        //  Default
+                        if (lstTableName.Contains("VAB_SalesRegionState") && VAB_SalesRegionState_ID > 0)
+                        {
+                            sqlCmd = new StringBuilder("UPDATE VAB_AccountBook_Element SET ");
+                            sqlCmd.Append("VAB_SalesRegionState_ID=").Append(VAB_SalesRegionState_ID);
+                            sqlCmd.Append(" WHERE VAB_AccountBook_ID=").Append(m_as.GetVAB_AccountBook_ID());
+                            sqlCmd.Append(" AND ElementType='SR'");
+                            no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
+                            if (no != 1)
+                                log.Log(Level.SEVERE, "AcctSchema ELement SalesRegion NOT updated");
+                        }
+                    }
                 }
-            }
-            //  CashBook
-            if (lstTableName.Contains("VAB_CashBook"))
-            {
-                MVABCashBook cb = new MVABCashBook(m_ctx, 0, m_trx);
-                cb.SetName(defaultName);
-                cb.SetVAB_Currency_ID(VAB_Currency_ID);
-                if (cb.Save())
-                    m_info.Append(Msg.Translate(m_lang, "VAB_CashBook_ID")).Append("=").Append(defaultName).Append("\n");
+
+                /**
+                 *  Business Partner
+                 */
+                //  Create BP Group
+                MVABBusinessPartner bp = null;
+                MVABBPartCategory bpg = null;
+                if (lstTableName.Contains("VAB_BPart_Category"))// Update by Paramjeet Singh
+                {
+                    bpg = new MVABBPartCategory(m_ctx, 0, m_trx);
+
+
+
+                    bpg.SetValue(defaultName);
+                    bpg.SetName(defaultName);
+                    bpg.SetIsDefault(true);
+                    if (bpg.Save())
+                        m_info.Append(Msg.Translate(m_lang, "VAB_BPart_Category_ID")).Append("=").Append(defaultName).Append("\n");
+                    else
+                        log.Log(Level.SEVERE, "BP Group NOT inserted");
+
+                    //	Create BPartner
+                    bp = new MVABBusinessPartner(m_ctx, 0, m_trx);
+                    bp.SetValue(defaultName);
+                    bp.SetName(defaultName);
+                    bp.SetBPGroup(bpg);
+                    if (bp.Save())
+                        m_info.Append(Msg.Translate(m_lang, "VAB_BusinessPartner_ID")).Append("=").Append(defaultName).Append("\n");
+                    else
+                        log.Log(Level.SEVERE, "BPartner NOT inserted");
+                }
+                //  Location for Standard BP
+                MVABAddress bpLoc = new MVABAddress(m_ctx, VAB_Country_ID, VAB_RegionState_ID, City, m_trx);
+                bpLoc.Save();
+                MVAMProduct product = null;
+                if (lstTableName.Contains("VAM_Product") && bp != null) // Update by Paramjeet Singh
+                {
+
+
+                    MVABBPartLocation bpl = new MVABBPartLocation(bp);
+                    bpl.SetVAB_Address_ID(bpLoc.GetVAB_Address_ID());
+                    if (!bpl.Save())
+                        log.Log(Level.SEVERE, "BP_Location (Standard) NOT inserted");
+                    //  Default
+
+                    sqlCmd = new StringBuilder("UPDATE VAB_AccountBook_Element SET ");
+                    sqlCmd.Append("VAB_BusinessPartner_ID=").Append(bp.GetVAB_BusinessPartner_ID());
+                    sqlCmd.Append(" WHERE VAB_AccountBook_ID=").Append(m_as.GetVAB_AccountBook_ID());
+                    sqlCmd.Append(" AND ElementType='BP'");
+                    no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
+                    if (no != 1)
+                        log.Log(Level.SEVERE, "AcctSchema Element BPartner NOT updated");
+
+                    CreatePreference("VAB_BusinessPartner_ID", bp.GetVAB_BusinessPartner_ID().ToString(), 143);
+
+                    /**
+                     *  Product
+                     */
+                    //  Create Product Category
+                    MVAMProductCategory pc = new MVAMProductCategory(m_ctx, 0, m_trx);
+                    pc.SetValue(defaultName);
+                    pc.SetName(defaultName);
+                    pc.SetIsDefault(true);
+                    if (pc.Save())
+                        m_info.Append(Msg.Translate(m_lang, "VAM_ProductCategory_ID")).Append("=").Append(defaultName).Append("\n");
+                    else
+                        log.Log(Level.SEVERE, "Product Category NOT inserted");
+
+                    //  UOM (EA)
+                    int VAB_UOM_ID = 100;
+
+                    //  TaxCategory
+                    int VAB_TaxCategory_ID = GetNextID(GetVAF_Client_ID(), "VAB_TaxCategory");
+                    sqlCmd = new StringBuilder("INSERT INTO VAB_TaxCategory ");
+                    sqlCmd.Append("(VAB_TaxCategory_ID,").Append(m_stdColumns).Append(",");
+                    sqlCmd.Append(" Name,IsDefault) VALUES (");
+                    sqlCmd.Append(VAB_TaxCategory_ID).Append(",").Append(m_stdValues).Append(", ");
+                    if (VAB_Country_ID == 100)    // US
+                        sqlCmd.Append("'Sales Tax','Y')");
+                    else
+                        sqlCmd.Append(defaultEntry).Append("'Y')");
+                    no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
+                    if (no != 1)
+                        log.Log(Level.SEVERE, "TaxCategory NOT inserted");
+
+                    //  Tax - Zero Rate
+                    MVABTaxRate tax = new MVABTaxRate(m_ctx, "Standard", Env.ZERO, VAB_TaxCategory_ID, m_trx);
+                    tax.SetIsDefault(true);
+                    if (tax.Save())
+                        m_info.Append(Msg.Translate(m_lang, "VAB_TaxRate_ID"))
+                            .Append("=").Append(tax.GetName()).Append("\n");
+                    else
+                        log.Log(Level.SEVERE, "Tax NOT inserted");
+
+                    sqlCmd.Clear();
+                    sqlCmd.Append("UPDATE VAB_TaxCategory SET VAB_TaxRate_ID=" + tax.GetVAB_TaxRate_ID() + " WHERE VAB_TaxCategory_ID=" + VAB_TaxCategory_ID);
+                    no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
+                    if (no != 1)
+                        log.Log(Level.SEVERE, "TaxCategory NOT Updated With Default Tax");
+
+
+                    //	Create Product
+                    product = new MVAMProduct(m_ctx, 0, m_trx);
+                    product.SetValue(defaultName);
+                    product.SetName(defaultName);
+                    product.SetVAB_UOM_ID(VAB_UOM_ID);
+                    product.SetVAM_ProductCategory_ID(pc.GetVAM_ProductCategory_ID());
+                    product.SetVAB_TaxCategory_ID(VAB_TaxCategory_ID);
+                    if (product.Save())
+                        m_info.Append(Msg.Translate(m_lang, "VAM_Product_ID")).Append("=").Append(defaultName).Append("\n");
+                    else
+                        log.Log(Level.SEVERE, "Product NOT inserted");
+                    //  Default
+
+                    sqlCmd = new StringBuilder("UPDATE VAB_AccountBook_Element SET ");
+                    sqlCmd.Append("VAM_Product_ID=").Append(product.GetVAM_Product_ID());
+                    sqlCmd.Append(" WHERE VAB_AccountBook_ID=").Append(m_as.GetVAB_AccountBook_ID());
+                    sqlCmd.Append(" AND ElementType='PR'");
+                    no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, null);
+                    if (no != 1)
+                        log.Log(Level.SEVERE, "AcctSchema Element Product NOT updated");
+                }
+
+                /**
+                 *  Location, Warehouse, Locator
+                 */
+                //  Location (Company)
+                MVABAddress loc = new MVABAddress(m_ctx, VAB_Country_ID, VAB_RegionState_ID, City, m_trx);
+                loc.Save();
+
+
+                sqlCmd = new StringBuilder("UPDATE VAF_OrgDetail SET VAB_Address_ID=");
+                sqlCmd.Append(loc.GetVAB_Address_ID()).Append(" WHERE VAF_Org_ID=").Append(GetVAF_Org_ID());
+                no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
+                if (no != 1)
+                    log.Log(Level.SEVERE, "Location NOT inserted");
+
+                CreatePreference("VAB_Country_ID", VAB_Country_ID.ToString(), 0);
+
+                //  Default Warehouse
+                MVAMWarehouse wh = new MVAMWarehouse(m_ctx, 0, m_trx);
+                wh.SetValue(defaultName);
+                wh.SetName(defaultName);
+                wh.SetVAB_Address_ID(loc.GetVAB_Address_ID());
+                if (!wh.Save())
+                {
+                    log.Log(Level.SEVERE, "Warehouse NOT inserted");
+                }
                 else
-                    log.Log(Level.SEVERE, "CashBook NOT inserted");
-                //
+                {
+                    CoreLibrary.DataBase.DB.ExecuteQuery("UPDATE VAF_LoginSetting SET VAM_Warehouse_ID=" + wh.GetVAM_Warehouse_ID() + " WHERE VAF_Client_ID=" + m_client.GetVAF_Client_ID(), null, m_trx);
+                }
+
+                //   Locator
+                if (lstTableName.Contains("VAM_Locator") && bp != null) // Update by Paramjeet Singh
+                {
+                    MVAMLocator locator = new MVAMLocator(wh, defaultName);
+                    locator.SetIsDefault(true);
+                    if (!locator.Save())
+                        log.Log(Level.SEVERE, "Locator NOT inserted");
+
+                }
+                //  Update ClientInfo
+                //if (lstTableName.Contains(tableName)) // Update by Paramjeet Singh
+                //{
+
+
+                if (bp != null && product != null)
+                {
+                    sqlCmd = new StringBuilder("UPDATE VAF_ClientDetail SET ");
+                    if (bp != null)
+                    {
+                        sqlCmd.Append("VAB_BusinessPartnerCashTrx_ID=").Append(bp.GetVAB_BusinessPartner_ID());
+                    }
+
+                    if (product != null)
+                    {
+                        sqlCmd.Append(",VAM_ProductFreight_ID=").Append(product.GetVAM_Product_ID());
+                    }
+                    //		sqlCmd.Append("VAB_UOM_Volume_ID=");
+                    //		sqlCmd.Append(",VAB_UOM_Weight_ID=");
+                    //		sqlCmd.Append(",VAB_UOM_Length_ID=");
+                    //		sqlCmd.Append(",VAB_UOM_Time_ID=");
+                    sqlCmd.Append(" WHERE VAF_Client_ID=").Append(GetVAF_Client_ID());
+                    no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
+                    if (no != 1)
+                    {
+                        String err = "ClientInfo not updated";
+                        log.Log(Level.SEVERE, err);
+                        m_info.Append(err);
+                        return false;
+                    }
+                }
+
+                /**
+                 *  Other
+                 */
+                //  PriceList
+
+                if (lstTableName.Contains("VAM_PriceList"))
+                {
+                    MVAMPriceList pl = new MVAMPriceList(m_ctx, 0, m_trx);
+                    pl.SetName(defaultName);
+                    pl.SetVAB_Currency_ID(VAB_Currency_ID);
+                    pl.SetIsDefault(true);
+                    if (!pl.Save())
+                        log.Log(Level.SEVERE, "PriceList NOT inserted");
+                    //  Price List
+                    MVAMDiscountCalculation ds = new MVAMDiscountCalculation(m_ctx, 0, m_trx);
+                    ds.SetName(defaultName);
+                    ds.SetDiscountType(MVAMDiscountCalculation.DISCOUNTTYPE_Pricelist);
+                    if (!ds.Save())
+                        log.Log(Level.SEVERE, "DiscountSchema NOT inserted");
+                    //  PriceList Version
+                    MVAMPriceListVersion plv = new MVAMPriceListVersion(pl);
+                    plv.SetName();
+                    plv.SetVAM_DiscountCalculation_ID(ds.GetVAM_DiscountCalculation_ID());
+                    if (!plv.Save())
+                        log.Log(Level.SEVERE, "PriceList_Version NOT inserted");
+                    //  ProductPrice
+                    MVAMProductPrice pp = new MVAMProductPrice(plv, product.GetVAM_Product_ID(),
+                        Env.ONE, Env.ONE, Env.ONE);
+                    if (!pp.Save())
+                        log.Log(Level.SEVERE, "ProductPrice NOT inserted");
+
+                }
+                //	Create Sales Rep for Client-User
+                MVABBusinessPartner bpCU = null;
+                if (lstTableName.Contains("VAB_BusinessPartner"))
+                {
+                    bpCU = new MVABBusinessPartner(m_ctx, 0, m_trx);
+                    bpCU.SetValue(VAF_UserContact_U_Name);
+                    bpCU.SetName(VAF_UserContact_U_Name);
+
+                    bpCU.SetBPGroup(bpg);
+                    bpCU.SetIsEmployee(true);
+                    bpCU.SetIsSalesRep(true);
+                    if (bpCU.Save())
+                        m_info.Append(Msg.Translate(m_lang, "SalesRep_ID")).Append("=").Append(VAF_UserContact_U_Name).Append("\n");
+                    else
+                        log.Log(Level.SEVERE, "SalesRep (User) NOT inserted");
+
+                    if (lstTableName.Contains("VAB_BPart_Location"))
+                    {
+                        //  Location for Client-User
+                        MVABAddress bpLocCU = new MVABAddress(m_ctx, VAB_Country_ID, VAB_RegionState_ID, City, m_trx);
+                        bpLocCU.Save();
+                        MVABBPartLocation bplCU = new MVABBPartLocation(bpCU);
+                        bplCU.SetVAB_Address_ID(bpLocCU.GetVAB_Address_ID());
+                        if (!bplCU.Save())
+                            log.Log(Level.SEVERE, "BP_Location (User) NOT inserted");
+                    }
+                }
+                //  Update User
+                sqlCmd = new StringBuilder("UPDATE VAF_UserContact SET VAB_BusinessPartner_ID=");
+                if (bpCU != null)
+                {
+                    sqlCmd.Append(bpCU.GetVAB_BusinessPartner_ID());
+                }
+                sqlCmd.Append(" WHERE VAF_UserContact_ID=").Append(VAF_UserContact_U_ID);
+                no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
+                if (no != 1)
+                    log.Log(Level.SEVERE, "User of SalesRep (User) NOT updated");
+
+
+                //	Create Sales Rep for Client-Admin
+                MVABBusinessPartner bpCA = null;
+                if (lstTableName.Contains("VAB_BusinessPartner"))
+                {
+                    bpCA = new MVABBusinessPartner(m_ctx, 0, m_trx);
+                    bpCA.SetValue(VAF_UserContact_Name);
+                    bpCA.SetName(VAF_UserContact_Name);
+                    bpCA.SetBPGroup(bpg);
+                    bpCA.SetIsEmployee(true);
+                    bpCA.SetIsSalesRep(true);
+                    if (bpCA.Save())
+                        m_info.Append(Msg.Translate(m_lang, "SalesRep_ID")).Append("=").Append(VAF_UserContact_Name).Append("\n");
+                    else
+                        log.Log(Level.SEVERE, "SalesRep (Admin) NOT inserted");
+
+                    if (lstTableName.Contains("VAB_BPart_Location"))
+                    {
+                        //  Location for Client-Admin
+                        MVABAddress bpLocCA = new MVABAddress(m_ctx, VAB_Country_ID, VAB_RegionState_ID, City, m_trx);
+                        bpLocCA.Save();
+                        MVABBPartLocation bplCA = new MVABBPartLocation(bpCA);
+                        bplCA.SetVAB_Address_ID(bpLocCA.GetVAB_Address_ID());
+                        if (!bplCA.Save())
+                            log.Log(Level.SEVERE, "BP_Location (Admin) NOT inserted");
+                    }
+                }
+
+                //  Update User
+                sqlCmd = new StringBuilder("UPDATE VAF_UserContact SET VAB_BusinessPartner_ID=");
+                if (bpCA != null)
+                {
+                    sqlCmd.Append(bpCA.GetVAB_BusinessPartner_ID());
+                }
+                sqlCmd.Append(" WHERE VAF_UserContact_ID=").Append(VAF_UserContact_ID);
+                no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
+                if (no != 1)
+                    log.Log(Level.SEVERE, "User of SalesRep (Admin) NOT updated");
+
+
+                //  Payment Term
+                if (lstTableName.Contains("VAB_PaymentTerm"))
+                {
+                    int VAB_PaymentTerm_ID = GetNextID(GetVAF_Client_ID(), "VAB_PaymentTerm");
+                    sqlCmd = new StringBuilder("INSERT INTO VAB_PaymentTerm ");
+                    sqlCmd.Append("(VAB_PaymentTerm_ID,").Append(m_stdColumns).Append(",");
+                    sqlCmd.Append("Value,Name,NetDays,GraceDays,DiscountDays,Discount,DiscountDays2,Discount2,IsDefault, IsValid) VALUES (");
+                    sqlCmd.Append(VAB_PaymentTerm_ID).Append(",").Append(m_stdValues).Append(",");
+                    sqlCmd.Append("'Immediate','Immediate',0,0,0,0,0,0,'Y','Y')");
+                    no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
+                    if (no != 1)
+                        log.Log(Level.SEVERE, "PaymentTerm NOT inserted");
+                }
+                //  Project Cycle
+                if (lstTableName.Contains("VAB_ProjectCycle"))
+                {
+                    VAB_ProjectCycle_ID = GetNextID(GetVAF_Client_ID(), "VAB_ProjectCycle");
+                    sqlCmd = new StringBuilder("INSERT INTO VAB_ProjectCycle ");
+                    sqlCmd.Append("(VAB_ProjectCycle_ID,").Append(m_stdColumns).Append(",");
+                    sqlCmd.Append(" Name,VAB_Currency_ID) VALUES (");
+                    sqlCmd.Append(VAB_ProjectCycle_ID).Append(",").Append(m_stdValues).Append(", ");
+                    sqlCmd.Append(defaultEntry).Append(VAB_Currency_ID).Append(")");
+                    no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
+                    if (no != 1)
+                        log.Log(Level.SEVERE, "Cycle NOT inserted");
+                }
+                /**
+                 *  Organization level data	===========================================
+                 */
+
+                //	Create Default Project
+                if (lstTableName.Contains("VAB_Project"))
+                {
+                    int VAB_Project_ID = GetNextID(GetVAF_Client_ID(), "VAB_Project");
+                    sqlCmd = new StringBuilder("INSERT INTO VAB_Project ");
+                    sqlCmd.Append("(VAB_Project_ID,").Append(m_stdColumns).Append(",");
+                    sqlCmd.Append(" Value,Name,VAB_Currency_ID,IsSummary) VALUES (");
+                    sqlCmd.Append(VAB_Project_ID).Append(",").Append(m_stdValuesOrg).Append(", ");
+                    sqlCmd.Append(defaultEntry).Append(defaultEntry).Append(VAB_Currency_ID).Append(",'N')");
+                    no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
+                    if (no == 1)
+                        m_info.Append(Msg.Translate(m_lang, "VAB_Project_ID")).Append("=").Append(defaultName).Append("\n");
+                    else
+                        log.Log(Level.SEVERE, "Project NOT inserted");
+
+
+                    //  Default Project
+                    if (m_hasProject)
+                    {
+                        sqlCmd = new StringBuilder("UPDATE VAB_AccountBook_Element SET ");
+                        sqlCmd.Append("VAB_Project_ID=").Append(VAB_Project_ID);
+                        sqlCmd.Append(" WHERE VAB_AccountBook_ID=").Append(m_as.GetVAB_AccountBook_ID());
+                        sqlCmd.Append(" AND ElementType='PJ'");
+                        no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
+                        if (no != 1)
+                            log.Log(Level.SEVERE, "AcctSchema ELement Project NOT updated");
+                    }
+                }
+                //  CashBook
+                if (lstTableName.Contains("VAB_CashBook"))
+                {
+                    MVABCashBook cb = new MVABCashBook(m_ctx, 0, m_trx);
+                    cb.SetName(defaultName);
+                    cb.SetVAB_Currency_ID(VAB_Currency_ID);
+                    if (cb.Save())
+                        m_info.Append(Msg.Translate(m_lang, "VAB_CashBook_ID")).Append("=").Append(defaultName).Append("\n");
+                    else
+                        log.Log(Level.SEVERE, "CashBook NOT inserted");
+                    //
+                }
+
+                // }
+                m_trx.Commit();
+                m_trx.Close();
+
             }
-            // }
-            m_trx.Commit();
-            m_trx.Close();
+            catch
+            {
+                m_trx.Rollback();
+                m_trx.Close();
+                return false;
+            }
 
 
 

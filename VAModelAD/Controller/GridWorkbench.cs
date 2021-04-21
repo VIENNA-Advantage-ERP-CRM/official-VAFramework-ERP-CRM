@@ -78,7 +78,7 @@ namespace VAdvantage.Model
                 sql = "SELECT t.Name,t.Description,t.Help,"
                     + " w.VAF_Column_ID,w.VAF_Image_ID,w.VAF_Colour_ID,w.VAPA_Target_ID,"
                     + " c.ColumnName "
-                    + "FROM VAF_WorkBench w, VAF_WorkBench_Trl t, VAF_Column c "
+                    + "FROM VAF_WorkBench w, VAF_WorkBench_TL t, VAF_Column c "
                     + "WHERE w.VAF_WorkBench_ID=" + VAF_WorkBench_ID.ToString()                   //  #1
                     + " AND w.IsActive='Y'"
                     + " AND w.VAF_WorkBench_ID=t.VAF_WorkBench_ID"

@@ -113,7 +113,7 @@ namespace VAdvantage.Model
                 + " LEFT OUTER JOIN VAF_DataVal_Rule vr ON (c.VAF_DataVal_Rule_ID=vr.VAF_DataVal_Rule_ID)"
                 + " INNER JOIN VAF_ColumnDic");
             if (!baseLanguage)
-                sql.Append("_Trl");
+                sql.Append("_TL");
             sql.Append(" e "
                 + " ON (c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID) "
                 + "WHERE t.VAF_TableView_ID=" + _VAF_TableView_ID + " "

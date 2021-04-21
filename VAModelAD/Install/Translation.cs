@@ -156,7 +156,7 @@ namespace VAdvantage.Install
 
         bool isBaseLanguage = Language.IsBaseLanguage(VAF_Language);
         String tableName = Trl_Table;
-        int pos = tableName.IndexOf("_Trl");
+        int pos = tableName.IndexOf("_TL");
         String Base_Table = Trl_Table.Substring(0, pos);
         if (isBaseLanguage)
             tableName =  Base_Table;
@@ -291,7 +291,7 @@ namespace VAdvantage.Install
 		List<String> list = new List<String>();
 		try
 		{			
-            param[0] = new SqlParameter("@param", Base_Table + "_Trl");
+            param[0] = new SqlParameter("@param", Base_Table + "_TL");
             idr = DataBase.DB.ExecuteReader(sql, param, null);
 			while (idr.Read())
 			{
@@ -389,7 +389,7 @@ namespace VAdvantage.Install
 		}
 		String 	sql = "SELECT Name, TableName "
 			+ "FROM VAF_TableView "
-			+ "WHERE TableName LIKE '%_Trl' "
+			+ "WHERE TableName LIKE '%_TL' "
 			+ "ORDER BY 1";
 		List<String> trlTables = new List<String>();
         IDataReader idr = null;

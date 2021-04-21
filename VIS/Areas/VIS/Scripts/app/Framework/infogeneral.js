@@ -402,7 +402,7 @@
             sql += " FROM " + tableName + " " + tableName;
             // Change done by mohit asked by mukesh sir to show the data on info window from translated tab if logged in with langauge other than base language- 22/03/2018
             if (isTrlColExist) {
-                sql += " Inner join " + tableName + "_Trl trlTable on (" + tableName + "." + tableName + "_ID=trlTable." + tableName + "_ID  AND trlTable.VAF_Language='" + VIS.context.getVAF_Language() + "')";
+                sql += " Inner join " + tableName + "_TL trlTable on (" + tableName + "." + tableName + "_ID=trlTable." + tableName + "_ID  AND trlTable.VAF_Language='" + VIS.context.getVAF_Language() + "')";
             }
 
             if (requery == true) {

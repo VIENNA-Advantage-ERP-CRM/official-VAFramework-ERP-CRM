@@ -854,7 +854,7 @@ namespace VAdvantage.Tool
                 //    + "WHERE (TableName IN ('RV_WarehousePrice','RV_BPartner')"	//	special views
                 //        + " OR IsView='N')"
                 //    + " AND Referenced_Table_ID IS NULL"
-                //    + " AND TableName NOT LIKE '%_Trl' and VAF_TableView_ID =" + GlobalVariable.GetTableId); // TableName NOT LIKE 'T%' AND ");
+                //    + " AND TableName NOT LIKE '%_TL' and VAF_TableView_ID =" + GlobalVariable.GetTableId); // TableName NOT LIKE 'T%' AND ");
                 //sql.Append(" ORDER BY TableName");
 
                 new GenerateModel(int.Parse(getTableId), directory, namespaceName);
@@ -868,7 +868,7 @@ namespace VAdvantage.Tool
                     + "WHERE (TableName IN ('RV_WarehousePrice','RV_BPartner')"	//	special views
                         + " OR IsView='N')"
                     + " AND Referenced_Table_ID IS NULL"
-                    + " AND TableName NOT LIKE '%_Trl' AND "); // TableName NOT LIKE 'T%' AND ");
+                    + " AND TableName NOT LIKE '%_TL' AND "); // TableName NOT LIKE 'T%' AND ");
                 sql.Append(" ORDER BY TableName");
                 IDataReader dr = null;
                 try

@@ -64,7 +64,7 @@ namespace VAdvantage.Process
 		//
 		log.Info("" + client);
 		String sql = "SELECT * FROM VAF_TableView "
-			+ "WHERE TableName LIKE '%_Trl' AND TableName NOT LIKE 'AD%' "
+			+ "WHERE TableName LIKE '%_TL' AND TableName NOT LIKE 'AD%' "
 			+ "ORDER BY TableName";
 		//PreparedStatement pstmt = null;
         IDataReader idr = null;

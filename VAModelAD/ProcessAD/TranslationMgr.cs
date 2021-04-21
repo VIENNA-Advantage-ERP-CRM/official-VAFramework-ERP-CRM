@@ -422,7 +422,7 @@ namespace VAdvantage.Process
             int words = _wordCount;
             bool isBaseLanguage = Language.IsBaseLanguage(_VAF_Language);
             String tableName = trlTableName;
-            int pos = tableName.IndexOf("_Trl");
+            int pos = tableName.IndexOf("_TL");
             String baseTableName = trlTableName.Substring(0, pos);
             if (isBaseLanguage)
                 tableName = baseTableName;
@@ -579,7 +579,7 @@ namespace VAdvantage.Process
             int words = _wordCount;
             bool isBaseLanguage = Language.IsBaseLanguage(_VAF_Language);
             String tableName = trlTableName;
-            int pos = tableName.IndexOf("_Trl");
+            int pos = tableName.IndexOf("_TL");
             String baseTableName = trlTableName.Substring(0, pos);
             if (isBaseLanguage)
                 tableName = baseTableName;
@@ -756,7 +756,7 @@ namespace VAdvantage.Process
             List<String> list = new List<String>();
             try
             {
-                param[0] = new SqlParameter("@param", Base_Table + "_Trl");
+                param[0] = new SqlParameter("@param", Base_Table + "_TL");
                 idr = DataBase.DB.ExecuteReader(sql, param, null);
                 while (idr.Read())
                 {
@@ -980,7 +980,7 @@ namespace VAdvantage.Process
 
             String sql = "SELECT Name, TableName "
                 + "FROM VAF_TableView "
-                + "WHERE TableName LIKE '%_Trl' "
+                + "WHERE TableName LIKE '%_TL' "
                 + "ORDER BY 1";
             List<String> trlTables = new List<String>();
             IDataReader idr = null;

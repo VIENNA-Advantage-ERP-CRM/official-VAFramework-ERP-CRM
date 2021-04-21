@@ -1853,7 +1853,7 @@
         //	Tables
         sql += " FROM " + this.tableName + " t";
         if (this.identifierTranslated)
-            sql += ", " + this.tableName + "_Trl tt";
+            sql += ", " + this.tableName + "_TL tt";
         //	Where
         sql += " WHERE t." + this.parentColumnName + "=@ID";
         if (this.identifierTranslated)

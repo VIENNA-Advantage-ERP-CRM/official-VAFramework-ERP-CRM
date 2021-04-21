@@ -103,7 +103,7 @@ namespace VAdvantage.Model
             if (baseTableName == null)
                 throw new ArgumentException("Base Table Name is null");
             _baseTableName = baseTableName;
-            _trlTableName = baseTableName + "_Trl";
+            _trlTableName = baseTableName + "_TL";
             InitColumns();
             //log.fine(toString());
         }

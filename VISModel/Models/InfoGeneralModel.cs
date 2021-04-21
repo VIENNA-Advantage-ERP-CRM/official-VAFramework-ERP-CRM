@@ -104,7 +104,7 @@ namespace VIS.Models
                     
                     VAdvantage.DataBase.VConnection con = new VAdvantage.DataBase.VConnection();
                     string owner = con.Db_uid;
-                    if (Util.GetValueOfInt(DB.ExecuteQuery("SELECT count(*) FROM ALL_OBJECTS WHERE OBJECT_TYPE = 'TABLE' AND OWNER =upper( '" + owner + "') AND OBJECT_NAME =upper( '" + _tableName + "_TRL')", null, null)) > 0)
+                    if (Util.GetValueOfInt(DB.ExecuteQuery("SELECT count(*) FROM ALL_OBJECTS WHERE OBJECT_TYPE = 'TABLE' AND OWNER =upper( '" + owner + "') AND OBJECT_NAME =upper( '" + _tableName + "_TL')", null, null)) > 0)
                     {
                         _trlTableExist = true;
                     }

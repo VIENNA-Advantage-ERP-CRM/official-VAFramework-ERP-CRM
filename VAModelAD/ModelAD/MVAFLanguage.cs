@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
  * Class Name     : MLanguage
- * Purpose        : To add/delete/update language in "_trl " table according to the system language
+ * Purpose        : To add/delete/update language in "_TL " table according to the system language
  * Class Used     : MLanguage inherits X_VAF_Language
  * Chronological    Development
  * Raghunandan      6-April-2009 
@@ -39,7 +39,7 @@ namespace VAdvantage.Model
         /// <returns>number of records deleted/inserted</returns>
         public int Maintain(bool add)
         {
-            String sql = "SELECT TableName FROM VAF_TableView WHERE TableName LIKE '%_Trl' ORDER BY 1";
+            String sql = "SELECT TableName FROM VAF_TableView WHERE TableName LIKE '%_TL' ORDER BY 1";
             DataSet ds = null;
             int retNo = 0;
             try

@@ -1189,7 +1189,7 @@ namespace VAdvantage.Model
             }
             try
             {
-                if (!_tableName.EndsWith("_Trl"))	//	translation tables have no model
+                if (!_tableName.EndsWith("_TL"))	//	translation tables have no model
                     return DataSavePO(recordID, drv);
             }
             catch (Exception e)
