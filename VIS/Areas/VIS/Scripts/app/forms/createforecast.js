@@ -451,12 +451,6 @@
 
         }
 
-        function vetoablechange(evt) {
-            if (evt.propertyName == "BudgetQuantity") {
-                modalTxtAmount.setValue(evt.newValue);
-            }
-        };
-
         /** Busy Indicator */
         function busyDiv(Value) {
             if (Value) {
