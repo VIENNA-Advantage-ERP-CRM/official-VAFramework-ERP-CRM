@@ -637,8 +637,8 @@ namespace VAdvantage.Print
 		"VAB_PaymentOptionCheck_vt", "VAB_PaymentOptionCheck_vt",  
 		"VAB_DunningExeEntry_v", "VAM_InventoryTransfer", "VAM_Inventory" ,
         /******************Manufacturing**************/
-        "VAVAM_WorkOrder_Header_v", "VAM_TaskList",
-		"VAVAM_WorkOrderTxn_Header_V", "VAM_StandardOperation_Header_v", "VAM_Routing_Header_v"
+        "VAM_WorkOrder_Header_v", "VAM_TaskList",
+		"VAM_WorkOrderTxn_Header_V", "VAM_StandardOperation_Header_v", "VAM_Routing_Header_v"
         /******************Manufacturing**************/
         };
         private static String[] DOC_BASETABLES = new String[] {
@@ -647,8 +647,8 @@ namespace VAdvantage.Print
 		"VAB_PaymentOptionCheck", "VAB_PaymentOptionCheck", 
 		"VAB_DunningExeEntry", "VAM_InventoryTransfer", "VAM_Inventory" ,
         /******************Manufacturing**************/
-         "VAVAM_WorkOrder", "VAM_TaskList",
-		"VAVAM_WorkOrderTransaction", "VAM_StandardOperation", "VAM_Routing"
+         "VAM_WorkOrder", "VAM_TaskList",
+		"VAM_WorkOrderTransaction", "VAM_StandardOperation", "VAM_Routing"
         /******************Manufacturing**************/
         
         };
@@ -658,8 +658,8 @@ namespace VAdvantage.Print
 		"VAB_PaymentOptionCheck_ID", "VAB_PaymentOptionCheck_ID", 
 		"VAB_DunningExeEntry_ID", "VAM_InventoryTransfer_ID",  "VAM_Inventory_ID" ,
          /******************Manufacturing**************/
-  //        "VAVAM_WorkOrder_ID", "VAM_TaskList_ID",
-		//"VAVAM_WorkOrderTransaction_ID", "VAM_StandardOperation_ID", "VAM_Routing_ID"
+  //        "VAM_WorkOrder_ID", "VAM_TaskList_ID",
+		//"VAM_WorkOrderTransaction_ID", "VAM_StandardOperation_ID", "VAM_Routing_ID"
           /******************Manufacturing**************/
         
         };
@@ -669,8 +669,8 @@ namespace VAdvantage.Print
 		X_VAB_PaymentOptionCheck.Table_ID, X_VAB_PaymentOptionCheck.Table_ID, 
 		X_VAB_DunningExeEntry.Table_ID, X_VAM_InventoryTransfer.Table_ID, X_VAM_Inventory.Table_ID ,
         /******************Manufacturing**************/
-  //       X_VAVAM_WorkOrder.Table_ID, X_VAM_TaskList.Table_ID,
-		//X_VAVAM_WorkOrderTransaction.Table_ID, X_VAM_StandardOperation.Table_ID, X_VAM_Routing.Table_ID
+  //       X_VAM_WorkOrder.Table_ID, X_VAM_TaskList.Table_ID,
+		//X_VAM_WorkOrderTransaction.Table_ID, X_VAM_StandardOperation.Table_ID, X_VAM_Routing.Table_ID
         /******************Manufacturing**************/
         
         };
@@ -1029,22 +1029,22 @@ namespace VAdvantage.Print
                 sql = "SELECT COALESCE(dt.VAF_Print_Rpt_Layout_ID,pf.WorkOrder_PrintFormat_ID), "
                     + " c.IsMultiLingualDocument, COALESCE(dt.DocumentCopies,0), "
                     + " dt.VAF_Print_Rpt_Layout_ID "
-                    + "FROM VAVAM_WorkOrder d"
+                    + "FROM VAM_WorkOrder d"
                     + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
                     + " INNER JOIN VAF_Print_Rpt_Page pf ON (d.VAF_Client_ID=pf.VAF_Client_ID OR pf.VAF_Client_ID=0)"
                     + " LEFT OUTER JOIN VAB_DocTypes dt ON (d.VAB_DocTypes_ID=dt.VAB_DocTypes_ID) "
-                    + "WHERE d.VAVAM_WorkOrder_ID=@recordid"                 //  info from PrintForm
+                    + "WHERE d.VAM_WorkOrder_ID=@recordid"                 //  info from PrintForm
                     + " AND pf.VAF_Org_ID IN (0,d.VAF_Org_ID) "
                     + "ORDER BY pf.VAF_Client_ID DESC,  pf.VAF_Org_ID DESC";
             else if (type == WORKORDERTXN)
                 sql = "SELECT COALESCE(dt.VAF_Print_Rpt_Layout_ID,pf.WorkOrderTxn_PrintFormat_ID), "
                     + " c.IsMultiLingualDocument, COALESCE(dt.DocumentCopies,0), "
                     + " dt.VAF_Print_Rpt_Layout_ID "
-                    + "FROM VAVAM_WorkOrderTransaction d"
+                    + "FROM VAM_WorkOrderTransaction d"
                     + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
                     + " INNER JOIN VAF_Print_Rpt_Page pf ON (d.VAF_Client_ID=pf.VAF_Client_ID OR pf.VAF_Client_ID=0)"
                     + " LEFT OUTER JOIN VAB_DocTypes dt ON (d.VAB_DocTypes_ID=dt.VAB_DocTypes_ID) "
-                    + "WHERE d.VAVAM_WorkOrderTransaction_ID=@recordid"                 //  info from PrintForm
+                    + "WHERE d.VAM_WorkOrderTransaction_ID=@recordid"                 //  info from PrintForm
                     + " AND pf.VAF_Org_ID IN (0,d.VAF_Org_ID) "
                     + "ORDER BY pf.VAF_Client_ID DESC,  pf.VAF_Org_ID DESC";
             else if (type == STANDARDOPERATION)

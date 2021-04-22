@@ -1,6 +1,6 @@
 namespace VAdvantage.Model{
 /** Generated Model - DO NOT CHANGE */
-using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for VAVAGL_ReDistribution
+using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for VAGL_ReDistribution
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
 public class X_VAGL_ReDistribution : PO{public X_VAGL_ReDistribution (Context ctx, int VAGL_ReDistribution_ID, Trx trxName) : base (ctx, VAGL_ReDistribution_ID, trxName){/** if (VAGL_ReDistribution_ID == 0){SetVAB_AccountBook_ID (0);SetDateAcct (DateTime.Now);// SYSDATE
@@ -29,8 +29,8 @@ static X_VAGL_ReDistribution(){ Table_ID = Get_Table_ID(Table_Name); model = new
 static long serialVersionUID = 27856268167673L;/** Last Updated Timestamp 11/19/2019 11:24:10 AM */
 public static long updatedMS = 1574142850884L;/** VAF_TableView_ID=1000533 */
 public static int Table_ID; // =1000533;
-/** TableName=VAVAGL_ReDistribution */
-public static String Table_Name="VAVAGL_ReDistribution";
+/** TableName=VAGL_ReDistribution */
+public static String Table_Name="VAGL_ReDistribution";
 protected static KeyNamePair model;protected Decimal accessLevel = new Decimal(3);/** AccessLevel
 @return 3 - Client - Org 
 */

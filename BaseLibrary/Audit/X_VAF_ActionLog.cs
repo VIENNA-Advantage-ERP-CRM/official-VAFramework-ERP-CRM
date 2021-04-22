@@ -8,7 +8,7 @@ namespace VAdvantage.Model
     using VAdvantage.Process;
     using VAdvantage.Model;
     using VAdvantage.Utility;
-    using System.Data;/** Generated Model for AD_ActionLog
+    using System.Data;/** Generated Model for VAF_ActionLog
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
     public class X_VAF_ActionLog : PO
@@ -40,8 +40,8 @@ namespace VAdvantage.Model
         static long serialVersionUID = 27883142468540L;/** Last Updated Timestamp 9/25/2020 8:59:12 AM */
         public static long updatedMS = 1601017151751L;/** VAF_TableView_ID=1001065 */
         public static int Table_ID; // =1001065;
-        /** TableName=AD_ActionLog */
-        public static String Table_Name = "AD_ActionLog";
+        /** TableName=VAF_ActionLog */
+        public static String Table_Name = "VAF_ActionLog";
         protected static KeyNamePair model; protected Decimal accessLevel = new Decimal(7);/** AccessLevel
 @return 7 - System - Client - Org 
 */

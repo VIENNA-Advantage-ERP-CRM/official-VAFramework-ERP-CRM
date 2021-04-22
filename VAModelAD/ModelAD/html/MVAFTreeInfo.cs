@@ -396,9 +396,9 @@ namespace VAdvantage.Model
             if (TREETYPE_Menu.Equals(treeType))
                 nodeTableName += "Menu";
             else if (TREETYPE_BPartner.Equals(treeType))
-                nodeTableName += "BP";
+                nodeTableName += "BPart";
             else if (TREETYPE_Product.Equals(treeType))
-                nodeTableName += "PR";
+                nodeTableName += "Prod";
             //
             else if (TREETYPE_CMContainer.Equals(treeType))
                 nodeTableName += "CMC";
@@ -410,13 +410,13 @@ namespace VAdvantage.Model
                 nodeTableName += "CMT";
             //
             else if (TREETYPE_User1.Equals(treeType))
-                nodeTableName += "U1";
+                nodeTableName += "User1";
             else if (TREETYPE_User2.Equals(treeType))
-                nodeTableName += "U2";
+                nodeTableName += "User2";
             else if (TREETYPE_User3.Equals(treeType))
-                nodeTableName += "U3";
+                nodeTableName += "User3";
             else if (TREETYPE_User4.Equals(treeType))
-                nodeTableName += "U4";
+                nodeTableName += "User4";
             return nodeTableName;
         }
 
@@ -429,11 +429,11 @@ namespace VAdvantage.Model
         {
             String nodeTableName = "VAF_TreeInfoChild";
             if (X_VAF_MenuConfig.Table_ID == VAF_TableView_ID)
-                nodeTableName += "MM";
+                nodeTableName += "Menu";
             else if (X_VAB_BusinessPartner.Table_ID == VAF_TableView_ID)
-                nodeTableName += "BP";
+                nodeTableName += "BPart";
             else if (X_VAM_Product.Table_ID == VAF_TableView_ID)
-                nodeTableName += "PR";
+                nodeTableName += "Prod";
             //
             //else if (X_VACM_Container.Table_ID == VAF_TableView_ID)
             //    nodeTableName += "CMC";
@@ -451,13 +451,13 @@ namespace VAdvantage.Model
                 if (s_TableIDs.Contains(ii))
                 {
                     if (s_TableIDs_U1.Contains(ii))
-                        nodeTableName += "U1";
+                        nodeTableName += "User1";
                     else if (s_TableIDs_U2.Contains(ii))
-                        nodeTableName += "U2";
+                        nodeTableName += "User2";
                     else if (s_TableIDs_U3.Contains(ii))
-                        nodeTableName += "U3";
+                        nodeTableName += "User3";
                     else if (s_TableIDs_U4.Contains(ii))
-                        nodeTableName += "U4";
+                        nodeTableName += "User4";
                 }
                 else	//	no tree
                     return null;
