@@ -263,7 +263,7 @@ namespace VAdvantage.Model
                 {
                     AttributeSetInstance_ID = olines.GetM_AttributeSetInstance_ID();
                 }
-                else if(iolines[i].GetM_AttributeSetInstance_ID() > 0)
+                else if (iolines[i].GetM_AttributeSetInstance_ID() > 0)
                 {
                     // When AttributeInstanceId set on Material Receipt Line
                     AttributeSetInstance_ID = iolines[i].GetM_AttributeSetInstance_ID();
@@ -1008,6 +1008,14 @@ namespace VAdvantage.Model
                     line.SetM_ProductContainer_ID(fromLine.GetM_ProductContainer_ID());
                 }
                 line.SetProcessed(false);
+
+                // VA077 specific 
+                if (Env.IsModuleInstalled("VA077_"))
+                {
+                    // Handle the case of reverse, set margin amt negative
+                    line.Set_Value("VA077_MarginAmt", decimal.Negate(Util.GetValueOfDecimal(line.Get_Value("VA077_MarginAmt"))));
+                }
+
                 if (line.Save(Get_TrxName()))
                     count++;
                 //	Cross Link
@@ -3633,7 +3641,7 @@ namespace VAdvantage.Model
                     // JID_1251:On Material receipt system will generate the asset for Items type product for which asset group linked with Product Category.
                     if ((product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item && product.IsCreateAsset() && sLine.GetMovementQty() > 0
                        && !IsReversal() && !IsReturnTrx() && !IsSOTrx() && sLine.GetA_Asset_ID() == 0) ||
-                       (Env.IsModuleInstalled("VA077_") && product != null 
+                       (Env.IsModuleInstalled("VA077_") && product != null
                        && (product.GetProductType() == X_M_Product.PRODUCTTYPE_Item || product.GetProductType() == X_M_Product.PRODUCTTYPE_Service)
                        && product.IsCreateAsset() && sLine.GetMovementQty() > 0
                        && !IsReversal() && !IsReturnTrx() && IsSOTrx() && sLine.GetA_Asset_ID() == 0))
@@ -3659,8 +3667,8 @@ namespace VAdvantage.Model
                                     return DocActionVariables.STATUS_INVALID;
                                 }
                                 else
-                                {                                    
-                                    if (Env.IsModuleInstalled("VA077_"))                                    
+                                {
+                                    if (Env.IsModuleInstalled("VA077_"))
                                         asset.SetName(asset.GetName());
                                     else
                                         asset.SetName(asset.GetName() + "_" + asset.GetValue());
@@ -5180,7 +5188,7 @@ namespace VAdvantage.Model
                             line.Set_Value("VA077_MarginAmt", Env.ZERO);
                             line.Set_Value("VA077_MarginPercent", Env.ZERO);
                         }
-                        
+
                         line.Save(Get_TrxName());
                         //if (countVA038 > 0)
                         //{
