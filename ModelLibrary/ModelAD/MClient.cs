@@ -1248,11 +1248,13 @@ namespace VAdvantage.Model
                 String msg = email.Send();
                 if (EMail.SENT_OK.Equals(msg))
                 {
+                    SaveMailAttachment(true, AD_Table_ID, Record_ID, message, subject, toEMail, GetRequestEMail());
                     //log.info("Sent EMail " + subject + " to " + toEMail);
                     return true;
                 }
                 else
                 {
+                    SaveMailAttachment(false, AD_Table_ID, Record_ID, message, subject, toEMail, GetRequestEMail());
                     //log.warning("Could NOT Send Email: " + subject + " to " + toEMail + ": " + msg + " (" + GetName() + ")");
                     return false;
                 }
@@ -1261,6 +1263,64 @@ namespace VAdvantage.Model
             {
                 log.Severe(GetName() + " - " + ex.Message);
                 return false;
+            }
+        }
+
+        // EmpCode : VIS0008
+        // Change done to save Mail history
+        /// <summary>
+        /// Save mail history against the record ID
+        /// </summary>
+        /// <param name="success"></param>
+        /// <param name="AD_Table_ID"></param>
+        /// <param name="Record_ID"></param>
+        /// <param name="message"></param>
+        /// <param name="subject"></param>
+        /// <param name="toEMail"></param>
+        /// <param name="fromEMail"></param>
+        private void SaveMailAttachment(bool success, int AD_Table_ID, int Record_ID, string message, string subject, string toEMail, string fromEMail)
+        {
+            if (!(AD_Table_ID > 0 && Record_ID > 0))
+            {
+                log.SaveError("VISPRO No Table  :: " + AD_Table_ID + ", " + Record_ID, "No Table No Record :: " + AD_Table_ID + ", " + Record_ID);
+                return;
+            }
+            //written to send attachment details into mailattachment table
+            MMailAttachment1 _mAttachment = new VAdvantage.Model.MMailAttachment1(GetCtx(), 0, null);
+            _mAttachment.SetIsMailSent(success);
+            _mAttachment.SetAD_Client_ID(GetCtx().GetAD_Client_ID());
+            _mAttachment.SetAD_Org_ID(GetCtx().GetAD_Org_ID());
+            _mAttachment.SetAD_Table_ID(AD_Table_ID);
+            _mAttachment.IsActive();
+            _mAttachment.SetAttachmentType("M");
+            _mAttachment.SetRecord_ID(Util.GetValueOfInt(Record_ID));
+            _mAttachment.SetTextMsg(message);
+            _mAttachment.SetTitle(subject);
+            _mAttachment.SetMailAddress(toEMail);
+            _mAttachment.SetMailAddressFrom(fromEMail);
+            if (_mAttachment.GetEntries().Length > 0)
+            {
+                _mAttachment.SetIsAttachment(true);
+            }
+            else
+            {
+                _mAttachment.SetIsAttachment(false);
+            }
+            if (!_mAttachment.Save())
+            {
+                ValueNamePair vnp = VLogger.RetrieveError();
+                string msg = "";
+                if (vnp != null)
+                {
+                    msg = vnp.GetName();
+                    if (msg.Trim() == "")
+                        msg = vnp.GetValue();
+                }
+
+                if (msg.Trim() == "")
+                    msg = "Error in saving attachment History :  " + subject + " - " + message;
+
+                log.SaveError(msg, subject + " - " + message);
             }
         }
 
