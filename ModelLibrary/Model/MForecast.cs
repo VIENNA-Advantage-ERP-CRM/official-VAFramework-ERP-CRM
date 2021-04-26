@@ -62,7 +62,7 @@ namespace VAdvantage.Model
             : base(ctx, rs, trxName)
         {
         }
-        
+
         /// <summary>
         /// Implement beforesave logic
         /// </summary>
@@ -516,6 +516,8 @@ namespace VAdvantage.Model
             int count = 0;
             string FromCurrency = null;
             string ToCurrency = null;
+            int lineNo = 0;
+            MForecastLine line = null;
             try
             {
                 if (IsProcessed() || IsPosted() || FromForecast == null)
@@ -523,12 +525,12 @@ namespace VAdvantage.Model
                     return "";
                 }
                 MForecastLine[] fromLines = FromForecast.GetLines(false);
-                
+
                 // Get Currency's ISO Code
                 DataSet _dsCurrency = DB.ExecuteDataset("SELECT ISO_CODE,C_Currency_ID FROM C_Currency WHERE C_Currency_ID IN(" + FromForecast.GetC_Currency_ID()
-                                      +"," + GetC_Currency_ID()+")");
+                                      + "," + GetC_Currency_ID() + ")");
 
-                if(_dsCurrency!=null && _dsCurrency.Tables.Count > 0)
+                if (_dsCurrency != null && _dsCurrency.Tables.Count > 0)
                 {
                     for (int i = 0; i < _dsCurrency.Tables[0].Rows.Count; i++)
                     {
@@ -543,7 +545,8 @@ namespace VAdvantage.Model
                     }
                 }
 
-                
+                lineNo = Util.GetValueOfInt(DB.ExecuteScalar("SELECT NVL(MAX(Line), 0) + 10 FROM C_ForecastLine WHERE C_Forecast_ID = " + GetC_Forecast_ID()));
+
                 for (int i = 0; i < fromLines.Length; i++)
                 {
                     //donot copy the lines where order and project reference exists 
@@ -553,11 +556,11 @@ namespace VAdvantage.Model
                     }
                     else
                     {
-                        MForecastLine line = new MForecastLine(GetCtx(), 0, Get_Trx());
+                        line = new MForecastLine(GetCtx(), 0, Get_Trx());
                         PO.CopyValues(fromLines[i], line, GetAD_Client_ID(), GetAD_Org_ID());
 
                         //price conversion
-                        line.SetUnitPrice(MConversionRate.Convert(GetCtx(), line.GetUnitPrice(), FromForecast.GetC_Currency_ID(), GetC_Currency_ID(), 
+                        line.SetUnitPrice(MConversionRate.Convert(GetCtx(), line.GetUnitPrice(), FromForecast.GetC_Currency_ID(), GetC_Currency_ID(),
                             GetAD_Client_ID(), GetAD_Org_ID()));
                         if (line.GetUnitPrice() == 0)
                         {
@@ -566,8 +569,9 @@ namespace VAdvantage.Model
                             count = 0;
                             return count + " " + _processMsg;
                         }
-                        line.SetTotalPrice(line.GetUnitPrice()*line.GetBaseQty());                        
+                        line.SetTotalPrice(line.GetUnitPrice() * line.GetBaseQty());
                         line.SetC_Forecast_ID(GetC_Forecast_ID());
+                        line.SetLine(lineNo);
                         line.SetProcessed(false);
                         if (!line.Save())
                         {
@@ -588,6 +592,7 @@ namespace VAdvantage.Model
                         }
                         else
                         {
+                            lineNo += 10;
                             count++;
                         }
 
@@ -602,7 +607,7 @@ namespace VAdvantage.Model
             {
                 log.Log(Level.SEVERE, e.Message);
             }
-         
+
             return count.ToString();
         }
 
