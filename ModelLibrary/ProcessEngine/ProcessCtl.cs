@@ -21,6 +21,7 @@ using System.ComponentModel;
 using System.IO;
 using VAdvantage.Model;
 using Npgsql;
+using VAdvantage.BiReport;
 
 namespace VAdvantage.ProcessEngine
 {
@@ -31,7 +32,8 @@ namespace VAdvantage.ProcessEngine
         public const string ReportType_CSV = "C";
         public const string ReportType_PDF = "P";
         public const string ReportType_RTF = "R";
-        public const string ReportType_HTML = "S";
+        public const string ReportType_HTML = "S";//HTML Report of Print Format
+        public const string ReportType_BIHTML = "B";//HTML Scripts returned by BI
 
 
 
@@ -88,27 +90,27 @@ namespace VAdvantage.ProcessEngine
                 try
                 {
                     NpgsqlCommand comm = new NpgsqlCommand();
-                conn1 = (NpgsqlConnection)DataBase.DB.GetConnection();
-                conn1.Open();
-                comm.Connection = conn1;
-                comm.CommandText = procedureName;
-                comm.CommandType = CommandType.StoredProcedure;
-                NpgsqlCommandBuilder.DeriveParameters(comm);
-                NpgsqlParameter[] param = new NpgsqlParameter[1];
+                    conn1 = (NpgsqlConnection)DataBase.DB.GetConnection();
+                    conn1.Open();
+                    comm.Connection = conn1;
+                    comm.CommandText = procedureName;
+                    comm.CommandType = CommandType.StoredProcedure;
+                    NpgsqlCommandBuilder.DeriveParameters(comm);
+                    NpgsqlParameter[] param = new NpgsqlParameter[1];
 
-                foreach (NpgsqlParameter orp in comm.Parameters)
-                {
-                    param[0] = new NpgsqlParameter(orp.ParameterName, _pi.GetAD_PInstance_ID());
-                }
+                    foreach (NpgsqlParameter orp in comm.Parameters)
+                    {
+                        param[0] = new NpgsqlParameter(orp.ParameterName, _pi.GetAD_PInstance_ID());
+                    }
 
-                //log.Fine("Executing " + procedureName + "(" + _pi.GetAD_PInstance_ID() + ")");
-                int res = SqlExec.PostgreSql.PostgreHelper.ExecuteNonQuery(conn1, CommandType.StoredProcedure, procedureName, param);
-                conn1.Close();
-                if (res < 0)
-                {
-                    ProcessInfoUtil.SetParameterFromDB(_pi, _ctx);
-                    return StartDBProcess(procedureName, _pi.GetParameter());
-                }
+                    //log.Fine("Executing " + procedureName + "(" + _pi.GetAD_PInstance_ID() + ")");
+                    int res = SqlExec.PostgreSql.PostgreHelper.ExecuteNonQuery(conn1, CommandType.StoredProcedure, procedureName, param);
+                    conn1.Close();
+                    if (res < 0)
+                    {
+                        ProcessInfoUtil.SetParameterFromDB(_pi, _ctx);
+                        return StartDBProcess(procedureName, _pi.GetParameter());
+                    }
                 }
                 catch (Exception e)
                 {
@@ -257,7 +259,7 @@ namespace VAdvantage.ProcessEngine
 
                     //log.Fine("Executing " + procedureName + "(" + _pi.GetAD_PInstance_ID() + ")");
                     int res = SqlExec.PostgreSql.PostgreHelper.ExecuteNonQuery(conn1, CommandType.StoredProcedure, procedureName, param);
-                    conn1.Close();                    
+                    conn1.Close();
                     if (res < 0)
                     {
                         return false;
@@ -395,7 +397,7 @@ namespace VAdvantage.ProcessEngine
                 _pi.SetSummary(Utility.Msg.ParseTranslation(_ctx, summary));
             if (_parent != null)
             {
-                Thread t = new Thread(delegate() { _parent.UnlockUI(_pi); });
+                Thread t = new Thread(delegate () { _parent.UnlockUI(_pi); });
                 t.CurrentCulture = Utility.Env.GetLanguage(_ctx).GetCulture(Utility.Env.GetLoginLanguage(_ctx).GetAD_Language());
                 t.CurrentUICulture = Utility.Env.GetLanguage(_ctx).GetCulture(Utility.Env.GetLoginLanguage(_ctx).GetAD_Language());
                 t.Start();
@@ -989,6 +991,13 @@ namespace VAdvantage.ProcessEngine
                     {
                         reportFilePath = re.GetRtfReportFilePath(reportFilePath);
                     }
+                    else if (_pi.GetFileType() == ReportType_BIHTML)
+                    {
+                        BiReportEngine com = new BiReportEngine();
+                        reportFilePath = com.GetReportString(ctx, log, pi);
+                        //reportFilePath = re.GetHTMLScript(reportFilePath);
+                    }
+
                 }
             }
             else
@@ -1362,7 +1371,7 @@ namespace VAdvantage.ProcessEngine
                 return;
             else
             {
-                Thread t = new Thread(delegate() { _parent.LockUI(_pi); });
+                Thread t = new Thread(delegate () { _parent.LockUI(_pi); });
                 t.CurrentCulture = Utility.Env.GetLanguage(_ctx).GetCulture(Utility.Env.GetLoginLanguage(_ctx).GetAD_Language());
                 t.CurrentUICulture = Utility.Env.GetLanguage(_ctx).GetCulture(Utility.Env.GetLoginLanguage(_ctx).GetAD_Language());
                 t.Start();

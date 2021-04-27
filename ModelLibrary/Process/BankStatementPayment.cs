@@ -158,10 +158,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     Get_Trx().Rollback();
                     ValueNamePair pp = VLogger.RetrieveError();
-                    string error = pp != null ? pp.GetValue() : "";
+                    //to get Exact Error Message first get Value from GetName() else GetValue()
+                    string error = pp != null ? pp.GetName() : "";
                     if (string.IsNullOrEmpty(error))
                     {
-                        error = pp != null ? pp.GetName() : "";
+                        error = pp != null ? pp.GetValue() : "";
                         if (string.IsNullOrEmpty(error))
                         {
                             error = pp != null ? pp.ToString() : "";
@@ -269,8 +270,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     payment.SetC_Invoice_ID(invoice.GetC_Invoice_ID());//set Invoice Reference
                     payment.SetC_InvoicePaySchedule_ID(Util.GetValueOfInt(_ds.Tables[0].Rows[0]["C_INVOICEPAYSCHEDULE_ID"]));
                     _dueAmt = Util.GetValueOfDecimal(_ds.Tables[0].Rows[0]["DUEAMT"]);
-
-                    if (invoice.IsSOTrx())
+                    //Set PayAmt -ve sign Incase of DocBaseType APC or ARC - IsReturnTrx is true
+                    //Set PayAmt +ve sign Incase of DocBaseType API or ARI - IsReturnTrx is false
+                    if (!invoice.IsReturnTrx())
                     {
                         payment.SetPayAmt(_dueAmt);
                     }
@@ -281,6 +283,18 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     if (!payment.Save(Get_Trx()))
                     {
                         Get_Trx().Rollback();
+                        ValueNamePair pp = VLogger.RetrieveError();
+                        //to get Exact Error Message first get Value from GetName() else GetValue()
+                        string error = pp != null ? pp.GetName() : "";
+                        if (string.IsNullOrEmpty(error))
+                        {
+                            error = pp != null ? pp.GetValue() : "";
+                            if (string.IsNullOrEmpty(error))
+                            {
+                                error = pp != null ? pp.ToString() : "";
+                            }
+                        }
+                        _message = !string.IsNullOrEmpty(error) ? error : "VA012_PaymentNotSaved";
                         return null;
                     }
                 }
@@ -289,6 +303,18 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     if (!payment.Save(Get_Trx()))
                     {
                         Get_Trx().Rollback();
+                        ValueNamePair pp = VLogger.RetrieveError();
+                        //to get Exact Error Message first get Value from GetName() else GetValue()
+                        string error = pp != null ? pp.GetName() : "";
+                        if (string.IsNullOrEmpty(error))
+                        {
+                            error = pp != null ? pp.GetValue() : "";
+                            if (string.IsNullOrEmpty(error))
+                            {
+                                error = pp != null ? pp.ToString() : "";
+                            }
+                        }
+                        _message = !string.IsNullOrEmpty(error) ? error : "VA012_PaymentNotSaved";
                         return null;
                     }
                     else
@@ -306,7 +332,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             PayAlocate.SetC_Invoice_ID(invoice.GetC_Invoice_ID());
                             PayAlocate.SetC_InvoicePaySchedule_ID(Util.GetValueOfInt(_ds.Tables[0].Rows[i]["C_INVOICEPAYSCHEDULE_ID"]));
 
-                            if (invoice.IsSOTrx())
+                            //Set PayAmt -ve sign Incase of DocBaseType APC or ARC - IsReturnTrx is true
+                            //Set PayAmt +ve sign Incase of DocBaseType API or ARI - IsReturnTrx is false
+                            if (!invoice.IsReturnTrx())
                             {
                                 PayAlocate.SetInvoiceAmt(Util.GetValueOfDecimal(_ds.Tables[0].Rows[i]["DUEAMT"]));
                                 PayAlocate.SetAmount(Util.GetValueOfDecimal(_ds.Tables[0].Rows[i]["DUEAMT"]));
@@ -320,10 +348,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             {
                                 Get_Trx().Rollback();
                                 ValueNamePair pp = VLogger.RetrieveError();
-                                string error = pp != null ? pp.GetValue() : "";
+                                //to get Exact Error Message first get Value from GetName() else GetValue()
+                                string error = pp != null ? pp.GetName() : "";
                                 if (string.IsNullOrEmpty(error))
                                 {
-                                    error = pp != null ? pp.GetName() : "";
+                                    error = pp != null ? pp.GetValue() : "";
                                     if (string.IsNullOrEmpty(error))
                                     {
                                         error = pp != null ? pp.ToString() : "";
@@ -350,11 +379,24 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 if (!payment.Save(Get_Trx()))
                 {
                     Get_Trx().Rollback();
+                    ValueNamePair pp = VLogger.RetrieveError();
+                    //to get Exact Error Message first get Value from GetName() else GetValue()
+                    string error = pp != null ? pp.GetName() : "";
+                    if (string.IsNullOrEmpty(error))
+                    {
+                        error = pp != null ? pp.GetValue() : "";
+                        if (string.IsNullOrEmpty(error))
+                        {
+                            error = pp != null ? pp.ToString() : "";
+                        }
+                    }
+                    _message = !string.IsNullOrEmpty(error) ? error : "VA012_PaymentNotSaved";
                     return null;
                 }
             }
             else
             {
+                _message = "VA012_ReferenceNotfoundtoCreatePayment";
                 return null;
             }
             //Commit the Transaction
