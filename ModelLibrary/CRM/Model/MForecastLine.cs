@@ -1,4 +1,11 @@
-﻿using System;
+﻿
+/********************************************************
+ * Module Name    :    VA Framework
+ * Purpose        :    TeamForecast Line Model
+ * Employee Code  :    209
+ * Updated Date   :    26-April-2021
+  ******************************************************/
+using System;
 using System.Net;
 using System.Windows;
 //using System.Windows.Controls;
@@ -17,6 +24,8 @@ namespace VAdvantage.Model
 {
     public class MForecastLine : X_C_ForecastLine
     {
+        private static VLogger log = VLogger.GetVLogger(typeof(MForecastLine).FullName);
+
         public MForecastLine(Ctx ctx, int C_ForecastLine_ID, Trx trxName) :
            base(ctx, C_ForecastLine_ID, null)
         {
@@ -30,12 +39,28 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="trx"></param>
+        /// <param name="C_Forecast_ID"></param>
+        /// <param name="M_Product_ID"></param>
+        public MForecastLine(Ctx ctx, Trx trx, int C_Forecast_ID ,int M_Product_ID)
+            : base(ctx, 0, trx)
+        {
+            int LineNo = Util.GetValueOfInt(DB.ExecuteScalar("SELECT NVL(MAX(Line), 0)+10  FROM C_ForecastLine WHERE " +
+                "C_Forecast_ID=" + C_Forecast_ID, null,trx));          
+            SetC_Forecast_ID(C_Forecast_ID);
+            SetM_Product_ID(M_Product_ID);
+            SetLine(LineNo);
+        }
+        /// <summary>
         /// Before Delete Constraints/logics
         /// </summary>
         /// <returns>true, when success</returns>
         protected override bool BeforeDelete()
         {
-            // when document is other that Drafted stage, then we cannot delete documnet line
+            // when document is other than Drafted stage, then we cannot delete documnet line
             string docStatus = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT DocStatus FROM C_Forecast 
                                 WHERE C_Forecast_ID = " + GetC_Forecast_ID(), null, Get_Trx()));
             if (!docStatus.Equals(MForecast.DOCSTATUS_Drafted))
@@ -149,5 +174,60 @@ namespace VAdvantage.Model
                 SetDescription(desc + " | " + description);
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ctx">Context</param>
+        /// <param name="trx">Transaction</param>
+        /// <param name="C_Forecast_ID">Team Forecast</param>
+        /// <param name="M_Product_ID">Product</param>
+        /// <returns></returns>
+        public static MForecastLine GetOrCreate(Ctx ctx,Trx trx,int C_Forecast_ID, int M_Product_ID)
+        {
+            MForecastLine retValue = null;
+            String sql = "SELECT * FROM C_ForecastLine " +
+                         " WHERE NVL(M_Product_ID,0)=" + M_Product_ID +
+                         " AND C_Forecas_ID=" + C_Forecast_ID+
+                         " AND C_OrderLine_ID IS NULL AND C_ProjectLine_ID IS NULL";
+
+
+            DataTable dt = null;
+            IDataReader idr = null;
+            try
+            {
+                idr = DB.ExecuteReader(sql, null, trx);
+                dt = new DataTable();
+                dt.Load(idr);
+                idr.Close();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    retValue = new MForecastLine(ctx, dr, trx);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                }
+                log.Log(Level.SEVERE, sql, ex);
+            }
+            finally
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                }
+                dt = null;
+            }
+            if (retValue == null)
+            {
+                retValue = new MForecastLine(ctx,trx,C_Forecast_ID, M_Product_ID);
+            }
+
+            return retValue;
+        }
+
     }
 }
