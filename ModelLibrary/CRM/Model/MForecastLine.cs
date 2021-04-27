@@ -94,7 +94,8 @@ namespace VAdvantage.Model
                 LineHistory.SetAD_Client_ID(GetAD_Client_ID());
                 LineHistory.SetAD_Org_ID(GetAD_Org_ID());
                 LineHistory.SetC_ForecastLine_ID(GetC_ForecastLine_ID());
-                LineHistory.SetLine(Util.GetValueOfInt(Get_ValueOld("Line")));
+                LineHistory.SetLine(Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT NVL(MAX(Line), 0) + 10 FROM C_ForecastLineHistory
+                            WHERE C_ForecastLine_ID = " + GetC_ForecastLine_ID())));
                 LineHistory.SetC_Order_ID(Util.GetValueOfInt(Get_ValueOld("C_Order_ID")));
                 LineHistory.SetC_OrderLine_ID(Util.GetValueOfInt(Get_ValueOld("C_OrderLine_ID")));
                 LineHistory.SetC_Project_ID(Util.GetValueOfInt(Get_ValueOld("C_Project_ID")));

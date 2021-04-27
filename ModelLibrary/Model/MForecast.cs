@@ -431,6 +431,10 @@ namespace VAdvantage.Model
                     if (old.CompareTo(Env.ZERO) != 0)
                     {
                         line.SetBaseQty(Env.ZERO);
+                        line.SetQtyEntered(Env.ZERO);
+                        line.SetPriceStd(Env.ZERO);
+                        line.SetTotalPrice(Env.ZERO);
+                        line.SetUnitPrice(Env.ZERO);
                         line.AddDescription(Msg.GetMsg(GetCtx(), "Voided") + " (" + old + ")");
                         if (!line.Save(Get_TrxName()))
                         {
