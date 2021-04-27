@@ -58,6 +58,11 @@ namespace VIS.Models
                 info["TeamColumn_ID"] = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Column_ID FROM AD_Column " +
                     @" WHERE columnname = 'C_Forecast_ID' AND AD_Table_ID = (SELECT AD_Table_ID FROM Ad_Table where TableName = '" + MForecastLine.Table_Name + "' )"));
             }
+            else if (Util.GetValueOfString(info["Table_Name"]).Equals("VA073_SalesForecast"))
+            {
+                info["BudgetColumn_ID"] = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Column_ID FROM AD_Column " +
+                    @" WHERE columnname = 'C_MasterForecast_ID' AND AD_Table_ID = (SELECT AD_Table_ID FROM Ad_Table where TableName = 'C_MasterForecastLine' )"));
+            }
             return info;
         }
 

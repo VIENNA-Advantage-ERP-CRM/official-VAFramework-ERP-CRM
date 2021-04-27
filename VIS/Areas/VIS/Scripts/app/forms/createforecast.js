@@ -55,6 +55,11 @@
         var _TeamForecastCtrl;
         var _TeamForecast_ID = 0;
 
+        var divBudgetForecastCtrl;
+        var _BudgetForecastLookUp;
+        var _BudgetForecastCtrl;
+        var _budgetForecast_ID = 0;
+
         var divProductCategoryCtrl;
         var _ProductCategoryLookUp;
         var _ProductCategoryCtrl;
@@ -77,13 +82,15 @@
         var AD_Client_ID = VIS.context.getWindowContextAsInt($self.windowNo, "AD_Client_ID", false);
 
         var isMasterForecast = false;
+        var isBudgetForecast = false;
 
         var elements = [
             "AD_Org_ID",
             "C_Period_ID",
             "C_DocType_ID",
             "M_Product_Category_ID",
-            "C_Forecast_ID"
+            "C_Forecast_ID",
+            "C_MasterForecast_ID"
         ];
 
         VIS.translatedTexts = VIS.Msg.translate(VIS.Env.getCtx(), elements, true);
@@ -115,8 +122,10 @@
             });
             if (data != null) {
                 AD_Org_ID = VIS.Utility.Util.getValueOfInt(data["AD_Org_ID"]);
-                isMasterForecast = VIS.Utility.Util.getValueOfString(data["Table_Name"]) == "C_Forecast" ? false : true;
+                isMasterForecast = VIS.Utility.Util.getValueOfString(data["Table_Name"]) == "C_MasterForecast" ? true : false;
+                isBudgetForecast = VIS.Utility.Util.getValueOfString(data["Table_Name"]) == "VA073_SalesForecast" ? true : false;
                 _TeamForecast_ID = VIS.Utility.Util.getValueOfInt(data["TeamColumn_ID"]);
+                _budgetForecast_ID = VIS.Utility.Util.getValueOfInt(data["BudgetColumn_ID"]);
             }
         };
 
@@ -180,6 +189,13 @@
                 $formDataRow.append($formData);
                 $formWrap.append($formDataRow);
             }
+            // Row 8.2
+            if (isBudgetForecast) {
+                $formDataRow = $('<div class="vis-budget-form-row">');
+                $formData = $('<div class="input-group vis-input-wrap" id="VIS_BudgetForecast_' + $self.windowNo + '">');
+                $formDataRow.append($formData);
+                $formWrap.append($formDataRow);
+            }
 
             // Row 9
             $formDataRow = $('<div class="vis-budget-form-row">');
@@ -225,6 +241,9 @@
             divOpportunityCtrl = $root.find("#VIS_Opportunity_" + $self.windowNo);
             if (isMasterForecast) {
                 divTeamForecastCtrl = $root.find("#VIS_TeamForecast_" + $self.windowNo);
+            }
+            if (isBudgetForecast) {
+                divBudgetForecastCtrl = $root.find("#VIS_BudgetForecast_" + $self.windowNo);
             }
             divProductCategoryCtrl = $root.find("#VIS_ProductCategory_" + $self.windowNo);
             divBudgetQuantityCtrl = $root.find("#VIS_BudgetQuantity_" + $self.windowNo);
@@ -291,7 +310,7 @@
             _OpenSalesOrderCtrl.getControl().prop('disabled', true);
             _OpenSalesOrderCtrl.getBtn(0).prop('disabled', true);
             _OpenSalesOrderCtrl.getBtn(1).prop('disabled', true);
-            _OpenSalesOrderCtrl.setCustomInfo('Budget Order');
+            _OpenSalesOrderCtrl.setCustomInfo('Budget_OpenSalesOrder');
             var _OpenSOCtrlWrap = $('<div class="vis-control-wrap">');
             var _openSOBtnWrap = $('<div class="input-group-append">');
             divOpenSalesOrderCtrl.append(_OpenSOCtrlWrap);
@@ -312,6 +331,7 @@
             _OpportunityCtrl.getControl().prop('disabled', true);
             _OpportunityCtrl.getBtn(0).prop('disabled', true);
             _OpportunityCtrl.getBtn(1).prop('disabled', true);
+            _OpportunityCtrl.setCustomInfo('Budget_Opportunity');
             var _OpportunityCtrlWrap = $('<div class="vis-control-wrap">');
             var _OpportunityBtnWrap = $('<div class="input-group-append">');
             divOpportunityCtrl.append(_OpportunityCtrlWrap);
@@ -324,6 +344,7 @@
                 validation = " C_Forecast.AD_Org_ID IN (0, " + AD_Org_ID + ") AND C_Forecast.DocStatus IN ('CO', 'CL')";
                 _TeamForecastLookUp = VIS.MLookupFactory.get(ctx, $self.windowNo, _TeamForecast_ID, VIS.DisplayType.MultiKey, "C_Forecast_ID", 0, false, validation);;
                 _TeamForecastCtrl = new VIS.Controls.VTextBoxButton("C_Forecast_ID", true, false, true, VIS.DisplayType.MultiKey, _TeamForecastLookUp);
+                _TeamForecastCtrl.setCustomInfo('Budget_TeamForecast');
                 var _TeamForecastCtrlWrap = $('<div class="vis-control-wrap">');
                 var _TeamForecastBtnWrap = $('<div class="input-group-append">');
                 divTeamForecastCtrl.append(_TeamForecastCtrlWrap);
@@ -331,6 +352,19 @@
                 divTeamForecastCtrl.append(_TeamForecastBtnWrap);
                 _TeamForecastBtnWrap.append(_TeamForecastCtrl.getBtn(0));
                 _TeamForecastBtnWrap.append(_TeamForecastCtrl.getBtn(1));
+            }
+
+            if (isBudgetForecast) {
+                validation = " C_MasterForecast.AD_Org_ID IN (0, " + AD_Org_ID + ") AND C_MasterForecast.DocStatus IN ('CO', 'CL')";
+                _BudgetForecastLookUp = VIS.MLookupFactory.get(ctx, $self.windowNo, _budgetForecast_ID, VIS.DisplayType.MultiKey, "C_MasterForecast_ID", 0, false, validation);;
+                _BudgetForecastCtrl = new VIS.Controls.VTextBoxButton("C_MasterForecast_ID", true, false, true, VIS.DisplayType.MultiKey, _BudgetForecastLookUp);
+                var _BudgetForecastCtrlWrap = $('<div class="vis-control-wrap">');
+                var _BudgetForecastBtnWrap = $('<div class="input-group-append">');
+                divBudgetForecastCtrl.append(_BudgetForecastCtrlWrap);
+                _BudgetForecastCtrlWrap.append(_BudgetForecastCtrl.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' ')).append('<label>' + VIS.translatedTexts.C_MasterForecast_ID + '</label>');
+                divBudgetForecastCtrl.append(_BudgetForecastBtnWrap);
+                _BudgetForecastBtnWrap.append(_BudgetForecastCtrl.getBtn(0));
+                _BudgetForecastBtnWrap.append(_BudgetForecastCtrl.getBtn(1));
             }
 
             validation = "M_Product_Category.IsActive = 'Y' AND M_Product_Category.AD_Org_ID IN (0, " + AD_Org_ID + ")";
@@ -441,19 +475,16 @@
             $btnOk.on("click", function () {
                 busyDiv(true);
                 var TeamForecast_ID = 0;
-                if (isMasterForecast)
-                {
+                if (isMasterForecast) {
                     TeamForecast_ID = _TeamForecastCtrl.getValue();
                 }
 
                 // Incase of Product categor BudgetQuantity should be selected
                 if (VIS.Utility.Util.getValueOfDecimal(_BudgetQuantityCtrl.getValue()) == 0 &&
-                    (_ProductCategoryCtrl.getValue() != undefined || VIS.Utility.Util.getValueOfString(_ProductCategoryCtrl.getValue()) != ""))
-                {
+                    (_ProductCategoryCtrl.getValue() != undefined || VIS.Utility.Util.getValueOfString(_ProductCategoryCtrl.getValue()) != "")) {
                     VIS.ADialog.info("SelectBudgetQunatity");
                 }
-                else
-                {
+                else {
                     GenerateTeamForecastLines(TeamForecast_ID);
                 }
 
@@ -473,17 +504,15 @@
                 }
                 // Incase of Product categor BudgetQuantity should be selected
                 if (VIS.Utility.Util.getValueOfDecimal(_BudgetQuantityCtrl.getValue()) == 0 &&
-                    (_ProductCategoryCtrl.getValue() != undefined || VIS.Utility.Util.getValueOfString(_ProductCategoryCtrl.getValue()) != ""))
-                {
+                    (_ProductCategoryCtrl.getValue() != undefined || VIS.Utility.Util.getValueOfString(_ProductCategoryCtrl.getValue()) != "")) {
                     VIS.ADialog.info("SelectBudgetQunatity");
                 }
-                else
-                {
+                else {
                     GenerateTeamForecastLines(TeamForecast_ID);
                 }
 
                 busyDiv(false);
-              
+
             })
             // Close Form
             $btnCancel.on("click", function () {
