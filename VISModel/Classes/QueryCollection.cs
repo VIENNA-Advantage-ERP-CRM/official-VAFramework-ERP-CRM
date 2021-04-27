@@ -140,7 +140,7 @@ namespace VIS.Classes
             queryList.VIS_35 = "SELECT p.VAM_Product_ID, ra.Name, ra.Description, ra.Qty FROM VAS_Res_Assignment ra"
                              + " INNER JOIN VAM_Product p ON (p.VAS_Resource_ID=ra.VAS_Resource_ID) WHERE ra.VAS_Res_Assignment_ID = @Param";
             queryList.VIS_36 = "SELECT bomPriceStd(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceStd,"
-                             + "boMVAMPriceList(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceList,"
+                             + "BOMPRICELIST(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceList,"
                              + "bomPriceLimit(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceLimit,"
                              + "p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID "
                              + "FROM VAM_Product p, VAM_ProductPrice pp, VAM_PriceList pl, VAM_PriceListVersion pv "
@@ -151,7 +151,7 @@ namespace VIS.Classes
                              + " AND pl.VAM_PriceList_ID=@param2 ORDER BY pv.ValidFrom DESC";
 
             queryList.VIS_37 = "SELECT bomPriceStd(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceStd,"
-                             + "boMVAMPriceList(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceList,"
+                             + "BOMPRICELIST(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceList,"
                              + "bomPriceLimit(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceLimit,"
                              + "p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID "
                              + "FROM VAM_Product p, VAM_ProductPrice pp, VAM_PriceList pl, VAM_PriceList bpl, VAM_PriceListVersion pv "

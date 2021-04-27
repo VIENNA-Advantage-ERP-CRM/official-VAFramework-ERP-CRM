@@ -211,7 +211,7 @@ namespace VAdvantage.Model
                     _VAB_UOM_ID = Util.GetValueOfInt(DB.ExecuteScalar(_sql));
                     //end
                     sql = "SELECT bomPriceStdUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceStd,"	//	1
-                       + " boMVAMPriceListUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceList,"		//	2
+                       + " BOMPRICELISTUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceList,"		//	2
                        + " bomPriceLimitUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceLimit,"	//	3
                        + " p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.VAM_ProductCategory_ID,"	//	4..7
                        + " pl.EnforcePriceLimit, pl.IsTaxIncluded "	// 8..9
@@ -229,7 +229,7 @@ namespace VAdvantage.Model
                 else
                 {
                     sql = "SELECT bomPriceStdAttr(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID) AS PriceStd,"	//	1
-                        + " boMVAMPriceListAttr(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID) AS PriceList,"		//	2
+                        + " BOMPRICELISTATTR(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID) AS PriceList,"		//	2
                         + " bomPriceLimitAttr(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID) AS PriceLimit,"	//	3
                         + " p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.VAM_ProductCategory_ID,"	//	4..7
                         + " pl.EnforcePriceLimit, pl.IsTaxIncluded "	// 8..9
@@ -246,7 +246,7 @@ namespace VAdvantage.Model
             else
             {
                 sql = "SELECT bomPriceStd(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceStd,"	//	1
-                    + " boMVAMPriceList(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceList,"		//	2
+                    + " BOMPRICELIST(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceList,"		//	2
                     + " bomPriceLimit(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceLimit,"	//	3
                     + " p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.VAM_ProductCategory_ID,"	//	4..7
                     + " pl.EnforcePriceLimit, pl.IsTaxIncluded "	// 8..9
@@ -361,7 +361,7 @@ namespace VAdvantage.Model
                 if (Env.HasModulePrefix("ED011_", out mInfo1))
                 {
                     sql = "SELECT bomPriceStdUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceStd,"	//	1
-                       + " boMVAMPriceListUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceList,"		//	2
+                       + " BOMPRICELISTUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceList,"		//	2
                        + " bomPriceLimitUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceLimit,"	//	3
                        + " p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.VAM_ProductCategory_ID,pl.EnforcePriceLimit "	// 4..8
                        + "FROM VAM_Product p"
@@ -379,7 +379,7 @@ namespace VAdvantage.Model
                 else
                 {
                     sql = "SELECT bomPriceStdAttr(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID) AS PriceStd,"	//	1
-                        + " boMVAMPriceListAttr(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID) AS PriceList,"		//	2
+                        + " BOMPRICELISTATTR(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID) AS PriceList,"		//	2
                         + " bomPriceLimitAttr(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID) AS PriceLimit,"	//	3
                         + " p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.VAM_ProductCategory_ID,pl.EnforcePriceLimit "	// 4..8
                         + "FROM VAM_Product p"
@@ -396,7 +396,7 @@ namespace VAdvantage.Model
             else
             {
                 sql = "SELECT bomPriceStd(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceStd,"	//	1
-                    + " boMVAMPriceList(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceList,"		//	2
+                    + " BOMPRICELIST(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceList,"		//	2
                     + " bomPriceLimit(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceLimit,"  	//	3
                     + " p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.VAM_ProductCategory_ID,pl.EnforcePriceLimit "	// 4..8
                     + "FROM VAM_Product p"
@@ -482,7 +482,7 @@ namespace VAdvantage.Model
                 if (Env.HasModulePrefix("ED011_", out mInfo1))
                 {
                     sql = "SELECT bomPriceStdUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceStd,"	//	1
-                        + " boMVAMPriceListUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceList,"		//	2
+                        + " BOMPRICELISTUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceList,"		//	2
                         + " bomPriceLimitUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceLimit,"	//	3
                         + " p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.VAM_ProductCategory_ID,"	//	4..7
                         + " pl.EnforcePriceLimit, pl.IsTaxIncluded "	// 8..9
@@ -502,7 +502,7 @@ namespace VAdvantage.Model
                 else
                 {
                     sql = "SELECT bomPriceStdAttr(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID) AS PriceStd,"	//	1
-                        + " boMVAMPriceListAttr(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID) AS PriceList,"		//	2
+                        + " BOMPRICELISTATTR(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID) AS PriceList,"		//	2
                         + " bomPriceLimitAttr(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID) AS PriceLimit,"	//	3
                         + " p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.VAM_ProductCategory_ID,"	//	4..7
                         + " pl.EnforcePriceLimit, pl.IsTaxIncluded "	// 8..9
@@ -522,7 +522,7 @@ namespace VAdvantage.Model
             {
 
                 sql = "SELECT bomPriceStd(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceStd,"	//	1
-                    + " boMVAMPriceList(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceList,"		//	2
+                    + " BOMPRICELIST(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceList,"		//	2
                     + " bomPriceLimit(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceLimit,"	//	3
                     + " p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.VAM_ProductCategory_ID,"	//	4..7
                     + " pl.EnforcePriceLimit, pl.IsTaxIncluded "	// 8..9

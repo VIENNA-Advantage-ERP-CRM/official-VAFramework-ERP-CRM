@@ -377,7 +377,7 @@ namespace VAdvantage.Model
         private void SetPriceForAttribute(int _VAM_Product_ID, int _VAM_PriceListVersion_ID, int _VAM_PFeature_SetInstance_ID)
         {
             string sql = "SELECT bomPriceStdAttr(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID) AS PriceStd,"	//	1
-                    + " boMVAMPriceListAttr(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID) AS PriceList,"		//	2
+                    + " BOMPRICELISTATTR(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID) AS PriceList,"		//	2
                     + " bomPriceLimitAttr(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID) AS PriceLimit"	//	3
                     + " FROM VAM_Product p"
                     + " INNER JOIN VAM_ProductPrice pp ON (p.VAM_Product_ID=pp.VAM_Product_ID)"
@@ -407,7 +407,7 @@ namespace VAdvantage.Model
         private void SetPriceForUOM(int _VAM_Product_ID, int _VAM_PriceListVersion_ID, int _VAM_PFeature_SetInstance_ID, int UOM)
         {
             string sql = "SELECT bomPriceStdUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceStd,"	//	1
-                          + " boMVAMPriceListUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceList,"		//	2
+                          + " BOMPRICELISTUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceList,"		//	2
                           + " bomPriceLimitUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceLimit,"	//	3
                           + " p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.VAM_ProductCategory_ID,"	//	4..7
                           + " pl.EnforcePriceLimit, pl.IsTaxIncluded "	// 8..9
@@ -2698,7 +2698,7 @@ namespace VAdvantage.Model
                 MVAMProduct product = MVAMProduct.Get(GetCtx(), GetVAM_Product_ID());
                 DataSet ds = new DataSet();
                 String sql = @"SELECT bomPriceStdUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceStd,
-                                boMVAMPriceListUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID)     AS PriceList,
+                                BOMPRICELISTUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID)     AS PriceList,
                                 bomPriceLimitUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID)    AS PriceLimit,
                                 p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.VAM_ProductCategory_ID,pl.EnforcePriceLimit,pl.IsTaxIncluded
                                 FROM VAM_Product p INNER JOIN VAM_ProductPrice pp ON (p.VAM_Product_ID=pp.VAM_Product_ID) INNER JOIN VAM_PriceListVersion pv

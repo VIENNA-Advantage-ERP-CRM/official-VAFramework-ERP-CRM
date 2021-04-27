@@ -59,7 +59,7 @@ namespace VIS.Models
 				new InfoColumn(s_headerPriceList, "VAM_PriceListVersion_ID",true, "plv.Name", DisplayType.Amount).Seq(50),
                 new InfoColumn(s_headerWarehouse, "VAM_Warehouse_ID",true, "w.Name", DisplayType.String).Seq(60),
 				new InfoColumn(Msg.Translate(ctx, "PriceList"), "PriceList",true,
-					"boMVAMPriceList(p.VAM_Product_ID, pr.VAM_PriceListVersion_ID) AS PriceList",  DisplayType.Amount).Seq(70),
+					"BOMPRICELIST(p.VAM_Product_ID, pr.VAM_PriceListVersion_ID) AS PriceList",  DisplayType.Amount).Seq(70),
 				new InfoColumn(Msg.Translate(ctx, "PriceStd"), "PriceStd",true,
 					"bomPriceStd(p.VAM_Product_ID, pr.VAM_PriceListVersion_ID) AS PriceStd", DisplayType.Amount).Seq(80),
 				new InfoColumn("Einzel MWSt", "",true,
@@ -114,14 +114,14 @@ namespace VIS.Models
                     if (Env.HasModulePrefix("ED011_", out aInfo))
                     {
                         list.Add(new InfoColumn(Msg.Translate(ctx, "PriceList"), "PriceList", true,
-                        "boMVAMPriceListUom(p.VAM_Product_ID, pr.VAM_PriceListVersion_ID,pr.VAM_PFeature_SetInstance_ID,pr.VAB_UOM_ID) AS PriceList", DisplayType.Amount).Seq(120));
+                        "BOMPRICELISTUOM(p.VAM_Product_ID, pr.VAM_PriceListVersion_ID,pr.VAM_PFeature_SetInstance_ID,pr.VAB_UOM_ID) AS PriceList", DisplayType.Amount).Seq(120));
                         list.Add(new InfoColumn(Msg.Translate(ctx, "PriceStd"), "PriceStd", true,
                         "bomPriceStdUom(p.VAM_Product_ID, pr.VAM_PriceListVersion_ID,pr.VAM_PFeature_SetInstance_ID,pr.VAB_UOM_ID) AS PriceStd", DisplayType.Amount).Seq(130));
                     }
                     else
                     {
                         list.Add(new InfoColumn(Msg.Translate(ctx, "PriceList"), "PriceList", true,
-                            "boMVAMPriceListAttr(p.VAM_Product_ID, pr.VAM_PriceListVersion_ID,pr.VAM_PFeature_SetInstance_ID) AS PriceList", DisplayType.Amount).Seq(120));
+                            "BOMPRICELISTATTR(p.VAM_Product_ID, pr.VAM_PriceListVersion_ID,pr.VAM_PFeature_SetInstance_ID) AS PriceList", DisplayType.Amount).Seq(120));
                         list.Add(new InfoColumn(Msg.Translate(ctx, "PriceStd"), "PriceStd", true,
                             "bomPriceStdAttr(p.VAM_Product_ID, pr.VAM_PriceListVersion_ID,pr.VAM_PFeature_SetInstance_ID) AS PriceStd", DisplayType.Amount).Seq(130));
                     }
@@ -129,7 +129,7 @@ namespace VIS.Models
                 else
                 {
                     list.Add(new InfoColumn(Msg.Translate(ctx, "PriceList"), "PriceList", true,
-                        "boMVAMPriceList(p.VAM_Product_ID, pr.VAM_PriceListVersion_ID) AS PriceList", DisplayType.Amount).Seq(120));
+                        "BOMPRICELIST(p.VAM_Product_ID, pr.VAM_PriceListVersion_ID) AS PriceList", DisplayType.Amount).Seq(120));
                     list.Add(new InfoColumn(Msg.Translate(ctx, "PriceStd"), "PriceStd", true,
                         "bomPriceStd(p.VAM_Product_ID, pr.VAM_PriceListVersion_ID) AS PriceStd", DisplayType.Amount).Seq(130));
                 }

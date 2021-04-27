@@ -16474,7 +16474,7 @@
 
             //	Search Pricelist for current version
             sql = "SELECT bomPriceStd(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceStd,"
-                + "boMVAMPriceList(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceList,"
+                + "BOMPRICELIST(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceList,"
                 + "bomPriceLimit(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceLimit,"
                 + "p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID "
                 + "FROM VAM_Product p, VAM_ProductPrice pp, VAM_PriceList pl, VAM_PriceListVersion pv "
@@ -16523,7 +16523,7 @@
             if (noPrice) {
                 //	Find if via Base Pricelist
                 sql = "SELECT bomPriceStd(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceStd,"
-                    + "boMVAMPriceList(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceList,"
+                    + "BOMPRICELIST(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceList,"
                     + "bomPriceLimit(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceLimit,"
                     + "p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID "
                     + "FROM VAM_Product p, VAM_ProductPrice pp, VAM_PriceList pl, VAM_PriceList bpl, VAM_PriceListVersion pv "
