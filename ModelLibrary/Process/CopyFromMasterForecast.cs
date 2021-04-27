@@ -1,4 +1,12 @@
-﻿using System;
+﻿
+/********************************************************
+ * Module Name    :    VA Framework
+ * Purpose        :    Copy lines of One Master forecast to another 
+ * Employee Code  :    209
+ * Date           :    26-April-2021
+  ******************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +21,10 @@ namespace VAdvantage.Process
     public class CopyFromMasterForecast : SvrProcess
     {
         private int C_MasterForecast_ID = 0;
+       
+        /// <summary>
+        /// Prepare
+        /// </summary>
         protected override void Prepare()
         {
             ProcessInfoParameter[] para = GetParameter();
@@ -23,7 +35,7 @@ namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("C_Forecast_ID"))
+                else if (name.Equals("C_MasterForecast_ID"))
                 {
                     C_MasterForecast_ID = Util.GetValueOfInt(para[i].GetParameter());
                 }

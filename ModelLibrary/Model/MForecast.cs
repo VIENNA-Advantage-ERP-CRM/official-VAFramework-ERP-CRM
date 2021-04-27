@@ -572,7 +572,7 @@ namespace VAdvantage.Model
 
                         //price conversion
                         line.SetUnitPrice(MConversionRate.Convert(GetCtx(), line.GetUnitPrice(), FromForecast.GetC_Currency_ID(), GetC_Currency_ID(),
-                            GetAD_Client_ID(), GetAD_Org_ID()));
+                            GetDateAcct(),Util.GetValueOfInt(Get_Value("C_ConversionType_ID")),GetAD_Client_ID(), GetAD_Org_ID()));
                         if (line.GetUnitPrice() == 0)
                         {
                             //if conversion not found then display message

@@ -555,7 +555,7 @@ namespace VAdvantage.Model
                     PO.CopyValues(fromLines[i], line, GetAD_Client_ID(), GetAD_Org_ID());
 
                     //price conversion
-                    line.SetPrice(MConversionRate.Convert(GetCtx(), line.GetPrice(), FromForecast.GetC_Currency_ID(), GetC_Currency_ID(),
+                    line.SetPrice(MConversionRate.Convert(GetCtx(), line.GetPrice(), FromForecast.GetC_Currency_ID(), GetC_Currency_ID(), GetDateAcct(),GetC_ConversionType_ID(),
                     GetAD_Client_ID(), GetAD_Org_ID()));
                     if (line.GetPrice() == 0)
                     {

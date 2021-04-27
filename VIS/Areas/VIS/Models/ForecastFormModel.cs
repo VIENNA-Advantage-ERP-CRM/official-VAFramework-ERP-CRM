@@ -36,7 +36,7 @@ namespace VIS.Models
         private Decimal ConvertedPrice = 0;
         private int ConversionType = 0;
         private DataSet ds = null;
-        private DateTime? DateTrx = null;
+        private DateTime? DateAcct = null;
         private int Precision = 0;
         #endregion
         /// <summary>
@@ -93,14 +93,14 @@ namespace VIS.Models
                 TableName = MTable.GetTableName(ctx, Util.GetValueOfInt(Table_ID));
                 
                 //Get Currency and conversion Type from header              
-                ds = DB.ExecuteDataset("SELECT Forecast.C_Currency_ID ,Forecast.TrxDate,C_Currency.ISO_CODE,C_Currency.StdPrecision,C_ConversionType_ID FROM " + TableName + " Forecast INNER JOIN C_Currency ON " +
+                ds = DB.ExecuteDataset("SELECT Forecast.C_Currency_ID ,Forecast.DateAcct,C_Currency.ISO_CODE,C_Currency.StdPrecision,C_ConversionType_ID FROM " + TableName + " Forecast INNER JOIN C_Currency ON " +
                     "C_Currency.C_Currency_ID = Forecast.C_Currency_ID WHERE " + TableName + "_ID =" + Forecast_ID);
 
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
                     ToCurrency = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Currency_ID"]);
                     ToCurrencyName = Util.GetValueOfString(ds.Tables[0].Rows[0]["ISO_CODE"]);
-                    DateTrx = Util.GetValueOfDateTime(ds.Tables[0].Rows[0]["TrxDate"]);
+                    DateAcct = Util.GetValueOfDateTime(ds.Tables[0].Rows[0]["DateAcct"]);
                     ConversionType = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_ConversionType_ID"]);
                     Precision = Util.GetValueOfInt(ds.Tables[0].Rows[0]["StdPrecision"]);
                 }
@@ -169,7 +169,7 @@ namespace VIS.Models
                         {
                             //Price conversion from Orderss currency to Forecast Currency
                             ConvertedPrice = MConversionRate.Convert(ctx, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["Price"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Currency_ID"]),
-                            ToCurrency, DateTrx, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
+                            ToCurrency, DateAcct, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
 
                             if (ConvertedPrice == 0)
                             {
@@ -250,7 +250,7 @@ namespace VIS.Models
                         {
                             //Price conversion from Orderss currency to Forecast Currency
                             ConvertedPrice = MConversionRate.Convert(ctx, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["Price"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Currency_ID"]),
-                            ToCurrency, DateTrx, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
+                            ToCurrency, DateAcct, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
 
                             if (ConvertedPrice == 0)
                             {
@@ -382,7 +382,7 @@ namespace VIS.Models
                 {
                     //Price conversion from Opportunity currency to Forecast Currency
                     ConvertedPrice = MConversionRate.Convert(ctx, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["Price"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Currency_ID"]),
-                    ToCurrency, DateTrx, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
+                    ToCurrency, DateAcct, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
 
                     if (ConvertedPrice == 0 )
                     {
@@ -502,7 +502,7 @@ namespace VIS.Models
                 {
                     //Price conversion from Orders currency to Forecast Currency
                     ConvertedPrice = MConversionRate.Convert(ctx, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["Price"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Currency_ID"]),
-                    ToCurrency, DateTrx, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
+                    ToCurrency, DateAcct, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
 
                     if (ConvertedPrice == 0)
                     {
