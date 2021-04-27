@@ -20706,16 +20706,13 @@
             if (dr != null) {
                 // Price List
                 var PriceListPresent = Util.getValueOfInt(mTab.getValue("M_PriceList_ID")); // from BSO/BPO window
-                var C_Order_Blanket = Util.getValueOfDecimal(mTab.getValue("C_Order_Blanket"));
-                if (PriceListPresent > 0 && C_Order_Blanket > 0) {
+                var ii = Util.getValueOfInt(isSOTrx ? dr["M_PriceList_ID"] : dr["PO_PriceList_ID"]);
+                if (ii != 0) {
+                    mTab.setValue("M_PriceList_ID", ii);
+                } else {
+                    mTab.setValue("M_PriceList_ID", null);
                 }
-                else {
-                    var ii = Util.getValueOfInt(isSOTrx ? dr["M_PriceList_ID"] : dr["PO_PriceList_ID"]);
-                    if (ii != 0) {
-                        mTab.setValue("M_PriceList_ID", ii);
-                    }
                     // JID_0364: If price list not available at BP, user need to select it manually
-                }
 
                 //	Bill-To BPartner
                 mTab.setValue("Bill_BPartner_ID", C_BPartner_ID);
@@ -20877,6 +20874,15 @@
                             }
                         }
                     }
+                }
+                //	Payment Term
+                var PaymentTermPresent = Util.getValueOfInt(mTab.getValue("C_PaymentTerm_ID")); // from BSO/BPO window
+                var ii = Util.getValueOfInt(isSOTrx ? dr["C_PaymentTerm_ID"] : dr["PO_PaymentTerm_ID"]);
+                if (ii != 0) {
+                    mTab.setValue("C_PaymentTerm_ID", ii);
+                }
+                else {
+                    mTab.setValue("C_PaymentTerm_ID", null);
                 }
             }
         }
