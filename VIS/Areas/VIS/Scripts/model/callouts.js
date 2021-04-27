@@ -16817,6 +16817,41 @@
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";
     };
+
+    CalloutTeamForcast.prototype.Charge = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        try {
+            if (this.isCalloutActive() || value == null || value.toString() == "") {
+                mTab.getField("C_UOM_ID").setReadOnly(false);
+                return "";
+            }
+
+            this.setCalloutActive(true);
+
+            //	No Product defined
+            if (mTab.getValue("M_Product_ID") != null) {
+                mTab.setValue("M_Product_ID", null);
+                mTab.setValue("M_AttributeSetInstance_ID", null);
+            }
+
+            //	Default charge from context
+            var c_uom_id = ctx.getContextAsInt("#C_UOM_ID");
+            if (c_uom_id > 0) {
+                mTab.setValue("C_UOM_ID", c_uom_id);	
+            }
+            else {
+                mTab.setValue("C_UOM_ID", 100);	//	EA
+            }
+            mTab.getField("C_UOM_ID").setReadOnly(true);
+        }
+        catch (err) {
+            this.setCalloutActive(false);
+            this.log.log(Level.SEVERE, sql, err);
+            return err
+        }
+        this.setCalloutActive(false);
+        oldValue = null;
+    };
+
     CalloutTeamForcast.prototype.CalculatePrice = function (ctx, windowNo, mTab, mField, value, oldValue) {
         // 
         if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) <= 0) {
@@ -16958,8 +16993,7 @@
         if (this.isCalloutActive() || value == null || value.toString() == "") {
             return "";
         }
-        try
-        {
+        try {
             this.setCalloutActive(true);
 
             var paramString = Util.getValueOfString(mTab.getValue("AD_Client_ID")).concat(",", Util.getValueOfString(mTab.getValue("DateAcct")), ",",
@@ -16971,8 +17005,7 @@
                 mTab.setValue("C_Period_ID", Period);
             }
         }
-        catch (err)
-        {
+        catch (err) {
             this.log.log(Level.SEVERE, sql, err);
             return err.message;
         }
@@ -16994,8 +17027,7 @@
         if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {
             return "";
         }
-        try
-        {
+        try {
             this.setCalloutActive(true)
             //get supervisor
             var SuperVisor = VIS.dataContext.getJSONRecord("MTeamForcast/GetSuperVisor", Util.getValueOfString(value));
@@ -17003,8 +17035,7 @@
                 mTab.setValue("Supervisor_ID", SuperVisor);
             }
         }
-        catch (err)
-        {
+        catch (err) {
             this.log.log(Level.SEVERE, sql, err);
             return err.message;
         }
@@ -17040,8 +17071,7 @@
             }
             return "";
         }
-        try
-        {
+        try {
             this.setCalloutActive(true);
             //get currency from pricelist
             var pricelist = VIS.dataContext.getJSONRecord("MPriceList/GetPriceListData", Util.getValueOfString(mTab.getValue("M_PriceList_ID")));
@@ -17049,8 +17079,7 @@
                 mTab.setValue("C_Currency_ID", pricelist["C_Currency_ID"]);
             }
         }
-        catch (err)
-        {
+        catch (err) {
             this.log.log(Level.SEVERE, sql, err);
             return err.message;
         }
@@ -17070,8 +17099,7 @@
      */
     CalloutMasterForecast.prototype.Product = function (ctx, windowNo, mTab, mField, value, oldValue) {
         if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {
-            if (mTab.getValue("M_Product_ID") == null)
-            {
+            if (mTab.getValue("M_Product_ID") == null) {
                 //set values to 0 if no product is selected
                 mTab.setValue("Price", 0);
                 mTab.setValue("PlannedRevenue", 0);
@@ -17082,8 +17110,7 @@
         }
         try {
             this.setCalloutActive(true);
-            if (ctx.getContextAsInt(windowNo, "M_PriceList_ID") > 0)
-            {
+            if (ctx.getContextAsInt(windowNo, "M_PriceList_ID") > 0) {
                 var paramString = Util.getValueOfString(mTab.getValue("M_Product_ID")).concat(",", Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")), ",",
                     Util.getValueOfString(ctx.getContextAsInt(windowNo, "M_PriceList_ID")), ",",
                     Util.getValueOfString(mTab.getValue("C_UOM_ID")))
@@ -17128,16 +17155,16 @@
             return "";
         }
         try {
-            this.setCalloutActive(true);           
-                //set Total Qty
-                var totalqty = Util.getValueOfDecimal(mTab.getValue("ForcastQty")) + Util.getValueOfDecimal(mTab.getValue("SalesOrderQty"))
-                    + Util.getValueOfDecimal(mTab.getValue("OppQty"));
-                mTab.setValue("TotalQty", totalqty);
-                
-                //set Planned Revenue
-                var price = Util.getValueOfDecimal(mTab.getValue("Price")) * Util.getValueOfDecimal(mTab.getValue("TotalQty"));
-                mTab.setValue("PlannedRevenue", price);
-        
+            this.setCalloutActive(true);
+            //set Total Qty
+            var totalqty = Util.getValueOfDecimal(mTab.getValue("ForcastQty")) + Util.getValueOfDecimal(mTab.getValue("SalesOrderQty"))
+                + Util.getValueOfDecimal(mTab.getValue("OppQty"));
+            mTab.setValue("TotalQty", totalqty);
+
+            //set Planned Revenue
+            var price = Util.getValueOfDecimal(mTab.getValue("Price")) * Util.getValueOfDecimal(mTab.getValue("TotalQty"));
+            mTab.setValue("PlannedRevenue", price);
+
         }
         catch (err) {
             this.log.log(Level.SEVERE, sql, err);
