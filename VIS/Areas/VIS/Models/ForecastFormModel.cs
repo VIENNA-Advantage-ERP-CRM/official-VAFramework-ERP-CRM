@@ -126,7 +126,7 @@ namespace VIS.Models
                        INNER JOIN C_Currency Currency ON Currency.C_Currency_ID=Orders.C_Currency_ID
                        LEFT JOIN M_Product Product ON Product.M_Product_ID=OrderLine.M_Product_ID
                        WHERE d.DocSubTypeSo NOT IN ('" + MDocType.DOCSUBTYPESO_BlanketOrder + "','" + MDocType.DOCSUBTYPESO_Proposal + "')" +
-                       " AND Orders.IsSOTrx='Y' AND Orders.IsReturnTrx='N' AND Orders.AD_Org_ID =" + Org_ID +
+                       " AND Orders.IsSOTrx='Y' AND Orders.IsReturnTrx='N' AND Orders.AD_Org_ID =" + Org_ID + " AND NVL(OrderLine.M_Product_ID,0)>0 " +
                        " AND Orders.DocStatus IN('CO','CL') AND OrderLine.QtyOrdered = OrderLine.QtyDelivered AND NVL(OrderLine.C_OrderLine_ID,0) NOT IN");
                     if (!IsMasterForecast)
                     {
@@ -214,7 +214,7 @@ namespace VIS.Models
                        INNER JOIN C_Currency Currency ON Currency.C_Currency_ID=Orders.C_Currency_ID
                        LEFT JOIN M_Product Product ON Product.M_Product_ID=OrderLine.M_Product_ID
                        WHERE d.DocSubTypeSo NOT IN ('" + MDocType.DOCSUBTYPESO_BlanketOrder + "','" + MDocType.DOCSUBTYPESO_Proposal + "')" +
-                      " AND Orders.IsSOTrx='Y' AND Orders.IsReturnTrx='N' AND Orders.AD_Org_ID =" + Org_ID +
+                      " AND Orders.IsSOTrx='Y' AND Orders.IsReturnTrx='N' AND Orders.AD_Org_ID =" + Org_ID  +" AND NVL(OrderLine.M_Product_ID,0)>0 " +
                       " AND Orders.DocStatus IN('CO','CL') AND OrderLine.QtyOrdered > OrderLine.QtyDelivered AND NVL(OrderLine.C_OrderLine_ID,0) NOT IN");
                     if (!IsMasterForecast)
                     {
@@ -361,11 +361,7 @@ namespace VIS.Models
                             " C_MasterForecastLineDetails Details ON  line.C_ForecastLine_ID = Details.C_ForecastLine_ID INNER JOIN c_masterforecastline  mLine " +
                             " ON mline.C_MasterForecastLine_ID = Details.C_MasterForecastLine_ID INNER JOIN C_MasterForecast master ON master.C_MasterForecast_ID = " +
                             " mline.C_MasterForecast_ID WHERE Forecast.ad_org_id =  " + Org_ID + " AND Forecast.docstatus NOT IN ( 'VO', 'RE' ) AND master.ad_org_id =  " + Org_ID +
-                            " AND master.docstatus NOT IN ( 'VO', 'RE' ))");
-                if (!string.IsNullOrEmpty(TeamForecast_IDs))
-                {
-                    sql.Append(" AND forecast.C_Forecast_ID IN (" + TeamForecast_IDs + ")");
-                }
+                            " AND master.docstatus NOT IN ( 'VO', 'RE' ))");             
             }
 
             if (!string.IsNullOrEmpty(Opportunities))
@@ -374,6 +370,7 @@ namespace VIS.Models
                 sql.Append(" AND Project.C_Project_ID IN(" + Opportunities + ")");
             }
             sql.Append(" ORDER BY Currency.ISO_CODE ");
+
             string sql1 = MRole.GetDefault(ctx).AddAccessSQL(sql.ToString(), "C_Project", true, true);
             ds = DB.ExecuteDataset(sql1, null, trx);
             if (ds != null && ds.Tables.Count > 0)
@@ -431,7 +428,7 @@ namespace VIS.Models
             FROM M_Product Product LEFT JOIN M_ProductPrice ProductPrice ON Product.M_Product_ID = ProductPrice.M_Product_ID AND ProductPrice.M_PriceList_Version_ID = 
             (SELECT MAX(M_PriceList_Version_ID) FROM M_PriceList_Version WHERE IsActive = 'Y' AND M_PriceList_ID =" + PriceList + " ) " +
             "AND ProductPrice.C_UOM_ID=Product.C_UOM_ID AND NVL(ProductPrice.M_AttributeSetInstance_ID,0)=NVL(Product.M_AttributeSetInstance_ID,0) " +
-            "WHERE Product.M_Product_Category_ID IN(" + ProductCategories + ") AND Product.AD_Org_ID IN (0," + Org_ID + ")");
+            "WHERE Product.IsActive = 'Y' AND Product.M_Product_Category_ID IN(" + ProductCategories + ") AND Product.AD_Org_ID IN (0," + Org_ID + ")");
 
 
             string sql1 = MRole.GetDefault(ctx).AddAccessSQL(sql.ToString(), "M_Product", true, true);
@@ -473,7 +470,7 @@ namespace VIS.Models
         public void TeamForecastProducts(Ctx ctx, Trx trx, int Org_ID, int Period, int Forecast_ID, string TeamForecast_IDs, bool IsMasterForecast, bool IncludeOpenSO, bool IncludeSO, bool IncludeOpp)
         {
             sql.Clear();
-            sql.Append(@"SELECT TLine.M_Product_ID,TLine.M_AttributeSetInstance_ID,TLine.QtyEntered,TForecast.C_Forecast_ID, C_ForecastLine_ID,
+            sql.Append(@"SELECT TLine.M_Product_ID,TLine.C_Charge_ID,TLine.M_AttributeSetInstance_ID,TLine.QtyEntered,TForecast.C_Forecast_ID, C_ForecastLine_ID,
             TLine.C_UOM_ID,NVL(UnitPrice,0) AS Price,TForecast.C_Currency_ID,Product.ISBOM,Currency.ISO_CODE FROM C_Forecast TForecast 
             INNER JOIN C_Forecastline TLine ON TLine.C_Forecast_ID = TForecast.C_Forecast_ID LEFT JOIN M_Product Product ON Product.M_Product_ID=TLine.M_Product_ID
             INNER JOIN C_Currency Currency ON Currency.C_Currency_ID= TForecast.C_Currency_ID 
@@ -514,7 +511,7 @@ namespace VIS.Models
                     }
                     //Create MasterForecastLines
                     CreateMasterForecastLines(ctx, trx, Org_ID, Forecast_ID, 0, 0, 0, 0, Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Forecast_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ForecastLine_ID"]),
-                    0, Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]),
+                     Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Charge_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]),
                     Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_UOM_ID"]),
                     Util.GetValueOfString(ds.Tables[0].Rows[i]["IsBOM"]), Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["QtyEntered"]), ConvertedPrice, "");
 
