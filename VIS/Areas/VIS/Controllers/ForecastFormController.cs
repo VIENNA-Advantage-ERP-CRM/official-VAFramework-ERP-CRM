@@ -1,4 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿/********************************************************
+ * Module Name    :    VA Framework
+ * Purpose        :    Implement Generate Lines functionality for Team amd Master Forecast
+ * Employee Code  :    209
+ * Date           :    26-April-2021
+  ******************************************************/
+
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,31 +43,32 @@ namespace VIS.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Generate Lines for master or team forecast
         /// </summary>
-        /// <param name="Org_ID"></param>
-        /// <param name="Period_ID"></param>
-        /// <param name="IncludeSO"></param>
-        /// <param name="DocType"></param>
-        /// <param name="IncludeOpenSO"></param>
-        /// <param name="OpenOrders"></param>
-        /// <param name="IncludeOpportunity"></param>
-        /// <param name="Opportunity"></param>
-        /// <param name="ProductCategory"></param>
-        /// <param name="BudgetQunatity"></param>
-        /// <param name="DeleteAndGenerateLines"></param>
-        /// <param name="Forecast_ID"></param>
-        /// <param name="TeamForecast_ID"></param>
-        /// <param name="Table_ID"></param>
-        /// <returns></returns>
+        /// <param name="Org_ID">Organization</param>
+        /// <param name="Period_ID">Period</param>
+        /// <param name="IncludeSO">Include SlesOrder</param>
+        /// <param name="DocType">Document Type</param>
+        /// <param name="IncludeOpenSO">Include OpenSlesOrder</param>
+        /// <param name="OpenOrders">Open SalesOrder</param>
+        /// <param name="IncludeOpportunity">Include Opportunit</param>
+        /// <param name="Opportunity">Opportunity</param>
+        /// <param name="ProductCategory">Product Category</param>
+        /// <param name="BudgetQunatity">Budget Quantity</param>
+        /// <param name="DeleteAndGenerateLines">DeleteAndGenerateLines</param>
+        /// <param name="Forecast_ID">Team/master Forecast</param>
+        /// <param name="TeamForecast_IDS">Teamforecast</param>
+        /// <param name="Table_ID">Table</param>
+        /// <param name="IsMasterForecast">IsmasterForecast</param>
+        /// <returns>info</returns>
         public JsonResult CreateForecastLine(string Org_ID, string Period_ID, string IncludeSO, string DocType, string IncludeOpenSO, string OpenOrders, string IncludeOpportunity,
-            string Opportunity, string ProductCategory, string BudgetQunatity, string DeleteAndGenerateLines, string Forecast_ID, string TeamForecast_ID, string Table_ID)
+            string Opportunity, string ProductCategory, string BudgetQunatity, string DeleteAndGenerateLines, string Forecast_ID, string TeamForecast_IDS, string Table_ID,string IsMasterForecast)
         {
             var ctx = Session["ctx"] as Ctx;
             ForecastFormModel obj = new ForecastFormModel();
             var value = obj.CreateForecastLine(ctx, Util.GetValueOfInt(Org_ID), Util.GetValueOfInt(Period_ID), Util.GetValueOfBool(IncludeSO), Util.GetValueOfInt(DocType),
                 Util.GetValueOfBool(IncludeOpenSO), OpenOrders, Util.GetValueOfBool(IncludeOpportunity), Opportunity, ProductCategory, Util.GetValueOfInt(BudgetQunatity),
-                Util.GetValueOfBool(DeleteAndGenerateLines), Util.GetValueOfInt(Forecast_ID), Util.GetValueOfInt(TeamForecast_ID), Util.GetValueOfInt(Table_ID));
+                Util.GetValueOfBool(DeleteAndGenerateLines), Util.GetValueOfInt(Forecast_ID), Util.GetValueOfString(TeamForecast_IDS), Util.GetValueOfInt(Table_ID), Util.GetValueOfBool(IsMasterForecast));
             return Json(JsonConvert.SerializeObject(value), JsonRequestBehavior.AllowGet);
         }
 

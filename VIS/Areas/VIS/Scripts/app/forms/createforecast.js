@@ -69,6 +69,7 @@
         var $buttons = null;
         var $btnOk = null;
         var $btnCancel = null;
+        var $btnApply = null;
         this.ad_table_ID;
         this.ad_window_ID;
         this.record_ID;
@@ -204,7 +205,8 @@
             $buttons = $('<div class="pull-right">');
             $btnOk = $('<span class="btn vis-budget-buttons-wrap-span">' + VIS.Msg.translate(ctx, "VIS_OK") + '</span>');
             $btnCancel = $('<span class="btn vis-budget-buttons-wrap-span">' + VIS.Msg.translate(ctx, "Cancel") + '</span>');
-            $buttons.append($btnOk).append($btnCancel);
+            $btnApply = $('<span class="btn vis-budget-buttons-wrap-span">' + VIS.Msg.translate(ctx, "Apply") + '</span>');
+            $buttons.append($btnOk).append($btnCancel).append($btnApply);
             $actionPanel.append($buttons);
             $mainpageContent.append($formWrap).append($actionPanel);
             $root.append($mainpageContent).append($bsyDiv);
@@ -435,11 +437,25 @@
                 }
             });
 
-            // Create Lines
+            // Create Lines and close the form 
             $btnOk.on("click", function () {
                 busyDiv(true);
+                var TeamForecast_ID = 0;
+                if (isMasterForecast)
+                {
+                    TeamForecast_ID = _TeamForecastCtrl.getValue();
+                }
 
-                GenerateTeamForecastLines();
+                // Incase of Product categor BudgetQuantity should be selected
+                if (VIS.Utility.Util.getValueOfDecimal(_BudgetQuantityCtrl.getValue()) == 0 &&
+                    (_ProductCategoryCtrl.getValue() != undefined || VIS.Utility.Util.getValueOfString(_ProductCategoryCtrl.getValue()) != ""))
+                {
+                    VIS.ADialog.info("SelectBudgetQunatity");
+                }
+                else
+                {
+                    GenerateTeamForecastLines(TeamForecast_ID);
+                }
 
                 busyDiv(false);
 
@@ -448,13 +464,34 @@
 
             });
 
+            //Create Lines but donot close form 
+            $btnApply.on("click", function () {
+                busyDiv(true);
+                var TeamForecast_ID = 0;
+                if (isMasterForecast) {
+                    TeamForecast_ID = _TeamForecastCtrl.getValue();
+                }
+                // Incase of Product categor BudgetQuantity should be selected
+                if (VIS.Utility.Util.getValueOfDecimal(_BudgetQuantityCtrl.getValue()) == 0 &&
+                    (_ProductCategoryCtrl.getValue() != undefined || VIS.Utility.Util.getValueOfString(_ProductCategoryCtrl.getValue()) != ""))
+                {
+                    VIS.ADialog.info("SelectBudgetQunatity");
+                }
+                else
+                {
+                    GenerateTeamForecastLines(TeamForecast_ID);
+                }
+
+                busyDiv(false);
+              
+            })
             // Close Form
             $btnCancel.on("click", function () {
                 $self.frame.close();
             });
         };
         /** Generate Team forecast lines */
-        function GenerateTeamForecastLines() {
+        function GenerateTeamForecastLines(TeamForecast_ID) {
             busyDiv(true);
             $.ajax({
                 url: VIS.Application.contextUrl + "ForecastForm/CreateForecastLine",
@@ -474,12 +511,13 @@
                     BudgetQunatity: _BudgetQuantityCtrl.getValue(),
                     DeleteAndGenerateLines: _GenerateLines.getValue(),
                     Forecast_ID: $self.record_ID,
-                    TeamForecast_ID: 0,
-                    Table_ID: $self.ad_table_ID
+                    TeamForecast_IDS: TeamForecast_ID,
+                    Table_ID: $self.ad_table_ID,
+                    IsMasterForecast: isMasterForecast
 
                 },
                 success: function (result) {
-                    VIS.ADialog.info(result, true, "");
+                    VIS.ADialog.info("", "", result);
                     busyDiv(false);
                 },
                 error: function (ex) {
