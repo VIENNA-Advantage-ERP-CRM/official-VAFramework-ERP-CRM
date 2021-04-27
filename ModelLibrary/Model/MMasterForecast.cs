@@ -22,7 +22,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MMasterForecast : X_C_MasterForecast,DocAction
+    public class MMasterForecast : X_C_MasterForecast, DocAction
     {
         #region Private Variables
         private static VLogger _log = VLogger.GetVLogger(typeof(MMasterForecast).FullName);
@@ -519,6 +519,8 @@ namespace VAdvantage.Model
             int count = 0;
             string FromCurrency = null;
             string ToCurrency = null;
+            int lineNo = 0;
+            MMasterForecastLine line = null;
             try
             {
                 if (IsProcessed() || IsPosted() || FromForecast == null)
@@ -526,7 +528,7 @@ namespace VAdvantage.Model
                     return "";
                 }
                 MMasterForecastLine[] fromLines = FromForecast.GetLines(false);
-               
+
                 //get ISO CODE of Currency
                 DataSet _dsCurrency = DB.ExecuteDataset("SELECT ISO_CODE,C_Currency_ID FROM C_Currency WHERE C_Currency_ID IN(" + FromForecast.GetC_Currency_ID() + "," + GetC_Currency_ID() + ")");
                 if (_dsCurrency != null && _dsCurrency.Tables.Count > 0)
@@ -544,11 +546,12 @@ namespace VAdvantage.Model
                     }
                 }
 
-              
+                lineNo = Util.GetValueOfInt(DB.ExecuteScalar("SELECT NVL(MAX(Line), 0) + 10 FROM C_MasterForecastLine WHERE C_MasterForecast_ID = " + GetC_MasterForecast_ID()));
+
                 for (int i = 0; i < fromLines.Length; i++)
                 {
-                   
-                    MMasterForecastLine line = new MMasterForecastLine(GetCtx(), 0, Get_Trx());
+
+                    line = new MMasterForecastLine(GetCtx(), 0, Get_Trx());
                     PO.CopyValues(fromLines[i], line, GetAD_Client_ID(), GetAD_Org_ID());
 
                     //price conversion
@@ -566,6 +569,7 @@ namespace VAdvantage.Model
                     line.SetOppQty(Env.ZERO);
                     line.SetPlannedRevenue(line.GetPrice() * line.GetTotalQty());
                     line.SetC_MasterForecast_ID(GetC_MasterForecast_ID());
+                    line.SetLine(lineNo);
                     line.SetProcessed(false);
                     if (!line.Save())
                     {
@@ -577,7 +581,7 @@ namespace VAdvantage.Model
                             {
                                 val = vp.GetValue();
                             }
-                            log.SaveWarning("", Msg.GetMsg(GetCtx(), "NotSaveMasterForecastLine") +val);
+                            log.SaveWarning("", Msg.GetMsg(GetCtx(), "NotSaveMasterForecastLine") + val);
                         }
                         else
                         {
@@ -586,6 +590,7 @@ namespace VAdvantage.Model
                     }
                     else
                     {
+                        lineNo += 10;
                         count++;
                     }
 
