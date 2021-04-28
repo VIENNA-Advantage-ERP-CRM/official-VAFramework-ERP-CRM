@@ -5142,6 +5142,19 @@ namespace VAdvantage.Model
                     }
                 }
 
+                //Remove Payment reference on Bank statement Line
+                if (Env.IsModuleInstalled("VA012_"))
+                {
+
+                    if (GetC_Payment_ID() > 0)
+                    {
+                        //changed DocStatus Condition
+                        DB.ExecuteQuery("UPDATE C_BankStatementLine bsl SET bsl.C_Payment_ID = null WHERE" +
+                            " EXISTS(SELECT * FROM C_BankStatement bs WHERE bsl.C_BankStatement_ID = bs.C_BankStatement_ID  AND bs.DocStatus NOT IN('CO', 'CL', 'RE', 'VO')) " +
+                            "AND bsl.C_Payment_ID = " + GetC_Payment_ID(), null, Get_Trx());
+                    }
+                }
+
                 //	Unlink & De-Allocate
                 DeAllocate();
             }
@@ -5416,6 +5429,19 @@ namespace VAdvantage.Model
                 {
                     DB.ExecuteQuery("UPDATE VA026_TRLoanApplication SET  C_Payment_ID = null WHERE C_Payment_ID = " + GetC_Payment_ID() +
                                     @" AND VA026_TRLoanApplication_ID = " + Get_ValueAsInt("VA026_TRLoanApplication_ID"), null, null);
+                }
+            }
+
+            //Remove Payment reference on Bank statement Line
+            if (Env.IsModuleInstalled("VA012_"))
+            {
+
+                if (GetC_Payment_ID() > 0)
+                {
+                    //changed DocStatus Condition
+                    DB.ExecuteQuery(" UPDATE C_BankStatementLine bsl SET bsl.C_Payment_ID = null WHERE" +
+                        " EXISTS(SELECT * FROM C_BankStatement bs WHERE bsl.C_BankStatement_ID = bs.C_BankStatement_ID  AND bs.DocStatus NOT IN('CO', 'CL', 'RE', 'VO')) " +
+                        "AND bsl.C_Payment_ID = " + GetC_Payment_ID(), null, Get_Trx());
                 }
             }
 

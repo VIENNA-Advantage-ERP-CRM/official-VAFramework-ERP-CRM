@@ -178,6 +178,8 @@ namespace VIS.DataContracts
 
         // Change Lokesh Chauhan
         public string CustomHTML { get; set; }
+
+        public bool IsBiHTMlReport { get; set; }
     }
 
     public class GridReportInfo
