@@ -3975,7 +3975,7 @@ namespace VAdvantage.Model
                         MOrder ref_order = new MOrder(GetCtx(), order.GetRef_Order_ID(), Get_Trx());
                         MInOut ret_Shipment = CreateShipment(ref_order, this, GetMovementDate(),
                                     true, false, GetM_Warehouse_ID(), GetMovementDate(), Get_Trx());
-                        // Show message if shipment completed or not completed
+                        // Show respective message if shipment completed or not completed
                         // Done by Rakesh Kumar On 29/Apr/2021 suggested by Mandeep and Bharat
                         if (ret_Shipment.CompleteIt() == "CO")
                         {
@@ -3986,6 +3986,7 @@ namespace VAdvantage.Model
                         {
                             _processMsg = Msg.GetMsg(GetCtx(), "VIS_ShipmentNotCompleted") + ": " + ret_Shipment.GetProcessMsg() + " - @DocumentNo@: " + ret_Shipment.GetDocumentNo();
                         }
+                        // Set References
                         ret_Shipment.SetRef_ShipMR_ID(GetM_InOut_ID());
                         ret_Shipment.Save(Get_Trx());
                         SetRef_ShipMR_ID(ret_Shipment.GetM_InOut_ID());
