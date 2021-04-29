@@ -263,7 +263,7 @@ namespace VAdvantage.Model
                 {
                     AttributeSetInstance_ID = olines.GetM_AttributeSetInstance_ID();
                 }
-                else if(iolines[i].GetM_AttributeSetInstance_ID() > 0)
+                else if (iolines[i].GetM_AttributeSetInstance_ID() > 0)
                 {
                     // When AttributeInstanceId set on Material Receipt Line
                     AttributeSetInstance_ID = iolines[i].GetM_AttributeSetInstance_ID();
@@ -3633,7 +3633,7 @@ namespace VAdvantage.Model
                     // JID_1251:On Material receipt system will generate the asset for Items type product for which asset group linked with Product Category.
                     if ((product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item && product.IsCreateAsset() && sLine.GetMovementQty() > 0
                        && !IsReversal() && !IsReturnTrx() && !IsSOTrx() && sLine.GetA_Asset_ID() == 0) ||
-                       (Env.IsModuleInstalled("VA077_") && product != null 
+                       (Env.IsModuleInstalled("VA077_") && product != null
                        && (product.GetProductType() == X_M_Product.PRODUCTTYPE_Item || product.GetProductType() == X_M_Product.PRODUCTTYPE_Service)
                        && product.IsCreateAsset() && sLine.GetMovementQty() > 0
                        && !IsReversal() && !IsReturnTrx() && IsSOTrx() && sLine.GetA_Asset_ID() == 0))
@@ -3659,8 +3659,8 @@ namespace VAdvantage.Model
                                     return DocActionVariables.STATUS_INVALID;
                                 }
                                 else
-                                {                                    
-                                    if (Env.IsModuleInstalled("VA077_"))                                    
+                                {
+                                    if (Env.IsModuleInstalled("VA077_"))
                                         asset.SetName(asset.GetName());
                                     else
                                         asset.SetName(asset.GetName() + "_" + asset.GetValue());
@@ -3975,14 +3975,20 @@ namespace VAdvantage.Model
                         MOrder ref_order = new MOrder(GetCtx(), order.GetRef_Order_ID(), Get_Trx());
                         MInOut ret_Shipment = CreateShipment(ref_order, this, GetMovementDate(),
                                     true, false, GetM_Warehouse_ID(), GetMovementDate(), Get_Trx());
+                        // Show message if shipment completed or not completed
+                        // Done by Rakesh Kumar On 29/Apr/2021 suggested by Mandeep and Bharat
                         if (ret_Shipment.CompleteIt() == "CO")
                         {
-                            ret_Shipment.SetRef_ShipMR_ID(GetM_InOut_ID());
                             ret_Shipment.SetDocStatus(DOCACTION_Complete);
-                            ret_Shipment.Save(Get_Trx());
-                            SetRef_ShipMR_ID(ret_Shipment.GetM_InOut_ID());
-                            _processMsg = "Shipment Generated :" + ret_Shipment.GetDocumentNo();
+                            _processMsg = Msg.GetMsg(GetCtx(), "VIS_ShipmentGenerated") + ": " + ret_Shipment.GetDocumentNo();
                         }
+                        else
+                        {
+                            _processMsg = Msg.GetMsg(GetCtx(), "VIS_ShipmentNotCompleted") + ": " + ret_Shipment.GetProcessMsg() + " - @DocumentNo@: " + ret_Shipment.GetDocumentNo();
+                        }
+                        ret_Shipment.SetRef_ShipMR_ID(GetM_InOut_ID());
+                        ret_Shipment.Save(Get_Trx());
+                        SetRef_ShipMR_ID(ret_Shipment.GetM_InOut_ID());
                     }
                 }
             }
