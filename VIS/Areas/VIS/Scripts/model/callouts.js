@@ -16885,14 +16885,21 @@
         if (C_UOM_ID == null) {
             C_UOM_ID = ctx.getContextAsInt(windowNo, "C_UOM_ID")
         }
-        var M_Product_ID = mTab.getValue("M_Product_ID");
         var Qty = mTab.getValue("BaseQty");
-        var paramStr = M_Product_ID.toString().concat(",", C_UOM_ID.toString(), ",", Qty.toString());
-        var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
-        if (pc != null) {
-            mTab.setValue("QtyEntered", pc);
+        if (mTab.getValue("M_Product_ID") != null)
+        {
+            var M_Product_ID = mTab.getValue("M_Product_ID");
+            var paramStr = M_Product_ID.toString().concat(",", C_UOM_ID.toString(), ",", Qty.toString());
+            var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
+            if (pc != null) {
+                mTab.setValue("QtyEntered", pc);
+            }
+            else {
+                mTab.setValue("QtyEntered", Qty);
+            }
         }
-        else {
+        else
+        {
             mTab.setValue("QtyEntered", Qty);
         }
         if (Util.getValueOfDecimal(mTab.getValue("UnitPrice")) != 0 && Qty != 0) {

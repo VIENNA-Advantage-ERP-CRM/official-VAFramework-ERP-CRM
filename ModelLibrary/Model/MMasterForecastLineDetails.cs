@@ -34,8 +34,25 @@ namespace VAdvantage.Model
 
         }
 
+        /// <summary>
+        /// After Save
+        /// </summary>
+        /// <param name="newRecord">New record</param>
+        /// <param name="success">Success</param>
+        /// <returns>true/false</returns>
         protected override bool AfterSave(bool newRecord, bool success)
-        {            
+        {
+            //update Amounts at master forecast line  
+            string _sql = "UPDATE C_MasterForecastLine SET " +
+            "Price= (SELECT NVL(SUM(TotaAmt),0)/ NVL(SUM(QtyEntered),0) FROM C_MasterForecastLineDetails WHERE C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID() + "),"+
+            "PlannedRevenue =(SELECT SUM(TotaAmt) FROM C_MasterForecastLineDetails WHERE C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID() + ")" +
+            " WHERE C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID();
+
+            if (DB.ExecuteQuery(_sql, null, Get_Trx()) < 0)
+            {
+                log.SaveError("ForecastLineNotUpdated", "");
+                return false;
+            }
             return true;
         }
 

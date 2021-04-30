@@ -31,19 +31,22 @@ namespace VAdvantage.Model
 
         }
 
-        /// <summary>
-        /// Create new Master Forecast Line
-        /// </summary>
-        /// <param name="Parent">Master Forecast</param>
-        /// <param name="M_Product_ID">Product</param>
+       /// <summary>
+       /// Create new MasterForeastLine
+       /// </summary>
+       /// <param name="ctx">Context</param>
+       /// <param name="trx">Transaction</param>
+       /// <param name="C_MasterForecast_ID">Master Forecast</param>
+       /// <param name="M_Product_ID">Product</param>
+       /// <param name="M_AttributeSetInstance_ID">Attribute set Insatnce</param>
         public MMasterForecastLine(Ctx ctx ,Trx trx ,int C_MasterForecast_ID ,int M_Product_ID, int M_AttributeSetInstance_ID)
             : base(ctx, 0, trx)
         {
             int LineNo = Util.GetValueOfInt(DB.ExecuteScalar("SELECT NVL(MAX(Line), 0)+10  FROM C_MasterForecastLine WHERE " +
                "C_MasterForecast_ID=" + C_MasterForecast_ID, null, trx));
-            string sql = "SELECT C_UOM_ID FROM M_Product WHERE M_Product_ID = " + M_Product_ID;
+            //string sql = "SELECT C_UOM_ID FROM M_Product WHERE M_Product_ID = " + M_Product_ID;
             SetLine(LineNo);
-            SetC_UOM_ID(Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null)));          
+            //SetC_UOM_ID(Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null)));          
             SetM_Product_ID(M_Product_ID);
             SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
           
@@ -77,10 +80,11 @@ namespace VAdvantage.Model
         /// <param name="trx">Transaction</param>
         /// <param name="MasterForeCast_ID">Master Forecast</param>
         /// <param name="M_Product_ID">Product</param>
+        /// <param name="Charge_ID">Charge</param>
         /// <param name="M_AttributeSetInstance_ID">AttributesetInsatnce</param>
-        /// <param name="ProductCategories">Product Categories</param>
-        /// <returns></returns>
-        public static MMasterForecastLine GetOrCreate(Ctx ctx,Trx trx,int MasterForeCast_ID, int M_Product_ID, int M_AttributeSetInstance_ID,string ProductCategories)
+        /// <param name="ProductCategories">Product Categories</param>      
+        /// <returns>MasterForecastLine</returns>
+        public static MMasterForecastLine GetOrCreate(Ctx ctx,Trx trx,int MasterForeCast_ID, int M_Product_ID, int Charge_ID,int M_AttributeSetInstance_ID,string ProductCategories)
         {
             MMasterForecastLine retValue = null;
             String sql = "SELECT * FROM C_MasterForecastLine WHERE ";
@@ -98,7 +102,11 @@ namespace VAdvantage.Model
                 {
                     sql += " NVL(M_Product_ID,0) = " + M_Product_ID +" AND";
                 }
-              
+
+                if (Charge_ID > 0)
+                {
+                    sql += " NVL(C_Charge_ID,0) = " + Charge_ID + " AND";
+                }
             }
             sql+= " NVL(C_MasterForecast_ID,0) =" + MasterForeCast_ID;
              

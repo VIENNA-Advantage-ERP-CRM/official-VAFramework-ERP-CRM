@@ -62,13 +62,15 @@ namespace VIS.Controllers
         /// <param name="IsMasterForecast">IsmasterForecast</param>
         /// <returns>info</returns>
         public JsonResult CreateForecastLine(string Org_ID, string Period_ID, string IncludeSO, string DocType, string IncludeOpenSO, string OpenOrders, string IncludeOpportunity,
-            string Opportunity, string ProductCategory, string BudgetQunatity, string DeleteAndGenerateLines, string Forecast_ID, string TeamForecast_IDS, string Table_ID,string IsMasterForecast)
+            string Opportunity, string ProductCategory, string BudgetQunatity, string DeleteAndGenerateLines, string Forecast_ID, string TeamForecast_IDS, string Table_ID,
+            string IsMasterForecast,string IsBudgetForecast,string MasterForecast_IDs)
         {
             var ctx = Session["ctx"] as Ctx;
             ForecastFormModel obj = new ForecastFormModel();
             var value = obj.CreateForecastLine(ctx, Util.GetValueOfInt(Org_ID), Util.GetValueOfInt(Period_ID), Util.GetValueOfBool(IncludeSO), Util.GetValueOfInt(DocType),
                 Util.GetValueOfBool(IncludeOpenSO), OpenOrders, Util.GetValueOfBool(IncludeOpportunity), Opportunity, ProductCategory, Util.GetValueOfInt(BudgetQunatity),
-                Util.GetValueOfBool(DeleteAndGenerateLines), Util.GetValueOfInt(Forecast_ID), Util.GetValueOfString(TeamForecast_IDS), Util.GetValueOfInt(Table_ID), Util.GetValueOfBool(IsMasterForecast));
+                Util.GetValueOfBool(DeleteAndGenerateLines), Util.GetValueOfInt(Forecast_ID), Util.GetValueOfString(TeamForecast_IDS), Util.GetValueOfInt(Table_ID), 
+                Util.GetValueOfBool(IsMasterForecast), Util.GetValueOfBool(IsBudgetForecast), Util.GetValueOfString(MasterForecast_IDs));
             return Json(JsonConvert.SerializeObject(value), JsonRequestBehavior.AllowGet);
         }
 

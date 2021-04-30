@@ -475,17 +475,22 @@
             $btnOk.on("click", function () {
                 busyDiv(true);
                 var TeamForecast_ID = 0;
+                var MasterForecast_ID = 0;
+
                 if (isMasterForecast) {
                     TeamForecast_ID = _TeamForecastCtrl.getValue();
                 }
 
-                // Incase of Product categor BudgetQuantity should be selected
+                if (isBudgetForecast) {
+                    MasterForecast_ID = _BudgetForecastCtrl.getValue();
+                }
+                // Incase of Product category BudgetQuantity should be selected
                 if (VIS.Utility.Util.getValueOfDecimal(_BudgetQuantityCtrl.getValue()) == 0 &&
                     (_ProductCategoryCtrl.getValue() != undefined || VIS.Utility.Util.getValueOfString(_ProductCategoryCtrl.getValue()) != "")) {
                     VIS.ADialog.info("SelectBudgetQunatity");
                 }
                 else {
-                    GenerateTeamForecastLines(TeamForecast_ID);
+                    GenerateForecastLines(TeamForecast_ID, MasterForecast_ID);
                 }
 
                 busyDiv(false);
@@ -499,8 +504,13 @@
             $btnApply.on("click", function () {
                 busyDiv(true);
                 var TeamForecast_ID = 0;
+                var MasterForecast_ID = 0;
                 if (isMasterForecast) {
                     TeamForecast_ID = _TeamForecastCtrl.getValue();
+                }
+                if (isBudgetForecast)
+                {
+                    MasterForecast_ID = _BudgetForecastCtrl.getValue();
                 }
                 // Incase of Product categor BudgetQuantity should be selected
                 if (VIS.Utility.Util.getValueOfDecimal(_BudgetQuantityCtrl.getValue()) == 0 &&
@@ -508,11 +518,10 @@
                     VIS.ADialog.info("SelectBudgetQunatity");
                 }
                 else {
-                    GenerateTeamForecastLines(TeamForecast_ID);
+                    GenerateForecastLines(TeamForecast_ID, MasterForecast_ID);
                 }
 
                 busyDiv(false);
-
             })
             // Close Form
             $btnCancel.on("click", function () {
@@ -520,7 +529,7 @@
             });
         };
         /** Generate Team forecast lines */
-        function GenerateTeamForecastLines(TeamForecast_ID) {
+        function GenerateForecastLines(TeamForecast_ID, MasterForecast_ID) {
             busyDiv(true);
             $.ajax({
                 url: VIS.Application.contextUrl + "ForecastForm/CreateForecastLine",
@@ -542,7 +551,9 @@
                     Forecast_ID: $self.record_ID,
                     TeamForecast_IDS: TeamForecast_ID,
                     Table_ID: $self.ad_table_ID,
-                    IsMasterForecast: isMasterForecast
+                    IsMasterForecast: isMasterForecast,
+                    IsBudgetForecast: isBudgetForecast,
+                    MasterForecast_IDs: MasterForecast_ID
 
                 },
                 success: function (result) {
