@@ -53,14 +53,14 @@ namespace VAdvantage.Process
         protected override string DoIt()
         {
             int To_MasterForecast_ID = GetRecord_ID();
-            log.Info(Msg.GetMsg(GetCtx(), "FromFrorcast") + C_MasterForecast_ID + " to " + To_MasterForecast_ID);
+            log.Info(Msg.GetMsg(GetCtx(), "FromFrorcast") + C_MasterForecast_ID + " " + Msg.GetMsg(GetCtx(), "To") + " " + To_MasterForecast_ID);
             if (To_MasterForecast_ID == 0)
             {
-                throw new ArgumentException("Target To_MasterForecast_ID == 0");
+                throw new ArgumentException(Msg.GetMsg(GetCtx(), "TargetMasterForecast"));
             }
             if (C_MasterForecast_ID == 0)
             {
-                throw new ArgumentException("Source C_MasterForecast_ID == 0");
+                throw new ArgumentException(Msg.GetMsg(GetCtx(), "SourceMasterForecast"));
             }
             MMasterForecast from = new MMasterForecast(GetCtx(), C_MasterForecast_ID, Get_Trx());
             MMasterForecast to = new MMasterForecast(GetCtx(), To_MasterForecast_ID, Get_Trx());

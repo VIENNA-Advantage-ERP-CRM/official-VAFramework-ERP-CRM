@@ -41,14 +41,14 @@ namespace VAdvantage.Process
         protected override string DoIt()
         {
             int To_Forecast_ID = GetRecord_ID();
-            log.Info(Msg.GetMsg(GetCtx(),"FromFrorcast") + C_Forecast_ID + " to " + To_Forecast_ID);
+            log.Info(Msg.GetMsg(GetCtx(),"FromFrorcast") + C_Forecast_ID +" "+ Msg.GetMsg(GetCtx(), "To") +" "+ To_Forecast_ID);
             if (To_Forecast_ID == 0)
             {
-                throw new ArgumentException("Target To_Forecast_ID == 0");
+                throw new ArgumentException(Msg.GetMsg(GetCtx(),"TargetForecastID"));
             }
             if (C_Forecast_ID == 0)
             {
-                throw new ArgumentException("Source C_Forecast_ID == 0");
+                throw new ArgumentException(Msg.GetMsg(GetCtx(), "SourceForecast_ID"));
             }
             MForecast from =  new MForecast(GetCtx(), C_Forecast_ID, Get_Trx());
             MForecast to = new MForecast(GetCtx(), To_Forecast_ID, Get_Trx());
