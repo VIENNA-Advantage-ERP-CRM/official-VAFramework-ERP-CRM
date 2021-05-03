@@ -57,7 +57,7 @@ namespace VAdvantage.Model
             if (!success)
                 return success;
             string sql = "update C_MasterForecast set GrandTotal = (SELECT COALESCE(SUM(PlannedRevenue),0) FROM C_MasterForecastLine WHERE isactive = 'Y' and C_MasterForecast_ID= " + GetC_MasterForecast_ID() + ") where C_MasterForecast_ID = " + GetC_MasterForecast_ID();
-            int count = DB.ExecuteQuery(sql, null, null);
+            int count = DB.ExecuteQuery(sql, null, Get_Trx());
             return true;
             //return base.AfterSave(newRecord, success);
         }
@@ -67,7 +67,7 @@ namespace VAdvantage.Model
             if (!success)
                 return success;
             string sql = "update C_MasterForecast set GrandTotal = (SELECT COALESCE(SUM(PlannedRevenue),0) FROM C_MasterForecastLine WHERE isactive = 'Y' and C_MasterForecast_ID= " + GetC_MasterForecast_ID() + ") where C_MasterForecast_ID = " + GetC_MasterForecast_ID();
-            int count = DB.ExecuteQuery(sql, null, null);
+            int count = DB.ExecuteQuery(sql, null, Get_Trx());
             return true;
             // return base.AfterDelete(success);
         }
@@ -90,7 +90,7 @@ namespace VAdvantage.Model
             String sql = "SELECT * FROM C_MasterForecastLine WHERE ";
             if (!String.IsNullOrEmpty(ProductCategories))
             {
-                sql += "NVL(M_Product_ID,0) = " + M_Product_ID + " AND C_ForecastLine_ID IS NULL AND C_OrderLine_ID IS NULL AND C_ProjectLine_ID IS NULL AND ";
+                sql += "NVL(M_Product_ID,0) = " + M_Product_ID + " AND ";
             }
             else
             {
