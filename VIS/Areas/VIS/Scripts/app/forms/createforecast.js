@@ -112,12 +112,21 @@
 
         /** Set Height of Form */
         this.setHeight = function () {
-            return 600;
+            var h = $(window).height();
+            if (isMasterForecast) {
+                return h - 195;
+            }
+            else if (isBudgetForecast){
+                return h - 160;
+            }
+            else {
+                return h -210;
+            }
         };
 
         /** set width of form */
         this.setWidth = function () {
-            return 450;
+            return 635;
         };
 
         /**Load org value and check window (Either team forecast and master Forecast) and Team Forecast reference  */
@@ -136,7 +145,7 @@
 
         /** Is used to design Forecast Form */
         function createMainView() {
-            $mainpageContent = $('<div class="vis-budget-main-wrap">');
+            $mainpageContent = $('<div class="vis-budget-main-wrap vis-formouterwrpdiv">');
 
             // Row 1
             $formWrap = $('<div class="vis-budget-form-wrap">');
@@ -235,7 +244,7 @@
             $btnOk = $('<span class="btn vis-budget-buttons-wrap-span">' + VIS.Msg.translate(ctx, "VIS_OK") + '</span>');
             $btnCancel = $('<span class="btn vis-budget-buttons-wrap-span">' + VIS.Msg.translate(ctx, "Cancel") + '</span>');
             $btnApply = $('<span class="btn vis-budget-buttons-wrap-span">' + VIS.Msg.translate(ctx, "Apply") + '</span>');
-            $buttons.append($btnOk).append($btnCancel).append($btnApply);
+            $buttons.append($btnOk).append($btnApply).append($btnCancel);
             $actionPanel.append($buttons);
             $mainpageContent.append($formWrap).append($actionPanel);
             $root.append($mainpageContent).append($bsyDiv);
@@ -395,328 +404,328 @@
                 _ProductCategoryCtrl.getControl().trigger("change");
             };
 
-                if (isBudgetForecast) {
-                    //Price list  Control
-                    validation = "M_PriceList.IsActive = 'Y' AND M_PriceList.IsSOPriceList='Y' AND M_PriceList.AD_Org_ID IN (0, " + AD_Org_ID + ")";
-                    _SalesPriceListLookUp = VIS.MLookupFactory.get(ctx, $self.windowNo, 2100, VIS.DisplayType.Search, "M_PriceList_ID", 0, false, validation);;
-                    _SalesPriceListCtrl = new VIS.Controls.VTextBoxButton("M_PriceList_ID", true, false, true, VIS.DisplayType.Search, _SalesPriceListLookUp);
-                    var SalesPriceListCtrlWrap = $('<div class="vis-control-wrap">');
-                    var _SalesPriceListBtnWrap = $('<div class="input-group-append">');
-                    divSalesPriceListCtrl.append(SalesPriceListCtrlWrap);
-                    SalesPriceListCtrlWrap.append(_SalesPriceListCtrl.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' ')).append('<label>' + VIS.translatedTexts.M_PriceList_ID + '</label>');
-                    divSalesPriceListCtrl.append(_SalesPriceListBtnWrap);
-                    _SalesPriceListBtnWrap.append(_SalesPriceListCtrl.getBtn(0));
-                    _SalesPriceListBtnWrap.append(_SalesPriceListCtrl.getBtn(1));
-                    _SalesPriceListCtrl.getControl().prop('disabled', true);
-
-                }
-
-                _BudgetQuantityCtrl = new VIS.Controls.VAmountTextBox("BudgetQuantity", true, false, true, 50, 100, VIS.DisplayType.Quantity);
-                _BudgetQuantityCtrl.getControl().prop('disabled', true);
-                var _BudgetQuantityCtrlWrap = $('<div class="vis-control-wrap">');
-                divBudgetQuantityCtrl.append(_BudgetQuantityCtrlWrap);
-                _BudgetQuantityCtrlWrap.append(_BudgetQuantityCtrl.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' ')).append('<label>' + VIS.Msg.getMsg("BudgetQuantity") + '</label>');
-
-
-                //$formDataR = $('<div class="vis-budget-form-col2">');
-                _GenerateLines = new VIS.Controls.VCheckBox("GenerateLines", false, false, true, VIS.Msg.getMsg("GenerateLines"), null);
-                var _GenerateLinesCtrlWrap = $('<div class="vis-control-wrap">');
-                divGenerateLines.append(_GenerateLinesCtrlWrap);
-                _GenerateLinesCtrlWrap.append(_GenerateLines.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' '));
-
-
-            };
-
-            /** Events handling*/
-            function bindEvents() {
-
-                // set value on Organization control, if value is defined there
-                _OrganizationCtrl.setValue(AD_Org_ID);
-
-                _IncludeSOCtrl.getControl().on("click", function (ev) {
-                    // when Include Sales Order True, then make the document type as selectable
-                    _DocumentTypeCtrl.getControl().prop('disabled', _IncludeSOCtrl.getValue() ? false : true);
-
-                    // when document type contain values, but user mark Include SO false after selection, then make it as null
-                    if (!_IncludeSOCtrl.getValue()) {
-                        _DocumentTypeCtrl.setValue();
-                    }
-
-                    // Disable Product Category, if include open SO selected as true and vice versa
-                    _ProductCategoryCtrl.getControl().trigger("change");
-
-                });
-
-                _IncludeOpenSalesOrderCtrl.getControl().on("click", function (ev) {
-                    // when Include Open Sales Order True, then make the Open Sales Order as selectable
-                    _OpenSalesOrderCtrl.getControl().prop('disabled', _IncludeOpenSalesOrderCtrl.getValue() ? false : true);
-                    _OpenSalesOrderCtrl.getBtn(0).prop('disabled', _IncludeOpenSalesOrderCtrl.getValue() ? false : true);
-                    _OpenSalesOrderCtrl.getBtn(1).prop('disabled', _IncludeOpenSalesOrderCtrl.getValue() ? false : true);
-
-                    // when Open Sales Order contain values, but user mark Include Open SO false after selection, then make it as null
-                    if (!_IncludeOpenSalesOrderCtrl.getValue()) {
-                        _OpenSalesOrderCtrl.setValue();
-                    }
-
-                    // Disable Product Category, if include open SO selected as true and vice versa
-                    _ProductCategoryCtrl.getControl().trigger("change");
-
-                });
-
-                _IncludeOpportunityCtrl.getControl().on("click", function (ev) {
-                    // when Include Opportunity True, then make the Opportunity as selectable
-                    _OpportunityCtrl.getControl().prop('disabled', _IncludeOpportunityCtrl.getValue() ? false : true);
-                    _OpportunityCtrl.getBtn(0).prop('disabled', _IncludeOpportunityCtrl.getValue() ? false : true);
-                    _OpportunityCtrl.getBtn(1).prop('disabled', _IncludeOpportunityCtrl.getValue() ? false : true);
-
-                    // when Opportunity contain values, but user mark Include Opportunity false after selection, then make it as null
-                    if (!_IncludeOpportunityCtrl.getValue()) {
-                        _OpportunityCtrl.setValue();
-                    }
-
-                    // Disable Product Category, if include open SO selected as true and vice versa
-                    _ProductCategoryCtrl.getControl().trigger("change");
-
-                });
-
-                _ProductCategoryCtrl.getControl().on("change", function (ev) {
-                    // Disable Product Category, if any checbox as true and vice versa
-                    _ProductCategoryCtrl.getControl().prop('disabled', (_IncludeOpenSalesOrderCtrl.getValue()
-                        || _IncludeOpportunityCtrl.getValue() || _IncludeSOCtrl.getValue()) ? true : false);
-                    _ProductCategoryCtrl.getBtn(0).prop('disabled', (_IncludeOpenSalesOrderCtrl.getValue()
-                        || _IncludeOpportunityCtrl.getValue() || _IncludeSOCtrl.getValue()) ? true : false);
-                    _ProductCategoryCtrl.getBtn(1).prop('disabled', (_IncludeOpenSalesOrderCtrl.getValue()
-                        || _IncludeOpportunityCtrl.getValue() || _IncludeSOCtrl.getValue()) ? true : false);
-
-                    // clear Product Category Control if satisfied
-                    (_IncludeOpenSalesOrderCtrl.getValue() || _IncludeOpportunityCtrl.getValue() || _IncludeSOCtrl.getValue()) ? _ProductCategoryCtrl.setValue() : "";
-
-                    // when product category contains value then make the budget field as editabled and vice versa
-                    if (_ProductCategoryCtrl.getValue() != undefined || VIS.Utility.Util.getValueOfString(_ProductCategoryCtrl.getValue()) != "") {
-                        _BudgetQuantityCtrl.getControl().prop('disabled', false);
-                        _SalesPriceListCtrl.getControl().prop('disabled', false);
-
-                    }
-                    else {
-                        _BudgetQuantityCtrl.getControl().prop('disabled', true);
-                        _BudgetQuantityCtrl.getControl().val(0);
-                        _SalesPriceListCtrl.getControl().prop('disabled', true);
-
-                    }
-                });
-
-                // Create Lines and close the form 
-                $btnOk.on("click", function () {
-                    busyDiv(true);
-                    var TeamForecast_ID = 0;
-                    var MasterForecast_ID = 0;
-                    var SalesPriceList_ID = 0;
-                    if (isMasterForecast) {
-                        TeamForecast_ID = _TeamForecastCtrl.getValue();
-                    }
-
-                    if (isBudgetForecast) {
-                        MasterForecast_ID = _BudgetForecastCtrl.getValue();
-                        SalesPriceList_ID = _SalesPriceListCtrl.getValue();
-                    }
-                    // Incase of Product category BudgetQuantity should be 
-                    if (_ProductCategoryCtrl.getValue() != undefined || VIS.Utility.Util.getValueOfString(_ProductCategoryCtrl.getValue()) != "") {
-                        if (VIS.Utility.Util.getValueOfDecimal(_BudgetQuantityCtrl.getValue()) == 0) {
-                            VIS.ADialog.info("SelectBudgetQunatity");
-                            return false;
-                        }
-                        if (isBudgetForecast && VIS.Utility.Util.getValueOfDecimal(_SalesPriceListCtrl.getValue()) == 0) {
-                            VIS.ADialog.info("SelectPriceList");
-                            return false;
-                        }
-                    }
-                   
-                        GenerateForecastLines(TeamForecast_ID, MasterForecast_ID, SalesPriceList_ID);
-                  
-
-                    busyDiv(false);
-
-                    // close Form
-                    $self.frame.close();
-
-                });
-
-                //Create Lines but donot close form 
-                $btnApply.on("click", function () {
-                    busyDiv(true);
-                    var TeamForecast_ID = 0;
-                    var MasterForecast_ID = 0;
-                    var SalesPriceList_ID = 0;
-
-                    if (isMasterForecast) {
-                        TeamForecast_ID = _TeamForecastCtrl.getValue();
-                    }
-                    if (isBudgetForecast) {
-                        MasterForecast_ID = _BudgetForecastCtrl.getValue();
-                        SalesPriceList_ID = _SalesPriceListCtrl.getValue();
-                    }
-                    // Incase of Product category BudgetQuantity should be 
-                    if (_ProductCategoryCtrl.getValue() != undefined || VIS.Utility.Util.getValueOfString(_ProductCategoryCtrl.getValue()) != "") {
-                        if (VIS.Utility.Util.getValueOfDecimal(_BudgetQuantityCtrl.getValue()) == 0) {
-                            VIS.ADialog.info("SelectBudgetQunatity");
-                            return false;
-                        }
-                        if (isBudgetForecast && VIS.Utility.Util.getValueOfDecimal(_SalesPriceListCtrl.getValue()) == 0) {
-                            VIS.ADialog.info("SelectPriceList");
-                            return false;
-                        }
-                    }
-                   
-                        GenerateForecastLines(TeamForecast_ID, MasterForecast_ID, SalesPriceList_ID);
-                  
-
-                    busyDiv(false);
-                })
-                // Close Form
-                $btnCancel.on("click", function () {
-                    $self.frame.close();
-                });
-            };
-            /** Generate Team forecast lines */
-            function GenerateForecastLines(TeamForecast_ID, MasterForecast_ID, SalesPriceList_ID) {
-                busyDiv(true);
-                $.ajax({
-                    url: VIS.Application.contextUrl + "ForecastForm/CreateForecastLine",
-                    type: "POST",
-                    dataType: "json",
-                    //  contentType: "application/json; charset=utf-8",
-                    data: {
-                        Org_ID: _OrganizationCtrl.getValue(),
-                        Period_ID: _PeriodCtrl.getValue(),
-                        IncludeSO: _IncludeSOCtrl.getValue(),
-                        DocType: _DocumentTypeCtrl.getValue(),
-                        IncludeOpenSO: _IncludeOpenSalesOrderCtrl.getValue(),
-                        OpenOrders: _OpenSalesOrderCtrl.getValue(),
-                        IncludeOpportunity: _IncludeOpportunityCtrl.getValue(),
-                        Opportunity: _OpportunityCtrl.getValue(),
-                        ProductCategory: _ProductCategoryCtrl.getValue(),
-                        BudgetQunatity: _BudgetQuantityCtrl.getValue(),
-                        DeleteAndGenerateLines: _GenerateLines.getValue(),
-                        Forecast_ID: $self.record_ID,
-                        TeamForecast_IDS: TeamForecast_ID,
-                        Table_ID: $self.ad_table_ID,
-                        IsMasterForecast: isMasterForecast,
-                        IsBudgetForecast: isBudgetForecast,
-                        MasterForecast_IDs: MasterForecast_ID,
-                        SalesPriceList_ID: SalesPriceList_ID
-                    },
-                    success: function (result) {
-                        VIS.ADialog.info("", "", result);
-                        busyDiv(false);
-                    },
-                    error: function (ex) {
-                        console.log(ex);
-                        busyDiv(false);
-                        VIS.ADialog.error("Error");
-                    }
-                });
+            if (isBudgetForecast) {
+                //Price list  Control
+                validation = "M_PriceList.IsActive = 'Y' AND M_PriceList.IsSOPriceList='Y' AND M_PriceList.AD_Org_ID IN (0, " + AD_Org_ID + ")";
+                _SalesPriceListLookUp = VIS.MLookupFactory.get(ctx, $self.windowNo, 2100, VIS.DisplayType.Search, "M_PriceList_ID", 0, false, validation);;
+                _SalesPriceListCtrl = new VIS.Controls.VTextBoxButton("M_PriceList_ID", true, false, true, VIS.DisplayType.Search, _SalesPriceListLookUp);
+                var SalesPriceListCtrlWrap = $('<div class="vis-control-wrap">');
+                var _SalesPriceListBtnWrap = $('<div class="input-group-append">');
+                divSalesPriceListCtrl.append(SalesPriceListCtrlWrap);
+                SalesPriceListCtrlWrap.append(_SalesPriceListCtrl.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' ')).append('<label>' + VIS.translatedTexts.M_PriceList_ID + '</label>');
+                divSalesPriceListCtrl.append(_SalesPriceListBtnWrap);
+                _SalesPriceListBtnWrap.append(_SalesPriceListCtrl.getBtn(0));
+                _SalesPriceListBtnWrap.append(_SalesPriceListCtrl.getBtn(1));
+                _SalesPriceListCtrl.getControl().prop('disabled', true);
 
             }
 
-            /** Busy Indicator */
-            function busyDiv(Value) {
-                if (Value) {
-                    $bsyDiv[0].style.visibility = 'visible';
+            _BudgetQuantityCtrl = new VIS.Controls.VAmountTextBox("BudgetQuantity", true, false, true, 50, 100, VIS.DisplayType.Quantity);
+            _BudgetQuantityCtrl.getControl().prop('disabled', true);
+            var _BudgetQuantityCtrlWrap = $('<div class="vis-control-wrap">');
+            divBudgetQuantityCtrl.append(_BudgetQuantityCtrlWrap);
+            _BudgetQuantityCtrlWrap.append(_BudgetQuantityCtrl.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' ')).append('<label>' + VIS.Msg.getMsg("BudgetQuantity") + '</label>');
+
+
+            //$formDataR = $('<div class="vis-budget-form-col2">');
+            _GenerateLines = new VIS.Controls.VCheckBox("GenerateLines", false, false, true, VIS.Msg.getMsg("GenerateLines"), null);
+            var _GenerateLinesCtrlWrap = $('<div class="vis-control-wrap">');
+            divGenerateLines.append(_GenerateLinesCtrlWrap);
+            _GenerateLinesCtrlWrap.append(_GenerateLines.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' '));
+
+
+        };
+
+        /** Events handling*/
+        function bindEvents() {
+
+            // set value on Organization control, if value is defined there
+            _OrganizationCtrl.setValue(AD_Org_ID);
+
+            _IncludeSOCtrl.getControl().on("click", function (ev) {
+                // when Include Sales Order True, then make the document type as selectable
+                _DocumentTypeCtrl.getControl().prop('disabled', _IncludeSOCtrl.getValue() ? false : true);
+
+                // when document type contain values, but user mark Include SO false after selection, then make it as null
+                if (!_IncludeSOCtrl.getValue()) {
+                    _DocumentTypeCtrl.setValue();
+                }
+
+                // Disable Product Category, if include open SO selected as true and vice versa
+                _ProductCategoryCtrl.getControl().trigger("change");
+
+            });
+
+            _IncludeOpenSalesOrderCtrl.getControl().on("click", function (ev) {
+                // when Include Open Sales Order True, then make the Open Sales Order as selectable
+                _OpenSalesOrderCtrl.getControl().prop('disabled', _IncludeOpenSalesOrderCtrl.getValue() ? false : true);
+                _OpenSalesOrderCtrl.getBtn(0).prop('disabled', _IncludeOpenSalesOrderCtrl.getValue() ? false : true);
+                _OpenSalesOrderCtrl.getBtn(1).prop('disabled', _IncludeOpenSalesOrderCtrl.getValue() ? false : true);
+
+                // when Open Sales Order contain values, but user mark Include Open SO false after selection, then make it as null
+                if (!_IncludeOpenSalesOrderCtrl.getValue()) {
+                    _OpenSalesOrderCtrl.setValue();
+                }
+
+                // Disable Product Category, if include open SO selected as true and vice versa
+                _ProductCategoryCtrl.getControl().trigger("change");
+
+            });
+
+            _IncludeOpportunityCtrl.getControl().on("click", function (ev) {
+                // when Include Opportunity True, then make the Opportunity as selectable
+                _OpportunityCtrl.getControl().prop('disabled', _IncludeOpportunityCtrl.getValue() ? false : true);
+                _OpportunityCtrl.getBtn(0).prop('disabled', _IncludeOpportunityCtrl.getValue() ? false : true);
+                _OpportunityCtrl.getBtn(1).prop('disabled', _IncludeOpportunityCtrl.getValue() ? false : true);
+
+                // when Opportunity contain values, but user mark Include Opportunity false after selection, then make it as null
+                if (!_IncludeOpportunityCtrl.getValue()) {
+                    _OpportunityCtrl.setValue();
+                }
+
+                // Disable Product Category, if include open SO selected as true and vice versa
+                _ProductCategoryCtrl.getControl().trigger("change");
+
+            });
+
+            _ProductCategoryCtrl.getControl().on("change", function (ev) {
+                // Disable Product Category, if any checbox as true and vice versa
+                _ProductCategoryCtrl.getControl().prop('disabled', (_IncludeOpenSalesOrderCtrl.getValue()
+                    || _IncludeOpportunityCtrl.getValue() || _IncludeSOCtrl.getValue()) ? true : false);
+                _ProductCategoryCtrl.getBtn(0).prop('disabled', (_IncludeOpenSalesOrderCtrl.getValue()
+                    || _IncludeOpportunityCtrl.getValue() || _IncludeSOCtrl.getValue()) ? true : false);
+                _ProductCategoryCtrl.getBtn(1).prop('disabled', (_IncludeOpenSalesOrderCtrl.getValue()
+                    || _IncludeOpportunityCtrl.getValue() || _IncludeSOCtrl.getValue()) ? true : false);
+
+                // clear Product Category Control if satisfied
+                (_IncludeOpenSalesOrderCtrl.getValue() || _IncludeOpportunityCtrl.getValue() || _IncludeSOCtrl.getValue()) ? _ProductCategoryCtrl.setValue() : "";
+
+                // when product category contains value then make the budget field as editabled and vice versa
+                if (_ProductCategoryCtrl.getValue() != undefined || VIS.Utility.Util.getValueOfString(_ProductCategoryCtrl.getValue()) != "") {
+                    _BudgetQuantityCtrl.getControl().prop('disabled', false);
+                    _SalesPriceListCtrl.getControl().prop('disabled', false);
+
                 }
                 else {
-                    $bsyDiv[0].style.visibility = 'hidden';
+                    _BudgetQuantityCtrl.getControl().prop('disabled', true);
+                    _BudgetQuantityCtrl.getControl().val(0);
+                    _SalesPriceListCtrl.getControl().prop('disabled', true);
+
                 }
-            };
+            });
 
-            this.getRoot = function () {
-                return $root;
-            };
+            // Create Lines and close the form 
+            $btnOk.on("click", function () {
+                busyDiv(true);
+                var TeamForecast_ID = 0;
+                var MasterForecast_ID = 0;
+                var SalesPriceList_ID = 0;
+                if (isMasterForecast) {
+                    TeamForecast_ID = _TeamForecastCtrl.getValue();
+                }
 
-            /** Dispose Components/Variables */
-            this.disposeComponent = function () {
-                $self = null;
-                $root = null;
+                if (isBudgetForecast) {
+                    MasterForecast_ID = _BudgetForecastCtrl.getValue();
+                    SalesPriceList_ID = _SalesPriceListCtrl.getValue();
+                }
+                // Incase of Product category BudgetQuantity should be 
+                if (_ProductCategoryCtrl.getValue() != undefined || VIS.Utility.Util.getValueOfString(_ProductCategoryCtrl.getValue()) != "") {
+                    if (VIS.Utility.Util.getValueOfDecimal(_BudgetQuantityCtrl.getValue()) == 0) {
+                        VIS.ADialog.info("SelectBudgetQunatity");
+                        return false;
+                    }
+                    if (isBudgetForecast && VIS.Utility.Util.getValueOfDecimal(_SalesPriceListCtrl.getValue()) == 0) {
+                        VIS.ADialog.info("SelectPriceList");
+                        return false;
+                    }
+                }
 
-                $bsyDiv = null;
-                $mainpageContent = null;
-                $formWrap = null;
-                $formDataRow = null;
-                $formData = null;
-                $actionPanel = null;
-                $buttons = null;
-                $btnOk = null;
-                $btnCancel = null;
-
-                divOrganizationCtrl = null;
-                _OrganizationLookUp = null;
-                _OrganizationCtrl = null;
-
-                divPeriodCtrl = null;
-                _PeriodLookUp = null;
-                _PeriodCtrl = null;
-
-                divIncludeSOCtrl = null;
-                _IncludeSOCtrl = null;
-
-                divDocumentTypeCtrl = null;
-                _DocumentTypeLookUp = null;
-                _DocumentTypeCtrl = null;
-
-                divIncludeOpenSalesOrderCtrl = null;
-                _IncludeOpenSalesOrderCtrl = null;
-
-                divOpenSalesOrderCtrl = null;
-                _OpenSalesOrderLookUp = null;
-                _OpenSalesOrderCtrl = null;
-
-                divIncludeOpportunityCtrl = null;
-                _IncludeOpportunityCtrl = null;
-
-                divOpportunityCtrl = null;
-                _OpportunityLookUp = null;
-                _OpportunityCtrl = null;
-
-                divTeamForecastCtrl = null;
-                _TeamForecastLookUp = null;
-                _TeamForecastCtrl = null;
-
-                divProductCategoryCtrl = null;
-                _ProductCategoryLookUp = null;
-                _ProductCategoryCtrl = null;
-
-                divBudgetQuantityCtrl = null;
-                _BudgetQuantityCtrl = null;
-
-                divGenerateLines = null;
-                _GenerateLines = null;
-            };
+                GenerateForecastLines(TeamForecast_ID, MasterForecast_ID, SalesPriceList_ID);
 
 
-            /** Intialize Form
-             * @param {any} windowNo
-             * @param {any} frame
-             */
-            createforecast.prototype.init = function (windowNo, frame) {
+                busyDiv(false);
 
-                this.frame = frame;
-                this.windowNo = windowNo;
-                this.ad_table_ID = this.frame.getAD_Table_ID();
-                this.ad_window_ID = this.frame.getAD_Window_ID();
-                this.record_ID = this.frame.getRecord_ID();
-                this.Initialize();
-                this.frame.getContentGrid().append(this.getRoot());
-            };
+                // close Form
+                $self.frame.close();
 
-            /** Must implement dispose */
-            createforecast.prototype.dispose = function () {
-                /*CleanUp Code */
-                //dispose this component
-                this.disposeComponent();
+            });
 
-                //call frame dispose function
-                this.frame = null;
-            };
-        
+            //Create Lines but donot close form 
+            $btnApply.on("click", function () {
+                busyDiv(true);
+                var TeamForecast_ID = 0;
+                var MasterForecast_ID = 0;
+                var SalesPriceList_ID = 0;
+
+                if (isMasterForecast) {
+                    TeamForecast_ID = _TeamForecastCtrl.getValue();
+                }
+                if (isBudgetForecast) {
+                    MasterForecast_ID = _BudgetForecastCtrl.getValue();
+                    SalesPriceList_ID = _SalesPriceListCtrl.getValue();
+                }
+                // Incase of Product category BudgetQuantity should be 
+                if (_ProductCategoryCtrl.getValue() != undefined || VIS.Utility.Util.getValueOfString(_ProductCategoryCtrl.getValue()) != "") {
+                    if (VIS.Utility.Util.getValueOfDecimal(_BudgetQuantityCtrl.getValue()) == 0) {
+                        VIS.ADialog.info("SelectBudgetQunatity");
+                        return false;
+                    }
+                    if (isBudgetForecast && VIS.Utility.Util.getValueOfDecimal(_SalesPriceListCtrl.getValue()) == 0) {
+                        VIS.ADialog.info("SelectPriceList");
+                        return false;
+                    }
+                }
+
+                GenerateForecastLines(TeamForecast_ID, MasterForecast_ID, SalesPriceList_ID);
+
+
+                busyDiv(false);
+            })
+            // Close Form
+            $btnCancel.on("click", function () {
+                $self.frame.close();
+            });
+        };
+        /** Generate Team forecast lines */
+        function GenerateForecastLines(TeamForecast_ID, MasterForecast_ID, SalesPriceList_ID) {
+            busyDiv(true);
+            $.ajax({
+                url: VIS.Application.contextUrl + "ForecastForm/CreateForecastLine",
+                type: "POST",
+                dataType: "json",
+                //  contentType: "application/json; charset=utf-8",
+                data: {
+                    Org_ID: _OrganizationCtrl.getValue(),
+                    Period_ID: _PeriodCtrl.getValue(),
+                    IncludeSO: _IncludeSOCtrl.getValue(),
+                    DocType: _DocumentTypeCtrl.getValue(),
+                    IncludeOpenSO: _IncludeOpenSalesOrderCtrl.getValue(),
+                    OpenOrders: _OpenSalesOrderCtrl.getValue(),
+                    IncludeOpportunity: _IncludeOpportunityCtrl.getValue(),
+                    Opportunity: _OpportunityCtrl.getValue(),
+                    ProductCategory: _ProductCategoryCtrl.getValue(),
+                    BudgetQunatity: _BudgetQuantityCtrl.getValue(),
+                    DeleteAndGenerateLines: _GenerateLines.getValue(),
+                    Forecast_ID: $self.record_ID,
+                    TeamForecast_IDS: TeamForecast_ID,
+                    Table_ID: $self.ad_table_ID,
+                    IsMasterForecast: isMasterForecast,
+                    IsBudgetForecast: isBudgetForecast,
+                    MasterForecast_IDs: MasterForecast_ID,
+                    SalesPriceList_ID: SalesPriceList_ID
+                },
+                success: function (result) {
+                    VIS.ADialog.info("", "", result);
+                    busyDiv(false);
+                },
+                error: function (ex) {
+                    console.log(ex);
+                    busyDiv(false);
+                    VIS.ADialog.error("Error");
+                }
+            });
+
+        }
+     
+        /** Busy Indicator */
+        function busyDiv(Value) {
+            if (Value) {
+                $bsyDiv[0].style.visibility = 'visible';
+            }
+            else {
+                $bsyDiv[0].style.visibility = 'hidden';
+            }
+        };
+
+        this.getRoot = function () {
+            return $root;
+        };
+      
+        /** Dispose Components/Variables */
+        this.disposeComponent = function () {
+            $self = null;
+            $root = null;
+
+            $bsyDiv = null;
+            $mainpageContent = null;
+            $formWrap = null;
+            $formDataRow = null;
+            $formData = null;
+            $actionPanel = null;
+            $buttons = null;
+            $btnOk = null;
+            $btnCancel = null;
+
+            divOrganizationCtrl = null;
+            _OrganizationLookUp = null;
+            _OrganizationCtrl = null;
+
+            divPeriodCtrl = null;
+            _PeriodLookUp = null;
+            _PeriodCtrl = null;
+
+            divIncludeSOCtrl = null;
+            _IncludeSOCtrl = null;
+
+            divDocumentTypeCtrl = null;
+            _DocumentTypeLookUp = null;
+            _DocumentTypeCtrl = null;
+
+            divIncludeOpenSalesOrderCtrl = null;
+            _IncludeOpenSalesOrderCtrl = null;
+
+            divOpenSalesOrderCtrl = null;
+            _OpenSalesOrderLookUp = null;
+            _OpenSalesOrderCtrl = null;
+
+            divIncludeOpportunityCtrl = null;
+            _IncludeOpportunityCtrl = null;
+
+            divOpportunityCtrl = null;
+            _OpportunityLookUp = null;
+            _OpportunityCtrl = null;
+
+            divTeamForecastCtrl = null;
+            _TeamForecastLookUp = null;
+            _TeamForecastCtrl = null;
+
+            divProductCategoryCtrl = null;
+            _ProductCategoryLookUp = null;
+            _ProductCategoryCtrl = null;
+
+            divBudgetQuantityCtrl = null;
+            _BudgetQuantityCtrl = null;
+
+            divGenerateLines = null;
+            _GenerateLines = null;
+        };
+
+
+        /** Intialize Form
+         * @param {any} windowNo
+         * @param {any} frame
+         */
+        createforecast.prototype.init = function (windowNo, frame) {
+
+            this.frame = frame;
+            this.windowNo = windowNo;
+            this.ad_table_ID = this.frame.getAD_Table_ID();
+            this.ad_window_ID = this.frame.getAD_Window_ID();
+            this.record_ID = this.frame.getRecord_ID();
+            this.Initialize();
+            this.frame.getContentGrid().append(this.getRoot());
+        };
+
+        /** Must implement dispose */
+        createforecast.prototype.dispose = function () {
+            /*CleanUp Code */
+            //dispose this component
+            this.disposeComponent();
+
+            //call frame dispose function
+            this.frame = null;
+        };
+
     };
     VIS.AForms.createforecast = createforecast;
 })(VIS, jQuery);

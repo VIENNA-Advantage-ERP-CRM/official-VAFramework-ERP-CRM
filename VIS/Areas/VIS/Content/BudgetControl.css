@@ -4,7 +4,7 @@
     /*height: 40% !important*/
 }
 
-.vis-budget-form-row {
+.vis-budget-form-row:first-child {
     padding-top:10px;
 }
 
@@ -31,4 +31,17 @@
 .vis-budget-buttons-wrap-span {
     font-size: 14px;
     padding: 6px 12px;
+}
+.vis-budget-form-row {
+    width: 50%;
+}
+
+.vis-budget-form-row:nth-child(odd) {
+    padding-right: 7px;
+}
+.vis-budget-form-row:nth-child(even) {
+    padding-left: 7px;
+}
+.vis-budget-form-row:nth-child(2) {
+    padding-top: 10px;
 }
