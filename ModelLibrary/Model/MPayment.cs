@@ -2890,7 +2890,7 @@ namespace VAdvantage.Model
                 if (!IsPrepayment())
                     SetIsAllocated(true);
             }
-            else
+            else if (GetReversalDoc_ID() == 0)
             {
                 AllocateIt();	//	Create Allocation Records
                 if (_AllocMsg != "")
