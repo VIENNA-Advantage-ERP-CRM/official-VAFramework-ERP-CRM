@@ -1,7 +1,7 @@
 ﻿
 /********************************************************
  * Module Name    :    VA Framework
- * Purpose        :    Implement Generate Lines functionality for Team amd Master Forecast
+ * Purpose        :    Implement Generate Lines functionality for Team amd Master Forecast 
  * Employee Code  :    209
  * Date           :    26-April-2021
   ******************************************************/
@@ -90,11 +90,12 @@ namespace VIS.Models
         /// <param name="TeamForecast_IDs">Team Forecast References</param>
         /// <param name="Table_ID">Table</param>
         /// <param name="IsMasterForecast"></param>
+        /// <param name="SalesPriceList_ID">PriceList</param>
         /// <Writer>209</Writer>
         /// <returns>info</returns>
         public string CreateForecastLine(Ctx ctx, int Org_ID, int Period_ID, bool IncludeSO, int DocType, bool IncludeOpenSO, string OpenOrders, bool IncludeOpportunity,
             string Opportunities, string ProductCategory, Decimal? BudgetQunatity, bool DeleteAndGenerateLines, int Forecast_ID, string TeamForecast_IDs, int Table_ID,
-            bool IsMasterForecast, bool IsBudgetForecast, string MasterForecast_IDs)
+            bool IsMasterForecast, bool IsBudgetForecast, string MasterForecast_IDs,int SalesPriceList_ID)
         {
             Trx trx = null;
             string TableName = "";
@@ -124,16 +125,36 @@ namespace VIS.Models
 
                 if (DeleteAndGenerateLines && !IsBudgetForecast)
                 {
-                    int count = DB.ExecuteQuery("DELETE FROM " + TableName + "Line WHERE " + TableName + "_ID =" + Forecast_ID, null, trx);
-                    if (count > 0)
+                    int count = 0;
+                    if (!IsMasterForecast)
                     {
-                        log.Log(Level.INFO, "ForecastLinesDeleted" + count);
+                         count = DB.ExecuteQuery("DELETE FROM C_ForecastLineHistory WHERE C_ForecastLine_ID IN (SELECT C_ForecastLine_ID FROM C_ForecastLine" +
+                            " WHERE C_Forecast_ID=" + Forecast_ID + ")", null, trx);
+                    }
+                    else
+                    {
+                         count= DB.ExecuteQuery("DELETE FROM C_MasterForecastLineDetails WHERE C_MasterForecastLine_ID IN (SELECT C_MasterForecastLine_ID FROM C_MasterForecastLine" +
+                            " WHERE C_masterForecast_ID=" + Forecast_ID + ")", null, trx);
+                    }
+                    if (count >= 0)
+                    {
+                        count=  DB.ExecuteQuery("DELETE FROM " + TableName + "Line WHERE " + TableName + "_ID =" + Forecast_ID, null, trx);
+
+                        if (count > 0)
+                        {
+                            log.Log(Level.INFO, "ForecastLinesDeleted" + count);
+                        }
                     }
                 }
                 else if (DeleteAndGenerateLines && IsBudgetForecast)
                 {
-                    int count = DB.ExecuteQuery("DELETE FROM VA073_ForecastLine WHERE VA073_ProductLine_ID IN (SELECT VA073_ProductLine_ID FROM VA073_ProductLine" +
-                        " WHERE VA073_SalesForecast_ID=" + Forecast_ID+")", null, trx);
+                    int count = DB.ExecuteQuery("DELETE FROM VA073_LineComponents WHERE VA073_ForecastLine_ID IN (SELECT VA073_ForecastLine_ID FROM VA073_ForecastLine" +
+                        " WHERE VA073_ProductLine_ID IN (SELECT VA073_ProductLine_ID FROM VA073_ProductLine WHERE VA073_SalesForecast_ID = " + Forecast_ID + "))", null, trx);
+                    if (count >= 0)
+                    {
+                        count = DB.ExecuteQuery("DELETE FROM VA073_ForecastLine WHERE VA073_ProductLine_ID IN (SELECT VA073_ProductLine_ID FROM VA073_ProductLine" +
+                        " WHERE VA073_SalesForecast_ID=" + Forecast_ID + ")", null, trx);
+                    }
                     if (count > 0)
                     {
                         count = DB.ExecuteQuery("DELETE FROM VA073_ProductLine WHERE VA073_SalesForecast_ID=" + Forecast_ID  , null, trx);
@@ -375,7 +396,7 @@ namespace VIS.Models
                 if (!string.IsNullOrEmpty(ProductCategory))
                 {
                     //get Pricelistfrom header 
-                    ProductCategoryProducts(ctx, trx, Org_ID, ProductCategory, BudgetQunatity, PriceList, Forecast_ID, IsMasterForecast,IsBudgetForecast,Period_ID);
+                    ProductCategoryProducts(ctx, trx, Org_ID, ProductCategory, BudgetQunatity, SalesPriceList_ID,PriceList, Forecast_ID, IsMasterForecast,IsBudgetForecast,Period_ID);
                 }
                 if (IsMasterForecast && !string.IsNullOrEmpty(TeamForecast_IDs))
                 {
@@ -538,17 +559,25 @@ namespace VIS.Models
         /// <param name="Org_ID">Organization</param>
         /// <param name="ProductCategories">Product Categor</param>
         /// <param name="BudgetQuantity">Quantity</param>
+        ///  <param name="SalesPriceList_ID">PriceList</param>
         /// <param name="PriceList">Price list</param>
         /// <param name="Forecast_ID">Master/Team Forecast</param>
         /// <param name="IsMasterFoecast">IsmasterForecast</param>
         /// <Writer>209</Writer>
-        public void ProductCategoryProducts(Ctx ctx, Trx trx, int Org_ID, string ProductCategories, Decimal? BudgetQuantity, int PriceList, int Forecast_ID, bool IsMasterFoecast,bool IsBudgetForecast,int Period)
+        public void ProductCategoryProducts(Ctx ctx, Trx trx, int Org_ID, string ProductCategories, Decimal? BudgetQuantity,int SalesPriceList_ID, int PriceList, int Forecast_ID, bool IsMasterFoecast,bool IsBudgetForecast,int Period)
         {
             sql.Clear();
-            sql.Append(@"SELECT Product.M_Product_ID,Product.C_UOM_ID,ProductPrice.PriceStd,Product.M_AttributeSetInstance_ID,Product.IsBOM
-            FROM M_Product Product LEFT JOIN M_ProductPrice ProductPrice ON Product.M_Product_ID = ProductPrice.M_Product_ID AND ProductPrice.M_PriceList_Version_ID = 
-            (SELECT MAX(M_PriceList_Version_ID) FROM M_PriceList_Version WHERE IsActive = 'Y' AND M_PriceList_ID =" + PriceList + " ) " +
-            "AND ProductPrice.C_UOM_ID=Product.C_UOM_ID AND NVL(ProductPrice.M_AttributeSetInstance_ID,0)=NVL(Product.M_AttributeSetInstance_ID,0) " +
+            sql.Append(@"SELECT Product.M_Product_ID,Product.C_UOM_ID,ProductPrice.PriceStd AS SalesPrice,Product.M_AttributeSetInstance_ID,Product.IsBOM");
+            if (IsBudgetForecast)
+            {
+                sql.Append(@",(SELECT ProductPrice.PriceStd FROM M_ProductPrice ProductPrice WHERE  ProductPrice.M_Product_ID = Product.M_Product_ID AND 
+                ProductPrice.M_PriceList_Version_ID =(SELECT MAX(M_PriceList_Version_ID) FROM M_PriceList_Version WHERE IsActive = 'Y' AND M_PriceList_ID = " + PriceList + ") " +
+                " AND ProductPrice.C_UOM_ID=Product.C_UOM_ID AND NVL(ProductPrice.M_AttributeSetInstance_ID,0)=NVL(Product.M_AttributeSetInstance_ID,0)) AS PurchasePrice ");
+            }
+
+           sql.Append(@" FROM M_Product Product LEFT JOIN M_ProductPrice ProductPrice ON Product.M_Product_ID = ProductPrice.M_Product_ID AND ProductPrice.M_PriceList_Version_ID = 
+            (SELECT MAX(M_PriceList_Version_ID) FROM M_PriceList_Version WHERE IsActive = 'Y' AND M_PriceList_ID =" + (IsBudgetForecast ? SalesPriceList_ID : PriceList) + " ) " +
+            "AND ProductPrice.C_UOM_ID=Product.C_UOM_ID AND NVL(ProductPrice.M_AttributeSetInstance_ID,0)=NVL(Product.M_AttributeSetInstance_ID,0) "+        
             "WHERE Product.IsActive = 'Y' AND Product.M_Product_Category_ID IN(" + ProductCategories + ") AND Product.AD_Org_ID IN (0," + Org_ID + ")");
 
 
@@ -563,14 +592,14 @@ namespace VIS.Models
                         //Create TeamForecast Lines
                         CreateTeamForecastLines(ctx, trx, Forecast_ID, 0, 0, 0, 0, 0, Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]),
                         Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_UOM_ID"]),
-                        Util.GetValueOfString(ds.Tables[0].Rows[i]["IsBOM"]), BudgetQuantity, BudgetQuantity, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PriceStd"]));
+                        Util.GetValueOfString(ds.Tables[0].Rows[i]["IsBOM"]), BudgetQuantity, BudgetQuantity, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["SalesPrice"]));
                     }
                     else if (IsMasterFoecast)
                     {
                        //Create MasterForecast Lines
                        CreateMasterForecastLines(ctx, trx, Org_ID, Forecast_ID, 0, 0, 0, 0, 0, 0, 0, Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]),
                        Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_UOM_ID"]),
-                       Util.GetValueOfString(ds.Tables[0].Rows[i]["IsBOM"]), BudgetQuantity, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PriceStd"]), ProductCategories);
+                       Util.GetValueOfString(ds.Tables[0].Rows[i]["IsBOM"]), BudgetQuantity, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["SalesPrice"]), ProductCategories);
                     }
 
                     else if (IsBudgetForecast)
@@ -578,8 +607,8 @@ namespace VIS.Models
                         //Create BudgetForecast Lines                  
                         CreateBudgetForecastLines(ctx, trx, Org_ID, Forecast_ID, 0, 0, 0, 0, 0, 0, 0,Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]), 
                           Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]),Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_UOM_ID"]), 0,0,0,0, 
-                          Util.GetValueOfString(ds.Tables[0].Rows[i]["IsBOM"]), BudgetQuantity, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PriceStd"]),
-                          Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PriceStd"]),ProductCategories,Period,null);
+                          Util.GetValueOfString(ds.Tables[0].Rows[i]["IsBOM"]), BudgetQuantity, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["SalesPrice"]),
+                          Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]),ProductCategories,Period,null);
                     }
                 }
             }
@@ -832,29 +861,7 @@ namespace VIS.Models
             Line.SetC_UOM_ID(UOM_ID);
             Line.SetM_AttributeSetInstance_ID(Attribute_ID);
             Line.SetIsBOM(BOM.Equals("Y") ? true : false);           
-            if (OrderLine_ID > 0)
-            {
-                Line.SetSalesOrderQty(BaseQuantity + Line.GetSalesOrderQty());
-            }
-            else if (ForecastLine_ID > 0)
-            {
-                Line.SetForcastQty(BaseQuantity + Line.GetForcastQty());
-            }
-            else if (ProjectLine_ID > 0)
-            {
-                Line.SetOppQty(BaseQuantity + Line.GetOppQty());
-            }
-            if (!String.IsNullOrEmpty(ProductCategories))
-            {
-                Line.SetForcastQty(BaseQuantity + Line.GetForcastQty());
-                Line.SetTotalQty(Line.GetForcastQty());
-                //Line.SetPrice(UnitPrice);
-                //Line.SetPlannedRevenue(UnitPrice * BaseQuantity);
-            }
-            else
-            {
-                Line.SetTotalQty(Line.GetSalesOrderQty() + Line.GetForcastQty() + Line.GetOppQty());
-            }            
+                     
             if (!Line.Save(trx))
             {
                 pp = VLogger.RetrieveError();
@@ -877,7 +884,7 @@ namespace VIS.Models
 
                     //Create MasterForecast LineDetails
                     MMasterForecastLineDetails Linedetails = CreateMasterForecastLinedetails(Line, Order_ID, OrderLine_ID, Project_ID, ProjectLine_ID, TeamForecast_ID, ForecastLine_ID,
-                                                             Charge_ID, Product_ID, Attribute_ID, UOM_ID, BOM, BaseQuantity, UnitPrice);
+                                                             Charge_ID, Product_ID, Attribute_ID, UOM_ID, BOM, BaseQuantity, UnitPrice,ProductCategories);
                 if (!Linedetails.Save(Line.Get_Trx()))
                 {
 
@@ -934,9 +941,9 @@ namespace VIS.Models
         /// <param name="UnitPrice">Unit Price</param>
         /// <Writer>209</Writer>
         /// <returns>Line Details Object</returns>
-        public MMasterForecastLineDetails CreateMasterForecastLinedetails(MMasterForecastLine Line, int Order_ID, int OrderLine_ID, int Project_ID, int ProjectLine_ID, int TeamForecast_ID, int ForecastLine_ID, int Charge_ID, int Product_ID, int Attribute_ID, int UOM_ID, String BOM, Decimal? BaseQuantity, decimal UnitPrice)
+        public MMasterForecastLineDetails CreateMasterForecastLinedetails(MMasterForecastLine Line, int Order_ID, int OrderLine_ID, int Project_ID, int ProjectLine_ID, int TeamForecast_ID, int ForecastLine_ID, int Charge_ID, int Product_ID, int Attribute_ID, int UOM_ID, String BOM, Decimal? BaseQuantity, decimal UnitPrice,string ProductCategories)
         {
-            MMasterForecastLineDetails lineDetails = new MMasterForecastLineDetails(Line.GetCtx(), 0, Line.Get_Trx());
+            MMasterForecastLineDetails lineDetails =  MMasterForecastLineDetails.GetOrCreate (Line, Product_ID,ProductCategories);
             lineDetails.SetAD_Client_ID(Line.GetAD_Client_ID());
             lineDetails.SetAD_Org_ID(Line.GetAD_Org_ID());
             lineDetails.SetC_MasterForecastLine_ID(Line.GetC_MasterForecastLine_ID());
@@ -997,23 +1004,7 @@ namespace VIS.Models
             ProductLinePo.Set_Value("M_AttributeSetInstance_ID",Attribute_ID);
             ProductLinePo.Set_Value("IsBOM", BOM.Equals("Y") ? true : false);
            
-            if (OrderLine_ID > 0)
-            {
-                ProductLinePo.Set_Value("SalesOrderQty", BaseQuantity + Util.GetValueOfDecimal(ProductLinePo.Get_Value("SalesOrderQty")));
-            }
-
-            else if (ProjectLine_ID > 0)
-            {
-                ProductLinePo.Set_Value("OppQty", BaseQuantity + Util.GetValueOfDecimal(ProductLinePo.Get_Value("OppQty")));
-            }
-
-            else if (OrderLine_ID == 0 && ProjectLine_ID == 0)
-            {
-                ProductLinePo.Set_Value("VA073_ForecastQty", BaseQuantity + Util.GetValueOfDecimal(ProductLinePo.Get_Value("VA073_ForecastQty")));
-            }
-                   
-            ProductLinePo.Set_Value("TotalQty", Util.GetValueOfDecimal(ProductLinePo.Get_Value("SalesOrderQty")) + Util.GetValueOfDecimal(ProductLinePo.Get_Value("VA073_ForecastQty"))
-                    + Util.GetValueOfDecimal(ProductLinePo.Get_Value("OppQty")));
+           
           
             ProductLinePo.Set_Value("VA073_PurchaseUnitPrice", PurchaseUnitPrice);
             ProductLinePo.Set_Value("VA073_PurchaseValue", PurchaseUnitPrice * Util.GetValueOfDecimal(ProductLinePo.Get_Value("TotalQty")));
@@ -1038,7 +1029,7 @@ namespace VIS.Models
                 "VA073_ProductLine_ID=" + ProductLinePo.Get_Value("VA073_ProductLine_ID"), null, ProductLinePo.Get_Trx()));                
                 //Create MasterForecast LineDetails
                 ForecastLinePO = CreateBudgetForecastLineDetails(ProductLinePo, Order_ID, OrderLine_ID, Project_ID, ProjectLine_ID, MasterForecast_ID, MasterForecastLine_ID,
-                                      Charge_ID, Product_ID, Attribute_ID, UOM_ID, BOM, BaseQuantity, UnitPrice,Period,Date,OrderBPartner,OrderLocation,ProjectBPartner,ProjectLocation);
+                                      Charge_ID, Product_ID, Attribute_ID, UOM_ID, BOM, BaseQuantity, UnitPrice,Period,Date,OrderBPartner,OrderLocation,ProjectBPartner,ProjectLocation,ProductCategories);
                 if (!ForecastLinePO.Save(trx))
                 {
 
@@ -1073,6 +1064,10 @@ namespace VIS.Models
                     FLineNo += 10;
                     //update Amounts at Headers  
                     string _sql = "UPDATE VA073_ProductLine SET " +
+                    "VA073_ForecastQty=(SELECT NVL(SUM(VA073_Quantity),0) FROM VA073_ForecastLine WHERE (NVL(C_MasterForecast_ID,0)>0 OR (NVL(C_Order_ID,0)=0 AND NVL(C_Project_ID,0)=0)) AND VA073_ProductLine_ID=" + ProductLinePo.Get_Value("VA073_ProductLine_ID") + "), " +
+                   "OppQty=(SELECT NVL(SUM(VA073_Quantity),0) FROM VA073_ForecastLine WHERE NVL(C_Project_ID,0)>0 AND VA073_ProductLine_ID=" + ProductLinePo.Get_Value("VA073_ProductLine_ID") + "), " +
+                   "SalesOrderQty =(SELECT NVL(SUM(VA073_Quantity),0) FROM VA073_ForecastLine WHERE NVL(C_Order_ID,0)>0 AND VA073_ProductLine_ID=" + ProductLinePo.Get_Value("VA073_ProductLine_ID") + "), " +
+                   "TotalQty=(SELECT NVL(SUM(VA073_Quantity),0) FROM VA073_ForecastLine WHERE  VA073_ProductLine_ID=" + ProductLinePo.Get_Value("VA073_ProductLine_ID") + ") , " +
                     "VA073_Price= (Round((SELECT NVL(SUM(VA073_TotalAmt),0)/ NVL(SUM(VA073_Quantity),0) FROM VA073_Forecastline WHERE VA073_ProductLine_ID=" + ProductLinePo.Get_Value("VA073_ProductLine_ID") + "), " +
                      Precision + ")), " +
                     "PlannedRevenue =(ROUND((SELECT SUM(VA073_TotalAmt) FROM VA073_Forecastline WHERE VA073_ProductLine_ID=" + ProductLinePo.Get_Value("VA073_ProductLine_ID") + ")," + Precision + "))" +
@@ -1221,10 +1216,10 @@ namespace VIS.Models
         /// <param name="ProjectLocation">Location</param>
         /// <returns>PO object</returns>
         public PO CreateBudgetForecastLineDetails(PO Parent, int Order_ID, int OrderLine_ID, int Project_ID, int ProjectLine_ID, int MasterForecast_ID, int MasterForecastLine_ID,
-        int Charge_ID, int Product_ID,int  Attribute_ID, int UOM_ID,String BOM, decimal? Quantity, decimal UnitPrice,int Period,DateTime? Date, int OrderBPartner, int OrderLocation, int ProjectBPartner, int ProjectLocation)
+        int Charge_ID, int Product_ID,int  Attribute_ID, int UOM_ID,String BOM, decimal? Quantity, decimal UnitPrice,int Period,DateTime? Date, int OrderBPartner, int OrderLocation, int ProjectBPartner, int ProjectLocation,string ProductCategories)
         {
             //VA073_ForecastLine object
-            ForecastLinePO = ForecastLineTbl.GetPO(Parent.GetCtx(), 0, Parent.Get_Trx());
+            ForecastLinePO = GetOrCreate(Parent,Product_ID,ProductCategories);
 
             ForecastLinePO.SetAD_Client_ID(Parent.GetAD_Client_ID());
             ForecastLinePO.SetAD_Org_ID(Parent.GetAD_Org_ID());
@@ -1258,6 +1253,72 @@ namespace VIS.Models
             }
 
             return ForecastLinePO;
-        }        
+        }
+
+        /// <summary>
+        ///  Is Used to Get or Create  Instance of ForecastLine
+        /// </summary>
+        /// <param name="Line">Product line</param>
+        /// <param name="M_Product_ID">Product</param>
+        /// <param name="ProductCategories">Product Category</param>
+        /// <Writer>209</Writer>
+        /// <returns>Forecast Line</returns>
+        public PO GetOrCreate(PO Line, int M_Product_ID, string ProductCategories)
+        {
+            PO retValue = null;
+            if (!String.IsNullOrEmpty(ProductCategories))
+            {
+                String sql = "SELECT * FROM VA073_ForecastLine WHERE NVL(M_Product_ID,0) = " + M_Product_ID + " AND NVL(C_OrderLine_ID,0) =0 AND NVL(C_ProjectLine_ID,0)=0  AND " +
+                    " NVL(C_MasterForecastLine_ID,0) =0 AND NVL(VA073_ProductLine_ID,0) =" + Line.Get_Value("VA073_ProductLine_ID");
+
+                DataTable dt = null;
+                IDataReader idr = null;
+                try
+                {
+                    idr = DB.ExecuteReader(sql, null, Line.Get_Trx());
+                    dt = new DataTable();
+                    dt.Load(idr);
+                    idr.Close();
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        retValue = ForecastLineTbl.GetPO(Line.GetCtx(), dr, Line.Get_Trx());
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (idr != null)
+                    {
+                        idr.Close();
+                    }
+                    log.Log(Level.SEVERE, sql, ex);
+                }
+                finally
+                {
+                    if (idr != null)
+                    {
+                        idr.Close();
+                    }
+                    dt = null;
+                }
+            }
+            if (retValue == null)
+                retValue = CreateProductlineDetails(Line, M_Product_ID);
+
+            return retValue;
+        }
+
+        /// <summary>
+        /// Create new ForecastLine
+        /// </summary>
+        /// <param name="Line">ProductLine</param>
+        /// <param name="M_Product_ID">Product</param>
+        /// <Writer>209</Writer>
+        /// <returns>Forecastline</returns>
+        public PO CreateProductlineDetails(PO Line ,int M_Product_ID)
+        {
+            ForecastLinePO = ForecastLineTbl.GetPO(Line.GetCtx(), 0, Line.Get_Trx());
+            ForecastLinePO.Set_Value("M_Product_ID",M_Product_ID);
+            return ForecastLinePO;
+        }
     }
 }
