@@ -231,10 +231,10 @@ namespace VAdvantage.Model
         @param UOMSymbol Symbol for a Unit of Measure */
         public void SetUOMSymbol(String UOMSymbol)
         {
-            if (UOMSymbol != null && UOMSymbol.Length > 10)
+            if (UOMSymbol != null && UOMSymbol.Length > 20)
             {
-                log.Warning("Length > 10 - truncated");
-                UOMSymbol = UOMSymbol.Substring(0, 10);
+                log.Warning("Length > 20 - truncated");
+                UOMSymbol = UOMSymbol.Substring(0, 20);
             }
             Set_Value("UOMSymbol", UOMSymbol);
         }
@@ -249,10 +249,10 @@ namespace VAdvantage.Model
         public void SetX12DE355(String X12DE355)
         {
             if (X12DE355 == null) throw new ArgumentException("X12DE355 is mandatory.");
-            if (X12DE355.Length > 4)
+            if (X12DE355.Length > 20)
             {
-                log.Warning("Length > 4 - truncated");
-                X12DE355 = X12DE355.Substring(0, 4);
+                log.Warning("Length > 20 - truncated");
+                X12DE355 = X12DE355.Substring(0, 20);
             }
             Set_Value("X12DE355", X12DE355);
         }

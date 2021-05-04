@@ -145,7 +145,7 @@ namespace VAdvantage.Process
             verWnd.SetName(DisplayName + "_" + TabName);
             verWnd.SetDisplayName(DisplayName);
             // set window as Query Only
-            verWnd.SetWindowType("Q");
+            verWnd.SetWindowType("M");
             verWnd.SetDescription("Display version data");
             verWnd.SetHelp("The window allows you to view past data versioning and future updation versions (if any).");
             if (!verWnd.Save())
@@ -182,7 +182,8 @@ namespace VAdvantage.Process
             tab.CopyTo(verTab);
             verTab.SetAD_Window_ID(ver_AD_Window_ID);
             verTab.SetAD_Table_ID(Ver_AD_Table_ID);
-            verTab.SetIsReadOnly(true);
+            verTab.SetIsReadOnly(false);
+            verTab.SetIsInsertRecord(false);
             verTab.SetIsSingleRow(true);
             verTab.SetWhereClause(null);
             verTab.SetSeqNo(10);
@@ -330,6 +331,7 @@ namespace VAdvantage.Process
                             verFld.SetAD_Tab_ID(Ver_AD_Tab_ID);
                             verFld.SetAD_Column_ID(VerColID);
                             verFld.SetExport_ID(null);
+                            verFld.SetIsReadOnly(true);
                             if (!verFld.Save())
                             {
                                 ValueNamePair vnp = VLogger.RetrieveError();
@@ -432,6 +434,7 @@ namespace VAdvantage.Process
                         verFld.SetMRIsDisplayed("Y");
                         verFld.SetMRSeqNo(2);
                     }
+                    verFld.SetIsReadOnly(true);
                     if (!verFld.Save())
                     {
                         log.Log(Level.SEVERE, "Version Field not saved :: " + verFld.GetName());

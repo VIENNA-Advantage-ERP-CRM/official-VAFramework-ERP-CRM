@@ -101,7 +101,7 @@
 
             $divOuterMain.append($busyDiv);
             $cmbType = $('<select style="display:none;width:100%">');
-            $lblIsBG  = $('<label  class="vis-ec-col-lblchkbox" style="display: none;"><input type="checkbox">' + VIS.Msg.translate(VIS.context, "IsBackgroundProcess") + '</label>');
+            $lblIsBG = $('<label  class="vis-ec-col-lblchkbox" style="display: none;"><input type="checkbox">' + VIS.Msg.translate(VIS.context, "IsBackgroundProcess") + '</label>');
             $chkIsBG = $($lblIsBG.find('input')[0]);
             $text = $("<span class='vis-process-description-Span' style='height: 40px;'>").val("asassasasasasaasa");
             //ProcessDialog
@@ -291,7 +291,7 @@
             });
         };
 
-       
+
 
         this.showCloseIcon = function (show) {
             if (show) {
@@ -308,8 +308,8 @@
                 $btnOK.removeClass('');
                 $btnOK.addClass('vis-process-ok-btn VIS_Pref_btn-2');
                 $btnOK.show();
-                window.setTimeout(function () { $btnOK.focus();},100)
-                
+                window.setTimeout(function () { $btnOK.focus(); }, 100)
+
             }
             else
                 $btnOK.hide();
@@ -820,7 +820,7 @@
                 btnSaveCsvAll = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllRecordCsv") + "' class='vis vis-csv-all'></a></li>");
                 btnsavepdfall = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllPagePdf") + "' class='vis vis-pdf-all'></a></li>");
             }
-           // toolbar = $("<div class='vis-report-header'>").append($('<h3 class="vis-report-tittle" style="float:left;padding-top: 10px;">').append(setTitle));
+            // toolbar = $("<div class='vis-report-header'>").append($('<h3 class="vis-report-tittle" style="float:left;padding-top: 10px;">').append(setTitle));
             toolbar = $("<div class='vis-report-header vis-ad-print-process'>");
 
             toolbar.append($('<div class="vis-ad-w-p-t-name vis-ad-process-header"><h5>' + self.parent.getName() + '</h5></div >'));
@@ -896,7 +896,7 @@
             if (!self.hideclose) {
                 toolbar.append(btnClose);
             }
-            
+
 
             if (self.splitUI) {
                 self.reportToolbar.removeClass('vis-processtoolpadd');
@@ -959,8 +959,8 @@
                 pctl.pi.setFileType(fileType);
                 //Set Action Origin and Origin name
                 pctl.pi.setActionOrigin(self.ActionOrigin);
-                 var orginName = VIS.context.getWindowContext(self.windowNo, "WindowName");
-            if (!orginName)
+                var orginName = VIS.context.getWindowContext(self.windowNo, "WindowName");
+                if (!orginName)
                     orginName = "Menu";
                 pctl.pi.setOriginName(orginName);
                 var data = { processInfo: pctl.pi.toJson(), parameterList: pctl.paraList }

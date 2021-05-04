@@ -994,6 +994,11 @@ namespace VIS.Helpers
                 hasDocValWF = GetDocValueWF(ctx, ctx.GetAD_Client_ID(), InsAD_Table_ID, trx);
                 versionInfo.HasDocValWF = hasDocValWF;
 
+                // EmpCode : VIS0008
+                // Check applied in case of Maintain version whether anyone else changed something
+                // on the same record, if so, then return and do not save
+                if (!CheckDBUpdated(ctx, m_fields, inn, outt, Record_ID, hasDocValWF))
+                    return;
 
                 // check applied, no need to check save in case of backdate entry
                 if (!IsBackDateVersion(inn.ValidFrom.Value))
@@ -1294,6 +1299,142 @@ namespace VIS.Helpers
                 outt.Status = GridTable.SAVE_OK;
         }
 
+        /// <summary>
+        /// Check if record is updated at DB level in case of versioning
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="m_fields"></param>
+        /// <param name="inn"></param>
+        /// <param name="outt"></param>
+        /// <param name="record_ID"></param>
+        /// <param name="hasDocValWF"></param>
+        /// <returns>True/False based on the verification at DB level</returns>
+        private bool CheckDBUpdated(Ctx ctx, List<WindowField> m_fields, SaveRecordIn inn, SaveRecordOut outt, int record_ID, bool hasDocValWF)
+        {
+            var rowData = inn.RowData; // new 
+            var _rowData = inn.OldRowData;
+            bool inserting = inn.Inserting;
+            bool compareDB = inn.CompareDB;
+
+            // no need to check further in case of new record
+            if (inserting)
+                return true;
+
+            int parentWinID = inn.AD_WIndow_ID;
+            PO po = GetPO(ctx, inn.AD_Table_ID, inn.Record_ID, inn.WhereClause, null, inn.AD_WIndow_ID, inn.AD_Table_ID, false, out parentWinID);
+
+            int size = m_fields.Count;
+
+            bool isEmpty = _rowData == null || _rowData.Count == 0;
+            for (int col = 0; col < size; col++)
+            {
+                WindowField field = m_fields[col];
+                if (field.IsVirtualColumn)
+                    continue;
+                String columnName = field.ColumnName;
+
+                //bool isClientOrgId = columnName == "AD_Client_ID" || columnName == "AD_Org_ID";
+
+                Object value = rowData[columnName.ToLower()];// GetValueAccordingPO(rowData[col], field.GetDisplayType(), isClientOrgId);
+                Object oldValue = isEmpty ? null : _rowData[columnName.ToLower()];// GetValueAccordingPO(_rowData[col], field.GetDisplayType(), isClientOrgId);
+
+                if (field.IsEncryptedColumn || field.IsObscure)
+                {
+                    value = SecureEngineBridge.DecryptByClientKey((string)rowData[columnName.ToLower()], key);// GetValueAccordingPO(rowData[col], field.GetDisplayType(), isClientOrgId);
+                    oldValue = isEmpty ? null : SecureEngineBridge.DecryptByClientKey((string)_rowData[columnName.ToLower()], key);// GetValueAccordingPO(_rowData[col], field.GetDisplayType(), isClientOrgId);
+                }
+
+                if (value == DBNull.Value)
+                    value = null;
+                if (oldValue == DBNull.Value)
+                    oldValue = null;
+
+                //	RowID
+                if (DisplayType.IsDate(field.DisplayType))
+                {
+                    if (value != null && !value.Equals(""))
+                    {
+                        value = Convert.ToDateTime(value).ToUniversalTime();
+                    }
+                    if (oldValue != null && !oldValue.Equals(""))
+                    {
+                        oldValue = Convert.ToDateTime(oldValue).ToUniversalTime();
+                    }
+                }
+                if (field.DisplayType == DisplayType.Binary)
+                {
+                    if (value != null && !value.Equals(""))
+                    {
+                        value = Convert.FromBase64String(value.ToString());
+                    }
+                    if (oldValue != null && !oldValue.Equals(""))
+                    {
+                        oldValue = Convert.FromBase64String(oldValue.ToString());
+                    }
+                }
+
+                if (field.DisplayType == DisplayType.RowID)
+                {
+                    ;   //ignore
+                }
+
+                //	Nothing changed & null
+                else if (oldValue == null && value == null)
+                {
+                    ;	//	ignore
+                }
+                /*data changed*/
+                else if (!inserting)
+                {
+                    //	Check existence
+                    int poIndex = po.Get_ColumnIndex(columnName);
+                    if (poIndex < 0)
+                    {
+                        //	Custom Fields not in PO
+                        //po.Set_CustomColumn(columnName, value);
+                        continue;
+                    }
+
+                    Object dbValue = po.Get_Value(poIndex);
+
+                    if (inserting
+                        || !compareDB
+                        //	Original == DB
+                        || oldValue == dbValue
+                        || Util.IsEqual(oldValue, dbValue)
+                        //	Target == DB (changed by trigger to new value already)
+                        || Util.IsEqual(value, dbValue))
+                    {
+
+                    }
+                    //	Original != DB
+                    else
+                    {
+                        String msg = columnName
+                            + "= " + oldValue
+                                + (oldValue == null ? "" : "(" + oldValue.GetType().FullName + ")")
+                            + " != DB: " + dbValue
+                                + (dbValue == null ? "" : "(" + dbValue.GetType().FullName + ")")
+                            + " -> New: " + value
+                                + (value == null ? "" : "(" + value.GetType().FullName + ")");
+                        //	CLogMgt.setLevel(Level.FINEST);
+
+                        outt.IsError = true;
+                        outt.FireEEvent = true;
+                        outt.EventParam = new EventParamOut() { Msg = "SaveErrorDataChanged", Info = columnName, IsError = true };
+                        outt.Status = GridTable.SAVE_ERROR;
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Function to check whether the record being saved is the latest version or not
+        /// </summary>
+        /// <param name="inn"></param>
+        /// <returns>True/False</returns>
         private bool CheckLatestVersion(SaveRecordIn inn)
         {
             string sqlOldVer = @"SELECT COUNT(IsActive) FROM " + inn.TableName + @"_Ver WHERE " + inn.WhereClause
@@ -1902,6 +2043,19 @@ namespace VIS.Helpers
                         po = table.GetPO(ctx, singleKeyWhere[i], p_trx);
                     else	//	Multi - Key
                         po = table.GetPO(ctx, multiKeyWhere[i], p_trx);
+
+                    if (table.GetTableName().EndsWith("_Ver") && (po.Get_ColumnIndex("ProcessedVersion") >= 0))
+                    {
+                        if (Util.GetValueOfBool(po.Get_Value("ProcessedVersion")))
+                        {
+                            p_trx.Rollback();
+                            outt.IsError = true;
+                            outt.FireEEvent = true;
+                            outt.ErrorMsg = "Delete" + Msg.GetMsg(ctx, "VIS_ProcessedVersion");
+                            outt.EventParam = new EventParamOut() { Msg = "VIS_ProcessedVersion", Info = "", IsError = true };
+                            break;
+                        }
+                    }
 
                     //	Delete via PO
                     if (po != null)

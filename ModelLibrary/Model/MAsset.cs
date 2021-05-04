@@ -745,7 +745,7 @@ namespace VAdvantage.Model
         {
             GetQty();		//	set to 1
             MAssetGroup astGrp = new MAssetGroup(GetCtx(), GetA_Asset_Group_ID(), Get_TrxName());
-            if (newRecord && astGrp.Get_ColumnIndex("M_SerNoCtl_ID") >= 0 && astGrp.GetM_SerNoCtl_ID() > 0)
+            if (newRecord && astGrp.Get_ColumnIndex("M_SerNoCtl_ID") >= 0 && astGrp.GetM_SerNoCtl_ID() > 0 && String.IsNullOrEmpty(GetValue()))
             {
                 string name = "";
                 MSerNoCtl ctl = new MSerNoCtl(GetCtx(), astGrp.GetM_SerNoCtl_ID(), Get_TrxName());

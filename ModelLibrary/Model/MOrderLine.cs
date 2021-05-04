@@ -4772,6 +4772,7 @@ namespace VAdvantage.Model
                 if (!order.Save())
                     return false;
             }
+
             //Develop by Deekshant For VA077 Module for calculating purchase,sales,margin
             if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
             {
@@ -4793,6 +4794,22 @@ namespace VAdvantage.Model
                 if (!UpdateMargins())
                 {
                     log.SaveWarning("", Msg.GetMsg(GetCtx(), "VIS_NotUpdated"));
+                    return false;
+                }
+            }
+
+
+            /********************************************************
+                * Module Name    : official-VAFramework-ERP-CRM
+                * Purpose        : Calculating Metal Consumption For cable Industory
+                * Chronological Development
+                * VIS0228      26 April 2021
+             ******************************************************/
+           
+            if (VAdvantage.Utility.Env.IsModuleInstalled("VA076_"))
+            {
+                if (!UpdateMetalConsumption(GetC_Order_ID()))
+                {
                     return false;
                 }
             }
@@ -4828,6 +4845,20 @@ namespace VAdvantage.Model
             if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
             {
                 if (!UpdateMargins())
+                {
+                    return false;
+                }
+            }
+
+            /********************************************************
+                * Module Name    : official-VAFramework-ERP-CRM
+                * Purpose        : Calculating Metal Consumption For cable Industory
+                * Chronological Development
+                * VIS0228      26 April 2021
+             ******************************************************/
+            if (VAdvantage.Utility.Env.IsModuleInstalled("VA076_"))
+            {
+                if (!UpdateMetalConsumption(GetC_Order_ID()))
                 {
                     return false;
                 }
@@ -5149,5 +5180,34 @@ namespace VAdvantage.Model
         {
             return _fromProcess;
         }
+
+        /// <summary>
+        /// Module Name    : official-VAFramework-ERP-CRM
+        /// Purpose        : Calculating Metal Consumption For cable Industory
+        /// Chronological Development
+        /// VIS0228      26 April 2021
+        /// <param name="c_order_ID"></param>
+        /// <returns>bool</returns>
+        public bool UpdateMetalConsumption(int c_order_ID)
+        {
+            string qry = @"UPDATE C_order O
+                                 SET (O.VA076_ALAlAlloyTotConMT, O.VA076_CUTotConMT,O.VA076_LeadTotConMT) =
+                                    (
+                                        SELECT ALMetal,CUMetal,LeadMetal FROM(
+                                        SELECT OL.c_order_ID, Sum(NVL(Atr.VA076_ALMetalWeight,0)*QtyEntered) AS ALMetal,Sum(NVL(VA076_CUMetalWeight,0)*QtyEntered) AS CUMetal,Sum(NVL(VA076_LeadMetalWeight,0)*QtyEntered) AS LeadMetal 
+                                        FROM C_OrderLine OL 
+                                        INNER JOIN VA076_Attributes Atr ON Atr.M_Product_ID=OL.M_Product_ID
+                                        WHERE OL.c_order_ID=" + c_order_ID + @" group by OL.c_order_ID) T
+                                    ) WHERE  O.c_order_ID =" + c_order_ID;
+
+            int no = DB.ExecuteQuery(qry, null, Get_TrxName());
+            if (no <= 0)
+            {
+                log.SaveWarning("", Msg.GetMsg(GetCtx(), "VIS_NotUpdated"));
+                return false;
+            }
+            return true;
+        }
+
     }
 }
