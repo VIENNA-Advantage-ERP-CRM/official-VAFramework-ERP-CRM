@@ -675,7 +675,7 @@ namespace ViennaAdvantageServer.Process
         /// <returns>object</returns>
         private MMasterForecastLine GenerateMasterForecast(int M_Product_ID, int M_AttributeSetInstance, decimal? totalQtyTeam, Decimal? totalQtyOpp, decimal? avgPrice)
         {
-            MMasterForecastLine mfLine = MMasterForecastLine.GetOrCreate(mf, M_Product_ID, M_AttributeSetInstance);
+            MMasterForecastLine mfLine = MMasterForecastLine.GetOrCreate(mf.GetCtx(),mf.Get_Trx(),mf.GetC_MasterForecast_ID(), M_Product_ID,0, M_AttributeSetInstance,"");
             Decimal? qty = mfLine.GetOppQty();
             mfLine.SetC_MasterForecast_ID(mf.GetC_MasterForecast_ID());
             if (totalQtyOpp > 0 && totalQtyTeam > 0)

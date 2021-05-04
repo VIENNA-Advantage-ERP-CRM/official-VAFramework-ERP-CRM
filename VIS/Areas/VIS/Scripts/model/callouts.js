@@ -3272,8 +3272,8 @@
                     "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
                     "," + Util.getValueOfString(mTab.getValue("C_UOM_ID")) + "," + ctx.getAD_Client_ID().toString() + "," + Util.getValueOfString(C_BPartner_ID) +
                     "," + Util.getValueOfString(QtyEntered) + "," + Util.getValueOfString(mTab.getValue("StartDate")) +
-                    "," + Util.getValueOfString(mTab.getValue("M_PriceList_ID")));                
-                    
+                    "," + Util.getValueOfString(mTab.getValue("M_PriceList_ID")));
+
                 var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPrices", params);
                 if (prices != null) {
 
@@ -3331,12 +3331,12 @@
                     }
                     else {
                         if (!isBlanketOrderLine) {
-                        /** Price List - ValidFrom date validation ** Dt:11/03/2021 ** Modified By: Kumar **/
+                            /** Price List - ValidFrom date validation ** Dt:11/03/2021 ** Modified By: Kumar **/
                             params = M_Product_ID.toString().concat(",", Util.getValueOfString(mTab.getValue("C_Order_ID")) + "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
                                 "," + Util.getValueOfString(mTab.getValue("C_UOM_ID")) + "," + ctx.getAD_Client_ID().toString() + "," + Util.getValueOfString(C_BPartner_ID) +
                                 "," + Util.getValueOfString(QtyEntered) + "," + Util.getValueOfString(countEd011) + "," + Util.getValueOfString(_countVAPRC) +
                                 "," + Util.getValueOfString(mTab.getValue("StartDate")) + "," + Util.getValueOfString(mTab.getValue("M_PriceList_ID")));
-                            
+
                             var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPricesOnChange", params);
 
                             pricelist = Util.getValueOfDecimal(prices["PriceList"]);
@@ -5141,20 +5141,16 @@
         var query = "SELECT PriceLimit FROM M_ProductPrice WHERE M_PriceList_Version_ID = (SELECT c.m_pricelist_version_id FROM  c_project c WHERE c.c_project_Id=" + projID + ")  AND M_Product_id=" + Util.getValueOfInt(mTab.getValue("M_Product_ID"));
 
         //get price on the basis of Attribute and UOM if selected
-        if (mTab.findColumn("M_AttributeSetInstance_ID") > 0)
-        {
+        if (mTab.findColumn("M_AttributeSetInstance_ID") > 0) {
             query += " AND NVL(M_AttributeSetInstance_ID,0)=" + Util.getValueOfInt(mTab.getValue("M_AttributeSetInstance_ID"));
         }
-       
-        if (mTab.findColumn("C_UOM_ID") > 0)
-        {
-             //if uom is not selected then get baseUom
-            if (Util.getValueOfInt(mTab.getValue("C_UOM_ID")) > 0)
-            {
+
+        if (mTab.findColumn("C_UOM_ID") > 0) {
+            //if uom is not selected then get baseUom
+            if (Util.getValueOfInt(mTab.getValue("C_UOM_ID")) > 0) {
                 query += " AND C_UOM_ID =" + Util.getValueOfInt(mTab.getValue("C_UOM_ID"));
             }
-            else
-            {
+            else {
                 query += " AND C_UOM_ID = (SELECT C_UOM_ID FROM M_Product WHERE M_Product_ID=" + Util.getValueOfInt(mTab.getValue("M_Product_ID")) + ")";
             }
         }
@@ -5550,7 +5546,7 @@
 
         //JID_0084: if the Payment currency is different from the bank statement currency it will add the converted amount based in the currency conversion available for selected date.
         var C_Currency_ID = mTab.getValue("C_Currency_ID");
-        var statementDate = mTab.getValue("ValutaDate"); 
+        var statementDate = mTab.getValue("ValutaDate");
 
         // JID_1418: When select payment on Bank statement line, system gives an error meassage
         //When select payment on Bank statement line with out select the statmenet Date, return error meassage
@@ -12021,8 +12017,7 @@
             }
 
             //set isreturntrx
-            if (mTab.getField("IsReturnTrx") != null)
-            {
+            if (mTab.getField("IsReturnTrx") != null) {
                 mTab.setValue("IsReturnTrx", Util.getValueOfBoolean(dr["IsReturnTrx"]));
             }
         }
@@ -13368,13 +13363,13 @@
 
                 var invoiceRecord = VIS.dataContext.getJSONRecord("MInvoice/GetInvoice", (mTab.getValue("C_Invoice_ID")).toString());
 
-            //** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **//
-                var paramsPrice;                
+                //** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **//
+                var paramsPrice;
                 paramsPrice = invoiceRecord["M_PriceList_ID"].toString().concat(",", mTab.getValue("C_Invoice_ID").toString(), ",",
-                        M_Product_ID.toString(), ",", 
-                        C_UOM_To_ID.toString(), ",",    
-                        Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")), ",",
-                        "2");
+                    M_Product_ID.toString(), ",",
+                    C_UOM_To_ID.toString(), ",",
+                    Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")), ",",
+                    "2");
 
                 //Get PriceListversion based on Pricelist
                 var _priceListVersion_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetM_PriceList_Version_ID", paramsPrice);
@@ -16030,7 +16025,7 @@
     //    this.setCalloutActive(true);
     //    try {
     //        var C_BPartner_ID = value;
-            
+
     //    }
     //    catch (err) {
     //        this.log.severe(err.toString());
@@ -16821,6 +16816,7 @@
                 mTab.setValue("PriceStd", PriceStd);
                 mTab.setValue("UnitPrice", PriceStd);
                 mTab.setValue("PriceStd", (PriceStd * Util.getValueOfDecimal(mTab.getValue("QtyEntered"))));
+                mTab.setValue("TotalPrice", (PriceStd * Util.getValueOfDecimal(mTab.getValue("QtyEntered"))));
             }
         }
         else {
@@ -16830,6 +16826,41 @@
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";
     };
+
+    CalloutTeamForcast.prototype.Charge = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        try {
+            if (this.isCalloutActive() || value == null || value.toString() == "") {
+                mTab.getField("C_UOM_ID").setReadOnly(false);
+                return "";
+            }
+
+            this.setCalloutActive(true);
+
+            //	No Product defined
+            if (mTab.getValue("M_Product_ID") != null) {
+                mTab.setValue("M_Product_ID", null);
+                mTab.setValue("M_AttributeSetInstance_ID", null);
+            }
+
+            //	Default charge from context
+            var c_uom_id = ctx.getContextAsInt("#C_UOM_ID");
+            if (c_uom_id > 0) {
+                mTab.setValue("C_UOM_ID", c_uom_id);	
+            }
+            else {
+                mTab.setValue("C_UOM_ID", 100);	//	EA
+            }
+            mTab.getField("C_UOM_ID").setReadOnly(true);
+        }
+        catch (err) {
+            this.setCalloutActive(false);
+            this.log.log(Level.SEVERE, sql, err);
+            return err
+        }
+        this.setCalloutActive(false);
+        oldValue = null;
+    };
+
     CalloutTeamForcast.prototype.CalculatePrice = function (ctx, windowNo, mTab, mField, value, oldValue) {
         // 
         if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) <= 0) {
@@ -16839,6 +16870,7 @@
         var price = Util.getValueOfDecimal(mTab.getValue("UnitPrice")) * Util.getValueOfDecimal(mTab.getValue("BaseQty"));
         // ForcastLine.SetQtyEntered(price);
         mTab.setValue("PriceStd", price);
+        mTab.setValue("TotalPrice", price);
 
         this.setCalloutActive(false);
         ctx = windowNo = mTab = mField = value = oldValue = null;
@@ -16853,27 +16885,35 @@
      * @param {any} value
      * @param {any} oldValue
      */
-    CalloutTeamForcast.prototype.Qty = function (ctx, windowNo, mTab, mField, value, oldValue) {  
-        if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {          
+    CalloutTeamForcast.prototype.Qty = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {
             return "";
-        }  
+        }
         this.setCalloutActive(true);
         var C_UOM_ID = mTab.getValue("C_UOM_ID");
         if (C_UOM_ID == null) {
-            C_UOM_ID = ctx.getContextAsInt(windowNo, "C_UOM_ID")  
+            C_UOM_ID = ctx.getContextAsInt(windowNo, "C_UOM_ID")
         }
-        var M_Product_ID = mTab.getValue("M_Product_ID");
         var Qty = mTab.getValue("BaseQty");
-        var paramStr = M_Product_ID.toString().concat(",", C_UOM_ID.toString(), ",", Qty.toString()); 
-        var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
-        if (pc != null) {
-            mTab.setValue("QtyEntered", pc);
+        if (mTab.getValue("M_Product_ID") != null)
+        {
+            var M_Product_ID = mTab.getValue("M_Product_ID");
+            var paramStr = M_Product_ID.toString().concat(",", C_UOM_ID.toString(), ",", Qty.toString());
+            var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
+            if (pc != null) {
+                mTab.setValue("QtyEntered", pc);
+            }
+            else {
+                mTab.setValue("QtyEntered", Qty);
+            }
         }
-        else {
+        else
+        {
             mTab.setValue("QtyEntered", Qty);
         }
         if (Util.getValueOfDecimal(mTab.getValue("UnitPrice")) != 0 && Qty != 0) {
             mTab.setValue("PriceStd", Qty * mTab.getValue("UnitPrice"))
+            mTab.setValue("TotalPrice", Qty * mTab.getValue("UnitPrice"))
         }
         this.setCalloutActive(false);
         ctx = windowNo = mTab = mField = value = oldValue = null;
@@ -16895,7 +16935,7 @@
         }
         this.setCalloutActive(true);
         //get currency from pricelist
-        var pricelist = VIS.dataContext.getJSONRecord("MPriceList/GetPriceListData", Util.getValueOfString( mTab.getValue("M_PriceList_ID")));
+        var pricelist = VIS.dataContext.getJSONRecord("MPriceList/GetPriceListData", Util.getValueOfString(mTab.getValue("M_PriceList_ID")));
         if (pricelist["C_Currency_ID"] != null) {
             mTab.setValue("C_Currency_ID", pricelist["C_Currency_ID"]);
         }
@@ -16919,6 +16959,7 @@
             if (mTab.getValue("M_Product_ID") == null) {
                 //set values to 0 if no product is selected
                 mTab.setValue("PriceStd", 0);
+                mTab.setValue("TotalPrice", 0);
                 mTab.setValue("UnitPrice", 0);
                 mTab.setValue("QtyEntered", 0);
                 mTab.setValue("BaseQty", 0);
@@ -16928,21 +16969,26 @@
         this.setCalloutActive(true);
         if (ctx.getContextAsInt(windowNo, "M_PriceList_ID") > 0) {
             var paramString = Util.getValueOfString(mTab.getValue("M_Product_ID")).concat(",", Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")), ",",
-                Util.getValueOfString(ctx.getContextAsInt(windowNo, "M_PriceList_ID")), ",", 
+                Util.getValueOfString(ctx.getContextAsInt(windowNo, "M_PriceList_ID")), ",",
                 Util.getValueOfString(mTab.getValue("C_UOM_ID")))
-                
+
             //get the price from product price inly if pricelist is selected
             var ProductData = VIS.dataContext.getJSONRecord("MProductPricing/GetProductdata", paramString);
             if (ProductData != null) {
                 mTab.setValue("PriceStd", ProductData["PriceStd"]);
                 mTab.setValue("UnitPrice", ProductData["PriceStd"]);
                 mTab.setValue("PriceStd", (ProductData["PriceStd"] * Util.getValueOfDecimal(mTab.getValue("BaseQty"))));
+                mTab.setValue("TotalPrice", (ProductData["PriceStd"] * Util.getValueOfDecimal(mTab.getValue("BaseQty"))));
 
                 if (Util.getValueOfInt(mTab.getValue("C_UOM_ID")) == 0) {
                     mTab.setValue("C_UOM_ID", ProductData["C_UOM_ID"]);
                 }
 
-            } 
+                if (mTab.findColumn("IsBOM") > 0) {
+                    mTab.setValue("IsBOM", ProductData["IsBOM"]);
+                }
+
+            }
         }
 
         this.setCalloutActive(false);
@@ -16950,18 +16996,81 @@
         return "";
     };
 
+    /**
+     * Set Period as per account date
+     * @param {any} ctx
+     * @param {any} windowNo
+     * @param {any} mTab
+     * @param {any} mField
+     * @param {any} value
+     * @param {any} oldValue
+     */
+    CalloutTeamForcast.prototype.AccountDate = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (this.isCalloutActive() || value == null || value.toString() == "") {
+            return "";
+        }
+        try {
+            this.setCalloutActive(true);
 
-   
+            var paramString = Util.getValueOfString(mTab.getValue("AD_Client_ID")).concat(",", Util.getValueOfString(mTab.getValue("DateAcct")), ",",
+                Util.getValueOfString(mTab.getValue("AD_Org_ID")))
+
+            //get Period
+            var Period = VIS.dataContext.getJSONRecord("MPeriod/GetPeriod", paramString);
+            if (Period != null) {
+                mTab.setValue("C_Period_ID", Period);
+            }
+        }
+        catch (err) {
+            this.log.log(Level.SEVERE, sql, err);
+            return err.message;
+        }
+        this.setCalloutActive(false);
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
+    /**
+     * Set Supervisor
+     * @param {any} ctx
+     * @param {any} windowNo
+     * @param {any} mTab
+     * @param {any} mField
+     * @param {any} value
+     * @param {any} oldValue
+     */
+    CalloutTeamForcast.prototype.SuperVisor = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {
+            return "";
+        }
+        try {
+            this.setCalloutActive(true)
+            //get supervisor
+            var SuperVisor = VIS.dataContext.getJSONRecord("MTeamForcast/GetSuperVisor", Util.getValueOfString(value));
+            if (SuperVisor != null) {
+                mTab.setValue("Supervisor_ID", SuperVisor);
+            }
+        }
+        catch (err) {
+            this.log.log(Level.SEVERE, sql, err);
+            return err.message;
+        }
+        this.setCalloutActive(false);
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
     VIS.Model.CalloutTeamForcast = CalloutTeamForcast;
     //************CalloutTeamForcast End****************
 
 
 
-     //************CalloutMasterForecast Start***************
+    //************CalloutMasterForecast Start***************
     function CalloutMasterForecast() {
         VIS.CalloutEngine.call(this, "VIS.CalloutMasterForecast");//must call
     };
     VIS.Utility.inheritPrototype(CalloutMasterForecast, VIS.CalloutEngine); //inherit prototype
+
     /**
      * set currency 
      * @param {any} ctx
@@ -16978,13 +17087,105 @@
             }
             return "";
         }
-        this.setCalloutActive(true);
-
-        var pricelist = VIS.dataContext.getJSONRecord("MPriceList/GetPriceListData", Util.getValueOfString(mTab.getValue("M_PriceList_ID")));
-        if (pricelist["C_Currency_ID"] != null) {
-            mTab.setValue("C_Currency_ID", pricelist["C_Currency_ID"]);
+        try {
+            this.setCalloutActive(true);
+            //get currency from pricelist
+            var pricelist = VIS.dataContext.getJSONRecord("MPriceList/GetPriceListData", Util.getValueOfString(mTab.getValue("M_PriceList_ID")));
+            if (pricelist["C_Currency_ID"] != null) {
+                mTab.setValue("C_Currency_ID", pricelist["C_Currency_ID"]);
+            }
         }
+        catch (err) {
+            this.log.log(Level.SEVERE, sql, err);
+            return err.message;
+        }
+        this.setCalloutActive(false);
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";;
+    };
 
+    /**
+     * Set Price as per price list
+     * @param {any} ctx
+     * @param {any} windowNo
+     * @param {any} mTab
+     * @param {any} mField
+     * @param {any} value
+     * @param {any} oldValue
+     */
+    CalloutMasterForecast.prototype.Product = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {
+            if (mTab.getValue("M_Product_ID") == null) {
+                //set values to 0 if no product is selected
+                mTab.setValue("Price", 0);
+                mTab.setValue("PlannedRevenue", 0);
+                mTab.setValue("ForcastQty", 0);
+                mTab.setValue("TotalQty", 0);
+            }
+            return "";
+        }
+        try {
+            this.setCalloutActive(true);
+            if (ctx.getContextAsInt(windowNo, "M_PriceList_ID") > 0) {
+                var paramString = Util.getValueOfString(mTab.getValue("M_Product_ID")).concat(",", Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")), ",",
+                    Util.getValueOfString(ctx.getContextAsInt(windowNo, "M_PriceList_ID")), ",",
+                    Util.getValueOfString(mTab.getValue("C_UOM_ID")))
+
+                //get the price from product price only if pricelist is selected
+                var ProductData = VIS.dataContext.getJSONRecord("MProductPricing/GetProductdata", paramString);
+                if (ProductData != null) {
+                    mTab.setValue("Price", ProductData["PriceStd"]);
+                    mTab.setValue("PlannedRevenue", (ProductData["PriceStd"] * Util.getValueOfDecimal(mTab.getValue("TotalQty"))));
+
+                    //set BaseUOM
+                    if (Util.getValueOfInt(mTab.getValue("C_UOM_ID")) == 0) {
+                        mTab.setValue("C_UOM_ID", ProductData["C_UOM_ID"]);
+                    }
+
+                    if (mTab.findColumn("IsBOM") > 0) {
+                        mTab.setValue("IsBOM", ProductData["IsBOM"]);
+                    }
+
+                }
+            }
+        }
+        catch (err) {
+            this.log.log(Level.SEVERE, sql, err);
+            return err.message;
+        }
+        this.setCalloutActive(false);
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
+    /**
+     * Set price and Qty
+     * @param {any} ctx
+     * @param {any} windowNo
+     * @param {any} mTab
+     * @param {any} mField
+     * @param {any} value
+     * @param {any} oldValue
+     */
+    CalloutMasterForecast.prototype.CalculatePrice = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) <= 0) {
+            return "";
+        }
+        try {
+            this.setCalloutActive(true);
+            //set Total Qty
+            var totalqty = Util.getValueOfDecimal(mTab.getValue("ForcastQty")) + Util.getValueOfDecimal(mTab.getValue("SalesOrderQty"))
+                + Util.getValueOfDecimal(mTab.getValue("OppQty"));
+            mTab.setValue("TotalQty", totalqty);
+
+            //set Planned Revenue
+            var price = Util.getValueOfDecimal(mTab.getValue("Price")) * Util.getValueOfDecimal(mTab.getValue("TotalQty"));
+            mTab.setValue("PlannedRevenue", price);
+
+        }
+        catch (err) {
+            this.log.log(Level.SEVERE, sql, err);
+            return err.message;
+        }
         this.setCalloutActive(false);
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";
@@ -17182,8 +17383,7 @@
     CalloutProductToOpportunity.prototype.ProductInfo = function (ctx, windowNo, mTab, mField, value, oldValue) {
 
         if (value == null || value.toString() == "") {
-            if (Util.getValueOfInt(mTab.getValue("M_Product_ID")) == 0)
-            {
+            if (Util.getValueOfInt(mTab.getValue("M_Product_ID")) == 0) {
                 //set prices and quantities 0 if product is deselected
                 mTab.setValue("PriceList", 0);
                 mTab.setValue("PlannedPrice", 0);
@@ -17199,14 +17399,14 @@
         var phaseID = Util.getValueOfInt(mTab.getValue("C_ProjectPhase_ID"));
         var projID = Util.getValueOfInt(mTab.getValue("C_Project_ID"));
         var productID = Util.getValueOfInt(mTab.getValue("M_Product_ID"));
-        var attributeID =0;
+        var attributeID = 0;
         var uomID = 0;
         //get price on the basis of Attribute and UOM if selected
         if (mTab.findColumn("M_AttributeSetInstance_ID") > 0) {
-             attributeID = Util.getValueOfInt(mTab.getValue("M_AttributeSetInstance_ID"));
+            attributeID = Util.getValueOfInt(mTab.getValue("M_AttributeSetInstance_ID"));
         }
         if (mTab.findColumn("C_UOM_ID") > 0) {
-             uomID = Util.getValueOfInt(mTab.getValue("C_UOM_ID"));
+            uomID = Util.getValueOfInt(mTab.getValue("C_UOM_ID"));
         }
         //
         var paramString = taskID.toString() + "," + phaseID.toString() + "," + projID.toString() + "," + productID.toString() + "," + attributeID.toString() + "," + uomID.toString();
@@ -17239,7 +17439,7 @@
             mTab.setValue("PlannedPrice", PriceStd);
             mTab.setValue("PlannedQty", 1);
             var PriceLimit = Util.getValueOfDecimal(dr["PriceLimit"]);
-          
+
 
             //var priceList_Version_ID = Util.getValueOfInt(dr["M_PriceList_Version_ID"]);
             // X_C_Project proj = new X_C_Project(ctx, projID, null);
@@ -17294,7 +17494,7 @@
             mTab.setValue("PlannedPrice", 0);
             mTab.setValue("Discount", 0)
             mTab.setValue("PlannedMarginAmt", 0);
-            mTab.setValue("PlannedAmt",0);
+            mTab.setValue("PlannedAmt", 0);
         }
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";
@@ -17374,8 +17574,7 @@
             var paramString = C_Order_ID.toString();
             var dr = VIS.dataContext.getJSONRecord("MOrder/GetOrder", paramString);
             var DataPrefix = VIS.dataContext.getJSONRecord("ModulePrefix/GetModulePrefix", "VA077_");
-            if (Util.getValueOfInt(dr["ID"]) != 0)
-            {
+            if (Util.getValueOfInt(dr["ID"]) != 0) {
                 mTab.setValue("DateOrdered", dr["DateOrdered"]);
                 mTab.setValue("POReference", dr["POReference"]);
                 mTab.setValue("AD_Org_ID", Util.getValueOfInt(dr["AD_Org_ID"]));
@@ -17417,7 +17616,7 @@
                 mTab.setValue("M_Warehouse_ID", Util.getValueOfInt(dr["M_Warehouse_ID"]));
                 if (DataPrefix["VA077_"]) {
                     if (dr["VA077_HistoricContractDate"] != "") {
-                      mTab.setValue("VA077_HistoricContractDate", Dateoffset(dr["VA077_HistoricContractDate"]));
+                        mTab.setValue("VA077_HistoricContractDate", Dateoffset(dr["VA077_HistoricContractDate"]));
                     }
                     if (dr["VA077_ChangeStartDate"] != "") {
                         mTab.setValue("VA077_ChangeStartDate", Dateoffset(dr["VA077_ChangeStartDate"]));
@@ -17450,7 +17649,7 @@
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";
     };
-        
+
     /// <summary>
     /// InOut - DocType.
     /// - sets MovementType
@@ -17761,7 +17960,7 @@
             var DataPrefix = VIS.dataContext.getJSONRecord("ModulePrefix/GetModulePrefix", "VA077_");
             var dr = VIS.dataContext.getJSONRecord("MOrderLine/GetOrderLine", paramString);
             // MOrderLine ol = new MOrderLine(ctx, C_OrderLine_ID, null);
-            
+
             //	Get Details
             if (Util.getValueOfInt(dr["GetID"]) != 0) {
 
@@ -17808,8 +18007,7 @@
                     mTab.setValue("IsDropShip", false);
                 }
 
-                if (DataPrefix["VA077_"])
-                {
+                if (DataPrefix["VA077_"]) {
                     mTab.setValue("VA077_CNAutodesk", Util.getValueOfString(dr["VA077_CNAutodesk"]));
                     mTab.setValue("VA077_Duration", Util.getValueOfString(dr["VA077_Duration"]));
                     mTab.setValue("VA077_MarginAmt", Util.getValueOfDecimal(dr["VA077_MarginAmt"]));
@@ -20439,7 +20637,7 @@
                 //Get PriceListversion based on Pricelist
                 /** Price List - Ensuring valid Uom id ** Dt:01/02/2021 ** Modified By: Kumar **/
                 var M_PriceList_Version_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetM_PriceList_Version_ID_On_Transaction_Date", paramFields);
-                
+
                 //var date = mTab.getValue("DateOrdered");
                 //if (date == null) {
                 //    date = Date.now();
@@ -21316,8 +21514,7 @@
             }
         }
         else if (Util.getValueOfString(mTab.getValue("VSS_PAYMENTTYPE")) == "R" ||
-            Util.getValueOfString(mTab.getValue("VSS_PAYMENTTYPE")) == "A")
-        { /*Payment Return and Receipt*/
+            Util.getValueOfString(mTab.getValue("VSS_PAYMENTTYPE")) == "A") { /*Payment Return and Receipt*/
             if (Util.getValueOfDecimal(mTab.getValue("amount")) < 0) {
                 mTab.setValue("Amount", (0 - Util.getValueOfDecimal(mTab.getValue("amount"))));
             }
