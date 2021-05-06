@@ -948,7 +948,7 @@ namespace VIS.Models
             lineDetails.SetAD_Org_ID(Line.GetAD_Org_ID());
             lineDetails.SetC_MasterForecastLine_ID(Line.GetC_MasterForecastLine_ID());
             lineDetails.SetM_Product_ID(Product_ID);
-            if (Util.GetValueOfInt(lineDetails.Get_ValueOld("C_MasterForecastLineDetails_ID")) == 0)
+            if (Util.GetValueOfInt(lineDetails.Get_ID()) == 0)
             {
                 //only set line no when new line is created
                 lineDetails.SetLineNo(MFLineNo);
@@ -1231,7 +1231,7 @@ namespace VIS.Models
             ForecastLinePO.Set_Value("M_Product_ID",Product_ID);
             ForecastLinePO.Set_Value("C_Period_ID", Period);
             ForecastLinePO.Set_Value("DatePromised", Date);
-            if (Util.GetValueOfInt(ForecastLinePO.Get_ValueOld("VA073_ForecastLine_ID")) == 0)
+            if (Util.GetValueOfInt(ForecastLinePO.Get_ID()) == 0)
             {
                //only set line no when new line is created
                 ForecastLinePO.Set_Value("LineNo", FLineNo);
