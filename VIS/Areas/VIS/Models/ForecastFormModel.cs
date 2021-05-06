@@ -917,7 +917,7 @@ namespace VIS.Models
                 }
                 else
                 {
-                    MFLineNo += 10;                  
+                    MFLineNo += 10;                    
                 }
             }
         }
@@ -948,7 +948,11 @@ namespace VIS.Models
             lineDetails.SetAD_Org_ID(Line.GetAD_Org_ID());
             lineDetails.SetC_MasterForecastLine_ID(Line.GetC_MasterForecastLine_ID());
             lineDetails.SetM_Product_ID(Product_ID);
-            lineDetails.SetLineNo(MFLineNo);
+            if (Util.GetValueOfInt(lineDetails.Get_ID()) == 0)
+            {
+                //only set line no when new line is created
+                lineDetails.SetLineNo(MFLineNo);
+            }
             lineDetails.SetC_Order_ID(Order_ID);
             lineDetails.SetC_OrderLine_ID(OrderLine_ID);
             lineDetails.SetC_Project_ID(Project_ID);
@@ -1227,7 +1231,11 @@ namespace VIS.Models
             ForecastLinePO.Set_Value("M_Product_ID",Product_ID);
             ForecastLinePO.Set_Value("C_Period_ID", Period);
             ForecastLinePO.Set_Value("DatePromised", Date);
-            ForecastLinePO.Set_Value("LineNo",FLineNo);
+            if (Util.GetValueOfInt(ForecastLinePO.Get_ID()) == 0)
+            {
+               //only set line no when new line is created
+                ForecastLinePO.Set_Value("LineNo", FLineNo);
+            }          
             ForecastLinePO.Set_Value("C_Order_ID",Order_ID);
             ForecastLinePO.Set_Value("C_OrderLine_ID",OrderLine_ID);
             ForecastLinePO.Set_Value("C_Project_ID",Project_ID);

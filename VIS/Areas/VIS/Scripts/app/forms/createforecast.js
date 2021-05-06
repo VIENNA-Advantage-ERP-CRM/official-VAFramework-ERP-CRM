@@ -112,15 +112,14 @@
 
         /** Set Height of Form */
         this.setHeight = function () {
-            var h = $(window).height();
             if (isMasterForecast) {
-                return h - 195;
+               367;
             }
             else if (isBudgetForecast){
-                return h - 160;
+                402;
             }
             else {
-                return h -210;
+               352;
             }
         };
 
