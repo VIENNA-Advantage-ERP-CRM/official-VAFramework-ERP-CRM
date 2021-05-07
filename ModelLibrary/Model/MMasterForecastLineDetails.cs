@@ -56,14 +56,17 @@ namespace VAdvantage.Model
         /// <returns>true/false</returns>
         protected override bool AfterSave(bool newRecord, bool success)
         {
+            string _sql = "SELECT StdPrecision FROM C_Currency WHERE C_Currency_ID=(SELECT C_Currency_ID FROM C_MasterForecast WHERE C_MasterForecast_ID =" +
+                "(SELECT C_MasterForecast_ID FROM C_MasterForecastLine WHERE C_MasterForecastLine_ID =" + GetC_MasterForecastLine_ID() + "))";
+            int Precision = Util.GetValueOfInt(DB.ExecuteScalar(_sql,null,Get_Trx()));
             //update Amounts at master forecast line  
-            string _sql = "UPDATE C_MasterForecastLine SET " +
+             _sql = "UPDATE C_MasterForecastLine SET " +
             "ForcastQty=(SELECT NVL(SUM(QtyEntered),0) FROM C_MasterForecastLineDetails WHERE (NVL(C_Forecast_ID,0)>0 OR (NVL(C_Order_ID,0)=0 AND NVL(C_Project_ID,0)=0)) AND C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID() + "), " +
             "SalesOrderQty =(SELECT NVL(SUM(QtyEntered),0) FROM C_MasterForecastLineDetails WHERE NVL(C_Order_ID,0)>0 AND C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID() + "), " +
             "OppQty=(SELECT NVL(SUM(QtyEntered),0) FROM C_MasterForecastLineDetails WHERE NVL(C_Project_ID,0)>0 AND C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID() + "), " +
             "TotalQty=(SELECT NVL(SUM(QtyEntered),0) FROM C_MasterForecastLineDetails WHERE  C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID() + ") , " +
-            "Price= (SELECT NVL(SUM(TotaAmt),0)/ NVL(SUM(QtyEntered),0) FROM C_MasterForecastLineDetails WHERE C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID() + ")," +
-            "PlannedRevenue =(SELECT SUM(TotaAmt) FROM C_MasterForecastLineDetails WHERE C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID() + ")" +
+            "Price= ROUND((SELECT NVL(SUM(TotaAmt),0)/ NVL(SUM(QtyEntered),0) FROM C_MasterForecastLineDetails WHERE C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID() + "),"+Precision+")," +
+            "PlannedRevenue =ROUND((SELECT SUM(TotaAmt) FROM C_MasterForecastLineDetails WHERE C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID() + ")," + Precision + ")"+
             " WHERE C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID();
         
             if (DB.ExecuteQuery(_sql, null, Get_Trx()) < 0)

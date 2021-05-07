@@ -32,6 +32,7 @@ namespace VIS.Models
         private string msg = null;
         private string ToCurrencyName = "";
         private string FromCurrencyName = "";
+        private int FromCurrency = 0;
         private int ToCurrency = 0;
         private int LineNo = 0;
         private int MFLineNo = 0;
@@ -39,6 +40,7 @@ namespace VIS.Models
         private int Count = 0;
         private int PriceList = 0;
         private Decimal ConvertedPrice = 0;
+        private Decimal PurchaseUnitPrice= 0;
         private int ConversionType = 0;
         private DataSet ds = null;
         private DateTime? DateAcct = null;
@@ -103,10 +105,14 @@ namespace VIS.Models
             {
                 trx = Trx.GetTrx("Forecast" + DateTime.Now.Ticks);
                 TableName = MTable.GetTableName(ctx, Util.GetValueOfInt(Table_ID));
-                
+
+               
                 //Get Currency and conversion Type from header              
-                ds = DB.ExecuteDataset("SELECT Forecast.C_Currency_ID ,Forecast.DateAcct,C_Currency.ISO_CODE,C_Currency.StdPrecision,C_ConversionType_ID,M_PriceList_ID FROM " + TableName + " Forecast INNER JOIN C_Currency ON " +
-                    "C_Currency.C_Currency_ID = Forecast.C_Currency_ID WHERE " + TableName + "_ID =" + Forecast_ID);
+                ds = DB.ExecuteDataset(@"SELECT C_Currency.C_Currency_ID AS ToCurrency ,M_PriceList.C_Currency_ID AS FromCurrency,Forecast.DateAcct,C_Currency.ISO_CODE,
+                    C_Currency.StdPrecision,C_ConversionType_ID,Forecast.M_PriceList_ID FROM " + TableName + " Forecast " +
+                    " INNER JOIN M_PriceList ON M_PriceList.M_PriceList_ID = Forecast.M_PriceList_ID INNER JOIN C_Currency ON " +
+                    "C_Currency.C_Currency_ID=Forecast.C_Currency_ID OR C_Currency.C_Currency_ID=M_PriceList.C_Currency_ID " +
+                    " WHERE " + TableName + "_ID =" + Forecast_ID);
 
                 if (IsBudgetForecast)
                 {
@@ -115,8 +121,27 @@ namespace VIS.Models
                 }
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
-                    ToCurrency = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Currency_ID"]);
-                    ToCurrencyName = Util.GetValueOfString(ds.Tables[0].Rows[0]["ISO_CODE"]);
+                    if (IsBudgetForecast)
+                    {
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        {
+                            if (Util.GetValueOfInt(ds.Tables[0].Rows[i]["ToCurrency"]) == Util.GetValueOfInt(ds.Tables[0].Rows[i]["FromCurrency"]))
+                            {
+                                FromCurrency = Util.GetValueOfInt(ds.Tables[0].Rows[i]["FromCurrency"]);
+                                FromCurrencyName = Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"]);
+                            }
+                            else
+                            {
+                                ToCurrency = Util.GetValueOfInt(ds.Tables[0].Rows[i]["ToCurrency"]);
+                                ToCurrencyName = Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"]);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ToCurrency = Util.GetValueOfInt(ds.Tables[0].Rows[0]["ToCurrency"]);
+                        ToCurrencyName = Util.GetValueOfString(ds.Tables[0].Rows[0]["ISO_CODE"]);
+                    }
                     DateAcct = Util.GetValueOfDateTime(ds.Tables[0].Rows[0]["DateAcct"]);
                     ConversionType = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_ConversionType_ID"]);
                     Precision = Util.GetValueOfInt(ds.Tables[0].Rows[0]["StdPrecision"]);
@@ -248,6 +273,7 @@ namespace VIS.Models
                                 continue;
                             }
 
+                                  
                             if (!IsMasterForecast   && !IsBudgetForecast)
                             {
                                 //create forecast lines 
@@ -268,12 +294,14 @@ namespace VIS.Models
 
                             else if (IsBudgetForecast)
                             {
+                                PurchaseUnitPrice = MConversionRate.Convert(ctx, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]), FromCurrency,
+                                ToCurrency, DateAcct, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
                                 //create Budgetforecast Line
                                 CreateBudgetForecastLines(ctx, trx, Org_ID, Forecast_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Order_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_OrderLine_ID"]), 0, 0, 0, 0,
                                   0, Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]),
                                   Util.GetValueOfInt(ds.Tables[0].Rows[i]["BaseUOM"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_BPartner_ID"]),
                                   Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_BPartner_Location_ID"]), 0, 0, Util.GetValueOfString(ds.Tables[0].Rows[i]["IsBOM"]), 
-                                  Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["BaseQty"]), ConvertedPrice, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]),
+                                  Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["BaseQty"]), ConvertedPrice, PurchaseUnitPrice,
                                   "",Period_ID, Util.GetValueOfDateTime(ds.Tables[0].Rows[i]["DateOrdered"]));
                             }
                         }
@@ -377,12 +405,14 @@ namespace VIS.Models
 
                             else if (IsBudgetForecast)
                             {
+                                PurchaseUnitPrice = MConversionRate.Convert(ctx, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]), FromCurrency,
+                                ToCurrency, DateAcct, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
                                 //create Budgetforecast Line
                                 CreateBudgetForecastLines(ctx, trx, Org_ID, Forecast_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Order_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_OrderLine_ID"]), 0, 0, 0, 0,
                                 0, Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]),Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]),
                                 Util.GetValueOfInt(ds.Tables[0].Rows[i]["BaseUOM"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_BPartner_ID"]), 
                                 Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_BPartner_Location_ID"]),0,0, Util.GetValueOfString(ds.Tables[0].Rows[i]["IsBOM"]), 
-                                Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["BaseQty"]), ConvertedPrice, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]),
+                                Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["BaseQty"]), ConvertedPrice, PurchaseUnitPrice,
                                 "",Period_ID, Util.GetValueOfDateTime(ds.Tables[0].Rows[i]["DateOrdered"]));                             
                             }
                         }
@@ -484,6 +514,7 @@ namespace VIS.Models
 
             else if (IsBudgetForecast)
             {
+               
                 //Budget Forecast -- case 
                 sql.Append("(SELECT NVL(C_ProjectLine_ID, 0) FROM VA073_ForecastLine FLine INNER JOIN VA073_ProductLine PLine ON FLine.VA073_ProductLine_ID=" +
                     "FLine.VA073_ProductLine_ID INNER JOIN VA073_SalesForecast Forecast ON Forecast.VA073_SalesForecast_ID=PLine.VA073_SalesForecast_ID " +
@@ -539,13 +570,15 @@ namespace VIS.Models
                     }
                     else if (IsBudgetForecast)
                     {
+                        PurchaseUnitPrice = MConversionRate.Convert(ctx, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]), FromCurrency,
+                        ToCurrency, DateAcct, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
                         //Create BudgetForecast Lines
                         CreateBudgetForecastLines(ctx, trx, Org_ID, Forecast_ID, 0, 0, Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Project_ID"]), 
                         Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ProjectLine_ID"]), 0, 0, 0, Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]),
                         Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["BaseUOM"]),0,0,
-                         Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_BPartner_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_BPartner_Location_ID"]),
+                        Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_BPartner_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_BPartner_Location_ID"]),
                         Util.GetValueOfString(ds.Tables[0].Rows[i]["IsBOM"]), Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["BaseQty"]), ConvertedPrice,
-                        Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]),"",Period,Util.GetValueOfDateTime(ds.Tables[0].Rows[i]["C_EnquiryrDate"]));
+                        PurchaseUnitPrice, "",Period,Util.GetValueOfDateTime(ds.Tables[0].Rows[i]["C_EnquiryrDate"]));
                     }
                 }
             }
@@ -604,11 +637,13 @@ namespace VIS.Models
 
                     else if (IsBudgetForecast)
                     {
+                        PurchaseUnitPrice = MConversionRate.Convert(ctx, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]), FromCurrency,
+                        ToCurrency, DateAcct, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
                         //Create BudgetForecast Lines                  
-                        CreateBudgetForecastLines(ctx, trx, Org_ID, Forecast_ID, 0, 0, 0, 0, 0, 0, 0,Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]), 
+                          CreateBudgetForecastLines(ctx, trx, Org_ID, Forecast_ID, 0, 0, 0, 0, 0, 0, 0,Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]), 
                           Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]),Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_UOM_ID"]), 0,0,0,0, 
                           Util.GetValueOfString(ds.Tables[0].Rows[i]["IsBOM"]), BudgetQuantity, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["SalesPrice"]),
-                          Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]),ProductCategories,Period,null);
+                          PurchaseUnitPrice, ProductCategories,Period,null);
                     }
                 }
             }
@@ -741,6 +776,8 @@ namespace VIS.Models
                         }
                         continue;
                     }
+                    PurchaseUnitPrice = MConversionRate.Convert(ctx, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]), FromCurrency,
+                    ToCurrency, DateAcct, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
                     //Create BudgetForecast Lines
                     CreateBudgetForecastLines(ctx, trx, Org_ID, Forecast_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Order_ID"]), 
                     Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_OrderLine_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Project_ID"]),
@@ -750,7 +787,7 @@ namespace VIS.Models
                     Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_UOM_ID"]),Util.GetValueOfInt(ds.Tables[0].Rows[i]["OrderBPartner"]), 
                     Util.GetValueOfInt(ds.Tables[0].Rows[i]["OrderLocation"]),Util.GetValueOfInt(ds.Tables[0].Rows[i]["ProjectBPartner"]),
                     Util.GetValueOfInt(ds.Tables[0].Rows[i]["ProjectLocation"]),Util.GetValueOfString(ds.Tables[0].Rows[i]["IsBOM"]), 
-                    Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["Quantity"]), ConvertedPrice, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]),
+                    Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["Quantity"]), ConvertedPrice, PurchaseUnitPrice,
                     "",Period ,Util.GetValueOfDateTime(ds.Tables[0].Rows[i]["TrxDate"]));
 
                 }
