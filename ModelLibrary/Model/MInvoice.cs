@@ -1676,11 +1676,19 @@ namespace VAdvantage.Model
                 int calendar_ID = 0;
                 DataSet ds = new DataSet();
 
-                calendar_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Calendar_ID FROM AD_ClientInfo WHERE ad_client_id = " + GetAD_Client_ID(), null, null));
+                // Organization Calendar
+                calendar_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Calendar_ID FROM AD_OrgInfo WHERE AD_Org_ID = " + GetAD_Org_ID(), null, Get_Trx()));
+                if (calendar_ID == 0)
+                {
+                    // Primary Calendar 
+                    calendar_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_Calendar_ID FROM AD_ClientInfo WHERE 
+                                    IsActive = 'Y' AND AD_Client_ID=" + GetAD_Client_ID(), null, null));
+                }
 
-                ds = DB.ExecuteDataset($"SELECT startdate , enddate FROM c_period WHERE c_year_id = (SELECT c_year.c_year_id FROM c_year INNER JOIN C_period ON " +
-                    $"c_year.c_year_id = C_period.c_year_id WHERE  c_year.c_calendar_id ={calendar_ID} and sysdate BETWEEN C_period.startdate AND C_period.enddate) " +
-                    $"AND periodno IN (1, 12)", null, null);
+                ds = DB.ExecuteDataset(@"SELECT startdate , enddate FROM c_period WHERE c_year_id = (SELECT c_year.c_year_id FROM c_year INNER JOIN C_period ON " +
+                    "c_year.c_year_id = C_period.c_year_id WHERE  c_year.c_calendar_id =" + calendar_ID + @" and 
+                    " + GlobalVariable.TO_DATE(GetDateInvoiced(), true) + " BETWEEN C_period.startdate AND C_period.enddate) " +
+                    "AND periodno IN (1, 12)", null, null);
 
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
@@ -1690,8 +1698,11 @@ namespace VAdvantage.Model
                 string sql = "SELECT COUNT(C_Invoice_ID) FROM C_Invoice WHERE DocStatus NOT IN('RE','VO') AND IsExpenseInvoice='N' AND IsSoTrx='N'" +
                   " AND C_BPartner_ID = " + GetC_BPartner_ID() + " AND InvoiceReference = '" + Get_Value("InvoiceReference") + "'" +
                   " AND AD_Org_ID= " + GetAD_Org_ID() + " AND AD_Client_ID= " + GetAD_Client_ID() + " AND C_DocTypeTarget_ID= " + GetC_DocTypeTarget_ID() +
-                  " AND DateAcct BETWEEN " + GlobalVariable.TO_DATE(startDate, true) + " AND " + GlobalVariable.TO_DATE(endDate, true);
-
+                  " AND DateInvoiced BETWEEN " + GlobalVariable.TO_DATE(startDate, true) + " AND " + GlobalVariable.TO_DATE(endDate, true);
+                if (GetC_Invoice_ID() > 0)
+                {
+                    sql += " AND C_Invoice_ID != " + GetC_Invoice_ID();
+                }
                 return Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
             }
             else
