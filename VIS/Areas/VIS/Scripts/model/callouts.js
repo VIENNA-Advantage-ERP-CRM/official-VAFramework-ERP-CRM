@@ -17507,9 +17507,6 @@
         }
         this.setCalloutActive(true);
         var C_UOM_ID = mTab.getValue("C_UOM_ID");
-        if (C_UOM_ID == null) {
-            C_UOM_ID = ctx.getContextAsInt(windowNo, "C_UOM_ID")
-        }
         var Qty = mTab.getValue("PlannedQty");
         if (mTab.getValue("M_Product_ID") != null) {
             var M_Product_ID = mTab.getValue("M_Product_ID");
