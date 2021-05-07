@@ -294,8 +294,21 @@ namespace VIS.Models
 
                             else if (IsBudgetForecast)
                             {
-                                PurchaseUnitPrice = MConversionRate.Convert(ctx, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]), FromCurrency,
-                                ToCurrency, DateAcct, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
+                                if (Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]) == 0)
+                                {
+                                    log.Log(Level.WARNING, Msg.GetMsg(ctx, "PurchasePriceNotFound"));
+                                }
+                                else
+                                {
+                                    //Price conversion from pricelist currency to header currency
+                                    PurchaseUnitPrice = MConversionRate.Convert(ctx, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]), FromCurrency,
+                                    ToCurrency, DateAcct, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
+                                    if (PurchaseUnitPrice == 0)
+                                    {
+                                        log.Log(Level.WARNING, Msg.GetMsg(ctx, "ConversionNotFound") + " " + Msg.GetMsg(ctx, "From") + " " + FromCurrencyName +
+                                            Msg.GetMsg(ctx, "To") + " " + ToCurrencyName);
+                                    }
+                                }
                                 //create Budgetforecast Line
                                 CreateBudgetForecastLines(ctx, trx, Org_ID, Forecast_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Order_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_OrderLine_ID"]), 0, 0, 0, 0,
                                   0, Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]),
@@ -405,8 +418,22 @@ namespace VIS.Models
 
                             else if (IsBudgetForecast)
                             {
-                                PurchaseUnitPrice = MConversionRate.Convert(ctx, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]), FromCurrency,
-                                ToCurrency, DateAcct, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
+                                if (Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]) == 0)
+                                {
+                                    log.Log(Level.WARNING, Msg.GetMsg(ctx, "PurchasePriceNotFound"));
+                                }
+                                else
+                                { 
+                                    //Price conversion from pricelist currency to header currency
+                                    PurchaseUnitPrice = MConversionRate.Convert(ctx, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]), FromCurrency,
+                                    ToCurrency, DateAcct, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
+                                    if (PurchaseUnitPrice == 0)
+                                    {
+                                        log.Log(Level.WARNING, Msg.GetMsg(ctx, "ConversionNotFound") + " " + Msg.GetMsg(ctx, "From") + " " +FromCurrencyName + 
+                                            Msg.GetMsg(ctx, "To") + " " + ToCurrencyName);
+                                    }
+                                }
+                               
                                 //create Budgetforecast Line
                                 CreateBudgetForecastLines(ctx, trx, Org_ID, Forecast_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Order_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_OrderLine_ID"]), 0, 0, 0, 0,
                                 0, Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]),Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]),
@@ -570,8 +597,21 @@ namespace VIS.Models
                     }
                     else if (IsBudgetForecast)
                     {
-                        PurchaseUnitPrice = MConversionRate.Convert(ctx, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]), FromCurrency,
-                        ToCurrency, DateAcct, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
+                        if (Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]) == 0)
+                        {
+                            log.Log(Level.WARNING, Msg.GetMsg(ctx, "PurchasePriceNotFound"));
+                        }
+                        else
+                        {
+                            //Price conversion from pricelist currency to header currency
+                            PurchaseUnitPrice = MConversionRate.Convert(ctx, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]), FromCurrency,
+                            ToCurrency, DateAcct, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
+                            if (PurchaseUnitPrice == 0)
+                            {
+                                log.Log(Level.WARNING, Msg.GetMsg(ctx, "ConversionNotFound") + " " + Msg.GetMsg(ctx, "From") + " " + FromCurrencyName +
+                                    Msg.GetMsg(ctx, "To") + " " + ToCurrencyName);
+                            }
+                        }
                         //Create BudgetForecast Lines
                         CreateBudgetForecastLines(ctx, trx, Org_ID, Forecast_ID, 0, 0, Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Project_ID"]), 
                         Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ProjectLine_ID"]), 0, 0, 0, Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]),
@@ -637,10 +677,23 @@ namespace VIS.Models
 
                     else if (IsBudgetForecast)
                     {
-                        PurchaseUnitPrice = MConversionRate.Convert(ctx, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]), FromCurrency,
-                        ToCurrency, DateAcct, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
-                        //Create BudgetForecast Lines                  
-                          CreateBudgetForecastLines(ctx, trx, Org_ID, Forecast_ID, 0, 0, 0, 0, 0, 0, 0,Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]), 
+                        if (Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]) == 0)
+                        {                     
+                            log.Log(Level.WARNING, Msg.GetMsg(ctx, "PurchasePriceNotFound"));
+                        }
+                        else
+                        {
+                            //Price conversion from pricelist currency to header currency
+                            PurchaseUnitPrice = MConversionRate.Convert(ctx, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]), FromCurrency,
+                            ToCurrency, DateAcct, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
+                            if (PurchaseUnitPrice == 0)
+                            {
+                                log.Log(Level.WARNING, Msg.GetMsg(ctx, "ConversionNotFound") + " " + Msg.GetMsg(ctx, "From") + " " + FromCurrencyName +
+                                    Msg.GetMsg(ctx, "To") + " " + ToCurrencyName);
+                            }
+                        }
+                        //Create BudgetForecast Lines  
+                        CreateBudgetForecastLines(ctx, trx, Org_ID, Forecast_ID, 0, 0, 0, 0, 0, 0, 0,Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]), 
                           Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]),Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_UOM_ID"]), 0,0,0,0, 
                           Util.GetValueOfString(ds.Tables[0].Rows[i]["IsBOM"]), BudgetQuantity, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["SalesPrice"]),
                           PurchaseUnitPrice, ProductCategories,Period,null);
@@ -776,8 +829,22 @@ namespace VIS.Models
                         }
                         continue;
                     }
-                    PurchaseUnitPrice = MConversionRate.Convert(ctx, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]), FromCurrency,
-                    ToCurrency, DateAcct, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
+                   
+                    if (Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]) == 0)
+                    {
+                        log.Log(Level.WARNING, Msg.GetMsg(ctx, "PurchasePriceNotFound"));
+                    }
+                    else
+                    {
+                        //Price conversion from pricelist currency to header currency
+                        PurchaseUnitPrice = MConversionRate.Convert(ctx, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]), FromCurrency,
+                        ToCurrency, DateAcct, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
+                        if (PurchaseUnitPrice == 0)
+                        {
+                            log.Log(Level.WARNING, Msg.GetMsg(ctx, "ConversionNotFound") + " " + Msg.GetMsg(ctx, "From") + " " + FromCurrencyName +
+                                Msg.GetMsg(ctx, "To") + " " + ToCurrencyName);
+                        }
+                    }
                     //Create BudgetForecast Lines
                     CreateBudgetForecastLines(ctx, trx, Org_ID, Forecast_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Order_ID"]), 
                     Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_OrderLine_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Project_ID"]),
