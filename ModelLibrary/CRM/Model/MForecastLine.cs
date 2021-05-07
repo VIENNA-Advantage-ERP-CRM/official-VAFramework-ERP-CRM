@@ -130,7 +130,7 @@ namespace VAdvantage.Model
                 LineHistory.SetM_AttributeSetInstance_ID(Util.GetValueOfInt(Get_ValueOld("M_AttributeSetInstance_ID")));
                 LineHistory.SetIsBOM(IsBOM());
                 LineHistory.SetM_BOM_ID(Util.GetValueOfInt(Get_ValueOld("M_BOM_ID")));
-                LineHistory.SetBOMUse(Util.GetValueOfString(Get_ValueOld("BOMUse")));
+                LineHistory.SetBOMUse(Util.GetValueOfString(Get_ValueOld("BOMUse")).Equals("")?null: Util.GetValueOfString(Get_ValueOld("BOMUse")));
                 LineHistory.SetC_UOM_ID(Util.GetValueOfInt(Get_ValueOld("C_UOM_ID")));
                 LineHistory.SetBaseQuantity(Util.GetValueOfDecimal(Get_ValueOld("BaseQty")));
                 LineHistory.SetQtyEntered(Util.GetValueOfDecimal(Get_ValueOld("QtyEntered")));
