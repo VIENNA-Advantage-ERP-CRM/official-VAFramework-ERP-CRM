@@ -17490,6 +17490,49 @@
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";
     };
+
+    /**
+     * Set BaseQuantity as per UOM
+     * @param {any} ctx
+     * @param {any} windowNo
+     * @param {any} mTab
+     * @param {any} mField
+     * @param {any} value
+     * @param {any} oldValue
+     */
+    CalloutProductToOpportunity.prototype.SetQty = function (ctx, windowNo, mTab, mField, value, oldValue)
+    {
+        if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {
+            return "";
+        }
+        this.setCalloutActive(true);
+        var C_UOM_ID = mTab.getValue("C_UOM_ID");
+        if (C_UOM_ID == null) {
+            C_UOM_ID = ctx.getContextAsInt(windowNo, "C_UOM_ID")
+        }
+        var Qty = mTab.getValue("PlannedQty");
+        if (mTab.getValue("M_Product_ID") != null) {
+            var M_Product_ID = mTab.getValue("M_Product_ID");
+            var paramStr = M_Product_ID.toString().concat(",", C_UOM_ID.toString(), ",", Qty.toString());
+            var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
+            if (pc != null) {
+                mTab.setValue("BaseQty", pc);
+            }
+            else {
+                mTab.setValue("BaseQty", Qty);
+            }
+        }
+        else {
+            mTab.setValue("BaseQty", Qty);
+        }
+       
+        this.setCalloutActive(false);
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    }
+
+
+
     VIS.Model.CalloutProductToOpportunity = CalloutProductToOpportunity;
     //**********CalloutProductToOpportunity End**************
 
