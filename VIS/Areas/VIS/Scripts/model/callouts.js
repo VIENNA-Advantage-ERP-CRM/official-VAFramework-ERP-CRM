@@ -5573,7 +5573,7 @@
                 if (mTab.findColumn("C_ConversionType_ID") >= 0) {
                     mTab.setValue("C_ConversionType_ID", payAmt[0]["C_ConversionType_ID"]);
                 }
-                mTab.setValue("DateAcct", new Date(payAmt[0]["DateAcct"]));
+                mTab.setValue("DateAcct", Globalize.format(new Date(payAmt[0]["DateAcct"]), "yyyy-MM-dd"));
             }
             //param[0] = new VIS.DB.SqlParam("@C_Payment_ID", C_Payment_ID);
             //dr = VIS.DB.executeReader(sql, param, null);
