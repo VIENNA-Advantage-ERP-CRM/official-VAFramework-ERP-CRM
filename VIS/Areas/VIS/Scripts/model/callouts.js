@@ -1256,7 +1256,7 @@
         return this.BPartnerBill(ctx, windowNo, mTab, mField, mTab.getValue("Bill_BPartner_ID"));
     };
 
-    
+
     /// <summary>
     /// Order Header - C_BPartner_Location.
     /// - C_BPartner_Location_ID
@@ -16609,12 +16609,13 @@
         var idr = null;
         try {
             var noPrice = true;
-
+            //JID_1784_1 set UOM of the selected product
+            var UOM = VIS.dataContext.getJSONRecord("MProduct/GetProduct", M_Product_ID.toString());
+            mTab.setValue("C_UOM_ID", Util.getValueOfInt(UOM.C_UOM_ID));
             //	Search Pricelist for current version
-            sql = "SELECT bomPriceStd(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceStd,"
-                + "bomPriceList(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceList,"
-                + "bomPriceLimit(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceLimit,"
-                + "p.C_UOM_ID,pv.ValidFrom,pl.C_Currency_ID "
+            uom = mTab.getValue("C_UOM_ID");
+            sql = "SELECT pp.PriceStd, "
+                + "pp.C_UOM_ID,pv.ValidFrom,pl.C_Currency_ID "
                 + "FROM M_Product p, M_ProductPrice pp, M_PriceList pl, M_PriceList_Version pv "
                 + "WHERE p.M_Product_ID=pp.M_Product_ID"
                 + " AND pp.M_PriceList_Version_ID=pv.M_PriceList_Version_ID"
@@ -16622,6 +16623,7 @@
                 + " AND pv.IsActive='Y'"
                 + " AND p.M_Product_ID=@param1"		//	1
                 + " AND pl.M_PriceList_ID=@param2"	//	2
+                + " AND pp.C_UOM_ID= " + uom
                 + " ORDER BY pv.ValidFrom DESC";
             //PreparedStatement pstmt = DataBase.prepareStatement(sql, null);
             var param = [];
@@ -16705,9 +16707,7 @@
                 }
                 idr.close();
             }
-            //JID_1784_1 set UOM of the selected product
-            var UOM = VIS.dataContext.getJSONRecord("MProduct/GetProduct", M_Product_ID.toString());
-            mTab.setValue("C_UOM_ID", Util.getValueOfInt(UOM.C_UOM_ID));
+
         }
         catch (err) {
             if (idr != null) {
@@ -16845,7 +16845,7 @@
             //	Default charge from context
             var c_uom_id = ctx.getContextAsInt("#C_UOM_ID");
             if (c_uom_id > 0) {
-                mTab.setValue("C_UOM_ID", c_uom_id);	
+                mTab.setValue("C_UOM_ID", c_uom_id);
             }
             else {
                 mTab.setValue("C_UOM_ID", 100);	//	EA
@@ -16895,8 +16895,7 @@
             C_UOM_ID = ctx.getContextAsInt(windowNo, "C_UOM_ID")
         }
         var Qty = mTab.getValue("BaseQty");
-        if (mTab.getValue("M_Product_ID") != null)
-        {
+        if (mTab.getValue("M_Product_ID") != null) {
             var M_Product_ID = mTab.getValue("M_Product_ID");
             var paramStr = M_Product_ID.toString().concat(",", C_UOM_ID.toString(), ",", Qty.toString());
             var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
@@ -16907,8 +16906,7 @@
                 mTab.setValue("QtyEntered", Qty);
             }
         }
-        else
-        {
+        else {
             mTab.setValue("QtyEntered", Qty);
         }
         if (Util.getValueOfDecimal(mTab.getValue("UnitPrice")) != 0 && Qty != 0) {
@@ -17509,8 +17507,7 @@
      * @param {any} value
      * @param {any} oldValue
      */
-    CalloutProductToOpportunity.prototype.SetQty = function (ctx, windowNo, mTab, mField, value, oldValue)
-    {
+    CalloutProductToOpportunity.prototype.SetQty = function (ctx, windowNo, mTab, mField, value, oldValue) {
         if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {
             return "";
         }
@@ -17531,7 +17528,7 @@
         else {
             mTab.setValue("BaseQty", Qty);
         }
-       
+
         this.setCalloutActive(false);
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";
@@ -20900,7 +20897,7 @@
     /// <param name="value">The new value</param>
     /// <returns>Error message or Set value in respective fields""</returns>
     CalloutOrderContract.prototype.BPartnerContract = function (ctx, windowNo, mTab, mField, value, oldValue) {
-        
+
         var PaymentBasetype = null;
         //var Util=VIS.Util;
         //var sql = "";
@@ -20950,7 +20947,7 @@
                 } else {
                     mTab.setValue("M_PriceList_ID", null);
                 }
-                    // JID_0364: If price list not available at BP, user need to select it manually
+                // JID_0364: If price list not available at BP, user need to select it manually
 
                 //	Bill-To BPartner
                 mTab.setValue("Bill_BPartner_ID", C_BPartner_ID);
@@ -23389,6 +23386,36 @@
             mTab.setValue("WeekOffset", VIS.Env.ZERO);
         }
 
+        this.setCalloutActive(false);
+        return "";
+    };
+    //To set price in Expense amount when UOM is selected on Report line window
+    CalloutTimeExpense.prototype.SetPrice = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (value == null || value.toString() == "") {
+            return "";
+        }
+        if (this.isCalloutActive() || value == null)
+            return "";
+        this.setCalloutActive(true);
+        try {
+            var paramStr = "";
+            var M_Product_ID = ctx.getContextAsInt(windowNo, "M_Product_ID");
+            paramStr = M_Product_ID.toString().concat(',').concat(mTab.getValue("S_TimeExpense_ID").toString()).concat(',').concat(mTab.getValue("C_UOM_ID").toString());
+            var prices = VIS.dataContext.getJSONRecord("MExpenseReport/GetPrices", paramStr);
+
+            if (prices != null) {
+
+                var PriceList = prices["PriceList"];
+                mTab.setValue("ExpenseAmt", PriceList);
+                mTab.setValue("ConvertedAmt", PriceList);
+            }
+            this.setCalloutActive(false);
+            return;
+        }
+        catch (err) {
+            this.setCalloutActive(false);
+            this.log.severe(err.toString());
+        }
         this.setCalloutActive(false);
         return "";
     };
