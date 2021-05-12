@@ -239,6 +239,8 @@ namespace ViennaAdvantageServer.Process
                         throw new ArgumentException(Msg.GetMsg(GetCtx(), "VIS_PaymentMethodNotDefined") + " : " + bp.GetName());
                     }
                 }
+                // Set InvoiceReference as DocumentNo By Rakesh Kumar(228) on 12/May/2021
+                inv.Set_Value("InvoiceReference", cont.GetDocumentNo());
                 inv.SetC_DocType_ID(_C_DocType_ID);
                 inv.SetC_DocTypeTarget_ID(_C_DocType_ID);
                 inv.SetC_BPartner_Location_ID(cont.GetBill_Location_ID());
@@ -286,7 +288,8 @@ namespace ViennaAdvantageServer.Process
                     invLine.SetPriceActual(cont.GetPriceEntered());
                     invLine.SetPriceEntered(cont.GetPriceEntered());
                     //  invLine.SetPriceLimit(price);
-                    invLine.SetPriceList(cont.GetPriceEntered());
+                    // Set PriceList By Rakesh Kumar(228) on 12/May/2021
+                    invLine.SetPriceList(cont.GetPriceList());
                     if (!invLine.Save())
                     {
                         //Neha----If Invoice Line not saved then will show the exception---11 Sep,2018
@@ -366,7 +369,7 @@ namespace ViennaAdvantageServer.Process
             }
             sql.Append(" ORDER BY AD_Org_ID Desc");
             _C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar(MRole.GetDefault(GetCtx()).AddAccessSQL(sql.ToString(), "C_DocType", true, true), null, Get_TrxName()));
-           
+
             // If ContractType not defined on Service Contract Window
             if (_C_DocType_ID == 0)
             {
