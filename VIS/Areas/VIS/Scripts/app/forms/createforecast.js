@@ -348,8 +348,8 @@
 
 
             validation = "C_Project.IsActive = 'Y' AND C_Project.IsOpportunity = 'Y' AND C_Project.AD_Org_ID IN (0, " + AD_Org_ID + ")";
-            _OpportunityLookUp = VIS.MLookupFactory.get(ctx, $self.windowNo, 5766, VIS.DisplayType.Search, "C_Project_ID", 0, false, validation);
-            _OpportunityCtrl = new VIS.Controls.VTextBoxButton("C_Project_ID", true, false, true, VIS.DisplayType.Search, _OpportunityLookUp);
+            _OpportunityLookUp = VIS.MLookupFactory.get(ctx, $self.windowNo, 5766, VIS.DisplayType.MultiKey, "C_Project_ID", 0, false, validation);
+            _OpportunityCtrl = new VIS.Controls.VTextBoxButton("C_Project_ID", true, false, true, VIS.DisplayType.MultiKey, _OpportunityLookUp);
             _OpportunityCtrl.getControl().prop('disabled', true);
             _OpportunityCtrl.getBtn(0).prop('disabled', true);
             _OpportunityCtrl.getBtn(1).prop('disabled', true);
