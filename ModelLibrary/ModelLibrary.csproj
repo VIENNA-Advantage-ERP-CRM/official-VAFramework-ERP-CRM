@@ -1705,13 +1705,16 @@
     <Compile Include="Process\CommissionCalc.cs" />
     <Compile Include="Process\CommissionCopy.cs" />
     <Compile Include="Process\CopyAllGroups.cs" />
+    <Compile Include="Process\CopyFromForecast.cs" />
     <Compile Include="Process\CopyFromInvoice.cs" />
     <Compile Include="Process\CopyFromJournal.cs" />
     <Compile Include="Process\CopyFromLine.cs" />
+    <Compile Include="Process\CopyFromMasterForecast.cs" />
     <Compile Include="Process\CopyFromOrder.cs" />
     <Compile Include="Process\CopyFromProject.cs" />
     <Compile Include="Process\CopyOrder.cs" />
     <Compile Include="Process\CopyTranslationEntries.cs" />
+    <Compile Include="Process\CostCalculationWithAcctSchema.cs" />
     <Compile Include="Process\CostCreate.cs" />
     <Compile Include="Process\CostingCalculation.cs" />
     <Compile Include="Process\CostUpdate.cs" />
