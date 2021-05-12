@@ -46,5 +46,22 @@ namespace VIS.Controllers
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
+        /// <summary>
+        /// Get standard price of product
+        /// </summary>
+        /// <param name="fields">List of Parameters</param>
+        /// <returns>Data in JSON format</returns>
+        public JsonResult GetStandardPrice(string fields)
+        {
+            String retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
+                MExpenseReportModel objExpense = new MExpenseReportModel();
+                retJSON = JsonConvert.SerializeObject(objExpense.GetStandardPrice(ctx, fields));
+            }
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }
