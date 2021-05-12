@@ -531,10 +531,12 @@
                 if (_ProductCategoryCtrl.getValue() != undefined || VIS.Utility.Util.getValueOfString(_ProductCategoryCtrl.getValue()) != "") {
                     if (VIS.Utility.Util.getValueOfDecimal(_BudgetQuantityCtrl.getValue()) == 0) {
                         VIS.ADialog.info("SelectBudgetQunatity");
+                        busyDiv(false);
                         return false;
                     }
                     if (isBudgetForecast && VIS.Utility.Util.getValueOfDecimal(_SalesPriceListCtrl.getValue()) == 0) {
                         VIS.ADialog.info("SelectPriceList");
+                        busyDiv(false);
                         return false;
                     }
                 }
@@ -567,10 +569,12 @@
                 if (_ProductCategoryCtrl.getValue() != undefined || VIS.Utility.Util.getValueOfString(_ProductCategoryCtrl.getValue()) != "") {
                     if (VIS.Utility.Util.getValueOfDecimal(_BudgetQuantityCtrl.getValue()) == 0) {
                         VIS.ADialog.info("SelectBudgetQunatity");
+                        busyDiv(false);
                         return false;
                     }
                     if (isBudgetForecast && VIS.Utility.Util.getValueOfDecimal(_SalesPriceListCtrl.getValue()) == 0) {
                         VIS.ADialog.info("SelectPriceList");
+                        busyDiv(false);
                         return false;
                     }
                 }

@@ -59,13 +59,13 @@ namespace VAdvantage.Model
         /// <returns></returns>
         protected override bool BeforeSave(bool newRecord)
         {
-            if (Util.GetValueOfInt(GetM_BOM_ID()) == 0)
+            if (Env.IsModuleInstalled("VAMFG_") && Util.GetValueOfInt(GetM_BOM_ID()) == 0)
             {
                 //fetch BOM ,BOMUSE ,Routing of selected Product
                 string sql = @"SELECT M_BOM_ID ,BOMUse,VAMFG_M_Routing_ID FROM M_Product p 
                     INNER JOIN M_BOM  BOM on p.M_product_ID = BOM.M_Product_ID 
                     LEFT JOIN VAMFG_M_Routing Routing ON Routing.M_product_ID=p.M_product_ID AND Routing.VAMFG_IsDefault='Y'
-                    WHERE p.M_Product_ID=" + GetM_Product_ID() + " AND p.ISBOM = 'Y'";
+                    WHERE p.M_Product_ID=" + GetM_Product_ID() + " AND p.ISBOM = 'Y'" + " AND BOM.IsActive = 'Y'";
 
                 DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
                 if(ds != null && ds.Tables[0].Rows.Count == 1)

@@ -728,11 +728,12 @@ namespace VIS.Models
         public void TeamForecastProducts(Ctx ctx, Trx trx, int Org_ID, int Period, int Forecast_ID, string TeamForecast_IDs, bool IsMasterForecast, bool IncludeOpenSO, bool IncludeSO, bool IncludeOpp)
         {
             sql.Clear();
-            sql.Append(@"SELECT TLine.M_Product_ID,TLine.C_Charge_ID,TLine.M_AttributeSetInstance_ID,TLine.QtyEntered,TLine.BOMUse,TLine.M_BOM_ID,TLine.VAMFG_M_Routing_ID,
-            TForecast.C_Forecast_ID, C_ForecastLine_ID,TLine.C_UOM_ID,NVL(UnitPrice,0) AS Price,TForecast.C_Currency_ID,Product.ISBOM,Currency.ISO_CODE,Product.C_UOM_ID AS BaseUOM 
-            FROM C_Forecast TForecast INNER JOIN C_Forecastline TLine ON TLine.C_Forecast_ID = TForecast.C_Forecast_ID LEFT JOIN M_Product Product ON Product.M_Product_ID=TLine.M_Product_ID
-            INNER JOIN C_Currency Currency ON Currency.C_Currency_ID= TForecast.C_Currency_ID 
-            WHERE  TForecast.AD_Org_ID = " + Org_ID + "   AND TForecast.DocStatus IN ('CO','CL') AND NVL(TLine.C_ForecastLine_ID,0) NOT IN " +
+            sql.Append(@"SELECT TLine.M_Product_ID,TLine.C_Charge_ID,TLine.M_AttributeSetInstance_ID,TLine.QtyEntered,TLine.BOMUse,TLine.M_BOM_ID,"+
+             (Env.IsModuleInstalled("VAMFG_")?"TLine.VAMFG_M_Routing_ID": "0 AS VAMFG_M_Routing_ID") +
+            ",TForecast.C_Forecast_ID, C_ForecastLine_ID,TLine.C_UOM_ID,NVL(UnitPrice,0) AS Price,TForecast.C_Currency_ID,Product.ISBOM,Currency.ISO_CODE,Product.C_UOM_ID AS BaseUOM "+
+            "FROM C_Forecast TForecast INNER JOIN C_Forecastline TLine ON TLine.C_Forecast_ID = TForecast.C_Forecast_ID LEFT JOIN M_Product Product ON Product.M_Product_ID=TLine.M_Product_ID "+
+            "INNER JOIN C_Currency Currency ON Currency.C_Currency_ID= TForecast.C_Currency_ID "+
+            "WHERE  TForecast.AD_Org_ID = " + Org_ID + "   AND TForecast.DocStatus IN ('CO','CL') AND NVL(TLine.C_ForecastLine_ID,0) NOT IN " +
             "(SELECT NVL(C_ForecastLine_ID,0) FROM C_MasterForecastlinedetails LineDetails INNER JOIN C_MasterForecastLine Line ON Line.C_MasterForecastLine_ID=" +
             " LineDetails.C_MasterForecastLine_ID INNER JOIN C_MasterForecast Forecast ON Forecast.C_MasterForecast_ID=Line.C_MasterForecast_ID WHERE " +
             " Forecast.AD_Org_ID =" + Org_ID + " AND Forecast.DocStatus NOT IN ('VO','RE')) AND NVL(TLine.C_OrderLine_ID,0) NOT IN (SELECT NVL(C_OrderLine_ID,0) FROM " +
@@ -794,8 +795,9 @@ namespace VIS.Models
             sql.Append("SELECT Details.M_Product_ID,Details.C_Charge_ID,Details.M_Attributesetinstance_ID, Mforcast.C_MasterForecast_ID,Details.C_MasterForecastLine_ID," +
                 " Details.C_Uom_ID, Details.C_OrderLine_ID, Details.C_Order_ID, Details.C_ProjectLine_ID, Details.C_Project_ID, Details.PriceEntered AS Price, " +
                 "Details.QtyEntered AS Quantity, Mforcast.C_Currency_ID, Product.ISBOM, Currency.ISO_CODE, Orders.C_BPartner_ID  AS OrderBPartner," +
-                "Orders.C_BPartner_Location_ID AS OrderLocation, Project.C_BPartner_Location_ID AS ProjectLocation,Line.BOMUse,Line.M_BOM_ID,Line.VAMFG_M_Routing_ID," +
-                "Project.C_BPartner_ID AS ProjectBPartner,Mforcast.TrxDate, (SELECT ProductPrice.PriceStd " +
+                "Orders.C_BPartner_Location_ID AS OrderLocation, Project.C_BPartner_Location_ID AS ProjectLocation,Line.BOMUse,Line.M_BOM_ID,"+
+                (Env.IsModuleInstalled("VAMFG_")?"Line.VAMFG_M_Routing_ID": "0 AS VAMFG_M_Routing_ID")+
+                ",Project.C_BPartner_ID AS ProjectBPartner,Mforcast.TrxDate, (SELECT ProductPrice.PriceStd " +
                 "FROM M_ProductPrice ProductPrice WHERE  ProductPrice.M_Product_ID = Product.M_Product_ID AND ProductPrice.M_PriceList_Version_ID = " +
                 "(SELECT MAX(M_PriceList_Version_ID) FROM M_PriceList_Version WHERE IsActive = 'Y' AND M_PriceList_ID = " + PriceList + ") " +
                 "AND ProductPrice.C_UOM_ID=Product.C_UOM_ID AND NVL(ProductPrice.M_AttributeSetInstance_ID,0)=NVL(Product.M_AttributeSetInstance_ID,0)) AS PurchasePrice " +
@@ -979,7 +981,10 @@ namespace VIS.Models
             Line.SetM_AttributeSetInstance_ID(Attribute_ID);
             Line.SetIsBOM(BOM.Equals("Y") ? true : false);
             Line.SetBOMUse(BOMUse.Equals("") ? null : BOMUse);
-            Line.Set_Value("VAMFG_M_Routing_ID", Routing_ID);
+            if (Env.IsModuleInstalled("VAMFG_"))
+            {
+               Line.Set_Value("VAMFG_M_Routing_ID", Routing_ID);
+            }
             Line.SetM_BOM_ID(M_BOM_ID);
             if (!Line.Is_New())
             {
@@ -1132,7 +1137,10 @@ namespace VIS.Models
             ProductLinePo.Set_Value("M_AttributeSetInstance_ID", Attribute_ID);
             ProductLinePo.Set_Value("IsBOM", BOM.Equals("Y") ? true : false);
             ProductLinePo.Set_Value("VA073_BOMUse", BOMUse.Equals("") ? null : BOMUse);
-            ProductLinePo.Set_Value("VAMFG_M_Routing_ID", Routing_ID);
+            if (Env.IsModuleInstalled("VAMFG_"))
+            {
+                ProductLinePo.Set_Value("VAMFG_M_Routing_ID", Routing_ID);
+            }
             ProductLinePo.Set_Value("M_BOM_ID", M_BOM_ID);
             ProductLinePo.Set_Value("VA073_PurchaseUnitPrice", PurchaseUnitPrice);
             ProductLinePo.Set_Value("VA073_PurchaseValue", PurchaseUnitPrice * Util.GetValueOfDecimal(ProductLinePo.Get_Value("TotalQty")));
@@ -1143,7 +1151,7 @@ namespace VIS.Models
                 string _sql = @"SELECT M_BOM_ID ,BOMUse,VAMFG_M_Routing_ID FROM M_Product p 
                     INNER JOIN M_BOM  BOM on p.M_product_ID = BOM.M_Product_ID 
                     LEFT JOIN VAMFG_M_Routing Routing ON Routing.M_product_ID=p.M_product_ID AND Routing.VAMFG_IsDefault='Y'
-                    WHERE p.M_Product_ID=" + Product_ID + " AND p.ISBOM = 'Y'";
+                    WHERE p.M_Product_ID=" + Product_ID + " AND p.ISBOM = 'Y' AND BOM.IsActive = 'Y'";
 
                 DataSet ds = DB.ExecuteDataset(_sql, null, trx);
                 if (ds != null && ds.Tables[0].Rows.Count == 1)
@@ -1406,7 +1414,10 @@ namespace VIS.Models
                 ForecastLinePO.Set_Value("C_BPartner_Location_ID", ProjectLocation);
             }
             ForecastLinePO.Set_Value("VA073_BOMUse", ProductLinePo.Get_Value("VA073_BOMUse"));
-            ForecastLinePO.Set_Value("VAMFG_M_Routing_ID", ProductLinePo.Get_Value("VAMFG_M_Routing_ID"));
+            if (Env.IsModuleInstalled("VAMFG_"))
+            {
+                ForecastLinePO.Set_Value("VAMFG_M_Routing_ID", ProductLinePo.Get_Value("VAMFG_M_Routing_ID")); 
+            }
             ForecastLinePO.Set_Value("M_BOM_ID", ProductLinePo.Get_Value("M_BOM_ID"));
             return ForecastLinePO;
         }
@@ -1493,7 +1504,7 @@ namespace VIS.Models
                     "PBOM.M_AttributeSetInstance_ID " +
                     "FROM M_Product p INNER JOIN M_BOM  BOM on p.M_product_ID = BOM.M_Product_ID " +
                     "INNER JOIN M_BOMProduct PBOM ON BOM.M_BOM_ID = PBOM.M_BOM_ID " +
-                    "WHERE BOM.M_BOM_ID = " + BOM_ID + " AND p.ISBOM = 'Y'";
+                    "WHERE BOM.M_BOM_ID = " + BOM_ID + " AND p.ISBOM = 'Y'  AND BOM.IsActive='Y'";
 
             DataSet Componentds = DB.ExecuteDataset(_sql, null, trx);
             if (Componentds != null && Componentds.Tables[0].Rows.Count > 0)
