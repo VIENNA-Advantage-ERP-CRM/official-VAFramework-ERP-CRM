@@ -329,6 +329,11 @@ namespace VIS.Models
                             }
                         }
                     }
+                    else
+                    {
+                        log.Log(Level.INFO, sql1);
+                        log.Log(Level.INFO, "Data not found against Sales Order");
+                    }
                 }
 
                 if (IncludeOpenSO)
@@ -453,6 +458,11 @@ namespace VIS.Models
                                 "", Period_ID, Util.GetValueOfDateTime(ds.Tables[0].Rows[i]["DateOrdered"]), "", 0, 0);
                             }
                         }
+                    }
+                    else
+                    {
+                        log.Log(Level.INFO, sql1);
+                        log.Log(Level.INFO, "Data not found against Open Sales Order");
                     }
                 }
                 //Include Opportunities for both Master and Team Forecast
@@ -633,6 +643,11 @@ namespace VIS.Models
                     }
                 }
             }
+            else
+            {
+                log.Log(Level.INFO, sql1);
+                log.Log(Level.INFO, "Data not found against Opportunity");
+            }
         }
 
         /// <summary>
@@ -711,6 +726,11 @@ namespace VIS.Models
                     }
                 }
             }
+            else
+            {
+                log.Log(Level.INFO, sql1);
+                log.Log(Level.INFO, "Data not found against Product Category");
+            }
         }
 
 
@@ -775,6 +795,11 @@ namespace VIS.Models
                     Util.GetValueOfString(ds.Tables[0].Rows[i]["BOMUse"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_BOM_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAMFG_M_Routing_ID"]));
 
                 }
+            }
+            else
+            {
+                log.Log(Level.INFO, sql1);
+                log.Log(Level.INFO, "Data not found against Team Forecast");
             }
 
         }
@@ -874,7 +899,11 @@ namespace VIS.Models
 
                 }
             }
-
+            else
+            {
+                log.Log(Level.INFO, sql1);
+                log.Log(Level.INFO, "Data not found against Master Forecast");
+            }
         }
 
 
