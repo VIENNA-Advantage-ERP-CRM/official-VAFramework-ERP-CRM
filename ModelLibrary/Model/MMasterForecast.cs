@@ -435,6 +435,7 @@ namespace VAdvantage.Model
                     {
                         line.SetOppQty(Env.ZERO);
                     }
+                    line.SetProcessed(true);
                     if (!line.Save(Get_TrxName()))
                     {
                         pp = VLogger.RetrieveError();
