@@ -476,6 +476,17 @@ namespace VAdvantage.Process
             po.SetClientOrg(so.GetAD_Client_ID(), so.GetAD_Org_ID());
             po.SetRef_Order_ID(so.GetC_Order_ID());
             po.SetIsSOTrx(false);
+
+            /** Updating trx org from so ** Dt:15/04/2021 ** Modified By: Kumar **/
+            if (Env.IsModuleInstalled("WMN01") && so.GetAD_OrgTrx_ID() > 0)
+            {
+                po.SetAD_OrgTrx_ID(so.GetAD_OrgTrx_ID());
+                if (po.Get_ColumnIndex("VA077_IsLegalEntity") > 0)
+                    po.Set_Value("VA077_IsLegalEntity", true);
+                if (po.Get_ColumnIndex("WMN01_IsLegalEntity") > 0)
+                    po.Set_Value("WMN01_IsLegalEntity", true);
+            }
+
             // method edited to set unreleased document type for PO
             po.SetC_DocTypeTarget_ID(false);
             //
