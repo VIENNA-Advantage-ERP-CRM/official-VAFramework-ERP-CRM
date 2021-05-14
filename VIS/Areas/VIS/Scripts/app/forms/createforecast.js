@@ -618,7 +618,7 @@
                     SalesPriceList_ID: SalesPriceList_ID
                 },
                 success: function (result) {
-                    VIS.ADialog.info("", "", result);
+                    VIS.ADialog.info("", "", JSON.parse(result));
                     busyDiv(false);
                 },
                 error: function (ex) {

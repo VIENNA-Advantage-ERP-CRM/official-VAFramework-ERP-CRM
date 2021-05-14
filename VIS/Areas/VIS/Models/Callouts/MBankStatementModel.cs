@@ -62,6 +62,14 @@ namespace VIS.Models
                 _list.Add("C_ConversionType_ID", c_conversionType_ID);
                 _list.Add("DateAcct", dateAcct);
                 _list.Add("payAmt", rate);
+                if (payAmt != 0 && rate == 0)
+                {
+                    _list.Add("ConvertedAmt", "ConversionNotFound");
+                }
+                else
+                {
+                    _list.Add("ConvertedAmt", "");
+                }
                 _paymentDetails = new List<Dictionary<string, object>>();
                 _paymentDetails.Add(_list);
             }
