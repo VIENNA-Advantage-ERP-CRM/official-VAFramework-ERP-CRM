@@ -16666,7 +16666,7 @@
             mTab.setValue("ExpenseAmt", priceActual);
             mTab.setValue("C_Currency_ID", currency);
             mTab.setValue("ConvertedAmt", priceActual);
-             //	no prices yet - look base pricelist
+            //	no prices yet - look base pricelist
             //if (noPrice) {
             //    //	Find if via Base Pricelist
             //    sql = "SELECT bomPriceStd(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceStd,"
@@ -23399,10 +23399,6 @@
     //To set price in Expense amount when UOM is selected on Report line window
     CalloutTimeExpense.prototype.SetPrice = function (ctx, windowNo, mTab, mField, value, oldValue) {
         if (value == null || value.toString() == "") {
-            if (value == null) {
-                mTab.setValue("ExpenseAmt", 0);
-                mTab.setValue("ConvertedAmt", 0);
-            }
             return "";
         }
         if (this.isCalloutActive() || value == null)
@@ -23416,9 +23412,24 @@
 
             if (prices != null) {
 
-                var PriceList = prices["PriceList"];
-                mTab.setValue("ExpenseAmt", PriceList);
-                mTab.setValue("ConvertedAmt", PriceList);
+                var PriceStd = prices["PriceStd"];
+                mTab.setValue("ExpenseAmt", PriceStd);
+                mTab.setValue("ConvertedAmt", PriceStd);
+            }
+            // To set UOM when charge is selected
+            if (mTab.getValue("C_Charge_ID") > 0) {
+                var c_uom_id = ctx.getContextAsInt("#C_UOM_ID");
+                if (c_uom_id > 0) {
+                    mTab.setValue("C_UOM_ID", c_uom_id);	//	Default UOM from context.
+                }
+                else {
+                    mTab.setValue("C_UOM_ID", 100);	
+                }
+                var chargeID = VIS.Utility.Util.getValueOfInt(mTab.getValue("C_Charge_ID"));
+                var paramString = chargeID.toString();
+                var chargeamt = VIS.dataContext.getJSONRecord("MExpenseReport/GetChargeAmount", paramString);
+                mTab.setValue("ExpenseAmt", chargeamt);
+                mTab.setValue("ConvertedAmt", chargeamt);
             }
             this.setCalloutActive(false);
             return;
