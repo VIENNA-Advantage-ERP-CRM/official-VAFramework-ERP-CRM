@@ -844,11 +844,13 @@ namespace VAdvantage.Model
             catch { }
 
             // JID_1280 : restrict to change the date account in case line with currency different than header is present.
-            if (!newRecord && Is_ValueChanged("DateAcct"))
+            // restrict to change the date account/ statement date / cashbook / documnet type when line exist
+            if (!newRecord && (Is_ValueChanged("DateAcct") || Is_ValueChanged("StatementDate") ||
+                              Is_ValueChanged("C_CashBook_ID") || Is_ValueChanged("C_DocType_ID")))
             {
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM C_CashLine WHERE IsActive='Y' AND C_Currency_ID!=" + GetC_Currency_ID() + " AND C_Cash_ID=" + GetC_Cash_ID())) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(C_CashLine_ID) FROM C_CashLine WHERE IsActive='Y' AND C_Cash_ID=" + GetC_Cash_ID())) > 0)
                 {
-                    log.SaveError("CantChngAcctDate", "");
+                    log.SaveError("VIS_CantChange", "");
                     return false;
                 }
             }
@@ -1384,7 +1386,7 @@ namespace VAdvantage.Model
                     alloc.ProcessIt(DocActionVariables.ACTION_COMPLETE);
                     alloc.Save();
                 }
-                else 
+                else
                 {
                     alloc.Delete(true, Get_Trx());
                 }
@@ -1572,46 +1574,46 @@ namespace VAdvantage.Model
 
                 if (bp.GetCreditStatusSettingOn() == "CH")
                 {
-                        //Arpit Dated 30th Nov,2017
-                        // Commented Code because the amount which is of cash Line is converted into Header currency and then update into Business Partner
-                        // Decimal? cashAmt = VAdvantage.Model.MConversionRate.ConvertBase(GetCtx(), Decimal.Add(Decimal.Add(line.GetAmount(), line.GetDiscountAmt()), line.GetWriteOffAmt()),
-                        //GetC_Currency_ID(), GetDateAcct(), 0, GetAD_Client_ID(), GetAD_Org_ID());
-                        Decimal? cashAmt = VAdvantage.Model.MConversionRate.ConvertBase(GetCtx(), Decimal.Add(Decimal.Add(line.GetAmount(), line.GetDiscountAmt()), line.GetWriteOffAmt()),
-                                           line.GetC_Currency_ID(), GetDateAcct(), line.GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
-                        //Arpit
-                        // not checking if cashamt is less than zero
-                        // Done by Vivek on 12/07/2017 as per discussion with Mandeep sir 
-                        if (cashAmt == null || cashAmt == 0)
-                        {
-                            //JID_0821: If Cashbook currency conversion is not found. On completion of cash journal System give error "IN".
-                            MConversionType conv = new MConversionType(GetCtx(), line.GetC_ConversionType_ID(), Get_TrxName());
-                            errorMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), line.GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
-                                + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
-                            return errorMsg;
-                        }
-                        UpdatedBal = Decimal.Subtract((Decimal)bp.GetTotalOpenBalance(), (Decimal)cashAmt);
-                        // changed here to set credit Used only in case of Receipt not in payment
-                        if (line.GetVSS_PAYMENTTYPE() == X_C_CashLine.VSS_PAYMENTTYPE_Receipt)
-                        {
-                            Decimal? newCreditAmt = bp.GetSO_CreditUsed();
-                            if (newCreditAmt == null)
-                                newCreditAmt = Decimal.Negate((Decimal)cashAmt);
-                            else
-                                newCreditAmt = Decimal.Subtract((Decimal)newCreditAmt, (Decimal)cashAmt);
-                            //
-                            log.Fine("TotalOpenBalance=" + bp.GetTotalOpenBalance(false) + "(" + cashAmt
-                                + ", Credit=" + bp.GetSO_CreditUsed() + "->" + newCreditAmt
-                                + ", Balance=" + bp.GetTotalOpenBalance(false) + " -> " + UpdatedBal);
-                            bp.SetSO_CreditUsed((Decimal)newCreditAmt);
-                        }
-                        bp.SetTotalOpenBalance(Convert.ToDecimal(UpdatedBal));
-                        bp.SetSOCreditStatus();
-                        if (!bp.Save(Get_TrxName()))
-                        {
-                            errorMsg = "Could not update Business Partner";
-                            return errorMsg;
-                        }
+                    //Arpit Dated 30th Nov,2017
+                    // Commented Code because the amount which is of cash Line is converted into Header currency and then update into Business Partner
+                    // Decimal? cashAmt = VAdvantage.Model.MConversionRate.ConvertBase(GetCtx(), Decimal.Add(Decimal.Add(line.GetAmount(), line.GetDiscountAmt()), line.GetWriteOffAmt()),
+                    //GetC_Currency_ID(), GetDateAcct(), 0, GetAD_Client_ID(), GetAD_Org_ID());
+                    Decimal? cashAmt = VAdvantage.Model.MConversionRate.ConvertBase(GetCtx(), Decimal.Add(Decimal.Add(line.GetAmount(), line.GetDiscountAmt()), line.GetWriteOffAmt()),
+                                       line.GetC_Currency_ID(), GetDateAcct(), line.GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+                    //Arpit
+                    // not checking if cashamt is less than zero
+                    // Done by Vivek on 12/07/2017 as per discussion with Mandeep sir 
+                    if (cashAmt == null || cashAmt == 0)
+                    {
+                        //JID_0821: If Cashbook currency conversion is not found. On completion of cash journal System give error "IN".
+                        MConversionType conv = new MConversionType(GetCtx(), line.GetC_ConversionType_ID(), Get_TrxName());
+                        errorMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), line.GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
+                            + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+                        return errorMsg;
                     }
+                    UpdatedBal = Decimal.Subtract((Decimal)bp.GetTotalOpenBalance(), (Decimal)cashAmt);
+                    // changed here to set credit Used only in case of Receipt not in payment
+                    if (line.GetVSS_PAYMENTTYPE() == X_C_CashLine.VSS_PAYMENTTYPE_Receipt)
+                    {
+                        Decimal? newCreditAmt = bp.GetSO_CreditUsed();
+                        if (newCreditAmt == null)
+                            newCreditAmt = Decimal.Negate((Decimal)cashAmt);
+                        else
+                            newCreditAmt = Decimal.Subtract((Decimal)newCreditAmt, (Decimal)cashAmt);
+                        //
+                        log.Fine("TotalOpenBalance=" + bp.GetTotalOpenBalance(false) + "(" + cashAmt
+                            + ", Credit=" + bp.GetSO_CreditUsed() + "->" + newCreditAmt
+                            + ", Balance=" + bp.GetTotalOpenBalance(false) + " -> " + UpdatedBal);
+                        bp.SetSO_CreditUsed((Decimal)newCreditAmt);
+                    }
+                    bp.SetTotalOpenBalance(Convert.ToDecimal(UpdatedBal));
+                    bp.SetSOCreditStatus();
+                    if (!bp.Save(Get_TrxName()))
+                    {
+                        errorMsg = "Could not update Business Partner";
+                        return errorMsg;
+                    }
+                }
                 //Arpit to update Business partner Location --set Total Open balance and SO credit Used
                 if (bp.GetCreditStatusSettingOn() == "CL")
                 {
