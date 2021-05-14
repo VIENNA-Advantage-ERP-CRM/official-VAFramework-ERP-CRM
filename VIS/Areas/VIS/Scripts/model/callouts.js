@@ -1256,7 +1256,7 @@
         return this.BPartnerBill(ctx, windowNo, mTab, mField, mTab.getValue("Bill_BPartner_ID"));
     };
 
-    
+
     /// <summary>
     /// Order Header - C_BPartner_Location.
     /// - C_BPartner_Location_ID
@@ -5518,17 +5518,22 @@
     /// <param name="value">value</param>
     /// <returns>null or error message</returns>
     CalloutBankStatement.prototype.Payment = function (ctx, windowNo, mTab, mField, value, oldValue) {
-        if (value == null || value.toString() == "") {
+        if (this.isCalloutActive() || value == null || value.toString() == "") {
             // JID_0333: Once user remove the payment reference Reset column Statement Amount, Transaction Amount, Charge Amount, Interest Amount, business partner and Invoice reference
-            mTab.setValue("StmtAmt", 0);
-            mTab.setValue("TrxAmt", 0);
-            mTab.setValue("ChargeAmt", 0);
-            mTab.setValue("ChargeAmt", 0);
-            mTab.setValue("C_BPartner_ID", 0);
-            mTab.setValue("C_Invoice_ID", 0);
+            if (VIS.Utility.Util.getValueOfInt(mTab.getValue("C_Payment_ID")) <= 0) {
+                mTab.setValue("StmtAmt", 0);
+                mTab.setValue("TrxAmt", 0);
+                mTab.setValue("ChargeAmt", 0);
+                mTab.setValue("ChargeAmt", 0);
+                mTab.setValue("C_BPartner_ID", 0);
+                mTab.setValue("C_Invoice_ID", 0);
+            }
             return "";
         }
-        var C_Payment_ID = value;
+
+        this.setCalloutActive(true);
+
+        var C_Payment_ID = mTab.getValue("C_Payment_ID");
         if (C_Payment_ID == null || C_Payment_ID == 0) {
             mTab.setValue("StmtAmt", 0);
             mTab.setValue("TrxAmt", 0);
@@ -5536,6 +5541,7 @@
             mTab.setValue("ChargeAmt", 0);
             mTab.setValue("C_BPartner_ID", 0);
             mTab.setValue("C_Invoice_ID", 0);
+            this.setCalloutActive(false);
             return "";
         }
         //
@@ -5546,14 +5552,15 @@
 
         //JID_0084: if the Payment currency is different from the bank statement currency it will add the converted amount based in the currency conversion available for selected date.
         var C_Currency_ID = mTab.getValue("C_Currency_ID");
-        var statementDate = mTab.getValue("ValutaDate");
+        var statementDate = mTab.getValue("DateAcct"); /*ValutaDate*/
 
         // JID_1418: When select payment on Bank statement line, system gives an error meassage
         //When select payment on Bank statement line with out select the statmenet Date, return error meassage
         if (statementDate == null) {
             //statementDate = new Date();
             mTab.setValue("C_Payment_ID", 0);
-            return VIS.Msg.getMsg("PlzSelectStmtDate");
+            this.setCalloutActive(false);
+            return "PlzSelectStmtDate";
         }
 
         //var sql = "SELECT PayAmt FROM C_Payment_v WHERE C_Payment_ID=@C_Payment_ID";		//	1
@@ -5561,37 +5568,32 @@
         //var param = [];
         try {
             //passed statement Date as in JSON format
-            var paramStr = C_Payment_ID.toString() + "," + C_Currency_ID.toString() + "," + JSON.stringify(statementDate);
+            var paramStr = C_Payment_ID.toString() + "," + C_Currency_ID.toString() + "," + statementDate;//JSON.stringify(statementDate)
             var payAmt = VIS.dataContext.getJSONRecord("MBankStatement/GetPayment", paramStr);
             //Update the BankStatementLine fields
             if (payAmt != null && payAmt.length > 0) {
-                mTab.setValue("TrxAmt", payAmt[0]["payAmt"]);
-                if (stmt == 0) {
-                    mTab.setValue("StmtAmt", payAmt[0]["payAmt"]);
+                if (payAmt[0]["ConvertedAmt"] != "") {
+                    mTab.setValue("C_Payment_ID", 0);
+                    this.setCalloutActive(false);
+                    return payAmt[0]["ConvertedAmt"];
                 }
+                mTab.setValue("TrxAmt", payAmt[0]["payAmt"]);
+                mTab.setValue("StmtAmt", payAmt[0]["payAmt"]);
+
                 //to Avoid Exception if Column not exists Used findColumn()
                 if (mTab.findColumn("C_ConversionType_ID") >= 0) {
                     mTab.setValue("C_ConversionType_ID", payAmt[0]["C_ConversionType_ID"]);
                 }
-                mTab.setValue("DateAcct", Globalize.format(new Date(payAmt[0]["DateAcct"]), "yyyy-MM-dd"));
+                // not to set account date from payment
+                //mTab.setValue("DateAcct", Globalize.format(new Date(payAmt[0]["DateAcct"]), "yyyy-MM-dd"));
             }
-            //param[0] = new VIS.DB.SqlParam("@C_Payment_ID", C_Payment_ID);
-            //dr = VIS.DB.executeReader(sql, param, null);
-            //if (dr.read())/// if (rs.next())
-            //{
-            //    var bd = dr.get("payamt");// rs.getBigDecimal(1);
-            //    mTab.setValue("TrxAmt", bd);
-            //    if (stmt == 0) {
-            //        mTab.setValue("StmtAmt", bd);
-            //    }
-            //}
-            //dr.close();
         }
         catch (err) {
             this.setCalloutActive(false);
             this.log.log(Level.SEVERE, "BankStmt_Payment", err);
             return err.toString();
         }
+        this.setCalloutActive(false);
         //  Recalculate Amounts
         this.Amount(ctx, windowNo, mTab, mField, value);
         ctx = windowNo = mTab = mField = value = oldValue = null;
@@ -5600,11 +5602,7 @@
 
     // Callout on change of Account Date on Bank Statement Line.
     CalloutBankStatement.prototype.SetConvertedAmt = function (ctx, windowNo, mTab, mField, value, oldValue) {
-        if (value == null || value.toString() == "") {
-            return "";
-        }
-
-        if (this.isCalloutActive()) {
+        if (this.isCalloutActive() || value == null || value.toString() == "") {
             return "";
         }
 
@@ -5620,10 +5618,10 @@
         //}
 
         var C_Currency_ID = mTab.getValue("C_Currency_ID");
-        var acctDate = mTab.getValue("ValutaDate");
+        var acctDate = mTab.getValue("DateAcct"); /*ValutaDate*/
         //When select payment on Bank statement line, system gives an error meassage
         if (acctDate == null) {
-            return VIS.Msg.getMsg("PlzSelectStmtDate");
+            return "PlzSelectStmtDate";
         }
 
         try {
@@ -16845,7 +16843,7 @@
             //	Default charge from context
             var c_uom_id = ctx.getContextAsInt("#C_UOM_ID");
             if (c_uom_id > 0) {
-                mTab.setValue("C_UOM_ID", c_uom_id);	
+                mTab.setValue("C_UOM_ID", c_uom_id);
             }
             else {
                 mTab.setValue("C_UOM_ID", 100);	//	EA
@@ -16895,8 +16893,7 @@
             C_UOM_ID = ctx.getContextAsInt(windowNo, "C_UOM_ID")
         }
         var Qty = mTab.getValue("BaseQty");
-        if (mTab.getValue("M_Product_ID") != null)
-        {
+        if (mTab.getValue("M_Product_ID") != null) {
             var M_Product_ID = mTab.getValue("M_Product_ID");
             var paramStr = M_Product_ID.toString().concat(",", C_UOM_ID.toString(), ",", Qty.toString());
             var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
@@ -16907,8 +16904,7 @@
                 mTab.setValue("QtyEntered", Qty);
             }
         }
-        else
-        {
+        else {
             mTab.setValue("QtyEntered", Qty);
         }
         if (Util.getValueOfDecimal(mTab.getValue("UnitPrice")) != 0 && Qty != 0) {
@@ -20900,7 +20896,7 @@
     /// <param name="value">The new value</param>
     /// <returns>Error message or Set value in respective fields""</returns>
     CalloutOrderContract.prototype.BPartnerContract = function (ctx, windowNo, mTab, mField, value, oldValue) {
-        
+
         var PaymentBasetype = null;
         //var Util=VIS.Util;
         //var sql = "";
@@ -20950,7 +20946,7 @@
                 } else {
                     mTab.setValue("M_PriceList_ID", null);
                 }
-                    // JID_0364: If price list not available at BP, user need to select it manually
+                // JID_0364: If price list not available at BP, user need to select it manually
 
                 //	Bill-To BPartner
                 mTab.setValue("Bill_BPartner_ID", C_BPartner_ID);
