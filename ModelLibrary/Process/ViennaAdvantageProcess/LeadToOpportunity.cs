@@ -64,8 +64,8 @@ namespace ViennaAdvantage.Process
                 if (lead.GetC_ProposalDdate() != null)
                 {
                     /** Fix for Proposal Due Date issue ** Dt: 05/12/2021 ** Modified By: Kumar **/
-                    if (Env.IsModuleInstalled("WMN01"))
-                        opp.SetC_ProposalDdate(Convert.ToDateTime(lead.GetC_ProposalDdate()));
+                    if (Env.IsModuleInstalled("VA077_"))
+                        opp.SetC_ProposalDdate(Util.GetValueOfDateTime(lead.GetC_ProposalDdate()));
                     else
                         opp.SetC_ProposalDdate(Convert.ToDateTime(lead.GetC_ProposalDdate()).ToLocalTime());
                 }
@@ -117,8 +117,8 @@ namespace ViennaAdvantage.Process
                 if (lead.GetC_ProposalDdate() != null)
                 {
                     /** Fix for Proposal Due Date issue ** Dt: 05/12/2021 ** Modified By: Kumar **/
-                    if (Env.IsModuleInstalled("WMN01"))
-                        opp.SetC_ProposalDdate(Convert.ToDateTime(lead.GetC_ProposalDdate()));
+                    if (Env.IsModuleInstalled("VA077_"))
+                        opp.SetC_ProposalDdate(Util.GetValueOfDateTime(lead.GetC_ProposalDdate()));
                     else
                         opp.SetC_ProposalDdate(Convert.ToDateTime(lead.GetC_ProposalDdate()).ToLocalTime());
                 }
