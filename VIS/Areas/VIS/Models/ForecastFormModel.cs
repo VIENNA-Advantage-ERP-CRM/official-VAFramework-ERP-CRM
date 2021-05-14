@@ -1177,8 +1177,8 @@ namespace VIS.Models
             if (Env.IsModuleInstalled("VAMFG_") && Util.GetValueOfInt(ProductLinePo.Get_Value("M_BOM_ID")) == 0)
             {
                 //fetch BOM ,BOMUSE ,Routing of selected Product 
-                string _sql = @"SELECT M_BOM_ID ,BOMUse,VAMFG_M_Routing_ID FROM M_Product p 
-                    INNER JOIN M_BOM  BOM on p.M_product_ID = BOM.M_Product_ID 
+                string _sql = @"SELECT BOM.M_BOM_ID ,BOM.BOMUse,Routing.VAMFG_M_Routing_ID FROM M_Product p 
+                    INNER JOIN M_BOM  BOM ON p.M_product_ID = BOM.M_Product_ID 
                     LEFT JOIN VAMFG_M_Routing Routing ON Routing.M_product_ID=p.M_product_ID AND Routing.VAMFG_IsDefault='Y'
                     WHERE p.M_Product_ID=" + Product_ID + " AND p.ISBOM = 'Y' AND BOM.IsActive = 'Y'";
 
