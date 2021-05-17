@@ -33,5 +33,22 @@ namespace VIS.Areas.VIS.Controllers.CallOut
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
+
+        /// <summary>
+        /// Get BOM details of selected product
+        /// </summary>
+        /// <param name="fields">Product</param>
+        /// <returns>BOM details</returns>
+        public JsonResult GetBOMdetails(string fields)
+        {
+            string retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                Ctx ctx = Session["ctx"] as Ctx;
+                MTeamForcastModel objAcctSchema = new MTeamForcastModel();
+                retJSON = JsonConvert.SerializeObject(objAcctSchema.GetBOMDetails(ctx, Util.GetValueOfInt(fields)));
+            }
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
     }
 }
