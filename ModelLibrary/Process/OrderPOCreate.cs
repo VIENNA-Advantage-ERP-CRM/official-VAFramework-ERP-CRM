@@ -476,6 +476,7 @@ namespace VAdvantage.Process
             po.SetClientOrg(so.GetAD_Client_ID(), so.GetAD_Org_ID());
             po.SetRef_Order_ID(so.GetC_Order_ID());
             po.SetIsSOTrx(false);
+
             // method edited to set unreleased document type for PO
             po.SetC_DocTypeTarget_ID(false);
             //
@@ -595,7 +596,13 @@ namespace VAdvantage.Process
                 if (result > 0)
                 {
                     po.SetVA077_IsLegalEntity(true);
-                }               
+                }
+
+                /** Updating trx org from so ** Dt:15/04/2021 ** Modified By: Kumar **/
+                if (so.GetAD_OrgTrx_ID() > 0)
+                {
+                    po.SetAD_OrgTrx_ID(so.GetAD_OrgTrx_ID());
+                }
             }
 
             // Handle error done by rakesh kumar on 17/Mar/2021
