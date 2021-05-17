@@ -16967,8 +16967,8 @@
                 mTab.setValue("PriceStd", 0);
                 mTab.setValue("TotalPrice", 0);
                 mTab.setValue("UnitPrice", 0);
-                mTab.setValue("QtyEntered", 0);
-                mTab.setValue("BaseQty", 0);
+                mTab.setValue("QtyEntered", 1);
+                mTab.setValue("BaseQty", 1);
             }
             return "";
         }
