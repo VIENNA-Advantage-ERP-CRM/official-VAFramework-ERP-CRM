@@ -16836,7 +16836,7 @@
             //	Default charge from context
             var c_uom_id = ctx.getContextAsInt("#C_UOM_ID");
             if (c_uom_id > 0) {
-                mTab.setValue("C_UOM_ID", c_uom_id);	
+                mTab.setValue("C_UOM_ID", c_uom_id);
             }
             else {
                 mTab.setValue("C_UOM_ID", 100);	//	EA
@@ -16858,10 +16858,11 @@
             return "";
         }
         this.setCalloutActive(true);
-        var price = Util.getValueOfDecimal(mTab.getValue("UnitPrice")) * Util.getValueOfDecimal(mTab.getValue("BaseQty"));
+        var stdPrecision = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency",Util.getValueOfString(ctx.getContextAsInt(windowNo, "C_Currency_ID")));
+        var price = Util.getValueOfDecimal(mTab.getValue("UnitPrice")) * Util.getValueOfDecimal(mTab.getValue("BaseQty"));       
         // ForcastLine.SetQtyEntered(price);
-        mTab.setValue("PriceStd", price);
-        mTab.setValue("TotalPrice", price);
+        mTab.setValue("PriceStd", price.toFixed(Util.getValueOfInt(stdPrecision.StdPrecision)));
+        mTab.setValue("TotalPrice", price.toFixed(Util.getValueOfInt(stdPrecision.StdPrecision)));
 
         this.setCalloutActive(false);
         ctx = windowNo = mTab = mField = value = oldValue = null;
@@ -16883,11 +16884,12 @@
         this.setCalloutActive(true);
         var C_UOM_ID = mTab.getValue("C_UOM_ID");
         if (C_UOM_ID == null) {
-            C_UOM_ID = ctx.getContextAsInt(windowNo, "C_UOM_ID")
+            C_UOM_ID = ctx.getContextAsInt(windowNo, "C_UOM_ID");
         }
         var Qty = mTab.getValue("BaseQty");
-        if (mTab.getValue("M_Product_ID") != null)
-        {
+        var stdPrecision = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency",
+            Util.getValueOfString(ctx.getContextAsInt(windowNo, "C_Currency_ID")));
+        if (mTab.getValue("M_Product_ID") != null) {
             var M_Product_ID = mTab.getValue("M_Product_ID");
             var paramStr = M_Product_ID.toString().concat(",", C_UOM_ID.toString(), ",", Qty.toString());
             var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
@@ -16898,13 +16900,12 @@
                 mTab.setValue("QtyEntered", Qty);
             }
         }
-        else
-        {
+        else {
             mTab.setValue("QtyEntered", Qty);
         }
         if (Util.getValueOfDecimal(mTab.getValue("UnitPrice")) != 0 && Qty != 0) {
-            mTab.setValue("PriceStd", Qty * mTab.getValue("UnitPrice"))
-            mTab.setValue("TotalPrice", Qty * mTab.getValue("UnitPrice"))
+            mTab.setValue("PriceStd", (Qty * mTab.getValue("UnitPrice")).toFixed(Util.getValueOfInt(stdPrecision.StdPrecision)));
+            mTab.setValue("TotalPrice", (Qty * mTab.getValue("UnitPrice")).toFixed(Util.getValueOfInt(stdPrecision.StdPrecision)));
         }
         this.setCalloutActive(false);
         ctx = windowNo = mTab = mField = value = oldValue = null;
@@ -16959,6 +16960,7 @@
         }
         this.setCalloutActive(true);
         if (ctx.getContextAsInt(windowNo, "M_PriceList_ID") > 0) {
+            var stdPrecision = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency",Util.getValueOfString(ctx.getContextAsInt(windowNo, "C_Currency_ID")));
             var paramString = Util.getValueOfString(mTab.getValue("M_Product_ID")).concat(",", Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")), ",",
                 Util.getValueOfString(ctx.getContextAsInt(windowNo, "M_PriceList_ID")), ",",
                 Util.getValueOfString(mTab.getValue("C_UOM_ID")))
@@ -16968,8 +16970,8 @@
             if (ProductData != null) {
                 mTab.setValue("PriceStd", ProductData["PriceStd"]);
                 mTab.setValue("UnitPrice", ProductData["PriceStd"]);
-                mTab.setValue("PriceStd", (ProductData["PriceStd"] * Util.getValueOfDecimal(mTab.getValue("BaseQty"))));
-                mTab.setValue("TotalPrice", (ProductData["PriceStd"] * Util.getValueOfDecimal(mTab.getValue("BaseQty"))));
+                mTab.setValue("PriceStd", (ProductData["PriceStd"] * Util.getValueOfDecimal(mTab.getValue("BaseQty"))).toFixed(Util.getValueOfInt(stdPrecision.StdPrecision)));
+                mTab.setValue("TotalPrice", (ProductData["PriceStd"] * Util.getValueOfDecimal(mTab.getValue("BaseQty"))).toFixed(Util.getValueOfInt(stdPrecision.StdPrecision)));
 
                 if (Util.getValueOfInt(mTab.getValue("C_UOM_ID")) == 0) {
                     mTab.setValue("C_UOM_ID", ProductData["C_UOM_ID"]);
@@ -16978,9 +16980,16 @@
                 if (mTab.findColumn("IsBOM") > 0) {
                     mTab.setValue("IsBOM", ProductData["IsBOM"]);
                 }
-
-            }
+            }         
         }
+        //set BOM,BOMuse and Routing
+        var BOMData = VIS.dataContext.getJSONRecord("MTeamForcast/GetBOMdetails", Util.getValueOfString(mTab.getValue("M_Product_ID")));
+        if (BOMData != null) {
+            mTab.setValue("BOMUse", BOMData["BOMUse"]);
+            mTab.setValue("VAMFG_M_Routing_ID", BOMData["VAMFG_M_Routing_ID"]);
+            mTab.setValue("M_BOM_ID", BOMData["M_BOM_ID"]);
+        }
+
 
         this.setCalloutActive(false);
         ctx = windowNo = mTab = mField = value = oldValue = null;
@@ -17118,6 +17127,7 @@
         try {
             this.setCalloutActive(true);
             if (ctx.getContextAsInt(windowNo, "M_PriceList_ID") > 0) {
+                var stdPrecision = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency", Util.getValueOfString(ctx.getContextAsInt(windowNo, "C_Currency_ID")));
                 var paramString = Util.getValueOfString(mTab.getValue("M_Product_ID")).concat(",", Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")), ",",
                     Util.getValueOfString(ctx.getContextAsInt(windowNo, "M_PriceList_ID")), ",",
                     Util.getValueOfString(mTab.getValue("C_UOM_ID")))
@@ -17126,7 +17136,7 @@
                 var ProductData = VIS.dataContext.getJSONRecord("MProductPricing/GetProductdata", paramString);
                 if (ProductData != null) {
                     mTab.setValue("Price", ProductData["PriceStd"]);
-                    mTab.setValue("PlannedRevenue", (ProductData["PriceStd"] * Util.getValueOfDecimal(mTab.getValue("TotalQty"))));
+                    mTab.setValue("PlannedRevenue", (ProductData["PriceStd"] * Util.getValueOfDecimal(mTab.getValue("TotalQty"))).toFixed(Util.getValueOfInt(stdPrecision.StdPrecision)));
 
                     //set BaseUOM
                     if (Util.getValueOfInt(mTab.getValue("C_UOM_ID")) == 0) {
@@ -17137,6 +17147,13 @@
                         mTab.setValue("IsBOM", ProductData["IsBOM"]);
                     }
 
+                }
+                //set BOM,BOMuse and Routing
+                var BOMData = VIS.dataContext.getJSONRecord("MTeamForcast/GetBOMdetails", Util.getValueOfString(mTab.getValue("M_Product_ID")));
+                if (BOMData != null) {
+                    mTab.setValue("BOMUse", BOMData["BOMUse"]);
+                    mTab.setValue("VAMFG_M_Routing_ID", BOMData["VAMFG_M_Routing_ID"]);
+                    mTab.setValue("M_BOM_ID", BOMData["M_BOM_ID"]);
                 }
             }
         }
@@ -17163,6 +17180,8 @@
         }
         try {
             this.setCalloutActive(true);
+            var stdPrecision = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency",
+            Util.getValueOfString(ctx.getContextAsInt(windowNo, "C_Currency_ID")));
             //set Total Qty
             var totalqty = Util.getValueOfDecimal(mTab.getValue("ForcastQty")) + Util.getValueOfDecimal(mTab.getValue("SalesOrderQty"))
                 + Util.getValueOfDecimal(mTab.getValue("OppQty"));
@@ -17170,7 +17189,7 @@
 
             //set Planned Revenue
             var price = Util.getValueOfDecimal(mTab.getValue("Price")) * Util.getValueOfDecimal(mTab.getValue("TotalQty"));
-            mTab.setValue("PlannedRevenue", price);
+            mTab.setValue("PlannedRevenue", price.toFixed(Util.getValueOfInt(stdPrecision.StdPrecision)));
 
         }
         catch (err) {
@@ -17500,8 +17519,7 @@
      * @param {any} value
      * @param {any} oldValue
      */
-    CalloutProductToOpportunity.prototype.SetQty = function (ctx, windowNo, mTab, mField, value, oldValue)
-    {
+    CalloutProductToOpportunity.prototype.SetQty = function (ctx, windowNo, mTab, mField, value, oldValue) {
         if (this.isCalloutActive() || value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {
             return "";
         }
@@ -17522,7 +17540,7 @@
         else {
             mTab.setValue("BaseQty", Qty);
         }
-       
+
         this.setCalloutActive(false);
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";
