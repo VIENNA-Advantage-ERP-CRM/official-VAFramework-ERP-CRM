@@ -900,6 +900,7 @@
     <Compile Include="Areas\VIS\Models\Callouts\MConversionRateModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MCurrencyModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MDocTypeModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MExpenseReportModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MInOutLineModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MInOutModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MInventoryLineModel.cs" />

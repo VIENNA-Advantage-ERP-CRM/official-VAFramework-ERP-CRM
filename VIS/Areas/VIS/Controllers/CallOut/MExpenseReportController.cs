@@ -30,5 +30,55 @@ namespace VIS.Controllers
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
+        /// <summary>
+        /// Get price of product
+        /// </summary>
+        /// <param name="fields">List of Parameters</param>
+        /// <returns>Data in JSON Format</returns>
+        public JsonResult GetPrices(string fields)
+        {
+            String retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
+                MExpenseReportModel objExpense = new MExpenseReportModel();
+                retJSON = JsonConvert.SerializeObject(objExpense.GetPrices(ctx, fields));
+            }
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
+        /// <summary>
+        /// Get standard price of product
+        /// </summary>
+        /// <param name="fields">List of Parameters</param>
+        /// <returns>Data in JSON format</returns>
+        public JsonResult GetStandardPrice(string fields)
+        {
+            String retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
+                MExpenseReportModel objExpense = new MExpenseReportModel();
+                retJSON = JsonConvert.SerializeObject(objExpense.GetStandardPrice(ctx, fields));
+            }
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Get ChargeAmount
+        /// </summary>
+        /// <param name="fields">Parameters</param>
+        /// <returns>Data in JSON Format</returns>
+        public JsonResult GetChargeAmount(string fields)
+        {
+            String retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
+                MExpenseReportModel objExpense = new MExpenseReportModel();
+                retJSON = JsonConvert.SerializeObject(objExpense.GetChargeAmount(ctx, fields));
+            }
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }
