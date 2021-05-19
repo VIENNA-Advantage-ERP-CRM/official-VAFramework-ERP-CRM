@@ -63,7 +63,7 @@ namespace VIS.Controllers
         public ActionResult GetHTMLReport(string info)
         {
             Ctx ctx = Session["ctx"] as Ctx;
-            if (Uri.IsWellFormedUriString(info, UriKind.RelativeOrAbsolute))
+            if (info.ToLower().Contains("http"))
             {
                 ViewBag.scriptt = info;
             }
