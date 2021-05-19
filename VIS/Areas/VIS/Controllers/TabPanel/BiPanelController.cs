@@ -63,6 +63,8 @@ namespace VIS.Controllers
         public ActionResult GetHTMLReport(string info)
         {
             Ctx ctx = Session["ctx"] as Ctx;
+            //If info contains http, that means a url is send from client. 
+            //Changed by Karan VIS007 on 19-May-2021
             if (info.ToLower().Contains("http"))
             {
                 ViewBag.scriptt = info;
