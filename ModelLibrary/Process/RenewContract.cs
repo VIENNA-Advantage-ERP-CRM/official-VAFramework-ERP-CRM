@@ -155,6 +155,8 @@ namespace ViennaAdvantageServer.Process
                             New.SetPriceActual(contact.GetPriceActual());
                             New.SetPriceList(contact.GetPriceList());
                         }
+                        // Set Contract Type done by Rakesh Kumar(228) date 19/May/2021
+                        New.SetContractType(contact.GetContractType());
                         New.SetC_Currency_ID(priceList.GetC_Currency_ID());
                         New.SetC_UOM_ID(contact.GetC_UOM_ID());
                         New.SetM_Product_ID(contact.GetM_Product_ID());
@@ -180,6 +182,9 @@ namespace ViennaAdvantageServer.Process
                         //Decimal? TotalRate = Util.GetValueOfDecimal((Util.GetValueOfDecimal(New.GetLineNetAmt()) * Util.GetValueOfDecimal(Rate)) / 100);
                         //TotalRate = Decimal.Round(TotalRate.Value, 2);
 
+                        // Calculate tax done by Rakesh Kumar(228) date 19/May/2021
+                        tax = MTax.Get(GetCtx(), contact.GetC_Tax_ID());
+
                         // if Surcharge Tax is selected on Tax, then set value in Surcharge Amount
                         if (New.Get_ColumnIndex("SurchargeAmt") > 0 && tax.GetSurcharge_Tax_ID() > 0)
                         {
@@ -199,7 +204,8 @@ namespace ViennaAdvantageServer.Process
                         }
                         // Calculate Discount %
                         Decimal? dis = Decimal.Multiply(Decimal.Divide(Decimal.Subtract(New.GetPriceList(), New.GetPriceEntered()), New.GetPriceList()), 100);
-                        New.SetDiscount(dis);                        
+                        // Round off upto 2 decimal points done by Rakesh Kumar(228) on 19/May/2021
+                        New.SetDiscount(Math.Round(dis ?? 0, 2, MidpointRounding.AwayFromZero));
 
                         // Set Grand Total Amount
                         if (priceList.IsTaxIncluded())
@@ -347,6 +353,8 @@ namespace ViennaAdvantageServer.Process
                             New.SetPriceEntered(contact.GetPriceEntered());
 
                         }
+                        // Set Contract Type done by Rakesh Kumar(228) date 19/May/2021
+                        New.SetContractType(contact.GetContractType());
                         New.SetTotalInvoice(contact.GetCycles());
                         New.SetC_Currency_ID(priceList.GetC_Currency_ID());
                         New.SetC_UOM_ID(contact.GetC_UOM_ID());
@@ -386,7 +394,8 @@ namespace ViennaAdvantageServer.Process
                         }
                         // Calculate Discount %
                         Decimal? dis = Decimal.Multiply(Decimal.Divide(Decimal.Subtract(New.GetPriceList(), New.GetPriceEntered()), New.GetPriceList()), 100);
-                        New.SetDiscount(dis);
+                        // Round off upto 2 decimal points done by Rakesh Kumar(228) on 19/May/2021
+                        New.SetDiscount(Math.Round(dis ?? 0, 2, MidpointRounding.AwayFromZero));
 
                         // Set Grand Total Amount
                         if (priceList.IsTaxIncluded())
@@ -467,7 +476,7 @@ namespace ViennaAdvantageServer.Process
                 }
                 return Msg.GetMsg(GetCtx(), "ContractNotRenew");
             }
-            catch
+            catch (Exception ex)
             {
                 if (dr != null)
                 {
