@@ -441,7 +441,7 @@ namespace VAdvantage.Model
                         line.SetQtyEntered(Env.ZERO);
                         line.SetPriceStd(Env.ZERO);
                         line.SetTotalPrice(Env.ZERO);
-                        line.SetUnitPrice(Env.ZERO);
+                       // line.SetUnitPrice(Env.ZERO);
                         line.AddDescription(Msg.GetMsg(GetCtx(), "Voided") + " (" + old + ")");
                         if (!line.Save(Get_TrxName()))
                         {
@@ -528,6 +528,7 @@ namespace VAdvantage.Model
             string FromCurrency = null;
             string ToCurrency = null;
             int lineNo = 0;
+            int Forecastline_Id = 0;
             MForecastLine line = null;
             try
             {
@@ -572,14 +573,23 @@ namespace VAdvantage.Model
 
                         //price conversion
                         line.SetUnitPrice(MConversionRate.Convert(GetCtx(), line.GetUnitPrice(), FromForecast.GetC_Currency_ID(), GetC_Currency_ID(),
-                            GetDateAcct(),Util.GetValueOfInt(Get_Value("C_ConversionType_ID")),GetAD_Client_ID(), GetAD_Org_ID()));
+                            GetDateAcct(), Util.GetValueOfInt(Get_Value("C_ConversionType_ID")), GetAD_Client_ID(), GetAD_Org_ID()));
                         if (line.GetUnitPrice() == 0)
                         {
-                            //if conversion not found then display message
-                            _processMsg = Msg.GetMsg(GetCtx(), "ConversionNotFound") + " " + Msg.GetMsg(GetCtx(), "From") + " " + FromCurrency + Msg.GetMsg(GetCtx(), "To") + ToCurrency;
-                            count = 0;
-                            return count + " " + _processMsg;
+                            if (FromCurrency != null && ToCurrency != FromCurrency)
+                            {
+                                //if conversion not found then display message
+                                _processMsg = Msg.GetMsg(GetCtx(), "ConversionNotFound") + " " + Msg.GetMsg(GetCtx(), "From") + " " + FromCurrency + Msg.GetMsg(GetCtx(), "To") + ToCurrency;
+                                count = 0;
+                                return count + " " + _processMsg;
+                            }
+                            else
+                            {
+                                Forecastline_Id = fromLines[i].GetC_ForecastLine_ID();
+                                continue;
+                            }
                         }
+
                         line.SetTotalPrice(line.GetUnitPrice() * line.GetBaseQty());
                         line.SetC_Forecast_ID(GetC_Forecast_ID());
                         line.SetLine(lineNo);
@@ -618,7 +628,10 @@ namespace VAdvantage.Model
             {
                 log.Log(Level.SEVERE, e.Message);
             }
-
+            if (Forecastline_Id > 0)
+            {
+                return count + " " + Msg.GetMsg(GetCtx(), "PriceNotFound") + " " + Msg.GetMsg(GetCtx(), "ForecastLine") + Forecastline_Id;
+            }
             return count.ToString();
         }
 

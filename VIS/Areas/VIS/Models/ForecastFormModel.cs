@@ -276,7 +276,8 @@ namespace VIS.Models
 
                             if (ConvertedPrice == 0)
                             {
-                                if (!FromCurrencyName.Contains(Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"])))
+                                if (!FromCurrencyName.Contains(Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"])) &&
+                                !Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"]).Equals(ToCurrencyName))
                                 {
                                     FromCurrencyName += Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"]) + ",";
                                 }
@@ -406,10 +407,11 @@ namespace VIS.Models
 
                             if (ConvertedPrice == 0)
                             {
-                                if (!FromCurrencyName.Contains(Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"])))
-                                {
+                                 if (!FromCurrencyName.Contains(Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"])) &&
+                                 !Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"]).Equals(ToCurrencyName))
+                                 {
                                     FromCurrencyName += Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"]) + ",";
-                                }
+                                 }
                                 continue;
                             }
 
@@ -593,7 +595,8 @@ namespace VIS.Models
 
                     if (ConvertedPrice == 0)
                     {
-                        if (!FromCurrencyName.Contains(Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"])))
+                        if (!FromCurrencyName.Contains(Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"])) &&
+                        !Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"]).Equals(ToCurrencyName))
                         {
                             FromCurrencyName += Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"]) + ",";
                         }
@@ -780,7 +783,8 @@ namespace VIS.Models
 
                     if (ConvertedPrice == 0)
                     {
-                        if (!FromCurrencyName.Contains(Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"])))
+                        if (!FromCurrencyName.Contains(Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"])) && 
+                            !Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"]).Equals(ToCurrencyName ))
                         {
                             FromCurrencyName += Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"]) + ",";
                         }
@@ -862,7 +866,8 @@ namespace VIS.Models
 
                     if (ConvertedPrice == 0)
                     {
-                        if (!FromCurrencyName.Contains(Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"])))
+                        if (!FromCurrencyName.Contains(Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"])) &&
+                            !Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"]).Equals(ToCurrencyName))
                         {
                             FromCurrencyName += Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"]) + ",";
                         }
