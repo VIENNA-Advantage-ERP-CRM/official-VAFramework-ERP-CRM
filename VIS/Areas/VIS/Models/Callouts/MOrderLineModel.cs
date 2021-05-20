@@ -71,18 +71,18 @@ namespace VIS.Models
 
             if (Env.IsModuleInstalled("VA077_"))
             {
-                retDic["VA077_CNAutodesk"]= Util.GetValueOfString(orderline.Get_Value("VA077_CNAutodesk"));
-                retDic["VA077_Duration"]= Util.GetValueOfString(orderline.Get_Value("VA077_Duration"));
-                retDic["VA077_MarginAmt"]= Util.GetValueOfString(orderline.Get_Value("VA077_MarginAmt"));
-                retDic["VA077_MarginPercent"]= Util.GetValueOfString(orderline.Get_Value("VA077_MarginPercent"));
-                retDic["VA077_OldSN"]= Util.GetValueOfString(orderline.Get_Value("VA077_OldSN"));
-                retDic["VA077_ProductInfo"]= Util.GetValueOfString(orderline.Get_Value("VA077_ProductInfo"));
-                retDic["VA077_PurchasePrice"]= Util.GetValueOfString(orderline.Get_Value("VA077_PurchasePrice"));
-                retDic["VA077_RegEmail"]= Util.GetValueOfString(orderline.Get_Value("VA077_RegEmail"));
-                retDic["VA077_SerialNo"]= Util.GetValueOfString(orderline.Get_Value("VA077_SerialNo"));
-                retDic["VA077_UpdateFromVersn"]= Util.GetValueOfString(orderline.Get_Value("VA077_UpdateFromVersn"));
-                retDic["VA077_UserRef_ID"]= Util.GetValueOfString(orderline.Get_Value("VA077_UserRef_ID"));
-                retDic["VA077_ServiceContract_ID"]= Util.GetValueOfString(orderline.Get_Value("VA077_ServiceContract_ID"));
+                retDic["VA077_CNAutodesk"] = Util.GetValueOfString(orderline.Get_Value("VA077_CNAutodesk"));
+                retDic["VA077_Duration"] = Util.GetValueOfString(orderline.Get_Value("VA077_Duration"));
+                retDic["VA077_MarginAmt"] = Util.GetValueOfString(orderline.Get_Value("VA077_MarginAmt"));
+                retDic["VA077_MarginPercent"] = Util.GetValueOfString(orderline.Get_Value("VA077_MarginPercent"));
+                retDic["VA077_OldSN"] = Util.GetValueOfString(orderline.Get_Value("VA077_OldSN"));
+                retDic["VA077_ProductInfo"] = Util.GetValueOfString(orderline.Get_Value("VA077_ProductInfo"));
+                retDic["VA077_PurchasePrice"] = Util.GetValueOfString(orderline.Get_Value("VA077_PurchasePrice"));
+                retDic["VA077_RegEmail"] = Util.GetValueOfString(orderline.Get_Value("VA077_RegEmail"));
+                retDic["VA077_SerialNo"] = Util.GetValueOfString(orderline.Get_Value("VA077_SerialNo"));
+                retDic["VA077_UpdateFromVersn"] = Util.GetValueOfString(orderline.Get_Value("VA077_UpdateFromVersn"));
+                retDic["VA077_UserRef_ID"] = Util.GetValueOfString(orderline.Get_Value("VA077_UserRef_ID"));
+                retDic["VA077_ServiceContract_ID"] = Util.GetValueOfString(orderline.Get_Value("VA077_ServiceContract_ID"));
                 retDic["VA077_StartDate"] = Util.GetValueOfString(orderline.Get_Value("VA077_StartDate"));
                 retDic["VA077_EndDate"] = Util.GetValueOfString(orderline.Get_Value("VA077_EndDate"));
 
@@ -1246,7 +1246,7 @@ namespace VIS.Models
             decimal _qtyEntered = Util.GetValueOfInt(paramValue[6].ToString());
             int countEd011 = Util.GetValueOfInt(paramValue[7].ToString());
             int countVAPRC = Util.GetValueOfInt(paramValue[8].ToString());
-            
+
             /** Price List - ValidFrom date validation ** Dt:11/03/2021 ** Modified By: Kumar **/
             string _transactionDate = string.Empty;
             if (paramValue.Length > 9)
@@ -1674,7 +1674,7 @@ namespace VIS.Models
                 /** Price List - ValidFrom date validation ** Dt:11/03/2021 ** Modified By: Kumar **/
                 if (Util.GetValueOfDateTime(_transactionDate) != null)
                     sbparams.Append(",").Append(Util.GetValueOfString(_transactionDate));
-                else                    
+                else
                     sbparams.Append(",").Append(Util.GetValueOfInt(_c_Order_ID));
 
                 sbparams.Append(",").Append(Util.GetValueOfInt(_m_Product_Id));
@@ -1764,7 +1764,7 @@ namespace VIS.Models
             int _c_Uom_Id = 0;
             int _priceListVersion_Id = 0;
             int _m_PriceList_ID = 0;
-            int _standardPrecision = 0;
+            int _standardPrecision = 2;
 
             MProductModel objProduct = new MProductModel();
             _c_Uom_Id = objProduct.GetC_UOM_ID(ctx, _m_Product_Id.ToString());
@@ -1783,8 +1783,8 @@ namespace VIS.Models
             MPriceListVersionModel objPLV = new MPriceListVersionModel();
             _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, sbparams.ToString(), ScreenType.Order);
 
-            MUOMModel objUOM = new MUOMModel();
-            _standardPrecision = objUOM.GetPrecision(ctx, _c_Uom_Id.ToString());
+            //MUOMModel objUOM = new MUOMModel();
+            _standardPrecision = MUOM.GetPrecision(ctx, purchasingUom);  /*objUOM.GetPrecision(ctx, _c_Uom_Id.ToString());*/
 
             MBPartnerModel objBPartner = new MBPartnerModel();
             Dictionary<String, String> bpartner1 = objBPartner.GetBPartner(ctx, _c_BPartner_Id.ToString());
@@ -1806,7 +1806,6 @@ namespace VIS.Models
                     //end
                     PriceList = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceList"]);
                     PriceLimit = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceLimit"]);
-
                     //set Conversion Ordered Qty
                     sql.Clear();
                     sql.Append("SELECT con.DivideRate FROM C_UOM_Conversion con INNER JOIN C_UOM uom ON con.C_UOM_ID = uom.C_UOM_ID WHERE con.IsActive = 'Y' " +
@@ -1896,6 +1895,7 @@ namespace VIS.Models
             retDic["PriceList"] = PriceList;
             retDic["PriceLimit"] = PriceLimit;
             retDic["QtyOrdered"] = QtyOrdered;
+            retDic["UOMStdPrecision"] = _standardPrecision;
             return retDic;
         }
 

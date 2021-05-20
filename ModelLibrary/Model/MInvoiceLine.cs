@@ -3734,9 +3734,10 @@ namespace VAdvantage.Model
                 if (newRecord || Is_ValueChanged("QtyInvoiced"))
                     SetQtyInvoiced(GetQtyInvoiced());
 
-                //JID_1744 PriceList Precision should as per Currency Precision
+                //JID_1744 PriceList Precision should as per Price List Precision --> rather than currency precision
+                int priceListPrcision = MPriceList.Get(GetCtx(), inv.GetM_PriceList_ID(), Get_Trx()).GetPricePrecision();
                 if (newRecord || Is_ValueChanged("PriceList"))
-                    SetPriceList(Decimal.Round(GetPriceList(), GetPrecision(), MidpointRounding.AwayFromZero));
+                    SetPriceList(Decimal.Round(GetPriceList(), priceListPrcision, MidpointRounding.AwayFromZero));
 
                 //	Calculations & Rounding
                 SetLineNetAmt();

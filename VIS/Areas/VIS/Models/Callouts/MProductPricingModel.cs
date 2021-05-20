@@ -113,7 +113,7 @@ namespace VIS.Models
                 PriceActual = (M_PriceList_Version_ID == 0 ? 0 : pp.GetPriceStd()),
                 PriceEntered = (M_PriceList_Version_ID == 0 ? 0 : pp.GetPriceStd()),
                 PriceStd = (M_PriceList_Version_ID == 0 ? 0 : pp.GetPriceStd()),
-                LineAmt = pp.GetLineAmt(2),
+                LineAmt = pp.GetLineAmt(MCurrency.Get(ctx, pp.GetC_Currency_ID()).GetStdPrecision()),
                 C_Currency_ID = System.Convert.ToInt32(pp.GetC_Currency_ID()),
                 Discount = pp.GetDiscount(),
                 C_UOM_ID = System.Convert.ToInt32(pp.GetC_UOM_ID()),
