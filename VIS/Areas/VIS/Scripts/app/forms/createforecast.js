@@ -541,14 +541,12 @@
                     }
                 }
 
-                GenerateForecastLines(TeamForecast_ID, MasterForecast_ID, SalesPriceList_ID);
-
-
-                busyDiv(false);
-
-                // close Form
-                $self.frame.close();
-
+                GenerateForecastLines(TeamForecast_ID, MasterForecast_ID, SalesPriceList_ID, function (result) {
+                    VIS.ADialog.info("", "", JSON.parse(result));
+                    busyDiv(false);
+                    // close Form
+                    $self.frame.close();
+                });             
             });
 
             //Create Lines but donot close form 
@@ -579,23 +577,26 @@
                     }
                 }
 
-                GenerateForecastLines(TeamForecast_ID, MasterForecast_ID, SalesPriceList_ID);
+                GenerateForecastLines(TeamForecast_ID, MasterForecast_ID, SalesPriceList_ID, function(result) {
+                    VIS.ADialog.info("", "", JSON.parse(result));
+                    busyDiv(false);
+                });
 
-
-                busyDiv(false);
             })
             // Close Form
             $btnCancel.on("click", function () {
                 $self.frame.close();
             });
         };
+
+      
         /** Generate Team forecast lines */
-        function GenerateForecastLines(TeamForecast_ID, MasterForecast_ID, SalesPriceList_ID) {
-            busyDiv(true);
+        function GenerateForecastLines(TeamForecast_ID, MasterForecast_ID, SalesPriceList_ID,callback) {      
             $.ajax({
                 url: VIS.Application.contextUrl + "ForecastForm/CreateForecastLine",
                 type: "POST",
                 dataType: "json",
+                async: true,
                 //  contentType: "application/json; charset=utf-8",
                 data: {
                     Org_ID: _OrganizationCtrl.getValue(),
@@ -618,8 +619,7 @@
                     SalesPriceList_ID: SalesPriceList_ID
                 },
                 success: function (result) {
-                    VIS.ADialog.info("", "", JSON.parse(result));
-                    busyDiv(false);
+                    callback(result);           
                 },
                 error: function (ex) {
                     console.log(ex);
@@ -627,9 +627,9 @@
                     VIS.ADialog.error("Error");
                 }
             });
-
-        }
-     
+        }      
+            
+       
         /** Busy Indicator */
         function busyDiv(Value) {
             if (Value) {

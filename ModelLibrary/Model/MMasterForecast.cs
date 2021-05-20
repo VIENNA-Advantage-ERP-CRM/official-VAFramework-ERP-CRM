@@ -435,6 +435,7 @@ namespace VAdvantage.Model
                     {
                         line.SetOppQty(Env.ZERO);
                     }
+                    line.SetPlannedRevenue(Env.ZERO);
                     line.SetProcessed(true);
                     if (!line.Save(Get_TrxName()))
                     {
@@ -521,6 +522,7 @@ namespace VAdvantage.Model
             string FromCurrency = null;
             string ToCurrency = null;
             int lineNo = 0;
+            int Forecastline_Id = 0;
             MMasterForecastLine line = null;
             try
             {
@@ -560,10 +562,18 @@ namespace VAdvantage.Model
                     GetAD_Client_ID(), GetAD_Org_ID()));
                     if (line.GetPrice() == 0)
                     {
-                        //if conversion not found then display message
-                        _processMsg = Msg.GetMsg(GetCtx(), "ConversionNotFound") + " " + Msg.GetMsg(GetCtx(), "From") + " " + FromCurrency + Msg.GetMsg(GetCtx(), "To") + ToCurrency;
-                        count = 0;
-                        return count + " " + _processMsg;
+                        if (FromCurrency != null && ToCurrency != FromCurrency)
+                        {
+                            //if conversion not found then display message
+                            _processMsg = Msg.GetMsg(GetCtx(), "ConversionNotFound") + " " + Msg.GetMsg(GetCtx(), "From") + " " + FromCurrency + Msg.GetMsg(GetCtx(), "To") + ToCurrency;
+                            count = 0;
+                            return count + " " + _processMsg;
+                        }
+                        else
+                        {
+                            Forecastline_Id = fromLines[i].GetC_MasterForecastLine_ID();
+                            continue;
+                        }
                     }
                     line.SetTotalQty(line.GetForcastQty());
                     line.SetSalesOrderQty(Env.ZERO);
@@ -605,7 +615,10 @@ namespace VAdvantage.Model
             {
                 log.Log(Level.SEVERE, e.Message);
             }
-
+            if (Forecastline_Id > 0)
+            {
+                return count + " " + Msg.GetMsg(GetCtx(), "PriceNotFound") + " " + Msg.GetMsg(GetCtx(), "ForecastLine") + Forecastline_Id;
+            }
             return count.ToString();
         }
 
