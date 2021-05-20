@@ -851,7 +851,7 @@ namespace VIS.Controllers
             if (countVA034)
                 sql.Append(", p.VA034_DepositSlipNo");
 
-            sql.Append(", p.TrxNo, p.CheckNo  FROM C_BankAccount ba"
+            sql.Append(", p.TrxNo, p.CheckNo, pay.C_ConversionType_ID  FROM C_BankAccount ba"
                 + " INNER JOIN C_Payment_v p ON (p.C_BankAccount_ID=ba.C_BankAccount_ID)"
                 + " INNER JOIN C_Payment pay ON p.C_Payment_ID=pay.C_Payment_ID"
                 + " INNER JOIN C_Currency c ON (p.C_Currency_ID=c.C_Currency_ID)"
@@ -901,8 +901,8 @@ namespace VIS.Controllers
 
                 if (countVA034)
                     sql.Append(", NULL AS VA034_DepositSlipNo");
-
-                sql.Append(", null AS TrxNo, null AS CheckNo FROM C_BankAccount ba"
+                //added C_ConversionType_ID to append the value on to the Bank statement Line
+                sql.Append(", null AS TrxNo, null AS CheckNo,cl.C_ConversionType_ID FROM C_BankAccount ba"
                          + " INNER JOIN C_CashLine cl ON (cl.C_BankAccount_ID=ba.C_BankAccount_ID)"
                          + " INNER JOIN C_Cash cs ON (cl.C_Cash_ID=cs.C_Cash_ID)"
                          + " INNER JOIN C_Charge chrg ON chrg.C_Charge_ID=cl.C_Charge_ID"

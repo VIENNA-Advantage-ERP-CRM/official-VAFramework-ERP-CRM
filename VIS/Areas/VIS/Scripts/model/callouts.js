@@ -5526,6 +5526,10 @@
             mTab.setValue("ChargeAmt", 0);
             mTab.setValue("C_BPartner_ID", 0);
             mTab.setValue("C_Invoice_ID", 0);
+            //clear the C_ConversionType_ID
+            if (mTab.findColumn("C_ConversionType_ID") >= 0) {
+                mTab.setValue("C_ConversionType_ID", 0);
+            }
             return "";
         }
         var C_Payment_ID = value;
@@ -5536,6 +5540,10 @@
             mTab.setValue("ChargeAmt", 0);
             mTab.setValue("C_BPartner_ID", 0);
             mTab.setValue("C_Invoice_ID", 0);
+            //clear the C_ConversionType_ID if C_Payment_ID is zero or null
+            if (mTab.findColumn("C_ConversionType_ID") >= 0) {
+                mTab.setValue("C_ConversionType_ID", 0);
+            }
             return "";
         }
         //
@@ -5573,7 +5581,8 @@
                 if (mTab.findColumn("C_ConversionType_ID") >= 0) {
                     mTab.setValue("C_ConversionType_ID", payAmt[0]["C_ConversionType_ID"]);
                 }
-                mTab.setValue("DateAcct", Globalize.format(new Date(payAmt[0]["DateAcct"]), "yyyy-MM-dd"));
+                //Requirement change no need to update DateAcct by the Payment reference
+                //mTab.setValue("DateAcct", Globalize.format(new Date(payAmt[0]["DateAcct"]), "yyyy-MM-dd"));
             }
             //param[0] = new VIS.DB.SqlParam("@C_Payment_ID", C_Payment_ID);
             //dr = VIS.DB.executeReader(sql, param, null);
