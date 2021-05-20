@@ -2798,7 +2798,7 @@ namespace VAdvantage.Model
             {
                 if (GetC_InvoicePaySchedule_ID() <= 0)
                 {
-                    string sql = "SELECT COUNT(*) FROM C_PaymentAllocate WHERE IsActive = 'Y' AND  NVL(C_InvoicePaySchedule_ID , 0) = 0 AND  NVL(C_Invoice_ID , 0) <> 0  AND  C_Payment_ID = " + GetC_Payment_ID();
+                    string sql = "SELECT COUNT(C_PaymentAllocate_ID) FROM C_PaymentAllocate WHERE IsActive = 'Y' AND  NVL(C_InvoicePaySchedule_ID , 0) = 0 AND  NVL(C_Invoice_ID , 0) <> 0  AND  C_Payment_ID = " + GetC_Payment_ID();
                     if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
                     {
                         _processMsg = "Select Invoice Payment Schedule";
@@ -2806,7 +2806,7 @@ namespace VAdvantage.Model
                     }
                     else
                     {
-                        sql = "SELECT COUNT(*) FROM C_PaymentAllocate WHERE IsActive = 'Y' AND  NVL(C_Invoice_ID , 0) <> 0 AND C_Payment_ID = " + GetC_Payment_ID();
+                        sql = "SELECT COUNT(C_PaymentAllocate_ID) FROM C_PaymentAllocate WHERE IsActive = 'Y' AND  NVL(C_Invoice_ID , 0) <> 0 AND C_Payment_ID = " + GetC_Payment_ID();
                         countPaymentAllocateRecords = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
                         if (countPaymentAllocateRecords > 0)
                         {
@@ -2817,7 +2817,7 @@ namespace VAdvantage.Model
                                 // when multiple user try to pay agaisnt same schedule from different scenarion at that tym lock record
                                 lock (objLock)
                                 {
-                                    if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM C_PaymentAllocate pa 
+                                    if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(pa.C_PaymentAllocate_ID) FROM C_PaymentAllocate pa 
                                             INNER JOIN C_invoice i ON i.c_invoice_id = pa.c_invoice_id INNER JOIN C_InvoicePaySchedule ips 
                                             ON (ips.C_Invoice_ID = i.C_Invoice_ID AND pa.C_InvoicePaySchedule_id = ips.C_InvoicePaySchedule_id) 
                                             WHERE pa.IsActive = 'Y' AND ips.IsActive = 'Y' AND ips.DueAmt > 0 AND NVL(pa.C_Invoice_ID , 0) <> 0 
@@ -2858,7 +2858,7 @@ namespace VAdvantage.Model
                     // when multiple user try to pay agaisnt same schedule from different scenarion at that tym lock record
                     lock (objLock)
                     {
-                        if (Util.GetValueOfInt(DB.ExecuteScalar(@"Select Count(*) from C_InvoicePaySchedule Where C_Invoice_ID = " + GetC_Invoice_ID() +
+                        if (Util.GetValueOfInt(DB.ExecuteScalar(@"Select Count(C_InvoicePaySchedule_ID) from C_InvoicePaySchedule Where C_Invoice_ID = " + GetC_Invoice_ID() +
                             @" AND C_InvoicePaySchedule_ID =" + GetC_InvoicePaySchedule_ID() +
                             @" AND DueAmt > 0  AND (nvl(c_payment_id,0) != 0 or nvl(c_cashline_id , 0) != 0 OR VA009_IsPaid = 'Y' )", null, Get_Trx())) > 0)
                         {
@@ -2869,7 +2869,7 @@ namespace VAdvantage.Model
                 }
                 if (GetC_Order_ID() != 0)
                 {
-                    if (Util.GetValueOfInt(DB.ExecuteScalar("Select Count(*) from VA009_OrderPaySchedule Where C_Order_ID=" + GetC_Order_ID() + "AND VA009_OrderPaySchedule_ID=" + GetVA009_OrderPaySchedule_ID() + " AND VA009_IsPaid='Y'")) > 0)
+                    if (Util.GetValueOfInt(DB.ExecuteScalar("Select Count(VA009_OrderPaySchedule_ID) from VA009_OrderPaySchedule Where C_Order_ID=" + GetC_Order_ID() + "AND VA009_OrderPaySchedule_ID=" + GetVA009_OrderPaySchedule_ID() + " AND VA009_IsPaid='Y'")) > 0)
                     {
                         _processMsg = "Payment is already done for selected order Schedule";
                         return DocActionVariables.STATUS_INVALID;
@@ -2945,7 +2945,7 @@ namespace VAdvantage.Model
             // change by Amit 27-5-2016 // Letter Of Credit module
             if (Env.IsModuleInstalled("VA026_"))
             {
-                MDocType docType = new MDocType(GetCtx(), GetC_DocType_ID(), Get_Trx());
+                MDocType docType = MDocType.Get(GetCtx(), GetC_DocType_ID());
 
                 if (Get_ValueAsInt("VA026_TRLoanApplication_ID") <= 0)
                 {
@@ -3247,7 +3247,7 @@ namespace VAdvantage.Model
                     //}
                     //paySch.Save(Get_Trx());
 
-                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM C_InvoicePaySchedule WHERE va009_ispaid = 'N' AND C_Invoice_ID = " + Util.GetValueOfInt(GetC_Invoice_ID()), null, Get_Trx())) == 0)
+                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(C_InvoicePaySchedule_ID) FROM C_InvoicePaySchedule WHERE va009_ispaid = 'N' AND C_Invoice_ID = " + Util.GetValueOfInt(GetC_Invoice_ID()), null, Get_Trx())) == 0)
                     {
                         DB.ExecuteQuery("UPDATE C_Invoice SET IsPaid = 'Y' WHERE C_Invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx());
                     }
@@ -3277,17 +3277,19 @@ namespace VAdvantage.Model
                             (Get_ColumnIndex("WithholdingAmt") >= 0 ? (GetWithholdingAmt() + GetBackupWithholdingAmount()) : 0);
                         Decimal orderPaidAmt = GetPayAmt() + GetDiscountAmt() + GetWriteOffAmt() +
                             (Get_ColumnIndex("WithholdingAmt") >= 0 ? (GetWithholdingAmt() + GetBackupWithholdingAmount()) : 0);
-                        MOrder order = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
-                        MClientInfo client = MClientInfo.Get(GetCtx(), GetAD_Client_ID());
-                        MAcctSchema asch = MAcctSchema.Get(GetCtx(), client.GetC_AcctSchema1_ID());
+                        //MOrder order = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
+                        int OrderCurrency = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_Currency_ID FROM C_Order 
+                                                    WHERE C_Order_ID = " + GetC_Order_ID(), null, Get_Trx()));
+                        //MClientInfo client = MClientInfo.Get(GetCtx(), GetAD_Client_ID());
+                        //MAcctSchema asch = MAcctSchema.Get(GetCtx(), client.GetC_AcctSchema1_ID());
 
-                        if (order.GetC_Currency_ID() != GetC_Currency_ID())
+                        if (OrderCurrency != GetC_Currency_ID())
                         {
-                            orderPaidAmt = MConversionRate.Convert(GetCtx(), orderPaidAmt, GetC_Currency_ID(), order.GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+                            orderPaidAmt = MConversionRate.Convert(GetCtx(), orderPaidAmt, GetC_Currency_ID(), OrderCurrency, GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
                         }
-                        if (asch.GetC_Currency_ID() != GetC_Currency_ID())
+                        if (GetCtx().GetContextAsInt("$C_Currency_ID") != GetC_Currency_ID())
                         {
-                            basePaidAmt = MConversionRate.Convert(GetCtx(), basePaidAmt, GetC_Currency_ID(), asch.GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+                            basePaidAmt = MConversionRate.Convert(GetCtx(), basePaidAmt, GetC_Currency_ID(), GetCtx().GetContextAsInt("$C_Currency_ID"), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
                         }
                         // update variance amount as ( Due amount - paid amount )
                         DB.ExecuteQuery("Update VA009_OrderPaySchedule set VA009_ISPAID='Y',C_Payment_ID=" + GetC_Payment_ID() +
@@ -3304,7 +3306,7 @@ namespace VAdvantage.Model
                         // when underr amount contain value then we need to split order schedule
                         if (GetOverUnderAmt() != 0)
                         {
-                            if (!SpiltOrderSchedule(GetCtx(), this, GetVA009_OrderPaySchedule_ID(), asch.GetC_Currency_ID(), GetOverUnderAmt(), Get_Trx()))
+                            if (!SpiltOrderSchedule(GetCtx(), this, GetVA009_OrderPaySchedule_ID(), GetCtx().GetContextAsInt("$C_Currency_ID"), GetOverUnderAmt(), Get_Trx()))
                             {
                                 return DocActionVariables.STATUS_INVALID;
                             }
@@ -3354,7 +3356,7 @@ namespace VAdvantage.Model
                         //}
                         //paySch.SetVA009_ExecutionStatus(GetVA009_ExecutionStatus());
                         //paySch.Save(Get_Trx());
-                        if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM C_InvoicePaySchedule WHERE va009_ispaid = 'N' AND C_Invoice_ID = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Invoice_ID"]), null, Get_Trx())) == 0)
+                        if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(C_InvoicePaySchedule_ID) FROM C_InvoicePaySchedule WHERE va009_ispaid = 'N' AND C_Invoice_ID = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Invoice_ID"]), null, Get_Trx())) == 0)
                         {
                             DB.ExecuteQuery("UPDATE C_Invoice SET IsPaid = 'Y' WHERE C_Invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx());
                         }
