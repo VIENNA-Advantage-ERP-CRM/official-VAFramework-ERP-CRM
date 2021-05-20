@@ -70,8 +70,7 @@ namespace VAdvantage.Process
             MInvoice obj = new MInvoice(GetCtx(), GetRecord_ID(), Get_Trx());
 
             // get Precision for rounding
-            MCurrency currency = new MCurrency(GetCtx(), obj.GetC_Currency_ID(), Get_Trx());
-            precision = currency.GetStdPrecision();
+            precision = MPriceList.Get(GetCtx(), obj.GetM_PriceList_ID(), Get_Trx()).GetPricePrecision();
 
             MInvoiceLine[] lines = obj.GetLines();
 
@@ -91,7 +90,7 @@ namespace VAdvantage.Process
                 subTotal = obj.GetTotalLines();
 
                 // when we are giving discount in terms of amount, then we have to calculate discount in term of percentage
-                discountPercentageOnTotalAmount = GetDiscountPercentageOnTotal(subTotal, _DiscountAmt, precision);
+                discountPercentageOnTotalAmount = GetDiscountPercentageOnTotal(subTotal, _DiscountAmt, 12);
 
                 for (int i = 0; i < lines.Length; i++)
                 {
@@ -100,7 +99,7 @@ namespace VAdvantage.Process
                     discountAmountOnTotal = GetDiscountAmountOnTotal(ln.GetLineNetAmt(), discountPercentageOnTotalAmount != 0 ? discountPercentageOnTotalAmount : _DiscountPercent);
 
                     // this value represent discount on unit price of 1 qty
-                    discountAmountOnTotal = Decimal.Round(Decimal.Divide(discountAmountOnTotal, ln.GetQtyEntered()), precision);
+                    discountAmountOnTotal = Decimal.Round(Decimal.Divide(discountAmountOnTotal, ln.GetQtyEntered()), 12);
 
                     if (discountPercentageOnTotalAmount != 0 && _DiscountAmt != 0)
                     {
@@ -116,7 +115,7 @@ namespace VAdvantage.Process
                         }
                     }
 
-                    ln.SetAmountAfterApplyDiscount(Decimal.Add(ln.GetAmountAfterApplyDiscount(), discountAmountOnTotal));
+                    ln.SetAmountAfterApplyDiscount(Decimal.Round(Decimal.Add(ln.GetAmountAfterApplyDiscount(), discountAmountOnTotal), precision));
                     ln.SetPriceActual(Decimal.Round(Decimal.Subtract(ln.GetPriceActual(), discountAmountOnTotal), precision));
                     ln.SetPriceEntered(Decimal.Round(Decimal.Subtract(ln.GetPriceEntered(), discountAmountOnTotal), precision));
                     // set tax amount as 0, so that on before save we calculate tax again on discounted price

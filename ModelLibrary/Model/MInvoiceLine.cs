@@ -3345,7 +3345,7 @@ namespace VAdvantage.Model
                     if (GetM_Product_ID() != 0)
                         SetM_Product_ID(0);
                 }
-                
+
                 MInvoice inv = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
 
                 // Check if new columns found on Asset table
@@ -3361,7 +3361,7 @@ namespace VAdvantage.Model
                     {
                         forComponent = Util.GetValueOfString(DB.ExecuteScalar("SELECT VAFAM_HasComponent FROM A_Asset WHERE A_Asset_ID = " +
                             GetA_Asset_ID(), null, Get_TrxName())).Equals("Y");
-                        if(forComponent && Util.GetValueOfString(Get_Value("VAFAM_CapitalExpense")).Equals("C"))
+                        if (forComponent && Util.GetValueOfString(Get_Value("VAFAM_CapitalExpense")).Equals("C"))
                         {
                             log.SaveError("VAFAM_SelAssetComps", "");
                             return false;
@@ -3734,9 +3734,10 @@ namespace VAdvantage.Model
                 if (newRecord || Is_ValueChanged("QtyInvoiced"))
                     SetQtyInvoiced(GetQtyInvoiced());
 
-                //JID_1744 PriceList Precision should as per Currency Precision
+                //JID_1744 PriceList Precision should as per Price List Precision --> rather than currency precision
+                int priceListPrcision = MPriceList.Get(GetCtx(), inv.GetM_PriceList_ID(), Get_Trx()).GetPricePrecision();
                 if (newRecord || Is_ValueChanged("PriceList"))
-                    SetPriceList(Decimal.Round(GetPriceList(), GetPrecision(), MidpointRounding.AwayFromZero));
+                    SetPriceList(Decimal.Round(GetPriceList(), priceListPrcision, MidpointRounding.AwayFromZero));
 
                 //	Calculations & Rounding
                 SetLineNetAmt();

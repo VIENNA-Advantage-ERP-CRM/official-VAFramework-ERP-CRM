@@ -688,7 +688,7 @@ namespace VAdvantage.Model
                 + "WHERE c.M_Product_ID=" + M_Product_ID
                 + " AND EXISTS (SELECT * FROM M_Product p "
                     + "WHERE c.M_Product_ID=p.M_Product_ID AND c.C_UOM_ID=p.C_UOM_ID)"
-                + " AND c.IsActive='Y'";
+                + " AND c.IsActive='Y' AND c.AD_Client_ID IN (0 , " + ctx.GetAD_Client_ID() + ")";
             DataTable dt = null;
             IDataReader idr = null;
             DataTable dt1 = null;
@@ -710,7 +710,7 @@ namespace VAdvantage.Model
                     sql = "SELECT * FROM C_UOM_Conversion c "
                 + "WHERE EXISTS (SELECT * FROM M_Product p "
                     + "WHERE c.C_UOM_ID=p.C_UOM_ID AND p.M_Product_ID=" + M_Product_ID + ")"
-                + " AND c.IsActive='Y'";
+                + " AND c.IsActive='Y' AND c.AD_Client_ID IN ( 0 , " + ctx.GetAD_Client_ID() + ")";
 
                     idr1 = DB.ExecuteReader(sql, null, null);
                     dt1 = new DataTable();

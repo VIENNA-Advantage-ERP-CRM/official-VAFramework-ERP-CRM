@@ -22,6 +22,7 @@ namespace VAdvantage.Model
     {
         /** Parent				*/
         private MProject _parent = null;
+        private int currencyPrecision = 0;
 
         /// <summary>
         /// Standard Constructor
@@ -139,8 +140,7 @@ namespace VAdvantage.Model
             Decimal plannedAmt = Decimal.Multiply(GetPlannedQty(), GetPlannedPrice());
             if (Env.Scale(plannedAmt) > GetCurPrecision())
             {
-                //plannedAmt.setScale(GetCurPrecision(), Decimal.ROUND_HALF_UP);
-                Decimal.Round(plannedAmt, GetCurPrecision(), MidpointRounding.AwayFromZero);
+                plannedAmt = Decimal.Round(plannedAmt, GetCurPrecision(), MidpointRounding.AwayFromZero);
             }
             SetPlannedAmt(plannedAmt);
 
@@ -151,13 +151,13 @@ namespace VAdvantage.Model
                 if (GetM_Product_ID() != 0)
                 {
                     Decimal marginEach = Decimal.Subtract(GetPlannedPrice(), GetLimitPrice());
-                    SetPlannedMarginAmt(Decimal.Multiply(marginEach, GetPlannedQty()));
+                    SetPlannedMarginAmt(Decimal.Round(Decimal.Multiply(marginEach, GetPlannedQty()), GetCurPrecision()));
                 }
                 else if (GetM_Product_Category_ID() != 0)
                 {
                     MProductCategory category = MProductCategory.Get(GetCtx(), GetM_Product_Category_ID());
                     Decimal marginEach = category.GetPlannedMargin();
-                    SetPlannedMarginAmt(Decimal.Multiply(marginEach, GetPlannedQty()));
+                    SetPlannedMarginAmt(Decimal.Round(Decimal.Multiply(marginEach, GetPlannedQty()), GetCurPrecision()));
                 }
             }
 
@@ -191,10 +191,22 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Currency Precision
         /// </summary>
-        /// <returns>2 (hardcoded)</returns>
+        /// <returns>pick StdPrecision from the Currency binded on price list</returns>
         protected int GetCurPrecision()
         {
-            return 2;
+            if (currencyPrecision == 0)
+            {
+                currencyPrecision = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT StdPrecision  FROM C_Currency WHERE C_Currency_ID = 
+                                ( SELECT C_Currency_ID FROM M_PriceList WHERE M_PriceList_ID =
+                                    (SELECT M_PriceList_ID FROM M_PriceList_Version WHERE M_PriceList_Version_ID = "
+                                         + (_parent != null ? _parent.GetM_PriceList_Version_ID().ToString() :
+                                            " (SELECT M_PriceList_Version_ID FROM C_Project WHERE C_Project_ID = " + GetC_Project_ID() + ")") + "))", null, Get_Trx()));
+            }
+            if (currencyPrecision == 0)
+            {
+                currencyPrecision = 2;
+            }
+            return currencyPrecision;
         }
 
         /// <summary>

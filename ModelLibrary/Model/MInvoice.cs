@@ -2190,9 +2190,13 @@ namespace VAdvantage.Model
             if (!CreatePaySchedule())
             {
                 ValueNamePair pp = VLogger.RetrieveError();
-                if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
+                if (pp != null)
                 {
                     _processMsg = pp.GetName();
+                }
+                if (String.IsNullOrEmpty(_processMsg))
+                {
+                    _processMsg = Msg.GetMsg(GetCtx(), "ScheduleNotCreated");
                 }
                 return DocActionVariables.STATUS_INVALID;
             }
