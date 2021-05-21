@@ -5611,8 +5611,7 @@
                 if (mTab.findColumn("C_ConversionType_ID") >= 0) {
                     mTab.setValue("C_ConversionType_ID", payAmt[0]["C_ConversionType_ID"]);
                 }
-                // not to set account date from payment
-                //mTab.setValue("DateAcct", Globalize.format(new Date(payAmt[0]["DateAcct"]), "yyyy-MM-dd"));
+                mTab.setValue("DateAcct", Globalize.format(new Date(payAmt[0]["DateAcct"]), "yyyy-MM-dd"));
             }
         }
         catch (err) {
