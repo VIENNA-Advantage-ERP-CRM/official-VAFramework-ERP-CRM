@@ -204,8 +204,8 @@ namespace ViennaAdvantageServer.Process
                         }
                         // Calculate Discount %
                         Decimal? dis = Decimal.Multiply(Decimal.Divide(Decimal.Subtract(New.GetPriceList(), New.GetPriceEntered()), New.GetPriceList()), 100);
-                        // Round off upto 2 decimal points done by Rakesh Kumar(228) on 19/May/2021
-                        New.SetDiscount(Math.Round(dis ?? 0, 2, MidpointRounding.AwayFromZero));
+                        // Round off based on Price Precision decimal points done by Rakesh Kumar(228) on 21/May/2021
+                        New.SetDiscount(Math.Round(dis ?? 0, priceList.GetPricePrecision(), MidpointRounding.AwayFromZero));
 
                         // Set Grand Total Amount
                         if (priceList.IsTaxIncluded())
@@ -394,8 +394,8 @@ namespace ViennaAdvantageServer.Process
                         }
                         // Calculate Discount %
                         Decimal? dis = Decimal.Multiply(Decimal.Divide(Decimal.Subtract(New.GetPriceList(), New.GetPriceEntered()), New.GetPriceList()), 100);
-                        // Round off upto 2 decimal points done by Rakesh Kumar(228) on 19/May/2021
-                        New.SetDiscount(Math.Round(dis ?? 0, 2, MidpointRounding.AwayFromZero));
+                        // Round off based on Price Precision done by Rakesh Kumar(228) on 21/May/2021
+                        New.SetDiscount(Math.Round(dis ?? 0, priceList.GetPricePrecision(), MidpointRounding.AwayFromZero));
 
                         // Set Grand Total Amount
                         if (priceList.IsTaxIncluded())
