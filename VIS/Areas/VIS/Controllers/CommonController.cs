@@ -976,6 +976,8 @@ namespace VIS.Controllers
                     // Change By Mohit To show trx no on create line from on bank statement
                     item.AuthCode = Util.GetValueOfString(data.Tables[0].Rows[i]["TrxNo"]);
                     item.CheckNo = Util.GetValueOfString(data.Tables[0].Rows[i]["CheckNo"]);
+                    // Get the C_ConversionType_ID
+                    item.C_ConversionType_ID = Util.GetValueOfInt(data.Tables[0].Rows[i]["C_ConversionType_ID"]);
                     dyndata.Add(item);
                 }
                 _iData.data = dyndata;
@@ -2107,6 +2109,8 @@ namespace VIS.Controllers
                 if (count > 0)
                     bsl.SetVA012_VoucherNo(Util.GetValueOfString(model[i]["VA034_DepositSlipNo"]));
 
+                //Set C_ConversionType_ID on Bank Statement Line
+                bsl.Set_Value("C_ConversionType_ID", Util.GetValueOfInt(model[i]["C_ConversionType_ID"]));
                 if (!bsl.Save())
                 {
                     //s_log.log(Level.SEVERE, "Line not created #" + i);
@@ -2170,6 +2174,7 @@ namespace VIS.Controllers
             public string VA034_DepositSlipNo { get; set; }
             public string AuthCode { get; set; }
             public string CheckNo { get; set; }
+            public int C_ConversionType_ID { get; set; }
         }
         public class DataObject
         {

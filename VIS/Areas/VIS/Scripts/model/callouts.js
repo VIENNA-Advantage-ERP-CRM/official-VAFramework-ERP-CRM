@@ -5547,13 +5547,15 @@
     CalloutBankStatement.prototype.Payment = function (ctx, windowNo, mTab, mField, value, oldValue) {
         if (this.isCalloutActive() || value == null || value.toString() == "") {
             // JID_0333: Once user remove the payment reference Reset column Statement Amount, Transaction Amount, Charge Amount, Interest Amount, business partner and Invoice reference
-            if (VIS.Utility.Util.getValueOfInt(mTab.getValue("C_Payment_ID")) <= 0) {
-                mTab.setValue("StmtAmt", 0);
-                mTab.setValue("TrxAmt", 0);
-                mTab.setValue("ChargeAmt", 0);
-                mTab.setValue("ChargeAmt", 0);
-                mTab.setValue("C_BPartner_ID", 0);
-                mTab.setValue("C_Invoice_ID", 0);
+            mTab.setValue("StmtAmt", 0);
+            mTab.setValue("TrxAmt", 0);
+            mTab.setValue("ChargeAmt", 0);
+            mTab.setValue("ChargeAmt", 0);
+            mTab.setValue("C_BPartner_ID", 0);
+            mTab.setValue("C_Invoice_ID", 0);
+            //clear the C_ConversionType_ID
+            if (mTab.findColumn("C_ConversionType_ID") >= 0) {
+                mTab.setValue("C_ConversionType_ID", 0);
             }
             return "";
         }
@@ -5568,7 +5570,10 @@
             mTab.setValue("ChargeAmt", 0);
             mTab.setValue("C_BPartner_ID", 0);
             mTab.setValue("C_Invoice_ID", 0);
-            this.setCalloutActive(false);
+            //clear the C_ConversionType_ID if C_Payment_ID is zero or null
+            if (mTab.findColumn("C_ConversionType_ID") >= 0) {
+                mTab.setValue("C_ConversionType_ID", 0);
+            }
             return "";
         }
         //
@@ -5611,7 +5616,8 @@
                 if (mTab.findColumn("C_ConversionType_ID") >= 0) {
                     mTab.setValue("C_ConversionType_ID", payAmt[0]["C_ConversionType_ID"]);
                 }
-                mTab.setValue("DateAcct", Globalize.format(new Date(payAmt[0]["DateAcct"]), "yyyy-MM-dd"));
+                //Requirement change no need to update DateAcct by the Payment reference
+                //mTab.setValue("DateAcct", Globalize.format(new Date(payAmt[0]["DateAcct"]), "yyyy-MM-dd"));
             }
         }
         catch (err) {
