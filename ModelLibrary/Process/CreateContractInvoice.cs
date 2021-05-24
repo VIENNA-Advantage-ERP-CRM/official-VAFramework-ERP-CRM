@@ -246,7 +246,6 @@ namespace ViennaAdvantageServer.Process
                 sql.Clear();
                 sql.Append("SELECT COUNT(C_ContractSchedule_ID)+1 From C_ContractSchedule Where NVL(C_INVOICE_ID,0) > 0 AND C_Contract_ID=" + cont.GetC_Contract_ID());
                 int scheduledInvoiceCount = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
-                // Set InvoiceReference as DocumentNo
                 inv.Set_Value("InvoiceReference", cont.GetDocumentNo() + "_" + Util.GetValueOfString(scheduledInvoiceCount));
                 inv.SetC_DocType_ID(_C_DocType_ID);
                 inv.SetC_DocTypeTarget_ID(_C_DocType_ID);
