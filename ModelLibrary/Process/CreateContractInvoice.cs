@@ -210,7 +210,7 @@ namespace ViennaAdvantageServer.Process
                     }
                 }
 
-                price = Decimal.Round(price.Value, 2, MidpointRounding.AwayFromZero);
+                //price = Decimal.Round(price.Value, 2, MidpointRounding.AwayFromZero);
 
                 inv = new VAdvantage.Model.MInvoice(GetCtx(), 0, Get_TrxName());
                 inv.SetAD_Client_ID(cont.GetAD_Client_ID());
@@ -242,8 +242,12 @@ namespace ViennaAdvantageServer.Process
                         throw new ArgumentException(Msg.GetMsg(GetCtx(), "VIS_PaymentMethodNotDefined") + " : " + bp.GetName());
                     }
                 }
-                // Set InvoiceReference as DocumentNo By Rakesh Kumar(228) on 12/May/2021
-                inv.Set_Value("InvoiceReference", cont.GetDocumentNo());
+                // Get count contract schedule of invoice created
+                sql.Clear();
+                sql.Append("SELECT COUNT(C_ContractSchedule_ID)+1 From C_ContractSchedule Where NVL(C_INVOICE_ID,0) > 0 AND C_Contract_ID=" + cont.GetC_Contract_ID());
+                int scheduledInvoiceCount = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
+                // Set InvoiceReference as DocumentNo+TotalSchedule Count By Rakesh Kumar(228) on 24/May/2021
+                inv.Set_Value("InvoiceReference", cont.GetDocumentNo() + "_" + Util.GetValueOfString(scheduledInvoiceCount));
                 inv.SetC_DocType_ID(_C_DocType_ID);
                 inv.SetC_DocTypeTarget_ID(_C_DocType_ID);
                 inv.SetC_BPartner_Location_ID(cont.GetBill_Location_ID());
