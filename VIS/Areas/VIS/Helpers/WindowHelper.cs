@@ -1026,7 +1026,13 @@ namespace VIS.Helpers
                             String info = "";
                             ValueNamePair ppE = VLogger.RetrieveError();
                             if (ppE == null)
+                            {
                                 ppE = VLogger.RetrieveWarning();
+                                if (ppE != null)
+                                {
+                                    outt.IsWarning = true;
+                                }
+                            }
                             if (ppE != null)
                             {
                                 msg = ppE.GetValue();
@@ -1151,7 +1157,13 @@ namespace VIS.Helpers
                 String info = "";
                 ValueNamePair ppE = VAdvantage.Logging.VLogger.RetrieveError();
                 if (ppE == null)
+                {
                     ppE = VAdvantage.Logging.VLogger.RetrieveWarning();
+                    if (ppE != null)
+                    {
+                        outt.IsWarning = true;
+                    }
+                }
                 if (ppE != null)
                 {
                     msg = ppE.GetValue();
@@ -1279,6 +1291,7 @@ namespace VIS.Helpers
                 String info = pp.GetName();
                 //fireDataStatusEEvent(msg, info, false);
                 outt.FireEEvent = true;
+                outt.IsWarning = true;
                 outt.EventParam = new EventParamOut() { Msg = msg, Info = info, IsError = true };
 
             }
