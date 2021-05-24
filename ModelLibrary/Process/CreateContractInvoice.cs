@@ -91,6 +91,8 @@ namespace ViennaAdvantageServer.Process
                     while (idr.Read())
                     {
                         cont = new VAdvantage.Model.X_C_Contract(GetCtx(), Util.GetValueOfInt(idr[0]), Get_TrxName());
+                        // Get business partner detail
+                        bp = new MBPartner(GetCtx(), cont.GetC_BPartner_ID(), Get_TrxName());
                         string date = System.DateTime.Now.ToString("dd-MMM-yyyy");
                         int[] contSch = VAdvantage.Model.X_C_ContractSchedule.GetAllIDs("C_ContractSchedule", "C_Contract_ID = " + cont.GetC_Contract_ID() + " AND FROMDATE <= '"
                             + date + "' AND NVL(C_INVOICE_ID,0) = 0", Get_TrxName());
@@ -118,7 +120,7 @@ namespace ViennaAdvantageServer.Process
                         idr = null;
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
                     if (idr != null)
                     {
@@ -223,7 +225,8 @@ namespace ViennaAdvantageServer.Process
                 {
                     // Done by Rakesh Kumar on 01/Apr/2021
                     // When ContractType is Accounts Receivable
-                    if (bp.GetVA009_PaymentMethod_ID() > 0 && (cont.GetContractType().Equals(X_C_Contract.CONTRACTTYPE_AccountsReceivable)))
+                    // If Contract type not found consider as AR Invoice by default Done by Rakesh 21/May/2021 suggested by Kanika
+                    if (bp.GetVA009_PaymentMethod_ID() > 0 && (string.IsNullOrEmpty(cont.GetContractType()) || cont.GetContractType().Equals(X_C_Contract.CONTRACTTYPE_AccountsReceivable)))
                     {
                         inv.SetVA009_PaymentMethod_ID(bp.GetVA009_PaymentMethod_ID());
                         inv.SetIsSOTrx(true);
@@ -357,9 +360,10 @@ namespace ViennaAdvantageServer.Process
             _C_DocType_ID = 0;
             sql.Append("SELECT C_DocType_ID FROM C_DocType "
                       + "WHERE AD_Client_ID=" + cont.GetAD_Client_ID() + " AND IsActive='Y' AND AD_Org_ID IN(0," + cont.GetAD_Org_ID() + ") ");
+            // If Contract type not found consider as AR Invoice by default Done by Rakesh 21/May/2021 suggested by Kanika
 
             // When ContractType is Accounts Receivable
-            if (cont.GetContractType().Equals(X_C_Contract.CONTRACTTYPE_AccountsReceivable))
+            if (string.IsNullOrEmpty(cont.GetContractType()) || cont.GetContractType().Equals(X_C_Contract.CONTRACTTYPE_AccountsReceivable))
             {
                 sql.Append(@" AND DocBaseType = '" + MDocBaseType.DOCBASETYPE_ARINVOICE + @"'");
             }
@@ -367,6 +371,7 @@ namespace ViennaAdvantageServer.Process
             {
                 sql.Append(@" AND DocBaseType = '" + MDocBaseType.DOCBASETYPE_APINVOICE + @"'");
             }
+
             sql.Append(" ORDER BY AD_Org_ID Desc");
             _C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar(MRole.GetDefault(GetCtx()).AddAccessSQL(sql.ToString(), "C_DocType", true, true), null, Get_TrxName()));
 
