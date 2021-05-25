@@ -97,7 +97,7 @@ namespace ViennaAdvantageServer.Process
                         string date = System.DateTime.Now.ToString("dd-MMM-yyyy");
                         int[] contSch = VAdvantage.Model.X_C_ContractSchedule.GetAllIDs("C_ContractSchedule", "C_Contract_ID = " + cont.GetC_Contract_ID() + " AND FROMDATE <= '"
                             + date + "' AND NVL(C_INVOICE_ID,0) = 0", Get_TrxName());
-                        if (contSch != null)
+                        if (contSch != null && contSch.Length > 0)
                         {
                             // Done by Rakesh Kumar on 01/Apr/2021
                             // Set DocTypeId
