@@ -89,31 +89,34 @@ namespace ViennaAdvantageServer.Process
                 {
                     // Changed datareader to dataset to solve problem in postgre db done by Rakesh 25/May/2021
                     ds = DB.ExecuteDataset(sql.ToString(), null, Get_TrxName());
-                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    if (ds != null)
                     {
-                        cont = new VAdvantage.Model.X_C_Contract(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Contract_ID"]), Get_TrxName());
-                        // Get business partner detail
-                        bp = new MBPartner(GetCtx(), cont.GetC_BPartner_ID(), Get_TrxName());
-                        string date = System.DateTime.Now.ToString("dd-MMM-yyyy");
-                        int[] contSch = VAdvantage.Model.X_C_ContractSchedule.GetAllIDs("C_ContractSchedule", "C_Contract_ID = " + cont.GetC_Contract_ID() + " AND FROMDATE <= '"
-                            + date + "' AND NVL(C_INVOICE_ID,0) = 0", Get_TrxName());
-                        if (contSch != null && contSch.Length > 0)
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
-                            // Done by Rakesh Kumar on 01/Apr/2021
-                            // Set DocTypeId
-                            SetDocType();
-                            for (int j = 0; j < contSch.Length; j++)
+                            cont = new VAdvantage.Model.X_C_Contract(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Contract_ID"]), Get_TrxName());
+                            // Get business partner detail
+                            bp = new MBPartner(GetCtx(), cont.GetC_BPartner_ID(), Get_TrxName());
+                            string date = System.DateTime.Now.ToString("dd-MMM-yyyy");
+                            int[] contSch = VAdvantage.Model.X_C_ContractSchedule.GetAllIDs("C_ContractSchedule", "C_Contract_ID = " + cont.GetC_Contract_ID() + " AND FROMDATE <= '"
+                                + date + "' AND NVL(C_INVOICE_ID,0) = 0", Get_TrxName());
+                            if (contSch != null && contSch.Length > 0)
                             {
-                                contSchedule = new VAdvantage.Model.X_C_ContractSchedule(GetCtx(), Util.GetValueOfInt(contSch[j]), Get_TrxName());
-                                GenerateInvoice(contSchedule);
+                                // Done by Rakesh Kumar on 01/Apr/2021
+                                // Set DocTypeId
+                                SetDocType();
+                                for (int j = 0; j < contSch.Length; j++)
+                                {
+                                    contSchedule = new VAdvantage.Model.X_C_ContractSchedule(GetCtx(), Util.GetValueOfInt(contSch[j]), Get_TrxName());
+                                    GenerateInvoice(contSchedule);
+                                }
                             }
-                        }
 
-                        sql.Clear();
-                        sql.Append("SELECT COUNT(C_ContractSchedule_ID) FROM C_ContractSchedule WHERE C_Contract_ID = " + cont.GetC_Contract_ID() + " AND NVL(C_INVOICE_ID,0) > 0");
-                        string sql1 = "UPDATE C_Contract SET InvoicesGenerated = " + Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()))
-                            + " WHERE C_Contract_ID = " + cont.GetC_Contract_ID();
-                        int res = DB.ExecuteQuery(sql1, null, Get_TrxName());
+                            sql.Clear();
+                            sql.Append("SELECT COUNT(C_ContractSchedule_ID) FROM C_ContractSchedule WHERE C_Contract_ID = " + cont.GetC_Contract_ID() + " AND NVL(C_INVOICE_ID,0) > 0");
+                            string sql1 = "UPDATE C_Contract SET InvoicesGenerated = " + Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()))
+                                + " WHERE C_Contract_ID = " + cont.GetC_Contract_ID();
+                            int res = DB.ExecuteQuery(sql1, null, Get_TrxName());
+                        }
                     }
                     if (ds != null)
                     {
