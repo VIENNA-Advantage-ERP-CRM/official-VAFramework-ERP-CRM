@@ -380,11 +380,13 @@ namespace ViennaAdvantageServer.Process
             }
 
             sql.Append(" ORDER BY AD_Org_ID Desc");
-            _C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar(MRole.GetDefault(GetCtx()).AddAccessSQL(sql.ToString(), "C_DocType", true, true), null, Get_TrxName()));
+            _C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
 
             // If ContractType not defined on Service Contract Window
             if (_C_DocType_ID == 0)
             {
+                // save error log info file
+                log.SaveInfo("Create Contract Invoice-", "Doc type not defind or found");
                 throw new ArgumentException(Msg.GetMsg(GetCtx(), "ContractTypeNotDefined"));
             }
         }
