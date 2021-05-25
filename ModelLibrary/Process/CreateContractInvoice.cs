@@ -84,13 +84,13 @@ namespace ViennaAdvantageServer.Process
             else
             {
                 sql.Append("SELECT C_Contract_ID FROM C_Contract WHERE IsActive = 'Y' AND AD_Client_ID = " + GetAD_Client_ID());
-                IDataReader idr = null;
+                DataSet ds = null;
                 try
                 {
-                    idr = DB.ExecuteReader(sql.ToString(), null, Get_TrxName());
-                    while (idr.Read())
+                    ds = DB.ExecuteDataset(sql.ToString(), null, Get_TrxName());
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        cont = new VAdvantage.Model.X_C_Contract(GetCtx(), Util.GetValueOfInt(idr[0]), Get_TrxName());
+                        cont = new VAdvantage.Model.X_C_Contract(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Contract_ID"]), Get_TrxName());
                         // Get business partner detail
                         bp = new MBPartner(GetCtx(), cont.GetC_BPartner_ID(), Get_TrxName());
                         string date = System.DateTime.Now.ToString("dd-MMM-yyyy");
@@ -101,9 +101,9 @@ namespace ViennaAdvantageServer.Process
                             // Done by Rakesh Kumar on 01/Apr/2021
                             // Set DocTypeId
                             SetDocType();
-                            for (int i = 0; i < contSch.Length; i++)
+                            for (int j = 0; j < contSch.Length; j++)
                             {
-                                contSchedule = new VAdvantage.Model.X_C_ContractSchedule(GetCtx(), Util.GetValueOfInt(contSch[i]), Get_TrxName());
+                                contSchedule = new VAdvantage.Model.X_C_ContractSchedule(GetCtx(), Util.GetValueOfInt(contSch[j]), Get_TrxName());
                                 GenerateInvoice(contSchedule);
                             }
                         }
@@ -114,18 +114,18 @@ namespace ViennaAdvantageServer.Process
                             + " WHERE C_Contract_ID = " + cont.GetC_Contract_ID();
                         int res = DB.ExecuteQuery(sql1, null, Get_TrxName());
                     }
-                    if (idr != null)
+                    if (ds != null)
                     {
-                        idr.Close();
-                        idr = null;
+                        ds.Dispose();
+                        ds = null;
                     }
                 }
                 catch (Exception ex)
                 {
-                    if (idr != null)
+                    if (ds != null)
                     {
-                        idr.Close();
-                        idr = null;
+                        ds.Dispose();
+                        ds = null;
                     }
                 }
             }
