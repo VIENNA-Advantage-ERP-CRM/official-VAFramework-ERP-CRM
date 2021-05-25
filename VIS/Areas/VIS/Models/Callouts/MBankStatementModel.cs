@@ -43,6 +43,8 @@ namespace VIS.Models
             int CurTo_ID = Util.GetValueOfInt(paramValue[1]);
             //Conversion based on Bank StatementLine Date
             DateTime? convDate = Util.GetValueOfDateTime(paramValue[2]);
+            //Get the Org_ID from the StatementLine - Tab
+            int ad_org_ID = Util.GetValueOfInt(paramValue[3]);
             Decimal rate = 0;
             //End Assign parameter value
             List<Dictionary<string, Object>> _paymentDetails = null;
@@ -58,7 +60,14 @@ namespace VIS.Models
                 //DateTime? dateAcct = Util.GetValueOfDateTime(ds.Tables[0].Rows[0][3]);          // JID_0333: Currency conversion should be based on Payment Account Date and Currency type
                 //rate = MConversionRate.Convert(ctx, payAmt, c_currency_ID, CurTo_ID, dateAcct, c_conversionType_ID, ctx.GetAD_Client_ID(), ctx.GetAD_Org_ID());
                 // Conversion Rate should be based on StatementLine Date & StatementLine ConversionType_ID Requirement by Ranvir
-                rate = MConversionRate.Convert(ctx, payAmt, c_currency_ID, CurTo_ID, convDate, c_conversionType_ID, ctx.GetAD_Client_ID(), ctx.GetAD_Org_ID());
+                if (CurTo_ID != c_currency_ID)
+                {
+                    rate = MConversionRate.Convert(ctx, payAmt, c_currency_ID, CurTo_ID, convDate, c_conversionType_ID, ctx.GetAD_Client_ID(), ad_org_ID);
+                }
+                else
+                {
+                    rate = payAmt;
+                }
                 Dictionary<string, Object> _list = new Dictionary<string, object>();
                 _list.Add("C_ConversionType_ID", c_conversionType_ID);
                 //_list.Add("DateAcct", dateAcct);
