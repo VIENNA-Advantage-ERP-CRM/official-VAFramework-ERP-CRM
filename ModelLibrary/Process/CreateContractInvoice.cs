@@ -87,6 +87,7 @@ namespace ViennaAdvantageServer.Process
                 DataSet ds = null;
                 try
                 {
+                    // Changed datareader to dataset to solve problem in postgre db done by Rakesh 25/May/2021
                     ds = DB.ExecuteDataset(sql.ToString(), null, Get_TrxName());
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
