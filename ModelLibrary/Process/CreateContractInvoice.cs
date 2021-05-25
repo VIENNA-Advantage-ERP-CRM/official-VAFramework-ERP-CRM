@@ -84,48 +84,52 @@ namespace ViennaAdvantageServer.Process
             else
             {
                 sql.Append("SELECT C_Contract_ID FROM C_Contract WHERE IsActive = 'Y' AND AD_Client_ID = " + GetAD_Client_ID());
-                IDataReader idr = null;
+                DataSet ds = null;
                 try
                 {
-                    idr = DB.ExecuteReader(sql.ToString(), null, Get_TrxName());
-                    while (idr.Read())
+                    // Changed datareader to dataset to solve problem in postgre db done by Rakesh 25/May/2021
+                    ds = DB.ExecuteDataset(sql.ToString(), null, Get_TrxName());
+                    if (ds != null)
                     {
-                        cont = new VAdvantage.Model.X_C_Contract(GetCtx(), Util.GetValueOfInt(idr[0]), Get_TrxName());
-                        // Get business partner detail
-                        bp = new MBPartner(GetCtx(), cont.GetC_BPartner_ID(), Get_TrxName());
-                        string date = System.DateTime.Now.ToString("dd-MMM-yyyy");
-                        int[] contSch = VAdvantage.Model.X_C_ContractSchedule.GetAllIDs("C_ContractSchedule", "C_Contract_ID = " + cont.GetC_Contract_ID() + " AND FROMDATE <= '"
-                            + date + "' AND NVL(C_INVOICE_ID,0) = 0", Get_TrxName());
-                        if (contSch != null)
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
-                            // Done by Rakesh Kumar on 01/Apr/2021
-                            // Set DocTypeId
-                            SetDocType();
-                            for (int i = 0; i < contSch.Length; i++)
+                            cont = new VAdvantage.Model.X_C_Contract(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Contract_ID"]), Get_TrxName());
+                            // Get business partner detail
+                            bp = new MBPartner(GetCtx(), cont.GetC_BPartner_ID(), Get_TrxName());
+                            string date = System.DateTime.Now.ToString("dd-MMM-yyyy");
+                            int[] contSch = VAdvantage.Model.X_C_ContractSchedule.GetAllIDs("C_ContractSchedule", "C_Contract_ID = " + cont.GetC_Contract_ID() + " AND FROMDATE <= '"
+                                + date + "' AND NVL(C_INVOICE_ID,0) = 0", Get_TrxName());
+                            if (contSch != null && contSch.Length > 0)
                             {
-                                contSchedule = new VAdvantage.Model.X_C_ContractSchedule(GetCtx(), Util.GetValueOfInt(contSch[i]), Get_TrxName());
-                                GenerateInvoice(contSchedule);
+                                // Done by Rakesh Kumar on 01/Apr/2021
+                                // Set DocTypeId
+                                SetDocType();
+                                for (int j = 0; j < contSch.Length; j++)
+                                {
+                                    contSchedule = new VAdvantage.Model.X_C_ContractSchedule(GetCtx(), Util.GetValueOfInt(contSch[j]), Get_TrxName());
+                                    GenerateInvoice(contSchedule);
+                                }
                             }
-                        }
 
-                        sql.Clear();
-                        sql.Append("SELECT COUNT(C_ContractSchedule_ID) FROM C_ContractSchedule WHERE C_Contract_ID = " + cont.GetC_Contract_ID() + " AND NVL(C_INVOICE_ID,0) > 0");
-                        string sql1 = "UPDATE C_Contract SET InvoicesGenerated = " + Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()))
-                            + " WHERE C_Contract_ID = " + cont.GetC_Contract_ID();
-                        int res = DB.ExecuteQuery(sql1, null, Get_TrxName());
+                            sql.Clear();
+                            sql.Append("SELECT COUNT(C_ContractSchedule_ID) FROM C_ContractSchedule WHERE C_Contract_ID = " + cont.GetC_Contract_ID() + " AND NVL(C_INVOICE_ID,0) > 0");
+                            string sql1 = "UPDATE C_Contract SET InvoicesGenerated = " + Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()))
+                                + " WHERE C_Contract_ID = " + cont.GetC_Contract_ID();
+                            int res = DB.ExecuteQuery(sql1, null, Get_TrxName());
+                        }
                     }
-                    if (idr != null)
+                    if (ds != null)
                     {
-                        idr.Close();
-                        idr = null;
+                        ds.Dispose();
+                        ds = null;
                     }
                 }
                 catch (Exception ex)
                 {
-                    if (idr != null)
+                    if (ds != null)
                     {
-                        idr.Close();
-                        idr = null;
+                        ds.Dispose();
+                        ds = null;
                     }
                 }
             }
@@ -242,11 +246,10 @@ namespace ViennaAdvantageServer.Process
                         throw new ArgumentException(Msg.GetMsg(GetCtx(), "VIS_PaymentMethodNotDefined") + " : " + bp.GetName());
                     }
                 }
-                // Get count contract schedule of invoice created
+                // Get count contract schedule of invoice created By Rakesh Kumar(228) on 24/May/2021
                 sql.Clear();
                 sql.Append("SELECT COUNT(C_ContractSchedule_ID)+1 From C_ContractSchedule Where NVL(C_INVOICE_ID,0) > 0 AND C_Contract_ID=" + cont.GetC_Contract_ID());
                 int scheduledInvoiceCount = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
-                // Set InvoiceReference as DocumentNo+TotalSchedule Count By Rakesh Kumar(228) on 24/May/2021
                 inv.Set_Value("InvoiceReference", cont.GetDocumentNo() + "_" + Util.GetValueOfString(scheduledInvoiceCount));
                 inv.SetC_DocType_ID(_C_DocType_ID);
                 inv.SetC_DocTypeTarget_ID(_C_DocType_ID);
