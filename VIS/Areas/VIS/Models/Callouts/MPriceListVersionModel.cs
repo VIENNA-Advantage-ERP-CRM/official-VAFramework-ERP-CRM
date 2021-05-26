@@ -260,7 +260,12 @@ namespace VIS.Models
                 string[] paramValue = fields.Split(',');
                 M_PriceList_ID = Util.GetValueOfInt(paramValue[0].ToString());
                 if (paramValue.Length > 1)
-                    _transactionDate = Util.GetValueOfDateTime(paramValue[1].ToString());
+                {
+                    if (paramValue[1] != null)
+                    {
+                        _transactionDate = Convert.ToDateTime(paramValue[1]);
+                    }
+                }
                 if (paramValue.Length > 2)
                     productId = Util.GetValueOfInt(paramValue[2].ToString());
                 if (paramValue.Length > 3)

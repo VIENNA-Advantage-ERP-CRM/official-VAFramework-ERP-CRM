@@ -209,6 +209,17 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
+        /// Before Save Logic Implement
+        /// </summary>
+        /// <param name="newRecord">newRecord</param>
+        /// <returns>true, when success</returns>
+        protected override bool BeforeSave(bool newRecord)
+        {
+            SetPrices(GetPriceList(), GetPriceStd(), GetPriceLimit());
+            return true;
+        }
+
+        /// <summary>
         /// Set Prices
         /// </summary>
         /// <param name="PriceList">list price</param>
@@ -216,9 +227,11 @@ namespace VAdvantage.Model
         /// <param name="PriceLimit">limit price</param>
         public void SetPrices(Decimal PriceList, Decimal PriceStd, Decimal PriceLimit)
         {
-            SetPriceLimit(PriceLimit);
-            SetPriceList(PriceList);
-            SetPriceStd(PriceStd);
+            int PricePrecision = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT PricePrecision FROM M_PriceList WHERE M_PriceList_ID =
+                                (SELECT M_PriceList_ID FROM M_PriceList_Version WHERE M_PriceList_Version_ID = " + GetM_PriceList_Version_ID() + ")", null, Get_Trx()));
+            SetPriceLimit(Decimal.Round(PriceLimit, PricePrecision, MidpointRounding.AwayFromZero));
+            SetPriceList(Decimal.Round(PriceList, PricePrecision, MidpointRounding.AwayFromZero));
+            SetPriceStd(Decimal.Round(PriceStd, PricePrecision, MidpointRounding.AwayFromZero));
         }
 
         /// <summary>

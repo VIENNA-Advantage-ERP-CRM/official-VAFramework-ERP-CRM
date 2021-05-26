@@ -42,5 +42,23 @@ namespace VIS.Controllers
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
+
+        /// <summary>
+        /// This Function is used to get the Price List Precision
+        /// </summary>
+        /// <param name="fields">Price List Version ID</param>
+        /// <returns>Precision</returns>
+        public JsonResult GetPriceListPrecision(string fields)
+        {
+            string retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
+                MPriceListModel objPriceListModel = new MPriceListModel();
+                fields = Util.GetValueOfString(VAdvantage.DataBase.DB.ExecuteScalar("SELECT M_PriceList_ID FROM M_PriceList_Version WHERE M_PriceList_Version_ID = " + fields));
+                retJSON = JsonConvert.SerializeObject(objPriceListModel.GetPriceList(ctx, fields));
+            }
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
     }
 }
