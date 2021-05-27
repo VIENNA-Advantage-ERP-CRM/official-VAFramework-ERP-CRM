@@ -1370,6 +1370,7 @@ VIS.GridController.prototype.checkInsertNewRow = function () {
             this.vCardView.navigate(recid, !this.isCardRow);
         }
         else if (recid > -1) {
+            this.vTable.select(recid) //select row for Grid
             this.vCardView.navigate(recid, true);
         }
 

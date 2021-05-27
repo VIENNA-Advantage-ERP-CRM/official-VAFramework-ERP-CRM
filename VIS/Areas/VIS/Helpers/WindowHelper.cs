@@ -1474,7 +1474,7 @@ namespace VIS.Helpers
         {
             String sql = "SELECT COUNT(AD_Workflow_ID) FROM AD_Workflow "
                 + " WHERE WorkflowType='V' AND IsActive='Y' AND IsValid='Y' AND AD_Table_ID = " + AD_Table_ID + " AND AD_Client_ID = " + AD_Client_ID
-                + " ORDER BY AD_Client_ID, AD_Table_ID";
+                + " GROUP BY AD_Client_ID, AD_Table_ID ORDER BY AD_Client_ID, AD_Table_ID";
 
             return Util.GetValueOfInt(DB.ExecuteScalar(sql, null, _trx)) > 0;
         }
