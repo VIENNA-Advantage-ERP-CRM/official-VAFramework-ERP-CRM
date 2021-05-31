@@ -100,16 +100,16 @@ namespace VAdvantage.Process
         /// <param name="trxName"></param>
         private void CreateSequence(MTable table, Trx trxName)
         {
-            if (!table.IsView())
+            if (!table.IsView() &&  table.GetKeyColumns().Length==1)
             {
                 if (!MSequence.CreateTableSequence(GetCtx(), table.GetTableName(), trxName))
                 {
                     //throw new Exception("Can not create Native Sequence for table " + table.GetTableName());
-                    this.AddLog("Can not create Native Sequence for table : " + table.GetTableName());
+                    this.AddLog("Cannot create Native Sequence for table : " + table.GetTableName());
                 }
                 else
                 {
-                    this.AddLog("Create Native Sequence for : " + table.GetTableName());
+                    this.AddLog("Created Native Sequence for : " + table.GetTableName());
                 }
             }
         }
