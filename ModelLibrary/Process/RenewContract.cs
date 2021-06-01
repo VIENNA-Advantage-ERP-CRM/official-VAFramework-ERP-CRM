@@ -39,7 +39,7 @@ namespace ViennaAdvantageServer.Process
             {
                 Sql.Append("SELECT RenewalType FROM C_Contract WHERE C_Contract_ID = " + Record_id + " AND RenewContract = 'N' AND IsActive = 'Y' AND AD_Client_ID = " + GetAD_Client_ID());
                 string renewType = Util.GetValueOfString(DB.ExecuteScalar(Sql.ToString(), null, Get_TrxName()));
-                if (renewType == "M")
+                if (renewType.Equals(X_C_Contract.RENEWALTYPE_Manual))
                 {
                     Sql.Clear();
                     Sql.Append("SELECT * FROM C_Contract WHERE C_Contract_ID=" + Record_id + " AND RenewContract = 'N' AND AD_Client_ID = " + GetAD_Client_ID());
@@ -48,29 +48,14 @@ namespace ViennaAdvantageServer.Process
                 {
                     // Done by Rakesh Kumar(228) to exectue query in postgresql db
                     Sql.Clear();
-                    if (DB.IsPostgreSQL())
-                    {
-                        Sql.Append("SELECT * FROM C_Contract WHERE date_trunc('DAY',EndDate- make_interval(DAYS=> COALESCE(CancelBeforeDays,0))) <= date_trunc('DAY', CURRENT_DATE) AND C_Contract_ID=" + Record_id
-                        + " AND RenewContract = 'N' AND AD_Client_ID = " + GetAD_Client_ID());
-                    }
-                    else
-                    {
-                        Sql.Append("SELECT * FROM C_Contract WHERE (EndDate- NVL(CancelBeforeDays,0)) <= " + GlobalVariable.TO_DATE(DateTime.Now, true) + " AND C_Contract_ID=" + Record_id
-                                                + " AND RenewContract = 'N' AND AD_Client_ID = " + GetAD_Client_ID());
-                    }
+                    Sql.Append(DBFunctionCollection.GetContract(Record_id, GetAD_Client_ID()));
                 }
             }
             else
             {
                 Sql.Clear();
-                if (DB.IsPostgreSQL())
-                {
-                    Sql.Append("SELECT * FROM C_Contract WHERE date_trunc('DAY',EndDate- make_interval(DAYS=> COALESCE(CancelBeforeDays,0))) <= date_trunc('DAY', CURRENT_DATE) AND RenewalType='A' AND RenewContract = 'N' AND AD_Client_ID = " + GetAD_Client_ID());
-                }
-                else
-                {
-                    Sql.Append("SELECT * FROM C_Contract WHERE (EndDate- NVL(CancelBeforeDays,0)) <= " + GlobalVariable.TO_DATE(DateTime.Now, true) + " AND RenewalType='A' AND RenewContract = 'N' AND AD_Client_ID = " + GetAD_Client_ID());
-                }
+                //Get contracts based on client
+                DBFunctionCollection.GetContract(0, GetAD_Client_ID());
             }
 
             // Changed datareader to dataset to resolve issue in postgresql done by Rakesh Kumar(228) on 31/May/2021
@@ -94,7 +79,7 @@ namespace ViennaAdvantageServer.Process
                     {
                         // Get Contract Detail using current datarow
                         contact = new X_C_Contract(GetCtx(), dsCont.Tables[0].Rows[i], Get_TrxName());
-                        if (contact.GetRenewalType() == "M")
+                        if (contact.GetRenewalType().Equals(X_C_Contract.RENEWALTYPE_Manual))
                         {
                             // SI_0772: By Clicking on Renew Contract, System is throwing an error as 'NoContractReNewed'.
                             CDate = contact.GetCancellationDate();
