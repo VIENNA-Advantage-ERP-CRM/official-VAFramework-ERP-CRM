@@ -953,5 +953,41 @@ namespace VAdvantage.DataBase
             return sql.ToString();
         }
 
+        /// <summary>
+        /// Query for getting contract detail to renew contract
+        /// Author: 228
+        /// </summary>
+        /// <param name="C_Contract_ID">Old C_Contract_ID</param>
+        /// <param name="AD_Client_ID">Tenent Id</param>
+        /// <returns>query</returns>
+        public static String GetContract(int C_Contract_ID, int AD_Client_ID)
+        {
+            StringBuilder sql = new StringBuilder();
+            if (C_Contract_ID > 0)
+            {
+                if (DB.IsPostgreSQL())
+                {
+                    sql.Append("SELECT * FROM C_Contract WHERE date_trunc('DAY',EndDate- make_interval(DAYS=> COALESCE(CancelBeforeDays,0))) <= date_trunc('DAY', CURRENT_DATE) AND C_Contract_ID=" + C_Contract_ID
+                                            + " AND RenewContract = 'N' AND AD_Client_ID = " + AD_Client_ID);
+                }
+                else
+                {
+                    sql.Append("SELECT * FROM C_Contract WHERE (EndDate- NVL(CancelBeforeDays,0)) <= " + GlobalVariable.TO_DATE(DateTime.Now, true) + " AND C_Contract_ID=" + C_Contract_ID
+                                            + " AND RenewContract = 'N' AND AD_Client_ID = " + AD_Client_ID);
+                }
+            }
+            else
+            {
+                if (DB.IsPostgreSQL())
+                {
+                    sql.Append("SELECT * FROM C_Contract WHERE date_trunc('DAY',EndDate- make_interval(DAYS=> COALESCE(CancelBeforeDays,0))) <= date_trunc('DAY', CURRENT_DATE) AND IsActive='Y' AND RenewalType='A' AND RenewContract = 'N' AND AD_Client_ID = " + AD_Client_ID);
+                }
+                else
+                {
+                    sql.Append("SELECT * FROM C_Contract WHERE (EndDate- NVL(CancelBeforeDays,0)) <= " + GlobalVariable.TO_DATE(DateTime.Now, true) + " AND IsActive='Y' AND RenewalType='A' AND RenewContract = 'N' AND AD_Client_ID = " + AD_Client_ID);
+                }
+            }
+            return sql.ToString();
+        }
     }
 }
