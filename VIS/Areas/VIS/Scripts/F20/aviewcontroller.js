@@ -1369,6 +1369,7 @@ VIS.GridController.prototype.checkInsertNewRow = function () {
             this.settingGridSelecton = false;
             this.vCardView.navigate(recid, !this.isCardRow);
         }
+        // Make sure this code works wonly when card view is opened.
         else if (recid > -1 && this.isCardRow) {
             this.settingGridSelecton = true;
             this.vTable.select(recid) //select row for Grid
