@@ -5550,7 +5550,6 @@
             mTab.setValue("StmtAmt", 0);
             mTab.setValue("TrxAmt", 0);
             mTab.setValue("ChargeAmt", 0);
-            mTab.setValue("ChargeAmt", 0);
             mTab.setValue("C_BPartner_ID", 0);
             mTab.setValue("C_Invoice_ID", 0);
             //clear the C_ConversionType_ID
@@ -5568,7 +5567,6 @@
         if (C_Payment_ID == null || C_Payment_ID == 0) {
             mTab.setValue("StmtAmt", 0);
             mTab.setValue("TrxAmt", 0);
-            mTab.setValue("ChargeAmt", 0);
             mTab.setValue("ChargeAmt", 0);
             mTab.setValue("C_BPartner_ID", 0);
             mTab.setValue("C_Invoice_ID", 0);
@@ -5666,6 +5664,8 @@
             var paramStr = C_Payment_ID.toString() + "," + C_Currency_ID.toString() + "," + acctDate.toString();
             var payAmt = VIS.dataContext.getJSONRecord("MBankStatement/GetConvertedAmt", paramStr);
             mTab.setValue("StmtAmt", payAmt);
+            //set transcation Amount also if change the date
+            mTab.setValue("TrxAmt", payAmt);
             //if (stmt == 0) {
             //    mTab.setValue("StmtAmt", payAmt);
             //}
