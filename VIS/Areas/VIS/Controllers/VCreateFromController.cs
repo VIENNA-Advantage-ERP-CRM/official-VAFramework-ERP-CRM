@@ -1006,6 +1006,24 @@ namespace VIS.Controllers
         //    return Json(JsonConvert.SerializeObject(obj.GetContainer(ctx, M_Locator_ID)), JsonRequestBehavior.AllowGet);
         //}
 
+        /// <summary>
+        /// Get converted Amount with Success or Error message
+        /// </summary>
+        /// <param name="_paymentId">C_CashLine_ID or C_Payment_ID</param>
+        /// <param name="amount">Amount</param>
+        /// <param name="currencyId">C_Currency_ID</param>
+        /// <param name="convsion_Id">C_ConversionType_ID</param>
+        /// <param name="date">Account Date</param>
+        /// <param name="paymentType">Payment Type(Payment or CashLine)</param>
+        /// <param name="_org_id">AD_Org_ID</param>
+        /// <returns>return type list contains ConvetedAmt and message</returns>
+        public JsonResult GetConvertedAmount(int _paymentId, decimal? amount,int? currencyId,int? convsion_Id, DateTime? date, string paymentType, int? _org_id)
+        {
+            var ctx = Session["ctx"] as Ctx;
+            VCreateFromModel obj = new VCreateFromModel();
+            var res = obj.GetConvertedAmount(ctx, _paymentId, amount, currencyId, convsion_Id, date, paymentType, _org_id);
+            return Json(JsonConvert.SerializeObject(res), JsonRequestBehavior.AllowGet);
+        }
 
     }
 }
