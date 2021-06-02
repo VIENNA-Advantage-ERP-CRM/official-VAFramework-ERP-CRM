@@ -36,6 +36,7 @@ namespace VIS.Models
         private string msg = null;
         private string ToCurrencyName = "";
         private string FromCurrencyName = "";
+        private string BudgetFromCurrencyName = "";
         private int FromCurrency = 0;
         private int ToCurrency = 0;
         private int LineNo = 0;
@@ -133,7 +134,7 @@ namespace VIS.Models
                             if (Util.GetValueOfInt(ds.Tables[0].Rows[i]["ToCurrency"]) == Util.GetValueOfInt(ds.Tables[0].Rows[i]["FromCurrency"]))
                             {
                                 FromCurrency = Util.GetValueOfInt(ds.Tables[0].Rows[i]["FromCurrency"]);
-                                FromCurrencyName = Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"]);
+                                BudgetFromCurrencyName = Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"]);
                             }
                             else
                             {
@@ -316,7 +317,7 @@ namespace VIS.Models
                                     ToCurrency, DateAcct, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
                                     if (PurchaseUnitPrice == 0)
                                     {
-                                        log.Log(Level.WARNING, Msg.GetMsg(ctx, "ConversionNotFound") + " " + Msg.GetMsg(ctx, "From") + " " + FromCurrencyName +
+                                        log.Log(Level.WARNING, Msg.GetMsg(ctx, "ConversionNotFound") + " " + Msg.GetMsg(ctx, "From") + " " + BudgetFromCurrencyName +
                                             Msg.GetMsg(ctx, "To") + " " + ToCurrencyName);
                                     }
                                 }
@@ -407,11 +408,11 @@ namespace VIS.Models
 
                             if (ConvertedPrice == 0)
                             {
-                                 if (!FromCurrencyName.Contains(Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"])) &&
-                                 !Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"]).Equals(ToCurrencyName))
-                                 {
+                                if (!FromCurrencyName.Contains(Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"])) &&
+                                !Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"]).Equals(ToCurrencyName))
+                                {
                                     FromCurrencyName += Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"]) + ",";
-                                 }
+                                }
                                 continue;
                             }
 
@@ -446,7 +447,7 @@ namespace VIS.Models
                                     ToCurrency, DateAcct, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
                                     if (PurchaseUnitPrice == 0)
                                     {
-                                        log.Log(Level.WARNING, Msg.GetMsg(ctx, "ConversionNotFound") + " " + Msg.GetMsg(ctx, "From") + " " + FromCurrencyName +
+                                        log.Log(Level.WARNING, Msg.GetMsg(ctx, "ConversionNotFound") + " " + Msg.GetMsg(ctx, "From") + " " + BudgetFromCurrencyName +
                                             Msg.GetMsg(ctx, "To") + " " + ToCurrencyName);
                                     }
                                 }
@@ -497,6 +498,7 @@ namespace VIS.Models
                     trx.Close();
                 }
                 log.Log(Level.SEVERE, "", e.Message);
+                return e.Message;
             }
 
             if (Count > 0)
@@ -631,7 +633,7 @@ namespace VIS.Models
                             ToCurrency, DateAcct, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
                             if (PurchaseUnitPrice == 0)
                             {
-                                log.Log(Level.WARNING, Msg.GetMsg(ctx, "ConversionNotFound") + " " + Msg.GetMsg(ctx, "From") + " " + FromCurrencyName +
+                                log.Log(Level.WARNING, Msg.GetMsg(ctx, "ConversionNotFound") + " " + Msg.GetMsg(ctx, "From") + " " + BudgetFromCurrencyName +
                                     Msg.GetMsg(ctx, "To") + " " + ToCurrencyName);
                             }
 
@@ -717,7 +719,7 @@ namespace VIS.Models
                             ToCurrency, DateAcct, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
                             if (PurchaseUnitPrice == 0)
                             {
-                                log.Log(Level.WARNING, Msg.GetMsg(ctx, "ConversionNotFound") + " " + Msg.GetMsg(ctx, "From") + " " + FromCurrencyName +
+                                log.Log(Level.WARNING, Msg.GetMsg(ctx, "ConversionNotFound") + " " + Msg.GetMsg(ctx, "From") + " " + BudgetFromCurrencyName +
                                     Msg.GetMsg(ctx, "To") + " " + ToCurrencyName);
                             }
                         }
@@ -751,11 +753,11 @@ namespace VIS.Models
         public void TeamForecastProducts(Ctx ctx, Trx trx, int Org_ID, int Period, int Forecast_ID, string TeamForecast_IDs, bool IsMasterForecast, bool IncludeOpenSO, bool IncludeSO, bool IncludeOpp)
         {
             sql.Clear();
-            sql.Append(@"SELECT TLine.M_Product_ID,TLine.C_Charge_ID,TLine.M_AttributeSetInstance_ID,TLine.QtyEntered,TLine.BOMUse,TLine.M_BOM_ID,"+
-             (Env.IsModuleInstalled("VAMFG_")?"TLine.VAMFG_M_Routing_ID": "0 AS VAMFG_M_Routing_ID") +
-            ",TForecast.C_Forecast_ID, C_ForecastLine_ID,TLine.C_UOM_ID,NVL(UnitPrice,0) AS Price,TForecast.C_Currency_ID,Product.ISBOM,Currency.ISO_CODE,Product.C_UOM_ID AS BaseUOM "+
-            "FROM C_Forecast TForecast INNER JOIN C_Forecastline TLine ON TLine.C_Forecast_ID = TForecast.C_Forecast_ID LEFT JOIN M_Product Product ON Product.M_Product_ID=TLine.M_Product_ID "+
-            "INNER JOIN C_Currency Currency ON Currency.C_Currency_ID= TForecast.C_Currency_ID "+
+            sql.Append(@"SELECT TLine.M_Product_ID,TLine.C_Charge_ID,TLine.M_AttributeSetInstance_ID,TLine.QtyEntered,TLine.BOMUse,TLine.M_BOM_ID," +
+             (Env.IsModuleInstalled("VAMFG_") ? "TLine.VAMFG_M_Routing_ID" : "0 AS VAMFG_M_Routing_ID") +
+            ",TForecast.C_Forecast_ID, C_ForecastLine_ID,TLine.C_UOM_ID,NVL(UnitPrice,0) AS Price,TForecast.C_Currency_ID,Product.ISBOM,Currency.ISO_CODE,Product.C_UOM_ID AS BaseUOM " +
+            "FROM C_Forecast TForecast INNER JOIN C_Forecastline TLine ON TLine.C_Forecast_ID = TForecast.C_Forecast_ID LEFT JOIN M_Product Product ON Product.M_Product_ID=TLine.M_Product_ID " +
+            "INNER JOIN C_Currency Currency ON Currency.C_Currency_ID= TForecast.C_Currency_ID " +
             "WHERE  TForecast.AD_Org_ID = " + Org_ID + "   AND TForecast.DocStatus IN ('CO','CL') AND NVL(TLine.C_ForecastLine_ID,0) NOT IN " +
             "(SELECT NVL(C_ForecastLine_ID,0) FROM C_MasterForecastlinedetails LineDetails INNER JOIN C_MasterForecastLine Line ON Line.C_MasterForecastLine_ID=" +
             " LineDetails.C_MasterForecastLine_ID INNER JOIN C_MasterForecast Forecast ON Forecast.C_MasterForecast_ID=Line.C_MasterForecast_ID WHERE " +
@@ -783,8 +785,8 @@ namespace VIS.Models
 
                     if (ConvertedPrice == 0)
                     {
-                        if (!FromCurrencyName.Contains(Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"])) && 
-                            !Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"]).Equals(ToCurrencyName ))
+                        if (!FromCurrencyName.Contains(Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"])) &&
+                            !Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"]).Equals(ToCurrencyName))
                         {
                             FromCurrencyName += Util.GetValueOfString(ds.Tables[0].Rows[i]["ISO_CODE"]) + ",";
                         }
@@ -824,8 +826,8 @@ namespace VIS.Models
             sql.Append("SELECT Details.M_Product_ID,Details.C_Charge_ID,Details.M_Attributesetinstance_ID, Mforcast.C_MasterForecast_ID,Details.C_MasterForecastLine_ID," +
                 " Details.C_Uom_ID, Details.C_OrderLine_ID, Details.C_Order_ID, Details.C_ProjectLine_ID, Details.C_Project_ID, Details.PriceEntered AS Price, " +
                 "Details.QtyEntered AS Quantity, Mforcast.C_Currency_ID, Product.ISBOM, Currency.ISO_CODE, Orders.C_BPartner_ID  AS OrderBPartner," +
-                "Orders.C_BPartner_Location_ID AS OrderLocation, Project.C_BPartner_Location_ID AS ProjectLocation,Line.BOMUse,Line.M_BOM_ID,"+
-                (Env.IsModuleInstalled("VAMFG_")?"Line.VAMFG_M_Routing_ID": "0 AS VAMFG_M_Routing_ID")+
+                "Orders.C_BPartner_Location_ID AS OrderLocation, Project.C_BPartner_Location_ID AS ProjectLocation,Line.BOMUse,Line.M_BOM_ID," +
+                (Env.IsModuleInstalled("VAMFG_") ? "Line.VAMFG_M_Routing_ID" : "0 AS VAMFG_M_Routing_ID") +
                 ",Project.C_BPartner_ID AS ProjectBPartner,Mforcast.TrxDate, (SELECT ProductPrice.PriceStd " +
                 "FROM M_ProductPrice ProductPrice WHERE  ProductPrice.M_Product_ID = Product.M_Product_ID AND ProductPrice.M_PriceList_Version_ID = " +
                 "(SELECT MAX(M_PriceList_Version_ID) FROM M_PriceList_Version WHERE IsActive = 'Y' AND M_PriceList_ID = " + PriceList + ") " +
@@ -885,7 +887,7 @@ namespace VIS.Models
                         ToCurrency, DateAcct, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
                         if (PurchaseUnitPrice == 0)
                         {
-                            log.Log(Level.WARNING, Msg.GetMsg(ctx, "ConversionNotFound") + " " + Msg.GetMsg(ctx, "From") + " " + FromCurrencyName +
+                            log.Log(Level.WARNING, Msg.GetMsg(ctx, "ConversionNotFound") + " " + Msg.GetMsg(ctx, "From") + " " + BudgetFromCurrencyName +
                                 Msg.GetMsg(ctx, "To") + " " + ToCurrencyName);
                         }
                     }
@@ -1017,7 +1019,7 @@ namespace VIS.Models
             Line.SetBOMUse(BOMUse.Equals("") ? null : BOMUse);
             if (Env.IsModuleInstalled("VAMFG_"))
             {
-               Line.Set_Value("VAMFG_M_Routing_ID", Routing_ID);
+                Line.Set_Value("VAMFG_M_Routing_ID", Routing_ID);
             }
             Line.SetM_BOM_ID(M_BOM_ID);
             if (!Line.Is_New())
@@ -1159,9 +1161,10 @@ namespace VIS.Models
         /// <param name="Period">Period</param>
         /// <param name="Date">Date</param>
         /// <writer>209</writer>
-
         public void CreateBudgetForecastLines(Ctx ctx, Trx trx, int Org_ID, int BudgetForecast_ID, int Order_ID, int OrderLine_ID, int Project_ID, int ProjectLine_ID, int MasterForecast_ID, int MasterForecastLine_ID, int Charge_ID, int Product_ID, int Attribute_ID, int UOM_ID, int OrderBPartner, int OrderLocation, int ProjectBPartner, int ProjectLocation, String BOM, decimal? BaseQuantity, decimal UnitPrice, decimal? PurchaseUnitPrice, string ProductCategories, int Period, DateTime? Date, string BOMUse, int M_BOM_ID, int Routing_ID)
         {
+            //set the context to indicate that line is created from form
+            ctx.SetContext("Form", true);
             ProductLinePo = GetOrCreate(ctx, trx, BudgetForecast_ID, Product_ID, Charge_ID, Attribute_ID, ProductCategories);
             ProductLinePo.Set_Value("AD_Org_ID", Org_ID);
             ProductLinePo.Set_Value("AD_Client_ID", ctx.GetAD_Client_ID());
@@ -1178,7 +1181,6 @@ namespace VIS.Models
             ProductLinePo.Set_Value("M_BOM_ID", M_BOM_ID);
             ProductLinePo.Set_Value("VA073_PurchaseUnitPrice", PurchaseUnitPrice);
             ProductLinePo.Set_Value("VA073_PurchaseValue", PurchaseUnitPrice * Util.GetValueOfDecimal(ProductLinePo.Get_Value("TotalQty")));
-
             if (Env.IsModuleInstalled("VAMFG_") && Util.GetValueOfInt(ProductLinePo.Get_Value("M_BOM_ID")) == 0)
             {
                 //fetch BOM ,BOMUSE ,Routing of selected Product 
@@ -1252,28 +1254,28 @@ namespace VIS.Models
                 {
                     FLineNo += 10;
                     //update Amounts at Headers  
-                    string _sql = "UPDATE VA073_ProductLine SET " +
-                    "VA073_ForecastQty=(SELECT NVL(SUM(VA073_Quantity),0) FROM VA073_ForecastLine WHERE (NVL(C_MasterForecast_ID,0)>0 OR (NVL(C_Order_ID,0)=0 AND NVL(C_Project_ID,0)=0)) AND VA073_ProductLine_ID=" + ProductLinePo.Get_Value("VA073_ProductLine_ID") + "), " +
-                   "OppQty=(SELECT NVL(SUM(VA073_Quantity),0) FROM VA073_ForecastLine WHERE NVL(C_Project_ID,0)>0 AND VA073_ProductLine_ID=" + ProductLinePo.Get_Value("VA073_ProductLine_ID") + "), " +
-                   "SalesOrderQty =(SELECT NVL(SUM(VA073_Quantity),0) FROM VA073_ForecastLine WHERE NVL(C_Order_ID,0)>0 AND VA073_ProductLine_ID=" + ProductLinePo.Get_Value("VA073_ProductLine_ID") + "), " +
-                   "TotalQty=(SELECT NVL(SUM(VA073_Quantity),0) FROM VA073_ForecastLine WHERE  VA073_ProductLine_ID=" + ProductLinePo.Get_Value("VA073_ProductLine_ID") + ") , " +
-                    "VA073_Price= (Round((SELECT NVL(SUM(VA073_TotalAmt),0)/ NVL(SUM(VA073_Quantity),0) FROM VA073_Forecastline WHERE VA073_ProductLine_ID=" + ProductLinePo.Get_Value("VA073_ProductLine_ID") + "), " +
-                     Precision + ")), " +
-                    "PlannedRevenue =(ROUND((SELECT SUM(VA073_TotalAmt) FROM VA073_Forecastline WHERE VA073_ProductLine_ID=" + ProductLinePo.Get_Value("VA073_ProductLine_ID") + ")," + Precision + "))" +
-                    " WHERE VA073_ProductLine_ID=" + ProductLinePo.Get_Value("VA073_ProductLine_ID");
+                   // string _sql = "UPDATE VA073_ProductLine SET " +
+                   // "VA073_ForecastQty=(SELECT NVL(SUM(VA073_Quantity),0) FROM VA073_ForecastLine WHERE (NVL(C_MasterForecast_ID,0)>0 OR (NVL(C_Order_ID,0)=0 AND NVL(C_Project_ID,0)=0)) AND VA073_ProductLine_ID=" + ProductLinePo.Get_Value("VA073_ProductLine_ID") + "), " +
+                   //"OppQty=(SELECT NVL(SUM(VA073_Quantity),0) FROM VA073_ForecastLine WHERE NVL(C_Project_ID,0)>0 AND VA073_ProductLine_ID=" + ProductLinePo.Get_Value("VA073_ProductLine_ID") + "), " +
+                   //"SalesOrderQty =(SELECT NVL(SUM(VA073_Quantity),0) FROM VA073_ForecastLine WHERE NVL(C_Order_ID,0)>0 AND VA073_ProductLine_ID=" + ProductLinePo.Get_Value("VA073_ProductLine_ID") + "), " +
+                   //"TotalQty=(SELECT NVL(SUM(VA073_Quantity),0) FROM VA073_ForecastLine WHERE  VA073_ProductLine_ID=" + ProductLinePo.Get_Value("VA073_ProductLine_ID") + ") , " +
+                   // "VA073_Price= (Round((SELECT NVL(SUM(VA073_TotalAmt),0)/ NVL(SUM(VA073_Quantity),0) FROM VA073_Forecastline WHERE VA073_ProductLine_ID=" + ProductLinePo.Get_Value("VA073_ProductLine_ID") + "), " +
+                   //  Precision + ")), " +
+                   // "PlannedRevenue =(ROUND((SELECT SUM(VA073_TotalAmt) FROM VA073_Forecastline WHERE VA073_ProductLine_ID=" + ProductLinePo.Get_Value("VA073_ProductLine_ID") + ")," + Precision + "))" +
+                   // " WHERE VA073_ProductLine_ID=" + ProductLinePo.Get_Value("VA073_ProductLine_ID");
 
-                    if (DB.ExecuteQuery(_sql, null, trx) > 0)
-                    {
-                        _sql = "UPDATE VA073_SalesForecast SET VA073_TotalAmt =" +
-                        "(Round((SELECT SUM(PlannedRevenue) FROM VA073_ProductLine WHERE VA073_SalesForecast_ID= (SELECT VA073_SalesForecast_ID FROM VA073_ProductLine WHERE VA073_ProductLine_ID=" + ProductLinePo.Get_Value("VA073_ProductLine_ID") + " ))," + Precision + "))" +
-                        ",VA073_TotalQty= (SELECT SUM(TotalQty) FROM VA073_ProductLine WHERE VA073_SalesForecast_ID= (SELECT VA073_SalesForecast_ID FROM VA073_ProductLine WHERE VA073_ProductLine_ID=" + ProductLinePo.Get_Value("VA073_ProductLine_ID") + " )) " +
-                        " WHERE VA073_SalesForecast_ID=(SELECT VA073_SalesForecast_ID FROM VA073_ProductLine WHERE VA073_ProductLine_ID=" + ProductLinePo.Get_Value("VA073_ProductLine_ID") + " ) ";
+                   // if (DB.ExecuteQuery(_sql, null, trx) > 0)
+                   // {
+                   //     _sql = "UPDATE VA073_SalesForecast SET VA073_TotalAmt =" +
+                   //     "(Round((SELECT SUM(PlannedRevenue) FROM VA073_ProductLine WHERE VA073_SalesForecast_ID= (SELECT VA073_SalesForecast_ID FROM VA073_ProductLine WHERE VA073_ProductLine_ID=" + ProductLinePo.Get_Value("VA073_ProductLine_ID") + " ))," + Precision + "))" +
+                   //     ",VA073_TotalQty= (SELECT SUM(TotalQty) FROM VA073_ProductLine WHERE VA073_SalesForecast_ID= (SELECT VA073_SalesForecast_ID FROM VA073_ProductLine WHERE VA073_ProductLine_ID=" + ProductLinePo.Get_Value("VA073_ProductLine_ID") + " )) " +
+                   //     " WHERE VA073_SalesForecast_ID=(SELECT VA073_SalesForecast_ID FROM VA073_ProductLine WHERE VA073_ProductLine_ID=" + ProductLinePo.Get_Value("VA073_ProductLine_ID") + " ) ";
 
-                        DB.ExecuteQuery(_sql, null, trx);
-                    }
+                   //     DB.ExecuteQuery(_sql, null, trx);
+                   // }
 
-                    //create line Components 
-                    CreateLineComponents(ctx, trx, ForecastLinePO, Util.GetValueOfInt(ForecastLinePO.Get_Value("M_BOM_ID")));
+                   // //create line Components 
+                   // CreateLineComponents(ctx, trx, ForecastLinePO, Util.GetValueOfInt(ForecastLinePO.Get_Value("M_BOM_ID")));
                 }
             }
         }
@@ -1450,7 +1452,7 @@ namespace VIS.Models
             ForecastLinePO.Set_Value("VA073_BOMUse", ProductLinePo.Get_Value("VA073_BOMUse"));
             if (Env.IsModuleInstalled("VAMFG_"))
             {
-                ForecastLinePO.Set_Value("VAMFG_M_Routing_ID", ProductLinePo.Get_Value("VAMFG_M_Routing_ID")); 
+                ForecastLinePO.Set_Value("VAMFG_M_Routing_ID", ProductLinePo.Get_Value("VAMFG_M_Routing_ID"));
             }
             ForecastLinePO.Set_Value("M_BOM_ID", ProductLinePo.Get_Value("M_BOM_ID"));
             return ForecastLinePO;
