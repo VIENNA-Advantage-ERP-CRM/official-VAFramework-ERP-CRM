@@ -518,11 +518,11 @@ namespace VAdvantage.Model
         /// <returns>info</returns>
         public String CopyLinesFrom(MMasterForecast FromForecast)
         {
+            int zeroPriceCount = 0;
             int count = 0;
             string FromCurrency = null;
             string ToCurrency = null;
             int lineNo = 0;
-            int Forecastline_Id = 0;
             MMasterForecastLine line = null;
             try
             {
@@ -571,7 +571,7 @@ namespace VAdvantage.Model
                         }
                         else
                         {
-                            Forecastline_Id = fromLines[i].GetC_MasterForecastLine_ID();
+                            zeroPriceCount++;
                             continue;
                         }
                     }
@@ -615,9 +615,9 @@ namespace VAdvantage.Model
             {
                 log.Log(Level.SEVERE, e.Message);
             }
-            if (Forecastline_Id > 0)
+            if (zeroPriceCount > 0)
             {
-                return count + " " + Msg.GetMsg(GetCtx(), "PriceNotFound") + " " + Msg.GetMsg(GetCtx(), "ForecastLine") + Forecastline_Id;
+                return count + " " + Msg.GetMsg(GetCtx(), "PriceNotFound") + "=" + zeroPriceCount + " " + Msg.GetMsg(GetCtx(), "NoOfLines");
             }
             return count.ToString();
         }
