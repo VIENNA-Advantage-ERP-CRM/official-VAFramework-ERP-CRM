@@ -646,7 +646,7 @@ namespace VAdvantage.WF
             if (newRecord)
             {
                 int VAF_Role_ID = GetCtx().GetVAF_Role_ID();
-                MWorkflowAccess wa = new MWorkflowAccess(this, VAF_Role_ID);
+                MVAFWFlowRights wa = new MVAFWFlowRights(this, VAF_Role_ID);
                 wa.Save();
             }
             //	Menu/Workflow
@@ -690,12 +690,12 @@ namespace VAdvantage.WF
         /// </summary>
         /// <param name="pi">Info (Record_ID)</param>
         /// <returns>process</returns>
-        public MVAFWFlowHandler Start(ProcessInfo pi)
+        public MVAFWFlowJob Start(ProcessInfo pi)
         {
-            MVAFWFlowHandler retValue = null;
+            MVAFWFlowJob retValue = null;
             try
             {
-                retValue = new MVAFWFlowHandler(this, pi);
+                retValue = new MVAFWFlowJob(this, pi);
                 retValue.Save();
                 retValue.StartWork();
                 pi.SetSummary(Msg.GetMsg(GetCtx(), "Processing", true));
@@ -715,12 +715,12 @@ namespace VAdvantage.WF
         /// </summary>
         /// <param name="pi">process info with Record_ID record for the workflow</param>
         /// <returns>process</returns>
-        public MVAFWFlowHandler StartWait(ProcessInfo pi)
+        public MVAFWFlowJob StartWait(ProcessInfo pi)
         {
             const int SLEEP = 500;		//	1/2 sec
             const int MAXLOOPS = 160;// 50;// 30;		//	15 sec
             //
-            MVAFWFlowHandler process = Start(pi);
+            MVAFWFlowJob process = Start(pi);
             if (process == null)
                 return null;
 
@@ -773,7 +773,7 @@ namespace VAdvantage.WF
                 if (state != null && state.GetState() == StateEngine.STATE_SUSPENDED)
                 {
                     string node = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT n.Name FROM VAF_WFlow_Task ac INNER JOIN VAF_WFlow_Node n ON ac.VAF_WFlow_Node_ID = n.VAF_WFlow_Node_ID WHERE
-                                  ac.VAF_WFlow_Handler_ID = " + process.Get_ID() + " AND ac.WFState = '" + StateEngine.STATE_SUSPENDED + "'"));
+                                  ac.VAF_WFlow_Job_ID = " + process.Get_ID() + " AND ac.WFState = '" + StateEngine.STATE_SUSPENDED + "'"));
                     if (!String.IsNullOrEmpty(node))
                     {
                         summary = state.ToString() + " " + Msg.GetMsg(GetCtx(), "For") + " " + node;
@@ -817,7 +817,7 @@ namespace VAdvantage.WF
 
         public bool StartWF(ProcessInfo _pi)
         {
-            MVAFWFlowHandler wfProcess = null;
+            MVAFWFlowJob wfProcess = null;
             if (_pi.IsBatch())
                 wfProcess = Start(_pi);      //	may return null
             else

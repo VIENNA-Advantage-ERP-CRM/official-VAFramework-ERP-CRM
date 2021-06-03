@@ -24,7 +24,7 @@ namespace VAdvantage.Model
             SetVAF_TableView_ID (0);
             SetVAF_WFlow_Task_ID (0);
             SetVAF_WFlow_Node_ID (0);
-            SetVAF_WFlow_Handler_ID (0);
+            SetVAF_WFlow_Job_ID (0);
             SetVAF_Workflow_ID (0);
             SetProcessed (false);	// N
             SetRecord_ID (0);
@@ -40,7 +40,7 @@ namespace VAdvantage.Model
             SetVAF_TableView_ID (0);
             SetVAF_WFlow_Task_ID (0);
             SetVAF_WFlow_Node_ID (0);
-            SetVAF_WFlow_Handler_ID (0);
+            SetVAF_WFlow_Job_ID (0);
             SetVAF_Workflow_ID (0);
             SetProcessed (false);	// N
             SetRecord_ID (0);
@@ -216,17 +216,17 @@ namespace VAdvantage.Model
             return new KeyNamePair(Get_ID(), GetVAF_WFlow_Node_ID().ToString());
         }
         /** Set Workflow Process.
-        @param VAF_WFlow_Handler_ID Actual Workflow Process Instance */
-        public void SetVAF_WFlow_Handler_ID(int VAF_WFlow_Handler_ID)
+        @param VAF_WFlow_Job_ID Actual Workflow Process Instance */
+        public void SetVAF_WFlow_Job_ID(int VAF_WFlow_Job_ID)
         {
-            if (VAF_WFlow_Handler_ID < 1) throw new ArgumentException("VAF_WFlow_Handler_ID is mandatory.");
-            Set_ValueNoCheck("VAF_WFlow_Handler_ID", VAF_WFlow_Handler_ID);
+            if (VAF_WFlow_Job_ID < 1) throw new ArgumentException("VAF_WFlow_Job_ID is mandatory.");
+            Set_ValueNoCheck("VAF_WFlow_Job_ID", VAF_WFlow_Job_ID);
         }
         /** Get Workflow Process.
         @return Actual Workflow Process Instance */
-        public int GetVAF_WFlow_Handler_ID()
+        public int GetVAF_WFlow_Job_ID()
         {
-            Object ii = Get_Value("VAF_WFlow_Handler_ID");
+            Object ii = Get_Value("VAF_WFlow_Job_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

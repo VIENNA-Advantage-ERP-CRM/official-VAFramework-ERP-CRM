@@ -4387,7 +4387,7 @@
         }
 
         if (out.FireEEvent) {
-            this.fireDataStatusEEvent(out.EventParam.Msg, out.EventParam.Info, out.EventParam.IsError);
+            this.fireDataStatusEEvent(out.EventParam.Msg, out.EventParam.Info, out.EventParam.IsError, out.IsWarning);
         }
         else if (out.FireIEvent) {
             this.fireDataStatusIEvent(out.EventParam.Msg, out.EventParam.Info, out.EventParam.IsError);

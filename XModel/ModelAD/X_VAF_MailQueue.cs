@@ -236,21 +236,21 @@ namespace ViennaAdvantage.Model
         ///<summary>
         /// SetWorkflow Process
         ///</summary>
-        ///<param name="VAF_WFlow_Handler_ID">Actual Workflow Process Instance</param>
-        public void SetVAF_WFlow_Handler_ID(int VAF_WFlow_Handler_ID)
+        ///<param name="VAF_WFlow_Job_ID">Actual Workflow Process Instance</param>
+        public void SetVAF_WFlow_Job_ID(int VAF_WFlow_Job_ID)
         {
-            if (VAF_WFlow_Handler_ID <= 0) Set_Value("VAF_WFlow_Handler_ID", null);
+            if (VAF_WFlow_Job_ID <= 0) Set_Value("VAF_WFlow_Job_ID", null);
             else
-                Set_Value("VAF_WFlow_Handler_ID", VAF_WFlow_Handler_ID);
+                Set_Value("VAF_WFlow_Job_ID", VAF_WFlow_Job_ID);
         }
 
         ///<summary>
         /// GetWorkflow Process
         ///</summary>
         ///<returns> Actual Workflow Process Instance</returns>
-        public int GetVAF_WFlow_Handler_ID()
+        public int GetVAF_WFlow_Job_ID()
         {
-            Object ii = Get_Value("VAF_WFlow_Handler_ID");
+            Object ii = Get_Value("VAF_WFlow_Job_ID");
             if (ii == null) return 0; return Convert.ToInt32(ii);
         }
 

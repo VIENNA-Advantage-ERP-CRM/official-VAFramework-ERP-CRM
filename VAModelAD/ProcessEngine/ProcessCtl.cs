@@ -65,7 +65,7 @@ namespace VAdvantage.ProcessEngine
                 try
                 {
                     asm = System.Reflection.Assembly.Load(GlobalVariable.PACKAGES[0]);
-                    type = asm.GetType("VAdvantage.WF.MWorkflow");
+                    type = asm.GetType("VAdvantage.WF.MVAFWorkflow");
 
                     ConstructorInfo constructor = type.GetConstructor(new Type[] { typeof(Ctx), typeof(int), typeof(Trx) });
                     Object WF = constructor.Invoke(new object[] { _ctx, VAF_Workflow_ID, null });
@@ -82,7 +82,7 @@ namespace VAdvantage.ProcessEngine
                     return started;
                 }
 
-                // MWorkflow WF = new MWorkflow(_ctx, VAF_Workflow_ID, null);
+                // MVAFWorkflow WF = new MVAFWorkflow(_ctx, VAF_Workflow_ID, null);
                 return started;
                 //StartWF
             }

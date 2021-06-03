@@ -1983,7 +1983,7 @@
                     sql += displayCols[item].ColumnSQL + " ";
                 }
 
-                if (displayType == VIS.DisplayType.ID && displayCols[item].ColumnName.toUpperCase() == "VAM_Product_ID") {
+                if (displayType == VIS.DisplayType.ID && displayCols[item].ColumnName.toUpperCase() == "VAM_PRODUCT_ID") {
                     keyCol = displayCols[item].ColumnName.toUpperCase();
                 }
 

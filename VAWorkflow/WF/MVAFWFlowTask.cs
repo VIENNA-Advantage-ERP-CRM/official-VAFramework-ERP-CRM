@@ -45,7 +45,7 @@ namespace VAdvantage.WF
         /**	New Value to save in audit	*/
         private String _newValue = null;
         /** Process						*/
-        private MVAFWFlowHandler _process = null;
+        private MVAFWFlowJob _process = null;
         /** Post Immediate Candidate	*/
         private DocAction _postImmediate = null;
         /** List of email recipients	*/
@@ -95,10 +95,10 @@ namespace VAdvantage.WF
         /// </summary>
         /// <param name="process">process</param>
         /// <param name="VAF_WFlow_Node_ID">start node id</param>
-        public MVAFWFlowTask(MVAFWFlowHandler process, int VAF_WFlow_Node_ID)
+        public MVAFWFlowTask(MVAFWFlowJob process, int VAF_WFlow_Node_ID)
             : base(process.GetCtx(), 0, process.Get_TrxName())
         {
-            SetVAF_WFlow_Handler_ID(process.GetVAF_WFlow_Handler_ID());
+            SetVAF_WFlow_Job_ID(process.GetVAF_WFlow_Job_ID());
             SetPriority(process.GetPriority());
 
             // vinay bhatt window id 
@@ -239,12 +239,12 @@ namespace VAdvantage.WF
                 base.SetWFState(WFState);
                 _state = new StateEngine(GetWFState());
                 _state.SetCtx(GetCtx());
-                Save();			//	closed in MVAFWFlowHandler.checkActivities()
+                Save();			//	closed in MVAFWFlowJob.checkActivities()
                 UpdateEventAudit();
 
                 //	Inform Process
                 if (_process == null)
-                    _process = new MVAFWFlowHandler(GetCtx(), GetVAF_WFlow_Handler_ID(), null);
+                    _process = new MVAFWFlowJob(GetCtx(), GetVAF_WFlow_Job_ID(), null);
 
                 _process.SetVAF_Screen_ID(GetVAF_Screen_ID());
                 _process.CheckActivities();
@@ -300,7 +300,7 @@ namespace VAdvantage.WF
         {
             if (_audit != null)
                 return _audit;
-            MVAFWFlowEventLog[] events = MVAFWFlowEventLog.Get(GetCtx(), GetVAF_WFlow_Handler_ID(), GetVAF_WFlow_Node_ID());
+            MVAFWFlowEventLog[] events = MVAFWFlowEventLog.Get(GetCtx(), GetVAF_WFlow_Job_ID(), GetVAF_WFlow_Node_ID());
             if (events == null || events.Length == 0)
                 _audit = new MVAFWFlowEventLog(this);
             else
@@ -595,7 +595,7 @@ namespace VAdvantage.WF
         /// Set Responsible and User from Process / Node
         /// </summary>
         /// <param name="process">process</param>
-        private void SetResponsible(MVAFWFlowHandler process)
+        private void SetResponsible(MVAFWFlowJob process)
         {
             //	Responsible
             int VAF_WFlow_Incharge_ID = GetNode().GetVAF_WFlow_Incharge_ID();
@@ -739,7 +739,7 @@ namespace VAdvantage.WF
 
         /// <summary>
         /// Execute Work.
-        /// Called from MVAFWFlowHandler.StartNext
+        /// Called from MVAFWFlowJob.StartNext
         /// Feedback to Process via SetWFState -> CheckActivities
         /// </summary>
         public void Run()
@@ -1187,10 +1187,10 @@ namespace VAdvantage.WF
                     int startVAF_UserContact_ID = 0;
                     int evendID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT WFE.VAF_WFlow_EventLog_ID
                                                                     FROM VAF_WFlow_EventLog WFE
-                                                                    INNER JOIN VAF_WFlow_Handler WFP
-                                                                    ON (WFP.VAF_WFlow_Handler_ID=WFE.VAF_WFlow_Handler_ID)
+                                                                    INNER JOIN VAF_WFlow_Job WFP
+                                                                    ON (WFP.VAF_WFlow_Job_ID=WFE.VAF_WFlow_Job_ID)
                                                                     INNER JOIN VAF_WFlow_Task WFA
-                                                                    ON (WFA.VAF_WFlow_Handler_ID =WFP.VAF_WFlow_Handler_ID)
+                                                                    ON (WFA.VAF_WFlow_Job_ID =WFP.VAF_WFlow_Job_ID)
                                                                     WHERE WFE.VAF_WFlow_Node_ID  =" + GetVAF_WFlow_Node_ID() + @"
                                                                     AND WFA.VAF_WFlow_Task_ID=" + GetVAF_WFlow_Task_ID()));
                     MVAFWFlowEventLog eve = new MVAFWFlowEventLog(GetCtx(), evendID, null);
@@ -1292,10 +1292,10 @@ namespace VAdvantage.WF
                 {
                     int evendID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT WFE.VAF_WFlow_EventLog_ID
                                                                     FROM VAF_WFlow_EventLog WFE
-                                                                    INNER JOIN VAF_WFlow_Handler WFP
-                                                                    ON (WFP.VAF_WFlow_Handler_ID=WFE.VAF_WFlow_Handler_ID)
+                                                                    INNER JOIN VAF_WFlow_Job WFP
+                                                                    ON (WFP.VAF_WFlow_Job_ID=WFE.VAF_WFlow_Job_ID)
                                                                     INNER JOIN VAF_WFlow_Task WFA
-                                                                    ON (WFA.VAF_WFlow_Handler_ID =WFP.VAF_WFlow_Handler_ID)
+                                                                    ON (WFA.VAF_WFlow_Job_ID =WFP.VAF_WFlow_Job_ID)
                                                                     WHERE WFE.VAF_WFlow_Node_ID  =" + GetVAF_WFlow_Node_ID() + @"
                                                                     AND WFA.VAF_WFlow_Task_ID=" + GetVAF_WFlow_Task_ID()));
                     MVAFWFlowEventLog eve = new MVAFWFlowEventLog(GetCtx(), evendID, null);
@@ -1606,7 +1606,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 string[] nodes = NodeIDs.Split(',');
                 if (nodes.Length > 0)
                 {
-                    DataSet dsWFAct = DB.ExecuteDataset("SELECT TextMsg, VAF_WFlow_Task_ID, VAF_WFlow_Node_ID FROM VAF_WFlow_Task WHERE VAF_WFlow_Handler_ID = " + GetVAF_WFlow_Handler_ID(), null, Get_TrxName());
+                    DataSet dsWFAct = DB.ExecuteDataset("SELECT TextMsg, VAF_WFlow_Task_ID, VAF_WFlow_Node_ID FROM VAF_WFlow_Task WHERE VAF_WFlow_Job_ID = " + GetVAF_WFlow_Job_ID(), null, Get_TrxName());
                     if (dsWFAct != null && dsWFAct.Tables[0].Rows.Count > 0)
                     {
                         foreach (string nID in nodes)
@@ -3270,7 +3270,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 mailQueue.SetRecord_ID(Record_ID);
                 mailQueue.SetVAF_WFlow_Task_ID(GetVAF_WFlow_Task_ID());
                 mailQueue.SetVAF_WFlow_EventLog_ID(_audit.Get_ID());
-                mailQueue.SetVAF_WFlow_Handler_ID(GetVAF_WFlow_Handler_ID());
+                mailQueue.SetVAF_WFlow_Job_ID(GetVAF_WFlow_Job_ID());
                 mailQueue.SetMailStatus("Q");
                 bool issaved = mailQueue.Save();
 
@@ -3361,7 +3361,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         public String GetHistoryHTML()
         {
             StringBuilder sb = new StringBuilder();
-            MVAFWFlowEventLog[] events = MVAFWFlowEventLog.Get(GetCtx(), GetVAF_WFlow_Handler_ID());
+            MVAFWFlowEventLog[] events = MVAFWFlowEventLog.Get(GetCtx(), GetVAF_WFlow_Job_ID());
             //SimpleDateFormat format = DisplayType.getDateFormat(DisplayType.DateTime);
             for (int i = 0; i < events.Length; i++)
             {

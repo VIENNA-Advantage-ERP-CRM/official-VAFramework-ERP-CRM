@@ -30,14 +30,14 @@ namespace VAdvantage.WF
         /// Get Event Audit for node
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="VAF_WFlow_Handler_ID">process</param>
+        /// <param name="VAF_WFlow_Job_ID">process</param>
         /// <param name="VAF_WFlow_Node_ID">optional node</param>
         /// <returns>event audit or null</returns>
-        public static MVAFWFlowEventLog[] Get(Ctx ctx, int VAF_WFlow_Handler_ID, int VAF_WFlow_Node_ID)
+        public static MVAFWFlowEventLog[] Get(Ctx ctx, int VAF_WFlow_Job_ID, int VAF_WFlow_Node_ID)
         {
             List<MVAFWFlowEventLog> list = new List<MVAFWFlowEventLog>();
             String sql = "SELECT * FROM VAF_WFlow_EventLog "
-                + "WHERE VAF_WFlow_Handler_ID=" + VAF_WFlow_Handler_ID;
+                + "WHERE VAF_WFlow_Job_ID=" + VAF_WFlow_Job_ID;
             if (VAF_WFlow_Node_ID > 0)
             {
                 sql += " AND VAF_WFlow_Node_ID=" + VAF_WFlow_Node_ID;
@@ -68,11 +68,11 @@ namespace VAdvantage.WF
         /// Get Event Audit for node
         /// </summary>
         /// <param name="ctx">Ctx</param>
-        /// <param name="VAF_WFlow_Handler_ID">process</param>
+        /// <param name="VAF_WFlow_Job_ID">process</param>
         /// <returns>event audit or null</returns>
-        public static MVAFWFlowEventLog[] Get(Ctx ctx, int VAF_WFlow_Handler_ID)
+        public static MVAFWFlowEventLog[] Get(Ctx ctx, int VAF_WFlow_Job_ID)
         {
-            return Get(ctx, VAF_WFlow_Handler_ID, 0);
+            return Get(ctx, VAF_WFlow_Job_ID, 0);
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace VAdvantage.WF
         public MVAFWFlowEventLog(MVAFWFlowTask activity)
             : base(activity.GetCtx(), 0, activity.Get_TrxName())
         {
-            SetVAF_WFlow_Handler_ID(activity.GetVAF_WFlow_Handler_ID());
+            SetVAF_WFlow_Job_ID(activity.GetVAF_WFlow_Job_ID());
             SetVAF_WFlow_Node_ID(activity.GetVAF_WFlow_Node_ID());
             SetVAF_TableView_ID(activity.GetVAF_TableView_ID());
             SetRecord_ID(activity.GetRecord_ID());

@@ -372,8 +372,9 @@
                     var f = oColumns[colIndex].field;
                     var val = record[f];
 
-                    if (!val)
-                        return;
+                    if (!val) {
+                        val = 0;
+                    }
 
                     //if (record.changes && typeof record.changes[f] != 'undefined') val = record.changes[f];
                     val = parseFloat(val).toLocaleString(undefined, {

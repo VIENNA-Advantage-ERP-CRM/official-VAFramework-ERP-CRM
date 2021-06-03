@@ -198,10 +198,10 @@
                 else if (validation != null) {
                     var token;
                     validation = validation.toUpperCase();
-                    if (validation.contains("VAM_Locator_ID")) {
-                        token = validation.substr(validation.indexOf("VAM_Locator_ID=") + 13, validation.length);
-                    } else if (validation.contains("VAM_LocatorTO_ID")) {
-                        token = validation.substr(validation.indexOf("VAM_LocatorTO_ID=") + 15, validation.length);
+                    if (validation.contains("VAM_LOCATOR_ID")) {
+                        token = validation.substr(validation.indexOf("VAM_LOCATOR_ID=") + 13, validation.length);
+                    } else if (validation.contains("VAM_LOCATORTO_ID")) {
+                        token = validation.substr(validation.indexOf("VAM_LOCATORTO_ID=") + 15, validation.length);
                     }
                     if (token != undefined) {
                         if (token.contains("AND")) {
@@ -244,10 +244,10 @@
         function getLocatorFromValidation(validation) {
             var token;
             validation = validation.toUpperCase();
-            if (validation.contains("VAM_Locator_ID")) {
-                token = validation.substr(validation.indexOf("VAM_Locator_ID=") + 13, validation.length);
-            } else if (validation.contains("VAM_LocatorTO_ID")) {
-                token = validation.substr(validation.indexOf("VAM_LocatorTO_ID=") + 15, validation.length);
+            if (validation.contains("VAM_LOCATOR_ID")) {
+                token = validation.substr(validation.indexOf("VAM_LOCATOR_ID=") + 13, validation.length);
+            } else if (validation.contains("VAM_LOCATORTO_ID")) {
+                token = validation.substr(validation.indexOf("VAM_LOCATORTO_ID=") + 15, validation.length);
             }
             if (token != undefined) {
                 if (token.contains("AND")) {

@@ -163,7 +163,7 @@ namespace VAdvantage.WF
                     .Append(keyColumn).Append("=" + document.Get_ID() + " AND ")	//	#2
                 .Append(logic)
                 //	Duplicate Open Workflow test
-                .Append(" AND NOT EXISTS (SELECT * FROM VAF_WFlow_Handler wfp ")
+                .Append(" AND NOT EXISTS (SELECT * FROM VAF_WFlow_Job wfp ")
                     .Append("WHERE wfp.VAF_TableView_ID=" + document.Get_Table_ID() + " AND wfp.Record_ID=")	//	#3
                     .Append(tableName).Append(".").Append(keyColumn)
                     .Append(" AND wfp.VAF_Workflow_ID=" + wf.GetVAF_Workflow_ID())	//	#4

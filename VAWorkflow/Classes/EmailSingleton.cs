@@ -52,7 +52,7 @@ namespace VAWorkflow.Classes
                 while (true)
                 {
                     // Get records from mail queue table to send them one by one as email
-                    DataSet mailds = DB.ExecuteDataset("SELECT VAF_Org_ID, VAF_Client_ID, CreatedBy, VAF_Role_ID, ToEMail, ToName, MailSubject, MailMessage, IsHtmlEmail, VAF_TableView_ID, Record_ID, VAF_WFlow_Task_ID, VAF_WFlow_EventLog_ID, VAF_MailQueue_ID, VAF_WFlow_Handler_ID FROM VAF_MailQueue WHERE MailStatus = 'Q' AND ROWNUM <= 5 ORDER BY VAF_MailQueue_ID");
+                    DataSet mailds = DB.ExecuteDataset("SELECT VAF_Org_ID, VAF_Client_ID, CreatedBy, VAF_Role_ID, ToEMail, ToName, MailSubject, MailMessage, IsHtmlEmail, VAF_TableView_ID, Record_ID, VAF_WFlow_Task_ID, VAF_WFlow_EventLog_ID, VAF_MailQueue_ID, VAF_WFlow_Job_ID FROM VAF_MailQueue WHERE MailStatus = 'Q' AND ROWNUM <= 5 ORDER BY VAF_MailQueue_ID");
 
                     if (mailds != null && mailds.Tables.Count > 0 && mailds.Tables[0].Rows.Count > 0)
                     {
@@ -75,7 +75,7 @@ namespace VAWorkflow.Classes
                             String fileName = null;
                             int VAF_WFlow_Task_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["VAF_WFlow_Task_ID"]);
                             int VAF_WFlow_EventLog_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["VAF_WFlow_EventLog_ID"]);
-                            int VAF_WFlow_Handler_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["VAF_WFlow_Handler_ID"]);
+                            int VAF_WFlow_Job_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["VAF_WFlow_Job_ID"]);
                             int VAF_MailQueue_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["VAF_MailQueue_ID"]);
 
 
@@ -138,7 +138,7 @@ namespace VAWorkflow.Classes
                                 mailQueue.SetMailStatus("S");
                                 int act1 = DB.ExecuteQuery("UPDATE VAF_WFlow_Task SET WFSTATE = 'CC' WHERE VAF_WFlow_Task_ID = " + VAF_WFlow_Task_ID);
                                 int aud1 = DB.ExecuteQuery("UPDATE VAF_WFlow_EventLog SET WFSTATE = 'CC' WHERE VAF_WFlow_EventLog_ID = " + VAF_WFlow_EventLog_ID);
-                                int wpro = DB.ExecuteQuery("UPDATE VAF_WFlow_Handler SET WFSTATE = 'CC' WHERE VAF_WFlow_Handler_ID = " + VAF_WFlow_Handler_ID + " AND WFState = 'BK' ");
+                                int wpro = DB.ExecuteQuery("UPDATE VAF_WFlow_Job SET WFSTATE = 'CC' WHERE VAF_WFlow_Job_ID = " + VAF_WFlow_Job_ID + " AND WFState = 'BK' ");
                             }
                             else
                             {

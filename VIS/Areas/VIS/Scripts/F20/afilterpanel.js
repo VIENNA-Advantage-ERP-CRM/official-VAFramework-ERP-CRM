@@ -267,7 +267,7 @@
             });
             var displayVal;
             if (field[0].lookup && field[0].lookup.getDisplay)
-                displayVal = (evt.newValue);
+                displayVal = field[0].lookup.getDisplay(evt.newValue);
             else
                 displayVal = evt.newValue;
             if (this.ctrlObjects[evt.propertyName])

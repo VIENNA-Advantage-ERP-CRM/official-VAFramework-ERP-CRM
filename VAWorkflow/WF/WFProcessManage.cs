@@ -31,7 +31,7 @@ namespace VAdvantage.WF
         // New Responsible		
         private int p_VAF_WFlow_Incharge_ID = 0;
         // Record				
-        private int p_VAF_WFlow_Handler_ID = 0;
+        private int p_VAF_WFlow_Job_ID = 0;
         String msg = null;
         /// <summary>
         ///Prepare - e.g., get Parameters.
@@ -55,7 +55,7 @@ namespace VAdvantage.WF
                 else
                     log.Log(Level.SEVERE, "Unknown Parameter: " + name);
             }
-            p_VAF_WFlow_Handler_ID = GetRecord_ID();
+            p_VAF_WFlow_Job_ID = GetRecord_ID();
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace VAdvantage.WF
         /// <returns>Message (variables are parsed)</returns>
         protected override String DoIt()
         {
-            MVAFWFlowHandler process = new MVAFWFlowHandler(GetCtx(), p_VAF_WFlow_Handler_ID, Get_Trx());
+            MVAFWFlowJob process = new MVAFWFlowJob(GetCtx(), p_VAF_WFlow_Job_ID, Get_Trx());
             log.Info("doIt - " + process);
 
             MVAFUserContact user = MVAFUserContact.Get(GetCtx(), GetVAF_UserContact_ID());

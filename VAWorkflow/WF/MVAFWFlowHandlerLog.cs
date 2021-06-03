@@ -1,8 +1,8 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MWorkflowProcessorLog
+ * Class Name     : MVAFWFlowHandlerLog
  * Purpose        : 
- * Class Used     : MWorkflowProcessorLog inherits the class X_VAF_WFlowHandlerLog, ViennaProcessorLog
+ * Class Used     : MVAFWFlowHandlerLog inherits the class X_VAF_WFlowHandlerLog, ViennaProcessorLog
  * Chronological    Development
  * Raghunandan      05-May-2009
   ******************************************************/
@@ -54,7 +54,7 @@ namespace VAdvantage.WF
         /// </summary>
         /// <param name="parent">parent</param>
         /// <param name="Summary">Summary</param>
-        public MVAFWFlowHandlerLog(MWorkflowProcessor parent, String Summary)
+        public MVAFWFlowHandlerLog(MVAFWFlowHandler parent, String Summary)
             : this(parent.GetCtx(), 0, parent.Get_Trx())
         {
             SetClientOrg(parent);

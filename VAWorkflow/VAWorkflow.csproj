@@ -56,11 +56,11 @@
     <Compile Include="WF\MVAFWFlowNode.cs" />
     <Compile Include="WF\MVAFWFlowNextNode.cs" />
     <Compile Include="WF\MVAFWFlowNodePara.cs" />
-    <Compile Include="WF\MVAFWFlowHandler.cs" />
+    <Compile Include="WF\MVAFWFlowJob.cs" />
     <Compile Include="WF\MVAFWFlowIncharge.cs" />
     <Compile Include="WF\MVAFWorkflow.cs" />
     <Compile Include="WF\MVAFWFlowRights.cs" />
-    <Compile Include="WF\MWorkflowProcessor.cs" />
+    <Compile Include="WF\MVAFWFlowHandler.cs" />
     <Compile Include="WF\MVAFWFlowHandlerLog.cs" />
     <Compile Include="WF\StateEngine.cs" />
     <Compile Include="WF\WFActivityManage.cs" />

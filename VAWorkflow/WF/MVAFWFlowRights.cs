@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MWorkflowAccess
+ * Class Name     : MVAFWFlowRights
  * Purpose        : 
  * Class Used     : 
  * Chronological    Development
@@ -19,7 +19,7 @@ using VAdvantage.SqlExec;
 using VAdvantage.Utility;
 namespace VAdvantage.WF
 {
-    public class MWorkflowAccess : X_VAF_WFlow_Rights
+    public class MVAFWFlowRights : X_VAF_WFlow_Rights
     {
         /// <summary>
         ///Standard Constructor
@@ -27,7 +27,7 @@ namespace VAdvantage.WF
         /// <param name="ctx">context</param>
         /// <param name="ignored">ignored -</param>
         /// <param name="trxName">transaction</param>
-        public MWorkflowAccess(Ctx ctx, int ignored, Trx trxName)
+        public MVAFWFlowRights(Ctx ctx, int ignored, Trx trxName)
             : base(ctx, 0, trxName)
         {
             if (ignored != 0)
@@ -46,7 +46,7 @@ namespace VAdvantage.WF
         /// <param name="ctx">context</param>
         /// <param name="dr">result set</param>
         /// <param name="trxName">transaction</param>
-        public MWorkflowAccess(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAFWFlowRights(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -56,7 +56,7 @@ namespace VAdvantage.WF
         /// </summary>
         /// <param name="parent">parent</param>
         /// <param name="VAF_Role_ID">role id</param>
-        public MWorkflowAccess(MVAFWorkflow parent, int VAF_Role_ID)
+        public MVAFWFlowRights(MVAFWorkflow parent, int VAF_Role_ID)
             : base(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);

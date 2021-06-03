@@ -766,7 +766,7 @@ namespace VIS.Models
                 for (int i = 0; i < groupWindowIDs.Count(); i++)
                 {
                     MVAFWorkflow wind = new MVAFWorkflow(ctx, groupWindowIDs[i], null);
-                    MWorkflowAccess wAccess = new MWorkflowAccess(wind, VAF_Role_ID);
+                    MVAFWFlowRights wAccess = new MVAFWFlowRights(wind, VAF_Role_ID);
                     if (roleWindowIDsDictinary.ContainsKey(groupWindowIDs[i]))
                     {
                         if (roleWindowIDsDictinary[groupWindowIDs[i]] != grantAccess)
