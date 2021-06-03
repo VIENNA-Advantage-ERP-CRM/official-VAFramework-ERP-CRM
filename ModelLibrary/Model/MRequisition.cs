@@ -40,6 +40,7 @@ namespace VAdvantage.Model
         MStorage Swhstorage = null;
 
         String _budgetMessage = String.Empty;
+        private string _budgetNotDefined = string.Empty;
 
         /**
         * 	Standard Constructor
@@ -400,13 +401,28 @@ namespace VAdvantage.Model
                         {
                             log.Info("Budget Control Start for Rquisition Document No  " + GetDocumentNo());
                             EvaluateBudgetControlData();
-                            if (_budgetMessage.Length > 0)
+                            // If Budget Exceeded or Not Defined By Rakesh Kumar 29/Apr/2021
+                            if (_budgetMessage.Length > 0 || _budgetNotDefined.Length > 0)
                             {
-                                _processMsg = Msg.GetMsg(GetCtx(), "BudgetExceedFor") + _budgetMessage;
+                                // Done by Rakesh Kumar On 29/Apr/2021
+                                // When budget exceeded
+                                if (_budgetMessage.Length > 0)
+                                {
+                                    _processMsg = Msg.GetMsg(GetCtx(), "BudgetExceedFor") + _budgetMessage;
+                                }
+                                if (_budgetNotDefined.Length > 0)
+                                {
+                                    _processMsg = _processMsg + "" + Msg.GetMsg(GetCtx(), "BudgetNotDefinedFor") + _budgetNotDefined;
+                                }
                                 SetProcessed(false);
-                                // Done by rakesh 19/Feb/2020
-                                SetIsBudgetBreach(true);
-                                SetIsBudgetBreachApproved(false);
+                                // Set Budget Breach only in case when budget exceeded
+                                // Done by Rakesh 29/Apr/2021
+                                if (_budgetMessage.Length > 0 && _budgetNotDefined.Length == 0)
+                                {
+                                    // Done by rakesh 19/Feb/2020
+                                    SetIsBudgetBreach(true);
+                                    SetIsBudgetBreachApproved(false);
+                                }
                                 return DocActionVariables.STATUS_INPROGRESS;
                             }
                             SetIsBudgetBreach(false);
@@ -809,11 +825,11 @@ namespace VAdvantage.Model
                                              (x.Account_ID == Util.GetValueOfInt(drDataRecord["Account_ID"]))
                                             ))
                 {
-                    // If budget not defined then add error message in budget message variable
-                    // Done by rakesh on 17/Mar/2021
-                    if (!_budgetMessage.Contains(Util.GetValueOfString(drBUdgetControl["BudgetName"])))
+                    // If budget not defined then add error message in _budgetNotDefined message variable
+                    // Done by rakesh on 29/Apr/2021 Messsage Variable changed from _budgetMessage to _budgetNotDefined
+                    if (!_budgetNotDefined.Contains(Util.GetValueOfString(drBUdgetControl["BudgetName"])))
                     {
-                        _budgetMessage += Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
+                        _budgetNotDefined += Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
                                             + Util.GetValueOfString(drBUdgetControl["ControlName"]) + ", ";
                     }
                     log.Info("Budget not defined for - " + Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
