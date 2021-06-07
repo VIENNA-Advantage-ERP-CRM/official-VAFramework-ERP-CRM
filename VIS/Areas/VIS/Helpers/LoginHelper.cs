@@ -758,19 +758,21 @@ namespace VIS.Helpers
         {
             Dictionary<string, object> retRes = new Dictionary<string, object>();
             retRes.Add("Success", false);
-            int validationTime = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Value FROM AD_SysConfig WHERE Name = 'LOGIN_TOKEN_EXPIRE_TIME' AND IsActive = 'Y'"));
-            if (validationTime <= 0)
-                validationTime = 15;
+            
             SqlParameter[] param = new SqlParameter[1];
             param[0] = new SqlParameter("@p1", TokenNum);
-            DataSet ds = DB.ExecuteDataset("SELECT TokenTime, Value, Password FROM AD_User WHERE IsActive = 'Y' AND LoginToken = @p1", param);
+            DataSet ds = DB.ExecuteDataset("SELECT AuthTokenExpireTime, Value, Password, IsAuthTokenOneTime, AD_User_ID FROM AD_User WHERE IsActive = 'Y' AND AuthToken = @p1", param);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
-                DateTime? dTime = Util.GetValueOfDateTime(ds.Tables[0].Rows[0]["Tokentime"]);
+                DateTime? expTime = Util.GetValueOfDateTime(ds.Tables[0].Rows[0]["AuthTokenExpireTime"]);
                 DateTime? curTime = System.DateTime.Now.ToUniversalTime();
-                int diff = Util.GetValueOfInt((curTime - dTime).Value.TotalSeconds);
-                if (diff <= validationTime)
+                if (curTime <= expTime)
                 {
+                    if (Util.GetValueOfString(ds.Tables[0].Rows[0]["IsAuthTokenOneTime"]).Equals("Y"))
+                    {
+                        int count = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE AD_User SET AuthTokenExpireTime = " + GlobalVariable.TO_DATE(System.DateTime.Now, false) + @" 
+                        WHERE AD_User_ID = " + Util.GetValueOfInt(ds.Tables[0].Rows[0]["AD_User_ID"])));
+                    }
                     retRes.Add("User", ds.Tables[0].Rows[0]["Value"]);
                     retRes.Add("Password", ds.Tables[0].Rows[0]["Password"].ToString());
                     retRes["Success"] = true;
