@@ -244,7 +244,7 @@ namespace VIS.Models
                     {
                         //Budget Forecast -- case
                         sql.Append("(SELECT NVL(C_OrderLine_ID, 0) FROM VA073_ForecastLine FLine INNER JOIN VA073_ProductLine PLine ON FLine.VA073_ProductLine_ID=" +
-                            "FLine.VA073_ProductLine_ID INNER JOIN VA073_SalesForecast Forecast ON Forecast.VA073_SalesForecast_ID=PLine.VA073_SalesForecast_ID " +
+                            "PLine.VA073_ProductLine_ID INNER JOIN VA073_SalesForecast Forecast ON Forecast.VA073_SalesForecast_ID=PLine.VA073_SalesForecast_ID " +
                             "WHERE Forecast.AD_Org_ID =" + Org_ID + " AND Forecast.DocStatus NOT IN ('VO','RE')) AND NVL(OrderLine.C_OrderLine_ID,0) NOT IN " +
                             "(SELECT NVL(LineDetails.C_OrderLine_ID, 0) FROM C_MasterForecastLineDetails LineDetails INNER JOIN C_MasterForecastLine Line ON " +
                             "LineDetails.C_MasterForecastLine_ID = Line.C_MasterForecastLine_ID INNER JOIN C_MasterForecast Master ON  Master.C_MasterForecast_ID = Line.C_MasterForecast_ID " +
@@ -382,7 +382,7 @@ namespace VIS.Models
                     {
                         //Budget Forecast -- case
                         sql.Append("(SELECT NVL(C_OrderLine_ID, 0) FROM VA073_ForecastLine FLine INNER JOIN VA073_ProductLine PLine ON FLine.VA073_ProductLine_ID=" +
-                            "FLine.VA073_ProductLine_ID INNER JOIN VA073_SalesForecast Forecast ON Forecast.VA073_SalesForecast_ID=PLine.VA073_SalesForecast_ID " +
+                            "PLine.VA073_ProductLine_ID INNER JOIN VA073_SalesForecast Forecast ON Forecast.VA073_SalesForecast_ID=PLine.VA073_SalesForecast_ID " +
                             "WHERE Forecast.AD_Org_ID =" + Org_ID + " AND Forecast.DocStatus NOT IN ('VO','RE')) AND NVL(OrderLine.C_OrderLine_ID,0) NOT IN " +
                             "(SELECT NVL(LineDetails.C_OrderLine_ID, 0) FROM C_MasterForecastLineDetails LineDetails INNER JOIN C_MasterForecastLine Line ON " +
                             "LineDetails.C_MasterForecastLine_ID = Line.C_MasterForecastLine_ID INNER JOIN C_MasterForecast Master ON  Master.C_MasterForecast_ID = Line.C_MasterForecast_ID " +
@@ -568,7 +568,7 @@ namespace VIS.Models
 
                 //Budget Forecast -- case 
                 sql.Append("(SELECT NVL(C_ProjectLine_ID, 0) FROM VA073_ForecastLine FLine INNER JOIN VA073_ProductLine PLine ON FLine.VA073_ProductLine_ID=" +
-                    "FLine.VA073_ProductLine_ID INNER JOIN VA073_SalesForecast Forecast ON Forecast.VA073_SalesForecast_ID=PLine.VA073_SalesForecast_ID " +
+                    "PLine.VA073_ProductLine_ID INNER JOIN VA073_SalesForecast Forecast ON Forecast.VA073_SalesForecast_ID=PLine.VA073_SalesForecast_ID " +
                     "WHERE Forecast.AD_Org_ID =" + Org_ID + " AND Forecast.DocStatus NOT IN ('VO','RE')) AND NVL(C_ProjectLine_ID,0) NOT IN " +
                     "(SELECT NVL(LineDetails.C_ProjectLine_ID, 0) FROM C_MasterForecastLineDetails LineDetails INNER JOIN C_MasterForecastLine Line ON " +
                     "LineDetails.C_MasterForecastLine_ID = Line.C_MasterForecastLine_ID INNER JOIN C_MasterForecast Master ON  Master.C_MasterForecast_ID = Line.C_MasterForecast_ID " +
