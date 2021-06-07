@@ -14,7 +14,7 @@
     <RootNamespace>ViennaAdvantageWeb</RootNamespace>
     <AssemblyName>ViennaAdvantageWeb</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -194,15 +194,17 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>3971</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:3971/</IISUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
+			<UseIIS>True</UseIIS>
+			<AutoAssignPort>True</AutoAssignPort>
+			<DevelopmentServerPort>3971</DevelopmentServerPort>
+			<DevelopmentServerVPath>/</DevelopmentServerVPath>
+			<IISUrl>http://localhost/VAdvantageHtml55121</IISUrl>
+			<OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+			<IISAppRootUrl>http://localhost/VAdvantageHtml55</IISAppRootUrl>
+			<NTLMAuthentication>False</NTLMAuthentication>
+			<UseCustomServer>False</UseCustomServer>
+			<CustomServerUrl>
+			</CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>

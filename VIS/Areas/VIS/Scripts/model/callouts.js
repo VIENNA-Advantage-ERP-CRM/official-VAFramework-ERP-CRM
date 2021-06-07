@@ -2606,31 +2606,32 @@
             if (QtyEntered > 0 && LineNetAmt == 0) {
                 //Check if it is RSO/RPO and prices available which are entered through blanket sales order.
                 var BlanketOrderLineID = Util.getValueOfDecimal(mTab.getValue("C_OrderLine_Blanket_ID"));
+                if (BlanketOrderLineID > 0) {
+                    dr = VIS.dataContext.getJSONRecord("MOrderLine/GetOrderLine", BlanketOrderLineID.toString());
+                    if (dr != null) {
 
-                dr = VIS.dataContext.getJSONRecord("MOrderLine/GetOrderLine", BlanketOrderLineID.toString());
-                if (dr != null) {
+                        var PriceList = Util.getValueOfDouble(dr["PriceList"]);
+                        var PriceActual = Util.getValueOfDouble(dr["PriceActual"]);
+                        var PriceEntered = Util.getValueOfDouble(dr["PriceEntered"]);
+                        var Discount = Util.getValueOfDouble(dr["Discount"]);
 
-                    var PriceList = Util.getValueOfDouble(dr["PriceList"]);
-                    var PriceActual = Util.getValueOfDouble(dr["PriceActual"]);
-                    var PriceEntered = Util.getValueOfDouble(dr["PriceEntered"]);
-                    var Discount = Util.getValueOfDouble(dr["Discount"]);
+                        if (PriceEntered != null) {
+                            mTab.setValue("PriceEntered", PriceEntered);
+                            mTab.setValue("LineNetAmt", PriceEntered * QtyEntered);
+                            LineNetAmt = PriceEntered * QtyEntered;
+                        }
 
-                    if (PriceEntered != null) {
-                        mTab.setValue("PriceEntered", PriceEntered);
-                        mTab.setValue("LineNetAmt", PriceEntered * QtyEntered);
-                        LineNetAmt = PriceEntered * QtyEntered;
-                    }
+                        if (PriceList != null) {
+                            mTab.setValue("PriceList", PriceList);
+                        }
 
-                    if (PriceList != null) {
-                        mTab.setValue("PriceList", PriceList);
-                    }
+                        if (Discount != null) {
+                            mTab.setValue("Discount", Discount);
+                        }
 
-                    if (Discount != null) {
-                        mTab.setValue("Discount", Discount);
-                    }
-
-                    if (PriceActual != null) {
-                        mTab.setValue("PriceActual", PriceActual);
+                        if (PriceActual != null) {
+                            mTab.setValue("PriceActual", PriceActual);
+                        }
                     }
                 }
             }
