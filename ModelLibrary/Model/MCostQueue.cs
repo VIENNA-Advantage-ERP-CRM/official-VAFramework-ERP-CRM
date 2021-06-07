@@ -545,7 +545,7 @@ namespace VAdvantage.Model
             MLocator loc = null; // is used to get warehouse id to manager costing levelev - Warehouse + Batch 
             String costLevel = null; // is used to check costing level binded for calculation of costing
             bool backwardCompatabilitySupport = false;
-            bool IsPOCostingMethod = MCostElement.IsPOCostingmethod(ctx, AD_Client_ID, product.GetM_Product_ID(), trxName);
+            bool IsPOCostingMethod = product != null ? MCostElement.IsPOCostingmethod(ctx, AD_Client_ID, product.GetM_Product_ID(), trxName) : false;
             try
             {
                 if (product != null)
