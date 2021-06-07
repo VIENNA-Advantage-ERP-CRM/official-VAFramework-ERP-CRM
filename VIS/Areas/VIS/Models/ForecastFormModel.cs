@@ -440,6 +440,7 @@ namespace VIS.Models
                                 if (Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]) == 0)
                                 {
                                     log.Log(Level.WARNING, Msg.GetMsg(ctx, "PurchasePriceNotFound"));
+                                    PurchaseUnitPrice = 0;
                                 }
                                 else
                                 {
@@ -626,6 +627,7 @@ namespace VIS.Models
                         if (Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]) == 0)
                         {
                             log.Log(Level.WARNING, Msg.GetMsg(ctx, "PurchasePriceNotFound"));
+                            PurchaseUnitPrice = 0;
                         }
                         else
                         {
@@ -712,6 +714,8 @@ namespace VIS.Models
                         if (Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]) == 0)
                         {
                             log.Log(Level.WARNING, Msg.GetMsg(ctx, "PurchasePriceNotFound"));
+                            PurchaseUnitPrice = 0;
+
                         }
                         else
                         {
@@ -880,6 +884,7 @@ namespace VIS.Models
                     if (Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["PurchasePrice"]) == 0)
                     {
                         log.Log(Level.WARNING, Msg.GetMsg(ctx, "PurchasePriceNotFound"));
+                        PurchaseUnitPrice = 0;
                     }
                     else
                     {
