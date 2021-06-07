@@ -346,7 +346,9 @@ namespace VIS.Controllers
                     {
                         // VIS0008
                         // Changes done to handle TOKEN in querystring
-                        if (Request.QueryString.AllKeys.Contains("TOKEN"))
+                        if (Request.QueryString.AllKeys.Contains("TOKEN")
+                            || Request.QueryString.AllKeys.Contains("Token")
+                            || Request.QueryString.AllKeys.Contains("token"))
                         {
                             string loginToken = Request.QueryString["TOKEN"];
                             Dictionary<string, object> tokDetails = LoginHelper.GetTokenDetails(loginToken);
