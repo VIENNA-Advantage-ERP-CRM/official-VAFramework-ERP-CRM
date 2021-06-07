@@ -758,12 +758,12 @@ namespace VIS.Helpers
         {
             Dictionary<string, object> retRes = new Dictionary<string, object>();
             retRes.Add("Success", false);
-            int validationTime = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Value FROM AD_SysConfig WHERE Name = 'LOGIN_TOKEN_EXPIRE_TIME'"));
+            int validationTime = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Value FROM AD_SysConfig WHERE Name = 'LOGIN_TOKEN_EXPIRE_TIME' AND IsActive = 'Y'"));
             if (validationTime <= 0)
                 validationTime = 15;
             SqlParameter[] param = new SqlParameter[1];
             param[0] = new SqlParameter("@p1", TokenNum);
-            DataSet ds = DB.ExecuteDataset("SELECT TokenTime, Value, Password FROM AD_User WHERE LoginToken = @p1", param);
+            DataSet ds = DB.ExecuteDataset("SELECT TokenTime, Value, Password FROM AD_User WHERE IsActive = 'Y' AND LoginToken = @p1", param);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 DateTime? dTime = Util.GetValueOfDateTime(ds.Tables[0].Rows[0]["Tokentime"]);
