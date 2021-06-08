@@ -335,7 +335,8 @@ namespace ViennaAdvantageServer.Process
                 inv.SetServiceContract(true);
                 if (!inv.Save(Get_TrxName()))
                 {
-                    msgInvoiceNotSaved.Append(cont.GetDocumentNo());
+                    Get_TrxName().Rollback();
+                    msgInvoiceNotSaved.Append(cont.GetDocumentNo() + "_" + contSchedule.GetFROMDATE().Value.ToString("ddMMMyyyy") + ",");
                     ValueNamePair pp = VLogger.RetrieveError();
                     if (pp != null)
                     {
@@ -345,7 +346,7 @@ namespace ViennaAdvantageServer.Process
                             msg = Msg.GetMsg("", pp.GetValue());
                     }
                     // save error log info file
-                    log.Info("Invoice not saved DocumentNo: " + cont.GetDocumentNo() + " - Schedule Date: " + contSchedule.GetFROMDATE().Value.ToString("dd-MMM-yyyy") + " Error: " + msg);
+                    log.Info("Invoice not saved DocumentNo: " + cont.GetDocumentNo() + " - Schedule From Date: " + contSchedule.GetFROMDATE().Value.ToString("dd-MMM-yyyy") + " Error: " + msg);
                 }
                 else
                 {
@@ -369,7 +370,8 @@ namespace ViennaAdvantageServer.Process
                     invLine.SetPriceList(cont.GetPriceList());
                     if (!invLine.Save(Get_TrxName()))
                     {
-                        msgInvoiceNotSaved.Append(cont.GetDocumentNo());
+                        Get_TrxName().Rollback();
+                        msgInvoiceNotSaved.Append(cont.GetDocumentNo() + "_" + contSchedule.GetFROMDATE().Value.ToString("ddMMMyyyy") + ",");
                         ValueNamePair pp = VLogger.RetrieveError();
                         if (pp != null)
                         {
@@ -379,7 +381,7 @@ namespace ViennaAdvantageServer.Process
                                 msg = Msg.GetMsg("", pp.GetValue());
                         }
                         // save error log info file
-                        log.Info("Invoice Line not saved DocumentNo: " + cont.GetDocumentNo() + " - Schedule Date: " + contSchedule.GetFROMDATE().Value.ToString("dd-MMM-yyyy") + " Error: " + msg);
+                        log.Info("Invoice Line not saved DocumentNo: " + cont.GetDocumentNo() + " - Schedule From Date: " + contSchedule.GetFROMDATE().Value.ToString("dd-MMM-yyyy") + " Error: " + msg);
                     }
                     else
                     {
