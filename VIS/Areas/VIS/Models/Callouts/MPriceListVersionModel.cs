@@ -261,7 +261,7 @@ namespace VIS.Models
                 M_PriceList_ID = Util.GetValueOfInt(paramValue[0].ToString());
                 if (paramValue.Length > 1)
                 {
-                    if (paramValue[1] != null)
+                    if (paramValue[1] != null && paramValue[1] != "")
                     {
                         _transactionDate = Convert.ToDateTime(paramValue[1]);
                     }
