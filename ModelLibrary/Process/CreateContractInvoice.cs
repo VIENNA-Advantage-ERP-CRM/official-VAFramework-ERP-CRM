@@ -27,9 +27,8 @@ namespace ViennaAdvantageServer.Process
 {
     public class CreateContractInvoice : SvrProcess
     {
-
         #region Private Variables
-        StringBuilder sb = new StringBuilder("");
+        private string _Result = "";
         StringBuilder sql = new StringBuilder();
         //int _count = 0;
         //Neha--Declare X-Class or MClass object publically for further use in class--11 Sep,2018
@@ -38,13 +37,23 @@ namespace ViennaAdvantageServer.Process
         VAdvantage.Model.MInvoice inv = null;
         MBPartner bp = null;
         int _C_DocType_ID = 0;
+        StringBuilder msgInvoiceNotSaved = new StringBuilder();
+        StringBuilder msgInvoiceSaved = new StringBuilder();
+        StringBuilder msgInvoiceSchNotFound = new StringBuilder();
+        StringBuilder msgDocTypeNotDefined = new StringBuilder();
+        StringBuilder msgPaymentMethodNotDefined = new StringBuilder();
+        StringBuilder msgInvoiceNotFound = new StringBuilder();
+        string msg = string.Empty;
+        DataSet ds = null;
+        DataSet dsSch = null;
+        int _tableId = 0, _processId = 0;
+        bool DocPaymentCheck = true;
         #endregion
 
         protected override void Prepare()
         {
 
         }
-
         /// <summary>
         /// Create AR and AP Invoices
         /// </summary>
@@ -52,65 +61,100 @@ namespace ViennaAdvantageServer.Process
         protected override string DoIt()
         {
             int C_Contract_ID = Util.GetValueOfInt(GetRecord_ID());
-            if (C_Contract_ID != 0)
+            // Get Invoice TableId and DocAction ProcessId to execute workflow
+            sql.Append("SELECT T.AD_TABLE_ID,C.AD_PROCESS_ID from AD_TABLE T INNER JOIN AD_COLUMN C ON C.AD_TABLE_ID=T.AD_TABLE_ID WHERE UPPER(C.ColumnName)='DOCACTION' AND UPPER(T.TableName)='C_INVOICE'");
+            DataSet dsTable = DB.ExecuteDataset(sql.ToString(), null, Get_TrxName());
+            if (dsTable != null && dsTable.Tables.Count > 0 && dsTable.Tables[0].Rows.Count > 0)
             {
-                cont = new VAdvantage.Model.X_C_Contract(GetCtx(), C_Contract_ID, Get_TrxName());
-                bp = new MBPartner(GetCtx(), cont.GetC_BPartner_ID(), Get_TrxName());
-                string date = System.DateTime.Now.ToString("dd-MMM-yyyy");
-                int[] contSch = VAdvantage.Model.X_C_ContractSchedule.GetAllIDs("C_ContractSchedule", "C_Contract_ID = " + C_Contract_ID + " AND FROMDATE <= '" + date
-                    + "' AND NVL(C_INVOICE_ID,0) = 0", Get_TrxName());
-                //Neha----If Not found any Invoice Schedule against the Contract then it will display the error message--11 Sep,2018
-                if (contSch != null && contSch.Length > 0)
-                {
-                    // Done by Rakesh Kumar on 01/Apr/2021
-                    // Set DocTypeId
-                    SetDocType();
-                    for (int i = 0; i < contSch.Length; i++)
-                    {
-                        contSchedule = new VAdvantage.Model.X_C_ContractSchedule(GetCtx(), Util.GetValueOfInt(contSch[i]), Get_TrxName());
-                        GenerateInvoice(contSchedule);
-                    }
-                }
-                else
-                {
-                    return Msg.GetMsg(GetCtx(), "VIS_NotFoundInvSchedule.");
-                }
-
-                sql.Clear();
-                sql.Append("SELECT COUNT(C_ContractSchedule_ID) FROM C_ContractSchedule WHERE C_Contract_ID = " + C_Contract_ID + " AND NVL(C_INVOICE_ID,0) > 0");
-                string sql1 = "UPDATE C_Contract SET InvoicesGenerated = " + Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName())) + " WHERE C_Contract_ID = " + C_Contract_ID;
-                int res = DB.ExecuteQuery(sql1, null, Get_TrxName());
+                _tableId = Util.GetValueOfInt(dsTable.Tables[0].Rows[0]["AD_TABLE_ID"]);
+                _processId = Util.GetValueOfInt(dsTable.Tables[0].Rows[0]["AD_PROCESS_ID"]);
             }
             else
             {
-                sql.Append("SELECT C_Contract_ID FROM C_Contract WHERE IsActive = 'Y' AND AD_Client_ID = " + GetAD_Client_ID());
-                DataSet ds = null;
+                return Msg.GetMsg(GetCtx(), "VIS_InvTableProcessNotFound");
+            }
+            // When process run from Service Contract Window
+            if (C_Contract_ID != 0)
+            {
+                cont = new VAdvantage.Model.X_C_Contract(GetCtx(), C_Contract_ID, Get_TrxName());
+
+                #region CheckDocTypeandPaymentMethod
+
+                // If ContractType not defined on Service Contract Window / Payment Method not defind on business partner
+                if (GetDocType() == 0 || !CheckPaymentMethod())
+                {
+                    DocPaymentCheck = false;
+                }
+                #endregion
+
+                // If DocType (ContractType) and payment method on business parter found
+                if (DocPaymentCheck)
+                {
+                    sql.Clear();
+                    sql.Append("SELECT * FROM C_CONTRACTSCHEDULE WHERE C_CONTRACT_ID = " + cont.GetC_Contract_ID() + " AND NVL(C_INVOICE_ID,0) = 0 AND FROMDATE <=" + GlobalVariable.TO_DATE(DateTime.Now, true));
+                    dsSch = DB.ExecuteDataset(sql.ToString(), null, Get_TrxName());
+                    if (dsSch != null && dsSch.Tables.Count > 0 && dsSch.Tables[0].Rows.Count > 0)
+                    {
+                        for (int j = 0; j < dsSch.Tables[0].Rows.Count; j++)
+                        {
+                            // Get Contract Schedule
+                            contSchedule = new VAdvantage.Model.X_C_ContractSchedule(GetCtx(), dsSch.Tables[0].Rows[j], Get_TrxName());
+                            GenerateInvoice(contSchedule);
+                        }
+                        sql.Clear();
+                        sql.Append("SELECT COUNT(C_ContractSchedule_ID) FROM C_ContractSchedule WHERE C_Contract_ID = " + C_Contract_ID + " AND NVL(C_INVOICE_ID,0) > 0");
+                        string sql1 = "UPDATE C_Contract SET InvoicesGenerated = " + Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName())) + " WHERE C_Contract_ID = " + C_Contract_ID;
+                        int res = DB.ExecuteQuery(sql1, null, Get_TrxName());
+                    }
+                    else
+                    {
+                        msgInvoiceSchNotFound.Append(cont.GetDocumentNo());
+                    }
+                }
+            }
+            else
+            {
+                sql.Clear();
+                // Get Active/Approved Contracts whose invoice schedule not completed yet
+                sql.Append("SELECT * FROM C_Contract WHERE IsActive = 'Y' AND TOTALINVOICE-INVOICESGENERATED>0 AND AD_Client_ID = " + GetAD_Client_ID() + " ORDER BY C_CONTRACT_ID");
                 try
                 {
-                    // Changed datareader to dataset to solve problem in postgre db done by Rakesh 25/May/2021
                     ds = DB.ExecuteDataset(sql.ToString(), null, Get_TrxName());
-                    if (ds != null)
+                    if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
-                            cont = new VAdvantage.Model.X_C_Contract(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Contract_ID"]), Get_TrxName());
-                            // Get business partner detail
-                            bp = new MBPartner(GetCtx(), cont.GetC_BPartner_ID(), Get_TrxName());
-                            string date = System.DateTime.Now.ToString("dd-MMM-yyyy");
-                            int[] contSch = VAdvantage.Model.X_C_ContractSchedule.GetAllIDs("C_ContractSchedule", "C_Contract_ID = " + cont.GetC_Contract_ID() + " AND FROMDATE <= '"
-                                + date + "' AND NVL(C_INVOICE_ID,0) = 0", Get_TrxName());
-                            if (contSch != null && contSch.Length > 0)
+                            DocPaymentCheck = true;
+                            //Get Contract Detail
+                            cont = new VAdvantage.Model.X_C_Contract(GetCtx(), ds.Tables[0].Rows[i], Get_TrxName());
+
+                            #region CheckDocTypeandPaymentMethod
+                            // If ContractType not defined on Service Contract Window / Payment Method not defind on business partner
+                            if (GetDocType() == 0 || !CheckPaymentMethod())
                             {
-                                // Done by Rakesh Kumar on 01/Apr/2021
-                                // Set DocTypeId
-                                SetDocType();
-                                for (int j = 0; j < contSch.Length; j++)
+                                //DocPaymentCheck = false;
+                                continue;
+                            }
+                            #endregion
+
+                            // Get Contract Schedules whose invoice not created yet based on ContractId
+                            sql.Clear();
+                            sql.Append("SELECT * FROM C_CONTRACTSCHEDULE WHERE C_CONTRACT_ID = " + cont.GetC_Contract_ID() + " AND NVL(C_INVOICE_ID,0) = 0 AND FROMDATE <=" + GlobalVariable.TO_DATE(DateTime.Now, true));
+                            dsSch = DB.ExecuteDataset(sql.ToString(), null, Get_TrxName());
+                            if (dsSch != null && dsSch.Tables.Count > 0 && dsSch.Tables[0].Rows.Count > 0)
+                            {
+                                for (int j = 0; j < dsSch.Tables[0].Rows.Count; j++)
                                 {
-                                    contSchedule = new VAdvantage.Model.X_C_ContractSchedule(GetCtx(), Util.GetValueOfInt(contSch[j]), Get_TrxName());
+                                    // Get Contract Schedule
+                                    contSchedule = new VAdvantage.Model.X_C_ContractSchedule(GetCtx(), dsSch.Tables[0].Rows[j], Get_TrxName());
                                     GenerateInvoice(contSchedule);
                                 }
                             }
-
+                            else
+                            {
+                                msgInvoiceSchNotFound.Append(cont.GetDocumentNo() + ",");
+                            }
+                            // Update Total Invoice Generated related to Contract
                             sql.Clear();
                             sql.Append("SELECT COUNT(C_ContractSchedule_ID) FROM C_ContractSchedule WHERE C_Contract_ID = " + cont.GetC_Contract_ID() + " AND NVL(C_INVOICE_ID,0) > 0");
                             string sql1 = "UPDATE C_Contract SET InvoicesGenerated = " + Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()))
@@ -118,10 +162,9 @@ namespace ViennaAdvantageServer.Process
                             int res = DB.ExecuteQuery(sql1, null, Get_TrxName());
                         }
                     }
-                    if (ds != null)
+                    else
                     {
-                        ds.Dispose();
-                        ds = null;
+                        msgInvoiceNotFound.Append(Msg.GetMsg(GetCtx(), "VIS_InvoiceNotFound"));
                     }
                 }
                 catch (Exception ex)
@@ -129,21 +172,53 @@ namespace ViennaAdvantageServer.Process
                     if (ds != null)
                     {
                         ds.Dispose();
-                        ds = null;
                     }
+                    if (dsSch != null)
+                    {
+                        dsSch.Dispose();
+                    }
+                    _Result = ex.Message;
                 }
             }
-            //Neha--If Invoice generated sucessfully then it will return sb.Length greater then 0
-            if (sb.Length > 0)
+            if (ds != null)
             {
-                return Msg.GetMsg(GetCtx(), "VIS_InvGenerated") + sb.ToString().Substring(0, sb.Length - 2);
+                ds.Dispose();
             }
-            else
+            if (dsSch != null)
             {
-                return Msg.GetMsg(GetCtx(), "VIS_InvNotGenerated");
+                dsSch.Dispose();
             }
+            string lineBreak = (C_Contract_ID == 0 ? " </br> " : ", ");
+            if (msgDocTypeNotDefined.Length > 0)
+            {
+                _Result = Msg.GetMsg(GetCtx(), "ContractTypeNotDefined") + " " + msgDocTypeNotDefined.ToString().Substring(0, msgDocTypeNotDefined.Length - 1) + lineBreak;
+            }
+            if (msgPaymentMethodNotDefined.Length > 0)
+            {
+                _Result = _Result + Msg.GetMsg(GetCtx(), "VIS_PaymentMethodNotDefined") + " " + msgPaymentMethodNotDefined.ToString().Substring(0, msgPaymentMethodNotDefined.Length - 1) + lineBreak;
+            }
+            if (msgInvoiceSchNotFound.Length > 0)
+            {
+                _Result = _Result + " " + Msg.GetMsg(GetCtx(), "VIS_NotFoundInvSchedule") + " " + msgInvoiceSchNotFound.ToString().Substring(0, msgInvoiceSchNotFound.Length - 1) + lineBreak;
+            }
+            if (msgInvoiceSaved.Length > 0)
+            {
+                _Result = _Result + " " + Msg.GetMsg(GetCtx(), "VIS_InvGenerated") + " " + msgInvoiceSaved.ToString().Substring(0, msgInvoiceSaved.Length - 1) + lineBreak;
+            }
+            if (msgInvoiceNotSaved.Length > 0)
+            {
+                _Result = _Result + " " + Msg.GetMsg(GetCtx(), "VIS_InvNotGenerated") + " " + msgInvoiceNotSaved.ToString().Substring(0, msgInvoiceNotSaved.Length - 1) + lineBreak;
+            }
+            if (msgInvoiceNotFound.Length > 0)
+            {
+                _Result = msgInvoiceNotFound.ToString();
+            }
+            if (string.IsNullOrEmpty(_Result))
+            {
+                _Result = Msg.GetMsg(GetCtx(), "VIS_InvNotGenerated");
+            }
+            return _Result;
         }
-
         /// <summary>
         /// Generate Contract Invoice
         /// </summary>
@@ -153,8 +228,6 @@ namespace ViennaAdvantageServer.Process
             if (contSchedule.IsActive())
             {
                 int res = 0;
-                // sql = "select noofdays from c_frequency where c_frequency_id = " + cont.GetC_Frequency_ID();
-                //  Decimal? days = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
 
                 Decimal? price = null;
                 if (!cont.IsCancel())
@@ -227,7 +300,6 @@ namespace ViennaAdvantageServer.Process
                 // JID_0872: System has To pick the Payment Method defined with the Business Partner against whom the Invoice is getting generated.
                 if (Env.IsModuleInstalled("VA009_"))
                 {
-                    // Done by Rakesh Kumar on 01/Apr/2021
                     // When ContractType is Accounts Receivable
                     // If Contract type not found consider as AR Invoice by default Done by Rakesh 21/May/2021 suggested by Kanika
                     if (bp.GetVA009_PaymentMethod_ID() > 0 && (string.IsNullOrEmpty(cont.GetContractType()) || cont.GetContractType().Equals(X_C_Contract.CONTRACTTYPE_AccountsReceivable)))
@@ -241,12 +313,8 @@ namespace ViennaAdvantageServer.Process
                         inv.SetVA009_PaymentMethod_ID(bp.GetVA009_PO_PaymentMethod_ID());
                         inv.SetIsSOTrx(false);
                     }
-                    else
-                    {
-                        throw new ArgumentException(Msg.GetMsg(GetCtx(), "VIS_PaymentMethodNotDefined") + " : " + bp.GetName());
-                    }
                 }
-                // Get count contract schedule of invoice created By Rakesh Kumar(228) on 24/May/2021
+                // Get count contract schedule of invoice
                 sql.Clear();
                 sql.Append("SELECT COUNT(C_ContractSchedule_ID)+1 From C_ContractSchedule Where NVL(C_INVOICE_ID,0) > 0 AND C_Contract_ID=" + cont.GetC_Contract_ID());
                 int scheduledInvoiceCount = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
@@ -263,18 +331,22 @@ namespace ViennaAdvantageServer.Process
                 inv.SetM_PriceList_ID(cont.GetM_PriceList_ID());
                 inv.SetSalesRep_ID(cont.GetSalesRep_ID());
                 inv.SetC_Contract_ID(cont.GetC_Contract_ID());
-                // Done by rakesh kumar on 31/Mar/2021
                 // When invoice created from service contract set ServiceContract always true
                 inv.SetServiceContract(true);
-                if (!inv.Save())
+                if (!inv.Save(Get_TrxName()))
                 {
-                    //Neha----If Invoice not saved then will show the exception---11 Sep,2018
-                    ValueNamePair pp = VAdvantage.Logging.VLogger.RetrieveError();
+                    msgInvoiceNotSaved.Append(cont.GetDocumentNo());
+                    ValueNamePair pp = VLogger.RetrieveError();
                     if (pp != null)
-                        throw new ArgumentException("Cannot save Invoice. " + pp.GetName());
-                    throw new ArgumentException("Cannot save Invoice");
+                    {
+                        msg = pp.GetName();
+                        //if GetName is Empty then it will check GetValue
+                        if (string.IsNullOrEmpty(msg))
+                            msg = Msg.GetMsg("", pp.GetValue());
+                    }
+                    // save error log info file
+                    log.Info("Invoice not saved DocumentNo: " + cont.GetDocumentNo() + " - Schedule Date: " + contSchedule.GetFROMDATE().Value.ToString("dd-MMM-yyyy") + " Error: " + msg);
                 }
-
                 else
                 {
                     VAdvantage.Model.MInvoiceLine invLine = new VAdvantage.Model.MInvoiceLine(GetCtx(), 0, Get_TrxName());
@@ -284,7 +356,6 @@ namespace ViennaAdvantageServer.Process
                     invLine.SetC_Invoice_ID(inv.GetC_Invoice_ID());
                     invLine.SetC_UOM_ID(cont.GetC_UOM_ID());
                     invLine.SetM_Product_ID(cont.GetM_Product_ID());
-                    // Added by Vivek on 21/11/2017 asigned by Pradeep
                     invLine.SetM_AttributeSetInstance_ID(cont.GetM_AttributeSetInstance_ID());
                     if (Util.GetValueOfInt(cont.GetC_OrderLine_ID()) != 0)
                     {
@@ -293,82 +364,56 @@ namespace ViennaAdvantageServer.Process
                     invLine.SetC_Tax_ID(cont.GetC_Tax_ID());
                     invLine.SetQty(cont.GetQtyEntered());
                     invLine.SetQtyEntered(cont.GetQtyEntered());
-                    // invLine.SetQtyInvoiced(1);
-                    // invLine.SetPrice(price.Value);
                     invLine.SetPriceActual(cont.GetPriceEntered());
                     invLine.SetPriceEntered(cont.GetPriceEntered());
-                    //  invLine.SetPriceLimit(price);
-                    // Set PriceList By Rakesh Kumar(228) on 12/May/2021
                     invLine.SetPriceList(cont.GetPriceList());
-                    if (!invLine.Save())
+                    if (!invLine.Save(Get_TrxName()))
                     {
-                        //Neha----If Invoice Line not saved then will show the exception---11 Sep,2018
-                        ValueNamePair pp = VAdvantage.Logging.VLogger.RetrieveError();
+                        msgInvoiceNotSaved.Append(cont.GetDocumentNo());
+                        ValueNamePair pp = VLogger.RetrieveError();
                         if (pp != null)
-                            throw new ArgumentException("Cannot save Invoice Line. " + pp.GetName());
-                        throw new ArgumentException("Cannot save Invoice Line");
+                        {
+                            msg = pp.GetName();
+                            //if GetName is Empty then it will check GetValue
+                            if (string.IsNullOrEmpty(msg))
+                                msg = Msg.GetMsg("", pp.GetValue());
+                        }
+                        // save error log info file
+                        log.Info("Invoice Line not saved DocumentNo: " + cont.GetDocumentNo() + " - Schedule Date: " + contSchedule.GetFROMDATE().Value.ToString("dd-MMM-yyyy") + " Error: " + msg);
                     }
-                }
-
-                string comp = inv.CompleteIt();
-                //Neha---If Invoice Completed then Set Document Action, Document Status and Contract on Invoice Header---11 Sep,2018
-                if (comp == "CO")
-                {
-                    inv.SetDocAction("CL");
-                    inv.SetDocStatus("CO");
-                    //Neha---Set C_Contract_ID on C_invoice table using MClass object--11 Sep,2018
-                    inv.SetC_Contract_ID(cont.GetC_Contract_ID());
-                    if (!inv.Save())
+                    else
                     {
-                        //Neha----If Invoice not saved then will show the exception---11 Sep,2018
-                        ValueNamePair pp = VAdvantage.Logging.VLogger.RetrieveError();
-                        if (pp != null)
-                            throw new ArgumentException("Cannot save Invoice. " + pp.GetName());
-                        throw new ArgumentException("Cannot save Invoice");
+                        //Set InvoiceId Created against Contract Schedule
+                        sql.Clear();
+                        sql.Append("UPDATE C_ContractSchedule SET C_Invoice_ID = " + inv.GetC_Invoice_ID() + ", Processed = 'Y' WHERE C_ContractSchedule_ID = " + contSchedule.GetC_ContractSchedule_ID());
+                        Util.GetValueOfInt(DB.ExecuteQuery(sql.ToString(), null, Get_TrxName()));
+                        msgInvoiceSaved.Append(inv.GetDocumentNo() + ",");
+                        //Commit Transaction to execute workflow associated
+                        Get_TrxName().Commit();
+
+                        //Complete Invoice and Generate Invoice Payment
+                        string msg = CompleteInvoicePayment(GetCtx(), inv.GetC_Invoice_ID(), _processId, MInvoice.DOCACTION_Complete, cont.GetC_Contract_ID());
+                        if (!string.IsNullOrEmpty(msg))
+                        {
+                            log.Info("Workflow not completed: " + msg);
+                        }
+
                     }
                 }
-                else
-                {
-                    //Neha----If Invoice not completed then will show the exception---11 Sep,2018
-                    if (inv.GetProcessMsg() != null)
-                    {
-                        throw new ArgumentException("Cannot complete the Invoice. " + inv.GetProcessMsg());
-                    }
-                    throw new ArgumentException("Cannot complete the Invoice");
-                }
-
-                #region Commented Code
-                //Neha---Set C_Contract_ID on C_invoice table using MClass object--11 Sep,2018
-
-                //sql = "UPDATE c_invoice SET C_Contract_ID = " + cont.GetC_Contract_ID() + " WHERE c_invoice_id = " + inv.GetC_Invoice_ID();
-                //res = Util.GetValueOfInt(DB.ExecuteQuery(sql, null, null));
-
-                //Neha---taxAmt not used in this class----11 Sep,2018
-
-                //sql = "SELECT SUM(taxamt) FROM c_invoicetax WHERE c_invoice_id = " + inv.GetC_Invoice_ID();
-                //Decimal? taxAmt = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
-                # endregion
-                sql.Clear();
-                sql.Append("UPDATE C_ContractSchedule SET C_Invoice_ID = " + inv.GetC_Invoice_ID() + ", Processed = 'Y' WHERE C_ContractSchedule_ID = " + contSchedule.GetC_ContractSchedule_ID());
-                res = Util.GetValueOfInt(DB.ExecuteQuery(sql.ToString(), null, Get_TrxName()));
-                //Neha---Append Document No. in sb----12 Sep,2018
-                sb.Append(inv.GetDocumentNo() + ", ");
-                //_count++;
             }
         }
         /// <summary>
-        /// Created By: Rakesh Kumar
-        /// Created Date: 01/Apr/2021
+        /// Created By: Rakesh Kumar (VA228)
+        /// Created Date: 07/June/2021
         /// Purpose: Get DocType
         /// </summary>
-        private void SetDocType()
+        private int GetDocType()
         {
-            sql.Clear();
             _C_DocType_ID = 0;
+            sql.Clear();
             sql.Append("SELECT C_DocType_ID FROM C_DocType "
                       + "WHERE AD_Client_ID=" + cont.GetAD_Client_ID() + " AND IsActive='Y' AND AD_Org_ID IN(0," + cont.GetAD_Org_ID() + ") ");
-            // If Contract type not found consider as AR Invoice by default Done by Rakesh 21/May/2021 suggested by Kanika
-
+            // If Contract type not found consider as AR Invoice by default
             // When ContractType is Accounts Receivable
             if (string.IsNullOrEmpty(cont.GetContractType()) || cont.GetContractType().Equals(X_C_Contract.CONTRACTTYPE_AccountsReceivable))
             {
@@ -382,13 +427,131 @@ namespace ViennaAdvantageServer.Process
             sql.Append(" ORDER BY AD_Org_ID Desc");
             _C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
 
+            // Get DocTypeId
             // If ContractType not defined on Service Contract Window
             if (_C_DocType_ID == 0)
             {
                 // save error log info file
-                log.SaveInfo("Create Contract Invoice-", "Doc type not defind or found");
-                throw new ArgumentException(Msg.GetMsg(GetCtx(), "ContractTypeNotDefined"));
+                log.Info("Create Contract Invoice - Doc Basetype not defind or found: " + cont.GetDocumentNo());
+                msgDocTypeNotDefined.Append(cont.GetDocumentNo() + ",");
             }
+            return _C_DocType_ID;
+        }
+        /// <summary>
+        /// Created By: Rakesh Kumar (VA228)
+        /// Created Date: 07/June/2021
+        /// Check payment method for Business Partner selected on Service Contract
+        /// </summary>
+        /// <returns>true/false</returns>
+        private bool CheckPaymentMethod()
+        {
+            bool result = true;
+            // Get business partner detail
+            bp = new MBPartner(GetCtx(), cont.GetC_BPartner_ID(), Get_TrxName());
+            // JID_0872: System has To pick the Payment Method defined with the Business Partner against whom the Invoice is getting generated.
+            if (Env.IsModuleInstalled("VA009_"))
+            {
+                // When ContractType is Accounts Receivable
+                // If Contract type not found consider as AR Invoice by default Done by Rakesh 21/May/2021 suggested by Kanika
+                if (bp.GetVA009_PaymentMethod_ID() > 0 && (string.IsNullOrEmpty(cont.GetContractType()) || cont.GetContractType().Equals(X_C_Contract.CONTRACTTYPE_AccountsReceivable)))
+                {
+                    result = true;
+                }
+                else if (bp.GetVA009_PO_PaymentMethod_ID() > 0 && (cont.GetContractType().Equals(X_C_Contract.CONTRACTTYPE_AccountsPayable)))
+                {
+                    result = true;
+                }
+                else
+                {
+                    msgPaymentMethodNotDefined.Append(cont.GetDocumentNo() + "/" + bp.GetName() + ",");
+                    log.Info("Create Contract Invoice - Payment method not defind or found: " + cont.GetDocumentNo());
+                    result = false;
+                }
+            }
+            return result;
+        }
+        /// <summary>
+        /// Complete the Invoice Payment when call this function to complete the record
+        /// </summary>
+        /// <param name="ctx">Context</param>
+        /// <param name="Record_ID">C_Payment_ID</param>
+        /// <param name="Process_ID">AD_Process_ID</param>
+        /// <param name="DocAction">Documnet Action</param>
+        /// <param name="contractId">Service Contract Id</param>
+        /// <returns>return message</returns>
+        public string CompleteInvoicePayment(Ctx ctx, int Record_ID, int Process_ID, string DocAction, int contractId)
+        {
+            string result = "";
+            MRole role = MRole.Get(ctx, ctx.GetAD_Role_ID());
+            if (Util.GetValueOfBool(role.GetProcessAccess(Process_ID)))
+            {
+                sql.Clear();
+                sql.Append("UPDATE C_Invoice SET DocAction = '" + DocAction + "',C_Contract_ID=" + contractId + " WHERE C_Invoice_ID = " + Record_ID);
+                DB.ExecuteQuery(sql.ToString());
+
+                MProcess proc = new MProcess(ctx, Process_ID, null);
+                MPInstance pin = new MPInstance(proc, Record_ID);
+                if (!pin.Save())
+                {
+                    ValueNamePair vnp = VLogger.RetrieveError();
+                    string errorMsg = "";
+                    if (vnp != null)
+                    {
+                        errorMsg = vnp.GetName();
+                        if (errorMsg == "")
+                            errorMsg = vnp.GetValue();
+                    }
+                    if (errorMsg == "")
+                        result = "DocNotCompleted";
+
+                    log.Info("Document not completed:" + result);
+                    return result;
+                }
+
+                MPInstancePara para = new MPInstancePara(pin, 20);
+                para.setParameter("DocAction", DocAction);
+                if (!para.Save())
+                {
+                    //String msg = "No DocAction Parameter added"; // not translated
+                }
+                VAdvantage.ProcessEngine.ProcessInfo pi = new VAdvantage.ProcessEngine.ProcessInfo("WF", Process_ID);
+                pi.SetAD_User_ID(ctx.GetAD_User_ID());
+                pi.SetAD_Client_ID(ctx.GetAD_Client_ID());
+                pi.SetAD_PInstance_ID(pin.GetAD_PInstance_ID());
+                pi.SetRecord_ID(Record_ID);
+                pi.SetTable_ID(_tableId); //AD_Table_ID=318 for C_Invoice
+
+                ProcessCtl worker = new ProcessCtl(ctx, null, pi, null);
+                worker.Run();
+
+                if (pi.IsError())
+                {
+                    ValueNamePair vnp = VLogger.RetrieveError();
+                    string errorMsg = "";
+                    if (vnp != null)
+                    {
+                        errorMsg = vnp.GetName();
+                        if (errorMsg == "")
+                            errorMsg = vnp.GetValue();
+                    }
+
+                    if (errorMsg == "")
+                        errorMsg = pi.GetSummary();
+
+                    if (errorMsg == "")
+                        errorMsg = "DocNotCompleted";
+                    result = errorMsg;
+                    log.Info("Document not completed:" + result);
+                    return result;
+                }
+                else
+                    result = "";
+            }
+            else
+            {
+                result = "NoAccess";
+            }
+            return result;
         }
     }
 }
