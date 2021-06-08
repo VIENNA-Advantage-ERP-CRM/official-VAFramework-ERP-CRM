@@ -748,5 +748,39 @@ namespace VIS.Helpers
             }
             return isValid;
         }
+
+        /// <summary>
+        /// function to check token details based on the token passed in the parameter
+        /// </summary>
+        /// <param name="TokenNum"></param>
+        /// <returns>Dictionary of values like Success, User Value and password</returns>
+        public static Dictionary<string, object> GetTokenDetails(string TokenNum)
+        {
+            Dictionary<string, object> retRes = new Dictionary<string, object>();
+            retRes.Add("Success", false);
+            
+            SqlParameter[] param = new SqlParameter[1];
+            param[0] = new SqlParameter("@p1", TokenNum);
+            DataSet ds = DB.ExecuteDataset("SELECT AuthTokenExpireTime, Value, Password, IsAuthTokenOneTime, AD_User_ID FROM AD_User WHERE IsActive = 'Y' AND AuthToken = @p1", param);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                DateTime? expTime = Util.GetValueOfDateTime(ds.Tables[0].Rows[0]["AuthTokenExpireTime"]);
+                DateTime? curTime = System.DateTime.Now.ToUniversalTime();
+                if (curTime <= expTime)
+                {
+                    if (Util.GetValueOfString(ds.Tables[0].Rows[0]["IsAuthTokenOneTime"]).Equals("Y"))
+                    {
+                        int count = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE AD_User SET AuthTokenExpireTime = " + GlobalVariable.TO_DATE(System.DateTime.Now, false) + @" 
+                        WHERE AD_User_ID = " + Util.GetValueOfInt(ds.Tables[0].Rows[0]["AD_User_ID"])));
+                    }
+                    retRes.Add("User", ds.Tables[0].Rows[0]["Value"]);
+                    retRes.Add("Password", ds.Tables[0].Rows[0]["Password"].ToString());
+                    retRes["Success"] = true;
+                    return retRes;
+                }
+            }
+
+            return retRes;
+        }
     }
 }
