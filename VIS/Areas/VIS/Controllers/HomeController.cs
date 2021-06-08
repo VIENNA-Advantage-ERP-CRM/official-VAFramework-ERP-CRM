@@ -344,8 +344,28 @@ namespace VIS.Controllers
                 {
                     try
                     {
-                        TempData["user"] = SecureEngine.Decrypt(Request.QueryString["U"]); //get uservalue
-                        TempData["pwd"] = SecureEngine.Decrypt(Request.QueryString["P"]);//get userpwd
+                        // VIS0008
+                        // Changes done to handle TOKEN in querystring
+                        string TokenKey = "";
+                        foreach (string key in Request.QueryString.AllKeys)
+                        {
+                            if (key.ToLower() == "token")
+                                TokenKey = Request.QueryString[key];
+                        }
+                        if (TokenKey != "")
+                        {
+                            Dictionary<string, object> tokDetails = LoginHelper.GetTokenDetails(TokenKey);
+                            if (Util.GetValueOfBool(tokDetails["Success"]))
+                            {
+                                TempData["user"] = tokDetails["User"]; //get uservalue
+                                TempData["pwd"] = SecureEngine.Decrypt(tokDetails["Password"]);//get userpwd
+                            }
+                        }
+                        else
+                        {
+                            TempData["user"] = SecureEngine.Decrypt(Request.QueryString["U"]); //get uservalue
+                            TempData["pwd"] = SecureEngine.Decrypt(Request.QueryString["P"]);//get userpwd
+                        }
                     }
                     catch
                     {
