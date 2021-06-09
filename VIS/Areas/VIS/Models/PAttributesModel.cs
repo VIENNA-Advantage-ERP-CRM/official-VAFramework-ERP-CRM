@@ -19,6 +19,8 @@ namespace VIS.Models
         public string tableStucture = "";
         public string ControlList { get; set; }
         public int MAttributeSetID { get; set; }
+        public bool IsCanCreate { get; set; }
+        public bool IsCanEdit { get; set; }
     }
 
     public class AttributeInstance
@@ -87,6 +89,10 @@ namespace VIS.Models
                 attributes = aset.GetMAttributes(true);
             }
 
+            // Check the User Role for Edit or Create access.
+            obj.IsCanCreate = MRole.GetDefault(ctx).IsCanCreateAttribute();
+            obj.IsCanEdit = MRole.GetDefault(ctx).IsCanEditAttribute();
+
             //Row 0
             obj.tableStucture = "<table class='vis-formouterwrpdiv' style='width: 100%;'><tr>";
             if (_productWindow)
@@ -116,7 +122,7 @@ namespace VIS.Models
 
                 obj.tableStucture += "<td>";
                 obj.tableStucture += "<div style='display: flex'>";
-                obj.tableStucture += "<div class='input-group vis-input-wrap' style='width: 50%; float: left;'>";
+                obj.tableStucture += "<div id=cmdNew_" + windowNo + " class='input-group vis-input-wrap' style='width: 50%; float: left;'>";
                 obj.tableStucture += "<div class='vis-control-wrap'>";
                 obj.tableStucture += "<label class='vis-ec-col-lblchkbox'><input type='checkbox' style='float:left;' id=chkNewEdit_" + windowNo
                     + ">" + newEditContent + "</label></div></div>";
@@ -671,8 +677,8 @@ namespace VIS.Models
             log.Fine(attribute + ", Product=" + product + ", R/O=" + readOnly);
             //Column 1
             obj.tableStucture += "<td>";
-                obj.tableStucture += "<div class='input-group vis-input-wrap'>";
-                obj.tableStucture += "<div class='vis-control-wrap'>";
+            obj.tableStucture += "<div class='input-group vis-input-wrap'>";
+            obj.tableStucture += "<div class='vis-control-wrap'>";
 
             string lbl = "";
 
@@ -927,7 +933,7 @@ namespace VIS.Models
                     qryAttr = new StringBuilder();
                     if (hasValue)
                     {
-                        qryAttr.Append(@"SELECT Count(M_AttributeSetInstance_ID) FROM M_AttributeSetInstance WHERE AD_Client_ID = " + ctx.GetAD_Client_ID() +  " AND Value = '" + strAttrCode + "'");
+                        qryAttr.Append(@"SELECT Count(M_AttributeSetInstance_ID) FROM M_AttributeSetInstance WHERE AD_Client_ID = " + ctx.GetAD_Client_ID() + " AND Value = '" + strAttrCode + "'");
                         prdAttributes = Util.GetValueOfInt(DB.ExecuteScalar(qryAttr.ToString()));
                         if (prdAttributes != 0)
                         {
@@ -939,7 +945,7 @@ namespace VIS.Models
                     else
                     {
                         qryAttr.Append(@"SELECT Count(M_Product_ID) FROM M_Product prd LEFT JOIN M_ProductAttributes patr on (prd.M_Product_ID=patr.M_Product_ID) " +
-                        " LEFT JOIN M_Manufacturer muf on (prd.M_Product_ID=muf.M_Product_ID) WHERE prd.AD_Client_ID = " + ctx.GetAD_Client_ID() 
+                        " LEFT JOIN M_Manufacturer muf on (prd.M_Product_ID=muf.M_Product_ID) WHERE prd.AD_Client_ID = " + ctx.GetAD_Client_ID()
                         + " AND (patr.UPC = '" + strAttrCode + "' OR prd.UPC = '" + strAttrCode + "' OR muf.UPC = '" + strAttrCode + "')");
                         prdAttributes = Util.GetValueOfInt(DB.ExecuteScalar(qryAttr.ToString()));
                         if (prdAttributes != 0)
@@ -1139,7 +1145,7 @@ namespace VIS.Models
                     //    sql.Insert(0, " WHERE ");
                     //}
 
-                    sql.Insert(0, " AND ");                    
+                    sql.Insert(0, " AND ");
                 }
 
                 sql.Append(" ORDER BY ats.M_AttributeSetInstance_ID");
