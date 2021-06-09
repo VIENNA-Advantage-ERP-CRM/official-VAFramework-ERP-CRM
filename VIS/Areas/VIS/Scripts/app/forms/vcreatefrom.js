@@ -2815,6 +2815,55 @@
                         }
                     });
                 }
+            },
+            //Implemented for BankStatement window (when click on Create Line From button),
+            //change the Converted Amt according to when change the AcctDate on the grid -added by Koteswararao
+            onChange: function (event) {    
+                window.setTimeout(function () {
+                    if ($self.dGrid.getChanges(event.recid) != undefined) {
+                        if (event.column == 0 && $self.dGrid.columns[event.column].field == "Date") {
+                            //AD_Org_ID getting from the window.
+                            var _orgId = VIS.context.getContextAsInt($self.windowNo, "AD_Org_ID");
+                            //Actual Amount
+                            var _amount = $self.dGrid.records[event.index].Amount;
+                            //BankStatement C_Currency_ID
+                            var _currency_Id = $self.dGrid.records[event.index].C_Currency_ID_K;
+                            var _convsionId = $self.dGrid.records[event.index].C_ConversionType_ID;
+                            //Account Date
+                            var _date = $self.dGrid.records[event.index].Date;
+                            //_type differentiate weather it is Payment or Cash Journal Line
+                            var _type = $self.dGrid.records[event.index].Type;
+                            var _payment_Id = $self.dGrid.records[event.index].C_Payment_ID_K;
+
+                            $.ajax({
+                                url: VIS.Application.contextUrl + "VCreateFrom/GetConvertedAmount",
+                                dataType: "json",
+                                type: "POST",
+                                data: {
+                                    _paymentId: _payment_Id, amount: _amount, currencyId: _currency_Id, convsion_Id: _convsionId, date: _date, paymentType: _type, _org_id: _orgId
+                                },
+                                error: function () {
+                                    //if through error it will return below message.
+                                    VIS.ADialog.info("ErrorWhileGettingData", null, "", "");
+                                    self.$super.setBusy(false);
+                                    return;
+                                },
+                                success: function (_list) {
+                                    _list = JSON.parse(_list);
+                                    if (VIS.Utility.Util.getValueOfString(_list._message) == "Success") {
+                                        _convertedAmt = VIS.Utility.Util.getValueOfDecimal(_list.convtAmt);
+                                        $self.dGrid.records[event.index].changes.ConvertedAmount = _convertedAmt;
+                                        $self.dGrid.records[event.index]["ConvertedAmount"] = _convertedAmt;
+                                        $self.dGrid.refreshRow(event.index + 1);//refresh a row of the grid
+                                    }
+                                    else {
+                                        VIS.ADialog.info(_list._message, null, "", "");
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }, 100);
             }
         });
         this.dGrid.selectNone();
@@ -2908,9 +2957,20 @@
             }
             // JID_1743: Need to make the Account date as editable on Create lines from Bank Statement.
             else if ($self.dGrid.columns[e.column].field == "Date") {
-                $self.dGrid.records[e.index]["Date"] = e.value_new;
+                //handled Invalid Date when user click on Account Date and not 
+                //selected Date just Double clicked and exist form that edit field - Added by Koteswararao
+                if (e.value_new != "") {
+                    $self.dGrid.records[e.index]["Date"] = e.value_new;
+                }
+                else if (e.value_previous != "") {
+                    $self.dGrid.records[e.index]["Date"] = e.value_previous;
+                }
+                else if (e.value_original != "") {
+                    $self.dGrid.records[e.index]["Date"] = e.value_original;
+                }
                 if ($self.dGrid.records[e.index]["Date"] != "") {
-                    AddEditedLine("Date", e.index, e.value_new);
+                    //AddEditedLine("Date", e.index, e.value_new);
+                    AddEditedLine("Date", e.index, $self.dGrid.records[e.index]["Date"]);
                 }
             }
         });
@@ -2940,7 +3000,17 @@
                 $self.editedItems.push($self.dGrid.records[index]);
             }
             else {
-                $self.editedItems.push($self.dGrid.records[index]);
+                //can't add duplicate records in editedItems, so that implemented below flag condition
+                var flag = 0;
+                for (var i = 0; i < $self.editedItems.length; i++) {
+                    if ($self.editedItems[i].recid == $self.dGrid.records[index].recid) {
+                        flag = 1;
+                        break;
+                    }
+                }
+                if (flag == 0) {
+                    $self.editedItems.push($self.dGrid.records[index]);
+                }
             }
         };
 

@@ -84,8 +84,10 @@ namespace VIS.Controllers
         /// <summary>
         /// save/create lines from BankStatement form
         /// </summary>
-        /// <param name="pref"></param>
-        /// <returns></returns>
+        /// <param name="model"></param>
+        /// <param name="selectedItems"></param>
+        /// <param name="C_BankStatement_ID"></param>
+        /// <returns>return bool value in the form of JSON</returns>
         public JsonResult SaveStatment(List<Dictionary<string, string>> model, string selectedItems, string C_BankStatement_ID)
         {
             var value = false;
@@ -976,6 +978,8 @@ namespace VIS.Controllers
                     // Change By Mohit To show trx no on create line from on bank statement
                     item.AuthCode = Util.GetValueOfString(data.Tables[0].Rows[i]["TrxNo"]);
                     item.CheckNo = Util.GetValueOfString(data.Tables[0].Rows[i]["CheckNo"]);
+                    // Get the C_ConversionType_ID
+                    item.C_ConversionType_ID = Util.GetValueOfInt(data.Tables[0].Rows[i]["C_ConversionType_ID"]);
                     dyndata.Add(item);
                 }
                 _iData.data = dyndata;
@@ -1851,7 +1855,7 @@ namespace VIS.Controllers
                         invoiceLine.Set_Value("VA077_UserRef_ID", orderLine.Get_Value("VA077_UserRef_ID"));
                         invoiceLine.Set_Value("VA077_StartDate", orderLine.Get_Value("VA077_StartDate"));
                         invoiceLine.Set_Value("VA077_EndDate", orderLine.Get_Value("VA077_EndDate"));
-                        
+                        invoiceLine.Set_Value("VA077_ServiceContract_ID", orderLine.Get_Value("VA077_ServiceContract_ID"));
                     }
 
 
@@ -1957,7 +1961,9 @@ namespace VIS.Controllers
                             invoiceLine.Set_Value("VA077_SerialNo", inoutLine.Get_Value("VA077_SerialNo"));
                             invoiceLine.Set_Value("VA077_UpdateFromVersn", inoutLine.Get_Value("VA077_UpdateFromVersn"));
                             invoiceLine.Set_Value("VA077_UserRef_ID", inoutLine.Get_Value("VA077_UserRef_ID"));
-
+                            invoiceLine.Set_Value("VA077_StartDate", inoutLine.Get_Value("VA077_StartDate"));
+                            invoiceLine.Set_Value("VA077_EndDate", inoutLine.Get_Value("VA077_EndDate"));
+                            invoiceLine.Set_Value("VA077_ServiceContract_ID", inoutLine.Get_Value("VA077_ServiceContract_ID"));
                         }
 
 
@@ -2071,9 +2077,19 @@ namespace VIS.Controllers
             return true;
         }
 
+        /// <summary>
+        /// Create the BankStatement Line from the header
+        /// </summary>
+        /// <param name="ctx">Context</param>
+        /// <param name="model">List of details</param>
+        /// <param name="selectedItems"></param>
+        /// <param name="C_BankStatement_ID">C_BankStatement_ID</param>
+        /// <returns>true of false which indicated true if success</returns>
         public bool SaveStatmentData(Ctx ctx, List<Dictionary<string, string>> model, string selectedItems, int C_BankStatement_ID)
         {
             MBankStatement bs = new MBankStatement(ctx, C_BankStatement_ID, null);
+
+            int _bpartner_Id = 0;
             //  Lines
             for (int i = 0; i < model.Count; i++)
             {
@@ -2081,33 +2097,54 @@ namespace VIS.Controllers
                 int C_Payment_ID = Convert.ToInt32(model[i]["C_Payment_ID_K"]);   //  2-C_Payment_ID
                 //int C_Currency_ID = Convert.ToInt32(model[i]["C_Currency_ID_K"]); //  3-Currency
                 //Decimal TrxAmt = Convert.ToDecimal(model[i]["Amount"]);           //  4-PayAmt
-                int C_Currency_ID = Convert.ToInt32(model[i]["C_Currency_ID_K"]); //  3-Currency
+                int C_Currency_ID = Convert.ToInt32(model[i]["C_Currency_ID_K"]); //  3-Currency                
                 Decimal TrxAmt = Convert.ToDecimal(model[i]["ConvertedAmount"]);           //  4-PayAmt
                 string type = Util.GetValueOfString(model[i]["Type"]);
                 MBankStatementLine bsl = new MBankStatementLine(bs);
                 bsl.SetStatementLineDate(trxDate);
                 //bsl.SetPayment(new MPayment(ctx, C_Payment_ID, null));
-                MPayment pmt = new MPayment(ctx, C_Payment_ID, null);
+                //MPayment pmt = new MPayment(ctx, C_Payment_ID, null);
                 if (type == "P")
                 {
                     bsl.SetC_Payment_ID(C_Payment_ID);
+                    //Get C_BPartner_ID
+                    _bpartner_Id = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_BPartner_ID FROM C_Payment WHERE IsActive='Y' AND C_Payment_ID=" + C_Payment_ID, null, null));
                 }
                 else
                 {
                     bsl.SetC_CashLine_ID(C_Payment_ID);
+                    //Get C_BPartner_ID
+                    _bpartner_Id = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_BPartner_ID FROM C_CashLine WHERE IsActive='Y' AND C_CashLine_ID=" + C_Payment_ID, null, null));
                 }
+
+                //set C_BPartner_ID
+                bsl.SetC_BPartner_ID(_bpartner_Id);
                 bsl.SetC_Currency_ID(C_Currency_ID);
                 bsl.SetTrxAmt(TrxAmt);
                 bsl.SetStmtAmt(TrxAmt);
-                bsl.SetDescription(pmt.GetDescription());
+                //set Description
+                bsl.SetDescription(Util.GetValueOfString(model[i]["Description"]));
                 bsl.Set_Value("TrxNo", Util.GetValueOfString(model[i]["AuthCode"]).Trim());
                 int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM AD_ModuleInfo WHERE Prefix='VA034_' AND IsActive='Y'"));
                 if (count > 0)
                     bsl.SetVA012_VoucherNo(Util.GetValueOfString(model[i]["VA034_DepositSlipNo"]));
 
+                //Set C_ConversionType_ID on Bank Statement Line
+                bsl.Set_Value("C_ConversionType_ID", Util.GetValueOfInt(model[i]["C_ConversionType_ID"]));
                 if (!bsl.Save())
                 {
                     //s_log.log(Level.SEVERE, "Line not created #" + i);
+                    //Used ValueNamePair to get Error
+                    ValueNamePair pp = VLogger.RetrieveError();
+                    //some times getting the error pp also
+                    string error = pp != null ? pp.ToString() == null ? pp.GetValue() : pp.ToString() : "";
+                    if (string.IsNullOrEmpty(error))
+                    {
+                        error = pp != null ? pp.GetName() : "";
+                    }
+                    ErrorMsg= !string.IsNullOrEmpty(error) ? error : "VIS.BankStatementLineNotCreated";
+                    Logger.global.Info(ErrorMsg);
+                    return false;
                 }
             }   //  for all rows
             return true;
@@ -2168,6 +2205,7 @@ namespace VIS.Controllers
             public string VA034_DepositSlipNo { get; set; }
             public string AuthCode { get; set; }
             public string CheckNo { get; set; }
+            public int C_ConversionType_ID { get; set; }
         }
         public class DataObject
         {

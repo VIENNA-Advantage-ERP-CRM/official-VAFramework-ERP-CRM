@@ -371,10 +371,9 @@
                 oColumn.render = function (record, index, colIndex) {
                     var f = oColumns[colIndex].field;
                     var val = record[f];
-
-                    if (!val)
-                        return;
-
+                    if (!val) {
+                        val = 0; // show zero if null
+                    }
                     //if (record.changes && typeof record.changes[f] != 'undefined') val = record.changes[f];
                     val = parseFloat(val).toLocaleString(undefined, {
                         'minimumFractionDigits': oColumns[colIndex].customFormat.getMinFractionDigit(),

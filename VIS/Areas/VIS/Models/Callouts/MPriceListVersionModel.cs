@@ -158,7 +158,7 @@ namespace VIS.Models
         public int GetM_PriceList_Version_ID(Ctx ctx, string priceListId, string transactionId, string productId, string uomId, string attrSetInstId)
         {
             int priceListVersionId = 0;
-            const int UOM_EACH = 100;
+            int UOM_EACH = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_UOM_ID FROM M_Product WHERE M_Product_ID = " + productId));
 
             try
             {

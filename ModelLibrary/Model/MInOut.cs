@@ -1008,6 +1008,14 @@ namespace VAdvantage.Model
                     line.SetM_ProductContainer_ID(fromLine.GetM_ProductContainer_ID());
                 }
                 line.SetProcessed(false);
+
+                // VA077 specific 
+                if (Env.IsModuleInstalled("VA077_"))
+                {
+                    // Handle the case of reverse, set margin amt negative
+                    line.Set_Value("VA077_MarginAmt", decimal.Negate(Util.GetValueOfDecimal(line.Get_Value("VA077_MarginAmt"))));
+                }
+
                 if (line.Save(Get_TrxName()))
                     count++;
                 //	Cross Link
@@ -5182,6 +5190,12 @@ namespace VAdvantage.Model
                     {
                         line.SetQty(Env.ZERO);
                         line.AddDescription("Void (" + old + ")");
+                        if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
+                        {
+                            line.Set_Value("VA077_MarginAmt", Env.ZERO);
+                            line.Set_Value("VA077_MarginPercent", Env.ZERO);
+                        }
+
                         line.Save(Get_TrxName());
                         //if (countVA038 > 0)
                         //{

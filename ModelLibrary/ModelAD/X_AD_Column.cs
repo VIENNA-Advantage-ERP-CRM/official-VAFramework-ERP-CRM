@@ -262,10 +262,10 @@ SetVersion (0.0);
 @param Callout External Callout Code - Fully qualified class names and method - separated by semicolons */
         public void SetCallout(String Callout)
         {
-            if (Callout != null && Callout.Length > 255)
+            if (Callout != null && Callout.Length > 1000)
             {
-                log.Warning("Length > 255 - truncated");
-                Callout = Callout.Substring(0, 255);
+                log.Warning("Length > 1000 - truncated");
+                Callout = Callout.Substring(0, 1000);
             }
             Set_Value("Callout", Callout);
         }

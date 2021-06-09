@@ -1022,7 +1022,7 @@ namespace VAdvantage.Model
             // JID_0899: If user do not select Product or Charge on Ship/Receipt Line, it will displayed the message "Please select the Product or charge
             if (GetC_Charge_ID() == 0 && GetM_Product_ID() == 0)
             {
-                log.SaveError("VIS_NOProductOrCharge","");
+                log.SaveError("VIS_NOProductOrCharge", "");
                 return false;
             }
             //	Get Line No
@@ -1230,7 +1230,7 @@ namespace VAdvantage.Model
                     }
                 }
             }
-            
+
             //	Order Line
             if (GetC_OrderLine_ID() == 0)
             {
@@ -1351,7 +1351,7 @@ namespace VAdvantage.Model
                         }
                     }
                 }
-            }
+            }            
 
             return true;
         }
@@ -1427,27 +1427,43 @@ namespace VAdvantage.Model
                     HCDate = Util.GetValueOfDateTime(contDS.Tables[0].Rows[0]["VA077_HistoricContractDate"]);
                     StartDate = Util.GetValueOfDateTime(contDS.Tables[0].Rows[0]["VA077_ContractCPStartDate"]);
                     EndDate = Util.GetValueOfDateTime(contDS.Tables[0].Rows[0]["VA077_ContractCPEndDate"]);
-                    AnnualValue = Util.GetValueOfDecimal(contDS.Tables[0].Rows[0]["VA077_AnnualValue"]);
+                    if (GetQtyEntered() > 0) // In the case of void qty will be zero, so set annual value only if qty is greater than zero
+                        AnnualValue = Util.GetValueOfDecimal(contDS.Tables[0].Rows[0]["VA077_AnnualValue"]);
+                    else if (GetQtyEntered() < 0)  // handle the reverse functionality case, make amt negative
+                        AnnualValue = Util.GetValueOfDecimal(contDS.Tables[0].Rows[0]["VA077_AnnualValue"]) * -1;
 
                     qry.Clear();
-                    qry.Append(@"UPDATE M_InOut  p SET VA077_TotalMarginAmt=(SELECT COALESCE(SUM(ol.VA077_MarginAmt),0) FROM M_InOutLine pl INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID) 
+                    qry.Append(@"UPDATE M_InOut  p SET VA077_TotalMarginAmt=(SELECT COALESCE(SUM(pl.VA077_MarginAmt),0) FROM M_InOutLine pl INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID) 
                             WHERE pl.IsActive = 'Y' AND pl.M_InOut_ID = " + GetM_InOut_ID() + @"),
                             VA077_TotalPurchaseAmt=(SELECT ROUND(COALESCE(SUM(
                                                                               CASE WHEN ol.VA077_Duration is null THEN  
-                                                                              ol.VA077_PurchasePrice * ol.QtyEntered  
+                                                                              ol.VA077_PurchasePrice * pl.QtyEntered  
                                                                               WHEN ol.VA077_Duration > 0 THEN  
-                                                                              ol.VA077_PurchasePrice * ol.QtyEntered * ol.VA077_Duration / 12  
+                                                                              ol.VA077_PurchasePrice * pl.QtyEntered * ol.VA077_Duration / 12  
                                                                               END), 0), 2) FROM M_InOutLine pl INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID)  
                             WHERE pl.IsActive = 'Y' AND pl.M_InOut_ID = " + GetM_InOut_ID() + @"),
-                            VA077_MarginPercent=(SELECT CASE WHEN Sum(ol.LineNetAmt) > 0 Then 
-                                                 ROUND(COALESCE(((Sum(ol.LineNetAmt) - Sum(
+                            VA077_MarginPercent=(SELECT CASE WHEN Sum(ol.LineNetAmt) <> 0 AND Sum(pl.QtyEntered) <> 0 Then 
+                                                 ROUND(COALESCE((((CASE WHEN Sum(pl.QtyEntered) > 0 Then 
+                                                                    COALESCE(SUM(ol.LineNetAmt),0) 
+                                                                    WHEN Sum(pl.QtyEntered) < 0 Then 
+                                                                    COALESCE(SUM(ol.LineNetAmt * -1),0) 
+                                                                    ELSE 0  END) - Sum(
                                                                 CASE WHEN ol.VA077_Duration is null THEN
-                                                                    COALESCE(ol.VA077_PurchasePrice, 0) * ol.QtyEntered
+                                                                    COALESCE(ol.VA077_PurchasePrice, 0) * pl.QtyEntered
                                                                     WHEN ol.VA077_Duration > 0 THEN
-                                                                    COALESCE(ol.VA077_PurchasePrice, 0) * ol.QtyEntered * ol.VA077_Duration/12 
-                                                                END)) / Sum(ol.LineNetAmt) * 100), 0), 2) ELSE 0  END  
+                                                                    COALESCE(ol.VA077_PurchasePrice, 0) * pl.QtyEntered * ol.VA077_Duration/12 
+                                                                END)) / (CASE WHEN Sum(pl.QtyEntered) > 0 Then 
+                                                                    COALESCE(SUM(ol.LineNetAmt),0) 
+                                                                    WHEN Sum(pl.QtyEntered) < 0 Then 
+                                                                    COALESCE(SUM(ol.LineNetAmt * -1),0) 
+                                                                    ELSE 0  END) * 100), 0), 2) ELSE 0  END  
                             FROM M_InOutLine pl INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID) WHERE pl.IsActive = 'Y' AND pl.M_InOut_ID = " + GetM_InOut_ID() + @"),
-                            VA077_TotalSalesAmt=(SELECT COALESCE(SUM(ol.LineNetAmt),0) FROM M_InOutLine pl  INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID)
+                            VA077_TotalSalesAmt=(SELECT CASE WHEN Sum(pl.QtyEntered) > 0 Then 
+                                                                    COALESCE(SUM(ol.LineNetAmt),0) 
+                                                                    WHEN Sum(pl.QtyEntered) < 0 Then 
+                                                                    COALESCE(SUM(ol.LineNetAmt * -1),0) 
+                                                                    ELSE 0  END FROM M_InOutLine pl  INNER JOIN C_OrderLine ol 
+                                                ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID)
                             WHERE pl.IsActive = 'Y' AND pl.M_InOut_ID = " + GetM_InOut_ID() + @")");
                     if (contDS.Tables[0].Rows[0]["VA077_HistoricContractDate"] != null)
                     {
@@ -1461,15 +1477,20 @@ namespace VAdvantage.Model
                     {
                         qry.Append(",VA077_ContractCPEndDate= " + GlobalVariable.TO_DATE(EndDate, true) + @"");
                     }
-                   
+
                     qry.Append(",VA077_OldAnnualContractTotal= " + AnnualValue + @",   
                                      VA077_ChangeStartDate = (SELECT MIN(ol.VA077_StartDate) FROM M_InOutLine pl INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID) 
                                      WHERE pl.IsActive = 'Y' AND pl.M_InOut_ID = " + GetM_InOut_ID() + @"),
-                                     VA077_PartialAmtCatchUp =(SELECT COALESCE(SUM(ol.LineNetAmt),0) FROM M_InOutLine pl INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID)
+                                     VA077_PartialAmtCatchUp =(SELECT CASE WHEN Sum(pl.QtyEntered) > 0 Then 
+                                                                    COALESCE(SUM(ol.LineNetAmt),0) 
+                                                                    WHEN Sum(pl.QtyEntered) < 0 Then 
+                                                                    COALESCE(SUM(ol.LineNetAmt * -1),0) 
+                                                                    ELSE 0  END FROM M_InOutLine pl INNER JOIN C_OrderLine ol 
+                                                               ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID)
                                      WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.M_InOut_ID = " + GetM_InOut_ID() + @"),
-                                     VA077_AdditionalAnnualCharge =(SELECT ROUND(COALESCE(SUM(ol.PriceEntered * ol.QtyEntered),0),2) FROM M_InOutLine pl INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID)
+                                     VA077_AdditionalAnnualCharge =(SELECT ROUND(COALESCE(SUM(ol.PriceEntered * pl.QtyEntered),0),2) FROM M_InOutLine pl INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID)
                                      WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.M_InOut_ID = " + GetM_InOut_ID() + @"),
-                                     VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + ROUND(COALESCE(SUM(ol.PriceEntered * ol.QtyEntered),0),2) FROM M_InOutLine pl INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID) 
+                                     VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + ROUND(COALESCE(SUM(ol.PriceEntered * pl.QtyEntered),0),2) FROM M_InOutLine pl INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID) 
                                      WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.M_InOut_ID = " + GetM_InOut_ID() + @"),
                                      VA077_OrderRef = (SELECT VA077_OrderRef FROM C_Order WHERE C_Order_Id = (SELECT C_Order_Id FROM M_InOut WHERE M_InOut_ID=" + GetM_InOut_ID() + @")) 
                                      WHERE p.M_InOut_ID=" + GetM_InOut_ID() + "");
@@ -1477,37 +1498,57 @@ namespace VAdvantage.Model
                 else
                 {
                     qry.Clear();
-                    qry.Append(@"UPDATE M_InOut  p SET VA077_TotalMarginAmt=(SELECT COALESCE(SUM(ol.VA077_MarginAmt),0) FROM M_InOutLine pl INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID)
+                    qry.Append(@"UPDATE M_InOut  p SET VA077_TotalMarginAmt=(SELECT COALESCE(SUM(pl.VA077_MarginAmt),0) FROM M_InOutLine pl INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID)
                             WHERE pl.IsActive = 'Y' AND pl.M_InOut_ID = " + GetM_InOut_ID() + @"),
                             VA077_TotalPurchaseAmt=(SELECT ROUND(COALESCE(SUM(
                                                                               CASE WHEN ol.VA077_Duration is null THEN  
-                                                                              ol.VA077_PurchasePrice * ol.QtyEntered  
+                                                                              ol.VA077_PurchasePrice * pl.QtyEntered  
                                                                               WHEN ol.VA077_Duration > 0 THEN  
-                                                                              ol.VA077_PurchasePrice * ol.QtyEntered * ol.VA077_Duration / 12  
+                                                                              ol.VA077_PurchasePrice * pl.QtyEntered * ol.VA077_Duration / 12  
                                                                               END), 0), 2) FROM M_InOutLine pl INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID) 
                             WHERE pl.IsActive = 'Y' AND pl.M_InOut_ID = " + GetM_InOut_ID() + @"),
-                            VA077_MarginPercent=(SELECT CASE WHEN Sum(ol.LineNetAmt) > 0 Then 
-                                                 ROUND(COALESCE(((Sum(ol.LineNetAmt) - Sum(
+                            VA077_MarginPercent=(SELECT CASE WHEN Sum(ol.LineNetAmt) <> 0 AND Sum(pl.QtyEntered) <> 0 Then 
+                                                 ROUND(COALESCE((((CASE WHEN Sum(pl.QtyEntered) > 0 Then 
+                                                                    COALESCE(SUM(ol.LineNetAmt),0) 
+                                                                    WHEN Sum(pl.QtyEntered) < 0 Then 
+                                                                    COALESCE(SUM(ol.LineNetAmt * -1),0) 
+                                                                    ELSE 0  END) - Sum(
                                                                 CASE WHEN ol.VA077_Duration is null THEN
-                                                                    COALESCE(ol.VA077_PurchasePrice, 0) * ol.QtyEntered
+                                                                    COALESCE(ol.VA077_PurchasePrice, 0) * pl.QtyEntered
                                                                     WHEN ol.VA077_Duration > 0 THEN
-                                                                    COALESCE(ol.VA077_PurchasePrice, 0) * ol.QtyEntered * ol.VA077_Duration/12 
-                                                                END)) / Sum(ol.LineNetAmt) * 100), 0), 2) ELSE 0  END  
+                                                                    COALESCE(ol.VA077_PurchasePrice, 0) * pl.QtyEntered * ol.VA077_Duration/12 
+                                                                END)) / ((CASE WHEN Sum(pl.QtyEntered) > 0 Then 
+                                                                            COALESCE(SUM(ol.LineNetAmt),0) 
+                                                                            WHEN Sum(pl.QtyEntered) < 0 Then 
+                                                                            COALESCE(SUM(ol.LineNetAmt * -1),0) 
+                                                                            ELSE 0  END)) * 100), 0), 2) ELSE 0  END  
                             FROM M_InOutLine pl INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID) WHERE pl.IsActive = 'Y' AND pl.M_InOut_ID = " + GetM_InOut_ID() + @"),
-                            VA077_TotalSalesAmt=(SELECT COALESCE(SUM(ol.LineNetAmt),0) FROM M_InOutLine pl INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID) 
+                            VA077_TotalSalesAmt=(SELECT CASE WHEN Sum(pl.QtyEntered) > 0 Then 
+                                                                    COALESCE(SUM(ol.LineNetAmt),0) 
+                                                                    WHEN Sum(pl.QtyEntered) < 0 Then 
+                                                                    COALESCE(SUM(ol.LineNetAmt * -1),0) 
+                                                                    ELSE 0  END
+                                                FROM M_InOutLine pl INNER JOIN C_OrderLine ol 
+                                                ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID) 
                             WHERE pl.IsActive = 'Y' AND pl.M_InOut_ID = " + GetM_InOut_ID() + @"),
                             VA077_ChangeStartDate = (SELECT MIN(ol.VA077_StartDate) FROM M_InOutLine pl INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID) 
                             WHERE pl.IsActive = 'Y' AND pl.M_InOut_ID = " + GetM_InOut_ID() + @"),
-                            VA077_PartialAmtCatchUp =(SELECT COALESCE(SUM(ol.LineNetAmt),0) FROM M_InOutLine pl INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID) 
+                            VA077_PartialAmtCatchUp =(SELECT CASE WHEN Sum(pl.QtyEntered) > 0 Then 
+                                                                    COALESCE(SUM(ol.LineNetAmt),0) 
+                                                                    WHEN Sum(pl.QtyEntered) < 0 Then 
+                                                                    COALESCE(SUM(ol.LineNetAmt * -1),0) 
+                                                                    ELSE 0  END 
+                                                     FROM M_InOutLine pl INNER JOIN C_OrderLine ol 
+                                                     ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID) 
                             WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.M_InOut_ID = " + GetM_InOut_ID() + @"),
-                            VA077_AdditionalAnnualCharge =(SELECT ROUND(COALESCE(SUM(ol.PriceEntered * ol.QtyEntered),0),2) FROM M_InOutLine pl 
+                            VA077_AdditionalAnnualCharge =(SELECT ROUND(COALESCE(SUM(ol.PriceEntered * pl.QtyEntered),0),2) FROM M_InOutLine pl 
                             INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID)
                             WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.M_InOut_ID = " + GetM_InOut_ID() + @"),
-                            VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + ROUND(COALESCE(SUM(ol.PriceEntered * ol.QtyEntered),0),2) FROM M_InOutLine pl INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID) 
+                            VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + ROUND(COALESCE(SUM(ol.PriceEntered * pl.QtyEntered),0),2) FROM M_InOutLine pl INNER JOIN C_OrderLine ol ON (pl.C_OrderLine_ID = ol.C_OrderLine_ID) 
                             WHERE pl.IsActive = 'Y' AND ol.VA077_ContractProduct='Y' AND pl.M_InOut_ID = " + GetM_InOut_ID() + @"),
                             VA077_OrderRef = (SELECT VA077_OrderRef FROM C_Order WHERE C_Order_Id = (SELECT C_Order_Id FROM M_InOut 
                             WHERE M_InOut_ID=" + GetM_InOut_ID() + @"))");
-                   
+
                     qry.Append(" WHERE p.M_InOut_ID=" + GetM_InOut_ID() + "");
                 }
 

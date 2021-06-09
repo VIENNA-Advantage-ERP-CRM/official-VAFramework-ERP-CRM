@@ -192,7 +192,7 @@ and ai.record_id = " + _Record_ID;
 
                 if (searchText != "undefined" && searchText != null && searchText != "")
                 {
-                    strApp += " AND upper(cd.VA048_To) like upper('%" + searchText + "%')";
+                    strApp += " AND upper(ai.VA048_To) like upper('%" + searchText + "%')";
                 }
             }
 
@@ -1714,9 +1714,10 @@ ON au.AD_User_ID=ai.createdby JOIN AD_Table adt ON adt.AD_Table_ID   =ai.AD_Tabl
         }
 
         // Added by Bharat on 07 June 2017
-        public List<string> GetUser(string sql)
+        public List<string> GetUser(string users)
         {
             List<string> obj = null;
+            string sql = "SELECT Name FROM AD_User WHERE AD_User_ID IN(" + users.Replace(';', ',')+")";
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
