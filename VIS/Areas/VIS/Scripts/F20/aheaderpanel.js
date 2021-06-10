@@ -421,6 +421,7 @@
 
                 if (mField.lookup) {
                     colValue = mField.lookup.getDisplay(colValue, true);
+                    colValue = VIS.Utility.Util.getIdentifierDisplayVal(colValue);
                 }
                 //	Date
                 else if (VIS.DisplayType.IsDate(displayType)) {
