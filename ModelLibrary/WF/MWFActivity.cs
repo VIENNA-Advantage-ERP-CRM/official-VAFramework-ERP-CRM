@@ -24,6 +24,8 @@ using VAdvantage.Print;
 using System.Net;
 using System.Threading;
 using System.Reflection;
+using VAdvantage.PushNotif;
+
 namespace VAdvantage.WF
 {
     public class MWFActivity : X_AD_WF_Activity
@@ -1239,6 +1241,13 @@ namespace VAdvantage.WF
                             SetAD_User_ID(nextAD_User_ID);
                             eve.SetAD_User_ID(nextAD_User_ID);
                             eve.Save();
+
+                            // Send push notification
+                            string q1 = "SELECT Priority FROM AD_WF_Activity WHERE AD_WF_Activity_ID = " + GetAD_WF_Activity_ID();
+                            string p1 = Util.GetValueOfString(DB.ExecuteScalar(q1));
+                            string msg1 = "Approve\n" + GetSummary() + '\n' + "Priority " + p1;
+                            PushNotification.SendNotificationToUser(nextAD_User_ID, GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(), "WorkFlow"), msg1, "W");
+
                             return false;
                         }
                         else
@@ -1274,6 +1283,13 @@ namespace VAdvantage.WF
                     SetAD_User_ID(nextAD_User_ID);
                     eve.SetAD_User_ID(nextAD_User_ID);
                     eve.Save();
+
+                    // Send push notification
+                    string q2 = "SELECT Priority FROM AD_WF_Activity WHERE AD_WF_Activity_ID = " + GetAD_WF_Activity_ID();
+                    string p2 = Util.GetValueOfString(DB.ExecuteScalar(q2));
+                    string msg2 = "Approve\n" + GetSummary() + '\n' + "Priority " + p2;
+                    PushNotification.SendNotificationToUser(nextAD_User_ID, GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(),"WorkFlow"), msg2, "W");
+
                     //if (!autoApproval)
                     //    SetAD_User_ID(nextAD_User_ID);
                     //if (autoApproval)
@@ -2517,6 +2533,13 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
 
             SetTextMsg(textMsg);
             Save();
+
+            // Send push notification
+            string query = "SELECT Priority FROM AD_WF_Activity WHERE AD_WF_Activity_ID = " + GetAD_WF_Activity_ID();
+            string priority = Util.GetValueOfString(DB.ExecuteScalar(query));
+            string msgBody = "Approve\n" + GetSummary() + '\n' + "Priority " + priority;
+            PushNotification.SendNotificationToUser(GetAD_User_ID(), GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(), "WorkFlow") + " FW", msgBody, "W");
+
             //	Close up Old Event
             GetEventAudit();
             _audit.SetAD_User_ID(oldUser.GetAD_User_ID());
@@ -3355,7 +3378,9 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             {
                 // add user ID to the Notice User list to whom notices are sent
                 if (!_noticeUsers.Contains(AD_User_ID))
+                {
                     _noticeUsers.Add(AD_User_ID);
+                }
             }
             else
             {

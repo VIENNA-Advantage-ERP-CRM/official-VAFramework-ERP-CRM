@@ -16,6 +16,7 @@ using VAdvantage.Utility;
 using System.Data;
 using VAdvantage.Logging;
 using System.Threading;
+using VAdvantage.PushNotif;
 
 namespace VAdvantage.Model
 {
@@ -1637,6 +1638,26 @@ namespace VAdvantage.Model
             {
                 log.SaveInfo("R_EmailSentBackgrnd", "");
             }
+
+            #region Push Notification
+
+            if (!IsProcessed() && Is_ValueChanged("R_Status_ID"))
+            {
+                string query = "SELECT IsClosed FROM R_Status S JOIN R_Request R ON S.R_Status_ID = R.R_Status_ID";
+                
+                string IsClosed = Util.GetValueOfString(DB.ExecuteScalar(query));
+
+                string msgTitle = Msg.GetMsg(GetCtx(), "Request") + " : " + GetDocumentNo();
+                string msgBody = "Priority : " + GetPriorityText() + "\n" + "Status : " + GetStatus() + "\n" + GetSummary();
+
+                if (IsClosed == "N")
+                {
+                    PushNotification.SendNotificationToUser(GetAD_User_ID(), GetAD_Window_ID(), GetRecord_ID(), msgTitle, msgBody, "R");
+                }
+            }
+
+            #endregion
+
             return success;
         }
 

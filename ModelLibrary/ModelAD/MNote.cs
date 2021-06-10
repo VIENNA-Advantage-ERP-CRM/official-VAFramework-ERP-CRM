@@ -18,6 +18,7 @@ using VAdvantage.DataBase;
 using VAdvantage.SqlExec;
 using VAdvantage.Logging;
 using VAdvantage.Utility;
+using VAdvantage.PushNotif;
 
 namespace VAdvantage.Model
 {
@@ -224,6 +225,15 @@ namespace VAdvantage.Model
                 .Append(",Processed=").Append(IsProcessed())
                 .Append("]");
             return sb.ToString();
+        }
+
+        protected override bool AfterSave(bool newRecord, bool success)
+        {
+            if (!success)
+                return success;
+
+            PushNotification.SendNotificationToUser(GetAD_User_ID(), GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(), "Notice"), GetTextMsg(), "N");
+            return true;
         }
     }
 }
