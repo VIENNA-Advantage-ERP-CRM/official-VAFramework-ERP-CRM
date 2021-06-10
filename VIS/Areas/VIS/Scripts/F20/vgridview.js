@@ -510,7 +510,39 @@
                             //d = w2utils.encodeTags(d);
                         }
 
-                        return d;
+                        var strDiv = "";
+                        if (d && d.indexOf("Images/") > -1) {
+
+                            //var img = d.substring(d.indexOf("Images/") + 7, d.lastIndexOf("^^") - d.indexOf("Images/") + 5);
+                            var img = d.substring(d.indexOf("Images/") + 7, d.lastIndexOf("^^"));
+                            img = VIS.Application.contextUrl + "Images/Thumb32x32/" + img;
+
+                            d = d.replace("^^" + d.substring(d.indexOf("Images/"), d.lastIndexOf("^^") + 2), "^^^")
+                            if (d.indexOf("Images/") > -1)
+                                d = d.replace(d.substring(d.indexOf("Images/"), d.lastIndexOf("^^") + 2), "^^^");
+
+                            d = d.split("^^^");
+                            strDiv = "<div class='vis-grid-td-icon-grp'>";
+                            for (var c = 0; c < d.length; c++) {
+                                //if (d.length.indexOf("Images/") > -1) {
+                                if (d[c].length > 0) {
+                                    strDiv += "<span>" + d[c] + "</span>";
+                                }
+                                if (c == 0)
+                                    strDiv += "<div class='vis-grid-row-td-icon'><img src='" + img + "' ></img></div>";
+                                //}
+                                //else {
+
+                                //}
+                            }
+                            +"</div > ";
+
+                        }
+
+                        if (strDiv == "")
+                            return d;
+
+                        return strDiv;
                         //return '<span>' + d + '</span>';
                     }
                 }

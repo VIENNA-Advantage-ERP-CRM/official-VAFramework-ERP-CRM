@@ -1960,7 +1960,8 @@
                             pp = this.lookup.get(newValue);
                         }
                         if (pp != null) {
-                            this.ctrl.append('<option value="' + pp.Key + '">' + pp.Name + '</option>');
+                            var valName = VIS.Utility.Util.getIdentifierDisplayVal(pp.Name);
+                            this.ctrl.append('<option value="' + pp.Key + '">' + valName + '</option>');
                             this.ctrl.val(newValue);
                         }
                     }
@@ -1975,6 +1976,19 @@
         }
         this.inserting = false;
     };
+
+    VComboBox.prototype.getDisplayValue = function (Name) {
+        var val = "";
+        if (Name.indexOf("Images/") > -1) {
+            val = Name.replace("^^" + Name.substring(Name.indexOf("Images/"), Name.lastIndexOf("^^") + 3), "")
+            if (val.indexOf("Images/") > -1) {
+                val = val.replace(val.substring(val.indexOf("Images/"), val.lastIndexOf("^^") + 3), "")
+            }
+        }
+        else
+            val = Name;
+        return val;
+    }
 
     VComboBox.prototype.getValue = function () {
         var val = this.ctrl.val();
@@ -1996,7 +2010,9 @@
             if (selVal && selVal == data[i].Key) {
                 selIndex = i;
             }
-            output[i] = '<option value="' + data[i].Key + '">' + data[i].Name + '</option>';
+            var val = VIS.Utility.Util.getIdentifierDisplayVal(data[i].Name);
+
+            output[i] = '<option value="' + data[i].Key + '">' + val + '</option>';
         }
         this.ctrl.empty();
         this.ctrl.html(output.join(''));

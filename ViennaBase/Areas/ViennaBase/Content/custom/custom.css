@@ -321,7 +321,7 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
 /****************** w2ui-grid ***********************/
 .w2ui-reset table,
 .w2ui-reset {
-    /*font-size: .75rem;*/
+    font-size: .9rem;
     font-family: var(--v-c-font-family);
 }
 .w2ui-grid {

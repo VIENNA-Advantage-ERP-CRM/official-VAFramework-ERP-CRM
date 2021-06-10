@@ -460,6 +460,19 @@
                 return 0;
             }
             return pieces[1].length;
+        },
+
+        getIdentifierDisplayVal:function (Name) {
+            var val = "";
+            if (Name.indexOf("Images/") > -1) {
+                val = Name.replace("^^" + Name.substring(Name.indexOf("Images/"), Name.lastIndexOf("^^") + 3), "")
+                if (val.indexOf("Images/") > -1) {
+                    val = val.replace(val.substring(val.indexOf("Images/"), val.lastIndexOf("^^") + 3), "")
+                }
+            }
+            else
+                val = Name;
+            return val;
         }
     };
 
