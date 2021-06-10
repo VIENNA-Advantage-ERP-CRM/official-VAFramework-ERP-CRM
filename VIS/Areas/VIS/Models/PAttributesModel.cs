@@ -766,9 +766,9 @@ namespace VIS.Models
                     value = instance.GetValue();
                 }
                 //Column 2
-                obj.tableStucture += "<td>";
-                obj.tableStucture += "<div class='input-group vis-input-wrap'>";
-                obj.tableStucture += "<div class='vis-control-wrap'>";
+                //obj.tableStucture += "<td>";
+                //obj.tableStucture += "<div class='input-group vis-input-wrap'>";
+                //obj.tableStucture += "<div class='vis-control-wrap'>";
                 if (readOnly)
                 {
                     obj.tableStucture += "<input placeholder=' ' data-placeholder='' class='' readonly id='txt" + attribute.GetName().Replace(" ", "") + "_" + windowNo
@@ -798,9 +798,9 @@ namespace VIS.Models
                 }
 
                 //Column 2
-                obj.tableStucture += "<td>";
-                obj.tableStucture += "<div class='input-group vis-input-wrap'>";
-                obj.tableStucture += "<div class='vis-control-wrap'>";
+                //obj.tableStucture += "<td>";
+                //obj.tableStucture += "<div class='input-group vis-input-wrap'>";
+                //obj.tableStucture += "<div class='vis-control-wrap'>";
                 if (readOnly)
                 {
                     obj.tableStucture += "<input placeholder=' ' data-placeholder='' class='' readonly id='txt" + attribute.GetName().Replace(" ", "") + "_" + windowNo
