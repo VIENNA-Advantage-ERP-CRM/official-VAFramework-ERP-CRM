@@ -14,7 +14,7 @@
     <RootNamespace>ViennaAdvantageWeb</RootNamespace>
     <AssemblyName>ViennaAdvantageWeb</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -53,6 +53,10 @@
     </Reference>
     <Reference Include="FRPTSvc">
       <HintPath>E:\Github\FRPT_FinancialManagment-New\ViennaAdvantageWeb\bin\FRPTSvc.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis, Version=1.2.4640.29187, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Mobile Support 2\ViennaAdvantageSvc\bin\Debug\Google.Apis.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -198,7 +202,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>3971</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:3971/</IISUrl>
+          <IISUrl>http://localhost/Framework</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
