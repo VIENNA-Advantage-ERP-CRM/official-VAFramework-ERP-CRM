@@ -2087,10 +2087,7 @@ namespace VIS.Controllers
         /// <returns>true of false which indicated true if success</returns>
         public bool SaveStatmentData(Ctx ctx, List<Dictionary<string, string>> model, string selectedItems, int C_BankStatement_ID)
         {
-            //Using transaction to handle the Exception while Saving the data
-            Trx trx = Trx.GetTrx(Trx.CreateTrxName("CSLrx"));
-
-            MBankStatement bs = new MBankStatement(ctx, C_BankStatement_ID, trx);
+            MBankStatement bs = new MBankStatement(ctx, C_BankStatement_ID, null);
 
             int _bpartner_Id = 0;
             int pageno = 1;
@@ -2116,7 +2113,7 @@ namespace VIS.Controllers
                 _sql = @"SELECT MAX(BSL.VA012_PAGE) AS PAGE, MAX(BSL.LINE)+10  AS LINE FROM C_BANKSTATEMENTLINE BSL
                     WHERE BSL.VA012_PAGE=(SELECT MAX(BL.VA012_PAGE) AS PAGE FROM C_BANKSTATEMENTLINE BL WHERE BL.C_BANKSTATEMENT_ID =" + C_BankStatement_ID + @") 
                     AND BSL.C_BANKSTATEMENT_ID =" + C_BankStatement_ID;
-                _data = DB.ExecuteDataset(_sql, null, trx);
+                _data = DB.ExecuteDataset(_sql, null, null);
                 if (_data != null && _data.Tables[0].Rows.Count > 0)
                 {
                     pageno = Util.GetValueOfInt(_data.Tables[0].Rows[0]["PAGE"]);
@@ -2141,13 +2138,13 @@ namespace VIS.Controllers
                 {
                     bsl.SetC_Payment_ID(C_Payment_ID);
                     //Get C_BPartner_ID
-                    _bpartner_Id = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_BPartner_ID FROM C_Payment WHERE IsActive='Y' AND C_Payment_ID=" + C_Payment_ID, null, trx));
+                    _bpartner_Id = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_BPartner_ID FROM C_Payment WHERE IsActive='Y' AND C_Payment_ID=" + C_Payment_ID, null, null));
                 }
                 else
                 {
                     bsl.SetC_CashLine_ID(C_Payment_ID);
                     //Get C_BPartner_ID
-                    _bpartner_Id = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_BPartner_ID FROM C_CashLine WHERE IsActive='Y' AND C_CashLine_ID=" + C_Payment_ID, null, trx));
+                    _bpartner_Id = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_BPartner_ID FROM C_CashLine WHERE IsActive='Y' AND C_CashLine_ID=" + C_Payment_ID, null, null));
                 }
 
                 //set C_BPartner_ID
@@ -2166,12 +2163,6 @@ namespace VIS.Controllers
                 bsl.Set_Value("C_ConversionType_ID", Util.GetValueOfInt(model[i]["C_ConversionType_ID"]));
                 if (!bsl.Save())
                 {
-                    //closing transaction
-                    trx.Rollback();
-                    //close the transaction
-                    trx.Close();
-                    //clear the object
-                    trx = null;
                     //s_log.log(Level.SEVERE, "Line not created #" + i);
                     //Used ValueNamePair to get Error
                     ValueNamePair pp = VLogger.RetrieveError();
@@ -2186,12 +2177,6 @@ namespace VIS.Controllers
                     return false;
                 }
             }   //  for all rows
-                //closing transaction
-            trx.Commit();
-            //close the transaction
-            trx.Close();
-            //clear the object
-            trx = null;
             return true;
         }
 
