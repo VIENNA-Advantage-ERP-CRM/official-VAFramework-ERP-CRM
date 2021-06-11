@@ -18,6 +18,7 @@ using VAdvantage.DataBase;
 using VAdvantage.SqlExec;
 using VAdvantage.Logging;
 using VAdvantage.Utility;
+using VAdvantage.PushNotif;
 
 namespace VAdvantage.Model
 {
@@ -224,6 +225,21 @@ namespace VAdvantage.Model
                 .Append(",Processed=").Append(IsProcessed())
                 .Append("]");
             return sb.ToString();
+        }
+
+        /* 	After Save
+         *	@param newRecord new
+         *	@param success success
+         *	@return true if can be saved
+         */
+        protected override bool AfterSave(bool newRecord, bool success)
+        {
+            if (!success)
+                return success;
+
+            // VIS264 - Send push notification
+            PushNotification.SendNotificationToUser(GetAD_User_ID(), GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(), "Notice"), GetTextMsg(), "N");
+            return true;
         }
     }
 }
