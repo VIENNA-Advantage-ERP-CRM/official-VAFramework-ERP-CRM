@@ -212,7 +212,7 @@ namespace VIS.Models
                     //column 2
                     //obj.tableStucture += "<td>";
                     obj.tableStucture += "<select id='cmbLot_" + windowNo + "'>";
-                    obj.tableStucture += " <option selected value='" + 0 + "' > </option>";
+                    obj.tableStucture += " <option selected value='" + 0 + "'></option>";
                     for (int i = 1; i < data.Length; i++)
                     {
                         if (Convert.ToInt32(data[i].Key) == _masi.GetM_Lot_ID())
@@ -876,23 +876,23 @@ namespace VIS.Models
             {
                 trx = Trx.GetTrx("VPAttribute" + DateTime.Now.Ticks);
 
-                if (!productWindow && strLotStringC != null)
+                if (!productWindow && !String.IsNullOrEmpty(strLotStringC))
                 {
                     strLotString = strLotStringC;
                 }	//	L
 
-                if (!productWindow && strSerNoC != null)
+                if (!productWindow && !String.IsNullOrEmpty(strSerNoC))
                 {
                     log.Fine("SerNo=" + strSerNoC);
                     strSerNo = strSerNoC;
                 }
 
-                if (!productWindow && dtGuaranteeDateC != null)
+                if (!productWindow && !String.IsNullOrEmpty(dtGuaranteeDateC))
                 {
-                    dtGuaranteeDate = Convert.ToDateTime(dtGuaranteeDateC);
+                    dtGuaranteeDate = Util.GetValueOfDateTime(dtGuaranteeDateC);
                 }	//	Gua
 
-                if (!productWindow && strAttrCodeC != null)
+                if (!productWindow && !String.IsNullOrEmpty(strAttrCodeC))
                 {
                     strAttrCode = strAttrCodeC;
                 }
