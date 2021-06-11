@@ -1026,7 +1026,13 @@ namespace VIS.Helpers
                             String info = "";
                             ValueNamePair ppE = VLogger.RetrieveError();
                             if (ppE == null)
+                            {
                                 ppE = VLogger.RetrieveWarning();
+                                if (ppE != null)
+                                {
+                                    outt.IsWarning = true;
+                                }
+                            }
                             if (ppE != null)
                             {
                                 msg = ppE.GetValue();
@@ -1151,7 +1157,13 @@ namespace VIS.Helpers
                 String info = "";
                 ValueNamePair ppE = VAdvantage.Logging.VLogger.RetrieveError();
                 if (ppE == null)
+                {
                     ppE = VAdvantage.Logging.VLogger.RetrieveWarning();
+                    if (ppE != null)
+                    {
+                        outt.IsWarning = true;
+                    }
+                }
                 if (ppE != null)
                 {
                     msg = ppE.GetValue();
@@ -1279,6 +1291,7 @@ namespace VIS.Helpers
                 String info = pp.GetName();
                 //fireDataStatusEEvent(msg, info, false);
                 outt.FireEEvent = true;
+                outt.IsWarning = true;
                 outt.EventParam = new EventParamOut() { Msg = msg, Info = info, IsError = true };
 
             }
@@ -1474,7 +1487,7 @@ namespace VIS.Helpers
         {
             String sql = "SELECT COUNT(AD_Workflow_ID) FROM AD_Workflow "
                 + " WHERE WorkflowType='V' AND IsActive='Y' AND IsValid='Y' AND AD_Table_ID = " + AD_Table_ID + " AND AD_Client_ID = " + AD_Client_ID
-                + " ORDER BY AD_Client_ID, AD_Table_ID";
+                + " GROUP BY AD_Client_ID, AD_Table_ID ORDER BY AD_Client_ID, AD_Table_ID";
 
             return Util.GetValueOfInt(DB.ExecuteScalar(sql, null, _trx)) > 0;
         }

@@ -4388,7 +4388,7 @@
         }
 
         if (out.FireEEvent) {
-            this.fireDataStatusEEvent(out.EventParam.Msg, out.EventParam.Info, out.EventParam.IsError);
+            this.fireDataStatusEEvent(out.EventParam.Msg, out.EventParam.Info, out.EventParam.IsError, out.IsWarning);
         }
         else if (out.FireIEvent) {
             this.fireDataStatusIEvent(out.EventParam.Msg, out.EventParam.Info, out.EventParam.IsError);
@@ -5113,14 +5113,20 @@
 
     //AD_Message, info, isError
     //errorLog
-    GridTable.prototype.fireDataStatusEEvent = function (AD_Message, info, isError) {
+    GridTable.prototype.fireDataStatusEEvent = function (AD_Message, info, isError,isWarn) {
 
         if (arguments.length === 1) {
-            this.fireDataStatusEEvent(arguments[0].value, arguments[0].name, true);
+            this.fireDataStatusEEvent(arguments[0].value, arguments[0].name, true, false);
         }
         else {
             var e = this.createDSE();
-            e.setInfo(AD_Message, info, isError, !isError);
+            if (!isWarn)
+                isWarn = !isError;
+            else {
+                isError = !isWarn;
+            }
+
+            e.setInfo(AD_Message, info, isError, isWarn);
             //if (isError)
             //    log.saveWarning(AD_Message, info);
             this.fireDataStatusChanged(e);

@@ -118,18 +118,25 @@ namespace ViennaAdvantage.Process
                 DataSet dts = DB.ExecuteDataset(str, null, Get_Trx());
                 if (dts != null && dts.Tables[0].Rows.Count > 0)
                 {
+                    bool headerOrgCreated = false;
                     for (int i = 0; i < dts.Tables[0].Rows.Count; i++)
                     {
                         int destinationorg = Util.GetValueOfInt(dts.Tables[0].Rows[i]["VA077_DestinationOrg"]);
                         // VAdvantage.Model.MOrder newOrder = new VAdvantage.Model.MOrder(GetCtx(), 0, Get_Trx());
                         int orgId = Util.GetValueOfInt(dts.Tables[0].Rows[i]["AD_Org_Id"]);
-                        if (orgId != destinationorg)
-                        {
-                            if (i > 0)
-                                docNo.Append(", ");
-                            AddHeader(destinationorg, orgId);
-                            Addline(destinationorg, orgId);
-                        }
+
+                        //Handel, if SO already created with header org then skip.
+                        if (headerOrgCreated && (destinationorg == 0 || destinationorg == orgId))
+                            continue;
+
+                        if (i > 0)
+                            docNo.Append(", ");
+                        AddHeader(destinationorg, orgId);
+                        Addline(destinationorg, orgId);
+
+                        //make flag true if desination org is zero or parent org.
+                        if (destinationorg == 0 || destinationorg == orgId)
+                            headerOrgCreated = true;
                     }
                 }
 

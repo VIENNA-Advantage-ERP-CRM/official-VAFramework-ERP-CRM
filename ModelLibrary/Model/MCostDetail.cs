@@ -26,6 +26,7 @@ namespace VAdvantage.Model
         //	Logger	
         private static VLogger _log = VLogger.GetVLogger(typeof(MCostDetail).FullName);
         private bool _isExpectedLandeCostCalculated = false;
+        private bool _IsCalculateExpectedLandedCostFromInvoice = false;
 
         /// <summary>
         /// Standard Constructor
@@ -1173,7 +1174,7 @@ namespace VAdvantage.Model
                     invoice = new MInvoice(GetCtx(), invoiceline.GetC_Invoice_ID(), Get_Trx());
                     // checking invoice contain reverse invoice ref or not
                 }
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM C_LandedCostAllocation WHERE  C_InvoiceLine_ID = " + GetC_InvoiceLine_ID(), null, Get_Trx())) <= 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(C_LandedCostAllocation_ID) FROM C_LandedCostAllocation WHERE  C_InvoiceLine_ID = " + GetC_InvoiceLine_ID(), null, Get_Trx())) <= 0)
                 {
                     if (GetC_OrderLine_ID() == 0) // if invoice created without orderline  then no impact on cost
                     {
@@ -1594,34 +1595,50 @@ namespace VAdvantage.Model
                 }
                 else if (!ce.IsCostingMethod())		//	Cost Adjustments
                 {
-                    // when expected cost already calculated, and during actual adjustment - current qty not available then no effects comes
-                    if (GetExpectedCostCalculated() && cost.GetCurrentQty() == 0)
+                    // system calculating expected landed cost on invoice completion
+                    if (IsCalculateExpectedLandedCostFromInvoice())
                     {
-                        return true;
+                        Decimal cCosts = Decimal.Add(Decimal.Multiply(cost.GetCurrentCostPrice(), cost.GetCurrentQty()), amt);
+                        Decimal qty1 = Decimal.Add(cost.GetCurrentQty(), qty);
+                        if (qty1.CompareTo(Decimal.Zero) == 0)
+                        {
+                            qty1 = Decimal.One;
+                        }
+                        cCosts = Decimal.Round(Decimal.Divide(cCosts, qty1), precision, MidpointRounding.AwayFromZero);
+                        cost.SetCurrentCostPrice(cCosts);
+                        cost.Add(amt, qty);
                     }
+                    else
+                    {
+                        // when expected cost already calculated, and during actual adjustment - current qty not available then no effects comes
+                        if (GetExpectedCostCalculated() && cost.GetCurrentQty() == 0)
+                        {
+                            return true;
+                        }
 
-                    Decimal cCosts = Decimal.Add(Decimal.Multiply(cost.GetCurrentCostPrice(), cost.GetCurrentQty()), amt);
-                    // when expected cost already calculated, then not to add qty 
-                    //Decimal qty1 = Decimal.Add(cost.GetCurrentQty(), GetExpectedCostCalculated() ? 0 : qty);
+                        Decimal cCosts = Decimal.Add(Decimal.Multiply(cost.GetCurrentCostPrice(), cost.GetCurrentQty()), amt);
+                        // when expected cost already calculated, then not to add qty 
+                        //Decimal qty1 = Decimal.Add(cost.GetCurrentQty(), GetExpectedCostCalculated() ? 0 : qty);
 
-                    Decimal qty1 = MCost.GetproductCostAndQtyMaterial(cd.GetAD_Client_ID(), cost.GetAD_Org_ID(), cost.GetM_Product_ID()
-                        , cost.GetM_AttributeSetInstance_ID(), cost.Get_Trx(), cost.GetM_Warehouse_ID(), true);
-                    if (qty1.CompareTo(Decimal.Zero) == 0)
-                    {
-                        qty1 = cost.GetCurrentQty();
+                        Decimal qty1 = MCost.GetproductCostAndQtyMaterial(cd.GetAD_Client_ID(), cost.GetAD_Org_ID(), cost.GetM_Product_ID()
+                            , cost.GetM_AttributeSetInstance_ID(), cost.Get_Trx(), cost.GetM_Warehouse_ID(), true);
+                        if (qty1.CompareTo(Decimal.Zero) == 0)
+                        {
+                            qty1 = cost.GetCurrentQty();
+                        }
+                        if (qty1.CompareTo(Decimal.Zero) == 0)
+                        {
+                            qty1 = Decimal.One;
+                        }
+                        // need to divide cost with Current qty, because we already add qty in freight
+                        cCosts = Decimal.Round(Decimal.Divide(cCosts, qty1), precision, MidpointRounding.AwayFromZero);
+                        cost.SetCurrentCostPrice(cCosts);
+                        // when expected cost already calculated, then not to add qty 
+                        //cost.Add(amt, GetExpectedCostCalculated() ? 0 : qty);
+                        cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), amt));
+                        cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), GetExpectedCostCalculated() ? 0 : qty));
+                        log.Finer("Inv - none - " + cost);
                     }
-                    if (qty1.CompareTo(Decimal.Zero) == 0)
-                    {
-                        qty1 = Decimal.One;
-                    }
-                    // need to divide cost with Current qty, because we already add qty in freight
-                    cCosts = Decimal.Round(Decimal.Divide(cCosts, qty1), precision, MidpointRounding.AwayFromZero);
-                    cost.SetCurrentCostPrice(cCosts);
-                    // when expected cost already calculated, then not to add qty 
-                    //cost.Add(amt, GetExpectedCostCalculated() ? 0 : qty);
-                    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), amt));
-                    cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), GetExpectedCostCalculated() ? 0 : qty));
-                    log.Finer("Inv - none - " + cost);
                 }
                 //change 3-5-2016
                 if (ce.IsWeightedAverageCost() && windowName != "Invoice(Customer)")
@@ -4362,6 +4379,24 @@ namespace VAdvantage.Model
         public bool GetExpectedCostCalculated()
         {
             return _isExpectedLandeCostCalculated;
+        }
+
+        /// <summary>
+        /// Set expected landed cost to be  calculated from invoice vendor
+        /// </summary>
+        /// <param name="IsCalculateExpectedCostFromInvoice">set is expected landed cost calculated or not from invoice</param>
+        public void SetCalculateExpectedLandedCostFromInvoice(bool IsCalculateExpectedCostFromInvoice)
+        {
+            _IsCalculateExpectedLandedCostFromInvoice = IsCalculateExpectedCostFromInvoice;
+        }
+
+        /// <summary>
+        /// Getter Property
+        /// </summary>
+        /// <returns>true, when expected landed costto be  calculated from invoice vendor</returns>
+        public bool IsCalculateExpectedLandedCostFromInvoice()
+        {
+            return _IsCalculateExpectedLandedCostFromInvoice;
         }
         //end
 

@@ -851,7 +851,7 @@ namespace VIS.Controllers
             if (countVA034)
                 sql.Append(", p.VA034_DepositSlipNo");
 
-            sql.Append(", p.TrxNo, p.CheckNo  FROM C_BankAccount ba"
+            sql.Append(", p.TrxNo, p.CheckNo, pay.C_ConversionType_ID  FROM C_BankAccount ba"
                 + " INNER JOIN C_Payment_v p ON (p.C_BankAccount_ID=ba.C_BankAccount_ID)"
                 + " INNER JOIN C_Payment pay ON p.C_Payment_ID=pay.C_Payment_ID"
                 + " INNER JOIN C_Currency c ON (p.C_Currency_ID=c.C_Currency_ID)"
@@ -901,8 +901,8 @@ namespace VIS.Controllers
 
                 if (countVA034)
                     sql.Append(", NULL AS VA034_DepositSlipNo");
-
-                sql.Append(", null AS TrxNo, null AS CheckNo FROM C_BankAccount ba"
+                //added C_ConversionType_ID to append the value on to the Bank statement Line
+                sql.Append(", null AS TrxNo, null AS CheckNo,cl.C_ConversionType_ID FROM C_BankAccount ba"
                          + " INNER JOIN C_CashLine cl ON (cl.C_BankAccount_ID=ba.C_BankAccount_ID)"
                          + " INNER JOIN C_Cash cs ON (cl.C_Cash_ID=cs.C_Cash_ID)"
                          + " INNER JOIN C_Charge chrg ON chrg.C_Charge_ID=cl.C_Charge_ID"
@@ -1006,6 +1006,24 @@ namespace VIS.Controllers
         //    return Json(JsonConvert.SerializeObject(obj.GetContainer(ctx, M_Locator_ID)), JsonRequestBehavior.AllowGet);
         //}
 
+        /// <summary>
+        /// Get converted Amount with Success or Error message
+        /// </summary>
+        /// <param name="_paymentId">C_CashLine_ID or C_Payment_ID</param>
+        /// <param name="amount">Amount</param>
+        /// <param name="currencyId">C_Currency_ID</param>
+        /// <param name="convsion_Id">C_ConversionType_ID</param>
+        /// <param name="date">Account Date</param>
+        /// <param name="paymentType">Payment Type(Payment or CashLine)</param>
+        /// <param name="_org_id">AD_Org_ID</param>
+        /// <returns>return type list contains ConvetedAmt and message</returns>
+        public JsonResult GetConvertedAmount(int _paymentId, decimal? amount,int? currencyId,int? convsion_Id, DateTime? date, string paymentType, int? _org_id)
+        {
+            var ctx = Session["ctx"] as Ctx;
+            VCreateFromModel obj = new VCreateFromModel();
+            var res = obj.GetConvertedAmount(ctx, _paymentId, amount, currencyId, convsion_Id, date, paymentType, _org_id);
+            return Json(JsonConvert.SerializeObject(res), JsonRequestBehavior.AllowGet);
+        }
 
     }
 }

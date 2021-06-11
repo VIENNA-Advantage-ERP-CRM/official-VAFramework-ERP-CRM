@@ -2321,7 +2321,7 @@
                     event.preventDefault();
                 }
             }
-            else if ((event.keyCode == 46 || event.keyCode == 8) && $ctrl.val().trim() != '') {
+            else if ((event.keyCode == 46 || event.keyCode == 8) && self.getValue() != null) {
                 self.setValue(null, true, true);
             }
 

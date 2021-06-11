@@ -642,7 +642,7 @@ namespace VAdvantage.DBPort
                 {
                     indAnd = rnumStr.Length;
                 }
-                retValue = retValue.Substring(0, rownum) + rnumStr.Substring(indAnd);
+                retValue = Utility.Util.Replace(retValue.Substring(0, rownum), "WHERE", "") + rnumStr.Substring(indAnd);
                 return convert + retValue + " LIMIT " + rnumStr.Substring(0, indAnd);
             }
             else if (retValue.IndexOf("ROWNUM<=") > 1)
@@ -658,7 +658,7 @@ namespace VAdvantage.DBPort
                 {
                     indAnd = rnumStr.Length;
                 }
-                retValue = retValue.Substring(0, rownum) + rnumStr.Substring(indAnd);
+                retValue = Utility.Util.Replace(retValue.Substring(0, rownum), "WHERE", "") + rnumStr.Substring(indAnd);
                 return convert + retValue + " LIMIT " + rnumStr.Substring(0, indAnd);
             }
             else if (retValue.IndexOf("ROWNUM<") > 1)
@@ -674,7 +674,7 @@ namespace VAdvantage.DBPort
                 {
                     indAnd = rnumStr.Length;
                 }
-                retValue = retValue.Substring(0, rownum) + rnumStr.Substring(indAnd);
+                retValue = Utility.Util.Replace(retValue.Substring(0, rownum), "WHERE", "") + rnumStr.Substring(indAnd);
                 return convert + retValue + " LIMIT " + rnumStr.Substring(0, indAnd);
             }
             return convert + retValue;

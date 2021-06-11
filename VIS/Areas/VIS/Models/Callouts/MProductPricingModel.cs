@@ -40,7 +40,7 @@ namespace VIS.Models
             M_PriceList_Version_ID = Util.GetValueOfInt(paramValue[5].ToString());
             DateTime? orderDate = Util.GetValueOfDateTime(paramValue[6]);
             DateTime? orderDate1 = Util.GetValueOfDateTime(paramValue[7]);
-                    
+
             //if (paramValue.Length > 8)    
             if (paramValue.Length == 9 || paramValue.Length == 11)
             {
@@ -108,7 +108,7 @@ namespace VIS.Models
 
                 //** Price List - ValidFrom date : return 0 when plv is not available ** Dt:03/26/2021 ** Modified By: Kumar **//
 
-                PriceList = (M_PriceList_Version_ID==0 ? 0: pp.GetPriceList()),
+                PriceList = (M_PriceList_Version_ID == 0 ? 0 : pp.GetPriceList()),
                 PriceLimit = (M_PriceList_Version_ID == 0 ? 0 : pp.GetPriceLimit()),
                 PriceActual = (M_PriceList_Version_ID == 0 ? 0 : pp.GetPriceStd()),
                 PriceEntered = (M_PriceList_Version_ID == 0 ? 0 : pp.GetPriceStd()),
@@ -143,25 +143,46 @@ namespace VIS.Models
             Attribute = Util.GetValueOfInt(paramValue[1].ToString());
             M_PriceList_ID = Util.GetValueOfInt(paramValue[2].ToString());
             UOM = Util.GetValueOfInt(paramValue[3].ToString());
+            retDic = new Dictionary<string, object>();
 
-            string sql = "SELECT PriceStd ,C_UOM_ID FROM M_ProductPrice WHERE M_PriceList_Version_ID = (SELECT MAX(M_PriceList_Version_ID) FROM M_PriceList_Version WHERE IsActive = 'Y'" +
-                "AND M_PriceList_ID =" + M_PriceList_ID + ") AND M_Product_ID=" + M_Product_ID+  " AND NVL(M_AttributeSetInstance_ID,0)=" + Attribute;
-  
+            string sql = @"SELECT M_ProductPrice.PriceStd ,M_Product.C_UOM_ID, M_Product.IsBOM, M_Product.IsVerified FROM M_ProductPrice
+                            INNER JOIN M_Product ON M_Product.M_Product_ID = M_ProductPrice.M_Product_ID 
+                            WHERE M_ProductPrice.M_PriceList_Version_ID = (SELECT MAX(M_PriceList_Version_ID) FROM M_PriceList_Version
+                            WHERE IsActive = 'Y'" +
+                            " AND M_PriceList_ID =" + M_PriceList_ID +
+                            ") AND M_ProductPrice.M_Product_ID=" + M_Product_ID +
+                            " AND NVL(M_ProductPrice.M_AttributeSetInstance_ID,0)=" + Attribute;
+
             if (UOM > 0)
             {
-                sql += " AND C_UOM_ID=" + UOM;
+                sql += " AND M_ProductPrice.C_UOM_ID=" + UOM;
             }
             else
             {
-                sql += " AND C_UOM_ID =(SELECT C_UOM_ID FROM M_Product WHERE M_Product_ID=" + M_Product_ID+")";
+                sql += " AND M_ProductPrice.C_UOM_ID = M_Product.C_UOM_ID";
             }
 
             DataSet ds = DB.ExecuteDataset(sql, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
-                retDic = new Dictionary<string, object>();
                 retDic["PriceStd"] = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceStd"]);
                 retDic["C_UOM_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_UOM_ID"]);
+                if (Util.GetValueOfString(ds.Tables[0].Rows[0]["IsVerified"]).Equals("Y"))
+                {
+                    retDic["IsBOM"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["IsBOM"]);
+                }
+            }
+            else
+            {
+                ds = DB.ExecuteDataset(@"SELECT C_UOM_ID, IsBOM, IsVerified FROM M_Product WHERE M_Product_ID = " + M_Product_ID, null, null);
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    retDic["C_UOM_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_UOM_ID"]);
+                    if (Util.GetValueOfString(ds.Tables[0].Rows[0]["IsVerified"]).Equals("Y"))
+                    {
+                        retDic["IsBOM"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["IsBOM"]);
+                    }
+                }
             }
             return retDic;
         }

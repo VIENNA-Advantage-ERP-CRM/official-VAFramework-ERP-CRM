@@ -173,6 +173,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\VIS\Content\BudgetControl.css" />
     <Content Include="Areas\VIS\Content\ClientSetup.css" />
     <Content Include="Areas\VIS\Content\Email.css" />
     <Content Include="Areas\VIS\Content\F20\Color.css" />
@@ -622,6 +623,7 @@
     <Content Include="Areas\VIS\Scripts\app\formframe.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\acctviewer.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\acctviewermenu.js" />
+    <Content Include="Areas\VIS\Scripts\app\forms\createforecast.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\form.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\generatexmodel.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\glDimensionValue.js" />
@@ -803,6 +805,7 @@
     <Compile Include="Areas\VIS\Controllers\CallOut\MRequestTypeController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MStorageController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MTaxController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MTeamForcastController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MUOMController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MUOMConversionController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MWarehouseController.cs" />
@@ -811,6 +814,7 @@
     <Compile Include="Areas\VIS\Controllers\CommonController.cs" />
     <Compile Include="Areas\VIS\Controllers\DocActionController.cs" />
     <Compile Include="Areas\VIS\Controllers\EmailController.cs" />
+    <Compile Include="Areas\VIS\Controllers\ForecastFormController.cs" />
     <Compile Include="Areas\VIS\Controllers\FormController.cs" />
     <Compile Include="Areas\VIS\Controllers\GenerateXModelController.cs" />
     <Compile Include="Areas\VIS\Controllers\GenralAttributeController.cs" />
@@ -896,6 +900,7 @@
     <Compile Include="Areas\VIS\Models\Callouts\MConversionRateModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MCurrencyModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MDocTypeModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MExpenseReportModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MInOutLineModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MInOutModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MInventoryLineModel.cs" />
@@ -920,6 +925,7 @@
     <Compile Include="Areas\VIS\Models\Callouts\MRequestTypeModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MStorageModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MTaxModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MTeamForcastModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MUOMConversionModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MUOMModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MWarehouseModel.cs" />
@@ -927,6 +933,7 @@
     <Compile Include="Areas\VIS\Models\Chat\ChatModel.cs" />
     <Compile Include="Areas\VIS\Models\DocActionModel.cs" />
     <Compile Include="Areas\VIS\Models\EmailModel.cs" />
+    <Compile Include="Areas\VIS\Models\ForecastFormModel.cs" />
     <Compile Include="Areas\VIS\Models\FormModel.cs" />
     <Compile Include="Areas\VIS\Models\GenerateModel.cs" />
     <Compile Include="Areas\VIS\Models\GenerateXModelModel.cs" />
