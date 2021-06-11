@@ -113,22 +113,24 @@
         if (!value)
             return "";
         //Incase of Bank statement Line can't update the DateAcct when C_Payment_ID is present
-        if (mTab.getTableName() == "C_BankStatementLine") {
+        //if (mTab.getTableName() == "C_BankStatementLine") {
             //Can't update the DateAcct when C_CashLine_ID is present
-            if (mTab.findColumn("C_CashLine_ID") >= 0) {
-                if (VIS.Utility.Util.getValueOfInt(mTab.getValue("C_Payment_ID")) <= 0 && VIS.Utility.Util.getValueOfInt(mTab.getValue("C_CashLine_ID")) <= 0) {
-                    mTab.setValue("DateAcct", value);
-                }
-            }
-            else {
-                if (VIS.Utility.Util.getValueOfInt(mTab.getValue("C_Payment_ID")) <= 0) {
-                    mTab.setValue("DateAcct", value);
-                }
-            }
-        }
-        else {
-            mTab.setValue("DateAcct", value);
-        }
+            //if (mTab.findColumn("C_CashLine_ID") >= 0) {
+            //    if (VIS.Utility.Util.getValueOfInt(mTab.getValue("C_Payment_ID")) <= 0 && VIS.Utility.Util.getValueOfInt(mTab.getValue("C_CashLine_ID")) <= 0) {
+            //        mTab.setValue("DateAcct", value);
+            //    }
+            //}
+            //else {
+            //    if (VIS.Utility.Util.getValueOfInt(mTab.getValue("C_Payment_ID")) <= 0) {
+            //        mTab.setValue("DateAcct", value);
+            //    }
+            //}
+        //    mTab.setValue("DateAcct", value);
+        //}
+        //else {
+        //Can be change according to Statement Line Date incase of BankStatement window
+        mTab.setValue("DateAcct", value);
+        //}
 
         // JID_1332: Set Value in Effective Date on selection of Statement date.
         if (mTab.getTableName() == "C_BankStatementLine") {

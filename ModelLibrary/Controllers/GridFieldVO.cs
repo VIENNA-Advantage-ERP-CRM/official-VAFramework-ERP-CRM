@@ -565,6 +565,8 @@ namespace VAdvantage.Controller
 
                 //Check If parameter is marked encrypted or not.
                 vo.IsEncryptedField = dr["IsEncrypted"].ToString() == "Y" ? true : false;
+                //Set Zoom Window
+                vo.ZoomWindow_ID = Util.GetValueOfInt(dr["ZoomWindow_ID"]);
                 dr.Delete();
 
             }

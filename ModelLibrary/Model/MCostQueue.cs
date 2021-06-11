@@ -545,6 +545,7 @@ namespace VAdvantage.Model
             MLocator loc = null; // is used to get warehouse id to manager costing levelev - Warehouse + Batch 
             String costLevel = null; // is used to check costing level binded for calculation of costing
             bool backwardCompatabilitySupport = false;
+            bool IsPOCostingMethod = product != null ? MCostElement.IsPOCostingmethod(ctx, AD_Client_ID, product.GetM_Product_ID(), trxName) : false;
             try
             {
                 if (product != null)
@@ -786,6 +787,7 @@ namespace VAdvantage.Model
                             invoiceline = null;
                             #endregion
                         }
+
                         else if (windowName == "Invoice(Vendor)" || windowName == "Invoice(Customer)" || windowName == "Match IV" || windowName == "Invoice(Vendor)-Return")
                         {
                             #region Get Price with conversion if required
@@ -2346,17 +2348,22 @@ namespace VAdvantage.Model
                         }
 
 
-                        // calculate expected landed cost 
-                        if (windowName == "Material Receipt" && orderline != null && orderline.Get_ID() > 0
-                            && order != null && order.Get_ID() > 0 && inoutline != null && inoutline.Get_ID() > 0 && !inoutline.IsCostImmediate())
+                        // calculate expected landed cost  
+                        if (((IsPOCostingMethod && windowName == "Material Receipt" && orderline != null && orderline.Get_ID() > 0
+                            && order != null && order.Get_ID() > 0) || (!IsPOCostingMethod && windowName == "Invoice(Vendor)" && invoiceline != null && invoiceline.GetC_OrderLine_ID() > 0))
+                            && inoutline != null && inoutline.Get_ID() > 0 && (IsPOCostingMethod ? !inoutline.IsCostImmediate() : !invoiceline.IsCostImmediate()))
                         {
                             #region calculate expected landed cost 
                             decimal expectedAmt = 0;
                             decimal expectedQty = 0;
                             query.Clear();
-                            query.Append("SELECT C_ExpectedCost.M_CostElement_ID , C_Expectedcostdistribution.Amt , C_Expectedcostdistribution.Qty, C_Expectedcostdistribution.C_Expectedcostdistribution_ID  " +
-                                          " FROM C_Expectedcostdistribution INNER JOIN C_ExpectedCost ON C_Expectedcostdistribution.C_ExpectedCost_ID = C_ExpectedCost.C_ExpectedCost_ID " +
-                                          " WHERE C_Expectedcostdistribution.Amt != 0 AND C_Expectedcostdistribution.C_OrderLine_ID = " + orderline.GetC_OrderLine_ID());
+                            query.Append(@"SELECT C_ExpectedCost.M_CostElement_ID , C_Expectedcostdistribution.Amt , C_Expectedcostdistribution.Qty,
+                                                 C_Expectedcostdistribution.C_Expectedcostdistribution_ID , C_Order.C_Currency_ID , C_Order.C_ConversionType_ID 
+                                          FROM C_Expectedcostdistribution INNER JOIN C_ExpectedCost ON C_Expectedcostdistribution.C_ExpectedCost_ID = C_ExpectedCost.C_ExpectedCost_ID 
+                                          INNER JOIN C_OrderLine ON C_OrderLine.C_OrderLine_ID = C_Expectedcostdistribution.C_OrderLine_ID
+                                          INNER JOIN C_Order ON C_Order.C_Order_ID = C_OrderLine.C_Order_ID 
+                                          WHERE C_Expectedcostdistribution.Amt != 0 AND C_Expectedcostdistribution.C_OrderLine_ID = " +
+                                          (IsPOCostingMethod ? orderline.GetC_OrderLine_ID() : invoiceline.GetC_OrderLine_ID()));
                             //if (inoutline.GetReversalDoc_ID() > 0)
                             //{
                             //    // during reversal of MR doc, system check expected landed cost is calculated ?
@@ -2370,8 +2377,10 @@ namespace VAdvantage.Model
                             DataSet dsExpectedLandedCostAllocation = DB.ExecuteDataset(query.ToString(), null, trxName);
                             if (dsExpectedLandedCostAllocation != null && dsExpectedLandedCostAllocation.Tables.Count > 0 && dsExpectedLandedCostAllocation.Tables[0].Rows.Count > 0)
                             {
+                                int OrderCurrency_ID;
                                 for (int lca = 0; lca < dsExpectedLandedCostAllocation.Tables[0].Rows.Count; lca++)
                                 {
+                                    OrderCurrency_ID = IsPOCostingMethod ? order.GetC_Currency_ID() : Util.GetValueOfInt(dsExpectedLandedCostAllocation.Tables[0].Rows[lca]["C_Currency_ID"]);
                                     // total distributed amount against orderline
                                     expectedAmt = Util.GetValueOfDecimal(dsExpectedLandedCostAllocation.Tables[0].Rows[lca]["Amt"]);
                                     // Orderline qty
@@ -2379,6 +2388,12 @@ namespace VAdvantage.Model
 
                                     // movement qty
                                     expectedQty = inoutline.GetMovementQty();
+                                    // when we reverese invoice, expected lanede cost calcualetd on invoice
+                                    // then make the qty Negate
+                                    if (!IsPOCostingMethod && invoiceline.GetQtyInvoiced() < 0)
+                                    {
+                                        expectedQty = decimal.Negate(expectedQty);
+                                    }
 
                                     // during cost adjustment - all amount to be distributed
                                     if (!product.IsCostAdjustmentOnLost())
@@ -2386,18 +2401,19 @@ namespace VAdvantage.Model
                                         // distributed amount of each qty
                                         expectedAmt = Decimal.Divide(expectedAmt, Util.GetValueOfDecimal(dsExpectedLandedCostAllocation.Tables[0].Rows[lca]["Qty"]));
                                         //total amount of movement qty
-                                        expectedAmt = Decimal.Multiply(expectedAmt, inoutline.GetMovementQty());
+                                        expectedAmt = Decimal.Multiply(expectedAmt, expectedQty);
                                     }
                                     else if (expectedQty < 0 && expectedAmt > 0)
                                     {
                                         // In case of normal loss, when qty is less than ZERO then nagate amount 
-                                        expectedAmt = Decimal.Negate(expectedAmt);
+                                        //expectedAmt = Decimal.Negate(expectedAmt);
                                     }
 
-                                    if (order.GetC_Currency_ID() != acctSchema.GetC_Currency_ID())
+                                    if (OrderCurrency_ID != acctSchema.GetC_Currency_ID())
                                     {
-                                        expectedAmt = MConversionRate.Convert(ctx, expectedAmt, order.GetC_Currency_ID(), acctSchema.GetC_Currency_ID(),
-                                                                    inout.GetDateAcct(), order.GetC_ConversionType_ID(), AD_Client_ID, AD_Org_ID);
+                                        expectedAmt = MConversionRate.Convert(ctx, expectedAmt, OrderCurrency_ID, acctSchema.GetC_Currency_ID(),
+                                                                    inout.GetDateAcct(), IsPOCostingMethod ? order.GetC_ConversionType_ID() :
+                                                                    Util.GetValueOfInt(dsExpectedLandedCostAllocation.Tables[0].Rows[lca]["C_ConversionType_ID"]), AD_Client_ID, AD_Org_ID);
                                         if (expectedAmt == 0)
                                         {
                                             if (optionalstr != "window")
@@ -2434,11 +2450,18 @@ namespace VAdvantage.Model
                                         }
                                         cd = MCostDetail.CreateCostDetail(acctSchema, AD_Org_ID, inoutline.GetM_Product_ID(),
                                             inoutline.GetM_AttributeSetInstance_ID(), windowName, inventoryLine, inoutline, movementline,
-                                             invoiceline, po, Util.GetValueOfInt(dsExpectedLandedCostAllocation.Tables[0].Rows[lca]["M_CostElement_ID"]), expectedAmt,
+                                             invoiceline, po, Util.GetValueOfInt(dsExpectedLandedCostAllocation.Tables[0].Rows[lca]["M_CostElement_ID"]), 
+                                             Decimal.Round(expectedAmt, acctSchema.GetCostingPrecision()),
                                              expectedQty, null, trxName, M_Warehouse_Id);
                                     }
                                     if (cd != null)
                                     {
+                                        // when expected landed cost calculated from invoice then set this property
+                                        if (!IsPOCostingMethod)
+                                        {
+                                            cd.SetCalculateExpectedLandedCostFromInvoice(true);
+                                        }
+
                                         result = cd.UpdateProductCost(windowName, cd, acctSchema, product, inoutline.GetM_AttributeSetInstance_ID(),
                                                                       AD_Org_ID, optionalStrCd: optionalstr);
                                         if (result)

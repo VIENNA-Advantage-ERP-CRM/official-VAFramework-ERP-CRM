@@ -169,7 +169,7 @@ namespace VIS.Controllers
         public JsonResult GetUser(string UserQry)
         {
             Ctx ct = Session["ctx"] as Ctx;
-            UserQry = SecureEngineBridge.DecryptByClientKey(UserQry, ct.GetSecureKey());
+            //UserQry = SecureEngineBridge.DecryptByClientKey(UserQry, ct.GetSecureKey());
             AttachmentHistoryModel his = new AttachmentHistoryModel();
             return Json(JsonConvert.SerializeObject(his.GetUser(UserQry)), JsonRequestBehavior.AllowGet);
         }

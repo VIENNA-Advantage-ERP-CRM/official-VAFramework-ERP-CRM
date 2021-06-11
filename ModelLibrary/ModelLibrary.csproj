@@ -216,6 +216,7 @@
     <Compile Include="CRM\Model\X_C_MasterForecastLine.cs" />
     <Compile Include="CRM\Model\X_C_TargetList.cs" />
     <Compile Include="CRM\Model\X_vss_lead_interestarea.cs" />
+    <Compile Include="CRM\Process\BulkAdjustmentQuantity.cs" />
     <Compile Include="CRM\Process\CalloutProcess.cs" />
     <Compile Include="CRM\Process\CreateAppointment.cs" />
     <Compile Include="CRM\Process\CreateContractInvoice.cs" />
@@ -831,6 +832,8 @@
     <Compile Include="Model\MFinRptAcctGroup.cs" />
     <Compile Include="Model\MFinRptAcctSubGroup.cs" />
     <Compile Include="Model\MFinRptConfig.cs" />
+    <Compile Include="Model\MForecast.cs" />
+    <Compile Include="Model\MForecastLineHistory.cs" />
     <Compile Include="Model\MGenAttribute.cs" />
     <Compile Include="Model\MGenAttributeInstance.cs" />
     <Compile Include="Model\MGenAttributeSearch.cs" />
@@ -883,6 +886,8 @@
     <Compile Include="Model\MLotCtl.cs" />
     <Compile Include="Model\MMailMsg.cs" />
     <Compile Include="Model\MManufacturer.cs" />
+    <Compile Include="Model\MMasterForecast.cs" />
+    <Compile Include="Model\MMasterForecastLineDetails.cs" />
     <Compile Include="Model\MMatchInv.cs" />
     <Compile Include="Model\MMatchPO.cs" />
     <Compile Include="Model\MMeasure.cs" />
@@ -1171,6 +1176,7 @@
     <Compile Include="Model\X_C_FinRptAcctGroup.cs" />
     <Compile Include="Model\X_C_FinRptAcctSubGroup.cs" />
     <Compile Include="Model\X_C_FinRptConfig.cs" />
+    <Compile Include="Model\X_C_ForecastLineHistory.cs" />
     <Compile Include="Model\X_C_GenAttribute.cs" />
     <Compile Include="Model\X_C_GenAttributeInstance.cs" />
     <Compile Include="Model\X_C_GenAttributeSearch.cs" />
@@ -1200,6 +1206,7 @@
     <Compile Include="Model\X_C_Lead.cs" />
     <Compile Include="Model\X_C_LeadQualification.cs" />
     <Compile Include="Model\X_C_Location.cs" />
+    <Compile Include="Model\X_C_MasterForecastLineDetails.cs" />
     <Compile Include="Model\X_C_NonBusinessDay.cs" />
     <Compile Include="Model\X_C_Order.cs" />
     <Compile Include="Model\X_C_OrderLine.cs" />
@@ -1698,13 +1705,16 @@
     <Compile Include="Process\CommissionCalc.cs" />
     <Compile Include="Process\CommissionCopy.cs" />
     <Compile Include="Process\CopyAllGroups.cs" />
+    <Compile Include="Process\CopyFromForecast.cs" />
     <Compile Include="Process\CopyFromInvoice.cs" />
     <Compile Include="Process\CopyFromJournal.cs" />
     <Compile Include="Process\CopyFromLine.cs" />
+    <Compile Include="Process\CopyFromMasterForecast.cs" />
     <Compile Include="Process\CopyFromOrder.cs" />
     <Compile Include="Process\CopyFromProject.cs" />
     <Compile Include="Process\CopyOrder.cs" />
     <Compile Include="Process\CopyTranslationEntries.cs" />
+    <Compile Include="Process\CostCalculationWithAcctSchema.cs" />
     <Compile Include="Process\CostCreate.cs" />
     <Compile Include="Process\CostingCalculation.cs" />
     <Compile Include="Process\CostUpdate.cs" />

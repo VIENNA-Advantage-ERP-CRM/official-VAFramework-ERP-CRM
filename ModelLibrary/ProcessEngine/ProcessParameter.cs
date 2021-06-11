@@ -54,8 +54,9 @@ namespace VAdvantage.ProcessEngine
                                   vr.Code AS ValidationCode,
                                   p.AD_InfoWindow_ID,
                                   p.LoadRecursiveData,
-p.ShowChildOfSelected,
-p.IsEncrypted
+                                  p.ShowChildOfSelected,
+                                  p.IsEncrypted,
+                                  p.ZoomWindow_ID
                                 FROM AD_Process_Para p
                                 LEFT OUTER JOIN AD_Val_Rule vr
                                 ON (p.AD_Val_Rule_ID =vr.AD_Val_Rule_ID)
@@ -99,9 +100,10 @@ p.IsEncrypted
                                   p.AD_Reference_Value_ID,
                                   vr.Code AS ValidationCode,
                                   p.ad_infowindow_id,
-                                  p.LoadRecursiveData
-                                    , p.ShowChildOfSelected,
-p.IsEncrypted
+                                  p.LoadRecursiveData,
+                                  p.ShowChildOfSelected,
+                                  p.IsEncrypted,
+                                  p.ZoomWindow_ID
                                 FROM AD_Process_Para p
                                 INNER JOIN AD_Process_Para_Trl t
                                 ON (p.AD_Process_Para_ID=t.AD_Process_Para_ID)
