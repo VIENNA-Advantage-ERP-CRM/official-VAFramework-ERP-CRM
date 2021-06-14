@@ -65,22 +65,26 @@ namespace VAdvantage.Model
          */
         protected override bool AfterSave(bool newRecord, bool success)
         {
-            if (!success || !newRecord)
+            if (!success)
                 return success;
 
-            string type, title;
-            if (IsTask())
+            if (newRecord)
             {
-                type = "T";
-                title = "Task: ";
-            }
-            else
-            {
-                type = "A";
-                title = "Appointment: ";
+                string type, title;
+                if (IsTask())
+                {
+                    type = "T";
+                    title = "Task: ";
+                }
+                else
+                {
+                    type = "A";
+                    title = "Appointment: ";
+                }
+
+                PushNotification.SendNotificationToUser(GetAD_User_ID(), GetAD_Window_ID(), GetRecord_ID(), title + GetSubject(), GetDescription(), type);
             }
 
-            PushNotification.SendNotificationToUser(GetAD_User_ID(), GetAD_Window_ID(), GetRecord_ID(), title + GetSubject(), GetDescription(), type);
             return true;
         }
     }

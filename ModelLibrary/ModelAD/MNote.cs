@@ -118,7 +118,7 @@ namespace VAdvantage.Model
         /// <param name="Reference"></param>
         /// <param name="trxName"></param>
         public MNote(Ctx ctx, int AD_Message_ID, int AD_User_ID, int AD_Client_ID, int AD_Org_ID, int AD_Table_ID, int Record_ID, String Reference, Trx trxName)
-            : this(ctx,AD_Message_ID, AD_User_ID, trxName)
+            : this(ctx, AD_Message_ID, AD_User_ID, trxName)
         {
             SetClientOrg(AD_Client_ID, AD_Org_ID);
             SetRecord(AD_Table_ID, Record_ID);
@@ -234,11 +234,15 @@ namespace VAdvantage.Model
          */
         protected override bool AfterSave(bool newRecord, bool success)
         {
-            if (!success || !newRecord)
+            if (!success)
                 return success;
 
-            // VIS264 - Send push notification
-            PushNotification.SendNotificationToUser(GetAD_User_ID(), GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(), "Notice"), GetTextMsg(), "N");
+            if (newRecord)
+            {
+                // VIS264 - Send push notification
+                PushNotification.SendNotificationToUser(GetAD_User_ID(), GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(), "Notice"), GetTextMsg(), "N");
+            }
+
             return true;
         }
     }
