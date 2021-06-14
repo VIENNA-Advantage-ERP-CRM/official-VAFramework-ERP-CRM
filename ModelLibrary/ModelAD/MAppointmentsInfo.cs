@@ -65,7 +65,7 @@ namespace VAdvantage.Model
          */
         protected override bool AfterSave(bool newRecord, bool success)
         {
-            if (!success)
+            if (!success || !newRecord)
                 return success;
 
             string type, title;
