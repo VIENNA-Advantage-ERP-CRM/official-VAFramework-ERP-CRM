@@ -1172,10 +1172,15 @@ namespace VAdvantage.WF
                         }
                     }
 
-                    if (autoApproval
-                        && doc.ProcessIt(DocActionVariables.ACTION_APPROVE)
-                        && doc.Save())
+                    if (autoApproval && doc.ProcessIt(DocActionVariables.ACTION_APPROVE) && doc.Save())
+                    {
                         return true;	//	done
+                    }
+                    else
+                    {
+                        // VIS264 - Send push notification
+                        PushNotification.SendNotificationToUser(GetAD_User_ID(), GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(), "WorkFlow"), GetMessageContent(), "W");
+                    }
                 }	//	approval
 
                 else if (_node.IsMultiApproval() && _node.GetApprovalLeval() > -1) //For Leave Request Approval
@@ -1329,6 +1334,9 @@ namespace VAdvantage.WF
                     SetAD_User_ID(userID);
                     eve.SetAD_User_ID(userID);
                     eve.Save();
+
+                    // VIS264 - Send push notification
+                    PushNotification.SendNotificationToUser(GetAD_User_ID(), GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(), "WorkFlow"), GetMessageContent(), "W");
                 }
                 //For Genral Attribute
                 //else if (new MColumn(GetCtx(),_node.GetAD_Column_ID(),Get_TrxName()).GetColumnName().ToUpper().Equals("C_GENATTRIBUTESETINSTANCE_ID"))
