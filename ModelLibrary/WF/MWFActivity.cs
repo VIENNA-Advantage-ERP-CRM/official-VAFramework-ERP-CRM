@@ -24,6 +24,8 @@ using VAdvantage.Print;
 using System.Net;
 using System.Threading;
 using System.Reflection;
+using VAdvantage.PushNotif;
+
 namespace VAdvantage.WF
 {
     public class MWFActivity : X_AD_WF_Activity
@@ -1239,6 +1241,10 @@ namespace VAdvantage.WF
                             SetAD_User_ID(nextAD_User_ID);
                             eve.SetAD_User_ID(nextAD_User_ID);
                             eve.Save();
+
+                            // VIS264 - Send push notification
+                            PushNotification.SendNotificationToUser(nextAD_User_ID, GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(), "WorkFlow"), GetMessageContent(), "W");
+
                             return false;
                         }
                         else
@@ -1274,6 +1280,10 @@ namespace VAdvantage.WF
                     SetAD_User_ID(nextAD_User_ID);
                     eve.SetAD_User_ID(nextAD_User_ID);
                     eve.Save();
+
+                    // VIS264 - Send push notification
+                    PushNotification.SendNotificationToUser(nextAD_User_ID, GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(), "WorkFlow"), GetMessageContent(), "W");
+
                     //if (!autoApproval)
                     //    SetAD_User_ID(nextAD_User_ID);
                     //if (autoApproval)
@@ -1575,6 +1585,17 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             //
             //
             throw new ArgumentException("Invalid Action (Not Implemented) =" + action);
+        }
+
+        /// <summary>
+        /// Get message content for push notification
+        /// </summary>
+        /// <returns>Message Content</returns>
+        private string GetMessageContent()
+        {
+            string priorityValue = "SELECT Priority FROM AD_WF_Activity WHERE AD_WF_Activity_ID = " + GetAD_WF_Activity_ID();
+            string priority = Util.GetValueOfString(DB.ExecuteScalar(priorityValue));
+            return "Approve\n" + GetSummary() + '\n' + "Priority " + priority;
         }
 
         /// <summary>
@@ -2517,6 +2538,10 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
 
             SetTextMsg(textMsg);
             Save();
+
+            // VIS264 - Send push notification
+            PushNotification.SendNotificationToUser(GetAD_User_ID(), GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(), "WorkFlow") + " FW", GetMessageContent(), "W");
+
             //	Close up Old Event
             GetEventAudit();
             _audit.SetAD_User_ID(oldUser.GetAD_User_ID());
