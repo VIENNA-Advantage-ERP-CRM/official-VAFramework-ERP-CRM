@@ -1204,14 +1204,22 @@ namespace VIS.Models
             ProductLinePo.Set_Value("C_UOM_ID", UOM_ID);
             ProductLinePo.Set_Value("M_AttributeSetInstance_ID", Attribute_ID);
             ProductLinePo.Set_Value("IsBOM", BOM.Equals("Y") ? true : false);
-            ProductLinePo.Set_Value("VA073_BOMUse", BOMUse.Equals("") ? null : BOMUse);
-            if (Env.IsModuleInstalled("VAMFG_"))
+            
+            if (Env.IsModuleInstalled("VAMFG_") && Util.GetValueOfInt(ProductLinePo.Get_Value("VAMFG_M_Routing_ID")) == 0)
             {
                 ProductLinePo.Set_Value("VAMFG_M_Routing_ID", Routing_ID);
             }
-            ProductLinePo.Set_Value("M_BOM_ID", M_BOM_ID);
-            ProductLinePo.Set_Value("VA073_PurchaseUnitPrice", PurchaseUnitPrice);
-            ProductLinePo.Set_Value("VA073_PurchaseValue", PurchaseUnitPrice * Util.GetValueOfDecimal(ProductLinePo.Get_Value("TotalQty")));
+            if (Util.GetValueOfInt(ProductLinePo.Get_Value("M_BOM_ID")) == 0)
+            {
+                ProductLinePo.Set_Value("M_BOM_ID", M_BOM_ID);
+            }
+            if (string.IsNullOrEmpty(Util.GetValueOfString(ProductLinePo.Get_Value("VA073_BOMUse"))))
+            {
+                ProductLinePo.Set_Value("VA073_BOMUse", BOMUse.Equals("") ? null : BOMUse);
+            }
+
+           // ProductLinePo.Set_Value("VA073_PurchaseUnitPrice", PurchaseUnitPrice);
+           // ProductLinePo.Set_Value("VA073_PurchaseValue", PurchaseUnitPrice * Util.GetValueOfDecimal(ProductLinePo.Get_Value("TotalQty")));
             if (Env.IsModuleInstalled("VAMFG_") && Util.GetValueOfInt(ProductLinePo.Get_Value("M_BOM_ID")) == 0)
             {
                 //fetch BOM ,BOMUSE ,Routing of selected Product 
@@ -1250,7 +1258,7 @@ namespace VIS.Models
                 "VA073_ProductLine_ID=" + ProductLinePo.Get_Value("VA073_ProductLine_ID"), null, ProductLinePo.Get_Trx()));
                 //Create MasterForecast LineDetails
                 ForecastLinePO = CreateBudgetForecastLineDetails(ProductLinePo, Order_ID, OrderLine_ID, Project_ID, ProjectLine_ID, MasterForecast_ID, MasterForecastLine_ID,
-                                      Charge_ID, Product_ID, Attribute_ID, UOM_ID, BOM, BaseQuantity, UnitPrice, Period, Date, OrderBPartner, OrderLocation, ProjectBPartner, ProjectLocation, ProductCategories);
+                                      Charge_ID, Product_ID, Attribute_ID, UOM_ID, BOM, BaseQuantity, UnitPrice, Period, Date, OrderBPartner, OrderLocation, ProjectBPartner, ProjectLocation, ProductCategories,Routing_ID,BOMUse,M_BOM_ID);
 
                 if (!ForecastLinePO.Save(trx))
                 {
@@ -1441,7 +1449,8 @@ namespace VIS.Models
         /// <param name="ProjectLocation">Location</param>
         /// <returns>PO object</returns>
         public PO CreateBudgetForecastLineDetails(PO Parent, int Order_ID, int OrderLine_ID, int Project_ID, int ProjectLine_ID, int MasterForecast_ID, int MasterForecastLine_ID,
-        int Charge_ID, int Product_ID, int Attribute_ID, int UOM_ID, String BOM, decimal? Quantity, decimal UnitPrice, int Period, DateTime? Date, int OrderBPartner, int OrderLocation, int ProjectBPartner, int ProjectLocation, string ProductCategories)
+        int Charge_ID, int Product_ID, int Attribute_ID, int UOM_ID, String BOM, decimal? Quantity, decimal UnitPrice, int Period, DateTime? Date, int OrderBPartner, int OrderLocation, 
+        int ProjectBPartner, int ProjectLocation, string ProductCategories,int Routing, string BOMUse, int BOM_ID)
         {
             //VA073_ForecastLine object
             ForecastLinePO = GetOrCreate(Parent, Product_ID, ProductCategories);
@@ -1474,18 +1483,31 @@ namespace VIS.Models
             {
                 ForecastLinePO.Set_Value("C_BPartner_ID", OrderBPartner);
                 ForecastLinePO.Set_Value("C_BPartner_Location_ID", OrderLocation);
+               
             }
             else if (ProjectLine_ID > 0)
             {
                 ForecastLinePO.Set_Value("C_BPartner_ID", ProjectBPartner);
-                ForecastLinePO.Set_Value("C_BPartner_Location_ID", ProjectLocation);
+                ForecastLinePO.Set_Value("C_BPartner_Location_ID", ProjectLocation);             
             }
-            ForecastLinePO.Set_Value("VA073_BOMUse", ProductLinePo.Get_Value("VA073_BOMUse"));
-            if (Env.IsModuleInstalled("VAMFG_"))
+            if (MasterForecastLine_ID > 0)
             {
-                ForecastLinePO.Set_Value("VAMFG_M_Routing_ID", ProductLinePo.Get_Value("VAMFG_M_Routing_ID"));
+                ForecastLinePO.Set_Value("M_BOM_ID", BOM_ID > 0 ? BOM_ID : ProductLinePo.Get_Value("M_BOM_ID"));
+                if (Env.IsModuleInstalled("VAMFG_"))
+                {
+                    ForecastLinePO.Set_Value("VAMFG_M_Routing_ID", Routing > 0 ? Routing : ProductLinePo.Get_Value("VAMFG_M_Routing_ID"));
+                }
+                ForecastLinePO.Set_Value("VA073_BOMUse", !string.IsNullOrEmpty(BOMUse) ? ProductLinePo.Get_Value("VA073_BOMUse") : BOMUse);
             }
-            ForecastLinePO.Set_Value("M_BOM_ID", ProductLinePo.Get_Value("M_BOM_ID"));
+            else
+            {
+                ForecastLinePO.Set_Value("VA073_BOMUse", ProductLinePo.Get_Value("VA073_BOMUse"));
+                ForecastLinePO.Set_Value("M_BOM_ID", ProductLinePo.Get_Value("M_BOM_ID"));
+                if (Env.IsModuleInstalled("VAMFG_"))
+                {
+                    ForecastLinePO.Set_Value("VAMFG_M_Routing_ID", ProductLinePo.Get_Value("VAMFG_M_Routing_ID"));
+                }
+            }
             return ForecastLinePO;
         }
 
