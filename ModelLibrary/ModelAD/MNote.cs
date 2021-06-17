@@ -240,7 +240,28 @@ namespace VAdvantage.Model
             if (newRecord)
             {
                 // VIS264 - Send push notification
-                PushNotification.SendNotificationToUser(GetAD_User_ID(), GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(), "Notice"), GetTextMsg(), "N");
+
+                DateTime now = DateTime.Now;
+                DateTime localTime = GetCreated().ToLocalTime();
+
+                string dayName = null;
+
+                if (now.ToShortDateString() == localTime.ToShortDateString())
+                {
+                    dayName = " (Today)";
+                }
+                else if(now.AddDays(1).ToShortDateString() == localTime.ToShortDateString())
+                {
+                    dayName = " (Tomorrow)";
+                }
+                else if (now.AddDays(-1).ToShortDateString() == localTime.ToShortDateString())
+                {
+                    dayName = " (Yesterday)";
+                }
+
+                string msgBody = "Received " + localTime + dayName;
+
+                PushNotification.SendNotificationToUser(GetAD_User_ID(), GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(), "Notice"), msgBody , "N");
             }
 
             return true;

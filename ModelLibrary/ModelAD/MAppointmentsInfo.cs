@@ -70,19 +70,25 @@ namespace VAdvantage.Model
 
             if (newRecord)
             {
-                string type, title;
+                string type, title, body;
                 if (IsTask())
                 {
+                    string priorityValue = $@"SELECT Name FROM AD_Ref_List WHERE AD_Reference_ID = 
+                                            (SELECT AD_Reference_ID FROM AD_Reference WHERE Name = '_PriorityRule')
+                                            AND Value = {GetPriorityKey()} AND IsActive = 'Y'";
+                    string priority = Util.GetValueOfString(DB.ExecuteScalar(priorityValue));
                     type = "T";
-                    title = "Task: ";
+                    title = "Task";
+                    body = GetSubject() + " (" + priority + ")";
                 }
                 else
                 {
                     type = "A";
-                    title = "Appointment: ";
+                    title = "Appointment";
+                    body = GetSubject() + " (" + GetStartDate().Value.ToLocalTime() + ")";
                 }
 
-                PushNotification.SendNotificationToUser(GetAD_User_ID(), GetAD_Window_ID(), GetRecord_ID(), title + GetSubject(), GetDescription(), type);
+                PushNotification.SendNotificationToUser(GetAD_User_ID(), GetAD_Window_ID(), GetRecord_ID(), title, body, type);
             }
 
             return true;
