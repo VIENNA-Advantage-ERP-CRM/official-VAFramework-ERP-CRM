@@ -523,21 +523,29 @@
 
                             d = d.split("^^^");
                             strDiv = "<div class='vis-grid-td-icon-grp'>";
+                            var highlightChar = '';
                             for (var c = 0; c < d.length; c++) {
-                                //if (d.length.indexOf("Images/") > -1) {
-                                if (d[c].length > 0) {
+                                if (d[c].trim().length > 0) {
+                                    if (highlightChar.length == 0)
+                                        highlightChar = d[c].trim().substring(0, 1).toUpper();
+
+                                    if (c > 0 && img.indexOf("nothing.png") > -1 && highlightChar.length>0) {
+                                        strDiv += "<div class='vis-grid-row-td-icon'><span>" + highlightChar + "</span></div>";
+                                    }
                                     strDiv += "<span>" + d[c] + "</span>";
                                 }
-                                if (c == 0)
-                                    strDiv += "<div class='vis-grid-row-td-icon'><img src='" + img + "' ></img></div>";
-                                //}
-                                //else {
-
-                                //}
+                                if (c == 0 || img.indexOf("nothing.png") > -1) {
+                                    if (img.indexOf("nothing.png")== -1)
+                                    {
+                                        strDiv += "<div class='vis-grid-row-td-icon'><img src='" + img + "' ></img></div>";
+                                    }
+                                   
+                                }
                             }
                             +"</div > ";
 
                         }
+                        
 
                         if (strDiv == "")
                             return d;

@@ -495,6 +495,8 @@ namespace VAdvantage.Classes
                 dr = DataBase.DB.ExecuteReader(sql);
                 while (dr.Read())
                 {
+                    if (dr[0].ToString().Equals("AD_Image_ID"))
+                        continue;
                     LookupDisplayColumn ldc = new LookupDisplayColumn(dr[0].ToString(),
                         "Y".Equals(dr[1].ToString()), Utility.Util.GetValueOfInt(dr[2]), Utility.Util.GetValueOfInt(dr[3]));
                     list.Add(ldc);
@@ -532,6 +534,8 @@ namespace VAdvantage.Classes
                     dr = DataBase.DB.ExecuteReader(sql1);
                     while (dr.Read())
                     {
+                        if (dr[0].ToString().Equals("AD_Image_ID"))
+                            continue;
                         count++;
                         LookupDisplayColumn ldc = new LookupDisplayColumn(dr[0].ToString(),
                             "Y".Equals(dr[1].ToString()), Utility.Util.GetValueOfInt(dr[2]), Utility.Util.GetValueOfInt(dr[3]));
@@ -787,7 +791,12 @@ namespace VAdvantage.Classes
 
                 //jz EDB || problem
                 //if (DatabaseType.IsPostgre || DatabaseType.IsMSSql)
-                displayColumn.Append(",'')");
+                if (ldc.ColumnName.ToLower().Equals("ad_image_id"))
+                    displayColumn.Append(",' Images/nothing.png^^')");
+                else
+                    displayColumn.Append(",'')");
+
+                //
             }
             return displayColumn;
         }

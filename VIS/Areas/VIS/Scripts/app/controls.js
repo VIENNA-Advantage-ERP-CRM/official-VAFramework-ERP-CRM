@@ -1523,8 +1523,11 @@
         if (!displayType)
             displayType = VIS.DisplayType.Table;
 
+       // var $ctrl = $('<input>', { name: columnName });
         var $ctrl = $('<select>', { name: columnName });
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, mandatory);
+
+       
         this.lookup = lookup;
         this.lastDisplay = "";
         this.settingFocus = false;
@@ -1600,6 +1603,13 @@
         this.getBtnCount = function () {
             return btnCount;
         };
+
+        //this.createAutoComplete = function () {
+        //    $ctrl.autocomplete({
+        //    });
+        //};
+
+        //this.createAutoComplete();
 
         /** 
             get contols button by index 
@@ -1996,6 +2006,7 @@
     VComboBox.prototype.refreshOptions = function (data, selVal) {
         var output = [];
         var selIndex = -1;
+        //userQueries = [];
         for (var i = 0; i < data.length; i++) {
             if (selVal && selVal == data[i].Key) {
                 selIndex = i;
@@ -2003,9 +2014,15 @@
             var val = VIS.Utility.Util.getIdentifierDisplayVal(data[i].Name);
 
             output[i] = '<option value="' + data[i].Key + '">' + val + '</option>';
+
+            //userQueries.push({
+            //    'title': val, 'label': val, 'value': val, 'id': data[i].Key
+            //});
         }
         this.ctrl.empty();
         this.ctrl.html(output.join(''));
+
+        //this.ctrl.autocomplete('option', 'source', userQueries);
 
         //if (selVal) {
         this.ctrl[0].selectedIndex = selIndex;
