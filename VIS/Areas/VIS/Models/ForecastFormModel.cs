@@ -145,7 +145,7 @@ namespace VIS.Models
                         if (ToCurrency == 0)
                         {
                             ToCurrency = FromCurrency;
-                            ToCurrencyName = FromCurrencyName;
+                            ToCurrencyName = BudgetFromCurrencyName;
                         }
                     }
                     else
@@ -270,8 +270,13 @@ namespace VIS.Models
                     if (ds != null && ds.Tables.Count > 0)
                     {
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                        {
-                            //Price conversion from Orderss currency to Forecast Currency
+                        {                            
+                            if (Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["Price"]) == 0)
+                            {
+                                log.Log(Level.WARNING, Msg.GetMsg(ctx, "PriceNotFound"));
+                                continue;
+                            }
+                            //Price conversion from Orders currency to Forecast Currency
                             ConvertedPrice = MConversionRate.Convert(ctx, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["Price"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Currency_ID"]),
                             ToCurrency, DateAcct, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
 
@@ -403,6 +408,11 @@ namespace VIS.Models
                     {
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
+                            if (Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["Price"]) == 0)
+                            {
+                                log.Log(Level.WARNING, Msg.GetMsg(ctx, "PriceNotFound"));
+                                continue;
+                            }
                             //Price conversion from Orderss currency to Forecast Currency
                             ConvertedPrice = MConversionRate.Convert(ctx, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["Price"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Currency_ID"]),
                             ToCurrency, DateAcct, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
@@ -510,7 +520,7 @@ namespace VIS.Models
             }
 
             //if conversion not found then display this message 
-            if (!string.IsNullOrEmpty(FromCurrencyName) && ((IsBudgetForecast && ToCurrency != FromCurrency) || !IsBudgetForecast))
+            if (!string.IsNullOrEmpty(FromCurrencyName)/* && ((IsBudgetForecast && ToCurrency != FromCurrency) || !IsBudgetForecast)*/)
             {
                 msg = Msg.GetMsg(ctx, "ConversionNotFound") + " " + FromCurrencyName.Trim(',') + " " + Msg.GetMsg(ctx, "To") + " " + ToCurrencyName;
 
@@ -593,6 +603,11 @@ namespace VIS.Models
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
+                    if (Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["Price"]) == 0)
+                    {
+                        log.Log(Level.WARNING, Msg.GetMsg(ctx, "PriceNotFound"));
+                        continue;
+                    }
                     //Price conversion from Opportunity currency to Forecast Currency
                     ConvertedPrice = MConversionRate.Convert(ctx, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["Price"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Currency_ID"]),
                     ToCurrency, DateAcct, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
@@ -784,6 +799,11 @@ namespace VIS.Models
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
+                    if (Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["Price"]) == 0)
+                    {
+                        log.Log(Level.WARNING, Msg.GetMsg(ctx, "PriceNotFound"));
+                        continue;
+                    }
                     //Price conversion from Orders currency to Forecast Currency
                     ConvertedPrice = MConversionRate.Convert(ctx, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["Price"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Currency_ID"]),
                     ToCurrency, DateAcct, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
@@ -867,6 +887,11 @@ namespace VIS.Models
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
+                    if (Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["Price"]) == 0)
+                    {
+                        log.Log(Level.WARNING, Msg.GetMsg(ctx, "PriceNotFound"));
+                        continue;
+                    }
                     //Price conversion from Orders currency to Forecast Currency
                     ConvertedPrice = MConversionRate.Convert(ctx, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["Price"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Currency_ID"]),
                     ToCurrency, DateAcct, ConversionType, ctx.GetAD_Client_ID(), Org_ID);
