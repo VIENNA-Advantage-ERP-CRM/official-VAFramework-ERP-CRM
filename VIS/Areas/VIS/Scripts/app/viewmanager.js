@@ -159,6 +159,7 @@
                 windw.refreshData();
                 windw.show($mainConatiner, addShortcut);
                 registerView(windw);
+                setGridFont();
                 return windw;
             }
 
@@ -168,9 +169,36 @@
                 windw.onClosed = removeShortcut;
                 windw.show($mainConatiner);
                 registerView(windw);
+                setGridFont();
             }
 
             return windw;
+        };
+
+        function setGridFont() {
+            //$('body').removeClass('w2ui-reset table');
+           
+            var dynamicClassName = ".w2ui-reset table{font-family: var(--v-c-font-family);";
+            if (Math.round(window.devicePixelRatio * 100) >= 100) {
+
+                dynamicClassName += "font-size: 0.85rem !important;}";
+            }
+            else {
+                dynamicClassName += "font-size: 1rem !important;}";
+            }
+            //
+            if (this.styleTag) {
+                this.styleTag.remove();
+                $('body').removeClass('w2ui-reset');
+                $('.vis-ad-w-p').addClass('w2ui-reset');
+            }
+            else {
+                $('body').addClass('w2ui-reset');
+            }
+            this.styleTag = document.createElement('style');
+            this.styleTag.type = 'text/css'
+            this.styleTag.innerHTML = dynamicClassName;
+            $($('head')[0]).append(this.styleTag);
         };
 
         /* Start form
@@ -290,7 +318,8 @@
 
         /* resize all open windows when screen size is changed
         */
-        function sizeChanged(h,w) {
+        function sizeChanged(h, w) {
+            setGridFont();
             for (var id in windowObjects) {
                 windowObjects[id].sizeChanged(h,w);
             }
