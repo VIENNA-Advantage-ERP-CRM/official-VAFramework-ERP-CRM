@@ -79,11 +79,40 @@ namespace VAdvantage.Model
         }
         protected override bool AfterSave(bool newRecord, bool success)
         {
+            string sql = "";
             if (!success)
                 return success;
-            string sql = "update C_MasterForecast set GrandTotal = (SELECT COALESCE(SUM(PlannedRevenue),0) FROM C_MasterForecastLine WHERE isactive = 'Y' and C_MasterForecast_ID= " + GetC_MasterForecast_ID() + ") where C_MasterForecast_ID = " + GetC_MasterForecast_ID();
-            int count = DB.ExecuteQuery(sql, null, Get_Trx());
-            return true;
+
+            if (newRecord && !GetCtx().GetContext("Form").Equals("Y"))
+            {
+                MMasterForecastLineDetails objForecastLine = new MMasterForecastLineDetails(this);
+                if (!objForecastLine.Save() )
+                {
+                    ValueNamePair vp = VLogger.RetrieveError();
+                    if (vp != null)
+                    {
+                        string val = vp.GetName();
+                        if (string.IsNullOrEmpty(val))
+                        {
+                            val = vp.GetValue();
+                        }
+                        log.SaveWarning("NotSaveForecastLine", val);
+                    }
+                }
+                else
+                {
+                    sql = "UPDATE C_MasterForecastLine SET IsManual='Y' WHERE C_MasterForecastLine_ID="+GetC_MasterForecastLine_ID();
+                    DB.ExecuteQuery(sql, null, Get_Trx());
+                }
+            }
+
+             sql = "update C_MasterForecast set GrandTotal = (SELECT COALESCE(SUM(PlannedRevenue),0) FROM C_MasterForecastLine WHERE isactive = 'Y' and C_MasterForecast_ID= " + GetC_MasterForecast_ID() + ") where C_MasterForecast_ID = " + GetC_MasterForecast_ID();
+             DB.ExecuteQuery(sql, null, Get_Trx());
+
+            
+
+
+                return true;
             //return base.AfterSave(newRecord, success);
         }
 
