@@ -94,7 +94,7 @@ namespace VAdvantage.Model
                 PushNotification.SendNotificationToUser(GetAD_User_ID(), GetAD_Window_ID(), GetRecord_ID(), title, body, type);
             }
             // Checking if notification is read by user 
-            else if (IsRead())
+            else if (Is_ValueChanged("IsRead") && IsRead())
             {
                 int creatorUserId = GetCreatedBy();
                 PushNotification.SendNotificationToUser(creatorUserId, GetAD_Window_ID(), GetRecord_ID(), title, body, type);
