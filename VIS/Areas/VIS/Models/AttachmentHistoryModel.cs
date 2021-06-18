@@ -40,14 +40,16 @@ namespace VIS.Models
             {
                 strAppCount += " AND upper(ai.Subject)  like upper('%" + searchText + "%')";
             }
-            strAppCount += " AND ai.IsTask='N' And ai.Ad_Table_Id = " + _AD_Table_ID + " And ai.AD_User_ID = " + ctx.GetAD_User_ID() + ")   UNION" +
+            strAppCount += " AND ai.IsTask='N' And ai.Ad_Table_Id = " + _AD_Table_ID+ " )   UNION" +
+            //strAppCount += " AND ai.IsTask='N' And ai.Ad_Table_Id = " + _AD_Table_ID + " And ai.AD_User_ID = " + ctx.GetAD_User_ID() + ")   UNION" +
 
                  "( SELECT ai.AppointmentsInfo_ID AS ID, ai.record_ID, ai.created,'" + Msg.GetMsg(ctx, "Task") + "' AS TYPE, subject  FROM AppointmentsInfo ai JOIN AD_User au on au.AD_User_ID=ai.createdby WHERE ai.record_Id =" + _Record_ID;
             if (searchText != "undefined" && searchText != null && searchText != "")
             {
                 strAppCount += " AND upper(ai.Subject)  like upper('%" + searchText + "%')";
             }
-            strAppCount += " AND ai.IsTask='Y' And ai.Ad_Table_Id = " + _AD_Table_ID + " And ai.AD_User_ID = " + ctx.GetAD_User_ID() + ")   UNION" +
+            strAppCount += " AND ai.IsTask='Y' And ai.Ad_Table_Id = " + _AD_Table_ID  + " )   UNION" +
+            //strAppCount += " AND ai.IsTask='Y' And ai.Ad_Table_Id = " + _AD_Table_ID + " And ai.AD_User_ID = " + ctx.GetAD_User_ID() + ")   UNION" +
 
 
             " SELECT MAILATTACHMENT1_ID AS ID, record_ID,created,'" + Msg.GetMsg(ctx, "SentMail") + "' AS TYPE, TITLE AS Subject FROM mailattachment1 WHERE record_id=" + _Record_ID;
@@ -120,7 +122,8 @@ and record_id = " + _Record_ID;
             {
                 strApp += " AND upper(ai.Subject)  like upper('%" + searchText + "%')";
             }
-            strApp += " AND ai.IsTask='N' And ai.Ad_Table_Id = " + _AD_Table_ID + " And ai.AD_User_ID = " + ctx.GetAD_User_ID() + ")   UNION" +
+            strApp += " AND ai.IsTask='N' And ai.Ad_Table_Id = " + _AD_Table_ID + " )   UNION" +
+            //strApp += " AND ai.IsTask='N' And ai.Ad_Table_Id = " + _AD_Table_ID + " And ai.AD_User_ID = " + ctx.GetAD_User_ID() + ")   UNION" +
 
 
                 "( SELECT ai.AppointmentsInfo_ID AS ID, ai.record_ID, ai.created,'" + Msg.GetMsg(ctx, "Task") + "' AS TYPE,ai.Subject,au.name  FROM AppointmentsInfo ai JOIN AD_User au on au.AD_User_ID=ai.createdby WHERE ai.record_Id =" + _Record_ID;
@@ -128,7 +131,8 @@ and record_id = " + _Record_ID;
             {
                 strApp += " AND upper(ai.Subject)  like upper('%" + searchText + "%')";
             }
-            strApp += " AND ai.IsTask='Y' And ai.Ad_Table_Id = " + _AD_Table_ID + " And ai.AD_User_ID = " + ctx.GetAD_User_ID() + ")   UNION" +
+            strApp += " AND ai.IsTask='Y' And ai.Ad_Table_Id = " + _AD_Table_ID +  " )   UNION" +
+            //strApp += " AND ai.IsTask='Y' And ai.Ad_Table_Id = " + _AD_Table_ID + " And ai.AD_User_ID = " + ctx.GetAD_User_ID() + ")   UNION" +
 
 
 
