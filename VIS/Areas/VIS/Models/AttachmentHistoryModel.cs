@@ -1703,8 +1703,17 @@ ON au.AD_User_ID=ai.createdby JOIN AD_Table adt ON adt.AD_Table_ID   =ai.AD_Tabl
                 obj["AD_Table_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["AD_Table_ID"]);
                 obj["Record_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["Record_ID"]);
                 obj["label"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["label"]);
-                obj["StartDate"] = Util.GetValueOfDateTime(ds.Tables[0].Rows[0]["StartDate"]);
-                obj["EndDate"] = Util.GetValueOfDateTime(ds.Tables[0].Rows[0]["EndDate"]);
+
+                DateTime _StartDate = Convert.ToDateTime (ds.Tables[0].Rows[0]["StartDate"]);
+                DateTime _format = DateTime.SpecifyKind(new DateTime(_StartDate.Year, _StartDate.Month, _StartDate.Day, _StartDate.Hour, _StartDate.Minute, _StartDate.Second), DateTimeKind.Utc);
+                _StartDate = _format;
+                obj["StartDate"] = _StartDate;
+
+                DateTime _EndDate = Convert.ToDateTime(ds.Tables[0].Rows[0]["EndDate"]);
+                 _format = DateTime.SpecifyKind(new DateTime(_EndDate.Year, _EndDate.Month, _EndDate.Day, _EndDate.Hour, _EndDate.Minute, _EndDate.Second), DateTimeKind.Utc);
+                _EndDate = _format;
+                obj["EndDate"] = _EndDate;
+
                 obj["Allday"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["Allday"]);
                 obj["Status"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["Status"]);
                 obj["ReminderInfo"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["ReminderInfo"]);
