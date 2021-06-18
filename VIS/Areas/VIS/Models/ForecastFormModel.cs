@@ -297,7 +297,7 @@ namespace VIS.Models
                                 CreateTeamForecastLines(ctx, trx, Forecast_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Order_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_OrderLine_ID"]), 0, 0,
                                 0, Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]),
                                 Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_UOM_ID"]),
-                                Util.GetValueOfString(ds.Tables[0].Rows[i]["IsBOM"]), Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["BaseQty"]), Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["ForecastQty"]), ConvertedPrice);
+                                Util.GetValueOfString(ds.Tables[0].Rows[i]["IsBOM"]), Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["BaseQty"]), Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["ForecastQty"]), ConvertedPrice,"");
 
                             }
                             else if (IsMasterForecast)
@@ -433,7 +433,7 @@ namespace VIS.Models
                                 CreateTeamForecastLines(ctx, trx, Forecast_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Order_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_OrderLine_ID"]), 0, 0,
                                 0, Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]),
                                 Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_UOM_ID"]),
-                                Util.GetValueOfString(ds.Tables[0].Rows[i]["IsBOM"]), Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["BaseQty"]), Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["ForecastQty"]), ConvertedPrice);
+                                Util.GetValueOfString(ds.Tables[0].Rows[i]["IsBOM"]), Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["BaseQty"]), Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["ForecastQty"]), ConvertedPrice,"");
 
                             }
                             else if (IsMasterForecast)
@@ -513,11 +513,11 @@ namespace VIS.Models
                 return e.Message;
             }
 
-            if (Count > 0)
-            {
+            //if (Count > 0)
+            //{
                 trx.Commit();
                 trx.Close();
-            }
+            //}
 
             //if conversion not found then display this message 
             if (!string.IsNullOrEmpty(FromCurrencyName)/* && ((IsBudgetForecast && ToCurrency != FromCurrency) || !IsBudgetForecast)*/)
@@ -525,8 +525,11 @@ namespace VIS.Models
                 msg = Msg.GetMsg(ctx, "ConversionNotFound") + " " + FromCurrencyName.Trim(',') + " " + Msg.GetMsg(ctx, "To") + " " + ToCurrencyName;
 
             }
-
-            return Msg.GetMsg(ctx, "LinesInsterted") + " " + Count + " " + msg;
+            if (Count == 0)
+            {
+                return Msg.GetMsg(ctx, "NoDataFound") + " " + msg;
+            }
+            return Msg.GetMsg(ctx, "LinesInsterted") + " " + msg;
         }
 
         /// <summary>
@@ -627,7 +630,7 @@ namespace VIS.Models
                         //Create TeamForecast Lines
                         CreateTeamForecastLines(ctx, trx, Forecast_ID, 0, 0, Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Project_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ProjectLine_ID"]),
                         0, Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_UOM_ID"]),
-                        Util.GetValueOfString(ds.Tables[0].Rows[i]["IsBOM"]), Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["BaseQty"]), Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["ForecastQty"]), ConvertedPrice);
+                        Util.GetValueOfString(ds.Tables[0].Rows[i]["IsBOM"]), Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["BaseQty"]), Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["ForecastQty"]), ConvertedPrice, "");
                     }
                     else if (IsMasterForecast)
                     {
@@ -714,7 +717,7 @@ namespace VIS.Models
                         //Create TeamForecast Lines
                         CreateTeamForecastLines(ctx, trx, Forecast_ID, 0, 0, 0, 0, 0, Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]),
                         Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_UOM_ID"]),
-                        Util.GetValueOfString(ds.Tables[0].Rows[i]["IsBOM"]), BudgetQuantity, BudgetQuantity, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["SalesPrice"]));
+                        Util.GetValueOfString(ds.Tables[0].Rows[i]["IsBOM"]), BudgetQuantity, BudgetQuantity, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["SalesPrice"]), ProductCategories);
                     }
                     else if (IsMasterFoecast)
                     {
@@ -966,9 +969,9 @@ namespace VIS.Models
         /// <param name="Forecastqty">Forecast Qunatity</param>
         /// <param name="UnitPrice">Price</param>
         /// <Writer>209</Writer>
-        public void CreateTeamForecastLines(Ctx ctx, Trx trx, int Forecast_ID, int Order_ID, int OrderLine_ID, int Project_ID, int ProjectLine_ID, int Charge_ID, int Org_ID, int Product_ID, int Attribute_ID, int UOM_ID, String BOM, Decimal? BaseQuantity, Decimal? Forecastqty, decimal UnitPrice)
+        public void CreateTeamForecastLines(Ctx ctx, Trx trx, int Forecast_ID, int Order_ID, int OrderLine_ID, int Project_ID, int ProjectLine_ID, int Charge_ID, int Org_ID, int Product_ID, int Attribute_ID, int UOM_ID, String BOM, Decimal? BaseQuantity, Decimal? Forecastqty, decimal UnitPrice, string ProductCategories)
         {
-            MForecastLine Line = MForecastLine.GetOrCreate(ctx, trx, Forecast_ID, Product_ID);
+            MForecastLine Line = MForecastLine.GetOrCreate(ctx, trx, Forecast_ID, Product_ID,  ProductCategories);
             Line.SetAD_Client_ID(ctx.GetAD_Client_ID());
             Line.SetAD_Org_ID(Org_ID);
             Line.SetC_Order_ID(Order_ID);
@@ -1039,6 +1042,8 @@ namespace VIS.Models
         /// <Writer>209</Writer>
         public void CreateMasterForecastLines(Ctx ctx, Trx trx, int Org_ID, int MasterForecast_ID, int Order_ID, int OrderLine_ID, int Project_ID, int ProjectLine_ID, int TeamForecast_ID, int ForecastLine_ID, int Charge_ID, int Product_ID, int Attribute_ID, int UOM_ID, String BOM, decimal? BaseQuantity, decimal UnitPrice, string ProductCategories, string BOMUse, int M_BOM_ID, int Routing_ID)
         {
+            //set the context to indicate that line is created from form
+            ctx.SetContext("Form", true);
             MMasterForecastLine Line = MMasterForecastLine.GetOrCreate(ctx, trx, MasterForecast_ID, Product_ID, Charge_ID, Attribute_ID, ProductCategories);
             Line.SetAD_Org_ID(Org_ID);
             Line.SetC_MasterForecast_ID(MasterForecast_ID);
@@ -1053,11 +1058,11 @@ namespace VIS.Models
                 Line.Set_Value("VAMFG_M_Routing_ID", Routing_ID);
             }
             Line.SetM_BOM_ID(M_BOM_ID);
-            if (!Line.Is_New())
-            {
-                //if not new record then decrement count
-                Count--;
-            }
+            //if (!Line.Is_New())
+            //{
+            //    //if not new record then decrement count
+            //    Count--;
+            //}
             if (!Line.Save(trx))
             {
                 pp = VLogger.RetrieveError();
@@ -1391,11 +1396,11 @@ namespace VIS.Models
             {
                 retValue = CreateProductLine(ctx, trx, BudgetForeCast_ID, M_Product_ID, M_AttributeSetInstance_ID);
             }
-            else
-            {
-                if (Count > 0)
-                    Count--;
-            }
+            //else
+            //{
+            //    if (Count > 0)
+            //        Count--;
+            //}
             return retValue;
         }
 
