@@ -1648,7 +1648,7 @@ namespace VAdvantage.Model
 
                 string IsClosed = Util.GetValueOfString(DB.ExecuteScalar(IsClosedValue));
 
-                string msgTitle = Msg.GetMsg(GetCtx(), "Request") + " (" + GetDocumentNo() + ")";
+                string msgTitle = Msg.GetMsg(GetCtx(), "VIS_Request") + " (" + GetDocumentNo() + ")";
                 string msgBody = Msg.GetMsg(GetCtx(), "Received") + " " + GetStatusName() + " " + Msg.GetMsg(GetCtx(), "Notification");
 
                 if (IsClosed == "N")
