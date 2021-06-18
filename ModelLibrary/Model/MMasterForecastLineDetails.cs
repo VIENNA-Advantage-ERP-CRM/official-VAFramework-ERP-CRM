@@ -79,7 +79,7 @@ namespace VAdvantage.Model
              _sql = "UPDATE C_MasterForecastLine SET " +
             "ForcastQty=(SELECT NVL(SUM(QtyEntered),0) FROM C_MasterForecastLineDetails WHERE (NVL(C_Forecast_ID,0)>0 OR (NVL(C_Order_ID,0)=0 AND NVL(C_Project_ID,0)=0)) AND C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID() + "), " +
             "SalesOrderQty =(SELECT NVL(SUM(QtyEntered),0) FROM C_MasterForecastLineDetails WHERE NVL(C_Order_ID,0)>0 AND NVL(C_Forecast_ID,0)=0  AND C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID() + "), " +
-            "OppQty=(SELECT NVL(SUM(QtyEntered),0) FROM C_MasterForecastLineDetails WHERE NVL(C_Project_ID,0)>0 AND (NVL(C_Forecast_ID,0)=0  AND C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID() + "), " +
+            "OppQty=(SELECT NVL(SUM(QtyEntered),0) FROM C_MasterForecastLineDetails WHERE NVL(C_Project_ID,0)>0 AND NVL(C_Forecast_ID,0)=0  AND C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID() + "), " +
             "TotalQty=(SELECT NVL(SUM(QtyEntered),0) FROM C_MasterForecastLineDetails WHERE  C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID() + ") , " +
             "Price= ROUND((SELECT NVL(SUM(TotaAmt),0)/ NVL(SUM(QtyEntered),0) FROM C_MasterForecastLineDetails WHERE C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID() + "),"+Precision+")," +
             "PlannedRevenue =ROUND((SELECT SUM(TotaAmt) FROM C_MasterForecastLineDetails WHERE C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID() + ")," + Precision + ")"+
