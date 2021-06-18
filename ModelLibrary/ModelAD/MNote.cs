@@ -248,18 +248,18 @@ namespace VAdvantage.Model
 
                 if (now.ToShortDateString() == localTime.ToShortDateString())
                 {
-                    dayName = " (Today)";
+                    dayName = " (" + Msg.GetMsg(GetCtx(), "Today") + ")";
                 }
                 else if(now.AddDays(1).ToShortDateString() == localTime.ToShortDateString())
                 {
-                    dayName = " (Tomorrow)";
+                    dayName = " (" + Msg.GetMsg(GetCtx(), "Tomorrow") + ")";
                 }
                 else if (now.AddDays(-1).ToShortDateString() == localTime.ToShortDateString())
                 {
-                    dayName = " (Yesterday)";
+                    dayName = " (" + Msg.GetMsg(GetCtx(), "Yesterday") + ")"; ;
                 }
 
-                string msgBody = "Received " + localTime + dayName;
+                string msgBody = Msg.GetMsg(GetCtx(), "Received") + " " + localTime + dayName;
 
                 PushNotification.SendNotificationToUser(GetAD_User_ID(), GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(), "Notice"), msgBody , "N");
             }

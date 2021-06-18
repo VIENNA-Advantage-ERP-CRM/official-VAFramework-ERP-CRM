@@ -78,13 +78,13 @@ namespace VAdvantage.Model
                                             AND Value = {GetPriorityKey()} AND IsActive = 'Y'";
                     string priority = Util.GetValueOfString(DB.ExecuteScalar(priorityValue));
                     type = "T";
-                    title = "Task";
+                    title = Msg.GetMsg(GetCtx(), "Task");
                     body = GetSubject() + " (" + priority + ")";
                 }
                 else
                 {
                     type = "A";
-                    title = "Appointment";
+                    title = Msg.GetMsg(GetCtx(), "Appointment");
                     body = GetSubject() + " (" + GetStartDate().Value.ToLocalTime() + ")";
                 }
 
