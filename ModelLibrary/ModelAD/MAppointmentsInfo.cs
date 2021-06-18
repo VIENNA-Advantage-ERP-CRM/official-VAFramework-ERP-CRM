@@ -68,28 +68,39 @@ namespace VAdvantage.Model
             if (!success)
                 return success;
 
-            if (newRecord)
+            #region Push Notification
+
+            string type, title, body;
+
+            if (IsTask())
             {
-                string type, title, body;
-                if (IsTask())
-                {
-                    string priorityValue = $@"SELECT Name FROM AD_Ref_List WHERE AD_Reference_ID = 
+                string priorityValue = $@"SELECT Name FROM AD_Ref_List WHERE AD_Reference_ID = 
                                             (SELECT AD_Reference_ID FROM AD_Reference WHERE Name = '_PriorityRule')
                                             AND Value = {GetPriorityKey()} AND IsActive = 'Y'";
-                    string priority = Util.GetValueOfString(DB.ExecuteScalar(priorityValue));
-                    type = "T";
-                    title = Msg.GetMsg(GetCtx(), "Task");
-                    body = GetSubject() + " (" + priority + ")";
-                }
-                else
-                {
-                    type = "A";
-                    title = Msg.GetMsg(GetCtx(), "Appointment");
-                    body = GetSubject() + " (" + GetStartDate().Value.ToLocalTime() + ")";
-                }
+                string priority = Util.GetValueOfString(DB.ExecuteScalar(priorityValue));
+                type = "T";
+                title = Msg.GetMsg(GetCtx(), "Task");
+                body = GetSubject() + " (" + priority + ")";
+            }
+            else
+            {
+                type = "A";
+                title = Msg.GetMsg(GetCtx(), "Appointment");
+                body = GetSubject() + " (" + GetStartDate().Value.ToLocalTime() + ")";
+            }
 
+            if (newRecord)
+            {
                 PushNotification.SendNotificationToUser(GetAD_User_ID(), GetAD_Window_ID(), GetRecord_ID(), title, body, type);
             }
+            // Checking if notification is read by user 
+            else if (IsRead())
+            {
+                int creatorUserId = GetCreatedBy();
+                PushNotification.SendNotificationToUser(creatorUserId, GetAD_Window_ID(), GetRecord_ID(), title, body, type);
+            }
+
+            #endregion
 
             return true;
         }
