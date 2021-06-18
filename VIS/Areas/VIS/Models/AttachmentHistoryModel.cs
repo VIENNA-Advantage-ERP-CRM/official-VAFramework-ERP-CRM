@@ -40,14 +40,16 @@ namespace VIS.Models
             {
                 strAppCount += " AND upper(ai.Subject)  like upper('%" + searchText + "%')";
             }
-            strAppCount += " AND ai.IsTask='N' And ai.Ad_Table_Id = " + _AD_Table_ID + " And ai.AD_User_ID = " + ctx.GetAD_User_ID() + ")   UNION" +
+            strAppCount += " AND ai.IsTask='N' And ai.Ad_Table_Id = " + _AD_Table_ID+ " )   UNION" +
+            //strAppCount += " AND ai.IsTask='N' And ai.Ad_Table_Id = " + _AD_Table_ID + " And ai.AD_User_ID = " + ctx.GetAD_User_ID() + ")   UNION" +
 
                  "( SELECT ai.AppointmentsInfo_ID AS ID, ai.record_ID, ai.created,'" + Msg.GetMsg(ctx, "Task") + "' AS TYPE, subject  FROM AppointmentsInfo ai JOIN AD_User au on au.AD_User_ID=ai.createdby WHERE ai.record_Id =" + _Record_ID;
             if (searchText != "undefined" && searchText != null && searchText != "")
             {
                 strAppCount += " AND upper(ai.Subject)  like upper('%" + searchText + "%')";
             }
-            strAppCount += " AND ai.IsTask='Y' And ai.Ad_Table_Id = " + _AD_Table_ID + " And ai.AD_User_ID = " + ctx.GetAD_User_ID() + ")   UNION" +
+            strAppCount += " AND ai.IsTask='Y' And ai.Ad_Table_Id = " + _AD_Table_ID  + " )   UNION" +
+            //strAppCount += " AND ai.IsTask='Y' And ai.Ad_Table_Id = " + _AD_Table_ID + " And ai.AD_User_ID = " + ctx.GetAD_User_ID() + ")   UNION" +
 
 
             " SELECT MAILATTACHMENT1_ID AS ID, record_ID,created,'" + Msg.GetMsg(ctx, "SentMail") + "' AS TYPE, TITLE AS Subject FROM mailattachment1 WHERE record_id=" + _Record_ID;
@@ -120,7 +122,8 @@ and record_id = " + _Record_ID;
             {
                 strApp += " AND upper(ai.Subject)  like upper('%" + searchText + "%')";
             }
-            strApp += " AND ai.IsTask='N' And ai.Ad_Table_Id = " + _AD_Table_ID + " And ai.AD_User_ID = " + ctx.GetAD_User_ID() + ")   UNION" +
+            strApp += " AND ai.IsTask='N' And ai.Ad_Table_Id = " + _AD_Table_ID + " )   UNION" +
+            //strApp += " AND ai.IsTask='N' And ai.Ad_Table_Id = " + _AD_Table_ID + " And ai.AD_User_ID = " + ctx.GetAD_User_ID() + ")   UNION" +
 
 
                 "( SELECT ai.AppointmentsInfo_ID AS ID, ai.record_ID, ai.created,'" + Msg.GetMsg(ctx, "Task") + "' AS TYPE,ai.Subject,au.name  FROM AppointmentsInfo ai JOIN AD_User au on au.AD_User_ID=ai.createdby WHERE ai.record_Id =" + _Record_ID;
@@ -128,7 +131,8 @@ and record_id = " + _Record_ID;
             {
                 strApp += " AND upper(ai.Subject)  like upper('%" + searchText + "%')";
             }
-            strApp += " AND ai.IsTask='Y' And ai.Ad_Table_Id = " + _AD_Table_ID + " And ai.AD_User_ID = " + ctx.GetAD_User_ID() + ")   UNION" +
+            strApp += " AND ai.IsTask='Y' And ai.Ad_Table_Id = " + _AD_Table_ID +  " )   UNION" +
+            //strApp += " AND ai.IsTask='Y' And ai.Ad_Table_Id = " + _AD_Table_ID + " And ai.AD_User_ID = " + ctx.GetAD_User_ID() + ")   UNION" +
 
 
 
@@ -1699,8 +1703,17 @@ ON au.AD_User_ID=ai.createdby JOIN AD_Table adt ON adt.AD_Table_ID   =ai.AD_Tabl
                 obj["AD_Table_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["AD_Table_ID"]);
                 obj["Record_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["Record_ID"]);
                 obj["label"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["label"]);
-                obj["StartDate"] = Util.GetValueOfDateTime(ds.Tables[0].Rows[0]["StartDate"]);
-                obj["EndDate"] = Util.GetValueOfDateTime(ds.Tables[0].Rows[0]["EndDate"]);
+
+                DateTime _StartDate = Convert.ToDateTime (ds.Tables[0].Rows[0]["StartDate"]);
+                DateTime _format = DateTime.SpecifyKind(new DateTime(_StartDate.Year, _StartDate.Month, _StartDate.Day, _StartDate.Hour, _StartDate.Minute, _StartDate.Second), DateTimeKind.Utc);
+                _StartDate = _format;
+                obj["StartDate"] = _StartDate;
+
+                DateTime _EndDate = Convert.ToDateTime(ds.Tables[0].Rows[0]["EndDate"]);
+                 _format = DateTime.SpecifyKind(new DateTime(_EndDate.Year, _EndDate.Month, _EndDate.Day, _EndDate.Hour, _EndDate.Minute, _EndDate.Second), DateTimeKind.Utc);
+                _EndDate = _format;
+                obj["EndDate"] = _EndDate;
+
                 obj["Allday"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["Allday"]);
                 obj["Status"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["Status"]);
                 obj["ReminderInfo"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["ReminderInfo"]);
