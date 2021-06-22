@@ -1050,7 +1050,7 @@ namespace VIS.Models
             Line.SetC_Charge_ID(Charge_ID);
             Line.SetM_Product_ID(Product_ID);
             Line.SetC_UOM_ID(UOM_ID);
-            Line.SetM_AttributeSetInstance_ID(Attribute_ID);
+           // Line.SetM_AttributeSetInstance_ID(Attribute_ID);
             Line.SetIsBOM(BOM.Equals("Y") ? true : false);
             Line.SetBOMUse(BOMUse.Equals("") ? null : BOMUse);
             if (Env.IsModuleInstalled("VAMFG_"))
