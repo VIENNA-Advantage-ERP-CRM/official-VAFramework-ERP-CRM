@@ -31,15 +31,15 @@ namespace VAdvantage.Model
 
         }
 
-       /// <summary>
-       /// Create new MasterForeastLine
-       /// </summary>
-       /// <param name="ctx">Context</param>
-       /// <param name="trx">Transaction</param>
-       /// <param name="C_MasterForecast_ID">Master Forecast</param>
-       /// <param name="M_Product_ID">Product</param>
-       /// <param name="M_AttributeSetInstance_ID">Attribute set Insatnce</param>
-        public MMasterForecastLine(Ctx ctx ,Trx trx ,int C_MasterForecast_ID ,int M_Product_ID, int M_AttributeSetInstance_ID)
+        /// <summary>
+        /// Create new MasterForeastLine
+        /// </summary>
+        /// <param name="ctx">Context</param>
+        /// <param name="trx">Transaction</param>
+        /// <param name="C_MasterForecast_ID">Master Forecast</param>
+        /// <param name="M_Product_ID">Product</param>
+        /// <param name="M_AttributeSetInstance_ID">Attribute set Insatnce</param>
+        public MMasterForecastLine(Ctx ctx, Trx trx, int C_MasterForecast_ID, int M_Product_ID, int M_AttributeSetInstance_ID)
             : base(ctx, 0, trx)
         {
             int LineNo = Util.GetValueOfInt(DB.ExecuteScalar("SELECT NVL(MAX(Line), 0)+10  FROM C_MasterForecastLine WHERE " +
@@ -49,7 +49,7 @@ namespace VAdvantage.Model
             //SetC_UOM_ID(Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null)));          
             SetM_Product_ID(M_Product_ID);
             SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
-          
+
         }
 
         /// <summary>
@@ -68,11 +68,21 @@ namespace VAdvantage.Model
                     WHERE p.M_Product_ID=" + GetM_Product_ID() + " AND p.ISBOM = 'Y'" + " AND BOM.IsActive = 'Y'";
 
                 DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
-                if(ds != null && ds.Tables[0].Rows.Count == 1)
+                if (ds != null && ds.Tables[0].Rows.Count == 1)
                 {
                     SetBOMUse(Util.GetValueOfString(ds.Tables[0].Rows[0]["BOMUse"]));
-                    Set_Value("VAMFG_M_Routing_ID",Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAMFG_M_Routing_ID"]));
+                    Set_Value("VAMFG_M_Routing_ID", Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAMFG_M_Routing_ID"]));
                     SetM_BOM_ID(Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_BOM_ID"]));
+                }
+            }
+            //System would not allow the chnages if child record present
+            if (!newRecord && (Is_ValueChanged("M_Product_ID") || Is_ValueChanged("ForcastQty") || Is_ValueChanged("M_AttributeSetInstance_ID")))
+            {
+                string sql = "SELECT COUNT(C_MasterForecastLineDetails_ID) FROM C_MasterForecastLineDetails WHERE C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID();
+                if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
+                {
+                    log.SaveError("ForecastLineCantChange", "");
+                    return false;
                 }
             }
             return true;
@@ -82,11 +92,12 @@ namespace VAdvantage.Model
             string sql = "";
             if (!success)
                 return success;
-
-            if (newRecord && !GetCtx().GetContext("Form").Equals("Y"))
+            bool IsForm = GetCtx().GetContext("Form").Equals("Y");
+            GetCtx().SetContext("Form", "");
+            if (newRecord && !IsForm)
             {
                 MMasterForecastLineDetails objForecastLine = new MMasterForecastLineDetails(this);
-                if (!objForecastLine.Save() )
+                if (!objForecastLine.Save())
                 {
                     ValueNamePair vp = VLogger.RetrieveError();
                     if (vp != null)
@@ -101,18 +112,18 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    sql = "UPDATE C_MasterForecastLine SET IsManual='Y' WHERE C_MasterForecastLine_ID="+GetC_MasterForecastLine_ID();
+                    sql = "UPDATE C_MasterForecastLine SET IsManual='Y' WHERE C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID();
                     DB.ExecuteQuery(sql, null, Get_Trx());
                 }
             }
 
-             sql = "update C_MasterForecast set GrandTotal = (SELECT COALESCE(SUM(PlannedRevenue),0) FROM C_MasterForecastLine WHERE isactive = 'Y' and C_MasterForecast_ID= " + GetC_MasterForecast_ID() + ") where C_MasterForecast_ID = " + GetC_MasterForecast_ID();
-             DB.ExecuteQuery(sql, null, Get_Trx());
-
-            
+            sql = "update C_MasterForecast set GrandTotal = (SELECT COALESCE(SUM(PlannedRevenue),0) FROM C_MasterForecastLine WHERE isactive = 'Y' and C_MasterForecast_ID= " + GetC_MasterForecast_ID() + ") where C_MasterForecast_ID = " + GetC_MasterForecast_ID();
+            DB.ExecuteQuery(sql, null, Get_Trx());
 
 
-                return true;
+
+
+            return true;
             //return base.AfterSave(newRecord, success);
         }
 
@@ -138,7 +149,7 @@ namespace VAdvantage.Model
         /// <param name="M_AttributeSetInstance_ID">AttributesetInsatnce</param>
         /// <param name="ProductCategories">Product Categories</param>      
         /// <returns>MasterForecastLine</returns>
-        public static MMasterForecastLine GetOrCreate(Ctx ctx,Trx trx,int MasterForeCast_ID, int M_Product_ID, int Charge_ID,int M_AttributeSetInstance_ID,string ProductCategories)
+        public static MMasterForecastLine GetOrCreate(Ctx ctx, Trx trx, int MasterForeCast_ID, int M_Product_ID, int Charge_ID, int M_AttributeSetInstance_ID, string ProductCategories)
         {
             MMasterForecastLine retValue = null;
             String sql = "SELECT * FROM C_MasterForecastLine WHERE ";
@@ -148,13 +159,11 @@ namespace VAdvantage.Model
             }
             else
             {
-                if (M_AttributeSetInstance_ID > 0)
-                {
-                    sql += " NVL(M_AttributeSetInstance_ID,0)=" + M_AttributeSetInstance_ID+" AND ";
-                }
+                sql += " NVL(M_AttributeSetInstance_ID,0)=" + M_AttributeSetInstance_ID + " AND ";
+
                 if (M_Product_ID > 0)
                 {
-                    sql += " NVL(M_Product_ID,0) = " + M_Product_ID +" AND";
+                    sql += " NVL(M_Product_ID,0) = " + M_Product_ID + " AND";
                 }
 
                 if (Charge_ID > 0)
@@ -162,9 +171,9 @@ namespace VAdvantage.Model
                     sql += " NVL(C_Charge_ID,0) = " + Charge_ID + " AND";
                 }
             }
-            sql+= " NVL(C_MasterForecast_ID,0) =" + MasterForeCast_ID;
-             
-            
+            sql += " NVL(C_MasterForecast_ID,0) =" + MasterForeCast_ID;
+
+
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -195,7 +204,7 @@ namespace VAdvantage.Model
                 dt = null;
             }
             if (retValue == null)
-                retValue = new MMasterForecastLine(ctx,trx , MasterForeCast_ID, M_Product_ID, M_AttributeSetInstance_ID);
+                retValue = new MMasterForecastLine(ctx, trx, MasterForeCast_ID, M_Product_ID, M_AttributeSetInstance_ID);
 
             return retValue;
         }
