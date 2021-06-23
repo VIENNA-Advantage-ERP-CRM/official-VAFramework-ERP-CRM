@@ -783,7 +783,18 @@ namespace VAdvantage.Model
         public void SetCheckDocActionAccess(Boolean CheckDocActionAccess) { Set_Value("CheckDocActionAccess", CheckDocActionAccess); }/** Get Check Document Action Access.
 @return Check document action access based on document type on every transaction. */
         public Boolean IsCheckDocActionAccess() { Object oo = Get_Value("CheckDocActionAccess"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
-
+        /** Set Can Create New Attribute.
+@param IsCanCreateAttribute Users with this role can create new attribute set instance */
+        public void SetIsCanCreateAttribute(Boolean IsCanCreateAttribute) { Set_Value("IsCanCreateAttribute", IsCanCreateAttribute); }
+        /** Get Can Create New Attribute.
+@return Users with this role can create new attribute set instance */
+        public Boolean IsCanCreateAttribute() { Object oo = Get_Value("IsCanCreateAttribute"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
+        /** Set Can Edit Attribute.
+@param IsCanEditAttribute Users with this role can edit attribute set instance */
+        public void SetIsCanEditAttribute(Boolean IsCanEditAttribute) { Set_Value("IsCanEditAttribute", IsCanEditAttribute); }
+        /** Get Can Edit Attribute.
+@return Users with this role can edit attribute set instance */
+        public Boolean IsCanEditAttribute() { Object oo = Get_Value("IsCanEditAttribute"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
     }
 
 }
