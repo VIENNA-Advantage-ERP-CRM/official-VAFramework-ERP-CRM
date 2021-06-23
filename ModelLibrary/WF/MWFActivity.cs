@@ -1179,7 +1179,7 @@ namespace VAdvantage.WF
                     else
                     {
                         // VIS264 - Send push notification
-                        PushNotification.SendNotificationToUser(GetAD_User_ID(), GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(), "WorkFlow"), GetNodeName() + " : " + Msg.GetMsg(GetCtx(), "ReceivedFor") + " " + GetWindowName() + GetDocumentNo(), "W");
+                        PushNotification.SendNotificationToUser(GetAD_User_ID(), GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(), "VIS_Workflows"), GetNodeName() + " : " + Msg.GetMsg(GetCtx(), "ReceivedFor") + " " + GetWindowName() + GetDocumentNo(), "W");
                     }
                 }	//	approval
 
@@ -1248,7 +1248,7 @@ namespace VAdvantage.WF
                             eve.Save();
 
                             // VIS264 - Send push notification                            
-                            PushNotification.SendNotificationToUser(nextAD_User_ID, GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(), "WorkFlow"), _node.GetName() + " : " + Msg.GetMsg(GetCtx(), "ReceivedFor") + " " + GetWindowName() + GetDocumentNo(), "W");
+                            PushNotification.SendNotificationToUser(nextAD_User_ID, GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(), "VIS_Workflows"), _node.GetName() + " : " + Msg.GetMsg(GetCtx(), "ReceivedFor") + " " + GetWindowName() + GetDocumentNo(), "W");
 
                             return false;
                         }
@@ -1287,7 +1287,7 @@ namespace VAdvantage.WF
                     eve.Save();
 
                     // VIS264 - Send push notification
-                    PushNotification.SendNotificationToUser(nextAD_User_ID, GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(), "WorkFlow"), GetNodeName() + " : " + Msg.GetMsg(GetCtx(), "ReceivedFor") + " " + GetWindowName() + GetDocumentNo(), "W");
+                    PushNotification.SendNotificationToUser(nextAD_User_ID, GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(), "VIS_Workflows"), GetNodeName() + " : " + Msg.GetMsg(GetCtx(), "ReceivedFor") + " " + GetWindowName() + GetDocumentNo(), "W");
 
                     //if (!autoApproval)
                     //    SetAD_User_ID(nextAD_User_ID);
@@ -1336,7 +1336,7 @@ namespace VAdvantage.WF
                     eve.Save();
 
                     // VIS264 - Send push notification
-                    PushNotification.SendNotificationToUser(GetAD_User_ID(), GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(), "WorkFlow"), GetNodeName() + " : " + Msg.GetMsg(GetCtx(), "ReceivedFor") + " " + GetWindowName() + GetDocumentNo(), "W");
+                    PushNotification.SendNotificationToUser(GetAD_User_ID(), GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(), "VIS_Workflows"), GetNodeName() + " : " + Msg.GetMsg(GetCtx(), "ReceivedFor") + " " + GetWindowName() + GetDocumentNo(), "W");
                 }
                 //For Genral Attribute
                 //else if (new MColumn(GetCtx(),_node.GetAD_Column_ID(),Get_TrxName()).GetColumnName().ToUpper().Equals("C_GENATTRIBUTESETINSTANCE_ID"))
@@ -2578,7 +2578,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             Save();
 
             // VIS264 - Send push notification
-            PushNotification.SendNotificationToUser(GetAD_User_ID(), GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(), "WorkFlow") + " (" + Msg.GetMsg(GetCtx(), "Forwarded") + ")", GetNodeName() + " : " + Msg.GetMsg(GetCtx(), "ReceivedFor") + " " + GetWindowName() + GetDocumentNo(), "W");
+            PushNotification.SendNotificationToUser(GetAD_User_ID(), GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(), "VIS_Workflows") + " (" + Msg.GetMsg(GetCtx(), "Forwarded") + ")", GetNodeName() + " : " + Msg.GetMsg(GetCtx(), "ReceivedFor") + " " + GetWindowName() + GetDocumentNo(), "W");
 
             //	Close up Old Event
             GetEventAudit();
