@@ -16895,7 +16895,7 @@
     CalloutTeamForcast.prototype.Charge = function (ctx, windowNo, mTab, mField, value, oldValue) {
         try {
             if (this.isCalloutActive() || value == null || value.toString() == "") {
-                mTab.getField("C_UOM_ID").setReadOnly(false);
+                //mTab.getField("C_UOM_ID").setReadOnly(false);
                 return "";
             }
 
@@ -16915,7 +16915,7 @@
             else {
                 mTab.setValue("C_UOM_ID", 100);	//	EA
             }
-            mTab.getField("C_UOM_ID").setReadOnly(true);
+           //mTab.getField("C_UOM_ID").setReadOnly(true);
         }
         catch (err) {
             this.setCalloutActive(false);

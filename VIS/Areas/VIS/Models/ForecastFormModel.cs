@@ -525,7 +525,7 @@ namespace VIS.Models
                 msg = Msg.GetMsg(ctx, "ConversionNotFound") + " " + FromCurrencyName.Trim(',') + " " + Msg.GetMsg(ctx, "To") + " " + ToCurrencyName;
 
             }
-            if (Count == 0)
+            if (Count == 0 && string.IsNullOrEmpty(FromCurrencyName))
             {
                 return Msg.GetMsg(ctx, "NoDataFound") + " " + msg;
             }
@@ -1207,7 +1207,7 @@ namespace VIS.Models
             ProductLinePo.Set_Value("C_Charge_ID", Charge_ID);
             ProductLinePo.Set_Value("M_Product_ID", Product_ID);
             ProductLinePo.Set_Value("C_UOM_ID", UOM_ID);
-            ProductLinePo.Set_Value("M_AttributeSetInstance_ID", Attribute_ID);
+           // ProductLinePo.Set_Value("M_AttributeSetInstance_ID", Attribute_ID);
             ProductLinePo.Set_Value("IsBOM", BOM.Equals("Y") ? true : false);
             
             if (Env.IsModuleInstalled("VAMFG_") && Util.GetValueOfInt(ProductLinePo.Get_Value("VAMFG_M_Routing_ID")) == 0)
@@ -1346,10 +1346,9 @@ namespace VIS.Models
             }
             else
             {
-                if (M_AttributeSetInstance_ID > 0)
-                {
-                    sql += " NVL(M_AttributeSetInstance_ID,0)=" + M_AttributeSetInstance_ID + " AND ";
-                }
+               
+                sql += " NVL(M_AttributeSetInstance_ID,0)=" + M_AttributeSetInstance_ID + " AND ";
+            
                 if (M_Product_ID > 0)
                 {
                     sql += " NVL(M_Product_ID,0) = " + M_Product_ID + " AND";
