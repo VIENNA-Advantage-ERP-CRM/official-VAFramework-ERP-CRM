@@ -104,6 +104,8 @@ namespace ViennaAdvantageServer.Process
                         contact.SetAD_Client_ID(order.GetAD_Client_ID());
                         contact.SetAD_Org_ID(order.GetAD_Org_ID());
                         //---------------------End ------------------
+                        // Set Contract type accounts receivable done by rakesh kunar 17/June/2021
+                        contact.SetContractType(X_C_Contract.CONTRACTTYPE_AccountsReceivable);
                         contact.SetDescription(order.GetDescription());
                         contact.SetC_Order_ID(order.GetC_Order_ID());
                         contact.SetC_OrderLine_ID(line.GetC_OrderLine_ID());
@@ -224,7 +226,7 @@ namespace ViennaAdvantageServer.Process
                             DB.ExecuteScalar(_qry, null, Get_TrxName());
                         }
                         //C_Contract_ID = contact.GetC_Contract_ID();
-                        DocumntNo += contact.GetDocumentNo() + "," ;
+                        DocumntNo += contact.GetDocumentNo() + ",";
 
                     }
 
