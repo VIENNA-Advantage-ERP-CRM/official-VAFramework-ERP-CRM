@@ -181,6 +181,12 @@ namespace VIS.Models
                             log.Log(Level.INFO, "ForecastLinesDeleted" + count);
                         }
                     }
+                    if(((IsMasterForecast && String.IsNullOrEmpty(TeamForecast_IDs)) ||!IsMasterForecast) && !IncludeSO && !IncludeOpenSO && !IncludeOpportunity && string.IsNullOrEmpty(ProductCategory))
+                    {
+                        trx.Commit();
+                        trx.Close();
+                        return Msg.GetMsg(ctx, "ForecastLinesDeleted");
+                    }
                 }
                 else if (DeleteAndGenerateLines && IsBudgetForecast)
                 {
@@ -198,6 +204,12 @@ namespace VIS.Models
                         {
                             log.Log(Level.INFO, "ForecastLinesDeleted" + count);
                         }
+                    }
+                    if (String.IsNullOrEmpty(MasterForecast_IDs) && !IncludeSO && !IncludeOpenSO && !IncludeOpportunity && string.IsNullOrEmpty(ProductCategory))
+                    {
+                        trx.Commit();
+                        trx.Close();
+                        return Msg.GetMsg(ctx, "ForecastLinesDeleted");
                     }
                 }
                 ////fetch lineNo for Team Forecast line 
@@ -333,7 +345,7 @@ namespace VIS.Models
                                   Util.GetValueOfInt(ds.Tables[0].Rows[i]["BaseUOM"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_BPartner_ID"]),
                                   Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_BPartner_Location_ID"]), 0, 0, Util.GetValueOfString(ds.Tables[0].Rows[i]["IsBOM"]),
                                   Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["BaseQty"]), ConvertedPrice, PurchaseUnitPrice,
-                                  "", Period_ID, Util.GetValueOfDateTime(ds.Tables[0].Rows[i]["DateOrdered"]), "", 0, 0);
+                                  "", Period_ID, Util.GetValueOfDateTime(ds.Tables[0].Rows[i]["DateOrdered"]), "", 0, 0,0);
                             }
                         }
                     }
@@ -470,7 +482,7 @@ namespace VIS.Models
                                 Util.GetValueOfInt(ds.Tables[0].Rows[i]["BaseUOM"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_BPartner_ID"]),
                                 Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_BPartner_Location_ID"]), 0, 0, Util.GetValueOfString(ds.Tables[0].Rows[i]["IsBOM"]),
                                 Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["BaseQty"]), ConvertedPrice, PurchaseUnitPrice,
-                                "", Period_ID, Util.GetValueOfDateTime(ds.Tables[0].Rows[i]["DateOrdered"]), "", 0, 0);
+                                "", Period_ID, Util.GetValueOfDateTime(ds.Tables[0].Rows[i]["DateOrdered"]), "", 0, 0,0);
                             }
                         }
                     }
@@ -678,7 +690,7 @@ namespace VIS.Models
                         Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["BaseUOM"]), 0, 0,
                         Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_BPartner_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_BPartner_Location_ID"]),
                         Util.GetValueOfString(ds.Tables[0].Rows[i]["IsBOM"]), Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["BaseQty"]), ConvertedPrice,
-                        PurchaseUnitPrice, "", Period, Util.GetValueOfDateTime(ds.Tables[0].Rows[i]["C_EnquiryrDate"]), "", 0, 0);
+                        PurchaseUnitPrice, "", Period, Util.GetValueOfDateTime(ds.Tables[0].Rows[i]["C_EnquiryrDate"]), "", 0, 0,0);
                     }
                 }
             }
@@ -763,7 +775,7 @@ namespace VIS.Models
                         CreateBudgetForecastLines(ctx, trx, Org_ID, Forecast_ID, 0, 0, 0, 0, 0, 0, 0, Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]),
                         Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_UOM_ID"]), 0, 0, 0, 0,
                         Util.GetValueOfString(ds.Tables[0].Rows[i]["IsBOM"]), BudgetQuantity, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["SalesPrice"]),
-                        PurchaseUnitPrice, ProductCategories, Period, null, "", 0, 0);
+                        PurchaseUnitPrice, ProductCategories, Period, null, "", 0, 0,0);
                     }
                 }
             }
@@ -867,7 +879,7 @@ namespace VIS.Models
             sql.Append("SELECT Details.M_Product_ID,Details.C_Charge_ID,Details.M_Attributesetinstance_ID, Mforcast.C_MasterForecast_ID,Details.C_MasterForecastLine_ID," +
                 " Details.C_Uom_ID, Details.C_OrderLine_ID, Details.C_Order_ID, Details.C_ProjectLine_ID, Details.C_Project_ID, Details.PriceEntered AS Price, " +
                 "Details.QtyEntered AS Quantity, Mforcast.C_Currency_ID, Product.ISBOM, Currency.ISO_CODE, Orders.C_BPartner_ID  AS OrderBPartner," +
-                "Orders.C_BPartner_Location_ID AS OrderLocation, Project.C_BPartner_Location_ID AS ProjectLocation,Line.BOMUse,Line.M_BOM_ID," +
+                "Orders.C_BPartner_Location_ID AS OrderLocation, Project.C_BPartner_Location_ID AS ProjectLocation,Line.BOMUse,Line.M_BOM_ID,Line.AdjustedQty," +
                 (Env.IsModuleInstalled("VAMFG_") ? "Line.VAMFG_M_Routing_ID" : "0 AS VAMFG_M_Routing_ID") +
                 ",Project.C_BPartner_ID AS ProjectBPartner,Mforcast.TrxDate, (SELECT ProductPrice.PriceStd " +
                 "FROM M_ProductPrice ProductPrice WHERE  ProductPrice.M_Product_ID = Product.M_Product_ID AND ProductPrice.M_PriceList_Version_ID = " +
@@ -949,7 +961,8 @@ namespace VIS.Models
                     Util.GetValueOfInt(ds.Tables[0].Rows[i]["ProjectLocation"]), Util.GetValueOfString(ds.Tables[0].Rows[i]["IsBOM"]),
                     Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["Quantity"]), ConvertedPrice, PurchaseUnitPrice,
                     "", Period, Util.GetValueOfDateTime(ds.Tables[0].Rows[i]["TrxDate"]), Util.GetValueOfString(ds.Tables[0].Rows[i]["BOMUse"]),
-                    Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_BOM_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAMFG_M_Routing_ID"]));
+                    Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_BOM_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAMFG_M_Routing_ID"]),
+                    Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["AdjustedQty"]));
 
                 }
             }
@@ -1210,7 +1223,10 @@ namespace VIS.Models
         /// <param name="Period">Period</param>
         /// <param name="Date">Date</param>
         /// <writer>209</writer>
-        public void CreateBudgetForecastLines(Ctx ctx, Trx trx, int Org_ID, int BudgetForecast_ID, int Order_ID, int OrderLine_ID, int Project_ID, int ProjectLine_ID, int MasterForecast_ID, int MasterForecastLine_ID, int Charge_ID, int Product_ID, int Attribute_ID, int UOM_ID, int OrderBPartner, int OrderLocation, int ProjectBPartner, int ProjectLocation, String BOM, decimal? BaseQuantity, decimal UnitPrice, decimal? PurchaseUnitPrice, string ProductCategories, int Period, DateTime? Date, string BOMUse, int M_BOM_ID, int Routing_ID)
+        public void CreateBudgetForecastLines(Ctx ctx, Trx trx, int Org_ID, int BudgetForecast_ID, int Order_ID, int OrderLine_ID, int Project_ID, 
+        int ProjectLine_ID, int MasterForecast_ID, int MasterForecastLine_ID, int Charge_ID, int Product_ID, int Attribute_ID, int UOM_ID, 
+        int OrderBPartner, int OrderLocation, int ProjectBPartner, int ProjectLocation, String BOM, decimal? BaseQuantity, decimal UnitPrice, 
+        decimal? PurchaseUnitPrice, string ProductCategories, int Period, DateTime? Date, string BOMUse, int M_BOM_ID, int Routing_ID, decimal AdjustedQty)
         {
             //set the context to indicate that line is created from form
             ctx.SetContext("Form", true);
@@ -1220,7 +1236,9 @@ namespace VIS.Models
             ProductLinePo.Set_Value("C_Charge_ID", Charge_ID);
             ProductLinePo.Set_Value("M_Product_ID", Product_ID);
             ProductLinePo.Set_Value("C_UOM_ID", UOM_ID);
-           // ProductLinePo.Set_Value("M_AttributeSetInstance_ID", Attribute_ID);
+            ProductLinePo.Set_Value("VA073_AdjustedQty", AdjustedQty+ Util.GetValueOfDecimal(ProductLinePo.Get_Value("VA073_AdjustedQty")));         
+            ProductLinePo.Set_Value("", UOM_ID);
+            // ProductLinePo.Set_Value("M_AttributeSetInstance_ID", Attribute_ID);
             ProductLinePo.Set_Value("IsBOM", BOM.Equals("Y") ? true : false);
             
             if (Env.IsModuleInstalled("VAMFG_") && Util.GetValueOfInt(ProductLinePo.Get_Value("VAMFG_M_Routing_ID")) == 0)
