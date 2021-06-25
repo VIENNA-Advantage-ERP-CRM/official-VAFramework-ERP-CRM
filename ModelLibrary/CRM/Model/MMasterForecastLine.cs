@@ -18,6 +18,7 @@ namespace VAdvantage.Model
     public class MMasterForecastLine : X_C_MasterForecastLine
     {
         private static VLogger log = VLogger.GetVLogger(typeof(MMasterForecastLine).FullName);
+        public bool IsVoid = false;
 
         public MMasterForecastLine(Ctx ctx, int C_MasterForecastLine_ID, Trx trxName) :
             base(ctx, C_MasterForecastLine_ID, null)
@@ -76,7 +77,7 @@ namespace VAdvantage.Model
                 }
             }
             //System would not allow the chnages if child record present
-            if (!newRecord && (Is_ValueChanged("M_Product_ID") || Is_ValueChanged("ForcastQty") || Is_ValueChanged("M_AttributeSetInstance_ID")))
+            if (!newRecord && (Is_ValueChanged("M_Product_ID") || Is_ValueChanged("ForcastQty") || Is_ValueChanged("M_AttributeSetInstance_ID")) && !IsVoid)
             {
                 string sql = "SELECT COUNT(C_MasterForecastLineDetails_ID) FROM C_MasterForecastLineDetails WHERE C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID();
                 if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)

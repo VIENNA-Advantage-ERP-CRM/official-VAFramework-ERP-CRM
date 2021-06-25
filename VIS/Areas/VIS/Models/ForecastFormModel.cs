@@ -515,8 +515,7 @@ namespace VIS.Models
 
             //if (Count > 0)
             //{
-                trx.Commit();
-                trx.Close();
+               
             //}
 
             //if conversion not found then display this message 
@@ -529,6 +528,14 @@ namespace VIS.Models
             {
                 return Msg.GetMsg(ctx, "NoDataFound") + " " + msg;
             }
+            else if(Count == 0 && !string.IsNullOrEmpty(FromCurrencyName))
+            {
+                return  msg;
+            }
+
+            trx.Commit();
+            trx.Close();
+
             return Msg.GetMsg(ctx, "LinesInsterted") + " " + msg;
         }
 
