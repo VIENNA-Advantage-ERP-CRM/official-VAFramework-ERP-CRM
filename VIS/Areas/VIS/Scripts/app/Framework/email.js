@@ -6,9 +6,6 @@
         //local variables          
         this.frame = null;
         this.windowNo = VIS.Env.getWindowNo();
-        /** Tab panel-adding cc & bcc emails ** Dt: 28/06/2021 ** Modified By: Kumar **/
-        this.ccmail = '';
-        this.bccmail = '';
         var ctx = VIS.Env.getCtx();
         var ch = null;
         var bpColumnName = "C_BPARTNER_ID";
@@ -148,6 +145,10 @@
         //send printformats as attachment Dynamically
         var $chkBSendPFasAtt = null;
         var $cmbPfFiletype = null;
+
+        /** Tab panel-adding cc & bcc emails ** Dt: 28/06/2021 ** Modified By: Kumar **/
+        var ccmail = '';
+        var bccmail = '';
 
         initEmail();
 
@@ -309,7 +310,7 @@
             $root.append($(data));
             var middleDivWidth = 0;
             $dynamicDisplay = $root.find('#' + self.windowNo + "_dyndis");
-            
+
             $chkBSendPFasAtt = $root.find('#' + self.windowNo + "_dynPF");
             $cmbPfFiletype = $root.find('#' + self.windowNo + "_dynPFType");
 
@@ -354,8 +355,21 @@
                 $to = $root.find('#' + self.windowNo + "_emailToTop");
                 $bcc = $root.find('#' + self.windowNo + "_emailBccTop");
                 $cc = $root.find('#' + self.windowNo + "_eamilCcTop");
-                $bcc.hide();
-                $cc.hide();
+
+                /** Tab panel-adding cc & bcc emails ** Dt: 28/06/2021 ** Modified By: Kumar **/
+                if (ccmail != undefined && ccmail != null && ccmail != '') {
+                    $cc.val(ccmail);
+                }
+                else
+                    $cc.hide();
+
+                /** Tab panel-adding cc & bcc emails ** Dt: 28/06/2021 ** Modified By: Kumar **/
+                if (bccmail != undefined && bccmail != null && bccmail != '') {
+                    $bcc.val(bccmail);
+                }
+                else
+                    $bcc.hide();
+
                 $root.find(".vis-Email-textarea-div").height($root.height() - (180));
 
                 $root.find('.vis-Email-leftWrap').css("width", '100%');
@@ -373,14 +387,6 @@
 
                 if (to != undefined && to != null) {
                     $to.val(to);
-                }
-                /** Tab panel-adding cc & bcc emails ** Dt: 28/06/2021 ** Modified By: Kumar **/
-                if (self.ccmail != undefined && self.ccmail != null && self.ccmail !='') {
-                    $cc.val(self.ccmail);
-                }
-                /** Tab panel-adding cc & bcc emails ** Dt: 28/06/2021 ** Modified By: Kumar **/
-                if (self.bccmail != undefined && self.bccmail != null && self.bccmail != '') {
-                    $bcc.val(self.bccmail);
                 }
 
                 //$root.find('.vis-form-data-sub').css({ 'width': '100%', 'padding-right': '42px' });
@@ -1691,19 +1697,19 @@
             }
             else {
                 $cmbPfFiletype.parent().hide();
-                if (isEmail == true && _curGC.singleRow == false && rowsSource.length > 1 && $dynamicDisplay.prop("checked")==false) {
+                if (isEmail == true && _curGC.singleRow == false && rowsSource.length > 1 && $dynamicDisplay.prop("checked") == false) {
                     $to.prop('disabled', false);
                     $cc.prop('disabled', false);
                     $bcc.prop('disabled', false);
                 }
             }
 
-            
+
         };
 
         function addPrintOption() {
 
-           
+
             $.ajax({
                 url: VIS.Application.contextUrl + "JsonData/GetReportFileTypes",
                 datatype: "json",
@@ -1723,7 +1729,7 @@
                         return;
                     }
                     for (var i = 0; i < d.length; i++) {
-                        $cmbPfFiletype.append( $("<option value=" + d[i].Key + ">" + d[i].Name + "</option>"));
+                        $cmbPfFiletype.append($("<option value=" + d[i].Key + ">" + d[i].Name + "</option>"));
                     }
                 }
             });
@@ -1918,7 +1924,7 @@
             //for static mails
             var mail = [];
 
-            if ($dynamicDisplay.prop("checked") == false && $chkBSendPFasAtt.prop("checked")==false) {
+            if ($dynamicDisplay.prop("checked") == false && $chkBSendPFasAtt.prop("checked") == false) {
                 var hasMailID = false;
                 var mailInfo = {};
 
@@ -2949,6 +2955,13 @@
 
         };
 
+        function showCcBccMails(mailcc, mailbcc) {
+            if (mailcc != undefined && mailcc != null && mailcc != '')
+                ccmail = mailcc;
+            if (mailbcc != undefined && mailbcc != null && mailbcc != '')
+                bccmail = mailbcc;
+        }
+
         this.show = function () {
             ch = new VIS.ChildDialog();
             ch.setHeight(800);
@@ -3063,7 +3076,7 @@
                 $chkBSendPFasAtt.off("click");
                 $chkBSendPFasAtt = null;
             }
-            if ($cmbPfFiletype != null) {                
+            if ($cmbPfFiletype != null) {
                 $cmbPfFiletype = null;
             }
             //self = null;
