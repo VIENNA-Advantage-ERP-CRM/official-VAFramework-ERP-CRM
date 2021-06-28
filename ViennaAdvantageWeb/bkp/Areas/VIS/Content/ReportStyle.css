@@ -1,0 +1,268 @@
+.vis-reportrootdiv {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.vis-report-header h3 {
+    margin: 0;
+    font-size: 1rem;
+    /* font-family: helvetica; */
+    font-weight: 400;
+    /*color: rgba(var(--v-c-on-primary), 1);*/
+    flex: 1;
+}
+.vis-report-header {
+    width: 100%;
+    /* background: rgba(var(--v-c-primary), 1); */
+    /* padding: 10px 0px 10px 0px; */
+    /* float: left; */
+    /* padding-left: 10px; */
+    padding: 5px 0 5px 0;
+    display: flex;
+    align-items: center;
+    color: rgba(var(--v-c-primary), 1);
+    border-bottom: 2px solid rgba(var(--v-c-primary), 1);
+}
+.vis-report-tittle {
+    width: 40%;
+    float: left;
+    padding-left: 10px;
+}
+.vis-processtoolpadd {
+    padding: 8px 0;
+}
+.vis-report-header .vis-icon-menuclose.vis-cross {
+    padding: 12px 10px;
+    display: flex;
+    /*background: rgba(var(--v-c-on-secondary), .4);*/
+}
+
+.vis-report-a-r-container {
+    overflow: auto;
+    background: rgba(var(--v-c-primary), 0.5);
+    /*float: left;*/
+    flex: 1;
+}
+.vis-btn-close {
+    width: 3%;
+    background: url('../Images/close.png');
+    background-color: #616364;
+    float: right;
+    background-repeat: no-repeat;
+    padding-top: 25px;
+    padding-bottom: 19px;
+    cursor: pointer;
+    background-position: center;
+    border: 0px;
+    margin: 0;
+}
+.vis-clear-both{
+	clear: both;
+}
+.vis-report-top-icons {
+    display: flex;
+    align-items: center;
+}
+.vis-report-top-icons > ul{
+	margin:0;
+	padding:0;
+	list-style:none;	
+}
+.vis-report-top-icons > ul > li{
+	    float: left;
+    display: inline-flex;
+    padding: 0 7px;
+    color: rgba(var(--v-c-primary), 1);
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+.vis-report-icon{
+	width:22px;
+	height:20px;
+	float:left;
+	margin: 0 8px;
+	background-repeat:no-repeat;	
+}
+
+ul.vis-reporticonsul, ul.vis-reporticonsulprint {
+    display: flex;
+    padding-right: 5px;
+    align-items: center;
+}
+
+ul.vis-reporticonsul li {
+    /*color: rgba(var(--v-c-on-primary), 1);*/
+}
+
+ul.vis-toppaging {
+    display: flex;
+    padding-right: 10px;
+    align-items: center;
+}
+
+ul.vis-toppaging li {
+    /*color: rgba(var(--v-c-on-primary), 1);*/
+    margin: 0;
+    font-size: 1rem;
+}
+ul.vis-toppaging li select {
+    /*border: none;*/    
+}
+
+ul.vis-toppaging li:nth-child(3) {
+    padding: 0;
+}
+.vis-archive-ico{
+	/*background-image:url(../Images/archive.png);*/	
+}
+.vis-repformat-ico{
+	/*background-image:url(../Images/repformat.png);*/	
+}
+.vis-savepdf-ico{
+	/*background-image:url(../Images/savepdf.png);*/	
+}
+
+.vis-savepdfALL-ico{
+	/*background-image:url(../Images/multiplepdf.png);*/	
+    height:23px;	    
+}
+.vis-icon-menuclose .vis-cross {
+    color: rgba(var(--v-c-on-secondary), 1);
+    font-size: .875rem;
+}
+
+.vis-savecsv-ico{
+	/*background-image:url(../Images/savecsv.png);*/	
+}
+
+.vis-savecsvAll-ico{
+	/*background-image:url(../Images/csv.png);
+    height:23px;*/	
+}
+.vis-selectcsview-page {
+    float: left;
+    /* margin-top: 9px; */
+    width: 60px;
+    border: none;
+    color: rgba(var(--v-c-on-secondary), 1);
+    height: 24px;
+    margin-right: 9px;
+    padding: 0 5px;
+    background: rgba(var(--v-c-secondary), 1);
+    background-image: linear-gradient(45deg, transparent 50%, rgba(var(--v-c-on-secondary),1) 50%), linear-gradient(135deg, rgba(var(--v-c-on-secondary),1) 50%, transparent 50%);
+    background-position: calc(100% - 12px), calc(100% - 7px);
+    background-size: 5px 4px, 5px 4px, 1px 1.5em;
+    background-repeat: no-repeat;
+}
+.vis-requery-ico{
+	/*background-image:url(../Images/requery.png);*/	
+}
+.vis-search-ico{
+	/*background-image:url(../Images/search.png);*/	
+}
+.vis-customize-ico{
+	/*background-image:url(../Images/customize.png);*/	
+}
+.vis-print-ico{
+	/*background-image:url(../Images/print.png);*/	
+}
+.vis-report-content, .vis-report-content-head, .vis-report-data, .vis-report-data > table{
+	float:left;
+	width:100%;	
+}
+/*.vis-report-content{ padding:15px;}*/
+    .vis-report-content > h4 {
+        color: rgba(var(--v-c-primary), 1);
+        font-size: 16px;
+        width: 100%;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+    }
+.vis-report-content-head > div{
+	float:left;
+	width:150px;	
+}
+.vis-report-data > table, .vis-report-content-head{
+	margin-top:20px;
+}
+.vis-report-table-head{
+	background-color:#e8eef0;	
+}
+.vis-report-table-head > th{
+	padding:10px;
+	color:#535353;
+	font-size:14px;
+	font-weight:normal;	
+}
+.vis-report-table-row > td{
+	font-size:12px;
+	color:#666;
+	padding:10px;	
+}
+.vis-report-gray{
+	background:#f8f8f8;	
+}
+.vis-report-bottom{
+	width:100%;
+	float:left;
+	/*position:absolute;*/
+	bottom:0;
+	background-color:#d9e3e7;
+	padding-left:10px;	
+}
+.vis-report-bottom-left{
+	float:left;	
+}
+.vis-report-bottom-left > p{
+	float:left;
+	font-size:12px;
+	color:#535353;
+	margin-bottom:0;
+	padding:5px 0;	
+}
+.vis-report-bottom-right{
+	float:right;
+	background-color:#cedce1;
+	padding-left:15px;	
+}
+.vis-report-bottom-right > ul{
+	list-style:none;
+	margin:0;
+	padding:0;	
+}
+.vis-report-bottom-right > ul > li{
+	float:left;
+	margin:0 15px 0 0;
+	background:url(../Images/bottom-divider.png) no-repeat right;
+	padding:5px 15px 5px 0;
+}   
+.vis-report-bottom-right > ul > li > select{
+	background:#e9eff2;
+	border:none;
+	padding:0 5px;
+	outline:none;
+}
+.VAPOS-ReportHeadRap {
+    float: left;
+    width: 100%;
+    background: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.VAPOS-ReportHeadRap h4 {
+    margin: 0;
+    line-height: 26px;
+}
+    .VAPOS-ReportHeadRap ul {
+        margin-top: 0 !important;
+    }
+.VAPOS-ReportHeadRap ul li a {width: 22px;height: 25px;}
+.vis-report-header input[type="checkbox"],
+.vis-report-header input[type="checkbox"]:checked:before,
+.vis-report-header input[type="checkbox"]:not(:checked),
+.vis-report-header input[type="checkbox"]:checked {
+    /*border-color: rgba(var(--v-c-on-primary), 1);*/
+}

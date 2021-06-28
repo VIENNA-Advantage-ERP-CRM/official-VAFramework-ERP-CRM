@@ -1,0 +1,103 @@
+.promptBorder
+{
+    background-color: #96A8C3;
+}
+
+.promptHeader
+{
+      padding : 2px 5px;
+      color: white;
+      font-family: Tahoma, sans-serif;
+      font-size: 8.5pt;
+      font-weight : bold;
+}
+
+.promptElement
+{
+      background-color: #E5EAF3;
+      border-top:1px solid #FFFFFF;
+}
+
+.promptElementText
+{
+      color: black;
+      font-family: Arial;
+      font-size: 11pt;
+}
+
+.promptingText
+{
+      color: black;
+      font-family: Tahoma, sans-serif;
+      font-size: 8.5pt;
+}
+
+.promptRuler
+{
+      color: #A3A3BC;
+      height: 1px;
+}
+
+.promptMessage
+{
+      color: #4F5C72;
+      font-family: Tahoma, sans-serif;
+      font-weight: bold;
+      font-size: 8.5pt;
+}
+
+.promptTextBox
+{
+    font-family: "arial" , "sans-serif";
+    font-size: 11px;
+    background-color: white;
+    border: 1px solid #96A8C3;
+    background-repeat: repeat-x;
+    padding-left: 5px;
+    padding-right: 2px;
+    height : 20px;
+}
+
+.promptButton
+{
+    color : black;
+    cursor : pointer;
+    font-family : Tahoma;
+    font-size : 8pt;
+    font-weight : normal;
+    text-decoration : none;
+}
+
+.promptButton a
+{
+    color : black;
+    cursor : pointer;
+    font-family : Tahoma;
+    font-size : 8pt;
+    font-weight : normal;
+    text-decoration : none;
+}
+
+.promptDropDown
+{
+      background-color: #FFFFFF;
+      border-top: 1px solid;
+      border-bottom: 1px solid;
+      border-left: 1px solid;
+      border-right: 1px solid;
+      border-color: #A3A3BC;
+      font-family: Arial;
+      font-size: 11pt;
+}
+
+.promptListBox
+{
+      background-color: #FFFFFF;
+      border-top: 1px solid;
+      border-bottom: 1px solid;
+      border-left: 1px solid;
+      border-right: 1px solid;
+      border-color: #A3A3BC;
+      font-family: Arial;
+      font-size: 11pt;
+}

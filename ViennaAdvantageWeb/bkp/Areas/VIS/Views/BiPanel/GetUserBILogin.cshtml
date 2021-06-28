@@ -1,0 +1,23 @@
+﻿@{
+    Layout = null;
+}
+
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>TOL01CustomerAgeingReport</title>
+</head>
+<body>
+    <div>
+        @if (ViewBag.scriptt==null)
+        {
+            <h4>@ViewBag.Message</h4>;
+        }
+        else
+        {
+        <script src="@ViewBag.scriptt"></script>
+        }
+    </div>
+</body>
+</html>

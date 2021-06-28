@@ -1,0 +1,416 @@
+<html>
+	<head>
+		<script language="javascript" src="../dom.js"></script>
+		<script language="javascript" src="../treeview.js"></script>
+		<script language="javascript" src="../palette.js"></script>
+		<script language="javascript">
+			var skin=parent._skin?parent._skin:"skin_standard";
+			var lang=parent._lang?parent._lang:"en";
+			
+			initDom("../images/"+skin+"/",lang)
+			styleSheet()
+		</script>
+			
+		<script language="javascript">
+
+			icons="treeicons.gif"
+
+			// Real tree view
+			tree = newTreeWidget("tree",200,300,icons,theAdvCB,dbClickCB,null,expandCB,collapseCB,deleteCB)						
+			
+			tree.setTooltipOnMouseOver(true) //force tooltip on mouse over			
+//			tree.setHighlightPath(true);
+			
+			root = newTreeWidgetElem(0, "Root element", "test", "help text")
+			
+			FillFirstTree(false)
+
+			//tree view with no icon
+			treeNoIcon = newTreeWidget("treeNoIcon",200,300,icons,theCB,theCB,null,expandCB,collapseCB)
+			rootNoIcon = newTreeWidgetElem(-1, "Root element", "test", "help text")
+			
+			treeNoIcon.setHighlightPath(true);
+						
+			FillFirstTreeNoIcon(false)
+			
+			// Icon list
+			iconList=newIconListWidget("iconList",200,300,icons,theCB,theCB)
+			iconList.setDragDrop(dragCB,acceptDropCB,dropCB)
+			
+			// Build 5000 items
+			var buildStart=new Date
+			var nbItems=201
+			for (var j=0;j<nbItems;j++)
+			{
+				iconList.add(newTreeWidgetElem(1, "Element "+j, "test"+j, "help text",null,"tooltip text"))
+			
+			}
+			var buildEnd=new Date
+			
+			// Button for changing an item
+			changeBtn=newButtonWidget("changeBtn","change selection","change()")
+			resizeBtn=newButtonWidget("resizeBtn","resize Tree & lists","resize()")
+			tooltipBtn=newButtonWidget("tooltipBtn","disable tooltip on mouse over","disableTooltip()")
+			renameBtn=newButtonWidget("renameBtn","rename","rename()")
+			selectionBtn=newButtonWidget("selectionBtn","multi selection","changeSel()")
+			
+			//to be improved later
+			searchBtn=newButtonWidget("searchBtn","search","search()")
+			searchTxt=newTextFieldWidget("searchTxt",null,null,null,search);
+
+
+			function expandCB(userData)
+			{
+				status="expandCB userData="+userData+" tree ID="+this.id
+			}
+
+			function collapseCB(userData)
+			{
+				status="collapseCB userData="+userData+" tree ID="+this.id
+			}
+					
+			function theCB()
+			{
+				//alert(this.id)
+				
+				if (this.id=="iconList")
+					status = this.getSelection().index
+			}
+			
+			function theAdvCB()
+			{
+				//alert(this.id)
+				
+				var arrSel=tree.getSelections();
+				var len = arrSel.length, s="";
+				for(var i=0;i<len;i++)
+				{
+					var elem=arrSel[i];
+					if(elem.isNode())
+						s+="node "+elem.name+"\n";
+					else
+						s+="leaf "+elem.name+"\n";											
+				}
+				//if(s!="") alert(s);				
+			}
+		
+			//IMPORTANT SAMPLE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			//1 - treeView is a single selection:
+			//Use data to perform double click action
+			
+			//2 - treeView is a multi selection:
+			//data will content the elem where the action is performed
+			//But to propagate the action to all selected items,use getSelectedItems()
+			
+			function dbClickCB(data)
+			{				
+				if(tree.multiSelection)
+				{
+					var arrSel =tree.getSelectedItems();
+					var s="";
+					for(var i=0; i<arrSel.length;i++)
+					{
+						//dbclick action
+						s+= arrSel[i].name + " ";
+					}
+					alert("dbClickCB  on "+ s);
+				}
+				else
+				{
+					//dbclick action
+					alert("classic dbClickCB  ");
+				}
+			}
+			
+			function deleteCB(data)
+			{
+				if(tree.multiSelection)
+				{
+					var arrSel =tree.getSelectedItems();
+					var s="";
+					for(var i=0; i<arrSel.length;i++)
+					{
+						s+= arrSel[i].name + " ";
+					}
+					alert("delete  "+ s);
+				}
+				else
+				{
+					alert(" classic deleteCB ");
+				}
+			}
+			//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			
+			function loadCB()
+			{
+				tree.init()
+				treeNoIcon.init()
+				iconList.init()				
+				
+				iconList.select(4)		
+				selectionBtn.init();								
+				selectItemButton.init();	
+				searchBtn.init();
+				searchTxt.init();							
+			}
+			
+			// DELAYED CREATION OF CHILDS
+			
+			
+			_this=null
+			function delayedCompleteCB()
+			{
+				for (var i=0;i<50;i++)
+				{
+					_this.add(newTreeWidgetElem(1, "Dimension 1", "test", "help text",null,"tooltip Dimension"))
+					_this.add(newTreeWidgetElem(1, "Dimension 2", "test", "help text",null,"tooltip Dimension"))
+					_this.add(newTreeWidgetElem(1, "Dimension 3", "test", "help text",null,"tooltip Dimension"))
+					_this.add(newTreeWidgetElem(1, "Dimension 4", "test", "help text",null,"tooltip Dimension"))
+				}
+				
+				_this.finishComplete()
+			
+			}
+			
+			
+			function querycompleteCB()
+			{
+				_this=this
+				setTimeout("delayedCompleteCB()",1000)
+			}
+			//////////////////////////////
+			
+			var sizes= new Array(200,70,400)
+			var idx=1
+
+			function rename()
+			{
+				var itm=tree.getSelectedItem()
+				if (itm)
+				{
+					itm.setEditable(true,editInPlaceCB,validEditInPlaceCB)
+					itm.showEditInput(true)
+				}
+			}
+			
+			function resize()
+			{
+				var w=sizes[(idx++)%3]
+				tree.resize(w)
+				iconList.resize(w)
+			}
+			function change()
+			{
+				var itm=tree.getSelectedItem()
+				if (itm)
+				{
+					itm.change(4, "new name", null, "new help",5,"new tooltip")
+					itm.setGrayStyle(!itm.isGrayStyle())
+				}
+			}
+			function changeSel()
+			{						
+				tree.setMultiSelection(true);					
+			}
+			
+			function editInPlaceCB()
+			{
+				alert("new value="+this.name)
+			}
+			
+			function validEditInPlaceCB(text)
+			{
+				if (text=="")
+				{
+					alert("enter a non empty value!")
+					return false
+				}
+				return true
+			}
+			
+			function disableTooltip()
+			{
+				tree.setTooltipOnMouseOver(false)
+			}
+			
+			function FillFirstTree(rebuild)
+			{
+				if (rebuild)
+					tree.deleteAll()
+				
+				tree.add(root)
+				root.expanded=false
+			
+				for (var i=0;i<10;i++)
+				{
+					var sub1=newTreeWidgetElem(6, "Class1", "test", "help text",7,"This is a test tooltip")
+					/*if (i==0)
+						{}*/
+					sub1.expanded=false
+					
+					root.add(sub1)
+					
+					var editble=newTreeWidgetElem(1, "Edit me...", "test", "help text")
+					
+					editble.setEditable(true,editInPlaceCB,validEditInPlaceCB)
+					root.add(editble)
+					
+					root.add(newTreeWidgetElem(1, "Dimension 1", "test", "help text",null,"tooltip Dimension"))
+					root.add(newTreeWidgetElem(1, "Dimension 2", "test", "help text",null,"tooltip Dimension"))
+					root.add(newTreeWidgetElem(1, "Dimension 3", "test", "help text",null,"tooltip Dimension"))
+					root.add(newTreeWidgetElem(1, "Dimension 4", "test", "help text",null,"tooltip Dimension"))
+									
+									
+					if (i==2)
+						root.add(newTreeWidgetElem(1, "To be selected", "id 123", "help text",null,"tooltip Dimension"))										
+									
+										
+					// DELAYED CREATION OF CHILDS					
+					var w=sub1.add(newTreeWidgetElem(2, "Delayed FILL !", "test", "help text"))
+					w.setIncomplete(querycompleteCB)
+					//////////////////////////////
+					
+					sub1.add(newTreeWidgetElem(2, "Mesure 2", "test", "help text",null,"tooltip mesure"))
+					root.add(newTreeWidgetElem(3, "Detail 1", "test", "help text",null,"tooltip detail"))
+					root.add(newTreeWidgetElem(3, "Detail 2", "test", "help text",null,"tooltip detail"))
+					
+					var sub2=newTreeWidgetElem(6, "Class2", "test", "help text",7,"This is a test tooltip")
+					sub1.add(sub2);
+					sub2.add(newTreeWidgetElem(1, "Dimension 1", "test", "help text",null,"tooltip Dimension"))
+					sub2.add(newTreeWidgetElem(2, "Mesure 2", "test", "help text",null,"tooltip mesure"))
+					sub2.add(newTreeWidgetElem(3, "Detail 2", "test", "help text",null,"tooltip detail"))
+					sub2.add(newTreeWidgetElem(6, "Class2", "test", "help text",7,"This is a test tooltip"))
+					
+					
+				}
+				
+				if (rebuild)
+					tree.rebuildHTML()
+			}
+			
+			//tree no icons
+			function FillFirstTreeNoIcon(rebuild)
+			{
+				if (rebuild)
+					treeNoIcon.deleteAll()
+				
+				treeNoIcon.add(rootNoIcon)
+			
+				for (var i=0;i<3;i++)
+				{
+					var sub1=newTreeWidgetElem(6, "Class1", "test", "help text",null,"This is a test tooltip")
+					var sub2=newTreeWidgetElem(-1, "Class2", "test", "help text",null,"This is a test tooltip")
+					if (i==0)
+						sub1.expanded=false
+					
+					rootNoIcon.add(sub1)
+					rootNoIcon.add(sub2)				
+					
+					sub1.add(newTreeWidgetElem(-1, "Dimension 1  tres tres tres tres tres long long", "test", "help text",null,"tooltip Dimension"))
+					sub1.add(newTreeWidgetElem(-1, "Dimension 2", "test", "help text",null,"tooltip Dimension"))
+					sub1.add(newTreeWidgetElem(-1, "Dimension 3", "test", "help text",null,"tooltip Dimension"))
+					sub1.add(newTreeWidgetElem(-1, "Dimension 4", "test", "help text",null,"tooltip Dimension"))
+					sub1.add(newTreeWidgetElem(-1, "Dimension 4", "test", "help text",null,"tooltip Dimension"))
+					
+					sub1.add(newTreeWidgetElem(2, "Mesure 2", "test", "help text",null,"tooltip mesure"))
+					sub1.add(newTreeWidgetElem(3, "Detail 1  tres tres tres tres tres long long", "test", "help text",null,"tooltip detail"))
+					sub1.add(newTreeWidgetElem(3, "Detail 2", "test", "help text",null,"tooltip detail"))
+					
+					sub2.add(newTreeWidgetElem(-1, "Dimension 1", "test", "help text",null,"tooltip Dimension"))
+					sub2.add(newTreeWidgetElem(-1, "Dimension 2", "test", "help text",null,"tooltip Dimension"))
+					sub2.add(newTreeWidgetElem(-1, "Dimension 3", "test", "help text",null,"tooltip Dimension"))
+					
+					sub2.add(newTreeWidgetElem(-1, "Mesure 2", "test", "help text",null,"tooltip mesure"))
+					sub2.add(newTreeWidgetElem(-1, "Detail 1", "test", "help text",null,"tooltip detail"))
+					sub2.add(newTreeWidgetElem(-1, "Detail 2", "test", "help text",null,"tooltip detail"))
+				}
+				
+				if (rebuild)
+					treeNoIcon.rebuildHTML()
+									
+			}
+			
+			// Icon list
+			
+			
+			function dragCB(source) // triggered when beginning D&D
+			{
+			}
+
+			function acceptDropCB (source, target, ctrl, shift) // return boolean if D&D is accepted
+			{
+				return true
+			}
+
+			function dropCB(source, target,ctrl, shift) // triggered when ending D&D
+			{
+			}	
+			
+			
+			selectItemButton=newButtonWidget("selectItemButton","Select in the tree view","selItem()")
+
+			function selItem()
+			{
+				tree.selectByData("id 123",true)
+			}
+			
+			function search()
+			{
+				var s = searchTxt.getValue();
+				//search(text,matchCase,matchWholeW,startFrom,next);
+				tree.search(s,false,false,null,false,notFoundCB);
+			}			
+			
+			function notFoundCB()
+			{
+				alert(searchTxt.getValue()+' not found')
+			}
+			
+		</script>
+	</head>
+	<body onload="loadCB()" onselectstart="return false">
+	
+		<table width="100%"><tr><td align="center" valign="middle">
+			<div class="insetBorder"><div class="dialogzone" style="padding:15px">
+	
+				<u><b>Tree View</b></u><br><br>
+				<table border="0"><tr valign="top"><td class="dialogzone">
+					<script language="javascript">tree.write()</script>
+					<br><br><a href="javascript:FillFirstTree(true)">Rewrite Tree</a>
+					<br><br><script language="javascript">changeBtn.write()</script>
+					<br><script language="javascript">resizeBtn.write()</script>
+					<br><script language="javascript">tooltipBtn.write()</script>
+					<br><script language="javascript">renameBtn.write()</script>
+					<br><script language="javascript">selectionBtn.write()</script>
+					<br><script language="javascript">selectItemButton.write()</script>
+					<br><script language="javascript">searchTxt.write()</script><script language="javascript">searchBtn.write()</script>
+				</td>
+				<td class="dialogzone" align="center">
+					<script language="javascript">
+					
+						var writeHTMLStart=new Date
+						iconList.write()
+						var writeHTMLEnd=new Date
+						document.write("<br><b>Build a list with "+(nbItems)+ " items</b><br><br><u>Build Time:</u> <b>"+ ((buildEnd.valueOf()-buildStart.valueOf())/1000) +" s</b><br><u>Build HTML Time:</u> <b>"+((writeHTMLEnd.valueOf()-writeHTMLStart.valueOf())/1000)+" s</b>")
+					</script>
+				</td>
+				<td class="dialogzone" align="center">
+					<script language="javascript">
+						treeNoIcon.write()
+					</script>
+					<br><br><a href="javascript:FillFirstTreeNoIcon(true)">Rewrite Tree No Icons</a>
+				</td>
+				</tr></table>
+
+					<script language="javascript">
+					</script>
+
+				<br><br>															
+				<br>					
+			</div>			
+			</div>			
+		</td></tr></table>
+		
+	</body>
+	
+</html>

@@ -1,0 +1,114 @@
+<html>
+<head>
+	<script language="javascript" src="../dom.js"></script>
+	<script language="javascript">	
+	initDom("../images/skin_standard/","en")
+	styleSheet()
+	</script>
+	
+	<style type="text/css">
+		.tbl{border:1px solid black;background-color:white}
+	</style>
+	
+	<title>Navigation page</title>
+
+	<script language="javascript">		
+		_p=parent.parent
+		function update(url)
+		{
+			if(_p && _p.updateContent)
+				_p.updateContent(null,null,url);
+			else
+				window.location.replace(url);
+		}		
+	</script>
+	
+</head>
+<body class="dialogzonebold">
+	<table width="100%"><tr><td align="left" class="dialogzonebold">
+		
+		<b>Simple widgets</b><br><br>
+		<table width="100%" cellspacing=0 cellpadding=4 style="border-collapse:collapse">
+			<tr>
+				<td width="50%" class="dialogzonebold tbl"><a href="javascript:update('inconwidget.html')">Icon widgets</a></td>
+				<td width="50%" class="dialogzonebold tbl"><a href="javascript:update('infowidget.html')">Info widget</a></td>
+			</tr>
+
+			<tr>
+				<td class="dialogzonebold tbl"><a href="javascript:update('framezone.html')">FrameZone widget</a></td>
+				<td class="dialogzonebold tbl"><a href="javascript:update('grabber.html')">Grabber Widget</a></td>
+			</tr>
+			
+			<tr>
+				<td class="dialogzonebold tbl"><a href="javascript:update('fieldswidget.html')">Field widgets text, int, float</a></td>
+				<td class="dialogzonebold tbl"><a href="javascript:update('buttons.html')">Button Widget</a></td>
+			</tr>
+			<tr>
+				<td class="dialogzonebold tbl"><a href="javascript:update('tooltipwidget.html')">Tooltip widget</a></td>
+				<td class="dialogzonebold tbl"></td>
+			</tr>
+		</table>
+
+
+		
+		<br><br><br>
+		<b>List and tree widgets</b><br><br>
+		<table width="100%" cellspacing=0 cellpadding=4 style="border-collapse:collapse">
+			<tr>
+				<td width="50%" class="dialogzonebold tbl"><a href="javascript:update('treeview.html')">Tree widget</a></td>
+				<td width="50%" class="dialogzonebold tbl"><a href="javascript:update('bolist.html')">BOList widget</a></td>
+			</tr>
+
+			<tr>
+				<td width="50%" class="dialogzonebold tbl"><a href="javascript:update('andorwidget.html')">Filter widget</a></td>
+				<td width="50%" class="dialogzonebold tbl"><a href="javascript:update('prompttree.html')">Prompt tree widget</a></td>
+			</tr>
+			<tr>
+				<td width="50%" class="dialogzonebold tbl"><a href="javascript:update('simplelist.html')">Simple list widget</a></td>
+				<td width="50%" class="dialogzonebold tbl"><a href="javascript:update('checktree.html')">Check Tree widget</a></td>
+			</tr>
+
+		
+		</table>
+
+		<br><br><br>
+		<b>GUI Emulation Widgets</b><br><br>
+		<table width="100%" cellspacing=0 cellpadding=4 style="border-collapse:collapse">
+			<tr>
+				<td width="50%" class="dialogzonebold tbl"><a href="javascript:update('menu.html')">Menu widget</a></td>
+				<td width="50%" class="dialogzonebold tbl"><a href="javascript:update('tabs.html')">Tab panel widget</a></td>
+			</tr>
+
+			<tr>
+				<td width="50%" class="dialogzonebold tbl"><a href="javascript:update('basicDialog.html')">Dialog Box Widget</a></td>
+				<td width="50%" class="dialogzonebold tbl"><a href="javascript:update('waitDialog.html')">WaitDialog Widget</a></td>
+			</tr>
+
+			<tr>
+				<td width="50%" class="dialogzonebold tbl"><a href="javascript:update('palettes.html')">Office-like palettes</a></td>
+				<td width="50%" class="dialogzonebold tbl"><a href="javascript:update('lov.html')">LOV Widget</a></td>
+			</tr>
+			<tr>
+				<td width="50%" class="dialogzonebold tbl"><a href="javascript:update('calendar.html')">Calendar Widget</a></td>
+				<td width="50%" class="dialogzonebold tbl"><a href="javascript:update('scrolltabs.html')">ScrollTabs</a></td>
+			</tr>
+			<tr>
+				<td width="50%" class="dialogzonebold tbl"><a href="javascript:update('textcombowidget.html')">TextCombo Widget</a></td>
+				<td width="50%" class="dialogzonebold tbl"><a href="javascript:update('iconscrollmenuwidget.html')">IconScrollMenu Widget</td>
+			</tr>
+			<tr>
+				<td width="50%" class="dialogzonebold tbl"><a href="javascript:update('iconlistpopupwidget.html')">iconListPopup Widget</a></td>
+				<td width="50%" class="dialogzonebold tbl"><a href="javascript:update('pane.html')">Pane Manager</a></td>
+			</tr>
+			<tr>
+				<td width="50%" class="dialogzonebold tbl"><a href="javascript:update('borderswidget.html')">Borders Widget</a></td>
+				<td width="50%" class="dialogzonebold tbl"></td>
+			</tr>
+			
+		</table>
+
+
+		</div>
+	</td></tr></table>
+</body>
+</html>

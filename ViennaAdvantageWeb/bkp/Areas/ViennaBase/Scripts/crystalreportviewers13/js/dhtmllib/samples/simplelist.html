@@ -1,0 +1,87 @@
+<html>
+	<head>
+		<script language="javascript" src="../dom.js"></script>		
+	<script language="javascript">
+			var skin=parent._skin?parent._skin:"skin_standard";
+			var lang=parent._lang?parent._lang:"en";
+			
+			initDom("../images/"+skin+"/",lang);
+			styleSheet();
+		</script>
+			
+		<script language="javascript">
+			mylist = newListWidget("mylist",changeCB,true,200,20,"this is a tooltip",dblClickCB,keyUpCB);
+			getSelButton = newButtonWidget("getSelButton","get Selection",clickCB);
+			
+			
+			function clickCB()
+			{
+				switch (this.id)
+				{
+					case "getSelButton":
+					
+						var sel = mylist.getSelection();
+						alert("index : " + sel.index + " value : " + sel.value);
+						break;
+						
+					
+				}
+			}
+
+			function loadCB()
+			{
+				mylist.init();
+				
+				
+				mylist.add("<value from add 1>","test6",true);
+				mylist.add("<value from add 2>","test7");
+			}
+
+			function changeCB()
+			{
+				status = "changed";
+			}
+			function dblClickCB()
+			{
+				status = "double click";
+			}
+			
+			function keyUpCB()
+			{
+				status ("key up");
+			}
+			
+		</script>
+	</head>
+	<body onload="loadCB()">
+		<table width="100%"><tr><td align="left" valign="middle">
+			<div class="insetBorder"><div class="dialogzone" style="padding:15px">
+			
+				<script language="javascript">
+					mylist.begin()
+				</script>
+
+					<option value="test1">value 1</option>
+					<option value="test2">value 2</option>
+					<option value="test3">value 3</option>
+					<option value="test4">value 4</option>
+					<option value="test5">value 5</option>
+				<script language="javascript">
+					mylist.end();
+				</script>
+				
+				<br><br>
+				
+				<script language="javascript">
+					getSelButton.write();
+				</script>
+				
+				<br><br>
+					<div class="dialogzone"> this is a sample text using dialogzone CSS class</div>
+					<div class="dialogzonebold"> this is a sample text using dialogzonebold CSS class</div>
+
+			</div></div>
+		</td></tr></table>
+	</body>
+	
+</html>

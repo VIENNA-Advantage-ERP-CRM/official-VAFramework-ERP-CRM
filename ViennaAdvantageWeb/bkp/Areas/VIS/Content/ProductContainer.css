@@ -1,0 +1,195 @@
+﻿.VIS_main-wrap,
+.VIS_form-wrap,
+.VIS_form-row,
+.VIS_form-data-row {
+    float: left;
+    width: 100%;
+}
+
+.VIS_form-col,
+.VIS_form-data-col {
+    float: left;
+    width: 50%;
+    /*padding: 10px 10px 0 10px;*/
+}
+.VIS_form-col label {
+    /* float: left; */
+    /* width: 100%; */
+    /* font-weight: normal; */
+}
+.VIS_form-col select {
+    /* float: left; */
+    /* width: 100%; */
+    /* height: 31px; */
+    /* border: 1px solid #ccc; */
+}
+.VIS_form-col-checkbox {
+    /*float: left;
+    width: 50%;
+    padding: 10px;*/
+}
+.VIS_form-col-checkbox input[type="checkbox"] {
+    /* float: left; */
+    /* margin-right: 10px; */
+}
+.VIS_form-col-checkbox label {
+    /* font-weight: normal; */
+}
+.VIS_outer-table-wrap {
+    float: left;
+    width: 100%;
+    padding: 1px;
+    height: 270px;
+    display: inline-block;
+}
+
+.VIS_buttons-wrap {
+    float: left;
+    width: 100%;
+    padding: 10px 0 0;
+}
+.VIS_buttons-wrap span {
+    background: rgba(var(--v-c-primary), 1);
+    color: rgba(var(--v-c-on-primary), 1);
+    /* border-radius: 0; */
+    margin-left: 5px;
+    float: left;
+    font-size: .875rem;
+}
+.VIS_buttons-wrap span:hover {
+    color: rgba(var(--v-c-on-primary), 1);
+}
+.VIS_buttons-ContainerTree {
+    /*background: #616364;
+    color: #fff;
+    border-radius: 0;
+    margin-left: 2px;
+    float: left;*/
+}
+
+.VIS_tree-container ul.nav-list {
+    /*padding-left: 20px;*/
+    flex-flow: column;
+    padding: 0;
+}
+
+.current {
+    background: rgba(var(--v-c-secondary), 1);
+}
+
+.VIS-pallet-icon {
+    /*float: left;
+    width: 31px;
+    height: 31px;
+    background: url('../Images/pallet-icon.png');
+    background-color: #616364;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    background-position: center;*/
+}
+
+.VIS_Tree-Container {
+    height: 384px;
+    float: left;
+    width: 100%;
+}
+
+.VIS_form-col select.VIS-container-move-combo-width {
+    /*width: calc(100% - 35px);*/
+}
+
+label.tree-toggler.nav-header:hover {
+    cursor: pointer;
+}
+
+.VIS_form-data-row {
+    /*float: left;
+    width: 100%;*/
+}
+
+.VIS_form-data-col {
+    /*float: left;
+    width: 50%;*/
+    /*margin-bottom: 2px;
+    padding: 0 10px;*/
+}
+.VIS_form-data-col label {
+    /* font-weight: normal; */
+    /* margin-bottom: 0px; */
+}
+.VIS_form-data-col input {
+    /* float: left; */
+    /* width: 100%; */
+    /* border-radius: 0; */
+    /* height: 27px; */
+    padding: 5px 10px;
+}
+
+.VIS_form-search-wrap {
+    /*float: left;
+    width: 100%;
+    margin-bottom: 3px;
+    margin-top: -1px;*/
+}
+.VIS_form-search-wrap input {
+    /*border-radius: 0;
+    height: 31px;
+    float: left;
+    width: calc(100% - 112px);
+    margin-right: 5px;*/
+    padding: 5px 10px;
+}
+
+.VIS_form-search-wrap button {
+    /*float: left;
+    width: 31px;
+    height: 31px;
+    background: #616364;
+    border: none;
+    margin-left: 4px;
+    color: #fff;
+    display: flex;
+    align-items: center;*/
+}
+.VIS_form-search-wrap button i {
+    /*font-size: 20px;*/
+}
+
+.VIS_pop-btn-wrap {
+    float: right;
+    width: auto;
+}
+
+.VIS_Tree-Container-disabled {
+    opacity: 0.2;
+}
+
+.VIS_Tree-Container-labelInfo {
+    height:10px; 
+    float: left; 
+    width: 100%; 
+    display:none;
+}
+.VIS_form-row .VIS_form-col:not(:first-child),
+.VIS_form-data-col:not(:first-child) {
+    padding-left: 7px;
+}
+
+.VIS_form-row .VIS_form-col:not(:last-child),
+.VIS_form-data-col:not(:last-child) {
+    padding-right: 7px;
+}
+.VIS_form-data-col input:not(:focus):placeholder-shown ~ label,
+.VIS_form-col input:not(:focus):placeholder-shown ~ label {
+    left: 10px;
+}
+#AddNewContainer, .VIS_main-wrap {
+    padding-top: 5px;
+}
+.VIS_tree-container .nav-list label {
+    padding: 5px;
+    border-radius: .25rem;
+}
+.VIS_tree-container .nav-list .nav-list {
+    padding-left: 15px;
+}

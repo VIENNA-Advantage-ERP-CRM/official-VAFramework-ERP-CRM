@@ -1,0 +1,45 @@
+<html>
+	<head>
+		<script language="javascript" src="../dom.js"></script>
+		<script language="javascript">
+			var skin=parent._skin?parent._skin:"skin_standard";
+			var lang=parent._lang?parent._lang:"en";
+			
+			initDom("../images/"+skin+"/",lang)
+			styleSheet()
+		</script>
+
+		<style type="text/css">
+			#horigrab{background-color:red}
+		</style>
+		
+		<script language="javascript">
+		
+			function resizeCB(x,y)
+			{
+				alert("x="+x+",y="+y)
+			}
+			function grabButtonCB()
+			{
+				alert(1)
+			}
+		
+			horigrab=newGrabberWidget("horigrab",resizeCB,10,10,5,500,true,grabButtonCB)
+			horigrab.setMinMax(5, 300)
+
+			function loadCB()
+			{
+				horigrab.init()
+			}
+
+		</script>
+	</head>
+	
+	<body onload="loadCB()" bgcolor="#e0e0e0">
+		<script language="javascript">horigrab.write();</script>
+		<select size=1">
+			<option>test test test</option>
+		</select>
+	</body>
+	
+</html>

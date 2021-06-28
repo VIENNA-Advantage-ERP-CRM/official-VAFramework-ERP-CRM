@@ -1,0 +1,26 @@
+﻿
+/* Theme based color - schema */
+/* va color */
+:root {
+    --v-c-primary: 0, 152, 247; /*#1aa0ed;*/
+    --v-c-on-primary: 255, 255, 255; /*white*/
+    /*Secondary*/
+    --v-c-secondary: 240,249,255;
+    /*black*/
+    --v-c-on-secondary: 36,61,76; /*black*/
+    /* common*/
+    --v-c-common: 255,255,255;
+    --v-c-on-common: 0,0,0;
+    --v-c-mandatory: 236,63,63;
+    --v-c-readonly: 241,241,241;
+    /*font family*/
+    --v-c-font-family: 'NoirPro-Regular', sans-serif;
+    /*--v-c-font-family: 'Montserrat-Regular', sans-serif;*/
+}
+
+
+.vis-color-primary {
+    color:rgba(var(--v-c-primary),1);
+}
+.vis-color-mandatory {
+}

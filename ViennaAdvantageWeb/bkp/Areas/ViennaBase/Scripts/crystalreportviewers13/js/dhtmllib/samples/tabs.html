@@ -1,0 +1,206 @@
+<html>
+	<head>
+		<script language="javascript" src="../dom.js"></script>
+		<script language="javascript" src="../menu.js"></script>
+		<script language="javascript" src="../palette.js"></script>
+		<script language="javascript" src="../psheet.js"></script>
+		<script language="javascript">
+			var skin=parent._skin?parent._skin:"skin_standard";
+			var lang=parent._lang?parent._lang:"en";
+			
+			initDom("../images/"+skin+"/",lang)
+			styleSheet()
+		</script>
+			
+		<script language="javascript">
+		
+			function theCB()
+			{
+				this.select(true)
+				
+				for (var i in topTabs)
+				{
+					var tab=topTabs[i]
+					if (this.id!=tab.id)
+						tab.select(false)
+				}
+			}
+		
+			function theCB2()
+			{
+				this.select(true)
+				
+				for (var i in bottomTabs)
+				{
+					var tab=bottomTabs[i]
+					if (this.id!=tab.id)
+						tab.select(false)
+				}
+			}
+		
+			function loadCB()
+			{
+				for (var i in topTabs)
+					topTabs[i].init()
+				for (var i in bottomTabs)
+					bottomTabs[i].init()
+					
+				tbar.init()
+				
+				tzone.init()
+			}
+
+			
+			var topTabs=new Array
+			for (var i=0;i<5;i++)
+			{
+				if ((i!=2)&&(i!=3))
+					topTabs[i]=newTabWidget("toptabNoIcon"+i,true,"test d'onglet "+i,theCB,"toto")
+				if (i==2)
+				{
+					topTabs[i]=newTabWidget("toptabNoIcon"+i,true,"test d'onglet "+i,theCB,"toto","imgtabs.gif",16,16,0,0)
+					topTabs[i].isSelected=true
+				}
+				if (i==3)
+					topTabs[i]=newTabWidget("toptabNoIcon"+i,true,"test d'onglet "+i,theCB,"toto","imgtabs.gif",16,16,0,-16)
+			}
+
+			var bottomTabs=new Array
+			for (var i=0;i<5;i++)
+			{
+				if ((i!=2)&&(i!=3))
+					bottomTabs[i]=newTabWidget("bottomtabNoIcon"+i,false,"test d'onglet "+i,theCB2,"toto")
+				if (i==2)
+				{
+					bottomTabs[i]=newTabWidget("bottomtabNoIcon"+i,false,"test d'onglet "+i,theCB2,"toto","imgtabs.gif",16,16,0,0)
+					bottomTabs[i].isSelected=true
+				}
+				if (i==3)
+					bottomTabs[i]=newTabWidget("bottomtabNoIcon"+i,false,"test d'onglet "+i,theCB2,"toto","imgtabs.gif",16,16,0,-16)
+			}
+
+
+			var counter=0
+
+			function changeFirst()
+			{
+				if (counter==0)
+				{
+					bottomTabs[0].change("test d'onglet changé",theCB2,"toto","imgtabs.gif",16,16,0,-16)
+					counter=1
+				}
+				else
+				{
+					bottomTabs[0].change("test d'onglet modif",theCB2,"toto")
+					counter=0
+				}
+			}
+			
+			function remSecond()
+			{
+				tbar.remove(1)
+			}
+
+
+			var theShow=true
+			function hfFirst()
+			{
+				theShow=!theShow
+				tbar.showTab(0,theShow)
+			}
+
+
+			var tbar = newTabBarWidget("theTbar",true)
+			tbar.add("test d'onglet 1","toto",-1,"imgtabs.gif",16,16,0,0)
+			tbar.add("test d'onglet 2","toto",-1,"imgtabs.gif",16,16,0,0)
+			tbar.add("test d'onglet 3","toto",-1,"imgtabs.gif",16,16,0,0)
+			
+			tbar.add("test d'onglet 4","toto",-1,"imgtabs.gif",16,16,0,0)
+			tbar.add("test d'onglet 5","toto",-1,"imgtabs.gif",16,16,0,0)
+			tbar.add("test d'onglet 6","toto",-1,"imgtabs.gif",16,16,0,0)
+			tbar.add("test d'onglet 7","toto",-1,"imgtabs.gif",16,16,0,0)
+			tbar.add("test d'onglet 8","toto",-1,"imgtabs.gif",16,16,0,0)
+			tbar.select(2)
+
+
+
+			function tzoneCB()
+			{
+				//alert(this.id)
+			}
+
+			tzone = newTabbedZone("tzone",tzoneCB,500,200)
+			tzone.add("test d'onglet ","toto","imgtabs.gif",16,16,0,0)
+			tzone.add("test d'onglet ","toto","imgtabs.gif",16,16,0,0)
+
+
+		</script>
+	</head>
+	<body onload="loadCB()">
+	
+		<table width="100%"><tr><td align="center" valign="middle">
+			<div class="insetBorder"><div class="dialogzone" style="padding:15px">
+	
+				<u><b>Single Top Tab, no image</b></u><br><br>
+				<table border="0" cellspacing="0" cellpadding="0"><tr>
+					<script language="javascript">
+						for (var i in topTabs)
+						document.write('<td>'+topTabs[i].getHTML()+'</td>')
+					</script>
+				</tr></table>
+				<br><br>
+				<u><b>Single Bottom Tab, no image</b></u><br><br>
+				<table border="0" cellspacing="0" cellpadding="0"><tr>
+					<script language="javascript">
+						for (var i in bottomTabs)
+						document.write('<td>'+bottomTabs[i].getHTML()+'</td>')
+					</script>
+				</tr></table>
+				<br>
+				<script language="javascript">
+					var theBtton = newButtonWidget("theBtton","change first tab","changeFirst()")
+					theBtton.write()
+				</script>
+
+
+				<br><br><br>
+				<u><b>Tab bar</b></u><br><br>
+				<div style="width:600px;overflow:hidden">
+					<script language="javascript">
+						tbar.write()
+					</script>
+				</div>
+
+				<br>
+				<script language="javascript">
+					var theBttonRem = newButtonWidget("theBttonRem","remove 2nd tab","remSecond()")
+					theBttonRem.write()
+					var theBttonHF = newButtonWidget("theBttonHF","Hide/show 1st Tab","hfFirst()")
+					theBttonHF.write()
+				</script>
+
+
+				<br><br><br>
+				<u><b>Tabdeb zone</b></u><br><br>
+
+				<script language="javascript">tzone.begin()</script>
+
+					<script language="javascript">tzone.beginTab(0)</script>
+						test du premier tab<br><br>
+						test test
+					<script language="javascript">tzone.endTab()</script>
+
+					<script language="javascript">tzone.beginTab(1)</script>
+						test du deuxieme tab<br>
+						qsd fqsd dsqf sqdf test test dkjsfhqsdk kqsdh kjqdshf kjdsqh kf qsdk fkqsdh kjsdqhf sdqjk hfksqdhf kjqsdkjsqd kjhsdqk hksdjq
+					<script language="javascript">tzone.endTab()</script>
+
+				<script language="javascript">tzone.end()</script>
+				
+
+			</div></div>
+		</td></tr></table>
+		
+	</body>
+	
+</html>

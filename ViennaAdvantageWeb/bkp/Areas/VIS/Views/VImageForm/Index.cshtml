@@ -1,0 +1,25 @@
+﻿@model VIS.Models.VImageModel
+<div>
+    @*<label id="@("lblImageSelect_" + ViewBag.WindowNumber)" class="VIS_Pref_Label_Font" style="font-size: 17px; margin-bottom: 0px;" >
+        Select Image
+    </label>*@
+    <div>
+        <label for="@("fileUpload_" + ViewBag.WindowNumber)" id="@("lblfileUpload_" + ViewBag.WindowNumber)" class="VIS-VImage-file-label">Choose File</label>
+        <input id="@("fileUpload_" + ViewBag.WindowNumber)" style="display: none;" type="file" accept="image/*" />
+        <input id="@("chkDataBaseSave_" + ViewBag.WindowNumber)" type="checkbox" checked="@Model.Isdatabase" />
+        <span>
+            <label id="@("lblDataBaseSave_" + ViewBag.WindowNumber)" class="VIS_Pref_Label_Font">Save In Database</label>
+        </span>
+    </div>
+</div>
+
+<div id="@("holderDiv_" + ViewBag.WindowNumber)"  class="VIS-VImage-testContent-wrap">
+    <img  id="@("imgUsrImage_" + ViewBag.WindowNumber)"  alt="User Avatar" title="User Image" src="@Model.UsrImage" />
+</div>
+
+<div class="VIS-VImage-testBottom-btn">
+    <a href="javascript:void(0)" id="@("btnImgDelete_" + ViewBag.WindowNumber)"  class="VIS_Pref_btn-2" style="margin-bottom:0px;margin-top:0px ;float:right;">Delete</a>
+    <a href="javascript:void(0)" id= "@("btnCancel_" + ViewBag.WindowNumber)" class="VIS_Pref_btn-2" style="margin-bottom:0px;margin-top:0px; float:right; margin-right:10px">Cancel</a>
+    <a href="javascript:void(0)" id="@("btnOk_" + ViewBag.WindowNumber)"  class="VIS_Pref_btn-2" style="margin-bottom:0px;margin-top:0px ;float:right; margin-right:10px">OK</a>
+
+</div>

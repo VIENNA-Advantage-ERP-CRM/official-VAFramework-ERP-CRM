@@ -1,0 +1,97 @@
+<html>
+	<head>
+		<script language="javascript" src="../dom.js"></script>
+		<script language="javascript" src="../treeview.js"></script>
+		<script language="javascript" src="../palette.js"></script>
+		<script language="javascript">
+			var skin=parent._skin?parent._skin:"skin_standard";
+			var lang=parent._lang?parent._lang:"en";
+			
+			initDom("../images/"+skin+"/",lang)
+			styleSheet()
+		</script>
+			
+		<script language="javascript">
+
+			var frmZoneWidth	= 200
+			var frmZoneHeight	= 400
+			theMemberTree = new newTreeWidget("theMembertree",frmZoneWidth,frmZoneHeight,"../samples/treeicons.gif",changeMemberCB,dblClickMemberCB,null)
+
+			memRoot = newTreeWidgetElem(6, "All", "mem1", "Help", 7)
+			theMemberTree.add(memRoot)
+
+			MemberDim1 = newTreeWidgetElem(6, "North Europe", "mem2", "tooltip", 7)
+			MemberDim1.isCheck=true
+			MemberDim1.checkCB=checkCB
+			
+			memRoot.add(MemberDim1)
+
+			MemberDim1.add(newTreeWidgetElem(1, "England", "mem2_1", "tooltip"))
+			
+			temp=newTreeWidgetElem(1, "Germany", "mem2_2", "tooltip")
+			MemberDim1.add(temp)
+			temp.isCheck=true
+			temp.check(true)
+			temp.checkCB=checkCB
+
+			MemberDim1.add(newTreeWidgetElem(1, "France", "mem2_3", "tooltip"))
+			MemberDim1.add(newTreeWidgetElem(1, "Danmark", "mem2_4", "tooltip"))
+			MemberDim1.expanded=true
+
+			MemberDim2 = newTreeWidgetElem(6, "South Europe", "mem3", "tooltip", 7)
+			memRoot.add(MemberDim2)
+
+			temp2=newTreeWidgetElem(-1, "Italie", "mem3_1", "tooltip")
+			temp2.isCheck=true
+			MemberDim2.add(temp2)
+			MemberDim2.add(newTreeWidgetElem(-1, "Greece", "mem3_2", "tooltip"))
+			MemberDim2.add(newTreeWidgetElem(-1, "Spain", "mem3_3", "tooltip"))
+			MemberDim2.add(newTreeWidgetElem(-1, "Portugal", "mem3_4", "tooltip"))
+			MemberDim2.expanded=true
+
+			MemberDim3 = newTreeWidgetElem(6, "North america", "mem43", "tooltip", 7)
+			memRoot.add(MemberDim3)
+
+			MemberDim3.add(newTreeWidgetElem(1, "Canada", "mem4_1", "tooltip"))
+			MemberDim3.add(newTreeWidgetElem(1, "USA", "mem4_2", "tooltip"))
+			MemberDim3.expanded=true
+
+			function changeMemberCB()
+			{
+			}
+			
+			function dblClickMemberCB()
+			{
+			}
+			
+			function loadCB()
+			{
+				theMemberTree.init()
+			}
+			
+			function checkCB()
+			{
+				alert(this.id+" checked="+this.isChecked())
+			}
+			
+			
+		</script>
+	</head>
+	<body onload="loadCB()" onselectstart="return false">
+	
+		<table width="100%"><tr><td align="center" valign="middle">
+			<div class="insetBorder"><div class="dialogzone" style="padding:15px">
+	
+				<u><b>Tree View with check boxes</b></u><br><br>
+				<table border="0"><tr valign="top"><td class="dialogzone">
+					<script language="javascript">theMemberTree.write()</script>
+				</td>
+				</tr></table>
+			</div>	
+				<!--<a href="javascript:temp.check(true)"> Check Germany</a>-->
+			</div>			
+		</td></tr></table>
+		
+	</body>
+	
+</html>

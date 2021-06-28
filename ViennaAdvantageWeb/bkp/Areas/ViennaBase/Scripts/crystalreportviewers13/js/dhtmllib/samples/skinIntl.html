@@ -1,0 +1,54 @@
+
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<title> Skin and Language </title>
+</head>
+<script language="javascript" src="../dom.js"></script>
+<script language="javascript">
+	initDom("../images/skin_standard/","en")
+	styleSheet()
+</script>
+<script>
+	_p=parent.parent
+	
+	skinList=newComboWidget("sampleSkinList",inputChanged,true,120);
+	langList=newComboWidget("sampleLangList",inputChanged,true,80);
+		
+	function loadCB()
+	{
+		skinList.init();
+		langList.init();
+		
+		skinList.add("skin_standard", "skin_standard");
+		skinList.add("skin_default", "skin_default");
+		skinList.add("skin_corporate", "skin_corporate");
+		skinList.add("skin_coloredline", "skin_coloredline");
+		
+		langList.add("en", "en");
+		langList.add("ja", "ja");
+		
+	}
+	
+	function inputChanged()
+	{
+		var skin=skinList.getSelection().value;
+		var lang =langList.getSelection().value;
+		_p.updateContent(skin,lang);
+	}	
+</script>
+<body onload="loadCB()" class="dialogzone">
+	<table class="dialogzone" cellpadding="3" cellspacing="0" border="0">
+	<tr>
+		<td>skin:</td>
+		<td>language:</td>
+	</tr>
+	<tr>
+		<td><script language="javascript">skinList.write()</script></td>
+		<td><script language="javascript">langList.write()</script></td>
+	</tr>		
+	</table>
+</body>
+</html>

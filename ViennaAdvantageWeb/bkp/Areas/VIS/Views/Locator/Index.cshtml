@@ -1,0 +1,95 @@
+﻿@{
+    var windowNo = ViewBag.WindowNumber;
+}
+
+@functions{
+    public string GetText(string msg, bool isTrans = false, bool isElement = false)
+    {
+        if (isTrans)
+        {
+            return VAdvantage.Utility.Msg.Translate(ViewBag.lang, msg);
+        }
+        else if (isElement)
+        {
+            return VAdvantage.Utility.Msg.GetElement(Convert.ToString(ViewBag.lang), msg, false);
+        }
+        return VAdvantage.Utility.Util.CleanMnemonic(VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, msg, true));
+    }
+}
+
+    <div class="vis-formouterwrpdiv">
+        <div class="VIS-locator-DivStyle">
+            @* work to make locator control to autocomplete *@
+            <div class="input-group vis-input-wrap">
+                <div class="vis-control-wrap">
+                    <input type="text" class="form-control ui-autocomplete-input" data-hasbtn="" placeholder="Search Locator" aria-haspopup="true" id="lstLocator_@windowNo" autocomplete="off">
+                    <label class="VIS_Pref_Label_Font VIS-locator-label" id="lblLocator_@windowNo" title="jh">@GetText("M_Locator_ID", true)</label>
+                </div>
+                <span class="input-group-append" id="locatorSearch_@windowNo"><span class="input-group-text"><a href="javascript:void(0)" class="glyphicon glyphicon-search"></a></span></span>
+                @* End *@
+            </div>
+        </div>
+
+        <div id="divchkCreateNew_@windowNo" class="VIS-locator-DivStyle">
+            <div class="input-group vis-input-wrap">
+                <div class="vis-control-wrap">
+                    <label class="vis-ec-col-lblchkbox"><input id="chkCreateNew_@windowNo" type="checkbox" />@GetText("CreateNew", true)</label>
+                </div>
+            </div>
+        </div>
+        <div id="divWarehouseInfo_@windowNo" class="VIS-locator-DivStyle">
+            <div class="input-group vis-input-wrap">
+                <div class="vis-control-wrap">
+                    <input class="VIS_Pref_pass" readonly type="tel" id="txtWarehouseInfo_@windowNo" data-placeholder="" placeholder=" " />
+                    <label class="VIS_Pref_Label_Font VIS-locator-label" id="lblWarehouseInfo_@windowNo" title="jh">@GetText("M_Warehouse_ID", true)</label>
+                </div>
+            </div>
+        </div>
+
+        <div id="divWarehouse_@windowNo" class="VIS-locator-DivStyle">
+            <div class="input-group vis-input-wrap">
+                <div class="vis-control-wrap">
+                    <select class="VIS_Pref_pass" disabled id="cmbWarehouse_@windowNo"></select>
+                    <label class="VIS_Pref_Label_Font VIS-locator-label" id="lblWarehouse_@windowNo" title="jh">@GetText("M_Warehouse_ID", true)</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="VIS-locator-DivStyle">
+            <div class="input-group vis-input-wrap">
+                <div class="vis-control-wrap">
+                    <input class="VIS_Pref_pass" data-placeholder="" placeholder=" " readonly type="tel" id="txtX_@windowNo" />
+                    <label class="VIS_Pref_Label_Font VIS-locator-label" id="lblX_@windowNo" title="jh">@GetText("X", false, true)</label>
+                </div>
+            </div>
+        </div>
+        <div class="VIS-locator-DivStyle">
+            <div class="input-group vis-input-wrap">
+                <div class="vis-control-wrap">
+                    <input class="VIS_Pref_pass" data-placeholder="" placeholder=" " readonly type="tel" id="txtY_@windowNo" />
+                    <label class="VIS_Pref_Label_Font VIS-locator-label" id="lblY_@windowNo" title="jh">@GetText("Y", false, true)</label>
+                </div>
+            </div>
+        </div>
+        <div class="VIS-locator-DivStyle">
+            <div class="input-group vis-input-wrap">
+                <div class="vis-control-wrap">
+                    <input class="VIS_Pref_pass" data-placeholder="" placeholder=" " readonly type="tel" id="txtZ_@windowNo" />
+                    <label class="VIS_Pref_Label_Font VIS-locator-label" id="lblZ_@windowNo" title="jh">@GetText("Z", false, true)</label>
+                </div>
+            </div>
+        </div>
+        <div class="VIS-locator-DivStyle">
+            <div class="input-group vis-input-wrap">
+                <div class="vis-control-wrap">
+                    <input class="VIS_Pref_pass" data-placeholder="" placeholder=" " readonly type="tel" id="txtValue_@windowNo" />
+                    <label class="VIS_Pref_Label_Font VIS-locator-label" id="lblValue_@windowNo" title="jh">@GetText("Value", true)</label>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="VIS-locator-DivStyle" style="text-align: right">
+            <input type="button" id="btnCancel_@windowNo" style="margin-bottom:0px;margin-top:0px; float:right " class="VIS_Pref_btn-2" value=@GetText("Cancel") />
+            <input type="button" id="btnOk_@windowNo" style="margin-bottom:0px;margin-top:0px; float:right; margin-right:10px" class="VIS_Pref_btn-2" value=@GetText("OK") />
+        </div>
+

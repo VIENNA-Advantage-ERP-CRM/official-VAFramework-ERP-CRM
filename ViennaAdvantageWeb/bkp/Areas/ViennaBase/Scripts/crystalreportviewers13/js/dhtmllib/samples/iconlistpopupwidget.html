@@ -1,0 +1,132 @@
+<html>
+	<head>
+		<script language="javascript" src="../dom.js"></script>
+		<script language="javascript" src="../treeview.js"></script>
+		<script language="javascript">
+			var skin=parent._skin?parent._skin:"skin_standard";
+			var lang=parent._lang?parent._lang:"en";
+			
+			initDom("../images/"+skin+"/",lang)
+			styleSheet()
+		</script>
+			
+		<script language="javascript">
+		
+			icons="treeicons.gif"
+			
+			function showMenu(e,x,y)
+			{
+				x=x?x:eventGetX(e);
+				y=y?y:eventGetY(e);
+				scmenu.show(true,x,y)
+			}
+			
+			function clickCB()
+			{
+				//alert('clickCB')
+			}
+			
+			function changeCB()
+			{
+				alert('changeCB')
+			}
+			
+			function dblClickCB()
+			{
+				//alert('dblClickCB')
+			}
+			
+			function keyUpCB()
+			{
+				alert('keyUpCB')
+			}
+			
+			var cnt=1
+			function change(e)
+			{
+				var list =  scmenu.getList()
+				
+				if(list.treeLyr==null)
+				{ 
+					showMenu(null,10,10);
+					return;
+				}
+				
+				list.deleteAll()
+
+				list.add(newTreeWidgetElem(1, "Element 2", "test0", "help text",null,"tooltip text"))
+				list.add(newTreeWidgetElem(2, "Element 2", "test1", "help text",null,"tooltip text"))
+				list.add(newTreeWidgetElem(2, "Element 2", "test2", "help text",null,"tooltip text"))
+				list.add(newTreeWidgetElem(2, "Element 2", "test3", "help text",null,"tooltip text"))
+				
+				if (cnt==1)
+					cnt=0
+				else
+					cnt=1
+				
+				if (cnt==0)
+				{
+					for (var i=0; i<50;i++)
+						list.add(newTreeWidgetElem(2, "Element 2", "test3", "help text",null,"tooltip text"))
+				}
+
+				list.rebuildHTML()
+				
+				showMenu(null,10,10);
+			
+			}
+			function loadCB()
+			{					
+				changeBtn.init()												
+				
+			}
+					
+			var scmenu=newIconListPopupWidget("scmenu",100,150,icons,clickCB,dblClickCB)
+			var list =  scmenu.getList()
+			
+			list.add(newTreeWidgetElem(1, "Element 2", "test0", "help text",null,"tooltip text"))
+			list.add(newTreeWidgetElem(2, "Element 2", "test1", "help text",null,"tooltip text"))
+			list.add(newTreeWidgetElem(2, "Element 2", "test2", "help text",null,"tooltip text"))
+			list.add(newTreeWidgetElem(2, "Element 2", "test3", "help text",null,"tooltip text"))
+			list.add(newTreeWidgetElem(2, "Element 2", "test4", "help text",null,"tooltip text"))
+			list.add(newTreeWidgetElem(2, "Element 2", "test5", "help text",null,"tooltip text"))
+			list.add(newTreeWidgetElem(1, "Element 2", "test6", "help text",null,"tooltip text"))
+			list.add(newTreeWidgetElem(1, "Element 2", "test6", "help text",null,"tooltip text"))
+			list.add(newTreeWidgetElem(1, "Element 2", "test6", "help text",null,"tooltip text"))
+			list.add(newTreeWidgetElem(1, "Element 2", "test6", "help text",null,"tooltip text"))			
+						
+			changeBtn=newButtonWidget("changeBtn","change list content ","change()")
+			
+		</script>
+	</head>
+	
+	<body onload="loadCB()">
+		
+		<div class="insetBorder">
+			<div id="IconListPopupWidgetTestArea" class="dialogzone" onclick="showMenu(event);">
+				Test IconListPopupWidget by right clicking here. The IconListPopupWidget should appear...<br>
+				Test IconListPopupWidget by right clicking here. The IconListPopupWidget should appear...<br>
+				Test IconListPopupWidget by right clicking here. The IconListPopupWidget should appear...<br>
+				Test IconListPopupWidget by right clicking here. The IconListPopupWidget should appear...<br>
+				Test IconListPopupWidget by right clicking here. The IconListPopupWidget should appear...<br>
+				Test IconListPopupWidget by right clicking here. The IconListPopupWidget should appear...<br>
+				Test IconListPopupWidget by right clicking here. The IconListPopupWidget should appear...<br>
+				Test IconListPopupWidget by right clicking here. The IconListPopupWidget should appear...<br>
+				Test IconListPopupWidget by right clicking here. The IconListPopupWidget should appear...<br>
+				Test IconListPopupWidget by right clicking here. The IconListPopupWidget should appear...<br>
+				Test IconListPopupWidget by right clicking here. The IconListPopupWidget should appear...<br>
+				Test IconListPopupWidget by right clicking here. The IconListPopupWidget should appear...<br>
+				Test IconListPopupWidget by right clicking here. The IconListPopupWidget should appear...<br>
+				Test IconListPopupWidget by right clicking here. The IconListPopupWidget should appear...<br>
+				Test IconListPopupWidget by right clicking here. The IconListPopupWidget should appear...<br>
+				Test IconListPopupWidget by right clicking here. The IconListPopupWidget should appear...<br>
+			</div>
+			<div>
+				<br><br>
+				<script language="javascript">changeBtn.write()</script>				
+			</div>
+									
+		</div>
+	</body>
+	
+</html>

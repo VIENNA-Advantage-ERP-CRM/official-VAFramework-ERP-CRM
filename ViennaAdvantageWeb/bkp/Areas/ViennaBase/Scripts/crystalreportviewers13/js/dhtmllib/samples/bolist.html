@@ -1,0 +1,207 @@
+<html>
+	<head>
+		<script language="javascript" src="../dom.js"></script>
+		<script language="javascript" src="../bolist.js"></script>
+		<script language="javascript">
+			var skin=parent._skin?parent._skin:"skin_standard";
+			var lang=parent._lang?parent._lang:"en";
+			
+			initDom("../images/"+skin+"/",lang)
+			styleSheet()
+		</script>
+			
+		<script language="javascript">
+		
+			// ---------------------------------------------
+			// Functions here
+			// ---------------------------------------------
+
+			function changeCB() { status="ChangeCB "+this.id }
+			function dblClickCB() { status="dblClickCB "+this.id }
+			function moveCB() { status="moveCB "+this.id }
+			function deleteCB()
+			{
+				var sel=this.getSelection()
+				if (sel)
+					this.getElement(sel.index).remove()
+			}
+
+			function loadCB()
+			{
+				for (var i in bolist)
+				{
+					bolistContainer[i].init()
+					bolistContainer[i].resize(500)
+
+					bolist[i].add("First item",0,"value1","tooltip",-1)
+					bolist[i].add("Second item",1,"value2","tooltip",-1)
+					bolist[i].add("Third item",2,"value3","tooltip",-1)
+				}
+				
+				bolist[1].select(2)
+				bolist[2].selectByVal("value3")
+
+
+				addCombo.init()
+				addLabel.init()
+				addButton.init()
+				addEndButton.init()
+
+				addCombo.add("Dimension","0",true)
+				addCombo.add("Measure","1")
+				addCombo.add("Detail","2")
+				addCombo.add("Filter","3")
+			}
+			
+			// ---------------------------------------------
+			// Buttons and related functions here
+			// ---------------------------------------------
+
+			addCombo     = newComboWidget("addCombo")
+			addButton    = newButtonWidget("addButton","Add (Beginning)","addElem(true)",100)
+			addEndButton = newButtonWidget("addEndButton","Add (End)","addElem()",100)
+			addLabel     = newTextFieldWidget("addLabel",null,null,null,addElem,false,null,100)
+			remButton    = newButtonWidget("remButton","Remove Selection","removeSelection()",100)
+			
+			valueIdx=0
+			
+			function addElem(begin)
+			{
+				var idx = addCombo.getSelection().index+1
+				for (var i in bolist)
+				{
+					var val="manualAdded"+(valueIdx++)
+					bolist[i].add(addLabel.getValue(),idx,val,addLabel.getValue(),begin?0:-1)
+					bolist[i].selectByVal(val)
+				}
+			}
+			
+			function removeSelection()
+			{
+				for (var i in bolist)
+				{
+					var sel=bolist[i].getSelection()
+					if (sel)
+						bolist[i].getElement(sel.index).remove()
+				}
+			}
+
+			// ---------------------------------------------
+			// Drag and Drop
+			// ---------------------------------------------
+
+			function dragCB(source)
+			{
+				//status="dragCB()"
+			}
+			
+			function acceptDropCB(source, target, ctrl, shift)
+			{
+				//status="acceptDropCB()"
+				return true
+			}
+			
+			function dropCB(source, target, ctrl, shift)
+			{
+				// ctrl means Drag Drop COPY
+				// shift means Drag Drop SWAP
+				// no modifiers means Drag Drop MOVE
+			
+				var sourceItem = source.selection
+				var targetItem = target.dropWidget
+				var index      = target.dropIndex
+				
+				if (shift)
+				{
+					targetItem = targetItem.items[index]
+					var n1=source.add(targetItem.text,targetItem.imgIndex,targetItem.value,targetItem.tooltip,sourceItem.getIndexInParent())
+					var n2=target.add(sourceItem.text,sourceItem.imgIndex,sourceItem.value,sourceItem.tooltip,targetItem.getIndexInParent())
+					
+					sourceItem.remove()
+					targetItem.remove()
+					
+					n1.select(true)
+					n2.select(true)
+				}
+				else
+				{
+					var n = target.add(sourceItem.text,sourceItem.imgIndex,sourceItem.value,sourceItem.tooltip,index)
+
+					if (!ctrl)
+						sourceItem.remove()
+				
+					n.select(true)
+				}
+			}
+
+
+			// ---------------------------------------------
+			// Create the BOLists here
+			// ---------------------------------------------
+
+			bolist = new Array
+			bolistContainer = new Array
+			
+			
+			bolistContainer[0] = newBOListContainerWidget("bolist0",550,100,"treeicons.gif",_wrapBOList,changeCB,dblClickCB,moveCB,deleteCB,true)
+			bolistContainer[1] = newBOListContainerWidget("bolist1",550,150,"treeicons.gif",_vertBOList,changeCB,dblClickCB,moveCB,deleteCB,true)
+			bolistContainer[2] = newBOListContainerWidget("bolist2",550,70,"treeicons.gif",_horiBOList,changeCB,dblClickCB,moveCB,deleteCB,true)
+
+			for (var i=0; i<bolistContainer.length; i++)
+			{
+				bolist[i] = bolistContainer[i].getList()
+				bolist[i].setDragDrop(dragCB,acceptDropCB,dropCB)
+
+			
+				bolist[i].add("Inserted before Init",3,"valueBef1","tooltip",-1)
+				bolist[i].add("Inserted before Init",4,"valueBef2","tooltip",-1)
+			}
+				
+			bolist[0].select(0)
+
+	</script>
+	</head>
+	<body onload="loadCB()">
+	
+		<table width="100%"><tr><td align="center" valign="middle">
+			<div class="insetBorder"><div class="dialogzone" style="padding:15px">
+
+				<table class="dialogzone" border="0" cellspacing="5">
+					<tr>
+						<td align="left">Add an item</td>
+						<td align="left"><script language="javascript">addButton.write();addEndButton.write();</script></td>
+						<td></td>
+						<td><script language="javascript">addCombo.write();addLabel.write()</script></td>
+					</tr>
+				</table>
+				<br>
+				<script language="javascript">remButton.write()</script>
+				<br>
+
+
+
+				<u><b>Wrapped BO List</b></u><br><br>
+				
+				<br>To delete an item, select it and press DEL, to move an item, drag and drop it (also between lists); to copy an item, use CTRL with drag and drop<br>
+				<table border="0"><tr valign="top"><td class="dialogzone">
+					<script language="javascript">bolistContainer[0].write()</script>
+				</td></tr></table>
+
+				<br>
+				<u><b>Vertical BO List</b></u><br><br>
+				<table border="0"><tr valign="top"><td class="dialogzone">
+					<script language="javascript">bolistContainer[1].write()</script>
+				</td></tr></table>
+
+				<br>
+				<u><b>Horizontal BO List</b></u><br><br>
+				<table border="0"><tr valign="top"><td class="dialogzone">
+					<script language="javascript">bolistContainer[2].write()</script>
+				</td></tr></table>
+
+			</div></div>
+		</td></tr></table>
+		
+	</body>
+	
+</html>

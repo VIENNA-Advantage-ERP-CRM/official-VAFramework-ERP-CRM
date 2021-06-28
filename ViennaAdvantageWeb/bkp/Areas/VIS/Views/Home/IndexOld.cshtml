@@ -1,0 +1,237 @@
+﻿@model VIS.Models.LoginModel
+
+
+
+@functions{
+
+    ///
+    ///<summary>
+    /// Get Antiforgery Token
+    /// </summary>
+    ///
+    ///<returns></returns>
+    public string GetAntiForgeryToken()
+    {
+        string cookieToken, formToken;
+        AntiForgery.GetTokens(null, out cookieToken, out formToken);
+        return cookieToken + ":" + formToken;
+    }
+
+    public string GetMsg(string lang, string key)
+    {
+        return VAdvantage.Utility.Msg.GetMsg(lang, key);
+    }
+       
+  }
+
+@section heads{
+
+    <script type="text/javascript">
+        window.history.forward();
+    </script>
+
+
+    @if (@User.Identity.IsAuthenticated)
+    {
+
+        var lst = VAdvantage.ModuleBundles.GetStyleBundles(); //Get All Style Bundle
+        foreach (var b in lst)
+        {
+            if (!BundleTable.Bundles.Contains(b))
+            {
+                BundleTable.Bundles.Add(b); //Add in Mvc Bundle Table
+            }
+        }
+
+        var lstRTLStyle = VAdvantage.ModuleBundles.GetRTLStyleBundles(); //Get All Script Bundle
+
+        foreach (var b in lstRTLStyle)
+        {
+            if (!BundleTable.Bundles.Contains(b))
+            {
+                BundleTable.Bundles.Add(b); //Add in Mvc Bundlw Table
+            }
+        }
+
+        var lstScript = VAdvantage.ModuleBundles.GetScriptBundles(); //Get All Script Bundle
+
+        foreach (var b in lstScript)
+        {
+            if (!BundleTable.Bundles.Contains(b))
+            {
+                BundleTable.Bundles.Add(b); //Add in Mvc Bundlw Table
+            }
+        }
+
+        List<string> paths = new List<string>();
+
+        foreach (Bundle b in BundleTable.Bundles)
+        {
+            if (b is StyleBundle)
+            {
+                if (b.Path.Contains("ViennaBase") && b.Path.Contains("_v")  && ViewBag.LibSuffix != "" && !b.Path.Contains(ViewBag.LibSuffix))
+                {
+                    continue;
+                }
+                else
+                {
+
+                    if (b.Path.EndsWith("RTL"))
+                    {
+                        if (ViewBag.direction == "rtl")
+                        {
+        @Styles.Render(b.Path); //render style 
+                        }
+                    }
+                    else
+                    {
+        @Styles.Render(b.Path); //render style 
+                    }
+                }
+            }
+            if (b is ScriptBundle)
+            {
+                paths.Add(b.Path); //add script to variable list , render it later
+            }
+        }
+
+        ViewBag.ScriptsPath = paths;
+    }
+
+    else //login 
+    {
+        if (ViewBag.LibSuffix != "")
+        {
+        @Styles.Render("~/Areas/ViennaBase/bundles/boot" + ViewBag.LibSuffix);
+        @Scripts.Render("~/Areas/ViennaBase/bundles/jquery" + ViewBag.LibSuffix);
+        }
+        else
+        {
+        @Styles.Render("~/bundles/boot");
+        @Scripts.Render("~/bundles/jquery");
+        }
+
+    }
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    <input id="vis_antiForgeryToken" type="hidden" value="@GetAntiForgeryToken()" />
+    <!-- App Header START -->
+    <header>
+        @Html.Partial("_UserSettings", Model)
+    </header>
+    
+    <!-- App Main Menu START -->
+    if (ViewBag.Menu != null)
+    {
+    <div id="vis_mainMenu" class="vis-mainMenu" style="display: none">
+        <div class="vis-menuTitle">
+            <p>@ViewBag.Menu.GetRootNode().Text</p>
+            <a href="javascript:void(0)" class="vis-mainMenuIcons vis-icon-menuclose" id="vis_closeMenu">close menu</a>
+        </div>
+        <!-- Menu Search  -->
+        <div class="vis-menuSearch" dir="ltr">
+            <input type="text" name="vis_menuSearch" dir="@ViewBag.direction"  id="vis_menuSearch" placeholder="@VAdvantage.Utility.Msg.GetMsg((string)ViewBag.culture, "Search")" list="vis_leafNodes" />
+            <!-- Leaf Nodes -->
+            <datalist id="vis_leafNodes">
+                @foreach (var item in ViewBag.Menu.GetLeafNodes())
+                {
+                    <option data-action='@item.ActionIndicator' data-actionid ="@item.ActionID"   title='@item.ID' value='@item.Name' ></option>
+                }
+            </datalist>
+
+            <a href="javascript:void(0)" id="vis_filterMenu" title="@VAdvantage.Utility.Msg.GetMsg((string)ViewBag.culture, "Filter")" class="vis-mainMenuIcons vis-icon-searchfilter"></a>
+            <a href="javascript:void(0)" class="vis-mainMenuIcons vis-icon-search">search</a>
+        </div>
+        <!-- App Tree  -->
+        <div class="vis-sidebarMenuWrapper">
+            <div id="vis_divTree" class="vis-css-treeview vis-css-menu">
+                @Html.Raw(@ViewBag.TreeHtml)
+            </div>
+        </div>
+    </div>
+    }
+    
+    <div id="vis_menuOverlay" class="vis-menu-Overlay">
+    </div> <!-- App Main Menu END -->
+    
+    <!-- App Main Section -->
+    <section id="vis_mainSection" style="padding-top: 42px; width: 100%; height: 100%;">
+        <!-- App Main Conatiner -->
+        <div id="vis_mainConatiner" class="vis-main-container">
+            <div id="vis_busyGrid" class="full-height-div busy">
+                <img src="~/Areas/VIS/Images/logo.jpg" />
+                <span>@VAdvantage.Utility.Msg.GetMsg((string)ViewBag.culture, "Loading")</span>
+            </div>
+            <!-- App Home Div -->
+            <div class="vis-sub-container" id="vis_home" style="display: none">
+                @* <img height="400" src="~/Areas/VIS/Images/main_screen.png" />*@
+                <img src="~/Areas/VIS/Images/busy.gif" />@VAdvantage.Utility.Msg.GetMsg((string)ViewBag.culture, "Loading")..........               
+            </div>
+            <div class="vis-sub-container" id="vis_home2" style="display: none;">
+            </div>
+        </div>
+    </section>
+                    
+    <footer>
+        @*taskbar div*@
+        <div class="vis-footer">
+            <div class="vis-taskbar-left">
+                <ul id="vis_taskbar" class="vis-taskbar">
+                    <li id="vis_lhome" style="display: none">
+                        <img src="~/Areas/VIS/Images/base/icon-home.png" style="vertical-align: text-top;" />
+                        <a>@VAdvantage.Utility.Msg.GetMsg((string)ViewBag.culture, "Home")</a>
+                    </li>
+                    |
+                </ul>
+            </div>
+            <div class="vis-taskbar-right">
+            </div>
+        </div>
+    </footer>
+    
+    @section scripts {
+
+        @*Dynamic content js*@
+        <script src="@Url.Action("Application", "Resource")"></script>
+        @{
+            
+            foreach (string b in ViewBag.ScriptsPath)
+            {
+                if (b.Contains("ViennaBase") && b.Contains("_v") && ViewBag.LibSuffix != "" && !b.Contains(ViewBag.LibSuffix))
+                {
+                    continue;
+                }
+                else
+                {
+            @Scripts.Render(b); // Render all Script files
+                }
+            }
+        }
+        <script src="https://maps.googleapis.com/maps/api/js"></script>
+        <script src="~/Areas/ViennaBase/Scripts/globalize/globalize.js"></script>
+        <script src="~/Areas/ViennaBase/Scripts/globalize/cultures/@String.Format("globalize.culture.{0}.js", ((String)ViewBag.culture).Replace("_", "-"))"></script>
+        <script>
+            VIS.VApp.init(); //Initlize App ()
+        </script>
+    }
+}
+else //Login Page
+{
+    <div class="loginConatiner">
+        <div id="loginPanel">
+            @Html.Partial("_Login")
+        </div>
+        <div id="login2Panel">
+            @Html.Partial("_Login2")
+        </div>
+    </div>
+    
+    @section scripts {
+        <link type="text/css" href="~/Areas/VIS/Content/Login.css" rel="stylesheet" />
+        <script type="text/javascript">  var contextUrl = '@Url.Content("~/")'  </script>
+        <script src="~/Areas/ViennaBase/Scripts/globalize/globalize.js"></script>
+        <script src="~/Areas/VIS/Scripts/app/ajaxlogin.js"></script>
+    }
+}

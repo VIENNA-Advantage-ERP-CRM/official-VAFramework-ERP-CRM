@@ -1,0 +1,199 @@
+﻿.vis-pSelectInfo {
+    width: 320px;
+    float: left;
+    /*padding: 12px;*/
+    background: rgba(var(--v-c-secondary), 1);
+    position: relative;
+    height: 100%;  
+}
+.vis-pPrintInfo {
+    padding: 0 5px;
+    position: relative;
+    /* margin: 5px; */
+    margin-right: 0px;
+    height: calc(100% - 50px);
+    width: 100%;
+}
+.vis-paymentselect-field, .vis-paymentPrint-field {
+    float: left;
+    /*margin-bottom: 5px;*/
+    padding: 0 7px;
+}
+.vis-paymentselect-field {
+    width: 100%;
+}
+.vis-paymentPrint-field{
+    width:50%;
+}
+.vis-pPrintProcess .vis-paymentPrint-field {
+    float: right;
+    width: auto;
+}
+.vis-paymentPrintChk-field {
+    float: right;
+    display: flex;
+}
+.vis-paymentPrintChk-field checkbox, .vis-paymentPrintChk-field label {
+    float: left;
+}
+.vis-mainContainer
+{
+    /*position:absolute;*/
+    width:100%;
+    height:100%;
+}
+.vis-pSelectIionGrid {
+    height: calc(100% - 60px);
+    width: calc(100% - 320px);
+    float: left;
+    padding: 0 12px;
+    margin-bottom: 10px;
+}
+.vis-fieldreadonly {
+    color: rgba(var(--v-c-on-secondary),.7) !important;
+    background: rgba(var(--v-c-on-secondary),.04) !important;
+    cursor: not-allowed;
+}
+.vis-paymentselect-field select, 
+.vis-paymentselect-field input:not([type="submit"]):not([type="checkbox"]), 
+.vis-paymentPrint-field select, 
+.vis-paymentPrint-field input:not([type="submit"]) {
+    /*width: 100%;
+    float: left;*/
+    /* color: rgba(var(--v-c-on-secondary), 1); */
+    /*height: 30px;*/
+    /*flex: 1;*/
+    /*background-color: var(--white);*/
+    /* outline: none; */
+}
+
+.vis-paymentselect-field input[type="checkbox"] {
+    margin: 2px 5px 0 0;
+}
+        .vis-paymentselect-field input[type="date"]
+        {
+            -webkit-appearance: none;
+        }
+        .vis-paymentPrint-field input[name='vis-name'],.vis-paymentPrint-field select[name='vis-name']
+        {
+            margin-right:15px;
+        }
+.vis-paymentselect-field label, .vis-paymentPrint-field label, .vis-paymentPrintChk-field label {
+    font-weight: normal;
+    color: rgba(var(--v-c-on-secondary), 1);
+    margin-bottom: 0;
+}
+
+.vis-pPrintProcess {
+    float: right;
+    width: 100%;
+    padding: 0 5px;
+}
+.vis-pSelectProcess
+{
+    float: right;
+    margin-right: 9px;
+}
+.vis-pBOMInfo
+{
+    /*width: 24%;
+    float: left;
+    padding: 15px;
+    background: #f8f8f8;
+    position:relative;
+    height:85%;
+    margin: 10px;
+    margin-right: 0px;
+    margin-left:5px;*/
+  
+}
+.vis-BOMLines
+{
+    /*height:80%;
+    width: 65%;
+    float: right;
+    margin: 10px;
+    margin-bottom: 0px;
+    margin-left: 0px;*/
+}
+.vis-bomlinesdata
+{
+    margin:5px;
+    float:left;
+    width:80%;
+}
+
+.vis-lookupTextboxes
+{
+  width:77% !important;
+  border-radius:none;
+}
+.vis-BOMLines label
+{
+    font-weight:normal;
+}
+
+.vis-frm-btn {
+    background: rgba(var(--v-c-primary), 1) !important;
+    color: rgba(var(--v-c-on-primary), 1) !important;
+    border: none !important;
+    padding: 10px 12px !important;
+    float: left;
+    margin-left: 10px;
+    min-width: 70px;
+    text-align: center !important;
+}
+.vis-pSelectInner {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 60px);
+    margin-bottom: 10px;
+    overflow: auto;
+    padding: 12px 5px;
+}
+.vis-pSelectInner ~ .vis-paymentselect-field {
+    padding-left: 12px;
+    padding-right: 0;
+    width: auto;
+}
+.vis-leftsidebarouterwrap .vis-paymentselect-field:first-child {
+    margin-top: 6px;
+}
+
+
+@media (max-width: 1024px)
+{
+    .vis-paymentPrint-field
+    {
+        /*width:48.5%;*/
+    }
+     .vis-lookupTextboxes
+    {
+        width:71% !important;
+        
+    }
+     .vis-lookupButtons
+    {
+    width:20px;
+    height:20px;
+    }
+}
+@media (max-width:999px)
+{
+    .vis-pSelectInfo
+    {
+        width: 35%;
+    }
+    .vis-pSelectIionGrid
+    {
+       
+        width: 65%;
+    }
+}
+@media (max-width: 767px)
+{
+    .vis-paymentPrint-field
+    {
+        width:100%;
+    }
+}

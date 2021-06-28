@@ -1,0 +1,208 @@
+﻿@model VAdvantage.Utility.Ctx
+
+@{
+    var windowNo = ViewBag.WindowNo;
+    var isRTL = Model.GetIsRightToLeft();
+    var dStyle = "";
+}
+
+@functions{
+    public string GetText(string msg, bool isTrans = false)
+    {
+        if (isTrans)
+            return VAdvantage.Utility.Msg.Translate(Model, msg);
+        return VAdvantage.Utility.Util.CleanMnemonic(VAdvantage.Utility.Msg.GetMsg(Model, msg,true));
+    }
+}
+
+<div class="vis-advancedSearch-contentWrap"> 
+    @if (isRTL)
+    {
+        dStyle = "border-left: 3px solid #d9e3e7;";
+    }
+    else
+    {
+        dStyle = "border-right: 3px solid #d9e3e7;";
+
+    }
+    <div class="vis-advancedSearchContentArea vis-pull-left" style="@dStyle">
+        <div class="vis-advancedSearchContentArea-up">
+            <div class="vis-advanedSearch-InputsWrap">
+                <div class="vis-form-group vis-advancedSearchInput" style="width: 25%;">
+                    <label id="lblQryName_@windowNo" for="QueryName">@GetText("QueryName")</label>
+                    <input readonly id="txtQryName_@windowNo" type="text" name="QueryName" maxlength="60">
+                </div>
+
+                <div class="vis-form-group vis-advancedSearchInput" style="width: 25%;">
+                    <label id="lblSavedQry_@windowNo" for="GetSavedQuery">@GetText("GetSavedQuery")</label>
+                    <select id="drpSavedQry_@windowNo">
+                    </select>
+                </div>
+
+                <div class="vis-advancedSearch-Icons vis-pull-left">
+                    <ul>
+                        @*<li><span class="advancedSearchActionIcon advancedSearch-EditIcon"></span></li>*@
+                        <li class="vis-pull-left"><button disabled id="btnDelete_@windowNo" class="vis-advancedSearchActionIcon vis-advancedSearch-delIcon"></button></li>
+                    </ul>
+                </div>
+
+            </div>
+            <!-- end of advanedSearch-InputsWrap -->
+
+            <div class="vis-advanedSearch-InputsWrap vis-pull-left">
+                <div class="vis-form-group vis-advancedSearchInput vis-advancedSearchInput-v">
+                    <label id="lblColumn_@windowNo"  for="Column">@GetText("Column")</label>
+                    <select id="drpColumn_@windowNo">
+                    </select>
+                </div>
+
+                <div class="vis-form-group vis-advancedSearchInput vis-advancedSearchInput-op">
+                    <label id="lblOperator_@windowNo" for="Oprator">@GetText("Operator")</label>
+                    <select id="drpOperator_@windowNo">
+                    </select>
+                </div>
+
+                <div class="vis-form-group vis-advancedSearchInput vis-advancedSearchInput-v" id="divValue1_@windowNo">
+                    <label  id="lblQryValue_@windowNo" for="QueryValue">@GetText("QueryValue")</label>
+                    <input  id="txtQryValue_@windowNo" type="text" name="QueryValue">
+                </div>
+                <!-- 
+                        <div class="advancedSearch-calender-Icon">
+                        	<ul>
+                            	<li><span class="advancedSearchActionIcon advancedSearch-calenderIcon"></span></li>
+                            </ul>
+                        </div>-->
+
+                <div class="vis-form-group vis-advancedSearchInput vis-advancedSearchInput-v" id="divValue2_@windowNo">
+                    <label for="QueryName"  id="lblToQryValue_@windowNo">@GetText("ToQueryValue")</label>
+                    <input  id="txtToQryValue_@windowNo" type="text" name="QueryName">
+                </div>
+
+                <div class="vis-advancedSearch-calender-Icon vis-pull-left">
+                    <ul>
+                        <li class="vis-pull-left"><button id="btnSave_@windowNo" disabled class="vis-advancedSearchActionIcon vis-advancedSearch-SaveIcon"></button></li>
+                    </ul>
+                </div>
+
+            </div>
+            <!-- end of advanedSearch-InputsWrap -->
+
+            @*dynamic Area*@
+            <div id="divDynamic_@windowNo">
+
+                <div class="vis-advanedSearch-InputsWrap vis-advancedSearchMrgin">
+                    <div class="vis-form-group vis-advancedSearchInput1 vis-pull-left">
+                        <input type="checkbox"  id="chkDynamic_@windowNo"  name="IsDynamic" class="vis-pull-left">
+                        <label for="IsDynamic" >@GetText("IsDynamic")</label>
+                    </div>
+
+                    <div class="vis-form-group vis-advancedSearchInput">
+                        <select id="drpDynamicOp_@windowNo" disabled>
+                            <option>@GetText("Today")</option>
+                            <option>@GetText("lastxDays")</option>
+                            <option>@GetText("lastxMonth")</option>
+                            <option>@GetText("lastxYears")</option>
+                        </select>
+                    </div>
+
+
+                    <div class="vis-form-group vis-advancedSearchHorigontal-dynamic vis-pull-left" id="divYear_@windowNo">
+                        <label for="Year">@GetText("Year")</label>
+                        <input id="txtYear_@windowNo" type="number" min="1" max="99" />
+                    </div>
+                    <div class="vis-form-group vis-advancedSearchHorigontal-dynamic vis-pull-left" id="divMonth_@windowNo">
+                        <label for="Month">@GetText("Month")</label>
+                        <input id="txtMonth_@windowNo" type="number" min="0" max="12" />
+                    </div>
+                    <div class="vis-form-group vis-advancedSearchHorigontal-dynamic vis-pull-left" id="divDay_@windowNo">
+                        <label for="Day">@GetText("Day")</label>
+                        <input id="txtDay_@windowNo" type="number" min="0" max="31" />
+                    </div>
+                </div>
+            </div>
+            <!-- end of advanedSearch-InputsWrap -->
+        </div>
+
+        <div class="vis-advancedSearchContentArea-down">
+            <div class="vis-advancedSearchTableWrap vis-table-responsive vis-pull-left">
+                <!--<div class="advancedSearchTableHead">
+                        	<p>Column</p>
+                            <p>Operator Name</p>
+                            <p>Query Value</p>
+                            <p>Query Value</p>
+                            <p>To Query Value</p>
+                            <p>Action</p>
+                        </div>-->
+                <table id="tblQry_@windowNo" class="vis-advancedSearchTable">
+                    <thead>
+                        <tr class="vis-advancedSearchTableHead">
+                            <th>@GetText("AD_Column_ID", true)</th>
+                            <th style="display:none">@GetText("KEYVALUE", true)</th>
+                            <th>@GetText("OperatorName", true)</th>
+                            <th>@GetText("QueryValue", true)</th>
+                            <th style="display:none">@GetText("VALUE1VALUE", true)</th>
+                            <th>@GetText("QueryValue2", true)</th>
+                            <th style="display:none">@GetText("VALUE2VALUE", true)</th>
+                            <th style="display:none">@GetText("AD_USERQUERYLINE_ID", true)</th>
+                            <th style="display:none">@GetText("Operator", true)</th>
+                            <th>@GetText("Action", true)</th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="vis-advancedSearchTableBody">
+                        @*<tr class="advancedSearchTableRow">
+                        </tr>*@
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+        <div class="vis-advancedSearchContentArea-button">
+            <div class="vis-advcedfooterBtn">
+                @{
+                    dStyle = isRTL ? "float:right" : "float:left";
+                }
+                <button id="btnRefresh_@windowNo" class="VIS_Pref_btn-2"  style="margin-bottom:0px;margin-top:0px;@dStyle">@GetText("Refresh")</button>
+                <div class="vis-pull-right">
+                    <button id="btnCancel_@windowNo" class="VIS_Pref_btn-2"  style="margin-top:0px;margin-right:10px;margin-bottom:0px;margin-left:10px;">@GetText("Cancel")</button>
+                    <button id="btnOk_@windowNo" class="VIS_Pref_btn-2"  style="margin-bottom:0px;margin-top:0px;">@GetText("Ok")</button>
+                </div>
+            </div>
+        </div>
+        <!-- end of advancedSearchTableWrap -->
+    </div>
+    <!-- end of advancedSearchContentArea -->
+    <div class="vis-advancedSearch-RecentRecords">
+        <div class="vis-RecentRecords-Heading">
+            @{
+                dStyle = isRTL ? "margin-right:15px" : "margin-left:15px"; 
+             }
+            <h4 style="@dStyle" >@GetText("VHistory")</h4>
+                
+            
+        </div>
+        <div class="vis-RecentRecords-listWrap" style="@dStyle">
+            <ul id="ulQry_@windowNo" >
+                 <li data-value="0" title="@GetText("All")" >@GetText("All")</li>
+                    <li data-value="365" title="@GetText("YearAll")">@GetText("YearAll")</li>
+                    <li data-value="365 | C" title="@GetText("YearCreated")">@GetText("YearCreated")</li>
+                    <li data-value="31" title="@GetText("MonthAll")">@GetText("MonthAll")</li>
+                    <li data-value="31 | C" title="@GetText("MonthCreated")">@GetText("MonthCreated")</li>
+                    <li data-value="7" title="@GetText("WeekAll")">@GetText("WeekAll")</li>
+                    <li data-value="7 | C" title="@GetText("WeekCreated")">@GetText("WeekCreated")</li>
+                    <li data-value="1" title="@GetText("DayAll")">@GetText("DayAll")</li>
+                    <li data-value="1 | C" title="@GetText("DayCreated")">@GetText("DayCreated")</li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+<div class="vis-advancedSearchFooter vis-pull-right"> 
+    <p id="pstatus_@windowNo" >16 / 16</p>
+</div>
+<!-- end of advancedSearch-GrayWrap -->
+     
+<div class="vis-apanel-busy vis-advancedSearchbusy" id="divBusy_@windowNo" >
+    <p style="text-align:center"> @GetText("Loading")</p>
+</div>

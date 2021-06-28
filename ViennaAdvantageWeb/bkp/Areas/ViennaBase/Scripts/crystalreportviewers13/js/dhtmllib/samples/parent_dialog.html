@@ -1,0 +1,33 @@
+<html>
+	<head>
+		<script language="javascript" src="../dom.js"></script>
+		<script language="javascript">
+			var skin=parent._skin?parent._skin:"skin_standard";
+			var lang=parent._lang?parent._lang:"en";
+			
+			initDom("../images/"+skin+"/",lang)
+			styleSheet()
+		</script>
+
+	</head>
+	<body>
+	
+	<table width="100%"><tr><td align="center" valign="middle">
+	
+		<div class="insetBorder"><div class="dialogzone" style="padding:15px">
+	
+		<a href="javascript:frameNav('DlgFrame','dialog.html')">
+		Launch a dialog window</a>
+	
+		</div></div>
+	
+	</td></tr></table>
+
+	<!-- the hidden iframe !-->
+	<iframe name="DlgFrame" id="dlg" src="../../lib/empty.html" style="position:absolute;left:-100px;top:-100px;width:10px;height:10px;"  frameborder="0" >
+	</iframe>'
+	
+	
+	</body>
+	
+</html>

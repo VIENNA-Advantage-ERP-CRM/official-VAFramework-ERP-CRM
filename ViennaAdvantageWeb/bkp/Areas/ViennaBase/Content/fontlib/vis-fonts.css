@@ -1,0 +1,851 @@
+/** App default fonts*/
+@font-face {
+    font-family: 'NoirPro-Regular';
+    src: url('../fonts/NoirPro-Regular.ttf') format('truetype');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'NoirPro-Regular';
+    src: url('../fonts/NoirPro-Light.ttf') format('truetype');
+    font-weight: 300;
+}
+/*@font-face {
+    font-family: 'NoirPro-Regular';
+    src: url('../fonts/NoirPro-Medium.ttf') format('truetype');
+    font-weight: 500;
+}*/
+@font-face {
+    font-family: 'NoirPro-Regular';
+    src: url('../fonts/NoirPro-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: 'NoirPro-Regular';
+    src: url('../fonts/NoirPro-Bold.ttf') format('truetype');
+    font-weight: 700;
+}
+
+
+/**END*/
+
+
+@font-face {
+    font-family: 'vis-fonts';
+    src: url('../fonts/vis-fonts.eot?22zgxr');
+    src: url('../fonts/vis-fonts.eot?22zgxr#iefix') format('embedded-opentype'), url('../fonts/vis-fonts.ttf?22zgxr') format('truetype'), url('../fonts/vis-fonts.woff?22zgxr') format('woff'), url('../fonts/vis-fonts.svg?22zgxr#vis-fonts') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+
+.vis {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'vis-fonts' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.vis-export-translation:before {
+  content: "\e9c6";
+}
+.vis-import-translation:before {
+  content: "\e9c7";
+}
+.vis-translation:before {
+  content: "\e9c8";
+}
+
+.vis-wallet:before {
+  content: "\e9c2";
+}
+.vis-coin-dollar:before {
+  content: "\e9c3";
+}
+.vis-mobile-card:before {
+  content: "\e9c4";
+}
+.vis-bank-transfer:before {
+  content: "\e9bf";
+}
+.vis-cash-bag:before {
+  content: "\e9c0";
+}
+.vis-cheque:before {
+  content: "\e9c1";
+}
+.vis-split:before {
+  content: "\e9c5";
+}
+
+.vis-scandoc:before {
+    content: "\e9be";
+}
+
+.vis-checkin-file:before {
+    content: "\e9b1";
+}
+
+.vis-checkout-file:before {
+    content: "\e9b2";
+}
+
+.vis-download:before {
+    content: "\e9b3";
+}
+
+.vis-file-down:before {
+    content: "\e9b4";
+}
+
+.vis-folder-globe:before {
+    content: "\e9b5";
+}
+
+.vis-folder-info:before {
+    content: "\e9b6";
+}
+
+.vis-folder-share:before {
+    content: "\e9b7";
+}
+
+.vis-forword-doc:before {
+    content: "\e9b8";
+}
+
+.vis-move-doc:before {
+    content: "\e9b9";
+}
+
+.vis-scanapp:before {
+    content: "\e9ba";
+}
+
+.vis-undo-checkout:before {
+    content: "\e9bb";
+}
+
+.vis-upload:before {
+    content: "\e9bc";
+}
+
+.vis-upload-history:before {
+    content: "\e9bd";
+}
+
+.vis-clear-filter:before {
+    content: "\e9b0";
+}
+
+.vis-add-chart:before {
+    content: "\e9ac";
+}
+
+.vis-add-kpi:before {
+    content: "\e9ad";
+}
+
+.vis-add-view:before {
+    content: "\e9ae";
+}
+
+.vis-line-chart:before {
+    content: "\e9af";
+}
+
+.vis-gmail-contacts-import:before {
+    content: "\e9aa";
+}
+
+.vis-gmail-settings:before {
+    content: "\e9ab";
+}
+
+.vis-account:before {
+    content: "\e900";
+}
+
+.vis-action:before {
+    content: "\e901";
+}
+
+.vis-addbp:before {
+    content: "\e902";
+}
+
+.vis-address-book:before {
+    content: "\e903";
+}
+
+.vis-amtdimension:before {
+    content: "\e904";
+}
+
+.vis-appointment:before {
+    content: "\e905";
+}
+
+.vis-archive:before {
+    content: "\e906";
+}
+
+.vis-arrow-down:before {
+    content: "\e907";
+}
+
+.vis-arrow-left:before {
+    content: "\e908";
+}
+
+.vis-arrow-right:before {
+    content: "\e909";
+}
+
+.vis-arrow-up:before {
+    content: "\e90a";
+}
+
+.vis-attachdocumentfrom:before {
+    content: "\e90b";
+}
+
+.vis-attachment:before {
+    content: "\e90c";
+}
+
+.vis-attachment1:before {
+    content: "\e90d";
+}
+
+.vis-attachmentx:before {
+    content: "\e90e";
+}
+
+.vis-bars:before {
+    content: "\e90f";
+}
+
+.vis-bin:before {
+    content: "\e910";
+}
+
+.vis-browser:before {
+    content: "\e911";
+}
+
+.vis-calculator:before {
+    content: "\e912";
+}
+
+.vis-cancel-circle:before {
+    content: "\e913";
+}
+
+.vis-card:before {
+    content: "\e914";
+}
+
+.vis-carddialog:before {
+    content: "\e915";
+}
+
+.vis-chat:before {
+    content: "\e916";
+}
+
+.vis-chatx:before {
+    content: "\e917";
+}
+
+.vis-clock:before {
+    content: "\e918";
+}
+
+.vis-code:before {
+    content: "\e919";
+}
+
+.vis-cog:before {
+    content: "\e91a";
+}
+
+.vis-contacts:before {
+    content: "\e91b";
+}
+
+.vis-contacts-o:before {
+    content: "\e91c";
+}
+
+.vis-copy:before {
+    content: "\e91d";
+}
+
+.vis-copy1:before {
+    content: "\e91e";
+}
+
+.vis-createdocument:before {
+    content: "\e91f";
+}
+
+.vis-createdocumentx:before {
+    content: "\e920";
+}
+
+.vis-cross:before {
+    content: "\e921";
+}
+
+.vis-csv-all:before {
+    content: "\e922";
+}
+
+.vis-customize:before {
+    content: "\e923";
+}
+
+.vis-delete:before {
+    content: "\e924";
+}
+
+.vis-document:before {
+    content: "\e925";
+}
+
+.vis-doc-blank:before {
+    content: "\e9a1";
+}
+
+.vis-doc-code:before {
+    content: "\e9a2";
+}
+
+.vis-doc-excel:before {
+    content: "\e9a3";
+}
+
+.vis-doc-html5:before {
+    content: "\e9a4";
+}
+
+.vis-doc-img:before {
+    content: "\e9a5";
+}
+
+.vis-doc-pdf:before {
+    content: "\e9a6";
+}
+
+.vis-doc-pp:before {
+    content: "\e9a7";
+}
+
+.vis-doc-text:before {
+    content: "\e9a8";
+}
+
+.vis-doc-word:before {
+    content: "\e9a9";
+}
+
+.vis-edit:before {
+    content: "\e926";
+}
+
+.vis-email:before {
+    content: "\e927";
+}
+
+.vis-enter:before {
+    content: "\e928";
+}
+
+.vis-exit:before {
+    content: "\e929";
+}
+
+.vis-export:before {
+    content: "\e92a";
+}
+
+.vis-eye:before {
+    content: "\e92b";
+}
+
+.vis-eye-blocked:before {
+    content: "\e92c";
+}
+
+.vis-eye-minus:before {
+    content: "\e92d";
+}
+
+.vis-eye-plus:before {
+    content: "\e92e";
+}
+
+.vis-favourite:before {
+    content: "\e92f";
+}
+
+.vis-faxemail:before {
+    content: "\e930";
+}
+
+.vis-file-empty:before {
+    content: "\e931";
+}
+
+.vis-file-pdf:before {
+    content: "\e932";
+}
+
+.vis-file-text:before {
+    content: "\e933";
+}
+
+.vis-find:before {
+    content: "\e934";
+}
+
+.vis-f-lock:before {
+    content: "\e935";
+}
+
+.vis-f-lockx:before {
+    content: "\e936";
+}
+
+.vis-format:before {
+    content: "\e937";
+}
+
+.vis-f-product:before {
+    content: "\e938";
+}
+
+.vis-gear:before {
+    content: "\e939";
+}
+
+.vis-graph:before {
+    content: "\e93a";
+}
+
+.vis-hammer:before {
+    content: "\e93b";
+}
+
+.vis-help:before {
+    content: "\e93c";
+}
+
+.vis-history:before {
+    content: "\e93d";
+}
+
+.vis-home:before {
+    content: "\e93e";
+}
+
+.vis-ignore:before {
+    content: "\e93f";
+}
+
+.vis-image:before {
+    content: "\e940";
+}
+
+.vis-images:before {
+    content: "\e941";
+}
+
+.vis-import:before {
+    content: "\e942";
+}
+
+.vis-info:before {
+    content: "\e943";
+}
+
+.vis-kpi:before {
+    content: "\e944";
+}
+
+.vis-letter:before {
+    content: "\e945";
+}
+
+.vis-link:before {
+    content: "\e946";
+}
+
+.vis-location:before {
+    content: "\e947";
+}
+
+.vis-locator:before {
+    content: "\e948";
+}
+
+.vis-lock:before {
+    content: "\e949";
+}
+
+.vis-lockx:before {
+    content: "\e94a";
+}
+
+.vis-logout:before {
+    content: "\e94b";
+}
+
+.vis-loop:before {
+    content: "\e94c";
+}
+
+.vis-mark:before {
+    content: "\e94d";
+}
+
+.vis-markx:before {
+    content: "\e94e";
+}
+
+.vis-multi:before {
+    content: "\e94f";
+}
+
+.vis-multix:before {
+    content: "\e950";
+}
+
+.vis-multix1:before {
+    content: "\e951";
+}
+
+.vis-m-window:before {
+    content: "\e952";
+}
+
+.vis-mytasks:before {
+    content: "\e953";
+}
+
+.vis-new:before {
+    content: "\e954";
+}
+
+.vis-new-tab:before {
+    content: "\e955";
+}
+
+.vis-next:before {
+    content: "\e956";
+}
+
+.vis-notice:before {
+    content: "\e957";
+}
+
+.vis-open-book:before {
+    content: "\e958";
+}
+
+.vis-open-file:before {
+    content: "\e959";
+}
+
+.vis-pagedown:before {
+    content: "\e95a";
+}
+
+.vis-pageup:before {
+    content: "\e95b";
+}
+
+.vis-paper-plane:before {
+    content: "\e95c";
+}
+
+.vis-paste:before {
+    content: "\e95d";
+}
+
+.vis-pattribute:before {
+    content: "\e95e";
+}
+
+.vis-payment:before {
+    content: "\e95f";
+}
+
+.vis-pcontainer:before {
+    content: "\e960";
+}
+
+.vis-pdf-all:before {
+    content: "\e961";
+}
+
+.vis-pencil:before {
+    content: "\e962";
+}
+
+.vis-plus:before {
+    content: "\e963";
+}
+
+.vis-preference:before {
+    content: "\e964";
+}
+
+.vis-previous:before {
+    content: "\e965";
+}
+
+.vis-print:before {
+    content: "\e966";
+}
+
+.vis-product:before {
+    content: "\e967";
+}
+
+.vis-publish:before {
+    content: "\e968";
+}
+
+.vis-recordaccess:before {
+    content: "\e969";
+}
+
+.vis-recordaccessx:before {
+    content: "\e96a";
+}
+
+.vis-refresh:before {
+    content: "\e96b";
+}
+
+.vis-removefav:before {
+    content: "\e96c";
+}
+
+.vis-report:before {
+    content: "\e96d";
+}
+
+.vis-request:before {
+    content: "\e96e";
+}
+
+.vis-save:before {
+    content: "\e96f";
+}
+
+.vis-save-as:before {
+    content: "\e970";
+}
+
+.vis-save-attach:before {
+    content: "\e971";
+}
+
+.vis-save-csv:before {
+    content: "\e972";
+}
+
+.vis-save-pdf:before {
+    content: "\e973";
+}
+
+.vis-scanner:before {
+    content: "\e974";
+}
+
+.vis-search:before {
+    content: "\e975";
+}
+
+.vis-share:before {
+    content: "\e976";
+}
+
+.vis-shiftleft:before {
+    content: "\e977";
+}
+
+.vis-shiftright:before {
+    content: "\e978";
+}
+
+.vis-shopping-cart:before {
+    content: "\e979";
+}
+
+.vis-shortcut:before {
+    content: "\e97a";
+}
+
+.vis-shuffle:before {
+    content: "\e97b";
+}
+
+.vis-sms:before {
+    content: "\e97c";
+}
+
+.vis-smsx:before {
+    content: "\e97d";
+}
+
+.vis-spinner:before {
+    content: "\e97e";
+}
+
+.vis-stack:before {
+    content: "\e97f";
+}
+
+.vis-star-empty:before {
+    content: "\e980";
+}
+
+.vis-star-full:before {
+    content: "\e981";
+}
+
+.vis-star-half:before {
+    content: "\e982";
+}
+
+.vis-stats-bars:before {
+    content: "\e983";
+}
+
+.vis-stats-dots:before {
+    content: "\e984";
+}
+
+.vis-subscribe:before {
+    content: "\e985";
+}
+
+.vis-subscribex:before {
+    content: "\e986";
+}
+
+.vis-task:before {
+    content: "\e987";
+}
+
+.vis-taskassigned:before {
+    content: "\e988";
+}
+
+.vis-ticket:before {
+    content: "\e989";
+}
+
+.vis-tl-1:before {
+    content: "\e98a";
+}
+
+.vis-tl-2:before {
+    content: "\e98b";
+}
+
+.vis-tl-3:before {
+    content: "\e98c";
+}
+
+.vis-tl-4:before {
+    content: "\e98d";
+}
+
+.vis-undo2:before {
+    content: "\e98e";
+}
+
+.vis-updatebp:before {
+    content: "\e98f";
+}
+
+.vis-uploaddocument:before {
+    content: "\e990";
+}
+
+.vis-uploaddocumentx:before {
+    content: "\e991";
+}
+
+.vis-url:before {
+    content: "\e992";
+}
+
+.vis-user:before {
+    content: "\e993";
+}
+
+.vis-user-check:before {
+    content: "\e994";
+}
+
+.vis-userfeed:before {
+    content: "\e995";
+}
+
+.vis-user-minus:before {
+    content: "\e996";
+}
+
+.vis-user-o:before {
+    content: "\e997";
+}
+
+.vis-userprofile:before {
+    content: "\e998";
+}
+
+.vis-users:before {
+    content: "\e999";
+}
+
+.vis-users-o:before {
+    content: "\e99a";
+}
+
+.vis-viewdocument:before {
+    content: "\e99b";
+}
+
+.vis-viewdocumentx:before {
+    content: "\e99c";
+}
+
+.vis-warning:before {
+    content: "\e99d";
+}
+
+.vis-web:before {
+    content: "\e99e";
+}
+
+.vis-workflow:before {
+    content: "\e99f";
+}
+
+.vis-zoomacross:before {
+    content: "\e9a0";
+}
