@@ -5,7 +5,10 @@
 
         //local variables          
         this.frame = null;
-        this.windowNo = VIS.Env.getWindowNo();        
+        this.windowNo = VIS.Env.getWindowNo();
+        /** Tab panel-adding cc & bcc emails ** Dt: 28/06/2021 ** Modified By: Kumar **/
+        this.ccmail = '';
+        this.bccmail = '';
         var ctx = VIS.Env.getCtx();
         var ch = null;
         var bpColumnName = "C_BPARTNER_ID";
@@ -145,10 +148,6 @@
         //send printformats as attachment Dynamically
         var $chkBSendPFasAtt = null;
         var $cmbPfFiletype = null;
-
-        /** Tab panel-adding cc & bcc emails ** Dt: 28/06/2021 ** Modified By: Kumar **/
-        var ccmail = '';
-        var bccmail = '';
 
         initEmail();
 
@@ -355,21 +354,8 @@
                 $to = $root.find('#' + self.windowNo + "_emailToTop");
                 $bcc = $root.find('#' + self.windowNo + "_emailBccTop");
                 $cc = $root.find('#' + self.windowNo + "_eamilCcTop");
-                
-                /** Tab panel-adding cc & bcc emails ** Dt: 28/06/2021 ** Modified By: Kumar **/
-                if (ccmail != undefined && ccmail != null && ccmail != '') {
-                    $cc.val(ccmail);
-                }
-                else
-                    $cc.hide();
-
-                /** Tab panel-adding cc & bcc emails ** Dt: 28/06/2021 ** Modified By: Kumar **/
-                if (bccmail != undefined && bccmail != null && bccmail != '') {
-                    $bcc.val(bccmail);
-                }
-                else
-                    $bcc.hide();
-
+                $bcc.hide();
+                $cc.hide();
                 $root.find(".vis-Email-textarea-div").height($root.height() - (180));
 
                 $root.find('.vis-Email-leftWrap').css("width", '100%');
@@ -388,7 +374,15 @@
                 if (to != undefined && to != null) {
                     $to.val(to);
                 }
-                
+                /** Tab panel-adding cc & bcc emails ** Dt: 28/06/2021 ** Modified By: Kumar **/
+                if (self.ccmail != undefined && self.ccmail != null && self.ccmail !='') {
+                    $cc.val(self.ccmail);
+                }
+                /** Tab panel-adding cc & bcc emails ** Dt: 28/06/2021 ** Modified By: Kumar **/
+                if (self.bccmail != undefined && self.bccmail != null && self.bccmail != '') {
+                    $bcc.val(self.bccmail);
+                }
+
                 //$root.find('.vis-form-data-sub').css({ 'width': '100%', 'padding-right': '42px' });
                 //$root.find('.vis-form-data-sub').width($root.find('.vis-Email-leftWrap').width() - 60);
                 $root.find('.vis-form-data-sub').width($root.width() - 85);
@@ -2954,13 +2948,6 @@
             }
 
         };
-
-        function showCcBccMails(mailcc, mailbcc) {
-            if (mailcc != undefined && mailcc != null && mailcc != '')
-                ccmail = mailcc;
-            if (mailbcc != undefined && mailbcc != null && mailbcc != '')
-                bccmail = mailbcc;
-        }
 
         this.show = function () {
             ch = new VIS.ChildDialog();
