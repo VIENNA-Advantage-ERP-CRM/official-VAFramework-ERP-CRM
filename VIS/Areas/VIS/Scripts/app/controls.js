@@ -1980,9 +1980,9 @@
     VComboBox.prototype.getDisplayValue = function (Name) {
         var val = "";
         if (Name.indexOf("Images/") > -1) {
-            val = Name.replace("^^" + Name.substring(Name.indexOf("Images/"), Name.lastIndexOf("^^") + 3), "")
+            val = Name.replace("^^" + Name.substring(Name.indexOf("Images/"), Name.lastIndexOf("^^") + 3), "_")
             if (val.indexOf("Images/") > -1) {
-                val = val.replace(val.substring(val.indexOf("Images/"), val.lastIndexOf("^^") + 3), "")
+                val = val.replace(val.substring(val.indexOf("Images/"), val.lastIndexOf("^^") + 3), "_")
             }
         }
         else

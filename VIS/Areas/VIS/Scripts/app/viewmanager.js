@@ -176,7 +176,6 @@
         };
 
         function setGridFont() {
-            //$('body').removeClass('w2ui-reset table');
            
             var dynamicClassName = ".w2ui-reset table{font-family: var(--v-c-font-family);";
             if (Math.round(window.devicePixelRatio * 100) >= 100) {
@@ -189,11 +188,11 @@
             //
             if (this.styleTag) {
                 this.styleTag.remove();
-                $('body').removeClass('w2ui-reset');
-                $('.vis-ad-w-p').addClass('w2ui-reset');
+                $('.vis-gc-vtable').removeClass('w2ui-reset');
+                $('.vis-gc-vtable').addClass('w2ui-reset');
             }
             else {
-                $('body').addClass('w2ui-reset');
+                $('.vis-gc-vtable').addClass('w2ui-reset');
             }
             this.styleTag = document.createElement('style');
             this.styleTag.type = 'text/css'
