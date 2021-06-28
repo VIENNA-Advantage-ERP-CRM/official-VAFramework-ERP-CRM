@@ -6,6 +6,9 @@
         //local variables          
         this.frame = null;
         this.windowNo = VIS.Env.getWindowNo();
+        /** Tab panel-adding cc & bcc emails ** Dt: 28/06/2021 ** Modified By: Kumar **/
+        this.ccmail = '';
+        this.bccmail = '';
         var ctx = VIS.Env.getCtx();
         var ch = null;
         var bpColumnName = "C_BPARTNER_ID";
@@ -371,6 +374,15 @@
                 if (to != undefined && to != null) {
                     $to.val(to);
                 }
+                /** Tab panel-adding cc & bcc emails ** Dt: 28/06/2021 ** Modified By: Kumar **/
+                if (self.ccmail != undefined && self.ccmail != null && self.ccmail !='') {
+                    $cc.val(self.ccmail);
+                }
+                /** Tab panel-adding cc & bcc emails ** Dt: 28/06/2021 ** Modified By: Kumar **/
+                if (self.bccmail != undefined && self.bccmail != null && self.bccmail != '') {
+                    $bcc.val(self.bccmail);
+                }
+
                 //$root.find('.vis-form-data-sub').css({ 'width': '100%', 'padding-right': '42px' });
                 //$root.find('.vis-form-data-sub').width($root.find('.vis-Email-leftWrap').width() - 60);
                 $root.find('.vis-form-data-sub').width($root.width() - 85);
