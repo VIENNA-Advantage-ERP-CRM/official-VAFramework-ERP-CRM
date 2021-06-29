@@ -55,7 +55,7 @@ namespace ViennaAdvantageServer.Process
             {
                 Sql.Clear();
                 //Get contracts based on client
-                DBFunctionCollection.GetContract(0, GetAD_Client_ID());
+                Sql.Append(DBFunctionCollection.GetContract(0, GetAD_Client_ID()));
             }
 
             // Changed datareader to dataset to resolve issue in postgresql done by Rakesh Kumar(228) on 31/May/2021

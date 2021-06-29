@@ -45,11 +45,11 @@ namespace VAdvantage.Model
         /// <param name="trx">Transaction</param>
         /// <param name="C_Forecast_ID">Team Forecast</param>
         /// <param name="M_Product_ID">Product</param>
-        public MForecastLine(Ctx ctx, Trx trx, int C_Forecast_ID ,int M_Product_ID)
+        public MForecastLine(Ctx ctx, Trx trx, int C_Forecast_ID, int M_Product_ID)
             : base(ctx, 0, trx)
         {
             int LineNo = Util.GetValueOfInt(DB.ExecuteScalar("SELECT NVL(MAX(Line), 0)+10  FROM C_ForecastLine WHERE " +
-                "C_Forecast_ID=" + C_Forecast_ID, null,trx));          
+                "C_Forecast_ID=" + C_Forecast_ID, null, trx));
             SetC_Forecast_ID(C_Forecast_ID);
             SetM_Product_ID(M_Product_ID);
             SetLine(LineNo);
@@ -62,17 +62,17 @@ namespace VAdvantage.Model
         /// <returns><True/returns>
         protected override bool BeforeSave(bool newRecord)
         {
-            if (Env.IsModuleInstalled("VAMFG_") && Util.GetValueOfInt( GetM_BOM_ID())==0)
+            if (Env.IsModuleInstalled("VAMFG_") && Util.GetValueOfInt(GetM_BOM_ID()) == 0)
             {
                 //fetch BOM, BOMUSE, Routing of selected Product
                 string sql = @"SELECT BOM.M_BOM_ID ,BOM.BOMUse,Routing.VAMFG_M_Routing_ID FROM M_Product p 
                     INNER JOIN M_BOM  BOM ON p.M_product_ID = BOM.M_Product_ID 
                     LEFT JOIN VAMFG_M_Routing Routing ON Routing.M_product_ID=p.M_product_ID AND Routing.VAMFG_IsDefault='Y'
-                    WHERE p.M_Product_ID=" + GetM_Product_ID() + " AND p.ISBOM = 'Y'"+ " AND BOM.IsActive='Y'";
+                    WHERE p.M_Product_ID=" + GetM_Product_ID() + " AND p.ISBOM = 'Y'" + " AND BOM.IsActive='Y'";
 
                 DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
                 if (ds != null && ds.Tables[0].Rows.Count == 1)
-                {                   
+                {
                     SetBOMUse(Util.GetValueOfString(ds.Tables[0].Rows[0]["BOMUse"]));
                     Set_Value("VAMFG_M_Routing_ID", Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAMFG_M_Routing_ID"]));
                     SetM_BOM_ID(Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_BOM_ID"]));
@@ -145,7 +145,7 @@ namespace VAdvantage.Model
                 MForecastLineHistory LineHistory = new MForecastLineHistory(GetCtx(), 0, Get_Trx());
                 LineHistory.SetAD_Client_ID(GetAD_Client_ID());
                 LineHistory.SetAD_Org_ID(GetAD_Org_ID());
-                LineHistory.Set_Value("AD_OrgTrx_ID",Get_ValueOld("AD_OrgTrx_ID"));
+                LineHistory.Set_Value("AD_OrgTrx_ID", Get_ValueOld("AD_OrgTrx_ID"));
                 LineHistory.SetC_ForecastLine_ID(GetC_ForecastLine_ID());
                 LineHistory.SetLine(Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT NVL(MAX(Line), 0) + 10 FROM C_ForecastLineHistory
                             WHERE C_ForecastLine_ID = " + GetC_ForecastLine_ID())));
@@ -158,7 +158,7 @@ namespace VAdvantage.Model
                 LineHistory.SetM_AttributeSetInstance_ID(Util.GetValueOfInt(Get_ValueOld("M_AttributeSetInstance_ID")));
                 LineHistory.SetIsBOM(IsBOM());
                 LineHistory.SetM_BOM_ID(Util.GetValueOfInt(Get_ValueOld("M_BOM_ID")));
-                LineHistory.SetBOMUse(Util.GetValueOfString(Get_ValueOld("BOMUse")).Equals("")?null: Util.GetValueOfString(Get_ValueOld("BOMUse")));
+                LineHistory.SetBOMUse(Util.GetValueOfString(Get_ValueOld("BOMUse")).Equals("") ? null : Util.GetValueOfString(Get_ValueOld("BOMUse")));
                 LineHistory.SetC_UOM_ID(Util.GetValueOfInt(Get_ValueOld("C_UOM_ID")));
                 LineHistory.SetBaseQuantity(Util.GetValueOfDecimal(Get_ValueOld("BaseQty")));
                 LineHistory.SetQtyEntered(Util.GetValueOfDecimal(Get_ValueOld("QtyEntered")));
@@ -212,48 +212,51 @@ namespace VAdvantage.Model
         /// <param name="C_Forecast_ID">Team Forecast</param>
         /// <param name="M_Product_ID">Product</param>
         /// <returns></returns>
-        public static MForecastLine GetOrCreate(Ctx ctx,Trx trx,int C_Forecast_ID, int M_Product_ID)
+        public static MForecastLine GetOrCreate(Ctx ctx, Trx trx, int C_Forecast_ID, int M_Product_ID, string ProductCategories)
         {
             MForecastLine retValue = null;
-            String sql = "SELECT * FROM C_ForecastLine " +
-                         " WHERE NVL(M_Product_ID,0)=" + M_Product_ID +
-                         " AND C_Forecast_ID=" + C_Forecast_ID+
-                         " AND NVL(C_OrderLine_ID,0)=0 AND NVL(C_ProjectLine_ID,0)=0";
-         
-            DataTable dt = null;
-            IDataReader idr = null;
-            try
+            if (!string.IsNullOrEmpty(ProductCategories))
             {
-                idr = DB.ExecuteReader(sql, null, trx);
-                dt = new DataTable();
-                dt.Load(idr);
-                idr.Close();
-                foreach (DataRow dr in dt.Rows)
+
+                String sql = "SELECT * FROM C_ForecastLine " +
+                             " WHERE NVL(M_Product_ID,0)=" + M_Product_ID +
+                             " AND C_Forecast_ID=" + C_Forecast_ID +
+                             " AND NVL(C_OrderLine_ID,0)=0 AND NVL(C_ProjectLine_ID,0)=0 ";
+
+                DataTable dt = null;
+                IDataReader idr = null;
+                try
                 {
-                    retValue = new MForecastLine(ctx, dr, trx);
-                }
-            }
-            catch (Exception ex)
-            {
-                if (idr != null)
-                {
+                    idr = DB.ExecuteReader(sql, null, trx);
+                    dt = new DataTable();
+                    dt.Load(idr);
                     idr.Close();
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        retValue = new MForecastLine(ctx, dr, trx);
+                    }
                 }
-                log.Log(Level.SEVERE, sql, ex);
-            }
-            finally
-            {
-                if (idr != null)
+                catch (Exception ex)
                 {
-                    idr.Close();
+                    if (idr != null)
+                    {
+                        idr.Close();
+                    }
+                    log.Log(Level.SEVERE, sql, ex);
                 }
-                dt = null;
+                finally
+                {
+                    if (idr != null)
+                    {
+                        idr.Close();
+                    }
+                    dt = null;
+                }
             }
             if (retValue == null)
             {
-                retValue = new MForecastLine(ctx,trx,C_Forecast_ID, M_Product_ID);
+                retValue = new MForecastLine(ctx, trx, C_Forecast_ID, M_Product_ID);
             }
-
             return retValue;
         }
 

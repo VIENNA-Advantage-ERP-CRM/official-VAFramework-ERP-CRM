@@ -404,7 +404,7 @@ namespace VAdvantage.Model
                     }
                 }
                 //QtyEntered should not be zero
-                if (Util.GetValueOfInt(Get_Value("QtyEntered")) == 0)
+                if (Util.GetValueOfDecimal(Get_Value("QtyEntered")) == 0)
                 {
                     log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "Quantity"));
                     return false;
