@@ -261,7 +261,7 @@ namespace VIS.Models
                             "(SELECT NVL(LineDetails.C_OrderLine_ID, 0) FROM C_MasterForecastLineDetails LineDetails INNER JOIN C_MasterForecastLine Line ON " +
                             "LineDetails.C_MasterForecastLine_ID = Line.C_MasterForecastLine_ID INNER JOIN C_MasterForecast Master ON  Master.C_MasterForecast_ID = Line.C_MasterForecast_ID " +
                             "INNER JOIN VA073_ForecastLine FLine ON FLine.C_MasterForecastLine_ID = Line.C_MasterForecastLine_ID INNER JOIN VA073_ProductLine PLine ON " +
-                            "PLine.VA073_ProductLine_ID=FLine.VA073_ProductLine_ID INNER JOIN VA073_SalesForecast Forecast ON Forecast.VA073_SalesForecast_ID = FLine.VA073_SalesForecast_ID " +
+                            "PLine.VA073_ProductLine_ID=FLine.VA073_ProductLine_ID INNER JOIN VA073_SalesForecast Forecast ON Forecast.VA073_SalesForecast_ID = PLine.VA073_SalesForecast_ID " +
                             "WHERE Forecast.ad_org_id =" + Org_ID + " AND Forecast.docstatus NOT IN ( 'VO', 'RE' ) AND Master.ad_org_id = " + Org_ID + " " +
                             "AND Master.docstatus NOT IN ( 'VO', 'RE' )) ");
                     }
@@ -405,7 +405,7 @@ namespace VIS.Models
                             "(SELECT NVL(LineDetails.C_OrderLine_ID, 0) FROM C_MasterForecastLineDetails LineDetails INNER JOIN C_MasterForecastLine Line ON " +
                             "LineDetails.C_MasterForecastLine_ID = Line.C_MasterForecastLine_ID INNER JOIN C_MasterForecast Master ON  Master.C_MasterForecast_ID = Line.C_MasterForecast_ID " +
                             "INNER JOIN VA073_ForecastLine FLine ON FLine.C_MasterForecastLine_ID = Line.C_MasterForecastLine_ID INNER JOIN VA073_ProductLine PLine ON " +
-                            "PLine.VA073_ProductLine_ID=FLine.VA073_ProductLine_ID INNER JOIN VA073_SalesForecast Forecast ON Forecast.VA073_SalesForecast_ID = FLine.VA073_SalesForecast_ID " +
+                            "PLine.VA073_ProductLine_ID=FLine.VA073_ProductLine_ID INNER JOIN VA073_SalesForecast Forecast ON Forecast.VA073_SalesForecast_ID = PLine.VA073_SalesForecast_ID " +
                             "WHERE Forecast.ad_org_id =" + Org_ID + " AND Forecast.docstatus NOT IN ( 'VO', 'RE' ) AND Master.ad_org_id = " + Org_ID + " " +
                             "AND Master.docstatus NOT IN ( 'VO', 'RE' )) ");
                     }
@@ -613,7 +613,7 @@ namespace VIS.Models
                     "(SELECT NVL(LineDetails.C_ProjectLine_ID, 0) FROM C_MasterForecastLineDetails LineDetails INNER JOIN C_MasterForecastLine Line ON " +
                     "LineDetails.C_MasterForecastLine_ID = Line.C_MasterForecastLine_ID INNER JOIN C_MasterForecast Master ON  Master.C_MasterForecast_ID = Line.C_MasterForecast_ID " +
                     "INNER JOIN VA073_ForecastLine FLine ON FLine.C_MasterForecastLine_ID = Line.C_MasterForecastLine_ID INNER JOIN VA073_ProductLine PLine ON " +
-                    "PLine.VA073_ProductLine_ID=FLine.VA073_ProductLine_ID INNER JOIN VA073_SalesForecast Forecast ON Forecast.VA073_SalesForecast_ID = FLine.VA073_SalesForecast_ID " +
+                    "PLine.VA073_ProductLine_ID=FLine.VA073_ProductLine_ID INNER JOIN VA073_SalesForecast Forecast ON Forecast.VA073_SalesForecast_ID = PLine.VA073_SalesForecast_ID " +
                     "WHERE Forecast.ad_org_id =" + Org_ID + " AND Forecast.docstatus NOT IN ( 'VO', 'RE' ) AND Master.ad_org_id = " + Org_ID + " " +
                     "AND Master.docstatus NOT IN ( 'VO', 'RE' )) ");
             }
