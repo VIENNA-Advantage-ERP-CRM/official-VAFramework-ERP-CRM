@@ -17,11 +17,11 @@ namespace VAdvantage.DataBase
     /// Contains all the Gloabal Variables to be used in Application
     /// </summary>
     public sealed class GlobalVariable
-    
+
     {
 
 
-        public  static  string ACCESSKEY = "caff4eb4fbd6273e37e8a325e19f0991";
+        public static string ACCESSKEY = "caff4eb4fbd6273e37e8a325e19f0991";
         private static bool _isEditor = false;
         /// <summary>
         /// Property used in Visual Editor From
@@ -58,7 +58,7 @@ namespace VAdvantage.DataBase
         public const string IMAP_CONFIG_FILE = "IMAPConfig_";
         public const string EMAIL_FOLDER = "EMail";
         public const string EMAIL_TEMP_FOLDER = "EMail\\Temp";
-        
+
         #region Miscellaneous Properties
         /// <summary>
         /// _DEFT_COMBO_VALUE contains default DataRowView value in combobox
@@ -85,7 +85,10 @@ namespace VAdvantage.DataBase
         #endregion
 
 
-        public static String AttachmentPath = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "Attachments");
+        public static String AttachmentPath = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath != null
+            ? System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath : (AppDomain.CurrentDomain.BaseDirectory.Contains("bin")
+            ? AppDomain.CurrentDomain.BaseDirectory.Substring(0, AppDomain.CurrentDomain.BaseDirectory.IndexOf("bin"))
+            : AppDomain.CurrentDomain.BaseDirectory), "Attachments");
 
         #region GenrateClass Path
         /// <summary>
@@ -731,10 +734,10 @@ namespace VAdvantage.DataBase
 
         //------------ End -----------------------//
 
-        public const string PRODUCT_NAME = "ViennaAdvantageSvc";  
+        public const string PRODUCT_NAME = "ViennaAdvantageSvc";
         public const string ASSEMBLY_NAME = "ModelLibrary";
         //public const string ASSEMBLY_NAME = "VAdvantage.exe";
-         
+
         public static String TO_STRING(String txt)
         {
             return TO_STRING(txt, 0);
