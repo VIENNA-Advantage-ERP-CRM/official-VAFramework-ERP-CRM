@@ -396,7 +396,8 @@
                         //get documenNo's
                         var paymentId = data.join();
                         var _docNo = getDocumentNo(paymentId);
-                        _docNo != null ? " Payment Created - " + _docNo : _docNo;
+                        //used get Message to get Value
+                        _docNo != null ? VIS.Msg.getMsg("VIS_PaymentCreated") + _docNo : _docNo;
                         VIS.ADialog.confirm("VPayPrintPrintRemittance?", true, _docNo, "Confirm", function (result) {
                             if (result) {
                                 isBusy(true);
