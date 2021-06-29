@@ -43,6 +43,20 @@ namespace VIS.Controllers
             return Json(JsonConvert.SerializeObject(objVPaySelect.Cmd_Print(ctx, C_PaySelection_ID, m_C_BankAccount_ID, paymentMethod_ID, Util.GetValueOfInt(checkNo))), JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Get DocumentNo from Payment
+        /// </summary>
+        /// <param name="paymentId">C_Payment_ID</param>
+        /// <returns>JSON Result which contains DocumentNo</returns>
+        [AjaxAuthorizeAttribute]
+        [AjaxSessionFilterAttribute]
+        public JsonResult GetDocumentNo(string paymentId)
+        {
+            Ctx ctx = Session["ctx"] as Ctx;
+            VPayPrintModel objVPaySelect = new VPayPrintModel();
+            return Json(JsonConvert.SerializeObject(objVPaySelect.GetDocumentNo(ctx, paymentId)), JsonRequestBehavior.AllowGet);
+        }
+
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]
         [HttpPost]
