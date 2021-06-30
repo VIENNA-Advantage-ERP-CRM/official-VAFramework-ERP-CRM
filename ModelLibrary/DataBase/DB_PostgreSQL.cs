@@ -401,9 +401,11 @@ namespace VAdvantage.DataBase
             NpgsqlConnection connection = new NpgsqlConnection(connectionString);
             try
             {
+
+
                 connection.Open();
                 NpgsqlDataAdapter adapter = new NpgsqlDataAdapter();
-                adapter.SelectCommand = new NpgsqlCommand(sql);
+                adapter.SelectCommand = new NpgsqlCommand(sql + " limit "+ pageSize + " offset "+ ((page - 1) * pageSize));
                 // adapter.SelectCommand.CommandTimeout = 500;
                 adapter.SelectCommand.Connection = (NpgsqlConnection)connection;
                 ds = new DataSet();
@@ -413,8 +415,8 @@ namespace VAdvantage.DataBase
                     page = 1;
                 }
                 //adapter.Fill(ds, ((page - 1) * pageSize) + increment, pageSize - increment, "Data");
-                adapter.Fill(ds, ((page - 1) * pageSize), pageSize, "Data");
-
+                //adapter.Fill(ds, ((page - 1) * pageSize), pageSize, "Data");
+                adapter.Fill(ds, "Data");
                 //adapter.FillSchema(ds, SchemaType.Mapped, "DataSchema");
 
                 //if (ds != null && ds.Tables.Count > 1)
