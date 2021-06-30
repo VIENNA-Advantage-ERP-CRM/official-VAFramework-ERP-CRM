@@ -1644,7 +1644,7 @@ namespace VAdvantage.Model
 
             if (!IsProcessed() && ( newRecord || Is_ValueChanged("R_Status_ID")))
             {
-                string IsClosedValue = "SELECT IsClosed FROM R_Status S JOIN R_Request R ON S.R_Status_ID = R.R_Status_ID WHERE S.IsActive = 'Y'";
+                string IsClosedValue = $"SELECT IsClosed FROM R_Status S JOIN R_Request R ON S.R_Status_ID = R.R_Status_ID WHERE S.IsActive = 'Y' AND R.R_Request_ID = {GetR_Request_ID()}";
 
                 string IsClosed = Util.GetValueOfString(DB.ExecuteScalar(IsClosedValue));
 
