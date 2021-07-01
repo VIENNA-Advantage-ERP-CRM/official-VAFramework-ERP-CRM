@@ -301,21 +301,24 @@ namespace VAdvantage.Classes
         /// <returns></returns>
         public static VLookUpInfo GetLookUp_List(Language language, int AD_Reference_Value_ID)
         {
-            StringBuilder realSQL = new StringBuilder("SELECT NULL, AD_Ref_List.Value,");
-            String displayCol = "AD_Ref_List.Name";
+            StringBuilder realSQL = new StringBuilder("SELECT NULL, rl.Value,");
+            String displayCol = "rl.Name";
             if (Utility.Env.IsBaseLanguage(language, "AD_Ref_List"))
             {
-                realSQL.Append(displayCol + ", AD_Ref_List.IsActive FROM AD_Ref_List");
+                realSQL.Append(displayCol + ", rl.IsActive, NVL(img.ImageURL,img.FontName),ref.ListDisplayOption FROM AD_Ref_List rl");
             }
             else
             {
                 displayCol = "trl.Name";
-                realSQL.Append(displayCol + ", AD_Ref_List.IsActive "
-                    + "FROM AD_Ref_List INNER JOIN AD_Ref_List_Trl trl "
-                    + " ON (AD_Ref_List.AD_Ref_List_ID=trl.AD_Ref_List_ID AND trl.AD_Language='")
+                realSQL.Append(displayCol + ", rl.IsActive, , NVL(img.ImageURL,img.FontName),ref.ListDisplayOption "
+                    + "FROM AD_Ref_List rl INNER JOIN AD_Ref_List_Trl trl "
+                    + " ON (rl.AD_Ref_List_ID=trl.AD_Ref_List_ID AND trl.AD_Language='")
                         .Append(language.GetAD_Language()).Append("')");
             }
-            realSQL.Append(" WHERE AD_Ref_List.AD_Reference_ID=").Append(AD_Reference_Value_ID);
+            realSQL.Append(" JOIN AD_Reference ref ON ref.AD_Reference_ID=rl.AD_Reference_ID ");
+            realSQL.Append(" LEFT OUTER JOIN AD_Image img ON rl.AD_Image_ID=img.AD_Image_ID ");
+
+            realSQL.Append(" WHERE rl.AD_Reference_ID=").Append(AD_Reference_Value_ID);
             realSQL.Append(" ORDER BY 2");
             //
             VLookUpInfo lookupInfo = new VLookUpInfo(realSQL.ToString(), "AD_Ref_List", "AD_Ref_List.Value",
@@ -736,7 +739,7 @@ namespace VAdvantage.Classes
                 //  translated
                 if (ldc.ColumnName.ToLower().Equals("ad_image_id"))
                 {
-                    string embeddedSQL = "SELECT nvl(ImageURL,'') ||'^^' FROM AD_Image WHERE " + tableName + ".AD_Image_ID=AD_Image.AD_Image_ID";
+                    string embeddedSQL = "SELECT NVL(ImageURL,'') ||'^^' FROM AD_Image WHERE " + tableName + ".AD_Image_ID=AD_Image.AD_Image_ID";
                     displayColumn.Append("(").Append(embeddedSQL).Append(")");
 
                 }
@@ -792,7 +795,7 @@ namespace VAdvantage.Classes
                 //jz EDB || problem
                 //if (DatabaseType.IsPostgre || DatabaseType.IsMSSql)
                 if (ldc.ColumnName.ToLower().Equals("ad_image_id"))
-                    displayColumn.Append(",' Images/nothing.png^^')");
+                    displayColumn.Append(",'Images/nothing.png^^')");
                 else
                     displayColumn.Append(",'')");
 

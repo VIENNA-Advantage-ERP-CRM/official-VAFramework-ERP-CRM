@@ -511,6 +511,29 @@
                         }
 
                         var strDiv = "";
+                        if (VIS.DisplayType.List == l.displayType) {
+                            var lType = l.getLovIconType(val, true);
+
+                            var listIcon = l.getLOVIconElement(val, true);
+                            if (!listIcon)
+                                return d;
+
+                            if (lType == "B") {
+                                strDiv = "<div class='vis-grid-td-icon-grp'>"
+                                    + "<div class='vis-grid-row-td-icon'> " + listIcon + "</div> ";
+                                strDiv += "<span> " + d + "</span ><div>";
+                            }
+                            else if (lType == "T") {
+                                return d;
+                            }
+                            else if (lType == "I") {
+                                strDiv = "<div class='vis-grid-td-icon-grp'>"
+                                    + "<div class='vis-grid-row-td-icon'> " + listIcon + "</div> ";
+                                strDiv += "<div>";
+                            }
+                        }
+
+                        else
                         if (d && d.indexOf("Images/") > -1) {
 
                             //var img = d.substring(d.indexOf("Images/") + 7, d.lastIndexOf("^^") - d.indexOf("Images/") + 5);
@@ -537,7 +560,7 @@
                                 if (c == 0 || img.indexOf("nothing.png") > -1) {
                                     if (img.indexOf("nothing.png")== -1)
                                     {
-                                        strDiv += "<div class='vis-grid-row-td-icon'><img src='" + img + "' ></img></div>";
+                                        strDiv += "<div class='vis-grid-row-td-icon'><img src='" + img + "?" + new Date().getTime() + "' ></img></div>";
                                     }
                                    
                                 }

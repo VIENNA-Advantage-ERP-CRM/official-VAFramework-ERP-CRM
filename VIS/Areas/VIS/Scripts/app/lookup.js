@@ -467,6 +467,36 @@
     };
 
 
+    MLookup.prototype.getLovIconType = function (value, checLocalList) {
+        var iconobj = this.lookup[" " + value];
+
+        if (iconobj) {
+            var iconpath = iconobj["icoType"];
+            return iconpath;
+        }
+    };
+
+    MLookup.prototype.getLOVIconElement = function (value, checkLocalList) {
+        
+        var iconobj = this.lookup[" " + value];
+
+        if (iconobj) {
+           var iconpath = iconobj["ico"];
+            if (iconpath) {
+                if (iconpath.indexOf("Images/") > -1) {
+                    var img = iconpath.substring(iconpath.indexOf("Images/") + 7);
+                    img = VIS.Application.contextUrl + "Images/Thumb32x32/" + img;
+                    return "<img src='" + img + "'></img>";
+                }
+                else {
+                    return "<i class='" + iconpath + "'></i>";
+                }
+            }
+        }
+
+    };
+
+
 
 
     MLookup.prototype.get = function (key) {
@@ -885,19 +915,26 @@
             var name = dr.getString(2);
 
             var isActive = dr.getString(3).equals("Y");
+            var p = {};
+            var key;
             if (!isActive) {
                 name = this.INACTIVE_S + name + this.INACTIVE_E;
                 this.hasInactive = true;
             }
             if (isNumber) {
-                var key = dr.getInt(0);
-                var p = { Key: key, Name: VIS.Utility.encodeText(name) };
-                lookup[" " + key] = p;
+                key = dr.getInt(0);
+                p = { Key: key, Name: VIS.Utility.encodeText(name) };
             } else {
-                var value = dr.getString(1);
-                var p1 = { Key: value, Name: VIS.Utility.encodeText(name) };
-                lookup[" " + value] = p1;
+                key = dr.getString(1);
+                p = { Key: key, Name: VIS.Utility.encodeText(name) };
             }
+
+            if (dr.tables[0].columns.length > 4) {
+                p["ico"] = dr.getString(4);
+                p["icoType"] = dr.getString(5);
+            }
+            lookup[" " + key] = p;
+
         }
         this.lookup = null;
         this.lookup = lookup;
