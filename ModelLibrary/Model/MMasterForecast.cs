@@ -414,6 +414,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < lines.Length; i++)
                 {
                     MMasterForecastLine line = lines[i];
+                    line.IsVoid = true;
                     Decimal old = line.GetTotalQty();
                     if (old.CompareTo(Env.ZERO) != 0)
                     {
