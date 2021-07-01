@@ -32,7 +32,7 @@ namespace VIS.Controllers
             h.SetContext(ctx);
             sqlIn.sql = SecureEngineBridge.DecryptByClientKey(sqlIn.sql, ctx.GetSecureKey());
             sqlIn.sql = Server.HtmlDecode(sqlIn.sql);
-            object data = h.ExecuteJDataSet(sqlIn);
+           object data = h.ExecuteJDataSet(sqlIn);
             return Json(JsonConvert.SerializeObject(data), JsonRequestBehavior.AllowGet);
         }
 
