@@ -52,11 +52,12 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Contructor
+        /// Constructor
         /// </summary>
         /// <param name="Product_ID">Product</param>
         /// <param name="ctx">Context</param>
         /// <param name="trx">Transaction</param>
+        /// <param name="MasterForecastLine_ID">MasterForecastLine</param>
         public MMasterForecastLineDetails(Ctx ctx, Trx trx, int Product_ID, int MasterForecastLine_ID) :
            base(ctx, 0, trx)
         {
