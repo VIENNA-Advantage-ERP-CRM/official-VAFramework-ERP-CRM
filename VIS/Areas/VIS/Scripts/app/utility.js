@@ -469,6 +469,12 @@
                 if (val.indexOf("Images/") > -1) {
                     val = val.replace(val.substring(val.indexOf("Images/"), val.lastIndexOf("^^") + 3), "_")
                 }
+                if (val.endsWith("_")) {
+                    val = val.substring(0, val.length - 1);
+                }
+                if (val.startsWith("_")) {
+                   val= val.substring(1);
+                }
             }
             else
                 val = Name;
