@@ -2955,7 +2955,7 @@
 
         };
 
-        function showCcBccMails(mailcc, mailbcc) {
+        this.showCcBccMails = function (mailcc, mailbcc) {
             if (mailcc != undefined && mailcc != null && mailcc != '')
                 ccmail = mailcc;
             if (mailbcc != undefined && mailbcc != null && mailbcc != '')
