@@ -10,7 +10,7 @@ namespace VAdvantage.DataBase
 
         static DBConn()
         {
-            SetConnectionString();
+            //SetConnectionString();
         }
 
         private static string connectionString = null;
@@ -98,8 +98,7 @@ namespace VAdvantage.DataBase
                         vconn.GetDatabase().SetConnectionString(connectionString);
                         return connectionString;
                     }
-
-
+                  
                     // connectionString =  vconn.CreateDBConnectionString();
                     //return Ini.CreateConnectionString(vconn);
                 }

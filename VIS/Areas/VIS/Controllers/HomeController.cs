@@ -45,7 +45,7 @@ namespace VIS.Controllers
         private static readonly object _lock = new object();
 
 
-       
+
         //public ActionResult Index(string param )
         //{
         //   // FormCollection fc = null;
@@ -67,18 +67,18 @@ namespace VIS.Controllers
         /// <returns></returns>
         public ActionResult Index(FormCollection form)
         {
-            if (Request.QueryString.Count>0)
+            if (Request.QueryString.Count > 0)
             {
-               // string user = Request.QueryString["U"];
-               // string pwd = Request.QueryString["P"];
-               // AccountController ac = new AccountController();
-               // LoginModel md = new LoginModel();
-               // md.Login1Model = new Login1Model();
-               // md.Login1Model.UserValue = user;
-               // md.Login1Model.Password = pwd;
-               //JsonResult jr =  ac.JsonLogin(md, "");
-               // ac.SetAuthCookie(md, Response); //AutoLogin if all passed
-               // return RedirectToAction("Index");
+                // string user = Request.QueryString["U"];
+                // string pwd = Request.QueryString["P"];
+                // AccountController ac = new AccountController();
+                // LoginModel md = new LoginModel();
+                // md.Login1Model = new Login1Model();
+                // md.Login1Model.UserValue = user;
+                // md.Login1Model.Password = pwd;
+                //JsonResult jr =  ac.JsonLogin(md, "");
+                // ac.SetAuthCookie(md, Response); //AutoLogin if all passed
+                // return RedirectToAction("Index");
             }
 
             //if (!User.Identity.IsAuthenticated)
@@ -166,8 +166,8 @@ namespace VIS.Controllers
 
                     if (string.IsNullOrEmpty(ctx.GetContext("##AD_User_Value")))
                     {
-                       return  new AccountController().LogOff();
-                        
+                        return new AccountController().LogOff();
+
                     }
 
                     if (key != "")
@@ -194,7 +194,7 @@ namespace VIS.Controllers
                     model = new LoginModel();
                     model.Login1Model = new Login1Model();
                     model.Login2Model = new Login2Model();
-                    model.Login1Model.UserValue =ctx.GetContext("##AD_User_Value");
+                    model.Login1Model.UserValue = ctx.GetContext("##AD_User_Value");
                     model.Login1Model.DisplayName = ctx.GetContext("##AD_User_Name");
                     model.Login1Model.LoginLanguage = ctx.GetAD_Language();
 
@@ -209,7 +209,7 @@ namespace VIS.Controllers
                     var OrgList = new List<KeyNamePair>();
                     var WareHouseList = new List<KeyNamePair>();
                     string username = "";
-                   IDataReader drRoles= LoginHelper.GetRoles(model.Login1Model.UserValue,false,false);
+                    IDataReader drRoles = LoginHelper.GetRoles(model.Login1Model.UserValue, false, false);
                     int AD_User_ID = 0;
                     if (drRoles.Read())
                     {
@@ -311,7 +311,7 @@ namespace VIS.Controllers
                         int libFound = 0;
                         foreach (Bundle b in BundleTable.Bundles)
                         {
-                            if (b.Path.Contains("ViennaBase") && b.Path.Contains("_v") && ViewBag.LibSuffix=="")
+                            if (b.Path.Contains("ViennaBase") && b.Path.Contains("_v") && ViewBag.LibSuffix == "")
                             {
                                 ViewBag.LibSuffix = Util.GetValueOfInt(ctx.GetContext("#FRONTEND_LIB_VERSION")) > 2
                                                       ? "_v3" : "_v2";
@@ -376,8 +376,8 @@ namespace VIS.Controllers
 
                 if (TempData.ContainsKey("user"))
                 {
-                    model.Login1Model.UserValue = TempData["user"].ToString() + "^Y^"+ TempData["pwd"].ToString();
-                   // model.Login1Model.Password = TempData.Peek("pwd").ToString();
+                    model.Login1Model.UserValue = TempData["user"].ToString() + "^Y^" + TempData["pwd"].ToString();
+                    // model.Login1Model.Password = TempData.Peek("pwd").ToString();
                 }
 
                 model.Login1Model.LoginLanguage = "en_US";

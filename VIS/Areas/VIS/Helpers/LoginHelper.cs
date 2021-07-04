@@ -758,7 +758,7 @@ namespace VIS.Helpers
         {
             Dictionary<string, object> retRes = new Dictionary<string, object>();
             retRes.Add("Success", false);
-
+            
             SqlParameter[] param = new SqlParameter[1];
             param[0] = new SqlParameter("@p1", TokenNum);
             DataSet ds = DB.ExecuteDataset("SELECT AuthTokenExpireTime, Value, Password, IsAuthTokenOneTime, AD_User_ID FROM AD_User WHERE IsActive = 'Y' AND AuthToken = @p1", param);

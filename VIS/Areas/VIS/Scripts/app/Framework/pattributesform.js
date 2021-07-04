@@ -32,6 +32,9 @@
         var windowName = "";
         var IsSOTrx = false;
         var IsInternalUse = false;
+        var canCreate = false;
+        var canEdit = false;
+
         this.log = VIS.Logging.VLogger.getVLogger("PAttributesForm");
         this.log.config("M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID + ", M_Product_ID=" + M_Product_ID + ", C_BPartner_ID=" + C_BPartner_ID + ", ProductW=" + productWindow + ", Column=" + AD_Column_ID);
 
@@ -67,7 +70,8 @@
         var btnSelect = $root.find("#btnSelect_" + windowNo);
         var btnLot = $root.find("#btnLot_" + windowNo);
         var btnSerNo = $root.find("#btnSerNo_" + windowNo);
-        var cmbLot = $root.find("#cmbLot_" + windowNo);;
+        var cmbLot = $root.find("#cmbLot_" + windowNo);
+        var cmdNew = $root.find("#cmdNew_" + windowNo);
         var chkNewEdit = $root.find("#chkNewEdit_" + windowNo);
         //Edit Record
         var lblEdit = $root.find("#lblEdit_" + windowNo);
@@ -95,8 +99,13 @@
         //	New/Edit Window
         // JID_1070: Enabled Create new checkbox on Attribute set Instance
         if (!productWindow) {
-            chkNewEdit.prop("checked", mAttributeSetInstanceId == 0);
-            if (mAttributeSetInstanceId > 0) {
+            if (canCreate) {
+                chkNewEdit.prop("checked", mAttributeSetInstanceId == 0);
+            }
+            else {
+                cmdNew.hide();                
+            }
+            if (mAttributeSetInstanceId > 0 || !canCreate) {
                 if (txtLotString) {
                     txtLotString.attr("readOnly", true);
                     txtLotString.addClass("vis-gc-vpanel-table-readOnly");
@@ -133,6 +142,11 @@
                         cntrl.addClass("vis-gc-vpanel-table-readOnly");
                         cntrl.attr("disabled", true);
                     }
+                }
+
+                if (!canEdit) {
+                    lblEdit.hide();
+                    chkEdit.hide();
                 }
             }
             else {
@@ -173,6 +187,10 @@
                         controlList = returnValue.ControlList.split(',');
                     }
                     mAttributeSetID = returnValue.MAttributeSetID;
+
+                    // Get User Create or Edit Access from Role
+                    canCreate = returnValue.IsCanCreate;
+                    canEdit = returnValue.IsCanEdit;
                 }
             });
         };
@@ -394,8 +412,10 @@
                     }
 
                     // Show Edit Check box after selecting existing Attribute Set Instance.
-                    lblEdit.show();
-                    chkEdit.show();
+                    if (canEdit) {
+                        lblEdit.show();
+                        chkEdit.show();
+                    }
                     //if ($self.onClose) {
                     //    $self.onClose(mAttributeSetInstanceId, mAttributeSetInstanceName, mLocatorId);
                     //    $root.dialog('close');
