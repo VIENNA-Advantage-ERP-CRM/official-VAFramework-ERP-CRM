@@ -2139,7 +2139,8 @@
                     AD_Org_ID: ctx.getAD_Org_ID(), attachment_ID: attachmentID, fileNamesFornNewAttach: JSON.stringify(filesforAttachmentforNewAttachment),
                     fileNamesForopenFormat: JSON.stringify(filesforAttachmentforOpenFormat), mailFormat: VIS.Utility.encodeText($textAreakeno.value()),
                     notify: wantNotification, strDocAttach: VIS.context.getContext("DocumentAttachViaEmail_" + self.windowNo),
-                    AD_Process_ID: _curtab.getAD_Process_ID(), printformatfileType: pfFiletype
+                    /** tab panel- null check ** Dt: 05/07/2021 ** Modified By: Kumar **/
+                    AD_Process_ID: ((_curtab != null) ? _curtab.getAD_Process_ID() : 0), printformatfileType: pfFiletype
                 };
                 $.ajax({
                     url: VIS.Application.contextUrl + "Email/SendMail",
