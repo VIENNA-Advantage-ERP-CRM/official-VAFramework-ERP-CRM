@@ -445,7 +445,7 @@ namespace VAdvantage.Model
                         log.Info("Start setting value of Paid Amount on Invoice Schedule");
 
                         //check no of schedule left for Payment for Currenct Invoice except this schedule
-                        int countUnPaidSchedule = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM C_InvoicePaySchedule WHERE IsActive = 'Y' AND 
+                        int countUnPaidSchedule = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_InvoicePaySchedule_ID) FROM C_InvoicePaySchedule WHERE IsActive = 'Y' AND 
                                                    VA009_IsPaid = 'N' AND C_Invoice_ID = " + line.GetC_Invoice_ID() +
                                                    @" AND C_InvoicePaySchedule_ID <> " + line.GetC_InvoicePaySchedule_ID(), null, Get_Trx()));
 
@@ -477,12 +477,12 @@ namespace VAdvantage.Model
                         ShiftVarianceOnOther = 0;
 
                         _sql.Clear();
-                        _sql.Append(@"SELECT DISTINCT asch.C_Currency_ID FROM c_acctschema asch INNER JOIN ad_clientinfo ci ON ci.c_acctschema1_id = asch.c_acctschema_id
-                                 INNER JOIN ad_client c ON c.ad_client_id = ci.ad_client_id INNER JOIN c_invoice i ON c.ad_client_id    = i.ad_client_id
-                                 WHERE i.ad_client_id = " + invoice.GetAD_Client_ID());
-                        int BaseCurrency = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString(), null, null));
+                        //_sql.Append(@"SELECT DISTINCT asch.C_Currency_ID FROM c_acctschema asch INNER JOIN ad_clientinfo ci ON ci.c_acctschema1_id = asch.c_acctschema_id
+                        //         INNER JOIN ad_client c ON c.ad_client_id = ci.ad_client_id INNER JOIN c_invoice i ON c.ad_client_id    = i.ad_client_id
+                        //         WHERE i.ad_client_id = " + invoice.GetAD_Client_ID());
+                        //int BaseCurrency = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString(), null, null));
 
-
+                        int BaseCurrency = GetCtx().GetContextAsInt("$C_Currency_ID");
 
                         #region set Invoice Paid Amount
                         //added check for payment and cash if cash/payment exist than create object otherwise that will be null
@@ -736,17 +736,19 @@ namespace VAdvantage.Model
                         }
 
                         // update invoice if all schedule are paid then mark paid as true at invoice
-                        if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM C_InvoicePaySchedule WHERE va009_ispaid = 'N' AND C_Invoice_ID = " + Util.GetValueOfInt(line.GetC_Invoice_ID()), null, Get_Trx())) == 0)
+                        if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(C_InvoicePaySchedule_ID) FROM C_InvoicePaySchedule WHERE va009_ispaid = 'N' AND C_Invoice_ID = " + Util.GetValueOfInt(line.GetC_Invoice_ID()), null, Get_Trx())) == 0)
                         {
-                            MInvoice inv = new MInvoice(GetCtx(), line.GetC_Invoice_ID(), Get_Trx());
-                            inv.SetIsPaid(true);
-                            inv.Save(Get_Trx());
+                            //MInvoice inv = new MInvoice(GetCtx(), line.GetC_Invoice_ID(), Get_Trx());
+                            //inv.SetIsPaid(true);
+                            //inv.Save(Get_Trx());
+                            DB.ExecuteQuery("UPDATE C_Invoice SET IsPaid = 'Y' WHERE C_Invoice_ID = " + line.GetC_Invoice_ID(), null, Get_Trx());
                         }
                         else
                         {
-                            MInvoice inv = new MInvoice(GetCtx(), line.GetC_Invoice_ID(), Get_Trx());
-                            inv.SetIsPaid(false);
-                            inv.Save(Get_Trx());
+                            //MInvoice inv = new MInvoice(GetCtx(), line.GetC_Invoice_ID(), Get_Trx());
+                            //inv.SetIsPaid(false);
+                            //inv.Save(Get_Trx());
+                            DB.ExecuteQuery("UPDATE C_Invoice SET IsPaid = 'N' WHERE C_Invoice_ID = " + line.GetC_Invoice_ID(), null, Get_Trx());
                         }
                     }
                 }
