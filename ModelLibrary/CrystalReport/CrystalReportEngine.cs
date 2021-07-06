@@ -734,7 +734,10 @@ namespace VAdvantage.CrystalReport
                     oStream = rptBurndown.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
                     byteArray = new byte[oStream.Length];
                     oStream.Read(byteArray, 0, Convert.ToInt32(oStream.Length));
-
+                    rptBurndown.Close();
+                    rptBurndown.Dispose();
+                    GC.Collect();
+                    rptBurndown = null;
                     return byteArray;
 
                     //if (form.IsDirectPrint())
@@ -940,7 +943,10 @@ namespace VAdvantage.CrystalReport
                     rptBurndown.ExportToDisk(CrystalDecisions.Shared.ExportFormatType.RichText, filePath);
                 }
                 //
+                rptBurndown.Close();
                 rptBurndown.Dispose();
+                GC.Collect();
+                rptBurndown = null;
                 log.Severe("CrystalReport Info:File Saved");
                 return filePath.Substring(filePath.IndexOf("TempDownload"));
             }
