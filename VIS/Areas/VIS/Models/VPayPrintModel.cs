@@ -315,6 +315,30 @@ namespace VIS.Models
             return objCmdPrint;
 
         }
+
+        /// <summary>
+        /// Get DocumentNo from the Payment
+        /// </summary>
+        /// <param name="ctx">Context</param>
+        /// <param name="paymentId">C_Payment_ID</param>
+        /// <returns>List of Document No's</returns>
+        public List<int> GetDocumentNo(Ctx ctx, string paymentId)
+        {
+            int _documentNo = 0;
+            List<int> documentNo = new List<int>();
+            string sql = "SELECT p.DocumentNo FROM C_Payment p WHERE IsActive='Y' AND p.C_Payment_ID IN(" + paymentId + ")";
+            DataSet ds = DB.ExecuteDataset(sql, null, null);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    _documentNo = Util.GetValueOfInt(ds.Tables[0].Rows[i]["DocumentNo"]);
+                    documentNo.Add(_documentNo);
+                }
+            }
+            return documentNo;
+        }
+
         /// <summary>
         /// ContinueCheckPrint
         /// </summary>
