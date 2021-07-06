@@ -55,6 +55,9 @@ namespace VAdvantage.Model
 
         private bool resetAmtDim = false;
         private bool resetTotalAmtDim = false;
+
+        private bool _reversal = false;
+
         /**
         * Get Invoice Line referencing InOut Line
         *	@param sLine shipment line
@@ -244,7 +247,10 @@ namespace VAdvantage.Model
                 SetIsDropShip(oLine.IsDropShip());
                 SetM_Product_ID(oLine.GetM_Product_ID());
                 SetM_AttributeSetInstance_ID(oLine.GetM_AttributeSetInstance_ID());
-                SetS_ResourceAssignment_ID(oLine.GetS_ResourceAssignment_ID());
+                if (Get_ColumnIndex("S_ResourceAssignment_ID") >= 0)
+                {
+                    SetS_ResourceAssignment_ID(oLine.GetS_ResourceAssignment_ID());
+                }
                 SetC_UOM_ID(oLine.GetC_UOM_ID());
                 //
                 SetPriceEntered(oLine.GetPriceEntered());
@@ -302,7 +308,10 @@ namespace VAdvantage.Model
                 {
                     MOrderLine oLine = new MOrderLine(GetCtx(), C_OrderLine_ID, Get_TrxName());
                     MOrder ord = new MOrder(GetCtx(), oLine.GetC_Order_ID(), Get_TrxName());          //Added By Bharat
-                    SetS_ResourceAssignment_ID(oLine.GetS_ResourceAssignment_ID());
+                    if (Get_ColumnIndex("S_ResourceAssignment_ID") >= 0)
+                    {
+                        SetS_ResourceAssignment_ID(oLine.GetS_ResourceAssignment_ID());
+                    }
                     M_AttributeSetInstance_ID = sLine.GetM_AttributeSetInstance_ID();               //Added By Bharat
                     C_UOM_ID = oLine.GetC_UOM_ID();
                     string docsubTypeSO = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocSubTypeSO FROM C_Doctype WHERE C_DocType_ID = " + ord.GetC_DocTypeTarget_ID()));
@@ -3349,22 +3358,29 @@ namespace VAdvantage.Model
                 MInvoice inv = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
 
                 // Check if new columns found on Asset table
-                bool forComponent = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(AD_Column_ID) FROM AD_Column WHERE ColumnName='VAFAM_HasComponent'
-                                     AND AD_Table_ID = " + MAsset.Table_ID, null, Get_Trx())) > 0;
+                //bool forComponent = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(AD_Column_ID) FROM AD_Column WHERE ColumnName='VAFAM_HasComponent'
+                //                     AND AD_Table_ID = " + MAsset.Table_ID, null, null)) > 0;
 
                 // If ‘VAFAM_IsAssetRelated’ is true and ‘Capitalise’ is selected in column ‘VAFAM_CapitalExpense’ 
                 // then it will check whether ‘VAFAM_HasComponent’ checkbox is true on the asset selected in ‘A_Asset_ID’ column. 
                 //If it is true, then it should give a following message: “Please select the asset component”.
-                if (Env.IsModuleInstalled("VAFAM_") && forComponent && Get_ColumnIndex("VAFAM_IsAssetRelated") > 0)
+                if (Env.IsModuleInstalled("VAFAM_") && Get_ColumnIndex("VAFAM_IsAssetRelated") > 0)
                 {
                     if (!inv.IsSOTrx() && !inv.IsReturnTrx() && Util.GetValueOfBool(Get_Value("VAFAM_IsAssetRelated")))
                     {
-                        forComponent = Util.GetValueOfString(DB.ExecuteScalar("SELECT VAFAM_HasComponent FROM A_Asset WHERE A_Asset_ID = " +
-                            GetA_Asset_ID(), null, Get_TrxName())).Equals("Y");
-                        if (forComponent && Util.GetValueOfString(Get_Value("VAFAM_CapitalExpense")).Equals("C"))
+                        try
                         {
-                            log.SaveError("VAFAM_SelAssetComps", "");
-                            return false;
+                            bool forComponent = Util.GetValueOfString(DB.ExecuteScalar("SELECT VAFAM_HasComponent FROM A_Asset WHERE A_Asset_ID = " +
+                                GetA_Asset_ID(), null, Get_TrxName())).Equals("Y");
+                            if (forComponent && Util.GetValueOfString(Get_Value("VAFAM_CapitalExpense")).Equals("C"))
+                            {
+                                log.SaveError("VAFAM_SelAssetComps", "");
+                                return false;
+                            }
+                        }
+                        catch
+                        {
+                            /*when VAFAM_HasComponent not exist into table*/
                         }
                     }
                 }
@@ -3398,12 +3414,11 @@ namespace VAdvantage.Model
                 int primaryAcctSchemaCurrency = 0;
                 // get current cost from product cost on new record and when product changed
                 // currency conversion also required if order has different currency with base currency
-                if (newRecord || (Is_ValueChanged("M_Product_ID")) || (Is_ValueChanged("M_AttributeSetInstance_ID")))
+                if (!((!String.IsNullOrEmpty(inv.GetConditionalFlag()) && inv.GetConditionalFlag().Equals(MInvoice.CONDITIONALFLAG_Reversal)) || IsReversal()) &&
+                    (newRecord || (Is_ValueChanged("M_Product_ID")) || (Is_ValueChanged("M_AttributeSetInstance_ID"))))
                 {
-
                     decimal currentcostprice = MCost.GetproductCosts(GetAD_Client_ID(), GetAD_Org_ID(), GetM_Product_ID(), Util.GetValueOfInt(GetM_AttributeSetInstance_ID()), Get_Trx());
-                    primaryAcctSchemaCurrency = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_Currency_ID from C_AcctSchema WHERE C_AcctSchema_ID = 
-                                            (SELECT c_acctschema1_id FROM ad_clientinfo WHERE ad_client_id = " + GetAD_Client_ID() + ")", null, Get_Trx()));
+                    primaryAcctSchemaCurrency = GetCtx().GetContextAsInt("$C_Currency_ID");
                     if (inv.GetC_Currency_ID() != primaryAcctSchemaCurrency)
                     {
                         currentcostprice = MConversionRate.Convert(GetCtx(), currentcostprice, primaryAcctSchemaCurrency, inv.GetC_Currency_ID(),
@@ -3504,13 +3519,13 @@ namespace VAdvantage.Model
                     }
 
                     //Added by Bharat to set Discrepancy Amount
-                    MDocType doc = new MDocType(GetCtx(), inv.GetC_DocTypeTarget_ID(), Get_TrxName());
+                    MDocType doc = MDocType.Get(GetCtx(), inv.GetC_DocTypeTarget_ID());
                     if (!doc.IsReturnTrx())
                     {
                         //int table_ID = MInvoiceLine.Table_ID;
                         if (inv.Get_ColumnIndex("DiscrepancyAmt") >= 0)
                         {
-                            decimal receivedQty = 0, invoicedQty = 0, qtyDiff = 0;
+                            decimal invoicedQty = 0;
                             decimal invAmt = 0, ordAmt = 0, discrepancyAmt = 0;
                             invoicedQty = GetQtyEntered();
                             invAmt = GetPriceEntered();
@@ -3526,8 +3541,8 @@ namespace VAdvantage.Model
                             //}
                             if (GetC_OrderLine_ID() > 0)
                             {
-                                MOrderLine ol = new MOrderLine(GetCtx(), GetC_OrderLine_ID(), Get_TrxName());
-                                ordAmt = ol.GetPriceEntered();
+                                ordAmt = Util.GetValueOfDecimal(DB.ExecuteScalar(@"SELECT PriceEntered FROM C_OrderLine 
+                                            WHERE C_OrderLine_ID = " + GetC_OrderLine_ID(), null, Get_Trx()));
                                 decimal diffAmt = Decimal.Subtract(invAmt, ordAmt);
                                 if (diffAmt > 0)
                                 {
@@ -3745,11 +3760,11 @@ namespace VAdvantage.Model
                     SetTaxAmt();
 
                 // set Tax Amount in base currency
-                if (Get_ColumnIndex("TaxBaseCurrencyAmt") >= 0)
+                if (!((!String.IsNullOrEmpty(inv.GetConditionalFlag()) && inv.GetConditionalFlag().Equals(MInvoice.CONDITIONALFLAG_Reversal))
+                    || IsReversal()) && Get_ColumnIndex("TaxBaseCurrencyAmt") >= 0)
                 {
                     decimal taxAmt = 0;
-                    primaryAcctSchemaCurrency = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_Currency_ID FROM C_AcctSchema WHERE C_AcctSchema_ID = 
-                                            (SELECT c_acctschema1_id FROM ad_clientinfo WHERE ad_client_id = " + GetAD_Client_ID() + ")", null, Get_Trx()));
+                    primaryAcctSchemaCurrency = GetCtx().GetContextAsInt("$C_Currency_ID");
                     if (inv.GetC_Currency_ID() != primaryAcctSchemaCurrency)
                     {
                         taxAmt = MConversionRate.Convert(GetCtx(), GetTaxAmt(), primaryAcctSchemaCurrency, inv.GetC_Currency_ID(),
@@ -3799,7 +3814,8 @@ namespace VAdvantage.Model
                 }
 
                 // Calculate Withholding Tax
-                if (newRecord || !inv.IsProcessing())
+                if (!((!String.IsNullOrEmpty(inv.GetConditionalFlag()) && inv.GetConditionalFlag().Equals(MInvoice.CONDITIONALFLAG_Reversal))
+                    || IsReversal()) && (newRecord || !inv.IsProcessing()))
                 {
                     if (!CalculateWithholding(inv.GetC_BPartner_ID(), inv.GetC_BPartner_Location_ID(), inv.IsSOTrx()))
                     {
@@ -3945,10 +3961,13 @@ namespace VAdvantage.Model
          */
         protected override bool AfterSave(bool newRecord, bool success)
         {
+            MInvoice inv = null;
             try
             {
                 if (!success || IsProcessed())
                     return success;
+
+                inv = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
 
                 // Reset Amount Dimension on header after save of new record
                 if (newRecord && GetLineNetAmt() != 0)
@@ -3957,14 +3976,16 @@ namespace VAdvantage.Model
                     resetTotalAmtDim = true;
                 }
 
-                if (!newRecord && Is_ValueChanged("C_Tax_ID"))
+                if (!newRecord && Is_ValueChanged("C_Tax_ID") &&
+                    !(!String.IsNullOrEmpty(inv.GetConditionalFlag()) &&
+                    (inv.GetConditionalFlag().Equals(MInvoice.CONDITIONALFLAG_Reversal) || inv.GetConditionalFlag().Equals(MInvoice.CONDITIONALFLAG_PrepareIt))))
                 {
                     //	Recalculate Tax for old Tax
                     MInvoiceTax tax = MInvoiceTax.Get(this, GetPrecision(),
                         true, Get_TrxName());	//	old Tax
                     if (tax != null)
                     {
-                        if (!tax.CalculateTaxFromLines())
+                        if (!tax.CalculateTaxFromLines(null))
                             return false;
                         if (!tax.Save(Get_TrxName()))
                             return true;
@@ -3985,8 +4006,7 @@ namespace VAdvantage.Model
                 }
 
                 //Added by Bharat to set Discrepancy Amount
-                MInvoice inv = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
-                MDocType doc = new MDocType(GetCtx(), inv.GetC_DocTypeTarget_ID(), Get_TrxName());
+                MDocType doc = MDocType.Get(GetCtx(), inv.GetC_DocTypeTarget_ID());
                 if (!inv.IsSOTrx() && !doc.IsReturnTrx())
                 {
                     if (inv.Get_ColumnIndex("DiscrepancyAmt") >= 0)
@@ -4013,32 +4033,17 @@ namespace VAdvantage.Model
 
                 // when purchase order having setting as "Hold payment" then need to set "Hold payment" on Invoice header also.
                 // calling - when IsHoldPayment column exist, Purchase side record, not in processing (like prepareit, completeit..) , not a hold payment Invoice
-                if (inv.Get_ColumnIndex("IsHoldPayment") > 0 && !inv.IsSOTrx() && !inv.IsProcessing() && !inv.IsHoldPayment())
+                if (!((!String.IsNullOrEmpty(inv.GetConditionalFlag()) && inv.GetConditionalFlag().Equals(MInvoice.CONDITIONALFLAG_Reversal))
+                    || IsReversal()) && inv.Get_ColumnIndex("IsHoldPayment") > 0 && !inv.IsSOTrx() && !inv.IsProcessing() && !inv.IsHoldPayment())
                 {
                     if (!UpdateHoldPayment())
                     {
-                        log.SaveWarning("", Msg.GetMsg(GetCtx(), "VIS_HoldPaymentNotUpdated")); ;
+                        log.SaveWarning("", Msg.GetMsg(GetCtx(), "VIS_HoldPaymentNotUpdated"));
                         return false;
 
                     }
                 }
-                //        //Develop by Deekshant For VA077 Module sales,purchase,margin
-                //        if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
-                //        {
-                //            string sql = "UPDATE C_Invoice  p SET " +
-                //"VA077_TotalMarginAmt=(SELECT COALESCE(SUM(pl.VA077_MarginAmt),0)  FROM C_InvoiceLine pl WHERE pl.IsActive = 'Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + ")" +
-                //",VA077_TotalPurchaseAmt=(SELECT COALESCE(SUM(pl.VA077_PurchasePrice),0)  FROM C_InvoiceLine pl WHERE pl.IsActive = 'Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + ")" +
-                //",VA077_MarginPercent=(SELECT COALESCE(SUM(pl.VA077_MarginPercent),0)  FROM C_InvoiceLine pl WHERE pl.IsActive = 'Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + ")" +
-                //",VA077_TotalSalesAmt=(SELECT COALESCE(SUM(pl.PriceEntered),0)  FROM C_InvoiceLine pl WHERE pl.IsActive = 'Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + ")" +
 
-                //" WHERE p.C_Invoice_ID=" + GetC_Invoice_ID();
-                //            int no = DB.ExecuteQuery(sql, null, Get_TrxName());
-                //            if (no <= 0)
-                //            {
-                //                log.SaveWarning("", Msg.GetMsg(GetCtx(), "VIS_NotUpdated"));
-                //                return false;
-                //            }
-                //        }
                 //Develop by Deekshant For VA077 Module for calculating purchase,sales,margin
                 if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
                 {
@@ -4054,7 +4059,15 @@ namespace VAdvantage.Model
                 // MessageBox.Show("MInvoiceLine--AfterSave");
             }
 
-            return UpdateHeaderTax();
+            if (!(!String.IsNullOrEmpty(inv.GetConditionalFlag()) &&
+                 (inv.GetConditionalFlag().Equals(MInvoice.CONDITIONALFLAG_Reversal) || inv.GetConditionalFlag().Equals(MInvoice.CONDITIONALFLAG_PrepareIt))))
+            {
+                return UpdateHeaderTax(inv);
+            }
+            else
+            {
+                return true;
+            }
         }
 
         /**
@@ -4109,7 +4122,7 @@ namespace VAdvantage.Model
                 }
             }
 
-            return UpdateHeaderTax();
+            return UpdateHeaderTax(inv);
         }
 
         /// <summary>
@@ -4140,7 +4153,7 @@ namespace VAdvantage.Model
                     EndDate = Util.GetValueOfDateTime(contDS.Tables[0].Rows[0]["VA077_ContractCPEndDate"]);
                     if (GetQtyEntered() > 0) // In the case of void qty will be zero, so set annual value only if qty is greater than zero
                         AnnualValue = Util.GetValueOfDecimal(contDS.Tables[0].Rows[0]["VA077_AnnualValue"]);
-                    else if(GetQtyEntered() < 0)  // handle the reverse functionality case, make amt negative
+                    else if (GetQtyEntered() < 0)  // handle the reverse functionality case, make amt negative
                         AnnualValue = Util.GetValueOfDecimal(contDS.Tables[0].Rows[0]["VA077_AnnualValue"]) * -1;
 
                     qry.Clear();
@@ -4291,18 +4304,16 @@ namespace VAdvantage.Model
          *	Update Tax & Header
          *	@return true if header updated with tax
          */
-        private bool UpdateHeaderTax()
+        private bool UpdateHeaderTax(MInvoice invoice)
         {
-            MInvoice invoice = null;
             try
             {
                 //	Recalculate Tax for this Tax
-
                 MInvoiceTax tax = MInvoiceTax.Get(this, GetPrecision(),
-                    false, Get_TrxName());	//	current Tax
+                    false, Get_TrxName());  //	current Tax
                 if (tax != null)
                 {
-                    if (!tax.CalculateTaxFromLines())
+                    if (!tax.CalculateTaxFromLines(null))
                         return false;
                     if (!tax.Save(Get_TrxName()))
                         return false;
@@ -4335,12 +4346,12 @@ namespace VAdvantage.Model
 
             //	Update Invoice Header
             String sql = "UPDATE C_Invoice i"
-                + " SET TotalLines="
-                    + "(SELECT COALESCE(SUM(LineNetAmt),0) FROM C_InvoiceLine il WHERE i.C_Invoice_ID=il.C_Invoice_ID) "
-                    + (resetAmtDim ? ", AmtDimSubTotal = null " : "")       // reset Amount Dimension if Sub Total Amount is different
-                    + (resetTotalAmtDim ? ", AmtDimGrandTotal = null " : "")     // reset Amount Dimension if Grand Total Amount is different
-                    + (Get_ColumnIndex("WithholdingAmt") > 0 ? ", WithholdingAmt = ((SELECT COALESCE(SUM(WithholdingAmt),0) FROM C_InvoiceLine il WHERE i.C_Invoice_ID=il.C_Invoice_ID))" : "")
-                + "WHERE C_Invoice_ID=" + GetC_Invoice_ID();
+            + " SET TotalLines="
+                + "(SELECT COALESCE(SUM(LineNetAmt),0) FROM C_InvoiceLine il WHERE i.C_Invoice_ID=il.C_Invoice_ID) "
+                + (resetAmtDim ? ", AmtDimSubTotal = null " : "")       // reset Amount Dimension if Sub Total Amount is different
+                + (resetTotalAmtDim ? ", AmtDimGrandTotal = null " : "")     // reset Amount Dimension if Grand Total Amount is different
+                + (Get_ColumnIndex("WithholdingAmt") > 0 ? ", WithholdingAmt = ((SELECT COALESCE(SUM(WithholdingAmt),0) FROM C_InvoiceLine il WHERE i.C_Invoice_ID=il.C_Invoice_ID))" : "")
+            + "WHERE C_Invoice_ID=" + GetC_Invoice_ID();
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 1)
             {
@@ -4567,8 +4578,7 @@ namespace VAdvantage.Model
                 if (newITax.Get_ColumnIndex("TaxBaseCurrencyAmt") > 0)
                 {
                     decimal? baseTaxAmt = taxAmt;
-                    int primaryAcctSchemaCurrency = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_Currency_ID FROM C_AcctSchema WHERE C_AcctSchema_ID = 
-                                            (SELECT c_acctschema1_id FROM ad_clientinfo WHERE ad_client_id = " + GetAD_Client_ID() + ")", null, Get_Trx()));
+                    int primaryAcctSchemaCurrency = GetCtx().GetContextAsInt("$C_Currency_ID");
                     if (invoice.GetC_Currency_ID() != primaryAcctSchemaCurrency)
                     {
                         baseTaxAmt = MConversionRate.Convert(GetCtx(), taxAmt, primaryAcctSchemaCurrency, invoice.GetC_Currency_ID(),
@@ -6431,6 +6441,25 @@ namespace VAdvantage.Model
             }
             return SetAmt(WindowNo, columnName);
         }
+
+        /// <summary>
+        /// Set Reversal
+        /// </summary>
+        /// <param name="reversal">reversal</param>
+        public void SetReversal(bool reversal)
+        {
+            _reversal = reversal;
+        }
+
+        /// <summary>
+        /// Is Reversal
+        /// </summary>
+        /// <returns>true, if reversal</returns>
+        public bool IsReversal()
+        {
+            return _reversal;
+        }
+
 
     }
 }
