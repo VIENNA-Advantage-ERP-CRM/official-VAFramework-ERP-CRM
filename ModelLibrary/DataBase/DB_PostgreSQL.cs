@@ -401,6 +401,8 @@ namespace VAdvantage.DataBase
             NpgsqlConnection connection = new NpgsqlConnection(connectionString);
             try
             {
+
+
                 connection.Open();
                 NpgsqlDataAdapter adapter = new NpgsqlDataAdapter();
                 adapter.SelectCommand = new NpgsqlCommand(sql + " limit " + pageSize + " offset " + ((page - 1) * pageSize));
