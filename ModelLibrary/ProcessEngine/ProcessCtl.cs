@@ -637,6 +637,7 @@ namespace VAdvantage.ProcessEngine
         }
 
         public Dictionary<string, object> Process(ProcessInfo pi, Ctx ctx, out byte[] report, out string reportFilePath)
+
         {
             reportFilePath = null;
 
