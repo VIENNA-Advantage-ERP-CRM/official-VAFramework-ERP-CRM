@@ -1568,54 +1568,76 @@
 
         
 
-        var lstObj = this.lst[ID];
-        if (lstObj) {
-            this.c = ID;
-            this.combination = lstObj["C"];
-            this.description = lstObj["D"];
-            return true;
-        }
+        //var lstObj = this.lst[ID];
+        //if (lstObj) {
+        //    this.c = ID;
+        //    this.combination = lstObj["C"];
+        //    this.description = lstObj["D"];
+        //    return true;
+        //}
 
-        var text = VIS.MLookupCache.getRecordLookup(this.getWindowNo(), this.getTabNo(), "c_validcombination_id", ID);
+        //var text = VIS.MLookupCache.getRecordLookup(this.getWindowNo(), this.getTabNo(), "c_validcombination_id", ID);
 
-        if (text) {
-            lstObj  = { "C": text, "D": "-" };
-            this.C_ValidCombination_ID = ID;
-            this.combination = lstObj["C"];
-            this.description = lstObj["D"];
-            this.lst[ID] = lstObj;
-            return true;
-        }
-
-       
+        //if (text) {
+        //    lstObj  = { "C": text, "D": "-" };
+        //    this.C_ValidCombination_ID = ID;
+        //    this.combination = lstObj["C"];
+        //    this.description = lstObj["D"];
+        //    this.lst[ID] = lstObj;
+        //    return true;
+        //}
 
         var SQL = "VIS_94";
 
         var param = [];
         param[0] = new VIS.DB.SqlParam("@ID", ID);
 
-        var self = this;
-        executeReader(SQL, param, function (dr) {
-
-            var dr = null;
-            try {
-                //	Prepare Statement
-                dr = executeReader(SQL, param);
-                if (!dr.read())
-                    return false;
-
-                self.lst[dr.getInt(0)] = { "C": dr.getString(1), "D": dr.getString(2)}
-               // this.C_ValidCombination_ID = dr.getInt(0);
-              //  this.combination = dr.getString(1);
-              //  this.description = dr.getString(2);
-            }
-            catch (e) {
+        var dr = null;
+        try {
+            //	Prepare Statement
+            dr = executeReader(SQL, param);
+            if (!dr.read())
                 return false;
-            }
-            finally {
-            }
-        });
-        return false;
+
+            this.C_ValidCombination_ID = dr.getInt(0);
+            this.combination = dr.getString(1);
+            this.description = dr.getString(2);
+        }
+        catch (e) {
+            return false;
+        }
+        finally {
+        }
+
+        return true;
+
+        //var SQL = "VIS_94";
+
+        //var param = [];
+        //param[0] = new VIS.DB.SqlParam("@ID", ID);
+
+        //var self = this;
+        //executeReader(SQL, param, function (dr) {
+
+        //    var dr = null;
+        //    try {
+        //        //	Prepare Statement
+        //        dr = executeReader(SQL, param);
+        //        if (!dr.read())
+        //            return false;
+
+        //        self.lst[dr.getInt(0)] = { "C": dr.getString(1), "D": dr.getString(2)}
+        //       // this.C_ValidCombination_ID = dr.getInt(0);
+        //      //  this.combination = dr.getString(1);
+        //      //  this.description = dr.getString(2);
+        //    }
+        //    catch (e) {
+        //        return false;
+        //    }
+        //    finally {
+        //    }
+        //});
+        //return false;
     };	//	load
     /**
      *	Get underlying fully qualified Table.Column Name
