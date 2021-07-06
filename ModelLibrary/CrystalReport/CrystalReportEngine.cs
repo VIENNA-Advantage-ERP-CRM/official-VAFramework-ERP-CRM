@@ -748,6 +748,12 @@ namespace VAdvantage.CrystalReport
                 }
                 catch (Exception ex)
                 {
+                    if (rptBurndown != null)
+                    {
+                        rptBurndown.Close();
+                        rptBurndown.Dispose();
+                        GC.Collect();
+                    }
                     throw ex;
 
                 }
@@ -907,6 +913,12 @@ namespace VAdvantage.CrystalReport
                     }
                     catch (Exception exx)
                     {
+                        if (rptBurndown != null)
+                        {
+                            rptBurndown.Close();
+                            rptBurndown.Dispose();
+                            GC.Collect();
+                        }
                         bytes = null;
                         log.Severe(exx.Message);
                     }
