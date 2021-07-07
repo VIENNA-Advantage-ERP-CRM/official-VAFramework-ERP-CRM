@@ -394,10 +394,9 @@ namespace VAdvantage.Model
             MOrder inv = new MOrder(Env.GetCtx(), Util.GetValueOfInt(Get_Value("C_Order_ID")), Get_TrxName());
             //11-nov-2014 Amit
             string taxRule = string.Empty;
-            int _CountED002 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX IN ('ED002_' , 'VATAX_' )"));
 
             string sql = "SELECT VATAX_TaxRule FROM AD_OrgInfo WHERE AD_Org_ID=" + inv.GetAD_Org_ID() + " AND IsActive ='Y' AND AD_Client_ID =" + GetCtx().GetAD_Client_ID();
-            if (_CountED002 > 0)
+            if (Env.IsModuleInstalled("VATAX_"))
             {
                 taxRule = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_TrxName()));
             }
@@ -405,9 +404,6 @@ namespace VAdvantage.Model
             // if (taxRule == "T" && ((_IsSOTrx && !_IsReturnTrx) || (!_IsSOTrx && !_IsReturnTrx)))
             if (taxRule == "T")
             {
-                sql = "SELECT Count(*) FROM AD_Column WHERE ColumnName = 'C_Tax_ID' AND AD_Table_ID = (SELECT AD_Table_ID FROM AD_Table WHERE TableName = 'C_TaxCategory')";
-                if (Util.GetValueOfInt(DB.ExecuteScalar(sql)) > 0)
-                {
                     int c_tax_ID = 0;
                     int taxCategory = 0;
                     MBPartner bp = new MBPartner(GetCtx(), inv.GetC_BPartner_ID(), Get_TrxName());
@@ -600,43 +596,42 @@ namespace VAdvantage.Model
                         return true;
                     }
                     return false;
-                }
-                else
-                {
-                    sql = @"SELECT VATAX_TaxType_ID FROM C_BPartner_Location WHERE C_BPartner_ID =" + inv.GetC_BPartner_ID() +
-                                   " AND IsActive = 'Y'  AND C_BPartner_Location_ID = " + inv.GetC_BPartner_Location_ID();
-                    int taxType = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
-                    if (taxType == 0)
-                    {
-                        sql = @"SELECT VATAX_TaxType_ID FROM C_BPartner WHERE C_BPartner_ID =" + inv.GetC_BPartner_ID() + " AND IsActive = 'Y'";
-                        taxType = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
-                        #region If Business Partner Is Proposed then it'll select default Tax.   Done By Manjot
-                        if (taxType == 0)
-                        {
-                            int ii = Tax.Get(GetCtx(), GetM_Product_ID(), GetC_Charge_ID(),
-                                         GetDateOrdered(), GetDateOrdered(),
-                                         GetAD_Org_ID(), GetM_Warehouse_ID(),
-                                         GetC_BPartner_Location_ID(),  // should be bill to
-                                         GetC_BPartner_Location_ID(), _IsSOTrx);
-                            if (ii == 0)
-                            {
-                                log.Log(Level.SEVERE, "No Tax found");
-                                return false;
-                            }
-                            SetC_Tax_ID(ii);
-                            return true;
-                        }
-                        #endregion
-                    }
-                    MProduct prod = new MProduct(Env.GetCtx(), System.Convert.ToInt32(GetM_Product_ID()), Get_TrxName());
-                    sql = "SELECT C_Tax_ID FROM VATAX_TaxCatRate WHERE C_TaxCategory_ID = " + prod.GetC_TaxCategory_ID() + " AND IsActive ='Y' AND VATAX_TaxType_ID =" + taxType;
-                    int taxId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
-                    if (taxId > 0)
-                    {
-                        SetC_Tax_ID(taxId);
-                        return true;
-                    }
-                }
+                //else
+                //{
+                //    sql = @"SELECT VATAX_TaxType_ID FROM C_BPartner_Location WHERE C_BPartner_ID =" + inv.GetC_BPartner_ID() +
+                //                   " AND IsActive = 'Y'  AND C_BPartner_Location_ID = " + inv.GetC_BPartner_Location_ID();
+                //    int taxType = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
+                //    if (taxType == 0)
+                //    {
+                //        sql = @"SELECT VATAX_TaxType_ID FROM C_BPartner WHERE C_BPartner_ID =" + inv.GetC_BPartner_ID() + " AND IsActive = 'Y'";
+                //        taxType = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
+                //        #region If Business Partner Is Proposed then it'll select default Tax.   Done By Manjot
+                //        if (taxType == 0)
+                //        {
+                //            int ii = Tax.Get(GetCtx(), GetM_Product_ID(), GetC_Charge_ID(),
+                //                         GetDateOrdered(), GetDateOrdered(),
+                //                         GetAD_Org_ID(), GetM_Warehouse_ID(),
+                //                         GetC_BPartner_Location_ID(),  // should be bill to
+                //                         GetC_BPartner_Location_ID(), _IsSOTrx);
+                //            if (ii == 0)
+                //            {
+                //                log.Log(Level.SEVERE, "No Tax found");
+                //                return false;
+                //            }
+                //            SetC_Tax_ID(ii);
+                //            return true;
+                //        }
+                //        #endregion
+                //    }
+                //    MProduct prod = new MProduct(Env.GetCtx(), System.Convert.ToInt32(GetM_Product_ID()), Get_TrxName());
+                //    sql = "SELECT C_Tax_ID FROM VATAX_TaxCatRate WHERE C_TaxCategory_ID = " + prod.GetC_TaxCategory_ID() + " AND IsActive ='Y' AND VATAX_TaxType_ID =" + taxType;
+                //    int taxId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
+                //    if (taxId > 0)
+                //    {
+                //        SetC_Tax_ID(taxId);
+                //        return true;
+                //    }
+                //}
             }
             else
             {
@@ -3942,9 +3937,11 @@ namespace VAdvantage.Model
                 decimal currentcostprice = 0;
                 if (!Ord.IsReturnTrx())
                 {
+
+                    //primaryAcctSchemaCurrency = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_Currency_ID from C_AcctSchema WHERE C_AcctSchema_ID = 
+                    //                        (SELECT c_acctschema1_id FROM ad_clientinfo WHERE ad_client_id = " + GetAD_Client_ID() + ")", null, Get_Trx()));
                     currentcostprice = MCost.GetproductCosts(GetAD_Client_ID(), GetAD_Org_ID(), GetM_Product_ID(), Util.GetValueOfInt(GetM_AttributeSetInstance_ID()), Get_Trx(), Ord.GetM_Warehouse_ID());
-                    primaryAcctSchemaCurrency = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_Currency_ID from C_AcctSchema WHERE C_AcctSchema_ID = 
-                                            (SELECT c_acctschema1_id FROM ad_clientinfo WHERE ad_client_id = " + GetAD_Client_ID() + ")", null, Get_Trx()));
+                    primaryAcctSchemaCurrency = GetCtx().GetContextAsInt("$C_Currency_ID");
                     if (Ord.GetC_Currency_ID() != primaryAcctSchemaCurrency)
                     {
                         currentcostprice = MConversionRate.Convert(GetCtx(), currentcostprice, primaryAcctSchemaCurrency, Ord.GetC_Currency_ID(),
@@ -3953,8 +3950,9 @@ namespace VAdvantage.Model
                 }
                 else if (Ord.IsReturnTrx() && GetOrig_OrderLine_ID() > 0)
                 {
-                    MOrderLine origOrderLine = new MOrderLine(GetCtx(), GetOrig_OrderLine_ID(), Get_Trx());
-                    currentcostprice = origOrderLine.GetCurrentCostPrice();
+                    currentcostprice= Util.GetValueOfDecimal(DB.ExecuteScalar(@"SELECT CurrentCostPrice FROM C_OrderLine WHERE C_OrderLine_ID =" + GetOrig_OrderLine_ID(),null,Get_Trx()));
+                    //MOrderLine origOrderLine = new MOrderLine(GetCtx(), GetOrig_OrderLine_ID(), Get_Trx());
+                    //currentcostprice = origOrderLine.GetCurrentCostPrice();
                 }
                 SetCurrentCostPrice(currentcostprice);
             }
@@ -4334,11 +4332,13 @@ namespace VAdvantage.Model
                 else
                 {
                     ////////////////////////////////////////////////////////////
-                    MInOut origInOut = new MInOut(GetCtx(), order.GetOrig_InOut_ID(), Get_TrxName());
+                    DateTime? movementdate = Util.GetValueOfDateTime(DB.ExecuteScalar("SELECT MovementDate FROM M_InOut WHERE " +
+                                                                                        "M_InOut_ID=" + order.GetOrig_InOut_ID(),null,Get_TrxName()));
+                   // MInOut origInOut = new MInOut(GetCtx(), order.GetOrig_InOut_ID(), Get_TrxName());
                     MReturnPolicy rpolicy = new MReturnPolicy(GetCtx(), order.GetM_ReturnPolicy_ID(), Get_TrxName());
 
-                    log.Fine("RMA Date : " + order.GetDateOrdered() + " Shipment Date : " + origInOut.GetMovementDate());
-                    withinPolicy = rpolicy.CheckReturnPolicy(origInOut.GetMovementDate(), order.GetDateOrdered(), GetM_Product_ID());
+                    log.Fine("RMA Date : " + order.GetDateOrdered() + " Shipment Date : " + movementdate);
+                    withinPolicy = rpolicy.CheckReturnPolicy(movementdate, order.GetDateOrdered(), GetM_Product_ID());
                 }
 
                 if (!withinPolicy)
@@ -4356,8 +4356,10 @@ namespace VAdvantage.Model
 
                 //pratap - Check if Qty > Movement Qty 4/12/15
                 //compare movement qty with ordered qty for UOM handling
-                MInOutLine origInOutLine = new MInOutLine(GetCtx(), GetOrig_InOutLine_ID(), Get_TrxName());
-                if (GetQtyOrdered().CompareTo(origInOutLine.GetMovementQty()) > 0)
+                decimal movementqty= Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT MovementQty FROM M_InOutLine WHERE " +
+                                                                                "M_InOutLine_ID=" + GetOrig_InOutLine_ID(), null, Get_TrxName()));
+                //MInOutLine origInOutLine = new MInOutLine(GetCtx(), GetOrig_InOutLine_ID(), Get_TrxName());
+                if (GetQtyOrdered().CompareTo(movementqty) > 0)
                 {
                     log.SaveError("VIS_ReturnQtyMoreThnOrder", "");
                     return false;
@@ -4694,6 +4696,7 @@ namespace VAdvantage.Model
         /// <returns>saved</returns>
         protected override bool AfterSave(bool newRecord, bool success)
         {
+            MOrder Ord = null;
             if (!success)
                 return success;
 
@@ -4735,7 +4738,7 @@ namespace VAdvantage.Model
                     return false;
 
                 // Warning message needs to display in case Entered Price is less than Cost of the Product on Sales Order
-                MOrder Ord = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
+                Ord = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
                 if (Ord.IsSOTrx() && !Ord.IsReturnTrx() && GetM_Product_ID() > 0)
                 {
                     MProduct prd = new MProduct(GetCtx(), GetM_Product_ID(), Get_Trx());
@@ -4749,8 +4752,8 @@ namespace VAdvantage.Model
             // nnayak : Changes for bug 1535824 - Order: Fully Invoiced
             if (!newRecord && Is_ValueChanged("QtyInvoiced"))
             {
-                MOrder order = new MOrder(GetCtx(), GetC_Order_ID(), Get_TrxName());
-                MOrderLine[] oLines = order.GetLines(true, null);
+                Ord = new MOrder(GetCtx(), GetC_Order_ID(), Get_TrxName());
+                MOrderLine[] oLines = Ord.GetLines(true, null);
                 bool isInvoiced = true;
                 for (int i = 0; i < oLines.Length; i++)
                 {
@@ -4761,9 +4764,9 @@ namespace VAdvantage.Model
                         break;
                     }
                 }
-                order.SetIsInvoiced(isInvoiced);
+                Ord.SetIsInvoiced(isInvoiced);
 
-                if (!order.Save())
+                if (!Ord.Save())
                     return false;
             }
 
