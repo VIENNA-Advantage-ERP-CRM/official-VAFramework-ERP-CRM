@@ -2099,7 +2099,10 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
         line-height: 16px;
         display: contents;
     }
-
+.vis-grid-row-td-icon i {
+    font-size: 1.1rem;
+    margin-top: .1rem;
+}
 
 
 
