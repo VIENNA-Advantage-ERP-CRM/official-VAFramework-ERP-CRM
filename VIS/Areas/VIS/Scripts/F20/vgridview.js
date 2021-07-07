@@ -517,15 +517,17 @@
                             var listIcon = l.getLOVIconElement(val, true);
                             if (!listIcon)
                                 return d;
-
+                            // If both , then show text and image
                             if (lType == "B") {
                                 strDiv = "<div class='vis-grid-td-icon-grp'>"
                                     + "<div class='vis-grid-row-td-icon'> " + listIcon + "</div> ";
                                 strDiv += "<span> " + d + "</span ><div>";
                             }
+                            // if Text, then show text only
                             else if (lType == "T") {
                                 return d;
                             }
+                                //Show icon only
                             else if (lType == "I") {
                                 strDiv = "<div class='vis-grid-td-icon-grp'>"
                                     + "<div class='vis-grid-row-td-icon'> " + listIcon + "</div> ";
@@ -534,9 +536,8 @@
                         }
 
                         else
-                        if (d && d.indexOf("Images/") > -1) {
+                        if (d && d.indexOf("Images/") > -1) {// Based on sequence of image in idenitifer, perform logic and display image with text
 
-                            //var img = d.substring(d.indexOf("Images/") + 7, d.lastIndexOf("^^") - d.indexOf("Images/") + 5);
                             var img = d.substring(d.indexOf("Images/") + 7, d.lastIndexOf("^^"));
                             img = VIS.Application.contextUrl + "Images/Thumb32x32/" + img;
 

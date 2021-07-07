@@ -462,6 +462,9 @@
             return pieces[1].length;
         },
 
+        /**
+         * @param {any} Name Removes image from identifier and returns text
+         */
         getIdentifierDisplayVal:function (Name) {
             var val = "";
             if (Name.indexOf("Images/") > -1) {

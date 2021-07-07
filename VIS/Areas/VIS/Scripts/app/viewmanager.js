@@ -175,6 +175,7 @@
             return windw;
         };
 
+        /* Check browser zoom level and based on that set W2UI grid font for window */
         function setGridFont() {
            
             var dynamicClassName = ".w2ui-reset table{font-family: var(--v-c-font-family);";
