@@ -2184,6 +2184,7 @@ namespace VAdvantage.Model
         */
         protected override bool BeforeSave(bool newRecord)
         {
+            MBPartner bp = null;
             try
             {
                 //	Client/Org Check
@@ -2283,7 +2284,7 @@ namespace VAdvantage.Model
                 //	BP Active check
                 if (newRecord || Is_ValueChanged("C_BPartner_ID"))
                 {
-                    MBPartner bp = MBPartner.Get(GetCtx(), GetC_BPartner_ID());
+                    bp = MBPartner.Get(GetCtx(), GetC_BPartner_ID());
                     if (!bp.IsActive())
                     {
                         log.SaveError("NotActive", Msg.GetMsg(GetCtx(), "C_BPartner_ID"));
@@ -2293,7 +2294,7 @@ namespace VAdvantage.Model
                 if ((newRecord || Is_ValueChanged("Bill_BPartner_ID"))
                         && GetBill_BPartner_ID() != GetC_BPartner_ID())
                 {
-                    MBPartner bp = MBPartner.Get(GetCtx(), GetBill_BPartner_ID());
+                    bp = MBPartner.Get(GetCtx(), GetBill_BPartner_ID());
                     if (!bp.IsActive())
                     {
                         log.SaveError("NotActive", Msg.GetMsg(GetCtx(), "Bill_BPartner_ID"));
@@ -2463,10 +2464,12 @@ namespace VAdvantage.Model
 
                     if (GetM_ReturnPolicy_ID() != 0)
                     {
-                        MInOut origInOut = new MInOut(GetCtx(), GetOrig_InOut_ID(), null);
+                        DateTime? movementdate = Util.GetValueOfDateTime(DB.ExecuteScalar("SELECT MovementDate FROM M_InOut WHERE " +
+                                                                                        "M_InOut_ID=" + GetOrig_InOut_ID()));
+                       // MInOut origInOut = new MInOut(GetCtx(), GetOrig_InOut_ID(), null);
                         MReturnPolicy rpolicy = new MReturnPolicy(GetCtx(), GetM_ReturnPolicy_ID(), null);
-                        log.Fine("RMA Date : " + GetDateOrdered() + " Shipment Date : " + origInOut.GetMovementDate());
-                        withinPolicy = rpolicy.CheckReturnPolicy(origInOut.GetMovementDate(), GetDateOrdered());
+                        log.Fine("RMA Date : " + GetDateOrdered() + " Shipment Date : " + movementdate);
+                        withinPolicy = rpolicy.CheckReturnPolicy(movementdate, GetDateOrdered());
                     }
                     else
                         withinPolicy = false;
@@ -3990,17 +3993,24 @@ namespace VAdvantage.Model
                 String Qry = "Select * from C_OrderLine where C_Order_ID=" + GetC_Order_ID();
                 DataSet orderlines = new DataSet();
                 orderlines = DB.ExecuteDataset(Qry);
+                // Set IsContract to true if IsContract selected on order line
+                if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(IsContract) FROM C_OrderLine WHERE C_Order_ID = " + GetC_Order_ID() + 
+                                                         " AND IsContract = 'Y' AND IsActive = 'Y' ")) > 0)
+                {
+                    Qry = @"UPDATE C_Order SET IsContract='Y' WHERE C_Order_ID=" + GetC_Order_ID();
+                    DB.ExecuteQuery(Qry, null, Get_TrxName());
+                }
                 if (orderlines.Tables[0].Rows.Count > 0)
                 {
                     for (int i = 0; i < orderlines.Tables[0].Rows.Count; i++)
                     {
-                        Char IsCont = Convert.ToChar(orderlines.Tables[0].Rows[i]["IsContract"]);
-                        if (IsCont == 'Y')
-                        {
-                            MOrder mo = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
-                            mo.SetIsContract(true);
-                            mo.Save();
-                        }
+                        //Char IsCont = Convert.ToChar(orderlines.Tables[0].Rows[i]["IsContract"]);
+                        //if (IsCont == 'Y')
+                        //{
+                        //    MOrder mo = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
+                        //    mo.SetIsContract(true);
+                        //    mo.Save();
+                        //}
 
                         ////Set Values on unit window if Unit is seleced on Line in case of POC Construction Module installed only for demo perpose
                         if (Env.IsModuleInstalled("VA052_"))
