@@ -204,7 +204,8 @@ namespace VAdvantage.Process
                         sqlSB.Clear().Append("UPDATE " + TableName + " SET ProcessedVersion = 'Y' WHERE ProcessedVersion = 'N' AND IsVersionApproved = 'Y'" +
                             " AND TRUNC(VersionValidFrom) <= " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(dr["VersionValidFrom"]), true) + " AND " + whereCond);
                         count = Util.GetValueOfInt(DB.ExecuteQuery(sqlSB.ToString(), null, null));
-                        _tblKeysProcessed.Add(sbKey.ToString());
+                        if (!(isSingleKey && Util.GetValueOfInt(sbKey.ToString()) <= 0))
+                            _tblKeysProcessed.Add(sbKey.ToString());
                         continue;
                     }
 
@@ -296,10 +297,17 @@ namespace VAdvantage.Process
                         //if (count <= 0)
                         //    log.Info(TableName + " not updated ==>> " + sqlSB.ToString());
 
-                        sqlSB.Clear().Append("UPDATE " + TableName + " SET ProcessedVersion = 'Y' WHERE ProcessedVersion = 'N' AND IsVersionApproved = 'Y'" +
-                            " AND TRUNC(VersionValidFrom) <= " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(dr["VersionValidFrom"]), true) + " AND " + whereCond);
+                        if (isSingleKey && Util.GetValueOfInt(sbKey.ToString()) <= 0)
+                        {
+                            sqlSB.Append("UPDATE " + TableName + " SET ProcessedVersion = 'Y', " + BaseTblName + "_ID  = " + poDest.Get_ID() + " WHERE " + TableName + "_ID = " + dr[TableName + "_ID"]);
+                        }
+                        else
+                        {
+                            sqlSB.Clear().Append("UPDATE " + TableName + " SET ProcessedVersion = 'Y' WHERE ProcessedVersion = 'N' AND IsVersionApproved = 'Y'" +
+                                " AND TRUNC(VersionValidFrom) <= " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(dr["VersionValidFrom"]), true) + " AND " + whereCond);
+                            _tblKeysProcessed.Add(sbKey.ToString());
+                        }
                         count = Util.GetValueOfInt(DB.ExecuteQuery(sqlSB.ToString(), null, null));
-                        _tblKeysProcessed.Add(sbKey.ToString());
                     }
                 }
             }
