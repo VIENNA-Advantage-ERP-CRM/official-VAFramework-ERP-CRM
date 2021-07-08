@@ -1515,7 +1515,7 @@ namespace VIS.Models
             ForecastLinePO.Set_Value("IsAdjusted", IsAdjusted.Equals("Y") ? true : false);
             ForecastLinePO.Set_Value("VA073_Quantity", Quantity);
             ForecastLinePO.Set_Value("VA073_Price", UnitPrice);
-            ForecastLinePO.Set_Value("VA073_TotalAmt", UnitPrice * Quantity);
+            ForecastLinePO.Set_Value("VA073_TotalAmt", Decimal.Round(Util.GetValueOfDecimal(UnitPrice * Quantity),Precision));
             if (OrderLine_ID > 0)
             {
                 ForecastLinePO.Set_Value("C_BPartner_ID", OrderBPartner);

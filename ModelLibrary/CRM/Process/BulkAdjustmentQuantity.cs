@@ -81,7 +81,8 @@ namespace VAdvantage.Process
 
             sql.Clear();
             sql.Append(@"SELECT C_MasterForecastLine.AD_Org_ID,C_MasterForecastLine_ID, TotalQty, AdjustedQty,C_MasterForecastLine.M_Product_ID,
-            C_MasterForecastLine.C_UOM_ID,C_MasterForecastLine.M_AttributeSetInstance_ID,C_MasterForecastLine.Price
+            C_MasterForecastLine.C_UOM_ID,C_MasterForecastLine.M_AttributeSetInstance_ID,C_MasterForecastLine.Price,C_MasterForecastLine.ForcastQty,
+            C_MasterForecastLine.SalesOrderQty,C_MasterForecastLine.OppQty
             FROM C_MasterForecastLine ");
             if (M_Product_Category_ID > 0 || !String.IsNullOrEmpty(M_Product_IDs))
             {
@@ -107,14 +108,15 @@ namespace VAdvantage.Process
                 for (int i = 0; i < dsMasterForecastLine.Tables[0].Rows.Count; i++)
                 {
                     // Quantity on which percentage to be applied
-                    quantity = Util.GetValueOfDecimal(dsMasterForecastLine.Tables[0].Rows[i]["TotalQty"]);
+                    quantity = Util.GetValueOfDecimal(dsMasterForecastLine.Tables[0].Rows[i]["ForcastQty"]) + Util.GetValueOfDecimal(dsMasterForecastLine.Tables[0].Rows[i]["SalesOrderQty"]) + 
+                    Util.GetValueOfDecimal(dsMasterForecastLine.Tables[0].Rows[i]["OppQty"]);
 
                     // quantity which is to be adjsuted
                     percentageBasedQty = Decimal.Divide(Decimal.Multiply(quantity, _Percentage), 100);
 
                     //
                     no = DB.ExecuteQuery("UPDATE C_MasterForecastLine SET TotalQty = " + Decimal.Add(quantity, percentageBasedQty) +
-                                     " , AdjustedQty =  " + percentageBasedQty +
+                                     " , AdjustedQty =  " + percentageBasedQty + 
                                      " , PlannedRevenue = Round((Price * " + Decimal.Add(quantity, percentageBasedQty) + "), " + precision + ")" +
                                      " WHERE C_MasterForecastLine_ID = "
                                      + Util.GetValueOfInt(dsMasterForecastLine.Tables[0].Rows[i]["C_MasterForecastLine_ID"]), null, Get_Trx());

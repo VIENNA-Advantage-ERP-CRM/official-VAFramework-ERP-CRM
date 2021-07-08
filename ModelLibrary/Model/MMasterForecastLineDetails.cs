@@ -110,21 +110,21 @@ namespace VAdvantage.Model
                     log.SaveError("ForecastLineNotUpdated", "");
                     return false;
                 }
-                else
-                {
-                    //update price and totalamt on linedetails in case after adjustment user again creates the line.
-                    _sql = "UPDATE C_MasterForecastLineDetails SET PriceEntered=(SELECT Price FROM C_MasterForecastLine WHERE C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID() + "), " +
-                        "TotaAmt= ROUND((SELECT Price FROM C_MasterForecastLine WHERE C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID() + ")+" +
-                        "(SELECT QtyEntered FROM C_MasterForecastLineDetails WHERE C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID() + " AND IsAdjusted='Y')," + Precision + ") " +
-                        " WHERE C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID() + " AND IsAdjusted='Y' ";
+                //else
+                //{
+                //    //update price and totalamt on linedetails in case after adjustment user again creates the line.
+                //    _sql = "UPDATE C_MasterForecastLineDetails SET PriceEntered=(SELECT Price FROM C_MasterForecastLine WHERE C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID() + "), " +
+                //        "TotaAmt= ROUND((SELECT Price FROM C_MasterForecastLine WHERE C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID() + ")+" +
+                //        "(SELECT QtyEntered FROM C_MasterForecastLineDetails WHERE C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID() + " AND IsAdjusted='Y')," + Precision + ") " +
+                //        " WHERE C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID() + " AND IsAdjusted='Y' ";
 
-                    DB.ExecuteQuery(_sql, null, Get_Trx());
-                    if (DB.ExecuteQuery(_sql, null, Get_Trx()) < 0)
-                    {
-                        log.SaveError("LineDetailNotUpdated", "");
-                        return false;
-                    }
-                }
+                //    DB.ExecuteQuery(_sql, null, Get_Trx());
+                //    if (DB.ExecuteQuery(_sql, null, Get_Trx()) < 0)
+                //    {
+                //        log.SaveError("LineDetailNotUpdated", "");
+                //        return false;
+                //    }
+                //}
             }
             return true;
         }
