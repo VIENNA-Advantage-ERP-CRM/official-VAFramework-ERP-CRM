@@ -80,7 +80,7 @@ namespace VAdvantage.Process
             int precision = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString()));
 
             sql.Clear();
-            sql.Append(@"SELECT C_MasterForecastLine.AD_Org_ID,C_MasterForecastLine_ID, TotalQty, AdjustedQty,C_MasterForecastLine.M_Product_ID,
+            sql.Append(@"SELECT C_MasterForecastLine.AD_Org_ID,C_MasterForecastLine_ID, C_MasterForecastLine.TotalQty, C_MasterForecastLine.AdjustedQty,C_MasterForecastLine.M_Product_ID,
             C_MasterForecastLine.C_UOM_ID,C_MasterForecastLine.M_AttributeSetInstance_ID,C_MasterForecastLine.Price,C_MasterForecastLine.ForcastQty,
             C_MasterForecastLine.SalesOrderQty,C_MasterForecastLine.OppQty
             FROM C_MasterForecastLine ");
