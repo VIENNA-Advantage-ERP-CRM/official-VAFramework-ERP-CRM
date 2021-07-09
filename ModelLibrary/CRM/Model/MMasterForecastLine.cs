@@ -117,9 +117,7 @@ namespace VAdvantage.Model
                     DB.ExecuteQuery(sql, null, Get_Trx());
                 }
             }
-            
-            DeleteAdjustedLineDetails();
-            
+           
             sql = "update C_MasterForecast set GrandTotal = (SELECT COALESCE(SUM(PlannedRevenue),0) FROM C_MasterForecastLine WHERE isactive = 'Y' and C_MasterForecast_ID= " + GetC_MasterForecast_ID() + ") where C_MasterForecast_ID = " + GetC_MasterForecast_ID();
             DB.ExecuteQuery(sql, null, Get_Trx());
 
@@ -137,26 +135,7 @@ namespace VAdvantage.Model
             // return base.AfterDelete(success);
         }
 
-        /// <summary>
-        /// This function is used to delete the Adjusted linedetails if new 
-        /// forecastline has added against the product which has already been adjusted
-        /// </summary>
-        /// <writer>209</writer>
-        public void DeleteAdjustedLineDetails()
-        {
-            string sql = @"DELETE FROM C_MasterForecastLineDetails   WHERE 
-            IsAdjusted = 'Y' AND M_Product_ID = " + GetM_Product_ID() + @" AND C_MasterForecastLine_ID IN
-            (SELECT C_MasterForecastLine_ID FROM C_MasterForecastLine WHERE C_MasterForecast_ID ="+GetC_MasterForecast_ID()+" )";
-            
-
-            if (DB.ExecuteQuery(sql, null, Get_Trx()) > 0)
-            {
-                sql = "UPDATE C_MasterForecastLine SET AdjustedQty=0 WHERE M_Product_ID =  " + GetM_Product_ID() + @" AND C_MasterForecastLine_ID IN
-                (SELECT C_MasterForecastLine_ID FROM C_MasterForecastLine WHERE C_MasterForecast_ID =" + GetC_MasterForecast_ID() +")";
-                DB.ExecuteQuery(sql, null, Get_Trx());
-            }
-           
-        }
+        
 
         /// <summary>
         /// Is Used to Get or Create  Instance of Master ForecastLine

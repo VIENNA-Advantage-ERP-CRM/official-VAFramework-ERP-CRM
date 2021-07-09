@@ -93,8 +93,8 @@
             "C_Period_ID",
             "C_DocType_ID",
             "M_Product_Category_ID",
-            "C_Forecast_ID",
-            "C_MasterForecast_ID",
+            "TeamForecast",
+            "MasterForecast",
             "M_PriceList_ID"
         ];
 
@@ -371,7 +371,7 @@
                 var _TeamForecastCtrlWrap = $('<div class="vis-control-wrap">');
                 var _TeamForecastBtnWrap = $('<div class="input-group-append">');
                 divTeamForecastCtrl.append(_TeamForecastCtrlWrap);
-                _TeamForecastCtrlWrap.append(_TeamForecastCtrl.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' ')).append('<label>' + VIS.Msg.getMsg("TeamForecast") + '</label>');
+                _TeamForecastCtrlWrap.append(_TeamForecastCtrl.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' ')).append('<label>' + VIS.translatedTexts.TeamForecast + '</label>');
                 divTeamForecastCtrl.append(_TeamForecastBtnWrap);
                 _TeamForecastBtnWrap.append(_TeamForecastCtrl.getBtn(0));
                 _TeamForecastBtnWrap.append(_TeamForecastCtrl.getBtn(1));
@@ -384,7 +384,7 @@
                 var _BudgetForecastCtrlWrap = $('<div class="vis-control-wrap">');
                 var _BudgetForecastBtnWrap = $('<div class="input-group-append">');
                 divBudgetForecastCtrl.append(_BudgetForecastCtrlWrap);
-                _BudgetForecastCtrlWrap.append(_BudgetForecastCtrl.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' ')).append('<label>' + VIS.Msg.getMsg("MasterForecast") + '</label>');
+                _BudgetForecastCtrlWrap.append(_BudgetForecastCtrl.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' ')).append('<label>' + VIS.translatedTexts.MasterForecast + '</label>');
                 divBudgetForecastCtrl.append(_BudgetForecastBtnWrap);
                 _BudgetForecastBtnWrap.append(_BudgetForecastCtrl.getBtn(0));
                 _BudgetForecastBtnWrap.append(_BudgetForecastCtrl.getBtn(1));

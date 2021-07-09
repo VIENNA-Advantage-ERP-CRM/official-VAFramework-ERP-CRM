@@ -125,10 +125,33 @@ namespace VAdvantage.Model
                 //        return false;
                 //    }
                 //}
+                DeleteAdjustedLineDetails();
             }
             return true;
         }
 
+        /// <summary>
+        /// This function is used to delete the Adjusted linedetails if new 
+        /// forecastline has added against the product which has already been adjusted
+        /// </summary>
+        /// <writer>209</writer>
+        public void DeleteAdjustedLineDetails()
+        {
+            string sql = @"DELETE FROM C_MasterForecastLineDetails   WHERE 
+            IsAdjusted = 'Y' AND M_Product_ID = " + GetM_Product_ID() + @" AND C_MasterForecastLine_ID IN
+            (SELECT C_MasterForecastLine_ID FROM C_MasterForecastLine WHERE C_MasterForecast_ID = 
+            (SELECT C_MasterForecast_ID FROM C_MasterForecastLine WHERE C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID() + " ))";
+
+
+            if (DB.ExecuteQuery(sql, null, Get_Trx()) > 0)
+            {
+                sql = "UPDATE C_MasterForecastLine SET AdjustedQty=0 WHERE M_Product_ID =  " + GetM_Product_ID() + @" AND C_MasterForecastLine_ID IN
+               (SELECT C_MasterForecastLine_ID FROM C_MasterForecastLine WHERE C_MasterForecast_ID = 
+               (SELECT C_MasterForecast_ID FROM C_MasterForecastLine WHERE C_MasterForecastLine_ID=" + GetC_MasterForecastLine_ID() + " ))";
+                DB.ExecuteQuery(sql, null, Get_Trx());
+            }
+
+        }
         /// <summary>
         ///  Is Used to Get or Create  Instance of MasterForecastLineDetails
         /// </summary>
