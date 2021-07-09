@@ -76,7 +76,7 @@ namespace VAdvantage.Model
             {
                 string priorityValue = $@"SELECT Name FROM AD_Ref_List WHERE AD_Reference_ID = 
                                             (SELECT AD_Reference_ID FROM AD_Reference WHERE Name = '_PriorityRule')
-                                            AND Value = {GetPriorityKey()} AND IsActive = 'Y'";
+                                            AND Value = '{GetPriorityKey()}' AND IsActive = 'Y'";
                 string priority = Util.GetValueOfString(DB.ExecuteScalar(priorityValue));
                 type = "T";
                 title = Msg.GetMsg(GetCtx(), "Task");
