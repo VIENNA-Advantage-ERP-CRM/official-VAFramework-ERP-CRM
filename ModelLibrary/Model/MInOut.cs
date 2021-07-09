@@ -1534,7 +1534,7 @@ namespace VAdvantage.Model
             else if (Is_ValueChanged("M_Warehouse_ID"))
             {
                 //JID_0858: when line exist then not able to update / change warehouse
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM M_InoutLine WHERE M_Inout_ID = " + GetM_InOut_ID(), null, Get_Trx())) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(M_InoutLine_ID) FROM M_InoutLine WHERE M_Inout_ID = " + GetM_InOut_ID(), null, Get_Trx())) > 0)
                 {
                     log.SaveError("VIS_WarehouseCantChange", "");
                     return false;
@@ -1552,8 +1552,9 @@ namespace VAdvantage.Model
             }
             if (newRecord || Is_ValueChanged("C_BPartner_ID"))
             {
-                MBPartner bp = MBPartner.Get(GetCtx(), GetC_BPartner_ID());
-                if (!bp.IsActive())
+                //MBPartner bp = MBPartner.Get(GetCtx(), GetC_BPartner_ID());
+                string bpActive = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsActive FROM C_BPartner WHERE C_BPartner_ID = " + GetC_BPartner_ID(), null, Get_Trx()));
+                if (bpActive.Equals("N"))
                 {
                     log.SaveError("NotActive", Msg.GetMsg(GetCtx(), "C_BPartner_ID"));
                     return false;
@@ -1756,8 +1757,9 @@ namespace VAdvantage.Model
             // check if Linked PO is not in completed or closed stage then not complete this record
             if (GetC_Order_ID() != 0 && !IsSOTrx() && !IsReturnTrx())
             {
-                MOrder order = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
-                if (order.GetDocStatus() != "CO" && order.GetDocStatus() != "CL")
+                //MOrder order = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
+                string docStatus = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocStatus FROM C_Order WHERE C_Order_ID = " + GetC_Order_ID(), null, Get_Trx()));
+                if (docStatus != "CO" && docStatus != "CL")
                 {
                     _processMsg = Msg.GetMsg(GetCtx(), "LinkedPOStatus");
                     return DocActionVariables.STATUS_INVALID;
@@ -1821,10 +1823,10 @@ namespace VAdvantage.Model
             {
                 if (GetC_Order_ID() != 0)
                 {
-                    int _countschedule = Util.GetValueOfInt(DB.ExecuteScalar("Select Count(*) From VA009_OrderPaySchedule Where C_Order_ID=" + GetC_Order_ID()));
+                    int _countschedule = Util.GetValueOfInt(DB.ExecuteScalar("Select Count(VA009_OrderPaySchedule_ID) From VA009_OrderPaySchedule Where C_Order_ID=" + GetC_Order_ID()));
                     if (_countschedule > 0)
                     {
-                        if (Util.GetValueOfInt(DB.ExecuteScalar("Select Count(*) From VA009_OrderPaySchedule Where C_Order_ID=" + GetC_Order_ID() + " AND VA009_Ispaid='Y'")) != _countschedule)
+                        if (Util.GetValueOfInt(DB.ExecuteScalar("Select Count(VA009_OrderPaySchedule_ID) From VA009_OrderPaySchedule Where C_Order_ID=" + GetC_Order_ID() + " AND VA009_Ispaid='Y'")) != _countschedule)
                         {
                             _processMsg = Msg.GetMsg(Env.GetCtx(), "VIS_PayAdvance"); // "Please Do Advance Payment against order";
                             return DocActionVariables.STATUS_INVALID;
