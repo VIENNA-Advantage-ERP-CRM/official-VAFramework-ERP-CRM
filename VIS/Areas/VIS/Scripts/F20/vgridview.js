@@ -515,12 +515,20 @@
                             var lType = l.getLovIconType(val, true);
 
                             var listIcon = l.getLOVIconElement(val, true);
-                            if (!listIcon)
-                                return d;
+                            var highlightChar = '';
+                            if (!listIcon) {
+                                highlightChar = d.substring(0, 1);
+                            }
                             // If both , then show text and image
                             if (lType == "B") {
-                                strDiv = "<div class='vis-grid-td-icon-grp'>"
-                                    + "<div class='vis-grid-row-td-icon'> " + listIcon + "</div> ";
+                                strDiv = "<div class='vis-grid-td-icon-grp'>";
+
+                                if (listIcon) {
+                                    strDiv += "<div class='vis-grid-row-td-icon'> " + listIcon + "</div> ";
+                                }
+                                else {
+                                    strDiv += "<div class='vis-grid-row-td-icon'><span>" + highlightChar + "</span></div>";
+                                }
                                 strDiv += "<span> " + d + "</span ><div>";
                             }
                             // if Text, then show text only
@@ -529,8 +537,13 @@
                             }
                                 //Show icon only
                             else if (lType == "I") {
-                                strDiv = "<div class='vis-grid-td-icon-grp'>"
-                                    + "<div class='vis-grid-row-td-icon'> " + listIcon + "</div> ";
+                                strDiv = "<div class='vis-grid-td-icon-grp' style='Justify-Content:center'>";
+                                if (listIcon) {
+                                    strDiv += "<div class='vis-grid-row-td-icon'> " + listIcon + "</div> ";
+                                }
+                                else {
+                                    strDiv += "<div class='vis-grid-row-td-icon'><span>" + highlightChar + "</span></div>";
+                                }
                                 strDiv += "<div>";
                             }
                         }
