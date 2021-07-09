@@ -704,7 +704,7 @@ namespace VAdvantage.Model
             {
                 //string fileName = Get_TableName() + Get_ID() + "_" + CommonFunctions.GenerateRandomNo()
                 String fileName = Get_TableName() + Get_ID() + "_" + CommonFunctions.GenerateRandomNo() + ".pdf";
-                string filePath = Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "TempDownload", fileName);
+                string filePath = Path.Combine(GlobalVariable.PhysicalPath, "TempDownload", fileName);
 
                 int processID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Process_Id FROM AD_Process WHERE VALUE='CashJournalReport'", null, null));
                 MPInstance instance = new MPInstance(GetCtx(), processID, GetC_Cash_ID());

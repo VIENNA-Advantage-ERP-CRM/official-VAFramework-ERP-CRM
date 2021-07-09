@@ -108,7 +108,7 @@ namespace VAdvantage.Common
                 byte[] bytes = repo.GetReportBytes();
                 string repPath = repo.GetReportFilePath(true, out bytes);
 
-                repPath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + repPath;
+                repPath = GlobalVariable.PhysicalPath + repPath;
                 ctx.SetContext("FetchingDocReport", "N");
                 if (!string.IsNullOrEmpty(repPath))
                 {
