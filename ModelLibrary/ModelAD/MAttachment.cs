@@ -1065,7 +1065,7 @@ namespace VAdvantage.Model
 
                         //(filename, Path.Combine(filePath, "TempDownload", folder));
 
-                        string filePath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath;
+                        string filePath = GlobalVariable.PhysicalPath;
 
                         // Create client info object
                         MClientInfo cInfo = null;
@@ -1176,9 +1176,9 @@ namespace VAdvantage.Model
                     // get next entry in zip
 
                     //Write file In Temp Download
-                    Directory.CreateDirectory(System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "TempDownload", FolderKey));
+                    Directory.CreateDirectory(System.IO.Path.Combine(GlobalVariable.PhysicalPath, "TempDownload", FolderKey));
 
-                    System.IO.File.WriteAllBytes(System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "TempDownload", FolderKey, name), dataEntry);
+                    System.IO.File.WriteAllBytes(System.IO.Path.Combine(GlobalVariable.PhysicalPath, "TempDownload", FolderKey, name), dataEntry);
 
                     entry = zip.getNextEntry();
                 }
@@ -1308,7 +1308,7 @@ namespace VAdvantage.Model
         {
             try
             {
-                string filePath = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "TempDownload");
+                string filePath = System.IO.Path.Combine(GlobalVariable.PhysicalPath, "TempDownload");
                 string zipinput = filePath + "\\" + folderKey + "\\zipInput";
                 string zipfileName = System.IO.Path.Combine(filePath, folderKey, DateTime.Now.Ticks.ToString());
 
@@ -1714,11 +1714,11 @@ namespace VAdvantage.Model
                     res = CreateAttachmentLine(attachmentFiles[i].Name, attachmentFiles[i].Size, FolderKey);
                     if (res.Equals("False"))
                     {
-                        Directory.Delete(System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "TempDownload", FolderKey));
+                        Directory.Delete(System.IO.Path.Combine(GlobalVariable.PhysicalPath, "TempDownload", FolderKey));
                         return false;
                     }
                 }
-                Directory.Delete(System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "TempDownload", FolderKey));
+                Directory.Delete(System.IO.Path.Combine(GlobalVariable.PhysicalPath, "TempDownload", FolderKey));
 
             }
             return true;
@@ -1734,7 +1734,7 @@ namespace VAdvantage.Model
                 {
                     string fileLocation = GetFileLocation();
                     string folder = DateTime.Now.Ticks.ToString();
-                    string filePath = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath);
+                    string filePath = System.IO.Path.Combine(GlobalVariable.PhysicalPath);
                     Directory.CreateDirectory(Path.Combine(filePath, "TempDownload", folder));
                     string filename = GetAD_Table_ID() + "_" + GetRecord_ID() + "_" + AD_AttachmentLine_ID;
                     string zipFileName = "zip" + DateTime.Now.Ticks.ToString();
