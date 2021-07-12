@@ -469,6 +469,25 @@ namespace VIS.Controllers
         /// <returns></returns>
         private int GetDoctypeBasedReport(Ctx ctx, int tableID, int record_ID)
         {
+            string tableName = MTable.GetTableName(ctx, tableID);
+
+
+            if (tableName.ToLower() == "c_invoice")
+            {
+                int Report_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Report_ID FROM C_BPartner WHERE C_BPartner_ID=(SELECT C_BPartner_ID FROM " + tableName + " WHERE " + tableName + "_ID=" + record_ID + ")"));
+                if (Report_ID > 0)
+                {
+                    //Get Report Language
+                    string lang = GetCustomerLanguage(tableID, record_ID, tableName);
+                    if (lang != "" && ctx.GetContext("#AD_Language")!= lang)
+                    {
+                        ctx.SetContext("Report_Lang", lang);
+                    }
+                   
+                    return Report_ID;
+                }
+            }
+
             #region To Override Default Process With Process Linked To Document Type
 
             string colName = "C_DocTypeTarget_ID";
@@ -484,9 +503,7 @@ namespace VIS.Controllers
             }
 
             if (id > 0)
-            {
-
-                string tableName = MTable.GetTableName(ctx, tableID);
+            {               
                 sql1 = "SELECT " + colName + ", AD_Org_ID FROM " + tableName + " WHERE " + tableName + "_ID =" + Util.GetValueOfString(record_ID);
                 DataSet ds = DB.ExecuteDataset(sql1);
 
@@ -522,7 +539,25 @@ namespace VIS.Controllers
 
             #endregion
         }
-
+        /// <summary>
+        /// Get Report Language from Coustomer Master
+        /// </summary>
+        /// <param name="tableID"></param>
+        /// <param name="record_ID"></param>
+        /// <param name="tableName"></param>
+        /// <returns></returns>
+        private string GetCustomerLanguage(int tableID, int record_ID,string tableName) {
+            string lang = "";
+            try
+            {
+                lang = Util.GetValueOfString(DB.ExecuteScalar("SELECT AD_Language FROM C_BPartner WHERE C_BPartner_ID=(SELECT C_BPartner_ID FROM " + tableName + " WHERE " + tableName + "_ID=" + record_ID + ")"));
+            }
+            catch(Exception ex) {
+            
+            }
+                   
+            return lang;
+        }
         #endregion
 
         #region "Dataset"
@@ -749,7 +784,7 @@ namespace VIS.Controllers
         {
             if (Session["ctx"] != null)
             {
-                Ctx ctx = Session["ctx"] as Ctx;
+                Ctx ctx = Session["ctx"] as Ctx;                
                 int pID = GetDoctypeBasedReport(ctx, AD_Table_ID, Record_ID);
                 if (pID > 0)
                 {
@@ -758,6 +793,7 @@ namespace VIS.Controllers
                 }
                 ProcessReportInfo rep = (ProcessHelper.GeneratePrint(Session["ctx"] as Ctx, AD_Process_ID, Name, AD_Table_ID, Record_ID, WindowNo, "", filetype, actionOrigin, originName));
                 ctx.SetContext("FetchingDocReport", "N");
+                ctx.SetContext("Report_Lang", "");
                 return Json(JsonConvert.SerializeObject(rep), JsonRequestBehavior.AllowGet);
             }
             else

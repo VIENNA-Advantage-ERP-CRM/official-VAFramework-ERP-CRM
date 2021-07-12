@@ -117,12 +117,9 @@ namespace VAdvantage.Model
                     DB.ExecuteQuery(sql, null, Get_Trx());
                 }
             }
-
+           
             sql = "update C_MasterForecast set GrandTotal = (SELECT COALESCE(SUM(PlannedRevenue),0) FROM C_MasterForecastLine WHERE isactive = 'Y' and C_MasterForecast_ID= " + GetC_MasterForecast_ID() + ") where C_MasterForecast_ID = " + GetC_MasterForecast_ID();
             DB.ExecuteQuery(sql, null, Get_Trx());
-
-
-
 
             return true;
             //return base.AfterSave(newRecord, success);
@@ -138,6 +135,7 @@ namespace VAdvantage.Model
             // return base.AfterDelete(success);
         }
 
+        
 
         /// <summary>
         /// Is Used to Get or Create  Instance of Master ForecastLine
