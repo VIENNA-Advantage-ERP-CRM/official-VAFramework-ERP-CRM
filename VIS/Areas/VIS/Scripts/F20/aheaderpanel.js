@@ -175,7 +175,7 @@
                             $lblControl = $label.getControl().addClass('vis-w-p-header-data-label');
                         }
 
-                        var colValue = getFieldValue(mField,);
+                        var colValue = getFieldValue(mField, iControl);
                         setValue(colValue, iControl, mField);
 
                         /*Set what do you want to show? Icon OR Label OR Both OR None*/
