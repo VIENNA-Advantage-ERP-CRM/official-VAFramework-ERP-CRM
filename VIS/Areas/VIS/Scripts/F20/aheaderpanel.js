@@ -16,6 +16,8 @@
 
         var $slider = $parentRoot.find('.fa-angle-double-left');
 
+       
+
         $parentRoot.css("flex-direction", "column");
         $slider.parent().css('display', 'flex');
         /**
@@ -64,7 +66,7 @@
                             continue;
                         }
 
-                        var colValue = getFieldValue(mField);
+                        var colValue = getFieldValue(mField, iControl);
 
                         setValue(colValue, iControl, mField);
                     }
@@ -173,7 +175,7 @@
                             $lblControl = $label.getControl().addClass('vis-w-p-header-data-label');
                         }
 
-                        var colValue = getFieldValue(mField);
+                        var colValue = getFieldValue(mField,);
                         setValue(colValue, iControl, mField);
 
                         /*Set what do you want to show? Icon OR Label OR Both OR None*/
@@ -215,6 +217,10 @@
                     if (oldValue == colValue) {
                         iControl.refreshImage(colValue);
                     }
+                }
+
+                else if (iControl.format){
+                    colValue = iControl.format.GetFormatAmount(iControl.format.GetFormatedValue(colValue), "init", VIS.Env.isDecimalPoint());
                 }
 
                 iControl.setValue(w2utils.encodeTags(colValue), false);
@@ -265,6 +271,7 @@
                         str = VIS.secureEngine.decrypt(str);
                     colValue = str.equals("true");	//	Boolean
                 }
+              
                 //	LOB 
                 else
                     colValue = colValue.toString();//string
