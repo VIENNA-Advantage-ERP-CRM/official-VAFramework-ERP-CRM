@@ -1338,6 +1338,165 @@ namespace VAdvantage.Classes
             return retValue;
         }
 
+
+        private static VLookUpInfo GetLookup_List(Ctx ctx,Language language, int windowNum, int AD_Reference_Value_ID)
+        {
+            string key = AD_Reference_Value_ID.ToString();
+            VLookUpInfo retValue = null;
+
+            string keyColumn = "", tableName = "", whereClause = "", orderByClause = "";
+            string displayColumn = "";
+            bool isTranslated = false, isValueDisplayed = false, isDisplayIdentifiers = false;
+            int zoomWindow = 0;
+            int zoomWindowPO = 0;
+            //	int AD_Table_ID = 0;
+            bool loaded = false;
+
+
+            tableName = "AD_Ref_List";
+            keyColumn = "AD_Ref_List_ID";
+            displayColumn = "Name";
+            isValueDisplayed = true;
+            isTranslated = true;
+            whereClause = "";
+            orderByClause = "";
+            zoomWindow = 0;
+            zoomWindowPO = 0;
+            isDisplayIdentifiers = false;
+            loaded = true;
+
+
+            if (!loaded)
+            {
+                s_log.Log(Level.SEVERE, "No Table Reference Table ID=" + AD_Reference_Value_ID);
+                return null;
+            }
+
+            isTranslated = isTranslated && IsTranslated(tableName);
+
+
+            //StringBuilder displayColumn1 = null;
+            //if (isDisplayIdentifiers)
+            //{
+            //    displayColumn1 = GetLookup_DisplayColumn(language, tableName);
+            //if (displayColumn1 == null)
+            //{
+            //    displayColumn1 = new StringBuilder("NULL");
+            //}
+            //displayColumn = displayColumn1.ToString();
+            //}
+            //if (displayColumn1 == null)
+            //{
+            //    displayColumn = tableName + ((isTranslated && !Env.IsBaseLanguage(language, tableName)) ? "_TRL." : ".") + displayColumn;
+            //}
+            //else
+            //{
+            //    displayColumn = displayColumn1.ToString();
+            //}
+
+            StringBuilder sb = new StringBuilder("SELECT ");
+            if (!keyColumn.EndsWith("_ID")) { sb.Append("NULL,"); }
+
+
+            //Translated
+            if (isTranslated && !Env.IsBaseLanguage(language, tableName))//  GlobalVariable.IsBaseLanguage())
+            {
+                sb.Append(tableName).Append(".").Append(keyColumn).Append(",");
+                if (keyColumn.EndsWith("_ID"))
+                    sb.Append("NULL,");
+                if (isValueDisplayed)
+                    sb.Append("NVL(").Append(tableName).Append(".Value,'-1') || '-' || ");
+
+                sb.Append(displayColumn.ToString());
+
+                sb.Append(",").Append(tableName).Append(".IsActive");
+                sb.Append(" FROM ").Append(tableName)
+                    .Append(" INNER JOIN ").Append(tableName).Append("_TRL ON (")
+                    .Append(tableName).Append(".").Append(keyColumn)
+                    .Append("=").Append(tableName).Append("_Trl.").Append(keyColumn)
+                    .Append(" AND ").Append(tableName).Append("_Trl.AD_Language='")
+                    .Append(language.GetAD_Language()).Append("')");
+            }
+            //	Not Translated
+            else
+            {
+                sb.Append(tableName).Append(".").Append(keyColumn).Append(",");
+                if (keyColumn.EndsWith("_ID"))
+                    sb.Append("NULL,");
+                if (isValueDisplayed)
+                    sb.Append("NVL(").Append(tableName).Append(".Value,'-1') || '-' || ");
+                //jz EDB || problem
+                //if (DatabaseType.IsPostgre)
+                //    sb.Append("COALESCE(TO_CHAR(").Append(displayColumn).Append("),'')");
+                //else if (DatabaseType.IsMSSql)
+                //   sb.Append("COALESCE(CONVERT(VARCHAR,").Append(displayColumn).Append("),'')");
+                //else
+                sb.Append("NVL(").Append(displayColumn).Append(",'-1')");
+                sb.Append(",").Append(tableName).Append(".IsActive");
+                sb.Append(" FROM ").Append(tableName);
+            }
+
+
+            //	add WHERE clause
+            Query zoomQuery = null;
+            if (whereClause != "")
+            {
+                string where = whereClause;
+                //if (where.IndexOf("@") != -1)
+                //    where = Utility.Env.ParseContext(ctx, windowNum, where, false);
+                if (where.Length == 0 && whereClause.Length != 0)
+                {
+                    s_log.Severe("Could not resolve: " + whereClause);
+                    ////Common.////ErrorLog.FillErrorLog("VlookupFactory","","Could not resolve: " + whereClause,VAdvantage.Framework.Message.MessageType.ERROR);
+                }
+
+
+                //	We have no context
+                //if (where.Length != 0)
+                //{
+                //    if (isDisplayIdentifiers)
+                //        sb.Append(" WHERE ");
+                //    else
+                //        sb.Append(" AND ");
+
+                //    sb.Append(where);
+                //    if (where.IndexOf(".") == -1)
+                //    {
+                //        s_log.Log(Level.SEVERE, "Table - " + tableName
+                //        + ": WHERE should be fully qualified: " + whereClause);
+                //    }
+                //    zoomQuery = new Query(tableName);
+                //    zoomQuery.AddRestriction(where);
+                //}
+            }
+
+            //	Order By qualified term or by Name
+            //if (orderByClause != "")
+            //{
+            //    sb.Append(" ORDER BY ").Append(orderByClause);
+            //    if (orderByClause.IndexOf(".") == -1)
+            //    {
+            //        s_log.Log(Level.SEVERE, "getLookup_Table - " + tableName
+            //            + ": ORDER BY must fully qualified: " + orderByClause);
+            //    }
+            //}
+            //else
+            sb.Append(" ORDER BY 3");
+
+            s_log.Finest("AD_Reference_Value_ID=" + AD_Reference_Value_ID + " - " + sb.ToString());
+            retValue = new VLookUpInfo(sb.ToString(), tableName,
+                tableName + "." + keyColumn, zoomWindow, zoomWindowPO, zoomQuery);
+            //if(!_sCacheRefTable.ContainsKey(key))
+            // {
+            //  _sCacheRefTable[key] = retValue.Clone();
+            // }
+
+            // display column  for Table type of references
+            retValue.displayColSubQ = displayColumn;
+
+            return retValue;
+        }
+
         /// <summary>
         ///Get Embedded Lookup SQL for Table Lookup
         /// </summary>
