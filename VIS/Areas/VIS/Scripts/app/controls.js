@@ -491,6 +491,9 @@
             var windowNo = mField.getWindowNo();//  no context check
             var displayType = mField.getHeaderOverrideReference() || mField.getDisplayType();
             var ctrl = null;
+
+
+
             if (displayType == VIS.DisplayType.Image) {
                 var image = new VImage(columnName, isMandatory, true, windowNo);
                 //image.setField(mField);
@@ -499,6 +502,10 @@
             }
             else {
                 var $ctrl = new VSpan(mField.getHelp(), columnName, false, true);
+                if (VIS.DisplayType.IsNumeric(displayType)) {
+                    $ctrl.format = VIS.DisplayType.GetNumberFormat(displayType);
+                }
+               
                 ctrl = $ctrl;
             }
 
@@ -1064,6 +1071,9 @@
         this.disposeComponent = function () {
             $ctrl = null;
             self = null;
+            if (this.format)
+                this.format.dispose();
+            this.format = null;
         }
     };
 

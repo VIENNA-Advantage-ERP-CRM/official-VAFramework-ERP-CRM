@@ -1570,7 +1570,7 @@
 
         var lstObj = this.lst[ID];
         if (lstObj) {
-            this.c = ID;
+            this.C_ValidCombination_ID = ID;
             this.combination = lstObj["C"];
             this.description = lstObj["D"];
             return true;
