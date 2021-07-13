@@ -74,7 +74,7 @@ namespace ViennaAdvantage.Process
         protected override string DoIt()
         {
             string extension = filename;
-            string path = HostingEnvironment.ApplicationPhysicalPath;
+            string path = GlobalVariable.PhysicalPath;
             if (filename.Contains("_FileCtrl"))
             {
                 path = path + "TempDownload//" + filename;

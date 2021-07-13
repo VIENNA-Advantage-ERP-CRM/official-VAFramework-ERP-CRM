@@ -1973,7 +1973,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             }
             else if (report != null)
             {
-                string filePath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + "TempDownload";
+                string filePath = GlobalVariable.PhysicalPath + "TempDownload";
                 if (!Directory.Exists(filePath))
                     Directory.CreateDirectory(filePath);
 

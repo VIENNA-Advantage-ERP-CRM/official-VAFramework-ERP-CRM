@@ -45,8 +45,8 @@ namespace VAdvantage.CrystalReport
         public byte[] GenerateCrystalReport()
         {
 
-            string reportPath = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "CReports\\Reports");
-            string reportImagePath = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "");
+            string reportPath = System.IO.Path.Combine(GlobalVariable.PhysicalPath, "CReports\\Reports");
+            string reportImagePath = System.IO.Path.Combine(GlobalVariable.PhysicalPath, "");
 
             string[] reportNameArray;
             string[] reportPathArray;
@@ -928,7 +928,7 @@ namespace VAdvantage.CrystalReport
                     bytes = null;
                 }
 
-                string FILE_PATH = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + "TempDownload";
+                string FILE_PATH = GlobalVariable.PhysicalPath + "TempDownload";
 
                 if (!Directory.Exists(FILE_PATH))
                     Directory.CreateDirectory(FILE_PATH);
@@ -974,8 +974,8 @@ namespace VAdvantage.CrystalReport
         {
             ReportDocument rptBurndown = null;
 
-            string reportPath = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "CReports\\Reports");
-            string reportImagePath = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "");
+            string reportPath = System.IO.Path.Combine(GlobalVariable.PhysicalPath, "CReports\\Reports");
+            string reportImagePath = System.IO.Path.Combine(GlobalVariable.PhysicalPath, "");
 
             string[] reportNameArray;
             string[] reportPathArray;
