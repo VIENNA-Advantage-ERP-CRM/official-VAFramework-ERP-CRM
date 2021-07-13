@@ -143,6 +143,17 @@ namespace VAdvantage.Common
 
             string colName = "C_DocTypeTarget_ID";
 
+            int invoiceReportID = VAdvantage.Common.Common.GetBusinessInvoiceReportID(ctx, tableID, record_ID);
+            if (invoiceReportID > 0)
+            {
+                string lang = VAdvantage.Common.Common.GetCustomerLanguage(ctx, tableID, record_ID);
+                if (lang != "" && ctx.GetContext("#AD_Language") != lang)
+                {
+                    ctx.SetContext("Report_Lang", lang);
+                }
+                return invoiceReportID;
+            }
+
 
             string sql1 = "SELECT COUNT(*) FROM AD_Column WHERE AD_Table_ID=" + tableID + " AND ColumnName   ='C_DocTypeTarget_ID'";
             int id = Util.GetValueOfInt(DB.ExecuteScalar(sql1));
@@ -235,6 +246,10 @@ namespace VAdvantage.Common
             ///	
             System.Globalization.CultureInfo original = System.Threading.Thread.CurrentThread.CurrentCulture;
             string langu = p_ctx.GetAD_Language().Replace("_", "-");
+            if (!string.IsNullOrEmpty(p_ctx.GetContext("Report_Lang")))
+            {
+                langu = p_ctx.GetContext("Report_Lang").Replace("_", "-");
+            }
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(langu);
             System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(langu);
 
@@ -267,7 +282,10 @@ namespace VAdvantage.Common
                 try
                 {
                     string lang = p_ctx.GetAD_Language().Replace("_", "-");
-
+                    if (!string.IsNullOrEmpty(p_ctx.GetContext("Report_Lang")))
+                    {
+                        lang = p_ctx.GetContext("Report_Lang").Replace("_", "-");
+                    }
                     if ((AD_ReportFormat_ID > 0) && (lang == "ar-IQ"))
                     {
                         isDocxFile = true;
@@ -591,8 +609,55 @@ namespace VAdvantage.Common
                ActionOrigin, reportTypeForLog, OriginName, descriptonForLog, AD_Table_ID, Record_ID);
         }
 
+        /// <summary>
+        /// Get Business Partner Invoice Report ID
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="tableID"></param>
+        /// <param name="record_ID"></param>
+        /// <returns></returns>
+        public static int GetBusinessInvoiceReportID(Ctx ctx, int tableID, int record_ID) {
+            string tableName = MTable.GetTableName(ctx, tableID);
+            int Report_ID = 0;
+            if (tableName.ToLower() == "c_invoice")
+            {
+                try
+                {
+                    Report_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT InvoiceReport_ID FROM C_BPartner WHERE C_BPartner_ID=(SELECT C_BPartner_ID FROM " + tableName + " WHERE " + tableName + "_ID=" + record_ID + ")"));
+                    if (Report_ID > 0)
+                    {                        
+                        return Report_ID;
+                    }
+                }
+                catch (Exception e)
+                {
+                }
+            }
+            return Report_ID;
+        }
 
+        /// <summary>
+        /// Get Report Language from Coustomer Master
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="tableID"></param>
+        /// <param name="record_ID"></param>
+        /// <returns></returns>
+        public static string GetCustomerLanguage(Ctx ctx, int tableID, int record_ID)
+        {
+            string tableName = MTable.GetTableName(ctx, tableID);
+            string lang = "";
+            try
+            {
+                lang = Util.GetValueOfString(DB.ExecuteScalar("SELECT AD_Language FROM C_BPartner WHERE C_BPartner_ID=(SELECT C_BPartner_ID FROM " + tableName + " WHERE " + tableName + "_ID=" + record_ID + ")"));
+            }
+            catch (Exception ex)
+            {
 
+            }
+
+            return lang;
+        }
 
     }
 

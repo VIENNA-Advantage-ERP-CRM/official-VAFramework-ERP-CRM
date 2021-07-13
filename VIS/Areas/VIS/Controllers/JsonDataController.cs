@@ -464,27 +464,19 @@ namespace VIS.Controllers
         {
             string tableName = MTable.GetTableName(ctx, tableID);
 
-
-            if (tableName.ToLower() == "c_invoice")
-            {
-                int Report_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Report_ID FROM C_BPartner WHERE C_BPartner_ID=(SELECT C_BPartner_ID FROM " + tableName + " WHERE " + tableName + "_ID=" + record_ID + ")"));
-                if (Report_ID > 0)
-                {
-                    //Get Report Language
-                    string lang = GetCustomerLanguage(tableID, record_ID, tableName);
-                    if (lang != "" && ctx.GetContext("#AD_Language")!= lang)
-                    {
-                        ctx.SetContext("Report_Lang", lang);
-                    }
-                   
-                    return Report_ID;
-                }
-            }
-
             #region To Override Default Process With Process Linked To Document Type
 
             string colName = "C_DocTypeTarget_ID";
-
+            int invoiceReportID = VAdvantage.Common.Common.GetBusinessInvoiceReportID(ctx, tableID, record_ID);
+            if (invoiceReportID > 0)
+            {
+                string lang = VAdvantage.Common.Common.GetCustomerLanguage(ctx, tableID, record_ID);
+                if (lang != "" && ctx.GetContext("#AD_Language") != lang)
+                {
+                    ctx.SetContext("Report_Lang", lang);
+                }
+                return invoiceReportID;
+            }
 
             string sql1 = "SELECT COUNT(*) FROM AD_Column WHERE AD_Table_ID=" + tableID + " AND ColumnName   ='C_DocTypeTarget_ID'";
             int id = Util.GetValueOfInt(DB.ExecuteScalar(sql1));
@@ -532,25 +524,7 @@ namespace VIS.Controllers
 
             #endregion
         }
-        /// <summary>
-        /// Get Report Language from Coustomer Master
-        /// </summary>
-        /// <param name="tableID"></param>
-        /// <param name="record_ID"></param>
-        /// <param name="tableName"></param>
-        /// <returns></returns>
-        private string GetCustomerLanguage(int tableID, int record_ID,string tableName) {
-            string lang = "";
-            try
-            {
-                lang = Util.GetValueOfString(DB.ExecuteScalar("SELECT AD_Language FROM C_BPartner WHERE C_BPartner_ID=(SELECT C_BPartner_ID FROM " + tableName + " WHERE " + tableName + "_ID=" + record_ID + ")"));
-            }
-            catch(Exception ex) {
-            
-            }
-                   
-            return lang;
-        }
+        
         #endregion
 
         #region "Dataset"
