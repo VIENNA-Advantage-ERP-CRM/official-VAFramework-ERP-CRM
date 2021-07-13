@@ -4738,12 +4738,13 @@ namespace VAdvantage.Model
                     return false;
 
                 // Warning message needs to display in case Entered Price is less than Cost of the Product on Sales Order
-                Ord = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
+                if (Ord == null)
+                {
+                    Ord = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
+                }
                 if (Ord.IsSOTrx() && !Ord.IsReturnTrx() && GetM_Product_ID() > 0)
                 {
-                    //MProduct prd = new MProduct(GetCtx(), GetM_Product_ID(), Get_Trx());
-                    string productType = Util.GetValueOfString(DB.ExecuteScalar("SELECT ProductType FROM M_Product WHERE M_Product_ID = " + GetM_Product_ID(), null, Get_Trx()));
-                    if (productType.Equals("I") && GetPriceEntered() < GetCurrentCostPrice())
+                    if (GetProduct().GetProductType().Equals("I") && GetPriceEntered() < GetCurrentCostPrice())
                     {
                         log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "VIS_PrcEntCantlessPrdCost"));
                     }

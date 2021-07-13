@@ -2114,10 +2114,10 @@ namespace VIS.Models
             int taxId = 0;
             int _c_BPartner_Id = 0;
             int _c_Bill_Location_Id = 0;
-            int _CountVATAX = 0;
+            //int _CountVATAX = 0;
 
             //_CountVATAX = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX IN ('VATAX_' )", null, null));
-            retDic["_CountVATAX"] = Util.GetValueOfBool(IsModuleinstalled);
+            retDic["_CountVATAX"] = IsModuleinstalled ? 1 : 0;
 
             MOrderModel objOrder = new MOrderModel();
             Dictionary<String, object> order = objOrder.GetOrder(ctx, _c_Order_Id.ToString());

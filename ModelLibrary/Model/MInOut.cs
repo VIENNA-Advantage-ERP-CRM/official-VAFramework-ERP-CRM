@@ -280,9 +280,8 @@ namespace VAdvantage.Model
                 MProduct product = olines.GetProduct();
                 if (product != null && product.Get_ID() != 0 && product.IsStocked())
                 {
-                    //MProductCategory pc = MProductCategory.Get(order.GetCtx(), product.GetM_Product_Category_ID());
-                    //String MMPolicy = pc.GetMMPolicy();
-                    string MMPolicy = Util.GetValueOfString(DB.ExecuteScalar("SELECT MMPolicy FROM M_Product_Category WHERE M_Product_Category_ID = " + product.GetM_Product_Category_ID()));
+                    MProductCategory pc = MProductCategory.Get(order.GetCtx(), product.GetM_Product_Category_ID());
+                    String MMPolicy = pc.GetMMPolicy();
                     if (MMPolicy == null || MMPolicy.Length == 0)
                     {
                         MMPolicy = client.GetMMPolicy();
@@ -2322,11 +2321,10 @@ namespace VAdvantage.Model
                     #region Asset Work
                     if (product != null)
                     {
-                        //MProductCategory pc = MProductCategory.Get(GetCtx(), product.GetM_Product_Category_ID());
-                        int astGrp = Util.GetValueOfInt(DB.ExecuteScalar("SELECT A_Asset_Group_ID FROM M_Product_Category WHERE M_Product_Category_ID = " + product.GetM_Product_Category_ID()));
+                        MProductCategory pc = MProductCategory.Get(GetCtx(), product.GetM_Product_Category_ID());
                         if (VAPOS_POSTerminal_ID > 0)
                         {
-                            if (IsSOTrx() && astGrp > 0 && sLine.GetA_Asset_ID() == 0)
+                            if (IsSOTrx() && pc.GetA_Asset_Group_ID() > 0 && sLine.GetA_Asset_ID() == 0)
                             {
                                 _processMsg = "AssetNotSetONShipmentLine: LineNo" + sLine.GetLine() + " :-->" + sLine.GetDescription();
                                 return DocActionVariables.STATUS_INPROGRESS;
@@ -2334,7 +2332,7 @@ namespace VAdvantage.Model
                         }
                         else
                         {
-                            if (IsSOTrx() && !IsReturnTrx() && astGrp > 0 && sLine.GetA_Asset_ID() == 0 && !Env.IsModuleInstalled("VA077_"))
+                            if (IsSOTrx() && !IsReturnTrx() && pc.GetA_Asset_Group_ID() > 0 && sLine.GetA_Asset_ID() == 0 && !Env.IsModuleInstalled("VA077_"))
                             {
                                 _processMsg = "AssetNotSetONShipmentLine: LineNo" + sLine.GetLine() + " :-->" + sLine.GetDescription();
                                 return DocActionVariables.STATUS_INPROGRESS;
@@ -4892,11 +4890,9 @@ namespace VAdvantage.Model
                     dynamic[] storages = null;
 
                     // Is Used to get Material Policy
-                    //MProductCategory pc = MProductCategory.Get(GetCtx(), product.GetM_Product_Category_ID());
-                    //String MMPolicy = pc.GetMMPolicy();
-
-                    string MMPolicy = Util.GetValueOfString(DB.ExecuteScalar("SELECT MMPolicy FROM M_Product_Category WHERE M_Product_Category_ID = " + product.GetM_Product_Category_ID()));
-
+                    MProductCategory pc = MProductCategory.Get(GetCtx(), product.GetM_Product_Category_ID());
+                    String MMPolicy = pc.GetMMPolicy();
+                    
                     // Is used for handling Gurantee Date - In Case of ASI
                     //DateTime? minGuaranteeDate = GetMovementDate();
 
@@ -5032,8 +5028,8 @@ namespace VAdvantage.Model
         protected Decimal autoBalanceNegative(MInOutLine line, MProduct product, Decimal qtyToReceive)
         {
             // Is Used to get Material Policy
-            //MProductCategory pc = MProductCategory.Get(GetCtx(), product.GetM_Product_Category_ID());
-            string MMPolicy = Util.GetValueOfString(DB.ExecuteScalar("SELECT MMPolicy FROM M_Product_Category WHERE M_Product_Category_ID = " + product.GetM_Product_Category_ID()));
+            MProductCategory pc = MProductCategory.Get(GetCtx(), product.GetM_Product_Category_ID());
+            string MMPolicy = pc.GetMMPolicy();
 
             // Is Used to get all Negative records from Contaner Storage
             X_M_ContainerStorage[] storages = MProductContainer.GetContainerStorageNegative(GetCtx(), GetM_Warehouse_ID(), line.GetM_Locator_ID(),

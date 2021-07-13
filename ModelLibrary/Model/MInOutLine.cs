@@ -1067,9 +1067,7 @@ namespace VAdvantage.Model
 
             //Checking for conversion of UOM 
             MInOut inO = new MInOut(GetCtx(), GetM_InOut_ID(), Get_TrxName());
-            //MDocType dt = new MDocType(GetCtx(), inO.GetC_DocType_ID(), Get_TrxName());
-            string splitWhenDifference = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsSplitWhenDifference FROM C_DocType WHERE C_DocType_ID = "
-                + inO.GetC_DocType_ID(), null, Get_Trx()));
+            MDocType dt = MDocType.Get(GetCtx(), inO.GetC_DocType_ID());
             MProduct _Product = null;
 
             // Check if Product_ID is non zero then only create the object
@@ -1081,7 +1079,7 @@ namespace VAdvantage.Model
             if (_Product != null && GetC_UOM_ID() != _Product.GetC_UOM_ID())
             {
                 decimal? differenceQty = Util.GetValueOfDecimal(GetCtx().GetContext("DifferenceQty_"));
-                if (differenceQty > 0 && !newRecord && splitWhenDifference.Equals("N"))
+                if (differenceQty > 0 && !newRecord && !dt.IsSplitWhenDifference())
                 {
                     //converted qty if found any difference then the Movement qty reduces by the difference amount
                     pc = MUOMConversion.ConvertProductFrom(GetCtx(), GetM_Product_ID(), GetC_UOM_ID(), QtyEntered - differenceQty);
