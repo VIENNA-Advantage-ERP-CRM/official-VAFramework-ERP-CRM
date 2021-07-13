@@ -2379,7 +2379,7 @@ namespace VAdvantage.Model
 
                         }
 
-                        if (bp.GetSOCreditStatus() != X_C_BPartner.SOCREDITSTATUS_NoCreditCheck && validate.Date < DateTime.Now.Date)
+                        if (bp.Get_Value("VA077_ValidityDate") != null && validate.Date < DateTime.Now.Date)
 
                         {
 
