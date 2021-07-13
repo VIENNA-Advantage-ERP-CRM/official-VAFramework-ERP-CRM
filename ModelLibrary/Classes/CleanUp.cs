@@ -4,10 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using VAdvantage.DataBase;
 
 namespace VAdvantage.Classes
 {
-    public class CleanUp :IDisposable
+    public class CleanUp : IDisposable
     {
         private static CleanUp _cleanUp = null;
         // private static bool isThreadRunning = false;
@@ -51,7 +52,7 @@ namespace VAdvantage.Classes
             // isThreadRunning = true;
             try
             {
-                string tempPath = Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "TempDownload");
+                string tempPath = Path.Combine(GlobalVariable.PhysicalPath, "TempDownload");
                 string[] files = Directory.GetFiles(tempPath);
 
                 //delete files which are Older than 12 hours 
@@ -92,7 +93,7 @@ namespace VAdvantage.Classes
             {
 
             }
-            
+
 
             ///isThreadRunning = false;
         }
