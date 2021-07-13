@@ -2970,7 +2970,7 @@ namespace VAdvantage.Model
                                     validate = Util.GetValueOfDateTime(bp.Get_Value("VA077_ValidityDate")).Value;
                                 }
 
-                                if (bp.GetSOCreditStatus() != X_C_BPartner.SOCREDITSTATUS_NoCreditCheck && validate.Date < DateTime.Now.Date)
+                                if (bp.Get_Value("VA077_ValidityDate") != null && validate.Date < DateTime.Now.Date)
                                 {
                                     int RecCount = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_Invoice_ID) FROM C_Invoice WHERE IsSOTrx='Y' AND IsReturnTrx='N' AND C_BPartner_ID =" + GetC_BPartner_ID() + " and DocStatus in('CO','CL') and DateInvoiced BETWEEN " + GlobalVariable.TO_DATE(DateTime.Now.Date.AddDays(-730), true) + " AND " + GlobalVariable.TO_DATE(DateTime.Now.Date, true) + ""));
 
