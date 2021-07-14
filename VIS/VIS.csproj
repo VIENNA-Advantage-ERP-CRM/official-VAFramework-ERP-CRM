@@ -708,6 +708,7 @@
     <Content Include="Areas\VIS\Scripts\app\processwrapper.js" />
     <Content Include="Areas\VIS\Scripts\app\role.js" />
     <Content Include="Areas\VIS\Scripts\app\secure-engine.js" />
+    <Content Include="Areas\VIS\Scripts\app\ssemanager.js" />
     <Content Include="Areas\VIS\Scripts\app\todo.bindings.js" />
     <Content Include="Areas\VIS\Scripts\app\todo.datacontext.js" />
     <Content Include="Areas\VIS\Scripts\app\todo.model.js" />
@@ -810,6 +811,7 @@
     <Compile Include="Areas\VIS\Controllers\CallOut\MUOMConversionController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MWarehouseController.cs" />
     <Compile Include="Areas\VIS\Controllers\CardViewController.cs" />
+    <Compile Include="Areas\VIS\Controllers\MessageController.cs" />
     <Compile Include="Areas\VIS\Controllers\Chat\ChatController.cs" />
     <Compile Include="Areas\VIS\Controllers\CommonController.cs" />
     <Compile Include="Areas\VIS\Controllers\DocActionController.cs" />
@@ -1024,6 +1026,7 @@
   <ItemGroup>
     <Folder Include="Areas\VIS\Scripts\app\processengine\" />
     <Folder Include="Areas\VIS\Views\AmountDivision\" />
+    <Folder Include="Areas\VIS\Views\Channel\" />
     <Folder Include="Areas\VIS\Views\GenerateXModel\" />
     <Folder Include="Areas\VIS\Views\GmailContacts\" />
     <Folder Include="Areas\VIS\Views\Group\" />

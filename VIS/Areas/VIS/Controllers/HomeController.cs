@@ -275,7 +275,10 @@ namespace VIS.Controllers
                     {
                         //Cretae new Sessin
                         MSession sessionNew = MSession.Get(ctx, true, GetVisitorIPAddress(true));
-
+                        ModelLibrary.PushNotif.SessionData sessionData = new ModelLibrary.PushNotif.SessionData();
+                        sessionData.UserId = ctx.GetAD_User_ID();
+                        sessionData.Name = ctx.GetAD_User_Name();
+                        ModelLibrary.PushNotif.SessionManager.Get().AddSession(ctx.GetAD_Session_ID(), sessionData);
 
                         var lst = VAdvantage.ModuleBundles.GetStyleBundles(); //Get All Style Bundle
                         foreach (var b in lst)
