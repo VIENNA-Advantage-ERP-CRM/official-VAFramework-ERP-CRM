@@ -23492,4 +23492,315 @@
     VIS.Model.CalloutPaymentTerm = CalloutPaymentTerm;
     //**************CalloutPaymentTerm End*************
 
+
+    //**************ProvisionalInvoice Start*********
+    function ProvisionalInvoice() {
+        VIS.CalloutEngine.call(this, "VIS.ProvisionalInvoice"); //must call
+    };
+    VIS.Utility.inheritPrototype(ProvisionalInvoice, VIS.CalloutEngine);//inherit CalloutEngine
+
+    //call when change the DateInvoiced field on Provisional Invoice window
+    ProvisionalInvoice.prototype.DateAcct = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (this.isCalloutActive())		//	assuming it is resetting value
+            return "";
+
+        if (!value)
+            return "";
+        
+        //Can be change according to DateInvoiced incase of Provisional Invoice window
+        mTab.setValue("DateAcct", value);
+
+        this.setCalloutActive(false);
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
+    /// <summary>
+    /// Order Header - PriceList.
+    /// (used also in Invoice)
+    /// - C_Currency_ID
+    /// 	- IsTaxIncluded
+    /// 	Window Context:
+    /// 	- EnforcePriceLimit
+    /// 	- M_PriceList_Version_ID
+    /// </summary>
+    /// <param name="ctx">context</param>
+    /// <param name="windowNo">current Window No</param>
+    /// <param name="mTab">Grid Tab</param>
+    /// <param name="mField">Grid Field</param>
+    /// <param name="value">New Value</param>
+    /// <returns>null or error message</returns>
+    ProvisionalInvoice.prototype.PriceList = function (ctx, windowNo, mTab, mField, value, oldValue) {
+
+        var dr = null;
+        if (this.isCalloutActive() || value == null || value.toString() == "") {
+            return "";
+        }
+        try {
+
+            var M_PriceList_ID = value.toString();
+            if (Util.getValueOfInt(M_PriceList_ID) == 0)
+                return "";
+            this.setCalloutActive(true);
+            if (steps) {
+                this.log.warning("init");
+            }
+
+            //	Use net price list - may not be future
+            dr = VIS.dataContext.getJSONRecord("MPriceList/GetPriceListDataForProvisionalInvoice", M_PriceList_ID);
+            if (dr != null) {
+                //	Tax Included
+                mTab.setValue("IsTaxIncluded", "Y" == dr["IsTaxIncluded"]);
+                //	Price Limit Enforce
+                ctx.setContext(windowNo, "EnforcePriceLimit", dr["EnforcePriceLimit"]);
+                //	Currency
+                var ii = Util.getValueOfInt(dr["C_Currency_ID"]);
+
+                var CurrencyPresent = Util.getValueOfInt(mTab.getValue("C_Currency_ID")); //Price List from BSO/BPO window
+                var C_Order_Blanket = Util.getValueOfDecimal(mTab.getValue("C_Order_Blanket"))
+                if (CurrencyPresent > 0 && C_Order_Blanket > 0) {
+                }
+                else {
+                    mTab.setValue("C_Currency_ID", ii);
+                }
+                var prislst = Util.getValueOfInt(dr["M_PriceList_Version_ID"]);
+                //	PriceList Version
+                ctx.setContext(windowNo, "M_PriceList_Version_ID", prislst);
+            }
+        }
+        catch (err) {
+            this.setCalloutActive(false);
+            this.log(Level.SEVERE, "", err);
+            return err;
+        }
+        if (steps) {
+            this.log.warning("finish");
+        }
+        this.setCalloutActive(false);
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
+
+    /**
+     *	Invoice Header- BPartner.
+     *		- M_PriceList_ID (+ Context)
+     *		- C_BPartner_Location_ID
+     *		- AD_User_ID
+     *		- POReference
+     *		- SO_Description
+     *		- IsDiscountPrinted
+     *		- PaymentRule
+     *		- C_PaymentTerm_ID
+     *	@param ctx context
+     *	@param windowNo window no
+     *	@param mTab tab
+     *	@param mField field
+     *	@param value value
+     *	@return null or error message
+     */
+    ProvisionalInvoice.prototype.BPartner = function (ctx, windowNo, mTab, mField, value, oldValue) {
+
+        if (value == null || value.toString() == "") {
+            return "";
+        }
+        try {
+            var C_BPartner_ID = Util.getValueOfInt(value);
+            if (C_BPartner_ID == null || C_BPartner_ID == 0) {
+                return "";
+            }
+            var isvendor = 'N';
+            var isCustomer = 'N';
+            var _CountVA009 = 0;
+
+            var isSOTrx = ctx.isSOTrx(windowNo);
+            var dr = null;
+            try {
+
+                dr = VIS.dataContext.getJSONRecord("MBPartner/GetBPDataForProvisionalInvoice", C_BPartner_ID);
+
+                if (dr != null) {
+                    //	PriceList & IsTaxIncluded & Currency
+                    var ii = Util.getValueOfInt(dr[isSOTrx ? "M_PriceList_ID" : "PO_PriceList_ID"]);
+                    if (ii > 0) {
+                        mTab.setValue("M_PriceList_ID", ii);
+                    }
+                    //If price list not available at BP, user need to select it manually
+
+                    //	PaymentRule
+                    //Inco Term
+                    var IncoTerm = Util.getValueOfInt(dr[isSOTrx ? "C_IncoTerm_ID" : "C_IncoTermPO_ID"]);
+                    if (IncoTerm > 0) {
+                        mTab.setValue("C_IncoTerm_ID", IncoTerm);
+                    }
+
+                    var s = Util.getValueOfString(dr[isSOTrx ? "PaymentRule" : "PaymentRulePO"]);
+                    if (s != null && s.length != 0) {
+                        if (ctx.getContext("DocBaseType").toString().endsWith("C"))	//	Credits are Payment Term
+                        {
+                            s = "P";
+                        }
+                        else if (isSOTrx && (s.toString().equals("S") || s.toString().equals("U")))	//	No Check/Transfer for SO_Trx
+                        {
+                            s = "P";											//  Payment Term
+                        }
+                        mTab.setValue("PaymentRule", s);
+                    }
+
+                    _CountVA009 = dr["countVA009"];
+                    if (_CountVA009 > 0) {
+                        var _PaymentMethod_ID = Util.getValueOfInt(dr["VA009_PaymentMethod_ID"]);
+                        
+                        isvendor = Util.getValueOfString(dr["IsVendor"]);
+                        isCustomer = Util.getValueOfString(dr["IsCustomer"]);
+                        if (!isSOTrx) { //In case of Purchase Order
+                            if (isvendor == "Y") {
+                                _PaymentMethod_ID = Util.getValueOfInt(dr["VA009_PO_PaymentMethod_ID"]);
+                                PaymentBasetype = Util.getValueOfString(dr["VA009_PAYMENTBASETYPEPO"]);
+                            }
+                            else {
+                                _PaymentMethod_ID = 0;
+                                PaymentBasetype = null;
+                            }
+                        }
+                        else {
+                            if (isvendor == "Y") {
+                                _PaymentMethod_ID = 0;
+                                PaymentBasetype = null;
+                                if (isCustomer == "Y") {
+                                    _PaymentMethod_ID = Util.getValueOfInt(dr["VA009_PaymentMethod_ID"]);
+                                    PaymentBasetype = Util.getValueOfString(dr["VA009_PAYMENTBASETYPE"]);
+                                }
+                            }
+                            else {
+                                if (isCustomer == "Y") {
+                                    _PaymentMethod_ID = Util.getValueOfInt(dr["VA009_PaymentMethod_ID"]);
+                                    PaymentBasetype = Util.getValueOfString(dr["VA009_PAYMENTBASETYPE"]);
+                                }
+                            }
+
+                        }
+                        
+
+                        if (_PaymentMethod_ID == 0)
+                            mTab.setValue("VA009_PaymentMethod_ID", null);
+                        else {
+                            mTab.setValue("VA009_PaymentMethod_ID", _PaymentMethod_ID);
+
+                            if (PaymentBasetype != null) {
+                                mTab.setValue("PaymentMethod", PaymentBasetype);
+                                if (isvendor == 'N')
+                                    mTab.setValue("PaymentRule", PaymentBasetype);
+                                else
+                                    mTab.setValue("PaymentRule", PaymentBasetype);
+                            }
+                            else {
+                                mTab.setValue("PaymentMethod", "T");
+                                if (isvendor == 'N')
+                                    mTab.setValue("PaymentRule", "T");
+                                else
+                                    mTab.setValue("PaymentRule", "T");
+                            }
+                        }
+                    }
+
+                    //  Payment Term
+                    var PaymentTermPresent = Util.getValueOfInt(mTab.getValue("C_PaymentTerm_ID")); // from BSO/BPO window
+                    var C_Order_Blanket = Util.getValueOfDecimal(mTab.getValue("C_Order_Blanket"))
+                    if (PaymentTermPresent > 0 && C_Order_Blanket > 0) {
+                    }
+                    else {
+                        ii = Util.getValueOfInt(dr[isSOTrx ? "C_PaymentTerm_ID" : "PO_PaymentTerm_ID"]);
+                        if (ii > 0) {
+                            mTab.setValue("C_PaymentTerm_ID", ii);
+                        }
+                    }
+                    //	Location
+                    var locID = Util.getValueOfInt(dr["C_BPartner_Location_ID"]);
+                    //	overwritten by InfoBP selection - works only if InfoWindow
+                    //	was used otherwise creates error (uses last value, may bevar to differnt BP)
+                    if (C_BPartner_ID.toString().equals(ctx.getContext("C_BPartner_ID"))) {
+                        var loc = ctx.getContext("C_BPartner_Location_ID");
+                        if (loc && loc.toString().length > 0) {
+                            locID = parseInt(loc);
+                        }
+                    }
+                    if (locID == 0) {
+                        mTab.setValue("C_BPartner_Location_ID", null);
+                    }
+                    else {
+                        mTab.setValue("C_BPartner_Location_ID", locID);
+                    }
+
+                    //	Contact - overwritten by InfoBP selection
+                    var contID = Util.getValueOfInt(dr["AD_User_ID"]);
+                    if (C_BPartner_ID.toString().equals(ctx.getContext("C_BPartner_ID"))) {
+                        var cont = ctx.getContext("AD_User_ID");
+                        if (cont && cont.toString().length > 0) {
+                            contID = parseInt(cont);
+                        }
+                    }
+                    if (contID == 0) {
+                        mTab.setValue("AD_User_ID", null);
+                    }
+                    else {
+                        mTab.setValue("AD_User_ID", contID);
+                    }
+
+                    //	CreditAvailable
+                    if (isSOTrx) {
+
+                        var CreditStatus = dr["CreditStatusSettingOn"];
+                        if (CreditStatus == "CH" || CreditStatus == "CL") {
+                            var CreditLimit = Util.getValueOfDouble(dr["SO_CreditLimit"]);
+                            if (CreditLimit != 0) {
+                                var CreditAvailable = Util.getValueOfDouble(dr["CreditAvailable"]);
+                                if (dr != null && CreditAvailable <= 0) {
+                                    VIS.ADialog.info("CreditOver");
+                                }
+                            }
+                        }
+                    }
+
+                    //	PO Reference
+                    s = Util.getValueOfString(dr["POReference"]);
+                    if (s != null && s.length != 0) {
+                        mTab.setValue("POReference", s);
+                    }
+                    else {
+                        mTab.setValue("POReference", null);
+                    }
+                    //	SO Description
+                    s = Util.getValueOfString(dr["SO_Description"]);
+                    if (s != null && s.toString().trim().length != 0) {
+                        mTab.setValue("Description", s);
+                    }
+                    //	IsDiscountPrinted
+                    s = Util.getValueOfString(dr["IsDiscountPrinted"]);
+                    if (s != null && s.toString().trim().length != 0) {
+                        mTab.setValue("IsDiscountPrinted", s);
+                    }
+                    else {
+                        mTab.setValue("IsDiscountPrinted", "N");
+                    }
+                }
+            }
+            catch (err) {
+                this.setCalloutActive(false);
+                this.log.log(Level.SEVERE, "bPartner", err);
+                return err.message;
+            }
+        }
+        catch (err) {
+            this.setCalloutActive(false);
+            this.log.severe(err.toString());
+        }
+        this.setCalloutActive(false);
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
+    VIS.Model.ProvisionalInvoice = ProvisionalInvoice;
+    //**************ProvisionalInvoice End*********
+
 })(VIS, jQuery);
