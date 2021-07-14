@@ -75,5 +75,36 @@ namespace VIS.Models
                 }
                 return retDic;
         }
+
+        /// <summary>
+        /// Get Price List Data When select or change the PriceList on 
+        /// Provisional Invoice window
+        /// </summary>
+        /// <param name="ctx">Context</param>
+        /// <param name="fields">Parameters</param>
+        /// <returns>List of Data</returns>
+        public Dictionary<String, Object> GetPriceListDataForProvisionalInvoice(Ctx ctx, string fields)
+        {
+            int M_PriceList_ID = Util.GetValueOfInt(fields);
+            Dictionary<String, Object> retDic = null;
+
+            string sql = "SELECT pl.IsTaxIncluded,pl.EnforcePriceLimit,pl.C_Currency_ID,"
+            + "plv.M_PriceList_Version_ID "
+            + "FROM M_PriceList pl,C_Currency c,M_PriceList_Version plv "
+            + "WHERE pl.C_Currency_ID=c.C_Currency_ID"
+            + " AND pl.M_PriceList_ID=plv.M_PriceList_ID"
+            + " AND pl.M_PriceList_ID=" + M_PriceList_ID                       
+            + "ORDER BY plv.ValidFrom DESC";
+            DataSet ds = DB.ExecuteDataset(sql, null, null);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                retDic = new Dictionary<String, Object>();
+                retDic["IsTaxIncluded"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["IsTaxIncluded"]);
+                retDic["EnforcePriceLimit"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["EnforcePriceLimit"]);
+                retDic["C_Currency_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Currency_ID"]);
+                retDic["M_PriceList_Version_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_PriceList_Version_ID"]);
+            }
+            return retDic;
+        }
     }
 }
