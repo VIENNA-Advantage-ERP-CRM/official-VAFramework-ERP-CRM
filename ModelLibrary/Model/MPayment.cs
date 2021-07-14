@@ -2789,8 +2789,8 @@ namespace VAdvantage.Model
                 if (!DocActionVariables.STATUS_INPROGRESS.Equals(status))
                     return status;
             }
-            // JID_1290: Set the document number from completed document sequence after completed (if needed)
-            SetCompletedDocumentNo();
+            // Set Document Date based on setting on Document Type
+            SetCompletedDocumentDate();
 
             // Amit for VA009 27-10-2015
             int countPaymentAllocateRecords = 0;
@@ -2990,10 +2990,7 @@ namespace VAdvantage.Model
                     }
                 }
             }
-
-            SetProcessed(true);
-            SetDocAction(DOCACTION_Close);
-
+            
             // nnayak - update BP open balance and credit used
             //Added by Vivek for Credit Limit on 25/08/2016
             if (GetC_BPartner_ID() != 0)
@@ -3431,7 +3428,11 @@ namespace VAdvantage.Model
                 GetCtx().SetContext("prepayOrder", "");
             }
 
+            // Set the document number from completed document sequence after completed (if needed)
+            SetCompletedDocumentNo();
 
+            SetProcessed(true);
+            SetDocAction(DOCACTION_Close);
             return DocActionVariables.STATUS_COMPLETED;
         }
 
@@ -3442,6 +3443,37 @@ namespace VAdvantage.Model
         {
             // if Reversal document then no need to get Document no from Completed sequence
             if (Get_ColumnIndex("IsReversal") > 0 && IsReversal())
+            {
+                return;
+            }
+
+            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+
+            // if Overwrite Sequence on Complete checkbox is true.
+            if (dt.IsOverwriteSeqOnComplete())
+            {
+                // Set Drafted Document No into Temp Document No.
+                if (Get_ColumnIndex("TempDocumentNo") > 0)
+                {
+                    SetTempDocumentNo(GetDocumentNo());
+                }
+
+                // Get current next from Completed document sequence defined on Document type
+                String value = MSequence.GetDocumentNo(GetC_DocType_ID(), Get_TrxName(), GetCtx(), true, this);
+                if (value != null)
+                {
+                    SetDocumentNo(value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Overwrite the document date based on setting on Document Type
+        /// </summary>
+        private void SetCompletedDocumentDate()
+        {
+            // if Reversal document then no need to get Document no from Completed sequence
+            if (IsReversal())
             {
                 return;
             }
@@ -3461,23 +3493,6 @@ namespace VAdvantage.Model
                     {
                         throw new Exception("@PeriodClosed@");
                     }
-                }
-            }
-
-            // if Overwrite Sequence on Complete checkbox is true.
-            if (dt.IsOverwriteSeqOnComplete())
-            {
-                // Set Drafted Document No into Temp Document No.
-                if (Get_ColumnIndex("TempDocumentNo") > 0)
-                {
-                    SetTempDocumentNo(GetDocumentNo());
-                }
-
-                // Get current next from Completed document sequence defined on Document type
-                String value = MSequence.GetDocumentNo(GetC_DocType_ID(), Get_TrxName(), GetCtx(), true, this);
-                if (value != null)
-                {
-                    SetDocumentNo(value);
                 }
             }
         }
