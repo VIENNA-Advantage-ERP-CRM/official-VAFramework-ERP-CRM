@@ -1143,16 +1143,17 @@ namespace VIS.Controllers
                 string sessionID = ctx.GetAD_Session_ID().ToString();
                 JavaScriptSerializer ser = new JavaScriptSerializer();
 
-                IEnumerable<KeyValuePair<string, string>> newDic = toastrMessage.Where(kvp => kvp.Key.Contains(sessionID));
+                //IEnumerable<KeyValuePair<string, string>> newDic = toastrMessage.Where(kvp => kvp.Key.Contains(sessionID));
+                var newDic = ModelLibrary.PushNotif.SSEManager.Get().GetMessages(ctx.GetAD_Session_ID());
                 if (newDic != null && newDic.Count() > 0)
                 {
-                    for (int i = 0; i < newDic.Count();)
-                    {
-                        KeyValuePair<string, string> keyVal = newDic.ElementAt(i);
-                        toastrMessage.Remove(keyVal.Key);
-                        serializedObject = ser.Serialize(new { item = keyVal.Value, message = keyVal.Value });
+                   /// for (int i = 0; i < newDic.Count();)
+                   // {
+                    //    KeyValuePair<string, string> keyVal = newDic.ElementAt(i);
+                    //    toastrMessage.Remove(keyVal.Key);
+                        serializedObject = ser.Serialize(newDic);
                         return Content(string.Format("data: {0}\n\n", serializedObject), "text/event-stream");
-                    }
+                    //}
                 }
             }
             JavaScriptSerializer se1r = new JavaScriptSerializer();
