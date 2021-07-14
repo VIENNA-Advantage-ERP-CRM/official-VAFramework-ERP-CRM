@@ -108,5 +108,19 @@ namespace VIS.Controllers
             retJSON = JsonConvert.SerializeObject(objBPModel.GetBPDetails(ctx, fields));
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
+
+        /// <summary>
+        /// Get Data from BPartner
+        /// </summary>
+        /// <param name="fields">Parameters</param>
+        /// <returns>List of BPData in JSON format</returns>
+        public JsonResult GetBPDataForProvisionalInvoice(string fields)
+        {
+            string retJSON = "";
+            Ctx ctx = Session["ctx"] as Ctx;
+            MBPartnerModel objBPModel = new MBPartnerModel();
+            retJSON = JsonConvert.SerializeObject(objBPModel.GetBPDataForProvisionalInvoice(ctx, fields));
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
     }
 }
