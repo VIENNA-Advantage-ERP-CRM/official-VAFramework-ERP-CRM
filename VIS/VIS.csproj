@@ -1033,6 +1033,7 @@
     <Folder Include="Areas\VIS\Views\MarkModule\" />
     <Folder Include="Areas\VIS\Views\ModulePrefix\" />
     <Folder Include="Areas\VIS\Views\MPeriod\" />
+    <Folder Include="Areas\VIS\Views\NewFolder1\" />
     <Folder Include="Areas\VIS\Views\OrgStructure\" />
     <Folder Include="Areas\VIS\Views\Payment\" />
     <Folder Include="Areas\VIS\Views\RecordAccess\" />

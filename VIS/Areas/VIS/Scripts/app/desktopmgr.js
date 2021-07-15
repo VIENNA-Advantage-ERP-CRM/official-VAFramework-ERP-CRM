@@ -439,7 +439,7 @@
             setAndLoadHomePage(); //Home Page
             historyMgr.restoreHistory(); //Restore History of App if any
             navigationInit();
-            window.addEventListener("DOMContentLoaded", VIS.SSEManager.start, false);
+            window.addEventListener("DOMContentLoaded", VIS.sseManager.start, false);
         }
 
         /*

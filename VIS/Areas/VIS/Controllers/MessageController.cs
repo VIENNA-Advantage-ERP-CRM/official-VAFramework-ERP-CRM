@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ModelLibrary.PushNotif;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -37,5 +38,26 @@ namespace VIS.Controllers
             serializedObject = se1r.Serialize(new { item = 1, message = "" });
             return Content(string.Format("data: {0}\n\n", serializedObject), "text/event-stream");
         }
+
+
+        public ActionResult Demo(bool IsStop)
+        {
+            Ctx ctx = Session["ctx"] as Ctx;
+
+            if (ctx != null)
+            {
+                if (IsStop)
+                {
+                    SSEManager.Get().AddMessage(ctx.GetAD_Session_ID(), " Stopped  ", "DEMOE", SSEManager.Cast.BroadCast);
+                }
+                else
+                {
+                    SSEManager.Get().AddMessage(ctx.GetAD_Session_ID(), " Started  ", "DEMOS", SSEManager.Cast.BroadCast);
+                }
+
+            }
+            return Json(new { result = "OK" }, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }
