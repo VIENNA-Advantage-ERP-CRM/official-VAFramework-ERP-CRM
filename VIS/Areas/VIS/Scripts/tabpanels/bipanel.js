@@ -52,10 +52,7 @@
                     } else if (VIS.Env.getCtx().getContext(that.windowNo, that.curTab().getTabNo(), key).length > 0)
                     {
                         key = VIS.Env.getCtx().getContext(that.windowNo, that.curTab().getTabNo(), key);
-                    }
-                    else if (VIS.Env.getCtx().getContext('#' + key).length > 0) {
-                        key = VIS.Env.getCtx().getContext('#' + key);
-                    }
+                    }                   
                     that.extraInfo = that.extraInfo.replaceAll(parm[i], key);
                 }
             }
