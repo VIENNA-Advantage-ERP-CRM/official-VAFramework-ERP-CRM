@@ -617,6 +617,10 @@ namespace VAdvantage.Common
         /// <param name="record_ID"></param>
         /// <returns></returns>
         public static int GetBusinessInvoiceReportID(Ctx ctx, int tableID, int record_ID) {
+            if (!string.IsNullOrEmpty(ctx.GetContext("Report_Lang"))){
+                ctx.SetContext("Report_Lang", "");
+            }
+
             string tableName = MTable.GetTableName(ctx, tableID);
             int Report_ID = 0;
             if (tableName.ToLower() == "c_invoice")
