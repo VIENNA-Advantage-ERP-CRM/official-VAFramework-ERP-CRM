@@ -1568,13 +1568,15 @@
 
         
 
-        //var lstObj = this.lst[ID];
-        //if (lstObj) {
-        //    this.c = ID;
-        //    this.combination = lstObj["C"];
-        //    this.description = lstObj["D"];
-        //    return true;
-        //}
+
+        var lstObj = this.lst[ID];
+        if (lstObj) {
+            this.C_ValidCombination_ID = ID;
+            this.combination = lstObj["C"];
+            this.description = lstObj["D"];
+            return true;
+        }
+
 
         //var text = VIS.MLookupCache.getRecordLookup(this.getWindowNo(), this.getTabNo(), "c_validcombination_id", ID);
 

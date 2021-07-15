@@ -250,7 +250,7 @@ namespace VAdvantage.Print
         public byte[] CreateCSV(Ctx ctx)
         {
             //added by jagmohan
-            FILE_PATH = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + "TempDownload";
+            FILE_PATH = GlobalVariable.PhysicalPath + "TempDownload";
 
             if (!Directory.Exists(FILE_PATH))
                 Directory.CreateDirectory(FILE_PATH);
@@ -279,7 +279,7 @@ namespace VAdvantage.Print
         public string GetCSVPath(Ctx ctx)
         {
             //added by jagmohan
-            FILE_PATH = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + "TempDownload";
+            FILE_PATH = GlobalVariable.PhysicalPath + "TempDownload";
 
             if (!Directory.Exists(FILE_PATH))
                 Directory.CreateDirectory(FILE_PATH);
@@ -318,7 +318,7 @@ namespace VAdvantage.Print
         public byte[] CreatePDF()
         {
             //added by jagmohan
-            FILE_PATH = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + "TempDownload";
+            FILE_PATH = GlobalVariable.PhysicalPath + "TempDownload";
 
             if (!Directory.Exists(FILE_PATH))
                 Directory.CreateDirectory(FILE_PATH);
@@ -380,7 +380,7 @@ namespace VAdvantage.Print
         public string CreatePDF(bool fetchBytes, byte[] bytes)
         {
             //added by jagmohan
-            FILE_PATH = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + "TempDownload";
+            FILE_PATH = GlobalVariable.PhysicalPath + "TempDownload";
             if (!Directory.Exists(FILE_PATH))
                 Directory.CreateDirectory(FILE_PATH);
 
@@ -491,9 +491,9 @@ namespace VAdvantage.Print
             try
             {
                 //First check for diretory if not exits then Craete
-                if (!Directory.Exists(Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "TempDownload")))
+                if (!Directory.Exists(Path.Combine(GlobalVariable.PhysicalPath, "TempDownload")))
                 {
-                    Directory.CreateDirectory(Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "TempDownload"));
+                    Directory.CreateDirectory(Path.Combine(GlobalVariable.PhysicalPath, "TempDownload"));
                 }
 
 
@@ -529,7 +529,7 @@ namespace VAdvantage.Print
         public byte[] CreatePDF(string table_ID, string Record_ID)
         {
             string path = table_ID + "_" + Record_ID;
-            FILE_PATH = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + "TempDownload";
+            FILE_PATH = GlobalVariable.PhysicalPath + "TempDownload";
 
             if (!Directory.Exists(FILE_PATH))
                 Directory.CreateDirectory(FILE_PATH);
@@ -961,8 +961,12 @@ namespace VAdvantage.Print
             //	Language
             MClient client = MClient.Get(ctx);
             Language language = client.GetLanguage();
-            //	Get Document Info
-            String sql = null;
+            // Set Report Language -VIS0228
+            if (!string.IsNullOrEmpty(ctx.GetContext("Report_Lang"))) {
+                language = Language.GetLanguage(ctx.GetContext("Report_Lang"));
+            }
+                //	Get Document Info
+                String sql = null;
             if (type == CHECK)
                 sql = "SELECT bad.Check_PrintFormat_ID,"								//	1
                     + "	c.IsMultiLingualDocument,bp.AD_Language,bp.C_BPartner_ID,d.DocumentNo "		//	2..5
@@ -1241,7 +1245,14 @@ namespace VAdvantage.Print
 
             /*   Set Culture according to BPartner Language */
 
-            System.Globalization.CultureInfo cInfo = new System.Globalization.CultureInfo(language.GetAD_Language().Replace('_','-'));
+            string lan = language.GetAD_Language().Replace('_', '-');
+            // Set Report Language -VIS0228
+            if (!string.IsNullOrEmpty(ctx.GetContext("Report_Lang")))
+            {
+                lan = ctx.GetContext("Report_Lang").Replace('_', '-');
+            }
+
+                System.Globalization.CultureInfo cInfo = new System.Globalization.CultureInfo(lan);
 
             
 

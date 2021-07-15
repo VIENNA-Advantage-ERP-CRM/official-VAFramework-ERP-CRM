@@ -56,6 +56,11 @@ namespace VAdvantage.Print
             _ctx = ctx;
             //	Language=[Deutsch,Locale=de_DE,AD_Language=en_US,DatePattern=DD.MM.YYYY,DecimalPoint=false]
             _language = Env.GetLanguage(ctx);
+            // Set Report Language -VIS0228
+            if (!string.IsNullOrEmpty(ctx.GetContext("Report_Lang")))
+            {
+                _language = Language.GetLanguage(ctx.GetContext("Report_Lang"));
+            }
             if (AD_PrintFormat_ID == 0)
             {
                 SetStandardHeaderFooter(true);
@@ -77,6 +82,10 @@ namespace VAdvantage.Print
         {
             _ctx = ctx;
             _language = Env.GetLanguage(ctx);
+            if (!string.IsNullOrEmpty(ctx.GetContext("Report_Lang")))
+            {
+                _language = Language.GetLanguage(ctx.GetContext("Report_Lang"));
+            }
             _items = GetItems();
         }	//	MPrintFormat
 
@@ -637,6 +646,11 @@ namespace VAdvantage.Print
                 + " AND pc.IsDefault='Y' AND pf.IsDefault='Y' AND pp.IsDefault='Y'";
 
             string AD_Language = Utility.Env.GetAD_Language(ctx);
+            // Set Report Language -VIS0228
+            if (!string.IsNullOrEmpty(ctx.GetContext("Report_Lang")))
+            {
+                AD_Language =ctx.GetContext("Report_Lang");
+            }
 
             bool error = true;
             IDataReader dr = null;
@@ -733,9 +747,14 @@ namespace VAdvantage.Print
 
             string sql1 = "SELECT ";
             string AD_Language = Utility.Env.GetAD_Language(ctx);
+            // Set Report Language -VIS0228
+            if (!string.IsNullOrEmpty(ctx.GetContext("Report_Lang")))
+            {
+                AD_Language = ctx.GetContext("Report_Lang");
+            }
 
 
-            if (AD_Language == null || AD_Language.Length == 0 || Env.IsBaseLanguage(AD_Language, "AD_Element"))
+                if (AD_Language == null || AD_Language.Length == 0 || Env.IsBaseLanguage(AD_Language, "AD_Element"))
             {
                 sql1 = sql1 + " t.Name,  (SELECT COUNT(*)  FROM AD_PrintFormat x  WHERE x.AD_Tab_ID =t.AD_Tab_ID  "
                 + "AND x.AD_Client_ID=c.AD_Client_ID  ) AS COUNT FROM AD_Tab t ,AD_Client c "

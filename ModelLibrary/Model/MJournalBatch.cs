@@ -532,10 +532,7 @@ namespace VAdvantage.Model
                     return status;
                 }
             }
-
-            // JID_1290: Set the document number from completed document sequence after completed (if needed)
-            SetCompletedDocumentNo();
-
+            
             //	Implicit Approval
             ApproveIt();
 
@@ -590,6 +587,10 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
             }
             //
+
+            // JID_1290: Set the document number from completed document sequence after completed (if needed)
+            SetCompletedDocumentNo();
+
             SetProcessed(true);
             SetDocAction(DOCACTION_Close);
             return DocActionVariables.STATUS_COMPLETED;
