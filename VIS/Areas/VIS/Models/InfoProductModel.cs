@@ -1103,7 +1103,11 @@ namespace VIS.Models
 
                     po.Set_Value("PriceList", pPrice["PriceList"]);
                     po.Set_Value("PlannedPrice", pPrice["PriceEntered"]);
-                    var discount = ((pPrice["PriceList"] - pPrice["PriceEntered"]) * 100) / pPrice["PriceList"];
+                    decimal? discount = 0;
+                    if (pPrice["PriceList"] > 0)
+                    {
+                        discount = ((pPrice["PriceList"] - pPrice["PriceEntered"]) * 100) / pPrice["PriceList"];
+                    }
 
                     po.Set_Value("Discount", discount);
                     // oppLine.SetDiscount(Decimal.Subtract(PriceList ,PriceStd));
