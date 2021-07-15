@@ -178,6 +178,11 @@ namespace VAdvantage.Model
             {
                 to.SetRef_Order_ID(0);
             }
+
+            if (to.Get_ColumnIndex("ConditionalFlag") > -1)
+            {
+                to.SetConditionalFlag(MOrder.CONDITIONALFLAG_PrepareIt);
+            }
             //
             if (!to.Save(trxName))
             {
@@ -211,6 +216,18 @@ namespace VAdvantage.Model
                 throw new Exception("Could not create Order Lines. " + (pp != null && pp.GetName() != null ? pp.GetName() : ""));
             }
 
+            if (to.Get_ColumnIndex("ConditionalFlag") > -1)
+            {
+                if (!to.CalculateTaxTotal())   //	setTotals
+                {
+                    throw new ArgumentException(Msg.GetMsg(from.GetCtx(), "ErrorCalculateTax") + ": " + to.GetDocumentNo().ToString());
+                }
+
+                // Update order header
+                to.UpdateHeader();
+
+                DB.ExecuteQuery("UPDATE C_Order SET ConditionalFlag = null WHERE C_Order_ID = " + to.GetC_Order_ID(), null, trxName);
+            }
             return to;
         }
 
@@ -1366,6 +1383,41 @@ namespace VAdvantage.Model
                 //ShowMessage.Error("MOrder", null, "CopyLinesFrom");
             }
             return count;
+        }
+
+        /// <summary>
+        /// Update Order Header
+        /// </summary>
+        /// <returns>true if header updated</returns>
+        public void UpdateHeader()
+        {
+            //	Update Order Header
+            String sql = "UPDATE C_Order i"
+                + " SET TotalLines="
+                    + "(SELECT COALESCE(SUM(LineNetAmt),0) FROM C_OrderLine il WHERE i.C_Order_ID=il.C_Order_ID) "
+                    + ", AmtDimSubTotal = null "
+                    + ", AmtDimGrandTotal = null "
+                + "WHERE C_Order_ID=" + GetC_Order_ID();
+            int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
+            if (no != 1)
+            {
+                log.Warning("(1) #" + no);
+            }
+
+            if (IsTaxIncluded())
+                sql = "UPDATE C_Order i "
+                    + "SET GrandTotal=TotalLines "
+                    + "WHERE C_Order_ID=" + GetC_Order_ID();
+            else
+                sql = "UPDATE C_Order i "
+                    + "SET GrandTotal=TotalLines+"
+                        + "(SELECT COALESCE(SUM(TaxAmt),0) FROM C_OrderTax it WHERE i.C_Order_ID=it.C_Order_ID) "
+                        + "WHERE C_Order_ID=" + GetC_Order_ID();
+            no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
+            if (no != 1)
+            {
+                log.Warning("(2) #" + no);
+            }
         }
 
         /*	String Representation
@@ -3091,7 +3143,7 @@ namespace VAdvantage.Model
                 + "(SELECT * FROM M_Product p WHERE C_OrderLine.M_Product_ID=p.M_Product_ID"
                 + " AND	p.IsBOM='Y' AND p.IsVerified='Y' AND p.IsStocked='N')";
             //
-            String sql = "SELECT COUNT(*) FROM C_OrderLine "
+            String sql = "SELECT COUNT(C_OrderLine_ID) FROM C_OrderLine "
                 + "WHERE C_Order_ID=" + GetC_Order_ID() + where;
             int count = DataBase.DB.GetSQLValue(Get_TrxName(), sql); //Convert.ToInt32(DataBase.DB.ExecuteScalar(sql, null, Get_TrxName()));
 
@@ -3403,7 +3455,7 @@ namespace VAdvantage.Model
         /// Calculate Tax and Total
         /// </summary>
         /// <returns>true if tax total calculated</returns>
-        private bool CalculateTaxTotal()
+        public bool CalculateTaxTotal()
         {
             try
             {
@@ -3412,7 +3464,7 @@ namespace VAdvantage.Model
                 DataBase.DB.ExecuteQuery("DELETE FROM C_OrderTax WHERE C_Order_ID=" + GetC_Order_ID(), null, Get_TrxName());
                 _taxes = null;
 
-                DataSet dsOdrLine = DB.ExecuteDataset("SELECT TaxAbleAmt, C_Order_ID, C_Tax_ID FROM C_OrderLine WHERE C_Order_ID=" + GetC_Order_ID());
+                DataSet dsOdrLine = DB.ExecuteDataset("SELECT TaxAbleAmt, C_Order_ID, C_Tax_ID FROM C_OrderLine WHERE C_Order_ID=" + GetC_Order_ID(), null, Get_TrxName());
 
                 //	Lines
                 Decimal totalLines = Env.ZERO;
@@ -5103,7 +5155,7 @@ namespace VAdvantage.Model
                             M_Locator_ID = MProductLocator.GetFirstM_Locator_ID(product, M_Warehouse_ID);
                             if (M_Locator_ID == 0)
                             {
-                                wh = MWarehouse.Get(GetCtx(), M_Warehouse_ID);
+                                //wh = MWarehouse.Get(GetCtx(), M_Warehouse_ID);
                                 M_Locator_ID = wh.GetDefaultM_Locator_ID();
                             }
                         }
@@ -5123,7 +5175,7 @@ namespace VAdvantage.Model
                             sql += " AND l.M_Locator_ID = " + M_Locator_ID;
                         }
                         OnHandQty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_Trx()));
-                        if (wh.IsDisallowNegativeInv() == true)
+                        if (wh.IsDisallowNegativeInv())
                         {
                             if (oLine.GetQtyOrdered() > QtyAvail && (DocSubTypeSO == "WR" || DocSubTypeSO == "WP"))
                             {
@@ -5217,13 +5269,15 @@ namespace VAdvantage.Model
                 {
                     if (MDocType.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO))
                     {
-                        string sql = "SELECT COUNT(*) FROM AD_Column WHERE AD_Table_ID = (SELECT AD_Table_ID FROM AD_Table WHERE TableName = 'C_DocType') AND ColumnName = 'VAPOS_OrderType'";
-                        int val = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
-                        if (val > 0)
+                        //string sql = "SELECT COUNT(AD_Column_ID) FROM AD_Column WHERE AD_Table_ID = (SELECT AD_Table_ID FROM AD_Table WHERE TableName = 'C_DocType') AND ColumnName = 'VAPOS_OrderType'";
+                        //int val = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
+                        //if (val > 0)
+                        //sql = "SELECT VAPOS_OrderType FROM C_DocType WHERE C_DocType_ID = " + dt.GetC_DocType_ID();
+                        //string oType = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_TrxName()));
+                        if (dt.Get_ColumnIndex("VAPOS_OrderType") > -1)
                         {
-                            sql = "SELECT VAPOS_OrderType FROM C_DocType WHERE C_DocType_ID = " + dt.GetC_DocType_ID();
-                            string oType = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_TrxName()));
-                            if (oType == "H" || oType == "W")
+                            string oType = Util.GetValueOfString(dt.Get_Value("VAPOS_OrderType"));
+                            if (oType.Equals("H") || oType.Equals("W"))
                             {
                                 posStatus = shipment.PrepareIt();
                                 shipment.SetDocStatus(posStatus);
@@ -5492,9 +5546,9 @@ namespace VAdvantage.Model
                                                 VAPOS_POSTerminal_ID=" + GetVAPOS_POSTerminal_ID()));
                             invoice.SetC_ConversionType_ID(ConversionTypeId);
 
-                            MOrder ord = new MOrder(GetCtx(), GetC_Order_ID(), null);
+                            //MOrder ord = new MOrder(GetCtx(), GetC_Order_ID(), null);
 
-                            if (ord.GetVAPOS_CreditAmt() > 0)
+                            if (GetVAPOS_CreditAmt() > 0)
                             {
                                 invoice.SetIsPaid(false);
                                 invoice.SetVAPOS_IsPaid(false);

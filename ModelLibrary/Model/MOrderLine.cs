@@ -957,7 +957,7 @@ namespace VAdvantage.Model
                     base.SetTaxAmt(TaxAmt);
                     SetSurchargeAmt(surchargeAmt);
                 }
-                else
+                else if(GetTaxAmt().Equals(Env.ZERO))
                 {
                     TaxAmt = tax.CalculateTax(GetLineNetAmt(), IsTaxIncluded(), GetPrecision());
                     if (IsTaxIncluded())
@@ -3904,9 +3904,9 @@ namespace VAdvantage.Model
             // Check if order line is drop ship type then set drop ship type of warehouse at order line
             if (Ord.IsSOTrx())
             {
-                wHouse = new MWarehouse(GetCtx(), Ord.GetM_Warehouse_ID(), Get_Trx());
                 if (IsDropShip())
                 {
+                    wHouse = new MWarehouse(GetCtx(), Ord.GetM_Warehouse_ID(), Get_Trx());
                     if (!wHouse.IsDropShip())
                     {
                         int _Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar("Select M_Warehouse_ID From M_Warehouse Where AD_Org_ID=" + GetAD_Org_ID() + " AND IsActive='Y' AND IsDropShip='Y'"));
@@ -4709,7 +4709,9 @@ namespace VAdvantage.Model
 
             if (!IsProcessed())
             {
-                if (!newRecord && Is_ValueChanged("C_Tax_ID"))
+                Ord = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
+                if (!newRecord && Is_ValueChanged("C_Tax_ID") && !(!String.IsNullOrEmpty(Ord.GetConditionalFlag()) &&
+                    Ord.GetConditionalFlag().Equals(MOrder.CONDITIONALFLAG_PrepareIt)))
                 {
                     //	Recalculate Tax for old Tax
                     MOrderTax tax = MOrderTax.Get(this, GetPrecision(), true, Get_TrxName());	//	old Tax
@@ -4734,14 +4736,13 @@ namespace VAdvantage.Model
                         }
                     }
                 }
-                if (!UpdateHeaderTax())
-                    return false;
-
-                // Warning message needs to display in case Entered Price is less than Cost of the Product on Sales Order
-                if (Ord == null)
+                if (!(!String.IsNullOrEmpty(Ord.GetConditionalFlag()) &&
+                    Ord.GetConditionalFlag().Equals(MOrder.CONDITIONALFLAG_PrepareIt)))
                 {
-                    Ord = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
+                    if (!UpdateHeaderTax())
+                        return false;
                 }
+                // Warning message needs to display in case Entered Price is less than Cost of the Product on Sales Order                
                 if (Ord.IsSOTrx() && !Ord.IsReturnTrx() && GetM_Product_ID() > 0)
                 {
                     if (GetProduct().GetProductType().Equals("I") && GetPriceEntered() < GetCurrentCostPrice())
