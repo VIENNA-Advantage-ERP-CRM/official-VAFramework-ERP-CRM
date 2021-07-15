@@ -24,6 +24,8 @@ using VAdvantage.Print;
 using System.Net;
 using System.Threading;
 using System.Reflection;
+using VAdvantage.PushNotif;
+
 namespace VAdvantage.WF
 {
     public class MWFActivity : X_AD_WF_Activity
@@ -1181,10 +1183,15 @@ namespace VAdvantage.WF
                         }
                     }
 
-                    if (autoApproval
-                        && doc.ProcessIt(DocActionVariables.ACTION_APPROVE)
-                        && doc.Save())
+                    if (autoApproval && doc.ProcessIt(DocActionVariables.ACTION_APPROVE) && doc.Save())
+                    {
                         return true;	//	done
+                    }
+                    else
+                    {
+                        // VIS264 - Send push notification
+                        PushNotification.SendNotificationToUser(GetAD_User_ID(), GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(), "VIS_Workflows"), GetNodeName() + " : " + Msg.GetMsg(GetCtx(), "ReceivedFor") + " " + GetWindowName() + GetDocumentNo(), "W");
+                    }
                 }	//	approval
 
                 else if (_node.IsMultiApproval() && _node.GetApprovalLeval() > -1) //For Leave Request Approval
@@ -1250,6 +1257,10 @@ namespace VAdvantage.WF
                             SetAD_User_ID(nextAD_User_ID);
                             eve.SetAD_User_ID(nextAD_User_ID);
                             eve.Save();
+
+                            // VIS264 - Send push notification                            
+                            PushNotification.SendNotificationToUser(nextAD_User_ID, GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(), "VIS_Workflows"), _node.GetName() + " : " + Msg.GetMsg(GetCtx(), "ReceivedFor") + " " + GetWindowName() + GetDocumentNo(), "W");
+
                             return false;
                         }
                         else
@@ -1285,6 +1296,10 @@ namespace VAdvantage.WF
                     SetAD_User_ID(nextAD_User_ID);
                     eve.SetAD_User_ID(nextAD_User_ID);
                     eve.Save();
+
+                    // VIS264 - Send push notification
+                    PushNotification.SendNotificationToUser(nextAD_User_ID, GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(), "VIS_Workflows"), GetNodeName() + " : " + Msg.GetMsg(GetCtx(), "ReceivedFor") + " " + GetWindowName() + GetDocumentNo(), "W");
+
                     //if (!autoApproval)
                     //    SetAD_User_ID(nextAD_User_ID);
                     //if (autoApproval)
@@ -1330,6 +1345,9 @@ namespace VAdvantage.WF
                     SetAD_User_ID(userID);
                     eve.SetAD_User_ID(userID);
                     eve.Save();
+
+                    // VIS264 - Send push notification
+                    PushNotification.SendNotificationToUser(GetAD_User_ID(), GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(), "VIS_Workflows"), GetNodeName() + " : " + Msg.GetMsg(GetCtx(), "ReceivedFor") + " " + GetWindowName() + GetDocumentNo(), "W");
                 }
                 //For Genral Attribute
                 //else if (new MColumn(GetCtx(),_node.GetAD_Column_ID(),Get_TrxName()).GetColumnName().ToUpper().Equals("C_GENATTRIBUTESETINSTANCE_ID"))
@@ -1586,6 +1604,47 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             //
             //
             throw new ArgumentException("Invalid Action (Not Implemented) =" + action);
+        }
+
+        /// <summary>
+        /// Get document number
+        /// </summary>
+        /// <returns></returns>
+        private string GetDocumentNo()
+        {
+            string tableName = null;
+            string tableNameValue = $"SELECT TableName FROM AD_Table WHERE AD_Table_ID = {GetAD_Table_ID()} AND IsActive='Y'";
+            if (tableNameValue != null)
+            {
+                tableName = Util.GetValueOfString(DB.ExecuteScalar(tableNameValue));
+            }
+            if (tableName == null)
+            {
+                return null;
+            }
+
+            PO po = MTable.GetPO(GetCtx(), tableName, GetRecord_ID(), null);
+
+            string documentNo = null;
+            if (po.Get_Value("DocumentNo") != null)
+            {
+                documentNo = " (" + Util.GetValueOfInt(po.Get_Value("DocumentNo")) + ")";
+            }
+            return documentNo;
+        }
+
+        /// <summary>
+        /// Get window name
+        /// </summary>
+        /// <returns></returns>
+        private string GetWindowName()
+        {
+            string windowNameValue = $"SELECT Name FROM AD_Window WHERE AD_Window_ID = {GetAD_Window_ID()} AND IsActive='Y'";
+            if (windowNameValue == null)
+            {
+                return null;
+            }
+            return Util.GetValueOfString(DB.ExecuteScalar(windowNameValue));
         }
 
         /// <summary>
@@ -1925,7 +1984,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             }
             else if (report != null)
             {
-                string filePath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + "TempDownload";
+                string filePath = GlobalVariable.PhysicalPath + "TempDownload";
                 if (!Directory.Exists(filePath))
                     Directory.CreateDirectory(filePath);
 
@@ -2528,6 +2587,10 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
 
             SetTextMsg(textMsg);
             Save();
+
+            // VIS264 - Send push notification
+            PushNotification.SendNotificationToUser(GetAD_User_ID(), GetAD_Window_ID(), GetRecord_ID(), Msg.GetMsg(GetCtx(), "VIS_Workflows") + " (" + Msg.GetMsg(GetCtx(), "Forwarded") + ")", GetNodeName() + " : " + Msg.GetMsg(GetCtx(), "ReceivedFor") + " " + GetWindowName() + GetDocumentNo(), "W");
+
             //	Close up Old Event
             GetEventAudit();
             _audit.SetAD_User_ID(oldUser.GetAD_User_ID());

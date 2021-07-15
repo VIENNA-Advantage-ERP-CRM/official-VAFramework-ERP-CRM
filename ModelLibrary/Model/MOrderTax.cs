@@ -197,33 +197,58 @@ namespace VAdvantage.Model
         /// <returns>true if aclculated</returns>
         public bool CalculateTaxFromLines()
         {
+            return CalculateTaxFromLines(null);
+        }
+
+        /// <summary>
+        /// Calculate/Set Tax Base Amt from Invoice Lines
+        /// </summary>
+        /// <param name="idr">dataset</param>
+        /// <returns>true if tax calculated</returns>
+        public bool CalculateTaxFromLines(DataSet idr)
+        {
+            String sql = string.Empty;
+            DataRow[] dr = null;
             Decimal taxBaseAmt = Env.ZERO;
             Decimal taxAmt = Env.ZERO;
             //
             bool documentLevel = GetTax().IsDocumentLevel();
             MTax tax = GetTax();
-            
+
             // Calculate Tax on TaxAble Amount
-            String sql = "SELECT TaxAbleAmt FROM C_OrderLine WHERE C_Order_ID=" + GetC_Order_ID() + " AND C_Tax_ID=" + GetC_Tax_ID();
-            IDataReader idr = null;
+            if (idr == null)
+            {
+                sql = "SELECT TaxAbleAmt, C_Order_ID, C_Tax_ID FROM C_OrderLine WHERE C_Order_ID=" + GetC_Order_ID() + " AND C_Tax_ID=" + GetC_Tax_ID();
+                idr = DB.ExecuteDataset(sql, null, Get_TrxName());
+                if (idr != null && idr.Tables.Count > 0 && idr.Tables[0].Rows.Count > 0)
+                {
+                    dr = idr.Tables[0].Select(" C_Order_ID = " + GetC_Order_ID() + " AND C_Tax_ID = " + GetC_Tax_ID());
+                }
+            }
+            else
+            {
+                dr = idr.Tables[0].Select(" C_Order_ID = " + GetC_Order_ID() + " AND C_Tax_ID = " + GetC_Tax_ID());
+            }
             try
             {
-                idr = DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
-                while (idr.Read())
+                if (dr != null && dr.Length > 0)
                 {
-                    Decimal baseAmt = Utility.Util.GetValueOfDecimal(idr[0]);
-                    taxBaseAmt = Decimal.Add(taxBaseAmt, baseAmt);
-                    //
-                    if (!documentLevel)		// calculate line tax
-                        taxAmt = Decimal.Add(taxAmt, tax.CalculateTax(baseAmt, false, GetPrecision()));
+                    for (int i = 0; i < dr.Length; i++)
+                    {
+
+                        Decimal baseAmt = Utility.Util.GetValueOfDecimal(dr[0]["TaxAbleAmt"]);
+                        taxBaseAmt = Decimal.Add(taxBaseAmt, baseAmt);
+                        //
+                        if (!documentLevel)     // calculate line tax
+                            taxAmt = Decimal.Add(taxAmt, tax.CalculateTax(baseAmt, false, GetPrecision()));
+                    }
                 }
-                idr.Close();
             }
             catch (Exception e)
             {
                 if (idr != null)
                 {
-                    idr.Close();
+                    idr.Dispose();
                 }
                 log.Log(Level.SEVERE, "CalculateTaxFromLines", e);
                 log.Log(Level.SEVERE, sql, e);

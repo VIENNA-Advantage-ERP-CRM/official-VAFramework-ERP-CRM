@@ -22,6 +22,7 @@ using System.Web.SessionState;
 using ViennaAdvantage.Model;
 using System.Web.Script.Serialization;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace VIS.Controllers
 {
@@ -92,7 +93,7 @@ namespace VIS.Controllers
                         wVo = new GridWindow(vo);
                         retJSON = JsonConvert.SerializeObject(wVo, Formatting.None);
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         retError = ex.Message;
                     }
@@ -116,7 +117,7 @@ namespace VIS.Controllers
         /// <param name="windowNo">window number</param>
         /// <param name="AD_Window_ID">window Id</param>
         /// <returns>grid window json result</returns>
-        public JsonResult GetWindowRecords(List<string> fields, SqlParamsIn sqlIn, int rowCount, string sqlCount, int AD_Table_ID,List<string> obscureFields)
+        public JsonResult GetWindowRecords(List<string> fields, SqlParamsIn sqlIn, int rowCount, string sqlCount, int AD_Table_ID, List<string> obscureFields)
         {
             object data = null;
             if (Session["ctx"] == null)
@@ -411,7 +412,13 @@ namespace VIS.Controllers
         /// <param name="Record_ID">record id</param>
         /// <param name="ParameterList">process parameter list</param>
         /// <returns>json result</returns>
-        public JsonResult ExecuteProcess(Dictionary<string, string> processInfo, ProcessPara[] parameterList)
+        /// 
+        public async Task<JsonResult> ExecuteProcess(Dictionary<string, string> processInfo, ProcessPara[] parameterList)
+        {
+            return await System.Threading.Tasks.Task.Run(() => ExecuteProcesAsync(processInfo, parameterList));
+        }
+
+        public JsonResult ExecuteProcesAsync(Dictionary<string, string> processInfo, ProcessPara[] parameterList)
         {
             string retJSON = "";
             string retError = null;
@@ -463,7 +470,6 @@ namespace VIS.Controllers
         private int GetDoctypeBasedReport(Ctx ctx, int tableID, int record_ID)
         {
             string tableName = MTable.GetTableName(ctx, tableID);
-
             #region To Override Default Process With Process Linked To Document Type
 
             string colName = "C_DocTypeTarget_ID";
@@ -524,7 +530,27 @@ namespace VIS.Controllers
 
             #endregion
         }
-        
+
+        /// <summary>
+        /// Get Report Language from Coustomer Master
+        /// </summary>
+        /// <param name="tableID"></param>
+        /// <param name="record_ID"></param>
+        /// <param name="tableName"></param>
+        /// <returns></returns>
+        private string GetCustomerLanguage(int tableID, int record_ID,string tableName) {
+            string lang = "";
+            try
+            {
+                lang = Util.GetValueOfString(DB.ExecuteScalar("SELECT AD_Language FROM C_BPartner WHERE C_BPartner_ID=(SELECT C_BPartner_ID FROM " + tableName + " WHERE " + tableName + "_ID=" + record_ID + ")"));
+            }
+            catch(Exception ex) {
+            
+            }
+                   
+            return lang;
+        }
+
         #endregion
 
         #region "Dataset"
@@ -589,7 +615,13 @@ namespace VIS.Controllers
         /// <param name="sqlIn">sql param datacontract </param>
         /// <returns>
         /// json dataset</returns>
-        public JsonResult JDataSetWithCode(SqlParamsIn sqlIn)
+        /// 
+
+        public async System.Threading.Tasks.Task <JsonResult> JDataSetWithCode(SqlParamsIn sqlIn)
+        {
+            return await System.Threading.Tasks.Task.Run(() => JDataSetWithCodeAsync(sqlIn));
+        }
+            public JsonResult JDataSetWithCodeAsync(SqlParamsIn sqlIn)
         {
             SqlHelper h = new SqlHelper();
             Ctx ctx = Session["ctx"] as Ctx;
@@ -710,8 +742,14 @@ namespace VIS.Controllers
             return Json(JsonConvert.SerializeObject(res), JsonRequestBehavior.AllowGet);
         }
 
+
+        public async System.Threading.Tasks.Task<JsonResult> GenerateReport(Dictionary<string, string> processInfo, string queryInfo, Object code, bool isCreateNew, int? treeID, int? node_ID, bool IsSummary)
+        {
+            return await System.Threading.Tasks.Task.Run(() => GenerateReportAsync(processInfo, queryInfo, code, isCreateNew, treeID, node_ID, IsSummary));
+        }
+
         [HttpPost]
-        public JsonResult GenerateReport(Dictionary<string, string> processInfo, string queryInfo, Object code, bool isCreateNew, int? treeID, int? node_ID, bool IsSummary)
+        public JsonResult GenerateReportAsync(Dictionary<string, string> processInfo, string queryInfo, Object code, bool isCreateNew, int? treeID, int? node_ID, bool IsSummary)
         {
             if (Session["ctx"] != null)
             {
@@ -731,7 +769,11 @@ namespace VIS.Controllers
             }
         }
 
-        public JsonResult GeneratePrint(int AD_Process_ID, string Name, int AD_Table_ID, int Record_ID, int WindowNo, string filetype,string actionOrigin, string originName)
+        public async System.Threading.Tasks.Task<JsonResult> GeneratePrint(int AD_Process_ID, string Name, int AD_Table_ID, int Record_ID, int WindowNo, string filetype, string actionOrigin, string originName)
+        {
+            return await System.Threading.Tasks.Task.Run(() => GeneratePrintAsync(AD_Process_ID, Name, AD_Table_ID, Record_ID, WindowNo, filetype, actionOrigin, originName));
+        }
+        public  JsonResult GeneratePrintAsync(int AD_Process_ID, string Name, int AD_Table_ID, int Record_ID, int WindowNo, string filetype, string actionOrigin, string originName)
         {
             if (Session["ctx"] != null)
             {
@@ -742,7 +784,7 @@ namespace VIS.Controllers
                     ctx.SetContext("FetchingDocReport", "Y");
                     AD_Process_ID = pID;
                 }
-                ProcessReportInfo rep = (ProcessHelper.GeneratePrint(Session["ctx"] as Ctx, AD_Process_ID, Name, AD_Table_ID, Record_ID, WindowNo, "", filetype,actionOrigin, originName));
+                ProcessReportInfo rep = (ProcessHelper.GeneratePrint(Session["ctx"] as Ctx, AD_Process_ID, Name, AD_Table_ID, Record_ID, WindowNo, "", filetype, actionOrigin, originName));
                 ctx.SetContext("FetchingDocReport", "N");
                 ctx.SetContext("Report_Lang", "");
                 return Json(JsonConvert.SerializeObject(rep), JsonRequestBehavior.AllowGet);
@@ -776,7 +818,7 @@ namespace VIS.Controllers
                 {
                     AD_Process_ID = pID;
                 }
-                ProcessReportInfo rep = (ProcessHelper.GeneratePrint(ctx, AD_Process_ID, Name, AD_Table_ID, 0, WindowNo, RecIDs, filetype,actionOrigin,originName));
+                ProcessReportInfo rep = (ProcessHelper.GeneratePrint(ctx, AD_Process_ID, Name, AD_Table_ID, 0, WindowNo, RecIDs, filetype, actionOrigin, originName));
                 ctx.SetContext("FetchingDocReport", "N");
                 return Json(JsonConvert.SerializeObject(rep), JsonRequestBehavior.AllowGet);
             }
@@ -953,7 +995,7 @@ namespace VIS.Controllers
             Ctx ctx = Session["ctx"] as Ctx;
             return Json(JsonConvert.SerializeObject(ProcessHelper.GetReportFileTypes(ctx, AD_Process_ID)), JsonRequestBehavior.AllowGet);
         }
-        
+
         /// <summary>
         /// Method to get parent tab records ID.
         /// </summary>
@@ -976,7 +1018,7 @@ namespace VIS.Controllers
             string sql = null;
             if (keyCol == "")
             {
-                sql = "SELECT " + pColumnName + ","+ pColumnName + " as Name, count(" + pColumnName + ") FROM " + pTableName;
+                sql = "SELECT " + pColumnName + "," + pColumnName + " as Name, count(" + pColumnName + ") FROM " + pTableName;
                 sql = "SELECT * FROM (" + MRole.GetDefault(ctx).AddAccessSQL(sql, pTableName, true, false);
                 if (!string.IsNullOrEmpty(validationCode))
                     sql += " AND " + validationCode;
@@ -1006,7 +1048,7 @@ namespace VIS.Controllers
                 else
                 {
                     sql = "SELECT " + keyCol + ", " + displayCol + " , count(" + keyCol + ")  FROM " + pTableName + " " + pTableName + " JOIN " + tableName + " " + tableName
-                        + " ON " + tableName + "." + tableName + "_ID =" + pTableName + "." + pColumnName 
+                        + " ON " + tableName + "." + tableName + "_ID =" + pTableName + "." + pColumnName
                         + " ";// WHERE " + pTableName + ".IsActive='Y'";
                     sql = "SELECT * FROM (" + MRole.GetDefault(ctx).AddAccessSQL(sql, tableName, true, false);
                     if (!string.IsNullOrEmpty(validationCode))
@@ -1021,7 +1063,7 @@ namespace VIS.Controllers
 
             Dictionary<string, object> result = new Dictionary<string, object>();
             List<FilterDataContract> keyva = new List<FilterDataContract>();
-            DataSet ds = VIS.DBase.DB.ExecuteDatasetPaging(sql,1,10);
+            DataSet ds = VIS.DBase.DB.ExecuteDatasetPaging(sql, 1, 10);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -1085,7 +1127,7 @@ namespace VIS.Controllers
             {
                 string sessionID = ctx.GetAD_Session_ID().ToString();
                 JavaScriptSerializer ser = new JavaScriptSerializer();
-                
+
                 IEnumerable<KeyValuePair<string, string>> newDic = toastrMessage.Where(kvp => kvp.Key.Contains(sessionID));
                 if (newDic != null && newDic.Count() > 0)
                 {

@@ -838,7 +838,9 @@ namespace VIS.Helpers
 
                 if (tableName.ToLower() == "c_invoice")
                 {
+
                     int Report_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT InvoiceReport_ID FROM C_BPartner WHERE C_BPartner_ID=(SELECT C_BPartner_ID FROM " + tableName + " WHERE " + tableName + "_ID=" + _pi.GetRecord_ID() + ")"));
+
                     if (Report_ID > 0)
                     {                       
                         return;

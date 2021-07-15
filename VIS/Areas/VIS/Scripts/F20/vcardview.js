@@ -16,6 +16,7 @@ function VCardView() {
     this.groupCtrls = [];
     this.fields = [];// card view fields
     this.grpCount = 0;
+    this.oldGrpCount = 0;
     this.grpColName = '';
     this.hasIncludedCols = false;
     // this.aPanel;
@@ -463,7 +464,7 @@ VCardView.prototype.createGroups = function () {
     }
 
     if (this.cGroup) {
-
+        this.cGroupInfo = [];
         var field = this.cGroup;
         if (field) {
             if (field.getDisplayType() == VIS.DisplayType.YesNo) {
@@ -501,6 +502,7 @@ VCardView.prototype.createGroups = function () {
 
 VCardView.prototype.refreshUI = function (width) {
 
+    this.isProcessed = false;
     this.createGroups();
 
     var records = this.mTab.getTableModel().mSortList;
@@ -531,6 +533,7 @@ VCardView.prototype.refreshUI = function (width) {
     }
     else {
         this.filterRecord(records);
+
         for (var p in this.cGroupInfo) {
             cardGroup = new VCardGroup(this.grpCount === 1, this.cGroupInfo[p].records, this.cGroupInfo[p].name, this.fields, this.cConditions);
             this.groupCtrls.push(cardGroup);
@@ -546,19 +549,23 @@ VCardView.prototype.filterRecord = function (records) {
     var grpCol = this.cGroup.getColumnName().toLowerCase();
     var record = null;
     var colValue = null;
-
+    var isgrouprChanged = false;
     for (var i = 0; i < len; i++) {
         record = records[i];
 
         colValue = record[grpCol];
-        if (this.cGroupInfo[colValue])
+        if (this.cGroupInfo[colValue]) {
             this.cGroupInfo[colValue].records.push(record);
+            isgrouprChanged = true;
+        }
         else {
             if (!this.cGroupInfo['Other__1']) {
                 this.cGroupInfo['Other__1'] = { 'name': 'Others', 'records': [] };
                 this.grpCount += 1;
+                isgrouprChanged = true;
             }
             this.cGroupInfo['Other__1'].records.push(record);
+            
         }
     }
 
@@ -572,7 +579,13 @@ VCardView.prototype.filterRecord = function (records) {
 
     while (eCols.length > 0) {
         delete this.cGroupInfo[eCols.pop()];
+
     }
+
+    if (this.oldGrpCount != this.grpCount || isgrouprChanged)
+        this.isProcessed = false; 
+
+    this.oldGrpCount = this.grpCount;
 };
 
 VCardView.prototype.dispose = function () {

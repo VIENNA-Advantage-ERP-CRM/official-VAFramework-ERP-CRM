@@ -3637,7 +3637,8 @@
 
             if (field.getLookup() != null && field.getLookup() instanceof VIS.MLookup) {
                 var lInfo = field.getLookup().info;
-                if (lInfo.displayColSubQ && lInfo.displayColSubQ != "") {
+                if (lInfo.displayColSubQ && lInfo.displayColSubQ != "" && gt._tableName.toLowerCase() !=lInfo.tableName.toLowerCase()) {
+
 
                     if (selectDirect == null)
                         selectDirect = new StringBuilder("SELECT ");
@@ -3656,7 +3657,19 @@
                         .append(" ) AS ").append(field.getColumnSQL() + '_T')
                         .append(',').append(field.getColumnSQL(true));
                 }
-            };
+            }
+
+            else if (field.getLookup() != null && field.getLookup() instanceof VIS.MAccountLookup) {
+                if (selectDirect == null)
+                    selectDirect = new StringBuilder("SELECT ");
+                else
+                    selectDirect.append(",");
+
+                selectDirect.append("( SELECT C_ValidCombination.Combination FROM C_ValidCombination WHERE C_ValidCombination.C_ValidCombination_ID=")
+                    .append(gt._tableName + '.' + field.getColumnSQL()).append(" ) AS ").append(field.getColumnSQL() + '_T')
+                    .append(',').append(field.getColumnSQL(true));
+
+            }
         }
 
         selectSql = null;
@@ -4388,7 +4401,7 @@
         }
 
         if (out.FireEEvent) {
-            this.fireDataStatusEEvent(out.EventParam.Msg, out.EventParam.Info, out.EventParam.IsError);
+            this.fireDataStatusEEvent(out.EventParam.Msg, out.EventParam.Info, out.EventParam.IsError, out.IsWarning);
         }
         else if (out.FireIEvent) {
             this.fireDataStatusIEvent(out.EventParam.Msg, out.EventParam.Info, out.EventParam.IsError);
@@ -5113,14 +5126,20 @@
 
     //AD_Message, info, isError
     //errorLog
-    GridTable.prototype.fireDataStatusEEvent = function (AD_Message, info, isError) {
+    GridTable.prototype.fireDataStatusEEvent = function (AD_Message, info, isError,isWarn) {
 
         if (arguments.length === 1) {
-            this.fireDataStatusEEvent(arguments[0].value, arguments[0].name, true);
+            this.fireDataStatusEEvent(arguments[0].value, arguments[0].name, true, false);
         }
         else {
             var e = this.createDSE();
-            e.setInfo(AD_Message, info, isError, !isError);
+            if (!isWarn)
+                isWarn = !isError;
+            else {
+                isError = !isWarn;
+            }
+
+            e.setInfo(AD_Message, info, isError, isWarn);
             //if (isError)
             //    log.saveWarning(AD_Message, info);
             this.fireDataStatusChanged(e);
@@ -5325,6 +5344,7 @@
             }
             else if (gField._vo.displayType == VIS.DisplayType.Account) {
                 m_lookup = new VIS.MAccountLookup(VIS.context, gField._vo.windowNo);
+                m_lookup.setTabNo(this.vo.tabNo);
             }
             else if (gField._vo.displayType == VIS.DisplayType.PAttribute) {
                 m_lookup = new VIS.MPAttributeLookup(VIS.context, gField._vo.windowNo);

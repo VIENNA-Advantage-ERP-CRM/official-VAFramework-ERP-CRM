@@ -69,7 +69,7 @@ namespace VAdvantage.Model
                 }
 
                 // Get IsTaxincluded from selected PriceList on header
-                bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsTaxIncluded FROM M_PriceList WHERE M_PriceList_ID = (SELECT M_PriceList_ID FROM C_Invoice WHERE C_Invoice_ID = " 
+                bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsTaxIncluded FROM M_PriceList WHERE M_PriceList_ID = (SELECT M_PriceList_ID FROM C_Invoice WHERE C_Invoice_ID = "
                     + line.GetC_Invoice_ID() + ")", null, trxName)) == "Y";
 
                 if (retValue != null)
@@ -153,7 +153,7 @@ namespace VAdvantage.Model
                 }
 
                 // Get IsTaxincluded from selected PriceList on header
-                bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsTaxIncluded FROM M_PriceList WHERE M_PriceList_ID = (SELECT M_PriceList_ID FROM C_Invoice WHERE C_Invoice_ID = " 
+                bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsTaxIncluded FROM M_PriceList WHERE M_PriceList_ID = (SELECT M_PriceList_ID FROM C_Invoice WHERE C_Invoice_ID = "
                     + line.GetC_Invoice_ID() + ")", null, trxName)) == "Y";
 
                 if (retValue != null)
@@ -252,66 +252,90 @@ namespace VAdvantage.Model
         }
 
 
-        /**************************************************************************
-         * 	Calculate/Set Tax Base Amt from Invoice Lines
-         * 	@return true if tax calculated
-         */
+        /// <summary>
+        /// Calculate/Set Tax Base Amt from Invoice Lines
+        /// </summary>
+        /// <returns>true if tax calculated</returns>
         public bool CalculateTaxFromLines()
         {
+            return CalculateTaxFromLines(null);
+        }
+
+        /// <summary>
+        /// Calculate/Set Tax Base Amt from Invoice Lines
+        /// </summary>
+        /// <param name="idr">dataset</param>
+        /// <returns>true if tax calculated</returns>
+        public bool CalculateTaxFromLines(DataSet idr)
+        {
+            String sql = string.Empty;
+            DataRow[] dr = null;
             Decimal? taxBaseAmt = Env.ZERO;
             Decimal taxAmt = Env.ZERO;
             //
             bool documentLevel = GetTax().IsDocumentLevel();
             MTax tax = GetTax();
             // Calculate Tax on TaxAble Amount
-            String sql = "SELECT il.TaxBaseAmt, COALESCE(il.TaxAmt,0), i.IsSOTrx  , i.C_Currency_ID , i.DateAcct , i.C_ConversionType_ID "
-                + "FROM C_InvoiceLine il"
-                + " INNER JOIN C_Invoice i ON (il.C_Invoice_ID=i.C_Invoice_ID) "
-                + "WHERE il.C_Invoice_ID=" + GetC_Invoice_ID() + " AND il.C_Tax_ID=" + GetC_Tax_ID();
-            IDataReader idr = null;
+            if (idr == null)
+            {
+                sql = "SELECT il.TaxBaseAmt, COALESCE(il.TaxAmt,0), i.IsSOTrx  , i.C_Currency_ID , i.DateAcct , i.C_ConversionType_ID, "
+                   + " il.C_Invoice_ID, il.C_Tax_ID FROM C_InvoiceLine il"
+                   + " INNER JOIN C_Invoice i ON (il.C_Invoice_ID=i.C_Invoice_ID) "
+                   + "WHERE il.C_Invoice_ID=" + GetC_Invoice_ID() + " AND il.C_Tax_ID=" + GetC_Tax_ID();
+                idr = DB.ExecuteDataset(sql, null, Get_TrxName());
+                if (idr != null && idr.Tables.Count > 0 && idr.Tables[0].Rows.Count > 0)
+                {
+                    dr = idr.Tables[0].Select(" C_Invoice_ID = " + GetC_Invoice_ID() + " AND C_Tax_ID = " + GetC_Tax_ID());
+                }
+            }
+            else
+            {
+                dr = idr.Tables[0].Select(" C_Invoice_ID = " + GetC_Invoice_ID() + " AND C_Tax_ID = " + GetC_Tax_ID());
+            }
             int c_Currency_ID = 0;
             DateTime? dateAcct = null;
             int c_ConversionType_ID = 0;
             try
             {
-                idr = DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
-                while (idr.Read())
+                if (dr != null && dr.Length > 0)
                 {
-                    //Get References from invoiice header
-                    c_Currency_ID = Utility.Util.GetValueOfInt(idr[3]);
-                    dateAcct = Utility.Util.GetValueOfDateTime(idr[4]);
-                    c_ConversionType_ID = Utility.Util.GetValueOfInt(idr[5]);
-                    //	BaseAmt
-                    Decimal baseAmt = Utility.Util.GetValueOfDecimal(idr[0]);
-                    taxBaseAmt = Decimal.Add((Decimal)taxBaseAmt, baseAmt);
-                    //	TaxAmt
-                    Decimal amt = Utility.Util.GetValueOfDecimal(idr[1]);
-                    //if (amt == null)
-                    //    amt = Env.ZERO;
-                    bool isSOTrx = "Y".Equals(idr[2].ToString());
-                    //
-                    if (documentLevel || Env.Signum(baseAmt) == 0)
+                    for (int i = 0; i < dr.Length; i++)
                     {
-                        amt = Env.ZERO;
+                        //Get References from invoiice header
+                        c_Currency_ID = Utility.Util.GetValueOfInt(dr[i]["C_Currency_ID"]);
+                        dateAcct = Utility.Util.GetValueOfDateTime(dr[i]["DateAcct"]);
+                        c_ConversionType_ID = Utility.Util.GetValueOfInt(dr[i]["C_ConversionType_ID"]);
+                        //	BaseAmt
+                        Decimal baseAmt = Utility.Util.GetValueOfDecimal(dr[i]["TaxBaseAmt"]);
+                        taxBaseAmt = Decimal.Add((Decimal)taxBaseAmt, baseAmt);
+                        //	TaxAmt
+                        Decimal amt = Utility.Util.GetValueOfDecimal(dr[i][1]);
+                        //if (amt == null)
+                        //    amt = Env.ZERO;
+                        bool isSOTrx = "Y".Equals(dr[i][2].ToString());
+                        //
+                        if (documentLevel || Env.Signum(baseAmt) == 0)
+                        {
+                            amt = Env.ZERO;
+                        }
+                        else if (Env.Signum(amt) != 0 && !isSOTrx)  //	manually entered
+                        {
+                            ;
+                        }
+                        else    // calculate line tax
+                        {
+                            amt = tax.CalculateTax(baseAmt, false, GetPrecision());
+                        }
+                        //
+                        taxAmt = Decimal.Add(taxAmt, amt);
                     }
-                    else if (Env.Signum(amt) != 0 && !isSOTrx)	//	manually entered
-                    {
-                        ;
-                    }
-                    else	// calculate line tax
-                    {
-                        amt = tax.CalculateTax(baseAmt, false, GetPrecision());
-                    }
-                    //
-                    taxAmt = Decimal.Add(taxAmt, amt);
                 }
-                idr.Close();
             }
             catch (Exception e)
             {
                 if (idr != null)
                 {
-                    idr.Close();
+                    idr.Dispose();
                 }
                 log.Log(Level.SEVERE, "setTaxBaseAmt", e);
                 log.Log(Level.SEVERE, sql, e);
@@ -329,8 +353,7 @@ namespace VAdvantage.Model
             if (Get_ColumnIndex("TaxBaseCurrencyAmt") >= 0)
             {
                 decimal taxAmtBaseCurrency = GetTaxAmt();
-                int primaryAcctSchemaCurrency = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_Currency_ID FROM C_AcctSchema WHERE C_AcctSchema_ID = 
-                                            (SELECT c_acctschema1_id FROM ad_clientinfo WHERE ad_client_id = " + GetAD_Client_ID() + ")", null, Get_Trx()));
+                int primaryAcctSchemaCurrency = GetCtx().GetContextAsInt("$C_Currency_ID");
                 if (c_Currency_ID != primaryAcctSchemaCurrency)
                 {
                     taxAmtBaseCurrency = MConversionRate.Convert(GetCtx(), GetTaxAmt(), primaryAcctSchemaCurrency, c_Currency_ID,

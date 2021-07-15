@@ -1636,7 +1636,7 @@
              "   Else " +
              "    '" + VIS.Msg.getMsg("Free", true) + "' " +
              "    End) as Status, " +
-             "     AI.ReminderInfo , AI.AttendeeInfo,  AI.RecurrenceInfo , " +
+             "     AI.ReminderInfo , nvl( ai.attendeeinfo,ai.Ad_User_ID) as attendeeinfo,  AI.RecurrenceInfo , " +
              "     (  " +
              "     CASE AI.IsPrivate " +
              "       WHEN 'Y' " +
@@ -1686,9 +1686,9 @@
                 strApp = "";
                 var attInfo = ds["AttendeeInfo"];
                 if (attInfo != null && attInfo != "") {
-                    strApp = " SELECT Name FROM AD_User WHERE AD_User_ID IN (" + attInfo.replace(/;/g, ',') + ")";
-                    _sql = VIS.secureEngine.encrypt(strApp);
-                    names = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "AttachmentHistory/GetUser", { "UserQry": _sql }, null);
+                    //strApp = " SELECT Name FROM AD_User WHERE AD_User_ID IN (" + attInfo.replace(/;/g, ',') + ")";
+                    //_sql = VIS.secureEngine.encrypt(strApp);
+                    names = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "AttachmentHistory/GetUser", { "UserQry": attInfo }, null);
                     if (names != null && names.length > 0) {
                         strApp = "";
                         for (var k = 0; k < names.length; k++) {
@@ -2273,8 +2273,8 @@
                 $category = $('<p>' + VIS.Utility.encodeText(category) + '</p>');
                 $contacts = $('<p>' + VIS.Utility.encodeText(ContactNames) + '</p>');
                 $label = $('<p>' + VIS.Utility.encodeText(label) + '</p>');
-                $startDate = $('<p>' + VIS.Utility.encodeText(new Date(startDate).toLocaleString()) + '</p>');
-                $endDate = $(' <p>' + VIS.Utility.encodeText(new Date(endDate).toLocaleString()) + '</p>');
+                $startDate = $('<p>' + VIS.Utility.encodeText(new Date(startDate+"Z").toLocaleString()) + '</p>');
+                $endDate = $(' <p>' + VIS.Utility.encodeText(new Date(endDate+"Z").toLocaleString()) + '</p>');
                 $allDay = $('<p>' + VIS.Utility.encodeText(allDay) + '</p>');
                 //if ($detail == undefined || $detail == null) {
                 //    $detail = $('<p class="vis-attachhistory-detail"></p>');
@@ -2658,7 +2658,7 @@
 
             if ($(target).is('a')) {
                 name = $(target).text();
-                AttID = $(target).data('AttID');
+                AttID = $(target).data('attid');
                 ID = $(target).data('id');
             }
             else if ($(target).is('img')) {

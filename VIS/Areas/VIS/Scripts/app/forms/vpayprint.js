@@ -393,7 +393,13 @@
                     isBusy(false);
                     var data = JSON.parse(jsonResult);
                     if (data != null || data != undefined) {
-                        VIS.ADialog.confirm("VPayPrintPrintRemittance?", true, "", "Confirm", function (result) {
+                        //get documenNo's
+                        var paymentId = data.join();
+                        var _docNo = getDocumentNo(paymentId);
+                        //used get Message to get Value
+                        //updated value appended to _docNo variable
+                        _docNo = _docNo != null ? VIS.Msg.getMsg("VIS_PaymentCreated") + _docNo : _docNo;
+                        VIS.ADialog.confirm("VPayPrintPrintRemittance?", true, _docNo, "Confirm", function (result) {
                             if (result) {
                                 isBusy(true);
                                 window.setTimeout(function () {
@@ -412,6 +418,27 @@
                 }
             });
         };
+
+        //Get the DocumentNo's for Payment
+        function getDocumentNo(_paymentId) {
+            var _docId = null;
+            $.ajax({
+                url: VIS.Application.contextUrl + "VPayPrint/GetDocumentNo",
+                async: false,
+                datatype: "Json",
+                type: "GET",
+                contentType: 'application/json; charset=utf-8',
+                data: { paymentId: _paymentId },
+                success: function (data) {
+                    _docId = JSON.parse(data);
+                    _docId = _docId != null ? _docId.join() : _docId;
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+            return _docId;
+        }
         //******************
         //VPayPrintPrintRemittance
         //******************$self.windowNo

@@ -199,6 +199,10 @@
         return this.tabNo;
     };
 
+    Lookup.prototype.setTabNo = function (tNo) {
+        this.tabNo = tNo;
+    };
+
     Lookup.prototype.getFieldColName = function () {
         return this.colName; //lower case
     };
@@ -346,9 +350,9 @@
 
         //  load into local lookup, if already cached
 
-        if (this.info.isCreadedUpdatedBy) {
-            return this;
-        }
+        //if (this.info.isCreadedUpdatedBy) {
+        //    return this;
+        //}
 
         if (this.info.isParent || this.info.isKey) {
             this.hasInactive = true; // creates focus listener for dynamic loading
@@ -362,17 +366,18 @@
         //    return this;
         //}
 
-        //if ((this.lookup.displayType == VIS.DisplayType.Search)
-        //		|| this.info.IsCreadedUpdatedBy)
-        //    return this;
-        // Don't load Parents/Keys
+        if ((this.getDisplayType() == VIS.DisplayType.Search)
+            || this.info.isCreadedUpdatedBy) {
+            return this;
+        }
+         //Don't load Parents/Keys
 
 
         //if (VIS.MLookupCache.loadFromCache(this.info, this)) {
         //    return this;
         //}
 
-        if (!this.info.isValidated) {
+        if (!this.info.isValidated ) {
             this.fillDirectList();
         }
         else {
@@ -480,7 +485,7 @@
                 this.lookupDirect = null;
                 this.lookupDirect = {};
             }
-            this.nextRead = Date.now() + 500; // 1/2 sec
+            this.nextRead = Date.now() + 2000; // 1/2 sec
         }
 
         var retValue = this.lookup[" " + key];
@@ -520,7 +525,7 @@
                 this.lookupDirect = null;
                 this.lookupDirect = {};
             }
-            this.nextRead = Date.now() + 500; // 1/2 sec
+            this.nextRead = Date.now() + 2000; // 1/2/3 sec
             return this.get(key);
         }
 
@@ -672,9 +677,9 @@
             var keyCol = this.getFieldColName();// this.info.keyColumn.substring(this.info.keyColumn.indexOf('.') + 1).toLowerCase();
 
             var text = VIS.MLookupCache.getRecordLookup(this.getWindowNo(), this.getTabNo(), keyCol, key);
-            if (text) {
+            if (text || (!text &&  key ==0)) {
                 //var keyValue = var isNumber = this.info.keyColumn.toUpperCase().endsWith("_ID");
-                retValue = { Key: key, Name: VIS.Utility.encodeText(text) };
+               var  retValue = { Key: key, Name: VIS.Utility.encodeText(text) };
                 this.lookupDirectAll[" " + key] = retValue;
                // return retValue;
             }
@@ -842,7 +847,7 @@
         }
 
         var self = this;
-        executeDataReaderPaging(directAllQuery, 1, 1000, null, function (dr) {
+        executeDataReaderPaging(directAllQuery, 1, 100, null, function (dr) {
             try {
                 var isNumber = self.info.keyColumn.endsWith("_ID");
 
@@ -1511,6 +1516,7 @@
         this.C_ValidCombination_ID = 0;
         this.combination;
         this.description;
+        this.lst = {};
     };
     VIS.Utility.inheritPrototype(MAccountLookup, Lookup);//Inherit
     /**
@@ -1560,29 +1566,56 @@
         if (ID == this.C_ValidCombination_ID)	//	already loaded
             return true;
 
+        
+
+        var lstObj = this.lst[ID];
+        if (lstObj) {
+            this.C_ValidCombination_ID = ID;
+            this.combination = lstObj["C"];
+            this.description = lstObj["D"];
+            return true;
+        }
+
+        var text = VIS.MLookupCache.getRecordLookup(this.getWindowNo(), this.getTabNo(), "c_validcombination_id", ID);
+
+        if (text) {
+            lstObj  = { "C": text, "D": "-" };
+            this.C_ValidCombination_ID = ID;
+            this.combination = lstObj["C"];
+            this.description = lstObj["D"];
+            this.lst[ID] = lstObj;
+            return true;
+        }
+
+       
+
         var SQL = "VIS_94";
 
         var param = [];
         param[0] = new VIS.DB.SqlParam("@ID", ID);
 
-        var dr = null;
-        try {
-            //	Prepare Statement
-            dr = executeReader(SQL, param);
-            if (!dr.read())
+        var self = this;
+        executeReader(SQL, param, function (dr) {
+
+            var dr = null;
+            try {
+                //	Prepare Statement
+                dr = executeReader(SQL, param);
+                if (!dr.read())
+                    return false;
+
+                self.lst[dr.getInt(0)] = { "C": dr.getString(1), "D": dr.getString(2)}
+               // this.C_ValidCombination_ID = dr.getInt(0);
+              //  this.combination = dr.getString(1);
+              //  this.description = dr.getString(2);
+            }
+            catch (e) {
                 return false;
-
-            this.C_ValidCombination_ID = dr.getInt(0);
-            this.combination = dr.getString(1);
-            this.description = dr.getString(2);
-        }
-        catch (e) {
-            return false;
-        }
-        finally {
-        }
-
-        return true;
+            }
+            finally {
+            }
+        });
+        return false;
     };	//	load
     /**
      *	Get underlying fully qualified Table.Column Name

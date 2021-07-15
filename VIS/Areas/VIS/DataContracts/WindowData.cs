@@ -68,6 +68,8 @@ namespace VIS.DataContracts
     public class SaveRecordOut
     {
         public bool IsError { get; set; }
+
+        public bool IsWarning { get; set; }
         public string ErrorMsg { get; set; }
         public string InfoMsg { get; set; }
         public bool FireEEvent { get; set; }

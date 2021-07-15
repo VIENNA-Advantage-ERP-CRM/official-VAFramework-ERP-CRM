@@ -2606,31 +2606,32 @@
             if (QtyEntered > 0 && LineNetAmt == 0) {
                 //Check if it is RSO/RPO and prices available which are entered through blanket sales order.
                 var BlanketOrderLineID = Util.getValueOfDecimal(mTab.getValue("C_OrderLine_Blanket_ID"));
+                if (BlanketOrderLineID > 0) {
+                    dr = VIS.dataContext.getJSONRecord("MOrderLine/GetOrderLine", BlanketOrderLineID.toString());
+                    if (dr != null) {
 
-                dr = VIS.dataContext.getJSONRecord("MOrderLine/GetOrderLine", BlanketOrderLineID.toString());
-                if (dr != null) {
+                        var PriceList = Util.getValueOfDouble(dr["PriceList"]);
+                        var PriceActual = Util.getValueOfDouble(dr["PriceActual"]);
+                        var PriceEntered = Util.getValueOfDouble(dr["PriceEntered"]);
+                        var Discount = Util.getValueOfDouble(dr["Discount"]);
 
-                    var PriceList = Util.getValueOfDouble(dr["PriceList"]);
-                    var PriceActual = Util.getValueOfDouble(dr["PriceActual"]);
-                    var PriceEntered = Util.getValueOfDouble(dr["PriceEntered"]);
-                    var Discount = Util.getValueOfDouble(dr["Discount"]);
+                        if (PriceEntered != null) {
+                            mTab.setValue("PriceEntered", PriceEntered);
+                            mTab.setValue("LineNetAmt", PriceEntered * QtyEntered);
+                            LineNetAmt = PriceEntered * QtyEntered;
+                        }
 
-                    if (PriceEntered != null) {
-                        mTab.setValue("PriceEntered", PriceEntered);
-                        mTab.setValue("LineNetAmt", PriceEntered * QtyEntered);
-                        LineNetAmt = PriceEntered * QtyEntered;
-                    }
+                        if (PriceList != null) {
+                            mTab.setValue("PriceList", PriceList);
+                        }
 
-                    if (PriceList != null) {
-                        mTab.setValue("PriceList", PriceList);
-                    }
+                        if (Discount != null) {
+                            mTab.setValue("Discount", Discount);
+                        }
 
-                    if (Discount != null) {
-                        mTab.setValue("Discount", Discount);
-                    }
-
-                    if (PriceActual != null) {
-                        mTab.setValue("PriceActual", PriceActual);
+                        if (PriceActual != null) {
+                            mTab.setValue("PriceActual", PriceActual);
+                        }
                     }
                 }
             }
@@ -5550,7 +5551,6 @@
             mTab.setValue("StmtAmt", 0);
             mTab.setValue("TrxAmt", 0);
             mTab.setValue("ChargeAmt", 0);
-            mTab.setValue("ChargeAmt", 0);
             mTab.setValue("C_BPartner_ID", 0);
             mTab.setValue("C_Invoice_ID", 0);
             //clear the C_ConversionType_ID
@@ -5568,7 +5568,6 @@
         if (C_Payment_ID == null || C_Payment_ID == 0) {
             mTab.setValue("StmtAmt", 0);
             mTab.setValue("TrxAmt", 0);
-            mTab.setValue("ChargeAmt", 0);
             mTab.setValue("ChargeAmt", 0);
             mTab.setValue("C_BPartner_ID", 0);
             mTab.setValue("C_Invoice_ID", 0);
@@ -5666,6 +5665,8 @@
             var paramStr = C_Payment_ID.toString() + "," + C_Currency_ID.toString() + "," + acctDate.toString();
             var payAmt = VIS.dataContext.getJSONRecord("MBankStatement/GetConvertedAmt", paramStr);
             mTab.setValue("StmtAmt", payAmt);
+            //set transcation Amount also if change the date
+            mTab.setValue("TrxAmt", payAmt);
             //if (stmt == 0) {
             //    mTab.setValue("StmtAmt", payAmt);
             //}
@@ -16895,7 +16896,7 @@
     CalloutTeamForcast.prototype.Charge = function (ctx, windowNo, mTab, mField, value, oldValue) {
         try {
             if (this.isCalloutActive() || value == null || value.toString() == "") {
-                mTab.getField("C_UOM_ID").setReadOnly(false);
+                //mTab.getField("C_UOM_ID").setReadOnly(false);
                 return "";
             }
 
@@ -16915,7 +16916,7 @@
             else {
                 mTab.setValue("C_UOM_ID", 100);	//	EA
             }
-            mTab.getField("C_UOM_ID").setReadOnly(true);
+           //mTab.getField("C_UOM_ID").setReadOnly(true);
         }
         catch (err) {
             this.setCalloutActive(false);

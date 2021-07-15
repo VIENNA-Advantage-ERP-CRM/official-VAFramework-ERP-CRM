@@ -385,11 +385,13 @@
 
             var dependentFields = this.getDependantFields(columnName);
             for (var i = 0, len = dependentFields.length; i < len; i++) {
-                var dep = field;
+                //var dep = field;
+                //field is not defined
+                var dep = dependentFields[i];
                 if (dep == null)
                     continue;
                 dep.refreshLookup();
-                dep.setValue(dep.getDefault(Env.getCtx(), this.windowNo), true);
+                dep.setValue(dep.getDefault(VIS.Env.getCtx(), this.windowNo), true);
             }
         }
     };

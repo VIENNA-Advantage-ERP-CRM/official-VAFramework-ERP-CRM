@@ -540,6 +540,55 @@ namespace VIS.Models
             return keyVal;
         }
 
+        /// <summary>
+        /// To Create Bank Statement Line
+        /// Get Conveted Amount along with message either success or error while getting data
+        /// </summary>
+        /// <param name="ctx">Current Context</param>
+        /// <param name="amount">Amount</param>
+        /// <param name="currencyId">C_Currency_ID</param>
+        /// <param name="convsion_Id">C_ConversionType_ID</param>
+        /// <param name="date">Account Date</param>
+        /// <param name="_org_id">AD_Org_ID</param>
+        /// <returns>list of Converted Amount and message</returns>
+        public Dictionary<string, object> GetConvertedAmount(Ctx ctx, int _paymentId, decimal? amount, int? currencyId, int? convsion_Id, DateTime? date, string paymentType, int? _org_id)
+        {
+            int _currency_Id = 0;
+            Decimal trxAmt = 0;
+            //DataSet _ds = null;
+            Dictionary<string, object> _list = new Dictionary<string, object>();
+            //Get the Currency from Payment or Cash Journal Line based on paymentType
+            //here P - indicates It is Payment, C - indicates it is Cash Journal Line
+            if (Util.GetValueOfString(paymentType).Equals("P"))
+            {
+                _currency_Id = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Currency_ID FROM C_Payment WHERE C_Payment_ID=" + _paymentId, null, null));
+            }
+            else
+            {
+                _currency_Id = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Currency_ID FROM C_CashLine WHERE C_CashLine_ID=" + _paymentId, null, null));
+            }
+            //Get Converted Amount
+            if (_currency_Id != currencyId)
+            {
+                trxAmt = MConversionRate.Convert(ctx, Util.GetValueOfDecimal(amount), _currency_Id, Util.GetValueOfInt(currencyId), date, Util.GetValueOfInt(convsion_Id), ctx.GetAD_Client_ID(), Util.GetValueOfInt(_org_id));
+            }
+            else
+            {
+                trxAmt = Util.GetValueOfDecimal(amount);
+            }
+            //check Condition weather Conversion found or not
+            //based on Actual amount(amount) and Converted Amount(trxAmt) 
+            if (Util.GetValueOfDecimal(amount) != 0 && trxAmt == 0)
+            {
+                _list["_message"] = "NotFoundCurrencyRate";
+            }
+            else
+            {
+                _list["_message"] = "Success";
+            }
+            _list["convtAmt"] = trxAmt;
+            return _list;
+        }
     }
 
 

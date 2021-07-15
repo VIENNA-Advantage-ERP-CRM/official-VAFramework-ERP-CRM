@@ -40,14 +40,16 @@ namespace VIS.Models
             {
                 strAppCount += " AND upper(ai.Subject)  like upper('%" + searchText + "%')";
             }
-            strAppCount += " AND ai.IsTask='N' And ai.Ad_Table_Id = " + _AD_Table_ID + " And ai.AD_User_ID = " + ctx.GetAD_User_ID() + ")   UNION" +
+            strAppCount += " AND ai.IsTask='N' And ai.Ad_Table_Id = " + _AD_Table_ID + " )   UNION" +
+            //strAppCount += " AND ai.IsTask='N' And ai.Ad_Table_Id = " + _AD_Table_ID + " And ai.AD_User_ID = " + ctx.GetAD_User_ID() + ")   UNION" +
 
                  "( SELECT ai.AppointmentsInfo_ID AS ID, ai.record_ID, ai.created,'" + Msg.GetMsg(ctx, "Task") + "' AS TYPE, subject  FROM AppointmentsInfo ai JOIN AD_User au on au.AD_User_ID=ai.createdby WHERE ai.record_Id =" + _Record_ID;
             if (searchText != "undefined" && searchText != null && searchText != "")
             {
                 strAppCount += " AND upper(ai.Subject)  like upper('%" + searchText + "%')";
             }
-            strAppCount += " AND ai.IsTask='Y' And ai.Ad_Table_Id = " + _AD_Table_ID + " And ai.AD_User_ID = " + ctx.GetAD_User_ID() + ")   UNION" +
+            strAppCount += " AND ai.IsTask='Y' And ai.Ad_Table_Id = " + _AD_Table_ID + " )   UNION" +
+            //strAppCount += " AND ai.IsTask='Y' And ai.Ad_Table_Id = " + _AD_Table_ID + " And ai.AD_User_ID = " + ctx.GetAD_User_ID() + ")   UNION" +
 
 
             " SELECT MAILATTACHMENT1_ID AS ID, record_ID,created,'" + Msg.GetMsg(ctx, "SentMail") + "' AS TYPE, TITLE AS Subject FROM mailattachment1 WHERE record_id=" + _Record_ID;
@@ -99,7 +101,7 @@ and record_id = " + _Record_ID;
 
         }
 
-        
+
         /// <summary>
         /// Load history records for current record
         /// </summary>
@@ -120,7 +122,8 @@ and record_id = " + _Record_ID;
             {
                 strApp += " AND upper(ai.Subject)  like upper('%" + searchText + "%')";
             }
-            strApp += " AND ai.IsTask='N' And ai.Ad_Table_Id = " + _AD_Table_ID + " And ai.AD_User_ID = " + ctx.GetAD_User_ID() + ")   UNION" +
+            strApp += " AND ai.IsTask='N' And ai.Ad_Table_Id = " + _AD_Table_ID + " )   UNION" +
+            //strApp += " AND ai.IsTask='N' And ai.Ad_Table_Id = " + _AD_Table_ID + " And ai.AD_User_ID = " + ctx.GetAD_User_ID() + ")   UNION" +
 
 
                 "( SELECT ai.AppointmentsInfo_ID AS ID, ai.record_ID, ai.created,'" + Msg.GetMsg(ctx, "Task") + "' AS TYPE,ai.Subject,au.name  FROM AppointmentsInfo ai JOIN AD_User au on au.AD_User_ID=ai.createdby WHERE ai.record_Id =" + _Record_ID;
@@ -128,7 +131,8 @@ and record_id = " + _Record_ID;
             {
                 strApp += " AND upper(ai.Subject)  like upper('%" + searchText + "%')";
             }
-            strApp += " AND ai.IsTask='Y' And ai.Ad_Table_Id = " + _AD_Table_ID + " And ai.AD_User_ID = " + ctx.GetAD_User_ID() + ")   UNION" +
+            strApp += " AND ai.IsTask='Y' And ai.Ad_Table_Id = " + _AD_Table_ID + " )   UNION" +
+            //strApp += " AND ai.IsTask='Y' And ai.Ad_Table_Id = " + _AD_Table_ID + " And ai.AD_User_ID = " + ctx.GetAD_User_ID() + ")   UNION" +
 
 
 
@@ -163,36 +167,36 @@ WHERE ai.VA048_To is not null and ai.IsActive = 'Y'
 and ai.AD_Table_ID = " + _AD_Table_ID + @"
 and ai.record_id = " + _Record_ID;
 
-//                if (_AD_Table_ID == 291)
-//                {
-//                    strApp += @" UNION " +
-//@"select cd.VA048_CallDetails_ID as ID, cd.record_ID, cd.created, '" + Msg.GetMsg(ctx, "VA048_CallType") + @"' as TYPE, cd.VA048_To as Subject, au.name 
-//FROM VA048_CallDetails cd 
-//left join AD_User au on au.AD_User_ID = cd.VA048_RefRecordID 
-//where cd.VA048_To is not null 
-//and cd.AD_Table_ID = 291 
-//and cd.Record_ID = " + _Record_ID + @" 
-//UNION
-//select cd.VA048_CallDetails_ID as id, cd.record_ID, cd.created, '" + Msg.GetMsg(ctx, "VA048_CallType") + @"' as type, cd.VA048_To as Subject, au.name 
-//FROM VA048_CallDetails cd 
-//left join AD_User au on au.AD_User_ID = cd.VA048_RefRecordID 
-//where cd.VA048_To is not null 
-//and au.C_BPartner_ID = " + _Record_ID + @" 
-//and cd.Record_ID = " + _Record_ID;
-//                }
-//                else
-//                {
-//                    strApp += " UNION " +
-//@"select cd.VA048_CallDetails_ID as id, cd.record_ID, cd.created, '" + Msg.GetMsg(ctx, "VA048_CallType") + @"' as type, cd.VA048_To as Subject, au.name 
-//FROM VA048_CallDetails cd 
-//left join AD_User au on au.AD_User_ID = cd.createdby 
-//WHERE cd.VA048_To is not null 
-//and cd.Record_ID = " + _Record_ID;
-//                }
+                //                if (_AD_Table_ID == 291)
+                //                {
+                //                    strApp += @" UNION " +
+                //@"select cd.VA048_CallDetails_ID as ID, cd.record_ID, cd.created, '" + Msg.GetMsg(ctx, "VA048_CallType") + @"' as TYPE, cd.VA048_To as Subject, au.name 
+                //FROM VA048_CallDetails cd 
+                //left join AD_User au on au.AD_User_ID = cd.VA048_RefRecordID 
+                //where cd.VA048_To is not null 
+                //and cd.AD_Table_ID = 291 
+                //and cd.Record_ID = " + _Record_ID + @" 
+                //UNION
+                //select cd.VA048_CallDetails_ID as id, cd.record_ID, cd.created, '" + Msg.GetMsg(ctx, "VA048_CallType") + @"' as type, cd.VA048_To as Subject, au.name 
+                //FROM VA048_CallDetails cd 
+                //left join AD_User au on au.AD_User_ID = cd.VA048_RefRecordID 
+                //where cd.VA048_To is not null 
+                //and au.C_BPartner_ID = " + _Record_ID + @" 
+                //and cd.Record_ID = " + _Record_ID;
+                //                }
+                //                else
+                //                {
+                //                    strApp += " UNION " +
+                //@"select cd.VA048_CallDetails_ID as id, cd.record_ID, cd.created, '" + Msg.GetMsg(ctx, "VA048_CallType") + @"' as type, cd.VA048_To as Subject, au.name 
+                //FROM VA048_CallDetails cd 
+                //left join AD_User au on au.AD_User_ID = cd.createdby 
+                //WHERE cd.VA048_To is not null 
+                //and cd.Record_ID = " + _Record_ID;
+                //                }
 
                 if (searchText != "undefined" && searchText != null && searchText != "")
                 {
-                    strApp += " AND upper(cd.VA048_To) like upper('%" + searchText + "%')";
+                    strApp += " AND upper(ai.VA048_To) like upper('%" + searchText + "%')";
                 }
             }
 
@@ -206,7 +210,7 @@ and ai.record_id = " + _Record_ID;
                     HistoryRecordInfo info = new HistoryRecordInfo();
                     info.id = Convert.ToInt32(ds.Tables[0].Rows[i]["ID"]);
                     info.record_id = Convert.ToInt32(ds.Tables[0].Rows[i]["record_ID"]);
-                    info.created = Convert.ToDateTime(ds.Tables[0].Rows[i]["created"]);
+                    info.created = DateTime.SpecifyKind(Convert.ToDateTime(ds.Tables[0].Rows[i]["created"]), DateTimeKind.Utc);
                     info.type = Convert.ToString(ds.Tables[0].Rows[i]["TYPE"]);
                     info.name = Convert.ToString(ds.Tables[0].Rows[i]["name"]);
                     info.subject = Convert.ToString(ds.Tables[0].Rows[i]["Subject"]);
@@ -434,7 +438,7 @@ and ai.record_id = " + _Record_ID;
 
 
             // For Letter, sent Mail, Inbox mail
-            
+
             finalsql.Append(" SELECT attachmenttype, ai.MAILATTACHMENT1_ID AS ID, ai.record_ID,ai.created,'" + Msg.GetMsg(ctx, "SentMail") + "' AS TYPE, ai.TITLE AS Subject,adt.Name  as TableName,ai.AD_Table_ID   FROM mailattachment1 ai JOIN AD_User au on au.AD_User_ID=ai.createdby  JOIN AD_Table adt on adt.AD_Table_ID =ai.AD_Table_ID  ");
             finalSqlCount.Append(" SELECT ai.created FROM mailattachment1  ai JOIN AD_User au on au.AD_User_ID=ai.createdby JOIN AD_Table adt on adt.AD_Table_ID =ai.AD_Table_ID ");
             if (whereMAtt.Length > 0)
@@ -1025,7 +1029,7 @@ and ai.record_id = " + _Record_ID;
                                 ColumnName FROM AD_Column WHERE lower(ColumnName)   !='updatedby' AND lower(columnname)     !='createdby' AND ad_reference_Value_id IN
                                 (SELECT ad_reference_id FROM ad_ref_table WHERE column_key_id= (SELECT AD_Column_ID FROM AD_Column WHERE columnname='AD_User_ID'
                                   AND AD_Table_ID = (SELECT AD_Table_ID FROM AD_Table WHERE TableName='AD_User' ) ) ) ) ab ON ab.AD_Table_ID=ai.AD_Table_ID ";
-                             // JOIN AD_Table att on ai.AD_Table_ID=att.AD_Table_ID) as foo order by tablename";
+                // JOIN AD_Table att on ai.AD_Table_ID=att.AD_Table_ID) as foo order by tablename";
 
                 if (VAdvantage.DataBase.DB.IsPostgreSQL())
                 {
@@ -1699,8 +1703,17 @@ ON au.AD_User_ID=ai.createdby JOIN AD_Table adt ON adt.AD_Table_ID   =ai.AD_Tabl
                 obj["AD_Table_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["AD_Table_ID"]);
                 obj["Record_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["Record_ID"]);
                 obj["label"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["label"]);
-                obj["StartDate"] = Util.GetValueOfDateTime(ds.Tables[0].Rows[0]["StartDate"]);
-                obj["EndDate"] = Util.GetValueOfDateTime(ds.Tables[0].Rows[0]["EndDate"]);
+
+                DateTime _StartDate = Convert.ToDateTime(ds.Tables[0].Rows[0]["StartDate"]);
+                DateTime _format = DateTime.SpecifyKind(new DateTime(_StartDate.Year, _StartDate.Month, _StartDate.Day, _StartDate.Hour, _StartDate.Minute, _StartDate.Second), DateTimeKind.Utc);
+                _StartDate = _format;
+                obj["StartDate"] = _StartDate;
+
+                DateTime _EndDate = Convert.ToDateTime(ds.Tables[0].Rows[0]["EndDate"]);
+                _format = DateTime.SpecifyKind(new DateTime(_EndDate.Year, _EndDate.Month, _EndDate.Day, _EndDate.Hour, _EndDate.Minute, _EndDate.Second), DateTimeKind.Utc);
+                _EndDate = _format;
+                obj["EndDate"] = _EndDate;
+
                 obj["Allday"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["Allday"]);
                 obj["Status"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["Status"]);
                 obj["ReminderInfo"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["ReminderInfo"]);
@@ -1714,9 +1727,10 @@ ON au.AD_User_ID=ai.createdby JOIN AD_Table adt ON adt.AD_Table_ID   =ai.AD_Tabl
         }
 
         // Added by Bharat on 07 June 2017
-        public List<string> GetUser(string sql)
+        public List<string> GetUser(string users)
         {
             List<string> obj = null;
+            string sql = "SELECT Name FROM AD_User WHERE AD_User_ID IN(" + users.Replace(';', ',') + ")";
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -1779,7 +1793,7 @@ where att.AD_table_ID = " + MTable.Get_Table_ID("VA048_CallDetails") + @" and at
                         ai.AttID = Util.GetValueOfInt(dsatt.Tables[0].Rows[i]["AD_Attachment_ID"]);
                         info.Attach.Add(ai);
                     }
-                    
+
                 }
 
                 //MMailAttachment1 _mAttachment = new MMailAttachment1(ctx, ID, null);

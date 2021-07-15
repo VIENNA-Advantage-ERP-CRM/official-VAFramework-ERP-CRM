@@ -11,6 +11,7 @@ namespace VIS.Classes
     public class QueryCollection
     {
         static dynamic queryList = new ExpandoObject();
+        static IDictionary<string, object> IqueryList = (IDictionary<string, object>)queryList;
         static bool isLoad = false;
 
         private static void AddQueries(Ctx ctx)
@@ -558,11 +559,11 @@ namespace VIS.Classes
 
         public static string GetQuery(string code, Ctx ctx)
         {
-            //if (!isLoad)
-            //{
-            AddQueries(ctx);
-            isLoad = true;
-            //}
+            if (IqueryList.Count <= 0)
+            {
+                AddQueries(ctx);
+                isLoad = true;
+            }
 
             object result = ((IDictionary<string, object>)queryList)[code];
             if (result != null)
