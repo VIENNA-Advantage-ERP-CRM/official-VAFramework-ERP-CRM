@@ -67,7 +67,7 @@ namespace VAdvantage.Model
         protected override bool BeforeSave(bool newRecord)
         {
             // If lines are available and user is changing the pricelist/conversiontype on header than we have to restrict it
-            if (!newRecord && (Is_ValueChanged("M_PriceList_ID") || Is_ValueChanged("C_ConversionType_ID")))
+            if (!newRecord && (Is_ValueChanged("M_PriceList_ID") || Is_ValueChanged("C_ConversionType_ID") || Is_ValueChanged("C_PaymentTerm_ID")))
             {
                 MProvisionalInvoiceLine[] lines = GetLines(true);
 
