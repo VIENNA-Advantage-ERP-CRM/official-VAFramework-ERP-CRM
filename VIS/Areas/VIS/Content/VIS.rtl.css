@@ -704,6 +704,10 @@ html[dir="rtl"] .k-button-icontext .k-sprite {
     margin-right: -.3rem;
 }
 
+html[dir="rtl"] .vis-leftsidebarouterwrap .vis-input-wrap label {
+    right: 10px;
+}
+
 
 /*rtl css End here*/
 
