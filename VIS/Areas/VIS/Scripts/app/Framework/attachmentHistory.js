@@ -1594,57 +1594,57 @@
         /**/
         function showAppointmentInfo(ID) {
             var strApp = "SELECT AI.AppointmentsInfo_ID, AI.Subject,AI.Location,AI.Description,AI.AD_Table_ID, AI.Record_ID, " +
-             " ( " +
-             " CASE Label " +
-             "   WHEN 1   " +
-             "  THEN  '" + VIS.Msg.getMsg("Important", true) + "' " +
-             "   WHEN 2 " +
-             "   THEN '" + VIS.Msg.getMsg("Business", true) + "' " +
-             "   WHEN 3 " +
-             "   THEN   '" + VIS.Msg.getMsg("Personal", true) + "' " +
-             "   WHEN 4 " +
-             "   THEN '" + VIS.Msg.getMsg("Vacation", true) + "' " +
-             "   WHEN 5 " +
-             "   THEN '" + VIS.Msg.getMsg("MustAttend", true) + "' " +
-             "   WHEN 6 " +
-             "   THEN '" + VIS.Msg.getMsg("TravelRequired", true) + "' " +
-             "   WHEN 7 " +
-             "   THEN '" + VIS.Msg.getMsg("NeedsPreparation", true) + "' " +
-             "   WHEN 8 " +
-             "   THEN '" + VIS.Msg.getMsg("BirthDay", true) + "' " +
-             "   WHEN 9 " +
-             "   THEN '" + VIS.Msg.getMsg("Anniversary", true) + "' " +
-             "   WHEN 10 " +
-             "   Then '" + VIS.Msg.getMsg("PhoneCall", true) + "' " +
-             "   ELSE '" + VIS.Msg.getMsg("None", true) + "' " +
-             " END ) AS label , " +
-             " AI.StartDate , AI.EndDate, " +
-             " ( " +
-             " CASE AI.AllDay " +
-             "   WHEN 'Y' " +
-              "       THEN '" + VIS.Msg.getMsg("Yes", true) + "' " +
-             "       ELSE '" + VIS.Msg.getMsg("No", true) + "' " +
-             " END) AS Allday , " +
-             " ( " +
-             " CASE AI.Status " +
-             "   WHEN 1 " +
-             "   THEN '" + VIS.Msg.getMsg("Tentative", true) + "'  " +
-             "   WHEN 2 " +
-             "   THEN '" + VIS.Msg.getMsg("Busy", true) + "' " +
-             "   WHEN 3 " +
-             "   THEN '" + VIS.Msg.getMsg("OutOfOffice", true) + "' " +
-             "   Else " +
-             "    '" + VIS.Msg.getMsg("Free", true) + "' " +
-             "    End) as Status, " +
-             "     AI.ReminderInfo , nvl( ai.attendeeinfo,ai.Ad_User_ID) as attendeeinfo,  AI.RecurrenceInfo , " +
-             "     (  " +
-             "     CASE AI.IsPrivate " +
-             "       WHEN 'Y' " +
-             "       THEN '" + VIS.Msg.getMsg("Yes") + "' " +
-             "       ELSE '" + VIS.Msg.getMsg("No") + "' " +
-             "     END) AS IsPrivate,AI.comments ,ac.Name as caname" +
-             "   FROM AppointmentsInfo ai LEFT OUTER JOIN appointmentcategory AC " +
-            " ON AI.appointmentcategory_id=ac.appointmentcategory_id WHERE AI.AppointmentsInfo_ID=" + ID;
+                " ( " +
+                " CASE Label " +
+                "   WHEN 1   " +
+                "  THEN  '" + VIS.Msg.getMsg("Important", true) + "' " +
+                "   WHEN 2 " +
+                "   THEN '" + VIS.Msg.getMsg("Business", true) + "' " +
+                "   WHEN 3 " +
+                "   THEN   '" + VIS.Msg.getMsg("Personal", true) + "' " +
+                "   WHEN 4 " +
+                "   THEN '" + VIS.Msg.getMsg("Vacation", true) + "' " +
+                "   WHEN 5 " +
+                "   THEN '" + VIS.Msg.getMsg("MustAttend", true) + "' " +
+                "   WHEN 6 " +
+                "   THEN '" + VIS.Msg.getMsg("TravelRequired", true) + "' " +
+                "   WHEN 7 " +
+                "   THEN '" + VIS.Msg.getMsg("NeedsPreparation", true) + "' " +
+                "   WHEN 8 " +
+                "   THEN '" + VIS.Msg.getMsg("BirthDay", true) + "' " +
+                "   WHEN 9 " +
+                "   THEN '" + VIS.Msg.getMsg("Anniversary", true) + "' " +
+                "   WHEN 10 " +
+                "   Then '" + VIS.Msg.getMsg("PhoneCall", true) + "' " +
+                "   ELSE '" + VIS.Msg.getMsg("None", true) + "' " +
+                " END ) AS label , " +
+                " AI.StartDate , AI.EndDate, " +
+                " ( " +
+                " CASE AI.AllDay " +
+                "   WHEN 'Y' " +
+                "       THEN '" + VIS.Msg.getMsg("Yes", true) + "' " +
+                "       ELSE '" + VIS.Msg.getMsg("No", true) + "' " +
+                " END) AS Allday , " +
+                " ( " +
+                " CASE AI.Status " +
+                "   WHEN 1 " +
+                "   THEN '" + VIS.Msg.getMsg("Tentative", true) + "'  " +
+                "   WHEN 2 " +
+                "   THEN '" + VIS.Msg.getMsg("Busy", true) + "' " +
+                "   WHEN 3 " +
+                "   THEN '" + VIS.Msg.getMsg("OutOfOffice", true) + "' " +
+                "   Else " +
+                "    '" + VIS.Msg.getMsg("Free", true) + "' " +
+                "    End) as Status, " +
+                "     AI.ReminderInfo , nvl( ai.attendeeinfo,ai.Ad_User_ID) as attendeeinfo,  AI.RecurrenceInfo , " +
+                "     (  " +
+                "     CASE AI.IsPrivate " +
+                "       WHEN 'Y' " +
+                "       THEN '" + VIS.Msg.getMsg("Yes") + "' " +
+                "       ELSE '" + VIS.Msg.getMsg("No") + "' " +
+                "     END) AS IsPrivate,AI.comments ,ac.Name as caname" +
+                "   FROM AppointmentsInfo ai LEFT OUTER JOIN appointmentcategory AC " +
+                " ON AI.appointmentcategory_id=ac.appointmentcategory_id WHERE AI.AppointmentsInfo_ID=" + ID;
 
             //VIS.DB.executeDataSet(strApp, null, function (ds) {
             //    if (ds != null && ds.getTables().length > 0) {
@@ -1836,7 +1836,7 @@
                 //if (VIS.Application.isRTL)
                 //    $bpzoomIcon = $('<img style="float:left;cursor:pointer" data-ids="' + zoomID + '" src="' + VIS.Application.contextUrl + 'Areas/vis/Images/history-zoom.png" alt="' + VIS.Msg.getMsg("VA048_CallType") + '">');
                 //else
-                    $bpzoomIcon = $('<i class=" vis vis-find" data-ids="' + zoomID + '">');
+                $bpzoomIcon = $('<i class=" vis vis-find" data-ids="' + zoomID + '">');
 
                 if (zoomID == 0)
                     $bpzoomIcon.hide();
@@ -1848,13 +1848,13 @@
 
                 var div0 = $('<div style="float:left;width:100%;margin-bottom:10px"></div>')
                     .append($('<div class="vis-attachhistory-right-row2">')
-                    .append($('<h6>' + VIS.Msg.getMsg("Title") + ' <i class="fa fa-phone"></i></h6>')
-                    .append($bpzoomIcon))
-                    .append($isconference))
+                        .append($('<h6>' + VIS.Msg.getMsg("Title") + ' <i class="fa fa-phone"></i></h6>')
+                            .append($bpzoomIcon))
+                        .append($isconference))
 
                     .append($('<div class="vis-attachhistory-right-row3" style="margin-right: 4px;" >')
-                    .append('<h6>' + VIS.Msg.getMsg("User") + '</h6> ')
-                    .append($fullname));
+                        .append('<h6>' + VIS.Msg.getMsg("User") + '</h6> ')
+                        .append($fullname));
 
                 $visattachhistorygriddataForCall.append(div0);
 
@@ -1862,46 +1862,46 @@
                 var div1 = $('<div style="float:left;width:100%;margin-bottom:10px" ></div>')
 
                     .append($('<div class="vis-attachhistory-right-row2">')
-                    .append($('<h6>' + VIS.Msg.getMsg("VA048_From") + '</h6>'))
-                    .append($fromCall))
+                        .append($('<h6>' + VIS.Msg.getMsg("VA048_From") + '</h6>'))
+                        .append($fromCall))
 
                     .append($('<div class="vis-attachhistory-right-row3" style="margin-right: 4px;" >')
-                    .append('<h6>' + VIS.Msg.getMsg("VA048_To") + '</h6> ')
-                    .append($to));
+                        .append('<h6>' + VIS.Msg.getMsg("VA048_To") + '</h6> ')
+                        .append($to));
 
                 $visattachhistorygriddataForCall.append(div1);
 
                 var div2 = $('<div style="float:left;width:100%;margin-bottom:10px" ></div>')
                     .append($('<div class="vis-attachhistory-right-row2"> ')
-                    .append('<h6>' + VIS.Msg.getMsg("VA048_Duration") + '</h6> ')
-                    .append($duration))
+                        .append('<h6>' + VIS.Msg.getMsg("VA048_Duration") + '</h6> ')
+                        .append($duration))
                     .append($('<div class="vis-attachhistory-right-row3" style="margin-right: 4px;" >')
-                    .append('<h6>' + VIS.Msg.getMsg("VA048_Status") + '</h6>')
-                    .append($status));
+                        .append('<h6>' + VIS.Msg.getMsg("VA048_Status") + '</h6>')
+                        .append($status));
                 $visattachhistorygriddataForCall.append(div2);
 
                 var div3 = $('<div style="float:left;width:100%;margin-bottom:10px" ></div>')
                     .append($('<div class="vis-attachhistory-right-row2">')
-                    .append('<h6>' + VIS.Msg.getMsg("VA048_Price") + '</h6>')
-                    .append($price))
+                        .append('<h6>' + VIS.Msg.getMsg("VA048_Price") + '</h6>')
+                        .append($price))
                     .append($('<div class="vis-attachhistory-right-row3" style="margin-right: 4px;" >')
-                    .append('<h6>' + VIS.Msg.getMsg("VA048_PriceUnit") + '</h6> ')
-                    .append($priceUnit));
+                        .append('<h6>' + VIS.Msg.getMsg("VA048_PriceUnit") + '</h6> ')
+                        .append($priceUnit));
                 $visattachhistorygriddataForCall.append(div3);
 
                 var div4 = $('<div style="float:left;width:100%;margin-bottom:10px" ></div>')
                     .append($('<div class="vis-attachhistory-right-row2">')
-                    .append('<h6>' + VIS.Msg.getMsg("Created") + '</h6>')
-                    .append($created))
+                        .append('<h6>' + VIS.Msg.getMsg("Created") + '</h6>')
+                        .append($created))
                     .append($('<div class="vis-attachhistory-right-row3" style="margin-right: 4px;" >')
-                    .append('<h6>' + VIS.Msg.getMsg("Category") + '</h6> ')
-                    .append($category));
+                        .append('<h6>' + VIS.Msg.getMsg("Category") + '</h6> ')
+                        .append($category));
                 $visattachhistorygriddataForCall.append(div4);
 
                 $visattachhistorygriddataForCall
                     .append($('<div class="vis-attachhistory-right-row" style="margin-bottom:20px;margin-right: 4px;">')
-                    .append('<h6>' + VIS.Msg.getMsg("VA048_Notes") + '</h6> ')
-                    .append($note));
+                        .append('<h6>' + VIS.Msg.getMsg("VA048_Notes") + '</h6> ')
+                        .append($note));
 
                 // attachment
                 $visattachhistorygriddataForCall.append($('<div class="vis-attachhistory-right-row">').append('<h6>' + VIS.Msg.getMsg("Attachments") + '</h6>'));
@@ -1920,14 +1920,14 @@
                 // comment
                 if ($txtAreacall == undefined || $txtAreacall == null)
                     $txtAreacall = $('<input type="text" placeholder="' + VIS.Msg.getMsg('TypeComment') + '"></input>');
-                
+
                 resltGrdforCall = $('<div class="vis-attachhistory-bottom"></div>');
 
                 hisCommentforCall = $('<div class="vis-attachhistory-comments vis-feedMessage"></div>');
                 hisCommentforCall.append($txtAreacall).append('<span class="vis-attachhistory-comment-icon vis vis-sms"></span>');
                 resltGrdforCall.append(($('<div class="vis-attachhistory-right-row" style="margin-top:0px">').append(hisCommentforCall).append('<p class="vis-attachhistory-view-comments">' + VIS.Msg.getMsg('ViewMoreComments') + '</p>')));
                 $visattachhistoryrightcontentForCall.append('<div style="display:none" class="vis-attachhistory-grid-data">').append($visattachhistorygriddataForCall).append(resltGrdforCall);
-                
+
                 $lastCommentCall = $('<div class="vis-attachhistory-right-row" >');
                 $visattachhistorygriddataForCall.append($lastCommentCall);
                 //
@@ -2041,7 +2041,7 @@
                 //    $zoomIcon = $('<img style="float:left;cursor:pointer;margin-top:3px;margin-right:5px" data-ids="' + zoomID + '" src="' + VIS.Application.contextUrl + 'Areas/vis/Images/history-zoom.png" alt="email">');
                 //}
                 //else {
-                    $zoomIcon = $('<i class="vis vis-find pull-right" data-ids="' + zoomID + '" ></i>');
+                $zoomIcon = $('<i class="vis vis-find pull-right" data-ids="' + zoomID + '" ></i>');
                 //}
 
                 $visattachhistoryrightcontentFormail = $('<div class="vis-attachhistory-right-content">');
@@ -2256,7 +2256,7 @@
             $bsyDiv[0].style.visibility = "hidden";
         };
 
-    /**/
+        /**/
         //below line commented to resolve data hiding issue in history
         function createRightPanelforAppointment(IDS, location, description, label, startDate, endDate, allDay, detail, comment, zoomID, subject, category, contacts, recID, ContactNames) {
             if ($visattachhistoryrightcontentFormail != undefined) {
@@ -2273,8 +2273,20 @@
                 $category = $('<p>' + VIS.Utility.encodeText(category) + '</p>');
                 $contacts = $('<p>' + VIS.Utility.encodeText(ContactNames) + '</p>');
                 $label = $('<p>' + VIS.Utility.encodeText(label) + '</p>');
-                $startDate = $('<p>' + VIS.Utility.encodeText(new Date(startDate+"Z").toLocaleString()) + '</p>');
-                $endDate = $(' <p>' + VIS.Utility.encodeText(new Date(endDate+"Z").toLocaleString()) + '</p>');
+
+                if (startDate.indexOf('Z') > 0) {
+                    $startDate = $('<p>' + VIS.Utility.encodeText(new Date(startDate).toLocaleString()) + '</p>');
+                } else {
+                    $startDate = $('<p>' + VIS.Utility.encodeText(new Date(startDate + "Z").toLocaleString()) + '</p>');
+                }
+
+                if (endDate.indexOf('Z') > 0) {
+                    $endDate = $(' <p>' + VIS.Utility.encodeText(new Date(endDate).toLocaleString()) + '</p>');
+                } else {
+                    $endDate = $(' <p>' + VIS.Utility.encodeText(new Date(endDate + "Z").toLocaleString()) + '</p>');
+                }
+
+
                 $allDay = $('<p>' + VIS.Utility.encodeText(allDay) + '</p>');
                 //if ($detail == undefined || $detail == null) {
                 //    $detail = $('<p class="vis-attachhistory-detail"></p>');
@@ -2288,7 +2300,7 @@
                 //    $bpzoomIcon = $('<img style="float:left;cursor:pointer" data-ids="' + zoomID + '" src="' + VIS.Application.contextUrl + 'Areas/vis/Images/history-zoom.png" alt="email">');
                 //}
                 //else {
-                    $bpzoomIcon = $('<i class=" vis vis-find" data-ids="' + zoomID + '" >');
+                $bpzoomIcon = $('<i class=" vis vis-find" data-ids="' + zoomID + '" >');
                 //}
                 $visattachhistoryrightcontentForAppoint = $('<div class="vis-attachhistory-right-content">');
 
@@ -2526,8 +2538,8 @@
             }
 
             str += ' <p>' + result.CharacterData + '</p>' +
-             '</div><div class="vis-attachhistory-comment-dateTime"><p>' + new Date(result.Created).toLocaleString() + '</p>' +
-             '</div></div></div>';
+                '</div><div class="vis-attachhistory-comment-dateTime"><p>' + new Date(result.Created).toLocaleString() + '</p>' +
+                '</div></div></div>';
 
             return str;
         };
