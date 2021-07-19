@@ -45,7 +45,10 @@ namespace VAdvantage.Model
             int ii = M_Product_Category_ID;
             MProductCategory pc = (MProductCategory)s_cache[ii];
             if (pc == null)
+            {
                 pc = new MProductCategory(ctx, M_Product_Category_ID, null);
+                s_cache.Add(ii, pc);
+            }
             return pc;
         }
 

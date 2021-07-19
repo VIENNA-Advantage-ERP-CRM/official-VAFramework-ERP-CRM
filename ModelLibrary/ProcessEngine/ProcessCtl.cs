@@ -809,6 +809,11 @@ namespace VAdvantage.ProcessEngine
             {
 
                 string lang = ctx.GetAD_Language().Replace("_", "-");
+                // Set Report Language -VIS0228
+                if (!string.IsNullOrEmpty(ctx.GetContext("Report_Lang")))
+                {
+                    lang = ctx.GetContext("Report_Lang").Replace("_", "-");
+                }
                 System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(lang);
                 System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(lang);
 
@@ -924,7 +929,7 @@ namespace VAdvantage.ProcessEngine
                         if (_pi.GetFileType() == ReportType_CSV)
                         {
                             report = _rep.CreateCSV(_ctx);
-                            string filePath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + "TempDownload";
+                            string filePath = GlobalVariable.PhysicalPath + "TempDownload";
 
                             if (!Directory.Exists(filePath))
                                 Directory.CreateDirectory(filePath);
@@ -1543,7 +1548,7 @@ namespace VAdvantage.ProcessEngine
 
         #endregion
 
-
+       
     }
 }
 

@@ -668,11 +668,11 @@ namespace VAdvantage.Model
                     return status;
             }
 
-            // JID_1290: Set the document number from completede document sequence after completed (if needed)
-            SetCompletedDocumentNo();
-
+            // Set Document Date based on setting on Document Type
+            SetCompletedDocumentDate();
+            
             // To check weather future date records are available in Transaction window
-            // this check implement after "SetCompletedDocumentNo" function, because this function overwrit movement date
+            // this check implement after "SetCompletedDocumentDate" function, because this function overwrit movement date
             _processMsg = MTransaction.CheckFutureDateRecord(GetMovementDate(), Get_TableName(), GetM_Movement_ID(), Get_Trx());
             if (!string.IsNullOrEmpty(_processMsg))
             {
@@ -1900,6 +1900,9 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
             }
 
+            // JID_1290: Set the document number from completede document sequence after completed (if needed)
+            SetCompletedDocumentNo();
+
             //
             SetProcessed(true);
             SetDocAction(DOCACTION_Close);
@@ -1919,18 +1922,6 @@ namespace VAdvantage.Model
 
             MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
 
-            // if Overwrite Date on Complete checkbox is true.
-            if (dt.IsOverwriteDateOnComplete())
-            {
-                SetMovementDate(DateTime.Now.Date);
-
-                //	Std Period open?
-                if (!MPeriod.IsOpen(GetCtx(), GetMovementDate(), dt.GetDocBaseType(), GetAD_Org_ID()))
-                {
-                    throw new Exception("@PeriodClosed@");
-                }
-            }
-
             // if Overwrite Sequence on Complete checkbox is true.
             if (dt.IsOverwriteSeqOnComplete())
             {
@@ -1945,6 +1936,32 @@ namespace VAdvantage.Model
                 if (value != null)
                 {
                     SetDocumentNo(value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Overwrite the document date based on setting on Document Type
+        /// </summary>
+        private void SetCompletedDocumentDate()
+        {
+            // if Reversal document then no need to get Document no from Completed sequence
+            if (IsReversal())
+            {
+                return;
+            }
+
+            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+
+            // if Overwrite Date on Complete checkbox is true.
+            if (dt.IsOverwriteDateOnComplete())
+            {
+                SetMovementDate(DateTime.Now.Date);
+
+                //	Std Period open?
+                if (!MPeriod.IsOpen(GetCtx(), GetMovementDate(), dt.GetDocBaseType(), GetAD_Org_ID()))
+                {
+                    throw new Exception("@PeriodClosed@");
                 }
             }
         }

@@ -432,5 +432,26 @@ SetSupervisor_ID (0);
                 return 0;
             return Convert.ToInt32(ii);
         }
+
+        /** Set Preference to Node.
+        @param PreferNode Setting to indicate that preference will be given to Node level settings */
+        public void SetPreferNode(Boolean PreferNode) 
+        { 
+            Set_Value("PreferNode", PreferNode); 
+        }
+
+        /** Get Preference to Node.
+        @return Setting to indicate that preference will be given to Node level settings */
+        public Boolean IsPreferNode() 
+        { 
+            Object oo = Get_Value("PreferNode"); 
+            if (oo != null) 
+            { 
+                if (oo.GetType() == typeof(bool)) 
+                    return Convert.ToBoolean(oo); 
+                return "Y".Equals(oo); 
+            } 
+            return false; 
+        }
     }
 }

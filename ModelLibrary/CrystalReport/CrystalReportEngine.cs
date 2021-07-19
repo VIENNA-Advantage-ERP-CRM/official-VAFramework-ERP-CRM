@@ -45,8 +45,8 @@ namespace VAdvantage.CrystalReport
         public byte[] GenerateCrystalReport()
         {
 
-            string reportPath = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "CReports\\Reports");
-            string reportImagePath = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "");
+            string reportPath = System.IO.Path.Combine(GlobalVariable.PhysicalPath, "CReports\\Reports");
+            string reportImagePath = System.IO.Path.Combine(GlobalVariable.PhysicalPath, "");
 
             string[] reportNameArray;
             string[] reportPathArray;
@@ -734,7 +734,10 @@ namespace VAdvantage.CrystalReport
                     oStream = rptBurndown.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
                     byteArray = new byte[oStream.Length];
                     oStream.Read(byteArray, 0, Convert.ToInt32(oStream.Length));
-
+                    rptBurndown.Close();
+                    rptBurndown.Dispose();
+                    GC.Collect();
+                    rptBurndown = null;
                     return byteArray;
 
                     //if (form.IsDirectPrint())
@@ -745,6 +748,12 @@ namespace VAdvantage.CrystalReport
                 }
                 catch (Exception ex)
                 {
+                    if (rptBurndown != null)
+                    {
+                        rptBurndown.Close();
+                        rptBurndown.Dispose();
+                        GC.Collect();
+                    }
                     throw ex;
 
                 }
@@ -904,6 +913,12 @@ namespace VAdvantage.CrystalReport
                     }
                     catch (Exception exx)
                     {
+                        if (rptBurndown != null)
+                        {
+                            rptBurndown.Close();
+                            rptBurndown.Dispose();
+                            GC.Collect();
+                        }
                         bytes = null;
                         log.Severe(exx.Message);
                     }
@@ -913,7 +928,7 @@ namespace VAdvantage.CrystalReport
                     bytes = null;
                 }
 
-                string FILE_PATH = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + "TempDownload";
+                string FILE_PATH = GlobalVariable.PhysicalPath + "TempDownload";
 
                 if (!Directory.Exists(FILE_PATH))
                     Directory.CreateDirectory(FILE_PATH);
@@ -940,7 +955,10 @@ namespace VAdvantage.CrystalReport
                     rptBurndown.ExportToDisk(CrystalDecisions.Shared.ExportFormatType.RichText, filePath);
                 }
                 //
+                rptBurndown.Close();
                 rptBurndown.Dispose();
+                GC.Collect();
+                rptBurndown = null;
                 log.Severe("CrystalReport Info:File Saved");
                 return filePath.Substring(filePath.IndexOf("TempDownload"));
             }
@@ -956,8 +974,8 @@ namespace VAdvantage.CrystalReport
         {
             ReportDocument rptBurndown = null;
 
-            string reportPath = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "CReports\\Reports");
-            string reportImagePath = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "");
+            string reportPath = System.IO.Path.Combine(GlobalVariable.PhysicalPath, "CReports\\Reports");
+            string reportImagePath = System.IO.Path.Combine(GlobalVariable.PhysicalPath, "");
 
             string[] reportNameArray;
             string[] reportPathArray;

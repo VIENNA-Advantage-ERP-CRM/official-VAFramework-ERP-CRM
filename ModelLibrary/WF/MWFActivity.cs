@@ -971,8 +971,22 @@ namespace VAdvantage.WF
             else if (MWFNode.ACTION_AppsReport.Equals(action))
             {
                 log.Fine("Report:AD_Process_ID=" + _node.GetAD_Process_ID());
+
+                int invoiceReportID = VAdvantage.Common.Common.GetBusinessInvoiceReportID(GetCtx(), GetAD_Table_ID(), GetRecord_ID());
+                if (invoiceReportID > 0)
+                {
+                    string lang = VAdvantage.Common.Common.GetCustomerLanguage(GetCtx(), GetAD_Table_ID(), GetRecord_ID());
+                    if (lang != "" && GetCtx().GetContext("#AD_Language") != lang)
+                    {
+                        GetCtx().SetContext("Report_Lang", lang);
+                    }
+
+                }
+                else {
+                    invoiceReportID = _node.GetAD_Process_ID();
+                }
                 //	Process
-                MProcess process = MProcess.Get(GetCtx(), _node.GetAD_Process_ID());
+                MProcess process = MProcess.Get(GetCtx(), invoiceReportID);
 
                 if (!process.IsReport() || (process.GetAD_PrintFormat_ID() == 0
                                              && process.GetAD_ReportView_ID() == 0
@@ -986,11 +1000,11 @@ namespace VAdvantage.WF
                 {
 
                     //throw new IllegalStateException("Not a Report AD_Process_ID=" + _node.getAD_Process_ID());
-                    throw new Exception("Not a Report AD_Process_ID=" + _node.GetAD_Process_ID());
+                    throw new Exception("Not a Report AD_Process_ID=" + invoiceReportID);
 
                 }
                 //
-                ProcessInfo pi = new ProcessInfo(_node.GetName(true), _node.GetAD_Process_ID(),
+                ProcessInfo pi = new ProcessInfo(_node.GetName(true), invoiceReportID,
                     GetAD_Table_ID(), GetRecord_ID());
                 pi.SetAD_User_ID(GetAD_User_ID());
                 pi.SetAD_Client_ID(GetAD_Client_ID());
@@ -1013,15 +1027,12 @@ namespace VAdvantage.WF
                 {
                     pi.SetIsCrystal(false);
                 }
-
+                
                 pi.SetAD_ReportFormat_ID(process.GetAD_ReportFormat_ID());
                 pi.SetAD_ReportMaster_ID(process.GetAD_ReportMaster_ID());
                 process.ProcessIt(pi, trx);
                 ReportRun(pi);
                 SendNoticeEMail(trx);
-
-
-
                 return true;
             }
 
@@ -1973,7 +1984,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             }
             else if (report != null)
             {
-                string filePath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + "TempDownload";
+                string filePath = GlobalVariable.PhysicalPath + "TempDownload";
                 if (!Directory.Exists(filePath))
                     Directory.CreateDirectory(filePath);
 
