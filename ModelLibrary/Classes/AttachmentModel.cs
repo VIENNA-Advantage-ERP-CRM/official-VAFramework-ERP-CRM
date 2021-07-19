@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using VAdvantage.DataBase;
 using VAdvantage.Model;
 using VAdvantage.Utility;
-using VIS.DBase;
 
-namespace ViennaAdvantageWeb.Areas.VIS.Models
+namespace VAdvantage.Classes
 {
     public class AttachmentModel
     {
