@@ -671,7 +671,7 @@ namespace VAdvantage.Model
                 }
                 else if (GetFileLocation() == FILELOCATION_ServerFileSystem)
                 {
-                    String path = GlobalVariable.AttachmentPath;
+                    String path = GetAttachmentPath();
 
                     //Create Directory
                     try
@@ -723,7 +723,7 @@ namespace VAdvantage.Model
                 } // No need to implement for now, but do not delete
                 if (GetFileLocation() == FILELOCATION_WebService)
                 {
-                    string filePath = GlobalVariable.AttachmentPath;
+                    string filePath = GetAttachmentPath();
                     string folderKey = "0";
                     int AD_AttachmentLine_ID = 0;
                     try
@@ -986,7 +986,7 @@ namespace VAdvantage.Model
             try
             {
 
-                String path = GlobalVariable.AttachmentPath;
+                String path = GetAttachmentPath();
                 //path = path.Substring(0,path.IndexOf("bin"));
                 if (Directory.Exists(path))
                 {
@@ -1036,7 +1036,7 @@ namespace VAdvantage.Model
                 else if (GetFileLocation() == FILELOCATION_ServerFileSystem)
                 {
                     fileName = this.GetAD_Table_ID() + "_" + this.GetRecord_ID();
-                    String filePath = GlobalVariable.AttachmentPath + "\\" + fileName;
+                    String filePath = Path.Combine(GetAttachmentPath(), fileName);
                     if (System.IO.File.Exists(filePath))
                     {
                         sdata = System.IO.File.ReadAllBytes(filePath);
@@ -1196,8 +1196,8 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get the server location
         /// </summary>
-        /// <returns>Server location</returns>
-        private string GetServerLocation()
+        /// <returns>Returns server location</returns>
+        private static string GetServerLocation()
         {
             string serverLocation = System.Web.Configuration.WebConfigurationManager.AppSettings["serverLocation"];
 
@@ -1511,7 +1511,7 @@ namespace VAdvantage.Model
 
 
                 //zipData = Utility.SecureEngine.EncryptFile(zipData, Password);
-                if (!SecureEngine.EncryptFile(zipfileName, Password, outputfileName))
+                if (!SecureEngine.EncryptFile(zipfileName, Password, Path.Combine(filePath, outputfileName)))
                 {
                     error.Append("ErrorInEncryption:" + zipfileName);
                     CleanUp(filePath + "\\" + folderKey, zipfileName, null, zipinput);
@@ -1562,7 +1562,7 @@ namespace VAdvantage.Model
 
                 else if (GetFileLocation() == FILELOCATION_ServerFileSystem)
                 {
-                    String path = GlobalVariable.AttachmentPath;
+                    string path = GetAttachmentPath();
 
                     //Create Directory
                     try
@@ -1626,6 +1626,15 @@ namespace VAdvantage.Model
             }
         }
 
+        /// <summary>
+        /// Get attachment path
+        /// </summary>
+        /// <returns>Returns attachment path</returns>
+        private static string GetAttachmentPath()
+        {
+            return GetServerLocation() == System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath ? 
+                        GlobalVariable.AttachmentPath : Path.Combine(GetServerLocation(), "Attachments");
+        }
 
         private void CleanUp(string dirpath, string zipfile, string encryptedfile, string zipInput)
         {
