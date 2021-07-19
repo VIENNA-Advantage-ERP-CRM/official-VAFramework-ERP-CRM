@@ -1636,7 +1636,7 @@ namespace VAdvantage.Model
         /// <returns>Returns attachment path</returns>
         private static string GetAttachmentPath()
         {
-            return GetServerLocation() == System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath ? 
+            return GetServerLocation() == GlobalVariable.PhysicalPath ? 
                         GlobalVariable.AttachmentPath : Path.Combine(GetServerLocation(), "Attachments");
         }
 
