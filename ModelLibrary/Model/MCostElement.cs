@@ -600,11 +600,10 @@ namespace VAdvantage.Model
             MProductCategory pc = null;
             bool isPOcostingMethod = false;
             string costingMethod = null;
-            MClient client = MClient.Get(ctx, AD_Client_ID);
-            MProduct product = MProduct.Get(ctx, M_Product_ID);
-
-            if (product != null)
+            
+            if (M_Product_ID > 0)
             {
+                MProduct product = MProduct.Get(ctx, M_Product_ID);
                 pc = MProductCategory.Get(product.GetCtx(), product.GetM_Product_Category_ID());
                 if (pc != null)
                 {
@@ -633,18 +632,18 @@ namespace VAdvantage.Model
                         }
                     }
                 }
-            }
-            if (costingMethod.Equals(COSTINGMETHOD_WeightedAveragePO) ||
-                costingMethod.Equals(COSTINGMETHOD_AveragePO) ||
-                costingMethod.Equals(COSTINGMETHOD_LastPOPrice))
-            {
-                isPOcostingMethod = true;
-            }
-            else
-            {
-                isPOcostingMethod = false;
-            }
 
+                if (costingMethod.Equals(COSTINGMETHOD_WeightedAveragePO) ||
+                    costingMethod.Equals(COSTINGMETHOD_AveragePO) ||
+                    costingMethod.Equals(COSTINGMETHOD_LastPOPrice))
+                {
+                    isPOcostingMethod = true;
+                }
+                else
+                {
+                    isPOcostingMethod = false;
+                }
+            }
             return isPOcostingMethod;
         }
 
@@ -688,20 +687,20 @@ namespace VAdvantage.Model
                         costingMethod = Util.GetValueOfString(ds.Tables[0].Rows[0]["AschcostingMethod"]);
                     }
                 }
-            }
-            if (costingMethod.Equals(COSTINGMETHOD_Lifo))
-            {
-                bindedCostingMethod = COSTINGMETHOD_Lifo;
-            }
-            else if (costingMethod.Equals(COSTINGMETHOD_Fifo))
-            {
-                bindedCostingMethod = COSTINGMETHOD_Fifo;
-            }
-            else
-            {
-                bindedCostingMethod = "";
-            }
 
+                if (costingMethod.Equals(COSTINGMETHOD_Lifo))
+                {
+                    bindedCostingMethod = COSTINGMETHOD_Lifo;
+                }
+                else if (costingMethod.Equals(COSTINGMETHOD_Fifo))
+                {
+                    bindedCostingMethod = COSTINGMETHOD_Fifo;
+                }
+                else
+                {
+                    bindedCostingMethod = "";
+                }
+            }
             return bindedCostingMethod;
         }
     }
