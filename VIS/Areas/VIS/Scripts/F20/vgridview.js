@@ -38,8 +38,12 @@
                     self.grid.select(Number(evt.recid));
                     var isCompositView = $('#AS_' + self.mTab.getWindowNo() + '_' + self.mTab.getAD_Window_ID()).find('[name=' + evt.target + ']').closest('.vis-ad-w-p-center-inctab');
                     if (isCompositView.length > 0) {
-                        isCompositView.find('.vis-multi').click()
-                    } else {
+                        if (isCompositView.find('.vis-multi').length > 0) {
+                            isCompositView.find('.vis-multi').click();
+                        } else {
+                            isCompositView.find('.vis-edit').click()
+                        }
+                    }  else {
                         $('#AS_' + self.mTab.getWindowNo() + '_' + self.mTab.getAD_Window_ID()).find(' .vis-multi:first').click();
                     }
 
