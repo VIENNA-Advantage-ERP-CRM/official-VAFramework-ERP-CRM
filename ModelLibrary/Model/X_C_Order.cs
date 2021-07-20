@@ -3034,5 +3034,25 @@ namespace VAdvantage.Model
         public void SetVA077_TotalSalesAmt(Decimal? VA077_TotalSalesAmt) { Set_Value("VA077_TotalSalesAmt", (Decimal?)VA077_TotalSalesAmt); }/** Get Total Sales Amount.
 @return Total Sales Amount */
         public Decimal GetVA077_TotalSalesAmt() { Object bd = Get_Value("VA077_TotalSalesAmt"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
+        /** ConditionalFlag AD_Reference_ID=1000246 */
+        public static int CONDITIONALFLAG_AD_Reference_ID = 1000246;/** Reversal = 00 */
+        public static String CONDITIONALFLAG_Reversal = "00";/** PrepareIt = 01 */
+        public static String CONDITIONALFLAG_PrepareIt = "01";/** CompleteIt = 02 */
+        public static String CONDITIONALFLAG_CompleteIt = "02";
+        /** Is test a valid value.
+@param test testvalue
+@returns true if valid **/
+        public bool IsConditionalFlagValid(String test) { return test == null || test.Equals("00") || test.Equals("01") || test.Equals("02"); }
+        /** Set Conditional Flag.
+@param ConditionalFlag This Field is used to bypass constraint on different action */
+        public void SetConditionalFlag(String ConditionalFlag)
+        {
+            if (!IsConditionalFlagValid(ConditionalFlag))
+                throw new ArgumentException("ConditionalFlag Invalid value - " + ConditionalFlag + " - Reference_ID=1000246 - 00 - 01 - 02"); if (ConditionalFlag != null && ConditionalFlag.Length > 2) { log.Warning("Length > 2 - truncated"); ConditionalFlag = ConditionalFlag.Substring(0, 2); }
+            Set_Value("ConditionalFlag", ConditionalFlag);
+        }
+        /** Get Conditional Flag.
+@return This Field is used to bypass constraint on different action */
+        public String GetConditionalFlag() { return (String)Get_Value("ConditionalFlag"); }
     }
 }

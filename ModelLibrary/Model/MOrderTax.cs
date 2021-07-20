@@ -236,7 +236,7 @@ namespace VAdvantage.Model
                     for (int i = 0; i < dr.Length; i++)
                     {
 
-                        Decimal baseAmt = Utility.Util.GetValueOfDecimal(dr[0]["TaxAbleAmt"]);
+                        Decimal baseAmt = Utility.Util.GetValueOfDecimal(dr[i]["TaxAbleAmt"]);
                         taxBaseAmt = Decimal.Add(taxBaseAmt, baseAmt);
                         //
                         if (!documentLevel)     // calculate line tax
