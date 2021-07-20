@@ -957,7 +957,7 @@ namespace VAdvantage.Model
                     base.SetTaxAmt(TaxAmt);
                     SetSurchargeAmt(surchargeAmt);
                 }
-                else if(GetTaxAmt().Equals(Env.ZERO))
+                else if (GetTaxAmt().Equals(Env.ZERO))
                 {
                     TaxAmt = tax.CalculateTax(GetLineNetAmt(), IsTaxIncluded(), GetPrecision());
                     if (IsTaxIncluded())
@@ -3906,7 +3906,7 @@ namespace VAdvantage.Model
             {
                 if (IsDropShip())
                 {
-                    wHouse = new MWarehouse(GetCtx(), Ord.GetM_Warehouse_ID(), Get_Trx());
+                    wHouse = MWarehouse.Get(GetCtx(), Ord.GetM_Warehouse_ID());
                     if (!wHouse.IsDropShip())
                     {
                         int _Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar("Select M_Warehouse_ID From M_Warehouse Where AD_Org_ID=" + GetAD_Org_ID() + " AND IsActive='Y' AND IsDropShip='Y'"));
@@ -3917,7 +3917,7 @@ namespace VAdvantage.Model
                         // if drop ship type of warehouse does not exist in same organization then create a new warehouse and set that warehouse
                         else
                         {
-                            _Warehouse_ID = CreateDropShipWareHouse();
+                            _Warehouse_ID = CreateDropShipWareHouse(wHouse);
                             SetM_Warehouse_ID(_Warehouse_ID);
                         }
                     }
@@ -5139,7 +5139,7 @@ namespace VAdvantage.Model
         /// Create Drop Ship Warehouse
         /// </summary>
         /// <returns>Warehouse ID</returns>
-        private int CreateDropShipWareHouse()
+        private int CreateDropShipWareHouse(MWarehouse wareH)
         {
             MWarehouse wh = new MWarehouse(GetCtx(), 0, Get_Trx());
             MOrg org = new MOrg(GetCtx(), GetAD_Org_ID(), Get_Trx());
@@ -5156,8 +5156,8 @@ namespace VAdvantage.Model
             }
             if (_Location_ID == 0)
             {
-                int _wID = Util.GetValueOfInt(DB.ExecuteScalar("Select M_WareHouse_ID From C_Order Where C_Order_ID=" + GetC_Order_ID()));
-                MWarehouse wareH = new MWarehouse(GetCtx(), _wID, Get_Trx());
+                //int _wID = Util.GetValueOfInt(DB.ExecuteScalar("Select M_WareHouse_ID From C_Order Where C_Order_ID=" + GetC_Order_ID()));
+                //MWarehouse wareH = new MWarehouse(GetCtx(), _wID, Get_Trx());
                 _Location_ID = wareH.GetC_Location_ID();
             }
             wh.SetC_Location_ID(_Location_ID);
