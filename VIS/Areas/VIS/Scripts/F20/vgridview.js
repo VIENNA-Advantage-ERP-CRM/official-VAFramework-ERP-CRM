@@ -19,6 +19,7 @@
         this.onAdd = null;
 
         this.editColumnIndex = -1;
+        var clickCount = 0;
 
 
         var self = this;
@@ -31,11 +32,29 @@
             size: '25px'
         };
 
+        function toggleToSingleView(evt) {
+            try {
+                if (self.grid.columns[evt.column].columnName.toLowerCase() == 'value' || self.grid.columns[evt.column].columnName.toLowerCase() == 'documentno' || self.grid.columns[evt.column].columnName.toLowerCase() == 'name') {
+                    self.grid.select(Number(evt.recid));
+                    var isCompositView = $('#AS_' + self.mTab.getWindowNo() + '_' + self.mTab.getAD_Window_ID()).find('[name=' + evt.target + ']').closest('.vis-ad-w-p-center-inctab');
+                    if (isCompositView.length > 0) {
+                        isCompositView.find('.vis-multi').click()
+                    } else {
+                        $('#AS_' + self.mTab.getWindowNo() + '_' + self.mTab.getAD_Window_ID()).find(' .vis-multi:first').click();
+                    }
+
+                }
+            } catch (err) {
+
+            }
+        }
+
         this.getEditColumn = function () {
             return editColumn;
         }
 
         this.onClick = function (evt) {
+            clickCount++;
             // console.log(evt);
             if (this.readOnly)
                 return;
@@ -65,7 +84,16 @@
 
         this.onSingleClick = function (evt) {
             //this.cRecid = evt.recid;
-            //console.log("click");
+            clickCount++;
+            singleClickTimer = setTimeout(function () {
+                if (clickCount === 1) {
+                    clickCount = 0;
+                    toggleToSingleView(evt);
+                } else if (clickCount === 2) {
+                    clearTimeout(singleClickTimer);
+                    clickCount = 0;
+                }
+            }, 400);
         };
 
         this.onSelectLocal = function (evt) {
@@ -252,7 +280,7 @@
             }
 
             return [AD_Client_ID, AD_Org_ID, Record_ID];
-        };
+        };      
 
         //this.onToolBarClick = function (target, data) {
         //    //self.$editBtn.img = "icon-reload";
@@ -441,6 +469,9 @@
 
 
                 oColumn.sortable = true;
+                if (columnName.toLowerCase() == "value" || columnName.toLowerCase() == "name" || columnName.toLowerCase() == "documentno") {
+                    oColumn.style = 'text-decoration:underline; color:blue !important; cursor:pointer';
+                }
 
                 if (mField.getIsEncryptedField()) {
                     oColumn.render = function (record, index, colIndex) {
