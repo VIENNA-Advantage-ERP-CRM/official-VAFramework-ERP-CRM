@@ -164,8 +164,13 @@ namespace VAdvantage.WF
             {
                 if (!(IsEsclAppSupervisor() || GetAD_WF_Responsible_ID() > 0))
                 {
-                    log.SaveError("VIS_EsclNotProvided", "");
-                    return false;
+                    // PreferNode
+                    // VIS0008 Added to check preference at node level as well
+                    if (!IsPreferNode())
+                    {
+                        log.SaveError("VIS_EsclNotProvided", "");
+                        return false;
+                    }
                 }
                 if (IsEsclForward())
                 {

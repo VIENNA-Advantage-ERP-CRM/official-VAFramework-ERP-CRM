@@ -153,6 +153,7 @@
     <Compile Include="Classes\AdvanceDocumentType.cs" />
     <Compile Include="Classes\AEnv.cs" />
     <Compile Include="Classes\AttachmentHelper.cs" />
+    <Compile Include="Classes\AttachmentModel.cs" />
     <Compile Include="Classes\BudgetCheck.cs" />
     <Compile Include="Classes\CCache.cs" />
     <Compile Include="Classes\CleanUp.cs" />
