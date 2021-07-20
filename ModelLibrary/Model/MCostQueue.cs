@@ -2412,15 +2412,15 @@ namespace VAdvantage.Model
                                     if (OrderCurrency_ID != acctSchema.GetC_Currency_ID())
                                     {
                                         expectedAmt = MConversionRate.Convert(ctx, expectedAmt, OrderCurrency_ID, acctSchema.GetC_Currency_ID(),
-                                                                    inout.GetDateAcct(), IsPOCostingMethod ? order.GetC_ConversionType_ID() :
-                                                                    Util.GetValueOfInt(dsExpectedLandedCostAllocation.Tables[0].Rows[lca]["C_ConversionType_ID"]), AD_Client_ID, AD_Org_ID);
+                                                                                                           IsPOCostingMethod ? inout.GetDateAcct() : invoice.GetDateAcct(), IsPOCostingMethod ? order.GetC_ConversionType_ID() :
+                                                                                                           Util.GetValueOfInt(dsExpectedLandedCostAllocation.Tables[0].Rows[lca]["C_ConversionType_ID"]), AD_Client_ID, AD_Org_ID);
                                         if (expectedAmt == 0)
                                         {
                                             if (optionalstr != "window")
                                             {
                                                 trxName.Rollback();
                                             }
-                                            conversionNotFound = inout.GetDocumentNo();
+                                            conversionNotFound = IsPOCostingMethod ? inout.GetDocumentNo() : invoice.GetDocumentNo();
                                             return false;
                                         }
                                     }
