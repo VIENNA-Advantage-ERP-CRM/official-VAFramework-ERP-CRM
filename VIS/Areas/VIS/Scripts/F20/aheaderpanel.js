@@ -184,7 +184,7 @@
                         var iControl = null;
 
                         //Apply HTML Style
-                        var dynamicClassName = this.applyCustomUISettings(headerSeqNo, startCol, colSpan, startRow, rowSpan, justyFy, alignItem,
+                        var dynamicClassName = $self.applyCustomUISettings(headerSeqNo, startCol, colSpan, startRow, rowSpan, justyFy, alignItem,
                             backgroundColor, FontColor, fontSize, fieldPadding);
 
                         // Find the div with dynamic class from container. Class will only be available in DOm if two fields are having same item seq. No.
@@ -203,7 +203,7 @@
                         // If Referenceof field is Image then added extra class to align image and Label in center.
                         if (mField.getDisplayType() == VIS.DisplayType.Image) {
                             $divLabel.addClass('vis-w-p-header-Label-center-f');
-                            var dynamicClassForImageJustyfy = this.justifyAlignImageItems(headerSeqNo, justyFy, alignItem);
+                            var dynamicClassForImageJustyfy = $self.justifyAlignImageItems(headerSeqNo, justyFy, alignItem);
                             $divLabel.addClass(dynamicClassForImageJustyfy);
                         }
 
@@ -212,7 +212,7 @@
 
                         iControl = VIS.VControlFactory.getReadOnlyControl(this.gTab, mField, false, false, false);
 
-                        var dynamicFieldValue = this.applyCustomUIForFieldValue(headerSeqNo, startCol, startRow, mField);
+                        var dynamicFieldValue = $self.applyCustomUIForFieldValue(headerSeqNo, startCol, startRow, mField);
 
                         iControl.getControl().addClass(dynamicFieldValue);
 
@@ -421,7 +421,6 @@
 
                 if (mField.lookup) {
                     colValue = mField.lookup.getDisplay(colValue, true);
-                    colValue = VIS.Utility.Util.getIdentifierDisplayVal(colValue);
                 }
                 //	Date
                 else if (VIS.DisplayType.IsDate(displayType)) {
@@ -468,6 +467,36 @@
 
             return colValue;
         }
+
+        var getIdentifierImage = function (mField) {
+            var value = mField.getValue();
+            value = mField.lookup.getDisplay(value, true);
+
+            if (value != null && value && value.indexOf("Images/") > -1) {// Based on sequence of image in idenitifer, perform logic and display image with text
+
+                var img = value.substring(value.indexOf("Images/") + 7, value.lastIndexOf("^^"));
+                img = VIS.Application.contextUrl + "Images/Thumb32x32/" + img;
+
+                if (c == 0 || img.indexOf("nothing.png") > -1) {
+
+                    value = value.replace("^^" + value.substring(value.indexOf("Images/"), value.lastIndexOf("^^") + 2), "^^^")
+                    if (value.indexOf("Images/") > -1)
+                        value = value.replace(value.substring(value.indexOf("Images/"), value.lastIndexOf("^^") + 2), "^^^");
+
+                    value = value.split("^^^");
+                    var highlightChar = '';
+                    for (var c = 0; c < value.length; c++) {
+                        if (value[c].trim().length > 0) {
+                            if (highlightChar.length == 0)
+                                highlightChar = value[c].trim().substring(0, 1).toUpper();
+                            return highlightChar;
+                        }
+
+                    }
+                }
+                else
+                    return img;
+            }
 
         var getIdentifierImage = function (mField) {
             var value = mField.getValue();
