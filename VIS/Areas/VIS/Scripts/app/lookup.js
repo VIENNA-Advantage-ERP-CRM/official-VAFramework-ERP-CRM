@@ -481,20 +481,26 @@
         }
     };
 
-    MLookup.prototype.getLOVIconElement = function (value, checkLocalList) {
-        
+    MLookup.prototype.getLOVIconElement = function (value, checkLocalList, getsource) {
+
         var iconobj = this.lookup[" " + value];
 
         if (iconobj) {
-           var iconpath = iconobj["ico"];
+            var iconpath = iconobj["ico"];
             if (iconpath) {
                 if (iconpath.indexOf("Images/") > -1) {
                     var img = iconpath.substring(iconpath.indexOf("Images/") + 7);
                     img = VIS.Application.contextUrl + "Images/Thumb32x32/" + img;
-                    return "<img src='" + img + "'></img>";
+                    if (getsource)
+                        return img;
+                    else
+                        return "<img src='" + img + "'></img>";
                 }
                 else {
-                    return "<i class='" + iconpath + "'></i>";
+                    if (getsource)
+                        return iconpath;
+                    else
+                        return "<i class='" + iconpath + "'></i>";
                 }
             }
         }
@@ -1015,6 +1021,10 @@
     /// <returns>Reference Value</returns>
     MLookup.prototype.getAD_Reference_Value_ID = function () {
         return this.info.AD_Reference_Value_ID;
+    };
+
+    MLookup.prototype.gethasImageIdentifier = function () {
+        return this.info.hasImageIdentifier;
     };
 
     MLookup.prototype.disableValidation = function () {

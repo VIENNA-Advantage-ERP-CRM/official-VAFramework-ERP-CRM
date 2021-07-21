@@ -163,6 +163,7 @@ namespace VAdvantage.Classes
             if (AD_Reference_ID == DisplayType.List)	//	17
             {
                 info = GetLookUp_List(language, AD_Reference_Value_ID);
+                info.hasImageIdentifier = true;
                 needToAddSecurity = false;
             }
             // TAble OR Search with Reference value
@@ -420,8 +421,9 @@ namespace VAdvantage.Classes
 
             StringBuilder realSQL = new StringBuilder("SELECT ");
             realSQL.Append(tableName).Append(".").Append(keyColumn).Append(",NULL,");
+            bool hasImageIdentifier = false;
+            StringBuilder displayColumn = GetLookup_DisplayColumn(language, tableName,out hasImageIdentifier);
 
-            StringBuilder displayColumn = GetLookup_DisplayColumn(language, tableName);
 
             realSQL.Append((displayColumn == null) ? "NULL" : displayColumn.ToString());
             realSQL.Append(",").Append(tableName).Append(".IsActive");
@@ -456,6 +458,8 @@ namespace VAdvantage.Classes
                 lInfo.displayColSubQ = displayColumn.ToString();
             else
                 lInfo.displayColSubQ = "";
+
+            lInfo.hasImageIdentifier = hasImageIdentifier;
 
             return lInfo;
         }
@@ -722,7 +726,6 @@ namespace VAdvantage.Classes
 
                 if (i > 0)
                 {
-                    // if (ldc.ColumnName.ToLower().Equals("ad_image_id") || list[i - 1].ColumnName.ToLower().Equals("ad_image_id"))
                     if (ldc.ColumnName.ToLower().Equals("ad_image_id"))
                     {
                         displayColumn.Append(" ||'^^'|| ");
@@ -745,6 +748,164 @@ namespace VAdvantage.Classes
                 {
                     string embeddedSQL = "SELECT NVL(ImageURL,'') ||'^^' FROM AD_Image WHERE " + tableName + ".AD_Image_ID=AD_Image.AD_Image_ID";
                     displayColumn.Append("(").Append(embeddedSQL).Append(")");
+                    
+                }
+                else if (ldc.IsTranslated && !Env.IsBaseLanguage(language, tableName))//  DataBase.GlobalVariable.IsBaseLanguage())
+                    displayColumn.Append(tableName).Append("_Trl.").Append(ldc.ColumnName);
+                //  date
+                else if (DisplayType.IsDate(ldc.DisplayType))
+                {
+                    displayColumn.Append(DataBase.DB.TO_CHAR(tableName + "." + ldc.ColumnName, ldc.DisplayType, language.GetAD_Language()));
+                }
+                //Search with ref key
+                else if (ldc.DisplayType == DisplayType.Search && ldc.AD_Ref_Val_ID > 0)
+                {
+                    string embeddedSQL = GetLookup_TableEmbed(language, ldc.ColumnName, tableName, ldc.AD_Ref_Val_ID);
+                    if (embeddedSQL != null)
+                        displayColumn.Append("(").Append(embeddedSQL).Append(")");
+                }
+
+                //  TableDir // Search 
+                else if ((ldc.DisplayType == DisplayType.TableDir || ldc.DisplayType == DisplayType.Search)
+                    && ldc.ColumnName.EndsWith("_ID"))
+                {
+                    string embeddedSQL = GetLookup_TableDirEmbed(language, ldc.ColumnName, tableName);
+                    if (embeddedSQL != null)
+                        displayColumn.Append("(").Append(embeddedSQL).Append(")");
+                }
+
+                //	Table
+                else if (ldc.DisplayType == DisplayType.Table && ldc.AD_Ref_Val_ID != 0)
+                {
+                    string embeddedSQL = GetLookup_TableEmbed(language, ldc.ColumnName, tableName, ldc.AD_Ref_Val_ID);
+                    if (embeddedSQL != null)
+                        displayColumn.Append("(").Append(embeddedSQL).Append(")");
+                }
+
+                //  number
+                else if (DisplayType.IsNumeric(ldc.DisplayType) || DisplayType.IsID(ldc.DisplayType))
+                {
+                    displayColumn.Append(DataBase.DB.TO_CHAR(tableName + "." + ldc.ColumnName, ldc.DisplayType, language.GetAD_Language()));
+                }
+                else if (ldc.DisplayType == DisplayType.List && ldc.AD_Ref_Val_ID != 0)
+                {
+                    // string embeddedSQL = GetLookup_ListEmbed(language, ldc.ColumnName, tableName, ldc.AD_Ref_Val_ID);
+                    //if (embeddedSQL != null)
+                    //    displayColumn.Append("(").Append(embeddedSQL).Append(")");
+                }
+                //  String
+                else
+                {
+                    //jz EDB || null issue
+                    if (DatabaseType.IsPostgre)
+                        displayColumn.Append("NVL(").Append(tableName).Append(".").Append(ldc.ColumnName).Append(",'')");
+                    else if (DatabaseType.IsMSSql)
+                        displayColumn.Append("COALESCE(CONVERT(VARCHAR,").Append(tableName).Append(".").Append(ldc.ColumnName).Append("),'')");
+                    else
+                        displayColumn.Append(tableName).Append(".").Append(ldc.ColumnName);
+                }
+
+                //jz EDB || problem
+                if (ldc.ColumnName.ToLower().Equals("ad_image_id"))
+                    displayColumn.Append(",'Images/nothing.png^^')");
+                else
+                    displayColumn.Append(",'')");
+
+                //
+            }
+            return displayColumn;
+        }
+
+
+        /// <summary>
+        /// Get Display Columns SQL for Table/Table Direct Lookup
+        /// </summary>
+        /// <param name="tableName">table name</param>
+        /// <param name="language">language object </param>
+        /// <returns></returns>
+        public static StringBuilder GetLookup_DisplayColumn(Language language, string tableName,out bool hasImagIdentifier)
+        {
+            //	get display column names
+            String sql0 = "SELECT c.ColumnName,c.IsTranslated,c.AD_Reference_ID,"
+                + "c.AD_Reference_Value_ID,t.AD_Window_ID,t.PO_Window_ID "
+                + "FROM AD_Table t"
+                + " INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID) "
+                + "WHERE tableName=@tableName"
+                + " AND c.IsIdentifier='Y' "
+                + "ORDER BY c.SeqNo";
+            hasImagIdentifier = false;
+            List<LookupDisplayColumn> list = new List<LookupDisplayColumn>();
+            bool isTranslated = false;
+            IDataReader dr = null;
+            try
+            {
+                SqlParameter[] param = new SqlParameter[1];
+                param[0] = new SqlParameter("@tableName", tableName);
+                dr = DataBase.DB.ExecuteReader(sql0, param);
+                while (dr.Read())
+                {
+                    LookupDisplayColumn ldc = new LookupDisplayColumn(dr[0].ToString(),
+                        "Y".Equals(dr[1].ToString()), Utility.Util.GetValueOfInt(dr[2]), Utility.Util.GetValueOfInt(dr[3]));
+                    list.Add(ldc);
+
+                    if (!isTranslated && ldc.IsTranslated)
+                        isTranslated = true;
+                }
+                dr.Close();
+                dr = null;
+                param = null;
+            }
+            catch (Exception e)
+            {
+                if (dr != null)
+                {
+                    dr.Close();
+                    dr = null;
+                }
+                s_log.Log(Level.SEVERE, sql0, e);
+                return null;
+            }
+
+            //  Do we have columns ?
+            if (list.Count == 0)
+            {
+                s_log.Log(Level.SEVERE, "No Identifier records found: " + tableName);
+                ////Common.////ErrorLog.FillErrorLog("VlookupFactory", "", "No Identifier records found: " + tableName, VAdvantage.Framework.Message.MessageType.ERROR);
+                return null;
+            }
+
+            StringBuilder displayColumn = new StringBuilder("");
+            int size = list.Count;
+            //  Get Display Column
+            for (int i = 0; i < size; i++)
+            {
+                LookupDisplayColumn ldc = list[i];
+
+                if (i > 0)
+                {
+                    if (ldc.ColumnName.ToLower().Equals("ad_image_id"))
+                    {
+                        displayColumn.Append(" ||'^^'|| ");
+                    }
+                    else
+                        if (!list[i - 1].ColumnName.ToLower().Equals("ad_image_id"))
+                        displayColumn.Append(" ||'_'|| ");
+                    else
+                        displayColumn.Append(" ||' '|| ");
+                }
+
+                //jz EDB || problem
+                //if (DatabaseType.IsPostgre)
+                //    displayColumn.Append("COALESCE(TO_CHAR(");
+                //else if (DatabaseType.IsMSSql)
+                //    displayColumn.Append("COALESCE(CONVERT(VARCHAR,");
+                displayColumn.Append("NVL(");
+                //  translated
+                if (ldc.ColumnName.ToLower().Equals("ad_image_id"))
+                {
+                    string embeddedSQL = "SELECT NVL(ImageURL,'') ||'^^' FROM AD_Image WHERE " + tableName + ".AD_Image_ID=AD_Image.AD_Image_ID";
+                    displayColumn.Append("(").Append(embeddedSQL).Append(")");
+                    hasImagIdentifier = true;
 
                 }
                 else if (ldc.IsTranslated && !Env.IsBaseLanguage(language, tableName))//  DataBase.GlobalVariable.IsBaseLanguage())
@@ -803,7 +964,6 @@ namespace VAdvantage.Classes
                 }
 
                 //jz EDB || problem
-                //if (DatabaseType.IsPostgre || DatabaseType.IsMSSql)
                 if (ldc.ColumnName.ToLower().Equals("ad_image_id"))
                     displayColumn.Append(",'Images/nothing.png^^')");
                 else
@@ -894,9 +1054,11 @@ namespace VAdvantage.Classes
 
 
             StringBuilder displayColumn1 = null;
+
+            bool hasImageIdentifier = false;
             if (isDisplayIdentifiers)
             {
-                displayColumn1 = GetLookup_DisplayColumn(language, tableName);
+                displayColumn1 = GetLookup_DisplayColumn(language, tableName,out hasImageIdentifier) ;
                 //if (displayColumn1 == null)
                 //{
                 //    displayColumn1 = new StringBuilder("NULL");
@@ -1012,6 +1174,7 @@ namespace VAdvantage.Classes
 
             // display column  for Table type of references
             retValue.displayColSubQ = displayColumn;
+            retValue.hasImageIdentifier = hasImageIdentifier;
 
             return retValue;
         }
@@ -1423,6 +1586,8 @@ namespace VAdvantage.Classes
 
         /* Display Column SQL Query*/
         public string displayColSubQ = null;
+
+        public bool hasImageIdentifier = false;
 
         #endregion
 
