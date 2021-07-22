@@ -170,12 +170,13 @@ namespace VAdvantage.Model
 
             if (!IsInternalUse())
             {
-                MInventory inv = new MInventory(GetCtx(), GetM_Inventory_ID(), Get_Trx());
-                inv.SetIsAdjusted(false);
-                if (!inv.Save())
-                {
+                int no = DB.ExecuteQuery("UPDATE M_Inventory SET IsAdjusted = 'N' WHERE M_Inventory_ID = " + GetM_Inventory_ID(), null, Get_Trx());
+                //MInventory inv = new MInventory(GetCtx(), GetM_Inventory_ID(), Get_Trx());
+                //inv.SetIsAdjusted(false);
+                //if (!inv.Save())
+                //{
 
-                }
+                //}
             }
             else                // SI_0682_1 Need to update the reserved qty on requisition line by internal use line save aslo and should work as work in inventory move.
             {
@@ -283,7 +284,7 @@ namespace VAdvantage.Model
             bool isContainrApplicable = MTransaction.ProductContainerApplicable(GetCtx());
 
             Decimal VA024_ProvisionPrice = 0;
-            MInventory inventory = new MInventory(GetCtx(), GetM_Inventory_ID(), Get_Trx());
+            MInventory inventory = MInventory.Get(GetCtx(), GetM_Inventory_ID());
             MProduct product = MProduct.Get(GetCtx(), GetM_Product_ID());
             if (newRecord && _isManualEntry)
             {
@@ -386,19 +387,20 @@ namespace VAdvantage.Model
             // no need to check when record is in processing
             if (!inventory.IsProcessing() || newRecord)
             {
-                int M_Warehouse_ID = 0; MWarehouse wh = null;
-                string qry = "select m_warehouse_id from m_locator where m_locator_id=" + GetM_Locator_ID();
-                M_Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, Get_TrxName()));
+                MWarehouse wh = null;
+                //int M_Warehouse_ID = 0;
+                //string qry = "select m_warehouse_id from m_locator where m_locator_id=" + GetM_Locator_ID();
+                //M_Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, Get_TrxName()));
 
-                wh = MWarehouse.Get(GetCtx(), M_Warehouse_ID);
-                qry = "SELECT QtyOnHand FROM M_Storage where m_locator_id=" + GetM_Locator_ID() + " and m_product_id=" + GetM_Product_ID() +
+                wh = MWarehouse.Get(GetCtx(), inventory.GetM_Warehouse_ID());
+                string qry = "SELECT QtyOnHand FROM M_Storage WHERE M_Locator_ID=" + GetM_Locator_ID() + " AND M_Product_ID=" + GetM_Product_ID() +
                       " AND NVL(M_AttributeSetInstance_ID, 0)=" + GetM_AttributeSetInstance_ID();
                 OnHandQty = Convert.ToDecimal(DB.ExecuteScalar(qry, null, Get_TrxName()));
 
                 // when record is in completed & closed stage - then no need to check qty availablity in warehouse
-                if (wh.IsDisallowNegativeInv() == true &&
-                    (!(inventory.GetDocStatus() == "CO" || inventory.GetDocStatus() == "CL" ||
-                       inventory.GetDocStatus() == "RE" || inventory.GetDocStatus() == "VO")))
+                if (wh.IsDisallowNegativeInv() &&
+                    (!(inventory.GetDocStatus().Equals("CO") || inventory.GetDocStatus().Equals("CL") ||
+                       inventory.GetDocStatus().Equals("RE") || inventory.GetDocStatus().Equals("VO"))))
                 {
                     // pick container current qty from transaction based on locator / product / ASI / Container / Movement Date 
                     if (isContainrApplicable && Get_ColumnIndex("M_ProductContainer_ID") >= 0)
