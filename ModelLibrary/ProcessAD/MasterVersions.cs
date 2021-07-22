@@ -105,7 +105,7 @@ namespace VAdvantage.Process
             _AD_Table_ID = AD_Table_ID;
             _AD_Column_ID = AD_Column_ID;
             bool hasMainVerCol = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Column_ID FROM AD_Column WHERE AD_Table_ID = " + _AD_Table_ID + " AND IsActive ='Y' AND IsMaintainVersions = 'Y'", null, _trx)) > 0;
-            if(!hasMainVerCol)
+            if (!hasMainVerCol)
                 hasMainVerCol = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsMaintainVersions FROM AD_Table WHERE AD_Table_ID = " + _AD_Table_ID, null, _trx)) == "Y";
             // check whether there are any columns in the table
             // marked as "Maintain Versions", then proceed else return
@@ -153,7 +153,8 @@ namespace VAdvantage.Process
                         if (error == "")
                             error = "Error in creating Version Table";
                         log.Log(Level.SEVERE, "Version table not created :: " + error);
-                        _trx.Rollback();
+                        if (_trx != null)
+                            _trx.Rollback();
                         return Msg.GetMsg(GetCtx(), "VersionTblNotCreated");
                     }
                     else
@@ -253,7 +254,8 @@ namespace VAdvantage.Process
                                     if (error == "")
                                         error = "Version Column not created";
                                     log.Log(Level.SEVERE, "Version Column not created :: " + sCol.GetColumnName() + " :: " + error);
-                                    _trx.Rollback();
+                                    if (_trx != null)
+                                        _trx.Rollback();
                                     return Msg.GetMsg(GetCtx(), "VersionColNotCreated");
                                 }
                                 else
@@ -277,7 +279,8 @@ namespace VAdvantage.Process
                     if (!success && retMsg != "")
                     {
                         log.Log(Level.SEVERE, "Column not sync :: " + retMsg);
-                        _trx.Rollback();
+                        if (_trx != null)
+                            _trx.Rollback();
                         return Msg.GetMsg(GetCtx(), "ColumnNotSync");
                     }
                     else
@@ -300,7 +303,8 @@ namespace VAdvantage.Process
                             if (retMsg != "")
                             {
                                 log.Log(Level.SEVERE, "Data not Inserted :: " + retMsg);
-                                _trx.Rollback();
+                                if (_trx != null)
+                                    _trx.Rollback();
                                 return Msg.GetMsg(GetCtx(), "DataInsertionErrorMultikey");
                             }
                         }
@@ -371,7 +375,8 @@ namespace VAdvantage.Process
                             if (error == "")
                                 error = "Error in creating System Element";
                             log.Log(Level.SEVERE, error);
-                            _trx.Rollback();
+                            if (_trx != null)
+                                _trx.Rollback();
                             return Msg.GetMsg(GetCtx(), "ElementNotSaved");
                         }
                         else
@@ -637,7 +642,8 @@ namespace VAdvantage.Process
                     if (error == "")
                         error = "Error in creating Version Column " + listDefVerCols[i];
                     log.Log(Level.SEVERE, "Version Column not created :: " + listDefVerCols[i] + " :: " + error);
-                    _trx.Rollback();
+                    if (_trx != null)
+                        _trx.Rollback();
                     return Msg.GetMsg(GetCtx(), "VersionColNotCreated");
                 }
                 else
