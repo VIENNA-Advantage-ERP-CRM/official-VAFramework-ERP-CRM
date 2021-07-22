@@ -190,7 +190,7 @@ namespace VAdvantage.DataBase
             //if (isDB2())
             //    trxName = null;	//	tries 3 times
 
-            // if SYSTEM_NATIVE_SEQUENCE is Y in System Config, then fetch Next ID from DB sequence
+           
            
 
             int id = MSequence.GetNextID(AD_Client_ID, TableName, trxName);	//	tries 3 times
