@@ -475,7 +475,7 @@
             if (value != null && value && value.indexOf("Images/") > -1) {// Based on sequence of image in idenitifer, perform logic and display image with text
 
                 var img = value.substring(value.indexOf("Images/") + 7, value.lastIndexOf("^^"));
-                img = VIS.Application.contextUrl + "Images/Thumb32x32/" + img;
+                img = VIS.Application.contextUrl + "Images/Thumb140x120/" + img;
 
                 if (c == 0 || img.indexOf("nothing.png") > -1) {
 
