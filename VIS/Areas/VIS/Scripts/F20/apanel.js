@@ -1525,6 +1525,9 @@
 
                     if (gTab.getIsHeaderPanel()) {
                         gc.initHeaderPanel(this.getParentDetailPane());
+                        if (gTab.HPanelNotShowInMultiRow && !gTab.getIsSingleRow()) {
+                            gc.vHeaderPanel.$parentRoot.hide();
+                        }
                     }
                 }
                 gc.initFilterPanel(curWindowNo, this.getFilterPane());
@@ -1538,7 +1541,7 @@
                 }
 
                 if (gTab.getHasPanel()) {
-                    gc.initTabPanel(gridWindow.getWindowWidth(), curWindowNo);
+                    gc.initTabPanel(gridWindow.getWindowWidth(), curWindowNo);                   
                 }
 
                 //	Is this tab included?

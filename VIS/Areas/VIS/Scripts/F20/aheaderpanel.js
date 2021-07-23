@@ -1,6 +1,6 @@
 ﻿; (function (VIS, $) {
 
-    function HeaderPanel($parentRoot) {
+    function HeaderPanel() {
         var $root = null;
         var alignmentHorizontal = false;
 
@@ -13,13 +13,9 @@
         this.windowNo = 0;
         this.dynamicStyle = [];
         this.styleTag = document.createElement('style');
-
-        var $slider = $parentRoot.find('.fa-angle-double-left');
-
-       
-
-        $parentRoot.css("flex-direction", "column");
-        $slider.parent().css('display', 'flex');
+        this.$parentRoot = null;
+        var $slider = "";
+        var dynamicClassName = "";
         /**
          * This function will check if tab is marked as header panel, then start creating header panel
          * and call next method to load items of header panel.
@@ -37,13 +33,25 @@
                     // Create Root for header Panel
                     $root = $('<div class="vis-ad-w-p-header_root_common">');
                     var headerCustom = this.headerParentCustomUISettings(backColor);
-                    $parentRoot.addClass(headerCustom);
+                    $self.$parentRoot.addClass(headerCustom);
 
 
                 }
             }
         };
 
+        /**
+         * this function will get parent root design
+         * @param {any} parentRoot
+         * VIS0228   07/23/2021
+         */
+        this.initialize = function (parentRoot) {
+            $self.$parentRoot = parentRoot;
+            $slider = this.$parentRoot.find('.fa-angle-double-left');
+            $self.$parentRoot.css("flex-direction", "column");
+            $slider.parent().css('display', 'flex');
+            eventHandling();
+        }
 
         /**
          * This method create headr panel items when user open header panel first time. After that when user change record, system simply change values of label
@@ -305,49 +313,49 @@
         this.getRoot = function () {
             return $root;
         };
-
+       
         this.getParent = function () {
-            return $parentRoot;
+            return this.$parentRoot;
         }
 
         this.alignHorzontal = function () {
             alignmentHorizontal = true;
-            $parentRoot.removeClass("vis-ad-w-p-header-l").addClass("vis-ad-w-p-header-t");
+            $self.$parentRoot.removeClass("vis-ad-w-p-header-l").addClass("vis-ad-w-p-header-t");
             $slider.removeClass('fa-angle-double-left').addClass('fa-angle-double-up');
             $slider.parent().css('background-color', 'transparent');
-            $parentRoot.css('flex-direction', 'row');
+            $self.$parentRoot.css('flex-direction', 'row');
         }
 
         function eventHandling() {
             $slider.on("click", function () {
                 if (alignmentHorizontal) {
-                    if ($parentRoot.height() == 0) {
-                        $parentRoot.height($self.gTab.getHeaderHeight());
+                    if ($self.$parentRoot.height() == 0) {
+                        $self.$parentRoot.height($self.gTab.getHeaderHeight());
                         $root.show();
-                        $parentRoot.find('.vis-ad-w-p-header-arrow-l').css('padding', '');
+                        $self.$parentRoot.find('.vis-ad-w-p-header-arrow-l').css('padding', '');
                         $slider.removeClass('fa-angle-double-down').addClass('fa-angle-double-up').removeClass('vis-ad-w-p-header-v');
                     }
                     else {
-                        $parentRoot.height(0);
+                        $self.$parentRoot.height(0);
                         $root.hide();
-                        $parentRoot.find('.vis-ad-w-p-header-arrow-l').css('padding', '0px');
+                        $self.$parentRoot.find('.vis-ad-w-p-header-arrow-l').css('padding', '0px');
                         $slider.removeClass('fa-angle-double-up').addClass('fa-angle-double-down').addClass('vis-ad-w-p-header-v');
                     }
                 }
                 else {
-                    if ($parentRoot.width() == 0) {
+                    if ($self.$parentRoot.width() == 0) {
                         $slider.removeClass('fa-angle-double-right').addClass('fa-angle-double-left').removeClass('vis-ad-w-p-header-h');
-                        $parentRoot.width($self.gTab.getHeaderWidth());
-                        $parentRoot.find('.vis-ad-w-p-header-arrow-l').css('padding', '');
+                        $self.$parentRoot.width($self.gTab.getHeaderWidth());
+                        $self.$parentRoot.find('.vis-ad-w-p-header-arrow-l').css('padding', '');
                         window.setTimeout(function () {
                             $root.show();
                         }, 50);
 
                     }
                     else {
-                        $parentRoot.width(0);
-                        $root.hide();
-                        $parentRoot.find('.vis-ad-w-p-header-arrow-l').css('padding', '0px');
+                        $self.$parentRoot.width(0);
+                        $self.$parentRoot.hide();
+                        $self.$parentRoot.find('.vis-ad-w-p-header-arrow-l').css('padding', '0px');
                         $slider.removeClass('fa-angle-double-left').addClass('fa-angle-double-right').addClass('vis-ad-w-p-header-h');
                     }
                 }
@@ -355,8 +363,6 @@
                     $self.sizeChangedListner.onSizeChanged();
             });
         };
-
-        eventHandling();
 
 
         /**
@@ -374,8 +380,8 @@
             this.controls = null;
             $root.remove();
             $root = null;
-            $parentRoot.remove();
-            $parentRoot = null;
+            this.$parentRoot.remove();
+            this.$parentRoot = null;
 
         };
 

@@ -436,7 +436,7 @@
         this.hasPanel = false;
         this.isHeaderPanel = false;
         this.headerPanel = null;
-
+        this.HPanelNotShowInMultiRow = false;
         this.mDataStatusEvent;
         this.mDataListenerList = [];
 
@@ -1374,6 +1374,7 @@
         if (this.vo.HeaderItems) {
             this.isHeaderPanel = true;
             headerPanel = this.vo.HeaderItems;
+            this.HPanelNotShowInMultiRow = this.vo.HPanelNotShowInMultiRow;
         }
     };
 
