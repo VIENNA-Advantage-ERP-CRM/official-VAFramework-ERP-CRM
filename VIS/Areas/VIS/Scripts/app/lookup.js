@@ -488,19 +488,19 @@
         if (iconobj) {
             var iconpath = iconobj["ico"];
             if (iconpath) {
-                if (iconpath.indexOf("Images/") > -1) {
+                if (iconpath.indexOf(" ") > -1) {
+                    if (getsource)
+                        return iconpath;
+                    else
+                        return "<i class='" + iconpath + "'></i>";
+                }
+                else {
                     var img = iconpath.substring(iconpath.indexOf("Images/") + 7);
                     img = VIS.Application.contextUrl + "Images/Thumb32x32/" + img;
                     if (getsource)
                         return img;
                     else
                         return "<img src='" + img + "'></img>";
-                }
-                else {
-                    if (getsource)
-                        return iconpath;
-                    else
-                        return "<i class='" + iconpath + "'></i>";
                 }
             }
         }

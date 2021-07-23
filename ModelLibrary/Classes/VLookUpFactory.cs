@@ -310,12 +310,12 @@ namespace VAdvantage.Classes
             String displayCol = "rl.Name";
             if (Utility.Env.IsBaseLanguage(language, "AD_Ref_List"))
             {
-                realSQL.Append(displayCol + ", rl.IsActive, NVL(img.ImageURL,img.FontName),ref.ListDisplayOption FROM AD_Ref_List rl");
+                realSQL.Append(displayCol + ", rl.IsActive, NVL(img.FontName,img.ImageURL),ref.ListDisplayOption FROM AD_Ref_List rl");
             }
             else
             {
                 displayCol = "trl.Name";
-                realSQL.Append(displayCol + ", rl.IsActive, , NVL(img.ImageURL,img.FontName),ref.ListDisplayOption "
+                realSQL.Append(displayCol + ", rl.IsActive, , NVL(img.FontName,img.ImageURL),ref.ListDisplayOption "
                     + "FROM AD_Ref_List rl INNER JOIN AD_Ref_List_Trl trl "
                     + " ON (rl.AD_Ref_List_ID=trl.AD_Ref_List_ID AND trl.AD_Language='")
                         .Append(language.GetAD_Language()).Append("')");
