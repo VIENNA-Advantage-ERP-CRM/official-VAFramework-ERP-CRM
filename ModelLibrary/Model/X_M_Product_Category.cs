@@ -658,6 +658,25 @@ namespace VAdvantage.Model
                 return 0;
             return Convert.ToInt32(ii);
         }
+        /** VA073_ProductGroup AD_Reference_ID=1001193 */
+        public static int VA073_PRODUCTGROUP_AD_Reference_ID = 1001193;/** Consumable = C */
+        public static String VA073_PRODUCTGROUP_Consumable = "C";/** Finished Product = F */
+        public static String VA073_PRODUCTGROUP_FinishedProduct = "F";/** Other = O */
+        public static String VA073_PRODUCTGROUP_Other = "O";/** Raw Material = R */
+        public static String VA073_PRODUCTGROUP_RawMaterial = "R";/** Semi-Finished Product = S */
+        public static String VA073_PRODUCTGROUP_Semi_FinishedProduct = "S";/** Is test a valid value.
+@param test testvalue
+@returns true if valid **/
+        public bool IsVA073_ProductGroupValid(String test) { return test == null || test.Equals("C") || test.Equals("F") || test.Equals("O") || test.Equals("R") || test.Equals("S"); }/** Set Product Group.
+@param VA073_ProductGroup Product Group */
+        public void SetVA073_ProductGroup(String VA073_ProductGroup)
+        {
+            if (!IsVA073_ProductGroupValid(VA073_ProductGroup))
+                throw new ArgumentException("VA073_ProductGroup Invalid value - " + VA073_ProductGroup + " - Reference_ID=1001193 - C - F - O - R - S"); if (VA073_ProductGroup != null && VA073_ProductGroup.Length > 1) { log.Warning("Length > 1 - truncated"); VA073_ProductGroup = VA073_ProductGroup.Substring(0, 1); }
+            Set_Value("VA073_ProductGroup", VA073_ProductGroup);
+        }/** Get Product Group.
+@return Product Group */
+        public String GetVA073_ProductGroup() { return (String)Get_Value("VA073_ProductGroup"); }
     }
 
 }
