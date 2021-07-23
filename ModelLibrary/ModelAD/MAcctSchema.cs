@@ -365,7 +365,8 @@ namespace VAdvantage.Model
                 if (info.GetC_AcctSchema1_ID() == GetC_AcctSchema_ID())
                     SetAD_OrgOnly_ID(0);
             }
-
+         
+            return true;
         }
 
         public void CheckCosting()
