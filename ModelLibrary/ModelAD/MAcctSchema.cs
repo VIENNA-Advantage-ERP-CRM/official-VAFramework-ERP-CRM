@@ -366,17 +366,6 @@ namespace VAdvantage.Model
                     SetAD_OrgOnly_ID(0);
             }
 
-            //if advance budget and costing module is installed then
-            //costing method should be standard costing
-            if (Env.IsModuleInstalled("VA073_"))
-            {
-                if (!GetCostingMethod().Equals(MAcctSchema.COSTINGMETHOD_StandardCosting))
-                {
-                    log.SaveError("VA073_AcctSchemaStdCosting","");
-                    return false;
-                }
-            }
-            return true;
         }
 
         public void CheckCosting()
