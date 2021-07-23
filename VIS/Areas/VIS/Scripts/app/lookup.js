@@ -483,19 +483,19 @@
         if (iconobj) {
             var iconpath = iconobj["ico"];
             if (iconpath) {
-                if (iconpath.indexOf("Images/") > -1) {
+                if (iconpath.indexOf(" ") > -1) {
+                    if (getsource)
+                        return iconpath;
+                    else
+                        return "<i class='" + iconpath + "'></i>";
+                }
+                else {
                     var img = iconpath.substring(iconpath.indexOf("Images/") + 7);
                     img = VIS.Application.contextUrl + "Images/Thumb32x32/" + img;
                     if (getsource)
                         return img;
                     else
                         return "<img src='" + img + "'></img>";
-                }
-                else {
-                    if (getsource)
-                        return iconpath;
-                    else
-                        return "<i class='" + iconpath + "'></i>";
                 }
             }
         }
@@ -516,7 +516,7 @@
                 this.lookupDirect = null;
                 this.lookupDirect = {};
             }
-            this.nextRead = Date.now() + 500; // 1/2 sec
+            this.nextRead = Date.now() + 2000; // 1/2 sec
         }
 
         var retValue = this.lookup[" " + key];

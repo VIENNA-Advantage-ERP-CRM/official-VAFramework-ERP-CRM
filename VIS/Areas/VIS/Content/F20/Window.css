@@ -1443,9 +1443,10 @@ li.vis-page-item-select {
     margin-right: 10px;
     position: relative;
     overflow: hidden;
+    background: rgba(var(--v-c-on-secondary), 0.1);
 }
 
-    .vis-w-p-header-icon-f:after {
+    /*.vis-w-p-header-icon-f:after {
         position: absolute;
         content: '';
         width: 35px;
@@ -1453,7 +1454,7 @@ li.vis-page-item-select {
         background: rgba(var(--v-c-on-secondary), 0.1);
         filter: brightness(0.2);
         z-index: 0;
-    }
+    }*/
 
     .vis-w-p-header-icon-f span {
         position: relative;

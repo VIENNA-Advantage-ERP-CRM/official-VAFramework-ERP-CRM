@@ -267,13 +267,15 @@
                             $div.append($divLabel);
                         }
 
+                        var $image = $('<img>');
+                        var $imageSpan = $('<span>');
+                        objctrls["img"] = $image;
+
+
                         if (mField.lookup && mField.lookup.gethasImageIdentifier()) {
 
-                            var $image = $('<img>');
-                            var $imageSpan = $('<span>');
-                            objctrls["img"] = $image;
-                            objctrls["imgspan"] = $imageSpan;
 
+                            objctrls["imgspan"] = $imageSpan;
 
                             var img = null;
                             var imgSpan = null;
@@ -329,7 +331,8 @@
                                 else
                                     $imageSpan.hide();//$divIcon.append($image);
 
-                                $divLabel.hide();
+                                if ($lblControl && $lblControl.length > 0)
+                                    $lblControl.hide();
                             }
                             else if (mField.getHeaderHeadingOnly() && $lblControl && $lblControl.length > 0) {
                                 $divLabel.append($lblControl);
@@ -344,16 +347,18 @@
                         }
                         else {
 
-
-                        /*Set what do you want to show? Icon OR Label OR Both OR None*/
+                            objctrls["imgspan"] = $spanIcon;
+                            /*Set what do you want to show? Icon OR Label OR Both OR None*/
                             if (!mField.getHeaderIconOnly() && !mField.getHeaderHeadingOnly()) {
-                                // $div.append($divIcon);
-                                //$divIcon.append('<span>');
-                                if (imgSpan != null)
-                                    $image.hide();// $divIcon.append($imageSpan);
-                                else {
-                                    $imageSpan.hide();// $divIcon.append($image);
-                                }
+                                $divIcon.append($spanIcon.append(icon));
+                                //if (imgSpan != null) {
+                                //    $image.hide();
+
+                                //}
+                                //else {
+                                //    $imageSpan.hide();
+
+                                //}
 
                                 if ($lblControl && $lblControl.length > 0)
                                     $divLabel.append($lblControl);
@@ -365,12 +370,9 @@
                             }
                             else if (mField.getHeaderIconOnly()) {
                                 // $div.append($divIcon);
-                                if (imgSpan != null)
-                                    $image.hide();// $divIcon.append($imageSpan);
-                                else
-                                    $imageSpan.hide();//$divIcon.append($image);
-
-                                $divLabel.hide();
+                                $divIcon.append($spanIcon.append(icon));
+                                if ($lblControl && $lblControl.length > 0)
+                                    $lblControl.hide();
                             }
                             else if (mField.getHeaderHeadingOnly() && $lblControl && $lblControl.length > 0) {
                                 $divLabel.append($lblControl);
@@ -505,7 +507,7 @@
             if (value != null && value && value.indexOf("Images/") > -1) {// Based on sequence of image in idenitifer, perform logic and display image with text
 
                 var img = value.substring(value.indexOf("Images/") + 7, value.lastIndexOf("^^"));
-                img = VIS.Application.contextUrl + "Images/Thumb32x32/" + img;
+                img = VIS.Application.contextUrl + "Images/Thumb140x120/" + img;
 
                 if (c == 0 || img.indexOf("nothing.png") > -1) {
 
