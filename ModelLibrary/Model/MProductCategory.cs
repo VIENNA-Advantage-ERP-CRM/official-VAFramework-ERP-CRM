@@ -252,7 +252,7 @@ namespace VAdvantage.Model
             // if finished and semifinished is selected in Product Group then costing method should be standard costing
             if (Env.IsModuleInstalled("VA073_"))
             {
-                if (Get_ColumnIndex("VA073_ProductGroup") >0)
+                if (Get_ColumnIndex("VA073_ProductGroup") >=0)
                 {
                     if(Util.GetValueOfString(Get_Value("VA073_ProductGroup")).Equals(MProductCategory.VA073_PRODUCTGROUP_FinishedProduct) ||
                         Util.GetValueOfString(Get_Value("VA073_ProductGroup")).Equals(MProductCategory.VA073_PRODUCTGROUP_Semi_FinishedProduct))
