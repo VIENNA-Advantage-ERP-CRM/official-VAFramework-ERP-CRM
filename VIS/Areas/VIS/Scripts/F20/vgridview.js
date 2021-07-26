@@ -535,7 +535,7 @@
                             else if (lType == "T") {
                                 return d;
                             }
-                                //Show icon only
+                            //Show icon only
                             else if (lType == "I") {
                                 strDiv = "<div class='vis-grid-td-icon-grp' style='Justify-Content:center'>";
                                 if (listIcon) {
@@ -549,8 +549,8 @@
                         }
 
                         else
-                        if (d && d.indexOf("Images/") > -1) {// Based on sequence of image in idenitifer, perform logic and display image with text
-
+                            //if (d && d.indexOf("Images/") > -1) {// Based on sequence of image in idenitifer, perform logic and display image with text
+                            if (mField.lookup.gethasImageIdentifier()) {
                             var img = d.substring(d.indexOf("Images/") + 7, d.lastIndexOf("^^"));
                             img = VIS.Application.contextUrl + "Images/Thumb32x32/" + img;
 
