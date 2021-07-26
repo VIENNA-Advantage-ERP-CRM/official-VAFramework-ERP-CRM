@@ -17,6 +17,7 @@
         this.onSort = null;
         this.onEdit = null;
         this.onAdd = null;
+        this.hyperLinkCell = {};
 
         this.editColumnIndex = -1;
         var clickCount = 0;
@@ -34,7 +35,7 @@
 
         function toggleToSingleView(evt) {
             try {
-                if (self.grid.columns[evt.column].columnName.toLowerCase() == 'value' || self.grid.columns[evt.column].columnName.toLowerCase() == 'documentno' || self.grid.columns[evt.column].columnName.toLowerCase() == 'name') {
+                if (self.grid.columns[evt.column].columnName == self.hyperLinkCell[self.grid.name]) {
                     self.grid.select(Number(evt.recid));
                     var isCompositView = $('#AS_' + self.mTab.getWindowNo() + '_' + self.mTab.getAD_Window_ID()).find('[name=' + evt.target + ']').closest('.vis-ad-w-p-center-inctab');
                     if (isCompositView.length > 0) {
@@ -473,8 +474,11 @@
 
 
                 oColumn.sortable = true;
-                if (columnName.toLowerCase() == "value" || columnName.toLowerCase() == "name" || columnName.toLowerCase() == "documentno") {
-                    oColumn.style = 'text-decoration:underline; color:blue !important; cursor:pointer';
+                if (oColumn.hidden == false && (this.hyperLinkCell[name] == "undefined" || this.hyperLinkCell[name] == null)) {
+                    if (columnName.toLowerCase() == "value" || columnName.toLowerCase() == "name" || columnName.toLowerCase() == "documentno") {
+                        this.hyperLinkCell[name] = columnName;
+                        oColumn.style = 'text-decoration:underline; color:blue !important; cursor:pointer';
+                    }
                 }
 
                 if (mField.getIsEncryptedField()) {
