@@ -262,6 +262,10 @@
                                 else if (styleArr[j].indexOf("<br>") > -1) {
                                     $div.css("flex-direction", "column");
                                 }
+                                else {
+                                    $div.append($divIcon);
+                                    $div.append($divLabel);
+                                }
                             }
                         }
                         else {
@@ -348,7 +352,7 @@
                             setValue(colValue, iControl, mField);
                         }
                         else {
-
+                            $spanIcon.addClass('vis-w-p-header-icon-fixed');
                             objctrls["imgspan"] = $spanIcon;
                             /*Set what do you want to show? Icon OR Label OR Both OR None*/
                             if (!mField.getHeaderIconOnly() && !mField.getHeaderHeadingOnly()) {
@@ -786,6 +790,7 @@
         if (style && style.toLower().indexOf("@value::") > -1) {
             style = getStylefromCompositeValue(style, "@value::");
         }
+       
         this.dynamicStyle.push("." + dynamicClassName + "  {" + style + "} ");
         return dynamicClassName;
     };
