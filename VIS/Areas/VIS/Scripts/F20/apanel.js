@@ -1525,8 +1525,8 @@
 
                     if (gTab.getIsHeaderPanel()) {
                         gc.initHeaderPanel(this.getParentDetailPane());
-                        if (gTab.HPanelNotShowInMultiRow && !gTab.getIsSingleRow()) {
-                            gc.vHeaderPanel.$parentRoot.hide();
+                        if (gTab.isHPanelNotShowInMultiRow && !gTab.getIsSingleRow()) {
+                            gc.vHeaderPanel.hidePanel();
                         }
                     }
                 }

@@ -1,6 +1,6 @@
 ﻿; (function (VIS, $) {
 
-    function HeaderPanel() {
+    function HeaderPanel($parentRoot) {
         var $root = null;
         var alignmentHorizontal = false;
 
@@ -13,9 +13,13 @@
         this.windowNo = 0;
         this.dynamicStyle = [];
         this.styleTag = document.createElement('style');
-        this.$parentRoot = null;
-        var $slider = "";
-        var dynamicClassName = "";
+
+        var $slider = $parentRoot.find('.fa-angle-double-left');
+
+
+
+        $parentRoot.css("flex-direction", "column");
+        $slider.parent().css('display', 'flex');
         /**
          * This function will check if tab is marked as header panel, then start creating header panel
          * and call next method to load items of header panel.
@@ -33,25 +37,13 @@
                     // Create Root for header Panel
                     $root = $('<div class="vis-ad-w-p-header_root_common">');
                     var headerCustom = this.headerParentCustomUISettings(backColor);
-                    $self.$parentRoot.addClass(headerCustom);
+                    $parentRoot.addClass(headerCustom);
 
 
                 }
             }
         };
 
-        /**
-         * this function will get parent root design
-         * @param {any} parentRoot
-         * VIS0228   07/23/2021
-         */
-        this.initialize = function (parentRoot) {
-            $self.$parentRoot = parentRoot;
-            $slider = this.$parentRoot.find('.fa-angle-double-left');
-            $self.$parentRoot.css("flex-direction", "column");
-            $slider.parent().css('display', 'flex');
-            eventHandling();
-        }
 
         /**
          * This method create headr panel items when user open header panel first time. After that when user change record, system simply change values of label
@@ -227,7 +219,7 @@
                     }
                 }
 
-                else if (iControl.format){
+                else if (iControl.format) {
                     colValue = iControl.format.GetFormatAmount(iControl.format.GetFormatedValue(colValue), "init", VIS.Env.isDecimalPoint());
                 }
 
@@ -279,7 +271,7 @@
                         str = VIS.secureEngine.decrypt(str);
                     colValue = str.equals("true");	//	Boolean
                 }
-              
+
                 //	LOB 
                 else
                     colValue = colValue.toString();//string
@@ -313,49 +305,58 @@
         this.getRoot = function () {
             return $root;
         };
-       
+
         this.getParent = function () {
-            return this.$parentRoot;
+            return $parentRoot;
         }
+        this.hidePanel = function () {
+            return $parentRoot.hide();
+        }
+
+        this.showPanel = function () {
+            return $parentRoot.show();
+        }
+
+
 
         this.alignHorzontal = function () {
             alignmentHorizontal = true;
-            $self.$parentRoot.removeClass("vis-ad-w-p-header-l").addClass("vis-ad-w-p-header-t");
+            $parentRoot.removeClass("vis-ad-w-p-header-l").addClass("vis-ad-w-p-header-t");
             $slider.removeClass('fa-angle-double-left').addClass('fa-angle-double-up');
             $slider.parent().css('background-color', 'transparent');
-            $self.$parentRoot.css('flex-direction', 'row');
+            $parentRoot.css('flex-direction', 'row');
         }
 
         function eventHandling() {
             $slider.on("click", function () {
                 if (alignmentHorizontal) {
-                    if ($self.$parentRoot.height() == 0) {
-                        $self.$parentRoot.height($self.gTab.getHeaderHeight());
+                    if ($parentRoot.height() == 0) {
+                        $parentRoot.height($self.gTab.getHeaderHeight());
                         $root.show();
-                        $self.$parentRoot.find('.vis-ad-w-p-header-arrow-l').css('padding', '');
+                        $parentRoot.find('.vis-ad-w-p-header-arrow-l').css('padding', '');
                         $slider.removeClass('fa-angle-double-down').addClass('fa-angle-double-up').removeClass('vis-ad-w-p-header-v');
                     }
                     else {
-                        $self.$parentRoot.height(0);
+                        $parentRoot.height(0);
                         $root.hide();
-                        $self.$parentRoot.find('.vis-ad-w-p-header-arrow-l').css('padding', '0px');
+                        $parentRoot.find('.vis-ad-w-p-header-arrow-l').css('padding', '0px');
                         $slider.removeClass('fa-angle-double-up').addClass('fa-angle-double-down').addClass('vis-ad-w-p-header-v');
                     }
                 }
                 else {
-                    if ($self.$parentRoot.width() == 0) {
+                    if ($parentRoot.width() == 0) {
                         $slider.removeClass('fa-angle-double-right').addClass('fa-angle-double-left').removeClass('vis-ad-w-p-header-h');
-                        $self.$parentRoot.width($self.gTab.getHeaderWidth());
-                        $self.$parentRoot.find('.vis-ad-w-p-header-arrow-l').css('padding', '');
+                        $parentRoot.width($self.gTab.getHeaderWidth());
+                        $parentRoot.find('.vis-ad-w-p-header-arrow-l').css('padding', '');
                         window.setTimeout(function () {
                             $root.show();
                         }, 50);
 
                     }
                     else {
-                        $self.$parentRoot.width(0);
-                        $self.$parentRoot.hide();
-                        $self.$parentRoot.find('.vis-ad-w-p-header-arrow-l').css('padding', '0px');
+                        $parentRoot.width(0);
+                        $root.hide();
+                        $parentRoot.find('.vis-ad-w-p-header-arrow-l').css('padding', '0px');
                         $slider.removeClass('fa-angle-double-left').addClass('fa-angle-double-right').addClass('vis-ad-w-p-header-h');
                     }
                 }
@@ -363,6 +364,8 @@
                     $self.sizeChangedListner.onSizeChanged();
             });
         };
+
+        eventHandling();
 
 
         /**
@@ -380,8 +383,8 @@
             this.controls = null;
             $root.remove();
             $root = null;
-            this.$parentRoot.remove();
-            this.$parentRoot = null;
+            $parentRoot.remove();
+            $parentRoot = null;
 
         };
 
