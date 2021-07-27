@@ -181,9 +181,9 @@
                     var $label = null;
                     var iControl = null;
 
-                    //Apply HTML Style
-                    var dynamicClassName = $self.applyCustomUISettings(headerSeqNo, startCol, colSpan, startRow, rowSpan, justyFy, alignItem,
-                        backgroundColor, FontColor, fontSize, fieldPadding);
+                        //Apply HTML Style
+                        var dynamicClassName = this.applyCustomUISettings(headerSeqNo, startCol, colSpan, startRow, rowSpan, justyFy, alignItem,
+                            backgroundColor, FontColor, fontSize, fieldPadding);
 
                     // Find the div with dynamic class from container. Class will only be available in DOm if two fields are having same item seq. No.
                     $div = $containerDiv.find('.' + dynamicClassName);
@@ -235,7 +235,7 @@
                         // If Referenceof field is Image then added extra class to align image and Label in center.
                         if (mField.getDisplayType() == VIS.DisplayType.Image) {
                             $divLabel.addClass('vis-w-p-header-Label-center-f');
-                            var dynamicClassForImageJustyfy = $self.justifyAlignImageItems(headerSeqNo, justyFy, alignItem);
+                            var dynamicClassForImageJustyfy = this.justifyAlignImageItems(headerSeqNo, justyFy, alignItem);
                             $divLabel.addClass(dynamicClassForImageJustyfy);
                         }
 
@@ -244,9 +244,7 @@
 
                         iControl = VIS.VControlFactory.getReadOnlyControl(this.gTab, mField, false, false, false);
 
-                        
-
-                        var dynamicFieldValue = $self.applyCustomUIForFieldValue(headerSeqNo, startCol, startRow, mField);
+                        var dynamicFieldValue = this.applyCustomUIForFieldValue(headerSeqNo, startCol, startRow, mField);
 
                         iControl.getControl().addClass(dynamicFieldValue);
 
