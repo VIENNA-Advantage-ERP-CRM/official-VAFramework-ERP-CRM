@@ -40,8 +40,8 @@ namespace VAdvantage.Model
  Set Table ID By Table Name
  added by ->Harwinder */
         static X_C_ProvisionalInvoiceLine() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
-        static long serialVersionUID = 27908474501410L;/** Last Updated Timestamp 7/15/2021 11:39:44 AM */
-        public static long updatedMS = 1626349184621L;/** AD_Table_ID=1000552 */
+        static long serialVersionUID = 27908910676885L;/** Last Updated Timestamp 7/20/2021 12:49:20 PM */
+        public static long updatedMS = 1626785360096L;/** AD_Table_ID=1000552 */
         public static int Table_ID; // =1000552;
         /** TableName=C_ProvisionalInvoiceLine */
         public static String Table_Name = "C_ProvisionalInvoiceLine";
@@ -193,11 +193,19 @@ namespace VAdvantage.Model
                 Set_Value("ReversalDoc_ID", ReversalDoc_ID);
         }/** Get Reversal Document.
 @return Reference of its original document */
-        public int GetReversalDoc_ID() { Object ii = Get_Value("ReversalDoc_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Tax Amount.
+        public int GetReversalDoc_ID() { Object ii = Get_Value("ReversalDoc_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Surcharge Amount.
+@param SurchargeAmt Surcharge Amount for a document */
+        public void SetSurchargeAmt(Decimal? SurchargeAmt) { Set_Value("SurchargeAmt", (Decimal?)SurchargeAmt); }/** Get Surcharge Amount.
+@return Surcharge Amount for a document */
+        public Decimal GetSurchargeAmt() { Object bd = Get_Value("SurchargeAmt"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }/** Set Tax Amount.
 @param TaxAmt Tax Amount for a document */
         public void SetTaxAmt(Decimal? TaxAmt) { Set_Value("TaxAmt", (Decimal?)TaxAmt); }/** Get Tax Amount.
 @return Tax Amount for a document */
-        public Decimal GetTaxAmt() { Object bd = Get_Value("TaxAmt"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }/** Set Total Difference.
+        public Decimal GetTaxAmt() { Object bd = Get_Value("TaxAmt"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }/** Set Taxable Amount.
+@param TaxBaseAmt Base for calculating the tax amount */
+        public void SetTaxBaseAmt(Decimal? TaxBaseAmt) { Set_Value("TaxBaseAmt", (Decimal?)TaxBaseAmt); }/** Get Taxable Amount.
+@return Base for calculating the tax amount */
+        public Decimal GetTaxBaseAmt() { Object bd = Get_Value("TaxBaseAmt"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }/** Set Total Difference.
 @param TotalDifference Total Difference */
         public void SetTotalDifference(Decimal? TotalDifference) { Set_Value("TotalDifference", (Decimal?)TotalDifference); }/** Get Total Difference.
 @return Total Difference */
