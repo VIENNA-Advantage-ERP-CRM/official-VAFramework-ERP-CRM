@@ -22,6 +22,7 @@ namespace VAdvantage.PushNotif
             if (!Env.IsModuleInstalled("VA074_"))
             {
                 _log.SaveError("PushNotif", "Module VA074_ is not installed!");
+                return;
             }
 
             try

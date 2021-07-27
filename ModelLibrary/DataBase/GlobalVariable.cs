@@ -90,6 +90,11 @@ namespace VAdvantage.DataBase
             ? AppDomain.CurrentDomain.BaseDirectory.Substring(0, AppDomain.CurrentDomain.BaseDirectory.IndexOf("bin"))
             : AppDomain.CurrentDomain.BaseDirectory), "Attachments");
 
+        public static String PhysicalPath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath != null
+            ? System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath : (AppDomain.CurrentDomain.BaseDirectory.Contains("bin")
+            ? AppDomain.CurrentDomain.BaseDirectory.Substring(0, AppDomain.CurrentDomain.BaseDirectory.IndexOf("bin"))
+            : AppDomain.CurrentDomain.BaseDirectory);
+
         #region GenrateClass Path
         /// <summary>
         /// set the class,to genrate the class 

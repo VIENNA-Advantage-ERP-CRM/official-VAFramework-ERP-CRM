@@ -225,7 +225,7 @@ namespace VAdvantage.Model
                 return 0;
             String sql = "DELETE FROM AD_SchedulerLog "
                 + "WHERE AD_Scheduler_ID=" + GetAD_Scheduler_ID()
-                + " AND (Created+" + GetKeepLogDays() + ") < SysDate";
+                + " AND adddays(Created, " + GetKeepLogDays() + ") < SysDate";
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             return no;
         }	//	deleteLog

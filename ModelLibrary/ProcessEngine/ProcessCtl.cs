@@ -924,7 +924,7 @@ namespace VAdvantage.ProcessEngine
                         if (_pi.GetFileType() == ReportType_CSV)
                         {
                             report = _rep.CreateCSV(_ctx);
-                            string filePath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + "TempDownload";
+                            string filePath = GlobalVariable.PhysicalPath + "TempDownload";
 
                             if (!Directory.Exists(filePath))
                                 Directory.CreateDirectory(filePath);
