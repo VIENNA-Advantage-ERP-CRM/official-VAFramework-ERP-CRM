@@ -59,6 +59,7 @@ namespace VAdvantage.Model
         {
 
         }
+
         /// <summary>
         /// Before Save
         /// </summary>
@@ -164,14 +165,12 @@ namespace VAdvantage.Model
             }
             //set processed true for all child tabs
             DB.ExecuteQuery("UPDATE C_ProvisionalInvoiceLine SET Processed = 'Y'  WHERE C_ProvisionalInvoice_ID = " + GetC_ProvisionalInvoice_ID(), null, Get_Trx());
+            DB.ExecuteQuery("UPDATE C_ProvisionalInvoiceTax  SET Processed = 'Y'  WHERE C_ProvisionalInvoice_ID = " + GetC_ProvisionalInvoice_ID(), null, Get_Trx());
 
             SetProcessed(true);
             SetDocAction(DOCACTION_Close);
             return DocActionVariables.STATUS_COMPLETED;
         }
-
-
-
 
         /// <summary>
         /// Create PDF
@@ -314,7 +313,6 @@ namespace VAdvantage.Model
             return false;
         }
 
-
         /// Reverse Correction
         /// </summary>
         /// <returns>true if success</returns>
@@ -322,8 +320,7 @@ namespace VAdvantage.Model
         {
             _log.Info(ToString());
 
-            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
-            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetAD_Org_ID()))
+            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), GetDocBaseType(), GetAD_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return false;
@@ -368,9 +365,8 @@ namespace VAdvantage.Model
             {
                 MProvisionalInvoiceLine oLine = null;
                 MProvisionalInvoiceLine rLine = null;
-                MProvisionalInvoiceTax oTax = null;
-                MProvisionalInvoiceTax rTax = null;
-              
+
+                #region Copy Lines
                 MProvisionalInvoiceLine[] Lines = GetLines(true);
                 for (int i = 0; i < Lines.Length; i++)
                 {
@@ -403,40 +399,8 @@ namespace VAdvantage.Model
                             _processMsg = Msg.GetMsg(GetCtx(), "NotCreateReversalProvisionalInvoice");
                         return false;
                     }
-
                 }
-
-                MProvisionalInvoiceTax[] Tax = GetTax(true);
-                for (int i = 0; i < Tax.Length; i++)
-                {
-                    oTax = Tax[i];
-                    rTax = new MProvisionalInvoiceTax(GetCtx(), 0, Get_TrxName());
-                    CopyValues(oLine, rLine, oLine.GetAD_Client_ID(), oLine.GetAD_Org_ID());
-                    rTax.Set_ValueNoCheck("C_ProvisionalInvoice_ID", reversal.GetC_ProvisionalInvoice_ID());
-                    rTax.SetTaxAmt(Decimal.Negate(oTax.GetTaxAmt()));
-                    rTax.SetTaxAbleAmt(Decimal.Negate(oTax.GetTaxAbleAmt()));
-                    rTax.SetProcessed(false);
-
-                    // Set Original Line reference
-                    rLine.SetReversalDoc_ID(oTax.GetC_ProvisionalInvoiceTax_ID());
-
-                    if (!rLine.Save())
-                    {
-                        pp = VLogger.RetrieveError();
-                        string val = pp.GetName();
-                        if (String.IsNullOrEmpty(val))
-                        {
-                            val = pp.GetValue();
-                        }
-                        if (!String.IsNullOrEmpty(pp.GetName()))
-                            _processMsg = Msg.GetMsg(GetCtx(), "NotCreateReversalProvisionalInvoice") + ", " + val;
-                        else
-                            _processMsg = Msg.GetMsg(GetCtx(), "NotCreateReversalProvisionalInvoice");
-                        return false;
-                    }
-
-                }
-
+                #endregion
 
             }
             if (!reversal.ProcessIt(DocActionVariables.ACTION_COMPLETE))
@@ -457,6 +421,7 @@ namespace VAdvantage.Model
             AddDescription("(" + reversal.GetDocumentNo() + "<-)");
 
             SetProcessed(true);
+            SetProcessing(false);
             SetDocStatus(DOCSTATUS_Reversed);   //	may come from void
             SetDocAction(DOCACTION_None);
 
@@ -607,15 +572,12 @@ namespace VAdvantage.Model
             if (whereClause != null)
                 sql += whereClause;
             sql += " ORDER BY Line";
-            // commented - bcz freight is distributed based on avoalbel qty
-            //sql += " ORDER BY M_Product_ID DESC "; // for picking all charge line first, than product
             try
             {
                 DataSet ds = DB.ExecuteDataset(sql, null, Get_TrxName());
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
                     MProvisionalInvoiceLine il = new MProvisionalInvoiceLine(GetCtx(), dr, Get_TrxName());
-                    //il.SetInvoice(this);
                     list.Add(il);
                 }
                 ds = null;
