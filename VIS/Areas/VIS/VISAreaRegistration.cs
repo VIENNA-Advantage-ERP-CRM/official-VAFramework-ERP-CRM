@@ -95,6 +95,7 @@ namespace VIS
                 "~/Areas/VIS/Scripts/app/forms/form.js",
                 "~/Areas/VIS/Scripts/app/forms/vcreatefrom.js",
                 "~/Areas/VIS/Scripts/app/forms/vcreatefrominvoice.js",
+                "~/Areas/VIS/Scripts/app/forms/vcreateformprovisionalinvoice.js",
                 "~/Areas/VIS/Scripts/app/forms/vcreatefromshipment.js",
                 "~/Areas/VIS/Scripts/app/forms/vcreatefromstatement.js",
                 "~/Areas/VIS/Scripts/app/forms/generatexmodel.js",

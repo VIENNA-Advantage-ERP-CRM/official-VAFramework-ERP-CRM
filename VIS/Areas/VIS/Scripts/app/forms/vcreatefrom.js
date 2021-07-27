@@ -12,7 +12,7 @@
         var _checkStatus = true;
         //To button pic on grid selected records
         this.arrListColumns = [];
-        
+
         // create log
         this.log = VIS.Logging.VLogger.getVLogger("VCreateFrom");
         this.divPaging = null;
@@ -58,12 +58,12 @@
         name = "btnDelete_" + this.windowNo;
         var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/uncheck-icon.png";
         this.selectAllButton = $("<button type='button' id='" + name + "' style='margin-bottom:0px;margin-top:0px;display: none;float: left;padding: 0px;border: 0px;' value='Ok' role='button' aria-disabled='false'>" +
-       "<img src='" + src + "'></button>");
+            "<img src='" + src + "'></button>");
 
         name = "btnRefresh_" + this.windowNo;
         src = VIS.Application.contextUrl + "Areas/VIS/Images/base/Refresh24.png";
         this.btnRefresh = $("<button id='" + name + "' style='margin-bottom: 1px; margin-top: 0px;display: none; float: left; margin-left: 0px;height: 38px; ' class='VIS_Pref_btn-2'>" +
-                   "<img src='" + src + "'></button>");
+            "<img src='" + src + "'></button>");
 
         name = "btnApply_" + this.windowNo;
         this.Applybtn = $("<input id='" + name + "' class='VIS_Pref_btn-2' style='display: none;' type='button' value='" + VIS.Msg.getMsg("Apply") + "'>");
@@ -99,6 +99,10 @@
         //this.ContainerTree = $("<img id='ContainerTree_" + this.windowNo + "' style='height: 27px;' class='pull-left VIS_buttons-ContainerTree VIS-pallet-icon VIS_Tree-Container-disabled' src='" + src + "'>");
         this.ContainerTree = $("<button class='input-group-text VIS_Tree-Container-disabled'><i id='ContainerTree_" + this.windowNo + "' class='fa fa-cubes'></i></button>");
 
+        // create column as Provisional Invoice on Create line on AP Invoice
+        this.lblProvisionalInvoice = new VIS.Controls.VLabel();
+        this.cmbProvisionalInvoice = new VIS.Controls.VComboBox('', false, false, true);
+
         this.DocumentNo = null;
         this.Date = null;
         this.Amount = null;
@@ -107,6 +111,7 @@
         this.CheckNo = null;
 
         this.fromInvoice = false;
+        this.ProvisionalInvoice = false;
         this.deliveryDate = null;
         this.cmbOrder = new VIS.Controls.VComboBox('', false, false, true);
         this.cmbInvoice = new VIS.Controls.VComboBox('', false, false, true);
@@ -136,6 +141,7 @@
                 var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
                 var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
                 var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
+                var C_ProvisionalInvoice_ID = $self.cmbProvisionalInvoice.getControl().find('option:selected').val();
                 var M_Product_ID = $self.vProduct.getValue();
                 var deliveryDate = $self.deliveryDate.getValue();
                 if (C_Order_ID != null) {
@@ -152,7 +158,13 @@
                     VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, 1);
                 }
                 else if (M_InOut_ID != null) {
-                    VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, 1);
+                    // call loadshipments from VCreateFormProvisionalInvoice.js for Provisiona Invoice
+                    if ($self.mTab.keyColumnName == "C_ProvisionalInvoice_ID") {
+                        VIS.VCreateFormProvisionalInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, 1);
+                    }
+                    else {
+                        VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, 1);
+                    }
                 }
                 else {
                     $self.setBusy(false);
@@ -175,7 +187,7 @@
                 var Amount = $self.Amount.getValue();
                 VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, 1);
             }
-                // Added by Manjot on 12/9/18 for combobox of Container on Material Receipt
+            // Added by Manjot on 12/9/18 for combobox of Container on Material Receipt
             else if (evt.propertyName == "M_Locator_ID") {
                 if ($self.locatorField != null) {
                     $self.isApplied = false;
@@ -185,7 +197,7 @@
                         VIS.VCreateFromShipment.prototype.initContainerDetails(M_locator_ID);
                 }
             }
-                //End
+            //End
             else {
                 this.locatorField.setBackground("");
             }
@@ -243,7 +255,13 @@
                         VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, 1);
                     }
                     else if (M_InOut_ID != null) {
-                        VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, 1);
+                         // call loadshipments from VCreateFormProvisionalInvoice.js for Provisiona Invoice
+                        if ($self.mTab.keyColumnName == "C_ProvisionalInvoice_ID") {
+                            VIS.VCreateFormProvisionalInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, 1);
+                        }
+                        else {
+                            VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, 1);
+                        }
                     }
                     else if (C_BankAccount_ID != null) {
                         var trxDate = $self.Date.getValue();
@@ -291,7 +309,13 @@
                         VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, parseInt($self.cmbPage.val()) - 1);
                     }
                     else if (M_InOut_ID != null) {
-                        VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, parseInt($self.cmbPage.val()) - 1);
+                         // call loadshipments from VCreateFormProvisionalInvoice.js for Provisiona Invoice
+                        if ($self.mTab.keyColumnName == "C_ProvisionalInvoice_ID") {
+                            VIS.VCreateFormProvisionalInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, parseInt($self.cmbPage.val()) - 1);
+                        }
+                        else {
+                            VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, parseInt($self.cmbPage.val()) - 1);
+                        }
                     }
                     else if (C_BankAccount_ID != null) {
                         var trxDate = $self.Date.getValue();
@@ -339,7 +363,13 @@
                         VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, parseInt($self.cmbPage.val()) + 1);
                     }
                     else if (M_InOut_ID != null) {
-                        VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, parseInt($self.cmbPage.val()) + 1);
+                         // call loadshipments from VCreateFormProvisionalInvoice.js for Provisiona Invoice
+                        if ($self.mTab.keyColumnName == "C_ProvisionalInvoice_ID") {
+                            VIS.VCreateFormProvisionalInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, parseInt($self.cmbPage.val()) + 1);
+                        }
+                        else {
+                            VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, parseInt($self.cmbPage.val()) + 1);
+                        }
                     }
                     else if (C_BankAccount_ID != null) {
                         var trxDate = $self.Date.getValue();
@@ -387,7 +417,13 @@
                         VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, parseInt($self.cmbPage.find("Option:last").val()));
                     }
                     else if (M_InOut_ID != null) {
-                        VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, parseInt($self.cmbPage.find("Option:last").val()));
+                         // call loadshipments from VCreateFormProvisionalInvoice.js for Provisiona Invoice
+                        if ($self.mTab.keyColumnName == "C_ProvisionalInvoice_ID") {
+                            VIS.VCreateFormProvisionalInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, parseInt($self.cmbPage.find("Option:last").val()));
+                        }
+                        else {
+                            VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, parseInt($self.cmbPage.find("Option:last").val()));
+                        }
                     }
                     else if (C_BankAccount_ID != null) {
                         var trxDate = $self.Date.getValue();
@@ -434,7 +470,13 @@
                     VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, $self.cmbPage.val());
                 }
                 else if (M_InOut_ID != null) {
-                    VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, $self.cmbPage.val());
+                     // call loadshipments from VCreateFormProvisionalInvoice.js for Provisiona Invoice
+                    if ($self.mTab.keyColumnName == "C_ProvisionalInvoice_ID") {
+                        VIS.VCreateFormProvisionalInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, $self.cmbPage.val());
+                    }
+                    else {
+                        VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, $self.cmbPage.val());
+                    }
                 }
                 else if (C_BankAccount_ID != null) {
                     var trxDate = $self.Date.getValue();
@@ -563,6 +605,55 @@
             });
         };
 
+        // function to check comma or dot from given value and return new value
+        this.checkcommaordot = function (event, val) {
+            var foundComma = false;
+            event.value_new = VIS.Utility.Util.getValueOfString(val);
+            if (event.value_new.contains(".")) {
+                foundComma = true;
+                var indices = [];
+                for (var i = 0; i < event.value_new.length; i++) {
+                    if (event.value_new[i] === ".")
+                        indices.push(i);
+                }
+                if (indices.length > 1) {
+                    event.value_new = removeAllButLast(event.value_new, '.');
+                }
+            }
+            if (event.value_new.contains(",")) {
+                if (foundComma) {
+                    event.value_new = removeAllButLast(event.value_new, ',');
+                }
+                else {
+                    var indices = [];
+                    for (var i = 0; i < event.value_new.length; i++) {
+                        if (event.value_new[i] === ",")
+                            indices.push(i);
+                    }
+                    if (indices.length > 1) {
+                        event.value_new = removeAllButLast(event.value_new, ',');
+                    }
+                    else {
+                        event.value_new = event.value_new.replace(",", ".");
+                    }
+                }
+            }
+            if (event.value_new == "") {
+                event.value_new = "0";
+            }
+            return event.value_new;
+        };
+
+        // Remove all seperator but only bring last seperator
+        this.removeAllButLast = function (amt, seprator) {
+            var parts = amt.split(seprator);
+            amt = parts.slice(0, -1).join('') + '.' + parts.slice(-1);
+            if (amt.indexOf('.') == (amt.length - 1)) {
+                amt = amt.replace(".", "");
+            }
+            return amt;
+        };
+
         this.disposeComponent = function () {
             $self = null;
             if (this.Okbtn)
@@ -604,6 +695,10 @@
         else if (AD_Table_ID == 426)		//	C_PaySelection
         {
             return null;	//	ignore - will call process C_PaySelection_CreateFrom
+        }
+        else if (AD_Table_ID == 1001627)		//	C_ProvisionalInvoice
+        {
+            retValue = new VIS.VCreateFormProvisionalInvoice(mTab);
         }
         else    //  Not supported CreateFrom
         {
@@ -658,11 +753,33 @@
         //this.cmbOrder.getControl().prop('selectedIndex', 0);
         return this.initBPDetails(C_BPartner_ID);
     }
+
+    /**Load Order and BP Deatil for Provisional Invoice */
+    VCreateFrom.prototype.initBPartnerForProvisional = function () {
+        //  load BPartner
+        var AD_Column_ID = 3499;        //  C_Invoice.C_BPartner_ID
+        var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), this.windowNo, AD_Column_ID, VIS.DisplayType.Search);
+
+        this.vBPartner = new VIS.Controls.VTextBoxButton("C_BPartner_ID", true, false, true, VIS.DisplayType.Search, lookup);
+        var C_BPartner_ID = VIS.Env.getCtx().getContextAsInt(this.windowNo, "C_BPartner_ID");
+        this.vBPartner.setValue(C_BPartner_ID);
+
+        //  initial loading
+        var orcmb = this.cmbOrder;
+        $(orcmb).html("");
+
+        var isReturnTrx = "Y".equals(VIS.Env.getCtx().getWindowContext(this.windowNo, "IsReturnTrx"));
+
+        this.getOrdersForProvisional(VIS.Env.getCtx(), C_BPartner_ID, isReturnTrx);
+
+        return this.initBPDetails(C_BPartner_ID);
+    }
+
     // Get Orders
     VCreateFrom.prototype.getOrders = function (ctx, C_BPartner_ID, isReturnTrx, forInvoice) {
 
         var display = "o.DocumentNo||' - ' ||".concat(VIS.DB.to_char("o.DateOrdered", VIS.DisplayType.Date, VIS.Env.getAD_Language(ctx))).concat("||' - '||").concat(
-                VIS.DB.to_char("o.GrandTotal", VIS.DisplayType.Amount, VIS.Env.getAD_Language(ctx)));
+            VIS.DB.to_char("o.GrandTotal", VIS.DisplayType.Amount, VIS.Env.getAD_Language(ctx)));
 
         var column = "m.M_InOutLine_ID";
         if (forInvoice) {
@@ -721,7 +838,62 @@
         //return pairs;
     }
 
-    
+    /**
+     * Load Order for Provisional Invoice
+     * @param {any} ctx
+     * @param {any} C_BPartner_ID
+     * @param {any} isReturnTrx
+     */
+    VCreateFrom.prototype.getOrdersForProvisional = function (ctx, C_BPartner_ID, isReturnTrx) {
+
+        var display = "o.DocumentNo||' - ' ||".concat(VIS.DB.to_char("o.DateOrdered", VIS.DisplayType.Date, VIS.Env.getAD_Language(ctx))).concat("||' - '||").concat(
+            VIS.DB.to_char("o.GrandTotal", VIS.DisplayType.Amount, VIS.Env.getAD_Language(ctx)));
+
+        var column = "m.C_InvoiceLine_ID";
+
+        var OrgId = VIS.Env.getCtx().getContextAsInt(this.windowNo, "AD_Org_ID")
+        var _isdrop = "Y".equals(VIS.Env.getCtx().getWindowContext(this.windowNo, "IsDropShip"));
+        var _isSoTrx = "Y".equals(VIS.Env.getCtx().getWindowContext(this.windowNo, "IsSOTrx"));
+        var recordId = VIS.context.getWindowContextAsInt(this.windowNo, "C_ProvisionalInvoice_ID", true);
+        $.ajax({
+            url: VIS.Application.contextUrl + "VCreateFrom/VCreateGetOrders",
+            type: 'POST',
+            //async: false,
+            data: {
+                displays: display,
+                columns: column,
+                C_BPartner_IDs: C_BPartner_ID,
+                isReturnTrxs: isReturnTrx,
+                OrgIds: OrgId,
+                IsDrop: _isdrop,
+                IsSOTrx: _isSoTrx,
+                forInvoices: false,
+                recordID: recordId,
+            },
+            success: function (datas) {
+                var ress = datas.result;
+                if (ress && ress.length > 0) {
+                    try {
+                        var key, value;
+                        for (var i = 0; i < ress.length; i++) {
+                            key = VIS.Utility.Util.getValueOfInt(ress[i].key);
+                            value = VIS.Utility.encodeText(ress[i].value);
+                            if (i == 0) {
+                                $self.cmbOrder.getControl().append(" <option value=0> </option>");
+                            }
+                            $self.cmbOrder.getControl().append(" <option value=" + key + ">" + value + "</option>");
+                        }
+                        $self.cmbOrder.getControl().prop('selectedIndex', 0);
+                    }
+                    catch (e) { }
+                }
+            },
+            error: function (e) {
+                $self.log.info(e);
+            },
+        });
+    }
+
     VCreateFrom.prototype.jbInit = function () {
         this.init();
 
@@ -744,7 +916,9 @@
         this.lblAuthCode.getControl().text(VIS.Msg.getMsg("AuthCode"));
         this.lblCheckNo.getControl().text(VIS.Msg.getMsg("CheckNo"));
 
-        
+        this.lblProvisionalInvoice.getControl().text(VIS.Msg.getMsg("ProvisionalInvoice"));
+
+
         //First Row
         /*******************************/
         var line = $("<div class='VIS_Pref_show'>");
@@ -769,26 +943,26 @@
         col.append(DivInputWrap);
         DivInputWrap.append(DivInputCtrlWrap);
         DivInputWrap.append(DivCtrlBtnWrap);
-        
+
         //else {
-            // To append Business Partner Control.. 
-            if (this.vBPartner != null) {
-                //ctrl.removeClass("VIS_Pref_slide-show pp");
-                //col.append(DivInputWrap);
-                //DivInputWrap.append(DivInputCtrlWrap);
-                //DivInputWrap.append(DivCtrlBtnWrap);
-                if (this.cmbBankAccount != null) {
-                    DivInputCtrlWrap.append(this.vBPartner.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
-                    DivCtrlBtnWrap.append(this.vBPartner.getBtn(0));
-                    DivCtrlBtnWrap.append(this.vBPartner.getBtn(1));
-                }
-                else {
-                    DivInputCtrlWrap.append(this.vBPartner.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
-                    DivCtrlBtnWrap.append(this.vBPartner.getBtn(0));
-                }
-                DivInputCtrlWrap.append(this.lblBPartner.getControl().addClass('VIS_Pref_Label_Font'));
+        // To append Business Partner Control.. 
+        if (this.vBPartner != null) {
+            //ctrl.removeClass("VIS_Pref_slide-show pp");
+            //col.append(DivInputWrap);
+            //DivInputWrap.append(DivInputCtrlWrap);
+            //DivInputWrap.append(DivCtrlBtnWrap);
+            if (this.cmbBankAccount != null) {
+                DivInputCtrlWrap.append(this.vBPartner.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
+                DivCtrlBtnWrap.append(this.vBPartner.getBtn(0));
+                DivCtrlBtnWrap.append(this.vBPartner.getBtn(1));
             }
-            //End Business Partner Control
+            else {
+                DivInputCtrlWrap.append(this.vBPartner.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
+                DivCtrlBtnWrap.append(this.vBPartner.getBtn(0));
+            }
+            DivInputCtrlWrap.append(this.lblBPartner.getControl().addClass('VIS_Pref_Label_Font'));
+        }
+        //End Business Partner Control
         //}
         //End First Column
         /*******************************/
@@ -831,21 +1005,28 @@
         //    }
         //}
         //else {
-            if (this.cmbBankAccount != null) {
+        if (this.cmbBankAccount != null) {
+            //col.append(DivInputWrap);
+            //DivInputWrap.append(DivInputCtrlWrap);
+            DivInputCtrlWrap.append(this.cmbBankAccount.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            DivInputCtrlWrap.append(this.lblBankAccount.getControl().addClass('VIS_Pref_Label_Font'));
+        }
+        else {
+            if (this.DocumentNoRef != null) {
+                //ctrl.removeClass("VIS_Pref_slide-show pp");
                 //col.append(DivInputWrap);
                 //DivInputWrap.append(DivInputCtrlWrap);
-                DivInputCtrlWrap.append(this.cmbBankAccount.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                DivInputCtrlWrap.append(this.lblBankAccount.getControl().addClass('VIS_Pref_Label_Font'));
+                DivInputCtrlWrap.append(this.DocumentNoRef.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+                DivInputCtrlWrap.append(this.lblDocumentNoRef.getControl().addClass('VIS_Pref_Label_Font'));
             }
-            else {
-                if (this.DocumentNoRef != null) {
-                    //ctrl.removeClass("VIS_Pref_slide-show pp");
-                    //col.append(DivInputWrap);
-                    //DivInputWrap.append(DivInputCtrlWrap);
-                    DivInputCtrlWrap.append(this.DocumentNoRef.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                    DivInputCtrlWrap.append(this.lblDocumentNoRef.getControl().addClass('VIS_Pref_Label_Font'));
-                }
+            else if (this.cmbProvisionalInvoice != null
+                && $self.mTab.keyColumnName == "C_Invoice_ID"
+                && "N".equals(VIS.Env.getCtx().getWindowContext(this.windowNo, "IsSOTrx"))) {
+                // show Provisional Invoice column on AP Invoice
+                DivInputCtrlWrap.append(this.cmbProvisionalInvoice.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+                DivInputCtrlWrap.append(this.lblProvisionalInvoice.getControl().addClass('VIS_Pref_Label_Font'));
             }
+        }
         //}
         //End Second Column
         /*******************************/
@@ -894,12 +1075,12 @@
         //    }
         //}
         //else {
-            if (this.DocumentNo != null) {
-                //ctrl.removeClass("VIS_Pref_slide-show pp");
-                col.append(DivInputWrap);
-                DivInputCtrlWrap.append(this.DocumentNo.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                DivInputCtrlWrap.append(this.lblDocumentNo.getControl().addClass('VIS_Pref_Label_Font'));
-            }
+        if (this.DocumentNo != null) {
+            //ctrl.removeClass("VIS_Pref_slide-show pp");
+            col.append(DivInputWrap);
+            DivInputCtrlWrap.append(this.DocumentNo.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            DivInputCtrlWrap.append(this.lblDocumentNo.getControl().addClass('VIS_Pref_Label_Font'));
+        }
         //}
 
         //if (VIS.Application.isRTL) {
@@ -915,13 +1096,13 @@
         //        DivInputCtrlWrap.append(this.lblShipment.getControl().addClass('VIS_Pref_Label_Font'));
         //    }
         //}
-       // else {
+        // else {
 
-            if (this.cmbOrder != null) {
-                col.append(DivInputWrap);
-                DivInputCtrlWrap.append(this.cmbOrder.getControl());
-                DivInputCtrlWrap.append(this.lblOrder.getControl().addClass('VIS_Pref_Label_Font'));
-            }
+        if (this.cmbOrder != null) {
+            col.append(DivInputWrap);
+            DivInputCtrlWrap.append(this.cmbOrder.getControl());
+            DivInputCtrlWrap.append(this.lblOrder.getControl().addClass('VIS_Pref_Label_Font'));
+        }
         //}
 
         // Amount Control
@@ -980,19 +1161,19 @@
         //        DivInputCtrlWrap.append(this.lblOrder.getControl().addClass('VIS_Pref_Label_Font'));
         //    }
 
-    //} 
-    //else {
-            if (this.cmbInvoice != null) {
-                //col.append(DivInputWrap);
-                DivInputCtrlWrap.append(this.cmbInvoice.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                DivInputCtrlWrap.append(this.lblInvoice.getControl().addClass('VIS_Pref_Label_Font'));
-            }
-            if (this.cmbShipment != null) {
-                //col.append(DivInputWrap);
-                DivInputCtrlWrap.append(this.cmbShipment.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                DivInputCtrlWrap.append(this.lblShipment.getControl().addClass('VIS_Pref_Label_Font'));
-            }
-       // }
+        //} 
+        //else {
+        if (this.cmbInvoice != null) {
+            //col.append(DivInputWrap);
+            DivInputCtrlWrap.append(this.cmbInvoice.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            DivInputCtrlWrap.append(this.lblInvoice.getControl().addClass('VIS_Pref_Label_Font'));
+        }
+        if (this.cmbShipment != null) {
+            //col.append(DivInputWrap);
+            DivInputCtrlWrap.append(this.cmbShipment.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            DivInputCtrlWrap.append(this.lblShipment.getControl().addClass('VIS_Pref_Label_Font'));
+        }
+        // }
 
         //if (VIS.Application.isRTL) {
         //    //reverse controls order
@@ -1004,13 +1185,13 @@
         //    }
         //}
         //else {
-            if (this.Date != null) {
-                //ctrl.removeClass("VIS_Pref_slide-show pp");
-                //col.append(DivInputWrap);
-                DivInputCtrlWrap.append(this.Date.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                DivInputCtrlWrap.append(this.lblDate.getControl().addClass('VIS_Pref_Label_Font'));
-            }
-       // }
+        if (this.Date != null) {
+            //ctrl.removeClass("VIS_Pref_slide-show pp");
+            //col.append(DivInputWrap);
+            DivInputCtrlWrap.append(this.Date.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            DivInputCtrlWrap.append(this.lblDate.getControl().addClass('VIS_Pref_Label_Font'));
+        }
+        // }
 
         //End Second Row
         /*******************************/
@@ -1059,13 +1240,13 @@
             //}
             //else {
 
-                if (this.locatorField != null) {
-                    //ctrl.removeClass("VIS_Pref_slide-show pp");
-                    //col.append(ctrl);
-                    DivInputCtrlWrap.append(this.locatorField.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
-                    DivCtrlBtnWrap.append(this.locatorField.getBtn(0));
-                    DivInputCtrlWrap.append(this.lblLocator.getControl().addClass('VIS_Pref_Label_Font'));
-                }
+            if (this.locatorField != null) {
+                //ctrl.removeClass("VIS_Pref_slide-show pp");
+                //col.append(ctrl);
+                DivInputCtrlWrap.append(this.locatorField.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
+                DivCtrlBtnWrap.append(this.locatorField.getBtn(0));
+                DivInputCtrlWrap.append(this.lblLocator.getControl().addClass('VIS_Pref_Label_Font'));
+            }
             //}
 
 
@@ -1095,20 +1276,20 @@
             //    }
             //}
             //else {
-                // Added by Manjot on 12/9/18 for combobox of Container on Material Receipt
-                if (this.cmbContainer != null) {
-                    //var src = VIS.Application.contextUrl + "Areas/VIS/Images/pallet-icon.png";
-                    col.css('visibility', 'hidden');//.append(ctrl);
-                    if (VIS.context.ctx["#PRODUCT_CONTAINER_APPLICABLE"] != undefined) {
-                        if (VIS.context.ctx["#PRODUCT_CONTAINER_APPLICABLE"].equals("Y", true)) {
-                            col.css('visibility', 'visible');//.append(ctrl);
-                            this.ContainerTree.removeClass("VIS_Tree-Container-disabled");
-                        }
+            // Added by Manjot on 12/9/18 for combobox of Container on Material Receipt
+            if (this.cmbContainer != null) {
+                //var src = VIS.Application.contextUrl + "Areas/VIS/Images/pallet-icon.png";
+                col.css('visibility', 'hidden');//.append(ctrl);
+                if (VIS.context.ctx["#PRODUCT_CONTAINER_APPLICABLE"] != undefined) {
+                    if (VIS.context.ctx["#PRODUCT_CONTAINER_APPLICABLE"].equals("Y", true)) {
+                        col.css('visibility', 'visible');//.append(ctrl);
+                        this.ContainerTree.removeClass("VIS_Tree-Container-disabled");
                     }
-                    DivInputCtrlWrap.append(this.cmbContainer.getControl().attr("disabled", true).attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
-                    DivCtrlBtnWrap.append(this.ContainerTree);
-                    DivInputCtrlWrap.append(this.lblContainer.getControl().addClass('VIS_Pref_Label_Font'));
                 }
+                DivInputCtrlWrap.append(this.cmbContainer.getControl().attr("disabled", true).attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
+                DivCtrlBtnWrap.append(this.ContainerTree);
+                DivInputCtrlWrap.append(this.lblContainer.getControl().addClass('VIS_Pref_Label_Font'));
+            }
             //}
         }
         //End Third Row
@@ -1163,12 +1344,12 @@
         //    }
         //}
         //else {
-            if (this.DepositSlip != null) {
-                //ctrl.removeClass("VIS_Pref_slide-show pp");
-                //col.append(ctrl);
-                DivInputCtrlWrap.append(this.DepositSlip.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                DivInputCtrlWrap.append(this.lblDepositSlip.getControl().addClass('VIS_Pref_Label_Font'));
-            }
+        if (this.DepositSlip != null) {
+            //ctrl.removeClass("VIS_Pref_slide-show pp");
+            //col.append(ctrl);
+            DivInputCtrlWrap.append(this.DepositSlip.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            DivInputCtrlWrap.append(this.lblDepositSlip.getControl().addClass('VIS_Pref_Label_Font'));
+        }
         //}
 
         //if (VIS.Application.isRTL) {
@@ -1183,11 +1364,11 @@
         //    }
         //}
         //else {
-            if (this.deliveryDate != null) {
-                //col.append(ctrl);
-                DivInputCtrlWrap.append(this.deliveryDate.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                DivInputCtrlWrap.append(this.lblDeliveryDate.getControl().addClass('VIS_Pref_Label_Font'));
-            }
+        if (this.deliveryDate != null) {
+            //col.append(ctrl);
+            DivInputCtrlWrap.append(this.deliveryDate.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            DivInputCtrlWrap.append(this.lblDeliveryDate.getControl().addClass('VIS_Pref_Label_Font'));
+        }
         //}
 
         // Check No Control
@@ -1249,14 +1430,14 @@
         //    }
         //}
         //else {
-            if (this.vProduct != null) {
-                //ctrl.removeClass("VIS_Pref_slide-show pp");
-                //col.append(ctrl);
-                DivInputCtrlWrap.append(this.vProduct.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
-                DivCtrlBtnWrap.append(this.vProduct.getBtn(0));
-                DivCtrlBtnWrap.append(this.vProduct.getBtn(1));
-                DivInputCtrlWrap.append(this.lblProduct.getControl().addClass('VIS_Pref_Label_Font'));
-            }
+        if (this.vProduct != null) {
+            //ctrl.removeClass("VIS_Pref_slide-show pp");
+            //col.append(ctrl);
+            DivInputCtrlWrap.append(this.vProduct.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
+            DivCtrlBtnWrap.append(this.vProduct.getBtn(0));
+            DivCtrlBtnWrap.append(this.vProduct.getBtn(1));
+            DivInputCtrlWrap.append(this.lblProduct.getControl().addClass('VIS_Pref_Label_Font'));
+        }
         //}
 
         //if (VIS.Application.isRTL) {
@@ -1269,12 +1450,12 @@
         //    }
         //}
         //else {
-            if (this.AuthCode != null) {
-                //ctrl.removeClass("VIS_Pref_slide-show pp");
-                //col.append(ctrl);
-                DivInputCtrlWrap.append(this.AuthCode.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                DivInputCtrlWrap.append(this.lblAuthCode.getControl().addClass('VIS_Pref_Label_Font'));
-            }
+        if (this.AuthCode != null) {
+            //ctrl.removeClass("VIS_Pref_slide-show pp");
+            //col.append(ctrl);
+            DivInputCtrlWrap.append(this.AuthCode.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            DivInputCtrlWrap.append(this.lblAuthCode.getControl().addClass('VIS_Pref_Label_Font'));
+        }
         //}
         //End Forth Row
         /******************************/
@@ -1444,7 +1625,12 @@
                     }
                 }
 
-                VIS.VCreateFromInvoice.prototype.saveInvoice();
+                if ($self.mTab.keyColumnName == "C_ProvisionalInvoice_ID") {
+                    VIS.VCreateFormProvisionalInvoice.prototype.saveProvisionalInvoice();
+                }
+                else {
+                    VIS.VCreateFromInvoice.prototype.saveInvoice();
+                }
             }
             //$self.setBusy(false);
             //if (output == false) {
@@ -1937,7 +2123,12 @@
                 //$self.AuthCode.setVisible = false;
                 $self.lblDeliveryDate.setVisible(false);
                 $self.deliveryDate.setVisible(false);
-                VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, 1);
+                if ($self.mTab.keyColumnName == "C_ProvisionalInvoice_ID") {
+                    VIS.VCreateFormProvisionalInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, 1);
+                }
+                else {
+                    VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, 1);
+                }
                 //$self.setBusy(false);
             });
         }
@@ -2033,7 +2224,11 @@
         else if ($self.mTab.keyColumnName == "C_Invoice_ID") {
             $self.record_ID = $self.mTab.getValue("C_Invoice_ID");
         }
-        if ($self.relatedToOrg.getValue()) {
+        else if ($self.mTab.keyColumnName == "C_ProvisionalInvoice_ID") {
+            $self.record_ID = $self.mTab.getValue("C_ProvisionalInvoice_ID");
+        }
+
+        if ($self.relatedToOrg != null && $self.relatedToOrg.getValue()) {
             var isBaseLanges = "";
             var MProductIDs = "";
             var DelivDate = "";
@@ -2537,6 +2732,10 @@
                             line['IsAdvance'] = res[i]["IsAdvance"];
                             line['C_InvoicePaymentTerm_ID'] = res[i]["C_InvoicePaymentTerm_ID"];
                             line['IsInvoicePTAdvance'] = res[i]["IsInvoicePTAdvance"];
+                            if ($self.mTab.keyColumnName == "C_ProvisionalInvoice_ID") {
+                                line['POPrice'] = res[i]["POPrice"];
+                                line['ProvisionalPrice'] = res[i]["ProvisionalPrice"];
+                            }
                             line['recid'] = count;
                             data.push(line);
                         }
@@ -2719,9 +2918,10 @@
                 //Added to get QuantityEntered value acc.to culture
                 render: function (record, index, col_index) {
                     var val = record["QuantityEntered"];
-                    val = checkcommaordot(event, val);
+                    val = $self.checkcommaordot(event, val);
                     return parseFloat(val).toLocaleString(undefined, { minimumFractionDigits: 4 });
-                }});
+                }
+            });
             this.arrListColumns.push({ field: "C_UOM_ID", caption: VIS.Msg.getMsg("UomName"), sortable: false, size: '150px', hidden: false });
             //Add product search key column in Grid 
             this.arrListColumns.push({ field: "M_Product_SearchKey", caption: VIS.Msg.getMsg("ProductSearchKey"), sortable: false, size: '150px', hidden: false });
@@ -2787,9 +2987,41 @@
             onEditField: function (event) {
                 id = event.recid;
                 if (event.column == 3) {
-                    $self.dGrid.records[event.index]["QuantityEntered"] = checkcommaordot(event, $self.dGrid.records[event.index]["QuantityEntered"]);
+                    $self.dGrid.records[event.index]["QuantityEntered"] = $self.checkcommaordot(event, $self.dGrid.records[event.index]["QuantityEntered"]);
                     var _value = format.GetFormatAmount($self.dGrid.records[event.index]["QuantityEntered"], "init", dotFormatter);
                     $self.dGrid.records[event.index]["QuantityEntered"] = format.GetConvertedString(_value, dotFormatter);
+                    $("#grid_" + $self.dGrid.name + "_rec_" + id).keydown(function (event) {
+                        if (!dotFormatter && (event.keyCode == 190 || event.keyCode == 110)) {// , separator
+                            return false;
+                        }
+                        else if (dotFormatter && event.keyCode == 188) { // . separator
+                            return false;
+                        }
+                        if (event.target.value.contains(".") && (event.which == 110 || event.which == 190 || event.which == 188)) {
+                            if (event.target.value.indexOf('.') > -1) {
+                                event.target.value = event.target.value.replace('.', '');
+                            }
+                        }
+                        else if (event.target.value.contains(",") && (event.which == 110 || event.which == 190 || event.which == 188)) {
+                            if (event.target.value.indexOf(',') > -1) {
+                                event.target.value = event.target.value.replace(',', '');
+                            }
+                        }
+                        if (event.keyCode != 8 && event.keyCode != 9 && (event.keyCode < 37 || event.keyCode > 40) &&
+                            (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)
+                            && event.keyCode != 109 && event.keyCode != 189 && event.keyCode != 110
+                            && event.keyCode != 144 && event.keyCode != 188 && event.keyCode != 190) {
+                            return false;
+                        }
+                    });
+                }
+
+                // change event of Provisional Price
+                if (event.column == 4 && $self.dGrid.columns[event.column].field == "ProvisionalPrice") {
+                    $self.dGrid.records[event.index]["ProvisionalPrice"] = $self.checkcommaordot(event, $self.dGrid.records[event.index]["ProvisionalPrice"]);
+                    var _value = format.GetFormatAmount($self.dGrid.records[event.index]["ProvisionalPrice"], "init", dotFormatter);
+                    $self.dGrid.records[event.index]["ProvisionalPrice"] = format.GetConvertedString(_value, dotFormatter);
+                    $self.dGrid.refreshRow(event.index + 1);//refresh a row of the grid
                     $("#grid_" + $self.dGrid.name + "_rec_" + id).keydown(function (event) {
                         if (!dotFormatter && (event.keyCode == 190 || event.keyCode == 110)) {// , separator
                             return false;
@@ -2818,7 +3050,7 @@
             },
             //Implemented for BankStatement window (when click on Create Line From button),
             //change the Converted Amt according to when change the AcctDate on the grid -added by Koteswararao
-            onChange: function (event) {    
+            onChange: function (event) {
                 window.setTimeout(function () {
                     if ($self.dGrid.getChanges(event.recid) != undefined) {
                         if (event.column == 0 && $self.dGrid.columns[event.column].field == "Date") {
@@ -2949,6 +3181,16 @@
                     AddEditedLine("QuantityEntered", e.index, _val.toFixed(4));
                 }
             }
+            if ($self.dGrid.columns[e.column].field == "ProvisionalPrice") {
+                var _val = format.GetConvertedNumber(e.value_new, dotFormatter);
+                if (_val < 0) {
+                    VIS.ADialog.error("PriceCantNegative");
+                    e.value_new = e.value_original;
+                    return;
+                }
+                $self.dGrid.records[e.index]["ProvisionalPrice"] = _val.toFixed(4);
+                AddEditedLine("ProvisionalPrice", e.index, _val.toFixed(4));
+            }
             else if ($self.dGrid.columns[e.column].field == "M_AttributeSetInstance_ID") {
                 $self.dGrid.records[e.index]["M_AttributeSetInstance_ID"] = e.value_new;
                 if (C_Order_ID > 0 || C_Invoice_ID > 0) {
@@ -3012,55 +3254,6 @@
                     $self.editedItems.push($self.dGrid.records[index]);
                 }
             }
-        };
-
-        // function to check comma or dot from given value and return new value
-        function checkcommaordot(event, val) {
-            var foundComma = false;
-            event.value_new = VIS.Utility.Util.getValueOfString(val);
-            if (event.value_new.contains(".")) {
-                foundComma = true;
-                var indices = [];
-                for (var i = 0; i < event.value_new.length; i++) {
-                    if (event.value_new[i] === ".")
-                        indices.push(i);
-                }
-                if (indices.length > 1) {
-                    event.value_new = removeAllButLast(event.value_new, '.');
-                }
-            }
-            if (event.value_new.contains(",")) {
-                if (foundComma) {
-                    event.value_new = removeAllButLast(event.value_new, ',');
-                }
-                else {
-                    var indices = [];
-                    for (var i = 0; i < event.value_new.length; i++) {
-                        if (event.value_new[i] === ",")
-                            indices.push(i);
-                    }
-                    if (indices.length > 1) {
-                        event.value_new = removeAllButLast(event.value_new, ',');
-                    }
-                    else {
-                        event.value_new = event.value_new.replace(",", ".");
-                    }
-                }
-            }
-            if (event.value_new == "") {
-                event.value_new = "0";
-            }
-            return event.value_new;
-        };
-
-        // Remove all seperator but only bring last seperator
-        function removeAllButLast(amt, seprator) {
-            var parts = amt.split(seprator);
-            amt = parts.slice(0, -1).join('') + '.' + parts.slice(-1);
-            if (amt.indexOf('.') == (amt.length - 1)) {
-                amt = amt.replace(".", "");
-            }
-            return amt;
         };
 
         //this.dGrid.on("click", function (e) {
