@@ -1987,6 +1987,10 @@
         this.inserting = false;
     };
 
+    /**
+     * if Identifer value contains image path, then remove it and return remaining Identifier
+     * @param {any} Name
+     */
     VComboBox.prototype.getDisplayValue = function (Name) {
         var val = "";
         if (Name.indexOf("Images/") > -1) {

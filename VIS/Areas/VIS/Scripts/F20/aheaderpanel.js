@@ -54,9 +54,9 @@
             /*If controls are already loaded, then do not manipulate DOM.Only fetch there reference from DOM and Change Values.
              *Else create header panel items. 
              */
-            if ($self.controls && $self.controls.length > 0 && !currentItem && !$containerDiv) {
-                for (var i = 0; i < $self.controls.length; i++) {
-                    var objControl = $self.controls[i];
+            if (this.controls && this.controls.length > 0 && !currentItem && !$containerDiv) {
+                for (var i = 0; i < this.controls.length; i++) {
+                    var objControl = this.controls[i];
                     if (objControl) {
                         var controls = objControl["control"];
                         var mField = objControl["field"];
@@ -133,7 +133,7 @@
 
                 if (!currentItem)
                     return;
-                var fields = $self.gTab.gridTable.gridFields;
+                var fields = this.gTab.gridTable.gridFields;
 
                 fields = $.grep(fields, function (item) {
                     if (item.getIsHeaderPanelitem()) {
@@ -184,7 +184,7 @@
                         var iControl = null;
 
                         //Apply HTML Style
-                        var dynamicClassName = $self.applyCustomUISettings(headerSeqNo, startCol, colSpan, startRow, rowSpan, justyFy, alignItem,
+                        var dynamicClassName = this.applyCustomUISettings(headerSeqNo, startCol, colSpan, startRow, rowSpan, justyFy, alignItem,
                             backgroundColor, FontColor, fontSize, fieldPadding);
 
                         // Find the div with dynamic class from container. Class will only be available in DOm if two fields are having same item seq. No.
@@ -203,16 +203,16 @@
                         // If Referenceof field is Image then added extra class to align image and Label in center.
                         if (mField.getDisplayType() == VIS.DisplayType.Image) {
                             $divLabel.addClass('vis-w-p-header-Label-center-f');
-                            var dynamicClassForImageJustyfy = $self.justifyAlignImageItems(headerSeqNo, justyFy, alignItem);
+                            var dynamicClassForImageJustyfy = this.justifyAlignImageItems(headerSeqNo, justyFy, alignItem);
                             $divLabel.addClass(dynamicClassForImageJustyfy);
                         }
 
                         // Get Controls to be displayed in Header Panel
                         $label = VIS.VControlFactory.getHeaderLabel(mField, true);
 
-                        iControl = VIS.VControlFactory.getReadOnlyControl($self.gTab, mField, false, false, false);
+                        iControl = VIS.VControlFactory.getReadOnlyControl(this.gTab, mField, false, false, false);
 
-                        var dynamicFieldValue = $self.applyCustomUIForFieldValue(headerSeqNo, startCol, startRow, mField);
+                        var dynamicFieldValue = this.applyCustomUIForFieldValue(headerSeqNo, startCol, startRow, mField);
 
                         iControl.getControl().addClass(dynamicFieldValue);
 
@@ -287,7 +287,6 @@
                             var imgSpan = null;
                             var styleArr = null;
                             if (VIS.DisplayType.List == mField.lookup.displayType) {
-                                //var lType = mField.lookup.getLovIconType(val, true);
 
                                 img = mField.lookup.getLOVIconElement(mField.getValue(), true);
                                 if (!img && colValue) {
@@ -298,9 +297,6 @@
                                 colValue = VIS.Utility.Util.getIdentifierDisplayVal(colValue);
                                 img = getIdentifierImage(mField);
                             }
-
-
-
                             if (img && !img.contains("Images/")) {
                                 imgSpan = img;//img contains First charater of Name or Identifier text
                                 $imageSpan.text(imgSpan);
@@ -314,35 +310,29 @@
 
                             /*Set what do you want to show? Icon OR Label OR Both OR None*/
                             if (!mField.getHeaderIconOnly() && !mField.getHeaderHeadingOnly()) {
-                                // $div.append($divIcon);
-                                //$divIcon.append('<span>');
                                 if (imgSpan != null)
-                                    $image.hide();// $divIcon.append($imageSpan);
+                                    $image.hide();
                                 else {
-                                    $imageSpan.hide();// $divIcon.append($image);
+                                    $imageSpan.hide();
                                 }
 
                                 if ($lblControl && $lblControl.length > 0)
                                     $divLabel.append($lblControl);
-                                // $div.append($divLabel);
                             }
                             else if (mField.getHeaderIconOnly() && mField.getHeaderHeadingOnly()) {
-                                //$div.append($divLabel);
                                 $divIcon.hide();
                             }
                             else if (mField.getHeaderIconOnly()) {
-                                // $div.append($divIcon);
                                 if (imgSpan != null)
-                                    $image.hide();// $divIcon.append($imageSpan);
+                                    $image.hide();
                                 else
-                                    $imageSpan.hide();//$divIcon.append($image);
+                                    $imageSpan.hide();
 
                                 if ($lblControl && $lblControl.length > 0)
                                     $lblControl.hide();
                             }
                             else if (mField.getHeaderHeadingOnly() && $lblControl && $lblControl.length > 0) {
                                 $divLabel.append($lblControl);
-                                // $div.append($divLabel);
                                 $divIcon.hide();
                             }
 
@@ -357,59 +347,26 @@
                             /*Set what do you want to show? Icon OR Label OR Both OR None*/
                             if (!mField.getHeaderIconOnly() && !mField.getHeaderHeadingOnly()) {
                                 $divIcon.append($spanIcon.append(icon));
-                                //if (imgSpan != null) {
-                                //    $image.hide();
-
-                                //}
-                                //else {
-                                //    $imageSpan.hide();
-
-                                //}
-
                                 if ($lblControl && $lblControl.length > 0)
                                     $divLabel.append($lblControl);
-                                // $div.append($divLabel);
                             }
                             else if (mField.getHeaderIconOnly() && mField.getHeaderHeadingOnly()) {
-                                //$div.append($divLabel);
                                 $divIcon.hide();
                             }
                             else if (mField.getHeaderIconOnly()) {
-                                // $div.append($divIcon);
                                 $divIcon.append($spanIcon.append(icon));
                                 if ($lblControl && $lblControl.length > 0)
                                     $lblControl.hide();
                             }
                             else if (mField.getHeaderHeadingOnly() && $lblControl && $lblControl.length > 0) {
                                 $divLabel.append($lblControl);
-                                // $div.append($divLabel);
                                 $divIcon.hide();
                             }
-                            //if (!mField.getHeaderIconOnly() && !mField.getHeaderHeadingOnly()) {
-                            //    $div.append($divIcon);
-                            //    $divIcon.append($spanIcon.append(icon));
-                            //    if ($lblControl && $lblControl.length > 0)
-                            //        $divLabel.append($lblControl);
-                            //}
-                            //else if (mField.getHeaderIconOnly() && mField.getHeaderHeadingOnly()) {
-                            //    $div.append($divLabel);
-                            //}
-                            //else if (mField.getHeaderIconOnly()) {
-                            //    $div.append($divIcon);
-                            //    $divIcon.append($spanIcon.append(icon));
-                            //}
-                            //else if (mField.getHeaderHeadingOnly() && $lblControl && $lblControl.length > 0) {
-                            //    $divLabel.append($lblControl);
-                            //}
-
+                            
                             setValue(colValue, iControl, mField);
                             /****END ******  Set what do you want to show? Icon OR Label OR Both OR None*/
-                            //$divLabel.append(iControl.getControl());
-                            //$div.append($divLabel);
-                            //$containerDiv.append($div);
                         }
                         $divLabel.append(iControl.getControl());
-                        // $div.append($divLabel);
                         $containerDiv.append($div);
                         $self.controls.push(objctrls);
                     }
