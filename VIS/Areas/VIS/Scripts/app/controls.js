@@ -1533,8 +1533,11 @@
         if (!displayType)
             displayType = VIS.DisplayType.Table;
 
+       // var $ctrl = $('<input>', { name: columnName });
         var $ctrl = $('<select>', { name: columnName });
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, mandatory);
+
+       
         this.lookup = lookup;
         this.lastDisplay = "";
         this.settingFocus = false;
@@ -1610,6 +1613,13 @@
         this.getBtnCount = function () {
             return btnCount;
         };
+
+        //this.createAutoComplete = function () {
+        //    $ctrl.autocomplete({
+        //    });
+        //};
+
+        //this.createAutoComplete();
 
         /** 
             get contols button by index 
@@ -1960,7 +1970,8 @@
                             pp = this.lookup.get(newValue);
                         }
                         if (pp != null) {
-                            this.ctrl.append('<option value="' + pp.Key + '">' + pp.Name + '</option>');
+                            var valName = VIS.Utility.Util.getIdentifierDisplayVal(pp.Name);
+                            this.ctrl.append('<option value="' + pp.Key + '">' + valName + '</option>');
                             this.ctrl.val(newValue);
                         }
                     }
@@ -1975,6 +1986,23 @@
         }
         this.inserting = false;
     };
+
+    /**
+     * if Identifer value contains image path, then remove it and return remaining Identifier
+     * @param {any} Name
+     */
+    VComboBox.prototype.getDisplayValue = function (Name) {
+        var val = "";
+        if (Name.indexOf("Images/") > -1) {
+            val = Name.replace("^^" + Name.substring(Name.indexOf("Images/"), Name.lastIndexOf("^^") + 3), "_")
+            if (val.indexOf("Images/") > -1) {
+                val = val.replace(val.substring(val.indexOf("Images/"), val.lastIndexOf("^^") + 3), "_")
+            }
+        }
+        else
+            val = Name;
+        return val;
+    }
 
     VComboBox.prototype.getValue = function () {
         var val = this.ctrl.val();
@@ -1992,14 +2020,23 @@
     VComboBox.prototype.refreshOptions = function (data, selVal) {
         var output = [];
         var selIndex = -1;
+        //userQueries = [];
         for (var i = 0; i < data.length; i++) {
             if (selVal && selVal == data[i].Key) {
                 selIndex = i;
             }
-            output[i] = '<option value="' + data[i].Key + '">' + data[i].Name + '</option>';
+            var val = VIS.Utility.Util.getIdentifierDisplayVal(data[i].Name);
+
+            output[i] = '<option value="' + data[i].Key + '">' + val + '</option>';
+
+            //userQueries.push({
+            //    'title': val, 'label': val, 'value': val, 'id': data[i].Key
+            //});
         }
         this.ctrl.empty();
         this.ctrl.html(output.join(''));
+
+        //this.ctrl.autocomplete('option', 'source', userQueries);
 
         //if (selVal) {
         this.ctrl[0].selectedIndex = selIndex;
