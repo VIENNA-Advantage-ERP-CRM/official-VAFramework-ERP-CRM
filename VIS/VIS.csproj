@@ -635,6 +635,7 @@
     <Content Include="Areas\VIS\Scripts\app\forms\vattributegrid.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\vBOMdrop.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\vcharge.js" />
+    <Content Include="Areas\VIS\Scripts\app\forms\vcreateformprovisionalinvoice.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\vcreatefrom.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\vcreatefrominvoice.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\vcreatefromshipment.js" />
