@@ -67,7 +67,7 @@ namespace VAdvantage.Process
                 CreateSequence("AD_Issue", Get_TrxName());
                 CreateSequence("AD_ChangeLog", Get_TrxName());
                 
-                sql = "SELECT AD_Table_ID FROM AD_Table WHERE TableName NOT IN ('AD_Sequence', 'AD_Issue', 'AD_ChangeLog') AND IsActive='Y'";
+                sql = "SELECT AD_Table_ID FROM AD_Table WHERE TableName NOT IN ('AD_Sequence', 'AD_Issue', 'AD_ChangeLog') Order BY Upper(TableName)";
                 DataSet ds = DB.ExecuteDataset(sql);
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
@@ -100,7 +100,7 @@ namespace VAdvantage.Process
         /// <param name="trxName"></param>
         private void CreateSequence(MTable table, Trx trxName)
         {
-            if (!table.IsView() &&  table.GetKeyColumns().Length==1)
+            if (!table.IsView())
             {
                 if (!MSequence.CreateTableSequence(GetCtx(), table.GetTableName(), trxName))
                 {

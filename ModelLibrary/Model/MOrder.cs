@@ -1402,7 +1402,7 @@ namespace VAdvantage.Model
             {
                 //string fileName = Get_TableName() + Get_ID() + "_" + CommonFunctions.GenerateRandomNo()
                 String fileName = Get_TableName() + Get_ID() + "_" + CommonFunctions.GenerateRandomNo() + ".pdf";
-                string filePath = Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "TempDownload", fileName);
+                string filePath = Path.Combine(GlobalVariable.PhysicalPath, "TempDownload", fileName);
 
 
                 ReportEngine_N re = ReportEngine_N.Get(GetCtx(), ReportEngine_N.ORDER, GetC_Order_ID());
@@ -2970,7 +2970,7 @@ namespace VAdvantage.Model
                                     validate = Util.GetValueOfDateTime(bp.Get_Value("VA077_ValidityDate")).Value;
                                 }
 
-                                if (validate.Date < DateTime.Now.Date)
+                                if (bp.Get_Value("VA077_ValidityDate") != null && validate.Date < DateTime.Now.Date)
                                 {
                                     int RecCount = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_Invoice_ID) FROM C_Invoice WHERE IsSOTrx='Y' AND IsReturnTrx='N' AND C_BPartner_ID =" + GetC_BPartner_ID() + " and DocStatus in('CO','CL') and DateInvoiced BETWEEN " + GlobalVariable.TO_DATE(DateTime.Now.Date.AddDays(-730), true) + " AND " + GlobalVariable.TO_DATE(DateTime.Now.Date, true) + ""));
 
