@@ -109,6 +109,9 @@ namespace VAdvantage.Controller
 
         /****   Is Header Panel   ***/
         public bool IsHeaderPanel = false;
+        
+        /****   Is Header Panel not show in multi row  ***/
+        public bool HPanelNotShowInMultiRow = false;
 
         /****   Grid Layout   ***/
         public int AD_HeaderLayout_ID = 0;
@@ -482,6 +485,9 @@ namespace VAdvantage.Controller
 
                 /***************Worked For Header Panel By Karan*****************/
                 vo.IsHeaderPanel = dr["Isheaderpanel"].Equals("Y");
+
+                /***************Worked For Header Panel By Mandeep * ****************/
+                vo.HPanelNotShowInMultiRow=dr["HPanelNotShowInMultiRow"].Equals("Y");
 
                 vo.AD_HeaderLayout_ID = Util.GetValueOfInt(dr["AD_HeaderLayout_ID"]);
 
@@ -952,6 +958,7 @@ namespace VAdvantage.Controller
 
             clone.IsHeaderPanel = IsHeaderPanel;
             clone.AD_HeaderLayout_ID = AD_HeaderLayout_ID;
+            clone.HPanelNotShowInMultiRow = HPanelNotShowInMultiRow;
             clone.HeaderAlignment = HeaderAlignment;
             clone.TabPanelAlignment = TabPanelAlignment;
             clone.HeaderItems = HeaderItems;

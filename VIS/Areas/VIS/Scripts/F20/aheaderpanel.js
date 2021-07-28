@@ -16,7 +16,7 @@
 
         var $slider = $parentRoot.find('.fa-angle-double-left');
 
-       
+
 
         $parentRoot.css("flex-direction", "column");
         $slider.parent().css('display', 'flex');
@@ -389,7 +389,7 @@
                     }
                 }
 
-                else if (iControl.format){
+                else if (iControl.format) {
                     colValue = iControl.format.GetFormatAmount(iControl.format.GetFormatedValue(colValue), "init", VIS.Env.isDecimalPoint());
                 }
 
@@ -441,7 +441,7 @@
                         str = VIS.secureEngine.decrypt(str);
                     colValue = str.equals("true");	//	Boolean
                 }
-              
+
                 //	LOB 
                 else
                     colValue = colValue.toString();//string
@@ -511,6 +511,15 @@
         this.getParent = function () {
             return $parentRoot;
         }
+        this.hidePanel = function () {
+            return $parentRoot.hide();
+        }
+
+        this.showPanel = function () {
+            return $parentRoot.show();
+        }
+
+
 
         this.alignHorzontal = function () {
             alignmentHorizontal = true;
