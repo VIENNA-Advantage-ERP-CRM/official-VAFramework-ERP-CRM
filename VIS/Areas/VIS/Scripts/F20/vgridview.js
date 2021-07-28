@@ -7,6 +7,7 @@
         this.grid = null;
         this.id = null;
         this.$container = null;
+        this.aPanel = null;
         this.rendered = false;
 
         this.onSelect = null;
@@ -17,8 +18,10 @@
         this.onSort = null;
         this.onEdit = null;
         this.onAdd = null;
+        this.hyperLinkCell = {};
 
         this.editColumnIndex = -1;
+        var clickCount = 0;
 
 
         var self = this;
@@ -31,11 +34,32 @@
             size: '25px'
         };
 
+        function toggleToSingleView(evt) {
+            try {
+                if (self.grid.columns[evt.column].columnName == self.hyperLinkCell[self.grid.name]) {
+                    self.grid.select(Number(evt.recid));
+                    var isCompositView = self.aPanel.getRoot().find('[name=' + evt.target + ']').closest('.vis-ad-w-p-center-inctab');
+                    if (isCompositView.length > 0) {
+                        if (isCompositView.find('.vis-multi').length > 0) {
+                            isCompositView.find('.vis-multi').click();
+                        } else {
+                            isCompositView.find('.vis-edit').click();
+                        }
+                    } else {
+                        self.aPanel.getRoot().find(' .vis-multi:first').click();
+                    }
+                }
+            } catch (err) {
+
+            }
+        }
+
         this.getEditColumn = function () {
             return editColumn;
         }
 
         this.onClick = function (evt) {
+            clickCount++;
             // console.log(evt);
             if (this.readOnly)
                 return;
@@ -65,7 +89,16 @@
 
         this.onSingleClick = function (evt) {
             //this.cRecid = evt.recid;
-            //console.log("click");
+            clickCount++;
+            singleClickTimer = setTimeout(function () {
+                if (clickCount === 1) {
+                    clickCount = 0;
+                    toggleToSingleView(evt);
+                } else if (clickCount === 2) {
+                    clearTimeout(singleClickTimer);
+                    clickCount = 0;
+                }
+            }, 400);
         };
 
         this.onSelectLocal = function (evt) {
@@ -252,7 +285,7 @@
             }
 
             return [AD_Client_ID, AD_Org_ID, Record_ID];
-        };
+        };      
 
         //this.onToolBarClick = function (target, data) {
         //    //self.$editBtn.img = "icon-reload";
@@ -286,7 +319,8 @@
         if (!mTab.getIsDisplayed(true))
             return 0;
 
-        this.id = name;
+        this.id = name;        
+        this.aPanel = aPanel;
         this.$container = $container;
         this.mTab = mTab;
         this.AD_Table_ID = this.mTab.getAD_Table_ID();
@@ -441,6 +475,12 @@
 
 
                 oColumn.sortable = true;
+                if (oColumn.hidden == false && (this.hyperLinkCell[name] == "undefined" || this.hyperLinkCell[name] == null)) {
+                    if (columnName.toLowerCase() == "value" || columnName.toLowerCase() == "name" || columnName.toLowerCase() == "documentno") {
+                        this.hyperLinkCell[name] = columnName;
+                        oColumn.style = 'text-decoration:underline; color:blue !important; cursor:pointer';
+                    }
+                }
 
                 if (mField.getIsEncryptedField()) {
                     oColumn.render = function (record, index, colIndex) {
@@ -511,7 +551,7 @@
                         }
 
                         var strDiv = "";
-                        if (VIS.DisplayType.List == l.displayType) {
+                        if (l && VIS.DisplayType.List == l.displayType) {
                             var lType = l.getLovIconType(val, true);
 
                             var listIcon = l.getLOVIconElement(val, true);
@@ -550,7 +590,7 @@
 
                         else
                             // Based on sequence of image in idenitifer, perform logic and display image with text
-                            if (mField.lookup.gethasImageIdentifier()) {
+                            if (l.gethasImageIdentifier()) {
                                 var imgIndex = d.indexOf("Images/");
                                  //Find Image from Identifier string 
                                 var img = d.substring(imgIndex + 7, d.lastIndexOf("^^"));
