@@ -33,15 +33,23 @@ namespace VIS.Models
             var dis = display;
             MClient tenant = MClient.Get(ctx);
 
+            // check order is loading for Provisional Invoice or not
+            bool isProvisionalInvoice = false;
+            if (!String.IsNullOrEmpty(column) && column.Equals("m.C_InvoiceLine_ID") && !forInvoices)
+            {
+                isProvisionalInvoice = true;
+            }
+
             // JID_0976
             string whereCondition = "";
             if (InvoiceID > 0)
             {
                 DataSet dsInvoice = DB.ExecuteDataset(@"SELECT C_Currency_ID  ,
                 CASE WHEN NVL(C_ConversionType_ID , 0) != 0  THEN C_ConversionType_ID ELSE 
-                (SELECT MAX(C_ConversionType_ID) FROM C_ConversionType WHERE C_ConversionType.AD_Client_ID IN (0 , C_Invoice.AD_Client_ID )
-                AND C_ConversionType.AD_Org_ID      IN (0 , C_Invoice.AD_Org_ID ) AND C_ConversionType.IsDefault = 'Y') END AS C_ConversionType_ID,
-                M_PriceList_ID FROM C_Invoice WHERE C_Invoice_ID = " + InvoiceID);
+                (SELECT MAX(C_ConversionType_ID) FROM C_ConversionType WHERE C_ConversionType.AD_Client_ID IN (0 , invoice.AD_Client_ID )
+                AND C_ConversionType.AD_Org_ID      IN (0 , invoice.AD_Org_ID ) AND C_ConversionType.IsDefault = 'Y') END AS C_ConversionType_ID,
+                M_PriceList_ID FROM " + (!isProvisionalInvoice ? "C_Invoice" : "C_ProvisionalInvoice") + " invoice WHERE" +
+                " " + (!isProvisionalInvoice ? "C_Invoice_ID" : "C_ProvisionalInvoice_ID") + " = " + InvoiceID);
                 if (dsInvoice != null && dsInvoice.Tables.Count > 0 && dsInvoice.Tables[0].Rows.Count > 0)
                 {
                     whereCondition = " AND o.C_Currency_ID = " + Convert.ToInt32(dsInvoice.Tables[0].Rows[0]["C_Currency_ID"]) +
@@ -69,7 +77,9 @@ namespace VIS.Models
             + @"(SELECT C_Order_ID FROM (SELECT ol.C_Order_ID,ol.C_OrderLine_ID,ol.QtyOrdered, 
             (SELECT SUM(m.qty) FROM m_matchPO m WHERE ol.C_OrderLine_ID=m.C_OrderLine_ID AND NVL(" + column + @", 0) != 0 AND m.ISACTIVE = 'Y' ) AS Qty,
             (SELECT SUM(IL.QtyInvoiced)  FROM C_INVOICELINE IL INNER JOIN C_Invoice I ON I.C_INVOICE_ID = IL.C_INVOICE_ID
-            WHERE il.ISACTIVE = 'Y' AND I.DOCSTATUS NOT IN ('VO','RE') AND OL.C_ORDERLINE_ID  =IL.C_ORDERLINE_ID) AS QtyInvoiced FROM C_OrderLine ol ");
+            WHERE il.ISACTIVE = 'Y' AND I.DOCSTATUS NOT IN ('VO','RE') AND OL.C_ORDERLINE_ID  =IL.C_ORDERLINE_ID) AS QtyInvoiced
+            , (SELECT SUM(IL.QtyInvoiced)  FROM C_ProvisionalInvoiceLine IL INNER JOIN C_ProvisionalInvoice I ON I.C_ProvisionalInvoice_ID = IL.C_ProvisionalInvoice_ID
+            WHERE il.ISACTIVE = 'Y' AND I.DOCSTATUS NOT IN ('VO','RE') AND OL.C_ORDERLINE_ID  =IL.C_ORDERLINE_ID) AS QtyProvisional FROM C_OrderLine ol ");
 
             // Get Orders based on the setting taken on Tenant to allow non item Product
             if (!forInvoices && tenant.Get_ColumnIndex("IsAllowNonItem") > 0 && !tenant.IsAllowNonItem())
@@ -78,7 +88,9 @@ namespace VIS.Models
             }
 
             sql.Append(") t GROUP BY C_Order_ID,C_OrderLine_ID,QtyOrdered "
-            + "HAVING QtyOrdered > SUM(nvl(Qty,0)) AND QtyOrdered > SUM(NVL(QtyInvoiced,0))) ORDER BY o.DateOrdered, o.DocumentNo");
+            + " HAVING QtyOrdered > SUM(nvl(Qty,0)) AND QtyOrdered > SUM(NVL(QtyInvoiced,0)) "
+            + (isProvisionalInvoice ? " AND QtyOrdered > SUM(NVL(QtyProvisional,0))" : "") +
+              " ) ORDER BY o.DateOrdered, o.DocumentNo");
 
             DataSet ds = DB.ExecuteDataset(sql.ToString());
 
