@@ -7,6 +7,7 @@
         this.grid = null;
         this.id = null;
         this.$container = null;
+        this.aPanel = null;
         this.rendered = false;
 
         this.onSelect = null;
@@ -37,17 +38,16 @@
             try {
                 if (self.grid.columns[evt.column].columnName == self.hyperLinkCell[self.grid.name]) {
                     self.grid.select(Number(evt.recid));
-                    var isCompositView = $('#AS_' + self.mTab.getWindowNo() + '_' + self.mTab.getAD_Window_ID()).find('[name=' + evt.target + ']').closest('.vis-ad-w-p-center-inctab');
+                    var isCompositView = self.aPanel.getRoot().find('[name=' + evt.target + ']').closest('.vis-ad-w-p-center-inctab');
                     if (isCompositView.length > 0) {
                         if (isCompositView.find('.vis-multi').length > 0) {
                             isCompositView.find('.vis-multi').click();
                         } else {
-                            isCompositView.find('.vis-edit').click()
+                            isCompositView.find('.vis-edit').click();
                         }
-                    }  else {
-                        $('#AS_' + self.mTab.getWindowNo() + '_' + self.mTab.getAD_Window_ID()).find(' .vis-multi:first').click();
+                    } else {
+                        self.aPanel.getRoot().find(' .vis-multi:first').click();
                     }
-
                 }
             } catch (err) {
 
@@ -319,7 +319,8 @@
         if (!mTab.getIsDisplayed(true))
             return 0;
 
-        this.id = name;
+        this.id = name;        
+        this.aPanel = aPanel;
         this.$container = $container;
         this.mTab = mTab;
         this.AD_Table_ID = this.mTab.getAD_Table_ID();
