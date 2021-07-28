@@ -551,7 +551,7 @@
                         }
 
                         var strDiv = "";
-                        if (VIS.DisplayType.List == l.displayType) {
+                        if (l && VIS.DisplayType.List == l.displayType) {
                             var lType = l.getLovIconType(val, true);
 
                             var listIcon = l.getLOVIconElement(val, true);
@@ -590,7 +590,7 @@
 
                         else
                             // Based on sequence of image in idenitifer, perform logic and display image with text
-                            if (mField.lookup.gethasImageIdentifier()) {
+                            if (l.gethasImageIdentifier()) {
                                 var imgIndex = d.indexOf("Images/");
                                  //Find Image from Identifier string 
                                 var img = d.substring(imgIndex + 7, d.lastIndexOf("^^"));
