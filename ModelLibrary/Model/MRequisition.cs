@@ -391,6 +391,9 @@ namespace VAdvantage.Model
                         return status;
                 }
 
+                // Set Document Date based on setting on Document Type
+                SetCompletedDocumentDate();
+
                 if (Env.IsModuleInstalled("FRPT_"))
                 {
                     // Once budget breach approved do not check budget breach functionality again
@@ -438,10 +441,7 @@ namespace VAdvantage.Model
                         }
                     }
                 }
-
-                // JID_1290: Set the document number from completed document sequence after completed (if needed)
-                SetCompletedDocumentNo();
-
+                
                 //	Implicit Approval
                 if (!IsApproved())
                 {
@@ -457,8 +457,7 @@ namespace VAdvantage.Model
                     return DocActionVariables.STATUS_INVALID;
                 }
                 //
-                SetProcessed(true);
-                SetDocAction(DocActionVariables.ACTION_CLOSE);
+                
                 /**************************************************************************************************************/
                 // Check Column Name  new 6jan 0 vikas
                 int _count = Util.GetValueOfInt(DB.ExecuteScalar(" SELECT Count(*) FROM AD_Column WHERE columnname = 'DTD001_SourceReserve' "));
@@ -573,6 +572,11 @@ namespace VAdvantage.Model
                 //MessageBox.Show("MRequisition--CompleteIt");
                 log.Severe(ex.ToString());
             }
+
+            // Set the document number from completed document sequence after completed (if needed)
+            SetCompletedDocumentNo();
+            SetProcessed(true);
+            SetDocAction(DocActionVariables.ACTION_CLOSE);
             return DocActionVariables.STATUS_COMPLETED;
         }
 
@@ -582,18 +586,6 @@ namespace VAdvantage.Model
         private void SetCompletedDocumentNo()
         {
             MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
-
-            // if Overwrite Date on Complete checkbox is true.
-            if (dt.IsOverwriteDateOnComplete())
-            {
-                SetDateDoc(DateTime.Now.Date);
-
-                //	Std Period open?
-                if (!MPeriod.IsOpen(GetCtx(), GetDateDoc(), dt.GetDocBaseType(), GetAD_Org_ID()))
-                {
-                    throw new Exception("@PeriodClosed@");
-                }
-            }
 
             // if Overwrite Sequence on Complete checkbox is true.
             if (dt.IsOverwriteSeqOnComplete())
@@ -609,6 +601,26 @@ namespace VAdvantage.Model
                 if (value != null)
                 {
                     SetDocumentNo(value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Overwrite the document date based on setting on Document Type
+        /// </summary>
+        private void SetCompletedDocumentDate()
+        {
+            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+
+            // if Overwrite Date on Complete checkbox is true.
+            if (dt.IsOverwriteDateOnComplete())
+            {
+                SetDateDoc(DateTime.Now.Date);
+
+                //	Std Period open?
+                if (!MPeriod.IsOpen(GetCtx(), GetDateDoc(), dt.GetDocBaseType(), GetAD_Org_ID()))
+                {
+                    throw new Exception("@PeriodClosed@");
                 }
             }
         }

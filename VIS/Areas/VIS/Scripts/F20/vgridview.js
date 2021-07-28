@@ -510,7 +510,94 @@
                             //d = w2utils.encodeTags(d);
                         }
 
-                        return d;
+                        var strDiv = "";
+                        if (VIS.DisplayType.List == l.displayType) {
+                            var lType = l.getLovIconType(val, true);
+
+                            var listIcon = l.getLOVIconElement(val, true);
+                            var highlightChar = '';
+                            if (!listIcon) {
+                                highlightChar = d.substring(0, 1);
+                            }
+                            // If both , then show text and image
+                            if (lType == "B") {
+                                strDiv = "<div class='vis-grid-td-icon-grp'>";
+
+                                if (listIcon) {
+                                    strDiv += "<div class='vis-grid-row-td-icon'> " + listIcon + "</div> ";
+                                }
+                                else {
+                                    strDiv += "<div class='vis-grid-row-td-icon'><span>" + highlightChar + "</span></div>";
+                                }
+                                strDiv += "<span> " + d + "</span ><div>";
+                            }
+                            // if Text, then show text only
+                            else if (lType == "T") {
+                                return d;
+                            }
+                            //Show icon only
+                            else if (lType == "I") {
+                                strDiv = "<div class='vis-grid-td-icon-grp' style='Justify-Content:center'>";
+                                if (listIcon) {
+                                    strDiv += "<div class='vis-grid-row-td-icon'> " + listIcon + "</div> ";
+                                }
+                                else {
+                                    strDiv += "<div class='vis-grid-row-td-icon'><span>" + highlightChar + "</span></div>";
+                                }
+                                strDiv += "<div>";
+                            }
+                        }
+
+                        else
+                            // Based on sequence of image in idenitifer, perform logic and display image with text
+                            if (mField.lookup.gethasImageIdentifier()) {
+                                var imgIndex = d.indexOf("Images/");
+                                 //Find Image from Identifier string 
+                                var img = d.substring(imgIndex + 7, d.lastIndexOf("^^"));
+                            img = VIS.Application.contextUrl + "Images/Thumb32x32/" + img;
+
+                                //Replace Image string with ^^^, so that ^^^ can be used to split Rest of identifer value
+                                d = d.replace("^^" + d.substring(imgIndex, d.lastIndexOf("^^") + 2), "^^^")
+                            if (d.indexOf("Images/") > -1)
+                                d = d.replace(d.substring(imgIndex, d.lastIndexOf("^^") + 2), "^^^");
+
+                                d = d.split("^^^");
+
+                                //Start HTMl string to be rendered inside Cell
+                            strDiv = "<div class='vis-grid-td-icon-grp'>";
+                                var highlightChar = '';
+
+                                //Now 'd' may contains identifier values to be displayed before and after image
+                            for (var c = 0; c < d.length; c++) {
+                                if (d[c].trim().length > 0) {
+                                    //If highlightChar is not found, then get it from first item encounterd.
+                                    if (highlightChar.length == 0)
+                                        highlightChar = d[c].trim().substring(0, 1).toUpper();
+                                    //If image contains nothing.png that means image not found in identfier and 
+                                    //we will Display highlightChar
+                                    if (c > 0 && img.indexOf("nothing.png") > -1 && highlightChar.length>0) {
+                                        strDiv += "<div class='vis-grid-row-td-icon'><span>" + highlightChar + "</span></div>";
+                                    }
+                                    strDiv += "<span>" + d[c] + "</span>";
+                                }
+                                //If image found, then display that image.
+                                if (c == 0 || img.indexOf("nothing.png") > -1) {
+                                    if (img.indexOf("nothing.png")== -1)
+                                    {
+                                        strDiv += "<div class='vis-grid-row-td-icon'><img src='" + img + "?" + new Date().getTime() + "' ></img></div>";
+                                    }
+                                   
+                                }
+                            }
+                            +"</div > ";
+
+                        }
+                        
+
+                        if (strDiv == "")
+                            return d;
+
+                        return strDiv;
                         //return '<span>' + d + '</span>';
                     }
                 }

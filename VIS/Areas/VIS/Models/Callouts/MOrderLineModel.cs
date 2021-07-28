@@ -13,6 +13,7 @@ namespace VIS.Models
 {
     public class MOrderLineModel
     {
+        bool IsModuleinstalled = Env.IsModuleInstalled("VATAX_");
         /// <summary>
         /// GetOrderLine
         /// </summary>
@@ -2113,10 +2114,10 @@ namespace VIS.Models
             int taxId = 0;
             int _c_BPartner_Id = 0;
             int _c_Bill_Location_Id = 0;
-            int _CountVATAX = 0;
+            //int _CountVATAX = 0;
 
-            _CountVATAX = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX IN ('VATAX_' )", null, null));
-            retDic["_CountVATAX"] = _CountVATAX.ToString();
+            //_CountVATAX = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX IN ('VATAX_' )", null, null));
+            retDic["_CountVATAX"] = IsModuleinstalled ? 1 : 0;
 
             MOrderModel objOrder = new MOrderModel();
             Dictionary<String, object> order = objOrder.GetOrder(ctx, _c_Order_Id.ToString());
@@ -2127,35 +2128,32 @@ namespace VIS.Models
             MBPartner bp = new MBPartner(ctx, _c_BPartner_Id, null);
             retDic["TaxExempt"] = bp.IsTaxExempt() ? "Y" : "N";
 
-            if (_CountVATAX > 0)
+            if (IsModuleinstalled)
             {
                 sql = "SELECT VATAX_TaxRule FROM AD_OrgInfo WHERE AD_Org_ID=" + Util.GetValueOfInt(order["AD_Org_ID"]) + " AND IsActive ='Y' AND AD_Client_ID =" + ctx.GetAD_Client_ID();
                 string taxRule = Util.GetValueOfString(DB.ExecuteScalar(sql, null, null));
                 retDic["taxRule"] = taxRule.ToString();
 
-                sql = "SELECT Count(*) FROM AD_Column WHERE ColumnName = 'C_Tax_ID' AND AD_Table_ID = (SELECT AD_Table_ID FROM AD_Table WHERE TableName = 'C_TaxCategory')";
-                if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null)) > 0)
-                {
-                    var paramString = (_c_Order_Id).ToString() + "," + (_m_Product_Id).ToString() + "," + (_c_Charge_Id).ToString();
+                var paramString = (_c_Order_Id).ToString() + "," + (_m_Product_Id).ToString() + "," + (_c_Charge_Id).ToString();
 
-                    taxId = GetTax(ctx, paramString);
-                }
-                else
-                {
-                    sql = "SELECT VATAX_TaxType_ID FROM C_BPartner_Location WHERE C_BPartner_ID =" + Util.GetValueOfInt(_c_BPartner_Id) +
-                                      " AND IsActive = 'Y'  AND C_BPartner_Location_ID = " + Util.GetValueOfInt(_c_Bill_Location_Id);
-                    var taxType = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                    if (taxType == 0)
-                    {
-                        sql = "SELECT VATAX_TaxType_ID FROM C_BPartner WHERE C_BPartner_ID =" + Util.GetValueOfInt(_c_BPartner_Id) + " AND IsActive = 'Y'";
-                        taxType = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                    }
+                taxId = GetTax(ctx, paramString);
+                
+                //else
+                //{
+                //    sql = "SELECT VATAX_TaxType_ID FROM C_BPartner_Location WHERE C_BPartner_ID =" + Util.GetValueOfInt(_c_BPartner_Id) +
+                //                      " AND IsActive = 'Y'  AND C_BPartner_Location_ID = " + Util.GetValueOfInt(_c_Bill_Location_Id);
+                //    var taxType = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                //    if (taxType == 0)
+                //    {
+                //        sql = "SELECT VATAX_TaxType_ID FROM C_BPartner WHERE C_BPartner_ID =" + Util.GetValueOfInt(_c_BPartner_Id) + " AND IsActive = 'Y'";
+                //        taxType = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                //    }
 
-                    MProductModel objProduct = new MProductModel();
-                    var prodtaxCategory = objProduct.GetTaxCategory(ctx, _m_Product_Id.ToString());
-                    sql = "SELECT C_Tax_ID FROM VATAX_TaxCatRate WHERE C_TaxCategory_ID = " + prodtaxCategory + " AND IsActive ='Y' AND VATAX_TaxType_ID =" + taxType;
-                    taxId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                }
+                //    MProductModel objProduct = new MProductModel();
+                //    var prodtaxCategory = objProduct.GetTaxCategory(ctx, _m_Product_Id.ToString());
+                //    sql = "SELECT C_Tax_ID FROM VATAX_TaxCatRate WHERE C_TaxCategory_ID = " + prodtaxCategory + " AND IsActive ='Y' AND VATAX_TaxType_ID =" + taxType;
+                //    taxId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                //}
             }
             retDic["taxId"] = taxId.ToString();
 

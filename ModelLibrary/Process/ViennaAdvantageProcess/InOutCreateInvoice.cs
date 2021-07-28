@@ -278,6 +278,9 @@ namespace ViennaAdvantage.Process
             {
                 invoice.SetPaymentMethod(invoice.GetPaymentRule());
             }
+
+            invoice.SetConditionalFlag(MInvoice.CONDITIONALFLAG_PrepareIt);
+
             if (!invoice.Save())
             {
                 //SI_0708 - message was not upto the mark
@@ -665,6 +668,12 @@ namespace ViennaAdvantage.Process
 
             if (count > 0)
             {
+                if (!invoice.CalculateTaxTotal())   //	setTotals
+                {
+                    throw new ArgumentException(Msg.GetMsg(GetCtx(), "ErrorCalculateTax") + ": " + invDocumentNo.ToString());
+                }
+                UpdateInvoiceHeader(invoice);
+                DB.ExecuteQuery("UPDATE C_Invoice SET ConditionalFlag = null WHERE C_Invoice_ID = " + invoice.GetC_Invoice_ID(), null, Get_Trx());
                 return invoice.GetDocumentNo();
             }
             else
@@ -672,6 +681,61 @@ namespace ViennaAdvantage.Process
                 //Get_Trx().Rollback();
                 throw new ArgumentException(Msg.GetMsg(GetCtx(), "InvoiceExist") + ": " + invDocumentNo.ToString());
             }
+        }
+
+        /// <summary>
+        /// Update Sub Total and Grand Total on header
+        /// </summary>
+        /// <param name="invoice">Invoice</param>
+        /// <returns>true when success</returns>
+        private bool UpdateInvoiceHeader(MInvoice invoice)
+        {
+            //	Update Invoice Header
+            String sql = "UPDATE C_Invoice i"
+            + " SET TotalLines="
+                + "(SELECT COALESCE(SUM(LineNetAmt),0) FROM C_InvoiceLine il WHERE i.C_Invoice_ID=il.C_Invoice_ID) "
+                + ", AmtDimSubTotal = null "      // reset Amount Dimension if Sub Total Amount is different
+                + ", AmtDimGrandTotal = null "     // reset Amount Dimension if Grand Total Amount is different
+                + (invoice.Get_ColumnIndex("WithholdingAmt") > 0 ? ", WithholdingAmt = ((SELECT COALESCE(SUM(WithholdingAmt),0) FROM C_InvoiceLine il WHERE i.C_Invoice_ID=il.C_Invoice_ID))" : "")
+            + "WHERE C_Invoice_ID=" + invoice.GetC_Invoice_ID();
+            int no = DB.ExecuteQuery(sql, null, Get_TrxName());
+            if (no != 1)
+            {
+                log.Warning("(1) #" + no);
+            }
+
+            if (invoice.IsTaxIncluded())
+                sql = "UPDATE C_Invoice i "
+                    + "SET GrandTotal=TotalLines "
+                    + (invoice.Get_ColumnIndex("WithholdingAmt") > 0 ? " , GrandTotalAfterWithholding = (TotalLines - NVL(WithholdingAmt, 0) - NVL(BackupWithholdingAmount, 0)) " : "")
+                    + "WHERE C_Invoice_ID=" + invoice.GetC_Invoice_ID();
+            else
+                sql = "UPDATE C_Invoice i "
+                    + "SET GrandTotal=TotalLines+"
+                        + "(SELECT COALESCE(SUM(TaxAmt),0) FROM C_InvoiceTax it WHERE i.C_Invoice_ID=it.C_Invoice_ID) "
+                        + (invoice.Get_ColumnIndex("WithholdingAmt") > 0 ? " , GrandTotalAfterWithholding = (TotalLines + (SELECT COALESCE(SUM(TaxAmt),0) FROM C_InvoiceTax it WHERE i.C_Invoice_ID=it.C_Invoice_ID) - NVL(WithholdingAmt, 0) - NVL(BackupWithholdingAmount, 0))" : "")
+                        + "WHERE C_Invoice_ID=" + invoice.GetC_Invoice_ID();
+            no = DB.ExecuteQuery(sql, null, Get_TrxName());
+            if (no != 1)
+            {
+                log.Warning("(2) #" + no);
+            }
+            else
+            {
+                // calculate withholdng on header 
+                if (invoice.GetC_Withholding_ID() > 0)
+                {
+                    if (!invoice.SetWithholdingAmount(invoice))
+                    {
+                        log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "WrongBackupWithholding"));
+                    }
+                    else
+                    {
+                        invoice.Save();
+                    }
+                }
+            }
+            return no == 1;
         }
     }
 }

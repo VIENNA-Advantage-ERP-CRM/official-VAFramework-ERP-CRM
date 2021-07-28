@@ -2010,7 +2010,7 @@
             //end 
 
             //var _CountVATAX = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX IN ('VATAX_' )"));
-            var _CountVATAX = Util.getValueOfInt(recDic["_CountVATAX"]);
+            //var _CountVATAX = Util.getValueOfInt(recDic["_CountVATAX"]);
 
             var isSOTrx = ctx.getWindowContext(windowNo, "IsSOTrx", true) == "Y";
             var isReturnTrx = ctx.getWindowContext(windowNo, "IsReturnTrx", true) == "Y";
@@ -2019,7 +2019,7 @@
             //var order = VIS.dataContext.getJSONRecord("MOrder/GetOrder", paramString);
 
             //sql = "SELECT VATAX_TaxRule FROM AD_OrgInfo WHERE AD_Org_ID=" + Util.getValueOfInt(order["AD_Org_ID"]) + " AND IsActive ='Y' AND AD_Client_ID =" + ctx.getAD_Client_ID();
-            if (_CountVATAX > 0) {
+            if (recDic["_CountVATAX"]) {
                 //taxRule = Util.getValueOfString(VIS.DB.executeScalar(sql));
                 taxRule = Util.getValueOfString(recDic["taxRule"]);
             }

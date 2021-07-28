@@ -45,7 +45,10 @@ namespace VAdvantage.Model
             int ii = M_Product_Category_ID;
             MProductCategory pc = (MProductCategory)s_cache[ii];
             if (pc == null)
+            {
                 pc = new MProductCategory(ctx, M_Product_Category_ID, null);
+                s_cache.Add(ii, pc);
+            }
             return pc;
         }
 
@@ -239,6 +242,32 @@ namespace VAdvantage.Model
             return success;
         }
 
+        /// <summary>
+        /// Before Save
+        /// </summary>
+        /// <param name="newRecord"></param>
+        /// <returns>true/false</returns>
+        protected override bool BeforeSave(bool newRecord)
+        {
+            // if finished and semifinished is selected in Product Group then costing method should be standard costing
+            if (Env.IsModuleInstalled("VA073_"))
+            {
+                if (Get_ColumnIndex("VA073_ProductGroup") >=0)
+                {
+                    if(Util.GetValueOfString(Get_Value("VA073_ProductGroup")).Equals(MProductCategory.VA073_PRODUCTGROUP_FinishedProduct) ||
+                        Util.GetValueOfString(Get_Value("VA073_ProductGroup")).Equals(MProductCategory.VA073_PRODUCTGROUP_Semi_FinishedProduct))
+                    {
+                        if (!GetCostingMethod().Equals(MProductCategory.COSTINGMETHOD_StandardCosting))
+                        {
+                            log.SaveError("VA073_SelectStdCosting","");
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            return true;
+        }
         /**
          * 	Before Delete
          *	@return true

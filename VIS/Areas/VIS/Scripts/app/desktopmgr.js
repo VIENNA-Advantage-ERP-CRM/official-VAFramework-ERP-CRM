@@ -322,6 +322,8 @@
             //    VA048.Apps.GetCallingInstance(false).resize();
         };
 
+        
+
         /*
            start menu action
            - call view manger start action 
