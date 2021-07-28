@@ -62,6 +62,12 @@
                         var mField = objControl["field"];
                         var iControl = controls["control"];
 
+                        if (mField == null && iControl != null) { //dynamic
+
+                            iControl.setValue(null);
+                            continue;
+                        } 
+
                         if (iControl == null && !mField.getIsHeading()) {
                             continue;
                         }
@@ -141,64 +147,90 @@
                     }
                 });
 
-                fields = fields.sort(function (a, b) { return a.getHeaderSeqno() - b.getHeaderSeqno() });
 
-                for (var i = 0; i < fields.length; i++) {
-                    var mField = fields[i];
-                    // Check if field is marked as Header Panel Item or Not.
-                    if (mField.getIsHeaderPanelitem()) {
-                        var controls = {};
-                        var headerSeqNo = mField.getHeaderSeqno();
-                        var headerItem = currentItem.HeaderItems[headerSeqNo];
+                //loop through header item
+                var headergFields = null;
+                for (var headerSeqNo in currentItem.HeaderItems) {
 
-                        if (!headerItem || headerItem.length <= 0) {
+                    var headerItem = currentItem.HeaderItems[headerSeqNo];
+                    var controls = {};
+                    var startCol = headerItem.StartColumn;
+                    var colSpan = headerItem.ColumnSpan;
+                    var startRow = headerItem.StartRow;
+                    var rowSpan = headerItem.RowSpan;
+                    var justyFy = headerItem.JustifyItems;
+                    var alignItem = headerItem.AlignItems;
+                    var fieldPadding = headerItem.Padding;
+                    var backgroundColor = headerItem.BackgroundColor;
+                    if (!backgroundColor) {
+                        backgroundColor = '';
+                    }
+                    var FontColor = headerItem.FontColor;
+                    if (!FontColor) {
+                        FontColor = '';
+                    }
+                    var fontSize = headerItem.FontSize;
+                    if (!fontSize) {
+                        fontSize = '';
+                    }
+                    var $div = null;
+                    var $divIcon = null;
+                    //$divIconSpan = $('<span>');
+                    //$divIconImg = $('<img>');
+                    var $divLabel = null;
+                    var $label = null;
+                    var iControl = null;
+
+                    //Apply HTML Style
+                    var dynamicClassName = $self.applyCustomUISettings(headerSeqNo, startCol, colSpan, startRow, rowSpan, justyFy, alignItem,
+                        backgroundColor, FontColor, fontSize, fieldPadding);
+
+                    // Find the div with dynamic class from container. Class will only be available in DOm if two fields are having same item seq. No.
+                    $div = $containerDiv.find('.' + dynamicClassName);
+
+                    //If div not found, then create new one.
+                    if ($div.length <= 0)
+                        $div = $('<div class="vis-w-p-header-data-f ' + dynamicClassName + '">');
+
+                    $divIcon = $('<div class="vis-w-p-header-icon-f"></div>');
+
+                    $divLabel = $('<div class="vis-w-p-header-Label-f"></div>');
+
+
+                    // is dynamic 
+                    if (headerItem.ColSql.length > 0) {
+                        iControl = new VIS.Controls.VKeyText(headerItem.ColSql, $self.gTab.getWindowNo(),
+                                                                $self.gTab.getWindowNo() + "_" + headerSeqNo);
+
+                        if (iControl == null) {
                             continue;
                         }
-                        var startCol = headerItem.StartColumn;
-                        var colSpan = headerItem.ColumnSpan;
-                        var startRow = headerItem.StartRow;
-                        var rowSpan = headerItem.RowSpan;
-                        var justyFy = headerItem.JustifyItems;
-                        var alignItem = headerItem.AlignItems;
-                        var fieldPadding = headerItem.Padding;
-                        var backgroundColor = headerItem.BackgroundColor;
-                        if (!backgroundColor) {
-                            backgroundColor = '';
+
+                        controls["control"] = iControl;
+                        var objctrls = { "control": controls, "field": null };
+
+                        $divLabel.append(iControl.getControl());
+                        $div.append($divLabel);
+                        // $div.append($divLabel);
+                        $containerDiv.append($div);
+                        $self.controls.push(objctrls);
+                    }
+                    else {
+                        if (!headergFields) {
+                            headergFields = {};
+                            fields = fields.sort(function (a, b) { return a.getHeaderSeqno() - b.getHeaderSeqno() });
+                            for (var i = 0; i < fields.length; i++) {
+                                var field = fields[i];
+                                // Check if field is marked as Header Panel Item or Not.
+                                if (field.getIsHeaderPanelitem()) {
+                                    headergFields[field.getHeaderSeqno()] = field;
+                                }
+                            }
                         }
-                        var FontColor = headerItem.FontColor;
-                        if (!FontColor) {
-                            FontColor = '';
-                        }
-                        var fontSize = headerItem.FontSize;
-                        if (!fontSize) {
-                            fontSize = '';
-                        }
 
-
-                        var $div = null;
-                        var $divIcon = null;
-                        //$divIconSpan = $('<span>');
-                        //$divIconImg = $('<img>');
-                        var $divLabel = null;
-                        var $label = null;
-                        var iControl = null;
-
-                        //Apply HTML Style
-                        var dynamicClassName = $self.applyCustomUISettings(headerSeqNo, startCol, colSpan, startRow, rowSpan, justyFy, alignItem,
-                            backgroundColor, FontColor, fontSize, fieldPadding);
-
-                        // Find the div with dynamic class from container. Class will only be available in DOm if two fields are having same item seq. No.
-                        $div = $containerDiv.find('.' + dynamicClassName);
-
-                        //If div not found, then create new one.
-                        if ($div.length <= 0)
-                            $div = $('<div class="vis-w-p-header-data-f ' + dynamicClassName + '">');
-
-
-
-                        $divIcon = $('<div class="vis-w-p-header-icon-f"></div>');
-
-                        $divLabel = $('<div class="vis-w-p-header-Label-f"></div>');
+                        var mField = headergFields[headerSeqNo];
+                        if (!mField)
+                            continue;
 
                         // If Referenceof field is Image then added extra class to align image and Label in center.
                         if (mField.getDisplayType() == VIS.DisplayType.Image) {
@@ -212,6 +244,8 @@
 
                         iControl = VIS.VControlFactory.getReadOnlyControl(this.gTab, mField, false, false, false);
 
+                        
+
                         var dynamicFieldValue = $self.applyCustomUIForFieldValue(headerSeqNo, startCol, startRow, mField);
 
                         iControl.getControl().addClass(dynamicFieldValue);
@@ -224,10 +258,10 @@
 
                         var $spanIcon = $('<span></span>');
                         var icon = VIS.VControlFactory.getIcon(mField);
-
                         if (iControl == null) {
                             continue;
                         }
+                      
                         var $lblControl = null;
                         if ($label) {
                             $lblControl = $label.getControl().addClass('vis-w-p-header-data-label');

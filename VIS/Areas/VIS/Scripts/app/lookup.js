@@ -2415,7 +2415,7 @@
     //        return;
     //    }
 
-    //    VIS.dataContext.getJSONData(VIS.Application.contextUrl + "Location" + "/GetLocations", "", function (data) {
+    //    VIS.3.getJSONData(VIS.Application.contextUrl + "Location" + "/GetLocations", "", function (data) {
 
     //        if (!MAmtDivLookup.prototype.cacheLookup) {
     //            MAmtDivLookup.prototype.cacheLookup = data;
