@@ -1587,6 +1587,9 @@ namespace VAdvantage.Classes
         /* Display Column SQL Query*/
         public string displayColSubQ = null;
 
+        /// <summary>
+        /// If image is marked as identifier, then true otherwise false
+        /// </summary>
         public bool hasImageIdentifier = false;
 
         #endregion
