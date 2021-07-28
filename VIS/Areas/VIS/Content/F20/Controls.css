@@ -331,6 +331,30 @@ input.vis-ev-col-readonly:not(:placeholder-shown) ~ label {
     height: 34px;
 }
 
+.vis-ev-col-linkbutton {
+    background: no-repeat;
+    border: none;
+    color: rgba(var(--v-c-primary), 1);
+}
+
+    .vis-ev-col-linkbutton i {
+        max-width: 35px;
+        max-height: 35px;
+       /* border: 1px solid rgba(var(--v-c-primary), 1);*/
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        color:inherit;
+        font-size:1rem;
+    }
+
+    .vis-ev-col-linkbutton span {
+        text-decoration: underline;
+        margin-left: .5rem;
+        color:inherit;
+    }
+
 .vis-input-wrap select.vis-ev-col-mandatory ~ .vis-ev-col-msign {
     right: 30px;
 }

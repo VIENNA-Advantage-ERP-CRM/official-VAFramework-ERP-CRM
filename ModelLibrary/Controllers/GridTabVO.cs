@@ -109,6 +109,9 @@ namespace VAdvantage.Controller
 
         /****   Is Header Panel   ***/
         public bool IsHeaderPanel = false;
+        
+        /****   Is Header Panel not show in multi row  ***/
+        public bool HPanelNotShowInMultiRow = false;
 
         /****   Grid Layout   ***/
         public int AD_HeaderLayout_ID = 0;
@@ -483,6 +486,9 @@ namespace VAdvantage.Controller
                 /***************Worked For Header Panel By Karan*****************/
                 vo.IsHeaderPanel = dr["Isheaderpanel"].Equals("Y");
 
+                /***************Worked For Header Panel By Mandeep * ****************/
+                vo.HPanelNotShowInMultiRow=dr["HPanelNotShowInMultiRow"].Equals("Y");
+
                 vo.AD_HeaderLayout_ID = Util.GetValueOfInt(dr["AD_HeaderLayout_ID"]);
 
                 vo.HeaderAlignment = Utility.Util.GetValueOfString(dr["HeaderAlignment"]);
@@ -611,16 +617,16 @@ namespace VAdvantage.Controller
         {
             if (mTabVO.AD_HeaderLayout_ID > 0)
             {
-                DataSet dsGridLayout = DataBase.DB.ExecuteDataset("SELECT * FROM AD_GridLayout  WHERE IsActive='Y' AND AD_HeaderLayout_ID=" + mTabVO.AD_HeaderLayout_ID +" ORDER BY SeqNo Asc");
+                DataSet dsGridLayout = DataBase.DB.ExecuteDataset("SELECT * FROM AD_GridLayout  WHERE IsActive='Y' AND AD_HeaderLayout_ID=" + mTabVO.AD_HeaderLayout_ID + " ORDER BY SeqNo Asc");
                 if (dsGridLayout != null && dsGridLayout.Tables[0].Rows.Count > 0)
                 {
                     mTabVO.HeaderItems = new List<HeaderPanelGrid>();
-                    
+
                     foreach (DataRow dr in dsGridLayout.Tables[0].Rows)
                     {
                         HeaderPanelGrid hGrid = new HeaderPanelGrid
                         {
-                          
+
                             HeaderBackColor = Utility.Util.GetValueOfString(dr["BackgroundColor"]),
 
                             HeaderName = Utility.Util.GetValueOfString(dr["Name"]),
@@ -634,8 +640,8 @@ namespace VAdvantage.Controller
                             AD_GridLayout_ID = Utility.Util.GetValueOfInt(dr["AD_GridLayout_ID"]),
                         };
 
-                        DataSet ds = DataBase.DB.ExecuteDataset("SELECT AlignItems,   ColumnSpan,   Justifyitems,   Rowspan,   Seqno,   Startcolumn,   Startrow," +
-                            " AD_GridLayoutItems_ID,BackgroundColor, FontColor, FontSize,padding FROM Ad_Gridlayoutitems WHERE IsActive      ='Y' AND AD_GridLayout_ID=" + hGrid.AD_GridLayout_ID);
+                        DataSet ds = DataBase.DB.ExecuteDataset("SELECT AlignItems,    ColumnSpan,   Justifyitems,   Rowspan,   Seqno,   Startcolumn,   Startrow," +
+                            " AD_GridLayoutItems_ID,BackgroundColor, FontColor, FontSize,padding, ColumnSql FROM Ad_Gridlayoutitems WHERE IsActive ='Y' AND AD_GridLayout_ID=" + hGrid.AD_GridLayout_ID + " ORDER BY Seqno ");
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
                             hGrid.HeaderItems = new Dictionary<int, object>();
@@ -651,10 +657,11 @@ namespace VAdvantage.Controller
                                     SeqNo = Convert.ToInt32(row["SeqNo"]),
                                     StartColumn = Convert.ToInt32(row["StartColumn"]),
                                     StartRow = Convert.ToInt32(row["StartRow"]),
-                                    BackgroundColor= Convert.ToString(row["BackgroundColor"]),
+                                    BackgroundColor = Convert.ToString(row["BackgroundColor"]),
                                     FontColor = Convert.ToString(row["FontColor"]),
                                     FontSize = Convert.ToString(row["FontSize"]),
                                     Padding = Convert.ToString(row["Padding"]),
+                                    ColSql = Convert.ToString(row["ColumnSql"])
                                 };
                             }
                         }
@@ -952,6 +959,7 @@ namespace VAdvantage.Controller
 
             clone.IsHeaderPanel = IsHeaderPanel;
             clone.AD_HeaderLayout_ID = AD_HeaderLayout_ID;
+            clone.HPanelNotShowInMultiRow = HPanelNotShowInMultiRow;
             clone.HeaderAlignment = HeaderAlignment;
             clone.TabPanelAlignment = TabPanelAlignment;
             clone.HeaderItems = HeaderItems;
