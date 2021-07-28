@@ -97,5 +97,18 @@ namespace VIS.Controllers
             MPaymentModel objCashBookModel = new MPaymentModel();
             return Json(JsonConvert.SerializeObject(objCashBookModel.GetBankAcctCurrency(fields)), JsonRequestBehavior.AllowGet);
         }
+
+        /// <summary>
+        /// Get Provisional Invoice data 
+        /// </summary>
+        /// <param name="fields">C_ProvisionalInvoice_ID</param>
+        /// <writer>209</writer>
+        /// <returns>Provisionalnvoice Data</returns>
+        public JsonResult GetProvisionalInvoiceData(string fields)
+        {
+            Ctx ctx = Session["ctx"] as Ctx;
+            MPaymentModel objPInvModel = new MPaymentModel();
+            return Json(JsonConvert.SerializeObject(objPInvModel.GetProvisionalInvoiceData(Util.GetValueOfInt(fields))), JsonRequestBehavior.AllowGet);
+        }
     }
 }
