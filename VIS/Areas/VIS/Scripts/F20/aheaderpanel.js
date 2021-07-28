@@ -147,6 +147,7 @@
                     }
                 });
 
+                fields = fields.sort(function (a, b) { return a.getHeaderSeqno() - b.getHeaderSeqno() });
 
                 //loop through header item
                 var headergFields = null;
@@ -499,36 +500,6 @@
 
             return colValue;
         }
-
-        var getIdentifierImage = function (mField) {
-            var value = mField.getValue();
-            value = mField.lookup.getDisplay(value, true);
-
-            if (value != null && value && value.indexOf("Images/") > -1) {// Based on sequence of image in idenitifer, perform logic and display image with text
-
-                var img = value.substring(value.indexOf("Images/") + 7, value.lastIndexOf("^^"));
-                img = VIS.Application.contextUrl + "Images/Thumb140x120/" + img;
-
-                if (c == 0 || img.indexOf("nothing.png") > -1) {
-
-                    value = value.replace("^^" + value.substring(value.indexOf("Images/"), value.lastIndexOf("^^") + 2), "^^^")
-                    if (value.indexOf("Images/") > -1)
-                        value = value.replace(value.substring(value.indexOf("Images/"), value.lastIndexOf("^^") + 2), "^^^");
-
-                    value = value.split("^^^");
-                    var highlightChar = '';
-                    for (var c = 0; c < value.length; c++) {
-                        if (value[c].trim().length > 0) {
-                            if (highlightChar.length == 0)
-                                highlightChar = value[c].trim().substring(0, 1).toUpper();
-                            return highlightChar;
-                        }
-
-                    }
-                }
-                else
-                    return img;
-            }
 
         var getIdentifierImage = function (mField) {
             var value = mField.getValue();
