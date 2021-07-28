@@ -557,7 +557,7 @@
                                 this.rightPaneLinkItems.push(iControl);
                             }
                             else {
-                                this.leftPaneLinkItems.push(iControl);
+                                //this.leftPaneLinkItems.push(iControl);
                             }
                         }
                         iControl.addActionListner(this);

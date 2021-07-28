@@ -482,7 +482,7 @@
             var insertRow = false;
 
             /* Dont Add in control panel */
-            if (mField.getIsLink()) {
+            if (mField.getIsLink() && mField.getIsRightPaneLink()) {
                 allControls[++allControlCount] = editor;
                 //allControls.push(editor);
                 allLinkControls.push(editor);
@@ -677,15 +677,18 @@
 
         var ctrl = $(wraper);
 
-        if (mField.getShowIcon() && (mField.getFontClass() != '' || mField.getImageName() != '')) {
-            var btns = ['<div class="input-group-prepend"><span class="input-group-text vis-color-primary">'];
-            if (mField.getFontClass() != '')
-                btns.push('<i class="' + mField.getFontClass() + '"></i>');
-            else
-                btns.push('<img src="' + VIS.Application.contextUrl + 'Images/Thumb16x16/' + mField.getImageName() + '"></img>');
-            btns.push('</span></div>');
-            ctrl.append(btns.join(' '));
+        if (!mField.getIsLink()) {
+            if (mField.getShowIcon() && (mField.getFontClass() != '' || mField.getImageName() != '')) {
 
+                var btns = ['<div class="input-group-prepend"><span class="input-group-text vis-color-primary">'];
+                if (mField.getFontClass() != '')
+                    btns.push('<i class="' + mField.getFontClass() + '"></i>');
+                else
+                    btns.push('<img src="' + VIS.Application.contextUrl + 'Images/Thumb16x16/' + mField.getImageName() + '"></img>');
+                btns.push('</span></div>');
+                ctrl.append(btns.join(' '));
+
+            }
         }
 
         if (editor != null && customStyle != "") {
@@ -711,7 +714,7 @@
 
 
 
-        if (mField.getDisplayType() != VIS.DisplayType.Label) { // exclude Label display type
+        if (mField.getDisplayType() != VIS.DisplayType.Label && !mField.getIsLink()) { // exclude Label display type
             ctrlP.append("<span class='vis-ev-ctrlinfowrap' data-colname='" + mField.getColumnName() + "' title='" + mField.getDescription() + "'  tabindex='-1' data-toggle='popover' data-trigger='focus'>" +
                 "<i class='vis vis-info' aria-hidden='true'></i></span'>");
         }
@@ -736,10 +739,6 @@
         }
         parent.append(ctrl);
     }
-
-
-
-
 
 }(VIS, jQuery));
 
