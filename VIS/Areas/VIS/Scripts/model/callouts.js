@@ -19960,6 +19960,50 @@
         return "";
     };
 
+     /**
+     * Get Provisional Invoice data
+     * @param ctx context
+     * @param windowNo current Window No
+     * @param mTab Grid Tab
+     * @param mField Grid Field
+     * @param value New Value
+     * @param oldValue Old Value
+     * @return Error message or ""
+     */
+    CalloutPayment.prototype.ProvisionalInvoice = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (value == null || value.toString() == "" || this.isCalloutActive()) {
+            return "";
+        }
+        this.setCalloutActive(true);
+        try
+        {         
+            //get the data of the selected  Provisional invoice 
+            var data = VIS.dataContext.getJSONRecord("MPayment/GetProvisionalInvoiceData", Util.getValueOfInt(mTab.getValue("C_ProvisionalInvoice_ID")));
+            if (data != null)
+            {
+                mTab.setValue("C_BPartner_ID", data["C_BPartner_ID"]);
+                mTab.setValue("C_BPartner_Location_ID", data["C_BPartner_Location_ID"]);
+                mTab.setValue("PaymentAmount", data["GrandTotal"]);
+                mTab.setValue("PayAmt", data["GrandTotal"]);
+                //check if VA009 module is Installed 
+                var DataPrefix = VIS.dataContext.getJSONRecord("ModulePrefix/GetModulePrefix", "VA009_");
+                if (DataPrefix["VA009_"])
+                {                  
+                   // mTab.setValue("VA009_PaymentMethod_ID", Util.getValueOfInt(data["VA009_PaymentMethod_ID"]));
+                }
+            }
+        }
+        catch (err)
+        {
+            this.setCalloutActive(false);
+            this.log.severe(err.toString());
+        }
+        this.setCalloutActive(false);
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
+
     VIS.Model.CalloutPayment = CalloutPayment;
     //*********** CalloutPayment End ******
 
