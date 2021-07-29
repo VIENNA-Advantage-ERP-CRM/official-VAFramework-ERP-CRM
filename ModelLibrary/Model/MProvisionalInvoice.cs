@@ -163,6 +163,27 @@ namespace VAdvantage.Model
                 _processMsg = valid;
                 return DocActionVariables.STATUS_INVALID;
             }
+
+            // for checking - costing calculate on completion or not
+            // IsCostImmediate = true - calculate cost on completion
+            MClient client = MClient.Get(GetCtx(), GetAD_Client_ID());
+
+            MProvisionalInvoiceLine[] Lines = GetLines(true);
+            MProvisionalInvoiceLine _line = null;
+            for (int i = 0; i < Lines.Length; i++)
+            {
+                _line = Lines[i];
+
+                // Costing Calculation
+                if (client.IsCostImmediate() && _line.GetM_Product_ID() > 0)
+                {
+                    if (!CostingCalculation(client, _line, false))
+                    {
+                        return DocActionVariables.STATUS_INVALID;
+                    }
+                }
+            }
+
             //set processed true for all child tabs
             DB.ExecuteQuery("UPDATE C_ProvisionalInvoiceLine SET Processed = 'Y'  WHERE C_ProvisionalInvoice_ID = " + GetC_ProvisionalInvoice_ID(), null, Get_Trx());
             DB.ExecuteQuery("UPDATE C_ProvisionalInvoiceTax  SET Processed = 'Y'  WHERE C_ProvisionalInvoice_ID = " + GetC_ProvisionalInvoice_ID(), null, Get_Trx());
@@ -170,6 +191,54 @@ namespace VAdvantage.Model
             SetProcessed(true);
             SetDocAction(DOCACTION_Close);
             return DocActionVariables.STATUS_COMPLETED;
+        }
+
+        /// <summary>
+        /// This function is used to calculate cost for Provisional Invoice
+        /// </summary>
+        /// <param name="client">Client</param>
+        /// <param name="line">Provisional Invoice Line</param>
+        /// <param name="callingbyProcess">method called from completion or process</param>
+        /// <returns>true, when success</returns>
+        public bool CostingCalculation(MClient client, MProvisionalInvoiceLine line, bool callingbyProcess)
+        {
+            String conversionNotFoundInvoice = String.Empty;
+
+            // when QtyInvoiced ==0, then no need to calculate
+            if (line != null && line.GetC_ProvisionalInvoice_ID() > 0 && line.GetQtyInvoiced() == 0)
+                return true;
+
+            // create product object
+            MProduct product1 = new MProduct(GetCtx(), line.GetM_Product_ID(), Get_Trx());
+
+            // when Product Type = Item, and having reference of OrderLine and InOutLine
+            if (product1.GetProductType().Equals(MProduct.PRODUCTTYPE_Item) && line.GetM_InOutLine_ID() > 0 && line.GetC_OrderLine_ID() > 0)
+            {
+                // Get Product Cost
+                Decimal ProductLineCost = line.GetProductLineCost(line);
+
+                // calculate invoice line costing after calculating costing of linked MR line 
+                if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
+                      "ProvisionalInvoice", null, null, null, null, line, ProductLineCost, line.GetQtyInvoiced(),
+                    Get_Trx(), out conversionNotFoundInvoice, optionalstr: (callingbyProcess ? "process" : "window")))
+                {
+                    SetProcessMsg(Msg.GetMsg(GetCtx(), "VIS_CostNotCalculated"));
+                    if ((client.Get_ColumnIndex("IsCostMandatory") > 0 && client.IsCostMandatory()) || callingbyProcess)
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    //Update IsCostImmediate , IsCostCalculated, IsReversedCostCalculated  as True on Line
+                    DB.ExecuteQuery(@"UPDATE C_ProvisionalInvoiceLine SET IsCostImmediate = 'Y' 
+                    " + (callingbyProcess ? ", IsCostCalculated = 'Y'" : "") + @""
+                      + (callingbyProcess && IsReversal() ? ", IsReversedCostCalculated = 'Y'" : "") + @"
+                    WHERE C_ProvisionalInvoiceLine_ID = " + line.GetC_ProvisionalInvoiceLine_ID(), null, Get_Trx());
+                }
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -244,6 +313,15 @@ namespace VAdvantage.Model
         public string GetProcessMsg()
         {
             return _processMsg;
+        }
+
+        /// <summary>
+        /// Set Process Message
+        /// </summary>
+        /// <param name="ProcessMsg">Process Message</param>
+        public void SetProcessMsg(String ProcessMsg)
+        {
+            _processMsg = ProcessMsg;
         }
 
         /// <summary>
@@ -334,10 +412,10 @@ namespace VAdvantage.Model
             }
             MProvisionalInvoice reversal = new MProvisionalInvoice(GetCtx(), 0, Get_TrxName());
             PO.CopyValues(this, reversal, GetAD_Client_ID(), GetAD_Org_ID());
-         
+
             reversal.SetDocumentNo(GetDocumentNo() + REVERSE_INDICATOR);	//	indicate reversals
             reversal.SetDocStatus(DOCSTATUS_Drafted);
-            reversal.SetDocAction(DOCACTION_Complete);          
+            reversal.SetDocAction(DOCACTION_Complete);
             reversal.SetPosted(false);
             reversal.SetProcessed(false);
             reversal.SetGrandTotal(Decimal.Negate(GetGrandTotal()));
@@ -461,7 +539,7 @@ namespace VAdvantage.Model
             else if (DOCSTATUS_Drafted.Equals(GetDocStatus())
                 || DOCSTATUS_Invalid.Equals(GetDocStatus())
                 || DOCSTATUS_InProgress.Equals(GetDocStatus()))
-            {         
+            {
                 MProvisionalInvoiceLine[] lines = GetLines(false);
                 for (int i = 0; i < lines.Length; i++)
                 {
@@ -473,7 +551,7 @@ namespace VAdvantage.Model
                         line.SetQtyInvoiced(Env.ZERO);
                         line.SetTaxAmt(Env.ZERO);
                         line.SetLineNetAmt(Env.ZERO);
-                        line.SetLineTotalAmt(Env.ZERO);                     
+                        line.SetLineTotalAmt(Env.ZERO);
                         line.Save(Get_TrxName());
                     }
 
@@ -498,7 +576,7 @@ namespace VAdvantage.Model
                         return false;
                     }
                 }
-                
+
                 MProvisionalInvoiceTax[] Taxes = GetTax(true);
                 for (int i = 0; i < Taxes.Length; i++)
                 {
@@ -547,7 +625,7 @@ namespace VAdvantage.Model
             else
                 SetDescription(desc + " | " + description);
         }
-    
+
         /// <summary>
         /// Get Provisional Invoice Lines
         /// </summary>
@@ -601,7 +679,7 @@ namespace VAdvantage.Model
         {
             List<MProvisionalInvoiceTax> list = new List<MProvisionalInvoiceTax>();
             String sql = "SELECT * FROM C_ProvisionalInvoiceTax WHERE C_ProvisionalInvoice_ID= " + GetC_ProvisionalInvoice_ID();
-                     
+
             try
             {
                 DataSet ds = DB.ExecuteDataset(sql, null, Get_TrxName());

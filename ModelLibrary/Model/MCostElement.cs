@@ -537,6 +537,18 @@ namespace VAdvantage.Model
                 && COSTELEMENTTYPE_Material.Equals(GetCostElementType());
         }
 
+        /// <summary>
+        /// Is Provisional Weighted Average
+        /// </summary>
+        /// <returns>true if Provisional Weighted Average</returns>
+        public bool IsProvisionalWeightedAverage()
+        {
+            String cm = GetCostingMethod();
+            return cm != null
+                && cm.Equals(COSTINGMETHOD_ProvisionalWeightedAverage)
+                && COSTELEMENTTYPE_Material.Equals(GetCostElementType());
+        }
+
 
         /**
          * 	String Representation
@@ -633,16 +645,18 @@ namespace VAdvantage.Model
                         }
                     }
                 }
-            }
-            if (costingMethod.Equals(COSTINGMETHOD_WeightedAveragePO) ||
-                costingMethod.Equals(COSTINGMETHOD_AveragePO) ||
-                costingMethod.Equals(COSTINGMETHOD_LastPOPrice))
-            {
-                isPOcostingMethod = true;
-            }
-            else
-            {
-                isPOcostingMethod = false;
+
+                if (costingMethod.Equals(COSTINGMETHOD_WeightedAveragePO) ||
+                    costingMethod.Equals(COSTINGMETHOD_AveragePO) ||
+                    costingMethod.Equals(COSTINGMETHOD_LastPOPrice) ||
+                    costingMethod.Equals(COSTINGMETHOD_ProvisionalWeightedAverage))
+                {
+                    isPOcostingMethod = true;
+                }
+                else
+                {
+                    isPOcostingMethod = false;
+                }
             }
 
             return isPOcostingMethod;
