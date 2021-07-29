@@ -590,7 +590,7 @@
 
                         else
                             // Based on sequence of image in idenitifer, perform logic and display image with text
-                            if (l.gethasImageIdentifier()) {
+                            if (l && l.gethasImageIdentifier()) {
                                 var imgIndex = d.indexOf("Images/");
                                  //Find Image from Identifier string 
                                 var img = d.substring(imgIndex + 7, d.lastIndexOf("^^"));
