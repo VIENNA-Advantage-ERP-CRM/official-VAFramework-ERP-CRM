@@ -567,7 +567,19 @@ namespace VAdvantage.Model
         {
             Object ii = Get_Value("M_Warehouse_ID"); if (ii == null) return 0; return Convert.ToInt32(ii);
         }
-    
+
+        /** Set Provisional InvoiceLine.
+        @param C_ProvisionalInvoiceLine_ID Provisional InvoiceLine */
+        public void SetC_ProvisionalInvoiceLine_ID(int C_ProvisionalInvoiceLine_ID)
+        {
+            if (C_ProvisionalInvoiceLine_ID <= 0) Set_Value("C_ProvisionalInvoiceLine_ID", null);
+            else
+                Set_Value("C_ProvisionalInvoiceLine_ID", C_ProvisionalInvoiceLine_ID);
+        }
+        /** Get Provisional InvoiceLine.
+        @return Provisional InvoiceLine */
+        public int GetC_ProvisionalInvoiceLine_ID() { Object ii = Get_Value("C_ProvisionalInvoiceLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+
     }
 
 }
