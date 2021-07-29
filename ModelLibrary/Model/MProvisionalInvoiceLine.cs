@@ -429,5 +429,65 @@ namespace VAdvantage.Model
             return pl.IsTaxIncluded();
         }
 
+        /// <summary>
+        /// This function is used to return diffreence amount (PO Cost - Provisional Cost) of line
+        /// </summary>
+        /// <param name="Invoiceline">Invoice Line</param>
+        /// <returns>Amount</returns>
+        public Decimal GetProductLineCost(MProvisionalInvoiceLine Invoiceline)
+        {
+            bool isOrderRecordFound = false;
+            int multiplier = 1;
+
+            // when not found invoiceline object or OrderLine ID not available
+            if ((Invoiceline == null || Invoiceline.Get_ID() <= 0) && (Invoiceline.Get_ID() > 0 && Invoiceline.GetC_OrderLine_ID() == 0))
+            {
+                return 0;
+            }
+
+            // Get Amount from PO
+            DataSet ds = DB.ExecuteDataset(@"SELECT TaxableAmt , TaxAmt, SurchargeAmt FROM C_OrderLine 
+                         WHERE C_OrderLIne_ID = " + Invoiceline.GetC_OrderLine_ID(), null, Get_Trx());
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                isOrderRecordFound = true;
+            }
+            if (Invoiceline.GetReversalDoc_ID() > 0)
+            {
+                multiplier = -1;
+            }
+
+            // Get Taxable amount from invoiceline
+            Decimal amt = Invoiceline.GetTaxBaseAmt() - (isOrderRecordFound ? (multiplier * Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["TaxableAmt"])) : 0);
+
+            // create object of tax - for checking tax to be include in cost or not
+            MTax tax = MTax.Get(Invoiceline.GetCtx(), Invoiceline.GetC_Tax_ID());
+            if (tax.Get_ColumnIndex("IsIncludeInCost") >= 0)
+            {
+                // add Tax amount in product cost
+                if (tax.IsIncludeInCost())
+                {
+                    amt += (Invoiceline.GetTaxAmt() - (isOrderRecordFound ? (multiplier * Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["TaxAmt"])) : 0));
+                }
+
+                // add Surcharge amount in product cost
+                if (tax.Get_ColumnIndex("Surcharge_Tax_ID") >= 0 && tax.GetSurcharge_Tax_ID() > 0)
+                {
+                    if (MTax.Get(Invoiceline.GetCtx(), tax.GetSurcharge_Tax_ID()).IsIncludeInCost())
+                    {
+                        amt += (Invoiceline.GetSurchargeAmt() - (isOrderRecordFound ? (multiplier * Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["SurchargeAmt"])) : 0));
+                    }
+                }
+            }
+
+            // if amount is ZERO, then calculate as usual with Line net amount
+            if (amt == 0)
+            {
+                amt = Invoiceline.GetLineNetAmt();
+            }
+
+            return amt;
+        }
+
     }
 }
