@@ -72,6 +72,9 @@ namespace VAdvantage.Process
         MInvoiceLine invoiceLine = null;
         bool isCostAdjustableOnLost = false;
 
+        MProvisionalInvoice provisionalInvoice = null;
+        MProvisionalInvoiceLine provisionalInvoiceLine = null;
+
         MProduct product = null;
 
         //MMatchPO match = null;
@@ -104,6 +107,7 @@ namespace VAdvantage.Process
         string conversionNotFoundMovement1 = "";
         string conversionNotFoundProductionExecution1 = "";
         string conversionNotFound = "";
+        string conversionNotFoundProvisionalInvoice = "";
 
         private String costingMethod = string.Empty;
 
@@ -215,6 +219,13 @@ namespace VAdvantage.Process
                          FROM M_Production WHERE movementdate = " + GlobalVariable.TO_DATE(minDateRecord, true) + @" AND isactive       = 'Y'
                                AND ((PROCESSED = 'Y' AND iscostcalculated = 'N' AND IsReversed = 'N' ) OR (PROCESSED = 'Y' AND iscostcalculated  = 'Y'
                                AND ISREVERSEDCOSTCALCULATED= 'N' AND IsReversed = 'Y' AND Name LIKE '%{->%'))");
+                    sql.Append(@"UNION 
+                         SELECT ad_client_id , ad_org_id , isactive , to_char(created, 'DD-MON-YY HH24:MI:SS') as created , createdby ,  to_char(updated, 'DD-MON-YY HH24:MI:SS') as updated , updatedby ,
+                                documentno , C_ProvisionalInvoice_id AS Record_Id , issotrx , isreturntrx , '' AS IsInternalUse, 'C_ProvisionalInvoice' AS TableName,
+                                docstatus, DateAcct AS DateAcct, iscostcalculated , isreversedcostcalculated 
+                         FROM C_ProvisionalInvoice WHERE dateacct = " + GlobalVariable.TO_DATE(minDateRecord, true) + @" AND isactive     = 'Y'
+                              AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N' ) OR (docstatus  IN ('RE') AND iscostcalculated = 'Y'
+                              AND ISREVERSEDCOSTCALCULATED= 'N' AND IsReversal ='Y')) ");
                     if (count > 0)
                     {
                         sql.Append(@" UNION
@@ -501,6 +512,60 @@ namespace VAdvantage.Process
                                 }
                             }
                             catch { }
+                            #endregion
+
+                            #region Cost Calculation for Provisional Invoice
+                            if (Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["TableName"]).Equals("C_ProvisionalInvoice"))
+                            {
+                                provisionalInvoice = new MProvisionalInvoice(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
+
+                                sql.Clear();
+                                sql.Append(@"SELECT * FROM C_ProvisionalInvoiceLine WHERE IsActive = 'Y' 
+                                                AND " + (provisionalInvoice.IsReversal() ? " iscostcalculated = 'Y' AND IsReversedCostCalculated = 'N' "
+                                                : " iscostcalculated = 'N' ") +
+                                                " AND C_ProvisionalInvoice_ID = " + provisionalInvoice.GetC_ProvisionalInvoice_ID() + " ORDER BY Line ");
+                                dsChildRecord = DB.ExecuteDataset(sql.ToString(), null, Get_Trx());
+                                if (dsChildRecord != null && dsChildRecord.Tables.Count > 0 && dsChildRecord.Tables[0].Rows.Count > 0)
+                                {
+                                    for (int j = 0; j < dsChildRecord.Tables[0].Rows.Count; j++)
+                                    {
+                                        provisionalInvoiceLine = new MProvisionalInvoiceLine(GetCtx(), dsChildRecord.Tables[0].Rows[j], Get_Trx());
+                                        if (client.IsCostImmediate() && provisionalInvoiceLine.GetM_Product_ID() > 0)
+                                        {
+                                            if (!provisionalInvoice.CostingCalculation(client, provisionalInvoiceLine, true))
+                                            {
+                                                if (!conversionNotFoundProvisionalInvoice.Contains(provisionalInvoice.GetDocumentNo()))
+                                                {
+                                                    conversionNotFoundProvisionalInvoice += provisionalInvoice.GetDocumentNo() + " , ";
+                                                }
+                                                _log.Info("Cost not Calculated for Provisional Invoice for this Line ID = " + provisionalInvoiceLine.GetC_ProvisionalInvoiceLine_ID());
+                                            }
+                                            else
+                                            {
+                                                _log.Fine("Cost Calculation updated for C_ProvisionalLine = " + provisionalInvoiceLine.GetC_ProvisionalInvoiceLine_ID());
+                                                Get_Trx().Commit();
+                                            }
+                                        }
+                                    }
+
+                                    // update Provisional Invoice Header
+                                    sql.Clear();
+                                    sql.Append(@"SELECT COUNT(C_ProvisionalInvoiceLine_ID) FROM C_ProvisionalInvoiceLine
+                                        WHERE " + (provisionalInvoice.IsReversal() ? "IsReversedCostCalculated = 'N'" : "IsCostCalculated = 'N'") + @"
+                                         AND IsActive = 'Y' AND C_ProvisionalInvoice_ID = " + provisionalInvoice.GetC_ProvisionalInvoice_ID());
+                                    if (Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_Trx())) <= 0)
+                                    {
+                                        //Update  IsCostCalculated, IsReversedCostCalculated  as True on Header
+                                        DB.ExecuteQuery(@"UPDATE C_ProvisionalInvoice SET IsCostCalculated = 'Y' "
+                                          + (provisionalInvoice.IsReversal() ? ", IsReversedCostCalculated = 'Y'" : "") + @"
+                                          WHERE C_ProvisionalInvoice_ID = " + provisionalInvoice.GetC_ProvisionalInvoice_ID(), null, Get_Trx());
+
+                                        _log.Fine("Cost Calculation updated for C_provisionalInvoice_ID = " + provisionalInvoice.GetC_ProvisionalInvoice_ID());
+                                        Get_Trx().Commit();
+                                    }
+                                    continue;
+                                }
+                            }
                             #endregion
 
                             #region Cost Calculation for SO / PO(not to be executed) / CRMA / VRMA
@@ -5258,10 +5323,14 @@ namespace VAdvantage.Process
                 {
                     conversionNotFoundProductionExecution = Msg.GetMsg(GetCtx(), "ConvNotForProduction") + conversionNotFoundProductionExecution1;
                 }
+                if (!string.IsNullOrEmpty(conversionNotFoundProvisionalInvoice))
+                {
+                    conversionNotFoundProvisionalInvoice = Msg.GetMsg(GetCtx(), "ConvNotForProvisional") + conversionNotFoundProvisionalInvoice;
+                }
 
                 conversionNotFound = conversionNotFoundInOut + "\n" + conversionNotFoundInvoice + "\n" +
                                      conversionNotFoundInventory + "\n" + conversionNotFoundMovement + "\n" +
-                                     conversionNotFoundProductionExecution;
+                                     conversionNotFoundProductionExecution + "\n" + conversionNotFoundProvisionalInvoice;
 
                 if (dsRecord != null)
                     dsRecord.Dispose();

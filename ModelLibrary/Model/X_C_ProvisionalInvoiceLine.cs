@@ -40,8 +40,8 @@ namespace VAdvantage.Model
  Set Table ID By Table Name
  added by ->Harwinder */
         static X_C_ProvisionalInvoiceLine() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
-        static long serialVersionUID = 27908910676885L;/** Last Updated Timestamp 7/20/2021 12:49:20 PM */
-        public static long updatedMS = 1626785360096L;/** AD_Table_ID=1000552 */
+        static long serialVersionUID = 27909664124342L;/** Last Updated Timestamp 7/29/2021 6:06:47 AM */
+        public static long updatedMS = 1627538807553L;/** AD_Table_ID=1000552 */
         public static int Table_ID; // =1000552;
         /** TableName=C_ProvisionalInvoiceLine */
         public static String Table_Name = "C_ProvisionalInvoiceLine";
@@ -115,7 +115,19 @@ namespace VAdvantage.Model
 @param Export_ID Export */
         public void SetExport_ID(String Export_ID) { if (Export_ID != null && Export_ID.Length > 50) { log.Warning("Length > 50 - truncated"); Export_ID = Export_ID.Substring(0, 50); } Set_Value("Export_ID", Export_ID); }/** Get Export.
 @return Export */
-        public String GetExport_ID() { return (String)Get_Value("Export_ID"); }/** Set Line No.
+        public String GetExport_ID() { return (String)Get_Value("Export_ID"); }/** Set Cost Calculated.
+@param IsCostCalculated This checkbox will auto set "True", when the cost is calculated for the document. */
+        public void SetIsCostCalculated(Boolean IsCostCalculated) { Set_Value("IsCostCalculated", IsCostCalculated); }/** Get Cost Calculated.
+@return This checkbox will auto set "True", when the cost is calculated for the document. */
+        public Boolean IsCostCalculated() { Object oo = Get_Value("IsCostCalculated"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }/** Set Cost Immediately.
+@param IsCostImmediate If selected, costs are calculated immediately on completion of the document. */
+        public void SetIsCostImmediate(Boolean IsCostImmediate) { Set_Value("IsCostImmediate", IsCostImmediate); }/** Get Cost Immediately.
+@return If selected, costs are calculated immediately on completion of the document. */
+        public Boolean IsCostImmediate() { Object oo = Get_Value("IsCostImmediate"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }/** Set Reversed Cost Calculated.
+@param IsReversedCostCalculated This checkbox will auto set "True", when the impact of cost is reversed for the document if any. */
+        public void SetIsReversedCostCalculated(Boolean IsReversedCostCalculated) { Set_Value("IsReversedCostCalculated", IsReversedCostCalculated); }/** Get Reversed Cost Calculated.
+@return This checkbox will auto set "True", when the impact of cost is reversed for the document if any. */
+        public Boolean IsReversedCostCalculated() { Object oo = Get_Value("IsReversedCostCalculated"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }/** Set Line No.
 @param Line Unique line for this document */
         public void SetLine(int Line) { Set_Value("Line", Line); }/** Get Line No.
 @return Unique line for this document */
