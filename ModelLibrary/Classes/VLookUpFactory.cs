@@ -306,24 +306,24 @@ namespace VAdvantage.Classes
         /// <returns></returns>
         public static VLookUpInfo GetLookUp_List(Language language, int AD_Reference_Value_ID)
         {
-            StringBuilder realSQL = new StringBuilder("SELECT NULL, rl.Value,");
-            String displayCol = "rl.Name";
+            StringBuilder realSQL = new StringBuilder("SELECT NULL, AD_Ref_List.Value,");
+            String displayCol = "AD_Ref_List.Name";
             if (Utility.Env.IsBaseLanguage(language, "AD_Ref_List"))
             {
-                realSQL.Append(displayCol + ", rl.IsActive, NVL(img.FontName,img.ImageURL),ref.ListDisplayOption FROM AD_Ref_List rl");
+                realSQL.Append(displayCol + ", AD_Ref_List.IsActive, NVL(img.FontName,img.ImageURL),ref.ListDisplayOption FROM AD_Ref_List AD_Ref_List");
             }
             else
             {
                 displayCol = "trl.Name";
-                realSQL.Append(displayCol + ", rl.IsActive, , NVL(img.FontName,img.ImageURL),ref.ListDisplayOption "
-                    + "FROM AD_Ref_List rl INNER JOIN AD_Ref_List_Trl trl "
-                    + " ON (rl.AD_Ref_List_ID=trl.AD_Ref_List_ID AND trl.AD_Language='")
+                realSQL.Append(displayCol + ", AD_Ref_List.IsActive, , NVL(img.FontName,img.ImageURL),ref.ListDisplayOption "
+                    + "FROM AD_Ref_List AD_Ref_List INNER JOIN AD_Ref_List_Trl trl "
+                    + " ON (AD_Ref_List.AD_Ref_List_ID=trl.AD_Ref_List_ID AND trl.AD_Language='")
                         .Append(language.GetAD_Language()).Append("')");
             }
-            realSQL.Append(" JOIN AD_Reference ref ON ref.AD_Reference_ID=rl.AD_Reference_ID ");
-            realSQL.Append(" LEFT OUTER JOIN AD_Image img ON rl.AD_Image_ID=img.AD_Image_ID ");
+            realSQL.Append(" JOIN AD_Reference ref ON ref.AD_Reference_ID=AD_Ref_List.AD_Reference_ID ");
+            realSQL.Append(" LEFT OUTER JOIN AD_Image img ON AD_Ref_List.AD_Image_ID=img.AD_Image_ID ");
 
-            realSQL.Append(" WHERE rl.AD_Reference_ID=").Append(AD_Reference_Value_ID);
+            realSQL.Append(" WHERE AD_Ref_List.AD_Reference_ID=").Append(AD_Reference_Value_ID);
             realSQL.Append(" ORDER BY 2");
             //
             VLookUpInfo lookupInfo = new VLookUpInfo(realSQL.ToString(), "AD_Ref_List", "AD_Ref_List.Value",
