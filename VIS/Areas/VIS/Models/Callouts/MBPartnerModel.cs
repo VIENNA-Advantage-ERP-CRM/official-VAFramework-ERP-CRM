@@ -349,23 +349,24 @@ namespace VIS.Models
 
             StringBuilder _sql = new StringBuilder();
             _sql.Append("SELECT b.ISVENDOR, b.ISCUSTOMER  ");
-            
-            if (Env.IsModuleInstalled("VA009_"))
-                 _sql.Append(" , b.VA009_PAYMENTMETHOD_ID, B.VA009_PO_PAYMENTMETHOD_ID, PM.VA009_PAYMENTBASETYPE, PMM.VA009_PAYMENTBASETYPE AS VA009_PAYMENTBASETYPEPO");
 
-           _sql.Append(" FROM C_BPartner b");
-            
-             if (Env.IsModuleInstalled("VA009_"))
-               _sql.Append(" LEFT JOIN VA009_PAYMENTMETHOD PM on B.VA009_PAYMENTMETHOD_ID=PM.VA009_PAYMENTMETHOD_ID LEFT JOIN VA009_PAYMENTMETHOD PMM ON B.VA009_PO_PAYMENTMETHOD_ID = PMM.VA009_PAYMENTMETHOD_ID ");
-            
-             _sql.Append(" WHERE b.C_BPartner_ID=" + C_BPartner_ID);
+            if (Env.IsModuleInstalled("VA009_"))
+                _sql.Append(" , b.VA009_PAYMENTMETHOD_ID, B.VA009_PO_PAYMENTMETHOD_ID, PM.VA009_PAYMENTBASETYPE, PMM.VA009_PAYMENTBASETYPE AS VA009_PAYMENTBASETYPEPO");
+
+            _sql.Append(" FROM C_BPartner b");
+
+            if (Env.IsModuleInstalled("VA009_"))
+                _sql.Append(" LEFT JOIN VA009_PAYMENTMETHOD PM on B.VA009_PAYMENTMETHOD_ID=PM.VA009_PAYMENTMETHOD_ID LEFT JOIN VA009_PAYMENTMETHOD PMM ON B.VA009_PO_PAYMENTMETHOD_ID = PMM.VA009_PAYMENTMETHOD_ID ");
+
+            _sql.Append(" WHERE b.C_BPartner_ID=" + C_BPartner_ID);
 
             DataSet ds = DB.ExecuteDataset(_sql.ToString(), null, null);
-            if (ds != null && ds.Tables[0].Rows.Count > 0) {
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
                 retDic = new Dictionary<string, object>();
                 retDic["IsVendor"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["IsVendor"]);
                 retDic["IsCustomer"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["IsCustomer"]);
-            
+
                 if (Env.IsModuleInstalled("VA009_"))
                 {
                     retDic["VA009_PaymentMethod_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]);
@@ -389,8 +390,8 @@ namespace VIS.Models
             Dictionary<string, object> retDic = null;
             int C_BPartner_ID = Util.GetValueOfInt(fields);
             //if VA009_ Module is installed then count the AD_MODULEINFO_ID
-            int countVA009 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
-            
+            int countVA009 = Env.IsModuleInstalled("VA009_") ? 1 : 0;
+
             string sql = "SELECT p.AD_Language,p.C_PaymentTerm_ID,"
                 + " COALESCE(p.M_PriceList_ID,g.M_PriceList_ID) AS M_PriceList_ID, p.PaymentRule,p.POReference,"
                 + " p.SO_Description,p.IsDiscountPrinted, p.C_IncoTerm_ID,p.C_IncoTermPO_ID, ";
@@ -411,7 +412,7 @@ namespace VIS.Models
                 sql += " LEFT JOIN VA009_PAYMENTMETHOD pm on p.VA009_PAYMENTMETHOD_ID = pm.VA009_PAYMENTMETHOD_ID" +
                     " LEFT JOIN VA009_PAYMENTMETHOD pmm ON p.VA009_PO_PAYMENTMETHOD_ID = pmm.VA009_PAYMENTMETHOD_ID";
             }
-            sql += " WHERE p.C_BPartner_ID=" + C_BPartner_ID + " AND p.IsActive='Y'";		
+            sql += " WHERE p.C_BPartner_ID=" + C_BPartner_ID + " AND p.IsActive='Y'";
 
             DataSet ds = DB.ExecuteDataset(sql, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
