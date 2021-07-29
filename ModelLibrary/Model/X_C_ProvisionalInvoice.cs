@@ -50,8 +50,8 @@ SetProcessed (false);// N
  Set Table ID By Table Name
  added by ->Harwinder */
         static X_C_ProvisionalInvoice() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
-        static long serialVersionUID = 27908471781068L;/** Last Updated Timestamp 7/15/2021 10:54:24 AM */
-        public static long updatedMS = 1626346464279L;/** AD_Table_ID=1000551 */
+        static long serialVersionUID = 27909665790665L;/** Last Updated Timestamp 7/29/2021 6:34:33 AM */
+        public static long updatedMS = 1627540473876L;/** AD_Table_ID=1000551 */
         public static int Table_ID; // =1000551;
         /** TableName=C_ProvisionalInvoice */
         public static String Table_Name = "C_ProvisionalInvoice";
@@ -242,7 +242,11 @@ SetProcessed (false);// N
 @param GrandTotal Total amount of document */
         public void SetGrandTotal(Decimal? GrandTotal) { Set_Value("GrandTotal", (Decimal?)GrandTotal); }/** Get Grand Total.
 @return Total amount of document */
-        public Decimal GetGrandTotal() { Object bd = Get_Value("GrandTotal"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }/** Set Paid.
+        public Decimal GetGrandTotal() { Object bd = Get_Value("GrandTotal"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }/** Set Cost Calculated.
+@param IsCostCalculated This checkbox will auto set "True", when the cost is calculated for the document. */
+        public void SetIsCostCalculated(Boolean IsCostCalculated) { Set_Value("IsCostCalculated", IsCostCalculated); }/** Get Cost Calculated.
+@return This checkbox will auto set "True", when the cost is calculated for the document. */
+        public Boolean IsCostCalculated() { Object oo = Get_Value("IsCostCalculated"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }/** Set Paid.
 @param IsPaid The document is paid */
         public void SetIsPaid(Boolean IsPaid) { Set_Value("IsPaid", IsPaid); }/** Get Paid.
 @return The document is paid */
@@ -254,7 +258,11 @@ SetProcessed (false);// N
 @param IsReversal This is a reversing transaction */
         public void SetIsReversal(Boolean IsReversal) { Set_Value("IsReversal", IsReversal); }/** Get Reversal.
 @return This is a reversing transaction */
-        public Boolean IsReversal() { Object oo = Get_Value("IsReversal"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }/** Set Sales Transaction.
+        public Boolean IsReversal() { Object oo = Get_Value("IsReversal"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }/** Set Reversed Cost Calculated.
+@param IsReversedCostCalculated This checkbox will auto set "True", when the impact of cost is reversed for the document if any. */
+        public void SetIsReversedCostCalculated(Boolean IsReversedCostCalculated) { Set_Value("IsReversedCostCalculated", IsReversedCostCalculated); }/** Get Reversed Cost Calculated.
+@return This checkbox will auto set "True", when the impact of cost is reversed for the document if any. */
+        public Boolean IsReversedCostCalculated() { Object oo = Get_Value("IsReversedCostCalculated"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }/** Set Sales Transaction.
 @param IsSOTrx This is a Sales Transaction */
         public void SetIsSOTrx(Boolean IsSOTrx) { Set_Value("IsSOTrx", IsSOTrx); }/** Get Sales Transaction.
 @return This is a Sales Transaction */
