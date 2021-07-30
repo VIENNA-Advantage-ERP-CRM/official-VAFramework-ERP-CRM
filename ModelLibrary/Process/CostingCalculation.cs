@@ -185,7 +185,7 @@ namespace VAdvantage.Process
                               AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N' ) OR (docstatus  IN ('RE') AND iscostcalculated = 'Y'
                               AND ISREVERSEDCOSTCALCULATED= 'N' AND description LIKE '%{->%')) 
                          UNION 
-                         SELECT i.ad_client_id ,  i.ad_org_id , i.isactive , to_char(mi.created, 'DD-MON-YY HH24:MI:SS') as created ,  i.createdby ,  TO_CHAR(mi.updated, 'DD-MON-YY HH24:MI:SS') AS updated ,
+                         SELECT i.ad_client_id ,  i.ad_org_id , i.isactive , to_char(i.created, 'DD-MON-YY HH24:MI:SS') as created ,  i.createdby ,  TO_CHAR(mi.updated, 'DD-MON-YY HH24:MI:SS') AS updated ,
                                 i.updatedby ,  mi.documentno ,  M_MatchInv_Id AS Record_Id ,  i.issotrx ,  i.isreturntrx ,  '' AS IsInternalUse,  'M_MatchInv' AS TableName,
                                 i.docstatus, i.DateAcct AS DateAcct,  mi.iscostcalculated ,  i.isreversedcostcalculated
                          FROM M_MatchInv mi INNER JOIN c_invoiceline il ON il.c_invoiceline_id = mi.c_invoiceline_id INNER JOIN C_Invoice i ON i.c_invoice_id       = il.c_invoice_id
