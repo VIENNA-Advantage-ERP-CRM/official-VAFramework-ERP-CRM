@@ -64,6 +64,8 @@
         var elements = [
             "AmtAcctCr",
             "AmtAcctDr",
+            "AmtSourceCr",
+            "AmtSourceDr",
         ];
 
         VIS.translatedTexts = VIS.Msg.translate(VIS.Env.getCtx(), elements, true);
@@ -985,7 +987,9 @@
                         // alignment of Credit and Debit field
                         if (row[j] != null && typeof (row[j]) == "number" &&
                             (VIS.translatedTexts.AmtAcctCr == dataObj.Columns[j] ||
-                                VIS.translatedTexts.AmtAcctDr == dataObj.Columns[j])) {
+                                VIS.translatedTexts.AmtAcctDr == dataObj.Columns[j] ||
+                                VIS.translatedTexts.AmtSourceCr == dataObj.Columns[j] ||
+                                VIS.translatedTexts.AmtSourceDr == dataObj.Columns[j])) {
                             $self.arrListColumns.push({
                                 field: dataObj.Columns[j], caption: VIS.Msg.translate(VIS.Env.getCtx(),
                                     dataObj.Columns[j]), sortable: true, size: '16%', hidden: false, style: 'text-align: right'
@@ -1011,7 +1015,9 @@
                         }
                         else if (row[j] != null && typeof (row[j]) == "number" &&
                             (VIS.translatedTexts.AmtAcctCr == dataObj.Columns[j] ||
-                                VIS.translatedTexts.AmtAcctDr == dataObj.Columns[j])) {
+                                VIS.translatedTexts.AmtAcctDr == dataObj.Columns[j] ||
+                            VIS.translatedTexts.AmtSourceCr == dataObj.Columns[j] ||
+                            VIS.translatedTexts.AmtSourceDr == dataObj.Columns[j])) {
                             line[dataObj.Columns[j]] = parseFloat(row[j]).toLocaleString();
                         }
                         else {
