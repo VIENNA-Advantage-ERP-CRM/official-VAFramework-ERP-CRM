@@ -68,7 +68,11 @@ namespace VAdvantage.Classes
             att.FolderKey = folderKey;
             att.SetFileLocation(fileLocation);
             att.SetIsFromHTML(true);
-            att.Save();
+            if (!att.Save())
+            {
+                info.AD_attachment_ID = att.GetAD_Attachment_ID();
+                info.Error = "Not Saved";
+            }
             info.AD_attachment_ID = att.GetAD_Attachment_ID();
             info.Error = att.Error;
 
