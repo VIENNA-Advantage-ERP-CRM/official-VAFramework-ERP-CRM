@@ -69,14 +69,14 @@ namespace VIS.Controllers
         /// </summary>
         /// <param name="pref"></param>
         /// <returns></returns>
-        public JsonResult SaveInvoice(List<Dictionary<string, string>> model, string selectedItems, string C_Order_ID, string C_Invoice_ID, string M_inout_id)
+        public JsonResult SaveInvoice(List<Dictionary<string, string>> model, string selectedItems, string C_Order_ID, string C_Invoice_ID, string M_inout_id, string C_ProvisionalInvoice_ID = "0")
         {
             var value = false;
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
                 CommonModel obj = new CommonModel();
-                value = obj.SaveInvoiceData(ctx, model, selectedItems, Convert.ToInt32(C_Order_ID), Convert.ToInt32(C_Invoice_ID), Convert.ToInt32(M_inout_id));
+                value = obj.SaveInvoiceData(ctx, model, selectedItems, Convert.ToInt32(C_Order_ID), Convert.ToInt32(C_Invoice_ID), Convert.ToInt32(M_inout_id), Convert.ToInt32(C_ProvisionalInvoice_ID));
             }
             return Json(new { result = value }, JsonRequestBehavior.AllowGet);
         }
@@ -927,6 +927,18 @@ namespace VIS.Controllers
                         item.M_InOut_ID_K = 0;
                         item.C_Invoice_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["c_invoiceline_id"]);
                     }
+                    else if (tableName == "C_ProvisionalInvoiceLine")
+                    {
+                        item.C_Order_ID = null;
+                        item.M_InOut_ID = null;
+                        item.C_Invoice_ID = Util.GetValueOfString(data.Tables[0].Rows[i]["line"]);
+                        item.C_Order_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["c_orderline_id"]);
+                        item.M_InOut_ID_K = 0;
+                        item.C_Invoice_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["c_provisionalinvoiceline_id"]);
+                        item.POPrice = Util.GetValueOfDecimal(data.Tables[0].Rows[i]["PricePO"]);
+                        item.ProvisionalPrice = Util.GetValueOfDecimal(data.Tables[0].Rows[i]["PriceEntered"]);
+                        item.InvoicePrice = Util.GetValueOfDecimal(data.Tables[0].Rows[i]["PriceEntered"]);
+                    }
                     else
                     {
                         recordid = Util.GetValueOfInt(data.Tables[0].Rows[i]["m_inoutline_id"]);
@@ -940,8 +952,9 @@ namespace VIS.Controllers
                             {
                                 select = true;
                             }
-                            else {
-                                qry = "SELECT QtyEntered FROM C_ProvisionalInvoiceLine WHERE C_ProvisionalInvoice_ID = " + recordID + 
+                            else
+                            {
+                                qry = "SELECT QtyEntered FROM C_ProvisionalInvoiceLine WHERE C_ProvisionalInvoice_ID = " + recordID +
                                       " AND M_Product_ID = " + Util.GetValueOfInt(data.Tables[0].Rows[i]["m_product_id"]) +
                                       " AND M_AttributeSetInstance_ID = " + Util.GetValueOfInt(data.Tables[0].Rows[i]["m_attributesetinstance_id"]);
                                 if (Util.GetValueOfDecimal(DB.ExecuteScalar(qry)) > 0)
@@ -1646,7 +1659,7 @@ namespace VIS.Controllers
             return retObj;
         }
 
-        public bool SaveInvoiceData(Ctx ctx, List<Dictionary<string, string>> model, string selectedItems, int C_Order_ID, int C_Invoice_ID, int M_InOut_ID)
+        public bool SaveInvoiceData(Ctx ctx, List<Dictionary<string, string>> model, string selectedItems, int C_Order_ID, int C_Invoice_ID, int M_InOut_ID, int C_ProvisionalInvoice_ID)
         {
             MOrder _order = null;
             if (C_Order_ID > 0)
@@ -1658,6 +1671,14 @@ namespace VIS.Controllers
             if (C_Invoice_ID > 0)
             {
                 _invoice = new MInvoice(ctx, C_Invoice_ID, null);
+                // Added By VA228(Rakesh Kumar): Set Provisional Invoice Reference
+                if (C_ProvisionalInvoice_ID > 0)
+                {
+                    if (_invoice.Get_ColumnIndex("C_ProvisionalInvoice_ID") >= 0)
+                    {
+                        DB.ExecuteScalar("UPDATE C_Invoice Set C_ProvisionalInvoice_ID=" + C_ProvisionalInvoice_ID + " Where C_Invoice_ID=" + C_Invoice_ID);
+                    }
+                }
             }
 
 
@@ -1765,8 +1786,19 @@ namespace VIS.Controllers
                 //	Create new Invoice Line
                 MInvoiceLine invoiceLine = new MInvoiceLine(_invoice);
                 invoiceLine.SetM_Product_ID(M_Product_ID, C_UOM_ID);	//	Line UOM
-                invoiceLine.SetQty(QtyEntered);							//	Invoiced/Entered
+                invoiceLine.SetQty(QtyEntered);                         //	Invoiced/Entered
 
+                if (C_ProvisionalInvoice_ID > 0)
+                {
+                    // Added By VA228(Rakesh Kumar): Set Priceentered and priceactual
+                    invoiceLine.SetPriceEntered(Convert.ToDecimal((model[i]["InvoicePrice"])));
+                    invoiceLine.SetPriceActual(Convert.ToDecimal((model[i]["InvoicePrice"])));
+                    invoiceLine.SetPriceList(Convert.ToDecimal((model[i]["InvoicePrice"])));
+
+                    // Set Provisional InvoiceLine Reference
+                    if (invoiceLine.Get_ColumnIndex("C_ProvisionalInvoiceLine_ID") >= 0)
+                        invoiceLine.Set_Value("C_ProvisionalInvoiceLine_ID", Convert.ToInt32((model[i]["C_Invoice_ID_K"])));
+                }
 
 
                 //  Info
@@ -2051,7 +2083,11 @@ namespace VIS.Controllers
 
                     }
 
-                    invoiceLine.SetPrice();
+                    // VA228: SetPrice when invoice is not provisional
+                    if (C_ProvisionalInvoice_ID == 0)
+                    {
+                        invoiceLine.SetPrice();
+                    }
                     invoiceLine.SetTax();
                     // Change By mohit Amortization proces
                     //int countVA038 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA038_' "));

@@ -165,6 +165,9 @@
                     else {
                         VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, 1);
                     }
+                } else if (C_ProvisionalInvoice_ID != null) {
+                    // VA228:Load provisional invoice data in grid from AP invoice window
+                    VIS.VCreateFromInvoice.prototype.loadProvisionalInvoices(C_ProvisionalInvoice_ID, M_Product_ID, 1);
                 }
                 else {
                     $self.setBusy(false);
@@ -230,6 +233,7 @@
                     var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
                     var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
                     var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
+                    var C_ProvisionalInvoice_ID = $self.cmbProvisionalInvoice.getControl().find('option:selected').val();
                     var C_BankAccount_ID = null;
                     if ($self.cmbBankAccount != null) {
                         C_BankAccount_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
@@ -255,7 +259,7 @@
                         VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, 1);
                     }
                     else if (M_InOut_ID != null) {
-                         // call loadshipments from VCreateFormProvisionalInvoice.js for Provisiona Invoice
+                        // call loadshipments from VCreateFormProvisionalInvoice.js for Provisiona Invoice
                         if ($self.mTab.keyColumnName == "C_ProvisionalInvoice_ID") {
                             VIS.VCreateFormProvisionalInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, 1);
                         }
@@ -273,6 +277,9 @@
                         var Amount = $self.Amount.getValue();
                         VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, 1);
                         //VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, 1);
+                    } else if (C_ProvisionalInvoice_ID != null) {
+                        // VA228:Load provisional invoice from AP invoice window
+                        VIS.VCreateFromInvoice.prototype.loadProvisionalInvoices(C_ProvisionalInvoice_ID, M_Product_ID, 1);
                     }
                     //$self.setBusy(false);
                 }
@@ -284,6 +291,7 @@
                     var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
                     var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
                     var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
+                    var C_ProvisionalInvoice_ID = $self.cmbProvisionalInvoice.getControl().find('option:selected').val();
                     var C_BankAccount_ID = null;
                     if ($self.cmbBankAccount != null) {
                         C_BankAccount_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
@@ -309,7 +317,7 @@
                         VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, parseInt($self.cmbPage.val()) - 1);
                     }
                     else if (M_InOut_ID != null) {
-                         // call loadshipments from VCreateFormProvisionalInvoice.js for Provisiona Invoice
+                        // call loadshipments from VCreateFormProvisionalInvoice.js for Provisiona Invoice
                         if ($self.mTab.keyColumnName == "C_ProvisionalInvoice_ID") {
                             VIS.VCreateFormProvisionalInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, parseInt($self.cmbPage.val()) - 1);
                         }
@@ -327,6 +335,9 @@
                         var Amount = $self.Amount.getValue();
                         VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, parseInt($self.cmbPage.val()) - 1);
                         //VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, parseInt($self.cmbPage.val()) - 1);
+                    } else if (C_ProvisionalInvoice_ID != null) {
+                        // VA228:Load provisional invoice from AP invoice window
+                        VIS.VCreateFromInvoice.prototype.loadProvisionalInvoices(C_ProvisionalInvoice_ID, M_Product_ID, parseInt($self.cmbPage.val()) - 1);
                     }
                     //$self.setBusy(false);
                 }
@@ -338,6 +349,7 @@
                     var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
                     var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
                     var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
+                    var C_ProvisionalInvoice_ID = $self.cmbProvisionalInvoice.getControl().find('option:selected').val();
                     var C_BankAccount_ID = null;
                     if ($self.cmbBankAccount != null) {
                         C_BankAccount_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
@@ -363,7 +375,7 @@
                         VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, parseInt($self.cmbPage.val()) + 1);
                     }
                     else if (M_InOut_ID != null) {
-                         // call loadshipments from VCreateFormProvisionalInvoice.js for Provisiona Invoice
+                        // call loadshipments from VCreateFormProvisionalInvoice.js for Provisiona Invoice
                         if ($self.mTab.keyColumnName == "C_ProvisionalInvoice_ID") {
                             VIS.VCreateFormProvisionalInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, parseInt($self.cmbPage.val()) + 1);
                         }
@@ -381,6 +393,9 @@
                         var Amount = $self.Amount.getValue();
                         VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, parseInt($self.cmbPage.val()) + 1);
                         //VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, parseInt($self.cmbPage.val()) + 1);
+                    } else if (C_ProvisionalInvoice_ID != null) {
+                        // VA228:Load provisional invoice from AP invoice window
+                        VIS.VCreateFromInvoice.prototype.loadProvisionalInvoices(C_ProvisionalInvoice_ID, M_Product_ID, parseInt($self.cmbPage.val()) + 1);
                     }
                     //$self.setBusy(false);
                 }
@@ -392,6 +407,7 @@
                     var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
                     var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
                     var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
+                    var C_ProvisionalInvoice_ID = $self.cmbProvisionalInvoice.getControl().find('option:selected').val();
                     var C_BankAccount_ID = null;
                     if ($self.cmbBankAccount != null) {
                         C_BankAccount_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
@@ -417,7 +433,7 @@
                         VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, parseInt($self.cmbPage.find("Option:last").val()));
                     }
                     else if (M_InOut_ID != null) {
-                         // call loadshipments from VCreateFormProvisionalInvoice.js for Provisiona Invoice
+                        // call loadshipments from VCreateFormProvisionalInvoice.js for Provisiona Invoice
                         if ($self.mTab.keyColumnName == "C_ProvisionalInvoice_ID") {
                             VIS.VCreateFormProvisionalInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, parseInt($self.cmbPage.find("Option:last").val()));
                         }
@@ -435,6 +451,9 @@
                         var Amount = $self.Amount.getValue();
                         VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, parseInt($self.cmbPage.find("Option:last").val()));
                         //VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, parseInt($self.cmbPage.find("Option:last").val()));
+                    } else if (C_ProvisionalInvoice_ID != null) {
+                        // VA228:Load provisional invoice from AP invoice window
+                        VIS.VCreateFromInvoice.prototype.loadProvisionalInvoices(C_ProvisionalInvoice_ID, M_Product_ID, parseInt($self.cmbPage.find("Option:last").val()));
                     }
                     //$self.setBusy(false);
                 }
@@ -445,6 +464,7 @@
                 var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
                 var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
                 var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
+                var C_ProvisionalInvoice_ID = $self.cmbProvisionalInvoice.getControl().find('option:selected').val();
                 var C_BankAccount_ID = null;
                 if ($self.cmbBankAccount != null) {
                     C_BankAccount_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
@@ -470,7 +490,7 @@
                     VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, $self.cmbPage.val());
                 }
                 else if (M_InOut_ID != null) {
-                     // call loadshipments from VCreateFormProvisionalInvoice.js for Provisiona Invoice
+                    // call loadshipments from VCreateFormProvisionalInvoice.js for Provisiona Invoice
                     if ($self.mTab.keyColumnName == "C_ProvisionalInvoice_ID") {
                         VIS.VCreateFormProvisionalInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, $self.cmbPage.val());
                     }
@@ -488,6 +508,9 @@
                     var Amount = $self.Amount.getValue();
                     VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, $self.cmbPage.val());
                     //VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, $self.cmbPage.val());
+                } else if (C_ProvisionalInvoice_ID != null) {
+                    // VA228:Load provisional invoice from AP invoice window
+                    VIS.VCreateFromInvoice.prototype.loadProvisionalInvoices(C_ProvisionalInvoice_ID, M_Product_ID, $self.cmbPage.val());
                 }
                 //$self.setBusy(false);
             });
@@ -734,6 +757,10 @@
         if (forInvoice) {
             var dt = VIS.dataContext.getJSONRecord("MDocType/GetDocType", VIS.Env.getCtx().getContextAsInt(this.windowNo, "C_DocTypeTarget_ID").toString());
             isReturnTrx = VIS.Utility.Util.getValueOfBoolean(dt["IsReturnTrx"]);
+            var isSoTrx = "Y".equals(VIS.Env.getCtx().getWindowContext(this.windowNo, "IsSOTrx"));
+            // Load Provisional Invoice to combo only when creating AP Invoice
+            if (!isReturnTrx && !isSoTrx)
+                this.getProvisionlInvoices(VIS.Env.getCtx(), C_BPartner_ID, isReturnTrx);
         }
         else {
             isReturnTrx = "Y".equals(VIS.Env.getCtx().getWindowContext(this.windowNo, "IsReturnTrx"));
@@ -742,6 +769,7 @@
         // JID_0350: "When user create MR with refrence to order OR by invoice by using "Create Line From" charge should not shows on grid.
 
         this.getOrders(VIS.Env.getCtx(), C_BPartner_ID, isReturnTrx, forInvoice);
+
 
         //for (var i = 0; i < orders.length; i++) {
         //    if (i == 0) {
@@ -838,6 +866,56 @@
         //return pairs;
     }
 
+    /**
+    * Get Provisional Invoice into provisional invoice combo
+    * @param {any} ctx
+    * @param {any} C_BPartner_ID
+    * @param {any} isReturnTrx
+    */
+    VCreateFrom.prototype.getProvisionlInvoices = function (ctx, C_BPartner_ID, isReturnTrx) {
+
+        var display = "i.DocumentNo||' - ' ||".concat(VIS.DB.to_char("i.DateInvoiced", VIS.DisplayType.Date, VIS.Env.getAD_Language(ctx))).concat("||' - '||").concat(
+            VIS.DB.to_char("i.GrandTotal", VIS.DisplayType.Amount, VIS.Env.getAD_Language(ctx)));
+
+        var OrgId = VIS.Env.getCtx().getContextAsInt(this.windowNo, "AD_Org_ID")
+        var recordId = VIS.context.getWindowContextAsInt(this.windowNo, "C_Invoice_ID", true);
+        $.ajax({
+            url: VIS.Application.contextUrl + "VCreateFrom/VCreateGetProvisionalInvoices",
+            type: 'POST',
+            //async: false,
+            data: {
+                displays: display,
+                C_BPartner_IDs: C_BPartner_ID,
+                isReturnTrxs: isReturnTrx,
+                OrgIds: OrgId,
+                recordID: recordId,
+            },
+            success: function (datas) {
+                var ress = datas.result;
+                if (ress && ress.length > 0) {
+                    try {
+                        var key, value;
+                        for (var i = 0; i < ress.length; i++) {
+                            key = VIS.Utility.Util.getValueOfInt(ress[i].key);
+                            value = VIS.Utility.encodeText(ress[i].value);
+
+                            if (i == 0) {
+                                $self.cmbProvisionalInvoice.getControl().append(" <option value=0> </option>");
+                            }
+                            $self.cmbProvisionalInvoice.getControl().append(" <option value=" + key + ">" + value + "</option>");
+                        }
+                        $self.cmbProvisionalInvoice.getControl().prop('selectedIndex', 0);
+                    }
+                    catch (e) {
+
+                    }
+                }
+            },
+            error: function (e) {
+                $self.log.info(e);
+            },
+        });
+    }
     /**
      * Load Order for Provisional Invoice
      * @param {any} ctx
@@ -1513,6 +1591,7 @@
             var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
             var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
             var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
+            var C_ProvisionalInvoice_ID = $self.cmbProvisionalInvoice.getControl().find('option:selected').val();
 
             var selection = null;
             if ($self.dGrid != null) {
@@ -1624,7 +1703,21 @@
                         }
                     }
                 }
+                // When provisional invoice selected by VA228(Rakesh) 29/July/2021
+                if ($self.dGrid != null && C_ProvisionalInvoice_ID != null) {
+                    for (item in selection) {
+                        // Check duplicate key and add value to dictionary object
+                        var obj = $.grep($self.multiValues, function (n, i) {
+                            return n.M_Product_ID_K == $self.dGrid.get(selection[item])["M_Product_ID_K"] && n.C_Invoice_ID_K == $self.dGrid.get(selection[item])["C_Invoice_ID_K"]
+                        });
+                        if (obj.length > 0) {
 
+                        }
+                        else {
+                            $self.multiValues.push($self.dGrid.get(selection[item]));
+                        }
+                    }
+                }
                 if ($self.mTab.keyColumnName == "C_ProvisionalInvoice_ID") {
                     VIS.VCreateFormProvisionalInvoice.prototype.saveProvisionalInvoice();
                 }
@@ -1840,6 +1933,7 @@
                     $self.dGrid = null;
                 }
                 var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
+                var C_ProvisionalInvoice_Id = $self.cmbProvisionalInvoice.getControl().find('option:selected').val();
                 if (C_Order_ID != null) {
                     $self.cmbInvoice.getControl().prop('selectedIndex', -1);
                     $self.cmbShipment.getControl().prop('selectedIndex', -1);
@@ -1847,6 +1941,13 @@
                     var M_Product_ID = $self.vProduct.getValue();
                     var deliveryDate = $self.deliveryDate.getValue();
                     $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, false, 1);
+                } else if (C_ProvisionalInvoice_Id != null) {
+                    // VA228:Load provisional invoice data into grid
+                    $self.cmbOrder.getControl().prop('selectedIndex', -1);
+                    $self.cmbInvoice.getControl().prop('selectedIndex', -1);
+                    $self.cmbShipment.getControl().prop('selectedIndex', -1);
+                    var M_Product_ID = $self.vProduct.getValue();
+                    VIS.VCreateFromInvoice.prototype.loadProvisionalInvoices(C_ProvisionalInvoice_Id, M_Product_ID, 1);
                 }
                 else {
                     $self.setBusy(false);
@@ -1889,6 +1990,7 @@
                 //  set Invoice and Shipment to Null
                 $self.cmbInvoice.getControl().prop('selectedIndex', -1);
                 $self.cmbShipment.getControl().prop('selectedIndex', -1);
+                $self.cmbProvisionalInvoice.getControl().prop('selectedIndex', -1);
                 //$self.lblDate.setVisible = false;
                 //$self.Date.setVisible = false;
                 //$self.lblDocumentNo.setVisible = false;
@@ -2084,6 +2186,7 @@
                 //  set Order and Shipment to Null
                 $self.cmbOrder.getControl().prop('selectedIndex', -1);
                 $self.cmbShipment.getControl().prop('selectedIndex', -1);
+                $self.cmbProvisionalInvoice.getControl().prop('selectedIndex', -1);
                 //$self.lblDate.setVisible = false;
                 //$self.Date.setVisible = false;
                 //$self.lblDocumentNo.setVisible = false;
@@ -2113,6 +2216,7 @@
                 //  set Order and Shipment to Null
                 $self.cmbOrder.getControl().prop('selectedIndex', -1);
                 $self.cmbInvoice.getControl().prop('selectedIndex', -1);
+                $self.cmbProvisionalInvoice.getControl().prop('selectedIndex', -1);
                 //$self.lblDate.setVisible = false;
                 //$self.Date.setVisible = false;
                 //$self.lblDocumentNo.setVisible = false;
@@ -2158,6 +2262,29 @@
             });
         }
 
+        if (this.cmbProvisionalInvoice) {
+            this.cmbProvisionalInvoice.getControl().change(function () {
+                //Load data into grid on provisional invoice combo change
+                $self.isApplied = false;
+                $self.setBusy(true);
+                $self.editedItems = [];
+                $self.multiValues = [];
+                if ($self.dGrid != null) {
+                    $self.dGrid.destroy();
+                    $self.dGrid = null;
+                }
+                var C_ProvisionalInvoice_ID = $self.cmbProvisionalInvoice.getControl().find('option:selected').val();
+                var M_Product_ID = $self.vProduct.getValue();
+                //  set Order/Invoice and Shipment to Null
+                $self.cmbOrder.getControl().prop('selectedIndex', -1);
+                $self.cmbShipment.getControl().prop('selectedIndex', -1);
+                $self.cmbInvoice.getControl().prop('selectedIndex', -1);
+                $self.lblDeliveryDate.setVisible(false);
+                $self.deliveryDate.setVisible(false);
+                VIS.VCreateFromInvoice.prototype.loadProvisionalInvoices(C_ProvisionalInvoice_ID, M_Product_ID, 1);
+            });
+        }
+
         // This function is used to open Product container in Tree structure
         if (this.ContainerTree) {
             this.ContainerTree.on("click", function () {
@@ -2198,7 +2325,6 @@
         data = this.getOrdersData(VIS.Env.getCtx(), C_Order_ID, M_Product_ID, DeliveryDate, forInvoice, pNo);
         //this.loadGrid(data);
     }
-
 
     // get order
     VCreateFrom.prototype.getOrdersData = function (ctx, C_Order_ID, M_Product_ID, DeliveryDate, forInvoice, pNo) {
@@ -2352,10 +2478,6 @@
         }
         return data;
     }
-
-
-
-
 
     //VCreateFrom.prototype.getOrdersData = function (ctx, C_Order_ID, M_Product_ID, DeliveryDate, forInvoice, pNo) {
     //    var data = [];
@@ -2612,7 +2734,6 @@
         this.loadGrid(data);
     }
 
-
     VCreateFrom.prototype.getOrderData = function (ctx, C_Order_ID, forInvoice) {
         var data = [];
         var sql = "";
@@ -2748,11 +2869,6 @@
         }
 
     }
-
-
-
-
-
 
     //VCreateFrom.prototype.getOrderData = function (ctx, C_Order_ID, forInvoice) {
     //    /**
@@ -2896,8 +3012,10 @@
             this.dGrid.destroy();
             this.dGrid = null;
         }
-
-        if (this.arrListColumns.length == 0) {
+        var isSoTrx = "Y".equals(VIS.Env.getCtx().getWindowContext(this.windowNo, "IsSOTrx"));
+        // VA228:Create new grid header when combo selection changed in case of AP Invoice
+        if (this.arrListColumns.length == 0 || ($self.mTab.keyColumnName == "C_Invoice_ID" && !isSoTrx)) {
+            this.arrListColumns = [];
             this.arrListColumns.push({
                 field: "Select", caption: VIS.Msg.getMsg("Select"), sortable: false, size: '50px', hidden: false,
                 //editable: { type: 'checkbox' }
@@ -2913,15 +3031,34 @@
                 }
             });
             this.arrListColumns.push({ field: "QuantityPending", caption: VIS.Msg.getMsg("Quantity"), sortable: false, size: '150px', render: 'number:4', hidden: true });
-            this.arrListColumns.push({
-                field: "QuantityEntered", caption: VIS.Msg.getMsg("QtyEntered"), editable: { type: 'number' }, sortable: false, size: '150px', hidden: false,
-                //Added to get QuantityEntered value acc.to culture
-                render: function (record, index, col_index) {
-                    var val = record["QuantityEntered"];
-                    val = $self.checkcommaordot(event, val);
-                    return parseFloat(val).toLocaleString(undefined, { minimumFractionDigits: 4 });
-                }
-            });
+            
+            // VA228: Show AP provisional invoice fields when provisional invice combo selected from AP Invoice window
+            if ($self.cmbProvisionalInvoice.getControl().find('option:selected').val() > 0 && !isSoTrx) {
+                this.arrListColumns.push({ field: "QuantityEntered", caption: VIS.Msg.getMsg("QtyEntered"), sortable: false, size: '150px', hidden: false });
+                this.arrListColumns.push({ field: "POPrice", caption: VIS.Msg.getMsg("POPrice"), sortable: false, size: '150px', hidden: false });
+                this.arrListColumns.push({ field: "ProvisionalPrice", caption: VIS.Msg.getMsg("ProvisionalPrice"), sortable: false, size: '150px', hidden: false });
+                this.arrListColumns.push({
+                    field: "InvoicePrice", caption: VIS.Msg.getMsg("InvoicePrice"), editable: { type: 'number', style: 'background-color: #f8f8f8;' }, sortable: false, size: '150px', hidden: false,
+
+                    render: function (record, index, col_index) {
+                        var val = record["InvoicePrice"];
+                        val = $self.checkcommaordot(event, val);
+                        return parseFloat(val).toLocaleString(undefined, { minimumFractionDigits: 4 });
+                    },
+                    style: 'background-color: #d1d1d14a'
+                });
+            } else {
+                this.arrListColumns.push({
+                    field: "QuantityEntered", caption: VIS.Msg.getMsg("QtyEntered"), editable: { type: 'number', style: 'background-color: #f8f8f8;' }, sortable: false, size: '150px', hidden: false,
+                    //Added to get QuantityEntered value acc.to culture
+                    render: function (record, index, col_index) {
+                        var val = record["QuantityEntered"];
+                        val = $self.checkcommaordot(event, val);
+                        return parseFloat(val).toLocaleString(undefined, { minimumFractionDigits: 4 });
+                    },
+                    style: 'background-color: #d1d1d14a'
+                });
+            }
             this.arrListColumns.push({ field: "C_UOM_ID", caption: VIS.Msg.getMsg("UomName"), sortable: false, size: '150px', hidden: false });
             //Add product search key column in Grid 
             this.arrListColumns.push({ field: "M_Product_SearchKey", caption: VIS.Msg.getMsg("ProductSearchKey"), sortable: false, size: '150px', hidden: false });
@@ -2932,7 +3069,7 @@
                 //render: function () {
                 //    return '<div><input type=text readonly="readonly" style= "width:80%; border:none" ></input><img src="' + VIS.Application.contextUrl + 'Areas/VIS/Images/base/MultiX16.png" alt="Attribute Set Instance" title="Attribute Set Instance" style="opacity:1;float:right;"></div>';
                 //}
-                field: "M_AttributeSetInstance_ID", caption: VIS.Msg.getMsg("ASI"), sortable: false, size: '150px', editable: { type: 'custom', ctrl: $self.$productAttribute, showAll: true },
+                field: "M_AttributeSetInstance_ID", caption: VIS.Msg.getMsg("ASI"), sortable: false, size: '150px', editable: { type: 'custom', ctrl: $self.$productAttribute, showAll: true, style: 'background-color: #f8f8f8;' },
                 render: function (record, index, col_index) {
                     var l = $self.pattrLookup;
                     var val = record["M_AttributeSetInstance_ID"];
@@ -2944,7 +3081,8 @@
                         d = l.getDisplay(val, true);
                     }
                     return d;
-                }
+                },
+                style: 'background-color: #d1d1d14a'
             });
 
             // Issue JID_0564: payment term detail on order 
@@ -2965,6 +3103,7 @@
             this.arrListColumns.push({ field: "C_Order_ID_K", caption: VIS.Msg.getMsg("Order"), sortable: false, size: '150px', hidden: true });
             this.arrListColumns.push({ field: "M_InOut_ID_K", caption: VIS.Msg.getMsg("Shipment/Receipt"), sortable: false, size: '150px', hidden: true });
             this.arrListColumns.push({ field: "C_Invoice_ID_K", caption: VIS.Msg.getMsg("Invoice"), sortable: false, size: '150px', hidden: true });
+
         }
 
         w2utils.encodeTags(data);
@@ -3021,6 +3160,38 @@
                     $self.dGrid.records[event.index]["ProvisionalPrice"] = $self.checkcommaordot(event, $self.dGrid.records[event.index]["ProvisionalPrice"]);
                     var _value = format.GetFormatAmount($self.dGrid.records[event.index]["ProvisionalPrice"], "init", dotFormatter);
                     $self.dGrid.records[event.index]["ProvisionalPrice"] = format.GetConvertedString(_value, dotFormatter);
+                    $self.dGrid.refreshRow(event.index + 1);//refresh a row of the grid
+                    $("#grid_" + $self.dGrid.name + "_rec_" + id).keydown(function (event) {
+                        if (!dotFormatter && (event.keyCode == 190 || event.keyCode == 110)) {// , separator
+                            return false;
+                        }
+                        else if (dotFormatter && event.keyCode == 188) { // . separator
+                            return false;
+                        }
+                        if (event.target.value.contains(".") && (event.which == 110 || event.which == 190 || event.which == 188)) {
+                            if (event.target.value.indexOf('.') > -1) {
+                                event.target.value = event.target.value.replace('.', '');
+                            }
+                        }
+                        else if (event.target.value.contains(",") && (event.which == 110 || event.which == 190 || event.which == 188)) {
+                            if (event.target.value.indexOf(',') > -1) {
+                                event.target.value = event.target.value.replace(',', '');
+                            }
+                        }
+                        if (event.keyCode != 8 && event.keyCode != 9 && (event.keyCode < 37 || event.keyCode > 40) &&
+                            (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)
+                            && event.keyCode != 109 && event.keyCode != 189 && event.keyCode != 110
+                            && event.keyCode != 144 && event.keyCode != 188 && event.keyCode != 190) {
+                            return false;
+                        }
+                    });
+                }
+
+                // VA228:change event of Provisional Invoice Price (AP Window)
+                if (event.column == 6 && $self.dGrid.columns[event.column].field == "InvoicePrice") {
+                    $self.dGrid.records[event.index]["InvoicePrice"] = $self.checkcommaordot(event, $self.dGrid.records[event.index]["InvoicePrice"]);
+                    var _value = format.GetFormatAmount($self.dGrid.records[event.index]["InvoicePrice"], "init", dotFormatter);
+                    $self.dGrid.records[event.index]["InvoicePrice"] = format.GetConvertedString(_value, dotFormatter);
                     $self.dGrid.refreshRow(event.index + 1);//refresh a row of the grid
                     $("#grid_" + $self.dGrid.name + "_rec_" + id).keydown(function (event) {
                         if (!dotFormatter && (event.keyCode == 190 || event.keyCode == 110)) {// , separator
@@ -3190,6 +3361,16 @@
                 }
                 $self.dGrid.records[e.index]["ProvisionalPrice"] = _val.toFixed(4);
                 AddEditedLine("ProvisionalPrice", e.index, _val.toFixed(4));
+            } else if ($self.dGrid.columns[e.column].field == "InvoicePrice") {
+                //VA228:Check invoice price and apply amount format
+                var _val = format.GetConvertedNumber(e.value_new, dotFormatter);
+                if (_val < 0) {
+                    VIS.ADialog.error("PriceCantNegative");
+                    e.value_new = e.value_original;
+                    return;
+                }
+                $self.dGrid.records[e.index]["InvoicePrice"] = _val.toFixed(4);
+                AddEditedLine("InvoicePrice", e.index, _val.toFixed(4));
             }
             else if ($self.dGrid.columns[e.column].field == "M_AttributeSetInstance_ID") {
                 $self.dGrid.records[e.index]["M_AttributeSetInstance_ID"] = e.value_new;
