@@ -45,9 +45,9 @@ namespace VAdvantage.Model
                 + "WHERE isactive='Y' AND AD_Alert_ID=" + GetAD_Alert_ID();
             List<MAlertRule> list = new List<MAlertRule>();
 
-            DataSet ds = DB.ExecuteDataset(sql);
             try
             {
+                DataSet ds = DB.ExecuteDataset(sql);
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
                     MAlertRule mAlertRule = new MAlertRule(GetCtx(), dr, null);
@@ -186,7 +186,7 @@ namespace VAdvantage.Model
                                     errorType = 1;//if error occured in following query than used in catch 
                                     if (DB.ExecuteScalar(sqlQuery) == DBNull.Value || DB.ExecuteScalar(sqlQuery) == null)
                                     {
-                                        numericValue =Convert.ToDecimal(0);
+                                        numericValue = Convert.ToDecimal(0);
                                     }
                                     else
                                     {
@@ -241,7 +241,7 @@ namespace VAdvantage.Model
                             else
                             {
                                 returnConditionValue = false;
-                                AlertRule.SetErrorMsg("Conditional Sequence Number " +alertCondition.GetSequence()+ " Error= Only Execute Select Query");
+                                AlertRule.SetErrorMsg("Conditional Sequence Number " + alertCondition.GetSequence() + " Error= Only Execute Select Query");
                                 AlertRule.SetIsValid(false);
                                 AlertRule.Save();
                                 return false;
@@ -253,12 +253,12 @@ namespace VAdvantage.Model
                             if (errorType == 1)
                             {
                                 AlertRule.SetErrorMsg("Conditional Sequence Number " + alertCondition.GetSequence() + " Select Error=" + e.Message);
-                               
+
                             }
                             else
                             {
                                 AlertRule.SetErrorMsg("Conditional Sequence Number " + alertCondition.GetSequence() + " Comparison Error=" + e.Message);
-                                
+
                             }
                             AlertRule.SetIsValid(false);
                             AlertRule.Save();
