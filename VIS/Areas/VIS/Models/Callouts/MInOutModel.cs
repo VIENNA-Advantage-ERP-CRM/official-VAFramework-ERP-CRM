@@ -133,5 +133,47 @@ namespace VIS.Models
             return retValue;
 
         }
+
+        /// <summary>
+        /// Get Business Partner Data
+        /// </summary>
+        /// <param name="fields">parameters</param>
+        /// <returns>BPartner Data</returns>
+        public Dictionary<string, object> GetBPartnerData(string fields)
+        {
+            Dictionary<string, object> retDic = null;
+            DataSet ds = null;
+            string sql = "SELECT p.AD_Language, p.POReference,"
+                + "p.CreditStatusSettingOn,p.SO_CreditLimit, NVL(p.SO_CreditLimit,0) - NVL(p.SO_CreditUsed,0) AS CreditAvailable,"
+                + "l.C_BPartner_Location_ID, c.AD_User_ID , p.SOCreditStatus,p.C_IncoTerm_ID,p.C_IncoTermPO_ID "
+                + "FROM C_BPartner p"
+                + " LEFT JOIN C_BPartner_Location l ON (p.C_BPartner_ID=l.C_BPartner_ID)"
+                + " LEFT JOIN AD_User c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
+                + "WHERE p.C_BPartner_ID=" + Util.GetValueOfInt(fields);		//	1 // SD
+            try
+            {
+                ds = DB.ExecuteDataset(sql, null, null);
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    retDic["POReference"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["POReference"]);
+                    retDic["CreditStatusSettingOn"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["CreditStatusSettingOn"]);
+                    retDic["SO_CreditLimit"] = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["SO_CreditLimit"]);
+                    retDic["CreditAvailable"] = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["CreditAvailable"]);
+                    retDic["C_BPartner_Location_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_BPartner_Location_ID"]);
+                    retDic["AD_User_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["AD_User_ID"]);
+                    retDic["SOCreditStatus"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["SOCreditStatus"]);
+                    retDic["C_IncoTerm_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_IncoTerm_ID"]);
+                    retDic["C_IncoTermPO_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_IncoTermPO_ID"]);
+                }
+            }
+            catch (Exception e)
+            {
+                if (ds != null)
+                {
+                    ds.Dispose();
+                }
+            }
+            return retDic;
+        }
     }
 }

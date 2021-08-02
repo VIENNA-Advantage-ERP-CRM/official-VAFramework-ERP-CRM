@@ -16916,7 +16916,7 @@
             else {
                 mTab.setValue("C_UOM_ID", 100);	//	EA
             }
-           //mTab.getField("C_UOM_ID").setReadOnly(true);
+            //mTab.getField("C_UOM_ID").setReadOnly(true);
         }
         catch (err) {
             this.setCalloutActive(false);
@@ -16963,7 +16963,7 @@
             C_UOM_ID = ctx.getContextAsInt(windowNo, "C_UOM_ID");
         }
         var Qty = mTab.getValue("BaseQty");
-        var stdPrecision = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency",Util.getValueOfString(ctx.getContextAsInt(windowNo, "C_Currency_ID")));
+        var stdPrecision = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency", Util.getValueOfString(ctx.getContextAsInt(windowNo, "C_Currency_ID")));
         if (mTab.getValue("M_Product_ID") != null) {
             var M_Product_ID = mTab.getValue("M_Product_ID");
             var paramStr = M_Product_ID.toString().concat(",", C_UOM_ID.toString(), ",", Qty.toString());
@@ -17253,7 +17253,7 @@
         }
         try {
             this.setCalloutActive(true);
-            var stdPrecision = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency",Util.getValueOfString(ctx.getContextAsInt(windowNo, "C_Currency_ID")));
+            var stdPrecision = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency", Util.getValueOfString(ctx.getContextAsInt(windowNo, "C_Currency_ID")));
             //set Total Qty
             var totalqty = Util.getValueOfDecimal(mTab.getValue("ForcastQty")) + Util.getValueOfDecimal(mTab.getValue("SalesOrderQty"))
                 + Util.getValueOfDecimal(mTab.getValue("OppQty"));
@@ -17824,9 +17824,9 @@
     CalloutInOut.prototype.BPartner = function (ctx, windowNo, mTab, mField, value, oldValue) {
         //  
 
-        var sql = "";
+        //var sql = "";
         var idr = null;
-        var drl = null;
+        var dr = null;
         if (value == null || value.toString() == "") {
             return "";
         }
@@ -17844,29 +17844,14 @@
             //	sraval: source forge bug # 1503219
             var order = mTab.getValue("C_Order_ID");
 
-            //sql = "SELECT p.AD_Language, p.POReference,"
-            //    + "SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
-            //    + "l.C_BPartner_Location_ID, c.AD_User_ID "
-            //    + "FROM C_BPartner p"
-            //    + " LEFT OUTER JOIN C_BPartner_Location l ON (p.C_BPartner_ID=l.C_BPartner_ID)"
-            //    + " LEFT OUTER JOIN AD_User c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
-            //    + "WHERE p.C_BPartner_ID=" + C_BPartner_ID;		//	1
-            sql = "SELECT p.AD_Language, p.POReference,"
-                + "p.CreditStatusSettingOn,p.SO_CreditLimit, NVL(p.SO_CreditLimit,0) - NVL(p.SO_CreditUsed,0) AS CreditAvailable,"
-                + "l.C_BPartner_Location_ID, c.AD_User_ID , p.SOCreditStatus,p.C_IncoTerm_ID,p.C_IncoTermPO_ID "
-                + "FROM C_BPartner p"
-                + " LEFT OUTER JOIN C_BPartner_Location l ON (p.C_BPartner_ID=l.C_BPartner_ID)"
-                + " LEFT OUTER JOIN AD_User c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
-                + "WHERE p.C_BPartner_ID=" + C_BPartner_ID;		//	1 // SD
-
-
-            idr = VIS.DB.executeReader(sql, null, null);
-            if (idr.read()) {
+            var paramString = true.toString() + "," + C_BPartner_ID;
+            //var idr = VIS.dataContext.getJSONRecord("MInOut/GetBPartnerOrderData", paramString);
+            var idr = VIS.dataContext.getJSONRecord("MBPartner/GetBPartnerOrderData", paramString);
+            if (idr != null) {
                 //	Location
-                var ii = Util.getValueOfInt(idr.get("c_bpartner_location_id"));
+                var ii = idr["C_BPartner_Location_ID"];
                 // sraval: source forge bug # 1503219 - default location for material receipt
                 if (order == null) {
-                    //if (dr.wasNull())
                     if (ii == 0) {
                         mTab.setValue("C_BPartner_Location_ID", null);
                     }
@@ -17875,7 +17860,7 @@
                     }
                 }
                 //	Contact
-                ii = Util.getValueOfInt(idr.get("ad_user_id"));
+                ii = idr["AD_User_ID"];
                 //if (dr.wasNull())
                 if (ii == 0) {
                     mTab.setValue("AD_User_ID", null);
@@ -17885,19 +17870,19 @@
                 }
 
                 //Inco Term
-                var IncoTerm = Util.getValueOfInt(idr.get(isSOTrx ? "C_IncoTerm_ID" : "C_IncoTermPO_ID"));
+                var IncoTerm = isSOTrx ? idr["C_IncoTerm_ID"] : idr["C_IncoTermPO_ID"];
                 if (IncoTerm > 0) {
                     mTab.setValue("C_IncoTerm_ID", IncoTerm);
                 }
 
                 // Skip credit check for returns
-                if (!isReturnTrx) {
+                if (isSOTrx & !isReturnTrx) {
                     //	CreditAvailable
-                    var CreditStatus = idr.getString("CreditStatusSettingOn");
-                    var CreditAvailable = Util.getValueOfDouble(idr.get("creditavailable"));
+                    var CreditStatus = idr["CreditStatusSettingOn"];
+                    var CreditAvailable = idr["CreditAvailable"];
                     if (CreditStatus == "CH") {
-                        if (idr.get("SOCreditStatus") != null) {
-                            if (!idr.get("SOCreditStatus").equals("X")) {// SD
+                        if (idr["SOCreditStatus"] != null) {
+                            if (!idr["SOCreditStatus"].equals("X")) {// SD
                                 if (CreditAvailable <= 0) {
                                     VIS.ADialog.info("CreditLimitOver");
                                 }
@@ -17906,25 +17891,15 @@
                     }
                     else {
                         var locId = Util.getValueOfInt(mTab.getValue("C_BPartner_Location_ID"));
-                        sql = "SELECT bp.CreditStatusSettingOn,p.SOCreditStatus,p.SO_CreditLimit, NVL(p.SO_CreditLimit,0) - NVL(p.SO_CreditUsed,0) AS CreditAvailable" +
-                            " FROM C_BPartner_Location p INNER JOIN C_BPartner bp ON (bp.C_BPartner_ID = p.C_BPartner_ID) WHERE p.C_BPartner_Location_ID = " + locId;
-                        drl = VIS.DB.executeReader(sql);
-                        if (drl.read()) {
-                            CreditStatus = drl.getString("CreditStatusSettingOn");
+                        dr = VIS.dataContext.getJSONRecord("MBPartner/GetLocationData", locId.toString());
+                        if (dr != null) {
+                            CreditStatus = Util.getValueOfString(dr["CreditStatusSettingOn"]);
                             if (CreditStatus == "CL") {
-                                var CreditLimit = Util.getValueOfDouble(drl.get("so_creditlimit"));
-                                var CreditAvailable = Util.getValueOfDouble(drl.get("creditavailable"));
-                                var SOCreditStatus = dr.getString("SOCreditStatus");
-                                //if (CreditLimit != 0) {                                    
-                                //    if (dr != null && CreditAvailable <= 0) {
-                                //        VIS.ADialog.info("CreditOver", null, "", "");
-                                //    }
-                                //}
-                                if (SOCreditStatus != null) {
-                                    if (!SOCreditStatus.equals("X")) {// SD
-                                        if (CreditAvailable <= 0) {
-                                            VIS.ADialog.info("CreditOver");
-                                        }
+                                var CreditLimit = Util.getValueOfDouble(dr["SO_CreditLimit"]);
+                                if (CreditLimit != 0) {
+                                    var CreditAvailable = Util.getValueOfDouble(dr["CreditAvailable"]);
+                                    if (CreditAvailable <= 0) {
+                                        VIS.ADialog.info("CreditOver");
                                     }
                                 }
                             }
@@ -17932,22 +17907,21 @@
                     }
                 }
             }
-            idr.close();
         }
         catch (err) {
             this.setCalloutActive(false);
-            if (idr != null) {
-                idr.close();
-                idr = null;
-            }
-            if (drl != null) {
-                drl.close();
-                drl = null;
-            }
+            //if (idr != null) {
+            //    idr.close();
+            //    idr = null;
+            //}
+            //if (drl != null) {
+            //    drl.close();
+            //    drl = null;
+            //}
             //MessageBox.Show("CalloutInOut--BPartner");
-            this.log.log(Level.SEVERE, sql, e);
+            //this.log.log(Level.SEVERE, sql, e);
             //return e.getLocalizedMessage();
-            return e.message;
+            return err;
         }
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";
@@ -18306,6 +18280,17 @@
             }
             //	qtyEntered changed - calculate movementQty
             else if (mField.getColumnName().toString().equals("QtyEntered")) {
+
+                // If Ship/Receipt Line is created with Reference of Inoice Line.
+                // Can not change the Quantity on line.
+                if (Util.getValueOfInt(mTab.getValue("M_InOutLine_ID")) > 0) {
+                    var invLine_ID = VIS.dataContext.getJSONRecord("MInOutLine/GetInvoiceLine", mTab.getValue("M_InOutLine_ID").toString());
+                    if (invLine_ID > 0) {
+                        mTab.setValue("QtyEntered", oldValue);
+                        this.setCalloutActive(false);
+                        return "VIS_CantChangeQty";
+                    }
+                }
                 var C_UOM_To_ID = ctx.getContextAsInt(windowNo, "C_UOM_ID");
                 qtyEntered = Util.getValueOfDecimal(value);
                 paramString = M_Product_ID.toString();
@@ -23468,7 +23453,7 @@
                     mTab.setValue("C_UOM_ID", c_uom_id);	//	Default UOM from context.
                 }
                 else {
-                    mTab.setValue("C_UOM_ID", 100);	
+                    mTab.setValue("C_UOM_ID", 100);
                 }
                 var chargeID = VIS.Utility.Util.getValueOfInt(mTab.getValue("C_Charge_ID"));
                 var paramString = chargeID.toString();
