@@ -2303,6 +2303,39 @@ namespace VAdvantage.Model
                             #endregion
                         }
 
+                        if (windowName.Equals("ProvisionalInvoice"))
+                        {
+                            // handle conversion 
+                            DataSet dsProductDetail = DB.ExecuteDataset(@"SELECT C_ProvisionalInvoice.DateAcct,
+                            C_ProvisionalInvoice.C_Currency_ID, C_ProvisionalInvoice.C_ConversionType_ID 
+                            FROM C_ProvisionalInvoice 
+                            INNER JOIN C_ProvisionalInvoiceLine ON C_ProvisionalInvoice.C_ProvisionalInvoice_ID = C_ProvisionalInvoiceLine.C_ProvisionalInvoice_ID 
+                            WHERE C_ProvisionalInvoice.C_ProvisionalInvoice_ID = " + po.Get_ValueAsInt("C_ProvisionalInvoice_ID"), null, trxName);
+                            if (dsProductDetail != null && dsProductDetail.Tables.Count > 0 && dsProductDetail.Tables[0].Rows.Count > 0)
+                            {
+                                if (acctSchema.GetC_Currency_ID() != Util.GetValueOfInt(dsProductDetail.Tables[0].Rows[0]["C_Currency_ID"]))
+                                {
+                                    Price = MConversionRate.Convert(ctx, Price, 
+                                        Util.GetValueOfInt(dsProductDetail.Tables[0].Rows[0]["C_Currency_ID"]),
+                                        acctSchema.GetC_Currency_ID(),
+                                        Util.GetValueOfDateTime(dsProductDetail.Tables[0].Rows[0]["DateAcct"]), 
+                                        Util.GetValueOfInt(dsProductDetail.Tables[0].Rows[0]["C_ConversionType_ID"]),
+                                        AD_Client_ID, AD_Org_ID);
+                                }
+                            }
+
+                            if (Price == 0)
+                            {
+                                if (optionalstr == "process")
+                                {
+                                    trxName.Rollback();
+                                }
+                                conversionNotFound = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT DocumentNo from 
+                                C_ProvisionalInvoice where C_ProvisionalInvoice_ID = " + Util.GetValueOfInt(po.Get_Value("C_ProvisionalInvoice_ID"))));
+                                return false;
+                            }
+                        }
+
                         if (windowName == "Inventory Move")
                         {
                             #region Special handling for Inventory move
@@ -2412,7 +2445,7 @@ namespace VAdvantage.Model
                                     if (OrderCurrency_ID != acctSchema.GetC_Currency_ID())
                                     {
                                         expectedAmt = MConversionRate.Convert(ctx, expectedAmt, OrderCurrency_ID, acctSchema.GetC_Currency_ID(),
-                                                                    inout.GetDateAcct(), IsPOCostingMethod ? order.GetC_ConversionType_ID() :
+                                                                    IsPOCostingMethod ? inout.GetDateAcct() : invoice.GetDateAcct(), IsPOCostingMethod ? order.GetC_ConversionType_ID() :
                                                                     Util.GetValueOfInt(dsExpectedLandedCostAllocation.Tables[0].Rows[lca]["C_ConversionType_ID"]), AD_Client_ID, AD_Org_ID);
                                         if (expectedAmt == 0)
                                         {
@@ -2420,7 +2453,7 @@ namespace VAdvantage.Model
                                             {
                                                 trxName.Rollback();
                                             }
-                                            conversionNotFound = inout.GetDocumentNo();
+                                            conversionNotFound = IsPOCostingMethod ? inout.GetDocumentNo() : invoice.GetDocumentNo();
                                             return false;
                                         }
                                     }
@@ -2450,7 +2483,7 @@ namespace VAdvantage.Model
                                         }
                                         cd = MCostDetail.CreateCostDetail(acctSchema, AD_Org_ID, inoutline.GetM_Product_ID(),
                                             inoutline.GetM_AttributeSetInstance_ID(), windowName, inventoryLine, inoutline, movementline,
-                                             invoiceline, po, Util.GetValueOfInt(dsExpectedLandedCostAllocation.Tables[0].Rows[lca]["M_CostElement_ID"]), 
+                                             invoiceline, po, Util.GetValueOfInt(dsExpectedLandedCostAllocation.Tables[0].Rows[lca]["M_CostElement_ID"]),
                                              Decimal.Round(expectedAmt, acctSchema.GetCostingPrecision()),
                                              expectedQty, null, trxName, M_Warehouse_Id);
                                     }
@@ -2646,7 +2679,7 @@ namespace VAdvantage.Model
                             if (optionalstr == "process")
                             {
                                 query.Clear();
-                                query.Append("SELECT MIN(M_CostDetail_ID) FROM M_CostDetail WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID());
+                                query.Append("SELECT MIN(M_CostDetail_ID) FROM M_CostDetail WHERE NVL(M_CostElement_ID , 0) = 0 AND IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID());
                                 if (windowName == "Invoice(Vendor)" || windowName == "Invoice(Customer)" || windowName == "Invoice(Vendor)-Return")
                                 {
                                     if (invoiceline.GetC_InvoiceLine_ID() > 0)
@@ -2693,6 +2726,10 @@ namespace VAdvantage.Model
                                 else if (windowName == "AssetDisposal")
                                 {
                                     query.Append(" AND VAFAM_AssetDisposal_ID = " + Util.GetValueOfInt(po.Get_Value("VAFAM_AssetDisposal_ID")));
+                                }
+                                else if (windowName == "ProvisionalInvoice")
+                                {
+                                    query.Append(" AND C_ProvisionalInvoiceLine_ID = " + Util.GetValueOfInt(po.Get_Value("C_ProvisionalInvoiceLine_ID")));
                                 }
                                 else if (windowName == "Production Execution" || windowName.Equals("PE-FinishGood"))
                                 {
@@ -3614,6 +3651,24 @@ namespace VAdvantage.Model
                                             }
                                         }
                                     }
+                                }
+                            }
+                            else if (windowName.Equals("ProvisionalInvoice"))
+                            {
+                                // Update Product Cost for Provisional Weighted Average
+                                result = cd.UpdateProductCost(windowName, cd, acctSchema, product, M_ASI_ID, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")), optionalStrCd: optionalstr);
+                                if (!result)
+                                {
+                                    if (optionalstr != "window")
+                                    {
+                                        trxName.Rollback();
+                                    }
+                                    else
+                                    {
+                                        DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
+                                    }
+                                    _log.Severe("Error occured during UpdateProductCost for C_ProvisonalInvoiceLine_ID = " + invoiceline.GetC_InvoiceLine_ID());
+                                    return false;
                                 }
                             }
 

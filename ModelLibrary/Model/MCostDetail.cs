@@ -193,6 +193,10 @@ namespace VAdvantage.Model
                         cd.SetM_InOutLine_ID(Util.GetValueOfInt(DB.ExecuteScalar("SELECT m_inoutline_id FROM m_inoutline WHERE isactive     = 'Y' AND c_orderline_id = " + invoiceline.GetC_OrderLine_ID(), null, null)));
                     }
                 }
+                else if (WindowName.Equals("ProvisionalInvoice"))
+                {
+                    cd.Set_Value("C_ProvisionalInvoiceLine_ID", po.Get_Value("C_ProvisionalInvoiceLine_ID"));
+                }
                 bool ok = cd.Save();
                 if (ok)
                 {
@@ -1027,9 +1031,9 @@ namespace VAdvantage.Model
 
                     log.Finer("PO - AveragePO - " + cost);
                 }
-                else if (ce.IsWeightedAveragePO())
+                else if (ce.IsWeightedAveragePO() || ce.IsProvisionalWeightedAverage())
                 {
-                    #region Weighted Av PO
+                    #region Weighted Av PO / Provisional Weighted Average
                     // Formula : ((CurrentQty * CurrentCostPrice) + (amt * qty)) / (CurrentQty + qty)
                     if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                     {
@@ -3774,6 +3778,27 @@ namespace VAdvantage.Model
                 {
                     MCostElementDetail.CreateCostElementDetail(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product, M_ASI_ID,
                                                     mas, ce.GetM_CostElement_ID(), windowName, cd, amt, qty);
+                }
+            }
+            else if (GetC_ProvisionalInvoiceLine_ID() != 0)
+            {
+                // Update Product Costs for Provisional Weighted Average
+                amt = cd.GetAmt();
+                if (ce.IsProvisionalWeightedAverage())
+                {
+                    if (cost.GetCurrentQty() != 0)
+                    {
+                        price = Decimal.Round(Decimal.Divide(
+                                                              Decimal.Add(
+                                                              Decimal.Multiply(cost.GetCurrentCostPrice(), cost.GetCurrentQty()), amt),
+                                                              cost.GetCurrentQty())
+                                                              , precision, MidpointRounding.AwayFromZero);
+                        cost.SetCurrentCostPrice(price);
+
+                        // calculate cost element detail
+                        MCostElementDetail.CreateCostElementDetail(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product, M_ASI_ID,
+                                                        mas, ce.GetM_CostElement_ID(), windowName, cd, (cost.GetCurrentCostPrice() * qty), qty);
+                    }
                 }
             }
             else	//	unknown or no id

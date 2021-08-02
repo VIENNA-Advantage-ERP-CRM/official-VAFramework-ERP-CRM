@@ -671,11 +671,13 @@ namespace VAdvantage.Model
                 //{
                 if (newRecord
                     || Is_ValueChanged("C_Charge_ID") || Is_ValueChanged("C_Invoice_ID")
-                    || Is_ValueChanged("C_Order_ID") || Is_ValueChanged("C_Project_ID"))
+                    || Is_ValueChanged("C_Order_ID") || Is_ValueChanged("C_Project_ID")
+                    || Is_ValueChanged("C_ProvisionalInvoice_ID"))
                     SetIsPrepayment(GetC_Charge_ID() == 0
                         && GetC_BPartner_ID() != 0
                         && (GetC_Order_ID() != 0
-                            || (GetC_Project_ID() != 0 && GetC_Invoice_ID() == 0)));
+                            || (GetC_Project_ID() != 0 && GetC_Invoice_ID() == 0)
+                            || Util.GetValueOfInt(Get_Value("C_ProvisionalInvoice_ID"))>0));
                 //}
 
                 if (GetC_Charge_ID() != 0)
