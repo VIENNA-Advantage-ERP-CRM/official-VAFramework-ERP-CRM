@@ -601,6 +601,67 @@ namespace VIS.Models
             _list["convtAmt"] = trxAmt;
             return _list;
         }
+
+        /// <summary>
+        /// Get Provisional invoices for combobox
+        /// </summary>
+        /// <param name="ctx">Context</param>
+        /// <param name="displays">Display Columns</param>
+        /// <param name="cBPartnerId">Business Partner</param>
+        /// <param name="OrgId">OrgazinationId</param>
+        /// <param name="isReturnTrxs">Return Transaction</param>
+        /// <param name="InvoiceID">InvoiceID</param>
+        /// <returns>List of Provisional Invoices</returns>
+        public List<VCreateFromGetCOrder> VCreateGetProvosionalInvoice(Ctx ctx, string displays, int cBPartnerId, int OrgId, bool isReturnTrxs, int InvoiceID)
+        {
+            List<VCreateFromGetCOrder> obj = new List<VCreateFromGetCOrder>();
+            MClient tenant = MClient.Get(ctx);
+
+            StringBuilder sql = new StringBuilder("SELECT i.C_ProvisionalInvoice_ID," + displays + " AS displays FROM C_ProvisionalInvoice i "
+                        + "INNER JOIN C_DocType d ON (i.C_DocType_ID = d.C_DocType_ID) "
+                        + "WHERE i.C_BPartner_ID=" + cBPartnerId + " AND i.IsSOTrx='N' "
+                        + "AND d.IsReturnTrx='" + (isReturnTrxs ? "Y" : "N") + "' AND i.DocStatus IN ('CL','CO') "
+                        + "AND i.C_ProvisionalInvoice_ID NOT IN (SELECT C_ProvisionalInvoice_ID FROM C_Invoice WHERE IsActive='Y' AND IsSOTrx='N' AND C_ProvisionalInvoice_ID>0) "
+                     );
+
+            string whereCondition = "";
+            if (InvoiceID > 0)
+            {
+                DataSet dsInvoice = DB.ExecuteDataset(@"SELECT C_Currency_ID,
+                CASE WHEN NVL(C_ConversionType_ID , 0) != 0  THEN C_ConversionType_ID ELSE 
+                (SELECT MAX(C_ConversionType_ID) FROM C_ConversionType WHERE C_ConversionType.AD_Client_ID IN (0 , invoice.AD_Client_ID )
+                AND C_ConversionType.AD_Org_ID IN (0 , invoice.AD_Org_ID ) AND C_ConversionType.IsDefault = 'Y') END AS C_ConversionType_ID,
+                M_PriceList_ID FROM C_Invoice invoice WHERE C_Invoice_ID=" + InvoiceID);
+
+                if (dsInvoice != null && dsInvoice.Tables.Count > 0 && dsInvoice.Tables[0].Rows.Count > 0)
+                {
+                    whereCondition = " AND i.C_Currency_ID = " + Convert.ToInt32(dsInvoice.Tables[0].Rows[0]["C_Currency_ID"]) +
+                        " AND i.C_ConversionType_ID = " + Util.GetValueOfInt(dsInvoice.Tables[0].Rows[0]["C_ConversionType_ID"]) +
+                        " AND i.M_PriceList_ID = " + Convert.ToInt32(dsInvoice.Tables[0].Rows[0]["M_PriceList_ID"]);
+                }
+            }
+            if (!String.IsNullOrEmpty(whereCondition))
+            {
+                sql.Append(whereCondition);
+            }
+            sql.Append(" AND i.AD_Client_ID=" + tenant.GetAD_Client_ID());
+            
+            sql.Append(" ORDER BY i.DateInvoiced, i.DocumentNo");
+
+            DataSet ds = DB.ExecuteDataset(sql.ToString());
+
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    VCreateFromGetCOrder objc = new VCreateFromGetCOrder();
+                    objc.key = Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ProvisionalInvoice_ID"]);
+                    objc.value = Util.GetValueOfString(ds.Tables[0].Rows[i]["displays"]);
+                    obj.Add(objc);
+                }
+            }
+            return obj;
+        }
     }
 
 
