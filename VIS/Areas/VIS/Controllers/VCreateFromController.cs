@@ -1060,6 +1060,184 @@ namespace VIS.Controllers
             var res = obj.GetConvertedAmount(ctx, _paymentId, amount, currencyId, convsion_Id, date, paymentType, _org_id);
             return Json(JsonConvert.SerializeObject(res), JsonRequestBehavior.AllowGet);
         }
+        /// <summary>
+        /// Get Provisional Invoices
+        /// </summary>
+        /// <param name="displays">Display Columns</param>
+        /// <param name="C_BPartner_IDs">Business Partner</param>
+        /// <param name="isReturnTrxs">Return Transaction</param>
+        /// <param name="OrgIds">Organization</param>
+        ///  <param name="recordID">C_Invoice_ID</param>
+        /// <returns>List of Provisonal in Json Format Bind to Combo</returns>
+        public JsonResult VCreateGetProvisionalInvoices(string displays, int C_BPartner_IDs, bool isReturnTrxs, int OrgIds, int recordID)
+        {
+            var ctx = Session["ctx"] as Ctx;
+            VCreateFromModel obj = new VCreateFromModel();
+            var value = obj.VCreateGetProvosionalInvoice(ctx, displays, C_BPartner_IDs, OrgIds, isReturnTrxs, recordID);
+            return Json(new { result = value }, JsonRequestBehavior.AllowGet);
+        }
+        /// <summary>
+        /// get data from common model
+        /// </summary>
+        /// <param name="keyColumnName">Primary column</param>
+        /// <param name="tableName">table name</param>
+        /// <param name="recordID">record id</param>
+        /// <param name="pageNo">page no</param>
+        /// <param name="isBaseLangss">browser language</param>
+        /// <param name="cInvoiceID">invoice id</param>
+        /// <param name="mProductIDs">products ids</param>
+        /// <param name="orgId">orgazination id</param>
+        /// <returns></returns>
+        public JsonResult GetProvisionalInvoicesDataVCreate(string keyColumnName, string tableName, int recordID, int pageNo, string isBaseLangss, int cInvoiceID, string mProductIDs, int? orgId)
+        {
+            var ctx = Session["ctx"] as Ctx;
+            CommonModel obj = new CommonModel();
+            string sql = GetSQlforGetProvisionalInvoicesData(isBaseLangss, cInvoiceID, mProductIDs, orgId);
+            var stValue = obj.GetData(sql, keyColumnName, tableName, recordID, pageNo, ctx);
+            return Json(JsonConvert.SerializeObject(stValue), JsonRequestBehavior.AllowGet);
+        }
+        /// <summary>
+        /// create sql qry for GetProvisionalInvoicesDataVCreate function
+        /// </summary>
+        /// <param name="isBaseLangss">browser language</param>
+        /// <param name="cInvoiceID">invoice id</param>
+        /// <param name="mProductIDs">products ids</param>
+        /// <returns>sql query</returns>
+        private string GetSQlforGetProvisionalInvoicesData(string isBaseLangss, int cInvoiceID, string mProductIDs, int? orgId)
+        {
+            string precision = "3";
+            if (isBaseLangss.ToUpper().Contains("C_UOM_TRL"))
+            {
+                precision = " uom1.stdprecision ";
+            }
+            else
+            {
+                precision = " uom.stdprecision ";
+            }
 
+            var ctx = Session["ctx"] as Ctx;
+            bool isAllownonItem = Util.GetValueOfString(ctx.GetContext("$AllowNonItem")).Equals("Y");
+
+            StringBuilder sql = new StringBuilder("SELECT * FROM  ( "
+                        + " SELECT "
+                        + " ROUND((l.QtyInvoiced) * "					//	1               
+                        + " (CASE WHEN l.QtyInvoiced=0 THEN 0 ELSE l.QtyEntered/l.QtyInvoiced END )," + precision + ") as QUANTITY,"	//	2
+                        + " ROUND((l.QtyInvoiced) * "					//	1               
+                        + " (CASE WHEN l.QtyInvoiced=0 THEN 0 ELSE l.QtyEntered/l.QtyInvoiced END )," + precision + ") as QTYENTER,"	//	2
+                        + " l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name) as UOM,"			//  3..4
+                        + " l.M_Product_ID,p.Name as PRODUCT,p.Value as PRODUCTSEARCHKEY, l.C_ProvisionalInvoiceLine_ID,l.Line,"      //  5..8
+                        + " l.C_OrderLine_ID,"                   					//  9
+                        + " l.M_AttributeSetInstance_ID AS M_ATTRIBUTESETINSTANCE_ID,"
+                        + " ins.description, "
+                        + " P.Iscostadjustmentonlost, "
+                        + " NVL(l.QtyInvoiced,0) as qtyInv , o.C_PaymentTerm_ID , pt.Name AS PaymentTermName "
+                        + @", (SELECT SUM( CASE WHEN c_paymentterm.VA009_Advance!= COALESCE(C_PaySchedule.VA009_Advance,'N') THEN 1 ELSE 0 END) AS isAdvance
+                        FROM c_paymentterm LEFT JOIN C_PaySchedule ON ( c_paymentterm.c_paymentterm_ID = C_PaySchedule.c_paymentterm_ID AND C_PaySchedule.IsActive ='Y' )
+                        WHERE c_paymentterm.c_paymentterm_ID =o.C_PaymentTerm_ID AND C_PaymentTerm.IsActive = 'Y' ) AS IsAdvance,l.PricePO,l.PriceEntered ");
+
+            if (isBaseLangss != "")
+            {
+                sql.Append(isBaseLangss);
+            }
+
+            if (isAllownonItem)
+            {
+                sql.Append(" LEFT JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID");
+            }
+            else
+            {
+                sql.Append(" INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID");
+            }
+
+            // Get lines from Invoice based on the setting taken on Tenant to allow non item Product
+            if (!isAllownonItem)
+            {
+                sql.Append(" AND p.ProductType = 'I') ");  // JID_0350: In Grid of Material Receipt need to show the items type products only
+            }
+            else
+            {
+                sql.Append(") ");
+            }
+
+            sql.Append(" LEFT JOIN C_ProvisionalInvoice o ON o.C_ProvisionalInvoice_ID = l.C_ProvisionalInvoice_ID LEFT JOIN C_PaymentTerm pt ON pt.C_PaymentTerm_ID = o.C_PaymentTerm_ID "
+             + " LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) "
+             + " WHERE l.C_ProvisionalInvoice_ID=" + cInvoiceID + " AND l.M_Product_ID>0");
+
+            if (orgId != null)
+            {
+                sql.Append(" AND L.AD_Org_ID=" + orgId + " ");
+            }
+
+            if (mProductIDs != "")
+            {
+                sql.Append(mProductIDs);
+            }
+
+            sql.Append(" GROUP BY l.QtyInvoiced,l.QtyEntered, l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name),"
+                + " l.M_Product_ID,p.Name, p.Value, l.C_ProvisionalInvoiceLine_ID,l.Line,l.C_OrderLine_ID,l.M_AttributeSetInstance_ID,ins.description, "
+                + " p.IsCostAdjustmentOnLost, "
+                + " L.Qtyinvoiced , o.C_PaymentTerm_ID , pt.Name,l.PricePO,l.PriceEntered ");
+
+            if (isBaseLangss.ToUpper().Contains("C_UOM_TRL"))
+            {
+                sql.Append(" , uom1.stdprecision ");
+            }
+            else
+            {
+                sql.Append(" , uom.stdprecision ");
+            }
+
+            // Show Invoice Line with Charge also, based on the setting for Non Item type on Tenant.
+            if (isAllownonItem)
+            {
+                sql.Append(" UNION SELECT "
+                  + "round((l.QtyInvoiced-SUM(COALESCE(m.QtyDelivered,0))) * "					//	1               
+                  + "(CASE WHEN l.QtyInvoiced=0 THEN 0 ELSE l.QtyEntered/l.QtyInvoiced END )," + precision + ") as QUANTITY,"	//	2
+                  + "round((l.QtyInvoiced-SUM(COALESCE(m.QtyDelivered,0))) * "
+                  + "(CASE WHEN l.QtyInvoiced=0 THEN 0 ELSE l.QtyEntered/l.QtyInvoiced END )," + precision + ") as QTYENTER,"	//	added by bharat
+                  + " l.C_UOM_ID  as C_UOM_ID  ,COALESCE(uom.UOMSymbol,uom.Name) as UOM,"			//	3..4
+                  + " 0 as M_PRODUCT_ID, c.Name as PRODUCT,c.Value as PRODUCTSEARCHKEY, l.C_ProvisionalInvoiceLine_ID,l.Line,"	//	5..6
+                  + " l.C_OrderLine_ID, l.M_AttributeSetInstance_ID AS M_ATTRIBUTESETINSTANCE_ID,"
+                  + " ins.description , "
+                  + " 'N' AS Iscostadjustmentonlost, 0 as qtyInv"			//	7..8 //              
+                  + " , i.C_PaymentTerm_ID , t.Name AS PaymentTermName "
+                  // JID_1414 - not to consider or pick In-Active Record
+                  + @", (SELECT SUM( CASE WHEN c_paymentterm.VA009_Advance!= COALESCE(C_PaySchedule.VA009_Advance,'N') THEN 1 ELSE 0 END) AS isAdvance
+                        FROM c_paymentterm LEFT JOIN C_PaySchedule ON ( c_paymentterm.c_paymentterm_ID = C_PaySchedule.c_paymentterm_ID AND C_PaySchedule.IsActive ='Y' ) 
+                        WHERE c_paymentterm.c_paymentterm_ID =i.C_PaymentTerm_ID AND C_PaymentTerm.IsActive = 'Y' ) AS IsAdvance,l.PricePO,l.PriceEntered ");
+
+                if (isBaseLangss != "")
+                {
+                    sql.Append(isBaseLangss);
+                }
+
+                sql.Append(" LEFT OUTER JOIN C_ProvisionalInvoice i ON (i.C_ProvisionalInvoice_ID = l.C_ProvisionalInvoice_ID)"
+                  + " LEFT OUTER JOIN C_PaymentTerm t ON (t.C_PaymentTerm_ID = i.C_PaymentTerm_ID)"
+                  + " LEFT OUTER JOIN C_OrderLine m ON(m.C_OrderLine_ID = l.C_OrderLine_ID) AND m.C_OrderLine_ID IS NOT NULL LEFT OUTER JOIN C_Charge c ON (l.C_Charge_ID=c.C_Charge_ID)");
+
+
+
+                sql.Append(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) WHERE l.C_ProvisionalInvoice_ID=" + cInvoiceID + " AND C.C_Charge_ID>0");
+                
+                if (orgId != null)
+                {
+                    sql.Append(" AND L.AD_Org_ID=" + orgId + " ");
+                }
+                sql.Append(" GROUP BY l.QtyInvoiced, l.QtyEntered, l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name), "
+                      + "l.M_Product_ID,c.Name, c.Value, l.C_ProvisionalInvoiceLine_ID, l.M_AttributeSetInstance_ID, l.Line,l.C_OrderLine_ID, ins.description, i.C_PaymentTerm_ID , t.Name,l.PricePO,l.PriceEntered");
+
+                if (isBaseLangss.ToUpper().Contains("C_UOM_TRL"))
+                {
+                    sql.Append(" , uom1.stdprecision ");
+                }
+                else
+                {
+                    sql.Append(" , uom.stdprecision ");
+                }
+            }
+            // Get Provisional Invoice line records which are not exits in AP Invoice Line
+            sql.Append(") t WHERE t.C_PROVISIONALINVOICELINE_ID NOT IN(SELECT C_PROVISIONALINVOICELINE_ID FROM C_InvoiceLine WHERE IsActive='Y' AND C_PROVISIONALINVOICELINE_ID>0) ORDER BY Line");
+            return sql.ToString();
+        }
     }
 }
