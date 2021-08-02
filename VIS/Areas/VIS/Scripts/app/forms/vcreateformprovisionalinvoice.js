@@ -17,7 +17,7 @@
 
         function dynInit() {
             //DynInit
-            baseObj.title = VIS.Msg.getMsg("Invoice") + " .. " + VIS.Msg.getMsg("CreateFrom");
+            baseObj.title = VIS.Msg.getMsg("ProvisionalInvoice") + " .. " + VIS.Msg.getMsg("CreateFrom");
             baseObj.relatedToOrg = null;
             baseObj.fromInvoice = false;
             baseObj.ProvisionalInvoice = true;
@@ -124,19 +124,20 @@
             }
         });   
         baseObj.arrListColumns.push({
-            field: "ProvisionalPrice", caption: VIS.Msg.getMsg("ProvisionalPrice"), editable: { type: 'number' }, sortable: false, size: '150px', hidden: false,
+            field: "ProvisionalPrice", caption: VIS.Msg.getMsg("ProvisionalPrice"), editable: { type: 'number', style: 'background-color: #f8f8f8;' }, sortable: false, size: '150px', hidden: false,
             render: function (record, index, col_index) {
                 var val = record["ProvisionalPrice"];
                 val = baseObj.checkcommaordot(event, val);
                 return parseFloat(val).toLocaleString(undefined, { minimumFractionDigits: 4 });
-            }
+            },
+            style: 'background-color: #d1d1d14a'
         });
 
         baseObj.arrListColumns.push({ field: "C_UOM_ID", caption: VIS.Msg.getMsg("UomName"), sortable: false, size: '150px', hidden: false });
         baseObj.arrListColumns.push({ field: "M_Product_SearchKey", caption: VIS.Msg.getMsg("ProductSearchKey"), sortable: false, size: '150px', hidden: false });
         baseObj.arrListColumns.push({ field: "M_Product_ID", caption: VIS.Msg.getMsg("ProductName"), sortable: true, size: '150px', hidden: false });
         baseObj.arrListColumns.push({
-            field: "M_AttributeSetInstance_ID", caption: VIS.Msg.getMsg("ASI"), sortable: false, size: '150px', editable: { type: 'custom', ctrl: self.$productAttribute, showAll: true },
+            field: "M_AttributeSetInstance_ID", caption: VIS.Msg.getMsg("ASI"), sortable: false, size: '150px', editable: { type: 'custom', ctrl: self.$productAttribute, showAll: true, style: 'background-color: #f8f8f8;' },
             render: function (record, index, col_index) {
                 var l = self.pattrLookup;
                 var val = record["M_AttributeSetInstance_ID"];
@@ -148,7 +149,8 @@
                     d = l.getDisplay(val, true);
                 }
                 return d;
-            }
+            },
+            style: 'background-color: #d1d1d14a'
         });
         baseObj.arrListColumns.push({ field: "C_PaymentTerm_ID", caption: VIS.Msg.getMsg("C_PaymentTerm_ID"), sortable: false, size: '150px', hidden: true });
         baseObj.arrListColumns.push({ field: "PaymentTermName", caption: VIS.Msg.getMsg("PaymentTermName"), sortable: false, size: '150px', hidden: false });
@@ -304,65 +306,6 @@
                 self.$super.loadGrid(res.data);
                 self.$super.setBusy(false);
             }
-        });
-        return data;
-    }
-
-    VCreateFormProvisionalInvoice.prototype.loadShipment = function (M_InOut_ID) {
-        var data = this.getShipmentData(VIS.Env.getCtx(), M_InOut_ID);
-        this.$super.loadGrid(data);
-    }
-
-    /// Unused Function
-    VCreateFormProvisionalInvoice.prototype.getShipmentData = function (ctx, M_InOut_ID) {
-
-        var data = [];
-
-
-        var isBaseLanguageUmo = "";
-        if (VIS.Env.isBaseLanguage(ctx, "C_UOM")) {
-            isBaseLanguageUmo = "FROM C_UOM uom INNER JOIN M_InOutLine l ON (l.C_UOM_ID=uom.C_UOM_ID) ";
-        }
-        else {
-            isBaseLanguageUmo = "FROM C_UOM_Trl uom INNER JOIN M_InOutLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.AD_Language='" + VIS.Env.getAD_Language(ctx) + "') ";
-        }
-
-
-        $.ajax({
-            url: VIS.Application.contextUrl + "VCreateFrom/GetShipmentDatas",
-            type: 'POST',
-            async: false,
-            data: { MInOutIDs: M_InOut_ID, isBaseLanguageUmos: isBaseLanguageUmo },
-            success: function (data) {
-                var ress = JSON.parse(data);
-                if (ress && ress.length > 0) {
-                    var count = 1;
-                    for (var i = 0; i < ress.length; i++) {
-                        var line = {};
-                        var qtyMovement = dr.getDecimal(0);
-                        var qtyEntered = dr.getDecimal(1);
-                        line['Quantity'] = qtyMovement;
-                        line['QuantityEntered'] = qtyEntered;
-                        line['C_UOM_ID'] = dr.getString(3);
-                        line['M_Product_ID'] = dr.getString(5);
-                        line['C_Order_ID'] = ".";
-                        line['M_InOut_ID'] = dr.getString(7);
-                        line['C_Invoice_ID'] = null;
-
-                        line['C_UOM_ID_K'] = dr.getString(2);
-                        line['M_Product_ID_K'] = dr.getInt(4);
-                        line['C_Order_ID_K'] = dr.getInt(8);;
-                        line['M_InOut_ID_K'] = dr.getInt(6);
-                        line['C_Invoice_ID_K'] = null;
-
-                        line['recid'] = count;
-                        count++;
-                        data.push(line);
-                    }
-                }
-            },
-            error: function (e) {
-            },
         });
         return data;
     }

@@ -1275,7 +1275,7 @@
         /*******************************/
 
         //Third Row
-        /*******************************/
+    /*******************************/
         if (this.locatorField != null || this.cmbContainer != null) {
             this.middelDiv.css('height', '48.5%');
 
@@ -1405,6 +1405,10 @@
         }
         //lableCtrl = $("<h5 style='width: 100%'>");
 
+        // VA228: Increase hegight of middle div when open from Provisional Invoice
+        if ($self.mTab.keyColumnName == "C_ProvisionalInvoice_ID") {
+            this.middelDiv.css('height', '64%');
+        }
 
         this.topDiv.append(line);
         line.append(col);
