@@ -69,7 +69,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="invoice">Provisional Invoice</param>
         public MProvisionalInvoiceLine(MProvisionalInvoice invoice)
-           : this(invoice.GetCtx(), 0, invoice.Get_TrxName())
+           : this(invoice.GetCtx(), 0, invoice.Get_Trx())
         {
             if (invoice.Get_ID() == 0)
                 throw new ArgumentException("Header not saved");
@@ -144,7 +144,13 @@ namespace VAdvantage.Model
         /// <returns>true, when sucess</returns>
         protected override bool AfterSave(bool newRecord, bool success)
         {
-            return UpdateHeaderTax();
+            if (!success)
+            {
+                return success;
+            }
+
+            // for reversal record, not to execute Update Header tax
+            return (GetReversalDoc_ID() <= 0 ? UpdateHeaderTax() : true);
         }
 
         /// <summary>
@@ -165,19 +171,19 @@ namespace VAdvantage.Model
         {
             //	Recalculate Tax for this Tax
             MProvisionalInvoiceTax tax = MProvisionalInvoiceTax.Get(this, GetPrecision(),
-                false, Get_TrxName());  //	current Tax
+                false, Get_Trx());  //	current Tax
             if (tax != null)
             {
                 if (!tax.CalculateTaxFromLines(null))
                     return false;
-                if (!tax.Save(Get_TrxName()))
+                if (!tax.Save(Get_Trx()))
                     return false;
             }
 
             MTax taxRate = tax.GetTax();
             if (taxRate.IsSummary())
             {
-                if (!CalculateChildTax(new MProvisionalInvoice(GetCtx(), GetC_ProvisionalInvoice_ID(), Get_Trx()), tax, taxRate, Get_TrxName()))
+                if (!CalculateChildTax(new MProvisionalInvoice(GetCtx(), GetC_ProvisionalInvoice_ID(), Get_Trx()), tax, taxRate, Get_Trx()))
                 {
                     return false;
                 }
@@ -189,7 +195,7 @@ namespace VAdvantage.Model
                 tax = MProvisionalInvoiceTax.GetSurcharge(this, GetPrecision(), false, Get_Trx());  //	current Tax
                 if (!tax.CalculateSurchargeFromLines())
                     return false;
-                if (!tax.Save(Get_TrxName()))
+                if (!tax.Save(Get_Trx()))
                     return false;
             }
 
@@ -198,7 +204,7 @@ namespace VAdvantage.Model
                  + " SET TotalLines="
                  + " (SELECT COALESCE(SUM(LineNetAmt),0) FROM C_ProvisionalInvoiceLine il WHERE i.C_ProvisionalInvoice_ID=il.C_ProvisionalInvoice_ID) "
                  + " WHERE C_ProvisionalInvoice_ID=" + GetC_ProvisionalInvoice_ID();
-            int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
+            int no = DataBase.DB.ExecuteQuery(sql, null, Get_Trx());
             if (no != 1)
             {
                 log.Warning("(1) #" + no);
@@ -213,7 +219,7 @@ namespace VAdvantage.Model
                     + "SET GrandTotal=TotalLines+"
                         + "(SELECT COALESCE(SUM(TaxAmt),0) FROM C_ProvisionalInvoiceTax it WHERE i.C_ProvisionalInvoice_ID=it.C_ProvisionalInvoice_ID) "
                         + "WHERE C_ProvisionalInvoice_ID=" + GetC_ProvisionalInvoice_ID();
-            no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
+            no = DataBase.DB.ExecuteQuery(sql, null, Get_Trx());
             if (no != 1)
             {
                 log.Warning("(2) #" + no);
@@ -266,7 +272,7 @@ namespace VAdvantage.Model
                 // Create New
                 if (newITax == null)
                 {
-                    newITax = new MProvisionalInvoiceTax(GetCtx(), 0, Get_TrxName());
+                    newITax = new MProvisionalInvoiceTax(GetCtx(), 0, Get_Trx());
                     newITax.SetClientOrg(this);
                     newITax.SetC_ProvisionalInvoice_ID(GetC_ProvisionalInvoice_ID());
                     newITax.SetC_Tax_ID(cTax.GetC_Tax_ID());
@@ -288,11 +294,11 @@ namespace VAdvantage.Model
                     }
                     newITax.Set_Value("TaxBaseCurrencyAmt", baseTaxAmt);
                 }
-                if (!newITax.Save(Get_TrxName()))
+                if (!newITax.Save(Get_Trx()))
                     return false;
             }
             // Delete Summary Level Tax Line
-            if (!iTax.Delete(true, Get_TrxName()))
+            if (!iTax.Delete(true, Get_Trx()))
                 return false;
 
             return true;
@@ -347,7 +353,7 @@ namespace VAdvantage.Model
                     base.SetTaxAmt(TaxAmt);
                     SetSurchargeAmt(surchargeAmt);
                 }
-                else
+                else if (GetTaxAmt().Equals(0))
                 {
                     TaxAmt = tax.CalculateTax(GetLineNetAmt(), IsTaxIncluded(), GetPrecision());
                     if (IsTaxIncluded())
@@ -403,7 +409,7 @@ namespace VAdvantage.Model
             String sql = "SELECT c.StdPrecision "
                 + "FROM C_Currency c INNER JOIN C_ProvisionalInvoice x ON (x.C_Currency_ID=c.C_Currency_ID) "
                 + "WHERE x.C_ProvisionalInvoice_ID=" + GetC_ProvisionalInvoice_ID();
-            int i = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteScalar(sql, null, Get_TrxName()));
+            int i = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteScalar(sql, null, Get_Trx()));
             if (i < 0)
             {
                 log.Warning("Precision=" + i + " - Set to 2");
@@ -478,12 +484,6 @@ namespace VAdvantage.Model
                         amt += (Invoiceline.GetSurchargeAmt() - (isOrderRecordFound ? (multiplier * Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["SurchargeAmt"])) : 0));
                     }
                 }
-            }
-
-            // if amount is ZERO, then calculate as usual with Line net amount
-            if (amt == 0)
-            {
-                amt = Invoiceline.GetLineNetAmt();
             }
 
             return amt;

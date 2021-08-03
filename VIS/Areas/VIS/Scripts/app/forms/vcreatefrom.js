@@ -719,7 +719,7 @@
         {
             return null;	//	ignore - will call process C_PaySelection_CreateFrom
         }
-        else if (AD_Table_ID == 1001627)		//	C_ProvisionalInvoice
+        else if (mTab.keyColumnName == "C_ProvisionalInvoice_ID")		//	C_ProvisionalInvoice
         {
             retValue = new VIS.VCreateFormProvisionalInvoice(mTab);
         }
