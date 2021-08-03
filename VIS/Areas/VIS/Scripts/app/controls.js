@@ -3427,7 +3427,9 @@
             }
 
             this.value = newValue;
-            this.ctrl.val(VIS.Utility.decodeText(this.lastDisplay));
+
+            var ctrlval = VIS.Utility.Util.getIdentifierDisplayVal(this.lastDisplay);
+            this.ctrl.val(VIS.Utility.decodeText(ctrlval));
 
             this.settingValue = false;
             //this.setBackground("white");
