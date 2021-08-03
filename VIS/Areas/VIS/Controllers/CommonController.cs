@@ -97,7 +97,7 @@ namespace VIS.Controllers
             {
                 var ctx = Session["ctx"] as Ctx;
                 CommonModel obj = new CommonModel();
-                value = obj.SaveProvisionalInvoiceData(ctx, model, selectedItems, Convert.ToInt32(C_Order_ID), Convert.ToInt32(C_ProvisionalInvoice_ID), Convert.ToInt32(M_inout_id));
+                value = obj.SaveProvisionalInvoiceData(ctx, model, selectedItems, Util.GetValueOfInt(C_Order_ID), Util.GetValueOfInt(C_ProvisionalInvoice_ID), Util.GetValueOfInt(M_inout_id));
             }
             return Json(new { result = value }, JsonRequestBehavior.AllowGet);
         }
@@ -752,8 +752,8 @@ namespace VIS.Controllers
                                     GROUP BY c_paymentterm.c_paymentterm_ID ");
                     if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
-                        C_InvoicePaymentTerm_ID = Convert.ToInt32(ds.Tables[0].Rows[0]["c_paymentterm_ID"]);
-                        IsInvoicePTAdvance = Convert.ToInt32(ds.Tables[0].Rows[0]["IsAdvance"]) > 0 ? true : false;
+                        C_InvoicePaymentTerm_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["c_paymentterm_ID"]);
+                        IsInvoicePTAdvance = Util.GetValueOfInt(ds.Tables[0].Rows[0]["IsAdvance"]) > 0 ? true : false;
                     }
                 }
 
@@ -804,7 +804,7 @@ namespace VIS.Controllers
                             if (recordid > 0)
                             {
                                 qry = "SELECT SUM(QtyEntered) FROM M_InOutLine WHERE M_InOut_ID = " + recordID + " AND C_OrderLine_ID = " + recordid;
-                                rec = Util.GetValueOfInt(DB.ExecuteScalar(qry));
+                                rec = Util.GetValueOfDecimal(DB.ExecuteScalar(qry));
                                 if (rec > 0)
                                 {
                                     // Change By Mohit 30/06/2016
@@ -817,7 +817,7 @@ namespace VIS.Controllers
                             {
                                 qry = "SELECT QtyEntered FROM M_InOutLine WHERE M_InOut_ID = " + recordID + " AND M_Product_ID = " + Util.GetValueOfInt(data.Tables[0].Rows[i]["m_product_id"]) +
                                     " AND M_AttributeSetInstance_ID = " + Util.GetValueOfInt(data.Tables[0].Rows[i]["m_attributesetinstance_id"]);
-                                rec = Util.GetValueOfInt(DB.ExecuteScalar(qry));
+                                rec = Util.GetValueOfDecimal(DB.ExecuteScalar(qry));
                                 if (rec > 0)
                                 {
                                     // Change By Mohit 30/06/2016
@@ -1793,7 +1793,7 @@ namespace VIS.Controllers
                     // Added By VA228(Rakesh Kumar): Set Priceentered and priceactual
                     invoiceLine.SetPriceEntered(Convert.ToDecimal((model[i]["InvoicePrice"])));
                     invoiceLine.SetPriceActual(Convert.ToDecimal((model[i]["InvoicePrice"])));
-                    invoiceLine.SetPriceList(Convert.ToDecimal((model[i]["InvoicePrice"])));
+                    //invoiceLine.SetPriceList(Convert.ToDecimal((model[i]["InvoicePrice"])));
 
                     // Set Provisional InvoiceLine Reference
                     if (invoiceLine.Get_ColumnIndex("C_ProvisionalInvoiceLine_ID") >= 0)
@@ -2219,21 +2219,26 @@ namespace VIS.Controllers
                 return true;
             }
 
+           
+            //Update PO_Reference from GRN to Provisional Invoice
+            if (M_InOut_ID > 0)
+            {
+                DataSet ds = DB.ExecuteDataset(@"SELECT POReference , C_Order_ID FROM M_InOut WHERE  M_InOut_ID = " + M_InOut_ID);
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    _invoice.SetPOReference(Util.GetValueOfString(ds.Tables[0].Rows[0]["POReference"]));
+                    if (C_Order_ID == 0)
+                    {
+                        C_Order_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Order_ID"]);
+                    }
+                }
+            }
+
             // Create Order Object 
             MOrder _order = null;
             if (C_Order_ID > 0)
             {
                 _order = new MOrder(ctx, C_Order_ID, null);
-            }
-
-            //Update PO_Reference from GRN to Provisional Invoice
-            if (M_InOut_ID > 0)
-            {
-                DataSet ds = DB.ExecuteDataset(@"SELECT POReference FROM M_InOut WHERE  M_InOut_ID = " + M_InOut_ID);
-                if (ds != null && ds.Tables[0].Rows.Count > 0)
-                {
-                    _invoice.SetPOReference(Util.GetValueOfString(ds.Tables[0].Rows[0]["POReference"]));
-                }
             }
 
             // Update Order Detail on Provisional Header 

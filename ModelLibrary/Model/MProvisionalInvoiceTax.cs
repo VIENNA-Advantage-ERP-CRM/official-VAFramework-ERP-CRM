@@ -18,7 +18,7 @@ using VAdvantage.Utility;
 
 namespace VAdvanatge.Model
 {
-    public class MProvisionalInvoiceTax: X_C_ProvisionalInvoiceTax
+    public class MProvisionalInvoiceTax : X_C_ProvisionalInvoiceTax
     {
         //	Static Logger	
         private static VLogger _log = VLogger.GetVLogger(typeof(X_C_ProvisionalInvoiceTax).FullName);
@@ -67,7 +67,7 @@ namespace VAdvanatge.Model
             MProvisionalInvoiceTax retValue = null;
             try
             {
-                if (line == null || line.GetC_ProvisionalInvoice_ID() == 0)//|| line.IsDescription()
+                if (line == null || line.GetC_ProvisionalInvoice_ID() == 0)
                     return null;
                 int C_Tax_ID = line.GetC_Tax_ID();
                 if (oldTax && line.Is_ValueChanged("C_Tax_ID"))
@@ -83,7 +83,8 @@ namespace VAdvanatge.Model
                     return null;
                 }
 
-                String sql = "SELECT * FROM C_ProvisionalInvoiceTax WHERE C_ProvisionalInvoice_ID=" + line.GetC_ProvisionalInvoice_ID() + " AND C_Tax_ID=" + C_Tax_ID;
+                String sql = "SELECT * FROM C_ProvisionalInvoiceTax WHERE C_ProvisionalInvoice_ID=" + line.GetC_ProvisionalInvoice_ID()
+                    + " AND C_Tax_ID=" + C_Tax_ID;
                 try
                 {
                     DataSet ds = DB.ExecuteDataset(sql, null, trxName);
@@ -101,7 +102,8 @@ namespace VAdvanatge.Model
                 }
 
                 // Get IsTaxincluded from selected PriceList on header
-                bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsTaxIncluded FROM M_PriceList WHERE M_PriceList_ID = (SELECT M_PriceList_ID FROM C_Invoice WHERE C_Invoice_ID = "
+                bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT IsTaxIncluded FROM M_PriceList 
+                    WHERE M_PriceList_ID = (SELECT M_PriceList_ID FROM C_ProvisionalInvoice WHERE C_ProvisionalInvoice_ID = "
                     + line.GetC_ProvisionalInvoice_ID() + ")", null, trxName)) == "Y";
 
                 if (retValue != null)
@@ -120,12 +122,12 @@ namespace VAdvanatge.Model
                 retValue.SetC_ProvisionalInvoice_ID(line.GetC_ProvisionalInvoice_ID());
                 retValue.SetC_Tax_ID(line.GetC_Tax_ID());
                 retValue.SetPrecision(precision);
-                retValue.SetIsTaxIncluded(isTaxIncluded); 
+                retValue.SetIsTaxIncluded(isTaxIncluded);
                 _log.Fine("(new) " + retValue);
             }
-            catch
+            catch (Exception e)
             {
-                // MessageBox.Show("MInvoiceTax--Get");
+                _log.Log(Level.SEVERE, e.Message);
             }
             return retValue;
         }
@@ -143,7 +145,7 @@ namespace VAdvanatge.Model
             MProvisionalInvoiceTax retValue = null;
             try
             {
-                if (line == null || line.GetC_ProvisionalInvoice_ID() == 0)//|| line.IsDescription()
+                if (line == null || line.GetC_ProvisionalInvoice_ID() == 0)
                     return null;
                 int C_Tax_ID = line.GetC_Tax_ID();
                 if (oldTax && line.Is_ValueChanged("C_Tax_ID"))
@@ -163,7 +165,8 @@ namespace VAdvanatge.Model
                     return null;
                 }
 
-                String sql = "SELECT * FROM C_ProvisionalInvoiceTax WHERE C_ProvisionalInvoice_ID=" + line.GetC_ProvisionalInvoice_ID() + " AND C_Tax_ID=" + C_Tax_ID;
+                String sql = @"SELECT * FROM C_ProvisionalInvoiceTax WHERE C_ProvisionalInvoice_ID=" + line.GetC_ProvisionalInvoice_ID()
+                    + " AND C_Tax_ID=" + C_Tax_ID;
                 try
                 {
                     DataSet ds = DB.ExecuteDataset(sql, null, trxName);
@@ -181,7 +184,8 @@ namespace VAdvanatge.Model
                 }
 
                 // Get IsTaxincluded from selected PriceList on header
-                bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsTaxIncluded FROM M_PriceList WHERE M_PriceList_ID = (SELECT M_PriceList_ID FROM C_Invoice WHERE C_Invoice_ID = "
+                bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT IsTaxIncluded FROM M_PriceList 
+                    WHERE M_PriceList_ID = (SELECT M_PriceList_ID FROM C_ProvisionalInvoice WHERE C_ProvisionalInvoice_ID = "
                     + line.GetC_ProvisionalInvoice_ID() + ")", null, trxName)) == "Y";
 
                 if (retValue != null)
@@ -203,9 +207,9 @@ namespace VAdvanatge.Model
                 retValue.SetIsTaxIncluded(isTaxIncluded);
                 _log.Fine("(new) " + retValue);
             }
-            catch
+            catch (Exception ex)
             {
-                // MessageBox.Show("MInvoiceTax--Get");
+                _log.Log(Level.SEVERE, ex.Message);
             }
             return retValue;
         }
@@ -221,10 +225,10 @@ namespace VAdvanatge.Model
             return _precision;
         }
 
-       /// <summary>
-       ///  Set Precision
-       /// </summary>
-       /// <param name="precision">The precision to set.</param>
+        /// <summary>
+        ///  Set Precision
+        /// </summary>
+        /// <param name="precision">The precision to set.</param>
         public void SetPrecision(int precision)
         {
             _precision = precision;
@@ -250,7 +254,6 @@ namespace VAdvanatge.Model
             return CalculateTaxFromLines(null);
         }
 
-
         /// <summary>
         /// Calculate/Set Tax Base Amt from Invoice Lines
         /// </summary>
@@ -272,7 +275,7 @@ namespace VAdvanatge.Model
                    + " il.C_ProvisionalInvoice_ID, il.C_Tax_ID FROM C_ProvisionalInvoiceLine il"
                    + " INNER JOIN C_ProvisionalInvoice i ON (il.C_ProvisionalInvoice_ID=i.C_ProvisionalInvoice_ID) "
                    + "WHERE il.C_ProvisionalInvoice_ID=" + GetC_ProvisionalInvoice_ID() + " AND il.C_Tax_ID=" + GetC_Tax_ID();
-                idr = DB.ExecuteDataset(sql, null, Get_TrxName());
+                idr = DB.ExecuteDataset(sql, null, Get_Trx());
                 if (idr != null && idr.Tables.Count > 0 && idr.Tables[0].Rows.Count > 0)
                 {
                     dr = idr.Tables[0].Select(" C_ProvisionalInvoice_ID = " + GetC_ProvisionalInvoice_ID() + " AND C_Tax_ID = " + GetC_Tax_ID());
@@ -364,7 +367,7 @@ namespace VAdvanatge.Model
             Decimal taxBaseAmt = Env.ZERO;
             Decimal surTaxAmt = Env.ZERO;
             //
-            MTax surTax = new MTax(GetCtx(), GetC_Tax_ID(), Get_TrxName());
+            MTax surTax = new MTax(GetCtx(), GetC_Tax_ID(), Get_Trx());
             bool documentLevel = surTax.IsDocumentLevel();
             //
             String sql = "SELECT il.TaxBaseAmt, COALESCE(il.TaxAmt,0), i.IsSOTrx  , i.C_Currency_ID , i.DateAcct , i.C_ConversionType_ID, tax.SurchargeType "
@@ -378,7 +381,7 @@ namespace VAdvanatge.Model
             int c_ConversionType_ID = 0;
             try
             {
-                idr = DB.ExecuteReader(sql, null, Get_TrxName());
+                idr = DB.ExecuteReader(sql, null, Get_Trx());
                 while (idr.Read())
                 {
                     //Get References from invoiice header

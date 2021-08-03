@@ -32,6 +32,8 @@ namespace VAdvantage.Model
         private string _processMsg = null;
         /** Reversal Indicator			*/
         public const String REVERSE_INDICATOR = "^";
+        //	Provisional Invoice Taxes	
+        private MProvisionalInvoiceTax[] _taxes;
         #endregion
 
         /// <summary>
@@ -70,12 +72,11 @@ namespace VAdvantage.Model
             // If lines are available and user is changing the pricelist/conversiontype on header than we have to restrict it
             if (!newRecord && (Is_ValueChanged("M_PriceList_ID") || Is_ValueChanged("C_ConversionType_ID") || Is_ValueChanged("C_PaymentTerm_ID")))
             {
-                MProvisionalInvoiceLine[] lines = GetLines(true);
-
-                if (lines.Length > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_ProvisionalInvoiceLine_ID) FROM C_ProvisionalInvoiceLine
+                                WHERE C_ProvisionalInvoice_ID = " + GetC_ProvisionalInvoice_ID(), null, Get_Trx())) > 0)
                 {
                     // Please Delete Lines First
-                    log.SaveWarning("", Msg.GetMsg(GetCtx(), "VIS_CantChange"));
+                    log.SaveWarning("VIS_CantChange", "");
                     return false;
                 }
             }
@@ -168,7 +169,7 @@ namespace VAdvantage.Model
             // IsCostImmediate = true - calculate cost on completion
             MClient client = MClient.Get(GetCtx(), GetAD_Client_ID());
 
-            MProvisionalInvoiceLine[] Lines = GetLines(true);
+            MProvisionalInvoiceLine[] Lines = GetLines(false);
             MProvisionalInvoiceLine _line = null;
             for (int i = 0; i < Lines.Length; i++)
             {
@@ -410,7 +411,8 @@ namespace VAdvantage.Model
                 _processMsg = Common.Common.NONBUSINESSDAY;
                 return false;
             }
-            MProvisionalInvoice reversal = new MProvisionalInvoice(GetCtx(), 0, Get_TrxName());
+
+            MProvisionalInvoice reversal = new MProvisionalInvoice(GetCtx(), 0, Get_Trx());
             PO.CopyValues(this, reversal, GetAD_Client_ID(), GetAD_Org_ID());
 
             reversal.SetDocumentNo(GetDocumentNo() + REVERSE_INDICATOR);	//	indicate reversals
@@ -445,17 +447,18 @@ namespace VAdvantage.Model
                 MProvisionalInvoiceLine rLine = null;
 
                 #region Copy Lines
-                MProvisionalInvoiceLine[] Lines = GetLines(true);
+                MProvisionalInvoiceLine[] Lines = GetLines(false);
                 for (int i = 0; i < Lines.Length; i++)
                 {
                     oLine = Lines[i];
-                    rLine = new MProvisionalInvoiceLine(GetCtx(), 0, Get_TrxName());
+                    rLine = new MProvisionalInvoiceLine(GetCtx(), 0, Get_Trx());
                     CopyValues(oLine, rLine, oLine.GetAD_Client_ID(), oLine.GetAD_Org_ID());
                     rLine.Set_ValueNoCheck("C_ProvisionalInvoice_ID", reversal.GetC_ProvisionalInvoice_ID());
                     rLine.SetLine(oLine.GetLine());
                     rLine.SetQtyEntered(Decimal.Negate(oLine.GetQtyEntered()));
                     rLine.SetQtyInvoiced(Decimal.Negate(oLine.GetQtyInvoiced()));
                     rLine.SetTaxAmt(Decimal.Negate(oLine.GetTaxAmt()));
+                    rLine.SetSurchargeAmt(Decimal.Negate(oLine.GetSurchargeAmt()));
                     rLine.SetLineTotalAmt(Decimal.Negate(oLine.GetLineTotalAmt()));
                     rLine.SetLineNetAmt(Decimal.Negate(oLine.GetLineNetAmt()));
                     rLine.SetProcessed(false);
@@ -480,6 +483,9 @@ namespace VAdvantage.Model
                 }
                 #endregion
 
+                // Calculate Provisonal Invoice tax
+                reversal.CalculateTaxTotal();
+
             }
             if (!reversal.ProcessIt(DocActionVariables.ACTION_COMPLETE))
             {
@@ -490,7 +496,8 @@ namespace VAdvantage.Model
             reversal.CloseIt();
             reversal.SetDocStatus(DOCSTATUS_Reversed);
             reversal.SetDocAction(DOCACTION_None);
-            reversal.Save(Get_TrxName());
+            reversal.SetProcessing(false);
+            reversal.Save(Get_Trx());
 
             //show on void full message Reversal Document created
             _processMsg = Msg.GetMsg(GetCtx(), "VIS_DocumentReversed") + reversal.GetDocumentNo();
@@ -505,6 +512,178 @@ namespace VAdvantage.Model
 
 
             return true;
+        }
+
+        /// <summary>
+        /// Calculate Tax for all Provisional Lines
+        /// </summary>
+        /// <returns>true, when success</returns>
+        public bool CalculateTaxTotal()
+        {
+            log.Fine(" Start CalculateTaxTotal fpr Provisional Invoice");
+            try
+            {
+                //	Delete Taxes
+                DataBase.DB.ExecuteQuery(@"DELETE FROM C_ProvisionalInvoiceTax 
+                WHERE C_ProvisionalInvoice_ID=" + GetC_ProvisionalInvoice_ID(), null, Get_Trx());
+
+                //
+                _taxes = null;
+                bool istaxinclude = false;
+
+                // Get Provisional Invoice Line
+                DataSet dsInvoiceLine = DB.ExecuteDataset(@"SELECT il.TaxBaseAmt, COALESCE(il.TaxAmt,0), i.IsSOTrx  , 
+                                            i.C_Currency_ID , i.DateAcct , i.C_ConversionType_ID , il.C_ProvisionalInvoice_ID, il.C_Tax_ID 
+                                           FROM C_ProvisionalInvoiceLine il 
+                                           INNER JOIN C_ProvisionalInvoice i ON (il.C_ProvisionalInvoice_ID=i.C_ProvisionalInvoice_ID) 
+                                           WHERE il.C_ProvisionalInvoice_ID=" + GetC_ProvisionalInvoice_ID(), null, Get_Trx());
+
+                //	Lines
+                Decimal totalLines = Env.ZERO;
+                List<int> taxList = new List<int>();
+                MProvisionalInvoiceLine[] lines = GetLines(false);
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    MProvisionalInvoiceLine line = lines[i];
+                    if (i == 0)
+                    {
+                        istaxinclude = line.IsTaxIncluded();
+                    }
+
+                    int taxID = (int)line.GetC_Tax_ID();
+                    if (!taxList.Contains(taxID))
+                    {
+                        MProvisionalInvoiceTax iTax = MProvisionalInvoiceTax.Get(line, GetPrecision(),
+                            false, Get_Trx());	//	current Tax
+                        if (iTax != null)
+                        {
+                            if (!iTax.CalculateTaxFromLines(dsInvoiceLine))
+                                return false;
+                            if (!iTax.Save())
+                                return false;
+                            taxList.Add(taxID);
+
+                            // if Surcharge Tax is selected then calculate Tax for this Surcharge Tax.
+                            if (line.Get_ColumnIndex("SurchargeAmt") > 0)
+                            {
+                                iTax = MProvisionalInvoiceTax.GetSurcharge(line, GetPrecision(), false, Get_Trx());  //	current Tax
+                                if (iTax != null)
+                                {
+                                    if (!iTax.CalculateSurchargeFromLines())
+                                        return false;
+                                    if (!iTax.Save(Get_Trx()))
+                                        return false;
+                                }
+                            }
+                        }
+                    }
+                    totalLines = Decimal.Add(totalLines, line.GetLineNetAmt());
+                }
+
+                //	Taxes
+                Decimal grandTotal = totalLines;
+                MProvisionalInvoiceTax[] taxes = GetTax(true);
+                for (int i = 0; i < taxes.Length; i++)
+                {
+                    MProvisionalInvoiceTax iTax = taxes[i];
+                    MTax tax = iTax.GetTax();
+                    if (tax.IsSummary())
+                    {
+                        MTax[] cTaxes = tax.GetChildTaxes(false);	//	Multiple taxes
+                        for (int j = 0; j < cTaxes.Length; j++)
+                        {
+                            MTax cTax = cTaxes[j];
+                            Decimal taxAmt = cTax.CalculateTax(iTax.GetTaxAbleAmt(), false, GetPrecision());
+                            //
+                            if (taxList.Contains(cTax.GetC_Tax_ID()))
+                            {
+                                String sql = @"SELECT * FROM C_ProvisionalInvoiceTax 
+                                WHERE C_ProvisionalInvoice_ID=" + GetC_ProvisionalInvoice_ID() + " AND C_Tax_ID=" + cTax.GetC_Tax_ID();
+                                DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
+                                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                                {
+                                    DataRow dr = ds.Tables[0].Rows[0];
+                                    MProvisionalInvoiceTax newITax = new MProvisionalInvoiceTax(GetCtx(), dr, Get_Trx());
+                                    newITax.SetTaxAmt(Decimal.Add(newITax.GetTaxAmt(), taxAmt));
+                                    newITax.SetTaxAbleAmt(Decimal.Add(newITax.GetTaxAbleAmt(), iTax.GetTaxAbleAmt()));
+                                    //if (newITax.Get_ColumnIndex("TaxBaseCurrencyAmt") > 0)
+                                    //{
+                                    //    Decimal baseTaxAmt = taxAmt;
+                                    //    int primaryAcctSchemaCurrency_ = GetCtx().GetContextAsInt("$C_Currency_ID");
+                                    //    if (GetC_Currency_ID() != primaryAcctSchemaCurrency_)
+                                    //    {
+                                    //        baseTaxAmt = MConversionRate.Convert(GetCtx(), taxAmt, primaryAcctSchemaCurrency_, GetC_Currency_ID(),
+                                    //                                                                   GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+                                    //    }
+                                    //    newITax.SetTaxBaseCurrencyAmt(Decimal.Add(newITax.GetTaxBaseCurrencyAmt(), baseTaxAmt));
+                                    //}
+                                    if (!newITax.Save(Get_Trx()))
+                                    {
+                                        return false;
+                                    }
+                                }
+                                ds = null;
+                            }
+                            else
+                            {
+                                MProvisionalInvoiceTax newITax = new MProvisionalInvoiceTax(GetCtx(), 0, Get_Trx());
+                                newITax.SetClientOrg(this);
+                                newITax.SetC_ProvisionalInvoice_ID(GetC_ProvisionalInvoice_ID());
+                                newITax.SetC_Tax_ID(cTax.GetC_Tax_ID());
+                                newITax.SetPrecision(GetPrecision());
+                                newITax.SetIsTaxIncluded(istaxinclude);
+                                newITax.SetTaxAbleAmt(iTax.GetTaxAbleAmt());
+                                newITax.SetTaxAmt(taxAmt);
+                                //Set Tax Amount (Base Currency) on Invoice Tax Window //Arpit--8 Jan,2018 Puneet 
+                                //if (newITax.Get_ColumnIndex("TaxBaseCurrencyAmt") > 0)
+                                //{
+                                //    decimal? baseTaxAmt = taxAmt;
+                                //    int primaryAcctSchemaCurrency_ = GetCtx().GetContextAsInt("$C_Currency_ID");
+                                //    if (GetC_Currency_ID() != primaryAcctSchemaCurrency_)
+                                //    {
+                                //        baseTaxAmt = MConversionRate.Convert(GetCtx(), taxAmt, primaryAcctSchemaCurrency_, GetC_Currency_ID(),
+                                //                                                                   GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+                                //    }
+                                //    newITax.Set_Value("TaxBaseCurrencyAmt", baseTaxAmt);
+                                //}
+                                if (!newITax.Save(Get_Trx()))
+                                    return false;
+                            }
+                            //
+                            if (!istaxinclude)
+                                grandTotal = Decimal.Add(grandTotal, taxAmt);
+                        }
+                        if (!iTax.Delete(true, Get_Trx()))
+                            return false;
+                    }
+                    else
+                    {
+                        if (!istaxinclude)
+                            grandTotal = Decimal.Add(grandTotal, iTax.GetTaxAmt());
+                    }
+                }
+
+                // Update Header 
+                DB.ExecuteQuery(@"UPDATE C_ProvisionalInvoice SET GrandTotal=" + grandTotal +
+                    ", TotalLines = " + totalLines + @" WHERE C_ProvisionalInvoice_ID=" + GetC_ProvisionalInvoice_ID(), null, Get_Trx());
+
+            }
+            catch (Exception e)
+            {
+                log.Severe(" Exception " + e.Message);
+                return false;
+            }
+            log.Fine(" End CalculateTaxTotal fpr Provisional Invoice");
+            return true;
+        }
+
+        /// <summary>
+        /// Get Standard Precision
+        /// </summary>
+        /// <returns>Precision Value</returns>
+        public int GetPrecision()
+        {
+            return MCurrency.GetStdPrecision(GetCtx(), GetC_Currency_ID());
         }
 
         /// <summary>
@@ -552,11 +731,10 @@ namespace VAdvantage.Model
                         line.SetTaxAmt(Env.ZERO);
                         line.SetLineNetAmt(Env.ZERO);
                         line.SetLineTotalAmt(Env.ZERO);
-                        line.Save(Get_TrxName());
                     }
 
                     line.SetProcessed(true);
-                    if (!line.Save(Get_TrxName()))
+                    if (!line.Save(Get_Trx()))
                     {
                         pp = VLogger.RetrieveError();
                         string error = string.Empty;
@@ -575,35 +753,6 @@ namespace VAdvantage.Model
                         _processMsg = error;
                         return false;
                     }
-                }
-
-                MProvisionalInvoiceTax[] Taxes = GetTax(true);
-                for (int i = 0; i < Taxes.Length; i++)
-                {
-                    MProvisionalInvoiceTax Tax = Taxes[i]; ;
-                    Tax.SetTaxAmt(Env.ZERO);
-                    Tax.SetTaxAbleAmt(Env.ZERO);
-                    Tax.SetProcessed(true);
-                    if (!Tax.Save())
-                    {
-                        pp = VLogger.RetrieveError();
-                        string error = string.Empty;
-                        if (pp != null)
-                        {
-                            error = pp.GetValue();
-                            if (string.IsNullOrEmpty(error))
-                            {
-                                error = pp.GetName();
-                                if (string.IsNullOrEmpty(error))
-                                {
-                                    error = Msg.GetMsg(GetCtx(), "ProvisionalInvoiceNotSave");
-                                }
-                            }
-                        }
-                        _processMsg = error;
-                        return false;
-                    }
-
                 }
 
                 AddDescription(Msg.GetMsg(GetCtx(), "Voided"));
@@ -652,10 +801,10 @@ namespace VAdvantage.Model
             sql += " ORDER BY Line";
             try
             {
-                DataSet ds = DB.ExecuteDataset(sql, null, Get_TrxName());
+                DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    MProvisionalInvoiceLine il = new MProvisionalInvoiceLine(GetCtx(), dr, Get_TrxName());
+                    MProvisionalInvoiceLine il = new MProvisionalInvoiceLine(GetCtx(), dr, Get_Trx());
                     list.Add(il);
                 }
                 ds = null;
@@ -677,15 +826,18 @@ namespace VAdvantage.Model
         /// <returns>Array of Records</returns>
         public MProvisionalInvoiceTax[] GetTax(bool requery)
         {
+            if (_taxes != null && !requery)
+                return _taxes;
+
             List<MProvisionalInvoiceTax> list = new List<MProvisionalInvoiceTax>();
             String sql = "SELECT * FROM C_ProvisionalInvoiceTax WHERE C_ProvisionalInvoice_ID= " + GetC_ProvisionalInvoice_ID();
 
             try
             {
-                DataSet ds = DB.ExecuteDataset(sql, null, Get_TrxName());
+                DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    MProvisionalInvoiceTax iTax = new MProvisionalInvoiceTax(GetCtx(), dr, Get_TrxName());
+                    MProvisionalInvoiceTax iTax = new MProvisionalInvoiceTax(GetCtx(), dr, Get_Trx());
                     list.Add(iTax);
                 }
                 ds = null;
