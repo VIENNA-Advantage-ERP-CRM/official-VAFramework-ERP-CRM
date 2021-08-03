@@ -1,7 +1,7 @@
 ﻿
 ; (function (VIS, $) {
 
-    //form declaretion
+    //Provisonal Invoice form declaration
     function VCreateFormProvisionalInvoice(tab) {
 
         var baseObj = this.$super;
@@ -15,6 +15,7 @@
         // create Log
         this.log = VIS.Logging.VLogger.getVLogger("VCreateFormProvisionalInvoice");
 
+        /** Intialize Create Line form for Provisonal Invoice */
         function dynInit() {
             //DynInit
             baseObj.title = VIS.Msg.getMsg("ProvisionalInvoice") + " .. " + VIS.Msg.getMsg("CreateFrom");
@@ -43,11 +44,13 @@
             return true;
         }
 
+        /* Intialize Shipment/Receipt Detail */
         function initBPDetails(C_BPartner_ID) {
             baseObj.cmbShipment.getControl().html("");
             getShipments(VIS.Env.getCtx(), C_BPartner_ID);
         }
 
+        /* Load Shipment/Receipt Combo data */
         function getShipments(ctx, C_BPartner_ID) {
             //var pairs = [];
 
@@ -87,6 +90,7 @@
             });
         }
 
+        /* Dispose Components */
         this.disposeComponent = function () {
             baseObj = null;
             selfChild = null;
@@ -96,6 +100,7 @@
 
     VIS.Utility.inheritPrototype(VCreateFormProvisionalInvoice, VIS.VCreateFrom);//Inherit from VCreateFrom
 
+    /* Create Grid Columsn for Proviosnal Invoice */
     VCreateFormProvisionalInvoice.prototype.getTableFieldVOs = function () {
         var baseObj = this.$super;
         var self = this;
@@ -175,6 +180,7 @@
         });
     }
 
+    /* Save Provisional Invoice Line */
     VCreateFormProvisionalInvoice.prototype.saveProvisionalInvoice = function () {
         if (this.$super.dGrid == null) {
             return false;
@@ -201,6 +207,7 @@
         return this.saveData(model, "", C_Order_ID, M_InOut_ID, C_ProvisionalInvoice_ID);
     }
 
+    /* Save Provisional Invoice Line */
     VCreateFormProvisionalInvoice.prototype.saveData = function (model, selectedItems, C_Order_ID, M_inout_id, C_ProvisionalInvoice_ID) {
         var obj = this;
         $.ajax({
@@ -233,12 +240,12 @@
         });
     }
 
-    /*----------*/
+    /* Get Shipment Data for grid*/
     VCreateFormProvisionalInvoice.prototype.loadShipments = function (M_InOut_ID, M_Product_ID, pNo) {
         var data = this.getShipmentsData(VIS.Env.getCtx(), M_InOut_ID, M_Product_ID, pNo);
     }
 
-    // Create 
+    /* Get Shipment Data for grid*/
     VCreateFormProvisionalInvoice.prototype.getShipmentsData = function (ctx, M_InOut_ID, M_Product_ID, pNo) {
 
         var data = [];
