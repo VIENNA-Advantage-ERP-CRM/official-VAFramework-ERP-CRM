@@ -2273,8 +2273,17 @@
                 $category = $('<p>' + VIS.Utility.encodeText(category) + '</p>');
                 $contacts = $('<p>' + VIS.Utility.encodeText(ContactNames) + '</p>');
                 $label = $('<p>' + VIS.Utility.encodeText(label) + '</p>');
-                $startDate = $('<p>' + VIS.Utility.encodeText(new Date(startDate+"Z").toLocaleString()) + '</p>');
-                $endDate = $(' <p>' + VIS.Utility.encodeText(new Date(endDate+"Z").toLocaleString()) + '</p>');
+                if (startDate.indexOf('Z') > 0) {
+                    $startDate = $('<p>' + VIS.Utility.encodeText(new Date(startDate).toLocaleString()) + '</p>');
+                } else {
+                    $startDate = $('<p>' + VIS.Utility.encodeText(new Date(startDate + "Z").toLocaleString()) + '</p>');
+                }
+
+                if (endDate.indexOf('Z') > 0) {
+                    $endDate = $(' <p>' + VIS.Utility.encodeText(new Date(endDate).toLocaleString()) + '</p>');
+                } else {
+                    $endDate = $(' <p>' + VIS.Utility.encodeText(new Date(endDate + "Z").toLocaleString()) + '</p>');
+                }
                 $allDay = $('<p>' + VIS.Utility.encodeText(allDay) + '</p>');
                 //if ($detail == undefined || $detail == null) {
                 //    $detail = $('<p class="vis-attachhistory-detail"></p>');

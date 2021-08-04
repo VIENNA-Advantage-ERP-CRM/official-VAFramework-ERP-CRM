@@ -640,6 +640,7 @@ namespace VAdvantage.Model
                 prefixAndDocNoSeperator = seq.GetPrefixAndDocNoSeperator();
 
             bool isAutoSequence = seq.IsAutoSequence();
+            bool isUseSeparateTrx = false;
 
             String selectSQL = null;
             if (isStartNewYear || isUseOrgLevel)
@@ -664,7 +665,14 @@ namespace VAdvantage.Model
             selectSQL = selectSQL + " FOR UPDATE";
 
             Trx trx = null;
-            if (trxName == null || !trxName.UseSameTrxForDocNo)
+            // Check if Maintain Seprate Trx is available on Document Sequence
+            if (seq.Get_ColumnIndex("IsUseSeparateTrx") > -1)
+            {
+                isUseSeparateTrx = seq.IsUseSeparateTrx();
+            }
+
+            // if Maintain Seprate Trx is true then it will create separate transaction to get Document No.
+            if (isUseSeparateTrx || trxName == null || !trxName.UseSameTrxForDocNo)
             {
                 trx = Trx.Get("ConnDDH" + DateTime.Now.Ticks + (new Random(4)).ToString());
             }
@@ -773,7 +781,8 @@ namespace VAdvantage.Model
                         next = -2;
                     }
 
-                    if (trxName == null || !trxName.UseSameTrxForDocNo)
+                    // Commit or rollback new transaction in case of Maintain seprate trx is true on Document Sequence.
+                    if (isUseSeparateTrx || trxName == null || !trxName.UseSameTrxForDocNo)
                     {
                         if (next == -2)
                             trx.Rollback();
@@ -834,7 +843,7 @@ namespace VAdvantage.Model
                 next = -2;
                 if (trx != null)
                 {
-                    if (trxName == null || !trxName.UseSameTrxForDocNo)
+                    if (isUseSeparateTrx || trxName == null || !trxName.UseSameTrxForDocNo)
                     {
                         trx.Rollback();
                     }
@@ -842,7 +851,7 @@ namespace VAdvantage.Model
             }
             finally
             {
-                if (trxName == null || !trxName.UseSameTrxForDocNo)
+                if (isUseSeparateTrx || trxName == null || !trxName.UseSameTrxForDocNo)
                 {
                     trx.Close();
                 }
@@ -1670,11 +1679,11 @@ namespace VAdvantage.Model
 
                 return true;
             }
-            
+
             return CreateSequence(ctx, TableName, trxName);
         }	//	createTableSequence
 
-        private static bool CreateSequence(Ctx ctx,string TableName, Trx trxName)
+        private static bool CreateSequence(Ctx ctx, string TableName, Trx trxName)
         {
             MSequence seq = new MSequence(ctx, 0, trxName);
             seq.SetClientOrg(0, 0);

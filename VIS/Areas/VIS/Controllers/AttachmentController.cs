@@ -5,9 +5,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
+using VAdvantage.Classes;
 using VAdvantage.Model;
 using VAdvantage.Utility;
-using ViennaAdvantageWeb.Areas.VIS.Models;
 using VIS.Filters;
 
 namespace VIS.Controllers
@@ -69,7 +69,9 @@ namespace VIS.Controllers
                 string savedFileName = Path.Combine(Server.MapPath("~/TempDownload/" + folderKey), Path.GetFileName(fileName));
                 MemoryStream ms = new MemoryStream();
                 hpf.InputStream.CopyTo(ms);
-                byte[] byteArray = ms.ToArray();
+                byte[] byteArray = ms.ToArray(); 
+                
+                string result = System.Text.Encoding.UTF8.GetString(byteArray);
 
                 if (Directory.GetFiles(Path.Combine(Server.MapPath("~/TempDownload"), folderKey)).Contains(Path.Combine(Server.MapPath("~/TempDownload"), folderKey, fileName)))//Append Content In File
                 {

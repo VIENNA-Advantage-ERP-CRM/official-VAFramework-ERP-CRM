@@ -178,6 +178,11 @@ namespace VAdvantage.Model
             {
                 to.SetRef_Order_ID(0);
             }
+
+            if (to.Get_ColumnIndex("ConditionalFlag") > -1)
+            {
+                to.SetConditionalFlag(MOrder.CONDITIONALFLAG_PrepareIt);
+            }
             //
             if (!to.Save(trxName))
             {
@@ -211,6 +216,18 @@ namespace VAdvantage.Model
                 throw new Exception("Could not create Order Lines. " + (pp != null && pp.GetName() != null ? pp.GetName() : ""));
             }
 
+            if (to.Get_ColumnIndex("ConditionalFlag") > -1)
+            {
+                if (!to.CalculateTaxTotal())   //	setTotals
+                {
+                    throw new ArgumentException(Msg.GetMsg(from.GetCtx(), "ErrorCalculateTax") + ": " + to.GetDocumentNo().ToString());
+                }
+
+                // Update order header
+                to.UpdateHeader();
+
+                DB.ExecuteQuery("UPDATE C_Order SET ConditionalFlag = null WHERE C_Order_ID = " + to.GetC_Order_ID(), null, trxName);
+            }
             return to;
         }
 
@@ -1368,6 +1385,41 @@ namespace VAdvantage.Model
             return count;
         }
 
+        /// <summary>
+        /// Update Order Header
+        /// </summary>
+        /// <returns>true if header updated</returns>
+        public void UpdateHeader()
+        {
+            //	Update Order Header
+            String sql = "UPDATE C_Order i"
+                + " SET TotalLines="
+                    + "(SELECT COALESCE(SUM(LineNetAmt),0) FROM C_OrderLine il WHERE i.C_Order_ID=il.C_Order_ID) "
+                    + ", AmtDimSubTotal = null "
+                    + ", AmtDimGrandTotal = null "
+                + "WHERE C_Order_ID=" + GetC_Order_ID();
+            int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
+            if (no != 1)
+            {
+                log.Warning("(1) #" + no);
+            }
+
+            if (IsTaxIncluded())
+                sql = "UPDATE C_Order i "
+                    + "SET GrandTotal=TotalLines "
+                    + "WHERE C_Order_ID=" + GetC_Order_ID();
+            else
+                sql = "UPDATE C_Order i "
+                    + "SET GrandTotal=TotalLines+"
+                        + "(SELECT COALESCE(SUM(TaxAmt),0) FROM C_OrderTax it WHERE i.C_Order_ID=it.C_Order_ID) "
+                        + "WHERE C_Order_ID=" + GetC_Order_ID();
+            no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
+            if (no != 1)
+            {
+                log.Warning("(2) #" + no);
+            }
+        }
+
         /*	String Representation
         *	@return Info
         */
@@ -2184,6 +2236,7 @@ namespace VAdvantage.Model
         */
         protected override bool BeforeSave(bool newRecord)
         {
+            MBPartner bp = null;
             try
             {
                 //	Client/Org Check
@@ -2245,11 +2298,33 @@ namespace VAdvantage.Model
                 //	Reservations in Warehouse
                 if (!newRecord && Is_ValueChanged("M_Warehouse_ID"))
                 {
-                    MOrderLine[] lines = GetLines(false, null);
-                    for (int i = 0; i < lines.Length; i++)
+                    //MOrderLine[] lines = GetLines(false, null);
+                    //for (int i = 0; i < lines.Length; i++)
+                    //{
+                    //    if (!lines[i].CanChangeWarehouse())		// saves Error	
+                    //        return false;
+                    //}
+
+                    string sql = "SELECT COUNT(C_OrderLine_ID) AS Count, QtyDelivered, QtyInvoiced, QtyReserved FROM C_OrderLine WHERE C_Order_ID = " + GetC_Order_ID()
+                        + " AND IsActive = 'Y' AND (QtyDelivered != 0 OR QtyInvoiced != 0 OR QtyReserved != 0) GROUP BY QtyDelivered, QtyInvoiced, QtyReserved, Line ORDER BY Line";
+                    DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
+                    if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
-                        if (!lines[i].CanChangeWarehouse())		// saves Error	
+                        if (Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["QtyDelivered"]) != 0)
+                        {
+                            log.SaveError("Error", Msg.Translate(GetCtx(), "QtyDelivered") + "=" + Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["QtyDelivered"]));
                             return false;
+                        }
+                        if (Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["QtyInvoiced"]) != 0)
+                        {
+                            log.SaveError("Error", Msg.Translate(GetCtx(), "QtyInvoiced") + "=" + Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["QtyInvoiced"]));
+                            return false;
+                        }
+                        if (Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["QtyReserved"]) != 0)
+                        {
+                            log.SaveError("Error", Msg.Translate(GetCtx(), "QtyReserved") + "=" + Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["QtyReserved"]));
+                            return false;
+                        }
                     }
                 }
 
@@ -2257,8 +2332,15 @@ namespace VAdvantage.Model
                 // JID_0399_1: After change the receipt or order system will give the error message
                 if (!newRecord && (Is_ValueChanged("M_PriceList_ID") || Is_ValueChanged("Orig_Order_ID") || Is_ValueChanged("Orig_InOut_ID")))
                 {
-                    MOrderLine[] lines = GetLines(false, null);
-                    if (lines.Length > 0)
+                    //MOrderLine[] lines = GetLines(false, null);
+                    //if (lines.Length > 0)
+                    //{
+                    //    log.SaveWarning("pleaseDeleteLinesFirst", "");
+                    //    return false;
+                    //}
+
+                    string sql = "SELECT COUNT(C_OrderLine_ID) FROM C_OrderLine WHERE C_Order_ID = " + GetC_Order_ID() + " AND IsActive = 'Y'";
+                    if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
                     {
                         log.SaveWarning("pleaseDeleteLinesFirst", "");
                         return false;
@@ -2283,7 +2365,7 @@ namespace VAdvantage.Model
                 //	BP Active check
                 if (newRecord || Is_ValueChanged("C_BPartner_ID"))
                 {
-                    MBPartner bp = MBPartner.Get(GetCtx(), GetC_BPartner_ID());
+                    bp = MBPartner.Get(GetCtx(), GetC_BPartner_ID());
                     if (!bp.IsActive())
                     {
                         log.SaveError("NotActive", Msg.GetMsg(GetCtx(), "C_BPartner_ID"));
@@ -2293,7 +2375,7 @@ namespace VAdvantage.Model
                 if ((newRecord || Is_ValueChanged("Bill_BPartner_ID"))
                         && GetBill_BPartner_ID() != GetC_BPartner_ID())
                 {
-                    MBPartner bp = MBPartner.Get(GetCtx(), GetBill_BPartner_ID());
+                    bp = MBPartner.Get(GetCtx(), GetBill_BPartner_ID());
                     if (!bp.IsActive())
                     {
                         log.SaveError("NotActive", Msg.GetMsg(GetCtx(), "Bill_BPartner_ID"));
@@ -2463,10 +2545,12 @@ namespace VAdvantage.Model
 
                     if (GetM_ReturnPolicy_ID() != 0)
                     {
-                        MInOut origInOut = new MInOut(GetCtx(), GetOrig_InOut_ID(), null);
+                        DateTime? movementdate = Util.GetValueOfDateTime(DB.ExecuteScalar("SELECT MovementDate FROM M_InOut WHERE " +
+                                                                                        "M_InOut_ID=" + GetOrig_InOut_ID()));
+                        // MInOut origInOut = new MInOut(GetCtx(), GetOrig_InOut_ID(), null);
                         MReturnPolicy rpolicy = new MReturnPolicy(GetCtx(), GetM_ReturnPolicy_ID(), null);
-                        log.Fine("RMA Date : " + GetDateOrdered() + " Shipment Date : " + origInOut.GetMovementDate());
-                        withinPolicy = rpolicy.CheckReturnPolicy(origInOut.GetMovementDate(), GetDateOrdered());
+                        log.Fine("RMA Date : " + GetDateOrdered() + " Shipment Date : " + movementdate);
+                        withinPolicy = rpolicy.CheckReturnPolicy(movementdate, GetDateOrdered());
                     }
                     else
                         withinPolicy = false;
@@ -2630,7 +2714,7 @@ namespace VAdvantage.Model
             }
             // check any payment term schedule is Advance, then return False
             // JID_1193: If Payment term header is valid but having lines with advance and Inactive. System should consider that as 100% immedate. However, system is creating schedule of advance on order.
-            else if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM C_PaySchedule WHERE IsActive = 'Y' AND IsValid = 'Y' 
+            else if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_PaySchedule_ID) FROM C_PaySchedule WHERE IsActive = 'Y' AND IsValid = 'Y' 
                                                             AND VA009_Advance = 'Y' AND C_PaymentTerm_ID = " + PaymentTerm_Id, null, Get_TrxName())) > 0)
             {
                 isAdvancePayTerm = false;
@@ -2805,7 +2889,7 @@ namespace VAdvantage.Model
 
             //	Mandatory Product Attribute Set Instance
             String mandatoryType = "='Y'";	//	IN ('Y','S')
-            String sql = "SELECT COUNT(*) "
+            String sql = "SELECT COUNT(C_OrderLine_ID) "
                 + "FROM C_OrderLine ol"
                 + " INNER JOIN M_Product p ON (ol.M_Product_ID=p.M_Product_ID)"
                 + " INNER JOIN M_AttributeSet pas ON (p.M_AttributeSet_ID=pas.M_AttributeSet_ID) "
@@ -2843,9 +2927,6 @@ namespace VAdvantage.Model
             //	Lines
             if (ExplodeBOM())
                 lines = GetLines(true, "M_Product_ID");
-
-
-            MDocType docType = MDocType.Get(GetCtx(), GetC_DocType_ID());
 
             //check Payment term is valid or Not (SI_0018)
             if (Util.GetValueOfString(DB.ExecuteScalar("SELECT IsValid FROM C_PaymentTerm WHERE C_PaymentTerm_ID = " + GetC_PaymentTerm_ID())) == "N")
@@ -3062,7 +3143,7 @@ namespace VAdvantage.Model
                 + "(SELECT * FROM M_Product p WHERE C_OrderLine.M_Product_ID=p.M_Product_ID"
                 + " AND	p.IsBOM='Y' AND p.IsVerified='Y' AND p.IsStocked='N')";
             //
-            String sql = "SELECT COUNT(*) FROM C_OrderLine "
+            String sql = "SELECT COUNT(C_OrderLine_ID) FROM C_OrderLine "
                 + "WHERE C_Order_ID=" + GetC_Order_ID() + where;
             int count = DataBase.DB.GetSQLValue(Get_TrxName(), sql); //Convert.ToInt32(DataBase.DB.ExecuteScalar(sql, null, Get_TrxName()));
 
@@ -3374,7 +3455,7 @@ namespace VAdvantage.Model
         /// Calculate Tax and Total
         /// </summary>
         /// <returns>true if tax total calculated</returns>
-        private bool CalculateTaxTotal()
+        public bool CalculateTaxTotal()
         {
             try
             {
@@ -3382,6 +3463,8 @@ namespace VAdvantage.Model
                 //	Delete Taxes
                 DataBase.DB.ExecuteQuery("DELETE FROM C_OrderTax WHERE C_Order_ID=" + GetC_Order_ID(), null, Get_TrxName());
                 _taxes = null;
+
+                DataSet dsOdrLine = DB.ExecuteDataset("SELECT TaxAbleAmt, C_Order_ID, C_Tax_ID FROM C_OrderLine WHERE C_Order_ID=" + GetC_Order_ID(), null, Get_TrxName());
 
                 //	Lines
                 Decimal totalLines = Env.ZERO;
@@ -3396,7 +3479,7 @@ namespace VAdvantage.Model
                         MOrderTax oTax = MOrderTax.Get(line, GetPrecision(),
                             false, Get_TrxName());	//	current Tax
                         //oTax.SetIsTaxIncluded(IsTaxIncluded());
-                        if (!oTax.CalculateTaxFromLines())
+                        if (!oTax.CalculateTaxFromLines(dsOdrLine))
                             return false;
                         if (!oTax.Save(Get_TrxName()))
                             return false;
@@ -3562,8 +3645,8 @@ namespace VAdvantage.Model
                     return DocActionVariables.STATUS_INPROGRESS;
                 }
 
-                // JID_1290: Set the document number from completed document sequence after completed (if needed)
-                SetCompletedDocumentNo();
+                // Set Document Date based on setting on Document Type
+                SetCompletedDocumentDate();
 
                 if (!IsReturnTrx())
                 {
@@ -3637,8 +3720,8 @@ namespace VAdvantage.Model
                     if (dt.IsReleaseDocument() && (dt.GetDocBaseType() == "SOO" || dt.GetDocBaseType() == "POO"))// if (dt.GetValue() == "RSO" || dt.GetValue() == "RPO")  ///if (dt.IsSOTrx() && dt.GetDocBaseType() == "SOO" && dt.GetDocSubTypeSO() == "BO")     //if (dt.GetValue() == "RSO")
                     {
                         MOrderLine[] lines = GetLines(true, "M_Product_ID");
-                        MOrder mo = new MOrder(GetCtx(), GetC_Order_ID(), null);
-                        MOrder moBlanket = new MOrder(GetCtx(), mo.GetC_Order_Blanket(), null);
+                        //MOrder mo = new MOrder(GetCtx(), GetC_Order_ID(), null);
+                        //MOrder moBlanket = new MOrder(GetCtx(), mo.GetC_Order_Blanket(), null);
 
                         if (lines.Length == 0)
                         {
@@ -3987,23 +4070,31 @@ namespace VAdvantage.Model
                     return DocActionVariables.STATUS_INVALID;
                 }
                 /******************/
-                String Qry = "Select * from C_OrderLine where C_Order_ID=" + GetC_Order_ID();
-                DataSet orderlines = new DataSet();
-                orderlines = DB.ExecuteDataset(Qry);
+                String Qry = "SELECT * FROM C_OrderLine WHERE C_Order_ID=" + GetC_Order_ID();
+                DataSet orderlines = DB.ExecuteDataset(Qry);
+                // Set IsContract to true if IsContract selected on order line
+                if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(IsContract) FROM C_OrderLine WHERE C_Order_ID = " + GetC_Order_ID() +
+                                                         " AND IsContract = 'Y' AND IsActive = 'Y' ")) > 0)
+                {
+                    Qry = @"UPDATE C_Order SET IsContract='Y' WHERE C_Order_ID=" + GetC_Order_ID();
+                    DB.ExecuteQuery(Qry, null, Get_TrxName());
+                }
                 if (orderlines.Tables[0].Rows.Count > 0)
                 {
-                    for (int i = 0; i < orderlines.Tables[0].Rows.Count; i++)
-                    {
-                        Char IsCont = Convert.ToChar(orderlines.Tables[0].Rows[i]["IsContract"]);
-                        if (IsCont == 'Y')
-                        {
-                            MOrder mo = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
-                            mo.SetIsContract(true);
-                            mo.Save();
-                        }
+                    //for (int i = 0; i < orderlines.Tables[0].Rows.Count; i++)
+                    //{
+                    //Char IsCont = Convert.ToChar(orderlines.Tables[0].Rows[i]["IsContract"]);
+                    //if (IsCont == 'Y')
+                    //{
+                    //    MOrder mo = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
+                    //    mo.SetIsContract(true);
+                    //    mo.Save();
+                    //}
 
-                        ////Set Values on unit window if Unit is seleced on Line in case of POC Construction Module installed only for demo perpose
-                        if (Env.IsModuleInstalled("VA052_"))
+                    ////Set Values on unit window if Unit is seleced on Line in case of POC Construction Module installed only for demo perpose
+                    if (Env.IsModuleInstalled("VA052_"))
+                    {
+                        for (int i = 0; i < orderlines.Tables[0].Rows.Count; i++)
                         {
                             int UnitID = Util.GetValueOfInt(orderlines.Tables[0].Rows[i]["A_Asset_ID"]); //AssetID is UnitID
                             if (UnitID > 0)
@@ -4126,6 +4217,8 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
             }
 
+            // Set the document number from completed document sequence after completed (if needed)
+            SetCompletedDocumentNo();
 
             return DocActionVariables.STATUS_COMPLETED;
         }
@@ -4561,22 +4654,6 @@ namespace VAdvantage.Model
 
             MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
 
-            // if Overwrite Date on Complete checkbox is true.
-            if (dt.IsOverwriteDateOnComplete())
-            {
-                SetDateOrdered(DateTime.Now.Date);
-                if (GetDateAcct().Value.Date < GetDateOrdered().Value.Date)
-                {
-                    SetDateAcct(GetDateOrdered());
-
-                    //	Std Period open?
-                    if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetAD_Org_ID()))
-                    {
-                        throw new Exception("@PeriodClosed@");
-                    }
-                }
-            }
-
             // if Overwrite Sequence on Complete checkbox is true.
             if (dt.IsOverwriteSeqOnComplete())
             {
@@ -4591,6 +4668,36 @@ namespace VAdvantage.Model
                 if (value != null)
                 {
                     SetDocumentNo(value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Overwrite the document date based on setting on Document Type
+        /// </summary>
+        private void SetCompletedDocumentDate()
+        {
+            // if Re-Activated document then no need to get Document no from Completed sequence
+            if (Get_ColumnIndex("IsReActivated") >= 0 && IsReActivated())
+            {
+                return;
+            }
+
+            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+
+            // if Overwrite Date on Complete checkbox is true.
+            if (dt.IsOverwriteDateOnComplete())
+            {
+                SetDateOrdered(DateTime.Now.Date);
+                if (GetDateAcct().Value.Date < GetDateOrdered().Value.Date)
+                {
+                    SetDateAcct(GetDateOrdered());
+
+                    //	Std Period open?
+                    if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetAD_Org_ID()))
+                    {
+                        throw new Exception("@PeriodClosed@");
+                    }
                 }
             }
         }
@@ -5048,7 +5155,7 @@ namespace VAdvantage.Model
                             M_Locator_ID = MProductLocator.GetFirstM_Locator_ID(product, M_Warehouse_ID);
                             if (M_Locator_ID == 0)
                             {
-                                wh = MWarehouse.Get(GetCtx(), M_Warehouse_ID);
+                                //wh = MWarehouse.Get(GetCtx(), M_Warehouse_ID);
                                 M_Locator_ID = wh.GetDefaultM_Locator_ID();
                             }
                         }
@@ -5068,7 +5175,7 @@ namespace VAdvantage.Model
                             sql += " AND l.M_Locator_ID = " + M_Locator_ID;
                         }
                         OnHandQty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_Trx()));
-                        if (wh.IsDisallowNegativeInv() == true)
+                        if (wh.IsDisallowNegativeInv())
                         {
                             if (oLine.GetQtyOrdered() > QtyAvail && (DocSubTypeSO == "WR" || DocSubTypeSO == "WP"))
                             {
@@ -5162,13 +5269,15 @@ namespace VAdvantage.Model
                 {
                     if (MDocType.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO))
                     {
-                        string sql = "SELECT COUNT(*) FROM AD_Column WHERE AD_Table_ID = (SELECT AD_Table_ID FROM AD_Table WHERE TableName = 'C_DocType') AND ColumnName = 'VAPOS_OrderType'";
-                        int val = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
-                        if (val > 0)
+                        //string sql = "SELECT COUNT(AD_Column_ID) FROM AD_Column WHERE AD_Table_ID = (SELECT AD_Table_ID FROM AD_Table WHERE TableName = 'C_DocType') AND ColumnName = 'VAPOS_OrderType'";
+                        //int val = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
+                        //if (val > 0)
+                        //sql = "SELECT VAPOS_OrderType FROM C_DocType WHERE C_DocType_ID = " + dt.GetC_DocType_ID();
+                        //string oType = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_TrxName()));
+                        if (dt.Get_ColumnIndex("VAPOS_OrderType") > -1)
                         {
-                            sql = "SELECT VAPOS_OrderType FROM C_DocType WHERE C_DocType_ID = " + dt.GetC_DocType_ID();
-                            string oType = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_TrxName()));
-                            if (oType == "H" || oType == "W")
+                            string oType = Util.GetValueOfString(dt.Get_Value("VAPOS_OrderType"));
+                            if (oType.Equals("H") || oType.Equals("W"))
                             {
                                 posStatus = shipment.PrepareIt();
                                 shipment.SetDocStatus(posStatus);
@@ -5437,9 +5546,9 @@ namespace VAdvantage.Model
                                                 VAPOS_POSTerminal_ID=" + GetVAPOS_POSTerminal_ID()));
                             invoice.SetC_ConversionType_ID(ConversionTypeId);
 
-                            MOrder ord = new MOrder(GetCtx(), GetC_Order_ID(), null);
+                            //MOrder ord = new MOrder(GetCtx(), GetC_Order_ID(), null);
 
-                            if (ord.GetVAPOS_CreditAmt() > 0)
+                            if (GetVAPOS_CreditAmt() > 0)
                             {
                                 invoice.SetIsPaid(false);
                                 invoice.SetVAPOS_IsPaid(false);
@@ -5701,9 +5810,9 @@ namespace VAdvantage.Model
             // To check if associated PO is exist but not reversed in case of drop shipment
             if (IsSOTrx() && !IsReturnTrx())
             {
-                if (Util.GetValueOfInt(DB.ExecuteScalar("Select Count(*) From C_OrderLine ol Inner Join C_Order o ON o.C_Order_ID=ol.C_Order_ID Where O.C_Order_ID=" + GetC_Order_ID() + " AND ol.IsDropShip='Y' AND O.IsSoTrx='Y' AND O.IsReturnTrx='N'")) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("Select Count(C_OrderLine_ID) From C_OrderLine ol Inner Join C_Order o ON o.C_Order_ID=ol.C_Order_ID Where O.C_Order_ID=" + GetC_Order_ID() + " AND ol.IsDropShip='Y' AND O.IsSoTrx='Y' AND O.IsReturnTrx='N'")) > 0)
                 {
-                    if (Util.GetValueOfInt(DB.ExecuteScalar("Select Count(*) From C_Order Where Ref_Order_Id=" + GetC_Order_ID() + " AND IsDropShip='Y' AND IsSoTrx='N' AND IsReturnTrx='N' AND DocStatus NOT IN ('VO','RE')")) > 0)
+                    if (Util.GetValueOfInt(DB.ExecuteScalar("Select Count(C_Order_ID) From C_Order Where Ref_Order_Id=" + GetC_Order_ID() + " AND IsDropShip='Y' AND IsSoTrx='N' AND IsReturnTrx='N' AND DocStatus NOT IN ('VO','RE')")) > 0)
                     {
                         _processMsg = "Associated purchase order must be voided or reversed first";
                         return false;
@@ -6027,9 +6136,9 @@ namespace VAdvantage.Model
                 // To check if associated PO is exist but not reversed  in case of drop shipment
                 if (IsSOTrx() && !IsReturnTrx())
                 {
-                    if (Util.GetValueOfInt(DB.ExecuteScalar("Select Count(*) From C_OrderLine ol Inner Join C_Order o ON o.C_Order_ID=ol.C_Order_ID Where O.C_Order_ID=" + GetC_Order_ID() + " AND ol.IsDropShip='Y' AND O.IsSoTrx='Y' AND O.IsReturnTrx='N'")) > 0)
+                    if (Util.GetValueOfInt(DB.ExecuteScalar("Select Count(C_OrderLine_ID) From C_OrderLine ol Inner Join C_Order o ON o.C_Order_ID=ol.C_Order_ID Where O.C_Order_ID=" + GetC_Order_ID() + " AND ol.IsDropShip='Y' AND O.IsSoTrx='Y' AND O.IsReturnTrx='N'")) > 0)
                     {
-                        if (Util.GetValueOfInt(DB.ExecuteScalar("Select Count(*) From C_Order Where Ref_Order_Id=" + GetC_Order_ID() + " AND IsDropShip='Y' AND IsSoTrx='N' AND IsReturnTrx='N' AND DocStatus NOT IN ('VO','RE')")) > 0)
+                        if (Util.GetValueOfInt(DB.ExecuteScalar("Select Count(C_Order_ID) From C_Order Where Ref_Order_Id=" + GetC_Order_ID() + " AND IsDropShip='Y' AND IsSoTrx='N' AND IsReturnTrx='N' AND DocStatus NOT IN ('VO','RE')")) > 0)
                         {
                             _processMsg = "Associated purchase order must be voided or reversed first";
                             return false;

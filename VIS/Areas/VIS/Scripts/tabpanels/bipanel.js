@@ -39,6 +39,24 @@
             if (!iFrame)
                 return;
             //$root.empty();VIS.Utility.encodeText(mails)
+            var parm = that.extraInfo.match(/\@.+?\@/g);
+            if (parm) {
+                for (var i = 0; i < parm.length; i++) {
+                    var key = parm[i].replaceAll("@", "")
+                    if (VIS.Env.getCtx().getContext(key).length > 0) {
+                        key = VIS.Env.getCtx().getContext(key);
+                    }
+                    else if (VIS.Env.getCtx().getContext(that.windowNo, key).length > 0)
+                    {
+                        key = VIS.Env.getCtx().getContext(that.windowNo, key);
+                    } else if (VIS.Env.getCtx().getContext(that.windowNo, that.curTab().getTabNo(), key).length > 0)
+                    {
+                        key = VIS.Env.getCtx().getContext(that.windowNo, that.curTab().getTabNo(), key);
+                    }                   
+                    that.extraInfo = that.extraInfo.replaceAll(parm[i], key);
+                }
+            }
+            
             var _src = VIS.Application.contextUrl + "BiPanel/GetUserBILogin?recID=" + record_ID + "&extraInfo=" + window.encodeURIComponent(that.extraInfo);
             //Frame = $('<iframe height=100%; width="100%"; frameborder="0" ></iframe>');
             //$root.html('<iframe src="'+_src+'"; height=100%; width="100%"; frameborder="0" ></iframe>');
