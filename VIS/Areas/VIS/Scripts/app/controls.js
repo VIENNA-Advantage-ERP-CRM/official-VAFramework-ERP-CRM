@@ -1217,7 +1217,7 @@
                 $ctrl.append($txt).append($img);
             }
             else {
-                $ctrl = $('<div type="button" class="vis-ev-col-linkbutton"></div>');
+                $ctrl = $('<button type="button" class="vis-ev-col-linkbutton"></button>');
                 $ctrl.append($img).append($txt);
             }   
         }
