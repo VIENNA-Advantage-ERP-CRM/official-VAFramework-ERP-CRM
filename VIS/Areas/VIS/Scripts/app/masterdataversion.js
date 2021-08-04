@@ -284,6 +284,7 @@
             if (dr.Table.length > 0) {
                 this.htmlUI.push('<tbody>');
                 for (var r = 0; r < dr.Table.length; r++) {
+
                     var recRowOld = dr.Table[r];
                     //recRow = Object.keys(recRow).reduce((c, k) => (c[k.toUpperCase()] = recRow[k], c), {});
 
@@ -292,6 +293,7 @@
                     for (var j = 0; j < keys.length; j++) {
                         recRow[keys[j].toUpperCase()] = recRowOld[keys[j]];
                     }
+
 
 
 

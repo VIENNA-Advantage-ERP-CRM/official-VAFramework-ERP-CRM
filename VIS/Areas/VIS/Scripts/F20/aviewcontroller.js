@@ -1674,6 +1674,8 @@ VIS.GridController.prototype.dataStatusChanged = function (e) {
 
         if (this.gTab.isHPanelNotShowInMultiRow && this.vHeaderPanel != null) {
             this.vHeaderPanel.showPanel();
+            if (this.vHeaderPanel.sizeChangedListner && this.vHeaderPanel.sizeChangedListner.onSizeChanged)
+                this.vHeaderPanel.sizeChangedListner.onSizeChanged();
         }
         this.dynamicDisplay(-1);
     };
@@ -1702,6 +1704,8 @@ VIS.GridController.prototype.dataStatusChanged = function (e) {
             this.vTable.refreshRow();          
             if (this.gTab.isHPanelNotShowInMultiRow && this.vHeaderPanel != null) {
                 this.vHeaderPanel.hidePanel();
+                if (this.vHeaderPanel.sizeChangedListner && this.vHeaderPanel.sizeChangedListner.onSizeChanged)
+                    this.vHeaderPanel.sizeChangedListner.onSizeChanged();
             }
         }
     

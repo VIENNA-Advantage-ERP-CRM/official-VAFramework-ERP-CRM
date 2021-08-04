@@ -1628,7 +1628,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             string documentNo = null;
             if (po.Get_Value("DocumentNo") != null)
             {
-                documentNo = " (" + Util.GetValueOfInt(po.Get_Value("DocumentNo")) + ")";
+                documentNo = " (" + Util.GetValueOfString(po.Get_Value("DocumentNo")) + ")";
             }
             return documentNo;
         }
