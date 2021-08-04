@@ -335,6 +335,8 @@ input.vis-ev-col-readonly:not(:placeholder-shown) ~ label {
     background: no-repeat;
     border: none;
     color: rgba(var(--v-c-primary), 1);
+    display:flex;
+    align-items:center;
 }
 
     .vis-ev-col-linkbutton i {
