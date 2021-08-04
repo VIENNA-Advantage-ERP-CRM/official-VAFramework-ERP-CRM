@@ -1439,6 +1439,7 @@ li.vis-page-item-select {
     align-items: center;
     justify-content: center;
     overflow:hidden;
+    min-width:35px;
 }
 
 /* .vis-w-p-header-icon-f:after {
