@@ -883,12 +883,12 @@ namespace VAdvantage.Classes
 
                 if (i > 0)
                 {
-                    if (ldc.ColumnName.ToLower().Equals("ad_image_id"))
+                    if (ldc.ColumnName.ToLower().Equals("ad_image_id") || ldc.DisplayType==DisplayType.Image)
                     {
                         displayColumn.Append(" ||'^^'|| ");
                     }
                     else
-                        if (!list[i - 1].ColumnName.ToLower().Equals("ad_image_id"))
+                        if (!list[i - 1].ColumnName.ToLower().Equals("ad_image_id") || list[i - 1].DisplayType != DisplayType.Image)
                         displayColumn.Append(" ||'_'|| ");
                     else
                         displayColumn.Append(" ||' '|| ");
@@ -901,9 +901,9 @@ namespace VAdvantage.Classes
                 //    displayColumn.Append("COALESCE(CONVERT(VARCHAR,");
                 displayColumn.Append("NVL(");
                 //  translated
-                if (ldc.ColumnName.ToLower().Equals("ad_image_id"))
+                if (ldc.ColumnName.ToLower().Equals("ad_image_id") || ldc.DisplayType == DisplayType.Image)
                 {
-                    string embeddedSQL = "SELECT NVL(ImageURL,'') ||'^^' FROM AD_Image WHERE " + tableName + ".AD_Image_ID=AD_Image.AD_Image_ID";
+                    string embeddedSQL = "SELECT NVL(ImageURL,'') ||'^^' FROM AD_Image WHERE " + tableName + "."+ ldc.ColumnName+ "=AD_Image.AD_Image_ID";
                     displayColumn.Append("(").Append(embeddedSQL).Append(")");
                     hasImagIdentifier = true;
 
@@ -964,7 +964,7 @@ namespace VAdvantage.Classes
                 }
 
                 //jz EDB || problem
-                if (ldc.ColumnName.ToLower().Equals("ad_image_id"))
+                if (ldc.ColumnName.ToLower().Equals("ad_image_id") || ldc.DisplayType == DisplayType.Image)
                     displayColumn.Append(",'Images/nothing.png^^')");
                 else
                     displayColumn.Append(",'')");
