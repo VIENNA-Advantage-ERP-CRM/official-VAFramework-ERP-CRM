@@ -748,12 +748,29 @@ namespace VAdvantage.Model
         {
             if (GetAD_Org_ID() != 0)
                 SetAD_Org_ID(0);
-            string imageUrl = GetImageURL().ToLower();
-            if (!imageUrl.Contains(".") || imageExtensions.IndexOf(imageUrl.Substring(imageUrl.LastIndexOf("."))) < 0)
+            string imageUrl = GetImageURL();
+            if (String.IsNullOrEmpty(imageUrl) && String.IsNullOrEmpty(GetFontName()))
+            {
+                log.SaveError("EnterFontNameOrUrl", "");
+                return false;
+            }
+
+            if (!String.IsNullOrEmpty(imageUrl))
+            {
+                imageUrl = imageUrl.ToLower();
+                if (!imageUrl.Contains(".") || imageExtensions.IndexOf(imageUrl.Substring(imageUrl.LastIndexOf("."))) < 0)
+                {
+                    log.SaveError("AddExtension", "");
+                    return false;
+                }
+            }
+
+            if (GetBinaryData() != null && String.IsNullOrEmpty(imageUrl))
             {
                 log.SaveError("AddExtension", "");
                 return false;
             }
+
 
             return true;
         }
