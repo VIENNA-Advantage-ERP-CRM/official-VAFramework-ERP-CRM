@@ -849,3 +849,11 @@
 .vis-zoomacross:before {
     content: "\e9a0";
 }
+
+.vis-cog-o-circle:before {
+    content: "\e9c6";
+}
+
+.vis-search-o-circle:before {
+    content: "\e9c7";
+}
