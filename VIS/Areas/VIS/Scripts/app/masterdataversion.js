@@ -285,6 +285,7 @@
                 this.htmlUI.push('<tbody>');
                 for (var r = 0; r < dr.Table.length; r++) {
                     var recRow = dr.Table[r];
+                    recRow = Object.keys(recRow).reduce((c, k) => (c[k.toUpperCase()] = recRow[k], c), {});
                     var bckColor = "";
                     // for alternate row colors
                     if ((r % 2) == 0)
