@@ -1217,7 +1217,7 @@
                 $ctrl.append($txt).append($img);
             }
             else {
-                $ctrl = $('<div type="button" class="vis-ev-col-linkbutton"></div>');
+                $ctrl = $('<button type="button" class="vis-ev-col-linkbutton"></button>');
                 $ctrl.append($img).append($txt);
             }   
         }
@@ -3427,7 +3427,9 @@
             }
 
             this.value = newValue;
-            this.ctrl.val(VIS.Utility.decodeText(this.lastDisplay));
+
+            var ctrlval = VIS.Utility.Util.getIdentifierDisplayVal(this.lastDisplay);
+            this.ctrl.val(VIS.Utility.decodeText(ctrlval));
 
             this.settingValue = false;
             //this.setBackground("white");
@@ -6251,7 +6253,12 @@
                 return;
         }
 
-        var where = validation.substring(validation.toUpperCase().lastIndexOf('WHERE'));
+        var wIndex = validation.toUpperCase().lastIndexOf('WHERE');
+        var where = '-1';
+        if (wIndex > -1) {
+            where = validation.substring(wIndex);
+        }
+         
         if (this.cache[where]) {
             // if (this.oldValue != newValue) {
             //  this.oldValue = newValue;
