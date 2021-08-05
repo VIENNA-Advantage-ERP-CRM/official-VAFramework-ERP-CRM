@@ -888,7 +888,7 @@ namespace VAdvantage.Classes
                         displayColumn.Append(" ||'^^'|| ");
                     }
                     else
-                        if (!list[i - 1].ColumnName.ToLower().Equals("ad_image_id") || list[i - 1].DisplayType != DisplayType.Image)
+                        if (!list[i - 1].ColumnName.ToLower().Equals("ad_image_id") && list[i - 1].DisplayType != DisplayType.Image)
                         displayColumn.Append(" ||'_'|| ");
                     else
                         displayColumn.Append(" ||' '|| ");
