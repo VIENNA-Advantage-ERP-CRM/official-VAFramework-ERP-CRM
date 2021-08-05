@@ -6096,6 +6096,7 @@
                 {
                     var d = new Date();
                     d.setMilliseconds(0);
+                    d.setSeconds(0);
                     var n = d.toISOString();
                     //console.log(vo.ColumnName + " <==>" + variable +"==>"+ n);
                     return n;
@@ -6488,6 +6489,7 @@
                         console.log(this.vo.ColumnName + "==>[3n] " + d.toISOString());
                     }
                     d.setMilliseconds(0);
+                    d.setSeconds(0);
                     return d.toISOString();
                 }
                 catch (ex) {
@@ -6503,6 +6505,7 @@
                 }
                 var d = new Date();
                 d.setMilliseconds(0);
+                d.setSeconds(0);
                 return d.toISOString();
             }
 
