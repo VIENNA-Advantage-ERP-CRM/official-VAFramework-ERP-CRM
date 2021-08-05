@@ -6095,6 +6095,7 @@
                 if (variable.equals("@SysDate@") || variable.equals("@Now@"))	//	System Time
                 {
                     var d = new Date();
+                    d.setMilliseconds(0);
                     var n = d.toISOString();
                     //console.log(vo.ColumnName + " <==>" + variable +"==>"+ n);
                     return n;
@@ -6486,6 +6487,7 @@
                         // console.log(this.vo.ColumnName + "==>[2] " + d);
                         console.log(this.vo.ColumnName + "==>[3n] " + d.toISOString());
                     }
+                    d.setMilliseconds(0);
                     return d.toISOString();
                 }
                 catch (ex) {
@@ -6499,7 +6501,9 @@
                 catch (exx) {
                     this.log.warning("Cannot convert to Timestamp: " + tsString);
                 }
-                return new Date().toISOString();
+                var d = new Date();
+                d.setMilliseconds(0);
+                return d.toISOString();
             }
 
             //	Boolean
