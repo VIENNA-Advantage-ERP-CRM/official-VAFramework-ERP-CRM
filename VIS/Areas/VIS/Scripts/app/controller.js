@@ -4225,11 +4225,11 @@
         if (obscureFields && obscureFields.length > 0) {
             var len = obscureFields.length;
             for (var i = 0; i < len; i++) {
-                if (RowData[obscureFields[i]]) {
+                if (RowData[obscureFields[i]] || RowData[obscureFields[i]]==0) {
                     RowData[obscureFields[i]] = this.encrypt(RowData[obscureFields[i]]);
                 }
 
-                if (OldRowData[obscureFields[i]]) {
+                if (OldRowData[obscureFields[i]] || OldRowData[obscureFields[i]]==0) {
                     OldRowData[obscureFields[i]] = this.encrypt(OldRowData[obscureFields[i]]);
                 }
             }
