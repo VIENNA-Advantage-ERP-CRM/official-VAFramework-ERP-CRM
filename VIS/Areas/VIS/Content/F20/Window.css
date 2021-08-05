@@ -2122,7 +2122,8 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
     margin-top: .1rem;
 }
 
-
-
+.vis-grid-td-icon-grp.w2ui-editable {
+    display: block;
+}
 
 
