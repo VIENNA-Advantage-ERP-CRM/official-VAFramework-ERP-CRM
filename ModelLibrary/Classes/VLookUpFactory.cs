@@ -945,12 +945,6 @@ namespace VAdvantage.Classes
                 {
                     displayColumn.Append(DataBase.DB.TO_CHAR(tableName + "." + ldc.ColumnName, ldc.DisplayType, language.GetAD_Language()));
                 }
-                else if (ldc.DisplayType == DisplayType.List && ldc.AD_Ref_Val_ID != 0)
-                {
-                    // string embeddedSQL = GetLookup_ListEmbed(language, ldc.ColumnName, tableName, ldc.AD_Ref_Val_ID);
-                    //if (embeddedSQL != null)
-                    //    displayColumn.Append("(").Append(embeddedSQL).Append(")");
-                }
                 //  String
                 else
                 {
