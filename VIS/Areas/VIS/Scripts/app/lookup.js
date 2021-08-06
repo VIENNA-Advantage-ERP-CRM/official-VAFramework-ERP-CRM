@@ -461,13 +461,18 @@
         return list;
     };
 
-    MLookup.prototype.getDisplay = function (value, checkLocalList) {
+    MLookup.prototype.getDisplay = function (value, checkLocalList, loadImage) {
         if (value == null) {
             return "";
         }
         var display = !checkLocalList ? this.get(value) : this.getFromList(value);
         if (display == null)
             return "<" + value.toString() + ">";
+        if (loadImage)
+            return display.Name;
+        else
+            return VIS.Utility.Util.getIdentifierDisplayVal(display.Name);
+
         return display.Name;
     };
 

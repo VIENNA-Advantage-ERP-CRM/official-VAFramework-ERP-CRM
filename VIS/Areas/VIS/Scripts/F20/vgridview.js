@@ -325,13 +325,13 @@
         this.mTab = mTab;
         this.AD_Table_ID = this.mTab.getAD_Table_ID();
 
-
         var oColumns = [];
         var mField = null;
         var size = grdFields.length;
         var visibleFields = 0;
 
         var mFields = grdFields.slice(0);
+
 
         mFields.sort(function (a, b) { return a.getMRSeqNo() - b.getMRSeqNo() });
 
@@ -368,6 +368,9 @@
             var readOnly = mField.getIsReadOnly();
             var updateable = mField.getIsEditable(false);      //  no context check
             //int WindowNo = mField.getWindowNo();
+
+          
+
 
             //  Not a Field
             if (mField.getIsHeading())
@@ -544,7 +547,7 @@
                         }
                         var d;
                         if (l) {
-                            d = l.getDisplay(val, true);
+                            d = l.getDisplay(val, true,true);
                             //if (d.startsWith("<"))
                             //  d = l.getDisplay(nd, false);
                             //d = w2utils.encodeTags(d);
@@ -592,6 +595,10 @@
                             // Based on sequence of image in idenitifer, perform logic and display image with text
                             if (l && l.gethasImageIdentifier()) {
                                 var imgIndex = d.indexOf("Images/");
+
+                                if (imgIndex == -1)
+                                        return d;
+
                                  //Find Image from Identifier string 
                                 var img = d.substring(imgIndex + 7, d.lastIndexOf("^^"));
                             img = VIS.Application.contextUrl + "Images/Thumb32x32/" + img;
@@ -624,7 +631,10 @@
                                 if (c == 0 || img.indexOf("nothing.png") > -1) {
                                     if (img.indexOf("nothing.png")== -1)
                                     {
-                                        strDiv += "<div class='vis-grid-row-td-icon'><img src='" + img + "?" + new Date().getTime() + "' ></img></div>";
+                                        strDiv += "<div class='vis-grid-row-td-icon'"
+                                            + " > <img src='" + img + "?" + new Date().getTime() +
+                                            "'></div > ";
+                                           // "' onerror='this.style.display=\"none\"' ></img></div > ";
                                     }
                                    
                                 }
@@ -637,9 +647,12 @@
                         if (strDiv == "")
                             return d;
 
+                       
+
                         return strDiv;
                         //return '<span>' + d + '</span>';
                     }
+                   
                 }
             }
             //Date /////////

@@ -1439,6 +1439,7 @@ li.vis-page-item-select {
     align-items: center;
     justify-content: center;
     overflow:hidden;
+    min-width:35px;
 }
 
 /* .vis-w-p-header-icon-f:after {
@@ -2121,7 +2122,8 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
     margin-top: .1rem;
 }
 
-
-
+.vis-grid-td-icon-grp.w2ui-editable {
+    display: block;
+}
 
 
