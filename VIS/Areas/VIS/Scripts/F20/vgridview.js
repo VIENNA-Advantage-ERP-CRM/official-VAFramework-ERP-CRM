@@ -481,7 +481,7 @@
                 if (oColumn.hidden == false && (this.hyperLinkCell[name] == "undefined" || this.hyperLinkCell[name] == null)) {
                     if (columnName.toLowerCase() == "value" || columnName.toLowerCase() == "name" || columnName.toLowerCase() == "documentno") {
                         this.hyperLinkCell[name] = columnName;
-                        oColumn.style = 'text-decoration:underline; color:blue !important; cursor:pointer';
+                        oColumn.style = 'text-decoration:underline; color:rgba(var(--v-c-primary), 1) !important; cursor:pointer';
                     }
                 }
 

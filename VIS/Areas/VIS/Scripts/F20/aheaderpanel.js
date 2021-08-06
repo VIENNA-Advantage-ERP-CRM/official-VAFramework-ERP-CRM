@@ -469,7 +469,7 @@
                 var displayType = mField.getDisplayType();
 
                 if (mField.lookup) {
-                    colValue = mField.lookup.getDisplay(colValue, true);
+                    colValue = mField.lookup.getDisplay(colValue, true,true);
                 }
                 //	Date
                 else if (VIS.DisplayType.IsDate(displayType)) {
@@ -519,7 +519,7 @@
 
         var getIdentifierImage = function (mField) {
             var value = mField.getValue();
-            value = mField.lookup.getDisplay(value, true);
+            value = mField.lookup.getDisplay(value, true,true);
 
             if (value != null && value && value.indexOf("Images/") > -1) {// Based on sequence of image in idenitifer, perform logic and display image with text
 

@@ -6245,13 +6245,18 @@
     VIS.Utility.inheritPrototype(VKeyText, IControl); //Inherit
 
     VKeyText.prototype.setValue = function (newValue, isHTML) {
-
+        var validation = null;
         if (this.needtoParse) {
-            var validation = VIS.Env.parseContext(VIS.context, this.windowNo, 0, this.colSql, false, true);
-            if (validation.length == 0)
-                //console.log(this.info.keyColumn + ": Loader NOT Validated: " + this.info.validationCode);
-                return;
+            validation = VIS.Env.parseContext(VIS.context, this.windowNo, 0, this.colSql, false, true);
         }
+        else {
+            validation = this.colSql;
+        }
+
+        if (!validation || validation.length == 0)
+            //console.log(this.info.keyColumn + ": Loader NOT Validated: " + this.info.validationCode);
+            return;
+
 
         var wIndex = validation.toUpperCase().lastIndexOf('WHERE');
         var where = '-1';
@@ -6268,6 +6273,12 @@
             }
         }
         else {
+            if (validation.toLowerCase().indexOf("select") == -1) {
+                this.cache[where] = validation;
+                this.ctrl.text(validation);
+                return;
+            }
+
             var self = this;
             executeScalarEn(validation, null,function (val) {
                if (val) {
