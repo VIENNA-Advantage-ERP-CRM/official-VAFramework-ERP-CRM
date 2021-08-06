@@ -547,7 +547,7 @@
                         }
                         var d;
                         if (l) {
-                            d = l.getDisplay(val, true);
+                            d = l.getDisplay(val, true,true);
                             //if (d.startsWith("<"))
                             //  d = l.getDisplay(nd, false);
                             //d = w2utils.encodeTags(d);
