@@ -632,7 +632,7 @@
                                     if (img.indexOf("nothing.png")== -1)
                                     {
                                         strDiv += "<div class='vis-grid-row-td-icon'"
-                                            + " > <img src='" + img + "?" + new Date().getTime() +
+                                            + " > <img src='" + img + 
                                             "'></div > ";
                                            // "' onerror='this.style.display=\"none\"' ></img></div > ";
                                     }
