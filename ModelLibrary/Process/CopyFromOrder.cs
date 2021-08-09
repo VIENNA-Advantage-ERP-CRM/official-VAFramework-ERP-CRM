@@ -73,8 +73,26 @@ namespace VAdvantage.Process
             MOrder from = new MOrder(GetCtx(), _C_Order_ID, Get_Trx());
             MOrder to = new MOrder(GetCtx(), To_C_Order_ID, Get_Trx());
 
+            if (to.Get_ColumnIndex("ConditionalFlag") > -1)
+            {
+                DB.ExecuteQuery("UPDATE C_Order SET ConditionalFlag = '" + MOrder.CONDITIONALFLAG_PrepareIt + "' WHERE C_Order_ID = " + to.GetC_Order_ID(), null, Get_Trx());
+            }
+
             //JID_0706: Need to bring the Attribute set instance value from old order to new order.
             int no = to.CopyLinesFrom(from, false, true);		//	no Attributes
+
+            if (to.Get_ColumnIndex("ConditionalFlag") > -1)
+            {
+                if (!to.CalculateTaxTotal())   //	setTotals
+                {
+                    log.Info(Msg.GetMsg(from.GetCtx(), "ErrorCalculateTax") + ": " + to.GetDocumentNo().ToString());
+                }
+
+                // Update order header
+                to.UpdateHeader();
+
+                DB.ExecuteQuery("UPDATE C_Order SET ConditionalFlag = null WHERE C_Order_ID = " + to.GetC_Order_ID(), null, Get_Trx());
+            }
             //
             return "@Copied@=" + no;
         }	//	doIt
