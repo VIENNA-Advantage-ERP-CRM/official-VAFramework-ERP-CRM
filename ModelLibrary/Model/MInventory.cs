@@ -56,7 +56,7 @@ namespace VAdvantage.Model
 
         /** Reversal Indicator			*/
         public const String REVERSE_INDICATOR = "^";
-
+       
         #endregion
 
 
@@ -1687,7 +1687,7 @@ namespace VAdvantage.Model
                     // check costing method is LIFO or FIFO
                     String costingMethod = MCostElement.CheckLifoOrFifoMethod(GetCtx(), GetAD_Client_ID(), line.GetM_Product_ID(), Get_Trx());
 
-                    product1 = MProduct.Get(GetCtx(), line.GetM_Product_ID());
+                    product1 = new MProduct(GetCtx(), line.GetM_Product_ID(), Get_Trx());
                     if (product1.GetProductType() == "I") // for Item Type product
                     {
                         #region get price from m_cost (Current Cost Price)

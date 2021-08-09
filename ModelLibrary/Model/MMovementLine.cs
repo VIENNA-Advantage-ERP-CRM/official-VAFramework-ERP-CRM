@@ -191,6 +191,14 @@ namespace VAdvantage.Model
             return _parent;
         }
 
+        /// <summary>
+        /// Set Parent
+        /// </summary>
+        /// <param name="parent">parent</param>
+        public void SetParent(MMovement parent)
+        {
+            _parent = parent;
+        }
 
         /// <summary>
         /// Before Save
@@ -231,7 +239,7 @@ namespace VAdvantage.Model
             }
 
             // Check Locator For Header Warehouse
-            MMovement mov = MMovement.Get(GetCtx(), GetM_Movement_ID());
+            MMovement mov = GetParent();
             MLocator loc = new MLocator(GetCtx(), GetM_Locator_ID(), Get_TrxName());
 
             if (Env.IsModuleInstalled("DTD001_"))

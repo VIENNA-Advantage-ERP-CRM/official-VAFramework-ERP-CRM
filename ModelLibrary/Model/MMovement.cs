@@ -93,24 +93,6 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Get Movement from Cache
-        /// </summary>
-        /// <param name="ctx">Context</param>
-        /// <param name="M_Movement_ID">ID</param>
-        /// <returns>MMovement</returns>
-        public static MMovement Get(Ctx ctx, int M_Movement_ID)
-        {
-            int key = M_Movement_ID;
-            MMovement retValue = (MMovement)_cache[key];
-            if (retValue != null)
-                return retValue;
-            retValue = new MMovement(ctx, M_Movement_ID, null);
-            if (retValue.Get_ID() != 0)
-                _cache.Add(key, retValue);
-            return retValue;
-        }
-
-        /// <summary>
         /// Get Lines
         /// </summary>
         /// <param name="requery">requery</param>
@@ -1850,7 +1832,7 @@ namespace VAdvantage.Model
                     //int ToWarehouseOrg = MLocator.Get(GetCtx(), line.GetM_LocatorTo_ID()).GetAD_Org_ID();
                     //if (GetAD_Org_ID() != ToWarehouseOrg)
                     //{
-                    product1 = MProduct.Get(GetCtx(), line.GetM_Product_ID());
+                    product1 = new MProduct(GetCtx(), line.GetM_Product_ID(), Get_Trx());
                     if (product1.GetProductType().Equals("I")) // for Item Type product
                     {
                         if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
@@ -3392,7 +3374,7 @@ namespace VAdvantage.Model
                 MMovementLine rLine = new MMovementLine(GetCtx(), 0, Get_TrxName());
                 CopyValues(oLine, rLine, oLine.GetAD_Client_ID(), oLine.GetAD_Org_ID());
                 rLine.SetM_Movement_ID(reversal.GetM_Movement_ID());
-                //
+                rLine.SetParent(reversal);
                 rLine.SetMovementQty(Decimal.Negate(rLine.GetMovementQty()));
                 rLine.SetQtyEntered(Decimal.Negate(rLine.GetQtyEntered()));
                 rLine.SetTargetQty(Env.ZERO);

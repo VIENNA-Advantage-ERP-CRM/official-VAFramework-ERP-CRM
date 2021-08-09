@@ -284,7 +284,7 @@ namespace VAdvantage.Model
             bool isContainrApplicable = MTransaction.ProductContainerApplicable(GetCtx());
 
             Decimal VA024_ProvisionPrice = 0;
-            MInventory inventory = MInventory.Get(GetCtx(), GetM_Inventory_ID());
+            MInventory inventory = GetParent();
             MProduct product = MProduct.Get(GetCtx(), GetM_Product_ID());
             if (newRecord && _isManualEntry)
             {
