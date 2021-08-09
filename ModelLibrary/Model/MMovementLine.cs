@@ -191,6 +191,14 @@ namespace VAdvantage.Model
             return _parent;
         }
 
+        /// <summary>
+        /// Set Parent
+        /// </summary>
+        /// <param name="parent">parent</param>
+        public void SetParent(MMovement parent)
+        {
+            _parent = parent;
+        }
 
         /// <summary>
         /// Before Save
@@ -231,10 +239,10 @@ namespace VAdvantage.Model
             }
 
             // Check Locator For Header Warehouse
-            MMovement mov = new MMovement(GetCtx(), GetM_Movement_ID(), Get_TrxName());
+            MMovement mov = GetParent();
             MLocator loc = new MLocator(GetCtx(), GetM_Locator_ID(), Get_TrxName());
-            Tuple<string, string, string> aInfo = null;
-            if (Env.HasModulePrefix("DTD001_", out aInfo))
+
+            if (Env.IsModuleInstalled("DTD001_"))
             {
                 if (mov.GetDTD001_MWarehouseSource_ID() == loc.GetM_Warehouse_ID())
                 {
@@ -263,8 +271,7 @@ namespace VAdvantage.Model
                 return false;
             }
 
-            Tuple<String, String, String> mInfo = null;
-            if (Env.HasModulePrefix("DTD001_", out mInfo))
+            if (Env.IsModuleInstalled("DTD001_"))
             {
                 if (!newRecord && Util.GetValueOfInt(Get_ValueOld("M_Product_ID")) != GetM_Product_ID())
                 {
@@ -296,8 +303,8 @@ namespace VAdvantage.Model
                 }
             }
             // IF Doc Status = InProgress then No record Save
-            MMovement move = new MMovement(GetCtx(), GetM_Movement_ID(), Get_Trx());        // Trx used to handle query stuck problem
-            if (newRecord && move.GetDocStatus() == "IP")
+            // MMovement move = new MMovement(GetCtx(), GetM_Movement_ID(), Get_Trx());        // Trx used to handle query stuck problem
+            if (newRecord && mov.GetDocStatus() == "IP")
             {
                 log.SaveError("Message", Msg.GetMsg(GetCtx(), "DTD001_CannotCreate"));
                 return false;
@@ -321,28 +328,29 @@ namespace VAdvantage.Model
             if (newRecord || Is_ValueChanged("QtyEntered"))
                 SetMovementQty(GetMovementQty());
 
-            string qry;
+            StringBuilder qry = new StringBuilder();
             if (!mov.IsProcessing() || newRecord)
             {
                 MWarehouse wh = null; MWarehouse whTo = null;
                 wh = MWarehouse.Get(GetCtx(), mov.GetDTD001_MWarehouseSource_ID());
                 whTo = MWarehouse.Get(GetCtx(), MLocator.Get(GetCtx(), GetM_LocatorTo_ID()).GetM_Warehouse_ID());
 
-                qry = "SELECT NVL(SUM(NVL(QtyOnHand,0)),0) AS QtyOnHand FROM M_Storage where m_locator_id=" + GetM_Locator_ID() + " and m_product_id=" + GetM_Product_ID();
+                qry.Append("SELECT NVL(SUM(NVL(QtyOnHand,0)),0) AS QtyOnHand FROM M_Storage where m_locator_id=" + GetM_Locator_ID() + " and m_product_id=" + GetM_Product_ID());
                 if (GetDTD001_AttributeNumber() == null || GetM_AttributeSetInstance_ID() > 0)
                 {
-                    qry += " AND NVL(M_AttributeSetInstance_ID , 0) =" + GetM_AttributeSetInstance_ID();
+                    qry.Append(" AND NVL(M_AttributeSetInstance_ID , 0) =" + GetM_AttributeSetInstance_ID());
                 }
-                OnHandQty = Convert.ToDecimal(DB.ExecuteScalar(qry));
+                OnHandQty = Convert.ToDecimal(DB.ExecuteScalar(qry.ToString()));
 
-                qry = "SELECT NVL(SUM(NVL(QtyOnHand,0)),0) AS QtyOnHand FROM M_Storage where m_locator_id=" + GetM_LocatorTo_ID() + " and m_product_id=" + GetM_Product_ID();
-                qry += " AND NVL(M_AttributeSetInstance_ID, 0) =" + GetM_AttributeSetInstance_ID();
-                OnHandQtyTo = Convert.ToDecimal(DB.ExecuteScalar(qry));
+                qry.Clear();
+                qry.Append("SELECT NVL(SUM(NVL(QtyOnHand,0)),0) AS QtyOnHand FROM M_Storage where m_locator_id=" + GetM_LocatorTo_ID() + " and m_product_id=" + GetM_Product_ID()
+                            + " AND NVL(M_AttributeSetInstance_ID, 0) =" + GetM_AttributeSetInstance_ID());
+                OnHandQtyTo = Convert.ToDecimal(DB.ExecuteScalar(qry.ToString()));
 
                 // SI_0635 : System is giving error of insufficient qty if disallow is true in TO warehouse and false in From warehouse
                 // when record is in completed & closed stage - then no need to check qty availablity in warehouse
                 if ((wh.IsDisallowNegativeInv() || whTo.IsDisallowNegativeInv()) &&
-                    (!(move.GetDocStatus() == "CO" || move.GetDocStatus() == "CL" || move.GetDocStatus() == "RE" || move.GetDocStatus() == "VO")))
+                    (!(mov.GetDocStatus() == "CO" || mov.GetDocStatus() == "CL" || mov.GetDocStatus() == "RE" || mov.GetDocStatus() == "VO")))
                 {
                     // pick container current qty from transaction based on locator / product / ASI / Container / Movement Date 
                     if (isContainrApplicable && Get_ColumnIndex("M_ProductContainer_ID") >= 0)
@@ -362,27 +370,27 @@ namespace VAdvantage.Model
                         //                               " AND t.M_Product_ID = " + GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + GetM_AttributeSetInstance_ID() +
                         //                               " AND NVL(t.M_ProductContainer_ID, 0) = " + (move.IsReversal() && !IsMoveFullContainer() && GetMovementQty() < 0 ? GetM_ProductContainer_ID() : GetRef_M_ProductContainerTo_ID());
                         //                    containerQtyTo = Util.GetValueOfDecimal(DB.ExecuteScalar(qry.ToString(), null, null));  // dont use Transaction here - otherwise impact goes wrong on completion
-
-                        qry = @"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
-                                                INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) +
+                        qry.Clear();
+                        qry.Append(@"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
+                                    INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(mov.GetMovementDate(), true) +
                                     " AND t.AD_Client_ID = " + GetAD_Client_ID() +
                                     @" AND t.M_Locator_ID = " + GetM_Locator_ID() +
-                                    " AND t.M_Product_ID = " + GetM_Product_ID() + " AND NVL(t.M_ProductContainer_ID, 0) = " + GetM_ProductContainer_ID();
+                                    " AND t.M_Product_ID = " + GetM_Product_ID() + " AND NVL(t.M_ProductContainer_ID, 0) = " + GetM_ProductContainer_ID());
 
                         // In Case of Attribute Number do not check qty with attribute from storage
                         if (GetDTD001_AttributeNumber() == null || GetM_AttributeSetInstance_ID() > 0)
                         {
-                            qry += " AND NVL(M_AttributeSetInstance_ID , 0) =" + GetM_AttributeSetInstance_ID();
+                            qry.Append(" AND NVL(M_AttributeSetInstance_ID , 0) =" + GetM_AttributeSetInstance_ID());
                         }
-                           
-                        containerQty = Util.GetValueOfDecimal(DB.ExecuteScalar(qry.ToString(), null, null));  // dont use Transaction here - otherwise impact goes wrong on completion
 
-                        qry = @"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC)  AS CurrentQty FROM m_transaction t 
-                                                INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) +
+                        containerQty = Util.GetValueOfDecimal(DB.ExecuteScalar(qry.ToString(), null, null));  // dont use Transaction here - otherwise impact goes wrong on completion
+                        qry.Clear();
+                        qry.Append(@"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC)  AS CurrentQty FROM m_transaction t 
+                                   INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(mov.GetMovementDate(), true) +
                                    " AND t.AD_Client_ID = " + GetAD_Client_ID() +
                                    @" AND t.M_Locator_ID = " + GetM_LocatorTo_ID() +
                                    " AND t.M_Product_ID = " + GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + GetM_AttributeSetInstance_ID() +
-                                   " AND NVL(t.M_ProductContainer_ID, 0) = " + GetRef_M_ProductContainerTo_ID();
+                                   " AND NVL(t.M_ProductContainer_ID, 0) = " + GetRef_M_ProductContainerTo_ID());
                         containerQtyTo = Util.GetValueOfDecimal(DB.ExecuteScalar(qry.ToString(), null, null));  // dont use Transaction here - otherwise impact goes wrong on completion
 
                     }
@@ -454,8 +462,8 @@ namespace VAdvantage.Model
                     SetVA024_UnitPrice(Util.GetValueOfDecimal(VA024_ProvisionPrice * GetMovementQty()));
 
                     // is used to get cost of binded cost method / costing level of primary accounting schema
-                    Decimal cost = MCost.GetproductCosts(move.GetAD_Client_ID(), move.GetAD_Org_ID(), GetM_Product_ID(),
-                         GetM_AttributeSetInstance_ID(), Get_Trx(), move.GetDTD001_MWarehouseSource_ID());
+                    Decimal cost = MCost.GetproductCosts(mov.GetAD_Client_ID(), mov.GetAD_Org_ID(), GetM_Product_ID(),
+                         GetM_AttributeSetInstance_ID(), Get_Trx(), mov.GetDTD001_MWarehouseSource_ID());
                     SetVA024_CostPrice((cost - VA024_ProvisionPrice) * GetMovementQty());
                 }
             }
@@ -467,7 +475,7 @@ namespace VAdvantage.Model
                     SetM_AttributeSetInstanceTo_ID(GetM_AttributeSetInstance_ID());
                 else
                 {
-                    if (Env.HasModulePrefix("DTD001_", out mInfo))
+                    if (Env.IsModuleInstalled("DTD001_"))
                     {
                         //MProduct product = GetProduct();
                         if (product != null

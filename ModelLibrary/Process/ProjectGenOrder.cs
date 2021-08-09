@@ -110,6 +110,12 @@ namespace VAdvantage.Process
             }
             //Credit Limit
             MOrder order = new MOrder(fromProject, true, MOrder.DocSubTypeSO_OnCredit);
+
+            if (order.Get_ColumnIndex("ConditionalFlag") > -1)
+            {
+                order.SetConditionalFlag(MOrder.CONDITIONALFLAG_PrepareIt);
+            }
+
             if (!order.Save())
             {
                 return GetRetrievedError(order, "Could not create Order");
@@ -151,6 +157,20 @@ namespace VAdvantage.Process
                         count++;
                     }
                 }	//	for all lines
+
+                if (order.Get_ColumnIndex("ConditionalFlag") > -1)
+                {
+                    if (!order.CalculateTaxTotal())   //	setTotals
+                    {
+                        log.Info(Msg.GetMsg(GetCtx(), "ErrorCalculateTax") + ": " + order.GetDocumentNo().ToString());
+                    }
+
+                    // Update order header
+                    order.UpdateHeader();
+
+                    DB.ExecuteQuery("UPDATE C_Order SET ConditionalFlag = null WHERE C_Order_ID = " + order.GetC_Order_ID(), null, Get_Trx());
+                }
+
                 if (lines.Length != count)
                 {
                     log.Log(Level.SEVERE, "Lines difference - ProjectLines=" + lines.Length + " <> Saved=" + count);

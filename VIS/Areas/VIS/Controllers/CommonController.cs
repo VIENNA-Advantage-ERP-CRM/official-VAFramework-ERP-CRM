@@ -1124,7 +1124,7 @@ namespace VIS.Controllers
                         po = tbl.GetPO(ctx, M_InoutLine_ID, null);
                         if (countVA010 > 0 && QualityPlan_ID > 0)
                             po.Set_ValueNoCheck("VA010_QualityPlan_ID", QualityPlan_ID);
-
+                        
                         po.Set_Value("QtyEntered", (Decimal?)QtyEnt);
                         po.Set_Value("MovementQty", (Decimal?)QtyEnt);
                         if (!po.Save())
@@ -1140,11 +1140,11 @@ namespace VIS.Controllers
                         //{ 
                         SqlIOL += " AND NVL(M_AttributeSetInstance_ID, 0) = " + M_AttributeSetInstance_ID;
                         //}
-                        if (isContainerApplicable)
-                        {
-                            // To check with containerID to get Record
-                            SqlIOL += " AND NVL(M_ProductContainer_ID , 0) = " + Container_ID;
-                        }
+                        //if (isContainerApplicable)
+                        //{
+                        //    // To check with containerID to get Record
+                        //    SqlIOL += " AND NVL(M_ProductContainer_ID , 0) = " + Container_ID;
+                        //}
 
                         M_InoutLine_ID = Util.GetValueOfInt(DB.ExecuteScalar(SqlIOL));
                         if (M_InoutLine_ID == 0)

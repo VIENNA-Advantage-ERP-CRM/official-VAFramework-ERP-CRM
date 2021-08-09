@@ -44,10 +44,10 @@ namespace VAdvantage.Model
             String sql = "SELECT * FROM AD_AlertRule "
                 + "WHERE isactive='Y' AND AD_Alert_ID=" + GetAD_Alert_ID();
             List<MAlertRule> list = new List<MAlertRule>();
-
-            DataSet ds = DB.ExecuteDataset(sql);
+            
             try
             {
+                DataSet ds = DB.ExecuteDataset(sql);
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
                     MAlertRule mAlertRule = new MAlertRule(GetCtx(), dr, null);

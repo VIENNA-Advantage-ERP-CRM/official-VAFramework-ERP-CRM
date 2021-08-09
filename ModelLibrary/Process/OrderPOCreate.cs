@@ -305,6 +305,7 @@ namespace VAdvantage.Process
                 GetErrorOrSetting(sqlErrorMessage.ToString(), Get_TrxName());
             }
 
+
             IDataReader idr = null;
             DataTable dt = null;
             MOrder po = null;
@@ -358,6 +359,11 @@ namespace VAdvantage.Process
                             consolidatePO.IsDropShip = Utility.Util.GetValueOfString(dr["ISDROPSHIP"]);
                             listConsolidatePO.Add(consolidatePO);
                         }
+                    }
+
+                    if (po.Get_ColumnIndex("ConditionalFlag") > -1)
+                    {
+                        DB.ExecuteQuery("UPDATE C_Order SET ConditionalFlag = '" + MOrder.CONDITIONALFLAG_PrepareIt + "' WHERE C_Order_ID = " + po.GetC_Order_ID(), null, Get_Trx());
                     }
 
                     _Dropship = Utility.Util.GetValueOfString(dr["ISDROPSHIP"]);
@@ -437,6 +443,18 @@ namespace VAdvantage.Process
                         }
                     }
 
+                    if (po.Get_ColumnIndex("ConditionalFlag") > -1)
+                    {
+                        if (!po.CalculateTaxTotal())   //	setTotals
+                        {
+                            log.Info(Msg.GetMsg(GetCtx(), "ErrorCalculateTax") + ": " + po.GetDocumentNo().ToString());
+                        }
+
+                        // Update order header
+                        po.UpdateHeader();
+
+                        DB.ExecuteQuery("UPDATE C_Order SET ConditionalFlag = null WHERE C_Order_ID = " + po.GetC_Order_ID(), null, Get_Trx());
+                    }
                 }
                 //idr.Close();
             }
