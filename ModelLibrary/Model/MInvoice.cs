@@ -63,6 +63,8 @@ namespace VAdvantage.Model
         string conversionNotFoundInOut = "";
         MInOutLine sLine = null;
 
+        //while handling the counter document this variable is used
+        private string _message = null;
         #endregion
 
         /// <summary>
@@ -196,16 +198,26 @@ namespace VAdvantage.Model
                 //when record is of SO then price list must be Sale price list and vice versa
                 if (from.GetCounterBPartner() != null && ((to.IsSOTrx() && !pl.IsSOPriceList()) || (!to.IsSOTrx() && pl.IsSOPriceList())))
                 {
+                    //changed query according to PriceList join with Business Partner
                     /* 1. check first with same currency , same Org , same client and IsDefault as True
                      * 2. check 2nd with same currency , same Org , same client and IsDefault as False
                      * 3. check 3rd with same currency , (*) Org , same client and IsDefault as True
                      * 4. check 3rd with same currency , (*) Org , same client and IsDefault as False */
-                    string sql = @"SELECT M_PriceList_ID FROM M_PriceList 
-                               WHERE IsActive = 'Y' AND AD_Client_ID IN ( " + to.GetAD_Client_ID() + @" , 0 ) " +
-                                    @" AND C_Currency_ID = " + to.GetC_Currency_ID() +
-                                    @" AND AD_Org_ID IN ( " + to.GetAD_Org_ID() + @" , 0 ) " +
-                                    @" AND IsSOPriceList = '" + (to.IsSOTrx() ? "Y" : "N") + "' " +
-                                    @" ORDER BY AD_Org_ID DESC , IsDefault DESC,  M_PriceList_ID DESC , AD_Client_ID DESC";
+                    //string sql = @"SELECT M_PriceList_ID FROM M_PriceList 
+                    //           WHERE IsActive = 'Y' AND AD_Client_ID IN ( " + to.GetAD_Client_ID() + @" , 0 ) " +
+                    //                @" AND C_Currency_ID = " + to.GetC_Currency_ID() +
+                    //                @" AND AD_Org_ID IN ( " + to.GetAD_Org_ID() + @" , 0 ) " +
+                    //                @" AND IsSOPriceList = '" + (to.IsSOTrx() ? "Y" : "N") + "' " +
+                    //                @" ORDER BY AD_Org_ID DESC , IsDefault DESC,  M_PriceList_ID DESC , AD_Client_ID DESC";
+                    //Get the PriceList from CounterBPartner
+                    string sql = @"SELECT pl.M_PriceList_ID FROM M_PriceList pl
+                               INNER JOIN C_BPartner bp ON pl.M_PriceList_ID=" + (to.IsSOTrx() ? "bp.M_PriceList_ID" : "bp.PO_PriceList_ID") +
+                               @" WHERE pl.IsActive = 'Y' AND pl.AD_Client_ID IN ( " + to.GetAD_Client_ID() + @" , 0 ) " +
+                                    @" AND pl.C_Currency_ID = " + to.GetC_Currency_ID() +
+                                    @" AND pl.AD_Org_ID IN ( " + to.GetAD_Org_ID() + @" , 0 ) " +
+                                    @" AND pl.IsSOPriceList = '" + (to.IsSOTrx() ? "Y" : "N") + "' " +
+                                    @" AND bp.C_BPartner_ID = " + from.GetCounterBPartner().GetC_BPartner_ID() +
+                                    @" ORDER BY pl.AD_Org_ID DESC , pl.IsDefault DESC,  pl.M_PriceList_ID DESC , pl.AD_Client_ID DESC";
                     int priceListId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, trxName));
                     if (priceListId > 0)
                     {
@@ -215,7 +227,9 @@ namespace VAdvantage.Model
                     {
                         //Could not create Invoice. Price List not avialable
                         from.SetProcessMsg(Msg.GetMsg(from.GetCtx(), "VIS_PriceListNotFound"));
-                        throw new Exception("Could not create Invoice. Price List not avialable");
+                        //get message from message window
+                        //throw new Exception("Could not create Invoice. Price List not avialable");
+                        throw new Exception(Msg.GetMsg(from.GetCtx(), "VIS_PriceListNotFound"));
                     }
                 }
 
@@ -4298,7 +4312,6 @@ namespace VAdvantage.Model
                         //    }
                         //}
                     }	//	SO
-                    else
                     {
                         newBalance = Decimal.Subtract(newBalance, invAmt);
                         log.Fine("GrandTotal=" + GetGrandTotal(true) + "(" + invAmt
@@ -4467,11 +4480,20 @@ namespace VAdvantage.Model
                     //	Counter Documents
                     MInvoice counter = CreateCounterDoc();
                     if (counter != null)
+                    {
                         Info.Append(" - @CounterDoc@: @C_Invoice_ID@=").Append(counter.GetDocumentNo());
+                    }
+                    else if (_message != null)
+                    {
+                        _processMsg = _message;
+                        return DocActionVariables.STATUS_INPROGRESS;
+                    }
                 }
                 catch (Exception e)
                 {
-                    Info.Append(" - @CounterDoc@: ").Append(e.Message.ToString());
+                    //Info.Append(" - @CounterDoc@: ").Append(e.Message.ToString());
+                    _processMsg = e.Message.ToString();
+                    return DocActionVariables.STATUS_INPROGRESS;
                 }
 
                 timeEstimation += " End at " + DateTime.Now.ToUniversalTime();
@@ -4499,7 +4521,13 @@ namespace VAdvantage.Model
                     return DocActionVariables.STATUS_INVALID;
                 }
             }
-
+            //Some times when complete the Invoice with zero amount the header ispaid check box not getting true but on 
+            //but on schedule the IsPaid check is true - so handled here
+            int _IsNotPaid = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(C_InvoicePayschedule_ID) AS IsPaid FROM C_InvoicePayschedule WHERE VA009_IsPaid='N' AND IsActive='Y' AND C_Invoice_ID=" + GetC_Invoice_ID()));
+            if (_IsNotPaid == 0)
+            {
+                SetIsPaid(true);
+            }
             return DocActionVariables.STATUS_COMPLETED;
         }
 
@@ -5157,19 +5185,30 @@ namespace VAdvantage.Model
         {
             //	Is this a counter doc ?
             if (GetRef_Invoice_ID() != 0)
+            {
+                //set processmsg as null to avoid avoid mis -execution CreateCounterDoc()
+                _message = null;
                 return null;
+            }
 
             //	Org Must be linked to BPartner
             MOrg org = MOrg.Get(GetCtx(), GetAD_Org_ID());
             int counterC_BPartner_ID = org.GetLinkedC_BPartner_ID(Get_TrxName()); //jz
             if (counterC_BPartner_ID == 0)
+            {
+                //if Linked BP is not found then return the message to user
+                _message = Msg.GetMsg(GetCtx(), "VIS_CoutrBPNotFound");
                 return null;
+            }
             //	Business Partner needs to be linked to Org
             MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), null);
             int counterAD_Org_ID = bp.GetAD_OrgBP_ID_Int();
             if (counterAD_Org_ID == 0)
+            {
+                //if Linked Org_ID is not found then return the message to user
+                _message = Msg.GetMsg(GetCtx(), "VIS_CoutrOrgNotFound");
                 return null;
-
+            }
             MBPartner counterBP = new MBPartner(GetCtx(), counterC_BPartner_ID, null);
             MOrgInfo counterOrgInfo = MOrgInfo.Get(GetCtx(), counterAD_Org_ID, null);
             log.Info("Counter BP=" + counterBP.GetName());
@@ -5180,13 +5219,20 @@ namespace VAdvantage.Model
             if (counterDT != null)
             {
                 log.Fine(counterDT.ToString());
+                //if counter DocType is not valid then return the message to user
                 if (!counterDT.IsCreateCounter() || !counterDT.IsValid())
+                {
+                    _message = Msg.GetMsg(GetCtx(), "VIS_InvalidCoutrDocType");
                     return null;
+                }
                 C_DocTypeTarget_ID = counterDT.GetCounter_C_DocType_ID();
             }
             if (C_DocTypeTarget_ID <= 0)
+            {
+                //if counter DocType is not found then return the message to user
+                _message = Msg.GetMsg(GetCtx(), "VIS_NotfundCoutrDocType");
                 return null;
-
+            }
             // Ref_C_Invoice_ID --> contain reference of Orignal Document which is to be reversed
             // Ref_Invoice_ID --> contain reference of counter document which is to be created against this document
             // when we reverse document, and if counter document is created agaisnt its orignal document then need to reverse that document also
@@ -5242,6 +5288,12 @@ namespace VAdvantage.Model
                 {
                     counter.SetDocAction(counterDT.GetDocAction());
                     counter.ProcessIt(counterDT.GetDocAction());
+                    //set IsPaid check true if all schedules paid checkbox is true
+                    int _IsNotPaid = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(C_InvoicePayschedule_ID) AS IsPaid FROM C_InvoicePayschedule WHERE VA009_IsPaid='N' AND IsActive='Y' AND C_Invoice_ID=" + counter.GetC_Invoice_ID()));
+                    if (_IsNotPaid == 0)
+                    {
+                        counter.SetIsPaid(true);
+                    }
                     counter.Save(Get_TrxName());
                 }
             }

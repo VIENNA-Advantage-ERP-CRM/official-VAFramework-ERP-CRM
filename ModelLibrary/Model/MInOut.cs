@@ -71,6 +71,9 @@ namespace VAdvantage.Model
         /**is container applicable */
         private bool isContainrApplicable = false;
 
+        //while handling the counter document this variable is used
+        private string _message = null;
+
         #endregion
 
         /// <summary>
@@ -3936,13 +3939,27 @@ namespace VAdvantage.Model
             //	Counter Documents
             try
             {
+                //if counter document not created due to some error not to completed the record
+                //and it should return the error message to the user
                 MInOut counter = CreateCounterDoc();
                 if (counter != null)
+                {
                     Info.Append(" - @CounterDoc@: @M_InOut_ID@=").Append(counter.GetDocumentNo());
+                }
+                //if Msg not null incase of counter record is null
+                else if (_message != null)
+                {
+                    _processMsg = _message;
+                    //then return message to user and Doc Status is changed to Inprogress
+                    return DocActionVariables.STATUS_INPROGRESS;
+                }
             }
             catch (Exception e)
             {
-                Info.Append(" - @CounterDoc@: ").Append(e.Message.ToString());
+                //if get exception while creating counter document then return the message to the user
+                //Info.Append(" - @CounterDoc@: ").Append(e.Message.ToString());
+                _processMsg = e.Message.ToString();
+                return DocActionVariables.STATUS_INPROGRESS;
             }
 
             //	User Validation
@@ -5074,20 +5091,32 @@ namespace VAdvantage.Model
         {
             //	Is this a counter doc ?
             if (GetRef_InOut_ID() != 0)
+            {
+                _message = null;
                 return null;
-
+            }
             //	Org Must be linked to BPartner
             MOrg org = MOrg.Get(GetCtx(), GetAD_Org_ID());
             //jz int counterC_BPartner_ID = org.getLinkedC_BPartner_ID(get_TrxName()); 
             int counterC_BPartner_ID = org.GetLinkedC_BPartner_ID(Get_TrxName());
+            //if counter BP not found the return the message Counter Bp not found for Linked Org
             if (counterC_BPartner_ID == 0)
+            {
+                _message = Msg.GetMsg(GetCtx(), "VIS_CoutrBPNotFound");
                 return null;
+            }
             //	Business Partner needs to be linked to Org
             //jz MBPartner bp = new MBPartner (getCtx(), getC_BPartner_ID(), null);
             MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_TrxName());
             int counterAD_Org_ID = bp.GetAD_OrgBP_ID_Int();
             if (counterAD_Org_ID == 0)
-                return null;
+                //if Org is not link the for BP the return message to the user, not found Link Org with the BP
+                if (counterAD_Org_ID == 0)
+                {
+                    //if Link Org not found then return the message to user plz first link the Org
+                    _message = Msg.GetMsg(GetCtx(), "VIS_CoutrOrgNotFound");
+                    return null;
+                }
 
             //jz MBPartner counterBP = new MBPartner (getCtx(), counterC_BPartner_ID, null);
             MBPartner counterBP = new MBPartner(GetCtx(), counterC_BPartner_ID, Get_TrxName());
@@ -5101,13 +5130,22 @@ namespace VAdvantage.Model
             if (counterDT != null)
             {
                 log.Fine(counterDT.ToString());
+                //if Created Inter Company Document is not Valid the does not allow user to complete the record
+                //it should return message to user the Counter Document is not Valid
                 if (!counterDT.IsCreateCounter() || !counterDT.IsValid())
+                {
+                    _message = Msg.GetMsg(GetCtx(), "VIS_InvalidCoutrDocType");
                     return null;
+                }
                 C_DocTypeTarget_ID = counterDT.GetCounter_C_DocType_ID();
                 isReturnTrx = counterDT.GetCounterDocType().IsReturnTrx();
             }
+            //if Counter document type not found then return message to the user
             if (C_DocTypeTarget_ID <= 0)
+            {
+                _message = Msg.GetMsg(GetCtx(), "VIS_NotfundCoutrDocType");
                 return null;
+            }
 
             // ReversalDoc_ID --> contain reference of Orignal Document which is to be reversed
             // Ref_InOut_ID --> contain reference of counter document which is to be created against this document

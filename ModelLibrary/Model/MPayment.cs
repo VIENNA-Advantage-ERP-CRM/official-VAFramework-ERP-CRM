@@ -61,6 +61,10 @@ namespace VAdvantage.Model
         // when multiple user try to pay agaisnt same schedule from different scenarion at that tym lock record
         static readonly object objLock = new object();
 
+
+        //while handling the counter document this variable is used
+        private string _message = null;
+
         /// <summary>
         /// Standard Constructor
         /// </summary>
@@ -2923,7 +2927,14 @@ namespace VAdvantage.Model
             //	Counter Doc
             MPayment counter = CreateCounterDoc();
             if (counter != null)
+            {
                 _processMsg += " @CounterDoc@: @C_Payment_ID@=" + counter.GetDocumentNo();
+            }
+            else if (_message != null)//if processMsg have value then It stop to complete the record and show the error message to the user
+            {
+                _processMsg = _message;
+                return DocActionVariables.STATUS_INPROGRESS;
+            }
 
             //	User Validation
             String valid = ModelValidationEngine.Get().FireDocValidate(this, ModalValidatorVariables.DOCTIMING_AFTER_COMPLETE);
@@ -4518,20 +4529,28 @@ namespace VAdvantage.Model
         {
             //	Is this a counter doc ?
             if (GetRef_Payment_ID() != 0)
+            {
+                _message = null;
                 return null;
-
+            }
             //	Org Must be linked to BPartner
             MOrg org = MOrg.Get(GetCtx(), GetAD_Org_ID());
             //jz int counterC_BPartner_ID = org.GetLinkedC_BPartner_ID(); 
             int counterC_BPartner_ID = org.GetLinkedC_BPartner_ID(Get_Trx());
             if (counterC_BPartner_ID == 0)
+            {
+                _message = Msg.GetMsg(GetCtx(), "VIS_CoutrBPNotFound");
                 return null;
+            }
             //	Business Partner needs to be linked to Org
             //jz MBPartner bp = new MBPartner (GetCtx(), GetC_BPartner_ID(), null);
             MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_Trx());
             int counterAD_Org_ID = bp.GetAD_OrgBP_ID_Int();
             if (counterAD_Org_ID == 0)
+            {
+                _message = Msg.GetMsg(GetCtx(), "VIS_CoutrOrgNotFound");
                 return null;
+            }
 
             //jz MBPartner counterBP = new MBPartner (GetCtx(), counterC_BPartner_ID, null);
             MBPartner counterBP = new MBPartner(GetCtx(), counterC_BPartner_ID, Get_Trx());
@@ -4544,12 +4563,20 @@ namespace VAdvantage.Model
             if (counterDT != null)
             {
                 log.Fine(counterDT.ToString());
+                //check the Doc Type is Valid or not to create counter Document
                 if (!counterDT.IsCreateCounter() || !counterDT.IsValid())
+                {
+                    _message = Msg.GetMsg(GetCtx(), "VIS_InvalidCoutrDocType");
                     return null;
+                }
                 C_DocTypeTarGet_ID = counterDT.GetCounter_C_DocType_ID();
             }
+            //if Document Type not found then reutrn a message to user
             if (C_DocTypeTarGet_ID <= 0)
+            {
+                _message = Msg.GetMsg(GetCtx(), "VIS_NotfundCoutrDocType");
                 return null;
+            }
 
             //	Deep Copy
             MPayment counter = new MPayment(GetCtx(), 0, Get_Trx());
