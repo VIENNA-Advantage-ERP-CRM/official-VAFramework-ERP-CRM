@@ -2761,7 +2761,7 @@ namespace VAdvantage.Model
 
                 log.Info(ToString());
                 StringBuilder Info = new StringBuilder();
-                MDocType dt = new MDocType(GetCtx(), GetC_DocTypeTarget_ID(), Get_Trx());
+                MDocType dt = MDocType.Get(GetCtx(), GetC_DocTypeTarget_ID());
                 //	Create Cash when the invoice againt order and payment method cash and  order is of POS type
                 if ((PAYMENTRULE_Cash.Equals(GetPaymentRule()) || PAYMENTRULE_CashAndCredit.Equals(GetPaymentRule())) && GetC_Order_ID() > 0)
                 {
@@ -3067,7 +3067,7 @@ namespace VAdvantage.Model
                        && !IsReversal())
                     {
                         int noAssets = (int)line.GetQtyEntered();
-                        MProduct product = new MProduct(GetCtx(), line.GetM_Product_ID(), Get_TrxName());
+                        MProduct product = MProduct.Get(GetCtx(), line.GetM_Product_ID());
                         if (product != null &&
                             (product.GetProductType() == X_M_Product.PRODUCTTYPE_Service || product.GetProductType() == X_M_Product.PRODUCTTYPE_ExpenseType) &&
                             product.IsCreateAsset())
@@ -4160,7 +4160,7 @@ namespace VAdvantage.Model
                             if (po != null)
                             {
                                 // Check if multiple vendors exist as current vwndor.Mohit
-                                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM M_Product_PO WHERE IsActive='Y' AND IsCurrentVendor='Y' AND  M_Product_ID = " + line.GetM_Product_ID(), null, Get_Trx())) > 1)
+                                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(M_Product_ID) FROM M_Product_PO WHERE IsActive='Y' AND IsCurrentVendor='Y' AND  M_Product_ID = " + line.GetM_Product_ID(), null, Get_Trx())) > 1)
                                 {
                                     // Update all vendors on purchasing tab as current vendor = False.
                                     DB.ExecuteQuery("UPDATE M_Product_PO SET IsCurrentVendor='N' WHERE C_BPartner_ID !=" + GetC_BPartner_ID() + " AND M_Product_ID= " + line.GetM_Product_ID(), null, Get_Trx());
@@ -5541,8 +5541,8 @@ namespace VAdvantage.Model
                 #region Calculating Cost on Expenses Arpit
                 //else
                 //{
-                Tuple<String, String, String> mInfo = null;
-                if (Env.HasModulePrefix("VAFAM_", out mInfo) && rLine.Get_ColumnIndex("VAFAM_IsAssetRelated") > 0)
+                
+                if (Env.IsModuleInstalled("VAFAM_") && rLine.Get_ColumnIndex("VAFAM_IsAssetRelated") > 0)
                 {
                     if (!IsSOTrx() && !IsReturnTrx() && Util.GetValueOfBool(rLine.Get_Value("VAFAM_IsAssetRelated")))
                     {

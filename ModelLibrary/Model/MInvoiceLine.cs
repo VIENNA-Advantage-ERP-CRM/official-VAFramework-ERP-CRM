@@ -1121,7 +1121,7 @@ namespace VAdvantage.Model
                     base.SetTaxAmt(TaxAmt);
                     SetSurchargeAmt(surchargeAmt);
                 }
-                else
+                else if(GetTaxAmt().Equals(Env.ZERO))
                 {
                     TaxAmt = tax.CalculateTax(GetLineNetAmt(), IsTaxIncluded(), GetPrecision());
                     if (IsTaxIncluded())
@@ -3355,7 +3355,7 @@ namespace VAdvantage.Model
                         SetM_Product_ID(0);
                 }
 
-                MInvoice inv = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
+                MInvoice inv = GetParent();
 
                 // Check if new columns found on Asset table
                 //bool forComponent = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(AD_Column_ID) FROM AD_Column WHERE ColumnName='VAFAM_HasComponent'
@@ -3967,7 +3967,7 @@ namespace VAdvantage.Model
                 if (!success || IsProcessed())
                     return success;
 
-                inv = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
+                inv = GetParent();
 
                 // Reset Amount Dimension on header after save of new record
                 if (newRecord && GetLineNetAmt() != 0)
