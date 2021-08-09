@@ -148,6 +148,12 @@
                     lblEdit.hide();
                     chkEdit.hide();
                 }
+
+                // If user do not have access to create or edit attribute,
+                // need to hide new lot button
+                if (!canCreate & !canEdit) {
+                    btnLot.hide();
+                }
             }
             else {
                 //lblEdit.css("display", "none");

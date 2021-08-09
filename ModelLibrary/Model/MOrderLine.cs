@@ -3860,8 +3860,8 @@ namespace VAdvantage.Model
                 }
             }
 
-            MOrder Ord = new MOrder(Env.GetCtx(), GetC_Order_ID(), Get_Trx());
-            MDocType docType = MDocType.Get(Env.GetCtx(), Ord.GetC_DocTypeTarget_ID());
+            MOrder Ord = GetParent();
+            MDocType docType = MDocType.Get(GetCtx(), Ord.GetC_DocTypeTarget_ID());
 
             // JID_1850 if product is there when qty delivered / invoicedcant be less than qtyordered
             if ((GetM_Product_ID()) > 0)
@@ -4709,7 +4709,7 @@ namespace VAdvantage.Model
 
             if (!IsProcessed())
             {
-                Ord = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
+                Ord = GetParent();
                 if (!newRecord && Is_ValueChanged("C_Tax_ID") && !(!String.IsNullOrEmpty(Ord.GetConditionalFlag()) &&
                     Ord.GetConditionalFlag().Equals(MOrder.CONDITIONALFLAG_PrepareIt)))
                 {
