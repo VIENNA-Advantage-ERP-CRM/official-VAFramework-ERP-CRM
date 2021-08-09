@@ -5095,6 +5095,38 @@ namespace VAdvantage.Model
                 _message = null;
                 return null;
             }
+
+            //	Document Type
+            //check weather Counter Document created & Acitve or not 
+            int C_DocTypeTarget_ID = 0;
+            bool isReturnTrx = false;
+            MDocTypeCounter counterDT = MDocTypeCounter.GetCounterDocType(GetCtx(), GetC_DocType_ID());
+            if (counterDT != null)
+            {
+                log.Fine(counterDT.ToString());
+                //if Created Inter Company Document is not Valid the does not allow user to complete the record
+                //it should return message to user the Counter Document is not Valid
+                if (!counterDT.IsCreateCounter() || !counterDT.IsValid())
+                {
+                    _message = Msg.GetMsg(GetCtx(), "VIS_InvalidCoutrDocType");
+                    return null;
+                }
+                C_DocTypeTarget_ID = counterDT.GetCounter_C_DocType_ID();
+                isReturnTrx = counterDT.GetCounterDocType().IsReturnTrx();
+                //if Counter document type not found then return message to the user
+                if (C_DocTypeTarget_ID <= 0)
+                {
+                    _message = Msg.GetMsg(GetCtx(), "VIS_NotfundCoutrDocType");
+                    return null;
+                }
+            }
+            else
+            {
+                _message = null;
+                return null;
+            }
+
+
             //	Org Must be linked to BPartner
             MOrg org = MOrg.Get(GetCtx(), GetAD_Org_ID());
             //jz int counterC_BPartner_ID = org.getLinkedC_BPartner_ID(get_TrxName()); 
@@ -5122,30 +5154,6 @@ namespace VAdvantage.Model
             MBPartner counterBP = new MBPartner(GetCtx(), counterC_BPartner_ID, Get_TrxName());
             MOrgInfo counterOrgInfo = MOrgInfo.Get(GetCtx(), counterAD_Org_ID, null);
             log.Info("Counter BP=" + counterBP.GetName());
-
-            //	Document Type
-            int C_DocTypeTarget_ID = 0;
-            bool isReturnTrx = false;
-            MDocTypeCounter counterDT = MDocTypeCounter.GetCounterDocType(GetCtx(), GetC_DocType_ID());
-            if (counterDT != null)
-            {
-                log.Fine(counterDT.ToString());
-                //if Created Inter Company Document is not Valid the does not allow user to complete the record
-                //it should return message to user the Counter Document is not Valid
-                if (!counterDT.IsCreateCounter() || !counterDT.IsValid())
-                {
-                    _message = Msg.GetMsg(GetCtx(), "VIS_InvalidCoutrDocType");
-                    return null;
-                }
-                C_DocTypeTarget_ID = counterDT.GetCounter_C_DocType_ID();
-                isReturnTrx = counterDT.GetCounterDocType().IsReturnTrx();
-            }
-            //if Counter document type not found then return message to the user
-            if (C_DocTypeTarget_ID <= 0)
-            {
-                _message = Msg.GetMsg(GetCtx(), "VIS_NotfundCoutrDocType");
-                return null;
-            }
 
             // ReversalDoc_ID --> contain reference of Orignal Document which is to be reversed
             // Ref_InOut_ID --> contain reference of counter document which is to be created against this document

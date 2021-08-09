@@ -5709,6 +5709,35 @@ namespace VAdvantage.Model
                 _message = null;
                 return null;
             }
+
+            //	Document Type
+            //check weather Counter Document created & Acitve or not 
+            int C_DocTypeTarget_ID = 0;
+            MDocTypeCounter counterDT = MDocTypeCounter.GetCounterDocType(GetCtx(), GetC_DocType_ID());
+            if (counterDT != null)
+            {
+                log.Fine(counterDT.ToString());
+                if (!counterDT.IsCreateCounter() || !counterDT.IsValid())
+                {
+                    //return the messge if couter DocType is not valid
+                    _message = Msg.GetMsg(GetCtx(), "VIS_InvalidCoutrDocType");
+                    return null;
+                }
+                C_DocTypeTarget_ID = counterDT.GetCounter_C_DocType_ID();
+                if (C_DocTypeTarget_ID <= 0)
+                {
+                    //return the messge if couter DocType is not found
+                    _message = Msg.GetMsg(GetCtx(), "VIS_NotfundCoutrDocType");
+                    return null;
+                }
+            }
+            else
+            {
+                _message = null;
+                return null;
+            }
+
+
             //	Org Must be linked to BPartner
             MOrg org = MOrg.Get(GetCtx(), GetAD_Org_ID());
             //jz int counterC_BPartner_ID = org.getLinkedC_BPartner_ID(Get_TrxName()); 
@@ -5734,27 +5763,6 @@ namespace VAdvantage.Model
             MBPartner counterBP = new MBPartner(GetCtx(), counterC_BPartner_ID, Get_TrxName());
             MOrgInfo counterOrgInfo = MOrgInfo.Get(GetCtx(), counterAD_Org_ID, null);
             log.Info("Counter BP=" + counterBP.GetName());
-
-            //	Document Type
-            int C_DocTypeTarget_ID = 0;
-            MDocTypeCounter counterDT = MDocTypeCounter.GetCounterDocType(GetCtx(), GetC_DocType_ID());
-            if (counterDT != null)
-            {
-                log.Fine(counterDT.ToString());
-                if (!counterDT.IsCreateCounter() || !counterDT.IsValid())
-                {
-                    //return the messge if couter DocType is not valid
-                    _message = Msg.GetMsg(GetCtx(), "VIS_InvalidCoutrDocType");
-                    return null;
-                }
-                C_DocTypeTarget_ID = counterDT.GetCounter_C_DocType_ID();
-            }
-            if (C_DocTypeTarget_ID <= 0)
-            {
-                //return the messge if couter DocType is not found
-                _message = Msg.GetMsg(GetCtx(), "VIS_NotfundCoutrDocType");
-                return null;
-            }
 
             // set counter Businees partner 
             SetCounterBPartner(counterBP, counterAD_Org_ID, counterOrgInfo.GetM_Warehouse_ID());

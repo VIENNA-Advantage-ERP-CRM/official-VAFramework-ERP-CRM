@@ -5191,6 +5191,33 @@ namespace VAdvantage.Model
                 return null;
             }
 
+            //	Document Type
+            //check weather Counter Document created & Acitve or not 
+            int C_DocTypeTarget_ID = 0;
+            MDocTypeCounter counterDT = MDocTypeCounter.GetCounterDocType(GetCtx(), GetC_DocType_ID());
+            if (counterDT != null)
+            {
+                log.Fine(counterDT.ToString());
+                //if counter DocType is not valid then return the message to user
+                if (!counterDT.IsCreateCounter() || !counterDT.IsValid())
+                {
+                    _message = Msg.GetMsg(GetCtx(), "VIS_InvalidCoutrDocType");
+                    return null;
+                }
+                C_DocTypeTarget_ID = counterDT.GetCounter_C_DocType_ID();
+                if (C_DocTypeTarget_ID <= 0)
+                {
+                    //if counter DocType is not found then return the message to user
+                    _message = Msg.GetMsg(GetCtx(), "VIS_NotfundCoutrDocType");
+                    return null;
+                }
+            }
+            else
+            {
+                _message = null;
+                return null;
+            }
+
             //	Org Must be linked to BPartner
             MOrg org = MOrg.Get(GetCtx(), GetAD_Org_ID());
             int counterC_BPartner_ID = org.GetLinkedC_BPartner_ID(Get_TrxName()); //jz
@@ -5210,29 +5237,9 @@ namespace VAdvantage.Model
                 return null;
             }
             MBPartner counterBP = new MBPartner(GetCtx(), counterC_BPartner_ID, null);
-            MOrgInfo counterOrgInfo = MOrgInfo.Get(GetCtx(), counterAD_Org_ID, null);
+            //MOrgInfo counterOrgInfo = MOrgInfo.Get(GetCtx(), counterAD_Org_ID, null);//not in Use
             log.Info("Counter BP=" + counterBP.GetName());
 
-            //	Document Type
-            int C_DocTypeTarget_ID = 0;
-            MDocTypeCounter counterDT = MDocTypeCounter.GetCounterDocType(GetCtx(), GetC_DocType_ID());
-            if (counterDT != null)
-            {
-                log.Fine(counterDT.ToString());
-                //if counter DocType is not valid then return the message to user
-                if (!counterDT.IsCreateCounter() || !counterDT.IsValid())
-                {
-                    _message = Msg.GetMsg(GetCtx(), "VIS_InvalidCoutrDocType");
-                    return null;
-                }
-                C_DocTypeTarget_ID = counterDT.GetCounter_C_DocType_ID();
-            }
-            if (C_DocTypeTarget_ID <= 0)
-            {
-                //if counter DocType is not found then return the message to user
-                _message = Msg.GetMsg(GetCtx(), "VIS_NotfundCoutrDocType");
-                return null;
-            }
             // Ref_C_Invoice_ID --> contain reference of Orignal Document which is to be reversed
             // Ref_Invoice_ID --> contain reference of counter document which is to be created against this document
             // when we reverse document, and if counter document is created agaisnt its orignal document then need to reverse that document also

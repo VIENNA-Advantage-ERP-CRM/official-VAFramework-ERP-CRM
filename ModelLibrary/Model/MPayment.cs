@@ -4533,6 +4533,35 @@ namespace VAdvantage.Model
                 _message = null;
                 return null;
             }
+
+            //	Document Type
+            //check weather Counter Document created & Acitve or not 
+            int C_DocTypeTarGet_ID = 0;
+            MDocTypeCounter counterDT = MDocTypeCounter.GetCounterDocType(GetCtx(), GetC_DocType_ID());
+            if (counterDT != null)
+            {
+                log.Fine(counterDT.ToString());
+                //check the Doc Type is Valid or not to create counter Document
+                if (!counterDT.IsCreateCounter() || !counterDT.IsValid())
+                {
+                    _message = Msg.GetMsg(GetCtx(), "VIS_InvalidCoutrDocType");
+                    return null;
+                }
+                C_DocTypeTarGet_ID = counterDT.GetCounter_C_DocType_ID();
+
+                //if Document Type not found then reutrn a message to user
+                if (C_DocTypeTarGet_ID <= 0)
+                {
+                    _message = Msg.GetMsg(GetCtx(), "VIS_NotfundCoutrDocType");
+                    return null;
+                }
+            }
+            else
+            {
+                _message = null;
+                return null;
+            }
+
             //	Org Must be linked to BPartner
             MOrg org = MOrg.Get(GetCtx(), GetAD_Org_ID());
             //jz int counterC_BPartner_ID = org.GetLinkedC_BPartner_ID(); 
@@ -4556,27 +4585,6 @@ namespace VAdvantage.Model
             MBPartner counterBP = new MBPartner(GetCtx(), counterC_BPartner_ID, Get_Trx());
             //	MOrgInfo counterOrgInfo = MOrgInfo.Get(GetCtx(), counterAD_Org_ID);
             log.Info("Counter BP=" + counterBP.GetName());
-
-            //	Document Type
-            int C_DocTypeTarGet_ID = 0;
-            MDocTypeCounter counterDT = MDocTypeCounter.GetCounterDocType(GetCtx(), GetC_DocType_ID());
-            if (counterDT != null)
-            {
-                log.Fine(counterDT.ToString());
-                //check the Doc Type is Valid or not to create counter Document
-                if (!counterDT.IsCreateCounter() || !counterDT.IsValid())
-                {
-                    _message = Msg.GetMsg(GetCtx(), "VIS_InvalidCoutrDocType");
-                    return null;
-                }
-                C_DocTypeTarGet_ID = counterDT.GetCounter_C_DocType_ID();
-            }
-            //if Document Type not found then reutrn a message to user
-            if (C_DocTypeTarGet_ID <= 0)
-            {
-                _message = Msg.GetMsg(GetCtx(), "VIS_NotfundCoutrDocType");
-                return null;
-            }
 
             //	Deep Copy
             MPayment counter = new MPayment(GetCtx(), 0, Get_Trx());
