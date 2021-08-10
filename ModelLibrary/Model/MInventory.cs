@@ -2158,6 +2158,7 @@ namespace VAdvantage.Model
                                     #region update Physical Inventory
                                     if (inventoryLine.GetM_ProductContainer_ID() == line.GetM_ProductContainer_ID())
                                     {
+                                        inventoryLine.SetParent(inventory);
                                         inventoryLine.SetQtyBook(containerCurrentQty);
                                         inventoryLine.SetOpeningStock(containerCurrentQty);
                                         inventoryLine.SetDifferenceQty(Decimal.Subtract(containerCurrentQty, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["ContainerCurrentQty"])));
@@ -2374,7 +2375,7 @@ namespace VAdvantage.Model
                                 inventory = new MInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetM_Inventory_ID()), Get_TrxName());
                                 if (!inventory.IsInternalUse())
                                 {
-                                    //break;
+                                    inventoryLine.SetParent(inventory);
                                     inventoryLine.SetQtyBook(qtyDiffer);
                                     inventoryLine.SetOpeningStock(qtyDiffer);
                                     inventoryLine.SetDifferenceQty(Decimal.Subtract(qtyDiffer, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["currentqty"])));

@@ -80,6 +80,7 @@ namespace VAdvantage.Model
         public MMovementLine(MMovement parent)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
+            SetParent(parent);
             SetClientOrg(parent);
             SetM_Movement_ID(parent.GetM_Movement_ID());
         }

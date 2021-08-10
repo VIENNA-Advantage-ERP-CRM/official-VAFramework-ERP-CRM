@@ -455,7 +455,7 @@ namespace VAdvantage.Model
             {
                 return Msg.GetMsg(Env.GetCtx(), "AlreadyFound");
             }
-            return string.Empty;            
+            return string.Empty;
         }
 
         public void UpdateStockSummary()
@@ -837,8 +837,10 @@ namespace VAdvantage.Model
                         if (Util.GetValueOfString(dataSet.Tables[0].Rows[index]["MovementType"]) == "I+" && Util.GetValueOfInt(dataSet.Tables[0].Rows[index]["M_InventoryLine_ID"]) > 0)
                         {
                             MInventoryLine minventoryLine = new MInventoryLine(ctx, Util.GetValueOfInt(dataSet.Tables[0].Rows[index]["M_InventoryLine_ID"]), _trx);
-                            if (!new MInventory(ctx, Util.GetValueOfInt(minventoryLine.GetM_Inventory_ID()), _trx).IsInternalUse())
+                            MInventory inventory = new MInventory(ctx, Util.GetValueOfInt(minventoryLine.GetM_Inventory_ID()), _trx);
+                            if (!inventory.IsInternalUse())
                             {
+                                minventoryLine.SetParent(inventory);
                                 minventoryLine.SetQtyBook(qtyMove);
                                 minventoryLine.SetOpeningStock(qtyMove);
                                 minventoryLine.SetDifferenceQty(Decimal.Subtract(qtyMove, Util.GetValueOfDecimal(dataSet.Tables[0].Rows[index]["currentqty"])));
@@ -918,10 +920,12 @@ namespace VAdvantage.Model
                         if (Util.GetValueOfString(dataSet.Tables[0].Rows[index]["MovementType"]) == "I+" && Util.GetValueOfInt(dataSet.Tables[0].Rows[index]["M_InventoryLine_ID"]) > 0)
                         {
                             MInventoryLine minventoryLine = new MInventoryLine(ctx, Util.GetValueOfInt(dataSet.Tables[0].Rows[index]["M_InventoryLine_ID"]), _trx);
-                            if (!new MInventory(ctx, Util.GetValueOfInt(minventoryLine.GetM_Inventory_ID()), (Trx)null).IsInternalUse())
+                            MInventory inventory = new MInventory(ctx, Util.GetValueOfInt(minventoryLine.GetM_Inventory_ID()), _trx);
+                            if (!inventory.IsInternalUse())
                             {
                                 if (minventoryLine.GetM_ProductContainer_ID() == containerId)
                                 {
+                                    minventoryLine.SetParent(inventory);
                                     minventoryLine.SetQtyBook(containerCurrentQty);
                                     minventoryLine.SetOpeningStock(containerCurrentQty);
                                     minventoryLine.SetDifferenceQty(Decimal.Subtract(containerCurrentQty, Util.GetValueOfDecimal(dataSet.Tables[0].Rows[index]["ContainerCurrentQty"])));

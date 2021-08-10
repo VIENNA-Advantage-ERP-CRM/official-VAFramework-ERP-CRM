@@ -4199,12 +4199,13 @@ namespace VAdvantage.Model
                                  Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_InventoryLine_ID"]) > 0)
                             {
                                 inventoryLine = new MInventoryLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_InventoryLine_ID"]), Get_TrxName());
-                                inventory = new MInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetM_Inventory_ID()), null);
+                                inventory = new MInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetM_Inventory_ID()), Get_TrxName());
                                 if (!inventory.IsInternalUse())
                                 {
                                     #region update Physical Inventory
                                     if (inventoryLine.GetM_ProductContainer_ID() == sLine.GetM_ProductContainer_ID())
                                     {
+                                        inventoryLine.SetParent(inventory);
                                         inventoryLine.SetQtyBook(containerCurrentQty);
                                         inventoryLine.SetOpeningStock(containerCurrentQty);
                                         inventoryLine.SetDifferenceQty(Decimal.Subtract(containerCurrentQty, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["ContainerCurrentQty"])));
@@ -4417,10 +4418,10 @@ namespace VAdvantage.Model
                                  Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_InventoryLine_ID"]) > 0)
                             {
                                 inventoryLine = new MInventoryLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_InventoryLine_ID"]), Get_TrxName());
-                                inventory = new MInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetM_Inventory_ID()), null);
+                                inventory = new MInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetM_Inventory_ID()), Get_TrxName());
                                 if (!inventory.IsInternalUse())
                                 {
-                                    //break;
+                                    inventoryLine.SetParent(inventory);
                                     inventoryLine.SetQtyBook(Qty);
                                     inventoryLine.SetOpeningStock(Qty);
                                     inventoryLine.SetDifferenceQty(Decimal.Subtract(Qty, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["currentqty"])));

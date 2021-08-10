@@ -236,6 +236,7 @@ namespace VAdvantage.Process
                                         int line_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][0]);
                                         currentQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[j][7]);
                                         MInventoryLine iLine = new MInventoryLine(GetCtx(), line_ID, Get_TrxName());
+                                        iLine.SetParent(inventory);
                                         iLine.SetQtyBook(currentQty);
                                         iLine.SetOpeningStock(currentQty);
                                         if (iLine.GetAdjustmentType() == "A")
