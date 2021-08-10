@@ -71,8 +71,6 @@ namespace VAdvantage.Model
         /**is container applicable */
         private bool isContainrApplicable = false;
 
-        //while handling the counter document this variable is used
-        private string _message = null;
 
         #endregion
 
@@ -3946,13 +3944,6 @@ namespace VAdvantage.Model
                 {
                     Info.Append(" - @CounterDoc@: @M_InOut_ID@=").Append(counter.GetDocumentNo());
                 }
-                //if Msg not null incase of counter record is null
-                else if (_message != null)
-                {
-                    _processMsg = _message;
-                    //then return message to user and Doc Status is changed to Inprogress
-                    return DocActionVariables.STATUS_INPROGRESS;
-                }
             }
             catch (Exception e)
             {
@@ -5092,7 +5083,6 @@ namespace VAdvantage.Model
             //	Is this a counter doc ?
             if (GetRef_InOut_ID() != 0)
             {
-                _message = null;
                 return null;
             }
 
@@ -5108,7 +5098,8 @@ namespace VAdvantage.Model
                 //it should return message to user the Counter Document is not Valid
                 if (!counterDT.IsCreateCounter() || !counterDT.IsValid())
                 {
-                    _message = Msg.GetMsg(GetCtx(), "VIS_InvalidCoutrDocType");
+                    //erro save into the log
+                    log.SaveError(Msg.GetMsg(GetCtx(), "VIS_InvalidCoutrDocType"), "");
                     return null;
                 }
                 C_DocTypeTarget_ID = counterDT.GetCounter_C_DocType_ID();
@@ -5116,13 +5107,13 @@ namespace VAdvantage.Model
                 //if Counter document type not found then return message to the user
                 if (C_DocTypeTarget_ID <= 0)
                 {
-                    _message = Msg.GetMsg(GetCtx(), "VIS_NotfundCoutrDocType");
+                    //erro save into the log
+                    log.SaveError(Msg.GetMsg(GetCtx(), "VIS_NotfundCoutrDocType"), "");
                     return null;
                 }
             }
             else
             {
-                _message = null;
                 return null;
             }
 
@@ -5134,21 +5125,28 @@ namespace VAdvantage.Model
             //if counter BP not found the return the message Counter Bp not found for Linked Org
             if (counterC_BPartner_ID == 0)
             {
-                _message = Msg.GetMsg(GetCtx(), "VIS_CoutrBPNotFound");
+                //erro save into the log
+                log.SaveError(Msg.GetMsg(GetCtx(), "VIS_CoutrBPNotFound"), "");
                 return null;
             }
             //	Business Partner needs to be linked to Org
             //jz MBPartner bp = new MBPartner (getCtx(), getC_BPartner_ID(), null);
             MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_TrxName());
             int counterAD_Org_ID = bp.GetAD_OrgBP_ID_Int();
+            //if Org is not link the for BP the return message to the user, not found Link Org with the BP
             if (counterAD_Org_ID == 0)
-                //if Org is not link the for BP the return message to the user, not found Link Org with the BP
-                if (counterAD_Org_ID == 0)
-                {
-                    //if Link Org not found then return the message to user plz first link the Org
-                    _message = Msg.GetMsg(GetCtx(), "VIS_CoutrOrgNotFound");
-                    return null;
-                }
+            {
+                //if Link Org not found then return null not access to do counter document
+                log.SaveError(Msg.GetMsg(GetCtx(), "VIS_CoutrOrgNotFound"), "");
+                return null;
+            }
+
+            //System should not allow to create counter document with same BP and organization.
+            if (counterAD_Org_ID == GetAD_Org_ID() || counterC_BPartner_ID == GetC_BPartner_ID())
+            {
+                log.SaveError(Msg.GetMsg(GetCtx(), "VIS_CtrOrgorBPShldNotAlwSame"), "");
+                return null;
+            }
 
             //jz MBPartner counterBP = new MBPartner (getCtx(), counterC_BPartner_ID, null);
             MBPartner counterBP = new MBPartner(GetCtx(), counterC_BPartner_ID, Get_TrxName());

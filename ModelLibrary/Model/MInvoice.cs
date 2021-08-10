@@ -63,8 +63,6 @@ namespace VAdvantage.Model
         string conversionNotFoundInOut = "";
         MInOutLine sLine = null;
 
-        //while handling the counter document this variable is used
-        private string _message = null;
         #endregion
 
         /// <summary>
@@ -4483,11 +4481,6 @@ namespace VAdvantage.Model
                     {
                         Info.Append(" - @CounterDoc@: @C_Invoice_ID@=").Append(counter.GetDocumentNo());
                     }
-                    else if (_message != null)
-                    {
-                        _processMsg = _message;
-                        return DocActionVariables.STATUS_INPROGRESS;
-                    }
                 }
                 catch (Exception e)
                 {
@@ -5186,8 +5179,6 @@ namespace VAdvantage.Model
             //	Is this a counter doc ?
             if (GetRef_Invoice_ID() != 0)
             {
-                //set processmsg as null to avoid avoid mis -execution CreateCounterDoc()
-                _message = null;
                 return null;
             }
 
@@ -5198,23 +5189,22 @@ namespace VAdvantage.Model
             if (counterDT != null)
             {
                 log.Fine(counterDT.ToString());
-                //if counter DocType is not valid then return the message to user
+                //if counter DocType is not valid then save the message in log
                 if (!counterDT.IsCreateCounter() || !counterDT.IsValid())
                 {
-                    _message = Msg.GetMsg(GetCtx(), "VIS_InvalidCoutrDocType");
+                    log.SaveError(Msg.GetMsg(GetCtx(), "VIS_InvalidCoutrDocType"), "");
                     return null;
                 }
                 C_DocTypeTarget_ID = counterDT.GetCounter_C_DocType_ID();
                 if (C_DocTypeTarget_ID <= 0)
                 {
-                    //if counter DocType is not found then return the message to user
-                    _message = Msg.GetMsg(GetCtx(), "VIS_NotfundCoutrDocType");
+                    //if counter DocType is not found then save the message in log
+                    log.SaveError(Msg.GetMsg(GetCtx(), "VIS_NotfundCoutrDocType"), "");
                     return null;
                 }
             }
             else
             {
-                _message = null;
                 return null;
             }
 
@@ -5223,8 +5213,8 @@ namespace VAdvantage.Model
             int counterC_BPartner_ID = org.GetLinkedC_BPartner_ID(Get_TrxName()); //jz
             if (counterC_BPartner_ID == 0)
             {
-                //if Linked BP is not found then return the message to user
-                _message = Msg.GetMsg(GetCtx(), "VIS_CoutrBPNotFound");
+                //if Linked BP is not found then save the message in log
+                log.SaveError(Msg.GetMsg(GetCtx(), "VIS_CoutrBPNotFound"), "");
                 return null;
             }
             //	Business Partner needs to be linked to Org
@@ -5232,10 +5222,19 @@ namespace VAdvantage.Model
             int counterAD_Org_ID = bp.GetAD_OrgBP_ID_Int();
             if (counterAD_Org_ID == 0)
             {
-                //if Linked Org_ID is not found then return the message to user
-                _message = Msg.GetMsg(GetCtx(), "VIS_CoutrOrgNotFound");
+                //if Linked Org_ID is not found then save the message into log
+                log.SaveError(Msg.GetMsg(GetCtx(), "VIS_CoutrOrgNotFound"), "");
                 return null;
             }
+
+            //System should not allow to create counter document with same BP and organization.
+            if (counterAD_Org_ID == GetAD_Org_ID() || counterC_BPartner_ID == GetC_BPartner_ID())
+            {
+                //erro save into the log
+                log.SaveError(Msg.GetMsg(GetCtx(), "VIS_CtrOrgorBPShldNotAlwSame"), "");
+                return null;
+            }
+
             MBPartner counterBP = new MBPartner(GetCtx(), counterC_BPartner_ID, null);
             //MOrgInfo counterOrgInfo = MOrgInfo.Get(GetCtx(), counterAD_Org_ID, null);//not in Use
             log.Info("Counter BP=" + counterBP.GetName());
