@@ -732,7 +732,8 @@ namespace VAdvantage.Controller
             }
             if (DisplayType.IsLookup(displayType))
             {
-                if (IsDisplayedf || IsDisplayedMR || ColumnName.ToLower().Equals("createdby")|| ColumnName.ToLower().Equals("updatedby")) 
+                if (IsDisplayedf || IsDisplayedMR || ColumnName.ToLower().Equals("createdby")|| ColumnName.ToLower().Equals("updatedby")
+                    || IsHeaderPanelitem) 
                 {
                     try
                     {
