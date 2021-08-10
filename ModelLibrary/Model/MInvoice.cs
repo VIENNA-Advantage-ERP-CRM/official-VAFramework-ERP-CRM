@@ -5192,14 +5192,14 @@ namespace VAdvantage.Model
                 //if counter DocType is not valid then save the message in log
                 if (!counterDT.IsCreateCounter() || !counterDT.IsValid())
                 {
-                    log.SaveError(Msg.GetMsg(GetCtx(), "VIS_InvalidCoutrDocType"), "");
+                    log.Info("Counter Document Type is not Valid one!");
                     return null;
                 }
                 C_DocTypeTarget_ID = counterDT.GetCounter_C_DocType_ID();
                 if (C_DocTypeTarget_ID <= 0)
                 {
                     //if counter DocType is not found then save the message in log
-                    log.SaveError(Msg.GetMsg(GetCtx(), "VIS_NotfundCoutrDocType"), "");
+                    log.Info("Counter Document Type not found on Inter Company Document window.");
                     return null;
                 }
             }
@@ -5214,7 +5214,7 @@ namespace VAdvantage.Model
             if (counterC_BPartner_ID == 0)
             {
                 //if Linked BP is not found then save the message in log
-                log.SaveError(Msg.GetMsg(GetCtx(), "VIS_CoutrBPNotFound"), "");
+                log.Info("Business Partner is not found on Customer/Vendor master window to create the Counter Document.");
                 return null;
             }
             //	Business Partner needs to be linked to Org
@@ -5223,7 +5223,7 @@ namespace VAdvantage.Model
             if (counterAD_Org_ID == 0)
             {
                 //if Linked Org_ID is not found then save the message into log
-                log.SaveError(Msg.GetMsg(GetCtx(), "VIS_CoutrOrgNotFound"), "");
+                log.Info("Linked Organization is not found on Customer/Vendor master window to create the Counter Document.");
                 return null;
             }
 
@@ -5231,7 +5231,7 @@ namespace VAdvantage.Model
             if (counterAD_Org_ID == GetAD_Org_ID() || counterC_BPartner_ID == GetC_BPartner_ID())
             {
                 //erro save into the log
-                log.SaveError(Msg.GetMsg(GetCtx(), "VIS_CtrOrgorBPShldNotAlwSame"), "");
+                log.Info("On Counter Document Organization or Business Partner should not allow the same with the Document.");
                 return null;
             }
 

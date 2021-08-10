@@ -5099,7 +5099,7 @@ namespace VAdvantage.Model
                 if (!counterDT.IsCreateCounter() || !counterDT.IsValid())
                 {
                     //erro save into the log
-                    log.SaveError(Msg.GetMsg(GetCtx(), "VIS_InvalidCoutrDocType"), "");
+                    log.Info("Counter Document Type is not Valid one!");
                     return null;
                 }
                 C_DocTypeTarget_ID = counterDT.GetCounter_C_DocType_ID();
@@ -5107,8 +5107,8 @@ namespace VAdvantage.Model
                 //if Counter document type not found then return message to the user
                 if (C_DocTypeTarget_ID <= 0)
                 {
-                    //erro save into the log
-                    log.SaveError(Msg.GetMsg(GetCtx(), "VIS_NotfundCoutrDocType"), "");
+                    //Info save into the log
+                    log.Info("Counter Document Type not found on Inter Company Document window.");
                     return null;
                 }
             }
@@ -5125,26 +5125,26 @@ namespace VAdvantage.Model
             //if counter BP not found the return the message Counter Bp not found for Linked Org
             if (counterC_BPartner_ID == 0)
             {
-                //erro save into the log
-                log.SaveError(Msg.GetMsg(GetCtx(), "VIS_CoutrBPNotFound"), "");
+                //Info save into the log
+                log.Info("Business Partner is not found on Customer/Vendor master window to create the Counter Document.");
                 return null;
             }
             //	Business Partner needs to be linked to Org
             //jz MBPartner bp = new MBPartner (getCtx(), getC_BPartner_ID(), null);
             MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_TrxName());
             int counterAD_Org_ID = bp.GetAD_OrgBP_ID_Int();
-            //if Org is not link the for BP the return message to the user, not found Link Org with the BP
+            //if Org is not link the for BP then save info into the log, not found Link Org with the BP
             if (counterAD_Org_ID == 0)
             {
-                //if Link Org not found then return null not access to do counter document
-                log.SaveError(Msg.GetMsg(GetCtx(), "VIS_CoutrOrgNotFound"), "");
+                //if Link Org not found then save the info into the log
+                log.Info("Linked Organization is not found on Customer/Vendor master window to create the Counter Document.");
                 return null;
             }
 
             //System should not allow to create counter document with same BP and organization.
             if (counterAD_Org_ID == GetAD_Org_ID() || counterC_BPartner_ID == GetC_BPartner_ID())
             {
-                log.SaveError(Msg.GetMsg(GetCtx(), "VIS_CtrOrgorBPShldNotAlwSame"), "");
+                log.Info("On Counter Document Organization or Business Partner should not allow the same with the Document.");
                 return null;
             }
 

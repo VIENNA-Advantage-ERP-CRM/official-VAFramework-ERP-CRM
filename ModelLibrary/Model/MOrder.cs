@@ -5712,14 +5712,14 @@ namespace VAdvantage.Model
                 if (!counterDT.IsCreateCounter() || !counterDT.IsValid())
                 {
                     //erro save into the log the messge if couter DocType is not valid
-                    log.SaveError(Msg.GetMsg(GetCtx(), "VIS_InvalidCoutrDocType"), "");
+                    log.Info("Counter Document Type is not Valid one!");
                     return null;
                 }
                 C_DocTypeTarget_ID = counterDT.GetCounter_C_DocType_ID();
                 if (C_DocTypeTarget_ID <= 0)
                 {
-                    //erro save into the log the messge if couter DocType is not found
-                    log.SaveError(Msg.GetMsg(GetCtx(), "VIS_NotfundCoutrDocType"), "");
+                    //Info save into the log the messge if couter DocType is not found
+                    log.Info("Counter Document Type not found on Inter Company Document window.");
                     return null;
                 }
             }
@@ -5735,8 +5735,8 @@ namespace VAdvantage.Model
             int counterC_BPartner_ID = org.GetLinkedC_BPartner_ID(Get_TrxName());
             if (counterC_BPartner_ID == 0)
             {
-                //erro save into the log the messge if Counter BP not found
-                log.SaveError(Msg.GetMsg(GetCtx(), "VIS_CoutrBPNotFound"), "");
+                //Info save into the log the messge if Counter BP not found
+                log.Info("Business Partner is not found on Customer/Vendor master window to create the Counter Document.");
                 return null;
             }
             //	Business Partner needs to be linked to Org
@@ -5745,8 +5745,8 @@ namespace VAdvantage.Model
             int counterAD_Org_ID = bp.GetAD_OrgBP_ID_Int();
             if (counterAD_Org_ID == 0)
             {
-                //erro save into the log the messge if Link Organization not found
-                log.SaveError(Msg.GetMsg(GetCtx(), "VIS_CoutrOrgNotFound"), "");
+                //Info save into the log the messge if Link Organization not found
+                log.Info("Linked Organization is not found on Customer/Vendor master window to create the Counter Document.");
                 return null;
             }
 
@@ -5754,7 +5754,7 @@ namespace VAdvantage.Model
             if (counterAD_Org_ID == GetAD_Org_ID() || counterC_BPartner_ID == GetC_BPartner_ID())
             {
                 //erro save into the log
-                log.SaveError(Msg.GetMsg(GetCtx(), "VIS_CtrOrgorBPShldNotAlwSame"), "");
+                log.Info("On Counter Document Organization or Business Partner should not allow the same with the Document.");
                 return null;
             }
 
