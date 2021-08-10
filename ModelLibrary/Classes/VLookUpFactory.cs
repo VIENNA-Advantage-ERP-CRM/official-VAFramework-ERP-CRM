@@ -903,7 +903,7 @@ namespace VAdvantage.Classes
                 //  translated
                 if (ldc.ColumnName.ToLower().Equals("ad_image_id") || ldc.DisplayType == DisplayType.Image)
                 {
-                    string embeddedSQL = "SELECT NVL(ImageURL,'') ||'^^' FROM AD_Image WHERE " + tableName + "."+ ldc.ColumnName+ "=AD_Image.AD_Image_ID";
+                    string embeddedSQL = "SELECT NVL(ImageURL,'') ||'^^' FROM AD_Image WHERE CAST(" + tableName + "."+ ldc.ColumnName+ " AS Integer)=AD_Image.AD_Image_ID";
                     displayColumn.Append("(").Append(embeddedSQL).Append(")");
                     hasImagIdentifier = true;
 
