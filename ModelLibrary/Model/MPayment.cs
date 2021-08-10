@@ -62,9 +62,6 @@ namespace VAdvantage.Model
         static readonly object objLock = new object();
 
 
-        //while handling the counter document this variable is used
-        private string _message = null;
-
         /// <summary>
         /// Standard Constructor
         /// </summary>
@@ -2930,11 +2927,6 @@ namespace VAdvantage.Model
             {
                 _processMsg += " @CounterDoc@: @C_Payment_ID@=" + counter.GetDocumentNo();
             }
-            else if (_message != null)//if processMsg have value then It stop to complete the record and show the error message to the user
-            {
-                _processMsg = _message;
-                return DocActionVariables.STATUS_INPROGRESS;
-            }
 
             //	User Validation
             String valid = ModelValidationEngine.Get().FireDocValidate(this, ModalValidatorVariables.DOCTIMING_AFTER_COMPLETE);
@@ -3213,7 +3205,9 @@ namespace VAdvantage.Model
                         {
                             if (!loc.Save(Get_Trx()))
                             {
-                                _processMsg = "Could not update Business Partner Location";
+                                //get message from Message window
+                                //_processMsg = "Could not update Business Partner Location";
+                                _processMsg = Msg.GetMsg(GetCtx(), "VIS_CouldNotUpdateBPLocation");
                                 return DocActionVariables.STATUS_INVALID;
                             }
                         }
@@ -3433,7 +3427,8 @@ namespace VAdvantage.Model
             }
 
             //JID_0880 Show message on completion of Payment
-            if (GetCtx().GetContext("prepayOrder") != null)
+            //avoid the ',' if Context of PrepayOrder not found
+            if (!string.IsNullOrEmpty(GetCtx().GetContext("prepayOrder")))
             {
                 _processMsg += "," + GetCtx().GetContext("prepayOrder");
                 GetCtx().SetContext("prepayOrder", "");
@@ -4530,34 +4525,11 @@ namespace VAdvantage.Model
             //	Is this a counter doc ?
             if (GetRef_Payment_ID() != 0)
             {
-                _message = null;
                 return null;
             }
-            //	Org Must be linked to BPartner
-            MOrg org = MOrg.Get(GetCtx(), GetAD_Org_ID());
-            //jz int counterC_BPartner_ID = org.GetLinkedC_BPartner_ID(); 
-            int counterC_BPartner_ID = org.GetLinkedC_BPartner_ID(Get_Trx());
-            if (counterC_BPartner_ID == 0)
-            {
-                _message = Msg.GetMsg(GetCtx(), "VIS_CoutrBPNotFound");
-                return null;
-            }
-            //	Business Partner needs to be linked to Org
-            //jz MBPartner bp = new MBPartner (GetCtx(), GetC_BPartner_ID(), null);
-            MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_Trx());
-            int counterAD_Org_ID = bp.GetAD_OrgBP_ID_Int();
-            if (counterAD_Org_ID == 0)
-            {
-                _message = Msg.GetMsg(GetCtx(), "VIS_CoutrOrgNotFound");
-                return null;
-            }
-
-            //jz MBPartner counterBP = new MBPartner (GetCtx(), counterC_BPartner_ID, null);
-            MBPartner counterBP = new MBPartner(GetCtx(), counterC_BPartner_ID, Get_Trx());
-            //	MOrgInfo counterOrgInfo = MOrgInfo.Get(GetCtx(), counterAD_Org_ID);
-            log.Info("Counter BP=" + counterBP.GetName());
 
             //	Document Type
+            //check weather Counter Document created & Acitve or not 
             int C_DocTypeTarGet_ID = 0;
             MDocTypeCounter counterDT = MDocTypeCounter.GetCounterDocType(GetCtx(), GetC_DocType_ID());
             if (counterDT != null)
@@ -4566,22 +4538,59 @@ namespace VAdvantage.Model
                 //check the Doc Type is Valid or not to create counter Document
                 if (!counterDT.IsCreateCounter() || !counterDT.IsValid())
                 {
-                    _message = Msg.GetMsg(GetCtx(), "VIS_InvalidCoutrDocType");
+                    log.Info("Counter Document Type is not Valid one!");
                     return null;
                 }
                 C_DocTypeTarGet_ID = counterDT.GetCounter_C_DocType_ID();
+
+                //if Document Type not found then  save the message into log
+                if (C_DocTypeTarGet_ID <= 0)
+                {
+                    log.Info("Counter Document Type not found on Inter Company Document window.");
+                    return null;
+                }
             }
-            //if Document Type not found then reutrn a message to user
-            if (C_DocTypeTarGet_ID <= 0)
+            else
             {
-                _message = Msg.GetMsg(GetCtx(), "VIS_NotfundCoutrDocType");
                 return null;
             }
+
+            //	Org Must be linked to BPartner
+            MOrg org = MOrg.Get(GetCtx(), GetAD_Org_ID());
+            //jz int counterC_BPartner_ID = org.GetLinkedC_BPartner_ID(); 
+            int counterC_BPartner_ID = org.GetLinkedC_BPartner_ID(Get_Trx());
+            if (counterC_BPartner_ID == 0)
+            {
+                log.Info("Business Partner is not found on Customer/Vendor master window to create the Counter Document.");
+                return null;
+            }
+            //	Business Partner needs to be linked to Org
+            //jz MBPartner bp = new MBPartner (GetCtx(), GetC_BPartner_ID(), null);
+            MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_Trx());
+            int counterAD_Org_ID = bp.GetAD_OrgBP_ID_Int();
+            if (counterAD_Org_ID == 0)
+            {
+                log.Info("Linked Organization is not found on Customer/Vendor master window to create the Counter Document.");
+                return null;
+            }
+            //System should not allow to create counter document with same BP and organization.
+            if (counterAD_Org_ID == GetAD_Org_ID()|| counterC_BPartner_ID == GetC_BPartner_ID())
+            {
+                log.Info("On Counter Document Organization or Business Partner should not allow the same with the Document.");
+                return null;
+            }
+
+            //jz MBPartner counterBP = new MBPartner (GetCtx(), counterC_BPartner_ID, null);
+            MBPartner counterBP = new MBPartner(GetCtx(), counterC_BPartner_ID, Get_Trx());
+            //	MOrgInfo counterOrgInfo = MOrgInfo.Get(GetCtx(), counterAD_Org_ID);
+            log.Info("Counter BP=" + counterBP.GetName());
 
             //	Deep Copy
             MPayment counter = new MPayment(GetCtx(), 0, Get_Trx());
             counter.SetAD_Org_ID(counterAD_Org_ID);
             counter.SetC_BPartner_ID(counterBP.GetC_BPartner_ID());
+            //Get BP_Location and Set It
+            counter.SetC_BPartner_Location_ID(counterBP.GetPrimaryC_BPartner_Location_ID());
             counter.SetIsReceipt(!IsReceipt());
             counter.SetC_DocType_ID(C_DocTypeTarGet_ID);
             counter.SetTrxType(GetTrxType());
