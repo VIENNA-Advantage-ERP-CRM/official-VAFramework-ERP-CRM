@@ -560,12 +560,12 @@
             return null;
 
         if (this.info.isParent && this.nextRead < Date.now()) {
-            this.lookup = null;
-            this.lookup = {};
-            if (this.lookupDirect) {
-                this.lookupDirect = null;
-                this.lookupDirect = {};
-            }
+            //this.lookup = null;
+            //this.lookup = {};
+            //if (this.lookupDirect) {
+            //    this.lookupDirect = null;
+            //    this.lookupDirect = {};
+            //}
             this.nextRead = Date.now() + 2000; // 1/2/3 sec
             return this.get(key);
         }
