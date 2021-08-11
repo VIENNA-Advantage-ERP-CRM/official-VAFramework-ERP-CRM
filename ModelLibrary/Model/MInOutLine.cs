@@ -213,6 +213,15 @@ namespace VAdvantage.Model
             return _parent;
         }
 
+        /// <summary>
+        /// Set Parent
+        /// </summary>
+        /// <param name="parent">parent</param>
+        public void SetParent(MInOut parent)
+        {
+            _parent = parent;
+        }
+
         /**
      * 	Set Order Line.
      * 	Does not set Quantity!
@@ -1066,7 +1075,7 @@ namespace VAdvantage.Model
             Decimal newMoveQty = movementQty ?? 0; //Arpit
 
             //Checking for conversion of UOM 
-            MInOut inO = new MInOut(GetCtx(), GetM_InOut_ID(), Get_TrxName());
+            MInOut inO = GetParent();
             MDocType dt = MDocType.Get(GetCtx(), inO.GetC_DocType_ID());
             MProduct _Product = null;
 

@@ -2765,7 +2765,7 @@ namespace VAdvantage.Model
                 }
 
                 // Set Document Date based on setting on Document Type
-                SetCompletedDocumentDate();                
+                SetCompletedDocumentDate();
 
                 //	Implicit Approval
                 if (!IsApproved())
@@ -4767,7 +4767,7 @@ namespace VAdvantage.Model
                         throw new Exception("@PeriodClosed@");
                     }
                 }
-            }            
+            }
         }
 
         /// <summary>
@@ -5337,6 +5337,7 @@ namespace VAdvantage.Model
                     Decimal old = line.GetQtyInvoiced();
                     if (old.CompareTo(Env.ZERO) != 0)
                     {
+                        line.SetInvoice(this);
                         line.SetQty(Env.ZERO);
                         line.SetTaxAmt(Env.ZERO);
                         line.SetLineNetAmt(Env.ZERO);
@@ -5345,9 +5346,10 @@ namespace VAdvantage.Model
                         //	Unlink Shipment
                         if (line.GetM_InOutLine_ID() != 0)
                         {
-                            MInOutLine ioLine = new MInOutLine(GetCtx(), line.GetM_InOutLine_ID(), Get_TrxName());
-                            ioLine.SetIsInvoiced(false);
-                            ioLine.Save(Get_TrxName());
+                            int no = DB.ExecuteQuery("UPDATE M_InOutLine SET IsInvoiced = 'N' WHERE M_InOutLine_ID = " + line.GetM_InOutLine_ID(), null, Get_TrxName());
+                            //MInOutLine ioLine = new MInOutLine(GetCtx(), line.GetM_InOutLine_ID(), Get_TrxName());
+                            //ioLine.SetIsInvoiced(false);
+                            //ioLine.Save(Get_TrxName());
                             line.SetM_InOutLine_ID(0);
                         }
                         line.Save(Get_TrxName());
@@ -5599,7 +5601,7 @@ namespace VAdvantage.Model
                 #region Calculating Cost on Expenses Arpit
                 //else
                 //{
-                
+
                 if (Env.IsModuleInstalled("VAFAM_") && rLine.Get_ColumnIndex("VAFAM_IsAssetRelated") > 0)
                 {
                     if (!IsSOTrx() && !IsReturnTrx() && Util.GetValueOfBool(rLine.Get_Value("VAFAM_IsAssetRelated")))
@@ -5689,13 +5691,13 @@ namespace VAdvantage.Model
             //MInOutLine ioLine = new MInOutLine(GetCtx(), iLine.GetM_InOutLine_ID(), Get_TrxName());
             //ioLine.SetIsInvoiced(false);
             //ioLine.Save(Get_TrxName());
-            DB.ExecuteReader(@"UPDATE M_InOutLine SET IsInvoiced = 'N' WHERE M_InOutLine_ID IN
+            DB.ExecuteQuery(@"UPDATE M_InOutLine SET IsInvoiced = 'N' WHERE M_InOutLine_ID IN
                     (SELECT M_InOutLine_ID FROM C_InvoiceLine WHERE NVL(M_InOutLine_ID, 0) != 0 AND C_Invoice_ID = " + GetC_Invoice_ID() + ")", null, Get_TrxName());
 
             //	Reconsiliation
             //iLine.SetM_InOutLine_ID(0);
             //iLine.Save(Get_TrxName());
-            DB.ExecuteReader(@"UPDATE C_InvoiceLine SET M_InOutLine_ID = null WHERE C_InvoiceLine_ID  IN
+            DB.ExecuteQuery(@"UPDATE C_InvoiceLine SET M_InOutLine_ID = null WHERE C_InvoiceLine_ID  IN
                     (SELECT C_InvoiceLine_ID FROM C_InvoiceLine WHERE NVL(M_InOutLine_ID, 0) != 0 AND C_Invoice_ID = " + GetC_Invoice_ID() + ")", null, Get_TrxName());
             //}
             //}

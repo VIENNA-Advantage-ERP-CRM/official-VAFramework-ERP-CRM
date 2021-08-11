@@ -475,12 +475,13 @@ namespace VIS.Models
                     {
                         moveline = new MMovementLine(_ctx, 0, trx);
                     }
+                    moveline.SetParent(move);
                     if (moveId == 0)
                     {
                         #region Create new record of movement line
                         lineNo += 10;
                         moveline.SetAD_Client_ID(move.GetAD_Client_ID());
-                        moveline.SetAD_Org_ID(move.GetAD_Org_ID());
+                        moveline.SetAD_Org_ID(move.GetAD_Org_ID());                        
                         moveline.SetM_Movement_ID(move.GetM_Movement_ID());
                         moveline.SetLine(lineNo);
                         moveline.SetM_Product_ID(Util.GetValueOfInt(mData[i]["M_Product_ID"]));
@@ -683,6 +684,7 @@ namespace VIS.Models
                     {
                         moveline = new MMovementLine(_ctx, 0, trx);
                     }
+                    moveline.SetParent(movement);
                     if (movementlineId == 0)
                     {
                         #region Create new record of movement line
