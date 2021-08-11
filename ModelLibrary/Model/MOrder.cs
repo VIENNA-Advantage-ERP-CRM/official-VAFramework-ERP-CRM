@@ -3914,7 +3914,7 @@ namespace VAdvantage.Model
                 //	Implicit Approval
                 if (!IsApproved())
                     ApproveIt();
-                GetLines(true, null);
+                GetLines(false, null);
 
                 //JID_1126: System will check the selected Vendor and product to update the price on Purchasing tab.
                 if (!IsSOTrx() && !IsReturnTrx() && dt.GetDocBaseType() == "POO")

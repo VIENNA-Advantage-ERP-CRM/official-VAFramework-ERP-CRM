@@ -873,7 +873,7 @@ namespace VAdvantage.Model
             // IsCostImmediate = true - calculate cost on completion
             MClient client = MClient.Get(GetCtx(), GetAD_Client_ID());
 
-            //MInventoryLine[] lines = GetLines(false);
+            lines = GetLines(true);
             //log.Info("total Lines=" + lines.Count());
             //MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
 
