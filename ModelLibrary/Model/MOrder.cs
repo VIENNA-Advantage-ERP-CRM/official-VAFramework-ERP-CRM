@@ -218,14 +218,6 @@ namespace VAdvantage.Model
 
             if (to.Get_ColumnIndex("ConditionalFlag") > -1)
             {
-                if (!to.CalculateTaxTotal())   //	setTotals
-                {
-                    throw new ArgumentException(Msg.GetMsg(from.GetCtx(), "ErrorCalculateTax") + ": " + to.GetDocumentNo().ToString());
-                }
-
-                // Update order header
-                to.UpdateHeader();
-
                 DB.ExecuteQuery("UPDATE C_Order SET ConditionalFlag = null WHERE C_Order_ID = " + to.GetC_Order_ID(), null, trxName);
             }
             return to;
@@ -1377,6 +1369,14 @@ namespace VAdvantage.Model
                 {
                     log.Log(Level.SEVERE, "Line difference - From=" + fromLines.Length + " <> Saved=" + count);
                 }
+
+                if (!CalculateTaxTotal())   //	setTotals
+                {
+                    log.Info(Msg.GetMsg(GetCtx(), "ErrorCalculateTax") + ": " + GetDocumentNo().ToString());
+                }
+
+                // Update order header
+                UpdateHeader();
             }
             catch
             {
