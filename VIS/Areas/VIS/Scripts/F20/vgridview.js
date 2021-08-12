@@ -402,6 +402,13 @@
                 oColumn.size = '100px';
             }
 
+            if (mField.getIsIdentifier()) {
+                if (oColumn.hidden == false && (this.hyperLinkCell[name] == "undefined" || this.hyperLinkCell[name] == null)) {
+                    this.hyperLinkCell[name] = columnName;
+                    oColumn.style = 'text-decoration:underline; color:rgba(var(--v-c-primary), 1) !important; cursor:pointer';
+                }
+            }
+
             if (displayType == VIS.DisplayType.Amount) {
                 oColumn.sortable = true;
                 oColumn.customFormat = VIS.DisplayType.GetNumberFormat(displayType);
@@ -478,12 +485,12 @@
 
 
                 oColumn.sortable = true;
-                if (oColumn.hidden == false && (this.hyperLinkCell[name] == "undefined" || this.hyperLinkCell[name] == null)) {
-                    if (columnName.toLowerCase() == "value" || columnName.toLowerCase() == "name" || columnName.toLowerCase() == "documentno") {
-                        this.hyperLinkCell[name] = columnName;
-                        oColumn.style = 'text-decoration:underline; color:rgba(var(--v-c-primary), 1) !important; cursor:pointer';
-                    }
-                }
+                //if (oColumn.hidden == false && (this.hyperLinkCell[name] == "undefined" || this.hyperLinkCell[name] == null)) {
+                //    if (columnName.toLowerCase() == "value" || columnName.toLowerCase() == "name" || columnName.toLowerCase() == "documentno") {
+                //        this.hyperLinkCell[name] = columnName;
+                //        oColumn.style = 'text-decoration:underline; color:rgba(var(--v-c-primary), 1) !important; cursor:pointer';
+                //    }
+                //}
 
                 if (mField.getIsEncryptedField()) {
                     oColumn.render = function (record, index, colIndex) {
@@ -908,10 +915,13 @@
                         oColumns[p].min = 100;
                     }
 
+                    if (this.hyperLinkCell[name] == "undefined" || this.hyperLinkCell[name] == null) {                      
+                        this.hyperLinkCell[name] = oColumns[p].columnName;
+                        oColumns[p].style = 'text-decoration:underline; color:rgba(var(--v-c-primary), 1) !important; cursor:pointer';
+                    }
                 }
             }
         }
-
 
         //oColumns[oColumns.length - 1].size = "100%";
         this.grid = $().w2grid({
