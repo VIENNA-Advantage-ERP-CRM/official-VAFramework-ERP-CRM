@@ -4516,7 +4516,8 @@ namespace VAdvantage.Model
             }
             //Some times when complete the Invoice with zero amount the header ispaid check box not getting true but on 
             //but on schedule the IsPaid check is true - so handled here
-            int _IsNotPaid = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(C_InvoicePayschedule_ID) AS IsPaid FROM C_InvoicePayschedule WHERE VA009_IsPaid='N' AND IsActive='Y' AND C_Invoice_ID=" + GetC_Invoice_ID()));
+            //Trx is added to get current changes
+            int _IsNotPaid = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(C_InvoicePayschedule_ID) AS IsPaid FROM C_InvoicePayschedule WHERE VA009_IsPaid='N' AND IsActive='Y' AND C_Invoice_ID=" + GetC_Invoice_ID(), null, Get_Trx()));
             if (_IsNotPaid == 0)
             {
                 SetIsPaid(true);
@@ -5294,12 +5295,6 @@ namespace VAdvantage.Model
                 {
                     counter.SetDocAction(counterDT.GetDocAction());
                     counter.ProcessIt(counterDT.GetDocAction());
-                    //set IsPaid check true if all schedules paid checkbox is true
-                    int _IsNotPaid = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(C_InvoicePayschedule_ID) AS IsPaid FROM C_InvoicePayschedule WHERE VA009_IsPaid='N' AND IsActive='Y' AND C_Invoice_ID=" + counter.GetC_Invoice_ID()));
-                    if (_IsNotPaid == 0)
-                    {
-                        counter.SetIsPaid(true);
-                    }
                     counter.Save(Get_TrxName());
                 }
             }
