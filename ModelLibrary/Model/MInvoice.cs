@@ -138,6 +138,12 @@ namespace VAdvantage.Model
             else
             {
                 to.Set_ValueNoCheck("DocumentNo", null);
+
+                // Set Conditional Flag to skip repeated logic on lines save.
+                if (to.Get_ColumnIndex("ConditionalFlag") > -1)
+                {
+                    to.SetConditionalFlag(MInvoice.CONDITIONALFLAG_PrepareIt);
+                }
             }
             if (!counter)
             {
@@ -278,6 +284,13 @@ namespace VAdvantage.Model
                 }
                 throw new Exception("Could not create Invoice Lines. " + (pp != null && pp.GetName() != null ? pp.GetName() : ""));
             }
+
+            // Set Conditional Flag to null.
+            if (to.Get_ColumnIndex("ConditionalFlag") > -1)         
+            {
+                DB.ExecuteQuery("UPDATE C_Invoice SET ConditionalFlag = null WHERE C_Invoice_ID = " + to.GetC_Invoice_ID(), null, trxName);
+            }
+
             return to;
         }
 
@@ -1087,6 +1100,11 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, "Line difference - From=" + fromLines.Length + " <> Saved=" + count);
             }
 
+            if (!CalculateTaxTotal())   //	setTotals
+            {
+                log.Info(Msg.GetMsg(GetCtx(), "ErrorCalculateTax") + ": " + GetDocumentNo().ToString());
+            }
+
             // Update header Tax
             UpdateHeadertax();
 
@@ -1096,7 +1114,7 @@ namespace VAdvantage.Model
         /// <summary>
         /// this function is used to update header tax
         /// </summary>
-        private void UpdateHeadertax()
+        public void UpdateHeadertax()
         {
             String sql = "UPDATE C_Invoice i"
                    + " SET TotalLines="

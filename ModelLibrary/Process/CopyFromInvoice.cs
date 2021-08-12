@@ -27,59 +27,72 @@ using VAdvantage.Logging;
 using VAdvantage.ProcessEngine;
 namespace VAdvantage.Process
 {
-  public class CopyFromInvoice:SvrProcess
+    public class CopyFromInvoice : SvrProcess
     {
-   private int		_C_Invoice_ID = 0;
+        private int _C_Invoice_ID = 0;
 
-	/// <summary>
-	/// Prepare - e.g., get Parameters.
-    /// </summary>
-	protected override void Prepare()
-	{
-		ProcessInfoParameter[] para = GetParameter();
-		for (int i = 0; i < para.Length; i++)
-		{
-			String name = para[i].GetParameterName();
-            if (para[i].GetParameter() == null)
-            {
-                ;
-            }
-            else if (name.Equals("C_Invoice_ID"))
-            {
-               // _C_Invoice_ID = ((Decimal)para[i].GetParameter()).intValue();
-                _C_Invoice_ID =Util.GetValueOfInt(((Decimal?)para[i].GetParameter()));
-            }
-            else
-            {
-                log.Log(Level.SEVERE, "prepare - Unknown Parameter: " + name);
-            }
-		}
-	}	//	prepare
-
-	/// <summary>
-	/// Perform Process.
-	/// </summary>
-	/// <returns>Message </returns>
-	protected override String DoIt() 
-	{
-		int To_C_Invoice_ID = GetRecord_ID();
-		log.Info("From C_Invoice_ID=" + _C_Invoice_ID + " to " + To_C_Invoice_ID);
-        if (To_C_Invoice_ID == 0)
+        /// <summary>
+        /// Prepare - e.g., get Parameters.
+        /// </summary>
+        protected override void Prepare()
         {
-            throw new Exception("Target C_Invoice_ID == 0");
-        }
-        if (_C_Invoice_ID == 0)
-        {
-            throw new Exception("Source C_Invoice_ID == 0");
-        }
-		VAdvantage.Model.MInvoice from = new VAdvantage.Model.MInvoice (GetCtx(), _C_Invoice_ID, null);
-		VAdvantage.Model.MInvoice to = new VAdvantage.Model.MInvoice (GetCtx(), To_C_Invoice_ID, null);
-		//
-		int no = to.CopyLinesFrom (from, false, false);
-		//
-		return "@Copied@=" + no;
-	}	//	doIt
+            ProcessInfoParameter[] para = GetParameter();
+            for (int i = 0; i < para.Length; i++)
+            {
+                String name = para[i].GetParameterName();
+                if (para[i].GetParameter() == null)
+                {
+                    ;
+                }
+                else if (name.Equals("C_Invoice_ID"))
+                {
+                    // _C_Invoice_ID = ((Decimal)para[i].GetParameter()).intValue();
+                    _C_Invoice_ID = Util.GetValueOfInt(((Decimal?)para[i].GetParameter()));
+                }
+                else
+                {
+                    log.Log(Level.SEVERE, "prepare - Unknown Parameter: " + name);
+                }
+            }
+        }   //	prepare
 
-}	//	CopyFromInvoice
+        /// <summary>
+        /// Perform Process.
+        /// </summary>
+        /// <returns>Message </returns>
+        protected override String DoIt()
+        {
+            int To_C_Invoice_ID = GetRecord_ID();
+            log.Info("From C_Invoice_ID=" + _C_Invoice_ID + " to " + To_C_Invoice_ID);
+            if (To_C_Invoice_ID == 0)
+            {
+                throw new Exception("Target C_Invoice_ID == 0");
+            }
+            if (_C_Invoice_ID == 0)
+            {
+                throw new Exception("Source C_Invoice_ID == 0");
+            }
+            VAdvantage.Model.MInvoice from = new VAdvantage.Model.MInvoice(GetCtx(), _C_Invoice_ID, null);
+
+            // Set Conditional Flag to skip repeated logic on lines save.
+            if (from.Get_ColumnIndex("ConditionalFlag") > -1)
+            {
+                DB.ExecuteQuery("UPDATE C_Invoice SET ConditionalFlag = '" + VAdvantage.Model.MInvoice.CONDITIONALFLAG_PrepareIt + "' WHERE C_Invoice_ID = " + To_C_Invoice_ID, null, null);
+            }
+
+            VAdvantage.Model.MInvoice to = new VAdvantage.Model.MInvoice(GetCtx(), To_C_Invoice_ID, null);            
+
+            int no = to.CopyLinesFrom(from, false, false);
+
+            // Call here the skipped logic that will execute only once.
+            if (to.Get_ColumnIndex("ConditionalFlag") > -1)
+            {
+                DB.ExecuteQuery("UPDATE C_Invoice SET ConditionalFlag = null WHERE C_Invoice_ID = " + to.GetC_Invoice_ID(), null, null);
+            }
+            //
+            return "@Copied@=" + no;
+        }   //	doIt
+
+    }	//	CopyFromInvoice
 
 }
