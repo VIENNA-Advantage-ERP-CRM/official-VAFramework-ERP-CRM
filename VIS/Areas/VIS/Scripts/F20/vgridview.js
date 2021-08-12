@@ -18,7 +18,7 @@
         this.onSort = null;
         this.onEdit = null;
         this.onAdd = null;
-        this.hyperLinkCell = {};
+        this.hyperLinkCell = null;
 
         this.editColumnIndex = -1;
         var clickCount = 0;
@@ -36,7 +36,7 @@
 
         function toggleToSingleView(evt) {
             try {
-                if (self.grid.columns[evt.column].columnName == self.hyperLinkCell[self.grid.name]) {
+                if (self.grid.columns[evt.column].columnName == self.hyperLinkCell) {
                     self.grid.select(Number(evt.recid));
                     var isCompositView = self.aPanel.getRoot().find('[name=' + evt.target + ']').closest('.vis-ad-w-p-center-inctab');
                     if (isCompositView.length > 0) {
@@ -402,9 +402,9 @@
                 oColumn.size = '100px';
             }
 
-            if (mField.getIsIdentifier()) {
-                if (oColumn.hidden == false && (this.hyperLinkCell[name] == "undefined" || this.hyperLinkCell[name] == null)) {
-                    this.hyperLinkCell[name] = columnName;
+            if (mField.getIsIdentifier() && this.hyperLinkCell == null) {
+                if (oColumn.hidden == false) {
+                    this.hyperLinkCell = columnName;
                     oColumn.style = 'text-decoration:underline; color:rgba(var(--v-c-primary), 1) !important; cursor:pointer';
                 }
             }
@@ -915,8 +915,8 @@
                         oColumns[p].min = 100;
                     }
 
-                    if (this.hyperLinkCell[name] == "undefined" || this.hyperLinkCell[name] == null) {                      
-                        this.hyperLinkCell[name] = oColumns[p].columnName;
+                    if (this.hyperLinkCell == null) {                      
+                        this.hyperLinkCell = oColumns[p].columnName;
                         oColumns[p].style = 'text-decoration:underline; color:rgba(var(--v-c-primary), 1) !important; cursor:pointer';
                     }
                 }
