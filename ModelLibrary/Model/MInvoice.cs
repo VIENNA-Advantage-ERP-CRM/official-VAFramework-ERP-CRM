@@ -286,7 +286,7 @@ namespace VAdvantage.Model
             }
 
             // Set Conditional Flag to null.
-            if (to.Get_ColumnIndex("ConditionalFlag") > -1)         
+            if (to.Get_ColumnIndex("ConditionalFlag") > -1)
             {
                 DB.ExecuteQuery("UPDATE C_Invoice SET ConditionalFlag = null WHERE C_Invoice_ID = " + to.GetC_Invoice_ID(), null, trxName);
             }
@@ -1100,9 +1100,12 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, "Line difference - From=" + fromLines.Length + " <> Saved=" + count);
             }
 
-            if (!CalculateTaxTotal())   //	setTotals
+            if (!(!counter && setOrder))
             {
-                log.Info(Msg.GetMsg(GetCtx(), "ErrorCalculateTax") + ": " + GetDocumentNo().ToString());
+                if (!CalculateTaxTotal())   //	setTotals
+                {
+                    log.Info(Msg.GetMsg(GetCtx(), "ErrorCalculateTax") + ": " + GetDocumentNo().ToString());
+                }
             }
 
             // Update header Tax
