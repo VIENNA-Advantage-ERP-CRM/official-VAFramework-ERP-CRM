@@ -4225,11 +4225,11 @@
         if (obscureFields && obscureFields.length > 0) {
             var len = obscureFields.length;
             for (var i = 0; i < len; i++) {
-                if (RowData[obscureFields[i]]) {
+                if (RowData[obscureFields[i]] || RowData[obscureFields[i]]==0) {
                     RowData[obscureFields[i]] = this.encrypt(RowData[obscureFields[i]]);
                 }
 
-                if (OldRowData[obscureFields[i]]) {
+                if (OldRowData[obscureFields[i]] || OldRowData[obscureFields[i]]==0) {
                     OldRowData[obscureFields[i]] = this.encrypt(OldRowData[obscureFields[i]]);
                 }
             }
@@ -5321,7 +5321,8 @@
 
         var m_lookup = null;
         /* Load Lookup */
-        if (this.vo.IsDisplayedf || this.vo.ColumnName.toLower().equals("createdby") || gField._vo.ColumnName.toLower().equals("updatedby")) {
+        if (this.vo.IsDisplayedf || this.vo.ColumnName.toLower().equals("createdby") || gField._vo.ColumnName.toLower().equals("updatedby")
+            || this.vo.IsHeaderPanelitem        ) {
             if (gField._vo.lookupInfo != null && VIS.DisplayType.IsLookup(gField._vo.displayType)) {
                 if (VIS.DisplayType.IsLookup(gField._vo.displayType)) {
 
@@ -5941,6 +5942,10 @@
         return this.value;
     };
 
+    GridField.prototype.getIsIdentifier = function () {
+        return this.vo.IsIdentifier;
+    }
+
     /**
      *  Get old/previous Value.
      * 	Called from MTab.processCallout
@@ -6095,6 +6100,8 @@
                 if (variable.equals("@SysDate@") || variable.equals("@Now@"))	//	System Time
                 {
                     var d = new Date();
+                    d.setMilliseconds(0);
+                    d.setSeconds(0);
                     var n = d.toISOString();
                     //console.log(vo.ColumnName + " <==>" + variable +"==>"+ n);
                     return n;
@@ -6486,6 +6493,8 @@
                         // console.log(this.vo.ColumnName + "==>[2] " + d);
                         console.log(this.vo.ColumnName + "==>[3n] " + d.toISOString());
                     }
+                    d.setMilliseconds(0);
+                    d.setSeconds(0);
                     return d.toISOString();
                 }
                 catch (ex) {
@@ -6499,7 +6508,10 @@
                 catch (exx) {
                     this.log.warning("Cannot convert to Timestamp: " + tsString);
                 }
-                return new Date().toISOString();
+                var d = new Date();
+                d.setMilliseconds(0);
+                d.setSeconds(0);
+                return d.toISOString();
             }
 
             //	Boolean

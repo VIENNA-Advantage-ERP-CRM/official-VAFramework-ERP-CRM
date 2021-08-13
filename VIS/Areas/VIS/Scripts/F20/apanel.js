@@ -1527,6 +1527,8 @@
                         gc.initHeaderPanel(this.getParentDetailPane());
                         if (gTab.isHPanelNotShowInMultiRow && !gTab.getIsSingleRow()) {
                             gc.vHeaderPanel.hidePanel();
+                            if (gc.vHeaderPanel.sizeChangedListner && gc.vHeaderPanel.sizeChangedListner.onSizeChanged)
+                                gc.vHeaderPanel.sizeChangedListner.onSizeChanged();
                         }
                     }
                 }

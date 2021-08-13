@@ -18,7 +18,7 @@
         this.onSort = null;
         this.onEdit = null;
         this.onAdd = null;
-        this.hyperLinkCell = {};
+        this.hyperLinkCell = null;
 
         this.editColumnIndex = -1;
         var clickCount = 0;
@@ -36,7 +36,7 @@
 
         function toggleToSingleView(evt) {
             try {
-                if (self.grid.columns[evt.column].columnName == self.hyperLinkCell[self.grid.name]) {
+                if (self.grid.columns[evt.column].columnName == self.hyperLinkCell) {
                     self.grid.select(Number(evt.recid));
                     var isCompositView = self.aPanel.getRoot().find('[name=' + evt.target + ']').closest('.vis-ad-w-p-center-inctab');
                     if (isCompositView.length > 0) {
@@ -325,13 +325,13 @@
         this.mTab = mTab;
         this.AD_Table_ID = this.mTab.getAD_Table_ID();
 
-
         var oColumns = [];
         var mField = null;
         var size = grdFields.length;
         var visibleFields = 0;
 
         var mFields = grdFields.slice(0);
+
 
         mFields.sort(function (a, b) { return a.getMRSeqNo() - b.getMRSeqNo() });
 
@@ -369,6 +369,9 @@
             var updateable = mField.getIsEditable(false);      //  no context check
             //int WindowNo = mField.getWindowNo();
 
+          
+
+
             //  Not a Field
             if (mField.getIsHeading())
                 continue;
@@ -397,6 +400,13 @@
             }
             else {
                 oColumn.size = '100px';
+            }
+
+            if (mField.getIsIdentifier() && this.hyperLinkCell == null) {
+                if (oColumn.hidden == false) {
+                    this.hyperLinkCell = columnName;
+                    oColumn.style = 'text-decoration:underline; color:rgba(var(--v-c-primary), 1) !important; cursor:pointer';
+                }
             }
 
             if (displayType == VIS.DisplayType.Amount) {
@@ -475,12 +485,12 @@
 
 
                 oColumn.sortable = true;
-                if (oColumn.hidden == false && (this.hyperLinkCell[name] == "undefined" || this.hyperLinkCell[name] == null)) {
-                    if (columnName.toLowerCase() == "value" || columnName.toLowerCase() == "name" || columnName.toLowerCase() == "documentno") {
-                        this.hyperLinkCell[name] = columnName;
-                        oColumn.style = 'text-decoration:underline; color:blue !important; cursor:pointer';
-                    }
-                }
+                //if (oColumn.hidden == false && (this.hyperLinkCell[name] == "undefined" || this.hyperLinkCell[name] == null)) {
+                //    if (columnName.toLowerCase() == "value" || columnName.toLowerCase() == "name" || columnName.toLowerCase() == "documentno") {
+                //        this.hyperLinkCell[name] = columnName;
+                //        oColumn.style = 'text-decoration:underline; color:rgba(var(--v-c-primary), 1) !important; cursor:pointer';
+                //    }
+                //}
 
                 if (mField.getIsEncryptedField()) {
                     oColumn.render = function (record, index, colIndex) {
@@ -544,7 +554,7 @@
                         }
                         var d;
                         if (l) {
-                            d = l.getDisplay(val, true);
+                            d = l.getDisplay(val, true,true);
                             //if (d.startsWith("<"))
                             //  d = l.getDisplay(nd, false);
                             //d = w2utils.encodeTags(d);
@@ -592,6 +602,10 @@
                             // Based on sequence of image in idenitifer, perform logic and display image with text
                             if (l && l.gethasImageIdentifier()) {
                                 var imgIndex = d.indexOf("Images/");
+
+                                if (imgIndex == -1)
+                                        return d;
+
                                  //Find Image from Identifier string 
                                 var img = d.substring(imgIndex + 7, d.lastIndexOf("^^"));
                             img = VIS.Application.contextUrl + "Images/Thumb32x32/" + img;
@@ -624,7 +638,10 @@
                                 if (c == 0 || img.indexOf("nothing.png") > -1) {
                                     if (img.indexOf("nothing.png")== -1)
                                     {
-                                        strDiv += "<div class='vis-grid-row-td-icon'><img src='" + img + "?" + new Date().getTime() + "' ></img></div>";
+                                        strDiv += "<div class='vis-grid-row-td-icon'"
+                                            + " > <img src='" + img + 
+                                            "'></div > ";
+                                           // "' onerror='this.style.display=\"none\"' ></img></div > ";
                                     }
                                    
                                 }
@@ -637,9 +654,12 @@
                         if (strDiv == "")
                             return d;
 
+                       
+
                         return strDiv;
                         //return '<span>' + d + '</span>';
                     }
+                   
                 }
             }
             //Date /////////
@@ -895,10 +915,13 @@
                         oColumns[p].min = 100;
                     }
 
+                    if (this.hyperLinkCell == null) {                      
+                        this.hyperLinkCell = oColumns[p].columnName;
+                        oColumns[p].style = 'text-decoration:underline; color:rgba(var(--v-c-primary), 1) !important; cursor:pointer';
+                    }
                 }
             }
         }
-
 
         //oColumns[oColumns.length - 1].size = "100%";
         this.grid = $().w2grid({

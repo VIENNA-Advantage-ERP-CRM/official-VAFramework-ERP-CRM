@@ -332,9 +332,11 @@ input.vis-ev-col-readonly:not(:placeholder-shown) ~ label {
 }
 
 .vis-ev-col-linkbutton {
-    background: no-repeat;
-    border: none;
-    color: rgba(var(--v-c-primary), 1);
+    background: no-repeat !important;
+    border: none !important;
+    color: rgba(var(--v-c-primary), 1) !important;
+    display: flex;
+    align-items: center;
 }
 
     .vis-ev-col-linkbutton i {
@@ -346,7 +348,6 @@ input.vis-ev-col-readonly:not(:placeholder-shown) ~ label {
         justify-content: center;
         border-radius: 50%;
         color:inherit;
-        font-size:1rem;
     }
 
     .vis-ev-col-linkbutton span {

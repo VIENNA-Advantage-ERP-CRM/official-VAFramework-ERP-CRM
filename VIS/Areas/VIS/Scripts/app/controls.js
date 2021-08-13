@@ -1217,7 +1217,7 @@
                 $ctrl.append($txt).append($img);
             }
             else {
-                $ctrl = $('<div type="button" class="vis-ev-col-linkbutton"></div>');
+                $ctrl = $('<button type="button" class="vis-ev-col-linkbutton"></button>');
                 $ctrl.append($img).append($txt);
             }   
         }
@@ -3427,7 +3427,9 @@
             }
 
             this.value = newValue;
-            this.ctrl.val(VIS.Utility.decodeText(this.lastDisplay));
+
+            var ctrlval = VIS.Utility.Util.getIdentifierDisplayVal(this.lastDisplay);
+            this.ctrl.val(VIS.Utility.decodeText(ctrlval));
 
             this.settingValue = false;
             //this.setBackground("white");
@@ -6243,15 +6245,25 @@
     VIS.Utility.inheritPrototype(VKeyText, IControl); //Inherit
 
     VKeyText.prototype.setValue = function (newValue, isHTML) {
-
+        var validation = null;
         if (this.needtoParse) {
-            var validation = VIS.Env.parseContext(VIS.context, this.windowNo, 0, this.colSql, false, true);
-            if (validation.length == 0)
-                //console.log(this.info.keyColumn + ": Loader NOT Validated: " + this.info.validationCode);
-                return;
+            validation = VIS.Env.parseContext(VIS.context, this.windowNo, 0, this.colSql, false, true);
+        }
+        else {
+            validation = this.colSql;
         }
 
-        var where = validation.substring(validation.toUpperCase().lastIndexOf('WHERE'));
+        if (!validation || validation.length == 0)
+            //console.log(this.info.keyColumn + ": Loader NOT Validated: " + this.info.validationCode);
+            return;
+
+
+        var wIndex = validation.toUpperCase().lastIndexOf('WHERE');
+        var where = '-1';
+        if (wIndex > -1) {
+            where = validation.substring(wIndex);
+        }
+         
         if (this.cache[where]) {
             // if (this.oldValue != newValue) {
             //  this.oldValue = newValue;
@@ -6261,6 +6273,12 @@
             }
         }
         else {
+            if (validation.toLowerCase().indexOf("select") == -1) {
+                this.cache[where] = validation;
+                this.ctrl.text(validation);
+                return;
+            }
+
             var self = this;
             executeScalarEn(validation, null,function (val) {
                if (val) {

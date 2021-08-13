@@ -44,6 +44,7 @@
     margin: 0px;
     padding: 0px 1px;
     vertical-align: middle;
+    color: rgba(var(--v-c-on-secondary), 1);
 }
 
 .w2ui-grid .w2ui-grid-body table .w2ui-col-number {
@@ -342,7 +343,7 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
     min-width: 28px;
 }
 .w2ui-grid .w2ui-grid-body .w2ui-grid-records table tr.w2ui-selected td.w2ui-grid-data > div {
-    color: rgba(var(--v-c-on-secondary), 1);
+    color: inherit;
 }
 .w2ui-grid .w2ui-grid-body table td.w2ui-grid-data:first-child > div {
     padding: 10px 0;

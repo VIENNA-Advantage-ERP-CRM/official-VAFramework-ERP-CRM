@@ -103,6 +103,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 throw new Exception("Not found @R_MailText_ID@=" + _R_MailText_ID);
             }
+
+            if(_R_InterestArea_ID <= 0 && _C_BP_Group_ID <= 0)
+            {
+                throw new Exception("Need to select one value - @R_InterestArea_ID@ or @C_BP_Group_ID@");
+            }
             //	Client Info
             _client = MClient.Get(GetCtx());
             if (_client.GetAD_Client_ID() == 0)

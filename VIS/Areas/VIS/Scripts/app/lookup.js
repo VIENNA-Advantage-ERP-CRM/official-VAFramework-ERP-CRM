@@ -461,13 +461,18 @@
         return list;
     };
 
-    MLookup.prototype.getDisplay = function (value, checkLocalList) {
+    MLookup.prototype.getDisplay = function (value, checkLocalList, loadImage) {
         if (value == null) {
             return "";
         }
         var display = !checkLocalList ? this.get(value) : this.getFromList(value);
         if (display == null)
             return "<" + value.toString() + ">";
+        if (loadImage)
+            return display.Name;
+        else
+            return VIS.Utility.Util.getIdentifierDisplayVal(display.Name);
+
         return display.Name;
     };
 
@@ -515,12 +520,12 @@
             return null;
 
         if (this.info.isParent && this.nextRead < Date.now()) {
-            this.lookup = null;
-            this.lookup = {};
-            if (this.lookupDirect) {
-                this.lookupDirect = null;
-                this.lookupDirect = {};
-            }
+            //this.lookup = null;
+            //this.lookup = {};
+            ////if (this.lookupDirect) {
+            //    this.lookupDirect = null;
+            //    this.lookupDirect = {};
+            //}
             this.nextRead = Date.now() + 2000; // 1/2 sec
         }
 
@@ -546,7 +551,7 @@
         }
 
 
-        var cacheLocal = this.info.isValidated;
+        var cacheLocal = true;// this.info.isValidated;
         return this.getDirect(key, false, cacheLocal); // do NOT cache
     };
     MLookup.prototype.getFromList = function (key) {
@@ -555,12 +560,12 @@
             return null;
 
         if (this.info.isParent && this.nextRead < Date.now()) {
-            this.lookup = null;
-            this.lookup = {};
-            if (this.lookupDirect) {
-                this.lookupDirect = null;
-                this.lookupDirect = {};
-            }
+            //this.lookup = null;
+            //this.lookup = {};
+            //if (this.lookupDirect) {
+            //    this.lookupDirect = null;
+            //    this.lookupDirect = {};
+            //}
             this.nextRead = Date.now() + 2000; // 1/2/3 sec
             return this.get(key);
         }

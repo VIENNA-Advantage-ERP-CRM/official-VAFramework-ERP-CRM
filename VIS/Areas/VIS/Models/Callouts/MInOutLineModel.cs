@@ -44,5 +44,18 @@ namespace VIS.Models
             //retlst.Add(retValue);
             return result;
         }
+
+        /// <summary>
+        /// Get Invoice Line ID
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="fields">parameter</param>
+        /// <returns>Invoice Line ID</returns>
+        public int GetInvoiceLine(Ctx ctx, string fields)
+        {
+            int invLine_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_InvoiceLine_ID FROM C_InvoiceLine WHERE M_InOutLine_ID = "
+                + Util.GetValueOfInt(fields), null, null));
+            return invLine_ID;
+        }
     }
 }

@@ -883,12 +883,12 @@ namespace VAdvantage.Classes
 
                 if (i > 0)
                 {
-                    if (ldc.ColumnName.ToLower().Equals("ad_image_id"))
+                    if (ldc.ColumnName.ToLower().Equals("ad_image_id") || ldc.DisplayType==DisplayType.Image)
                     {
                         displayColumn.Append(" ||'^^'|| ");
                     }
                     else
-                        if (!list[i - 1].ColumnName.ToLower().Equals("ad_image_id"))
+                        if (!list[i - 1].ColumnName.ToLower().Equals("ad_image_id") && list[i - 1].DisplayType != DisplayType.Image)
                         displayColumn.Append(" ||'_'|| ");
                     else
                         displayColumn.Append(" ||' '|| ");
@@ -901,9 +901,9 @@ namespace VAdvantage.Classes
                 //    displayColumn.Append("COALESCE(CONVERT(VARCHAR,");
                 displayColumn.Append("NVL(");
                 //  translated
-                if (ldc.ColumnName.ToLower().Equals("ad_image_id"))
+                if (ldc.ColumnName.ToLower().Equals("ad_image_id") || ldc.DisplayType == DisplayType.Image)
                 {
-                    string embeddedSQL = "SELECT NVL(ImageURL,'') ||'^^' FROM AD_Image WHERE " + tableName + ".AD_Image_ID=AD_Image.AD_Image_ID";
+                    string embeddedSQL = "SELECT NVL(ImageURL,'') ||'^^' FROM AD_Image WHERE CAST(" + tableName + "."+ ldc.ColumnName+ " AS Integer)=AD_Image.AD_Image_ID";
                     displayColumn.Append("(").Append(embeddedSQL).Append(")");
                     hasImagIdentifier = true;
 
@@ -945,12 +945,6 @@ namespace VAdvantage.Classes
                 {
                     displayColumn.Append(DataBase.DB.TO_CHAR(tableName + "." + ldc.ColumnName, ldc.DisplayType, language.GetAD_Language()));
                 }
-                else if (ldc.DisplayType == DisplayType.List && ldc.AD_Ref_Val_ID != 0)
-                {
-                    // string embeddedSQL = GetLookup_ListEmbed(language, ldc.ColumnName, tableName, ldc.AD_Ref_Val_ID);
-                    //if (embeddedSQL != null)
-                    //    displayColumn.Append("(").Append(embeddedSQL).Append(")");
-                }
                 //  String
                 else
                 {
@@ -964,7 +958,7 @@ namespace VAdvantage.Classes
                 }
 
                 //jz EDB || problem
-                if (ldc.ColumnName.ToLower().Equals("ad_image_id"))
+                if (ldc.ColumnName.ToLower().Equals("ad_image_id") || ldc.DisplayType == DisplayType.Image)
                     displayColumn.Append(",'Images/nothing.png^^')");
                 else
                     displayColumn.Append(",'')");

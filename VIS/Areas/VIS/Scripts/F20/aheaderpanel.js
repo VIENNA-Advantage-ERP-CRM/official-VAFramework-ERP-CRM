@@ -154,7 +154,7 @@
                 for (var headerSeqNo in currentItem.HeaderItems) {
 
                     var headerItem = currentItem.HeaderItems[headerSeqNo];
-                    var controls = {};
+                    
                     var startCol = headerItem.StartColumn;
                     var colSpan = headerItem.ColumnSpan;
                     var startRow = headerItem.StartRow;
@@ -182,9 +182,9 @@
                     var $label = null;
                     var iControl = null;
 
-                        //Apply HTML Style
-                        var dynamicClassName = this.applyCustomUISettings(headerSeqNo, startCol, colSpan, startRow, rowSpan, justyFy, alignItem,
-                            backgroundColor, FontColor, fontSize, fieldPadding);
+                    //Apply HTML Style
+                    var dynamicClassName = this.applyCustomUISettings(headerSeqNo, startCol, colSpan, startRow, rowSpan, justyFy, alignItem,
+                        backgroundColor, FontColor, fontSize, fieldPadding);
 
                     // Find the div with dynamic class from container. Class will only be available in DOm if two fields are having same item seq. No.
                     $div = $containerDiv.find('.' + dynamicClassName);
@@ -193,15 +193,15 @@
                     if ($div.length <= 0)
                         $div = $('<div class="vis-w-p-header-data-f ' + dynamicClassName + '">');
 
-                    $divIcon = $('<div class="vis-w-p-header-icon-f"></div>');
-
-                    $divLabel = $('<div class="vis-w-p-header-Label-f"></div>');
+                   
 
 
                     // is dynamic 
                     if (headerItem.ColSql.length > 0) {
+                        var controls = {};
+                        $divLabel = $('<div class="vis-w-p-header-Label-f"></div>');
                         iControl = new VIS.Controls.VKeyText(headerItem.ColSql, $self.gTab.getWindowNo(),
-                                                                $self.gTab.getWindowNo() + "_" + headerSeqNo);
+                            $self.gTab.getWindowNo() + "_" + headerSeqNo);
 
                         if (iControl == null) {
                             continue;
@@ -222,17 +222,32 @@
                             fields = fields.sort(function (a, b) { return a.getHeaderSeqno() - b.getHeaderSeqno() });
                             for (var i = 0; i < fields.length; i++) {
                                 var field = fields[i];
+                             
+
                                 // Check if field is marked as Header Panel Item or Not.
                                 if (field.getIsHeaderPanelitem()) {
-                                    headergFields[field.getHeaderSeqno()] = field;
+                                    if (field.getHeaderSeqno() in headergFields) {
+                                        headergFields[field.getHeaderSeqno()].push(field);
+                                    }
+                                    else {
+                                        headergFields[field.getHeaderSeqno()] = [field];
+                                    }
                                 }
                             }
                         }
 
-                        var mField = headergFields[headerSeqNo];
-                        if (!mField)
+                        var mFields = headergFields[headerSeqNo];
+                        if (!mFields)
                             continue;
+                        for (var x = 0; x < mFields.length; x++) {
+                            var mField = mFields[x];
+                            if (!mField)
+                                continue;
 
+                            var controls = {};
+                            $divIcon = $('<div class="vis-w-p-header-icon-f"></div>');
+
+                            $divLabel = $('<div class="vis-w-p-header-Label-f"></div>');
                         // If Referenceof field is Image then added extra class to align image and Label in center.
                         if (mField.getDisplayType() == VIS.DisplayType.Image) {
                             $divLabel.addClass('vis-w-p-header-Label-center-f');
@@ -260,7 +275,7 @@
                         if (iControl == null) {
                             continue;
                         }
-                      
+
                         var $lblControl = null;
                         if ($label) {
                             $lblControl = $label.getControl().addClass('vis-w-p-header-data-label');
@@ -395,7 +410,7 @@
                                 $divLabel.append($lblControl);
                                 $divIcon.hide();
                             }
-                            
+
                             setValue(colValue, iControl, mField);
                             /****END ******  Set what do you want to show? Icon OR Label OR Both OR None*/
                         }
@@ -403,6 +418,7 @@
                         $containerDiv.append($div);
                         $self.controls.push(objctrls);
                     }
+                }
                 }
             }
 
@@ -453,7 +469,7 @@
                 var displayType = mField.getDisplayType();
 
                 if (mField.lookup) {
-                    colValue = mField.lookup.getDisplay(colValue, true);
+                    colValue = mField.lookup.getDisplay(colValue, true,true);
                 }
                 //	Date
                 else if (VIS.DisplayType.IsDate(displayType)) {
@@ -503,7 +519,7 @@
 
         var getIdentifierImage = function (mField) {
             var value = mField.getValue();
-            value = mField.lookup.getDisplay(value, true);
+            value = mField.lookup.getDisplay(value, true,true);
 
             if (value != null && value && value.indexOf("Images/") > -1) {// Based on sequence of image in idenitifer, perform logic and display image with text
 
@@ -785,7 +801,7 @@
 
     HeaderPanel.prototype.applyCustomUIForFieldValue = function (headerSeqNo, startCol, startRow, mField) {
         var style = mField.getHeaderStyle();
-        var dynamicClassName = "vis-hp-FieldValue_" + startRow + "_" + startCol + "_" + this.windowNo + "_" + headerSeqNo;
+        var dynamicClassName = "vis-hp-FieldValue_" + startRow + "_" + startCol + "_" + this.windowNo + "_" + headerSeqNo + "_" + mField.getAD_Column_ID();
         if (style && style.toLower().indexOf("@value::") > -1) {
             style = getStylefromCompositeValue(style, "@value::");
         }
