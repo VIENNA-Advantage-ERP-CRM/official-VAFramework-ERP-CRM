@@ -102,6 +102,7 @@ namespace VIS.Helpers
             while (dr.Read())
             {
 
+
                 ShortcutItemModel itm = new ShortcutItemModel();
 
                 itm.ShortcutName = Util.GetValueOfString(dr["Name2"]);

@@ -103,14 +103,20 @@ namespace VIS.Controllers
         #endregion
 
         #region Menual Forms
-
+        /// <summary>
+        /// Get the Generated Invoice Info
+        /// </summary>
+        /// <param name="whereClause">WHERE Condition Value or C_Order_ID</param>
+        /// <returns>returns Invoice Info</returns>
         public JsonResult GenerateInvoices(string whereClause)
         {
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
                 CommonModel obj = new CommonModel();
-                var value = obj.GenerateInvoices(ctx, whereClause);
+                //not use of var value
+                //var value = obj.GenerateInvoices(ctx, whereClause);
+                obj.GenerateInvoices(ctx, whereClause);
                 return Json(new { obj.ErrorMsg, obj.lblStatusInfo, obj.statusBar, obj.DocumentText }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { result = "ok" }, JsonRequestBehavior.AllowGet);
@@ -1118,7 +1124,7 @@ namespace VIS.Controllers
                         po = tbl.GetPO(ctx, M_InoutLine_ID, null);
                         if (countVA010 > 0 && QualityPlan_ID > 0)
                             po.Set_ValueNoCheck("VA010_QualityPlan_ID", QualityPlan_ID);
-
+                        
                         po.Set_Value("QtyEntered", (Decimal?)QtyEnt);
                         po.Set_Value("MovementQty", (Decimal?)QtyEnt);
                         if (!po.Save())
@@ -1134,11 +1140,11 @@ namespace VIS.Controllers
                         //{ 
                         SqlIOL += " AND NVL(M_AttributeSetInstance_ID, 0) = " + M_AttributeSetInstance_ID;
                         //}
-                        if (isContainerApplicable)
-                        {
-                            // To check with containerID to get Record
-                            SqlIOL += " AND NVL(M_ProductContainer_ID , 0) = " + Container_ID;
-                        }
+                        //if (isContainerApplicable)
+                        //{
+                        //    // To check with containerID to get Record
+                        //    SqlIOL += " AND NVL(M_ProductContainer_ID , 0) = " + Container_ID;
+                        //}
 
                         M_InoutLine_ID = Util.GetValueOfInt(DB.ExecuteScalar(SqlIOL));
                         if (M_InoutLine_ID == 0)
@@ -2436,7 +2442,9 @@ namespace VIS.Controllers
         {
             ProcessInfoUtil.SetLogFromDB(pi);
             StringBuilder iText = new StringBuilder();
-            iText.Append("<b>").Append(pi.GetSummary())
+            //get the Proper Message to understand by user so replaced GetSummery with Message
+            //iText.Append("<b>").Append(pi.GetSummary())
+            iText.Append("<b>").Append(Msg.GetMsg(ctx, "VIS_InvSuccessfullyCreated"))
                 .Append("</b><br>(")
                 .Append(Msg.GetMsg(ctx, "InvGenerateInfo"))
                 //Invoices are generated depending on the Invoicing Rule selection in the Order

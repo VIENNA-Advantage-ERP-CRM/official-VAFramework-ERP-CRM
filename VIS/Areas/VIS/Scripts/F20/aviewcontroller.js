@@ -557,7 +557,7 @@
                                 this.rightPaneLinkItems.push(iControl);
                             }
                             else {
-                                this.leftPaneLinkItems.push(iControl);
+                                //this.leftPaneLinkItems.push(iControl);
                             }
                         }
                         iControl.addActionListner(this);
@@ -668,7 +668,7 @@
     VIS.GridController.prototype.getIsHeaderPanel = function () {
         return this.gTab.getIsHeaderPanel();
     };
-
+   
     VIS.GridController.prototype.detachDynamicAction = function () {
         var i = 0;
         var j = 0;
@@ -1671,6 +1671,12 @@ VIS.GridController.prototype.dataStatusChanged = function (e) {
             this.getVMapPanel().hide();
 
         }
+
+        if (this.gTab.isHPanelNotShowInMultiRow && this.vHeaderPanel != null) {
+            this.vHeaderPanel.showPanel();
+            if (this.vHeaderPanel.sizeChangedListner && this.vHeaderPanel.sizeChangedListner.onSizeChanged)
+                this.vHeaderPanel.sizeChangedListner.onSizeChanged();
+        }
         this.dynamicDisplay(-1);
     };
 
@@ -1692,11 +1698,16 @@ VIS.GridController.prototype.dataStatusChanged = function (e) {
                 p1.css({ "float": 'right' });
             else p1.css({ "float": '' });
 
-        p1.show();
-        p1 = null;
-        this.vTable.resize();
-        this.vTable.refreshRow();
-    }
+            p1.show();
+            p1 = null;
+            this.vTable.resize();
+            this.vTable.refreshRow();          
+            if (this.gTab.isHPanelNotShowInMultiRow && this.vHeaderPanel != null) {
+                this.vHeaderPanel.hidePanel();
+                if (this.vHeaderPanel.sizeChangedListner && this.vHeaderPanel.sizeChangedListner.onSizeChanged)
+                    this.vHeaderPanel.sizeChangedListner.onSizeChanged();
+            }
+        }
     
 };
 

@@ -56,7 +56,7 @@ namespace VAdvantage.Model
 
         /** Reversal Indicator			*/
         public const String REVERSE_INDICATOR = "^";
-
+       
         #endregion
 
 
@@ -304,7 +304,7 @@ namespace VAdvantage.Model
                 }
                 if (Is_ValueChanged("M_Warehouse_ID"))
                 {
-                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM M_InventoryLine WHERE M_Inventory_ID = " + GetM_Inventory_ID(), null, Get_Trx())) > 0)
+                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(M_InventoryLine_ID) FROM M_InventoryLine WHERE M_Inventory_ID = " + GetM_Inventory_ID(), null, Get_Trx())) > 0)
                     {
                         log.SaveError("VIS_WarehouseCantChange", "");
                         return false;
@@ -557,42 +557,46 @@ namespace VAdvantage.Model
             isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
 
             #region[Prevent from completing if on hand qty not available as per requirement and disallow negative is true at warehouse.]
-            string sql = "";
-            sql = "SELECT ISDISALLOWNEGATIVEINV FROM M_Warehouse WHERE M_Warehouse_ID = (SELECT M_WAREHOUSE_ID FROM M_Inventory WHERE M_Inventory_ID = " + Util.GetValueOfInt(GetM_Inventory_ID()) + " )";
-            string disallow = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_TrxName()));
-            int[] invLine = MInventoryLine.GetAllIDs("M_InventoryLine", "M_Inventory_ID  = " + GetM_Inventory_ID(), Get_TrxName());
-
-            if (disallow.ToUpper() == "Y")
+            StringBuilder sql = new StringBuilder();
+            sql.Append("SELECT ISDISALLOWNEGATIVEINV FROM M_Warehouse WHERE M_Warehouse_ID = " + GetM_Warehouse_ID());
+            string disallow = Util.GetValueOfString(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
+            //int[] invLine = MInventoryLine.GetAllIDs("M_InventoryLine", "M_Inventory_ID  = " + GetM_Inventory_ID(), Get_TrxName());
+            MInventoryLine[] lines = GetLines(false);
+            log.Info("total Lines=" + lines.Count());
+            if (disallow.ToUpper().Equals("Y"))
             {
                 int m_locator_id = 0;
                 int m_product_id = 0;
                 StringBuilder products = new StringBuilder();
                 StringBuilder locators = new StringBuilder();
+
                 bool check = false;
-                for (int i = 0; i < invLine.Length; i++)
+                for (int i = 0; i < lines.Length; i++)
                 {
-                    MInventoryLine inLine = new MInventoryLine(Env.GetCtx(), invLine[i], Get_TrxName());
+                    //MInventoryLine inLine = new MInventoryLine(Env.GetCtx(), invLine[i], Get_TrxName());
+                    MInventoryLine inLine = lines[i];
                     m_locator_id = Util.GetValueOfInt(inLine.GetM_Locator_ID());
                     m_product_id = Util.GetValueOfInt(inLine.GetM_Product_ID());
                     Decimal qtyToMove = 0;
-
-                    sql = "SELECT M_AttributeSet_ID FROM M_Product WHERE M_Product_ID = " + m_product_id;
-                    int m_attribute_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
+                    sql.Clear();
+                    sql.Append("SELECT M_AttributeSet_ID FROM M_Product WHERE M_Product_ID = " + m_product_id);
+                    int m_attribute_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
                     if (m_attribute_ID == 0)
                     {
+                        sql.Clear();
                         if (!isContainerApplicable)
                         {
-                            sql = "SELECT SUM(QtyOnHand) FROM M_Storage WHERE M_Locator_ID = " + m_locator_id + " AND M_Product_ID = " + m_product_id;
+                            sql.Append("SELECT SUM(QtyOnHand) FROM M_Storage WHERE M_Locator_ID = " + m_locator_id + " AND M_Product_ID = " + m_product_id);
                         }
                         else
                         {
-                            sql = @"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
+                            sql.Append(@"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
                                         INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
-                                           " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND t.M_Locator_ID = " + inLine.GetM_Locator_ID() +
-                                           " AND t.M_Product_ID = " + inLine.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + inLine.GetM_AttributeSetInstance_ID() +
-                                           " AND NVL(t.M_ProductContainer_ID, 0) = " + inLine.GetM_ProductContainer_ID();
+                                        " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND t.M_Locator_ID = " + inLine.GetM_Locator_ID() +
+                                        " AND t.M_Product_ID = " + inLine.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + inLine.GetM_AttributeSetInstance_ID() +
+                                        " AND NVL(t.M_ProductContainer_ID, 0) = " + inLine.GetM_ProductContainer_ID());
                         }
-                        decimal qty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_TrxName()));
+                        decimal qty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
                         //int qtyToMove = Util.GetValueOfInt(inLine.GetQtyInternalUse());
                         if (inLine.IsInternalUse())
                         {
@@ -612,19 +616,20 @@ namespace VAdvantage.Model
                     }
                     else
                     {
+                        sql.Clear();
                         if (!isContainerApplicable)
                         {
-                            sql = "SELECT SUM(QtyOnHand) FROM M_Storage WHERE M_Locator_ID = " + m_locator_id + " AND M_Product_ID = " + m_product_id + " AND M_AttributeSetInstance_ID = " + inLine.GetM_AttributeSetInstance_ID();
+                            sql.Append("SELECT SUM(QtyOnHand) FROM M_Storage WHERE M_Locator_ID = " + m_locator_id + " AND M_Product_ID = " + m_product_id + " AND M_AttributeSetInstance_ID = " + inLine.GetM_AttributeSetInstance_ID());
                         }
                         else
                         {
-                            sql = @"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
+                            sql.Append(@"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
                                         INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
-                                         " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND t.M_Locator_ID = " + inLine.GetM_Locator_ID() +
-                                         " AND t.M_Product_ID = " + inLine.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + inLine.GetM_AttributeSetInstance_ID() +
-                                         " AND NVL(t.M_ProductContainer_ID, 0) = " + inLine.GetM_ProductContainer_ID();
+                                        " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND t.M_Locator_ID = " + inLine.GetM_Locator_ID() +
+                                        " AND t.M_Product_ID = " + inLine.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + inLine.GetM_AttributeSetInstance_ID() +
+                                        " AND NVL(t.M_ProductContainer_ID, 0) = " + inLine.GetM_ProductContainer_ID());
                         }
-                        decimal qty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_TrxName()));
+                        decimal qty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
                         //int qtyToMove = Util.GetValueOfInt(inLine.GetQtyInternalUse());
                         if (inLine.IsInternalUse())
                         {
@@ -645,11 +650,13 @@ namespace VAdvantage.Model
                 }
                 if (check)
                 {
-                    sql = DBFunctionCollection.ConcatinateListOfLocators(locators.ToString());
-                    string loc = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_TrxName()));
+                    sql.Clear();
+                    sql.Append(DBFunctionCollection.ConcatinateListOfLocators(locators.ToString()));
+                    string loc = Util.GetValueOfString(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
 
-                    sql = DBFunctionCollection.ConcatinateListOfProducts(products.ToString());
-                    string prod = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_TrxName()));
+                    sql.Clear();
+                    sql.Append(DBFunctionCollection.ConcatinateListOfProducts(products.ToString()));
+                    string prod = Util.GetValueOfString(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
 
                     _processMsg = Msg.GetMsg(Env.GetCtx(), "InsufficientQuantityFor: ") + prod + Msg.GetMsg(Env.GetCtx(), "OnLocators: ") + loc;
                     return DocActionVariables.STATUS_DRAFTED;
@@ -663,9 +670,10 @@ namespace VAdvantage.Model
                 {
                     StringBuilder delReq = new StringBuilder();
                     bool delivered = false;
-                    for (int i = 0; i < invLine.Length; i++)
+                    for (int i = 0; i < lines.Length; i++)
                     {
-                        MInventoryLine inLine = new MInventoryLine(Env.GetCtx(), invLine[i], Get_TrxName());
+                        //MInventoryLine inLine = new MInventoryLine(Env.GetCtx(), invLine[i], Get_TrxName());
+                        MInventoryLine inLine = lines[i];
                         if (inLine.GetM_RequisitionLine_ID() != 0)
                         {
                             MRequisitionLine reqLine = new MRequisitionLine(GetCtx(), inLine.GetM_RequisitionLine_ID(), Get_TrxName());
@@ -679,9 +687,10 @@ namespace VAdvantage.Model
 
                     if (delivered)
                     {
-                        sql = DBFunctionCollection.ConcatnatedListOfRequisition(delReq.ToString());
+                        sql.Clear();
+                        sql.Append(DBFunctionCollection.ConcatnatedListOfRequisition(delReq.ToString()));
                         sql = sql.Replace("'", "''");
-                        string req = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));
+                        string req = Util.GetValueOfString(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
 
                         _processMsg = Msg.GetMsg(Env.GetCtx(), "RequisitionAlreadyDone") + ": " + req;
                         return DocActionVariables.STATUS_DRAFTED;
@@ -696,8 +705,9 @@ namespace VAdvantage.Model
                 // during completion - system will verify 
                 // if container avialble on line is belongs to same warehouse and locator
                 // if not then not to complete this record
-                sql = DBFunctionCollection.MInventoryContainerNotMatched(GetM_Inventory_ID());
-                string containerNotMatched = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));
+                sql.Clear();
+                sql.Append(DBFunctionCollection.MInventoryContainerNotMatched(GetM_Inventory_ID()));
+                string containerNotMatched = Util.GetValueOfString(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
                 if (!String.IsNullOrEmpty(containerNotMatched))
                 {
                     SetProcessMsg(Msg.GetMsg(GetCtx(), "VIS_ContainerNotFound") + containerNotMatched);
@@ -739,30 +749,31 @@ namespace VAdvantage.Model
                 #region Update QtyCount
                 //Added by Bharat on 30/12/2016 for optimization
                 log.Info("update Inventory Started");
+                sql.Clear();
                 if (!isContainerApplicable)
                 {
-                    sql = @"SELECT m.M_InventoryLine_ID, m.M_Locator_ID, m.M_Product_ID, m.M_AttributeSetInstance_ID, m.AdjustmentType, m.AsOnDateCount, m.DifferenceQty,
+                    sql.Append(@"SELECT m.M_InventoryLine_ID, m.M_Locator_ID, m.M_Product_ID, m.M_AttributeSetInstance_ID, m.AdjustmentType, m.AsOnDateCount, m.DifferenceQty,
                 nvl(mt.CurrentQty, 0) as CurrentQty FROM M_InventoryLine m LEFT JOIN (SELECT DISTINCT t.M_Locator_ID, t.M_Product_ID, t.M_AttributeSetInstance_ID, 
                 FIRST_VALUE(t.CurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM M_Transaction t
                 INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
                " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND l.AD_Org_ID = " + GetAD_Org_ID() +
                @") mt ON m.M_Product_ID = mt.M_Product_ID AND nvl(m.M_AttributeSetInstance_ID, 0) = nvl(mt.M_AttributeSetInstance_ID, 0) 
-                AND m.M_Locator_ID = mt.M_Locator_ID WHERE m.M_Inventory_ID = " + Get_ID() + " ORDER BY m.Line";
+                AND m.M_Locator_ID = mt.M_Locator_ID WHERE m.M_Inventory_ID = " + Get_ID() + " ORDER BY m.Line");
                 }
                 else
                 {
-                    sql = @"SELECT m.M_InventoryLine_ID, m.M_Locator_ID, m.M_Product_ID, m.M_AttributeSetInstance_ID, m.AdjustmentType, m.AsOnDateCount, m.DifferenceQty,
+                    sql.Append(@"SELECT m.M_InventoryLine_ID, m.M_Locator_ID, m.M_Product_ID, m.M_AttributeSetInstance_ID, m.AdjustmentType, m.AsOnDateCount, m.DifferenceQty,
                 nvl(mt.CurrentQty, 0) as CurrentQty FROM M_InventoryLine m LEFT JOIN (SELECT DISTINCT t.M_Locator_ID, t.M_Product_ID, t.M_AttributeSetInstance_ID, t.M_ProductContainer_ID, 
                 FIRST_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM M_Transaction t
                 INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
                 " AND t.AD_Client_ID = " + GetAD_Client_ID() + @") mt ON m.M_Product_ID = mt.M_Product_ID AND nvl(m.M_AttributeSetInstance_ID, 0) = nvl(mt.M_AttributeSetInstance_ID, 0) 
-                AND m.M_Locator_ID = mt.M_Locator_ID AND nvl(m.M_ProductContainer_ID, 0) = nvl(mt.M_ProductContainer_ID, 0) WHERE m.M_Inventory_ID = " + Get_ID() + " ORDER BY m.Line";
+                AND m.M_Locator_ID = mt.M_Locator_ID AND nvl(m.M_ProductContainer_ID, 0) = nvl(mt.M_ProductContainer_ID, 0) WHERE m.M_Inventory_ID = " + Get_ID() + " ORDER BY m.Line");
                 }
                 DataSet ds = null;
                 StringBuilder updateSql = new StringBuilder();
                 try
                 {
-                    ds = DB.ExecuteDataset(sql, null, Get_Trx());
+                    ds = DB.ExecuteDataset(sql.ToString(), null, Get_Trx());
                     if (ds != null && ds.Tables[0].Rows.Count > 0)
                     {
                         //updateSql.Append("BEGIN ");
@@ -791,9 +802,10 @@ namespace VAdvantage.Model
 
                         if (cnt > 0)
                         {
-                            MInventory inventory = new MInventory(GetCtx(), GetM_Inventory_ID(), Get_TrxName());
-                            inventory.SetIsAdjusted(true);
-                            inventory.Save();
+                            //MInventory inventory = new MInventory(GetCtx(), GetM_Inventory_ID(), Get_TrxName());
+                            //inventory.SetIsAdjusted(true);
+                            //inventory.Save();
+                            int no = DB.ExecuteQuery("UPDATE M_Inventory SET IsAdjusted = 'Y' WHERE M_Inventory_ID = " + GetM_Inventory_ID(), null, Get_Trx());
                         }
                     }
                     log.Info("update Inventory End");
@@ -810,17 +822,17 @@ namespace VAdvantage.Model
             }
 
             #region Quantity Count can not be -ve -- In Case of DisAllow negative is True
-            sql = @"SELECT COUNT(i.M_Inventory_ID) FROM M_Inventory i
+            sql.Clear();
+            sql.Append(@"SELECT COUNT(i.M_Inventory_ID) FROM M_Inventory i
                     INNER JOIN m_inventoryline il ON i.M_Inventory_ID = il.M_Inventory_ID 
                     INNER JOIN m_storage s ON (il.m_product_id  = s.m_product_id AND il.m_locator_id  = s.m_locator_id
                     AND NVL(il.M_AttributeSetInstance_ID , 0) = NVL(s.M_AttributeSetInstance_ID , 0))
-                   INNER JOIN m_warehouse w ON w.m_warehouse_id  = i.M_Warehouse_ID
-                 WHERE w.isdisallownegativeinv = 'Y' AND il.isActive = 'Y' AND s.IsActive = 'Y' AND (( 1=
-                  CASE  WHEN i.isinternaluse = 'N' AND il.DifferenceQty > 0 AND (s.qtyonhand-il.DifferenceQty) < 0 THEN 1  ELSE 0  END )
-                  OR (1 = CASE WHEN i.isinternaluse  = 'Y' AND (s.qtyonhand-il.qtyinternaluse) < 0 THEN 1
-                               ELSE 0 END)) 
-                   AND i.M_Inventory_ID = " + GetM_Inventory_ID();
-            int countRecord = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
+                    INNER JOIN m_warehouse w ON w.m_warehouse_id  = i.M_Warehouse_ID
+                    WHERE w.isdisallownegativeinv = 'Y' AND il.isActive = 'Y' AND s.IsActive = 'Y' AND (( 1=
+                    CASE  WHEN i.isinternaluse = 'N' AND il.DifferenceQty > 0 AND (s.qtyonhand-il.DifferenceQty) < 0 THEN 1  ELSE 0  END )
+                    OR (1 = CASE WHEN i.isinternaluse  = 'Y' AND (s.qtyonhand-il.qtyinternaluse) < 0 THEN 1 ELSE 0 END)) 
+                    AND i.M_Inventory_ID = " + GetM_Inventory_ID());
+            int countRecord = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
             if (countRecord > 0)
             {
                 _processMsg = "Quantity Count can not be -ve";
@@ -829,8 +841,9 @@ namespace VAdvantage.Model
             #endregion
 
             int countVA024 = Env.IsModuleInstalled("VA024_") ? 1 : 0;
-            sql = @"SELECT AD_TABLE_ID  FROM AD_TABLE WHERE tablename LIKE 'VA024_T_ObsoleteInventory' AND IsActive = 'Y'";
-            int tableId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+            sql.Clear();
+            sql.Append(@"SELECT AD_TABLE_ID FROM AD_TABLE WHERE tablename LIKE 'VA024_T_ObsoleteInventory' AND IsActive = 'Y'");
+            int tableId = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, null));
 
             //	Re-Check
             if (!_justPrepared)
@@ -840,11 +853,11 @@ namespace VAdvantage.Model
                     return status;
             }
 
-            // JID_1290: Set the document number from completede document sequence after completed (if needed)
-            SetCompletedDocumentNo();
+            // Set Document Date based on setting on Document Type
+            SetCompletedDocumentDate();
 
             // To check weather future date records are available in Transaction window
-            // this check implement after "SetCompletedDocumentNo" function, because this function overwrit movement date
+            // this check implement after "SetCompletedDocumentDate" function, because this function overwrit movement date
             _processMsg = MTransaction.CheckFutureDateRecord(GetMovementDate(), Get_TableName(), GetM_Inventory_ID(), Get_Trx());
             if (!string.IsNullOrEmpty(_processMsg))
             {
@@ -860,9 +873,9 @@ namespace VAdvantage.Model
             // IsCostImmediate = true - calculate cost on completion
             MClient client = MClient.Get(GetCtx(), GetAD_Client_ID());
 
-            MInventoryLine[] lines = GetLines(false);
-            log.Info("total Lines=" + lines.Count());
-            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+            //MInventoryLine[] lines = GetLines(false);
+            //log.Info("total Lines=" + lines.Count());
+            //MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
 
             //
             log.Info("Lines Loop Started");
@@ -911,14 +924,16 @@ namespace VAdvantage.Model
 
                             // SI_0682_1 Need to update the reserved qty on requisition line by internal use line save aslo and should work as work in inventory move.
                             MRequisitionLine reqLine = null;
-                            MRequisition req = null;
+                            //MRequisition req = null;
+                            string reqStatus = "";
                             decimal reverseRequisitionQty = 0;
                             if (line.GetM_RequisitionLine_ID() > 0 && IsInternalUse())
                             {
                                 #region Need to update the reserved qty on requisition line by internal use line save aslo and should work as work in inventory move.
                                 reqLine = new MRequisitionLine(GetCtx(), line.GetM_RequisitionLine_ID(), Get_Trx());
-                                req = new MRequisition(GetCtx(), reqLine.GetM_Requisition_ID(), Get_Trx());
-
+                                //req = new MRequisition(GetCtx(), reqLine.GetM_Requisition_ID(), Get_Trx());
+                                reqStatus = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocStatus FROM M_Requisition WHERE M_Requisition_ID="
+                                                + reqLine.GetM_Requisition_ID(), null, Get_Trx()));
                                 if (!IsReversal())
                                 {
                                     if (Decimal.Subtract(reqLine.GetQty(), reqLine.GetDTD001_DeliveredQty()) >= ma.GetMovementQty())
@@ -997,7 +1012,7 @@ namespace VAdvantage.Model
                                 {
                                     OrdLocator_ID = line.GetM_Locator_ID();
                                 }
-                                if (OrdLocator_ID > 0 && req.GetDocStatus() != "CL")
+                                if (OrdLocator_ID > 0 && reqStatus != "CL")
                                 {
                                     MStorage ordStorage = MStorage.Get(GetCtx(), OrdLocator_ID, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_TrxName());
                                     //ordStorage.SetDTD001_SourceReserve(Decimal.Subtract(ordStorage.GetDTD001_SourceReserve(), line.GetQtyInternalUse()));
@@ -1030,11 +1045,12 @@ namespace VAdvantage.Model
                             log.Fine(storage.ToString());
 
                             #region  Update Transaction / Future Date entry
-                            sql = @"SELECT DISTINCT First_VALUE(t.CurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
+                            sql.Clear();
+                            sql.Append(@"SELECT DISTINCT First_VALUE(t.CurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
                             INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
                                     " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND t.M_Locator_ID = " + line.GetM_Locator_ID() +
-                                " AND t.M_Product_ID = " + line.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + line.GetM_AttributeSetInstance_ID();
-                            trxQty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_Trx()));
+                                " AND t.M_Product_ID = " + line.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + line.GetM_AttributeSetInstance_ID());
+                            trxQty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
 
                             if (isContainerApplicable && line.Get_ColumnIndex("M_ProductContainer_ID") >= 0)
                             {
@@ -1101,14 +1117,17 @@ namespace VAdvantage.Model
                             MInventoryLineMA ma = mas[j];
 
                             // SI_0682_1 Need to update the reserved qty on requisition line by internal use line save aslo and should work as work in inventory move.
-                            MRequisition req = null;
+                            //MRequisition req = null;
                             MRequisitionLine reqLine = null;
                             decimal reverseRequisitionQty = 0;
+                            string reqStatus = "";
                             if (Env.IsModuleInstalled("DTD001_") && IsInternalUse() && line.GetM_RequisitionLine_ID() > 0)
                             {
                                 #region Need to update the reserved qty on requisition line by internal use line save aslo and should work as work in inventory move.
                                 reqLine = new MRequisitionLine(GetCtx(), line.GetM_RequisitionLine_ID(), Get_Trx());
-                                req = new MRequisition(GetCtx(), reqLine.GetM_Requisition_ID(), Get_Trx());        // Trx used to handle query stuck problem
+                                //req = new MRequisition(GetCtx(), reqLine.GetM_Requisition_ID(), Get_Trx());        // Trx used to handle query stuck problem
+                                reqStatus = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocStatus FROM M_Requisition WHERE M_Requisition_ID="
+                                                + reqLine.GetM_Requisition_ID(), null, Get_Trx()));
                                 if (!IsReversal())
                                 {
                                     if (Decimal.Subtract(reqLine.GetQty(), reqLine.GetDTD001_DeliveredQty()) >= ma.GetMovementQty())
@@ -1199,7 +1218,7 @@ namespace VAdvantage.Model
                                 {
                                     OrdLocator_ID = line.GetM_Locator_ID();
                                 }
-                                if (OrdLocator_ID > 0 && req.GetDocStatus() != "CL")
+                                if (OrdLocator_ID > 0 && reqStatus != "CL")
                                 {
                                     MStorage ordStorage = MStorage.Get(GetCtx(), OrdLocator_ID, line.GetM_Product_ID(), ma.GetM_AttributeSetInstance_ID(), Get_TrxName());
                                     //ordStorage.SetDTD001_SourceReserve(Decimal.Subtract(ordStorage.GetDTD001_SourceReserve(), ma.GetMovementQty()));
@@ -1232,11 +1251,12 @@ namespace VAdvantage.Model
                             log.Fine(storage.ToString());
 
                             #region Update Transaction / Future Date entry
-                            sql = @"SELECT DISTINCT FIRST_VALUE(t.CurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
+                            sql.Clear();
+                            sql.Append(@"SELECT DISTINCT FIRST_VALUE(t.CurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
                             INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
                             " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND l.AD_Org_ID = " + GetAD_Org_ID() + " AND t.M_Locator_ID = " + line.GetM_Locator_ID() +
-                            " AND t.M_Product_ID = " + line.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + line.GetM_AttributeSetInstance_ID();
-                            trxQty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_Trx()));
+                            " AND t.M_Product_ID = " + line.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + line.GetM_AttributeSetInstance_ID());
+                            trxQty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
 
                             if (isContainerApplicable && line.Get_ColumnIndex("M_ProductContainer_ID") >= 0)
                             {
@@ -1303,13 +1323,16 @@ namespace VAdvantage.Model
                             #region not to be execute this block -- because we are creating M_InventoryLineMA lines with full qty
                             // SI_0682_1 Need to update the reserved qty on requisition line by internal use line save aslo and should work as work in inventory move.
                             MRequisitionLine reqLine = null;
-                            MRequisition req = null;
+                            //MRequisition req = null;
+                            string reqStatus = "";
                             decimal reverseRequisitionQty = 0;
                             if (line.GetM_RequisitionLine_ID() > 0 && IsInternalUse())
                             {
                                 #region Need to update the reserved qty on requisition line by internal use line save aslo and should work as work in inventory move.
                                 reqLine = new MRequisitionLine(GetCtx(), line.GetM_RequisitionLine_ID(), Get_Trx());
-                                req = new MRequisition(GetCtx(), reqLine.GetM_Requisition_ID(), Get_Trx());
+                                //req = new MRequisition(GetCtx(), reqLine.GetM_Requisition_ID(), Get_Trx());
+                                reqStatus = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocStatus FROM M_Requisition WHERE M_Requisition_ID="
+                                                + reqLine.GetM_Requisition_ID(), null, Get_Trx()));
                                 if (Decimal.Subtract(reqLine.GetQty(), reqLine.GetDTD001_DeliveredQty()) >= line.GetQtyInternalUse())
                                 {
                                     reverseRequisitionQty = line.GetQtyInternalUse();
@@ -1368,7 +1391,7 @@ namespace VAdvantage.Model
                                 {
                                     OrdLocator_ID = line.GetM_Locator_ID();
                                 }
-                                if (OrdLocator_ID > 0 && req.GetDocStatus() != "CL")
+                                if (OrdLocator_ID > 0 && reqStatus != "CL")
                                 {
                                     MStorage ordStorage = MStorage.Get(GetCtx(), OrdLocator_ID, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_TrxName());
                                     ordStorage.SetDTD001_SourceReserve(Decimal.Subtract(ordStorage.GetDTD001_SourceReserve(), line.GetQtyInternalUse()));
@@ -1400,11 +1423,12 @@ namespace VAdvantage.Model
                             log.Fine(storage.ToString());
 
                             #region Update Transaction / Future Date entry
-                            sql = @"SELECT DISTINCT FIRST_VALUE(t.CurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
+                            sql.Clear();
+                            sql.Append(@"SELECT DISTINCT FIRST_VALUE(t.CurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
                             INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
                             " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND t.M_Locator_ID = " + line.GetM_Locator_ID() +
-                            " AND t.M_Product_ID = " + line.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + line.GetM_AttributeSetInstance_ID();
-                            trxQty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_Trx()));
+                            " AND t.M_Product_ID = " + line.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + line.GetM_AttributeSetInstance_ID());
+                            trxQty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
 
                             if (isContainerApplicable && line.Get_ColumnIndex("M_ProductContainer_ID") >= 0)
                             {
@@ -1466,13 +1490,16 @@ namespace VAdvantage.Model
                     #region this will execute when we did physical inventory in current date and try to do back date entry -- bcz we are not creating MA Line in that case
                     // SI_0682_1 Need to update the reserved qty on requisition line by internal use line save aslo and should work as work in inventory move.
                     MRequisitionLine reqLine = null;
-                    MRequisition req = null;
+                    //MRequisition req = null;
+                    string reqStatus = "";
                     decimal reverseRequisitionQty = 0;
                     if (line.GetM_RequisitionLine_ID() > 0)
                     {
                         #region Need to update the reserved qty on requisition line by internal use line save aslo and should work as work in inventory move.
                         reqLine = new MRequisitionLine(GetCtx(), line.GetM_RequisitionLine_ID(), Get_Trx());
-                        req = new MRequisition(GetCtx(), reqLine.GetM_Requisition_ID(), Get_Trx());         // Trx used to handle query stuck problem
+                        //req = new MRequisition(GetCtx(), reqLine.GetM_Requisition_ID(), Get_Trx());         // Trx used to handle query stuck problem
+                        reqStatus = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocStatus FROM M_Requisition WHERE M_Requisition_ID="
+                                               + reqLine.GetM_Requisition_ID(), null, Get_Trx()));
                         if (!IsReversal())
                         {
                             if (Decimal.Subtract(reqLine.GetQty(), reqLine.GetDTD001_DeliveredQty()) >= line.GetQtyInternalUse())
@@ -1561,7 +1588,7 @@ namespace VAdvantage.Model
                         {
                             OrdLocator_ID = line.GetM_Locator_ID();
                         }
-                        if (OrdLocator_ID > 0 && req.GetDocStatus() != "CL")
+                        if (OrdLocator_ID > 0 && reqStatus != "CL")
                         {
                             MStorage ordStorage = MStorage.Get(GetCtx(), OrdLocator_ID, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_TrxName());
                             //ordStorage.SetDTD001_SourceReserve(Decimal.Subtract(ordStorage.GetDTD001_SourceReserve(), line.GetQtyInternalUse()));
@@ -1594,11 +1621,12 @@ namespace VAdvantage.Model
                     log.Fine(storage.ToString());
 
                     #region  Update Transaction / Future Date entry
-                    sql = @"SELECT DISTINCT FIRST_VALUE(t.CurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
+                    sql.Clear();
+                    sql.Append(@"SELECT DISTINCT FIRST_VALUE(t.CurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
                             INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
                             " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND l.AD_Org_ID = " + GetAD_Org_ID() + " AND t.M_Locator_ID = " + line.GetM_Locator_ID() +
-                            " AND t.M_Product_ID = " + line.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + line.GetM_AttributeSetInstance_ID();
-                    trxQty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_Trx()));
+                            " AND t.M_Product_ID = " + line.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + line.GetM_AttributeSetInstance_ID());
+                    trxQty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
 
                     if (isContainerApplicable && line.Get_ColumnIndex("M_ProductContainer_ID") >= 0)
                     {
@@ -1771,17 +1799,18 @@ namespace VAdvantage.Model
                         (GetDescription() != null && GetDescription().Contains("{->") && line.GetM_Product_ID() > 0 && !IsInternalUse() && line.GetDifferenceQty() < 0))
                     {
                         log.Info("Obsolute Inventory Work Started");
-                        sql = @"SELECT * FROM va024_t_obsoleteinventory
+                        sql.Clear();
+                        sql.Append(@"SELECT * FROM va024_t_obsoleteinventory
                                  WHERE ad_client_id    = " + GetAD_Client_ID() + " AND ad_org_id = " + GetAD_Org_ID() +
                                  " AND M_Product_ID = " + line.GetM_Product_ID() +
-                                 " AND NVL(M_AttributeSetInstance_ID , 0) = " + line.GetM_AttributeSetInstance_ID();
+                                 " AND NVL(M_AttributeSetInstance_ID , 0) = " + line.GetM_AttributeSetInstance_ID());
                         //" AND M_Warehouse_Id = " + GetM_Warehouse_ID();
                         if (GetDescription() != null && !GetDescription().Contains("{->"))
                         {
-                            sql += " AND va024_isdelivered = 'N' ";
+                            sql.Append(" AND va024_isdelivered = 'N' ");
                         }
-                        sql += " ORDER BY va024_t_obsoleteinventory_id DESC ";
-                        DataSet dsObsoleteInventory = DB.ExecuteDataset(sql, null, Get_Trx());
+                        sql.Append(" ORDER BY va024_t_obsoleteinventory_id DESC ");
+                        DataSet dsObsoleteInventory = DB.ExecuteDataset(sql.ToString(), null, Get_Trx());
                         if (dsObsoleteInventory != null && dsObsoleteInventory.Tables.Count > 0 && dsObsoleteInventory.Tables[0].Rows.Count > 0)
                         {
                             Decimal remainigQty = 0;
@@ -1872,6 +1901,10 @@ namespace VAdvantage.Model
                 _processMsg = valid;
                 return DocActionVariables.STATUS_INVALID;
             }
+
+            // Set the document number from completed document sequence after completed (if needed)
+            SetCompletedDocumentNo();
+
             //
             SetProcessed(true);
             SetDocAction(DOCACTION_Close);
@@ -1891,18 +1924,6 @@ namespace VAdvantage.Model
 
             MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
 
-            // if Overwrite Date on Complete checkbox is true.
-            if (dt.IsOverwriteDateOnComplete())
-            {
-                SetMovementDate(DateTime.Now.Date);
-
-                //	Std Period open?
-                if (!MPeriod.IsOpen(GetCtx(), GetMovementDate(), dt.GetDocBaseType(), GetAD_Org_ID()))
-                {
-                    throw new Exception("@PeriodClosed@");
-                }
-            }
-
             // if Overwrite Sequence on Complete checkbox is true.
             if (dt.IsOverwriteSeqOnComplete())
             {
@@ -1917,6 +1938,32 @@ namespace VAdvantage.Model
                 if (value != null)
                 {
                     SetDocumentNo(value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Overwrite the document date based on setting on Document Type
+        /// </summary>
+        private void SetCompletedDocumentDate()
+        {
+            // if Reversal document then no need to get Document no from Completed sequence
+            if (IsReversal())
+            {
+                return;
+            }
+
+            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+
+            // if Overwrite Date on Complete checkbox is true.
+            if (dt.IsOverwriteDateOnComplete())
+            {
+                SetMovementDate(DateTime.Now.Date);
+
+                //	Std Period open?
+                if (!MPeriod.IsOpen(GetCtx(), GetMovementDate(), dt.GetDocBaseType(), GetAD_Org_ID()))
+                {
+                    throw new Exception("@PeriodClosed@");
                 }
             }
         }

@@ -1433,33 +1433,51 @@ li.vis-page-item-select {
 
 
 .vis-w-p-header-icon-f {
-    /* background: rgba(var(--v-c-on-secondary), 0.2); */
-    border-radius: 50%;
-    min-width: 35px;
-    min-height: 35px;
+    margin-right: 10px;
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 10px;
-    position: relative;
-    overflow: hidden;
+    overflow:hidden;
+    min-width:35px;
 }
 
-    .vis-w-p-header-icon-f:after {
-        position: absolute;
+/* .vis-w-p-header-icon-f:after {
+    position: absolute;
         content: '';
         width: 35px;
         height: 35px;
         background: rgba(var(--v-c-on-secondary), 0.1);
         filter: brightness(0.2);
         z-index: 0;
-    }
+    }*/
 
-    .vis-w-p-header-icon-f span {
+    .vis-w-p-header-icon-fixed {
         position: relative;
         z-index: 1;
         display: flex;
+        border-radius: 50%;
+        min-width: 35px;
+        min-height: 35px;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        background: rgba(var(--v-c-on-secondary), 0.1);
     }
+
+.vis-w-p-header-icon-f span {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    min-width: 35px;
+    min-height: 35px;
+    align-items: center;
+    justify-content: center;
+    background: rgba(var(--v-c-on-secondary), 0.1);
+    /*border-radius: 50%;*/
+    width: 100%;
+    height: 100%;
+}
 
 .vis-w-p-header-Label-f {
     /*padding-left: 10px;*/
@@ -2070,3 +2088,42 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
             background: rgba(var(--v-c-secondary), .5);
         }
 /**********************END Filter Panel*/
+
+
+.vis-grid-td-icon-grp {
+    padding: 0px 7px 0px 0px !important;
+    display: flex;
+    align-items: center;
+}
+
+.vis-grid-row-td-icon {
+    height: 32px;
+    width: 32px;
+    display: inline-flex;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 .4rem;
+    min-width: 32px;
+    min-height: 32px;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(var(--v-c-primary),0.4);
+}
+
+    .vis-grid-row-td-icon span {
+        /* font-weight: bold; */
+        font-size: 24px;
+        /* color: rgba(var(--v-c-primary)); */
+        line-height: 16px;
+        display: contents;
+    }
+.vis-grid-row-td-icon i {
+    font-size: 1.1rem;
+    margin-top: .1rem;
+}
+
+.vis-grid-td-icon-grp.w2ui-editable {
+    display: block;
+}
+
+

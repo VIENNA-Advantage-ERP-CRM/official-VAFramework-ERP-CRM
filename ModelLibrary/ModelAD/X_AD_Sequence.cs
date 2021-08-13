@@ -159,5 +159,12 @@ public bool IsYearMonthFormatValid (String test){return test == null || test.Equ
 public void SetYearMonthFormat (String YearMonthFormat){if (!IsYearMonthFormatValid(YearMonthFormat))
 throw new ArgumentException ("YearMonthFormat Invalid value - " + YearMonthFormat + " - Reference_ID=1000340 - 1 - 2");if (YearMonthFormat != null && YearMonthFormat.Length > 1){log.Warning("Length > 1 - truncated");YearMonthFormat = YearMonthFormat.Substring(0,1);}Set_Value ("YearMonthFormat", YearMonthFormat);}/** Get Year and Month Format.
 @return The Format in which the year and month will be displayed in Prefix. */
-public String GetYearMonthFormat() {return (String)Get_Value("YearMonthFormat");}}
+public String GetYearMonthFormat() {return (String)Get_Value("YearMonthFormat");}
+/** Set Maintain Separate Trx.
+@param IsUseSeparateTrx Restrict to maintain separate transaction for document no. */
+public void SetIsUseSeparateTrx(Boolean IsUseSeparateTrx) { Set_Value("IsUseSeparateTrx", IsUseSeparateTrx); }
+/** Get Maintain Separate Trx.
+@return Restrict to maintain separate transaction for document no. */
+public Boolean IsUseSeparateTrx() { Object oo = Get_Value("IsUseSeparateTrx"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
+}
 }

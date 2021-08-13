@@ -3373,7 +3373,7 @@ namespace VIS.Models
                                   WHEN (GetConversionType(cn.AD_Client_ID) != 0 ) THEN (SELECT name FROM C_CONVERSIONTYPE WHERE C_CONVERSIONTYPE_ID = GetConversionType(cn.AD_Client_ID))
                                   ELSE (SELECT name FROM C_CONVERSIONTYPE WHERE C_CONVERSIONTYPE_ID =(GetConversionType(0)) ) END AS CONVERSIONNAME ,
                                 CASE
-                                  WHEN NVL(cl.VSS_PaymentType,0)!='0' THEN (SELECT Name FROM AD_Ref_List WHERE AD_Reference_ID=(SELECT AD_Reference_Value_ID FROM AD_Column WHERE ColumnName ='VSS_PAYMENTTYPE' AND AD_Table_ID =(SELECT AD_Table_ID FROM AD_Table WHERE TableName='C_CashLine')) AND IsActive='Y' AND value=cl.VSS_PaymentType) END AS Payment,
+                                  WHEN NVL(cl.VSS_PaymentType,'0')!='0' THEN (SELECT Name FROM AD_Ref_List WHERE AD_Reference_ID=(SELECT AD_Reference_Value_ID FROM AD_Column WHERE ColumnName ='VSS_PAYMENTTYPE' AND AD_Table_ID =(SELECT AD_Table_ID FROM AD_Table WHERE TableName='C_CashLine')) AND IsActive='Y' AND value=cl.VSS_PaymentType) END AS Payment,
                                   ROUND(cn.amount, " + objCurrency.GetStdPrecision() + ") AS AMOUNT, "
                              + " ROUND(currencyConvert(ALLOCCASHAVAILABLE(cn.C_CashLine_ID),cn.C_Currency_ID ," + _C_Currency_ID + ",cn.DATEACCT ,cn.C_ConversionType_ID  ,cn.AD_Client_ID ,cn.AD_Org_ID ) , " + objCurrency.GetStdPrecision() + ") AS CONVERTEDAMOUNT,"//  6   #1cn.amount as OPENAMT,"
                              + " ROUND(currencyConvert(ALLOCCASHAVAILABLE(cn.C_CashLine_ID),cn.C_Currency_ID ," + _C_Currency_ID + ",cn.DATEACCT,cn.C_ConversionType_ID ,cn.AD_Client_ID ,cn.AD_Org_ID), " + objCurrency.GetStdPrecision() + ") as OPENAMT,"  //  7   #2

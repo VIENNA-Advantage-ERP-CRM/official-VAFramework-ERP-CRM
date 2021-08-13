@@ -685,7 +685,7 @@ html[dir="rtl"] .vis-filter-dialog {
     left: auto;
     right: 200px;
 }
-#vis_mainMenu .vis-menuTitle {
+html[dir="rtl"] #vis_mainMenu .vis-menuTitle {
     border-top-right-radius: 0;
     border-top-left-radius: 5px;
 }

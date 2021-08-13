@@ -1525,6 +1525,11 @@
 
                     if (gTab.getIsHeaderPanel()) {
                         gc.initHeaderPanel(this.getParentDetailPane());
+                        if (gTab.isHPanelNotShowInMultiRow && !gTab.getIsSingleRow()) {
+                            gc.vHeaderPanel.hidePanel();
+                            if (gc.vHeaderPanel.sizeChangedListner && gc.vHeaderPanel.sizeChangedListner.onSizeChanged)
+                                gc.vHeaderPanel.sizeChangedListner.onSizeChanged();
+                        }
                     }
                 }
                 gc.initFilterPanel(curWindowNo, this.getFilterPane());
@@ -1538,7 +1543,7 @@
                 }
 
                 if (gTab.getHasPanel()) {
-                    gc.initTabPanel(gridWindow.getWindowWidth(), curWindowNo);
+                    gc.initTabPanel(gridWindow.getWindowWidth(), curWindowNo);                   
                 }
 
                 //	Is this tab included?

@@ -961,8 +961,12 @@ namespace VAdvantage.Print
             //	Language
             MClient client = MClient.Get(ctx);
             Language language = client.GetLanguage();
-            //	Get Document Info
-            String sql = null;
+            // Set Report Language -VIS0228
+            if (!string.IsNullOrEmpty(ctx.GetContext("Report_Lang"))) {
+                language = Language.GetLanguage(ctx.GetContext("Report_Lang"));
+            }
+                //	Get Document Info
+                String sql = null;
             if (type == CHECK)
                 sql = "SELECT bad.Check_PrintFormat_ID,"								//	1
                     + "	c.IsMultiLingualDocument,bp.AD_Language,bp.C_BPartner_ID,d.DocumentNo "		//	2..5
@@ -1241,7 +1245,14 @@ namespace VAdvantage.Print
 
             /*   Set Culture according to BPartner Language */
 
-            System.Globalization.CultureInfo cInfo = new System.Globalization.CultureInfo(language.GetAD_Language().Replace('_','-'));
+            string lan = language.GetAD_Language().Replace('_', '-');
+            // Set Report Language -VIS0228
+            if (!string.IsNullOrEmpty(ctx.GetContext("Report_Lang")))
+            {
+                lan = ctx.GetContext("Report_Lang").Replace('_', '-');
+            }
+
+                System.Globalization.CultureInfo cInfo = new System.Globalization.CultureInfo(lan);
 
             
 

@@ -7,6 +7,7 @@
         this.grid = null;
         this.id = null;
         this.$container = null;
+        this.aPanel = null;
         this.rendered = false;
 
         this.onSelect = null;
@@ -17,8 +18,10 @@
         this.onSort = null;
         this.onEdit = null;
         this.onAdd = null;
+        this.hyperLinkCell = null;
 
         this.editColumnIndex = -1;
+        var clickCount = 0;
 
 
         var self = this;
@@ -31,11 +34,32 @@
             size: '25px'
         };
 
+        function toggleToSingleView(evt) {
+            try {
+                if (self.grid.columns[evt.column].columnName == self.hyperLinkCell) {
+                    self.grid.select(Number(evt.recid));
+                    var isCompositView = self.aPanel.getRoot().find('[name=' + evt.target + ']').closest('.vis-ad-w-p-center-inctab');
+                    if (isCompositView.length > 0) {
+                        if (isCompositView.find('.vis-multi').length > 0) {
+                            isCompositView.find('.vis-multi').click();
+                        } else {
+                            isCompositView.find('.vis-edit').click();
+                        }
+                    } else {
+                        self.aPanel.getRoot().find(' .vis-multi:first').click();
+                    }
+                }
+            } catch (err) {
+
+            }
+        }
+
         this.getEditColumn = function () {
             return editColumn;
         }
 
         this.onClick = function (evt) {
+            clickCount++;
             // console.log(evt);
             if (this.readOnly)
                 return;
@@ -65,7 +89,16 @@
 
         this.onSingleClick = function (evt) {
             //this.cRecid = evt.recid;
-            //console.log("click");
+            clickCount++;
+            singleClickTimer = setTimeout(function () {
+                if (clickCount === 1) {
+                    clickCount = 0;
+                    toggleToSingleView(evt);
+                } else if (clickCount === 2) {
+                    clearTimeout(singleClickTimer);
+                    clickCount = 0;
+                }
+            }, 400);
         };
 
         this.onSelectLocal = function (evt) {
@@ -252,7 +285,7 @@
             }
 
             return [AD_Client_ID, AD_Org_ID, Record_ID];
-        };
+        };      
 
         //this.onToolBarClick = function (target, data) {
         //    //self.$editBtn.img = "icon-reload";
@@ -286,11 +319,11 @@
         if (!mTab.getIsDisplayed(true))
             return 0;
 
-        this.id = name;
+        this.id = name;        
+        this.aPanel = aPanel;
         this.$container = $container;
         this.mTab = mTab;
         this.AD_Table_ID = this.mTab.getAD_Table_ID();
-
 
         var oColumns = [];
         var mField = null;
@@ -298,6 +331,7 @@
         var visibleFields = 0;
 
         var mFields = grdFields.slice(0);
+
 
         mFields.sort(function (a, b) { return a.getMRSeqNo() - b.getMRSeqNo() });
 
@@ -335,6 +369,9 @@
             var updateable = mField.getIsEditable(false);      //  no context check
             //int WindowNo = mField.getWindowNo();
 
+          
+
+
             //  Not a Field
             if (mField.getIsHeading())
                 continue;
@@ -363,6 +400,13 @@
             }
             else {
                 oColumn.size = '100px';
+            }
+
+            if (mField.getIsIdentifier() && this.hyperLinkCell == null) {
+                if (oColumn.hidden == false) {
+                    this.hyperLinkCell = columnName;
+                    oColumn.style = 'text-decoration:underline; color:rgba(var(--v-c-primary), 1) !important; cursor:pointer';
+                }
             }
 
             if (displayType == VIS.DisplayType.Amount) {
@@ -441,6 +485,12 @@
 
 
                 oColumn.sortable = true;
+                //if (oColumn.hidden == false && (this.hyperLinkCell[name] == "undefined" || this.hyperLinkCell[name] == null)) {
+                //    if (columnName.toLowerCase() == "value" || columnName.toLowerCase() == "name" || columnName.toLowerCase() == "documentno") {
+                //        this.hyperLinkCell[name] = columnName;
+                //        oColumn.style = 'text-decoration:underline; color:rgba(var(--v-c-primary), 1) !important; cursor:pointer';
+                //    }
+                //}
 
                 if (mField.getIsEncryptedField()) {
                     oColumn.render = function (record, index, colIndex) {
@@ -504,15 +554,112 @@
                         }
                         var d;
                         if (l) {
-                            d = l.getDisplay(val, true);
+                            d = l.getDisplay(val, true,true);
                             //if (d.startsWith("<"))
                             //  d = l.getDisplay(nd, false);
                             //d = w2utils.encodeTags(d);
                         }
 
-                        return d;
+                        var strDiv = "";
+                        if (l && VIS.DisplayType.List == l.displayType) {
+                            var lType = l.getLovIconType(val, true);
+
+                            var listIcon = l.getLOVIconElement(val, true);
+                            var highlightChar = '';
+                            if (!listIcon) {
+                                highlightChar = d.substring(0, 1);
+                            }
+                            // If both , then show text and image
+                            if (lType == "B") {
+                                strDiv = "<div class='vis-grid-td-icon-grp'>";
+
+                                if (listIcon) {
+                                    strDiv += "<div class='vis-grid-row-td-icon'> " + listIcon + "</div> ";
+                                }
+                                else {
+                                    strDiv += "<div class='vis-grid-row-td-icon'><span>" + highlightChar + "</span></div>";
+                                }
+                                strDiv += "<span> " + d + "</span ><div>";
+                            }
+                            // if Text, then show text only
+                            else if (lType == "T") {
+                                return d;
+                            }
+                            //Show icon only
+                            else if (lType == "I") {
+                                strDiv = "<div class='vis-grid-td-icon-grp' style='Justify-Content:center'>";
+                                if (listIcon) {
+                                    strDiv += "<div class='vis-grid-row-td-icon'> " + listIcon + "</div> ";
+                                }
+                                else {
+                                    strDiv += "<div class='vis-grid-row-td-icon'><span>" + highlightChar + "</span></div>";
+                                }
+                                strDiv += "<div>";
+                            }
+                        }
+
+                        else
+                            // Based on sequence of image in idenitifer, perform logic and display image with text
+                            if (l && l.gethasImageIdentifier()) {
+                                var imgIndex = d.indexOf("Images/");
+
+                                if (imgIndex == -1)
+                                        return d;
+
+                                 //Find Image from Identifier string 
+                                var img = d.substring(imgIndex + 7, d.lastIndexOf("^^"));
+                            img = VIS.Application.contextUrl + "Images/Thumb32x32/" + img;
+
+                                //Replace Image string with ^^^, so that ^^^ can be used to split Rest of identifer value
+                                d = d.replace("^^" + d.substring(imgIndex, d.lastIndexOf("^^") + 2), "^^^")
+                            if (d.indexOf("Images/") > -1)
+                                d = d.replace(d.substring(imgIndex, d.lastIndexOf("^^") + 2), "^^^");
+
+                                d = d.split("^^^");
+
+                                //Start HTMl string to be rendered inside Cell
+                            strDiv = "<div class='vis-grid-td-icon-grp'>";
+                                var highlightChar = '';
+
+                                //Now 'd' may contains identifier values to be displayed before and after image
+                            for (var c = 0; c < d.length; c++) {
+                                if (d[c].trim().length > 0) {
+                                    //If highlightChar is not found, then get it from first item encounterd.
+                                    if (highlightChar.length == 0)
+                                        highlightChar = d[c].trim().substring(0, 1).toUpper();
+                                    //If image contains nothing.png that means image not found in identfier and 
+                                    //we will Display highlightChar
+                                    if (c > 0 && img.indexOf("nothing.png") > -1 && highlightChar.length>0) {
+                                        strDiv += "<div class='vis-grid-row-td-icon'><span>" + highlightChar + "</span></div>";
+                                    }
+                                    strDiv += "<span>" + d[c] + "</span>";
+                                }
+                                //If image found, then display that image.
+                                if (c == 0 || img.indexOf("nothing.png") > -1) {
+                                    if (img.indexOf("nothing.png")== -1)
+                                    {
+                                        strDiv += "<div class='vis-grid-row-td-icon'"
+                                            + " > <img src='" + img + 
+                                            "'></div > ";
+                                           // "' onerror='this.style.display=\"none\"' ></img></div > ";
+                                    }
+                                   
+                                }
+                            }
+                            +"</div > ";
+
+                        }
+                        
+
+                        if (strDiv == "")
+                            return d;
+
+                       
+
+                        return strDiv;
                         //return '<span>' + d + '</span>';
                     }
+                   
                 }
             }
             //Date /////////
@@ -768,10 +915,13 @@
                         oColumns[p].min = 100;
                     }
 
+                    if (this.hyperLinkCell == null) {                      
+                        this.hyperLinkCell = oColumns[p].columnName;
+                        oColumns[p].style = 'text-decoration:underline; color:rgba(var(--v-c-primary), 1) !important; cursor:pointer';
+                    }
                 }
             }
         }
-
 
         //oColumns[oColumns.length - 1].size = "100%";
         this.grid = $().w2grid({

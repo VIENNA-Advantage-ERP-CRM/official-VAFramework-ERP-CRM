@@ -421,7 +421,7 @@ namespace VAdvantage.Model
                         MAllocationHdr allocHdr = new MAllocationHdr(GetCtx(), GetC_AllocationHdr_ID(), Get_Trx());
                         decimal payAmt = 0;
                         MDocType doctype = null;
-                        MCurrency currency = new MCurrency(GetCtx(), invoice.GetC_Currency_ID(), null);
+                        MCurrency currency = MCurrency.Get(GetCtx(), invoice.GetC_Currency_ID());
                         if (GetC_InvoicePaySchedule_ID() != 0 && !invoice.IsPaid())
                         {
                             invoiceSchedule = new MInvoicePaySchedule(GetCtx(), GetC_InvoicePaySchedule_ID(), Get_TrxName());
@@ -445,7 +445,7 @@ namespace VAdvantage.Model
                             if (reverse && payment != null)
                             {
                                 #region Handle for Payment & Invoice Allocation
-                                doctype = new MDocType(GetCtx(), invoice.GetC_DocType_ID(), null);
+                                doctype = MDocType.Get(GetCtx(), invoice.GetC_DocType_ID());
 
                                 // convert (payment amount / Amount from View Allocation) to invoice currency amount then subtract Paid invoice amount to calculated amount
                                 if (doctype.GetDocBaseType() == "ARC" || doctype.GetDocBaseType() == "APC")
@@ -539,7 +539,7 @@ namespace VAdvantage.Model
                             {
                                 #region Handle fo Cash Journal & Invoice Allocation
 
-                                doctype = new MDocType(GetCtx(), invoice.GetC_DocType_ID(), null);
+                                doctype = MDocType.Get(GetCtx(), invoice.GetC_DocType_ID());
                                 cashLine = new MCashLine(GetCtx(), C_CashLine_ID, Get_Trx());
 
                                 // convert cash amount to invoice currency amount with allocation date then subtract Paid invoice amount to calculated amount
