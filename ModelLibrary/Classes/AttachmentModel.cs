@@ -107,29 +107,13 @@ namespace VAdvantage.Classes
             return att.GetFile(AD_AttachmentLine_ID);
         }
 
-
-        public int DeleteAttachment(string AttachmentLines)
-        {
-            if (AttachmentLines == null || AttachmentLines.Length == 0)
-            {
-                return 0;
-            }
-            if (AttachmentLines.EndsWith(","))
-            {
-                AttachmentLines = AttachmentLines.Substring(0, AttachmentLines.Length - 1);
-            }
-            return DB.ExecuteQuery("DELETE FROM AD_AttachmentLine WHERE AD_AttachmentLine_ID IN (" + AttachmentLines + ")", null, null);
-
-
-        }
-
         /// <summary>
         /// Delete attachment files from database as well as file location
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="AttachmentLineIDs"></param>
         /// <returns>number of deleted files, -1 in case of failure</returns>
-        public int DeleteAttachmentsWithActualFiles(Ctx ctx, string AttachmentLineIDs)
+        public int DeleteAttachment(Ctx ctx, string AttachmentLineIDs)
         {
             try
             {

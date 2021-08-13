@@ -132,7 +132,7 @@ namespace VIS.Controllers
         {
             Ctx ctx = Session["ctx"] as Ctx;
             AttachmentModel am = new AttachmentModel();
-            return Json(new { result = am.DeleteAttachmentsWithActualFiles(ctx, AttachmentLines) }, JsonRequestBehavior.AllowGet);
+            return Json(new { result = am.DeleteAttachment(ctx, AttachmentLines) }, JsonRequestBehavior.AllowGet);
         }
     }
 }

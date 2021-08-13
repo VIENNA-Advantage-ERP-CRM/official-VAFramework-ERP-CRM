@@ -2015,7 +2015,7 @@ WHERE att.IsActive = 'Y' AND al.IsActive = 'Y' AND ar.IsActive = 'Y' AND att.AD_
 
                     if (fileLocation == X_AD_Attachment.FILELOCATION_ServerFileSystem)
                     {
-                        //Delete file from attachments folder if exists
+                        // VIS_264: Delete file from attachments folder if exists
                         if (System.IO.File.Exists(Path.Combine(filePath, filename)))
                         {
                             System.IO.File.Delete(Path.Combine(filePath, filename));
@@ -2029,7 +2029,7 @@ WHERE att.IsActive = 'Y' AND al.IsActive = 'Y' AND ar.IsActive = 'Y' AND att.AD_
                     }
                     if (fileLocation == X_AD_Attachment.FILELOCATION_Database)
                     {
-                        // If file location is database, no action needed since whole attachment line row 
+                        // VIS_264: If file location is database, no action needed since whole attachment line row 
                         // will be deleted afterwards
                     }
                 }
