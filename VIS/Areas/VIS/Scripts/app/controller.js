@@ -5942,6 +5942,10 @@
         return this.value;
     };
 
+    GridField.prototype.getIsIdentifier = function () {
+        return this.vo.IsIdentifier;
+    }
+
     /**
      *  Get old/previous Value.
      * 	Called from MTab.processCallout

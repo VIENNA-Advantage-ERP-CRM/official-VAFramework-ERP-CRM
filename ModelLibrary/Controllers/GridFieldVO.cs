@@ -277,6 +277,10 @@ namespace VAdvantage.Controller
                     {
                         vo.AskUserBGProcess = "Y".Equals(dr[i].ToString());
                     }
+
+                    else if (columnName.Equals("ISIDENTIFIER")) {
+                        vo.IsIdentifier = "Y".Equals(dr[i].ToString());
+                    }
                     /******************************/
                     else if (columnName.Equals("Isheaderpanelitem", StringComparison.OrdinalIgnoreCase))
                     {

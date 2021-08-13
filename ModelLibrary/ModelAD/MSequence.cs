@@ -106,6 +106,13 @@ namespace VAdvantage.Model
 
         public static int GetNextID(int AD_Client_ID, String TableName, Trx txtName)
         {
+            // if SYSTEM_NATIVE_SEQUENCE is Y in System Config, then fetch Next ID from DB sequence
+            if (MSysConfig.IsNativeSequence(false))
+            {
+                int m_sequence_id = VConnection.Get().GetDatabase().GetNextID(TableName + "_SEQ");
+                return m_sequence_id;
+            }
+
             if (DatabaseType.IsMSSql)
                 return GetNextIDMSSql(AD_Client_ID, TableName);
             else if (DatabaseType.IsMySql)
