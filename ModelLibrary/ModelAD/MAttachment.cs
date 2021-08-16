@@ -1998,11 +1998,11 @@ WHERE att.IsActive = 'Y' AND al.IsActive = 'Y' AND ar.IsActive = 'Y' AND att.AD_
         }
 
         /// <summary>
-        /// Delete attachment files
+        /// Delete actual attachment files
         /// </summary>
         /// <param name="AttachmentLineIDs"></param>
-        /// <returns>true if success, false if failure</returns>
-        public bool DeleteAttachments(string[] AttachmentLineIDs)
+        /// <returns></returns>
+        public void DeleteAttachments(string[] AttachmentLineIDs)
         {
             try
             {
@@ -2024,7 +2024,7 @@ WHERE att.IsActive = 'Y' AND al.IsActive = 'Y' AND ar.IsActive = 'Y' AND att.AD_
                     }
                     if (fileLocation == X_AD_Attachment.FILELOCATION_FTPLocation)
                     {
-                        bool res = DeleteFileFromFtpServer(filename);
+                        DeleteFileFromFtpServer(filename);
                         continue;
                     }
                     if (fileLocation == X_AD_Attachment.FILELOCATION_Database)
@@ -2033,11 +2033,10 @@ WHERE att.IsActive = 'Y' AND al.IsActive = 'Y' AND ar.IsActive = 'Y' AND att.AD_
                         // will be deleted afterwards
                     }
                 }
-                return true;
             }
             catch (Exception ex)
             {
-                return false;
+                _log.Log(Level.WARNING, "DeleteAttachments -> ", ex.Message);
             }
         }
 
@@ -2045,8 +2044,8 @@ WHERE att.IsActive = 'Y' AND al.IsActive = 'Y' AND ar.IsActive = 'Y' AND att.AD_
         /// Delete attachment file from ftp server
         /// </summary>
         /// <param name="filename"></param>
-        /// <returns>True if sucees, false if failure</returns>
-        private bool DeleteFileFromFtpServer(string filename)
+        /// <returns></returns>
+        private void DeleteFileFromFtpServer(string filename)
         {
             try
             {
@@ -2067,11 +2066,10 @@ WHERE att.IsActive = 'Y' AND al.IsActive = 'Y' AND ar.IsActive = 'Y' AND att.AD_
                 FtpWebResponse response = (FtpWebResponse)request.GetResponse();
 
                 response.Close();
-                return true;
             }
-            catch
+            catch(Exception ex)
             {
-                return false;
+                _log.Log(Level.WARNING, "DeleteFileFromFtpServer -> ", ex.Message);
             }
         }
     }

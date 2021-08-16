@@ -10,7 +10,6 @@ namespace VAdvantage.Classes
 {
     public class AttachmentModel
     {
-
         public InitAttachment GetAttachment(int AD_Table_ID, int Record_ID, VAdvantage.Utility.Ctx ctx)
         {
             InitAttachment initialData = new InitAttachment();
@@ -89,7 +88,7 @@ namespace VAdvantage.Classes
             att = newAttachment;
         }
 
-        public string DownloadAttachment(Ctx _ctx, string fileName, int AD_Attachment_ID, int AD_AttachmentLine_ID,string actionOrigin, string originName, int AD_Table_ID, int recordID)
+        public string DownloadAttachment(Ctx _ctx, string fileName, int AD_Attachment_ID, int AD_AttachmentLine_ID, string actionOrigin, string originName, int AD_Table_ID, int recordID)
         {
             //Saved Action Log
             VAdvantage.Common.Common.SaveActionLog(_ctx, actionOrigin, originName, AD_Table_ID, recordID, 0, "", "", "Attachment Downloaded:->" + fileName, MActionLog.ACTIONTYPE_Download);
@@ -129,21 +128,22 @@ namespace VAdvantage.Classes
                 string[] attachmentLineIds = AttachmentLineIDs.Split(',');
 
                 int AD_Attachment_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Attachment_ID FROM AD_AttachmentLine WHERE AD_AttachmentLine_ID = " + attachmentLineIds[0], null, null));
-                if (AD_Attachment_ID == 0)
+                if (AD_Attachment_ID > 0)
                 {
-                    return 0;
-                }
+                    int noOfDeletion = DB.ExecuteQuery("DELETE FROM AD_AttachmentLine WHERE AD_AttachmentLine_ID IN (" + AttachmentLineIDs + ")", null, null);
 
-                MAttachment att = new MAttachment(ctx, AD_Attachment_ID, null);
-
-                if (att.DeleteAttachments(attachmentLineIds))
-                {
-                    return DB.ExecuteQuery("DELETE FROM AD_AttachmentLine WHERE AD_AttachmentLine_ID IN (" + AttachmentLineIDs + ")", null, null);
+                    // VIS264: If all attachments are deleted from DB successfully, then delete actual files
+                    if (noOfDeletion == attachmentLineIds.Count())
+                    {
+                        MAttachment att = new MAttachment(ctx, AD_Attachment_ID, null);
+                        att.DeleteAttachments(attachmentLineIds);
+                    }
+                    return noOfDeletion;
                 }
 
                 return 0;
             }
-            catch(Exception ex)
+            catch
             {
                 return -1;
             }
