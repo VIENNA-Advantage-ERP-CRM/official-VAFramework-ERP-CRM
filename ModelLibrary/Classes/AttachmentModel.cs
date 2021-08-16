@@ -107,20 +107,46 @@ namespace VAdvantage.Classes
             return att.GetFile(AD_AttachmentLine_ID);
         }
 
-
-        public int DeleteAttachment(string AttachmentLines)
+        /// <summary>
+        /// Delete attachment files from database as well as file location
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="AttachmentLineIDs"></param>
+        /// <returns>number of deleted files, -1 in case of failure</returns>
+        public int DeleteAttachment(Ctx ctx, string AttachmentLineIDs)
         {
-            if (AttachmentLines == null || AttachmentLines.Length == 0)
+            try
             {
+                if (AttachmentLineIDs == null || AttachmentLineIDs.Length == 0)
+                {
+                    return 0;
+                }
+                if (AttachmentLineIDs.EndsWith(","))
+                {
+                    AttachmentLineIDs = AttachmentLineIDs.Substring(0, AttachmentLineIDs.Length - 1);
+                }
+
+                string[] attachmentLineIds = AttachmentLineIDs.Split(',');
+
+                int AD_Attachment_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Attachment_ID FROM AD_AttachmentLine WHERE AD_AttachmentLine_ID = " + attachmentLineIds[0], null, null));
+                if (AD_Attachment_ID == 0)
+                {
+                    return 0;
+                }
+
+                MAttachment att = new MAttachment(ctx, AD_Attachment_ID, null);
+
+                if (att.DeleteAttachments(attachmentLineIds))
+                {
+                    return DB.ExecuteQuery("DELETE FROM AD_AttachmentLine WHERE AD_AttachmentLine_ID IN (" + AttachmentLineIDs + ")", null, null);
+                }
+
                 return 0;
             }
-            if (AttachmentLines.EndsWith(","))
+            catch(Exception ex)
             {
-                AttachmentLines = AttachmentLines.Substring(0, AttachmentLines.Length - 1);
+                return -1;
             }
-            return DB.ExecuteQuery("DELETE FROM AD_AttachmentLine WHERE AD_AttachmentLine_ID IN (" + AttachmentLines + ")", null, null);
-
-
         }
     }
 

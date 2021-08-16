@@ -130,8 +130,9 @@ namespace VIS.Controllers
         [AjaxSessionFilterAttribute]
         public JsonResult DeleteAttachment(string AttachmentLines)
         {
+            Ctx ctx = Session["ctx"] as Ctx;
             AttachmentModel am = new AttachmentModel();
-            return Json(new { result = am.DeleteAttachment(AttachmentLines) }, JsonRequestBehavior.AllowGet);
+            return Json(new { result = am.DeleteAttachment(ctx, AttachmentLines) }, JsonRequestBehavior.AllowGet);
         }
     }
 }
