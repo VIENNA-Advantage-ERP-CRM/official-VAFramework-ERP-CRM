@@ -654,12 +654,6 @@ namespace VAdvantage.Model
             // rounding control amount based on standard precision defined on currency
             SetControlAmt(Decimal.Round(GetControlAmt(), acctSchema.GetStdPrecision()));
 
-            // Set Costing based on Accounting Schema
-            if (Util.GetValueOfBool(acctSchema.Get_Value("Costing")) && Get_ColumnIndex("Costing") >= 0)
-            {
-                Set_Value("Costing", Util.GetValueOfBool(acctSchema.Get_Value("Costing")));
-            }
-
             return true;
         }	//	beforeSave
 
