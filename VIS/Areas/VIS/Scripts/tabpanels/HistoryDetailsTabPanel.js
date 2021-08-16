@@ -593,17 +593,24 @@
                     }
 
                     $rootcontent.empty();
-                    $htmlcontent = $('<div class="VIS-testPanel VIS-tp-borderBott" ><div class="d-flex align-items-center VIS-tp-leftIcons"><i><img data-mailto="' + result.To + '" data-mailcc="' + result.Cc + '" data-mailbcc="' + result.Bcc + '" id="VIS_imgReply' + window_No + '" height="20px" width="20px" src="./Areas/VIS/Images/email-reply.png" ></i><i><img data-mailto="' + result.To + '" data-mailcc="' + result.Cc + '" data-mailbcc="' + result.Bcc + '" id="VIS_imgReplyAll' + window_No + '" height="20px" width="20px" src="./Areas/VIS/Images/email-replyall.png" ></i><i><img id="VIS_imgForward' + window_No + '" height="20px" width="20px" src="./Areas/VIS/Images/email-forward.png" ></i></div> <div class="align-items-center d-flex VIS-tp-rightIcons" ><span id="VIS_prtHistory' + window_No + '"><i class="vis vis-print" title="Print"></i></span><span><i id="VIS_prevRecord' + window_No + '" class="fa fa-arrow-left"></i></span><span><i id="VIS_nextRecord' + window_No + '" class="fa fa-arrow-right"></i></span><span class="VIS-close-btn" id="VIS_btnClose' + window_No + '"><i class="vis vis-cross"></i></span></div></div>');
+                    $htmlcontent = $('<div class="VIS-testPanel VIS-tp-borderBott" ><div class="d-flex align-items-center VIS-tp-leftIcons"><span><i class="fa fa-reply" data-mailto="' + result.To + '" data-mailcc="' + result.Cc + '" data-mailbcc="' + result.Bcc + '" id="VIS_imgReply' + window_No + '"></i></span><span><i class="fa fa-reply-all" data-mailto="' + result.To + '" data-mailcc="' + result.Cc + '" data-mailbcc="' + result.Bcc + '" id="VIS_imgReplyAll' + window_No + '"></i></span><span><i class="fa fa-share" id="VIS_imgForward' + window_No + '"></i></span></div>'
+                        + '<div class= "align-items-center d-flex VIS-tp-rightIcons" ><span id="VIS_prtHistory' + window_No + '"><i class="vis vis-print" title="Print"></i></span><span><i id="VIS_prevRecord' + window_No + '" class="fa fa-arrow-left"></i></span><span><i id="VIS_nextRecord' + window_No + '" class="fa fa-arrow-right"></i></span><span class="VIS-close-btn" id="VIS_btnClose' + window_No + '"><i class="vis vis-cross"></i></span></div ></div > ');
                     $mailbodyhtml = $('<div class="VIS-tp-contentdiv" >'
-                        + '<div id="VIS-tp-comments-input' + window_No + '" class="VIS-tp-comments-input"><div style="width: 100%"><table height="50px" width="100%"><tr height="50px"><td><div class="VIS-mail-user-div"><span class="VIS-mail-user-span">' + userInitials + '</span></div></td>'
-                        + '<td height="50px"><span class="VIS-mail-username">' + UserName + '</span><span id="VIS_mailSubject' + window_No + '" class="VIS-mail-subject VIS-tp-recordLabels">' + result.Title + '</span><span class="VIS-mail-from"><span class="VIS-tp-recordLabels">' + VIS.Msg.getMsg("From") + ':&nbsp; </span>' + result.From + '</span><span class="VIS-mail-to"><span class="VIS-tp-recordLabels">' + VIS.Msg.getMsg("To") + ':&nbsp; </span>' + mailtoddlhtml + '</span></td><td height="50px" class="VIS-mail-date">' + new Date(result.Date).toLocaleString() + '</td></tr></table></div>'
+                        + '<div id="VIS-tp-comments-input' + window_No + '" class="VIS-tp-comments-input"><div class="vis-tp-emailDetailWrap"><div class="VIS-mail-user-div"><span class="VIS-mail-user-span">' + userInitials + '</span></div>'                        
+                        + '<div class="VIS-contentTitile"><span class="VIS-mail-username">' + UserName + '</span><span id="VIS_mailSubject' + window_No + '" class="VIS-mail-subject VIS-tp-recordLabels">' + result.Title
+                        + '</span><div class="VIS-mail-content"><div class="VIS-mail-from"><span class="VIS-tp-recordLabels">' + VIS.Msg.getMsg("From") + ': </span><span style="word-break: break-word;">'
+                        + result.From + '</span></div><small>'+ new Date(result.Date).toLocaleString() + '</small></div><span class="VIS-mail-to"><span class="VIS-tp-recordLabels">' + VIS.Msg.getMsg("To") + ': </span>' + mailtoddlhtml + '</span></div></div>'
                         + '<div id="VIS_mailBody' + window_No + '" class="VIS-mail-body" >' + result.Detail + '</div></div >'
                         + '<div id="VIS_viewMoreComments' + window_No + '" style="display:none;" class="VIS-tp-commentsPanel"></div>'
-                        + '<div id="VIS_commentsdata' + window_No + '"><div class="pr-0 m-0 VIS-tp-commentsField d-flex flex-column w-100"><p id="VIS_viewAllComments' + window_No + '" class="vis-attachhistory-view-comments" > ' + VIS.Msg.getMsg('ViewMoreComments') + '</p><div class="vis-attachhistory-comments vis-feedMessage m-0"><input id="VIS_txtComments' + window_No + '" type="text" placeholder="' + VIS.Msg.getMsg('TypeComment') + '"></input><span id="VIS_btnComments' + window_No + '" class="vis-attachhistory-comment-icon vis vis-sms"></span></div></div></div>');
+                        + '<div id="VIS_commentsdata' + window_No + '"><div class="pr-0 m-0 VIS-tp-commentsField d-flex flex-column w-100"><p id="VIS_viewAllComments' + window_No + '" class="vis-attachhistory-view-comments" > ' + VIS.Msg.getMsg('ViewMoreComments')
+                        + '</p><div class="vis-attachhistory-comments vis-feedMessage m-0"><input id="VIS_txtComments' + window_No + '" type="text" placeholder="' + VIS.Msg.getMsg('TypeComment') + '"></input><span id="VIS_btnComments'
+                        + window_No + '" class="vis-attachhistory-comment-icon vis vis-sms"></span></div></div></div>');
 
                     $printhtml = $('<div class="VIS-tp-contentdiv" >'
-                        + '<div class="VIS-tp-comments-input' + window_No + '" ><div style="width:100%" ><table height="50px" width="100%"><tr height="50px"><td><div class="VIS-mail-user-div"><span class="VIS-mail-user-span">' + userInitials + '</span></div></td>'
-                        + '<td height="50px"><span class="VIS-mail-username">' + UserName + '</span><span id="mailSubject" class="VIS-mail-subject VIS-tp-recordLabels">' + result.Title + '</span><span class="VIS-mail-from"><span class="VIS-tp-recordLabels">' + VIS.Msg.getMsg("From") + ':&nbsp; </span>' + result.From + '</span><span class="VIS-mail-to"><span class="VIS-tp-recordLabels">' + VIS.Msg.getMsg("To") + ':&nbsp; </span>' + mailtoddlhtml + '</span></td><td height="50px" class="VIS-mail-date">' + result.Date + '</td></tr></table></div>'
+                        + '<div class="VIS-tp-comments-input' + window_No + '" ><div class="vis-tp-emailDetailWrap"<div class="VIS-mail-user-div"><span class="VIS-mail-user-span">' + userInitials + '</span></div>'
+                        + '<div class="VIS-contentTitile"><span class="VIS-mail-username">' + UserName + '</span><span id="mailSubject" class="VIS-mail-subject VIS-tp-recordLabels">' + result.Title
+                        + '</span><div class="VIS-mail-content"><span class="VIS-mail-from"><span class="VIS-tp-recordLabels">' + VIS.Msg.getMsg("From") + ': </span><span style="word-break: break-word;">'
+                        + result.From + '</span></div><small>' + new Date(result.Date).toLocaleString() + '</small></div><span class="VIS-mail-to"><span class="VIS-tp-recordLabels">' + VIS.Msg.getMsg("To") + ': </span>' + mailtoddlhtml + '</span></div></div>'
                         + '<div class="VIS-mail-body" >' + result.Detail + '</div></div>');
 
 
@@ -1544,7 +1551,7 @@
             var target = e.target;
             var mailto, mailcc, mailbcc;
 
-            if ($(target).is('img') && (data == "R" || data == "RA")) {
+            if ($(target).is('i') && (data == "R" || data == "RA")) {
                 mailto = $(target).data('mailto');
                 mailcc = $(target).data('mailcc');
                 mailbcc = $(target).data('mailbcc');

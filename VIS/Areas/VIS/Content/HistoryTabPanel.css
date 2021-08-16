@@ -194,12 +194,13 @@
     border-bottom: 1px solid rgba(var(--v-c-on-secondary), .2);
 }
 
-.VIS-tp-leftIcons i {
+.VIS-tp-leftIcons span {
     margin-right: .8rem;
     cursor: pointer;
+    font-size: 1.2rem;
 }
 
-    .VIS-tp-leftIcons i:not(:last-child) {
+    .VIS-tp-leftIcons span:not(:last-child) {
         border-right: 1px solid rgba(var(--v-c-on-secondary), .2);
         padding-right: .8rem;
     }
@@ -475,6 +476,12 @@ VIS-tp-commentData {
     padding: 0 .625rem;
     margin-bottom: .625rem;
 }
+.vis-tp-emailDetailWrap {
+    display: flex;
+    align-items: center;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+}
 
 .VIS-mail-header {
     width: 100%;
@@ -503,6 +510,18 @@ VIS-tp-commentData {
     line-height: 50px;*/
 }
 
+.VIS-mail-content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+    .VIS-mail-content small {
+        flex: 1;
+        white-space: nowrap;
+        padding-left: .5rem;
+    }
+
 .VIS-mail-username {
     font-size: .85rem;
     font-weight: bold;
@@ -520,14 +539,7 @@ VIS-tp-commentData {
     /*text-align: center;*/
     width: auto;
 }
-/*.VIS-mail-to {
-    font-size: 12px;
-    text-align: center;
-}*/
-/*.VIS-mail-from {
-    font-size: 12px;
-    text-align: center;
-}*/
+
 .VIS-mail-date {
     text-align: right;
     font-size: .625rem;
