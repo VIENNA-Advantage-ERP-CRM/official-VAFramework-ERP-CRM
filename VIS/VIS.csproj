@@ -891,6 +891,7 @@
     <Compile Include="Areas\VIS\Models\AmountDivisionModel.cs" />
     <Compile Include="Areas\VIS\Models\ASearchModel.cs" />
     <Compile Include="Areas\VIS\Models\AttachmentHistoryModel.cs" />
+    <Compile Include="Areas\VIS\Models\AttachmentModel.cs" />
     <Compile Include="Areas\VIS\Models\BPartnerModel.cs" />
     <Compile Include="Areas\VIS\Models\CalloutPaymentModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MAcctSchemaModel.cs" />

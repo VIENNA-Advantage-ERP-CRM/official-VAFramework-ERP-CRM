@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using VAdvantage.DataBase;
 using VAdvantage.Model;
 using VAdvantage.Utility;
+using VIS.DBase;
 
-namespace VAdvantage.Classes
+namespace ViennaAdvantageWeb.Areas.VIS.Models
 {
     public class AttachmentModel
     {
+
         public InitAttachment GetAttachment(int AD_Table_ID, int Record_ID, VAdvantage.Utility.Ctx ctx)
         {
             InitAttachment initialData = new InitAttachment();
@@ -106,47 +107,20 @@ namespace VAdvantage.Classes
             return att.GetFile(AD_AttachmentLine_ID);
         }
 
-        /// <summary>
-        /// Delete attachment files from database as well as file location
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="AttachmentLineIDs"></param>
-        /// <returns>number of deleted files, -1 in case of failure</returns>
-        public int DeleteAttachment(Ctx ctx, string AttachmentLineIDs)
+
+        public int DeleteAttachment(string AttachmentLines)
         {
-            try
+            if (AttachmentLines == null || AttachmentLines.Length == 0)
             {
-                if (AttachmentLineIDs == null || AttachmentLineIDs.Length == 0)
-                {
-                    return 0;
-                }
-                if (AttachmentLineIDs.EndsWith(","))
-                {
-                    AttachmentLineIDs = AttachmentLineIDs.Substring(0, AttachmentLineIDs.Length - 1);
-                }
-
-                string[] attachmentLineIds = AttachmentLineIDs.Split(',');
-
-                int AD_Attachment_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Attachment_ID FROM AD_AttachmentLine WHERE AD_AttachmentLine_ID = " + attachmentLineIds[0], null, null));
-                if (AD_Attachment_ID > 0)
-                {
-                    int noOfDeletion = DB.ExecuteQuery("DELETE FROM AD_AttachmentLine WHERE AD_AttachmentLine_ID IN (" + AttachmentLineIDs + ")", null, null);
-
-                    // VIS264: If all attachments are deleted from DB successfully, then delete actual files
-                    if (noOfDeletion == attachmentLineIds.Count())
-                    {
-                        MAttachment att = new MAttachment(ctx, AD_Attachment_ID, null);
-                        att.DeleteAttachments(attachmentLineIds);
-                    }
-                    return noOfDeletion;
-                }
-
                 return 0;
             }
-            catch
+            if (AttachmentLines.EndsWith(","))
             {
-                return -1;
+                AttachmentLines = AttachmentLines.Substring(0, AttachmentLines.Length - 1);
             }
+            return DB.ExecuteQuery("DELETE FROM AD_AttachmentLine WHERE AD_AttachmentLine_ID IN (" + AttachmentLines + ")", null, null);
+
+
         }
     }
 
