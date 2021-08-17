@@ -5,9 +5,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
-using VAdvantage.Classes;
 using VAdvantage.Model;
 using VAdvantage.Utility;
+using ViennaAdvantageWeb.Areas.VIS.Models;
 using VIS.Filters;
 
 namespace VIS.Controllers
@@ -69,9 +69,7 @@ namespace VIS.Controllers
                 string savedFileName = Path.Combine(Server.MapPath("~/TempDownload/" + folderKey), Path.GetFileName(fileName));
                 MemoryStream ms = new MemoryStream();
                 hpf.InputStream.CopyTo(ms);
-                byte[] byteArray = ms.ToArray(); 
-                
-                string result = System.Text.Encoding.UTF8.GetString(byteArray);
+                byte[] byteArray = ms.ToArray();
 
                 if (Directory.GetFiles(Path.Combine(Server.MapPath("~/TempDownload"), folderKey)).Contains(Path.Combine(Server.MapPath("~/TempDownload"), folderKey, fileName)))//Append Content In File
                 {
@@ -119,12 +117,12 @@ namespace VIS.Controllers
 
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]
-        public JsonResult DownloadAttachment(string fileName, int AD_Attachment_ID, int AD_AttachmentLine_ID,string actionOrigin, string originName,int AD_Table_ID, int recordID)
+        public JsonResult DownloadAttachment(string fileName, int AD_Attachment_ID, int AD_AttachmentLine_ID, string actionOrigin, string originName, int AD_Table_ID, int recordID)
         {
             //List<AttFileInfo> _files = JsonConvert.DeserializeObject<List<AttFileInfo>>(files);
             Ctx ctx = Session["ctx"] as Ctx;
             AttachmentModel am = new AttachmentModel();
-            return Json(new { result = am.DownloadAttachment(ctx, fileName, AD_Attachment_ID, AD_AttachmentLine_ID, actionOrigin,originName,AD_Table_ID,recordID) }, JsonRequestBehavior.AllowGet);
+            return Json(new { result = am.DownloadAttachment(ctx, fileName, AD_Attachment_ID, AD_AttachmentLine_ID, actionOrigin, originName, AD_Table_ID, recordID) }, JsonRequestBehavior.AllowGet);
         }
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]
