@@ -1,4 +1,11 @@
-﻿using Ionic.Zip;
+﻿/********************************************************
+ * Module Name    :    VA Framework
+ * Purpose        :    History Details Tab Panel
+ * Employee Code  :    60
+ * Date           :    17-August-2021
+  ******************************************************/
+
+using Ionic.Zip;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,6 +16,9 @@ using VAdvantage.Utility;
 
 namespace VIS.Models
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class HistoryDetailsDataModel
     {
         /// <summary>

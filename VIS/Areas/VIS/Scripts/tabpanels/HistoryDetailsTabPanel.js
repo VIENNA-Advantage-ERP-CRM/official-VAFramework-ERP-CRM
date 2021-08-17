@@ -123,7 +123,7 @@
         /* Getting the record count*/
         function getGridDataRecordCount(RecordId, TableId) {
             $.ajax({
-                url: VIS.Application.contextUrl + "HistoryDetailsData/GetHistoryRecordsCount",
+                url: VIS.Application.contextUrl + "VIS/HistoryDetailsData/GetHistoryRecordsCount",
                 //async: false,
                 data: { RecordId: RecordId, AD_Table_ID: TableId },
                 success: function (data) {
@@ -150,7 +150,7 @@
         function loadGridData(RecordId, selPage, window_No, TableId) {
             $('#VIS_tabPanelDataLoader' + window_No).show();
             $.ajax({
-                url: VIS.Application.contextUrl + "HistoryDetailsData/GetHistoryRecordDetails",
+                url: VIS.Application.contextUrl + "VIS/HistoryDetailsData/GetHistoryRecordDetails",
                 //async: false,
                 data: { RecordId: RecordId, AD_Table_ID: TableId, CurrentPage: selPage },
                 success: function (data) {
@@ -524,7 +524,7 @@
         function showMail(ID, UserName, window_No) {
 
             $.ajax({
-                url: VIS.Application.contextUrl + "HistoryDetailsData/GetSelectedMailDetails",
+                url: VIS.Application.contextUrl + "VIS/HistoryDetailsData/GetSelectedMailDetails",
                 datatype: "json",
                 type: "get",
                 cache: false,
@@ -687,7 +687,7 @@
         function showLetter(ID, UserName, window_No) {
 
             $.ajax({
-                url: VIS.Application.contextUrl + "HistoryDetailsData/GetSelectedLetterDetails",
+                url: VIS.Application.contextUrl + "VIS/HistoryDetailsData/GetSelectedLetterDetails",
                 datatype: "json",
                 type: "get",
                 cache: false,
@@ -789,7 +789,7 @@
         function showCallInfo(ID, UserName, window_No) {
             var CallDetails_ID = VIS.Utility.Util.getValueOfInt(ID);
             $.ajax({
-                url: VIS.Application.contextUrl + "HistoryDetailsData/GetSelectedCallDetails",
+                url: VIS.Application.contextUrl + "VIS/HistoryDetailsData/GetSelectedCallDetails",
                 datatype: "json",
                 type: "get",
                 cache: false,
@@ -917,7 +917,7 @@
         function showAppointmentInfo(ID, UserName, window_No) {
             var attdInfo = "";
             var $appthtml;
-            var ds = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "HistoryDetailsData/GetSelectedAppointmentDetails", { "record_ID": ID }, null);
+            var ds = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "VIS/HistoryDetailsData/GetSelectedAppointmentDetails", { "record_ID": ID }, null);
             var _mattachID;
             if (ds != null) {
                 strApp = "";
@@ -1035,7 +1035,7 @@
         function showTask(rID, UserName, window_No) {
 
             $.ajax({
-                url: VIS.Application.contextUrl + "HistoryDetailsData/GetSelectedTaskDetails",
+                url: VIS.Application.contextUrl + "VIS/HistoryDetailsData/GetSelectedTaskDetails",
                 datatype: "json",
                 type: "get",
                 cache: false,
@@ -1195,7 +1195,7 @@
         function showAttachment(ID, UserName, window_No) {
 
             $.ajax({
-                url: VIS.Application.contextUrl + "HistoryDetailsData/GetSelectedAttachmentDetails",
+                url: VIS.Application.contextUrl + "VIS/HistoryDetailsData/GetSelectedAttachmentDetails",
                 datatype: "json",
                 type: "get",
                 cache: false,
@@ -1284,7 +1284,7 @@
         function showChat(ID, UserName, window_No) {
 
             $.ajax({
-                url: VIS.Application.contextUrl + "HistoryDetailsData/GetSelectedChatDetails",
+                url: VIS.Application.contextUrl + "VIS/HistoryDetailsData/GetSelectedChatDetails",
                 datatype: "json",
                 type: "get",
                 cache: false,
@@ -1437,7 +1437,7 @@
             }
 
             $.ajax({
-                url: VIS.Application.contextUrl + "HistoryDetailsData/DownloadAllAttachments",
+                url: VIS.Application.contextUrl + "VIS/HistoryDetailsData/DownloadAllAttachments",
                 datatype: "json",
                 type: "get",
                 cache: false,
@@ -1477,7 +1477,7 @@
             }
 
             $.ajax({
-                url: VIS.Application.contextUrl + "HistoryDetailsData/DownloadHistoryAttachment",
+                url: VIS.Application.contextUrl + "VIS/HistoryDetailsData/DownloadHistoryAttachment",
                 datatype: "json",
                 type: "get",
                 cache: false,
@@ -1503,7 +1503,7 @@
             }
 
             $.ajax({
-                url: VIS.Application.contextUrl + "HistoryDetailsData/DownloadAttachment",
+                url: VIS.Application.contextUrl + "VIS/HistoryDetailsData/DownloadAttachment",
                 datatype: "json",
                 type: "get",
                 cache: false,
