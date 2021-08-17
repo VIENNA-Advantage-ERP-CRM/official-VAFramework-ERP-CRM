@@ -130,8 +130,8 @@ namespace VIS.Models
 
             /************************************/
             _bpGroup = FillBPGroup();
-            _bpRelation = FillBPRelation();
-            _bpLocation = FillBPLocation(0, ctx);
+            //_bpRelation = FillBPRelation();
+            //_bpLocation = FillBPLocation(0, ctx);
             /************************************/
             ro = _readOnly;
             if (!ro)
