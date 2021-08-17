@@ -455,9 +455,10 @@
                     for (var i = 0; i < dd.lstBPGroup.length; i++) {
                         bpgroup += "<option value='" + dd.lstBPGroup[i].ID + "'>" + VIS.Utility.encodeText(dd.lstBPGroup[i].Name) + "</option>";
                     }
-                    for (var i = 0; i < dd.lstBPRelation.length; i++) {
-                        bprelation += "<option value='" + dd.lstBPRelation[i].ID + "'>" + VIS.Utility.encodeText(dd.lstBPRelation[i].Name) + "</option>";
-                    }
+                    // VIS0060
+                    //for (var i = 0; i < dd.lstBPRelation.length; i++) {
+                    //    bprelation += "<option value='" + dd.lstBPRelation[i].ID + "'>" + VIS.Utility.encodeText(dd.lstBPRelation[i].Name) + "</option>";
+                    //}
                     //for (var i = 0; i < dd.lstBPLocation.length; i++) {
                     //    bplocation += "<option value='" + dd.lstBPLocation[i].ID + "'>" + dd.lstBPLocation[i].Name + "</option>";
                     //}
@@ -1028,12 +1029,14 @@
                 {
                     $chkEmployee.attr("checked", "checked");
                 }
-                OnSelectionChangeEvent($selectBPRelation.val(), windowNo, dd.bpLocationID);
+                // VIS0060
+                OnSelectionChangeEvent(VIS.Utility.Util.getValueOfInt($selectBPRelation.val()), windowNo, dd.bpLocationID);
             }
             else if (BPRelationID > 0 && BPGroupID > 0) {
                 $bpartnerroot.find("#ddlBPRelation_" + windowNo).val(BPRelationID);
                 $bpartnerroot.find("#ddlBPGroup_" + windowNo).val(BPGroupID);
-                OnSelectionChangeEvent($selectBPRelation.val(), windowNo, dd.bpLocationID);
+                // VIS0060
+                OnSelectionChangeEvent(VIS.Utility.Util.getValueOfInt($selectBPRelation.val()), windowNo, dd.bpLocationID);
             }
 
 
@@ -1050,8 +1053,8 @@
             $btnAddress = $bpartnerroot.find("#divAddress_" + windowNo).find("Button").eq(1);
             SaveBPartner(windowNo, BPtype, BPartnerID);
             $selectBPRelation.on("change", function () {
-
-                OnSelectionChangeEvent($selectBPRelation.val(), windowNo);
+                // VIS0060
+                OnSelectionChangeEvent(VIS.Utility.Util.getValueOfInt($selectBPRelation.val()), windowNo);
             });
             $txtSearchKey.on("focusout", function () {
 
