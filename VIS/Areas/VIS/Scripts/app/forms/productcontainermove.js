@@ -175,7 +175,7 @@
 
             $formData = $('<div class="VIS_form-col input-group vis-input-wrap">');
             var $formDataCtrlWrp = $('<div class="vis-control-wrap">');
-            var $ChkFullContainer = $('<label class="vis-ec-col-lblchkbox" title=' + VIS.Msg.translate(VIS.Env.getCtx(), "VIS_MoveFullContainerToolTip") + '><input type="checkbox" name="">' + VIS.Msg.translate(VIS.Env.getCtx(), "VIS_MoveFullContainer") + '</label>');
+            var $ChkFullContainer = $('<label class="vis-ec-col-lblchkbox" title="' + VIS.Msg.translate(VIS.Env.getCtx(), "VIS_MoveFullContainerToolTip") + '"><input type="checkbox" name="">' + VIS.Msg.translate(VIS.Env.getCtx(), "VIS_MoveFullContainer") + '</label>');
             $formData.append($formDataCtrlWrp);
             $formDataCtrlWrp.append($ChkFullContainer)/*.append($lblMoveFullContainer)*/;
             $moveFullContainer = $ChkFullContainer.find('input');
@@ -188,7 +188,7 @@
             $formData3 = $('<div class="VIS_form-col input-group vis-input-wrap">');
             var $formData3CtrlWrp = $('<div class="vis-control-wrap">');
             //$withoutContainer = $('<input type="radio" name="WithoutContainer" disabled>');
-            var $ChkwithoutContainer = $('<label title=' + VIS.Msg.translate(VIS.Env.getCtx(), "VIS_WithoutContainerToolTip") + '><input type="checkbox" name="WithoutContainer">' + VIS.Msg.translate(VIS.Env.getCtx(), "VIS_WithoutContainer") + '</label>');
+            var $ChkwithoutContainer = $('<label class="vis-ec-col-lblchkbox" title="' + VIS.Msg.translate(VIS.Env.getCtx(), "VIS_WithoutContainerToolTip") + '"><input type="checkbox" name="WithoutContainer">' + VIS.Msg.translate(VIS.Env.getCtx(), "VIS_WithoutContainer") + '</label>');
             $formData3.append($formData3CtrlWrp);
             $formData3CtrlWrp.append($ChkwithoutContainer)/*.append($lblWithoutContainer)*/;
             $withoutContainer = $ChkwithoutContainer.find('input');
