@@ -538,6 +538,9 @@
             var isMandatory = mField.getIsMandatory(false);
             var windowNo = mField.getWindowNo();//  no context check
             var displayType = mField.getHeaderOverrideReference() || mField.getDisplayType();
+            var isReadOnly = mField.getIsReadOnly();
+            var isUpdateable = mField.getIsEditable(false);
+
             var ctrl = null;
 
 
@@ -546,7 +549,15 @@
                 var image = new VImage(columnName, isMandatory, true, windowNo);
                 //image.setField(mField);
                 image.setDimension(120, 140);
+                image.hideText();
                 ctrl = image;
+            }
+            else if (displayType == VIS.DisplayType.Button) {
+                var btn = new VButton(columnName, isMandatory, isReadOnly, isUpdateable, mField.getHeader(), mField.getDescription(), mField.getHelp(), mField.getAD_Process_ID(), mField.getIsLink(), mField.getIsRightPaneLink(), mField.getAD_Form_ID(), mField.getIsBackgroundProcess(), mField.getAskUserBGProcess())
+                btn.setField(mField,true);
+                
+                btn.setReferenceKey(mField.getAD_Reference_Value_ID());
+                ctrl = btn;
             }
             else {
                 var $ctrl = new VSpan(mField.getHelp(), columnName, false, true);
@@ -1230,14 +1241,15 @@
         };
 
         //	Special Buttons
+        
         if (columnName.equals("PaymentRule")) {
             this.readReference(195);
-            $ctrl.css("color", "blue"); //
+           //$ctrl.css("color", "blue"); //
             this.setIcon("vis vis-payment");    //  29*14
         }
         else if (columnName.equals("DocAction")) {
             this.readReference(135);
-            $ctrl.css("color", "blue"); //
+           //$ctrl.css("color", "blue"); //
             this.setIcon("vis vis-cog");    //  16*16
         }
         else if (columnName.equals("CreateFrom")) {
@@ -1249,7 +1261,7 @@
         }
         else if (columnName.equals("Posted")) {
             this.readReference(234);
-            $ctrl.css("color", "magenta"); //
+            //$ctrl.css("color", "magenta"); //
             this.setIcon("fa fa-line-chart");    //  16*16
         }
         else if (isLink) {
@@ -1345,6 +1357,23 @@
 
         };
 
+        this.setLayout = function (isHeaderPnl) {
+            if (!this.mField)
+                return;
+            if (!isHeaderPnl) {
+                if (this.mField.getIsFieldOnly() && this.mField.getShowIcon())
+                    $txt.remove();
+                else if (this.mField.getIsFieldOnly())
+                    $img.remove();
+            }
+            else {
+                if (this.mField.getHeaderHeadingOnly()) 
+                    $img.remove();
+                else if (this.mField.getHeaderIconOnly())
+                    $txt.remove();
+            }
+        };
+
         this.disposeComponent = function () {
             $ctrl.off(VIS.Events.onClick);
             $ctrl = null;
@@ -1358,7 +1387,7 @@
     };
     VIS.Utility.inheritPrototype(VButton, IControl);//Inherit
 
-    VButton.prototype.setField = function (mField) {
+    VButton.prototype.setField = function (mField,isHeaderPnl) {
         this.mField = mField;
         if (!this.isIconSet) {
             if (mField.getShowIcon() && (mField.getFontClass() != '' || mField.getImageName() != ''))
@@ -1369,7 +1398,10 @@
                     this.setIcon(VIS.Application.contextUrl + 'Images/Thumb16x16/' + mField.getImageName(),true);
             }
         }
+        this.setLayout(isHeaderPnl);
     };
+
+
 
     VButton.prototype.setReferenceKey = function (refid) {
         if (refid && refid > 0 && refid != 195 && refid != 135 && refid != 234) {
@@ -5009,6 +5041,11 @@
                 this.ctrl.removeClass('vis-input-wrap-button-image-add');
             }
         };
+
+        this.hideText = function () {
+            $txt.hide();
+        }
+
         this.disposeComponent = function () {
             $ctrl.off(VIS.Events.onClick);
             $ctrl = null;

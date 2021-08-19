@@ -445,7 +445,7 @@
 
     VIS.GridController.prototype.initHeaderPanel = function (parent) {
         this.vHeaderPanel = new VIS.HeaderPanel(parent);
-        this.vHeaderPanel.init(this.getMTab());
+        this.vHeaderPanel.init(this);
         this.vHeaderPanel.addSizeChangeListner(this);
     };
 
@@ -984,6 +984,9 @@
 
     VIS.GridController.prototype.getMTab = function () {
         return this.gTab;
+    };
+    VIS.GridController.prototype.getAPanel = function () {
+        return this.aPanel;
     };
 
     VIS.GridController.prototype.getIsDisplayed = function () {
