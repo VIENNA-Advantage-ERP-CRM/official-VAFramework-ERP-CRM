@@ -58,8 +58,8 @@ namespace VAdvantage.Process
                                   umail.AD_User_ID,
                                   umail.AD_CLient_ID,
                                   umail.AD_Org_ID,umail.ISAUTOATTACH,umail.TABLEATTACH,umail.IsExcludeEmployee
-                                FROM ad_usermailconfigration umail
-                                WHERE umail.IsActive ='Y' and umail.AD_User_ID= "+GetCtx().GetAD_User_ID();
+                                FROM ad_usermailconfigration umail  WHERE umail.IsActive ='Y'";
+
 
             //if (AD_User_ID > 0)
             //{
