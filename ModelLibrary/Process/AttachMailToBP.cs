@@ -59,7 +59,7 @@ namespace VAdvantage.Process
                                   umail.AD_CLient_ID,
                                   umail.AD_Org_ID,umail.ISAUTOATTACH,umail.TABLEATTACH,umail.IsExcludeEmployee
                                 FROM ad_usermailconfigration umail
-                                WHERE umail.IsActive ='Y' ";
+                                WHERE umail.IsActive ='Y' and umail.AD_User_ID= "+GetCtx().GetAD_User_ID();
 
             //if (AD_User_ID > 0)
             //{
@@ -226,7 +226,7 @@ namespace VAdvantage.Process
                             for (int i = 0; i < message.Attachments.Count; i++)
                             {
                                 isAttachment = true;
-                                mAttachment.SetBinaryData(message.Attachments[i].Data);
+                                //mAttachment.SetBinaryData(message.Attachments[i].Data);
                                 mAttachment.AddEntry(message.Attachments[i].FileName, message.Attachments[i].Data);
                             }
 
@@ -369,7 +369,7 @@ namespace VAdvantage.Process
                                     for (int i = 0; i < message.Attachments.Count; i++)
                                     {
                                         isAttachment = true;
-                                        mAttachment.SetBinaryData(message.Attachments[i].Data);
+                                        //mAttachment.SetBinaryData(message.Attachments[i].Data);
                                         mAttachment.AddEntry(message.Attachments[i].FileName, message.Attachments[i].Data);
                                     }
 
