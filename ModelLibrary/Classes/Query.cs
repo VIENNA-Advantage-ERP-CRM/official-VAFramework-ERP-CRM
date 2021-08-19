@@ -427,7 +427,7 @@ namespace VAdvantage.Classes
                                     string dt2 = DB.TO_DATE(P_Date.Value.AddHours(24), false); ;
                                     string dt1 = DB.TO_DATE(P_Date.Value, false);
 
-                                    query.AddRestriction(" " + ParameterName + " BETWEEN " + dt1 + " AND " + dt2 + "");
+                                    query.AddRestriction(" " + tableName+"." + ParameterName + " BETWEEN " + dt1 + " AND " + dt2 + "");
 
                                     query.AddDummyRestriction("TRUNC(" + ParameterName + ",'DD')", Query.EQUAL,
                                         P_Date, Name, Info);
