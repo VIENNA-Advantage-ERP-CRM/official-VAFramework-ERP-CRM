@@ -186,6 +186,7 @@
     <Content Include="Areas\VIS\Content\Find.css" />
     <Content Include="Areas\VIS\Content\GlJournalDimension.css" />
     <Content Include="Areas\VIS\Content\GroupStyle.css" />
+    <Content Include="Areas\VIS\Content\HistoryTabPanel.css" />
     <Content Include="Areas\VIS\Content\Home.css" />
     <Content Include="Areas\VIS\Content\Images\logo.png" />
     <Content Include="Areas\VIS\Content\Login.css" />
@@ -744,6 +745,7 @@
     <Content Include="Areas\VIS\Scripts\processengine\processinfo.js" />
     <Content Include="Areas\VIS\Scripts\processengine\processparameter.js" />
     <Content Include="Areas\VIS\Scripts\tabpanels\bipanel.js" />
+    <Content Include="Areas\VIS\Scripts\tabpanels\HistoryDetailsTabPanel.js" />
     <Content Include="Areas\VIS\Scripts\tabpanels\verinfo.js" />
     <Content Include="Areas\VIS\Scripts\TestPanel.js" />
     <Content Include="Areas\VIS\Scripts\VIS.all.min.js" />
@@ -846,6 +848,7 @@
     <Compile Include="Areas\VIS\Controllers\SmsController.cs" />
     <Compile Include="Areas\VIS\Controllers\Subscribe\SubscribeController.cs" />
     <Compile Include="Areas\VIS\Controllers\TabPanel\BiPanelController.cs" />
+    <Compile Include="Areas\VIS\Controllers\TabPanel\HistoryDetailsDataController.cs" />
     <Compile Include="Areas\VIS\Controllers\ThemeController.cs" />
     <Compile Include="Areas\VIS\Controllers\TreeMaintenanceController.cs" />
     <Compile Include="Areas\VIS\Controllers\UserPreferenceController.cs" />
@@ -888,6 +891,7 @@
     <Compile Include="Areas\VIS\Models\AmountDivisionModel.cs" />
     <Compile Include="Areas\VIS\Models\ASearchModel.cs" />
     <Compile Include="Areas\VIS\Models\AttachmentHistoryModel.cs" />
+    <Compile Include="Areas\VIS\Models\AttachmentModel.cs" />
     <Compile Include="Areas\VIS\Models\BPartnerModel.cs" />
     <Compile Include="Areas\VIS\Models\CalloutPaymentModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MAcctSchemaModel.cs" />
@@ -960,6 +964,7 @@
     <Compile Include="Areas\VIS\Models\SmsModel.cs" />
     <Compile Include="Areas\VIS\Models\Subscribe\SubscribeModel.cs" />
     <Compile Include="Areas\VIS\Models\TabPanels\BiPanelModel.cs" />
+    <Compile Include="Areas\VIS\Models\TabPanels\HistoryDetailsDataModel.cs" />
     <Compile Include="Areas\VIS\Models\ThemeModel.cs" />
     <Compile Include="Areas\VIS\Models\TreeMaintenanceModel.cs" />
     <Compile Include="Areas\VIS\Models\UserPreferenceModel.cs" />
