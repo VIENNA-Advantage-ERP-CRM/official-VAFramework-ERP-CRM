@@ -301,7 +301,7 @@
             loadToWarehouse();
 
             // load To Locator
-            loadToLocator();
+            //loadToLocator();
 
             // on selection of "From Locator" -- load "From Container"
             $cmbFromLocator.on('change', function () {
@@ -560,6 +560,9 @@
                         }
                     }
                     $cmbToWarehouse.prop('selectedIndex', 0);
+
+                    // load To Locator
+                    loadToLocator();
                 },
                 error: function (er) {
                     busyDiv('hidden');
