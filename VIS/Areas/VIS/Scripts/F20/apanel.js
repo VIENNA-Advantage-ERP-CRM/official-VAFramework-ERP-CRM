@@ -1767,8 +1767,9 @@
     /**
      *	Action Listener
      *  @param action string or object
+     *  Controller object called fron header panel
      */
-    APanel.prototype.actionPerformed = function (action) {
+    APanel.prototype.actionPerformed = function (action,controller) {
 
         if (this.getIsUILocked())
             return;
@@ -1779,7 +1780,7 @@
             //  Command Buttons
 
             if (action.source instanceof VIS.Controls.VButton) {
-                if (!selfPan.actionButton(action.source)) {
+                if (!selfPan.actionButton(action.source, controller)) {
                     selfPan.setBusy(false, true);
                 }
                 return;
@@ -3275,26 +3276,31 @@
             return;
         }
 
+        return this.cmd_save2(manual,this.curTab, this.curGC, this, callback);
+
+    };
+
+    APanel.prototype.cmd_save2 = function (manual,curTab, curGC, selfPanel, callback) {
         var needExecute = true;
 
-        if (this.curTab.getCommitWarning().length > 0 && this.curTab.needSave(true, false)) {
+        if (curTab.getCommitWarning().length > 0 && curTab.needSave(true, false)) {
             needExecute = false;
 
-            var selfPanel = this;
+            //var selfPanel = this;
 
-            VIS.ADialog.confirm("SaveChanges?", true, this.curTab.getCommitWarning(), "Confirm", function (result) {
+            VIS.ADialog.confirm("SaveChanges?", true, curTab.getCommitWarning(), "Confirm", function (result) {
 
                 if (!result) {
                     return;
                 }
-                var retValue = selfPanel.curGC.dataSave(manual);
+                var retValue = curGC.dataSave(manual);
 
                 if (manual && !retValue && !selfPanel.errorDisplayed) {
 
                 }
-                selfPanel.curGC.refreshTabPanelData(selfPanel.curTab.getRecord_ID());
+                curGC.refreshTabPanelData(selfPanel.curTab.getRecord_ID());
                 if (manual)
-                    selfPanel.curGC.dynamicDisplay(-1);
+                    curGC.dynamicDisplay(-1);
 
             });
 
@@ -3305,19 +3311,19 @@
 
         if (needExecute) {
 
-            var retValue = this.curGC.dataSave(manual);
+            var retValue = curGC.dataSave(manual);
 
-            if (manual && !retValue && !this.errorDisplayed) {
+            if (manual && !retValue && !selfPanel.errorDisplayed) {
 
             }
 
             if (manual)
-                this.curGC.dynamicDisplay(-1);
+                curGC.dynamicDisplay(-1);
 
             if (callback) {
                 callback(retValue);
             }
-            this.curGC.refreshTabPanelData(this.curTab.getRecord_ID());
+            curGC.refreshTabPanelData(curTab.getRecord_ID());
             return retValue;
         }
 
