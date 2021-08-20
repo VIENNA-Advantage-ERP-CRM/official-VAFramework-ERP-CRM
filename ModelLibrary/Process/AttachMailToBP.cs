@@ -300,7 +300,18 @@ namespace VAdvantage.Process
                         //  {
                         try
                         {
-                            string sql = "SELECT " + tableName + "_ID " + " , C_BPartner_ID,Name,value " + "FROM " + tableName + " WHERE lower(Email) like " + "'%" + from.Trim().ToLower() + "%'";
+                            string sql;
+                            //changes done by Emp id:187
+                            //If sender is lead it checks this query
+                            if (sender == "C_Lead")
+                            {
+                                sql = "SELECT C_Lead_ID, C_Bpartner_ID,Name,DocumentNo as value FROM C_Lead WHERE lower(Email) like " + "'%" + from.Trim().ToLower() + "%'";
+                            }
+                            else
+                            {
+                                sql = "SELECT " + tableName + "_ID " + " , C_BPartner_ID,Name,value " + "FROM " + tableName + " WHERE lower(Email) like " + "'%" + from.Trim().ToLower() + "%'";
+                            }
+
                             sql += " AND AD_Client_ID=" + AD_Client_ID;
                             //sql += " AND AD_Client_ID=" + GetCtx().GetAD_Client_ID();
                             //string finalSql = MRole.GetDefault(GetCtx(), false).AddAccessSQL(sql, tableName.ToString(), MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
@@ -326,17 +337,21 @@ namespace VAdvantage.Process
                             {
                                 for (int j = 0; j < dt.Rows.Count; j++)
                                 {
-                                    string sqlQuery = "SELECT IsEmployee From C_BPartner WHERE C_BPartner_ID=" + Convert.ToInt32(dt.Rows[j][1]);
-                                    sql += " AND AD_Client_ID=" + AD_Client_ID;
-                                    //sqlQuery += " AND AD_Client_ID=" + GetCtx().GetAD_Client_ID();
-                                    //string finalQuery = MRole.GetDefault(GetCtx(), false).AddAccessSQL(sqlQuery, "C_BPartner", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
-                                    DataSet ds = DB.ExecuteDataset(sqlQuery);
-
-                                    if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                                    // Its go inside for user or busineespartner
+                                    if (sender != "C_Lead")
                                     {
-                                        if (isExcludeEmployee == "Y" && Convert.ToString(ds.Tables[0].Rows[0]["IsEmployee"]).Trim() == "Y")
+                                        string sqlQuery = "SELECT IsEmployee From C_BPartner WHERE C_BPartner_ID=" + Util.GetValueOfInt(dt.Rows[j][1]);
+                                        sql += " AND AD_Client_ID=" + AD_Client_ID;
+                                        //sqlQuery += " AND AD_Client_ID=" + GetCtx().GetAD_Client_ID();
+                                        //string finalQuery = MRole.GetDefault(GetCtx(), false).AddAccessSQL(sqlQuery, "C_BPartner", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+                                        DataSet ds = DB.ExecuteDataset(sqlQuery);
+
+                                        if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                                         {
-                                            continue;
+                                            if (isExcludeEmployee == "Y" && Convert.ToString(ds.Tables[0].Rows[0]["IsEmployee"]).Trim() == "Y")
+                                            {
+                                                continue;
+                                            }
                                         }
                                     }
                                     if (sender == "AD_User")
@@ -351,6 +366,13 @@ namespace VAdvantage.Process
                                         _tableID = PO.Get_Table_ID("C_BPartner");
                                         existRec = GetAttachedRecord(_tableID, Convert.ToInt32(dt.Rows[j][1]), Convert.ToInt32(uid), folderName);
                                         userOrBp = Msg.GetMsg(GetCtx(), "BusinessPartner");
+                                    }
+                                    //if sender is lead
+                                    if (sender == "C_Lead")
+                                    {
+                                        _tableID = PO.Get_Table_ID("C_Lead");
+                                        existRec = GetAttachedRecord(_tableID, Convert.ToInt32(dt.Rows[j][0]), Convert.ToInt32(uid), folderName);
+                                        userOrBp = Msg.GetMsg(GetCtx(), "Lead");
                                     }
 
                                     if (existRec > 0)// Is mail already attached
@@ -384,9 +406,6 @@ namespace VAdvantage.Process
                                         bcc += ((Limilabs.Mail.Headers.MailBox)message.Bcc[i]).Address + ";";
                                     }
                                     string title = message.Subject;
-
-
-
 
                                     string mailAddress = "";
                                     for (int i = 0; i < message.To.Count; i++)
@@ -426,6 +445,11 @@ namespace VAdvantage.Process
                                         mAttachment.SetRecord_ID(Convert.ToInt32(dt.Rows[j][1]));
                                         record_ID = Convert.ToInt32(dt.Rows[j][1]);
                                     }
+                                    if (sender == "C_Lead")
+                                    {
+                                        mAttachment.SetRecord_ID(Convert.ToInt32(dt.Rows[j][0]));
+                                        record_ID = Convert.ToInt32(dt.Rows[j][0]);
+                                    }
 
                                     mAttachment.SetMailUID(Convert.ToInt32(uid));
                                     mAttachment.SetMailUserName(mailAddress);
@@ -451,7 +475,7 @@ namespace VAdvantage.Process
                             //    retVal.Append("MultipleRecordFound");
                             //}
                         }
-                        catch
+                        catch (Exception ex)
                         { }
                         //}
 
