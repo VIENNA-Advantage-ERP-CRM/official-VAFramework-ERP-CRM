@@ -266,6 +266,14 @@ namespace VAdvantage.Model
                 return false;
             }
 
+            // VIS0060: when we try to move product from container to container then from container and to container can not be same
+            if (GetM_Locator_ID() == GetM_LocatorTo_ID() && Get_ColumnIndex("M_ProductContainer_ID") > 0 && Get_ColumnIndex("Ref_M_ProductContainerTo_ID") > 0
+                && GetM_ProductContainer_ID() > 0 && GetRef_M_ProductContainerTo_ID() > 0 && GetM_ProductContainer_ID() == GetRef_M_ProductContainerTo_ID())
+            {
+                log.SaveError("VIS_ContainerCantSame", "");
+                return false;
+            }
+
             if (Env.Signum(GetMovementQty()) == 0 && Util.GetValueOfInt(GetTargetQty()) == 0)
             {
                 log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "MovementQty"));
