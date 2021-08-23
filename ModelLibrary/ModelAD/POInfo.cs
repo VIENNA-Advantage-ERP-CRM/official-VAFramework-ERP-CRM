@@ -251,25 +251,31 @@ namespace VAdvantage.Model
                                 _querySQL.Append(", " + lookupInfo.displayColSubQ);
                             }
                         }
+                        // VIS0008
+                        // Changed to pick date from subquery in case of Location, Locator, Attribute and Account References
                         // case for Location type of columns
                         else if (column.DisplayType == DisplayType.Location)
                         {
-                            _querySQL.Append(", " + column.ColumnName + " AS " + column.ColumnName + "_LOC");
+                            _querySQL.Append(", (SELECT l.Address1 || ', ' || l.City || ', ' || c.Name FROM C_Location l LEFT JOIN C_Country c ON (c.C_Country_ID = l.C_Country_ID) WHERE l.C_Location_ID = " + tbl.GetTableName() + "." + column.ColumnName + ") AS " + column.ColumnName + "_LOC");
                         }
                         // case for Locator type of columns
                         else if (column.DisplayType == DisplayType.Locator)
                         {
-                            _querySQL.Append(", " + column.ColumnName + " AS " + column.ColumnName + "_LTR");
+                            _querySQL.Append(", (SELECT Value FROM M_Locator WHERE M_Locator_ID = " + tbl.GetTableName() + "." + column.ColumnName + ") AS " + column.ColumnName + "_LTR");
                         }
                         // case for Attribute Set Instance & General Attribute columns
-                        else if (column.DisplayType == DisplayType.PAttribute || column.DisplayType == DisplayType.GAttribute)
+                        else if (column.DisplayType == DisplayType.PAttribute)
                         {
-                            _querySQL.Append(", " + column.ColumnName + " AS " + column.ColumnName + "_ASI");
+                            _querySQL.Append(", (SELECT Description FROM M_AttributeSetInstance WHERE M_AttributeSetInstance_ID = " + tbl.GetTableName() + "." + column.ColumnName + ") AS " + column.ColumnName + "_ASI");
+                        }
+                        else if (column.DisplayType == DisplayType.GAttribute)
+                        {
+                            _querySQL.Append(", (SELECT Description FROM C_GenAttributeSetInstance WHERE C_GenAttributeSetInstance_ID = " + tbl.GetTableName() + "." + column.ColumnName + ") AS " + column.ColumnName + "_ASI");
                         }
                         // case for Account type of columns
                         else if (column.DisplayType == DisplayType.Account)
                         {
-                            _querySQL.Append(", " + column.ColumnName + " AS " + column.ColumnName + "_ACT");
+                            _querySQL.Append(", (SELECT Description FROM C_ValidCombination WHERE C_ValidCombination_ID = " + tbl.GetTableName() + "." + column.ColumnName + ") AS " + column.ColumnName + "_ACT");
                         }
                     }
                 }
