@@ -303,6 +303,8 @@
             _PeriodBtnWrap.append(_PeriodCtrl.getBtn(0));
             _PeriodBtnWrap.append(_PeriodCtrl.getBtn(1));
             _PeriodCtrl.getControl().prop('disabled', true);
+            _PeriodCtrl.getBtn(0).prop('disabled', true);
+            _PeriodCtrl.getBtn(1).prop('disabled', true);
 
             ////columnName, mandatory, isReadOnly, isUpdateable, text, description, tableEditor
             _IncludeSOCtrl = new VIS.Controls.VCheckBox("IncludeSO", false, false, true, VIS.Msg.getMsg("IncludeSO"), null);
@@ -446,6 +448,8 @@
                 // when Include Sales Order True, then make the document type as selectable
                 _DocumentTypeCtrl.getControl().prop('disabled', _IncludeSOCtrl.getValue() ? false : true);
                 _PeriodCtrl.getControl().prop('disabled', _IncludeSOCtrl.getValue() ? false : true);
+                _PeriodCtrl.getBtn(0).prop('disabled', _IncludeSOCtrl.getValue() ? false : true);
+                _PeriodCtrl.getBtn(1).prop('disabled', _IncludeSOCtrl.getValue() ? false : true);
                 // when document type contain values, but user mark Include SO false after selection, then make it as null
                 if (!_IncludeSOCtrl.getValue()) {
                     _DocumentTypeCtrl.setValue();
