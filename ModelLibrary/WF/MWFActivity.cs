@@ -1055,7 +1055,11 @@ namespace VAdvantage.WF
                     pi.SetAD_Window_ID(_process.GetAD_Window_ID());
 
                 pi.SetAD_PInstance_ID(pInstance.GetAD_PInstance_ID());
-                return process.ProcessIt(pi, trx);
+                // VIS0060: work done to Show Message from workflow Process
+                bool ret = process.ProcessIt(pi, trx);
+                SetTextMsg(pi.GetSummary());
+                _process.SetProcessMsg(pi.GetSummary());
+                return ret;
             }
 
             /******	TODO Start Task				******/
