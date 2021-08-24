@@ -1305,6 +1305,12 @@ namespace VIS.Helpers
                     msg = pp.GetValue();
                     info = pp.GetName();
                 }
+
+                // VIS0060: Show Message from workflow Process
+                if (!String.IsNullOrEmpty(po.GetDocWFMsg()))
+                {
+                    info = po.GetDocWFMsg();
+                }
                 outt.FireIEvent = true;
                 outt.EventParam = new EventParamOut() { Msg = msg, Info = info };
             }
