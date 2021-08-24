@@ -1901,11 +1901,19 @@ namespace VAdvantage.Model
             return parent_ID;
         }
 
+        /// <summary>
+        /// Set Document Value WF Message
+        /// </summary>
+        /// <param name="msg"></param>
         public void SetDocWFMsg(string msg)
         {
             this.s_docWFMsg = msg;
         }
 
+        /// <summary>
+        /// Get Document Value WF Message
+        /// </summary>
+        /// <returns></returns>
         public string GetDocWFMsg()
         {
             return s_docWFMsg;
