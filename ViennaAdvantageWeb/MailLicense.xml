@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<License>
+  <Id>fda53368-c487-4762-8d0c-f910483333d2</Id>
+  <ProductName>Mail.dll</ProductName>
+  <SubscriptionUntil>2013-06-16</SubscriptionUntil>
+  <RegisteredTo>VIENNA IT Solutions Private Limited</RegisteredTo>
+  <LicenseType>Single developer</LicenseType>
+  <BuyerName>VIENNA IT Solutions Private Limited</BuyerName>
+  <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+    <SignedInfo>
+      <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" />
+      <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
+      <Reference URI="">
+        <Transforms>
+          <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
+        </Transforms>
+        <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+        <DigestValue>CI/QOyZ7U83DycqTbEajXQF8nAU=</DigestValue>
+      </Reference>
+    </SignedInfo>
+    <SignatureValue>jJIa8bzW/LKiXide+FN9J640zGsbg9CP/2WnDyaMwketyJsn8QlV1eCeMBPundm/4sU/WqEIcIbS9w8qhpNUUYHCZ1d/bjPhrTH0OTLrKWNJnLwl1rezj2d5aq98BiV8Pr537uL/4WvZuMfuxwFvE3h/El6DbMpCbXr7gxb518o=</SignatureValue>
+  </Signature>
+</License>
