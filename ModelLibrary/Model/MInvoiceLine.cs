@@ -5513,7 +5513,7 @@ namespace VAdvantage.Model
                         // Set Landed Cost Id and Warehouse ID on Landed Cost Allocation
                         if (lca.Get_ColumnIndex("C_LandedCost_ID") > 0)
                         {
-                            lca.SetC_LandedCost_ID(lcs[i].Get_ID());
+                            lca.SetC_LandedCost_ID(lcs.FirstOrDefault(b => b.GetM_InOut_ID() == inl.GetM_InOut_ID()).GetC_LandedCost_ID());
                         }
                         if (lca.Get_ColumnIndex("M_Warehouse_ID") > 0)
                         {
@@ -5654,7 +5654,7 @@ namespace VAdvantage.Model
                         // Set Landed Cost Id and Warehouse ID on Landed Cost Allocation
                         if (lca.Get_ColumnIndex("C_LandedCost_ID") > 0)
                         {
-                            lca.SetC_LandedCost_ID(lcs[i].Get_ID());
+                            lca.SetC_LandedCost_ID(lcs.FirstOrDefault(b => b.GetM_Movement_ID() == iml.GetM_Movement_ID()).GetC_LandedCost_ID());
                         }
                         if (lca.Get_ColumnIndex("M_Warehouse_ID") > 0)
                         {
