@@ -74,7 +74,7 @@
 
                         var colValue = getFieldValue(mField, iControl);
 
-                        if (mField.lookup && mField.lookup.gethasImageIdentifier()) {
+                        if (mField.lookup && mField.lookup.gethasImageIdentifier && mField.lookup.gethasImageIdentifier()) {
                             colValue = VIS.Utility.Util.getIdentifierDisplayVal(colValue);
 
                             var $imgCtrl = objControl["img"];
@@ -326,7 +326,7 @@
                         objctrls["img"] = $image;
 
 
-                        if (mField.lookup && mField.lookup.gethasImageIdentifier()) {
+                            if (mField.lookup && mField.lookup.gethasImageIdentifier && mField.lookup.gethasImageIdentifier()) {
 
 
                             objctrls["imgspan"] = $imageSpan;
