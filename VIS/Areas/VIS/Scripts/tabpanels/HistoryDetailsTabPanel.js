@@ -25,6 +25,8 @@
         var _curPageRecords = 0;
         var tableID = 0;
         var window_No = 0;
+        var $lblTaskMsg = null;
+        var taskClosed;
 
         function setContentHeight(fromRoot) {
             var $outerwrap = $root.closest(".vis-ad-w-p-ap-tp-outerwrap");
@@ -346,7 +348,7 @@
                             '</div>' +
                             '</div>' +
                             '<div data-recid="' + i + '" class="VIS-tp-recordInfoRight">' +
-                            ((VIS.Utility.Util.getValueOfBoolean(res[i].IsTaskClosed) == true) ? '<span data-recid="' + i + '" class="VIS-tp-taskTag">' + VIS.Msg.getMsg("Closed") + '</span>' : '') +
+                            (res[i].IsTaskClosed ? '<span data-recid="' + i + '" class="VIS-tp-taskTag">' + VIS.Msg.getMsg("Closed") + '</span>' : '') +
                             '<i data-recid="' + i + '">&nbsp;</i>' +
                             '<small data-recid="' + i + '" >By: ' + res[i].UserName + '</small>' +
                             '</div>' +
@@ -596,10 +598,10 @@
                     $htmlcontent = $('<div class="VIS-testPanel VIS-tp-borderBott" ><div class="d-flex align-items-center VIS-tp-leftIcons"><span><i class="fa fa-reply" data-mailto="' + result.To + '" data-mailcc="' + result.Cc + '" data-mailbcc="' + result.Bcc + '" id="VIS_imgReply' + window_No + '"></i></span><span><i class="fa fa-reply-all" data-mailto="' + result.To + '" data-mailcc="' + result.Cc + '" data-mailbcc="' + result.Bcc + '" id="VIS_imgReplyAll' + window_No + '"></i></span><span><i class="fa fa-share" id="VIS_imgForward' + window_No + '"></i></span></div>'
                         + '<div class= "align-items-center d-flex VIS-tp-rightIcons" ><span id="VIS_prtHistory' + window_No + '"><i class="vis vis-print" title="Print"></i></span><span><i id="VIS_prevRecord' + window_No + '" class="fa fa-arrow-left"></i></span><span><i id="VIS_nextRecord' + window_No + '" class="fa fa-arrow-right"></i></span><span class="VIS-close-btn" id="VIS_btnClose' + window_No + '"><i class="vis vis-cross"></i></span></div ></div > ');
                     $mailbodyhtml = $('<div class="VIS-tp-contentdiv" >'
-                        + '<div id="VIS-tp-comments-input' + window_No + '" class="VIS-tp-comments-input"><div class="vis-tp-emailDetailWrap"><div class="VIS-mail-user-div"><span class="VIS-mail-user-span">' + userInitials + '</span></div>'                        
+                        + '<div id="VIS-tp-comments-input' + window_No + '" class="VIS-tp-comments-input"><div class="vis-tp-emailDetailWrap"><div class="VIS-mail-user-div"><span class="VIS-mail-user-span">' + userInitials + '</span></div>'
                         + '<div class="VIS-contentTitile"><span class="VIS-mail-username">' + UserName + '</span><span id="VIS_mailSubject' + window_No + '" class="VIS-mail-subject VIS-tp-recordLabels">' + result.Title
                         + '</span><div class="VIS-mail-content"><div class="VIS-mail-from"><span class="VIS-tp-recordLabels">' + VIS.Msg.getMsg("From") + ': </span><span style="word-break: break-word;">'
-                        + result.From + '</span></div><small>'+ new Date(result.Date).toLocaleString() + '</small></div><span class="VIS-mail-to"><span class="VIS-tp-recordLabels">' + VIS.Msg.getMsg("To") + ': </span>' + mailtoddlhtml + '</span></div></div>'
+                        + result.From + '</span></div><small>' + new Date(result.Date).toLocaleString() + '</small></div><span class="VIS-mail-to"><span class="VIS-tp-recordLabels">' + VIS.Msg.getMsg("To") + ': </span>' + mailtoddlhtml + '</span></div></div>'
                         + '<div id="VIS_mailBody' + window_No + '" class="VIS-mail-body" >' + result.Detail + '</div></div >'
                         + '<div id="VIS_viewMoreComments' + window_No + '" style="display:none;" class="VIS-tp-commentsPanel"></div>'
                         + '<div id="VIS_commentsdata' + window_No + '"><div class="pr-0 m-0 VIS-tp-commentsField d-flex flex-column w-100"><p id="VIS_viewAllComments' + window_No + '" class="vis-attachhistory-view-comments" > ' + VIS.Msg.getMsg('ViewMoreComments')
@@ -981,7 +983,7 @@
                     + '</div>'
                     + '</div>');
 
-                $footerhtml = $('<div id="ViewMoreComments' + window_No + '" style="display:none;" class="VIS-tp-commentsPanel"></div><div id="VIS_commentsdata' + window_No + '"><div class="pr-0 m-0 VIS-tp-commentsField d-flex flex-column w-100"><p id="VIS_viewAllComments' + window_No + '" class="vis-attachhistory-view-comments" > ' + VIS.Msg.getMsg('ViewMoreComments') + '</p><div class="vis-attachhistory-comments vis-feedMessage m-0"><input id="VIS_txtComments' + window_No + '" type="text" placeholder="' + VIS.Msg.getMsg('VIS_TypeComment') + '"></input><span id="VIS_btnComments' + window_No + '" class="vis-attachhistory-comment-icon vis vis-sms"></span></div></div>'
+                $footerhtml = $('<div id="ViewMoreComments' + window_No + '" style="display:none;" class="VIS-tp-commentsPanel"></div><div id="VIS_commentsdata' + window_No + '"><div class="pr-0 m-0 VIS-tp-commentsField d-flex flex-column w-100"><p id="VIS_viewAllComments' + window_No + '" class="vis-attachhistory-view-comments" > ' + VIS.Msg.getMsg('ViewMoreComments') + '</p><div class="vis-attachhistory-comments vis-feedMessage m-0"><input id="VIS_txtComments' + window_No + '" type="text" placeholder="' + VIS.Msg.getMsg('TypeComment') + '"></input><span id="VIS_btnComments' + window_No + '" class="vis-attachhistory-comment-icon vis vis-sms"></span></div></div>'
                     + '</div>');
 
                 var $contenthtml = $('<div class="VIS-mail-header VIS-tp-recordDetail"></div>');
@@ -1048,6 +1050,7 @@
                     if (result != null) {
                         var strApp = "";
                         var attInfo = result.AttendeeInfo;
+                        taskClosed = result.IsTaskClosed;
                         _mattachID = VIS.Utility.Util.getValueOfString(result.AppointmentsInfo_ID);
                         if (attInfo != null && attInfo != "") {
                             names = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "AttachmentHistory/GetUser", { "UserQry": attInfo }, null);
@@ -1099,7 +1102,7 @@
                         $taskhtml = $('<div class="VIS-tp-contentdiv VIS-tp-contentPanel">'
                             + '<div id="VIS-tp-comments-input' + window_No + '" class="VIS-tp-comments-input">'
                             + '<div class="VIS-tp-taskcontTag" >'
-                            + ((VIS.Utility.Util.getValueOfBoolean(result.IsTaskClosed) == true) ? '<span class="VIS-tp-taskTag">' + VIS.Msg.getMsg("Closed") + '</span>' : '')
+                            + (result.IsTaskClosed ? '<span class="VIS-tp-taskTag">' + VIS.Msg.getMsg("Closed") + '</span>' : '')
                             + '<table height="50px" width="100%">'
                             + '<tr class="VIS-call-col-header"><td>' + VIS.Msg.getMsg("Priority") + '</td><td>' + VIS.Msg.getMsg("Status") + '</td></tr>'
                             + '<tr class="VIS-call-col-data"><td style="' + prtyTextColor + '">' + prtyText + '</td><td>' + (VIS.Utility.Util.getValueOfInt(result.TaskStatus) * 10) + '%</td></tr>'
@@ -1111,17 +1114,23 @@
                             + '<tr class="VIS-call-col-data"><td colspan="2">' + result.Result + '</td></tr>'
                             + '<tr class="VIS-call-col-header"><td colspan="2">' + VIS.Msg.getMsg("Description") + '</td></tr>'
                             + '<tr class="VIS-call-col-data"><td colspan="2">' + result.Description + '</td></tr>'
+                            + '<tr><td><div class="vis-float-left" style="margin-right:10px;"><input id="VIS_chkTaskComplete' + window_No
+                            + '" value="1" type="checkbox" class="vis-float-left" style="margin-top:5px;"><label id="VIS_lblTaskComplete' + window_No
+                            + '" for="chkTaskComplete" class="wsp-task-from-inputLabel vis-float-left" style="margin-left:5px;">' + VIS.Msg.getMsg("Closed")
+                            + '</label></div></td><td><div class="vis-float-right"><a href="javascript:void(0)" id="VIS_hlnktaskdone' + window_No
+                            + '" class="vis-btn vis-btn-done vis-icon-doneButton vis-float-right"> <span class="vis-btn-ico vis-btn-done-bg vis-btn-done-border"></span>'
+                            + VIS.Msg.getMsg("Done") + '</a></div></td></tr>'
                             + '</table>'
                             + '</div>'
                             + '</div>'
                             + '<div id="VIS_viewMoreComments' + window_No + '" style="display:none;" class="VIS-tp-commentsPanel"></div>'
-                            + '<div id="VIS_commentsdata' + window_No + '"><div class="pr-0 m-0 VIS-tp-commentsField d-flex flex-column w-100"><p id="VIS_viewAllComments' + window_No + '" class="vis-attachhistory-view-comments" > ' + VIS.Msg.getMsg('ViewMoreComments') + '</p><div class="vis-attachhistory-comments vis-feedMessage m-0"><input id="VIS_txtComments' + window_No + '" type="text" placeholder="' + VIS.Msg.getMsg('VIS_TypeComment') + '"></input><span id="VIS_btnComments' + window_No + '" class="vis-attachhistory-comment-icon vis vis-sms"></span></div></div>'
+                            + '<div id="VIS_commentsdata' + window_No + '"><div class="pr-0 m-0 VIS-tp-commentsField d-flex flex-column w-100"><p id="VIS_viewAllComments' + window_No + '" class="vis-attachhistory-view-comments" > ' + VIS.Msg.getMsg('ViewMoreComments') + '</p><div class="vis-attachhistory-comments vis-feedMessage m-0"><input id="VIS_txtComments' + window_No + '" type="text" placeholder="' + VIS.Msg.getMsg('TypeComment') + '"></input><span id="VIS_btnComments' + window_No + '" class="vis-attachhistory-comment-icon vis vis-sms"></span></div></div>'
                             + '</div>');
 
                         $printhtml = $('<div class="VIS-tp-contentdiv VIS-tp-contentPanel">'
                             + '<div id="VIS-tp-comments-input' + window_No + '" class="VIS-tp-comments-input">'
                             + '<div class="VIS-tp-taskcontTag" >'
-                            + ((VIS.Utility.Util.getValueOfBoolean(result.IsTaskClosed) == true) ? '<span class="VIS-tp-taskTag">' + VIS.Msg.getMsg("Closed") + '</span>' : '')
+                            + (result.IsTaskClosed ? '<span class="VIS-tp-taskTag">' + VIS.Msg.getMsg("Closed") + '</span>' : '')
                             + '<table height="50px" width="100%">'
                             + '<tr class="VIS-call-col-header"><td>' + VIS.Msg.getMsg("Priority") + '</td><td>' + VIS.Msg.getMsg("Status") + '</td></tr>'
                             + '<tr class="VIS-call-col-data"><td style="' + prtyTextColor + '">' + result.Priority + '</td><td>' + (VIS.Utility.Util.getValueOfInt(result.TaskStatus) * 10) + '%</td></tr>'
@@ -1137,7 +1146,7 @@
                             + '</div>'
                             + '</div>');
 
-                        $footerhtml = $('<div id="VIS_viewMoreComments' + window_No + '" style="display:none;" class="VIS-tp-commentsPanel"></div><div id="VIS_commentsdata' + window_No + '"><div class="pr-0 m-0 VIS-tp-commentsField d-flex flex-column w-100"><p id="VIS_viewAllComments' + window_No + '" class="vis-attachhistory-view-comments" > ' + VIS.Msg.getMsg('ViewMoreComments') + '</p><div class="vis-attachhistory-comments vis-feedMessage m-0"><input id="VIS_txtComments' + window_No + '" type="text" placeholder="' + VIS.Msg.getMsg('VIS_TypeComment') + '"></input><span id="VIS_btnComments' + window_No + '" class="vis-attachhistory-comment-icon vis vis-sms"></span></div></div>'
+                        $footerhtml = $('<div id="VIS_viewMoreComments' + window_No + '" style="display:none;" class="VIS-tp-commentsPanel"></div><div id="VIS_commentsdata' + window_No + '"><div class="pr-0 m-0 VIS-tp-commentsField d-flex flex-column w-100"><p id="VIS_viewAllComments' + window_No + '" class="vis-attachhistory-view-comments" > ' + VIS.Msg.getMsg('ViewMoreComments') + '</p><div class="vis-attachhistory-comments vis-feedMessage m-0"><input id="VIS_txtComments' + window_No + '" type="text" placeholder="' + VIS.Msg.getMsg('TypeComment') + '"></input><span id="VIS_btnComments' + window_No + '" class="vis-attachhistory-comment-icon vis vis-sms"></span></div></div>'
                             + '</div>');
 
                         var $contenthtml = $('<div class="VIS-mail-header VIS-tp-recordDetail"></div>');
@@ -1184,6 +1193,74 @@
                         $('#VIS_btnClose' + window_No).click(function () {
                             $('#VIS_recordDetail' + window_No).hide();
                             setContentHeight();
+                        });
+
+                        //changes done by Emp Id:187
+                        //After clicking on div if the task is closed it need to hide closed checkbox and Done 
+                        if (taskClosed) {
+                            $taskhtml.find("#VIS_chkTaskComplete" + window_No).hide();
+                            $taskhtml.find("#VIS_hlnktaskdone" + window_No).hide();
+                            $taskhtml.find("#VIS_lblTaskComplete" + window_No).hide();
+
+                        }
+                        // Task is updated when task is closed from tab panel
+                        $taskhtml.find("#VIS_hlnktaskdone" + window_No).on("click", function (e) {
+
+                            if ($lblTaskMsg != null)
+                                $lblTaskMsg.empty();
+                            var t_title = result.Subject;
+                            var t_ctgry = result.CategoryName;
+                            var t_sdatetime = result.StartDate;
+                            var t_edatetime = result.EndDate;
+                            if (t_edatetime < t_sdatetime) {
+                                $lblTaskMsg.append(VIS.Msg.getMsg("WSP_EndDateShouldBeGreaterThanStartDate"));
+                                return;
+                            }
+                            var t_desc = result.Description;
+                            var t_result = result.Result;
+                            var t_prtykey = result.PriorityKey;
+                            var t_prty = result.Priority;
+                            var t_sts = parseInt(result.TaskStatus);
+                            var t_ststext = result.TaskStatus;
+                            var t_isClosed = "";
+                            var $chkTaskCmplte = $taskhtml.find("#VIS_chkTaskComplete" + window_No).prop("checked", true);;
+                            if ($chkTaskCmplte.is(":checked")) {
+                                t_isClosed = true;
+                            }
+                            else {
+                                t_isClosed = false;
+                            }
+                            var models = [];
+                            var task_ID = result.AppointmentsInfo_ID;
+                            var t_cntact_id = [];
+                            WspSharedUser = [];
+                            var Ad_UserID = 0;
+                            var taskusrID = result.UserID;
+                            if (taskusrID != null && taskusrID != 0) {
+                                Ad_UserID = taskusrID;
+                            }
+                            else {
+                                Ad_UserID = VIS.context.getAD_User_ID();
+                            }
+                            models.push({ AppointmentsInfo_ID: task_ID, Title: t_title, Description: t_desc, Start: t_sdatetime, End: t_edatetime, Categories: t_ctgry, TaskStatus: t_sts, PriorityKey: t_prtykey, Ad_User_ID: Ad_UserID, Contacts: t_cntact_id, ContactsInfo: WspSharedUser, isClosed: t_isClosed, Result: t_result });
+                            if (t_title != "" && t_title.trim().length > 0) {
+                                $.ajax({
+                                    url: VIS.Application.contextUrl + 'WSP/Home/UpdateJson_Task',
+                                    type: "POST",
+                                    datatype: "JSON",
+                                    contentType: "application/json; charset=utf-8",
+                                    async: true,
+                                    //data: { models: models },
+                                    data: JSON.stringify({ models: models }),
+                                    success: function (result) {
+                                        var data = JSON.parse(result);
+                                        VIS.ADialog.info("WSP_TaskUpdated", true, null);
+                                        $taskhtml.find("#VIS_chkTaskComplete" + window_No).hide();
+                                        $taskhtml.find("#VIS_hlnktaskdone" + window_No).hide();
+                                        $taskhtml.find("#VIS_lblTaskComplete" + window_No).hide();
+                                    }
+                                });
+                            }
                         });
                     }
                 },
@@ -1410,12 +1487,6 @@
                     });
                 }
             });
-        };
-
-        function printData(e) {
-            if ($rootcontent != undefined && $rootcontent.is(':visible') == true) {
-                //finalPrint($('#contentDiv').html());
-            }
         };
 
         function finalPrint(html) {
