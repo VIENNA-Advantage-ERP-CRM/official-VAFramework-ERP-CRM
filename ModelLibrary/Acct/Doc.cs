@@ -266,7 +266,7 @@ namespace VAdvantage.Acct
                     //for posting set Window_ID at doc
                     if (doc.GetAD_Window_ID() < 0)
                     {
-                        doc.SetAD_Window_ID(GetWindowID(AD_Table_ID, Record_ID, TableName));
+                        doc.SetAD_Window_ID(GetWindowID(AD_Table_ID, Record_ID, TableName,  trxName));
                     }
                    
                 }
@@ -322,9 +322,9 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="AD_Table_ID">Table_ID of Documents</param>
         /// <param name="Record_ID">Recordto be posted</param>
-        /// <param name="TableName">Table Name of ocument</param>
+        /// <param name="TableName">Table Name of Document</param>
         /// <returns>AD_Window_ID</returns>
-        public static int GetWindowID(int AD_Table_ID, int Record_ID, string TableName)
+        public static int GetWindowID(int AD_Table_ID, int Record_ID, string TableName ,Trx trxName)
         {
             string sql = @"SELECT AD_Tab.AD_Window_ID FROM AD_Tab ";
             
@@ -337,7 +337,7 @@ namespace VAdvantage.Acct
             {
                 sql += "WHERE AD_Tab.AD_Table_ID = " + AD_Table_ID;
             }
-            return Util.GetValueOfInt(DB.ExecuteScalar(sql));
+            return Util.GetValueOfInt(DB.ExecuteScalar(sql, null, trxName));
         }
 
 
