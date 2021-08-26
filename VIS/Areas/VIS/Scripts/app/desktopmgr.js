@@ -89,6 +89,11 @@
                         VIS.FavouriteHelper.showOverlay($target); // show menu item's options
                         return;
                     }
+                    if ($target.data('summary') == "Y") {
+                        $('.vis-navmenuItems-Container').hide();
+                        $('#Menu' + $target.data('value')).show();
+                        return;
+                    }
                     startMenuAction($target.data('action'), $target.data('actionid')); //start action
                     return;
                 }
