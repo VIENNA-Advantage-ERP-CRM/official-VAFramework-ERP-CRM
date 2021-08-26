@@ -264,7 +264,11 @@ namespace VAdvantage.Acct
                 else
                 {
                     //for posting set Window_ID at doc
-                    doc.SetAD_Window_ID(GetWindowID(AD_Table_ID,Record_ID,TableName));
+                    if (doc.GetAD_Window_ID() < 0)
+                    {
+                        doc.SetAD_Window_ID(GetWindowID(AD_Table_ID, Record_ID, TableName));
+                    }
+                   
                 }
                 dt = null;
             }
