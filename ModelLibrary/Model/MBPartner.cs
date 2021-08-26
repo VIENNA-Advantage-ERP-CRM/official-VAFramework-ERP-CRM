@@ -1236,6 +1236,29 @@ namespace VAdvantage.Model
                     }
                 }
             }
+
+            // If NextStepBy value not provided or neither NextStepBy nor C_Followupdate has changed, no task will be created.
+            if (Env.IsModuleInstalled("VA061_"))
+            {
+                int wf_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Workflow_ID FROM AD_Workflow WHERE WorkflowType='V' AND IsActive='Y' AND AD_Table_ID="
+                    + Get_Table_ID(), null, Get_Trx()));
+                if (wf_ID > 0 && Get_Value("VA061_NextStepBy") != null && (Is_ValueChanged("VA061_NextStepBy") || Is_ValueChanged("C_Followupdate")))
+                {
+                    // Ensure that VA061_NextStep has value
+                    if (string.IsNullOrEmpty(Util.GetValueOfString(Get_Value("VA061_NextStep"))))
+                    {
+                        log.SaveWarning("VA061_NextStepMustHaveValue", "");
+                        return false;
+                    }
+
+                    // Ensure that FollowUp On has value
+                    if (string.IsNullOrEmpty(Util.GetValueOfString(Get_Value("C_Followupdate"))))
+                    {
+                        log.SaveWarning("VA061_FollowupdateMustHaveValue", "");
+                        return false;
+                    }
+                }
+            }
             return true;
         }
 
