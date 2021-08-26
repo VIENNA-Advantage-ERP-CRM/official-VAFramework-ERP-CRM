@@ -1309,6 +1309,7 @@ namespace VIS.Helpers
                 }
                 else if (!String.IsNullOrEmpty(po.GetDocWFMsg()))
                 {
+                    msg = "";
                     info = po.GetDocWFMsg();
                 }
                 outt.FireIEvent = true;
