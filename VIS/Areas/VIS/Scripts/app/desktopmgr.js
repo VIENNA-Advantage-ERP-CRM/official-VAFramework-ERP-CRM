@@ -91,6 +91,8 @@
                     }
                     if ($target.data('summary') == "Y") {
                         $('.vis-navmenuItems-Container').hide();
+                        $target.parent().siblings().removeClass("vis-navSelected");
+                        $target.parent().addClass("vis-navSelected");
                         $('#Menu' + $target.data('value')).show();
                         return;
                     }
@@ -100,7 +102,7 @@
             };
 
             // task bar click event
-            $shortcutUL.on(VIS.Events.onClick,"LI", function (event) {
+            $shortcutUL.on(VIS.Events.onClick, "LI", function (event) {
                 event.preventDefault();
                 //if (VIS.context.getContext("#DisableMenu") == 'Y') {
                 //    return;
@@ -117,7 +119,7 @@
                 if (event.target.nodeName === "LI") {
                     $c = $(event.target);
                 }
-                
+
                 else if (event.target.parentNode.nodeName === "LI") {
                     $c = $(event.target.parentNode);
                 }
@@ -305,29 +307,28 @@
 
         /*set height of section (main container) to window size */
         function adjustHeight() {
-                var height = 0;
-                if ((VIS.Application.isMobile || VIS.Application.isIOS) && document.documentElement)
-                {
-                    height = document.documentElement.clientHeight;
-                }
-                else {
-                    height = window.innerHeight;
-                }
-                ////$section.css('height', height - 22);
+            var height = 0;
+            if ((VIS.Application.isMobile || VIS.Application.isIOS) && document.documentElement) {
+                height = document.documentElement.clientHeight;
+            }
+            else {
+                height = window.innerHeight;
+            }
+            ////$section.css('height', height - 22);
             height = height - 23;
             if (VIS.Utility.Util.getValueOfInt(VIS.context.ctx["#FRAMEWORK_VERSION"]) < 2)
                 height = height - 43;
 
-                 VIS.Env.setScreenHeight(height);
-                 document.documentElement.style.setProperty('--vis-screen-height', (height * 0.01) +'px');
-                if (VIS.viewManager)
-                    VIS.viewManager.sizeChanged(height, window.innerwidth);
+            VIS.Env.setScreenHeight(height);
+            document.documentElement.style.setProperty('--vis-screen-height', (height * 0.01) + 'px');
+            if (VIS.viewManager)
+                VIS.viewManager.sizeChanged(height, window.innerwidth);
             // Resize event for calling interface
             //if (window.VA048 && VA048.Apps.GetCallingInstance(false))
             //    VA048.Apps.GetCallingInstance(false).resize();
         };
 
-        
+
 
         /*
            start menu action
@@ -358,19 +359,19 @@
                 curSelTaskBarItem = itm.addClass('vis-app-f-selected');
                 itm = null;
             }
-        }; 
+        };
 
         function activateTaskBarItemUsingID(item) {
             var nId = item.data('wid');
             activateTaskBarItem($shortcutUL.find("LI#" + nId));
         };
 
-    /*
-       close active view
-       and get container by passed name or id to set as current active view
-     *
-     * @param  name name or id of view
-     */
+        /*
+           close active view
+           and get container by passed name or id to set as current active view
+         *
+         * @param  name name or id of view
+         */
         function closeFrame(ele) {
             if (viewsZIndexCache[viewsZIndexCache.length - 1] == ele[0].id)
                 VIS.viewManager.closeFrame(ele[0].id);
@@ -427,7 +428,7 @@
         function searchAndStartAction(txt, list) {
             if (txt === "" || txt.length < 1)
                 return;
-            for (var i = 0; i < list.options.length ; i++) {
+            for (var i = 0; i < list.options.length; i++) {
                 if (list.options[i].value === txt) { //matched
                     var $option = $(list.options[i]);
                     startMenuAction($option.data("action"), $option.data("actionid"));
@@ -455,12 +456,10 @@
            - set active view to home page
         */
         function setAndLoadHomePage() {
-            if (!VIS.MRole.getIsDisableMenu() ||( VIS.MRole.getIsDisableMenu() && VIS.MRole.getHomePage() == 0))
-            {
+            if (!VIS.MRole.getIsDisableMenu() || (VIS.MRole.getIsDisableMenu() && VIS.MRole.getHomePage() == 0)) {
                 renderHomePage();
             }
-            if (VIS.MRole.getIsDisableMenu())
-            {
+            if (VIS.MRole.getIsDisableMenu()) {
                 $('.vis-topMenu').hide();
                 $('.vis-menuHeaderLogo').show();
             }
@@ -470,8 +469,7 @@
             }
         };
 
-        function renderHomePage()
-        {
+        function renderHomePage() {
             $('#vis_lhome').show();
             dynamicViewCache['vis_lhome'] = $home;
             currentActiveView = $home.show();
@@ -791,9 +789,9 @@
             }).success(function (result) {
                 fillCombo(combo, result.data);
             })
-            .fail(function (result) {
-                alert(result);
-            });
+                .fail(function (result) {
+                    alert(result);
+                });
         };
 
         /* handle combobox change event
@@ -953,6 +951,8 @@
         var filteredMenuHtml = "";
         var filterA = null;
         var isVisible = false;
+        var selectedMenu = '';
+        var _menuTree = null;
 
         //var main = $('<div class="vis-wakeup-main" >').hide(); 
         var root = $('<div class="vis-dialog vis-filter-dialog">');
@@ -965,13 +965,14 @@
 
             // create UI
             root.html('<input type="radio" name="filter" id="vis_filter_radio_1" value="A" checked style="margin-bottom:5px;margin:1px;" /><label for="vis_filter_radio_1">' + VIS.Msg.getMsg("All") + '</label><br>' +
-                      '<input type="radio" name="filter" id="vis_filter_radio_2" value="W" style="margin-bottom:5px;margin:1px;" /><label for="vis_filter_radio_2">' + VIS.Msg.getMsg("Window") + '</label><br>' +
-                      '<input type="radio" name="filter" id="vis_filter_radio_3" value="X" style="margin-bottom:5px;margin:1px;"/><label for="vis_filter_radio_3">' + VIS.Msg.getMsg("Form") + '</label><br>' +
-                      '<input type="radio" name="filter" id="vis_filter_radio_4" value="P" style="margin-bottom:5px;margin:1px;"/><label for="vis_filter_radio_4">' + VIS.Msg.getMsg("Process") + '</label><br>' +
-                      '<input type="radio" name="filter" id="vis_filter_radio_5" value="R" style="margin-bottom:20px;margin:1px;"/><label for="vis_filter_radio_5">' + VIS.Msg.getMsg("Report") + '</label><br/>' +
-                      '<input type="button" name="filter" value=' + VIS.Msg.getMsg("Filter") + '></input>');
+                '<input type="radio" name="filter" id="vis_filter_radio_2" value="W" style="margin-bottom:5px;margin:1px;" /><label for="vis_filter_radio_2">' + VIS.Msg.getMsg("Window") + '</label><br>' +
+                '<input type="radio" name="filter" id="vis_filter_radio_3" value="X" style="margin-bottom:5px;margin:1px;"/><label for="vis_filter_radio_3">' + VIS.Msg.getMsg("Form") + '</label><br>' +
+                '<input type="radio" name="filter" id="vis_filter_radio_4" value="P" style="margin-bottom:5px;margin:1px;"/><label for="vis_filter_radio_4">' + VIS.Msg.getMsg("Process") + '</label><br>' +
+                '<input type="radio" name="filter" id="vis_filter_radio_5" value="R" style="margin-bottom:20px;margin:1px;"/><label for="vis_filter_radio_5">' + VIS.Msg.getMsg("Report") + '</label><br/>' +
+                '<input type="button" name="filter" value=' + VIS.Msg.getMsg("Filter") + '></input>');
 
-            menuUL = menuTree.find(">ul"); //menu UL element
+            menuUL = menuTree.find(".vis-navMainContent"); //menu UL element
+            _menuTree = menuTree;
             var options = [], itm = null;
             menuUL.find('li').each(function () {
                 itm = $(this);
@@ -979,11 +980,12 @@
                     options.push(itm[0].outerHTML);
                 }
             });
-
+            selectedMenu = $(menuTree.find(".vis-navSelected a")[0]).data("value");
+            $(menuTree.find(".vis-navSelected")[0]).removeClass('vis-navSelected');
             menuHtml = menuUL.html(); //all html tree string
-            filteredMenuHtml = options.join(''); // all leaf nodes
-            options.length = 0;
-            options = null;
+            filteredMenuHtml = options; // all leaf nodes
+            //options.length = 0;
+            //options = null;
             filterA = filterMenuA; // event invoker
             $('body').append(root); // append div to body
             events(); // bind events
@@ -997,6 +999,9 @@
             root.on("click", "input[type=button]", function (e) {
                 e.stopPropagation();
                 var rd = root.find("input[type=radio]:checked").val();
+                if (_menuTree.find(".vis-navSelected a").length > 0)
+                    selectedMenu = $(_menuTree.find(".vis-navSelected a")[0]).data("value");
+                $(_menuTree.find(".vis-navSelected")[0]).removeClass('vis-navSelected');
                 filterMenu(rd); // menu filter
                 closePopup(); // close popup
             });
@@ -1009,10 +1014,43 @@
             if (action === "A") { // all tree
                 menuUL.empty();
                 menuUL.html(menuHtml);
+                menuUL.find('li').show(); // hide all
+                _menuTree.find('[data-value="' + selectedMenu + '"]').trigger('click');
             }
             else {
                 menuUL.empty();
-                menuUL.html(filteredMenuHtml); // all leaf nodes
+
+                var $mainContainer = $('<div class="vis-navmenuItems-Container">');
+                var navcolwrap1 = $('<div class="vis-navColWrap">');
+                var navcolwrap2 = $('<div class="vis-navColWrap">');
+                var navcolwrap3 = $('<div class="vis-navColWrap">');
+                $mainContainer.append(filteredMenuHtml);
+                $mainContainer.find('li').data('hide', 'Y');
+                $mainContainer.find('li > a[data-action="' + action + '"]').parent().data('hide', 'N');
+                filteredMenuHtml = $mainContainer.find('li');
+
+                var j = 1;
+                for (var i = 0; i < filteredMenuHtml.length; i++) {
+                    if ($(filteredMenuHtml[i]).data('hide') == 'Y')
+                        continue;
+                    if (j==3) {
+                        navcolwrap3.append(filteredMenuHtml[i]);
+                        j = 1;
+                    }
+                    else if (j==2) {
+                        navcolwrap2.append(filteredMenuHtml[i]);
+                        j = 3;
+                    } 
+                    else {
+                        navcolwrap1.append(filteredMenuHtml[i]);
+                        j = 2;
+                    }
+                }
+                $mainContainer.empty();
+                $mainContainer.append(navcolwrap1).append(navcolwrap2).append(navcolwrap3);
+
+
+                menuUL.html($mainContainer.html()); // all leaf nodes
                 menuUL.find('li').hide(); // hide all
 
                 menuUL.find('li > a[data-action="' + action + '"]').parent().show(); // show only match action
@@ -1051,15 +1089,15 @@
     var wakeupDialog = function () {
         // ui root
         var root = $('<div class="vis-wakeup-main"></div>'
-                    + '<div class="vis-wakeup-outerwrap">'
-                    + '<div class="vis-wakeup-content">'
-                    + '<div class="vis-wakeup-headsec">'
-                    + '</div>'
-                    + '<div class="vis-wakeup-datawrp">'
-                    + '<strong>Oh no! Something went wrong</strong>'
-                    + '<div class="vis-wakeup-text">'
-                    //+ VIS.Msg.getMsg('WakeupText')
-                    + '</div><button>Refresh</button></div></div></div></div>');
+            + '<div class="vis-wakeup-outerwrap">'
+            + '<div class="vis-wakeup-content">'
+            + '<div class="vis-wakeup-headsec">'
+            + '</div>'
+            + '<div class="vis-wakeup-datawrp">'
+            + '<strong>Oh no! Something went wrong</strong>'
+            + '<div class="vis-wakeup-text">'
+            //+ VIS.Msg.getMsg('WakeupText')
+            + '</div><button>Refresh</button></div></div></div></div>');
 
         var btn = root.find('button');
         var imgS = root.find('.vis-wakeup-sleep');
@@ -1091,18 +1129,17 @@
     /**
     * Start Server sent events
     */
-    var startToastr = function ()
-    {
-        var source = new EventSource('JsonData/MsgForToastr?varificationToken='+$("#vis_antiForgeryToken").val());
+    var startToastr = function () {
+        var source = new EventSource('JsonData/MsgForToastr?varificationToken=' + $("#vis_antiForgeryToken").val());
         source.onmessage = function (e) {
             var returnedItem = JSON.parse(e.data);
             if (returnedItem.message && returnedItem.message.length > 0) {
-                toastr.success(returnedItem.message, '', { timeOut: 4000, "positionClass": "toast-top-center","closeButton": true, });
+                toastr.success(returnedItem.message, '', { timeOut: 4000, "positionClass": "toast-top-center", "closeButton": true, });
             }
         };
     };
 
-  
+
 
     /*
        global ajax error handler 

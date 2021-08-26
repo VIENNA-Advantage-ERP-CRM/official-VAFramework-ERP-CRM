@@ -1154,14 +1154,15 @@ html[dir="rtl"] .vis-auth-dialog
     text-decoration: line-through;
 }
 .vis-filter-dialog {
-    top: 132px;
-    left: 200px;
+    top: 85px;
+    left: auto;
     padding: 10px;
     display: none;
     color: rgba(var(--v-c-on-secondary), 1);
     box-shadow: 0px 2px 3px 1px rgba(var(--v-c-on-secondary), 0.18);
     border: 1px solid rgba(var(--v-c-primary), .15);
     min-width: 150px;
+    right: 320px;
 }
 .vis-filter-dialog label {
     font-weight: normal;
@@ -1177,4 +1178,7 @@ html[dir="rtl"] .vis-auth-dialog
 
 .vis-css-treeview ul li input[type="checkbox"] {
     position: absolute;
+}
+.vis-navSearchWrap .input-group-text i {
+    color: rgba(var(--v-c-on-primary), 1);
 }

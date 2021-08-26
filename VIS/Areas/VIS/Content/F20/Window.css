@@ -2136,7 +2136,7 @@ a:hover {
 
 .vis-navMainWrap {
     width: 80vw;
-    height: 95vh;
+    height: 87vh;
     box-shadow: 2px 2px 5px 2px rgb(0 0 0 / 10%);
 }
 
@@ -2208,10 +2208,21 @@ a:hover {
     width: 250px;
     background: rgba(var(--v-c-secondary), .3);
     height: 100%;
+    overflow: auto;
 }
 
-.vis-navContentWrap {
-    height: 100%;
+.vis-navMainWrap > .vis-navContentWrap {
+    height: calc(100% - 43px);
+    width: 100%;
+}
+
+.vis-navList {
+    display: flex;
+    align-items: center;
+}
+
+.vis-navmenuItems-Container .vis-navList a i {
+    padding-right: .5rem;
 }
 
 .vis-navList a {
@@ -2221,10 +2232,13 @@ a:hover {
     align-items: center;
     flex: 1;
 }
+.vis-navLeftWrap .vis-navList a {
+    justify-content: space-between;
+}
 
-    .vis-navList a span {
-        flex: 1;
-    }
+.vis-navList a span {
+    flex: 1;
+}
 
     .vis-navList a i:first-child,
     .vis-navLeftWrap a i {
@@ -2236,13 +2250,18 @@ a:hover {
     padding-top: .625rem;
     flex: 1;
 }
-
+.vis-navColWrap > .vis-navSubMenu:first-child {
+    margin-top: .5rem;
+}
+.vis-navColWrap > .vis-navSubMenu {
+    padding-left: 0;
+}
 .vis-navDataHead {
     display: flex;
     align-items: center;
     font-size: .875rem;
     color: rgba(var(--v-c-on-secondary), 1);
-    margin-bottom: 1rem;
+    margin-bottom: .5rem;
     font-weight: 600;
 }
 
@@ -2274,6 +2293,8 @@ a:hover {
 .vis-navMainContent {
     flex: 1;
     padding-right: .5rem;
+    overflow: auto;
+    max-width: calc(100% - 258px);
 }
 
 .vis-navDataWrap ul {
@@ -2296,9 +2317,15 @@ a:hover {
 .vis-navDataWrap .vis-navList:not(.vis-navSelected) a,
 .vis-navList .dropdown-toggle {
     opacity: .8;
+    font-size: 1rem;
+}
+
+.vis-navList span {
+    padding: 0 .5rem;
 }
 
 .vis-navSubMenu {
+    margin-top: 1rem;
     padding-left: .5rem;
 }
 
@@ -2306,4 +2333,16 @@ a:hover {
 display:flex;
 flex:1;
 
+}
+
+.vis-navmenuItems-Container .vis-navList {
+    border-left: 3px solid rgba(var(--v-c-on-secondary), .1);
+}
+.vis-navMainContent .vis-navList:hover {
+    border-color: rgba(var(--v-c-primary), 1);
+    color: rgba(var(--v-c-primary), 1);
+}
+.vis-navContentWrap,
+.vis-navMainContent {
+    width: 100%;
 }
