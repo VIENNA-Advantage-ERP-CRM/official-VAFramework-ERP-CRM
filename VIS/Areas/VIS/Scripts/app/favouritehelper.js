@@ -36,7 +36,7 @@
             action = btn.data('action');
             actionid = btn.data('actionid');
             nodeName = btn.data('name');
-            isFav = btn.data('isfav');
+            isFav = btn.attr('data-isfav');
             if (!isloaded) {
                 initialize();
                 isloaded = true;
@@ -64,16 +64,17 @@
                 btn.find('span').remove();
                 var otherSpan = $('#vis_divTree').find('[data-value="' + btn.data('value') + '"]');
                 if (otherSpan && otherSpan.length > 0) {
-                    if ($(otherSpan[1]).find('span.fa.fa-star').length == 0) {
-                        $(otherSpan[1]).data('isfav', 'no');
+                    if ($(otherSpan[1]).find('span.fa.fa-star').length > 0) {
+                        $(otherSpan[1]).attr('data-isfav', 'no');
                         $(otherSpan[1]).find('span.fa.fa-star').remove();
                     }
-                    else {
-                        $(otherSpan[3]).data('isfav', 'no');
+
+                    if ($(otherSpan[3])) {
+                        $(otherSpan[3]).attr('data-isfav', 'no');
                         $(otherSpan[3]).find('span.fa.fa-star').remove();
                     }
                 }
-                btn.data('isfav', 'no');
+                btn.attr('data-isfav', 'no');
                 removeFav(nodeID);
                 VIS.favMgr.removeFavourite(nodeID);
             }
@@ -87,18 +88,18 @@
                 barNode.Name = nodeName;// $(aAction).parent().children(0).text();
                 //btn.removeClass("vis-favitmunchecked");
                 //btn.addClass("vis-favitmchecked");
-                btn.data('isfav', 'yes');
+                btn.attr('data-isfav', 'yes');
                 btn.prepend('<span class="fa fa-star"></span>');
                 var otherSpan = $('#vis_divTree').find('[data-value="' + btn.data('value') + '"]');
                 if (otherSpan && otherSpan.length > 2) {
-                   
+
                     if ($(otherSpan[1]).find('span.fa.fa-star').length == 0) {
                         $(otherSpan[1]).prepend('<span class="fa fa-star"></span>');
-                        $(otherSpan[1]).data('isfav', 'yes');
+                        $(otherSpan[1]).attr('data-isfav', 'yes');
                     }
                     else {
                         $(otherSpan[3]).prepend('<span class="fa fa-star"></span>');
-                        $(otherSpan[3]).data('isfav', 'yes');
+                        $(otherSpan[3]).attr('data-isfav', 'yes');
                     }
                 }
 

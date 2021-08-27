@@ -1038,8 +1038,9 @@
             }
             else {
                 //menuUL.empty();
-                filteredMenuHtml = getMenuList();
+                
                 menuUL.find('.vis-navmenuitemsfilter').remove();
+                filteredMenuHtml = getMenuList();
                 menuUL.find('.vis-navmenuItems-Container').hide();
                 var $mainContainer = $('<div class="vis-navmenuItems-Container vis-navmenuitemsfilter">');
                 var navcolwrap1 = $('<div class="vis-navColWrap">');
