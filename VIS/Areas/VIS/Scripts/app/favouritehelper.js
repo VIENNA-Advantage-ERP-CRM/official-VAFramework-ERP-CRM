@@ -8,7 +8,7 @@
 
     function FavouriteHelper() {
         var $root = null;
-        var $menu = null;       
+        var $menu = null;
         var nodeID = null;
         var btn = null;
         var barNode = null;
@@ -16,11 +16,11 @@
         var liAddfav = null;
         var liRemovefav = null;
         var lifavZoom = null;
-        var action, actionid, nodeName,isFav;
+        var action, actionid, nodeName, isFav;
         var isloaded = false;
         function initialize() {
             $root = $('<div style="width:100%;height:100%">');//, {
-            $menu = $("<ul class='vis-apanel-rb-ul' style='width:100%;height:100%'>");            
+            $menu = $("<ul class='vis-apanel-rb-ul' style='width:100%;height:100%'>");
             liAddfav = $("<li data-isfav='no' data-id='favaction'>").append(VIS.Msg.getMsg('AddFav'));
             liRemovefav = $("<li data-isfav='yes' data-id='favaction'>").append(VIS.Msg.getMsg('RemoveFav'));
             lifavZoom = $("<li data-isfav='" + btn.data('isfav') + "' data-id='favaction'>").append(VIS.Msg.getMsg('OpenNewTab'));
@@ -28,11 +28,11 @@
             $menu.append(liRemovefav);
             $menu.append(lifavZoom);
             $root.append($menu);
-            bindEvent();            
+            bindEvent();
         };
         function showOverlay(_btn) {
             btn = _btn;
-            nodeID =  btn.data('value');
+            nodeID = btn.data('value');
             action = btn.data('action');
             actionid = btn.data('actionid');
             nodeName = btn.data('name');
@@ -52,15 +52,27 @@
             btn.w2overlay($root.clone(true), { css: { height: '300px' } });
         };
 
-        function bindEvent() {            
+        function bindEvent() {
             liAddfav.on('click', addRemoveFav);
             liRemovefav.on('click', addRemoveFav);
             lifavZoom.on('click', openNewTab);
         };
         function addRemoveFav() {
             if (isFav == 'yes') {
-                btn.removeClass("vis-favitmchecked");
-                btn.addClass("vis-favitmunchecked");
+                //btn.removeClass("vis-favitmchecked");
+                //btn.addClass("vis-favitmunchecked");
+                btn.find('span').remove();
+                var otherSpan = $('#vis_divTree').find('[data-value="' + btn.data('value') + '"]');
+                if (otherSpan && otherSpan.length > 0) {
+                    if ($(otherSpan[1]).find('span.fa.fa-star').length == 0) {
+                        $(otherSpan[1]).data('isfav', 'no');
+                        $(otherSpan[1]).find('span.fa.fa-star').remove();
+                    }
+                    else {
+                        $(otherSpan[3]).data('isfav', 'no');
+                        $(otherSpan[3]).find('span.fa.fa-star').remove();
+                    }
+                }
                 btn.data('isfav', 'no');
                 removeFav(nodeID);
                 VIS.favMgr.removeFavourite(nodeID);
@@ -73,9 +85,23 @@
                 barNode.ProcessID = actionid; //aAction.data('actionid');
                 barNode.NodeID = nodeID;//btn.data('value');
                 barNode.Name = nodeName;// $(aAction).parent().children(0).text();
-                btn.removeClass("vis-favitmunchecked");
-                btn.addClass("vis-favitmchecked");
+                //btn.removeClass("vis-favitmunchecked");
+                //btn.addClass("vis-favitmchecked");
                 btn.data('isfav', 'yes');
+                btn.prepend('<span class="fa fa-star"></span>');
+                var otherSpan = $('#vis_divTree').find('[data-value="' + btn.data('value') + '"]');
+                if (otherSpan && otherSpan.length > 2) {
+                   
+                    if ($(otherSpan[1]).find('span.fa.fa-star').length == 0) {
+                        $(otherSpan[1]).prepend('<span class="fa fa-star"></span>');
+                        $(otherSpan[1]).data('isfav', 'yes');
+                    }
+                    else {
+                        $(otherSpan[3]).prepend('<span class="fa fa-star"></span>');
+                        $(otherSpan[3]).data('isfav', 'yes');
+                    }
+                }
+
                 addToFav(nodeID);
                 VIS.favMgr.addFavourite(barNode);
             }
@@ -98,12 +124,12 @@
             $.ajax({
                 url: VIS.Application.contextUrl + "Home/RemoveNodeFavourite/?nodeID=" + nodeID,
                 dataType: "json"
-               
+
             });
         };
 
         function removeFavourite(nodeID) {
-            if(!menudiv) menudiv = $('#vis_divTree');
+            if (!menudiv) menudiv = $('#vis_divTree');
             var li = menudiv.children(0).find("[data-value='" + nodeID + "']");
             var btnPic = $(li.children()[1]);
             btnPic.removeClass("vis-favitmchecked");

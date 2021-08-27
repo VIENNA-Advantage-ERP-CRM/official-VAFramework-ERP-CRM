@@ -336,23 +336,23 @@ namespace VIS.Helpers
             }
             else
             {
-                string contextMenu = "<div class='dropdown show'>";
+                string contextMenu = "<div class=''>";
                 if (onBar)
                 {
-                    contextMenu += " <button data-isfavbtn='yes' data-value='" + id + "' data-isfav='yes' data-action='" + action + "' data-actionid ='" + aid + "' data-name ='" + text + "' class='dropdown-toggle' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
+                    contextMenu += " <span data-isfavbtn='yes' data-value='" + id + "' data-isfav='yes' data-action='" + action + "' data-actionid ='" + aid + "' data-name ='" + text + "'><span class='fa fa-star'></span>";
                 }
                 else
                 {
-                    contextMenu += " <button data-isfavbtn='yes' data-value='" + id + "' data-isfav='no' data-action='" + action + "' data-actionid ='" + aid + "' data-name ='" + text + "' class='dropdown-toggle' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
+                    contextMenu += " <span data-isfavbtn='yes' data-value='" + id + "' data-isfav='no' data-action='" + action + "' data-actionid ='" + aid + "' data-name ='" + text + "'>";
                 }
 
                 contextMenu += "  <i class='fa fa-ellipsis-v'></i>" +
-               "  </button>" +
-               "  <div class='dropdown-menu' aria-labelledby='dropdownMenuButton' x-placement='bottom-start' style='position: absolute; transform: translate3d(0px, 26px, 0px); top: 0px; left: 0px; will-change: transform; '>" +
-                 "   <a class='dropdown-item' href='#'>Action</a>" +
-                "   <a class='dropdown-item' href='#'>Another action</a>" +
-                  " <a class='dropdown-item' href='#'>Something else here</a>" +
-               "  </div" +
+               "  </span>" +
+               //"  <div class='dropdown-menu' aria-labelledby='dropdownMenuButton' x-placement='bottom-start' style='position: absolute; transform: translate3d(0px, 26px, 0px); top: 0px; left: 0px; will-change: transform; '>" +
+               //  "   <a class='dropdown-item' href='#'>Action</a>" +
+               // "   <a class='dropdown-item' href='#'>Another action</a>" +
+               //   " <a class='dropdown-item' href='#'>Something else here</a>" +
+               //"  </div" +
               " </div>";
 
                 if (seqNo == settingSeqNo || isSettingItem)

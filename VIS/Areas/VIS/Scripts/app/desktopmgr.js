@@ -72,6 +72,8 @@
                 }
             });
 
+            $($menuTree.find('.vis-navLeftWrap a')[0]).trigger("click");
+
             function menuItemClick(event) {
                 if (event.target.nodeName === "LABEL") {
                     if (Date.now() - time < 300) { //skip double click
@@ -98,6 +100,14 @@
                     }
                     startMenuAction($target.data('action'), $target.data('actionid')); //start action
                     return;
+                }
+
+                if (event.target.nodeName === "I") {
+                    var $target = $(event.target).parent();
+                    if ($target.data('isfavbtn') == 'yes') {
+                        VIS.FavouriteHelper.showOverlay($target); // show menu item's options
+                        return;
+                    }
                 }
             };
 
@@ -971,17 +981,12 @@
                 '<input type="radio" name="filter" id="vis_filter_radio_5" value="R" style="margin-bottom:20px;margin:1px;"/><label for="vis_filter_radio_5">' + VIS.Msg.getMsg("Report") + '</label><br/>' +
                 '<input type="button" name="filter" value=' + VIS.Msg.getMsg("Filter") + '></input>');
 
-            menuUL = menuTree.find(".vis-navMainContent"); //menu UL element
+            
             _menuTree = menuTree;
             var options = [], itm = null;
-            menuUL.find('li').each(function () {
-                itm = $(this);
-                if (itm.data("summary") == "N") {
-                    options.push(itm[0].outerHTML);
-                }
-            });
-            selectedMenu = $(menuTree.find(".vis-navSelected a")[0]).data("value");
-            $(menuTree.find(".vis-navSelected")[0]).removeClass('vis-navSelected');
+            options=getMenuList();
+            //selectedMenu = $(menuTree.find(".vis-navSelected a")[0]).data("value");
+            //$(menuTree.find(".vis-navSelected")[0]).removeClass('vis-navSelected');
             menuHtml = menuUL.html(); //all html tree string
             filteredMenuHtml = options; // all leaf nodes
             //options.length = 0;
@@ -989,6 +994,18 @@
             filterA = filterMenuA; // event invoker
             $('body').append(root); // append div to body
             events(); // bind events
+        };
+
+        function getMenuList() {
+            var options = [];
+            menuUL = _menuTree.find(".vis-navMainContent"); //menu UL element
+            menuUL.find('li').each(function () {
+                itm = $(this);
+                if (itm.data("summary") == "N") {
+                    options.push(itm[0].outerHTML);
+                }
+            });
+            return options;
         };
 
         /*
@@ -1012,15 +1029,19 @@
         */
         function filterMenu(action) {
             if (action === "A") { // all tree
-                menuUL.empty();
-                menuUL.html(menuHtml);
+                //menuUL.empty();
+                // menuUL.html(menuHtml);
+                menuUL.find('.vis-navmenuitemsfilter').remove();
+                menuUL.find('.vis-navmenuItems-Container').show();
                 menuUL.find('li').show(); // hide all
                 _menuTree.find('[data-value="' + selectedMenu + '"]').trigger('click');
             }
             else {
-                menuUL.empty();
-
-                var $mainContainer = $('<div class="vis-navmenuItems-Container">');
+                //menuUL.empty();
+                filteredMenuHtml = getMenuList();
+                menuUL.find('.vis-navmenuitemsfilter').remove();
+                menuUL.find('.vis-navmenuItems-Container').hide();
+                var $mainContainer = $('<div class="vis-navmenuItems-Container vis-navmenuitemsfilter">');
                 var navcolwrap1 = $('<div class="vis-navColWrap">');
                 var navcolwrap2 = $('<div class="vis-navColWrap">');
                 var navcolwrap3 = $('<div class="vis-navColWrap">');
@@ -1050,7 +1071,7 @@
                 $mainContainer.append(navcolwrap1).append(navcolwrap2).append(navcolwrap3);
 
 
-                menuUL.html($mainContainer.html()); // all leaf nodes
+                menuUL.append($mainContainer); // all leaf nodes
                 menuUL.find('li').hide(); // hide all
 
                 menuUL.find('li > a[data-action="' + action + '"]').parent().show(); // show only match action
