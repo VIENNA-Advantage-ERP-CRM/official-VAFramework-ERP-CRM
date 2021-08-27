@@ -31,6 +31,14 @@ namespace VIS.Helpers
         private int rootParentID = 0;
         private int settingSeqNo = 9999;
         private bool isSettingItem = false;
+        private Dictionary<string, string> menuIcons = new Dictionary<string, string>() {
+            { "W","fa fa-window-maximize"},
+            { "R","vis vis-report"},
+            { "P","fa fa-cog"},
+            { "X","fa fa-list-alt"},
+            { "S","fa fa-folder-o"}
+
+        };
 
 
 
@@ -209,7 +217,7 @@ namespace VIS.Helpers
                             lastParentID = 0;
                             menu1HTML.Append("<div class='vis-navColWrap'>");
                             menu2HTML.Append("<div class='vis-navColWrap'>");
-                            settingsHTML.Append("<div class='vis-navColWrap'>");
+                            settingsHTML.Append("<div class='vis-navColWrap'><div class='vis-navSubMenu'><h5 class='vis-navDataHead'><i class='"+menuIcons["S"]+"'></i><span>"+Msg.GetMsg(_ctx,"Settings")+"</span></h5></div>");
                         }
                         else
                         {
@@ -347,23 +355,19 @@ namespace VIS.Helpers
                 }
 
                 contextMenu += "  <i class='fa fa-ellipsis-v'></i>" +
-               "  </span>" +
-               //"  <div class='dropdown-menu' aria-labelledby='dropdownMenuButton' x-placement='bottom-start' style='position: absolute; transform: translate3d(0px, 26px, 0px); top: 0px; left: 0px; will-change: transform; '>" +
-               //  "   <a class='dropdown-item' href='#'>Action</a>" +
-               // "   <a class='dropdown-item' href='#'>Another action</a>" +
-               //   " <a class='dropdown-item' href='#'>Something else here</a>" +
-               //"  </div" +
-              " </div>";
+               "  </span> </div>";
+
+
 
                 if (seqNo == settingSeqNo || isSettingItem)
-                    settingsHTML.Append("<li class='vis-navList'  data-summary='N'><a href='javascript:void(0)'  data-sqeno='" + seqNo + "'  data-value='" + id + "' data-action='" + action + "' data-actionid ='" + aid + "'><i class='vis vis-cog'></i>" + text + "</a>" + contextMenu + "</li>");
+                    settingsHTML.Append("<li class='vis-navList'  data-summary='N'><a href='javascript:void(0)'  data-sqeno='" + seqNo + "'  data-value='" + id + "' data-action='" + action + "' data-actionid ='" + aid + "'><i class='"+ menuIcons [action]+ "'></i>" + text + "</a>" + contextMenu + "</li>");
                 else if (itemNo > 0 && itemNo % 2 == 0)
                 {
-                    menu2HTML.Append("<li class='vis-navList'  data-summary='N'><a href='javascript:void(0)'  data-sqeno='" + seqNo + "'  data-value='" + id + "' data-action='" + action + "' data-actionid ='" + aid + "'><i class='vis vis-cog'></i>" + text + "</a>" + contextMenu + "</li>");
+                    menu2HTML.Append("<li class='vis-navList'  data-summary='N'><a href='javascript:void(0)'  data-sqeno='" + seqNo + "'  data-value='" + id + "' data-action='" + action + "' data-actionid ='" + aid + "'><i class='" + menuIcons[action] + "'></i>" + text + "</a>" + contextMenu + "</li>");
                 }
                 else
                 {
-                    menu1HTML.Append("<li class='vis-navList'  data-summary='N'><a href='javascript:void(0)'  data-sqeno='" + seqNo + "'  data-value='" + id + "' data-action='" + action + "' data-actionid ='" + aid + "'><i class='vis vis-cog'></i>" + text + "</a>" + contextMenu + "</li>");
+                    menu1HTML.Append("<li class='vis-navList'  data-summary='N'><a href='javascript:void(0)'  data-sqeno='" + seqNo + "'  data-value='" + id + "' data-action='" + action + "' data-actionid ='" + aid + "'><i class='" + menuIcons[action] + "'></i>" + text + "</a>" + contextMenu + "</li>");
                 }
 
                 //h += "<li style='min-height: 40px;overflow: auto;' data-value='" + id + "' data-summary='N'>" +
@@ -463,17 +467,17 @@ namespace VIS.Helpers
                 //}
                 if (seqNo == settingSeqNo || isSettingItem)
                 {
-                    settingsHTML.Append("<div data-sqeno='" + seqNo + "' data-value='" + id + "' data-summary='Y'  class='vis-navSubMenu'><h5 class='vis-navDataHead'><i class='vis vis-cog'></i>" +
+                    settingsHTML.Append("<div data-sqeno='" + seqNo + "' data-value='" + id + "' data-summary='Y'  class='vis-navSubMenu'><h5 class='vis-navDataHead'><i class='" + menuIcons["S"] + "'></i>" +
             "<span>" + text + "</span></h5><ul class='list-unstyled'>");
                 }
                 else if (itemNo > 0 && itemNo % 2 == 0)
                 {
-                    menu2HTML.Append("<div  data-sqeno='" + seqNo + "'  data-value='" + id + "' data-summary='Y'  class='vis-navSubMenu'><h5 class='vis-navDataHead'><i class='vis vis-cog'></i>" +
+                    menu2HTML.Append("<div  data-sqeno='" + seqNo + "'  data-value='" + id + "' data-summary='Y'  class='vis-navSubMenu'><h5 class='vis-navDataHead'><i class='" + menuIcons["S"] + "'></i>" +
         "<span>" + text + "</span></h5><ul class='list-unstyled'>");
                 }
                 else
                 {
-                    menu1HTML.Append("<div data-sqeno='" + seqNo + "' data-value='" + id + "' data-summary='Y'  class='vis-navSubMenu'><h5 class='vis-navDataHead'><i class='vis vis-cog'></i>" +
+                    menu1HTML.Append("<div data-sqeno='" + seqNo + "' data-value='" + id + "' data-summary='Y'  class='vis-navSubMenu'><h5 class='vis-navDataHead'><i class='" + menuIcons["S"] + "'></i>" +
     "<span>" + text + "</span></h5><ul class='list-unstyled'>");
                 }
                 //h += "<li  data-value='" + id + "' data-summary='Y' class='vis-hasSubMenu'> " +
