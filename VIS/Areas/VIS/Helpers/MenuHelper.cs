@@ -224,7 +224,7 @@ namespace VIS.Helpers
                             if (vt.SeqNo == settingSeqNo)
                             {
                                 isSettingItem = true;
-                                GetSummaryItemStart(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), windowNo, settingSeqNo);
+                                GetSummaryItemStart(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), windowNo, settingSeqNo,vt.Image);
                             }
 
                             else if (lastParentID == 0 || lastParentID == vt.Parent_ID)
@@ -235,7 +235,7 @@ namespace VIS.Helpers
                                     itemNo++;
                                 lastParentID = vt.Node_ID;
 
-                                GetSummaryItemStart(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), windowNo);
+                                GetSummaryItemStart(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), windowNo,0, vt.Image);
                             }
                             else
                             {
@@ -249,7 +249,7 @@ namespace VIS.Helpers
                                         menu1HTML.Append("</div>");
                                     itemNo++;
                                 }
-                                GetSummaryItemStart(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), windowNo);
+                                GetSummaryItemStart(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), windowNo,0, vt.Image);
                             }
 
                         }
@@ -450,7 +450,7 @@ namespace VIS.Helpers
         /// <param name="id">id of node</param>
         /// <param name="text">text display</param>
         /// <returns>html string</returns>
-        private string GetSummaryItemStart(int id, string text, string windowNo = "", int seqNo = 0)
+        private string GetSummaryItemStart(int id, string text, string windowNo = "", int seqNo = 0,string Image="")
         {
             var h = "";
             if (windowNo != "")
@@ -465,19 +465,33 @@ namespace VIS.Helpers
                 //{
                 //    menu2HTML.Append("</div>");
                 //}
+                string icon = "<i class='" + menuIcons["S"] + "'></i>";
+
+                if (!string.IsNullOrEmpty(Image))
+                {
+                    if (Image.IndexOf("Images/") > -1)
+                    {
+                        icon = Image.Substring(Image.IndexOf("Images/") + 7);
+                        icon = "<img src='"+ _ctx.GetContextUrl()+ "Images/Thumb32x32/" + icon+"'/>";
+                    }
+                    else {
+                        icon = "<i class='" + Image + "'></i>";
+                    }
+                }
+
                 if (seqNo == settingSeqNo || isSettingItem)
                 {
-                    settingsHTML.Append("<div data-sqeno='" + seqNo + "' data-value='" + id + "' data-summary='Y'  class='vis-navSubMenu'><h5 class='vis-navDataHead'><i class='" + menuIcons["S"] + "'></i>" +
+                    settingsHTML.Append("<div data-sqeno='" + seqNo + "' data-value='" + id + "' data-summary='Y'  class='vis-navSubMenu'><h5 class='vis-navDataHead'>" + icon+
             "<span>" + text + "</span></h5><ul class='list-unstyled'>");
                 }
                 else if (itemNo > 0 && itemNo % 2 == 0)
                 {
-                    menu2HTML.Append("<div  data-sqeno='" + seqNo + "'  data-value='" + id + "' data-summary='Y'  class='vis-navSubMenu'><h5 class='vis-navDataHead'><i class='" + menuIcons["S"] + "'></i>" +
+                    menu2HTML.Append("<div  data-sqeno='" + seqNo + "'  data-value='" + id + "' data-summary='Y'  class='vis-navSubMenu'><h5 class='vis-navDataHead'>"+icon +
         "<span>" + text + "</span></h5><ul class='list-unstyled'>");
                 }
                 else
                 {
-                    menu1HTML.Append("<div data-sqeno='" + seqNo + "' data-value='" + id + "' data-summary='Y'  class='vis-navSubMenu'><h5 class='vis-navDataHead'><i class='" + menuIcons["S"] + "'></i>" +
+                    menu1HTML.Append("<div data-sqeno='" + seqNo + "' data-value='" + id + "' data-summary='Y'  class='vis-navSubMenu'><h5 class='vis-navDataHead'>"+icon +
     "<span>" + text + "</span></h5><ul class='list-unstyled'>");
                 }
                 //h += "<li  data-value='" + id + "' data-summary='Y' class='vis-hasSubMenu'> " +
