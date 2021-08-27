@@ -1257,6 +1257,12 @@ namespace VAdvantage.Model
                         log.SaveWarning("VA061_FollowupdateMustHaveValue", "");
                         return false;
                     }
+                    // Set Value in this field to true, for task generation on workflow process
+                    Set_Value("VA061_IsCreateTask", true);
+                }
+                else
+                {
+                    Set_Value("VA061_IsCreateTask", false);
                 }
             }
             return true;
