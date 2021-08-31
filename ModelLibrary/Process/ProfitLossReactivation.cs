@@ -38,13 +38,15 @@ namespace VAdvantage.Process
         /// <returns>Message</returns>
         protected override string DoIt()
         {
-            if (ReActivatePL(GetRecord_ID()) < 0)
+            if (DeletePostingAffects(GetRecord_ID()) < 0)
             {
+                Get_Trx().Rollback();
                 return Msg.GetMsg(GetCtx(), "PLNotReActivated");
             }
 
-            if (DeletePostingAffects(GetRecord_ID()) < 0)
+            if (ReActivatePL(GetRecord_ID()) < 0)
             {
+                Get_Trx().Rollback();
                 return Msg.GetMsg(GetCtx(), "PLNotReActivated");
             }
 
@@ -58,8 +60,8 @@ namespace VAdvantage.Process
         /// <returns>count</returns>
         public int ReActivatePL(int C_ProfitLoss_ID)
         {
-            no = DB.ExecuteQuery(@"UPDATE C_ProfitLoss SET Processed = 'N' , DocAction = 'CO' , DocStatus = 'IP'
-                WHERE C_ProfitLoss_ID = " + C_ProfitLoss_ID);
+            no = DB.ExecuteQuery(@"UPDATE C_ProfitLoss SET Processed = 'N' , DocAction = 'CO' , DocStatus = 'IP' , Posted = 'N' 
+                WHERE C_ProfitLoss_ID = " + C_ProfitLoss_ID , null  , Get_Trx());
             log.Info("C_ProfitLoss - Unprocessed record Count : " + no);
 
             return no;
@@ -73,7 +75,7 @@ namespace VAdvantage.Process
         public int DeletePostingAffects(int C_ProfitLoss_ID)
         {
             no = DB.ExecuteQuery("DELETE FROM Fact_Acct WHERE Record_ID = " + C_ProfitLoss_ID +
-                " AND AD_Table_ID = " + X_C_ProfitLoss.Table_ID);
+                " AND AD_Table_ID = " + X_C_ProfitLoss.Table_ID, null, Get_Trx());
             log.Info("Delete Accounting Fact Detail record for P&L Clossing : " + no);
             return no;
         }
