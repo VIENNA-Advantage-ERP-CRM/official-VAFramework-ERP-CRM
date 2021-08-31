@@ -117,7 +117,9 @@ namespace ViennaAdvantage.Process
             if (Env.IsModuleInstalled("VA061_"))
             {
                 lead.Set_Value("IsArchive", true);
-                int statusId = Util.GetValueOfInt(DB.ExecuteScalar("SELECT R_Status_ID FROM R_Status Where Value = 'CNV' AND IsActive = 'Y'", null, null));
+                int statusId = Util.GetValueOfInt(DB.ExecuteScalar("SELECT R_Status_ID FROM R_Status Where Value = 'CNV' AND IsActive = 'Y' " +
+                    "AND R_StatusCategory_ID = (SELECT R_StatusCategory_ID FROM R_RequestType WHERE R_RequestType_ID = (SELECT R_RequestType_ID FROM " +
+                    "AD_ClientInfo WHERE AD_Client_ID = " + GetAD_Client_ID() + "))", null, null));
 
                 if (statusId > 0)
                 {
@@ -176,15 +178,7 @@ namespace ViennaAdvantage.Process
                     {
                         C_BpID = lead.GetRef_BPartner_ID();
                     }
-                    bp = new MBPartner(GetCtx(), C_BpID, Get_TrxName());
-                    bp.Set_Value("C_SalesRegion_ID", Util.GetValueOfInt(lead.Get_Value("C_SalesRegion_ID")));
-                    bp.SetC_Country_ID(Util.GetValueOfInt(lead.Get_Value("C_Country_ID")));
-                    bp.Set_Value("R_Source_ID", Util.GetValueOfInt(lead.Get_Value("R_Source_ID")));
-                    bp.Set_Value("R_Status_ID", Util.GetValueOfInt(lead.Get_Value("R_Status_ID")));
-                    bp.Set_Value("C_Lead_ID", Util.GetValueOfInt(lead.GetC_Lead_ID()));                    
-                    bp.Set_Value("LeadRating", Util.GetValueOfString(lead.Get_Value("LeadRating")));
-                    bp.Set_Value("C_LeadQualification_ID", Util.GetValueOfInt(lead.Get_Value("C_LeadQualification_ID")));
-                    bp.Set_Value("C_BPartnerSR_ID", Util.GetValueOfInt(lead.Get_Value("C_BPartnerSR_ID")));
+                    bp = new MBPartner(GetCtx(), C_BpID, Get_TrxName());                    
                     bp.Set_Value("Summary", Util.GetValueOfString(lead.Get_Value("Help")));
                     bp.Set_Value("EmailOptOut", Util.GetValueOfBool(lead.Get_Value("EmailOptOut")));
                     bp.Set_Value("C_Lead_Target", Util.GetValueOfString(lead.Get_Value("C_Lead_Target")));
@@ -194,14 +188,8 @@ namespace ViennaAdvantage.Process
                     bp.Set_Value("VA047_UsingSystem_ID", Util.GetValueOfInt(lead.Get_Value("VA047_UsingSystem_ID")));
                     bp.Set_Value("DateDiffrence", Util.GetValueOfInt(lead.Get_Value("DateDiffrence")));
                     bp.SetC_Greeting_ID(Util.GetValueOfInt(lead.Get_Value("C_Greeting_ID")));
-                    bp.SetC_BP_Status_ID(Util.GetValueOfInt(lead.Get_Value("C_BP_Status_ID")));
-                    bp.SetEMail(Util.GetValueOfString(lead.Get_Value("EMail")));
-                    bp.SetMobile(Util.GetValueOfString(lead.Get_Value("Mobile")));
-                    bp.SetC_Campaign_ID(Util.GetValueOfInt(lead.Get_Value("C_Campaign_ID")));
-                    bp.SetSalesRep_ID(Util.GetValueOfInt(lead.Get_Value("SalesRep_ID")));
-                    bp.SetDescription(Util.GetValueOfString(lead.Get_Value("Description")));
+                    bp.SetC_BP_Status_ID(Util.GetValueOfInt(lead.Get_Value("C_BP_Status_ID")));                    
                     bp.Set_Value("VA047_LinkedIn", Util.GetValueOfString(lead.Get_Value("VA047_LinkedIn")));                    
-                    bp.Set_Value("Created", lead.GetCreated());
 
                     //C_Location_ID
 
@@ -239,7 +227,7 @@ namespace ViennaAdvantage.Process
                                 cspr.Set_Value("VA047_Option1", Util.GetValueOfInt(cus.Get_Value("VA047_Option1")));
                                 cspr.Set_Value("VA047_Option2", Util.GetValueOfInt(cus.Get_Value("VA047_Option2")));
                                 cspr.Set_Value("VA047_Option3", Util.GetValueOfInt(cus.Get_Value("VA047_Option3")));
-                                cspr.Set_Value("VA047_NoOfUser", Util.GetValueOfInt(cus.Get_Value("VA047_NoOfUser")));                                
+                                cspr.Set_Value("VA047_NoOfUser", Util.GetValueOfInt(cus.Get_Value("VA047_NoOfUser")));
                                 if (Util.GetValueOfString(cus.Get_Value("VA047_WealthEvaluation")) != string.Empty)
                                     cspr.Set_Value("VA047_WealthEvaluation", Util.GetValueOfString(cus.Get_Value("VA047_WealthEvaluation")));
                                 cspr.Set_Value("Va047_BuyDate", Util.GetValueOfDateTime(cus.Get_Value("Va047_BuyDate")));
@@ -304,6 +292,11 @@ namespace ViennaAdvantage.Process
                     lead.Save(Get_TrxName());
                 }
                 #endregion                
+            }
+
+            if (C_BpID == 0)
+            {
+                C_BpID = lead.GetRef_BPartner_ID();
             }
 
             #region Copy Mail
