@@ -41,7 +41,6 @@ namespace VIS.Helpers
         };
 
 
-
         /// <summary>
         /// std contructor
         /// </summary>
@@ -116,6 +115,26 @@ namespace VIS.Helpers
             return vTree;
         }
 
+        public string GetNewMenuTreeUI(VTreeNode root, string baseUrl, string windowNo = "", string tableName = "table")
+        {
+            mainContainerHTML = new StringBuilder("<div class='d-flex vis-navContentWrap'>");
+
+            leftMenuHTML = new StringBuilder();
+
+            menu1HTML = new StringBuilder();
+            menu2HTML = new StringBuilder();
+            settingsHTML = new StringBuilder();
+            lstMenuSections = new List<string>();
+            leftMenuHTML.Append("<div class='vis-navLeftWrap'><ul class='list-unstyled'>");
+            CreateNewTree(root.Nodes, baseUrl, windowNo);
+
+            mainContainerHTML.Append(leftMenuHTML.ToString() + "</ul></div><div class='d-flex vis-navMainContent'>"
+                + String.Join(" ", lstMenuSections.ToArray()) + "</div></div>");
+
+            return mainContainerHTML.ToString();
+
+        }
+
 
         /// <summary>
         /// get Menu Tree html String 
@@ -126,33 +145,15 @@ namespace VIS.Helpers
         public string GetMenuTreeUI(VTreeNode root, string baseUrl, string windowNo = "", string tableName = "table")
         {
             StringBuilder sb = new StringBuilder("");
-            mainContainerHTML = new StringBuilder("<div class='d-flex vis-navContentWrap'>");
             if (windowNo != "")
             {
                 sb.Append("<ul data-tableName='" + tableName + "'>");
                 sb.Append("<li data-value='" + root.Node_ID + "'>").Append(GetRootItem(root.Node_ID, root.SetName, windowNo));
             }
-            else
-            {
-                leftMenuHTML = new StringBuilder();
-
-                menu1HTML = new StringBuilder();
-                menu2HTML = new StringBuilder();
-                settingsHTML = new StringBuilder();
-                lstMenuSections = new List<string>();
-                leftMenuHTML.Append("<div class='vis-navLeftWrap'><ul class='list-unstyled'>");
-            }
 
             sb.Append("<ul>");
 
             sb.Append(CreateTree(root.Nodes, baseUrl, windowNo));
-
-            mainContainerHTML.Append(leftMenuHTML.ToString() + "</ul></div><div class='d-flex vis-navMainContent'>"
-                + String.Join(" ", lstMenuSections.ToArray()) + "</div></div>");
-
-            return mainContainerHTML.ToString();
-
-
 
             sb.Append("</ul>");
 
@@ -160,6 +161,8 @@ namespace VIS.Helpers
 
             return sb.ToString();
         }
+
+
 
         /// <summary>
         /// Create Tree 
@@ -206,91 +209,120 @@ namespace VIS.Helpers
                     VTreeNode vt = (VTreeNode)item;
                     if (vt.IsSummary)
                     {
-                        if (vt.Parent_ID == 0)
+                        sb.Append(GetSummaryItemStart(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), windowNo));
+                        sb.Append(CreateTree(((System.Windows.Forms.TreeNode)vt).Nodes, baseUrl, windowNo));
+                        sb.Append(GetSummaryItemEnd());
+                    }
+                    else
+                    {
+                        sb.Append(GetTreeItem(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), vt.ImageKey, vt.GetAction(), vt.GetActionID(), baseUrl, windowNo, vt.OnBar));
+                    }
+                }
+            }
+            return sb.ToString();
+        }
+
+        /// Create Tree 
+        /// </summary>
+        /// <param name="treeNodeCollection"></param>
+        /// <param name="baseUrl"></param>
+        /// <returns></returns>
+        private void CreateNewTree(System.Windows.Forms.TreeNodeCollection treeNodeCollection, string baseUrl, string windowNo = "")
+        {
+            foreach (var item in treeNodeCollection)
+            {
+                VTreeNode vt = (VTreeNode)item;
+                if (vt.IsSummary)
+                {
+                    if (vt.Parent_ID == 0)
+                    {
+                        rootParentID = vt.Node_ID;
+                        GetMainMenuSummaryItem(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), windowNo);
+                        itemNo = 0;
+                        menu1HTML.Clear();
+                        menu2HTML.Clear();
+                        settingsHTML.Clear();
+                        lastParentID = 0;
+                        isSettingItem = false;
+                        menu1HTML.Append("<div class='vis-navColWrap'>");
+                        menu2HTML.Append("<div class='vis-navColWrap'>");
+                        settingsHTML.Append("<div class='vis-navColWrap'><div class='vis-navSubMenu'><h5 class='vis-navDataHead'><i class='" + menuIcons["S"] + "'></i><span>" + Msg.GetMsg(_ctx, "Settings") + "</span></h5></div>");
+                    }
+                    else
+                    {
+                        if (vt.SeqNo == settingSeqNo)
                         {
-                            rootParentID = vt.Node_ID;
-                            GetMainMenuSummaryItem(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), windowNo);
-                            itemNo = 0;
-                            menu1HTML.Clear();
-                            menu2HTML.Clear();
-                            settingsHTML.Clear();
-                            lastParentID = 0;
-                            menu1HTML.Append("<div class='vis-navColWrap'>");
-                            menu2HTML.Append("<div class='vis-navColWrap'>");
-                            settingsHTML.Append("<div class='vis-navColWrap'><div class='vis-navSubMenu'><h5 class='vis-navDataHead'><i class='"+menuIcons["S"]+"'></i><span>"+Msg.GetMsg(_ctx,"Settings")+"</span></h5></div>");
+                            isSettingItem = true;
+                            GetNewSummaryItemStart(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), windowNo, settingSeqNo, vt.Image);
+                            lastParentID = vt.Node_ID;
+                        }
+
+                        else if (lastParentID == 0 || lastParentID == vt.Parent_ID)
+                        {
+                            //if(lastParentID == vt.Parent_ID)
+                            //    itemNo++;
+                            if (vt.Parent_ID == rootParentID)
+                                itemNo++;
+                            lastParentID = vt.Node_ID;
+
+                            GetNewSummaryItemStart(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), windowNo, 0, vt.Image);
                         }
                         else
                         {
-                            if (vt.SeqNo == settingSeqNo)
-                            {
-                                isSettingItem = true;
-                                GetSummaryItemStart(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), windowNo, settingSeqNo,vt.Image);
-                            }
-
-                            else if (lastParentID == 0 || lastParentID == vt.Parent_ID)
-                            {
-                                //if(lastParentID == vt.Parent_ID)
-                                //    itemNo++;
-                                if (vt.Parent_ID == rootParentID)
-                                    itemNo++;
-                                lastParentID = vt.Node_ID;
-
-                                GetSummaryItemStart(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), windowNo,0, vt.Image);
-                            }
+                            if (vt.SeqNo == settingSeqNo || isSettingItem)
+                                settingsHTML.Append("</div>");
                             else
                             {
-                                if (vt.SeqNo == settingSeqNo)
-                                    settingsHTML.Append("</div>");
+                                if (itemNo > 0 && itemNo % 2 == 0)
+                                    menu2HTML.Append("</div>");
                                 else
-                                {
-                                    if (itemNo > 0 && itemNo % 2 == 0)
-                                        menu2HTML.Append("</div>");
-                                    else
-                                        menu1HTML.Append("</div>");
-                                    itemNo++;
-                                }
-                                GetSummaryItemStart(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), windowNo,0, vt.Image);
+                                    menu1HTML.Append("</div>");
+                                itemNo++;
                             }
-
+                            GetNewSummaryItemStart(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), windowNo, 0, vt.Image);
                         }
 
-                        sb.Append(CreateTree(((System.Windows.Forms.TreeNode)vt).Nodes, baseUrl, windowNo));
+                    }
+
+                    CreateNewTree(((System.Windows.Forms.TreeNode)vt).Nodes, baseUrl, windowNo);
+                    
+
+                    if (vt.Parent_ID == 0)
+                    {
+                        //if (itemNo % 2 == 0)
+                        menu2HTML.Append("</div>");
+                        //else
+                        menu1HTML.Append("</div>");
+
+                        settingsHTML.Append("</div>");
+
+                        isSettingItem = false;
+
+                        lstMenuSections.Add("<div class='vis-navmenuItems-Container' style='display:none' id='Menu" + vt.Node_ID + "'>" + menu1HTML.ToString() + menu2HTML.ToString() + settingsHTML.ToString() + "</div>");
+                    }
+                    else
+                    {
+                        if (vt.SeqNo == settingSeqNo || isSettingItem)
+                            settingsHTML.Append("</div>");
+                        else if (itemNo > 0 && itemNo % 2 == 0)
+                            menu2HTML.Append("</div>");
+                        else
+                            menu1HTML.Append("</div>");
+
                         if (vt.SeqNo == settingSeqNo)
                         {
                             isSettingItem = false;
                         }
 
-                        if (vt.Parent_ID == 0)
-                        {
-                            //if (itemNo % 2 == 0)
-                            menu2HTML.Append("</div>");
-                            //else
-                            menu1HTML.Append("</div>");
-
-                            settingsHTML.Append("</div>");
-
-                            lstMenuSections.Add("<div class='vis-navmenuItems-Container' style='display:none' id='Menu" + vt.Node_ID + "'>" + menu1HTML.ToString() + menu2HTML.ToString() + settingsHTML.ToString() + "</div>");
-                        }
-                        else
-                        {
-                            if (vt.SeqNo == settingSeqNo)
-                                settingsHTML.Append("</div>");
-                            else if (itemNo > 0 && itemNo % 2 == 0)
-                                menu2HTML.Append("</div>");
-                            else
-                                menu1HTML.Append("</div>");
-
-                            lastParentID = vt.Parent_ID;
-                            sb.Append(GetSummaryItemEnd());
-                        }
-                    }
-                    else
-                    {
-                        sb.Append(GetTreeItem(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), vt.ImageKey, vt.GetAction(), vt.GetActionID(), baseUrl, windowNo, vt.OnBar, vt.SeqNo));
+                        lastParentID = vt.Parent_ID;
                     }
                 }
+                else
+                {
+                    GetNewTreeItem(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), vt.ImageKey, vt.GetAction(), vt.GetActionID(), baseUrl, windowNo, vt.OnBar, vt.SeqNo);
+                }
             }
-            return sb.ToString();
+
         }
 
         /// <summary>
@@ -309,6 +341,39 @@ namespace VIS.Helpers
             return h;
         }
 
+
+        private void GetNewTreeItem(int id, string text, string img, string action, int aid, string baseUrl, string windowNo = "", bool onBar = false, int seqNo = 0)
+        {
+            if (action.Trim() == "") { action = "W"; img = "W"; }
+
+            string contextMenu = "<div class=''>";
+            if (onBar)
+            {
+                contextMenu += " <span data-isfavbtn='yes' data-value='" + id + "' data-isfav='yes' data-action='" + action + "' data-actionid ='" + aid + "' data-name ='" + text + "'><span class='fa fa-star'></span>";
+            }
+            else
+            {
+                contextMenu += " <span data-isfavbtn='yes' data-value='" + id + "' data-isfav='no' data-action='" + action + "' data-actionid ='" + aid + "' data-name ='" + text + "'>";
+            }
+
+            contextMenu += "  <i class='fa fa-ellipsis-v'></i>" +
+           "  </span> </div>";
+
+
+
+            if (seqNo == settingSeqNo || isSettingItem)
+                settingsHTML.Append("<li class='vis-navList'  data-summary='N'><a href='javascript:void(0)'  data-sqeno='" + seqNo + "'  data-value='" + id + "' data-action='" + action + "' data-actionid ='" + aid + "'><i class='" + menuIcons[action] + "'></i>" + text + "</a>" + contextMenu + "</li>");
+            else if (itemNo > 0 && itemNo % 2 == 0)
+            {
+                menu2HTML.Append("<li class='vis-navList'  data-summary='N'><a href='javascript:void(0)'  data-sqeno='" + seqNo + "'  data-value='" + id + "' data-action='" + action + "' data-actionid ='" + aid + "'><i class='" + menuIcons[action] + "'></i>" + text + "</a>" + contextMenu + "</li>");
+            }
+            else
+            {
+                menu1HTML.Append("<li class='vis-navList'  data-summary='N'><a href='javascript:void(0)'  data-sqeno='" + seqNo + "'  data-value='" + id + "' data-action='" + action + "' data-actionid ='" + aid + "'><i class='" + menuIcons[action] + "'></i>" + text + "</a>" + contextMenu + "</li>");
+            }
+
+        }
+
         /// <summary>
         /// get leaf node html string
         /// </summary>
@@ -319,7 +384,7 @@ namespace VIS.Helpers
         /// <param name="aid">data attribute id</param>
         /// <param name="baseUrl">app url</param>
         /// <returns>html string </returns>
-        private string GetTreeItem(int id, string text, string img, string action, int aid, string baseUrl, string windowNo = "", bool onBar = false, int seqNo = 0)
+        private string GetTreeItem(int id, string text, string img, string action, int aid, string baseUrl, string windowNo = "", bool onBar = false)
         {
             if (action.Trim() == "") { action = "W"; img = "W"; }
             var h = "";
@@ -344,50 +409,24 @@ namespace VIS.Helpers
             }
             else
             {
-                string contextMenu = "<div class=''>";
+                h += "<li style='min-height: 40px;overflow: auto;' data-value='" + id + "' data-summary='N'>" +
+                     "<a class='vis-menuitm-with-favItm' href='javascript:void(0)'  data-value='" + id + "' data-action='" + action + "' data-actionid ='" + aid + "'>" +
+                     "<span " + GetSpanClass(img);
+                if (_ctx.GetIsRightToLeft())
+                {
+                    h += " style='float:right;margin:1px 0px 0px 10px;' ";
+                }
+
+                h += " ></span>" + text + "</a>";
+
                 if (onBar)
                 {
-                    contextMenu += " <span data-isfavbtn='yes' data-value='" + id + "' data-isfav='yes' data-action='" + action + "' data-actionid ='" + aid + "' data-name ='" + text + "'><span class='fa fa-star'></span>";
+                    h += "<a data-isfavbtn='yes' data-value='" + id + "' data-isfav='yes' data-action='" + action + "' data-actionid ='" + aid + "' data-name ='" + text + "'   class='vis-menufavitm vis-favitmchecked'></a>";
                 }
                 else
                 {
-                    contextMenu += " <span data-isfavbtn='yes' data-value='" + id + "' data-isfav='no' data-action='" + action + "' data-actionid ='" + aid + "' data-name ='" + text + "'>";
+                    h += "<a data-isfavbtn='yes' data-value='" + id + "' data-isfav='no' data-action='" + action + "' data-actionid ='" + aid + "'  data-name ='" + text + "' class='vis-menufavitm vis-favitmunchecked'></a>";
                 }
-
-                contextMenu += "  <i class='fa fa-ellipsis-v'></i>" +
-               "  </span> </div>";
-
-
-
-                if (seqNo == settingSeqNo || isSettingItem)
-                    settingsHTML.Append("<li class='vis-navList'  data-summary='N'><a href='javascript:void(0)'  data-sqeno='" + seqNo + "'  data-value='" + id + "' data-action='" + action + "' data-actionid ='" + aid + "'><i class='"+ menuIcons [action]+ "'></i>" + text + "</a>" + contextMenu + "</li>");
-                else if (itemNo > 0 && itemNo % 2 == 0)
-                {
-                    menu2HTML.Append("<li class='vis-navList'  data-summary='N'><a href='javascript:void(0)'  data-sqeno='" + seqNo + "'  data-value='" + id + "' data-action='" + action + "' data-actionid ='" + aid + "'><i class='" + menuIcons[action] + "'></i>" + text + "</a>" + contextMenu + "</li>");
-                }
-                else
-                {
-                    menu1HTML.Append("<li class='vis-navList'  data-summary='N'><a href='javascript:void(0)'  data-sqeno='" + seqNo + "'  data-value='" + id + "' data-action='" + action + "' data-actionid ='" + aid + "'><i class='" + menuIcons[action] + "'></i>" + text + "</a>" + contextMenu + "</li>");
-                }
-
-                //h += "<li style='min-height: 40px;overflow: auto;' data-value='" + id + "' data-summary='N'>" +
-                //     "<a class='vis-menuitm-with-favItm' href='javascript:void(0)'  data-value='" + id + "' data-action='" + action + "' data-actionid ='" + aid + "'>" +
-                //     "<span " + GetSpanClass(img);
-                //if (_ctx.GetIsRightToLeft())
-                //{
-                //    h += " style='float:right;margin:1px 0px 0px 10px;' ";
-                //}
-
-                //h += " ></span>" + text + "</a>";
-
-                //if (onBar)
-                //{
-                //    h += "<a data-isfavbtn='yes' data-value='" + id + "' data-isfav='yes' data-action='" + action + "' data-actionid ='" + aid + "' data-name ='" + text + "'   class='vis-menufavitm vis-favitmchecked'></a>";
-                //}
-                //else
-                //{
-                //    h += "<a data-isfavbtn='yes' data-value='" + id + "' data-isfav='no' data-action='" + action + "' data-actionid ='" + aid + "'  data-name ='" + text + "' class='vis-menufavitm vis-favitmunchecked'></a>";
-                //}
             }
             return h;
         }
@@ -450,7 +489,7 @@ namespace VIS.Helpers
         /// <param name="id">id of node</param>
         /// <param name="text">text display</param>
         /// <returns>html string</returns>
-        private string GetSummaryItemStart(int id, string text, string windowNo = "", int seqNo = 0,string Image="")
+        private string GetSummaryItemStart(int id, string text, string windowNo = "")
         {
             var h = "";
             if (windowNo != "")
@@ -461,49 +500,51 @@ namespace VIS.Helpers
             }
             else
             {
-                //if (menu2HTML.Length > 0)
-                //{
-                //    menu2HTML.Append("</div>");
-                //}
-                string icon = "<i class='" + menuIcons["S"] + "'></i>";
-
-                if (!string.IsNullOrEmpty(Image))
-                {
-                    if (Image.IndexOf("Images/") > -1)
-                    {
-                        icon = Image.Substring(Image.IndexOf("Images/") + 7);
-                        icon = "<img src='"+ _ctx.GetContextUrl()+ "Images/Thumb32x32/" + icon+"'/>";
-                    }
-                    else {
-                        icon = "<i class='" + Image + "'></i>";
-                    }
-                }
-
-                if (seqNo == settingSeqNo || isSettingItem)
-                {
-                    settingsHTML.Append("<div data-sqeno='" + seqNo + "' data-value='" + id + "' data-summary='Y'  class='vis-navSubMenu'><h5 class='vis-navDataHead'>" + icon+
-            "<span>" + text + "</span></h5><ul class='list-unstyled'>");
-                }
-                else if (itemNo > 0 && itemNo % 2 == 0)
-                {
-                    menu2HTML.Append("<div  data-sqeno='" + seqNo + "'  data-value='" + id + "' data-summary='Y'  class='vis-navSubMenu'><h5 class='vis-navDataHead'>"+icon +
-        "<span>" + text + "</span></h5><ul class='list-unstyled'>");
-                }
-                else
-                {
-                    menu1HTML.Append("<div data-sqeno='" + seqNo + "' data-value='" + id + "' data-summary='Y'  class='vis-navSubMenu'><h5 class='vis-navDataHead'>"+icon +
-    "<span>" + text + "</span></h5><ul class='list-unstyled'>");
-                }
-                //h += "<li  data-value='" + id + "' data-summary='Y' class='vis-hasSubMenu'> " +
-                //     "<input type='checkbox'  id='" + windowNo + id + "' />" +
-                //     "<label data-target='#ul_" + id + "' data-toggle='collapse' for='" + windowNo + id + "'><i class='fa fa-folder-o vis-folder-open-ico'></i>" +
-                //      text +
-                //      " </label>";
-                //h += "<ul class='collapse'  id='ul_" + id + "'>";
-
+                h += "<li  data-value='" + id + "' data-summary='Y' class='vis-hasSubMenu'> " +
+                     "<input type='checkbox'  id='" + windowNo + id + "' />" +
+                     "<label data-target='#ul_" + id + "' data-toggle='collapse' for='" + windowNo + id + "'><i class='fa fa-folder-o vis-folder-open-ico'></i>" +
+                      text +
+                      " </label>";
+                h += "<ul class='collapse'  id='ul_" + id + "'>";
             }
 
             return h;
+        }
+
+        private void GetNewSummaryItemStart(int id, string text, string windowNo = "", int seqNo = 0, string Image = "")
+        {
+            string icon = "<i class='" + menuIcons["S"] + "'></i>";
+
+            if (!string.IsNullOrEmpty(Image))
+            {
+                if (Image.IndexOf("Images/") > -1)
+                {
+                    icon = Image.Substring(Image.IndexOf("Images/") + 7);
+                    icon = "<img src='" + _ctx.GetContextUrl() + "Images/Thumb32x32/" + icon + "'/>";
+                }
+                else
+                {
+                    icon = "<i class='" + Image + "'></i>";
+                }
+            }
+
+            if (seqNo == settingSeqNo || isSettingItem)
+            {
+                settingsHTML.Append("<div data-sqeno='" + seqNo + "' data-value='" + id + "' data-summary='Y'  class='vis-navSubMenu'><h5 class='vis-navDataHead'>" + icon +
+        "<span>" + text + "</span></h5><ul class='list-unstyled'>");
+            }
+            else if (itemNo > 0 && itemNo % 2 == 0)
+            {
+                menu2HTML.Append("<div  data-sqeno='" + seqNo + "'  data-value='" + id + "' data-summary='Y'  class='vis-navSubMenu'><h5 class='vis-navDataHead'>" + icon +
+    "<span>" + text + "</span></h5><ul class='list-unstyled'>");
+            }
+            else
+            {
+                menu1HTML.Append("<div data-sqeno='" + seqNo + "' data-value='" + id + "' data-summary='Y'  class='vis-navSubMenu'><h5 class='vis-navDataHead'>" + icon +
+"<span>" + text + "</span></h5><ul class='list-unstyled'>");
+            }
+
+
         }
 
         private void GetMainMenuSummaryItem(int id, string text, string windowNo = "")

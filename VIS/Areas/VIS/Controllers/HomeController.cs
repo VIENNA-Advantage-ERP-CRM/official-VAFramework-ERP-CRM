@@ -253,7 +253,7 @@ namespace VIS.Controllers
                         ViewBag.Menu = mnuHelper.GetMenuTree(); // create tree
                         Session["barNodes"] = ViewBag.Menu.GetBarNodes(); /* add is session to get it in favourite call */
 
-                        ViewBag.TreeHtml = mnuHelper.GetMenuTreeUI(ViewBag.Menu.GetRootNode(), @Url.Content("~/"));
+                        ViewBag.TreeHtml = mnuHelper.GetNewMenuTreeUI(ViewBag.Menu.GetRootNode(), @Url.Content("~/"));
                     }
 
                     ViewBag.disableMenu = disableMenu;

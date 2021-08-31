@@ -298,7 +298,7 @@
         */
         function hideMenu() {
             menuFilterMgr.closePopup();
-            $vis_mainMenu.hide('fast');
+            $vis_mainMenu.attr('style', 'display: none !important');
             $menuOverlay.fadeOut();
             $vis_menuSearch.val("");
             $vis_menuSearch.blur();
@@ -307,7 +307,7 @@
         /* show app menu */
         function showMenu() {
             $menuOverlay.fadeIn();
-            $vis_mainMenu.show('fast');
+            $vis_mainMenu.attr('style', 'display: flex !important')
         };
 
         function toggleMenu() {
