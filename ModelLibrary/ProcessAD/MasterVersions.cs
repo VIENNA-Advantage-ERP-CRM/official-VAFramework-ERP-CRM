@@ -660,7 +660,8 @@ namespace VAdvantage.Process
         private string GetColumnNameString(int Ver_AD_Table_ID)
         {
             StringBuilder colNameString = new StringBuilder("");
-            DataSet dsCols = DB.ExecuteDataset("SELECT ColumnName FROM AD_Column WHERE AD_Table_ID = " + Ver_AD_Table_ID + " AND IsActive = 'Y'", null, _trx);
+            // VIS0008 Ignored Virtual columns here
+            DataSet dsCols = DB.ExecuteDataset("SELECT ColumnName FROM AD_Column WHERE AD_Table_ID = " + Ver_AD_Table_ID + " AND IsActive = 'Y' AND ColumnSQL IS NULL", null, _trx);
             if (dsCols != null && dsCols.Tables[0].Rows.Count > 0)
             {
                 string[] colNames = dsCols.Tables[0].AsEnumerable().Select(r => Convert.ToString(r["ColumnName"])).ToArray();
