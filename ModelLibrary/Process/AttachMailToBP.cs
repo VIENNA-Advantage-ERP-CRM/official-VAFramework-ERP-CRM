@@ -292,7 +292,7 @@ namespace VAdvantage.Process
                             }
                             else
                             {
-                                SendMailOrNotification(dsUser, GetCtx(), Msg.GetMsg(GetCtx(), " Emailrecievedwithsubject") + " = " + message.Subject + " " + Msg.GetMsg(GetCtx(), "ANDAttachto") + " " + Msg.GetMsg(GetCtx(), "RequestID") + " = " + recordID, Util.GetValueOfInt(TableID), Util.GetValueOfInt(recordID), Convert.ToString(documentNO));
+                                SendMailOrNotification(dsUser, GetCtx(), Msg.GetMsg(GetCtx(), "Emailrecievedwithsubject") + " = " + message.Subject + " " + Msg.GetMsg(GetCtx(), "ANDAttachto") + " " + Msg.GetMsg(GetCtx(), "RequestID") + " = " + recordID, Util.GetValueOfInt(TableID), Util.GetValueOfInt(recordID), Convert.ToString(documentNO));
                             }
 
                         }
@@ -461,7 +461,7 @@ namespace VAdvantage.Process
                                     }
                                     else
                                     {
-                                        SendMailOrNotification(dsUser, GetCtx(), Msg.GetMsg(GetCtx(), " Emailrecievedwithsubject") + " = " + message.Subject + Msg.GetMsg(GetCtx(), "ANDAttachto") + userOrBp + " = " + Util.GetValueOfString(dt.Rows[j]["Name"]), _tableID, record_ID, Util.GetValueOfString(dt.Rows[j]["Value"]));
+                                        SendMailOrNotification(dsUser, GetCtx(), Msg.GetMsg(GetCtx(), "Emailrecievedwithsubject") + " = " + message.Subject  + Msg.GetMsg(GetCtx(), "ANDAttachto")  + userOrBp + " = " + Util.GetValueOfString(dt.Rows[j]["Name"]), _tableID, record_ID, Util.GetValueOfString(dt.Rows[j]["Value"]));
                                     }
                                 }
                             }
