@@ -187,6 +187,28 @@
             self.paintRow(evt.index);
         };
 
+        this.cellRender = function (rIndex, cIndex) {
+            var col = self.grid.columns[cIndex];
+            if (col.gridField && col.gridField.getStyleLogic() != '') // get from property
+            {
+                var arr = col.gridField.getStyleLogic().split(',');
+                self.cellRowIndex = rIndex;
+                //this.cellColumnName = col.field;
+                var ret = null;
+                for (var j = 0; j < arr.length; j++) {
+                    var cArr = arr[j].split("?");
+                    if (cArr.length != 2)
+                        continue;
+                    if (VIS.Evaluator.evaluateLogic(self, cArr[0])) {
+                        ret = cArr[1];
+                        break;
+                    }
+                }
+                return ret;
+            }
+            return null;
+        };
+
         this.paintRow = function (index) {
 
             var rec = this.grid.records[index];
@@ -967,12 +989,24 @@
             onDblClick: this.onClick,
             onEditField: this.onEditField,
             onChange: this.onChange,
-            onRowAdd: this.onRowAdd
+            onRowAdd: this.onRowAdd,
+            onCellRender:this.cellRender
             //onResize: function () { alert('resize') }
 
         });
+
         //this.grid.selectType = 'cell';;
         return size;
+    };
+
+   
+    
+    VTable.prototype.getValueAsString = function (field) {
+        var record = this.grid.records[this.cellRowIndex];
+        var data = this.grid.parseField(record, field.toLowerCase());
+        if (!data)
+            return '';
+        return data.toString();
     };
 
     VTable.prototype.get = function (recid, isIndex) {
@@ -1026,6 +1060,7 @@
 
     VTable.prototype.refresh = function () {
         this.grid.refresh();
+        console.log("refresh");
     };
 
     VTable.prototype.resize = function () {

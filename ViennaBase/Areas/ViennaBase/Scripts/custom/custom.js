@@ -596,6 +596,140 @@ if (jQuery.prototype.jquery == "3.4.1" && w2utils.version == "1.4.3") {
     return time;
 };
 
+; w2obj.grid.prototype.getRecordHTML= function (ind, lineNum, summary) {
+    var rec_html = '';
+    var sel = this.last.selection;
+    var record;
+    // first record needs for resize purposes
+    if (ind == -1) {
+        rec_html += '<tr line="0">';
+        if (this.show.lineNumbers) rec_html += '<td class="w2ui-col-number" style="height: 0px;"></td>';
+        if (this.show.selectColumn) rec_html += '<td class="w2ui-col-select" style="height: 0px;"></td>';
+        if (this.show.expandColumn) rec_html += '<td class="w2ui-col-expand" style="height: 0px;"></td>';
+        for (var i in this.columns) {
+            if (this.columns[i].hidden) continue;
+            rec_html += '<td class="w2ui-grid-data" col="' + i + '" style="height: 0px;"></td>';
+        }
+        rec_html += '<td class="w2ui-grid-data-last" style="height: 0px;"></td>';
+        rec_html += '</tr>';
+        return rec_html;
+    }
+    // regular record
+    var url = (typeof this.url != 'object' ? this.url : this.url.get);
+    if (summary !== true) {
+        if (this.searchData.length > 0 && !url) {
+            if (ind >= this.last.searchIds.length) return '';
+            ind = this.last.searchIds[ind];
+            record = this.records[ind];
+        } else {
+            if (ind >= this.records.length) return '';
+            record = this.records[ind];
+        }
+    } else {
+        if (ind >= this.summary.length) return '';
+        record = this.summary[ind];
+    }
+    if (!record) return '';
+    var id = w2utils.escapeId(record.recid);
+    var isRowSelected = false;
+    if (sel.indexes.indexOf(ind) != -1) isRowSelected = true;
+    // render TR
+    rec_html += '<tr id="grid_' + this.name + '_rec_' + record.recid + '" recid="' + record.recid + '" line="' + lineNum + '" ' +
+        ' class="' + (lineNum % 2 == 0 ? 'w2ui-even' : 'w2ui-odd') +
+        (isRowSelected && this.selectType == 'row' ? ' w2ui-selected' : '') +
+        (record.editable === false ? ' w2ui-no-edit' : '') +
+        (record.expanded === true ? ' w2ui-expanded' : '') + '" ' +
+        (summary !== true ?
+            (w2utils.isIOS ?
+                '    onclick  = "w2ui[\'' + this.name + '\'].dblClick(\'' + record.recid + '\', event);"'
+                :
+                '    onclick  = "w2ui[\'' + this.name + '\'].click(\'' + record.recid + '\', event);"' +
+                '    oncontextmenu = "w2ui[\'' + this.name + '\'].contextMenu(\'' + record.recid + '\', event);"'
+            )
+            : ''
+        ) +
+        ' style="height: ' + this.recordHeight + 'px; ' + (!isRowSelected && typeof record['style'] == 'string' ? record['style'] : '') + '" ' +
+        (typeof record['style'] == 'string' ? 'custom_style="' + record['style'] + '"' : '') +
+        '>';
+    if (this.show.lineNumbers) {
+        rec_html += '<td id="grid_' + this.name + '_cell_' + ind + '_number' + (summary ? '_s' : '') + '" class="w2ui-col-number">' +
+            (summary !== true ? '<div>' + lineNum + '</div>' : '') +
+            '</td>';
+    }
+    if (this.show.selectColumn) {
+        rec_html +=
+            '<td id="grid_' + this.name + '_cell_' + ind + '_select' + (summary ? '_s' : '') + '" class="w2ui-grid-data w2ui-col-select" ' +
+            '        onclick="if (event.stopPropagation) event.stopPropagation(); else event.cancelBubble = true;">' +
+            (summary !== true ?
+                '    <div>' +
+                '        <input class="w2ui-grid-select-check" type="checkbox" tabIndex="-1"' +
+                '            ' + (isRowSelected ? 'checked="checked"' : '') +
+                '            onclick="var obj = w2ui[\'' + this.name + '\']; ' +
+                '                if (!obj.multiSelect) { obj.selectNone(); }' +
+                '                if (this.checked) obj.select(\'' + record.recid + '\'); else obj.unselect(\'' + record.recid + '\'); ' +
+                '                if (event.stopPropagation) event.stopPropagation(); else event.cancelBubble = true;">' +
+                '    </div>'
+                :
+                '') +
+            '</td>';
+    }
+    if (this.show.expandColumn) {
+        var tmp_img = '';
+        if (record.expanded === true) tmp_img = '-'; else tmp_img = '+';
+        if (record.expanded == 'none') tmp_img = '';
+        if (record.expanded == 'spinner') tmp_img = '<div class="w2ui-spinner" style="width: 16px; margin: -2px 2px;"></div>';
+        rec_html +=
+            '<td id="grid_' + this.name + '_cell_' + ind + '_expand' + (summary ? '_s' : '') + '" class="w2ui-grid-data w2ui-col-expand">' +
+            (summary !== true ?
+                '    <div ondblclick="if (event.stopPropagation) event.stopPropagation(); else event.cancelBubble = true;" ' +
+                '            onclick="w2ui[\'' + this.name + '\'].toggle(\'' + record.recid + '\', event); ' +
+                '                if (event.stopPropagation) event.stopPropagation(); else event.cancelBubble = true;">' +
+                '        ' + tmp_img + ' </div>'
+                :
+                '') +
+            '</td>';
+    }
+    var col_ind = 0;
+    while (true) {
+        var col = this.columns[col_ind];
+        if (col.hidden) { col_ind++; if (typeof this.columns[col_ind] == 'undefined') break; else continue; }
+        var isChanged = !summary && record.changes && typeof record.changes[col.field] != 'undefined';
+        var rec_cell = this.getCellHTML(ind, col_ind, summary);
+        var addStyle = '';
+        if (typeof col.render == 'string') {
+            var tmp = col.render.toLowerCase().split(':');
+            if (['number', 'int', 'float', 'money', 'currency', 'percent'].indexOf(tmp[0]) != -1) addStyle += 'text-align: right;';
+        }
+        if (typeof record.style == 'object' && typeof record.style[col_ind] == 'string') {
+            addStyle += record.style[col_ind] + ';';
+        }
+        var isCellSelected = false;
+        if (isRowSelected && $.inArray(col_ind, sel.columns[ind]) != -1) isCellSelected = true;
+
+        var dStyle = '';
+        if (this.onCellRender && typeof this.onCellRender == 'function') {
+            dStyle = this.onCellRender(ind, col_ind);
+            if (!dStyle) dStyle = '';
+        }
+
+        rec_html += '<td class="w2ui-grid-data' + (isCellSelected ? ' w2ui-selected' : '') + (isChanged ? ' w2ui-changed' : '');
+
+        if (dStyle.indexOf(':') < 0 && dStyle !='') {
+            rec_html +=' '+ dStyle;
+        }
+        rec_html += '" col="' + col_ind + '" ' +
+            '    style="' + addStyle + (typeof col.style != 'undefined' ? col.style : '') + dStyle+'" ' +
+            (typeof col.attr != 'undefined' ? col.attr : '') + '>' +
+            rec_cell +
+            '</td>';
+        col_ind++;
+        if (typeof this.columns[col_ind] == 'undefined') break;
+    }
+    rec_html += '<td class="w2ui-grid-data-last"></td>';
+    rec_html += '</tr>';
+    return rec_html;
+};
+
 
 
 

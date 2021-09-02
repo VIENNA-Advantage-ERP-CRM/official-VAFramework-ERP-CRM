@@ -6404,6 +6404,7 @@ w2utils.keyboard = (function (obj) {
                 }
                 var isCellSelected = false;
                 if (isRowSelected && $.inArray(col_ind, sel.columns[ind]) != -1) isCellSelected = true;
+                
                 rec_html += '<td class="w2ui-grid-data'+ (isCellSelected ? ' w2ui-selected' : '') + (isChanged ? ' w2ui-changed' : '') +'" col="'+ col_ind +'" '+
                             '    style="'+ addStyle + (typeof col.style != 'undefined' ? col.style : '') +'" '+
                                           (typeof col.attr != 'undefined' ? col.attr : '') +'>'+

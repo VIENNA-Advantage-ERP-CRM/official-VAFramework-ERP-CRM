@@ -870,6 +870,7 @@
                                 //mField.validateValue();
                                 ve.setBackground(mField.getIsError());
 
+
                                 // Check if new record and current field marked as default field and focus is not set yet, 
                                 // then set focus.
                                 if (mField.getIsDefaultFocus() && !this.isDefaultFocusSet && !comp.getName().startsWith("lbl")) {
@@ -877,6 +878,11 @@
                                     this.isDefaultFocusSet = true;
                                 }
 
+                                if (!comp.getName().startsWith('lbl') && mField.getStyleLogic() != '') {
+                                    var carr = mField.getStyleLogic().split(',');
+                                    var style = this.evaluateStyleCondition(mField,carr);
+                                    ve.setHtmlStyle(style);
+                                }
                             }
                         }
                     }
@@ -892,6 +898,20 @@
                 }
             }
         }
+    };
+
+    VIS.GridController.prototype.evaluateStyleCondition = function (mField,arr) {
+        var ret = null;
+        for (var j = 0; j < arr.length; j++) {
+            var cArr = arr[j].split("?");
+            if (cArr.length != 2)
+                continue;
+            if (VIS.Evaluator.evaluateLogic(mField,cArr[0])) {
+                ret = cArr[1];
+                break;
+            }
+        }
+        return ret;
     };
 
     VIS.GridController.prototype.dynamicDisplayLinks = function (col) {
