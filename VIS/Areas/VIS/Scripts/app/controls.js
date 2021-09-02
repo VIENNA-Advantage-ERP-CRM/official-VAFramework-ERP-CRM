@@ -739,6 +739,30 @@
         this.setBackground(false);
     };
 
+    IControl.prototype.setHtmlStyle = function (style) {
+        if (style && this.dynStyle != style) {
+            this.dynStyle = style;
+            if (style.contains(':')) {
+                this.oldStyle = this.ctrl.attr('style');
+                this.ctrl.removeAttr(style).attr('style', style);
+            }
+            else {
+                this.ctrl.addClass(style);
+            }
+        }
+        else if (!style && this.dynStyle) {
+            if (this.dynStyle.contains(':')) {
+                this.ctrl.removeAttr('style');
+                if (this.oldStyle) this.ctrl.attr('style', this.oldStyle);
+            }
+            else {
+                this.ctrl.removeClass(this.dynStyle);
+            }
+            this.oldStyle = null;
+            this.dynStyle = null;
+        }
+    }
+
     /*
     Set Default Focus
     */
@@ -1389,7 +1413,7 @@
 
     VButton.prototype.setField = function (mField,isHeaderPnl) {
         this.mField = mField;
-        if (!this.isIconSet) {
+       // if (!this.isIconSet) {
             if (mField.getShowIcon() && (mField.getFontClass() != '' || mField.getImageName() != ''))
             {
                 if (mField.getFontClass() != '')
@@ -1397,7 +1421,7 @@
                 else
                     this.setIcon(VIS.Application.contextUrl + 'Images/Thumb16x16/' + mField.getImageName(),true);
             }
-        }
+       // }
         this.setLayout(isHeaderPnl);
     };
 

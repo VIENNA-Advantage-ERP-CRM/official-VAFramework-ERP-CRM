@@ -268,6 +268,8 @@ namespace VAdvantage.Controller
 
         public bool IsUnique = false;
 
+        public string StyleLogic = "";
+
 
         /// <summary>
         /// calaculate MaxDisplayLength
