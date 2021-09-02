@@ -75,38 +75,55 @@
             $($menuTree.find('.vis-navLeftWrap a')[0]).trigger("click");
 
             function menuItemClick(event) {
-                if (event.target.nodeName === "LABEL") {
-                    if (Date.now() - time < 300) { //skip double click
-                        event.preventDefault();
-                        event.stopPropagation();
+                var $par = $(event.target).parent();
+                if (event.target.nodeName === "LABEL" && $par.data("con") == "Y") {
+                    var pID = $par.data("value");
+                    $('#ul_' + pID).css('display', 'block');
+                    //$par.show();
+                    $('.vismenu-parent').hide();
+
+                    //$par.find('ul').show();
+                }
+                else if ($(event.target).hasClass('vis-menuitm-backbtn'))
+                {
+                    var val = $(event.target).data("value");
+                    $('#ul_' + val).css('display', 'none');;
+                    $('.vismenu-parent').show();
+                }
+                else {
+                    if (event.target.nodeName === "LABEL") {
+                        if (Date.now() - time < 300) { //skip double click
+                            event.preventDefault();
+                            event.stopPropagation();
+                            time = Date.now();
+                            return;
+                        }
                         time = Date.now();
-                        return;
                     }
-                    time = Date.now();
-                }
 
-                if (event.target.nodeName === "A") {
-                    var $target = $(event.target);
-                    if ($target.data('isfavbtn') == 'yes') {
-                        VIS.FavouriteHelper.showOverlay($target); // show menu item's options
+                    if (event.target.nodeName === "A") {
+                        var $target = $(event.target);
+                        if ($target.data('isfavbtn') == 'yes') {
+                            VIS.FavouriteHelper.showOverlay($target); // show menu item's options
+                            return;
+                        }
+                        if ($target.data('summary') == "Y") {
+                            $('.vis-navmenuItems-Container').hide();
+                            $target.parent().siblings().removeClass("vis-navSelected");
+                            $target.parent().addClass("vis-navSelected");
+                            $('#Menu' + $target.data('value')).show();
+                            return;
+                        }
+                        startMenuAction($target.data('action'), $target.data('actionid')); //start action
                         return;
                     }
-                    if ($target.data('summary') == "Y") {
-                        $('.vis-navmenuItems-Container').hide();
-                        $target.parent().siblings().removeClass("vis-navSelected");
-                        $target.parent().addClass("vis-navSelected");
-                        $('#Menu' + $target.data('value')).show();
-                        return;
-                    }
-                    startMenuAction($target.data('action'), $target.data('actionid')); //start action
-                    return;
-                }
 
-                if (event.target.nodeName === "I") {
-                    var $target = $(event.target).parent();
-                    if ($target.data('isfavbtn') == 'yes') {
-                        VIS.FavouriteHelper.showOverlay($target); // show menu item's options
-                        return;
+                    if (event.target.nodeName === "I") {
+                        var $target = $(event.target).parent();
+                        if ($target.data('isfavbtn') == 'yes') {
+                            VIS.FavouriteHelper.showOverlay($target); // show menu item's options
+                            return;
+                        }
                     }
                 }
             };
@@ -981,10 +998,10 @@
                 '<input type="radio" name="filter" id="vis_filter_radio_5" value="R" style="margin-bottom:20px;margin:1px;"/><label for="vis_filter_radio_5">' + VIS.Msg.getMsg("Report") + '</label><br/>' +
                 '<input type="button" name="filter" value=' + VIS.Msg.getMsg("Filter") + '></input>');
 
-            
+
             _menuTree = menuTree;
             var options = [], itm = null;
-            options=getMenuList();
+            options = getMenuList();
             //selectedMenu = $(menuTree.find(".vis-navSelected a")[0]).data("value");
             //$(menuTree.find(".vis-navSelected")[0]).removeClass('vis-navSelected');
             menuHtml = menuUL.html(); //all html tree string
@@ -1038,7 +1055,7 @@
             }
             else {
                 //menuUL.empty();
-                
+
                 menuUL.find('.vis-navmenuitemsfilter').remove();
                 filteredMenuHtml = getMenuList();
                 menuUL.find('.vis-navmenuItems-Container').hide();
@@ -1055,14 +1072,14 @@
                 for (var i = 0; i < filteredMenuHtml.length; i++) {
                     if ($(filteredMenuHtml[i]).data('hide') == 'Y')
                         continue;
-                    if (j==3) {
+                    if (j == 3) {
                         navcolwrap3.append(filteredMenuHtml[i]);
                         j = 1;
                     }
-                    else if (j==2) {
+                    else if (j == 2) {
                         navcolwrap2.append(filteredMenuHtml[i]);
                         j = 3;
-                    } 
+                    }
                     else {
                         navcolwrap1.append(filteredMenuHtml[i]);
                         j = 2;

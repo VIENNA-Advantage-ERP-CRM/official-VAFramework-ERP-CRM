@@ -150,16 +150,18 @@ namespace VIS.Helpers
                 sb.Append("<ul data-tableName='" + tableName + "'>");
                 sb.Append("<li data-value='" + root.Node_ID + "'>").Append(GetRootItem(root.Node_ID, root.SetName, windowNo));
             }
+            menu1HTML = new StringBuilder();
+            menu2HTML = new StringBuilder();
 
-            sb.Append("<ul>");
+            menu1HTML.Append("<ul class='vismenu-parent'>");
 
             sb.Append(CreateTree(root.Nodes, baseUrl, windowNo));
 
-            sb.Append("</ul>");
+            menu2HTML.Append("</ul>");
 
-            sb.Append("</li></ul>");
+            menu1HTML.Append("</li></ul>");
 
-            return sb.ToString();
+            return menu1HTML.ToString() + menu2HTML.ToString();
         }
 
 
@@ -209,7 +211,7 @@ namespace VIS.Helpers
                     VTreeNode vt = (VTreeNode)item;
                     if (vt.IsSummary)
                     {
-                        sb.Append(GetSummaryItemStart(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), windowNo));
+                        sb.Append(GetSummaryItemStart(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), windowNo, vt.Parent_ID));
                         sb.Append(CreateTree(((System.Windows.Forms.TreeNode)vt).Nodes, baseUrl, windowNo));
                         sb.Append(GetSummaryItemEnd());
                     }
@@ -285,7 +287,7 @@ namespace VIS.Helpers
                     }
 
                     CreateNewTree(((System.Windows.Forms.TreeNode)vt).Nodes, baseUrl, windowNo);
-                    
+
 
                     if (vt.Parent_ID == 0)
                     {
@@ -409,23 +411,23 @@ namespace VIS.Helpers
             }
             else
             {
-                h += "<li style='min-height: 40px;overflow: auto;' data-value='" + id + "' data-summary='N'>" +
-                     "<a class='vis-menuitm-with-favItm' href='javascript:void(0)'  data-value='" + id + "' data-action='" + action + "' data-actionid ='" + aid + "'>" +
-                     "<span " + GetSpanClass(img);
+                menu2HTML.Append("<li style='min-height: 40px;overflow: auto;' data-value='" + id + "' data-summary='N'>");
+                menu2HTML.Append("<a class='vis-menuitm-with-favItm' href='javascript:void(0)'  data-value='" + id + "' data-action='" + action + "' data-actionid ='" + aid + "'>");
+                menu2HTML.Append("<span " + GetSpanClass(img));
                 if (_ctx.GetIsRightToLeft())
                 {
-                    h += " style='float:right;margin:1px 0px 0px 10px;' ";
+                    menu2HTML.Append(" style='float:right;margin:1px 0px 0px 10px;' ");
                 }
 
-                h += " ></span>" + text + "</a>";
+                menu2HTML.Append(" ></span>" + text + "</a>");
 
                 if (onBar)
                 {
-                    h += "<a data-isfavbtn='yes' data-value='" + id + "' data-isfav='yes' data-action='" + action + "' data-actionid ='" + aid + "' data-name ='" + text + "'   class='vis-menufavitm vis-favitmchecked'></a>";
+                    menu2HTML.Append("<a data-isfavbtn='yes' data-value='" + id + "' data-isfav='yes' data-action='" + action + "' data-actionid ='" + aid + "' data-name ='" + text + "'   class='vis-menufavitm vis-favitmchecked'></a>");
                 }
                 else
                 {
-                    h += "<a data-isfavbtn='yes' data-value='" + id + "' data-isfav='no' data-action='" + action + "' data-actionid ='" + aid + "'  data-name ='" + text + "' class='vis-menufavitm vis-favitmunchecked'></a>";
+                    menu2HTML.Append("<a data-isfavbtn='yes' data-value='" + id + "' data-isfav='no' data-action='" + action + "' data-actionid ='" + aid + "'  data-name ='" + text + "' class='vis-menufavitm vis-favitmunchecked'></a>");
                 }
             }
             return h;
@@ -489,7 +491,7 @@ namespace VIS.Helpers
         /// <param name="id">id of node</param>
         /// <param name="text">text display</param>
         /// <returns>html string</returns>
-        private string GetSummaryItemStart(int id, string text, string windowNo = "")
+        private string GetSummaryItemStart(int id, string text, string windowNo = "", int parentID = 0)
         {
             var h = "";
             if (windowNo != "")
@@ -500,12 +502,21 @@ namespace VIS.Helpers
             }
             else
             {
-                h += "<li  data-value='" + id + "' data-summary='Y' class='vis-hasSubMenu'> " +
-                     "<input type='checkbox'  id='" + windowNo + id + "' />" +
-                     "<label data-target='#ul_" + id + "' data-toggle='collapse' for='" + windowNo + id + "'><i class='fa fa-folder-o vis-folder-open-ico'></i>" +
-                      text +
-                      " </label>";
-                h += "<ul class='collapse'  id='ul_" + id + "'>";
+                if (parentID > 0)
+                    menu1HTML.Append("<li  data-con='Y' data-value='" + id + "' data-summary='Y' class='vis-hasSubMenu' style='display:none'> ");
+                else
+                    menu1HTML.Append("<li  data-con='Y' data-value='" + id + "' data-summary='Y' class='vis-hasSubMenu'> ");
+                menu1HTML.Append("<input type='checkbox'  id='" + windowNo + id + "' />");
+                menu1HTML.Append("<label data-target='#ul_" + id + "' data-toggle='collapse' for='" + windowNo + id + "'><i class='fa fa-folder-o vis-folder-open-ico'></i>" + text + " </label>");
+
+                if (parentID > 0)
+                    menu2HTML.Append("<ul  data-con='Y' id='ul_" + id + "' style='display:none'>");
+                else
+                    menu2HTML.Append("<ul data-con='Y' id='ul_" + id + "' style='display:none'>");
+
+                menu2HTML.Append("<li style='min-height: 40px;overflow: auto;' data-value='" + id + "' data-summary='N'>");
+                menu2HTML.Append("<a class='vis-menuitm-with-favItm vis-menuitm-backbtn' href='javascript:void(0)'  data-value='" + id + "' data-action='N' data-actionid ='" + id + "'>");
+                menu2HTML.Append("<span class='' style='float:right;margin:1px 0px 0px 10px;'></span>" + text + "</a></li>");
             }
 
             return h;
@@ -580,7 +591,10 @@ namespace VIS.Helpers
         /// <returns></returns>
         private string GetSummaryItemEnd()
         {
-            return "</ul></li>";
+            menu2HTML.Append("</ul>");
+            menu1HTML.Append("</li>");
+            return "";
+            //  return "</ul></li>";
         }
 
         /// <summary>
