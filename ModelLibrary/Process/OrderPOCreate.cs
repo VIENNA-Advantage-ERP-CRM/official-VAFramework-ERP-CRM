@@ -360,12 +360,7 @@ namespace VAdvantage.Process
                             listConsolidatePO.Add(consolidatePO);
                         }
                     }
-
-                    if (po.Get_ColumnIndex("ConditionalFlag") > -1)
-                    {
-                        DB.ExecuteQuery("UPDATE C_Order SET ConditionalFlag = '" + MOrder.CONDITIONALFLAG_PrepareIt + "' WHERE C_Order_ID = " + po.GetC_Order_ID(), null, Get_Trx());
-                    }
-
+                    
                     _Dropship = Utility.Util.GetValueOfString(dr["ISDROPSHIP"]);
                     // int M_Product_ID = Utility.Util.GetValueOfInt(dr["M_PRODUCT_ID"]);
                     //	Create PO Line
@@ -621,6 +616,12 @@ namespace VAdvantage.Process
                 {
                     po.SetAD_OrgTrx_ID(so.GetAD_OrgTrx_ID());
                 }
+            }
+
+            // Set Conditional Flag to skip repeated logic on lines save.
+            if (po.Get_ColumnIndex("ConditionalFlag") > -1)
+            {
+                po.SetConditionalFlag(MOrder.CONDITIONALFLAG_PrepareIt);
             }
 
             // Handle error done by rakesh kumar on 17/Mar/2021

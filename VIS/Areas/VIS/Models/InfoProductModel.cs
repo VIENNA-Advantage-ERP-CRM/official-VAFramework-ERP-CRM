@@ -2100,7 +2100,7 @@ namespace VIS.Models
             // JID_1700: When physical inventory showing only available stock
             if (Util.GetValueOfInt(Windows.PhysicalInventory) == WindowID || Util.GetValueOfInt(Windows.InternalUse) == WindowID)
             {
-                sql += "AND prd.IsStocked='Y'";
+                sql += "AND prd.IsStocked='Y' AND prd.ProductType='I'";     // DevOps #329, only show product type 'Item' in cart of Product info
             }
             sql += " ORDER BY ic.VAICNT_ReferenceNo, cl.Line";
             DataSet ds = DB.ExecuteDataset(sql, null, null);

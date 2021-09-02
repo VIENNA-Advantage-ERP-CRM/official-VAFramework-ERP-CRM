@@ -2917,7 +2917,7 @@
         //	Set Message / Info
         if (e.getAD_Message() != null || e.getInfo() != null) {
             var sb = new StringBuilder();
-            var msg = e.getMessage();
+            var msg = e.getAD_Message();
             if (msg != null && msg.length > 0)
                 sb.append(VIS.Msg.getMsg(e.getAD_Message()));
             var info = e.getInfo();

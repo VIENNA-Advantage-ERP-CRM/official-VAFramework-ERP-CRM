@@ -125,7 +125,7 @@ namespace VAdvantage.Acct
             //
             FactLine line = new FactLine(_doc.GetCtx(), _doc.Get_Table_ID(),
                 _doc.Get_ID(),
-                docLine == null ? 0 : (docLine.GetPrimaryKeyValue != 0 ? docLine.GetPrimaryKeyValue : docLine.Get_ID()), _trx);
+                docLine == null ? 0 : (docLine.GetPrimaryKeyValue != 0 ? docLine.GetPrimaryKeyValue : docLine.Get_ID()), _doc.GetAD_Window_ID(), _trx);
             // set accounting schema reference 
             line.SetC_AcctSchema_ID(_acctSchema.GetC_AcctSchema_ID());
             //  Set Info & Account
@@ -211,7 +211,7 @@ namespace VAdvantage.Acct
             Add(line);
             return line;
         }
-
+       
         /// <summary>
         ///  Add Fact Line
         /// </summary>

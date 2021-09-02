@@ -1300,10 +1300,17 @@ namespace VIS.Helpers
                 pp = VAdvantage.Logging.VLogger.RetrieveInfo();
                 String msg = "Saved";
                 String info = "";
+
+                // VIS0060: Show Message from workflow Process
                 if (pp != null)
                 {
                     msg = pp.GetValue();
                     info = pp.GetName();
+                }
+                else if (!String.IsNullOrEmpty(po.GetDocWFMsg()))
+                {
+                    msg = "";
+                    info = po.GetDocWFMsg();
                 }
                 outt.FireIEvent = true;
                 outt.EventParam = new EventParamOut() { Msg = msg, Info = info };

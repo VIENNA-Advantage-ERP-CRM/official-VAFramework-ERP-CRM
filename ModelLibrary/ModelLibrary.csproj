@@ -1811,6 +1811,7 @@
     <Compile Include="Process\ProductionReverse.cs" />
     <Compile Include="Process\ProductStockSummary.cs" />
     <Compile Include="Process\ProfitLossClosing.cs" />
+    <Compile Include="Process\ProfitLossReactivation.cs" />
     <Compile Include="Process\ProjectClose.cs" />
     <Compile Include="Process\ProjectGenOrder.cs" />
     <Compile Include="Process\ProjectGenPO.cs" />

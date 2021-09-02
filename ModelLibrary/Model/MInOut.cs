@@ -71,6 +71,7 @@ namespace VAdvantage.Model
         /**is container applicable */
         private bool isContainrApplicable = false;
 
+
         #endregion
 
         /// <summary>
@@ -1551,6 +1552,14 @@ namespace VAdvantage.Model
                 log.SaveError("FillMandatory", Msg.Translate(GetCtx(), "C_Order_ID"));
                 return false;
             }
+
+            // VIS0060: Check if Document Type is not selected.
+            if (newRecord && GetC_Order_ID() > 0 && GetC_DocType_ID() == 0)
+            {
+                log.SaveError("VIS_ShipDocTypeNotFound", "");
+                return false;
+            }
+
             if (newRecord || Is_ValueChanged("C_BPartner_ID"))
             {
                 //MBPartner bp = MBPartner.Get(GetCtx(), GetC_BPartner_ID());
@@ -2171,7 +2180,7 @@ namespace VAdvantage.Model
             }
 
             // Set Document Date based on setting on Document Type
-            SetCompletedDocumentDate();            
+            SetCompletedDocumentDate();
 
             // To check weather future date records are available in Transaction window
             // this check implement after "SetCompletedDocumentDate" function, because this function overwrit movement date
@@ -2306,8 +2315,8 @@ namespace VAdvantage.Model
             }
 
             bool countVA026 = Env.IsModuleInstalled("VA009_") && Env.IsModuleInstalled("VA026_");
-                #region [Process All Lines]
-                for (int lineIndex = 0; lineIndex < lines.Length; lineIndex++)
+            #region [Process All Lines]
+            for (int lineIndex = 0; lineIndex < lines.Length; lineIndex++)
             {
                 MInOutLine sLine = lines[lineIndex];
                 MProduct product = sLine.GetProduct();
@@ -3936,13 +3945,20 @@ namespace VAdvantage.Model
             //	Counter Documents
             try
             {
+                //if counter document not created due to some error not to completed the record
+                //and it should return the error message to the user
                 MInOut counter = CreateCounterDoc();
                 if (counter != null)
+                {
                     Info.Append(" - @CounterDoc@: @M_InOut_ID@=").Append(counter.GetDocumentNo());
+                }
             }
             catch (Exception e)
             {
-                Info.Append(" - @CounterDoc@: ").Append(e.Message.ToString());
+                //if get exception while creating counter document then return the message to the user
+                //Info.Append(" - @CounterDoc@: ").Append(e.Message.ToString());
+                _processMsg = e.Message.ToString();
+                return DocActionVariables.STATUS_INPROGRESS;
             }
 
             //	User Validation
@@ -4199,12 +4215,13 @@ namespace VAdvantage.Model
                                  Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_InventoryLine_ID"]) > 0)
                             {
                                 inventoryLine = new MInventoryLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_InventoryLine_ID"]), Get_TrxName());
-                                inventory = new MInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetM_Inventory_ID()), null);
+                                inventory = new MInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetM_Inventory_ID()), Get_TrxName());
                                 if (!inventory.IsInternalUse())
                                 {
                                     #region update Physical Inventory
                                     if (inventoryLine.GetM_ProductContainer_ID() == sLine.GetM_ProductContainer_ID())
                                     {
+                                        inventoryLine.SetParent(inventory);
                                         inventoryLine.SetQtyBook(containerCurrentQty);
                                         inventoryLine.SetOpeningStock(containerCurrentQty);
                                         inventoryLine.SetDifferenceQty(Decimal.Subtract(containerCurrentQty, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["ContainerCurrentQty"])));
@@ -4417,10 +4434,10 @@ namespace VAdvantage.Model
                                  Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_InventoryLine_ID"]) > 0)
                             {
                                 inventoryLine = new MInventoryLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_InventoryLine_ID"]), Get_TrxName());
-                                inventory = new MInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetM_Inventory_ID()), null);
+                                inventory = new MInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetM_Inventory_ID()), Get_TrxName());
                                 if (!inventory.IsInternalUse())
                                 {
-                                    //break;
+                                    inventoryLine.SetParent(inventory);
                                     inventoryLine.SetQtyBook(Qty);
                                     inventoryLine.SetOpeningStock(Qty);
                                     inventoryLine.SetDifferenceQty(Decimal.Subtract(Qty, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["currentqty"])));
@@ -4892,7 +4909,7 @@ namespace VAdvantage.Model
                     // Is Used to get Material Policy
                     MProductCategory pc = MProductCategory.Get(GetCtx(), product.GetM_Product_Category_ID());
                     String MMPolicy = pc.GetMMPolicy();
-                    
+
                     // Is used for handling Gurantee Date - In Case of ASI
                     //DateTime? minGuaranteeDate = GetMovementDate();
 
@@ -5074,40 +5091,76 @@ namespace VAdvantage.Model
         {
             //	Is this a counter doc ?
             if (GetRef_InOut_ID() != 0)
+            {
                 return null;
-
-            //	Org Must be linked to BPartner
-            MOrg org = MOrg.Get(GetCtx(), GetAD_Org_ID());
-            //jz int counterC_BPartner_ID = org.getLinkedC_BPartner_ID(get_TrxName()); 
-            int counterC_BPartner_ID = org.GetLinkedC_BPartner_ID(Get_TrxName());
-            if (counterC_BPartner_ID == 0)
-                return null;
-            //	Business Partner needs to be linked to Org
-            //jz MBPartner bp = new MBPartner (getCtx(), getC_BPartner_ID(), null);
-            MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_TrxName());
-            int counterAD_Org_ID = bp.GetAD_OrgBP_ID_Int();
-            if (counterAD_Org_ID == 0)
-                return null;
-
-            //jz MBPartner counterBP = new MBPartner (getCtx(), counterC_BPartner_ID, null);
-            MBPartner counterBP = new MBPartner(GetCtx(), counterC_BPartner_ID, Get_TrxName());
-            MOrgInfo counterOrgInfo = MOrgInfo.Get(GetCtx(), counterAD_Org_ID, null);
-            log.Info("Counter BP=" + counterBP.GetName());
+            }
 
             //	Document Type
+            //check weather Counter Document created & Acitve or not 
             int C_DocTypeTarget_ID = 0;
             bool isReturnTrx = false;
             MDocTypeCounter counterDT = MDocTypeCounter.GetCounterDocType(GetCtx(), GetC_DocType_ID());
             if (counterDT != null)
             {
                 log.Fine(counterDT.ToString());
+                //if Created Inter Company Document is not Valid the does not allow user to complete the record
+                //it should return message to user the Counter Document is not Valid
                 if (!counterDT.IsCreateCounter() || !counterDT.IsValid())
+                {
+                    //erro save into the log
+                    log.Info("Counter Document Type is not Valid one!");
                     return null;
+                }
                 C_DocTypeTarget_ID = counterDT.GetCounter_C_DocType_ID();
                 isReturnTrx = counterDT.GetCounterDocType().IsReturnTrx();
+                //if Counter document type not found then return message to the user
+                if (C_DocTypeTarget_ID <= 0)
+                {
+                    //Info save into the log
+                    log.Info("Counter Document Type not found on Inter Company Document window.");
+                    return null;
+                }
             }
-            if (C_DocTypeTarget_ID <= 0)
+            else
+            {
                 return null;
+            }
+
+
+            //	Org Must be linked to BPartner
+            MOrg org = MOrg.Get(GetCtx(), GetAD_Org_ID());
+            //jz int counterC_BPartner_ID = org.getLinkedC_BPartner_ID(get_TrxName()); 
+            int counterC_BPartner_ID = org.GetLinkedC_BPartner_ID(Get_TrxName());
+            //if counter BP not found the return the message Counter Bp not found for Linked Org
+            if (counterC_BPartner_ID == 0)
+            {
+                //Info save into the log
+                log.Info("Business Partner is not found on Customer/Vendor master window to create the Counter Document.");
+                return null;
+            }
+            //	Business Partner needs to be linked to Org
+            //jz MBPartner bp = new MBPartner (getCtx(), getC_BPartner_ID(), null);
+            MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_TrxName());
+            int counterAD_Org_ID = bp.GetAD_OrgBP_ID_Int();
+            //if Org is not link the for BP then save info into the log, not found Link Org with the BP
+            if (counterAD_Org_ID == 0)
+            {
+                //if Link Org not found then save the info into the log
+                log.Info("Linked Organization is not found on Customer/Vendor master window to create the Counter Document.");
+                return null;
+            }
+
+            //System should not allow to create counter document with same BP and organization.
+            if (counterAD_Org_ID == GetAD_Org_ID() || counterC_BPartner_ID == GetC_BPartner_ID())
+            {
+                log.Info("On Counter Document Organization or Business Partner should not allow the same with the Document.");
+                return null;
+            }
+
+            //jz MBPartner counterBP = new MBPartner (getCtx(), counterC_BPartner_ID, null);
+            MBPartner counterBP = new MBPartner(GetCtx(), counterC_BPartner_ID, Get_TrxName());
+            MOrgInfo counterOrgInfo = MOrgInfo.Get(GetCtx(), counterAD_Org_ID, null);
+            log.Info("Counter BP=" + counterBP.GetName());
 
             // ReversalDoc_ID --> contain reference of Orignal Document which is to be reversed
             // Ref_InOut_ID --> contain reference of counter document which is to be created against this document
