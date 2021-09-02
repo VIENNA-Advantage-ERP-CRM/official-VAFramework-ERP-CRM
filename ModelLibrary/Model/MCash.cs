@@ -981,7 +981,7 @@ namespace VAdvantage.Model
                     {
                         //_processMsg = "No Conversion Rate found - @C_CashLine_ID@= " + line.GetLine();
 
-                        MConversionType conv = new MConversionType(GetCtx(), line.GetC_ConversionType_ID(), Get_TrxName());
+                        MConversionType conv = MConversionType.Get(GetCtx(), line.GetC_ConversionType_ID());
                         _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), line.GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToCashBookCurr")
                             + MCurrency.GetISO_Code(GetCtx(), C_Currency_ID) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
                         return DocActionVariables.STATUS_INVALID;
@@ -1335,7 +1335,7 @@ namespace VAdvantage.Model
                                 //_processMsg = "Could not convert C_Currency_ID=" + line.GetC_Currency_ID()
                                 //    + " to Bank Account C_Currency_ID=" + bankAcct.GetC_Currency_ID();                                
 
-                                MConversionType conv = new MConversionType(GetCtx(), line.GetC_ConversionType_ID(), Get_TrxName());
+                                MConversionType conv = MConversionType.Get(GetCtx(), line.GetC_ConversionType_ID());
                                 _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), line.GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBankCurrency")
                                     + MCurrency.GetISO_Code(GetCtx(), bankAcct.GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
                                 return DocActionVariables.STATUS_INVALID;
@@ -1586,7 +1586,7 @@ namespace VAdvantage.Model
                     if (cashAmt == null || cashAmt == 0)
                     {
                         //JID_0821: If Cashbook currency conversion is not found. On completion of cash journal System give error "IN".
-                        MConversionType conv = new MConversionType(GetCtx(), line.GetC_ConversionType_ID(), Get_TrxName());
+                        MConversionType conv =  MConversionType.Get(GetCtx(), line.GetC_ConversionType_ID());
                         errorMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), line.GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
                             + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
                         return errorMsg;
@@ -1626,7 +1626,7 @@ namespace VAdvantage.Model
                         //return DocActionVariables.STATUS_INVALID;
 
                         //JID_0821: If Cashbook currency conversion is not found. On completion of cash journal System give error "IN".
-                        MConversionType conv = new MConversionType(GetCtx(), line.GetC_ConversionType_ID(), Get_TrxName());
+                        MConversionType conv = MConversionType.Get(GetCtx(), line.GetC_ConversionType_ID());
                         errorMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), line.GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
                             + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
                         return errorMsg;

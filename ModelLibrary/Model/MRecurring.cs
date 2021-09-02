@@ -107,7 +107,7 @@ namespace VAdvantage.Model
             MRecurringRun run = new MRecurringRun(GetCtx(), this);
             String msg = "@Created@ ";
             //Checked if the Next Date Run is less then the date pressent Arpit on 15th Dec,2016
-            if (GetDateNextRun() == DateTime.Now.Date || GetDateNextRun()==null)
+            if (GetDateNextRun() == DateTime.Now.Date || GetDateNextRun() == null)
             {
 
                 //	Copy
@@ -127,8 +127,9 @@ namespace VAdvantage.Model
                     run.SetC_Invoice_ID(invoice.GetC_Invoice_ID());
                     //Set Invoice Refrence and Description from Orignal to Recurring
                     invoice.Set_Value("InvoiceReference", from.GetDocumentNo() + "_" + (GetRunsMax() - GetRunsRemaining() + 1));
-                    invoice.AddDescription(Msg.GetMsg(from.GetCtx(), "RecurringDocument")+from.GetDocumentNo());
-                    if (!invoice.Save(Get_TrxName())) {
+                    invoice.AddDescription(Msg.GetMsg(from.GetCtx(), "RecurringDocument") + from.GetDocumentNo());
+                    if (!invoice.Save(Get_TrxName()))
+                    {
                         ValueNamePair pp = VLogger.RetrieveError();
                         if (pp != null)
                         {
@@ -151,6 +152,11 @@ namespace VAdvantage.Model
                 else if (GetRecurringType().Equals(MRecurring.RECURRINGTYPE_GLJournalBatch)) //Changes to GL Journal Batch by Arpit
                 {
                     MJournalBatch journal = MJournalBatch.CopyFrom(GetCtx(), GetGL_JournalBatch_ID(), dateDoc, Get_TrxName());
+                    if (journal.Get_ID() <= 0)
+                    {
+                        String error = journal.GetProcessMsg();
+                        throw new Exception(String.IsNullOrEmpty(error) ? "Could not create Journal Batch" : error);
+                    }
                     run.SetGL_JournalBatch_ID(journal.GetGL_JournalBatch_ID());
                     msg += journal.GetDocumentNo();
                 }
@@ -158,6 +164,11 @@ namespace VAdvantage.Model
                 else if (GetRecurringType().Equals(MRecurring.RECURRINGTYPE_GLJournal))
                 {
                     MJournal Journal = MJournal.CopyFrom(GetCtx(), GetGL_Journal_ID(), dateDoc, Get_TrxName());
+                    if (Journal.Get_ID() <= 0)
+                    {
+                        String error = Journal.GetProcessMsg();
+                        throw new Exception(String.IsNullOrEmpty(error) ? "Could not create Journal" : error);
+                    }
                     run.SetGL_Journal_ID(Journal.GetGL_Journal_ID());
                     msg += Journal.GetDocumentNo();
                 }
@@ -168,6 +179,11 @@ namespace VAdvantage.Model
                     MPayment from = new MPayment(GetCtx(), GetC_Payment_ID(), Get_TrxName());
                     MPayment payment = MPayment.CopyFrom(from, dateDoc,
                         from.GetC_DocType_ID(), Get_TrxName());
+                    if (payment.Get_ID() <= 0)
+                    {
+                        String error = payment.GetProcessMsg();
+                        throw new Exception(String.IsNullOrEmpty(error) ? "Could not create Payment" : error);
+                    }
                     run.SetC_Payment_ID(payment.GetC_Payment_ID());
                     msg += payment.GetDocumentNo();
                 }
@@ -184,7 +200,7 @@ namespace VAdvantage.Model
             }
             else
             {
-                return Msg.GetMsg(GetCtx(), "RecurringNotCompleted")+ String.Format("{0:dd/M/yyyy}", Convert.ToDateTime(GetDateNextRun()));
+                return Msg.GetMsg(GetCtx(), "RecurringNotCompleted") + String.Format("{0:dd/M/yyyy}", Convert.ToDateTime(GetDateNextRun()));
             }
         }	//	execureRun
 
