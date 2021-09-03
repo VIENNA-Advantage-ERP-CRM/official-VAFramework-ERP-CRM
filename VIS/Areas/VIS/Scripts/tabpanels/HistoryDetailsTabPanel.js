@@ -144,7 +144,7 @@
 
         function ddlpagesOnChange(e) {
             selectedPage = $('#VIS_ddlPages' + window_No).find(":selected").val();
-            loadGridData(_selectedId, VIS.Utility.Util.getValueOfInt(selectedPage), window_N, tableID);
+            loadGridData(_selectedId, VIS.Utility.Util.getValueOfInt(selectedPage), window_No, tableID);
             currentPage = selectedPage;
         };
 
