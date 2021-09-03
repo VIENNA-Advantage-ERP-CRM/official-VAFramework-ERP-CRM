@@ -193,7 +193,8 @@ namespace VIS.Controllers
             {
                 sql.Append(isBaseLangess);
             }
-            sql.Append(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) WHERE l.C_Order_ID=" + (C_Ord_IDs == null ? 0 : C_Ord_IDs) + " AND l.M_Product_ID>0");
+            sql.Append(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) WHERE l.C_Order_ID=" + (C_Ord_IDs == null ? 0 : C_Ord_IDs) + " AND l.M_Product_ID>0");//Hanlded case: order is not selected and on the change/selection
+                                                                                                                                                                                                                          //of deliverydate excception's coming  missing expression
 
             // Get lines from Order based on the setting taken on Tenant to allow non item Product
             if (!forInvoicees && !isAllownonItem)
@@ -243,8 +244,9 @@ namespace VIS.Controllers
                 {
                     sql.Append(isBaseLangess);
                 }
-
-                sql.Append(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) WHERE l.C_Order_ID=" + (C_Ord_IDs == null ? 0 : C_Ord_IDs) + " AND C.C_Charge_ID >0 ");
+                                                                                                                                                              
+                sql.Append(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) WHERE l.C_Order_ID=" + (C_Ord_IDs == null ? 0 : C_Ord_IDs) + " AND C.C_Charge_ID >0 "); //Hanlded case: order is not selected and on the change/selection
+                                                                                                                                                                                                                                //of deliverydate excception's coming  missing expression
 
                 if (DelivDates != "")
                 {
