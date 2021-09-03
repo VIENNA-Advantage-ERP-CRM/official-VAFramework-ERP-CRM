@@ -190,7 +190,7 @@ namespace VIS.Models
                         + "   SELECT ai.APPOINTMENTSINFO_ID AS ID, ai.AD_TABLE_ID, ai.RECORD_ID, ai.CREATED, au.NAME AS FROMUSER, 'APPOINTMENT' AS TYPE, ai.SUBJECT AS SUBJECT, au.NAME, 'N' AS HASATTACHMENT, '' AS ISTASKCLOSED "
                         + "   FROM APPOINTMENTSINFO ai "
                         + "   JOIN AD_USER au ON au.AD_USER_ID=ai.CREATEDBY "
-                        + "   WHERE ai.ISACTIVE = 'Y' AND ai.ISTASK = 'N' "
+                        + "   WHERE (ai.AttendeeInfo IS NOT NULL OR ai.RefAppointmentsInfo_ID IS NULL) AND ai.ISACTIVE = 'Y' AND ai.ISTASK = 'N' "
                         + "   AND ai.AD_TABLE_ID = " + _AD_Table_ID
                         + "   AND ai.RECORD_ID = " + RecordId
 
@@ -569,7 +569,7 @@ namespace VIS.Models
                             FileType = Util.GetValueOfString(row["FileType"]),
                             FileSize = Util.GetValueOfInt(row["FileSize"]),
                             FileLocation = Util.GetValueOfString(row["FileLocation"]),
-                            CreatedOn = Util.GetValueOfDateTime(row["CreatedOn"]).ToString(),
+                            CreatedOn = DateTime.SpecifyKind(Convert.ToDateTime(row["CreatedOn"]), DateTimeKind.Utc),
                             CreatedBy = Util.GetValueOfString(row["CreatedBy"]),
                             AD_Table_ID = Util.GetValueOfInt(row["AD_Table_ID"]),
                             Record_ID = Util.GetValueOfInt(row["Record_ID"])
@@ -875,7 +875,7 @@ namespace VIS.Models
         public int FileSize { get; set; }
         public int AD_Table_ID { get; set; }
         public int Record_ID { get; set; }
-        public string CreatedOn { get; set; }
+        public DateTime CreatedOn { get; set; }
         public string CreatedBy { get; set; }
     }
 
