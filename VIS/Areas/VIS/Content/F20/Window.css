@@ -2346,3 +2346,7 @@ flex:1;
 .vis-navMainContent {
     width: 100%;
 }
+
+.vis-menuSum-hide {
+display:none;
+}

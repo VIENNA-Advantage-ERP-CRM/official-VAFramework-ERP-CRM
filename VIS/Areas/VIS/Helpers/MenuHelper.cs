@@ -29,6 +29,7 @@ namespace VIS.Helpers
         private int itemNo = 1;
         private int lastParentID = 0;
         private int rootParentID = 0;
+        private string rootItem = "";
         private int settingSeqNo = 9999;
         private bool isSettingItem = false;
         private Dictionary<string, string> menuIcons = new Dictionary<string, string>() {
@@ -231,6 +232,7 @@ namespace VIS.Helpers
         /// <returns></returns>
         private void CreateNewTree(System.Windows.Forms.TreeNodeCollection treeNodeCollection, string baseUrl, string windowNo = "")
         {
+            bool isOutContainerDiv = false;
             foreach (var item in treeNodeCollection)
             {
                 VTreeNode vt = (VTreeNode)item;
@@ -239,6 +241,7 @@ namespace VIS.Helpers
                     if (vt.Parent_ID == 0)
                     {
                         rootParentID = vt.Node_ID;
+                        rootItem = vt.SetName;
                         GetMainMenuSummaryItem(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), windowNo);
                         itemNo = 0;
                         menu1HTML.Clear();
@@ -248,7 +251,7 @@ namespace VIS.Helpers
                         isSettingItem = false;
                         menu1HTML.Append("<div class='vis-navColWrap'>");
                         menu2HTML.Append("<div class='vis-navColWrap'>");
-                        settingsHTML.Append("<div class='vis-navColWrap'><div class='vis-navSubMenu'><h5 class='vis-navDataHead'><i class='" + menuIcons["S"] + "'></i><span>" + Msg.GetMsg(_ctx, "Settings") + "</span></h5></div>");
+                        settingsHTML.Append("<div class='vis-navColWrap'>");
                     }
                     else
                     {
@@ -261,13 +264,14 @@ namespace VIS.Helpers
 
                         else if (lastParentID == 0 || lastParentID == vt.Parent_ID)
                         {
-                            //if(lastParentID == vt.Parent_ID)
-                            //    itemNo++;
                             if (vt.Parent_ID == rootParentID)
+                            {
                                 itemNo++;
+                                isOutContainerDiv = true;
+                            }
                             lastParentID = vt.Node_ID;
 
-                            GetNewSummaryItemStart(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), windowNo, 0, vt.Image);
+                            GetNewSummaryItemStart(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), windowNo, 0, vt.Image, isOutContainerDiv);
                         }
                         else
                         {
@@ -281,6 +285,7 @@ namespace VIS.Helpers
                                     menu1HTML.Append("</div>");
                                 itemNo++;
                             }
+                            isOutContainerDiv = true;
                             GetNewSummaryItemStart(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), windowNo, 0, vt.Image);
                         }
 
@@ -291,25 +296,27 @@ namespace VIS.Helpers
 
                     if (vt.Parent_ID == 0)
                     {
-                        //if (itemNo % 2 == 0)
                         menu2HTML.Append("</div>");
-                        //else
                         menu1HTML.Append("</div>");
 
                         settingsHTML.Append("</div>");
 
                         isSettingItem = false;
 
-                        lstMenuSections.Add("<div class='vis-navmenuItems-Container' style='display:none' id='Menu" + vt.Node_ID + "'>" + menu1HTML.ToString() + menu2HTML.ToString() + settingsHTML.ToString() + "</div>");
+                        lstMenuSections.Add("<div class='vis-navmenuItems-Container' style='display:none' id='Menu" + vt.Node_ID + "'><h6 class='vismenu-hidden-header' style='display:none'>"+vt.SetName+"</h6>" + menu1HTML.ToString() + menu2HTML.ToString() + settingsHTML.ToString() + "</div>");
                     }
                     else
                     {
+                        string endDiv = "</div>";
+                        //if (isOutContainerDiv)
+                        //    endDiv = "</div></div>";
+
                         if (vt.SeqNo == settingSeqNo || isSettingItem)
-                            settingsHTML.Append("</div>");
+                            settingsHTML.Append(endDiv);
                         else if (itemNo > 0 && itemNo % 2 == 0)
-                            menu2HTML.Append("</div>");
+                            menu2HTML.Append(endDiv);
                         else
-                            menu1HTML.Append("</div>");
+                            menu1HTML.Append(endDiv);
 
                         if (vt.SeqNo == settingSeqNo)
                         {
@@ -522,7 +529,7 @@ namespace VIS.Helpers
             return h;
         }
 
-        private void GetNewSummaryItemStart(int id, string text, string windowNo = "", int seqNo = 0, string Image = "")
+        private void GetNewSummaryItemStart(int id, string text, string windowNo = "", int seqNo = 0, string Image = "", bool container = false)
         {
             string icon = "<i class='" + menuIcons["S"] + "'></i>";
 
@@ -539,19 +546,27 @@ namespace VIS.Helpers
                 }
             }
 
+            string continerAttribute = "";
+            string parentDiv = "";
+            //if (container)
+            //{
+            //    continerAttribute = "data-isContainer='Y'";
+            //    parentDiv = "<div class='vismenu-hidden-header'><h6 class='vismenu-hidden-headerh5' style='display:none'>" + rootItem+"</h6>";
+            //}
+
             if (seqNo == settingSeqNo || isSettingItem)
             {
-                settingsHTML.Append("<div data-sqeno='" + seqNo + "' data-value='" + id + "' data-summary='Y'  class='vis-navSubMenu'><h5 class='vis-navDataHead'>" + icon +
+                settingsHTML.Append(parentDiv).Append("<div "+ continerAttribute + " data-sqeno='" + seqNo + "' data-value='" + id + "' data-summary='Y'  class='vis-navSubMenu'><h5 class='vis-navDataHead'>" + icon +
         "<span>" + text + "</span></h5><ul class='list-unstyled'>");
             }
             else if (itemNo > 0 && itemNo % 2 == 0)
             {
-                menu2HTML.Append("<div  data-sqeno='" + seqNo + "'  data-value='" + id + "' data-summary='Y'  class='vis-navSubMenu'><h5 class='vis-navDataHead'>" + icon +
+                menu2HTML.Append(parentDiv).Append("<div " + continerAttribute + " data-sqeno='" + seqNo + "'  data-value='" + id + "' data-summary='Y'  class='vis-navSubMenu'><h5 class='vis-navDataHead'>" + icon +
     "<span>" + text + "</span></h5><ul class='list-unstyled'>");
             }
             else
             {
-                menu1HTML.Append("<div data-sqeno='" + seqNo + "' data-value='" + id + "' data-summary='Y'  class='vis-navSubMenu'><h5 class='vis-navDataHead'>" + icon +
+                menu1HTML.Append(parentDiv).Append("<div  " + continerAttribute + " data-sqeno='" + seqNo + "' data-value='" + id + "' data-summary='Y'  class='vis-navSubMenu'><h5 class='vis-navDataHead'>" + icon +
 "<span>" + text + "</span></h5><ul class='list-unstyled'>");
             }
 

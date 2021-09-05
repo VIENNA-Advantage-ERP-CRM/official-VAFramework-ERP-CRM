@@ -84,13 +84,13 @@
 
                     //$par.find('ul').show();
                 }
-                else if ($(event.target).hasClass('vis-menuitm-backbtn'))
-                {
+                else if ($(event.target).hasClass('vis-menuitm-backbtn')) {
                     var val = $(event.target).data("value");
                     $('#ul_' + val).css('display', 'none');;
                     $('.vismenu-parent').show();
                 }
                 else {
+
                     if (event.target.nodeName === "LABEL") {
                         if (Date.now() - time < 300) { //skip double click
                             event.preventDefault();
@@ -111,7 +111,13 @@
                             $('.vis-navmenuItems-Container').hide();
                             $target.parent().siblings().removeClass("vis-navSelected");
                             $target.parent().addClass("vis-navSelected");
-                            $('#Menu' + $target.data('value')).show();
+                            //$('#Menu' + $target.data('value')).show();
+                            var items = $('#Menu' + $target.data('value'));
+                            items.removeAttr('style');
+                            items.find('.vis-menuSum-hide').removeClass('vis-menuSum-hide');
+
+                            $menuTree.find('.vismenu-hidden-header').hide();
+                            $menuTree.find('.vis-nav-AllItems').hide();
                             return;
                         }
                         startMenuAction($target.data('action'), $target.data('actionid')); //start action
@@ -980,6 +986,7 @@
         var isVisible = false;
         var selectedMenu = '';
         var _menuTree = null;
+        var newContainer = null;
 
         //var main = $('<div class="vis-wakeup-main" >').hide(); 
         var root = $('<div class="vis-dialog vis-filter-dialog">');
@@ -1010,18 +1017,27 @@
             //options = null;
             filterA = filterMenuA; // event invoker
             $('body').append(root); // append div to body
+            createFilterAllMenu();
             events(); // bind events
         };
 
-        function getMenuList() {
+
+
+        function getMenuList(action) {
             var options = [];
             menuUL = _menuTree.find(".vis-navMainContent"); //menu UL element
-            menuUL.find('li').each(function () {
-                itm = $(this);
-                if (itm.data("summary") == "N") {
-                    options.push(itm[0].outerHTML);
-                }
-            });
+
+            var menuUL1 = _menuTree.find(".vismenu-hidden-header"); //menu UL element
+            for (var i = 0; i < menuUL1.length; i++) {
+                itm = $(menuUL1[i]);
+                //if ((action && action == itm.data("action")) || itm.data("summary") == "Y")
+                //{
+                //    options.push(itm[0].outerHTML);
+                //}
+                //else if (itm.data("summary") == "N") {
+                options.push(itm[0].outerHTML);
+                //}
+            };
             return options;
         };
 
@@ -1033,31 +1049,81 @@
             root.on("click", "input[type=button]", function (e) {
                 e.stopPropagation();
                 var rd = root.find("input[type=radio]:checked").val();
-                if (_menuTree.find(".vis-navSelected a").length > 0)
-                    selectedMenu = $(_menuTree.find(".vis-navSelected a")[0]).data("value");
-                $(_menuTree.find(".vis-navSelected")[0]).removeClass('vis-navSelected');
-                filterMenu(rd); // menu filter
+                // if (_menuTree.find(".vis-navSelected a").length > 0)
+                //   selectedMenu = $(_menuTree.find(".vis-navSelected a")[0]).data("value");
+                //$(_menuTree.find(".vis-navSelected")[0]).removeClass('vis-navSelected');
+                //filterMenu(rd); // menu filter
+                filterSelectedMenu(rd);
+
                 closePopup(); // close popup
             });
+
+            $('.vis-menu-headerName').click(function () {
+                showAllItems();
+            });
+        };
+
+        function filterSelectedMenu(action) {
+            if (newContainer.is(':visible')) {
+                //_menuTree.find('.vis-navMainContent li').show();///Show All
+
+               // newContainer.find('.vis-navmenuItems-Container-allItems').removeAttr('style');
+                newContainer.find('.vis-navMainContent').removeAttr('style');
+                if (action === "A") { // all tree
+                    _menuTree.find('.vis-navMainContent li').show();///Show All
+                }
+                else {
+                    _menuTree.find('.vis-navMainContent li').hide(); // hide all
+                    _menuTree.find('.vis-navMainContent li > a[data-action="' + action + '"]').parent().show(); // show only match action
+                }
+            }
+            else {
+                if (action === "A") { // all tree
+                    _menuTree.find('.vis-navMainContent li').show();///Show All
+                }
+                else {
+                    _menuTree.find('.vis-navMainContent li').hide(); // hide all
+                    _menuTree.find('.vis-navMainContent li > a[data-action="' + action + '"]').parent().show(); // show only match action
+                }
+            }
+        }
+
+
+        function createFilterAllMenu() {
+            var container = _menuTree.find('.vis-navmenuItems-Container');
+            newContainer = $("<div class='vis-nav-AllItems'></div>");
+            for (var i = 0; i < container.length; i++) {
+                //var newDiv = jQuery.extend(true, {}, $(container[i]));
+                newContainer.append($(container[i]).clone().removeAttr('style').addClass('vis-navmenuItems-Container-allItems'));
+            }
+            newContainer.hide();
+            _menuTree.find('.vis-navMainContent').append(newContainer);
+        }
+
+        function showAllItems() {
+            _menuTree.find('.vis-navmenuItems-Container').hide();
+            newContainer.find('.vis-navmenuItems-Container').removeAttr('style');
+            newContainer.find('.vismenu-hidden-header').show();
+            newContainer.show();
         };
 
         /* filter the menu accroding to action
         @param action type of menu item
         */
         function filterMenu(action) {
+            menuUL.find('.vis-menuSum-hide').removeClass('vis-menuSum-hide');
+
             if (action === "A") { // all tree
-                //menuUL.empty();
-                // menuUL.html(menuHtml);
                 menuUL.find('.vis-navmenuitemsfilter').remove();
                 menuUL.find('.vis-navmenuItems-Container').show();
                 menuUL.find('li').show(); // hide all
                 _menuTree.find('[data-value="' + selectedMenu + '"]').trigger('click');
+                menuUL.find('.vismenu-hidden-headerh5').hide();
+
             }
             else {
-                //menuUL.empty();
-
                 menuUL.find('.vis-navmenuitemsfilter').remove();
-                filteredMenuHtml = getMenuList();
+                filteredMenuHtml = getMenuList(action);
                 menuUL.find('.vis-navmenuItems-Container').hide();
                 var $mainContainer = $('<div class="vis-navmenuItems-Container vis-navmenuitemsfilter">');
                 var navcolwrap1 = $('<div class="vis-navColWrap">');
@@ -1066,7 +1132,7 @@
                 $mainContainer.append(filteredMenuHtml);
                 $mainContainer.find('li').data('hide', 'Y');
                 $mainContainer.find('li > a[data-action="' + action + '"]').parent().data('hide', 'N');
-                filteredMenuHtml = $mainContainer.find('li');
+                filteredMenuHtml = $mainContainer.find('.vismenu-hidden-header');
 
                 var j = 1;
                 for (var i = 0; i < filteredMenuHtml.length; i++) {
@@ -1093,6 +1159,43 @@
                 menuUL.find('li').hide(); // hide all
 
                 menuUL.find('li > a[data-action="' + action + '"]').parent().show(); // show only match action
+                var allUls = menuUL.find('.vismenu-hidden-header').find('ul');
+
+                for (var j = 0; j < allUls.length; j++) {
+                    var thisUL = $(allUls[j]);
+                    var liList = thisUL.find('li');
+                    var canhide = false;
+                    for (var k = 0; k < liList.length; k++) {
+                        if ($(liList[k]).is(':visible')) {
+                            canhide = false;
+                            break;
+                        }
+                        canhide = true;
+                    }
+                    if (canhide)
+                        thisUL.addClass('vis-menuSum-hide');
+                }
+
+                allUls = menuUL.find('.vismenu-hidden-header');
+                for (var j = 0; j < allUls.length; j++) {
+                    var canhide = false;
+                    var liList = $(allUls[j]).find('ul');
+
+                    for (var k = 0; k < liList.length; k++) {
+                        if ($(liList[k]).is(':visible')) {
+                            canhide = false;
+                            break;
+                        }
+                        canhide = true;
+                    }
+                    if (canhide)
+                        $(allUls[j]).addClass('vis-menuSum-hide');
+                }
+
+
+
+
+                menuUL.find('.vismenu-hidden-headerh5').show();
             }
         };
 
