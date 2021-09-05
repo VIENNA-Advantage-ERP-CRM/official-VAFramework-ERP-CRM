@@ -118,6 +118,10 @@
 
                             $menuTree.find('.vismenu-hidden-header').hide();
                             $menuTree.find('.vis-nav-AllItems').hide();
+
+                            if (menuFilterMgr)
+                            menuFilterMgr.hideEmptyFolders();
+                            
                             return;
                         }
                         startMenuAction($target.data('action'), $target.data('actionid')); //start action
@@ -1064,6 +1068,7 @@
         };
 
         function filterSelectedMenu(action) {
+            _menuTree.find('.vis-navSubMenu').removeClass('vis-menuSum-hide');
             if (newContainer.is(':visible')) {
                 //_menuTree.find('.vis-navMainContent li').show();///Show All
 
@@ -1086,6 +1091,57 @@
                     _menuTree.find('.vis-navMainContent li > a[data-action="' + action + '"]').parent().show(); // show only match action
                 }
             }
+            hideEmptyFolders();
+        }
+
+        function hideEmptyFolders() {
+            if (root.find("input[type=radio]:checked").val() != "A") {
+                var allUls = menuUL.find('.vis-navmenuItems-Container').find('ul');
+
+                for (var j = 0; j < allUls.length; j++) {
+                    var thisUL = $(allUls[j]);
+                    var liList = thisUL.find('li');
+                    var canhide = false;
+                    for (var k = 0; k < liList.length; k++) {
+                        if ($(liList[k]).is(':visible')) {
+                            canhide = false;
+                            break;
+                        }
+                        canhide = true;
+                    }
+                    if (canhide)
+                        thisUL.closest('.vis-navSubMenu').addClass('vis-menuSum-hide');
+                }
+
+                allUls = menuUL.find('.vis-navmenuItems-Container-allItems');
+                for (var j = 0; j < allUls.length; j++) {
+                    var canhide = false;
+                    var liList = $(allUls[j]).find('.vis-navSubMenu');
+                    if (liList.length > 0) {
+                        for (var k = 0; k < liList.length; k++) {
+                            if (!$(liList[k]).hasClass('vis-menuSum-hide')) {
+                                canhide = false;
+                                break;
+                            }
+                            canhide = true;
+                        }
+                        if (canhide)
+                            $(allUls[j]).addClass('vis-menuSum-hide');
+                    }
+                    else {
+                        var liList = $(allUls[j]).find('li');
+                        for (var k = 0; k < liList.length; k++) {
+                            if ($(liList[k]).is(':visible')) {
+                                canhide = false;
+                                break;
+                            }
+                            canhide = true;
+                        }
+                        if (canhide)
+                            $(allUls[j]).addClass('vis-menuSum-hide');
+                    }
+                }
+            }
         }
 
 
@@ -1104,7 +1160,10 @@
             _menuTree.find('.vis-navmenuItems-Container').hide();
             newContainer.find('.vis-navmenuItems-Container').removeAttr('style');
             newContainer.find('.vismenu-hidden-header').show();
+            menuUL.find('.vis-menuSum-hide').removeClass('vis-menuSum-hide');
+            _menuTree.find(".vis-navSelected").removeClass('vis-navSelected');
             newContainer.show();
+            hideEmptyFolders();
         };
 
         /* filter the menu accroding to action
@@ -1214,10 +1273,13 @@
             }
         };
 
+      
+
         // return object public function
         return {
             init: init,
-            closePopup: closePopup
+            closePopup: closePopup,
+            hideEmptyFolders: hideEmptyFolders
         }
     }();
 

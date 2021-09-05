@@ -2219,6 +2219,7 @@ a:hover {
 .vis-navList {
     display: flex;
     align-items: center;
+
 }
 
 .vis-navmenuItems-Container .vis-navList a i {
