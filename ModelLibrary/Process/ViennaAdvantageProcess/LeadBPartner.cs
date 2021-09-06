@@ -208,7 +208,7 @@ namespace ViennaAdvantage.Process
                             for (int i = 0; i < cs.Length; i++)
                             {
                                 cus = tbl.GetPO(GetCtx(), cs[i], Get_TrxName());
-                                cspr = tbl.GetPO(GetCtx(), 0, Get_TrxName());
+                                cspr = tbl1.GetPO(GetCtx(), 0, Get_TrxName());
                                 cspr.Set_Value("C_BPartner_ID", C_BpID);
                                 cspr.Set_Value("M_Product_ID", Util.GetValueOfInt(cus.Get_Value("M_Product_ID")));
                                 cspr.Set_Value("C_IndustryCode_ID", Util.GetValueOfInt(cus.Get_Value("C_IndustryCode_ID")));
@@ -250,7 +250,7 @@ namespace ViennaAdvantage.Process
                             for (int i = 0; i < cs.Length; i++)
                             {
                                 cus = tbl.GetPO(GetCtx(), cs[i], Get_TrxName());
-                                cspr = tbl.GetPO(GetCtx(), 0, Get_TrxName());
+                                cspr = tbl1.GetPO(GetCtx(), 0, Get_TrxName());
                                 cspr.Set_Value("C_BPartner_ID", C_BpID);
                                 cspr.Set_Value("M_Product_ID", Util.GetValueOfInt(cus.Get_Value("M_Product_ID")));
                                 cspr.Set_Value("C_IndustryCode_ID", Util.GetValueOfInt(cus.Get_Value("C_IndustryCode_ID")));
