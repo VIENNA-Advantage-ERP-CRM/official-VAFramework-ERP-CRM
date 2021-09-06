@@ -3242,19 +3242,19 @@
                 maxValue = field.getMaxValue();
                 minValue = field.getMinValue();
                 if ($.isNumeric(maxValue) && $.isNumeric(minValue)) {
-                    if (field.getValue() > field.getMaxValue() || field.getValue() < field.getMinValue()) {
+                    if (Number(field.getValue()) > Number(field.getMaxValue()) || Number(field.getValue()) < Number(field.getMinValue())) {
                         VIS.ADialog.error("ValidationError", true, ": " + VIS.Msg.getMsg("VIS_ValueOf") + " " + field.getHeader() + " " + VIS.Msg.getMsg("VIS_MustBetween") + " " + field.getMinValue() + " " + VIS.Msg.getMsg("VIS_And") + " " + field.getMaxValue());
                         return false;
                     }
                 }
                 else if ($.isNumeric(maxValue)) {
-                    if (field.getValue() > maxValue) {
+                    if (Number(field.getValue()) >Number(maxValue)) {
                         VIS.ADialog.error("ValidationError", true, ": " + VIS.Msg.getMsg("VIS_ValueOf") + " " + field.getHeader() + " " + VIS.Msg.getMsg("VIS_Lessthan") + " " + maxValue);
                         return false;
                     }
                 }
                 else if ($.isNumeric(minValue)) {
-                    if (field.getValue() < minValue) {
+                    if (Number(field.getValue()) < Number( minValue)) {
                         VIS.ADialog.error("ValidationError", true, ": " + VIS.Msg.getMsg("VIS_ValueOf") + " " + field.getHeader() + " " + VIS.Msg.getMsg("VIS_Greaterthan") + " " + minValue);
                         return false;
                     }
@@ -5382,7 +5382,7 @@
     GridField.prototype.getIsInserting = function () {
         return this.inserting;
     };
-
+  
     GridField.prototype.getIsDisplayed = function (checkContext) {
         if (arguments.length == 0) {
             return this.vo.IsDisplayedf;
@@ -5517,7 +5517,6 @@
             return 3;
         return 4;
     };
-
 
     GridField.prototype.getIsMandatory = function (checkContext) {
 
@@ -6777,6 +6776,9 @@
 
     GridField.prototype.getIsUnique = function () {
         return this.vo.IsUnique;
+    };
+    GridField.prototype.getIsSwitch = function () {
+        return this.vo.IsSwitch;
     };
 
     /**

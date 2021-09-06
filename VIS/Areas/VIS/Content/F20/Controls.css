@@ -381,6 +381,7 @@ label.vis-ec-col-lblchkbox {
     font-weight: normal;
     color: rgba(var(--v-c-on-secondary), 1);
     align-items: center;
+    font-size: .875rem;
 }
 
 /*.vis-ev-col label.vis-ec-col-lblchkbox {
@@ -525,6 +526,95 @@ input[type="radio"]:not(:checked){
     border: 1px solid rgba(var(--v-c-on-secondary), .2);
 }
 
+.vis-input-wrap input[type=range],
+.vis-gc-vtable.w2ui-grid .w2ui-editable input[type=range] {
+    outline: 0;
+    border: 0;
+    max-width: 100%;
+}
+
+.vis-gc-vtable.w2ui-grid .w2ui-editable input[type=range] {
+    min-height: auto;
+    margin-top: 0 !important;
+}
+
+
+.vis-progress_output {
+    color: rgba(var(--v-c-on-primary), 1);
+    position: absolute;
+    left: 32px;
+    transform: translateX(-1%);
+    z-index: 1;
+    margin-top: 7px !important;
+}
+
+.w2ui-editable .vis-progress_output {
+    position: relative !important;
+    margin-top: 4px !important;
+    left: 0.5%;
+}
+
+.w2ui-grid-data .vis-grid_progress_output {
+    /* color: black !important; */
+    position: absolute;
+    left: 0.5%;
+    transform: translateX(-1%);
+    z-index: 1;
+    margin-top: -18px;
+}
+
+.vis-input-wrap input[type=range],
+.w2ui-editable input[type=range] {
+    overflow: hidden;
+    height: 20px !important;
+    -webkit-appearance: none;
+    background-color: #ddd;
+    padding: 0 !important;
+}
+
+    .vis-input-wrap input[type=range]::-webkit-slider-runnable-track,
+    .w2ui-editable input[type=range]::-webkit-slider-runnable-track {
+        height: 20px !important;
+        -webkit-appearance: none;
+        color: rgba(var(--v-c-primary), 1) ;
+        -webkit-transition: box-shadow 0.2s ease-in-out;
+        transition: box-shadow 0.2s ease-in-out;
+        background-color: rgba(var(--v-c-on-secondary),0.1);
+    }
+
+    .vis-input-wrap input[type=range]::-webkit-slider-thumb,
+    .w2ui-editable input[type=range]::-webkit-slider-thumb {
+        width: 25px;
+        -webkit-appearance: none;
+        height: 20px;
+        cursor: ew-resize;
+        background: #ddd;
+        box-shadow: -340px 0 0 320px rgba(var(--v-c-primary), 1), inset 0 0 0 20px rgba(var(--v-c-primary), 1);
+        -webkit-transition: box-shadow 0.2s ease-in-out;
+        transition: box-shadow 0.2s ease-in-out;
+        position: relative;
+    }
+
+.vis-input-wrap input[type="range"],
+.w2ui-editable input[type="range"] {
+    border-radius:0.7rem !important;
+    margin-left: 22px;
+    margin-top: 7px;
+    width: calc(100% - 22px);
+}
+
+    .vis-input-wrap input[type="range"] + label {
+        padding: 0;
+        left: 0 !important;
+        top: -10px !important;
+    }
+
+    .vis-input-wrap input[type="range"] ~ .vis-ev-ctrlinfowrap,
+    .w2ui-editable input[type="range"] ~ .vis-ev-ctrlinfowrap {
+        left: 0;
+    }
+
+    
 
 /***************************** Control Prop End ****************************************/
 

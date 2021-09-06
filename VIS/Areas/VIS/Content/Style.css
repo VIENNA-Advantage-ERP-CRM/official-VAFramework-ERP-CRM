@@ -1,4 +1,4 @@
-.vis-pu-outerwrap{
+﻿.vis-pu-outerwrap{
     width: 100%;
     height: 100%;
 }
@@ -1140,8 +1140,45 @@ input[type="checkbox"].vis-tm-chkbox {
 .vis-view_team span {
     padding-right: 5px;
 }
-/*contactinfo form homepage END*/
 
+
+
+.vis-progressCtrl {
+    background-color: white;
+    display: block;
+    width: 100%;
+    height: 1.2em;
+    /* margin-left: 30px; */
+    margin-top: -0.9rem;
+}
+
+    .vis-progressCtrl::-webkit-progress-bar {
+        background: rgba(var(--v-c-on-secondary), .05);
+        border-radius: .7rem;
+    }
+
+    .vis-progressCtrl::-webkit-progress-value {
+        background: rgba(var(--v-c-primary), 1);
+        border-radius: .7rem 0 0 .7rem;
+    }
+
+    .vis-progressCtrl::-ms-fill {
+        background: rgba(var(--v-c-primary), 1);
+    }
+
+.vis-progress-gridOutput {
+    color: rgba(var(--v-c-on-primary), 1);
+    padding-left: .625rem;
+    font-size: .75rem;
+    padding-top: .1rem;
+}
+
+
+
+
+
+}
+/*contactinfo form homepage END*/
 @media (max-width: 1024px) {
     .VIS-TM-textdivTreedata {
         width: 65%;
@@ -1176,3 +1213,4 @@ input[type="checkbox"].vis-tm-chkbox {
         line-height: 18px;
     }
 }
+

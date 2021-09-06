@@ -363,6 +363,10 @@ namespace VAdvantage.Controller
                     {
                         vo.IsUnique = "Y".Equals(dr[i].ToString());
                     }
+                    else if (columnName.Equals("isSwitch", StringComparison.OrdinalIgnoreCase))
+                    {
+                        vo.IsSwitch= "Y".Equals(dr[i].ToString());
+                    }
 
                 }
                 if (vo.Header == null)
@@ -860,6 +864,7 @@ namespace VAdvantage.Controller
             clone.FieldGroupDefault = FieldGroupDefault;
             clone.ShowFilterOption = ShowFilterOption;
             clone.IsUnique = IsUnique;
+            clone.IsSwitch = IsSwitch;
             return clone;
         }
 

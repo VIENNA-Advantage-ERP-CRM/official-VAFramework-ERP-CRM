@@ -463,3 +463,47 @@ input:not([type=button]), select, textarea{
     /*font-size: 1rem;*/
 
 }
+
+
+.vis-ctrl-switch {
+    height: 0;
+    width: 0;
+    visibility: hidden;
+}
+
+.vis-ctrl-switchSlider {
+    cursor: pointer;
+    text-indent: -9999px;
+    width: 3.4rem;
+    height: 0.5rem;
+    background: rgba(var(--v-c-on-secondary), 0.1);
+    display: inline-block;
+    border-radius: 2rem;
+    line-height: 1;
+    padding: 0.1666rem;
+    position: relative;
+    left: -15px;
+}
+
+    .vis-ctrl-switchSlider:after {
+        content: "";
+        position: absolute;
+        top: -0.5rem;
+        left: 0.166666rem;
+        width: 1.5rem;
+        height: 1.5rem;
+        background: rgba(var(--v-c-on-secondary), 1);
+        border-radius: 2rem;
+        transition: 0.3s;
+    }
+
+.vis-ctrl-switch:checked + .vis-ctrl-switchSlider {
+    /*background: rgba(var(--v-c-primary), 1);*/
+}
+
+.vis-ctrl-switch:checked + .vis-ctrl-switchSlider:after {
+    left: calc(100% - 0.166666rem);
+    transform: translateX(-100%);
+    background: rgba(var(--v-c-primary), 1);
+}
+

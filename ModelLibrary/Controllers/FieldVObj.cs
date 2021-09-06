@@ -267,7 +267,7 @@ namespace VAdvantage.Controller
         public bool ShowFilterOption = false;
 
         public bool IsUnique = false;
-
+        public bool IsSwitch = false;
 
         /// <summary>
         /// calaculate MaxDisplayLength
