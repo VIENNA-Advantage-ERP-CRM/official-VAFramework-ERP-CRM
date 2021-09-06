@@ -15971,7 +15971,6 @@ VIS-tp-commentData {
 
 .VIS-HistGrd-data {
     height: 470px;
-    /*height: 100%;*/
     width: 100%;
 }
 
@@ -16024,6 +16023,8 @@ VIS-tp-commentData {
         flex: 1;
         white-space: nowrap;
         padding-left: .5rem;
+        text-align: right;
+        padding-right: 0.3rem;
     }
 
 .VIS-mail-username {
