@@ -741,14 +741,15 @@
 
     IControl.prototype.setHtmlStyle = function (style) {
         if (style && this.dynStyle != style) {
-            this.dynStyle = style;
+            
             if (style.contains(':')) {
-                this.oldStyle = this.ctrl.attr('style');
+                if(!this.dynStyle) this.oldStyle = this.ctrl.attr('style');
                 this.ctrl.removeAttr(style).attr('style', style);
             }
             else {
                 this.ctrl.addClass(style);
             }
+            this.dynStyle = style;
         }
         else if (!style && this.dynStyle) {
             if (this.dynStyle.contains(':')) {
