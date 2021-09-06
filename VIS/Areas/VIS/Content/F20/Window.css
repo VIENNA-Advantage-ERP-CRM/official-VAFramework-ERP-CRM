@@ -2193,11 +2193,15 @@ a:hover {
 .vis-navHeadWrap {
     padding: .4rem .625rem;
     border-bottom: 1px solid rgba(var(--v-c-on-secondary), .05);
+    justify-content: space-between;
 }
 
     .vis-navHeadWrap h5 {
         color: rgba(var(--v-c-primary), 1);
+        text-decoration: underline;
+        font-weight: 600;
         font-size: 1rem;
+        cursor: pointer;
     }
 
 .vis-navFilterIco i {
@@ -2206,8 +2210,9 @@ a:hover {
 
 .vis-navLeftWrap {
     width: 250px;
-    background: rgba(var(--v-c-secondary), .3);
+    /*background: rgba(var(--v-c-secondary), .3);*/
     height: 100%;
+    border-right: 1px solid rgba(var(--v-c-on-secondary), .2);
     overflow: auto;
 }
 
@@ -2266,10 +2271,10 @@ a:hover {
     font-weight: 600;
 }
 
-    .vis-navDataHead i {
-        padding-right: .5rem;
-    }
-
+.vis-navDataHead i, 
+.vis-navDataHead img {
+    padding-right: .5rem;
+}
 .vis-navDataWrap a span {
     padding: 0 .5rem;
     font-size: .875rem;
@@ -2331,9 +2336,9 @@ a:hover {
 }
 
 .vis-navmenuItems-Container {
-display:flex;
-flex:1;
-
+    display: flex;
+    flex: 1;
+    flex-direction: column;
 }
 
 .vis-navmenuItems-Container .vis-navList {
@@ -2350,4 +2355,26 @@ flex:1;
 
 .vis-menuSum-hide {
 display:none;
+}
+.vis-navAccordian {
+    padding: .1rem .2rem !important;
+    cursor: pointer;    
+}
+
+.vis-navDataHead span {
+    flex: 1;
+}
+.vis-navLeftWrap .vis-navList {
+    border-bottom: 1px solid rgba(var(--v-c-on-secondary), .05);
+}
+.vismenu-hidden-header {
+    padding: .5rem 0 .2rem 0;
+    margin: .625rem 0 0 1rem;
+    font-weight: 600;
+    color: rgba(var(--v-c-primary), 1);
+    width: calc(95% / 3);
+    border-bottom: 3px solid;
+}
+.vis-nav-AllItems {
+    width: 100%;
 }

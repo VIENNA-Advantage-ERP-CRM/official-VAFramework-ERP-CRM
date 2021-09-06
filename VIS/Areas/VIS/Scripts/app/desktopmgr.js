@@ -129,7 +129,23 @@
                     }
 
                     if (event.target.nodeName === "I") {
-                        var $target = $(event.target).parent();
+                        var $target = $(event.target);
+                        if ($target.hasClass('vis-navAccordian')) {
+                            if ($target.hasClass('fa-plus')) {
+                                $target.removeClass('fa-plus').addClass('fa-minus');
+                                var id = $target.data('pid');
+                                $menuTree.find('[data-ulid="' + id + '"]').show();
+                            }
+                            else {
+                                $target.removeClass('fa-minus').addClass('fa-plus');
+                                var id = $target.data('pid');
+                                $menuTree.find('[data-ulid="' + id + '"]').hide();
+                            }
+                            return;
+                        }
+
+
+                        var $target = $target.parent();
                         if ($target.data('isfavbtn') == 'yes') {
                             VIS.FavouriteHelper.showOverlay($target); // show menu item's options
                             return;
