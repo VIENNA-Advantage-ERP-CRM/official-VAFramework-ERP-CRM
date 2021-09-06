@@ -144,7 +144,7 @@
 
         function ddlpagesOnChange(e) {
             selectedPage = $('#VIS_ddlPages' + window_No).find(":selected").val();
-            loadGridData(_selectedId, VIS.Utility.Util.getValueOfInt(selectedPage), window_N, tableID);
+            loadGridData(_selectedId, VIS.Utility.Util.getValueOfInt(selectedPage), window_No, tableID);
             currentPage = selectedPage;
         };
 
@@ -1813,12 +1813,13 @@
                 for (var i = 0; i < result.length; i++) {
                     str = updateComments(str, result[i]);
                 }
-                str += '</div>';
+                str += '</div>';                
                 $('#VIS_viewMoreComments' + window_No).show();
                 $('#VIS-tp-comments-input' + window_No).hide();
                 $('#VIS_viewMoreComments' + window_No).empty();
                 $('#VIS_commentsMsg' + window_No).hide();
                 $('#VIS_viewAllComments' + window_No).text(VIS.Msg.getMsg('HideComments'));
+                $('#VIS_viewMoreComments' + window_No).height($root.find('.VIS-tp-contentdiv').height() - $('#VIS_commentsdata' + window_No).height());
                 $('#VIS_viewMoreComments' + window_No).append(str);
             }
             //else

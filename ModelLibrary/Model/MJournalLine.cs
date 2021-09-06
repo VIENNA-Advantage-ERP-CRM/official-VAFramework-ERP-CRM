@@ -476,7 +476,6 @@ namespace VAdvantage.Model
             }
 
             Decimal? amt = Decimal.Multiply(valuesRate, GetAmtSourceDr());
-            //            Decimal? amt = Decimal.Multiply(rate.Value, GetAmtSourceDr());
             if (Env.Scale(amt.Value) > GetPrecision())
             {
                 amt = Decimal.Round(amt.Value, GetPrecision(), MidpointRounding.AwayFromZero);
@@ -493,7 +492,6 @@ namespace VAdvantage.Model
             }
 
             amt = Decimal.Multiply(valuesRateCredit, GetAmtSourceCr());
-            //            amt = Decimal.Multiply(rate.Value, GetAmtSourceCr());
 
             if (Env.Scale(amt.Value) > GetPrecision())
             {
@@ -512,12 +510,10 @@ namespace VAdvantage.Model
                 SetAD_Org_ID(GetAccount().GetAD_Org_ID());
             }
 
-            //18/7/2016
-            //MAnish before save journal line. if journal line has some dimention and user update debit or credit field,, first chk is there dimention or not.
-            string sql = "Select Count(*) FROM GL_LineDimension WHERE GL_JournalLine_ID=" + Get_Value("GL_JournalLine_ID");
-            int count = Util.GetValueOfInt(DB.ExecuteScalar(sql));
-
-            if (!newRecord && Is_ValueChanged("ElementType") && count > 0)
+            // if journal line has some dimention and user update debit or credit field, first chk is there dimention or not.
+            if (!newRecord && Is_ValueChanged("ElementType") 
+                && Util.GetValueOfInt(DB.ExecuteScalar(@"Select Count(GL_LineDimension_ID) FROM GL_LineDimension 
+                   WHERE GL_JournalLine_ID=" + Get_Value("GL_JournalLine_ID"))) > 0)
             {
                 log.SaveWarning("DeleteDimention", "");
                 log.SaveError("DeleteDimention", "");
@@ -554,8 +550,8 @@ namespace VAdvantage.Model
                         return false;
                     }
                 }
-            }
-            //end 18/7/2016.            
+            }   
+            
             return true;
         }	//	beforeSave
 

@@ -1764,7 +1764,7 @@ namespace VAdvantage.Model
                     // JID_0822: if conversion not found system will give message Message: Could not convert currency to base currency - Conversion type: XXXX
                     if (invAmt == 0)
                     {
-                        MConversionType conv = new MConversionType(GetCtx(), GetC_ConversionType_ID(), Get_TrxName());
+                        MConversionType conv = MConversionType.Get(GetCtx(), GetC_ConversionType_ID());
                         retMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
                             + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
 
@@ -2355,7 +2355,7 @@ namespace VAdvantage.Model
 
                 if (invAmt == 0)
                 {
-                    MConversionType conv = new MConversionType(GetCtx(), GetC_ConversionType_ID(), Get_TrxName());
+                    MConversionType conv = MConversionType.Get(GetCtx(), GetC_ConversionType_ID());
                     _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
                         + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
 
@@ -3347,23 +3347,27 @@ namespace VAdvantage.Model
                                 #region landed cost Allocation
                                 if (!IsSOTrx() && !IsReturnTrx())
                                 {
-                                    if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), null, 0, "Invoice(Vendor)", null, null, null, line,
+                                    if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_LandedCost_ID) FROM
+                                          C_LandedCost WHERE C_InvoiceLine_ID = " + line.GetC_InvoiceLine_ID(), null, Get_Trx())) > 0)
+                                    {
+                                        if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), null, 0, "Invoice(Vendor)", null, null, null, line,
                                          null, ProductLineCost, 0, Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
-                                    {
-                                        if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
                                         {
-                                            conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
+                                            if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
+                                            {
+                                                conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
+                                            }
+                                            _processMsg = Msg.GetMsg(GetCtx(), "VIS_CostNotCalculated");// "Could not create Product Costs";
+                                            if (client.Get_ColumnIndex("IsCostMandatory") > 0 && client.IsCostMandatory())
+                                            {
+                                                return DocActionVariables.STATUS_INVALID;
+                                            }
                                         }
-                                        _processMsg = Msg.GetMsg(GetCtx(), "VIS_CostNotCalculated");// "Could not create Product Costs";
-                                        if (client.Get_ColumnIndex("IsCostMandatory") > 0 && client.IsCostMandatory())
+                                        else
                                         {
-                                            return DocActionVariables.STATUS_INVALID;
+                                            line.SetIsCostImmediate(true);
+                                            line.Save();
                                         }
-                                    }
-                                    else
-                                    {
-                                        line.SetIsCostImmediate(true);
-                                        line.Save();
                                     }
                                 }
                                 #endregion
@@ -3780,23 +3784,27 @@ namespace VAdvantage.Model
                                 if (!IsSOTrx() && !IsReturnTrx())
                                 {
                                     #region landed cost allocation
-                                    if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), null, 0, "Invoice(Vendor)", null, null, null, line,
-                                        null, ProductLineCost, 0, Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
+                                    if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_LandedCost_ID) FROM
+                                          C_LandedCost WHERE  C_InvoiceLine_ID = " + line.GetC_InvoiceLine_ID(), null, Get_Trx())) > 0)
                                     {
-                                        if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
+                                        if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), null, 0, "Invoice(Vendor)", null, null, null, line,
+                                            null, ProductLineCost, 0, Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
                                         {
-                                            conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
+                                            if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
+                                            {
+                                                conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
+                                            }
+                                            _processMsg = Msg.GetMsg(GetCtx(), "VIS_CostNotCalculated");// "Could not create Product Costs";
+                                            if (client.Get_ColumnIndex("IsCostMandatory") > 0 && client.IsCostMandatory())
+                                            {
+                                                return DocActionVariables.STATUS_INVALID;
+                                            }
                                         }
-                                        _processMsg = Msg.GetMsg(GetCtx(), "VIS_CostNotCalculated");// "Could not create Product Costs";
-                                        if (client.Get_ColumnIndex("IsCostMandatory") > 0 && client.IsCostMandatory())
+                                        else
                                         {
-                                            return DocActionVariables.STATUS_INVALID;
+                                            line.SetIsCostImmediate(true);
+                                            line.Save();
                                         }
-                                    }
-                                    else
-                                    {
-                                        line.SetIsCostImmediate(true);
-                                        line.Save();
                                     }
                                     #endregion
                                 }
@@ -5403,10 +5411,13 @@ namespace VAdvantage.Model
         /// <returns>return true if success</returns>
         public bool ReverseCorrectIt()
         {
-            //added by shubham JID_1501 to check payment shedule or not during void_
+            //JID_1501 to check payment shedule or not during void
             if (Env.IsModuleInstalled("VA009_"))
             {
-                int checkpayshedule = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(c_invoicepayschedule_ID) FROM C_invoicepayschedule WHERE c_invoice_ID=" + GetC_Invoice_ID() + " AND VA009_ISpaid='Y'", null, Get_Trx()));
+                // query chnaged, bcz when we create invoice with negative amount, on completion system mark schedule as paid 
+                // while on reversal of same document system said, reverse dependant payment first while it is not available
+                int checkpayshedule = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(c_invoicepayschedule_ID) FROM C_invoicepayschedule 
+                WHERE c_invoice_ID=" + GetC_Invoice_ID() + " AND ( NVL(C_Payment_ID , 0) > 0 or NVL(C_cashline_ID , 0) > 0 )", null, Get_Trx()));
                 if (checkpayshedule != 0)
                 {
                     _processMsg = Msg.GetMsg(GetCtx(), "DeleteAllowcationFirst");
@@ -5760,14 +5771,14 @@ namespace VAdvantage.Model
             Save();
 
             #region Commented by Manjot Suggested by Amit/Mukesh/Surya Sir on 30/04/2018, As discussed that we don't need to delete the schedules in case of reversal and Mark all the schedules as Paid
-
-            //Modeule Prefix VA009--- For Deletion Of Payment Schedules
-            //int _CountVA009 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
             if (Env.IsModuleInstalled("VA009_"))
             {
                 //TODO Verify why schedules are deleted and , why transaction is not used here
                 //int count = Convert.ToInt32(DB.ExecuteScalar("DELETE FROM C_InvoicePaySchedule WHERE C_Invoice_ID=" + GetC_Invoice_ID(), null, Get_Trx()));
                 int count = Convert.ToInt32(DB.ExecuteScalar("UPDATE C_InvoicePaySchedule SET VA009_Ispaid='Y' WHERE C_Invoice_ID=" + GetC_Invoice_ID(), null, Get_Trx()));
+
+                // mark paid as true for reversal record as well
+                DB.ExecuteScalar("UPDATE C_InvoicePaySchedule SET VA009_Ispaid='Y' WHERE C_Invoice_ID=" + reversal.GetC_Invoice_ID(), null, Get_Trx());
             }
             //End OF VA009..........................................................................................................
             #endregion

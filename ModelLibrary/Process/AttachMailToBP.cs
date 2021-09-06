@@ -24,6 +24,7 @@ namespace VAdvantage.Process
         string sender = string.Empty;
         string folderName = "Inbox";
         string isExcludeEmployee = string.Empty;
+        DateTime? lastRun;
 
         private StringBuilder retVal = new StringBuilder();
 
@@ -57,7 +58,8 @@ namespace VAdvantage.Process
                                   umail.imapusername,
                                   umail.AD_User_ID,
                                   umail.AD_CLient_ID,
-                                  umail.AD_Org_ID,umail.ISAUTOATTACH,umail.TABLEATTACH,umail.IsExcludeEmployee
+                                  umail.AD_Org_ID,umail.ISAUTOATTACH,umail.TABLEATTACH,umail.IsExcludeEmployee,
+                                  umail.DateLastRun, AD_UserMailConfigration_ID
                                 FROM ad_usermailconfigration umail
                                 WHERE umail.IsActive ='Y' ";
 
@@ -80,6 +82,13 @@ namespace VAdvantage.Process
                 user = new UserInformation();
                 sender = Convert.ToString(ds.Tables[0].Rows[i]["TABLEATTACH"]).Trim();
                 isExcludeEmployee = Convert.ToString(ds.Tables[0].Rows[i]["IsExcludeEmployee"]).Trim();
+                lastRun = null;
+
+                if (ds.Tables[0].Rows[i]["DateLastRun"] != null)
+                {
+                    lastRun = Util.GetValueOfDateTime(ds.Tables[0].Rows[i]["DateLastRun"]);
+                }
+
                 if (Convert.ToString(ds.Tables[0].Rows[i]["ISAUTOATTACH"]).Trim() == "N" && (sender == string.Empty || sender == null))
                 {
                     retVal.Append("Mail Configration EMail Address <=> " + Convert.ToString(ds.Tables[0].Rows[i]["imapusername"]) + Environment.NewLine);
@@ -156,10 +165,11 @@ namespace VAdvantage.Process
 
                 if (AD_User_ID > 0)
                 {
-
                     GetMails(user, AD_User_ID, AD_Client_ID, AD_Org_ID);
-
                 }
+
+                DB.ExecuteQuery("UPDATE AD_UserMailConfigration SET DateLastRun = " + GlobalVariable.TO_DATE(DateTime.Now.AddDays(-1), true) 
+                    + " WHERE AD_UserMailConfigration_ID = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_UserMailConfigration_ID"]));
             }
 
 
@@ -174,12 +184,17 @@ namespace VAdvantage.Process
             if (login.Equals(""))
             {
                 imapMail.SelectInbox();
-
-
-
-                List<long> uidList = imapMail.SearchFlag(Flag.All);
+                List<long> uidList;
+                // if Process is running first time then search all mails else search mails after last run date.
+                if (lastRun != null)
+                {
+                    uidList = imapMail.Search(Expression.SentSince(lastRun.Value));
+                }
+                else {
+                    uidList = imapMail.SearchFlag(Flag.All);
+                }
+                
                 uidList.Reverse();
-
 
                 //DocumentService ser = new DocumentService();
                 byte[] bytes = null;

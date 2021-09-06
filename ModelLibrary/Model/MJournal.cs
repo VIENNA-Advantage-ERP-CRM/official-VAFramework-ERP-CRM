@@ -33,6 +33,8 @@ namespace VAdvantage.Model
         //	Process Message 			
         private String _processMsg = null;
         private ValueNamePair pp = null;
+        // Logger	
+        private static VLogger _log = VLogger.GetVLogger(typeof(MJournal).FullName);
 
         /// <summary>
         /// Standard Constructor
@@ -477,7 +479,22 @@ namespace VAdvantage.Model
                     }
                 }
 
-                if (toLine.Save())
+                if (!toLine.Save())
+                {
+                    String error = "";
+                    ValueNamePair pp = VLogger.RetrieveError();
+                    if (pp != null)
+                    {
+                        error = pp.GetName();
+                        if (String.IsNullOrEmpty(error))
+                        {
+                            error = pp.GetValue();
+                        }
+                        _log.Log(Level.SEVERE, String.IsNullOrEmpty(error) ? "Could not create Journal Line" : Msg.GetMsg(toLine.GetCtx(), error));
+                    }
+                    SetProcessMsg(String.IsNullOrEmpty(error) ? "Could not create Journal Line" : Msg.GetMsg(toLine.GetCtx(), error));
+                }
+                else 
                 {
                     count++;
                     lineCount += toLine.CopyLinesFrom(fromLines[i], toLine.GetGL_JournalLine_ID(), typeCR);
@@ -583,8 +600,22 @@ namespace VAdvantage.Model
                 toLine.SetProcessed(false);
                 toLine.SetQty(fromLines[i].GetQty());
                 toLine.SetElementType(fromLines[i].GetElementType());
-                if (toLine.Save(fromJournal.Get_TrxName()))
+                if (!toLine.Save(fromJournal.Get_TrxName()))
                 {
+                    String error = "";
+                    ValueNamePair pp = VLogger.RetrieveError();
+                    if (pp != null)
+                    {
+                        error = pp.GetName();
+                        if (String.IsNullOrEmpty(error))
+                        {
+                            error = pp.GetValue();
+                        }
+                        _log.Log(Level.SEVERE, String.IsNullOrEmpty(error) ? "Could not create GL Journal" : Msg.GetMsg(toLine.GetCtx(), error));
+                    }
+                    SetProcessMsg(String.IsNullOrEmpty(error) ? "Could not create GL Journal" : Msg.GetMsg(toLine.GetCtx(), error));
+                }
+                else{
                     count++;
                     lineCount += toLine.CopyLinesFrom(fromLines[i], toLine.GetGL_JournalLine_ID());
                 }
@@ -1498,7 +1529,19 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
             //
             if (!to.Save())
             {
-                throw new Exception("Could not create GL Journal ");
+                String error = "";
+                ValueNamePair pp = VLogger.RetrieveError();
+                if (pp != null)
+                {
+                    error = pp.GetName();
+                    if (String.IsNullOrEmpty(error))
+                    {
+                        error = pp.GetValue();
+                    }
+                    _log.Log(Level.SEVERE, String.IsNullOrEmpty(error) ? "Could not create GL Journal" : Msg.GetMsg(to.GetCtx(), error));
+                }
+                to.SetProcessMsg(String.IsNullOrEmpty(error) ? "Could not create GL Journal" : Msg.GetMsg(to.GetCtx(), error));
+                throw new Exception(String.IsNullOrEmpty(error) ? "Could not create GL Journal" : Msg.GetMsg(to.GetCtx(), error));
             }
 
             if (to.CopyJLines(from, dateDoc) == 0)
