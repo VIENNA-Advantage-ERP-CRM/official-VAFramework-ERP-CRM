@@ -1496,12 +1496,11 @@ li.vis-page-item-select {
         max-height: 150px;
         background: transparent;
         overflow: hidden;
+        color: inherit !important;
     }
 
 
-        .vis-w-p-header-Label-f button span {
-            display: none;
-        }
+        
 
 
     .vis-w-p-header-Label-f img {

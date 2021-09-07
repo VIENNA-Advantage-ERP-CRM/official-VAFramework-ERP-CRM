@@ -6,7 +6,7 @@
 
         this.headerItems = null;
         var $self = this;
-        this.gTab = null;
+        this.curTab = null;
         this.controls = [];
         this.textAlignEnum = { "C": "Center", "R": "flex-end", "L": "flex-start" };
         this.alignItemEnum = { "C": "Center", "T": "flex-start", "B": "flex-end" };
@@ -74,7 +74,12 @@
 
                         var colValue = getFieldValue(mField, iControl);
 
-                        if (mField.lookup && mField.lookup.gethasImageIdentifier()) {
+                        if (iControl instanceof VIS.Controls.VButton) {
+                            colValue = mField.getValue();
+                            setValue(colValue, iControl, mField);
+                        }
+
+                        else if (mField.lookup && mField.lookup.gethasImageIdentifier()) {
                             colValue = VIS.Utility.Util.getIdentifierDisplayVal(colValue);
 
                             var $imgCtrl = objControl["img"];
@@ -139,7 +144,7 @@
 
                 if (!currentItem)
                     return;
-                var fields = this.gTab.gridTable.gridFields;
+                var fields = this.curTab.gridTable.gridFields;
 
                 fields = $.grep(fields, function (item) {
                     if (item.getIsHeaderPanelitem()) {
@@ -248,18 +253,22 @@
                             $divIcon = $('<div class="vis-w-p-header-icon-f"></div>');
 
                             $divLabel = $('<div class="vis-w-p-header-Label-f"></div>');
-                        // If Referenceof field is Image then added extra class to align image and Label in center.
-                        if (mField.getDisplayType() == VIS.DisplayType.Image) {
-                            $divLabel.addClass('vis-w-p-header-Label-center-f');
-                            var dynamicClassForImageJustyfy = this.justifyAlignImageItems(headerSeqNo, justyFy, alignItem);
-                            $divLabel.addClass(dynamicClassForImageJustyfy);
-                        }
+                            // If Referenceof field is Image then added extra class to align image and Label in center.
+                            if (mField.getDisplayType() == VIS.DisplayType.Image) {
+                                $divLabel.addClass('vis-w-p-header-Label-center-f');
+                                var dynamicClassForImageJustyfy = this.justifyAlignImageItems(headerSeqNo, justyFy, alignItem);
+                                $divLabel.addClass(dynamicClassForImageJustyfy);
+                            }
 
-                        // Get Controls to be displayed in Header Panel
-                        $label = VIS.VControlFactory.getHeaderLabel(mField, true);
-
-                        iControl = VIS.VControlFactory.getReadOnlyControl(this.gTab, mField, false, false, false);
-
+                            // Get Controls to be displayed in Header Panel
+                            $label = VIS.VControlFactory.getHeaderLabel(mField, true);
+                                iControl = VIS.VControlFactory.getReadOnlyControl(this.curTab, mField, false, false, false);
+                            
+                            if (mField.getDisplayType() == VIS.DisplayType.Button) {
+                                if(iControl !=null)
+                                iControl.addActionListner(this);
+                            }
+                        
                         var dynamicFieldValue = this.applyCustomUIForFieldValue(headerSeqNo, startCol, startRow, mField);
 
                         iControl.getControl().addClass(dynamicFieldValue);
@@ -272,9 +281,9 @@
 
                         var $spanIcon = $('<span></span>');
                         var icon = VIS.VControlFactory.getIcon(mField);
-                        if (iControl == null) {
-                            continue;
-                        }
+                            if (iControl == null) {
+                                continue;
+                            }
 
                         var $lblControl = null;
                         if ($label) {
@@ -368,7 +377,8 @@
                                     $divLabel.append($lblControl);
                             }
                             else if (mField.getHeaderIconOnly() && mField.getHeaderHeadingOnly()) {
-                                $divIcon.hide();
+                                //$divIcon.hide();
+                                $divIcon.remove();
                             }
                             else if (mField.getHeaderIconOnly()) {
                                 if (imgSpan != null)
@@ -377,11 +387,13 @@
                                     $imageSpan.hide();
 
                                 if ($lblControl && $lblControl.length > 0)
-                                    $lblControl.hide();
+                                    $lblControl.remove();
                             }
-                            else if (mField.getHeaderHeadingOnly() && $lblControl && $lblControl.length > 0) {
-                                $divLabel.append($lblControl);
-                                $divIcon.hide();
+                            else if (mField.getHeaderHeadingOnly()) {
+                                if ($lblControl && $lblControl.length > 0) {
+                                    $divLabel.append($lblControl);
+                                }
+                                $divIcon.remove();
                             }
 
                             $divLabel.append(iControl.getControl());
@@ -392,23 +404,28 @@
                         else {
                             $spanIcon.addClass('vis-w-p-header-icon-fixed');
                             objctrls["imgspan"] = $spanIcon;
-                            /*Set what do you want to show? Icon OR Label OR Both OR None*/
-                            if (!mField.getHeaderIconOnly() && !mField.getHeaderHeadingOnly()) {
+                        /*Set what do you want to show? Icon OR Label OR Both OR None*/
+                            if (mField.getDisplayType() == VIS.DisplayType.Button) {
+                                $divIcon.remove(); // button has image with field
+                            }
+                            else if (!mField.getHeaderIconOnly() && !mField.getHeaderHeadingOnly()) {
                                 $divIcon.append($spanIcon.append(icon));
                                 if ($lblControl && $lblControl.length > 0)
                                     $divLabel.append($lblControl);
                             }
                             else if (mField.getHeaderIconOnly() && mField.getHeaderHeadingOnly()) {
-                                $divIcon.hide();
+                                $divIcon.remove();
                             }
                             else if (mField.getHeaderIconOnly()) {
                                 $divIcon.append($spanIcon.append(icon));
                                 if ($lblControl && $lblControl.length > 0)
                                     $lblControl.hide();
                             }
-                            else if (mField.getHeaderHeadingOnly() && $lblControl && $lblControl.length > 0) {
-                                $divLabel.append($lblControl);
-                                $divIcon.hide();
+                            else if (mField.getHeaderHeadingOnly()) {
+                                if ($lblControl && $lblControl.length > 0) {
+                                    $divLabel.append($lblControl);
+                                }
+                                $divIcon.remove();
                             }
 
                             setValue(colValue, iControl, mField);
@@ -442,7 +459,9 @@
                     colValue = iControl.format.GetFormatAmount(iControl.format.GetFormatedValue(colValue), "init", VIS.Env.isDecimalPoint());
                 }
 
-                iControl.setValue(w2utils.encodeTags(colValue), false);
+              
+                    iControl.setValue(w2utils.encodeTags(colValue), false);
+                
 
             }
             else {
@@ -468,6 +487,7 @@
             if (colValue) {
                 var displayType = mField.getDisplayType();
 
+                
                 if (mField.lookup) {
                     colValue = mField.lookup.getDisplay(colValue, true,true);
                 }
@@ -630,7 +650,7 @@
             this.styleTag = null;
             this.headerItems = null;
             $self = null;
-            this.gTab = null;
+            this.curTab = null;
             this.controls = null;
             $root.remove();
             $root = null;
@@ -641,18 +661,21 @@
 
     };
 
-    HeaderPanel.prototype.init = function (gTab) {
-
-        var backColor = gTab.getHeaderBackColor();
-        this.setHeaderLayout(gTab, backColor);
+    HeaderPanel.prototype.init = function (gc) {
+        //Action evt listnder
+        this.aPanel = gc.getAPanel();
+        this.curTab = gc.getMTab();
+        this.curGC = gc;
+        var backColor = this.curTab.getHeaderBackColor();
+        this.setHeaderLayout(this.curTab, backColor);
         var root = this.getRoot();
 
         var $parentRoot = this.getParent();
         var rootClass = "vis-w-p-Header-Root-v";//Fixed Class for vertical Alignment
-        var alignmentHorizontal = this.gTab.getHeaderHorizontal();
-        var height = this.gTab.getHeaderHeight();
-        var width = this.gTab.getHeaderWidth();
-        var padding = this.gTab.getHeaderPadding();
+        var alignmentHorizontal = this.curTab.getHeaderHorizontal();
+        var height = this.curTab.getHeaderHeight();
+        var width = this.curTab.getHeaderWidth();
+        var padding = this.curTab.getHeaderPadding();
 
         var rootCustomStyle = this.headerUISettings(alignmentHorizontal, height, width, "", padding);
         root.addClass(rootCustomStyle);
@@ -865,9 +888,25 @@
      * this method will be invoked on window close.
      * */
     HeaderPanel.prototype.dispose = function () {
+        this.aPanel = null;
+        this.curTab = null;
+        this.curGC = null;
+        this.sizeChangedListner = null;
         this.disposeComponent();
     };
 
+    HeaderPanel.prototype.actionPerformed = function (action) {
+        //selfPan.actionButton(action.source);
+        if (this.aPanel.curTab.needSave(true, false)) {
+            this.aPanel.cmd_save(true);
+            return;
+        }
+            this.aPanel.actionPerformed(action, this);
+    };
+
+    HeaderPanel.prototype.cmd_save = function (manual, callback) {
+        return this.aPanel.cmd_save2(manual, this.curTab, this.curGC, this.aPanel, callback);
+    }
     VIS.HeaderPanel = HeaderPanel;
 
 }(VIS, jQuery));
