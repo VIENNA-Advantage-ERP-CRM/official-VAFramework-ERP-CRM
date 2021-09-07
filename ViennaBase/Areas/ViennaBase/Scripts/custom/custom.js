@@ -134,9 +134,9 @@ if (jQuery.prototype.jquery == "3.4.1" && w2utils.version == "1.4.3") {
 
         }
 
-        if (dt == VIS.DisplayType.ProgressBar) {
-            el.append(edit.ctrl.getProgressOutput());
-        }
+        //if (dt == VIS.DisplayType.ProgressBar) {
+        //    el.append(edit.ctrl.getProgressOutput());
+        //}
 
         if (!edit.ctrl.editingGrid) {
             edit.ctrl.editingGrid = this;
@@ -497,7 +497,6 @@ if (jQuery.prototype.jquery == "3.4.1" && w2utils.version == "1.4.3") {
                     '    obj.editChange.call(obj, this, ' + changeInd + ', ' + col_ind + ', event); ' +
                     '">';
             }
-
         }
         if (!this.show.recordTitles) {
             var data = '<div style="' + addStyle + '">' + data + '</div>';

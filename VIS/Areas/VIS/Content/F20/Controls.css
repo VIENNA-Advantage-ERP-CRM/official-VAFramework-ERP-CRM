@@ -531,6 +531,7 @@ input[type="radio"]:not(:checked){
     outline: 0;
     border: 0;
     max-width: 100%;
+    position: relative;
 }
 
 .vis-gc-vtable.w2ui-grid .w2ui-editable input[type=range] {
@@ -539,30 +540,35 @@ input[type="radio"]:not(:checked){
 }
 
 
-.vis-progress_output {
+.vis-progress-output {
     color: rgba(var(--v-c-on-primary), 1);
     position: absolute;
     left: 32px;
     transform: translateX(-1%);
-    z-index: 1;
+    z-index: 2;
     margin-top: 7px !important;
 }
 
-.w2ui-editable .vis-progress_output {
-    position: relative !important;
+.w2ui-editable .vis-progress-output {
+   /* position: relative !important;*/
     margin-top: 4px !important;
-    left: 0.5%;
+    /*left: 0.5%;*/
 }
 
-.w2ui-grid-data .vis-grid_progress_output {
+.w2ui-grid-data .vis-grid-progress-output {
     /* color: black !important; */
     position: absolute;
     left: 0.5%;
     transform: translateX(-1%);
-    z-index: 1;
+    z-index: 2;
     margin-top: -18px;
 }
-
+.vis-progressCtrlWrap {
+    border: none !important;
+    background: none !important;
+    cursor:none;
+    pointer-events:none;
+}
 .vis-input-wrap input[type=range],
 .w2ui-editable input[type=range] {
     overflow: hidden;
@@ -570,6 +576,8 @@ input[type="radio"]:not(:checked){
     -webkit-appearance: none;
     background-color: #ddd;
     padding: 0 !important;
+    z-index: 1;
+    pointer-events: all;
 }
 
     .vis-input-wrap input[type=range]::-webkit-slider-runnable-track,
@@ -603,18 +611,17 @@ input[type="radio"]:not(:checked){
     width: calc(100% - 22px);
 }
 
-    .vis-input-wrap input[type="range"] + label {
-        padding: 0;
-        left: 0 !important;
-        top: -10px !important;
-    }
+.vis-input-wrap .vis-progressCtrlWrap + label {
+    padding: 0;
+    left: 0 !important;
+    top: -10px !important;
+}
 
     .vis-input-wrap input[type="range"] ~ .vis-ev-ctrlinfowrap,
     .w2ui-editable input[type="range"] ~ .vis-ev-ctrlinfowrap {
         left: 0;
     }
 
-    
 
 /***************************** Control Prop End ****************************************/
 

@@ -719,12 +719,12 @@
                 "<i class='vis vis-info' aria-hidden='true'></i></span'>");
         }
 
-        if (editor && mField.getDisplayType() == VIS.DisplayType.ProgressBar) {
-            if (customStyle != "") {
-                editor.getProgressOutput().attr('style', customStyle);
-            }
-            ctrlP.prepend(editor.getProgressOutput());
-        }
+        //if (editor && mField.getDisplayType() == VIS.DisplayType.ProgressBar) {
+        //    if (customStyle != "") {
+        //        editor.getProgressOutput().attr('style', customStyle);
+        //    }
+        //    ctrlP.prepend(editor.getProgressOutput());
+        //}
 
         ctrlP.append("<span class='vis-ev-col-msign'><i class='fa fa-exclamation' aria-hidden='true'></span'>");
         ctrl.append(ctrlP);

@@ -97,11 +97,8 @@ namespace VIS.Controllers
                 sb.Append(" VIS.context.ctx = ").Append(Newtonsoft.Json.JsonConvert.SerializeObject(ctx.GetMap())).Append("; ");
 
                 /* Message */
-                sb.Append(" VIS.I18N.labels = { ");
-                
-                //Get _WindowAction list 
-                ValueNamePair[] refList = MRefList.GetList(435, false, ctx);
-               int refListTotal = refList.Length;
+                sb.Append(" VIS.I18N.labels = { ");               
+               
 
                 if (msgs != null)
                 {
@@ -121,35 +118,36 @@ namespace VIS.Controllers
                         //}
                         string msg = (string)msgs.Get(key) ?? "";
                         msg = msg.Replace("\n", " ").Replace("\r", " ").Replace("\"", "'");
-
-                        if (total == 0 && refListTotal == 0)
+                        sb.Append("\"").Append(key).Append("\": ").Append("\"").Append(msg).Append("\"");
+                        if (total != 0)
                         {
-                            sb.Append("\"").Append(key).Append("\": ").Append("\"").Append(msg).Append("\"");
+                            sb.Append(",");
                         }
-                        else
-                        {
-                            sb.Append("\"").Append(key).Append("\": ").Append("\"").Append(msg).Append("\", ");
-                        }
+                       
                     }
                    
                 }
-               
+
                 /* purpose: right window action translation with search key
                  * VIS0228      08-Aug-2021 
                  */
-
+               
+                ValueNamePair[] refList = MRefList.GetList(435, false, ctx);
+                int refListTotal = refList.Length;
                 if (refListTotal > 0)
                 {
+                    if (msgs.Keys.Count > 0) {
+                        sb.Append(", ");
+                    }
+
                     for (int i = 0; i < refList.Length; i++)
-                    {                       
-                        if (i==(refListTotal - 1))
+                    {
+                        sb.Append("\"").Append(refList[i].GetValue()).Append("\": ").Append("\"").Append(refList[i].GetName()).Append("\""); 
+                        if (i !=(refListTotal - 1))
                         {
-                            sb.Append("\"").Append(refList[i].GetValue()).Append("\": ").Append("\"").Append(refList[i].GetName()).Append("\"");
+                            sb.Append(", ");
                         }
-                        else
-                        {
-                            sb.Append("\"").Append(refList[i].GetValue()).Append("\": ").Append("\"").Append(refList[i].GetName()).Append("\", ");
-                        }
+                       
                     }
                 }
 
