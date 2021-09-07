@@ -881,7 +881,7 @@
                                 if (!comp.getName().startsWith('lbl') && mField.getStyleLogic() != '') {
                                     var carr = mField.getStyleLogic().split(',');
                                     var style = this.evaluateStyleCondition(mField,carr);
-                                    ve.setHtmlStyle(style);
+                                    ve.setHtmlStyle(style); // set/reset style based on condition
                                 }
                             }
                         }
@@ -900,6 +900,11 @@
         }
     };
 
+    /**
+     * evaluate style condition based on current selected row 
+     * @param {any} mField field/column name
+     * @param {any} arr array of custom conditions
+     */
     VIS.GridController.prototype.evaluateStyleCondition = function (mField,arr) {
         var ret = null;
         for (var j = 0; j < arr.length; j++) {

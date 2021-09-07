@@ -14,7 +14,6 @@ if (jQuery.prototype.jquery == "3.4.1" && w2utils.version == "1.4.3") {
     }
 };
 
-
 ; w2obj.grid.prototype.add = function (record) {
     if (!$.isArray(record)) record = [record];
     var added = 0;
@@ -596,6 +595,10 @@ if (jQuery.prototype.jquery == "3.4.1" && w2utils.version == "1.4.3") {
     return time;
 };
 
+/**
+ *override existing function  
+ * support and fire render cell event if attached
+ **/
 ; w2obj.grid.prototype.getRecordHTML= function (ind, lineNum, summary) {
     var rec_html = '';
     var sel = this.last.selection;
@@ -708,7 +711,7 @@ if (jQuery.prototype.jquery == "3.4.1" && w2utils.version == "1.4.3") {
 
         var dStyle = '';
         if (this.onCellRender && typeof this.onCellRender == 'function') {
-            dStyle = this.onCellRender(ind, col_ind);
+            dStyle = this.onCellRender(ind, col_ind); // fire render cell function
             if (!dStyle) dStyle = '';
         }
 
@@ -729,10 +732,6 @@ if (jQuery.prototype.jquery == "3.4.1" && w2utils.version == "1.4.3") {
     rec_html += '</tr>';
     return rec_html;
 };
-
-
-
-
 
 /* support jquery Object also */
 

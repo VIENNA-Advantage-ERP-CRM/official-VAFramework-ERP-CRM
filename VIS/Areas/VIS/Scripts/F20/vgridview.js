@@ -187,6 +187,11 @@
             self.paintRow(evt.index);
         };
 
+        /**
+         * cell render handler 
+         * @param {any} rIndex row index
+         * @param {any} cIndex cell index
+         */
         this.cellRender = function (rIndex, cIndex) {
             var col = self.grid.columns[cIndex];
             if (col.gridField && col.gridField.getStyleLogic() != '') // get from property
@@ -999,8 +1004,11 @@
         return size;
     };
 
-   
-    
+   /**
+    * return current cell-row value as string
+    * called form Evaluator class
+    * @param {any} field name of field /column 
+    */
     VTable.prototype.getValueAsString = function (field) {
         var record = this.grid.records[this.cellRowIndex];
         var data = this.grid.parseField(record, field.toLowerCase());

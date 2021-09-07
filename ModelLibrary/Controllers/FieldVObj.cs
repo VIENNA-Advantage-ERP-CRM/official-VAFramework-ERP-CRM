@@ -267,7 +267,7 @@ namespace VAdvantage.Controller
         public bool ShowFilterOption = false;
 
         public bool IsUnique = false;
-
+        /* style logic stirng { expression [,]}*/
         public string StyleLogic = "";
 
 

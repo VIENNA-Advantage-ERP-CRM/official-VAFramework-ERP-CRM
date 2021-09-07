@@ -739,6 +739,10 @@
         this.setBackground(false);
     };
 
+    /**
+     * set/reset style on control
+     * @param {any} style inline style / class
+     */
     IControl.prototype.setHtmlStyle = function (style) {
         if (style && this.dynStyle != style) {
             
@@ -782,6 +786,7 @@
         this.isMandatory = isMandatory;
         this.setBackground(false);
     };
+
     /**
      *	set backgoud color of control
      *
@@ -832,6 +837,7 @@
     IControl.prototype.setDisplayType = function (displayType) {
         this.displayType = displayType;
     };
+
     /**
      *	value Change Listener 
      *  @param listener
@@ -839,6 +845,7 @@
     IControl.prototype.addVetoableChangeListener = function (listner) {
         this.vetoablechangeListner = listner;
     };
+
     /**
      *	Notify value changed
      *  @param event
@@ -877,6 +884,7 @@
             }, 10, this);
         }
     };
+
     /**
      *	Refresh UI
      *  @param event
@@ -892,7 +900,6 @@
 
     };
 
-
     /**
     *	action listner
     *   @param event
@@ -900,6 +907,7 @@
     IControl.prototype.addActionListner = function (listner) {
         this.actionListner = listner;
     };
+
     /**
      *	Notify action (eg click )
      *  @param event
