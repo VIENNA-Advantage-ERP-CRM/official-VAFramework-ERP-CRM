@@ -316,7 +316,7 @@ namespace VIS.Helpers
 
                         isSettingItem = false;
 
-                        lstMenuSections.Add("<div class='vis-navmenuItems-Container' style='display:none' id='Menu" + vt.Node_ID + "'><h6 class='vismenu-hidden-header' style='display:none'>" + vt.SetName + "</h6><div style='display:flex'>" + menu1HTML.ToString() + menu2HTML.ToString() + settingsHTML.ToString() + "</div></div>");
+                        lstMenuSections.Add("<div class='vis-navmenuItems-Container' style='display:none' id='Menu" + vt.Node_ID + "'><h6 class='vismenu-hidden-header' style='display:none'><div class='vis-nav-AllItems-Header'>" + vt.SetName + "</div></h6><div style='display:flex'>" + menu1HTML.ToString() + menu2HTML.ToString() + settingsHTML.ToString() + "</div></div>");
                     }
                     else
                     {
@@ -534,7 +534,7 @@ namespace VIS.Helpers
                 else
                     menu2HTML.Append("<ul data-con='Y' id='ul_" + id + "' style='display:none'>");
 
-                menu2HTML.Append("<li style='min-height: 40px;overflow: auto;' data-value='" + id + "' data-summary='N'>");
+                menu2HTML.Append("<li style='min-height: 40px;overflow: auto;' data-value='" + id + "' data-summary='N' style='display:none'>");
                 menu2HTML.Append("<a class='vis-menuitm-with-favItm vis-menuitm-backbtn' href='javascript:void(0)'  data-value='" + id + "' data-action='N' data-actionid ='" + id + "'>");
                 menu2HTML.Append("<span class='' style='float:right;margin:1px 0px 0px 10px;'></span>" + text + "</a></li>");
             }

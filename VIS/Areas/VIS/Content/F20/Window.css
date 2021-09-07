@@ -2372,9 +2372,51 @@ display:none;
     margin: .625rem 0 0 1rem;
     font-weight: 600;
     color: rgba(var(--v-c-primary), 1);
-    width: calc(95% / 3);
-    border-bottom: 3px solid;
+    width: 98%;
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    min-height: 30px;
 }
 .vis-nav-AllItems {
     width: 100%;
 }
+
+.vis-nav-AllItems-Header {
+    background: #fff;
+    margin: 0 auto;
+    text-align: center;
+    display: inline-flex;
+    position: absolute;
+    z-index: 1;
+    padding: 0 .625rem;
+}
+
+.vismenu-hidden-header:after {
+    position: absolute;
+    content: '';
+    height: 1px;
+    /*background: linear-gradient( 90deg, transparent 10%, rgba(var(--v-c-primary), 1) 50%, transparent 90%);*/
+    width: 60%;
+    top: 3px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 0;
+    margin: auto;
+    background-color: rgba(var(--v-c-primary), 1);
+}
+
+/*.vis-menu-heading-divider-left,
+.vis-menu-heading-divider-right {
+    flex: 1;
+    height: 1px;
+}
+.vis-menu-heading-divider-left {
+    background: linear-gradient( 90deg, transparent 10%, rgba(var(--v-c-primary), 1) 90%);
+}
+
+.vis-menu-heading-divider-right {
+    background: linear-gradient( 90deg, rgba(var(--v-c-primary), 1) 10%, transparent 90%);
+}*/
