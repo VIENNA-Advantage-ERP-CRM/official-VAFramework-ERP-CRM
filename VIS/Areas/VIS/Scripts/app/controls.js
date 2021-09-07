@@ -6322,38 +6322,48 @@
         var $ctrl = $('<button class="vis-progressCtrlWrap">');
         var $rangeCtrl = $('<input>', { type: 'range', step: '0.01', name: columnName, maxlength: fieldLength, 'data-type': 'int' });
         var $oputput = $('<output class="vis-progress-output">');
-        $ctrl.append($oputput).append($rangeCtrl);
-        IControl.call(this, $div, controlDisplayType, isReadOnly, columnName, isMandatory);      
+        
+            $ctrl.append($oputput).append($rangeCtrl);
+       
+        IControl.call(this, $ctrl, controlDisplayType, isReadOnly, columnName, isMandatory);      
         if (isReadOnly || !isUpdateable) {
             this.setReadOnly(true);
         }
         else {
             this.setReadOnly(false);
         }
+        this.rangeCtrl = $rangeCtrl;
+        this.oputput = $oputput;
 
-        this.getProgressOutput = function () {            
-                return $oputput;           
+        this.setText = function (val) {            
+            $oputput.text(val);           
+        };
+        this.setRange = function (val) {
+            $rangeCtrl.val(val);
         };
 
-        this.getrangeValue = function () {            
-            return $rangeCtrl;           
+        this.getRange = function () {            
+            return $rangeCtrl.val();           
         };
         
         var self = this; //self pointer
 
+
+        
+
         /* Event */
-        $ctrl.on("change input", function (e) {  
+        $rangeCtrl.on("input", function (e) {  
             e.stopPropagation();
-            var newVal = $ctrl.val(); 
+            var newVal = $rangeCtrl.val(); 
             //self.setOutputPosition();
             $oputput.text(newVal);
-            $div.val(newVal);
+            //$ctrl.val(newVal);
         });
 
-        $ctrl.on("change", function (e) {
+        $rangeCtrl.on("change", function (e) {
             e.stopPropagation();
-            var newVal = $ctrl.val();
-            $div.val(newVal);
+            var newVal = $rangeCtrl.val();
+            //$ctrl.val(newVal);
             if (newVal !== self.oldValue) {              
                 var evt = { newValue: newVal, propertyName: self.getName() };
                 self.fireValueChanged(evt);
@@ -6364,7 +6374,8 @@
 
         this.disposeComponent = function () {
             $ctrl = null;
-            $div = null;
+            $rangeCtrl = null;
+            this.rangeCtrl = this.$oputput = null;
             self = null;
         }
     };
@@ -6373,32 +6384,34 @@
     VProgressBar.prototype.setValue = function (newValue) {
         if (this.oldValue != newValue) {
             this.oldValue = newValue;
-            this.getProgressOutput().text(newValue);
-            this.ctrl.val(newValue);
+            this.setText(newValue);
+            this.setRange(newValue);
             //this.setOutputPosition();
         }
     };
 
     VProgressBar.prototype.getValue = function () {           
-        return this.ctrl.val();
+        return this.getRange();
     };
     VProgressBar.prototype.setMaxValue = function (maxValue) {
         if ($.isNumeric(maxValue)) {
-            this.ctrl.attr("max", maxValue);
+            this.rangeCtrl.attr("max", maxValue);
         }
     };
 
     VProgressBar.prototype.setMinValue = function (minValue) {
         if ($.isNumeric(minValue)) {
-            this.ctrl.attr("min", minValue);
+            this.rangeCtrl.attr("min", minValue);
         }
     };
     VProgressBar.prototype.getDisplay = function () {
-        return this.ctrl.val();
+        return this.rangeCtrl.val();
     };
-    VProgressBar.prototype.getControl = function () {
-        if (this.editingGrid) {
-            return this.ctrl.find('input');
+    VProgressBar.prototype.getControl = function (parent) {
+        if (parent) {
+            parent.addClass("vis-progressCtrlWrap");
+            parent.append(this.oputput);
+            return this.rangeCtrl;
         }
         return this.ctrl;        
     };

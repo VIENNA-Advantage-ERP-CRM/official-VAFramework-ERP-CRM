@@ -110,11 +110,12 @@ if (jQuery.prototype.jquery == "3.4.1" && w2utils.version == "1.4.3") {
                 obj.editChange.call(obj, this, index, column, event);
             });
     } else if (edit.type == 'custom' && edit.ctrl) { // change - custom Column
-        var ctrl = edit.ctrl.getControl();
-        var btn = null;
+        
 
         var dt = edit.ctrl.getDisplayType();
         el.html('');
+        var ctrl = edit.ctrl.getControl(el);
+        var btn = null;
 
         el.addClass('w2ui-editable')
            .append(ctrl);
