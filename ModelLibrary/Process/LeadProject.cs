@@ -315,6 +315,21 @@ namespace VAdvantage.Process
             }
             lead.Save();
             MProject project = lead.GetProject();
+
+            // SOTC specific work to set data on Opportunity
+            if (Env.IsModuleInstalled("VA047_"))
+            {
+                project.SetC_Lead_ID(lead.GetC_Lead_ID());
+
+                if (lead.GetC_BPartner_ID() > 0)
+                    project.SetC_BPartner_ID(lead.GetC_BPartner_ID());
+                else
+                    project.SetC_BPartnerSR_ID(lead.GetRef_BPartner_ID());
+
+                project.SetIsOpportunity(true);
+                project.Set_Value("Created", lead.GetCreated());
+                project.Save();
+            }
             //
             return "@C_Project_ID@ " + project.GetName();
         }   //	doIt
