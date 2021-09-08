@@ -473,6 +473,23 @@
                 };
                 //oColumn.caption = 'class="vis-control-wrap-int-amount"';
             }
+            else if (displayType == VIS.DisplayType.ProgressBar) {
+                oColumn.sortable = true;
+                oColumn.render = function (record, index, colIndex) {
+                    var f = oColumns[colIndex].field;
+                    var val = record[f];
+                    var maxVal = oColumns[colIndex].gridField.getMaxValue();
+                    var minVal = oColumns[colIndex].gridField.getMinValue();
+                    if (record.changes && typeof record.changes[f] != 'undefined') {
+                        val = record.changes[f];
+                    }  
+                    //return '<input id="rng' + index + '" type="range" min="' + minVal + '" max="' + maxVal + '" disabled="disabled" value="' + val + '" /><div style="position: absolute"><output class="vis-grid_progress_output"> ' + val+'</output></div>';
+                   
+                    return '<div class="vis-progress-gridbar">'+
+                        '<div class="vis-progress-percent-bar" style = "width:' + val + '%" ></div>'+ 
+                        '<div class="vis-progress-gridoutput" > ' + val + '</div></div >';
+                }
+            }
             else if (VIS.DisplayType.IsNumeric(displayType)) {
                 oColumn.sortable = true;
                 oColumn.customFormat = VIS.DisplayType.GetNumberFormat(displayType);
@@ -497,13 +514,19 @@
             else if (displayType == VIS.DisplayType.YesNo) {
 
                 oColumn.sortable = true;
-                var lCol = columnName.toLowerCase();
-                //oColumn.render = function (record, index, colIndex) {
-                //    var chk = (record[oColumns[colIndex].field]) ? "checked" : "";
-                //    //console.log(chk);
-                //    return '<input type="checkbox" ' + chk + ' disabled="disabled" >';
-                //}
+                var lCol = columnName.toLowerCase();  
+                if (oColumn.gridField.getIsSwitch()) {
+                    oColumn.render = "switch";
+                    //oColumn.render = function (record, index, colIndex) {
+                        
+                    //    var chk = (record[oColumns[colIndex].field]) ? "checked" : "";
+                    //    //console.log(chk);
+                    //   // return '<input type="checkbox" ' + chk + ' onclick="var obj = w2ui[\'' + name + '\'];     obj.editChange.call(obj, this, ' + index + ', ' + colIndex +', event)" class="vis-switch"><i for="switch" onclick="$(this).prev().click();"   class="vis-switchSlider">Toggle</i></div>';
+                    //}
+                }
+                
                 oColumn.editable = { type: 'checkbox' };
+               
             }
             //	String (clear/password)
             else if (displayType == VIS.DisplayType.String
@@ -880,7 +903,7 @@
                     return "#" + val.toString().length;
                 }
             }
-
+            
             else { //all text Type Columns
 
                 oColumn.sortable = true;
@@ -917,8 +940,10 @@
             var iControl = VIS.VControlFactory.getControl(mTab, mField, false, false, false);
             iControl.setReadOnly(false);
 
-            if (!oColumn.editable)
+            if (!oColumn.editable) {
                 oColumn.editable = { type: 'custom', ctrl: iControl };
+            }
+                
 
             iControl.addVetoableChangeListener(gc);
 
@@ -941,6 +966,9 @@
                         //oColumns[p].size = w + '%';
                         oColumns[p].min = 100;
                     }
+                    //if (oColumns[p].gridField.getIsSwitch()) {
+                    //    oColumns[p].editable = { type: 'checkbox' };
+                    //}
 
                     if (this.hyperLinkCell == null) {                      
                         this.hyperLinkCell = oColumns[p].columnName;

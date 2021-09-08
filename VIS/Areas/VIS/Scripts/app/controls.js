@@ -177,7 +177,7 @@
         String: 10, Integer: 11, Amount: 12, ID: 13, Text: 14, Date: 15, DateTime: 16, List: 17, Table: 18, TableDir: 19,
         YesNo: 20, Location: 21, Number: 22, Binary: 23, Time: 24, Account: 25, RowID: 26, Color: 27, Button: 28, Quantity: 29,
         Search: 30, Locator: 31, Image: 32, Assignment: 33, Memo: 34, PAttribute: 35, TextLong: 36, CostPrice: 37, FilePath: 38,
-        FileName: 39, URL: 40, PrinterName: 42, Label: 44, MultiKey: 45, GAttribute: 46, AmtDimension: 47, ProductContainer: 48,
+        FileName: 39, URL: 40, PrinterName: 42, Label: 44, MultiKey: 45, GAttribute: 46, AmtDimension: 47, ProductContainer: 48, ProgressBar:49,
 
         IsString: function (displayType) {
             return VIS.DisplayType.String == displayType;
@@ -219,7 +219,7 @@
         },
         IsNumeric: function (displayType) {
             if (displayType == VIS.DisplayType.Amount || displayType == VIS.DisplayType.Number || displayType == VIS.DisplayType.CostPrice
-                || displayType == VIS.DisplayType.Integer || displayType == VIS.DisplayType.Quantity)
+                || displayType == VIS.DisplayType.Integer || displayType == VIS.DisplayType.Quantity || displayType == VIS.DisplayType.ProgressBar)
                 return true;
             return false;
         },	//	
@@ -247,7 +247,7 @@
             else if (displayType == this.Quantity) {
                 format = new VIS.Format(this.MAX_DIGITS, this.MAX_FRACTION, 0);
             }
-            else if (displayType == this.Amount) {
+            else if (displayType == this.Amount || displayType == this.ProgressBar) {
                 format = new VIS.Format(this.MAX_DIGITS, this.MAX_FRACTION, this.AMOUNT_FRACTION);
             }
             else if (displayType == this.CostPrice) {
@@ -290,9 +290,9 @@
             var maxValue = mField.getMaxValue();
             var ctrl = null;
             var displayType = mField.getDisplayType();
-
+           
             var isReadOnly = mField.getIsReadOnly();
-            var isUpdateable = mField.getIsEditable(false);
+            var isUpdateable = mField.getIsEditable(false);           
             var windowNo = mField.getWindowNo();
             var tabNo = 0;
             if (mTab)
@@ -324,7 +324,7 @@
             }
             else if (displayType == VIS.DisplayType.YesNo) {
                 //columnName, mandatory, isReadOnly, isUpdateable, text, description, tableEditor
-                var chk = new VCheckBox(columnName, isMandatory, isReadOnly, isUpdateable, mField.getHeader(), mField.getDescription());
+                var chk = new VCheckBox(columnName, isMandatory, isReadOnly, isUpdateable, mField.getHeader(), mField.getDescription(), mField.getIsSwitch());
                 chk.setField(mField);
                 ctrl = chk;
             }
@@ -417,6 +417,13 @@
                     num.setMinValue(minValue);
                     num.setMaxValue(maxValue);
                     ctrl = num;
+                }
+                else if (displayType == VIS.DisplayType.ProgressBar) {
+                    var bar = new VProgressBar(columnName, isMandatory, isReadOnly, isUpdateable, mField.getDisplayLength(), mField.getFieldLength(), displayType);
+                    bar.setField(mField);
+                    bar.setMinValue(minValue);
+                    bar.setMaxValue(maxValue); 
+                    ctrl = bar;
                 }
             }
             else if (displayType == VIS.DisplayType.PAttribute) {
@@ -622,7 +629,9 @@
      *	Get control
      * 	@return control
      */
-    IControl.prototype.getControl = function () { return this.ctrl };
+    IControl.prototype.getControl = function () {        
+        return this.ctrl
+    };
 
     /**
     *	Get root
@@ -795,7 +804,7 @@
     IControl.prototype.setBackground = function (e) {
 
         if (this.colName.startsWith("lbl") || this.displayType == VIS.DisplayType.Label ||
-            this.displayType == VIS.DisplayType.YesNo || this.displayType == VIS.DisplayType.Button)
+            this.displayType == VIS.DisplayType.YesNo || this.displayType == VIS.DisplayType.Button || this.displayType == VIS.DisplayType.ProgressBar)
             return;
 
 
@@ -1583,11 +1592,16 @@
     *  @param description
     **********************************************************************/
 
-    function VCheckBox(columnName, mandatory, isReadOnly, isUpdateable, text, description) {
-        var $ctrl = $('<input>', { type: 'checkbox', name: columnName, value: text });
-        var $lbl = $('<label class="vis-ec-col-lblchkbox" />').html(text).prepend($ctrl);
-        IControl.call(this, $lbl, VIS.DisplayType.YesNo, isReadOnly, columnName, mandatory);
-
+    function VCheckBox(columnName, mandatory, isReadOnly, isUpdateable, text, description, isSwitch) {
+        var $ctrl = $('<input>', { type: 'checkbox', name: columnName, value: text }); 
+        var $lbl = $('<label class="vis-ec-col-lblchkbox" />').html(text);
+        if (isSwitch) {
+            $ctrl.addClass('vis-ctrl-switch');
+            $lbl.prepend('<i for="switch" class="vis-ctrl-switchSlider">Toggle</i>');
+        }
+        $lbl.prepend($ctrl);       
+        //var $lbl = $('<label class="vis-ec-col-lblchkbox" />').html(text).prepend('<i for="switch" class="vis-switchSlider">Toggle</i>').prepend($ctrl);
+        IControl.call(this, $lbl, VIS.DisplayType.YesNo, isReadOnly, columnName, mandatory);       
         this.cBox = $ctrl;
         var self = this;
 
@@ -6132,6 +6146,7 @@
         * Decide if open container dialog or not.
         * If Must Open that means must open dialog.(when user click Icon)
         */
+
         this.actionText = function (mustOpen) {
             if (!self.value) {
                 self.value = 0;
@@ -6369,10 +6384,131 @@
             return null;
         }
     };
+   
+    
+    // VProgressBar
+   
+    function VProgressBar(columnName, isMandatory, isReadOnly, isUpdateable, displayLength, fieldLength, controlDisplayType) {     
+        var $ctrl = $('<button class="vis-progressCtrlWrap">');
+        var $rangeCtrl = $('<input>', { type: 'range', step: '0.01', name: columnName, maxlength: fieldLength, 'data-type': 'int' });
+        var $oputput = $('<output class="vis-progress-output">');
+        
+            $ctrl.append($oputput).append($rangeCtrl);
+       
+        IControl.call(this, $ctrl, controlDisplayType, isReadOnly, columnName, isMandatory);      
+        if (isReadOnly || !isUpdateable) {
+            this.setReadOnly(true);
+        }
+        else {
+            this.setReadOnly(false);
+        }
+        this.rangeCtrl = $rangeCtrl;
+        this.oputput = $oputput;
+
+        this.setText = function (val) {            
+            $oputput.text(val);           
+        };
+        this.setRange = function (val) {
+            $rangeCtrl.val(val);
+        };
+
+        this.getRange = function () {            
+            return $rangeCtrl.val();           
+        };
+        
+        var self = this; //self pointer
 
 
+        
 
+        /* Event */
+        $rangeCtrl.on("input", function (e) {  
+            e.stopPropagation();
+            var newVal = $rangeCtrl.val(); 
+            //self.setOutputPosition();
+            $oputput.text(newVal);
+            //$ctrl.val(newVal);
+        });
 
+        $rangeCtrl.on("change", function (e) {
+            e.stopPropagation();
+            var newVal = $rangeCtrl.val();
+            //$ctrl.val(newVal);
+            if (newVal !== self.oldValue) {              
+                var evt = { newValue: newVal, propertyName: self.getName() };
+                self.fireValueChanged(evt);
+                evt = null;                
+                //self.setOutputPosition();
+            }
+        });
+
+        this.disposeComponent = function () {
+            $ctrl = null;
+            $rangeCtrl = null;
+            this.rangeCtrl = this.$oputput = null;
+            self = null;
+        }
+    };
+
+    VIS.Utility.inheritPrototype(VProgressBar, IControl);
+    VProgressBar.prototype.setValue = function (newValue) {
+        if (this.oldValue != newValue) {
+            this.oldValue = newValue;
+            this.setText(newValue);
+            this.setRange(newValue);
+            //this.setOutputPosition();
+        }
+    };
+
+    VProgressBar.prototype.getValue = function () {           
+        return this.getRange();
+    };
+    VProgressBar.prototype.setMaxValue = function (maxValue) {
+        if ($.isNumeric(maxValue)) {
+            this.rangeCtrl.attr("max", maxValue);
+        }
+    };
+
+    VProgressBar.prototype.setMinValue = function (minValue) {
+        if ($.isNumeric(minValue)) {
+            this.rangeCtrl.attr("min", minValue);
+        }
+    };
+    VProgressBar.prototype.getDisplay = function () {
+        return this.rangeCtrl.val();
+    };
+    VProgressBar.prototype.getControl = function (parent) {
+        if (parent) {
+            parent.addClass("vis-progressCtrlWrap");
+            parent.append(this.oputput);
+            return this.rangeCtrl;
+        }
+        return this.ctrl;        
+    };
+    //VProgressBar.prototype.setOutputPosition = function () {
+    //    var offset = 30;
+    //    if (this.editingGrid) {
+    //        offset = 0;
+    //    }
+    //    var width = this.ctrl.width();
+    //    var val = this.getValue();
+    //    var min = this.mField.getMinValue() ? this.mField.getMinValue() : 0;
+    //    var max = this.mField.getMaxValue() ? this.mField.getMaxValue() : 100;
+    //    var newPoint = (val - Number(min)) / (Number(max) - Number(min));
+    //    if (newPoint < 0) {
+    //        newPlace = 0;
+    //    }
+    //    else if (newPoint > 1) {
+    //        newPlace = width;
+    //    }
+    //    else {
+    //        newPlace = width * newPoint;
+    //    }
+
+    //    this.getProgressOutput().css({ left: (newPlace / 2) + offset }).text(val);
+      
+    //}
+        
     //To implement culture change
     //1.Control type number to textbox:number text not comma in un english culture
     //2.implement formate in setValue Globalize.format(newValue, "n0");
@@ -6400,5 +6536,6 @@
     VIS.Controls.VAmtDimension = VAmtDimension;
     VIS.Controls.VProductContainer = VProductContainer;
     VIS.Controls.VKeyText = VKeyText;
+    VIS.Controls.VProgressBar = VProgressBar;
     /* END */
 }(jQuery, VIS));
