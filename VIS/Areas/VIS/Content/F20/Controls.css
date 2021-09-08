@@ -546,13 +546,13 @@ input[type="radio"]:not(:checked){
     left: 32px;
     transform: translateX(-1%);
     z-index: 2;
-    margin-top: 7px !important;
+    margin-top: 12px !important;
 }
 
 .w2ui-editable .vis-progress-output {
-   /* position: relative !important;*/
-    margin-top: 4px !important;
-    /*left: 0.5%;*/
+    /* position: relative !important;*/
+    margin-top: 8px !important;
+    left: 3%;
 }
 
 .w2ui-grid-data .vis-grid-progress-output {
@@ -566,8 +566,7 @@ input[type="radio"]:not(:checked){
 .vis-progressCtrlWrap {
     border: none !important;
     background: none !important;
-    cursor:none;
-    pointer-events:none;
+    
 }
 .vis-input-wrap input[type=range],
 .w2ui-editable input[type=range] {
@@ -576,8 +575,8 @@ input[type="radio"]:not(:checked){
     -webkit-appearance: none;
     background-color: #ddd;
     padding: 0 !important;
-    z-index: 1;
-    pointer-events: all;
+    z-index: 1;   
+    top: 0.3rem;
 }
 
     .vis-input-wrap input[type=range]::-webkit-slider-runnable-track,
@@ -614,15 +613,44 @@ input[type="radio"]:not(:checked){
 .vis-input-wrap .vis-progressCtrlWrap + label {
     padding: 0;
     left: 0 !important;
-    top: -10px !important;
+    top: -12px !important;
 }
 
-    .vis-input-wrap input[type="range"] ~ .vis-ev-ctrlinfowrap,
-    .w2ui-editable input[type="range"] ~ .vis-ev-ctrlinfowrap {
-        left: 0;
-    }
+.vis-input-wrap .vis-progressCtrlWrap ~ .vis-ev-ctrlinfowrap,
+.w2ui-editable .vis-progressCtrlWrap ~ .vis-ev-ctrlinfowrap {
+    left: 0;
+    Top: 18px !important;
+}
 
 
 /***************************** Control Prop End ****************************************/
 
+.vis-autocomplete-items {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    /*position the autocomplete items to be the same width as the container:*/
+    top: 100%;
+    left: 0;
+    right: 0;
+}
 
+    .vis-autocomplete-items div {
+        padding: 10px;
+        cursor: pointer;
+        background-color: #fff;
+        border-bottom: 1px solid #d4d4d4;
+    }
+
+        /*when hovering an item:*/
+        .vis-autocomplete-items div:hover {
+            background-color: #e9e9e9;
+        }
+
+/*when navigating through the items using the arrow keys:*/
+.vis-autocomplete-active {
+    background-color: DodgerBlue !important;
+    color: #ffffff;
+}

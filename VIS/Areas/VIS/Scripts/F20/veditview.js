@@ -698,7 +698,7 @@
         var ctrlP = $("<div class='vis-control-wrap'>");
 
         if (editor && (editor.getControl()[0].tagName == 'INPUT' || editor.getControl()[0].tagName == "SELECT" ||
-            editor.getControl()[0].tagName == 'TEXTAREA') && editor.getControl()[0].type != 'checkbox') {
+            editor.getControl()[0].tagName == 'TEXTAREA' || editor.getControl()[0].className == 'vis-progressCtrlWrap') && editor.getControl()[0].type != 'checkbox') {
             //editor.getControl().addClass("custom-select");
             ctrlP.append(editor.getControl().attr("placeholder", " ").attr("data-placeholder", ""));
             if (label != null) {
