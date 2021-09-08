@@ -159,8 +159,9 @@ namespace VIS
             //     "~/Areas/VIS/Scripts/app/forms/createforecast.js",
 
 
-            //       "~/Areas/VIS/Scripts/tabpanels/verinfo.js",
-            //      "~/Areas/VIS/Scripts/TestPanel.js");
+            //     "~/Areas/VIS/Scripts/tabpanels/verinfo.js",
+            //     "~/Areas/VIS/Scripts/tabpanels/HistoryDetailsTabPanel.js",
+            //     "~/Areas/VIS/Scripts/TestPanel.js");
 
 
             //modScript.Include(
@@ -205,7 +206,8 @@ namespace VIS
             //    "~/Areas/VIS/Content/GroupStyle.css",
             //     "~/Areas/VIS/Content/ProductContainer.css",
             //    "~/Areas/VIS/Content/GlJournalDimension.css",
-            //    "~/Areas/VIS/Content/BudgetControl.css"
+            //    "~/Areas/VIS/Content/BudgetControl.css",
+            //    "~/Areas/VIS/Content/HistoryTabPanel.css"
             //   );
 
             //style.Include("~/Areas/VIS/Content/F20/Color.css",

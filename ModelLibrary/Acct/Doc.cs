@@ -96,6 +96,8 @@ namespace VAdvantage.Acct
         private int _C_CashBook_ID = -1;
         //Currency					
         private int _C_Currency_ID = -1;
+        //Window
+        private int _AD_Window_ID = -1;
         /**********************/
         /** Work Order Class            */
         private int _workorder_id = -1;
@@ -259,6 +261,15 @@ namespace VAdvantage.Acct
                 {
                     _log.Severe("Not Found: " + TableName + "_ID=" + Record_ID);
                 }
+                else
+                {
+                    //for posting set Window_ID at doc
+                    if (doc.GetAD_Window_ID() < 0)
+                    {
+                        doc.SetAD_Window_ID(GetWindowID(AD_Table_ID, Record_ID, TableName,  trxName));
+                    }
+                   
+                }
                 dt = null;
             }
             catch (Exception e)
@@ -305,6 +316,30 @@ namespace VAdvantage.Acct
             }
             return null;
         }
+
+        /// <summary>
+        /// Gets the Window_ID of the document
+        /// </summary>
+        /// <param name="AD_Table_ID">Table_ID of Documents</param>
+        /// <param name="Record_ID">Recordto be posted</param>
+        /// <param name="TableName">Table Name of Document</param>
+        /// <returns>AD_Window_ID</returns>
+        public static int GetWindowID(int AD_Table_ID, int Record_ID, string TableName ,Trx trxName)
+        {
+            string sql = @"SELECT AD_Tab.AD_Window_ID FROM AD_Tab ";
+            
+            if (TableName.Equals("GL_Journal")) {
+                sql += "INNER JOIN AD_Window ON AD_Window.AD_WINDOW_ID = AD_Tab.AD_Window_ID WHERE AD_Window.Name = " +
+                    "CASE WHEN(SELECT NVL(GL_JournalBatch_ID, 0) FROM GL_Journal WHERE GL_Journal_ID = "+ Record_ID + ") = 0 " +
+                    "THEN 'GL Journal Line' ELSE 'GL Journal' END AND AD_Tab.AD_Table_ID = " + AD_Table_ID;                
+            }
+            else
+            {
+                sql += "WHERE AD_Tab.AD_Table_ID = " + AD_Table_ID;
+            }
+            return Util.GetValueOfInt(DB.ExecuteScalar(sql, null, trxName));
+        }
+
 
         /// <summary>
         /// Post Document
@@ -797,7 +832,7 @@ namespace VAdvantage.Acct
                     }
                 }
 
-                
+
 
             }	//	for all facts
 
@@ -2197,6 +2232,24 @@ namespace VAdvantage.Acct
         public void SetC_Currency_ID(int C_Currency_ID)
         {
             _C_Currency_ID = C_Currency_ID;
+        }
+
+        /// <summary>
+        /// Get AD_Window_ID
+        /// </summary>
+        /// <returns>Window</returns>
+        public int GetAD_Window_ID()
+        {
+            return _AD_Window_ID;
+        }
+
+        /// <summary>
+        ///Set AD_Window_ID
+        /// </summary>
+        /// <param name="AD_Window_ID">Window</param>
+        public void SetAD_Window_ID(int AD_Window_ID)
+        {
+            _AD_Window_ID = AD_Window_ID;
         }
 
         /// <summary>

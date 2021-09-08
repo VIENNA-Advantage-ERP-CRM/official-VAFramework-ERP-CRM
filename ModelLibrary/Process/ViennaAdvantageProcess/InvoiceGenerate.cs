@@ -922,8 +922,8 @@ namespace ViennaAdvantage.Process
             else
                 sql = "UPDATE C_Invoice i "
                     + "SET GrandTotal=TotalLines+"
-                        + "(SELECT COALESCE(SUM(TaxAmt),0) FROM C_InvoiceTax it WHERE i.C_Invoice_ID=it.C_Invoice_ID) "
-                        + (invoice.Get_ColumnIndex("WithholdingAmt") > 0 ? " , GrandTotalAfterWithholding = (TotalLines + (SELECT COALESCE(SUM(TaxAmt),0) FROM C_InvoiceTax it WHERE i.C_Invoice_ID=it.C_Invoice_ID) - NVL(WithholdingAmt, 0) - NVL(BackupWithholdingAmount, 0))" : "")
+                        + "(SELECT ROUND((COALESCE(SUM(TaxAmt),0)),"+invoice.GetPrecision()+") FROM C_InvoiceTax it WHERE i.C_Invoice_ID=it.C_Invoice_ID) "
+                        + (invoice.Get_ColumnIndex("WithholdingAmt") > 0 ? " , GrandTotalAfterWithholding = (TotalLines + (SELECT ROUND((COALESCE(SUM(TaxAmt),0))," + invoice.GetPrecision() + ") FROM C_InvoiceTax it WHERE i.C_Invoice_ID=it.C_Invoice_ID) - NVL(WithholdingAmt, 0) - NVL(BackupWithholdingAmount, 0))" : "")
                         + "WHERE C_Invoice_ID=" + invoice.GetC_Invoice_ID();
             no = DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 1)

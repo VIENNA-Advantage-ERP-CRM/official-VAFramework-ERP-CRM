@@ -218,14 +218,6 @@ namespace VAdvantage.Model
 
             if (to.Get_ColumnIndex("ConditionalFlag") > -1)
             {
-                if (!to.CalculateTaxTotal())   //	setTotals
-                {
-                    throw new ArgumentException(Msg.GetMsg(from.GetCtx(), "ErrorCalculateTax") + ": " + to.GetDocumentNo().ToString());
-                }
-
-                // Update order header
-                to.UpdateHeader();
-
                 DB.ExecuteQuery("UPDATE C_Order SET ConditionalFlag = null WHERE C_Order_ID = " + to.GetC_Order_ID(), null, trxName);
             }
             return to;
@@ -1377,6 +1369,14 @@ namespace VAdvantage.Model
                 {
                     log.Log(Level.SEVERE, "Line difference - From=" + fromLines.Length + " <> Saved=" + count);
                 }
+
+                if (!CalculateTaxTotal())   //	setTotals
+                {
+                    log.Info(Msg.GetMsg(GetCtx(), "ErrorCalculateTax") + ": " + GetDocumentNo().ToString());
+                }
+
+                // Update order header
+                UpdateHeader();
             }
             catch
             {
@@ -2836,7 +2836,7 @@ namespace VAdvantage.Model
 
                     if (ordAmt == 0)
                     {
-                        MConversionType conv = new MConversionType(GetCtx(), GetC_ConversionType_ID(), Get_TrxName());
+                        MConversionType conv =  MConversionType.Get(GetCtx(), GetC_ConversionType_ID());
                         _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
                             + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
 
@@ -3914,7 +3914,7 @@ namespace VAdvantage.Model
                 //	Implicit Approval
                 if (!IsApproved())
                     ApproveIt();
-                GetLines(true, null);
+                GetLines(false, null);
 
                 //JID_1126: System will check the selected Vendor and product to update the price on Purchasing tab.
                 if (!IsSOTrx() && !IsReturnTrx() && dt.GetDocBaseType() == "POO")
@@ -3954,11 +3954,17 @@ namespace VAdvantage.Model
                     //	Counter Documents
                     MOrder counter = CreateCounterDoc();
                     if (counter != null)
+                    {
                         Info.Append(" - @CounterDoc@: @Order@=").Append(counter.GetDocumentNo());
+                    }
                 }
                 catch (Exception e)
                 {
-                    Info.Append(" - @CounterDoc@: ").Append(e.Message.ToString());
+                    //if get any exception while creating counter document then return the message to user 
+                    // and not to complete the main record
+                    //Info.Append(" - @CounterDoc@: ").Append(e.Message.ToString());
+                    _processMsg = e.Message.ToString();
+                    return DocActionVariables.STATUS_INPROGRESS;
                 }
 
                 ////	Create SO Shipment - Force Shipment
@@ -5692,38 +5698,70 @@ namespace VAdvantage.Model
         {
             //	Is this itself a counter doc ?
             if (GetRef_Order_ID() != 0)
+            {
                 return null;
-
-            //	Org Must be linked to BPartner
-            MOrg org = MOrg.Get(GetCtx(), GetAD_Org_ID());
-            //jz int counterC_BPartner_ID = org.getLinkedC_BPartner_ID(Get_TrxName()); 
-            int counterC_BPartner_ID = org.GetLinkedC_BPartner_ID(Get_TrxName());
-            if (counterC_BPartner_ID == 0)
-                return null;
-            //	Business Partner needs to be linked to Org
-            //jz MBPartner bp = MBPartner.get (GetCtx(), getC_BPartner_ID());
-            MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_TrxName());
-            int counterAD_Org_ID = bp.GetAD_OrgBP_ID_Int();
-            if (counterAD_Org_ID == 0)
-                return null;
-
-            //jz MBPartner counterBP = MBPartner.get (GetCtx(), counterC_BPartner_ID);
-            MBPartner counterBP = new MBPartner(GetCtx(), counterC_BPartner_ID, Get_TrxName());
-            MOrgInfo counterOrgInfo = MOrgInfo.Get(GetCtx(), counterAD_Org_ID, null);
-            log.Info("Counter BP=" + counterBP.GetName());
+            }
 
             //	Document Type
+            //check weather Counter Document created & Acitve or not 
             int C_DocTypeTarget_ID = 0;
             MDocTypeCounter counterDT = MDocTypeCounter.GetCounterDocType(GetCtx(), GetC_DocType_ID());
             if (counterDT != null)
             {
                 log.Fine(counterDT.ToString());
                 if (!counterDT.IsCreateCounter() || !counterDT.IsValid())
+                {
+                    //erro save into the log the messge if couter DocType is not valid
+                    log.Info("Counter Document Type is not Valid one!");
                     return null;
+                }
                 C_DocTypeTarget_ID = counterDT.GetCounter_C_DocType_ID();
+                if (C_DocTypeTarget_ID <= 0)
+                {
+                    //Info save into the log the messge if couter DocType is not found
+                    log.Info("Counter Document Type not found on Inter Company Document window.");
+                    return null;
+                }
             }
-            if (C_DocTypeTarget_ID <= 0)
+            else
+            {
                 return null;
+            }
+
+
+            //	Org Must be linked to BPartner
+            MOrg org = MOrg.Get(GetCtx(), GetAD_Org_ID());
+            //jz int counterC_BPartner_ID = org.getLinkedC_BPartner_ID(Get_TrxName()); 
+            int counterC_BPartner_ID = org.GetLinkedC_BPartner_ID(Get_TrxName());
+            if (counterC_BPartner_ID == 0)
+            {
+                //Info save into the log the messge if Counter BP not found
+                log.Info("Business Partner is not found on Customer/Vendor master window to create the Counter Document.");
+                return null;
+            }
+            //	Business Partner needs to be linked to Org
+            //jz MBPartner bp = MBPartner.get (GetCtx(), getC_BPartner_ID());
+            MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_TrxName());
+            int counterAD_Org_ID = bp.GetAD_OrgBP_ID_Int();
+            if (counterAD_Org_ID == 0)
+            {
+                //Info save into the log the messge if Link Organization not found
+                log.Info("Linked Organization is not found on Customer/Vendor master window to create the Counter Document.");
+                return null;
+            }
+
+            //System should not allow to create counter document with same BP and organization.
+            if (counterAD_Org_ID == GetAD_Org_ID() || counterC_BPartner_ID == GetC_BPartner_ID())
+            {
+                //erro save into the log
+                log.Info("On Counter Document Organization or Business Partner should not allow the same with the Document.");
+                return null;
+            }
+
+            //jz MBPartner counterBP = MBPartner.get (GetCtx(), counterC_BPartner_ID);
+            MBPartner counterBP = new MBPartner(GetCtx(), counterC_BPartner_ID, Get_TrxName());
+            MOrgInfo counterOrgInfo = MOrgInfo.Get(GetCtx(), counterAD_Org_ID, null);
+            log.Info("Counter BP=" + counterBP.GetName());
 
             // set counter Businees partner 
             SetCounterBPartner(counterBP, counterAD_Org_ID, counterOrgInfo.GetM_Warehouse_ID());

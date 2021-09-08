@@ -79,6 +79,9 @@ namespace VAdvantage.Model
         /** Document Value Workflow Manager		*/
         private static DocWorkflowMgr s_docWFMgr = null;
 
+        // Document Value Workflow message
+        public string s_docWFMsg = "";
+
         private int parent_ID = 0;
 
         #endregion
@@ -1898,6 +1901,24 @@ namespace VAdvantage.Model
             return parent_ID;
         }
 
+        /// <summary>
+        /// Set Document Value WF Message
+        /// </summary>
+        /// <param name="msg"></param>
+        public void SetDocWFMsg(string msg)
+        {
+            this.s_docWFMsg = msg;
+        }
+
+        /// <summary>
+        /// Get Document Value WF Message
+        /// </summary>
+        /// <returns></returns>
+        public string GetDocWFMsg()
+        {
+            return s_docWFMsg;
+        }
+
         public bool Set_ValueNoCheck(String ColumnName, Object value)
         {
             bool success = true;
@@ -2292,7 +2313,7 @@ namespace VAdvantage.Model
                     {
                         if (!DB.IsPostgreSQL())
                         {
-                            adLog.Append( " END; ");
+                            adLog.Append(" END; ");
                         }
 
                         //p_ctx.SetContext("AD_ChangeLogBatch", "");
@@ -3475,7 +3496,7 @@ namespace VAdvantage.Model
                     {
                         if (!DB.IsPostgreSQL())
                         {
-                            adLog.Append( " END; ");
+                            adLog.Append(" END; ");
                         }
                         adLog.Replace("TO_DATE", "TO_TIMESTAMP");
                         no = DB.ExecuteQuery(adLog.ToString(), null, null);
@@ -4476,7 +4497,7 @@ namespace VAdvantage.Model
                             adLogDB = adLog;
                         }
                         p_ctx.SetContext("AD_ChangeLogBatch", "");
-                        adLogDB= adLogDB.Replace("TO_DATE", "TO_TIMESTAMP");
+                        adLogDB = adLogDB.Replace("TO_DATE", "TO_TIMESTAMP");
                         DB.ExecuteQuery(adLogDB, null, null);
                     }
                 }

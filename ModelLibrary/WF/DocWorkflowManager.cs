@@ -53,12 +53,12 @@ namespace VAdvantage.WF
         {
             PO.SetDocWorkflowMgr(Get());
         }
-       
+
 
         /// <summary>
         /// Doc Workflow Manager
         /// </summary>
-        private DocWorkflowManager(): base()
+        private DocWorkflowManager() : base()
         {
             if (_mgr == null)
                 _mgr = this;
@@ -109,8 +109,8 @@ namespace VAdvantage.WF
 
                 if (document.Get_Trx() != null)
                 {
-                   
-                    ManageSkippedWF.Add( document.Get_Trx().SetUniqueTrxName(Trx.CreateTrxName("WFDV")), document);
+
+                    ManageSkippedWF.Add(document.Get_Trx().SetUniqueTrxName(Trx.CreateTrxName("WFDV")), document);
                     log.Severe("Not started: " + wf);
                     continue;
                 }
@@ -120,17 +120,21 @@ namespace VAdvantage.WF
                 ProcessInfo pi = new ProcessInfo(wf.GetName(), AD_Process_ID, AD_Table_ID, document.Get_ID());
                 pi.SetAD_User_ID(document.GetCtx().GetAD_User_ID());
                 pi.SetAD_Client_ID(document.GetAD_Client_ID());
-                
+
                 // vinay bhatt for window id
                 pi.SetAD_Window_ID(document.GetAD_Window_ID());
                 //
 
                 wf.GetCtx().SetContext("#AD_Client_ID", pi.GetAD_Client_ID().ToString());
-                if (wf.Start(pi) != null)
+                MWFProcess retVal = wf.Start(pi);
+                if (retVal != null)
                 {
                     log.Config(wf.GetName());
                     _noStarted++;
                     started = true;
+
+                    // VIS0060: work done to Show Message from workflow Process
+                    document.SetDocWFMsg(retVal.GetProcessMsg());
                 }
             }
             return started;

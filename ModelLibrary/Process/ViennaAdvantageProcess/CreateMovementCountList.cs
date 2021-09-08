@@ -205,7 +205,7 @@ ORDER BY s.M_Locator_ID, s.M_Product_ID, s.Qty DESC, s.M_AttributeSetInstance_ID
                 dt.Load(idr);
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
-                   // while (idr.Read())
+                // while (idr.Read())
                 {
                     int M_Product_ID = Util.GetValueOfInt(dr[0]);
                     product = MProduct.Get(GetCtx(), M_Product_ID);
@@ -227,6 +227,7 @@ ORDER BY s.M_Locator_ID, s.M_Product_ID, s.Qty DESC, s.M_AttributeSetInstance_ID
                     {
                         //Save data on Movement Line
                         _line = new MMovementLine(GetCtx(), 0, Get_Trx());
+                        _line.SetParent(_movement);
                         _line.SetAD_Client_ID(_movement.GetAD_Client_ID());
                         _line.SetAD_Org_ID(_movement.GetAD_Org_ID());
                         _line.SetM_Movement_ID(_m_Movement_ID);

@@ -351,6 +351,7 @@ namespace ViennaAdvantageServer.Process
                 else
                 {
                     VAdvantage.Model.MInvoiceLine invLine = new VAdvantage.Model.MInvoiceLine(GetCtx(), 0, Get_TrxName());
+                    invLine.SetInvoice(inv);
                     invLine.SetAD_Client_ID(inv.GetAD_Client_ID());
                     invLine.SetAD_Org_ID(inv.GetAD_Org_ID());
                     invLine.SetC_Campaign_ID(inv.GetC_Campaign_ID());

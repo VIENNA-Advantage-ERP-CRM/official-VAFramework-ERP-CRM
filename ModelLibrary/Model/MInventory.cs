@@ -754,7 +754,7 @@ namespace VAdvantage.Model
                 {
                     sql.Append(@"SELECT m.M_InventoryLine_ID, m.M_Locator_ID, m.M_Product_ID, m.M_AttributeSetInstance_ID, m.AdjustmentType, m.AsOnDateCount, m.DifferenceQty,
                 nvl(mt.CurrentQty, 0) as CurrentQty FROM M_InventoryLine m LEFT JOIN (SELECT DISTINCT t.M_Locator_ID, t.M_Product_ID, t.M_AttributeSetInstance_ID, 
-                FIRST_VALUE(t.CurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM M_Transaction t
+                FIRST_VALUE(t.CurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID, t.M_Locator_ID, NVL(t.M_ProductContainer_ID, 0) ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM M_Transaction t
                 INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
                " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND l.AD_Org_ID = " + GetAD_Org_ID() +
                @") mt ON m.M_Product_ID = mt.M_Product_ID AND nvl(m.M_AttributeSetInstance_ID, 0) = nvl(mt.M_AttributeSetInstance_ID, 0) 
@@ -764,7 +764,7 @@ namespace VAdvantage.Model
                 {
                     sql.Append(@"SELECT m.M_InventoryLine_ID, m.M_Locator_ID, m.M_Product_ID, m.M_AttributeSetInstance_ID, m.AdjustmentType, m.AsOnDateCount, m.DifferenceQty,
                 nvl(mt.CurrentQty, 0) as CurrentQty FROM M_InventoryLine m LEFT JOIN (SELECT DISTINCT t.M_Locator_ID, t.M_Product_ID, t.M_AttributeSetInstance_ID, t.M_ProductContainer_ID, 
-                FIRST_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM M_Transaction t
+                FIRST_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID, t.M_Locator_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM M_Transaction t
                 INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
                 " AND t.AD_Client_ID = " + GetAD_Client_ID() + @") mt ON m.M_Product_ID = mt.M_Product_ID AND nvl(m.M_AttributeSetInstance_ID, 0) = nvl(mt.M_AttributeSetInstance_ID, 0) 
                 AND m.M_Locator_ID = mt.M_Locator_ID AND nvl(m.M_ProductContainer_ID, 0) = nvl(mt.M_ProductContainer_ID, 0) WHERE m.M_Inventory_ID = " + Get_ID() + " ORDER BY m.Line");
@@ -873,7 +873,7 @@ namespace VAdvantage.Model
             // IsCostImmediate = true - calculate cost on completion
             MClient client = MClient.Get(GetCtx(), GetAD_Client_ID());
 
-            //MInventoryLine[] lines = GetLines(false);
+            lines = GetLines(true);
             //log.Info("total Lines=" + lines.Count());
             //MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
 
@@ -2158,6 +2158,7 @@ namespace VAdvantage.Model
                                     #region update Physical Inventory
                                     if (inventoryLine.GetM_ProductContainer_ID() == line.GetM_ProductContainer_ID())
                                     {
+                                        inventoryLine.SetParent(inventory);
                                         inventoryLine.SetQtyBook(containerCurrentQty);
                                         inventoryLine.SetOpeningStock(containerCurrentQty);
                                         inventoryLine.SetDifferenceQty(Decimal.Subtract(containerCurrentQty, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["ContainerCurrentQty"])));
@@ -2374,7 +2375,7 @@ namespace VAdvantage.Model
                                 inventory = new MInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetM_Inventory_ID()), Get_TrxName());
                                 if (!inventory.IsInternalUse())
                                 {
-                                    //break;
+                                    inventoryLine.SetParent(inventory);
                                     inventoryLine.SetQtyBook(qtyDiffer);
                                     inventoryLine.SetOpeningStock(qtyDiffer);
                                     inventoryLine.SetDifferenceQty(Decimal.Subtract(qtyDiffer, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["currentqty"])));

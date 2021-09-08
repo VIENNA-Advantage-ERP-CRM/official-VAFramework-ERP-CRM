@@ -320,16 +320,22 @@ namespace VAdvantage.Model
             MDocType dt = GetDocType();
             if (dt == null)
             {
-                log.Log(Level.SEVERE, "No DocType=" + GetC_DocType_ID());
+                //get the message from message window
+                //log.Log(Level.SEVERE, "No DocType=" + GetC_DocType_ID());
+                log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "VIS_NoDocType") + " - " + GetC_DocType_ID());
                 SetIsValid(false);
-                return "No Document Type";
+                //return "No Document Type";
+                return Msg.GetMsg(GetCtx(), "VIS_NoDocType");
             }
             MDocType c_dt = GetCounterDocType();
             if (c_dt == null)
             {
-                log.Log(Level.SEVERE, "No Counter DocType=" + GetCounter_C_DocType_ID());
+                //get the message from message window
+                //log.Log(Level.SEVERE, "No Counter DocType=" + GetCounter_C_DocType_ID());
+                log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "VIS_NoCoutrDocType") + " - " + GetCounter_C_DocType_ID());
                 SetIsValid(false);
-                return "No Counter Document Type";
+                //return "No Counter Document Type";
+                return Msg.GetMsg(GetCtx(), "VIS_NoCoutrDocType");
             }
             //
             String dtBT = dt.GetDocBaseType();
@@ -368,14 +374,19 @@ namespace VAdvantage.Model
             }
             else
             {
-                log.Warning("NOT - " + dtBT + " -> " + c_dtBT);
+                //message should be get from Message window
+                //log.Warning("NOT - " + dtBT + " -> " + c_dtBT);
+                log.Warning(Msg.GetMsg(GetCtx(), "NotValid") + " - " + dtBT + " -> " + c_dtBT);
                 SetIsValid(false);
-                return "Not valid";
+                //return "Not valid";
+                return Msg.GetMsg(GetCtx(), "NotValid");
             }
             //	Counter should have document numbering 
             if (!c_dt.IsDocNoControlled())
             {
-                return "Counter Document Type should be automatically Document Number controlled";
+                //message get from message window
+                //return "Counter Document Type should be automatically Document Number controlled";
+                return Msg.GetMsg(GetCtx(), "VIS_CoutrDocTypeAutoDocNoContrled");
             }
             return null;
         }

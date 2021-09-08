@@ -363,7 +363,6 @@ namespace VAdvantage.Model
                 {
                     // ShowMessage.Info("First Select Customer Group Then process again", true, null, null);
                     return null;
-
                 }
                 else
                 {
@@ -391,6 +390,31 @@ namespace VAdvantage.Model
                     _bp.SetSalesRep_ID(GetSalesRep_ID());
                 if (GetC_Campaign_ID() != 0)
                     _bp.SetC_Campaign_ID(GetC_Campaign_ID());
+
+                _bp.Set_Value("C_SalesRegion_ID", GetC_SalesRegion_ID());
+                _bp.SetC_Country_ID(GetC_Country_ID());
+                _bp.SetDescription(GetDescription());
+                _bp.Set_Value("C_Lead_ID", GetC_Lead_ID());
+                _bp.SetEMail(GetEMail());
+                _bp.SetMobile(GetMobile());
+                _bp.Set_Value("R_Source_ID", GetR_Source_ID());
+                _bp.Set_Value("C_BPartnerSR_ID", GetC_BPartnerSR_ID());
+
+
+                // VIS0060: Set Next Step, Next Step By and Follow update
+                if (Env.IsModuleInstalled("VA061_"))
+                {
+                    _bp.Set_Value("VA061_NextStep", Get_Value("VA061_NextStep"));
+                    if (Get_Value("C_Followupdate") != null)
+                    {
+                        _bp.Set_Value("C_Followupdate", Util.GetValueOfDateTime(Get_Value("C_Followupdate")));
+                    }
+                    _bp.Set_Value("VA061_NextStepBy", Get_Value("VA061_NextStepBy"));
+                    _bp.Set_Value("LeadRating", GetLeadRating());
+                    _bp.Set_Value("C_LeadQualification_ID", GetC_LeadQualification_ID());
+                    _bp.Set_Value("R_Status_ID", GetR_Status_ID());
+                    _bp.Set_Value("Created", GetCreated());
+                }
                 if (!_bp.Save())
                 {
                     return "@SaveError@";
@@ -449,7 +473,8 @@ namespace VAdvantage.Model
                         {
 
                         }
-                    } dr.Close();
+                    }
+                    dr.Close();
                 }
             }
             catch
@@ -686,6 +711,105 @@ namespace VAdvantage.Model
                     SetProcessed(_Status.IsClosed());
             }
 
+            // Added work from SOTC module.
+            if (Env.IsModuleInstalled("VA047_"))
+            {
+                int count = 0;
+                StringBuilder sql = new StringBuilder();
+                bool email = false;
+                bool mobile = false;
+                bool phone = false;
+                if (!string.IsNullOrEmpty(GetEMail()))
+                {
+                    sql.Append("SELECT COUNT(C_Lead_ID) FROM C_LEAD WHERE IsActive = 'Y' AND LOWER(Email) ='" + GetEMail().ToLower() + "'AND C_Lead_ID !='" + GetC_Lead_ID() + "' AND IsArchive != 'Y'");
+                    count = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
+                    if (count > 0)
+                    {
+                        email = true;
+                    }
+                    sql.Clear();
+                }
+                if (!string.IsNullOrEmpty(GetMobile()))
+                {
+                    sql.Append("SELECT COUNT(C_Lead_ID) FROM C_LEAD WHERE IsActive = 'Y' AND Mobile = '" + GetMobile() + "'AND C_Lead_ID !='" + GetC_Lead_ID() + "' AND IsArchive != 'Y'");
+                    count = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
+                    if (count > 0)
+                    {
+                        mobile = true;
+                    }
+
+                    sql.Clear();
+                }
+                if (!string.IsNullOrEmpty(GetPhone()))
+                {
+                    sql.Append("SELECT COUNT(C_Lead_ID) FROM C_LEAD WHERE IsActive = 'Y' AND Phone = '" + GetPhone() + "'AND C_Lead_ID !='" + GetC_Lead_ID() + "' AND IsArchive != 'Y'");
+                    count = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
+                    if (count > 0)
+                    {
+                        phone = true;
+                    }
+                }
+                if (email && mobile && phone)
+                {
+                    log.SaveInfo("VA047_AllExists", "");
+                }
+                else if (email && mobile)
+                {
+                    log.SaveInfo("VA047_EmailMobileExists", "");
+                }
+                else if (mobile && phone)
+                {
+                    log.SaveInfo("VA047_MobilePhoneExists", "");
+                }
+                else if (email && phone)
+                {
+                    log.SaveInfo("VA047_EmailPhoneExists", "");
+                }
+                else if (email)
+                {
+                    log.SaveInfo("VA047_EmailExists", "");
+
+                }
+                else if (mobile)
+                {
+                    log.SaveInfo("VA047_MobileExists", "");
+                }
+                else if (phone)
+                {
+                    log.SaveInfo("VA047_PhoneExists", "");
+                }
+            }
+
+            // If NextStepBy value not provided or neither NextStepBy nor C_Followupdate has changed, no task will be created.
+            if (Env.IsModuleInstalled("VA061_"))
+            {
+                int wf_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Workflow_ID FROM AD_Workflow WHERE WorkflowType='V' AND IsActive='Y' AND AD_Table_ID="
+                    + Get_Table_ID(), null, Get_Trx()));
+
+                if (wf_ID > 0 && Get_Value("VA061_NextStepBy") != null && (Is_ValueChanged("VA061_NextStepBy") || Is_ValueChanged("C_Followupdate")))
+                {
+                    // Ensure that VA061_NextStep has value
+                    if (string.IsNullOrEmpty(Util.GetValueOfString(Get_Value("VA061_NextStep"))))
+                    {
+                        log.SaveWarning("VA061_NextStepMustHaveValue", "");
+                        return false;
+                    }
+
+                    // Ensure that FollowUp On has value
+                    if (string.IsNullOrEmpty(Util.GetValueOfString(GetC_Followupdate())))
+                    {
+                        log.SaveWarning("VA061_FollowupdateMustHaveValue", "");
+                        return false;
+                    }
+
+                    // Set Value in this field to true, for task generation on workflow process
+                    Set_Value("VA061_IsCreateTask", true);
+                }
+                else
+                {
+                    Set_Value("VA061_IsCreateTask", false);
+                }
+            }
             return true;
         }
 

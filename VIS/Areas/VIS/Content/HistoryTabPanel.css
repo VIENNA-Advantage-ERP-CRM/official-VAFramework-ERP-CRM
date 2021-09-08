@@ -1,0 +1,716 @@
+﻿
+.VIS-tp-mainContainer {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    padding-top: .625rem;
+    color: rgba(var(--v-c-on-secondary), 1);
+}
+
+.VIS-tp-topSearchWrp {
+    display: flex;
+    width: 100%;
+    margin-bottom: .625rem;
+    padding: 0 .625rem;
+}
+
+.VIS-tp-refreshIcon {
+    background: transparent;
+    display: flex;
+    border: none;
+    align-items: center;
+    width: 30px;
+    color: rgba(var(--v-c-on-secondary), 1);
+    outline: none;
+}
+
+    .VIS-tp-refreshIcon:focus {
+        outline: none;
+    }
+
+.VIS-tp-searchControl input {
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: .875rem;
+}
+
+.VIS-tp-searchControl {
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
+    border-radius: .3rem;
+    padding: 0 .5rem 0 .5rem;
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+
+
+    .VIS-tp-searchControl i {
+        color: rgba(var(--v-c-on-secondary), .4);
+        cursor: pointer;
+    }
+
+.VIS-tp-recordswrap {
+    width: 100%;
+    height: 100%;
+    overflow: overlay;
+    padding: 0 .625rem;
+}
+
+.VIS-tp-recordsWrap {
+    flex: 1;
+    overflow-y: auto;
+    margin-top: 1rem;
+    cursor: pointer;
+    height: calc(100% - 50px);
+}
+
+.VIS-tp-recordWrap {
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
+    display: flex;
+    border-radius: .7rem;
+    padding: .5rem .625rem;
+    align-items: center;
+    margin-bottom: .4rem;
+    position: relative;
+    cursor: pointer;
+}
+
+.VIS-tp-recordLabels {
+    font-weight: 600;
+}
+
+.VIS-tp-recordIcon {
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .875rem;
+    color: rgba(var(--v-c-primary), 1);
+}
+
+.VIS-tp-recordInfo {
+    padding: 0 .625rem;
+    flex: 1;
+}
+
+    .VIS-tp-recordInfo h6 {
+        font-size: .875rem;
+        font-weight: 600;
+        margin-bottom: .2rem;
+    }
+
+.VIS-tp-attachInfo {
+    padding: 0 .625rem;
+    flex: 1;
+}
+
+    .VIS-tp-attachInfo h6 {
+        font-size: .775rem;
+        font-weight: 600;
+        margin-bottom: .2rem;
+    }
+
+.VIS-tp-recordSubject {
+    display: flex;
+    font-size: .75rem;
+    align-items: center;
+}
+
+    .VIS-tp-recordSubject p {
+        margin: 0;
+        opacity: .8;
+        padding-left: .3rem;
+    }
+
+    .VIS-tp-recordSubject i {
+        transform: rotate(45deg);
+    }
+
+.VIS-tp-recordInfoRight {
+    text-align: right;
+}
+
+    .VIS-tp-recordInfoRight small {
+        display: block;
+        font-size: .75rem;
+        opacity: .8;
+    }
+
+
+.VIS-tp-selectedRecord,
+.VIS-tp-recordWrap:hover {
+    border-color: rgba(var(--v-c-primary), 1);
+    color: rgba(var(--v-c-primary), 1);
+}
+
+    .VIS-tp-selectedRecord .VIS-tp-recordIcon,
+    .VIS-tp-recordWrap:hover .VIS-tp-recordIcon {
+        border-color: rgba(var(--v-c-primary), 1);
+    }
+
+.VIS-tp-sentEmail i {
+    transform: rotate(-120deg);
+}
+
+.VIS-tp-taskTag {
+    font-style: normal;
+    font-size: .75rem;
+    position: absolute;
+    top: 0;
+    right: -1px;
+    background: red;
+    padding: .1rem .5rem;
+    color: #fff;
+    border-top-right-radius: .7rem;
+    border-bottom-left-radius: .7rem;
+}
+
+.VIS-tp-taskcontTag {
+    /*width: 100%;
+    height: 60%;
+    overflow-y: auto;*/
+    position: relative;
+}
+
+    .VIS-tp-taskcontTag .VIS-tp-taskTag {
+        border-top-right-radius: 0;
+        right: 0;
+    }
+
+.VIS-testPanel {
+    /*border-bottom: 1px solid rgba(var(--v-c-on-secondary), .2);*/
+    padding-bottom: .5rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.VIS-tp-borderBott {
+    border-bottom: 1px solid rgba(var(--v-c-on-secondary), .2);
+}
+
+.VIS-tp-leftIcons span {
+    margin-right: .8rem;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+    .VIS-tp-leftIcons span:not(:last-child) {
+        border-right: 1px solid rgba(var(--v-c-on-secondary), .2);
+        padding-right: .8rem;
+    }
+
+.VIS-tp-rightIcons span:not(:last-child) {
+    border-right: 1px solid rgba(var(--v-c-on-secondary), .2);
+    padding-right: .8rem;
+    margin-right: .8rem;
+    cursor: pointer;
+}
+
+.VIS-tp-rightIcons {
+    font-size: 1rem;
+}
+
+.VIS-tp-detailsPanel {
+    background-color: white;
+    border-top-style: ridge;
+    padding: 2px 5px;
+    border-radius: 1rem;
+    color: rgba(var(--v-c-on-secondary), 1);
+    position: relative;
+}
+
+.VIS-tp-contentdiv {
+    height: 100%;
+    position: relative;
+}
+
+.VIS-tp-downloadAttachment {
+    display: flex;
+    width: 96%;
+    justify-content: space-between;
+    border-top: 1px solid rgba(var(--v-c-on-secondary), .2);
+    /*padding-top: .5rem;*/
+    margin-top: .5rem;
+    position: absolute;
+    bottom: 0;
+    min-height: 30px;
+}
+
+    .VIS-tp-downloadAttachment i,
+    .VIS-tp-attchDownload span {
+        color: rgba(var(--v-c-primary), 1);
+    }
+
+    .VIS-tp-downloadAttachment span {
+        font-size: .75rem;
+    }
+
+.VIS-tp-attchDownload,
+.VIS-tp-attachments {
+    display: flex;
+    align-items: center;
+}
+
+.VIS-tp-downloadAttachment i {
+    margin-right: .5rem;
+}
+
+.VIS-close-btn,
+.VIS-tp-attchDownload {
+    cursor: pointer;
+}
+
+.VIS-tp-commentsField > p {
+    margin-bottom: 0;
+    margin-right: 5px;
+    font-size: .75rem;
+    color: rgba(var(--v-c-primary), 1);
+}
+
+.VIS-tp-commentHead h6 {
+    color: rgba(var(--v-c-primary), 1);
+    font-size: .75rem;
+}
+
+.VIS-attachhistory-comment-text {
+    padding-left: 5px;
+}
+
+VIS-tp-commentData {
+    border-top: 1px solid rgba(var(--v-c-on-secondary), .2);
+    padding-top: .5rem;
+    width: 100%;
+    /* height: 60px; */
+    /* overflow-y: auto; */
+    margin-top: .5rem;
+}
+
+.VIS-feedDetails-cmnt i {
+    color: rgba(var(--v-c-primary), 1);
+    background: rgba(var(--v-c-primary),.3);
+    padding: 10px;
+    font-size: 1.75rem;
+    border-radius: .25rem;
+    width: 48px;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    float: left;
+    margin-right: 10px;
+    margin-top: 2px;
+}
+
+.VIS-tp-commentsPanel {
+    background-color: white;
+    border-top-style: ridge;
+    padding: 5px 10px;
+    /*border-radius: 1rem;*/
+    color: rgba(var(--v-c-on-secondary), 1);
+    height: 200px;
+    overflow-y: auto;
+}
+
+.VIS-tp-recordsPanel {
+    height: 50%;
+}
+
+/*.VIS-tp-detailsPanel {
+    display: flex;
+    flex-direction: column;
+    border-top: ridge;
+    border-radius: 1rem;
+    margin-top: .625rem;
+    padding: .625rem;
+    height: 50%;
+}*/
+
+.VIS-tp-headWrap {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(var(--v-c-on-secondary), .2);
+    padding-bottom: .5rem;
+}
+
+    .VIS-tp-headWrap h6 {
+        margin: 0;
+        color: rgba(var(--v-c-primary), 1);
+        padding-left: .5rem;
+    }
+
+.VIS-tp-contentWrap {
+    display: flex;
+    flex-direction: column;
+    padding-top: .625rem;
+    /*height: calc(100% - 50px);*/
+    //overflow: auto;
+}
+
+.VIS-tp-attachIcon {
+    font-size: 2rem;
+}
+
+.VIS-tp-dateTime {
+    font-size: .75rem;
+    padding-bottom: .5rem;
+    display: flex;
+}
+
+.VIS-tp-userImg {
+    overflow: hidden;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    border-radius: 50%;
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
+    background: rgba(var(--v-c-primary),.3);
+    align-items: center;
+    justify-content: center;
+}
+
+    .VIS-tp-userImg i {
+        color: rgba(var(--v-c-primary), 1);
+        font-size: 1.6rem;
+    }
+
+.VIS-tp-chatInfo {
+    display: flex;
+    justify-content: space-between;
+}
+
+    .VIS-tp-chatInfo span {
+        font-size: .75rem;
+    }
+
+.VIS-chatBoxWrap {
+    position: absolute;
+    bottom: 15px;
+    left: 10px;
+    right: 10px;
+}
+
+.VIS-chatContentWrap {
+    height: calc(100% - 100px);
+    overflow: auto;
+}
+
+.VIS-tp-message {
+    margin-bottom: 0;
+    color: rgba(var(--v-c-primary), 1);
+    padding-top: .25rem;
+    font-size: .875rem;
+}
+
+.VIS-tp-attachIcon .vis-doc-word {
+    color: #2A5699;
+}
+
+.VIS-tp-attachIcon .vis-doc-pp {
+    color: #C94222;
+}
+
+.VIS-tp-attachIcon .vis-doc-excel {
+    color: #1C6C40;
+}
+
+.VIS-tp-attachIcon .vis-doc-pdf {
+    color: #EC0F02;
+}
+
+.VIS-tp-attachIcon .vis-doc-text {
+    color: #777;
+}
+
+.VIS-tp-attachIcon .vis-doc-img,
+.VIS-tp-attachIcon .vis-doc-blank {
+    color: rgba(var(--v-c-primary), 1);
+}
+
+.VIS-tp-msgRecevied {
+    border-top-left-radius: 0;
+    width: 85%;
+}
+
+.VIS-tp-msgSend {
+    border-bottom-right-radius: 0;
+    width: 85%;
+    margin-left: auto;
+}
+
+.VIS-tp-dropdownWrap a::after {
+    display: none;
+}
+
+.VIS-tp-dropdownWrap a {
+    color: rgba(var(--v-c-on-secondary), 1);
+}
+
+.VIS-mail-to .btn {
+    padding: 0;
+    outline: none;
+}
+
+    .VIS-mail-to .btn:focus {
+        box-shadow: none;
+    }
+
+.VIS-root-div {
+    height: 100%;
+    width: 100%;
+}
+
+.VIS-HistGrd-data {
+    height: 470px;   
+    width: 100%;
+}
+
+.VIS-root-pagingHtml {
+    padding: 0 .625rem;
+    margin-bottom: .625rem;
+}
+.vis-tp-emailDetailWrap {
+    display: flex;
+    align-items: center;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+}
+
+.VIS-mail-header {
+    width: 100%;
+    /*height: 60%;*/
+    overflow-y: auto;
+}
+
+.VIS-mail-user-div {
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    background: rgba(var(--v-c-primary), .1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.VIS-mail-user-span {
+    /*align-items: center;*/
+    color: rgba(var(--v-c-primary), 1);
+    /*padding-left: 13px;*/
+    font-size: 1.2rem;
+    font-weight: bold;
+    /*text-align: center;
+    vertical-align: middle;
+    line-height: 50px;*/
+}
+
+.VIS-mail-content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+    .VIS-mail-content small {
+        flex: 1;
+        white-space: nowrap;
+        padding-left: .5rem;
+        text-align: right;
+        padding-right: 0.3rem;
+    }
+
+.VIS-mail-username {
+    font-size: .85rem;
+    font-weight: bold;
+    display: block;
+    padding-left: .5rem;
+    /*text-align: center;*/
+}
+
+.VIS-mail-subject,
+.VIS-mail-to,
+.VIS-mail-from {
+    font-size: .75rem;
+    display: flex;
+    padding-left: .5rem;
+    /*text-align: center;*/
+    width: auto;
+}
+
+.VIS-mail-date {
+    text-align: right;
+    font-size: .625rem;
+    width: auto;
+    max-width: 100%;
+    min-width: 115px;
+}
+
+.VIS-tp-comments-input {
+    min-height: calc(100% - 50px);
+}
+
+.VIS-mail-body {
+    /*height: 80px;*/
+    font-size: .75rem;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.VIS-letter-header {
+    color: rgba(var(--v-c-primary), 1);
+    font-size: larger
+}
+
+.VIS-call-right-header {
+    margin-left: 130px;
+    float: right;
+    display: inline-block;
+    vertical-align: top;
+    padding: 2px 5px
+}
+
+.VIS-call-col-header {
+    vertical-align: bottom;
+    height: 25px;
+    font-weight: 600;
+}
+
+.VIS-call-col-data {
+    vertical-align: top;
+    font-size: 10px;
+    height: 25px
+}
+
+.VIS-attachments-file {
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.VIS-chat-text {
+    vertical-align: top;
+    font-size: 10px;
+    color: rgba(var(--v-c-primary), 1);
+    height: 25px;
+}
+
+.VIS-chat-box {
+    /*position: absolute;*/
+    width: 100%;
+    /*bottom: 35px;*/
+}
+
+    .VIS-chat-box textarea {
+        width: 100%;
+        border-radius: .4rem;
+    }
+/*.VIS-chat-send-div {
+    position: absolute;
+    height: 40px;
+    width: 90%;
+    bottom: 0px;
+}*/
+.VIS-chat-send-div {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.VIS-chat-send {
+    display: flex;
+    /*float: right;
+    width: 110px;
+    text-align: right;
+    margin-top: 3px;*/
+}
+
+.VIS-tp-chatBtn {
+    display: flex;
+    width: 30px;
+    height: 30px;
+    background: rgba(var(--v-c-primary), 1);
+    border-radius: .25rem;
+    color: rgba(var(--v-c-on-primary), 1);
+    align-items: center;
+    justify-content: center;
+    margin-left: 1rem;
+    cursor: pointer;
+}
+
+.VIS-tp-taskcontTag .VIS-tp-taskTag {
+    border-top-right-radius: 0;
+}
+
+.VIS-contentHead {
+    display: flex;
+    flex: 1;
+    padding-left: .625rem;
+    align-items: center;
+}
+
+.VIS-contentHeadOuter {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding-bottom: .3rem;
+    min-height: 44px;
+}
+
+.VIS-contentTitile {
+    flex: 1;
+}
+
+    .VIS-contentTitile h6 {
+        color: rgba(var(--v-c-primary), 1);
+    }
+
+
+.VIS-tp-rightIcons span:not(:last-child) {
+    font-size: 1.2rem;
+}
+
+.VIS-contentHeadOuter .VIS-tp-recordIcon {
+    border-color: rgba(var(--v-c-primary), 1);
+}
+
+.VIS-tp-attachmentContent .VIS-tp-recordWrap:hover {
+    border-color: rgba(var(--v-c-on-secondary), .2);
+    color: rgba(var(--v-c-on-secondary), 1);
+}
+
+.VIS-tp-recordDetail {
+    height: calc(100% - 46px);
+}
+
+.VIS-tp-emailDetailOuterPanel {
+    height: calc(100% - 75px);
+    overflow: auto;
+}
+
+.VIS-tabPanelDataLoader {
+    margin: 0 auto;
+    position: absolute;
+    bottom: 200px;
+    font-size: 8px;
+    left: 47%;
+    display: none;
+    /*width: 100%;*/
+    opacity: 1;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    color: rgba(var(--v-c-primary),1);
+}
+
+.VIS-tp-searchControl input,
+.VIS-tp-searchControl input:focus {
+    border: none !important;
+    padding-left: 0;
+}
+
+.VIS-tp-searchControl:focus-within {
+    border-color: rgba(var(--v-c-primary), 1);
+}
