@@ -337,6 +337,7 @@ input.vis-ev-col-readonly:not(:placeholder-shown) ~ label {
     color: rgba(var(--v-c-primary), 1) !important;
     display: flex;
     align-items: center;
+   /* justify-content: center;*/
 }
 
     .vis-ev-col-linkbutton i {

@@ -27,6 +27,7 @@ namespace VAdvantage.Model
     {
         //Cache Client-ID				
         private static CCache<int, int> s_cache = new CCache<int, int>("C_ConversionType", 4);
+        private static CCache<int, MConversionType> conversionType_cache = new CCache<int, MConversionType>("C_ConversionType", 50);
 
         /// <summary>
         ///	Standard Constructor
@@ -79,6 +80,27 @@ namespace VAdvantage.Model
             //	Return
             s_cache.Add(key, C_ConversionType_ID);
             return C_ConversionType_ID;
+        }
+
+        /// <summary>
+        /// Get Conversion Type
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="C_ConversionType_ID">Conversion Type ID</param>
+        /// <returns>MConversionType Object</returns>
+        public static MConversionType Get(Ctx ctx, int C_ConversionType_ID)
+        {
+            //	Try Cache
+            int key = C_ConversionType_ID;
+            MConversionType retValue = conversionType_cache[key];
+            if (retValue != null)
+                return retValue;
+            //	Create it
+            retValue = new MConversionType(ctx, C_ConversionType_ID, null);
+            //	Save in System
+            if (retValue.GetAD_Client_ID() == 0)
+                conversionType_cache.Add(key, retValue);
+            return retValue;
         }
 
         /// <summary>

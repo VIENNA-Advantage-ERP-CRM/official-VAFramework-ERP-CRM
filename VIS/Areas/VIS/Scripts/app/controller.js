@@ -575,7 +575,7 @@
     };	//	i
 
     GridTab.prototype.getValueAsString = function (variableName) {
-        var value = VIS.context.getWindowContext(this.vo.windowNo, this.vo.windowNo, variableName, true);
+        var value = VIS.context.getWindowContext(this.vo.windowNo, this.vo.tabNo, variableName, true);
         if (!value) {
             return '';
         }
@@ -5711,12 +5711,9 @@
         return this.vo.AD_Process_ID;
     };
 
-
     GridField.prototype.getAD_Form_ID = function () {
         return this.vo.AD_Form_ID;
     };
-
-
 
     GridField.prototype.getAD_Column_ID = function () {
         return this.vo.AD_Column_ID;
@@ -5733,6 +5730,7 @@
     GridField.prototype.getIsFieldOnly = function () {
         return this.vo.IsFieldOnly;
     };
+
     GridField.prototype.getShowLabel = function () {
         return true;
     };
@@ -5756,6 +5754,7 @@
     GridField.prototype.getMRSeqNo = function () {
         return this.vo.mrSeqNo;
     };
+
     GridField.prototype.getIsSelectionColumn = function () {
         return this.vo.IsSelectionColumn;
     };
@@ -5796,13 +5795,14 @@
         //}
         return list;
     };
+
     GridField.prototype.getAD_Window_ID = function () {
         return this.vo.AD_Window_ID;
-    }
+    };
 
     GridField.prototype.getAD_InfoWindow_ID = function () {
         return this.vo.AD_InfoWindow_ID;
-    }
+    };
 
     GridField.prototype.getValueAsString = function (variableName) {
         var value = VIS.context.getWindowContext(this.vo.windowNo, this.vo.tabNo, variableName, true);
@@ -5841,7 +5841,6 @@
             return this.vo.ColumnName;
         }
     };
-
 
     GridField.prototype.getIsLink = function () {
         return this.vo.isLink;
@@ -5886,7 +5885,6 @@
         return this.vo.DisplayLength;
     };
 
-
     /**
      * Get Field Length
      * @return fieldLength
@@ -5894,7 +5892,6 @@
     GridField.prototype.getFieldLength = function () {
         return this.vo.FieldLength;
     };
-
 
     /**
     * Get Field Length
@@ -5911,8 +5908,6 @@
     GridField.prototype.getMaxValue = function () {
         return this.vo.ValueMax;
     };
-
-
     /**
      * Get VFormat
      * @return vformat string
@@ -5943,7 +5938,7 @@
 
     GridField.prototype.getIsIdentifier = function () {
         return this.vo.IsIdentifier;
-    }
+    };
 
     /**
      *  Get old/previous Value.
@@ -5957,7 +5952,6 @@
     GridField.prototype.getIsRange = function () {
         return this.vo.isRange;
     };
-
 
     GridField.prototype.getIsRange = function () {
         return this.vo.isRange;
@@ -6211,7 +6205,6 @@
         return null;
     };	//	getDefault
 
-
     GridField.prototype.getDefault2 = function (ctx, windowNo) {
         /**************************************************************************
      *	Create default value.
@@ -6432,7 +6425,6 @@
         return null;
     };	//	getDefault
 
-
     GridField.prototype.getIsEncryptedColumn = function () {
         return this.vo.IsEncryptedColumn;
     };
@@ -6445,7 +6437,11 @@
         return this.vo.IsDefaultFocus;
     };
 
-
+    GridField.prototype.getStyleLogic = function () {
+        if (!this.vo.StyleLogic)
+            this.vo.StyleLogic = '';
+        return this.vo.StyleLogic;
+    };
 
     GridField.prototype.createDefault = function (variable, value) {
 
@@ -6544,8 +6540,6 @@
         }
         return null;
     };	//	createDefaul
-
-
 
     GridField.prototype.setValue = function (newValue, inserting) {
 

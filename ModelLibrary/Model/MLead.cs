@@ -391,15 +391,29 @@ namespace VAdvantage.Model
                 if (GetC_Campaign_ID() != 0)
                     _bp.SetC_Campaign_ID(GetC_Campaign_ID());
 
+                _bp.Set_Value("C_SalesRegion_ID", GetC_SalesRegion_ID());
+                _bp.SetC_Country_ID(GetC_Country_ID());
+                _bp.SetDescription(GetDescription());
+                _bp.Set_Value("C_Lead_ID", GetC_Lead_ID());
+                _bp.SetEMail(GetEMail());
+                _bp.SetMobile(GetMobile());
+                _bp.Set_Value("R_Source_ID", GetR_Source_ID());
+                _bp.Set_Value("C_BPartnerSR_ID", GetC_BPartnerSR_ID());
+
+
                 // VIS0060: Set Next Step, Next Step By and Follow update
                 if (Env.IsModuleInstalled("VA061_"))
                 {
-                    _bp.Set_Value("VA061_NextStep", Util.GetValueOfString(Get_Value("VA061_NextStep")));
+                    _bp.Set_Value("VA061_NextStep", Get_Value("VA061_NextStep"));
                     if (Get_Value("C_Followupdate") != null)
                     {
                         _bp.Set_Value("C_Followupdate", Util.GetValueOfDateTime(Get_Value("C_Followupdate")));
                     }
-                    _bp.Set_Value("VA061_NextStepBy", Util.GetValueOfString(Get_Value("VA061_NextStepBy")));
+                    _bp.Set_Value("VA061_NextStepBy", Get_Value("VA061_NextStepBy"));
+                    _bp.Set_Value("LeadRating", GetLeadRating());
+                    _bp.Set_Value("C_LeadQualification_ID", GetC_LeadQualification_ID());
+                    _bp.Set_Value("R_Status_ID", GetR_Status_ID());
+                    _bp.Set_Value("Created", GetCreated());
                 }
                 if (!_bp.Save())
                 {
@@ -763,7 +777,7 @@ namespace VAdvantage.Model
                 else if (phone)
                 {
                     log.SaveInfo("VA047_PhoneExists", "");
-                }               
+                }
             }
 
             // If NextStepBy value not provided or neither NextStepBy nor C_Followupdate has changed, no task will be created.
@@ -787,6 +801,13 @@ namespace VAdvantage.Model
                         log.SaveWarning("VA061_FollowupdateMustHaveValue", "");
                         return false;
                     }
+
+                    // Set Value in this field to true, for task generation on workflow process
+                    Set_Value("VA061_IsCreateTask", true);
+                }
+                else
+                {
+                    Set_Value("VA061_IsCreateTask", false);
                 }
             }
             return true;

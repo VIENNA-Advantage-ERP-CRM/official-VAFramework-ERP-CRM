@@ -269,6 +269,11 @@ namespace VAdvantage.Controller
         public bool IsUnique = false;
         public bool IsSwitch = false;
 
+        /* style logic stirng { expression [,]}*/
+        public string StyleLogic = "";
+
+
+
         /// <summary>
         /// calaculate MaxDisplayLength
         /// </summary>

@@ -144,7 +144,7 @@
 
         function ddlpagesOnChange(e) {
             selectedPage = $('#VIS_ddlPages' + window_No).find(":selected").val();
-            loadGridData(_selectedId, VIS.Utility.Util.getValueOfInt(selectedPage), window_N, tableID);
+            loadGridData(_selectedId, VIS.Utility.Util.getValueOfInt(selectedPage), window_No, tableID);
             currentPage = selectedPage;
         };
 
@@ -600,8 +600,8 @@
                     $mailbodyhtml = $('<div class="VIS-tp-contentdiv" >'
                         + '<div id="VIS-tp-comments-input' + window_No + '" class="VIS-tp-comments-input"><div class="vis-tp-emailDetailWrap"><div class="VIS-mail-user-div"><span class="VIS-mail-user-span">' + userInitials + '</span></div>'
                         + '<div class="VIS-contentTitile"><span class="VIS-mail-username">' + UserName + '</span><span id="VIS_mailSubject' + window_No + '" class="VIS-mail-subject VIS-tp-recordLabels">' + result.Title
-                        + '</span><div class="VIS-mail-content"><div class="VIS-mail-from"><span class="VIS-tp-recordLabels">' + VIS.Msg.getMsg("From") + ': </span><span style="word-break: break-word;">'
-                        + result.From + '</span></div><small>' + new Date(result.Date).toLocaleString() + '</small></div><span class="VIS-mail-to"><span class="VIS-tp-recordLabels">' + VIS.Msg.getMsg("To") + ': </span>' + mailtoddlhtml + '</span></div></div>'
+                        + '</span><div class="VIS-mail-content"><div class="VIS-mail-from"><span class="VIS-tp-recordLabels">' + VIS.Msg.getMsg("From") + ':&nbsp;</span><span style="word-break: break-word;">'
+                        + result.From + '</span></div><small>' + new Date(result.Date).toLocaleString() + '</small></div><span class="VIS-mail-to"><span class="VIS-tp-recordLabels">' + VIS.Msg.getMsg("To") + ':&nbsp; </span>' + mailtoddlhtml + '</span></div></div>'
                         + '<div id="VIS_mailBody' + window_No + '" class="VIS-mail-body" >' + result.Detail + '</div></div >'
                         + '<div id="VIS_viewMoreComments' + window_No + '" style="display:none;" class="VIS-tp-commentsPanel"></div>'
                         + '<div id="VIS_commentsdata' + window_No + '"><div class="pr-0 m-0 VIS-tp-commentsField d-flex flex-column w-100"><p id="VIS_viewAllComments' + window_No + '" class="vis-attachhistory-view-comments" > ' + VIS.Msg.getMsg('ViewMoreComments')
@@ -611,8 +611,8 @@
                     $printhtml = $('<div class="VIS-tp-contentdiv" >'
                         + '<div class="VIS-tp-comments-input' + window_No + '" ><div class="vis-tp-emailDetailWrap"<div class="VIS-mail-user-div"><span class="VIS-mail-user-span">' + userInitials + '</span></div>'
                         + '<div class="VIS-contentTitile"><span class="VIS-mail-username">' + UserName + '</span><span id="mailSubject" class="VIS-mail-subject VIS-tp-recordLabels">' + result.Title
-                        + '</span><div class="VIS-mail-content"><span class="VIS-mail-from"><span class="VIS-tp-recordLabels">' + VIS.Msg.getMsg("From") + ': </span><span style="word-break: break-word;">'
-                        + result.From + '</span></div><small>' + new Date(result.Date).toLocaleString() + '</small></div><span class="VIS-mail-to"><span class="VIS-tp-recordLabels">' + VIS.Msg.getMsg("To") + ': </span>' + mailtoddlhtml + '</span></div></div>'
+                        + '</span><div class="VIS-mail-content"><span class="VIS-mail-from"><span class="VIS-tp-recordLabels">' + VIS.Msg.getMsg("From") + ':&nbsp;</span><span style="word-break: break-word;">'
+                        + result.From + '</span></div><small>' + new Date(result.Date).toLocaleString() + '</small></div><span class="VIS-mail-to"><span class="VIS-tp-recordLabels">' + VIS.Msg.getMsg("To") + ':&nbsp; </span>' + mailtoddlhtml + '</span></div></div>'
                         + '<div class="VIS-mail-body" >' + result.Detail + '</div></div>');
 
 
@@ -1114,11 +1114,11 @@
                             + '<tr class="VIS-call-col-data"><td colspan="2">' + result.Result + '</td></tr>'
                             + '<tr class="VIS-call-col-header"><td colspan="2">' + VIS.Msg.getMsg("Description") + '</td></tr>'
                             + '<tr class="VIS-call-col-data"><td colspan="2">' + result.Description + '</td></tr>'
-                            + '<tr><td><div class="vis-float-left" style="margin-right:10px;"><input id="VIS_chkTaskComplete' + window_No
-                            + '" value="1" type="checkbox" class="vis-float-left" style="margin-top:5px;"><label id="VIS_lblTaskComplete' + window_No
-                            + '" for="chkTaskComplete" class="wsp-task-from-inputLabel vis-float-left" style="margin-left:5px;">' + VIS.Msg.getMsg("Closed")
+                            + '<tr><td><div class="vis-float-left vis-frm-ls-top"><input id="VIS_chkTaskComplete' + window_No
+                            + '" value="1" type="checkbox" class="vis-float-left"><label id="VIS_lblTaskComplete' + window_No
+                            + '" for="chkTaskComplete" class="wsp-task-from-inputLabel vis-float-left" style="margin:0 0 0 5px;">' + VIS.Msg.getMsg("Closed")
                             + '</label></div></td><td><div class="vis-float-right"><a href="javascript:void(0)" id="VIS_hlnktaskdone' + window_No
-                            + '" class="vis-btn vis-btn-done vis-icon-doneButton vis-float-right"> <span class="vis-btn-ico vis-btn-done-bg vis-btn-done-border"></span>'
+                            + '" class="vis-btn vis-btn-done vis-icon-doneButton vis-float-right vis-btnOk"> <span class="vis-btn-ico vis-btn-done-bg vis-btn-done-border"></span>'
                             + VIS.Msg.getMsg("Done") + '</a></div></td></tr>'
                             + '</table>'
                             + '</div>'
@@ -1813,12 +1813,13 @@
                 for (var i = 0; i < result.length; i++) {
                     str = updateComments(str, result[i]);
                 }
-                str += '</div>';
+                str += '</div>';                
                 $('#VIS_viewMoreComments' + window_No).show();
                 $('#VIS-tp-comments-input' + window_No).hide();
                 $('#VIS_viewMoreComments' + window_No).empty();
                 $('#VIS_commentsMsg' + window_No).hide();
                 $('#VIS_viewAllComments' + window_No).text(VIS.Msg.getMsg('HideComments'));
+                $('#VIS_viewMoreComments' + window_No).height($root.find('.VIS-tp-contentdiv').height() - $('#VIS_commentsdata' + window_No).height());
                 $('#VIS_viewMoreComments' + window_No).append(str);
             }
             //else
