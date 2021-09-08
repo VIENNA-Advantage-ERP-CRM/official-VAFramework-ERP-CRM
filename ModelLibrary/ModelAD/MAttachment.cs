@@ -1636,7 +1636,7 @@ namespace VAdvantage.Model
         /// <returns>Returns attachment path</returns>
         private static string GetAttachmentPath()
         {
-            return GetServerLocation() == GlobalVariable.PhysicalPath ? 
+            return GetServerLocation() == GlobalVariable.PhysicalPath ?
                         GlobalVariable.AttachmentPath : Path.Combine(GetServerLocation(), "Attachments");
         }
 
@@ -1995,6 +1995,82 @@ WHERE att.IsActive = 'Y' AND al.IsActive = 'Y' AND ar.IsActive = 'Y' AND att.AD_
                 return Util.GetValueOfString(attRefDs.Tables[0].Rows[0]["DocumentURI"]);
             }
             return "";
+        }
+
+        /// <summary>
+        /// Delete actual attachment files
+        /// </summary>
+        /// <param name="AttachmentLineIDs"></param>
+        /// <returns></returns>
+        public void DeleteAttachments(string[] AttachmentLineIDs)
+        {
+            try
+            {
+                string fileLocation = GetFileLocation();
+                string filePath = System.IO.Path.Combine(GetServerLocation(), "Attachments");
+
+                for (int i = 0; i < AttachmentLineIDs.Length; i++)
+                {
+                    string filename = GetAD_Table_ID() + "_" + GetRecord_ID() + "_" + AttachmentLineIDs[i];
+
+                    if (fileLocation == X_AD_Attachment.FILELOCATION_ServerFileSystem)
+                    {
+                        // VIS_264: Delete file from attachments folder if exists
+                        if (System.IO.File.Exists(Path.Combine(filePath, filename)))
+                        {
+                            System.IO.File.Delete(Path.Combine(filePath, filename));
+                        }
+                        continue;
+                    }
+                    if (fileLocation == X_AD_Attachment.FILELOCATION_FTPLocation)
+                    {
+                        DeleteFileFromFtpServer(filename);
+                        continue;
+                    }
+                    if (fileLocation == X_AD_Attachment.FILELOCATION_Database)
+                    {
+                        // VIS_264: If file location is database, no action needed since whole attachment line row 
+                        // will be deleted afterwards
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.Log(Level.WARNING, "DeleteAttachments -> ", ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Delete attachment file from ftp server
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        private void DeleteFileFromFtpServer(string filename)
+        {
+            try
+            {
+                MClientInfo cInfo = null;
+                if (AD_Client_ID > 0)
+                {
+                    cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                }
+                else
+                {
+                    cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                }
+
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(cInfo.GetFTPUrl() + "//" + cInfo.GetFTPFolder() + "//" + filename);
+                request.Credentials = new NetworkCredential(cInfo.GetFTPUsername(), cInfo.GetFTPPwd());
+                request.Method = WebRequestMethods.Ftp.DeleteFile;
+
+                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+
+                response.Close();
+            }
+            catch(Exception ex)
+            {
+                _log.Log(Level.WARNING, "DeleteFileFromFtpServer -> ", ex.Message);
+            }
         }
     }
 

@@ -80,6 +80,7 @@ namespace VAdvantage.Model
         public MMovementLine(MMovement parent)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
+            SetParent(parent);
             SetClientOrg(parent);
             SetM_Movement_ID(parent.GetM_Movement_ID());
         }
@@ -262,6 +263,14 @@ namespace VAdvantage.Model
                  !(GetM_ProductContainer_ID() > 0 || GetRef_M_ProductContainerTo_ID() > 0)))
             {
                 log.SaveError("Error", Msg.ParseTranslation(GetCtx(), "'From @M_Locator_ID@' and '@M_LocatorTo_ID@' cannot be same."));//change message according to requirement
+                return false;
+            }
+
+            // VIS0060: when we try to move product from container to container then from container and to container can not be same
+            if (GetM_Locator_ID() == GetM_LocatorTo_ID() && Get_ColumnIndex("M_ProductContainer_ID") > 0 && Get_ColumnIndex("Ref_M_ProductContainerTo_ID") > 0
+                && GetM_ProductContainer_ID() > 0 && GetRef_M_ProductContainerTo_ID() > 0 && GetM_ProductContainer_ID() == GetRef_M_ProductContainerTo_ID())
+            {
+                log.SaveError("VIS_ContainerCantSame", "");
                 return false;
             }
 

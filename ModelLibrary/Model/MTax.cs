@@ -309,7 +309,7 @@ namespace VAdvantage.Model
 
                 tax = Decimal.Subtract(amount, bbase);
             }
-            Decimal finalTax = Decimal.Round((Decimal)tax, scale, MidpointRounding.AwayFromZero);
+            Decimal finalTax = Decimal.Round((Decimal)tax, 7, MidpointRounding.AwayFromZero);//SET 7 By VIS0228 As discussed with Mukesh Sir
             //BigDecimal finalTax = tax.setScale(scale, BigDecimal.ROUND_HALF_UP);
             log.Fine("calculateTax " + amount
                 + " (incl=" + taxIncluded + ",mult=" + multiplier + ",scale=" + scale

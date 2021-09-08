@@ -207,6 +207,12 @@ namespace ViennaAdvantageServer.Process
                     order.Set_Value("VA077_OrderRef", fromProject.GetPOReference());
                 }
 
+                // Set Conditional Flag here to improve performance
+                if (order.Get_ColumnIndex("ConditionalFlag") > -1)
+                {
+                    order.SetConditionalFlag(MOrder.CONDITIONALFLAG_PrepareIt);
+                }
+
                 if (!order.Save())
                 {
                     Get_TrxName().Rollback();
@@ -285,6 +291,20 @@ namespace ViennaAdvantageServer.Process
                     log.SaveError("ProjectNotSaved", "");
                     return Msg.GetMsg(GetCtx(), "ProjectNotSaved");
                 }
+
+                if (order.Get_ColumnIndex("ConditionalFlag") > -1)
+                {
+                    if (!order.CalculateTaxTotal())   //	setTotals
+                    {
+                        log.Info(Msg.GetMsg(GetCtx(), "ErrorCalculateTax") + ": " + order.GetDocumentNo().ToString());
+                    }
+
+                    // Update order header
+                    order.UpdateHeader();
+
+                    DB.ExecuteQuery("UPDATE C_Order SET ConditionalFlag = null WHERE C_Order_ID = " + order.GetC_Order_ID(), null, Get_TrxName());
+                }
+
                 msg = Msg.GetMsg(GetCtx(), "QuotationGenerated");
             }
             else

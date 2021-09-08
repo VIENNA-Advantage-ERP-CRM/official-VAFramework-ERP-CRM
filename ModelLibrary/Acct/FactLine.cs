@@ -63,6 +63,31 @@ namespace VAdvantage.Acct
         }
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="ctx">Context</param>
+        /// <param name="AD_Table_ID">Table</param>
+        /// <param name="Record_ID">record</param>
+        /// <param name="Line_ID">Line</param>
+        /// <param name="AD_Window_ID">Window</param>
+        /// <param name="trxName">transaction</param>
+        public FactLine(Ctx ctx, int AD_Table_ID, int Record_ID, int Line_ID, int AD_Window_ID, Trx trxName)
+        : base(ctx, 0, trxName)
+        {
+            SetAD_Client_ID(0);							//	do not derive
+            SetAD_Org_ID(0);							//	do not derive
+            SetAmtAcctCr(Env.ZERO);
+            SetAmtAcctDr(Env.ZERO);
+            SetAmtSourceCr(Env.ZERO);
+            SetAmtSourceDr(Env.ZERO);
+            SetAD_Table_ID(AD_Table_ID);
+            SetRecord_ID(Record_ID);
+            SetLine_ID(Line_ID);
+            Set_Value("AD_Window_ID", AD_Window_ID);
+        }
+
+
+        /// <summary>
         /// Create Reversal (negate DR/CR) of the line
         /// </summary>
         /// <param name="description"> new description</param>
