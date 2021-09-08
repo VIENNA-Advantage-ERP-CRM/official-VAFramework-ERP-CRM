@@ -192,27 +192,15 @@
          * @param {any} rIndex row index
          * @param {any} cIndex cell index
          */
-        this.cellRender = function (rIndex, cIndex) {
+        this.cellStyleRender = function (rIndex, cIndex) {
             var col = self.grid.columns[cIndex];
-            if (col.gridField && col.gridField.getStyleLogic() != '') // get from property
+            if (!col.selfCellStyleRender && col.gridField && col.gridField.getStyleLogic() != '') // get from property
             {
-                var arr = col.gridField.getStyleLogic().split(',');
-                self.cellRowIndex = rIndex;
-                //this.cellColumnName = col.field;
-                var ret = null;
-                for (var j = 0; j < arr.length; j++) {
-                    var cArr = arr[j].split("?");
-                    if (cArr.length != 2)
-                        continue;
-                    if (VIS.Evaluator.evaluateLogic(self, cArr[0])) {
-                        ret = cArr[1];
-                        break;
-                    }
-                }
-                return ret;
+                return self.evaluateStyleLogic(rIndex, col.gridField.getStyleLogic());
             }
             return null;
         };
+
 
         this.paintRow = function (index) {
 
@@ -312,7 +300,7 @@
             }
 
             return [AD_Client_ID, AD_Org_ID, Record_ID];
-        };      
+        };
 
         //this.onToolBarClick = function (target, data) {
         //    //self.$editBtn.img = "icon-reload";
@@ -341,12 +329,37 @@
     VTable.prototype.ROW_REFRESH = 'F';
     VTable.prototype.ROW_UNDO = 'U';
 
+    /**
+     * Evaluate style logic
+     * @param {any} rIndex row Index
+     * @param {any} styleLogic logic string {expression [,]}
+     */
+    VTable.prototype.evaluateStyleLogic = function (rIndex, styleLogic) {
+        this.cellRowIndex = rIndex;
+        var arr = styleLogic.split(',');
+
+        //this.cellColumnName = col.field;
+        var ret = null;
+        for (var j = 0; j < arr.length; j++) {
+            var cArr = arr[j].split("?");
+            if (cArr.length != 2)
+                continue;
+            if (VIS.Evaluator.evaluateLogic(this, cArr[0])) {
+                ret = cArr[1];
+                break;
+            }
+        }
+        return ret;
+
+    };
+
+
     VTable.prototype.setupGridTable = function (aPanel, grdFields, $container, name, mTab, gc) {
 
         if (!mTab.getIsDisplayed(true))
             return 0;
 
-        this.id = name;        
+        this.id = name;
         this.aPanel = aPanel;
         this.$container = $container;
         this.mTab = mTab;
@@ -396,7 +409,7 @@
             var updateable = mField.getIsEditable(false);      //  no context check
             //int WindowNo = mField.getWindowNo();
 
-          
+
 
 
             //  Not a Field
@@ -405,7 +418,8 @@
 
             var oColumn = {
 
-                resizable: true
+                resizable: true,
+                selfCellStyleRender: false  /* self evalauate Style conditions*/
             }
 
             oColumn.gridField = mField;
@@ -475,18 +489,26 @@
             }
             else if (displayType == VIS.DisplayType.ProgressBar) {
                 oColumn.sortable = true;
+                oColumn.selfCellStyleRender = true;
                 oColumn.render = function (record, index, colIndex) {
                     var f = oColumns[colIndex].field;
+
+                    var gField = oColumns[colIndex].gridField;
+                    var style = '';
+                    if (gField.getStyleLogic() != '')
+                        style = self.evaluateStyleLogic(index, gField.getStyleLogic());
+                    if (!style) style = '';
+
                     var val = record[f];
-                    var maxVal = oColumns[colIndex].gridField.getMaxValue();
-                    var minVal = oColumns[colIndex].gridField.getMinValue();
+                    //var maxVal = gField.getMaxValue();
+                    //var minVal = gField.getMinValue();
                     if (record.changes && typeof record.changes[f] != 'undefined') {
                         val = record.changes[f];
-                    }  
+                    }
                     //return '<input id="rng' + index + '" type="range" min="' + minVal + '" max="' + maxVal + '" disabled="disabled" value="' + val + '" /><div style="position: absolute"><output class="vis-grid_progress_output"> ' + val+'</output></div>';
-                   
-                    return '<div class="vis-progress-gridbar">'+
-                        '<div class="vis-progress-percent-bar" style = "width:' + val + '%" ></div>'+ 
+
+                    return '<div class="vis-progress-gridbar" style="'+style+'">' +
+                        '<div class="vis-progress-percent-bar" style = "width:' + val + '%;'+style+'" ></div>' +
                         '<div class="vis-progress-gridoutput" > ' + val + '</div></div >';
                 }
             }
@@ -514,19 +536,19 @@
             else if (displayType == VIS.DisplayType.YesNo) {
 
                 oColumn.sortable = true;
-                var lCol = columnName.toLowerCase();  
+                var lCol = columnName.toLowerCase();
                 if (oColumn.gridField.getIsSwitch()) {
                     oColumn.render = "switch";
                     //oColumn.render = function (record, index, colIndex) {
-                        
+
                     //    var chk = (record[oColumns[colIndex].field]) ? "checked" : "";
                     //    //console.log(chk);
                     //   // return '<input type="checkbox" ' + chk + ' onclick="var obj = w2ui[\'' + name + '\'];     obj.editChange.call(obj, this, ' + index + ', ' + colIndex +', event)" class="vis-switch"><i for="switch" onclick="$(this).prev().click();"   class="vis-switchSlider">Toggle</i></div>';
                     //}
                 }
-                
+
                 oColumn.editable = { type: 'checkbox' };
-               
+
             }
             //	String (clear/password)
             else if (displayType == VIS.DisplayType.String
@@ -604,7 +626,7 @@
                         }
                         var d;
                         if (l) {
-                            d = l.getDisplay(val, true,true);
+                            d = l.getDisplay(val, true, true);
                             //if (d.startsWith("<"))
                             //  d = l.getDisplay(nd, false);
                             //d = w2utils.encodeTags(d);
@@ -654,62 +676,61 @@
                                 var imgIndex = d.indexOf("Images/");
 
                                 if (imgIndex == -1)
-                                        return d;
+                                    return d;
 
-                                 //Find Image from Identifier string 
+                                //Find Image from Identifier string 
                                 var img = d.substring(imgIndex + 7, d.lastIndexOf("^^"));
-                            img = VIS.Application.contextUrl + "Images/Thumb32x32/" + img;
+                                img = VIS.Application.contextUrl + "Images/Thumb32x32/" + img;
 
                                 //Replace Image string with ^^^, so that ^^^ can be used to split Rest of identifer value
                                 d = d.replace("^^" + d.substring(imgIndex, d.lastIndexOf("^^") + 2), "^^^")
-                            if (d.indexOf("Images/") > -1)
-                                d = d.replace(d.substring(imgIndex, d.lastIndexOf("^^") + 2), "^^^");
+                                if (d.indexOf("Images/") > -1)
+                                    d = d.replace(d.substring(imgIndex, d.lastIndexOf("^^") + 2), "^^^");
 
                                 d = d.split("^^^");
 
                                 //Start HTMl string to be rendered inside Cell
-                            strDiv = "<div class='vis-grid-td-icon-grp'>";
+                                strDiv = "<div class='vis-grid-td-icon-grp'>";
                                 var highlightChar = '';
 
                                 //Now 'd' may contains identifier values to be displayed before and after image
-                            for (var c = 0; c < d.length; c++) {
-                                if (d[c].trim().length > 0) {
-                                    //If highlightChar is not found, then get it from first item encounterd.
-                                    if (highlightChar.length == 0)
-                                        highlightChar = d[c].trim().substring(0, 1).toUpper();
-                                    //If image contains nothing.png that means image not found in identfier and 
-                                    //we will Display highlightChar
-                                    if (c > 0 && img.indexOf("nothing.png") > -1 && highlightChar.length>0) {
-                                        strDiv += "<div class='vis-grid-row-td-icon'><span>" + highlightChar + "</span></div>";
+                                for (var c = 0; c < d.length; c++) {
+                                    if (d[c].trim().length > 0) {
+                                        //If highlightChar is not found, then get it from first item encounterd.
+                                        if (highlightChar.length == 0)
+                                            highlightChar = d[c].trim().substring(0, 1).toUpper();
+                                        //If image contains nothing.png that means image not found in identfier and 
+                                        //we will Display highlightChar
+                                        if (c > 0 && img.indexOf("nothing.png") > -1 && highlightChar.length > 0) {
+                                            strDiv += "<div class='vis-grid-row-td-icon'><span>" + highlightChar + "</span></div>";
+                                        }
+                                        strDiv += "<span>" + d[c] + "</span>";
                                     }
-                                    strDiv += "<span>" + d[c] + "</span>";
-                                }
-                                //If image found, then display that image.
-                                if (c == 0 || img.indexOf("nothing.png") > -1) {
-                                    if (img.indexOf("nothing.png")== -1)
-                                    {
-                                        strDiv += "<div class='vis-grid-row-td-icon'"
-                                            + " > <img src='" + img + 
-                                            "'></div > ";
-                                           // "' onerror='this.style.display=\"none\"' ></img></div > ";
-                                    }
-                                   
-                                }
-                            }
-                            +"</div > ";
+                                    //If image found, then display that image.
+                                    if (c == 0 || img.indexOf("nothing.png") > -1) {
+                                        if (img.indexOf("nothing.png") == -1) {
+                                            strDiv += "<div class='vis-grid-row-td-icon'"
+                                                + " > <img src='" + img +
+                                                "'></div > ";
+                                            // "' onerror='this.style.display=\"none\"' ></img></div > ";
+                                        }
 
-                        }
-                        
+                                    }
+                                }
+                                +"</div > ";
+
+                            }
+
 
                         if (strDiv == "")
                             return d;
 
-                       
+
 
                         return strDiv;
                         //return '<span>' + d + '</span>';
                     }
-                   
+
                 }
             }
             //Date /////////
@@ -903,7 +924,7 @@
                     return "#" + val.toString().length;
                 }
             }
-            
+
             else { //all text Type Columns
 
                 oColumn.sortable = true;
@@ -943,7 +964,7 @@
             if (!oColumn.editable) {
                 oColumn.editable = { type: 'custom', ctrl: iControl };
             }
-                
+
 
             iControl.addVetoableChangeListener(gc);
 
@@ -970,7 +991,7 @@
                     //    oColumns[p].editable = { type: 'checkbox' };
                     //}
 
-                    if (this.hyperLinkCell == null) {                      
+                    if (this.hyperLinkCell == null) {
                         this.hyperLinkCell = oColumns[p].columnName;
                         oColumns[p].style = 'text-decoration:underline; color:rgba(var(--v-c-primary), 1) !important; cursor:pointer';
                     }
@@ -1023,20 +1044,21 @@
             onEditField: this.onEditField,
             onChange: this.onChange,
             onRowAdd: this.onRowAdd,
-            onCellRender:this.cellRender
+            onCellStyleRender: this.cellStyleRender
             //onResize: function () { alert('resize') }
 
         });
+        var self = this;
 
         //this.grid.selectType = 'cell';;
         return size;
     };
 
-   /**
-    * return current cell-row value as string
-    * called form Evaluator class
-    * @param {any} field name of field /column 
-    */
+    /**
+     * return current cell-row value as string
+     * called form Evaluator class
+     * @param {any} field name of field /column 
+     */
     VTable.prototype.getValueAsString = function (field) {
         var record = this.grid.records[this.cellRowIndex];
         var data = this.grid.parseField(record, field.toLowerCase());

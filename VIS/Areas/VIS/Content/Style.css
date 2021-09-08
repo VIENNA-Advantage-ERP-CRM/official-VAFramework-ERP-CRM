@@ -1146,7 +1146,7 @@ input[type="checkbox"].vis-tm-chkbox {
 .vis-progress-gridbar {
     width: 100%;
     height: 1.2em;
-    background-color: rgba(var(--v-c-on-secondary),0.1);
+    background-color: rgba(var(--v-c-on-secondary),0.1) !important;
     border-radius: 10px;
     vertical-align: middle;
     position: relative;
@@ -1157,14 +1157,14 @@ input[type="checkbox"].vis-tm-chkbox {
     background-color: rgba(var(--v-c-primary), 1);
     border-radius: 10px;
     position: absolute;
-    z-index: 2;
+    
 }
 
 .vis-progress-gridoutput {
     height: 1.2em;
     width: 100%;
     position: absolute;
-    z-index: 3;
+   
     padding-left: 5px;
     padding-top: 2px;
 }

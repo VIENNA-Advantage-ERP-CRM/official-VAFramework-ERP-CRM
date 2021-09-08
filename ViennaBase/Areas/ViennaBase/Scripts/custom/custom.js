@@ -794,7 +794,7 @@ if (jQuery.prototype.jquery == "3.4.1" && w2utils.version == "1.4.3") {
 
         var dStyle = '';
         if (this.onCellRender && typeof this.onCellRender == 'function') {
-            dStyle = this.onCellRender(ind, col_ind); // fire render cell function
+            dStyle = this.onCellStyleRender(ind, col_ind); // fire render cell function
             if (!dStyle) dStyle = '';
         }
 
