@@ -97,7 +97,9 @@ namespace VIS.Controllers
                 sb.Append(" VIS.context.ctx = ").Append(Newtonsoft.Json.JsonConvert.SerializeObject(ctx.GetMap())).Append("; ");
 
                 /* Message */
-                sb.Append(" VIS.I18N.labels = { ");
+                sb.Append(" VIS.I18N.labels = { ");               
+               
+
                 if (msgs != null)
                 {
                     int total = msgs.Keys.Count;
@@ -116,17 +118,39 @@ namespace VIS.Controllers
                         //}
                         string msg = (string)msgs.Get(key) ?? "";
                         msg = msg.Replace("\n", " ").Replace("\r", " ").Replace("\"", "'");
+                        sb.Append("\"").Append(key).Append("\": ").Append("\"").Append(msg).Append("\"");
+                        if (total != 0)
+                        {
+                            sb.Append(",");
+                        }
+                       
+                    }
+                   
+                }
 
-                        if (total == 0)
+                /* purpose: right window action translation with search key
+                 * VIS0228      08-Aug-2021 
+                 */
+               
+                ValueNamePair[] refList = MRefList.GetList(435, false, ctx);
+                int refListTotal = refList.Length;
+                if (refListTotal > 0)
+                {
+                    if (msgs.Keys.Count > 0) {
+                        sb.Append(", ");
+                    }
+
+                    for (int i = 0; i < refList.Length; i++)
+                    {
+                        sb.Append("\"").Append(refList[i].GetValue()).Append("\": ").Append("\"").Append(refList[i].GetName()).Append("\""); 
+                        if (i !=(refListTotal - 1))
                         {
-                            sb.Append("\"").Append(key).Append("\": ").Append("\"").Append(msg).Append("\"");
+                            sb.Append(", ");
                         }
-                        else
-                        {
-                            sb.Append("\"").Append(key).Append("\": ").Append("\"").Append(msg).Append("\", ");
-                        }
+                       
                     }
                 }
+
                 sb.Append("};");
                 // sb.Append(" console.log(VIS.I18N.labels)");
                 //return View();

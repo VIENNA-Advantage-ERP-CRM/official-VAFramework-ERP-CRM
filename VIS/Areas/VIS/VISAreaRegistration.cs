@@ -163,6 +163,7 @@ namespace VIS
                  "~/Areas/VIS/Scripts/tabpanels/HistoryDetailsTabPanel.js",
                  "~/Areas/VIS/Scripts/TestPanel.js");
 
+            modScript_v1.Include("~/Areas/VIS/Scripts/app/windowframe.js"); //Old design , do-not alter 
 
             modScript.Include(
                  "~/Areas/VIS/Scripts/F20/thememgr.js",
@@ -188,7 +189,22 @@ namespace VIS
                  );
 
 
+            style.Include("~/Areas/VIS/Content/Site.css",
 
+                "~/Areas/VIS/Content/VISAD.css",
+                "~/Areas/VIS/Content/PrefStyle.css",
+                "~/Areas/VIS/Content/Home.css",
+                "~/Areas/VIS/Content/PaymentRule.css",
+                "~/Areas/VIS/Content/Style.css",
+                "~/Areas/VIS/Content/ClientSetup.css",
+                "~/Areas/VIS/Content/Find.css",
+                "~/Areas/VIS/Content/Email.css",
+                "~/Areas/VIS/Content/VPaySelect.css",
+                 "~/Areas/VIS/Content/reportstyle.css",
+                 "~/Areas/VIS/Content/RecordAccessDialog.css",
+                "~/Areas/VIS/Content/GroupStyle.css",
+                 "~/Areas/VIS/Content/ProductContainer.css",
+                "~/Areas/VIS/Content/GlJournalDimension.css",
 
             style.Include("~/Areas/VIS/Content/Site.css",
 

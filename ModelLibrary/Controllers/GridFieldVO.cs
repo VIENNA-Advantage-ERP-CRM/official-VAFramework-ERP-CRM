@@ -109,6 +109,8 @@ namespace VAdvantage.Controller
                         vo.IsDisplayedMR = "Y".Equals(dr[i].ToString());
                     else if (columnName.Equals("DISPLAYLOGIC"))
                         vo.DisplayLogic = dr[i].ToString();
+                    else if (columnName.Equals("STYLELOGIC"))
+                        vo.StyleLogic = dr[i].ToString();
                     else if (columnName.Equals("DEFAULTVALUE"))
                         vo.DefaultValue = dr[i].ToString();
                     else if (columnName.Equals("ISMANDATORYUI"))
@@ -362,6 +364,10 @@ namespace VAdvantage.Controller
                     else if (columnName.Equals("IsUnique", StringComparison.OrdinalIgnoreCase))
                     {
                         vo.IsUnique = "Y".Equals(dr[i].ToString());
+                    }
+                    else if (columnName.Equals("isSwitch", StringComparison.OrdinalIgnoreCase))
+                    {
+                        vo.IsSwitch= "Y".Equals(dr[i].ToString());
                     }
 
                 }
@@ -726,6 +732,8 @@ namespace VAdvantage.Controller
                 Callout = "";
             if (ReadOnlyLogic == null)
                 ReadOnlyLogic = "";
+            if (StyleLogic == null)
+                StyleLogic = "";
 
 
             //  Create Lookup, if not ID
@@ -789,6 +797,7 @@ namespace VAdvantage.Controller
             clone.IsDisplayedf = IsDisplayedf;
             clone.IsDisplayedMR = IsDisplayedMR;
             clone.DisplayLogic = DisplayLogic;
+            clone.StyleLogic = StyleLogic;
             clone.DefaultValue = DefaultValue;
             clone.IsMandatoryUI = IsMandatoryUI;
             clone.IsReadOnly = IsReadOnly;
@@ -860,6 +869,7 @@ namespace VAdvantage.Controller
             clone.FieldGroupDefault = FieldGroupDefault;
             clone.ShowFilterOption = ShowFilterOption;
             clone.IsUnique = IsUnique;
+            clone.IsSwitch = IsSwitch;
             return clone;
         }
 
