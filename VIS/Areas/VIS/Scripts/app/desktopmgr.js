@@ -76,18 +76,40 @@
 
             function menuItemClick(event) {
                 var $par = $(event.target).parent();
-                if (event.target.nodeName === "LABEL" && $par.data("con") == "Y") {
+                if ($(event.target).hasClass('vis-menuitm-backbtn')) {
+                    $(event.target).closest('ul').css('display', 'none');;
+                  var pid=  $(event.target).closest('ul').parent().data('ulid');
+                    // $('[data-id="ul_' + val + '"]').css('display', 'none');;
+                /*$('.vismenu-parent').show();*/
+                    var rootID = $(event.target).closest('ul').parent().parent().attr('id');
+
+                    if (rootID) {
+                        $menuTree.find('[data-value="' + $par.data('ulid') + '"]').siblings().show()
+                        $menuTree.find('[data-value="' + $par.data('ulid') + '"]').show();
+                    }
+                    else {
+                        $menuTree.find('[data-value="' + $par.data('ulid') + '"]').parent().show();
+                        $menuTree.find('[data-value="' + $par.data('ulid') + '"]').parent().siblings().show()
+                        $(event.target).closest('ul').css('display', 'none');;
+                    }
+                    // $par.parent().siblings().show();
+                }
+                else if (event.target.nodeName === "LABEL" && $par.data("con") == "Y") {
                     var pID = $par.data("value");
-                    $('#ul_' + pID).css('display', 'block');
+                    $('[data-ulid="' + pID + '"]').css('display', 'block');
                     //$par.show();
-                    $('.vismenu-parent').hide();
+                    // $('.vismenu-parent').hide();
+                    if ($par.data("summary") == 'Y') {
+                        $par.siblings().hide()
+                        $par.hide();
+                    }
+                    else {
+                        $par.parent().siblings().hide();
+                        $par.hide();
+                    }
+                    //$par.siblings().hide();
 
                     //$par.find('ul').show();
-                }
-                else if ($(event.target).hasClass('vis-menuitm-backbtn')) {
-                    var val = $(event.target).data("value");
-                    $('#ul_' + val).css('display', 'none');;
-                    $('.vismenu-parent').show();
                 }
                 else {
 
@@ -120,8 +142,8 @@
                             $menuTree.find('.vis-nav-AllItems').hide();
 
                             if (menuFilterMgr)
-                            menuFilterMgr.hideEmptyFolders();
-                            
+                                menuFilterMgr.hideEmptyFolders();
+
                             return;
                         }
                         startMenuAction($target.data('action'), $target.data('actionid')); //start action
@@ -350,7 +372,12 @@
         /* show app menu */
         function showMenu() {
             $menuOverlay.fadeIn();
-            $vis_mainMenu.attr('style', 'display: flex !important')
+            //if ((VIS.Application.isMobile || VIS.Application.isIOS) && document.documentElement) {
+            $vis_mainMenu.attr('style', 'display: block !important')
+            //}
+            //else {
+            //    $vis_mainMenu.attr('style', 'display: flex !important')
+            //}
         };
 
         function toggleMenu() {
@@ -1088,7 +1115,7 @@
             if (newContainer.is(':visible')) {
                 //_menuTree.find('.vis-navMainContent li').show();///Show All
 
-               // newContainer.find('.vis-navmenuItems-Container-allItems').removeAttr('style');
+                // newContainer.find('.vis-navmenuItems-Container-allItems').removeAttr('style');
                 newContainer.find('.vis-navMainContent').removeAttr('style');
                 if (action === "A") { // all tree
                     _menuTree.find('.vis-navMainContent li').show();///Show All
@@ -1289,7 +1316,7 @@
             }
         };
 
-      
+
 
         // return object public function
         return {

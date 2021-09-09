@@ -252,14 +252,14 @@ namespace VIS.Controllers
                         //get current user info
                         ViewBag.Menu = mnuHelper.GetMenuTree(); // create tree
                         Session["barNodes"] = ViewBag.Menu.GetBarNodes(); /* add is session to get it in favourite call */
-                        ViewBag.IsMobile =  Request.Browser.IsMobileDevice;
+                        ViewBag.IsMobile = true;//  Request.Browser.IsMobileDevice;
                         //if (Request.Browser.IsMobileDevice)
                         //{
-                           // ViewBag.TreeHtml = mnuHelper.GetMenuTreeUI(ViewBag.Menu.GetRootNode(), @Url.Content("~/"));
+                            ViewBag.TreeHtml = mnuHelper.GetMenuTreeUI(ViewBag.Menu.GetRootNode(), @Url.Content("~/"));
                         //}
                         //else
                         //{
-                         ViewBag.TreeHtml = mnuHelper.GetNewMenuTreeUI(ViewBag.Menu.GetRootNode(), @Url.Content("~/"));
+                        // ViewBag.TreeHtml = mnuHelper.GetNewMenuTreeUI(ViewBag.Menu.GetRootNode(), @Url.Content("~/"));
                         //}
                     }
 
