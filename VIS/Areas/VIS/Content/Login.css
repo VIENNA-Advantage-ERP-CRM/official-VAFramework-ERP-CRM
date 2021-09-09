@@ -271,7 +271,7 @@ html {
 	background-image: url(../img/bg.jpg);
 }*/
 html, body {
-     background-image: url(../Images/login/bg2.jpg);
+    background-image: url(../Images/login/bg2.jpg);
     background-repeat: no-repeat;
     background-position: center center;
     background-attachment: fixed;
@@ -282,6 +282,7 @@ html, body {
     overflow: hidden;
     height: 100%;
 }
+
 .login-wrap {
     width: 100%;
     height: 100%;
@@ -292,16 +293,19 @@ html, body {
     justify-content: center;
     padding-top: 2rem;
 }
+
 .loginConatiner {
     width: 100%;
     height: 100%;
     overflow: auto;
 }
+
 .vienna-logo {
     position: fixed;
     right: 20px;
     bottom: 20px;
 }
+
 .login-content {
     /*width: 527px;
 	height: 448px;
@@ -358,10 +362,11 @@ html, body {
     width: calc(100% - 30px);
     outline: none;
 }
-.input-row > input[type=date] {
-    font-size:16px;
-    line-height:22px;
-}
+
+    .input-row > input[type=date] {
+        font-size: 16px;
+        line-height: 22px;
+    }
 
 
 
@@ -397,6 +402,7 @@ input::-webkit-input-placeholder {
     cursor: pointer;
     border: none;
 }
+
 .language {
     width: calc(100% - 30px);
     /*height: 17px;
@@ -407,34 +413,36 @@ input::-webkit-input-placeholder {
     position: relative;
     padding-right: 12px;
 }
-.language > select {
-    background: transparent;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    width: 100%;
-    font-size: 18px;
-    border: 0;
-    color: #fff;
-    outline: none;
-}
-.language > select > option {
-    background: rgba(255,255,255,.2);
-    color: #333;
-    border: none;
-}
+
+    .language > select {
+        background: transparent;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        width: 100%;
+        font-size: 18px;
+        border: 0;
+        color: #fff;
+        outline: none;
+    }
+
+        .language > select > option {
+            background: rgba(255,255,255,.2);
+            color: #333;
+            border: none;
+        }
+
 .validation-summary-errors {
     color: white;
-    
 }
+
     .validation-summary-errors ul {
         margin-left: 30px;
         margin-right: 30px;
-        list-style:none;
+        list-style: none;
         padding: 0px;
     }
 
-.login-button input[disabled]
-{
+.login-button input[disabled] {
     text-decoration: line-through;
 }
 
@@ -443,9 +451,9 @@ input::-webkit-input-placeholder {
 .login2PanelBtn {
     background-color: #1aa0ed;
     color: white;
-    border:none;
-    padding:5px;
-    font-size:20px;
+    border: none;
+    padding: 5px;
+    font-size: 20px;
 }
 
 .vis-loginQRSec {
@@ -526,11 +534,13 @@ input::-webkit-input-placeholder {
     .input-row > input {
         /*width: 88%;*/
     }
+
     .vienna-logo {
-            right: 10px;
+        right: 10px;
         bottom: 10px;
         z-index: 0;
     }
+
         .vienna-logo img {
             max-width: 80px;
         }
@@ -553,9 +563,9 @@ input::-webkit-input-placeholder {
         display: none;
     }*/
 
-        .vienna-logo > img {
-            opacity: 0.3;
-        }
+    .vienna-logo > img {
+        opacity: 0.3;
+    }
 }
 
 /* SLIDE TWO */
@@ -646,3 +656,16 @@ input::-webkit-input-placeholder {
             background: #00bf00;
         }
 
+.vis-login-skipLink {
+    text-align: right;
+    display: block;
+    border: none;
+    margin-bottom: 12px;
+    color: #fff;
+    font-size: 1.2rem;
+    text-decoration: underline;
+}
+
+    .vis-login-skipLink:hover, .vis-login-skipLink:focus {
+        color: #fff
+    }

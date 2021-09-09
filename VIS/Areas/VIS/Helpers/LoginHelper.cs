@@ -150,8 +150,10 @@ namespace VIS.Helpers
             if (!cache["SuperUserVal"].Equals(model.Login1Model.UserValue))
             {
                 String Token2FAKey = Util.GetValueOfString(dr["TokenKey2FA"]);
-                bool enable2FA = Util.GetValueOfString(dr["Is2FAEnabled"]) == "Y";
-                if (enable2FA)
+                // bool enable2FA = Util.GetValueOfString(dr["Is2FAEnabled"]) == "Y";
+                string method2FA = Util.GetValueOfString(dr["TwoFAMethod"]);
+                //if (enable2FA)
+                if (method2FA != "")
                 {
                     model.Login1Model.QRFirstTime = false;
                     TwoFactorAuthenticator tfa = new TwoFactorAuthenticator();
@@ -181,7 +183,8 @@ namespace VIS.Helpers
                     model.Login1Model.QRCodeURL = setupInfo.QrCodeSetupImageUrl;
                 }
 
-                model.Login1Model.Is2FAEnabled = enable2FA;
+                //model.Login1Model.Is2FAEnabled = enable2FA;
+                model.Login1Model.TwoFAMethod = method2FA;
             }
 
 
@@ -283,7 +286,7 @@ namespace VIS.Helpers
             param[0] = new SqlParameter("@username", uname);
             StringBuilder sql = new StringBuilder("SELECT u.AD_User_ID, r.AD_Role_ID,r.Name,")
                // .Append(" u.ConnectionProfile, u.Password,u.FailedLoginCount,u.PasswordExpireOn, u.Is2FAEnabled, u.TokenKey2FA, u.Value ")	//	4,5
-               .Append(" u.ConnectionProfile, u.Password, u.FailedLoginCount, u.PasswordExpireOn, u.Is2FAEnabled, u.TokenKey2FA, u.Value, u.Name as username, u.Created ")	//	4,5
+               .Append(" u.ConnectionProfile, u.Password, u.FailedLoginCount, u.PasswordExpireOn, u.Is2FAEnabled, u.TokenKey2FA, u.TwoFAMethod, u.Value, u.Name as username, u.Created ")	//	4,5
                .Append("FROM AD_User u")
                .Append(" INNER JOIN AD_User_Roles ur ON (u.AD_User_ID=ur.AD_User_ID AND ur.IsActive='Y')")
                .Append(" INNER JOIN AD_Role r ON (ur.AD_Role_ID=r.AD_Role_ID AND r.IsActive='Y') ");
@@ -723,7 +726,7 @@ namespace VIS.Helpers
         public static bool Validate2FAOTP(LoginModel model)
         {
             bool isValid = false;
-            DataSet dsUser = DB.ExecuteDataset(@"SELECT Value, TokenKey2FA, Created, Is2FAEnabled, AD_User_ID FROM AD_User WHERE AD_User_ID = " + model.Login1Model.AD_User_ID);
+            DataSet dsUser = DB.ExecuteDataset(@"SELECT Value, TokenKey2FA, Created, Is2FAEnabled, TwoFAMethod, AD_User_ID FROM AD_User WHERE AD_User_ID = " + model.Login1Model.AD_User_ID);
             if (dsUser != null && dsUser.Tables[0].Rows.Count > 0)
             {
                 TwoFactorAuthenticator tfa = new TwoFactorAuthenticator();
@@ -758,7 +761,7 @@ namespace VIS.Helpers
         {
             Dictionary<string, object> retRes = new Dictionary<string, object>();
             retRes.Add("Success", false);
-            
+
             SqlParameter[] param = new SqlParameter[1];
             param[0] = new SqlParameter("@p1", TokenNum);
             DataSet ds = DB.ExecuteDataset("SELECT AuthTokenExpireTime, Value, Password, IsAuthTokenOneTime, AD_User_ID FROM AD_User WHERE IsActive = 'Y' AND AuthToken = @p1", param);
