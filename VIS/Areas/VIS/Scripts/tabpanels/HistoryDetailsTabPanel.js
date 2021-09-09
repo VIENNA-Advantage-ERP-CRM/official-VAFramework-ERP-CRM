@@ -1489,6 +1489,19 @@
             });
         };
 
+        function DurationCalculator(time) {
+            var hr = ~~(time / 3600);
+            var min = ~~((time % 3600) / 60);
+            var sec = time % 60;
+            var sec_min = "";
+            if (hr > 0) {
+                sec_min += "" + hrs + ":" + (min < 10 ? "0" : "");
+            }
+            sec_min += "" + min + ":" + (sec < 10 ? "0" : "");
+            sec_min += "" + sec;
+            return sec_min + ' ' + VIS.Msg.getMsg('VA048_Minutes');
+        }
+
         function finalPrint(html) {
             var mywindow = window.open();
             var link = '<link rel="stylesheet" href="' + VIS.Application.contextUrl + 'Areas/VIS/Content/VIS.all.min.css" />';
