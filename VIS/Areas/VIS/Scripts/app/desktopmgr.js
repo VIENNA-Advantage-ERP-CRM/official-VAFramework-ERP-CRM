@@ -75,30 +75,38 @@
             $($menuTree.find('.vis-navLeftWrap a')[0]).trigger("click");
 
             function menuItemClick(event) {
-                var $par = $(event.target).parent();
-                if ($(event.target).hasClass('vis-menuitm-backbtn')) {
-                    $(event.target).closest('ul').css('display', 'none');;
-                  var pid=  $(event.target).closest('ul').parent().data('ulid');
-                    // $('[data-id="ul_' + val + '"]').css('display', 'none');;
-                /*$('.vismenu-parent').show();*/
-                    var rootID = $(event.target).closest('ul').parent().parent().attr('id');
+                var $target = $(event.target);
+                if ($target.hasClass('fa fa-arrow-left')) {
+                    $target = $target.parent();
+                }
 
-                    if (rootID) {
-                        $menuTree.find('[data-value="' + $par.data('ulid') + '"]').siblings().show()
-                        $menuTree.find('[data-value="' + $par.data('ulid') + '"]').show();
-                    }
-                    else {
-                        $menuTree.find('[data-value="' + $par.data('ulid') + '"]').parent().show();
-                        $menuTree.find('[data-value="' + $par.data('ulid') + '"]').parent().siblings().show()
-                        $(event.target).closest('ul').css('display', 'none');;
-                    }
+              var $par=  $target.parent();
+                if ($target.hasClass('vis-menuitm-backbtn')) {
+                    $target.closest('ul').css('display', 'none');;
+                    var pid = $target.closest('ul').parent().data('ulid');
+                    // $('[data-id="ul_' + val + '"]').css('display', 'none');;
+                $('.vismenu-parent').show();
+                    //var rootID = $target.closest('ul').parent().parent().attr('id');
+
+                    //if (rootID) {
+                        $menuTree.find('[data-val="' + $par.data('ulid') + '"]').siblings().show()
+                        $menuTree.find('[data-val="' + $par.data('ulid') + '"]').show();
+                    //}
+                    //else {
+                    //    $menuTree.find('[data-value="' + $par.data('ulid') + '"]').parent().show();
+                    //    $menuTree.find('[data-value="' + $par.data('ulid') + '"]').parent().siblings().show()
+                    //    $target.closest('ul').css('display', 'none');;
+                    //}
+                    $menuTree.find('li[data-ulid="' + $par.data('ulid')).hide();
+                    $menuTree.find('ul[data-ulid="' + $par.data('ulid')).hide();
+
                     // $par.parent().siblings().show();
                 }
                 else if (event.target.nodeName === "LABEL" && $par.data("con") == "Y") {
-                    var pID = $par.data("value");
-                    $('[data-ulid="' + pID + '"]').css('display', 'block');
+                    var pID = $par.data("val");
+                    $menuTree.find('[data-ulid="' + pID + '"]').css('display', 'block');
                     //$par.show();
-                    // $('.vismenu-parent').hide();
+                     $('.vismenu-parent').hide();
                     if ($par.data("summary") == 'Y') {
                         $par.siblings().hide()
                         $par.hide();

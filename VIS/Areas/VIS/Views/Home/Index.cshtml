@@ -144,29 +144,38 @@
 
         @if (ViewBag.IsMobile == true) {
 
-        <div id="vis_mainMenu" class="vis-mainMenu" style="display: none">
-            <div class="vis-menuTitle">
-                <p>@ViewBag.Menu.GetRootNode().Text</p>
-                <a href="javascript:void(0)" id="vis_closeMenu"><i class="fa fa-times" aria-hidden="true"></i></a>
-            </div>
-            <div class="vis-menuSearch">
-                <input type="text" name="vis_menuSearch" dir="@ViewBag.direction" id="vis_menuSearch" placeholder="@VAdvantage.Utility.Msg.GetMsg((string)ViewBag.culture, "Search")" list="vis_leafNodes" />
-                <datalist id="vis_leafNodes">
-                    @foreach (var item in ViewBag.Menu.GetLeafNodes())
-                    {
-                        <option data-action='@item.ActionIndicator' data-actionid="@item.ActionID" title='@item.ID' value='@item.Name'></option>
-                    }
-                </datalist>
-
-                <a href="javascript:void(0)" id="vis_filterMenu" title="@VAdvantage.Utility.Msg.GetMsg((string)ViewBag.culture, "Filter")" class="fa fa-filter"></a>
-                <a href="javascript:void(0)" class="fa fa-search"></a>
-            </div>
-            <div class="vis-sidebarMenuWrapper">
-                <div id="vis_divTree" class="vis-css-treeview vis-css-menu">
-                    @Html.Raw(@ViewBag.TreeHtml)
+    <div id="vis_mainMenu" class="vis-mainMenu" style="display: none">
+        <div class="d-flex align-items-center vis-navHeadWrap" style="display: none">
+            <h5 class="m-0 vis-menu-headerName">@ViewBag.Menu.GetRootNode().Text</h5>
+            <div class="d-flex align-items-center vis-navHeadRight">
+                <div class="vis-navSearchWrap">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="vis_menuSearch" name="vis_menuSearch" placeholder="@VAdvantage.Utility.Msg.GetMsg((string)ViewBag.culture, "Search")" list="vis_leafNodes">
+                        <datalist id="vis_leafNodes">
+                            @foreach (var item in ViewBag.Menu.GetLeafNodes())
+                            {
+                                <option data-action='@item.ActionIndicator' data-actionid="@item.ActionID" title='@item.ID' value='@item.Name'></option>
+                            }
+                        </datalist>
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="vis vis-search"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="vis-navFilterIco">
+                    @*<i class="fa fa-filter"></i>*@
+                    <a href="javascript:void(0)" id="vis_filterMenu" title="@VAdvantage.Utility.Msg.GetMsg((string)ViewBag.culture, "Filter")" class="fa fa-filter"></a>
                 </div>
             </div>
         </div>
+        <div class="vis-sidebarMenuWrapper">
+            <div id="vis_divTree" class="vis-css-treeview vis-css-menu">
+                @Html.Raw(@ViewBag.TreeHtml)
+            </div>
+        </div>
+    </div>
         }
         else
         {

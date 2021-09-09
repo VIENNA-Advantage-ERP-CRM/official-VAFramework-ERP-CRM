@@ -69,9 +69,17 @@
                         $(otherSpan[1]).find('span.fa.fa-star').remove();
                     }
 
-                    if ($(otherSpan[3])) {
-                        $(otherSpan[3]).attr('data-isfav', 'no');
-                        $(otherSpan[3]).find('span.fa.fa-star').remove();
+                    if (VIS.Application.isMobile || VIS.Application.isIOS) {
+                        if ($(otherSpan[5])) {
+                            $(otherSpan[5]).attr('data-isfav', 'no');
+                            $(otherSpan[5]).find('span.fa.fa-star').remove();
+                        }
+                    }
+                    else {
+                        if ($(otherSpan[3])) {
+                            $(otherSpan[3]).attr('data-isfav', 'no');
+                            $(otherSpan[3]).find('span.fa.fa-star').remove();
+                        }
                     }
                 }
                 btn.attr('data-isfav', 'no');
@@ -98,8 +106,14 @@
                         $(otherSpan[1]).attr('data-isfav', 'yes');
                     }
                     else {
-                        $(otherSpan[3]).prepend('<span class="fa fa-star"></span>');
-                        $(otherSpan[3]).attr('data-isfav', 'yes');
+                        if (VIS.Application.isMobile || VIS.Application.isIOS) {
+                            $(otherSpan[5]).prepend('<span class="fa fa-star"></span>');
+                            $(otherSpan[5]).attr('data-isfav', 'yes');
+                        }
+                        else {
+                            $(otherSpan[3]).prepend('<span class="fa fa-star"></span>');
+                            $(otherSpan[3]).attr('data-isfav', 'yes');
+                        }
                     }
                 }
 
