@@ -88,11 +88,12 @@
                         showLoginResetPwd();
                         $('#ResetPwd').val(json.ctx.ResetPwd);
                     }
-                    else if (json.ctx && json.ctx.Is2FAEnabled) {
+                    // else if (json.ctx && json.ctx.Is2FAEnabled)
+                    else if (json.ctx && json.ctx.TwoFAMethod != "") {
                         showLogin2FA();
                         $("#QRCdeimg").attr('src', json.ctx.QRCodeURL);
                         if (json.ctx.QRFirstTime)
-                            $(".vis-loginQRSec").css("display", "block");
+                            $(".vis-firstLoginAuth").css("display", "block");
                         else {
                             var loginQRLbl = $(".vis-loginQRLabel");
                             loginQRLbl.css("margin-top", "15px");
@@ -173,6 +174,11 @@
         $('#login-form-3').show();
         $btnLogin1.prop('disabled', false);
     };
+
+    var skipClick = function (e) {
+        $("#login3Data1").val(true);
+        $btnLogin1.submit();
+    }
 
     var showLogin = function (e) {
         $("#login2Panel").hide();//  "slide", function () {
@@ -326,10 +332,28 @@
         $backButton.val(Globalize.localize("Back"));
     }
 
+    var checkCapsLock = function (e) {
+        var caps = event.getModifierState && event.getModifierState('CapsLock');
+        var $form = $loginForm;
+        if (caps)
+            displayErrors($form, ['CapsLockOn']);
+        else
+            displayErrors($form, "");
+    }
+
     $("#loginForm").submit(formSubmitHandler);
     $("#login2Form").submit(formSubmitHandler);
     $("#showLogin").click(showLogin);
     $("#login2Form select").change(comboChange);
+
+    $("#txtPwd").on("keydown", checkCapsLock);
+
+    $("#login-form-2").on("keydown", checkCapsLock);
+
+    $("#lblSkip").click(skipClick);
+
+    
+    var $loginForm = $("#loginForm");
 
     var $cmbRole = $("#role");
     var $cmbClient = $("#client");

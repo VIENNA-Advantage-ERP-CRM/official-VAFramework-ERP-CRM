@@ -65,6 +65,10 @@ namespace VIS.Models
 
         public string TokenKey2FA { get; set; }
 
+        public string TwoFAMethod { get; set; }
+
+        public bool SkipNow { get; set; }
+
         public string QRCodeURL { get; set; }
 
         [DataType(DataType.Password)]
