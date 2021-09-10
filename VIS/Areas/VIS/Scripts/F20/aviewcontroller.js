@@ -1622,6 +1622,9 @@ VIS.GridController.prototype.dataStatusChanged = function (e) {
         this.aPanel.dataStatusChanged(e);
 
     var col = e.getChangedColumn();
+    if (this.vHeaderPanel) {
+        this.vHeaderPanel.navigate();
+    }
     if (!e.getIsChanged() || col < 0)
         return;
 
@@ -1665,9 +1668,7 @@ VIS.GridController.prototype.dataStatusChanged = function (e) {
             }
         }
         this.dynamicDisplay(col);	//	 -1 = all
-        if (this.vHeaderPanel) {
-            this.vHeaderPanel.navigate();
-        }
+        
 
     }; //  dataStatusChanged
 
