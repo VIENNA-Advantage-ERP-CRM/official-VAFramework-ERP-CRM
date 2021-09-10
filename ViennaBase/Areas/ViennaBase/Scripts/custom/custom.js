@@ -793,7 +793,7 @@ if (jQuery.prototype.jquery == "3.4.1" && w2utils.version == "1.4.3") {
         if (isRowSelected && $.inArray(col_ind, sel.columns[ind]) != -1) isCellSelected = true;
 
         var dStyle = '';
-        if (this.onCellRender && typeof this.onCellRender == 'function') {
+        if (this.onCellStyleRender && typeof this.onCellStyleRender == 'function') {
             dStyle = this.onCellStyleRender(ind, col_ind); // fire render cell function
             if (!dStyle) dStyle = '';
         }
