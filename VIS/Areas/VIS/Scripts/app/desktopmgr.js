@@ -80,17 +80,17 @@
                     $target = $target.parent();
                 }
 
-              var $par=  $target.parent();
+                var $par = $target.parent();
                 if ($target.hasClass('vis-menuitm-backbtn')) {
                     $target.closest('ul').css('display', 'none');;
                     var pid = $target.closest('ul').parent().data('ulid');
                     // $('[data-id="ul_' + val + '"]').css('display', 'none');;
-                $('.vismenu-parent').show();
+                    $('.vismenu-parent').show();
                     //var rootID = $target.closest('ul').parent().parent().attr('id');
 
                     //if (rootID) {
-                        $menuTree.find('[data-val="' + $par.data('ulid') + '"]').siblings().show()
-                        $menuTree.find('[data-val="' + $par.data('ulid') + '"]').show();
+                    $menuTree.find('[data-val="' + $par.data('ulid') + '"]').siblings().show()
+                    $menuTree.find('[data-val="' + $par.data('ulid') + '"]').show();
                     //}
                     //else {
                     //    $menuTree.find('[data-value="' + $par.data('ulid') + '"]').parent().show();
@@ -104,9 +104,9 @@
                 }
                 else if (event.target.nodeName === "LABEL" && $par.data("con") == "Y") {
                     var pID = $par.data("val");
-                    $menuTree.find('[data-ulid="' + pID + '"]').css('display', 'block');
+                    $menuTree.find('[data-ulid="' + pID + '"]').css('display', 'block').addClass('vismenu-selectedMbTab');
                     //$par.show();
-                     $('.vismenu-parent').hide();
+                    $('.vismenu-parent').hide();
                     if ($par.data("summary") == 'Y') {
                         $par.siblings().hide()
                         $par.hide();
@@ -1119,30 +1119,57 @@
         };
 
         function filterSelectedMenu(action) {
-            _menuTree.find('.vis-navSubMenu').removeClass('vis-menuSum-hide');
-            if (newContainer.is(':visible')) {
-                //_menuTree.find('.vis-navMainContent li').show();///Show All
-
-                // newContainer.find('.vis-navmenuItems-Container-allItems').removeAttr('style');
-                newContainer.find('.vis-navMainContent').removeAttr('style');
+            if ((VIS.Application.isMobile || VIS.Application.isIOS) && document.documentElement) {
                 if (action === "A") { // all tree
-                    _menuTree.find('.vis-navMainContent li').show();///Show All
+                    if (newContainer.is(':visible')) {
+                        newContainer.find('li').show()
+                    }
+                    else {
+                        _menuTree.find('.vismenu-selectedMbTab').find('li').show();
+                        //_menuTree.find('li > a[data-action="' + action + '"]').parent().show();
+                    }
                 }
                 else {
-                    _menuTree.find('.vis-navMainContent li').hide(); // hide all
-                    _menuTree.find('.vis-navMainContent li > a[data-action="' + action + '"]').parent().show(); // show only match action
+                    if (newContainer.is(':visible')) {
+                        newContainer.find('li').hide();
+                        newContainer.find('.vis-menu-innerFolders').show();
+                        newContainer.find('.vis-menuitm-backbtn').show();
+                        newContainer.find('li > a[data-action="' + action + '"]').parent().show();
+                    }
+                    else {
+                        _menuTree.find('.vismenu-selectedMbTab').find('li').hide();
+                        _menuTree.find('.vis-menu-innerFolders').show();
+                        _menuTree.find('.vis-menuitm-backbtn').show();
+                        _menuTree.find('.vismenu-selectedMbTab').find('li > a[data-action="' + action + '"]').parent().show();
+                    }
                 }
             }
             else {
-                if (action === "A") { // all tree
-                    _menuTree.find('.vis-navMainContent li').show();///Show All
+                _menuTree.find('.vis-navSubMenu').removeClass('vis-menuSum-hide');
+                if (newContainer.is(':visible')) {
+                    //_menuTree.find('.vis-navMainContent li').show();///Show All
+
+                    // newContainer.find('.vis-navmenuItems-Container-allItems').removeAttr('style');
+                    newContainer.find('.vis-navMainContent').removeAttr('style');
+                    if (action === "A") { // all tree
+                        _menuTree.find('.vis-navMainContent li').show();///Show All
+                    }
+                    else {
+                        _menuTree.find('.vis-navMainContent li').hide(); // hide all
+                        _menuTree.find('.vis-navMainContent li > a[data-action="' + action + '"]').parent().show(); // show only match action
+                    }
                 }
                 else {
-                    _menuTree.find('.vis-navMainContent li').hide(); // hide all
-                    _menuTree.find('.vis-navMainContent li > a[data-action="' + action + '"]').parent().show(); // show only match action
+                    if (action === "A") { // all tree
+                        _menuTree.find('.vis-navMainContent li').show();///Show All
+                    }
+                    else {
+                        _menuTree.find('.vis-navMainContent li').hide(); // hide all
+                        _menuTree.find('.vis-navMainContent li > a[data-action="' + action + '"]').parent().show(); // show only match action
+                    }
                 }
+                hideEmptyFolders();
             }
-            hideEmptyFolders();
         }
 
         function hideEmptyFolders() {
@@ -1197,116 +1224,153 @@
 
 
         function createFilterAllMenu() {
-            var container = _menuTree.find('.vis-navmenuItems-Container');
-            newContainer = $("<div class='vis-nav-AllItems'></div>");
-            for (var i = 0; i < container.length; i++) {
-                //var newDiv = jQuery.extend(true, {}, $(container[i]));
-                newContainer.append($(container[i]).clone().removeAttr('style').addClass('vis-navmenuItems-Container-allItems'));
+            if ((VIS.Application.isMobile || VIS.Application.isIOS) && document.documentElement) {
+                newContainer = $("<div class='vis-nav-AllItems'></div>");
+                var container = _menuTree.children();
+                for (var i = 1; i < container.length; i++) {
+                    var newItem = $(container[i]).clone().removeAttr('style').addClass('vis-navmenuItems-Container-allItems');
+                    newItem.css('display:block');
+                    newItem.find('[data-summary="N"]').show();
+                    newItem.find('ul').show();
+                    newItem.find('.vis-subNavFirstElement').removeClass('vis-subNavFirstElement');
+                    newItem.find('.fa fa-arrow-left').remove();
+                    newContainer.append(newItem);
+                }
+                newContainer.hide();
+                _menuTree.append(newContainer);
             }
-            newContainer.hide();
-            _menuTree.find('.vis-navMainContent').append(newContainer);
+            else {
+                var container = _menuTree.find('.vis-navmenuItems-Container');
+                newContainer = $("<div class='vis-nav-AllItems'></div>");
+                for (var i = 0; i < container.length; i++) {
+                    newContainer.append($(container[i]).clone().removeAttr('style').addClass('vis-navmenuItems-Container-allItems'));
+                }
+                newContainer.hide();
+                _menuTree.find('.vis-navMainContent').append(newContainer);
+            }
         }
 
         function showAllItems() {
-            _menuTree.find('.vis-navmenuItems-Container').hide();
-            newContainer.find('.vis-navmenuItems-Container').removeAttr('style');
-            newContainer.find('.vismenu-hidden-header').show();
-            menuUL.find('.vis-menuSum-hide').removeClass('vis-menuSum-hide');
-            _menuTree.find(".vis-navSelected").removeClass('vis-navSelected');
-            newContainer.show();
-            hideEmptyFolders();
+            if ((VIS.Application.isMobile || VIS.Application.isIOS) && document.documentElement) {
+                newContainer.siblings().hide();
+                newContainer.show();
+            }
+            else {
+                _menuTree.find('.vis-navmenuItems-Container').hide();
+                newContainer.find('.vis-navmenuItems-Container').removeAttr('style');
+                newContainer.find('.vismenu-hidden-header').show();
+                menuUL.find('.vis-menuSum-hide').removeClass('vis-menuSum-hide');
+                _menuTree.find(".vis-navSelected").removeClass('vis-navSelected');
+                newContainer.show();
+                hideEmptyFolders();
+
+            }
         };
 
         /* filter the menu accroding to action
         @param action type of menu item
         */
         function filterMenu(action) {
-            menuUL.find('.vis-menuSum-hide').removeClass('vis-menuSum-hide');
-
-            if (action === "A") { // all tree
-                menuUL.find('.vis-navmenuitemsfilter').remove();
-                menuUL.find('.vis-navmenuItems-Container').show();
-                menuUL.find('li').show(); // hide all
-                _menuTree.find('[data-value="' + selectedMenu + '"]').trigger('click');
-                menuUL.find('.vismenu-hidden-headerh5').hide();
-
+            if ((VIS.Application.isMobile || VIS.Application.isIOS) && document.documentElement) {
+                if (newContainer.is(':visible')) {
+                    newContainer.find('li').data('hide', 'Y');
+                    newContainer.find('li > a[data-action="' + action + '"]').parent().data('hide', 'N');
+                }
+                else {
+                    _menuTree.find('li').data('hide', 'Y');
+                    _menuTree.find('li > a[data-action="' + action + '"]').parent().data('hide', 'N');
+                }
             }
             else {
-                menuUL.find('.vis-navmenuitemsfilter').remove();
-                filteredMenuHtml = getMenuList(action);
-                menuUL.find('.vis-navmenuItems-Container').hide();
-                var $mainContainer = $('<div class="vis-navmenuItems-Container vis-navmenuitemsfilter">');
-                var navcolwrap1 = $('<div class="vis-navColWrap">');
-                var navcolwrap2 = $('<div class="vis-navColWrap">');
-                var navcolwrap3 = $('<div class="vis-navColWrap">');
-                $mainContainer.append(filteredMenuHtml);
-                $mainContainer.find('li').data('hide', 'Y');
-                $mainContainer.find('li > a[data-action="' + action + '"]').parent().data('hide', 'N');
-                filteredMenuHtml = $mainContainer.find('.vismenu-hidden-header');
+                menuUL.find('.vis-menuSum-hide').removeClass('vis-menuSum-hide');
 
-                var j = 1;
-                for (var i = 0; i < filteredMenuHtml.length; i++) {
-                    if ($(filteredMenuHtml[i]).data('hide') == 'Y')
-                        continue;
-                    if (j == 3) {
-                        navcolwrap3.append(filteredMenuHtml[i]);
-                        j = 1;
-                    }
-                    else if (j == 2) {
-                        navcolwrap2.append(filteredMenuHtml[i]);
-                        j = 3;
-                    }
-                    else {
-                        navcolwrap1.append(filteredMenuHtml[i]);
-                        j = 2;
-                    }
+                if (action === "A") { // all tree
+                    menuUL.find('.vis-navmenuitemsfilter').remove();
+                    menuUL.find('.vis-navmenuItems-Container').show();
+                    menuUL.find('li').show(); // hide all
+                    _menuTree.find('[data-value="' + selectedMenu + '"]').trigger('click');
+                    menuUL.find('.vismenu-hidden-headerh5').hide();
+
                 }
-                $mainContainer.empty();
-                $mainContainer.append(navcolwrap1).append(navcolwrap2).append(navcolwrap3);
+                else {
+                    menuUL.find('.vis-navmenuitemsfilter').remove();
+                    filteredMenuHtml = getMenuList(action);
+                    menuUL.find('.vis-navmenuItems-Container').hide();
+                    var $mainContainer = $('<div class="vis-navmenuItems-Container vis-navmenuitemsfilter">');
+                    var navcolwrap1 = $('<div class="vis-navColWrap">');
+                    var navcolwrap2 = $('<div class="vis-navColWrap">');
+                    var navcolwrap3 = $('<div class="vis-navColWrap">');
+                    $mainContainer.append(filteredMenuHtml);
+                    $mainContainer.find('li').data('hide', 'Y');
+                    $mainContainer.find('li > a[data-action="' + action + '"]').parent().data('hide', 'N');
+                    filteredMenuHtml = $mainContainer.find('.vismenu-hidden-header');
 
-
-                menuUL.append($mainContainer); // all leaf nodes
-                menuUL.find('li').hide(); // hide all
-
-                menuUL.find('li > a[data-action="' + action + '"]').parent().show(); // show only match action
-                var allUls = menuUL.find('.vismenu-hidden-header').find('ul');
-
-                for (var j = 0; j < allUls.length; j++) {
-                    var thisUL = $(allUls[j]);
-                    var liList = thisUL.find('li');
-                    var canhide = false;
-                    for (var k = 0; k < liList.length; k++) {
-                        if ($(liList[k]).is(':visible')) {
-                            canhide = false;
-                            break;
+                    var j = 1;
+                    for (var i = 0; i < filteredMenuHtml.length; i++) {
+                        if ($(filteredMenuHtml[i]).data('hide') == 'Y')
+                            continue;
+                        if (j == 3) {
+                            navcolwrap3.append(filteredMenuHtml[i]);
+                            j = 1;
                         }
-                        canhide = true;
-                    }
-                    if (canhide)
-                        thisUL.addClass('vis-menuSum-hide');
-                }
-
-                allUls = menuUL.find('.vismenu-hidden-header');
-                for (var j = 0; j < allUls.length; j++) {
-                    var canhide = false;
-                    var liList = $(allUls[j]).find('ul');
-
-                    for (var k = 0; k < liList.length; k++) {
-                        if ($(liList[k]).is(':visible')) {
-                            canhide = false;
-                            break;
+                        else if (j == 2) {
+                            navcolwrap2.append(filteredMenuHtml[i]);
+                            j = 3;
                         }
-                        canhide = true;
+                        else {
+                            navcolwrap1.append(filteredMenuHtml[i]);
+                            j = 2;
+                        }
                     }
-                    if (canhide)
-                        $(allUls[j]).addClass('vis-menuSum-hide');
+                    $mainContainer.empty();
+                    $mainContainer.append(navcolwrap1).append(navcolwrap2).append(navcolwrap3);
+
+
+                    menuUL.append($mainContainer); // all leaf nodes
+                    menuUL.find('li').hide(); // hide all
+
+                    menuUL.find('li > a[data-action="' + action + '"]').parent().show(); // show only match action
+                    var allUls = menuUL.find('.vismenu-hidden-header').find('ul');
+
+                    for (var j = 0; j < allUls.length; j++) {
+                        var thisUL = $(allUls[j]);
+                        var liList = thisUL.find('li');
+                        var canhide = false;
+                        for (var k = 0; k < liList.length; k++) {
+                            if ($(liList[k]).is(':visible')) {
+                                canhide = false;
+                                break;
+                            }
+                            canhide = true;
+                        }
+                        if (canhide)
+                            thisUL.addClass('vis-menuSum-hide');
+                    }
+
+                    allUls = menuUL.find('.vismenu-hidden-header');
+                    for (var j = 0; j < allUls.length; j++) {
+                        var canhide = false;
+                        var liList = $(allUls[j]).find('ul');
+
+                        for (var k = 0; k < liList.length; k++) {
+                            if ($(liList[k]).is(':visible')) {
+                                canhide = false;
+                                break;
+                            }
+                            canhide = true;
+                        }
+                        if (canhide)
+                            $(allUls[j]).addClass('vis-menuSum-hide');
+                    }
+
+
+
+
+                    menuUL.find('.vismenu-hidden-headerh5').show();
                 }
-
-
-
-
-                menuUL.find('.vismenu-hidden-headerh5').show();
             }
+
+
         };
 
         /* show hide popup

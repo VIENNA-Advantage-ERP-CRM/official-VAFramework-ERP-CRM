@@ -857,3 +857,27 @@
 .vis-search-o-circle:before {
     content: "\e9c7";
 }
+
+.vis-approved:before {
+    content: "\e9c8";
+}
+
+.vis-close:before {
+    content: "\e9c9";
+}
+
+.vis-completed:before {
+    content: "\e9ca";
+}
+
+.vis-drafted:before {
+    content: "\e9cb";
+}
+
+.vis-in-progess:before {
+    content: "\e9cc";
+}
+
+.vis-invalid:before {
+    content: "\e9cd";
+}
