@@ -447,6 +447,7 @@
             //SetBusy(false);
 
             var html = '<option value="-1"> </option>';
+            var sortedFields = [];
             for (var c = 0; c < findFields.length; c++) {
                 // get field
                 var field = findFields[c];
@@ -487,7 +488,21 @@
                 //dr[0] = header; // Name
                 //dr[1] = columnName; // DB_ColName
                 //dt.Rows.Add(dr);
-                html += '<option value="' + columnName + '">' + header + '</option>';
+                //html += '<option value="' + columnName + '">' + header + '</option>';
+                sortedFields.push({ 'value': columnName, 'text': header });
+            }
+
+            // sort by text
+            sortedFields.sort(function (a, b) {
+                var n1 = a.text.toUpperCase();
+                var n2 = b.text.toUpperCase();
+                if (n1 > n2) return 1;
+                if (n1 < n2) return -1;
+                return 0;
+            });
+
+            for (var col = 0; col < sortedFields.length; col++) {
+                html += '<option value="' + sortedFields[col].value + '">' + sortedFields[col].text + '</option>';
             }
             drpColumns.html(html);
             setBusy(false);
