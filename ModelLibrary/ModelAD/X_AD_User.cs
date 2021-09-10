@@ -1601,7 +1601,7 @@ namespace VAdvantage.Model
 @return Yellowfin Role */
         public int GetVA037_YellowfinRoles_ID() { Object ii = Get_Value("VA037_YellowfinRoles_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Search Key.
 @param Value Search key for the record in the format required - must be unique */
-        
+
         /** Set BI User Name.
 @param VA037_BIUserName BI User Name */
         public void SetVA037_BIUserName(String VA037_BIUserName) { if (VA037_BIUserName != null && VA037_BIUserName.Length > 50) { log.Warning("Length > 50 - truncated"); VA037_BIUserName = VA037_BIUserName.Substring(0, 50); } Set_Value("VA037_BIUserName", VA037_BIUserName); }/** Get BI User Name.
@@ -1665,7 +1665,7 @@ namespace VAdvantage.Model
 
         /** Set Jasper Password.
 @param VA039_JasperPwd Jasper Password */
-public void SetVA039_JasperPwd(String VA039_JasperPwd) { if (VA039_JasperPwd != null && VA039_JasperPwd.Length > 100) { log.Warning("Length > 100 - truncated"); VA039_JasperPwd = VA039_JasperPwd.Substring(0, 100); } Set_Value("VA039_JasperPwd", VA039_JasperPwd); }/** Get Jasper Password.
+        public void SetVA039_JasperPwd(String VA039_JasperPwd) { if (VA039_JasperPwd != null && VA039_JasperPwd.Length > 100) { log.Warning("Length > 100 - truncated"); VA039_JasperPwd = VA039_JasperPwd.Substring(0, 100); } Set_Value("VA039_JasperPwd", VA039_JasperPwd); }/** Get Jasper Password.
 @return Jasper Password */
         public String GetVA039_JasperPwd() { return (String)Get_Value("VA039_JasperPwd"); }
 
@@ -1682,8 +1682,37 @@ public void SetVA039_JasperPwd(String VA039_JasperPwd) { if (VA039_JasperPwd != 
 @return Failed Login Count */
         public int GetFailedLoginCount() { Object ii = Get_Value("FailedLoginCount"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
-
+        /** TwoFAMethod AD_Reference_ID=1000677 */
+        public static int TWOFAMETHOD_AD_Reference_ID=1000677;
+        /** Google Authenticator = GA */
+        public static String TWOFAMETHOD_GoogleAuthenticator = "GA";
+        /** VA Mobile App = VA */
+        public static String TWOFAMETHOD_VAMobileApp = "VA";
+        /** Is test a valid value.
+        @param test testvalue
+        @returns true if valid **/
+        public bool IsTwoFAMethodValid(String test) 
+        { 
+            return test == null || test.Equals("GA") || test.Equals("VA"); 
+        }
+        /** Set 2FA Method.
+        @param TwoFAMethod 2FA Method */
+        public void SetTwoFAMethod(String TwoFAMethod)
+        {
+            if (!IsTwoFAMethodValid(TwoFAMethod))
+                throw new ArgumentException("TwoFAMethod Invalid value - " + TwoFAMethod + " - Reference_ID=1000677 - GA - VA"); 
+            if (TwoFAMethod != null && TwoFAMethod.Length > 2) 
+            { 
+                log.Warning("Length > 2 - truncated"); 
+                TwoFAMethod = TwoFAMethod.Substring(0, 2); 
+            }
+            Set_Value("TwoFAMethod", TwoFAMethod);
+        }
+        /** Get 2FA Method.
+        @return 2FA Method */
+        public String GetTwoFAMethod() 
+        { 
+            return (String)Get_Value("TwoFAMethod"); 
+        }
     }
-
-
 }

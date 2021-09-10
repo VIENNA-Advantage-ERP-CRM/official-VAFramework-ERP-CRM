@@ -156,31 +156,46 @@ namespace VIS.Helpers
                 if (method2FA != "")
                 {
                     model.Login1Model.QRFirstTime = false;
-                    TwoFactorAuthenticator tfa = new TwoFactorAuthenticator();
-                    SetupCode setupInfo = null;
                     string userSKey = Util.GetValueOfString(dr["Value"]);
                     int ADUserID = Util.GetValueOfInt(dr["AD_User_ID"]);
-                    // if token key don't exist for user, then create new
-                    if (Token2FAKey.Trim() == "")
+                    if (method2FA == X_AD_User.TWOFAMETHOD_GoogleAuthenticator)
                     {
-                        model.Login1Model.QRFirstTime = true;
-                        Token2FAKey = userSKey;
-                        // get Random Number
-                        model.Login1Model.TokenKey2FA = GetRndNum();
-                        // create Token key based on Value, UserID and Random Number
-                        Token2FAKey = userSKey + ADUserID.ToString() + model.Login1Model.TokenKey2FA;
+                        TwoFactorAuthenticator tfa = new TwoFactorAuthenticator();
+                        SetupCode setupInfo = null;
+                        // if token key don't exist for user, then create new
+                        if (Token2FAKey.Trim() == "")
+                        {
+                            model.Login1Model.QRFirstTime = true;
+                            Token2FAKey = userSKey;
+                            // get Random Number
+                            model.Login1Model.TokenKey2FA = GetRndNum(16);
+                            // create Token key based on Value, UserID and Random Number
+                            Token2FAKey = userSKey + ADUserID.ToString() + model.Login1Model.TokenKey2FA;
+                        }
+                        else
+                        {
+                            // Decrypt token key saved in database
+                            string decKey = SecureEngine.Decrypt(Token2FAKey);
+                            Token2FAKey = userSKey + ADUserID.ToString() + decKey;
+                        }
+                        string url = Util.GetValueOfString(HttpContext.Current.Request.Url.AbsoluteUri).Replace("VIS/Account/JsonLogin", "").Replace("https://", "").Replace("http://", "");
+                        setupInfo = tfa.GenerateSetupCode("VA ", url + " " + userSKey, Token2FAKey, 150, 150);
+                        model.Login1Model.QRCodeURL = setupInfo.QrCodeSetupImageUrl;
                     }
-                    else
+                    else if (method2FA == X_AD_User.TWOFAMETHOD_VAMobileApp)
                     {
-                        // Decrypt token key saved in database
-                        string decKey = SecureEngine.Decrypt(Token2FAKey);
-                        Token2FAKey = userSKey + ADUserID.ToString() + decKey;
+                        if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(VA074_MobileLinked_ID) FROM VA074_MobileLinked 
+                            WHERE VA074_AD_User_ID = " + ADUserID + " AND VA074_PushNotiToken IS NOT NULL AND IsActive = 'Y'")) > 0)
+                        {
+                            string TokenNo = GetRndNum(6);
+                            _dictVAMobTokens.Add(userSKey, TokenNo);
+                            VAdvantage.PushNotif.PushNotification.SendNotificationToUser(ADUserID, 0, 0, Msg.GetMsg(new Ctx(), "VIS_VAOTP"), Msg.GetMsg(new Ctx(), "OTP") + " : " + TokenNo, "");
+                        }
+                        else
+                        {
+
+                        }
                     }
-
-                    string url = Util.GetValueOfString(HttpContext.Current.Request.Url.AbsoluteUri).Replace("VIS/Account/JsonLogin", "").Replace("https://", "").Replace("http://", "");
-
-                    setupInfo = tfa.GenerateSetupCode("VA ", url + " " + userSKey, Token2FAKey, 150, 150);
-                    model.Login1Model.QRCodeURL = setupInfo.QrCodeSetupImageUrl;
                 }
 
                 //model.Login1Model.Is2FAEnabled = enable2FA;
@@ -354,11 +369,11 @@ namespace VIS.Helpers
         /// Generate Random number of 16 characters and return
         /// </summary>
         /// <returns></returns>
-        public static string GetRndNum()
+        public static string GetRndNum(int digits)
         {
             Random RNG = new Random();
             StringBuilder builder = new StringBuilder();
-            while (builder.Length < 16)
+            while (builder.Length < digits)
             {
                 builder.Append(RNG.Next(10).ToString());
             }
@@ -784,6 +799,23 @@ namespace VIS.Helpers
             }
 
             return retRes;
+        }
+
+        internal static Dictionary<string, string> _dictVAMobTokens = new Dictionary<string, string>();
+        public static bool ValidateVAToken(string userKey, string TokenNum)
+        {
+            if (_dictVAMobTokens.ContainsKey(userKey))
+            {
+                string TokenNo = _dictVAMobTokens[userKey];
+                if (TokenNo == TokenNum)
+                {
+                    _dictVAMobTokens.Remove(userKey);
+                    return true;
+                }
+                else
+                    return false;
+            }
+            return false;
         }
     }
 }
