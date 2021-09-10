@@ -458,6 +458,9 @@ input::-webkit-input-placeholder {
 
 .vis-loginQRSec {
     margin-bottom: 15px;
+}
+
+.vis-firstLoginAuth {
     display: none;
 }
 
@@ -658,7 +661,6 @@ input::-webkit-input-placeholder {
 
 .vis-login-skipLink {
     text-align: right;
-    display: block;
     border: none;
     margin-bottom: 12px;
     color: #fff;

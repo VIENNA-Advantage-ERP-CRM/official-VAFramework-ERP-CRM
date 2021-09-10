@@ -105,7 +105,11 @@ namespace VIS.Controllers
                                 var otp = model.Login1Model.OTP2FA;
                                 model.Login1Model = JsonHelper.Deserialize(model.Login1Model.Login1DataOTP, typeof(Login1Model)) as Login1Model;
                                 model.Login1Model.OTP2FA = otp;
-                                bool valOTP = LoginHelper.Validate2FAOTP(model);
+                                bool valOTP = false;
+                                if (TwoFAMethod == X_AD_User.TWOFAMETHOD_GoogleAuthenticator)
+                                    valOTP = LoginHelper.Validate2FAOTP(model);
+                                else if (TwoFAMethod == X_AD_User.TWOFAMETHOD_VAMobileApp)
+                                    valOTP = LoginHelper.ValidateVAToken(model.Login1Model.UserValue, model.Login1Model.OTP2FA);
                                 if (valOTP)
                                 {
                                     proceedToLogin2 = 2;
