@@ -81,13 +81,15 @@
                 }
 
                 var $par = $target.parent();
+                var currentFilter = menuFilterMgr.getFilterValue();
                 if ($target.hasClass('vis-menuitm-backbtn')) {
+
                     $target.closest('ul').css('display', 'none');;
                     var pid = $target.closest('ul').parent().data('ulid');
                     // $('[data-id="ul_' + val + '"]').css('display', 'none');;
                     $('.vismenu-parent').show();
                     //var rootID = $target.closest('ul').parent().parent().attr('id');
-
+                    $menuTree.find('.vismenu-selectedMbTab').removeClass('vismenu-selectedMbTab');
                     //if (rootID) {
                     $menuTree.find('[data-val="' + $par.data('ulid') + '"]').siblings().show()
                     $menuTree.find('[data-val="' + $par.data('ulid') + '"]').show();
@@ -97,16 +99,27 @@
                     //    $menuTree.find('[data-value="' + $par.data('ulid') + '"]').parent().siblings().show()
                     //    $target.closest('ul').css('display', 'none');;
                     //}
-                    $menuTree.find('li[data-ulid="' + $par.data('ulid')).hide();
-                    $menuTree.find('ul[data-ulid="' + $par.data('ulid')).hide();
+                    $menuTree.find('ul:not(.vismenu-parent)').hide();
+                    $menuTree.find('li:not(.vis-hasSubMenu)').hide();
 
                     // $par.parent().siblings().show();
                 }
                 else if (event.target.nodeName === "LABEL" && $par.data("con") == "Y") {
                     var pID = $par.data("val");
-                    $menuTree.find('[data-ulid="' + pID + '"]').css('display', 'block').addClass('vismenu-selectedMbTab');
-                    //$par.show();
+                    var selectedTab = $menuTree.find('[data-ulid="' + pID + '"]');
+                    selectedTab.css('display', 'block').addClass('vismenu-selectedMbTab');
+                    selectedTab.find('ul').css('display', 'block');
+                    selectedTab.find('li').hide();
+                    selectedTab.find('.vis-subNavFirstElement').show();
+                    selectedTab.find('.vis-menu-innerFolders').show();
+                    if (currentFilter != "A")
+                        selectedTab.find('li > a[data-action="' + currentFilter + '"]').parent().css('display', 'block');
+                    else
+                        selectedTab.find('li').css('display', 'block');
                     $('.vismenu-parent').hide();
+                    menuFilterMgr.hideMobileEmptyFolder();
+                    //$par.show();
+                  
                     if ($par.data("summary") == 'Y') {
                         $par.siblings().hide()
                         $par.hide();
@@ -1120,29 +1133,34 @@
 
         function filterSelectedMenu(action) {
             if ((VIS.Application.isMobile || VIS.Application.isIOS) && document.documentElement) {
+                _menuTree.find('.vis-menuSum-hide').removeClass('vis-menuSum-hide');
+
                 if (action === "A") { // all tree
-                    if (newContainer.is(':visible')) {
-                        newContainer.find('li').show()
-                    }
-                    else {
-                        _menuTree.find('.vismenu-selectedMbTab').find('li').show();
-                        //_menuTree.find('li > a[data-action="' + action + '"]').parent().show();
-                    }
+                    //if (newContainer.is(':visible')) {
+                    //    newContainer.find('li').show()
+                    //}
+                    //else {
+                    _menuTree.find('li').show();
+                    //_menuTree.find('li > a[data-action="' + action + '"]').parent().show();
+                    //}
                 }
                 else {
-                    if (newContainer.is(':visible')) {
-                        newContainer.find('li').hide();
-                        newContainer.find('.vis-menu-innerFolders').show();
-                        newContainer.find('.vis-menuitm-backbtn').show();
-                        newContainer.find('li > a[data-action="' + action + '"]').parent().show();
-                    }
-                    else {
-                        _menuTree.find('.vismenu-selectedMbTab').find('li').hide();
-                        _menuTree.find('.vis-menu-innerFolders').show();
-                        _menuTree.find('.vis-menuitm-backbtn').show();
-                        _menuTree.find('.vismenu-selectedMbTab').find('li > a[data-action="' + action + '"]').parent().show();
-                    }
+                    ////if (newContainer.is(':visible')) {
+                    ////    newContainer.find('li').hide();
+                    ////    newContainer.find('.vis-menu-innerFolders').show();
+                    ////    newContainer.find('.vis-menuitm-backbtn').parent().show();
+                    ////    newContainer.find('li > a[data-action="' + action + '"]').parent().show();
+                    ////}
+                    ////else {
+                    _menuTree.find('li').hide();
+                    _menuTree.find('.vis-menu-innerFolders').show();
+                    _menuTree.find('.vis-menuitm-backbtn').parent().show();
+                    _menuTree.find('li > a[data-action="' + action + '"]').parent().show();
+                    //}
                 }
+
+                hideMobileEmptyFolder();
+
             }
             else {
                 _menuTree.find('.vis-navSubMenu').removeClass('vis-menuSum-hide');
@@ -1170,6 +1188,82 @@
                 }
                 hideEmptyFolders();
             }
+        }
+
+
+        function hideMobileEmptyFolder() {
+            if (root.find("input[type=radio]:checked").val() != "A") {
+                if (_menuTree.find('.vismenu-parent').is(':visible'))
+                    return;
+                var selectedTab = _menuTree.find('.vismenu-selectedMbTab');
+                var allUls = [];
+                if (selectedTab && selectedTab.length > 0) {
+                    allUls = selectedTab.find('ul');
+                    selectedTab.find('.vis-menuSum-hide').removeClass('vis-menuSum-hide');
+                }
+
+                else {
+                    allUls = _menuTree.find('ul');
+                    _menuTree.find('.vis-menuSum-hide').removeClass('vis-menuSum-hide');
+                }
+
+                
+                //var allUls = _menuTree.find('ul');
+
+                for (var j = 0; j < allUls.length; j++) {
+                    var thisUL = $(allUls[j]);
+                    if (thisUL.hasClass('vismenu-parent'))
+                        continue;
+
+                    var liList = thisUL.find('li');
+                    var canhide = false;
+                    for (var k = 0; k < liList.length; k++) {
+                        if ($(liList[k]).is(':visible') && !$(liList[k]).hasClass('vis-menu-innerFolders')) {
+                            canhide = false;
+                            break;
+                        }
+                        canhide = true;
+                    }
+                    if (canhide) {
+                        thisUL.addClass('vis-menuSum-hide');
+                        //thisUL.removeAttr('style')
+                        //thisUL.parent().removeAttr('style');
+                        thisUL.css('display', '');
+                        thisUL.parent().css('display', '');
+                    }
+                }
+
+                if (selectedTab && selectedTab.length > 0) {
+                    allUls = selectedTab.find('.vis-menuitm-backbtn');
+                }
+                else {
+                    allUls = _menuTree.find('.vis-menuitm-backbtn');
+                }
+                for (var j = 0; j < allUls.length; j++) {
+                    var thisUL = $(allUls[j]).parent();;
+
+                    var liList = thisUL.siblings();
+                    var canhide = false;
+                    for (var k = 0; k < liList.length; k++) {
+                        if ($(liList[k]).is(':visible')) {
+                            canhide = false;
+                            break;
+                        }
+                        canhide = true;
+                    }
+
+                    if (canhide) {
+                        if (selectedTab==null ||
+                            selectedTab.length == 0) {
+                            thisUL.css('display', '');
+                            thisUL.addClass('vis-menuSum-hide');
+                        }
+                    }
+
+                }
+
+            }
+
         }
 
         function hideEmptyFolders() {
@@ -1225,19 +1319,19 @@
 
         function createFilterAllMenu() {
             if ((VIS.Application.isMobile || VIS.Application.isIOS) && document.documentElement) {
-                newContainer = $("<div class='vis-nav-AllItems'></div>");
-                var container = _menuTree.children();
-                for (var i = 1; i < container.length; i++) {
-                    var newItem = $(container[i]).clone().removeAttr('style').addClass('vis-navmenuItems-Container-allItems');
-                    newItem.css('display:block');
-                    newItem.find('[data-summary="N"]').show();
-                    newItem.find('ul').show();
-                    newItem.find('.vis-subNavFirstElement').removeClass('vis-subNavFirstElement');
-                    newItem.find('.fa fa-arrow-left').remove();
-                    newContainer.append(newItem);
-                }
-                newContainer.hide();
-                _menuTree.append(newContainer);
+                // newContainer = $("<div class='vis-nav-AllItems'></div>");
+                //var container = _menuTree.children();
+                //for (var i = 1; i < container.length; i++) {
+                //    var newItem = $(container[i]).clone().removeAttr('style').addClass('vis-navmenuItems-Container-allItems');
+                //    newItem.css('display:block');
+                //    newItem.find('[data-summary="N"]').show();
+                //    newItem.find('ul').show();
+                //    newItem.find('.vis-subNavFirstElement').removeClass('vis-subNavFirstElement');
+                //    newItem.find('.fa fa-arrow-left').remove();
+                //    newContainer.append(newItem);
+                //}
+                //newContainer.hide();
+                //_menuTree.append(newContainer);
             }
             else {
                 var container = _menuTree.find('.vis-navmenuItems-Container');
@@ -1252,8 +1346,21 @@
 
         function showAllItems() {
             if ((VIS.Application.isMobile || VIS.Application.isIOS) && document.documentElement) {
-                newContainer.siblings().hide();
-                newContainer.show();
+                //newContainer.siblings().hide();
+                //newContainer.show();
+                var filter = getFilterValue();
+                _menuTree.find('li').hide();
+                _menuTree.find('.vis-subNavFirstElement').show();
+                _menuTree.find('.vis-menu-innerFolders').show();
+                _menuTree.find('ul').show();
+                if (filter == "A")
+                    _menuTree.find('li').show();
+                else
+                    _menuTree.find('li > a[data-action="' + filter + '"]').parent().show();
+                _menuTree.find('.vis-subNavFirstElement').css({ "position": "relative", "top": "0px" });
+               
+                _menuTree.find('.vismenu-parent').hide();
+                hideMobileEmptyFolder();
             }
             else {
                 _menuTree.find('.vis-navmenuItems-Container').hide();
@@ -1380,6 +1487,10 @@
             isVisible ? root.show('slide-down') : root.hide('slide-up');
         };
 
+        function getFilterValue() {
+            return root.find("input[type=radio]:checked").val();
+        }
+
         /* close popup
         */
         function closePopup() {
@@ -1394,7 +1505,9 @@
         return {
             init: init,
             closePopup: closePopup,
-            hideEmptyFolders: hideEmptyFolders
+            hideEmptyFolders: hideEmptyFolders,
+            getFilterValue: getFilterValue,
+            hideMobileEmptyFolder: hideMobileEmptyFolder
         }
     }();
 
