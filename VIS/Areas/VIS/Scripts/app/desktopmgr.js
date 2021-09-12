@@ -1191,7 +1191,7 @@
         }
 
 
-        function hideMobileEmptyFolder() {
+        function hideMobileEmptyFolder(allItems) {
             if (root.find("input[type=radio]:checked").val() != "A") {
                 if (_menuTree.find('.vismenu-parent').is(':visible'))
                     return;
@@ -1233,11 +1233,12 @@
                     }
                 }
 
-                if (selectedTab && selectedTab.length > 0) {
+                if (selectedTab && selectedTab.length > 0 && !allItems) {
                     allUls = selectedTab.find('.vis-menuitm-backbtn');
                 }
                 else {
                     allUls = _menuTree.find('.vis-menuitm-backbtn');
+                    selectedTab = null;
                 }
                 for (var j = 0; j < allUls.length; j++) {
                     var thisUL = $(allUls[j]).parent();;
@@ -1253,8 +1254,7 @@
                     }
 
                     if (canhide) {
-                        if (selectedTab==null ||
-                            selectedTab.length == 0) {
+                        if (selectedTab == null || selectedTab.length == 0 || allItems) {
                             thisUL.css('display', '');
                             thisUL.addClass('vis-menuSum-hide');
                         }
@@ -1360,7 +1360,7 @@
                 _menuTree.find('.vis-subNavFirstElement').css({ "position": "relative", "top": "0px" });
                
                 _menuTree.find('.vismenu-parent').hide();
-                hideMobileEmptyFolder();
+                hideMobileEmptyFolder(true);
             }
             else {
                 _menuTree.find('.vis-navmenuItems-Container').hide();
