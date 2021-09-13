@@ -2499,8 +2499,45 @@
             }
 
         };
+        if (displayType == VIS.DisplayType.Search) {
+            $ctrl.visautocomplete({
+                source: function (term, response) {
+                    var sql = self.lookup.info.queryAll;
+                    var keyColumn = self.lookup.colName;
+                    var displayColumn = self.lookup.info.displayColSubQ;    
 
+                    sql = sql.replace(displayColumn, displayColumn + ' finalValue');
 
+                    term = term.toUpper();
+                    term += "%";                    
+                    $.ajax({
+                        type: 'Post',
+                        url: VIS.Application.contextUrl + "Form/GetAccessSqlAutoComplete",
+                        data: { sql: sql, columnName: columnName, text: term } ,
+                        success: function (data) {
+                            var res = [];
+                            if (JSON.parse(data) != null) {
+                                result = JSON.parse(data).Table;
+                                for (var i = 0; i < result.length; i++) {                                   
+                                    res.push({
+                                        id: result[i][columnName.toUpper()],
+                                        value: VIS.Utility.Util.getIdentifierDisplayVal(result[i]['FINALVALUE'])
+                                    });
+                                }
+                                
+                            }                           
+                            response(res);
+                        },
+                    });
+                    
+                },
+                minLength: 2,
+                onSelect: function (e, item) {
+                    self.setValue(item.id, true, true);
+                }
+            });
+
+        }
         $ctrl.on("keydown", function (event) {
 
             //if (event.shiftKey && event.keyCode == 13) {
@@ -2514,7 +2551,7 @@
             //    }
 
             //else 
-            if ((event.keyCode == 13 || (event.keyCode == 9 && $ctrl.val().trim() != '')) && !event.shiftKey) {//will work on press of Tab key OR Enter Key
+            if ((event.keyCode == 13 || (event.keyCode == 9 && $ctrl.val().trim() != '')) && !event.shiftKey && $ctrl.val().length==0) {//will work on press of Tab key OR Enter Key
                 if (self.actionText()) {
                     event.stopPropagation();
                     event.preventDefault();
@@ -2670,7 +2707,7 @@
 
             text = "";
 
-            self.setValue(keyId, true, true);; //bind value and text
+            self.setValue(keyId, true, true); //bind value and text
             return false;
 
 
@@ -2717,8 +2754,8 @@
             else if (_columnName.equals("SalesRep_ID")) {
                 _tableName = "AD_User";
                 _keyColumnName = "AD_User_ID";
-            }
-
+            }  
+            
             $.ajax({
                 url: VIS.Application.contextUrl + "Form/GetAccessSql",
                 dataType: "json",
@@ -3322,7 +3359,7 @@
                             if (dr.read()) {
                                 keyColumnName = dr.getString(0);
                             }
-                            dr.dispose();
+                            dr.dispose(); 
                         }
                         catch (e) {
                             this.log.log(VIS.Logging.Level.SEVERE, query, e);

@@ -566,6 +566,56 @@ namespace VIS.Models
             return sql;
         }
 
+        public DataSet GetAccessSqlAutoComplete(Ctx ctx, string _columnName, string text,string sql)
+        {
+            
+            if (_columnName.Equals("M_Product_ID"))
+            {
+                sql += " AND (UPPER(M_Product.Value) LIKE " + DB.TO_STRING(text) +
+                    " OR UPPER(M_Product.Name) LIKE " + DB.TO_STRING(text) + ")";
+              
+            }
+            else if (_columnName.Equals("C_BPartner_ID"))
+            {
+                sql += " AND (UPPER(Value) LIKE ";
+                sql += DB.TO_STRING(text) + " OR UPPER(Name) LIKE " + DB.TO_STRING(text) + ")";                
+            }
+            else if (_columnName.Equals("C_Order_ID"))
+            {
+                sql += " AND UPPER(DocumentNo) LIKE ";
+                sql += DB.TO_STRING(text);               
+            }
+            else if (_columnName.Equals("C_Invoice_ID"))
+            {
+                sql += " AND UPPER(DocumentNo) LIKE ";
+                sql += DB.TO_STRING(text);
+            }
+            else if (_columnName.Equals("M_InOut_ID"))
+            {
+                sql += " AND UPPER(DocumentNo) LIKE ";
+                sql += DB.TO_STRING(text);
+            }
+            else if (_columnName.Equals("C_Payment_ID"))
+            {
+                sql += " AND UPPER(DocumentNo) LIKE ";
+                sql += DB.TO_STRING(text);
+            }
+            else if (_columnName.Equals("GL_JournalBatch_ID"))
+            {
+                sql += "AND UPPER(DocumentNo) LIKE ";
+                sql += DB.TO_STRING(text);
+            }
+            else if (_columnName.Equals("SalesRep_ID"))
+            {
+                sql += " AND UPPER(Name) LIKE ";
+                sql += DB.TO_STRING(text);
+            }
+           // var finalSql = MRole.GetDefault(ctx).AddAccessSQL(sql, tableName, MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+
+            return DB.ExecuteDataset(sql, null);
+        }
+
+
         public List<JTable> GetWareProWiseLocator(Ctx ctx, string colName, int orgId, int warehouseId, int productId, bool onlyIsSOTrx)
         {
             string sql = "SELECT M_Locator_ID," + colName + " FROM M_Locator WHERE IsActive='Y'";

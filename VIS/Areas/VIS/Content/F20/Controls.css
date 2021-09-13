@@ -644,7 +644,9 @@ input[type="radio"]:not(:checked){
         background-color: #fff;
         border-bottom: 1px solid #d4d4d4;
     }
-
+    .vis-autocomplete-items strong {
+        font-weight: bolder !important;
+    }
         /*when hovering an item:*/
         .vis-autocomplete-items div:hover {
             background-color: #e9e9e9;
@@ -654,4 +656,8 @@ input[type="radio"]:not(:checked){
 .vis-autocomplete-active {
     background-color: DodgerBlue !important;
     color: #ffffff;
+}
+
+.w2ui-editable .vis-autocomplete-items {
+    position: relative;
 }

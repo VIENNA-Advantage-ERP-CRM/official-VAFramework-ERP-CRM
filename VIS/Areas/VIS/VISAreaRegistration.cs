@@ -49,6 +49,7 @@ namespace VIS
                 "~/Areas/VIS/Scripts/app/adialog.js",
                 "~/Areas/VIS/Scripts/app/lookup.js",
                 "~/Areas/VIS/Scripts/app/treepanel.js",
+                "~/Areas/VIS/Scripts/app/visautocomplete.js",
 
                 "~/Areas/VIS/Scripts/app/controller.js",
                 "~/Areas/VIS/Scripts/app/formframe.js",
