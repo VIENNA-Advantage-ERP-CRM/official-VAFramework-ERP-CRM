@@ -2499,14 +2499,15 @@
             }
 
         };
+        // Autocomplete
         if (displayType == VIS.DisplayType.Search) {
-            $ctrl.visautocomplete({
+            $ctrl.vaautocomplete({
                 source: function (term, response) {
                     var sql = self.lookup.info.queryAll;
                     var keyColumn = self.lookup.colName;
                     var displayColumn = self.lookup.info.displayColSubQ;    
 
-                    sql = sql.replace(displayColumn, displayColumn + ' finalValue');
+                    sql = sql.replace(displayColumn, (displayColumn + ' AS finalValue'));
 
                     term = term.toUpper();
                     term += "%";                    
@@ -6446,7 +6447,12 @@
             $oputput.text(val);           
         };
         this.setRange = function (val) {
-            $rangeCtrl.val(val);
+            if (val != null) {
+                $rangeCtrl.val(val);
+            } else {
+                $rangeCtrl.val(0);
+            }
+           
         };
 
         this.getRange = function () {            

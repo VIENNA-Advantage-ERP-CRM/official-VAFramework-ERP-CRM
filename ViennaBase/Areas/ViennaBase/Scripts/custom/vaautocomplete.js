@@ -1,5 +1,9 @@
-﻿(function ($) {
-    $.fn.visautocomplete = function (options) {
+﻿/** 
+ *  Purpose: autocomplete
+ * Mandeep Singh( VIS0228) 13-Sep-2021
+ */  
+(function ($) {
+    $.fn.vaautocomplete = function (options) {
         // This is the easiest way to have default options.
         var settings = $.extend({
             delay:300,
@@ -23,15 +27,8 @@
 
             var a, b, i, val = self.value;
             /*create a DIV element that will contain the items (values):*/
-            a = document.createElement("DIV");
-            //if ($(self).parents().hasClass('w2ui-editable')) {
-            //    a.setAttribute("id", self.name + "Grdvis-autocomplete-list");
-            //} else {
-            //    if (!$(self).closest('.vis-ev-col').hasClass('vis-autocompete-postion')) {
-            //        $(self).closest('.vis-ev-col').addClass('vis-autocompete-postion');
-            //    }
-            //    a.setAttribute("id", self.name + "vis-autocomplete-list");
-            //}
+            a = document.createElement("DIV");           
+            a.setAttribute("id", self.name + "vis-autocomplete-list");           
             a.setAttribute("class", "vis-autocomplete-items");
             /*append the DIV element as a child of the autocomplete container:*/
             $('body').append(a);
@@ -96,7 +93,7 @@
         });
         /*execute a function presses a key on the keyboard:*/
         ctrl.addEventListener("keydown", function (e) {
-            var x = document.getElementById(this.id + "vis-autocomplete-list");
+            var x = document.getElementById(this.name + "vis-autocomplete-list");
             if (x) x = x.getElementsByTagName("div");
             if (e.keyCode == 40) {
                 /*If the arrow DOWN key is pressed,
