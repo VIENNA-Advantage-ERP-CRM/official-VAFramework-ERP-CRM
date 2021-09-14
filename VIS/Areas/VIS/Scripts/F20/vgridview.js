@@ -508,8 +508,8 @@
                     //return '<input id="rng' + index + '" type="range" min="' + minVal + '" max="' + maxVal + '" disabled="disabled" value="' + val + '" /><div style="position: absolute"><output class="vis-grid_progress_output"> ' + val+'</output></div>';
 
                     return '<div class="vis-progress-gridbar" style="'+style+'">' +
-                        '<div class="vis-progress-percent-bar" style = "width:' + val + '%;'+style+'" ></div>' +
-                        '<div class="vis-progress-gridoutput" > ' + val + '</div></div >';
+                        '<div class="vis-progress-percent-bar" style = "width:' + (val||0) + '%;'+style+'" ></div>' +
+                        '<div class="vis-progress-gridoutput" > ' + (val||'') + '</div></div >';
                 }
             }
             else if (VIS.DisplayType.IsNumeric(displayType)) {
