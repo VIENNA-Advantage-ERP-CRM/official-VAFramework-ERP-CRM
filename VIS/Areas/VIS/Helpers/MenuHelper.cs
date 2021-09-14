@@ -31,7 +31,7 @@ namespace VIS.Helpers
         private int rootParentID = 0;
         private bool isSubItem = false;
         private string lastParent = "";
-        private int settingSeqNo = 9999;
+        //private int settingSeqNo = 9999;
         private bool isSettingItem = false;
         private Dictionary<string, string> menuIcons = new Dictionary<string, string>() {
             { "W","fa fa-window-maximize"},
@@ -239,12 +239,12 @@ namespace VIS.Helpers
                     {
                         if (vt.Parent_ID == rootParentID)
                         {
-                            GetMobileSummaryItem(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), rootParentID,false,vt.Image);
+                            GetMobileSummaryItem(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), rootParentID, false, vt.Image);
                         }
                         else
                         {
                             isSubItem = true;
-                            GetMobileSummaryItem(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), rootParentID, true,vt.Image);
+                            GetMobileSummaryItem(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), rootParentID, true, vt.Image);
                         }
 
                     }
@@ -356,16 +356,16 @@ namespace VIS.Helpers
                     else
                     {
                         //Add item to Settings section of menu , if sequence no is 9999
-                        if (vt.SeqNo == settingSeqNo)
+                        if (vt.IsSetting)
                         {
                             isSettingItem = true;
                             if (vt.Parent_ID == rootParentID)
                             {
-                                GetNewSummaryItemStart(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), windowNo, settingSeqNo, vt.Image, 0);
+                                GetNewSummaryItemStart(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), windowNo, vt.SeqNo, vt.Image, 0, vt.IsSetting);
                             }
                             else
                             {
-                                GetNewSummaryItemStart(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), windowNo, settingSeqNo, vt.Image, vt.Parent_ID);
+                                GetNewSummaryItemStart(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), windowNo, vt.SeqNo, vt.Image, vt.Parent_ID, vt.IsSetting);
                             }
 
                             lastParentID = vt.Node_ID;
@@ -391,7 +391,7 @@ namespace VIS.Helpers
                         else
                         {
                             // Close previous parent and start new one.
-                            if (vt.SeqNo == settingSeqNo || isSettingItem)
+                            if (vt.IsSetting || isSettingItem)
                                 settingsHTML.Append("</div>");
                             else
                             {
@@ -425,14 +425,14 @@ namespace VIS.Helpers
                     {
                         string endDiv = "</div>";
 
-                        if (vt.SeqNo == settingSeqNo || isSettingItem)
+                        if (vt.IsSetting || isSettingItem)
                             settingsHTML.Append(endDiv);
                         else if (itemNo > 0 && itemNo % 2 == 0)
                             menu2HTML.Append(endDiv);
                         else
                             menu1HTML.Append(endDiv);
 
-                        if (vt.SeqNo == settingSeqNo)
+                        if (vt.IsSetting)
                         {
                             isSettingItem = false;
                         }
@@ -495,7 +495,7 @@ namespace VIS.Helpers
 
 
 
-            if (seqNo == settingSeqNo || isSettingItem)
+            if (isSettingItem)
                 settingsHTML.Append("<li class='vis-navList'  data-summary='N'><a href='javascript:void(0)'  data-sqeno='" + seqNo + "'  data-value='" + id + "' data-action='" + action + "' data-actionid ='" + aid + "'><i class='" + menuIcons[action] + "'></i>" + text + "</a>" + contextMenu + "</li>");
             else if (itemNo > 0 && itemNo % 2 == 0)
             {
@@ -779,7 +779,7 @@ namespace VIS.Helpers
         /// <param name="seqNo"></param>
         /// <param name="Image"></param>
         /// <param name="parent_ID">if not 0, that means this usmmary item is child of another one. So add plus icon for that</param>
-        private void GetNewSummaryItemStart(int id, string text, string windowNo = "", int seqNo = 0, string Image = "", int parent_ID = 0)
+        private void GetNewSummaryItemStart(int id, string text, string windowNo = "", int seqNo = 0, string Image = "", int parent_ID = 0, bool setting = false)
         {
             string icon = "<i class='" + menuIcons["S"] + "'></i>";
 
@@ -812,7 +812,7 @@ namespace VIS.Helpers
             //    parentDiv = "<div class='vismenu-hidden-header'><h6 class='vismenu-hidden-headerh5' style='display:none'>" + rootItem+"</h6>";
             //}
 
-            if (seqNo == settingSeqNo || isSettingItem)
+            if (setting || isSettingItem)
             {
                 settingsHTML.Append("<div  data-sqeno='" + seqNo + "' data-value='" + id + "' data-summary='Y'  class='vis-navSubMenu'><h5 class='vis-navDataHead'>" + icon +
         "<span>" + text + "</span>" + expandIcon + "</h5>" + ulUnStyle);
