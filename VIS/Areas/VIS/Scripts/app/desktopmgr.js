@@ -85,7 +85,7 @@
                 // If modile menu is opened and user clicks on back button
                 if ($target.hasClass('vis-menuitm-backbtn')) {
                     $target.closest('ul').css('display', 'none');;
-                    $('.vismenu-parent').show();
+                    $vis_mainMenu.find('.vismenu-parent').show();
                     $menuTree.find('.vismenu-selectedMbTab').removeClass('vismenu-selectedMbTab');
 
                     //Show All items of main menu
@@ -118,7 +118,7 @@
                         selectedTab.find('li > a[data-action="' + currentFilter + '"]').parent().css('display', 'flex');
                     else
                         selectedTab.find('li:not(.vis-menusubItem)').css('display', 'flex');
-                    $('.vismenu-parent').hide();
+                    $vis_mainMenu.find('.vismenu-parent').hide();
                     menuFilterMgr.hideMobileEmptyFolder();
 
                     if ($par.data("summary") == 'Y') {
