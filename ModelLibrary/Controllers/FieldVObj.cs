@@ -267,6 +267,11 @@ namespace VAdvantage.Controller
         public bool ShowFilterOption = false;
 
         public bool IsUnique = false;
+        public bool IsSwitch = false;
+
+        /* style logic stirng { expression [,]}*/
+        public string StyleLogic = "";
+
 
 
         /// <summary>

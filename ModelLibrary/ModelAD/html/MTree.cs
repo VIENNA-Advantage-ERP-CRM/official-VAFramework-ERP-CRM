@@ -777,11 +777,13 @@ namespace VAdvantage.Model
                 if (baseLang)
                     sqlNode.Append("SELECT AD_Menu.AD_Menu_ID, AD_Menu.Name,AD_Menu.Description,AD_Menu.IsSummary,AD_Menu.Action, "
                         + "AD_Menu.AD_Window_ID, AD_Menu.AD_Process_ID, AD_Menu.AD_Form_ID, AD_Menu.AD_Workflow_ID, AD_Menu.AD_Task_ID, AD_Menu.AD_Workbench_ID, "
+
                         + " NVL(img.FontName,img.ImageURL) as Image, AD_Menu.IsSetting FROM AD_Menu AD_Menu");
                 else
                     sqlNode.Append("SELECT AD_Menu.AD_Menu_ID,  t.Name,t.Description,AD_Menu.IsSummary,AD_Menu.Action, "
                         + "AD_Menu.AD_Window_ID, AD_Menu.AD_Process_ID, AD_Menu.AD_Form_ID, AD_Menu.AD_Workflow_ID, AD_Menu.AD_Task_ID, AD_Menu.AD_Workbench_ID, "
                         + " NVL(img.FontName,img.ImageURL) as Image, AD_Menu.IsSetting FROM AD_Menu AD_Menu JOIN  AD_Menu_Trl t ON AD_Menu.AD_Menu_ID=t.AD_Menu_ID ");
+
                 if (!baseLang)
                 {
                     sqlNode.Append(" JOIN " + GetNodeTableName() + " pr on pr.NODE_ID=AD_Menu." + columnNameX + "_ID ");
@@ -1363,7 +1365,9 @@ namespace VAdvantage.Model
                                 name, description, Parent_ID, isSummary,
                                 actionColor, onBar);
                         retValue.Image = Utility.Util.GetValueOfString(dr["Image"]);
+
                         retValue.IsSetting = Utility.Util.GetValueOfString(dr["IsSetting"]) == "Y";
+
                     }
                     break;
                 }

@@ -190,7 +190,7 @@
     content: "\e904";
 }
 
-.vis-appointment:before {
+.vis-appointment:before, .vis-apt:before {
     content: "\e905";
 }
 
@@ -214,11 +214,11 @@
     content: "\e90a";
 }
 
-.vis-attachdocumentfrom:before {
+.vis-attachdocumentfrom:before, .vis-adf:before {
     content: "\e90b";
 }
 
-.vis-attachment:before {
+.vis-attachment:before, .vis-att:before {
     content: "\e90c";
 }
 
@@ -226,7 +226,7 @@
     content: "\e90d";
 }
 
-.vis-attachmentx:before {
+.vis-attachmentx:before, .vis-attx:before {
     content: "\e90e";
 }
 
@@ -258,11 +258,11 @@
     content: "\e915";
 }
 
-.vis-chat:before {
+.vis-chat:before, .vis-cht:before {
     content: "\e916";
 }
 
-.vis-chatx:before {
+.vis-chatx:before, .vis-chtx:before {
     content: "\e917";
 }
 
@@ -286,7 +286,7 @@
     content: "\e91c";
 }
 
-.vis-copy:before {
+.vis-copy:before, .vis-crd:before {
     content: "\e91d";
 }
 
@@ -294,11 +294,11 @@
     content: "\e91e";
 }
 
-.vis-createdocument:before {
+.vis-createdocument:before, .vis-cdt:before {
     content: "\e91f";
 }
 
-.vis-createdocumentx:before {
+.vis-createdocumentx:before, .vis-cdtx:before {
     content: "\e920";
 }
 
@@ -362,7 +362,7 @@
     content: "\e926";
 }
 
-.vis-email:before {
+.vis-email:before, .vis-eml:before {
     content: "\e927";
 }
 
@@ -450,7 +450,7 @@
     content: "\e93c";
 }
 
-.vis-history:before {
+.vis-history:before, .vis-hiy:before {
     content: "\e93d";
 }
 
@@ -470,7 +470,7 @@
     content: "\e941";
 }
 
-.vis-import:before {
+.vis-import:before, .vis-imp:before {
     content: "\e942";
 }
 
@@ -482,7 +482,7 @@
     content: "\e944";
 }
 
-.vis-letter:before {
+.vis-letter:before, .vis-ler:before {
     content: "\e945";
 }
 
@@ -514,11 +514,11 @@
     content: "\e94c";
 }
 
-.vis-mark:before {
+.vis-mark:before, .vis-mte:before {
     content: "\e94d";
 }
 
-.vis-markx:before {
+.vis-markx:before, .vis-mtex:before {
     content: "\e94e";
 }
 
@@ -646,7 +646,7 @@
     content: "\e96d";
 }
 
-.vis-request:before {
+.vis-request:before, .vis-crt:before {
     content: "\e96e";
 }
 
@@ -738,15 +738,15 @@
     content: "\e984";
 }
 
-.vis-subscribe:before {
+.vis-subscribe:before, .vis-srd:before {
     content: "\e985";
 }
 
-.vis-subscribex:before {
+.vis-subscribex:before, .vis-srdx:before {
     content: "\e986";
 }
 
-.vis-task:before {
+.vis-task:before, .vis-tak:before {
     content: "\e987";
 }
 
@@ -782,11 +782,11 @@
     content: "\e98f";
 }
 
-.vis-uploaddocument:before {
+.vis-uploaddocument:before, .vis-udt:before {
     content: "\e990";
 }
 
-.vis-uploaddocumentx:before {
+.vis-uploaddocumentx:before, .vis-udtx:before {
     content: "\e991";
 }
 
@@ -826,11 +826,11 @@
     content: "\e99a";
 }
 
-.vis-viewdocument:before {
+.vis-viewdocument:before, .vis-vdt:before {
     content: "\e99b";
 }
 
-.vis-viewdocumentx:before {
+.vis-viewdocumentx:before, .vis-vdtx:before {
     content: "\e99c";
 }
 
@@ -846,7 +846,7 @@
     content: "\e99f";
 }
 
-.vis-zoomacross:before {
+.vis-zoomacross:before, .vis-zas:before {
     content: "\e9a0";
 }
 

@@ -24,6 +24,7 @@ namespace VAdvantage.Process
         string sender = string.Empty;
         string folderName = "Inbox";
         string isExcludeEmployee = string.Empty;
+        DateTime? lastRun;
 
         private StringBuilder retVal = new StringBuilder();
 
@@ -57,9 +58,10 @@ namespace VAdvantage.Process
                                   umail.imapusername,
                                   umail.AD_User_ID,
                                   umail.AD_CLient_ID,
-                                  umail.AD_Org_ID,umail.ISAUTOATTACH,umail.TABLEATTACH,umail.IsExcludeEmployee
-                                FROM ad_usermailconfigration umail  WHERE umail.IsActive ='Y'";
-
+                                  umail.AD_Org_ID,umail.ISAUTOATTACH,umail.TABLEATTACH,umail.IsExcludeEmployee,
+                                  umail.DateLastRun, AD_UserMailConfigration_ID
+                                FROM ad_usermailconfigration umail
+                                WHERE umail.IsActive ='Y' ";
 
             //if (AD_User_ID > 0)
             //{
@@ -80,6 +82,13 @@ namespace VAdvantage.Process
                 user = new UserInformation();
                 sender = Convert.ToString(ds.Tables[0].Rows[i]["TABLEATTACH"]).Trim();
                 isExcludeEmployee = Convert.ToString(ds.Tables[0].Rows[i]["IsExcludeEmployee"]).Trim();
+                lastRun = null;
+
+                if (ds.Tables[0].Rows[i]["DateLastRun"] != null)
+                {
+                    lastRun = Util.GetValueOfDateTime(ds.Tables[0].Rows[i]["DateLastRun"]);
+                }
+
                 if (Convert.ToString(ds.Tables[0].Rows[i]["ISAUTOATTACH"]).Trim() == "N" && (sender == string.Empty || sender == null))
                 {
                     retVal.Append("Mail Configration EMail Address <=> " + Convert.ToString(ds.Tables[0].Rows[i]["imapusername"]) + Environment.NewLine);
@@ -119,7 +128,7 @@ namespace VAdvantage.Process
 
                 if (ds.Tables[0].Rows[i]["imapport"] != DBNull.Value && ds.Tables[0].Rows[i]["imapport"] != null)
                 {
-                    user.HostPort = Convert.ToInt32(ds.Tables[0].Rows[i]["imapport"]);
+                    user.HostPort = Util.GetValueOfInt(ds.Tables[0].Rows[i]["imapport"]);
                 }
                 else
                 {
@@ -140,26 +149,27 @@ namespace VAdvantage.Process
 
                 if (ds.Tables[0].Rows[i]["AD_User_ID"] != DBNull.Value && ds.Tables[0].Rows[i]["AD_User_ID"] != null)
                 {
-                    AD_User_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_User_ID"]);
+                    AD_User_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_User_ID"]);
                 }
 
                 //AD_Client_ID
                 if (ds.Tables[0].Rows[i]["AD_Client_ID"] != DBNull.Value && ds.Tables[0].Rows[i]["AD_Client_ID"] != null)
                 {
-                    AD_Client_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Client_ID"]);
+                    AD_Client_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_Client_ID"]);
                 }
 
                 if (ds.Tables[0].Rows[i]["AD_Org_ID"] != DBNull.Value && ds.Tables[0].Rows[i]["AD_Org_ID"] != null)
                 {
-                    AD_Org_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Org_ID"]);
+                    AD_Org_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_Org_ID"]);
                 }
 
                 if (AD_User_ID > 0)
                 {
-
                     GetMails(user, AD_User_ID, AD_Client_ID, AD_Org_ID);
-
                 }
+
+                DB.ExecuteQuery("UPDATE AD_UserMailConfigration SET DateLastRun = " + GlobalVariable.TO_DATE(DateTime.Now.AddDays(-1), true) 
+                    + " WHERE AD_UserMailConfigration_ID = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_UserMailConfigration_ID"]));
             }
 
 
@@ -174,12 +184,17 @@ namespace VAdvantage.Process
             if (login.Equals(""))
             {
                 imapMail.SelectInbox();
-
-
-
-                List<long> uidList = imapMail.SearchFlag(Flag.All);
+                List<long> uidList;
+                // if Process is running first time then search all mails else search mails after last run date.
+                if (lastRun != null)
+                {
+                    uidList = imapMail.Search(Expression.SentSince(lastRun.Value));
+                }
+                else {
+                    uidList = imapMail.SearchFlag(Flag.All);
+                }
+                
                 uidList.Reverse();
-
 
                 //DocumentService ser = new DocumentService();
                 byte[] bytes = null;
@@ -207,7 +222,7 @@ namespace VAdvantage.Process
                             string recordID = subJect.Split('-')[1];// subJect.Substring(subJect.IndexOf("_") + 1, subJect.LastIndexOf(")") - subJect.IndexOf("_") - 1);
 
 
-                            existRec = GetAttachedRecord(Util.GetValueOfInt(TableID), Convert.ToInt32(recordID), Convert.ToInt32(uid), folderName);
+                            existRec = GetAttachedRecord(Util.GetValueOfInt(TableID), Util.GetValueOfInt(recordID), Util.GetValueOfInt(uid), folderName);
 
                             if (existRec > 0)// Is mail already attached
                             {
@@ -260,7 +275,7 @@ namespace VAdvantage.Process
 
                             mAttachment.SetAD_Client_ID(GetCtx().GetAD_Client_ID());
                             mAttachment.SetAD_Org_ID(GetCtx().GetAD_Org_ID());
-                            mAttachment.SetAD_Table_ID(Convert.ToInt32(TableID));
+                            mAttachment.SetAD_Table_ID(Util.GetValueOfInt(TableID));
                             mAttachment.SetAttachmentType("I");
                             mAttachment.SetDateMailReceived(message.Date);
                             mAttachment.SetFolderName(folderName);
@@ -270,7 +285,7 @@ namespace VAdvantage.Process
                             mAttachment.SetMailAddressBcc(bcc);
                             mAttachment.SetMailAddressCc(cc);
                             mAttachment.SetMailAddressFrom(mailFrom);
-                            mAttachment.SetRecord_ID(Convert.ToInt32(recordID));
+                            mAttachment.SetRecord_ID(Util.GetValueOfInt(recordID));
                             //if (sender == "AD_User")
                             //{
                             //    mAttachment.SetRecord_ID(Convert.ToInt32(dt.Rows[j][0]));
@@ -282,7 +297,7 @@ namespace VAdvantage.Process
                             //    record_ID = Convert.ToInt32(dt.Rows[j][1]);
                             //}
 
-                            mAttachment.SetMailUID(Convert.ToInt32(uid));
+                            mAttachment.SetMailUID(Util.GetValueOfInt(uid));
                             mAttachment.SetMailUserName(mailAddress);
                             mAttachment.SetTextMsg(textmsg);
                             mAttachment.SetTitle(message.Subject);
@@ -292,7 +307,7 @@ namespace VAdvantage.Process
                             }
                             else
                             {
-                                SendMailOrNotification(dsUser, GetCtx(), Msg.GetMsg(GetCtx(), " Emailrecievedwithsubject") + " = " + message.Subject + " " + Msg.GetMsg(GetCtx(), "ANDAttachto") + " " + Msg.GetMsg(GetCtx(), "RequestID") + " = " + recordID, Convert.ToInt32(TableID), Convert.ToInt32(recordID), Convert.ToString(documentNO));
+                                SendMailOrNotification(dsUser, GetCtx(), Msg.GetMsg(GetCtx(), "Emailrecievedwithsubject") + " = " + message.Subject + " " + Msg.GetMsg(GetCtx(), "ANDAttachto") + " " + Msg.GetMsg(GetCtx(), "RequestID") + " = " + recordID, Util.GetValueOfInt(TableID), Util.GetValueOfInt(recordID), Convert.ToString(documentNO));
                             }
 
                         }
@@ -300,7 +315,18 @@ namespace VAdvantage.Process
                         //  {
                         try
                         {
-                            string sql = "SELECT " + tableName + "_ID " + " , C_BPartner_ID,Name,value " + "FROM " + tableName + " WHERE lower(Email) like " + "'%" + from.Trim().ToLower() + "%'";
+                            string sql;
+                            //changes done by Emp id:187
+                            //If sender is lead it checks this query
+                            if (sender == "C_Lead")
+                            {
+                                sql = "SELECT C_Lead_ID, C_Bpartner_ID,Name,DocumentNo AS value FROM C_Lead WHERE LOWER(Email) LIKE " + "'%" + from.Trim().ToLower() + "%'";
+                            }
+                            else
+                            {
+                                sql = "SELECT " + tableName + "_ID " + " , C_BPartner_ID,Name,value " + "FROM " + tableName + " WHERE LOWER(Email) LIKE " + "'%" + from.Trim().ToLower() + "%'";
+                            }
+
                             sql += " AND AD_Client_ID=" + AD_Client_ID;
                             //sql += " AND AD_Client_ID=" + GetCtx().GetAD_Client_ID();
                             //string finalSql = MRole.GetDefault(GetCtx(), false).AddAccessSQL(sql, tableName.ToString(), MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
@@ -326,31 +352,42 @@ namespace VAdvantage.Process
                             {
                                 for (int j = 0; j < dt.Rows.Count; j++)
                                 {
-                                    string sqlQuery = "SELECT IsEmployee From C_BPartner WHERE C_BPartner_ID=" + Convert.ToInt32(dt.Rows[j][1]);
-                                    sql += " AND AD_Client_ID=" + AD_Client_ID;
-                                    //sqlQuery += " AND AD_Client_ID=" + GetCtx().GetAD_Client_ID();
-                                    //string finalQuery = MRole.GetDefault(GetCtx(), false).AddAccessSQL(sqlQuery, "C_BPartner", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
-                                    DataSet ds = DB.ExecuteDataset(sqlQuery);
-
-                                    if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                                    // Its go inside for user or busineespartner
+                                    if (sender != "C_Lead")
                                     {
-                                        if (isExcludeEmployee == "Y" && Convert.ToString(ds.Tables[0].Rows[0]["IsEmployee"]).Trim() == "Y")
+                                        string sqlQuery = "SELECT IsEmployee FROM C_BPartner WHERE C_BPartner_ID=" + Util.GetValueOfInt(dt.Rows[j]["C_BPartner_ID"]);
+                                        sql += " AND AD_Client_ID=" + AD_Client_ID;
+                                        //sqlQuery += " AND AD_Client_ID=" + GetCtx().GetAD_Client_ID();
+                                        //string finalQuery = MRole.GetDefault(GetCtx(), false).AddAccessSQL(sqlQuery, "C_BPartner", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+                                        DataSet ds = DB.ExecuteDataset(sqlQuery);
+
+                                        if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                                         {
-                                            continue;
+                                            if (isExcludeEmployee == "Y" && Convert.ToString(ds.Tables[0].Rows[0]["IsEmployee"]).Trim() == "Y")
+                                            {
+                                                continue;
+                                            }
                                         }
                                     }
                                     if (sender == "AD_User")
                                     {
                                         _tableID = PO.Get_Table_ID("AD_User");
-                                        existRec = GetAttachedRecord(_tableID, Convert.ToInt32(dt.Rows[j][0]), Convert.ToInt32(uid), folderName);
+                                        existRec = GetAttachedRecord(_tableID, Util.GetValueOfInt(dt.Rows[j]["AD_User_ID"]), Util.GetValueOfInt(uid), folderName);
                                         userOrBp = Msg.GetMsg(GetCtx(), "User");
                                     }
                                     //if (sender == "businessPartner")
                                     if (sender == "C_BPartner")
                                     {
                                         _tableID = PO.Get_Table_ID("C_BPartner");
-                                        existRec = GetAttachedRecord(_tableID, Convert.ToInt32(dt.Rows[j][1]), Convert.ToInt32(uid), folderName);
+                                        existRec = GetAttachedRecord(_tableID, Util.GetValueOfInt(dt.Rows[j]["C_BPartner_ID"]), Util.GetValueOfInt(uid), folderName);
                                         userOrBp = Msg.GetMsg(GetCtx(), "BusinessPartner");
+                                    }
+                                    //if sender is lead
+                                    if (sender == "C_Lead")
+                                    {
+                                        _tableID = PO.Get_Table_ID("C_Lead");
+                                        existRec = GetAttachedRecord(_tableID, Util.GetValueOfInt(dt.Rows[j]["C_Lead_ID"]), Util.GetValueOfInt(uid), folderName);
+                                        userOrBp = Msg.GetMsg(GetCtx(), "Lead");
                                     }
 
                                     if (existRec > 0)// Is mail already attached
@@ -385,9 +422,6 @@ namespace VAdvantage.Process
                                     }
                                     string title = message.Subject;
 
-
-
-
                                     string mailAddress = "";
                                     for (int i = 0; i < message.To.Count; i++)
                                     {
@@ -418,16 +452,21 @@ namespace VAdvantage.Process
 
                                     if (sender == "AD_User")
                                     {
-                                        mAttachment.SetRecord_ID(Convert.ToInt32(dt.Rows[j][0]));
-                                        record_ID = Convert.ToInt32(dt.Rows[j][0]);
+                                        mAttachment.SetRecord_ID(Util.GetValueOfInt(dt.Rows[j]["AD_User_ID"]));
+                                        record_ID = Util.GetValueOfInt(dt.Rows[j][0]);
                                     }
                                     if (sender == "C_BPartner")
                                     {
-                                        mAttachment.SetRecord_ID(Convert.ToInt32(dt.Rows[j][1]));
-                                        record_ID = Convert.ToInt32(dt.Rows[j][1]);
+                                        mAttachment.SetRecord_ID(Util.GetValueOfInt(dt.Rows[j]["C_BPartner_ID"]));
+                                        record_ID = Util.GetValueOfInt(dt.Rows[j][1]);
+                                    }
+                                    if (sender == "C_Lead")
+                                    {
+                                        mAttachment.SetRecord_ID(Util.GetValueOfInt(dt.Rows[j]["C_Lead_ID"]));
+                                        record_ID = Util.GetValueOfInt(dt.Rows[j][0]);
                                     }
 
-                                    mAttachment.SetMailUID(Convert.ToInt32(uid));
+                                    mAttachment.SetMailUID(Util.GetValueOfInt(uid));
                                     mAttachment.SetMailUserName(mailAddress);
                                     mAttachment.SetTextMsg(textmsg);
                                     mAttachment.SetTitle(message.Subject);
@@ -437,7 +476,7 @@ namespace VAdvantage.Process
                                     }
                                     else
                                     {
-                                        SendMailOrNotification(dsUser, GetCtx(), Msg.GetMsg(GetCtx(), " Emailrecievedwithsubject") + " = " + message.Subject + Msg.GetMsg(GetCtx(), "ANDAttachto") + userOrBp + " = " + Convert.ToString(dt.Rows[j]["Name"]), _tableID, record_ID, Convert.ToString(dt.Rows[j]["Value"]));
+                                        SendMailOrNotification(dsUser, GetCtx(), Msg.GetMsg(GetCtx(), "Emailrecievedwithsubject") + " = " + message.Subject  + Msg.GetMsg(GetCtx(), "ANDAttachto")  + userOrBp + " = " + Util.GetValueOfString(dt.Rows[j]["Name"]), _tableID, record_ID, Util.GetValueOfString(dt.Rows[j]["Value"]));
                                     }
                                 }
                             }
@@ -451,7 +490,7 @@ namespace VAdvantage.Process
                             //    retVal.Append("MultipleRecordFound");
                             //}
                         }
-                        catch
+                        catch (Exception ex)
                         { }
                         //}
 

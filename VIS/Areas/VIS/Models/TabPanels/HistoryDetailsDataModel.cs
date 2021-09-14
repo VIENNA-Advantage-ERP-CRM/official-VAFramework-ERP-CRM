@@ -75,7 +75,7 @@ namespace VIS.Models
                         + "   SELECT ai.APPOINTMENTSINFO_ID AS ID, ai.AD_TABLE_ID, ai.RECORD_ID, ai.CREATED, au.NAME AS FROMUSER, 'APPOINTMENT' AS TYPE, ai.SUBJECT AS SUBJECT, au.NAME, 'N' AS HASATTACHMENT, '' AS ISTASKCLOSED "
                         + "   FROM APPOINTMENTSINFO ai "
                         + "   JOIN AD_USER au ON au.AD_USER_ID=ai.CREATEDBY "
-                        + "   WHERE ai.ISACTIVE = 'Y' AND ai.ISTASK = 'N' "
+                        + "   WHERE (ai.AttendeeInfo IS NOT NULL OR ai.RefAppointmentsInfo_ID IS NULL) AND ai.ISACTIVE = 'Y' AND ai.ISTASK = 'N' "
                         + "   AND ai.AD_TABLE_ID = " + _AD_Table_ID
                         + "   AND ai.RECORD_ID = " + RecordId
 
@@ -190,7 +190,7 @@ namespace VIS.Models
                         + "   SELECT ai.APPOINTMENTSINFO_ID AS ID, ai.AD_TABLE_ID, ai.RECORD_ID, ai.CREATED, au.NAME AS FROMUSER, 'APPOINTMENT' AS TYPE, ai.SUBJECT AS SUBJECT, au.NAME, 'N' AS HASATTACHMENT, '' AS ISTASKCLOSED "
                         + "   FROM APPOINTMENTSINFO ai "
                         + "   JOIN AD_USER au ON au.AD_USER_ID=ai.CREATEDBY "
-                        + "   WHERE ai.ISACTIVE = 'Y' AND ai.ISTASK = 'N' "
+                        + "   WHERE (ai.AttendeeInfo IS NOT NULL OR ai.RefAppointmentsInfo_ID IS NULL) AND ai.ISACTIVE = 'Y' AND ai.ISTASK = 'N' "
                         + "   AND ai.AD_TABLE_ID = " + _AD_Table_ID
                         + "   AND ai.RECORD_ID = " + RecordId
 
@@ -340,8 +340,8 @@ namespace VIS.Models
 
             string strSql = @"SELECT cd.VA048_IsConference, NVL(cd.VA048_From, '-') as VA048_From, " +
                 " NVL(cd.VA048_To, '-') as VA048_To, cd.VA048_Duration, cd.VA048_Price, " +
-                "NVL(cd.VA048_Price_Unit, '-') as VA048_Price_Unit, NVL(cd.VA048_Status, '-') as VA048_Status," + 
-                " cd.AD_Table_ID, cd.Record_ID, cd.VA048_CallNotes, cd.Created, " + 
+                "NVL(cd.VA048_Price_Unit, '-') as VA048_Price_Unit, NVL(cd.VA048_Status, '-') as VA048_Status," +
+                " cd.AD_Table_ID, cd.Record_ID, cd.VA048_CallNotes, cd.Created, " +
                 fullNameColumn + @" AS VA048_FullName FROM VA048_CallDetails cd " +
                 " LEFT JOIN AD_User ad on cd.CreatedBy = ad.AD_User_ID " +
                 " WHERE cd.IsActive = 'Y' and cd.VA048_CallDetails_ID = " + ID;
@@ -352,7 +352,7 @@ namespace VIS.Models
                 {
                     string attachemntsql = @"SELECT att.AD_Attachment_ID, att.FileLocation, " + "atl.AD_AttachmentLine_ID, atl.FileName, atl.FileType FROM AD_Attachment att " +
                       " LEFT JOIN AD_AttachmentLine atl on att.AD_Attachment_ID = atl.AD_Attachment_ID " +
-                      " WHERE att.AD_table_ID = " + MTable.Get_Table_ID("VA048_CallDetails") + 
+                      " WHERE att.AD_table_ID = " + MTable.Get_Table_ID("VA048_CallDetails") +
                       @" and att.Record_ID = " + ID;
 
                     using (DataSet dsatt = DB.ExecuteDataset(attachemntsql))
@@ -438,7 +438,7 @@ namespace VIS.Models
                 "   Else " +
                 "    '" + Msg.GetMsg(ctx, "Free", true) + "' " +
                 "    End) as Status, " +
-                "     AI.ReminderInfo, COALESCE(ai.AttendeeInfo, CAST(ai.Ad_User_Id AS VARCHAR(10))) AS AttendeeInfo, " + 
+                "     AI.ReminderInfo, COALESCE(ai.AttendeeInfo, CAST(ai.Ad_User_Id AS VARCHAR(10))) AS AttendeeInfo, " +
                 "     AI.RecurrenceInfo , " +
                 "     (  " +
                 "     CASE AI.IsPrivate " +
@@ -497,7 +497,7 @@ namespace VIS.Models
                           " AI.ReminderInfo, COALESCE(ai.AttendeeInfo, CAST(ai.ad_user_id AS VARCHAR(10))) AS AttendeeInfo,  AI.RecurrenceInfo , " +
                           " AI.PRIORITYKEY, AI.comments ,ac.Name as CategoryName, ai.ISCLOSED AS ISTASKCLOSED" +
                           " FROM AppointmentsInfo ai LEFT OUTER JOIN appointmentcategory AC " +
-                          " ON AI.appointmentcategory_id=ac.appointmentcategory_id " +                          
+                          " ON AI.appointmentcategory_id=ac.appointmentcategory_id " +
                           " WHERE ai.ISACTIVE='Y' AND ISTASK='Y' AND AI.AppointmentsInfo_ID=" + Util.GetValueOfInt(ID);
 
             TaskDetails lstTask = new TaskDetails();
@@ -569,7 +569,7 @@ namespace VIS.Models
                             FileType = Util.GetValueOfString(row["FileType"]),
                             FileSize = Util.GetValueOfInt(row["FileSize"]),
                             FileLocation = Util.GetValueOfString(row["FileLocation"]),
-                            CreatedOn = Util.GetValueOfDateTime(row["CreatedOn"]).ToString(),
+                            CreatedOn = DateTime.SpecifyKind(Convert.ToDateTime(row["CreatedOn"]), DateTimeKind.Utc),
                             CreatedBy = Util.GetValueOfString(row["CreatedBy"]),
                             AD_Table_ID = Util.GetValueOfInt(row["AD_Table_ID"]),
                             Record_ID = Util.GetValueOfInt(row["Record_ID"])
@@ -875,7 +875,7 @@ namespace VIS.Models
         public int FileSize { get; set; }
         public int AD_Table_ID { get; set; }
         public int Record_ID { get; set; }
-        public string CreatedOn { get; set; }
+        public DateTime CreatedOn { get; set; }
         public string CreatedBy { get; set; }
     }
 

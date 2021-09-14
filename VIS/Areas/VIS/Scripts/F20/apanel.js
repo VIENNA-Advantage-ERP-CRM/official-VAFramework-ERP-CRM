@@ -409,28 +409,28 @@
             var mWindow = this.gridWindow;
             actionItemCount_Right = 0;
             if (mWindow.getIsAppointment()) {
-                this.aAppointment = this.addActions("Appointment", null, false, false, false, onAction); //1
+                this.aAppointment = this.addActions("APT", null, false, false, false, onAction); //1
                 this.aAppointment.setTextDirection("r");
                 $ulactionbar.append(this.aAppointment.getListItmIT());
             }
             if (mWindow.getIsTask()) {
-                this.aTask = this.addActions("Task", null, false, false, false, onAction); //1
+                this.aTask = this.addActions("TAK", null, false, false, false, onAction); //1
                 this.aTask.setTextDirection("r");
                 $ulactionbar.append(this.aTask.getListItmIT());
 
             }
             if (mWindow.getIsEmail()) {
-                this.aEmail = this.addActions("EMail", null, false, false, false, onAction); //1
+                this.aEmail = this.addActions("EML", null, false, false, false, onAction); //1
                 this.aEmail.setTextDirection("r");
                 $ulactionbar.append(this.aEmail.getListItmIT());
             }
             if (mWindow.getIsLetter()) {
-                this.aLetter = this.addActions("Letter", null, false, false, false, onAction); //1
+                this.aLetter = this.addActions("LER", null, false, false, false, onAction); //1
                 this.aLetter.setTextDirection("r");
                 $ulactionbar.append(this.aLetter.getListItmIT());
             }
             if (mWindow.getIsSms()) {
-                this.aSms = this.addActions("Sms", null, false, false, false, onAction); //1
+                this.aSms = this.addActions("SMS", null, false, false, false, onAction); //1
                 this.aSms.setTextDirection("r");
                 $ulactionbar.append(this.aSms.getListItmIT());
             }
@@ -447,17 +447,17 @@
                 $ulactionbar.append(this.aChat.getListItmIT());
             }
             if (mWindow.getIsAttachment()) {
-                this.aAttachment = this.addActions("Attachment", null, false, false, false, onAction, true); //1
+                this.aAttachment = this.addActions("ATT", null, false, false, false, onAction, true); //1
                 this.aAttachment.setTextDirection("r");
                 $ulactionbar.append(this.aAttachment.getListItmIT());
             }
             if (mWindow.getIsHistory()) {
-                this.aHistory = this.addActions("History", null, false, false, false, onAction); //1
+                this.aHistory = this.addActions("HIY", null, false, false, false, onAction); //1
                 this.aHistory.setTextDirection("r");
                 $ulactionbar.append(this.aHistory.getListItmIT());
             }
             if (mWindow.getIsCheckRequest()) {
-                this.aRequest = this.addActions("Request", null, true, false, false, onAction);
+                this.aRequest = this.addActions("CRT", null, true, false, false, onAction);
                 this.aRequest.setTextDirection("r");
                 $ulactionbar.append(this.aRequest.getListItmIT());
             }
@@ -469,48 +469,48 @@
             }
 
             if (mWindow.getIsCopyReocrd()) {
-                this.aCopy = this.addActions("Copy", null, false, false, false, onAction);
+                this.aCopy = this.addActions("CRD", null, false, false, false, onAction);
                 this.aCopy.setTextDirection("r");
                 $ulactionbar.append(this.aCopy.getListItmIT());
             }
             if (mWindow.getIsSubscribedRecord()) {
-                this.aSubscribe = this.addActions("Subscribe", null, true, false, false, onAction, true);
+                this.aSubscribe = this.addActions("SRD", null, true, false, false, onAction, true);
                 this.aSubscribe.setTextDirection("r");
                 $ulactionbar.append(this.aSubscribe.getListItmIT());
             }
             if (mWindow.getIsZoomAcross()) {
-                this.aZoomAcross = this.addActions("ZoomAcross", null, true, false, false, onAction);
+                this.aZoomAcross = this.addActions("ZAS", null, true, false, false, onAction);
                 this.aZoomAcross.setTextDirection("r");
                 $ulactionbar.append(this.aZoomAcross.getListItmIT());
             }
             if (mWindow.getIsCreatedDocument()) {
-                this.aCreateDocument = this.addActions("CreateDocument", null, false, false, false, onAction); //1
+                this.aCreateDocument = this.addActions("CDT", null, false, false, false, onAction); //1
                 this.aCreateDocument.setTextDirection("r");
                 $ulactionbar.append(this.aCreateDocument.getListItmIT());
             }
             if (mWindow.getIsUploadedDocument()) {
-                this.aUploadDocument = this.addActions("UploadDocument", null, false, false, false, onAction); //1
+                this.aUploadDocument = this.addActions("UDT", null, false, false, false, onAction); //1
                 this.aUploadDocument.setTextDirection("r");
                 $ulactionbar.append(this.aUploadDocument.getListItmIT());
             }
             if (mWindow.getIsViewDocument()) {
-                this.aViewDocument = this.addActions("ViewDocument", null, false, false, false, onAction, true); //1
+                this.aViewDocument = this.addActions("VDT", null, false, false, false, onAction, true); //1
                 this.aViewDocument.setTextDirection("r");
                 $ulactionbar.append(this.aViewDocument.getListItmIT());
             }
             if (mWindow.getIsAttachDocumentFrom()) {
-                this.aAttachFrom = this.addActions("AttachDocumentFrom", null, false, false, false, onAction, true); //1
+                this.aAttachFrom = this.addActions("ADF", null, false, false, false, onAction, true); //1
                 this.aAttachFrom.setTextDirection("r");
                 $ulactionbar.append(this.aAttachFrom.getListItmIT());
             }
             if (mWindow.getIsMarkToExport()) {
-                this.aMarkToExport = this.addActions("Mark", null, false, false, false, onAction, true); //1
+                this.aMarkToExport = this.addActions("MTE", null, false, false, false, onAction, true); //1
                 this.aMarkToExport.setTextDirection("r");
                 $ulactionbar.append(this.aMarkToExport.getListItmIT());
             }
 
             if (mWindow.getIsImportMap()) {
-                this.aImportMap = this.addActions("Import", null, false, false, false, onAction); //1
+                this.aImportMap = this.addActions("IMP", null, false, false, false, onAction); //1
                 this.aImportMap.setTextDirection("r");
                 $ulactionbar.append(this.aImportMap.getListItmIT());
             }
@@ -1245,7 +1245,7 @@
     APanel.prototype.ACTION_NAME_DELETE = "Delete";
     APanel.prototype.ACTION_NAME_REFRESH = "Refresh";
     APanel.prototype.ACTION_NAME_FIND = "Find";
-    APanel.prototype.ACTION_NAME_CHAT = "Chat";
+    APanel.prototype.ACTION_NAME_CHAT = "CHT";
     APanel.prototype.ACTION_NAME_APPOINTMENT = "Appointment";
     APanel.prototype.ACTION_NAME_ARCHIVE = "Archive";
 
@@ -1767,8 +1767,9 @@
     /**
      *	Action Listener
      *  @param action string or object
+     *  Controller object called fron header panel
      */
-    APanel.prototype.actionPerformed = function (action) {
+    APanel.prototype.actionPerformed = function (action,controller) {
 
         if (this.getIsUILocked())
             return;
@@ -1779,7 +1780,7 @@
             //  Command Buttons
 
             if (action.source instanceof VIS.Controls.VButton) {
-                if (!selfPan.actionButton(action.source)) {
+                if (!selfPan.actionButton(action.source, controller)) {
                     selfPan.setBusy(false, true);
                 }
                 return;
@@ -2384,6 +2385,11 @@
                 VIS.ADialog.warn("AccessTableNoView");
             }
         }
+
+        if (vButton.mField.getAD_Reference_Value_ID()==435) {
+            aPanel.actionPerformedCallback(aPanel, vButton.value);
+        }
+
         curTab = curGC = aPanel = null;
 
     };
@@ -2917,7 +2923,7 @@
         //	Set Message / Info
         if (e.getAD_Message() != null || e.getInfo() != null) {
             var sb = new StringBuilder();
-            var msg = e.getMessage();
+            var msg = e.getAD_Message();
             if (msg != null && msg.length > 0)
                 sb.append(VIS.Msg.getMsg(e.getAD_Message()));
             var info = e.getInfo();
@@ -3275,26 +3281,31 @@
             return;
         }
 
+        return this.cmd_save2(manual,this.curTab, this.curGC, this, callback);
+
+    };
+
+    APanel.prototype.cmd_save2 = function (manual,curTab, curGC, selfPanel, callback) {
         var needExecute = true;
 
-        if (this.curTab.getCommitWarning().length > 0 && this.curTab.needSave(true, false)) {
+        if (curTab.getCommitWarning().length > 0 && curTab.needSave(true, false)) {
             needExecute = false;
 
-            var selfPanel = this;
+            //var selfPanel = this;
 
-            VIS.ADialog.confirm("SaveChanges?", true, this.curTab.getCommitWarning(), "Confirm", function (result) {
+            VIS.ADialog.confirm("SaveChanges?", true, curTab.getCommitWarning(), "Confirm", function (result) {
 
                 if (!result) {
                     return;
                 }
-                var retValue = selfPanel.curGC.dataSave(manual);
+                var retValue = curGC.dataSave(manual);
 
                 if (manual && !retValue && !selfPanel.errorDisplayed) {
 
                 }
-                selfPanel.curGC.refreshTabPanelData(selfPanel.curTab.getRecord_ID());
+                curGC.refreshTabPanelData(selfPanel.curTab.getRecord_ID());
                 if (manual)
-                    selfPanel.curGC.dynamicDisplay(-1);
+                    curGC.dynamicDisplay(-1);
 
             });
 
@@ -3305,19 +3316,19 @@
 
         if (needExecute) {
 
-            var retValue = this.curGC.dataSave(manual);
+            var retValue = curGC.dataSave(manual);
 
-            if (manual && !retValue && !this.errorDisplayed) {
+            if (manual && !retValue && !selfPanel.errorDisplayed) {
 
             }
 
             if (manual)
-                this.curGC.dynamicDisplay(-1);
+                curGC.dynamicDisplay(-1);
 
             if (callback) {
                 callback(retValue);
             }
-            this.curGC.refreshTabPanelData(this.curTab.getRecord_ID());
+            curGC.refreshTabPanelData(curTab.getRecord_ID());
             return retValue;
         }
 

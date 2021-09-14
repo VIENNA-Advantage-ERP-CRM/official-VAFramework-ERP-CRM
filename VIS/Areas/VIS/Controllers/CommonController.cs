@@ -1124,7 +1124,7 @@ namespace VIS.Controllers
                         po = tbl.GetPO(ctx, M_InoutLine_ID, null);
                         if (countVA010 > 0 && QualityPlan_ID > 0)
                             po.Set_ValueNoCheck("VA010_QualityPlan_ID", QualityPlan_ID);
-                        
+
                         po.Set_Value("QtyEntered", (Decimal?)QtyEnt);
                         po.Set_Value("MovementQty", (Decimal?)QtyEnt);
                         if (!po.Save())
@@ -1626,7 +1626,7 @@ namespace VIS.Controllers
                     _invoice.Set_Value("VA077_TotalPurchaseAmt", _order.Get_Value("VA077_TotalPurchaseAmt"));
                     _invoice.Set_Value("VA077_TotalSalesAmt", _order.Get_Value("VA077_TotalSalesAmt"));
                     _invoice.Set_Value("VA077_MarginPercent", _order.Get_Value("VA077_MarginPercent"));
-                    
+
                 }
 
                 _invoice.Save();
@@ -1846,7 +1846,7 @@ namespace VIS.Controllers
                         orderLine.GetQtyEntered()), 12, MidpointRounding.AwayFromZero));
                     }
 
-                    if(Env.IsModuleInstalled("VA077_"))
+                    if (Env.IsModuleInstalled("VA077_"))
                     {
                         invoiceLine.Set_Value("VA077_CNAutodesk", orderLine.Get_Value("VA077_CNAutodesk"));
                         invoiceLine.Set_Value("VA077_Duration", orderLine.Get_Value("VA077_Duration"));
@@ -2178,7 +2178,7 @@ namespace VIS.Controllers
                     {
                         error = pp != null ? pp.GetName() : "";
                     }
-                    ErrorMsg= !string.IsNullOrEmpty(error) ? error : "VIS.BankStatementLineNotCreated";
+                    ErrorMsg = !string.IsNullOrEmpty(error) ? error : "VIS.BankStatementLineNotCreated";
                     Logger.global.Info(ErrorMsg);
                     return false;
                 }
@@ -2659,10 +2659,20 @@ namespace VIS.Controllers
                             //	Create PO - Invoice Link = corrects PO
                             if (iLine.GetC_OrderLine_ID() != 0 && iLine.GetM_Product_ID() != 0)
                             {
-                                MMatchPO matchPO = MMatchPO.Create(iLine, sLine, inv.GetDateInvoiced(), qty);
+                                MMatchPO matchPO = null;
+                                if (qty > 0)
+                                {
+                                    // VIS0060: In Case of UnMatch Invoice-Receipt, do not set Qty Delivered to zero on Purchase order
+                                    matchPO = MMatchPO.Create(iLine, sLine, inv.GetDateInvoiced(), qty);
+                                    matchPO.SetM_InOutLine_ID(M_InOutLine_ID);
+                                }
+                                else
+                                {
+                                    matchPO = MMatchPO.Create(iLine, null, inv.GetDateInvoiced(), qty);
+                                }
+
                                 matchPO.Set_ValueNoCheck("C_BPartner_ID", inv.GetC_BPartner_ID());
-                                matchPO.SetC_InvoiceLine_ID(iLine);
-                                matchPO.SetM_InOutLine_ID(M_InOutLine_ID);
+                                matchPO.SetC_InvoiceLine_ID(iLine);                                
                                 if (!matchPO.Save())
                                 {
                                     ValueNamePair pp = VLogger.RetrieveError();

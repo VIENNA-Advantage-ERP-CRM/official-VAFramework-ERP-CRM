@@ -123,12 +123,12 @@
 
         function dynInit(Record_ID) {
 
-            debugger;
             docStatus = tabObj.getValue("DocStatus");
             var docAction = tabObj.getValue("DocAction");
-            //
             var processing = tabObj.getValue("Processing");
-            if (processing == "N") {
+
+            //Rakesh(VA228):Check processing return value Y/N in case when reference is button and true/false when reference is Checkbox
+            if (processing == "N" || !processing) {
                 processing = false;
             }
             else {

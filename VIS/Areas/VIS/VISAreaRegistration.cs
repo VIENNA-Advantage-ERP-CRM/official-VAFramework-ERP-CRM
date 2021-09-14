@@ -163,6 +163,7 @@ namespace VIS
                  "~/Areas/VIS/Scripts/tabpanels/HistoryDetailsTabPanel.js",
                  "~/Areas/VIS/Scripts/TestPanel.js");
 
+           
 
             modScript.Include(
                  "~/Areas/VIS/Scripts/F20/thememgr.js",
@@ -188,7 +189,7 @@ namespace VIS
                  );
 
 
-
+            
 
             style.Include("~/Areas/VIS/Content/Site.css",
 

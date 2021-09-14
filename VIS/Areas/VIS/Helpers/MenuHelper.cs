@@ -31,7 +31,7 @@ namespace VIS.Helpers
         private int rootParentID = 0;
         private bool isSubItem = false;
         private string lastParent = "";
-        //private int settingSeqNo = 9999;
+
         private bool isSettingItem = false;
         private Dictionary<string, string> menuIcons = new Dictionary<string, string>() {
             { "W","fa fa-window-maximize"},
@@ -239,12 +239,15 @@ namespace VIS.Helpers
                     {
                         if (vt.Parent_ID == rootParentID)
                         {
+
                             GetMobileSummaryItem(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), rootParentID, false, vt.Image);
+
                         }
                         else
                         {
                             isSubItem = true;
                             GetMobileSummaryItem(vt.Node_ID, System.Net.WebUtility.HtmlEncode(vt.SetName), rootParentID, true, vt.Image);
+
                         }
 
                     }
@@ -424,7 +427,6 @@ namespace VIS.Helpers
                     else
                     {
                         string endDiv = "</div>";
-
                         if (vt.IsSetting || isSettingItem)
                             settingsHTML.Append(endDiv);
                         else if (itemNo > 0 && itemNo % 2 == 0)
@@ -492,6 +494,7 @@ namespace VIS.Helpers
 
             contextMenu += "  <i class='fa fa-ellipsis-v'></i>" +
            "  </span> </div>";
+
 
 
 
@@ -811,6 +814,7 @@ namespace VIS.Helpers
             //    continerAttribute = "data-isContainer='Y'";
             //    parentDiv = "<div class='vismenu-hidden-header'><h6 class='vismenu-hidden-headerh5' style='display:none'>" + rootItem+"</h6>";
             //}
+
 
             if (setting || isSettingItem)
             {

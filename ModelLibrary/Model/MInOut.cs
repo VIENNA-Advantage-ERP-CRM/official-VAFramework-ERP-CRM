@@ -1552,6 +1552,14 @@ namespace VAdvantage.Model
                 log.SaveError("FillMandatory", Msg.Translate(GetCtx(), "C_Order_ID"));
                 return false;
             }
+
+            // VIS0060: Check if Document Type is not selected.
+            if (newRecord && GetC_Order_ID() > 0 && GetC_DocType_ID() == 0)
+            {
+                log.SaveError("VIS_ShipDocTypeNotFound", "");
+                return false;
+            }
+
             if (newRecord || Is_ValueChanged("C_BPartner_ID"))
             {
                 //MBPartner bp = MBPartner.Get(GetCtx(), GetC_BPartner_ID());
@@ -2172,7 +2180,7 @@ namespace VAdvantage.Model
             }
 
             // Set Document Date based on setting on Document Type
-            SetCompletedDocumentDate();            
+            SetCompletedDocumentDate();
 
             // To check weather future date records are available in Transaction window
             // this check implement after "SetCompletedDocumentDate" function, because this function overwrit movement date
@@ -2307,8 +2315,8 @@ namespace VAdvantage.Model
             }
 
             bool countVA026 = Env.IsModuleInstalled("VA009_") && Env.IsModuleInstalled("VA026_");
-                #region [Process All Lines]
-                for (int lineIndex = 0; lineIndex < lines.Length; lineIndex++)
+            #region [Process All Lines]
+            for (int lineIndex = 0; lineIndex < lines.Length; lineIndex++)
             {
                 MInOutLine sLine = lines[lineIndex];
                 MProduct product = sLine.GetProduct();
@@ -4901,7 +4909,7 @@ namespace VAdvantage.Model
                     // Is Used to get Material Policy
                     MProductCategory pc = MProductCategory.Get(GetCtx(), product.GetM_Product_Category_ID());
                     String MMPolicy = pc.GetMMPolicy();
-                    
+
                     // Is used for handling Gurantee Date - In Case of ASI
                     //DateTime? minGuaranteeDate = GetMovementDate();
 
