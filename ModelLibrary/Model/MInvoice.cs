@@ -2713,11 +2713,11 @@ namespace VAdvantage.Model
                 }
                 //
                 SetTotalLines(totalLines);
-                SetGrandTotal(grandTotal);
+                SetGrandTotal(Decimal.Round(grandTotal, GetPrecision()));
                 if (Get_ColumnIndex("WithholdingAmt") > 0)
                 {
                     base.SetWithholdingAmt(totalWithholdingAmt);
-                    SetGrandTotalAfterWithholding(grandTotal - totalWithholdingAmt);
+                    SetGrandTotalAfterWithholding(Decimal.Round((grandTotal - totalWithholdingAmt), GetPrecision()));
                 }
             }
             catch (Exception)
