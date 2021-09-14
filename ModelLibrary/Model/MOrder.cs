@@ -3564,7 +3564,7 @@ namespace VAdvantage.Model
                 }
                 //
                 SetTotalLines(totalLines);
-                SetGrandTotal(grandTotal);
+                SetGrandTotal(Decimal.Round(grandTotal, GetPrecision()));
             }
             catch
             {
