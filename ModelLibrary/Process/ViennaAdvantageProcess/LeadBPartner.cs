@@ -405,10 +405,10 @@ namespace ViennaAdvantage.Process
             //
             if (lead.GetRef_BPartner_ID() != 0)
             {
-                return Msg.GetMsg(GetCtx(), "Prospect generated successfully");
+                return Msg.GetMsg(GetCtx(), "ProspectGenerated");
             }
             else
-                return Msg.GetMsg(GetCtx(), "Prospect not generated ");
+                return Msg.GetMsg(GetCtx(), "ProspectNotGenerated");
 
         }	//	doIt
 

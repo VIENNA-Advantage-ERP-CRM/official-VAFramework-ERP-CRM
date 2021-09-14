@@ -565,6 +565,79 @@ namespace VIS.Models
             }
             return sql;
         }
+        /// <summary>
+        /// autocomplete search 
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="_columnName"></param>
+        /// <param name="text"></param>
+        /// <param name="sql"></param>
+        /// <returns>DataSet</returns>
+        /// Mandeep Singh(VIS0028) 13-sep-2021
+        public DataSet GetAccessSqlAutoComplete(Ctx ctx, string _columnName, string text,string sql)
+        {
+            int idx = sql.LastIndexOf("WHERE");
+            string lastPart = "";
+            if (idx != -1) {
+                idx = idx + 5;
+                lastPart = sql.Substring(idx, sql.Length - idx);
+                sql = sql.Substring(0, idx);
+                
+            }
+            
+            if (_columnName.Equals("M_Product_ID"))
+            {
+                sql += " (UPPER(M_Product.Value) LIKE " + DB.TO_STRING(text) +
+                    " OR UPPER(M_Product.Name) LIKE " + DB.TO_STRING(text) + ")";
+                sql += " AND ";
+            }
+            else if (_columnName.Equals("C_BPartner_ID"))
+            {
+                sql += " (UPPER(Value) LIKE ";
+                sql += DB.TO_STRING(text) + " OR UPPER(Name) LIKE " + DB.TO_STRING(text) + ")";
+                sql += " AND ";
+            }
+            else if (_columnName.Equals("C_Order_ID"))
+            {
+                sql += " UPPER(DocumentNo) LIKE ";
+                sql += DB.TO_STRING(text);
+                sql += " AND ";
+            }
+            else if (_columnName.Equals("C_Invoice_ID"))
+            {
+                sql += " UPPER(DocumentNo) LIKE ";
+                sql += DB.TO_STRING(text);
+                sql += " AND ";
+            }
+            else if (_columnName.Equals("M_InOut_ID"))
+            {
+                sql += " UPPER(DocumentNo) LIKE ";
+                sql += DB.TO_STRING(text);
+                sql += " AND ";
+            }
+            else if (_columnName.Equals("C_Payment_ID"))
+            {
+                sql += " UPPER(DocumentNo) LIKE ";
+                sql += DB.TO_STRING(text);
+                sql += " AND ";
+            }
+            else if (_columnName.Equals("GL_JournalBatch_ID"))
+            {
+                sql += " UPPER(DocumentNo) LIKE ";
+                sql += DB.TO_STRING(text);
+                sql += " AND ";
+            }
+            else if (_columnName.Equals("SalesRep_ID"))
+            {
+                sql += " UPPER(Name) LIKE ";
+                sql += DB.TO_STRING(text);
+                sql += " AND ";
+            }
+          
+            sql += lastPart;
+            return DB.ExecuteDataset(sql, null);
+        }
+
 
         public List<JTable> GetWareProWiseLocator(Ctx ctx, string colName, int orgId, int warehouseId, int productId, bool onlyIsSOTrx)
         {
