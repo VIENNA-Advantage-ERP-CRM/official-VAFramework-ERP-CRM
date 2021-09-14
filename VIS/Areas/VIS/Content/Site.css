@@ -363,7 +363,7 @@ html[dir="rtl"] #vis_mainMenu
 
 .vis-menuitm-with-favItm
 {
-    width: 85%;
+    width: 93%;
     display: inline-block;
     float: left;
 }
@@ -555,13 +555,15 @@ html[dir="rtl"] .vis-mainMenuIcons.vis-icon-menuclose
 
 
 .vis-subNavFirstElement {
-    position: fixed;
-    top: 88px;
-    left: 0;
-    width: 312px;
+    /*position: fixed;
+    top: 85px;
+    left: 0;*/
+    width: 100%;
 }
 
-
+.vis-css-treeview > li {
+    display: none !important;
+}
 
 .vis-sidebarMenuWrapper {
     width: 100%;
@@ -569,15 +571,24 @@ html[dir="rtl"] .vis-mainMenuIcons.vis-icon-menuclose
     position: relative;
 }
 
-.vis-subNavFirstElement {
-    position: fixed;
-    top: 88px;
-    left: 0;
-    width: 312px;
+.vis-mbilemenu-search {
+    padding: .3rem .2rem .3rem .625rem;
+    border-bottom: 1px solid rgba(var(--v-c-on-secondary), .05);
+}
+
+.vis-mbilemenu-search-icon {
+    color: rgba(var(--v-c-primary), 1) !important;
+    border-radius: 0;
+    /* color: red; */
+    font-size: 1rem;
+}
+
+.vis-mbilemenu-search .input-group-text {
+    border: none !important;
 }
 
 .vis-menu-foldderUL ul {
-    margin-left: 15px !important;
+    padding-left: 15px !important;
 }
 
 .vis-menu-innerFolders ~ li {
@@ -586,6 +597,7 @@ html[dir="rtl"] .vis-mainMenuIcons.vis-icon-menuclose
 }
 
 .vis-subNavFirstElement ~ li {
+   
     padding-left: .625rem;
 }
 
@@ -600,7 +612,9 @@ html[dir="rtl"] .vis-mainMenuIcons.vis-icon-menuclose
     background: rgba(var(--v-c-primary), 1);
     color: rgba(var(--v-c-on-primary), 1);
 }
-
+.vis-css-treeview ul li span {
+    padding-right: .625rem;
+}
 /*.vis-sidebarMenuWrapper ul
     {
         list-style: none;
@@ -699,10 +713,13 @@ html[dir="rtl"] .vis-hasSubMenu:after
     list-style: none;
     margin: 0;
     padding: 0px;
+    width: 100%;
 }
 
 .vis-css-treeview ul li {
     border-bottom: 1px solid rgba(var(--v-c-on-secondary), .1);
+    display: flex;
+    align-items: center;
 }
 
 .vis-css-treeview ul li a {
@@ -710,7 +727,18 @@ html[dir="rtl"] .vis-hasSubMenu:after
     display: block;
     outline: none;
     Color: inherit;
+    flex: 1;
     /* margin-right: 20px; */
+}
+.vis-menu-innerFolders {
+    padding-left: 1rem;
+    font-weight: 600;
+    justify-content: space-between;
+}
+
+.vis-menuItem {
+    display: flex;
+    align-items: center;
 }
 
 .vis-css-treeview ul li ul {

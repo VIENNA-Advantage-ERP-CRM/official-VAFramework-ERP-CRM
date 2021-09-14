@@ -79,47 +79,48 @@
                 if ($target.hasClass('fa fa-arrow-left')) {
                     $target = $target.parent();
                 }
-
                 var $par = $target.parent();
-                var currentFilter = menuFilterMgr.getFilterValue();
-                if ($target.hasClass('vis-menuitm-backbtn')) {
 
+
+                // If modile menu is opened and user clicks on back button
+                if ($target.hasClass('vis-menuitm-backbtn')) {
                     $target.closest('ul').css('display', 'none');;
-                    var pid = $target.closest('ul').parent().data('ulid');
-                    // $('[data-id="ul_' + val + '"]').css('display', 'none');;
                     $('.vismenu-parent').show();
-                    //var rootID = $target.closest('ul').parent().parent().attr('id');
                     $menuTree.find('.vismenu-selectedMbTab').removeClass('vismenu-selectedMbTab');
-                    //if (rootID) {
+
+                    //Show All items of main menu
                     $menuTree.find('[data-val="' + $par.data('ulid') + '"]').siblings().show()
                     $menuTree.find('[data-val="' + $par.data('ulid') + '"]').show();
-                    //}
-                    //else {
-                    //    $menuTree.find('[data-value="' + $par.data('ulid') + '"]').parent().show();
-                    //    $menuTree.find('[data-value="' + $par.data('ulid') + '"]').parent().siblings().show()
-                    //    $target.closest('ul').css('display', 'none');;
-                    //}
+
+                    //hide all submenus
                     $menuTree.find('ul:not(.vismenu-parent)').hide();
                     $menuTree.find('li:not(.vis-hasSubMenu)').hide();
-
-                    // $par.parent().siblings().show();
+                    if (menuFilterMgr)
+                    menuFilterMgr.setIsMenuHeaderClicked(false);
                 }
+                // If user clicks on any item in mobile menu
                 else if (event.target.nodeName === "LABEL" && $par.data("con") == "Y") {
                     var pID = $par.data("val");
+                    var currentFilter;
+                    if (!menuFilterMgr)
+                        return;
+                    // if any filter is applied, then on navigation on main menu, that filter must be applied.
+                    currentFilter = menuFilterMgr.getFilterValue();
+                    menuFilterMgr.setIsMenuHeaderClicked(false);
                     var selectedTab = $menuTree.find('[data-ulid="' + pID + '"]');
-                    selectedTab.css('display', 'block').addClass('vismenu-selectedMbTab');
+                    selectedTab.css('display', 'flex').addClass('vismenu-selectedMbTab');
                     selectedTab.find('ul').css('display', 'block');
                     selectedTab.find('li').hide();
                     selectedTab.find('.vis-subNavFirstElement').show();
                     selectedTab.find('.vis-menu-innerFolders').show();
+                    selectedTab.find('.fa-minus').removeClass('fa-minus').addClass('fa-plus');
                     if (currentFilter != "A")
-                        selectedTab.find('li > a[data-action="' + currentFilter + '"]').parent().css('display', 'block');
+                        selectedTab.find('li > a[data-action="' + currentFilter + '"]').parent().css('display', 'flex');
                     else
-                        selectedTab.find('li').css('display', 'block');
+                        selectedTab.find('li:not(.vis-menusubItem)').css('display', 'flex');
                     $('.vismenu-parent').hide();
                     menuFilterMgr.hideMobileEmptyFolder();
-                    //$par.show();
-                  
+
                     if ($par.data("summary") == 'Y') {
                         $par.siblings().hide()
                         $par.hide();
@@ -128,10 +129,8 @@
                         $par.parent().siblings().hide();
                         $par.hide();
                     }
-                    //$par.siblings().hide();
-
-                    //$par.find('ul').show();
                 }
+                //For Web Menu
                 else {
 
                     if (event.target.nodeName === "LABEL") {
@@ -150,17 +149,18 @@
                             VIS.FavouriteHelper.showOverlay($target); // show menu item's options
                             return;
                         }
+                        //If user clicks summary Item, thenmark it as selected item in main menu and show its child along with
                         if ($target.data('summary') == "Y") {
-                            $('.vis-navmenuItems-Container').hide();
+                            $vis_mainMenu.find('.vis-navmenuItems-Container').hide();
                             $target.parent().siblings().removeClass("vis-navSelected");
                             $target.parent().addClass("vis-navSelected");
-                            //$('#Menu' + $target.data('value')).show();
-                            var items = $('#Menu' + $target.data('value'));
+                            var items = $vis_mainMenu.find('#Menu' + $target.data('value'));
                             items.removeAttr('style');
                             items.find('.vis-menuSum-hide').removeClass('vis-menuSum-hide');
 
                             $menuTree.find('.vismenu-hidden-header').hide();
                             $menuTree.find('.vis-nav-AllItems').hide();
+                            $menuTree.find('.fa-minus').removeClass('fa-minus').addClass('fa-plus');
 
                             if (menuFilterMgr)
                                 menuFilterMgr.hideEmptyFolders();
@@ -170,15 +170,17 @@
                         startMenuAction($target.data('action'), $target.data('actionid')); //start action
                         return;
                     }
-
+                    // For Sub menus in Web.
                     if (event.target.nodeName === "I") {
                         var $target = $(event.target);
                         if ($target.hasClass('vis-navAccordian')) {
+                            //If user clicks on plus sign, then show all items of submenu
                             if ($target.hasClass('fa-plus')) {
                                 $target.removeClass('fa-plus').addClass('fa-minus');
                                 var id = $target.data('pid');
                                 $menuTree.find('[data-ulid="' + id + '"]').show();
                             }
+                            //If user clicks on plus sign, then hide all items of submenu
                             else {
                                 $target.removeClass('fa-minus').addClass('fa-plus');
                                 var id = $target.data('pid');
@@ -543,7 +545,7 @@
         /* initialize action */
         function start() {
             polyFills();//implement fallback for Datalist and other newer controls 
-            menuFilterMgr.init($menuTree, $('#vis_filterMenu')); //init Menu filter popup Manager
+            menuFilterMgr.init($menuTree, $('#vis_filterMenu'), $vis_mainMenu); //init Menu filter popup Manager
             authDialog.init($('#vis_home_ca'), $('#vis_userName')); //Init Authorization Dialog
             setAndLoadHomePage(); //Home Page
             historyMgr.restoreHistory(); //Restore History of App if any
@@ -1055,6 +1057,8 @@
         var selectedMenu = '';
         var _menuTree = null;
         var newContainer = null;
+        var isheaderClicked = false;
+        var _mainMenu = null;
 
         //var main = $('<div class="vis-wakeup-main" >').hide(); 
         var root = $('<div class="vis-dialog vis-filter-dialog">');
@@ -1063,7 +1067,7 @@
         @param menuTree  menu tree UI element
         @param filterMenuA filter UI element
         */
-        function init(menuTree, filterMenuA) {
+        function init(menuTree, filterMenuA,mainMenu) {
 
             // create UI
             root.html('<input type="radio" name="filter" id="vis_filter_radio_1" value="A" checked style="margin-bottom:5px;margin:1px;" /><label for="vis_filter_radio_1">' + VIS.Msg.getMsg("All") + '</label><br>' +
@@ -1073,16 +1077,12 @@
                 '<input type="radio" name="filter" id="vis_filter_radio_5" value="R" style="margin-bottom:20px;margin:1px;"/><label for="vis_filter_radio_5">' + VIS.Msg.getMsg("Report") + '</label><br/>' +
                 '<input type="button" name="filter" value=' + VIS.Msg.getMsg("Filter") + '></input>');
 
-
+            _mainMenu = mainMenu;
             _menuTree = menuTree;
             var options = [], itm = null;
             options = getMenuList();
-            //selectedMenu = $(menuTree.find(".vis-navSelected a")[0]).data("value");
-            //$(menuTree.find(".vis-navSelected")[0]).removeClass('vis-navSelected');
             menuHtml = menuUL.html(); //all html tree string
             filteredMenuHtml = options; // all leaf nodes
-            //options.length = 0;
-            //options = null;
             filterA = filterMenuA; // event invoker
             $('body').append(root); // append div to body
             createFilterAllMenu();
@@ -1090,21 +1090,17 @@
         };
 
 
-
+        /**
+         * Create a list of all items to be displayed in Show all contents
+         * @param {any} action
+         */
         function getMenuList(action) {
             var options = [];
             menuUL = _menuTree.find(".vis-navMainContent"); //menu UL element
-
             var menuUL1 = _menuTree.find(".vismenu-hidden-header"); //menu UL element
             for (var i = 0; i < menuUL1.length; i++) {
                 itm = $(menuUL1[i]);
-                //if ((action && action == itm.data("action")) || itm.data("summary") == "Y")
-                //{
-                //    options.push(itm[0].outerHTML);
-                //}
-                //else if (itm.data("summary") == "N") {
                 options.push(itm[0].outerHTML);
-                //}
             };
             return options;
         };
@@ -1117,46 +1113,36 @@
             root.on("click", "input[type=button]", function (e) {
                 e.stopPropagation();
                 var rd = root.find("input[type=radio]:checked").val();
-                // if (_menuTree.find(".vis-navSelected a").length > 0)
-                //   selectedMenu = $(_menuTree.find(".vis-navSelected a")[0]).data("value");
-                //$(_menuTree.find(".vis-navSelected")[0]).removeClass('vis-navSelected');
-                //filterMenu(rd); // menu filter
                 filterSelectedMenu(rd);
-
                 closePopup(); // close popup
             });
 
-            $('.vis-menu-headerName').click(function () {
+            /**
+             *  When user clicks on menu name, show all items in menu
+             * 
+             **/
+            _mainMenu.find('.vis-menu-headerName').click(function () {
+                setIsMenuHeaderClicked(true);
                 showAllItems();
             });
         };
 
         function filterSelectedMenu(action) {
             if ((VIS.Application.isMobile || VIS.Application.isIOS) && document.documentElement) {
+                if (_menuTree.find('.vismenu-parent').is(':visible'))
+                    return;
+
+                //if using mobile device, then filter is All Items, show all otherwise based on filter
                 _menuTree.find('.vis-menuSum-hide').removeClass('vis-menuSum-hide');
 
                 if (action === "A") { // all tree
-                    //if (newContainer.is(':visible')) {
-                    //    newContainer.find('li').show()
-                    //}
-                    //else {
                     _menuTree.find('li').show();
-                    //_menuTree.find('li > a[data-action="' + action + '"]').parent().show();
-                    //}
                 }
                 else {
-                    ////if (newContainer.is(':visible')) {
-                    ////    newContainer.find('li').hide();
-                    ////    newContainer.find('.vis-menu-innerFolders').show();
-                    ////    newContainer.find('.vis-menuitm-backbtn').parent().show();
-                    ////    newContainer.find('li > a[data-action="' + action + '"]').parent().show();
-                    ////}
-                    ////else {
                     _menuTree.find('li').hide();
                     _menuTree.find('.vis-menu-innerFolders').show();
                     _menuTree.find('.vis-menuitm-backbtn').parent().show();
                     _menuTree.find('li > a[data-action="' + action + '"]').parent().show();
-                    //}
                 }
 
                 hideMobileEmptyFolder();
@@ -1164,33 +1150,48 @@
             }
             else {
                 _menuTree.find('.vis-navSubMenu').removeClass('vis-menuSum-hide');
-                if (newContainer.is(':visible')) {
-                    //_menuTree.find('.vis-navMainContent li').show();///Show All
+                // If all items are visible
+                //if (newContainer.is(':visible')) {
+                //    newContainer.find('.vis-navMainContent').removeAttr('style');
+                //    if (action === "A") { // all tree
+                //        _menuTree.find('.vis-navMainContent li').show();///Show All
+                //    }
+                //    else {
+                //        _menuTree.find('.vis-navMainContent li').hide(); // hide all
+                //        _menuTree.find('.vis-navMainContent li > a[data-action="' + action + '"]').parent().show(); // show only match action
+                //    }
+                //}
+                //else {
+                //    if (action === "A") { // all tree
+                //        _menuTree.find('.vis-navMainContent li').show();///Show All
+                //    }
+                //    else {
+                //        _menuTree.find('.vis-navMainContent li').hide(); // hide all
+                //        _menuTree.find('.vis-navMainContent li > a[data-action="' + action + '"]').parent().show(); // show only match action
+                //    }
+                //}
 
-                    // newContainer.find('.vis-navmenuItems-Container-allItems').removeAttr('style');
+                //Show or hide items based on filters applied
+                if (newContainer.is(':visible')) {
                     newContainer.find('.vis-navMainContent').removeAttr('style');
-                    if (action === "A") { // all tree
-                        _menuTree.find('.vis-navMainContent li').show();///Show All
-                    }
-                    else {
-                        _menuTree.find('.vis-navMainContent li').hide(); // hide all
-                        _menuTree.find('.vis-navMainContent li > a[data-action="' + action + '"]').parent().show(); // show only match action
-                    }
+                }
+                if (action === "A") { // all tree
+                    _menuTree.find('.vis-navMainContent li').show();///Show All
                 }
                 else {
-                    if (action === "A") { // all tree
-                        _menuTree.find('.vis-navMainContent li').show();///Show All
-                    }
-                    else {
-                        _menuTree.find('.vis-navMainContent li').hide(); // hide all
-                        _menuTree.find('.vis-navMainContent li > a[data-action="' + action + '"]').parent().show(); // show only match action
-                    }
+                    _menuTree.find('.vis-navMainContent li').hide(); // hide all
+                    _menuTree.find('.vis-navMainContent li > a[data-action="' + action + '"]').parent().show(); // show only match action
                 }
+
+
                 hideEmptyFolders();
             }
         }
 
-
+        /**
+         * In case of mobiles, when user apply filter then hide all folders with no visible child
+         * @param {any} allItems
+         */
         function hideMobileEmptyFolder(allItems) {
             if (root.find("input[type=radio]:checked").val() != "A") {
                 if (_menuTree.find('.vismenu-parent').is(':visible'))
@@ -1207,9 +1208,7 @@
                     _menuTree.find('.vis-menuSum-hide').removeClass('vis-menuSum-hide');
                 }
 
-                
-                //var allUls = _menuTree.find('ul');
-
+                //Hide all Emplty Subfolders
                 for (var j = 0; j < allUls.length; j++) {
                     var thisUL = $(allUls[j]);
                     if (thisUL.hasClass('vismenu-parent'))
@@ -1226,20 +1225,19 @@
                     }
                     if (canhide) {
                         thisUL.addClass('vis-menuSum-hide');
-                        //thisUL.removeAttr('style')
-                        //thisUL.parent().removeAttr('style');
                         thisUL.css('display', '');
                         thisUL.parent().css('display', '');
                     }
                 }
 
-                if (selectedTab && selectedTab.length > 0 && !allItems) {
+                if (selectedTab && selectedTab.length > 0 && !isheaderClicked) {
                     allUls = selectedTab.find('.vis-menuitm-backbtn');
                 }
                 else {
                     allUls = _menuTree.find('.vis-menuitm-backbtn');
                     selectedTab = null;
                 }
+                //Hide all Main folder having no visible child after appling filter
                 for (var j = 0; j < allUls.length; j++) {
                     var thisUL = $(allUls[j]).parent();;
 
@@ -1254,7 +1252,7 @@
                     }
 
                     if (canhide) {
-                        if (selectedTab == null || selectedTab.length == 0 || allItems) {
+                        if (selectedTab == null || selectedTab.length == 0 || isheaderClicked) {
                             thisUL.css('display', '');
                             thisUL.addClass('vis-menuSum-hide');
                         }
@@ -1266,10 +1264,15 @@
 
         }
 
+    /**
+     * In case of  Web Menu, when user apply filter then hide all folders with no visible child
+     */
         function hideEmptyFolders() {
+
             if (root.find("input[type=radio]:checked").val() != "A") {
                 var allUls = menuUL.find('.vis-navmenuItems-Container').find('ul');
-
+                menuUL.find('.vis-menuSum-hide').removeClass('vis-menuSum-hide');
+                //Hide all empty subfolders
                 for (var j = 0; j < allUls.length; j++) {
                     var thisUL = $(allUls[j]);
                     var liList = thisUL.find('li');
@@ -1285,6 +1288,7 @@
                         thisUL.closest('.vis-navSubMenu').addClass('vis-menuSum-hide');
                 }
 
+                //Hide all empty parent Folders
                 allUls = menuUL.find('.vis-navmenuItems-Container-allItems');
                 for (var j = 0; j < allUls.length; j++) {
                     var canhide = false;
@@ -1314,26 +1318,21 @@
                     }
                 }
             }
+            else {
+                menuUL.find('.vis-menuSum-hide').removeClass('vis-menuSum-hide');
+            }
         }
 
-
+        /**
+         * Create UI to display all items together in case of web Menu
+         * */
         function createFilterAllMenu() {
             if ((VIS.Application.isMobile || VIS.Application.isIOS) && document.documentElement) {
-                // newContainer = $("<div class='vis-nav-AllItems'></div>");
-                //var container = _menuTree.children();
-                //for (var i = 1; i < container.length; i++) {
-                //    var newItem = $(container[i]).clone().removeAttr('style').addClass('vis-navmenuItems-Container-allItems');
-                //    newItem.css('display:block');
-                //    newItem.find('[data-summary="N"]').show();
-                //    newItem.find('ul').show();
-                //    newItem.find('.vis-subNavFirstElement').removeClass('vis-subNavFirstElement');
-                //    newItem.find('.fa fa-arrow-left').remove();
-                //    newContainer.append(newItem);
-                //}
-                //newContainer.hide();
-                //_menuTree.append(newContainer);
+                return;
             }
             else {
+                // In case of web menu,when showing all items, create copy of all item containers and add them in new parent.
+                //This is done because in case of displaying all items, design is not same as with Single Item.
                 var container = _menuTree.find('.vis-navmenuItems-Container');
                 newContainer = $("<div class='vis-nav-AllItems'></div>");
                 for (var i = 0; i < container.length; i++) {
@@ -1344,10 +1343,11 @@
             }
         }
 
+        /**
+         * When User clicks on menu name, all items of menu will be visible.
+         * */
         function showAllItems() {
             if ((VIS.Application.isMobile || VIS.Application.isIOS) && document.documentElement) {
-                //newContainer.siblings().hide();
-                //newContainer.show();
                 var filter = getFilterValue();
                 _menuTree.find('li').hide();
                 _menuTree.find('.vis-subNavFirstElement').show();
@@ -1358,7 +1358,7 @@
                 else
                     _menuTree.find('li > a[data-action="' + filter + '"]').parent().show();
                 _menuTree.find('.vis-subNavFirstElement').css({ "position": "relative", "top": "0px" });
-               
+                _menuTree.find('.fa-plus').removeClass('fa-plus').addClass('fa-minus');
                 _menuTree.find('.vismenu-parent').hide();
                 hideMobileEmptyFolder(true);
             }
@@ -1366,118 +1366,14 @@
                 _menuTree.find('.vis-navmenuItems-Container').hide();
                 newContainer.find('.vis-navmenuItems-Container').removeAttr('style');
                 newContainer.find('.vismenu-hidden-header').show();
-                menuUL.find('.vis-menuSum-hide').removeClass('vis-menuSum-hide');
+                
                 _menuTree.find(".vis-navSelected").removeClass('vis-navSelected');
                 newContainer.show();
+                _menuTree.find('.fa-plus').removeClass('fa-plus').addClass('fa-minus');
+                newContainer.find('.vismenu-subSummaryNode').css('display', '');
                 hideEmptyFolders();
 
             }
-        };
-
-        /* filter the menu accroding to action
-        @param action type of menu item
-        */
-        function filterMenu(action) {
-            if ((VIS.Application.isMobile || VIS.Application.isIOS) && document.documentElement) {
-                if (newContainer.is(':visible')) {
-                    newContainer.find('li').data('hide', 'Y');
-                    newContainer.find('li > a[data-action="' + action + '"]').parent().data('hide', 'N');
-                }
-                else {
-                    _menuTree.find('li').data('hide', 'Y');
-                    _menuTree.find('li > a[data-action="' + action + '"]').parent().data('hide', 'N');
-                }
-            }
-            else {
-                menuUL.find('.vis-menuSum-hide').removeClass('vis-menuSum-hide');
-
-                if (action === "A") { // all tree
-                    menuUL.find('.vis-navmenuitemsfilter').remove();
-                    menuUL.find('.vis-navmenuItems-Container').show();
-                    menuUL.find('li').show(); // hide all
-                    _menuTree.find('[data-value="' + selectedMenu + '"]').trigger('click');
-                    menuUL.find('.vismenu-hidden-headerh5').hide();
-
-                }
-                else {
-                    menuUL.find('.vis-navmenuitemsfilter').remove();
-                    filteredMenuHtml = getMenuList(action);
-                    menuUL.find('.vis-navmenuItems-Container').hide();
-                    var $mainContainer = $('<div class="vis-navmenuItems-Container vis-navmenuitemsfilter">');
-                    var navcolwrap1 = $('<div class="vis-navColWrap">');
-                    var navcolwrap2 = $('<div class="vis-navColWrap">');
-                    var navcolwrap3 = $('<div class="vis-navColWrap">');
-                    $mainContainer.append(filteredMenuHtml);
-                    $mainContainer.find('li').data('hide', 'Y');
-                    $mainContainer.find('li > a[data-action="' + action + '"]').parent().data('hide', 'N');
-                    filteredMenuHtml = $mainContainer.find('.vismenu-hidden-header');
-
-                    var j = 1;
-                    for (var i = 0; i < filteredMenuHtml.length; i++) {
-                        if ($(filteredMenuHtml[i]).data('hide') == 'Y')
-                            continue;
-                        if (j == 3) {
-                            navcolwrap3.append(filteredMenuHtml[i]);
-                            j = 1;
-                        }
-                        else if (j == 2) {
-                            navcolwrap2.append(filteredMenuHtml[i]);
-                            j = 3;
-                        }
-                        else {
-                            navcolwrap1.append(filteredMenuHtml[i]);
-                            j = 2;
-                        }
-                    }
-                    $mainContainer.empty();
-                    $mainContainer.append(navcolwrap1).append(navcolwrap2).append(navcolwrap3);
-
-
-                    menuUL.append($mainContainer); // all leaf nodes
-                    menuUL.find('li').hide(); // hide all
-
-                    menuUL.find('li > a[data-action="' + action + '"]').parent().show(); // show only match action
-                    var allUls = menuUL.find('.vismenu-hidden-header').find('ul');
-
-                    for (var j = 0; j < allUls.length; j++) {
-                        var thisUL = $(allUls[j]);
-                        var liList = thisUL.find('li');
-                        var canhide = false;
-                        for (var k = 0; k < liList.length; k++) {
-                            if ($(liList[k]).is(':visible')) {
-                                canhide = false;
-                                break;
-                            }
-                            canhide = true;
-                        }
-                        if (canhide)
-                            thisUL.addClass('vis-menuSum-hide');
-                    }
-
-                    allUls = menuUL.find('.vismenu-hidden-header');
-                    for (var j = 0; j < allUls.length; j++) {
-                        var canhide = false;
-                        var liList = $(allUls[j]).find('ul');
-
-                        for (var k = 0; k < liList.length; k++) {
-                            if ($(liList[k]).is(':visible')) {
-                                canhide = false;
-                                break;
-                            }
-                            canhide = true;
-                        }
-                        if (canhide)
-                            $(allUls[j]).addClass('vis-menuSum-hide');
-                    }
-
-
-
-
-                    menuUL.find('.vismenu-hidden-headerh5').show();
-                }
-            }
-
-
         };
 
         /* show hide popup
@@ -1487,8 +1383,15 @@
             isVisible ? root.show('slide-down') : root.hide('slide-up');
         };
 
+        /**
+         * return Applied filter(window Or Form or process or reports or all)
+         * */
         function getFilterValue() {
             return root.find("input[type=radio]:checked").val();
+        }
+
+        function setIsMenuHeaderClicked(isheader) {
+            isheaderClicked = isheader;
         }
 
         /* close popup
@@ -1507,7 +1410,8 @@
             closePopup: closePopup,
             hideEmptyFolders: hideEmptyFolders,
             getFilterValue: getFilterValue,
-            hideMobileEmptyFolder: hideMobileEmptyFolder
+            hideMobileEmptyFolder: hideMobileEmptyFolder,
+            setIsMenuHeaderClicked: setIsMenuHeaderClicked
         }
     }();
 

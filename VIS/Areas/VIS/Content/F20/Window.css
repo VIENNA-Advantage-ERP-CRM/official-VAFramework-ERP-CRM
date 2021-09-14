@@ -2198,7 +2198,6 @@ a:hover {
 
     .vis-navHeadWrap h5 {
         color: rgba(var(--v-c-primary), 1);
-        text-decoration: underline;
         font-weight: 600;
         font-size: 1rem;
         cursor: pointer;
@@ -2354,10 +2353,10 @@ a:hover {
 }
 
 .vis-menuSum-hide {
-display:none;
+display:none !important;
 }
 .vis-navAccordian {
-    padding: .1rem .2rem !important;
+    padding: .1rem .4rem !important;
     cursor: pointer;    
 }
 

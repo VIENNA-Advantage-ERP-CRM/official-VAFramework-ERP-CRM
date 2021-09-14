@@ -150,23 +150,36 @@
             <div class="d-flex align-items-center vis-navHeadRight">
                 <div class="vis-navSearchWrap">
                     <div class="input-group">
-                        <input type="text" class="form-control" id="vis_menuSearch" name="vis_menuSearch" placeholder="@VAdvantage.Utility.Msg.GetMsg((string)ViewBag.culture, "Search")" list="vis_leafNodes">
+                        @*<input type="text" class="form-control" id="vis_menuSearch" name="vis_menuSearch" placeholder="@VAdvantage.Utility.Msg.GetMsg((string)ViewBag.culture, "Search")" list="vis_leafNodes">*@
                         <datalist id="vis_leafNodes">
                             @foreach (var item in ViewBag.Menu.GetLeafNodes())
                             {
                                 <option data-action='@item.ActionIndicator' data-actionid="@item.ActionID" title='@item.ID' value='@item.Name'></option>
                             }
                         </datalist>
-                        <div class="input-group-append">
+                        @*<div class="input-group-append">
                             <span class="input-group-text">
                                 <i class="vis vis-search"></i>
                             </span>
-                        </div>
+                        </div>*@
                     </div>
                 </div>
                 <div class="vis-navFilterIco">
                     @*<i class="fa fa-filter"></i>*@
                     <a href="javascript:void(0)" id="vis_filterMenu" title="@VAdvantage.Utility.Msg.GetMsg((string)ViewBag.culture, "Filter")" class="fa fa-filter"></a>
+                </div>
+            </div>
+
+        </div>
+        <div class="vis-mbilemenu-search">
+            <div class="vis-navSearchWrap" style="    background: no-repeat;">
+                <div class="input-group">
+                    <input type="text" class="form-control ui-autocomplete-input" id="vis_menuSearch" name="vis_menuSearch" placeholder="Search" list="vis_leafNodes" autocomplete="off" style="padding-left: 0;">
+                    <div class="input-group-append">
+                        <span class="input-group-text" style=" background: none;">
+                            <i class="vis vis-search vis-mbilemenu-search-icon"></i>
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
