@@ -776,15 +776,16 @@ namespace VAdvantage.Model
                 sourceTable = "AD_Menu";
                 if (baseLang)
                     sqlNode.Append("SELECT AD_Menu.AD_Menu_ID, AD_Menu.Name,AD_Menu.Description,AD_Menu.IsSummary,AD_Menu.Action, "
-                        + "AD_Menu.AD_Window_ID, AD_Menu.AD_Process_ID, AD_Menu.AD_Form_ID, AD_Menu.AD_Workflow_ID, AD_Menu.AD_Task_ID, AD_Menu.AD_Workbench_ID "
-                        + "FROM AD_Menu AD_Menu");
+                        + "AD_Menu.AD_Window_ID, AD_Menu.AD_Process_ID, AD_Menu.AD_Form_ID, AD_Menu.AD_Workflow_ID, AD_Menu.AD_Task_ID, AD_Menu.AD_Workbench_ID, "
+                        + " NVL(img.FontName,img.ImageURL) as Image FROM AD_Menu AD_Menu");
                 else
                     sqlNode.Append("SELECT AD_Menu.AD_Menu_ID,  t.Name,t.Description,AD_Menu.IsSummary,AD_Menu.Action, "
-                        + "AD_Menu.AD_Window_ID, AD_Menu.AD_Process_ID, AD_Menu.AD_Form_ID, AD_Menu.AD_Workflow_ID, AD_Menu.AD_Task_ID, AD_Menu.AD_Workbench_ID "
-                        + "FROM AD_Menu AD_Menu JOIN  AD_Menu_Trl t ON AD_Menu.AD_Menu_ID=t.AD_Menu_ID ");
+                        + "AD_Menu.AD_Window_ID, AD_Menu.AD_Process_ID, AD_Menu.AD_Form_ID, AD_Menu.AD_Workflow_ID, AD_Menu.AD_Task_ID, AD_Menu.AD_Workbench_ID, "
+                        + " NVL(img.FontName,img.ImageURL) as Image FROM AD_Menu AD_Menu JOIN  AD_Menu_Trl t ON AD_Menu.AD_Menu_ID=t.AD_Menu_ID ");
                 if (!baseLang)
                 {
                     sqlNode.Append(" JOIN " + GetNodeTableName() + " pr on pr.NODE_ID=AD_Menu." + columnNameX + "_ID ");
+                    sqlNode.Append(" LEFT OUTER JOIN AD_Image img on AD_Menu.AD_Image_ID=img.AD_Image_ID ");
 
                     sqlNode.Append(" WHERE AD_Menu.AD_Menu_ID=t.AD_Menu_ID AND t.AD_Language='")
                         .Append(Utility.Env.GetAD_Language(GetCtx())).Append("'");
@@ -800,9 +801,11 @@ namespace VAdvantage.Model
                 }
                 else
                 {
+                    sqlNode.Append(" LEFT OUTER JOIN AD_Image img on AD_Menu.AD_Image_ID=img.AD_Image_ID ");
                     if (onDemand)
                     {
                         sqlNode.Append(" JOIN " + GetNodeTableName() + " pr on pr.NODE_ID=AD_Menu." + columnNameX + "_ID ");
+                        sqlNode.Append(" LEFT OUTER JOIN AD_Image img on AD_Menu.AD_Image_ID=img.AD_Image_ID ");
                         //  sqlNode.Append(" OR ( m." + columnNameX + "_ID IN (SELECT NODE_ID FROM " + GetNodeTableName() + " WHERE Parent_ID=0 AND AD_Tree_ID=" + GetAD_Tree_ID() + " AND m.IsSummary='N' AND IsActive='Y')) ");
                         sqlNode.Append("AND pr.AD_Tree_ID=" + GetAD_Tree_ID() + "  AND (IsSummary='Y')");
 
@@ -1359,6 +1362,7 @@ namespace VAdvantage.Model
                         retValue = new VTreeNode(Node_ID, seqNo,
                                 name, description, Parent_ID, isSummary,
                                 actionColor, onBar);
+                        retValue.Image = Utility.Util.GetValueOfString(dr["Image"]);
                     }
                     break;
                 }

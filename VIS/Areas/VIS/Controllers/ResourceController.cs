@@ -55,6 +55,7 @@ namespace VIS.Controllers
                 //fullUrl = fullUrl.Remove(fullUrl.LastIndexOf('/'));
                 fullUrl = fullUrl.Remove(fullUrl.IndexOf("VIS/Resource"));
                 ctx.SetApplicationUrl(fullUrl);
+                ctx.SetContextUrl(@Url.Content("~/"));
 
                 SecureEngine.Encrypt("a");
 
