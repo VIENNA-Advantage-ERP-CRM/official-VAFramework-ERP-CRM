@@ -3232,7 +3232,7 @@ namespace VAdvantage.Model
                     String costingMethod = MCostElement.CheckLifoOrFifoMethod(GetCtx(), GetAD_Client_ID(), sLine.GetM_Product_ID(), Get_Trx());
 
                     productCQ = new MProduct(GetCtx(), sLine.GetM_Product_ID(), Get_Trx());
-                    if (productCQ.GetProductType() == "I") // for Item Type product
+                    if (sLine.GetM_Product_ID() > 0 && productCQ.GetProductType() == "I") // for Item Type product
                     {
                         //if (GetReversalDoc_ID() > 0 || (GetDescription() != null && GetDescription().Contains("RC")))
                         //{
