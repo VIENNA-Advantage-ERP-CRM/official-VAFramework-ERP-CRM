@@ -178,7 +178,7 @@ namespace ViennaAdvantage.Process
                     {
                         C_BpID = lead.GetRef_BPartner_ID();
                     }
-                    bp = new MBPartner(GetCtx(), C_BpID, Get_TrxName());                    
+                    bp = new MBPartner(GetCtx(), C_BpID, Get_TrxName());
                     bp.Set_Value("Summary", Util.GetValueOfString(lead.Get_Value("Help")));
                     bp.Set_Value("EmailOptOut", Util.GetValueOfBool(lead.Get_Value("EmailOptOut")));
                     bp.Set_Value("C_Lead_Target", Util.GetValueOfString(lead.Get_Value("C_Lead_Target")));
@@ -188,8 +188,8 @@ namespace ViennaAdvantage.Process
                     bp.Set_Value("VA047_UsingSystem_ID", Util.GetValueOfInt(lead.Get_Value("VA047_UsingSystem_ID")));
                     bp.Set_Value("DateDiffrence", Util.GetValueOfInt(lead.Get_Value("DateDiffrence")));
                     bp.SetC_Greeting_ID(Util.GetValueOfInt(lead.Get_Value("C_Greeting_ID")));
-                    bp.SetC_BP_Status_ID(Util.GetValueOfInt(lead.Get_Value("C_BP_Status_ID")));                    
-                    bp.Set_Value("VA047_LinkedIn", Util.GetValueOfString(lead.Get_Value("VA047_LinkedIn")));                    
+                    bp.SetC_BP_Status_ID(Util.GetValueOfInt(lead.Get_Value("C_BP_Status_ID")));
+                    bp.Set_Value("VA047_LinkedIn", Util.GetValueOfString(lead.Get_Value("VA047_LinkedIn")));
 
                     //C_Location_ID
 
@@ -209,10 +209,10 @@ namespace ViennaAdvantage.Process
                             {
                                 cus = tbl.GetPO(GetCtx(), cs[i], Get_TrxName());
                                 cspr = tbl1.GetPO(GetCtx(), 0, Get_TrxName());
-                                cspr.Set_Value("C_BPartner_ID", C_BpID);
-                                cspr.Set_Value("M_Product_ID", Util.GetValueOfInt(cus.Get_Value("M_Product_ID")));
-                                cspr.Set_Value("C_IndustryCode_ID", Util.GetValueOfInt(cus.Get_Value("C_IndustryCode_ID")));
-                                cspr.Set_Value("VA047_UsingSystem_ID", Util.GetValueOfInt(cus.Get_Value("VA047_UsingSystem_ID")));
+                                cspr.Set_ValueNoCheck("C_BPartner_ID", C_BpID);
+                                cspr.Set_Value("M_Product_ID", cus.Get_Value("M_Product_ID"));
+                                cspr.Set_Value("C_IndustryCode_ID", cus.Get_Value("C_IndustryCode_ID"));
+                                cspr.Set_Value("VA047_UsingSystem_ID", cus.Get_Value("VA047_UsingSystem_ID"));
                                 cspr.Set_Value("VA047_BudgetUSD", Util.GetValueOfDecimal(cus.Get_Value("VA047_BudgetUSD")));
                                 cspr.Set_Value("VA047_NoOfEmp", Util.GetValueOfDecimal(cus.Get_Value("VA047_NoOfEmp")));
                                 cspr.Set_Value("VA047_AnnualTO", Util.GetValueOfDecimal(cus.Get_Value("VA047_AnnualTO")));
@@ -223,7 +223,7 @@ namespace ViennaAdvantage.Process
                                 cspr.Set_Value("VA047_Twitter", Util.GetValueOfString(cus.Get_Value("VA047_Twitter")));
                                 cspr.Set_Value("VA047_Ethnicity", Util.GetValueOfString(cus.Get_Value("VA047_Ethnicity")));
                                 cspr.Set_Value("VA047_Age", Util.GetValueOfDecimal(cus.Get_Value("VA047_Age")));
-                                cspr.Set_Value("VA047_ReasonEVienna_ID", Util.GetValueOfInt(cus.Get_Value("VA047_ReasonEVienna_ID")));
+                                cspr.Set_Value("VA047_ReasonEVienna_ID", cus.Get_Value("VA047_ReasonEVienna_ID"));
                                 cspr.Set_Value("VA047_Option1", Util.GetValueOfInt(cus.Get_Value("VA047_Option1")));
                                 cspr.Set_Value("VA047_Option2", Util.GetValueOfInt(cus.Get_Value("VA047_Option2")));
                                 cspr.Set_Value("VA047_Option3", Util.GetValueOfInt(cus.Get_Value("VA047_Option3")));
@@ -251,14 +251,14 @@ namespace ViennaAdvantage.Process
                             {
                                 cus = tbl.GetPO(GetCtx(), cs[i], Get_TrxName());
                                 cspr = tbl1.GetPO(GetCtx(), 0, Get_TrxName());
-                                cspr.Set_Value("C_BPartner_ID", C_BpID);
-                                cspr.Set_Value("M_Product_ID", Util.GetValueOfInt(cus.Get_Value("M_Product_ID")));
-                                cspr.Set_Value("C_IndustryCode_ID", Util.GetValueOfInt(cus.Get_Value("C_IndustryCode_ID")));
-                                cspr.Set_Value("VA047_UsingSystem_ID", Util.GetValueOfInt(cus.Get_Value("VA047_UsingSystem_ID")));
+                                cspr.Set_ValueNoCheck("C_BPartner_ID", C_BpID);
+                                cspr.Set_Value("M_Product_ID", cus.Get_Value("M_Product_ID"));
+                                cspr.Set_Value("C_IndustryCode_ID", cus.Get_Value("C_IndustryCode_ID"));
+                                cspr.Set_Value("VA047_UsingSystem_ID", cus.Get_Value("VA047_UsingSystem_ID"));
                                 cspr.Set_Value("VA047_BudgetUSD", Util.GetValueOfDecimal(cus.Get_Value("VA047_BudgetUSD")));
                                 cspr.Set_Value("VA047_NoOfEmp", Util.GetValueOfDecimal(cus.Get_Value("VA047_NoOfEmp")));
                                 cspr.Set_Value("VA047_AnnualTO", Util.GetValueOfDecimal(cus.Get_Value("VA047_AnnualTO")));
-                                cspr.Set_Value("VA047_ERPExp", Util.GetValueOfDateTime(cus.Get_Value("VA047_ERPExp")));
+                                cspr.Set_Value("VA047_ERPExp", Util.GetValueOfDecimal(cus.Get_Value("VA047_ERPExp")));
                                 cspr.Set_Value("VA047_facebook", Util.GetValueOfString(cus.Get_Value("VA047_facebook")));
                                 cspr.Set_Value("VA047_Hobbies", Util.GetValueOfString(cus.Get_Value("VA047_Hobbies")));
                                 cspr.Set_Value("VA047_LinkedIn", Util.GetValueOfString(cus.Get_Value("VA047_LinkedIn")));
@@ -266,7 +266,7 @@ namespace ViennaAdvantage.Process
                                 cspr.Set_Value("VA047_Twitter", Util.GetValueOfString(cus.Get_Value("VA047_Twitter")));
                                 cspr.Set_Value("VA047_Ethnicity", Util.GetValueOfString(cus.Get_Value("VA047_Ethnicity")));
                                 cspr.Set_Value("VA047_Age", Util.GetValueOfDecimal(cus.Get_Value("VA047_Age")));
-                                cspr.Set_Value("VA047_ReasonEVienna_ID", Util.GetValueOfInt(cus.Get_Value("VA047_ReasonEVienna_ID")));
+                                cspr.Set_Value("VA047_ReasonEVienna_ID", cus.Get_Value("VA047_ReasonEVienna_ID"));
                                 cspr.Set_Value("VA047_Vertical1", Util.GetValueOfInt(cus.Get_Value("VA047_Vertical1")));
                                 cspr.Set_Value("VA047_Vertical2", Util.GetValueOfInt(cus.Get_Value("VA047_Vertical2")));
                                 cspr.Set_Value("VA047_Vertical3", Util.GetValueOfInt(cus.Get_Value("VA047_Vertical3")));
@@ -405,10 +405,10 @@ namespace ViennaAdvantage.Process
             //
             if (lead.GetRef_BPartner_ID() != 0)
             {
-                return Msg.GetMsg(GetCtx(), "Prospect generated successfully");
+                return Msg.GetMsg(GetCtx(), "ProspectGenerated");
             }
             else
-                return Msg.GetMsg(GetCtx(), "Prospect not generated ");
+                return Msg.GetMsg(GetCtx(), "ProspectNotGenerated");
 
         }	//	doIt
 
