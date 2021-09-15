@@ -657,7 +657,14 @@ namespace VAdvantage.Model
         {
             if (ctx != null)
             {
-                return Util.GetValueOfString(ctx.GetContext("#PRODUCT_CONTAINER_APPLICABLE")).Equals("Y");
+                string containerApplicable = Util.GetValueOfString(ctx.GetContext("#PRODUCT_CONTAINER_APPLICABLE"));
+
+                if (String.IsNullOrEmpty(containerApplicable))
+                {
+                    containerApplicable = Util.GetValueOfString(DB.ExecuteScalar("SELECT Value FROM AD_SysConfig WHERE IsActive = 'Y' AND Name = 'PRODUCT_CONTAINER_APPLICABLE'"));                    
+                }
+
+                return containerApplicable.Equals("Y");
             }
             else
             {
