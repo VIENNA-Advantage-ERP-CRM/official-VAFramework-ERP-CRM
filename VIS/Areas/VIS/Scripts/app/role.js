@@ -570,6 +570,7 @@ VIS.MRole.getRecordWhere = function (AD_Table_ID, keyColumnName, rw) {
     //
     var sbInclude = new StringBuilder();
     var sbExclude = new StringBuilder();
+    var isIncludeNull = false;
     // Role Access
     var m_recordAccess = this.vo.recordAccess;
     for (var i = 0; i < m_recordAccess.length; i++) {
@@ -591,16 +592,31 @@ VIS.MRole.getRecordWhere = function (AD_Table_ID, keyColumnName, rw) {
                     sbInclude.append(",");
                 sbInclude.append(m_recordAccess[i].Record_ID);
             }
+            isIncludeNull = isIncludeNull || m_recordAccess[i].IsIncludeNull;
         }
     } // for all Table Access
 
     var sb = new StringBuilder();
-    if (sbExclude.length() > 0)
+    if (sbExclude.length() > 0) {
+        if (isIncludeNull) {
+            sb.append("(");
+        }
         sb.append(sbExclude).append(")");
+        if (isIncludeNull) {
+            sb.append(" OR ").append(keyColumnName).append(" IS NULL )");
+        }
+        isIncludeNull = false;
+    }
     if (sbInclude.length() > 0) {
         if (sb.length() > 0)
             sb.append(" AND ");
+        if (isIncludeNull) {
+            sb.append("(");
+        }
         sb.append(sbInclude).append(")");
+        if (isIncludeNull) {
+            sb.append(" OR ").Append(keyColumnName).append(" IS NULL )");
+        }
     }
 
     // Don't ignore Privacy Access

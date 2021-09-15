@@ -39,8 +39,9 @@
         var drow3 = null;
         var drow4 = null;
 
-
-
+        var divIncNull = null;
+        var chkIncNull = null;
+        var lblIncNull = null;
 
 
 
@@ -89,7 +90,11 @@
                 chkReadOnly = $("<input type='checkbox'>");
                 lblReadOnly = $("<label>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'IsReadOnly'));
                 chkDepEntry = $("<input type='checkbox'>");
-                lblDepEntry = $("<label>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'IsDependentEntities'));
+            lblDepEntry = $("<label>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'IsDependentEntities'));
+
+            chkIncNull = $("<input type='checkbox'>");
+            lblIncNull = $("<label>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'IncludeNull'));
+           
 
             //}
             root = $("<div class='vis-forms-container'>");
@@ -135,6 +140,13 @@
             divDepEntry.append(chkDepEntry);
             divDepEntry.append(lblDepEntry);
             divAccOp.append(divDepEntry);
+
+            divIncNull   = $("<div class='vis-rad-check'>");
+            //chkReadOnly = $("<input type='checkbox'>");
+            //lblReadOnly = $("<label>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'IsReadOnly'));
+            divIncNull.append(chkIncNull);
+            divIncNull.append(lblIncNull);
+            divAccOp.append(divIncNull);
 
             divRecord.append(divRole);
             divRecord.append(divAccOp);
@@ -206,7 +218,7 @@
             loadRecords();
             root.dialog({
                 width: 600,
-                height: 228,
+                height: 232,
                 resizable: false,
                 title: 'Record',
                 modal: true
@@ -261,6 +273,7 @@
                     item.ISDEPENDENTENTITIES = dr[i].ISDEPENDENTENTITIES;
                     item.ISEXCLUDE = dr[i].ISEXCLUDE;
                     item.ISREADONLY = dr[i].ISREADONLY;
+                    item.ISINCLUDENULL = dr[i].ISINCLUDENULL;
                     recordAccessData.push(item);
                 }
             }
@@ -298,6 +311,7 @@
                     isExclude: chkExclude.prop('checked'),
                     isReadOnly: chkReadOnly.prop('checked'),
                     isDependentEntities: chkDepEntry.prop('checked'),
+                    isIncludeNull: chkIncNull.prop('checked'),
                     isUpdate: update
                 },
                 success: function (data) {
@@ -341,6 +355,7 @@
             chkActive.attr('checked', true);
             chkExclude.attr('checked', true);
             chkReadOnly.attr('checked', false);
+            chkIncNull.attr('checked', false);
             chkDepEntry.attr('checked', false);
             lblRecNo.empty();
             lblRecNo.append("+" + (recordAccessData.length + 1) + "/" + (recordAccessData.length + 1));
@@ -355,6 +370,7 @@
             chkActive.attr('checked', recordAccessData[curIndex].ISACTIVE == 'Y' ? true : false);
             chkExclude.attr('checked', recordAccessData[curIndex].ISEXCLUDE == 'Y' ? true : false);
             chkReadOnly.attr('checked', recordAccessData[curIndex].ISREADONLY == 'Y' ? true : false);
+            chkIncNull.attr('checked', recordAccessData[curIndex].ISINCLUDENULL == 'Y' ? true : false);
             chkDepEntry.attr('checked', recordAccessData[curIndex].ISDEPENDENTENTITIES == 'Y' ? true : false);
             lblRecNo.empty();
             lblRecNo.append((curIndex + 1) + "/" + recordAccessData.length);
@@ -390,6 +406,7 @@
                     isActive: chkActive.prop('checked'),
                     isExclude: chkExclude.prop('checked'),
                     isReadOnly: chkReadOnly.prop('checked'),
+                    isIncludeNull:chkIncNull.prop('checked'),
                     isDependentEntities: chkDepEntry.prop('checked')
                 },
                 success: function (data) {
@@ -434,6 +451,7 @@
             chkActive = null;
             chkExclude = null;
             chkReadOnly = null;
+            chkIncNull = null;
             chkDepEntry = null;
             lblRecNo = null;
             recordAccessData = null;
