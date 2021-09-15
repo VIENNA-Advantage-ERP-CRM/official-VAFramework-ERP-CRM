@@ -2836,7 +2836,7 @@ namespace VAdvantage.Model
 
                     if (ordAmt == 0)
                     {
-                        MConversionType conv =  MConversionType.Get(GetCtx(), GetC_ConversionType_ID());
+                        MConversionType conv = MConversionType.Get(GetCtx(), GetC_ConversionType_ID());
                         _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
                             + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
 
@@ -5136,10 +5136,16 @@ namespace VAdvantage.Model
                     {
                         // when order line created with charge OR with Product which is not of "item type" then not to create shipment line against this.
                         MProduct oproduct = oLine.GetProduct();
+                        string allowNonItem = Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem"));
+
+                        if (String.IsNullOrEmpty(allowNonItem))
+                        {
+                            allowNonItem = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsAllowNonItem FROM AD_Client WHERE AD_Client_ID = " + GetAD_Client_ID(), null, Get_Trx()));
+                        }
 
                         //Create Lines for Charge / (Resource - Service - Expense) type product based on setting on Tenant to "Allow Non Item type".
                         if ((oproduct == null || !(oproduct != null && oproduct.GetProductType() == MProduct.PRODUCTTYPE_Item))
-                            && (Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("N")))
+                            && (allowNonItem.Equals("N")))
                             continue;
 
                         //
@@ -5623,7 +5629,13 @@ namespace VAdvantage.Model
 
 
                     // Create Lines for Charge / (Resource - Service - Expense) type product based on setting on Tenant to "Allow Non Item type".
-                    if (Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("N"))
+                    string allowNonItem = Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem"));
+
+                    if (String.IsNullOrEmpty(allowNonItem))
+                    {
+                        allowNonItem = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsAllowNonItem FROM AD_Client WHERE AD_Client_ID = " + GetAD_Client_ID(), null, Get_Trx()));
+                    }
+                    if (allowNonItem.Equals("N"))
                     {
                         // Create Invoice Line for Charge / (Resource - Service - Expense) type product 
                         MOrderLine[] oLines = GetLinesOtherthanProduct();
