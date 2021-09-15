@@ -897,10 +897,15 @@
 
     HeaderPanel.prototype.actionPerformed = function (action) {
         //selfPan.actionButton(action.source);
+
+      
+
         if (this.aPanel.curTab.needSave(true, false)) {
             this.aPanel.cmd_save(true);
             return;
         }
+
+
             this.aPanel.actionPerformed(action, this);
     };
 

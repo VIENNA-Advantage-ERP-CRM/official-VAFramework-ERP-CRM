@@ -89,6 +89,7 @@ namespace VAdvantage.Model
             SetRecord_ID(Record_ID);
             SetIsExclude(true);
             SetIsReadOnly(false);
+            SetIsIncludeNull(false);
             SetIsDependentEntities(false);
         }
 

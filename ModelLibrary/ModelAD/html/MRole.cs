@@ -2269,6 +2269,7 @@ namespace VAdvantage.Model
             //
             StringBuilder sbInclude = new StringBuilder();
             StringBuilder sbExclude = new StringBuilder();
+            bool isIncludeNull = false;
             //	Role Access
             for (int i = 0; i < _recordAccess.Length; i++)
             {
@@ -2294,17 +2295,38 @@ namespace VAdvantage.Model
                             sbInclude.Append(",");
                         sbInclude.Append(_recordAccess[i].GetRecord_ID());
                     }
+                    isIncludeNull = isIncludeNull || _recordAccess[i].IsIncludeNull();
                 }
             }	//	for all Table Access
 
             StringBuilder sb = new StringBuilder();
             if (sbExclude.Length > 0)
+            {
+                if (isIncludeNull)
+                {
+                    sb.Append("(");
+                }
                 sb.Append(sbExclude).Append(")");
+                if (isIncludeNull)
+                {
+                    sb.Append(" OR ").Append(keyColumnName).Append(" IS NULL )");
+                }
+                isIncludeNull = false;
+            }
             if (sbInclude.Length > 0)
             {
                 if (sb.Length > 0)
                     sb.Append(" AND ");
+
+                if (isIncludeNull)
+                {
+                    sb.Append("(");
+                }
                 sb.Append(sbInclude).Append(")");
+                if (isIncludeNull)
+                {
+                    sb.Append(" OR ").Append(keyColumnName).Append(" IS NULL )");
+                }
             }
 
             //Don't ignore Privacy Access

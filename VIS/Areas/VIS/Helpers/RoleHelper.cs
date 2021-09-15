@@ -208,6 +208,7 @@ namespace VIS.Helpers
         public bool IsReadOnly;
         public bool IsExclude;
         public string KeyColumnName;
+        public bool IsIncludeNull;
 
         public static List<RecordAccess> Get(MRecordAccess[] recAccess)
         {
@@ -221,6 +222,7 @@ namespace VIS.Helpers
                 ra.AD_Table_ID = r.GetAD_Table_ID();
                 ra.Record_ID = r.GetRecord_ID();
                 ra.KeyColumnName = r.GetKeyColumnName();
+                ra.IsIncludeNull = r.IsIncludeNull();
                 rl.Add(ra);
             }
             return rl;
