@@ -1773,12 +1773,17 @@
 
         if (this.getIsUILocked())
             return;
+
+        if (action.source instanceof VIS.Controls.VButton) {
+            if (!action.source.getField().getIsEditable(true) || this.curTab.getIsReadOnly()) {
+                return;
+            }
+        }
         //	Do Screenrt w/o busy
         this.setBusy(true);
         var selfPan = this;
         setTimeout(function () {
             //  Command Buttons
-
             if (action.source instanceof VIS.Controls.VButton) {
                 if (!selfPan.actionButton(action.source, controller)) {
                     selfPan.setBusy(false, true);
