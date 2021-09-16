@@ -219,6 +219,8 @@ namespace VIS.Helpers
             foreach (var item in treeNodeCollection)
             {
                 VTreeNode vt = (VTreeNode)item;
+                if (vt.Parent_ID < 0)
+                    continue;
                 // Add back buttons for first subfolder which will use to navigate to main menu
                 if (vt.Parent_ID != 0 && rootParentID == lastParentID && addbackButton)
                 {
@@ -734,7 +736,7 @@ namespace VIS.Helpers
         // Add back buttons for first subfolder which will use to navigate to main menu
         private void GetSummaryBackBtn(int id, string text, string windowNo = "", int parentID = 0)
         {
-            menu2HTML.Append("<ul  data-ulid='" + parentID + "'><li class='vis-subNavFirstElement' style='overflow: auto;display:none' data-con='Y' data-ulid='" + parentID + "' data-val='" + id + "' data-summary='N'>");
+            menu2HTML.Append("<ul  data-ulid='" + parentID + "'><li class='vis-subNavFirstElement' style='min-height: 40px;overflow: auto;display:none' data-con='Y' data-ulid='" + parentID + "' data-val='" + id + "' data-summary='N'>");
             menu2HTML.Append("<label class='vis-menuitm-with-favItm vis-menuitm-backbtn' href='javascript:void(0)'  data-val='" + id + "' data-action='N' data-actionid ='" + id + "'>");
             menu2HTML.Append("<i class='fa fa-arrow-left'></i><span class='' style='float:right;margin:1px 0px 0px 10px;'></span>" + text + "</label></li>");
         }

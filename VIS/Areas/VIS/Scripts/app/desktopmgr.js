@@ -96,7 +96,7 @@
                     $menuTree.find('ul:not(.vismenu-parent)').hide();
                     $menuTree.find('li:not(.vis-hasSubMenu)').hide();
                     if (menuFilterMgr)
-                    menuFilterMgr.setIsMenuHeaderClicked(false);
+                        menuFilterMgr.setIsMenuHeaderClicked(false);
                 }
                 // If user clicks on any item in mobile menu
                 else if (event.target.nodeName === "LABEL" && $par.data("con") == "Y") {
@@ -1067,7 +1067,7 @@
         @param menuTree  menu tree UI element
         @param filterMenuA filter UI element
         */
-        function init(menuTree, filterMenuA,mainMenu) {
+        function init(menuTree, filterMenuA, mainMenu) {
 
             // create UI
             root.html('<input type="radio" name="filter" id="vis_filter_radio_1" value="A" checked style="margin-bottom:5px;margin:1px;" /><label for="vis_filter_radio_1">' + VIS.Msg.getMsg("All") + '</label><br>' +
@@ -1264,9 +1264,9 @@
 
         }
 
-    /**
-     * In case of  Web Menu, when user apply filter then hide all folders with no visible child
-     */
+        /**
+         * In case of  Web Menu, when user apply filter then hide all folders with no visible child
+         */
         function hideEmptyFolders() {
 
             if (root.find("input[type=radio]:checked").val() != "A") {
@@ -1366,7 +1366,7 @@
                 _menuTree.find('.vis-navmenuItems-Container').hide();
                 newContainer.find('.vis-navmenuItems-Container').removeAttr('style');
                 newContainer.find('.vismenu-hidden-header').show();
-                
+
                 _menuTree.find(".vis-navSelected").removeClass('vis-navSelected');
                 newContainer.show();
                 _menuTree.find('.fa-plus').removeClass('fa-plus').addClass('fa-minus');
@@ -1380,6 +1380,8 @@
         */
         function toggle() {
             isVisible = !isVisible;
+            var left = Math.round(_mainMenu.find('.vis-navFilterIco').offset().left) - 84;
+            root.css('left', left);
             isVisible ? root.show('slide-down') : root.hide('slide-up');
         };
 

@@ -623,7 +623,7 @@ html[dir="rtl"] .vis-mainMenuIcons.vis-icon-menuclose
     /*padding-right: .625rem;*/
 }
 .vis-css-treeview ul li span i {
-    padding: 0 .625rem;
+    padding: 0 .725rem;
 }
 /*.vis-sidebarMenuWrapper ul
     {
@@ -1249,7 +1249,7 @@ html[dir="rtl"] .vis-auth-dialog
     box-shadow: 0px 2px 3px 1px rgba(var(--v-c-on-secondary), 0.18);
     border: 1px solid rgba(var(--v-c-primary), .15);
     min-width: 150px;
-    right: 320px;
+    /*right: 320px;*/
 }
 .vis-filter-dialog label {
     font-weight: normal;
