@@ -219,6 +219,8 @@ namespace VIS.Helpers
             foreach (var item in treeNodeCollection)
             {
                 VTreeNode vt = (VTreeNode)item;
+                if (vt.Parent_ID < 0)
+                    continue;
                 // Add back buttons for first subfolder which will use to navigate to main menu
                 if (vt.Parent_ID != 0 && rootParentID == lastParentID && addbackButton)
                 {
@@ -599,9 +601,9 @@ namespace VIS.Helpers
             contextMenu += "  <i class='fa fa-ellipsis-v'></i>" +
            "  </span> </div>";
             if (isSubItem)
-                menu2HTML.Append("<li class='vis-menuItem vis-menusubItem' style='min-height: 40px;overflow: auto;display:none' data-ulid='" + parentID + "' data-val='" + id + "' data-summary='N' >");
+                menu2HTML.Append("<li class='vis-menuItem vis-menusubItem' style='overflow: auto;display:none' data-ulid='" + parentID + "' data-val='" + id + "' data-summary='N' >");
             else
-                menu2HTML.Append("<li class='vis-menuItem' style='min-height: 40px;overflow: auto' data-ulid='" + parentID + "' data-val='" + id + "' data-summary='N' >");
+                menu2HTML.Append("<li class='vis-menuItem' style='overflow: auto' data-ulid='" + parentID + "' data-val='" + id + "' data-summary='N' >");
             menu2HTML.Append("<a class='vis-menuitm-with-favItm' href='javascript:void(0)'  data-val='" + id + "' data-action='" + action + "' data-actionid ='" + aid + "'>");
             menu2HTML.Append("<span " + GetSpanClass(img));
 
@@ -762,7 +764,7 @@ namespace VIS.Helpers
 
             menu2HTML.Append("<ul class='vis-menu-foldderUL' data-con='Y' data-ulid='" + parentID + "' style='display:none'>");
 
-            menu2HTML.Append("<li class='vis-menu-innerFolders' data-con='Y' style='min-height: 40px;overflow: auto;' data-val='" + id + "' data-summary='N'>");
+            menu2HTML.Append("<li class='vis-menu-innerFolders' data-con='Y' style='overflow: auto;' data-val='" + id + "' data-summary='N'>");
             menu2HTML.Append(icon).Append("<span class='vis-menuitm-with-favItm' href='javascript:void(0)'  data-val='" + id + "' data-action='N' data-actionid ='" + id + "'>");
             if (addPlusIcon)
                 menu2HTML.Append(text + "</span><i class='fa fa-plus vis-navAccordian' data-pID='" + id + "'></i></li>");
