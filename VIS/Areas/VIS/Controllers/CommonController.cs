@@ -2148,17 +2148,17 @@ namespace VIS.Controllers
                     if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
                         _bpartner_Id = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_BPartner_ID"]);
-                        if (bsl.Get_ColumnIndex("EftCheckNo") > 0)
+                        if (bsl.Get_ColumnIndex("EftCheckNo") >= 0)
                         {
                             bsl.SetEftCheckNo(Util.GetValueOfString(ds.Tables[0].Rows[0]["CheckNo"]));
                             bsl.SetEftValutaDate(Util.GetValueOfDateTime(ds.Tables[0].Rows[0]["Checkdate"]));
                         }
-                        if (bsl.Get_ColumnIndex("VA009_PaymentMethod_ID") > 0)
+                        if (bsl.Get_ColumnIndex("VA009_PaymentMethod_ID") >= 0)
                         {
                             bsl.Set_Value("VA009_PaymentMethod_ID", Util.GetValueOfString(ds.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]));
 
                         }
-                        if (bsl.Get_ColumnIndex("TenderType") > 0)
+                        if (bsl.Get_ColumnIndex("TenderType") >= 0)
                         {
                             bsl.Set_Value("TenderType", Util.GetValueOfString(ds.Tables[0].Rows[0]["TenderType"]));
                         }
