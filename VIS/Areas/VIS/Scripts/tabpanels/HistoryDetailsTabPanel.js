@@ -1826,7 +1826,7 @@
                 for (var i = 0; i < result.length; i++) {
                     str = updateComments(str, result[i]);
                 }
-                str += '</div>';                
+                str += '</div>';
                 $('#VIS_viewMoreComments' + window_No).show();
                 $('#VIS-tp-comments-input' + window_No).hide();
                 $('#VIS_viewMoreComments' + window_No).empty();

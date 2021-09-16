@@ -130,6 +130,7 @@ namespace VIS.Models
 
             /************************************/
             _bpGroup = FillBPGroup();
+            // VIS0060
             //_bpRelation = FillBPRelation();
             //_bpLocation = FillBPLocation(0, ctx);
             /************************************/
