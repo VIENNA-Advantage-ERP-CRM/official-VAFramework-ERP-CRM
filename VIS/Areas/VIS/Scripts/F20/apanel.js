@@ -1928,97 +1928,16 @@
             tis.cmd_print();
         }
         else if (tis.aCreateDocument && tis.aCreateDocument.getAction() === action) {
-            if (window.VADMS) {
-                var frame = new VIS.CFrame();
-                var editDoc = new window.VADMS.editDocument(0, "", 0, "", 0, null, "", tis.curTab.getAD_Window_ID(), tis.curTab.getAD_Table_ID(), tis.curTab.getRecord_ID());
-                frame.setName(VIS.Msg.getMsg("VADMS_CreateDocument"));
-                frame.setTitle(VIS.Msg.getMsg("VADMS_CreateDocument"));
-                frame.hideHeader(true);
-                frame.setContent(editDoc);
-                editDoc.initialize();
-                frame.show();
-            }
-            else {
-                VIS.ADialog.error('PleaseInstallDMSModule', true, "");
-            }
-
+            actionVADMSDocument(tis, action)
         }
         else if (tis.aUploadDocument && tis.aUploadDocument.getAction() === action) {
-
-            if (window.VADMS) {
-                // New parameter add for upload document dialoag to sent current window name and tab name
-                window.VADMS.uploaddocument(0, tis.curTab.getAD_Window_ID(), tis.curTab.getAD_Table_ID(), tis.curTab.getRecord_ID(), tis.$parentWindow.name, tis.curTab.getName());
-
-            }
-            else {
-                VIS.ADialog.error('PleaseInstallDMSModule', true, "");
-            }
-
+            actionVADMSDocument(tis, action);
         }
         else if (tis.aViewDocument && tis.aViewDocument.getAction() === action) {
-            if (window.VADMS) {
-                var frame = new VIS.CFrame();
-                var doc = new window.VADMS.DocumentManagementSystem();
-                frame.setName(VIS.Msg.getMsg("VADMS_Document"));
-                frame.setTitle(VIS.Msg.getMsg("VADMS_Document"));
-                frame.hideHeader(true);
-                doc.setWindowNo(VIS.Env.getWindowNo());
-                doc.setWindowID(tis.curTab.getAD_Window_ID());
-                doc.setTableID(tis.curTab.getAD_Table_ID());
-                doc.setRecordID(tis.curTab.getRecord_ID());
-                doc.setWindowName(tis.gridWindow.getName());
-                frame.setContent(doc);
-                doc.initialize();
-                frame.show();
-
-            }
-            else {
-                VIS.ADialog.error('PleaseInstallDMSModule', true, "");
-            }
+            actionVADMSDocument(tis, action);
         }
         else if (tis.aAttachFrom && tis.aAttachFrom.getAction() === action) {
-            if (window.VADMS) {
-                var self = tis;
-                var documentID = VIS.context.getContext("VADMS_Document_ID");
-                if (documentID.length > 0) {
-                    var dataIn = {
-                        docID: documentID,
-                        winID: tis.curTab.getAD_Window_ID(),
-                        tableID: tis.curTab.getAD_Table_ID(),
-                        recID: tis.curTab.getRecord_ID()
-                    };
-                    $.ajax({
-                        url: VIS.Application.contextUrl + "JsonData/AttachFrom",
-                        dataType: "json",
-                        data: dataIn,
-                        success: function (data) {
-                            if (JSON.parse(data) == "OK") {
-                                self.curTab.loadDocuments();
-                                self.aViewDocument.setPressed(self.curTab.hasDocument());
-                                //if (!VIS.ADialog.ask("AttachWithOther")) {
-                                //    VIS.context.setContext("VADMS_Document_ID", 0);
-                                //}
-
-
-                                VIS.ADialog.confirm("AttachWithOther", true, "", "Confirm", function (result) {
-                                    if (!result) {
-                                        VIS.context.setContext("VADMS_Document_ID", 0);
-                                    }
-                                });
-
-
-                                self = null;
-                            }
-                            else {
-                                VIS.ADialog.error('NotAttached', true, "");
-                            }
-                        }
-                    });
-                }
-            }
-            else {
-                VIS.ADialog.error('PleaseInstallDMSModule', true, "");
-            }
+            actionVADMSDocument(tis, action);
         }
         else if (tis.aMarkToExport && tis.aMarkToExport.getAction() === action) {
 
@@ -2386,8 +2305,55 @@
             }
         }
 
-        if (vButton.mField.getAD_Reference_Value_ID()==435) {
-            aPanel.actionPerformedCallback(aPanel, vButton.value);
+        if (vButton.mField.getAD_Reference_Value_ID() == 435) {
+
+            switch (vButton.value) {
+                case 'APT':
+                    aPanel.cmd_appointment();
+                    break;
+                case 'EML':
+                    aPanel.cmd_email();
+                    break;
+                case 'SMS':
+                    aPanel.cmd_sms();
+                    break;
+                case 'LER':
+                    aPanel.cmd_letter();
+                    break;
+                case 'TAK':
+                    aPanel.cmd_task();
+                    break;
+                case 'CHT':
+                    aPanel.cmd_chat();
+                    break;
+                case 'ATT':
+                    aPanel.cmd_attachment();
+                    break;
+                case 'HIY':
+                    aPanel.cmd_history();
+                    break;
+                case 'CRT':
+                    aPanel.cmd_request();
+                    break;
+                case 'CRD':
+                    aPanel.cmd_new(true);
+                    break;
+                case 'SRD':
+                    aPanel.cmd_subscribe();
+                    break;
+                case 'ZAS':
+                    aPanel.cmd_zoomAcross();
+                    break;
+                case 'MTE':
+                    aPanel.cmd_markToExport();
+                    break;
+                case 'IMP':
+                    aPanel.cmd_ImportMap();
+                    break;
+                default: actionVADMSDocument(aPanel, vButton.value)
+            }
+            
+           // aPanel.actionPerformedCallback(aPanel, vButton.value);
         }
 
         curTab = curGC = aPanel = null;
@@ -2530,6 +2496,80 @@
         actionProcessAfterSave = null;
         return ret;
     };
+
+    function actionVADMSDocument(aPanel, action) {
+        if (window.VADMS) {
+            if (action == 'CDT') {
+                var frame = new VIS.CFrame();
+                var editDoc = new window.VADMS.editDocument(0, "", 0, "", 0, null, "", aPanel.curTab.getAD_Window_ID(), aPanel.curTab.getAD_Table_ID(), aPanel.curTab.getRecord_ID());
+                frame.setName(VIS.Msg.getMsg("VADMS_CreateDocument"));
+                frame.setTitle(VIS.Msg.getMsg("VADMS_CreateDocument"));
+                frame.hideHeader(true);
+                frame.setContent(editDoc);
+                editDoc.initialize();
+                frame.show();
+            }
+            else if (action == 'ADF') {
+                var documentID = VIS.context.getContext("VADMS_Document_ID");
+                if (documentID.length > 0) {
+                    var dataIn = {
+                        docID: documentID,
+                        winID: aPanel.curTab.getAD_Window_ID(),
+                        tableID: aPanel.curTab.getAD_Table_ID(),
+                        recID: aPanel.curTab.getRecord_ID()
+                    };
+                    $.ajax({
+                        url: VIS.Application.contextUrl + "JsonData/AttachFrom",
+                        dataType: "json",
+                        data: dataIn,
+                        success: function (data) {
+                            if (JSON.parse(data) == "OK") {
+                                aPanel.curTab.loadDocuments();
+                                aPanel.aViewDocument.setPressed(aPanel.curTab.hasDocument());
+                                //if (!VIS.ADialog.ask("AttachWithOther")) {
+                                //    VIS.context.setContext("VADMS_Document_ID", 0);
+                                //}
+
+
+                                VIS.ADialog.confirm("AttachWithOther", true, "", "Confirm", function (result) {
+                                    if (!result) {
+                                        VIS.context.setContext("VADMS_Document_ID", 0);
+                                    }
+                                });
+
+
+                                aPanel = null;
+                            }
+                            else {
+                                VIS.ADialog.error('NotAttached', true, "");
+                            }
+                        }
+                    });
+                }
+            }
+            else if (action == 'VDT') {
+                var frame = new VIS.CFrame();
+                var doc = new window.VADMS.DocumentManagementSystem();
+                frame.setName(VIS.Msg.getMsg("VADMS_Document"));
+                frame.setTitle(VIS.Msg.getMsg("VADMS_Document"));
+                frame.hideHeader(true);
+                doc.setWindowNo(VIS.Env.getWindowNo());
+                doc.setWindowID(aPanel.curTab.getAD_Window_ID());
+                doc.setTableID(aPanel.curTab.getAD_Table_ID());
+                doc.setRecordID(aPanel.curTab.getRecord_ID());
+                doc.setWindowName(aPanel.gridWindow.getName());
+                frame.setContent(doc);
+                doc.initialize();
+                frame.show();
+            }
+            else if (action == 'UDT') {
+                window.VADMS.uploaddocument(0, aPanel.curTab.getAD_Window_ID(), aPanel.curTab.getAD_Table_ID(), aPanel.curTab.getRecord_ID(), aPanel.$parentWindow.name, aPanel.curTab.getName());
+            }
+        } else {
+            VIS.ADialog.error('PleaseInstallDMSModule', true, "");
+        }
+
+    }
 
     /**
      *	tab change

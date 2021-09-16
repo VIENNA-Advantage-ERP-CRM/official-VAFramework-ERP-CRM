@@ -6528,6 +6528,11 @@
         }
         return this.ctrl;        
     };
+    VProgressBar.prototype.setReadOnly = function (readOnly) {
+        this.isReadOnly = readOnly;
+        this.ctrl.find('input').prop('disabled', readOnly ? true : false);
+        this.setBackground(false);
+    };
     //VProgressBar.prototype.setOutputPosition = function () {
     //    var offset = 30;
     //    if (this.editingGrid) {
