@@ -2145,25 +2145,22 @@ namespace VIS.Controllers
                     bsl.SetC_Payment_ID(C_Payment_ID);
                     //Rakesh(VA228):Get BPartner,CheckNo
                     DataSet ds = DB.ExecuteDataset("SELECT C_BPartner_ID,CheckNo,Checkdate,VA009_PaymentMethod_ID,TenderType FROM C_Payment WHERE IsActive='Y' AND C_Payment_ID=" + C_Payment_ID, null, null);
-                    if (ds != null && ds.Tables.Count > 0)
+                    if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
-                        for (int j = 0; j < ds.Tables[0].Rows.Count; j++)
+                        _bpartner_Id = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_BPartner_ID"]);
+                        if (bsl.Get_ColumnIndex("EftCheckNo") > 0)
                         {
-                            _bpartner_Id = Util.GetValueOfInt(ds.Tables[0].Rows[j]["C_BPartner_ID"]);
-                            if (bsl.Get_ColumnIndex("EftCheckNo") > 0)
-                            {
-                                bsl.SetEftCheckNo(Util.GetValueOfString(ds.Tables[0].Rows[j]["CheckNo"]));
-                                bsl.SetEftValutaDate(Util.GetValueOfDateTime(ds.Tables[0].Rows[j]["Checkdate"]));
-                            }
-                            if (bsl.Get_ColumnIndex("VA009_PaymentMethod_ID") > 0)
-                            {
-                                bsl.Set_Value("VA009_PaymentMethod_ID", Util.GetValueOfString(ds.Tables[0].Rows[j]["VA009_PaymentMethod_ID"]));
+                            bsl.SetEftCheckNo(Util.GetValueOfString(ds.Tables[0].Rows[0]["CheckNo"]));
+                            bsl.SetEftValutaDate(Util.GetValueOfDateTime(ds.Tables[0].Rows[0]["Checkdate"]));
+                        }
+                        if (bsl.Get_ColumnIndex("VA009_PaymentMethod_ID") > 0)
+                        {
+                            bsl.Set_Value("VA009_PaymentMethod_ID", Util.GetValueOfString(ds.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]));
 
-                            }
-                            if (bsl.Get_ColumnIndex("TenderType") > 0)
-                            {
-                                bsl.Set_Value("TenderType", Util.GetValueOfString(ds.Tables[0].Rows[j]["TenderType"]));
-                            }
+                        }
+                        if (bsl.Get_ColumnIndex("TenderType") > 0)
+                        {
+                            bsl.Set_Value("TenderType", Util.GetValueOfString(ds.Tables[0].Rows[0]["TenderType"]));
                         }
                     }
                 }
