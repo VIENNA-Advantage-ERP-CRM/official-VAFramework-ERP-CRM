@@ -2143,8 +2143,29 @@ namespace VIS.Controllers
                 if (type == "P")
                 {
                     bsl.SetC_Payment_ID(C_Payment_ID);
-                    //Get C_BPartner_ID
-                    _bpartner_Id = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_BPartner_ID FROM C_Payment WHERE IsActive='Y' AND C_Payment_ID=" + C_Payment_ID, null, null));
+                    //Rakesh(VA228):Get BPartner,CheckNo
+                    DataSet ds = DB.ExecuteDataset("SELECT C_BPartner_ID,CheckNo,Checkdate,VA009_PaymentMethod_ID,TenderType FROM C_Payment WHERE IsActive='Y' AND C_Payment_ID=" + C_Payment_ID, null, null);
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        for (int j = 0; j < ds.Tables[0].Rows.Count; j++)
+                        {
+                            _bpartner_Id = Util.GetValueOfInt(ds.Tables[0].Rows[j]["C_BPartner_ID"]);
+                            if (bsl.Get_ColumnIndex("EftCheckNo") > 0)
+                            {
+                                bsl.SetEftCheckNo(Util.GetValueOfString(ds.Tables[0].Rows[j]["CheckNo"]));
+                                bsl.SetEftValutaDate(Util.GetValueOfDateTime(ds.Tables[0].Rows[j]["Checkdate"]));
+                            }
+                            if (bsl.Get_ColumnIndex("VA009_PaymentMethod_ID") > 0)
+                            {
+                                bsl.Set_Value("VA009_PaymentMethod_ID", Util.GetValueOfString(ds.Tables[0].Rows[j]["VA009_PaymentMethod_ID"]));
+
+                            }
+                            if (bsl.Get_ColumnIndex("TenderType") > 0)
+                            {
+                                bsl.Set_Value("TenderType", Util.GetValueOfString(ds.Tables[0].Rows[j]["TenderType"]));
+                            }
+                        }
+                    }
                 }
                 else
                 {
@@ -2672,7 +2693,7 @@ namespace VIS.Controllers
                                 }
 
                                 matchPO.Set_ValueNoCheck("C_BPartner_ID", inv.GetC_BPartner_ID());
-                                matchPO.SetC_InvoiceLine_ID(iLine);                                
+                                matchPO.SetC_InvoiceLine_ID(iLine);
                                 if (!matchPO.Save())
                                 {
                                     ValueNamePair pp = VLogger.RetrieveError();
