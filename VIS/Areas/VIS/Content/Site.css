@@ -363,9 +363,16 @@ html[dir="rtl"] #vis_mainMenu
 
 .vis-menuitm-with-favItm
 {
-    width: 93%;
+    width: 100%;
     display: inline-block;
     float: left;
+}
+
+.vis-css-treeview li.vis-subNavFirstElement ~ ul li span {
+    padding-left: .625rem;
+}
+.vis-navSearchWrap input:focus {
+    border: none !important;
 }
 
 html[dir="rtl"] .vis-menuitm-with-favItm
@@ -613,7 +620,10 @@ html[dir="rtl"] .vis-mainMenuIcons.vis-icon-menuclose
     color: rgba(var(--v-c-on-primary), 1);
 }
 .vis-css-treeview ul li span {
-    padding-right: .625rem;
+    /*padding-right: .625rem;*/
+}
+.vis-css-treeview ul li span i {
+    padding: 0 .625rem;
 }
 /*.vis-sidebarMenuWrapper ul
     {
