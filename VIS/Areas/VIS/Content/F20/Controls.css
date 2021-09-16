@@ -12,11 +12,20 @@
 }
 
 
-.vis-ev-col input:not([type=button]):not([type="checkbox"]):not([type="radio"]), .vis-ev-col select, .vis-ev-col textarea, .vis-control-wrap > button {
+.vis-ev-col input:not([type=button]):not([type="checkbox"]):not([type="radio"]), .vis-ev-col select, .vis-ev-col textarea {
     border: 1px solid rgba(var(--v-c-on-secondary), .2);
     /*border: 1px solid var(--input-border);*/
     border-radius: .25rem;
     color: rgba(var(--v-c-on-secondary), 1);
+    background-color: transparent;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.vis-control-wrap > button {
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
+    /*border: 1px solid var(--input-border);*/
+    border-radius: .25rem;
+   /* color: rgba(var(--v-c-on-secondary), 1);*/
     background-color: transparent;
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
@@ -334,7 +343,7 @@ input.vis-ev-col-readonly:not(:placeholder-shown) ~ label {
 .vis-ev-col-linkbutton {
     background: no-repeat !important;
     border: none !important;
-    color: rgba(var(--v-c-primary), 1) !important;
+    color: rgba(var(--v-c-primary), 1);
     display: flex;
     align-items: center;
    /* justify-content: center;*/

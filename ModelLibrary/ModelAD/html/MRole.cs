@@ -1978,6 +1978,7 @@ namespace VAdvantage.Model
             String whereColumnName = null;
             List<int> includes = new List<int>();
             List<int> excludes = new List<int>();
+            bool isIncludeNull = false;
             for (int i = 0; i < _recordDependentAccess.Length; i++)
             {
                 String columnName = _recordDependentAccess[i].GetKeyColumnName(asp.GetTableInfo(asp.GetMainSqlIndex()));
@@ -1998,7 +1999,7 @@ namespace VAdvantage.Model
                     continue;
 
                 if (AD_Table_ID != 0 && AD_Table_ID != _recordDependentAccess[i].GetAD_Table_ID())
-                    retSQL.Append(GetDependentAccess(whereColumnName, includes, excludes));
+                    retSQL.Append(GetDependentAccess(whereColumnName, includes, excludes, isIncludeNull));
 
                 AD_Table_ID = _recordDependentAccess[i].GetAD_Table_ID();
                 //	*** we found the column in the main query
@@ -2012,9 +2013,12 @@ namespace VAdvantage.Model
                     includes.Add(_recordDependentAccess[i].GetRecord_ID());
                     log.Fine("Include " + columnName + " - " + _recordDependentAccess[i]);
                 }
+
+                isIncludeNull = isIncludeNull || _recordDependentAccess[i].IsIncludeNull();
                 whereColumnName = GetDependentRecordWhereColumn(mainSql, columnName);
+
             }	//	for all dependent records
-            retSQL.Append(GetDependentAccess(whereColumnName, includes, excludes));
+            retSQL.Append(GetDependentAccess(whereColumnName, includes, excludes, isIncludeNull));
             //
             retSQL.Append(orderBy);
             log.Finest(retSQL.ToString());
@@ -2355,9 +2359,10 @@ namespace VAdvantage.Model
         /// <param name="whereColumnName"></param>
         /// <param name="includes"></param>
         /// <param name="excludes"></param>
+        /// <param name="isIncludeNull"></param>
         /// <returns></returns>
         private string GetDependentAccess(string whereColumnName,
-                    List<int> includes, List<int> excludes)
+                    List<int> includes, List<int> excludes,bool isIncludeNull)
         {
             if (includes.Count == 0 && excludes.Count == 0)
                 return "";
@@ -2366,6 +2371,8 @@ namespace VAdvantage.Model
                 log.Warning("Mixing Include and Excluse rules - Will not return values");
             }
             StringBuilder where = new StringBuilder(" AND ");
+            if (isIncludeNull)
+                where.Append(" ( ");
             if (includes.Count == 1)
                 where.Append(whereColumnName).Append("=").Append(includes[0]);
             else if (includes.Count > 1)
@@ -2392,6 +2399,8 @@ namespace VAdvantage.Model
                 }
                 where.Append(")");
             }
+            if (isIncludeNull)
+                where.Append(" OR ").Append(whereColumnName).Append(" IS NULL ").Append( " ) ");
             log.Finest(where.ToString());
             return where.ToString();
         }	//	getDependent
