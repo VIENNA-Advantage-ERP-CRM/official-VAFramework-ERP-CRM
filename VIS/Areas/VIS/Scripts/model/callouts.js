@@ -5621,6 +5621,22 @@
                 if (mTab.findColumn("C_ConversionType_ID") >= 0) {
                     mTab.setValue("C_ConversionType_ID", payAmt[0]["C_ConversionType_ID"]);
                 }
+                //Update PaymentMethod, CheckNo and CheckDate When select the Payment from Bank Statement Line
+                if (mTab.findColumn("VA009_PaymentMethod_ID") >= 0 && mTab.getValue("VA009_PaymentMethod_ID") > 0) {
+                    mTab.setValue("VA009_PaymentMethod_ID", payAmt[0]["VA009_PaymentMethod_ID"]);
+                }
+                else if (mTab.findColumn("VA009_PaymentMethod_ID") >= 0) {
+                    mTab.setValue("VA009_PaymentMethod_ID", null);
+                }
+                if (mTab.getValue("EFTCheckNo") == null && payAmt[0]["EFTCheckNo"] != null) {
+                    mTab.setValue("EFTCheckNo", payAmt[0]["EFTCheckNo"]);
+                }
+                if (payAmt[0]["EFTValutaDate"] != null) {
+                    mTab.setValue("EFTValutaDate", payAmt[0]["EFTValutaDate"]);
+                }
+                if (mTab.findColumn("TenderType") >= 0 && payAmt[0]["TenderType"] != null) {
+                    mTab.setValue("TenderType", payAmt[0]["TenderType"]);
+                }
                 //Requirement change no need to update DateAcct by the Payment reference
                 //mTab.setValue("DateAcct", Globalize.format(new Date(payAmt[0]["DateAcct"]), "yyyy-MM-dd"));
             }
