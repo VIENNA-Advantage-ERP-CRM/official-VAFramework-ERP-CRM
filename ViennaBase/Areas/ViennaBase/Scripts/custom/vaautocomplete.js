@@ -34,17 +34,18 @@
             $('body').append(a);
             var width = $(self).outerWidth();
             var Height = $(self).outerHeight();
-            var offset = $(self).offset()
-
+            var offset = $(self).offset();
             $(a).attr("style", "left:" + offset.left + "px; top:" + (offset.top + Height) + "px;width:" + width + "px");
             /*for each item in the array...*/
             for (i = 0; i < arr.length; i++) {
-                /*check if the item starts with the same letters as the text field value:*/
-                //if (arr[i].value.substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+            /*check if the item starts with the same letters as the text field value:*/
+                var idx = arr[i].value.toUpperCase().indexOf(val.toUpperCase());
+                if (idx!=-1) {
                     /*create a DIV element for each matching element:*/
-                    b = document.createElement("DIV");
-                /*make the matching letters bold:*/                  
-                b.innerHTML = arr[i].value.toUpperCase().replace(val.toUpperCase(), "<strong>" + val.toUpperCase() + "</strong>");
+                    b = document.createElement("DIV");                   
+                /*make the matching letters bold:var idx*/
+                    var boldVal = arr[i].value.substr(idx,val.length)
+                    b.innerHTML = arr[i].value.replace(boldVal, "<strong>" + boldVal + "</strong>");
                     //b.innerHTML += arr[i].value.substr(val.length);
                     /*insert a input field that will hold the current array item's value:*/
                     b.innerHTML += "<input type='hidden' data-id='" + arr[i].id + "'  value='" + arr[i].value + "'>";
@@ -62,7 +63,7 @@
                         closeAllLists();
                     });
                     a.appendChild(b);
-                //}
+                }
             }
         }
        
@@ -92,7 +93,7 @@
             }, settings.delay);
         });
         /*execute a function presses a key on the keyboard:*/
-        ctrl.addEventListener("keydown", function (e) {
+        ctrl.addEventListener("keydown", function (e) { 
             var x = document.getElementById(this.name + "vis-autocomplete-list");
             if (x) x = x.getElementsByTagName("div");
             if (e.keyCode == 40) {
@@ -100,7 +101,7 @@
                 increase the currentFocus variable:*/
                 currentFocus++;
                 /*and and make the current item more visible:*/
-                addActive(x);
+                addActive(x);               
             } else if (e.keyCode == 38) { //up
                 /*If the arrow UP key is pressed,
                 decrease the currentFocus variable:*/
@@ -114,7 +115,7 @@
                     /*and simulate a click on the "active" item:*/
                     if (x) x[currentFocus].click();
                 }
-            }
+            }            
         });
 
         function addActive(x) {
@@ -133,7 +134,7 @@
             for (var i = 0; i < x.length; i++) {
                 x[i].classList.remove("vis-autocomplete-active");
             }
-        }
+        }       
 
         function closeAllLists(elmnt) {
             /*close all autocomplete lists in the document,
