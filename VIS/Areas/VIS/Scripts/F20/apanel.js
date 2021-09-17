@@ -2361,9 +2361,10 @@
                 default: actionVADMSDocument(aPanel, vButton.value)
             }
 
-        curTab = curGC = aPanel = null;
+            curTab = curGC = aPanel = null;
 
-    };
+        };
+    }
 
     function checkPostingByNewLogic(callback) {
         $.ajax({
