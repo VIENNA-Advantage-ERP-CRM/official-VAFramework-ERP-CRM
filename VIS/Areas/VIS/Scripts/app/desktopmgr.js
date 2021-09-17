@@ -1112,9 +1112,11 @@
             filterA.on("click", toggle);
             root.on("click", "input[type=button]", function (e) {
                 e.stopPropagation();
-                var rd = root.find("input[type=radio]:checked").val();
-                filterSelectedMenu(rd);
-                closePopup(); // close popup
+                filterClicked();
+            });
+            _mainMenu.find('.vis-removeFilter').on("click", function () {
+                root.find('#vis_filter_radio_1').prop("checked", true);
+                filterClicked();
             });
 
             /**
@@ -1125,6 +1127,18 @@
                 setIsMenuHeaderClicked(true);
                 showAllItems();
             });
+
+            function filterClicked() {
+                var rd = root.find("input[type=radio]:checked").val();
+                filterSelectedMenu(rd);
+                if (rd == "A") {
+                    _mainMenu.find('.vis-removeFilter').hide();
+                }
+                else {
+                    _mainMenu.find('.vis-removeFilter').show();
+                }
+                closePopup(); // close popup
+            };
         };
 
         function filterSelectedMenu(action) {

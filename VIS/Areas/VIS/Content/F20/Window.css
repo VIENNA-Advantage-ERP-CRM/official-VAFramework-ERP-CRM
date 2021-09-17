@@ -2148,6 +2148,26 @@ a:hover {
     justify-content: center;
     color: rgba(var(--v-c-primary), 1);
     font-size: 1.2rem;
+    position: relative;
+    padding-right: .4rem;
+}
+.vis-navFilterIco a {
+    font-size: 1.5rem;
+}
+.vis-removeFilter {
+    position: absolute;
+    background: #ffffff;
+    right: -2px;
+    bottom: 3px;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    color: #0098f7;
+    font-size: .7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    cursor: pointer;
 }
 
 .vis-navSearchWrap {
