@@ -622,7 +622,7 @@ VIS.MRole.getRecordWhere = function (AD_Table_ID, keyColumnName, rw) {
         }
         sb.append(sbInclude).append(")");
         if (isIncludeNull) {
-            sb.append(" OR ").Append(keyColumnName).append(" IS NULL )");
+            sb.append(" OR ").append(keyColumnName).append(" IS NULL )");
         }
     }
 
