@@ -1149,7 +1149,7 @@
                 showAllItems();
             });
 
-            function filterClicked() {
+              function filterClicked() {
                 var rd = root.find("input[type=radio]:checked").val();
                 filterSelectedMenu(rd);
                 if (rd == "A") {

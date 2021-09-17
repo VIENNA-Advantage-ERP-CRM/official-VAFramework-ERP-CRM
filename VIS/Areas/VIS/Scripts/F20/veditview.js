@@ -677,7 +677,7 @@
 
         var ctrl = $(wraper);
 
-        if (!mField.getIsLink()) {
+        if (!mField.getIsLink() && mField.getDisplayType() != VIS.DisplayType.Button) {
             if (mField.getShowIcon() && (mField.getFontClass() != '' || mField.getImageName() != '')) {
 
                 var btns = ['<div class="input-group-prepend"><span class="input-group-text vis-color-primary">'];

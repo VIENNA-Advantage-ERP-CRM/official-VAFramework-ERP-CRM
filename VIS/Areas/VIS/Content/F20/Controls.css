@@ -12,11 +12,20 @@
 }
 
 
-.vis-ev-col input:not([type=button]):not([type="checkbox"]):not([type="radio"]), .vis-ev-col select, .vis-ev-col textarea, .vis-control-wrap > button {
+.vis-ev-col input:not([type=button]):not([type="checkbox"]):not([type="radio"]), .vis-ev-col select, .vis-ev-col textarea {
     border: 1px solid rgba(var(--v-c-on-secondary), .2);
     /*border: 1px solid var(--input-border);*/
     border-radius: .25rem;
     color: rgba(var(--v-c-on-secondary), 1);
+    background-color: transparent;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.vis-control-wrap > button {
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
+    /*border: 1px solid var(--input-border);*/
+    border-radius: .25rem;
+   /* color: rgba(var(--v-c-on-secondary), 1);*/
     background-color: transparent;
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
@@ -334,7 +343,7 @@ input.vis-ev-col-readonly:not(:placeholder-shown) ~ label {
 .vis-ev-col-linkbutton {
     background: no-repeat !important;
     border: none !important;
-    color: rgba(var(--v-c-primary), 1) !important;
+    color: rgba(var(--v-c-primary), 1);
     display: flex;
     align-items: center;
    /* justify-content: center;*/
@@ -592,12 +601,14 @@ input[type="radio"]:not(:checked){
 
     .vis-input-wrap input[type=range]::-webkit-slider-thumb,
     .w2ui-editable input[type=range]::-webkit-slider-thumb {
-        width: 25px;
+        width: 20px;
+        border-radius: 50%;
         -webkit-appearance: none;
         height: 20px;
         cursor: ew-resize;
-        background: #ddd;
-        box-shadow: -340px 0 0 320px rgba(var(--v-c-primary), 1), inset 0 0 0 20px rgba(var(--v-c-primary), 1);
+        background: linear-gradient( 90deg, black 53%, #fff 47%);
+        /* box-shadow: -340px 0 0 320px rgba(var(--v-c-primary), 1), inset 0 0 0 20px rgba(var(--v-c-primary), 1); */
+        box-shadow: -330px 0 0 324px rgba(var(--v-c-primary), 1), inset 0 0 0 1px rgba(var(--v-c-on-secondary), 1);
         -webkit-transition: box-shadow 0.2s ease-in-out;
         transition: box-shadow 0.2s ease-in-out;
         position: relative;

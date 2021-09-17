@@ -869,6 +869,14 @@ namespace VAdvantage.Model
                             }
                         }
                     }
+                    //Rakesh(VA228):Set VA009_IsContra true assigned by amit
+                    if (GetC_BPartner_ID() <= 0 && !IsReversal())
+                    {
+                        if (Get_ColumnIndex("VA009_IsContra") >= 0)
+                        {
+                            Set_Value("VA009_IsContra", true);
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -5262,7 +5270,14 @@ namespace VAdvantage.Model
             // 
             // during creation of counter document, Payment Execution Status should be "In-Progress"
             if (Env.IsModuleInstalled("VA009_"))
+            {
                 reversal.SetVA009_ExecutionStatus("I");
+                //Rakesh(VA228):Set contra value on reversal
+                if (Get_ColumnIndex("VA009_IsContra") >= 0)
+                {
+                    reversal.Set_Value("VA009_IsContra", Get_Value("VA009_IsContra"));
+                }
+            }
             //
             reversal.SetIsAllocated(true);
             // Reconcile true on Original and Reverse Payment if Reconcile is False

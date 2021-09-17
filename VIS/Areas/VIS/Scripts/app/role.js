@@ -516,15 +516,19 @@ VIS.MRole.getKeyColumnName = function (tableInfo, keyColumnName) {
     return columnSyn;
 }; //key columnname 
 
-VIS.MRole.getDependentAccess = function (whereColumnName, includes, excludes) {
+VIS.MRole.getDependentAccess = function (whereColumnName, includes, excludes, isIncludeNull) {
     if (includes.length == 0 && excludes.length == 0)
         return "";
     if (includes.length != 0 && excludes.length != 0)
         this.log.warning("Mixing Include and Excluse rules - Will not return values");
 
     var where = new StringBuilder(" AND ");
-    if (includes.length == 1)
+    if (isIncludeNull)
+        where.append(" ( ");
+    if (includes.length == 1) {
+        
         where.append(whereColumnName).append("=").append(includes[0]);
+    }
     else if (includes.length > 1) {
         where.append(whereColumnName).append(" IN (");
         for (var ii = 0; ii < includes.length; ii++) {
@@ -544,6 +548,9 @@ VIS.MRole.getDependentAccess = function (whereColumnName, includes, excludes) {
         }
         where.append(")");
     }
+
+    if (isIncludeNull)
+        where.append(" OR ").append(whereColumnName).append(" IS NULL").append(" ) ");
     return where.toString();
 }; // getDependentAccess
 
@@ -615,7 +622,7 @@ VIS.MRole.getRecordWhere = function (AD_Table_ID, keyColumnName, rw) {
         }
         sb.append(sbInclude).append(")");
         if (isIncludeNull) {
-            sb.append(" OR ").Append(keyColumnName).append(" IS NULL )");
+            sb.append(" OR ").append(keyColumnName).append(" IS NULL )");
         }
     }
 
@@ -887,6 +894,7 @@ VIS.MRole.addAccessSQL = function (SQL, TableNameIn, fullyQualified, rw, addOrgA
     var whereColumnName = null;
     var includes = [];
     var excludes = [];
+    var isIncludeNull = false; // include null value with include exclude list
     //MTable table = MTable.get(getCtx(), TableNameIn);
     var m_recordDependentAccess = this.vo.recordDependentAccess;
     for (i = 0; i < m_recordDependentAccess.length; i++) {
@@ -907,7 +915,7 @@ VIS.MRole.addAccessSQL = function (SQL, TableNameIn, fullyQualified, rw, addOrgA
         if (AD_Table_ID != 0
                 && AD_Table_ID != m_recordDependentAccess[i].AD_Table_ID)
             retSQL.append(this.getDependentAccess(whereColumnName, includes,
-                    excludes));
+                excludes, isIncludeNull));
 
         AD_Table_ID = m_recordDependentAccess[i].AD_Table_ID;
         // *** we found the column in the main query
@@ -920,6 +928,7 @@ VIS.MRole.addAccessSQL = function (SQL, TableNameIn, fullyQualified, rw, addOrgA
             //log.fine("Include " + columnName + " - "
             //        + m_recordDependentAccess[i]);
         }
+        isIncludeNull = isIncludeNull || m_recordDependentAccess[i].IsIncludeNull;
 
         var column = null;// table.getColumn(columnName);
         if (column != null) {
@@ -933,7 +942,7 @@ VIS.MRole.addAccessSQL = function (SQL, TableNameIn, fullyQualified, rw, addOrgA
                     columnName);
     } // for all dependent records
 
-    retSQL.append(this.getDependentAccess(whereColumnName, includes, excludes));
+    retSQL.append(this.getDependentAccess(whereColumnName, includes, excludes, isIncludeNull));
     //
     retSQL.append(orderBy);
     // console.log(retSQL.toString());

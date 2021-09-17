@@ -97,7 +97,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             MPayment payment = CreatePayment(ibs.GetC_Invoice_ID(), ibs.GetC_BPartner_ID(),
                 ibs.GetC_Currency_ID(), ibs.GetStmtAmt(), ibs.GetTrxAmt(),
                 ibs.GetC_BankAccount_ID(),Utility.Util.GetValueOfDateTime(ibs.GetStatementLineDate() == null ? ibs.GetStatementDate() : ibs.GetStatementLineDate()),
-                Utility.Util.GetValueOfDateTime(ibs.GetDateAcct()), ibs.GetDescription(), ibs.GetAD_Org_ID(), 0, 0); //Used Zero's as parameters to Avoid throw Error
+                Utility.Util.GetValueOfDateTime(ibs.GetDateAcct()), ibs.GetDescription(), ibs.GetAD_Org_ID(), 0, 0, 0, null, null, null); //Used Zero's as parameters to Avoid throw Error
             if (payment == null)
             {
                 throw new SystemException("Could not create Payment");
@@ -138,11 +138,15 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //Check the Column Exists or not then Pass the Colums as parameters for CreatePayment method
             int conversionType = bsl.Get_ColumnIndex("C_ConversionType_ID") > 0 ? bsl.Get_ValueAsInt("C_ConversionType_ID") : 0;
             int _order_Id = bsl.Get_ColumnIndex("C_Order_ID") > 0 ? bsl.Get_ValueAsInt("C_Order_ID") : 0;
+            //Get CheckDate and TenderType from Bank Statement Line
+            //string checkNo = bsl.Get_ColumnIndex("CheckNo") > 0 ? bsl.GetValueAsString("CheckNo") : null;
+            DateTime? checkDate = bsl.GetEftValutaDate() != null ? bsl.GetEftValutaDate() : bsl.GetDateAcct();
+            string tenderType = bsl.Get_ColumnIndex("TenderType") > 0 ? bsl.GetValueAsString("TenderType") : null;
 
             MPayment payment = CreatePayment(bsl.GetC_Invoice_ID(), bsl.GetC_BPartner_ID(),
                 bsl.GetC_Currency_ID(), bsl.GetStmtAmt(), bsl.GetTrxAmt(),
                 bs.GetC_BankAccount_ID(), bsl.GetStatementLineDate(), bsl.GetDateAcct(),
-                bsl.GetDescription(), bsl.GetAD_Org_ID(), conversionType, _order_Id);
+                bsl.GetDescription(), bsl.GetAD_Org_ID(), conversionType, _order_Id, bsl.GetVA009_PaymentMethod_ID(), bsl.GetEftCheckNo(), checkDate, tenderType);
  
             if (payment == null && !string.IsNullOrEmpty(_message))
             {
@@ -205,11 +209,15 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <param name="AD_Org_ID"></param>
         /// <param name="C_ConversionType_ID">C_ConversionType_ID</param>
         /// <param name="C_Order_ID">C_Order_ID</param>
+        /// <param name="_paymentMethod">VA009_PaymentMethod_ID</param>
+        /// <param name="_checkNo">Cheque No</param>
+        /// <param name="_checkDate">Cheque Date</param>
+        /// <param name="_tenderType">Tender Type</param>
         /// <returns>payment</returns>
         private MPayment CreatePayment(int C_Invoice_ID, int C_BPartner_ID,
             int C_Currency_ID, Decimal stmtAmt, Decimal trxAmt,
             int C_BankAccount_ID, DateTime? dateTrx, DateTime? dateAcct,
-            String description, int AD_Org_ID, int C_ConversionType_ID, int C_Order_ID)
+            String description, int AD_Org_ID, int C_ConversionType_ID, int C_Order_ID, int _paymentMethod, string _checkNo, DateTime? _checkDate, string _tenderType)
         {
             //	Trx Amount = Payment overwrites Statement Amount if defined
             Decimal payAmt = trxAmt;
@@ -258,7 +266,19 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 //set the BPartner Location from the Invoice
                 payment.SetC_BPartner_Location_ID(invoice.GetC_BPartner_Location_ID());
                 //set the PaymentMethod by the reference of Invoice
-                payment.SetVA009_PaymentMethod_ID(invoice.GetVA009_PaymentMethod_ID());
+                //payment.SetVA009_PaymentMethod_ID(invoice.GetVA009_PaymentMethod_ID());
+                //get PaymentMethod,CheckNo,TenderType and checkDate from the BankStatement Line and Set to Payment
+                payment.SetVA009_PaymentMethod_ID(_paymentMethod);
+                if (!string.IsNullOrEmpty(_checkNo))
+                {
+                    payment.SetCheckNo(_checkNo);
+                }
+                if (!string.IsNullOrEmpty(_checkNo) && _checkDate.HasValue)
+                {
+                    payment.SetCheckDate(_checkDate);
+                }
+
+                payment.SetTenderType(_tenderType);
                 payment.SetC_Currency_ID(invoice.GetC_Currency_ID());
                 decimal _dueAmt = 0;
 
@@ -374,7 +394,19 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
                 payment.SetC_BPartner_Location_ID(order.GetC_BPartner_Location_ID());
                 payment.SetC_Currency_ID(order.GetC_Currency_ID());
-                payment.SetVA009_PaymentMethod_ID(order.GetVA009_PaymentMethod_ID());
+                //payment.SetVA009_PaymentMethod_ID(order.GetVA009_PaymentMethod_ID());
+                //get PaymentMethod from the BankStatement Line
+                //get PaymentMethod,CheckNo, tenderType and checkDate from the BankStatement Line and Set to Payment
+                payment.SetVA009_PaymentMethod_ID(_paymentMethod);
+                if (!string.IsNullOrEmpty(_checkNo))
+                {
+                    payment.SetCheckNo(_checkNo);
+                }
+                if (!string.IsNullOrEmpty(_checkNo) && _checkDate.HasValue)
+                {
+                    payment.SetCheckDate(_checkDate);
+                }
+                payment.SetTenderType(_tenderType);
                 payment.SetPayAmt(order.GetGrandTotal());
                 if (!payment.Save(Get_Trx()))
                 {
