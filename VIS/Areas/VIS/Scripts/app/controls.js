@@ -1252,15 +1252,15 @@
         this.values = null;
         this.isIconSet = true;
 
-        var $img = $("<i title='" + text + "'>");
+        var $img = $("<i style='color:inherit' title='" + text + "'>");
 
-        var $txt = $("<span>").text(text);
+        var $txt = $("<span style='color:inherit'>").text(text);
         var rootPath = VIS.Application.contextUrl + "Areas/VIS/Images/base/";
 
         var $ctrl = null;
         //Init Control
         if (!isLink) {
-            $ctrl = $('<button>', { type: 'button', name: columnName });
+            $ctrl = $('<button class="vis-ev-col-wrap-button">', { type: 'button', name: columnName });
             $img.css("margin-right", "8px");
             $ctrl.append($img).append($txt);
         }
@@ -1270,7 +1270,7 @@
                 $ctrl.append($txt).append($img);
             }
             else {
-                $ctrl = $('<button type="button" class="vis-ev-col-linkbutton"></button>');
+                $ctrl = $('<button type="button" class="vis-ev-col-wrap-button vis-ev-col-linkbutton"></button>');
                 $ctrl.append($img).append($txt);
             }   
         }
