@@ -341,7 +341,13 @@ namespace VIS.Controllers
                         }
                         //check system setting// set to skipped lib
 
+
                     }
+
+                    /// VIS0008
+                    /// 
+                    if (!LoginHelper.IsDeviceLinked(AD_User_ID))
+                        VIS.Controllers.JsonDataController.AddMessageForToastr("VA074" + "_P_" + ctx.GetAD_Session_ID(), Msg.GetMsg(ctx, "Please link VA Mobile App to enable 2FA"));
                 }
             }
 
