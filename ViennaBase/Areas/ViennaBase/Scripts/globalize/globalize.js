@@ -349,7 +349,7 @@
             "AdminActDisabled": "Admin Account has been Disabled",
             "AdminActExpired": "Admin Account has been Expired",
             "AdminMaxFailedLoginAttempts": "Admin User account is locked. Maximum failed login attempts exceeds the defined limit. Please contact to administrator.",
-
+            "PlzScanVAApp": "Please scan QR code from VA Mobile App",
         }
     };
 
