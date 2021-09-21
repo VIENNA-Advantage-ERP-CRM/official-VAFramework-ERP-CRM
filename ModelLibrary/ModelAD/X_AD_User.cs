@@ -1714,5 +1714,24 @@ namespace VAdvantage.Model
         { 
             return (String)Get_Value("TwoFAMethod"); 
         }
+
+        /** Set 2FA Token Key.
+        @param TokenKey2FA Unique Two Factor Token Key */
+        public void SetTokenKey2FA(String TokenKey2FA) 
+        { 
+            if (TokenKey2FA != null && TokenKey2FA.Length > 500) 
+            { 
+                log.Warning("Length > 500 - truncated"); 
+                TokenKey2FA = TokenKey2FA.Substring(0, 500); 
+            } 
+            Set_Value("TokenKey2FA", TokenKey2FA); 
+        }
+        
+        /** Get 2FA Token Key.
+        @return Unique Two Factor Token Key */
+        public String GetTokenKey2FA() 
+        { 
+            return (String)Get_Value("TokenKey2FA"); 
+        }
     }
 }
