@@ -6,7 +6,7 @@
 
     var getValidationSummaryErrors = function ($form) {
         var errorSummary = $form.find('.validation-summary-errors, .validation-summary-valid');
-        return errorSummary; 
+        return errorSummary;
     };
 
     var displayErrors = function (form, errors) {
@@ -65,7 +65,6 @@
             $.post($form.attr('action'), $form.serializeArray())
                 .done(function (json) {
                     json = json || {};
-
                     // In case of success, we redirect to the provided URL or the same page.
 
                     if (json.step2) {
@@ -98,6 +97,10 @@
                             var loginQRLbl = $(".vis-loginQRLabel");
                             loginQRLbl.css("margin-top", "15px");
                             loginQRLbl.css("margin-bottom", "40px");
+                            if (json.ctx.TwoFAMethod == "VA") {
+                                $('#login3Data2').val('false');
+                                $(".vis-login-resendOTP").css("display", "block");
+                            }
                         }
                         $otpTwoFA.val("");
                         $('#login3Data').val(JSON.stringify(json.ctx));
@@ -139,13 +142,13 @@
 
     var validatePassword = function (password) {
         var regex = /^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*[@$!%*?&])[a-zA-Z][A-Za-z\d@$!%*?& ]{4,}$/;// Start with Alphabet, minimum 4 length
-       //@$!%*#?& allowed only
+        //@$!%*#?& allowed only
 
         var passed = 0;
 
-       if(!regex.test(password)) {
+        if (!regex.test(password)) {
 
-           return false;
+            return false;
         }
         return true;
     };
@@ -163,7 +166,7 @@
     var showLoginResetPwd = function () {
         $('#login-form-1').hide();
         $('#login-form-3').hide();
-        $('#login-form-2').show(); 
+        $('#login-form-2').show();
         $btnLogin1.prop('disabled', false);
         $newPwd.focus();
     };
@@ -180,11 +183,16 @@
         $btnLogin1.submit();
     }
 
+    var resendClick = function (e) {
+        $("#login3Data2").val(true);
+        $btnLogin1.submit();
+    }
+
     var showLogin = function (e) {
         $("#login2Panel").hide();//  "slide", function () {
         $("#loginPanel").show();//"slide", function () {
         $("#loginName").focus();
-      //  $imgAuto.hide();
+        //  $imgAuto.hide();
         e.preventDefault();
     };
 
@@ -322,6 +330,7 @@
         $otpTwoFA.attr("placeholder", Globalize.localize("EnterOTP"));
         $lblScanQRCode.text(Globalize.localize("ScanQRCode"));
         $lblEnterVerCode.text(Globalize.localize("EnterVerCode"));
+        $lblScanVAApp.text(Globalize.localize("PlzScanVAApp"));
 
         $lblRole.text(Globalize.localize("Role"));
         $lblClient.text(Globalize.localize("Client"));
@@ -351,8 +360,9 @@
     $("#login-form-2").on("keydown", checkCapsLock);
 
     $("#lblSkip").click(skipClick);
+    $("#lblResend").click(resendClick);
 
-    
+
     var $loginForm = $("#loginForm");
 
     var $cmbRole = $("#role");
@@ -368,6 +378,7 @@
     var $otpTwoFA = $('#txt2FAOTP');
     var $lblScanQRCode = $('#lblScanQRCode');
     var $lblEnterVerCode = $('#lblEnterVerCode');
+    var $lblScanVAApp = $('#lblScanVAApp');
     //var $lblUser = $('label[for="Login1Model_UserName"]');
     //var $lblPwd = $('label[for="Login1Model_Password"]');
     //var $lblLang = $('label[for="Login1Model_LoginLanguage"]');
@@ -443,7 +454,7 @@
     else {
         $txtUser.focus();
     }
-    
+
 
 });
 

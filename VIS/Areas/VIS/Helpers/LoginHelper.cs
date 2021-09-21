@@ -88,7 +88,7 @@ namespace VIS.Helpers
             }
             else
             {
-                throw new Exception("UserNotFound");
+                    throw new Exception("UserNotFound");
             }
 
             //if authenticated by LDAP or password is null(Means request from home page)
@@ -156,6 +156,7 @@ namespace VIS.Helpers
                 if (method2FA != "")
                 {
                     model.Login1Model.QRFirstTime = false;
+                    model.Login1Model.NoLoginSet = false;
                     string userSKey = Util.GetValueOfString(dr["Value"]);
                     int ADUserID = Util.GetValueOfInt(dr["AD_User_ID"]);
                     if (method2FA == X_AD_User.TWOFAMETHOD_GoogleAuthenticator)
@@ -187,13 +188,27 @@ namespace VIS.Helpers
                         if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(VA074_MobileLinked_ID) FROM VA074_MobileLinked 
                             WHERE VA074_AD_User_ID = " + ADUserID + " AND VA074_PushNotiToken IS NOT NULL AND IsActive = 'Y'")) > 0)
                         {
-                            string TokenNo = GetRndNum(6);
-                            _dictVAMobTokens.Add(userSKey, TokenNo);
-                            VAdvantage.PushNotif.PushNotification.SendNotificationToUser(ADUserID, 0, 0, Msg.GetMsg(new Ctx(), "VIS_VAOTP"), Msg.GetMsg(new Ctx(), "OTP") + " : " + TokenNo, "");
+                            SendPushNotToken(ADUserID, userSKey);
+                            //string TokenNo = GetRndNum(6);
+                            //if (_dictVAMobTokens.ContainsKey(userSKey))
+                            //    _dictVAMobTokens[userSKey] = TokenNo;
+                            //else
+                            //    _dictVAMobTokens.Add(userSKey, TokenNo);
+                            //VAdvantage.PushNotif.PushNotification.SendNotificationToUser(ADUserID, 0, 0, Msg.GetMsg(new Ctx(), "VIS_VAOTP"), Msg.GetMsg(new Ctx(), "OTP") + " : " + TokenNo, "");
                         }
                         else
                         {
-
+                            //int loginSettingsCount = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(AD_LoginSetting_ID) FROM AD_LoginSetting WHERE IsActive = 'Y' 
+                            //AND AD_User_ID = " + ADUserID));
+                            //if (!(loginSettingsCount == 1))
+                            //{
+                            //VIS.Controllers.JsonDataController.AddMessageForToastr("Msg1", "Please link VA Mobile App to enable 2FA");
+                            model.Login1Model.NoLoginSet = true;
+                            //}
+                            //else
+                            //{
+                            //    // Display QR Code HERE
+                            //}
                         }
                     }
                 }
@@ -734,34 +749,51 @@ namespace VIS.Helpers
         }
 
         /// <summary>`
-        /// Validate OTP from Google Authenticator
+        /// Validate OTP from Google Authenticator or VA Mobile APP
         /// </summary>
         /// <param name="model"></param>
         /// <returns>true/false</returns>
-        public static bool Validate2FAOTP(LoginModel model)
+        public static bool Validate2FAOTP(LoginModel model, string TwoFAMethod)
         {
             bool isValid = false;
-            DataSet dsUser = DB.ExecuteDataset(@"SELECT Value, TokenKey2FA, Created, Is2FAEnabled, TwoFAMethod, AD_User_ID FROM AD_User WHERE AD_User_ID = " + model.Login1Model.AD_User_ID);
-            if (dsUser != null && dsUser.Tables[0].Rows.Count > 0)
+            if (TwoFAMethod == X_AD_User.TWOFAMETHOD_GoogleAuthenticator)
             {
-                TwoFactorAuthenticator tfa = new TwoFactorAuthenticator();
-                string Token2FAKey = Util.GetValueOfString(dsUser.Tables[0].Rows[0]["Value"]);
-                int ADUserID = Util.GetValueOfInt(dsUser.Tables[0].Rows[0]["AD_User_ID"]);
-                if (model.Login1Model.TokenKey2FA != null && model.Login1Model.TokenKey2FA != "")
-                    Token2FAKey = Token2FAKey.ToString() + ADUserID.ToString() + model.Login1Model.TokenKey2FA;
-                else if (Util.GetValueOfString(dsUser.Tables[0].Rows[0]["TokenKey2FA"]) != "")
+                DataSet dsUser = DB.ExecuteDataset(@"SELECT Value, TokenKey2FA, Created, Is2FAEnabled, TwoFAMethod, AD_User_ID FROM AD_User WHERE AD_User_ID = " + model.Login1Model.AD_User_ID);
+                if (dsUser != null && dsUser.Tables[0].Rows.Count > 0)
                 {
-                    string decKey = Util.GetValueOfString(dsUser.Tables[0].Rows[0]["TokenKey2FA"]);
-                    decKey = SecureEngine.Decrypt(decKey);
-                    Token2FAKey = Token2FAKey.ToString() + ADUserID.ToString() + decKey;
-                }
+                    TwoFactorAuthenticator tfa = new TwoFactorAuthenticator();
+                    string Token2FAKey = Util.GetValueOfString(dsUser.Tables[0].Rows[0]["Value"]);
+                    int ADUserID = Util.GetValueOfInt(dsUser.Tables[0].Rows[0]["AD_User_ID"]);
+                    if (model.Login1Model.TokenKey2FA != null && model.Login1Model.TokenKey2FA != "")
+                        Token2FAKey = Token2FAKey.ToString() + ADUserID.ToString() + model.Login1Model.TokenKey2FA;
+                    else if (Util.GetValueOfString(dsUser.Tables[0].Rows[0]["TokenKey2FA"]) != "")
+                    {
+                        string decKey = Util.GetValueOfString(dsUser.Tables[0].Rows[0]["TokenKey2FA"]);
+                        decKey = SecureEngine.Decrypt(decKey);
+                        Token2FAKey = Token2FAKey.ToString() + ADUserID.ToString() + decKey;
+                    }
 
-                isValid = tfa.ValidateTwoFactorPIN(Token2FAKey, model.Login1Model.OTP2FA);
-                if (isValid && Util.GetValueOfString(dsUser.Tables[0].Rows[0]["TokenKey2FA"]).Trim() == "")
-                {
-                    string encKey = SecureEngine.Encrypt(model.Login1Model.TokenKey2FA);
-                    int countUpd = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE AD_USER SET TokenKey2FA = '" + encKey + @"' WHERE 
+                    isValid = tfa.ValidateTwoFactorPIN(Token2FAKey, model.Login1Model.OTP2FA);
+                    if (isValid && Util.GetValueOfString(dsUser.Tables[0].Rows[0]["TokenKey2FA"]).Trim() == "")
+                    {
+                        string encKey = SecureEngine.Encrypt(model.Login1Model.TokenKey2FA);
+                        int countUpd = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE AD_USER SET TokenKey2FA = '" + encKey + @"' WHERE 
                                     AD_USER_ID = " + model.Login1Model.AD_User_ID));
+                    }
+                }
+            }
+            else if (TwoFAMethod == X_AD_User.TWOFAMETHOD_VAMobileApp)
+            {
+                if (_dictVAMobTokens.ContainsKey(model.Login1Model.UserValue))
+                {
+                    string TokenNo = _dictVAMobTokens[model.Login1Model.UserValue];
+                    if (TokenNo == model.Login1Model.OTP2FA)
+                    {
+                        _dictVAMobTokens.Remove(model.Login1Model.UserValue);
+                        return true;
+                    }
+                    else
+                        return false;
                 }
             }
             return isValid;
@@ -802,20 +834,30 @@ namespace VIS.Helpers
         }
 
         internal static Dictionary<string, string> _dictVAMobTokens = new Dictionary<string, string>();
-        public static bool ValidateVAToken(string userKey, string TokenNum)
+
+        /// <summary>
+        /// Check if VA Mobile app is scanned for the user passed in the parameter
+        /// </summary>
+        /// <param name="AD_User_ID">User ID</param>
+        /// <returns>true/false</returns>
+        public static bool IsDeviceLinked(int AD_User_ID)
         {
-            if (_dictVAMobTokens.ContainsKey(userKey))
+            if (X_AD_User.TWOFAMETHOD_VAMobileApp == Util.GetValueOfString(DB.ExecuteScalar("SELECT TwoFAMethod FROM AD_User WHERE AD_User_ID = " + AD_User_ID)))
             {
-                string TokenNo = _dictVAMobTokens[userKey];
-                if (TokenNo == TokenNum)
-                {
-                    _dictVAMobTokens.Remove(userKey);
-                    return true;
-                }
-                else
-                    return false;
+                return Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(VA074_MobileLinked_ID) FROM VA074_MobileLinked 
+                            WHERE VA074_AD_User_ID = " + AD_User_ID + " AND VA074_PushNotiToken IS NOT NULL AND IsActive = 'Y'")) > 0;
             }
-            return false;
+            return true;
+        }
+
+        public static void SendPushNotToken(int ADUserID, string userSKey)
+        {
+            string TokenNo = GetRndNum(6);
+            if (_dictVAMobTokens.ContainsKey(userSKey))
+                _dictVAMobTokens[userSKey] = TokenNo;
+            else
+                _dictVAMobTokens.Add(userSKey, TokenNo);
+            VAdvantage.PushNotif.PushNotification.SendNotificationToUser(ADUserID, 0, 0, Msg.GetMsg(new Ctx(), "VIS_VAOTP"), Msg.GetMsg(new Ctx(), "OTP") + " : " + TokenNo, "");
         }
     }
 }

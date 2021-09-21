@@ -600,6 +600,14 @@ namespace VAdvantage.Model
                 log.SaveError("Warning", Msg.GetMsg(GetCtx(), "UserCannotUpdate", true));
                 return false;
             }
+
+            // VIS0008 Change for 2FA
+            if (!newRecord && Is_ValueChanged("TwoFAMethod") 
+                && (Util.GetValueOfString(Get_ValueOld("TwoFAMethod")) == X_AD_User.TWOFAMETHOD_GoogleAuthenticator))
+            {
+                SetTokenKey2FA("");
+            }
+
             if (Is_ValueChanged("Password"))
             {
                 string pwd = GetPassword();
