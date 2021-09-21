@@ -2504,10 +2504,10 @@
             $ctrl.vaautocomplete({
                 source: function (term, response) {
                     var sql = self.lookup.info.queryAll;
-                    var keyColumn = self.lookup.colName;
+                    var keyColumn = self.lookup.info.keyColumn;
                     var displayColumn = self.lookup.info.displayColSubQ;    
-
-                    sql = sql.replace(displayColumn, (displayColumn + ' AS finalValue'));
+                    var lastPart = sql.substr(sql.lastIndexOf('FROM'), sql.length);
+                    sql = "SELECT " + keyColumn + " AS ID,NULL," + displayColumn + " AS finalValue " + lastPart;
 
                     term = term.toUpper();
                     term += "%";                    
@@ -2519,9 +2519,9 @@
                             var res = [];
                             if (JSON.parse(data) != null) {
                                 result = JSON.parse(data).Table;
-                                for (var i = 0; i < result.length; i++) {                                   
+                                for (var i = 0; i < result.length; i++) { 
                                     res.push({
-                                        id: result[i][columnName.toUpper()],
+                                        id: result[i]['ID'],
                                         value: VIS.Utility.Util.getIdentifierDisplayVal(result[i]['FINALVALUE'])
                                     });
                                 }
