@@ -225,6 +225,24 @@ Object ii = Get_Value("Record_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-}
+        /** Set Read Only.
+@param IsReadOnly Field is read only */
+        public void SetIsIncludeNull(Boolean IsReadOnly)
+        {
+            Set_Value("IsIncludeNull", IsReadOnly);
+        }
+        /** Get Read Only.
+@return Field is read only */
+        public Boolean IsIncludeNull()
+        {
+            Object oo = Get_Value("IsIncludeNull");
+            if (oo != null)
+            {
+                if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo);
+                return "Y".Equals(oo);
+            }
+            return false;
+        }
+    }
 
 }

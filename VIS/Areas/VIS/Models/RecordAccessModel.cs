@@ -11,17 +11,19 @@ namespace VIS.Areas.VIS.Models
 {
     public class RecordAccessModel
     {
-        public bool SaveAccess(Ctx ctx,int AD_Role_ID, int AD_Table_ID, int Record_ID, bool isActive, bool isExclude, bool isReadOnly, bool isDependentEntities,bool isUpdate)
+        public bool SaveAccess(Ctx ctx, int AD_Role_ID, int AD_Table_ID, int Record_ID, bool isActive,
+            bool isExclude, bool isReadOnly, bool isIncludeNull, bool isDependentEntities, bool isUpdate)
         {
             if (isUpdate)
             {
                 string sql = "UPDATE AD_Record_Access SET IsActive='" + (isActive ? 'Y' : 'N') + @"',
                               IsExclude='" + (isExclude ? 'Y' : 'N') + @"',
                               IsReadOnly='" + (isReadOnly ? 'Y' : 'N') + @"',
+                              IsIncludeNull='" + (isIncludeNull ? 'Y' : 'N') + @"',
                               IsDependentEntities='" + (isDependentEntities ? 'Y' : 'N') + @"'
                               WHERE AD_Role_ID=" + AD_Role_ID + @"
                               AND Record_ID=" + Record_ID + @"
-                              AND AD_Table_ID=" + AD_Table_ID ;
+                              AND AD_Table_ID=" + AD_Table_ID;
                 int res = VAdvantage.DataBase.DB.ExecuteQuery(sql);
                 if (res > -1)
                 {
@@ -35,10 +37,12 @@ namespace VIS.Areas.VIS.Models
             recData.SetIsExclude(isExclude);
             recData.SetIsReadOnly(isReadOnly);
             recData.SetIsDependentEntities(isDependentEntities);
+            recData.SetIsIncludeNull(isIncludeNull);
             bool success = recData.Save();
             return success;
         }
-        public bool DeleteRecordAccess( int AD_Role_ID, int AD_Table_ID, int Record_ID, bool isActive, bool isExclude, bool isReadOnly, bool isDependentEntities)
+        public bool DeleteRecordAccess(int AD_Role_ID, int AD_Table_ID, int Record_ID, bool isActive,
+            bool isExclude, bool isReadOnly, bool isIncludeNull, bool isDependentEntities)
         {
             string sql = "DELETE FROM  AD_Record_Access WHERE AD_Role_ID=" + AD_Role_ID + @"
                         AND Record_ID=" + Record_ID + @"
@@ -46,6 +50,7 @@ namespace VIS.Areas.VIS.Models
                         AND IsActive='" + (isActive ? 'Y' : 'N') + @"'
                         AND IsExclude='" + (isExclude ? 'Y' : 'N') + @"'
                         AND IsReadOnly='" + (isReadOnly ? 'Y' : 'N') + @"'
+                        AND IsIncludeNull='" + (isIncludeNull ? 'Y' : 'N') + @"'
                         AND IsDependentEntities='" + (isDependentEntities ? 'Y' : 'N') + "'";
             int res = VAdvantage.DataBase.DB.ExecuteQuery(sql);
             if (res > -1)
@@ -68,7 +73,7 @@ namespace VIS.Areas.VIS.Models
                 {
                     Dictionary<string, object> obj = new Dictionary<string, object>();
                     obj["AD_Role_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_Role_ID"]);
-                    obj["Name"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["Name"]);                    
+                    obj["Name"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["Name"]);
                     retDic.Add(obj);
                 }
             }
@@ -79,7 +84,7 @@ namespace VIS.Areas.VIS.Models
         public List<Dictionary<string, object>> GetRecordAccess(int _AD_Table_ID, int _Record_ID, Ctx ctx)
         {
             List<Dictionary<string, object>> retDic = null;
-            string sql = @"SELECT AD_ROLE_ID,ISACTIVE,ISDEPENDENTENTITIES,ISEXCLUDE,ISREADONLY FROM AD_Record_Access WHERE AD_Table_ID=" + _AD_Table_ID 
+            string sql = @"SELECT AD_ROLE_ID,ISACTIVE,ISDEPENDENTENTITIES,ISEXCLUDE,ISREADONLY,ISINCLUDENULL FROM AD_Record_Access WHERE AD_Table_ID=" + _AD_Table_ID
                 + " AND Record_ID=" + _Record_ID + " AND AD_Client_ID=" + ctx.GetAD_Client_ID();
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -92,7 +97,8 @@ namespace VIS.Areas.VIS.Models
                     obj["ISACTIVE"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["ISACTIVE"]);
                     obj["ISDEPENDENTENTITIES"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["ISDEPENDENTENTITIES"]);
                     obj["ISEXCLUDE"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["ISEXCLUDE"]);
-                    obj["ISREADONLY"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["ISREADONLY"]);                    
+                    obj["ISREADONLY"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["ISREADONLY"]);
+                    obj["ISINCLUDENULL"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["ISINCLUDENULL"]);
                     retDic.Add(obj);
                 }
             }
