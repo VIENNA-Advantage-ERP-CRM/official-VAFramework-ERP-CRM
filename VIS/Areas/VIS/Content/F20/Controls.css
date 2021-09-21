@@ -557,7 +557,12 @@ input[type="radio"]:not(:checked){
     transform: translateX(-1%);
     z-index: 2;
     margin-top: 12px !important;
+    transition: 3s;
 }
+    .vis-progress-output:hover {
+        z-index: 0;
+        transition: 0s;
+    }
 .vis-advancedSearchInput .vis-progress-output {
     margin-top:8px !important;
 }
@@ -590,6 +595,7 @@ input[type="radio"]:not(:checked){
 .vis-input-wrap input[type=range],
 .vis-advancedSearchInput input[type=range],
 .w2ui-editable input[type=range] {
+    border: none !important;
     overflow: hidden;
     min-height: 20px !important;
     height: 20px !important;
@@ -619,7 +625,7 @@ input[type="radio"]:not(:checked){
         -webkit-appearance: none;
         height: 20px;
         cursor: ew-resize;
-        background: linear-gradient( 90deg, black 53%, #fff 47%);
+        background: linear-gradient( 90deg, black 53%, rgba(var(--v-c-primary), 1) 47%);
         /* box-shadow: -340px 0 0 320px rgba(var(--v-c-primary), 1), inset 0 0 0 20px rgba(var(--v-c-primary), 1); */
         box-shadow: -330px 0 0 324px rgba(var(--v-c-primary), 1), inset 0 0 0 1px rgba(var(--v-c-on-secondary), 1);
         -webkit-transition: box-shadow 0.2s ease-in-out;
@@ -646,6 +652,9 @@ input[type="radio"]:not(:checked){
 .w2ui-editable .vis-progressCtrlWrap ~ .vis-ev-ctrlinfowrap {
     left: 0;
     Top: 18px !important;
+}
+.w2ui-grid-data .vis-progressCtrlWrap{
+    box-shadow:none !important;
 }
 
 
