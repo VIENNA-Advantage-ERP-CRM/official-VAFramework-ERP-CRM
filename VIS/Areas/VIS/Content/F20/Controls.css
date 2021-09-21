@@ -558,12 +558,17 @@ input[type="radio"]:not(:checked){
     z-index: 2;
     margin-top: 12px !important;
 }
+.vis-advancedSearchInput .vis-progress-output {
+    margin-top:8px !important;
+}
 
 .w2ui-editable .vis-progress-output {
     /* position: relative !important;*/
     margin-top: 8px !important;
     left: 3%;
 }
+
+
 
 .w2ui-grid-data .vis-grid-progress-output {
     /* color: black !important; */
@@ -578,28 +583,36 @@ input[type="radio"]:not(:checked){
     background: none !important;
     
 }
+.vis-advancedSearchInput .vis-progressCtrlWrap {
+    width:100% !important;
+}
+
 .vis-input-wrap input[type=range],
+.vis-advancedSearchInput input[type=range],
 .w2ui-editable input[type=range] {
     overflow: hidden;
+    min-height: 20px !important;
     height: 20px !important;
     -webkit-appearance: none;
     background-color: #ddd;
     padding: 0 !important;
-    z-index: 1;   
+    z-index: 1;
     top: 0.3rem;
 }
 
     .vis-input-wrap input[type=range]::-webkit-slider-runnable-track,
+    .vis-advancedSearchInput::-webkit-slider-runnable-track,
     .w2ui-editable input[type=range]::-webkit-slider-runnable-track {
-        height: 20px !important;
+        height: 20px !important;       
         -webkit-appearance: none;
-        color: rgba(var(--v-c-primary), 1) ;
+        color: rgba(var(--v-c-primary), 1);
         -webkit-transition: box-shadow 0.2s ease-in-out;
         transition: box-shadow 0.2s ease-in-out;
         background-color: rgba(var(--v-c-on-secondary),0.1);
     }
 
     .vis-input-wrap input[type=range]::-webkit-slider-thumb,
+    .vis-advancedSearchInput input[type=range]::-webkit-slider-thumb,
     .w2ui-editable input[type=range]::-webkit-slider-thumb {
         width: 20px;
         border-radius: 50%;
@@ -615,8 +628,9 @@ input[type="radio"]:not(:checked){
     }
 
 .vis-input-wrap input[type="range"],
+.vis-advancedSearchInput input[type="range"],
 .w2ui-editable input[type="range"] {
-    border-radius:0.7rem !important;
+    border-radius: 0.7rem !important;
     margin-left: 22px;
     margin-top: 7px;
     width: calc(100% - 22px);
