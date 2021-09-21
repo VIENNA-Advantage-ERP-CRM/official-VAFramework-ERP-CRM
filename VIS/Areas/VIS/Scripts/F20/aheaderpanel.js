@@ -470,6 +470,9 @@
 
                     iControl.setValue(null, false);
                 }
+                else if (mField.getDisplayType() == VIS.DisplayType.Button) {
+                    iControl.setText("- -");
+                }
                 else
                     iControl.setValue("- -", true);
             }
