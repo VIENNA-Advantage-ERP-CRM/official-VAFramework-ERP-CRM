@@ -576,65 +576,81 @@ namespace VIS.Models
         /// Mandeep Singh(VIS0028) 13-sep-2021
         public DataSet GetAccessSqlAutoComplete(Ctx ctx, string _columnName, string text,string sql)
         {
-            int idx = sql.LastIndexOf("WHERE");
+            int idx = sql.IndexOf("finalValue");
             string lastPart = "";
             if (idx != -1) {
-                idx = idx + 5;
                 lastPart = sql.Substring(idx, sql.Length - idx);
-                sql = sql.Substring(0, idx);
+                int newIndex = lastPart.IndexOf("WHERE");
+                newIndex = newIndex + 5;
+                lastPart = lastPart.Substring(newIndex, lastPart.Length - newIndex);
+                sql = sql.Replace(lastPart,"");
                 
             }
-            
+            bool isColumnMatch = false;
             if (_columnName.Equals("M_Product_ID"))
             {
+                isColumnMatch = true;
                 sql += " (UPPER(M_Product.Value) LIKE " + DB.TO_STRING(text) +
                     " OR UPPER(M_Product.Name) LIKE " + DB.TO_STRING(text) + ")";
                 sql += " AND ";
             }
             else if (_columnName.Equals("C_BPartner_ID"))
             {
+                isColumnMatch = true;
                 sql += " (UPPER(Value) LIKE ";
                 sql += DB.TO_STRING(text) + " OR UPPER(Name) LIKE " + DB.TO_STRING(text) + ")";
                 sql += " AND ";
             }
             else if (_columnName.Equals("C_Order_ID"))
             {
+                isColumnMatch = true;
                 sql += " UPPER(DocumentNo) LIKE ";
                 sql += DB.TO_STRING(text);
                 sql += " AND ";
             }
             else if (_columnName.Equals("C_Invoice_ID"))
             {
+                isColumnMatch = true;
                 sql += " UPPER(DocumentNo) LIKE ";
                 sql += DB.TO_STRING(text);
                 sql += " AND ";
             }
             else if (_columnName.Equals("M_InOut_ID"))
             {
+                isColumnMatch = true;
                 sql += " UPPER(DocumentNo) LIKE ";
                 sql += DB.TO_STRING(text);
                 sql += " AND ";
             }
             else if (_columnName.Equals("C_Payment_ID"))
             {
+                isColumnMatch = true;
                 sql += " UPPER(DocumentNo) LIKE ";
                 sql += DB.TO_STRING(text);
                 sql += " AND ";
             }
             else if (_columnName.Equals("GL_JournalBatch_ID"))
             {
+                isColumnMatch = true;
                 sql += " UPPER(DocumentNo) LIKE ";
                 sql += DB.TO_STRING(text);
                 sql += " AND ";
             }
             else if (_columnName.Equals("SalesRep_ID"))
             {
+                isColumnMatch = true;
                 sql += " UPPER(Name) LIKE ";
                 sql += DB.TO_STRING(text);
                 sql += " AND ";
             }
-          
-            sql += lastPart;
+            if (isColumnMatch) {
+                sql += lastPart;
+            }
+            else
+            {   sql += lastPart;
+                sql = "SELECT * FROM (" + sql + ") WHERE UPPER(finalvalue) LIKE " + DB.TO_STRING(text);
+            }
+           
             return DB.ExecuteDataset(sql, null);
         }
 

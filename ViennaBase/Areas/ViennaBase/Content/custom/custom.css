@@ -489,7 +489,7 @@ input:not([type=button]), select, textarea{
         content: "";
         position: absolute;
         top: -0.5rem;
-        left: 0.166666rem;
+        left: 0rem;
         width: 1.5rem;
         height: 1.5rem;
         background: rgba(var(--v-c-on-secondary), 1);
@@ -502,7 +502,7 @@ input:not([type=button]), select, textarea{
 }
 
 .vis-ctrl-switch:checked + .vis-ctrl-switchSlider:after {
-    left: calc(100% - 0.166666rem);
+    left: calc(100% - 0rem);
     transform: translateX(-100%);
     background: rgba(var(--v-c-primary), 1);
 }

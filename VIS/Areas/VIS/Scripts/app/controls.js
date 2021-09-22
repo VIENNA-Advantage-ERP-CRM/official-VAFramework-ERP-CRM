@@ -128,7 +128,7 @@
     var executeScalarEn = function (sql, params, callback) {
         var async = callback ? true : false;
         var dataIn = { sql: sql, page: 1, pageSize: 0 }
-        dataIn.sql = VIS.secureEngine.encrypt(dataIn.sql) ;
+        dataIn.sql = VIS.secureEngine.encrypt(dataIn.sql);
         if (params) {
             dataIn.param = params;
         }
@@ -177,7 +177,7 @@
         String: 10, Integer: 11, Amount: 12, ID: 13, Text: 14, Date: 15, DateTime: 16, List: 17, Table: 18, TableDir: 19,
         YesNo: 20, Location: 21, Number: 22, Binary: 23, Time: 24, Account: 25, RowID: 26, Color: 27, Button: 28, Quantity: 29,
         Search: 30, Locator: 31, Image: 32, Assignment: 33, Memo: 34, PAttribute: 35, TextLong: 36, CostPrice: 37, FilePath: 38,
-        FileName: 39, URL: 40, PrinterName: 42, Label: 44, MultiKey: 45, GAttribute: 46, AmtDimension: 47, ProductContainer: 48, ProgressBar:49,
+        FileName: 39, URL: 40, PrinterName: 42, Label: 44, MultiKey: 45, GAttribute: 46, AmtDimension: 47, ProductContainer: 48, ProgressBar: 49,
 
         IsString: function (displayType) {
             return VIS.DisplayType.String == displayType;
@@ -290,9 +290,9 @@
             var maxValue = mField.getMaxValue();
             var ctrl = null;
             var displayType = mField.getDisplayType();
-           
+
             var isReadOnly = mField.getIsReadOnly();
-            var isUpdateable = mField.getIsEditable(false);           
+            var isUpdateable = mField.getIsEditable(false);
             var windowNo = mField.getWindowNo();
             var tabNo = 0;
             if (mTab)
@@ -422,7 +422,7 @@
                     var bar = new VProgressBar(columnName, isMandatory, isReadOnly, isUpdateable, mField.getDisplayLength(), mField.getFieldLength(), displayType);
                     bar.setField(mField);
                     bar.setMinValue(minValue);
-                    bar.setMaxValue(maxValue); 
+                    bar.setMaxValue(maxValue);
                     ctrl = bar;
                 }
             }
@@ -561,8 +561,8 @@
             }
             else if (displayType == VIS.DisplayType.Button) {
                 var btn = new VButton(columnName, isMandatory, isReadOnly, isUpdateable, mField.getHeader(), mField.getDescription(), mField.getHelp(), mField.getAD_Process_ID(), mField.getIsLink(), mField.getIsRightPaneLink(), mField.getAD_Form_ID(), mField.getIsBackgroundProcess(), mField.getAskUserBGProcess())
-                btn.setField(mField,true);
-                
+                btn.setField(mField, true);
+
                 btn.setReferenceKey(mField.getAD_Reference_Value_ID());
                 ctrl = btn;
             }
@@ -571,7 +571,7 @@
                 if (VIS.DisplayType.IsNumeric(displayType)) {
                     $ctrl.format = VIS.DisplayType.GetNumberFormat(displayType);
                 }
-               
+
                 ctrl = $ctrl;
             }
 
@@ -629,7 +629,7 @@
      *	Get control
      * 	@return control
      */
-    IControl.prototype.getControl = function () {        
+    IControl.prototype.getControl = function () {
         return this.ctrl
     };
 
@@ -754,9 +754,9 @@
      */
     IControl.prototype.setHtmlStyle = function (style) {
         if (style && this.dynStyle != style) {
-            
+
             if (style.contains(':')) {
-                if(!this.dynStyle) this.oldStyle = this.ctrl.attr('style');
+                if (!this.dynStyle) this.oldStyle = this.ctrl.attr('style');
                 this.ctrl.removeAttr(style).attr('style', style);
             }
             else {
@@ -1272,7 +1272,7 @@
             else {
                 $ctrl = $('<button type="button" class="vis-ev-col-wrap-button vis-ev-col-linkbutton"></button>');
                 $ctrl.append($img).append($txt);
-            }   
+            }
         }
 
         this.setIcon = function (img, isSrc) {
@@ -1283,15 +1283,15 @@
         };
 
         //	Special Buttons
-        
+
         if (columnName.equals("PaymentRule")) {
             this.readReference(195);
-           //$ctrl.css("color", "blue"); //
+            //$ctrl.css("color", "blue"); //
             this.setIcon("vis vis-payment");    //  29*14
         }
         else if (columnName.equals("DocAction")) {
             this.readReference(135);
-           //$ctrl.css("color", "blue"); //
+            //$ctrl.css("color", "blue"); //
             this.setIcon("vis vis-cog");    //  16*16
         }
         else if (columnName.equals("CreateFrom")) {
@@ -1409,7 +1409,7 @@
                     $img.remove();
             }
             else {
-                if (this.mField.getHeaderHeadingOnly()) 
+                if (this.mField.getHeaderHeadingOnly())
                     $img.remove();
                 else if (this.mField.getHeaderIconOnly())
                     $txt.remove();
@@ -1429,17 +1429,16 @@
     };
     VIS.Utility.inheritPrototype(VButton, IControl);//Inherit
 
-    VButton.prototype.setField = function (mField,isHeaderPnl) {
+    VButton.prototype.setField = function (mField, isHeaderPnl) {
         this.mField = mField;
-       // if (!this.isIconSet) {
-            if (mField.getShowIcon() && (mField.getFontClass() != '' || mField.getImageName() != ''))
-            {
-                if (mField.getFontClass() != '')
-                    this.setIcon(mField.getFontClass());
-                else
-                    this.setIcon(VIS.Application.contextUrl + 'Images/Thumb16x16/' + mField.getImageName(),true);
-            }
-       // }
+        // if (!this.isIconSet) {
+        if (mField.getShowIcon() && (mField.getFontClass() != '' || mField.getImageName() != '')) {
+            if (mField.getFontClass() != '')
+                this.setIcon(mField.getFontClass());
+            else
+                this.setIcon(VIS.Application.contextUrl + 'Images/Thumb16x16/' + mField.getImageName(), true);
+        }
+        // }
         this.setLayout(isHeaderPnl);
     };
 
@@ -1593,15 +1592,15 @@
     **********************************************************************/
 
     function VCheckBox(columnName, mandatory, isReadOnly, isUpdateable, text, description, isSwitch) {
-        var $ctrl = $('<input>', { type: 'checkbox', name: columnName, value: text }); 
+        var $ctrl = $('<input>', { type: 'checkbox', name: columnName, value: text });
         var $lbl = $('<label class="vis-ec-col-lblchkbox" />').html(text);
         if (isSwitch) {
             $ctrl.addClass('vis-ctrl-switch');
             $lbl.prepend('<i for="switch" class="vis-ctrl-switchSlider">Toggle</i>');
         }
-        $lbl.prepend($ctrl);       
+        $lbl.prepend($ctrl);
         //var $lbl = $('<label class="vis-ec-col-lblchkbox" />').html(text).prepend('<i for="switch" class="vis-switchSlider">Toggle</i>').prepend($ctrl);
-        IControl.call(this, $lbl, VIS.DisplayType.YesNo, isReadOnly, columnName, mandatory);       
+        IControl.call(this, $lbl, VIS.DisplayType.YesNo, isReadOnly, columnName, mandatory);
         this.cBox = $ctrl;
         var self = this;
 
@@ -1685,11 +1684,11 @@
         if (!displayType)
             displayType = VIS.DisplayType.Table;
 
-       // var $ctrl = $('<input>', { name: columnName });
+        // var $ctrl = $('<input>', { name: columnName });
         var $ctrl = $('<select>', { name: columnName });
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, mandatory);
 
-       
+
         this.lookup = lookup;
         this.lastDisplay = "";
         this.settingFocus = false;
@@ -1925,7 +1924,8 @@
             }
 
             var AD_Window_ID = 0;
-            if (self.mField.getZoomWindow_ID() > 0) {
+            // VIS0045 : Handle Zoom Issue on Combo when control used on Form
+            if (self.mField != null && self.mField.getZoomWindow_ID() > 0) {
                 AD_Window_ID = self.mField.getZoomWindow_ID();
             }
             else {
@@ -2503,34 +2503,35 @@
         if (displayType == VIS.DisplayType.Search) {
             $ctrl.vaautocomplete({
                 source: function (term, response) {
-                    var sql = self.lookup.info.queryAll;
-                    var keyColumn = self.lookup.colName;
-                    var displayColumn = self.lookup.info.displayColSubQ;    
-
-                    sql = sql.replace(displayColumn, (displayColumn + ' AS finalValue'));
+                    var sql = self.lookup.info.queryAll;                   
+                    var keyColumn = self.lookup.info.keyColumn;
+                    var displayColumn = self.lookup.info.displayColSubQ;
+                    sql = sql.replace(displayColumn,'');
+                    var lastPart = sql.substr(sql.indexOf('FROM'), sql.length);
+                    sql = "SELECT " + keyColumn + " AS ID,NULL," + displayColumn + " AS finalValue " + lastPart;
 
                     term = term.toUpper();
-                    term += "%";                    
+                    term += "%";
                     $.ajax({
                         type: 'Post',
                         url: VIS.Application.contextUrl + "Form/GetAccessSqlAutoComplete",
-                        data: { sql: sql, columnName: columnName, text: term } ,
+                        data: { sql: sql, columnName: columnName, text: term },
                         success: function (data) {
                             var res = [];
                             if (JSON.parse(data) != null) {
                                 result = JSON.parse(data).Table;
-                                for (var i = 0; i < result.length; i++) {                                   
+                                for (var i = 0; i < result.length; i++) {
                                     res.push({
-                                        id: result[i][columnName.toUpper()],
+                                        id: result[i]['ID'],
                                         value: VIS.Utility.Util.getIdentifierDisplayVal(result[i]['FINALVALUE'])
                                     });
                                 }
-                                
-                            }                           
+
+                            }
                             response(res);
                         },
                     });
-                    
+
                 },
                 minLength: 2,
                 onSelect: function (e, item) {
@@ -2552,7 +2553,7 @@
             //    }
 
             //else 
-            if ((event.keyCode == 13 || (event.keyCode == 9 && $ctrl.val().trim() != '')) && !event.shiftKey && $ctrl.val().length==0) {//will work on press of Tab key OR Enter Key
+            if ((event.keyCode == 13 || (event.keyCode == 9 && $ctrl.val().trim() != '')) && !event.shiftKey && $ctrl.val().length == 0) {//will work on press of Tab key OR Enter Key
                 if (self.actionText()) {
                     event.stopPropagation();
                     event.preventDefault();
@@ -2755,8 +2756,8 @@
             else if (_columnName.equals("SalesRep_ID")) {
                 _tableName = "AD_User";
                 _keyColumnName = "AD_User_ID";
-            }  
-            
+            }
+
             $.ajax({
                 url: VIS.Application.contextUrl + "Form/GetAccessSql",
                 dataType: "json",
@@ -3360,7 +3361,7 @@
                             if (dr.read()) {
                                 keyColumnName = dr.getString(0);
                             }
-                            dr.dispose(); 
+                            dr.dispose();
                         }
                         catch (e) {
                             this.log.log(VIS.Logging.Level.SEVERE, query, e);
@@ -6334,18 +6335,18 @@
      *  @param value  The text to be displayed by the VSpan.
      *  @param name  name of control to bind VSpan with
      */
-    function VKeyText(colSql, windowNo,  name) {
+    function VKeyText(colSql, windowNo, name) {
         this.colSql = colSql;
         this.windowNo = windowNo;
         this.cache = {};
-       // this.col = '';
+        // this.col = '';
         this.needtoParse = false;
 
         if (colSql.contains('@')) {
             this.needtoParse = true;
         }
 
-       
+
 
         var strFor = ' for="' + name + '"';
 
@@ -6361,7 +6362,7 @@
             this.format = null;
             this.cache = {};
             this.cache = null;
-        } 
+        }
     };
 
 
@@ -6386,7 +6387,7 @@
         if (wIndex > -1) {
             where = validation.substring(wIndex);
         }
-         
+
         if (this.cache[where]) {
             // if (this.oldValue != newValue) {
             //  this.oldValue = newValue;
@@ -6403,12 +6404,12 @@
             }
 
             var self = this;
-            executeScalarEn(validation, null,function (val) {
-               if (val) {
-                   self.ctrl.text(val);
-               }
-               else
-                   self.ctrl.text("");
+            executeScalarEn(validation, null, function (val) {
+                if (val) {
+                    self.ctrl.text(val);
+                }
+                else
+                    self.ctrl.text("");
                 self.cache[where] = val;
             });
         }
@@ -6422,18 +6423,18 @@
             return null;
         }
     };
-   
-    
+
+
     // VProgressBar
-   
-    function VProgressBar(columnName, isMandatory, isReadOnly, isUpdateable, displayLength, fieldLength, controlDisplayType) {     
+
+    function VProgressBar(columnName, isMandatory, isReadOnly, isUpdateable, displayLength, fieldLength, controlDisplayType) {
         var $ctrl = $('<button class="vis-progressCtrlWrap">');
         var $rangeCtrl = $('<input>', { type: 'range', step: '0.01', name: columnName, maxlength: fieldLength, 'data-type': 'int' });
         var $oputput = $('<output class="vis-progress-output">');
-        
-            $ctrl.append($oputput).append($rangeCtrl);
-       
-        IControl.call(this, $ctrl, controlDisplayType, isReadOnly, columnName, isMandatory);      
+
+        $ctrl.append($oputput).append($rangeCtrl);
+
+        IControl.call(this, $ctrl, controlDisplayType, isReadOnly, columnName, isMandatory);
         if (isReadOnly || !isUpdateable) {
             this.setReadOnly(true);
         }
@@ -6443,8 +6444,8 @@
         this.rangeCtrl = $rangeCtrl;
         this.oputput = $oputput;
 
-        this.setText = function (val) {            
-            $oputput.text(val);           
+        this.setText = function (val) {
+            $oputput.text(val);
         };
         this.setRange = function (val) {
             if (val != null) {
@@ -6452,22 +6453,22 @@
             } else {
                 $rangeCtrl.val(0);
             }
-           
+
         };
 
-        this.getRange = function () {            
-            return $rangeCtrl.val();           
+        this.getRange = function () {
+            return $rangeCtrl.val();
         };
-        
+
         var self = this; //self pointer
 
 
-        
+
 
         /* Event */
-        $rangeCtrl.on("input", function (e) {  
+        $rangeCtrl.on("input", function (e) {
             e.stopPropagation();
-            var newVal = $rangeCtrl.val(); 
+            var newVal = $rangeCtrl.val();
             //self.setOutputPosition();
             $oputput.text(newVal);
             //$ctrl.val(newVal);
@@ -6477,10 +6478,10 @@
             e.stopPropagation();
             var newVal = $rangeCtrl.val();
             //$ctrl.val(newVal);
-            if (newVal !== self.oldValue) {              
+            if (newVal !== self.oldValue) {
                 var evt = { newValue: newVal, propertyName: self.getName() };
                 self.fireValueChanged(evt);
-                evt = null;                
+                evt = null;
                 //self.setOutputPosition();
             }
         });
@@ -6503,7 +6504,7 @@
         }
     };
 
-    VProgressBar.prototype.getValue = function () {           
+    VProgressBar.prototype.getValue = function () {
         return this.getRange();
     };
     VProgressBar.prototype.setMaxValue = function (maxValue) {
@@ -6526,7 +6527,7 @@
             parent.append(this.oputput);
             return this.rangeCtrl;
         }
-        return this.ctrl;        
+        return this.ctrl;
     };
 
     VProgressBar.prototype.setReadOnly = function (readOnly) {
@@ -6555,9 +6556,9 @@
     //    }
 
     //    this.getProgressOutput().css({ left: (newPlace / 2) + offset }).text(val);
-      
+
     //}
-        
+
     //To implement culture change
     //1.Control type number to textbox:number text not comma in un english culture
     //2.implement formate in setValue Globalize.format(newValue, "n0");
