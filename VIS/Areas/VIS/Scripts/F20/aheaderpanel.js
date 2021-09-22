@@ -66,7 +66,7 @@
 
                             iControl.setValue(null);
                             continue;
-                        } 
+                        }
 
                         if (iControl == null && !mField.getIsHeading()) {
                             continue;
@@ -159,7 +159,7 @@
                 for (var headerSeqNo in currentItem.HeaderItems) {
 
                     var headerItem = currentItem.HeaderItems[headerSeqNo];
-                    
+
                     var startCol = headerItem.StartColumn;
                     var colSpan = headerItem.ColumnSpan;
                     var startRow = headerItem.StartRow;
@@ -198,7 +198,7 @@
                     if ($div.length <= 0)
                         $div = $('<div class="vis-w-p-header-data-f ' + dynamicClassName + '">');
 
-                   
+
 
 
                     // is dynamic 
@@ -227,7 +227,7 @@
                             fields = fields.sort(function (a, b) { return a.getHeaderSeqno() - b.getHeaderSeqno() });
                             for (var i = 0; i < fields.length; i++) {
                                 var field = fields[i];
-                             
+
 
                                 // Check if field is marked as Header Panel Item or Not.
                                 if (field.getIsHeaderPanelitem()) {
@@ -262,180 +262,180 @@
 
                             // Get Controls to be displayed in Header Panel
                             $label = VIS.VControlFactory.getHeaderLabel(mField, true);
-                                iControl = VIS.VControlFactory.getReadOnlyControl(this.curTab, mField, false, false, false);
-                            
+                            iControl = VIS.VControlFactory.getReadOnlyControl(this.curTab, mField, false, false, false);
+
                             if (mField.getDisplayType() == VIS.DisplayType.Button) {
-                                if(iControl !=null)
-                                iControl.addActionListner(this);
+                                if (iControl != null)
+                                    iControl.addActionListner(this);
                             }
-                        
-                        var dynamicFieldValue = this.applyCustomUIForFieldValue(headerSeqNo, startCol, startRow, mField);
 
-                        iControl.getControl().addClass(dynamicFieldValue);
+                            var dynamicFieldValue = this.applyCustomUIForFieldValue(headerSeqNo, startCol, startRow, mField);
 
-                        // Create object of controls and push object and Field in Array
-                        // THis array is used when user navigate from one record to another.
-                        controls["control"] = iControl;
+                            iControl.getControl().addClass(dynamicFieldValue);
 
-                        var objctrls = { "control": controls, "field": mField };
+                            // Create object of controls and push object and Field in Array
+                            // THis array is used when user navigate from one record to another.
+                            controls["control"] = iControl;
 
-                        var $spanIcon = $('<span></span>');
-                        var icon = VIS.VControlFactory.getIcon(mField);
+                            var objctrls = { "control": controls, "field": mField };
+
+                            var $spanIcon = $('<span></span>');
+                            var icon = VIS.VControlFactory.getIcon(mField);
                             if (iControl == null) {
                                 continue;
                             }
 
-                        var $lblControl = null;
-                        if ($label) {
-                            $lblControl = $label.getControl().addClass('vis-w-p-header-data-label');
-                        }
-
-                        var colValue = getFieldValue(mField);
-
-                        styleArr = mField.getHeaderStyle();
-                        if (styleArr && styleArr.length > 0)
-                            styleArr = styleArr.split("|");
-
-                        if (styleArr && styleArr.length > 0) {
-                            for (var j = 0; j < styleArr.length; j++) {
-                                if (styleArr[j].indexOf("@img::") > -1 || styleArr[j].indexOf("@span::") > -1) {
-                                    $div.append($divIcon);
-                                    var css = "";
-                                    if (styleArr[j].indexOf("@img::") > -1) {
-                                        css = styleArr[j].replace("@img::", "");
-                                    }
-                                    else if (styleArr[j].indexOf("@span::")) {
-                                        css = styleArr[j].replace("@span::", "");
-                                    }
-                                    $divIcon.attr('style', css);
-                                }
-                                else if (styleArr[j].indexOf("@value::") > -1) {
-                                    //var css = "";
-
-                                    //css = styleArr[j].replace("@value::", "");
-                                    //$divLabel.attr('style', css);
-                                    $div.append($divLabel);
-                                }
-                                else if (styleArr[j].indexOf("<br>") > -1) {
-                                    $div.css("flex-direction", "column");
-                                }
-                                else {
-                                    $div.append($divIcon);
-                                    $div.append($divLabel);
-                                }
+                            var $lblControl = null;
+                            if ($label) {
+                                $lblControl = $label.getControl().addClass('vis-w-p-header-data-label');
                             }
-                        }
-                        else {
-                            $div.append($divIcon);
-                            $div.append($divLabel);
-                        }
 
-                        var $image = $('<img>');
-                        var $imageSpan = $('<span>');
-                        objctrls["img"] = $image;
+                            var colValue = getFieldValue(mField);
 
+                            styleArr = mField.getHeaderStyle();
+                            if (styleArr && styleArr.length > 0)
+                                styleArr = styleArr.split("|");
 
-                        if (mField.lookup && mField.lookup.gethasImageIdentifier()) {
+                            if (styleArr && styleArr.length > 0) {
+                                for (var j = 0; j < styleArr.length; j++) {
+                                    if (styleArr[j].indexOf("@img::") > -1 || styleArr[j].indexOf("@span::") > -1) {
+                                        $div.append($divIcon);
+                                        var css = "";
+                                        if (styleArr[j].indexOf("@img::") > -1) {
+                                            css = styleArr[j].replace("@img::", "");
+                                        }
+                                        else if (styleArr[j].indexOf("@span::")) {
+                                            css = styleArr[j].replace("@span::", "");
+                                        }
+                                        $divIcon.attr('style', css);
+                                    }
+                                    else if (styleArr[j].indexOf("@value::") > -1) {
+                                        //var css = "";
 
-
-                            objctrls["imgspan"] = $imageSpan;
-
-                            var img = null;
-                            var imgSpan = null;
-                            var styleArr = null;
-                            if (VIS.DisplayType.List == mField.lookup.displayType) {
-
-                                img = mField.lookup.getLOVIconElement(mField.getValue(), true);
-                                if (!img && colValue) {
-                                    imgSpan = colValue.substring(0, 1);
+                                        //css = styleArr[j].replace("@value::", "");
+                                        //$divLabel.attr('style', css);
+                                        $div.append($divLabel);
+                                    }
+                                    else if (styleArr[j].indexOf("<br>") > -1) {
+                                        $div.css("flex-direction", "column");
+                                    }
+                                    else {
+                                        $div.append($divIcon);
+                                        $div.append($divLabel);
+                                    }
                                 }
                             }
                             else {
-                                colValue = VIS.Utility.Util.getIdentifierDisplayVal(colValue);
-                                img = getIdentifierImage(mField);
+                                $div.append($divIcon);
+                                $div.append($divLabel);
                             }
-                            if (img && !img.contains("Images/")) {
-                                imgSpan = img;//img contains First charater of Name or Identifier text
-                                $imageSpan.text(imgSpan);
+
+                            var $image = $('<img>');
+                            var $imageSpan = $('<span>');
+                            objctrls["img"] = $image;
+
+
+                            if (mField.lookup && mField.lookup.gethasImageIdentifier()) {
+
+
+                                objctrls["imgspan"] = $imageSpan;
+
+                                var img = null;
+                                var imgSpan = null;
+                                var styleArr = null;
+                                if (VIS.DisplayType.List == mField.lookup.displayType) {
+
+                                    img = mField.lookup.getLOVIconElement(mField.getValue(), true);
+                                    if (!img && colValue) {
+                                        imgSpan = colValue.substring(0, 1);
+                                    }
+                                }
+                                else {
+                                    colValue = VIS.Utility.Util.getIdentifierDisplayVal(colValue);
+                                    img = getIdentifierImage(mField);
+                                }
+                                if (img && !img.contains("Images/")) {
+                                    imgSpan = img;//img contains First charater of Name or Identifier text
+                                    $imageSpan.text(imgSpan);
+                                }
+                                else {
+                                    $image.attr('src', img);
+                                }
+
+                                $divIcon.append($imageSpan);
+                                $divIcon.append($image);
+
+                                /*Set what do you want to show? Icon OR Label OR Both OR None*/
+                                if (!mField.getHeaderIconOnly() && !mField.getHeaderHeadingOnly()) {
+                                    if (imgSpan != null)
+                                        $image.hide();
+                                    else {
+                                        $imageSpan.hide();
+                                    }
+
+                                    if ($lblControl && $lblControl.length > 0)
+                                        $divLabel.append($lblControl);
+                                }
+                                else if (mField.getHeaderIconOnly() && mField.getHeaderHeadingOnly()) {
+                                    //$divIcon.hide();
+                                    $divIcon.remove();
+                                }
+                                else if (mField.getHeaderIconOnly()) {
+                                    if (imgSpan != null)
+                                        $image.hide();
+                                    else
+                                        $imageSpan.hide();
+
+                                    if ($lblControl && $lblControl.length > 0)
+                                        $lblControl.remove();
+                                }
+                                else if (mField.getHeaderHeadingOnly()) {
+                                    if ($lblControl && $lblControl.length > 0) {
+                                        $divLabel.append($lblControl);
+                                    }
+                                    $divIcon.remove();
+                                }
+
+                                $divLabel.append(iControl.getControl());
+
+                                $containerDiv.append($div);
+                                setValue(colValue, iControl, mField);
                             }
                             else {
-                                $image.attr('src', img);
-                            }
-
-                            $divIcon.append($imageSpan);
-                            $divIcon.append($image);
-
-                            /*Set what do you want to show? Icon OR Label OR Both OR None*/
-                            if (!mField.getHeaderIconOnly() && !mField.getHeaderHeadingOnly()) {
-                                if (imgSpan != null)
-                                    $image.hide();
-                                else {
-                                    $imageSpan.hide();
+                                $spanIcon.addClass('vis-w-p-header-icon-fixed');
+                                objctrls["imgspan"] = $spanIcon;
+                                /*Set what do you want to show? Icon OR Label OR Both OR None*/
+                                if (mField.getDisplayType() == VIS.DisplayType.Button) {
+                                    $divIcon.remove(); // button has image with field
+                                }
+                                else if (!mField.getHeaderIconOnly() && !mField.getHeaderHeadingOnly()) {
+                                    $divIcon.append($spanIcon.append(icon));
+                                    if ($lblControl && $lblControl.length > 0)
+                                        $divLabel.append($lblControl);
+                                }
+                                else if (mField.getHeaderIconOnly() && mField.getHeaderHeadingOnly()) {
+                                    $divIcon.remove();
+                                }
+                                else if (mField.getHeaderIconOnly()) {
+                                    $divIcon.append($spanIcon.append(icon));
+                                    if ($lblControl && $lblControl.length > 0)
+                                        $lblControl.hide();
+                                }
+                                else if (mField.getHeaderHeadingOnly()) {
+                                    if ($lblControl && $lblControl.length > 0) {
+                                        $divLabel.append($lblControl);
+                                    }
+                                    $divIcon.remove();
                                 }
 
-                                if ($lblControl && $lblControl.length > 0)
-                                    $divLabel.append($lblControl);
+                                setValue(colValue, iControl, mField);
+                                /****END ******  Set what do you want to show? Icon OR Label OR Both OR None*/
                             }
-                            else if (mField.getHeaderIconOnly() && mField.getHeaderHeadingOnly()) {
-                                //$divIcon.hide();
-                                $divIcon.remove();
-                            }
-                            else if (mField.getHeaderIconOnly()) {
-                                if (imgSpan != null)
-                                    $image.hide();
-                                else
-                                    $imageSpan.hide();
-
-                                if ($lblControl && $lblControl.length > 0)
-                                    $lblControl.remove();
-                            }
-                            else if (mField.getHeaderHeadingOnly()) {
-                                if ($lblControl && $lblControl.length > 0) {
-                                    $divLabel.append($lblControl);
-                                }
-                                $divIcon.remove();
-                            }
-
                             $divLabel.append(iControl.getControl());
-
                             $containerDiv.append($div);
-                            setValue(colValue, iControl, mField);
+                            $self.controls.push(objctrls);
                         }
-                        else {
-                            $spanIcon.addClass('vis-w-p-header-icon-fixed');
-                            objctrls["imgspan"] = $spanIcon;
-                        /*Set what do you want to show? Icon OR Label OR Both OR None*/
-                            if (mField.getDisplayType() == VIS.DisplayType.Button) {
-                                $divIcon.remove(); // button has image with field
-                            }
-                            else if (!mField.getHeaderIconOnly() && !mField.getHeaderHeadingOnly()) {
-                                $divIcon.append($spanIcon.append(icon));
-                                if ($lblControl && $lblControl.length > 0)
-                                    $divLabel.append($lblControl);
-                            }
-                            else if (mField.getHeaderIconOnly() && mField.getHeaderHeadingOnly()) {
-                                $divIcon.remove();
-                            }
-                            else if (mField.getHeaderIconOnly()) {
-                                $divIcon.append($spanIcon.append(icon));
-                                if ($lblControl && $lblControl.length > 0)
-                                    $lblControl.hide();
-                            }
-                            else if (mField.getHeaderHeadingOnly()) {
-                                if ($lblControl && $lblControl.length > 0) {
-                                    $divLabel.append($lblControl);
-                                }
-                                $divIcon.remove();
-                            }
-
-                            setValue(colValue, iControl, mField);
-                            /****END ******  Set what do you want to show? Icon OR Label OR Both OR None*/
-                        }
-                        $divLabel.append(iControl.getControl());
-                        $containerDiv.append($div);
-                        $self.controls.push(objctrls);
                     }
-                }
                 }
             }
 
@@ -459,9 +459,9 @@
                     colValue = iControl.format.GetFormatAmount(iControl.format.GetFormatedValue(colValue), "init", VIS.Env.isDecimalPoint());
                 }
 
-              
-                    iControl.setValue(w2utils.encodeTags(colValue), false);
-                
+
+                iControl.setValue(w2utils.encodeTags(colValue), false);
+
 
             }
             else {
@@ -470,7 +470,7 @@
 
                     iControl.setValue(null, false);
                 }
-                else if (mField.getDisplayType() == VIS.DisplayType.Button) {
+                else if (mField.getDisplayType() == VIS.DisplayType.Button && mField.getAD_Reference_Value_ID() > 0) {
                     iControl.setText("- -");
                 }
                 else
@@ -490,9 +490,9 @@
             if (colValue) {
                 var displayType = mField.getDisplayType();
 
-                
+
                 if (mField.lookup) {
-                    colValue = mField.lookup.getDisplay(colValue, true,true);
+                    colValue = mField.lookup.getDisplay(colValue, true, true);
                 }
                 //	Date
                 else if (VIS.DisplayType.IsDate(displayType)) {
@@ -542,7 +542,7 @@
 
         var getIdentifierImage = function (mField) {
             var value = mField.getValue();
-            value = mField.lookup.getDisplay(value, true,true);
+            value = mField.lookup.getDisplay(value, true, true);
 
             if (value != null && value && value.indexOf("Images/") > -1) {// Based on sequence of image in idenitifer, perform logic and display image with text
 
@@ -831,7 +831,7 @@
         if (style && style.toLower().indexOf("@value::") > -1) {
             style = getStylefromCompositeValue(style, "@value::");
         }
-       
+
         this.dynamicStyle.push("." + dynamicClassName + "  {" + style + "} ");
         return dynamicClassName;
     };
@@ -901,7 +901,7 @@
     HeaderPanel.prototype.actionPerformed = function (action) {
         //selfPan.actionButton(action.source);
 
-      
+
 
         if (this.aPanel.curTab.needSave(true, false)) {
             this.aPanel.cmd_save(true);
@@ -909,7 +909,7 @@
         }
 
 
-            this.aPanel.actionPerformed(action, this);
+        this.aPanel.actionPerformed(action, this);
     };
 
     HeaderPanel.prototype.cmd_save = function (manual, callback) {
