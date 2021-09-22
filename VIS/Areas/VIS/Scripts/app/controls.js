@@ -2503,10 +2503,11 @@
         if (displayType == VIS.DisplayType.Search) {
             $ctrl.vaautocomplete({
                 source: function (term, response) {
-                    var sql = self.lookup.info.queryAll;
+                    var sql = self.lookup.info.queryAll;                   
                     var keyColumn = self.lookup.info.keyColumn;
                     var displayColumn = self.lookup.info.displayColSubQ;
-                    var lastPart = sql.substr(sql.lastIndexOf('FROM'), sql.length);
+                    sql = sql.replace(displayColumn,'');
+                    var lastPart = sql.substr(sql.indexOf('FROM'), sql.length);
                     sql = "SELECT " + keyColumn + " AS ID,NULL," + displayColumn + " AS finalValue " + lastPart;
 
                     term = term.toUpper();
