@@ -445,7 +445,7 @@
 
     VIS.GridController.prototype.initHeaderPanel = function (parent) {
         this.vHeaderPanel = new VIS.HeaderPanel(parent);
-        this.vHeaderPanel.init(this.getMTab());
+        this.vHeaderPanel.init(this);
         this.vHeaderPanel.addSizeChangeListner(this);
     };
 
@@ -870,6 +870,7 @@
                                 //mField.validateValue();
                                 ve.setBackground(mField.getIsError());
 
+
                                 // Check if new record and current field marked as default field and focus is not set yet, 
                                 // then set focus.
                                 if (mField.getIsDefaultFocus() && !this.isDefaultFocusSet && !comp.getName().startsWith("lbl")) {
@@ -877,6 +878,11 @@
                                     this.isDefaultFocusSet = true;
                                 }
 
+                                if (!comp.getName().startsWith('lbl') && mField.getStyleLogic() != '') {
+                                    var carr = mField.getStyleLogic().split(',');
+                                    var style = this.evaluateStyleCondition(mField,carr);
+                                    ve.setHtmlStyle(style); // set/reset style based on condition
+                                }
                             }
                         }
                     }
@@ -892,6 +898,25 @@
                 }
             }
         }
+    };
+
+    /**
+     * evaluate style condition based on current selected row 
+     * @param {any} mField field/column name
+     * @param {any} arr array of custom conditions
+     */
+    VIS.GridController.prototype.evaluateStyleCondition = function (mField,arr) {
+        var ret = null;
+        for (var j = 0; j < arr.length; j++) {
+            var cArr = arr[j].split("?");
+            if (cArr.length != 2)
+                continue;
+            if (VIS.Evaluator.evaluateLogic(mField,cArr[0])) {
+                ret = cArr[1];
+                break;
+            }
+        }
+        return ret;
     };
 
     VIS.GridController.prototype.dynamicDisplayLinks = function (col) {
@@ -984,6 +1009,9 @@
 
     VIS.GridController.prototype.getMTab = function () {
         return this.gTab;
+    };
+    VIS.GridController.prototype.getAPanel = function () {
+        return this.aPanel;
     };
 
     VIS.GridController.prototype.getIsDisplayed = function () {
@@ -1594,6 +1622,9 @@ VIS.GridController.prototype.dataStatusChanged = function (e) {
         this.aPanel.dataStatusChanged(e);
 
     var col = e.getChangedColumn();
+    if (this.vHeaderPanel) {
+        this.vHeaderPanel.navigate();
+    }
     if (!e.getIsChanged() || col < 0)
         return;
 
@@ -1637,9 +1668,7 @@ VIS.GridController.prototype.dataStatusChanged = function (e) {
             }
         }
         this.dynamicDisplay(col);	//	 -1 = all
-        if (this.vHeaderPanel) {
-            this.vHeaderPanel.navigate();
-        }
+        
 
     }; //  dataStatusChanged
 

@@ -96,6 +96,7 @@ namespace ViennaBase
                         "~/Areas/ViennaBase/Scripts/w2ui/w2ui-1.4.3.min.js",
                         "~/Areas/ViennaBase/Scripts/spectrum.js",
                         "~/Areas/ViennaBase/Scripts/custom/custom.js",
+                        "~/Areas/ViennaBase/Scripts/custom/vaautocomplete.js",
                         "~/Areas/ViennaBase/Scripts/FileSaver.js", 
                         "~/Areas/ViennaBase/Scripts/jszip.js", 
                         "~/Areas/ViennaBase/Scripts/jszip-utils.js", 

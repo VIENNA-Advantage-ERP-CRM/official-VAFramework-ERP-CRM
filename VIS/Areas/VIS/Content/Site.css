@@ -363,9 +363,16 @@ html[dir="rtl"] #vis_mainMenu
 
 .vis-menuitm-with-favItm
 {
-    width: 85%;
+    width: 100%;
     display: inline-block;
     float: left;
+}
+
+.vis-css-treeview li.vis-subNavFirstElement ~ ul li span {
+    padding-left: .625rem;
+}
+.vis-navSearchWrap input:focus {
+    border: none !important;
 }
 
 html[dir="rtl"] .vis-menuitm-with-favItm
@@ -554,19 +561,70 @@ html[dir="rtl"] .vis-mainMenuIcons.vis-icon-menuclose
 }
 
 
-
-
-
-.vis-sidebarMenuWrapper
-{
-    top: 90px;
-    width: 99%;
-    position: absolute;
-    z-index: 22;
-    bottom: 0px;
-    left: 0;
+.vis-subNavFirstElement {
+    /*position: fixed;
+    top: 85px;
+    left: 0;*/
+    width: 100%;
 }
 
+.vis-css-treeview > li {
+    display: none !important;
+}
+
+.vis-sidebarMenuWrapper {
+    width: 100%;
+    height: calc(100vh - 130px);
+    position: relative;
+}
+
+.vis-mbilemenu-search {
+    padding: .3rem .2rem .3rem .625rem;
+    border-bottom: 1px solid rgba(var(--v-c-on-secondary), .05);
+}
+
+.vis-mbilemenu-search-icon {
+    color: rgba(var(--v-c-primary), 1) !important;
+    border-radius: 0;
+    /* color: red; */
+    font-size: 1rem;
+}
+
+.vis-mbilemenu-search .input-group-text {
+    border: none !important;
+}
+
+.vis-menu-foldderUL ul {
+    padding-left: 15px !important;
+}
+
+.vis-menu-innerFolders ~ li {
+    padding-left: 1.25rem;
+    border: none !important;
+}
+
+.vis-subNavFirstElement ~ li {
+   
+    padding-left: .625rem;
+}
+
+.vis-css-treeview ul li a:first-child {
+    border-left: 4px solid rgba(var(--v-c-on-secondary), .2);
+}
+.vis-css-treeview ul li:hover a {
+    border-color: rgba(var(--v-c-primary), 1);
+    color: rgba(var(--v-c-primary), 1);
+}
+.vis-css-treeview li:hover label {
+    background: rgba(var(--v-c-primary), 1);
+    color: rgba(var(--v-c-on-primary), 1);
+}
+.vis-css-treeview ul li span {
+    /*padding-right: .625rem;*/
+}
+.vis-css-treeview ul li span i {
+    padding: 0 .725rem;
+}
 /*.vis-sidebarMenuWrapper ul
     {
         list-style: none;
@@ -663,23 +721,35 @@ html[dir="rtl"] .vis-hasSubMenu:after
 }
 .vis-css-treeview ul {
     list-style: none;
-    margin: 0px 10px 10px 10px;
+    margin: 0;
     padding: 0px;
+    width: 100%;
 }
 
 .vis-css-treeview ul li {
-    margin-bottom: 2px;
-    background-color: rgba(var(--v-c-secondary), 0.5);
-    position: relative;
+    border-bottom: 1px solid rgba(var(--v-c-on-secondary), .1);
+    display: flex;
+    align-items: center;
 }
 
-            .vis-css-treeview ul li a {
-                padding: 10px;
-                display: block;
-                outline: none;
-                Color: rgba(var(--v-c-primary),1);
-                /*margin-right: 20px;*/
-            }
+.vis-css-treeview ul li a {
+    padding: 10px;
+    display: block;
+    outline: none;
+    Color: inherit;
+    flex: 1;
+    /* margin-right: 20px; */
+}
+.vis-menu-innerFolders {
+    padding-left: 1rem;
+    font-weight: 600;
+    justify-content: space-between;
+}
+
+.vis-menuItem {
+    display: flex;
+    align-items: center;
+}
 
 .vis-css-treeview ul li ul {
     background-color: rgba(var(--v-c-primary), 0.07);
@@ -780,14 +850,31 @@ html[dir="rtl"] .vis-css-treeview label::before
         vertical-align: top;*/
 }
 
-.vis-css-treeview label
-{
+.vis-css-treeview label {
     margin: 0;
     padding: 10px;
     display: block;
-    /*margin-right: 20px;*/
     font-weight: normal;
-    color: rgba(var(--v-c-primary),1);
+    color: inherit;
+    position: relative;
+    width: 100%;
+}
+.vis-css-treeview label:after {
+    position: absolute;
+    content: "\f054";
+    right: 10px;
+    font-family: 'FontAwesome';
+}
+.vis-menuitm-backbtn:after {
+    display: none;
+}
+.vis-css-treeview label.vis-menuitm-backbtn {
+    background: rgba(var(--v-c-primary), 1);
+    color: rgba(var(--v-c-on-primary), 1);
+}
+.vis-css-treeview li.vis-subNavFirstElement ~ li,
+.vis-css-treeview li.vis-subNavFirstElement ~ ul li {
+    border: none;
 }
 
     /*.vis-css-treeview label::before
@@ -1154,14 +1241,15 @@ html[dir="rtl"] .vis-auth-dialog
     text-decoration: line-through;
 }
 .vis-filter-dialog {
-    top: 132px;
-    left: 200px;
+    top: 85px;
+    left: auto;
     padding: 10px;
     display: none;
     color: rgba(var(--v-c-on-secondary), 1);
     box-shadow: 0px 2px 3px 1px rgba(var(--v-c-on-secondary), 0.18);
     border: 1px solid rgba(var(--v-c-primary), .15);
     min-width: 150px;
+    /*right: 320px;*/
 }
 .vis-filter-dialog label {
     font-weight: normal;
@@ -1177,4 +1265,7 @@ html[dir="rtl"] .vis-auth-dialog
 
 .vis-css-treeview ul li input[type="checkbox"] {
     position: absolute;
+}
+.vis-navSearchWrap .input-group-text i {
+    color: rgba(var(--v-c-on-primary), 1);
 }

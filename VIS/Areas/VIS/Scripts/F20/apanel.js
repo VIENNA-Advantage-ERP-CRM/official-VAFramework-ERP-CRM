@@ -409,28 +409,28 @@
             var mWindow = this.gridWindow;
             actionItemCount_Right = 0;
             if (mWindow.getIsAppointment()) {
-                this.aAppointment = this.addActions("Appointment", null, false, false, false, onAction); //1
+                this.aAppointment = this.addActions("APT", null, false, false, false, onAction); //1
                 this.aAppointment.setTextDirection("r");
                 $ulactionbar.append(this.aAppointment.getListItmIT());
             }
             if (mWindow.getIsTask()) {
-                this.aTask = this.addActions("Task", null, false, false, false, onAction); //1
+                this.aTask = this.addActions("TAK", null, false, false, false, onAction); //1
                 this.aTask.setTextDirection("r");
                 $ulactionbar.append(this.aTask.getListItmIT());
 
             }
             if (mWindow.getIsEmail()) {
-                this.aEmail = this.addActions("EMail", null, false, false, false, onAction); //1
+                this.aEmail = this.addActions("EML", null, false, false, false, onAction); //1
                 this.aEmail.setTextDirection("r");
                 $ulactionbar.append(this.aEmail.getListItmIT());
             }
             if (mWindow.getIsLetter()) {
-                this.aLetter = this.addActions("Letter", null, false, false, false, onAction); //1
+                this.aLetter = this.addActions("LER", null, false, false, false, onAction); //1
                 this.aLetter.setTextDirection("r");
                 $ulactionbar.append(this.aLetter.getListItmIT());
             }
             if (mWindow.getIsSms()) {
-                this.aSms = this.addActions("Sms", null, false, false, false, onAction); //1
+                this.aSms = this.addActions("SMS", null, false, false, false, onAction); //1
                 this.aSms.setTextDirection("r");
                 $ulactionbar.append(this.aSms.getListItmIT());
             }
@@ -447,17 +447,17 @@
                 $ulactionbar.append(this.aChat.getListItmIT());
             }
             if (mWindow.getIsAttachment()) {
-                this.aAttachment = this.addActions("Attachment", null, false, false, false, onAction, true); //1
+                this.aAttachment = this.addActions("ATT", null, false, false, false, onAction, true); //1
                 this.aAttachment.setTextDirection("r");
                 $ulactionbar.append(this.aAttachment.getListItmIT());
             }
             if (mWindow.getIsHistory()) {
-                this.aHistory = this.addActions("History", null, false, false, false, onAction); //1
+                this.aHistory = this.addActions("HIY", null, false, false, false, onAction); //1
                 this.aHistory.setTextDirection("r");
                 $ulactionbar.append(this.aHistory.getListItmIT());
             }
             if (mWindow.getIsCheckRequest()) {
-                this.aRequest = this.addActions("Request", null, true, false, false, onAction);
+                this.aRequest = this.addActions("CRT", null, true, false, false, onAction);
                 this.aRequest.setTextDirection("r");
                 $ulactionbar.append(this.aRequest.getListItmIT());
             }
@@ -469,48 +469,48 @@
             }
 
             if (mWindow.getIsCopyReocrd()) {
-                this.aCopy = this.addActions("Copy", null, false, false, false, onAction);
+                this.aCopy = this.addActions("CRD", null, false, false, false, onAction);
                 this.aCopy.setTextDirection("r");
                 $ulactionbar.append(this.aCopy.getListItmIT());
             }
             if (mWindow.getIsSubscribedRecord()) {
-                this.aSubscribe = this.addActions("Subscribe", null, true, false, false, onAction, true);
+                this.aSubscribe = this.addActions("SRD", null, true, false, false, onAction, true);
                 this.aSubscribe.setTextDirection("r");
                 $ulactionbar.append(this.aSubscribe.getListItmIT());
             }
             if (mWindow.getIsZoomAcross()) {
-                this.aZoomAcross = this.addActions("ZoomAcross", null, true, false, false, onAction);
+                this.aZoomAcross = this.addActions("ZAS", null, true, false, false, onAction);
                 this.aZoomAcross.setTextDirection("r");
                 $ulactionbar.append(this.aZoomAcross.getListItmIT());
             }
             if (mWindow.getIsCreatedDocument()) {
-                this.aCreateDocument = this.addActions("CreateDocument", null, false, false, false, onAction); //1
+                this.aCreateDocument = this.addActions("CDT", null, false, false, false, onAction); //1
                 this.aCreateDocument.setTextDirection("r");
                 $ulactionbar.append(this.aCreateDocument.getListItmIT());
             }
             if (mWindow.getIsUploadedDocument()) {
-                this.aUploadDocument = this.addActions("UploadDocument", null, false, false, false, onAction); //1
+                this.aUploadDocument = this.addActions("UDT", null, false, false, false, onAction); //1
                 this.aUploadDocument.setTextDirection("r");
                 $ulactionbar.append(this.aUploadDocument.getListItmIT());
             }
             if (mWindow.getIsViewDocument()) {
-                this.aViewDocument = this.addActions("ViewDocument", null, false, false, false, onAction, true); //1
+                this.aViewDocument = this.addActions("VDT", null, false, false, false, onAction, true); //1
                 this.aViewDocument.setTextDirection("r");
                 $ulactionbar.append(this.aViewDocument.getListItmIT());
             }
             if (mWindow.getIsAttachDocumentFrom()) {
-                this.aAttachFrom = this.addActions("AttachDocumentFrom", null, false, false, false, onAction, true); //1
+                this.aAttachFrom = this.addActions("ADF", null, false, false, false, onAction, true); //1
                 this.aAttachFrom.setTextDirection("r");
                 $ulactionbar.append(this.aAttachFrom.getListItmIT());
             }
             if (mWindow.getIsMarkToExport()) {
-                this.aMarkToExport = this.addActions("Mark", null, false, false, false, onAction, true); //1
+                this.aMarkToExport = this.addActions("MTE", null, false, false, false, onAction, true); //1
                 this.aMarkToExport.setTextDirection("r");
                 $ulactionbar.append(this.aMarkToExport.getListItmIT());
             }
 
             if (mWindow.getIsImportMap()) {
-                this.aImportMap = this.addActions("Import", null, false, false, false, onAction); //1
+                this.aImportMap = this.addActions("IMP", null, false, false, false, onAction); //1
                 this.aImportMap.setTextDirection("r");
                 $ulactionbar.append(this.aImportMap.getListItmIT());
             }
@@ -1245,7 +1245,7 @@
     APanel.prototype.ACTION_NAME_DELETE = "Delete";
     APanel.prototype.ACTION_NAME_REFRESH = "Refresh";
     APanel.prototype.ACTION_NAME_FIND = "Find";
-    APanel.prototype.ACTION_NAME_CHAT = "Chat";
+    APanel.prototype.ACTION_NAME_CHAT = "CHT";
     APanel.prototype.ACTION_NAME_APPOINTMENT = "Appointment";
     APanel.prototype.ACTION_NAME_ARCHIVE = "Archive";
 
@@ -1767,19 +1767,25 @@
     /**
      *	Action Listener
      *  @param action string or object
+     *  Controller object called fron header panel
      */
-    APanel.prototype.actionPerformed = function (action) {
+    APanel.prototype.actionPerformed = function (action,controller) {
 
         if (this.getIsUILocked())
             return;
+
+        if (action.source instanceof VIS.Controls.VButton) {
+            if (!action.source.getField().getIsEditable(true) || this.curTab.getIsReadOnly()) {
+                return;
+            }
+        }
         //	Do Screenrt w/o busy
         this.setBusy(true);
         var selfPan = this;
         setTimeout(function () {
             //  Command Buttons
-
             if (action.source instanceof VIS.Controls.VButton) {
-                if (!selfPan.actionButton(action.source)) {
+                if (!selfPan.actionButton(action.source, controller)) {
                     selfPan.setBusy(false, true);
                 }
                 return;
@@ -1927,97 +1933,19 @@
             tis.cmd_print();
         }
         else if (tis.aCreateDocument && tis.aCreateDocument.getAction() === action) {
-            if (window.VADMS) {
-                var frame = new VIS.CFrame();
-                var editDoc = new window.VADMS.editDocument(0, "", 0, "", 0, null, "", tis.curTab.getAD_Window_ID(), tis.curTab.getAD_Table_ID(), tis.curTab.getRecord_ID());
-                frame.setName(VIS.Msg.getMsg("VADMS_CreateDocument"));
-                frame.setTitle(VIS.Msg.getMsg("VADMS_CreateDocument"));
-                frame.hideHeader(true);
-                frame.setContent(editDoc);
-                editDoc.initialize();
-                frame.show();
-            }
-            else {
-                VIS.ADialog.error('PleaseInstallDMSModule', true, "");
-            }
+            actionVADMSDocument(tis, action);
 
         }
         else if (tis.aUploadDocument && tis.aUploadDocument.getAction() === action) {
 
-            if (window.VADMS) {
-                // New parameter add for upload document dialoag to sent current window name and tab name
-                window.VADMS.uploaddocument(0, tis.curTab.getAD_Window_ID(), tis.curTab.getAD_Table_ID(), tis.curTab.getRecord_ID(), tis.$parentWindow.name, tis.curTab.getName());
-
-            }
-            else {
-                VIS.ADialog.error('PleaseInstallDMSModule', true, "");
-            }
+            actionVADMSDocument(tis, action);
 
         }
         else if (tis.aViewDocument && tis.aViewDocument.getAction() === action) {
-            if (window.VADMS) {
-                var frame = new VIS.CFrame();
-                var doc = new window.VADMS.DocumentManagementSystem();
-                frame.setName(VIS.Msg.getMsg("VADMS_Document"));
-                frame.setTitle(VIS.Msg.getMsg("VADMS_Document"));
-                frame.hideHeader(true);
-                doc.setWindowNo(VIS.Env.getWindowNo());
-                doc.setWindowID(tis.curTab.getAD_Window_ID());
-                doc.setTableID(tis.curTab.getAD_Table_ID());
-                doc.setRecordID(tis.curTab.getRecord_ID());
-                doc.setWindowName(tis.gridWindow.getName());
-                frame.setContent(doc);
-                doc.initialize();
-                frame.show();
-
-            }
-            else {
-                VIS.ADialog.error('PleaseInstallDMSModule', true, "");
-            }
+            actionVADMSDocument(tis, action);
         }
         else if (tis.aAttachFrom && tis.aAttachFrom.getAction() === action) {
-            if (window.VADMS) {
-                var self = tis;
-                var documentID = VIS.context.getContext("VADMS_Document_ID");
-                if (documentID.length > 0) {
-                    var dataIn = {
-                        docID: documentID,
-                        winID: tis.curTab.getAD_Window_ID(),
-                        tableID: tis.curTab.getAD_Table_ID(),
-                        recID: tis.curTab.getRecord_ID()
-                    };
-                    $.ajax({
-                        url: VIS.Application.contextUrl + "JsonData/AttachFrom",
-                        dataType: "json",
-                        data: dataIn,
-                        success: function (data) {
-                            if (JSON.parse(data) == "OK") {
-                                self.curTab.loadDocuments();
-                                self.aViewDocument.setPressed(self.curTab.hasDocument());
-                                //if (!VIS.ADialog.ask("AttachWithOther")) {
-                                //    VIS.context.setContext("VADMS_Document_ID", 0);
-                                //}
-
-
-                                VIS.ADialog.confirm("AttachWithOther", true, "", "Confirm", function (result) {
-                                    if (!result) {
-                                        VIS.context.setContext("VADMS_Document_ID", 0);
-                                    }
-                                });
-
-
-                                self = null;
-                            }
-                            else {
-                                VIS.ADialog.error('NotAttached', true, "");
-                            }
-                        }
-                    });
-                }
-            }
-            else {
-                VIS.ADialog.error('PleaseInstallDMSModule', true, "");
-            }
+            actionVADMSDocument(tis, action);
         }
         else if (tis.aMarkToExport && tis.aMarkToExport.getAction() === action) {
 
@@ -2384,9 +2312,59 @@
                 VIS.ADialog.warn("AccessTableNoView");
             }
         }
-        curTab = curGC = aPanel = null;
 
-    };
+        if (vButton.mField.getAD_Reference_Value_ID() == 435) {
+
+            switch (vButton.value) {
+                case 'APT':
+                    aPanel.cmd_appointment();
+                    break;
+                case 'EML':
+                    aPanel.cmd_email();
+                    break;
+                case 'SMS':
+                    aPanel.cmd_sms();
+                    break;
+                case 'LER':
+                    aPanel.cmd_letter();
+                    break;
+                case 'TAK':
+                    aPanel.cmd_task();
+                    break;
+                case 'CHT':
+                    aPanel.cmd_chat();
+                    break;
+                case 'ATT':
+                    aPanel.cmd_attachment();
+                    break;
+                case 'HIY':
+                    aPanel.cmd_history();
+                    break;
+                case 'CRT':
+                    aPanel.cmd_request();
+                    break;
+                case 'CRD':
+                    aPanel.cmd_new(true);
+                    break;
+                case 'SRD':
+                    aPanel.cmd_subscribe();
+                    break;
+                case 'ZAS':
+                    aPanel.cmd_zoomAcross();
+                    break;
+                case 'MTE':
+                    aPanel.cmd_markToExport();
+                    break;
+                case 'IMP':
+                    aPanel.cmd_ImportMap();
+                    break;
+                default: actionVADMSDocument(aPanel, vButton.value)
+            }
+
+            curTab = curGC = aPanel = null;
+
+        };
+    }
 
     function checkPostingByNewLogic(callback) {
         $.ajax({
@@ -2493,38 +2471,111 @@
         return false;
     };
 
-    function btnClickAfterSave2New(vButton, table_ID, record_ID, ctx, batch, aPanel, ret, columnName, isbackground) {
-        var title = vButton.getDescription();
-        if (title == null || title.length == 0)
-            title = columnName;
-        var pi = new VIS.ProcessInfo(title, vButton.getProcess_ID(), table_ID, record_ID);
-        pi.setAD_User_ID(ctx.getAD_User_ID());
-        pi.setAD_Client_ID(ctx.getAD_Client_ID());
-        pi.setAD_Window_ID((aPanel.$parentWindow === undefined ? 0 : aPanel.$parentWindow.AD_Window_ID));// vinay bhatt window id
-        pi.setIsBatch(batch);
-        pi.setIsBackground(isbackground);
-        //start process
+        function btnClickAfterSave2New(vButton, table_ID, record_ID, ctx, batch, aPanel, ret, columnName, isbackground) {
+            var title = vButton.getDescription();
+            if (title == null || title.length == 0)
+                title = columnName;
+            var pi = new VIS.ProcessInfo(title, vButton.getProcess_ID(), table_ID, record_ID);
+            pi.setAD_User_ID(ctx.getAD_User_ID());
+            pi.setAD_Client_ID(ctx.getAD_Client_ID());
+            pi.setAD_Window_ID((aPanel.$parentWindow === undefined ? 0 : aPanel.$parentWindow.AD_Window_ID));// vinay bhatt window id
+            pi.setIsBatch(batch);
+            pi.setIsBackground(isbackground);
+            //start process
 
-        var pCtl = new VIS.ProcessCtl(aPanel, pi, null);
-        //pCtl.setIsPdf(vButton.isPdf);
-        //pCtl.setIsCsv(vButton.isCsv);
-        if (vButton.isPdf) {
-            pi.setFileType(VIS.ProcessCtl.prototype.REPORT_TYPE_PDF);
+            var pCtl = new VIS.ProcessCtl(aPanel, pi, null);
+            //pCtl.setIsPdf(vButton.isPdf);
+            //pCtl.setIsCsv(vButton.isCsv);
+            if (vButton.isPdf) {
+                pi.setFileType(VIS.ProcessCtl.prototype.REPORT_TYPE_PDF);
+            }
+            else if (vButton.isCsv) {
+                pi.setFileType(VIS.ProcessCtl.prototype.REPORT_TYPE_CSV);
+            }
+
+            pCtl.process(aPanel.curWindowNo); //  calls lockUI, unlockUI
+            ret = true;
+            aPanel = null;
+            vButton = null;
+            batch = false;
+            startWOasking = false;
+            actionProcessAfterSave = null;
+            return ret;
+        };
+
+        function actionVADMSDocument(aPanel, action) {
+            if (window.VADMS) {
+                if (action == 'CDT') {
+                    var frame = new VIS.CFrame();
+                    var editDoc = new window.VADMS.editDocument(0, "", 0, "", 0, null, "", aPanel.curTab.getAD_Window_ID(), aPanel.curTab.getAD_Table_ID(), aPanel.curTab.getRecord_ID());
+                    frame.setName(VIS.Msg.getMsg("VADMS_CreateDocument"));
+                    frame.setTitle(VIS.Msg.getMsg("VADMS_CreateDocument"));
+                    frame.hideHeader(true);
+                    frame.setContent(editDoc);
+                    editDoc.initialize();
+                    frame.show();
+                }
+                else if (action == 'ADF') {
+                    var documentID = VIS.context.getContext("VADMS_Document_ID");
+                    if (documentID.length > 0) {
+                        var dataIn = {
+                            docID: documentID,
+                            winID: aPanel.curTab.getAD_Window_ID(),
+                            tableID: aPanel.curTab.getAD_Table_ID(),
+                            recID: aPanel.curTab.getRecord_ID()
+                        };
+                        $.ajax({
+                            url: VIS.Application.contextUrl + "JsonData/AttachFrom",
+                            dataType: "json",
+                            data: dataIn,
+                            success: function (data) {
+                                if (JSON.parse(data) == "OK") {
+                                    aPanel.curTab.loadDocuments();
+                                    aPanel.aViewDocument.setPressed(aPanel.curTab.hasDocument());
+                                    //if (!VIS.ADialog.ask("AttachWithOther")) {
+                                    //    VIS.context.setContext("VADMS_Document_ID", 0);
+                                    //}
+
+
+                                    VIS.ADialog.confirm("AttachWithOther", true, "", "Confirm", function (result) {
+                                        if (!result) {
+                                            VIS.context.setContext("VADMS_Document_ID", 0);
+                                        }
+                                    });
+
+
+                                    aPanel = null;
+                                }
+                                else {
+                                    VIS.ADialog.error('NotAttached', true, "");
+                                }
+                            }
+                        });
+                    }
+                }
+                else if (action == 'VDT') {
+                    var frame = new VIS.CFrame();
+                    var doc = new window.VADMS.DocumentManagementSystem();
+                    frame.setName(VIS.Msg.getMsg("VADMS_Document"));
+                    frame.setTitle(VIS.Msg.getMsg("VADMS_Document"));
+                    frame.hideHeader(true);
+                    doc.setWindowNo(VIS.Env.getWindowNo());
+                    doc.setWindowID(aPanel.curTab.getAD_Window_ID());
+                    doc.setTableID(aPanel.curTab.getAD_Table_ID());
+                    doc.setRecordID(aPanel.curTab.getRecord_ID());
+                    doc.setWindowName(aPanel.gridWindow.getName());
+                    frame.setContent(doc);
+                    doc.initialize();
+                    frame.show();
+                }
+                else if (action == 'UDT') {
+                    window.VADMS.uploaddocument(0, aPanel.curTab.getAD_Window_ID(), aPanel.curTab.getAD_Table_ID(), aPanel.curTab.getRecord_ID(), aPanel.$parentWindow.name, aPanel.curTab.getName());
+                }
+            } else {
+                VIS.ADialog.error('PleaseInstallDMSModule', true, "");
+            }
+
         }
-        else if (vButton.isCsv) {
-            pi.setFileType(VIS.ProcessCtl.prototype.REPORT_TYPE_CSV);
-        }
-
-        pCtl.process(aPanel.curWindowNo); //  calls lockUI, unlockUI
-        ret = true;
-        aPanel = null;
-        vButton = null;
-        batch = false;
-        startWOasking = false;
-        actionProcessAfterSave = null;
-        return ret;
-    };
-
     /**
      *	tab change
      *  @param action tab item's id
@@ -3275,26 +3326,31 @@
             return;
         }
 
+        return this.cmd_save2(manual,this.curTab, this.curGC, this, callback);
+
+    };
+
+    APanel.prototype.cmd_save2 = function (manual,curTab, curGC, selfPanel, callback) {
         var needExecute = true;
 
-        if (this.curTab.getCommitWarning().length > 0 && this.curTab.needSave(true, false)) {
+        if (curTab.getCommitWarning().length > 0 && curTab.needSave(true, false)) {
             needExecute = false;
 
-            var selfPanel = this;
+            //var selfPanel = this;
 
-            VIS.ADialog.confirm("SaveChanges?", true, this.curTab.getCommitWarning(), "Confirm", function (result) {
+            VIS.ADialog.confirm("SaveChanges?", true, curTab.getCommitWarning(), "Confirm", function (result) {
 
                 if (!result) {
                     return;
                 }
-                var retValue = selfPanel.curGC.dataSave(manual);
+                var retValue = curGC.dataSave(manual);
 
                 if (manual && !retValue && !selfPanel.errorDisplayed) {
 
                 }
-                selfPanel.curGC.refreshTabPanelData(selfPanel.curTab.getRecord_ID());
+                curGC.refreshTabPanelData(selfPanel.curTab.getRecord_ID());
                 if (manual)
-                    selfPanel.curGC.dynamicDisplay(-1);
+                    curGC.dynamicDisplay(-1);
 
             });
 
@@ -3305,19 +3361,19 @@
 
         if (needExecute) {
 
-            var retValue = this.curGC.dataSave(manual);
+            var retValue = curGC.dataSave(manual);
 
-            if (manual && !retValue && !this.errorDisplayed) {
+            if (manual && !retValue && !selfPanel.errorDisplayed) {
 
             }
 
             if (manual)
-                this.curGC.dynamicDisplay(-1);
+                curGC.dynamicDisplay(-1);
 
             if (callback) {
                 callback(retValue);
             }
-            this.curGC.refreshTabPanelData(this.curTab.getRecord_ID());
+            curGC.refreshTabPanelData(curTab.getRecord_ID());
             return retValue;
         }
 

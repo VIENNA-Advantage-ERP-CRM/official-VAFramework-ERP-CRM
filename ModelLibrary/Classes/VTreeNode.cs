@@ -307,6 +307,12 @@ namespace VAdvantage.Classes
             }
         }
 
+        public string Image { get; set; }
+
+
+        public bool IsSetting { get; set; }
+
+
         /// <summary>
         /// get and set form id
         /// </summary>
