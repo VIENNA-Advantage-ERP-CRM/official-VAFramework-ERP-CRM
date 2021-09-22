@@ -576,12 +576,14 @@ namespace VIS.Models
         /// Mandeep Singh(VIS0028) 13-sep-2021
         public DataSet GetAccessSqlAutoComplete(Ctx ctx, string _columnName, string text,string sql)
         {
-            int idx = sql.LastIndexOf("WHERE");
+            int idx = sql.IndexOf("finalValue");
             string lastPart = "";
             if (idx != -1) {
-                idx = idx + 5;
                 lastPart = sql.Substring(idx, sql.Length - idx);
-                sql = sql.Substring(0, idx);
+                int newIndex = lastPart.IndexOf("WHERE");
+                newIndex = newIndex + 5;
+                lastPart = lastPart.Substring(newIndex, lastPart.Length - newIndex);
+                sql = sql.Replace(lastPart,"");
                 
             }
             bool isColumnMatch = false;
