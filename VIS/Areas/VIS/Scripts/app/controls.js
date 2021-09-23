@@ -2503,15 +2503,35 @@
         if (displayType == VIS.DisplayType.Search) {
             $ctrl.vaautocomplete({
                 source: function (term, response) {
-                    var sql = self.lookup.info.queryAll;                   
+                    var sql = self.lookup.info.query;
                     var keyColumn = self.lookup.info.keyColumn;
                     var displayColumn = self.lookup.info.displayColSubQ;
-                    sql = sql.replace(displayColumn,'');
+                    sql = sql.replace(displayColumn, '');
+
+                    var posFrom = sql.indexOf(" FROM ");
+                    var hasWhere = sql.indexOf(" WHERE ", posFrom) != -1;
+                    var posOrder = sql.lastIndexOf(" ORDER BY ");
+                    var validation = "";
+                    if (!self.lookup.info.isValidated) {
+                        validation = VIS.Env.parseContext(VIS.context, self.lookup.windowNo, self.lookup.tabNo, self.lookup.info.validationCode, false, true);
+                        if (validation.length == 0 && self.lookup.info.validationCode.length > 0) {
+                            return;
+                        }
+                        validation = " AND " + validation;
+                    }
+
+                    if (posOrder != -1) {
+                        sql = sql.substring(0, posOrder) + (hasWhere ? " AND " : " WHERE ") + self.lookup.info.tableName + ".isActive='Y'" + validation + sql.substring(posOrder);
+                    }
+                    else {
+                        sql += (hasWhere ? " AND " : " WHERE ") + self.lookup.info.tableName + ".isActive='Y'" + validation;
+                    }
+
                     var lastPart = sql.substr(sql.indexOf('FROM'), sql.length);
                     sql = "SELECT " + keyColumn + " AS ID,NULL," + displayColumn + " AS finalValue " + lastPart;
 
                     term = term.toUpper();
-                    term += "%";
+                    term = "%" + term + "%";
                     $.ajax({
                         type: 'Post',
                         url: VIS.Application.contextUrl + "Form/GetAccessSqlAutoComplete",
