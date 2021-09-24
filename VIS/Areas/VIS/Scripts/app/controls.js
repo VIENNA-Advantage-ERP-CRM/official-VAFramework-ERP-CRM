@@ -2520,7 +2520,7 @@
                         validation = " AND " + validation;
                     }
 
-                    if (posOrder != -1) {
+                     if (posOrder != -1) {
                         var orderByIdx = validation.toUpper().lastIndexOf(" ORDER BY ");
                         if (orderByIdx == -1) {
                             validation = validation + sql.substring(posOrder);
@@ -2545,9 +2545,13 @@
                             if (JSON.parse(data) != null) {
                                 result = JSON.parse(data).Table;
                                 for (var i = 0; i < result.length; i++) {
+                                    var parseObj = {};
+                                    parseObj[Object.keys(result[i])[0].toLowerCase()] = result[i][Object.keys(result[i])[0]];
+                                    parseObj[Object.keys(result[i])[1].toLowerCase()] = result[i][Object.keys(result[i])[1]];
+                                    parseObj[Object.keys(result[i])[2].toLowerCase()] = result[i][Object.keys(result[i])[2]];
                                     res.push({
-                                        id: result[i]['ID'],
-                                        value: VIS.Utility.Util.getIdentifierDisplayVal(result[i]['FINALVALUE'])
+                                        id: parseObj.id,
+                                        value: VIS.Utility.Util.getIdentifierDisplayVal(parseObj.finalvalue)
                                     });
                                 }
 
