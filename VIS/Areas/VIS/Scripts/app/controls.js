@@ -2521,10 +2521,14 @@
                     }
 
                     if (posOrder != -1) {
-                        sql = sql.substring(0, posOrder) + (hasWhere ? " AND " : " WHERE ") + self.lookup.info.tableName + ".isActive='Y'" + validation + sql.substring(posOrder);
+                        var orderByIdx = validation.toUpper().lastIndexOf(" ORDER BY ");
+                        if (orderByIdx == -1) {
+                            validation = validation + sql.substring(posOrder);
+                        }
+                        sql = sql.substring(0, posOrder) + (hasWhere ? " AND " : " WHERE ") + self.lookup.info.tableName + ".isActive='Y' " + validation;
                     }
                     else {
-                        sql += (hasWhere ? " AND " : " WHERE ") + self.lookup.info.tableName + ".isActive='Y'" + validation;
+                        sql += (hasWhere ? " AND " : " WHERE ") + self.lookup.info.tableName + ".isActive='Y' " + validation;
                     }
 
                     var lastPart = sql.substr(sql.indexOf('FROM'), sql.length);
