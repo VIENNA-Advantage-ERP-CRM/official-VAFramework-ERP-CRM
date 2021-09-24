@@ -2803,15 +2803,7 @@ namespace VAdvantage.Model
                                         String schedule = string.Empty;
                                         try
                                         {
-                                            sql = @"SELECT LTRIM(SYS_CONNECT_BY_PATH( PaidSchedule, ' , '),',') PaidSchedule FROM
-                                              (SELECT PaidSchedule, ROW_NUMBER () OVER (ORDER BY PaidSchedule ) RN, COUNT (*) OVER () CNT FROM 
-                                                (SELECT duedate || '_' || dueamt AS PaidSchedule FROM C_PaymentAllocate pa
-                                                INNER JOIN C_invoice i ON i.c_invoice_id = pa.c_invoice_id
-                                                INNER JOIN C_InvoicePaySchedule ips ON (ips.C_Invoice_ID = i.C_Invoice_ID AND pa.C_InvoicePaySchedule_id = ips.C_InvoicePaySchedule_id) 
-                                                 WHERE pa.IsActive = 'Y' AND ips.IsActive = 'Y' AND NVL(pa.C_Invoice_ID , 0)  <> 0 AND (NVL(ips.c_payment_id,0)  != 0
-                                                 OR NVL(ips.c_cashline_id , 0) != 0 OR ips.VA009_IsPaid = 'Y') AND pa.C_Payment_ID = " + GetC_Payment_ID() +
-                                                     @" AND ROWNUM <= 100 )  )
-                                                 WHERE RN = CNT START WITH RN = 1 CONNECT BY RN = PRIOR RN + 1";
+                                            sql = DBFunctionCollection.CheckPaidScheduleAgainstPayment(GetC_Payment_ID());
                                             schedule = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));
                                         }
                                         catch (Exception ex)

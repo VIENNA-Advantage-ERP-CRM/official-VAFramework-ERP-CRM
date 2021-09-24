@@ -121,7 +121,7 @@ namespace VAdvantage.Model
             if (isCam.Equals("Y"))                             // Campaign Window
             {
                 //Used transaction object because total was not updating on header
-                MProject prj = new MProject(GetCtx(), projID, null);
+                MProject prj = new MProject(GetCtx(), projID, Get_TrxName());
                 decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(PlannedAmt),0)  FROM C_ProjectTask WHERE IsActive = 'Y' AND " +
                     "C_ProjectPhase_ID in (SELECT C_ProjectPhase_ID FROM C_ProjectPhase WHERE C_Project_ID = " + projID + ")",null, Get_TrxName()));
                 prj.SetPlannedAmt(plnAmt);

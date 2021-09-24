@@ -2503,15 +2503,39 @@
         if (displayType == VIS.DisplayType.Search) {
             $ctrl.vaautocomplete({
                 source: function (term, response) {
-                    var sql = self.lookup.info.queryAll;                   
+                    var sql = self.lookup.info.query;
                     var keyColumn = self.lookup.info.keyColumn;
                     var displayColumn = self.lookup.info.displayColSubQ;
-                    sql = sql.replace(displayColumn,'');
+                    sql = sql.replace(displayColumn, '');
+
+                    var posFrom = sql.indexOf(" FROM ");
+                    var hasWhere = sql.indexOf(" WHERE ", posFrom) != -1;
+                    var posOrder = sql.lastIndexOf(" ORDER BY ");
+                    var validation = "";
+                    if (!self.lookup.info.isValidated) {
+                        validation = VIS.Env.parseContext(VIS.context, self.lookup.windowNo, self.lookup.tabNo, self.lookup.info.validationCode, false, true);
+                        if (validation.length == 0 && self.lookup.info.validationCode.length > 0) {
+                            return;
+                        }
+                        validation = " AND " + validation;
+                    }
+
+                     if (posOrder != -1) {
+                        var orderByIdx = validation.toUpper().lastIndexOf(" ORDER BY ");
+                        if (orderByIdx == -1) {
+                            validation = validation + sql.substring(posOrder);
+                        }
+                        sql = sql.substring(0, posOrder) + (hasWhere ? " AND " : " WHERE ") + self.lookup.info.tableName + ".isActive='Y' " + validation;
+                    }
+                    else {
+                        sql += (hasWhere ? " AND " : " WHERE ") + self.lookup.info.tableName + ".isActive='Y' " + validation;
+                    }
+
                     var lastPart = sql.substr(sql.indexOf('FROM'), sql.length);
                     sql = "SELECT " + keyColumn + " AS ID,NULL," + displayColumn + " AS finalValue " + lastPart;
 
                     term = term.toUpper();
-                    term += "%";
+                    term = "%" + term + "%";
                     $.ajax({
                         type: 'Post',
                         url: VIS.Application.contextUrl + "Form/GetAccessSqlAutoComplete",
@@ -2521,9 +2545,13 @@
                             if (JSON.parse(data) != null) {
                                 result = JSON.parse(data).Table;
                                 for (var i = 0; i < result.length; i++) {
+                                    var parseObj = {};
+                                    parseObj[Object.keys(result[i])[0].toLowerCase()] = result[i][Object.keys(result[i])[0]];
+                                    parseObj[Object.keys(result[i])[1].toLowerCase()] = result[i][Object.keys(result[i])[1]];
+                                    parseObj[Object.keys(result[i])[2].toLowerCase()] = result[i][Object.keys(result[i])[2]];
                                     res.push({
-                                        id: result[i]['ID'],
-                                        value: VIS.Utility.Util.getIdentifierDisplayVal(result[i]['FINALVALUE'])
+                                        id: parseObj.id,
+                                        value: VIS.Utility.Util.getIdentifierDisplayVal(parseObj.finalvalue)
                                     });
                                 }
 
