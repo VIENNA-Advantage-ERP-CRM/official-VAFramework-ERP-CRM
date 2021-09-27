@@ -576,6 +576,7 @@ namespace VIS.Models
         /// Mandeep Singh(VIS0028) 13-sep-2021
         public DataSet GetAccessSqlAutoComplete(Ctx ctx, string _columnName, string text,string sql)
         {
+            sql = VIS.Classes.SecureEngineBridge.DecryptByClientKey(sql, ctx.GetSecureKey());
             int idx = sql.IndexOf("finalValue");
             string lastPart = "";
             if (idx != -1) {
@@ -584,7 +585,7 @@ namespace VIS.Models
                 newIndex = newIndex + 5;
                 lastPart = lastPart.Substring(newIndex, lastPart.Length - newIndex);
                 sql = sql.Replace(lastPart,"");
-                
+
             }
             bool isColumnMatch = false;
             if (_columnName.Equals("M_Product_ID"))
@@ -650,8 +651,8 @@ namespace VIS.Models
             {   sql += lastPart;
                 sql = "SELECT * FROM (" + sql + ") WHERE UPPER(finalvalue) LIKE " + DB.TO_STRING(text);
             }
-           
-            return DB.ExecuteDataset(sql, null);
+
+            return VIS.DBase.DB.ExecuteDatasetPaging(sql, 1, 1000);
         }
 
 

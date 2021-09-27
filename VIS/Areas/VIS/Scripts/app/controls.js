@@ -2539,7 +2539,7 @@
                     $.ajax({
                         type: 'Post',
                         url: VIS.Application.contextUrl + "Form/GetAccessSqlAutoComplete",
-                        data: { sql: sql, columnName: columnName, text: term },
+                        data: { sql: VIS.secureEngine.encrypt(sql), columnName: columnName, text: term },
                         success: function (data) {
                             var res = [];
                             if (JSON.parse(data) != null) {
