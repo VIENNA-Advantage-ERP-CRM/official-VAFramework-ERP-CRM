@@ -153,13 +153,16 @@
                     }
 
                     else {
-
-                        label = VIS.VControlFactory.getLabel(field); //get label
+                        
+                            label = VIS.VControlFactory.getLabel(field); //get label
                         crt.addVetoableChangeListener(this);
-                        label.getControl().find('sup').hide();
                         inputWrap.append(crt.getControl());
-                        if (label)
-                            inputWrap.append(label.getControl());
+                        if (label) {
+                            label.getControl().find('sup').hide();
+                           
+                            if (label)
+                                inputWrap.append(label.getControl());
+                        }
                         grp.append(inputWrap);
                     }
                     if (crt && crt.getBtnCount() > 1) {
@@ -898,7 +901,7 @@
                 this.selectionfields.push(field);
             else
                 sortedFields.push({ 'value': columnName, 'text': header });
-               // html += '<option value="' + columnName + '">' + header + '</option>';
+            // html += '<option value="' + columnName + '">' + header + '</option>';
         }
         sortedFields.sort(function (a, b) {
             var n1 = a.text.toUpperCase();
