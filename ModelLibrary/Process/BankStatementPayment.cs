@@ -25,7 +25,8 @@ using System.Data.SqlClient;
 using System.IO;
 using VAdvantage.Logging;
 
-using VAdvantage.ProcessEngine;namespace VAdvantage.Process
+using VAdvantage.ProcessEngine;
+namespace VAdvantage.Process
 {
     public class BankStatementPayment : ProcessEngine.SvrProcess
     {
@@ -96,7 +97,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //
             MPayment payment = CreatePayment(ibs.GetC_Invoice_ID(), ibs.GetC_BPartner_ID(),
                 ibs.GetC_Currency_ID(), ibs.GetStmtAmt(), ibs.GetTrxAmt(),
-                ibs.GetC_BankAccount_ID(),Utility.Util.GetValueOfDateTime(ibs.GetStatementLineDate() == null ? ibs.GetStatementDate() : ibs.GetStatementLineDate()),
+                ibs.GetC_BankAccount_ID(), Utility.Util.GetValueOfDateTime(ibs.GetStatementLineDate() == null ? ibs.GetStatementDate() : ibs.GetStatementLineDate()),
                 Utility.Util.GetValueOfDateTime(ibs.GetDateAcct()), ibs.GetDescription(), ibs.GetAD_Org_ID(), 0, 0, 0, null, null, null); //Used Zero's as parameters to Avoid throw Error
             if (payment == null)
             {
@@ -147,7 +148,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 bsl.GetC_Currency_ID(), bsl.GetStmtAmt(), bsl.GetTrxAmt(),
                 bs.GetC_BankAccount_ID(), bsl.GetStatementLineDate(), bsl.GetDateAcct(),
                 bsl.GetDescription(), bsl.GetAD_Org_ID(), conversionType, _order_Id, bsl.GetVA009_PaymentMethod_ID(), bsl.GetEftCheckNo(), checkDate, tenderType);
- 
+
             if (payment == null && !string.IsNullOrEmpty(_message))
             {
                 return _message;
@@ -174,7 +175,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     }
                     return !string.IsNullOrEmpty(error) ? error : "DatanotSaved";
                 }
-                else 
+                else
                 {
                     String retString = "@C_Payment_ID@ = " + mPayment.GetDocumentNo();
                     if (Env.Signum(payment.GetOverUnderAmt()) != 0)
@@ -184,9 +185,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     Get_Trx().Commit();
                     return retString;
                 }
-                
+
             }
-            else 
+            else
             {
                 Get_Trx().Rollback();
                 return _message;
@@ -221,7 +222,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             //	Trx Amount = Payment overwrites Statement Amount if defined
             Decimal payAmt = trxAmt;
-            if ( Env.ZERO.CompareTo(payAmt) == 0)
+            if (Env.ZERO.CompareTo(payAmt) == 0)
             {
                 payAmt = stmtAmt;
             }
@@ -439,6 +440,16 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             if (!string.IsNullOrEmpty(_message))
             {
                 return null;
+            }
+            //If payment type is cheque
+            if (!string.IsNullOrEmpty(_tenderType) && _tenderType.Equals(X_C_Payment.TENDERTYPE_Check))
+            {
+                //Rakesh(VA228):Get and Update reference of checkno and check date on bank statement line
+                DataSet ds = DB.ExecuteDataset("SELECT CheckNo,CheckDate FROM C_Payment WHERE C_Payment_ID=" + payment.GetC_Payment_ID());
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    DB.ExecuteQuery("UPDATE C_BankStatementLine SET EftCheckNo = '" + Util.GetValueOfString(ds.Tables[0].Rows[0]["CheckNo"]) + "', EftValutaDate=" + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(ds.Tables[0].Rows[0]["CheckDate"]), true) + " WHERE C_BankStatementLine_ID = " + GetRecord_ID());
+                }
             }
             return payment;
         }
