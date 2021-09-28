@@ -143,7 +143,7 @@ namespace VAdvantage.Model
                 }
                 SetDescription(payment.GetDescription());
             }
-            else 
+            else
             {
                 return Msg.GetMsg(GetCtx(), "NoCurrencyConversion");
             }
@@ -153,7 +153,7 @@ namespace VAdvantage.Model
                 bool _IsPaymentAllocate = false;
                 int _InvCount;
                 //When Payment have Multiple InvoicePaySchedules
-                if (payment.Get_ColumnIndex("IsPaymentAllocate") > 0) 
+                if (payment.Get_ColumnIndex("IsPaymentAllocate") > 0)
                 {
                     _IsPaymentAllocate = Util.GetValueOfBool(payment.Get_Value("IsPaymentAllocate"));
                 }
@@ -161,7 +161,7 @@ namespace VAdvantage.Model
                 {
                     _InvCount = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(C_PaymentAllocate_ID) FROM C_PaymentAllocate WHERE IsActive='Y' AND C_Payment_ID=" + payment.GetC_Payment_ID(), null, null));
                 }
-                else 
+                else
                 {
                     _InvCount = payment.GetC_Invoice_ID();
                 }
@@ -429,7 +429,8 @@ namespace VAdvantage.Model
                 SetC_BPartner_ID(invoice.GetC_BPartner_ID());
             }
             //Set BPartner_ID when having Order_ID
-            if (Env.IsModuleInstalled("VA012_")) {
+            if (Env.IsModuleInstalled("VA012_"))
+            {
                 if (GetC_Order_ID() != 0 && GetC_BPartner_ID() == 0)
                 {
                     int _bpartner_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_BPartner_ID FROM C_Order WHERE IsActive='Y' AND C_Order_ID=" + GetC_Order_ID(), null, Get_Trx()));
@@ -468,6 +469,30 @@ namespace VAdvantage.Model
                 {
                     resetAmtDim = true;
                     Set_Value("AmtDimChargeAmount", null);
+                }
+            }
+            //Rakesh(VA228):Check tendertype column
+            if (Get_ColumnIndex("TenderType") >= 0)
+            {
+                if (Get_Value("TenderType").Equals("K"))
+                {
+                    //Rakesh:Get autocheckcontrol on 28/Sep/2021 assigned by Amit
+                    int bankAccountId = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_BankAccount_ID FROM C_BankStatement WHERE C_BankStatement_ID=" + GetC_BankStatement_ID(), null, null));
+                    string autoCheckControl = Util.GetValueOfString(DB.ExecuteScalar("SELECT ChkNoAutoControl FROM C_BankAccount WHERE C_BankAccount_ID=" + bankAccountId, null, null));
+                    //When check number not autocontrolled for selected bank account then make it manadatory
+                    if (autoCheckControl.Equals("N"))
+                    {
+                        if (String.IsNullOrEmpty(GetEftCheckNo()))
+                        {
+                            log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "EftCheckNo"));
+                            return false;
+                        }
+                        if (!GetEftValutaDate().HasValue)
+                        {
+                            log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "EftValutaDate"));
+                            return false;
+                        }
+                    }
                 }
             }
             return true;
@@ -621,7 +646,7 @@ namespace VAdvantage.Model
                     _Sql.Append("UPDATE C_BankStatement bs"
                    + " SET StatementDifference=(SELECT COALESCE( SUM(StmtAmt), 0 ) FROM C_BankStatementLine bsl "
                        + "WHERE bsl.C_BankStatement_ID=bs.C_BankStatement_ID AND bsl.IsActive='Y') "
-                       //+ ", StatementDate=(SELECT MAX(DateAcct) FROM C_BankStatementLine WHERE IsActive = 'Y' AND C_BankStatement_ID = " + GetC_BankStatement_ID() + ")"
+                   //+ ", StatementDate=(SELECT MAX(DateAcct) FROM C_BankStatementLine WHERE IsActive = 'Y' AND C_BankStatement_ID = " + GetC_BankStatement_ID() + ")"
                    + "WHERE C_BankStatement_ID=" + GetC_BankStatement_ID());
                 }
 
