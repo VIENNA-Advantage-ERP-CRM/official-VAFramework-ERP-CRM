@@ -651,8 +651,10 @@ namespace VIS.Models
             {   sql += lastPart;
                 sql = "SELECT * FROM (" + sql + ") WHERE UPPER(finalvalue) LIKE " + DB.TO_STRING(text);
             }
+            DataSet ds= VIS.DBase.DB.ExecuteDatasetPaging(sql, 1, 1000);
+            ds.Tables[0].TableName = "Table";
+            return ds;
 
-            return VIS.DBase.DB.ExecuteDatasetPaging(sql, 1, 1000);
         }
 
 
