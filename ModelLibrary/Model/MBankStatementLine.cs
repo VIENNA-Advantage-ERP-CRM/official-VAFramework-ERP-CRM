@@ -477,8 +477,8 @@ namespace VAdvantage.Model
                 if (Get_Value("TenderType").Equals("K"))
                 {
                     //Rakesh:Get autocheckcontrol on 28/Sep/2021 assigned by Amit
-                    int bankAccountId = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_BankAccount_ID FROM C_BankStatement WHERE C_BankStatement_ID=" + GetC_BankStatement_ID(), null, null));
-                    string autoCheckControl = Util.GetValueOfString(DB.ExecuteScalar("SELECT ChkNoAutoControl FROM C_BankAccount WHERE C_BankAccount_ID=" + bankAccountId, null, null));
+                    string autoCheckControl = Util.GetValueOfString(DB.ExecuteScalar("SELECT B.ChkNoAutoControl FROM C_BankStatement S " +
+                        "INNER JOIN C_BankAccount B ON B.C_BankAccount_ID=S.C_BankAccount_ID WHERE S.C_BankStatement_ID=" + GetC_BankStatement_ID(), null, Get_TrxName()));
                     //When check number not autocontrolled for selected bank account then make it manadatory
                     if (autoCheckControl.Equals("N"))
                     {
