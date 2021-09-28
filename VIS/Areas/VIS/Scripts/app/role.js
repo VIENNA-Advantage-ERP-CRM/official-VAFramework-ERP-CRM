@@ -1,5 +1,4 @@
-﻿
-// MRole
+﻿// MRole
 
 ; VIS.MRole.getDefault = function () {
     return VIS.MRole;
@@ -20,9 +19,9 @@ VIS.MRole.canUpdate = function (AD_Client_ID, AD_Org_ID, AD_Table_ID, Record_ID,
         whatMissing += "S";
     }
 
-        // Client == Client!=0 & Org=0
+    // Client == Client!=0 & Org=0
     else if (AD_Client_ID != 0 && AD_Org_ID == 0
-            && userLevel.indexOf('C') == -1) {
+        && userLevel.indexOf('C') == -1) {
         if (userLevel.indexOf('O') == -1 && this.getIsOrgAccess(AD_Org_ID, true))
             ; // Client+Org with access to *
         else {
@@ -31,9 +30,9 @@ VIS.MRole.canUpdate = function (AD_Client_ID, AD_Org_ID, AD_Table_ID, Record_ID,
         }
     }
 
-        // Organization == Client!=0 & Org!=0
+    // Organization == Client!=0 & Org!=0
     else if (AD_Client_ID != 0 && AD_Org_ID != 0
-            && userLevel.indexOf('O') == -1) {
+        && userLevel.indexOf('O') == -1) {
         retValue = false;
         whatMissing += "O";
     }
@@ -47,9 +46,9 @@ VIS.MRole.canUpdate = function (AD_Client_ID, AD_Org_ID, AD_Table_ID, Record_ID,
 
     if (!retValue && createError) {
         VIS.MRole.log.warning("AccessTableNoUpdate => AD_Client_ID="
-                + AD_Client_ID + ", AD_Org_ID=" + AD_Org_ID
-                + ", UserLevel=" + userLevel + " => missing="
-                + whatMissing);
+            + AD_Client_ID + ", AD_Org_ID=" + AD_Org_ID
+            + ", UserLevel=" + userLevel + " => missing="
+            + whatMissing);
         //log.warning(toString());
     }
     return retValue;
@@ -63,11 +62,11 @@ VIS.MRole.getIsColumnAccess = function (AD_Table_ID, AD_Column_ID, ro) {
     var m_columnAccess = this.vo.columnAccess;
     for (var i = 0; i < m_columnAccess.length; i++) {
         if (m_columnAccess[i].IsExclude) // Exclude
-            // If you Exclude Access to a column and select Read Only,
-            // you can only read data (otherwise no access).
+        // If you Exclude Access to a column and select Read Only,
+        // you can only read data (otherwise no access).
         {
             if (m_columnAccess[i].AD_Table_ID == AD_Table_ID
-                    && m_columnAccess[i].AD_Column_ID == AD_Column_ID) {
+                && m_columnAccess[i].AD_Column_ID == AD_Column_ID) {
                 if (!ro) // just R/O Access requested
                     retValue = !m_columnAccess[i].IsReadOnly;
                 else
@@ -81,8 +80,8 @@ VIS.MRole.getIsColumnAccess = function (AD_Table_ID, AD_Column_ID, ro) {
                     return retValue;
             }
         } else // Include
-            // If you Include Access to a column and select Read Only,
-            // you can only read data (otherwise full access).
+        // If you Include Access to a column and select Read Only,
+        // you can only read data (otherwise full access).
         {
             if (m_columnAccess[i].AD_Table_ID == AD_Table_ID) {
                 // retValue = false;
@@ -127,15 +126,15 @@ VIS.MRole.getIsTableAccessLevel = function (AD_Table_ID, isAccess) {
     var userLevel = this.vo.UserLevel.trim();
     //S,4,6
     if (userLevel.indexOf('S') != -1 && (strRoleAccessLevel.equals(VIS.Consts.ACCESSLEVEL_SystemOnly)
-            || strRoleAccessLevel.equals(VIS.Consts.ACCESSLEVEL_SystemPlusClient))) {
+        || strRoleAccessLevel.equals(VIS.Consts.ACCESSLEVEL_SystemPlusClient))) {
         return true;
     }//8**********************************************************8//
     if (userLevel.indexOf('C') != -1 && (strRoleAccessLevel.equals(VIS.Consts.ACCESSLEVEL_ClientOnly)
-                        || strRoleAccessLevel.equals(VIS.Consts.ACCESSLEVEL_SystemPlusClient))) {
+        || strRoleAccessLevel.equals(VIS.Consts.ACCESSLEVEL_SystemPlusClient))) {
         return true;
     }
     if (userLevel.indexOf('O') != -1 && (strRoleAccessLevel.equals(VIS.Consts.ACCESSLEVEL_Organization)
-           || strRoleAccessLevel.equals(VIS.Consts.ACCESSLEVEL_ClientPlusOrganization))) {
+        || strRoleAccessLevel.equals(VIS.Consts.ACCESSLEVEL_ClientPlusOrganization))) {
         return true;
     }
     //    log.Fine("NO - AD_Table_ID=" + AD_Table_ID
@@ -148,33 +147,27 @@ VIS.MRole.canView = function (strAccesLevel) {
     var userLevel = this.vo.UserLevel.trim(); //Format 'SCO'
 
     var retValue = true;
-    if (VIS.Consts.ACCESSLEVEL_All.equals(strAccesLevel))
-    { retValue = true; }
+    if (VIS.Consts.ACCESSLEVEL_All.equals(strAccesLevel)) { retValue = true; }
 
-        //	4 - System data 
+    //	4 - System data 
     else if (VIS.Consts.ACCESSLEVEL_SystemOnly.equals(strAccesLevel)
-                && userLevel.indexOf('S') == -1)
-    { retValue = false; }
+        && userLevel.indexOf('S') == -1) { retValue = false; }
 
-        //	2 - Client data requires C
+    //	2 - Client data requires C
     else if (VIS.Consts.ACCESSLEVEL_ClientOnly.equals(strAccesLevel)
-                && userLevel.indexOf('C') == -1)
-    { retValue = false; }
+        && userLevel.indexOf('C') == -1) { retValue = false; }
 
-        //	1 - Organization data requires O
+    //	1 - Organization data requires O
     else if (VIS.Consts.ACCESSLEVEL_Organization.equals(strAccesLevel)
-                 && userLevel.indexOf('O') == -1)
-    { retValue = false; }
+        && userLevel.indexOf('O') == -1) { retValue = false; }
 
-        //	3 - Client Shared requires C or O
+    //	3 - Client Shared requires C or O
     else if (VIS.Consts.ACCESSLEVEL_ClientPlusOrganization.equals(strAccesLevel)
-                 && (!(userLevel.indexOf('C') != -1 || userLevel.indexOf('O') != -1)))
-    { retValue = false; }
+        && (!(userLevel.indexOf('C') != -1 || userLevel.indexOf('O') != -1))) { retValue = false; }
 
-        //	6 - System/Client requires S or C
+    //	6 - System/Client requires S or C
     else if (VIS.Consts.ACCESSLEVEL_SystemPlusClient.equals(strAccesLevel)
-                && (!(userLevel.indexOf('S') != -1 || userLevel.indexOf('C') != -1)))
-    { retValue = false; }
+        && (!(userLevel.indexOf('S') != -1 || userLevel.indexOf('C') != -1))) { retValue = false; }
 
     if (retValue) {
         return retValue;
@@ -182,7 +175,7 @@ VIS.MRole.canView = function (strAccesLevel) {
     //  Notification
     VIS.MRole.log.warning("AccessTableNoView",
         "Required=" + strAccesLevel + "("
-        
+
         + ") != UserLevel=" + userLevel);
     //log.Info(ToString());
     return retValue;
@@ -195,11 +188,11 @@ VIS.MRole.getIsTableAccess = function (AD_Table_ID, ro) {
     var m_tableAccess = this.vo.tableAccess;
     for (var i = 0; i < m_tableAccess.length; i++) {
         if (!VIS.Consts.ACCESSTYPERULE_Accessing
-                .equals(m_tableAccess[i].AccessTypeRule))
+            .equals(m_tableAccess[i].AccessTypeRule))
             continue;
         if (m_tableAccess[i].IsExclude) // Exclude
-            // If you Exclude Access to a table and select Read Only,
-            // you can only read data (otherwise no access).
+        // If you Exclude Access to a table and select Read Only,
+        // you can only read data (otherwise no access).
         {
             if (m_tableAccess[i].AD_Table_ID === AD_Table_ID) {
                 if (ro)
@@ -213,8 +206,8 @@ VIS.MRole.getIsTableAccess = function (AD_Table_ID, ro) {
                 return hasAccess;
             }
         } else // Include
-            // If you Include Access to a table and select Read Only,
-            // you can only read data (otherwise full access).
+        // If you Include Access to a table and select Read Only,
+        // you can only read data (otherwise full access).
         {
             hasAccess = false;
             if (m_tableAccess[i].AD_Table_ID == AD_Table_ID) {
@@ -251,7 +244,7 @@ VIS.MRole.getIsCanReport = function (AD_Table_ID) {
     var m_tableAccess = this.vo.tableAccess;
     for (var i = 0; i < m_tableAccess.length; i++) {
         if (!VIS.Consts.ACCESSTYPERULE_Reporting
-                .equals(m_tableAccess[i].AccessTypeRule))
+            .equals(m_tableAccess[i].AccessTypeRule))
             continue;
         if (m_tableAccess[i].IsExclude) // Exclude
         {
@@ -290,7 +283,7 @@ VIS.MRole.getIsCanExport = function (AD_Table_ID) {
     var m_tableAccess = this.vo.tableAccess;
     for (var i = 0; i < m_tableAccess.length; i++) {
         if (!VIS.Consts.ACCESSTYPERULE_Exporting
-                .equals(m_tableAccess[i].AccessTypeRule))
+            .equals(m_tableAccess[i].AccessTypeRule))
             continue;
         if (m_tableAccess[i].IsExclude) // Exclude
         {
@@ -352,8 +345,8 @@ VIS.MRole.getIsRecordAccess = function (AD_Table_ID, Record_ID, ro) {
             continue;
 
         if (ra.IsExclude) // Exclude
-            // If you Exclude Access to a column and select Read Only,
-            // you can only read data (otherwise no access).
+        // If you Exclude Access to a column and select Read Only,
+        // you can only read data (otherwise no access).
         {
             if (ra.Record_ID === Record_ID) {
                 m_recordAccess = null;
@@ -363,8 +356,8 @@ VIS.MRole.getIsRecordAccess = function (AD_Table_ID, Record_ID, ro) {
                     return false;
             }
         } else // Include
-            // If you Include Access to a column and select Read Only,
-            // you can only read data (otherwise full access).
+        // If you Include Access to a column and select Read Only,
+        // you can only read data (otherwise full access).
         {
             negativeList = false; // has to be defined
             if (ra.Record_ID === Record_ID) {
@@ -499,7 +492,7 @@ VIS.MRole.getKeyColumnName = function (tableInfo, keyColumnName) {
         return keyColumnName;
 
     //	We have a synonym - ignore it if base table inquired
-    for (var i = 0 ; i < tableInfo.length; i++) {
+    for (var i = 0; i < tableInfo.length; i++) {
         var element = tableInfo[i];
         if (keyColumnName.equals("AD_User_ID")) {
 
@@ -526,7 +519,7 @@ VIS.MRole.getDependentAccess = function (whereColumnName, includes, excludes, is
     if (isIncludeNull)
         where.append(" ( ");
     if (includes.length == 1) {
-        
+
         where.append(whereColumnName).append("=").append(includes[0]);
     }
     else if (includes.length > 1) {
@@ -590,7 +583,7 @@ VIS.MRole.getRecordWhere = function (AD_Table_ID, keyColumnName, rw) {
                     sbExclude.append(",");
                 sbExclude.append(m_recordAccess[i].Record_ID);
             }
-                // IN (x)
+            // IN (x)
             else if (!rw || !m_recordAccess[i].IsReadOnly) // include
             {
                 if (sbInclude.length() == 0)
@@ -631,7 +624,7 @@ VIS.MRole.getRecordWhere = function (AD_Table_ID, keyColumnName, rw) {
 
         if (!this.vo.tableData[AD_Table_ID].IsView && this.vo.tableData[AD_Table_ID].HasKey) {
             var lockedIDs = " NOT IN ( SELECT Record_ID FROM AD_Private_Access WHERE AD_Table_ID = "
-                    + AD_Table_ID + " AND AD_User_ID <> " + this.vo.AD_User_ID + " AND IsActive = 'Y' )";
+                + AD_Table_ID + " AND AD_User_ID <> " + this.vo.AD_User_ID + " AND IsActive = 'Y' )";
             //if (lockedIDs.length > 0) {
             if (sb.length() > 0)
                 sb.append(" AND ");
@@ -645,12 +638,12 @@ VIS.MRole.getRecordWhere = function (AD_Table_ID, keyColumnName, rw) {
 };// getRecordWhere
 
 /**
-	 * Get Doc Where Clause Value
-	 * 
-	 * @param tableName
-	 *            TableName
-	 * @return where clause or null (if access all doc)
-	 */
+     * Get Doc Where Clause Value
+     * 
+     * @param tableName
+     *            TableName
+     * @return where clause or null (if access all doc)
+     */
 VIS.MRole.getDocWhere = function (TableName) {
 
     var baseUrl = VIS.Application.contextUrl;
@@ -750,7 +743,7 @@ VIS.MRole.getDocWhere = function (TableName) {
 
 
     //GetDocWhere
-    
+
     $.ajax({
         type: 'Get',
         async: false,
@@ -801,8 +794,8 @@ VIS.MRole.addAccessSQL = function (SQL, TableNameIn, fullyQualified, rw, addOrgA
     // Use First Table
     var tableName = "";
     if (ti.length > 0
-            && (ti[0].getTableName().equals(TableNameIn) || ti[0]
-                                                               .getSynonym().equals(TableNameIn))) {
+        && (ti[0].getTableName().equals(TableNameIn) || ti[0]
+            .getSynonym().equals(TableNameIn))) {
         tableName = ti[0].getSynonym();
         if (VIS.Utility.Util.isEmpty(tableName))
             tableName = ti[0].getTableName();
@@ -862,7 +855,7 @@ VIS.MRole.addAccessSQL = function (SQL, TableNameIn, fullyQualified, rw, addOrgA
         if (AD_Table_ID != 0 && !this.getIsTableAccess(AD_Table_ID, !rw)) {
             retSQL.append(" AND 1=3"); // prevent access at all
             this.log.fine("No access to AD_Table_ID=" + AD_Table_ID + " - "
-                    + TableName + " - " + retSQL);
+                + TableName + " - " + retSQL);
             break; // no need to check further
         }
 
@@ -913,7 +906,7 @@ VIS.MRole.addAccessSQL = function (SQL, TableNameIn, fullyQualified, rw, addOrgA
             continue;
 
         if (AD_Table_ID != 0
-                && AD_Table_ID != m_recordDependentAccess[i].AD_Table_ID)
+            && AD_Table_ID != m_recordDependentAccess[i].AD_Table_ID)
             retSQL.append(this.getDependentAccess(whereColumnName, includes,
                 excludes, isIncludeNull));
 
@@ -922,7 +915,7 @@ VIS.MRole.addAccessSQL = function (SQL, TableNameIn, fullyQualified, rw, addOrgA
         if (m_recordDependentAccess[i].IsExclude) {
             excludes.push(m_recordDependentAccess[i].Record_ID);
             this.log.fine("Exclude " + columnName + " - "
-                    + m_recordDependentAccess[i]);
+                + m_recordDependentAccess[i]);
         } else if (!rw || !m_recordDependentAccess[i].IsReadOnly) {
             includes.push(m_recordDependentAccess[i].Record_ID);
             //log.fine("Include " + columnName + " - "
@@ -939,7 +932,7 @@ VIS.MRole.addAccessSQL = function (SQL, TableNameIn, fullyQualified, rw, addOrgA
                 whereColumnName = columnSQL;
         } else
             whereColumnName = this.getDependentRecordWhereColumn(mainSql,
-                    columnName);
+                columnName);
     } // for all dependent records
 
     retSQL.append(this.getDependentAccess(whereColumnName, includes, excludes, isIncludeNull));
@@ -1040,13 +1033,10 @@ VIS.MRole.getHomePage = function () {
 VIS.MRole.toStringX = function (ctx) {
     var sb = new StringBuilder();
     sb.append(VIS.Msg.translate(ctx, "AD_Role_ID")).append("=").append(
-            this.getName()).append(" - ").append(
-                    VIS.Msg.translate(ctx, "IsCanExport")).append("=").append(
-                            this.getIsCanExport()).append(" - ").append(
-                                   VIS.Msg.translate(ctx, "IsCanReport")).append("=").append(
-                                            this.getIsCanReport()).append(VIS.Env.NL).append(VIS.Env.NL);
+        this.getName()).append(" - ").append(
+            VIS.Msg.translate(ctx, "IsCanExport")).append("=").append(
+                this.getIsCanExport()).append(" - ").append(
+                    VIS.Msg.translate(ctx, "IsCanReport")).append("=").append(
+                        this.getIsCanReport()).append(VIS.Env.NL).append(VIS.Env.NL);
     return sb.toString();
 };
-
-
-

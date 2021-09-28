@@ -438,7 +438,16 @@ namespace VIS.Controllers
                 if (rep.Report != null && (rep.Report.Length > 1048576 || Util.GetValueOfInt(rep.ReportProcessInfo["Record_ID"]) > 0))
                 {
                     rep.AskForNewTab = true;
-                    string filePath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + "TempDownload" + "\\temp_" + DateTime.Now.Ticks + ".pdf";
+                    string filePath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + "TempDownload" + "\\temp_" + DateTime.Now.Ticks;
+                    if (processInfo["FileType"] == "C")
+                    {
+                        filePath += ".csv";
+                    }
+                    else
+                    {
+                        filePath += ".pdf";
+                    }
+
                     System.IO.File.WriteAllBytes(filePath, rep.Report);
                     rep.ReportFilePath = filePath.Substring(filePath.IndexOf("TempDownload"));
                     rep.HTML = null;
