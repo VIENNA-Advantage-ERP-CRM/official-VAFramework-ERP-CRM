@@ -151,8 +151,8 @@ namespace VIS.Controllers
                         TempData["QRCodeURL"] = model.Login1Model.QRCodeURL;
                         TempData["TwoFAMethod"] = model.Login1Model.TwoFAMethod;
                         //model.Login1Model.Password = null;
-                        // if (model.Login1Model.ResetPwd || model.Login1Model.Is2FAEnabled)
-                        if (!model.Login1Model.NoLoginSet && (model.Login1Model.ResetPwd || model.Login1Model.TwoFAMethod != ""))
+                        //if (model.Login1Model.ResetPwd || model.Login1Model.Is2FAEnabled)
+                        if (!model.Login1Model.NoLoginSet && (model.Login1Model.ResetPwd || Util.GetValueOfString(model.Login1Model.TwoFAMethod) != ""))
                         {
                             return Json(new { step2 = false, redirect = returnUrl, ctx = model.Login1Model });
                         }
