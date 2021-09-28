@@ -153,13 +153,13 @@
                     }
 
                     else {
-                        
-                            label = VIS.VControlFactory.getLabel(field); //get label
+
+                        label = VIS.VControlFactory.getLabel(field); //get label
                         crt.addVetoableChangeListener(this);
                         inputWrap.append(crt.getControl());
                         if (label) {
                             label.getControl().find('sup').hide();
-                           
+
                             if (label)
                                 inputWrap.append(label.getControl());
                         }
@@ -979,6 +979,21 @@
                 else
                     whereClause += " " + dynFilter;
             }
+
+            //Remove query which will fetch image.. Only display test in Filter option.
+            if (displayCol.indexOf("||'^^'|| NVL((SELECT NVL(ImageURL,'')") > 0
+                && displayCol.indexOf("thing.png^^') ||' '||") > 0) {
+                var displayCol1 = displayCol.substr(0, displayCol.indexOf("||'^^'|| NVL((SELECT NVL(Imag"));
+                displayCol = displayCol.substr(displayCol.indexOf("othing.png^^') ||' '||") + 22);
+                displayCol = displayCol1 + "||'_'||" + displayCol;
+            }
+            if (displayCol.indexOf("||'^^'|| NVL((SELECT NVL(ImageURL,'')") > 0) {
+                displayCol = displayCol.replace(displayCol.substr(displayCol.indexOf("||'^^'|| NVL((SELECT NVL(Imag"), displayCol.indexOf("Images/nothing.png^^')") + 21), '');
+            }
+            else if (displayCol.indexOf("nothing.png") > -1) {
+                displayCol = displayCol.replace(displayCol.substr(displayCol.indexOf("NVL((SELECT NVL(ImageURL,'')"), displayCol.indexOf("thing.png^^') ||' '||") + 21), '')
+            }
+
 
             var data = {
                 keyCol: keyCol, displayCol: displayCol, validationCode: validationCode
