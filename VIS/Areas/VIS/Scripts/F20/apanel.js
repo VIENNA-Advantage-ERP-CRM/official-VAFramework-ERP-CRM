@@ -483,25 +483,28 @@
                 this.aZoomAcross.setTextDirection("r");
                 $ulactionbar.append(this.aZoomAcross.getListItmIT());
             }
-            if (mWindow.getIsCreatedDocument()) {
-                this.aCreateDocument = this.addActions("CDT", null, false, false, false, onAction); //1
-                this.aCreateDocument.setTextDirection("r");
-                $ulactionbar.append(this.aCreateDocument.getListItmIT());
-            }
-            if (mWindow.getIsUploadedDocument()) {
-                this.aUploadDocument = this.addActions("UDT", null, false, false, false, onAction); //1
-                this.aUploadDocument.setTextDirection("r");
-                $ulactionbar.append(this.aUploadDocument.getListItmIT());
-            }
-            if (mWindow.getIsViewDocument()) {
-                this.aViewDocument = this.addActions("VDT", null, false, false, false, onAction, true); //1
-                this.aViewDocument.setTextDirection("r");
-                $ulactionbar.append(this.aViewDocument.getListItmIT());
-            }
-            if (mWindow.getIsAttachDocumentFrom()) {
-                this.aAttachFrom = this.addActions("ADF", null, false, false, false, onAction, true); //1
-                this.aAttachFrom.setTextDirection("r");
-                $ulactionbar.append(this.aAttachFrom.getListItmIT());
+            // VIS0008 Check applied if access is there for DMS form to this Role then only display these actions for the window
+            if (VIS.MRole.getFormAccess(this.ctx.getContextAsInt("DMS_Form_ID"))) {
+                if (mWindow.getIsCreatedDocument()) {
+                    this.aCreateDocument = this.addActions("CDT", null, false, false, false, onAction); //1
+                    this.aCreateDocument.setTextDirection("r");
+                    $ulactionbar.append(this.aCreateDocument.getListItmIT());
+                }
+                if (mWindow.getIsUploadedDocument()) {
+                    this.aUploadDocument = this.addActions("UDT", null, false, false, false, onAction); //1
+                    this.aUploadDocument.setTextDirection("r");
+                    $ulactionbar.append(this.aUploadDocument.getListItmIT());
+                }
+                if (mWindow.getIsViewDocument()) {
+                    this.aViewDocument = this.addActions("VDT", null, false, false, false, onAction, true); //1
+                    this.aViewDocument.setTextDirection("r");
+                    $ulactionbar.append(this.aViewDocument.getListItmIT());
+                }
+                if (mWindow.getIsAttachDocumentFrom()) {
+                    this.aAttachFrom = this.addActions("ADF", null, false, false, false, onAction, true); //1
+                    this.aAttachFrom.setTextDirection("r");
+                    $ulactionbar.append(this.aAttachFrom.getListItmIT());
+                }
             }
             if (mWindow.getIsMarkToExport()) {
                 this.aMarkToExport = this.addActions("MTE", null, false, false, false, onAction, true); //1
