@@ -278,7 +278,7 @@ namespace VIS.Controllers
         /// <returns>query</returns>
         public string GetProvisionalLine()
         {
-            string sql = @"  C_Orderline_ID NOT IN (SELECT C_Orderline_ID FROM
+            string sql = @"  NVL(C_Orderline_ID , 0) NOT IN (SELECT C_Orderline_ID FROM
                             (SELECT ol.C_Order_ID, ol.C_Orderline_ID, ol.qtyordered, 
                             (SELECT SUM(il.qtyinvoiced) FROM c_invoiceline il
                                    INNER JOIN c_invoice i ON i.c_invoice_id = il.c_invoice_id
