@@ -980,6 +980,7 @@
                     whereClause += " " + dynFilter;
             }
 
+            //Remove query which will fetch image.. Only display test in Filter option.
             if (displayCol.indexOf("||'^^'|| NVL((SELECT NVL(ImageURL,'')") > 0
                 && displayCol.indexOf("thing.png^^') ||' '||") > 0) {
                 var displayCol1 = displayCol.substr(0, displayCol.indexOf("||'^^'|| NVL((SELECT NVL(Imag"));
