@@ -189,26 +189,10 @@ namespace VIS.Helpers
                             WHERE VA074_AD_User_ID = " + ADUserID + " AND VA074_PushNotiToken IS NOT NULL AND IsActive = 'Y'")) > 0)
                         {
                             SendPushNotToken(ADUserID, userSKey);
-                            //string TokenNo = GetRndNum(6);
-                            //if (_dictVAMobTokens.ContainsKey(userSKey))
-                            //    _dictVAMobTokens[userSKey] = TokenNo;
-                            //else
-                            //    _dictVAMobTokens.Add(userSKey, TokenNo);
-                            //VAdvantage.PushNotif.PushNotification.SendNotificationToUser(ADUserID, 0, 0, Msg.GetMsg(new Ctx(), "VIS_VAOTP"), Msg.GetMsg(new Ctx(), "OTP") + " : " + TokenNo, "");
                         }
                         else
                         {
-                            //int loginSettingsCount = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(AD_LoginSetting_ID) FROM AD_LoginSetting WHERE IsActive = 'Y' 
-                            //AND AD_User_ID = " + ADUserID));
-                            //if (!(loginSettingsCount == 1))
-                            //{
-                            //VIS.Controllers.JsonDataController.AddMessageForToastr("Msg1", "Please link VA Mobile App to enable 2FA");
                             model.Login1Model.NoLoginSet = true;
-                            //}
-                            //else
-                            //{
-                            //    // Display QR Code HERE
-                            //}
                         }
                     }
                 }
