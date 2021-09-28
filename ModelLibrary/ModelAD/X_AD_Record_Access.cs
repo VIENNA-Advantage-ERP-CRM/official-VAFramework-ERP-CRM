@@ -219,13 +219,12 @@ SetRecord_ID (0);
         }
         /** Get Record ID.
 @return Direct internal record ID */
-        public int GetRecord_ID()
-        {
-            Object ii = Get_Value("Record_ID");
-            if (ii == null) return 0;
-            return Convert.ToInt32(ii);
-        }
-
+public int GetRecord_ID() 
+{
+Object ii = Get_Value("Record_ID");
+if (ii == null) return 0;
+return Convert.ToInt32(ii);
+}
         /** Set Read Only.
 @param IsReadOnly Field is read only */
         public void SetIsIncludeNull(Boolean IsReadOnly)

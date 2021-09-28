@@ -74,27 +74,27 @@
 
             //}
             //else {
-                divRecord = $("<div class='vis-rad-recordData'>");
-                btnDown = $("<button  class='vis-rad-navBtn' disabled='disabled'>").append($("<i class='fa fa-caret-down'></i>"));
-                btnUp = $("<button  class='vis-rad-navBtn' disabled='disabled'>").append($("<i class='fa fa-caret-up'></i>"));
-                divAction = $("<div class='vis-rad-actionIcons' >");
-                btnNew = $("<button  class='vis-rad-actionBtn'>").append($("<i class='vis vis-plus'></i>"));
-                divWrap = $("<div class='vis-rad-btnWrap' >");
-                btnCancel = $("<a href = 'javascript:void(0)'  class='vis-rad-buttons VIS_Pref_btn-2'>").append(VIS.Msg.getMsg('Cancel'));
-                spanRec = $("<span class='vis-rad-paging'>").append(lblRecNo);
-                chkActive = $("<input type='checkbox' checked >");
-                lblActive = $("<label>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'IsActive'));
+            divRecord = $("<div class='vis-rad-recordData'>");
+            btnDown = $("<button  class='vis-rad-navBtn' disabled='disabled'>").append($("<i class='fa fa-caret-down'></i>"));
+            btnUp = $("<button  class='vis-rad-navBtn' disabled='disabled'>").append($("<i class='fa fa-caret-up'></i>"));
+            divAction = $("<div class='vis-rad-actionIcons' >");
+            btnNew = $("<button  class='vis-rad-actionBtn'>").append($("<i class='vis vis-plus'></i>"));
+            divWrap = $("<div class='vis-rad-btnWrap' >");
+            btnCancel = $("<a href = 'javascript:void(0)'  class='vis-rad-buttons VIS_Pref_btn-2'>").append(VIS.Msg.getMsg('Cancel'));
+            spanRec = $("<span class='vis-rad-paging'>").append(lblRecNo);
+            chkActive = $("<input type='checkbox' checked >");
+            lblActive = $("<label>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'IsActive'));
 
-                chkExclude = $("<input type='checkbox' checked >");
-                lblExclude = $("<label>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'IsExclude'));
-                chkReadOnly = $("<input type='checkbox'>");
-                lblReadOnly = $("<label>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'IsReadOnly'));
-                chkDepEntry = $("<input type='checkbox'>");
+            chkExclude = $("<input type='checkbox' checked >");
+            lblExclude = $("<label>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'IsExclude'));
+            chkReadOnly = $("<input type='checkbox'>");
+            lblReadOnly = $("<label>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'IsReadOnly'));
+            chkDepEntry = $("<input type='checkbox'>");
             lblDepEntry = $("<label>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'IsDependentEntities'));
 
             chkIncNull = $("<input type='checkbox'>");
             lblIncNull = $("<label>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'IncludeNull'));
-           
+
 
             //}
             root = $("<div class='vis-forms-container'>");
@@ -141,7 +141,7 @@
             divDepEntry.append(lblDepEntry);
             divAccOp.append(divDepEntry);
 
-            divIncNull   = $("<div class='vis-rad-check'>");
+            divIncNull = $("<div class='vis-rad-check'>");
             //chkReadOnly = $("<input type='checkbox'>");
             //lblReadOnly = $("<label>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'IsReadOnly'));
             divIncNull.append(chkIncNull);
@@ -406,7 +406,7 @@
                     isActive: chkActive.prop('checked'),
                     isExclude: chkExclude.prop('checked'),
                     isReadOnly: chkReadOnly.prop('checked'),
-                    isIncludeNull:chkIncNull.prop('checked'),
+                    isIncludeNull: chkIncNull.prop('checked'),
                     isDependentEntities: chkDepEntry.prop('checked')
                 },
                 success: function (data) {
