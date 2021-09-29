@@ -648,8 +648,16 @@ namespace VIS.Models
                 sql += lastPart;
             }
             else
-            {   sql += lastPart;
-                sql = "SELECT * FROM (" + sql + ") WHERE UPPER(finalvalue) LIKE " + DB.TO_STRING(text);
+            {  
+                sql += lastPart;
+                if (DB.IsOracle())
+                {
+                    sql = "SELECT * FROM (" + sql + ") WHERE UPPER(finalvalue) LIKE " + DB.TO_STRING(text);
+                }
+                else
+                {
+                    sql = "SELECT * FROM (" + sql + ") AS tbl WHERE UPPER(finalvalue) LIKE " + DB.TO_STRING(text);
+                }
             }
             DataSet ds= VIS.DBase.DB.ExecuteDatasetPaging(sql, 1, 1000);
             ds.Tables[0].TableName = "Table";
