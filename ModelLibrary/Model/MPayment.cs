@@ -3277,7 +3277,8 @@ namespace VAdvantage.Model
                 {
                     // get Check number
                     string checkNo = GetChecknumber(GetVA009_PaymentMethod_ID(), GetC_BankAccount_ID(), Get_Trx());
-                    if (!string.IsNullOrEmpty(checkNo))
+                    //Check cheque number exists
+                    if (!string.IsNullOrEmpty(checkNo) && checkNo != "0")
                     {
                         //update the check Date with Account Date if CheckDate is null
                         DateTime? checkDate = GetCheckDate() != null ? GetCheckDate() : GetDateAcct();
