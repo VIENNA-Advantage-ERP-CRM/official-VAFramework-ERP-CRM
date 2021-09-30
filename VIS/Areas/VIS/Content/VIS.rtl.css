@@ -796,6 +796,11 @@ html[dir="rtl"] .vis-css-treeview li.vis-subNavFirstElement ~ ul li div span {
 html[dir="rtl"] .vis-css-treeview li.vis-subNavFirstElement ~ ul li a span {
     padding-right: 0;
 }
+
+html[dir="rtl"] .vis-removeFilter {
+
+right: 26px;
+}
 /*rtl css End here*/
 
 
