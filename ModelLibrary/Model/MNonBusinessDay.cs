@@ -72,13 +72,13 @@ namespace VAdvantage.Model
         {
             bool nbDay = false;
             int C_Period_ID = MPeriod.GetC_Period_ID(ctx, dt, AD_Org_ID);
-            string sql = "SELECT C_CALENDAR_ID FROM C_YEAR WHERE C_YEAR_ID=(SELECT C_YEAR_ID FROM C_PERIOD  WHERE C_PERIOD_ID=" + C_Period_ID + ")";
+            string sql = "SELECT C_Calendar_ID FROM C_Year WHERE C_Year_ID=(SELECT C_Year_ID FROM C_Period  WHERE C_Period_ID=" + C_Period_ID + ")";
             int C_Calendar_ID = Convert.ToInt32(DataBase.DB.ExecuteScalar(sql, null, null));
 
             sql = MRole.GetDefault(ctx, false).AddAccessSQL(
-               "SELECT count(*) FROM C_NONBUSINESSDAY WHERE ISACTIVE = 'Y' AND C_CALENDAR_ID=" + C_Calendar_ID
+               "SELECT COUNT(C_NonBusinessDay_ID) FROM C_NonBusinessDay WHERE ISACTIVE = 'Y' AND C_Calendar_ID=" + C_Calendar_ID
                + (AD_Org_ID > 0 ? " AND AD_Org_ID IN (0, " + AD_Org_ID + ")" : "") + " AND DATE1=TO_DATE('" + dt.Value.ToShortDateString() + "', 'MM-DD-YY')",
-               "C_NonBusinessDay", false, false);   // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
+               "C_NonBusinessDay", false, false);   // JID_1205: At the trx, need to check any non business day in that org. if not found then check * org.
             try
             {
                 int count = Convert.ToInt32(DataBase.DB.ExecuteScalar(sql, null, null));
