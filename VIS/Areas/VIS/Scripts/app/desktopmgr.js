@@ -1149,7 +1149,7 @@
                 showAllItems();
             });
 
-              function filterClicked() {
+            function filterClicked() {
                 var rd = root.find("input[type=radio]:checked").val();
                 filterSelectedMenu(rd);
                 if (rd == "A") {
@@ -1435,6 +1435,10 @@
         function toggle() {
             isVisible = !isVisible;
             var left = Math.round(_mainMenu.find('.vis-navFilterIco').offset().left) - 84;
+
+            if (VIS.Application.isRTL) {
+                root.css('right', 'auto');
+            }
             root.css('left', left);
             isVisible ? root.show('slide-down') : root.hide('slide-up');
         };
