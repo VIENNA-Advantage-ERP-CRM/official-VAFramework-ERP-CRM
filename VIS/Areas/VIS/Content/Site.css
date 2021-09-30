@@ -734,10 +734,11 @@ html[dir="rtl"] .vis-hasSubMenu:after
 
 .vis-css-treeview ul li a {
     padding: 10px;
-    display: block;
+    display: flex;
     outline: none;
     Color: inherit;
     flex: 1;
+    align-items: center;
     /* margin-right: 20px; */
 }
 .vis-menu-innerFolders {

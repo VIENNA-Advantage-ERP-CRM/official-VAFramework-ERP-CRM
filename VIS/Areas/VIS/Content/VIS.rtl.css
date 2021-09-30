@@ -817,6 +817,11 @@ html[dir="rtl"] .w2ui-editable .vis-progress-output {
     right: 3%;
 }
 
+
+html[dir="rtl"] .vis-removeFilter {
+
+right: 26px;
+}
 /*rtl css End here*/
 
 
