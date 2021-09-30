@@ -1249,6 +1249,7 @@ html[dir="rtl"] .vis-auth-dialog
     box-shadow: 0px 2px 3px 1px rgba(var(--v-c-on-secondary), 0.18);
     border: 1px solid rgba(var(--v-c-primary), .15);
     min-width: 150px;
+    max-width: 150px;
     /*right: 320px;*/
 }
 .vis-filter-dialog label {
@@ -1268,4 +1269,15 @@ html[dir="rtl"] .vis-auth-dialog
 }
 .vis-navSearchWrap .input-group-text i {
     color: rgba(var(--v-c-on-primary), 1);
+}
+.vis-navList div span {
+    display: flex;
+}
+.vis-navHeadRight {
+    width: 30%;
+    justify-content: flex-end;
+}
+
+.vis-navSearchWrap input {
+    min-width: 120px;
 }
