@@ -647,20 +647,15 @@ namespace VIS.Models
             if (isColumnMatch) {
                 sql += lastPart;
             }
-            else
-            {  
+            else {
                 sql += lastPart;
-                if (DB.IsOracle())
-                {
-                    sql = "SELECT * FROM (" + sql + ") WHERE UPPER(finalvalue) LIKE " + DB.TO_STRING(text);
-                }
-                else
-                {
-                    sql = "SELECT * FROM (" + sql + ") AS tbl WHERE UPPER(finalvalue) LIKE " + DB.TO_STRING(text);
-                }
+                sql = DBFunctionCollection.convertToSubQuery(sql, "*") + "WHERE UPPER(finalvalue) LIKE " + DB.TO_STRING(text);
             }
-            DataSet ds= VIS.DBase.DB.ExecuteDatasetPaging(sql, 1, 1000);
-            ds.Tables[0].TableName = "Table";
+            DataSet ds = VIS.DBase.DB.ExecuteDatasetPaging(sql, 1, 1000);
+            if (ds != null)
+            {
+                ds.Tables[0].TableName = "Table";
+            }
             return ds;
 
         }
