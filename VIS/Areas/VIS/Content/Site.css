@@ -1275,7 +1275,7 @@ html[dir="rtl"] .vis-auth-dialog
     display: flex;
 }
 .vis-navHeadRight {
-    width: 30%;
+    /*width: 30%;*/
     justify-content: flex-end;
 }
 
