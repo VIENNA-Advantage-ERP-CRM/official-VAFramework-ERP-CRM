@@ -1279,7 +1279,7 @@ namespace VAdvantage.Model
                     //issue JID_1474 If full quantity of any line is released from blanket order then system will not create that line in Release order
                     if (docType.IsReleaseDocument())
                     {
-                        if (docBaseType == MDocBaseType.DOCBASETYPE_BLANKETSALESORDER || docBaseType == MDocBaseType.DOCBASETYPE_SALESORDER)
+                        if (docBaseType == MDocBaseType.DOCBASETYPE_PURCHASEORDER || docBaseType == MDocBaseType.DOCBASETYPE_SALESORDER)
                         {
                             if (fromLines[i].GetQtyEntered() == 0)
                             {
@@ -1757,8 +1757,8 @@ namespace VAdvantage.Model
                         MOrderLine ol = new MOrderLine(GetCtx(), dr, Get_TrxName());
                         ol.SetHeaderInfo(this);
                         //JID_1673 Quantity entered should not be zero
-                        if ((Utility.Util.GetValueOfDecimal(dr["QtyEntered"])) > 0)
-                            list.Add(ol);
+                        //if ((Utility.Util.GetValueOfDecimal(dr["QtyEntered"])) > 0)
+                        list.Add(ol);
                     }
                 }
             }
