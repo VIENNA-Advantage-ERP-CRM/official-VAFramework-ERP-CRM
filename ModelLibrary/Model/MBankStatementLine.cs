@@ -474,7 +474,7 @@ namespace VAdvantage.Model
             //Rakesh(VA228):Check tendertype column
             if (Get_ColumnIndex("TenderType") >= 0)
             {
-                if (Get_Value("TenderType").Equals("K"))
+                if (!string.IsNullOrEmpty(Util.GetValueOfString(Get_Value("TenderType"))) && Get_Value("TenderType").Equals("K"))
                 {
                     //Rakesh:Get autocheckcontrol on 28/Sep/2021 assigned by Amit
                     string autoCheckControl = Util.GetValueOfString(DB.ExecuteScalar("SELECT B.ChkNoAutoControl FROM C_BankStatement S " +
