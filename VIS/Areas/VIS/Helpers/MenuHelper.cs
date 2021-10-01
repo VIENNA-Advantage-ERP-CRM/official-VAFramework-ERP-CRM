@@ -416,12 +416,38 @@ namespace VIS.Helpers
                     // here if parent ID is 0, then close this main menu item
                     if (vt.Parent_ID == 0)
                     {
+                       
+                        if (menu2HTML.Length < 40 && settingsHTML.Length > 40)
+                        {
+                            menu2HTML.Clear();
+                            menu2HTML.Append("<div class='vis-navColWrap' style='display:none'>");
+                            menu1HTML.Replace("vis-navColWrap'", "vis-navColWrap' style='min-width:250px'");
+                            settingsHTML.Replace("vis-navColWrap'", "vis-navColWrap' style='min-width:250px'");
+                        }
+                        else if (menu2HTML.Length < 40 && settingsHTML.Length < 40)
+                        {
+                            menu2HTML.Clear();
+                            settingsHTML.Clear();
+                            menu2HTML.Append("<div class='vis-navColWrap' style='display:none'>");
+                            settingsHTML.Append("<div class='vis-navColWrap' style='display:none'>");
+                            menu1HTML.Replace("vis-navColWrap'", "vis-navColWrap' style='min-width:250px'");
+                        }
+                        else if (menu2HTML.Length > 40 && settingsHTML.Length < 40)
+                        {
+                            settingsHTML.Clear();
+                            settingsHTML.Append("<div class='vis-navColWrap' style='display:none'>");
+                            menu1HTML.Replace("vis-navColWrap'", "vis-navColWrap' style='min-width:250px'");
+                            menu2HTML.Replace("vis-navColWrap'", "vis-navColWrap' style='min-width:250px'");
+                        }
+
                         menu2HTML.Append("</div>");
                         menu1HTML.Append("</div>");
 
                         settingsHTML.Append("</div>");
 
                         isSettingItem = false;
+
+
 
                         lstMenuSections.Add("<div class='vis-navmenuItems-Container' style='display:none' id='Menu" + vt.Node_ID + "'><h6 class='vismenu-hidden-header' style='display:none'><div class='vis-nav-AllItems-Header'>" + vt.SetName + "</div></h6><div style='display:flex'>" + menu1HTML.ToString() + menu2HTML.ToString() + settingsHTML.ToString() + "</div></div>");
                     }
