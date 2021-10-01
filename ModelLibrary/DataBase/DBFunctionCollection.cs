@@ -1024,5 +1024,25 @@ namespace VAdvantage.DataBase
             }
             return sql.ToString();
         }
+
+        /// <summary>
+        /// convert main query to subquery 
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="column">multiple columnname sperated by comma</param>
+        /// <returns></returns>
+        public static String convertToSubQuery(string query, string column)
+        {
+            StringBuilder sql = new StringBuilder();
+            if (DB.IsPostgreSQL())
+            {
+                sql.Append("SELECT " + column + " FROM (" + query + ") AS tbl ");
+            }
+            else
+            {
+                sql.Append("SELECT " + column + " FROM (" + query + ") ");
+            }
+            return sql.ToString();
+        }
     }
 }

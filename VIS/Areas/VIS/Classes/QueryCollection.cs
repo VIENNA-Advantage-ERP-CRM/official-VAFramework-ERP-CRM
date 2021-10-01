@@ -543,9 +543,9 @@ namespace VIS.Classes
             queryList.VIS_147 = "DELETE FROM AD_UserQueryLine WHERE AD_UserQueryLine_ID=@AD_UserQuery_ID";
 
             queryList.VIS_148 = "SELECT l.Value, t.Name FROM AD_Ref_List l, AD_Ref_List_Trl t "
-                   + "WHERE l.AD_Ref_List_ID=t.AD_Ref_List_ID"
-                   + " AND t.AD_Language='" + Env.GetAD_Language(ctx) + "'"
-                   + " AND l.AD_Reference_ID=@AD_Reference_ID AND l.IsActive='Y'";
+                  + "WHERE l.AD_Ref_List_ID=t.AD_Ref_List_ID"
+                  + " AND t.AD_Language='@Language_Translation@'"
+                  + " AND l.AD_Reference_ID=@AD_Reference_ID AND l.IsActive='Y'";
 
             queryList.VIS_149 = "SELECT IsCrystalReport FROM AD_Process WHERE AD_Process_ID=@AD_Process_ID";
 
@@ -568,7 +568,7 @@ namespace VIS.Classes
             object result = ((IDictionary<string, object>)queryList)[code];
             if (result != null)
             {
-                return result.ToString();
+                return result.ToString().Replace("@Language_Translation@", Env.GetAD_Language(ctx));
             }
             return code;
         }
