@@ -677,7 +677,7 @@
 
         var ctrl = $(wraper);
 
-        if (!mField.getIsLink()) {
+        if (!mField.getIsLink() && mField.getDisplayType() != VIS.DisplayType.Button) {
             if (mField.getShowIcon() && (mField.getFontClass() != '' || mField.getImageName() != '')) {
 
                 var btns = ['<div class="input-group-prepend"><span class="input-group-text vis-color-primary">'];
@@ -698,7 +698,7 @@
         var ctrlP = $("<div class='vis-control-wrap'>");
 
         if (editor && (editor.getControl()[0].tagName == 'INPUT' || editor.getControl()[0].tagName == "SELECT" ||
-            editor.getControl()[0].tagName == 'TEXTAREA') && editor.getControl()[0].type != 'checkbox') {
+            editor.getControl()[0].tagName == 'TEXTAREA' || editor.getControl()[0].className == 'vis-progressCtrlWrap') && editor.getControl()[0].type != 'checkbox') {
             //editor.getControl().addClass("custom-select");
             ctrlP.append(editor.getControl().attr("placeholder", " ").attr("data-placeholder", ""));
             if (label != null) {
@@ -718,6 +718,13 @@
             ctrlP.append("<span class='vis-ev-ctrlinfowrap' data-colname='" + mField.getColumnName() + "' title='" + mField.getDescription() + "'  tabindex='-1' data-toggle='popover' data-trigger='focus'>" +
                 "<i class='vis vis-info' aria-hidden='true'></i></span'>");
         }
+
+        //if (editor && mField.getDisplayType() == VIS.DisplayType.ProgressBar) {
+        //    if (customStyle != "") {
+        //        editor.getProgressOutput().attr('style', customStyle);
+        //    }
+        //    ctrlP.prepend(editor.getProgressOutput());
+        //}
 
         ctrlP.append("<span class='vis-ev-col-msign'><i class='fa fa-exclamation' aria-hidden='true'></span'>");
         ctrl.append(ctrlP);

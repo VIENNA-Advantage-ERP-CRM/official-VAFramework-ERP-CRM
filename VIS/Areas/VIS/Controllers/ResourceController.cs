@@ -35,7 +35,7 @@ namespace VIS.Controllers
             StringBuilder sb = new StringBuilder();
 
             Ctx ctx = Session["ctx"] as Ctx;
-           
+
 
             if (ctx == null) // handle null value , sometime session is expired
             {
@@ -55,6 +55,7 @@ namespace VIS.Controllers
                 //fullUrl = fullUrl.Remove(fullUrl.LastIndexOf('/'));
                 fullUrl = fullUrl.Remove(fullUrl.IndexOf("VIS/Resource"));
                 ctx.SetApplicationUrl(fullUrl);
+                ctx.SetContextUrl(@Url.Content("~/"));
 
                 SecureEngine.Encrypt("a");
 
@@ -94,10 +95,14 @@ namespace VIS.Controllers
 
                 /* CTX */
                 SetLoginContext(ctx);
+                // VIS0008 Setting other values into Context
+                SetOtherContext(ctx);
                 sb.Append(" VIS.context.ctx = ").Append(Newtonsoft.Json.JsonConvert.SerializeObject(ctx.GetMap())).Append("; ");
 
                 /* Message */
                 sb.Append(" VIS.I18N.labels = { ");
+
+
                 if (msgs != null)
                 {
                     int total = msgs.Keys.Count;
@@ -116,17 +121,40 @@ namespace VIS.Controllers
                         //}
                         string msg = (string)msgs.Get(key) ?? "";
                         msg = msg.Replace("\n", " ").Replace("\r", " ").Replace("\"", "'");
+                        sb.Append("\"").Append(key).Append("\": ").Append("\"").Append(msg).Append("\"");
+                        if (total != 0)
+                        {
+                            sb.Append(",");
+                        }
 
-                        if (total == 0)
+                    }
+
+                }
+
+                /* purpose: right window action translation with search key
+                 * VIS0228      08-Aug-2021 
+                 */
+
+                ValueNamePair[] refList = MRefList.GetList(435, false, ctx);
+                int refListTotal = refList.Length;
+                if (refListTotal > 0)
+                {
+                    if (msgs.Keys.Count > 0)
+                    {
+                        sb.Append(", ");
+                    }
+
+                    for (int i = 0; i < refList.Length; i++)
+                    {
+                        sb.Append("\"").Append(refList[i].GetValue()).Append("\": ").Append("\"").Append(refList[i].GetName()).Append("\"");
+                        if (i != (refListTotal - 1))
                         {
-                            sb.Append("\"").Append(key).Append("\": ").Append("\"").Append(msg).Append("\"");
+                            sb.Append(", ");
                         }
-                        else
-                        {
-                            sb.Append("\"").Append(key).Append("\": ").Append("\"").Append(msg).Append("\", ");
-                        }
+
                     }
                 }
+
                 sb.Append("};");
                 // sb.Append(" console.log(VIS.I18N.labels)");
                 //return View();
@@ -166,6 +194,17 @@ namespace VIS.Controllers
             //return JsonHelper.Serialize(_ctx.GetMap());
         }
 
+        /// <summary>
+        /// Load Other Preferences into Context
+        /// </summary>
+        /// <param name="_ctx"> application context </param>
+        internal void SetOtherContext(Ctx _ctx)
+        {
+            // Fetched DMS form id and set into context
+            int AD_Form_ID = Util.GetValueOfInt(VAdvantage.DataBase.DB.ExecuteScalar("SELECT AD_Form_ID FROM AD_Form WHERE Name = 'VADMS_DMSWeb' AND IsActive = 'Y'"));
+            _ctx.SetContext("DMS_Form_ID", AD_Form_ID);
+        }
+
         internal string GetThemeInfo(Ctx _ctx)
         {
             string thms = "";
@@ -173,9 +212,9 @@ namespace VIS.Controllers
             //1 first user and client 
 
             string qry = "SELECT COALESCE(u.AD_Theme_ID,c.AD_Theme_ID) FROM AD_User u INNER JOIN AD_Client c ON c.AD_Client_ID = u.AD_Client_ID " +
-                         " WHERE u.AD_User_ID ="+_ctx.GetAD_User_ID();
+                         " WHERE u.AD_User_ID =" + _ctx.GetAD_User_ID();
 
-            int id = Util.GetValueOfInt(DBase.DB.ExecuteScalar(qry,null,null));
+            int id = Util.GetValueOfInt(DBase.DB.ExecuteScalar(qry, null, null));
 
             if (id < 1)
             {
@@ -207,7 +246,7 @@ namespace VIS.Controllers
         int _AD_Client_ID = 0;
         Thread _thread = null;
 
-        public ResourceManager(string url,int AD_Client_ID)
+        public ResourceManager(string url, int AD_Client_ID)
         {
             _url = url;
             _AD_Client_ID = AD_Client_ID;

@@ -1243,6 +1243,7 @@
     <Content Include="Areas\ViennaBase\Scripts\spectrum.js" />
     <Content Include="Areas\ViennaBase\Content\w2ui\w2ui-1.4.3.css" />
     <Content Include="Areas\ViennaBase\Scripts\toastr\toastr.min.js" />
+    <Content Include="Areas\ViennaBase\Scripts\custom\vaautocomplete.js" />
     <Content Include="Areas\ViennaBase\Scripts\w2ui\w2ui-1.4.3.js" />
     <Content Include="Areas\ViennaBase\Content\w2ui\w2ui-1.4.3.min.css" />
     <Content Include="Areas\ViennaBase\Scripts\w2ui\w2ui-1.4.3.min.js" />

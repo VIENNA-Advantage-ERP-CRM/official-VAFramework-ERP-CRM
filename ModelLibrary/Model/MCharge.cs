@@ -131,7 +131,7 @@ namespace VAdvantage.Model
          *	@param trxName transaction
          */
         public MCharge(Ctx ctx, int C_Charge_ID, Trx trxName) :
-            base(ctx, C_Charge_ID, null)
+            base(ctx, C_Charge_ID, trxName)
         {
             //super (ctx, C_Charge_ID, null);
             if (C_Charge_ID == 0)

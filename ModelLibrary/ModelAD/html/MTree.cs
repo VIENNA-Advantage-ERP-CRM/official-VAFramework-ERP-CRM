@@ -69,46 +69,46 @@ namespace VAdvantage.Model
 
         /** Tree Type Array		*/
         private static String[] TREETYPES = new String[] {
-		    TREETYPE_Activity,
-		    TREETYPE_BoM,
-		    TREETYPE_BPartner,
-		    TREETYPE_CMContainer,
-		    TREETYPE_CMMedia,
-		    TREETYPE_CMContainerStage,
-		    TREETYPE_CMTemplate,
-		    TREETYPE_ElementValue,
-		    TREETYPE_Campaign,
-		    TREETYPE_Menu,
-		    TREETYPE_Organization,
-		    TREETYPE_ProductCategory,
-		    TREETYPE_Project,
-		    TREETYPE_Product,
-		    TREETYPE_SalesRegion,
-		    TREETYPE_User1,
-		    TREETYPE_User2,
-		    TREETYPE_User3,
-		    TREETYPE_User4,
-		    TREETYPE_Other
-	    };
+            TREETYPE_Activity,
+            TREETYPE_BoM,
+            TREETYPE_BPartner,
+            TREETYPE_CMContainer,
+            TREETYPE_CMMedia,
+            TREETYPE_CMContainerStage,
+            TREETYPE_CMTemplate,
+            TREETYPE_ElementValue,
+            TREETYPE_Campaign,
+            TREETYPE_Menu,
+            TREETYPE_Organization,
+            TREETYPE_ProductCategory,
+            TREETYPE_Project,
+            TREETYPE_Product,
+            TREETYPE_SalesRegion,
+            TREETYPE_User1,
+            TREETYPE_User2,
+            TREETYPE_User3,
+            TREETYPE_User4,
+            TREETYPE_Other
+        };
         /** Table ID Array				*/
         private static int[] TABLEIDS = new int[] {
-		    X_C_Activity.Table_ID,
-		    X_M_BOM.Table_ID,
-		    X_C_BPartner.Table_ID,
-		    X_CM_Container.Table_ID,
-		    X_CM_Media.Table_ID,
-		    X_CM_CStage.Table_ID,
-		    X_CM_Template.Table_ID,
-		    X_C_ElementValue.Table_ID,
-		    X_C_Campaign.Table_ID,
-		    X_AD_Menu.Table_ID,
-		    X_AD_Org.Table_ID,
-		    X_M_Product_Category.Table_ID,
-		    X_C_Project.Table_ID,
-		    X_M_Product.Table_ID,
-		    X_C_SalesRegion.Table_ID,
-		    0,0,0,0,0
-	    };
+            X_C_Activity.Table_ID,
+            X_M_BOM.Table_ID,
+            X_C_BPartner.Table_ID,
+            X_CM_Container.Table_ID,
+            X_CM_Media.Table_ID,
+            X_CM_CStage.Table_ID,
+            X_CM_Template.Table_ID,
+            X_C_ElementValue.Table_ID,
+            X_C_Campaign.Table_ID,
+            X_AD_Menu.Table_ID,
+            X_AD_Org.Table_ID,
+            X_M_Product_Category.Table_ID,
+            X_C_Project.Table_ID,
+            X_M_Product.Table_ID,
+            X_C_SalesRegion.Table_ID,
+            0,0,0,0,0
+        };
 
         /// <summary>
         /// Default Constructor. Need to call loadNodes explicitly
@@ -776,15 +776,18 @@ namespace VAdvantage.Model
                 sourceTable = "AD_Menu";
                 if (baseLang)
                     sqlNode.Append("SELECT AD_Menu.AD_Menu_ID, AD_Menu.Name,AD_Menu.Description,AD_Menu.IsSummary,AD_Menu.Action, "
-                        + "AD_Menu.AD_Window_ID, AD_Menu.AD_Process_ID, AD_Menu.AD_Form_ID, AD_Menu.AD_Workflow_ID, AD_Menu.AD_Task_ID, AD_Menu.AD_Workbench_ID "
-                        + "FROM AD_Menu AD_Menu");
+                        + "AD_Menu.AD_Window_ID, AD_Menu.AD_Process_ID, AD_Menu.AD_Form_ID, AD_Menu.AD_Workflow_ID, AD_Menu.AD_Task_ID, AD_Menu.AD_Workbench_ID, "
+
+                        + " NVL(img.FontName,img.ImageURL) as Image, AD_Menu.IsSetting FROM AD_Menu AD_Menu");
                 else
                     sqlNode.Append("SELECT AD_Menu.AD_Menu_ID,  t.Name,t.Description,AD_Menu.IsSummary,AD_Menu.Action, "
-                        + "AD_Menu.AD_Window_ID, AD_Menu.AD_Process_ID, AD_Menu.AD_Form_ID, AD_Menu.AD_Workflow_ID, AD_Menu.AD_Task_ID, AD_Menu.AD_Workbench_ID "
-                        + "FROM AD_Menu AD_Menu JOIN  AD_Menu_Trl t ON AD_Menu.AD_Menu_ID=t.AD_Menu_ID ");
+                        + "AD_Menu.AD_Window_ID, AD_Menu.AD_Process_ID, AD_Menu.AD_Form_ID, AD_Menu.AD_Workflow_ID, AD_Menu.AD_Task_ID, AD_Menu.AD_Workbench_ID, "
+                        + " NVL(img.FontName,img.ImageURL) as Image, AD_Menu.IsSetting FROM AD_Menu AD_Menu JOIN  AD_Menu_Trl t ON AD_Menu.AD_Menu_ID=t.AD_Menu_ID ");
+
                 if (!baseLang)
                 {
                     sqlNode.Append(" JOIN " + GetNodeTableName() + " pr on pr.NODE_ID=AD_Menu." + columnNameX + "_ID ");
+                    sqlNode.Append(" LEFT OUTER JOIN AD_Image img on AD_Menu.AD_Image_ID=img.AD_Image_ID ");
 
                     sqlNode.Append(" WHERE AD_Menu.AD_Menu_ID=t.AD_Menu_ID AND t.AD_Language='")
                         .Append(Utility.Env.GetAD_Language(GetCtx())).Append("'");
@@ -800,9 +803,11 @@ namespace VAdvantage.Model
                 }
                 else
                 {
+                    sqlNode.Append(" LEFT OUTER JOIN AD_Image img on AD_Menu.AD_Image_ID=img.AD_Image_ID ");
                     if (onDemand)
                     {
                         sqlNode.Append(" JOIN " + GetNodeTableName() + " pr on pr.NODE_ID=AD_Menu." + columnNameX + "_ID ");
+                        sqlNode.Append(" LEFT OUTER JOIN AD_Image img on AD_Menu.AD_Image_ID=img.AD_Image_ID ");
                         //  sqlNode.Append(" OR ( m." + columnNameX + "_ID IN (SELECT NODE_ID FROM " + GetNodeTableName() + " WHERE Parent_ID=0 AND AD_Tree_ID=" + GetAD_Tree_ID() + " AND m.IsSummary='N' AND IsActive='Y')) ");
                         sqlNode.Append("AND pr.AD_Tree_ID=" + GetAD_Tree_ID() + "  AND (IsSummary='Y')");
 
@@ -932,7 +937,7 @@ namespace VAdvantage.Model
                 dt = new DataTable();
                 dt.Load(drTree);
                 drTree.Close();
-               
+
             }
             catch
             {
@@ -957,7 +962,7 @@ namespace VAdvantage.Model
         /// Load Nodes and Bar
         /// </summary>
         /// <param name="AD_User_ID">user for tree bar</param>
-        private void LoadNodes(int AD_User_ID,string orderClause="")
+        private void LoadNodes(int AD_User_ID, string orderClause = "")
         {
             ////  SQL for TreeNodes
             StringBuilder sql = new StringBuilder("SELECT "
@@ -1359,6 +1364,10 @@ namespace VAdvantage.Model
                         retValue = new VTreeNode(Node_ID, seqNo,
                                 name, description, Parent_ID, isSummary,
                                 actionColor, onBar);
+                        retValue.Image = Utility.Util.GetValueOfString(dr["Image"]);
+
+                        retValue.IsSetting = Utility.Util.GetValueOfString(dr["IsSetting"]) == "Y";
+
                     }
                     break;
                 }

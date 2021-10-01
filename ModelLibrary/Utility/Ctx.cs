@@ -1325,6 +1325,16 @@ namespace VAdvantage.Utility
             SetContext("#AppFullUrl", url);
         }
 
+        public void SetContextUrl(string url)
+        {
+            SetContext("#ContextUrl", url);
+        }
+
+        public string GetContextUrl()
+        {
+          return  GetContext("#ContextUrl");
+        }
+
         public void SetIsSSL(bool isSsl)
         {
             SetContext("#IsSSL", isSsl ? "Y" : "N");

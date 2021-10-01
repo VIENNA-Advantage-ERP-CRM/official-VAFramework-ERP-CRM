@@ -205,6 +205,28 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
+        /// Implement After Delete Logic
+        /// </summary>
+        /// <param name="success">Success</param>
+        /// <returns>true, when success</returns>
+        protected override bool AfterDelete(bool success)
+        {
+            if (!success)
+            {
+                return false;
+            }
+
+            // Delete Line, on deletion of Landed Cost
+            int no = DB.ExecuteQuery("DELETE FROM C_LandedCostAllocation WHERE C_LandedCost_ID=" + GetC_LandedCost_ID(), null, Get_Trx());
+            if (no != 0)
+            {
+                log.Info("Landed Cost Allocation Line Deleted #" + no);
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Allocate Costs.
         ///	Done at Invoice Line Level
         /// </summary>

@@ -99,7 +99,7 @@ namespace ViennaAdvantage.Process
             }
             if (lead.GetBPName() == null)
             {
-                return Msg.GetMsg(GetCtx(), "Please enter Company name, Prospect or Business Partner");
+                return Msg.GetMsg(GetCtx(), "PleaseEnterProspectDetails");
             }
             if (lead.Get_ID() != _C_Lead_ID)
             {
@@ -273,7 +273,7 @@ namespace ViennaAdvantage.Process
                                 cspr.Set_Value("VA047_Option1", Util.GetValueOfInt(cus.Get_Value("VA047_Option1")));
                                 cspr.Set_Value("VA047_Option2", Util.GetValueOfInt(cus.Get_Value("VA047_Option2")));
                                 cspr.Set_Value("VA047_Option3", Util.GetValueOfInt(cus.Get_Value("VA047_Option3")));
-                                cspr.Set_Value("VA047_PartnerType", Util.GetValueOfString(cus.Get_Value("VA047_Par`tnerType")));
+                                cspr.Set_Value("VA047_PartnerType", Util.GetValueOfString(cus.Get_Value("VA047_PartnerType")));
                                 cspr.Set_Value("VA047_Vertical4", Util.GetValueOfInt(cus.Get_Value("VA047_Vertical4")));
                                 cspr.Set_Value("VA047_UsingSystem1", Util.GetValueOfInt(cus.Get_Value("VA047_UsingSystem1")));
                                 cspr.Set_Value("VA047_UsingSystem2", Util.GetValueOfInt(cus.Get_Value("VA047_UsingSystem2")));

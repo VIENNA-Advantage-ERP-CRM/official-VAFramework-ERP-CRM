@@ -156,10 +156,13 @@
 
                         label = VIS.VControlFactory.getLabel(field); //get label
                         crt.addVetoableChangeListener(this);
-                        label.getControl().find('sup').hide();
                         inputWrap.append(crt.getControl());
-                        if (label)
-                            inputWrap.append(label.getControl());
+                        if (label) {
+                            label.getControl().find('sup').hide();
+
+                            if (label)
+                                inputWrap.append(label.getControl());
+                        }
                         grp.append(inputWrap);
                     }
                     if (crt && crt.getBtnCount() > 1) {
@@ -845,7 +848,7 @@
         this.curTabfields = [];
 
         var html = '<option value="-1"> </option>';
-
+        var sortedFields = [];
         //Fill Dynamic Column List 
         for (var c = 0; c < curTabfieldlist.length; c++) {
             // get field
@@ -897,9 +900,20 @@
             if (field.getIsSelectionColumn())
                 this.selectionfields.push(field);
             else
-                html += '<option value="' + columnName + '">' + header + '</option>';
+                sortedFields.push({ 'value': columnName, 'text': header });
+            // html += '<option value="' + columnName + '">' + header + '</option>';
         }
+        sortedFields.sort(function (a, b) {
+            var n1 = a.text.toUpperCase();
+            var n2 = b.text.toUpperCase();
+            if (n1 > n2) return 1;
+            if (n1 < n2) return -1;
+            return 0;
+        });
 
+        for (var col = 0; col < sortedFields.length; col++) {
+            html += '<option value="' + sortedFields[col].value + '">' + sortedFields[col].text + '</option>';
+        }
         //Add this html in Dynamic created column
         this.fillColumns(html);
 
@@ -965,6 +979,21 @@
                 else
                     whereClause += " " + dynFilter;
             }
+
+            //Remove query which will fetch image.. Only display test in Filter option.
+            if (displayCol.indexOf("||'^^'|| NVL((SELECT NVL(ImageURL,'')") > 0
+                && displayCol.indexOf("thing.png^^') ||' '||") > 0) {
+                var displayCol1 = displayCol.substr(0, displayCol.indexOf("||'^^'|| NVL((SELECT NVL(Imag"));
+                displayCol = displayCol.substr(displayCol.indexOf("othing.png^^') ||' '||") + 22);
+                displayCol = displayCol1 + "||'_'||" + displayCol;
+            }
+            if (displayCol.indexOf("||'^^'|| NVL((SELECT NVL(ImageURL,'')") > 0) {
+                displayCol = displayCol.replace(displayCol.substr(displayCol.indexOf("||'^^'|| NVL((SELECT NVL(Imag"), displayCol.indexOf("Images/nothing.png^^')") + 21), '');
+            }
+            else if (displayCol.indexOf("nothing.png") > -1) {
+                displayCol = displayCol.replace(displayCol.substr(displayCol.indexOf("NVL((SELECT NVL(ImageURL,'')"), displayCol.indexOf("thing.png^^') ||' '||") + 21), '')
+            }
+
 
             var data = {
                 keyCol: keyCol, displayCol: displayCol, validationCode: validationCode
