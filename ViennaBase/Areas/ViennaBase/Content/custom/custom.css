@@ -506,21 +506,20 @@ input:not([type=button]), select, textarea{
     transform: translateX(-100%);
     background: rgba(var(--v-c-primary), 1);
 }
-
+html[dir="rtl"] .vis-ctrl-switchSlider {
+    left:unset;
+    right: -15px;
+}
 
 .vis-autocomplete-items {
     position: absolute;
     border: 1px solid #d4d4d4;
-
    /* border-bottom: none;*/
-
     border-top: none;
     z-index: 999;
     /*position the autocomplete items to be the same width as the container:*/
     top: 100%;
     left: 0;
-    right: 0;
-
     max-height: 254px;
     overflow: auto;
 
