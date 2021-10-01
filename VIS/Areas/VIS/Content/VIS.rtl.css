@@ -809,6 +809,7 @@ html[dir="rtl"] .vis-input-wrap input[type=range]::-webkit-slider-thumb, .vis-ad
 
 html[dir="rtl"] .vis-input-wrap .vis-progressCtrlWrap ~ .vis-ev-ctrlinfowrap, .w2ui-editable .vis-progressCtrlWrap ~ .vis-ev-ctrlinfowrap {
     right: 0;
+    left: unset;
 }
 
 html[dir="rtl"] .w2ui-editable .vis-progress-output {

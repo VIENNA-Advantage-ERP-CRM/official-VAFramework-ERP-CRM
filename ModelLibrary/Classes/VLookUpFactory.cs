@@ -315,13 +315,13 @@ namespace VAdvantage.Classes
             else
             {
                 displayCol = "trl.Name";
-                realSQL.Append(displayCol + ", AD_Ref_List.IsActive, , NVL(img.FontName,img.ImageURL),ref.ListDisplayOption "
+                realSQL.Append(displayCol + ", AD_Ref_List.IsActive, NVL(img.FontName,img.ImageURL),ref.ListDisplayOption "
                     + "FROM AD_Ref_List AD_Ref_List INNER JOIN AD_Ref_List_Trl trl "
                     + " ON (AD_Ref_List.AD_Ref_List_ID=trl.AD_Ref_List_ID AND trl.AD_Language='")
                         .Append(language.GetAD_Language()).Append("')");
             }
-            realSQL.Append(" JOIN AD_Reference ref ON ref.AD_Reference_ID=AD_Ref_List.AD_Reference_ID ");
-            realSQL.Append(" LEFT OUTER JOIN AD_Image img ON AD_Ref_List.AD_Image_ID=img.AD_Image_ID ");
+            realSQL.Append(" INNER JOIN AD_Reference ref ON (ref.AD_Reference_ID=AD_Ref_List.AD_Reference_ID) ");
+            realSQL.Append(" LEFT OUTER JOIN AD_Image img ON (AD_Ref_List.AD_Image_ID=img.AD_Image_ID) ");
 
             realSQL.Append(" WHERE AD_Ref_List.AD_Reference_ID=").Append(AD_Reference_Value_ID);
             realSQL.Append(" ORDER BY 2");
