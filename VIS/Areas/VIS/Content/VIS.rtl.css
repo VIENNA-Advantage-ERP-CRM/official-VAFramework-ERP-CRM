@@ -127,7 +127,8 @@ html[dir="rtl"] .VIS-AMTD-formData select,
 html[dir="rtl"] .VIS-AMTD-formData input,
 html[dir="rtl"] .vis-advancedSearch-RecentRecords,
 html[dir="rtl"] .VIS_Pref_show .VIS_Pref_dd:not(:first-child),
-html[dir="rtl"] .vis-group-role-pad .vis-group-user-profile label{
+html[dir="rtl"] .vis-group-role-pad .vis-group-user-profile label,
+html[dir="rtl"] .vis-navSearchWrap input{
     padding-left: 0;
     padding-right: 10px;
 }
@@ -456,7 +457,8 @@ html[dir="rtl"] .vis-control-wrap > button {
     text-align: center;
 }
 html[dir="rtl"] .vis-ad-w-p-tb-search span:first-child i,
-html[dir="rtl"] .vis-menuSearch a.fa-search {
+html[dir="rtl"] .vis-menuSearch a.fa-search,
+html[dir="rtl"] .vis-navSearchWrap .input-group-text i {
     transform: rotate(90deg);
 }
 html[dir="rtl"] .vis-ad-w-p-t-c-tc i,
@@ -514,8 +516,7 @@ html[dir="rtl"] .VIS_Pref_content-right-5 {
     padding-left: 0;
 }
 html[dir="rtl"] .VIS_Pref_content-right,
-html[dir="rtl"] .VIS_Pref_content-right-5,
-html[dir="rtl"] .vis-css-treeview ul li {
+html[dir="rtl"] .VIS_Pref_content-right-5 {
     padding-left: 10px;
 }
 html[dir="rtl"] .vis-cs-op-lbl {
@@ -567,6 +568,12 @@ html[dir="rtl"] .vis-tree-search .input-group-text {
     border-bottom-right-radius: 0;
     border-top-left-radius: 1.5rem;
     border-bottom-left-radius: 1.5rem;
+}
+html[dir="rtl"] .vis-navSearchWrap .input-group-text {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
 }
 html[dir="rtl"] .right-inner-addon a {
     right: auto;
@@ -708,7 +715,111 @@ html[dir="rtl"] .vis-leftsidebarouterwrap .vis-input-wrap label {
     right: 10px;
 }
 
+html[dir="rtl"] .list-unstyled {
+    padding-right: 0;
+}
 
+html[dir="rtl"] .vis-navList a i:first-child,
+html[dir="rtl"] .vis-navLeftWrap a i {
+    transform: rotate(180deg);
+}
+
+html[dir="rtl"] .vis-navDataHead i,
+html[dir="rtl"] .vis-navDataHead img {
+    padding-right: 0;
+    padding-left: .5rem;
+}
+html[dir="rtl"] .vis-navSubMenu {
+    padding-left: 0;
+    padding-right: .5rem;
+}
+html[dir="rtl"] .vis-css-treeview label:before {
+    position: absolute;
+    content: "\f054";
+    left: 0px;
+    font-family: 'FontAwesome';
+    transform: rotate( 180deg);
+}
+html[dir="rtl"] .vis-css-treeview label:after {
+    display: none;
+}
+html[dir="rtl"] .vis-css-treeview ul.vismenu-parent li,
+html[dir="rtl"] .vis-menu-innerFolders ~ li,
+html[dir="rtl"] .vis-css-treeview ul li.vis-menu-innerFolders {
+    padding-left: 0;
+}
+html[dir="rtl"] .vis-menu-foldderUL ul {
+    padding-left: 0 !important;
+}
+html[dir="rtl"] .vis-menu-foldderUL ul {
+    padding-right: 15px !important;
+}
+html[dir="rtl"] .vis-menu-innerFolders ~ li {
+    padding-right: 1.25rem;
+}
+html[dir="rtl"] .vis-menu-innerFolders {
+    padding-right: 1rem;
+}
+
+html[dir="rtl"] .vis-css-treeview li.vis-subNavFirstElement ~ ul li:first-child span {
+    padding-right: .625rem;
+    padding-left: 0;
+}
+html[dir="rtl"] .vis-css-treeview li.vis-subNavFirstElement ~ ul li span {
+    padding-right: .625rem;
+}
+
+html[dir="rtl"] .vis-css-treeview ul li a:first-child,
+html[dir="rtl"] .vis-navmenuItems-Container .vis-navList {
+    border-left: none;
+    border-right: 4px solid rgba(var(--v-c-on-secondary), .2);
+}
+html[dir="rtl"] .vis-css-treeview .vis-subNavFirstElement label:before {
+    display: none;
+}
+html[dir="rtl"] .vis-subNavFirstElement label i {
+    transform: rotate( 180deg);
+    padding-left: 0 !important;
+    padding-right: 10px !important;
+}
+html[dir="rtl"] .vis-navMainContent .vis-navList:hover {
+    border-right: 4px solid rgba(var(--v-c-primary), 1);
+}
+html[dir="rtl"] .vis-navColWrap {
+    padding-left: 0;
+    padding-right: 1rem;
+}
+html[dir="rtl"] .vis-css-treeview li.vis-subNavFirstElement ~ ul li div span {
+    padding-left: 0;
+}
+
+html[dir="rtl"] .vis-css-treeview li.vis-subNavFirstElement ~ ul li a span {
+    padding-right: 0;
+}
+
+html[dir="rtl"] .vis-removeFilter {
+
+right: 26px;
+}
 /*rtl css End here*/
+
+html[dir="rtl"] .vis-progress-output {
+    right: 32px;
+    left: unset;
+}
+html[dir="rtl"] .vis-input-wrap input[type=range]::-webkit-slider-thumb, .vis-advancedSearchInput input[type=range]::-webkit-slider-thumb, .w2ui-editable input[type=range]::-webkit-slider-thumb {
+    background: linear-gradient( -90deg, black 53%, rgba(var(--v-c-primary), 1) 47%);
+    box-shadow: 330px 0 0 324px rgba(var(--v-c-primary), 1), inset 0 0 0 1px rgba(var(--v-c-on-secondary), 1);
+}
+html[dir="rtl"] .vis-input-wrap .vis-progressCtrlWrap ~ .vis-ev-ctrlinfowrap, .w2ui-editable .vis-progressCtrlWrap ~ .vis-ev-ctrlinfowrap {
+    right: 0;
+}
+html[dir="rtl"] .w2ui-editable .vis-progress-output {
+    /* position: relative !important;*/
+    margin-top: 8px !important;
+    right: 3%;
+}
+    /*rtl css End here*/
+
 
 

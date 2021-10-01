@@ -4657,12 +4657,15 @@ namespace VAdvantage.Model
 
             // when document is other that Drafted stage, then we cannot delete documnet line
             // But allowed to delete lines from Quotation.
+            // VIS0060: Can delete lines with zero quantity.
             MOrder order = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
-            if (order.GetDocStatus() != "DR" && !order.IsSalesQuotation())
+            if (order.GetDocStatus() != "DR" && !order.IsSalesQuotation() && !GetQtyEntered().Equals(Env.ZERO))
             {
                 log.SaveError("DeleteError", Msg.GetMsg(GetCtx(), "CannotDeleteTrx"));
                 return false;
             }
+            // VIS0060: UnLink all the Requisition Lines linked with this order line.
+            DB.ExecuteQuery("UPDATE M_RequisitionLine SET C_OrderLine_ID = NULL WHERE C_OrderLine_ID = " + Get_ID(), null, Get_Trx());            
             return true;
         }
 
