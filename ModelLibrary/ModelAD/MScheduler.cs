@@ -84,11 +84,12 @@ namespace VAdvantage.Model
                 //int port=System.Web.HttpContext.Current.Request.Url.Port;
                 //string machineIPPort =machineIP+ ":" + port.ToString();
                 DataSet ds = DataBase.DB.ExecuteDataset(sql);
+                s_log.SaveError("Console VServer Machine IP : " + machineIP, "Console VServer Machine IP : " + machineIP);
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
                     scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM AD_Schedule WHERE 
                                                         AD_Schedule_ID = (SELECT AD_Schedule_ID FROM AD_Scheduler WHERE AD_Scheduler_ID =" + dr["AD_Scheduler_ID"] + " )"));
-
+                    s_log.SaveError("Console VServer Schedule IP : " + scheduleIP, "Console VServer Schedule IP : " + scheduleIP);
                     //if (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP) || machineIPPort.Contains(scheduleIP))
                     if (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP))
                     {

@@ -427,7 +427,7 @@ namespace VAdvantage.DataBase
                 //    ds.Tables.Remove(schema);
                 //}
             }
-            catch
+            catch(Exception ex)
             {
                 //
                 ds = null;

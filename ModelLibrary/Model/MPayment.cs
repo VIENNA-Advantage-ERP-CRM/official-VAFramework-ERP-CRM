@@ -869,6 +869,14 @@ namespace VAdvantage.Model
                             }
                         }
                     }
+                    //Rakesh(VA228):Set VA009_IsContra true assigned by amit
+                    if (GetC_BPartner_ID() <= 0 && !IsReversal())
+                    {
+                        if (Get_ColumnIndex("VA009_IsContra") >= 0)
+                        {
+                            Set_Value("VA009_IsContra", true);
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -2795,15 +2803,7 @@ namespace VAdvantage.Model
                                         String schedule = string.Empty;
                                         try
                                         {
-                                            sql = @"SELECT LTRIM(SYS_CONNECT_BY_PATH( PaidSchedule, ' , '),',') PaidSchedule FROM
-                                              (SELECT PaidSchedule, ROW_NUMBER () OVER (ORDER BY PaidSchedule ) RN, COUNT (*) OVER () CNT FROM 
-                                                (SELECT duedate || '_' || dueamt AS PaidSchedule FROM C_PaymentAllocate pa
-                                                INNER JOIN C_invoice i ON i.c_invoice_id = pa.c_invoice_id
-                                                INNER JOIN C_InvoicePaySchedule ips ON (ips.C_Invoice_ID = i.C_Invoice_ID AND pa.C_InvoicePaySchedule_id = ips.C_InvoicePaySchedule_id) 
-                                                 WHERE pa.IsActive = 'Y' AND ips.IsActive = 'Y' AND NVL(pa.C_Invoice_ID , 0)  <> 0 AND (NVL(ips.c_payment_id,0)  != 0
-                                                 OR NVL(ips.c_cashline_id , 0) != 0 OR ips.VA009_IsPaid = 'Y') AND pa.C_Payment_ID = " + GetC_Payment_ID() +
-                                                     @" AND ROWNUM <= 100 )  )
-                                                 WHERE RN = CNT START WITH RN = 1 CONNECT BY RN = PRIOR RN + 1";
+                                            sql = DBFunctionCollection.CheckPaidScheduleAgainstPayment(GetC_Payment_ID());
                                             schedule = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));
                                         }
                                         catch (Exception ex)
@@ -5262,7 +5262,14 @@ namespace VAdvantage.Model
             // 
             // during creation of counter document, Payment Execution Status should be "In-Progress"
             if (Env.IsModuleInstalled("VA009_"))
+            {
                 reversal.SetVA009_ExecutionStatus("I");
+                //Rakesh(VA228):Set contra value on reversal
+                if (Get_ColumnIndex("VA009_IsContra") >= 0)
+                {
+                    reversal.Set_Value("VA009_IsContra", Get_Value("VA009_IsContra"));
+                }
+            }
             //
             reversal.SetIsAllocated(true);
             // Reconcile true on Original and Reverse Payment if Reconcile is False

@@ -130,6 +130,20 @@ namespace VIS.Controllers
             FormModel model = new FormModel(ctx);
             return Content(model.GetAccessSql(columnName, text));
         }
+        /// <summary>
+        /// autocomplete search 
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="columnName"></param>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        ///  Mandeep Singh(VIS0028) 13-sep-2021
+        public ActionResult GetAccessSqlAutoComplete(string sql, string columnName, string text)
+        {
+            Ctx ctx = Session["ctx"] as Ctx;
+            FormModel model = new FormModel(ctx);
+            return Json(JsonConvert.SerializeObject(model.GetAccessSqlAutoComplete(ctx,columnName, text, sql)), JsonRequestBehavior.AllowGet);
+        }
 
 
         public ActionResult GetTextButtonQueryResult(string sql)

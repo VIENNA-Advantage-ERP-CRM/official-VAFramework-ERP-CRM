@@ -545,11 +545,12 @@
             //if (child && child.length > 1) {
             //    $(child[1]).css("width", "auto");
             //}
-            window.setTimeout(function () {
-                $object.css('height', '99.4%');
-            }, 50);
-            $object.css('height', $object.height() - 1);
-
+            if ($object) {
+                window.setTimeout(function () {
+                    $object.css('height', '99.4%');
+                }, 50);
+                $object.css('height', $object.height() - 1);
+            }
         };
 
 

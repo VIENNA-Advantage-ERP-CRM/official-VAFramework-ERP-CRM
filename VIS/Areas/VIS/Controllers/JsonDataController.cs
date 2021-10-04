@@ -503,7 +503,7 @@ namespace VIS.Controllers
             }
 
             if (id > 0)
-            {               
+            {
                 sql1 = "SELECT " + colName + ", AD_Org_ID FROM " + tableName + " WHERE " + tableName + "_ID =" + Util.GetValueOfString(record_ID);
                 DataSet ds = DB.ExecuteDataset(sql1);
 
@@ -547,16 +547,18 @@ namespace VIS.Controllers
         /// <param name="record_ID"></param>
         /// <param name="tableName"></param>
         /// <returns></returns>
-        private string GetCustomerLanguage(int tableID, int record_ID,string tableName) {
+        private string GetCustomerLanguage(int tableID, int record_ID, string tableName)
+        {
             string lang = "";
             try
             {
                 lang = Util.GetValueOfString(DB.ExecuteScalar("SELECT AD_Language FROM C_BPartner WHERE C_BPartner_ID=(SELECT C_BPartner_ID FROM " + tableName + " WHERE " + tableName + "_ID=" + record_ID + ")"));
             }
-            catch(Exception ex) {
-            
+            catch (Exception ex)
+            {
+
             }
-                   
+
             return lang;
         }
 
@@ -626,11 +628,11 @@ namespace VIS.Controllers
         /// json dataset</returns>
         /// 
 
-        public async System.Threading.Tasks.Task <JsonResult> JDataSetWithCode(SqlParamsIn sqlIn)
+        public async System.Threading.Tasks.Task<JsonResult> JDataSetWithCode(SqlParamsIn sqlIn)
         {
             return await System.Threading.Tasks.Task.Run(() => JDataSetWithCodeAsync(sqlIn));
         }
-            public JsonResult JDataSetWithCodeAsync(SqlParamsIn sqlIn)
+        public JsonResult JDataSetWithCodeAsync(SqlParamsIn sqlIn)
         {
             SqlHelper h = new SqlHelper();
             Ctx ctx = Session["ctx"] as Ctx;
@@ -782,11 +784,11 @@ namespace VIS.Controllers
         {
             return await System.Threading.Tasks.Task.Run(() => GeneratePrintAsync(AD_Process_ID, Name, AD_Table_ID, Record_ID, WindowNo, filetype, actionOrigin, originName));
         }
-        public  JsonResult GeneratePrintAsync(int AD_Process_ID, string Name, int AD_Table_ID, int Record_ID, int WindowNo, string filetype, string actionOrigin, string originName)
+        public JsonResult GeneratePrintAsync(int AD_Process_ID, string Name, int AD_Table_ID, int Record_ID, int WindowNo, string filetype, string actionOrigin, string originName)
         {
             if (Session["ctx"] != null)
             {
-                Ctx ctx = Session["ctx"] as Ctx;                
+                Ctx ctx = Session["ctx"] as Ctx;
                 int pID = GetDoctypeBasedReport(ctx, AD_Table_ID, Record_ID);
                 if (pID > 0)
                 {
@@ -1069,6 +1071,10 @@ namespace VIS.Controllers
 
                 }
             }
+
+            //If DB is postgre, then append foo at end of subquery
+            if (DB.IsPostgreSQL())
+                sql += " AS foo ";
 
             Dictionary<string, object> result = new Dictionary<string, object>();
             List<FilterDataContract> keyva = new List<FilterDataContract>();

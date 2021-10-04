@@ -12,11 +12,20 @@
 }
 
 
-.vis-ev-col input:not([type=button]):not([type="checkbox"]):not([type="radio"]), .vis-ev-col select, .vis-ev-col textarea, .vis-control-wrap > button {
+.vis-ev-col input:not([type=button]):not([type="checkbox"]):not([type="radio"]), .vis-ev-col select, .vis-ev-col textarea {
     border: 1px solid rgba(var(--v-c-on-secondary), .2);
     /*border: 1px solid var(--input-border);*/
     border-radius: .25rem;
     color: rgba(var(--v-c-on-secondary), 1);
+    background-color: transparent;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.vis-control-wrap > button {
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
+    /*border: 1px solid var(--input-border);*/
+    border-radius: .25rem;
+   /* color: rgba(var(--v-c-on-secondary), 1);*/
     background-color: transparent;
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
@@ -334,9 +343,10 @@ input.vis-ev-col-readonly:not(:placeholder-shown) ~ label {
 .vis-ev-col-linkbutton {
     background: no-repeat !important;
     border: none !important;
-    color: rgba(var(--v-c-primary), 1) !important;
+    color: rgba(var(--v-c-primary), 1);
     display: flex;
     align-items: center;
+   /* justify-content: center;*/
 }
 
     .vis-ev-col-linkbutton i {
@@ -381,6 +391,7 @@ label.vis-ec-col-lblchkbox {
     font-weight: normal;
     color: rgba(var(--v-c-on-secondary), 1);
     align-items: center;
+    font-size: .875rem;
 }
 
 /*.vis-ev-col label.vis-ec-col-lblchkbox {
@@ -525,7 +536,126 @@ input[type="radio"]:not(:checked){
     border: 1px solid rgba(var(--v-c-on-secondary), .2);
 }
 
+.vis-input-wrap input[type=range],
+.vis-gc-vtable.w2ui-grid .w2ui-editable input[type=range] {
+    outline: 0;
+    border: 0;
+    max-width: 100%;
+    position: relative;
+}
+
+.vis-gc-vtable.w2ui-grid .w2ui-editable input[type=range] {
+    min-height: auto;
+    margin-top: 0 !important;
+}
+
+
+.vis-progress-output {
+    color: rgba(var(--v-c-on-primary), 1);
+    position: absolute;
+    left: 32px;
+    transform: translateX(-1%);
+    z-index: 2;
+    margin-top: 12px !important;
+    transition: 3s;
+}
+    .vis-progress-output:hover {
+        z-index: 0;
+        transition: 0s;
+    }
+.vis-advancedSearchInput .vis-progress-output {
+    margin-top:8px !important;
+}
+
+.w2ui-editable .vis-progress-output {
+    /* position: relative !important;*/
+    margin-top: 8px !important;
+    left: 3%;
+}
+
+
+
+.w2ui-grid-data .vis-grid-progress-output {
+    /* color: black !important; */
+    position: absolute;
+    left: 0.5%;
+    transform: translateX(-1%);
+    z-index: 2;
+    margin-top: -18px;
+}
+.vis-progressCtrlWrap {
+    border: none !important;
+    background: none !important;
+    
+}
+.vis-advancedSearchInput .vis-progressCtrlWrap {
+    width:100% !important;
+}
+
+.vis-input-wrap input[type=range],
+.vis-advancedSearchInput input[type=range],
+.w2ui-editable input[type=range] {
+    border: none !important;
+    overflow: hidden;
+    min-height: 20px !important;
+    height: 20px !important;
+    -webkit-appearance: none;
+    background-color: #ddd;
+    padding: 0 !important;
+    z-index: 1;
+    top: 0.3rem;
+}
+
+    .vis-input-wrap input[type=range]::-webkit-slider-runnable-track,
+    .vis-advancedSearchInput::-webkit-slider-runnable-track,
+    .w2ui-editable input[type=range]::-webkit-slider-runnable-track {
+        height: 20px !important;       
+        -webkit-appearance: none;
+        color: rgba(var(--v-c-primary), 1);
+        -webkit-transition: box-shadow 0.2s ease-in-out;
+        transition: box-shadow 0.2s ease-in-out;
+        background-color: rgba(var(--v-c-on-secondary),0.1);
+    }
+
+    .vis-input-wrap input[type=range]::-webkit-slider-thumb,
+    .vis-advancedSearchInput input[type=range]::-webkit-slider-thumb,
+    .w2ui-editable input[type=range]::-webkit-slider-thumb {
+        width: 20px;
+        border-radius: 50%;
+        -webkit-appearance: none;
+        height: 20px;
+        cursor: ew-resize;
+        background: linear-gradient( 90deg, black 53%, rgba(var(--v-c-primary), 1) 47%);
+        /* box-shadow: -340px 0 0 320px rgba(var(--v-c-primary), 1), inset 0 0 0 20px rgba(var(--v-c-primary), 1); */
+        box-shadow: -330px 0 0 324px rgba(var(--v-c-primary), 1), inset 0 0 0 1px rgba(var(--v-c-on-secondary), 1);
+        -webkit-transition: box-shadow 0.2s ease-in-out;
+        transition: box-shadow 0.2s ease-in-out;
+        position: relative;
+    }
+
+.vis-input-wrap input[type="range"],
+.vis-advancedSearchInput input[type="range"],
+.w2ui-editable input[type="range"] {
+    border-radius: 0.7rem !important;
+    margin-left: 22px;
+    margin-top: 7px;
+    width: calc(100% - 22px);
+}
+
+.vis-input-wrap .vis-progressCtrlWrap + label {
+    padding: 0;
+    left: 0 !important;
+    top: -12px !important;
+}
+
+.vis-input-wrap .vis-progressCtrlWrap ~ .vis-ev-ctrlinfowrap,
+.w2ui-editable .vis-progressCtrlWrap ~ .vis-ev-ctrlinfowrap {
+    left: 0;
+    Top: 18px !important;
+}
+.w2ui-grid-data .vis-progressCtrlWrap{
+    box-shadow:none !important;
+}
+
 
 /***************************** Control Prop End ****************************************/
-
-

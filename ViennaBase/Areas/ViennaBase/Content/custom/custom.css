@@ -463,3 +463,91 @@ input:not([type=button]), select, textarea{
     /*font-size: 1rem;*/
 
 }
+
+
+.vis-ctrl-switch {
+    height: 0;
+    width: 0;
+    visibility: hidden;
+}
+
+.vis-ctrl-switchSlider {
+    cursor: pointer;
+    text-indent: -9999px;
+    width: 3.4rem;
+    height: 0.5rem;
+    background: rgba(var(--v-c-on-secondary), 0.1);
+    display: inline-block;
+    border-radius: 2rem;
+    line-height: 1;
+    padding: 0.1666rem;
+    position: relative;
+    left: -15px;
+}
+
+    .vis-ctrl-switchSlider:after {
+        content: "";
+        position: absolute;
+        top: -0.5rem;
+        left: 0rem;
+        width: 1.5rem;
+        height: 1.5rem;
+        background: rgba(var(--v-c-on-secondary), 1);
+        border-radius: 2rem;
+        transition: 0.3s;
+    }
+
+.vis-ctrl-switch:checked + .vis-ctrl-switchSlider {
+    /*background: rgba(var(--v-c-primary), 1);*/
+}
+
+.vis-ctrl-switch:checked + .vis-ctrl-switchSlider:after {
+    left: calc(100% - 0rem);
+    transform: translateX(-100%);
+    background: rgba(var(--v-c-primary), 1);
+}
+html[dir="rtl"] .vis-ctrl-switchSlider {
+    left:unset;
+    right: -15px;
+}
+
+.vis-autocomplete-items {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+   /* border-bottom: none;*/
+    border-top: none;
+    z-index: 999;
+    /*position the autocomplete items to be the same width as the container:*/
+    top: 100%;
+    left: 0;
+    max-height: 254px;
+    overflow: auto;
+
+}
+
+    .vis-autocomplete-items div {
+        padding: 2px 10px 2px 10px;
+        cursor: pointer;
+        background-color: #fff;
+       /* border-bottom: 1px solid #d4d4d4;*/
+    }
+
+    .vis-autocomplete-items strong {
+        font-weight: bolder !important;
+    }
+    /*when hovering an item:*/
+    .vis-autocomplete-items div:hover {
+        background-color: #e9e9e9;
+    }
+
+/*when navigating through the items using the arrow keys:*/
+.vis-autocomplete-active {
+    background-color: rgba(var(--v-c-primary), 1) !important;
+    color: #ffffff;
+}
+
+.w2ui-editable .vis-autocomplete-items {
+    position: relative;
+}
+
+

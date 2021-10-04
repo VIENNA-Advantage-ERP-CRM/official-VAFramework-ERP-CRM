@@ -743,6 +743,41 @@ namespace VAdvantage.DataBase
             return sql.ToString();
         }
 
+        /// <summary>
+        /// This function is used to create query as per DB Support
+        /// </summary>
+        /// <param name="C_Payment_ID">Payment ID</param>
+        /// <returns>SQL</returns>
+        public static string CheckPaidScheduleAgainstPayment(int C_Payment_ID)
+        {
+            StringBuilder sql = new StringBuilder();
+            if (DB.IsOracle())
+            {
+                sql.Append(@"SELECT LTRIM(SYS_CONNECT_BY_PATH( PaidSchedule, ' , '),',') PaidSchedule FROM
+                                              (SELECT PaidSchedule, ROW_NUMBER () OVER (ORDER BY PaidSchedule ) RN, COUNT (*) OVER () CNT FROM 
+                                                (SELECT duedate || '_' || dueamt AS PaidSchedule FROM C_PaymentAllocate pa
+                                                INNER JOIN C_invoice i ON i.c_invoice_id = pa.c_invoice_id
+                                                INNER JOIN C_InvoicePaySchedule ips ON (ips.C_Invoice_ID = i.C_Invoice_ID AND pa.C_InvoicePaySchedule_id = ips.C_InvoicePaySchedule_id) 
+                                                 WHERE pa.IsActive = 'Y' AND ips.IsActive = 'Y' AND NVL(pa.C_Invoice_ID , 0)  <> 0 AND (NVL(ips.c_payment_id,0)  != 0
+                                                 OR NVL(ips.c_cashline_id , 0) != 0 OR ips.VA009_IsPaid = 'Y') AND pa.C_Payment_ID = " + C_Payment_ID +
+                                                   @" AND ROWNUM <= 100 )  )
+                                                 WHERE RN = CNT START WITH RN = 1 CONNECT BY RN = PRIOR RN + 1");
+            }
+            else if (DB.IsPostgreSQL())
+            {
+                sql.Append(@"SELECT string_agg(PaidSchedule, ', ') FROM 
+                                (SELECT ips.duedate || '_' || ips.dueamt AS PaidSchedule FROM C_PaymentAllocate pa
+                                INNER JOIN C_invoice i ON i.c_invoice_id = pa.c_invoice_id
+                                INNER JOIN C_InvoicePaySchedule ips ON (ips.C_Invoice_ID = i.C_Invoice_ID 
+                                AND pa.C_InvoicePaySchedule_id = ips.C_InvoicePaySchedule_id)
+                                WHERE pa.IsActive = 'Y' AND ips.IsActive = 'Y' AND NVL(pa.C_Invoice_ID , 0)  <> 0 
+                                AND (NVL(ips.c_payment_id,0)  != 0
+                                OR NVL(ips.c_cashline_id , 0) != 0 OR ips.VA009_IsPaid = 'Y')
+                                AND pa.C_Payment_ID =" + C_Payment_ID + " LIMIT 100 )t WHERE PaidSchedule IS NOT NULL");
+            }
+            return sql.ToString();
+        }
+
         public static string MoveConfirmNoActualValue(string mMovementLinesConfirm)
         {
             StringBuilder sql = new StringBuilder();
@@ -986,6 +1021,26 @@ namespace VAdvantage.DataBase
                 {
                     sql.Append("SELECT * FROM C_Contract WHERE (EndDate- NVL(CancelBeforeDays,0)) <= " + GlobalVariable.TO_DATE(DateTime.Now, true) + " AND IsActive='Y' AND RenewalType='A' AND RenewContract = 'N' AND AD_Client_ID = " + AD_Client_ID);
                 }
+            }
+            return sql.ToString();
+        }
+
+        /// <summary>
+        /// convert main query to subquery 
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="column">multiple columnname sperated by comma</param>
+        /// <returns></returns>
+        public static String convertToSubQuery(string query, string column)
+        {
+            StringBuilder sql = new StringBuilder();
+            if (DB.IsPostgreSQL())
+            {
+                sql.Append("SELECT " + column + " FROM (" + query + ") AS tbl ");
+            }
+            else
+            {
+                sql.Append("SELECT " + column + " FROM (" + query + ") ");
             }
             return sql.ToString();
         }
