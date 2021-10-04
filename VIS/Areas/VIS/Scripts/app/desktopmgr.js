@@ -1321,7 +1321,6 @@
          * In case of  Web Menu, when user apply filter then hide all folders with no visible child
          */
         function hideEmptyFolders() {
-
             if (root.find("input[type=radio]:checked").val() != "A") {
                 var allUls = menuUL.find('.vis-navmenuItems-Container').find('ul');
                 menuUL.find('.vis-menuSum-hide').removeClass('vis-menuSum-hide');
@@ -1355,21 +1354,21 @@
                             }
                             canhide = true;
                         }
-                        if (canhide)
-                            $(allUls[j]).addClass('vis-menuSum-hide');
+                        //if (canhide)
+                        //    $(allUls[j]).addClass('vis-menuSum-hide');
                     }
-                    else {
-                        var liList = $(allUls[j]).find('li');
-                        for (var k = 0; k < liList.length; k++) {
-                            if ($(liList[k]).is(':visible')) {
-                                canhide = false;
-                                break;
-                            }
-                            canhide = true;
+                    //else {
+                    var liList = $(allUls[j]).find('li');
+                    for (var k = 0; k < liList.length; k++) {
+                        if ($(liList[k]).is(':visible')) {
+                            canhide = false;
+                            break;
                         }
-                        if (canhide)
-                            $(allUls[j]).addClass('vis-menuSum-hide');
+                        canhide = true;
                     }
+                    if (canhide)
+                        $(allUls[j]).addClass('vis-menuSum-hide');
+                    //}
                 }
             }
             else {
