@@ -3273,22 +3273,26 @@ namespace VAdvantage.Model
             MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
             if (GetTenderType().Equals(X_C_Payment.TENDERTYPE_Check) && bnkAct.IsChkNoAutoControl() && !IsReversal())
             {
-                if ((dt.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_APPAYMENT) && GetPayAmt() >= 0) || (dt.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_ARRECEIPT) && GetPayAmt() < 0))
+                //Rakesh(VA228):When cheque number is not present on bank payment check and execute autocheck if enabled
+                if (string.IsNullOrEmpty(GetCheckNo()))
                 {
-                    // get Check number
-                    string checkNo = GetChecknumber(GetVA009_PaymentMethod_ID(), GetC_BankAccount_ID(), Get_Trx());
-                    //Check cheque number exists
-                    if (!string.IsNullOrEmpty(checkNo) && checkNo != "0")
+                    if ((dt.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_APPAYMENT) && GetPayAmt() >= 0) || (dt.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_ARRECEIPT) && GetPayAmt() < 0))
                     {
-                        //update the check Date with Account Date if CheckDate is null
-                        DateTime? checkDate = GetCheckDate() != null ? GetCheckDate() : GetDateAcct();
-                        DB.ExecuteQuery("UPDATE C_Payment SET CheckDate=" + GlobalVariable.TO_DATE(checkDate, true) + ", CheckNo='" + checkNo + "' WHERE C_Payment_ID=" + GetC_Payment_ID(), null, Get_Trx());
-                    }
-                    else
-                    {
-                        _processMsg = Msg.GetMsg(GetCtx(), "NoCheckNum");
-                        log.Info("" + _processMsg + ": Payment Document No " + GetDocumentNo());
-                        return DocActionVariables.STATUS_INVALID;
+                        // get Check number
+                        string checkNo = GetChecknumber(GetVA009_PaymentMethod_ID(), GetC_BankAccount_ID(), Get_Trx());
+                        //Check cheque number exists
+                        if (!string.IsNullOrEmpty(checkNo) && checkNo != "0")
+                        {
+                            //update the check Date with Account Date if CheckDate is null
+                            DateTime? checkDate = GetCheckDate() != null ? GetCheckDate() : GetDateAcct();
+                            DB.ExecuteQuery("UPDATE C_Payment SET CheckDate=" + GlobalVariable.TO_DATE(checkDate, true) + ", CheckNo='" + checkNo + "' WHERE C_Payment_ID=" + GetC_Payment_ID(), null, Get_Trx());
+                        }
+                        else
+                        {
+                            _processMsg = Msg.GetMsg(GetCtx(), "NoCheckNum");
+                            log.Info("" + _processMsg + ": Payment Document No " + GetDocumentNo());
+                            return DocActionVariables.STATUS_INVALID;
+                        }
                     }
                 }
             }
