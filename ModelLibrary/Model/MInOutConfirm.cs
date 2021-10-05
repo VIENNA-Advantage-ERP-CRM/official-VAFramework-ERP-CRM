@@ -41,8 +41,8 @@ namespace VAdvantage.Model
         private Boolean _justPrepared = false;
         /**	Static Logger	*/
         private static VLogger _log = VLogger.GetVLogger(typeof(MInOutConfirm).FullName);
-
         ValueNamePair pp = null;
+        int docTypeAssociate = 0;
 
         /**
 	 * 	Create Confirmation or return existing one
@@ -1032,7 +1032,7 @@ namespace VAdvantage.Model
                 }
                 /**End**/
 
-                
+
                 // Now save Splitted Document
                 if (!splitLine.Save(Get_TrxName()))
                 {
@@ -1162,8 +1162,17 @@ namespace VAdvantage.Model
                     // Set InternalUser true if Internal User Inventory
                     int doctypeSetting = CheckAssociateDocTypeSetting(inout.GetC_DocType_ID(), false);
                     if (doctypeSetting == 1)
-                    { _inventory.SetIsInternalUse(true); }
-                    else { _inventory.SetIsInternalUse(false); }
+                    {
+                        _inventory.SetIsInternalUse(true);
+                    }
+                    else
+                    {
+                        _inventory.SetIsInternalUse(false);
+                    }
+                    if (docTypeAssociate > 0)
+                    {
+                        _inventory.SetC_DocType_ID(docTypeAssociate);
+                    }
                     //vikas  new 13 jan 2016 1
                     // _inventory.SetIsInternalUse(true);
                     if (_inventory.GetC_DocType_ID() == 0)
@@ -1196,37 +1205,78 @@ namespace VAdvantage.Model
                     }
                     SetM_Inventory_ID(_inventory.GetM_Inventory_ID());
                 }
+
                 MInOutLine ioLine = confirm.GetLine();
+
+                StringBuilder query = new StringBuilder();
+                int result = 0;
+                decimal currentQty = 0;
+                //Opening Stock , Qunatity Book => CurrentQty From Transaction of MovementDate
+                //As On Date Count = Opening Stock - Diff Qty
+                //Qty Count = Qty Book - Diff Qty
+                query.Append("SELECT COUNT(M_Transaction_ID) FROM M_Transaction WHERE Movementdate = " + GlobalVariable.TO_DATE(_inventory.GetMovementDate(), true) + @" 
+                           AND  M_Product_ID = " + ioLine.GetM_Product_ID() + " AND M_Locator_ID = " + ioLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + ioLine.GetM_AttributeSetInstance_ID());
+                result = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString()));
+                query.Clear();
+                if (result > 0)
+                {
+                    query.Append(@"SELECT currentqty FROM M_Transaction WHERE M_Transaction_ID =
+                            (SELECT MAX(M_Transaction_ID)   FROM M_Transaction
+                            WHERE movementdate =     (SELECT MAX(movementdate) FROM M_Transaction WHERE movementdate <= " + GlobalVariable.TO_DATE(_inventory.GetMovementDate(), true) + @" 
+                            AND  M_Product_ID = " + ioLine.GetM_Product_ID() + " AND M_Locator_ID = " + ioLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + ioLine.GetM_AttributeSetInstance_ID() + @")
+                            AND  M_Product_ID = " + ioLine.GetM_Product_ID() + " AND M_Locator_ID = " + ioLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + ioLine.GetM_AttributeSetInstance_ID() + @")
+                            AND  M_Product_ID = " + ioLine.GetM_Product_ID() + " AND M_Locator_ID = " + ioLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + ioLine.GetM_AttributeSetInstance_ID());
+                    currentQty = Util.GetValueOfDecimal(DB.ExecuteScalar(query.ToString()));
+                }
+                else
+                {
+                    query.Append("SELECT COUNT(M_Transaction_ID) FROM M_Transaction WHERE movementdate < " + GlobalVariable.TO_DATE(_inventory.GetMovementDate(), true) + @" 
+                            AND  M_Product_ID = " + ioLine.GetM_Product_ID() + " AND M_Locator_ID = " + ioLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + ioLine.GetM_AttributeSetInstance_ID());
+                    result = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString()));
+                    if (result > 0)
+                    {
+                        query.Clear();
+                        query.Append(@"SELECT currentqty FROM M_Transaction WHERE M_Transaction_ID =
+                            (SELECT MAX(M_Transaction_ID)   FROM M_Transaction
+                            WHERE movementdate =     (SELECT MAX(movementdate) FROM M_Transaction WHERE movementdate < " + GlobalVariable.TO_DATE(_inventory.GetMovementDate(), true) + @" 
+                            AND  M_Product_ID = " + ioLine.GetM_Product_ID() + " AND M_Locator_ID = " + ioLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + ioLine.GetM_AttributeSetInstance_ID() + @")
+                            AND  M_Product_ID = " + ioLine.GetM_Product_ID() + " AND M_Locator_ID = " + ioLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + ioLine.GetM_AttributeSetInstance_ID() + @")
+                            AND  M_Product_ID = " + ioLine.GetM_Product_ID() + " AND M_Locator_ID = " + ioLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + ioLine.GetM_AttributeSetInstance_ID());
+                        currentQty = Util.GetValueOfDecimal(DB.ExecuteScalar(query.ToString()));
+                    }
+                }
                 // Removed the code as already handled on before save..
                 MInventoryLine line = new MInventoryLine(_inventory, ioLine.GetM_Locator_ID(), ioLine.GetM_Product_ID(), ioLine.GetM_AttributeSetInstance_ID(),
                    confirm.GetScrappedQty(), Env.ZERO);
 
-                //Below code commented because we have to convert the Quantity for update in wareHouse as mentioned above
-                //MInventoryLine line = new MInventoryLine(_inventory,
-                //    ioLine.GetM_Locator_ID(), ioLine.GetM_Product_ID(),
-                //    ioLine.GetM_AttributeSetInstance_ID(),
-                //    confirm.GetScrappedQty(), Env.ZERO);
-                //new 15 jan
-
                 // Added by Bharat on 17 Jan 2019 to set new fields UOM and Qty Entered..
                 line.Set_Value("C_UOM_ID", ioLine.GetC_UOM_ID());
-                line.Set_Value("QtyEntered", line.GetQtyBook());
-                line.SetQtyInternalUse(line.GetQtyBook());
-                line.SetQtyBook(0);
-
+                line.Set_Value("QtyEntered", confirm.GetScrappedQty());
+                line.SetAdjustmentType("D");
+                line.SetDifferenceQty(Util.GetValueOfDecimal(confirm.GetScrappedQty()));
+                line.SetQtyBook(currentQty);
+                line.SetOpeningStock(currentQty);
+                line.SetAsOnDateCount(Decimal.Subtract(Util.GetValueOfDecimal(line.GetOpeningStock()), Util.GetValueOfDecimal(confirm.GetScrappedQty())));
+                line.SetQtyCount(Decimal.Subtract(Util.GetValueOfDecimal(line.GetQtyBook()), Util.GetValueOfDecimal(confirm.GetScrappedQty())));
 
                 //Lakhwinder
                 //Behave as per setting on Doctype
                 if (_inventory.IsInternalUse())
                 {
                     line.SetIsInternalUse(true);
+                    line.SetQtyInternalUse(confirm.GetScrappedQty());
+                    if (Env.IsModuleInstalled("DTD001_"))
+                    {
+                        int chrgID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT MAX(C_Charge_ID) FROM C_Charge WHERE DTD001_ChargeType='INV' AND IsActive='Y' AND AD_Org_ID IN (0," + GetAD_Org_ID() + ") AND AD_Client_ID=" + GetAD_Client_ID(), null, Get_Trx()));
+                        if (chrgID == 0)
+                        {
+                            _processMsg += "InvChargeNotThere";
+                            return false;
+                        }
+                        line.SetC_Charge_ID(chrgID);
+                    }
                 }
-                Tuple<String, String, String> mInfo = null;
-                if (Env.HasModulePrefix("DTD001_", out mInfo))
-                {
-                    int _charge = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Charge_ID FROM C_Charge WHERE isactive='Y' AND  DTD001_ChargeType='INV'"));
-                    line.SetC_Charge_ID(_charge);
-                }
+
                 // End
                 if (!line.Save(Get_TrxName()))
                 {
@@ -1272,7 +1322,7 @@ namespace VAdvantage.Model
             if (docType.Get_ColumnIndex("C_DocTypeScrap_ID") < 0 && docType.Get_ColumnIndex("C_DocTypeDifference_ID") < 0)
             { return 0; }
 
-            int docTypeAssociate = 0;
+            //int docTypeAssociate = 0;
             if (!isDiff)
             {
                 docTypeAssociate = Util.GetValueOfInt(docType.Get_Value("C_DocTypeScrap_ID"));

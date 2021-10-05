@@ -645,13 +645,14 @@ namespace VAdvantage.Model
             {
                 if (Is_ValueChanged("C_UOM_ID") || Is_ValueChanged("M_AttributeSet_ID"))
                 {
-                    string uqry = "SELECT SUM(cc) as count FROM  (SELECT COUNT(*) AS cc FROM M_MovementLine WHERE M_Product_ID = " + GetM_Product_ID() + @"  UNION
-                SELECT COUNT(*) AS cc FROM M_InventoryLine WHERE M_Product_ID = " + GetM_Product_ID() + " UNION SELECT COUNT(*) AS cc FROM C_OrderLine WHERE M_Product_ID = " + GetM_Product_ID() +
-                    " UNION  SELECT COUNT(*) AS cc FROM M_InOutLine WHERE M_Product_ID = " + GetM_Product_ID() + ") t";
+                    string uqry = "SELECT SUM(cc) AS count FROM (SELECT COUNT(M_MovementLine_ID) AS cc FROM M_MovementLine WHERE M_Product_ID = " + GetM_Product_ID() 
+                        + @"  UNION SELECT COUNT(M_InventoryLine_ID) AS cc FROM M_InventoryLine WHERE M_Product_ID = " + GetM_Product_ID() 
+                        + " UNION SELECT COUNT(C_OrderLine_ID) AS cc FROM C_OrderLine WHERE M_Product_ID = " + GetM_Product_ID() 
+                        + " UNION SELECT COUNT(M_InOutLine_ID) AS cc FROM M_InOutLine WHERE M_Product_ID = " + GetM_Product_ID() + ") t";
                     int no = Util.GetValueOfInt(DB.ExecuteScalar(uqry));
                     if (no == 0 || IsBOM())
                     {
-                        uqry = "SELECT count(*) FROM M_ProductionPlan WHERE M_Product_ID = " + GetM_Product_ID();
+                        uqry = "SELECT COUNT(M_Product_ID) FROM M_ProductionPlan WHERE M_Product_ID = " + GetM_Product_ID();
                         no = Util.GetValueOfInt(DB.ExecuteScalar(uqry));
                     }
                     if (no > 0)
@@ -732,18 +733,19 @@ namespace VAdvantage.Model
                 //MFRPTProductAcct obj = null;
                 int _MProduct_ID = GetM_Product_ID();
                 int _PCategory_ID = GetM_Product_Category_ID();
-                string sql = "SELECT L.VALUE FROM AD_REF_LIST L inner join AD_Reference r on R.AD_REFERENCE_ID=L.AD_REFERENCE_ID where   r.name='FRPT_RelatedTo' and l.name='Product'";
+                string sql = "SELECT L.Value FROM AD_Ref_List L INNER JOIN AD_Reference r ON R.AD_Reference_ID=L.AD_Reference_ID WHERE r.Name='FRPT_RelatedTo' AND l.Name='Product'";
                 //"select VALUE from AD_Ref_List where name='Product'";
                 string _RelatedToProduct = Convert.ToString(DB.ExecuteScalar(sql));
                 //string _RelatedToProduct = X_FRPT_AcctDefault.FRPT_RELATEDTO_Product.ToString();
 
                 _sql.Clear();
-                _sql.Append("Select Count(*) From FRPT_Product_Acct  where M_Product_ID=" + _MProduct_ID + " AND IsActive = 'Y' AND AD_Client_ID = " + GetAD_Client_ID());
+                _sql.Append("SELECT COUNT(M_Product_ID) FROM FRPT_Product_Acct WHERE M_Product_ID=" + _MProduct_ID + " AND IsActive = 'Y' AND AD_Client_ID = " + GetAD_Client_ID());
                 int value = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
                 if (value < 1)
                 {
                     _sql.Clear();
-                    _sql.Append("Select  PCA.c_acctschema_id, PCA.c_validcombination_id, PCA.frpt_acctdefault_id From FRPT_product_category_acct PCA inner join frpt_acctdefault ACC ON acc.frpt_acctdefault_id= PCA.frpt_acctdefault_id where PCA.m_product_category_id=" + _PCategory_ID + " and acc.frpt_relatedto='" + _RelatedToProduct + "' AND PCA.IsActive = 'Y' AND PCA.AD_Client_ID = " + GetAD_Client_ID());
+                    _sql.Append("SELECT PCA.C_AcctSchema_ID, PCA.C_ValidCombination_ID, PCA.FRPT_AcctDefault_ID FROM FRPT_Product_Category_acct PCA INNER JOIN FRPT_AcctDefault ACC ON acc.FRPT_AcctDefault_ID= PCA.FRPT_AcctDefault_ID WHERE PCA.M_Product_Category_ID=" 
+                        + _PCategory_ID + " AND acc.FRPT_RelatedTo='" + _RelatedToProduct + "' AND PCA.IsActive = 'Y' AND PCA.AD_Client_ID = " + GetAD_Client_ID());
                     //_sql.Append("Select C_AcctSchema_ID, C_ValidCombination_ID, FRPT_AcctDefault_ID from FRPT_product_category_acct where m_product_category_id =" + _PCategory_ID);
 
                     DataSet ds = DB.ExecuteDataset(_sql.ToString());
@@ -762,35 +764,7 @@ namespace VAdvantage.Model
                             { }
                         }
                     }
-                }
-                // Change by mohit amortization process
-                //int _CountVA038 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA038_'  AND IsActive = 'Y'"));
-                //if (_CountVA038 > 0)
-                //{
-                //    if (GetProductType() == "E" || GetProductType() == "S")
-                //    {
-                //        if (Util.GetValueOfInt(Get_Value("VA038_AmortizationTemplate_ID")) > 0)
-                //        {
-                //            DataSet _dsAcct = DB.ExecuteDataset("SELECT C_AcctSchema_ID, FRPT_AcctDefault_ID, C_VALIDCOMBINATION_ID, SEQNO FROM VA038_Amortization_Acct "
-                //                              + "WHERE IsActive='Y' AND  VA038_AmortizationTemplate_ID=" + Util.GetValueOfInt(Get_Value("VA038_AmortizationTemplate_ID")));
-                //            if (_dsAcct != null && _dsAcct.Tables[0].Rows.Count > 0)
-                //            {
-                //                for (int j = 0; j < _dsAcct.Tables[0].Rows.Count; j++)
-                //                {
-                //                    obj = MTable.GetPO(GetCtx(), "FRPT_Product_Acct", 0, null);
-                //                    obj.Set_ValueNoCheck("AD_Org_ID", 0);
-                //                    obj.Set_ValueNoCheck("M_Product_ID", _MProduct_ID);
-                //                    obj.Set_ValueNoCheck("C_AcctSchema_ID", Util.GetValueOfInt(_dsAcct.Tables[0].Rows[j]["C_AcctSchema_ID"]));
-                //                    obj.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(_dsAcct.Tables[0].Rows[j]["C_ValidCombination_ID"]));
-                //                    obj.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(_dsAcct.Tables[0].Rows[j]["FRPT_AcctDefault_ID"]));
-                //                    if (!obj.Save())
-                //                    { }
-                //                }
-                //            }
-                //        }
-                //    }
-                //}
-                // End amortization process
+                }                
             }
             else
             {
@@ -805,9 +779,9 @@ namespace VAdvantage.Model
                 //	Name/Description Change in Asset	MAsset.setValueNameDescription
                 if (!newRecord && (Is_ValueChanged("Name") || Is_ValueChanged("Description")))
                 {
-                    String sql = " UPDATE A_Asset a SET Name=(SELECT SUBSTR(bp.Name || ' - ' || p.Name,1,60) FROM M_Product p, C_BPartner bp  WHERE p.M_Product_ID=a.M_Product_ID AND bp.C_BPartner_ID=a.C_BPartner_ID)," +
+                    String sql = " UPDATE A_Asset a SET Name=(SELECT SUBSTR(bp.Name || ' - ' || p.Name,1,60) FROM M_Product p, C_BPartner bp WHERE p.M_Product_ID=a.M_Product_ID AND bp.C_BPartner_ID=a.C_BPartner_ID)," +
       "Description=(SELECT  p.Description FROM M_Product p, C_BPartner bp WHERE p.M_Product_ID=a.M_Product_ID AND bp.C_BPartner_ID=a.C_BPartner_ID)" +
-      "WHERE IsActive='Y'  AND M_Product_ID=" + GetM_Product_ID();
+      "WHERE IsActive='Y' AND M_Product_ID=" + GetM_Product_ID();
 
                     int no = 0;
                     try
@@ -850,18 +824,11 @@ namespace VAdvantage.Model
                 //}
             }
 
-            //22-12-2015
-            //by Amit for creating records ffor product foe all Costing Element whose costing elemnt type is 'Material'
-            //if (newRecord || Is_ValueChanged("M_Product_Category_ID"))
-            //{
-            //    MCost.CreateRecords(this);
-            //}
-            //20-12-2016
-            //By Vivek Chauhan saving Nutrition value against product...........
-            object ModuleId = DB.ExecuteScalar("select ad_moduleinfo_id from ad_moduleinfo where prefix='VA019_' and isactive='Y'");
-            if (ModuleId != null && ModuleId != DBNull.Value)
+            
+            //By Vivek Chauhan saving Nutrition value against product...........            
+            if (Env.IsModuleInstalled("VA019_"))
             {
-                object objNDBNo = DB.ExecuteScalar("select va019_ndbno from M_Product where m_product_ID=" + GetM_Product_ID() + "");
+                object objNDBNo = DB.ExecuteScalar("SELECT VA019_NDBno FROM M_Product WHERE M_Product_ID=" + GetM_Product_ID() + "");
                 if (objNDBNo != null && objNDBNo != DBNull.Value)
                 {
                     CallNutritionApi(Convert.ToString(objNDBNo), GetM_Product_ID());
