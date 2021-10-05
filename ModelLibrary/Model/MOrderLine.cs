@@ -696,8 +696,8 @@ namespace VAdvantage.Model
             {
                 sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID =" + taxCategory +
                     " AND tcr.IsActive = 'Y' AND tcr.VATAX_TaxBase = 'L' AND tcr.C_Country_ID = " + Country_ID + " AND NVL(tcr.C_Region_ID,0) = " + Region_ID +
-                    " AND (CASE WHEN (tcr.vatax_ispostal = 'Y') THEN CASE WHEN tcr.postal <= '" + Postal + "' AND tcr.postal_to >= '" + Postal + "' THEN 1 ELSE 2" +
-                    " END ELSE  CASE WHEN tcr.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
+                    " AND (CASE WHEN (tcr.VATAX_IsPostal = 'Y') THEN CASE WHEN tcr.Postal <= '" + Postal + "' AND tcr.Postal_To >= '" + Postal + "' THEN 1 ELSE 2" +
+                    " END ELSE  CASE WHEN tcr.Postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
             }
             C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
             if (C_Tax_ID > 0)
@@ -715,8 +715,8 @@ namespace VAdvantage.Model
                 else
                 {
                     sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID =" + taxCategory +
-                        " AND tcr.IsActive = 'Y' AND tcr.VATAX_TaxBase = 'L' AND tcr.C_Country_ID = " + Country_ID + " AND tcr.C_Region_ID IS NULL AND (CASE WHEN (tcr.vatax_ispostal = 'Y') THEN CASE WHEN tcr.postal <= '" + Postal +
-                        "' AND tcr.postal_to >= '" + Postal + "' THEN 1 ELSE 2" + " END ELSE  CASE WHEN tcr.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','"
+                        " AND tcr.IsActive = 'Y' AND tcr.VATAX_TaxBase = 'L' AND tcr.C_Country_ID = " + Country_ID + " AND tcr.C_Region_ID IS NULL AND (CASE WHEN (tcr.VATAX_IsPostal = 'Y') THEN CASE WHEN tcr.Postal <= '" + Postal +
+                        "' AND tcr.Postal_To >= '" + Postal + "' THEN 1 ELSE 2" + " END ELSE  CASE WHEN tcr.Postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','"
                         + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
                 }
                 C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
@@ -729,8 +729,8 @@ namespace VAdvantage.Model
                     if (!String.IsNullOrEmpty(Postal))
                     {
                         sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID =" + taxCategory +
-                            " AND tcr.IsActive = 'Y' AND tcr.VATAX_TaxBase = 'L' AND tcr.C_Country_ID IS NULL " + " AND tcr.C_Region_ID IS NULL AND (CASE WHEN (tcr.vatax_ispostal = 'Y') THEN CASE WHEN tcr.postal <= '"
-                            + Postal + "' AND tcr.postal_to >= '" + Postal + "' THEN 1 ELSE 2 END ELSE  CASE WHEN tcr.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','"
+                            " AND tcr.IsActive = 'Y' AND tcr.VATAX_TaxBase = 'L' AND tcr.C_Country_ID IS NULL " + " AND tcr.C_Region_ID IS NULL AND (CASE WHEN (tcr.VATAX_IsPostal = 'Y') THEN CASE WHEN tcr.Postal <= '"
+                            + Postal + "' AND tcr.Postal_To >= '" + Postal + "' THEN 1 ELSE 2 END ELSE  CASE WHEN tcr.Postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','"
                             + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
                         C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                     }
@@ -757,7 +757,7 @@ namespace VAdvantage.Model
             {
                 sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID = "
                 + taxCategory + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.C_Country_ID = " + Country_ID + " AND NVL(trl.C_Region_ID,0) = " + Region_ID +
-                " AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= '" + Postal + "' AND trl.postal_to >= '" + Postal + "' THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '"
+                " AND (CASE WHEN (trl.VATAX_IsPostal = 'Y') THEN CASE WHEN trl.Postal <= '" + Postal + "' AND trl.Postal_To >= '" + Postal + "' THEN 1 ELSE 2 END ELSE  CASE WHEN trl.Postal = '"
                 + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
             }
             C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
@@ -776,8 +776,8 @@ namespace VAdvantage.Model
                 else
                 {
                     sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID = "
-                    + taxCategory + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.C_Country_ID = " + Country_ID + " AND trl.C_Region_ID IS NULL AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= '"
-                    + Postal + "' AND trl.postal_to >= '" + Postal + "' THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','"
+                    + taxCategory + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.C_Country_ID = " + Country_ID + " AND trl.C_Region_ID IS NULL AND (CASE WHEN (trl.VATAX_IsPostal = 'Y') THEN CASE WHEN trl.Postal <= '"
+                    + Postal + "' AND trl.Postal_To >= '" + Postal + "' THEN 1 ELSE 2 END ELSE  CASE WHEN trl.Postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','"
                     + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
                 }
                 C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
@@ -790,8 +790,8 @@ namespace VAdvantage.Model
                     if (!String.IsNullOrEmpty(Postal))
                     {
                         sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID = "
-                        + taxCategory + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.C_Country_ID IS NULL AND trl.C_Region_ID IS NULL AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= '"
-                        + Postal + "' AND trl.postal_to >= '" + Postal + "' THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','"
+                        + taxCategory + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.C_Country_ID IS NULL AND trl.C_Region_ID IS NULL AND (CASE WHEN (trl.VATAX_IsPostal = 'Y') THEN CASE WHEN trl.Postal <= '"
+                        + Postal + "' AND trl.Postal_To >= '" + Postal + "' THEN 1 ELSE 2 END ELSE  CASE WHEN trl.Postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','"
                         + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
                         C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
 
@@ -819,8 +819,8 @@ namespace VAdvantage.Model
             {
                 sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID = "
                 + taxCategory + " AND tcr.VATAX_DiffCountry = 'Y' AND tcr.C_Country_ID = " + toCountry + " AND tcr.VATAX_TaxRegion_ID = " + taxRegion + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.C_Country_ID = " + Country_ID +
-                " AND NVL(trl.C_Region_ID,0) = " + Region_ID + " AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= '" + Postal + "' AND trl.postal_to >= '" + Postal +
-                "' THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
+                " AND NVL(trl.C_Region_ID,0) = " + Region_ID + " AND (CASE WHEN (trl.VATAX_IsPostal = 'Y') THEN CASE WHEN trl.Postal <= '" + Postal + "' AND trl.Postal_To >= '" + Postal +
+                "' THEN 1 ELSE 2 END ELSE  CASE WHEN trl.Postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
             }
             C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
             if (C_Tax_ID > 0)
@@ -838,8 +838,8 @@ namespace VAdvantage.Model
                 else
                 {
                     sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID = "
-                    + taxCategory + " AND tcr.VATAX_DiffCountry = 'Y' AND tcr.C_Country_ID = " + toCountry + " AND tcr.VATAX_TaxRegion_ID = " + taxRegion + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.C_Country_ID = " + Country_ID + " AND trl.C_Region_ID IS NULL AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= '"
-                    + Postal + "' AND trl.postal_to >= '" + Postal + "' THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
+                    + taxCategory + " AND tcr.VATAX_DiffCountry = 'Y' AND tcr.C_Country_ID = " + toCountry + " AND tcr.VATAX_TaxRegion_ID = " + taxRegion + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.C_Country_ID = " + Country_ID + " AND trl.C_Region_ID IS NULL AND (CASE WHEN (trl.VATAX_IsPostal = 'Y') THEN CASE WHEN trl.Postal <= '"
+                    + Postal + "' AND trl.Postal_To >= '" + Postal + "' THEN 1 ELSE 2 END ELSE  CASE WHEN trl.Postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
                 }
                 C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                 if (C_Tax_ID > 0)
@@ -851,8 +851,8 @@ namespace VAdvantage.Model
                     if (!String.IsNullOrEmpty(Postal))
                     {
                         sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID = "
-                        + taxCategory + " AND tcr.VATAX_DiffCountry = 'Y' AND tcr.C_Country_ID = " + toCountry + " AND tcr.VATAX_TaxRegion_ID = " + taxRegion + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.C_Country_ID IS NULL AND trl.C_Region_ID IS NULL AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= '"
-                        + Postal + "' AND trl.postal_to >= '" + Postal + "' THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
+                        + taxCategory + " AND tcr.VATAX_DiffCountry = 'Y' AND tcr.C_Country_ID = " + toCountry + " AND tcr.VATAX_TaxRegion_ID = " + taxRegion + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.C_Country_ID IS NULL AND trl.C_Region_ID IS NULL AND (CASE WHEN (trl.VATAX_IsPostal = 'Y') THEN CASE WHEN trl.Postal <= '"
+                        + Postal + "' AND trl.Postal_To >= '" + Postal + "' THEN 1 ELSE 2 END ELSE  CASE WHEN trl.Postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
                         C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                         if (C_Tax_ID > 0)
                         {
@@ -2514,7 +2514,7 @@ namespace VAdvantage.Model
                 }
             }
             //	Fallback
-            String sql = "SELECT c.StdPrecision "
+            String sql = "SELECT C.StdPrecision "
                 + "FROM C_Currency c INNER JOIN C_Order x ON (x.C_Currency_ID=c.C_Currency_ID) "
                 + "WHERE x.C_Order_ID=" + GetC_Order_ID();
 
@@ -3635,7 +3635,7 @@ namespace VAdvantage.Model
             // Change ConvertUOMWise
             if (DB.GetSQLValue(null, "SELECT VAPOS_POSTerminal_ID FROM C_Order WHERE C_Order_ID = " + GetC_Order_ID()) > 0)
             {
-                string _CONVERTUOMWISE = Util.GetValueOfString(DB.ExecuteScalar("Select VAPOS_CONVERTUOMWISE from M_Product where M_product_ID=" + GetM_Product_ID()));
+                string _CONVERTUOMWISE = Util.GetValueOfString(DB.ExecuteScalar("SELECT VAPOS_ConvertUomWise FROM M_Product WHERE M_product_ID=" + GetM_Product_ID()));
                 if (_CONVERTUOMWISE == "Y")
                 {
                     if (GetQtyEntered() <= 1)
@@ -3909,7 +3909,7 @@ namespace VAdvantage.Model
                     wHouse = MWarehouse.Get(GetCtx(), Ord.GetM_Warehouse_ID());
                     if (!wHouse.IsDropShip())
                     {
-                        int _Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar("Select M_Warehouse_ID From M_Warehouse Where AD_Org_ID=" + GetAD_Org_ID() + " AND IsActive='Y' AND IsDropShip='Y'"));
+                        int _Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_Warehouse_ID FROM M_Warehouse WHERE AD_Org_ID=" + GetAD_Org_ID() + " AND IsActive='Y' AND IsDropShip='Y'"));
                         if (_Warehouse_ID > 0)
                         {
                             SetM_Warehouse_ID(_Warehouse_ID);
@@ -4791,8 +4791,8 @@ namespace VAdvantage.Model
                     // Copy the VA077_IsContract from SQ and update to SO 
                     string qry = @"UPDATE C_OrderLine 
                                    SET VA077_IsContract=(SELECT VA077_IsContract 
-                                   FROM C_OrderLine WHERE C_OrderLine_Id =" + Util.GetValueOfInt(Get_Value("C_Quotation_Line_ID")) + @")                          
-                                   WHERE C_OrderLine_Id=" + GetC_OrderLine_ID();
+                                   FROM C_OrderLine WHERE C_OrderLine_ID =" + Util.GetValueOfInt(Get_Value("C_Quotation_Line_ID")) + @")                          
+                                   WHERE C_OrderLine_ID=" + GetC_OrderLine_ID();
                     int no = DB.ExecuteQuery(qry, null, Get_TrxName());
                     if (no <= 0)
                     {
@@ -5200,15 +5200,15 @@ namespace VAdvantage.Model
         /// <returns>bool</returns>
         public bool UpdateMetalConsumption(int c_order_ID)
         {
-            string qry = @"UPDATE C_order O
+            string qry = @"UPDATE C_Order O
                                  SET (O.VA076_ALAlAlloyTotConMT, O.VA076_CUTotConMT,O.VA076_LeadTotConMT) =
                                     (
                                         SELECT ALMetal,CUMetal,LeadMetal FROM(
-                                        SELECT OL.c_order_ID, Sum(NVL(Atr.VA076_ALMetalWeight,0)*QtyEntered) AS ALMetal,Sum(NVL(VA076_CUMetalWeight,0)*QtyEntered) AS CUMetal,Sum(NVL(VA076_LeadMetalWeight,0)*QtyEntered) AS LeadMetal 
+                                        SELECT OL.C_Order_ID, Sum(NVL(Atr.VA076_ALMetalWeight,0)*QtyEntered) AS ALMetal,Sum(NVL(VA076_CUMetalWeight,0)*QtyEntered) AS CUMetal,Sum(NVL(VA076_LeadMetalWeight,0)*QtyEntered) AS LeadMetal 
                                         FROM C_OrderLine OL 
                                         INNER JOIN VA076_Attributes Atr ON Atr.M_Product_ID=OL.M_Product_ID
-                                        WHERE OL.c_order_ID=" + c_order_ID + @" group by OL.c_order_ID) T
-                                    ) WHERE  O.c_order_ID =" + c_order_ID;
+                                        WHERE OL.C_Order_ID=" + c_order_ID + @" group by OL.C_Order_ID) T
+                                    ) WHERE  O.C_Order_ID =" + c_order_ID;
 
             int no = DB.ExecuteQuery(qry, null, Get_TrxName());
             if (no <= 0)
