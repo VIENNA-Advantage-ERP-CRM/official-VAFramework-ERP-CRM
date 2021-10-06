@@ -37,6 +37,8 @@ namespace VAdvantage.Model
 
         private decimal oldDueAmt = 0;
 
+        private bool byPassVallidateCondition = false;
+
         /**
          * 	Get Payment Schedule of the invoice
          * 	@param Ctx context
@@ -161,7 +163,7 @@ namespace VAdvantage.Model
                 SetDiscountAmt(discount);
                 SetIsValid(true);
             }
-                        
+
             /** Adhoc Payment - Setting DueDate for an InvoicePaySchedule ** Dt: 18/01/2021 ** Modified By: Kumar **/
             //	Dates            
             DateTime? dueDate = (invoice.Get_ColumnIndex("DueDate") >= 0 && invoice.GetDueDate() >= invoice.GetDateInvoiced()) ? invoice.GetDueDate() : TimeUtil.AddDays(invoice.GetDateInvoiced(), paySchedule.GetNetDays());
@@ -213,7 +215,7 @@ namespace VAdvantage.Model
         protected override bool BeforeSave(bool newRecord)
         {
             if (Is_ValueChanged("DueAmt"))
-            { 
+            {
                 log.Fine("beforeSave");
                 SetIsValid(false);
             }
@@ -230,14 +232,14 @@ namespace VAdvantage.Model
                 if (GetC_Payment_ID() > 0)
                 {
                     #region for payment
-                    MPayment payment = new MPayment(GetCtx(), GetC_Payment_ID(), Get_Trx());
-                    SetVA009_PaymentMethod_ID(payment.GetVA009_PaymentMethod_ID());
-
                     // get payment method detail -- update to here 
-                    DataSet dsPaymentMethod = DB.ExecuteDataset(@"SELECT VA009_PaymentMode, VA009_PaymentType, VA009_PaymentTrigger FROM VA009_PaymentMethod
-                                          WHERE VA009_PaymentMethod_ID = " + payment.GetVA009_PaymentMethod_ID(), null, Get_Trx());
+                    DataSet dsPaymentMethod = DB.ExecuteDataset(@"SELECT VA009_PaymentMode, VA009_PaymentType, VA009_PaymentTrigger, 
+                                            VA009_PaymentMethod_ID FROM VA009_PaymentMethod
+                                          WHERE VA009_PaymentMethod_ID = (SELECT VA009_PaymentMethod_ID FROM C_Payment
+                                          where C_Payment_ID =" + GetC_Payment_ID() + ")", null, Get_Trx());
                     if (dsPaymentMethod != null && dsPaymentMethod.Tables.Count > 0 && dsPaymentMethod.Tables[0].Rows.Count > 0)
                     {
+                        SetVA009_PaymentMethod_ID(Util.GetValueOfInt(dsPaymentMethod.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]));
                         if (!String.IsNullOrEmpty(Util.GetValueOfString(dsPaymentMethod.Tables[0].Rows[0]["VA009_PaymentMode"])))
                             SetVA009_PaymentMode(Util.GetValueOfString(dsPaymentMethod.Tables[0].Rows[0]["VA009_PaymentMode"]));
                         if (!String.IsNullOrEmpty(Util.GetValueOfString(dsPaymentMethod.Tables[0].Rows[0]["VA009_PaymentType"])))
@@ -318,7 +320,7 @@ namespace VAdvantage.Model
                 SetBackupWithholdingAmount(0);
                 SetWithholdingAmt(0);
             }
-                 
+
             return true;
         }
 
@@ -330,7 +332,7 @@ namespace VAdvantage.Model
          */
         protected override bool AfterSave(bool newRecord, bool success)
         {
-            if (newRecord || Is_ValueChanged("DueAmt"))
+            if ((newRecord || Is_ValueChanged("DueAmt")) && !byPassVallidateCondition)
             {
                 log.Fine("afterSave");
                 GetParent();
@@ -374,6 +376,15 @@ namespace VAdvantage.Model
                              WHERE inv.IsActive = 'Y' AND inv.C_Invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx());
             }
             return success;
+        }
+
+        /// <summary>
+        /// This function is used to bypass the validate Pay Schedule
+        /// </summary>
+        /// <param name="bypass">true or fals</param>
+        public void ByPassValidatePayScheduleCondition(bool bypass)
+        {
+            byPassVallidateCondition = bypass;
         }
 
     }

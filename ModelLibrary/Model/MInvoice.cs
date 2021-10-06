@@ -1386,6 +1386,13 @@ namespace VAdvantage.Model
                     schedule[i].Save(Get_Trx());
                 }
             }
+
+            //String sql = "UPDATE C_InvoicePaySchedule Set IsValid = '" + (valid ? "Y" : "N") +
+            //            @"' WHERE IsValid != '" + (valid ? "Y" : "N") + @"' 
+            //                AND C_InvoicePaySchedule_ID IN (SELECT C_InvoicePaySchedule_ID FROM C_InvoicePaySchedule ips 
+            //                WHERE C_Invoice_ID=" + GetC_Invoice_ID() + ")";
+            //DB.ExecuteQuery(sql, null, Get_Trx());
+
             return valid;
         }
 
