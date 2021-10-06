@@ -140,6 +140,9 @@
             "WrongOTP": "Falsches OTP eingegeben",
             "ScanQRCode": "Scannen Sie den Code mit Google Authenticator",
             "EnterVerCode": "Geben Sie das von Ihrer mobilen Anwendung generierte OTP ein",
+            "EnterVAVerCode": "Geben Sie OTP ein, das Sie auf Ihrem registrierten Mobiltelefon erhalten haben",
+            "SkipThisTime": "Diesmal überspringen",
+            "ResendOTP": "OTP erneut senden",
 }
 
 });

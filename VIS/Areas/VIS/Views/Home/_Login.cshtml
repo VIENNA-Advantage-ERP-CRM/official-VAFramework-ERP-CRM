@@ -117,8 +117,8 @@ new SelectList(ViewBag.Languages, "Key", "Name"), new { id = "cmbLang" })
                         <img id="QRCdeimg" src="" alt="QR CODE HERE" />
                     </div>
                 </div>
-                <div class="vis-loginQRLabel vis-loginOTPSec" style="font-size: 15px;"> <label id="lblEnterVerCode"></label></div>
-                <div class="vis-loginQRLabel vis-loginOTPSec" style="font-size: 15px; display:none;"> <label id="lblScanVAApp"></label></div>
+                <div class="vis-loginQRLabel vis-loginOTPSec vis-loginGALbl"> <label id="lblEnterGAOTP"></label></div>
+                <div class="vis-loginQRLabel vis-loginOTPSec vis-loginVALbl"> <label id="lblEnterVAOTP"></label></div>
                 <div class="input-row vis-loginOTPSec" style="margin-bottom:15px;">
                     <label class="input-icon">
                         <img src="~/Areas/VIS/Images/login/mob-ico.png" alt="icon">
@@ -129,9 +129,9 @@ new SelectList(ViewBag.Languages, "Key", "Name"), new { id = "cmbLang" })
                 </div>
                 @Html.HiddenFor(m => m.Login1Model.Login1DataOTP, new { id = "login3Data" })
                 <img style="display: none;margin:0px auto 10px;position: absolute;bottom: 23%;left: 44%;z-index: 999;" class="img-login" src="~/Areas/VIS/Images/busy.gif" />
-                <a href="#" id="lblSkip" type="submit" class="input-row vis-firstLoginAuth vis-login-skipLink vis-loginOTPSec">Skip this time</a>
+                <a href="#" id="lblSkip" type="submit" class="input-row vis-firstLoginAuth vis-login-skipLink vis-loginOTPSec"></a>
                 @Html.HiddenFor(m => m.Login1Model.SkipNow, new { id = "login3Data1" })
-                <a href="#" id="lblResend" type="submit" class="input-row vis-login-skipLink vis-loginOTPSec vis-login-resendOTP">Resend OTP</a>
+                <a href="#" id="lblResend" type="submit" class="input-row vis-login-skipLink vis-loginOTPSec vis-login-resendOTP"></a>
                 @Html.HiddenFor(m => m.Login1Model.ResendOTP, new { id = "login3Data2" })
             </div>
 

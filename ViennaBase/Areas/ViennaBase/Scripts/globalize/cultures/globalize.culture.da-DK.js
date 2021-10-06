@@ -131,7 +131,10 @@ Globalize.addCultureInfo( "da-DK", "default", {
         "EnterOTP": "Indtast OTP",
         "WrongOTP": "Forkert OTP indtastet",
         "ScanQRCode": "Scan koden med Google Authenticator",
-        "EnterVerCode": "Indtast OTP genereret af din mobilapplikation",
+		"EnterVerCode": "Indtast OTP genereret af din mobilapplikation",
+		"EnterVAVerCode": "Indtast OTP modtaget på din registrerede mobil",
+		"SkipThisTime": "Spring denne gang over",
+		"ResendOTP": "Send OTP igen",
 	}
 });
 
