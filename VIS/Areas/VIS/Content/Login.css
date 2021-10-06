@@ -480,6 +480,15 @@ input::-webkit-input-placeholder {
     text-align: center;
 }
 
+.vis-loginVALbl {
+    font-size: 15px;
+    display: none;
+}
+
+.vis-loginGALbl {
+    font-size: 15px;
+    display: none;
+}
 
 @media (max-width: 1366px) {
     .login-content {

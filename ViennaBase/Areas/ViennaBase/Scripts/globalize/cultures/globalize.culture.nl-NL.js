@@ -130,7 +130,10 @@ Globalize.addCultureInfo( "nl-NL", "default", {
         "EnterOTP": "Voer OTP in",
         "WrongOTP": "Verkeerde OTP ingevoerd",
         "ScanQRCode": "Scan de code met Google Authenticator",
-        "EnterVerCode": "Voer OTP in die is gegenereerd door uw mobiele applicatie"
+        "EnterVerCode": "Voer OTP in die is gegenereerd door uw mobiele applicatie",
+		"EnterVAVerCode": "Voer OTP in dat is ontvangen op uw geregistreerde mobiel",
+		"SkipThisTime": "Deze keer overslaan",
+		"ResendOTP": "OTP opnieuw verzenden",
 	}
 
 });

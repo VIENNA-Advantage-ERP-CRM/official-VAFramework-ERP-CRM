@@ -137,7 +137,10 @@
             "EnterOTP": "Inserisci OTP",
             "WrongOTP": "OTP errato inserito",
             "ScanQRCode": "Scansiona il codice con Google Authenticator",
-            "EnterVerCode": "Inserisci OTP generato dalla tua applicazione mobile"
+            "EnterVerCode": "Inserisci OTP generato dalla tua applicazione mobile",
+            "EnterVAVerCode": "Inserisci l'OTP ricevuto sul tuo cellulare registrato",
+            "SkipThisTime": "Salta questa volta",
+            "ResendOTP": "Reinvia OTP",
         }
     });
 
