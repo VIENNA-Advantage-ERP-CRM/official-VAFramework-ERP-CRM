@@ -129,7 +129,10 @@ Globalize.addCultureInfo( "id-ID", "default", {
         "EnterOTP": "Masukkan OTP",
         "WrongOTP": "Salah OTP Dimasukkan",
         "ScanQRCode": "Pindai kodenya dengan Google Authenticator",
-        "EnterVerCode": "Masukkan OTP yang dihasilkan oleh aplikasi seluler Anda"
+        "EnterVerCode": "Masukkan OTP yang dihasilkan oleh aplikasi seluler Anda",
+        "EnterVAVerCode": "Masukkan OTP yang diterima di ponsel Anda yang terdaftar",
+        "SkipThisTime": "Lewati kali ini",
+        "ResendOTP": "Kirim ulang OTP",
 	}
 });
 

@@ -90,6 +90,10 @@
                     // else if (json.ctx && json.ctx.Is2FAEnabled)
                     else if (json.ctx && json.ctx.TwoFAMethod != "") {
                         showLogin2FA();
+                        if (json.ctx.TwoFAMethod == "GA")
+                            $(".vis-loginGALbl").css('display', 'block');
+                        else
+                            $(".vis-loginVALbl").css('display', 'block');
                         $("#QRCdeimg").attr('src', json.ctx.QRCodeURL);
                         if (json.ctx.QRFirstTime)
                             $(".vis-firstLoginAuth").css("display", "block");
@@ -106,6 +110,7 @@
                         $('#login3Data').val(JSON.stringify(json.ctx));
                         $otpTwoFA.focus();
                         $imgbusy1.css('display', 'none');
+                        $imgAuto.hide();
                     }
                     else if (json.success) {
                         window.location = json.redirect || location.href;
@@ -161,6 +166,7 @@
         $cmbOrg.empty();
         $cmbWarehouse.empty();
         $("#login2Panel").find("ul").empty();
+        $(".login-content").show();
     };
 
     var showLoginResetPwd = function () {
@@ -175,6 +181,7 @@
         $('#login-form-1').hide();
         $('#login-form-2').hide();
         $('#login-form-3').show();
+        $(".login-content").show();
         $btnLogin1.prop('disabled', false);
     };
 
@@ -192,7 +199,7 @@
         $("#login2Panel").hide();//  "slide", function () {
         $("#loginPanel").show();//"slide", function () {
         $("#loginName").focus();
-        //  $imgAuto.hide();
+        $imgAuto.hide();
         e.preventDefault();
     };
 
@@ -329,8 +336,10 @@
 
         $otpTwoFA.attr("placeholder", Globalize.localize("EnterOTP"));
         $lblScanQRCode.text(Globalize.localize("ScanQRCode"));
-        $lblEnterVerCode.text(Globalize.localize("EnterVerCode"));
-        $lblScanVAApp.text(Globalize.localize("PlzScanVAApp"));
+        $lblEnterGAOTP.text(Globalize.localize("EnterVerCode"));
+        $lblEnterVAOTP.text(Globalize.localize("EnterVAVerCode"));
+        $lblSkip.text(Globalize.localize("SkipThisTime"));
+        $lblResend.text(Globalize.localize("ResendOTP"));
 
         $lblRole.text(Globalize.localize("Role"));
         $lblClient.text(Globalize.localize("Client"));
@@ -359,9 +368,13 @@
 
     $("#login-form-2").on("keydown", checkCapsLock);
 
-    $("#lblSkip").click(skipClick);
-    $("#lblResend").click(resendClick);
+   
 
+    var $lblSkip = $("#lblSkip");
+    var $lblResend = $("#lblResend");
+
+    $lblSkip.click(skipClick);
+    $lblResend.click(resendClick);
 
     var $loginForm = $("#loginForm");
 
@@ -377,8 +390,8 @@
     var $newCPwd = $('#txtCNewPwd');
     var $otpTwoFA = $('#txt2FAOTP');
     var $lblScanQRCode = $('#lblScanQRCode');
-    var $lblEnterVerCode = $('#lblEnterVerCode');
-    var $lblScanVAApp = $('#lblScanVAApp');
+    var $lblEnterGAOTP = $('#lblEnterGAOTP');
+    var $lblEnterVAOTP = $('#lblEnterVAOTP');
     //var $lblUser = $('label[for="Login1Model_UserName"]');
     //var $lblPwd = $('label[for="Login1Model_Password"]');
     //var $lblLang = $('label[for="Login1Model_LoginLanguage"]');

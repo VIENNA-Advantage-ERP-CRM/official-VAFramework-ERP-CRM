@@ -135,7 +135,10 @@ Globalize.addCultureInfo( "hr-HR", "default", {
         "EnterOTP": "Unesite OTP",
         "WrongOTP": "Pogrešno ušao OTP",
         "ScanQRCode": "Skenirajte kôd pomoću Google Autentifikatora",
-        "EnterVerCode": "Unesite OTP generiran od strane vaše mobilne aplikacije"
+		"EnterVerCode": "Unesite OTP generiran od strane vaše mobilne aplikacije",
+		"EnterVAVerCode": "Unesite OTP primljen na registrirani mobitel",
+		"SkipThisTime": "Ovaj put preskočite",
+		"ResendOTP": "Ponovno pošaljite OTP",
 	}
 });
 
