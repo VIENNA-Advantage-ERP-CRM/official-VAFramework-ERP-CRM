@@ -1,26 +1,30 @@
 ﻿; (function (VIS, $) {
     function changeUserImage() {
-       // debugger;
+        // debugger;
         var $txtChangeStatus = $("#vis-textStatus");
         var $imgOkStatus = $("#vis-img-OKStatus");
         var $imgCancelStatus = $("#vis-img-CancelStatus");
         var $labelStatus = $("#vis-labelStatus");
         $("#vis-file-input").change(function () {
-            debugger;
-            if (document.getElementById('vis-file-input').files[0]!=null)
-            {
-            var xhr = new XMLHttpRequest();
-            var fd = new FormData();
-            fd.append("file", document.getElementById('vis-file-input').files[0]);
-            xhr.open("POST", VIS.Application.contextUrl + "Home/SaveImageAsByte", true);
-            xhr.send(fd);
-            xhr.addEventListener("load", function (event) {                
-                var dd = event.target.response;
-                var res = JSON.parse(dd);
-                var a = JSON.parse(res);             
-                $("#imgUsrImage").attr('src', "data:image/jpg;base64," + a);
-            }, false);
-        }
+            var file = document.getElementById('vis-file-input').files[0];
+            if (file != null) {
+                var type = file.type.split('/').pop().toLowerCase();
+                if (type != "jpeg" && type != "jpg" && type != "png" && type != "ico" && type != "webp" && type != "svg") {
+                    VIS.ADialog.info("SelectImageOnly");
+                    return false;
+                }
+                var xhr = new XMLHttpRequest();
+                var fd = new FormData();
+                fd.append("file", file);
+                xhr.open("POST", VIS.Application.contextUrl + "Home/SaveImageAsByte", true);
+                xhr.send(fd);
+                xhr.addEventListener("load", function (event) {
+                    var dd = event.target.response;
+                    var res = JSON.parse(dd);
+                    var a = JSON.parse(res);
+                    $("#imgUsrImage").attr('src', "data:image/jpg;base64," + a);
+                }, false);
+            }
         });
         function saveStatus() {
             $txtChangeStatus = $("#vis-textStatus");
@@ -32,7 +36,7 @@
                     async: false,
                     data: { status: $txtChangeStatus.val() },
                     success: function (data) {
-                       // debugger;
+                        // debugger;
                         if (JSON.parse(data).length > 0) {
                             $txtChangeStatus.css("visibility", "hidden");
                             $imgCancelStatus.css("visibility", "hidden");
@@ -55,14 +59,14 @@
             saveStatus();
         });
         $imgCancelStatus.on("click", function () {
-           // debugger;
+            // debugger;
             $txtChangeStatus.css("visibility", "hidden");
             $imgCancelStatus.css("visibility", "hidden");
             $imgOkStatus.css("visibility", "hidden");
             $labelStatus.css("visibility", "visible");
         });
         $txtChangeStatus.on("focus", function () {
-          //  debugger;
+            //  debugger;
             $imgCancelStatus.css("visibility", "visible");
             $imgOkStatus.css("visibility", "visible");
         });
@@ -74,7 +78,7 @@
             }
         });
         $txtChangeStatus.on("blur", function () {
-           // debugger;
+            // debugger;
             //$("#vis-img-CancelStatus").css("visibility", "hidden");
             //$("#vis-img-OKStatus").css("visibility", "hidden");
         });
@@ -83,7 +87,7 @@
             $txtChangeStatus.css("visibility", "visible");
             //$imgCancelStatus.css("visibility", "visible");
             //$imgOkStatus.css("visibility", "visible");
-            
+
             $txtChangeStatus.val($labelStatus.text());
             $txtChangeStatus.focus();
 

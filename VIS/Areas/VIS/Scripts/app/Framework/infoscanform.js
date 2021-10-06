@@ -467,7 +467,7 @@
                 recordHeight: 30,
                 show: {
                     columnHeaders: true,   // indicates if columns is visible
-                    lineNumbers: true,     // indicates if line numbers column is visible
+                    lineNumbers: false,     // indicates if line numbers column is visible
                     selectColumn: true     // indicates if select column is visible
                 },
                 columns: self.arrListColumns,
