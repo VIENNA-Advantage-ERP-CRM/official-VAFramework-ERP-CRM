@@ -5361,7 +5361,7 @@ namespace VAdvantage.Model
                     sql = @"SELECT s.M_AttributeSetInstance_ID ,s.M_ProductContainer_ID, s.Qty
                            FROM M_ContainerStorage s 
                            LEFT OUTER JOIN M_AttributeSetInstance asi ON (s.M_AttributeSetInstance_ID=asi.M_AttributeSetInstance_ID)
-                           WHERE NOT EXISTS (SELECT * FROM M_ProductContainer p WHERE isactive = 'N' AND p.M_ProductContainer_ID = NVL(s.M_ProductContainer_ID , 0)) 
+                           WHERE NOT EXISTS (SELECT * FROM M_ProductContainer p WHERE IsActive = 'N' AND p.M_ProductContainer_ID = NVL(s.M_ProductContainer_ID , 0)) 
                            AND s.AD_Client_ID= " + oLine.GetAD_Client_ID() + @"
                            AND s.AD_Org_ID=" + oLine.GetAD_Org_ID() + @"
                            AND s.M_Locator_ID = " + M_Locator_ID + @" 
@@ -5831,7 +5831,7 @@ namespace VAdvantage.Model
             //JID_1474 If quantity released is greater than 0, then system will not allow to void blanket order record and give message: 'Please Void/Reverse its dependent transactions first'
             if (dt.GetDocBaseType() == MDocBaseType.DOCBASETYPE_BLANKETSALESORDER)
             {
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT SUM(qtyreleased) FROM C_OrderLine WHERE C_Order_ID = " + GetC_Order_ID(), null, Get_Trx())) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT SUM(QtyReleased) FROM C_OrderLine WHERE C_Order_ID = " + GetC_Order_ID(), null, Get_Trx())) > 0)
                 {
                     _processMsg = "Please Void/Reverse its dependent transactions first";
                     return false;
@@ -5860,9 +5860,9 @@ namespace VAdvantage.Model
             // To check if associated PO is exist but not reversed in case of drop shipment
             if (IsSOTrx() && !IsReturnTrx())
             {
-                if (Util.GetValueOfInt(DB.ExecuteScalar("Select Count(C_OrderLine_ID) From C_OrderLine ol Inner Join C_Order o ON o.C_Order_ID=ol.C_Order_ID Where O.C_Order_ID=" + GetC_Order_ID() + " AND ol.IsDropShip='Y' AND O.IsSoTrx='Y' AND O.IsReturnTrx='N'")) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(C_OrderLine_ID) FROM C_OrderLine ol INNER JOIN C_Order o ON o.C_Order_ID=ol.C_Order_ID WHERE O.C_Order_ID=" + GetC_Order_ID() + " AND ol.IsDropShip='Y' AND O.IsSoTrx='Y' AND O.IsReturnTrx='N'")) > 0)
                 {
-                    if (Util.GetValueOfInt(DB.ExecuteScalar("Select Count(C_Order_ID) From C_Order Where Ref_Order_Id=" + GetC_Order_ID() + " AND IsDropShip='Y' AND IsSoTrx='N' AND IsReturnTrx='N' AND DocStatus NOT IN ('VO','RE')")) > 0)
+                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(C_Order_ID) FROM C_Order WHERE Ref_Order_ID=" + GetC_Order_ID() + " AND IsDropShip='Y' AND IsSoTrx='N' AND IsReturnTrx='N' AND DocStatus NOT IN ('VO','RE')")) > 0)
                     {
                         _processMsg = "Associated purchase order must be voided or reversed first";
                         return false;
@@ -6155,7 +6155,7 @@ namespace VAdvantage.Model
                 }
 
                 // JID_1035 before reactivating the order user need to void the payment first if orderschedule  exist against current order
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT( VA009_OrderPaySchedule_ID ) FROM VA009_OrderPaySchedule WHERE c_order_id =" + GetC_Order_ID() + " AND (c_payment_id !=0 OR c_cashline_id!=0)")) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT( VA009_OrderPaySchedule_ID ) FROM VA009_OrderPaySchedule WHERE C_Order_ID =" + GetC_Order_ID() + " AND (C_Payment_ID !=0 OR C_CashLine_ID!=0)")) > 0)
                 {
                     _processMsg = Msg.GetMsg(GetCtx(), "PaymentmustvoidedFirst");
                     return false;
@@ -6186,9 +6186,9 @@ namespace VAdvantage.Model
                 // To check if associated PO is exist but not reversed  in case of drop shipment
                 if (IsSOTrx() && !IsReturnTrx())
                 {
-                    if (Util.GetValueOfInt(DB.ExecuteScalar("Select Count(C_OrderLine_ID) From C_OrderLine ol Inner Join C_Order o ON o.C_Order_ID=ol.C_Order_ID Where O.C_Order_ID=" + GetC_Order_ID() + " AND ol.IsDropShip='Y' AND O.IsSoTrx='Y' AND O.IsReturnTrx='N'")) > 0)
+                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(C_OrderLine_ID) FROM C_OrderLine ol INNER JOIN C_Order o ON o.C_Order_ID=ol.C_Order_ID Where O.C_Order_ID=" + GetC_Order_ID() + " AND ol.IsDropShip='Y' AND O.IsSoTrx='Y' AND O.IsReturnTrx='N'")) > 0)
                     {
-                        if (Util.GetValueOfInt(DB.ExecuteScalar("Select Count(C_Order_ID) From C_Order Where Ref_Order_Id=" + GetC_Order_ID() + " AND IsDropShip='Y' AND IsSoTrx='N' AND IsReturnTrx='N' AND DocStatus NOT IN ('VO','RE')")) > 0)
+                        if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(C_Order_ID) FROM C_Order WHERE Ref_Order_Id=" + GetC_Order_ID() + " AND IsDropShip='Y' AND IsSoTrx='N' AND IsReturnTrx='N' AND DocStatus NOT IN ('VO','RE')")) > 0)
                         {
                             _processMsg = "Associated purchase order must be voided or reversed first";
                             return false;
@@ -6431,23 +6431,23 @@ namespace VAdvantage.Model
         {
             // SI_0595_3 : check orderline id exist on invoiceline or inoutline. if exist then not able to reverse the current order.
             // JID_1953 : by Amit -> when payment exist against selected Order, then not able to void transaction
-            string sql = @"Select SUM(Result) From (
-                           SELECT COUNT(il.c_orderline_id) AS Result FROM M_Inout i INNER JOIN m_inoutline il ON i.m_inout_id = il.m_inout_id
-                           INNER JOIN c_orderline ol ON ol.c_orderline_id = il.c_orderline_id
+            string sql = @"SELECT SUM(Result) FROM (
+                           SELECT COUNT(il.C_OrderLine_ID) AS Result FROM M_InOut i INNER JOIN M_InOutLine il ON i.M_InOut_ID = il.M_InOut_ID
+                           INNER JOIN C_OrderLine ol ON ol.C_OrderLine_ID = il.C_OrderLine_ID
                            WHERE ol.C_Order_ID  = " + C_Order_ID + @" AND i.DocStatus NOT IN ('RE' , 'VO')
                          UNION ALL
                            SELECT COUNT(C_Order_ID) AS Result FROM C_Payment WHERE 
                                 DocStatus NOT IN ('RE' , 'VO') AND C_Order_ID = " + C_Order_ID + @"
                          UNION ALL
-                          SELECT COUNT(il.c_orderline_id) AS Result FROM C_Invoice i INNER JOIN C_Invoiceline il ON i.C_Invoice_id = il.C_Invoice_id
-                          INNER JOIN c_orderline ol ON ol.c_orderline_id = il.c_orderline_id
+                          SELECT COUNT(il.C_OrderLine_ID) AS Result FROM C_Invoice i INNER JOIN C_InvoiceLine il ON i.C_Invoice_id = il.C_Invoice_id
+                          INNER JOIN C_OrderLine ol ON ol.C_OrderLine_ID = il.C_OrderLine_ID
                           WHERE ol.C_Order_ID  = " + C_Order_ID + @" AND i.DocStatus NOT IN ('RE' , 'VO')) t";
             int _countOrder = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
 
             //check order id exist on LCDetail or PODetail or SODetail. if exist then not able to reverse the current order 
             if (_countOrder == 0 && Env.IsModuleInstalled("VA026_"))
             {
-                sql = @"Select SUM(Result) From (                                                  
+                sql = @"SELECT SUM(Result) FROM (                                                  
                                 SELECT COUNT(o.C_Order_ID) AS Result FROM VA026_LCDetail lc INNER JOIN C_Order o ON lc.C_Order_ID=o.C_Order_ID WHERE 
                                 lc.DocStatus NOT IN ('RE' , 'VO') AND o.C_Order_ID=" + C_Order_ID + @"
                                 UNION ALL
@@ -6480,10 +6480,10 @@ namespace VAdvantage.Model
         public MPayment CreatePaymentAgainstPOSDocType(StringBuilder info, MInvoice inv)
         {
             DataSet invSch = DB.ExecuteDataset(@"SELECT ci.C_InvoicePaySchedule_ID, ci.VA009_OpnAmntInvce, d.C_BankAccount_ID,
-                                d.C_DocTypePayment_ID FROM c_invoicepayschedule ci 
-                                INNER JOIN c_invoice  i ON i.c_invoice_id = ci.c_invoice_id
-                                INNER JOIN C_order ord ON ord.C_Order_ID=i.c_order_id
-                                INNER JOIN c_doctype  d ON d.c_doctype_id = ord.c_doctype_id 
+                                d.C_DocTypePayment_ID FROM C_InvoicePaySchedule ci 
+                                INNER JOIN C_Invoice  i ON i.C_Invoice_ID = ci.C_Invoice_ID
+                                INNER JOIN C_Order ord ON ord.C_Order_ID=i.C_Order_ID
+                                INNER JOIN C_DocType  d ON d.C_DocType_ID = ord.C_DocType_ID 
                                 WHERE i.C_Invoice_ID= " + GetC_Invoice_ID(), null, Get_Trx());
             MPayment _payment = new MPayment(GetCtx(), 0, Get_Trx());
             _payment.SetAD_Org_ID(inv.GetAD_Org_ID());
