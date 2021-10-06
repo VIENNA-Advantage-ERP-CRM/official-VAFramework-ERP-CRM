@@ -87,7 +87,6 @@
                         showLoginResetPwd();
                         $('#ResetPwd').val(json.ctx.ResetPwd);
                     }
-                    // else if (json.ctx && json.ctx.Is2FAEnabled)
                     else if (json.ctx && json.ctx.TwoFAMethod != "") {
                         showLogin2FA();
                         if (json.ctx.TwoFAMethod == "GA")
