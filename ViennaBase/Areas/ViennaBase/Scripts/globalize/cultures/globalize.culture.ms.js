@@ -144,7 +144,10 @@ Globalize.addCultureInfo( "ms", "default", {
         "EnterOTP": "Masukkan OTP",
         "WrongOTP": "OTP Salah Dimasukkan",
         "ScanQRCode": "Imbas kod dengan Google Authenticator",
-        "EnterVerCode": "Masukkan OTP yang dihasilkan oleh aplikasi mudah alih anda"
+        "EnterVerCode": "Masukkan OTP yang dihasilkan oleh aplikasi mudah alih anda",
+        "EnterVAVerCode": "Masukkan OTP yang diterima di telefon bimbit berdaftar anda",
+        "SkipThisTime": "Langkau kali ini",
+        "ResendOTP": "Hantar semula OTP",
 
     }
 };

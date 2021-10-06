@@ -131,7 +131,10 @@ Globalize.addCultureInfo( "nb-NO", "default", {
         "EnterOTP": "Skriv inn OTP",
         "WrongOTP": "Feil OTP angitt",
         "ScanQRCode": "Skann koden med Google Authenticator",
-        "EnterVerCode": "Skriv inn OTP generert av mobilapplikasjonen din"
+		"EnterVerCode": "Skriv inn OTP generert av mobilapplikasjonen din",
+		"EnterVAVerCode": "Skriv inn OTP mottatt på din registrerte mobil",
+		"SkipThisTime": "Hopp over denne gangen",
+		"ResendOTP": "Send OTP på nytt",
 	}
 });
 

@@ -144,7 +144,9 @@ Globalize.addCultureInfo( "sq-AL", "default", {
         "AdminActDisabled": "Llogaria e administratorit është çaktivizuar",
         "AdminActExpired": "Llogaria e administratorit ka skaduar",
         "AdminMaxFailedLoginAttempts": "Admin e llogarisë së përdoruesit është e kyçur. Përpjekjet maksimale të dështuara të hyrjes tejkalojnë kufirin e përcaktuar. Ju lutemi kontaktoni administratorin.",
-
+        "EnterVAVerCode": "Shkruani OTP të marrë në celularin tuaj të regjistruar",
+        "SkipThisTime": "Kaloni këtë herë",
+        "ResendOTP": "Ridërgo OTP -në",
     }
 });
 
