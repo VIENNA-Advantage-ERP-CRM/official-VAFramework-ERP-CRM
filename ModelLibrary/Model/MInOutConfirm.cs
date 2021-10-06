@@ -85,7 +85,7 @@ namespace VAdvantage.Model
                 cLine.Save(ship.Get_TrxName());
             }
             // Change By Arpit Rai on 24th August,2017 To Check if VA Material Quality Control Module exists or not
-            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM AD_ModuleInfo WHERE Prefix='VA010_'", null, null)) > 0)
+            if (Env.IsModuleInstalled("VA010_"))
             {
                 if (confirmType == MInOutConfirm.CONFIRMTYPE_ShipReceiptConfirm)
                 {
@@ -632,76 +632,6 @@ namespace VAdvantage.Model
          */
         public String CompleteIt()
         {
-            //////By Sukhwinder on 21 Dec, 2017
-            ////#region[Prevent from completing if on hand qty not available as per requirement and disallow negative is true at warehouse. By Sukhwinder on 21 Dec, 2017]
-            ////string sql = "";
-            ////sql = "SELECT ISDISALLOWNEGATIVEINV FROM M_Warehouse WHERE M_Warehouse_ID = (SELECT M_WAREHOUSE_ID FROM M_INOUT WHERE M_INOUT_ID = " + Util.GetValueOfInt(GetM_InOut_ID()) + " )";
-            ////string disallow = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_TrxName()));
-
-            ////if (disallow.ToUpper() == "Y")
-            ////{
-            ////    int[] ioLine = MInOutLineConfirm.GetAllIDs("M_InOutLineConfirm", "M_InOutConfirm_ID  = " + GetM_InOutConfirm_ID(), Get_TrxName());                
-            ////    int m_locator_id = 0;
-            ////    int m_product_id = 0;
-            ////    StringBuilder products = new StringBuilder();
-            ////    StringBuilder locators = new StringBuilder();
-            ////    bool check = false;
-            ////    for (int i = 0; i < ioLine.Length; i++)
-            ////    {
-            ////        MInOutLineConfirm iol = new MInOutLineConfirm(Env.GetCtx(), ioLine[i], Get_TrxName());
-            ////        MInOutLine iol1 = new MInOutLine(Env.GetCtx(), iol.GetM_InOutLine_ID() , Get_TrxName());
-            ////        m_locator_id = Util.GetValueOfInt(iol1.GetM_Locator_ID());
-            ////        m_product_id = Util.GetValueOfInt(iol1.GetM_Product_ID());
-
-
-
-            ////        sql = "SELECT M_AttributeSet_ID FROM M_Product WHERE M_Product_ID = " + m_product_id;
-            ////        int m_attribute_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
-            ////        if (m_attribute_ID == 0)
-            ////        {
-            ////            sql = "SELECT SUM(QtyOnHand) FROM M_Storage WHERE M_Locator_ID = " + m_locator_id + " AND M_Product_ID = " + m_product_id;
-            ////            int qty = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
-            ////            int qtyToMove = Util.GetValueOfInt(iol.GetConfirmedQty());
-            ////            if (qty < qtyToMove)
-            ////            {
-            ////                check = true;
-            ////                products.Append(m_product_id + ", ");
-            ////                locators.Append(m_locator_id + ", ");
-            ////                continue;
-            ////            }
-            ////        }
-            ////        else
-            ////        {
-            ////            sql = "SELECT SUM(QtyOnHand) FROM M_Storage WHERE M_Locator_ID = " + m_locator_id + " AND M_Product_ID = " + m_product_id + " AND M_AttributeSetInstance_ID = " + iol1.GetM_AttributeSetInstance_ID();
-            ////            int qty = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
-            ////            int qtyToMove = Util.GetValueOfInt(iol.GetConfirmedQty());
-            ////            if (qty < qtyToMove)
-            ////            {
-            ////                check = true;
-            ////                products.Append(m_product_id + ",");
-            ////                locators.Append(m_locator_id + ",");
-            ////                continue;
-            ////            }
-            ////        }
-            ////    }
-            ////    if (check)
-            ////    {
-            ////        sql = "SELECT SUBSTR (SYS_CONNECT_BY_PATH (value , ', '), 2) CSV FROM (SELECT value , ROW_NUMBER () OVER (ORDER BY value ) rn, COUNT (*) over () CNT FROM "
-            ////             + " (SELECT DISTINCT value FROM m_locator WHERE M_Locator_ID IN(" + locators.ToString().Trim().Trim(',') + "))) WHERE rn = cnt START WITH RN = 1 CONNECT BY rn = PRIOR rn + 1";
-            ////        string loc = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_TrxName()));
-
-            ////        sql = "SELECT SUBSTR (SYS_CONNECT_BY_PATH (Name , ', '), 2) CSV FROM (SELECT Name , ROW_NUMBER () OVER (ORDER BY Name ) rn, COUNT (*) over () CNT FROM "
-            ////            + " M_Product WHERE M_Product_ID IN (" + products.ToString().Trim().Trim(',') + ") ) WHERE rn = cnt START WITH RN = 1 CONNECT BY rn = PRIOR rn + 1";
-            ////        string prod = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_TrxName()));
-
-            ////        _processMsg = Msg.GetMsg(Env.GetCtx(), "InsufficientQuantityFor: ") + prod + Msg.GetMsg(Env.GetCtx(), "OnLocators: ") + loc;
-            ////        return DocActionVariables.STATUS_DRAFTED;
-            ////    }
-            ////}
-
-            ////#endregion
-            //////
-
             //	Re-Check
             if (!_justPrepared)
             {
@@ -792,24 +722,7 @@ namespace VAdvantage.Model
             }
             #endregion
 
-            // Created By Sunil 17/9/2016
-            // Complete Shipment
             //MInOut io = new MInOut(GetCtx(), GetM_InOut_ID(), Get_TrxName());
-            //if (io.GetDocStatus() == DOCSTATUS_Reversed)
-            //{
-            //    GetCtx().SetContext("DifferenceQty_", "0");
-            //    VoidIt(); //To set document void if MR is aleady in reversed case
-            //    SetDocAction(DOCACTION_Void);
-            //    return DocActionVariables.STATUS_VOIDED;
-            //}
-            //else if (io.GetDocStatus() == DOCSTATUS_Completed || io.GetDocStatus() == DOCSTATUS_Closed)
-            //{
-            //    SetProcessed(true);
-            //    //Not to Complete MR/Shipment when it is already comepleted/ handled case when a completed record generates a confirmation
-            //}
-            //else
-            //{
-            MInOut io = new MInOut(GetCtx(), GetM_InOut_ID(), Get_TrxName());
             SetProcessed(true);
             if (!Save(Get_TrxName()))
             {
@@ -818,14 +731,13 @@ namespace VAdvantage.Model
                 _processMsg = "Confirmation Not Completed";
                 return DocActionVariables.STATUS_INVALID;
             }
-            string Status_ = io.CompleteIt();
+            string Status_ = inout.CompleteIt();
             if (Status_ == "CO")
             {
-
-                io.SetProcessed(true);
-                io.SetDocStatus(DocActionVariables.STATUS_COMPLETED);
-                io.SetDocAction(DocActionVariables.ACTION_CLOSE);
-                if (io.Save(Get_TrxName()))
+                inout.SetProcessed(true);
+                inout.SetDocStatus(DocActionVariables.STATUS_COMPLETED);
+                inout.SetDocAction(DocActionVariables.ACTION_CLOSE);
+                if (inout.Save(Get_TrxName()))
                 {
                     GetCtx().SetContext("DifferenceQty_", "0"); //To set difference Qty zero in context if document get comepleted
                 }
@@ -834,7 +746,7 @@ namespace VAdvantage.Model
                     GetCtx().SetContext("DifferenceQty_", "0");
                     Get_Trx().Rollback();
                     // SI_0713_1 - message should be correct
-                    _processMsg = io.GetProcessMsg() + "Shipment Not Completed";
+                    _processMsg = inout.GetProcessMsg() + "Shipment Not Completed";
                     return DocActionVariables.STATUS_INVALID;
                 }
             }
@@ -843,12 +755,12 @@ namespace VAdvantage.Model
                 GetCtx().SetContext("DifferenceQty_", "0");
                 Get_Trx().Rollback();
                 // SI_0713_1 - message should be correct
-                _processMsg = io.GetProcessMsg() + " Shipment Not Completed";
+                _processMsg = inout.GetProcessMsg() + " Shipment Not Completed";
                 return DocActionVariables.STATUS_INVALID;
             }
 
             //	All lines
-            bool internalInventory = false; //Arpit
+            // bool internalInventory = false;
             for (int i = 0; i < lines.Length; i++)
             {
                 MInOutLineConfirm confirmLine = lines[i];
@@ -869,7 +781,7 @@ namespace VAdvantage.Model
                 {
                     if (CreateDifferenceDoc(inout, confirmLine))
                     {
-                        internalInventory = true;
+                        // internalInventory = true;
                         confirmLine.SetProcessed(true);
                         confirmLine.Save(Get_TrxName());
                     }
@@ -1183,7 +1095,7 @@ namespace VAdvantage.Model
                             // Get Internal Use Inv Doc Type
                             for (int i = 0; i < types.Length; i++)
                             {
-                                int _count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM C_DocType WHERE IsActive='Y' AND  IsInternalUse='Y' AND C_DocType_ID=" + types[i].GetC_DocType_ID()));
+                                int _count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(C_DocType_ID) FROM C_DocType WHERE IsActive='Y' AND  IsInternalUse='Y' AND C_DocType_ID=" + types[i].GetC_DocType_ID()));
                                 if (_count > 0)
                                 {
                                     _inventory.SetC_DocType_ID(types[i].GetC_DocType_ID());
@@ -1209,42 +1121,16 @@ namespace VAdvantage.Model
                 MInOutLine ioLine = confirm.GetLine();
 
                 StringBuilder query = new StringBuilder();
-                int result = 0;
                 decimal currentQty = 0;
                 //Opening Stock , Qunatity Book => CurrentQty From Transaction of MovementDate
                 //As On Date Count = Opening Stock - Diff Qty
-                //Qty Count = Qty Book - Diff Qty
-                query.Append("SELECT COUNT(M_Transaction_ID) FROM M_Transaction WHERE Movementdate = " + GlobalVariable.TO_DATE(_inventory.GetMovementDate(), true) + @" 
-                           AND  M_Product_ID = " + ioLine.GetM_Product_ID() + " AND M_Locator_ID = " + ioLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + ioLine.GetM_AttributeSetInstance_ID());
-                result = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString()));
-                query.Clear();
-                if (result > 0)
-                {
-                    query.Append(@"SELECT currentqty FROM M_Transaction WHERE M_Transaction_ID =
-                            (SELECT MAX(M_Transaction_ID)   FROM M_Transaction
-                            WHERE movementdate =     (SELECT MAX(movementdate) FROM M_Transaction WHERE movementdate <= " + GlobalVariable.TO_DATE(_inventory.GetMovementDate(), true) + @" 
-                            AND  M_Product_ID = " + ioLine.GetM_Product_ID() + " AND M_Locator_ID = " + ioLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + ioLine.GetM_AttributeSetInstance_ID() + @")
-                            AND  M_Product_ID = " + ioLine.GetM_Product_ID() + " AND M_Locator_ID = " + ioLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + ioLine.GetM_AttributeSetInstance_ID() + @")
-                            AND  M_Product_ID = " + ioLine.GetM_Product_ID() + " AND M_Locator_ID = " + ioLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + ioLine.GetM_AttributeSetInstance_ID());
-                    currentQty = Util.GetValueOfDecimal(DB.ExecuteScalar(query.ToString()));
-                }
-                else
-                {
-                    query.Append("SELECT COUNT(M_Transaction_ID) FROM M_Transaction WHERE movementdate < " + GlobalVariable.TO_DATE(_inventory.GetMovementDate(), true) + @" 
-                            AND  M_Product_ID = " + ioLine.GetM_Product_ID() + " AND M_Locator_ID = " + ioLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + ioLine.GetM_AttributeSetInstance_ID());
-                    result = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString()));
-                    if (result > 0)
-                    {
-                        query.Clear();
-                        query.Append(@"SELECT currentqty FROM M_Transaction WHERE M_Transaction_ID =
-                            (SELECT MAX(M_Transaction_ID)   FROM M_Transaction
-                            WHERE movementdate =     (SELECT MAX(movementdate) FROM M_Transaction WHERE movementdate < " + GlobalVariable.TO_DATE(_inventory.GetMovementDate(), true) + @" 
-                            AND  M_Product_ID = " + ioLine.GetM_Product_ID() + " AND M_Locator_ID = " + ioLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + ioLine.GetM_AttributeSetInstance_ID() + @")
-                            AND  M_Product_ID = " + ioLine.GetM_Product_ID() + " AND M_Locator_ID = " + ioLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + ioLine.GetM_AttributeSetInstance_ID() + @")
-                            AND  M_Product_ID = " + ioLine.GetM_Product_ID() + " AND M_Locator_ID = " + ioLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + ioLine.GetM_AttributeSetInstance_ID());
-                        currentQty = Util.GetValueOfDecimal(DB.ExecuteScalar(query.ToString()));
-                    }
-                }
+                //Qty Count = Qty Book - Diff Qty                
+                query.Append(@"SELECT DISTINCT FIRST_VALUE(t.CurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
+                            INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(_inventory.GetMovementDate(), true) +
+                               " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND t.M_Locator_ID = " + ioLine.GetM_Locator_ID() +
+                           " AND t.M_Product_ID = " + ioLine.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + ioLine.GetM_AttributeSetInstance_ID());
+                currentQty = Util.GetValueOfDecimal(DB.ExecuteScalar(query.ToString(), null, Get_Trx()));
+
                 // Removed the code as already handled on before save..
                 MInventoryLine line = new MInventoryLine(_inventory, ioLine.GetM_Locator_ID(), ioLine.GetM_Product_ID(), ioLine.GetM_AttributeSetInstance_ID(),
                    confirm.GetScrappedQty(), Env.ZERO);
