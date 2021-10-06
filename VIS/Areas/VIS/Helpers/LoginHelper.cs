@@ -150,9 +150,7 @@ namespace VIS.Helpers
             if (!cache["SuperUserVal"].Equals(model.Login1Model.UserValue))
             {
                 String Token2FAKey = Util.GetValueOfString(dr["TokenKey2FA"]);
-                // bool enable2FA = Util.GetValueOfString(dr["Is2FAEnabled"]) == "Y";
                 string method2FA = Util.GetValueOfString(dr["TwoFAMethod"]);
-                //if (enable2FA)
                 if (method2FA != "")
                 {
                     model.Login1Model.QRFirstTime = false;
@@ -197,7 +195,6 @@ namespace VIS.Helpers
                     }
                 }
 
-                //model.Login1Model.Is2FAEnabled = enable2FA;
                 model.Login1Model.TwoFAMethod = method2FA;
             }
 
