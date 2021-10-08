@@ -150,6 +150,12 @@
 
         this.GetConvertedNumber = function (val, dotFormatter) {
             if (dotFormatter) {
+               
+                var inputSplit = val.split(".");
+                 // Check value without exponetial
+                if (!Number.isSafeInteger(Number(inputSplit[0]))) {
+                    return Number.MAX_SAFE_INTEGER; // Set maximumn value
+                }
                 return Number(String(val).replace(/[^0-9.-]+/g, ""));
             } else {
                 return Number(String(val).replace(/[^0-9,-]+/g, "").replace(/[,]+/g, "."));

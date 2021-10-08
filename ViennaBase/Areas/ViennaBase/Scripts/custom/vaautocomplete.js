@@ -1,7 +1,7 @@
 ﻿/** 
  *  Purpose: autocomplete
  * Mandeep Singh( VIS0228) 13-Sep-2021
- */  
+ */
 (function ($) {
     $.fn.vaautocomplete = function (options) {
         // This is the easiest way to have default options.
@@ -16,15 +16,13 @@
 
         var ctrl = this[0];
         var currentFocus, arr = [], setTime;
-        var self;
+        var self, isSearch = false;
         var response = function (data) {
             suggestion(data);
         };
 
         var suggestion = function (arr) {
-
-
-
+            isSearch = true;
             var a, b, i, val = self.value;
             /*create a DIV element that will contain the items (values):*/
             a = document.createElement("DIV");
@@ -32,10 +30,6 @@
             a.setAttribute("class", "vis-autocomplete-items");
             /*append the DIV element as a child of the autocomplete container:*/
             $('body').append(a);
-            var width = $(self).outerWidth();
-            var Height = $(self).outerHeight();
-            var offset = $(self).offset();
-            $(a).attr("style", "left:" + offset.left + "px; top:" + (offset.top + Height) + "px;min-width:" + width + "px;max-width:" + (width + 200) + "px");
             /*for each item in the array...*/
             for (i = 0; i < arr.length; i++) {
                 /*check if the item starts with the same letters as the text field value:*/
@@ -56,7 +50,8 @@
                         var obj = {
                             id: this.getElementsByTagName("input")[0].getAttribute('data-id'),
                             text: this.getElementsByTagName("input")[0].value
-                        }
+                        }  
+                        isSearch = false;
                         settings.onSelect(e, obj);
                         /*close the list of autocompleted values,
                         (or any other open lists of autocompleted values:*/
@@ -65,8 +60,31 @@
                     a.appendChild(b);
                 }
             }
-        }
 
+            /*calculate list postion*/
+            var width = $(self).outerWidth();
+            var Height = $(self).outerHeight();
+            var offset = $(self).offset();
+            var listHeight = $(a).height();
+            var listWidth = $(a).width();
+            var windowHeight = $(window).height();
+            var windowWidth = $(window).width();
+            var top = offset.top;
+            var left = offset.left;
+            var bottom = windowHeight - (top + Height + 10);
+            var right = windowWidth - left - listWidth;
+            var topbottom = (listHeight <= bottom) ? bottom : top;
+            var leftright = ((listWidth - width) <= right) ? right : left;
+            var yPos = top + Height;
+            var xPos = left;
+            if (topbottom == top) {
+                yPos = top - listHeight;
+            }
+            if (leftright == left) {
+                xPos = left - (listWidth - width);
+            }            
+            $(a).attr("style", "left:" + xPos + "px; top:" + yPos + "px;min-width:" + width + "px;max-width:" + (width + 200) + "px");
+        }
         ctrl.addEventListener("focus", function (e) {
             ctrl.autocomplete = "off";
         });
@@ -80,11 +98,11 @@
                 return false;
             }
             if (ctrl.value.length < settings.minLength) {
+                isSearch = false;
                 return false;
             }
             currentFocus = -1;
             setTime = setTimeout(function () {
-
                 if ($.isArray(settings.source)) {
                     suggestion(settings.source);
                 } else {
@@ -144,12 +162,18 @@
                 if (elmnt != x[i] && elmnt != ctrl) {
                     x[i].parentNode.removeChild(x[i]);
                 }
-
             }
         }
         /*execute a function when someone clicks in the document:*/
-        document.addEventListener("click", function (e) {
-            closeAllLists(e.target);
+        ctrl.addEventListener("blur", function (e) {
+            setTimeout(function () {
+                if (isSearch) {
+                    ctrl.value = '';
+                }
+                $(".vis-autocomplete-items").remove();
+            }, 400);
+
+            // closeAllLists(e.target);
         });
         // Greenify the collection based on the settings variable.
     };
