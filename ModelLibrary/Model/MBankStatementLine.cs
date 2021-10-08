@@ -405,6 +405,14 @@ namespace VAdvantage.Model
                 return false;
             }
 
+            // VIS0060: if no period found for statement date, then give message.
+            MPeriod period = MPeriod.Get(GetCtx(), GetStatementLineDate(), GetAD_Org_ID());
+            if (period == null)
+            {
+                log.SaveError("PeriodNotValid", "");
+                return false;
+            }
+
             //	Set Line No
             if (GetLine() == 0)
             {

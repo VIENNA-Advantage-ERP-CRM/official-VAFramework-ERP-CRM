@@ -346,6 +346,8 @@ namespace VIS.Models
                 int pageSize = 50;
                 PageSetting pSetting = new PageSetting();
                 pSetting.CurrentPage = pageNo;
+                pSetting.TotalRecords = totalRec;
+                pSetting.PageSize = pageSize;
                 pSetting.TotalPage = (totalRec % pageSize) == 0 ? (totalRec / pageSize) : ((totalRec / pageSize) + 1);
                 _iData.pSetting = pSetting;
 
@@ -641,6 +643,15 @@ namespace VIS.Models
             get;
             set;
         }
-        
+        public int TotalRecords
+        {
+            get;
+            set;
+        }
+        public int PageSize
+        {
+            get;
+            set;
+        }
     }
 }
