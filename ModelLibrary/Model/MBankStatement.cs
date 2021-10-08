@@ -301,6 +301,14 @@ namespace VAdvantage.Model
                 }
             }
 
+            // VIS0060: if no period found for statement date, then give message.
+            MPeriod period = MPeriod.Get(GetCtx(), GetStatementDate(), GetAD_Org_ID());
+            if (period == null)
+            {
+                log.SaveError("PeriodNotValid", "");
+                return false;
+            }
+
             //JID_1325: System should not allow to save bank statment with previous date, statement date should be equal or greater than previous created bank statment record with same bank account. 
             no = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_BankStatement_ID) FROM C_BankStatement WHERE IsActive = 'Y' AND DocStatus != 'VO' AND StatementDate > "
                 + GlobalVariable.TO_DATE(GetStatementDate(), true) + " AND C_BankAccount_ID = " + GetC_BankAccount_ID() + " AND C_BankStatement_ID != " + Get_ID(), null, Get_Trx()));
