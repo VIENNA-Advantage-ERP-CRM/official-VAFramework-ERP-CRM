@@ -157,13 +157,13 @@
                 });
 
                 // Validate From date and To Date
-                $dateFrom.on('change', function () {
+                $dateFrom.on('focusout', function () {
                     if ($dateFrom.val() != "" && $dateTo.val() != "" && $dateFrom.val() > $dateTo.val()) {
                         $dateTo.val('');
                     }
                 });
 
-                $dateTo.on('change', function () {
+                $dateTo.on('focusout', function () {
                     if ($dateFrom.val() != "" && $dateTo.val() != "" && $dateFrom.val() > $dateTo.val()) {
                         $dateTo.val('');
                         VIS.ADialog.info("ToDateMustGreater");
