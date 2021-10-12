@@ -157,6 +157,7 @@ Globalize.addCultureInfo( "zh-TW", "default", {
 		"EnterVAVerCode": "输入在您注册的手机上收到的 OTP",
 		"SkipThisTime": "这次跳过",
 		"ResendOTP": "重新发送动态密码",
+		"CapsLockOn": "大寫鎖定已開啟",
 	}
 });
 

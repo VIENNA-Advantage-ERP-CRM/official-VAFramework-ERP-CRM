@@ -147,6 +147,7 @@ Globalize.addCultureInfo( "sq-AL", "default", {
         "EnterVAVerCode": "Shkruani OTP të marrë në celularin tuaj të regjistruar",
         "SkipThisTime": "Kaloni këtë herë",
         "ResendOTP": "Ridërgo OTP -në",
+        "CapsLockOn": "Caps lock është aktiv",
     }
 });
 

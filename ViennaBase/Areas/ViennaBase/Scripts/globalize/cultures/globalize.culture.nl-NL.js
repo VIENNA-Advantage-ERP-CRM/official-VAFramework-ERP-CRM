@@ -134,6 +134,7 @@ Globalize.addCultureInfo( "nl-NL", "default", {
 		"EnterVAVerCode": "Voer OTP in dat is ontvangen op uw geregistreerde mobiel",
 		"SkipThisTime": "Deze keer overslaan",
 		"ResendOTP": "OTP opnieuw verzenden",
+		"CapsLockOn": "Caps Lock staat aan",
 	}
 
 });
