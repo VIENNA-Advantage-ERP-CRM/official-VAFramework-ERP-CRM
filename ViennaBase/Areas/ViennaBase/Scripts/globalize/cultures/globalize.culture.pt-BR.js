@@ -136,6 +136,7 @@ Globalize.addCultureInfo( "pt-BR", "default", {
 		"EnterVAVerCode": "Insira OTP recebido em seu celular registrado",
 		"SkipThisTime": "Pular desta vez",
 		"ResendOTP": "Reenviar OTP",
+		"CapsLockOn": "Caps Lock está ativado",
 	}
 });
 

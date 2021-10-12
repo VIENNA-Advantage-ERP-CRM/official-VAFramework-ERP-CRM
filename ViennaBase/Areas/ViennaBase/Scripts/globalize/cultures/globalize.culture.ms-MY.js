@@ -156,6 +156,7 @@ Globalize.addCultureInfo( "ms-MY", "default", {
         "EnterVAVerCode": "Masukkan OTP yang diterima di telefon bimbit berdaftar anda",
         "SkipThisTime": "Langkau kali ini",
         "ResendOTP": "Hantar semula OTP",
+        "CapsLockOn": "Kunci topi dihidupkan",
     }
 });
 

@@ -136,6 +136,7 @@
             "EnterVAVerCode": "Entrez OTP reçu sur votre mobile enregistré",
             "SkipThisTime": "Passer cette fois",
             "ResendOTP": "Renvoyer OTP",
+            "CapsLockOn": "Touche Maj activée",
         }
 });
 

@@ -135,6 +135,7 @@ Globalize.addCultureInfo( "da-DK", "default", {
 		"EnterVAVerCode": "Indtast OTP modtaget på din registrerede mobil",
 		"SkipThisTime": "Spring denne gang over",
 		"ResendOTP": "Send OTP igen",
+		"CapsLockOn": "Caps Lock er på",
 	}
 });
 

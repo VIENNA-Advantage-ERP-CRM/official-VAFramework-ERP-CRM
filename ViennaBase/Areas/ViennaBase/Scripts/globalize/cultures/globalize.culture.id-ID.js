@@ -133,6 +133,7 @@ Globalize.addCultureInfo( "id-ID", "default", {
         "EnterVAVerCode": "Masukkan OTP yang diterima di ponsel Anda yang terdaftar",
         "SkipThisTime": "Lewati kali ini",
         "ResendOTP": "Kirim ulang OTP",
+        "CapsLockOn": "Capslock aktif",
 	}
 });
 

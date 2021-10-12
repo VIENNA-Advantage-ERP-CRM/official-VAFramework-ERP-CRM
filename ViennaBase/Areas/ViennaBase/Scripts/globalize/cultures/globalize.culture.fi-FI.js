@@ -135,6 +135,7 @@ Globalize.addCultureInfo( "fi-FI", "default", {
 		"EnterVAVerCode": "Kirjoita rekisteröityyn matkapuhelimeesi vastaanotettu OTP",
 		"SkipThisTime": "Ohita tällä kertaa",
 		"ResendOTP": "Lähetä OTP uudelleen",
+		"CapsLockOn": "CAPS LOCK on päällä",
 	}
 });
 

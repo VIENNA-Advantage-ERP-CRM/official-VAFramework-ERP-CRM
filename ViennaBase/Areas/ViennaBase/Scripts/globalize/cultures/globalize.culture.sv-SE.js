@@ -145,6 +145,7 @@ Globalize.addCultureInfo( "sv-SE", "default", {
         "EnterVAVerCode": "Ange OTP mottagen på din registrerade mobil",
         "SkipThisTime": "Hoppa över den här gången",
         "ResendOTP": "Skicka om OTP",
+        "CapsLockOn": "Caps Lock är på",
 	}
 });
 

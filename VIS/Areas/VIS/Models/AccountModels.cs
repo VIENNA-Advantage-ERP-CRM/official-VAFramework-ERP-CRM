@@ -65,6 +65,7 @@ namespace VIS.Models
 
         public string TokenKey2FA { get; set; }
 
+        // VIS0008 added new properties
         public string TwoFAMethod { get; set; }
 
         public bool SkipNow { get; set; }

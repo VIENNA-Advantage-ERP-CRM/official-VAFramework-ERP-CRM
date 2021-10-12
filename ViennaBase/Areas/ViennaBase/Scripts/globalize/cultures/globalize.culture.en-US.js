@@ -103,6 +103,7 @@ Globalize.addCultureInfo( "en-US", "default", {
         "AdminMaxFailedLoginAttempts": "Admin User account is locked. Maximum failed login attempts exceeds the defined limit. Please contact to administrator.",
 		"SkipThisTime": "Skip this time",
 		"ResendOTP": "Resend OTP",
+		"CapsLockOn": "Caps lock is on",
 	}
 });
 
