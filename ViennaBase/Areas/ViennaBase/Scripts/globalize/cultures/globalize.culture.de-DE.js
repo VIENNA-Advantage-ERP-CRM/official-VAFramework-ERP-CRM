@@ -151,6 +151,7 @@
             "EnterVAVerCode": "Geben Sie OTP ein, das Sie auf Ihrem registrierten Mobiltelefon erhalten haben",
             "SkipThisTime": "Diesmal überspringen",
             "ResendOTP": "OTP erneut senden",
+            "CapsLockOn": "Die Feststelltaste ist aktiviert",
         }
 
 

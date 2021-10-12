@@ -137,6 +137,7 @@
             "EnterVAVerCode": "Ingrese la OTP recibida en su móvil registrado",
             "SkipThisTime": "Omitir esta vez",
             "ResendOTP": "Reenviar OTP",
+            "CapsLockOn": "Bloqueo de mayúsculas está activado",
         }
 
     });

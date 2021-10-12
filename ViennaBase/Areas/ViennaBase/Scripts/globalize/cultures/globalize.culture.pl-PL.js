@@ -142,6 +142,7 @@
             "EnterVAVerCode": "Wpisz hasło OTP otrzymane na zarejestrowany telefon komórkowy",
             "SkipThisTime": "Pomiń ten czas",
             "ResendOTP": "Wyślij ponownie OTP",
+            "CapsLockOn": "Caps Lock jest włączony",
 }
 });
 

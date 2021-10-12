@@ -113,6 +113,7 @@
             "EnterVAVerCode": "Enter OTP received on your registered mobile",
             "SkipThisTime": "Skip this time",
             "ResendOTP": "Resend OTP",
+            "CapsLockOn": "Caps lock is on",
         }
     });
 

@@ -353,6 +353,7 @@
             "PlzScanVAApp": "Please scan QR code from VA Mobile App",
             "SkipThisTime": "Skip this time",
             "ResendOTP": "Resend OTP",
+            "CapsLockOn": "Caps lock is on",
         }
     };
 

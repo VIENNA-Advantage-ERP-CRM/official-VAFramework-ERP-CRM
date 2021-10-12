@@ -150,6 +150,7 @@ namespace VIS.Helpers
             if (!cache["SuperUserVal"].Equals(model.Login1Model.UserValue))
             {
                 String Token2FAKey = Util.GetValueOfString(dr["TokenKey2FA"]);
+                // VIS0008 Change done to handle VA 2FA alongwith Google Authenticator
                 string method2FA = Util.GetValueOfString(dr["TwoFAMethod"]);
                 if (method2FA != "")
                 {
@@ -361,10 +362,12 @@ namespace VIS.Helpers
 
         }
 
+        // VIS0008 Enhance function to return value according to paramenter passed
         /// <summary>
         /// Generate Random number of 16 characters and return
         /// </summary>
-        /// <returns></returns>
+        /// <param name="digits">int value for number of characters</param>
+        /// <returns>string value Random Number</returns>
         public static string GetRndNum(int digits)
         {
             Random RNG = new Random();
@@ -624,6 +627,11 @@ namespace VIS.Helpers
             return list;
         }
 
+        /// <summary>
+        /// Fetch Login Context
+        /// </summary>
+        /// <param name="model">Login Model</param>
+        /// <returns>LoginContext</returns>
         internal static LoginContext GetLoginContext(LoginModel model)
         {
             LoginContext ctx = new LoginContext();
@@ -670,6 +678,12 @@ namespace VIS.Helpers
 
         }
 
+        /// <summary>
+        /// Fetching Login Context
+        /// </summary>
+        /// <param name="model">Login Model</param>
+        /// <param name="ctxLogIn">Login Context</param>
+        /// <returns>LoginContext</returns>
         internal static LoginContext GetLoginContext(LoginModel model, Ctx ctxLogIn)
         {
             LoginContext ctx = new LoginContext();
@@ -697,7 +711,10 @@ namespace VIS.Helpers
             return ctx;
         }
 
-
+        /// <summary>
+        /// Function to save login details in Login setting table
+        /// </summary>
+        /// <param name="model">Login Model</param>
         internal static void SaveLoginSetting(LoginModel model)
         {
             try
@@ -724,15 +741,14 @@ namespace VIS.Helpers
             catch
             {
             }
-
-
-
         }
 
-        /// <summary>`
+        // VIS0008 Enhancement for VA Mobile App 2 factor Authentication
+        /// <summary>
         /// Validate OTP from Google Authenticator or VA Mobile APP
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="model">Login Model</param>
+        /// <param name="TwoFAMethod">Two Factor Auth Method</param>
         /// <returns>true/false</returns>
         public static bool Validate2FAOTP(LoginModel model, string TwoFAMethod)
         {
@@ -831,6 +847,11 @@ namespace VIS.Helpers
             return true;
         }
 
+        /// <summary>
+        /// Send push notificaiton token to user
+        /// </summary>
+        /// <param name="ADUserID">User ID</param>
+        /// <param name="userSKey">User Search Key</param>
         public static void SendPushNotToken(int ADUserID, string userSKey)
         {
             string TokenNo = GetRndNum(6);
@@ -838,7 +859,7 @@ namespace VIS.Helpers
                 _dictVAMobTokens[userSKey] = TokenNo;
             else
                 _dictVAMobTokens.Add(userSKey, TokenNo);
-            VAdvantage.PushNotif.PushNotification.SendNotificationToUser(ADUserID, 0, 0, Msg.GetMsg(new Ctx(), "VIS_VAOTP"), Msg.GetMsg(new Ctx(), "OTP") + " : " + TokenNo, "");
+            VAdvantage.PushNotif.PushNotification.SendNotificationToUser(ADUserID, 0, 0, "", Msg.GetMsg(new Ctx(), "VIS_UseVerCode") + " " + TokenNo + " " + Msg.GetMsg(new Ctx(), "VIS_VAAuthentication"), "");
         }
     }
 }
