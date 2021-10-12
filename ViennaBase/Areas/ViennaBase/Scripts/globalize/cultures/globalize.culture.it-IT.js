@@ -141,6 +141,7 @@
             "EnterVAVerCode": "Inserisci l'OTP ricevuto sul tuo cellulare registrato",
             "SkipThisTime": "Salta questa volta",
             "ResendOTP": "Reinvia OTP",
+            "CapsLockOn": "Blocco maiuscolo attivo",
         }
     });
 

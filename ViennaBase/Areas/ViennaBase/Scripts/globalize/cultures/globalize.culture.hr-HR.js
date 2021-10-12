@@ -139,6 +139,7 @@ Globalize.addCultureInfo( "hr-HR", "default", {
 		"EnterVAVerCode": "Unesite OTP primljen na registrirani mobitel",
 		"SkipThisTime": "Ovaj put preskočite",
 		"ResendOTP": "Ponovno pošaljite OTP",
+		"CapsLockOn": "Uključena je velika slova",
 	}
 });
 

@@ -523,6 +523,7 @@ Globalize.addCultureInfo( "ar-IQ", "default", {
         "EnterVAVerCode": "أدخل OTP المستلم على هاتفك المحمول المسجل",
         "SkipThisTime": "تخطي هذه المرة",
         "ResendOTP": "إعادة إرسال OTP",
+        "CapsLockOn": "الحروف الكبيرة مفعلة",
     }
 });
 

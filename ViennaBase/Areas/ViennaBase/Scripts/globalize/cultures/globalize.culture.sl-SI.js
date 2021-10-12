@@ -137,6 +137,7 @@ Globalize.addCultureInfo( "sl-SI", "default", {
 		"EnterVAVerCode": "Vnesite OTP, prejet na registrirani mobilni telefon",
 		"SkipThisTime": "Tokrat preskočite",
 		"ResendOTP": "Znova pošljite OTP",
+		"CapsLockOn": "Caps Lock je vklopljen",
 	}
 });
 

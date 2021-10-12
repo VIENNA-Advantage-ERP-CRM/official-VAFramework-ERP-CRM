@@ -87,6 +87,7 @@
                         showLoginResetPwd();
                         $('#ResetPwd').val(json.ctx.ResetPwd);
                     }
+                        // VIS0008 enhancement for VA Mobile app 2FA
                     else if (json.ctx && json.ctx.TwoFAMethod != "") {
                         showLogin2FA();
                         if (json.ctx.TwoFAMethod == "GA")
@@ -349,6 +350,7 @@
         $backButton.val(Globalize.localize("Back"));
     }
 
+    // VIS0008 Check for Caps lock on
     var checkCapsLock = function (e) {
         var caps = event.getModifierState && event.getModifierState('CapsLock');
         var $form = $loginForm;
