@@ -17,13 +17,14 @@
         var ctrl = this[0];
         var currentFocus, arr = [], setTime;
         var self, isSearch = false;
+        var a;
         var response = function (data) {
             suggestion(data);
         };
 
         var suggestion = function (arr) {
             isSearch = true;
-            var a, b, i, val = self.value;
+            var b, i, val = self.value;
             /*create a DIV element that will contain the items (values):*/
             a = document.createElement("DIV");
             a.setAttribute("id", self.name + "vis-autocomplete-list");
@@ -61,12 +62,14 @@
                 }
             }
 
-            /*calculate list postion*/
-            var width = $(self).outerWidth();
-            var Height = $(self).outerHeight();
-            var offset = $(self).offset();
-            var listHeight = $(a).height();
-            var listWidth = $(a).width();
+        /*calculate list postion*/
+            var slf = $(self);
+            var ancr = $(a);
+            var width = slf.outerWidth();
+            var Height = slf.outerHeight();
+            var offset = slf.offset();
+            var listHeight = ancr.height();
+            var listWidth = ancr.width();
             var windowHeight = $(window).height();
             var windowWidth = $(window).width();
             var top = offset.top;
@@ -83,7 +86,7 @@
             if (leftright == left) {
                 xPos = left - (listWidth - width);
             }            
-            $(a).attr("style", "left:" + xPos + "px; top:" + yPos + "px;min-width:" + width + "px;max-width:" + (width + 200) + "px");
+            ancr.attr("style", "left:" + xPos + "px; top:" + yPos + "px;min-width:" + width + "px;max-width:" + (width + 200) + "px");
         }
         ctrl.addEventListener("focus", function (e) {
             ctrl.autocomplete = "off";
@@ -170,7 +173,7 @@
                 if (isSearch) {
                     ctrl.value = '';
                 }
-                $(".vis-autocomplete-items").remove();
+                a.remove();
             }, 400);
 
             // closeAllLists(e.target);
