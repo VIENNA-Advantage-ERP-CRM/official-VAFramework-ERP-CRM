@@ -3023,9 +3023,9 @@ namespace VIS.Models
               + "ROUND(currencyConvert(ALLOCPAYMENTAVAILABLE(p.C_Payment_ID) ,p.C_Currency_ID ," + _C_Currency_ID + ",cp.DATEACCT ,p.C_ConversionType_ID ,p.AD_Client_ID ,p.AD_Org_ID), " + objCurrency.GetStdPrecision() + ") as OPENAMT,"  //  7   #2
               + "p.MultiplierAP as MULTIPLIERAP, 0 as APPLIEDAMT , TO_CHAR(cp.DATEACCT ,'YYYY-MM-DD') AS DATEACCT, p.AD_Org_ID , o.Name, d.docbasetype , pm.VA009_Name "
               //+ " , dc.name AS DocTypeName "
-              + "FROM C_Payment_v p"		//	Corrected for AP/AR
-              + " INNER JOIN C_DocType d ON p.C_DOCTYPE_ID = d.C_DOCTYPE_ID"  //getting docbasetype
-              + " INNER JOIN AD_Org o ON o.AD_Org_ID = p.AD_Org_ID "
+              + " FROM C_Payment_v p"		//	Corrected for AP/AR
+              + " INNER JOIN C_DocType d ON (p.C_DOCTYPE_ID = d.C_DOCTYPE_ID)"  //getting docbasetype
+              + " INNER JOIN AD_Org o ON (o.AD_Org_ID = p.AD_Org_ID) "
               + " INNER JOIN C_Currency c ON (p.C_Currency_ID=c.C_Currency_ID) "
               + " INNER JOIN C_Payment cp ON (p.C_Payment_ID = cp.C_Payment_ID) "
               + " INNER JOIN VA009_PaymentMethod pm ON (cp.VA009_PaymentMethod_ID = pm.VA009_PaymentMethod_ID) "
@@ -3397,10 +3397,11 @@ namespace VIS.Models
                              + " ROUND(currencyConvert(ALLOCCASHAVAILABLE(cn.C_CashLine_ID),cn.C_Currency_ID ," + _C_Currency_ID + ",cn.DATEACCT ,cn.C_ConversionType_ID  ,cn.AD_Client_ID ,cn.AD_Org_ID ) , " + objCurrency.GetStdPrecision() + ") AS CONVERTEDAMOUNT,"//  6   #1cn.amount as OPENAMT,"
                              + " ROUND(currencyConvert(ALLOCCASHAVAILABLE(cn.C_CashLine_ID),cn.C_Currency_ID ," + _C_Currency_ID + ",cn.DATEACCT,cn.C_ConversionType_ID ,cn.AD_Client_ID ,cn.AD_Org_ID), " + objCurrency.GetStdPrecision() + ") as OPENAMT,"  //  7   #2
                                                                                                                                                                                                                                                               //+ " currencyConvert(cn.Amount ,cn.C_Currency_ID ," + _C_Currency_ID + ",cn.Created ,114 ,cn.AD_Client_ID ,cn.AD_Org_ID ) as OPENAMT,"
-                             + " cn.MultiplierAP AS MULTIPLIERAP,0 as APPLIEDAMT,TO_CHAR(cn.DATEACCT ,'YYYY-MM-DD') as DATEACCT , o.AD_Org_ID  , o.Name  from c_cashline_new cn"
-                             + " INNER JOIN C_Cashline cl ON cl.C_Cashline_ID=cn.C_Cashline_ID"
-                              + " INNER JOIN AD_Org o ON o.AD_Org_ID = cn.AD_Org_ID "
-                             + " INNER join c_currency c ON (cn.C_Currency_ID=c.C_Currency_ID) WHERE cn.IsAllocated   ='N' AND cn.Processed ='Y'"
+                              + " cn.MultiplierAP AS MULTIPLIERAP,0 as APPLIEDAMT,TO_CHAR(cn.DATEACCT ,'YYYY-MM-DD') as DATEACCT , o.AD_Org_ID  , o.Name " +
+                             " FROM C_CashLine_new cn"
+                             + " INNER JOIN C_Cashline cl ON (cl.C_Cashline_ID=cn.C_Cashline_ID)"
+                              + " INNER JOIN AD_Org o ON (o.AD_Org_ID = cn.AD_Org_ID) "
+                             + " INNER JOIN c_currency c ON (cn.C_Currency_ID=c.C_Currency_ID) WHERE cn.IsAllocated   ='N' AND cn.Processed ='Y'"
                              //+ " and cn.cashtype IN ('I' , 'B') and cn.docstatus in ('CO','CL') "
 
                              //Enhancement ID- JID_0593,  Cash line  is created with refrence of Invoice. Void View allocation. Cash line do not show on payment allocation. 
@@ -3578,11 +3579,11 @@ namespace VIS.Models
             TO_CHAR(i.DateInvoiced, 'YYYY-MM-DD') as DATE1, i.DocumentNo AS DOCUMENTNO, 
             i.C_Invoice_ID AS CINVOICEID, c.ISO_Code AS ISO_CODE, i.C_CONVERSIONTYPE_ID, i.AD_Client_ID, 
             i.AD_Org_ID, i.C_Currency_ID, i.MultiplierAP, i.docbasetype, 0 as WRITEOFF, 0 as APPLIEDAMT, 
-            i.DATEACCT, i.C_InvoicePaySchedule_ID, i.C_Invoice_ID, o.Name, pm.VA009_Name  FROM	C_Invoice_v i 
-            INNER JOIN AD_Org o ON o.AD_Org_ID = i.AD_Org_ID INNER JOIN C_Currency 
-            c ON (i.C_Currency_ID = c.C_Currency_ID)  INNER JOIN C_InvoicePaySchedule ips ON (i.C_Invoice_ID = ips.C_Invoice_ID) 
+            i.DATEACCT, i.C_InvoicePaySchedule_ID, i.C_Invoice_ID, o.Name, pm.VA009_Name FROM C_Invoice_v i 
+            INNER JOIN AD_Org o ON (o.AD_Org_ID = i.AD_Org_ID) INNER JOIN C_Currency c ON (i.C_Currency_ID = c.C_Currency_ID)
+            INNER JOIN C_InvoicePaySchedule ips ON (i.C_Invoice_ID = ips.C_Invoice_ID) 
             INNER JOIN VA009_PaymentMethod pm ON (ips.VA009_PaymentMethod_ID = pm.VA009_PaymentMethod_ID) 
-            WHERE 		i.IsPaid= 'N' AND i.Processed = 'Y' ");
+            WHERE i.IsPaid='N' AND i.Processed = 'Y'");
 
             //to get invoice schedules against related business partner
             if (!string.IsNullOrEmpty(relatedBpids))
@@ -3698,18 +3699,24 @@ namespace VIS.Models
             sqlInvoice.Append(sqlnew);
             sqlnew = null;
 
-            sqlInvoice.Append(" ), OpenInvoice AS ( SELECT 	SELECTROW,Name, DATE1, DOCUMENTNO, CINVOICEID, ISO_CODE, T1.C_CONVERSIONTYPE_ID, AD_Client_ID, AD_Org_ID," +
-                " T1.C_Currency_ID, T1.MultiplierAP, docbasetype, WRITEOFF, APPLIEDAMT, DATEACCT, T1.C_InvoicePaySchedule_ID, T1.C_Invoice_ID, " +
-                " INVOICEOPEN_NEW(T2.C_Invoice_ID, T2.C_InvoicePaySchedule_ID, T2.C_Currency_ID, T2.C_CONVERSIONTYPE_ID, T2.GRANDTOTAL, T2.MULTIPLIERAP, T2.MULTIPLIER, T2.ModCount) invoiceOpen " +
-                " , t1.VA009_Name FROM	Invoice T1 INNER JOIN c_invoice_v_NEW T2 ON (T1.C_Invoice_ID = T2.C_Invoice_ID AND NVL(T1.C_InvoicePaySchedule_ID, 0) = NVL (T2.C_InvoicePaySchedule_ID, 0)) ) ");
+            sqlInvoice.Append(@" ), OpenInvoice AS ( SELECT 	SELECTROW,Name, DATE1, DOCUMENTNO, CINVOICEID, ISO_CODE, T1.C_CONVERSIONTYPE_ID, 
+                                AD_Client_ID, AD_Org_ID, T1.C_Currency_ID, T1.MultiplierAP, docbasetype, WRITEOFF, APPLIEDAMT, DATEACCT, 
+                                T1.C_InvoicePaySchedule_ID, T1.C_Invoice_ID, 
+                                /*INVOICEOPEN_NEW(T2.C_Invoice_ID, T2.C_InvoicePaySchedule_ID, 
+                                T2.C_Currency_ID, T2.C_CONVERSIONTYPE_ID, T2.GRANDTOTAL, T2.MULTIPLIERAP, T2.MULTIPLIER, T2.ModCount)*/
+                                T2.GRANDTOTAL  AS invoiceOpen, t1.VA009_Name
+                                FROM Invoice T1 INNER JOIN c_invoice_v_NEW T2
+                                ON (T1.C_Invoice_ID = T2.C_Invoice_ID AND NVL(T1.C_InvoicePaySchedule_ID, 0) = NVL (T2.C_InvoicePaySchedule_ID, 0)) ) ");
             List<VIS_InvoiceData> payData = new List<VIS_InvoiceData>();
 
             // count record for paging
             if (page == 1)
             {
-                string sql = @"SELECT COUNT(*) FROM C_Invoice_v i"
-                                + " INNER JOIN C_Currency c ON (i.C_Currency_ID=c.C_Currency_ID) WHERE i.IsPaid='N' AND i.Processed='Y'"
-                                + " AND i.C_BPartner_ID=" + _C_BPartner_ID;
+                string sql = @"SELECT COUNT(ci.C_InvoicePaySchedule_ID) FROM C_Invoice i
+                                 INNER JOIN C_InvoicePaySchedule ci ON (ci.C_Invoice_ID = i.C_Invoice_ID)
+                                 INNER JOIN C_Currency c ON (i.C_Currency_ID=c.C_Currency_ID) 
+                              WHERE i.IsPaid='N' AND i.Processed='Y' AND ci.VA009_IsPaid = 'N' 
+                                 AND i.C_BPartner_ID=" + _C_BPartner_ID;
                 if (!chk)
                 {
                     sql += " AND i.C_Currency_ID=" + _C_Currency_ID;
@@ -3718,8 +3725,9 @@ namespace VIS.Models
                 if (!string.IsNullOrEmpty(relatedBpids))
                     sqlInvoice.Append(" OR i.C_BPartner_ID IN ( " + relatedBpids + " ) ");
 
-                sql += " AND ((invoiceOpen(C_Invoice_ID,C_InvoicePaySchedule_ID)) *i.MultiplierAP ) <> 0 ";
-                sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "i", true, false);
+                //sql += " AND ((invoiceOpen(C_Invoice_ID,C_InvoicePaySchedule_ID)) *i.MultiplierAP ) <> 0 ";
+                sql += " AND ci.IsValid = 'Y' AND NVL(ci.C_Payment_ID , 0 ) = 0 AND NVL(ci.C_CashLine_ID, 0) = 0";
+                sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "C_Invoice", true, false);
                 countRecord = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
             }
             if (String.IsNullOrEmpty(conversionDate))
@@ -3829,7 +3837,7 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
         {
             List<VIS_DocbaseType> DocbaseType = new List<VIS_DocbaseType>();
             //string _sql = "SELECT DB.DocBaseType, DB.Name FROM C_DOCTYPE C_DOCTYPE INNER JOIN C_DOCBASETYPE DB ON C_DocType.DOCBASETYPE=DB.DOCBASETYPE WHERE DB.DOCBASETYPE IN ('API','APR','APC','ARC') AND C_DocType.ISACTIVE='Y'";
-            string _sql = "SELECT C_DOCBASETYPE.DocBaseType, C_DOCBASETYPE.Name FROM C_DOCBASETYPE C_DOCBASETYPE WHERE C_DOCBASETYPE.DOCBASETYPE IN ('API','APR','APC','ARC','ARI') AND C_DOCBASETYPE.ISACTIVE='Y'";
+            string _sql = "SELECT C_DOCBASETYPE.DocBaseType, C_DOCBASETYPE.Name FROM C_DocBaseType C_DOCBASETYPE WHERE C_DOCBASETYPE.DOCBASETYPE IN ('APP','ARR') AND C_DOCBASETYPE.ISACTIVE='Y'";
             _sql = MRole.GetDefault(ctx).AddAccessSQL(_sql, "C_DocBaseType", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
             DataSet ds = DB.ExecuteDataset(_sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -3849,7 +3857,9 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
         public List<VIS_DocType> GetDocType()
         {
             List<VIS_DocType> DocType = new List<VIS_DocType>();
-            string _sql = "SELECT C_DocType.NAME, C_DocType.C_DOCTYPE_ID FROM C_DOCTYPE C_DOCTYPE INNER JOIN C_DOCBASETYPE DB ON C_DocType.DOCBASETYPE=DB.DOCBASETYPE WHERE DB.DOCBASETYPE IN ('APR','API','ARC','APC','ARI') AND C_DocType.ISACTIVE='Y'";
+            string _sql = @"SELECT C_DocType.NAME, C_DocType.C_DOCTYPE_ID FROM C_DocType C_DOCTYPE 
+                            INNER JOIN C_DocBaseType DB ON (C_DocType.DOCBASETYPE=DB.DOCBASETYPE )
+                            WHERE DB.DOCBASETYPE IN ('APR','API','ARC','APC','ARI') AND C_DocType.ISACTIVE='Y'";
             //string _sql = "SELECT C_DocType.Name,C_DocType_ID FROM C_DocType INNER JOIN c_docbasetype ON c_doctype.docbasetype = c_docbasetype.docbasetype WHERE  C_DocBaseType_ID IN (SELECT AD_Reference_ID FROM AD_Column WHERE ColumnName ='DocBaseType' AND AD_Table_ID =(SELECT AD_Table_ID FROM AD_Table WHERE TableName='C_DocType')) AND c_doctype.isactive='Y'";
             _sql = MRole.GetDefault(ctx).AddAccessSQL(_sql, "C_DocType", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
             DataSet ds = DB.ExecuteDataset(_sql);
@@ -3871,7 +3881,9 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
         public List<VIS_DocType> GetpayDocType()
         {
             List<VIS_DocType> DocType = new List<VIS_DocType>();
-            string _sql = "SELECT C_DocType.NAME, C_DocType.C_DOCTYPE_ID FROM C_DOCTYPE C_DOCTYPE INNER JOIN C_DOCBASETYPE DB ON C_DocType.DOCBASETYPE=DB.DOCBASETYPE WHERE DB.DOCBASETYPE IN ('APP','ARR') AND C_DocType.ISACTIVE='Y'";
+            string _sql = @"SELECT C_DocType.NAME, C_DocType.C_DOCTYPE_ID FROM C_DOCTYPE C_DocType 
+                            INNER JOIN C_DocBaseType DB ON (C_DocType.DOCBASETYPE=DB.DOCBASETYPE )
+                            WHERE DB.DOCBASETYPE IN ('APP','ARR') AND C_DocType.ISACTIVE='Y'";
             //string _sql = "SELECT C_DocType.Name,C_DocType_ID FROM C_DocType INNER JOIN c_docbasetype ON c_doctype.docbasetype = c_docbasetype.docbasetype WHERE  C_DocBaseType_ID IN (SELECT AD_Reference_ID FROM AD_Column WHERE ColumnName ='DocBaseType' AND AD_Table_ID =(SELECT AD_Table_ID FROM AD_Table WHERE TableName='C_DocType')) AND c_doctype.isactive='Y'";
             _sql = MRole.GetDefault(ctx).AddAccessSQL(_sql, "C_DocType", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
             DataSet ds = DB.ExecuteDataset(_sql);
