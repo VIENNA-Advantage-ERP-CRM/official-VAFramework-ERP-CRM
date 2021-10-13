@@ -625,7 +625,7 @@ namespace VAdvantage.Model
                         // update open amount in base / invoice currency when we splitted record
                         paySch.SetVA009_OpenAmnt(BaseCurrency != invoice.GetC_Currency_ID() ? (paySch.GetDueAmt() * multiplyRate) : paySch.GetDueAmt());
                         paySch.SetVA009_OpnAmntInvce(paySch.GetDueAmt());
-
+                        paySch.ByPassValidatePayScheduleCondition(true);
                         if (!paySch.Save(Get_Trx()))
                         {
                             log.Info("Not Updated Paid Amount on Invoice Schedule for this schedule <==> " + line.GetC_InvoicePaySchedule_ID());
@@ -709,7 +709,7 @@ namespace VAdvantage.Model
                             // convert due amount into Base Currency
                             newPaySch.SetVA009_OpenAmnt(BaseCurrency != invoice.GetC_Currency_ID() ? Decimal.Multiply(newPaySch.GetDueAmt(), multiplyRate) : newPaySch.GetDueAmt());
                             newPaySch.SetVA009_OpnAmntInvce(newPaySch.GetDueAmt());
-
+                            newPaySch.ByPassValidatePayScheduleCondition(true);
                             if (!newPaySch.Save(Get_Trx()))
                             {
                                 ValueNamePair pp = VLogger.RetrieveError();

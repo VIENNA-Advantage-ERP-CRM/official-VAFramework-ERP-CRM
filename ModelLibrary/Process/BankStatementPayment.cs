@@ -258,6 +258,11 @@ namespace VAdvantage.Process
                 payment.SetDateAcct(payment.GetDateTrx());
             }
             payment.SetDescription(description);
+            //Rakesh:Override autocheckno. with eftcheck number if exists
+            if (!string.IsNullOrEmpty(_checkNo))
+            {
+                payment.SetIsOverrideAutoCheck(true);
+            }
             //
             if (C_Invoice_ID != 0)
             {
@@ -432,6 +437,7 @@ namespace VAdvantage.Process
                 _message = "VA012_ReferenceNotfoundtoCreatePayment";
                 return null;
             }
+            
             //Commit the Transaction
             Get_Trx().Commit();
             //Call Complete Method to Complete the Record

@@ -3273,8 +3273,8 @@ namespace VAdvantage.Model
             MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
             if (GetTenderType().Equals(X_C_Payment.TENDERTYPE_Check) && bnkAct.IsChkNoAutoControl() && !IsReversal())
             {
-                //Rakesh(VA228):When cheque number is not present on bank payment check and execute autocheck if enabled
-                if (string.IsNullOrEmpty(GetCheckNo()))
+                //Rakesh(VA228):When override autocheck is set false execute autocheck functionality
+                if (!IsOverrideAutoCheck())
                 {
                     if ((dt.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_APPAYMENT) && GetPayAmt() >= 0) || (dt.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_ARRECEIPT) && GetPayAmt() < 0))
                     {
