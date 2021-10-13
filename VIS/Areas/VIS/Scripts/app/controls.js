@@ -3718,7 +3718,9 @@
         var length = fieldLength;
 
         //Init Control
+
         var $ctrl = $('<input autocomplete="off">', { type: 'number', step: 'any', name: columnName, maxlength: length, 'data-type': 'int' });
+
 
         //Call base class
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory);
@@ -3889,7 +3891,7 @@
             e.stopPropagation();
             // var newVal = $ctrl.val();
 
-            var newVal = self.getValue();
+            var newVal = self.getValue();          
             this.value = newVal;
 
             if (newVal !== self.oldValue) {
@@ -4062,7 +4064,7 @@
         // text change Event 
         $ctrl.on("change", function (e) {
             e.stopPropagation();
-            //var newVal = $ctrl.val();
+            //var newVal = $ctrl.val();    
             var newVal = self.getValue();
             newVal = Globalize.parseInt(newVal.toString());
             //alert(newVal);
@@ -4123,7 +4125,7 @@
         return this.ctrl.val();
     };
 
-    /***END VNumTextBox***/
+        /***END VNumTextBox***/
 
 
 
