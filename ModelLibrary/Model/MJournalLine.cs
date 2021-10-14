@@ -787,7 +787,7 @@ namespace VAdvantage.Model
                 toLine.SetSeqNo(fromLines[i].GetSeqNo());
                 toLine.SetLineType(fromLines[i].GetLineType());
                 toLine.SetGL_JournalLine_ID(newlineID);
-
+                toLine.SetDimensionValue(fromLines[i].GetDimensionValue());
                 if (typeCR == 'C')
                 {
                     toLine.SetAmount(Decimal.Negate(fromLines[i].GetAmount()));
