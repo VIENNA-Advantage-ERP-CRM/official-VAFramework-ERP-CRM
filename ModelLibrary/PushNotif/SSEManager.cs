@@ -31,7 +31,7 @@ namespace ModelLibrary.PushNotif
  *  Chronological Development
  *  
  *************************************/
-    public class SSEManager
+   public class SSEManager
     {
         /* static object */
         private static SSEManager _obj = null;
