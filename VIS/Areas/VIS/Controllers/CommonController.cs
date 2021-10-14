@@ -2084,7 +2084,7 @@ namespace VIS.Controllers
                     // Added By VA228(Rakesh Kumar): Set Priceentered and priceactual
                     invoiceLine.SetPriceEntered(Convert.ToDecimal((model[i]["InvoicePrice"])));
                     invoiceLine.SetPriceActual(Convert.ToDecimal((model[i]["InvoicePrice"])));
-                    //invoiceLine.SetPriceList(Convert.ToDecimal((model[i]["InvoicePrice"])));
+                    invoiceLine.SetPriceList(Convert.ToDecimal((model[i]["InvoicePrice"])));
 
                     // Set Provisional InvoiceLine Reference
                     if (invoiceLine.Get_ColumnIndex("C_ProvisionalInvoiceLine_ID") >= 0)
@@ -2245,7 +2245,6 @@ namespace VIS.Controllers
                 invoiceLine.SetQtyInvoiced(QtyEntered);
                 invoiceLine.SetPricePO(Util.GetValueOfDecimal((model[i]["POPrice"])));
                 invoiceLine.SetPerUnitDifference(Decimal.Subtract(Util.GetValueOfDecimal((model[i]["POPrice"])), Util.GetValueOfDecimal((model[i]["ProvisionalPrice"]))));
-
                 //  Info
                 MOrderLine orderLine = null;
                 if (C_OrderLine_ID != 0)
@@ -2306,6 +2305,7 @@ namespace VIS.Controllers
                     invoiceLine.SetClientOrg(orderLine.GetAD_Client_ID(), orderLine.GetAD_Org_ID());
                     invoiceLine.SetOrderLine(orderLine);	//	overwrites
                     invoiceLine.SetPriceEntered(Util.GetValueOfDecimal((model[i]["ProvisionalPrice"])));
+                    invoiceLine.SetPriceList(invoiceLine.GetPriceEntered());
                     invoiceLine.SetUnitPrice(invoiceLine.GetPriceEntered());
                     if (orderLine.GetQtyEntered().CompareTo(orderLine.GetQtyOrdered()) != 0)
                     {
