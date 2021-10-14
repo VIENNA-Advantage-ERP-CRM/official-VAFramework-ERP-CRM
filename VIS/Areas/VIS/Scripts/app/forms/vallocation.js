@@ -83,7 +83,7 @@
 
         //Added for inter-business partner work assigned by puneet and mukesh sir
         var $vchkBPAllocation = null;
-          // inter-company 
+        // inter-company 
         var $vchICompanyAllocation = null;
         var _isInterBPartner = false;
         var _isInterCompany = false;
@@ -451,8 +451,8 @@
                 //when select MultiCurrency without selecting conversionDate it will clear the grid's 
                 if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
                     // Commented because we need to search on button click suggested by ashish
-                   // blankAllGrids();
-                   // clearRightPanelFilters(); //clear right side  filters and selected records
+                    // blankAllGrids();
+                    // clearRightPanelFilters(); //clear right side  filters and selected records
                     $conversionDate.val('');
                     return;
                 }
@@ -1091,7 +1091,7 @@
                     else {
                         VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
                     }
-                    $srchInvoice.val('');
+                    // $srchInvoice.val('');
                 }
             });
             $srchbtnInvoice.on("click", function (e) {
@@ -1116,7 +1116,7 @@
                 else {
                     VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
                 }
-                $srchInvoice.val('');
+                //$srchInvoice.val('');
             });
 
             //click event for search Payment records which is based on Document No
@@ -1143,7 +1143,7 @@
                     else {
                         VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
                     }
-                    $srchPayment.val('');
+                    //  $srchPayment.val('');
                 }
             });
             $srchbtnPayment.on("click", function (e) {
@@ -1168,7 +1168,7 @@
                 else {
                     VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
                 }
-                $srchPayment.val('');
+                // $srchPayment.val('');
             });
 
             //click event for search Cash Journal line records which is based on Document No
@@ -1195,7 +1195,7 @@
                     else {
                         VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
                     }
-                    $srchCashJournal.val('');
+                    // $srchCashJournal.val('');
                 }
             });
             $srchbtnCashJournal.on("click", function (e) {
@@ -1220,7 +1220,7 @@
                 else {
                     VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
                 }
-                $srchCashJournal.val('');
+                // $srchCashJournal.val('');
             });
 
             //click event for search GL Journal line records which is based on Document No
@@ -1247,7 +1247,7 @@
                     else {
                         VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
                     }
-                    $srchGL.val('');
+                    //$srchGL.val('');
                 }
             });
 
@@ -1273,10 +1273,12 @@
                 else {
                     VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
                 }
-                $srchGL.val('');
+                //$srchGL.val('');
             });
             //-----For Select All buttons on grid by Manjot assigned by Mukesh sir and Savita
             $invSelectAll.on("change", function (e) {
+                //window.setTimeout(function () {
+                $bsyDiv[0].style.visibility = "visible";
                 var chk = $('#grid_' + $gridInvoice.name + '_records td[col="0"]').find('input[type="checkbox"]');
                 for (var i = 0; i < chk.length; i++) {
                     $(chk[i]).prop('checked', $invSelectAll.prop("checked"));
@@ -1289,10 +1291,13 @@
                 // Clear Selected invoices array when we de-select the select all checkbox. work done for to hold all the selected invoices
                 if ($invSelectAll.prop("checked") == false)
                     selectedInvoices = [];
+                $bsyDiv[0].style.visibility = "hidden";
+                //}, 300);
             });
 
             //change event for checkbox to select/unselet all for Payment grid
             $paymentSelctAll.on("change", function (e) {
+                $bsyDiv[0].style.visibility = "visible";
                 var chk = $('#grid_' + $gridPayment.name + '_records td[col="0"]').find('input[type="checkbox"]');
                 for (var i = 0; i < chk.length; i++) {
                     $(chk[i]).prop('checked', $paymentSelctAll.prop("checked"));
@@ -1303,10 +1308,12 @@
                 }
                 if ($paymentSelctAll.prop("checked") == false)
                     selectedPayments = [];
+                $bsyDiv[0].style.visibility = "hidden";
             });
 
             //change event forf checkbox to select/unselect all for Cash Journal line
             $cashSelctAll.on("change", function (e) {
+                $bsyDiv[0].style.visibility = "visible";
                 var chk = $('#grid_' + $gridCashline.name + '_records td[col="0"]').find('input[type="checkbox"]');
                 for (var i = 0; i < chk.length; i++) {
                     $(chk[i]).prop('checked', $cashSelctAll.prop("checked"));
@@ -1317,6 +1324,7 @@
                 }
                 if ($cashSelctAll.prop("checked") == false)
                     selectedCashlines = [];
+                $bsyDiv[0].style.visibility = "hidden";
             });
 
             //check all grids are loaded or not
@@ -1354,6 +1362,7 @@
 
             //change event for checkbox to select/unselect all for gl-allocation grid
             $glSelectAll.on("change", function (e) {
+                $bsyDiv[0].style.visibility = "visible";
                 if ($glSelectAll.prop("checked") == false) {
                     getGLChanges = [];
                 }
@@ -1367,6 +1376,7 @@
                 }
                 if ($glSelectAll.prop("checked") == false)
                     SelectedGL = [];
+                $bsyDiv[0].style.visibility = "hidden";
             });
             //end 
             //set/reset the background-color change event
@@ -2410,14 +2420,19 @@
                 //+ '<label>' + VIS.Msg.getMsg("AutoWriteOff") + '</label>'
                 //+ '</div>'
                 //inter company checkbox and label added 
-                + '<div class="vis-allocation-leftControls">'
+                + '<div class="vis-allocation-leftControls"> <div class= "input-group vis-input-wrap" > <div class="vis-control-wrap"> '
+                + '<label class="vis-ec-col-lblchkbox">'
                 + '<input id=VIS_chkbxICompanyAllocation_' + $self.windowNo + ' class="vis-allocation-interComp" type="checkbox">'
-                + '<label>' + VIS.Msg.getMsg("InterCompanyAllocation") + '</label>'
-                + '</div>'
-                + '<div class="vis-allocation-leftControls">'
+                + VIS.Msg.getMsg("InterCompanyAllocation")
+                + '</label>'
+                + '</div> </div> </div>'
+
+                + '<div class="vis-allocation-leftControls"> <div class= "input-group vis-input-wrap" > <div class="vis-control-wrap">'
+                + '<label class="vis-ec-col-lblchkbox">'
                 + '<input id=VIS_chkbxBPAllocation_' + $self.windowNo + ' class="vis-allocation-interBP" type="checkbox">'
-                + '<label>' + VIS.Msg.getMsg("BPAllocation") + '</label>'
-                + '</div>'
+                + VIS.Msg.getMsg("BPAllocation")
+                + '</label>'
+                + '</div></div> </div>'
                 //---------------------------Added new parameters----Neha----3 August 2018---Asked by Amit
                 //+ '<div class="vis-allocation-leftControls">'
                 //+ '<div class="panel-group" style="margin: 0px;" id="accordion" role="tablist" aria-multiselectable="true">'
@@ -3882,7 +3897,7 @@
             var columns = [];
             columns.push({ field: 'SelectRow', caption: VIS.translatedTexts.VIS_Check, size: '50px', editable: { type: 'checkbox' } });
             columns.push({ field: "AD_Org_ID", caption: VIS.translatedTexts.AD_Org_ID, size: '85px', hidden: true });
-            columns.push({ field: "OrgName", caption: VIS.translatedTexts.AD_Org_ID, size: '105px', hidden: true });
+            columns.push({ field: "OrgName", caption: VIS.translatedTexts.AD_Org_ID, size: '105px', hidden: false });
             columns.push({
                 field: "DATEACCT", caption: VIS.translatedTexts.DateAcct, size: '105px', hidden: false, render: function (record, index, col_index) {
                     var val = record["DATEACCT"];
@@ -6388,7 +6403,7 @@
         *  @param e event
         */
         function vetoableChange(name, value) {
-            if (value == null) {
+            if (name != "C_BPartner_ID" && value == null) {
                 //clear right side  filters and selected records
                 clearRightPanelFilters();
                 //added to load all blank grids
@@ -6398,12 +6413,12 @@
 
             //  BPartner
             if (name == "C_BPartner_ID") {
-                if (_C_BPartner_ID != value) {
-                    //clear right side  filters and selected records
-                    clearRightPanelFilters();
-                    //added to load all blank grids
-                    blankAllGrids();
-                }
+                //if (_C_BPartner_ID != value) {
+                //    //clear right side  filters and selected records
+                //    clearRightPanelFilters();
+                //    //added to load all blank grids
+                //    blankAllGrids();
+                //}
                 _C_BPartner_ID = value;
                 if (_C_BPartner_ID > 0) {
                     // If BP is selected then  set mandatory false---Neha
