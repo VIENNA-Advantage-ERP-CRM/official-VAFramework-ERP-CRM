@@ -616,12 +616,12 @@ namespace VIS.Models
         {
             List<VCreateFromGetCOrder> obj = new List<VCreateFromGetCOrder>();
             MClient tenant = MClient.Get(ctx);
-
+            //fetch provisional Invoices whose invoice is not yet created or Invoice is reversed or void
             StringBuilder sql = new StringBuilder("SELECT i.C_ProvisionalInvoice_ID," + displays + " AS displays FROM C_ProvisionalInvoice i "
                         + "INNER JOIN C_DocType d ON (i.C_DocType_ID = d.C_DocType_ID) "
                         + "WHERE i.C_BPartner_ID=" + cBPartnerId + " AND i.IsSOTrx='N' "
                         + "AND d.IsReturnTrx='" + (isReturnTrxs ? "Y" : "N") + "' AND i.DocStatus IN ('CL','CO') "
-                        + "AND i.C_ProvisionalInvoice_ID NOT IN (SELECT C_ProvisionalInvoice_ID FROM C_Invoice WHERE IsActive='Y' AND IsSOTrx='N' AND C_ProvisionalInvoice_ID>0) "
+                        + "AND i.C_ProvisionalInvoice_ID NOT IN (SELECT C_ProvisionalInvoice_ID FROM C_Invoice WHERE IsActive='Y' AND IsSOTrx='N' AND C_ProvisionalInvoice_ID>0 AND DocStatus NOT IN ('VO','RE')) "
                      );
 
             string whereCondition = "";

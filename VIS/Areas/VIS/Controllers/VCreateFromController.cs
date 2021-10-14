@@ -1235,8 +1235,9 @@ namespace VIS.Controllers
                     sql.Append(" , uom.stdprecision ");
                 }
             }
-            // Get Provisional Invoice line records which are not exits in AP Invoice Line
-            sql.Append(") t WHERE t.C_PROVISIONALINVOICELINE_ID NOT IN(SELECT C_PROVISIONALINVOICELINE_ID FROM C_InvoiceLine WHERE IsActive='Y' AND C_PROVISIONALINVOICELINE_ID>0) ORDER BY Line");
+            // Get Provisional Invoice line records which are not exits in AP Invoice Line and not considered void or reverse invoices
+            sql.Append(") t WHERE t.C_PROVISIONALINVOICELINE_ID NOT IN(SELECT C_PROVISIONALINVOICELINE_ID FROM C_InvoiceLine INNER JOIN C_Invoice ON C_Invoice.C_Invoice_ID = C_InvoiceLine.C_Invoice_ID " +
+                "WHERE C_InvoiceLine.IsActive = 'Y' AND C_PROVISIONALINVOICELINE_ID > 0 AND C_Invoice.DocStatus NOT IN('VO', 'RE')) ORDER BY Line");
             return sql.ToString();
         }
     }
