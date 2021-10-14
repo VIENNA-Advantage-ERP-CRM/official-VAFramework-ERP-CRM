@@ -441,15 +441,19 @@ namespace VAdvantage.Model
             {
                 return 0;
             }
+
+            int precision = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT stdprecision FROM C_Currency WHERE C_Currency_ID = 
+                            ( SELECT C_Currency_ID FROM GL_journal WHERE GL_Journal_ID=" + GetGL_Journal_ID() + " )", null, Get_Trx()));
             int count = 0;
             int lineCount = 0;
-
+            MJournalLine toLine = null;
             MJournalLine[] fromLines = fromJournal.GetLines(false);
             for (int i = 0; i < fromLines.Length; i++)
             {
-                MJournalLine toLine = new MJournalLine(GetCtx(), 0, fromJournal.Get_TrxName());
+                toLine = new MJournalLine(GetCtx(), 0, fromJournal.Get_TrxName());
                 PO.CopyValues(fromLines[i], toLine, GetAD_Client_ID(), GetAD_Org_ID());
                 toLine.SetGL_Journal_ID(GetGL_Journal_ID());
+                toLine.m_precision = precision;
                 //
                 if (dateAcct != null)
                 {
@@ -476,7 +480,12 @@ namespace VAdvantage.Model
                     if (toLine.Get_ColumnIndex("ReversalDoc_ID") > 0)
                     {
                         toLine.SetReversalDoc_ID(fromLines[i].GetGL_JournalLine_ID());
+                        toLine._isReverseByProcess = true;
                     }
+                }
+                if (Get_ColumnIndex("ConditionalFlag") >= 0 && Util.GetValueOfString(Get_Value("ConditionalFlag")).Equals("00"))
+                {
+                    toLine._isReverseByProcess = true;
                 }
 
                 if (!toLine.Save())
@@ -494,12 +503,16 @@ namespace VAdvantage.Model
                     }
                     SetProcessMsg(String.IsNullOrEmpty(error) ? "Could not create Journal Line" : Msg.GetMsg(toLine.GetCtx(), error));
                 }
-                else 
+                else
                 {
                     count++;
                     lineCount += toLine.CopyLinesFrom(fromLines[i], toLine.GetGL_JournalLine_ID(), typeCR);
                 }
             }
+
+            // Update Header
+            toLine.UpdateJournalTotal();
+
             if (fromLines.Length != count)
             {
                 log.Log(Level.SEVERE, "Line difference - JournalLines=" + fromLines.Length + " <> Saved=" + count);
@@ -615,7 +628,8 @@ namespace VAdvantage.Model
                     }
                     SetProcessMsg(String.IsNullOrEmpty(error) ? "Could not create GL Journal" : Msg.GetMsg(toLine.GetCtx(), error));
                 }
-                else{
+                else
+                {
                     count++;
                     lineCount += toLine.CopyLinesFrom(fromLines[i], toLine.GetGL_JournalLine_ID());
                 }
@@ -1165,7 +1179,7 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
             {
                 m_processMsg = Msg.GetMsg(GetCtx(), "DeleteAllowcationFirst");
                 return null;
-            }			 
+            }
             //	Journal
             MJournal reverse = new MJournal(this);
             reverse.SetGL_JournalBatch_ID(GL_JournalBatch_ID);
