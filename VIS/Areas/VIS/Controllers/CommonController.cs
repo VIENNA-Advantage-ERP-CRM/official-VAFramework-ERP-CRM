@@ -1787,20 +1787,6 @@ namespace VIS.Controllers
                 MInvoiceLine invoiceLine = new MInvoiceLine(_invoice);
                 invoiceLine.SetM_Product_ID(M_Product_ID, C_UOM_ID);	//	Line UOM
                 invoiceLine.SetQty(QtyEntered);                         //	Invoiced/Entered
-
-                if (C_ProvisionalInvoice_ID > 0)
-                {
-                    // Added By VA228(Rakesh Kumar): Set Priceentered and priceactual
-                    invoiceLine.SetPriceEntered(Convert.ToDecimal((model[i]["InvoicePrice"])));
-                    invoiceLine.SetPriceActual(Convert.ToDecimal((model[i]["InvoicePrice"])));
-                    //invoiceLine.SetPriceList(Convert.ToDecimal((model[i]["InvoicePrice"])));
-
-                    // Set Provisional InvoiceLine Reference
-                    if (invoiceLine.Get_ColumnIndex("C_ProvisionalInvoiceLine_ID") >= 0)
-                        invoiceLine.Set_Value("C_ProvisionalInvoiceLine_ID", Convert.ToInt32((model[i]["C_Invoice_ID_K"])));
-                }
-
-
                 //  Info
                 MOrderLine orderLine = null;
                 if (C_OrderLine_ID != 0)
@@ -2166,6 +2152,20 @@ namespace VIS.Controllers
 
                     // End Amortization process
                 }
+
+                //Provisional Invoice case : overwrites price
+                if (C_ProvisionalInvoice_ID > 0)
+                {
+                    // Added By VA228(Rakesh Kumar): Set Priceentered and priceactual
+                    invoiceLine.SetPriceEntered(Convert.ToDecimal((model[i]["InvoicePrice"])));
+                    invoiceLine.SetPriceActual(Convert.ToDecimal((model[i]["InvoicePrice"])));
+                    invoiceLine.SetPriceList(Convert.ToDecimal((model[i]["InvoicePrice"])));
+
+                    // Set Provisional InvoiceLine Reference
+                    if (invoiceLine.Get_ColumnIndex("C_ProvisionalInvoiceLine_ID") >= 0)
+                        invoiceLine.Set_Value("C_ProvisionalInvoiceLine_ID", Convert.ToInt32((model[i]["C_Invoice_ID_K"])));
+                }
+
                 if (!invoiceLine.Save())
                 {
                     //s_log.log(Level.SEVERE, "Line NOT created #" + i);
@@ -2318,7 +2318,6 @@ namespace VIS.Controllers
                 invoiceLine.SetQtyInvoiced(QtyEntered);
                 invoiceLine.SetPricePO(Util.GetValueOfDecimal((model[i]["POPrice"])));
                 invoiceLine.SetPerUnitDifference(Decimal.Subtract(Util.GetValueOfDecimal((model[i]["POPrice"])), Util.GetValueOfDecimal((model[i]["ProvisionalPrice"]))));
-
                 //  Info
                 MOrderLine orderLine = null;
                 if (C_OrderLine_ID != 0)
@@ -2379,6 +2378,7 @@ namespace VIS.Controllers
                     invoiceLine.SetClientOrg(orderLine.GetAD_Client_ID(), orderLine.GetAD_Org_ID());
                     invoiceLine.SetOrderLine(orderLine);	//	overwrites
                     invoiceLine.SetPriceEntered(Util.GetValueOfDecimal((model[i]["ProvisionalPrice"])));
+                    invoiceLine.SetPriceList(invoiceLine.GetPriceEntered());
                     invoiceLine.SetUnitPrice(invoiceLine.GetPriceEntered());
                     if (orderLine.GetQtyEntered().CompareTo(orderLine.GetQtyOrdered()) != 0)
                     {
