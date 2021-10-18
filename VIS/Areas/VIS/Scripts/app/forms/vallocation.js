@@ -2285,6 +2285,7 @@
                             }
 
                             //if any invoice is selected and we load another invoice from db than we have to check weather that invoice is already selected or not. if already selected tha skip that.
+                            var newData = []; /* contain on scroll data */
                             if (selectedInvoices.length > 0) {
                                 totalselectedinv = selectedInvoices.length;
                                 for (var i = 0; i < data.length; i++) {
@@ -2295,12 +2296,13 @@
 
                                     if (filterObj.length == 0) {
                                         data[i]["recid"] = selectedInvoices.length + i;
-                                        selectedInvoices.push(data[i]);
+                                        newData.push(data[i]);
                                     }
                                 }
-                                data = selectedInvoices;
+                                data = newData;
                                 // Clear Selected invoices array when we de-select the select all checkbox. work done for to hold all the selected invoices
                                 selectedInvoices = [];
+                                newData = [];
                             }
                             //end
 
@@ -3215,6 +3217,7 @@
                     if (data) {
 
                         //if any invoice is selected and we load another invoice from db than we have to check weather that invoice is already selected or not. if already selected tha skip that.
+                        var newData = [];/* contain on scroll data */
                         if (selectedInvoices.length > 0) {
                             totalselectedinv = selectedInvoices.length;
                             for (var i = 0; i < data.length; i++) {
@@ -3224,12 +3227,13 @@
 
                                 if (filterObj.length == 0) {
                                     data[i]["recid"] = selectedInvoices.length + i;
-                                    selectedInvoices.push(data[i]);
+                                    newData.push(data[i]);
                                 }
                             }
-                            data = selectedInvoices;
+                            data = newData;
                             // Clear Selected invoices array when we de-select the select all checkbox. work done for to hold all the selected invoices
                             selectedInvoices = [];
+                            newData = [];
                         }
                         //end
 
@@ -5828,7 +5832,8 @@
                         ConversionName: record.ConversionName,
                         DATEACCT: record.DATEACCT,
                         AD_Org_ID: record.AD_Org_ID,
-                        OrgName: record.OrgName
+                        OrgName: record.OrgName,
+                        PayName: record.PayName
                     };
                     selectedInvoices.push(rcdRow);
 
