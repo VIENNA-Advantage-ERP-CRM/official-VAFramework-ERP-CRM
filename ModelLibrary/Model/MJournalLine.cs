@@ -466,8 +466,8 @@ namespace VAdvantage.Model
             // set precision value based on cuurenncy define on GL Journal
             if (m_precision == 0)
             {
-                m_precision = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT stdprecision FROM c_currency WHERE c_currency_id = 
-                            ( SELECT c_currency_id FROM GL_journal WHERE GL_Journal_ID=" + GetGL_Journal_ID() + " )", null, Get_Trx()));
+                m_precision = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT StdPrecision FROM C_Currency WHERE C_Currency_ID = 
+                            ( SELECT C_Currency_ID FROM GL_Journal WHERE GL_Journal_ID=" + GetGL_Journal_ID() + " )", null, Get_Trx()));
 
             }
 

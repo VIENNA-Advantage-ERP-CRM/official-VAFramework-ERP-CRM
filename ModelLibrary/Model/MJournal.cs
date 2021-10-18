@@ -913,7 +913,12 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
 
             //Manish 18/7/2016 .. Because if line dimention (Amount) column sum is not equals to debit or credit value complete process will not done. 
             Decimal journalDRAndCR = 0;
-            string getlinevalues = "SELECT NVL(ElementType,null) AS ElementType,AmtSourceDr,AmtAcctCr,AmtSourceCr,GL_JournalLine_ID FROM GL_JournalLine where GL_Journal_ID=" + Get_Value("GL_Journal_ID");
+            string getlinevalues = @"SELECT gl.AmtSourceDr, gl.AmtSourceCr, gl.GL_JournalLine_ID, SUM(gld.amount) AS LineDimensionAmt  
+                                    FROM GL_JournalLine gl INNER JOIN 
+                                    GL_LineDimension gld ON gl.GL_JournalLine_ID = gld.GL_JournalLine_ID
+                                    where GL_Journal_ID =" + Get_Value("GL_Journal_ID") + @" 
+                                    GROUP BY gl.AmtSourceDr,
+                                     gl.AmtAcctCr, gl.AmtSourceCr, gl.GL_JournalLine_ID";
             DataSet dts = DB.ExecuteDataset(getlinevalues, null, null);
 
             if (dts != null && dts.Tables[0].Rows.Count > 0)
@@ -921,11 +926,6 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
                 for (int i = 0; i < dts.Tables[0].Rows.Count; i++)
                 {
                     journalDRAndCR = 0;
-
-                    if (dts.Tables[0].Rows[i]["ElementType"].ToString() == "")
-                    {
-                        continue;
-                    }
 
                     if (Util.GetValueOfDecimal(dts.Tables[0].Rows[i]["AmtSourceDr"]) > 0)
                     {
@@ -939,10 +939,7 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
                         }
                     }
 
-                    string getlineval = "SELECT SUM(amount) FROM gl_linedimension where GL_JournalLine_ID=" + Convert.ToInt32(dts.Tables[0].Rows[i]["GL_JournalLine_ID"]);
-                    Decimal count = Util.GetValueOfDecimal(DB.ExecuteScalar(getlineval));
-
-                    if (journalDRAndCR != count)
+                    if (journalDRAndCR != Util.GetValueOfDecimal(dts.Tables[0].Rows[i]["LineDimensionAmt"]))
                     {
                         m_processMsg = "@AmountNotMatch@";
                         return DocActionVariables.STATUS_INVALID;
