@@ -506,7 +506,10 @@ namespace VAdvantage.Model
                 else
                 {
                     count++;
-                    lineCount += toLine.CopyLinesFrom(fromLines[i], toLine.GetGL_JournalLine_ID(), typeCR);
+                    if (!String.IsNullOrEmpty(toLine.GetElementType()))
+                    {
+                        lineCount += toLine.CopyLinesFrom(fromLines[i], toLine.GetGL_JournalLine_ID(), typeCR);
+                    }
                 }
             }
 
