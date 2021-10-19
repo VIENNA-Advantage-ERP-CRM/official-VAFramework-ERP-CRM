@@ -2285,7 +2285,6 @@
                             }
 
                             //if any invoice is selected and we load another invoice from db than we have to check weather that invoice is already selected or not. if already selected tha skip that.
-                            var newData = []; /* contain on scroll data */
                             if (selectedInvoices.length > 0) {
                                 totalselectedinv = selectedInvoices.length;
                                 for (var i = 0; i < data.length; i++) {
@@ -2296,13 +2295,12 @@
 
                                     if (filterObj.length == 0) {
                                         data[i]["recid"] = selectedInvoices.length + i;
-                                        newData.push(data[i]);
+                                        selectedInvoices.push(data[i]);
                                     }
                                 }
-                                data = newData;
+                                data = selectedInvoices;
                                 // Clear Selected invoices array when we de-select the select all checkbox. work done for to hold all the selected invoices
                                 selectedInvoices = [];
-                                newData = [];
                             }
                             //end
 
@@ -3073,6 +3071,8 @@
                 success: function (result) {
                     var data = JSON.parse(result);
                     if (data) {
+                        var count = $gridPayment.records.length;
+                        var newData = [];
                         //if any payment is selected and we load another payment from db than we have to check weather that payment is already selected or not. if already selected tha skip that.
                         if (selectedPayments.length > 0) {
                             totalselectedpay = selectedPayments.length;
@@ -3082,13 +3082,14 @@
                                 });
 
                                 if (filterObj.length == 0) {
-                                    data[i]["recid"] = selectedPayments.length + i;
-                                    selectedPayments.push(data[i]);
+                                    data[i]["recid"] = count + i;
+                                    newData.push(data[i]);
                                 }
                             }
-                            data = selectedPayments;
+                            data = newData;
                             // Clear Selected payments array when we de-select the select all checkbox. work done for to hold all the selected payments
                             selectedPayments = [];
+                            newData = [];
                         }
                         //end
                         bindPaymentGridOnScroll(data);
@@ -3142,6 +3143,8 @@
                 success: function (result) {
                     var data = JSON.parse(result);
                     if (data) {
+                        var count = $gridCashline.records.length;
+                        var newData = [];
                         if (selectedCashlines.length > 0) {
                             totalselectedcash = selectedCashlines.length;
                             for (var i = 0; i < data.length; i++) {
@@ -3150,13 +3153,14 @@
                                 });
 
                                 if (filterObj.length == 0) {
-                                    data[i]["recid"] = selectedCashlines.length + i;
-                                    selectedCashlines.push(data[i]);
+                                    data[i]["recid"] = count + i;
+                                    newData.push(data[i]);
                                 }
                             }
-                            data = selectedCashlines;
+                            data = newData;
                             // Clear Selected invoices array when we de-select the select all checkbox. work done for to hold all the selected invoices
                             selectedCashlines = [];
+                            newData = [];
                         }
                         //end
                         bindCashlineGridOnScroll(data);
