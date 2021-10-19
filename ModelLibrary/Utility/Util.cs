@@ -327,7 +327,7 @@ namespace VAdvantage.Utility
         }
         public static bool GetValueOfBool(String value)
         {
-            bool? bValue =System.Convert.ToBoolean(value);
+            bool? bValue = System.Convert.ToBoolean(value);
 
             if (bValue != null)
             {
@@ -511,7 +511,7 @@ namespace VAdvantage.Utility
                 DateTime d2 = (DateTime)o2;
                 if (d1.Equals(d2))
                     return true;
-                else if (d1.Date == d2.Date && d1.TimeOfDay.Hours == d2.TimeOfDay.Hours && d1.TimeOfDay.Minutes==d2.TimeOfDay.Minutes && d1.TimeOfDay.Seconds == d2.TimeOfDay.Seconds)
+                else if (d1.Date == d2.Date && d1.TimeOfDay.Hours == d2.TimeOfDay.Hours && d1.TimeOfDay.Minutes == d2.TimeOfDay.Minutes && d1.TimeOfDay.Seconds == d2.TimeOfDay.Seconds)
                     return true;
 
             }
@@ -526,7 +526,7 @@ namespace VAdvantage.Utility
             return o1.Equals(o2) || o1.ToString() == o2.ToString();
         }
 
-      
+
         /// <summary>
         ///Replace String values.
         /// </summary>
@@ -569,27 +569,27 @@ namespace VAdvantage.Utility
 
 
 
-      /// <summary>
-      /// Find index of search character in str.
-	  /// This ignores content in () and 'texts'
-      /// </summary>
-      /// <param name="str">string</param>
-      /// <param name="search">search search character</param>
-      /// <returns>index or -1 if not found</returns>
+        /// <summary>
+        /// Find index of search character in str.
+        /// This ignores content in () and 'texts'
+        /// </summary>
+        /// <param name="str">string</param>
+        /// <param name="search">search search character</param>
+        /// <returns>index or -1 if not found</returns>
         public static int FindIndexOf(String str, char search)
         {
             return FindIndexOf(str, search, search);
         }   //  findIndexOf
 
 
-      /// <summary>
-      /// Find index of search characters in str.
-	  ///  This ignores content in () and 'texts'
-      /// </summary>
-      /// <param name="str">String</param>
-      /// <param name="search1">search1 first search character</param>
-      /// <param name="search2">second search character (or)</param>
-      /// <returns>index or -1 if not found</returns>
+        /// <summary>
+        /// Find index of search characters in str.
+        ///  This ignores content in () and 'texts'
+        /// </summary>
+        /// <param name="str">String</param>
+        /// <param name="search1">search1 first search character</param>
+        /// <param name="search2">second search character (or)</param>
+        /// <returns>index or -1 if not found</returns>
         public static int FindIndexOf(String str, char search1, char search2)
         {
             if (str == null)
@@ -618,13 +618,13 @@ namespace VAdvantage.Utility
         }
 
 
-      /// <summary>
-      /// Find index of search character in str.
-	 ///  This ignores content in () and 'texts'
-	  /// </summary>
-      /// <param name="str">string</param>
-      /// <param name="search">search charactor</param>
-      /// <returns>index or -1 if not found</returns>
+        /// <summary>
+        /// Find index of search character in str.
+        ///  This ignores content in () and 'texts'
+        /// </summary>
+        /// <param name="str">string</param>
+        /// <param name="search">search charactor</param>
+        /// <returns>index or -1 if not found</returns>
         public static int FindIndexOf(String str, String search)
         {
             if (str == null || search == null || search.Length == 0)

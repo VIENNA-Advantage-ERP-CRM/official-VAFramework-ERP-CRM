@@ -13,6 +13,7 @@ using VAdvantage.Model;
 using System.Data;
 using VAdvantage.Logging;
 using VAdvantage.Utility;
+using VAdvantage.Classes;
 
 namespace VAdvantage.Controller
 {
@@ -109,7 +110,7 @@ namespace VAdvantage.Controller
 
         /****   Is Header Panel   ***/
         public bool IsHeaderPanel = false;
-        
+
         /****   Is Header Panel not show in multi row  ***/
         public bool HPanelNotShowInMultiRow = false;
 
@@ -151,6 +152,13 @@ namespace VAdvantage.Controller
 
         // Maintain versions on table level // for Master data Versioning
         public bool IsMaintainVersions = false;
+
+        /** Tab Layout		*/
+        public string TabLayout = "N";
+
+        public List<CardViewData> Cards = new List<CardViewData>();
+
+        public int DefaultCardID = 0;
 
         public List<GridFieldVO> GetFields()
         {
@@ -217,6 +225,9 @@ namespace VAdvantage.Controller
                 }
 
                 CreateTabPanels(vo);
+
+                CreateCardPanels(vo);
+
                 if (vo.panels != null && vo.panels.Count > 0)
                 {
                     vo.HasPanels = true;
@@ -487,7 +498,7 @@ namespace VAdvantage.Controller
                 vo.IsHeaderPanel = dr["Isheaderpanel"].Equals("Y");
 
                 /***************Worked For Header Panel By Mandeep * ****************/
-                vo.HPanelNotShowInMultiRow=dr["HPanelNotShowInMultiRow"].Equals("Y");
+                vo.HPanelNotShowInMultiRow = dr["HPanelNotShowInMultiRow"].Equals("Y");
 
                 vo.AD_HeaderLayout_ID = Util.GetValueOfInt(dr["AD_HeaderLayout_ID"]);
 
@@ -510,6 +521,7 @@ namespace VAdvantage.Controller
 
                 vo.IsMaintainVersions = Utility.Util.GetValueOfString(dr["IsMaintainVersions"]).Equals("Y");
 
+                vo.TabLayout = Utility.Util.GetValueOfString(dr["TabLayout"]);
             }
             catch (System.Exception ex)
             {
@@ -617,55 +629,49 @@ namespace VAdvantage.Controller
         {
             if (mTabVO.AD_HeaderLayout_ID > 0)
             {
-                DataSet dsGridLayout = DataBase.DB.ExecuteDataset("SELECT * FROM AD_GridLayout  WHERE IsActive='Y' AND AD_HeaderLayout_ID=" + mTabVO.AD_HeaderLayout_ID + " ORDER BY SeqNo Asc");
-                if (dsGridLayout != null && dsGridLayout.Tables[0].Rows.Count > 0)
+                mTabVO.HeaderItems = GetHeaderPanelItems(mTabVO.AD_HeaderLayout_ID);
+            }
+        }
+        public static List<HeaderPanelGrid> GetHeaderPanelItems(int headerLayoutID)
+        {
+            CommonFunctions fun = new CommonFunctions();
+            List<HeaderPanelGrid> hitems = fun.GetHeaderPanelItems(headerLayoutID);
+            return hitems;
+
+        }
+        private static void CreateCardPanels(GridTabVO mTabVO)
+        {
+            DataSet ds = DataBase.DB.ExecuteDataset(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name, AD_CardView.IsDefault,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,ad_headerlayout.backgroundcolor,ad_headerlayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
+                        on AD_CardView.AD_HeaderLayout_ID = AD_HeaderLayout.AD_HeaderLayout_ID WHERE AD_CardView.AD_Tab_ID =" + mTabVO.AD_Tab_ID + " AND AD_CardView.IsActive='Y' ORDER BY AD_CardView.Name ASC");
+
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    mTabVO.HeaderItems = new List<HeaderPanelGrid>();
-
-                    foreach (DataRow dr in dsGridLayout.Tables[0].Rows)
+                    CardViewData card = new CardViewData()
                     {
-                        HeaderPanelGrid hGrid = new HeaderPanelGrid
-                        {
+                        AD_CardView_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_CardView_ID"]),
+                        IsDefault = ds.Tables[0].Rows[i]["IsDefault"] == "Y",
+                        Name = Util.GetValueOfString(ds.Tables[0].Rows[i]["Name"]),
+                        AD_HeaderLayout_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_HeaderLayout_ID"]),
+                        FieldGroupID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_Field_ID"]),
+                        Style = Util.GetValueOfString(ds.Tables[0].Rows[i]["backgroundcolor"]),
+                        Padding = Util.GetValueOfString(ds.Tables[0].Rows[i]["Padding"])
 
-                            HeaderBackColor = Utility.Util.GetValueOfString(dr["BackgroundColor"]),
+                    };
+                    mTabVO.Cards.Add(card);
+                    if (card.IsDefault)
+                    {
+                        mTabVO.DefaultCardID = card.AD_CardView_ID;
 
-                            HeaderName = Utility.Util.GetValueOfString(dr["Name"]),
 
-                            HeaderTotalColumn = Utility.Util.GetValueOfInt(dr["TotalColumns"]),
+                        card.IncludedCols = new List<int>();
+                        card.Conditions = new List<CardViewCondition>();
+                        VAdvantage.Classes.CommonFunctions cFun = new VAdvantage.Classes.CommonFunctions();
+                        cFun.GetCardViewDetails(card);
 
-                            HeaderTotalRow = Utility.Util.GetValueOfInt(dr["TotalRows"]),
+                        card.HeaderItems = GetHeaderPanelItems(mTabVO.AD_HeaderLayout_ID);
 
-                            HeaderPadding = Utility.Util.GetValueOfString(dr["Padding"]),
-
-                            AD_GridLayout_ID = Utility.Util.GetValueOfInt(dr["AD_GridLayout_ID"]),
-                        };
-
-                        DataSet ds = DataBase.DB.ExecuteDataset("SELECT AlignItems,    ColumnSpan,   Justifyitems,   Rowspan,   Seqno,   Startcolumn,   Startrow," +
-                            " AD_GridLayoutItems_ID,BackgroundColor, FontColor, FontSize,padding, ColumnSql FROM Ad_Gridlayoutitems WHERE IsActive ='Y' AND AD_GridLayout_ID=" + hGrid.AD_GridLayout_ID + " ORDER BY Seqno ");
-                        if (ds != null && ds.Tables[0].Rows.Count > 0)
-                        {
-                            hGrid.HeaderItems = new Dictionary<int, object>();
-                            foreach (DataRow row in ds.Tables[0].Rows)
-                            {
-                                hGrid.HeaderItems[Convert.ToInt32(row["SeqNo"])] = new HeaderPanelItemsVO
-                                {
-                                    AD_GridLayoutItems_ID = Convert.ToInt32(row["AD_GridLayoutItems_ID"]),
-                                    ColumnSpan = Convert.ToInt32(row["ColumnSpan"]),
-                                    AlignItems = Convert.ToString(row["AlignItems"]),
-                                    JustifyItems = Convert.ToString(row["JustifyItems"]),
-                                    RowSpan = Convert.ToInt32(row["RowSpan"]),
-                                    SeqNo = Convert.ToInt32(row["SeqNo"]),
-                                    StartColumn = Convert.ToInt32(row["StartColumn"]),
-                                    StartRow = Convert.ToInt32(row["StartRow"]),
-                                    BackgroundColor = Convert.ToString(row["BackgroundColor"]),
-                                    FontColor = Convert.ToString(row["FontColor"]),
-                                    FontSize = Convert.ToString(row["FontSize"]),
-                                    Padding = Convert.ToString(row["Padding"]),
-                                    ColSql = Convert.ToString(row["ColumnSql"])
-                                };
-                            }
-                        }
-                        mTabVO.HeaderItems.Add(hGrid);
                     }
                 }
             }

@@ -2429,6 +2429,12 @@ display:none !important;
     background-color: rgba(var(--v-c-primary), 1);
 }
 
+.vis-grid-row-td-icon-center {
+    display: flex;
+    justify-content: center;
+    padding: 3px !important;
+}
+
 /*.vis-menu-heading-divider-left,
 .vis-menu-heading-divider-right {
     flex: 1;

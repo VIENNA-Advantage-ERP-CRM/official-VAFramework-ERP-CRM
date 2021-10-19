@@ -507,9 +507,9 @@
                     }
                     //return '<input id="rng' + index + '" type="range" min="' + minVal + '" max="' + maxVal + '" disabled="disabled" value="' + val + '" /><div style="position: absolute"><output class="vis-grid_progress_output"> ' + val+'</output></div>';
 
-                    return '<div class="vis-progress-gridbar" style="'+style+'">' +
-                        '<div class="vis-progress-percent-bar" style = "width:' + (val||0) + '%;'+style+'" ></div>' +
-                        '<div class="vis-progress-gridoutput" > ' + (val||'') + '</div></div >';
+                    return '<div class="vis-progress-gridbar" style="' + style + '">' +
+                        '<div class="vis-progress-percent-bar" style = "width:' + (val || 0) + '%;' + style + '" ></div>' +
+                        '<div class="vis-progress-gridoutput" > ' + (val || '') + '</div></div >';
                 }
             }
             else if (VIS.DisplayType.IsNumeric(displayType)) {
@@ -889,21 +889,20 @@
 
                 oColumn.render = function (record, index, colIndex) {
                     var f = oColumns[colIndex].field;
-                    var val = record[f];
+                    var val = record["imgurl"];
                     if (record.changes && typeof record.changes[f] != 'undefined') {
                         val = record.changes[f];
                     }
 
                     if (!val) {
-                        val = "-";
+                        val ='<div class="vis-grid-row-td-icon-center">-</div>';
                         return val;
                     }
-                    return VIS.Msg.getElement1('AD_Image_ID') + '-' + val;
-                    //var img = $('img').error(function () {
-                    //    $(this).attr("src", VIS.Application.contextUrl + "/Images/Thumb32x32/" + val + ".jpeg ");
-                    //}).attr("src", VIS.Application.contextUrl + "/Images/Thumb32x32/" + val+".png ");
-
-                    //return img.html();
+                    //return VIS.Msg.getElement1('AD_Image_ID') + '-' + val;
+                    val = val.replace("Images/", "Images/Thumb32x32/");
+                    //var img = $('<img>').attr("src", VIS.Application.contextUrl + val);
+                    var img = '<div class="vis-grid-row-td-icon-center"><div class="vis-grid-row-td-icon"><img src="' + VIS.Application.contextUrl + val +'"></div></div>';
+                    return img;
                 }
             }
 

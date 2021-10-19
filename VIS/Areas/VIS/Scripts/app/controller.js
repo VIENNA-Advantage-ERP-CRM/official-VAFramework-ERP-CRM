@@ -3636,6 +3636,10 @@
                 select.append(VIS.Env.parseContext(this.ctx, gt._windowNo, selectSql, false));
             }
 
+            if (field.getDisplayType() == VIS.DisplayType.Image) {
+                select.append(", (SELECT ImageURL from AD_Image img where img.AD_Image_ID=" + gt._tableName+"."+ selectSql+") as imgUrl");
+            }
+
             if (field.getLookup() != null && field.getLookup() instanceof VIS.MLookup) {
                 var lInfo = field.getLookup().info;
                 if (lInfo.displayColSubQ && lInfo.displayColSubQ != "" && gt._tableName.toLowerCase() !=lInfo.tableName.toLowerCase()) {
@@ -6564,6 +6568,14 @@
         }
         this.forcefirepropchange = this.inserting || this.vo.displayType == VIS.DisplayType.YesNo
     };
+
+    GridField.prototype.setCardViewSeqNo = function (seqNo) {
+        this.cardViewSeq = seqNo;
+    }
+
+    GridField.prototype.getCardViewSeqNo = function () {
+      return  this.cardViewSeq;
+    }
 
     GridField.prototype.updateContext = function () {
 
