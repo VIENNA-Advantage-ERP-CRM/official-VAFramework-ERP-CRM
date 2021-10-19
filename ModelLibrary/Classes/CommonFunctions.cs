@@ -26,6 +26,7 @@ using System.Configuration;
 using System.Data;
 using VAdvantage.Utility;
 using VAdvantage.Model;
+using VAdvantage.Controller;
 
 namespace VAdvantage.Classes
 {
@@ -190,7 +191,7 @@ namespace VAdvantage.Classes
 
                 return nextSeqID;
             }
-            catch 
+            catch
             {
                 return 0;
             }
@@ -255,7 +256,7 @@ namespace VAdvantage.Classes
             return Utility.Util.GetValueOfInt(ExecuteQuery.ExecuteScalar(sqlQuery).ToString());
         }
 
-      
+
 
         //public static void InsertError(string strExName, string strExMessage)
         //{
@@ -283,7 +284,7 @@ namespace VAdvantage.Classes
             return int.Parse(ExecuteQuery.ExecuteScalar(strQuery));
         }
 
-       
+
         /// <summary>
         /// Get Root Node
         /// </summary>
@@ -347,14 +348,14 @@ namespace VAdvantage.Classes
         /// Set The cursors
         /// </summary>
         /// <param name="curType"></param>
-       
+
 
         /// <summary>
         /// to set shortcut key of menu items
         /// </summary>
         /// <param name="objMenuStrip">object of menustrip</param>
         /// <returns></returns>
-      
+
 
 
         ///// <summary>
@@ -528,8 +529,8 @@ namespace VAdvantage.Classes
 
         //}
 
-   
-   
+
+
 
 
         public static System.Drawing.Color GetBackGroundColor(bool value)
@@ -764,7 +765,7 @@ namespace VAdvantage.Classes
         {
             if (po == null || text.IndexOf("@") == -1)
                 return text;
-            
+
             String inStr = text;
             String token;
             StringBuilder outStr = new StringBuilder();
@@ -921,5 +922,132 @@ namespace VAdvantage.Classes
             }
             return value.ToString();
         }
+
+        public void GetCardViewDetails(CardViewData cv)
+        {
+            string sql = "";
+            IDataReader dr = null;
+            int AD_CV_ID = cv.AD_CardView_ID;
+            if (AD_CV_ID > 0)
+            {
+                sql = "SELECT AD_Field_ID, SeqNo FROM AD_CardView_Column WHERE IsActive='Y' AND AD_CardView_ID = " + AD_CV_ID + " ORDER BY SeqNo";
+                dr = DB.ExecuteReader(sql);
+                while (dr.Read())
+                {
+                    cv.IncludedCols.Add(
+                        new CardViewCol()
+                        {
+                            AD_Field_ID = VAdvantage.Utility.Util.GetValueOfInt(dr[0]),
+                            SeqNo = VAdvantage.Utility.Util.GetValueOfInt(dr[1])
+                        });
+                }
+                dr.Close();
+            }
+            if (AD_CV_ID > 0)
+            {
+                sql = "SELECT ConditionValue,Color  FROM AD_CardView_Condition WHERE IsActive='Y' AND AD_CardView_ID = " + AD_CV_ID + " ORDER BY AD_CardView_Condition_ID ";
+                dr = DB.ExecuteReader(sql);
+                while (dr.Read())
+                {
+                    var cdc = new CardViewCondition();
+                    cdc.Color = dr[1].ToString();
+                    cdc.ConditionValue = dr[0].ToString();
+                    cv.Conditions.Add(cdc);
+                }
+                dr.Close();
+            }
+        }
+
+        public List<HeaderPanelGrid> GetHeaderPanelItems(int headerLayoutID)
+        {
+            List<HeaderPanelGrid> hitems = new List<HeaderPanelGrid>();
+            DataSet dsGridLayout = DataBase.DB.ExecuteDataset("SELECT * FROM AD_GridLayout  WHERE IsActive='Y' AND AD_HeaderLayout_ID=" + headerLayoutID + " ORDER BY SeqNo Asc");
+            if (dsGridLayout != null && dsGridLayout.Tables[0].Rows.Count > 0)
+            {
+                hitems = new List<HeaderPanelGrid>();
+
+                foreach (DataRow dr in dsGridLayout.Tables[0].Rows)
+                {
+                    HeaderPanelGrid hGrid = new HeaderPanelGrid
+                    {
+
+                        HeaderBackColor = Utility.Util.GetValueOfString(dr["BackgroundColor"]),
+
+                        HeaderName = Utility.Util.GetValueOfString(dr["Name"]),
+
+                        HeaderTotalColumn = Utility.Util.GetValueOfInt(dr["TotalColumns"]),
+
+                        HeaderTotalRow = Utility.Util.GetValueOfInt(dr["TotalRows"]),
+
+                        HeaderPadding = Utility.Util.GetValueOfString(dr["Padding"]),
+
+                        AD_GridLayout_ID = Utility.Util.GetValueOfInt(dr["AD_GridLayout_ID"]),
+                    };
+
+                    DataSet ds = DataBase.DB.ExecuteDataset("SELECT AlignItems,    ColumnSpan,   Justifyitems,   Rowspan,   Seqno,   Startcolumn,   Startrow," +
+                        " AD_GridLayoutItems_ID,BackgroundColor, FontColor, FontSize,padding, ColumnSql FROM Ad_Gridlayoutitems WHERE IsActive ='Y' AND AD_GridLayout_ID=" + hGrid.AD_GridLayout_ID + " ORDER BY Seqno ");
+                    if (ds != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        hGrid.HeaderItems = new Dictionary<int, object>();
+                        foreach (DataRow row in ds.Tables[0].Rows)
+                        {
+                            hGrid.HeaderItems[Convert.ToInt32(row["SeqNo"])] = new HeaderPanelItemsVO
+                            {
+                                AD_GridLayoutItems_ID = Convert.ToInt32(row["AD_GridLayoutItems_ID"]),
+                                ColumnSpan = Convert.ToInt32(row["ColumnSpan"]),
+                                AlignItems = Convert.ToString(row["AlignItems"]),
+                                JustifyItems = Convert.ToString(row["JustifyItems"]),
+                                RowSpan = Convert.ToInt32(row["RowSpan"]),
+                                SeqNo = Convert.ToInt32(row["SeqNo"]),
+                                StartColumn = Convert.ToInt32(row["StartColumn"]),
+                                StartRow = Convert.ToInt32(row["StartRow"]),
+                                BackgroundColor = Convert.ToString(row["BackgroundColor"]),
+                                FontColor = Convert.ToString(row["FontColor"]),
+                                FontSize = Convert.ToString(row["FontSize"]),
+                                Padding = Convert.ToString(row["Padding"]),
+                                ColSql = Convert.ToString(row["ColumnSql"])
+                            };
+                        }
+                    }
+                    hitems.Add(hGrid);
+                }
+            }
+            return hitems;
+        }
+    }
+
+    public class CardViewData
+    {
+        public int FieldGroupID { get; set; }
+        public List<CardViewCol> IncludedCols { get; set; }
+        public List<CardViewCondition> Conditions { get; set; }
+        public int AD_CardView_ID { get; set; }
+
+        public bool IsDefault { get; set; }
+
+        public string Name { get; set; }
+        public int AD_HeaderLayout_ID { get; set; }
+        public string Style { get; set; }
+        public string Padding { get; set; }
+
+        public List<HeaderPanelGrid> HeaderItems { get; set; }
+    }
+
+    public class CardViewCondition
+    {
+        public string Color { get; set; }
+        public string ConditionValue
+        {
+            get;
+            set;
+        }
+        public string FColor { get; set; }
+    }
+
+    public class CardViewCol
+    {
+        public int AD_Field_ID { get; set; }
+
+        public int SeqNo { get; set; }
     }
 }

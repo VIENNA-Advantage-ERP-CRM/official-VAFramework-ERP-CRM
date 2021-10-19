@@ -14,7 +14,7 @@ using VAdvantage.Process;
 using VAdvantage.Logging;
 using VIS.DataContracts;
 using VIS.Classes;
-
+using VAdvantage.Controller;
 
 namespace VIS.Helpers
 {
@@ -2957,8 +2957,9 @@ namespace VIS.Helpers
 
             int AD_CV_ID = -1;
 
-            string sql = "SELECT AD_CardView_ID,AD_Field_ID FROM AD_CardView WHERE AD_Window_ID = " + AD_Window_ID + " AND AD_Tab_ID = " + AD_Tab_ID + " AND AD_USER_ID=" + ctx.GetAD_User_ID()
-                            + " AND AD_Client_ID = " + ctx.GetAD_Client_ID() + " ORDER BY AD_USER_ID  ";
+            string sql = @"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name, AD_CardView.IsDefault,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,ad_headerlayout.backgroundcolor,ad_headerlayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
+                        on AD_CardView.AD_HeaderLayout_ID = AD_HeaderLayout.AD_HeaderLayout_ID WHERE AD_CardView.AD_Window_ID = " + AD_Window_ID + " AND AD_CardView.AD_Tab_ID = " + AD_Tab_ID + " AND AD_CardView.AD_USER_ID=" + ctx.GetAD_User_ID()
+                            + " AND AD_CardView.AD_Client_ID = " + ctx.GetAD_Client_ID() + " ORDER BY AD_CardView.AD_USER_ID  ";
             IDataReader dr = null;
             try
             {
@@ -2966,13 +2967,16 @@ namespace VIS.Helpers
                 if (dr.Read())
                 {
                     AD_CV_ID = Convert.ToInt32(dr[0]);
-                    cv.FieldGroupID = VAdvantage.Utility.Util.GetValueOfInt(dr[1]);
+                    cv.FieldGroupID = VAdvantage.Utility.Util.GetValueOfInt(dr["AD_Field_ID"]);
                     cv.AD_CardView_ID = AD_CV_ID;
+                    cv.AD_HeaderLayout_ID = VAdvantage.Utility.Util.GetValueOfInt(dr["AD_HeaderLayout_ID"]);
+                    cv.Style = VAdvantage.Utility.Util.GetValueOfString(dr["backgroundcolor"]);
+                    cv.Padding = VAdvantage.Utility.Util.GetValueOfString(dr["Padding"]);
                 }
                 else
                 {
                     dr.Close();
-                    sql = "SELECT c.AD_CardView_ID, c.AD_Field_ID  FROM AD_CardView c INNER JOIN AD_CardView_Role r ON r.AD_Cardview_ID = r.AD_CardView_ID WHERE c.AD_Window_ID=" + AD_Window_ID + " AND "
+                    sql = "SELECT c.AD_CardView_ID, c.AD_Field_ID,AD_HeaderLayout_ID  FROM AD_CardView c INNER JOIN AD_CardView_Role r ON r.AD_Cardview_ID = r.AD_CardView_ID WHERE c.AD_Window_ID=" + AD_Window_ID + " AND "
                                  + " c.AD_Tab_ID=" + AD_Tab_ID + " AND r.AD_Role_ID = " + ctx.GetAD_Role_ID() + " AND c.AD_User_ID IS NULL";
                     dr = DB.ExecuteReader(sql);
                     if (dr.Read())
@@ -2980,33 +2984,16 @@ namespace VIS.Helpers
                         AD_CV_ID = Convert.ToInt32(dr[0]);
                         cv.FieldGroupID = VAdvantage.Utility.Util.GetValueOfInt(dr[1]);
                         cv.AD_CardView_ID = AD_CV_ID;
+                        cv.AD_HeaderLayout_ID = VAdvantage.Utility.Util.GetValueOfInt(dr[2]);
                     }
                 }
                 dr.Close();
 
-                if (AD_CV_ID > 0)
-                {
-                    sql = "SELECT AD_Field_ID FROM AD_CardView_Column WHERE IsActive='Y' AND AD_CardView_ID = " + AD_CV_ID + " ORDER BY SeqNo";
-                    dr = DB.ExecuteReader(sql);
-                    while (dr.Read())
-                    {
-                        cv.IncludedCols.Add(VAdvantage.Utility.Util.GetValueOfInt(dr[0]));
-                    }
-                    dr.Close();
-                }
-                if (AD_CV_ID > 0)
-                {
-                    sql = "SELECT ConditionValue,Color  FROM AD_CardView_Condition WHERE IsActive='Y' AND AD_CardView_ID = " + AD_CV_ID + " ORDER BY AD_CardView_Condition_ID ";
-                    dr = DB.ExecuteReader(sql);
-                    while (dr.Read())
-                    {
-                        var cdc = new CardViewCondition();
-                        cdc.Color = dr[1].ToString();
-                        cdc.ConditionValue = dr[0].ToString();
-                        cv.Conditions.Add(cdc);
-                    }
-                    dr.Close();
-                }
+                VAdvantage.Classes.CommonFunctions cFun = new VAdvantage.Classes.CommonFunctions();
+                cFun.GetCardViewDetails(cv);
+
+                cv.HeaderItems = cFun.GetHeaderPanelItems(cv.AD_HeaderLayout_ID);
+
             }
             catch
             {
