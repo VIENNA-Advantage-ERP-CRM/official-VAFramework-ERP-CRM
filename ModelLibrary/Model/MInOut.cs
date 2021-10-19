@@ -3186,7 +3186,7 @@ namespace VAdvantage.Model
 
                         Matchpo.SetIsSOTrx(IsSOTrx());
                         Matchpo.SetIsReturnTrx(IsReturnTrx());
-                        if (dsAvailableStock != null)
+                        if (dsAvailableStock != null && dsAvailableStock.Tables[0].Rows.Count>0)
                         {
                             Matchpo.SetAvailableStock(Util.GetValueOfDecimal(
                                 dsAvailableStock.Tables[0].Select("M_InOutLine_ID = " + sLine.GetM_InOutLine_ID())[0]["QtyOnHand"]));
