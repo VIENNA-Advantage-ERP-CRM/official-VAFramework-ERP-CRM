@@ -3218,6 +3218,7 @@
 
                         //if any invoice is selected and we load another invoice from db than we have to check weather that invoice is already selected or not. if already selected tha skip that.
                         var newData = [];/* contain on scroll data */
+                        var count = $gridInvoice.records.length;
                         if (selectedInvoices.length > 0) {
                             totalselectedinv = selectedInvoices.length;
                             for (var i = 0; i < data.length; i++) {
@@ -3226,7 +3227,7 @@
                                 });
 
                                 if (filterObj.length == 0) {
-                                    data[i]["recid"] = selectedInvoices.length + i;
+                                    data[i]["recid"] = count + i;
                                     newData.push(data[i]);
                                 }
                             }
@@ -5599,7 +5600,8 @@
                             ConversionName: record.ConversionName,
                             DATEACCT: record.DATEACCT,
                             AD_Org_ID: record.AD_Org_ID,
-                            OrgName: record.OrgName
+                            OrgName: record.OrgName,
+                            PayName: record.PayName
                         };
                         selectedPayments.push(rcdRow);
 
