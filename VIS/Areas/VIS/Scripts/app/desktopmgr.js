@@ -571,7 +571,7 @@
             setAndLoadHomePage(); //Home Page
             historyMgr.restoreHistory(); //Restore History of App if any
             navigationInit();
-            window.addEventListener("DOMContentLoaded", startToastr, false);
+            window.addEventListener("DOMContentLoaded", VIS.sseManager.start, false);
         }
 
         /*
@@ -1524,15 +1524,15 @@
     /**
     * Start Server sent events
     */
-    var startToastr = function () {
-        var source = new EventSource('JsonData/MsgForToastr?varificationToken=' + $("#vis_antiForgeryToken").val());
-        source.onmessage = function (e) {
-            var returnedItem = JSON.parse(e.data);
-            if (returnedItem.message && returnedItem.message.length > 0) {
-                toastr.success(returnedItem.message, '', { timeOut: 4000, "positionClass": "toast-top-center", "closeButton": true, });
-            }
-        };
-    };
+    //var startToastr = function () {
+    //    var source = new EventSource('JsonData/MsgForToastr?varificationToken=' + $("#vis_antiForgeryToken").val());
+    //    source.onmessage = function (e) {
+    //        var returnedItem = JSON.parse(e.data);
+    //        if (returnedItem.message && returnedItem.message.length > 0) {
+    //            toastr.success(returnedItem.message, '', { timeOut: 4000, "positionClass": "toast-top-center", "closeButton": true, });
+    //        }
+    //    };
+    //};
 
 
 

@@ -1920,6 +1920,7 @@
     <Compile Include="Process\XmlHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PushNotif\PushNotification.cs" />
+    <Compile Include="PushNotif\SSEManager.cs" />
     <Compile Include="Report\FinBalance.cs" />
     <Compile Include="Report\FinReport.cs" />
     <Compile Include="Report\FinReportPeriod.cs" />

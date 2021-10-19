@@ -290,7 +290,10 @@ namespace VAdvantage.DataBase
                     index = attributes.IndexOf("Password=", StringComparison.OrdinalIgnoreCase);
                     Db_pwd = Substring(attributes, index + 9, attributes.IndexOf(";", index));
                     index = attributes.IndexOf("SearchPath=", StringComparison.OrdinalIgnoreCase);
-                    Db_searchPath = Substring(attributes, index + 11, attributes.IndexOf(";", index));
+                    if (index > 0)
+                    {
+                        Db_searchPath = Substring(attributes, index + 11, attributes.IndexOf(";", index));
+                    }
                     Db_name = attributes.Substring(attributes.IndexOf("Database=", StringComparison.OrdinalIgnoreCase) + 9);
                 }
             }
