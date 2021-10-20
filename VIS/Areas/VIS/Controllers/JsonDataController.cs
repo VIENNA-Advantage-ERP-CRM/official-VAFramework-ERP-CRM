@@ -1125,12 +1125,18 @@ namespace VIS.Controllers
 
 
         #region Toaster notification
+        [Obsolete]
         [NonAction]
         public static void AddMessageForToastr(string key, string value)
         {
-            lock (_object)
+            int val;
+            if (int.TryParse(key,out val))
             {
-                toastrMessage[key] = value;
+                ModelLibrary.PushNotif.SSEManager.Get().AddMessage(val, value);
+           // lock (_object)
+              //  {
+               //     toastrMessage[key] = value;
+               // }
             }
         }
 
