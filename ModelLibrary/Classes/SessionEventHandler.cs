@@ -19,6 +19,7 @@ namespace VAdvantage.Classes
                 {
                     s.Logout();
                 }
+                ModelLibrary.PushNotif.SessionManager.Get().RemoveSession(ctx.GetAD_Session_ID());
               }
             catch
             {
