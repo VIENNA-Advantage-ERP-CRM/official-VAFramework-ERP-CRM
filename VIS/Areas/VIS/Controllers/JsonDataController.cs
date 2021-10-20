@@ -1125,18 +1125,25 @@ namespace VIS.Controllers
 
 
         #region Toaster notification
-        [Obsolete]
+       [Obsolete]
         [NonAction]
         public static void AddMessageForToastr(string key, string value)
         {
-            int val;
-            if (int.TryParse(key,out val))
+            try
             {
-                ModelLibrary.PushNotif.SSEManager.Get().AddMessage(val, value);
-           // lock (_object)
-              //  {
-               //     toastrMessage[key] = value;
-               // }
+                if (key.Contains("_"))
+                {
+                    key = key.Substring(key.IndexOf("_") + 1);
+                }
+                int val = 0;
+                if (int.TryParse(key, out val))
+                {
+                    ModelLibrary.PushNotif.SSEManager.Get().AddMessage(val, value);
+                }
+            }
+            catch
+            {
+                // blank
             }
         }
 
@@ -1149,7 +1156,7 @@ namespace VIS.Controllers
                 string sessionID = ctx.GetAD_Session_ID().ToString();
                 JavaScriptSerializer ser = new JavaScriptSerializer();
 
-                //IEnumerable<KeyValuePair<string, string>> newDic = toastrMessage.Where(kvp => kvp.Key.Contains(sessionID));
+                //IEnumerable<KeyValuePair<string, string>> Dic = toastrMessage.Where(kvp => kvp.Key.Contains(sessionID));
                 var newDic = ModelLibrary.PushNotif.SSEManager.Get().GetMessages(ctx.GetAD_Session_ID());
                 if (newDic != null && newDic.Count() > 0)
                 {
