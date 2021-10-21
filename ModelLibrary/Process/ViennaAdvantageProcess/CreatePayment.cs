@@ -43,7 +43,6 @@ namespace ViennaAdvantage.Process
         {
             try
             {
-
                 if (C_Order_ID < 1)
                 {
                     return "Failed";
@@ -61,12 +60,16 @@ namespace ViennaAdvantage.Process
                 payment.SetAD_Client_ID(GetCtx().GetAD_Client_ID());
                 payment.SetAD_Org_ID(GetCtx().GetAD_Org_ID());
                 //payment.SetDocumentNo(MS
-                payment.SetC_BankAccount_ID(Util.GetValueOfInt(DB.ExecuteScalar("Select c_bankAccount_ID from c_bankaccount where isdefault='Y' and isactive='Y'")));
+                payment.SetC_BankAccount_ID(Util.GetValueOfInt(DB.ExecuteScalar("SELECT c_bankAccount_ID FROM c_bankaccount WHERE isdefault='Y' AND isactive='Y'")));
                 payment.SetDateTrx(DateTime.Now);
                 payment.SetDateAcct(DateTime.Now);
                 payment.SetC_BPartner_ID(order.GetC_BPartner_ID());
+                //(1052) Set Business Partner Location
+                payment.SetC_BPartner_Location_ID(order.GetC_BPartner_Location_ID());
                 payment.SetPayAmt(order.GetGrandTotal());
                 payment.SetC_Currency_ID(order.GetC_Currency_ID());
+                //(1052) Set Currency Type
+                payment.SetC_ConversionType_ID(order.GetC_ConversionType_ID());              
                 payment.SetTenderType("K");
                 payment.SetDocStatus("IP");
                 C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_DocType_ID From C_DocType WHERE isactive='Y' AND DocBaseType = 'ARR' AND AD_Client_ID = " + order.GetAD_Client_ID() + " ORDER BY IsDefault DESC"));
@@ -79,7 +82,8 @@ namespace ViennaAdvantage.Process
                 else if (baseType.Equals("WI"))//OnCreditOrder
                 {
                     payment.SetC_Invoice_ID(order.GetC_Invoice_ID());
-
+                    //(1052) set Invoice PaySchedule
+                    payment.SetC_InvoicePaySchedule_ID(Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_InvoicePaySchedule_ID FROM C_InvoicePaySchedule WHERE C_Invoice_ID = " + order.GetC_Invoice_ID())));
                 }
                 payment.Save();
 
