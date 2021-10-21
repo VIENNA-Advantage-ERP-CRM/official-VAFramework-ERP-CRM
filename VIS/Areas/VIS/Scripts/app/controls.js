@@ -2244,7 +2244,7 @@
             max += 'T24:00:00';
         }
 
-        var $ctrl = $('<input autocomplete="off">', {
+        var $ctrl = $('<input>', {
             'type': type, name: columnName,
         });
 
@@ -2417,7 +2417,8 @@
 
         var btnCount = 0;
         //create ui
-        var $ctrl = $('<input autocomplete="off">', { type: 'text', name: columnName });
+        var $ctrl = $('<input>', { type: 'text', name: columnName });
+        $ctrl.attr('autocomplete', 'off');
 
         var $btnSearch = $('<button  tabindex="-1" class="input-group-text"><i  tabindex="-1" class="' + src + '"></i></button>');
         btnCount += 1;
@@ -3719,7 +3720,8 @@
 
         //Init Control
 
-        var $ctrl = $('<input autocomplete="off">', { type: 'number', step: 'any', name: columnName, maxlength: length, 'data-type': 'int' });
+        var $ctrl = $('<input>', { type: 'number', step: 'any', name: columnName, maxlength: length, 'data-type': 'int' });
+        $ctrl.attr('autocomplete', 'off');
 
 
         //Call base class
@@ -3993,7 +3995,7 @@
         var displayType = VIS.DisplayType.Integer;
         var length = fieldLength;
         //Init Control
-        var $ctrl = $('<input autocomplete="off">', { type: 'text', name: columnName, maxlength: length, 'data-type': 'int' });
+        var $ctrl = $('<input>', { type: 'text', name: columnName, maxlength: length, 'data-type': 'int' });
 
         //Call base class
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory);
@@ -4652,7 +4654,7 @@
 
 
         //create ui
-        var $ctrl = $('<input autocomplete="off" >', { type: 'text', name: columnName });
+        var $ctrl = $('<input>', { type: 'text', name: columnName });
         var $btn = $('<button class="input-group-text"><i class="' + src + '"></i></button>');
         var btnCount = 1;
 
@@ -5283,7 +5285,7 @@
         var LoadIntoDatabase = 'LoadIntoDatabase';
 
         this.data = null;
-        var inputCtrl = $("<input autocomplete='off' type='file' class='file' name='file'/>");
+        var inputCtrl = $("<input type='file' class='file' name='file'/>");
 
         $ctrl = $('<button>', { type: 'button', name: columnName });
         $ctrl.append($txt);
@@ -5463,7 +5465,7 @@
         var src = "vis vis-url";// VIS.Application.contextUrl + "Areas/VIS/Images/base/Url20.png";
         var btnCount = 0;
         //create ui
-        var $ctrl = $('<input autocomplete="off">', { type: 'text', name: columnName, maxlength: fieldLength });
+        var $ctrl = $('<input>', { type: 'text', name: columnName, maxlength: fieldLength });
         var $btnSearch = $('<button class="input-group-text"><i class="' + src + '" ></i></button>');
         btnCount += 1;
 
@@ -5633,7 +5635,7 @@
         this.value = null;
         var btnCount = 0;
 
-        var $ctrl = $('<input autocomplete="off">', { type: 'text', name: columnName });
+        var $ctrl = $('<input>', { type: 'text', name: columnName});
         var $btnSearch = $('<button class="input-group-text"><i class="' + src + '" /></button>');
         btnCount += 1;
 
@@ -6051,7 +6053,8 @@
 
 
         //create ui
-        var $ctrl = $('<input autocomplete="off">', { type: 'text', name: columnName });
+        var $ctrl = $('<input>', { type: 'text', name: columnName });
+        $ctrl.attr('autocomplete', 'off');
         var $btnpContainer = $('<button class="input-group-text"><i class="vis vis-pcontainer" /></button>');
         //var $btnPop = $('<button  tabindex="-1" class="input-group-text"><img tabindex="-1" src="' + VIS.Application.contextUrl + "Areas/VIS/Images/base/Info20.png" + '" /></button>');
         var $btnPop = $('<button  tabindex="-1" class="input-group-text"><i tabindex="-1" Class="fa fa-ellipsis-v" /></button>');
