@@ -21,10 +21,10 @@ using VAdvantage.Logging;
 using VAdvantage.Utility;
 namespace VAdvantage.WF
 {
-    public class MWorkflowProcessor : X_AD_WorkflowProcessor,ViennaProcessor
+    public class MWorkflowProcessor : X_AD_WorkflowProcessor, ViennaProcessor
     {
         //Static Logger	
-        private static VLogger _log	= VLogger.GetVLogger (typeof(MWorkflowProcessor).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MWorkflowProcessor).FullName);
 
         /// <summary>
         /// Standard Constructor
@@ -75,6 +75,62 @@ namespace VAdvantage.WF
                 {
                     pstmt = null;
                 }
+                _log.Log(Level.SEVERE, sql, e);
+            }
+            MWorkflowProcessor[] retValue = new MWorkflowProcessor[list.Count];
+            retValue = list.ToArray();
+            return retValue;
+        }
+
+        /// <summary>
+        /// Get Active Workflow Processors
+        /// VIS0060 - 21-Oct-2021
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="ExecuteProcess"></param>
+        /// <returns>active processors</returns>
+        public static MWorkflowProcessor[] GetActive(Ctx ctx, string ExecuteProcess)
+        {
+            List<MWorkflowProcessor> list = new List<MWorkflowProcessor>();
+            String sql = @"SELECT wf.AD_WorkflowProcessor_ID, se.RunOnlyOnIP FROM AD_WorkflowProcessor wf 
+                        LEFT JOIN AD_Schedule se ON wf.AD_Schedule_ID = se.AD_Schedule_ID
+                        WHERE wf.IsActive = 'Y'";
+
+            string scheduleIP = null;
+            try
+            {
+                string machineIP = null;        // System.Net.Dns.GetHostEntry(Environment.MachineName).AddressList[0].ToString();
+                var host = System.Net.Dns.GetHostEntry(Environment.MachineName);
+                foreach (var ip in host.AddressList)
+                {
+                    if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    {
+                        machineIP = ip.ToString();
+                        break;
+                    }
+                }
+                _log.SaveError("Console VServer Machine IP : " + machineIP, "Console VServer Machine IP : " + machineIP);
+
+                DataSet ds = DataBase.DB.ExecuteDataset(sql, null, null);
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        scheduleIP = Util.GetValueOfString(dr["RunOnlyOnIP"]);
+                        if (ExecuteProcess.Equals("2") && (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP)))
+                        {
+                            list.Add(new MWorkflowProcessor(new Ctx(), Util.GetValueOfInt(dr["AD_WorkflowProcessor_ID"]), null));
+                        }
+                        else if (machineIP.Contains(scheduleIP))
+                        {
+                            list.Add(new MWorkflowProcessor(ctx, Util.GetValueOfInt(dr["AD_WorkflowProcessor_ID"]), null));
+                        }
+                    }
+                }
+                ds = null;
+            }
+            catch (Exception e)
+            {
                 _log.Log(Level.SEVERE, sql, e);
             }
             MWorkflowProcessor[] retValue = new MWorkflowProcessor[list.Count];
@@ -181,7 +237,7 @@ namespace VAdvantage.WF
                     }
                 }
             }
-            
+
             return true;
         }
 

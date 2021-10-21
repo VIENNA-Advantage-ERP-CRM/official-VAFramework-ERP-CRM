@@ -46,7 +46,7 @@ namespace VAdvantage.Model
                 string machineIP = System.Net.Dns.GetHostEntry(Environment.MachineName).AddressList[0].ToString();
 
 
-               idr = DataBase.DB.ExecuteReader(sql, null, null);
+                idr = DataBase.DB.ExecuteReader(sql, null, null);
                 while (idr.Read())
                 {
                     scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM AD_Schedule WHERE 
@@ -54,10 +54,10 @@ namespace VAdvantage.Model
 
                     //list.Add(new MAcctProcessor(ctx, idr, null));
 
-                      if (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP))
-                      {
-                          list.Add(new MAcctProcessor(new Ctx(), idr, null));
-                      }
+                    if (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP))
+                    {
+                        list.Add(new MAcctProcessor(new Ctx(), idr, null));
+                    }
 
                 }
                 idr.Close();
@@ -73,8 +73,63 @@ namespace VAdvantage.Model
             return retValue;
         }
 
+        /// <summary>
+        /// Get Active Account Processors
+        /// VIS0060 - 21-Oct-2021
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="ExecuteProcess"></param>
+        /// <returns>active processors</returns>
+        public static MAcctProcessor[] GetActive(Ctx ctx, string ExecuteProcess)
+        {
+            List<MAcctProcessor> list = new List<MAcctProcessor>();
+            String sql = @"SELECT act.C_AcctProcessor_ID, se.RunOnlyOnIP FROM C_AcctProcessor act 
+                            LEFT JOIN AD_Schedule se ON act.AD_Schedule_ID = se.AD_Schedule_ID 
+                            WHERE act.IsActive = 'Y'";
+            string scheduleIP = null;
+            try
+            {
+                string machineIP = null;        // System.Net.Dns.GetHostEntry(Environment.MachineName).AddressList[0].ToString();
+                var host = System.Net.Dns.GetHostEntry(Environment.MachineName);
+                foreach (var ip in host.AddressList)
+                {
+                    if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    {
+                        machineIP = ip.ToString();
+                        break;
+                    }
+                }
 
+                DataSet ds = DB.ExecuteDataset(sql);
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        //scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM AD_Schedule WHERE 
+                        //                                   AD_Schedule_ID = (SELECT AD_Schedule_ID FROM C_AcctProcessor WHERE C_AcctProcessor_ID =" + idr["C_AcctProcessor_ID"] + " )"));
 
+                        scheduleIP = Util.GetValueOfString(dr["RunOnlyOnIP"]);
+                        if (ExecuteProcess.Equals("2") && (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP)))
+                        {
+                            list.Add(new MAcctProcessor(new Ctx(), Util.GetValueOfInt(dr["C_AcctProcessor_ID"]), null));
+                        }
+                        else if (machineIP.Contains(scheduleIP))
+                        {
+                            list.Add(new MAcctProcessor(new Ctx(), Util.GetValueOfInt(dr["C_AcctProcessor_ID"]), null));
+                        }
+                    }
+                }
+                ds = null;
+            }
+            catch (Exception e)
+            {
+                _log.Log(Level.SEVERE, sql, e);
+            }
+
+            MAcctProcessor[] retValue = new MAcctProcessor[list.Count];
+            retValue = list.ToArray();
+            return retValue;
+        }
 
         /// <summary>
         /// Standard Construvtor
