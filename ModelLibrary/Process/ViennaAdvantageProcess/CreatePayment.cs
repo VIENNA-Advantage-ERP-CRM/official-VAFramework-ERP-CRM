@@ -85,8 +85,15 @@ namespace ViennaAdvantage.Process
                     //(1052) set Invoice PaySchedule
                     payment.SetC_InvoicePaySchedule_ID(Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_InvoicePaySchedule_ID FROM C_InvoicePaySchedule WHERE C_Invoice_ID = " + order.GetC_Invoice_ID())));
                 }
-                payment.Save();
-
+                if (!payment.Save()) {
+                    ValueNamePair pp = VLogger.RetrieveError();
+                    string val = pp.GetValue();
+                    if (string.IsNullOrEmpty(val))
+                    {
+                        val = pp.GetName();
+                    }
+                    return Msg.GetMsg(GetCtx(), "PaymentNotCreated") + " "+ val;
+                }
                 return payment.GetDocumentNo().ToString();
             }
             catch
