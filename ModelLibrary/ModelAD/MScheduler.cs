@@ -120,9 +120,7 @@ namespace VAdvantage.Model
         public static MScheduler[] GetActive(Ctx ctx, string ExecuteProcess)
         {
             List<MScheduler> list = new List<MScheduler>();
-            String sql = @"SELECT sch.AD_Scheduler_ID, se.RunOnlyOnIP FROM AD_Scheduler sch 
-                            LEFT JOIN AD_Schedule se ON sch.AD_Schedule_ID = se.AD_Schedule_ID 
-                            WHERE sch.IsActive='Y'";
+            String sql = "SELECT * FROM AD_Scheduler WHERE sch.IsActive='Y'";
             string scheduleIP = null;
             try
             {
@@ -144,16 +142,17 @@ namespace VAdvantage.Model
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        scheduleIP = Util.GetValueOfString(dr["RunOnlyOnIP"]);
+                        scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM AD_Schedule WHERE 
+                                                        AD_Schedule_ID = (SELECT AD_Schedule_ID FROM AD_Scheduler WHERE AD_Scheduler_ID =" + dr["AD_Scheduler_ID"] + " )"));
                         s_log.SaveError("Console VServer Schedule IP : " + scheduleIP, "Console VServer Schedule IP : " + scheduleIP);
 
                         if (ExecuteProcess.Equals("2") && (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP)))
                         {
-                            list.Add(new MScheduler(new Ctx(), Util.GetValueOfInt(dr["AD_Scheduler_ID"]), null));
+                            list.Add(new MScheduler(new Ctx(), dr, null));
                         }
                         else if (machineIP.Contains(scheduleIP))
                         {
-                            list.Add(new MScheduler(new Ctx(), Util.GetValueOfInt(dr["AD_Scheduler_ID"]), null));
+                            list.Add(new MScheduler(new Ctx(), dr, null));
                         }
                     }
                 }

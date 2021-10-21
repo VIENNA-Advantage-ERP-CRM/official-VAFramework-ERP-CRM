@@ -92,9 +92,7 @@ namespace VAdvantage.WF
         public static MWorkflowProcessor[] GetActive(Ctx ctx, string ExecuteProcess)
         {
             List<MWorkflowProcessor> list = new List<MWorkflowProcessor>();
-            String sql = @"SELECT wf.AD_WorkflowProcessor_ID, se.RunOnlyOnIP FROM AD_WorkflowProcessor wf 
-                        LEFT JOIN AD_Schedule se ON wf.AD_Schedule_ID = se.AD_Schedule_ID
-                        WHERE wf.IsActive = 'Y'";
+            String sql = "SELECT * FROM AD_WorkflowProcessor WHERE IsActive='Y'";
 
             string scheduleIP = null;
             try
@@ -116,14 +114,16 @@ namespace VAdvantage.WF
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        scheduleIP = Util.GetValueOfString(dr["RunOnlyOnIP"]);
+                        scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM AD_Schedule WHERE 
+                                                       AD_Schedule_ID = (SELECT AD_Schedule_ID FROM AD_WorkflowProcessor WHERE AD_WorkflowProcessor_ID =" + dr["AD_WorkflowProcessor_ID"] + " )"));
+
                         if (ExecuteProcess.Equals("2") && (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP)))
                         {
-                            list.Add(new MWorkflowProcessor(new Ctx(), Util.GetValueOfInt(dr["AD_WorkflowProcessor_ID"]), null));
+                            list.Add(new MWorkflowProcessor(new Ctx(), dr, null));
                         }
                         else if (machineIP.Contains(scheduleIP))
                         {
-                            list.Add(new MWorkflowProcessor(ctx, Util.GetValueOfInt(dr["AD_WorkflowProcessor_ID"]), null));
+                            list.Add(new MWorkflowProcessor(ctx, dr, null));
                         }
                     }
                 }

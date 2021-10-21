@@ -64,9 +64,7 @@ namespace VAdvantage.Model
         public static MAlertProcessor[] GetActive(Ctx ctx, string ExecuteProcess)
         {
             List<MAlertProcessor> list = new List<MAlertProcessor>();
-            String sql = @"SELECT alr.AD_AlertProcessor_ID, se.RunOnlyOnIP FROM AD_AlertProcessor alr 
-                            LEFT JOIN AD_Schedule se ON alr.AD_Schedule_ID = se.AD_Schedule_ID 
-                            WHERE alr.IsActive = 'Y'";
+            String sql = "SELECT * FROM AD_AlertProcessor WHERE IsActive='Y'";
             string scheduleIP = null;
             try
             {
@@ -87,14 +85,16 @@ namespace VAdvantage.Model
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        scheduleIP = Util.GetValueOfString(dr["RunOnlyOnIP"]);
+                        scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM AD_Schedule WHERE 
+                                                        AD_Schedule_ID = (SELECT AD_Schedule_ID FROM AD_AlertProcessor WHERE AD_AlertProcessor_ID =" + dr["AD_AlertProcessor_ID"] + " )"));
+
                         if (ExecuteProcess.Equals("2") && (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP)))
                         {
-                            list.Add(new MAlertProcessor(new Ctx(), Util.GetValueOfInt(dr["AD_AlertProcessor_ID"]), null));
+                            list.Add(new MAlertProcessor(new Ctx(), dr, null));
                         }
                         else if (machineIP.Contains(scheduleIP))
                         {
-                            list.Add(new MAlertProcessor(new Ctx(), Util.GetValueOfInt(dr["AD_AlertProcessor_ID"]), null));
+                            list.Add(new MAlertProcessor(new Ctx(), dr, null));
                         }
                     }
                 }

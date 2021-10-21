@@ -83,9 +83,8 @@ namespace VAdvantage.Model
         public static MAcctProcessor[] GetActive(Ctx ctx, string ExecuteProcess)
         {
             List<MAcctProcessor> list = new List<MAcctProcessor>();
-            String sql = @"SELECT act.C_AcctProcessor_ID, se.RunOnlyOnIP FROM C_AcctProcessor act 
-                            LEFT JOIN AD_Schedule se ON act.AD_Schedule_ID = se.AD_Schedule_ID 
-                            WHERE act.IsActive = 'Y'";
+            String sql = "SELECT * FROM C_AcctProcessor WHERE IsActive='Y'";
+            IDataReader idr = null;
             string scheduleIP = null;
             try
             {
@@ -100,30 +99,27 @@ namespace VAdvantage.Model
                     }
                 }
 
-                DataSet ds = DB.ExecuteDataset(sql);
-                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                idr = DataBase.DB.ExecuteReader(sql, null, null);
+                while (idr.Read())
                 {
-                    foreach (DataRow dr in ds.Tables[0].Rows)
-                    {
-                        //scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM AD_Schedule WHERE 
-                        //                                   AD_Schedule_ID = (SELECT AD_Schedule_ID FROM C_AcctProcessor WHERE C_AcctProcessor_ID =" + idr["C_AcctProcessor_ID"] + " )"));
+                    scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM AD_Schedule WHERE 
+                                                       AD_Schedule_ID = (SELECT AD_Schedule_ID FROM C_AcctProcessor WHERE C_AcctProcessor_ID =" + idr["C_AcctProcessor_ID"] + " )"));
 
-                        scheduleIP = Util.GetValueOfString(dr["RunOnlyOnIP"]);
-                        if (ExecuteProcess.Equals("2") && (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP)))
-                        {
-                            list.Add(new MAcctProcessor(new Ctx(), Util.GetValueOfInt(dr["C_AcctProcessor_ID"]), null));
-                        }
-                        else if (machineIP.Contains(scheduleIP))
-                        {
-                            list.Add(new MAcctProcessor(new Ctx(), Util.GetValueOfInt(dr["C_AcctProcessor_ID"]), null));
-                        }
+                    if (ExecuteProcess.Equals("2") && (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP)))
+                    {
+                        list.Add(new MAcctProcessor(new Ctx(), idr, null));
+                    }
+                    else if (machineIP.Contains(scheduleIP))
+                    {
+                        list.Add(new MAcctProcessor(new Ctx(), idr, null));
                     }
                 }
-                ds = null;
+                idr.Close();
             }
             catch (Exception e)
             {
-                _log.Log(Level.SEVERE, sql, e);
+                if (idr != null) { idr.Close(); }
+                _log.Log(Level.SEVERE, "GetActive", e);
             }
 
             MAcctProcessor[] retValue = new MAcctProcessor[list.Count];

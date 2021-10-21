@@ -100,9 +100,8 @@ namespace VAdvantage.Model
         public static MRequestProcessor[] GetActive(Ctx ctx, string ExecuteProcess)
         {
             List<MRequestProcessor> list = new List<MRequestProcessor>();
-            String sql = @"SELECT req.R_RequestProcessor_ID, se.RunOnlyOnIP FROM R_RequestProcessor req 
-                        LEFT JOIN AD_Schedule se ON req.AD_Schedule_ID = se.AD_Schedule_ID
-                        WHERE req.IsActive = 'Y'";
+            String sql = "SELECT * FROM R_RequestProcessor WHERE IsActive='Y'";
+            IDataReader idr = null;
             string scheduleIP = null;
             try
             {
@@ -118,26 +117,30 @@ namespace VAdvantage.Model
                 }
                 _log.SaveError("Console VServer Machine IP : " + machineIP, "Console VServer Machine IP : " + machineIP);
 
-                DataSet ds = DB.ExecuteDataset(sql);
-                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                idr = DataBase.DB.ExecuteReader(sql, null, null);
+                while (idr.Read())
                 {
-                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM AD_Schedule WHERE 
+                                                       AD_Schedule_ID = (SELECT AD_Schedule_ID FROM R_RequestProcessor WHERE R_RequestProcessor_ID =" + idr["R_RequestProcessor_ID"] + " )"));
+
+                    if (ExecuteProcess.Equals("2") && (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP)))
                     {
-                        scheduleIP = Util.GetValueOfString(dr["RunOnlyOnIP"]);
-                        if (ExecuteProcess.Equals("2") && (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP)))
-                        {
-                            list.Add(new MRequestProcessor(new Ctx(), Util.GetValueOfInt(dr["R_RequestProcessor_ID"]), null));
-                        }
-                        else if (machineIP.Contains(scheduleIP))
-                        {
-                            list.Add(new MRequestProcessor(new Ctx(), Util.GetValueOfInt(dr["R_RequestProcessor_ID"]), null));
-                        }
+                        list.Add(new MRequestProcessor(new Ctx(), idr, null));
+                    }
+                    else if (machineIP.Contains(scheduleIP))
+                    {
+                        list.Add(new MRequestProcessor(new Ctx(), idr, null));
                     }
                 }
-                ds = null;
+                idr.Close();
             }
             catch (Exception e)
             {
+                if (idr != null)
+                {
+                    idr.Close();
+                    idr = null;
+                }
                 _log.Log(Level.SEVERE, sql, e);
             }
 
