@@ -51,25 +51,25 @@
     };
 
     VIS.EnvConstants =
-        {
-            /** WindowNo for Find           */
-            WINDOW_FIND: 1110,
-            /** WinowNo for MLookup         */
-            WINDOW_MLOOKUP: 1111,
-            /** WindowNo for PrintCustomize */
-            WINDOW_CUSTOMIZE: 1112,
+    {
+        /** WindowNo for Find           */
+        WINDOW_FIND: 1110,
+        /** WinowNo for MLookup         */
+        WINDOW_MLOOKUP: 1111,
+        /** WindowNo for PrintCustomize */
+        WINDOW_CUSTOMIZE: 1112,
 
-            /** WindowNo for PrintCustomize */
-            WINDOW_INFO: 1113,
-            /** Tab for Info                */
-            TAB_INFO: 1113,
-            /** WindowNo for AccountEditor */
-            WINDOW_ACCOUNT: 1114,
-            /** Temp WindowNo for GridField */
-            WINDOW_TEMP: 11100000,
-            /** Maximum int value --code by raghu*/
-            INT32MAXVALUE: 2147483647
-        }
+        /** WindowNo for PrintCustomize */
+        WINDOW_INFO: 1113,
+        /** Tab for Info                */
+        TAB_INFO: 1113,
+        /** WindowNo for AccountEditor */
+        WINDOW_ACCOUNT: 1114,
+        /** Temp WindowNo for GridField */
+        WINDOW_TEMP: 11100000,
+        /** Maximum int value --code by raghu*/
+        INT32MAXVALUE: 2147483647
+    }
 
 
 
@@ -150,20 +150,19 @@
 
         this.GetConvertedNumber = function (val, dotFormatter) {
             if (dotFormatter) {
-               
-                var inputSplit = val.split(".");
-                 // Check value without exponetial
-                if (!Number.isSafeInteger(Number(inputSplit[0]))) {
-                    return Number.MAX_SAFE_INTEGER; // Set maximumn value
-                }
-                return Number(String(val).replace(/[^0-9.-]+/g, ""));
-            } else {
-                var inputSplit = val.split(",");
+                var num = Number(String(val).replace(/[^0-9.-]+/g, ""));
                 // Check value without exponetial
-                if (!Number.isSafeInteger(Number(inputSplit[0]))) {
+                if (!Number.isSafeInteger(num)) {
                     return Number.MAX_SAFE_INTEGER; // Set maximumn value
                 }
-                return Number(String(val).replace(/[^0-9,-]+/g, "").replace(/[,]+/g, "."));
+                return num;
+            } else {
+                var num = Number(String(val).replace(/[^0-9,-]+/g, "").replace(/[,]+/g, "."));
+                // Check value without exponetial
+                if (!Number.isSafeInteger(num)) {
+                    return Number.MAX_SAFE_INTEGER; // Set maximumn value
+                }
+                return num;
             }
         }
 
@@ -476,7 +475,7 @@
         /**
          * @param {any} Name Removes image from identifier and returns text
          */
-        getIdentifierDisplayVal:function (Name) {
+        getIdentifierDisplayVal: function (Name) {
             var val = "";
             if (Name && Name.indexOf("Images/") > -1) {
                 val = Name.replace("^^" + Name.substring(Name.indexOf("Images/"), Name.lastIndexOf("^^") + 3), "_")
@@ -487,7 +486,7 @@
                     val = val.substring(0, val.length - 1);
                 }
                 if (val.startsWith("_")) {
-                   val= val.substring(1);
+                    val = val.substring(1);
                 }
             }
             else
@@ -748,11 +747,11 @@
 
 
         /**
-	 *  Check Base Language
-	 *  @param ctx context
-	 * 	@param tableName table to be translated
-	 * 	@return true if base language and table not translated
-	 */
+     *  Check Base Language
+     *  @param ctx context
+     * 	@param tableName table to be translated
+     * 	@return true if base language and table not translated
+     */
         function isBaseLanguage(ctx, tableName) {
 
             var lang = "";
@@ -945,9 +944,9 @@
         };
 
         /**
-	      * 	Is Workflow Process view enabled.
-	      *	@return true if enabled
-	      */
+          * 	Is Workflow Process view enabled.
+          *	@return true if enabled
+          */
         function getIsWorkflowProcess() {
             if (s_workflow == null) {
                 s_workflow = false;
