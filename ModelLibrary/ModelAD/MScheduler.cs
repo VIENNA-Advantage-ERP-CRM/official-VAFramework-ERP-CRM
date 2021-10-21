@@ -120,7 +120,7 @@ namespace VAdvantage.Model
         public static MScheduler[] GetActive(Ctx ctx, string ExecuteProcess)
         {
             List<MScheduler> list = new List<MScheduler>();
-            String sql = "SELECT * FROM AD_Scheduler WHERE sch.IsActive='Y'";
+            String sql = "SELECT * FROM AD_Scheduler WHERE IsActive='Y'";
             string scheduleIP = null;
             try
             {
