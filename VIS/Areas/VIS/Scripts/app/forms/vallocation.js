@@ -6222,7 +6222,6 @@
             //$date.val(Globalize.format(new Date(maxDate), "yyyy-MM-dd"));
             //$dateAcct.val(Globalize.format(new Date(maxDate), "yyyy-MM-dd"));
             $dateAcct.val(Globalize.format(maxDate, "yyyy-MM-dd"));
-            console.log("Max Date:- " + maxDate);
         };
 
         //load unallocated GL Journal Lines
@@ -6483,15 +6482,20 @@
                         var keys = Object.keys(currnetRow);
                         //var bd = parseFloat(checkcommaordot(event, rowsPayment[i][keys[keys.indexOf("AppliedAmt")]])).toFixed(stdPrecision);
                         var bd;
-                        if (rowsPayment[i][keys[keys.indexOf("AppliedAmt")]].toString().contains("-") ||
-                            rowsPayment[i][keys[keys.indexOf("AppliedAmt")]].toString().contains("−")) {
-                            bd = (-1 * Math.abs(format.GetConvertedNumber(rowsPayment[i][keys[keys.indexOf("AppliedAmt")]].toString(), dotFormatter))).toFixed(stdPrecision);
+                        if (rowsPayment[i][keys[keys.indexOf("AppliedAmt")]] != "" && rowsPayment[i][keys[keys.indexOf("AppliedAmt")]] != undefined) {
+                            if (rowsPayment[i][keys[keys.indexOf("AppliedAmt")]].toString().contains("-") ||
+                                rowsPayment[i][keys[keys.indexOf("AppliedAmt")]].toString().contains("−")) {
+                                bd = (-1 * Math.abs(format.GetConvertedNumber(rowsPayment[i][keys[keys.indexOf("AppliedAmt")]].toString(), dotFormatter))).toFixed(stdPrecision);
+                            }
+                            else {
+                                bd = format.GetConvertedNumber(rowsPayment[i][keys[keys.indexOf("AppliedAmt")]].toString(), dotFormatter).toFixed(stdPrecision);
+                            }
+                            bd = parseFloat(bd);
                         }
                         else {
-                            bd = format.GetConvertedNumber(rowsPayment[i][keys[keys.indexOf("AppliedAmt")]].toString(), dotFormatter).toFixed(stdPrecision);
+                            bd = 0;
+                            console.log("Payment Row: " + rowsPayment[i][keys[keys.indexOf("AppliedAmt")]] + ", RowNo:-" + i);
                         }
-
-                        bd = parseFloat(bd);
                         totalPay = totalPay + (isNaN(bd) ? 0 : bd);  //  Applied Pay
                         _noPayments++;
                     }
@@ -6515,15 +6519,20 @@
                         //************************************** Changed
                         var keys = Object.keys(currnetRow);
                         var bd;
-                        //var bd = parseFloat(checkcommaordot(event, rowsCash[i][keys[keys.indexOf("AppliedAmt")]])).toFixed(stdPrecision);
-                        if (rowsCash[i][keys[keys.indexOf("AppliedAmt")]].toString().contains("-") ||
-                            rowsCash[i][keys[keys.indexOf("AppliedAmt")]].toString().contains("−")) {
-                            bd = (-1 * Math.abs(format.GetConvertedNumber(rowsCash[i][keys[keys.indexOf("AppliedAmt")]].toString(), dotFormatter))).toFixed(stdPrecision);
+                        if (rowsCash[i][keys[keys.indexOf("AppliedAmt")]] != "" && rowsCash[i][keys[keys.indexOf("AppliedAmt")]] != undefined) {
+                            //var bd = parseFloat(checkcommaordot(event, rowsCash[i][keys[keys.indexOf("AppliedAmt")]])).toFixed(stdPrecision);
+                            if (rowsCash[i][keys[keys.indexOf("AppliedAmt")]].toString().contains("-") ||
+                                rowsCash[i][keys[keys.indexOf("AppliedAmt")]].toString().contains("−")) {
+                                bd = (-1 * Math.abs(format.GetConvertedNumber(rowsCash[i][keys[keys.indexOf("AppliedAmt")]].toString(), dotFormatter))).toFixed(stdPrecision);
+                            }
+                            else {
+                                bd = format.GetConvertedNumber(rowsCash[i][keys[keys.indexOf("AppliedAmt")]].toString(), dotFormatter).toFixed(stdPrecision);
+                            }
+                            bd = parseFloat(bd);
+                        } else {
+                            bd = 0;
+                            console.log("Cash Row: " + rowsCash[i][keys[keys.indexOf("AppliedAmt")]] + ", RowNo:-" + i);
                         }
-                        else {
-                            bd = format.GetConvertedNumber(rowsCash[i][keys[keys.indexOf("AppliedAmt")]].toString(), dotFormatter).toFixed(stdPrecision);
-                        }
-                        bd = parseFloat(bd);
                         totalCash = totalCash + (isNaN(bd) ? 0 : bd);  //  Applied Pay
                         _noCashLines++;
                     }
@@ -6558,7 +6567,8 @@
                         allocDate = timeUtil.max(allocDate, ts);
                         var keys = Object.keys(currnetRow);
                         var bd;
-                        if (rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]] != "") {
+                        //VA228:Check applied amount is undefined
+                        if (rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]] != "" && rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]] != undefined) {
                             //bd = parseFloat(checkcommaordot(event, rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]])).toFixed(stdPrecision);
                             if (rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]].toString().contains("-") ||
                                 rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]].toString().contains("−")) {
@@ -6571,6 +6581,7 @@
                         }
                         else {
                             bd = 0;
+                            console.log("Invoice Row: " + rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]] + ", RowNo:-" + i);
                         }
                         totalInv = totalInv + (isNaN(bd) ? 0 : bd);  //  Applied Inv
                         _noInvoices++;
@@ -6595,12 +6606,13 @@
                         allocDate = timeUtil.max(allocDate, ts);
                         var keys = Object.keys(currnetRow);
                         var bd;
-                        if (rowsGL[i][keys[keys.indexOf("AppliedAmt")]] != "") {
+                        if (rowsGL[i][keys[keys.indexOf("AppliedAmt")]] != "" && rowsGL[i][keys[keys.indexOf("AppliedAmt")]] != undefined) {
                             bd = parseFloat(rowsGL[i][keys[keys.indexOf("AppliedAmt")]]).toFixed(stdPrecision);
                             bd = parseFloat(bd);
                         }
                         else {
                             bd = 0;
+                            console.log("GL Row: " + rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]] + ", RowNo:-" + i);
                         }
                         totalGL = totalGL + (isNaN(bd) ? 0 : bd);  //  Applied GL
                         _noGL++;
