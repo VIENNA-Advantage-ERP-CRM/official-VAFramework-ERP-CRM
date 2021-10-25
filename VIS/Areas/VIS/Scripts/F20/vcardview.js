@@ -22,18 +22,24 @@
         // this.aPanel;
         this.onCardEdit = null;
 
+
         var root;
         var body = null;
         var headerdiv;
+        var cmbDiv;
+        var $cmbCards = null;
+
         //  var cardList;
         function init() {
             root = $("<div class='vis-cv-body vis-noselect'>");
             body = $("<div class='vis-cv-main'>");
             headerdiv = $("<div class='vis-cv-header'>");
+            cmbDiv = $("<div class='vis-cv-header'>");
+            $cmbCards = $('<Select>')
+            cmbDiv.append($cmbCards);
             //   cardList = $("<img style='margin-left:10px;margin-top:4px;float:right' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/defaultCView.png' >");
             root.append(body);
         }
-
 
         var self = this;
 
@@ -43,6 +49,7 @@
         this.getRoot = function () {
             return root;
         };
+
         this.getBody = function () {
             return body;
         };
@@ -50,14 +57,14 @@
         this.setHeader = function (txt) {
             headerdiv.text(txt);
         }
+
         this.getHeader = function () {
             return headerdiv;
         }
 
-        //this.getCardList = function () {
-        //    return cardList;
-        //};
-
+        this.getCmbDiv = function () {
+            return cmbDiv;
+        };
 
         this.sizeChanged = function (h, w) {
             root.height((h - 12) + 'px');
@@ -129,6 +136,14 @@
             return 0;
         };
 
+        var handleEvents = function () {
+            $cmbCards.on("change", cardChanged);
+        };
+
+        var cardChanged = function (e) {
+            self.getCardViewData(self.mTab, $cmbCards.val());
+        };
+
         var curCard = null;
         var crid = null;
         this.navigate = function (rid, oset, skipScroll) {
@@ -175,6 +190,16 @@
                 this.groupCtrls.pop().dispose();
             }
         };
+
+        this.fillCardViewList = function (cards) {
+            if (cards && cards.length > 0 && $cmbCards.find('option').length == 0) {
+                for (var i = 0; i < cards.length; i++) {
+                    $cmbCards.append('<option value="' + cards[i].AD_CardView_ID + '">' + cards[i].Name + '</option>');
+                }
+            }
+        };
+
+        handleEvents();
     };
 
     VCardView.prototype.tableModelChanged = function (action, args, actionIndexOrId) {
@@ -221,22 +246,22 @@
 
     VCardView.prototype.setupCardView = function (aPanel, mTab, cContainer, vCardId) {
         this.mTab = mTab;
-        // this.aPanel = aPanel;
-        var self = this;
-        VIS.dataContext.getCardViewInfo(mTab.getAD_Window_ID(), mTab.getAD_Tab_ID(), function (retData) {
-            //init 
-            //var retData = {};
-            // retData.Group = "AccessLevel" //C_UOM_ID";
-            // retData.InCol = ['Name', 'Description', 'Help', 'C_UOM_ID']
-            // retData.Conditions = [];
-            self.setCardViewData(retData);
 
-        });
+        this.fillCardViewList(mTab.vo.Cards);
 
-        //this.createGroups();
-        //  cContainer.append(this.getCardList()).append(this.getHeader());
+        this.getCardViewData(mTab, 0);
+
         cContainer.append(this.getHeader());
+        cContainer.append(this.getCmbDiv());
         cContainer.append(this.getRoot());
+    };
+
+    VCardView.prototype.getCardViewData = function (mTab, cardID) {
+        var self = this;
+        VIS.dataContext.getCardViewInfo(mTab.getAD_Window_ID(), mTab.getAD_Tab_ID(), cardID, function (retData) {
+            self.setCardViewData(retData);
+            self.refreshUI();
+        });
     };
 
     VCardView.prototype.setCardViewData = function (retData) {
@@ -264,25 +289,16 @@
             for (var i = 0; i < retData.IncludedCols.length; i++) {
                 var f = this.mTab.getFieldById(retData.IncludedCols[i].AD_Field_ID);
                 f.setCardViewSeqNo(retData.IncludedCols[i].SeqNo);
+                f.setCardFieldStyle(retData.IncludedCols[i].HTMLStyle);
+                f.setCardIconHide(retData.IncludedCols[i].HideIcon);
+                f.setCardTextHide(retData.IncludedCols[i].HideText);
                 if (f)
                     this.fields.push(f);
-
                 this.hasIncludedCols = true;
             }
         }
 
         if (this.fields.length < 1) {
-
-            //Check for Included column
-            // var aFields = this.mTab.gridTable.gridFields.slice(); //copy of array
-            //var f = null;
-            //while (aFields.length > 0) {
-            //    f = aFields.pop();
-            //    if (f.getIsIncludedColumn()) {
-            //        this.fields.unshift(f);
-            //    }
-            //}
-
             if (this.fields.length < 1) {
                 f = this.mTab.getField('Name');
                 if (f) {
@@ -391,7 +407,7 @@
             this.filterRecord(records);
 
             for (var p in this.cGroupInfo) {
-                cardGroup = new VCardGroup(this.grpCount === 1, this.cGroupInfo[p].records, this.cGroupInfo[p].name, this.fields, this.cConditions, this.headerItems, this.headerStyle, headerPadding);
+                cardGroup = new VCardGroup(this.grpCount === 1, this.cGroupInfo[p].records, this.cGroupInfo[p].name, this.fields, this.cConditions, this.headerItems, this.headerStyle, this.headerPadding);
                 this.groupCtrls.push(cardGroup);
                 root.append(cardGroup.getRoot())
             }
@@ -455,6 +471,7 @@
         var root = null;
         var body;
         var cards = [];
+        var windowNo = VIS.Env.getWindowNo();
 
         function init() {
             var str = "<div class='vis-cv-cg vis-pull-left'> <div class='vis-cv-head' >" + grpName
@@ -471,8 +488,9 @@
 
         function createCards() {
             var card = null;
+            this.fieldStyles = {};
             for (var i = 0; i < records.length; i++) {
-                card = new VCard(fields, records[i], headerItems, headerStyle, headerPadding);
+                card = new VCard(fields, records[i], headerItems, headerStyle, headerPadding, windowNo, this.fieldStyles);
                 if (onlyOne) {
                     card.getRoot().width("240px").css({ 'margin': '5px 12px 12px 5px', 'float': (VIS.Application.isRTL ? 'right' : 'left') });
                 }
@@ -513,11 +531,16 @@
     };
 
     /* Card View Control */
-    function VCard(fields, record, headerItems, headerStyle, headerPadding) {
+    function VCard(fields, record, headerItems, headerStyle, headerPadding, windowNo, fieldStyles) {
         this.record = record;
         this.dynamicStyle = [];
         this.textAlignEnum = { "C": "Center", "R": "flex-end", "L": "flex-start" };
         this.alignItemEnum = { "C": "Center", "T": "flex-start", "B": "flex-end" };
+        this.dynamicStyle = [];
+        this.styleTag = document.createElement('style');
+        this.windowNo = windowNo;
+        this.fieldStyles = fieldStyles;
+
 
         var root = $('<div class="vis-cv-card" data-recid=' + record.recid + ' name = vc_' + record.recid + ' ></div>');
 
@@ -534,12 +557,18 @@
         root.append($root);
         var headerCustom = this.headerParentCustomUISettings(headerStyle);
 
-        var rootCustomStyle = this.headerUISettings("", headerPadding);
-        $root.addClass(rootCustomStyle);
+        if (!this.fieldStyles["root_" + windowNo])
+            this.fieldStyles["root_" + windowNo] = {};
+        this.rootCustomStyle = this.fieldStyles["root_" + windowNo]['headerUISettings'];
+        if (!this.rootCustomStyle) {
+            this.rootCustomStyle = this.headerUISettings("", headerPadding);
+            this.fieldStyles["root_" + windowNo]['headerUISettings'] = this.rootCustomStyle;
+        }
+        $root.addClass(this.rootCustomStyle);
 
 
 
-        this.setHeaderItems = function (currentItem, $containerDiv, fields) {
+        this.setHeaderItems = function (currentItem, $containerDiv, fields, record) {
 
             /*If controls are already loaded, then do not manipulate DOM.Only fetch there reference from DOM and Change Values.
              *Else create header panel items. 
@@ -579,17 +608,22 @@
                 var $divLabel = null;
                 var $label = null;
                 var iControl = null;
-
+                if (!this.fieldStyles[headerSeqNo + '_' + startCol + '_' + colSpan + '_' + startRow + '_' + rowSpan])
+                    this.fieldStyles[headerSeqNo + '_' + startCol + '_' + colSpan + '_' + startRow + '_' + rowSpan] = {};
                 //Apply HTML Style
-                var dynamicClassName = this.applyCustomUISettings(headerSeqNo, startCol, colSpan, startRow, rowSpan, justyFy, alignItem,
-                    backgroundColor, FontColor, fontSize, fieldPadding);
+                this.dynamicClassName = this.fieldStyles[headerSeqNo + '_' + startCol + '_' + colSpan + '_' + startRow + '_' + rowSpan]['applyCustomUISettings'];
+                if (!this.dynamicClassName) {
+                    this.dynamicClassName = this.applyCustomUISettings(headerSeqNo, startCol, colSpan, startRow, rowSpan, justyFy, alignItem,
+                        backgroundColor, FontColor, fontSize, fieldPadding);
+                    this.fieldStyles[headerSeqNo + '_' + startCol + '_' + colSpan + '_' + startRow + '_' + rowSpan]['applyCustomUISettings'] = this.dynamicClassName;
+                }
 
                 // Find the div with dynamic class from container. Class will only be available in DOm if two fields are having same item seq. No.
-                $div = $containerDiv.find('.' + dynamicClassName);
+                $div = $containerDiv.find('.' + this.dynamicClassName);
 
                 //If div not found, then create new one.
                 if ($div.length <= 0)
-                    $div = $('<div class="vis-w-p-header-data-f ' + dynamicClassName + '">');
+                    $div = $('<div class="vis-w-p-header-data-f ' + this.dynamicClassName + '">');
 
 
 
@@ -624,24 +658,26 @@
                         //headergFields[field.getHeaderSeqno()] = [field];
                         // Check if field is marked as Header Panel Item or Not.
                         //if (field.getIsHeaderPanelitem()) {
-                        if (field.getHeaderSeqno() in headergFields) {
-                            headergFields[field.getHeaderSeqno()].push(field);
+                        if (field.getCardViewSeqNo() in headergFields) {
+                            headergFields[field.getCardViewSeqNo()].push(field);
                         }
                         else {
-                            headergFields[field.getHeaderSeqno()] = [field];
+                            headergFields[field.getCardViewSeqNo()] = [field];
                         }
                         //}
                     }
                 }
 
                 var mFields = headergFields[headerSeqNo];
-                //if (!mFields)
-                //    continue;
-                for (var x = 0; x < fields.length; x++) {
-                    var mField = fields[x];
+                if (!mFields)
+                    continue;
+                for (var x = 0; x < mFields.length; x++) {
+                    var mField = mFields[x];
                     if (!mField)
                         continue;
 
+                    if (!this.fieldStyles[mField.getColumnName()])
+                        this.fieldStyles[mField.getColumnName()] = {}
                     var controls = {};
                     $divIcon = $('<div class="vis-w-p-header-icon-f"></div>');
 
@@ -649,8 +685,12 @@
                     // If Referenceof field is Image then added extra class to align image and Label in center.
                     if (mField.getDisplayType() == VIS.DisplayType.Image) {
                         $divLabel.addClass('vis-w-p-header-Label-center-f');
-                        var dynamicClassForImageJustyfy = this.justifyAlignImageItems(headerSeqNo, justyFy, alignItem);
-                        $divLabel.addClass(dynamicClassForImageJustyfy);
+                        this.dynamicClassForImageJustyfy = this.fieldStyles[mField.getColumnName()]['justifyAlignImageItems'];
+                        if (!this.dynamicClassForImageJustyfy) {
+                            this.dynamicClassForImageJustyfy = this.justifyAlignImageItems(headerSeqNo, justyFy, alignItem);
+                            this.fieldStyles[mField.getColumnName()] = { 'justifyAlignImageItems': this.dynamicClassForImageJustyfy };
+                        }
+                        $divLabel.addClass(this.dynamicClassForImageJustyfy);
                     }
 
                     // Get Controls to be displayed in Header Panel
@@ -662,9 +702,12 @@
                             iControl.addActionListner(this);
                     }
 
-                    var dynamicFieldValue = this.applyCustomUIForFieldValue(headerSeqNo, startCol, startRow, mField);
-
-                    iControl.getControl().addClass(dynamicFieldValue);
+                    this.dynamicFieldValue = this.fieldStyles[mField.getColumnName()]['applyCustomUIForFieldValue'];
+                    if (!this.dynamicFieldValue) {
+                        this.dynamicFieldValue = this.applyCustomUIForFieldValue(headerSeqNo, startCol, startRow, mField);
+                        this.fieldStyles[mField.getColumnName()] = { 'applyCustomUIForFieldValue': this.dynamicFieldValue };
+                    }
+                    iControl.getControl().addClass(this.dynamicFieldValue);
 
                     // Create object of controls and push object and Field in Array
                     // THis array is used when user navigate from one record to another.
@@ -683,9 +726,9 @@
                         $lblControl = $label.getControl().addClass('vis-w-p-header-data-label');
                     }
 
-                    var colValue = getFieldValue(mField);
+                    var colValue = getFieldValue(mField, record);
 
-                    styleArr = mField.getHeaderStyle();
+                    styleArr = mField.getCardFieldStyle();
                     if (styleArr && styleArr.length > 0)
                         styleArr = styleArr.split("|");
 
@@ -745,7 +788,7 @@
                         }
                         else {
                             colValue = VIS.Utility.Util.getIdentifierDisplayVal(colValue);
-                            img = getIdentifierImage(mField);
+                            img = getIdentifierImage(mField, record);
                         }
                         if (img && !img.contains("Images/")) {
                             imgSpan = img;//img contains First charater of Name or Identifier text
@@ -759,7 +802,7 @@
                         $divIcon.append($image);
 
                         /*Set what do you want to show? Icon OR Label OR Both OR None*/
-                        if (!mField.getHeaderIconOnly() && !mField.getHeaderHeadingOnly()) {
+                        if (!mField.isCardIconHide() && !mField.isCardTextHide()) {
                             if (imgSpan != null)
                                 $image.hide();
                             else {
@@ -769,11 +812,11 @@
                             if ($lblControl && $lblControl.length > 0)
                                 $divLabel.append($lblControl);
                         }
-                        else if (mField.getHeaderIconOnly() && mField.getHeaderHeadingOnly()) {
+                        else if (mField.isCardIconHide() && mField.isCardTextHide()) {
                             //$divIcon.hide();
                             $divIcon.remove();
                         }
-                        else if (mField.getHeaderIconOnly()) {
+                        else if (mField.isCardTextHide()) {
                             if (imgSpan != null)
                                 $image.hide();
                             else
@@ -782,7 +825,7 @@
                             if ($lblControl && $lblControl.length > 0)
                                 $lblControl.remove();
                         }
-                        else if (mField.getHeaderHeadingOnly()) {
+                        else if (mField.isCardIconHide()) {
                             if ($lblControl && $lblControl.length > 0) {
                                 $divLabel.append($lblControl);
                             }
@@ -801,20 +844,20 @@
                         if (mField.getDisplayType() == VIS.DisplayType.Button) {
                             $divIcon.remove(); // button has image with field
                         }
-                        else if (!mField.getHeaderIconOnly() && !mField.getHeaderHeadingOnly()) {
+                        else if (!mField.isCardIconHide() && !mField.isCardTextHide()) {
                             $divIcon.append($spanIcon.append(icon));
                             if ($lblControl && $lblControl.length > 0)
                                 $divLabel.append($lblControl);
                         }
-                        else if (mField.getHeaderIconOnly() && mField.getHeaderHeadingOnly()) {
+                        else if (mField.isCardIconHide() && mField.isCardTextHide()) {
                             $divIcon.remove();
                         }
-                        else if (mField.getHeaderIconOnly()) {
+                        else if (!mField.isCardIconHide() && mField.isCardTextHide()) {
                             $divIcon.append($spanIcon.append(icon));
                             if ($lblControl && $lblControl.length > 0)
                                 $lblControl.hide();
                         }
-                        else if (mField.getHeaderHeadingOnly()) {
+                        else if (mField.isCardIconHide() && !mField.isCardTextHide()) {
                             if ($lblControl && $lblControl.length > 0) {
                                 $divLabel.append($lblControl);
                             }
@@ -834,30 +877,42 @@
         };
 
         this.setHeader = function () {
-            for (var j = 0; j < headerItems.length; j++) {
+            if (headerItems && headerItems.length > 0) {
+                for (var j = 0; j < headerItems.length; j++) {
 
-                var currentItem = headerItems[j];
+                    var currentItem = headerItems[j];
 
-                var rows = currentItem.HeaderTotalRow;
-                var columns = currentItem.HeaderTotalColumn;
-                var backColor = currentItem.HeaderBackColor;
-                var padding = currentItem.HeaderPadding;
+                    var rows = currentItem.HeaderTotalRow;
+                    var columns = currentItem.HeaderTotalColumn;
+                    var backColor = currentItem.HeaderBackColor;
+                    var padding = currentItem.HeaderPadding;
 
-                if (!backColor) {
-                    backColor = '';
+                    if (!backColor) {
+                        backColor = '';
+                    }
+
+                    if (!padding) {
+                        padding = '';
+                    }
+
+                    if (!this.fieldStyles[columns + '_' + rows + '_' + backColor + '_' + padding])
+                        this.fieldStyles[columns + '_' + rows + '_' + backColor + '_' + padding] = {};
+                    //Apply HTML Style
+                    this.dymcClass = this.fieldStyles[columns + '_' + rows + '_' + backColor + '_' + padding]['fieldGroupContainerUISettings'];
+                    if (!this.dymcClass) {
+                        this.dymcClass = this.fieldGroupContainerUISettings(columns, rows, backColor, padding, 1);
+                        this.fieldStyles[columns + '_' + rows + '_' + backColor + '_' + padding]['fieldGroupContainerUISettings'] = this.dymcClass;
+                    }
+
+                    var $containerDiv = $('<div class="' + this.dymcClass + '">');
+                    root.append($containerDiv);
+
+                    this.setHeaderItems(currentItem, $containerDiv, fields, record)
+
+
                 }
-
-                if (!padding) {
-                    padding = '';
-                }
-
-                var dymcClass = this.fieldGroupContainerUISettings(columns, rows, backColor, padding, 1);
-
-                var $containerDiv = $('<div class="' + dymcClass + '">');
-                root.append($containerDiv);
-
-                this.setHeaderItems(currentItem, $containerDiv, fields)
-
+            }
+            else {
                 for (var i = 0; i < fields.length; i++) {
                     field = fields[i];
                     var value = record[field.getColumnName().toLowerCase()];
@@ -987,8 +1042,8 @@
             }
         };
 
-        var getFieldValue = function (mField) {
-            var colValue = mField.getValue();
+        var getFieldValue = function (mField, record) {
+            var colValue = record[mField.getColumnName().toLowerCase()]; // mField.getValue();
 
             //if (!mField.getIsDisplayed())
             //    return "";
@@ -1045,14 +1100,14 @@
             return colValue;
         }
 
-        var getIdentifierImage = function (mField) {
-            var value = mField.getValue();
+        var getIdentifierImage = function (mField, record) {
+            var value = record[mField.getColumnName().toLowerCase()];
             value = mField.lookup.getDisplay(value, true, true);
 
             if (value != null && value && value.indexOf("Images/") > -1) {// Based on sequence of image in idenitifer, perform logic and display image with text
 
                 var img = value.substring(value.indexOf("Images/") + 7, value.lastIndexOf("^^"));
-                img = VIS.Application.contextUrl + "Images/Thumb140x120/" + img;
+                img = VIS.Application.contextUrl + "Images/Thumb32x32/" + img;
 
                 if (c == 0 || img.indexOf("nothing.png") > -1) {
 
@@ -1079,20 +1134,39 @@
 
         this.setHeader();
 
+        this.addStyleToDom();
+
 
 
     };
 
+    VCard.prototype.addStyleToDom = function () {
+        this.styleTag.type = 'text/css';
+        this.styleTag.innerHTML = this.dynamicStyle.join(" ");
+        $($('head')[0]).append(this.styleTag);
+    };
+
     VCard.prototype.applyCustomUIForFieldValue = function (headerSeqNo, startCol, startRow, mField) {
-        var style = mField.getHeaderStyle();
+        var style = mField.getCardFieldStyle();
         var dynamicClassName = "vis-hp-card-FieldValue_" + startRow + "_" + startCol + "_" + this.windowNo + "_" + headerSeqNo + "_" + mField.getAD_Column_ID();
-        //if (style && style.toLower().indexOf("@value::") > -1) {
-        //    style = getStylefromCompositeValue(style, "@value::");
-        //}
+        if (style && style.toLower().indexOf("@value::") > -1) {
+            style = getStylefromCompositeValue(style, "@value::");
+        }
 
         this.dynamicStyle.push("." + dynamicClassName + "  {" + style + "} ");
         return dynamicClassName;
     };
+
+    var getStylefromCompositeValue = function (style, requiredtype) {
+        if (style && style.toLower().indexOf(requiredtype) > -1) {
+            var styleArr = style.split("|");
+            for (var i = 0; i < styleArr.length; i++) {
+                if (styleArr[i].toLower().indexOf(requiredtype) > -1) {
+                    return styleArr[i].toLower().replace(requiredtype, "").trim();
+                }
+            }
+        }
+    }
 
     VCard.prototype.headerParentCustomUISettings = function (backColor) {
         var dynamicClassName = "vis-ad-w-p-card-Custom_" + this.windowNo;
@@ -1114,7 +1188,7 @@
 
     VCard.prototype.fieldGroupContainerUISettings = function (columns, rows, backcolor, padding, itemNo) {
         var dynamicClassName = "vis-ad-w-p-fg_card-container_" + rows + "_" + columns + "_" + this.windowNo + "_" + itemNo;
-        this.dynamicStyle.push(" ." + dynamicClassName + " {");
+        this.dynamicStyle.push(" ." + dynamicClassName + " {display:grid;");
         this.dynamicStyle.push('grid-template-columns:repeat(' + columns + ', 1fr);grid-template-rows:repeat(' + rows + ', auto);padding:' + padding + ';' + backcolor);
         this.dynamicStyle.push("} ");
         return dynamicClassName;

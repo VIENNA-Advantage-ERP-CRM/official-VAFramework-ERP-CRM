@@ -663,9 +663,7 @@ namespace VAdvantage.Controller
                     if (card.IsDefault)
                     {
                         mTabVO.DefaultCardID = card.AD_CardView_ID;
-
-
-                        card.IncludedCols = new List<int>();
+                        card.IncludedCols = new List<CardViewCol>();
                         card.Conditions = new List<CardViewCondition>();
                         VAdvantage.Classes.CommonFunctions cFun = new VAdvantage.Classes.CommonFunctions();
                         cFun.GetCardViewDetails(card);
