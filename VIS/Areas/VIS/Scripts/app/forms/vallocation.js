@@ -361,6 +361,7 @@
             $root.find(".vis-allocation-resultdiv").css({ "width": "100%", "margin": "0", "bottom": "0", "position": "inherit" });
             $bsyDiv[0].style.visibility = "hidden";
         };
+        
 
         function eventHandling() {
             //Organization 
@@ -1282,10 +1283,21 @@
                 var chk = $('#grid_' + $gridInvoice.name + '_records td[col="0"]').find('input[type="checkbox"]');
                 for (var i = 0; i < chk.length; i++) {
                     $(chk[i]).prop('checked', $invSelectAll.prop("checked"));
+
+                    //var checked = $('#grid_' + $gridInvoice.name + '_records td[col="0"]').find('input[type="checkbox"]:checked');
+                    ////VA228:User can select maximum 50 records assigned by amit
+                    //if (checked != null && checked.length > 50) {
+                    //    $(chk[i]).prop('checked', false);
+                    //    break;
+                    //}
+                    if (!checkCheckedLimitOnSelectAllCheckBox(chk[i], true, false, false, false))
+                        break;
+
                     //$(chk[i]).change(e);
                     $gridInvoice.editChange.call($gridInvoice, chk[i], i, 0, e);
                     var eData = { "type": "click", "phase": "before", "target": "grid", "recid": i, "index": i, "isStopped": false, "isCan//celled": false, "onComplete": null };
                     $gridInvoice.trigger(eData);
+                    console.log("rowno.: " + i);
                 }
 
                 // Clear Selected invoices array when we de-select the select all checkbox. work done for to hold all the selected invoices
@@ -1301,6 +1313,10 @@
                 var chk = $('#grid_' + $gridPayment.name + '_records td[col="0"]').find('input[type="checkbox"]');
                 for (var i = 0; i < chk.length; i++) {
                     $(chk[i]).prop('checked', $paymentSelctAll.prop("checked"));
+
+                    if (!checkCheckedLimitOnSelectAllCheckBox(chk[i], false, true, false, false))
+                        break;
+
                     //$(chk[i]).change(e);
                     $gridPayment.editChange.call($gridPayment, chk[i], i, 0, e);
                     var eData = { "type": "click", "phase": "before", "target": "grid", "recid": i, "index": i, "isStopped": false, "isCan//celled": false, "onComplete": null };
@@ -1317,6 +1333,10 @@
                 var chk = $('#grid_' + $gridCashline.name + '_records td[col="0"]').find('input[type="checkbox"]');
                 for (var i = 0; i < chk.length; i++) {
                     $(chk[i]).prop('checked', $cashSelctAll.prop("checked"));
+
+                    if (!checkCheckedLimitOnSelectAllCheckBox(chk[i], false, false, true, false))
+                        break;
+
                     //$(chk[i]).change(e);
                     $gridCashline.editChange.call($gridCashline, chk[i], i, 0, e);
                     var eData = { "type": "click", "phase": "before", "target": "grid", "recid": i, "index": i, "isStopped": false, "isCan//celled": false, "onComplete": null };
@@ -1326,6 +1346,8 @@
                     selectedCashlines = [];
                 $bsyDiv[0].style.visibility = "hidden";
             });
+
+
 
             //check all grids are loaded or not
             // return true or false based on condition
@@ -1369,6 +1391,10 @@
                 var chk = $('#grid_' + $glLineGrid.name + '_records td[col="0"]').find('input[type="checkbox"]');
                 for (var i = 0; i < chk.length; i++) {
                     $(chk[i]).prop('checked', $glSelectAll.prop("checked"));
+
+                    if (!checkCheckedLimitOnSelectAllCheckBox(chk[i], false, false, false, true))
+                        break;
+
                     //$(chk[i]).change(e);
                     $glLineGrid.editChange.call($glLineGrid, chk[i], i, 0, e);
                     var eData = { "type": "click", "phase": "before", "target": "grid", "recid": i, "index": i, "isStopped": false, "isCan//celled": false, "onComplete": null };
@@ -3396,8 +3422,10 @@
                 columns: columns,
                 records: rows,
                 onChange: function (event) {
-                    glCellChanged(event);
-                    //getMaxDate();
+                    if (checkCheckedLimitOnCellCheckboxClick(event, false, false, false, true)) {
+                        glCellChanged(event);
+                        //getMaxDate();
+                    }
                 },
                 onClick: function (event) {
                     glCellClicked(event);
@@ -3571,7 +3599,9 @@
                     getMaxDate();
                 },
                 onChange: function (event) {
-                    paymentCellChanged(event);
+                    if (checkCheckedLimitOnCellCheckboxClick(event, false, true, false, false)) {
+                        paymentCellChanged(event);
+                    }
                 },
                 onDblClick: function (event) {
                     paymentDoubleClicked(event);
@@ -3797,7 +3827,9 @@
                 columns: columns,
                 records: rows,
                 onChange: function (event) {
-                    cashCellChanged(event);
+                    if (checkCheckedLimitOnCellCheckboxClick(event, false, false, true, false)) {
+                        cashCellChanged(event);
+                    }
                 },
                 onClick: function (event) {
                     cashCellClicked(event);
@@ -3900,6 +3932,65 @@
             //added window no to find grid to implement scroll  issue : scroll was not working properly
             $divCashline.find('#grid_openformatgridcash_' + $self.windowNo + '_records').on('scroll', cartCashScroll);
         };
+
+        /**
+         * check checkbox checked limit when click on select all checkbox
+         * @param {any} chk
+         * @param {any} isInv
+         * @param {any} isPayment
+         * @param {any} isCash
+         * @param {any} isGl
+         */
+        function checkCheckedLimitOnSelectAllCheckBox(chk, isInv, isPayment, isCash, isGl) {
+            var result = true;
+            var checked = null;
+            if (isInv)
+                checked = $('#grid_' + $gridInvoice.name + '_records td[col="0"]').find('input[type="checkbox"]:checked');
+            else if (isPayment)
+                checked = $('#grid_' + $gridPayment.name + '_records td[col="0"]').find('input[type="checkbox"]:checked');
+            else if (isCash)
+                checked = $('#grid_' + $gridCashline.name + '_records td[col="0"]').find('input[type="checkbox"]:checked');
+            else if (isGl)
+                checked = $('#grid_' + $glLineGrid.name + '_records td[col="0"]').find('input[type="checkbox"]:checked');
+
+            //VA228:User can select maximum 50 records assigned by amit
+            if (checked != null && checked.length > 50) {
+                $(chk).prop('checked', false);
+                result = false;
+            }
+            return result;
+        }
+        /**
+         * check checked checkbox on click checkbox inside grid
+         * @param {any} event
+         * @param {any} isInv
+         * @param {any} isPayment
+         * @param {any} isCash
+         * @param {any} isGl
+         */
+        function checkCheckedLimitOnCellCheckboxClick(event, isInv, isPayment, isCash, isGl) {
+            var result = true;
+            var gridId = null;
+            if (isInv)
+                gridId = $gridInvoice.name;
+            else if (isPayment)
+                gridId = $gridPayment.name;
+            else if (isCash)
+                gridId = $gridCashline.name;
+            else if (isGl)
+                gridId = $glLineGrid.name;
+
+            var checked = $('#grid_' + gridId + '_records td[col="0"]').find('input[type="checkbox"]:checked');
+            //VA228:User can select maximum 50 records assigned by amit
+            if (checked != null && checked.length > 50) {
+                var chk = $('#grid_' + gridId + '_records td[col="0"]').find('input[type="checkbox"]');
+                $(chk[event.recid]).prop('checked', false);
+                VIS.ADialog.warn("VIS_MaxLimitReached");
+                event.preventDefault();
+                result = false;
+            }
+            return result;
+        }
 
         //Invoice grid bind
         function bindInvoiceGrid(data, chk) {
@@ -4030,8 +4121,10 @@
                 columns: columns,
                 records: rows,
                 onChange: function (event) {
-                    invoiceCellChanged(event);
-                    getMaxDate();
+                    if (checkCheckedLimitOnCellCheckboxClick(event, true, false, false, false)) {
+                        invoiceCellChanged(event);
+                        getMaxDate();
+                    }
                 },
                 onClick: function (event) {
                     invoiceCellClicked(event);
