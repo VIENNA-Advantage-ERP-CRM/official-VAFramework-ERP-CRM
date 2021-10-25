@@ -551,6 +551,10 @@
         return this.vo.IsSingleRow;
     }
 
+    GridTab.prototype.getTabLayout = function () {
+        return this.vo.TabLayout;
+    }
+
     GridTab.prototype.getIsDisplayed = function (initialSetup) {
         //  no restrictions
 
@@ -6576,6 +6580,32 @@
     GridField.prototype.getCardViewSeqNo = function () {
       return  this.cardViewSeq;
     }
+
+    GridField.prototype.setCardFieldStyle = function (style) {
+        this.cardFieldStyle = style;
+    }
+
+    GridField.prototype.getCardFieldStyle = function () {
+        return this.cardFieldStyle;
+    }
+
+    GridField.prototype.setCardIconHide = function (hide) {
+        this.cardHideIcon = hide;
+    }
+
+    GridField.prototype.isCardIconHide = function () {
+        return this.cardHideIcon;
+    }
+
+    GridField.prototype.setCardTextHide = function (hide) {
+        this.cardTextHide = hide;
+    }
+
+    GridField.prototype.isCardTextHide = function () {
+        return this.cardTextHide;
+    }
+
+
 
     GridField.prototype.updateContext = function () {
 

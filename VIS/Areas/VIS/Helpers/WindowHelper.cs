@@ -2949,17 +2949,27 @@ namespace VIS.Helpers
         /// clean up
         /// </summary>
 
-        internal static CardViewData GetCardViewDetail(int AD_Window_ID, int AD_Tab_ID, Ctx ctx)
+        internal static CardViewData GetCardViewDetail(int AD_Window_ID, int AD_Tab_ID, Ctx ctx,int AD_CardView_ID)
         {
             CardViewData cv = new CardViewData();
-            cv.IncludedCols = new List<int>();
+            cv.IncludedCols = new List<CardViewCol>();
             cv.Conditions = new List<CardViewCondition>();
 
             int AD_CV_ID = -1;
 
             string sql = @"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name, AD_CardView.IsDefault,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,ad_headerlayout.backgroundcolor,ad_headerlayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
-                        on AD_CardView.AD_HeaderLayout_ID = AD_HeaderLayout.AD_HeaderLayout_ID WHERE AD_CardView.AD_Window_ID = " + AD_Window_ID + " AND AD_CardView.AD_Tab_ID = " + AD_Tab_ID + " AND AD_CardView.AD_USER_ID=" + ctx.GetAD_User_ID()
-                            + " AND AD_CardView.AD_Client_ID = " + ctx.GetAD_Client_ID() + " ORDER BY AD_CardView.AD_USER_ID  ";
+                        on AD_CardView.AD_HeaderLayout_ID = AD_HeaderLayout.AD_HeaderLayout_ID WHERE ";
+
+            if (AD_CardView_ID > 0)
+            {
+                sql += @"AD_CardView.AD_CardView_ID = " + AD_CardView_ID;
+            }
+            else
+            {
+                sql += @"AD_CardView.AD_Window_ID = " + AD_Window_ID + " AND AD_CardView.AD_Tab_ID = " + AD_Tab_ID + " AND AD_CardView.AD_USER_ID=" + ctx.GetAD_User_ID()
+                                  + " AND AD_CardView.AD_Client_ID = " + ctx.GetAD_Client_ID();
+            }
+                           sql+= " ORDER BY AD_CardView.AD_USER_ID  ";
             IDataReader dr = null;
             try
             {
