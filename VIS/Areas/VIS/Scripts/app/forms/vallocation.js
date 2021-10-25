@@ -1284,12 +1284,7 @@
                 for (var i = 0; i < chk.length; i++) {
                     $(chk[i]).prop('checked', $invSelectAll.prop("checked"));
 
-                    //var checked = $('#grid_' + $gridInvoice.name + '_records td[col="0"]').find('input[type="checkbox"]:checked');
-                    ////VA228:User can select maximum 50 records assigned by amit
-                    //if (checked != null && checked.length > 50) {
-                    //    $(chk[i]).prop('checked', false);
-                    //    break;
-                    //}
+                    //VA228:Break statement when max limit 50 reached
                     if (!checkCheckedLimitOnSelectAllCheckBox(chk[i], true, false, false, false))
                         break;
 
@@ -3934,7 +3929,7 @@
         };
 
         /**
-         * check checkbox checked limit when click on select all checkbox
+         * check checkbox checked limit when click on select all checkbox max 50 records are allow to select
          * @param {any} chk
          * @param {any} isInv
          * @param {any} isPayment
@@ -3961,7 +3956,7 @@
             return result;
         }
         /**
-         * check checked checkbox on click checkbox inside grid
+         * check checked checkbox on click checkbox inside grid max 50 records are allow to select
          * @param {any} event
          * @param {any} isInv
          * @param {any} isPayment
