@@ -95,7 +95,7 @@ namespace VAdvantage.DataBase
         }
 
         /** Database Type       */
-        private String m_type = DatabaseType.DB_ORACLE;
+        private String m_type =    DatabaseType.DB_ORACLE;
 
         public String Db_Type
         {

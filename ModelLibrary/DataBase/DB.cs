@@ -1622,7 +1622,7 @@ namespace VAdvantage.DataBase
         /// <returns></returns>
         internal static string GetConnectionString()
         {
-            return DBConn.SetAndGetConnectionString();
+            return DBConn.CreateConnectionString();
         }
 
         /// <summary>
