@@ -1292,7 +1292,6 @@
                     $gridInvoice.editChange.call($gridInvoice, chk[i], i, 0, e);
                     var eData = { "type": "click", "phase": "before", "target": "grid", "recid": i, "index": i, "isStopped": false, "isCan//celled": false, "onComplete": null };
                     $gridInvoice.trigger(eData);
-                    console.log("rowno.: " + i);
                 }
 
                 // Clear Selected invoices array when we de-select the select all checkbox. work done for to hold all the selected invoices
