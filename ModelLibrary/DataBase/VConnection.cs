@@ -135,6 +135,9 @@ namespace VAdvantage.DataBase
             set { m_db_searchPath = value; }
         }
 
+        //initialize connection string and other properties*/
+        
+
         /// <summary>
         /// Is Oracle
         /// </summary>
@@ -357,6 +360,7 @@ namespace VAdvantage.DataBase
                 //else	//	existing environment properties
                 //{
                 s_cc = new VConnection();
+
                 //s_cc.SetAttributes(attributes);
                 //}
                 //log.Fine(s_cc.ToString());

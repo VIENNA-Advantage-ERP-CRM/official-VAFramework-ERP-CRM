@@ -46,7 +46,10 @@ namespace VAdvantage.DataBase
         /** SQL Statement Separator "; "	*/
         public static String SQLSTATEMENT_SEPARATOR = "; ";
 
-        public static String P_VIENNASYS = "ViennaSys";	//	Save system records
+        public static String P_VIENNASYS = "ViennaSys"; //	Save system records
+
+        //initialize connection string and other properties*/
+        private string conString = DBConn.CreateConnectionString();
 
         public static String TO_STRING(String txt)
         {
