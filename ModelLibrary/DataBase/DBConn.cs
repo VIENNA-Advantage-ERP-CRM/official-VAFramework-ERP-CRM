@@ -21,6 +21,12 @@ namespace VAdvantage.DataBase
             CreateConnectionString();
             DB.SetDBTarget(VConnection.Get());
         }
+        public static string SetAndGetConnectionString()
+        {
+            string con = CreateConnectionString();
+            DB.SetDBTarget(VConnection.Get());
+            return con;
+        }
 
         public static void SetOracleConnectionString(string connString)
         {
@@ -42,7 +48,7 @@ namespace VAdvantage.DataBase
             connectionString = connString;
         }
 
-        public static string CreateConnectionString()
+        private static string CreateConnectionString()
         {
 
             if (DataBase.DB.UseMigratedConnection)
