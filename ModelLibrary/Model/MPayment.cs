@@ -5442,56 +5442,6 @@ namespace VAdvantage.Model
 
             //JID_0889: show on void full message Reversal Document created
             StringBuilder Info = new StringBuilder(Msg.GetMsg(GetCtx(), "VIS_DocumentReversed") + reversal.GetDocumentNo());
-            int Alline_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT al.c_allocationline_id FROM c_allocationline al "
-                                                                + " INNER JOIN c_allocationhdr alhdr ON alhdr.c_allocationhdr_ID=al.c_allocationhdr_ID WHERE al.c_payment_ID         =" + GetC_Payment_ID()
-                                                                + " and alhdr.docstatus in ('CO','CL')"));
-            MAllocationHdr alloc = null;
-            if (Alline_ID > 0)
-            {
-                alloc = new MAllocationHdr(GetCtx(), false,
-                GetDateTrx(), GetC_Currency_ID(),
-                Msg.Translate(GetCtx(), "C_Payment_ID") + ": " + reversal.GetDocumentNo(), Get_Trx());
-                alloc.SetAD_Org_ID(GetAD_Org_ID());
-                // Update conversion type from payment to view allocation (required for posting)
-                if (alloc.Get_ColumnIndex("C_ConversionType_ID") > 0)
-                {
-                    alloc.SetC_ConversionType_ID(GetC_ConversionType_ID());
-                }
-                /** when trx date not matched with account date, then we have to set dateacct from payment record*/
-                alloc.SetDateAcct(GetDateAcct());
-
-                if (!alloc.Save())
-                {
-                    log.Warning("Automatic allocation - hdr not saved");
-                }
-                else
-                {
-                    //	Original Allocation
-                    MAllocationLine aLine = new MAllocationLine(alloc, GetPayAmt(true) -
-                        (Get_ColumnIndex("BackupWithholdingAmount") >= 0 ? (GetWithholdingAmt() + GetBackupWithholdingAmount()) : 0),
-                        Env.ZERO, Env.ZERO, Env.ZERO);
-                    aLine.SetDocInfo(GetC_BPartner_ID(), 0, 0);
-                    aLine.SetPaymentInfo(GetC_Payment_ID(), 0);
-                    if (!aLine.Save(Get_Trx()))
-                    {
-                        log.Warning("Automatic allocation - line not saved");
-                    }
-                    //	Reversal Allocation
-                    aLine = new MAllocationLine(alloc, reversal.GetPayAmt(true) +
-                        (Get_ColumnIndex("BackupWithholdingAmount") >= 0 ? (GetWithholdingAmt() + GetBackupWithholdingAmount()) : 0),
-                        Env.ZERO, Env.ZERO, Env.ZERO);
-                    aLine.SetDocInfo(reversal.GetC_BPartner_ID(), 0, 0);
-                    aLine.SetPaymentInfo(reversal.GetC_Payment_ID(), 0);
-                    if (!aLine.Save(Get_Trx()))
-                    {
-                        log.Warning("Automatic allocation - reversal line not saved");
-                    }
-                }
-                alloc.ProcessIt(DocActionVariables.ACTION_COMPLETE);
-                alloc.Save(Get_Trx());
-                Info.Append(" - @C_AllocationHdr_ID@: ").Append(alloc.GetDocumentNo());
-            }
-
 
             // change by Amit 2-6-2016 // Letter Of Credit module
             if (Env.IsModuleInstalled("VA026_"))
