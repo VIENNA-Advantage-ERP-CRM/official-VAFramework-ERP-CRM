@@ -972,6 +972,13 @@ namespace VAdvantage.Model
             {
                 MAllocationLine line = _lines[i];
                 line.SetIsActive(false);
+                // set Amount as ZERO on Reversal of Allocation
+                line.SetAmount(Env.ZERO);
+                line.SetDiscountAmt(Env.ZERO);
+                line.SetWriteOffAmt(Env.ZERO);
+                line.SetOverUnderAmt(Env.ZERO);
+                line.SetWithholdingAmt(Env.ZERO);
+                line.SetBackupWithholdingAmount(Env.ZERO);
                 line.Save();
                 bps.Add(line.ProcessIt(true));	//	reverse
 
