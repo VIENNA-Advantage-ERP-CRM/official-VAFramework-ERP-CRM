@@ -300,7 +300,8 @@ namespace VAdvantage.Model
                     for (int i = 0; i < ces.Length; i++)
                     {
                         MCostElement ce = ces[i];
-                        if (ce.GetM_CostElement_ID() != costElementId)
+                        if (ce.GetM_CostElement_ID() != costElementId && 
+                            !ce.GetCostingMethod().Equals(MCostElement.COSTINGMETHOD_ProvisionalWeightedAverage))
                         {
                             if (!UpdateCost(acctSchema, product, ce, AD_Org_ID, M_ASI_ID, 0, cq_AD_Org_ID, windowName, cd, costingMethod, costElementId, M_Warehouse_ID))
                             {
@@ -373,6 +374,7 @@ namespace VAdvantage.Model
             else
             {
                 // when calculate cost on completion, then calculate cost of defined costing method either on product category or on Accounting Schema
+                WeightedProvisionalInvoice:
                 MCostElement ce = null;
                 if (optionalStrCd == "window" && GetM_CostElement_ID() == 0)
                 {
@@ -385,6 +387,14 @@ namespace VAdvantage.Model
                 if (!UpdateCost(acctSchema, product, ce, AD_Org_ID, M_ASI_ID, 0, cq_AD_Org_ID, windowName, cd, costingMethod, costElementId, M_Warehouse_ID))
                 {
                     return false;
+                }
+
+                if (windowName.Equals("Material Receipt") && optionalStrCd != "process")
+                {
+                    // Get Costing Element of Weighted Provisional Invoice
+                    costElementId = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT DISTINCT M_CostElement_ID FROM M_CostElement WHERE IsActive = 'Y' 
+                            AND CostingMethod = 'B' AND AD_Client_ID = " + product.GetAD_Client_ID()));
+                    goto WeightedProvisionalInvoice;
                 }
             }
             return true;
