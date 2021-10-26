@@ -19,8 +19,9 @@ namespace VAdvantage.DataBase
         public static void SetConnectionString()
         {
             CreateConnectionString();
-            DB.SetDBTarget(VConnection.Get());
+            //DB.SetDBTarget(VConnection.Get());
         }
+       
 
         public static void SetOracleConnectionString(string connString)
         {
@@ -72,6 +73,7 @@ namespace VAdvantage.DataBase
                         connectionString = TrimUnicode(connectionString);
                         vconn.SetAttributes(connectionString);
                         vconn.GetDatabase().SetConnectionString(connectionString);
+                        DB.SetDBTarget(VConnection.Get());
                         return connectionString;
                     }
                     connectionString = System.Configuration.ConfigurationManager.AppSettings["PostgreSQLConnectionString"];
@@ -80,6 +82,7 @@ namespace VAdvantage.DataBase
                         vconn.Db_Type = DatabaseType.DB_POSTGRESQL;
                         vconn.SetAttributes(connectionString);
                         vconn.GetDatabase().SetConnectionString(connectionString);
+                        DB.SetDBTarget(VConnection.Get());
                         return connectionString;
                     }
                     connectionString = System.Configuration.ConfigurationManager.AppSettings["PostgreSQLPlusConnectionString"];
@@ -88,6 +91,7 @@ namespace VAdvantage.DataBase
                         vconn.Db_Type = DatabaseType.DB_POSTGRESQL;
                         vconn.SetAttributes(connectionString);
                         vconn.GetDatabase().SetConnectionString(connectionString);
+                        DB.SetDBTarget(VConnection.Get());
                         return connectionString;
                     }
                     connectionString = System.Configuration.ConfigurationManager.AppSettings["MSSQLConnectionString"];
@@ -96,11 +100,9 @@ namespace VAdvantage.DataBase
                         vconn.Db_Type = DatabaseType.DB_MSSQL;
                         vconn.SetAttributes(connectionString);
                         vconn.GetDatabase().SetConnectionString(connectionString);
+                        DB.SetDBTarget(VConnection.Get());
                         return connectionString;
                     }
-                  
-                    // connectionString =  vconn.CreateDBConnectionString();
-                    //return Ini.CreateConnectionString(vconn);
                 }
 
                 return connectionString;
@@ -115,7 +117,6 @@ namespace VAdvantage.DataBase
             //}
             //return constr;   //return the connection string to the user
         }
-
 
         public static string CreateConnectionString(string host_name, string port_number, string user_id, string password, string database, string db_to_match)
         {
