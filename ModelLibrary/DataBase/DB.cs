@@ -49,7 +49,7 @@ namespace VAdvantage.DataBase
         public static String P_VIENNASYS = "ViennaSys"; //	Save system records
 
         //initialize connection string and other properties*/
-        private string conString = DBConn.CreateConnectionString();
+        private static string conString = DBConn.CreateConnectionString();
 
         public static String TO_STRING(String txt)
         {
