@@ -923,9 +923,10 @@ namespace VAdvantage.Classes
             return value.ToString();
         }
 
-        public CardViewData GetCardViewDetails(int AD_User_ID, int AD_Tab_ID, int AD_CardView_ID)
+        public CardViewData GetCardViewDetails(int AD_User_ID, int AD_Tab_ID, int AD_CardView_ID, Ctx ctx)
         {
             DataSet ds = null;
+
             if (AD_CardView_ID > 0)
             {
                 ds = DataBase.DB.ExecuteDataset(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name, AD_CardView.IsDefault,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,ad_headerlayout.backgroundcolor,ad_headerlayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
@@ -933,15 +934,19 @@ namespace VAdvantage.Classes
             }
             else
             {
-                ds = DataBase.DB.ExecuteDataset(@" SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,ad_headerlayout.backgroundcolor,ad_headerlayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
+                ds = DataBase.DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@" SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,ad_headerlayout.backgroundcolor,ad_headerlayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
                         ON ( AD_CardView.AD_HeaderLayout_ID = AD_HeaderLayout.AD_HeaderLayout_ID)
                         JOIN AD_DefaultCardView AD_DefaultCardView ON (AD_DefaultCardView.AD_CardView_ID=AD_CardView.AD_CardView_ID)
-                        WHERE AD_DefaultCardView.IsActive='Y' AND AD_DefaultCardView.AD_User_ID=" + AD_User_ID + " AND AD_DefaultCardView.AD_Tab_ID =" + AD_Tab_ID + " AND AD_CardView.IsActive='Y' ORDER BY AD_CardView.Name ASC");
+                        WHERE AD_DefaultCardView.isactive = 'Y' AND 
+                        (AD_CardView.AD_User_ID IS NULL OR AD_CardView.createdBy=" + AD_User_ID + ") AND AD_DefaultCardView.ad_user_id = " + AD_User_ID +
+                        " AND AD_DefaultCardView.AD_Tab_ID=" + AD_Tab_ID + " AND AD_CardView.IsActive = 'Y' " +
+                        "ORDER BY AD_DefaultCardView.AD_Client_ID Desc", "AD_CardView", true, false));
 
                 if (ds == null || ds.Tables[0].Rows.Count == 0)
                 {
-                    ds = DataBase.DB.ExecuteDataset(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,ad_headerlayout.backgroundcolor,ad_headerlayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
-                        ON (AD_CardView.AD_HeaderLayout_ID = AD_HeaderLayout.AD_HeaderLayout_ID) WHERE AD_CardView.IsDefault='Y' AND AD_CardView.AD_Tab_ID =" + AD_Tab_ID + " AND AD_CardView.IsActive='Y' ORDER BY AD_CardView.Name ASC");
+                    ds = DataBase.DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,ad_headerlayout.backgroundcolor,ad_headerlayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
+                        ON (AD_CardView.AD_HeaderLayout_ID = AD_HeaderLayout.AD_HeaderLayout_ID) WHERE AD_CardView.IsDefault='Y'
+                        AND AD_CardView.AD_Tab_ID =" + AD_Tab_ID + " AND AD_CardView.IsActive='Y' ORDER BY AD_CardView.Name ASC", "AD_CardView", true, false));
                 }
             }
 
@@ -1055,9 +1060,9 @@ namespace VAdvantage.Classes
                                 FontSize = Convert.ToString(row["FontSize"]),
                                 Padding = Convert.ToString(row["Padding"]),
                                 ColSql = Convert.ToString(row["ColumnSql"]),
-                                HideFieldIcon=Util.GetValueOfString(row["HideFieldIcon"])=="Y",
+                                HideFieldIcon = Util.GetValueOfString(row["HideFieldIcon"]) == "Y",
                                 HideFieldText = Util.GetValueOfString(row["HideFieldtext"]) == "Y",
-                                FieldValueStyle= Convert.ToString(row["FieldValueStyle"])
+                                FieldValueStyle = Convert.ToString(row["FieldValueStyle"])
                             };
                         }
                     }
