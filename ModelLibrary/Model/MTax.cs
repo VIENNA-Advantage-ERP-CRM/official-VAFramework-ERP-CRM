@@ -292,6 +292,12 @@ namespace VAdvantage.Model
             //	Null Tax
             if (IsZeroTax())
                 return Env.ZERO;
+
+            MClient client = MClient.Get(GetCtx());
+            if (client.Get_ColumnIndex("IsRoundLineTaxAmt") >= 0 && !client.IsRoundLineTaxAmt())
+            {
+                scale = 7;      //SET 7 By VIS0228 As discussed with Mukesh Sir
+            }
             Decimal multiplier = Decimal.Round(Decimal.Divide(GetRate(), ONEHUNDRED), 12, MidpointRounding.AwayFromZero);
             //BigDecimal multiplier = getRate().divide(ONEHUNDRED, 12, BigDecimal.ROUND_HALF_UP);		
             Decimal? tax = null;
@@ -309,7 +315,7 @@ namespace VAdvantage.Model
 
                 tax = Decimal.Subtract(amount, bbase);
             }
-            Decimal finalTax = Decimal.Round((Decimal)tax, 7, MidpointRounding.AwayFromZero);//SET 7 By VIS0228 As discussed with Mukesh Sir
+            Decimal finalTax = Decimal.Round((Decimal)tax, scale, MidpointRounding.AwayFromZero);
             //BigDecimal finalTax = tax.setScale(scale, BigDecimal.ROUND_HALF_UP);
             log.Fine("calculateTax " + amount
                 + " (incl=" + taxIncluded + ",mult=" + multiplier + ",scale=" + scale
