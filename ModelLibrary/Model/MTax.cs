@@ -293,6 +293,7 @@ namespace VAdvantage.Model
             if (IsZeroTax())
                 return Env.ZERO;
 
+            // VIS0060: Work done to Round off Tax Amount based on setting taken on Tenant.
             MClient client = MClient.Get(GetCtx());
             if (client.Get_ColumnIndex("IsRoundLineTaxAmt") >= 0 && !client.IsRoundLineTaxAmt())
             {
