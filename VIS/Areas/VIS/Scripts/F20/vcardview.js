@@ -26,17 +26,17 @@
         var root;
         var body = null;
         var headerdiv;
-        var cmbDiv;
-        var $cmbCards = null;
+        var $cmbCards = null; 
+        var $lblGroup = null;
 
         //  var cardList;
         function init() {
             root = $("<div class='vis-cv-body vis-noselect'>");
             body = $("<div class='vis-cv-main'>");
             headerdiv = $("<div class='vis-cv-header'>");
-            cmbDiv = $("<div class='vis-cv-header'>");
             $cmbCards = $('<Select>')
-            cmbDiv.append($cmbCards);
+            $lblGroup = $('<p>');
+            headerdiv.append($cmbCards).append($lblGroup);
             //   cardList = $("<img style='margin-left:10px;margin-top:4px;float:right' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/defaultCView.png' >");
             root.append(body);
         }
@@ -55,16 +55,12 @@
         };
 
         this.setHeader = function (txt) {
-            headerdiv.text(txt);
+            $lblGroup.text(txt);
         }
 
         this.getHeader = function () {
             return headerdiv;
         }
-
-        this.getCmbDiv = function () {
-            return cmbDiv;
-        };
 
         this.sizeChanged = function (h, w) {
             root.height((h - 12) + 'px');
@@ -93,7 +89,7 @@
                 }
             }
             else
-                body.width(262 * (grpCtrlC));
+                body.width(body.parent().width * (grpCtrlC));
             this.navigate();
         };
 
@@ -137,11 +133,22 @@
         };
 
         var handleEvents = function () {
+            $cmbCards.one("focus", loadCards);
             $cmbCards.on("change", cardChanged);
+        };
+
+
+        var loadCards = function () {
+            var res = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "JsonData/GetCardsInfo", { AD_Tab_ID: self.mTab.getAD_Tab_ID() });
+            if (res) {
+                self.fillCardViewList(res);
+            }
         };
 
         var cardChanged = function (e) {
             self.getCardViewData(self.mTab, $cmbCards.val());
+            e.stopPropagation();
+            e.preventDefault();
         };
 
         var curCard = null;
@@ -192,7 +199,8 @@
         };
 
         this.fillCardViewList = function (cards) {
-            if (cards && cards.length > 0 && $cmbCards.find('option').length == 0) {
+            $cmbCards.empty();
+            if (cards && cards.length > 0) {
                 for (var i = 0; i < cards.length; i++) {
                     $cmbCards.append('<option value="' + cards[i].AD_CardView_ID + '">' + cards[i].Name + '</option>');
                 }
@@ -252,7 +260,6 @@
         this.getCardViewData(mTab, 0);
 
         cContainer.append(this.getHeader());
-        cContainer.append(this.getCmbDiv());
         cContainer.append(this.getRoot());
     };
 
@@ -290,8 +297,8 @@
                 var f = this.mTab.getFieldById(retData.IncludedCols[i].AD_Field_ID);
                 f.setCardViewSeqNo(retData.IncludedCols[i].SeqNo);
                 f.setCardFieldStyle(retData.IncludedCols[i].HTMLStyle);
-                f.setCardIconHide(retData.IncludedCols[i].HideIcon);
-                f.setCardTextHide(retData.IncludedCols[i].HideText);
+                //f.setCardIconHide(retData.IncludedCols[i].HideIcon);
+                //f.setCardTextHide(retData.IncludedCols[i].HideText);
                 if (f)
                     this.fields.push(f);
                 this.hasIncludedCols = true;
@@ -556,6 +563,7 @@
         var $root = $('<div class="vis-ad-w-p-card_root_common">');
         root.append($root);
         var headerCustom = this.headerParentCustomUISettings(headerStyle);
+        root.addClass(headerCustom);
 
         if (!this.fieldStyles["root_" + windowNo])
             this.fieldStyles["root_" + windowNo] = {};
@@ -590,6 +598,10 @@
                 var alignItem = headerItem.AlignItems;
                 var fieldPadding = headerItem.Padding;
                 var backgroundColor = headerItem.BackgroundColor;
+                var hideFieldIcon = headerItem.HideFieldIcon;
+                var hideFieldText = headerItem.HideFieldText;
+                var fieldValueStyle = headerItem.FieldValueStyle;
+
                 if (!backgroundColor) {
                     backgroundColor = '';
                 }
@@ -651,13 +663,8 @@
                 //else {
                 if (!headergFields) {
                     headergFields = {};
-                    //fields = fields.sort(function (a, b) { return a.getHeaderSeqno() - b.getHeaderSeqno() });
                     for (var i = 0; i < fields.length; i++) {
                         var field = fields[i];
-
-                        //headergFields[field.getHeaderSeqno()] = [field];
-                        // Check if field is marked as Header Panel Item or Not.
-                        //if (field.getIsHeaderPanelitem()) {
                         if (field.getCardViewSeqNo() in headergFields) {
                             headergFields[field.getCardViewSeqNo()].push(field);
                         }
@@ -675,6 +682,11 @@
                     var mField = mFields[x];
                     if (!mField)
                         continue;
+                    if (mField.getCardFieldStyle())
+                        fieldValueStyle = mField.getCardFieldStyle();
+
+                    mField.setCardIconHide(hideFieldIcon);
+                    mField.setCardTextHide(hideFieldText);
 
                     if (!this.fieldStyles[mField.getColumnName()])
                         this.fieldStyles[mField.getColumnName()] = {}
@@ -704,7 +716,7 @@
 
                     this.dynamicFieldValue = this.fieldStyles[mField.getColumnName()]['applyCustomUIForFieldValue'];
                     if (!this.dynamicFieldValue) {
-                        this.dynamicFieldValue = this.applyCustomUIForFieldValue(headerSeqNo, startCol, startRow, mField);
+                        this.dynamicFieldValue = this.applyCustomUIForFieldValue(headerSeqNo, startCol, startRow, mField, fieldValueStyle);
                         this.fieldStyles[mField.getColumnName()] = { 'applyCustomUIForFieldValue': this.dynamicFieldValue };
                     }
                     iControl.getControl().addClass(this.dynamicFieldValue);
@@ -728,7 +740,7 @@
 
                     var colValue = getFieldValue(mField, record);
 
-                    styleArr = mField.getCardFieldStyle();
+                    styleArr = fieldValueStyle;
                     if (styleArr && styleArr.length > 0)
                         styleArr = styleArr.split("|");
 
@@ -1146,8 +1158,8 @@
         $($('head')[0]).append(this.styleTag);
     };
 
-    VCard.prototype.applyCustomUIForFieldValue = function (headerSeqNo, startCol, startRow, mField) {
-        var style = mField.getCardFieldStyle();
+    VCard.prototype.applyCustomUIForFieldValue = function (headerSeqNo, startCol, startRow, mField, fieldValueStyle) {
+        var style = fieldValueStyle;
         var dynamicClassName = "vis-hp-card-FieldValue_" + startRow + "_" + startCol + "_" + this.windowNo + "_" + headerSeqNo + "_" + mField.getAD_Column_ID();
         if (style && style.toLower().indexOf("@value::") > -1) {
             style = getStylefromCompositeValue(style, "@value::");

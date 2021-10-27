@@ -2483,6 +2483,12 @@ findImg {
     font-weight: bold;
     color: darkgray;
     font-size: 12px;
+    padding-top: .5rem;
+    position: relative;
+    z-index: 9;
+}
+.vis-cv-header select {
+    margin-right: .5rem;
 }
 
 .vis-cv-main {
