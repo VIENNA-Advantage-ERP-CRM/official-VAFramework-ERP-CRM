@@ -79,18 +79,18 @@ namespace VIS.Controllers
             CardViewModel objCardViewModel = new CardViewModel();
             if (isNewRecord)
             {
-                id = objCardViewModel.SaveCardViewRecord(lstCardView[0].CardViewName, lstCardView[0].AD_Window_ID, lstCardView[0].AD_Tab_ID, lstCardView[0].UserID, lstCardView[0].AD_GroupField_ID, ctx, 0/*, LstRoleID*/, lstCardViewCondition,lstCardView[0].IsCardDefault, lstCardView[0].AD_HeaderLayout_ID);
+                id = objCardViewModel.SaveCardViewRecord(lstCardView[0].CardViewName, lstCardView[0].AD_Window_ID, lstCardView[0].AD_Tab_ID, lstCardView[0].UserID, lstCardView[0].AD_GroupField_ID, ctx, 0/*, LstRoleID*/, lstCardViewCondition, lstCardView[0].AD_HeaderLayout_ID, lstCardView[0].isPublic);
             }
             else
             {
                 objCardViewModel.DeleteAllCardViewColumns(lstCardView[0].CardViewID, ctx);
-                id = objCardViewModel.SaveCardViewRecord(lstCardView[0].CardViewName, lstCardView[0].AD_Window_ID, lstCardView[0].AD_Tab_ID, lstCardView[0].UserID, lstCardView[0].AD_GroupField_ID, ctx, lstCardView[0].CardViewID/*, LstRoleID*/, lstCardViewCondition, lstCardView[0].IsCardDefault, lstCardView[0].AD_HeaderLayout_ID);
+                id = objCardViewModel.SaveCardViewRecord(lstCardView[0].CardViewName, lstCardView[0].AD_Window_ID, lstCardView[0].AD_Tab_ID, lstCardView[0].UserID, lstCardView[0].AD_GroupField_ID, ctx, lstCardView[0].CardViewID/*, LstRoleID*/, lstCardViewCondition, lstCardView[0].AD_HeaderLayout_ID,lstCardView[0].isPublic);
             }
 
-            if (lstCardView[0].IsDefault)
-            {
-                objCardViewModel.SetDefaultCardView(ctx, id, lstCardView[0].AD_Tab_ID);
-            }
+            //if (lstCardView[0].IsDefault)
+            //{
+                objCardViewModel.SetDefaultCardView(ctx, id, lstCardView[0].AD_Tab_ID, lstCardView[0].IsDefault);
+            //}
 
             int sqNo = 0;
             if (lstCardViewColumns != null)
