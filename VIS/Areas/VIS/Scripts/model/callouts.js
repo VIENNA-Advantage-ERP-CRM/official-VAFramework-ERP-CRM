@@ -23543,4 +23543,47 @@
     VIS.Model.CalloutPaymentTerm = CalloutPaymentTerm;
     //**************CalloutPaymentTerm End*************
 
+    //*********** CalloutLead Start ****
+    function CalloutLead() {
+        VIS.CalloutEngine.call(this, "VIS.CalloutLead"); //must call
+    };
+    VIS.Utility.inheritPrototype(CalloutLead, VIS.CalloutEngine);//inherit CalloutEngine
+
+    /**
+     * Set full name on Lead window
+     * @param {any} ctx
+     * @param {any} windowNo
+     * @param {any} mTab
+     * @param {any} mField
+     * @param {any} value
+     * @param {any} oldValue
+     */
+    CalloutLead.prototype.SetFullName = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if ((this.isCalloutActive() || value == null || value.toString() == "") && (mField.getColumnName() != "LastName")) {
+            return "";
+        }
+        this.setCalloutActive(true);
+        var fName = "";
+        if (mTab.getValue("Firstname") != null) {
+            fName = mTab.getValue("Firstname");
+        }
+        if (mTab.getValue("LastName") != null && mTab.getValue("LastName") != "") {
+            if (fName == "")
+                fName = mTab.getValue("LastName");
+            else
+                fName = fName + " " + mTab.getValue("LastName");
+        }
+        if (fName != "") {
+            mTab.setValue("Name", fName);
+            mTab.setValue("ContactName", fName);
+        }
+        this.setCalloutActive(false);
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
+    VIS.Model.CalloutLead = CalloutLead;
+    //**************CalloutLead End*************
+
+
 })(VIS, jQuery);
