@@ -31,18 +31,18 @@
                 <i class="vis vis-mark"></i>
             </div>
             <div class="VIS_Pref_pass-line">
-                <h4 class="VIS-Lavel-float">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang,"VIS_CurrentPassword")</h4>
+                <h4 class="VIS-Lavel-float">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang,"VIS_CurrentPassword")<span class="text-danger">*</span></h4>
                 <input id="@("txtCurrentPws_" + ViewBag.WindowNumber)" maxlength="60" class="VIS_Pref_pass" placeholder="@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "VIS_CurrentPassword")" type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}">
                 <div class="VIS_Pref_clear-both"></div>
             </div>
             <div class="VIS_Pref_pass-line">
-                <h4 class="VIS-Lavel-float">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang,"VIS_NewPassword") </h4>
+                <h4 class="VIS-Lavel-float">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang,"VIS_NewPassword")<span class="text-danger">*</span></h4>
                 <input id="@("txtNewPws_" + ViewBag.WindowNumber)" maxlength="60" class="VIS_Pref_pass" placeholder="@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "VIS_NewPassword")" type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
                     name="pwd1" onchange="form.pwd2.pattern = this.value;">
                 <div class="VIS_Pref_clear-both"></div>
             </div>
             <div class="VIS_Pref_pass-line">
-                <h4 class="VIS-Lavel-float">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang,"VIS_ConfirmPassword") </h4>
+                <h4 class="VIS-Lavel-float">@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang,"VIS_ConfirmPassword")<span class="text-danger">*</span></h4>
                 <input id="@("txtConformPws_" + ViewBag.WindowNumber)" maxlength="60" class="VIS_Pref_pass" placeholder="@VAdvantage.Utility.Msg.GetMsg(ViewBag.lang, "VIS_ConfirmPassword")" type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="pwd2">
                 <div class="VIS_Pref_clear-both"></div>
             </div>

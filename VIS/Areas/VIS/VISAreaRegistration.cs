@@ -157,12 +157,13 @@ namespace VIS
             //     "~/Areas/VIS/Scripts/app/forms/glDimensionValue.js",
             //     "~/Areas/VIS/Scripts/app/forms/vcreaterelatedlines.js",
             //     "~/Areas/VIS/Scripts/app/forms/createforecast.js",
+            //       "~/Areas/VIS/Scripts/app/ssemanager.js",
 
 
-            //     "~/Areas/VIS/Scripts/tabpanels/verinfo.js",
-            //     "~/Areas/VIS/Scripts/tabpanels/HistoryDetailsTabPanel.js",
-            //     "~/Areas/VIS/Scripts/TestPanel.js");
-
+            //       "~/Areas/VIS/Scripts/tabpanels/verinfo.js",
+            //        "~/Areas/VIS/Scripts/tabpanels/HistoryDetailsTabPanel.js",
+            //      "~/Areas/VIS/Scripts/TestPanel.js",
+            //     "~/Areas/VIS/Scripts/app/forms/form.js");
 
 
             //modScript.Include(

@@ -870,6 +870,7 @@ namespace VAdvantage.Controller
             clone.ShowFilterOption = ShowFilterOption;
             clone.IsUnique = IsUnique;
             clone.IsSwitch = IsSwitch;
+            clone.IsIdentifier = IsIdentifier;
             return clone;
         }
 

@@ -15785,6 +15785,57 @@
         return "";
     };
 
+    /// <summary>
+    /// Requisition Line - Charge.
+    /// </summary>
+    /// <param name="ctx">context</param>
+    /// <param name="windowNo">current Window No</param>
+    /// <param name="mTab">Grid Tab</param>
+    /// <param name="mField">Grid Field</param>
+    /// <param name="value"> New Value</param>
+    /// <returns>null or error message</returns>
+
+    CalloutRequisition.prototype.Charge = function (ctx, windowNo, mTab, mField, value, oldValue) {
+
+        try {
+            if (this.isCalloutActive() || value == null || value.toString() == "") {
+                return "";
+            }
+
+            this.setCalloutActive(true);
+            var C_Charge_ID = Util.getValueOfInt(value);
+            if (C_Charge_ID == null || C_Charge_ID == 0) {
+                this.setCalloutActive(false);
+                return "";
+            }
+
+            //	No Product defined
+            if (mTab.getValue("M_Product_ID") != null) {
+                mTab.setValue("M_Product_ID", null);                
+            }
+            mTab.setValue("M_AttributeSetInstance_ID", null);            
+
+            //set default UOM for charge.
+            var c_uom_id = ctx.getContextAsInt("#C_UOM_ID");
+            if (c_uom_id > 0) {
+                mTab.setValue("C_UOM_ID", c_uom_id);	//	Default charge from context
+            }
+            else {
+                mTab.setValue("C_UOM_ID", 100);	//	EA
+            }
+
+            var chargeAmt = VIS.dataContext.getJSONRecord("MCharge/GetCharge", C_Charge_ID.toString()); 
+            mTab.setValue("PriceActual", Util.getValueOfDecimal(chargeAmt));            
+        }
+        catch (err) {
+            this.setCalloutActive(false);            
+            return err.message;
+        }
+        this.setCalloutActive(false);
+        oldValue = null;
+        return "";
+    };
+
     /**
      *	Order Line - Amount.
      *		- called from Qty, PriceActual

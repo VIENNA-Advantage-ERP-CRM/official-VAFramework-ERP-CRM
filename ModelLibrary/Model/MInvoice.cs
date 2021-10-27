@@ -5741,39 +5741,6 @@ namespace VAdvantage.Model
             SetC_Payment_ID(0);
             SetIsPaid(true);
 
-            //	Create Allocation
-            if (!isCash)
-            {
-                MAllocationHdr alloc = new MAllocationHdr(GetCtx(), false, GetDateAcct(),
-                    GetC_Currency_ID(),
-                    Msg.Translate(GetCtx(), "C_Invoice_ID") + ": " + GetDocumentNo() + "/" + reversal.GetDocumentNo(),
-                    Get_TrxName());
-                alloc.SetAD_Org_ID(GetAD_Org_ID());
-                // Update conversion type from Invoice to view allocation (required for posting)
-                if (alloc.Get_ColumnIndex("C_ConversionType_ID") > 0)
-                {
-                    alloc.SetC_ConversionType_ID(GetC_ConversionType_ID());
-                }
-                if (alloc.Save())
-                {
-                    //	Amount
-                    Decimal gt = GetGrandTotal(true);
-                    if (!IsSOTrx())
-                        gt = Decimal.Negate(gt);
-                    //	Orig Line
-                    MAllocationLine aLine = new MAllocationLine(alloc, gt, Env.ZERO, Env.ZERO, Env.ZERO);
-                    aLine.SetC_Invoice_ID(GetC_Invoice_ID());
-                    aLine.Save();
-                    //	Reversal Line
-                    MAllocationLine rLine = new MAllocationLine(alloc, Decimal.Negate(gt), Env.ZERO, Env.ZERO, Env.ZERO);
-                    rLine.SetC_Invoice_ID(reversal.GetC_Invoice_ID());
-                    rLine.Save();
-                    //	Process It
-                    if (alloc.ProcessIt(DocActionVariables.ACTION_COMPLETE))
-                        alloc.Save();
-                }
-            }   //	notCash
-
             //	Explicitly Save for balance calc.
             Save();
 

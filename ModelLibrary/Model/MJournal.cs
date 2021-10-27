@@ -441,15 +441,19 @@ namespace VAdvantage.Model
             {
                 return 0;
             }
+
+            int precision = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT stdprecision FROM C_Currency WHERE C_Currency_ID = 
+                            ( SELECT C_Currency_ID FROM GL_journal WHERE GL_Journal_ID=" + GetGL_Journal_ID() + " )", null, Get_Trx()));
             int count = 0;
             int lineCount = 0;
-
+            MJournalLine toLine = null;
             MJournalLine[] fromLines = fromJournal.GetLines(false);
             for (int i = 0; i < fromLines.Length; i++)
             {
-                MJournalLine toLine = new MJournalLine(GetCtx(), 0, fromJournal.Get_TrxName());
+                toLine = new MJournalLine(GetCtx(), 0, fromJournal.Get_TrxName());
                 PO.CopyValues(fromLines[i], toLine, GetAD_Client_ID(), GetAD_Org_ID());
                 toLine.SetGL_Journal_ID(GetGL_Journal_ID());
+                toLine.m_precision = precision;
                 //
                 if (dateAcct != null)
                 {
@@ -476,7 +480,12 @@ namespace VAdvantage.Model
                     if (toLine.Get_ColumnIndex("ReversalDoc_ID") > 0)
                     {
                         toLine.SetReversalDoc_ID(fromLines[i].GetGL_JournalLine_ID());
+                        toLine._isReverseByProcess = true;
                     }
+                }
+                if (Get_ColumnIndex("ConditionalFlag") >= 0 && Util.GetValueOfString(Get_Value("ConditionalFlag")).Equals("00"))
+                {
+                    toLine._isReverseByProcess = true;
                 }
 
                 if (!toLine.Save())
@@ -494,12 +503,19 @@ namespace VAdvantage.Model
                     }
                     SetProcessMsg(String.IsNullOrEmpty(error) ? "Could not create Journal Line" : Msg.GetMsg(toLine.GetCtx(), error));
                 }
-                else 
+                else
                 {
                     count++;
-                    lineCount += toLine.CopyLinesFrom(fromLines[i], toLine.GetGL_JournalLine_ID(), typeCR);
+                    if (!String.IsNullOrEmpty(toLine.GetElementType()))
+                    {
+                        lineCount += toLine.CopyLinesFrom(fromLines[i], toLine.GetGL_JournalLine_ID(), typeCR);
+                    }
                 }
             }
+
+            // Update Header
+            toLine.UpdateJournalTotal();
+
             if (fromLines.Length != count)
             {
                 log.Log(Level.SEVERE, "Line difference - JournalLines=" + fromLines.Length + " <> Saved=" + count);
@@ -615,7 +631,8 @@ namespace VAdvantage.Model
                     }
                     SetProcessMsg(String.IsNullOrEmpty(error) ? "Could not create GL Journal" : Msg.GetMsg(toLine.GetCtx(), error));
                 }
-                else{
+                else
+                {
                     count++;
                     lineCount += toLine.CopyLinesFrom(fromLines[i], toLine.GetGL_JournalLine_ID());
                 }
@@ -899,7 +916,12 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
 
             //Manish 18/7/2016 .. Because if line dimention (Amount) column sum is not equals to debit or credit value complete process will not done. 
             Decimal journalDRAndCR = 0;
-            string getlinevalues = "SELECT NVL(ElementType,null) AS ElementType,AmtSourceDr,AmtAcctCr,AmtSourceCr,GL_JournalLine_ID FROM GL_JournalLine where GL_Journal_ID=" + Get_Value("GL_Journal_ID");
+            string getlinevalues = @"SELECT gl.AmtSourceDr, gl.AmtSourceCr, gl.GL_JournalLine_ID, SUM(gld.amount) AS LineDimensionAmt  
+                                    FROM GL_JournalLine gl INNER JOIN 
+                                    GL_LineDimension gld ON gl.GL_JournalLine_ID = gld.GL_JournalLine_ID
+                                    where GL_Journal_ID =" + Get_Value("GL_Journal_ID") + @" 
+                                    GROUP BY gl.AmtSourceDr,
+                                     gl.AmtAcctCr, gl.AmtSourceCr, gl.GL_JournalLine_ID";
             DataSet dts = DB.ExecuteDataset(getlinevalues, null, null);
 
             if (dts != null && dts.Tables[0].Rows.Count > 0)
@@ -907,11 +929,6 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
                 for (int i = 0; i < dts.Tables[0].Rows.Count; i++)
                 {
                     journalDRAndCR = 0;
-
-                    if (dts.Tables[0].Rows[i]["ElementType"].ToString() == "")
-                    {
-                        continue;
-                    }
 
                     if (Util.GetValueOfDecimal(dts.Tables[0].Rows[i]["AmtSourceDr"]) > 0)
                     {
@@ -925,10 +942,7 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
                         }
                     }
 
-                    string getlineval = "SELECT SUM(amount) FROM gl_linedimension where GL_JournalLine_ID=" + Convert.ToInt32(dts.Tables[0].Rows[i]["GL_JournalLine_ID"]);
-                    Decimal count = Util.GetValueOfDecimal(DB.ExecuteScalar(getlineval));
-
-                    if (journalDRAndCR != count)
+                    if (journalDRAndCR != Util.GetValueOfDecimal(dts.Tables[0].Rows[i]["LineDimensionAmt"]))
                     {
                         m_processMsg = "@AmountNotMatch@";
                         return DocActionVariables.STATUS_INVALID;
@@ -1165,7 +1179,7 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
             {
                 m_processMsg = Msg.GetMsg(GetCtx(), "DeleteAllowcationFirst");
                 return null;
-            }			 
+            }
             //	Journal
             MJournal reverse = new MJournal(this);
             reverse.SetGL_JournalBatch_ID(GL_JournalBatch_ID);

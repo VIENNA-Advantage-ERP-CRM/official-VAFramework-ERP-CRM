@@ -2417,7 +2417,8 @@
 
         var btnCount = 0;
         //create ui
-        var $ctrl = $('<input >', { type: 'text', name: columnName });
+        var $ctrl = $('<input>', { type: 'text', name: columnName });
+        $ctrl.attr('autocomplete', 'off');
 
         var $btnSearch = $('<button  tabindex="-1" class="input-group-text"><i  tabindex="-1" class="' + src + '"></i></button>');
         btnCount += 1;
@@ -3718,7 +3719,10 @@
         var length = fieldLength;
 
         //Init Control
+
         var $ctrl = $('<input>', { type: 'number', step: 'any', name: columnName, maxlength: length, 'data-type': 'int' });
+        $ctrl.attr('autocomplete', 'off');
+
 
         //Call base class
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory);
@@ -3889,7 +3893,7 @@
             e.stopPropagation();
             // var newVal = $ctrl.val();
 
-            var newVal = self.getValue();
+            var newVal = self.getValue();          
             this.value = newVal;
 
             if (newVal !== self.oldValue) {
@@ -4062,7 +4066,7 @@
         // text change Event 
         $ctrl.on("change", function (e) {
             e.stopPropagation();
-            //var newVal = $ctrl.val();
+            //var newVal = $ctrl.val();    
             var newVal = self.getValue();
             newVal = Globalize.parseInt(newVal.toString());
             //alert(newVal);
@@ -4123,7 +4127,7 @@
         return this.ctrl.val();
     };
 
-    /***END VNumTextBox***/
+        /***END VNumTextBox***/
 
 
 
@@ -4650,7 +4654,7 @@
 
 
         //create ui
-        var $ctrl = $('<input >', { type: 'text', name: columnName });
+        var $ctrl = $('<input>', { type: 'text', name: columnName });
         var $btn = $('<button class="input-group-text"><i class="' + src + '"></i></button>');
         var btnCount = 1;
 
@@ -5631,11 +5635,11 @@
         this.value = null;
         var btnCount = 0;
 
-        var $ctrl = $('<input>', { type: 'text', name: columnName });
+        var $ctrl = $('<input>', { type: 'text', name: columnName});
         var $btnSearch = $('<button class="input-group-text"><i class="' + src + '" /></button>');
         btnCount += 1;
 
-        var inputCtrl = $("<input type='file' class='file' name='file'/>");
+        var inputCtrl = $("<input autocomplete='off' type='file' class='file' name='file'/>");
         $ctrl.append($btnSearch);
 
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, mandatoryField);
@@ -6050,6 +6054,7 @@
 
         //create ui
         var $ctrl = $('<input>', { type: 'text', name: columnName });
+        $ctrl.attr('autocomplete', 'off');
         var $btnpContainer = $('<button class="input-group-text"><i class="vis vis-pcontainer" /></button>');
         //var $btnPop = $('<button  tabindex="-1" class="input-group-text"><img tabindex="-1" src="' + VIS.Application.contextUrl + "Areas/VIS/Images/base/Info20.png" + '" /></button>');
         var $btnPop = $('<button  tabindex="-1" class="input-group-text"><i tabindex="-1" Class="fa fa-ellipsis-v" /></button>');
