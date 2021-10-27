@@ -96,6 +96,8 @@
         var isFirstLoad = false;
         var LastCVCondition = [];
         var isBusyRoot = null;
+        var $vSearchHeaderLayout = null;
+        var isdefault = null;
         // var 
         var root, ch;
         function init() {
@@ -124,12 +126,30 @@
         var CardViewUI = function () {
 
             // Card View Dropdown
+
+
+            var $divHeadderLay = $('<div class="input-group vis-input-wrap">');
+            var lblefault = $('<label class="vis-ec-col-lblchkbox" style="opacity: 1;width: 100%;">Default  </label>');
+            isdefault = $('<input type="checkbox" name="IsDefault" value="Default">');
+            lblefault.prepend(isdefault);
+            var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), 0, 1025709, VIS.DisplayType.Search);
+            $vSearchHeaderLayout = new VIS.Controls.VTextBoxButton("AD_HeaderLayout_ID", true, false, true, VIS.DisplayType.Search, value);
+
+            var $divCtrl = $('<div class="vis-control-wrap">');
+            var $divCtrlBtn = $('<div class="input-group-append">');
+            $divCtrl.append($vSearchHeaderLayout.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' ')).append('<label for="Name">' + VIS.Msg.getMsg("HeaderLayout") + '</label>');
+            
+            $divHeadderLay.append($divCtrl).append($divCtrlBtn);
+            $divCtrlBtn.append($vSearchHeaderLayout.getBtn(0)).append($vSearchHeaderLayout.getBtn(1));
+            
+
             isBusyRoot = $("<div class='vis-apanel-busy vis-cardviewmainbusy'></div> ");
             rootCardViewUI = $("<div class='vis-cardviewmain'></div>");
             var divCardViewMainFirstChild = $("<div class='vis-cardviewmainfirstchild vis-pull-left'></div>");
             var CardViewTopFiledsWrap = $("<div class='vis-cardviewtopfieldswrap'></div>");
             var divCardViewMainSecondChild = $("<div class='vis-cardviewmainsecondchild'></div>");
             var divCardViewCondition = $("<div class='vis-cardviewCondition'></div>").append("<div class='vis-cardviewConditionControls'> </div>  <div class='vis-cardviewConditionGrid'> </div> ");
+            var divLayout = $("<div class='vis-cardviewbtn'>").append(lblefault).append($divHeadderLay);            
             var divCardViewbtn = $("<div class='vis-cardviewbtn'><button class='vis-btnDelete'><i class='vis vis-delete'></i></button> <div class='vis-cdv-customokcancle'><button class='vis-btnOk'>  " + VIS.Msg.getMsg("Ok") + "  </button><button class='vis-btnCardViewCancle'>  " + VIS.Msg.getMsg("Cancel") + "  </button></div> </div>");
             rootCardViewUI.append(divCardViewMainFirstChild);
             divCardViewMainFirstChild.append(CardViewTopFiledsWrap);
@@ -138,7 +158,7 @@
             CardViewTopFiledsWrap.append("<div class='vis-seconddiv vis-pull-right'></div>");
             divCardViewMainFirstChild.append("<div class='vis-thirddiv vis-pull-left' ></div>");
             rootCardViewUI.find(".vis-firstdiv").append("<div class='vis-first-divHeader'><label class='vis-ddlcardview'>" + VIS.Msg.getMsg("SelectCardView") + " </label><label style='display:none' class='vis-lbcardviewname'>" + VIS.Msg.getMsg("CardViewName") + " </label></div>  ")
-            var divCardView = $("<div class='vis-CardView vis-pull-left'> <div  class='vis-cardviewchild vis-pull-left'></div>  </div>");
+                       var divCardView = $("<div class='vis-CardView vis-pull-left'> <div  class='vis-cardviewchild vis-pull-left'></div>  </div>");
             var divCardViewName = $("<input style='display:none' class='vis-txtcardviewname' type='text'>");
             var divUser = $("<div class='vis-User vis-pull-left'></div>");
             var btnNewAndCancle = $("<div class='vis-pull-left'><button  class='vis-btnnew vis-cvd-btn'><i class='vis vis-plus'></i></button><button style='display:none' class='vis-btncancle vis-cvd-canclebtn'><i class='vis vis-mark'></i></button> <button class='vis-btnedit vis-cvd-editbtn'><i class='vis vis-pencil'></i></button></div>");
@@ -149,7 +169,7 @@
 
             if (VIS.MRole.isAdministrator) {
 
-                rootCardViewUI.append(divCardViewMainSecondChild);
+                //rootCardViewUI.append(divCardViewMainSecondChild);
                 rootCardViewUI.find(".vis-firstdiv").append(" <div style='display:none' class='vis-first-divHeader vis-pull-right'><label >" + VIS.Msg.getMsg("SelectUser") + "</label></div>");
                 rootCardViewUI.find(".vis-CardView").append("");
                 rootCardViewUI.find(".vis-firstdiv").append(divCardView);
@@ -160,6 +180,7 @@
                 cmbUser = rootCardViewUI.find(".vis-cmbuser");
                 AddCVConditionControl(divCardViewCondition.find(".vis-cardviewConditionControls"));
                 rootCardViewUI.append(divCardViewCondition);
+                rootCardViewUI.append(divLayout);
                 rootCardViewUI.append(divCardViewbtn);
                 rootCardViewUI.find(".vis-btnDelete").css("display", "block");
 
@@ -179,9 +200,9 @@
                 rootCardViewUI.find(".vis-btnDelete").css("display", "none");
             }
             CreateCVGrid(rootCardViewUI.find(".vis-cardviewConditionGrid"));
-            divCardViewMainSecondChild.append("<label class='vis-pull-left'> " + VIS.Msg.getMsg("SelectRole") + "</label>");
+            //divCardViewMainSecondChild.append("<label class='vis-pull-left'> " + VIS.Msg.getMsg("SelectRole") + "</label>");
 
-            divCardViewMainSecondChild.append("<div class='vis-cardviewmainsecondchildinner'><ul class='vis-ulrole'> </ul></div>");
+            //divCardViewMainSecondChild.append("<div class='vis-cardviewmainsecondchildinner'><ul class='vis-ulrole'> </ul></div>");
             ulRole = rootCardViewUI.find(".vis-ulrole");
             // controls 
             ddlCardView = rootCardViewUI.find(".vis-ddlcardview");
@@ -301,12 +322,14 @@
                     roleInfo = dbResult[0].lstRoleData;
                     LstCardViewRole = dbResult[0].lstCardViewRoleData;
                     LstCardViewCondition = dbResult[0].lstCardViewConditonData;
+                   
                     if (cardViewInfo != null && cardViewInfo.length > 0) {
 
                         for (var i = 0; i < cardViewInfo.length; i++) {
                             // AD_CardView_ID = cardViewInfo[0].CardViewID;
-                            cmbCardView.append("<Option ad_user_id=" + cardViewInfo[i].UserID + " cardviewid=" + cardViewInfo[i].CardViewID + " ad_field_id=" + cardViewInfo[i].AD_GroupField_ID + "> " + w2utils.encodeTags(cardViewInfo[i].CardViewName) + "</Option>");
+                            cmbCardView.append("<Option ad_user_id=" + cardViewInfo[i].UserID + " cardviewid=" + cardViewInfo[i].CardViewID + " ad_field_id=" + cardViewInfo[i].AD_GroupField_ID + " isdefault=" + cardViewInfo[i].IsCardDefault + " ad_headerLayout_id="+cardViewInfo[i].AD_HeaderLayout_ID+"> " + w2utils.encodeTags(cardViewInfo[i].CardViewName) + "</Option>");
                         }
+                        
                     }
                     else {
                         btnNew.trigger("click");
@@ -339,7 +362,7 @@
                     //  txtCardViewName.val(cmbCardView.find(":selected").data('name'));
                     if (VIS.MRole.isAdministrator) {
                         // FillUserList(cmbUser);
-                        FillRoleList(ulRole);
+                        //FillRoleList(ulRole);
                     }
                     if (AD_User_ID > 0) {
                         ulRole.attr('disabled', 'disabled');
@@ -364,6 +387,8 @@
             if (sel.length > 0) {
                 AD_CardView_ID = parseInt(sel.attr("cardviewid"));
                 cardViewUserID = parseInt(sel.attr("ad_user_id"));
+                $vSearchHeaderLayout.setValue(sel.attr("ad_headerLayout_id"));
+                isdefault.attr("checked", sel.attr("isdefault")=='true'?true:false);
             }
 
             //  txtCardViewName.val(sel.data('name'));
@@ -1118,7 +1143,7 @@
                 includeCols.push(parseInt(f.AD_Field_ID));
             }
 
-            cardViewArray.push({ AD_Window_ID: AD_Window_ID, AD_Tab_ID: AD_Tab_ID, UserID: AD_User_ID, AD_GroupField_ID: AD_GroupField_ID, isNewRecord: isNewRecord, CardViewName: cardViewName, CardViewID: AD_CardView_ID });
+            cardViewArray.push({ AD_Window_ID: AD_Window_ID, AD_Tab_ID: AD_Tab_ID, UserID: AD_User_ID, AD_GroupField_ID: AD_GroupField_ID, isNewRecord: isNewRecord, CardViewName: cardViewName, CardViewID: AD_CardView_ID, IsCardDefault: isdefault.is(":checked"), AD_HeaderLayout_ID: $vSearchHeaderLayout.getValue() });
             var url = VIS.Application.contextUrl + "CardView/SaveCardViewColumns";
             $.ajax({
                 type: "POST",
@@ -1126,7 +1151,7 @@
                 url: url,
                 dataType: "json",
                 contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify({ 'lstCardView': cardViewArray, 'lstCardViewColumns': cardViewColArray, 'LstRoleID': LstRoleID, 'lstCardViewCondition': strConditionArray }),
+                data: JSON.stringify({ 'lstCardView': cardViewArray, 'lstCardViewColumns': cardViewColArray, /*'LstRoleID': LstRoleID,*/ 'lstCardViewCondition': strConditionArray }),
                 success: function (data) {
                     var result = JSON.parse(data);
                     AD_CardView_ID = result;
