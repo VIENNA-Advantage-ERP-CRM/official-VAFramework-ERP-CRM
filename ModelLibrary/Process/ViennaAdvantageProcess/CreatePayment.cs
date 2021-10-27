@@ -8,6 +8,8 @@ using ViennaAdvantage.Model;
 using VAdvantage.Utility;
 using VAdvantage.DataBase;
 using VAdvantage.Model;
+using System.Data;
+
 namespace ViennaAdvantage.Process
 {
     class CreatePayment : SvrProcess
@@ -72,7 +74,9 @@ namespace ViennaAdvantage.Process
                 payment.SetC_ConversionType_ID(order.GetC_ConversionType_ID());              
                 payment.SetTenderType("K");
                 payment.SetDocStatus("IP");
-                C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_DocType_ID From C_DocType WHERE isactive='Y' AND DocBaseType = 'ARR' AND AD_Client_ID = " + order.GetAD_Client_ID() + " ORDER BY IsDefault DESC"));
+                //(1052) Apply org check
+                C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_DocType_ID From C_DocType WHERE isactive='Y' AND " +
+                "DocBaseType = 'ARR' AND AD_Client_ID = " + order.GetAD_Client_ID() + " AND AD_Org_ID IN (0,"+order.GetAD_Org_ID()+ ") ORDER BY IsDefault DESC,AD_Org_ID DESC"));
                 payment.SetC_DocType_ID(C_DocType_ID);
                 if (baseType.Equals("PR")) //prepay Order
                 {
@@ -81,11 +85,10 @@ namespace ViennaAdvantage.Process
                 }
                 else if (baseType.Equals("WI"))//OnCreditOrder
                 {
-                    payment.SetC_Invoice_ID(order.GetC_Invoice_ID());
-                    //(1052) set Invoice PaySchedule
-                    payment.SetC_InvoicePaySchedule_ID(Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_InvoicePaySchedule_ID FROM C_InvoicePaySchedule WHERE C_Invoice_ID = " + order.GetC_Invoice_ID())));
+                   // payment.SetC_Invoice_ID(order.GetC_Invoice_ID());                 
                 }
-                if (!payment.Save()) {
+                if (!payment.Save()) 
+                {
                     ValueNamePair pp = VLogger.RetrieveError();
                     string val = pp.GetValue();
                     if (string.IsNullOrEmpty(val))
@@ -94,13 +97,57 @@ namespace ViennaAdvantage.Process
                     }
                     return Msg.GetMsg(GetCtx(), "PaymentNotCreated") + " "+ val;
                 }
+                else
+                {
+                    if (baseType.Equals("WI")) 
+                    {
+                        //credit order case : update invoice and Invoice schdule refrence
+                        DataSet ds = null;
+                        ds = DB.ExecuteDataset("SELECT C_InvoicePaySchedule_ID, DueAmt FROM C_InvoicePaySchedule WHERE C_Invoice_ID = " + order.GetC_Invoice_ID());
+                        if (ds != null && ds.Tables[0].Rows.Count > 0)
+                        {
+                            if (ds.Tables[0].Rows.Count == 1)
+                            {
+                                //set Invoice PaySchedule and Invoice in case of single invoice schedule
+                                int count =  DB.ExecuteQuery("UPDATE C_Payment SET C_InvoicePaySchedule_ID= " + Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_InvoicePaySchedule_ID"]) +
+                                    ",C_Invoice_ID="+order.GetC_Invoice_ID()+" WHERE C_Payment_ID=" + payment.GetC_Payment_ID(),null,Get_TrxName());
+                            }
+                            else
+                            {
+                                //in case of multiple invoice schedule create PaymentAllocates
+                                MPaymentAllocate alloc = null;
+                                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                                {
+                                    alloc = new MPaymentAllocate(GetCtx(), 0, Get_TrxName());
+                                    alloc.SetAD_Client_ID(payment.GetAD_Client_ID());
+                                    alloc.SetAD_Org_ID(payment.GetAD_Org_ID());
+                                    alloc.SetC_Payment_ID(payment.GetC_Payment_ID());
+                                    alloc.SetC_Invoice_ID(order.GetC_Invoice_ID());
+                                    alloc.SetC_InvoicePaySchedule_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_InvoicePaySchedule_ID"]));
+                                    alloc.SetAmount(Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["DueAmt"]));
+                                    alloc.SetInvoiceAmt(Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["DueAmt"]));
+
+                                    if(!alloc.Save()){
+                                        ValueNamePair pp = VLogger.RetrieveError();
+                                        string val = pp.GetValue();
+                                        if (string.IsNullOrEmpty(val))
+                                        {
+                                            val = pp.GetName();
+                                        }
+                                        log.Severe("Payment Allocate not saved " + val);
+                                    }                                  
+                                }                              
+                            }
+                        } 
+                    }
+                }
                 return payment.GetDocumentNo().ToString();
             }
-            catch
+            catch(Exception ex)
             {
-                return "Failed";
+                log.Severe("GeneratePayment Exception:"+ex.Message);
+                return "Failed:"+ ex.Message;
             }
         }
-
     }
 }
