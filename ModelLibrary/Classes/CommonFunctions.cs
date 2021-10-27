@@ -923,42 +923,88 @@ namespace VAdvantage.Classes
             return value.ToString();
         }
 
-        public void GetCardViewDetails(CardViewData cv)
+        public CardViewData GetCardViewDetails(int AD_User_ID, int AD_Tab_ID, int AD_CardView_ID)
         {
-            string sql = "";
-            IDataReader dr = null;
-            int AD_CV_ID = cv.AD_CardView_ID;
-            if (AD_CV_ID > 0)
+            DataSet ds = null;
+            if (AD_CardView_ID > 0)
             {
-                sql = "SELECT AD_Field_ID, SeqNo, HTMLStyle, HideCardIcon, HideCardText FROM AD_CardView_Column WHERE IsActive='Y' AND AD_CardView_ID = " + AD_CV_ID + " ORDER BY SeqNo";
-                dr = DB.ExecuteReader(sql);
-                while (dr.Read())
+                ds = DataBase.DB.ExecuteDataset(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name, AD_CardView.IsDefault,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,ad_headerlayout.backgroundcolor,ad_headerlayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
+                        ON (AD_CardView.AD_HeaderLayout_ID = AD_HeaderLayout.AD_HeaderLayout_ID) WHERE AD_CardView.AD_CardView_ID = " + AD_CardView_ID);
+            }
+            else
+            {
+                ds = DataBase.DB.ExecuteDataset(@" SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,ad_headerlayout.backgroundcolor,ad_headerlayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
+                        ON ( AD_CardView.AD_HeaderLayout_ID = AD_HeaderLayout.AD_HeaderLayout_ID)
+                        JOIN AD_DefaultCardView AD_DefaultCardView ON (AD_DefaultCardView.AD_CardView_ID=AD_CardView.AD_CardView_ID)
+                        WHERE AD_DefaultCardView.IsActive='Y' AND AD_DefaultCardView.AD_User_ID=" + AD_User_ID + " AND AD_DefaultCardView.AD_Tab_ID =" + AD_Tab_ID + " AND AD_CardView.IsActive='Y' ORDER BY AD_CardView.Name ASC");
+
+                if (ds == null || ds.Tables[0].Rows.Count == 0)
                 {
-                    cv.IncludedCols.Add(
-                        new CardViewCol()
+                    ds = DataBase.DB.ExecuteDataset(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,ad_headerlayout.backgroundcolor,ad_headerlayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
+                        ON (AD_CardView.AD_HeaderLayout_ID = AD_HeaderLayout.AD_HeaderLayout_ID) WHERE AD_CardView.IsDefault='Y' AND AD_CardView.AD_Tab_ID =" + AD_Tab_ID + " AND AD_CardView.IsActive='Y' ORDER BY AD_CardView.Name ASC");
+                }
+            }
+
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    CardViewData card = new CardViewData()
+                    {
+                        AD_CardView_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_CardView_ID"]),
+                        IsDefault = true,
+                        Name = Util.GetValueOfString(ds.Tables[0].Rows[i]["Name"]),
+                        AD_HeaderLayout_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_HeaderLayout_ID"]),
+                        FieldGroupID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_Field_ID"]),
+                        Style = Util.GetValueOfString(ds.Tables[0].Rows[i]["backgroundcolor"]),
+                        Padding = Util.GetValueOfString(ds.Tables[0].Rows[i]["Padding"])
+
+                    };
+
+                    card.IncludedCols = new List<CardViewCol>();
+                    card.Conditions = new List<CardViewCondition>();
+
+                    string sql = "";
+                    IDataReader dr = null;
+                    int AD_CV_ID = card.AD_CardView_ID;
+                    if (AD_CV_ID > 0)
+                    {
+                        sql = "SELECT AD_Field_ID, SeqNo, FieldValueStyle, HideCardIcon, HideCardText FROM AD_CardView_Column WHERE IsActive='Y' AND AD_CardView_ID = " + AD_CV_ID + " ORDER BY SeqNo";
+                        dr = DB.ExecuteReader(sql);
+                        while (dr.Read())
                         {
-                            AD_Field_ID = VAdvantage.Utility.Util.GetValueOfInt(dr[0]),
-                            SeqNo = VAdvantage.Utility.Util.GetValueOfInt(dr[1]),
-                            HTMLStyle = VAdvantage.Utility.Util.GetValueOfString(dr[2]),
-                            HideIcon = (VAdvantage.Utility.Util.GetValueOfString(dr[3])=="Y"),
-                            HideText = (VAdvantage.Utility.Util.GetValueOfString(dr[4])=="Y")
-                        });
+                            card.IncludedCols.Add(
+                                new CardViewCol()
+                                {
+                                    AD_Field_ID = VAdvantage.Utility.Util.GetValueOfInt(dr[0]),
+                                    SeqNo = VAdvantage.Utility.Util.GetValueOfInt(dr[1]),
+                                    HTMLStyle = VAdvantage.Utility.Util.GetValueOfString(dr[2]),
+                                    HideIcon = (VAdvantage.Utility.Util.GetValueOfString(dr[3]) == "Y"),
+                                    HideText = (VAdvantage.Utility.Util.GetValueOfString(dr[4]) == "Y")
+                                });
+                        }
+                        dr.Close();
+                    }
+                    if (AD_CV_ID > 0)
+                    {
+                        sql = "SELECT ConditionValue,Color  FROM AD_CardView_Condition WHERE IsActive='Y' AND AD_CardView_ID = " + AD_CV_ID + " ORDER BY AD_CardView_Condition_ID ";
+                        dr = DB.ExecuteReader(sql);
+                        while (dr.Read())
+                        {
+                            var cdc = new CardViewCondition();
+                            cdc.Color = dr[1].ToString();
+                            cdc.ConditionValue = dr[0].ToString();
+                            card.Conditions.Add(cdc);
+                        }
+                        dr.Close();
+                    }
+
+                    card.HeaderItems = GetHeaderPanelItems(card.AD_HeaderLayout_ID);
+
+                    return card;
                 }
-                dr.Close();
             }
-            if (AD_CV_ID > 0)
-            {
-                sql = "SELECT ConditionValue,Color  FROM AD_CardView_Condition WHERE IsActive='Y' AND AD_CardView_ID = " + AD_CV_ID + " ORDER BY AD_CardView_Condition_ID ";
-                dr = DB.ExecuteReader(sql);
-                while (dr.Read())
-                {
-                    var cdc = new CardViewCondition();
-                    cdc.Color = dr[1].ToString();
-                    cdc.ConditionValue = dr[0].ToString();
-                    cv.Conditions.Add(cdc);
-                }
-                dr.Close();
-            }
+            return null;
         }
 
         public List<HeaderPanelGrid> GetHeaderPanelItems(int headerLayoutID)
@@ -988,7 +1034,7 @@ namespace VAdvantage.Classes
                     };
 
                     DataSet ds = DataBase.DB.ExecuteDataset("SELECT AlignItems,    ColumnSpan,   Justifyitems,   Rowspan,   Seqno,   Startcolumn,   Startrow," +
-                        " AD_GridLayoutItems_ID,BackgroundColor, FontColor, FontSize,padding, ColumnSql FROM Ad_Gridlayoutitems WHERE IsActive ='Y' AND AD_GridLayout_ID=" + hGrid.AD_GridLayout_ID + " ORDER BY Seqno ");
+                        " AD_GridLayoutItems_ID,BackgroundColor, FontColor, FontSize,padding, ColumnSql,HideFieldIcon, HideFieldText, FieldValueStyle FROM Ad_Gridlayoutitems WHERE IsActive ='Y' AND AD_GridLayout_ID=" + hGrid.AD_GridLayout_ID + " ORDER BY Seqno ");
                     if (ds != null && ds.Tables[0].Rows.Count > 0)
                     {
                         hGrid.HeaderItems = new Dictionary<int, object>();
@@ -1008,7 +1054,10 @@ namespace VAdvantage.Classes
                                 FontColor = Convert.ToString(row["FontColor"]),
                                 FontSize = Convert.ToString(row["FontSize"]),
                                 Padding = Convert.ToString(row["Padding"]),
-                                ColSql = Convert.ToString(row["ColumnSql"])
+                                ColSql = Convert.ToString(row["ColumnSql"]),
+                                HideFieldIcon=Util.GetValueOfString(row["HideFieldIcon"])=="Y",
+                                HideFieldText = Util.GetValueOfString(row["HideFieldtext"]) == "Y",
+                                FieldValueStyle= Convert.ToString(row["FieldValueStyle"])
                             };
                         }
                     }
@@ -1054,5 +1103,11 @@ namespace VAdvantage.Classes
         public string HTMLStyle { get; set; }
         public bool HideIcon { get; set; }
         public bool HideText { get; set; }
+    }
+
+    public class CardsInfo
+    {
+        public string Name { get; set; }
+        public int AD_CardView_ID { get; set; }
     }
 }

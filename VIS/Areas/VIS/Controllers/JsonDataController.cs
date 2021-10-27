@@ -1147,6 +1147,14 @@ namespace VIS.Controllers
             }
         }
 
+        public JsonResult GetCardsInfo(int AD_Tab_ID)
+        {
+            Ctx ctx = Session["ctx"] as Ctx;
+            WindowHelper help = new WindowHelper();
+            List<CardsInfo> cards = help.GetCards(ctx, AD_Tab_ID);
+            return Json(JsonConvert.SerializeObject(cards), JsonRequestBehavior.AllowGet);
+        }
+
         public ContentResult MsgForToastr()
         {
             Ctx ctx = Session["ctx"] as Ctx;

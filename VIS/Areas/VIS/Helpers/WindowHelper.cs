@@ -2949,68 +2949,90 @@ namespace VIS.Helpers
         /// clean up
         /// </summary>
 
-        internal static CardViewData GetCardViewDetail(int AD_Window_ID, int AD_Tab_ID, Ctx ctx,int AD_CardView_ID)
+        internal static CardViewData GetCardViewDetail(int AD_Window_ID, int AD_Tab_ID, Ctx ctx, int AD_CardView_ID)
         {
-            CardViewData cv = new CardViewData();
-            cv.IncludedCols = new List<CardViewCol>();
-            cv.Conditions = new List<CardViewCondition>();
-
-            int AD_CV_ID = -1;
-
-            string sql = @"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name, AD_CardView.IsDefault,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,ad_headerlayout.backgroundcolor,ad_headerlayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
-                        on AD_CardView.AD_HeaderLayout_ID = AD_HeaderLayout.AD_HeaderLayout_ID WHERE ";
-
-            if (AD_CardView_ID > 0)
-            {
-                sql += @"AD_CardView.AD_CardView_ID = " + AD_CardView_ID;
-            }
-            else
-            {
-                sql += @"AD_CardView.AD_Window_ID = " + AD_Window_ID + " AND AD_CardView.AD_Tab_ID = " + AD_Tab_ID + " AND AD_CardView.AD_USER_ID=" + ctx.GetAD_User_ID()
-                                  + " AND AD_CardView.AD_Client_ID = " + ctx.GetAD_Client_ID();
-            }
-                           sql+= " ORDER BY AD_CardView.AD_USER_ID  ";
-            IDataReader dr = null;
-            try
-            {
-                dr = DB.ExecuteReader(sql);
-                if (dr.Read())
-                {
-                    AD_CV_ID = Convert.ToInt32(dr[0]);
-                    cv.FieldGroupID = VAdvantage.Utility.Util.GetValueOfInt(dr["AD_Field_ID"]);
-                    cv.AD_CardView_ID = AD_CV_ID;
-                    cv.AD_HeaderLayout_ID = VAdvantage.Utility.Util.GetValueOfInt(dr["AD_HeaderLayout_ID"]);
-                    cv.Style = VAdvantage.Utility.Util.GetValueOfString(dr["backgroundcolor"]);
-                    cv.Padding = VAdvantage.Utility.Util.GetValueOfString(dr["Padding"]);
-                }
-                else
-                {
-                    dr.Close();
-                    sql = "SELECT c.AD_CardView_ID, c.AD_Field_ID,AD_HeaderLayout_ID  FROM AD_CardView c INNER JOIN AD_CardView_Role r ON r.AD_Cardview_ID = r.AD_CardView_ID WHERE c.AD_Window_ID=" + AD_Window_ID + " AND "
-                                 + " c.AD_Tab_ID=" + AD_Tab_ID + " AND r.AD_Role_ID = " + ctx.GetAD_Role_ID() + " AND c.AD_User_ID IS NULL";
-                    dr = DB.ExecuteReader(sql);
-                    if (dr.Read())
-                    {
-                        AD_CV_ID = Convert.ToInt32(dr[0]);
-                        cv.FieldGroupID = VAdvantage.Utility.Util.GetValueOfInt(dr[1]);
-                        cv.AD_CardView_ID = AD_CV_ID;
-                        cv.AD_HeaderLayout_ID = VAdvantage.Utility.Util.GetValueOfInt(dr[2]);
-                    }
-                }
-                dr.Close();
-
-                VAdvantage.Classes.CommonFunctions cFun = new VAdvantage.Classes.CommonFunctions();
-                cFun.GetCardViewDetails(cv);
-
-                cv.HeaderItems = cFun.GetHeaderPanelItems(cv.AD_HeaderLayout_ID);
-
-            }
-            catch
-            {
-                if (dr != null)
-                    dr.Close();
-            }
+            VAdvantage.Classes.CommonFunctions cFun = new VAdvantage.Classes.CommonFunctions();
+            CardViewData cv = cFun.GetCardViewDetails(ctx.GetAD_User_ID(), AD_Tab_ID, AD_CardView_ID);
             return cv;
+            //CardViewData cv = new CardViewData();
+            //cv.IncludedCols = new List<CardViewCol>();
+            //cv.Conditions = new List<CardViewCondition>();
+
+            //int AD_CV_ID = -1;
+
+            //string sql = @"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name, AD_CardView.IsDefault,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,ad_headerlayout.backgroundcolor,ad_headerlayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
+            //            on AD_CardView.AD_HeaderLayout_ID = AD_HeaderLayout.AD_HeaderLayout_ID WHERE ";
+
+            //if (AD_CardView_ID > 0)
+            //{
+            //    sql += @"AD_CardView.AD_CardView_ID = " + AD_CardView_ID;
+            //}
+            //else
+            //{
+            //    sql += @"AD_CardView.AD_Window_ID = " + AD_Window_ID + " AND AD_CardView.AD_Tab_ID = " + AD_Tab_ID + " AND AD_CardView.AD_USER_ID=" + ctx.GetAD_User_ID()
+            //                      + " AND AD_CardView.AD_Client_ID = " + ctx.GetAD_Client_ID();
+            //}
+            //               sql+= " ORDER BY AD_CardView.AD_USER_ID  ";
+            //IDataReader dr = null;
+            //try
+            //{
+            //    dr = DB.ExecuteReader(sql);
+            //    if (dr.Read())
+            //    {
+            //        AD_CV_ID = Convert.ToInt32(dr[0]);
+            //        cv.FieldGroupID = VAdvantage.Utility.Util.GetValueOfInt(dr["AD_Field_ID"]);
+            //        cv.AD_CardView_ID = AD_CV_ID;
+            //        cv.AD_HeaderLayout_ID = VAdvantage.Utility.Util.GetValueOfInt(dr["AD_HeaderLayout_ID"]);
+            //        cv.Style = VAdvantage.Utility.Util.GetValueOfString(dr["backgroundcolor"]);
+            //        cv.Padding = VAdvantage.Utility.Util.GetValueOfString(dr["Padding"]);
+            //    }
+            //    else
+            //    {
+            //        dr.Close();
+            //        sql = "SELECT c.AD_CardView_ID, c.AD_Field_ID,AD_HeaderLayout_ID  FROM AD_CardView c INNER JOIN AD_CardView_Role r ON r.AD_Cardview_ID = r.AD_CardView_ID WHERE c.AD_Window_ID=" + AD_Window_ID + " AND "
+            //                     + " c.AD_Tab_ID=" + AD_Tab_ID + " AND r.AD_Role_ID = " + ctx.GetAD_Role_ID() + " AND c.AD_User_ID IS NULL";
+            //        dr = DB.ExecuteReader(sql);
+            //        if (dr.Read())
+            //        {
+            //            AD_CV_ID = Convert.ToInt32(dr[0]);
+            //            cv.FieldGroupID = VAdvantage.Utility.Util.GetValueOfInt(dr[1]);
+            //            cv.AD_CardView_ID = AD_CV_ID;
+            //            cv.AD_HeaderLayout_ID = VAdvantage.Utility.Util.GetValueOfInt(dr[2]);
+            //        }
+            //    }
+            //    dr.Close();
+
+
+
+            //    cv.HeaderItems = cFun.GetHeaderPanelItems(cv.AD_HeaderLayout_ID);
+
+            //}
+            //catch
+            //{
+            //    if (dr != null)
+            //        dr.Close();
+            //}
+            //return cv;
+        }
+
+        public List<CardsInfo> GetCards(Ctx ctx, int AD_Tab_ID)
+        {
+            List<CardsInfo> cards = new List<CardsInfo>();
+            string sql = "SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name FROM AD_CardView WHERE IsActive='Y' AND AD_Tab_ID=" + AD_Tab_ID;
+            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "AD_CardView", true, false);
+            DataSet ds = DB.ExecuteDataset(sql);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    cards.Add(new CardsInfo()
+                    {
+                        Name = Util.GetValueOfString(ds.Tables[0].Rows[i]["Name"]),
+                        AD_CardView_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_CardView_ID"])
+                    });
+                }
+            }
+            return cards;
         }
 
         public void Dispose()
