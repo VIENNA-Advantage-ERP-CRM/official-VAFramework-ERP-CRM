@@ -1125,12 +1125,25 @@ namespace VIS.Controllers
 
 
         #region Toaster notification
+       [Obsolete]
         [NonAction]
         public static void AddMessageForToastr(string key, string value)
         {
-            lock (_object)
+            try
             {
-                toastrMessage[key] = value;
+                if (key.Contains("_"))
+                {
+                    key = key.Substring(key.IndexOf("_") + 1);
+                }
+                int val = 0;
+                if (int.TryParse(key, out val))
+                {
+                    ModelLibrary.PushNotif.SSEManager.Get().AddMessage(val, value);
+                }
+            }
+            catch
+            {
+                // blank
             }
         }
 
@@ -1143,16 +1156,17 @@ namespace VIS.Controllers
                 string sessionID = ctx.GetAD_Session_ID().ToString();
                 JavaScriptSerializer ser = new JavaScriptSerializer();
 
-                IEnumerable<KeyValuePair<string, string>> newDic = toastrMessage.Where(kvp => kvp.Key.Contains(sessionID));
+                //IEnumerable<KeyValuePair<string, string>> Dic = toastrMessage.Where(kvp => kvp.Key.Contains(sessionID));
+                var newDic = ModelLibrary.PushNotif.SSEManager.Get().GetMessages(ctx.GetAD_Session_ID());
                 if (newDic != null && newDic.Count() > 0)
                 {
-                    for (int i = 0; i < newDic.Count();)
-                    {
-                        KeyValuePair<string, string> keyVal = newDic.ElementAt(i);
-                        toastrMessage.Remove(keyVal.Key);
-                        serializedObject = ser.Serialize(new { item = keyVal.Value, message = keyVal.Value });
+                   /// for (int i = 0; i < newDic.Count();)
+                   // {
+                    //    KeyValuePair<string, string> keyVal = newDic.ElementAt(i);
+                    //    toastrMessage.Remove(keyVal.Key);
+                        serializedObject = ser.Serialize(newDic);
                         return Content(string.Format("data: {0}\n\n", serializedObject), "text/event-stream");
-                    }
+                    //}
                 }
             }
             JavaScriptSerializer se1r = new JavaScriptSerializer();

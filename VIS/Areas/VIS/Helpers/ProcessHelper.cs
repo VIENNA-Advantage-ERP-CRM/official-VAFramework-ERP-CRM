@@ -198,7 +198,9 @@ namespace VIS.Helpers
                             ret.Result = ret.Result.Substring(0, 100) + "...";
                         }
 
-                        VIS.Controllers.JsonDataController.AddMessageForToastr(Convert.ToInt32(processInfo["Process_ID"]) + "_P_" + ctx.GetAD_Session_ID(), pro.GetName() + " " + Msg.GetMsg(ctx, "Completed") + ": " + ret.Result);
+                        //VIS.Controllers.JsonDataController.AddMessageForToastr(Convert.ToInt32(processInfo["Process_ID"]) + "_P_" + ctx.GetAD_Session_ID(), pro.GetName() + " " + Msg.GetMsg(ctx, "Completed") + ": " + ret.Result);
+                        ModelLibrary.PushNotif.SSEManager.Get().AddMessage(ctx.GetAD_Session_ID(),  pro.GetName() + " " + Msg.GetMsg(ctx, "Completed") + ": " + ret.Result );
+                       
 
                     });
                 }

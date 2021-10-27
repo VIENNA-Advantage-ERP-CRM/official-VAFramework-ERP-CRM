@@ -258,6 +258,11 @@ namespace VAdvantage.Process
                 payment.SetDateAcct(payment.GetDateTrx());
             }
             payment.SetDescription(description);
+            //Rakesh:Override autocheckno. with eftcheck number if exists
+            if (!string.IsNullOrEmpty(_checkNo))
+            {
+                payment.SetIsOverrideAutoCheck(true);
+            }
             //
             if (C_Invoice_ID != 0)
             {
@@ -432,6 +437,7 @@ namespace VAdvantage.Process
                 _message = "VA012_ReferenceNotfoundtoCreatePayment";
                 return null;
             }
+            
             //Commit the Transaction
             Get_Trx().Commit();
             //Call Complete Method to Complete the Record
@@ -444,11 +450,15 @@ namespace VAdvantage.Process
             //If payment type is cheque
             if (!string.IsNullOrEmpty(_tenderType) && _tenderType.Equals(X_C_Payment.TENDERTYPE_Check))
             {
-                //Rakesh(VA228):Get and Update reference of checkno and check date on bank statement line
-                DataSet ds = DB.ExecuteDataset("SELECT CheckNo,CheckDate FROM C_Payment WHERE C_Payment_ID=" + payment.GetC_Payment_ID());
-                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                //If no check defined on bank stateline update from payment
+                if (string.IsNullOrEmpty(_checkNo))
                 {
-                    DB.ExecuteQuery("UPDATE C_BankStatementLine SET EftCheckNo = '" + Util.GetValueOfString(ds.Tables[0].Rows[0]["CheckNo"]) + "', EftValutaDate=" + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(ds.Tables[0].Rows[0]["CheckDate"]), true) + " WHERE C_BankStatementLine_ID = " + GetRecord_ID());
+                    //Rakesh(VA228):Get and Update reference of checkno and check date on bank statement line
+                    DataSet ds = DB.ExecuteDataset("SELECT CheckNo,CheckDate FROM C_Payment WHERE C_Payment_ID=" + payment.GetC_Payment_ID());
+                    if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                    {
+                        DB.ExecuteQuery("UPDATE C_BankStatementLine SET EftCheckNo = '" + Util.GetValueOfString(ds.Tables[0].Rows[0]["CheckNo"]) + "', EftValutaDate=" + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(ds.Tables[0].Rows[0]["CheckDate"]), true) + " WHERE C_BankStatementLine_ID = " + GetRecord_ID());
+                    }
                 }
             }
             return payment;

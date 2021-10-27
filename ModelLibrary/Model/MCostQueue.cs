@@ -2649,6 +2649,8 @@ namespace VAdvantage.Model
                                 query.Append("SELECT MIN(M_CostDetail_ID) FROM M_CostDetail WHERE IsActive = 'Y' AND C_AcctSchema_ID = " + acctSchema.GetC_AcctSchema_ID());
                                 if (windowName == "Invoice(Vendor)" || windowName == "Invoice(Customer)" || windowName == "Invoice(Vendor)-Return")
                                 {
+                                    // get cost detail object where cost element is null 
+                                    query.Append("  AND NVL(M_CostElement_ID , 0) = 0 ");
                                     if (invoiceline.GetC_InvoiceLine_ID() > 0)
                                     {
                                         query.Append("  AND C_InvoiceLine_ID = " + invoiceline.GetC_InvoiceLine_ID());
