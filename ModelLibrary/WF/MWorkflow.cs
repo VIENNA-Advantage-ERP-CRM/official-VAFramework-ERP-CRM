@@ -321,6 +321,18 @@ namespace VAdvantage.WF
             }
             //	Look for Entry
             MWorkflow[] retValue = (MWorkflow[])_cacheDocValue[key];
+            //return Clone object having new context 
+            if (retValue != null && retValue.Length > 0)
+            {
+                List<MWorkflow> wfList = new List<MWorkflow>(retValue.Length);
+                foreach (MWorkflow nwf in retValue)
+                {
+                    wfList.Add((MWorkflow)PO.Copy(ctx, nwf, nwf.Get_Trx()));
+                }
+
+                retValue = wfList.ToArray();
+            }
+
             return retValue;
         }
 
