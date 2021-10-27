@@ -226,7 +226,7 @@ namespace VAdvantage.Controller
 
                 CreateTabPanels(vo);
 
-                CreateCardPanels(vo);
+                CreateCardPanels(vo, wVO.GetCtx());
 
                 if (vo.panels != null && vo.panels.Count > 0)
                 {
@@ -639,39 +639,14 @@ namespace VAdvantage.Controller
             return hitems;
 
         }
-        private static void CreateCardPanels(GridTabVO mTabVO)
+        private static void CreateCardPanels(GridTabVO mTabVO, Ctx ctx)
         {
-            DataSet ds = DataBase.DB.ExecuteDataset(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name, AD_CardView.IsDefault,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,ad_headerlayout.backgroundcolor,ad_headerlayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
-                        on AD_CardView.AD_HeaderLayout_ID = AD_HeaderLayout.AD_HeaderLayout_ID WHERE AD_CardView.AD_Tab_ID =" + mTabVO.AD_Tab_ID + " AND AD_CardView.IsActive='Y' ORDER BY AD_CardView.Name ASC");
-
-            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            VAdvantage.Classes.CommonFunctions cFun = new VAdvantage.Classes.CommonFunctions();
+            CardViewData card = cFun.GetCardViewDetails(ctx.GetAD_User_ID(), mTabVO.AD_Tab_ID, 0);
+            if (card != null)
             {
-                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                {
-                    CardViewData card = new CardViewData()
-                    {
-                        AD_CardView_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_CardView_ID"]),
-                        IsDefault = ds.Tables[0].Rows[i]["IsDefault"] == "Y",
-                        Name = Util.GetValueOfString(ds.Tables[0].Rows[i]["Name"]),
-                        AD_HeaderLayout_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_HeaderLayout_ID"]),
-                        FieldGroupID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_Field_ID"]),
-                        Style = Util.GetValueOfString(ds.Tables[0].Rows[i]["backgroundcolor"]),
-                        Padding = Util.GetValueOfString(ds.Tables[0].Rows[i]["Padding"])
-
-                    };
-                    mTabVO.Cards.Add(card);
-                    if (card.IsDefault)
-                    {
-                        mTabVO.DefaultCardID = card.AD_CardView_ID;
-                        card.IncludedCols = new List<CardViewCol>();
-                        card.Conditions = new List<CardViewCondition>();
-                        VAdvantage.Classes.CommonFunctions cFun = new VAdvantage.Classes.CommonFunctions();
-                        cFun.GetCardViewDetails(card);
-
-                        card.HeaderItems = GetHeaderPanelItems(mTabVO.AD_HeaderLayout_ID);
-
-                    }
-                }
+                mTabVO.Cards.Add(card);
+                mTabVO.DefaultCardID = card.AD_CardView_ID;
             }
         }
 
