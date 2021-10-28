@@ -129,5 +129,21 @@ namespace VIS.Controllers
             var jsonResult = Json(JsonConvert.SerializeObject(""), JsonRequestBehavior.AllowGet);
             return jsonResult;
         }
+
+        /// <summary>
+        /// Update card from Drag and drop
+        /// </summary>
+        /// <param name="grpID"></param>
+        /// <param name="recordID"></param>
+        /// <param name="columnID"></param>
+        /// <param name="tableID"></param>
+        /// <returns>int</returns>
+        public int UpdateCardByDragDrop(string grpValue, int recordID, int columnID, int tableID)
+        {
+
+            Ctx ctx = Session["ctx"] as Ctx;
+            CardViewModel objCardViewModel = new CardViewModel();
+            return objCardViewModel.UpdateCardByDragDrop(ctx, grpValue, recordID, columnID, tableID);
+        }
     }
 }

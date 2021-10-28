@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using VAdvantage.DataBase;
 using VAdvantage.Model;
@@ -420,6 +421,34 @@ namespace VIS.Models
             userQuery.SetAD_User_ID(ctx.GetAD_User_ID());
             userQuery.SetAD_CardView_ID(cardView);
             userQuery.Save();
+        }
+
+        /// <summary>
+        /// Update card from Drag and drop
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="grpID"></param>
+        /// <param name="recordID"></param>
+        /// <param name="columnID"></param>
+        /// <param name="tableID"></param>
+        /// <returns></returns>
+        public int UpdateCardByDragDrop(Ctx ctx, string grpValue, int recordID, int columnID, int tableID)
+        {
+            string tableName = MTable.GetTableName(ctx, tableID);
+            string keyColumn = tableName + "_ID";
+            string ColumnName = MColumn.GetColumnName(ctx, columnID);
+            string sqlQuery = "";
+            if (Regex.IsMatch(grpValue, @"^\d+$"))
+            {
+                sqlQuery = "UPDATE " + tableName + " SET " + ColumnName + "=" + grpValue + " WHERE " + keyColumn + "=" + recordID;
+            }
+            else
+            {
+                sqlQuery = "UPDATE " + tableName + " SET " + ColumnName + "='" + grpValue + "' WHERE " + keyColumn + "=" + recordID;
+            }
+
+            int result = DB.ExecuteQuery(sqlQuery);
+            return result;
         }
 
     }

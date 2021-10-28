@@ -550,4 +550,10 @@ html[dir="rtl"] .vis-ctrl-switchSlider {
     position: relative;
 }
 
+.va-dragdrop.active {
+    opacity: 0.5;
+}
+
+
+
 
