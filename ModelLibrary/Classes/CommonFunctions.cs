@@ -926,7 +926,7 @@ namespace VAdvantage.Classes
         public CardViewData GetCardViewDetails(int AD_User_ID, int AD_Tab_ID, int AD_CardView_ID, Ctx ctx)
         {
             DataSet ds = null;
-
+            bool hasDefaultCard = false;
             if (AD_CardView_ID > 0)
             {
                 ds = DataBase.DB.ExecuteDataset(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name, AD_CardView.IsDefault,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,ad_headerlayout.backgroundcolor,ad_headerlayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
@@ -934,36 +934,57 @@ namespace VAdvantage.Classes
             }
             else
             {
-                ds = DataBase.DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@" SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,ad_headerlayout.backgroundcolor,ad_headerlayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
+                ds = DataBase.DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@" SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,ad_headerlayout.backgroundcolor,ad_headerlayout.padding,
+    ad_defaultcardview.ad_client_id,
+    ad_defaultcardview.ad_user_ID FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
                         ON ( AD_CardView.AD_HeaderLayout_ID = AD_HeaderLayout.AD_HeaderLayout_ID)
-                        JOIN AD_DefaultCardView AD_DefaultCardView ON (AD_DefaultCardView.AD_CardView_ID=AD_CardView.AD_CardView_ID)
-                        WHERE AD_DefaultCardView.isactive = 'Y' AND 
-                        (AD_CardView.AD_User_ID IS NULL OR AD_CardView.createdBy=" + AD_User_ID + ") AND AD_DefaultCardView.ad_user_id = " + AD_User_ID +
+                        JOIN AD_DefaultCardView AD_DefaultCardView ON ( AD_DefaultCardView.ad_cardview_id = AD_CardView.ad_cardview_id AND (AD_CardView.ad_user_id IS NULL OR AD_CardView.ad_user_id = 101))
+                        WHERE AD_DefaultCardView.isactive = 'Y' " +
                         " AND AD_DefaultCardView.AD_Tab_ID=" + AD_Tab_ID + " AND AD_CardView.IsActive = 'Y' " +
                         "ORDER BY AD_DefaultCardView.AD_Client_ID Desc", "AD_CardView", true, false));
 
                 if (ds == null || ds.Tables[0].Rows.Count == 0)
                 {
                     ds = DataBase.DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,ad_headerlayout.backgroundcolor,ad_headerlayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
-                        ON (AD_CardView.AD_HeaderLayout_ID = AD_HeaderLayout.AD_HeaderLayout_ID) WHERE AD_CardView.IsDefault='Y'
-                        AND AD_CardView.AD_Tab_ID =" + AD_Tab_ID + " AND AD_CardView.IsActive='Y' ORDER BY AD_CardView.Name ASC", "AD_CardView", true, false));
+                        ON (AD_CardView.AD_HeaderLayout_ID = AD_HeaderLayout.AD_HeaderLayout_ID) WHERE AD_CardView.AD_Tab_ID =" + AD_Tab_ID + " AND AD_CardView.IsActive='Y' ORDER BY AD_CardView.Name ASC", "AD_CardView", true, false));
+                }
+                else
+                {
+                    hasDefaultCard = true;
                 }
             }
 
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
-                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                DataRow[] rows = null;
+                if (hasDefaultCard)
+                {
+                    rows = ds.Tables[0].Select("AD_User_ID = " + ctx.GetAD_User_ID());
+                    if (rows == null || rows.Length == 0)
+                    {
+                        rows = ds.Tables[0].Select("AD_Client_ID = " + ctx.GetAD_Client_ID());
+                        if (rows == null || rows.Length == 0)
+                        {
+                            rows = ds.Tables[0].Select();
+                        }
+                    }
+                }
+                else {
+                    rows = ds.Tables[0].Select();
+                }
+
+
+                for (int i = 0; i < rows.Length; i++)
                 {
                     CardViewData card = new CardViewData()
                     {
-                        AD_CardView_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_CardView_ID"]),
+                        AD_CardView_ID = Convert.ToInt32(rows[i]["AD_CardView_ID"]),
                         IsDefault = true,
-                        Name = Util.GetValueOfString(ds.Tables[0].Rows[i]["Name"]),
-                        AD_HeaderLayout_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_HeaderLayout_ID"]),
-                        FieldGroupID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_Field_ID"]),
-                        Style = Util.GetValueOfString(ds.Tables[0].Rows[i]["backgroundcolor"]),
-                        Padding = Util.GetValueOfString(ds.Tables[0].Rows[i]["Padding"])
-
+                        Name = Util.GetValueOfString(rows[i]["Name"]),
+                        AD_HeaderLayout_ID = Util.GetValueOfInt(rows[i]["AD_HeaderLayout_ID"]),
+                        FieldGroupID = Util.GetValueOfInt(rows[i]["AD_Field_ID"]),
+                        Style = Util.GetValueOfString(rows[i]["backgroundcolor"]),
+                        Padding = Util.GetValueOfString(rows[i]["Padding"])
                     };
 
                     card.IncludedCols = new List<CardViewCol>();

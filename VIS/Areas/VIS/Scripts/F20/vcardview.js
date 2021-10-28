@@ -562,8 +562,17 @@
 
         var $root = $('<div class="vis-ad-w-p-card_root_common">');
         root.append($root);
-        var headerCustom = this.headerParentCustomUISettings(headerStyle);
-        root.addClass(headerCustom);
+
+        //"vis-ad-w-p-card-Custom_" + this.windowNo
+        if (!this.fieldStyles["vis-ad-w-p-card-Custom_" + windowNo])
+            this.fieldStyles["vis-ad-w-p-card-Custom_" + windowNo] = {};
+        this.headerCustom = this.fieldStyles["vis-ad-w-p-card-Custom_" + windowNo]["headerParentCustomUISettings"];
+        if (!this.headerCustom) {
+            this.headerCustom = this.headerParentCustomUISettings(headerStyle);
+            this.fieldStyles["vis-ad-w-p-card-Custom_" + windowNo]["headerParentCustomUISettings"] = this.headerCustom;
+        }
+        //var headerCustom = this.headerParentCustomUISettings(headerStyle);
+        root.addClass(this.headerCustom);
 
         if (!this.fieldStyles["root_" + windowNo])
             this.fieldStyles["root_" + windowNo] = {};
@@ -1183,7 +1192,6 @@
     VCard.prototype.headerParentCustomUISettings = function (backColor) {
         var dynamicClassName = "vis-ad-w-p-card-Custom_" + this.windowNo;
         this.dynamicStyle.push(" ." + dynamicClassName + " {flex:1;");
-        this.dynamicStyle.push('background: ' + 'rgba(var(--v-c-primary));');
         this.dynamicStyle.push(backColor);
 
         this.dynamicStyle.push("} ");

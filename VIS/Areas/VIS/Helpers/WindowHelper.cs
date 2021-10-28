@@ -3018,7 +3018,7 @@ namespace VIS.Helpers
         public List<CardsInfo> GetCards(Ctx ctx, int AD_Tab_ID)
         {
             List<CardsInfo> cards = new List<CardsInfo>();
-            string sql = "SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name FROM AD_CardView WHERE IsActive='Y' AND AD_Tab_ID=" + AD_Tab_ID;
+            string sql = "SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name FROM AD_CardView WHERE IsActive='Y' AND AD_Tab_ID=" + AD_Tab_ID+ " ORDER BY NAME ASC";
             sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "AD_CardView", true, false);
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
