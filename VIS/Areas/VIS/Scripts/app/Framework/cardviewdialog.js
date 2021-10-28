@@ -8,6 +8,7 @@
         var AD_Window_ID = mTab.getAD_Window_ID();
         var AD_Tab_ID = mTab.getAD_Tab_ID();
         var tabName = mTab.getName();
+        var WindowNo = mTab.getWindowNo();
         var WindowName = aPanel.curGC.aPanel.$parentWindow.getName();
         var AD_CardView_ID = cardView.getAD_CardView_ID();
         var AD_GroupField_ID = cardView.getField_Group_ID();
@@ -98,6 +99,7 @@
         var isBusyRoot = null;
         var $vSearchHeaderLayout = null;
         var isdefault = null;
+        var isPublic = null;
         // var 
         var root, ch;
         function init() {
@@ -129,10 +131,15 @@
 
 
             var $divHeadderLay = $('<div class="input-group vis-input-wrap">');
-            var lblefault = $('<label class="vis-ec-col-lblchkbox" style="opacity: 1;width: 100%;">Default  </label>');
+            var lblDefault = $('<label class="vis-ec-col-lblchkbox" style="opacity: 1;width: 50%;">' + defaultMsg+'</label>');
             isdefault = $('<input type="checkbox" name="IsDefault" value="Default">');
-            lblefault.prepend(isdefault);
-            var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), 0, 1025709, VIS.DisplayType.Search);
+            lblDefault.prepend(isdefault);
+
+            var lblIsPublic = $('<label class="vis-ec-col-lblchkbox" style="opacity: 1;width: 50%;">Is Public</label>');
+            isPublic = $('<input type="checkbox" checked="true" name="IsPublic" value="Public">');
+            lblIsPublic.prepend(isPublic);
+
+            var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), WindowNo, 1025709, VIS.DisplayType.Search);
             $vSearchHeaderLayout = new VIS.Controls.VTextBoxButton("AD_HeaderLayout_ID", true, false, true, VIS.DisplayType.Search, value);
 
             var $divCtrl = $('<div class="vis-control-wrap">');
@@ -149,7 +156,11 @@
             var CardViewTopFiledsWrap = $("<div class='vis-cardviewtopfieldswrap'></div>");
             var divCardViewMainSecondChild = $("<div class='vis-cardviewmainsecondchild'></div>");
             var divCardViewCondition = $("<div class='vis-cardviewCondition'></div>").append("<div class='vis-cardviewConditionControls'> </div>  <div class='vis-cardviewConditionGrid'> </div> ");
-            var divLayout = $("<div class='vis-cardviewbtn'>").append(lblefault).append($divHeadderLay);            
+            if (VIS.MRole.isAdministrator) {
+                var divLayout = $("<div class='vis-cardviewbtn'>").append(lblDefault).append(lblIsPublic).append($divHeadderLay);
+            } else {
+                var divLayout = $("<div class='vis-cardviewbtn'>").append(lblDefault).append($divHeadderLay);
+            }
             var divCardViewbtn = $("<div class='vis-cardviewbtn'><button class='vis-btnDelete'><i class='vis vis-delete'></i></button> <div class='vis-cdv-customokcancle'><button class='vis-btnOk'>  " + VIS.Msg.getMsg("Ok") + "  </button><button class='vis-btnCardViewCancle'>  " + VIS.Msg.getMsg("Cancel") + "  </button></div> </div>");
             rootCardViewUI.append(divCardViewMainFirstChild);
             divCardViewMainFirstChild.append(CardViewTopFiledsWrap);
@@ -195,6 +206,7 @@
                 rootCardViewUI.find(".k ").css("display", "none");
                 AddCVConditionControl(divCardViewCondition.find(".vis-cardviewConditionControls"));
                 rootCardViewUI.append(divCardViewCondition);
+                rootCardViewUI.append(divLayout);
                 rootCardViewUI.append(divCardViewbtn);
                 // divCardViewbtn.css({ "float": "right" });
                 rootCardViewUI.find(".vis-btnDelete").css("display", "none");
@@ -327,7 +339,7 @@
 
                         for (var i = 0; i < cardViewInfo.length; i++) {
                             // AD_CardView_ID = cardViewInfo[0].CardViewID;
-                            cmbCardView.append("<Option ad_user_id=" + cardViewInfo[i].UserID + " cardviewid=" + cardViewInfo[i].CardViewID + " ad_field_id=" + cardViewInfo[i].AD_GroupField_ID + " isdefault=" + cardViewInfo[i].IsCardDefault + " ad_headerLayout_id="+cardViewInfo[i].AD_HeaderLayout_ID+"> " + w2utils.encodeTags(cardViewInfo[i].CardViewName) + "</Option>");
+                            cmbCardView.append("<Option ad_user_id=" + cardViewInfo[i].UserID + " cardviewid=" + cardViewInfo[i].CardViewID + " ad_field_id=" + cardViewInfo[i].AD_GroupField_ID + " isdefault=" + cardViewInfo[i].DefaultID + " ad_headerLayout_id="+cardViewInfo[i].AD_HeaderLayout_ID+"> " + w2utils.encodeTags(cardViewInfo[i].CardViewName) + "</Option>");
                         }
                         
                     }
@@ -364,9 +376,9 @@
                         // FillUserList(cmbUser);
                         //FillRoleList(ulRole);
                     }
-                    if (AD_User_ID > 0) {
-                        ulRole.attr('disabled', 'disabled');
-                    }
+                    //if (AD_User_ID > 0) {
+                    //    ulRole.attr('disabled', 'disabled');
+                    //}
                 }, error: function (errorThrown) {
                     alert(errorThrown.statusText);
                 }
@@ -389,6 +401,7 @@
                 cardViewUserID = parseInt(sel.attr("ad_user_id"));
                 $vSearchHeaderLayout.setValue(sel.attr("ad_headerLayout_id"));
                 isdefault.attr("checked", sel.attr("isdefault")=='true'?true:false);
+                isPublic.attr("checked", cardViewUserID > 0 ? false:true);
             }
 
             //  txtCardViewName.val(sel.data('name'));
@@ -1084,10 +1097,10 @@
                     cardViewName = txtCardViewName.val();
                     if (LstRoleID == null || LstRoleID.length <= 0) {
                         if (AD_User_ID != VIS.context.getAD_User_ID()) {
-                            if (!confirm(VIS.Msg.getMsg("CardViewWarning"))) {
-                                AD_User_ID = 0;
-                                return false;
-                            }
+                            //if (!confirm(VIS.Msg.getMsg("CardViewWarning"))) {
+                            //    AD_User_ID = 0;
+                            //    return false;
+                            //}
                             AD_User_ID = VIS.context.getAD_User_ID();
                         }
                         else
@@ -1143,7 +1156,7 @@
                 includeCols.push(parseInt(f.AD_Field_ID));
             }
 
-            cardViewArray.push({ AD_Window_ID: AD_Window_ID, AD_Tab_ID: AD_Tab_ID, UserID: AD_User_ID, AD_GroupField_ID: AD_GroupField_ID, isNewRecord: isNewRecord, CardViewName: cardViewName, CardViewID: AD_CardView_ID, IsCardDefault: isdefault.is(":checked"), AD_HeaderLayout_ID: $vSearchHeaderLayout.getValue() });
+            cardViewArray.push({ AD_Window_ID: AD_Window_ID, AD_Tab_ID: AD_Tab_ID, UserID: AD_User_ID, AD_GroupField_ID: AD_GroupField_ID, isNewRecord: isNewRecord, CardViewName: cardViewName, CardViewID: AD_CardView_ID, IsDefault: isdefault.is(":checked"), AD_HeaderLayout_ID: $vSearchHeaderLayout.getValue(), isPublic: isPublic.is(":checked") });
             var url = VIS.Application.contextUrl + "CardView/SaveCardViewColumns";
             $.ajax({
                 type: "POST",

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using VAdvantage.DataBase;
 using VAdvantage.Model;
@@ -52,7 +53,7 @@ namespace VIS.Models
                         AD_GroupField_ID = VAdvantage.Utility.Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_FIELD_ID"]),
                         CreatedBy = Convert.ToInt32(ds.Tables[0].Rows[i]["CREATEDBY"]),
                         AD_HeaderLayout_ID = VAdvantage.Utility.Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_HEADERLAYOUT_ID"]),
-                        IsCardDefault = VAdvantage.Utility.Util.GetValueOfString(ds.Tables[0].Rows[i]["ISDEFAULT"])=="Y"?true:false,
+                        //IsDefault = VAdvantage.Utility.Util.GetValueOfString(ds.Tables[0].Rows[i]["ISDEFAULT"])=="Y"?true:false,
                         DefaultID = isDefault
                     };
                     lstCardView.Add(objCardView);
@@ -200,7 +201,7 @@ namespace VIS.Models
             }
             return lstCardViewColumns;
         }
-        public int SaveCardViewRecord(string cardViewName, int ad_Window_ID, int ad_Tab_ID, int ad_User_ID, int ad_Field_ID, Ctx ctx, int cardViewID/*, List<RolePropeties> lstRoleId*/, List<CardViewConditionPropeties> lstCVCondition, bool IsCardDefault, int AD_HeaderLayout_ID)
+        public int SaveCardViewRecord(string cardViewName, int ad_Window_ID, int ad_Tab_ID, int ad_User_ID, int ad_Field_ID, Ctx ctx, int cardViewID/*, List<RolePropeties> lstRoleId*/, List<CardViewConditionPropeties> lstCVCondition, int AD_HeaderLayout_ID,bool isPublic)
         {
             string conditionValue = string.Empty;
             string conditionText = string.Empty;
@@ -218,10 +219,15 @@ namespace VIS.Models
             }
             objCardView.SetAD_Window_ID(ad_Window_ID);
             objCardView.SetAD_Tab_ID(ad_Tab_ID);
-            objCardView.SetAD_User_ID(ad_User_ID);
+            if (MUser.Get(ctx).IsAdministrator() && isPublic)
+            {
+                //objCardView.SetAD_User_ID(ad_User_ID);
+            }
+            else {
+                objCardView.SetAD_User_ID(ad_User_ID);
+            }
             objCardView.SetAD_Field_ID(ad_Field_ID);
             objCardView.SetName(cardViewName);
-            objCardView.Set_Value("IsDefault", IsCardDefault);
             objCardView.Set_ValueNoCheck("AD_HeaderLayout_ID", AD_HeaderLayout_ID);
             if (!objCardView.Save())
             {
@@ -266,22 +272,32 @@ namespace VIS.Models
             return objCardView.Get_ID();
         }
 
-        public void SetDefaultCardView(Ctx ctx, int cardViewID, int AD_Tab_ID)
+        public void SetDefaultCardView(Ctx ctx, int cardViewID, int AD_Tab_ID,bool isDefault)
         {
-            string sql = "SELECT AD_DefaultCardView_ID FROM AD_DefaultCardView WHERE AD_Tab_ID=" + AD_Tab_ID + " AND AD_User_ID=" + ctx.GetAD_User_ID();
-            object id = DB.ExecuteScalar(sql);
-
-            int AD_DefaultCardView_ID = 0;
-            if (id != null && id != DBNull.Value)
+            string sql = "";
+            if (!isDefault)
             {
-                AD_DefaultCardView_ID = Convert.ToInt32(id);
+                sql = "DELETE FROM AD_DefaultCardView WHERE AD_CardView_ID=" + cardViewID + " AND AD_Tab_ID=" + AD_Tab_ID + " AND AD_User_ID=" + ctx.GetAD_User_ID();
+                DB.ExecuteScalar(sql);
             }
+            else
+            {
 
-            X_AD_DefaultCardView cardView = new X_AD_DefaultCardView(ctx, AD_DefaultCardView_ID, null);
-            cardView.SetAD_Tab_ID(AD_Tab_ID);
-            cardView.SetAD_User_ID(ctx.GetAD_User_ID());
-            cardView.SetAD_CardView_ID(Convert.ToInt32(cardViewID));
-            cardView.Save();
+                sql = "SELECT AD_DefaultCardView_ID FROM AD_DefaultCardView WHERE AD_Tab_ID=" + AD_Tab_ID + " AND AD_User_ID=" + ctx.GetAD_User_ID();
+                object id = DB.ExecuteScalar(sql);
+
+                int AD_DefaultCardView_ID = 0;
+                if (id != null && id != DBNull.Value)
+                {
+                    AD_DefaultCardView_ID = Convert.ToInt32(id);
+                }
+
+                X_AD_DefaultCardView cardView = new X_AD_DefaultCardView(ctx, AD_DefaultCardView_ID, null);
+                cardView.SetAD_Tab_ID(AD_Tab_ID);
+                cardView.SetAD_User_ID(ctx.GetAD_User_ID());
+                cardView.SetAD_CardView_ID(Convert.ToInt32(cardViewID));
+                cardView.Save();
+            }
         }
 
 
@@ -407,6 +423,34 @@ namespace VIS.Models
             userQuery.Save();
         }
 
+        /// <summary>
+        /// Update card from Drag and drop
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="grpID"></param>
+        /// <param name="recordID"></param>
+        /// <param name="columnID"></param>
+        /// <param name="tableID"></param>
+        /// <returns></returns>
+        public int UpdateCardByDragDrop(Ctx ctx, string grpValue, int recordID, int columnID, int tableID)
+        {
+            string tableName = MTable.GetTableName(ctx, tableID);
+            string keyColumn = tableName + "_ID";
+            string ColumnName = MColumn.GetColumnName(ctx, columnID);
+            string sqlQuery = "";
+            if (Regex.IsMatch(grpValue, @"^\d+$"))
+            {
+                sqlQuery = "UPDATE " + tableName + " SET " + ColumnName + "=" + grpValue + " WHERE " + keyColumn + "=" + recordID;
+            }
+            else
+            {
+                sqlQuery = "UPDATE " + tableName + " SET " + ColumnName + "='" + grpValue + "' WHERE " + keyColumn + "=" + recordID;
+            }
+
+            int result = DB.ExecuteQuery(sqlQuery);
+            return result;
+        }
+
     }
 
     public class CardViewPropeties
@@ -425,8 +469,8 @@ namespace VIS.Models
         public bool isNewRecord { get; set; }
         public bool IsDefault { get; set; }
         public int CreatedBy { get; set; }
-        public bool DefaultID { get; set; }
-        public bool IsCardDefault { get; set; }
+        public bool DefaultID { get; set; }      
+        public bool isPublic { get; set; }      
         public int AD_HeaderLayout_ID { get; set; }
     }
 
