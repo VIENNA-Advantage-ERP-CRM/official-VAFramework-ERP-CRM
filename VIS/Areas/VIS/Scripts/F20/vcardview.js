@@ -360,7 +360,7 @@
                     var data = lookup.data;
 
                     for (var i = 0; i < data.length; i++) {
-                        this.cGroupInfo[data[i].Key] = { 'name': data[i].Name, 'records': [] };
+                        this.cGroupInfo[data[i].Key] = { 'name': data[i].Name, 'records': [], 'key': data[i].Key};
                         this.grpCount += 1;
                         //if (i >= 4)
                         //    break;
@@ -373,7 +373,7 @@
             }
         }
         if (this.grpCount < 1) {//add one group by de
-            this.cGroupInfo['All'] = { 'name': VIS.Msg.getMsg('All'), 'records': [] };
+            this.cGroupInfo['All'] = { 'name': VIS.Msg.getMsg('All'), 'records': [],'key': null };
             this.grpCount = 1;
         }
         this.isProcessed = true;
@@ -401,22 +401,52 @@
         if (this.grpCount == 1) {
 
             var n = '';
+            var key = null;
             for (var p in this.cGroupInfo) {
                 n = this.cGroupInfo[p].name;
+                key = this.cGroupInfo[p].key;
                 break;
             }
 
-            cardGroup = new VCardGroup(true, records, n, this.fields, this.cConditions, this.headerItems, this.headerStyle, this.headerPadding);
+            cardGroup = new VCardGroup(true, records, n, this.fields, this.cConditions, this.headerItems, this.headerStyle, this.headerPadding,key);
             this.groupCtrls.push(cardGroup);
             root.append(cardGroup.getRoot())
         }
         else {
             this.filterRecord(records);
-
+            var $this = this;
             for (var p in this.cGroupInfo) {
-                cardGroup = new VCardGroup(this.grpCount === 1, this.cGroupInfo[p].records, this.cGroupInfo[p].name, this.fields, this.cConditions, this.headerItems, this.headerStyle, this.headerPadding);
+                cardGroup = new VCardGroup(this.grpCount === 1, this.cGroupInfo[p].records, this.cGroupInfo[p].name, this.fields, this.cConditions, this.headerItems, this.headerStyle, this.headerPaddings, this.cGroupInfo[p].key);
                 this.groupCtrls.push(cardGroup);
-                root.append(cardGroup.getRoot())
+                root.append(cardGroup.getRoot());
+                var sortable = new vaSortable(cardGroup.getBody()[0], {
+                    attr: 'data-recid',
+                    selfSort: false,
+                    ignore: '.vis-cv-card-edit',
+                    onSelect: function (e, item) {
+                        $this.onCardEdit({ 'recid': item }, true)
+                        var obj = {
+                            grpValue: $(e).parent().attr('data-key'),
+                            recordID: $this.mTab.getRecord_ID(),
+                            columnID: $this.cGroup.getAD_Column_ID(),
+                            tableID: $this.mTab.getAD_Table_ID()
+                        }
+                        $.ajax({
+                            type: "POST",
+                            url: VIS.Application.contextUrl + "CardView/UpdateCardByDragDrop",
+                            dataType: "json",
+                            data: obj,
+                            success: function (data) {
+                                if (data < 1) {
+                                    vaSortable.prototype.revertItem();
+                                }
+                            },
+                            error: function (err) {
+                                vaSortable.prototype.revertItem();
+                            }
+                        });
+                    }
+                });
             }
         }
         this.calculateWidth(width);
@@ -472,7 +502,7 @@
     };
 
     /* Group Control */
-    function VCardGroup(onlyOne, records, grpName, fields, conditions, headerItems, headerStyle, headerPadding) {
+    function VCardGroup(onlyOne, records, grpName, fields, conditions, headerItems, headerStyle, headerPadding,key) {
 
         //conditions = [{ 'bgColor': '#80ff80', 'cValue': '@AD_User_ID@=1005324 & @C_DocTypeTarget_ID@=132' }];
         var root = null;
@@ -482,7 +512,7 @@
 
         function init() {
             var str = "<div class='vis-cv-cg vis-pull-left'> <div class='vis-cv-head' >" + grpName
-                + "</div><div class='vis-cv-grpbody'></div></div>";
+                + "</div><div data-key='" + key +"'  class='vis-cv-grpbody'></div></div>";
             root = $(str);
             body = root.find('.vis-cv-grpbody');
             if (onlyOne) {
@@ -549,7 +579,7 @@
         this.fieldStyles = fieldStyles;
 
 
-        var root = $('<div class="vis-cv-card" data-recid=' + record.recid + ' name = vc_' + record.recid + ' ></div>');
+        var root = $('<div class="vis-cv-card va-dragdrop" data-recid=' + record.recid + ' name = vc_' + record.recid + ' ></div>');
 
         //root.append($("<i class='pin'></i>"));
         // root.append($('<span class="glyphicon glyphicon-hand-down vis-cv-card-selected"></span>'));
@@ -1256,6 +1286,7 @@
 
     VCard.prototype.dispose = function () {
         this.dC();
+        vaSortable.prototype.dispose();
     };
 
     VIS.VCardView = VCardView;
