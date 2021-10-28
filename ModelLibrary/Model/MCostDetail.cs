@@ -215,6 +215,7 @@ namespace VAdvantage.Model
 
         public bool UpdateProductCost(String windowName, MCostDetail cd, MAcctSchema acctSchema, MProduct product, int M_ASI_ID, int cq_AD_Org_ID, string optionalStrCd = "process")
         {
+            bool ProvisionalInvCalculated = false;
             int AD_Org_ID = 0;
             // Get Org based on Costing Level
             dynamic pc = null;
@@ -300,7 +301,9 @@ namespace VAdvantage.Model
                     for (int i = 0; i < ces.Length; i++)
                     {
                         MCostElement ce = ces[i];
-                        if (ce.GetM_CostElement_ID() != costElementId && 
+
+                        // will not execute this  section for ProvisionalWeightedAverage
+                        if (ce.GetM_CostElement_ID() != costElementId &&
                             !ce.GetCostingMethod().Equals(MCostElement.COSTINGMETHOD_ProvisionalWeightedAverage))
                         {
                             if (!UpdateCost(acctSchema, product, ce, AD_Org_ID, M_ASI_ID, 0, cq_AD_Org_ID, windowName, cd, costingMethod, costElementId, M_Warehouse_ID))
@@ -373,8 +376,9 @@ namespace VAdvantage.Model
             }
             else
             {
-                // when calculate cost on completion, then calculate cost of defined costing method either on product category or on Accounting Schema
-                WeightedProvisionalInvoice:
+                ProvisionalInvCalculated = false;
+            // when calculate cost on completion, then calculate cost of defined costing method either on product category or on Accounting Schema
+            WeightedProvisionalInvoice:
                 MCostElement ce = null;
                 if (optionalStrCd == "window" && GetM_CostElement_ID() == 0)
                 {
@@ -389,11 +393,13 @@ namespace VAdvantage.Model
                     return false;
                 }
 
-                if (windowName.Equals("Material Receipt") && optionalStrCd != "process")
+                // when we are calculating cost from Material Receipt, at the same time we have to calculate ProvisionalWeightedAverage 
+                if (windowName.Equals("Material Receipt") && optionalStrCd != "process" && !ProvisionalInvCalculated)
                 {
                     // Get Costing Element of Weighted Provisional Invoice
                     costElementId = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT DISTINCT M_CostElement_ID FROM M_CostElement WHERE IsActive = 'Y' 
                             AND CostingMethod = 'B' AND AD_Client_ID = " + product.GetAD_Client_ID()));
+                    ProvisionalInvCalculated = true;
                     goto WeightedProvisionalInvoice;
                 }
             }
