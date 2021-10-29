@@ -33,7 +33,7 @@
 	var fromItem, itemName, nextItem, dropClass = ".va-dragdrop";
 
 	// get position of mouse/touch in relation to viewport 
-	var getPoint = function (e) {
+	var getPoint = function (e) {		
 		var scrollX = Math.max(0, _w.pageXOffset || _d.scrollLeft || _b.scrollLeft || 0) - (_d.clientLeft || 0),
 			scrollY = Math.max(0, _w.pageYOffset || _d.scrollTop || _b.scrollTop || 0) - (_d.clientTop || 0),
 			pointX = e ? (Math.max(0, e.pageX || e.clientX || 0) - scrollX) : 0,
@@ -57,7 +57,7 @@
 			this._dragging = false;
 			this._isSwaped = false;
 			this._container.setAttribute("data-is-sortable", 1);
-			this._container.style["position"] = "static";
+			this._container.style["position"] = "static";			
 			window.addEventListener("mousedown", this._onPress.bind(this), true);
 			window.addEventListener("touchstart", this._onPress.bind(this), true);
 			window.addEventListener("mouseup", this._onRelease.bind(this), true);
@@ -163,7 +163,7 @@
 		_onPress: function (e) {
 			if (this._options && this._options.ignore && e.target.closest(this._options.ignore)) {
 				return;
-			}
+			}			
 
 			if (e && e.target && e.target.closest(dropClass) && e.target.closest(dropClass).parentNode === this._container) {
 				this._isSwaped = false;
@@ -181,7 +181,7 @@
 		_onRelease: function (e) {
 			if (e && e.target && e.target.closest(dropClass) && e.target.closest(dropClass).parentNode === this._container && this._options.attr && this._clickItem && this._isSwaped) {
 				this._options.onSelect(this._clickItem, this._clickItem.getAttribute(this._options.attr));
-			}
+			}			
 			this._dragging = false;
 			this._trashDragItem();
 		},

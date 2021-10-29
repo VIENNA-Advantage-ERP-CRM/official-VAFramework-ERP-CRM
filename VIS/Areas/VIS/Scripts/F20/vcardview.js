@@ -93,7 +93,7 @@
             this.navigate();
         };
 
-        body.on('click', 'div.vis-cv-card', function (e) {
+        body.on('mousedown touchstart', 'div.vis-cv-card', function (e) {
 
             if (self.onCardEdit) {
                 var d = $(e.target);
@@ -447,9 +447,9 @@
                 var sortable = new vaSortable(cardGroup.getBody()[0], {
                     attr: 'data-recid',
                     selfSort: false,
-                    ignore: '.vis-cv-card-edit',
+                    ignore: '.vis-cv-card-edit',                    
                     onSelect: function (e, item) {
-                        $this.onCardEdit({ 'recid': item }, true)
+                        //$this.onCardEdit({ 'recid': item }, true);
                         var obj = {
                             grpValue: $(e).parent().attr('data-key'),
                             recordID: $this.mTab.getRecord_ID(),
@@ -464,6 +464,9 @@
                             success: function (data) {
                                 if (data < 1) {
                                     vaSortable.prototype.revertItem();
+                                } else {
+                                    $this.mTab.dataRefresh();
+                                    $(e).find(':contains("' + $this.cGroup.getHeader() + '") strong').text($(e).parent().attr('data-name')); 
                                 }
                             },
                             error: function (err) {
@@ -541,7 +544,7 @@
 
         function init() {
             var str = "<div class='vis-cv-cg vis-pull-left'> <div class='vis-cv-head' >" + grpName
-                + "</div><div data-key='" + key +"'  class='vis-cv-grpbody'></div></div>";
+                + "</div><div data-name='" + grpName+"' data-key='" + key +"'  class='vis-cv-grpbody'></div></div>";
             root = $(str);
             body = root.find('.vis-cv-grpbody');
             if (onlyOne) {

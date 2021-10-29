@@ -26,10 +26,10 @@ namespace VIS.Models
                             FROM AD_CardView
                             LEFT OUTER JOIN AD_DefaultCardView
                             ON AD_CardView.AD_CardView_ID=AD_DefaultCardView.AD_CardView_ID
-                            WHERE AD_CardView.AD_Window_id=" + ad_Window_ID + " and AD_CardView.AD_Tab_id=" + ad_Tab_ID + " AND AD_CardView.AD_Client_ID  =" + ctx.GetAD_Client_ID() + @" 
-                            ORDER BY AD_CardView.Name Asc";
+                            WHERE AD_CardView.AD_Window_id=" + ad_Window_ID + " and AD_CardView.AD_Tab_id=" + ad_Tab_ID + " AND (AD_CardView.AD_User_ID IS NULL OR AD_CardView.AD_User_ID  =" + ctx.GetAD_User_ID() + @" 
+                            ) ORDER BY AD_CardView.Name Asc";
 
-
+            sqlQuery = MRole.GetDefault(ctx).AddAccessSQL(sqlQuery, "AD_CardView", true, false);
             DataSet ds = DB.ExecuteDataset(sqlQuery);
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
@@ -272,32 +272,22 @@ namespace VIS.Models
             return objCardView.Get_ID();
         }
 
-        public void SetDefaultCardView(Ctx ctx, int cardViewID, int AD_Tab_ID,bool isDefault)
+        public void SetDefaultCardView(Ctx ctx, int cardViewID, int AD_Tab_ID)
         {
-            string sql = "";
-            if (!isDefault)
+            string sql = "SELECT AD_DefaultCardView_ID FROM AD_DefaultCardView WHERE AD_Tab_ID=" + AD_Tab_ID + " AND AD_User_ID=" + ctx.GetAD_User_ID();
+            object id = DB.ExecuteScalar(sql);
+
+            int AD_DefaultCardView_ID = 0;
+            if (id != null && id != DBNull.Value)
             {
-                sql = "DELETE FROM AD_DefaultCardView WHERE AD_CardView_ID=" + cardViewID + " AND AD_Tab_ID=" + AD_Tab_ID + " AND AD_User_ID=" + ctx.GetAD_User_ID();
-                DB.ExecuteScalar(sql);
+                AD_DefaultCardView_ID = Convert.ToInt32(id);
             }
-            else
-            {
 
-                sql = "SELECT AD_DefaultCardView_ID FROM AD_DefaultCardView WHERE AD_Tab_ID=" + AD_Tab_ID + " AND AD_User_ID=" + ctx.GetAD_User_ID();
-                object id = DB.ExecuteScalar(sql);
-
-                int AD_DefaultCardView_ID = 0;
-                if (id != null && id != DBNull.Value)
-                {
-                    AD_DefaultCardView_ID = Convert.ToInt32(id);
-                }
-
-                X_AD_DefaultCardView cardView = new X_AD_DefaultCardView(ctx, AD_DefaultCardView_ID, null);
-                cardView.SetAD_Tab_ID(AD_Tab_ID);
-                cardView.SetAD_User_ID(ctx.GetAD_User_ID());
-                cardView.SetAD_CardView_ID(Convert.ToInt32(cardViewID));
-                cardView.Save();
-            }
+            X_AD_DefaultCardView cardView = new X_AD_DefaultCardView(ctx, AD_DefaultCardView_ID, null);
+            cardView.SetAD_Tab_ID(AD_Tab_ID);
+            cardView.SetAD_User_ID(ctx.GetAD_User_ID());
+            cardView.SetAD_CardView_ID(Convert.ToInt32(cardViewID));
+            cardView.Save();
         }
 
 
