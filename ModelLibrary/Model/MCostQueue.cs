@@ -2305,6 +2305,12 @@ namespace VAdvantage.Model
 
                         if (windowName.Equals("ProvisionalInvoice"))
                         {
+                            if (po.Get_ValueAsInt("M_InOutLine_ID") > 0)
+                            {
+                                M_Warehouse_Id = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT M_Warehouse_ID FROM M_InOut WHERE M_InOut_ID = 
+                                    ( SELECT M_InOut_ID FROM M_InOutLine WHERE M_InOutLine_ID = " 
+                                        + po.Get_ValueAsInt("M_InOutLine_ID") + " )", null, trxName));
+                            }
                             // handle conversion 
                             DataSet dsProductDetail = DB.ExecuteDataset(@"SELECT C_ProvisionalInvoice.DateAcct,
                             C_ProvisionalInvoice.C_Currency_ID, C_ProvisionalInvoice.C_ConversionType_ID 
