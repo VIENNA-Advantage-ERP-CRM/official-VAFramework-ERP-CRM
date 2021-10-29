@@ -700,7 +700,7 @@ span.vis-ad-w-p-tb-rc-action {
     flex: 1;
     min-height: 80%;
     max-height: 99%;
-    overflow-y: auto;
+    /*overflow-y: hidden;*/
     padding: 0 10px;
     /*grid-template-columns: 1fr auto;
     grid-template-rows: 1fr auto auto auto auto;*/

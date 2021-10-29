@@ -2471,29 +2471,38 @@ findImg {
 }
 
 .vis-cv-body {
-    height: 100%;
-    overflow-x: auto;
+    height: calc(100% - 12px);
+    overflow-y: auto;
     position: relative;
+    overflow-x: hidden;
 }
 
 .vis-cv-header {
-    height: 12px;
+    height: 11px;
     text-align: right;
-    /*background-color: #D7E3E7;*/
+    /* background-color: #D7E3E7; */
     font-weight: bold;
-    color: darkgray;
+    /* color: darkgray; */
     font-size: 12px;
-    padding-top: .5rem;
+    padding-top: .4rem;
     position: relative;
     z-index: 9;
 }
 .vis-cv-header select {
     margin-right: .5rem;
+    position: relative;
+    z-index: 2;
 }
-
+.vis-cv-header p {
+    position: absolute;
+    top: 0;
+    text-align: center;
+    width: 100%;
+    z-index: 0;
+}
 .vis-cv-main {
     bottom: 0;
-    top: 2px;
+    top: 15px;
     position: absolute;
 }
 
