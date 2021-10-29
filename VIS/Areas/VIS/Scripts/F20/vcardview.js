@@ -208,6 +208,9 @@
                 for (var i = 0; i < cards.length; i++) {
                     $cmbCards.append('<option value="' + cards[i].AD_CardView_ID + '">' + cards[i].Name + '</option>');
                 }
+                if (this.AD_CardView_ID) {
+                    $cmbCards.val(this.AD_CardView_ID);
+                }
             }
             else {
                 $cmbCards.hide();
@@ -289,6 +292,7 @@
             if (cardID) {
                 self.getCardCmb().val(cardID);
             }
+           
         });
     };
 
