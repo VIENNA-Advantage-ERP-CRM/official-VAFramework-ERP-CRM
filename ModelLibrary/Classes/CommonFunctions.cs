@@ -938,9 +938,8 @@ namespace VAdvantage.Classes
     ad_defaultcardview.ad_client_id,
     ad_defaultcardview.ad_user_ID FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
                         ON ( AD_CardView.AD_HeaderLayout_ID = AD_HeaderLayout.AD_HeaderLayout_ID)
-                        JOIN AD_DefaultCardView AD_DefaultCardView ON ( AD_DefaultCardView.ad_cardview_id = AD_CardView.ad_cardview_id AND (AD_CardView.ad_user_id IS NULL OR AD_CardView.ad_user_id = 101))
-                        WHERE AD_DefaultCardView.isactive = 'Y' " +
-                        " AND AD_DefaultCardView.AD_Tab_ID=" + AD_Tab_ID + " AND AD_CardView.IsActive = 'Y' " +
+                        JOIN AD_DefaultCardView AD_DefaultCardView ON ( AD_DefaultCardView.ad_cardview_id = AD_CardView.ad_cardview_id)
+                       WHERE  AD_CardView.AD_Tab_ID=" + AD_Tab_ID + " AND AD_CardView.IsActive = 'Y' AND (AD_CardView.ad_user_id IS NULL OR AD_CardView.ad_user_id = " + ctx.GetAD_User_ID() + @") " +
                         "ORDER BY AD_DefaultCardView.AD_Client_ID Desc", "AD_CardView", true, false));
 
                 if (ds == null || ds.Tables[0].Rows.Count == 0)
