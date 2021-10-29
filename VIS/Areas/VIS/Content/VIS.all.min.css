@@ -1,4 +1,4 @@
-﻿/**version 1.0.32.1*/
+﻿/**version 1.0.34.0*/
 /* Minification failed. Returning unminified contents.
 (36,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
 (37,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
@@ -813,9 +813,9 @@
 (20601,39): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
 (20776,39): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
 (20787,39): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(20814,63): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(20815,43): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
-(20815,88): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
+(20809,63): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
+(20810,43): run-time error CSS1039: Token not allowed after unary operator: '-v-c-primary'
+(20810,88): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
  */
 html, body {
     height: 100%;
@@ -22538,11 +22538,6 @@ html[dir="rtl"] .vis-css-treeview li.vis-subNavFirstElement ~ ul li a span {
     padding-right: 0;
 }
 
-html[dir="rtl"] .vis-removeFilter {
-    right: 26px;
-}
-/*rtl css End here*/
-
 html[dir="rtl"] .vis-progress-output {
     right: 32px;
     left: unset;
@@ -22566,8 +22561,12 @@ html[dir="rtl"] .w2ui-editable .vis-progress-output {
     margin-top: 8px !important;
     right: 3%;
 }
-/*rtl css End here*/
 
+
+html[dir="rtl"] .vis-removeFilter {
+    right: 26px;
+}
+/*rtl css End here*/
 
 
 
