@@ -452,8 +452,11 @@ namespace VAdvantage.Model
             }
 
             // Get Amount from PO
-            DataSet ds = DB.ExecuteDataset(@"SELECT TaxableAmt , TaxAmt, SurchargeAmt FROM C_OrderLine 
-                         WHERE C_OrderLIne_ID = " + Invoiceline.GetC_OrderLine_ID(), null, Get_Trx());
+            DataSet ds = DB.ExecuteDataset(@"SELECT ROUND((TaxableAmt/QtyOrdered) * " + Math.Abs(Invoiceline.GetQtyInvoiced()) + @", 10) AS TaxableAmt  
+                                                    , ROUND((TaxAmt/QtyOrdered) * " + Math.Abs(Invoiceline.GetQtyInvoiced()) + @", 10) AS TaxAmt 
+                                                    , ROUND((SurchargeAmt/QtyOrdered) * " + Math.Abs(Invoiceline.GetQtyInvoiced()) + @", 10) AS SurchargeAmt 
+                                            FROM C_OrderLine 
+                                            WHERE C_OrderLIne_ID = " + Invoiceline.GetC_OrderLine_ID(), null, Get_Trx());
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
                 isOrderRecordFound = true;

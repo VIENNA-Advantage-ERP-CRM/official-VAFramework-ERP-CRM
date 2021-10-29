@@ -377,6 +377,15 @@ namespace VAdvantage.Model
             else
             {
                 ProvisionalInvCalculated = false;
+
+                // Get Costing Element of ProvisionalWeightedAverage
+                if (windowName.Equals("ProvisionalInvoice"))
+                {
+                    // Get Costing Element of Weighted Provisional Invoice
+                    costElementId = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT DISTINCT M_CostElement_ID FROM M_CostElement WHERE IsActive = 'Y' 
+                            AND CostingMethod = 'B' AND AD_Client_ID = " + product.GetAD_Client_ID()));
+                }
+
             // when calculate cost on completion, then calculate cost of defined costing method either on product category or on Accounting Schema
             WeightedProvisionalInvoice:
                 MCostElement ce = null;
