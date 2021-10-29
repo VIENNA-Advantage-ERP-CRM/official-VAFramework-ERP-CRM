@@ -658,8 +658,10 @@
             this.singleRow = false;
         else if (defaultTabLayout == "Y")
             this.switchSingleRow(true);
-        else if (defaultTabLayout == "C")
-            this.switchCardRow(true);
+        else if (defaultTabLayout == "C") {
+            this.isCardRow = false;
+            this.switchCardRow(false);
+        }
 
 
         //if (onlyMultiRow || !mTab.getIsSingleRow()) {
@@ -1768,13 +1770,11 @@
                 p1.css({ "float": 'right' });
             else p1.css({ "float": '' });
 
-            p1.show();
+            p1.css('display', 'block');
             if (!avoidRefresh)
                 this.vCardView.refreshUI(this.getVCardPanel().width());
             p1 = null;
-            //this.vTable.resize();
         }
-
     };
 
     VIS.GridController.prototype.switchMapRow = function () {

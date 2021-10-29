@@ -755,9 +755,9 @@
                             retVal.Conditions = strConditionArray;
                             retVal.AD_CardView_ID = orginalAD_CardView_ID;
                         }
-                        cardView.setCardViewData(retVal);
+                        //cardView.setCardViewData(retVal);
                         if (gc.isCardRow)
-                            cardView.refreshUI(gc.getVCardPanel().width());
+                            cardView.getCardViewData(null, AD_CardView_ID);
                         ch.close();
                         e.stopPropagation();
                         e.preventDefault();
@@ -1660,9 +1660,9 @@
                     retVal.Conditions = [];
                     retVal.AD_CardView_ID = orginalAD_CardView_ID;
                 }
-                cardView.setCardViewData(retVal);
+                //cardView.setCardViewData(retVal);
                 if (gc.isCardRow)
-                    cardView.refreshUI(gc.getVCardPanel().width());
+                    cardView.getCardViewData(null, AD_CardView_ID);
 
                 //}
             };

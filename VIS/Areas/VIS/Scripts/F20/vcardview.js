@@ -38,7 +38,7 @@
             $lblGroup = $('<p>');
             headerdiv.append($cmbCards).append($lblGroup);
             //   cardList = $("<img style='margin-left:10px;margin-top:4px;float:right' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/defaultCView.png' >");
-            root.append(body);
+            root.append(headerdiv).append(body);
         }
 
         var self = this;
@@ -89,7 +89,7 @@
                 }
             }
             else
-                body.width(body.parent().width * (grpCtrlC));
+                body.width(body.parent().width() * (grpCtrlC));
             this.navigate();
         };
 
@@ -130,6 +130,10 @@
             if (this.cGroup)
                 return this.cGroup.getAD_Field_ID();
             return 0;
+        };
+
+        this.getCardCmb = function () {
+            return $cmbCards;
         };
 
         var handleEvents = function () {
@@ -205,6 +209,9 @@
                     $cmbCards.append('<option value="' + cards[i].AD_CardView_ID + '">' + cards[i].Name + '</option>');
                 }
             }
+            else {
+                $cmbCards.hide();
+            }
         };
 
         handleEvents();
@@ -257,17 +264,31 @@
 
         this.fillCardViewList(mTab.vo.Cards);
 
-        this.getCardViewData(mTab, 0);
+       // this.getCardViewData(mTab, 0);
+        var cardss = mTab.vo.Cards[0];
 
-        cContainer.append(this.getHeader());
+        this.setCardViewData(cardss);
+        this.refreshUI(this.getBody().width());
+
+        //cContainer.append(this.getHeader());
         cContainer.append(this.getRoot());
     };
 
     VCardView.prototype.getCardViewData = function (mTab, cardID) {
         var self = this;
-        VIS.dataContext.getCardViewInfo(mTab.getAD_Window_ID(), mTab.getAD_Tab_ID(), cardID, function (retData) {
+        var windowID = 0;
+        var tabID = 0;
+        if (mTab) {
+            windowID = mTab.getAD_Window_ID();
+            tabID = mTab.getAD_Tab_ID();
+        }
+
+        VIS.dataContext.getCardViewInfo(windowID, tabID, cardID, function (retData) {
             self.setCardViewData(retData);
-            self.refreshUI();
+            self.refreshUI(self.getBody().width());
+            if (cardID) {
+                self.getCardCmb().val(cardID);
+            }
         });
     };
 
@@ -295,12 +316,15 @@
 
             for (var i = 0; i < retData.IncludedCols.length; i++) {
                 var f = this.mTab.getFieldById(retData.IncludedCols[i].AD_Field_ID);
-                f.setCardViewSeqNo(retData.IncludedCols[i].SeqNo);
-                f.setCardFieldStyle(retData.IncludedCols[i].HTMLStyle);
+               
                 //f.setCardIconHide(retData.IncludedCols[i].HideIcon);
                 //f.setCardTextHide(retData.IncludedCols[i].HideText);
-                if (f)
+                if (f) {
+                    f.setCardViewSeqNo(retData.IncludedCols[i].SeqNo);
+                    f.setCardFieldStyle(retData.IncludedCols[i].HTMLStyle);
                     this.fields.push(f);
+                }
+                    
                 this.hasIncludedCols = true;
             }
         }
@@ -360,7 +384,7 @@
                     var data = lookup.data;
 
                     for (var i = 0; i < data.length; i++) {
-                        this.cGroupInfo[data[i].Key] = { 'name': data[i].Name, 'records': [], 'key': data[i].Key};
+                        this.cGroupInfo[data[i].Key] = { 'name': data[i].Name, 'records': [], 'key': data[i].Key };
                         this.grpCount += 1;
                         //if (i >= 4)
                         //    break;
@@ -372,6 +396,7 @@
                 this.setHeader('');
             }
         }
+        else { this.setHeader('');}
         if (this.grpCount < 1) {//add one group by de
             this.cGroupInfo['All'] = { 'name': VIS.Msg.getMsg('All'), 'records': [],'key': null };
             this.grpCount = 1;
@@ -453,6 +478,10 @@
     };
 
     VCardView.prototype.filterRecord = function (records) {
+
+        if (!records)
+            return;
+
         var len = records.length;
 
         var grpCol = this.cGroup.getColumnName().toLowerCase();
@@ -526,6 +555,8 @@
         function createCards() {
             var card = null;
             this.fieldStyles = {};
+            if (!records)
+                return;
             for (var i = 0; i < records.length; i++) {
                 card = new VCard(fields, records[i], headerItems, headerStyle, headerPadding, windowNo, this.fieldStyles);
                 if (onlyOne) {
