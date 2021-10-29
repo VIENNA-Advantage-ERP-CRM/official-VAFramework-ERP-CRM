@@ -971,6 +971,9 @@ namespace VAdvantage.Model
             for (int i = 0; i < _lines.Length; i++)
             {
                 MAllocationLine line = _lines[i];
+
+                bps.Add(line.ProcessIt(true));	//	reverse
+
                 line.SetIsActive(false);
                 // set Amount as ZERO on Reversal of Allocation
                 line.SetAmount(Env.ZERO);
@@ -980,7 +983,7 @@ namespace VAdvantage.Model
                 line.SetWithholdingAmt(Env.ZERO);
                 line.SetBackupWithholdingAmount(Env.ZERO);
                 line.Save();
-                bps.Add(line.ProcessIt(true));	//	reverse
+                
 
                 // Added by Amit for Payment Management 5-11-2015   
                 if (Env.IsModuleInstalled("VA009_"))
