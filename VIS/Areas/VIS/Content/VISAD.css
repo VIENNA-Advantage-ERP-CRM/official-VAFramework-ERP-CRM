@@ -2819,7 +2819,8 @@ findImg {
     width: 100%;
 }
 .vis-cardviewCondition {
-    width: calc(100% - 140px);
+    /*width: calc(100% - 140px);*/
+    width: 100%;
     margin-top: 10px;
     height: 200px;
     float: right;

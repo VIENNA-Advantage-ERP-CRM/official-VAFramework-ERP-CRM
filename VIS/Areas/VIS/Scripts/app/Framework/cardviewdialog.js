@@ -100,6 +100,7 @@
         var $vSearchHeaderLayout = null;
         var isdefault = null;
         var isPublic = null;
+        var lblDefault = null;
         // var 
         var root, ch;
         function init() {
@@ -131,20 +132,21 @@
 
 
             var $divHeadderLay = $('<div class="input-group vis-input-wrap">');
-            var lblDefault = $('<label class="vis-ec-col-lblchkbox" style="opacity: 1;width: 50%;">' + defaultMsg+'</label>');
+            lblDefault = $('<label class="vis-ec-col-lblchkbox" style="opacity: 1;width: 50%;display:none">' + defaultMsg+'</label>');
             isdefault = $('<input type="checkbox" name="IsDefault" value="Default">');
             lblDefault.prepend(isdefault);
 
-            var lblIsPublic = $('<label class="vis-ec-col-lblchkbox" style="opacity: 1;width: 50%;">Is Public</label>');
+            var lblIsPublic = $('<label class="vis-ec-col-lblchkbox" style="opacity: 1;width: 50%;">'+VIS.Msg.getMsg("Shared")+'</label>');
             isPublic = $('<input type="checkbox" checked="true" name="IsPublic" value="Public">');
             lblIsPublic.prepend(isPublic);
+
 
             var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), WindowNo, 1025709, VIS.DisplayType.Search);
             $vSearchHeaderLayout = new VIS.Controls.VTextBoxButton("AD_HeaderLayout_ID", true, false, true, VIS.DisplayType.Search, value);
 
             var $divCtrl = $('<div class="vis-control-wrap">');
             var $divCtrlBtn = $('<div class="input-group-append">');
-            $divCtrl.append($vSearchHeaderLayout.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' ')).append('<label for="Name">' + VIS.Msg.getMsg("HeaderLayout") + '</label>');
+            $divCtrl.append($vSearchHeaderLayout.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' ')).append('<label for="Name">' + VIS.Msg.getMsg("cardLayout") + '</label>');
             
             $divHeadderLay.append($divCtrl).append($divCtrlBtn);
             $divCtrlBtn.append($vSearchHeaderLayout.getBtn(0)).append($vSearchHeaderLayout.getBtn(1));
@@ -414,7 +416,7 @@
                 FillColumnInclude(false, false);
             }
             FillGroupFields();
-            FillRoleList(ulRole);
+            //FillRoleList(ulRole);
         }
 
         var FillTextControl = function () {
@@ -437,7 +439,8 @@
                     if (c == "created" || c == "createdby" || c == "updated" || c == "updatedby") {
                         continue;
                     }
-                    if ((VIS.DisplayType.IsLookup(tabField[i].getDisplayType()) && tabField[i].getLookup() && tabField[i].getLookup().getIsValidated()) || (tabField[i].getDisplayType() == VIS.DisplayType.YesNo)) {
+                   
+                    if (VIS.DisplayType.IsLookup(tabField[i].getDisplayType()) && tabField[i].getLookup() && tabField[i].getLookup().getIsValidated() && tabField[i].getDisplayType() == VIS.DisplayType.List && tabField[i].getCallout() == '' && !tabField[i].getIsReadOnly()) {
                         cmbGroupField.append("<Option FieldID=" + tabField[i].getAD_Field_ID() + "> " + tabField[i].getHeader() + "</Option>");
                     }
                 }
@@ -510,14 +513,15 @@
                     btnNew.css({ "display": "none" });
                     btnCancle.css({ "display": "block" });
                     btnEdit.css({ "display": "none" });
+                    lblDefault.css({ "display": "block" });
                     rootCardViewUI.find(".vis-cardviewchild");
                     isNewRecord = true;
                     LstRoleID = [];
-                    UnSelectRoleUl();
+                    //UnSelectRoleUl();
                     cmbGroupField.find("[FieldID='" + -1 + "']").attr("selected", "selected");
                     FillColumnInclude(false, true);
                     ulRightColumns.children().remove();
-                    ulRole.find('input[type=checkbox]').attr('disabled', false);
+                    //ulRole.find('input[type=checkbox]').attr('disabled', false);
                     LastCVCondition = cardviewCondition;
                     cardviewCondition = [];
                     AddRow(cardviewCondition);
@@ -535,11 +539,12 @@
                     btnCancle.css({ "display": "none" });
                     txtCardViewName.val("");
                     btnEdit.css({ "display": "block" });
+                    lblDefault.css({ "display": "none" });
                     rootCardViewUI.find(".vis-cardviewchild");
                     isNewRecord = false;
                     FillColumnInclude(true, false);
                     FillGroupFields();
-                    FillRoleList(ulRole);
+                    //FillRoleList(ulRole);
                     AddRow(LastCVCondition);
                 });
             }
@@ -555,6 +560,7 @@
                     btnNew.css({ "display": "none" });
                     btnCancle.css({ "display": "block" });
                     btnEdit.css({ "display": "none" });
+                    lblDefault.css({ "display": "none" });
                     rootCardViewUI.find(".vis-cardviewchild");
                     txtCardViewName.val(cmbCardView.find(":selected").text().trim());
 
