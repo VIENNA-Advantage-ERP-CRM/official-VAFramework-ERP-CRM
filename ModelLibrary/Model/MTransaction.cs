@@ -105,23 +105,25 @@ namespace VAdvantage.Model
         /// <returns></returns>
         protected override bool BeforeSave(bool newRecord)
         {
+            return true;
+            // VIS0060: Code commented to handle case of reversed Future date transaction exist.
             // is used to check Container applicable into system
-            isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
+            //isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
 
             // system will check - if container qty goes negative then not to save Transaction
-            MLocator locator = MLocator.Get(GetCtx(), GetM_Locator_ID());
-            MWarehouse warehouse = MWarehouse.Get(GetCtx(), locator.GetM_Warehouse_ID());
-            if (isContainerApplicable && warehouse.IsDisallowNegativeInv() && Get_ColumnIndex("ContainerCurrentQty") >= 0 && GetContainerCurrentQty() < 0)
-            {
-                log.SaveError("Info", Msg.GetMsg(GetCtx(), "VIS_FutureContainerQtygoesNegative"));
-                return false;
-            }
-            else if (warehouse.IsDisallowNegativeInv() && GetCurrentQty() < 0)
-            {
-                log.SaveError("Info", Msg.GetMsg(GetCtx(), "VIS_FutureQtygoesNegative"));
-                return false;
-            }
-            return base.BeforeSave(newRecord);
+            //MLocator locator = MLocator.Get(GetCtx(), GetM_Locator_ID());
+            //MWarehouse warehouse = MWarehouse.Get(GetCtx(), locator.GetM_Warehouse_ID());
+            //if (isContainerApplicable && warehouse.IsDisallowNegativeInv() && Get_ColumnIndex("ContainerCurrentQty") >= 0 && GetContainerCurrentQty() < 0)
+            //{
+            //    log.SaveError("Info", Msg.GetMsg(GetCtx(), "VIS_FutureContainerQtygoesNegative"));
+            //    return false;
+            //}
+            //else if (warehouse.IsDisallowNegativeInv() && GetCurrentQty() < 0)
+            //{
+            //    log.SaveError("Info", Msg.GetMsg(GetCtx(), "VIS_FutureQtygoesNegative"));
+            //    return false;
+            //}
+            //return base.BeforeSave(newRecord);
         }
 
         /// <summary>
@@ -142,7 +144,7 @@ namespace VAdvantage.Model
             if (isContainerApplicable && newRecord && PO.Get_Table_ID("M_ContainerStorage") > 0 && GetMMpolicyDate() != null)
             {
                 // If Physical Inventory available afetr movement date - then not to do impacts on container storage 
-                bool isPhysicalInventory = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM M_ContainerStorage WHERE IsPhysicalInventory = 'Y'
+                bool isPhysicalInventory = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(M_Product_ID) FROM M_ContainerStorage WHERE IsPhysicalInventory = 'Y'
                                               AND MMPolicyDate > " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
                                               @" AND M_Product_ID = " + GetM_Product_ID() +
                                               @" AND NVL(M_AttributeSetInstance_ID , 0) = " + GetM_AttributeSetInstance_ID() +
