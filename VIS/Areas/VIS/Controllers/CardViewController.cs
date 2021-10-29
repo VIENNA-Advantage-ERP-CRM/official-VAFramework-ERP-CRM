@@ -87,10 +87,10 @@ namespace VIS.Controllers
                 id = objCardViewModel.SaveCardViewRecord(lstCardView[0].CardViewName, lstCardView[0].AD_Window_ID, lstCardView[0].AD_Tab_ID, lstCardView[0].UserID, lstCardView[0].AD_GroupField_ID, ctx, lstCardView[0].CardViewID/*, LstRoleID*/, lstCardViewCondition, lstCardView[0].AD_HeaderLayout_ID,lstCardView[0].isPublic);
             }
 
-            //if (lstCardView[0].IsDefault)
-            //{
-                objCardViewModel.SetDefaultCardView(ctx, id, lstCardView[0].AD_Tab_ID, lstCardView[0].IsDefault);
-            //}
+            if (lstCardView[0].IsDefault)
+            {
+                objCardViewModel.SetDefaultCardView(ctx, id, lstCardView[0].AD_Tab_ID);
+            }
 
             int sqNo = 0;
             if (lstCardViewColumns != null)
