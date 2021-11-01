@@ -889,7 +889,7 @@
 
                 oColumn.render = function (record, index, colIndex) {
                     var f = oColumns[colIndex].field;
-                    var val = record["imgurl"];
+                    var val = record["imgUrlColumn"];
                     if (record.changes && typeof record.changes[f] != 'undefined') {
                         val = record.changes[f];
                     }

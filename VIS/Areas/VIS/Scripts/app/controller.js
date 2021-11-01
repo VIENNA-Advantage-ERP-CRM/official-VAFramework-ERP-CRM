@@ -3641,7 +3641,7 @@
             }
 
             if (field.getDisplayType() == VIS.DisplayType.Image) {
-                select.append(", (SELECT ImageURL from AD_Image img where img.AD_Image_ID=" + gt._tableName+"."+ selectSql+") as imgUrl");
+                select.append(", (SELECT ImageURL from AD_Image img where img.AD_Image_ID=" + gt._tableName+"."+ selectSql+") as imgUrlColumn");
             }
 
             if (field.getLookup() != null && field.getLookup() instanceof VIS.MLookup) {
