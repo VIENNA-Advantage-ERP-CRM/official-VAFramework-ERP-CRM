@@ -53,14 +53,14 @@ namespace ViennaAdvantage.Process
                 MOrder order = new MOrder(GetCtx(), C_Order_ID, Get_TrxName());
                 int C_DocType_ID = order.GetC_DocTypeTarget_ID();
                 string baseType = DB.ExecuteScalar("SELECT DocSubTypeSO From C_DocType WHERE isactive='Y' AND C_DocType_ID=" + C_DocType_ID).ToString();
-
+                int C_Invoice_ID = order.GetC_Invoice_ID();
                 if (!(baseType.Equals("PR") || baseType.Equals("WI")))
                 {
                     return "Order Type must be Prepay Order or Credit Order.";
                 }
                 MPayment payment = new MPayment(GetCtx(), 0, Get_TrxName());
                 payment.SetAD_Client_ID(GetCtx().GetAD_Client_ID());
-                payment.SetAD_Org_ID(GetCtx().GetAD_Org_ID());
+                payment.SetAD_Org_ID(order.GetAD_Org_ID());
                 //payment.SetDocumentNo(MS
                 payment.SetC_BankAccount_ID(Util.GetValueOfInt(DB.ExecuteScalar("SELECT c_bankAccount_ID FROM c_bankaccount WHERE isdefault='Y' AND isactive='Y'")));
                 payment.SetDateTrx(DateTime.Now);
@@ -103,14 +103,14 @@ namespace ViennaAdvantage.Process
                     {
                         //credit order case : update invoice and Invoice schdule refrence
                         DataSet ds = null;
-                        ds = DB.ExecuteDataset("SELECT C_InvoicePaySchedule_ID, DueAmt FROM C_InvoicePaySchedule WHERE C_Invoice_ID = " + order.GetC_Invoice_ID());
+                        ds = DB.ExecuteDataset("SELECT C_InvoicePaySchedule_ID, DueAmt FROM C_InvoicePaySchedule WHERE C_Invoice_ID = " + C_Invoice_ID));
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
                             if (ds.Tables[0].Rows.Count == 1)
                             {
                                 //set Invoice PaySchedule and Invoice in case of single invoice schedule
                                 int count =  DB.ExecuteQuery("UPDATE C_Payment SET C_InvoicePaySchedule_ID= " + Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_InvoicePaySchedule_ID"]) +
-                                    ",C_Invoice_ID="+order.GetC_Invoice_ID()+" WHERE C_Payment_ID=" + payment.GetC_Payment_ID(),null,Get_TrxName());
+                                    ",C_Invoice_ID="+ C_Invoice_ID + " WHERE C_Payment_ID=" + payment.GetC_Payment_ID(),null,Get_TrxName());
                             }
                             else
                             {
@@ -122,7 +122,7 @@ namespace ViennaAdvantage.Process
                                     alloc.SetAD_Client_ID(payment.GetAD_Client_ID());
                                     alloc.SetAD_Org_ID(payment.GetAD_Org_ID());
                                     alloc.SetC_Payment_ID(payment.GetC_Payment_ID());
-                                    alloc.SetC_Invoice_ID(order.GetC_Invoice_ID());
+                                    alloc.SetC_Invoice_ID(C_Invoice_ID);
                                     alloc.SetC_InvoicePaySchedule_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_InvoicePaySchedule_ID"]));
                                     alloc.SetAmount(Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["DueAmt"]));
                                     alloc.SetInvoiceAmt(Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["DueAmt"]));
