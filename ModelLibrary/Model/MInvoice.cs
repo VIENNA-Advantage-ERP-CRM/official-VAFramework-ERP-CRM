@@ -983,7 +983,7 @@ namespace VAdvantage.Model
                     line.SetQtyEntered(Decimal.Negate(line.GetQtyEntered()));
                     line.SetQtyInvoiced(Decimal.Negate(line.GetQtyInvoiced()));
                     line.SetLineNetAmt(Decimal.Negate(line.GetLineNetAmt()));
-                    if (Get_ColumnIndex("C_Invoice_ID") >= 0)
+                    if (Get_ColumnIndex("ReversalDoc_ID") >= 0)
                     {
                         //(1052-Nov/1/2021) set Reversal Document
                         line.SetReversalDoc_ID(fromLine.GetC_InvoiceLine_ID());
@@ -5535,7 +5535,7 @@ namespace VAdvantage.Model
                 GetC_DocType_ID(), false, Get_TrxName(), true);
             // set original document reference
             reversal.SetRef_C_Invoice_ID(GetC_Invoice_ID());
-            if (Get_ColumnIndex("C_Invoice_ID") >= 0)
+            if (Get_ColumnIndex("ReversalDoc_ID") >= 0)
             {
                 //(1052-Nov/1/2021) set Reversal Document
                 reversal.SetReversalDoc_ID(GetC_Invoice_ID());
