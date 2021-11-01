@@ -29,7 +29,6 @@
         var cardViewColumnFieldindex = -1;
         var WindowAD_Field_ID = 0;
         var cardViewColumnAD_Field_ID = 0;
-        var cardViewColumnAD_Field_ID = 0;
         var AD_CardViewColumn_ID = 0;
         var columnFieldArray = [];
         var cardViewColArray = [];
@@ -204,6 +203,7 @@
                 rootCardViewUI.find(".vis-firstdiv").append(divCardView);
                 rootCardViewUI.find(".vis-cardviewchild").append(divCardViewName);
                 rootCardViewUI.find(".vis-cardviewchild");
+                rootCardViewUI.find(".vis-CardView").append(btnNewAndCancle);
                 //divCardViewMainFirstChild.css({ "width": "100%", "float": "left" });
                 rootCardViewUI.find(".k ").css("display", "none");
                 AddCVConditionControl(divCardViewCondition.find(".vis-cardviewConditionControls"));
@@ -439,8 +439,8 @@
                     if (c == "created" || c == "createdby" || c == "updated" || c == "updatedby") {
                         continue;
                     }
-                   
-                    if (VIS.DisplayType.IsLookup(tabField[i].getDisplayType()) && tabField[i].getLookup() && tabField[i].getLookup().getIsValidated() && tabField[i].getDisplayType() == VIS.DisplayType.List && tabField[i].getCallout() == '' && !tabField[i].getIsReadOnly()) {
+
+                    if ((VIS.DisplayType.IsLookup(tabField[i].getDisplayType()) && tabField[i].getLookup() && tabField[i].getLookup().getIsValidated() && tabField[i].getCallout() == '' && !tabField[i].getIsReadOnly()) || tabField[i].getDisplayType() == VIS.DisplayType.YesNo ) {
                         cmbGroupField.append("<Option FieldID=" + tabField[i].getAD_Field_ID() + "> " + tabField[i].getHeader() + "</Option>");
                     }
                 }
@@ -482,6 +482,10 @@
                         continue;
                     }
 
+                    if (!tabField[i].getIsDisplayed()) {
+                        continue;
+                    }
+
                     if (cardView.hasIncludedCols && !isShowAllColumn) {
                         var result = jQuery.grep(columnFieldArray, function (value) {
                             return value == tabField[i].getAD_Field_ID();
@@ -513,7 +517,8 @@
                     btnNew.css({ "display": "none" });
                     btnCancle.css({ "display": "block" });
                     btnEdit.css({ "display": "none" });
-                    lblDefault.css({ "display": "block" });
+                    lblDefault.css({ "display": "block" }).attr('checked', false);
+                    $vSearchHeaderLayout.setValue(null);
                     rootCardViewUI.find(".vis-cardviewchild");
                     isNewRecord = true;
                     LstRoleID = [];
@@ -560,7 +565,7 @@
                     btnNew.css({ "display": "none" });
                     btnCancle.css({ "display": "block" });
                     btnEdit.css({ "display": "none" });
-                    lblDefault.css({ "display": "none" });
+                    lblDefault.css({ "display": "block" });
                     rootCardViewUI.find(".vis-cardviewchild");
                     txtCardViewName.val(cmbCardView.find(":selected").text().trim());
 
@@ -1134,7 +1139,9 @@
                 }
 
                 if (isNewRecord) {
-                    if (orginalAD_CardView_ID > 0 && orginalcardViewUserID > 0) {
+                    if (AD_User_ID == cardViewUserID) {
+                        cardViewName = txtCardViewName.val();
+                    }else if (orginalAD_CardView_ID > 0 && orginalcardViewUserID > 0) {
                         isNewRecord = false;
                         AD_CardView_ID = orginalAD_CardView_ID;
                         cardViewUserID = orginalcardViewUserID;
