@@ -428,6 +428,7 @@ namespace VAdvantage.Model
 
             int _invoice_id = 0;
             int _invoicePaySchedule_ID = 0;
+            List<int> invoiceIds = new List<int>();
             //	Link
             GetLines(false);
             HashSet<int> bps = new HashSet<int>();
@@ -443,6 +444,9 @@ namespace VAdvantage.Model
                     if (line.GetC_Invoice_ID() > 0 && line.GetC_InvoicePaySchedule_ID() > 0)
                     {
                         log.Info("Start setting value of Paid Amount on Invoice Schedule");
+                        //VA228:Get invoice ids
+                        if (!invoiceIds.Contains(Util.GetValueOfInt(line.GetC_Invoice_ID())))
+                            invoiceIds.Add(Util.GetValueOfInt(line.GetC_Invoice_ID()));
 
                         //check no of schedule left for Payment for Currenct Invoice except this schedule
                         int countUnPaidSchedule = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_InvoicePaySchedule_ID) FROM C_InvoicePaySchedule WHERE IsActive = 'Y' AND 
@@ -754,6 +758,16 @@ namespace VAdvantage.Model
                 }
 
                 //End
+            }
+            //VA228:update amount paid on invoice,get total of paid schedule invoice amount from C_InvoicePaySchedule and update on invoice header
+            if (invoiceIds.Count > 0)
+            {
+                string query = @"Update C_Invoice INV set VA009_PaidAmount=(select VA009_PaidAmntInvce from (
+                                Select SUM(VA009_PaidAmntInvce) as VA009_PaidAmntInvce , inv.C_Invoice_id
+                                From C_Invoice inv
+                                Inner join C_InvoicePaySchedule ps on ps.C_Invoice_id=inv.C_Invoice_id
+                                group by inv.C_Invoice_id)t where INV.C_Invoice_id=t.C_Invoice_id) where inv.C_Invoice_id in(" + string.Join(",", invoiceIds) + @")";
+                DB.ExecuteQuery(query, null, Get_Trx());
             }
             //UpdateBP(bps);
 
