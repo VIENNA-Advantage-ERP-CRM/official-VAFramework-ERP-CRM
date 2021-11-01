@@ -257,7 +257,7 @@ namespace VAdvantage.Model
                     if(Util.GetValueOfString(Get_Value("VA073_ProductGroup")).Equals(MProductCategory.VA073_PRODUCTGROUP_FinishedProduct) ||
                         Util.GetValueOfString(Get_Value("VA073_ProductGroup")).Equals(MProductCategory.VA073_PRODUCTGROUP_Semi_FinishedProduct))
                     {
-                        if (!GetCostingMethod().Equals(MProductCategory.COSTINGMETHOD_StandardCosting))
+                        if (Get_ColumnIndex("CostingMethod") >= 0 && (GetCostingMethod()==null || !GetCostingMethod().Equals(MProductCategory.COSTINGMETHOD_StandardCosting)))
                         {
                             log.SaveError("VA073_SelectStdCosting","");
                             return false;
