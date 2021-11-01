@@ -455,6 +455,8 @@ namespace VAdvantage.Model
                     CopyValues(oLine, rLine, oLine.GetAD_Client_ID(), oLine.GetAD_Org_ID());
                     rLine.Set_ValueNoCheck("C_ProvisionalInvoice_ID", reversal.GetC_ProvisionalInvoice_ID());
                     rLine.SetLine(oLine.GetLine());
+                    rLine.SetM_InOutLine_ID(oLine.GetM_InOutLine_ID());
+                    rLine.SetC_OrderLine_ID(oLine.GetC_OrderLine_ID());
                     rLine.SetQtyEntered(Decimal.Negate(oLine.GetQtyEntered()));
                     rLine.SetQtyInvoiced(Decimal.Negate(oLine.GetQtyInvoiced()));
                     rLine.SetTaxAmt(Decimal.Negate(oLine.GetTaxAmt()));
