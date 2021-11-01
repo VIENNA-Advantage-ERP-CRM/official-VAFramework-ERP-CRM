@@ -983,7 +983,7 @@ namespace VAdvantage.Model
                     line.SetQtyEntered(Decimal.Negate(line.GetQtyEntered()));
                     line.SetQtyInvoiced(Decimal.Negate(line.GetQtyInvoiced()));
                     line.SetLineNetAmt(Decimal.Negate(line.GetLineNetAmt()));
-                    //(1052_1/Nov/2021) set Reversal Document
+                    //((1052-Nov/1/2021)) set Reversal Document
                     line.SetReversalDoc_ID(fromLine.GetC_InvoiceLine_ID());
                     if (((Decimal)line.GetTaxAmt()).CompareTo(Env.ZERO) != 0)
                         line.SetTaxAmt(Decimal.Negate((Decimal)line.GetTaxAmt()));
