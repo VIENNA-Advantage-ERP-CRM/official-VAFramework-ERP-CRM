@@ -26,7 +26,7 @@
         var root;
         var body = null;
         var headerdiv;
-        var $cmbCards = null; 
+        var $cmbCards = null;
         var $lblGroup = null;
 
         //  var cardList;
@@ -267,7 +267,7 @@
 
         this.fillCardViewList(mTab.vo.Cards);
 
-       // this.getCardViewData(mTab, 0);
+        // this.getCardViewData(mTab, 0);
         var cardss = mTab.vo.Cards[0];
 
         this.setCardViewData(cardss);
@@ -292,7 +292,7 @@
             if (cardID) {
                 self.getCardCmb().val(cardID);
             }
-           
+
         });
     };
 
@@ -320,16 +320,20 @@
 
             for (var i = 0; i < retData.IncludedCols.length; i++) {
                 var f = this.mTab.getFieldById(retData.IncludedCols[i].AD_Field_ID);
-               
+
                 //f.setCardIconHide(retData.IncludedCols[i].HideIcon);
                 //f.setCardTextHide(retData.IncludedCols[i].HideText);
                 if (f) {
                     f.setCardViewSeqNo(retData.IncludedCols[i].SeqNo);
                     f.setCardFieldStyle(retData.IncludedCols[i].HTMLStyle);
                     this.fields.push(f);
+                    if (!retData.headerItems || retdata.headerItems.length == 0) {
+                        f.setCardIconHide(retData.IncludedCols[i].HideIcon);
+                        f.setCardTextHide(retData.IncludedCols[i].HideText);
+                    }
+                    this.hasIncludedCols = true;
                 }
-                    
-                this.hasIncludedCols = true;
+               
             }
         }
 
@@ -400,9 +404,9 @@
                 this.setHeader('');
             }
         }
-        else { this.setHeader('');}
+        else { this.setHeader(''); }
         if (this.grpCount < 1) {//add one group by de
-            this.cGroupInfo['All'] = { 'name': VIS.Msg.getMsg('All'), 'records': [],'key': null };
+            this.cGroupInfo['All'] = { 'name': VIS.Msg.getMsg('All'), 'records': [], 'key': null };
             this.grpCount = 1;
         }
         this.isProcessed = true;
@@ -437,7 +441,7 @@
                 break;
             }
 
-            cardGroup = new VCardGroup(true, records, n, this.fields, this.cConditions, this.headerItems, this.headerStyle, this.headerPadding,key);
+            cardGroup = new VCardGroup(true, records, n, this.fields, this.cConditions, this.headerItems, this.headerStyle, this.headerPadding, key);
             this.groupCtrls.push(cardGroup);
             root.append(cardGroup.getRoot())
         }
@@ -451,7 +455,7 @@
                 var sortable = new vaSortable(cardGroup.getBody()[0], {
                     attr: 'data-recid',
                     selfSort: false,
-                    ignore: '.vis-cv-card-edit',                    
+                    ignore: '.vis-cv-card-edit',
                     onSelect: function (e, item) {
                         //$this.onCardEdit({ 'recid': item }, true);
                         var obj = {
@@ -470,7 +474,7 @@
                                     vaSortable.prototype.revertItem();
                                 } else {
                                     $this.mTab.dataRefresh();
-                                    $(e).find(':contains("' + $this.cGroup.getHeader() + '") strong').text($(e).parent().attr('data-name')); 
+                                    $(e).find(':contains("' + $this.cGroup.getHeader() + '") strong').text($(e).parent().attr('data-name'));
                                 }
                             },
                             error: function (err) {
@@ -538,7 +542,7 @@
     };
 
     /* Group Control */
-    function VCardGroup(onlyOne, records, grpName, fields, conditions, headerItems, headerStyle, headerPadding,key) {
+    function VCardGroup(onlyOne, records, grpName, fields, conditions, headerItems, headerStyle, headerPadding, key) {
 
         //conditions = [{ 'bgColor': '#80ff80', 'cValue': '@AD_User_ID@=1005324 & @C_DocTypeTarget_ID@=132' }];
         var root = null;
@@ -548,7 +552,7 @@
 
         function init() {
             var str = "<div class='vis-cv-cg vis-pull-left'> <div class='vis-cv-head' >" + grpName
-                + "</div><div data-name='" + grpName+"' data-key='" + key +"'  class='vis-cv-grpbody'></div></div>";
+                + "</div><div data-name='" + grpName + "' data-key='" + key + "'  class='vis-cv-grpbody'></div></div>";
             root = $(str);
             body = root.find('.vis-cv-grpbody');
             if (onlyOne) {
@@ -817,6 +821,8 @@
 
                     var colValue = getFieldValue(mField, record);
 
+
+
                     styleArr = fieldValueStyle;
                     if (styleArr && styleArr.length > 0)
                         styleArr = styleArr.split("|");
@@ -870,9 +876,10 @@
                         var styleArr = null;
                         if (VIS.DisplayType.List == mField.lookup.displayType) {
 
-                            img = mField.lookup.getLOVIconElement(mField.getValue(), true);
+                            img = mField.lookup.getLOVIconElement(record[mField.getColumnName().toLower()], true);
                             if (!img && colValue) {
                                 imgSpan = colValue.substring(0, 1);
+                                img = imgSpan;
                             }
                         }
                         else {
@@ -881,7 +888,7 @@
                         }
                         if (img && !img.contains("Images/")) {
                             imgSpan = img;//img contains First charater of Name or Identifier text
-                            $imageSpan.text(imgSpan);
+                            $imageSpan.append(imgSpan);
                         }
                         else {
                             $image.attr('src', img);
@@ -1007,10 +1014,130 @@
                     var value = record[field.getColumnName().toLowerCase()];
                     dt = field.getDisplayType();
 
-                    if (VIS.DisplayType.IsLookup(dt)) {
-                        value = field.getLookup().getDisplay(value);
+                    var $label = VIS.VControlFactory.getHeaderLabel(field, true);
+                    var iControl = VIS.VControlFactory.getReadOnlyControl(this.curTab, field, false, false, false);
+                    var $lblControl = null;
+                    if ($label) {
+                        $lblControl = $label.getControl().addClass('vis-w-p-header-data-label');
+                    }
+                    if (field.getDisplayType() == VIS.DisplayType.Button) {
+                        if (iControl != null)
+                            iControl.addActionListner(this);
                     }
 
+
+                
+                    if (field.lookup && field.lookup.gethasImageIdentifier()) {
+                        var $divIcon = $('<div class="vis-w-p-header-icon-f"></div>');
+                        var $div = $('<div class="vis-w-p-header-data-f">')
+                        var $divLabel = $('<div class="vis-w-p-header-Label-f"></div>');
+                        var img = null;
+                        var imgSpan = null;
+                        var styleArr = null;
+                        var $image = $('<img>');
+                        var $imageSpan = $('<span>');
+                        var colValue = getFieldValue(field, record);
+
+                        var styleArr = field.cardFieldStyle;
+                        if (styleArr && styleArr.length > 0)
+                            styleArr = styleArr.split("|");
+                        if (styleArr && styleArr.length > 0) {
+                            for (var j = 0; j < styleArr.length; j++) {
+                                if (styleArr[j].indexOf("@img::") > -1 || styleArr[j].indexOf("@span::") > -1) {
+                                    $div.append($divIcon);
+                                    var css = "";
+                                    if (styleArr[j].indexOf("@img::") > -1) {
+                                        css = styleArr[j].replace("@img::", "");
+                                    }
+                                    else if (styleArr[j].indexOf("@span::")) {
+                                        css = styleArr[j].replace("@span::", "");
+                                    }
+                                    $divIcon.attr('style', css);
+                                }
+                                else if (styleArr[j].indexOf("@value::") > -1) {
+                                    //var css = "";
+
+                                    //css = styleArr[j].replace("@value::", "");
+                                    //$divLabel.attr('style', css);
+                                    $div.append($divLabel);
+                                }
+                                else if (styleArr[j].indexOf("<br>") > -1) {
+                                    $div.css("flex-direction", "column");
+                                }
+                                else {
+                                    $div.append($divIcon);
+                                    $div.append($divLabel);
+                                }
+                            }
+                        }
+                        else {
+                            $div.append($divIcon);
+                            $div.append($divLabel);
+                        }
+
+
+                        if (VIS.DisplayType.List == field.lookup.displayType) {
+                            img = field.lookup.getLOVIconElement(record[field.getColumnName().toLower()], true);
+
+                            if (!img && colValue) {
+                                imgSpan = colValue.substring(0, 1);
+                                img = imgSpan;
+                            }
+                        }
+                        else {
+                            colValue = VIS.Utility.Util.getIdentifierDisplayVal(colValue);
+                            img = getIdentifierImage(field, record);
+                        }
+                        if (img && !img.contains("Images/")) {
+                            imgSpan = img;//img contains First charater of Name or Identifier text
+                            $imageSpan.append(imgSpan);
+                        }
+                        else {
+                            $image.attr('src', img);
+                        }
+
+                        $divIcon.append($imageSpan);
+                        $divIcon.append($image);
+
+                        /*Set what do you want to show? Icon OR Label OR Both OR None*/
+                        if (!field.isCardIconHide() && !field.isCardTextHide()) {
+                            if (imgSpan != null)
+                                $image.hide();
+                            else {
+                                $imageSpan.hide();
+                            }
+
+                            if ($lblControl && $lblControl.length > 0)
+                                $divLabel.append($lblControl);
+                        }
+                        else if (field.isCardIconHide() && field.isCardTextHide()) {
+                            //$divIcon.hide();
+                            $divIcon.remove();
+                        }
+                        else if (field.isCardTextHide()) {
+                            if (imgSpan != null)
+                                $image.hide();
+                            else
+                                $imageSpan.hide();
+
+                            if ($lblControl && $lblControl.length > 0)
+                                $lblControl.remove();
+                        }
+                        else if (field.isCardIconHide()) {
+                            if ($lblControl && $lblControl.length > 0) {
+                                $divLabel.append($lblControl);
+                            }
+                            $divIcon.remove();
+                        }
+
+                        $divLabel.append(iControl.getControl());
+                        setValue(colValue, iControl, field);
+                        root.append($div);
+                        continue;
+                    }
+                    else if (VIS.DisplayType.IsLookup(dt)) {
+                        value = field.getLookup().getDisplay(value);
+                    }
                     else if (VIS.DisplayType.YesNo == dt) {
                         if (value || value == 'Y')
                             value = VIS.Msg.getMsg('Yes');
@@ -1044,6 +1171,12 @@
                         var val = VIS.Utility.Util.getValueOfDecimal(value);
                         value = (val).toLocaleString();
                     }
+                    else if (VIS.DisplayType.Image == dt) {
+                        setValue(value, iControl, field);
+                        root.append($label.getControl()).append(iControl.getControl());
+                        continue;
+                    }
+
                     if (!value && value != 0)
                         value = ' -- ';
                     value = w2utils.encodeTags(value);
@@ -1243,6 +1376,12 @@
         }
 
         this.dynamicStyle.push("." + dynamicClassName + "  {" + style + "} ");
+        return dynamicClassName;
+    };
+
+    VCard.prototype.justifyAlignImageItems = function (headerSeqNo, justify, alignItem) {
+        var dynamicClassName = "vis-w-p-header-label-center-justify_" + headerSeqNo + "_" + this.windowNo;
+        this.dynamicStyle.push(" ." + dynamicClassName + " {justify-content:" + this.textAlignEnum[justify] + ";align-items:" + this.alignItemEnum[alignItem] + "}");
         return dynamicClassName;
     };
 
