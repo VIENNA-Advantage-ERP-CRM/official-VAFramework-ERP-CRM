@@ -3018,9 +3018,22 @@ namespace VIS.Helpers
         public List<CardsInfo> GetCards(Ctx ctx, int AD_Tab_ID)
         {
             List<CardsInfo> cards = new List<CardsInfo>();
-            string sql = "SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name FROM AD_CardView WHERE IsActive='Y' AND AD_Tab_ID=" + AD_Tab_ID+ " ORDER BY NAME ASC";
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "AD_CardView", true, false);
-            DataSet ds = DB.ExecuteDataset(sql);
+            //string sql = "SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name FROM AD_CardView WHERE IsActive='Y' AND AD_Tab_ID=" + AD_Tab_ID+ " ORDER BY NAME ASC";
+            //sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "AD_CardView", true, false);
+
+          DataSet  ds = DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@" SELECT AD_CardView.ad_cardview_id, AD_CardView.name FROM AD_CardView AD_CardView
+   Left Outer JOIN AD_DefaultCardView AD_DefaultCardView ON (  AD_CardView.ad_cardview_id=AD_DefaultCardView.ad_cardview_id)
+                        WHERE  AD_CardView.AD_Tab_ID=" + AD_Tab_ID + @" AND AD_CardView.IsActive = 'Y'   AND ( AD_CardView.ad_user_id IS NULL
+                                                          OR AD_CardView.ad_user_id = " + ctx.GetAD_User_ID()+ @") " +
+                        "ORDER BY AD_DefaultCardView.AD_Client_ID Desc", "AD_CardView", true, false));
+
+            if (ds == null || ds.Tables[0].Rows.Count == 0)
+            {
+                ds = DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name FROM AD_CardView AD_CardView 
+                    WHERE AD_CardView.AD_Tab_ID =" + AD_Tab_ID + " AND AD_CardView.IsActive='Y' ORDER BY AD_CardView.Name ASC", "AD_CardView", true, false));
+            }
+
+
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)

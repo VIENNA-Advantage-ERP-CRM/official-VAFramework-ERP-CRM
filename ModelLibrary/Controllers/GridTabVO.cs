@@ -951,6 +951,9 @@ namespace VAdvantage.Controller
             clone.MaintainVerOnApproval = MaintainVerOnApproval;
 
             clone.IsMaintainVersions = IsMaintainVersions;
+            clone.TabLayout = TabLayout;
+            clone.DefaultCardID = DefaultCardID;
+            clone.Cards = Cards;
 
             clone.fields = new List<GridFieldVO>();
             for (int i = 0; i < fields.Count; i++)
