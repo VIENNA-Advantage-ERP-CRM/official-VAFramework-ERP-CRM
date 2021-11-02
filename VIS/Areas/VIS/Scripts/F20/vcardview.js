@@ -716,7 +716,7 @@
 
                 //If div not found, then create new one.
                 if ($div.length <= 0)
-                    $div = $('<div class="vis-w-p-header-data-f ' + this.dynamicClassName + '">');
+                    $div = $('<div class="vis-w-p-card-data-f ' + this.dynamicClassName + '">');
 
 
 
@@ -772,12 +772,12 @@
                     if (!this.fieldStyles[mField.getColumnName()])
                         this.fieldStyles[mField.getColumnName()] = {}
                     var controls = {};
-                    $divIcon = $('<div class="vis-w-p-header-icon-f"></div>');
+                    $divIcon = $('<div class="vis-w-p-card-icon-f"></div>');
 
-                    $divLabel = $('<div class="vis-w-p-header-Label-f"></div>');
+                    $divLabel = $('<div class="vis-w-p-card-Label-f"></div>');
                     // If Referenceof field is Image then added extra class to align image and Label in center.
                     if (mField.getDisplayType() == VIS.DisplayType.Image) {
-                        $divLabel.addClass('vis-w-p-header-Label-center-f');
+                        $divLabel.addClass('vis-w-p-card-Label-center-f');
                         this.dynamicClassForImageJustyfy = this.fieldStyles[mField.getColumnName()]['justifyAlignImageItems'];
                         if (!this.dynamicClassForImageJustyfy) {
                             this.dynamicClassForImageJustyfy = this.justifyAlignImageItems(headerSeqNo, justyFy, alignItem);
@@ -816,7 +816,7 @@
 
                     var $lblControl = null;
                     if ($label) {
-                        $lblControl = $label.getControl().addClass('vis-w-p-header-data-label');
+                        $lblControl = $label.getControl().addClass('vis-w-p-card-data-label');
                     }
 
                     var colValue = getFieldValue(mField, record);
@@ -934,7 +934,7 @@
                         setValue(colValue, iControl, mField);
                     }
                     else {
-                        $spanIcon.addClass('vis-w-p-header-icon-fixed');
+                        $spanIcon.addClass('vis-w-p-card-icon-fixed');
                         objctrls["imgspan"] = $spanIcon;
                         /*Set what do you want to show? Icon OR Label OR Both OR None*/
                         if (mField.getDisplayType() == VIS.DisplayType.Button) {
@@ -1018,7 +1018,7 @@
                     var iControl = VIS.VControlFactory.getReadOnlyControl(this.curTab, field, false, false, false);
                     var $lblControl = null;
                     if ($label) {
-                        $lblControl = $label.getControl().addClass('vis-w-p-header-data-label');
+                        $lblControl = $label.getControl().addClass('vis-w-p-card-data-label');
                     }
                     if (field.getDisplayType() == VIS.DisplayType.Button) {
                         if (iControl != null)
@@ -1028,9 +1028,9 @@
 
                 
                     if (field.lookup && field.lookup.gethasImageIdentifier()) {
-                        var $divIcon = $('<div class="vis-w-p-header-icon-f"></div>');
-                        var $div = $('<div class="vis-w-p-header-data-f">')
-                        var $divLabel = $('<div class="vis-w-p-header-Label-f"></div>');
+                        var $divIcon = $('<div class="vis-w-p-card-icon-f"></div>');
+                        var $div = $('<div class="vis-w-p-card-data-f">')
+                        var $divLabel = $('<div class="vis-w-p-card-Label-f"></div>');
                         var img = null;
                         var imgSpan = null;
                         var styleArr = null;
