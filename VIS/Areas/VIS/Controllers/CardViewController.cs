@@ -101,7 +101,7 @@ namespace VIS.Controllers
                     {
                         lstCardViewColumns[i].CardViewID = id;
                     }
-                    sqNo = i * 10;
+                    sqNo = ((i+1) * 10);
                     objCardViewModel.SaveCardViewColumns(lstCardViewColumns[i].CardViewID, lstCardViewColumns[i].AD_Field_ID, sqNo, ctx);
                     id = lstCardViewColumns[i].CardViewID;
                 }

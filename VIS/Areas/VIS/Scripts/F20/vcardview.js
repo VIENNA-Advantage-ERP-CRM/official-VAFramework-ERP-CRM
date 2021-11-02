@@ -22,12 +22,12 @@
         // this.aPanel;
         this.onCardEdit = null;
 
-
         var root;
         var body = null;
         var headerdiv;
         var $cmbCards = null;
         var $lblGroup = null;
+        var windowNo = null;
 
         //  var cardList;
         function init() {
@@ -455,7 +455,7 @@
                 var sortable = new vaSortable(cardGroup.getBody()[0], {
                     attr: 'data-recid',
                     selfSort: false,
-                    ignore: '.vis-cv-card-edit',
+                    ignore: ['.vis-cv-card-edit','.vis-ev-col-wrap-button'],
                     onSelect: function (e, item) {
                         //$this.onCardEdit({ 'recid': item }, true);
                         var obj = {
@@ -474,7 +474,11 @@
                                     vaSortable.prototype.revertItem();
                                 } else {
                                     $this.mTab.dataRefresh();
-                                    $(e).find(':contains("' + $this.cGroup.getHeader() + '") strong').text($(e).parent().attr('data-name'));
+                                    var rec = $.grep(records, function (element, index) {
+                                        return element.recid == item;
+                                    });
+                                    var changeCard = new VCard($this.fields, rec[0], $this.headerItems, $this.headerStyle, $this.headerPadding, windowNo, {})
+                                    root.find("[name='vc_" + item + "']").html('').html(changeCard.getRoot().html());
                                 }
                             },
                             error: function (err) {
@@ -548,11 +552,10 @@
         var root = null;
         var body;
         var cards = [];
-        var windowNo = VIS.Env.getWindowNo();
-
+        windowNo = VIS.Env.getWindowNo();
         function init() {
             var str = "<div class='vis-cv-cg vis-pull-left'> <div class='vis-cv-head' >" + grpName
-                + "</div><div data-name='" + grpName + "' data-key='" + key + "'  class='vis-cv-grpbody'></div></div>";
+                + "</div><div data-key='" + key + "'  class='vis-cv-grpbody'></div></div>";
             root = $(str);
             body = root.find('.vis-cv-grpbody');
             if (onlyOne) {
