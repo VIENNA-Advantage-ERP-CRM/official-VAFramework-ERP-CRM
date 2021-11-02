@@ -162,7 +162,12 @@
 		// on item press/drag 
 		_onPress: function (e) {
 			if (this._options && this._options.ignore && e.target.closest(this._options.ignore)) {
-				return;
+				for (var i = 0; i < this._options.ignore.length; i++) {
+					if (e.target.closest(this._options.ignore[i])) {
+						console.log(this._options.ignore[i]);
+						return;
+					}
+				}
 			}			
 
 			if (e && e.target && e.target.closest(dropClass) && e.target.closest(dropClass).parentNode === this._container) {
