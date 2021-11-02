@@ -1420,7 +1420,11 @@ li.vis-page-item-select {
 }
 
 .vis-w-p-card-data-label {
-    /*font-size: 0.80rem;*/
+    font-weight: 400;
+}
+
+.vis-w-p-card-Label-f span {
+    font-weight: bolder;
 }
 
 
@@ -1502,6 +1506,20 @@ li.vis-page-item-select {
 }
 
 .vis-w-p-header-icon-f span {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    min-width: 35px;
+    min-height: 35px;
+    align-items: center;
+    justify-content: center;
+    background: rgba(var(--v-c-on-secondary), 0.1);
+    /*border-radius: 50%;*/
+    width: 100%;
+    height: 100%;
+}
+
+.vis-w-p-card-icon-f span {
     position: relative;
     z-index: 1;
     display: flex;

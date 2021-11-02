@@ -333,7 +333,7 @@
                     }
                     this.hasIncludedCols = true;
                 }
-               
+
             }
         }
 
@@ -405,7 +405,7 @@
             }
         }
         else { this.setHeader(''); }
-        if (this.grpCount < 1) {//add one group by de
+        if (this.grpCount < 1 || this.cGroupInfo.length < 1) {//add one group by de
             this.cGroupInfo['All'] = { 'name': VIS.Msg.getMsg('All'), 'records': [], 'key': null };
             this.grpCount = 1;
         }
@@ -1029,7 +1029,7 @@
                     }
 
 
-                
+
                     if (field.lookup && field.lookup.gethasImageIdentifier()) {
                         var $divIcon = $('<div class="vis-w-p-card-icon-f"></div>');
                         var $div = $('<div class="vis-w-p-card-data-f">')
