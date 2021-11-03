@@ -4161,6 +4161,11 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
                         }
                     }
                 }
+                else
+                {
+                    //VA228:Return when any of selected record under processing
+                    return Msg.GetMsg(ctx, "VIS_SelectedRecordsUnderProcessing");
+                }
 
             }
             return string.Empty;
