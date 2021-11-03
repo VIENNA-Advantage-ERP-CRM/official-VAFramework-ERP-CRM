@@ -145,5 +145,10 @@ namespace VIS.Controllers
             CardViewModel objCardViewModel = new CardViewModel();
             return objCardViewModel.UpdateCardByDragDrop(ctx, grpValue, recordID, columnID, tableID);
         }
+        public int GetColumnID(string tableName, string columnName)
+        {
+            CardViewModel objCardViewModel = new CardViewModel();
+            return objCardViewModel.GetColumnID(tableName, columnName);
+        }
     }
 }
