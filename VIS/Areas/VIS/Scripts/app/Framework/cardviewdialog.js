@@ -137,18 +137,7 @@
 
             var lblIsPublic = $('<label class="vis-ec-col-lblchkbox" style="opacity: 1;width: 50%;">'+VIS.Msg.getMsg("Shared")+'</label>');
             isPublic = $('<input type="checkbox" checked="true" name="IsPublic" value="Public">');
-            lblIsPublic.prepend(isPublic);
-
-
-            var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), WindowNo, 1025709, VIS.DisplayType.Search);
-            $vSearchHeaderLayout = new VIS.Controls.VTextBoxButton("AD_HeaderLayout_ID", true, false, true, VIS.DisplayType.Search, value);
-
-            var $divCtrl = $('<div class="vis-control-wrap">');
-            var $divCtrlBtn = $('<div class="input-group-append">');
-            $divCtrl.append($vSearchHeaderLayout.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' ')).append('<label for="Name">' + VIS.Msg.getMsg("cardLayout") + '</label>');
-            
-            $divHeadderLay.append($divCtrl).append($divCtrlBtn);
-            $divCtrlBtn.append($vSearchHeaderLayout.getBtn(0)).append($vSearchHeaderLayout.getBtn(1));
+            lblIsPublic.prepend(isPublic);            
             
 
             isBusyRoot = $("<div class='vis-apanel-busy vis-cardviewmainbusy'></div> ");
@@ -158,9 +147,9 @@
             var divCardViewMainSecondChild = $("<div class='vis-cardviewmainsecondchild'></div>");
             var divCardViewCondition = $("<div class='vis-cardviewCondition'></div>").append("<div class='vis-cardviewConditionControls'> </div>  <div class='vis-cardviewConditionGrid'> </div> ");
             if (VIS.MRole.isAdministrator) {
-                var divLayout = $("<div class='vis-cardviewbtn'>").append(lblDefault).append(lblIsPublic).append($divHeadderLay);
+                var divLayout = $("<div class='vis-cardviewbtn'>").append(lblDefault).append(lblIsPublic);
             } else {
-                var divLayout = $("<div class='vis-cardviewbtn'>").append(lblDefault).append($divHeadderLay);
+                var divLayout = $("<div class='vis-cardviewbtn'>").append(lblDefault);
             }
             var divCardViewbtn = $("<div class='vis-cardviewbtn'><button class='vis-btnDelete'><i class='vis vis-delete'></i></button> <div class='vis-cdv-customokcancle'><button class='vis-btnOk'>  " + VIS.Msg.getMsg("Ok") + "  </button><button class='vis-btnCardViewCancle'>  " + VIS.Msg.getMsg("Cancel") + "  </button></div> </div>");
             rootCardViewUI.append(divCardViewMainFirstChild);
@@ -170,7 +159,7 @@
             CardViewTopFiledsWrap.append("<div class='vis-seconddiv vis-pull-right'></div>");
             divCardViewMainFirstChild.append("<div class='vis-thirddiv vis-pull-left' ></div>");
             rootCardViewUI.find(".vis-firstdiv").append("<div class='vis-first-divHeader'><label class='vis-ddlcardview'>" + VIS.Msg.getMsg("SelectCardView") + " </label><label style='display:none' class='vis-lbcardviewname'>" + VIS.Msg.getMsg("CardViewName") + " </label></div>  ")
-                       var divCardView = $("<div class='vis-CardView vis-pull-left'> <div  class='vis-cardviewchild vis-pull-left'></div>  </div>");
+            var divCardView = $("<div class='vis-CardView vis-pull-left'> <div  class='vis-cardviewchild vis-pull-left'></div>  </div>");
             var divCardViewName = $("<input style='display:none' class='vis-txtcardviewname' type='text'>");
             var divUser = $("<div class='vis-User vis-pull-left'></div>");
             var btnNewAndCancle = $("<div class='vis-pull-left'><button  class='vis-btnnew vis-cvd-btn'><i class='vis vis-plus'></i></button><button style='display:none' class='vis-btncancle vis-cvd-canclebtn'><i class='vis vis-mark'></i></button> <button class='vis-btnedit vis-cvd-editbtn'><i class='vis vis-pencil'></i></button></div>");
@@ -178,6 +167,21 @@
 
 
             divUser.append("<Select type='text' class='vis-cmbuser'> </Select>");
+
+            var res = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "CardView/GetColumnID", { tableName: 'AD_CardView', columnName:'AD_HeaderLayout_ID' });
+            if (res) {
+                var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), WindowNo, res, VIS.DisplayType.Search);
+                $vSearchHeaderLayout = new VIS.Controls.VTextBoxButton("AD_HeaderLayout_ID", true, false, true, VIS.DisplayType.Search, value);
+
+                var $divCtrl = $('<div class="vis-control-wrap">');
+                var $divCtrlBtn = $('<div class="input-group-append">');
+                $divCtrl.append($vSearchHeaderLayout.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' ')).append('<label for="Name">' + VIS.Msg.getMsg("cardLayout") + '</label>');
+
+                $divHeadderLay.append($divCtrl).append($divCtrlBtn);
+                $divCtrlBtn.append($vSearchHeaderLayout.getBtn(0)).append($vSearchHeaderLayout.getBtn(1));
+                divLayout.append($divHeadderLay);
+            }
+
 
             if (VIS.MRole.isAdministrator) {
 

@@ -500,7 +500,6 @@
             return;
 
         var len = records.length;
-
         var grpCol = this.cGroup.getColumnName().toLowerCase();
         var record = null;
         var colValue = null;
