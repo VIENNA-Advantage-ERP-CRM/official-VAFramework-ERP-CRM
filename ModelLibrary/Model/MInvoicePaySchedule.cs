@@ -371,9 +371,13 @@ namespace VAdvantage.Model
                         }
                     }
                 }
-                DB.ExecuteQuery(@"UPDATE C_Invoice inv SET VA009_PaidAmount = 
+                //VA228:Bypass update statement when executed from payment allocation form, amount paid will be updated from MAllocationHdr class on Complete call
+                if (!byPassVallidateCondition)
+                {
+                    DB.ExecuteQuery(@"UPDATE C_Invoice inv SET VA009_PaidAmount = 
                               (SELECT SUM(VA009_PaidAmntInvce) FROM C_InvoicePaySchedule isch WHERE isch.C_Invoice_ID = inv.C_Invoice_ID AND isch.IsActive = 'Y')
                              WHERE inv.IsActive = 'Y' AND inv.C_Invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx());
+                }
             }
             return success;
         }
