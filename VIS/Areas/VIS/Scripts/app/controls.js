@@ -5175,6 +5175,10 @@
             $spanIcon.hide();
         };
 
+        this.hideEditIcon = function () {
+            $spanIcon.hide();
+        };
+
         this.disposeComponent = function () {
             $ctrl.off(VIS.Events.onClick);
             $ctrl = null;
