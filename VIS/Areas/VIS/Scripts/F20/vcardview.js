@@ -478,8 +478,8 @@
                                     var rec = $.grep(records, function (element, index) {
                                         return element.recid == item;
                                     });
-                                    var changeCard = new VCard($this.fields, rec[0], $this.headerItems, $this.headerStyle, $this.headerPadding, windowNo, {},$this.aPanel)
-                                    root.find("[name='vc_" + item + "']").html('').html(changeCard.getRoot().html());
+                                    var changeCard = new VCard($this.fields, rec[0], $this.headerItems, $this.headerStyle, $this.headerPadding, windowNo, {}, $this.aPanel)
+                                    root.find("[name='vc_" + item + "']").replaceWith(changeCard.getRoot());
                                 }
                             },
                             error: function (err) {
