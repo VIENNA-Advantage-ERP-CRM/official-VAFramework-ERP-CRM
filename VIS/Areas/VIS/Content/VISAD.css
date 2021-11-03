@@ -2478,20 +2478,25 @@ findImg {
 }
 
 .vis-cv-header {
-    height: 11px;
+    /*height: 11px;*/
     text-align: right;
-    /* background-color: #D7E3E7; */
+     background-color: #fff; 
     font-weight: bold;
     /* color: darkgray; */
     font-size: 12px;
-    padding-top: .4rem;
-    position: relative;
-    z-index: 9;
+    padding-top: 0;
+    position: sticky;
+    z-index: 1;
+    top: 0;
 }
 .vis-cv-header select {
     margin-right: .5rem;
     position: relative;
     z-index: 2;
+    padding-top: 0;
+    border: none;
+    height: 16px;
+    text-align: right;
 }
 .vis-cv-header p {
     position: absolute;
@@ -2502,8 +2507,9 @@ findImg {
 }
 .vis-cv-main {
     bottom: 0;
-    top: 15px;
+    top: 12px;
     position: absolute;
+    z-index: 0;
 }
 
 .vis-cv-cg {
@@ -2587,8 +2593,11 @@ findImg {
 .vis-cv-card-edit {
     cursor: pointer;
     float: right;
-    margin-top: -10px;
+    /*margin-top: -10px;*/
     color: rgb(229, 228, 228);
+    position: absolute;
+    right: 5px;
+    top: 7px;
 }
 
     .vis-cv-card-edit:hover {
