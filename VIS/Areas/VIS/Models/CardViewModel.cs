@@ -440,7 +440,15 @@ namespace VIS.Models
             int result = DB.ExecuteQuery(sqlQuery);
             return result;
         }
+        public int GetColumnID(string tableName, string columnName)
+        {
 
+            string sql = " SELECT cl.ad_column_id FROM ad_column cl WHERE cl.ad_table_id=" +
+                     "(SELECT tb.ad_table_id FROM ad_table tb WHERE tb.tablename='" + tableName + "'" +
+                      ") and cl.columnname='" + columnName + "'";
+
+            return DB.GetSQLValue(null, sql);
+        }
     }
 
     public class CardViewPropeties
