@@ -557,6 +557,7 @@
                 //image.setField(mField);
                 image.setDimension(120, 140);
                 image.hideText();
+                image.hideEditIcon();
                 ctrl = image;
             }
             else if (displayType == VIS.DisplayType.Button) {
@@ -5159,6 +5160,10 @@
         this.hideText = function () {
             $txt.hide();
         }
+
+        this.hideEditIcon = function () {
+            $spanIcon.hide();
+        };
 
         this.disposeComponent = function () {
             $ctrl.off(VIS.Events.onClick);
