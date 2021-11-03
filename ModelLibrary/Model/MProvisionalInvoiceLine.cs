@@ -439,8 +439,9 @@ namespace VAdvantage.Model
         /// This function is used to return diffreence amount (PO Cost - Provisional Cost) of line
         /// </summary>
         /// <param name="Invoiceline">Invoice Line</param>
+        /// <param name="IsPOCostingMethod">Is PO CostingMethod</param>
         /// <returns>Amount</returns>
-        public Decimal GetProductLineCost(MProvisionalInvoiceLine Invoiceline)
+        public Decimal GetProductLineCost(MProvisionalInvoiceLine Invoiceline, bool IsPOCostingMethod)
         {
             bool isOrderRecordFound = false;
             int multiplier = 1;
@@ -452,14 +453,18 @@ namespace VAdvantage.Model
             }
 
             // Get Amount from PO
-            DataSet ds = DB.ExecuteDataset(@"SELECT ROUND((TaxableAmt/QtyOrdered) * " + Math.Abs(Invoiceline.GetQtyInvoiced()) + @", 10) AS TaxableAmt  
+            DataSet ds = null;
+            if (IsPOCostingMethod)
+            {
+                ds = DB.ExecuteDataset(@"SELECT ROUND((TaxableAmt/QtyOrdered) * " + Math.Abs(Invoiceline.GetQtyInvoiced()) + @", 10) AS TaxableAmt  
                                                     , ROUND((TaxAmt/QtyOrdered) * " + Math.Abs(Invoiceline.GetQtyInvoiced()) + @", 10) AS TaxAmt 
                                                     , ROUND((SurchargeAmt/QtyOrdered) * " + Math.Abs(Invoiceline.GetQtyInvoiced()) + @", 10) AS SurchargeAmt 
                                             FROM C_OrderLine 
                                             WHERE C_OrderLIne_ID = " + Invoiceline.GetC_OrderLine_ID(), null, Get_Trx());
-            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-            {
-                isOrderRecordFound = true;
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    isOrderRecordFound = true;
+                }
             }
             if (Invoiceline.GetReversalDoc_ID() > 0)
             {

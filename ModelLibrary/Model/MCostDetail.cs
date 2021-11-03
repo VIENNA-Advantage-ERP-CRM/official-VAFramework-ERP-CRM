@@ -377,9 +377,10 @@ namespace VAdvantage.Model
             else
             {
                 ProvisionalInvCalculated = false;
+                bool isPOCostingMethod = MCostElement.IsPOCostingmethod(GetCtx(), cd.GetAD_Client_ID(), cd.GetM_Product_ID(), product.Get_Trx());
 
                 // Get Costing Element of ProvisionalWeightedAverage
-                if (windowName.Equals("ProvisionalInvoice"))
+                if (windowName.Equals("ProvisionalInvoice") && isPOCostingMethod)
                 {
                     // Get Costing Element of Weighted Provisional Invoice
                     costElementId = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT DISTINCT M_CostElement_ID FROM M_CostElement WHERE IsActive = 'Y' 
@@ -403,9 +404,10 @@ namespace VAdvantage.Model
                 }
 
                 // when we are calculating cost from Material Receipt, at the same time we have to calculate ProvisionalWeightedAverage 
-                if (windowName.Equals("Material Receipt") && optionalStrCd != "process" && !ProvisionalInvCalculated)
+                // when we are calculating cost from ProvisionalInvoice and Costing method not belongs to PO costing Method
+                if (((windowName.Equals("Material Receipt") && optionalStrCd != "process" && isPOCostingMethod)
+                    || (windowName.Equals("ProvisionalInvoice") && !isPOCostingMethod)) && !ProvisionalInvCalculated)
                 {
-                   // MCostElement.IsPOCostingmethod(GetCtx() , cd.GetM_Product_ID() , )
                     // Get Costing Element of Weighted Provisional Invoice
                     costElementId = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT DISTINCT M_CostElement_ID FROM M_CostElement WHERE IsActive = 'Y' 
                             AND CostingMethod = 'B' AND AD_Client_ID = " + product.GetAD_Client_ID()));
