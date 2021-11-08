@@ -347,7 +347,7 @@ namespace VIS.Controllers
                     /// VIS0008
                     /// Check applied for adding message to toastr if 2FA method is VA and VA App is not linked with device
                     if (!LoginHelper.IsDeviceLinked(AD_User_ID))
-                        VIS.Controllers.JsonDataController.AddMessageForToastr("VA074" + "_L_" + ctx.GetAD_Session_ID(), Msg.GetMsg(ctx, "PlzLinkVAApp"));
+                        ModelLibrary.PushNotif.SSEManager.Get().AddMessage(ctx.GetAD_Session_ID(), Msg.GetMsg(ctx, "PlzLinkVAApp"));
                 }
             }
 
