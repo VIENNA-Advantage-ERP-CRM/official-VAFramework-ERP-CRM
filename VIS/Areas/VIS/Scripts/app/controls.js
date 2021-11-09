@@ -6468,9 +6468,9 @@
     // VProgressBar
 
     function VProgressBar(columnName, isMandatory, isReadOnly, isUpdateable, displayLength, fieldLength, controlDisplayType) {
-        var $ctrl = $('<button class="vis-progressCtrlWrap">');
+        var $ctrl = $('<div class="vis-progressCtrlWrap">');
         var $rangeCtrl = $('<input>', { type: 'range', step: '0.01', name: columnName, maxlength: fieldLength, 'data-type': 'int' });
-        var $oputput = $('<output class="vis-progress-output">');
+        var $oputput = $('<output  class="vis-progress-output">');
 
         $ctrl.append($oputput).append($rangeCtrl);
 
@@ -6483,7 +6483,7 @@
         }
         this.rangeCtrl = $rangeCtrl;
         this.oputput = $oputput;
-
+        $oputput.text(0);
         this.setText = function (val) {
             $oputput.text(val);
         };
@@ -6506,10 +6506,24 @@
 
 
         /* Event */
+
+        $oputput.keypress(function (event) {
+            if (event.which < 46 || event.which > 59) {
+                event.preventDefault();
+            };
+            if ((event.which == 46 && $(this).val().indexOf('.') != -1) || (event.which == 44 && $(this).val().indexOf(',') != -1)) {
+                event.preventDefault();
+            };
+
+        }).on("blur", function () {
+            $rangeCtrl.val($(this).text() || 0).change();
+        })
+
         $rangeCtrl.on("input", function (e) {
             e.stopPropagation();
             var newVal = $rangeCtrl.val();
             //self.setOutputPosition();
+            $oputput.show();
             $oputput.text(newVal);
             //$ctrl.val(newVal);
         });
@@ -6573,6 +6587,7 @@
     VProgressBar.prototype.setReadOnly = function (readOnly) {
         this.isReadOnly = readOnly;
         this.ctrl.find('input').prop('disabled', readOnly ? true : false);
+        this.ctrl.find('output').attr('contenteditable', readOnly ? false : true);
         this.setBackground(false);
     };
     //VProgressBar.prototype.setOutputPosition = function () {
