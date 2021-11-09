@@ -3026,10 +3026,10 @@ namespace VIS.Helpers
             List<CardsInfo> cards = new List<CardsInfo>();
             // Get Login user's default card and other cards of  current tab
           DataSet  ds = DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@" SELECT AD_CardView.ad_cardview_id, AD_CardView.name,AD_DefaultCardView.ad_cardview_id as dcard FROM AD_CardView AD_CardView
-   Left Outer JOIN AD_DefaultCardView AD_DefaultCardView ON (  AD_CardView.ad_cardview_id=AD_DefaultCardView.ad_cardview_id)
+   LEFT OUTER JOIN AD_DefaultCardView AD_DefaultCardView ON (  AD_CardView.ad_cardview_id=AD_DefaultCardView.ad_cardview_id)
                         WHERE  AD_CardView.AD_Tab_ID=" + AD_Tab_ID + @" AND AD_CardView.IsActive = 'Y'   AND ( AD_CardView.ad_user_id IS NULL
                                                           OR AD_CardView.ad_user_id = " + ctx.GetAD_User_ID()+ @") " +
-                        "ORDER BY AD_DefaultCardView.AD_Client_ID Desc", "AD_CardView", true, false));
+                        "ORDER BY AD_DefaultCardView.AD_Client_ID DESC", "AD_CardView", true, false));
 
             if (ds == null || ds.Tables[0].Rows.Count == 0)
             {

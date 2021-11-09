@@ -632,6 +632,12 @@ namespace VAdvantage.Controller
                 mTabVO.HeaderItems = GetHeaderPanelItems(mTabVO.AD_HeaderLayout_ID);
             }
         }
+
+        /// <summary>
+        /// Fetch Header Panel (card Template) info
+        /// </summary>
+        /// <param name="headerLayoutID"></param>
+        /// <returns></returns>
         public static List<HeaderPanelGrid> GetHeaderPanelItems(int headerLayoutID)
         {
             CommonFunctions fun = new CommonFunctions();

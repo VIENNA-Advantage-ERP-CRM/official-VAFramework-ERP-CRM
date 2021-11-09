@@ -938,25 +938,25 @@ namespace VAdvantage.Classes
             if (AD_CardView_ID > 0)
             {
                 // If fetching specific card
-                ds = DataBase.DB.ExecuteDataset(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name, AD_CardView.IsDefault,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,ad_headerlayout.backgroundcolor,ad_headerlayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
+                ds = DataBase.DB.ExecuteDataset(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name, AD_CardView.IsDefault,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,AD_HeaderLayout.backgroundcolor,AD_HeaderLayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
                         ON (AD_CardView.AD_HeaderLayout_ID = AD_HeaderLayout.AD_HeaderLayout_ID) WHERE AD_CardView.AD_CardView_ID = " + AD_CardView_ID);
             }
             else
             {
 
                 //Fetch default card for login user
-                ds = DataBase.DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@" SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,ad_headerlayout.backgroundcolor,ad_headerlayout.padding,
-    ad_defaultcardview.ad_client_id,
-    ad_defaultcardview.ad_user_ID FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
+                ds = DataBase.DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@" SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,AD_HeaderLayout.backgroundcolor,AD_HeaderLayout.padding,
+    AD_DefaultCardView.ad_client_id,
+    AD_DefaultCardView.ad_user_ID FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
                         ON ( AD_CardView.AD_HeaderLayout_ID = AD_HeaderLayout.AD_HeaderLayout_ID)
-                        JOIN AD_DefaultCardView AD_DefaultCardView ON ( AD_DefaultCardView.ad_cardview_id = AD_CardView.ad_cardview_id)
+                        INNER JOIN AD_DefaultCardView AD_DefaultCardView ON ( AD_DefaultCardView.ad_cardview_id = AD_CardView.ad_cardview_id)
                        WHERE  AD_CardView.AD_Tab_ID=" + AD_Tab_ID + " AND AD_CardView.IsActive = 'Y' AND (AD_CardView.ad_user_id IS NULL OR AD_CardView.ad_user_id = " + ctx.GetAD_User_ID() + @") " +
                         "ORDER BY AD_DefaultCardView.AD_Client_ID Desc", "AD_CardView", true, false));
 
                 if (ds == null || ds.Tables[0].Rows.Count == 0)
                 {
                     //If no default card found, then load other cards of tABS
-                    ds = DataBase.DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,ad_headerlayout.backgroundcolor,ad_headerlayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
+                    ds = DataBase.DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,AD_HeaderLayout.backgroundcolor,AD_HeaderLayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
                         ON (AD_CardView.AD_HeaderLayout_ID = AD_HeaderLayout.AD_HeaderLayout_ID) WHERE AD_CardView.AD_Tab_ID =" + AD_Tab_ID + " AND AD_CardView.IsActive='Y' ORDER BY AD_CardView.Name ASC", "AD_CardView", true, false));
                 }
                 else
@@ -1114,48 +1114,5 @@ namespace VAdvantage.Classes
         }
     }
 
-    public class CardViewData
-    {
-        public int FieldGroupID { get; set; }
-        public List<CardViewCol> IncludedCols { get; set; }
-        public List<CardViewCondition> Conditions { get; set; }
-        public int AD_CardView_ID { get; set; }
-
-        public bool IsDefault { get; set; }
-
-        public string Name { get; set; }
-        public int AD_HeaderLayout_ID { get; set; }
-        public string Style { get; set; }
-        public string Padding { get; set; }
-
-        public List<HeaderPanelGrid> HeaderItems { get; set; }
-    }
-
-    public class CardViewCondition
-    {
-        public string Color { get; set; }
-        public string ConditionValue
-        {
-            get;
-            set;
-        }
-        public string FColor { get; set; }
-    }
-
-    public class CardViewCol
-    {
-        public int AD_Field_ID { get; set; }
-        public int SeqNo { get; set; }
-        public string HTMLStyle { get; set; }
-        public bool HideIcon { get; set; }
-        public bool HideText { get; set; }
-    }
-
-    public class CardsInfo
-    {
-        public string Name { get; set; }
-        public int AD_CardView_ID { get; set; }
-
-        public bool IsDefault { get; set; }
-    }
+   
 }
