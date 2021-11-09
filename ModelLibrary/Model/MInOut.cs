@@ -4028,7 +4028,7 @@ namespace VAdvantage.Model
                         // Done by Rakesh Kumar On 29/Apr/2021 suggested by Mandeep and Bharat
 
                         // VIS0060: Work done to call workflow to complete Shipment.
-                        string result = CompleteOrReverse(GetCtx(), ret_Shipment.GetM_InOut_ID(), 109, DOCACTION_Complete);
+                        string result = DocumentEngine.CompleteOrReverse(GetCtx(), MInOut.Table_Name, MInOut.Table_ID, ret_Shipment.GetM_InOut_ID(), 109, DOCACTION_Complete);
                         if (!String.IsNullOrEmpty(result))
                         {
                             _processMsg = Msg.GetMsg(GetCtx(), "VIS_ShipmentNotCompleted") + ": " + ret_Shipment.GetProcessMsg() + " - @DocumentNo@: " + ret_Shipment.GetDocumentNo();
@@ -4070,86 +4070,6 @@ namespace VAdvantage.Model
             SetProcessed(true);
             SetDocAction(DOCACTION_Close);
             return DocActionVariables.STATUS_COMPLETED;
-        }
-
-        /// <summary>
-        /// Mehtod added to complete or reverse the document by executing the workflow
-        /// </summary>
-        /// <param name="ctx">Context</param>
-        /// <param name="Record_ID">M_InOut_ID</param>
-        /// <param name="Process_ID">Process ID</param>
-        /// <param name="DocAction">Document Action</param>
-        /// <returns>result of completion or reversal in a string array</returns>
-        public string CompleteOrReverse(Ctx ctx, int Record_ID, int Process_ID, string DocAction)
-        {
-            string result = "";
-            MRole role = MRole.Get(ctx, ctx.GetAD_Role_ID());
-            if (Util.GetValueOfBool(role.GetProcessAccess(Process_ID)))
-            {
-                DB.ExecuteQuery("UPDATE M_InOut SET DocAction = '" + DocAction + "' WHERE M_InOut_ID = " + Record_ID);
-
-                MProcess proc = new MProcess(ctx, Process_ID, null);
-                MPInstance pin = new MPInstance(proc, Record_ID);
-                if (!pin.Save())
-                {
-                    ValueNamePair vnp = VLogger.RetrieveError();
-                    string errorMsg = "";
-                    if (vnp != null)
-                    {
-                        errorMsg = vnp.GetName();
-                        if (errorMsg == "")
-                            errorMsg = vnp.GetValue();
-                    }
-                    if (errorMsg == "")
-                        result = errorMsg = Msg.GetMsg(ctx, "DocNotCompleted");
-
-                    return result;
-                }
-
-                MPInstancePara para = new MPInstancePara(pin, 20);
-                para.setParameter("DocAction", DocAction);
-                if (!para.Save())
-                {
-
-                }
-                ProcessInfo pi = new ProcessInfo("WF", Process_ID);
-                pi.SetAD_User_ID(ctx.GetAD_User_ID());
-                pi.SetAD_Client_ID(ctx.GetAD_Client_ID());
-                pi.SetAD_PInstance_ID(pin.GetAD_PInstance_ID());
-                pi.SetRecord_ID(Record_ID);
-                pi.SetTable_ID(319);
-
-                ProcessCtl worker = new ProcessCtl(ctx, null, pi, null);
-                worker.Run();
-
-                if (pi.IsError())
-                {
-                    ValueNamePair vnp = VLogger.RetrieveError();
-                    string errorMsg = "";
-                    if (vnp != null)
-                    {
-                        errorMsg = vnp.GetName();
-                        if (errorMsg == "")
-                            errorMsg = vnp.GetValue();
-                    }
-
-                    if (errorMsg == "")
-                        errorMsg = pi.GetSummary();
-
-                    if (errorMsg == "")
-                        errorMsg = Msg.GetMsg(ctx, "DocNotCompleted");
-                    result = errorMsg;
-                    return result;
-                }
-                else
-                    result = "";
-            }
-            else
-            {
-                result = Msg.GetMsg(ctx, "NoAccess");
-                return result;
-            }
-            return result;
         }
 
         /// <summary>
