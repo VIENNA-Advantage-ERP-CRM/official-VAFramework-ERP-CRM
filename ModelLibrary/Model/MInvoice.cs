@@ -4351,6 +4351,7 @@ namespace VAdvantage.Model
                         //    }
                         //}
                     }	//	SO
+                    else  //VA228:Applied else condition
                     {
                         newBalance = Decimal.Subtract(newBalance, invAmt);
                         log.Fine("GrandTotal=" + GetGrandTotal(true) + "(" + invAmt
