@@ -2989,24 +2989,26 @@ namespace VIS.Models
         /// <param name="size">Page Size</param>
         /// <param name="c_docType_ID">DocmentType</param>
         /// <param name="docBaseType">DocumentBase Type</param>
+        /// <param name="payMethod_ID">Payment Method ID</param>
         /// <param name="fromDate">From Date</param>
         /// <param name="toDate">To Date</param>
         /// <param name="srchText">search Document No</param>
+        /// <param name="isInterComp">Inter Company Flag</param>
         /// <returns>No of unallocated payments</returns>
-        public List<VIS_PaymentData> GetPayments(int AD_Org_ID, int _C_Currency_ID, int _C_BPartner_ID, bool isInterBPartner, bool chk, int page, int size, int c_docType_ID, string docBaseType, DateTime? fromDate, DateTime? toDate, string srchText)
+        public List<VIS_PaymentData> GetPayments(int AD_Org_ID, int _C_Currency_ID, int _C_BPartner_ID, bool isInterBPartner, bool chk, int page, int size, int c_docType_ID, string docBaseType, int payMethod_ID, DateTime? fromDate, DateTime? toDate, string srchText, bool isInterComp)
         {
             //used to get related business partner against selected business partner 
             string relatedBpids = string.Empty;
-            //if (isInterBPartner)
-            //{
-            //    relatedBpids = GetRelatedBP(_C_BPartner_ID);
-            //}
+            if (isInterBPartner)
+            {
+                relatedBpids = GetRelatedBP(_C_BPartner_ID);
+            }
             int countRecord = 0;
             // used to create for preciosion handling
             MCurrency objCurrency = MCurrency.Get(ctx, _C_Currency_ID);
 
             //Changed DateTrx to DateAcct because we have to convert currency on Account Date Not on Transaction Date 
-            string sql = "SELECT 'false' as SELECTROW, TO_CHAR(p.DateTrx,'YYYY-MM-DD') as DATE1,p.DocumentNo As DOCUMENTNO,p.C_Payment_ID As CPAYMENTID,"  //  1..3
+            StringBuilder sql = new StringBuilder("SELECT 'false' as SELECTROW, TO_CHAR(p.DateTrx,'YYYY-MM-DD') as DATE1,p.DocumentNo As DOCUMENTNO,p.C_Payment_ID As CPAYMENTID,"  //  1..3
               + @"c.ISO_Code as ISOCODE, 
                 CASE
                   WHEN NVL(p.C_CONVERSIONTYPE_ID , 0) !=0 THEN p.C_CONVERSIONTYPE_ID
@@ -3019,40 +3021,55 @@ namespace VIS.Models
                   ROUND(p.PayAmt, " + objCurrency.GetStdPrecision() + ") AS PAYMENT,"                            //  4..5
               + "ROUND(currencyConvert(ALLOCPAYMENTAVAILABLE(p.C_Payment_ID) ,p.C_Currency_ID ," + _C_Currency_ID + ",cp.DATEACCT ,p.C_ConversionType_ID ,p.AD_Client_ID ,p.AD_Org_ID ), " + objCurrency.GetStdPrecision() + ") AS CONVERTEDAMOUNT,"//  6   #1
               + "ROUND(currencyConvert(ALLOCPAYMENTAVAILABLE(p.C_Payment_ID) ,p.C_Currency_ID ," + _C_Currency_ID + ",cp.DATEACCT ,p.C_ConversionType_ID ,p.AD_Client_ID ,p.AD_Org_ID), " + objCurrency.GetStdPrecision() + ") as OPENAMT,"  //  7   #2
-              + "p.MultiplierAP as MULTIPLIERAP, 0 as APPLIEDAMT , TO_CHAR(cp.DATEACCT ,'YYYY-MM-DD') AS DATEACCT, p.AD_Org_ID , o.Name, d.docbasetype "
+              + "p.MultiplierAP as MULTIPLIERAP, 0 as APPLIEDAMT , TO_CHAR(cp.DATEACCT ,'YYYY-MM-DD') AS DATEACCT, p.AD_Org_ID , o.Name, d.docbasetype , pm.VA009_Name "
               //+ " , dc.name AS DocTypeName "
-              + "FROM C_Payment_v p"		//	Corrected for AP/AR
-              + " INNER JOIN C_DocType d ON p.C_DOCTYPE_ID = d.C_DOCTYPE_ID"  //getting docbasetype
-              + " INNER JOIN AD_Org o ON o.AD_Org_ID = p.AD_Org_ID "
+              + " FROM C_Payment_v p"		//	Corrected for AP/AR
+              + " INNER JOIN C_DocType d ON (p.C_DOCTYPE_ID = d.C_DOCTYPE_ID)"  //getting docbasetype
+              + " INNER JOIN AD_Org o ON (o.AD_Org_ID = p.AD_Org_ID) "
               + " INNER JOIN C_Currency c ON (p.C_Currency_ID=c.C_Currency_ID) "
               + " INNER JOIN C_Payment cp ON (p.C_Payment_ID = cp.C_Payment_ID) "
+              + " INNER JOIN VA009_PaymentMethod pm ON (cp.VA009_PaymentMethod_ID = pm.VA009_PaymentMethod_ID) "
               // + " INNER JOIN C_DOCTYPE DC ON (P.C_DOCTYPE_ID=DC.C_DOCTYPE_ID) "
               + " WHERE   ((p.IsAllocated ='N' and p.c_charge_id is null) "
               + " OR (p.isallocated = 'N' AND p.c_charge_id is not null and p.isprepayment = 'Y'))"
-              + " AND p.Processed='Y' AND p.processing ='N' AND p.DocStatus IN ('CO','CL') "
-              + " AND p.C_BPartner_ID=" + _C_BPartner_ID;
+              + " AND p.Processed='Y' AND p.processing ='N' AND p.DocStatus IN ('CO','CL') ");
+            //+ " AND p.C_BPartner_ID=" + _C_BPartner_ID);
 
-            //filter based on Organization
-            if (AD_Org_ID != 0)
+            //to get payments against related business partner
+            if (!string.IsNullOrEmpty(relatedBpids))
+                sql.Append(" AND p.C_BPartner_ID IN ( " + relatedBpids + " , " + _C_BPartner_ID + " ) ");
+            else
+                sql.Append(" AND p.C_BPartner_ID = " + _C_BPartner_ID);
+
+            if (!isInterComp)
             {
-                sql += " AND p.AD_Org_ID=" + AD_Org_ID;
+                //filter based on Organization
+                if (AD_Org_ID != 0)
+                {
+                    sql.Append(" AND p.AD_Org_ID=" + AD_Org_ID);
+                }
             }
             //when paymnet having order schedule ref - those not to be shown in grid 
             if (Env.IsModuleInstalled("VA009_"))
             {
-                sql += " AND cp.VA009_OrderPaySchedule_ID IS NULL ";
+                sql.Append(" AND cp.VA009_OrderPaySchedule_ID IS NULL ");
+                //if payment method is selected in filter than get records based on payment method
+                if (payMethod_ID > 0)
+                {
+                    sql.Append(" AND cp.VA009_PaymentMethod_ID=" + payMethod_ID);
+                }
             }
             if (!chk)
             {
-                sql += " AND p.C_Currency_ID=" + _C_Currency_ID;				//      #4
+                sql.Append(" AND p.C_Currency_ID=" + _C_Currency_ID);				//      #4
             }
             if (c_docType_ID > 0)
             {
-                sql += " AND d.c_docType_ID=" + c_docType_ID;
+                sql.Append(" AND d.c_docType_ID=" + c_docType_ID);
             }
             if (docBaseType != "0" && docBaseType != null)
             {
-                sql += " AND d.DocBaseType='" + docBaseType + "'";
+                sql.Append(" AND d.DocBaseType='" + docBaseType + "'");
             }
             if (srchText != string.Empty)
             {
@@ -3062,19 +3079,19 @@ namespace VIS.Models
                     String[] myStringArray = srchText.TrimStart(new Char[] { ' ', '=' }).Split(',');
                     if (myStringArray.Length > 0)
                     {
-                        sql += " AND UPPER(p.DocumentNo) IN ( ";
+                        sql.Append(" AND UPPER(p.DocumentNo) IN ( ");
                         for (int z = 0; z < myStringArray.Length; z++)
                         {
                             if (z != 0)
-                            { sql += ","; }
-                            sql += " UPPER('" + myStringArray[z].Trim() + "')";
+                            { sql.Append(","); }
+                            sql.Append(" UPPER('" + myStringArray[z].Trim() + "')");
                         }
-                        sql += ")";
+                        sql.Append(")");
                     }
                 }
                 else
                 {
-                    sql += " AND UPPER(p.DocumentNo) LIKE UPPER('%" + srchText.Trim() + "%')";
+                    sql.Append(" AND UPPER(p.DocumentNo) LIKE UPPER('%" + srchText.Trim() + "%')");
                 }
             }
             //added from and to dates to filter the records which is under these dates
@@ -3082,23 +3099,20 @@ namespace VIS.Models
             {
                 if (toDate != null)
                 {
-                    sql += " AND p.DateTrx BETWEEN " + GlobalVariable.TO_DATE(fromDate, true) + " AND " + GlobalVariable.TO_DATE(toDate, true);
+                    sql.Append(" AND p.DateTrx BETWEEN " + GlobalVariable.TO_DATE(fromDate, true) + " AND " + GlobalVariable.TO_DATE(toDate, true));
                 }
                 else
                 {
-                    sql += " AND p.DateTrx >= " + GlobalVariable.TO_DATE(fromDate, true);
+                    sql.Append(" AND p.DateTrx >= " + GlobalVariable.TO_DATE(fromDate, true));
                 }
             }
             if (fromDate == null && toDate != null)
             {
-                sql += " AND p.DateTrx <=" + GlobalVariable.TO_DATE(toDate, true);
+                sql.Append(" AND p.DateTrx <=" + GlobalVariable.TO_DATE(toDate, true));
             }
-            //to get payment against related business partner
-            if (!string.IsNullOrEmpty(relatedBpids))
-                sql += " OR p.C_BPartner_ID IN ( " + relatedBpids + " ) ";
 
-            sql += " ORDER BY p.DateTrx,p.DocumentNo";
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "p", true, false);
+            sql.Append(" ORDER BY p.DateTrx,p.DocumentNo");
+            string qry = MRole.GetDefault(ctx).AddAccessSQL(sql.ToString(), "p", true, false);
 
             List<VIS_PaymentData> payData = new List<VIS_PaymentData>();
 
@@ -3109,21 +3123,23 @@ namespace VIS.Models
               + " INNER JOIN C_Currency c ON (p.C_Currency_ID=c.C_Currency_ID) "
               + " WHERE   ((p.IsAllocated ='N' and p.c_charge_id is null) "
               + " OR (p.isallocated = 'N' AND p.c_charge_id is not null and p.isprepayment = 'Y'))"
-              + " AND p.Processed='Y' AND p.DocStatus IN ('CO','CL') "
-              + " AND p.C_BPartner_ID=" + _C_BPartner_ID;
+              + " AND p.Processed='Y' AND p.DocStatus IN ('CO','CL') ";
+                //to get payments against related business partner
+                if (!string.IsNullOrEmpty(relatedBpids))
+                    sql1 += (" AND p.C_BPartner_ID IN ( " + relatedBpids + " , " + _C_BPartner_ID + " ) ");
+                else
+                    sql1 += (" AND p.C_BPartner_ID = " + _C_BPartner_ID);
+
                 if (!chk)
                 {
                     sql1 += " AND p.C_Currency_ID=" + _C_Currency_ID;
                 }
-                //to get payment against related business partner
-                if (!string.IsNullOrEmpty(relatedBpids))
-                    sql1 += "   OR p.C_BPartner_ID IN ( " + relatedBpids + " ) ";
 
                 sql1 = MRole.GetDefault(ctx).AddAccessSQL(sql1, "p", true, false);
                 countRecord = Util.GetValueOfInt(DB.ExecuteScalar(sql1, null, null));
             }
 
-            DataSet dr = VIS.DBase.DB.ExecuteDatasetPaging(sql, page, size);
+            DataSet dr = VIS.DBase.DB.ExecuteDatasetPaging(sql.ToString(), page, size);
 
             if (dr != null && dr.Tables.Count > 0 && dr.Tables[0].Rows.Count > 0)
             {
@@ -3149,6 +3165,7 @@ namespace VIS.Models
                     pData.AD_Org_ID = Convert.ToInt32(dr.Tables[0].Rows[i]["AD_Org_ID"]);
                     pData.OrgName = Convert.ToString(dr.Tables[0].Rows[i]["Name"]);
                     pData.DocBaseType = dr.Tables[0].Rows[i]["docbasetype"].ToString();
+                    pData.PayName = Util.GetValueOfString(dr.Tables[0].Rows[i]["VA009_Name"]);
                     payData.Add(pData);
                 }
             }
@@ -3347,15 +3364,16 @@ namespace VIS.Models
         /// <param name="toDate">To Date</param>
         /// <param name="paymentType_ID">Payment Type</param>
         /// <param name="srchText">Search Document No</param>
+        /// <param name="isInterComp">Inter Company Flag</param>
         /// <returns>No of unallocated Cash Lines</returns>
-        public List<VIS_CashData> GetCashJounral(int AD_Org_ID, int _C_Currency_ID, int _C_BPartner_ID, bool isInterBPartner, bool chk, int page, int size, DateTime? fromDate, DateTime? toDate, string paymentType_ID, string srchText)
+        public List<VIS_CashData> GetCashJounral(int AD_Org_ID, int _C_Currency_ID, int _C_BPartner_ID, bool isInterBPartner, bool chk, int page, int size, DateTime? fromDate, DateTime? toDate, string paymentType_ID, string srchText, bool isInterComp)
         {
             //used to get related business partner against selected business partner 
             string relatedBpids = string.Empty;
-            //if (isInterBPartner)
-            //{
-            //    relatedBpids = GetRelatedBP(_C_BPartner_ID);
-            //}
+            if (isInterBPartner)
+            {
+                relatedBpids = GetRelatedBP(_C_BPartner_ID);
+            }
 
             int countRecord = 0;
             // used to create for preciosion handling
@@ -3378,23 +3396,33 @@ namespace VIS.Models
                              + " ROUND(currencyConvert(ALLOCCASHAVAILABLE(cn.C_CashLine_ID),cn.C_Currency_ID ," + _C_Currency_ID + ",cn.DATEACCT ,cn.C_ConversionType_ID  ,cn.AD_Client_ID ,cn.AD_Org_ID ) , " + objCurrency.GetStdPrecision() + ") AS CONVERTEDAMOUNT,"//  6   #1cn.amount as OPENAMT,"
                              + " ROUND(currencyConvert(ALLOCCASHAVAILABLE(cn.C_CashLine_ID),cn.C_Currency_ID ," + _C_Currency_ID + ",cn.DATEACCT,cn.C_ConversionType_ID ,cn.AD_Client_ID ,cn.AD_Org_ID), " + objCurrency.GetStdPrecision() + ") as OPENAMT,"  //  7   #2
                                                                                                                                                                                                                                                               //+ " currencyConvert(cn.Amount ,cn.C_Currency_ID ," + _C_Currency_ID + ",cn.Created ,114 ,cn.AD_Client_ID ,cn.AD_Org_ID ) as OPENAMT,"
-                             + " cn.MultiplierAP AS MULTIPLIERAP,0 as APPLIEDAMT,TO_CHAR(cn.DATEACCT ,'YYYY-MM-DD') as DATEACCT , o.AD_Org_ID  , o.Name  from c_cashline_new cn"
-                             + " INNER JOIN C_Cashline cl ON cl.C_Cashline_ID=cn.C_Cashline_ID"
-                              + " INNER JOIN AD_Org o ON o.AD_Org_ID = cn.AD_Org_ID "
-                             + " INNER join c_currency c ON (cn.C_Currency_ID=c.C_Currency_ID) WHERE cn.IsAllocated   ='N' AND cn.Processed ='Y'"
+                              + " cn.MultiplierAP AS MULTIPLIERAP,0 as APPLIEDAMT,TO_CHAR(cn.DATEACCT ,'YYYY-MM-DD') as DATEACCT , o.AD_Org_ID  , o.Name " +
+                             " FROM C_CashLine_new cn"
+                             + " INNER JOIN C_Cashline cl ON (cl.C_Cashline_ID=cn.C_Cashline_ID)"
+                              + " INNER JOIN AD_Org o ON (o.AD_Org_ID = cn.AD_Org_ID) "
+                             + " INNER JOIN c_currency c ON (cn.C_Currency_ID=c.C_Currency_ID) WHERE cn.IsAllocated   ='N' AND cn.Processed ='Y'"
                              //+ " and cn.cashtype IN ('I' , 'B') and cn.docstatus in ('CO','CL') "
 
                              //Enhancement ID- JID_0593,  Cash line  is created with refrence of Invoice. Void View allocation. Cash line do not show on payment allocation. 
-                             + " and cn.cashtype IN ('B', 'I') and cn.docstatus in ('CO','CL') "// AND cn.Processing = 'N' "
+                             + " and cn.cashtype IN ('B', 'I') and cn.docstatus in ('CO','CL') ";// AND cn.Processing = 'N' "
 
-                             // Commented because Against Business Partner there is no charge
-                             // + " AND cn.C_Charge_ID  IS Not NULL"
-                             + " AND cn.C_BPartner_ID=" + _C_BPartner_ID;
-            //filter based on Organization
-            if (AD_Org_ID != 0)
+            // Commented because Against Business Partner there is no charge
+            // + " AND cn.C_Charge_ID  IS Not NULL"
+
+            // get all records for related business partners
+            if (!string.IsNullOrEmpty(relatedBpids))
+                sqlCash += " AND cn.C_BPartner_ID IN ( " + relatedBpids + " , " + _C_BPartner_ID + " )";
+            else
+                sqlCash += " AND cn.C_BPartner_ID = " + _C_BPartner_ID;
+            if (!isInterComp)
             {
-                sqlCash += " AND cn.AD_Org_ID=" + AD_Org_ID;
+                //filter based on Organization
+                if (AD_Org_ID != 0)
+                {
+                    sqlCash += " AND cn.AD_Org_ID=" + AD_Org_ID;
+                }
             }
+
             if (!chk)
             {
                 sqlCash += " AND cn.C_Currency_ID=" + _C_Currency_ID;
@@ -3440,10 +3468,7 @@ namespace VIS.Models
                 {
                     sqlCash += " AND UPPER(cn.receiptno) LIKE UPPER('%" + srchText.Trim() + "%')";
                 }
-            }
-            //to get CashLines against related business partner
-            if (!string.IsNullOrEmpty(relatedBpids))
-                sqlCash += " OR cn.C_BPartner_ID IN ( " + relatedBpids + " ) ";
+            }           
 
             sqlCash += " ORDER BY cn.created,cn.receiptno";
 
@@ -3456,8 +3481,13 @@ namespace VIS.Models
             {
                 string sql = @"SELECT COUNT(*) FROM c_cashline_new cn"
                              + " INNER join c_currency c ON (cn.C_Currency_ID=c.C_Currency_ID) WHERE cn.IsAllocated   ='N' AND cn.Processed ='Y'"
-                             + " and cn.cashtype = 'B' and cn.docstatus in ('CO','CL') "
-                             + " AND cn.C_BPartner_ID=" + _C_BPartner_ID;
+                             + " and cn.cashtype = 'B' and cn.docstatus in ('CO','CL') ";
+                // get all records for related business partners
+                if (!string.IsNullOrEmpty(relatedBpids))
+                    sql += " AND cn.C_BPartner_ID IN ( " + relatedBpids + " , " + _C_BPartner_ID + " )";
+                else
+                    sql += " AND cn.C_BPartner_ID = " + _C_BPartner_ID;
+
                 if (!chk)
                 {
                     sql += " AND cn.C_Currency_ID=" + _C_Currency_ID;
@@ -3524,19 +3554,21 @@ namespace VIS.Models
         /// <param name="docNo">Document Number</param>
         /// <param name="c_docType_ID">Document Type ID</param>
         /// <param name="docBaseType">DocBaseType</param>
+        /// <param name="payMethod_ID">Payment Method ID</param>
         /// <param name="fromDate">From Date</param>
         /// <param name="toDate">To Date</param>
         /// <param name="conversionDate">ConversionType Date</param>
         /// <param name="srchText">Search Document No</param>
+        /// <param name="isInterComp">Inter Company Flag</param>
         /// <returns></returns>
-        public List<VIS_InvoiceData> GetInvoice(int AD_Org_ID, int _C_Currency_ID, int _C_BPartner_ID, bool isInterBPartner, bool chk, string date, int page, int size, string docNo, int c_docType_ID, string docBaseType, DateTime? fromDate, DateTime? toDate, string conversionDate, string srchText)
+        public List<VIS_InvoiceData> GetInvoice(int AD_Org_ID, int _C_Currency_ID, int _C_BPartner_ID, bool isInterBPartner, bool chk, string date, int page, int size, string docNo, int c_docType_ID, string docBaseType, int payMethod_ID, DateTime? fromDate, DateTime? toDate, string conversionDate, string srchText, bool isInterComp)
         {
             //used to get related business partner against selected business partner 
             string relatedBpids = string.Empty;
-            //if (isInterBPartner)
-            //{
-            //    relatedBpids = GetRelatedBP(_C_BPartner_ID);
-            //}
+            if (isInterBPartner)
+            {
+                relatedBpids = GetRelatedBP(_C_BPartner_ID);
+            }
 
             int countRecord = 0;
             // used to create for preciosion handling
@@ -3548,10 +3580,17 @@ namespace VIS.Models
             TO_CHAR(i.DateInvoiced, 'YYYY-MM-DD') as DATE1, i.DocumentNo AS DOCUMENTNO, 
             i.C_Invoice_ID AS CINVOICEID, c.ISO_Code AS ISO_CODE, i.C_CONVERSIONTYPE_ID, i.AD_Client_ID, 
             i.AD_Org_ID, i.C_Currency_ID, i.MultiplierAP, i.docbasetype, 0 as WRITEOFF, 0 as APPLIEDAMT, 
-            i.DATEACCT, i.C_InvoicePaySchedule_ID, i.C_Invoice_ID, o.Name  FROM	C_Invoice_v i 
-            INNER JOIN AD_Org o ON o.AD_Org_ID = i.AD_Org_ID INNER JOIN C_Currency 
-            c ON (i.C_Currency_ID = c.C_Currency_ID) WHERE 		i.IsPaid= 'N' AND i.Processed = 'Y' AND 
-            i.C_BPartner_ID = " + _C_BPartner_ID);
+            i.DATEACCT, i.C_InvoicePaySchedule_ID, i.C_Invoice_ID, o.Name, pm.VA009_Name FROM C_Invoice_PA_v i 
+            INNER JOIN AD_Org o ON (o.AD_Org_ID = i.AD_Org_ID) INNER JOIN C_Currency c ON (i.C_Currency_ID = c.C_Currency_ID)
+            INNER JOIN C_InvoicePaySchedule ips ON (i.C_Invoice_ID = ips.C_Invoice_ID AND i.C_InvoicePaySchedule_ID=ips.C_InvoicePaySchedule_ID ) 
+            INNER JOIN VA009_PaymentMethod pm ON (ips.VA009_PaymentMethod_ID = pm.VA009_PaymentMethod_ID) 
+            WHERE i.IsPaid='N' AND i.Processed = 'Y'");
+
+            //to get invoice schedules against related business partner
+            if (!string.IsNullOrEmpty(relatedBpids))
+                sqlInvoice.Append(" AND i.C_BPartner_ID IN ( " + relatedBpids + " , " + _C_BPartner_ID + " ) ");
+            else
+                sqlInvoice.Append(" AND i.C_BPartner_ID = " + _C_BPartner_ID);
 
             #region Commented because we optimize the query
             //string sqlInvoice = "SELECT 'false' as SELECTROW , TO_CHAR(i.DateInvoiced,'YYYY-MM-DD')  as DATE1  ,  i.DocumentNo    AS DOCUMENTNO  , i.C_Invoice_ID AS CINVOICEID,"
@@ -3578,10 +3617,13 @@ namespace VIS.Models
             //                    + " AND i.C_BPartner_ID=" + _C_BPartner_ID;
             #endregion
 
-            //------Filter data on the basis of new parameters
-            if (AD_Org_ID != 0)
+            //------Filter data on the basis of inter company parameters
+            if (!isInterComp)
             {
-                sqlInvoice.Append(" AND i.AD_Org_ID=" + AD_Org_ID);
+                if (AD_Org_ID != 0)
+                {
+                    sqlInvoice.Append(" AND i.AD_Org_ID=" + AD_Org_ID);
+                }
             }
             if (!chk)
             {
@@ -3603,6 +3645,10 @@ namespace VIS.Models
             if (docBaseType != "0" && docBaseType != null)
             {
                 sqlInvoice.Append(" AND i.DocBaseType='" + docBaseType + "'");
+            }
+            if (payMethod_ID > 0)
+            {
+                sqlInvoice.Append(" AND ips.VA009_PaymentMethod_ID=" + payMethod_ID);
             }
             if (srchText != string.Empty)
             {
@@ -3643,9 +3689,6 @@ namespace VIS.Models
             {
                 sqlInvoice.Append(" AND I.DATEINVOICED <=" + GlobalVariable.TO_DATE(toDate, true));
             }
-            //to get invoice schedules against related business partner
-            if (!string.IsNullOrEmpty(relatedBpids))
-                sqlInvoice.Append("   OR I.C_BPartner_ID IN ( " + relatedBpids + " ) ");
             //--------------------------------------
 
             string sqlnew = string.Empty;
@@ -3654,26 +3697,96 @@ namespace VIS.Models
             sqlInvoice.Append(sqlnew);
             sqlnew = null;
 
-            sqlInvoice.Append(" ), OpenInvoice AS ( SELECT 	SELECTROW,Name, DATE1, DOCUMENTNO, CINVOICEID, ISO_CODE, T1.C_CONVERSIONTYPE_ID, AD_Client_ID, AD_Org_ID, T1.C_Currency_ID, T1.MultiplierAP, docbasetype, WRITEOFF, APPLIEDAMT, DATEACCT, T1.C_InvoicePaySchedule_ID, T1.C_Invoice_ID, INVOICEOPEN_NEW(T2.C_Invoice_ID, T2.C_InvoicePaySchedule_ID, T2.C_Currency_ID, T2.C_CONVERSIONTYPE_ID, T2.GRANDTOTAL, T2.MULTIPLIERAP, T2.MULTIPLIER, T2.ModCount) invoiceOpen FROM	Invoice T1 INNER JOIN c_invoice_v_NEW T2 ON (T1.C_Invoice_ID = T2.C_Invoice_ID AND NVL(T1.C_InvoicePaySchedule_ID, 0) = NVL (T2.C_InvoicePaySchedule_ID, 0)) ) ");
+            sqlInvoice.Append(@" ), OpenInvoice AS ( SELECT 	SELECTROW,Name, DATE1, DOCUMENTNO, CINVOICEID, ISO_CODE, T1.C_CONVERSIONTYPE_ID, 
+                                AD_Client_ID, AD_Org_ID, T1.C_Currency_ID, T1.MultiplierAP, docbasetype, WRITEOFF, APPLIEDAMT, DATEACCT, 
+                                T1.C_InvoicePaySchedule_ID, T1.C_Invoice_ID, 
+                                /*INVOICEOPEN_NEW(T2.C_Invoice_ID, T2.C_InvoicePaySchedule_ID, 
+                                T2.C_Currency_ID, T2.C_CONVERSIONTYPE_ID, T2.GRANDTOTAL, T2.MULTIPLIERAP, T2.MULTIPLIER, T2.ModCount)*/
+                                T2.GRANDTOTAL  AS invoiceOpen, t1.VA009_Name
+                                FROM Invoice T1 INNER JOIN C_INVOICE_V_NEW_PA T2
+                                ON (T1.C_Invoice_ID = T2.C_Invoice_ID AND NVL(T1.C_InvoicePaySchedule_ID, 0) = NVL (T2.C_InvoicePaySchedule_ID, 0)) ) ");
             List<VIS_InvoiceData> payData = new List<VIS_InvoiceData>();
 
             // count record for paging
             if (page == 1)
             {
-                string sql = @"SELECT COUNT(*) FROM C_Invoice_v i"
-                                + " INNER JOIN C_Currency c ON (i.C_Currency_ID=c.C_Currency_ID) WHERE i.IsPaid='N' AND i.Processed='Y'"
-                                + " AND i.C_BPartner_ID=" + _C_BPartner_ID;
-                if (!chk)
-                {
-                    sql += " AND i.C_Currency_ID=" + _C_Currency_ID;
-                }
+                StringBuilder sql = new StringBuilder(@"SELECT COUNT(ci.C_InvoicePaySchedule_ID) FROM C_Invoice i
+                                 INNER JOIN C_InvoicePaySchedule ci ON (ci.C_Invoice_ID = i.C_Invoice_ID)
+                                 INNER JOIN C_Currency c ON (i.C_Currency_ID=c.C_Currency_ID) 
+                              WHERE i.IsPaid='N' AND i.Processed='Y' AND ci.VA009_IsPaid = 'N'");
+
                 //to get invoice schedules against related business partner
                 if (!string.IsNullOrEmpty(relatedBpids))
-                    sqlInvoice.Append(" OR i.C_BPartner_ID IN ( " + relatedBpids + " ) ");
+                    sql.Append(" AND i.C_BPartner_ID IN ( " + relatedBpids + " , " + _C_BPartner_ID + " ) ");
+                else
+                    sql.Append(" AND i.C_BPartner_ID = " + _C_BPartner_ID);
 
-                sql += " AND ((invoiceOpen(C_Invoice_ID,C_InvoicePaySchedule_ID)) *i.MultiplierAP ) <> 0 ";
-                sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "i", true, false);
-                countRecord = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                if (!chk)
+                {
+                    sql.Append(" AND i.C_Currency_ID=" + _C_Currency_ID);
+                }
+
+                if (!String.IsNullOrEmpty(docNo))
+                {
+                    sql.Append(" AND Upper(i.documentno) LIKE Upper('%" + docNo + "%')");
+                }
+                if (c_docType_ID > 0)
+                {
+                    sql.Append(" AND i.C_DOCTYPETARGET_ID=" + c_docType_ID);
+                }
+                //if (docBaseType != "0" && docBaseType != null)
+                //{
+                //    sqlInvoice.Append(" AND i.DocBaseType='" + docBaseType + "'");
+                //}
+                if (payMethod_ID > 0)
+                {
+                    sql.Append(" AND ci.VA009_PaymentMethod_ID=" + payMethod_ID);
+                }
+                if (srchText != string.Empty)
+                {
+                    //JID_1793 -- when search text contain "=" then serach with documnet no only
+                    if (srchText.Contains("="))
+                    {
+                        String[] myStringArray = srchText.TrimStart(new Char[] { ' ', '=' }).Split(',');
+                        if (myStringArray.Length > 0)
+                        {
+                            sql.Append(" AND UPPER(i.documentno) IN ( ");
+                            for (int z = 0; z < myStringArray.Length; z++)
+                            {
+                                if (z != 0)
+                                { sql.Append(","); }
+                                sql.Append(" UPPER('" + myStringArray[z].Trim() + "')");
+                            }
+                            sql.Append(")");
+                        }
+                    }
+                    else
+                    {
+                        sql.Append(" AND UPPER(i.documentno) LIKE UPPER('%" + srchText.Trim() + "%')");
+                    }
+                }
+
+                if (fromDate != null)
+                {
+                    if (toDate != null)
+                    {
+                        sql.Append(" AND I.DATEINVOICED BETWEEN " + GlobalVariable.TO_DATE(fromDate, true) + " AND " + GlobalVariable.TO_DATE(toDate, true));
+                    }
+                    else
+                    {
+                        sql.Append(" AND I.DATEINVOICED >= " + GlobalVariable.TO_DATE(fromDate, true));
+                    }
+                }
+                if (fromDate == null && toDate != null)
+                {
+                    sql.Append(" AND I.DATEINVOICED <=" + GlobalVariable.TO_DATE(toDate, true));
+                }
+
+                //sql += " AND ((invoiceOpen(C_Invoice_ID,C_InvoicePaySchedule_ID)) *i.MultiplierAP ) <> 0 ";
+                sql.Append(" AND ci.IsValid = 'Y' AND NVL(ci.C_Payment_ID , 0 ) = 0 AND NVL(ci.C_CashLine_ID, 0) = 0");
+
+                string newsql = MRole.GetDefault(ctx).AddAccessSQL(sql.ToString(), "C_Invoice", true, false);
+                countRecord = Util.GetValueOfInt(DB.ExecuteScalar(newsql, null, null));
             }
             if (String.IsNullOrEmpty(conversionDate))
             {
@@ -3696,7 +3809,7 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
 " C_Currency_ID," + _C_Currency_ID + ", " + conversionDate + ", C_ConversionType_ID, " +
 "AD_Client_ID, AD_Org_ID) * MultiplierAP) AS DISCOUNT, MultiplierAP, docbasetype, WRITEOFF, APPLIEDAMT, DATEACCT, C_InvoicePaySchedule_ID," +
 " (select TO_CHAR(Ip.Duedate,'YYYY-MM-DD') from C_InvoicePaySchedule ip where C_InvoicePaySchedule_ID = Result.C_InvoicePaySchedule_ID) Scheduledate, " +
-"AD_Org_ID FROM	OpenInvoice Result WHERE 	invoiceOpen * MultiplierAP <> 0");
+"AD_Org_ID, VA009_Name FROM	OpenInvoice Result WHERE 	invoiceOpen * MultiplierAP <> 0");
 
             //IDataReader dr = DB.ExecuteReader(sqlInvoice);
             DataSet dr = VIS.DBase.DB.ExecuteDatasetPaging(sqlInvoice.ToString(), page, size);
@@ -3733,6 +3846,7 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
                     pData.DATEACCT = Util.GetValueOfDateTime(dr.Tables[0].Rows[i]["DATEACCT"]);
                     pData.AD_Org_ID = Convert.ToInt32(dr.Tables[0].Rows[i]["AD_Org_ID"]);
                     pData.OrgName = Convert.ToString(dr.Tables[0].Rows[i]["Name"]);
+                    pData.PayName = Util.GetValueOfString(dr.Tables[0].Rows[i]["VA009_Name"]);
                     payData.Add(pData);
                 }
             }
@@ -3781,7 +3895,7 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
         {
             List<VIS_DocbaseType> DocbaseType = new List<VIS_DocbaseType>();
             //string _sql = "SELECT DB.DocBaseType, DB.Name FROM C_DOCTYPE C_DOCTYPE INNER JOIN C_DOCBASETYPE DB ON C_DocType.DOCBASETYPE=DB.DOCBASETYPE WHERE DB.DOCBASETYPE IN ('API','APR','APC','ARC') AND C_DocType.ISACTIVE='Y'";
-            string _sql = "SELECT C_DOCBASETYPE.DocBaseType, C_DOCBASETYPE.Name FROM C_DOCBASETYPE C_DOCBASETYPE WHERE C_DOCBASETYPE.DOCBASETYPE IN ('API','APR','APC','ARC','ARI') AND C_DOCBASETYPE.ISACTIVE='Y'";
+            string _sql = "SELECT C_DOCBASETYPE.DocBaseType, C_DOCBASETYPE.Name FROM C_DocBaseType C_DOCBASETYPE WHERE C_DOCBASETYPE.DOCBASETYPE IN ('APP','ARR') AND C_DOCBASETYPE.ISACTIVE='Y'";
             _sql = MRole.GetDefault(ctx).AddAccessSQL(_sql, "C_DocBaseType", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
             DataSet ds = DB.ExecuteDataset(_sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -3801,7 +3915,9 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
         public List<VIS_DocType> GetDocType()
         {
             List<VIS_DocType> DocType = new List<VIS_DocType>();
-            string _sql = "SELECT C_DocType.NAME, C_DocType.C_DOCTYPE_ID FROM C_DOCTYPE C_DOCTYPE INNER JOIN C_DOCBASETYPE DB ON C_DocType.DOCBASETYPE=DB.DOCBASETYPE WHERE DB.DOCBASETYPE IN ('APR','API','ARC','APC','ARI') AND C_DocType.ISACTIVE='Y'";
+            string _sql = @"SELECT C_DocType.NAME, C_DocType.C_DOCTYPE_ID FROM C_DocType C_DOCTYPE 
+                            INNER JOIN C_DocBaseType DB ON (C_DocType.DOCBASETYPE=DB.DOCBASETYPE )
+                            WHERE DB.DOCBASETYPE IN ('APR','API','ARC','APC','ARI') AND C_DocType.ISACTIVE='Y'";
             //string _sql = "SELECT C_DocType.Name,C_DocType_ID FROM C_DocType INNER JOIN c_docbasetype ON c_doctype.docbasetype = c_docbasetype.docbasetype WHERE  C_DocBaseType_ID IN (SELECT AD_Reference_ID FROM AD_Column WHERE ColumnName ='DocBaseType' AND AD_Table_ID =(SELECT AD_Table_ID FROM AD_Table WHERE TableName='C_DocType')) AND c_doctype.isactive='Y'";
             _sql = MRole.GetDefault(ctx).AddAccessSQL(_sql, "C_DocType", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
             DataSet ds = DB.ExecuteDataset(_sql);
@@ -3823,7 +3939,9 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
         public List<VIS_DocType> GetpayDocType()
         {
             List<VIS_DocType> DocType = new List<VIS_DocType>();
-            string _sql = "SELECT C_DocType.NAME, C_DocType.C_DOCTYPE_ID FROM C_DOCTYPE C_DOCTYPE INNER JOIN C_DOCBASETYPE DB ON C_DocType.DOCBASETYPE=DB.DOCBASETYPE WHERE DB.DOCBASETYPE IN ('APP','ARR') AND C_DocType.ISACTIVE='Y'";
+            string _sql = @"SELECT C_DocType.NAME, C_DocType.C_DOCTYPE_ID FROM C_DOCTYPE C_DocType 
+                            INNER JOIN C_DocBaseType DB ON (C_DocType.DOCBASETYPE=DB.DOCBASETYPE )
+                            WHERE DB.DOCBASETYPE IN ('APP','ARR') AND C_DocType.ISACTIVE='Y'";
             //string _sql = "SELECT C_DocType.Name,C_DocType_ID FROM C_DocType INNER JOIN c_docbasetype ON c_doctype.docbasetype = c_docbasetype.docbasetype WHERE  C_DocBaseType_ID IN (SELECT AD_Reference_ID FROM AD_Column WHERE ColumnName ='DocBaseType' AND AD_Table_ID =(SELECT AD_Table_ID FROM AD_Table WHERE TableName='C_DocType')) AND c_doctype.isactive='Y'";
             _sql = MRole.GetDefault(ctx).AddAccessSQL(_sql, "C_DocType", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
             DataSet ds = DB.ExecuteDataset(_sql);
@@ -4044,7 +4162,7 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
         {
             StringBuilder bpids = new StringBuilder();
             DataSet ds = null;
-            ds = DB.ExecuteDataset(@" SELECT C_BPartnerRelation_ID FROM C_BP_Relation WHERE C_BPartner_ID = " + C_BPartner_ID + " AND ispayfrom ='Y' ");
+            ds = DB.ExecuteDataset(@" SELECT C_BPartnerRelation_ID FROM C_BP_Relation WHERE C_BPartner_ID = " + C_BPartner_ID + " AND ispayfrom = 'Y' ");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -4068,8 +4186,9 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
         /// <param name="toDate">To Date</param>
         /// <param name="srchText">Search Document NO</param>
         /// <param name="chk"> bool MultiCurrency </param>
+        /// <param name="isInterComp"> Inter Company Flag </param>
         /// <returns>No of unallocated GL Lines</returns>
-        public List<GLData> GetGLData(int AD_Org_ID, int _C_Currency_ID, int _C_BPartner_ID, int page, int size, DateTime? fromDate, DateTime? toDate, string srchText, bool chk)
+        public List<GLData> GetGLData(int AD_Org_ID, int _C_Currency_ID, int _C_BPartner_ID, int page, int size, DateTime? fromDate, DateTime? toDate, string srchText, bool chk, bool isInterComp)
         {
             List<GLData> glData = new List<GLData>();
             StringBuilder sql = new StringBuilder();
@@ -4085,10 +4204,14 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
                 INNER JOIN C_CONVERSIONTYPE CT ON ct.C_CONVERSIONTYPE_ID= jl.C_CONVERSIONTYPE_ID INNER JOIN C_ELEMENTVALUE EV ON ev.c_elementvalue_ID=JL.ACCOUNT_ID INNER JOIN C_BPARTNER CB
                 ON cb.C_BPartner_ID = jl.C_BPartner_ID WHERE j.docstatus IN ('CO','CL') AND jl.isallocated ='N' AND EV.isAllocationrelated='Y' AND EV.AccountType IN ('A','L')");
 
-            //filter based on Organization
-            if (AD_Org_ID != 0)
+            //filter based on inter company parameter
+            if (!isInterComp)
             {
-                sql.Append(" AND J.AD_Org_ID=" + AD_Org_ID);
+                //filter based on Organization
+                if (AD_Org_ID != 0)
+                {
+                    sql.Append(" AND J.AD_Org_ID=" + AD_Org_ID);
+                }
             }
             if (!chk)
             {
@@ -5897,6 +6020,7 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
             public DateTime? DATEACCT { get; set; }
             public int AD_Org_ID { get; set; }
             public string OrgName { get; set; }
+            public string PayName { get; set; }
         }
 
         public class VIS_PaymentData
@@ -5918,6 +6042,7 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
             public int AD_Org_ID { get; set; }
             public string OrgName { get; set; }
             public string DocBaseType { get; set; }
+            public string PayName { get; set; }
         }
 
         public class VIS_CashData

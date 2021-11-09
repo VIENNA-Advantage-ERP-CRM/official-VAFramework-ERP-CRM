@@ -983,6 +983,11 @@ namespace VAdvantage.Model
                     line.SetQtyEntered(Decimal.Negate(line.GetQtyEntered()));
                     line.SetQtyInvoiced(Decimal.Negate(line.GetQtyInvoiced()));
                     line.SetLineNetAmt(Decimal.Negate(line.GetLineNetAmt()));
+                    if (Get_ColumnIndex("ReversalDoc_ID") >= 0)
+                    {
+                        //(1052-Nov/1/2021) set Reversal Document
+                        line.SetReversalDoc_ID(fromLine.GetC_InvoiceLine_ID());
+                    }
                     if (((Decimal)line.GetTaxAmt()).CompareTo(Env.ZERO) != 0)
                         line.SetTaxAmt(Decimal.Negate((Decimal)line.GetTaxAmt()));
 
@@ -1386,6 +1391,13 @@ namespace VAdvantage.Model
                     schedule[i].Save(Get_Trx());
                 }
             }
+
+            //String sql = "UPDATE C_InvoicePaySchedule Set IsValid = '" + (valid ? "Y" : "N") +
+            //            @"' WHERE IsValid != '" + (valid ? "Y" : "N") + @"' 
+            //                AND C_InvoicePaySchedule_ID IN (SELECT C_InvoicePaySchedule_ID FROM C_InvoicePaySchedule ips 
+            //                WHERE C_Invoice_ID=" + GetC_Invoice_ID() + ")";
+            //DB.ExecuteQuery(sql, null, Get_Trx());
+
             return valid;
         }
 
@@ -5523,6 +5535,11 @@ namespace VAdvantage.Model
                 GetC_DocType_ID(), false, Get_TrxName(), true);
             // set original document reference
             reversal.SetRef_C_Invoice_ID(GetC_Invoice_ID());
+            if (Get_ColumnIndex("ReversalDoc_ID") >= 0)
+            {
+                //(1052-Nov/1/2021) set Reversal Document
+                reversal.SetReversalDoc_ID(GetC_Invoice_ID());
+            }
             if (Get_ColumnIndex("BackupWithholdingAmount") > 0)
             {
                 reversal.SetC_Withholding_ID(GetC_Withholding_ID()); // backup withholding refernce
@@ -5733,39 +5750,6 @@ namespace VAdvantage.Model
             SetDocAction(DOCACTION_None);
             SetC_Payment_ID(0);
             SetIsPaid(true);
-
-            //	Create Allocation
-            if (!isCash)
-            {
-                MAllocationHdr alloc = new MAllocationHdr(GetCtx(), false, GetDateAcct(),
-                    GetC_Currency_ID(),
-                    Msg.Translate(GetCtx(), "C_Invoice_ID") + ": " + GetDocumentNo() + "/" + reversal.GetDocumentNo(),
-                    Get_TrxName());
-                alloc.SetAD_Org_ID(GetAD_Org_ID());
-                // Update conversion type from Invoice to view allocation (required for posting)
-                if (alloc.Get_ColumnIndex("C_ConversionType_ID") > 0)
-                {
-                    alloc.SetC_ConversionType_ID(GetC_ConversionType_ID());
-                }
-                if (alloc.Save())
-                {
-                    //	Amount
-                    Decimal gt = GetGrandTotal(true);
-                    if (!IsSOTrx())
-                        gt = Decimal.Negate(gt);
-                    //	Orig Line
-                    MAllocationLine aLine = new MAllocationLine(alloc, gt, Env.ZERO, Env.ZERO, Env.ZERO);
-                    aLine.SetC_Invoice_ID(GetC_Invoice_ID());
-                    aLine.Save();
-                    //	Reversal Line
-                    MAllocationLine rLine = new MAllocationLine(alloc, Decimal.Negate(gt), Env.ZERO, Env.ZERO, Env.ZERO);
-                    rLine.SetC_Invoice_ID(reversal.GetC_Invoice_ID());
-                    rLine.Save();
-                    //	Process It
-                    if (alloc.ProcessIt(DocActionVariables.ACTION_COMPLETE))
-                        alloc.Save();
-                }
-            }   //	notCash
 
             //	Explicitly Save for balance calc.
             Save();

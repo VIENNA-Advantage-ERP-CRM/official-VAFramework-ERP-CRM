@@ -698,7 +698,7 @@ namespace VAdvantage.Model
         {
             return new KeyNamePair(Get_ID(), GetDocumentNo());
         }
-        
+
         /** Adhoc Payment - Adding a new column (DueDate) for Payment Term ** Dt: 18/01/2021 ** Modified By: Kumar **/
         /** Set Due Date.
         @param DueDate Date when the payment is due */
@@ -1085,7 +1085,7 @@ namespace VAdvantage.Model
         public bool IsPaymentRuleValid(String test)
         {
             return test.Equals("B") || test.Equals("D") || test.Equals("K") || test.Equals("L") || test.Equals("P") || test.Equals("S") || test.Equals("T") || test.Equals("C")
-                || test.Equals("W") || test.Equals("O"); 
+                || test.Equals("W") || test.Equals("O");
         }
         /** Set Payment Method.
         @param PaymentRule How you pay the invoice */
@@ -1336,14 +1336,15 @@ namespace VAdvantage.Model
         public bool IsPaymentMethodValid(String test)
         {
             return test == null || test.Equals("B") || test.Equals("C") || test.Equals("D") || test.Equals("K") || test.Equals("L") || test.Equals("P") || test.Equals("S") || test.Equals("T")
-                || test.Equals("W") || test.Equals("O"); 
+                || test.Equals("W") || test.Equals("O");
         }
         /** Set Payment Method.
         @param PaymentMethod Payment Method */
         public void SetPaymentMethod(String PaymentMethod)
         {
             if (!IsPaymentMethodValid(PaymentMethod))
-                throw new ArgumentException("PaymentMethod Invalid value - " + PaymentMethod + " - Reference_ID=195 - B - C - D - K - L - P - S - T - W -O"); if (PaymentMethod != null && PaymentMethod.Length > 1) { log.Warning("Length > 1 - truncated"); PaymentMethod = PaymentMethod.Substring(0, 1); } Set_Value("PaymentMethod", PaymentMethod);
+                throw new ArgumentException("PaymentMethod Invalid value - " + PaymentMethod + " - Reference_ID=195 - B - C - D - K - L - P - S - T - W -O"); if (PaymentMethod != null && PaymentMethod.Length > 1) { log.Warning("Length > 1 - truncated"); PaymentMethod = PaymentMethod.Substring(0, 1); }
+            Set_Value("PaymentMethod", PaymentMethod);
         }
         /** Get Payment Method.
         @return Payment Method */
@@ -1618,6 +1619,17 @@ namespace VAdvantage.Model
 @return This Field is used to bypass constraint on different action */
         public String GetConditionalFlag() { return (String)Get_Value("ConditionalFlag"); }
 
+        /** ReversalDoc_ID AD_Reference_ID=336 */
+        public static int REVERSALDOC_ID_AD_Reference_ID = 336;/** Set Reversal Document.
+@param ReversalDoc_ID Reference of its original document */
+        public void SetReversalDoc_ID(int ReversalDoc_ID)
+        {
+            if (ReversalDoc_ID <= 0) Set_Value("ReversalDoc_ID", null);
+            else
+                Set_Value("ReversalDoc_ID", ReversalDoc_ID);
+        }/** Get Reversal Document.
+@return Reference of its original document */
+        public int GetReversalDoc_ID() { Object ii = Get_Value("ReversalDoc_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
     }
 
 }

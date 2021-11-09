@@ -625,7 +625,7 @@ namespace VAdvantage.Model
                         // update open amount in base / invoice currency when we splitted record
                         paySch.SetVA009_OpenAmnt(BaseCurrency != invoice.GetC_Currency_ID() ? (paySch.GetDueAmt() * multiplyRate) : paySch.GetDueAmt());
                         paySch.SetVA009_OpnAmntInvce(paySch.GetDueAmt());
-
+                        paySch.ByPassValidatePayScheduleCondition(true);
                         if (!paySch.Save(Get_Trx()))
                         {
                             log.Info("Not Updated Paid Amount on Invoice Schedule for this schedule <==> " + line.GetC_InvoicePaySchedule_ID());
@@ -709,7 +709,7 @@ namespace VAdvantage.Model
                             // convert due amount into Base Currency
                             newPaySch.SetVA009_OpenAmnt(BaseCurrency != invoice.GetC_Currency_ID() ? Decimal.Multiply(newPaySch.GetDueAmt(), multiplyRate) : newPaySch.GetDueAmt());
                             newPaySch.SetVA009_OpnAmntInvce(newPaySch.GetDueAmt());
-
+                            newPaySch.ByPassValidatePayScheduleCondition(true);
                             if (!newPaySch.Save(Get_Trx()))
                             {
                                 ValueNamePair pp = VLogger.RetrieveError();
@@ -971,9 +971,19 @@ namespace VAdvantage.Model
             for (int i = 0; i < _lines.Length; i++)
             {
                 MAllocationLine line = _lines[i];
-                line.SetIsActive(false);
-                line.Save();
+
                 bps.Add(line.ProcessIt(true));	//	reverse
+
+                line.SetIsActive(false);
+                // set Amount as ZERO on Reversal of Allocation
+                line.SetAmount(Env.ZERO);
+                line.SetDiscountAmt(Env.ZERO);
+                line.SetWriteOffAmt(Env.ZERO);
+                line.SetOverUnderAmt(Env.ZERO);
+                line.SetWithholdingAmt(Env.ZERO);
+                line.SetBackupWithholdingAmount(Env.ZERO);
+                line.Save();
+                
 
                 // Added by Amit for Payment Management 5-11-2015   
                 if (Env.IsModuleInstalled("VA009_"))

@@ -146,15 +146,17 @@ namespace VIS.Controllers
         /// <param name="size">Page Size</param>
         /// <param name="c_docType_ID">DocType ID</param>
         /// <param name="docBaseType">DocBaseType</param>
+        /// <param name="PaymentMethod_ID">PaymentMethod ID</param>
         /// <param name="fromDate">From Date</param>
         /// <param name="toDate">to Date</param>
         /// <param name="srchText">Search Document No</param>
+        /// <param name="isInterComp">Inter Company Flag</param>
         /// <returns>No of unallocated payments</returns>
-        public JsonResult GetPayments(int AD_Org_ID, int _C_Currency_ID, int _C_BPartner_ID, bool isInterBPartner, bool chk, int page, int size,int c_docType_ID,string docBaseType, DateTime? fromDate, DateTime? toDate,string srchText)
+        public JsonResult GetPayments(int AD_Org_ID, int _C_Currency_ID, int _C_BPartner_ID, bool isInterBPartner, bool chk, int page, int size,int c_docType_ID,string docBaseType, int PaymentMethod_ID, DateTime? fromDate, DateTime? toDate,string srchText, bool isInterComp)
         {
             Ctx ct = Session["ctx"] as Ctx;
             PaymentAllocation payments = new PaymentAllocation(ct);
-            return Json(JsonConvert.SerializeObject(payments.GetPayments(AD_Org_ID, _C_Currency_ID, _C_BPartner_ID, isInterBPartner, chk, page, size, c_docType_ID, docBaseType, fromDate, toDate, srchText)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(payments.GetPayments(AD_Org_ID, _C_Currency_ID, _C_BPartner_ID, isInterBPartner, chk, page, size, c_docType_ID, docBaseType, PaymentMethod_ID, fromDate, toDate, srchText, isInterComp)), JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -171,12 +173,13 @@ namespace VIS.Controllers
         /// <param name="toDate">To Date</param>
         /// <param name="paymentType_ID">Payment Type ID</param>
         /// <param name="srchText">Search for Document No</param>
+        /// <param name="isInterComp">Inter Company Flag</param>
         /// <returns>No of unallocated Cash Lines</returns>
-        public JsonResult GetCashJounral(int AD_Org_ID, int _C_Currency_ID, int _C_BPartner_ID, bool isInterBPartner, bool chk, int page, int size, DateTime? fromDate, DateTime? toDate,string paymentType_ID,string srchText)
+        public JsonResult GetCashJounral(int AD_Org_ID, int _C_Currency_ID, int _C_BPartner_ID, bool isInterBPartner, bool chk, int page, int size, DateTime? fromDate, DateTime? toDate,string paymentType_ID,string srchText, bool isInterComp)
         {
             Ctx ct = Session["ctx"] as Ctx;
             PaymentAllocation payments = new PaymentAllocation(ct);
-            return Json(JsonConvert.SerializeObject(payments.GetCashJounral(AD_Org_ID, _C_Currency_ID, _C_BPartner_ID, isInterBPartner, chk, page, size, fromDate, toDate, paymentType_ID, srchText)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(payments.GetCashJounral(AD_Org_ID, _C_Currency_ID, _C_BPartner_ID, isInterBPartner, chk, page, size, fromDate, toDate, paymentType_ID, srchText, isInterComp)), JsonRequestBehavior.AllowGet);
         }
 
         //Added new parameters---Neha---
@@ -194,16 +197,18 @@ namespace VIS.Controllers
         /// <param name="docNo">Document Number</param>
         /// <param name="c_docType_ID">Document Type ID</param>
         /// <param name="docBaseType">DocBase Type</param>
+        /// <param name="PaymentMethod_ID">PaymentMethod ID</param>
         /// <param name="fromDate">From Date</param>
         /// <param name="toDate">To Date</param>
         /// <param name="conversionDate">ConversionType Date</param>
         /// <param name="srchText">Search the Document No</param>
+        /// <param name="isInterComp">Inter Company Flag</param>
         /// <returns></returns>
-        public JsonResult GetInvoice(int AD_Org_ID, int _C_Currency_ID, int _C_BPartner_ID, bool isInterBPartner, bool chk, string date, int page, int size, string docNo, int c_docType_ID,string docBaseType, DateTime? fromDate, DateTime? toDate, string conversionDate,string srchText)
+        public JsonResult GetInvoice(int AD_Org_ID, int _C_Currency_ID, int _C_BPartner_ID, bool isInterBPartner, bool chk, string date, int page, int size, string docNo, int c_docType_ID,string docBaseType, int PaymentMethod_ID, DateTime? fromDate, DateTime? toDate, string conversionDate,string srchText, bool isInterComp)
         {
             Ctx ct = Session["ctx"] as Ctx;
             PaymentAllocation payments = new PaymentAllocation(ct);
-            return Json(JsonConvert.SerializeObject(payments.GetInvoice(AD_Org_ID,_C_Currency_ID, _C_BPartner_ID, isInterBPartner, chk, date, page, size, docNo, c_docType_ID, docBaseType, fromDate, toDate, conversionDate, srchText)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(payments.GetInvoice(AD_Org_ID,_C_Currency_ID, _C_BPartner_ID, isInterBPartner, chk, date, page, size, docNo, c_docType_ID, docBaseType, PaymentMethod_ID, fromDate, toDate, conversionDate, srchText, isInterComp)), JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -309,12 +314,13 @@ namespace VIS.Controllers
         /// <paramref name="toDate"/>To Date
         /// <paramref name="srchText"/>Search Document No
         /// <paramref name="chk"/>MultiCurrency 
+        /// <param name="isInterComp">Inter Company Flag</param>
         /// <returns>No of unallocated GL Lines</returns>
-        public JsonResult GetGLData(int AD_Org_ID,int _C_Currency_ID, int _C_BPartner_ID, int page, int size, DateTime? fromDate, DateTime? toDate,string srchText,bool chk)
+        public JsonResult GetGLData(int AD_Org_ID,int _C_Currency_ID, int _C_BPartner_ID, int page, int size, DateTime? fromDate, DateTime? toDate,string srchText,bool chk, bool isInterComp)
         {
             Ctx ct = Session["ctx"] as Ctx;
             PaymentAllocation payments = new PaymentAllocation(ct);
-            return Json(JsonConvert.SerializeObject(payments.GetGLData(AD_Org_ID,_C_Currency_ID, _C_BPartner_ID, page, size, fromDate, toDate, srchText, chk)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(payments.GetGLData(AD_Org_ID,_C_Currency_ID, _C_BPartner_ID, page, size, fromDate, toDate, srchText, chk, isInterComp)), JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>

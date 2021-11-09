@@ -25,20 +25,23 @@
         var self = this;
         var multiValues = [];
         var grdname = null;
-        var divPaging, ulPaging, liFirstPage, liPrevPage, liCurrPage, liNextPage, liLastPage, cmbPage;
+        var divPaging, ulPaging, liFirstPage, liPrevPage, liCurrPage, liNextPage, liLastPage, cmbPage, liPageNo;
+        var $spanPageResult = null;
+        var showText = VIS.Msg.getMsg("ShowingResult");
+        var ofText = VIS.Msg.getMsg("of");
         var selectedItems = [];
         function initializeComponent() {
 
             inforoot.css("width", "100%");
             inforoot.css("height", "100%");
             inforoot.css("position", "relative");
-            
+
             searchTab = $("<div class='vis-info-l-s-wrap vis-leftsidebarouterwrap'>");
-                searchSec = $("<div>");
-                searchTab.append(searchSec);
-                datasec = $("<div class='vis-info-datasec'>");
-                btnsec = $("<div class='vis-info-btnsec'>");
-            
+            searchSec = $("<div>");
+            searchTab.append(searchSec);
+            datasec = $("<div class='vis-info-datasec'>");
+            btnsec = $("<div class='vis-info-btnsec'>");
+
             subroot.append(searchTab);
             subroot.append(datasec);
             subroot.append(btnsec);
@@ -63,8 +66,8 @@
             //    btnOK = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;'>").append(Oktxt);
             //}
             //else {
-                btnCancel = $("<button class='VIS_Pref_btn-2'>").append(canceltxt);
-                btnOK = $("<button class='VIS_Pref_btn-2'>").append(Oktxt);
+            btnCancel = $("<button class='VIS_Pref_btn-2'>").append(canceltxt);
+            btnOK = $("<button class='VIS_Pref_btn-2'>").append(Oktxt);
             //}
 
             var divbtnLeft = $("<div class='vis-info-btnleft'>");
@@ -81,9 +84,9 @@
             //    divbtnRight.append(btnRequery);
             //}
             //else {
-                divbtnRight.append(btnCancel);
-                divbtnRight.append(btnOK);
-                divbtnLeft.append(btnRequery);
+            divbtnRight.append(btnCancel);
+            divbtnRight.append(btnOK);
+            divbtnLeft.append(btnRequery);
             //}
 
             btnsec.append(divbtnLeft);
@@ -149,7 +152,7 @@
                     displayData(true, cmbPage.val());
                 });
             };
-            
+
 
         }
 
@@ -191,7 +194,7 @@
                         alert(VIS.Msg.getMsg('ERRORGettingSchema'));
                         return;
                     }
-                    
+
                     displaySchema(InfoObj);
                 }
             });
@@ -228,7 +231,7 @@
                     var td = $("<td class='vis-gc-vpanel-table-td1'>");
                     var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
                     var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
-                    var Leftformfieldbtnwrap = $('<div class="input-group-append">');                    
+                    var Leftformfieldbtnwrap = $('<div class="input-group-append">');
 
                     tr = $("<tr>");
                     tableSArea.append(tr);
@@ -241,11 +244,11 @@
                     displayType = schema[item].AD_Reference_ID;
                     ctrl = getControl(schema[item].AD_Reference_ID, schema[item].ColumnName, schema[item].Name, schema[item].AD_Reference_Value_ID, schema[item].lookup);
                     srchCtrl.Ctrl = ctrl;
-                    
+
                     // check if there is some value needed to be set on this control.- Added by Mohit- 13 Feb 2019
                     if (schema[item].SetValue != null) {
                         var retValue = false;
-                          // If there is some condition given, then validate the condition                      
+                        // If there is some condition given, then validate the condition                      
                         if (schema[item].Condition != null) {
                             var checkAll = [];
                             var logical = [];
@@ -279,7 +282,7 @@
                                 }
                             }
                         }
-                            // if no condition, by default true.
+                        // if no condition, by default true.
                         else {
                             retValue = true;
                         }
@@ -314,7 +317,7 @@
 
                     }
 
-                    
+
                     srchCtrl.AD_Reference_ID = schema[item].AD_Reference_ID;
                     srchCtrl.ColumnName = schema[item].SelectClause;
                     if (srchCtrl.ColumnName.toUpperCase().indexOf(" AS ") > -1) {
@@ -331,9 +334,9 @@
                     }
 
                     var tdctrl = $("<td>");
-                    
 
-                    
+
+
 
                     //tr.append(tdctrl);
                     var count = ctrl.getBtnCount();
@@ -343,19 +346,19 @@
                             //div.css('margin-top', '5px');
                         }
 
-                            Leftformfieldctrlwrp.append(ctrl.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                            var ctrlBtn = ctrl.getBtn(0);
-                            if (ctrlBtn != null) {
-                                Leftformfieldbtnwrap.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2"));
-                                ctrl.getControl().attr('data-hasbtn', ' ');
-                            }
-                            ctrlBtn = ctrl.getBtn(1);
-                            if (ctrlBtn != null) {
-                                Leftformfieldbtnwrap.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2"));
-                                ctrl.getControl().attr('data-hasbtn', ' ');
-                            }
-                            count = -1;
-                            ctrl = null;
+                        Leftformfieldctrlwrp.append(ctrl.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+                        var ctrlBtn = ctrl.getBtn(0);
+                        if (ctrlBtn != null) {
+                            Leftformfieldbtnwrap.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2"));
+                            ctrl.getControl().attr('data-hasbtn', ' ');
+                        }
+                        ctrlBtn = ctrl.getBtn(1);
+                        if (ctrlBtn != null) {
+                            Leftformfieldbtnwrap.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2"));
+                            ctrl.getControl().attr('data-hasbtn', ' ');
+                        }
+                        count = -1;
+                        ctrl = null;
                         //}
                         //tdctrl.append(div);
                         //td.append(div);
@@ -367,15 +370,15 @@
                         if (appendTopMargin) {
                             //div.css('margin-top', '5px');
                         }
-                       
-                            Leftformfieldctrlwrp.append(ctrl.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                            var ctrlBtn = ctrl.getBtn(0);
-                            if (ctrlBtn != null) {
-                                Leftformfieldbtnwrap.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2"));
-                                ctrl.getControl().attr('data-hasbtn', ' ');
-                            }
-                            count = -1;
-                            ctrl = null;
+
+                        Leftformfieldctrlwrp.append(ctrl.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+                        var ctrlBtn = ctrl.getBtn(0);
+                        if (ctrlBtn != null) {
+                            Leftformfieldbtnwrap.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2"));
+                            ctrl.getControl().attr('data-hasbtn', ' ');
+                        }
+                        count = -1;
+                        ctrl = null;
                         //}
                         //td.append(div);
                         //Leftformfieldwrp.append(Leftformfieldctrlwrp);
@@ -400,7 +403,7 @@
                         var Leftformfieldbtnwrapto = $('<div class="input-group-append">');
                         //tableSArea.append(tr);
 
-                        
+
                         tr = $("<tr>");
                         tableSArea.append(tr);
 
@@ -417,20 +420,20 @@
                             if (appendTopMargin) {
                                 ctrl.getControl();
                             }
-                            
+
                             Leftformfieldctrlwrpto.append(ctrl.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                                var ctrlBtn = ctrl.getBtn(0);
-                                if (ctrlBtn != null) {
-                                    Leftformfieldbtnwrapto.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2"));
-                                    ctrl.getControl().attr('data-hasbtn', ' ');
-                                }
-                                ctrlBtn = ctrl.getBtn(1);
-                                if (ctrlBtn != null) {
-                                    Leftformfieldbtnwrapto.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2"));
-                                    ctrl.getControl().attr('data-hasbtn', ' ');
-                                }
-                                count = -1;
-                                ctrl = null;
+                            var ctrlBtn = ctrl.getBtn(0);
+                            if (ctrlBtn != null) {
+                                Leftformfieldbtnwrapto.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2"));
+                                ctrl.getControl().attr('data-hasbtn', ' ');
+                            }
+                            ctrlBtn = ctrl.getBtn(1);
+                            if (ctrlBtn != null) {
+                                Leftformfieldbtnwrapto.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2"));
+                                ctrl.getControl().attr('data-hasbtn', ' ');
+                            }
+                            count = -1;
+                            ctrl = null;
                             //}
                             //td.append(div);
                             //Leftformfieldwrp.append(Leftformfieldctrlwrp);
@@ -448,7 +451,7 @@
                             else {
                                 ctrl.getControl();
                             }
-                            Leftformfieldctrlwrpto.append(ctrl.getControl().attr('data-placeholder', '').attr('placeholder', ' ')); 
+                            Leftformfieldctrlwrpto.append(ctrl.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
 
                         }
                         Leftformfieldctrlwrpto.append((new VIS.Controls.VLabel(VIS.Msg.getMsg("To"), schema[item].ColumnName)).getControl());
@@ -479,7 +482,7 @@
                         appendTopMargin = true;
                     }
 
-                    
+
                 }
 
 
@@ -929,19 +932,19 @@
                     //    oColumn.render = 'number:1';
                     //}
                 }
-                    //	YesNo
-                    //else if (displayType == VIS.DisplayType.YesNo) {
+                //	YesNo
+                //else if (displayType == VIS.DisplayType.YesNo) {
 
-                    //    oColumn.render = function (record, index, colIndex) {
+                //    oColumn.render = function (record, index, colIndex) {
 
-                    //        var chk = (record[grdCols[colIndex].field]) == 'True' ? "checked" : "";
+                //        var chk = (record[grdCols[colIndex].field]) == 'True' ? "checked" : "";
 
-                    //        return '<input type="checkbox" ' + chk + ' disabled="disabled" >';
-                    //    }
-                    //}
+                //        return '<input type="checkbox" ' + chk + ' disabled="disabled" >';
+                //    }
+                //}
 
                 //Date /////////
-             // JID_1809 Date is showing as per browser culture
+                // JID_1809 Date is showing as per browser culture
                 else if (VIS.DisplayType.IsDate(displayType)) {
                     if (displayType == VIS.DisplayType.Date) {
                         oColumn.render = function (record, index, colIndex) {
@@ -975,7 +978,7 @@
                             else d = "";
                             return d;
                         }
-                    }                    
+                    }
                 }
 
                 else if (displayType == VIS.DisplayType.Location || displayType == VIS.DisplayType.Locator) {
@@ -1039,7 +1042,7 @@
                     // do not show toolbar on Info Window.
                     toolbar: false,  // indicates if toolbar is v isible
                     columnHeaders: true,   // indicates if columns is visible
-                    lineNumbers: true,  // indicates if line numbers column is visible
+                    lineNumbers: false,  // indicates if line numbers column is visible
                     selectColumn: true,  // indicates if select column is visible
                     toolbarReload: false,   // indicates if toolbar reload button is visible
                     toolbarColumns: true,   // indicates if toolbar columns button is visible
@@ -1221,6 +1224,8 @@
         function createPageSettings() {
             ulPaging = $('<ul class="vis-statusbar-ul">');
 
+            liPageNo = $('<li class="flex-fill"><div class="vis-ad-w-p-s-result"><span></span></div></li>');
+
             liFirstPage = $('<li style="opacity: 1;"><div><i class="vis vis-shiftleft" title="' + VIS.Msg.getMsg("FirstPage") + '" style="opacity: 0.6;"></i></div></li>');
 
             liPrevPage = $('<li style="opacity: 1;"><div><i class="vis vis-pageup" title="' + VIS.Msg.getMsg("PageUp") + '" style="opacity: 0.6;"></i></div></li>');
@@ -1233,8 +1238,9 @@
 
             liLastPage = $('<li style="opacity: 1;"><div><i class="vis vis-shiftright" title="' + VIS.Msg.getMsg("LastPage") + '" style="opacity: 0.6;"></i></div></li>');
 
+            $spanPageResult = liPageNo.find(".vis-ad-w-p-s-result").find("span");
 
-            ulPaging.append(liFirstPage).append(liPrevPage).append(liCurrPage).append(liNextPage).append(liLastPage);
+            ulPaging.append(liPageNo).append(liFirstPage).append(liPrevPage).append(liCurrPage).append(liNextPage).append(liLastPage);
             pageEvents();
         }
 
@@ -1266,14 +1272,12 @@
         }
 
         function resetPageCtrls(psetting) {
-
             cmbPage.empty();
             if (psetting.TotalPage > 0) {
                 for (var i = 0; i < psetting.TotalPage; i++) {
                     cmbPage.append($("<option value=" + (i + 1) + ">" + (i + 1) + "</option>"))
                 }
                 cmbPage.val(psetting.CurrentPage);
-
 
                 if (psetting.TotalPage > psetting.CurrentPage) {
                     liNextPage.css("opacity", "1");
@@ -1299,7 +1303,6 @@
                     liNextPage.css("opacity", "0.6");
                     liLastPage.css("opacity", "0.6");
                 }
-
             }
             else {
                 liFirstPage.css("opacity", "0.6");
@@ -1307,6 +1310,21 @@
                 liNextPage.css("opacity", "0.6");
                 liLastPage.css("opacity", "0.6");
             }
+
+            // Show pages information
+            var cp = psetting.CurrentPage;
+            var ps = psetting.PageSize;
+            var tr = psetting.TotalRecords;
+
+            var s = (cp - 1) * ps;
+            var e = s + ps;
+            if (e > tr) e = tr;
+            if (tr == 0) {
+                s -= 1;
+            }
+            var text = showText + " " + (s + 1) + "-" + e + " " + ofText + " " + tr;
+
+            $spanPageResult.text(text);
         }
     };
 
