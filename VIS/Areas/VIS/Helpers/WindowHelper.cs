@@ -3015,13 +3015,17 @@ namespace VIS.Helpers
             //return cv;
         }
 
+        /// <summary>
+        /// Get List of cards for tab and login user
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="AD_Tab_ID"></param>
+        /// <returns></returns>
         public List<CardsInfo> GetCards(Ctx ctx, int AD_Tab_ID)
         {
             List<CardsInfo> cards = new List<CardsInfo>();
-            //string sql = "SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name FROM AD_CardView WHERE IsActive='Y' AND AD_Tab_ID=" + AD_Tab_ID+ " ORDER BY NAME ASC";
-            //sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "AD_CardView", true, false);
-
-          DataSet  ds = DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@" SELECT AD_CardView.ad_cardview_id, AD_CardView.name FROM AD_CardView AD_CardView
+            // Get Login user's default card and other cards of  current tab
+          DataSet  ds = DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@" SELECT AD_CardView.ad_cardview_id, AD_CardView.name,AD_DefaultCardView.ad_cardview_id as dcard FROM AD_CardView AD_CardView
    Left Outer JOIN AD_DefaultCardView AD_DefaultCardView ON (  AD_CardView.ad_cardview_id=AD_DefaultCardView.ad_cardview_id)
                         WHERE  AD_CardView.AD_Tab_ID=" + AD_Tab_ID + @" AND AD_CardView.IsActive = 'Y'   AND ( AD_CardView.ad_user_id IS NULL
                                                           OR AD_CardView.ad_user_id = " + ctx.GetAD_User_ID()+ @") " +
@@ -3029,7 +3033,8 @@ namespace VIS.Helpers
 
             if (ds == null || ds.Tables[0].Rows.Count == 0)
             {
-                ds = DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name FROM AD_CardView AD_CardView 
+                //If no default card set, then get all cards of tab.
+                ds = DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name,0  as dcard FROM AD_CardView AD_CardView 
                     WHERE AD_CardView.AD_Tab_ID =" + AD_Tab_ID + " AND AD_CardView.IsActive='Y' ORDER BY AD_CardView.Name ASC", "AD_CardView", true, false));
             }
 
@@ -3038,16 +3043,23 @@ namespace VIS.Helpers
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    cards.Add(new CardsInfo()
+                    CardsInfo card = new CardsInfo()
                     {
                         Name = Util.GetValueOfString(ds.Tables[0].Rows[i]["Name"]),
                         AD_CardView_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_CardView_ID"])
-                    });
+                    };
+
+                    // dcard is default card ID. it can be 0
+                    if (Util.GetValueOfInt(ds.Tables[0].Rows[i]["dcard"]) > 0)
+                        card.IsDefault = true;
+                    cards.Add(card);
                 }
             }
             return cards;
         }
 
+
+    
         public void Dispose()
         {
             _createSqlColumn.Clear();

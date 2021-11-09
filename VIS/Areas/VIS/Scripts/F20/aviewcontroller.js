@@ -653,7 +653,10 @@
         //  Set initial presentation
 
         var defaultTabLayout = mTab.getTabLayout();
-
+        // check default layout of tab
+        //N means multirow lauoyt
+        //Y means Single row layout
+        //C means Card view layout
         if (defaultTabLayout == "N")
             this.singleRow = false;
         else if (defaultTabLayout == "Y")
@@ -663,14 +666,6 @@
             this.switchCardRow(false);
         }
 
-
-        //if (onlyMultiRow || !mTab.getIsSingleRow()) {
-        //    // this.switchMultiRow();
-        //    this.singleRow = false;
-        //    //this.switchMultiRow();
-        //}
-        //else
-        //    this.switchSingleRow(true);
     };
 
 

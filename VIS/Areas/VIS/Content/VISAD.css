@@ -2480,7 +2480,7 @@ findImg {
 .vis-cv-header {
     /*height: 11px;*/
     text-align: right;
-     background-color: #fff; 
+    /*background-color: #fff;*/
     font-weight: bold;
     /* color: darkgray; */
     font-size: 12px;
@@ -2488,14 +2488,16 @@ findImg {
     position: sticky;
     z-index: 1;
     top: 0;
+    display: flex;
+    justify-content: flex-end;
 }
-.vis-cv-header select {
-    margin-right: .5rem;
+.vis-cv-header input {
+    /*margin-right: .5rem;*/
     position: relative;
     z-index: 2;
-    padding-top: 0;
+    padding-top: 2px;
     border: none;
-    height: 16px;
+    height: 17px;
     text-align: right;
 }
 .vis-cv-header p {
@@ -2504,6 +2506,7 @@ findImg {
     text-align: center;
     width: 100%;
     z-index: 0;
+    background: #fff;
 }
 .vis-cv-main {
     bottom: 0;
@@ -2590,15 +2593,23 @@ findImg {
     overflow: hidden;
 }
 
-.vis-cv-card-edit {
-    cursor: pointer;
-    float: right;
-    /*margin-top: -10px;*/
-    color: rgb(229, 228, 228);
-    position: absolute;
-    right: 5px;
-    top: 7px;
+.vis-cv-card span {
+    margin: 0 0 5px;
+    color: gray;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
+
+    .vis-cv-card-edit {
+        cursor: pointer;
+        float: right;
+        /*margin-top: -10px;*/
+        color: rgb(229, 228, 228);
+        position: absolute;
+        right: 5px;
+        top: 7px;
+    }
 
     .vis-cv-card-edit:hover {
         color: gray;
@@ -5131,3 +5142,9 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
     box-shadow: none !important;
 }
 
+/*jquery ui dropdown list 09Nov2021*/
+.ui-menu .ui-menu-item-wrapper {
+    padding: 3px 0 3px .4em;
+    display: flex !important;
+    justify-content: space-between;
+}

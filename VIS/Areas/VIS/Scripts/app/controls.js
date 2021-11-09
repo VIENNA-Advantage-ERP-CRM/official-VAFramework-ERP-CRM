@@ -563,8 +563,6 @@
             else if (displayType == VIS.DisplayType.Button) {
                 var btn = new VButton(columnName, isMandatory, isReadOnly, isUpdateable, mField.getHeader(), mField.getDescription(), mField.getHelp(), mField.getAD_Process_ID(), mField.getIsLink(), mField.getIsRightPaneLink(), mField.getAD_Form_ID(), mField.getIsBackgroundProcess(), mField.getAskUserBGProcess())
                 btn.setField(mField, true);
-
-                btn.setReferenceKey(mField.getAD_Reference_Value_ID());
                 ctrl = btn;
             }
             else {
@@ -1234,7 +1232,8 @@
      *  @param AD_Process_ID process to start
     
      ***************************************************************************/
-    function VButton(columnName, mandatory, isReadOnly, isUpdateable, text, description, help, AD_Process_ID, isLink, isRightLink, AD_Form_ID, isBGProcess, isAskUserBGProcess) {
+    function VButton(columnName, mandatory, isReadOnly, isUpdateable, text, description, help, AD_Process_ID, isLink, isRightLink
+        , AD_Form_ID, isBGProcess, isAskUserBGProcess) {
 
         this.actionListner;
         this.AD_Process_ID = AD_Process_ID;
@@ -1282,17 +1281,15 @@
             else
                 $img.addClass(img);
         };
-
+      
         //	Special Buttons
 
         if (columnName.equals("PaymentRule")) {
             this.readReference(195);
-            //$ctrl.css("color", "blue"); //
             this.setIcon("vis vis-payment");    //  29*14
         }
         else if (columnName.equals("DocAction")) {
             this.readReference(135);
-            //$ctrl.css("color", "blue"); //
             this.setIcon("vis vis-cog");    //  16*16
         }
         else if (columnName.equals("CreateFrom")) {
@@ -1430,6 +1427,8 @@
     };
     VIS.Utility.inheritPrototype(VButton, IControl);//Inherit
 
+    VButton.prototype.referenceList = {};
+
     VButton.prototype.setField = function (mField, isHeaderPnl) {
         this.mField = mField;
         // if (!this.isIconSet) {
@@ -1510,7 +1509,19 @@
      *  @param AD_Reference_ID reference
      */
     VButton.prototype.readReference = function (AD_Reference_ID) {
-        this.values = {};
+
+        this.values = null;
+        if (this.referenceList) {
+            this.values = this.referenceList[AD_Reference_ID];
+        }
+
+        if (this.values) {
+            return this.values;
+        }
+        else {
+            this.values = {};
+        }
+        
         var SQL;
         if (VIS.Env.isBaseLanguage(VIS.Env.getCtx(), "")) {
             SQL = "VIS_82";
@@ -1525,6 +1536,7 @@
 
                 this.values[dr.getString(0)] = dr.getString(1);
             }
+            this.referenceList[AD_Reference_ID] = this.values;
             dr.close();
         }
         catch (e) {
@@ -2521,7 +2533,7 @@
                         validation = " AND " + validation;
                     }
 
-                     if (posOrder != -1) {
+                    if (posOrder != -1) {
                         var orderByIdx = validation.toUpper().lastIndexOf(" ORDER BY ");
                         if (orderByIdx == -1) {
                             validation = validation + sql.substring(posOrder);
@@ -5160,6 +5172,7 @@
         this.hideText = function () {
             $txt.hide();
         }
+
 
         this.hideEditIcon = function () {
             $spanIcon.hide();

@@ -635,10 +635,16 @@ namespace VAdvantage.Controller
         public static List<HeaderPanelGrid> GetHeaderPanelItems(int headerLayoutID)
         {
             CommonFunctions fun = new CommonFunctions();
-            List<HeaderPanelGrid> hitems = fun.GetHeaderPanelItems(headerLayoutID);
+            List<HeaderPanelGrid> hitems = fun.GetCardTemplateItems(headerLayoutID);
             return hitems;
 
         }
+
+        /// <summary>
+        /// Create card panels for current tab
+        /// </summary>
+        /// <param name="mTabVO"></param>
+        /// <param name="ctx"></param>
         private static void CreateCardPanels(GridTabVO mTabVO, Ctx ctx)
         {
             VAdvantage.Classes.CommonFunctions cFun = new VAdvantage.Classes.CommonFunctions();

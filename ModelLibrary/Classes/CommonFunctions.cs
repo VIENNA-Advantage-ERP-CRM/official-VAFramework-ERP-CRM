@@ -923,17 +923,28 @@ namespace VAdvantage.Classes
             return value.ToString();
         }
 
+        /// <summary>
+        /// Get details of card like included columns, conditions, card template etc.
+        /// </summary>
+        /// <param name="AD_User_ID"></param>
+        /// <param name="AD_Tab_ID"></param>
+        /// <param name="AD_CardView_ID"></param>
+        /// <param name="ctx"></param>
+        /// <returns></returns>
         public CardViewData GetCardViewDetails(int AD_User_ID, int AD_Tab_ID, int AD_CardView_ID, Ctx ctx)
         {
             DataSet ds = null;
             bool hasDefaultCard = false;
             if (AD_CardView_ID > 0)
             {
+                // If fetching specific card
                 ds = DataBase.DB.ExecuteDataset(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name, AD_CardView.IsDefault,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,ad_headerlayout.backgroundcolor,ad_headerlayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
                         ON (AD_CardView.AD_HeaderLayout_ID = AD_HeaderLayout.AD_HeaderLayout_ID) WHERE AD_CardView.AD_CardView_ID = " + AD_CardView_ID);
             }
             else
             {
+
+                //Fetch default card for login user
                 ds = DataBase.DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@" SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,ad_headerlayout.backgroundcolor,ad_headerlayout.padding,
     ad_defaultcardview.ad_client_id,
     ad_defaultcardview.ad_user_ID FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
@@ -944,6 +955,7 @@ namespace VAdvantage.Classes
 
                 if (ds == null || ds.Tables[0].Rows.Count == 0)
                 {
+                    //If no default card found, then load other cards of tABS
                     ds = DataBase.DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,ad_headerlayout.backgroundcolor,ad_headerlayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
                         ON (AD_CardView.AD_HeaderLayout_ID = AD_HeaderLayout.AD_HeaderLayout_ID) WHERE AD_CardView.AD_Tab_ID =" + AD_Tab_ID + " AND AD_CardView.IsActive='Y' ORDER BY AD_CardView.Name ASC", "AD_CardView", true, false));
                 }
@@ -958,12 +970,15 @@ namespace VAdvantage.Classes
                 DataRow[] rows = null;
                 if (hasDefaultCard)
                 {
+                    // check if any default card is set by login user.
                     rows = ds.Tables[0].Select("AD_User_ID = " + ctx.GetAD_User_ID());
                     if (rows == null || rows.Length == 0)
                     {
+                        // If no default card by user, then try to get default card of tanent.
                         rows = ds.Tables[0].Select("AD_Client_ID = " + ctx.GetAD_Client_ID());
                         if (rows == null || rows.Length == 0)
                         {
+                            // if no default card found, then try to  get default set by System administrator
                             rows = ds.Tables[0].Select();
                         }
                     }
@@ -973,17 +988,17 @@ namespace VAdvantage.Classes
                 }
 
 
-                for (int i = 0; i < rows.Length; i++)
-                {
+                //for (int i = 0; i < rows.Length; i++)
+                //{
                     CardViewData card = new CardViewData()
                     {
-                        AD_CardView_ID = Convert.ToInt32(rows[i]["AD_CardView_ID"]),
+                        AD_CardView_ID = Convert.ToInt32(rows[0]["AD_CardView_ID"]),
                         IsDefault = true,
-                        Name = Util.GetValueOfString(rows[i]["Name"]),
-                        AD_HeaderLayout_ID = Util.GetValueOfInt(rows[i]["AD_HeaderLayout_ID"]),
-                        FieldGroupID = Util.GetValueOfInt(rows[i]["AD_Field_ID"]),
-                        Style = Util.GetValueOfString(rows[i]["backgroundcolor"]),
-                        Padding = Util.GetValueOfString(rows[i]["Padding"])
+                        Name = Util.GetValueOfString(rows[0]["Name"]),
+                        AD_HeaderLayout_ID = Util.GetValueOfInt(rows[0]["AD_HeaderLayout_ID"]),
+                        FieldGroupID = Util.GetValueOfInt(rows[0]["AD_Field_ID"]),
+                        Style = Util.GetValueOfString(rows[0]["backgroundcolor"]),
+                        Padding = Util.GetValueOfString(rows[0]["Padding"])
                     };
 
                     card.IncludedCols = new List<CardViewCol>();
@@ -994,6 +1009,7 @@ namespace VAdvantage.Classes
                     int AD_CV_ID = card.AD_CardView_ID;
                     if (AD_CV_ID > 0)
                     {
+                    // Fetch included columns
                         sql = "SELECT AD_Field_ID, SeqNo, FieldValueStyle, HideCardIcon, HideCardText FROM AD_CardView_Column WHERE IsActive='Y' AND AD_CardView_ID = " + AD_CV_ID + " ORDER BY SeqNo";
                         dr = DB.ExecuteReader(sql);
                         while (dr.Read())
@@ -1012,6 +1028,7 @@ namespace VAdvantage.Classes
                     }
                     if (AD_CV_ID > 0)
                     {
+                    //Fetch Conditions
                         sql = "SELECT ConditionValue,Color  FROM AD_CardView_Condition WHERE IsActive='Y' AND AD_CardView_ID = " + AD_CV_ID + " ORDER BY AD_CardView_Condition_ID ";
                         dr = DB.ExecuteReader(sql);
                         while (dr.Read())
@@ -1024,15 +1041,21 @@ namespace VAdvantage.Classes
                         dr.Close();
                     }
 
-                    card.HeaderItems = GetHeaderPanelItems(card.AD_HeaderLayout_ID);
+                    //Fetch Card Template
+                    card.HeaderItems = GetCardTemplateItems(card.AD_HeaderLayout_ID);
 
                     return card;
-                }
+               // }
             }
             return null;
         }
 
-        public List<HeaderPanelGrid> GetHeaderPanelItems(int headerLayoutID)
+        /// <summary>
+        /// Get Card Template details
+        /// </summary>
+        /// <param name="headerLayoutID"></param>
+        /// <returns></returns>
+        public List<HeaderPanelGrid> GetCardTemplateItems(int headerLayoutID)
         {
             List<HeaderPanelGrid> hitems = new List<HeaderPanelGrid>();
             DataSet dsGridLayout = DataBase.DB.ExecuteDataset("SELECT * FROM AD_GridLayout  WHERE IsActive='Y' AND AD_HeaderLayout_ID=" + headerLayoutID + " ORDER BY SeqNo Asc");
@@ -1134,5 +1157,7 @@ namespace VAdvantage.Classes
     {
         public string Name { get; set; }
         public int AD_CardView_ID { get; set; }
+
+        public bool IsDefault { get; set; }
     }
 }

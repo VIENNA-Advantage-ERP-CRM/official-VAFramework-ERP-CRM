@@ -1142,6 +1142,13 @@ namespace VIS.Controllers
             return Json(JsonConvert.SerializeObject(cards), JsonRequestBehavior.AllowGet);
         }
 
+        public void InsertUpdateDefaultCard(int AD_Tab_ID, int AD_Card_ID)
+        {
+            Ctx ctx = Session["ctx"] as Ctx;
+            CardViewModel objCardViewModel = new CardViewModel();
+            objCardViewModel.SetDefaultCardView(ctx, AD_Card_ID, AD_Tab_ID);
+        }
+
         public ContentResult MsgForToastr()
         {
             Ctx ctx = Session["ctx"] as Ctx;

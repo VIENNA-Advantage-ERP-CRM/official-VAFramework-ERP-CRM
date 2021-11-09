@@ -27,21 +27,83 @@
         var headerdiv;
         var $cmbCards = null;
         var $lblGroup = null;
-        var windowNo = null;
+        var $btnClrSearch = null;
+        var $imgdownSearch = null;
+        var self = this;
+        this.isAutoCompleteOpen = false;
 
         //  var cardList;
         function init() {
             root = $("<div class='vis-cv-body vis-noselect'>");
             body = $("<div class='vis-cv-main'>");
             headerdiv = $("<div class='vis-cv-header'>");
-            $cmbCards = $('<Select>')
+            $cmbCards = $('<input placeholder="' + VIS.Msg.getMsg("SelectCard") + '">')
             $lblGroup = $('<p>');
-            headerdiv.append($cmbCards).append($lblGroup);
-            //   cardList = $("<img style='margin-left:10px;margin-top:4px;float:right' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/base/defaultCView.png' >");
+            $imgdownSearch = $('<span class="vis-ad-w-p-tb-s-icon-down" style="position: relative;z-index: 1;cursor:pointer"><i class="fa fa-chevron-down"></i></span>');
+            headerdiv.append($cmbCards).append($imgdownSearch).append($lblGroup);
             root.append(headerdiv).append(body);
+            createCardautoComplete();
         }
 
-        var self = this;
+        /**
+         * create autocomplete box to show list of cards
+         * */
+        function createCardautoComplete() {
+            $cmbCards.autocomplete({
+                select: function (ev, ui) {
+                    cardChanged(ui.item.id, ui.item.label);
+                    ev.stopPropagation();
+                },
+                minLength: 0,
+                open: function (ev, ui) {
+                    self.isAutoCompleteOpen = true;
+                },
+                close: function (event, ui) {
+                    $imgdownSearch.css("transform", "rotate(360deg)");
+                    window.setTimeout(function () {
+                        self.isAutoCompleteOpen = false;
+                    },600);
+                },
+                source: []
+            });
+
+            /*
+             * Handled render event to show make default icon in menu
+             */
+            $cmbCards.autocomplete().data('ui-autocomplete')._renderItem = function (ul, item) {
+
+                var span = null;
+                if (item.isDefault == 'Y') {
+                    span = $("<span title='" + VIS.Msg.getMsg("DefaultSearch") + "'  data-id='" + item.id + "' class='VIS-winSearch-defaultIcon'></span>");
+                }
+                else {
+                    span = $("<span title='" + VIS.Msg.getMsg("MakeDefaultSearch") + "' data-id='" + item.id + "' class='VIS-winSearch-NonDefaultIcon'></span>");
+                }
+
+                var li = $("<li>")
+                    .append($("<a style='display:block' title='" + item.title + "'>" + item.label + "</a>").append(span))
+                    .prependTo(ul);
+
+                // When user clicks on make default icon, then save details in DB.
+                span.on("click", function (e) {
+                    var cardID = $(this).data('id');
+                    $.ajax({
+                        url: VIS.Application.contextUrl + "JsonData/InsertUpdateDefaultCard",
+                        dataType: "json",
+                        data: { AD_Tab_ID: self.mTab.getAD_Tab_ID(), AD_Card_ID: cardID },
+                        success: function (data) {
+
+                        },
+                        error: function (er) {
+                            console.log(er);
+                        }
+
+                    });
+                });
+
+                return li;
+            };
+        };
 
         init();
         //eventHandle();
@@ -139,9 +201,20 @@
         var handleEvents = function () {
             $cmbCards.one("focus", loadCards);
             $cmbCards.on("change", cardChanged);
+            $imgdownSearch.on("click", function () {
+                if (!self.isAutoCompleteOpen) {
+                    $imgdownSearch.css("transform", "rotate(180deg)");
+                    loadCards();
+                }
+                else {
+                    $imgdownSearch.css("transform", "rotate(360deg)");
+                }
+            });
         };
 
-
+        /**
+         * Load list of cards for current tab and current user
+         * */
         var loadCards = function () {
             var res = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "JsonData/GetCardsInfo", { AD_Tab_ID: self.mTab.getAD_Tab_ID() });
             if (res) {
@@ -149,10 +222,13 @@
             }
         };
 
-        var cardChanged = function (e) {
-            self.getCardViewData(self.mTab, $cmbCards.val());
-            e.stopPropagation();
-            e.preventDefault();
+        /**
+         * When user change caard from drowdown, then fetch details of card and show card
+         * @param {any} cardID
+         * @param {any} cardName
+         */
+        var cardChanged = function (cardID, cardName) {
+            self.getCardViewData(self.mTab, cardID, cardName);
         };
 
         var curCard = null;
@@ -202,14 +278,30 @@
             }
         };
 
+        /**
+         * Display cards in auto complete dropdown
+         * @param {any} cards
+         */
         this.fillCardViewList = function (cards) {
             $cmbCards.empty();
+            var userQueries = [];
+            $imgdownSearch.css('visibility', 'visible');
             if (cards && cards.length > 0) {
                 for (var i = 0; i < cards.length; i++) {
-                    $cmbCards.append('<option value="' + cards[i].AD_CardView_ID + '">' + cards[i].Name + '</option>');
+                    // $cmbCards.append('<option value="' + cards[i].AD_CardView_ID + '">' + cards[i].Name + '</option>');
+                    if (cards[i].IsDefault) {
+                        userQueries.push({ 'title': cards[i].Name, 'label': cards[i].Name, 'value': cards[i].Name, 'id': cards[i].AD_CardView_ID, 'isDefault': 'Y' });
+                    }
+                    else {
+                        userQueries.push({ 'title': cards[i].Name, 'label': cards[i].Name, 'value': cards[i].Name, 'id': cards[i].AD_CardView_ID, 'isDefault': 'N' });
+                    }
                 }
+                $cmbCards.autocomplete('option', 'source', userQueries);
+                $cmbCards.autocomplete("search", "");
+                $cmbCards.trigger("focus");
+
                 if (this.AD_CardView_ID) {
-                    $cmbCards.val(this.AD_CardView_ID);
+                    $cmbCards.val(this.cardName);
                 }
             }
             else {
@@ -278,7 +370,13 @@
         cContainer.append(this.getRoot());
     };
 
-    VCardView.prototype.getCardViewData = function (mTab, cardID) {
+    /**
+     * When user change card from drowdown, then fetch details of card and show card
+     * @param {any} mTab
+     * @param {any} cardID
+     * @param {any} cardName
+     */
+    VCardView.prototype.getCardViewData = function (mTab, cardID, cardName) {
         var self = this;
         var windowID = 0;
         var tabID = 0;
@@ -291,7 +389,7 @@
             self.setCardViewData(retData);
             self.refreshUI(self.getBody().width());
             if (cardID) {
-                self.getCardCmb().val(cardID);
+                self.getCardCmb().val(retData.Name);
             }
 
         });
@@ -306,6 +404,11 @@
         if (retData) {
 
             this.AD_CardView_ID = retData.AD_CardView_ID;
+            //$cmbCards.autocomplete('option', 'source', userQueries);
+            //$cmbCards.autocomplete("search", "");
+            //$cmbCards.trigger("focus");
+            this.cardName = retData.Name;
+            this.getCardCmb().val(retData.Name);
 
             var f = this.mTab.getFieldById(retData.FieldGroupID)
             if (f) {
@@ -415,83 +518,89 @@
 
     VCardView.prototype.refreshUI = function (width) {
 
-        this.isProcessed = false;
-        this.createGroups();
+        var $this = this;
+        window.setTimeout(function () {
+            if (width == 0) {
+                wwidth = $this.getBody().width();
+            }
+            $this.isProcessed = false;
+            $this.createGroups();
 
-        var records = this.mTab.getTableModel().mSortList;
+            var records = $this.mTab.getTableModel().mSortList;
 
+            var root = $this.getBody();
 
-        var root = this.getBody();
-
-        while (this.groupCtrls.length > 0) {
-            this.groupCtrls.pop().dispose();
-        }
-
-        this.groupCtrls.length = 0;
-
-        root.empty();
-
-        var cardGroup = null;
-        if (this.grpCount == 1) {
-
-            var n = '';
-            var key = null;
-            for (var p in this.cGroupInfo) {
-                n = this.cGroupInfo[p].name;
-                key = this.cGroupInfo[p].key;
-                break;
+            while ($this.groupCtrls.length > 0) {
+                $this.groupCtrls.pop().dispose();
             }
 
-            cardGroup = new VCardGroup(true, records, n, this.fields, this.cConditions, this.headerItems, this.headerStyle, this.headerPadding, key, this.aPanel);
-            this.groupCtrls.push(cardGroup);
-            root.append(cardGroup.getRoot())
-        }
-        else {
-            this.filterRecord(records);
-            var $this = this;
-            for (var p in this.cGroupInfo) {
-                cardGroup = new VCardGroup(this.grpCount === 1, this.cGroupInfo[p].records, this.cGroupInfo[p].name, this.fields, this.cConditions, this.headerItems, this.headerStyle, this.headerPaddings, this.cGroupInfo[p].key, this.aPanel);
-                this.groupCtrls.push(cardGroup);
-                root.append(cardGroup.getRoot());
-                var sortable = new vaSortable(cardGroup.getBody()[0], {
-                    attr: 'data-recid',
-                    selfSort: false,
-                    ignore: ['.vis-cv-card-edit', '.vis-ev-col-wrap-button'],
-                    onSelect: function (e, item) {
-                        //$this.onCardEdit({ 'recid': item }, true);
-                        var obj = {
-                            grpValue: $(e).parent().attr('data-key'),
-                            recordID: $this.mTab.getRecord_ID(),
-                            columnID: $this.cGroup.getAD_Column_ID(),
-                            tableID: $this.mTab.getAD_Table_ID()
-                        }
-                        $.ajax({
-                            type: "POST",
-                            url: VIS.Application.contextUrl + "CardView/UpdateCardByDragDrop",
-                            dataType: "json",
-                            data: obj,
-                            success: function (data) {
-                                if (data < 1) {
-                                    vaSortable.prototype.revertItem();
-                                } else {
-                                    $this.mTab.dataRefresh();
-                                    var rec = $.grep(records, function (element, index) {
-                                        return element.recid == item;
-                                    });
-                                    var changeCard = new VCard($this.fields, rec[0], $this.headerItems, $this.headerStyle, $this.headerPadding, windowNo, {},$this.aPanel)
-                                    root.find("[name='vc_" + item + "']").html('').html(changeCard.getRoot().html());
-                                }
-                            },
-                            error: function (err) {
-                                vaSortable.prototype.revertItem();
+            $this.groupCtrls.length = 0;
+
+            root.empty();
+
+            var cardGroup = null;
+            if ($this.grpCount == 1) {
+
+                var n = '';
+                var key = null;
+                for (var p in $this.cGroupInfo) {
+                    n = $this.cGroupInfo[p].name;
+                    key = $this.cGroupInfo[p].key;
+                    break;
+                }
+
+                cardGroup = new VCardGroup(true, records, n, $this.fields, $this.cConditions, $this.headerItems, $this.headerStyle, $this.headerPadding, key, $this.aPanel);
+                $this.groupCtrls.push(cardGroup);
+                root.append(cardGroup.getRoot())
+            }
+            else {
+                $this.filterRecord(records);
+                for (var p in $this.cGroupInfo) {
+                    cardGroup = new VCardGroup($this.grpCount === 1, $this.cGroupInfo[p].records, $this.cGroupInfo[p].name, $this.fields, $this.cConditions, $this.headerItems, $this.headerStyle, $this.headerPaddings, $this.cGroupInfo[p].key, $this.aPanel);
+                    $this.groupCtrls.push(cardGroup);
+                    root.append(cardGroup.getRoot());
+                    var sortable = new vaSortable(cardGroup.getBody()[0], {
+                        attr: 'data-recid',
+                        selfSort: false,
+                        ignore: ['.vis-cv-card-edit', '.vis-ev-col-wrap-button'],
+                        onSelect: function (e, item) {
+                            //$this.onCardEdit({ 'recid': item }, true);
+                            var obj = {
+                                grpValue: $(e).parent().attr('data-key'),
+                                recordID: $this.mTab.getRecord_ID(),
+                                columnID: $this.cGroup.getAD_Column_ID(),
+                                tableID: $this.mTab.getAD_Table_ID()
                             }
-                        });
-                    }
-                });
+                            $.ajax({
+                                type: "POST",
+                                url: VIS.Application.contextUrl + "CardView/UpdateCardByDragDrop",
+                                dataType: "json",
+                                data: obj,
+                                success: function (data) {
+                                    if (data < 1) {
+                                        vaSortable.prototype.revertItem();
+                                    } else {
+                                        $this.mTab.dataRefresh();
+                                        var rec = $.grep(records, function (element, index) {
+                                            return element.recid == item;
+                                        });
+                                        var changeCard = new VCard($this.fields, rec[0], $this.headerItems, $this.headerStyle, $this.headerPadding, windowNo, {}, $this.aPanel)
+                                        root.find("[name='vc_" + item + "']").html('').html(changeCard.getRoot().html());
+                                    }
+                                },
+                                error: function (err) {
+                                    vaSortable.prototype.revertItem();
+                                }
+                            });
+                        }
+                    });
+                }
             }
-        }
 
-        this.calculateWidth(width);
+            $this.calculateWidth(width);
+
+        }, 10);
+
     };
 
     VCardView.prototype.filterRecord = function (records) {
@@ -582,7 +691,7 @@
                 card.evaluate(conditions)
             }
         };
-       
+
 
         this.getRoot = function () {
             return root;
@@ -616,7 +725,7 @@
     };
 
     /* Card View Control */
-    function VCard(fields, record, headerItems, headerStyle, headerPadding, windowNo, fieldStyles,aPanel) {
+    function VCard(fields, record, headerItems, headerStyle, headerPadding, windowNo, fieldStyles, aPanel) {
         this.record = record;
         this.aPanel = aPanel;
         this.dynamicStyle = [];
@@ -642,7 +751,6 @@
         var $root = $('<div class="vis-ad-w-p-card_root_common">');
         root.append($root);
 
-        //"vis-ad-w-p-card-Custom_" + this.windowNo
         if (!this.fieldStyles["vis-ad-w-p-card-Custom_" + windowNo])
             this.fieldStyles["vis-ad-w-p-card-Custom_" + windowNo] = {};
         this.headerCustom = this.fieldStyles["vis-ad-w-p-card-Custom_" + windowNo]["headerParentCustomUISettings"];
@@ -650,7 +758,6 @@
             this.headerCustom = this.headerParentCustomUISettings(headerStyle);
             this.fieldStyles["vis-ad-w-p-card-Custom_" + windowNo]["headerParentCustomUISettings"] = this.headerCustom;
         }
-        //var headerCustom = this.headerParentCustomUISettings(headerStyle);
         root.addClass(this.headerCustom);
 
         if (!this.fieldStyles["root_" + windowNo])
@@ -831,43 +938,7 @@
 
 
 
-                        //styleArr = fieldValueStyle;
-                        //if (styleArr && styleArr.length > 0)
-                        //    styleArr = styleArr.split("|");
-
-                        //if (styleArr && styleArr.length > 0) {
-                        //    for (var j = 0; j < styleArr.length; j++) {
-                        //        if (styleArr[j].indexOf("@img::") > -1 || styleArr[j].indexOf("@span::") > -1) {
-                        //            $div.append($divIcon);
-                        //            var css = "";
-                        //            if (styleArr[j].indexOf("@img::") > -1) {
-                        //                css = styleArr[j].replace("@img::", "");
-                        //            }
-                        //            else if (styleArr[j].indexOf("@span::")) {
-                        //                css = styleArr[j].replace("@span::", "");
-                        //            }
-                        //            $divIcon.attr('style', css);
-                        //        }
-                        //        else if (styleArr[j].indexOf("@value::") > -1) {
-                        //            //var css = "";
-
-                        //            //css = styleArr[j].replace("@value::", "");
-                        //            //$divLabel.attr('style', css);
-                        //            $div.append($divLabel);
-                        //        }
-                        //        else if (styleArr[j].indexOf("<br>") > -1) {
-                        //            $div.css("flex-direction", "column");
-                        //        }
-                        //        else {
-                        //            $div.append($divIcon);
-                        //            $div.append($divLabel);
-                        //        }
-                        //    }
-                        //}
-                        //else {
-                        //    $div.append($divIcon);
-                        //    $div.append($divLabel);
-                        //}
+                        
                         setFieldLayout(fieldValueStyle, $div, $divIcon, $divLabel);
                         var $image = $('<img>');
                         var $imageSpan = $('<span>');
@@ -952,6 +1023,9 @@
 
         };
 
+        /**
+         * Create card according to template
+         * */
         this.setHeader = function () {
             if (headerItems && headerItems.length > 0) {
                 for (var j = 0; j < headerItems.length; j++) {
@@ -1045,36 +1119,7 @@
 
                         /*Set what do you want to show? Icon OR Label OR Both OR None*/
                         setFieldVisibility(field, imgSpan, $image, $imageSpan, $lblControl, $divLabel, $divIcon);
-                        //if (!field.isCardIconHide() && !field.isCardTextHide()) {
-                        //    if (imgSpan != null)
-                        //        $image.hide();
-                        //    else {
-                        //        $imageSpan.hide();
-                        //    }
-
-                        //    if ($lblControl && $lblControl.length > 0)
-                        //        $divLabel.append($lblControl);
-                        //}
-                        //else if (field.isCardIconHide() && field.isCardTextHide()) {
-                        //    //$divIcon.hide();
-                        //    $divIcon.remove();
-                        //}
-                        //else if (field.isCardTextHide()) {
-                        //    if (imgSpan != null)
-                        //        $image.hide();
-                        //    else
-                        //        $imageSpan.hide();
-
-                        //    if ($lblControl && $lblControl.length > 0)
-                        //        $lblControl.remove();
-                        //}
-                        //else if (field.isCardIconHide()) {
-                        //    if ($lblControl && $lblControl.length > 0) {
-                        //        $divLabel.append($lblControl);
-                        //    }
-                        //    $divIcon.remove();
-                        //}
-
+                        
                         $divLabel.append(iControl.getControl());
                         setValue(colValue, iControl, field);
                         root.append($div);
@@ -1209,14 +1254,12 @@
             }
         };
 
+        //Get value of field..
         var getFieldValue = function (mField, record) {
             var colValue = record[mField.getColumnName().toLowerCase()]; // mField.getValue();
 
-            //if (!mField.getIsDisplayed())
-            //    return "";
             if (colValue) {
                 var displayType = mField.getDisplayType();
-
 
                 if (mField.lookup) {
                     colValue = mField.lookup.getDisplay(colValue, true, true);
@@ -1267,6 +1310,11 @@
             return colValue;
         }
 
+        /**
+         * Set layout of idenifier field
+         * @param {any} mField
+         * @param {any} record
+         */
         var getIdentifierImage = function (mField, record) {
             var value = record[mField.getColumnName().toLowerCase()];
             value = mField.lookup.getDisplay(value, true, true);
@@ -1299,6 +1347,13 @@
 
         };
 
+        /**
+         * Set Layout of field based on setting in Field Value Style field
+         * @param {any} fieldValueStyle
+         * @param {any} $div
+         * @param {any} $divIcon
+         * @param {any} $divLabel
+         */
         var setFieldLayout = function (fieldValueStyle, $div, $divIcon, $divLabel) {
             var styleArr = fieldValueStyle;
             if (styleArr && styleArr.length > 0)
@@ -1318,10 +1373,6 @@
                         $divIcon.attr('style', css);
                     }
                     else if (styleArr[j].indexOf("@value::") > -1) {
-                        //var css = "";
-
-                        //css = styleArr[j].replace("@value::", "");
-                        //$divLabel.attr('style', css);
                         $div.append($divLabel);
                     }
                     else if (styleArr[j].indexOf("<br>") > -1) {
@@ -1340,6 +1391,16 @@
             }
         };
 
+        /**
+         * Set visibility of field, icon and label of field
+         * @param {any} mField
+         * @param {any} imgSpan
+         * @param {any} $image
+         * @param {any} $imageSpan
+         * @param {any} $lblControl
+         * @param {any} $divLabel
+         * @param {any} $divIcon
+         */
         var setFieldVisibility = function (mField, imgSpan, $image, $imageSpan, $lblControl, $divLabel, $divIcon) {
             if (!mField.isCardIconHide() && !mField.isCardTextHide()) {
                 if (imgSpan != null)
@@ -1381,13 +1442,23 @@
     };
 
 
-
+    /**
+     * Add dynamically created style tags to HTML document
+     * */
     VCard.prototype.addStyleToDom = function () {
         this.styleTag.type = 'text/css';
         this.styleTag.innerHTML = this.dynamicStyle.join(" ");
         $($('head')[0]).append(this.styleTag);
     };
 
+    /**
+     * Set field style
+     * @param {any} headerSeqNo
+     * @param {any} startCol
+     * @param {any} startRow
+     * @param {any} mField
+     * @param {any} fieldValueStyle
+     */
     VCard.prototype.applyCustomUIForFieldValue = function (headerSeqNo, startCol, startRow, mField, fieldValueStyle) {
         var style = fieldValueStyle;
         var dynamicClassName = "vis-hp-card-FieldValue_" + startRow + "_" + startCol + "_" + this.windowNo + "_" + headerSeqNo + "_" + mField.getAD_Column_ID();
@@ -1399,12 +1470,23 @@
         return dynamicClassName;
     };
 
+    /**
+     * Set field style
+     * @param {any} headerSeqNo
+     * @param {any} justify
+     * @param {any} alignItem
+     */
     VCard.prototype.justifyAlignImageItems = function (headerSeqNo, justify, alignItem) {
         var dynamicClassName = "vis-w-p-header-label-center-justify_" + headerSeqNo + "_" + this.windowNo;
         this.dynamicStyle.push(" ." + dynamicClassName + " {justify-content:" + this.textAlignEnum[justify] + ";align-items:" + this.alignItemEnum[alignItem] + "}");
         return dynamicClassName;
     };
 
+    /**
+     * 
+     * @param {any} style
+     * @param {any} requiredtype
+     */
     var getStylefromCompositeValue = function (style, requiredtype) {
         if (style && style.toLower().indexOf(requiredtype) > -1) {
             var styleArr = style.split("|");
@@ -1416,6 +1498,10 @@
         }
     }
 
+    /**
+     * Get  Custom Style of Parent of field
+     * @param {any} backColor
+     */
     VCard.prototype.headerParentCustomUISettings = function (backColor) {
         var dynamicClassName = "vis-ad-w-p-card-Custom_" + this.windowNo;
         this.dynamicStyle.push(" ." + dynamicClassName + " {flex:1;");
@@ -1425,6 +1511,11 @@
         return dynamicClassName;
     };
 
+    /**
+     * Get Header UI Setting Style
+     * @param {any} backcolor
+     * @param {any} padding
+     */
     VCard.prototype.headerUISettings = function (backcolor, padding) {
         var dynamicClassName = "vis-ad-w-p-card_root_" + this.windowNo;
         this.dynamicStyle.push(" ." + dynamicClassName + " {display:flex;overflow:auto;");
@@ -1433,6 +1524,14 @@
         return dynamicClassName;
     };
 
+    /**
+     * Set Custom style of field Group
+     * @param {any} columns
+     * @param {any} rows
+     * @param {any} backcolor
+     * @param {any} padding
+     * @param {any} itemNo
+     */
     VCard.prototype.fieldGroupContainerUISettings = function (columns, rows, backcolor, padding, itemNo) {
         var dynamicClassName = "vis-ad-w-p-fg_card-container_" + rows + "_" + columns + "_" + this.windowNo + "_" + itemNo;
         this.dynamicStyle.push(" ." + dynamicClassName + " {display:grid;");
@@ -1441,6 +1540,20 @@
         return dynamicClassName;
     };
 
+    /**
+     * get Style of Field Group
+     * @param {any} headerSeqNo
+     * @param {any} startCol
+     * @param {any} colSpan
+     * @param {any} startRow
+     * @param {any} rowSpan
+     * @param {any} justify
+     * @param {any} alignment
+     * @param {any} backColor
+     * @param {any} fontColor
+     * @param {any} fontSize
+     * @param {any} padding
+     */
     VCard.prototype.applyCustomUISettings = function (headerSeqNo, startCol, colSpan, startRow, rowSpan, justify, alignment, backColor, fontColor, fontSize, padding) {
         var dynamicClassName = "vis-hp-card-FieldGroup_" + startRow + "_" + startCol + "_" + this.windowNo + "_" + headerSeqNo;
         this.dynamicStyle.push("." + dynamicClassName + "  {grid-column:" + startCol + " / span " + colSpan + "; grid-row: " + startRow + " / span " + rowSpan + ";");
@@ -1489,6 +1602,10 @@
         return val;
     };
 
+    /**
+     * handled Button click 
+     * @param {any} action
+     */
     VCard.prototype.actionPerformed = function (action) {
         //selfPan.actionButton(action.source);
         if (this.aPanel.curTab.needSave(true, false)) {
@@ -1502,6 +1619,11 @@
         this.aPanel.actionPerformed(action, this);
     };
 
+    /**
+     * Save unsaved changes before buton click
+     * @param {any} manual
+     * @param {any} callback
+     */
     VCard.prototype.cmd_save = function (manual, callback) {
         return this.aPanel.cmd_save2(manual, this.curTab, this.curGC, this.aPanel, callback);
     }
