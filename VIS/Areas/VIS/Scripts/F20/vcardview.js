@@ -434,10 +434,10 @@
                     f.setCardViewSeqNo(retData.IncludedCols[i].SeqNo);
                     f.setCardFieldStyle(retData.IncludedCols[i].HTMLStyle);
                     this.fields.push(f);
-                    if (!retData.headerItems || retdata.headerItems.length == 0) {
-                        f.setCardIconHide(retData.IncludedCols[i].HideIcon);
-                        f.setCardTextHide(retData.IncludedCols[i].HideText);
-                    }
+                    //if (!retData.headerItems || retdata.headerItems.length == 0) {
+                    //    f.setCardIconHide(retData.IncludedCols[i].HideIcon);
+                    //    f.setCardTextHide(retData.IncludedCols[i].HideText);
+                    //}
                     this.hasIncludedCols = true;
                 }
 

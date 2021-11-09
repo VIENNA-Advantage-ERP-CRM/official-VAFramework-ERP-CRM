@@ -1010,7 +1010,7 @@ namespace VAdvantage.Classes
                     if (AD_CV_ID > 0)
                     {
                     // Fetch included columns
-                        sql = "SELECT AD_Field_ID, SeqNo, FieldValueStyle, HideCardIcon, HideCardText FROM AD_CardView_Column WHERE IsActive='Y' AND AD_CardView_ID = " + AD_CV_ID + " ORDER BY SeqNo";
+                        sql = "SELECT AD_Field_ID, SeqNo, FieldValueStyle FROM AD_CardView_Column WHERE IsActive='Y' AND AD_CardView_ID = " + AD_CV_ID + " ORDER BY SeqNo";
                         dr = DB.ExecuteReader(sql);
                         while (dr.Read())
                         {
@@ -1019,9 +1019,7 @@ namespace VAdvantage.Classes
                                 {
                                     AD_Field_ID = VAdvantage.Utility.Util.GetValueOfInt(dr[0]),
                                     SeqNo = VAdvantage.Utility.Util.GetValueOfInt(dr[1]),
-                                    HTMLStyle = VAdvantage.Utility.Util.GetValueOfString(dr[2]),
-                                    HideIcon = (VAdvantage.Utility.Util.GetValueOfString(dr[3]) == "Y"),
-                                    HideText = (VAdvantage.Utility.Util.GetValueOfString(dr[4]) == "Y")
+                                    HTMLStyle = VAdvantage.Utility.Util.GetValueOfString(dr[2])
                                 });
                         }
                         dr.Close();
