@@ -428,6 +428,7 @@ namespace VAdvantage.Model
 
             int _invoice_id = 0;
             int _invoicePaySchedule_ID = 0;
+            List<int> invoiceIds = new List<int>();
             //	Link
             GetLines(false);
             HashSet<int> bps = new HashSet<int>();
@@ -443,6 +444,9 @@ namespace VAdvantage.Model
                     if (line.GetC_Invoice_ID() > 0 && line.GetC_InvoicePaySchedule_ID() > 0)
                     {
                         log.Info("Start setting value of Paid Amount on Invoice Schedule");
+                        //VA228:Get invoice ids
+                        if (!invoiceIds.Contains(Util.GetValueOfInt(line.GetC_Invoice_ID())))
+                            invoiceIds.Add(Util.GetValueOfInt(line.GetC_Invoice_ID()));
 
                         //check no of schedule left for Payment for Currenct Invoice except this schedule
                         int countUnPaidSchedule = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_InvoicePaySchedule_ID) FROM C_InvoicePaySchedule WHERE IsActive = 'Y' AND 
@@ -755,6 +759,17 @@ namespace VAdvantage.Model
 
                 //End
             }
+            //VA228:update amount paid on invoice,get total of paid schedule invoice amount from C_InvoicePaySchedule and update on invoice header
+            if (invoiceIds.Count > 0)
+            {
+                string query = @"UPDATE C_Invoice INV SET VA009_PaidAmount=(SELECT VA009_PaidAmntInvce FROM (
+                                SELECT SUM(VA009_PaidAmntInvce) AS VA009_PaidAmntInvce , inv.C_Invoice_id
+                                FROM C_Invoice inv
+                                INNER JOIN C_InvoicePaySchedule ps ON ps.C_Invoice_id=inv.C_Invoice_id
+                                WHERE inv.C_Invoice_id IN(" + string.Join(",", invoiceIds) + @")
+                                GROUP BY inv.C_Invoice_id)t WHERE INV.C_Invoice_id=t.C_Invoice_id) WHERE INV.C_Invoice_id IN(" + string.Join(",", invoiceIds) + @")";
+                DB.ExecuteQuery(query, null, Get_Trx());
+            }
             //UpdateBP(bps);
 
             //	User Validation
@@ -971,6 +986,9 @@ namespace VAdvantage.Model
             for (int i = 0; i < _lines.Length; i++)
             {
                 MAllocationLine line = _lines[i];
+
+                bps.Add(line.ProcessIt(true));	//	reverse
+
                 line.SetIsActive(false);
                 // set Amount as ZERO on Reversal of Allocation
                 line.SetAmount(Env.ZERO);
@@ -980,7 +998,7 @@ namespace VAdvantage.Model
                 line.SetWithholdingAmt(Env.ZERO);
                 line.SetBackupWithholdingAmount(Env.ZERO);
                 line.Save();
-                bps.Add(line.ProcessIt(true));	//	reverse
+                
 
                 // Added by Amit for Payment Management 5-11-2015   
                 if (Env.IsModuleInstalled("VA009_"))
