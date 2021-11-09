@@ -141,6 +141,8 @@ namespace VAdvantage.Controller
                         vo.FieldLength = Utility.Util.GetValueOfInt(dr[i]);
                     else if (columnName.Equals("VFORMAT"))
                         vo.VFormat = dr[i].ToString();
+                    else if (columnName.Equals("VFORMATERROR"))
+                        vo.VFormatError = dr[i].ToString();
                     else if (columnName.Equals("VALUEMIN"))
                         vo.ValueMin = dr[i].ToString();
                     else if (columnName.Equals("VALUEMAX"))
@@ -687,6 +689,7 @@ namespace VAdvantage.Controller
             vo.DefaultValue = f.DefaultValue;
             vo.DefaultValue2 = f.DefaultValue2;
             vo.VFormat = f.VFormat;
+            vo.VFormatError = f.VFormatError;
             vo.ValueMin = f.ValueMin;
             vo.ValueMax = f.ValueMax;
             vo.isRange = f.isRange;
@@ -813,6 +816,7 @@ namespace VAdvantage.Controller
             clone.SortNo = SortNo;
             clone.FieldLength = FieldLength;
             clone.VFormat = VFormat;
+            clone.VFormatError = VFormatError;
             clone.ValueMin = ValueMin;
             clone.ValueMax = ValueMax;
             clone.FieldGroup = FieldGroup;
