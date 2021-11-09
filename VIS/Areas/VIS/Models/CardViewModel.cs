@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using VAdvantage.DataBase;
 using VAdvantage.Model;
@@ -25,10 +26,10 @@ namespace VIS.Models
                             FROM AD_CardView
                             LEFT OUTER JOIN AD_DefaultCardView
                             ON AD_CardView.AD_CardView_ID=AD_DefaultCardView.AD_CardView_ID
-                            WHERE AD_CardView.AD_Window_id=" + ad_Window_ID + " and AD_CardView.AD_Tab_id=" + ad_Tab_ID + " AND AD_CardView.AD_Client_ID  =" + ctx.GetAD_Client_ID() + @" 
-                            ORDER BY AD_CardView.Name Asc";
+                            WHERE AD_CardView.AD_Window_id=" + ad_Window_ID + " and AD_CardView.AD_Tab_id=" + ad_Tab_ID + " AND (AD_CardView.AD_User_ID IS NULL OR AD_CardView.AD_User_ID  =" + ctx.GetAD_User_ID() + @" 
+                            ) ORDER BY AD_CardView.Name Asc";
 
-
+            sqlQuery = MRole.GetDefault(ctx).AddAccessSQL(sqlQuery, "AD_CardView", true, false);
             DataSet ds = DB.ExecuteDataset(sqlQuery);
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
@@ -51,6 +52,8 @@ namespace VIS.Models
                         UserID = VAdvantage.Utility.Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_USER_ID"]),
                         AD_GroupField_ID = VAdvantage.Utility.Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_FIELD_ID"]),
                         CreatedBy = Convert.ToInt32(ds.Tables[0].Rows[i]["CREATEDBY"]),
+                        AD_HeaderLayout_ID = VAdvantage.Utility.Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_HEADERLAYOUT_ID"]),
+                        //IsDefault = VAdvantage.Utility.Util.GetValueOfString(ds.Tables[0].Rows[i]["ISDEFAULT"])=="Y"?true:false,
                         DefaultID = isDefault
                     };
                     lstCardView.Add(objCardView);
@@ -198,7 +201,7 @@ namespace VIS.Models
             }
             return lstCardViewColumns;
         }
-        public int SaveCardViewRecord(string cardViewName, int ad_Window_ID, int ad_Tab_ID, int ad_User_ID, int ad_Field_ID, Ctx ctx, int cardViewID, List<RolePropeties> lstRoleId, List<CardViewConditionPropeties> lstCVCondition)
+        public int SaveCardViewRecord(string cardViewName, int ad_Window_ID, int ad_Tab_ID, int ad_User_ID, int ad_Field_ID, Ctx ctx, int cardViewID/*, List<RolePropeties> lstRoleId*/, List<CardViewConditionPropeties> lstCVCondition, int AD_HeaderLayout_ID,bool isPublic)
         {
             string conditionValue = string.Empty;
             string conditionText = string.Empty;
@@ -216,29 +219,36 @@ namespace VIS.Models
             }
             objCardView.SetAD_Window_ID(ad_Window_ID);
             objCardView.SetAD_Tab_ID(ad_Tab_ID);
-            objCardView.SetAD_User_ID(ad_User_ID);
+            if (MUser.Get(ctx).IsAdministrator() && isPublic)
+            {
+                //objCardView.SetAD_User_ID(ad_User_ID);
+            }
+            else {
+                objCardView.SetAD_User_ID(ad_User_ID);
+            }
             objCardView.SetAD_Field_ID(ad_Field_ID);
             objCardView.SetName(cardViewName);
+            objCardView.Set_ValueNoCheck("AD_HeaderLayout_ID", AD_HeaderLayout_ID);
             if (!objCardView.Save())
             {
             }
             if (isupdate)
             {
-                DeleteAllCardViewRole(objCardView.Get_ID(), ctx);
+                //DeleteAllCardViewRole(objCardView.Get_ID(), ctx);
                 DeleteAllCardViewCondition(objCardView.Get_ID(), ctx);
             }
-            if (lstRoleId != null && lstRoleId.Count > 0)
-            {
-                for (int i = 0; i < lstRoleId.Count; i++)
-                {
-                    MCardViewRole objMCVR = new MCardViewRole(ctx, 0, null);
-                    objMCVR.SetAD_CardView_ID(objCardView.Get_ID());
-                    objMCVR.SetAD_Role_ID(lstRoleId[i].AD_Role_ID);
-                    if (!objMCVR.Save())
-                    {
-                    }
-                }
-            }
+            //if (lstRoleId != null && lstRoleId.Count > 0)
+            //{
+            //    for (int i = 0; i < lstRoleId.Count; i++)
+            //    {
+            //        MCardViewRole objMCVR = new MCardViewRole(ctx, 0, null);
+            //        objMCVR.SetAD_CardView_ID(objCardView.Get_ID());
+            //        objMCVR.SetAD_Role_ID(lstRoleId[i].AD_Role_ID);
+            //        if (!objMCVR.Save())
+            //        {
+            //        }
+            //    }
+            //}
 
             if (lstCVCondition != null && lstCVCondition.Count > 0)
             {
@@ -403,6 +413,42 @@ namespace VIS.Models
             userQuery.Save();
         }
 
+        /// <summary>
+        /// Update card from Drag and drop
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="grpID"></param>
+        /// <param name="recordID"></param>
+        /// <param name="columnID"></param>
+        /// <param name="tableID"></param>
+        /// <returns></returns>
+        public int UpdateCardByDragDrop(Ctx ctx, string grpValue, int recordID, int columnID, int tableID)
+        {
+            string tableName = MTable.GetTableName(ctx, tableID);
+            string keyColumn = tableName + "_ID";
+            string ColumnName = MColumn.GetColumnName(ctx, columnID);
+            string sqlQuery = "";
+            if (Regex.IsMatch(grpValue, @"^\d+$"))
+            {
+                sqlQuery = "UPDATE " + tableName + " SET " + ColumnName + "=" + grpValue + " WHERE " + keyColumn + "=" + recordID;
+            }
+            else
+            {
+                sqlQuery = "UPDATE " + tableName + " SET " + ColumnName + "='" + grpValue + "' WHERE " + keyColumn + "=" + recordID;
+            }
+
+            int result = DB.ExecuteQuery(sqlQuery);
+            return result;
+        }
+        public int GetColumnID(string tableName, string columnName)
+        {
+
+            string sql = " SELECT cl.ad_column_id FROM ad_column cl WHERE cl.ad_table_id=" +
+                     "(SELECT tb.ad_table_id FROM ad_table tb WHERE tb.tablename='" + tableName + "'" +
+                      ") and cl.columnname='" + columnName + "'";
+
+            return DB.GetSQLValue(null, sql);
+        }
     }
 
     public class CardViewPropeties
@@ -421,7 +467,9 @@ namespace VIS.Models
         public bool isNewRecord { get; set; }
         public bool IsDefault { get; set; }
         public int CreatedBy { get; set; }
-        public bool DefaultID { get; set; }
+        public bool DefaultID { get; set; }      
+        public bool isPublic { get; set; }      
+        public int AD_HeaderLayout_ID { get; set; }
     }
 
     public class UserPropeties

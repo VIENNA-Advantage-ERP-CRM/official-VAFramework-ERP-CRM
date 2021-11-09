@@ -673,5 +673,8 @@ input[type="radio"]:not(:checked){
     box-shadow: none !important;
 }
 
+.w2ui-editable .vis-ev-col-img-ctrl + button{
+    max-height:32px;
+}
 
 /***************************** Control Prop End ****************************************/

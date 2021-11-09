@@ -2471,24 +2471,48 @@ findImg {
 }
 
 .vis-cv-body {
-    height: 100%;
-    overflow-x: auto;
+    height: calc(100% - 12px);
+    overflow-y: auto;
     position: relative;
+    overflow-x: hidden;
 }
 
 .vis-cv-header {
-    height: 12px;
+    /*height: 11px;*/
     text-align: right;
-    /*background-color: #D7E3E7;*/
+    /*background-color: #fff;*/
     font-weight: bold;
-    color: darkgray;
+    /* color: darkgray; */
     font-size: 12px;
+    padding-top: 0;
+    position: sticky;
+    z-index: 1;
+    top: 0;
+    display: flex;
+    justify-content: flex-end;
 }
-
+.vis-cv-header input {
+    /*margin-right: .5rem;*/
+    position: relative;
+    z-index: 2;
+    padding-top: 2px;
+    border: none;
+    height: 17px;
+    text-align: right;
+}
+.vis-cv-header p {
+    position: absolute;
+    top: 0;
+    text-align: center;
+    width: 100%;
+    z-index: 0;
+    background: #fff;
+}
 .vis-cv-main {
     bottom: 0;
-    top: 2px;
+    top: 12px;
     position: absolute;
+    z-index: 0;
 }
 
 .vis-cv-cg {
@@ -2542,7 +2566,7 @@ findImg {
     background-color: #F7F7EB;
     padding: 14px 5px 0 5px;
     font-size: 12px;
-    min-height: 100px;
+    min-height: 85px;
     position: relative;
 }
 
@@ -2569,12 +2593,23 @@ findImg {
     overflow: hidden;
 }
 
-.vis-cv-card-edit {
-    cursor: pointer;
-    float: right;
-    margin-top: -10px;
-    color: rgb(229, 228, 228);
+.vis-cv-card span {
+    margin: 0 0 5px;
+    color: gray;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
+
+    .vis-cv-card-edit {
+        cursor: pointer;
+        float: right;
+        /*margin-top: -10px;*/
+        color: rgb(229, 228, 228);
+        position: absolute;
+        right: 5px;
+        top: 7px;
+    }
 
     .vis-cv-card-edit:hover {
         color: gray;
@@ -2813,7 +2848,8 @@ findImg {
     width: 100%;
 }
 .vis-cardviewCondition {
-    width: calc(100% - 140px);
+    /*width: calc(100% - 140px);*/
+    width: 100%;
     margin-top: 10px;
     height: 200px;
     float: right;
@@ -5106,3 +5142,9 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
     box-shadow: none !important;
 }
 
+/*jquery ui dropdown list 09Nov2021*/
+.ui-menu .ui-menu-item-wrapper {
+    padding: 3px 0 3px .4em;
+    display: flex !important;
+    justify-content: space-between;
+}

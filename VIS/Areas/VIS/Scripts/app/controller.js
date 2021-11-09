@@ -551,6 +551,10 @@
         return this.vo.IsSingleRow;
     }
 
+    GridTab.prototype.getTabLayout = function () {
+        return this.vo.TabLayout;
+    }
+
     GridTab.prototype.getIsDisplayed = function (initialSetup) {
         //  no restrictions
 
@@ -3636,6 +3640,10 @@
                 select.append(VIS.Env.parseContext(this.ctx, gt._windowNo, selectSql, false));
             }
 
+            if (field.getDisplayType() == VIS.DisplayType.Image) {
+                select.append(", (SELECT ImageURL from AD_Image img where img.AD_Image_ID=" + gt._tableName+"."+ selectSql+") as imgUrlColumn");
+            }
+
             if (field.getLookup() != null && field.getLookup() instanceof VIS.MLookup) {
                 var lInfo = field.getLookup().info;
                 if (lInfo.displayColSubQ && lInfo.displayColSubQ != "" && gt._tableName.toLowerCase() !=lInfo.tableName.toLowerCase()) {
@@ -6571,6 +6579,40 @@
         }
         this.forcefirepropchange = this.inserting || this.vo.displayType == VIS.DisplayType.YesNo
     };
+
+    GridField.prototype.setCardViewSeqNo = function (seqNo) {
+        this.cardViewSeq = seqNo;
+    }
+
+    GridField.prototype.getCardViewSeqNo = function () {
+      return  this.cardViewSeq;
+    }
+
+    GridField.prototype.setCardFieldStyle = function (style) {
+        this.cardFieldStyle = style;
+    }
+
+    GridField.prototype.getCardFieldStyle = function () {
+        return this.cardFieldStyle;
+    }
+
+    GridField.prototype.setCardIconHide = function (hide) {
+        this.cardHideIcon = hide;
+    }
+
+    GridField.prototype.isCardIconHide = function () {
+        return this.cardHideIcon;
+    }
+
+    GridField.prototype.setCardTextHide = function (hide) {
+        this.cardTextHide = hide;
+    }
+
+    GridField.prototype.isCardTextHide = function () {
+        return this.cardTextHide;
+    }
+
+
 
     GridField.prototype.updateContext = function () {
 

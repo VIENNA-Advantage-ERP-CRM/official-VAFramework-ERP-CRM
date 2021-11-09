@@ -864,6 +864,7 @@
     <Content Include="Areas\ViennaBase\Scripts\crystalreportviewers13\urlreporting\activexviewer.js" />
     <Content Include="Areas\ViennaBase\Scripts\crystalreportviewers13\urlreporting\appletviewer.js" />
     <Content Include="Areas\ViennaBase\Scripts\custom\custom.js" />
+    <Content Include="Areas\ViennaBase\Scripts\custom\vadragdrop.js" />
     <Content Include="Areas\ViennaBase\Scripts\downloader.js" />
     <Content Include="Areas\ViennaBase\Scripts\FileSaver.js" />
     <Content Include="Areas\ViennaBase\Scripts\globalize\cultures\globalize.culture.af-ZA.js" />
