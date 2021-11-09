@@ -874,6 +874,38 @@ namespace VAdvantage.DataBase
             }
         }
 
+        static Classes.CCache<string, bool> _cacheTblName = new Classes.CCache<string, bool>("DBColl_TablesExist", 100);
+
+        /// <summary>
+        /// Check whether table exist in database
+        /// </summary>
+        /// <param name="table_catalog">For Oracle - User_ID, For PostGre -- DataBase Name</param>
+        /// <param name="tableName">tableName</param>
+        /// <returns>true/false</returns>
+        public static bool IsTableExists(string table_catalog, string tableName)
+        {
+            bool tblExists = true;
+            if (_cacheTblName.ContainsKey(tableName.ToUpper()))
+            {
+                return _cacheTblName[tableName.ToUpper()];
+            }
+            else
+            {
+                if (DB.IsPostgreSQL())
+                {
+                    tblExists = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM information_schema.tables WHERE  UPPER(table_catalog) = UPPER('" + table_catalog + "')" +
+                        " AND UPPER(table_name)   = UPPER('" + tableName + "')")) > 0;
+                }
+                else
+                {
+                    tblExists = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM all_objects WHERE object_type IN ('TABLE') AND (object_name)  = UPPER('" + tableName + "')" +
+                       " AND OWNER LIKE '" + table_catalog + "'")) > 0;
+                }
+                _cacheTblName.Add(tableName.ToUpper(), tblExists);
+            }
+            return tblExists;
+        }
+
         /// <summary>
         /// This function is used to type columen name as intezer
         /// </summary>
