@@ -218,7 +218,7 @@
         var loadCards = function () {
             var res = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "JsonData/GetCardsInfo", { AD_Tab_ID: self.mTab.getAD_Tab_ID() });
             if (res) {
-                self.fillCardViewList(res);
+                self.fillCardViewList(res,true);
             }
         };
 
@@ -282,7 +282,7 @@
          * Display cards in auto complete dropdown
          * @param {any} cards
          */
-        this.fillCardViewList = function (cards) {
+        this.fillCardViewList = function (cards,showData) {
             $cmbCards.empty();
             var userQueries = [];
             $imgdownSearch.css('visibility', 'visible');
@@ -297,8 +297,11 @@
                     }
                 }
                 $cmbCards.autocomplete('option', 'source', userQueries);
-                $cmbCards.autocomplete("search", "");
-                $cmbCards.trigger("focus");
+
+                if (showData) {
+                    $cmbCards.autocomplete("search", "");
+                    $cmbCards.trigger("focus");
+                }
 
                 if (this.AD_CardView_ID) {
                     $cmbCards.val(this.cardName);
