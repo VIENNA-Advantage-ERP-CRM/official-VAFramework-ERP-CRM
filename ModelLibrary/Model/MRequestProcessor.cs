@@ -127,7 +127,7 @@ namespace VAdvantage.Model
                     {
                         list.Add(new MRequestProcessor(new Ctx(), idr, null));
                     }
-                    else if (machineIP.Contains(scheduleIP))
+                    else if (!string.IsNullOrEmpty(scheduleIP) && machineIP.Contains(scheduleIP))
                     {
                         list.Add(new MRequestProcessor(new Ctx(), idr, null));
                     }
