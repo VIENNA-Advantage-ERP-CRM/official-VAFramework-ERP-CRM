@@ -154,9 +154,11 @@ namespace VAdvantage.Model
         {
             bool returnConditionValue = true;
             int errorType = 0;
+            // VIS0008
+            // Change to check table in database, bug fixed in case of PostgreSQL
             //string Sql = "SELECT object_name FROM all_objects WHERE object_type IN ('TABLE','VIEW') AND (object_name)  = UPPER('AD_ALERTRULECONDITION') AND OWNER LIKE '" + DB.GetSchema() + "'";
             //string ObjectName = Convert.ToString(DB.ExecuteScalar(Sql));
-            if (VAdvantage.Classes.CommonFunctions.IsTableExists(DB.GetSchema(), "AD_AlertRuleCondition"))
+            if (DBFunctionCollection.IsTableExists(DB.GetSchema(), "AD_AlertRuleCondition"))
             {
                 //Fetch All Alert Condition Against AlertID.............
                 DataSet dsAlertCondition = DB.ExecuteDataset("SELECT AD_AlertRuleCondition_ID FROM AD_AlertRuleCondition WHERE AD_AlertRule_ID=" + AlertRule.GetAD_AlertRule_ID() + " AND IsActive='Y' ORDER BY Sequence,AD_AlertRuleCondition_ID");
