@@ -5916,6 +5916,13 @@
         return this.vo.VFormat;
     };
 
+    /**
+     * get format error message
+     * */
+    GridField.prototype.getVFormatError = function () {
+        return this.vo.VFormatError;
+    };
+
     GridField.prototype.getLookup = function () {
         return this.lookup;
     };
