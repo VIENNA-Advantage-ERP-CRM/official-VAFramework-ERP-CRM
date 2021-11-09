@@ -92,7 +92,7 @@ namespace VAdvantage.Model
                         {
                             list.Add(new MAlertProcessor(new Ctx(), dr, null));
                         }
-                        else if (machineIP.Contains(scheduleIP))
+                        else if (!string.IsNullOrEmpty(scheduleIP) && machineIP.Contains(scheduleIP))
                         {
                             list.Add(new MAlertProcessor(new Ctx(), dr, null));
                         }

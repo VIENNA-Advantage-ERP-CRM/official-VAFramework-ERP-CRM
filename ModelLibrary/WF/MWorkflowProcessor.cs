@@ -121,7 +121,7 @@ namespace VAdvantage.WF
                         {
                             list.Add(new MWorkflowProcessor(new Ctx(), dr, null));
                         }
-                        else if (machineIP.Contains(scheduleIP))
+                        else if (!string.IsNullOrEmpty(scheduleIP) && machineIP.Contains(scheduleIP))
                         {
                             list.Add(new MWorkflowProcessor(ctx, dr, null));
                         }

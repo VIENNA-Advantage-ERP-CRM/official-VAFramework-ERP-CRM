@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using VAdvantage.DataBase;
+using VAdvantage.Logging;
 using VAdvantage.Model;
 using VAdvantage.Process;
 
@@ -902,6 +903,88 @@ using VAdvantage.Utility;namespace VAdvantage.Process
             return MRole.Get(ctx, roleId).checkActionAccess(clientId, docTypeId, options,ref maxIndex);
         }
 
+        /// <summary>
+        /// Mehtod added to complete or reverse the document by executing the workflow
+        /// Author: VIS0060
+        /// </summary>
+        /// <param name="ctx">Context</param>
+        /// <param name="Table_Name">Table Name</param>
+        /// <param name="Table_ID">Table ID</param>
+        /// <param name="Record_ID">Record ID</param>
+        /// <param name="Process_ID">Process ID</param>
+        /// <param name="DocAction">Document Action</param>
+        /// <returns>result of Document Action as string</returns>
+        public static string CompleteOrReverse(Ctx ctx, string Table_Name, int Table_ID, int Record_ID, int Process_ID, string DocAction)
+        {
+            string result = "";
+            MRole role = MRole.Get(ctx, ctx.GetAD_Role_ID());
+            if (Util.GetValueOfBool(role.GetProcessAccess(Process_ID)))
+            {
+                DB.ExecuteQuery("UPDATE " + Table_Name + " SET DocAction = '" + DocAction + "' WHERE " + Table_Name + "_ID = " + Record_ID);
+
+                MProcess proc = new MProcess(ctx, Process_ID, null);
+                MPInstance pin = new MPInstance(proc, Record_ID);
+                if (!pin.Save())
+                {
+                    ValueNamePair vnp = VLogger.RetrieveError();
+                    string errorMsg = "";
+                    if (vnp != null)
+                    {
+                        errorMsg = vnp.GetName();
+                        if (errorMsg == "")
+                            errorMsg = vnp.GetValue();
+                    }
+                    if (errorMsg == "")
+                        result = errorMsg = Msg.GetMsg(ctx, "DocNotCompleted");
+
+                    return result;
+                }
+
+                MPInstancePara para = new MPInstancePara(pin, 20);
+                para.setParameter("DocAction", DocAction);
+                if (!para.Save())
+                {
+
+                }
+                ProcessInfo pi = new ProcessInfo("WF", Process_ID);
+                pi.SetAD_User_ID(ctx.GetAD_User_ID());
+                pi.SetAD_Client_ID(ctx.GetAD_Client_ID());
+                pi.SetAD_PInstance_ID(pin.GetAD_PInstance_ID());
+                pi.SetRecord_ID(Record_ID);
+                pi.SetTable_ID(Table_ID);
+
+                ProcessCtl worker = new ProcessCtl(ctx, null, pi, null);
+                worker.Run();
+
+                if (pi.IsError())
+                {
+                    ValueNamePair vnp = VLogger.RetrieveError();
+                    string errorMsg = "";
+                    if (vnp != null)
+                    {
+                        errorMsg = vnp.GetName();
+                        if (errorMsg == "")
+                            errorMsg = vnp.GetValue();
+                    }
+
+                    if (errorMsg == "")
+                        errorMsg = pi.GetSummary();
+
+                    if (errorMsg == "")
+                        errorMsg = Msg.GetMsg(ctx, "DocNotCompleted");
+                    result = errorMsg;
+                    return result;
+                }
+                else
+                    result = "";
+            }
+            else
+            {
+                result = Msg.GetMsg(ctx, "NoAccess");
+                return result;
+            }
+            return result;
+        }
     }
 
 
