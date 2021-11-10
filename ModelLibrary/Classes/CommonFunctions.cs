@@ -938,7 +938,7 @@ namespace VAdvantage.Classes
             if (AD_CardView_ID > 0)
             {
                 // If fetching specific card
-                ds = DataBase.DB.ExecuteDataset(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name, AD_CardView.IsDefault,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,AD_HeaderLayout.backgroundcolor,AD_HeaderLayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
+                ds = DataBase.DB.ExecuteDataset(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name, AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,AD_HeaderLayout.backgroundcolor,AD_HeaderLayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
                         ON (AD_CardView.AD_HeaderLayout_ID = AD_HeaderLayout.AD_HeaderLayout_ID) WHERE AD_CardView.AD_CardView_ID = " + AD_CardView_ID);
             }
             else
