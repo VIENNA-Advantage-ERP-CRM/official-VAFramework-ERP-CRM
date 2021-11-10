@@ -170,7 +170,8 @@
 
             var res = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "CardView/GetColumnID", { tableName: 'AD_CardView', columnName:'AD_HeaderLayout_ID' });
             if (res) {
-                var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), WindowNo, res, VIS.DisplayType.Search);
+                //var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), WindowNo, res, VIS.DisplayType.Search);
+                var value = VIS.MLookupFactory.get(VIS.Env.getCtx(), WindowNo, res, VIS.DisplayType.Search, "AD_HeaderLayout_ID", 0, false, "IsHeaderView='N'");
                 $vSearchHeaderLayout = new VIS.Controls.VTextBoxButton("AD_HeaderLayout_ID", true, false, true, VIS.DisplayType.Search, value);
 
                 var $divCtrl = $('<div class="vis-control-wrap">');
