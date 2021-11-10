@@ -921,5 +921,28 @@ namespace VAdvantage.Classes
             }
             return value.ToString();
         }
+
+        //VIS0008 Added to check table existense in database
+        static Classes.CCache<string, bool> _cacheTblName = new Classes.CCache<string, bool>("DBColl_TablesExist", 100);
+
+        /// <summary>
+        /// Check whether table exist in database
+        /// </summary>
+        /// <param name="table_catalog">For Oracle - User_ID, For PostGre -- DataBase Name</param>
+        /// <param name="tableName">tableName</param>
+        /// <returns>true/false</returns>
+        public static bool IsTableExists(string table_catalog, string tableName)
+        {
+            if (_cacheTblName.ContainsKey(tableName.ToUpper()))
+            {
+                return _cacheTblName[tableName.ToUpper()];
+            }
+            else
+            {
+                bool tblExists = Util.GetValueOfInt(DB.ExecuteScalar(DBFunctionCollection.CheckTableExistence(table_catalog, tableName))) > 0;               
+                _cacheTblName.Add(tableName.ToUpper(), tblExists);
+                return tblExists;
+            }
+        }
     }
 }
