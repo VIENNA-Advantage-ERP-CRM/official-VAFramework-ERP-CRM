@@ -23574,7 +23574,6 @@
                 fName = fName + " " + mTab.getValue("LastName");
         }
         if (fName != "") {
-            mTab.setValue("Name", fName);
             mTab.setValue("ContactName", fName);
         }
         this.setCalloutActive(false);
