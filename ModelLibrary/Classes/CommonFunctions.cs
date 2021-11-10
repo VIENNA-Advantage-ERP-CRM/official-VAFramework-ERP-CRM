@@ -933,26 +933,16 @@ namespace VAdvantage.Classes
         /// <returns>true/false</returns>
         public static bool IsTableExists(string table_catalog, string tableName)
         {
-            bool tblExists = true;
             if (_cacheTblName.ContainsKey(tableName.ToUpper()))
             {
                 return _cacheTblName[tableName.ToUpper()];
             }
             else
             {
-                if (DB.IsPostgreSQL())
-                {
-                    tblExists = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM information_schema.tables WHERE  UPPER(table_catalog) = UPPER('" + table_catalog + "')" +
-                        " AND UPPER(table_name)   = UPPER('" + tableName + "')")) > 0;
-                }
-                else
-                {
-                    tblExists = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM all_objects WHERE object_type IN ('TABLE') AND (object_name)  = UPPER('" + tableName + "')" +
-                       " AND OWNER LIKE '" + table_catalog + "'")) > 0;
-                }
+                bool tblExists = Util.GetValueOfInt(DB.ExecuteScalar(DBFunctionCollection.CheckTableExistence(table_catalog, tableName))) > 0;               
                 _cacheTblName.Add(tableName.ToUpper(), tblExists);
+                return tblExists;
             }
-            return tblExists;
         }
     }
 }
