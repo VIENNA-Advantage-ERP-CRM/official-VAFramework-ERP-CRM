@@ -483,6 +483,7 @@
 
         if (this.cGroup) {
             this.cGroupInfo = [];
+            this.grpCount = 0;
             var field = this.cGroup;
             if (field) {
                 if (field.getDisplayType() == VIS.DisplayType.YesNo) {
@@ -512,7 +513,7 @@
             }
         }
         else { this.setHeader(''); }
-        if (this.grpCount < 1 || this.cGroupInfo.length < 1) {//add one group by de
+        if (this.grpCount < 1 || $.isEmptyObject(this.cGroupInfo) ) {//add one group by de
             this.cGroupInfo['All'] = { 'name': VIS.Msg.getMsg('All'), 'records': [], 'key': null };
             this.grpCount = 1;
         }
@@ -547,7 +548,7 @@
                 var n = '';
                 var key = null;
                 for (var p in $this.cGroupInfo) {
-                    n = $this.cGroupInfo[p].name;
+                    n = VIS.Utility.Util.getIdentifierDisplayVal($this.cGroupInfo[p].name);
                     key = $this.cGroupInfo[p].key;
                     break;
                 }
@@ -559,7 +560,7 @@
             else {
                 $this.filterRecord(records);
                 for (var p in $this.cGroupInfo) {
-                    cardGroup = new VCardGroup($this.grpCount === 1, $this.cGroupInfo[p].records, $this.cGroupInfo[p].name, $this.fields, $this.cConditions, $this.headerItems, $this.headerStyle, $this.headerPaddings, $this.cGroupInfo[p].key, $this.aPanel);
+                    cardGroup = new VCardGroup($this.grpCount === 1, $this.cGroupInfo[p].records, VIS.Utility.Util.getIdentifierDisplayVal($this.cGroupInfo[p].name), $this.fields, $this.cConditions, $this.headerItems, $this.headerStyle, $this.headerPaddings, $this.cGroupInfo[p].key, $this.aPanel);
                     $this.groupCtrls.push(cardGroup);
                     root.append(cardGroup.getRoot());
                     var sortable = new vaSortable(cardGroup.getBody()[0], {
