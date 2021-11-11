@@ -134,6 +134,7 @@ namespace VAdvantage.Model
                 to.SetConditionalFlag(MInvoice.CONDITIONALFLAG_Reversal);
                 to.SetBackupWithholdingAmount(Decimal.Negate(from.GetBackupWithholdingAmount()));
                 to.SetGrandTotalAfterWithholding(Decimal.Negate(from.GetGrandTotalAfterWithholding()));
+                to.Set_Value("C_ProvisionalInvoice_ID", from.Get_ValueAsInt("C_ProvisionalInvoice_ID"));
             }
             else
             {
@@ -1018,7 +1019,9 @@ namespace VAdvantage.Model
                         line.SetC_Withholding_ID(fromLine.GetC_Withholding_ID()); //  withholding refernce
                         line.SetWithholdingAmt(Decimal.Negate(fromLine.GetWithholdingAmt())); // withholding amount
                     }
-
+                    //
+                    line.Set_Value("C_ProvisionalInvoiceLine_ID", fromLine.Get_ValueAsInt("C_ProvisionalInvoiceLine_ID"));
+                    line.Set_Value("ReversalDoc_ID", fromLine.GetC_InvoiceLine_ID());
                 }
 
                 // enhanced by Amit 4-1-2016
@@ -3351,7 +3354,7 @@ namespace VAdvantage.Model
                         if (line != null && line.GetC_Invoice_ID() > 0 && line.GetQtyInvoiced() == 0)
                             continue;
 
-                        Decimal ProductLineCost = line.GetProductLineCost(line);
+                        Decimal ProductLineCost = line.GetProductLineCost(line, true);
 
                         // check IsCostAdjustmentOnLost exist on product 
                         string sql = @"SELECT COUNT(AD_Column_ID) FROM AD_Column WHERE IsActive = 'Y' AND 

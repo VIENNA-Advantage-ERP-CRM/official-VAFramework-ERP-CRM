@@ -5450,7 +5450,17 @@ namespace VAdvantage.Model
                             {
                                 if (invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
                                 {
-                                    // 
+                                    // when we revrse the transaction, remove invoice amount and add mr amount
+                                    if (invoice.GetC_Currency_ID() != acctSchema.GetC_Currency_ID())
+                                    {
+                                        PriceLifoOrFifo += MConversionRate.Convert(invoiceLine.GetCtx(), (ProductInvoicePriceActual * invoiceLine.GetQtyEntered()), invoice.GetC_Currency_ID(), acctSchema.GetC_Currency_ID(),
+                                                                                 invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), AD_Client_ID, AD_Org_ID);
+                                    }
+                                    else
+                                    {
+                                        PriceLifoOrFifo += (ProductInvoicePriceActual * invoiceLine.GetQtyEntered());
+                                    }
+                                    PriceLifoOrFifo -= price * invoiceLine.GetQtyEntered();
                                 }
                                 else
                                 {

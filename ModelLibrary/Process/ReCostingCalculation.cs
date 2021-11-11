@@ -447,10 +447,10 @@ namespace VAdvantage.Process
                                             try
                                             {
                                                 product = new MProduct(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_Product_ID"]), Get_Trx());
-                                                invoiceLine = new MInvoiceLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["C_InvoiceLine_ID"]), Get_Trx());
+                                                invoiceLine = new MInvoiceLine(GetCtx(), dsChildRecord.Tables[0].Rows[j], Get_Trx());
                                                 if (invoiceLine != null && invoiceLine.Get_ID() > 0)
                                                 {
-                                                    ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine);
+                                                    ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine, true);
                                                 }
                                                 if (invoiceLine != null && invoiceLine.GetC_Invoice_ID() > 0 && invoiceLine.GetQtyInvoiced() == 0)
                                                     continue;
@@ -1184,7 +1184,7 @@ namespace VAdvantage.Process
                             {
                                 landedCostAllocation = new MLandedCostAllocation(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
                                 MInvoiceLine invoiceLine = new MInvoiceLine(GetCtx(), landedCostAllocation.GetC_InvoiceLine_ID(), Get_Trx());
-                                ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine);
+                                ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine, true);
                                 MProduct product = MProduct.Get(GetCtx(), landedCostAllocation.GetM_Product_ID());
                                 if (!MCostQueue.CreateProductCostsDetails(GetCtx(), landedCostAllocation.GetAD_Client_ID(), landedCostAllocation.GetAD_Org_ID(), product,
                                                                0, "LandedCost", null, null, null, invoiceLine, null, ProductInvoiceLineCost, 0, Get_Trx(), out conversionNotFoundInvoice))
@@ -1694,10 +1694,10 @@ namespace VAdvantage.Process
                                             try
                                             {
                                                 product = new MProduct(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_Product_ID"]), Get_Trx());
-                                                invoiceLine = new MInvoiceLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["C_InvoiceLine_ID"]), Get_Trx());
+                                                invoiceLine = new MInvoiceLine(GetCtx(), dsChildRecord.Tables[0].Rows[j], Get_Trx());
                                                 if (invoiceLine != null && invoiceLine.Get_ID() > 0)
                                                 {
-                                                    ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine);
+                                                    ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine, true);
                                                 }
                                                 if (invoiceLine != null && invoiceLine.GetC_Invoice_ID() > 0 && invoiceLine.GetQtyInvoiced() == 0)
                                                     continue;
@@ -3452,7 +3452,7 @@ namespace VAdvantage.Process
                 {
                     try
                     {
-                        inoutLine = new MInOutLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_InOutLine_ID"]), Get_Trx());
+                        inoutLine = new MInOutLine(GetCtx(), dsChildRecord.Tables[0].Rows[j], Get_Trx());
                         orderLine = new MOrderLine(GetCtx(), inoutLine.GetC_OrderLine_ID(), null);
                         if (orderLine != null && orderLine.GetC_Order_ID() > 0)
                         {
@@ -3711,7 +3711,7 @@ namespace VAdvantage.Process
                 {
                     try
                     {
-                        inoutLine = new MInOutLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_InOutLine_ID"]), Get_Trx());
+                        inoutLine = new MInOutLine(GetCtx(), dsChildRecord.Tables[0].Rows[j], Get_Trx());
                         orderLine = new MOrderLine(GetCtx(), inoutLine.GetC_OrderLine_ID(), null);
                         if (orderLine != null && orderLine.GetC_Order_ID() > 0)
                         {
@@ -3929,7 +3929,7 @@ namespace VAdvantage.Process
             int M_Warehouse_Id = inoutLine.GetM_Warehouse_ID();
             if (invoiceLine != null && invoiceLine.Get_ID() > 0)
             {
-                ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine);
+                ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine, true);
             }
             if (inoutLine.GetC_OrderLine_ID() > 0)
             {
@@ -4122,7 +4122,7 @@ namespace VAdvantage.Process
             invoice = new MInvoice(GetCtx(), invoiceLine.GetC_Invoice_ID(), Get_Trx());
             if (invoiceLine != null && invoiceLine.Get_ID() > 0)
             {
-                ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine);
+                ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine, true);
             }
             product = new MProduct(GetCtx(), invoiceLine.GetM_Product_ID(), Get_Trx());
             if (inoutLine.GetC_OrderLine_ID() > 0)
@@ -4232,7 +4232,7 @@ namespace VAdvantage.Process
                 for (int j = 0; j < dsChildRecord.Tables[0].Rows.Count; j++)
                 {
                     product = new MProduct(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_Product_ID"]), Get_Trx());
-                    inventoryLine = new MInventoryLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_InventoryLine_ID"]), Get_Trx());
+                    inventoryLine = new MInventoryLine(GetCtx(), dsChildRecord.Tables[0].Rows[j], Get_Trx());
                     if (product.GetProductType() == "I") // for Item Type product
                     {
                         costingMethod = MCostElement.CheckLifoOrFifoMethod(GetCtx(), GetAD_Client_ID(), product.GetM_Product_ID(), Get_Trx());
@@ -4512,7 +4512,7 @@ namespace VAdvantage.Process
                 for (int j = 0; j < dsChildRecord.Tables[0].Rows.Count; j++)
                 {
                     product = new MProduct(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_Product_ID"]), Get_Trx());
-                    movementLine = new MMovementLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_MovementLine_ID"]), Get_Trx());
+                    movementLine = new MMovementLine(GetCtx(), dsChildRecord.Tables[0].Rows[j], Get_Trx());
                     locatorTo = MLocator.Get(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_LocatorTo_ID"]));
                     costingMethod = MCostElement.CheckLifoOrFifoMethod(GetCtx(), GetAD_Client_ID(), product.GetM_Product_ID(), Get_Trx());
 
