@@ -4020,17 +4020,33 @@ namespace VAdvantage.Model
                         MOrder ref_order = new MOrder(GetCtx(), order.GetRef_Order_ID(), Get_Trx());
                         MInOut ret_Shipment = CreateShipment(ref_order, this, GetMovementDate(),
                                     true, false, GetM_Warehouse_ID(), GetMovementDate(), Get_Trx());
+
+                        // VIS0060: Commit the Transaction here to call workflow to complete Shipment.
+                        Get_Trx().Commit();
                         // Show respective message if shipment completed or not completed
                         // Done by Rakesh Kumar On 29/Apr/2021 suggested by Mandeep and Bharat
-                        if (ret_Shipment.CompleteIt() == "CO")
-                        {
-                            ret_Shipment.SetDocStatus(DOCACTION_Complete);
-                            _processMsg = Msg.GetMsg(GetCtx(), "VIS_ShipmentGenerated") + ": " + ret_Shipment.GetDocumentNo();
-                        }
-                        else
+
+                        // VIS0060: Work done to call workflow to complete Shipment.
+                        string result = DocumentEngine.CompleteOrReverse(GetCtx(), MInOut.Table_Name, MInOut.Table_ID, ret_Shipment.GetM_InOut_ID(), 109, DOCACTION_Complete);
+                        if (!String.IsNullOrEmpty(result))
                         {
                             _processMsg = Msg.GetMsg(GetCtx(), "VIS_ShipmentNotCompleted") + ": " + ret_Shipment.GetProcessMsg() + " - @DocumentNo@: " + ret_Shipment.GetDocumentNo();
                         }
+                        else
+                        {
+                            _processMsg = Msg.GetMsg(GetCtx(), "VIS_ShipmentGenerated") + ": " + ret_Shipment.GetDocumentNo();
+                        }
+
+                        //if (ret_Shipment.CompleteIt() == "CO")
+                        //{
+                        //    ret_Shipment.SetDocStatus(DOCACTION_Complete);
+                        //    _processMsg = Msg.GetMsg(GetCtx(), "VIS_ShipmentGenerated") + ": " + ret_Shipment.GetDocumentNo();
+                        //}
+                        //else
+                        //{
+                        //    _processMsg = Msg.GetMsg(GetCtx(), "VIS_ShipmentNotCompleted") + ": " + ret_Shipment.GetProcessMsg() + " - @DocumentNo@: " + ret_Shipment.GetDocumentNo();
+                        //}
+
                         // Set References
                         ret_Shipment.SetRef_ShipMR_ID(GetM_InOut_ID());
                         ret_Shipment.Save(Get_Trx());
