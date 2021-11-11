@@ -599,7 +599,7 @@ namespace VAdvantage.Process
                                                 invoiceLine = new MInvoiceLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["C_InvoiceLine_ID"]), Get_Trx());
                                                 if (invoiceLine != null && invoiceLine.Get_ID() > 0)
                                                 {
-                                                    ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine);
+                                                    ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine, true);
                                                     ProductInvoicePriceActual = ProductInvoiceLineCost / invoiceLine.GetQtyEntered();
                                                 }
                                                 if (invoiceLine != null && invoiceLine.GetC_Invoice_ID() > 0 && invoiceLine.GetQtyInvoiced() == 0)
@@ -1348,7 +1348,7 @@ namespace VAdvantage.Process
                                         ProductOrderLineCost = orderLine.GetProductLineCost(orderLine);
                                         ProductOrderPriceActual = ProductOrderLineCost / orderLine.GetQtyEntered();
                                     }
-                                    ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine);
+                                    ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine, true);
                                     if (product.GetProductType() == "I" && product.GetM_Product_ID() > 0)
                                     {
                                         bool isUpdatePostCurrentcostPriceFromMR = MCostElement.IsPOCostingmethod(GetCtx(), product.GetAD_Client_ID(), product.GetM_Product_ID(), Get_Trx());
@@ -4341,7 +4341,7 @@ namespace VAdvantage.Process
                                     inoutLine = new MInOutLine(GetCtx(), matchInvCostReverse.GetM_InOutLine_ID(), Get_Trx());
                                     invoiceLine = new MInvoiceLine(GetCtx(), matchInvCostReverse.GetRev_C_InvoiceLine_ID(), Get_Trx());
                                     invoice = new MInvoice(GetCtx(), invoiceLine.GetC_Invoice_ID(), Get_Trx());
-                                    ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine);
+                                    ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine, true);
 
                                     product = new MProduct(GetCtx(), invoiceLine.GetM_Product_ID(), Get_Trx());
                                     if (inoutLine.GetC_OrderLine_ID() > 0)
@@ -4443,7 +4443,7 @@ namespace VAdvantage.Process
                                                 if (invoiceLine != null && invoiceLine.GetC_Invoice_ID() > 0 && invoiceLine.GetQtyInvoiced() == 0)
                                                     continue;
 
-                                                ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine);
+                                                ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine, true);
 
                                                 if (invoiceLine.GetC_OrderLine_ID() > 0)
                                                 {

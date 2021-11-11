@@ -284,8 +284,8 @@ namespace VIS.Controllers
                                    INNER JOIN c_invoice i ON i.c_invoice_id = il.c_invoice_id
                                WHERE il.isactive = 'Y' AND i.docstatus NOT IN ( 'VO', 'RE' )
                                        AND ol.c_orderline_id = il.c_orderline_id )  AS qtyinvoiced
-                            FROM c_orderline ol ) t GROUP BY c_order_id, c_orderline_id, qtyordered
-                            HAVING SUM(nvl(qtyinvoiced, 0)) != 0)";
+                            FROM c_orderline ol ) t WHERE nvl(qtyinvoiced, 0) >= qtyordered /*GROUP BY c_order_id, c_orderline_id, qtyordered
+                            HAVING SUM(nvl(qtyinvoiced, 0)) != 0*/)";
             return sql;
 
         }
