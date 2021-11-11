@@ -70,7 +70,7 @@ namespace ViennaAdvantage.Process
                     invoiceScheduleCount = Util.GetValueOfInt(ds.Tables[0].Rows[0]["Invcount"]);
                     invoicePaySchedule_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_InvoicePaySchedule_ID"]);
                 }
-                if (!(orderDocBaseType.Equals(MDocType.DOCSUBTYPESO_PrepayOrder) || !orderDocBaseType.Equals(MDocType.DOCSUBTYPESO_OnCreditOrder)))
+                if (!orderDocBaseType.Equals(MDocType.DOCSUBTYPESO_PrepayOrder) && !orderDocBaseType.Equals(MDocType.DOCSUBTYPESO_OnCreditOrder))
                 {
                     //donot create payment if order is not prepay or credit
                     return Msg.GetMsg(GetCtx(), "PrepayCreditOrder");
