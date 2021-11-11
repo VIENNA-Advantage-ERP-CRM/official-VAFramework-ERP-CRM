@@ -2936,13 +2936,48 @@ namespace VAdvantage.Model
         /// <returns>LineNetAmount of Product</returns>
         public Decimal GetProductLineCost(MInvoiceLine invoiceline)
         {
+            return GetProductLineCost(invoiceline, false);
+        }
+
+        /// <summary>
+        /// This function is used for costing calculation
+        /// It gives consolidated product cost (taxable amt + tax amount + surcharge amt) based on setting
+        /// </summary>
+        /// <param name="invoiceline">Invoice Line reference</param>
+        /// <param name="difference">is to calculate difference between order and actual invoice</param>
+        /// <returns>LineNetAmount of Product</returns>
+        public Decimal GetProductLineCost(MInvoiceLine invoiceline , bool difference = false)
+        {
             if (invoiceline == null || invoiceline.Get_ID() <= 0)
             {
                 return 0;
             }
 
+            bool isProvisionalInvoiceRecordFound = false;
+            int multiplier = 1;
+
+            // Get Amount from Provisional Invoice
+            DataSet ds = null;
+            if (difference && invoiceline.Get_ColumnIndex("C_ProvisionalInvoiceLine_ID") >=0 && invoiceline.Get_ValueAsInt("C_ProvisionalInvoiceLine_ID") > 0)
+            {
+                ds = DB.ExecuteDataset(@"SELECT ROUND((TaxBaseAmt/QtyInvoiced) * " + Math.Abs(invoiceline.GetQtyInvoiced()) + @", 10) AS TaxableAmt  
+                                                    , ROUND((TaxAmt/QtyInvoiced) * " + Math.Abs(invoiceline.GetQtyInvoiced()) + @", 10) AS TaxAmt 
+                                                    , ROUND((SurchargeAmt/QtyInvoiced) * " + Math.Abs(invoiceline.GetQtyInvoiced()) + @", 10) AS SurchargeAmt 
+                                            FROM C_ProvisionalInvoiceLine 
+                                            WHERE C_ProvisionalInvoiceLine_ID = " + invoiceline.Get_ValueAsInt("C_ProvisionalInvoiceLine_ID"), null, Get_Trx());
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    isProvisionalInvoiceRecordFound = true;
+                }
+            }
+            if (invoiceline.Get_ColumnIndex("ReversalDoc_ID") >= 0 && invoiceline.Get_ValueAsInt("ReversalDoc_ID") > 0)
+            {
+                multiplier = -1;
+            }
+
+
             // Get Taxable amount from invoiceline
-            Decimal amt = invoiceline.GetTaxBaseAmt();
+            Decimal amt = invoiceline.GetTaxBaseAmt() - (isProvisionalInvoiceRecordFound ? (multiplier * Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["TaxableAmt"])) : 0);
 
             // create object of tax - for checking tax to be include in cost or not
             MTax tax = MTax.Get(invoiceline.GetCtx(), invoiceline.GetC_Tax_ID());
@@ -2951,7 +2986,7 @@ namespace VAdvantage.Model
                 // add Tax amount in product cost
                 if (tax.IsIncludeInCost())
                 {
-                    amt += invoiceline.GetTaxAmt();
+                    amt += (invoiceline.GetTaxAmt() - (isProvisionalInvoiceRecordFound ? (multiplier * Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["TaxAmt"])) : 0)); 
                 }
 
                 // add Surcharge amount in product cost
@@ -2959,7 +2994,7 @@ namespace VAdvantage.Model
                 {
                     if (MTax.Get(invoiceline.GetCtx(), tax.GetSurcharge_Tax_ID()).IsIncludeInCost())
                     {
-                        amt += invoiceline.GetSurchargeAmt();
+                        amt += (invoiceline.GetSurchargeAmt() - (isProvisionalInvoiceRecordFound ? (multiplier * Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["SurchargeAmt"])) : 0)); 
                     }
                 }
             }
