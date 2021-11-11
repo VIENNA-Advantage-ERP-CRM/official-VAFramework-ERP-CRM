@@ -3733,7 +3733,7 @@
 
         //Init Control
 
-        var $ctrl = $('<input>', { type: 'number', step: 'any', name: columnName, maxlength: length, 'data-type': 'int' });
+        var $ctrl = $('<input>', { type: 'number', step: 'any', name: columnName, maxlength: 16, 'data-type': 'int' });
         $ctrl.attr('autocomplete', 'off');
 
 
