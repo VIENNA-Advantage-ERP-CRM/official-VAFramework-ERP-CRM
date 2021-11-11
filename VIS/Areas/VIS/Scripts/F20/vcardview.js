@@ -487,8 +487,8 @@
             var field = this.cGroup;
             if (field) {
                 if (field.getDisplayType() == VIS.DisplayType.YesNo) {
-                    this.cGroupInfo['true'] = { 'name': 'Yes', 'records': [] };
-                    this.cGroupInfo['false'] = { 'name': 'No', 'records': [] };
+                    this.cGroupInfo['true'] = { 'name': 'Yes', 'records': [], 'key':'Y' };
+                    this.cGroupInfo['false'] = { 'name': 'No', 'records': [], 'key': 'N' };
                     this.grpCount = 2;
                 }
                 else if (VIS.DisplayType.IsLookup(field.getDisplayType()) && field.getLookup()) { //TODO: check validated also
