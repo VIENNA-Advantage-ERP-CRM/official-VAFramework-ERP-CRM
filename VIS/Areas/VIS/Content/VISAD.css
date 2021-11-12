@@ -2567,7 +2567,7 @@ findImg {
     .vis-cv-header p {
         position: absolute;
         top: 0;
-        text-align: center;
+        text-align: center !important;
         width: 100%;
         z-index: 0;
         background: #fff;

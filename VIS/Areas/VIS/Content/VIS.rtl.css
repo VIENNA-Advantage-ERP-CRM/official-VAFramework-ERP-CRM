@@ -137,7 +137,8 @@ html[dir="rtl"] .vis-filter-dialog label,
 html[dir="rtl"] .vis-ad-w-p-tb-lc li span,
 html[dir="rtl"] .vis-ad-w-p-tb-rc-a-list li span,
 html[dir="rtl"] .vis-feedTitleBar,
-html[dir="rtl"] .vis-ulrole li {
+html[dir="rtl"] .vis-ulrole li,
+html[dir="rtl"] .ui-menu .ui-menu-item-wrapper p {
     padding-left: 0;
     padding-right: 5px;
 }
@@ -842,6 +843,14 @@ html[dir="rtl"] .w2ui-editable .vis-progress-output {
 html[dir="rtl"] .vis-removeFilter {
 
 right: 26px;
+}
+
+html[dir="rtl"] .vis-vs-card-autoComplete {
+    right: auto;
+    left: 8px;
+}
+html[dir="rtl"] .ui-menu .ui-menu-item-wrapper {
+    padding-right: 3px;
 }
 /*rtl css End here*/
 
