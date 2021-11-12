@@ -3627,6 +3627,8 @@
         var select = new StringBuilder("SELECT ");
         var selectDirect = null;
         var selectSql = null;
+        var hasImage = false;
+        var imgColName = '';
         for (var i = 0; i < this.gridFields.length; i++) {
             if (i > 0) {
                 select.append(", ");
@@ -3641,7 +3643,9 @@
             }
 
             if (field.getDisplayType() == VIS.DisplayType.Image) {
-                select.append(", (SELECT ImageURL from AD_Image img where img.AD_Image_ID=" + gt._tableName+"."+ selectSql+") as imgUrlColumn");
+                imgColName = selectSql;
+                hasImage = true;
+               // select.append(", (SELECT ImageURL from AD_Image img where img.AD_Image_ID=" + gt._tableName+"."+ selectSql+") as imgUrlColumn");
             }
 
             if (field.getLookup() != null && field.getLookup() instanceof VIS.MLookup) {
@@ -3682,6 +3686,10 @@
         }
 
         selectSql = null;
+        if (hasImage) {
+            select.append(", (SELECT ImageURL from AD_Image img where img.AD_Image_ID=" + gt._tableName + "." + imgColName + ") as imgUrlColumn");
+        }
+
         //
         select.append(" FROM ").append(gt._tableName);
 

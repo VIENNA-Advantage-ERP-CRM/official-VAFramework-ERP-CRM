@@ -37,9 +37,9 @@
             root = $("<div class='vis-cv-body vis-noselect'>");
             body = $("<div class='vis-cv-main'>");
             headerdiv = $("<div class='vis-cv-header'>");
-            $cmbCards = $('<input placeholder="' + VIS.Msg.getMsg("SelectCard") + '">')
+            $cmbCards = $('<input  class="vis-vs-card-autoComplete" style="display:inline">')
             $lblGroup = $('<p>');
-            $imgdownSearch = $('<span class="vis-ad-w-p-tb-s-icon-down" style="position: relative;z-index: 1;cursor:pointer"><i class="fa fa-chevron-down"></i></span>');
+            $imgdownSearch = $('<span class="vis-ad-w-p-tb-s-icon-down vis-cv-cardlist"><i class="fa fa-ellipsis-h"></i></span>');
             headerdiv.append($cmbCards).append($imgdownSearch).append($lblGroup);
             root.append(headerdiv).append(body);
             createCardautoComplete();
@@ -52,6 +52,12 @@
             $cmbCards.autocomplete({
                 select: function (ev, ui) {
                     cardChanged(ui.item.id, ui.item.label);
+                    var currentTarget = $(ev.currentTarget);
+
+                    currentTarget.find('.vis-cv-card-selected-card').removeClass('vis-cv-card-selected-card');
+
+                    currentTarget.find('[data-checkid="' + ui.item.id + '"]').addClass('vis-cv-card-selected-card');
+
                     ev.stopPropagation();
                 },
                 minLength: 0,
@@ -59,10 +65,10 @@
                     self.isAutoCompleteOpen = true;
                 },
                 close: function (event, ui) {
-                    $imgdownSearch.css("transform", "rotate(360deg)");
+                    //$imgdownSearch.css("transform", "rotate(360deg)");
                     window.setTimeout(function () {
                         self.isAutoCompleteOpen = false;
-                    },600);
+                    }, 600);
                 },
                 source: []
             });
@@ -73,16 +79,29 @@
             $cmbCards.autocomplete().data('ui-autocomplete')._renderItem = function (ul, item) {
 
                 var span = null;
+                var tickSpan = null;
                 if (item.isDefault == 'Y') {
-                    span = $("<span title='" + VIS.Msg.getMsg("DefaultSearch") + "'  data-id='" + item.id + "' class='VIS-winSearch-defaultIcon'></span>");
+                    span = $("<span title='" + VIS.Msg.getMsg("DefaultCard") + "'  data-id='" + item.id + "' class='VIS-winSearch-defaultIcon'></span>");
+
                 }
                 else {
-                    span = $("<span title='" + VIS.Msg.getMsg("MakeDefaultSearch") + "' data-id='" + item.id + "' class='VIS-winSearch-NonDefaultIcon'></span>");
+                    span = $("<span title='" + VIS.Msg.getMsg("MakeDefaultCard") + "' data-id='" + item.id + "' class='VIS-winSearch-NonDefaultIcon'></span>");
                 }
 
-                var li = $("<li>")
-                    .append($("<a style='display:block' title='" + item.title + "'>" + item.label + "</a>").append(span))
-                    .prependTo(ul);
+
+                tickSpan = $("<span class='fa fa-check-circle vis-cv-card-selected-card-listitem'></span>");
+
+                var li = null;
+                if (self.AD_CardView_ID == item.id) {
+                    li = $("<li>")
+                        .append($("<a  data-checkid='" + item.id + "'  class='vis-cv-card-selected-card' style='display:block' title='" + item.title + "'></a>").append(tickSpan).append("<p>" + item.label + "</p>").append(span))
+                        .prependTo(ul);
+                }
+                else {
+                    li = $("<li>")
+                        .append($("<a  data-checkid='" + item.id + "'  style='display:block' title='" + item.title + "'></a>").append(tickSpan).append("<p>" + item.label + "</p>").append(span))
+                        .prependTo(ul);
+                }
 
                 // When user clicks on make default icon, then save details in DB.
                 span.on("click", function (e) {
@@ -202,13 +221,13 @@
             $cmbCards.one("focus", loadCards);
             $cmbCards.on("change", cardChanged);
             $imgdownSearch.on("click", function () {
-                if (!self.isAutoCompleteOpen) {
-                    $imgdownSearch.css("transform", "rotate(180deg)");
-                    loadCards();
-                }
-                else {
-                    $imgdownSearch.css("transform", "rotate(360deg)");
-                }
+                //if (!self.isAutoCompleteOpen) {
+
+                loadCards();
+                //}
+                // else {
+                //$imgdownSearch.css("transform", "rotate(360deg)");
+                // }
             });
         };
 
@@ -218,7 +237,7 @@
         var loadCards = function () {
             var res = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "JsonData/GetCardsInfo", { AD_Tab_ID: self.mTab.getAD_Tab_ID() });
             if (res) {
-                self.fillCardViewList(res,true);
+                self.fillCardViewList(res, true);
             }
         };
 
@@ -260,6 +279,10 @@
             root.remove();
             body.remove();
             headerdiv.remove();
+            $cmbCards.remove();
+            $cmbCards = null;
+            $imgdownSearch.remove();
+            $imgdownSearch = null;
 
             root = body = headerdiv = null;
 
@@ -282,11 +305,12 @@
          * Display cards in auto complete dropdown
          * @param {any} cards
          */
-        this.fillCardViewList = function (cards,showData) {
+        this.fillCardViewList = function (cards, showData) {
             $cmbCards.empty();
             var userQueries = [];
-            $imgdownSearch.css('visibility', 'visible');
+            //$imgdownSearch.css('visibility', 'visible');
             if (cards && cards.length > 0) {
+                //headerdiv.show();
                 for (var i = 0; i < cards.length; i++) {
                     // $cmbCards.append('<option value="' + cards[i].AD_CardView_ID + '">' + cards[i].Name + '</option>');
                     if (cards[i].IsDefault) {
@@ -297,10 +321,14 @@
                     }
                 }
                 $cmbCards.autocomplete('option', 'source', userQueries);
-
+                //$imgdownSearch.css("transform", "rotate(180deg)");
                 if (showData) {
+                    //window.setTimeout(function () {
+
+                    //$cmbCards.trigger("focus");
                     $cmbCards.autocomplete("search", "");
-                    $cmbCards.trigger("focus");
+                    //}, 400);
+
                 }
 
                 if (this.AD_CardView_ID) {
@@ -308,7 +336,7 @@
                 }
             }
             else {
-                $cmbCards.hide();
+                //headerdiv.hide();
             }
         };
 
@@ -405,7 +433,7 @@
         this.cConditions = [];
         this.headerItems = {};
         if (retData) {
-
+            // this.getHeader().show();
             this.AD_CardView_ID = retData.AD_CardView_ID;
             //$cmbCards.autocomplete('option', 'source', userQueries);
             //$cmbCards.autocomplete("search", "");
@@ -487,8 +515,10 @@
             var field = this.cGroup;
             if (field) {
                 if (field.getDisplayType() == VIS.DisplayType.YesNo) {
+
                     this.cGroupInfo['true'] = { 'name': 'Yes', 'records': [], 'key': true };
                     this.cGroupInfo['false'] = { 'name': 'No', 'records': [], 'key': false };
+
                     this.grpCount = 2;
                 }
                 else if (VIS.DisplayType.IsLookup(field.getDisplayType()) && field.getLookup()) { //TODO: check validated also
@@ -513,7 +543,7 @@
             }
         }
         else { this.setHeader(''); }
-        if (this.grpCount < 1 || $.isEmptyObject(this.cGroupInfo) ) {//add one group by de
+        if (this.grpCount < 1 || $.isEmptyObject(this.cGroupInfo)) {//add one group by de
             this.cGroupInfo['All'] = { 'name': VIS.Msg.getMsg('All'), 'records': [], 'key': null };
             this.grpCount = 1;
         }
@@ -690,6 +720,9 @@
                 card = new VCard(fields, records[i], headerItems, headerStyle, headerPadding, windowNo, this.fieldStyles, aPanel);
                 if (onlyOne) {
                     card.getRoot().width("240px").css({ 'margin': '5px 12px 12px 5px', 'float': (VIS.Application.isRTL ? 'right' : 'left') });
+                }
+                if (i == 0) {
+                    card.addStyleToDom();
                 }
                 cards.push(card);
                 body.append(card.getRoot());
@@ -898,10 +931,14 @@
                         // If Referenceof field is Image then added extra class to align image and Label in center.
                         if (mField.getDisplayType() == VIS.DisplayType.Image) {
                             $divLabel.addClass('vis-w-p-card-Label-center-f');
-                            this.dynamicClassForImageJustyfy = this.fieldStyles[mField.getColumnName()]['justifyAlignImageItems'];
+
+                            if (!this.fieldStyles[mField.getColumnName() + 'justifyAlignImageItems'])
+                                this.fieldStyles[mField.getColumnName() + 'justifyAlignImageItems'] = {};
+
+                            this.dynamicClassForImageJustyfy = this.fieldStyles[mField.getColumnName() + 'justifyAlignImageItems']['justifyAlignImageItems'];
                             if (!this.dynamicClassForImageJustyfy) {
                                 this.dynamicClassForImageJustyfy = this.justifyAlignImageItems(headerSeqNo, justyFy, alignItem);
-                                this.fieldStyles[mField.getColumnName()] = { 'justifyAlignImageItems': this.dynamicClassForImageJustyfy };
+                                this.fieldStyles[mField.getColumnName() + 'justifyAlignImageItems'] = { 'justifyAlignImageItems': this.dynamicClassForImageJustyfy };
                             }
                             $divLabel.addClass(this.dynamicClassForImageJustyfy);
                         }
@@ -915,10 +952,13 @@
                                 iControl.addActionListner(this);
                         }
 
-                        this.dynamicFieldValue = this.fieldStyles[mField.getColumnName()]['applyCustomUIForFieldValue'];
+                        if (!this.fieldStyles[mField.getColumnName() + 'applyCustomUIForFieldValue'])
+                            this.fieldStyles[mField.getColumnName() + 'applyCustomUIForFieldValue'] = {};
+
+                        this.dynamicFieldValue = this.fieldStyles[mField.getColumnName() + 'applyCustomUIForFieldValue']['applyCustomUIForFieldValue'];
                         if (!this.dynamicFieldValue) {
                             this.dynamicFieldValue = this.applyCustomUIForFieldValue(headerSeqNo, startCol, startRow, mField, fieldValueStyle);
-                            this.fieldStyles[mField.getColumnName()] = { 'applyCustomUIForFieldValue': this.dynamicFieldValue };
+                            this.fieldStyles[mField.getColumnName() + 'applyCustomUIForFieldValue'] = { 'applyCustomUIForFieldValue': this.dynamicFieldValue };
                         }
                         iControl.getControl().addClass(this.dynamicFieldValue);
 
@@ -943,7 +983,7 @@
 
 
 
-                        
+
                         setFieldLayout(fieldValueStyle, $div, $divIcon, $divLabel);
                         var $image = $('<img>');
                         var $imageSpan = $('<span>');
@@ -1124,7 +1164,7 @@
 
                         /*Set what do you want to show? Icon OR Label OR Both OR None*/
                         setFieldVisibility(field, imgSpan, $image, $imageSpan, $lblControl, $divLabel, $divIcon);
-                        
+
                         $divLabel.append(iControl.getControl());
                         setValue(colValue, iControl, field);
                         root.append($div);
@@ -1216,6 +1256,9 @@
 
         this.dC = function () {
             pencil.off('touchstart mouseover');
+
+            this.styleTag.remove();
+            this.styleTag = null;
             root.remove();
             root = null;
             this.getRoot = null;
@@ -1440,10 +1483,7 @@
 
         this.setHeader();
 
-        this.addStyleToDom();
-
-
-
+        //this.addStyleToDom();
     };
 
 
