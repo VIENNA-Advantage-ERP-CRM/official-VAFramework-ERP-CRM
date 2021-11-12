@@ -81,12 +81,11 @@
                 var span = null;
                 var tickSpan = null;
                 if (item.isDefault == 'Y') {
-                    span = $("<span title='" + VIS.Msg.getMsg("DefaultSearch") + "'  data-id='" + item.id + "' class='VIS-winSearch-defaultIcon'></span>");
+                    span = $("<span title='" + VIS.Msg.getMsg("DefaultCard") + "'  data-id='" + item.id + "' class='VIS-winSearch-defaultIcon'></span>");
 
                 }
                 else {
-                    span = $("<span title='" + VIS.Msg.getMsg("MakeDefaultSearch") + "' data-id='" + item.id + "' class='VIS-winSearch-NonDefaultIcon'></span>");
-                    tickSpan = $("<span title='" + VIS.Msg.getMsg("MakeDefaultSearch") + "' data-checkid='" + item.id + "' class='fa fa-check'></span>");
+                    span = $("<span title='" + VIS.Msg.getMsg("MakeDefaultCard") + "' data-id='" + item.id + "' class='VIS-winSearch-NonDefaultIcon'></span>");
                 }
 
 
