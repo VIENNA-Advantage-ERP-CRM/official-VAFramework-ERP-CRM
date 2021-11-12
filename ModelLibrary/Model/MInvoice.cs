@@ -1019,7 +1019,6 @@ namespace VAdvantage.Model
                     }
                     //
                     line.Set_Value("C_ProvisionalInvoiceLine_ID", fromLine.Get_ValueAsInt("C_ProvisionalInvoiceLine_ID"));
-                    line.Set_Value("ReversalDoc_ID", fromLine.GetC_InvoiceLine_ID());
                 }
 
                 // enhanced by Amit 4-1-2016
