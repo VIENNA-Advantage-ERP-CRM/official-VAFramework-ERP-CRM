@@ -881,3 +881,24 @@
 .vis-invalid:before {
     content: "\e9cd";
 }
+
+
+.vis-rate-1:before {
+    content: "\e9ce";
+}
+
+.vis-rate-2:before {
+    content: "\e9cf";
+}
+
+.vis-rate-3:before {
+    content: "\e9d0";
+}
+
+.vis-rate-4:before {
+    content: "\e9d1";
+}
+
+.vis-rate-5:before {
+    content: "\e9d2";
+}
