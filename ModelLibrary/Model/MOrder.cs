@@ -3984,7 +3984,9 @@ namespace VAdvantage.Model
                         shipment = CreateShipment(dt, realTimePOS ? null : GetDateOrdered());
                         if (shipment == null)
                             return DocActionVariables.STATUS_INVALID;
-                        Info.Append("Successfully created:@M_InOut_ID@ & doc no.: ").Append(shipment.GetDocumentNo());
+                        
+                        //(1052)correct process message
+                        Info.Append(Msg.GetMsg(GetCtx(), "SucessfullyCreatedMInout")).Append(shipment.GetDocumentNo());
                         _processMsg = Info.ToString();
                         if (shipment.GetDocStatus() == "DR")
                         {
