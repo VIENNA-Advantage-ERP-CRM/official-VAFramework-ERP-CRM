@@ -419,35 +419,63 @@ namespace VIS.Models
         /// <param name="ctx"></param>
         /// <param name="grpID"></param>
         /// <param name="recordID"></param>
-        /// <param name="columnID"></param>
-        /// <param name="tableID"></param>
+        /// <param name="columnName"></param>
+        /// <param name="tableName"></param>
         /// <returns></returns>
-        public int UpdateCardByDragDrop(Ctx ctx, string grpValue, int recordID, int columnID, int tableID)
+        public int UpdateCardByDragDrop(Ctx ctx, string grpValue, int recordID, string columnName, string tableName,int dataType)
         {
-            string tableName = MTable.GetTableName(ctx, tableID);
-            string keyColumn = tableName + "_ID";
-            string ColumnName = MColumn.GetColumnName(ctx, columnID);
-            string sqlQuery = "";
-            if (Regex.IsMatch(grpValue, @"^\d+$"))
+            int result = 1;
+            try
             {
-                sqlQuery = "UPDATE " + tableName + " SET " + ColumnName + "=" + grpValue + " WHERE " + keyColumn + "=" + recordID;
-            }
-            else
-            {
-                sqlQuery = "UPDATE " + tableName + " SET " + ColumnName + "='" + grpValue + "' WHERE " + keyColumn + "=" + recordID;
-            }
+                PO _po = MTable.GetPO(ctx, tableName, recordID, null);
+                if (VAdvantage.Classes.DisplayType.YesNo == dataType)
+                {
+                    _po.Set_ValueNoCheck(columnName, Convert.ToBoolean(grpValue));
+                }
+                else if (VAdvantage.Classes.DisplayType.IsDate(dataType))
+                {
+                    _po.Set_ValueNoCheck(columnName, Convert.ToDateTime(grpValue));
+                }
+                else
+                {
+                    _po.Set_ValueNoCheck(columnName, grpValue);
+                }
 
-            int result = DB.ExecuteQuery(sqlQuery);
+                
+                if (!_po.Save())
+                {
+                    result = 0;
+                }
+            }
+            catch (Exception e) {
+                result = 0;
+            }
+            //string keyColumn = tableName + "_ID";
+            //string ColumnName = MColumn.GetColumnName(ctx, columnID);
+            //string sqlQuery = "";
+            //if (Regex.IsMatch(grpValue, @"^\d+$"))
+            //{
+            //    sqlQuery = "UPDATE " + tableName + " SET " + ColumnName + "=" + grpValue + " WHERE " + keyColumn + "=" + recordID;
+            //}
+            //else
+            //{
+            //    sqlQuery = "UPDATE " + tableName + " SET " + ColumnName + "='" + grpValue + "' WHERE " + keyColumn + "=" + recordID;
+            //}
+
+            //int result = DB.ExecuteQuery(sqlQuery);
             return result;
         }
-        public int GetColumnID(string tableName, string columnName)
+        public string GetColumnIDWindowID(string tableName, string columnName)
         {
 
             string sql = " SELECT cl.ad_column_id FROM ad_column cl WHERE cl.ad_table_id=" +
                      "(SELECT tb.ad_table_id FROM ad_table tb WHERE tb.tablename='" + tableName + "'" +
                       ") and cl.columnname='" + columnName + "'";
+            string columnID = Util.GetValueOfString(DB.GetSQLValue(null, sql));
+            sql = "SELECT ad_window_id FROM AD_Window WHERE UPPER(NAME)=UPPER('Card Template') AND isActive='Y'";
+            string windowID = Util.GetValueOfString(DB.GetSQLValue(null, sql));
 
-            return DB.GetSQLValue(null, sql);
+            return columnID + "," + windowID;
         }
     }
 
@@ -499,5 +527,5 @@ namespace VIS.Models
         public List<CardViewPropeties> lstCardViewData { get; set; }
         public List<List<RolePropeties>> lstCardViewRoleData { get; set; }
         public List<CardViewConditionPropeties> lstCardViewConditonData { get; set; }
-    }
+    } 
 }

@@ -168,11 +168,12 @@
 
             divUser.append("<Select type='text' class='vis-cmbuser'> </Select>");
 
-            var res = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "CardView/GetColumnID", { tableName: 'AD_CardView', columnName:'AD_HeaderLayout_ID' });
+            var res = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "CardView/GetColumnIDWindowID", { tableName: 'AD_CardView', columnName:'AD_HeaderLayout_ID' });
             if (res) {
+                res = res.split(",");
                 //var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), WindowNo, res, VIS.DisplayType.Search);
-                var value = VIS.MLookupFactory.get(VIS.Env.getCtx(), WindowNo, res, VIS.DisplayType.Search, "AD_HeaderLayout_ID", 0, false, "IsHeaderView='N'");
-                $vSearchHeaderLayout = new VIS.Controls.VTextBoxButton("AD_HeaderLayout_ID", true, false, true, VIS.DisplayType.Search, value);
+                var value = VIS.MLookupFactory.get(VIS.Env.getCtx(), WindowNo, res[0], VIS.DisplayType.Search, "AD_HeaderLayout_ID", 0, false, "IsHeaderView='N'");
+                $vSearchHeaderLayout = new VIS.Controls.VTextBoxButton("AD_HeaderLayout_ID", true, false, true, VIS.DisplayType.Search, value, Number(res[1]));
 
                 var $divCtrl = $('<div class="vis-control-wrap">');
                 var $divCtrlBtn = $('<div class="input-group-append">');
@@ -346,7 +347,7 @@
 
                         for (var i = 0; i < cardViewInfo.length; i++) {
                             // AD_CardView_ID = cardViewInfo[0].CardViewID;
-                            cmbCardView.append("<Option ad_user_id=" + cardViewInfo[i].UserID + " cardviewid=" + cardViewInfo[i].CardViewID + " ad_field_id=" + cardViewInfo[i].AD_GroupField_ID + " isdefault=" + cardViewInfo[i].DefaultID + " ad_headerLayout_id="+cardViewInfo[i].AD_HeaderLayout_ID+"> " + w2utils.encodeTags(cardViewInfo[i].CardViewName) + "</Option>");
+                            cmbCardView.append("<Option is_shared=" + cardViewInfo[i].UserID +" ad_user_id=" + cardViewInfo[i].CreatedBy+ " cardviewid=" + cardViewInfo[i].CardViewID + " ad_field_id=" + cardViewInfo[i].AD_GroupField_ID + " isdefault=" + cardViewInfo[i].DefaultID + " ad_headerLayout_id="+cardViewInfo[i].AD_HeaderLayout_ID+"> " + w2utils.encodeTags(cardViewInfo[i].CardViewName) + "</Option>");
                         }
                         
                     }
@@ -408,7 +409,7 @@
                 cardViewUserID = parseInt(sel.attr("ad_user_id"));
                 $vSearchHeaderLayout.setValue(sel.attr("ad_headerLayout_id"));
                 isdefault.attr("checked", sel.attr("isdefault")=='true'?true:false);
-                isPublic.attr("checked", cardViewUserID > 0 ? false:true);
+                isPublic.attr("checked", parseInt(sel.attr("is_shared"))> 0 ? false:true);
             }
 
             //  txtCardViewName.val(sel.data('name'));
@@ -1109,7 +1110,13 @@
 
             var isShow
             if (VIS.MRole.isAdministrator) {
-                if (isNewRecord) {
+                if (VIS.context.getAD_User_ID() != AD_User_ID) {
+                    isNewRecord = true;
+                    AD_User_ID = VIS.context.getAD_User_ID();
+                    cardViewName = cmbCardView.find(":selected").text() + " (" + defaultMsg + ")";
+                    isPublic.attr("checked", false);
+
+                } else if (isNewRecord) {
                     cardViewName = txtCardViewName.val();
                     if (LstRoleID == null || LstRoleID.length <= 0) {
                         if (AD_User_ID != VIS.context.getAD_User_ID()) {
@@ -1157,6 +1164,7 @@
                     }
                 }
             }
+
             if (cardViewName.length < 1 && !isEdit) {
                 cardViewName = cmbCardView.find(":selected").text();
             }

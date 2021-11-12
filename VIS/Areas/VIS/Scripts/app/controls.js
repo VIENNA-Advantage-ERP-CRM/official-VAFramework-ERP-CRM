@@ -3422,6 +3422,9 @@
             if (self.mField != null && self.mField.getZoomWindow_ID() > 0) {
                 AD_Window_ID = self.mField.getZoomWindow_ID();
             }
+            else if (zoomWindow_ID && zoomWindow_ID > 0) {
+                AD_Window_ID = zoomWindow_ID;
+            }
             else {
                 AD_Window_ID = self.lookup.getZoomWindow(zoomQuery);
             }
