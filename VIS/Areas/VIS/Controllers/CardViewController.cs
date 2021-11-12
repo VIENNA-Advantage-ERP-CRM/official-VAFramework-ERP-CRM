@@ -135,20 +135,20 @@ namespace VIS.Controllers
         /// </summary>
         /// <param name="grpID"></param>
         /// <param name="recordID"></param>
-        /// <param name="columnID"></param>
-        /// <param name="tableID"></param>
+        /// <param name="columnName"></param>
+        /// <param name="tableName"></param>
         /// <returns>int</returns>
-        public int UpdateCardByDragDrop(string grpValue, int recordID, int columnID, int tableID)
+        public int UpdateCardByDragDrop(string grpValue, int recordID, string columnName, string tableName, int dataType)
         {
 
             Ctx ctx = Session["ctx"] as Ctx;
             CardViewModel objCardViewModel = new CardViewModel();
-            return objCardViewModel.UpdateCardByDragDrop(ctx, grpValue, recordID, columnID, tableID);
+            return objCardViewModel.UpdateCardByDragDrop(ctx, grpValue, recordID, columnName, tableName, dataType);
         }
-        public int GetColumnID(string tableName, string columnName)
+        public JsonResult GetColumnIDWindowID(string tableName, string columnName)
         {
             CardViewModel objCardViewModel = new CardViewModel();
-            return objCardViewModel.GetColumnID(tableName, columnName);
+            return Json(JsonConvert.SerializeObject(objCardViewModel.GetColumnIDWindowID(tableName, columnName)), JsonRequestBehavior.AllowGet);
         }
     }
 }

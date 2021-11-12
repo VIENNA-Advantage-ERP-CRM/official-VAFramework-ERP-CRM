@@ -487,8 +487,8 @@
             var field = this.cGroup;
             if (field) {
                 if (field.getDisplayType() == VIS.DisplayType.YesNo) {
-                    this.cGroupInfo['true'] = { 'name': 'Yes', 'records': [], 'key':'Y' };
-                    this.cGroupInfo['false'] = { 'name': 'No', 'records': [], 'key': 'N' };
+                    this.cGroupInfo['true'] = { 'name': 'Yes', 'records': [], 'key': true };
+                    this.cGroupInfo['false'] = { 'name': 'No', 'records': [], 'key': false };
                     this.grpCount = 2;
                 }
                 else if (VIS.DisplayType.IsLookup(field.getDisplayType()) && field.getLookup()) { //TODO: check validated also
@@ -572,8 +572,9 @@
                             var obj = {
                                 grpValue: $(e).parent().attr('data-key'),
                                 recordID: $this.mTab.getRecord_ID(),
-                                columnID: $this.cGroup.getAD_Column_ID(),
-                                tableID: $this.mTab.getAD_Table_ID()
+                                columnName: $this.cGroup.getColumnName(),
+                                tableName: $this.mTab.getTableName(),
+                                dataType: $this.cGroup.getDisplayType()
                             }
                             $.ajax({
                                 type: "POST",
