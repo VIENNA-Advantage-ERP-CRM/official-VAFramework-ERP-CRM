@@ -1,4 +1,4 @@
-namespace ViennaAdvantage.Model
+namespace VAdvantage.Model
 {
     /** Generated Model - DO NOT CHANGE */
     using System;
