@@ -3904,18 +3904,7 @@ namespace VAdvantage.Model
                         {
                             #region Av Invoice
 
-                            if (isReturnTrx && !RecordIsReversal)
-                            {
-                                if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
-                                {
-                                    return false;
-                                }
-                                else
-                                {
-                                    cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
-                                }
-                            }
-                            else if (!isReturnTrx && RecordIsReversal)
+                            if ((isReturnTrx && !RecordIsReversal) || (!isReturnTrx && RecordIsReversal))
                             {
                                 if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                                 {
@@ -3951,18 +3940,7 @@ namespace VAdvantage.Model
                         else
                         {
                             #region Weighted Av Invoice
-                            if (isReturnTrx && !RecordIsReversal)
-                            {
-                                if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
-                                {
-                                    return false;
-                                }
-                                else
-                                {
-                                    cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
-                                }
-                            }
-                            else if (!isReturnTrx && RecordIsReversal)
+                            if ((isReturnTrx && !RecordIsReversal) || (!isReturnTrx && RecordIsReversal))
                             {
                                 if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                                 {
@@ -4048,18 +4026,8 @@ namespace VAdvantage.Model
                         else
                         {
                             #region last Invoice
-                            if (isReturnTrx && !RecordIsReversal) // -ve entry for completion
-                            {
-                                if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
-                                {
-                                    return false;
-                                }
-                                else
-                                {
-                                    cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
-                                }
-                            }
-                            else if (!isReturnTrx && RecordIsReversal) // +ve Entry for reverse
+                            if ((isReturnTrx && !RecordIsReversal) // -ve entry for completion
+                                || (!isReturnTrx && RecordIsReversal)) // +ve Entry for reverse
                             {
                                 if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                                 {
@@ -4096,18 +4064,7 @@ namespace VAdvantage.Model
                         else
                         {
                             #region Std Costing
-                            if (isReturnTrx && !RecordIsReversal)
-                            {
-                                if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
-                                {
-                                    return false;
-                                }
-                                else
-                                {
-                                    cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
-                                }
-                            }
-                            else if (!isReturnTrx && RecordIsReversal)
+                            if ((isReturnTrx && !RecordIsReversal) || (!isReturnTrx && RecordIsReversal))
                             {
                                 if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                                 {
