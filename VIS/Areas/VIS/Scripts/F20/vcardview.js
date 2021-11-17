@@ -854,14 +854,15 @@
                 var $divLabel = null;
                 var $label = null;
                 var iControl = null;
-                if (!this.fieldStyles[headerSeqNo + '_' + startCol + '_' + colSpan + '_' + startRow + '_' + rowSpan])
-                    this.fieldStyles[headerSeqNo + '_' + startCol + '_' + colSpan + '_' + startRow + '_' + rowSpan] = {};
+                var gridLayout_ID = currentItem.AD_GridLayout_ID;
+                if (!this.fieldStyles[startCol + '_' + colSpan + '_' + startRow + '_' + rowSpan + '_' + gridLayout_ID])
+                    this.fieldStyles[startCol + '_' + colSpan + '_' + startRow + '_' + rowSpan + '_' + gridLayout_ID] = {};
                 //Apply HTML Style
-                this.dynamicClassName = this.fieldStyles[headerSeqNo + '_' + startCol + '_' + colSpan + '_' + startRow + '_' + rowSpan]['applyCustomUISettings'];
+                this.dynamicClassName = this.fieldStyles[startCol + '_' + colSpan + '_' + startRow + '_' + rowSpan + '_' + gridLayout_ID]['applyCustomUISettings'];
                 if (!this.dynamicClassName) {
                     this.dynamicClassName = this.applyCustomUISettings(headerSeqNo, startCol, colSpan, startRow, rowSpan, justyFy, alignItem,
                         backgroundColor, FontColor, fontSize, fieldPadding);
-                    this.fieldStyles[headerSeqNo + '_' + startCol + '_' + colSpan + '_' + startRow + '_' + rowSpan]['applyCustomUISettings'] = this.dynamicClassName;
+                    this.fieldStyles[startCol + '_' + colSpan + '_' + startRow + '_' + rowSpan + '_' + gridLayout_ID]['applyCustomUISettings'] = this.dynamicClassName;
                 }
 
                 // Find the div with dynamic class from container. Class will only be available in DOm if two fields are having same item seq. No.
@@ -890,6 +891,9 @@
 
                     $divLabel.append(iControl.getControl());
                     iControl.setValue();
+                    fieldValueStyle = headerItem.FieldValueStyle;
+                    if (fieldValueStyle)
+                        $divLabel.attr('style', fieldValueStyle);
                     $div.append($divLabel);
                     // $div.append($divLabel);
                     $containerDiv.append($div);
@@ -1275,6 +1279,7 @@
                 if (mField.getDisplayType() == VIS.DisplayType.Image) {
                     var oldValue = iControl.getValue();
                     iControl.getControl().show();
+                    iControl.setDimension(240, 320);
                     if (oldValue == colValue) {
                         iControl.refreshImage(colValue);
                     }
