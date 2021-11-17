@@ -6540,6 +6540,9 @@
             };
 
         }).on("blur", function () {
+            if ($.isNumeric($rangeCtrl.attr("max")) && Number($rangeCtrl.attr("max")) < Number($(this).text())) {
+                $(this).text($rangeCtrl.attr("max"));
+            }
             $rangeCtrl.val($(this).text() || 0).change();
         })
 
@@ -6588,6 +6591,8 @@
     VProgressBar.prototype.setMaxValue = function (maxValue) {
         if ($.isNumeric(maxValue)) {
             this.rangeCtrl.attr("max", maxValue);
+        } else {
+            this.rangeCtrl.attr("max", 100);
         }
     };
 

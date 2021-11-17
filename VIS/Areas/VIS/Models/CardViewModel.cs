@@ -26,7 +26,7 @@ namespace VIS.Models
                             FROM AD_CardView
                             LEFT OUTER JOIN AD_DefaultCardView
                             ON AD_CardView.AD_CardView_ID=AD_DefaultCardView.AD_CardView_ID
-                            WHERE AD_CardView.AD_Window_id=" + ad_Window_ID + " and AD_CardView.AD_Tab_id=" + ad_Tab_ID + " AND (AD_CardView.AD_User_ID IS NULL OR AD_CardView.AD_User_ID  =" + ctx.GetAD_User_ID() + @" 
+                            WHERE AD_CardView.IsActive='Y' AND  AD_CardView.AD_Window_id=" + ad_Window_ID + " and AD_CardView.AD_Tab_id=" + ad_Tab_ID + " AND (AD_CardView.AD_User_ID IS NULL OR AD_CardView.AD_User_ID  =" + ctx.GetAD_User_ID() + @" 
                             ) ORDER BY AD_CardView.Name Asc";
 
             sqlQuery = MRole.GetDefault(ctx).AddAccessSQL(sqlQuery, "AD_CardView", true, false);
@@ -221,7 +221,7 @@ namespace VIS.Models
             objCardView.SetAD_Tab_ID(ad_Tab_ID);
             if (MUser.Get(ctx).IsAdministrator() && isPublic)
             {
-                //objCardView.SetAD_User_ID(ad_User_ID);
+                objCardView.SetAD_User_ID(0);
             }
             else {
                 objCardView.SetAD_User_ID(ad_User_ID);
@@ -259,7 +259,7 @@ namespace VIS.Models
                         conditionValue = lstCVCondition[i].ConditionValue.Trim();
                         conditionText = lstCVCondition[i].ConditionText.Trim();
                         MCardViewCondition objMCVR = new MCardViewCondition(ctx, 0, null);
-                        objMCVR.SetAD_CardView_ID(objCardView.Get_ID());
+                        objMCVR.Set_ValueNoCheck("AD_CardView_ID", objCardView.Get_ID());
                         objMCVR.SetColor(lstCVCondition[i].Color);
                         objMCVR.SetConditionValue(conditionValue.Trim());
                         objMCVR.SetConditionText(conditionText.Trim());
@@ -338,6 +338,21 @@ namespace VIS.Models
 
             }
         }
+        /// <summary>
+        ///  Delete default card
+        /// </summary>
+        /// <param name="ad_CardView_ID"></param>
+        /// <param name="ctx"></param>
+        public void DeleteDefaultCardView(int ad_CardView_ID, Ctx ctx)
+        {
+            string sqlQuery = "DELETE FROM AD_DefaultCardView WHERE AD_CARDVIEW_ID=" + ad_CardView_ID + " AND AD_Client_ID=" + ctx.GetAD_Client_ID();
+            int result = DB.ExecuteQuery(sqlQuery);
+            if (result < 1)
+            {
+
+            }
+        }
+
         public void DeleteCardViewColumns(int ad_CardViewColumn_ID, Ctx ctx)
         {
             string sqlQuery = "DELETE FROM AD_CARDVIEW_COLUMN WHERE AD_CARDVIEW_COLUMN_ID=" + ad_CardViewColumn_ID;
@@ -391,6 +406,7 @@ namespace VIS.Models
             DeleteCardView(ad_CardView_ID, ctx);
             DeleteAllCardViewColumns(ad_CardView_ID, ctx);
             DeleteAllCardViewRole(ad_CardView_ID, ctx);
+            DeleteDefaultCardView(ad_CardView_ID, ctx);
         }
 
 

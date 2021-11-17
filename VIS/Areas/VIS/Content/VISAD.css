@@ -2528,15 +2528,15 @@ findImg {
     display: none;
     height: 100%;
     max-height: 100%;
-    width: 99%;
-    max-width: 99%;
+    width: 100%;
+    max-width: 100%;
 }
 
 .vis-cv-body {
     height: calc(100% - 12px);
     overflow-y: auto;
     position: relative;
-    overflow-x: hidden;
+    overflow-x: auto;
 }
 
 .vis-cv-header {
@@ -2611,7 +2611,7 @@ findImg {
     right: 0;
     top: 27px;
     /*width: 248px;*/
-    overflow: auto;
+    /*overflow: auto;*/
 }
 
 .vis-cv-card {
