@@ -1425,7 +1425,7 @@ li.vis-page-item-select {
 }
 
 .vis-w-p-card-Label-f span {
-    font-weight: bolder;
+    /*font-weight: bolder;*/
 }
 
 
@@ -1528,7 +1528,7 @@ li.vis-page-item-select {
     min-height: 35px;
     align-items: center;
     justify-content: center;
-    background: rgba(var(--v-c-on-secondary), 0.1);
+    /*background: rgba(var(--v-c-on-secondary), 0.1);*/
     /*border-radius: 50%;*/
     width: 100%;
     height: 100%;
@@ -1589,8 +1589,9 @@ li.vis-page-item-select {
 
     .vis-w-p-card-Label-f img {
         max-width: 100%;
-        max-height: 100%;
+        /*max-height: 100%;*/
         border: none;
+        object-fit: cover;
         /*transform: scale(1.3);*/
     }
 
