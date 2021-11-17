@@ -2250,6 +2250,11 @@ namespace VAdvantage.Model
                             //
                             _processMsg = "Open @M_InOutConfirm_ID@: " +
                                 confirm.GetConfirmTypeName() + " - " + confirm.GetDocumentNo();
+                            // VIS-158 : Cable Industry specific change to set MR confirmation number
+                            if (Env.IsModuleInstalled("VA076_") && Get_ColumnIndex("VA076_ConfirmationNo") >= 0)
+                            {
+                                Set_Value("VA076_ConfirmationNo", confirm.GetDocumentNo());
+                            }
                             FreezeDoc();//Arpit
                             return DocActionVariables.STATUS_INPROGRESS;
                         }
@@ -2268,6 +2273,11 @@ namespace VAdvantage.Model
                         //
                         _processMsg = "Open @M_InOutConfirm_ID@: " +
                             confirm.GetConfirmTypeName() + " - " + confirm.GetDocumentNo();
+                        // VIS-158 : Cable Industry specific change to set MR confirmation number
+                        if (Env.IsModuleInstalled("VA076_") && Get_ColumnIndex("VA076_ConfirmationNo") >= 0)
+                        {
+                            Set_Value("VA076_ConfirmationNo", confirm.GetDocumentNo());
+                        }
                         FreezeDoc();//Arpit                  
                         return DocActionVariables.STATUS_INPROGRESS;
                     }
