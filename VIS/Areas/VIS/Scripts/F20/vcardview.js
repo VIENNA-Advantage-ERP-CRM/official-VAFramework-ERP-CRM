@@ -150,6 +150,7 @@
 
         this.calculateWidth = function (width) {
             //set width
+            width = (width - 6);
             var grpCtrlC = this.groupCtrls.length;
             if (grpCtrlC < 1)
                 return;
@@ -320,7 +321,7 @@
                         userQueries.push({ 'title': cards[i].Name, 'label': cards[i].Name, 'value': cards[i].Name, 'id': cards[i].AD_CardView_ID, 'isDefault': 'N' });
                     }
                 }
-                $cmbCards.autocomplete('option', 'source', userQueries);
+                $cmbCards.autocomplete('option', 'source', userQueries, "position", { my: "left top", at: "left bottom" });
                 //$imgdownSearch.css("transform", "rotate(180deg)");
                 if (showData) {
                     //window.setTimeout(function () {
@@ -555,7 +556,7 @@
         var $this = this;
         window.setTimeout(function () {
             if (width == 0) {
-                wwidth = $this.getBody().width();
+                width = $this.getBody().width();
             }
             $this.isProcessed = false;
             $this.createGroups();
@@ -620,7 +621,7 @@
                                             return element.recid == item;
                                         });
                                         var changeCard = new VCard($this.fields, rec[0], $this.headerItems, $this.headerStyle, $this.headerPadding, windowNo, {}, $this.aPanel)
-                                        root.find("[name='vc_" + item + "']").html('').html(changeCard.getRoot().html());
+                                        root.find("[name='vc_" + item + "']").replaceWith(changeCard.getRoot());
                                     }
                                 },
                                 error: function (err) {

@@ -362,16 +362,26 @@
                     orginalAD_CardView_ID = AD_CardView_ID;
 
                     //cardViewUserID = cmbCardView.find(":selected").attr("ad_user_id");
+                    isPublic.attr("checked", parseInt(cmbCardView.find(":selected").attr("is_shared")) > 0 ? false : true);
+                    isdefault.attr("checked", cmbCardView.find(":selected").attr("isdefault") == 'true' ? true : false);
+                    $vSearchHeaderLayout.setValue(cmbCardView.find(":selected").attr("ad_headerLayout_id"));
+                    cardViewUserID = parseInt(cmbCardView.find(":selected").attr("ad_user_id"));
+                    if (cardViewUserID == VIS.context.getAD_User_ID()) {
+                        rootCardViewUI.find(".vis-btnDelete").css("display", "block");
+                    } else {
+                        rootCardViewUI.find(".vis-btnDelete").css("display", "none");
+                    }
+
                     try {
                         if (!isDelete) {
-                            cardViewUserID = parseInt(cmbCardView.find(":selected").attr("ad_user_id"));
+                            //cardViewUserID = parseInt(cmbCardView.find(":selected").attr("ad_user_id"));
                             AD_User_ID = cardViewUserID;
-                            orginalcardViewUserID = cardViewUserID;
+                            orginalcardViewUserID = cardViewUserID;                           
                         }
                         else {
                             orginalAD_CardView_ID = cmbCardView.find(":selected").attr("cardviewid");
                             AD_GroupField_ID = cmbCardView.find(":selected").attr("ad_field_id");
-                            cardViewUserID = parseInt(cmbCardView.find(":selected").attr("ad_user_id"));
+                            //cardViewUserID = parseInt(cmbCardView.find(":selected").attr("ad_user_id"));
                             AD_CardView_ID = orginalAD_CardView_ID;
                         }
                     }
@@ -409,7 +419,12 @@
                 cardViewUserID = parseInt(sel.attr("ad_user_id"));
                 $vSearchHeaderLayout.setValue(sel.attr("ad_headerLayout_id"));
                 isdefault.attr("checked", sel.attr("isdefault")=='true'?true:false);
-                isPublic.attr("checked", parseInt(sel.attr("is_shared"))> 0 ? false:true);
+                isPublic.attr("checked", parseInt(sel.attr("is_shared")) > 0 ? false : true);
+                if (cardViewUserID == VIS.context.getAD_User_ID()) {
+                    rootCardViewUI.find(".vis-btnDelete").css("display", "block");
+                } else {
+                    rootCardViewUI.find(".vis-btnDelete").css("display", "none");
+                }
             }
 
             //  txtCardViewName.val(sel.data('name'));
@@ -574,7 +589,7 @@
                     lblDefault.css({ "display": "block" });
                     rootCardViewUI.find(".vis-cardviewchild");
                     txtCardViewName.val(cmbCardView.find(":selected").text().trim());
-
+                    lblDefault.css({ "display": "none" }).attr('checked', false);
                 });
             }
             if (cmbUser != null) {
@@ -1108,62 +1123,78 @@
 
         var SaveCardViewColumn = function (lstCardView) {
 
+
             var isShow
-            if (VIS.MRole.isAdministrator) {
-                if (VIS.context.getAD_User_ID() != AD_User_ID) {
-                    isNewRecord = true;
-                    AD_User_ID = VIS.context.getAD_User_ID();
-                    cardViewName = cmbCardView.find(":selected").text() + " (" + defaultMsg + ")";
-                    isPublic.attr("checked", false);
-
-                } else if (isNewRecord) {
-                    cardViewName = txtCardViewName.val();
-                    if (LstRoleID == null || LstRoleID.length <= 0) {
-                        if (AD_User_ID != VIS.context.getAD_User_ID()) {
-                            //if (!confirm(VIS.Msg.getMsg("CardViewWarning"))) {
-                            //    AD_User_ID = 0;
-                            //    return false;
-                            //}
-                            AD_User_ID = VIS.context.getAD_User_ID();
-                        }
-                        else
-                            AD_User_ID = 0;
-                    }
-                    else AD_User_ID = 0;
-                } else {
-                    cardViewName = txtCardViewName.val();
-                    if (AD_User_ID == cardViewUserID) {
-                        // if (orginalAD_CardView_ID > 0 && orginalcardViewUserID > 0){
-                        //     AD_CardView_ID = orginalAD_CardView_ID;
-                        //     cardViewUserID = orginalcardViewUserID;
-                        //}
-                    }
-                    else {
-                        AD_User_ID = 0;
-                    }
-                }
+            cardViewUserID = parseInt(cmbCardView.find(":selected").attr("ad_user_id"));
+            if (VIS.context.getAD_User_ID() == cardViewUserID && !isNewRecord) {
+                AD_User_ID = VIS.context.getAD_User_ID();
+            } else if (VIS.context.getAD_User_ID() != cardViewUserID && !isNewRecord) {
+                isNewRecord = true;
+                AD_User_ID = VIS.context.getAD_User_ID();
+                cardViewName = cmbCardView.find(":selected").text() + " (" + defaultMsg + ")";
+                isPublic.attr("checked", false);
+            } else {
+                isNewRecord = true;
+                AD_User_ID = VIS.context.getAD_User_ID();
+                cardViewName = txtCardViewName.val();
             }
-            else {
 
-                if (!cardViewUserID || cardViewUserID < 1) {
-                    isNewRecord = true;
-                    AD_User_ID = VIS.context.getAD_User_ID();
-                }
 
-                if (isNewRecord) {
-                    if (AD_User_ID == cardViewUserID) {
-                        cardViewName = txtCardViewName.val();
-                    }else if (orginalAD_CardView_ID > 0 && orginalcardViewUserID > 0) {
-                        isNewRecord = false;
-                        AD_CardView_ID = orginalAD_CardView_ID;
-                        cardViewUserID = orginalcardViewUserID;
-                        cardViewName = cmbCardView.find(":selected").text() + " (" + defaultMsg + ")";
-                    }
-                    else {
-                        cardViewName = cmbCardView.find(":selected").text() + " " + defaultMsg;
-                    }
-                }
-            }
+            //if (VIS.MRole.isAdministrator) {
+            //    if (VIS.context.getAD_User_ID() != AD_User_ID) {
+            //        isNewRecord = true;
+            //        AD_User_ID = VIS.context.getAD_User_ID();
+            //        cardViewName = cmbCardView.find(":selected").text() + " (" + defaultMsg + ")";
+            //        isPublic.attr("checked", false);
+
+            //    } else if (isNewRecord) {
+            //        cardViewName = txtCardViewName.val();
+            //        if (LstRoleID == null || LstRoleID.length <= 0) {
+            //            if (AD_User_ID != VIS.context.getAD_User_ID()) {
+            //                //if (!confirm(VIS.Msg.getMsg("CardViewWarning"))) {
+            //                //    AD_User_ID = 0;
+            //                //    return false;
+            //                //}
+            //                AD_User_ID = VIS.context.getAD_User_ID();
+            //            }
+            //            else
+            //                AD_User_ID = 0;
+            //        }
+            //        else AD_User_ID = 0;
+            //    } else {
+            //        cardViewName = txtCardViewName.val();
+            //        if (AD_User_ID == cardViewUserID) {
+            //            // if (orginalAD_CardView_ID > 0 && orginalcardViewUserID > 0){
+            //            //     AD_CardView_ID = orginalAD_CardView_ID;
+            //            //     cardViewUserID = orginalcardViewUserID;
+            //            //}
+            //        }
+            //        else {
+            //            AD_User_ID = 0;
+            //        }
+            //    }
+            //}
+            //else {
+
+            //    if (!cardViewUserID || cardViewUserID < 1) {
+            //        isNewRecord = true;
+            //        AD_User_ID = VIS.context.getAD_User_ID();
+            //    }
+
+            //    if (isNewRecord) {
+            //        if (AD_User_ID == cardViewUserID) {
+            //            cardViewName = txtCardViewName.val();
+            //        }else if (orginalAD_CardView_ID > 0 && orginalcardViewUserID > 0) {
+            //            isNewRecord = false;
+            //            AD_CardView_ID = orginalAD_CardView_ID;
+            //            cardViewUserID = orginalcardViewUserID;
+            //            cardViewName = cmbCardView.find(":selected").text() + " (" + defaultMsg + ")";
+            //        }
+            //        else {
+            //            cardViewName = cmbCardView.find(":selected").text() + " " + defaultMsg;
+            //        }
+            //    }
+            //}
 
             if (cardViewName.length < 1 && !isEdit) {
                 cardViewName = cmbCardView.find(":selected").text();
