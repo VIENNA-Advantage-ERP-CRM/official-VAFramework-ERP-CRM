@@ -159,7 +159,7 @@ namespace VAdvantage.Model
             if (VAdvantage.Classes.CommonFunctions.IsTableExists(DB.GetSchema(), "AD_AlertRuleCondition"))
             {
                 //Fetch All Alert Condition Against AlertID.............
-                DataSet dsAlertCondition = DB.ExecuteDataset("select ad_alertRulecondition_id from ad_alertRulecondition where ad_alertrule_ID=" + AlertRule.GetAD_AlertRule_ID() + " and isactive='Y' order by sequence,ad_alertrulecondition_id");
+                DataSet dsAlertCondition = DB.ExecuteDataset("SELECT AD_AlertRuleCondition_ID FROM AD_AlertRuleCondition WHERE AD_AlertRule_ID=" + AlertRule.GetAD_AlertRule_ID() + " AND IsActive='Y' ORDER BY Sequence,AD_AlertRuleCondition_ID");
                 //IF No Alert Condition Find then return true otherwise Follow further Condition............
                 if (dsAlertCondition != null && dsAlertCondition.Tables[0].Rows.Count > 0)
                 {

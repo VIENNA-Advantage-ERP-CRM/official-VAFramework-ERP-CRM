@@ -2587,7 +2587,7 @@ namespace VAdvantage.Model
 
                 //
                 DataSet dsInvoiceLine = DB.ExecuteDataset(@"SELECT il.TaxBaseAmt, COALESCE(il.TaxAmt,0), i.IsSOTrx  , 
-                                            i.C_Currency_ID , i.DateAcct , i.C_ConversionType_ID , il.C_Invoice_ID, il.C_Tax_ID 
+                                            i.C_Currency_ID , i.DateAcct , i.C_ConversionType_ID , il.C_Invoice_ID, il.C_Tax_ID, il.LineNetAmt  
                                            FROM C_InvoiceLine il 
                                            INNER JOIN C_Invoice i ON (il.C_Invoice_ID=i.C_Invoice_ID) 
                                            WHERE il.C_Invoice_ID=" + GetC_Invoice_ID(), null, Get_TrxName());
