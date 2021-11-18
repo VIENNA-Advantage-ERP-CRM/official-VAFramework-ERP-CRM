@@ -100,6 +100,8 @@
         var isdefault = null;
         var isPublic = null;
         var lblDefault = null;
+        var backgroundType = null;
+        var isGradient = null;
         // var 
         var root, ch;
         function init() {
@@ -151,7 +153,7 @@
             } else {
                 var divLayout = $("<div class='vis-cardviewbtn'>").append(lblDefault);
             }
-            var divCardViewbtn = $("<div class='vis-cardviewbtn'><button class='vis-btnDelete'><i class='vis vis-delete'></i></button> <div class='vis-cdv-customokcancle'><button class='vis-btnOk'>  " + VIS.Msg.getMsg("Ok") + "  </button><button class='vis-btnCardViewCancle'>  " + VIS.Msg.getMsg("Cancel") + "  </button></div> </div>");
+            var divCardViewbtn = $("<div class='vis-cardviewbtn'><button class='vis-btnDelete'><i title=" + VIS.Msg.getMsg("DeleteRecord") + " class='vis vis-delete'></i></button> <div class='vis-cdv-customokcancle'><button class='vis-btnOk'>  " + VIS.Msg.getMsg("Ok") + "  </button><button class='vis-btnCardViewCancle'>  " + VIS.Msg.getMsg("Cancel") + "  </button></div> </div>");
             rootCardViewUI.append(divCardViewMainFirstChild);
             divCardViewMainFirstChild.append(CardViewTopFiledsWrap);
             CardViewTopFiledsWrap.append("<div class='vis-firstdiv vis-pull-left' ></div>");
@@ -162,7 +164,7 @@
             var divCardView = $("<div class='vis-CardView vis-pull-left'> <div  class='vis-cardviewchild vis-pull-left'></div>  </div>");
             var divCardViewName = $("<input style='display:none' class='vis-txtcardviewname' type='text'>");
             var divUser = $("<div class='vis-User vis-pull-left'></div>");
-            var btnNewAndCancle = $("<div class='vis-pull-left'><button  class='vis-btnnew vis-cvd-btn'><i class='vis vis-plus'></i></button><button style='display:none' class='vis-btncancle vis-cvd-canclebtn'><i class='vis vis-mark'></i></button> <button class='vis-btnedit vis-cvd-editbtn'><i class='vis vis-pencil'></i></button></div>");
+            var btnNewAndCancle = $("<div class='vis-pull-left'><button  class='vis-btnnew vis-cvd-btn'><i title=" + VIS.Msg.getMsg("AddNew") + " class='vis vis-plus'></i></button><button style='display:none' title=" + VIS.Msg.getMsg("VIS_DialogCancel") + " class='vis-btncancle vis-cvd-canclebtn'><i class='vis vis-mark'></i></button> <button class='vis-btnedit vis-cvd-editbtn' title=" + VIS.Msg.getMsg("EditRecord") +"  ><i class='vis vis-pencil'></i></button></div>");
             divCardView.find(".vis-cardviewchild").append("<select class='vis-cmbcardview'> </select>");
 
 
@@ -291,7 +293,7 @@
             btnSave = rootCardViewUI.find(".vis-btnsave");
             cvTable = rootCardViewUI.find(".vis-cv-rowtable");
             ctrColor = rootCardViewUI.find(".vis-cmbcolor");
-
+            isGradient = rootCardViewUI.find(".vis-gradient");
 
 
             isBusyRoot.css({
@@ -312,8 +314,20 @@
 
         var AddCVConditionControl = function (root) {
 
+            backgroundType = $('<div style="width:100%"> <input class="vis-firstcolor vis-pull-left" type="color" style="width: 20%;"><input class="vis-firstPer vis-pull-left" min="0" max="100" value="0" type="number" style="width: 20%;"><input class="vis-Lastcolor vis-pull-left" type="color" style="width: 20%;"><input class="vis-LastPer vis-pull-left" type="number" min="0" max="100" value="100" style="width: 20%;">'
+                + '<select class="vis-GrdType" style = "width: 20%;">'
+                + '<option value="to bottom">↓</option>'
+                + '<option value="to top">↑</option>'
+                + '<option value="to right">→</option>'
+                + '<option value="to left">←</option>'
+                + '<option value="to top left">↖</option>'
+                + '<option value="to top right">↗</option>'
+                + '<option value="to bottom left">↙</option>'
+                + '<option value="to bottom right">↘</option>'
+                + '</select></div>');
+
             var pDiv = $('<div class="vis-cv-condctrl-inner">');
-            var divCVConditionCmbColor = $("<div class='vis-divcvc-cmbcolor'><div style='width:100%'><lable>" + VIS.Msg.getMsg("BGColor") + "</lable></div> <div style='width:100%'> <input class='vis-cmbcolor' type='color' /></div></div>");
+            var divCVConditionCmbColor = $("<div class='vis-divcvc-cmbcolor'><div style='width:100%'><lable><input type='checkbox' class='vis-gradient' />" + VIS.Msg.getMsg("BGColor") + " </lable></div> <div class='vis-backgroundType' style='width:100%'> <input class='vis-cmbcolor' type='color' /></div></div>");            
             var divCVConditionCmbColumnColor = $("<div class='vis-divcvc-cmbcolumn'><div style='width:100%'><lable>" + VIS.Msg.getMsg("Column") + "</lable></div> <div><select class='vis-cmbcolumn'></select></div></div>");
             var divCVConditionCmbOperator = $("<div class='vis-divcvc-cmboperator'><div style='width:100%'><lable>" + VIS.Msg.getMsg("Operator") + "</lable></div>  <div><select class='vis-cmboperator'></select> </div></div>");
             var divCVConditionQueryValue = $("<div class='vis-divcvc-queryvalue'><div style='width:100%'><lable>" + VIS.Msg.getMsg("QueryValue") + "</lable></div> <div class='vis-cvd-valcontainer' style='width:100%'></div></div>");
@@ -376,7 +390,7 @@
                         if (!isDelete) {
                             //cardViewUserID = parseInt(cmbCardView.find(":selected").attr("ad_user_id"));
                             AD_User_ID = cardViewUserID;
-                            orginalcardViewUserID = cardViewUserID;
+                            orginalcardViewUserID = cardViewUserID;                           
                         }
                         else {
                             orginalAD_CardView_ID = cmbCardView.find(":selected").attr("cardviewid");
@@ -421,7 +435,7 @@
                 AD_CardView_ID = parseInt(sel.attr("cardviewid"));
                 cardViewUserID = parseInt(sel.attr("ad_user_id"));
                 $vSearchHeaderLayout.setValue(sel.attr("ad_headerLayout_id"));
-                isdefault.attr("checked", sel.attr("isdefault") == 'true' ? true : false);
+                isdefault.attr("checked", sel.attr("isdefault")=='true'?true:false);
                 isPublic.attr("checked", parseInt(sel.attr("is_shared")) > 0 ? false : true);
                 if (cardViewUserID == VIS.context.getAD_User_ID()) {
                     rootCardViewUI.find(".vis-btnDelete").css("display", "block");
@@ -588,10 +602,14 @@
                     btnNew.css({ "display": "none" });
                     btnCancle.css({ "display": "block" });
                     btnEdit.css({ "display": "none" });
-                    lblDefault.css({ "display": "block" });
                     rootCardViewUI.find(".vis-cardviewchild");
                     txtCardViewName.val(cmbCardView.find(":selected").text().trim());
-                    lblDefault.css({ "display": "none" }).attr('checked', false);
+                    if (cardViewInfo != null && cardViewInfo.length > 0) {
+                        lblDefault.css({ "display": "none" }).attr('checked', false);
+                    } else {
+                        lblDefault.css({ "display": "block" }).attr('checked', false);
+                    }
+
                 });
             }
             if (cmbUser != null) {
@@ -935,15 +953,30 @@
                     cvConditionArray = {};
 
                     var colorValue = "";
+                    if ($(isGradient).is(':checked')) {
+                        var firstColor = rootCardViewUI.find('.vis-firstcolor');
+                        var LirstColor = rootCardViewUI.find('.vis-Lastcolor');
+                        if (!Modernizr.inputtypes.color) {
+                            firstColor = firstColor.spectrum('get');
+                            LirstColor = LirstColor.spectrum('get');
+                        }
+                        else {
+                            firstColor = firstColor.val();
+                            LirstColor = LirstColor.val();
+                        }
+                        var firstPer = rootCardViewUI.find('.vis-firstPer').val()||0;
+                        var LastPer = rootCardViewUI.find('.vis-LastPer').val()||0;
+                        var gredType = rootCardViewUI.find('.vis-GrdType option:selected').val();
+                        colorValue = 'linear-gradient(' + gredType + ', ' + firstColor + ' ' + firstPer + '%, ' + LirstColor + ' ' + LastPer+'%)';
+                    } else {
 
-                    if (!Modernizr.inputtypes.color) {
-                        colorValue = ctrColor.spectrum('get');
+                        if (!Modernizr.inputtypes.color) {
+                            colorValue = ctrColor.spectrum('get');
+                        }
+                        else {
+                            colorValue = ctrColor.val();
+                        }
                     }
-                    else {
-                        colorValue = ctrColor.val();
-                    }
-
-
 
                     var index = $.map(cardviewCondition, function (value, i) {
                         if (value.Color == colorValue) {
@@ -1017,6 +1050,22 @@
                         }
                     }
                 });
+            }
+
+            if (isGradient != null) {
+                isGradient.on("click", function () {
+                    if ($(this).is(':checked')) {
+                        rootCardViewUI.find('.vis-backgroundType').html('').append(backgroundType);
+                        rootCardViewUI.find('.vis-divcvc-cmboperator').css({'width':'10%'});
+                        rootCardViewUI.find('.vis-divcvc-cmbcolor').css({'width':'40%'});
+
+                    } else {
+                        rootCardViewUI.find('.vis-divcvc-cmboperator').css({ 'width': '25%' });
+                        rootCardViewUI.find('.vis-divcvc-cmbcolor').css({ 'width': '25%' });
+                        ctrColor = $("<input class='vis-cmbcolor' type='color' />");
+                        rootCardViewUI.find('.vis-backgroundType').html("").append(ctrColor);
+                    }
+                })
             }
         };
 
@@ -1130,7 +1179,6 @@
 
         var SaveCardViewColumn = function (lstCardView) {
 
-
             var renameCard = false;
             cardViewUserID = parseInt(cmbCardView.find(":selected").attr("ad_user_id"));
             if (VIS.context.getAD_User_ID() == cardViewUserID && !isNewRecord) {
@@ -1146,6 +1194,7 @@
                 AD_User_ID = VIS.context.getAD_User_ID();
                 cardViewName = txtCardViewName.val();
             }
+
 
             if (cardViewName.length < 1 && !isEdit) {
                 cardViewName = cmbCardView.find(":selected").text();
@@ -1283,14 +1332,16 @@
             //    root.find("[ad_role_id='" + cardViewUserID + "']").attr("selected", "selected");
         };
         var changeHeader = function () {
-            if (cardViewUserID > 0) {
-                if (ch != null)
-                    ch.changeTitle(VIS.Msg.getMsg("Card") + "(" + VIS.Msg.getMsg("IsPrivate") + ")");
-            }
-            else {
-                if (ch != null)
-                    ch.changeTitle(VIS.Msg.getMsg("Card"));
-            }
+            if (ch != null)
+                ch.changeTitle(VIS.Msg.getMsg("Card"));
+            //if (cardViewUserID > 0) {
+            //    if (ch != null)
+            //        ch.changeTitle(VIS.Msg.getMsg("Card") + "(" + VIS.Msg.getMsg("IsPrivate") + ")");
+            //}
+            //else {
+            //    if (ch != null)
+            //        ch.changeTitle(VIS.Msg.getMsg("Card"));
+            //}
         };
 
         var CreateCVGrid = function (root) {
@@ -1320,7 +1371,7 @@
                 for (var i = 0; i < data.length; i++) {
                     for (var j = 0; j < data[i].Condition.length; j++) {
                         row = $("<tr class='vis-cv-TableRow'></tr");
-                        row.append("<td value=" + data[i].Color + " style='width:" + col1Width + "px'><div class='vis-cvd-bgcolor' style='background-color:" + data[i].Color + ";cursor:pointer'>" + data[i].Color + "</div></td>");
+                        row.append("<td value='" + data[i].Color + "' style='width:" + col1Width + "px'><div class='vis-cvd-bgcolor' style='background:" + data[i].Color + ";cursor:pointer;color:transparent'>-</div></td>");
                         row.append("<td style='width:" + col2Width + "px' value=" + data[i].Condition[j].ColName + ">" + data[i].Condition[j].ColHeader + "</td>");
                         row.append("<td style='width:" + col3Width + "px' value=" + data[i].Condition[j].Operator + ">" + data[i].Condition[j].OperatorText + "</td>");
                         row.append("<td style='width:" + col4Width + "px' value=" + data[i].Condition[j].QueryValue + ">" + data[i].Condition[j].QueryText + "</td>");
