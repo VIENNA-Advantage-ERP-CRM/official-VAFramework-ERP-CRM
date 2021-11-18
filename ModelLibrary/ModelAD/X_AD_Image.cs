@@ -238,6 +238,28 @@ return new KeyNamePair(Get_ID(), GetName());
         {
             return (String)Get_Value("FontName");
         }
+
+        /// <summary>
+        /// Set Image Extension
+        /// </summary>
+        /// <param name="ImageExtension"></param>
+        public void SetImageExtension(String ImageExtension)
+        {
+            if (ImageExtension.Length > 5)
+            {
+                log.Warning("Length > 60 - truncated");
+                ImageExtension = ImageExtension.Substring(0, 5);
+            }
+            Set_Value("ImageExtension", ImageExtension);
+        }
+        /// <summary>
+        /// Get Image extension
+        /// </summary>
+        /// <returns></returns>
+        public String GetImageExtension()
+        {
+            return (String)Get_Value("ImageExtension");
+        }
     }
 
 }

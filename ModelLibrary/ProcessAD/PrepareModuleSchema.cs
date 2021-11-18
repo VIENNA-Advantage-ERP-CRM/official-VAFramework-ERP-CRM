@@ -805,6 +805,13 @@ namespace VAdvantage.Process
                 {
                     InsertIntoDBSchema(X_AD_CardView_Condition.Table_ID, sAD_CardView_ID, X_AD_CardView_Condition.Table_Name, name, "AD_CardView_Condition_ID=" + lstCardCondition[cnd]);
                 }
+
+                //mark default card 
+                List<int> dcids = GetIDs("AD_DefaultCardView", "AD_DefaultCardView_ID","AD_CardView_ID=" + sAD_CardView_ID);
+                for (int crd = 0; crd < dcids.Count; crd++)
+                {
+                    InsertIntoDBSchema(X_AD_DefaultCardView.Table_ID, dcids[crd], X_AD_DefaultCardView.Table_Name, name, "AD_DefaultCardView_ID =" + dcids[crd]);
+                }
             }
         }
 
