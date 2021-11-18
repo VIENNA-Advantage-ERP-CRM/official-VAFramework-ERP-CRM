@@ -29,7 +29,7 @@
 .VIS-winSearch-NonDefaultIcon {
     font-size: 11px;
     color: #B9E1F7;
-    width: 25px;
+    width: 20px;
     line-height: 19px;
     cursor: pointer;
     text-align: center;
@@ -42,7 +42,7 @@
 .VIS-winSearch-defaultIcon {
     font-size: 11px;
     color: #B9E1F7;
-    width: 25px;
+    width: 20px;
     line-height: 19px;
     cursor: pointer;
     text-align: center;
@@ -2571,6 +2571,7 @@ findImg {
         width: 100%;
         z-index: 0;
         background: #fff;
+        font-weight:600;
     }
 
 .vis-cv-main {
@@ -2674,7 +2675,7 @@ findImg {
 
 .vis-cv-card span {
     /*margin: 0 0 5px;*/
-    color: gray;
+    /*color: gray;*/
     text-overflow: ellipsis;
     overflow: hidden;
 }
@@ -2691,6 +2692,7 @@ findImg {
     position: absolute;
     right: 5px;
     top: 7px;
+    z-index: 9;
 }
 
     .vis-cv-card-edit:hover {

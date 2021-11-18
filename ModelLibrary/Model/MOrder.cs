@@ -3464,7 +3464,7 @@ namespace VAdvantage.Model
                 DataBase.DB.ExecuteQuery("DELETE FROM C_OrderTax WHERE C_Order_ID=" + GetC_Order_ID(), null, Get_TrxName());
                 _taxes = null;
 
-                DataSet dsOdrLine = DB.ExecuteDataset("SELECT TaxAbleAmt, C_Order_ID, C_Tax_ID FROM C_OrderLine WHERE C_Order_ID=" + GetC_Order_ID(), null, Get_TrxName());
+                DataSet dsOdrLine = DB.ExecuteDataset("SELECT LineNetAmt, TaxAbleAmt, C_Order_ID, C_Tax_ID FROM C_OrderLine WHERE C_Order_ID=" + GetC_Order_ID(), null, Get_TrxName());
 
                 //	Lines
                 Decimal totalLines = Env.ZERO;
