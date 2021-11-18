@@ -1238,7 +1238,7 @@
 
         this.setColor = function (bc, fc) {
             if (bc)
-                root.css('background-color', bc);
+                root.css('background', bc);
             if (fc)
                 root.css('color', bc);
         };

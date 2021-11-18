@@ -74,7 +74,7 @@ namespace ViennaAdvantage.Model
 @return AD_CardView_ID */
         public int GetAD_CardView_ID() { Object ii = Get_Value("AD_CardView_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Color.
 @param Color Color */
-        public void SetColor(String Color) { if (Color != null && Color.Length > 50) { log.Warning("Length > 50 - truncated"); Color = Color.Substring(0, 50); } Set_Value("Color", Color); }/** Get Color.
+        public void SetColor(String Color) { if (Color != null && Color.Length > 100) { log.Warning("Length > 100 - truncated"); Color = Color.Substring(0, 100); } Set_Value("Color", Color); }/** Get Color.
 @return Color */
         public String GetColor() { return (String)Get_Value("Color"); }/** Set CondiitonValue.
 @param CondiitonValue CondiitonValue */

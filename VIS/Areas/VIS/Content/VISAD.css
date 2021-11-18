@@ -2547,9 +2547,9 @@ findImg {
     /* color: darkgray; */
     font-size: 12px;
     padding-top: 0;
-    position: sticky;
+    position: fixed;
     z-index: 1;
-    top: 0;
+    right: 70px;
     display: flex;
     justify-content: flex-end;
 }
