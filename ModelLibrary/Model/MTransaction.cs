@@ -105,23 +105,25 @@ namespace VAdvantage.Model
         /// <returns></returns>
         protected override bool BeforeSave(bool newRecord)
         {
+            return true;
+            // VIS0060: Code commented to handle case of reversed Future date transaction exist.
             // is used to check Container applicable into system
-            isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
+            //isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
 
             // system will check - if container qty goes negative then not to save Transaction
-            MLocator locator = MLocator.Get(GetCtx(), GetM_Locator_ID());
-            MWarehouse warehouse = MWarehouse.Get(GetCtx(), locator.GetM_Warehouse_ID());
-            if (isContainerApplicable && warehouse.IsDisallowNegativeInv() && Get_ColumnIndex("ContainerCurrentQty") >= 0 && GetContainerCurrentQty() < 0)
-            {
-                log.SaveError("Info", Msg.GetMsg(GetCtx(), "VIS_FutureContainerQtygoesNegative"));
-                return false;
-            }
-            else if (warehouse.IsDisallowNegativeInv() && GetCurrentQty() < 0)
-            {
-                log.SaveError("Info", Msg.GetMsg(GetCtx(), "VIS_FutureQtygoesNegative"));
-                return false;
-            }
-            return base.BeforeSave(newRecord);
+            //MLocator locator = MLocator.Get(GetCtx(), GetM_Locator_ID());
+            //MWarehouse warehouse = MWarehouse.Get(GetCtx(), locator.GetM_Warehouse_ID());
+            //if (isContainerApplicable && warehouse.IsDisallowNegativeInv() && Get_ColumnIndex("ContainerCurrentQty") >= 0 && GetContainerCurrentQty() < 0)
+            //{
+            //    log.SaveError("Info", Msg.GetMsg(GetCtx(), "VIS_FutureContainerQtygoesNegative"));
+            //    return false;
+            //}
+            //else if (warehouse.IsDisallowNegativeInv() && GetCurrentQty() < 0)
+            //{
+            //    log.SaveError("Info", Msg.GetMsg(GetCtx(), "VIS_FutureQtygoesNegative"));
+            //    return false;
+            //}
+            //return base.BeforeSave(newRecord);
         }
 
         /// <summary>
