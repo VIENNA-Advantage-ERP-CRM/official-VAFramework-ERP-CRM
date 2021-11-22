@@ -622,6 +622,7 @@
                                         });
                                         var changeCard = new VCard($this.fields, rec[0], $this.headerItems, $this.headerStyle, $this.headerPadding, windowNo, {}, $this.aPanel)
                                         root.find("[name='vc_" + item + "']").replaceWith(changeCard.getRoot());
+                                        changeCard.evaluate($this.cConditions)
                                     }
                                 },
                                 error: function (err) {
