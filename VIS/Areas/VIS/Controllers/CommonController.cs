@@ -1572,6 +1572,7 @@ namespace VIS.Controllers
 
         public bool SaveInvoiceData(Ctx ctx, List<Dictionary<string, string>> model, string selectedItems, int C_Order_ID, int C_Invoice_ID, int M_InOut_ID)
         {
+            int lineNo = 0;
             MOrder _order = null;
             if (C_Order_ID > 0)
             {
@@ -1639,6 +1640,9 @@ namespace VIS.Controllers
             }
             //DateTime? AmortStartDate = null;
             //DateTime? AmortEndDate = null;
+
+            // VIS0060: Get Max Line No from Invoice Lines.
+            lineNo = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COALESCE(MAX(Line), 0) + 10 FROM C_InvoiceLine WHERE C_Invoice_ID =" + C_Invoice_ID));
             //  Lines
             for (int i = 0; i < model.Count; i++)
             {
@@ -1731,6 +1735,78 @@ namespace VIS.Controllers
                     }
                 }	//	get Ship info
 
+                //	Order Info
+                if (orderLine != null)
+                {
+                    invoiceLine.SetOrderLine(orderLine);	//	overwrites
+
+                    /* nnayak - Bug 1567690. The organization from the Orderline can be different from the organization 
+                    on the header */
+                    invoiceLine.SetClientOrg(orderLine.GetAD_Client_ID(), orderLine.GetAD_Org_ID());
+                    if (orderLine.GetQtyEntered().CompareTo(orderLine.GetQtyOrdered()) != 0)
+                    {
+                        //invoiceLine.setQtyInvoiced(QtyEntered
+                        //    .multiply(orderLine.getQtyOrdered())
+                        //    .divide(orderLine.getQtyEntered(), 12, Decimal.ROUND_HALF_UP));
+                        invoiceLine.SetQtyInvoiced(Decimal.Round(Decimal.Divide(Decimal.Multiply(QtyEntered,
+                        orderLine.GetQtyOrdered()),
+                        orderLine.GetQtyEntered()), 12, MidpointRounding.AwayFromZero));
+                    }
+
+                    if (Env.IsModuleInstalled("VA077_"))
+                    {
+                        invoiceLine.Set_Value("VA077_CNAutodesk", orderLine.Get_Value("VA077_CNAutodesk"));
+                        invoiceLine.Set_Value("VA077_Duration", orderLine.Get_Value("VA077_Duration"));
+                        invoiceLine.Set_Value("VA077_MarginAmt", orderLine.Get_Value("VA077_MarginAmt"));
+                        invoiceLine.Set_Value("VA077_MarginPercent", orderLine.Get_Value("VA077_MarginPercent"));
+                        invoiceLine.Set_Value("VA077_OldSN", orderLine.Get_Value("VA077_OldSN"));
+                        invoiceLine.Set_Value("VA077_ProductInfo", orderLine.Get_Value("VA077_ProductInfo"));
+                        invoiceLine.Set_Value("VA077_PurchasePrice", orderLine.Get_Value("VA077_PurchasePrice"));
+                        invoiceLine.Set_Value("VA077_RegEmail", orderLine.Get_Value("VA077_RegEmail"));
+                        invoiceLine.Set_Value("VA077_SerialNo", orderLine.Get_Value("VA077_SerialNo"));
+                        invoiceLine.Set_Value("VA077_UpdateFromVersn", orderLine.Get_Value("VA077_UpdateFromVersn"));
+                        invoiceLine.Set_Value("VA077_UserRef_ID", orderLine.Get_Value("VA077_UserRef_ID"));
+                        invoiceLine.Set_Value("VA077_StartDate", orderLine.Get_Value("VA077_StartDate"));
+                        invoiceLine.Set_Value("VA077_EndDate", orderLine.Get_Value("VA077_EndDate"));
+                        invoiceLine.Set_Value("VA077_ServiceContract_ID", orderLine.Get_Value("VA077_ServiceContract_ID"));
+                    }
+                }
+                else
+                {
+                    //s_log.fine("No Order Line");
+
+                    /* nnayak - Bug 1567690. The organization from the Receipt can be different from the organization 
+                    on the header */
+                    if (inoutLine != null)
+                    {
+                        invoiceLine.SetClientOrg(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID());
+
+                        if (Env.IsModuleInstalled("VA077_"))
+                        {
+                            invoiceLine.Set_Value("VA077_CNAutodesk", inoutLine.Get_Value("VA077_CNAutodesk"));
+                            invoiceLine.Set_Value("VA077_Duration", inoutLine.Get_Value("VA077_Duration"));
+                            invoiceLine.Set_Value("VA077_MarginAmt", inoutLine.Get_Value("VA077_MarginAmt"));
+                            invoiceLine.Set_Value("VA077_MarginPercent", inoutLine.Get_Value("VA077_MarginPercent"));
+                            invoiceLine.Set_Value("VA077_OldSN", inoutLine.Get_Value("VA077_OldSN"));
+                            invoiceLine.Set_Value("VA077_ProductInfo", inoutLine.Get_Value("VA077_ProductInfo"));
+                            invoiceLine.Set_Value("VA077_PurchasePrice", inoutLine.Get_Value("VA077_PurchasePrice"));
+                            invoiceLine.Set_Value("VA077_RegEmail", inoutLine.Get_Value("VA077_RegEmail"));
+                            invoiceLine.Set_Value("VA077_SerialNo", inoutLine.Get_Value("VA077_SerialNo"));
+                            invoiceLine.Set_Value("VA077_UpdateFromVersn", inoutLine.Get_Value("VA077_UpdateFromVersn"));
+                            invoiceLine.Set_Value("VA077_UserRef_ID", inoutLine.Get_Value("VA077_UserRef_ID"));
+                            invoiceLine.Set_Value("VA077_StartDate", inoutLine.Get_Value("VA077_StartDate"));
+                            invoiceLine.Set_Value("VA077_EndDate", inoutLine.Get_Value("VA077_EndDate"));
+                            invoiceLine.Set_Value("VA077_ServiceContract_ID", inoutLine.Get_Value("VA077_ServiceContract_ID"));
+                        }
+
+
+                    }
+
+                    invoiceLine.SetPrice();
+                    invoiceLine.SetTax();             
+                }
+
+                // VIS0060: Handle case of Attribute Set Instance, was overwritten by Order Line Attribute Set Instance
                 //	Shipment Info
                 if (inoutLine != null)
                 {
@@ -1828,238 +1904,15 @@ namespace VIS.Controllers
                     //s_log.fine("No Receipt Line");
                 }
 
-                //	Order Info
-                if (orderLine != null)
-                {
-                    invoiceLine.SetOrderLine(orderLine);	//	overwrites
-
-                    /* nnayak - Bug 1567690. The organization from the Orderline can be different from the organization 
-                    on the header */
-                    invoiceLine.SetClientOrg(orderLine.GetAD_Client_ID(), orderLine.GetAD_Org_ID());
-                    if (orderLine.GetQtyEntered().CompareTo(orderLine.GetQtyOrdered()) != 0)
-                    {
-                        //invoiceLine.setQtyInvoiced(QtyEntered
-                        //    .multiply(orderLine.getQtyOrdered())
-                        //    .divide(orderLine.getQtyEntered(), 12, Decimal.ROUND_HALF_UP));
-                        invoiceLine.SetQtyInvoiced(Decimal.Round(Decimal.Divide(Decimal.Multiply(QtyEntered,
-                        orderLine.GetQtyOrdered()),
-                        orderLine.GetQtyEntered()), 12, MidpointRounding.AwayFromZero));
-                    }
-
-                    if (Env.IsModuleInstalled("VA077_"))
-                    {
-                        invoiceLine.Set_Value("VA077_CNAutodesk", orderLine.Get_Value("VA077_CNAutodesk"));
-                        invoiceLine.Set_Value("VA077_Duration", orderLine.Get_Value("VA077_Duration"));
-                        invoiceLine.Set_Value("VA077_MarginAmt", orderLine.Get_Value("VA077_MarginAmt"));
-                        invoiceLine.Set_Value("VA077_MarginPercent", orderLine.Get_Value("VA077_MarginPercent"));
-                        invoiceLine.Set_Value("VA077_OldSN", orderLine.Get_Value("VA077_OldSN"));
-                        invoiceLine.Set_Value("VA077_ProductInfo", orderLine.Get_Value("VA077_ProductInfo"));
-                        invoiceLine.Set_Value("VA077_PurchasePrice", orderLine.Get_Value("VA077_PurchasePrice"));
-                        invoiceLine.Set_Value("VA077_RegEmail", orderLine.Get_Value("VA077_RegEmail"));
-                        invoiceLine.Set_Value("VA077_SerialNo", orderLine.Get_Value("VA077_SerialNo"));
-                        invoiceLine.Set_Value("VA077_UpdateFromVersn", orderLine.Get_Value("VA077_UpdateFromVersn"));
-                        invoiceLine.Set_Value("VA077_UserRef_ID", orderLine.Get_Value("VA077_UserRef_ID"));
-                        invoiceLine.Set_Value("VA077_StartDate", orderLine.Get_Value("VA077_StartDate"));
-                        invoiceLine.Set_Value("VA077_EndDate", orderLine.Get_Value("VA077_EndDate"));
-                        invoiceLine.Set_Value("VA077_ServiceContract_ID", orderLine.Get_Value("VA077_ServiceContract_ID"));
-                    }
-
-
-
-                    // Change By mohit Amortization proces
-                    //int countVA038 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA038_' "));
-                    //if (countVA038 > 0)
-                    //{
-                    //    if (Util.GetValueOfInt(orderLine.GetM_Product_ID()) > 0)
-                    //    {
-                    //        MProduct pro = new MProduct(ctx, orderLine.GetM_Product_ID(), null);
-                    //        if (Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
-                    //        {
-                    //            invoiceLine.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")));
-                    //            DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")));
-                    //            AmortStartDate = null;
-                    //            AmortEndDate = null;
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "A")
-                    //            {
-                    //                AmortStartDate = _invoice.GetDateAcct();
-                    //            }
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "T")
-                    //            {
-                    //                AmortStartDate = _invoice.GetDateInvoiced();
-                    //            }
-
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_PeriodType"]) == "M")
-                    //            {
-                    //                AmortEndDate = AmortStartDate.Value.AddMonths(Util.GetValueOfInt(amrtDS.Tables[0].Rows[0]["VA038_AmortizationPeriod"]));
-                    //            }
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_PeriodType"]) == "Y")
-                    //            {
-                    //                AmortEndDate = AmortStartDate.Value.AddYears(Util.GetValueOfInt(amrtDS.Tables[0].Rows[0]["VA038_AmortizationPeriod"]));
-                    //            }
-                    //            invoiceLine.Set_Value("FROMDATE", AmortStartDate);
-                    //            invoiceLine.Set_Value("EndDate", AmortEndDate);
-                    //            if (amrtDS != null)
-                    //            {
-                    //                amrtDS.Dispose();
-                    //            }
-                    //        }
-                    //    }
-                    //    if (Util.GetValueOfInt(orderLine.GetC_Charge_ID()) > 0)
-                    //    {
-                    //        MCharge charge = new MCharge(ctx, orderLine.GetC_Charge_ID(), null);
-                    //        if (Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
-                    //        {
-                    //            invoiceLine.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
-                    //            DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
-                    //            AmortStartDate = null;
-                    //            AmortEndDate = null;
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "A")
-                    //            {
-                    //                AmortStartDate = _invoice.GetDateAcct();
-                    //            }
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "T")
-                    //            {
-                    //                AmortStartDate = _invoice.GetDateInvoiced();
-                    //            }
-
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_PeriodType"]) == "M")
-                    //            {
-                    //                AmortEndDate = AmortStartDate.Value.AddMonths(Util.GetValueOfInt(amrtDS.Tables[0].Rows[0]["VA038_AmortizationPeriod"]));
-                    //            }
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_PeriodType"]) == "Y")
-                    //            {
-                    //                AmortEndDate = AmortStartDate.Value.AddYears(Util.GetValueOfInt(amrtDS.Tables[0].Rows[0]["VA038_AmortizationPeriod"]));
-                    //            }
-                    //            invoiceLine.Set_Value("FROMDATE", AmortStartDate);
-                    //            invoiceLine.Set_Value("EndDate", AmortEndDate);
-                    //            if (amrtDS != null)
-                    //            {
-                    //                amrtDS.Dispose();
-                    //            }
-                    //        }
-                    //    }
-
-                    //}
-
-                    // End Amortization process
-
-                }
-                else
-                {
-                    //s_log.fine("No Order Line");
-
-                    /* nnayak - Bug 1567690. The organization from the Receipt can be different from the organization 
-                    on the header */
-                    if (inoutLine != null)
-                    {
-                        invoiceLine.SetClientOrg(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID());
-
-                        if (Env.IsModuleInstalled("VA077_"))
-                        {
-                            invoiceLine.Set_Value("VA077_CNAutodesk", inoutLine.Get_Value("VA077_CNAutodesk"));
-                            invoiceLine.Set_Value("VA077_Duration", inoutLine.Get_Value("VA077_Duration"));
-                            invoiceLine.Set_Value("VA077_MarginAmt", inoutLine.Get_Value("VA077_MarginAmt"));
-                            invoiceLine.Set_Value("VA077_MarginPercent", inoutLine.Get_Value("VA077_MarginPercent"));
-                            invoiceLine.Set_Value("VA077_OldSN", inoutLine.Get_Value("VA077_OldSN"));
-                            invoiceLine.Set_Value("VA077_ProductInfo", inoutLine.Get_Value("VA077_ProductInfo"));
-                            invoiceLine.Set_Value("VA077_PurchasePrice", inoutLine.Get_Value("VA077_PurchasePrice"));
-                            invoiceLine.Set_Value("VA077_RegEmail", inoutLine.Get_Value("VA077_RegEmail"));
-                            invoiceLine.Set_Value("VA077_SerialNo", inoutLine.Get_Value("VA077_SerialNo"));
-                            invoiceLine.Set_Value("VA077_UpdateFromVersn", inoutLine.Get_Value("VA077_UpdateFromVersn"));
-                            invoiceLine.Set_Value("VA077_UserRef_ID", inoutLine.Get_Value("VA077_UserRef_ID"));
-                            invoiceLine.Set_Value("VA077_StartDate", inoutLine.Get_Value("VA077_StartDate"));
-                            invoiceLine.Set_Value("VA077_EndDate", inoutLine.Get_Value("VA077_EndDate"));
-                            invoiceLine.Set_Value("VA077_ServiceContract_ID", inoutLine.Get_Value("VA077_ServiceContract_ID"));
-                        }
-
-
-                    }
-
-                    invoiceLine.SetPrice();
-                    invoiceLine.SetTax();
-                    // Change By mohit Amortization proces
-                    //int countVA038 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA038_' "));
-                    //if (countVA038 > 0)
-                    //{
-                    //    if (Util.GetValueOfInt(inoutLine.GetM_Product_ID()) > 0)
-                    //    {
-                    //        MProduct pro = new MProduct(ctx, inoutLine.GetM_Product_ID(), null);
-                    //        if (Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
-                    //        {
-                    //            invoiceLine.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")));
-                    //            DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")));
-                    //            AmortStartDate = null;
-                    //            AmortEndDate = null;
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "A")
-                    //            {
-                    //                AmortStartDate = _invoice.GetDateAcct();
-                    //            }
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "T")
-                    //            {
-                    //                AmortStartDate = _invoice.GetDateInvoiced();
-                    //            }
-
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_PeriodType"]) == "M")
-                    //            {
-                    //                AmortEndDate = AmortStartDate.Value.AddMonths(Util.GetValueOfInt(amrtDS.Tables[0].Rows[0]["VA038_AmortizationPeriod"]));
-                    //            }
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_PeriodType"]) == "Y")
-                    //            {
-                    //                AmortEndDate = AmortStartDate.Value.AddYears(Util.GetValueOfInt(amrtDS.Tables[0].Rows[0]["VA038_AmortizationPeriod"]));
-                    //            }
-                    //            invoiceLine.Set_Value("FROMDATE", AmortStartDate);
-                    //            invoiceLine.Set_Value("EndDate", AmortEndDate);
-                    //            if (amrtDS != null)
-                    //            {
-                    //                amrtDS.Dispose();
-                    //            }
-                    //        }
-                    //    }
-                    //    if (Util.GetValueOfInt(inoutLine.GetC_Charge_ID()) > 0)
-                    //    {
-                    //        MCharge charge = new MCharge(ctx, inoutLine.GetC_Charge_ID(), null);
-                    //        if (Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
-                    //        {
-                    //            invoiceLine.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
-                    //            DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
-                    //            AmortStartDate = null;
-                    //            AmortEndDate = null;
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "A")
-                    //            {
-                    //                AmortStartDate = _invoice.GetDateAcct();
-                    //            }
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "T")
-                    //            {
-                    //                AmortStartDate = _invoice.GetDateInvoiced();
-                    //            }
-
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_PeriodType"]) == "M")
-                    //            {
-                    //                AmortEndDate = AmortStartDate.Value.AddMonths(Util.GetValueOfInt(amrtDS.Tables[0].Rows[0]["VA038_AmortizationPeriod"]));
-                    //            }
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_PeriodType"]) == "Y")
-                    //            {
-                    //                AmortEndDate = AmortStartDate.Value.AddYears(Util.GetValueOfInt(amrtDS.Tables[0].Rows[0]["VA038_AmortizationPeriod"]));
-                    //            }
-                    //            invoiceLine.Set_Value("FROMDATE", AmortStartDate);
-                    //            invoiceLine.Set_Value("EndDate", AmortEndDate);
-                    //            if (amrtDS != null)
-                    //            {
-                    //                amrtDS.Dispose();
-                    //            }
-                    //        }
-                    //    }
-
-                    //}
-
-                    // End Amortization process
-                }
+                // VIS0060: Set Line no on Invoice Line.
+                invoiceLine.SetLine(lineNo);
                 if (!invoiceLine.Save())
                 {
                     //s_log.log(Level.SEVERE, "Line NOT created #" + i);
                 }
                 else  // Added by Bharat issue given by Sumit - Order ID not set on Invoice Header.
                 {
+                    lineNo += 10;
                     if (C_Order_ID == 0 && C_OrderLine_ID > 0)
                     {
                         MOrderLine ordLine = new MOrderLine(ctx, C_OrderLine_ID, null);

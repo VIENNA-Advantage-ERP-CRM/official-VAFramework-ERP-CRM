@@ -279,7 +279,7 @@ namespace VAdvantage.Model
             if (idr == null)
             {
                 sql = "SELECT il.TaxBaseAmt, COALESCE(il.TaxAmt,0), i.IsSOTrx  , i.C_Currency_ID , i.DateAcct , i.C_ConversionType_ID, "
-                   + " il.C_Invoice_ID, il.C_Tax_ID FROM C_InvoiceLine il"
+                   + " il.C_Invoice_ID, il.C_Tax_ID, il.LineNetAmt FROM C_InvoiceLine il"
                    + " INNER JOIN C_Invoice i ON (il.C_Invoice_ID=i.C_Invoice_ID) "
                    + "WHERE il.C_Invoice_ID=" + GetC_Invoice_ID() + " AND il.C_Tax_ID=" + GetC_Tax_ID();
                 idr = DB.ExecuteDataset(sql, null, Get_TrxName());
@@ -306,12 +306,63 @@ namespace VAdvantage.Model
                         dateAcct = Utility.Util.GetValueOfDateTime(dr[i]["DateAcct"]);
                         c_ConversionType_ID = Utility.Util.GetValueOfInt(dr[i]["C_ConversionType_ID"]);
                         //	BaseAmt
-                        Decimal baseAmt = Utility.Util.GetValueOfDecimal(dr[i]["TaxBaseAmt"]);
+                        Decimal baseAmt = Utility.Util.GetValueOfDecimal(dr[i]["LineNetAmt"]);
+                        Decimal TaxableAmt = baseAmt;
+                        if (IsTaxIncluded())
+                        {
+                            Decimal surRate = 0;
+                            Decimal multiplier = 0;
+                            if (tax.GetSurcharge_Tax_ID() > 0)
+                            {
+                                MTax surTax = MTax.Get(GetCtx(), tax.GetSurcharge_Tax_ID());
+                                surRate = surTax.GetRate();
+                                if (tax.GetSurchargeType() == MTax.SURCHARGETYPE_LineAmountPlusTax)
+                                {
+                                    multiplier = Decimal.Round(Decimal.Divide(surRate, 100), 12, MidpointRounding.AwayFromZero);
+                                    multiplier = Decimal.Add(multiplier, Env.ONE);
+                                    baseAmt = Decimal.Divide(baseAmt, multiplier);
+                                    baseAmt = Decimal.Round(baseAmt, 12, MidpointRounding.AwayFromZero);
+
+                                    multiplier = Decimal.Round(Decimal.Divide(tax.GetRate(), 100), 12, MidpointRounding.AwayFromZero);
+                                    multiplier = Decimal.Add(multiplier, Env.ONE);
+                                    baseAmt = Decimal.Divide(baseAmt, multiplier);
+                                    baseAmt = Decimal.Round(baseAmt, 12, MidpointRounding.AwayFromZero);
+                                    TaxableAmt = baseAmt;
+                                }
+                                else if (tax.GetSurchargeType() == MTax.SURCHARGETYPE_LineAmount)
+                                {
+                                    multiplier = Decimal.Round(Decimal.Divide(Decimal.Add(tax.GetRate(), surRate), 100),
+                                                           12, MidpointRounding.AwayFromZero);
+                                    multiplier = Decimal.Add(multiplier, Env.ONE);
+                                    baseAmt = Decimal.Divide(baseAmt, multiplier);
+                                    baseAmt = Decimal.Round(baseAmt, 12, MidpointRounding.AwayFromZero);
+                                    TaxableAmt = baseAmt;
+                                }
+                                else if (tax.GetSurchargeType() == MTax.SURCHARGETYPE_TaxAmount)
+                                {
+                                    multiplier = Decimal.Round(Decimal.Divide(surRate, 100), 12, MidpointRounding.AwayFromZero);
+                                    multiplier = Decimal.Multiply(tax.GetRate(), multiplier);
+                                    multiplier = Decimal.Add(tax.GetRate(), multiplier);
+                                    multiplier = Decimal.Round(Decimal.Divide(multiplier, 100), 12, MidpointRounding.AwayFromZero);
+                                    multiplier = Decimal.Add(multiplier, Env.ONE);
+
+                                    baseAmt = Decimal.Divide(baseAmt, multiplier);
+                                    baseAmt = Decimal.Round(baseAmt, 12, MidpointRounding.AwayFromZero);
+                                    TaxableAmt = baseAmt;
+                                }
+                            }
+                            else
+                            {
+                                multiplier = Decimal.Round(Decimal.Divide(tax.GetRate(), 100), 12, MidpointRounding.AwayFromZero);
+                                multiplier = Decimal.Add(multiplier, Env.ONE);
+                                baseAmt = Decimal.Divide(baseAmt, multiplier);
+                            }
+                        }
                         taxBaseAmt = Decimal.Add((Decimal)taxBaseAmt, baseAmt);
+
                         //	TaxAmt
                         Decimal amt = Utility.Util.GetValueOfDecimal(dr[i][1]);
-                        //if (amt == null)
-                        //    amt = Env.ZERO;
+
                         bool isSOTrx = "Y".Equals(dr[i][2].ToString());
                         //
                         if (documentLevel || Env.Signum(baseAmt) == 0)
@@ -324,7 +375,9 @@ namespace VAdvantage.Model
                         }
                         else    // calculate line tax
                         {
-                            amt = tax.CalculateTax(baseAmt, false, GetPrecision());
+                            amt = tax.CalculateTax(TaxableAmt,
+                                (tax.GetSurcharge_Tax_ID() > 0) ? false :
+                                IsTaxIncluded(), GetPrecision());
                         }
                         //
                         taxAmt = Decimal.Add(taxAmt, amt);
@@ -366,7 +419,7 @@ namespace VAdvantage.Model
             //if (IsTaxIncluded())
             //    SetTaxBaseAmt(Decimal.Subtract((Decimal)taxBaseAmt, taxAmt));
             //else
-            SetTaxBaseAmt((Decimal)taxBaseAmt);
+            SetTaxBaseAmt(Decimal.Round((Decimal)taxBaseAmt, GetPrecision()));
             return true;
         }
 
@@ -376,13 +429,15 @@ namespace VAdvantage.Model
         /// <returns>true if calculated</returns>
         public bool CalculateSurchargeFromLines()
         {
+            Decimal multiplier = 0;
             Decimal taxBaseAmt = Env.ZERO;
             Decimal surTaxAmt = Env.ZERO;
             //
             MTax surTax = new MTax(GetCtx(), GetC_Tax_ID(), Get_TrxName());
             bool documentLevel = surTax.IsDocumentLevel();
             //
-            String sql = "SELECT il.TaxBaseAmt, COALESCE(il.TaxAmt,0), i.IsSOTrx  , i.C_Currency_ID , i.DateAcct , i.C_ConversionType_ID, tax.SurchargeType "
+            String sql = @"SELECT il.TaxBaseAmt, COALESCE(il.TaxAmt,0), i.IsSOTrx  , i.C_Currency_ID ,
+                            i.DateAcct , i.C_ConversionType_ID, tax.SurchargeType, il.LineNetAmt, tax.Rate "
                 + "FROM C_InvoiceLine il"
                 + " INNER JOIN C_Invoice i ON (il.C_Invoice_ID=i.C_Invoice_ID) "
                 + " INNER JOIN C_Tax tax ON il.C_Tax_ID=tax.C_Tax_ID "
@@ -401,7 +456,8 @@ namespace VAdvantage.Model
                     dateAcct = Utility.Util.GetValueOfDateTime(idr[4]);
                     c_ConversionType_ID = Utility.Util.GetValueOfInt(idr[5]);
                     //	BaseAmt
-                    Decimal baseAmt = Utility.Util.GetValueOfDecimal(idr[0]);
+                    Decimal baseAmt = Utility.Util.GetValueOfDecimal(idr["LineNetAmt"]);
+                    Decimal orignalTaxRate = Util.GetValueOfDecimal(idr["Rate"]);
                     //	TaxAmt
                     Decimal taxAmt = Utility.Util.GetValueOfDecimal(idr[1]);
                     string surchargeType = Util.GetValueOfString(idr[6]);
@@ -409,12 +465,34 @@ namespace VAdvantage.Model
                     // for Surcharge Calculation type - Line Amount + Tax Amount
                     if (surchargeType.Equals(MTax.SURCHARGETYPE_LineAmountPlusTax))
                     {
+                        if (IsTaxIncluded())
+                        {
+                            // calculate base amount based on Surcharge Rate
+                            multiplier = Decimal.Round(Decimal.Divide(surTax.GetRate(), 100), 12, MidpointRounding.AwayFromZero);
+                            multiplier = Decimal.Add(multiplier, Env.ONE);
+                            baseAmt = Decimal.Divide(baseAmt, multiplier);
+                            baseAmt = Decimal.Round(baseAmt, 12, MidpointRounding.AwayFromZero);
+
+                            // calculate base amount on above calculate baseamt based on original tax rate
+                            multiplier = Decimal.Round(Decimal.Divide(orignalTaxRate, 100), 12, MidpointRounding.AwayFromZero);
+                            multiplier = Decimal.Add(multiplier, Env.ONE);
+                            baseAmt = Decimal.Divide(baseAmt, multiplier);
+                            baseAmt = Decimal.Round(baseAmt, 12, MidpointRounding.AwayFromZero);
+                        }
                         baseAmt = Decimal.Add(baseAmt, taxAmt);
                         taxBaseAmt = Decimal.Add(taxBaseAmt, baseAmt);
                     }
                     // for Surcharge Calculation type - Line Amount 
                     else if (surchargeType.Equals(MTax.SURCHARGETYPE_LineAmount))
                     {
+                        if (IsTaxIncluded())
+                        {
+                            multiplier = Decimal.Round(Decimal.Divide(Decimal.Add(surTax.GetRate(), orignalTaxRate), 100), 12, MidpointRounding.AwayFromZero);
+                            multiplier = Decimal.Add(multiplier, Env.ONE);
+
+                            baseAmt = Decimal.Divide(baseAmt, multiplier);
+                            baseAmt = Decimal.Round(baseAmt, 12, MidpointRounding.AwayFromZero);
+                        }
                         taxBaseAmt = Decimal.Add(taxBaseAmt, baseAmt);
                     }
                     // for Surcharge Calculation type - Tax Amount
@@ -473,8 +551,11 @@ namespace VAdvantage.Model
                 SetTaxBaseCurrencyAmt(taxAmtBaseCurrency);
             }
 
-            //	Set Base            
-            SetTaxBaseAmt(taxBaseAmt);
+            //	Set Base
+            //if (IsTaxIncluded())
+            //    SetTaxBaseAmt(Decimal.Subtract((Decimal)taxBaseAmt, surTaxAmt));
+            //else
+            SetTaxBaseAmt(Decimal.Round(taxBaseAmt, GetPrecision()));
             return true;
         }
 
