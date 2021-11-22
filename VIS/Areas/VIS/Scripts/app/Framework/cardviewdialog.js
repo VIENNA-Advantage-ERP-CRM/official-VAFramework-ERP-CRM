@@ -299,6 +299,10 @@
             isBusyRoot.css({
                 "display": "none"
             });
+
+            rootCardViewUI.find("*").attr("disabled", "disabled");
+            rootCardViewUI.find(".vis-firstdiv *").removeAttr("disabled");
+            rootCardViewUI.find(".vis-cardviewbtn:last *").removeAttr("disabled");
             Events();
 
         };
@@ -382,8 +386,12 @@
                     cardViewUserID = parseInt(cmbCardView.find(":selected").attr("ad_user_id"));
                     if (cardViewUserID == VIS.context.getAD_User_ID()) {
                         rootCardViewUI.find(".vis-btnDelete").css("display", "block");
+                        rootCardViewUI.find(".vis-cvd-editbtn i").removeClass('vis-copy').addClass('vis-pencil');
+                        rootCardViewUI.find(".vis-cvd-editbtn").attr("title", VIS.Msg.getMsg("EditRecord"));                       
                     } else {
                         rootCardViewUI.find(".vis-btnDelete").css("display", "none");
+                        rootCardViewUI.find(".vis-cvd-editbtn i").removeClass('vis-pencil').addClass('vis-copy');
+                        rootCardViewUI.find(".vis-cvd-editbtn").attr("title", VIS.Msg.getMsg("CopyCard"));
                     }
 
                     try {
@@ -439,8 +447,12 @@
                 isPublic.attr("checked", parseInt(sel.attr("is_shared")) > 0 ? false : true);
                 if (cardViewUserID == VIS.context.getAD_User_ID()) {
                     rootCardViewUI.find(".vis-btnDelete").css("display", "block");
+                    rootCardViewUI.find(".vis-cvd-editbtn i").removeClass('vis-copy').addClass('vis-pencil');
+                    rootCardViewUI.find(".vis-cvd-editbtn").attr("title", VIS.Msg.getMsg("EditRecord"));
                 } else {
                     rootCardViewUI.find(".vis-btnDelete").css("display", "none");
+                    rootCardViewUI.find(".vis-cvd-editbtn i").removeClass('vis-pencil').addClass('vis-copy');
+                    rootCardViewUI.find(".vis-cvd-editbtn").attr("title", VIS.Msg.getMsg("CopyCard"));
                 }
             }
 
@@ -560,6 +572,7 @@
                     isNewRecord = true;
                     LstRoleID = [];
                     //UnSelectRoleUl();
+                    cmbGroupField.find(":selected").removeAttr("selected");
                     cmbGroupField.find("[FieldID='" + -1 + "']").attr("selected", "selected");
                     FillColumnInclude(false, true);
                     ulRightColumns.children().remove();
@@ -567,6 +580,7 @@
                     LastCVCondition = cardviewCondition;
                     cardviewCondition = [];
                     AddRow(cardviewCondition);
+                    rootCardViewUI.find("*").removeAttr("disabled");
                 });
             }
             if (btnCancle != null) {
@@ -588,6 +602,9 @@
                     FillGroupFields();
                     //FillRoleList(ulRole);
                     AddRow(LastCVCondition);
+                    rootCardViewUI.find("*").attr("disabled", "disabled");
+                    rootCardViewUI.find(".vis-firstdiv *").removeAttr("disabled");
+                    rootCardViewUI.find(".vis-cardviewbtn:last *").removeAttr("disabled");
                 });
             }
 
@@ -609,7 +626,7 @@
                     } else {
                         lblDefault.css({ "display": "block" }).attr('checked', false);
                     }
-
+                    rootCardViewUI.find("*").removeAttr("disabled");
                 });
             }
             if (cmbUser != null) {
@@ -789,8 +806,7 @@
                             IsBusy(false);
                             return false;
                         }
-
-
+                        
 
 
                         //var retVal = {};
@@ -1178,47 +1194,55 @@
         };
 
         var SaveCardViewColumn = function (lstCardView) {
-
-            var renameCard = false;
+           
             cardViewUserID = parseInt(cmbCardView.find(":selected").attr("ad_user_id"));
             if (VIS.context.getAD_User_ID() == cardViewUserID && !isNewRecord) {
                 AD_User_ID = VIS.context.getAD_User_ID();
             } else if (VIS.context.getAD_User_ID() != cardViewUserID && !isNewRecord) {
                 isNewRecord = true;
-                AD_User_ID = VIS.context.getAD_User_ID();
-                renameCard = true;
-                //cardViewName = cmbCardView.find(":selected").text() + " (" + defaultMsg + ")";
+                AD_User_ID = VIS.context.getAD_User_ID();                
                 isPublic.attr("checked", false);
             } else {
                 isNewRecord = true;
-                AD_User_ID = VIS.context.getAD_User_ID();
-                cardViewName = txtCardViewName.val();
+                AD_User_ID = VIS.context.getAD_User_ID();                
             }
 
-
-            if (cardViewName.length < 1 && !isEdit) {
-                cardViewName = cmbCardView.find(":selected").text();
-            }
-            else if (isEdit) {
-                cardViewName = txtCardViewName.val();
-            }
-
-            if (renameCard) {
-                var newcard = new cardCopyDialog();
-                newcard.show();
-                newcard.onClose = function () {
-                    
-                   var newcardname = newcard.getName();
-                    if (newcardname && newcardname.length > 0) {
-                        cardViewName = newcardname;
-                        SaveCardInfoFinal();
+            if (isNewRecord) {
+                for (var a = 0; a < cardViewInfo.length; a++) {
+                    if (cardViewInfo[a].CardViewName.trim() == txtCardViewName.val().trim()) {
+                        VIS.ADialog.error("cardAlreadyExist", true, "");
+                        IsBusy(false);
+                        return false;
                     }
-                    IsBusy(false);
-                    isNewRecord = false;
                 }
             }
+
+            //if (cardViewName.length < 1 && !isEdit) {
+            //    cardViewName = cmbCardView.find(":selected").text();
+            //}
+            //else if (isEdit) {
+            cardViewName = txtCardViewName.val().trim();
+            //}
+
+            if (isEdit || isNewRecord) {
+                //SaveCardInfoFinal();
+                //var newcard = new cardCopyDialog();
+                //newcard.show();
+                //newcard.onClose = function () {
+
+                //    var newcardname = newcard.getName();
+                //    if (newcardname && newcardname.length > 0) {
+                //        cardViewName = newcardname;
+                        SaveCardInfoFinal();
+                //    }
+                //    IsBusy(false);
+                //    isNewRecord = false;
+                //}
+
+            }
             else {
-                SaveCardInfoFinal();
+                IsBusy(false);
+                ch.close();
             }
         };
 
@@ -1234,7 +1258,7 @@
                 includeCols.push(parseInt(f.AD_Field_ID));
             }
 
-            cardViewArray.push({ AD_Window_ID: AD_Window_ID, AD_Tab_ID: AD_Tab_ID, UserID: AD_User_ID, AD_GroupField_ID: AD_GroupField_ID, isNewRecord: isNewRecord, CardViewName: cardViewName, CardViewID: AD_CardView_ID, IsDefault: isdefault.is(":checked"), AD_HeaderLayout_ID: $vSearchHeaderLayout.getValue(), isPublic: isPublic.is(":checked") });
+            cardViewArray.push({ AD_Window_ID: AD_Window_ID, AD_Tab_ID: AD_Tab_ID, UserID: AD_User_ID, AD_GroupField_ID: cmbGroupField.find(":selected").attr("fieldid"), isNewRecord: isNewRecord, CardViewName: cardViewName, CardViewID: AD_CardView_ID, IsDefault: isdefault.is(":checked"), AD_HeaderLayout_ID: $vSearchHeaderLayout.getValue(), isPublic: isPublic.is(":checked") });
             var url = VIS.Application.contextUrl + "CardView/SaveCardViewColumns";
             $.ajax({
                 type: "POST",
@@ -1275,25 +1299,7 @@
                     alert(errorThrown.statusText);
                 }
             });
-        };
-
-        var DeleteCardView = function () {
-            var url = VIS.Application.contextUrl + "CardView/DeleteCardViewRecord";
-            $.ajax({
-                type: "POST",
-                async: false,
-                url: url,
-                dataType: "json",
-                contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify({ 'ad_CardView_ID': AD_CardView_ID }),
-                success: function (data) {
-                    var result = JSON.parse(data);
-
-                }, error: function (errorThrown) {
-                    alert(errorThrown.statusText);
-                }
-            });
-        };
+        };        
 
         var FillUserList = function (root) {
             if (root != null) { root.children().remove(); }
@@ -1346,7 +1352,7 @@
 
         var CreateCVGrid = function (root) {
             var cvHeaderTable = $("<Table class='vis-cv-headertable'><tr class='vis-cv-TableHead'>" +
-                "<th >" + VIS.Msg.getMsg("BGColor") + "</th>" +
+                "<th >" + VIS.Msg.getMsg("BGColorGrid") + "</th>" +
                 "<th>" + VIS.Msg.getMsg("Column") + "</th>" +
                 "<th>" + VIS.Msg.getMsg("Operator") + "</th>" +
                 "<th>" + VIS.Msg.getMsg("QueryValue") + "</th>" +
