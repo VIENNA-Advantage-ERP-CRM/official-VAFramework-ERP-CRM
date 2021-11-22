@@ -1409,6 +1409,7 @@ namespace VAdvantage.Model
                                                           Decimal.Add(
                                                           Decimal.Multiply(cost.GetCurrentCostPrice(), cost.GetCurrentQty()), amt),
                                                           cost.GetCurrentQty()), precision, MidpointRounding.AwayFromZero);
+                                cost.SetCurrentCostPrice(price);
                             }
                             cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), amt));
                             if (!isProvisnalInvcalculated)

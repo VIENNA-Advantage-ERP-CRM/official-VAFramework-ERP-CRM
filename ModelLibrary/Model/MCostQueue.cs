@@ -2449,7 +2449,7 @@ namespace VAdvantage.Model
                                     if (OrderCurrency_ID != acctSchema.GetC_Currency_ID())
                                     {
                                         expectedAmt = MConversionRate.Convert(ctx, expectedAmt, OrderCurrency_ID, acctSchema.GetC_Currency_ID(),
-                                                                    Util.GetValueOfDateTime(po.Get_Value("DateAcct")), 
+                                                                    Util.GetValueOfDateTime(po.Get_Value("DateAcct")),
                                                                     Util.GetValueOfInt(dsExpectedLandedCostAllocation.Tables[0].Rows[lca]["C_ConversionType_ID"]), AD_Client_ID, AD_Org_ID);
                                         if (expectedAmt == 0)
                                         {
@@ -3757,7 +3757,10 @@ namespace VAdvantage.Model
                                         else
                                         {
                                             DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
-                                            DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                            if (!string.IsNullOrEmpty(costQueuseIds))
+                                            {
+                                                DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                            }
                                         }
                                         _log.Severe("Error occured during UpdateProductCost for C_invoiceLine_ID = " + invoiceline.GetC_InvoiceLine_ID());
                                         return false;
@@ -3793,7 +3796,10 @@ namespace VAdvantage.Model
                                                 else
                                                 {
                                                     DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
-                                                    DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                                    if (!string.IsNullOrEmpty(costQueuseIds))
+                                                    {
+                                                        DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                                    }
                                                 }
                                                 _log.Severe("Error occured during UpdateProductCost for C_InvoiceLine_ID = " + invoiceline.GetC_InvoiceLine_ID());
                                                 return false;
