@@ -796,14 +796,14 @@ namespace VAdvantage.Process
                                          +" FROM AD_CardView_Column WHERE AD_CardView_Column_ID=" + lstCardCol[col] + ")"))>0)
                     // if (HasModulePrefix("Sequence", "AD_CardView_Column", "AD_CardView_Column_ID=" + lstCardCol[col], out name))
                     {
-                        InsertIntoDBSchema(X_AD_CardView_Column.Table_ID, sAD_CardView_ID, X_AD_CardView_Column.Table_Name, name, "AD_CardView_Column_ID=" + lstCardCol[col]);
+                        InsertIntoDBSchema(X_AD_CardView_Column.Table_ID, lstCardCol[col], X_AD_CardView_Column.Table_Name, name, "AD_CardView_Column_ID=" + lstCardCol[col]);
                     }
                    
                 }
                 List<int> lstCardCondition = GetIDs("AD_CardView_Condition", "AD_CardView_Condition_ID", "AD_CardView_ID=" + sAD_CardView_ID);
                 for (int cnd = 0; cnd < lstCardCondition.Count; cnd++)
                 {
-                    InsertIntoDBSchema(X_AD_CardView_Condition.Table_ID, sAD_CardView_ID, X_AD_CardView_Condition.Table_Name, name, "AD_CardView_Condition_ID=" + lstCardCondition[cnd]);
+                    InsertIntoDBSchema(X_AD_CardView_Condition.Table_ID, lstCardCondition[cnd], X_AD_CardView_Condition.Table_Name, name, "AD_CardView_Condition_ID=" + lstCardCondition[cnd]);
                 }
 
                 //mark default card 
