@@ -99,7 +99,12 @@ namespace VAdvantage.Model
             {
                 SetC_DocType_ID(Util.GetValueOfInt(dt.Get_Value("C_DocTypeConfrimation_ID")));
             }
-            ////////
+
+            // VIS0060: Set Trx Org from Movement to Confirmation
+            if (move.GetAD_OrgTrx_ID() > 0)
+            {
+                Set_Value("AD_OrgTrx_ID", move.GetAD_OrgTrx_ID());
+            }
         }
 
         /// <summary>
