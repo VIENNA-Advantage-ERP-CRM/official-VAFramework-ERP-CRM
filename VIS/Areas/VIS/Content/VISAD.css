@@ -2599,7 +2599,7 @@ findImg {
     white-space: nowrap;
     overflow: hidden;
     color: rgba(var(--v-c-primary), 1);
-    margin: 0 5px;
+    margin: 2px 5px;
     border-bottom: 2px solid rgba(var(--v-c-primary), 1);
     /*background-color: ghostwhite;*/
 }
