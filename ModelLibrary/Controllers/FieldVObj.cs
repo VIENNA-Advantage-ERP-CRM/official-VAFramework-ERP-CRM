@@ -273,6 +273,7 @@ namespace VAdvantage.Controller
 
         /* style logic stirng { expression [,]}*/
         public string StyleLogic = "";
+        public string GridImageStyle = null;
 
 
 

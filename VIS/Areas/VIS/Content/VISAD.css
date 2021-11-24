@@ -2550,7 +2550,7 @@ findImg {
     padding-top: 0;
     position: fixed;
     z-index: 1;
-    right: 65px;
+    right: 61px;
     display: flex;
     justify-content: flex-end;
 }
@@ -2580,17 +2580,20 @@ findImg {
     top: 12px;
     position: absolute;
     z-index: 0;
+    display:flex;
+    width: 100%;
 }
 
 .vis-cv-cg {
     height: 100%;
-    width: 250px;
+    /*width: 250px;*/
     float: left;
     margin-bottom: 0px;
     margin-right: 10px;
     position: relative;
     /*border-right:1px solid gray;*/
     /*background-color: ghostwhite;*/
+    flex: 1;
 }
 
 .vis-cv-head {
@@ -2635,6 +2638,7 @@ findImg {
     font-size: 12px;
     min-height: 85px;
     position: relative;
+    /*width:250px;*/
 }
 
 .vis-cv-card-selected {
