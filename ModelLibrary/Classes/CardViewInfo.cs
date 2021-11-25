@@ -20,6 +20,7 @@ namespace VAdvantage.Classes
         public int AD_HeaderLayout_ID { get; set; }
         public string Style { get; set; }
         public string Padding { get; set; }
+        public string groupSequence { get; set; }
 
         public List<HeaderPanelGrid> HeaderItems { get; set; }
     }

@@ -53,6 +53,7 @@ namespace VIS.Models
                         AD_GroupField_ID = VAdvantage.Utility.Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_FIELD_ID"]),
                         CreatedBy = Convert.ToInt32(ds.Tables[0].Rows[i]["CREATEDBY"]),
                         AD_HeaderLayout_ID = VAdvantage.Utility.Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_HEADERLAYOUT_ID"]),
+                        groupSequence=Convert.ToString(ds.Tables[0].Rows[i]["GROUPSEQUENCE"]),
                         //IsDefault = VAdvantage.Utility.Util.GetValueOfString(ds.Tables[0].Rows[i]["ISDEFAULT"])=="Y"?true:false,
                         DefaultID = isDefault
                     };
@@ -201,7 +202,7 @@ namespace VIS.Models
             }
             return lstCardViewColumns;
         }
-        public int SaveCardViewRecord(string cardViewName, int ad_Window_ID, int ad_Tab_ID, int ad_User_ID, int ad_Field_ID, Ctx ctx, int cardViewID/*, List<RolePropeties> lstRoleId*/, List<CardViewConditionPropeties> lstCVCondition, int AD_HeaderLayout_ID,bool isPublic)
+        public int SaveCardViewRecord(string cardViewName, int ad_Window_ID, int ad_Tab_ID, int ad_User_ID, int ad_Field_ID, Ctx ctx, int cardViewID/*, List<RolePropeties> lstRoleId*/, List<CardViewConditionPropeties> lstCVCondition, int AD_HeaderLayout_ID,bool isPublic,string groupSequence)
         {
             string conditionValue = string.Empty;
             string conditionText = string.Empty;
@@ -229,6 +230,7 @@ namespace VIS.Models
             objCardView.SetAD_Field_ID(ad_Field_ID);
             objCardView.SetName(cardViewName);
             objCardView.Set_ValueNoCheck("AD_HeaderLayout_ID", AD_HeaderLayout_ID);
+            objCardView.Set_ValueNoCheck("groupSequence", groupSequence);
             if (!objCardView.Save())
             {
             }
@@ -438,9 +440,9 @@ namespace VIS.Models
         /// <param name="columnName"></param>
         /// <param name="tableName"></param>
         /// <returns></returns>
-        public int UpdateCardByDragDrop(Ctx ctx, string grpValue, int recordID, string columnName, string tableName,int dataType)
+        public string UpdateCardByDragDrop(Ctx ctx, string grpValue, int recordID, string columnName, string tableName,int dataType)
         {
-            int result = 1;
+            string result = "1";
             try
             {
                 PO _po = MTable.GetPO(ctx, tableName, recordID, null);
@@ -460,11 +462,18 @@ namespace VIS.Models
                 
                 if (!_po.Save())
                 {
-                    result = 0;
+                    ValueNamePair pp = VAdvantage.Logging.VLogger.RetrieveError();
+                   
+                    string error = pp != null ? pp.GetName() : ""; ;
+                    if (string.IsNullOrEmpty(error))
+                    {
+                        error = pp != null ? pp.GetValue() : "";
+                    }
+                    result = error;
                 }
             }
             catch (Exception e) {
-                result = 0;
+                result = e.Message;
             }
             //string keyColumn = tableName + "_ID";
             //string ColumnName = MColumn.GetColumnName(ctx, columnID);
@@ -504,6 +513,7 @@ namespace VIS.Models
         public int UserID { get; set; }
 
         public string FieldName { get; set; }
+        public string groupSequence { get; set; }
         public int AD_Field_ID { get; set; }
         public int AD_GroupField_ID { get; set; }
         public int AD_CardViewColumn_ID { get; set; }

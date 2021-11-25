@@ -938,14 +938,14 @@ namespace VAdvantage.Classes
             if (AD_CardView_ID > 0)
             {
                 // If fetching specific card
-                ds = DataBase.DB.ExecuteDataset(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name, AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,AD_HeaderLayout.backgroundcolor,AD_HeaderLayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
+                ds = DataBase.DB.ExecuteDataset(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name, AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,AD_CardView.groupsequence,AD_HeaderLayout.backgroundcolor,AD_HeaderLayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
                         ON (AD_CardView.AD_HeaderLayout_ID = AD_HeaderLayout.AD_HeaderLayout_ID) WHERE AD_CardView.AD_CardView_ID = " + AD_CardView_ID);
             }
             else
             {
 
                 //Fetch default card for login user
-                ds = DataBase.DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@" SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,AD_HeaderLayout.backgroundcolor,AD_HeaderLayout.padding,
+                ds = DataBase.DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@" SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,AD_CardView.groupsequence,AD_HeaderLayout.backgroundcolor,AD_HeaderLayout.padding,
     AD_DefaultCardView.ad_client_id,
     AD_DefaultCardView.ad_user_ID FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
                         ON ( AD_CardView.AD_HeaderLayout_ID = AD_HeaderLayout.AD_HeaderLayout_ID)
@@ -956,7 +956,7 @@ namespace VAdvantage.Classes
                 if (ds == null || ds.Tables[0].Rows.Count == 0)
                 {
                     //If no default card found, then load other cards of tABS
-                    ds = DataBase.DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,AD_HeaderLayout.backgroundcolor,AD_HeaderLayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
+                    ds = DataBase.DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,AD_CardView.groupsequence,AD_HeaderLayout.backgroundcolor,AD_HeaderLayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
                         ON (AD_CardView.AD_HeaderLayout_ID = AD_HeaderLayout.AD_HeaderLayout_ID) WHERE AD_CardView.AD_Tab_ID =" + AD_Tab_ID + " AND  (AD_CardView.AD_User_ID Is Null OR AD_CardView.AD_User_ID=" + ctx.GetAD_User_ID() + @") AND AD_CardView.IsActive='Y' ORDER BY AD_CardView.Name ASC", "AD_CardView", true, false));
                 }
                 else
@@ -998,7 +998,8 @@ namespace VAdvantage.Classes
                         AD_HeaderLayout_ID = Util.GetValueOfInt(rows[0]["AD_HeaderLayout_ID"]),
                         FieldGroupID = Util.GetValueOfInt(rows[0]["AD_Field_ID"]),
                         Style = Util.GetValueOfString(rows[0]["backgroundcolor"]),
-                        Padding = Util.GetValueOfString(rows[0]["Padding"])
+                        Padding = Util.GetValueOfString(rows[0]["Padding"]),
+                        groupSequence = Util.GetValueOfString(rows[0]["groupsequence"])
                     };
 
                     card.IncludedCols = new List<CardViewCol>();
