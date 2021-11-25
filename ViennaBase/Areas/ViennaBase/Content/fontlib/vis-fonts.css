@@ -254,6 +254,10 @@
     content: "\e914";
 }
 
+.vis-cardx:before {
+    content: "\e950";
+}
+
 .vis-carddialog:before {
     content: "\e915";
 }
@@ -901,4 +905,7 @@
 
 .vis-rate-5:before {
     content: "\e9d2";
+}
+.vis-back:before {
+    content: "\e9d3";
 }

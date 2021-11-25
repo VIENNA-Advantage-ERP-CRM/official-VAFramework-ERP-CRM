@@ -1069,9 +1069,14 @@ namespace VAdvantage.Process
 
                 if (sReference.GetValidationType() == X_AD_Reference.VALIDATIONTYPE_ListValidation)
                 {
-                    IDataReader dr = DataBase.DB.ExecuteReader("Select AD_Ref_List_ID,Name From AD_Ref_List Where AD_Reference_ID =" + sReference.GetAD_Reference_ID());
+                    IDataReader dr = DataBase.DB.ExecuteReader("Select AD_Ref_List_ID,Name,AD_Image_ID From AD_Ref_List Where AD_Reference_ID =" + sReference.GetAD_Reference_ID());
                     while (dr.Read())
                     {
+                        int ad_image_ID = Util.GetValueOfInt(dr[2]);
+                        if (ad_image_ID > 0)
+                        {
+                            CheckImage(ad_image_ID); 
+                        }
                         InsertIntoDBSchema(X_AD_Ref_List.Table_ID, Convert.ToInt32(dr[0]), X_AD_Ref_List.Table_Name, dr[1].ToString(), "AD_Ref_List_ID = " + Convert.ToInt32(dr[0]));
                     }
                     dr.Close();
