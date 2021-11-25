@@ -19,6 +19,7 @@
         this.oldGrpCount = 0;
         this.grpColName = '';
         this.hasIncludedCols = false;
+        this.groupSequence = null;
         // this.aPanel;
         this.onCardEdit = null;
 
@@ -440,6 +441,7 @@
             //$cmbCards.autocomplete("search", "");
             //$cmbCards.trigger("focus");
             this.cardName = retData.Name;
+            this.groupSequence = retData.groupSequence;
             this.getCardCmb().val(retData.Name);
 
             var f = this.mTab.getFieldById(retData.FieldGroupID)
@@ -529,13 +531,28 @@
                     lookup.fillCombobox(true, true, true, false);
 
                     var data = lookup.data;
-
-                    for (var i = 0; i < data.length; i++) {
-                        this.cGroupInfo[data[i].Key] = { 'name': data[i].Name, 'records': [], 'key': data[i].Key };
-                        this.grpCount += 1;
-                        //if (i >= 4)
-                        //    break;
+                    if (this.groupSequence != null && this.groupSequence != "") {
+                        var grpArr = this.groupSequence.split(",");
+                        for (var a = 0; a < grpArr.length; a++) {
+                            for (var i = 0; i < data.length; i++) {
+                                if (data[i].Key == grpArr[a]) {
+                                    this.cGroupInfo[data[i].Key] = { 'name': data[i].Name, 'records': [], 'key': data[i].Key };
+                                    this.grpCount += 1;
+                                    //if (i >= 4)
+                                    //    break;
+                                }
+                            }
+                        }
+                    } else {
+                        for (var i = 0; i < data.length; i++) {
+                            this.cGroupInfo[data[i].Key] = { 'name': data[i].Name, 'records': [], 'key': data[i].Key };
+                            this.grpCount += 1;
+                            //if (i >= 4)
+                            //    break;
+                        }
                     }
+
+                  
                 }
                 this.setHeader(field.getHeader());
             }
@@ -613,8 +630,9 @@
                                 dataType: "json",
                                 data: obj,
                                 success: function (data) {
-                                    if (data < 1) {
-                                        vaSortable.prototype.revertItem();
+                                    if (data != "1") {
+                                        VIS.ADialog.error(data, true, "");
+                                        vaSortable.prototype.revertItem();                                       
                                     } else {
                                         $this.mTab.dataRefresh();
                                         var rec = $.grep(records, function (element, index) {
@@ -626,6 +644,7 @@
                                     }
                                 },
                                 error: function (err) {
+                                    VIS.ADialog.error(err.responseText, true, "");
                                     vaSortable.prototype.revertItem();
                                 }
                             });
