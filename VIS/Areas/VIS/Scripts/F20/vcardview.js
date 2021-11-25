@@ -151,28 +151,28 @@
 
         this.calculateWidth = function (width) {
             //set width
-            width = (width - 6);
-            var grpCtrlC = this.groupCtrls.length;
-            if (grpCtrlC < 1)
-                return;
-            if (width) {
+            //width = (width - 6);
+            //var grpCtrlC = this.groupCtrls.length;
+            //if (grpCtrlC < 1)
+            //    return;
+            //if (width) {
 
-                var tGrpW = 262 * grpCtrlC;
-                if (tGrpW > width) {
-                    body.width(262 * grpCtrlC);
-                }
-                else {
-                    body.width(width);
-                    var newW = Math.ceil(width / grpCtrlC) - 24;
-                    while (grpCtrlC > 0) {
-                        --grpCtrlC;
+            //    var tGrpW = 300 * grpCtrlC;
+            //    if (tGrpW > width) {
+            //        body.width(300 * grpCtrlC);
+            //    }
+            //    else {
+            //        body.width(width);
+            //        var newW = Math.ceil(width / grpCtrlC) - 24;
+            //        while (grpCtrlC > 0) {
+            //            --grpCtrlC;
 
-                        this.groupCtrls[grpCtrlC].setWidth(newW);
-                    }
-                }
-            }
-            else
-                body.width(body.parent().width() * (grpCtrlC));
+            //            this.groupCtrls[grpCtrlC].setWidth(newW);
+            //        }
+            //    }
+            //}
+            //else
+            //    body.width(body.parent().width() * (grpCtrlC));
             this.navigate();
         };
 

@@ -1497,13 +1497,13 @@ li.vis-page-item-select {
     position: relative;
     z-index: 1;
     display: flex;
-    border-radius: 50%;
+    /*border-radius: 50%;*/
     min-width: 35px;
     min-height: 35px;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    background: rgba(var(--v-c-on-secondary), 0.1);
+    /*background: rgba(var(--v-c-on-secondary), 0.1);*/
 }
 
 .vis-w-p-header-icon-f span {
@@ -1527,7 +1527,7 @@ li.vis-page-item-select {
     min-width: 35px;
     min-height: 35px;
     align-items: center;
-    justify-content: center;
+    /*justify-content: center;*/
     /*background: rgba(var(--v-c-on-secondary), 0.1);*/
     /*border-radius: 50%;*/
     width: 100%;

@@ -6785,6 +6785,10 @@
         return this.vo.HtmlStyle;
     };
 
+    GridField.prototype.getGridImageStyle = function () {
+        return this.vo.GridImageStyle;
+    };
+
     GridField.prototype.getShowIcon = function () {
         return this.vo.ShowIcon;
     };

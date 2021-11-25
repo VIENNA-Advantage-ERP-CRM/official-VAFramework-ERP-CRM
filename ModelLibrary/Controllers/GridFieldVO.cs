@@ -282,7 +282,8 @@ namespace VAdvantage.Controller
                         vo.AskUserBGProcess = "Y".Equals(dr[i].ToString());
                     }
 
-                    else if (columnName.Equals("ISIDENTIFIER")) {
+                    else if (columnName.Equals("ISIDENTIFIER"))
+                    {
                         vo.IsIdentifier = "Y".Equals(dr[i].ToString());
                     }
                     /******************************/
@@ -312,7 +313,31 @@ namespace VAdvantage.Controller
                     }
                     else if (columnName.Equals("HtmlStyle", StringComparison.OrdinalIgnoreCase))
                     {
-                        vo.HtmlStyle = dr[i].ToString();
+                        string htmlStyle = dr[i].ToString();
+                        if (htmlStyle != null && htmlStyle.Length > 0 && htmlStyle.IndexOf("@") > -1)
+                        {
+                            string[] stylearr = htmlStyle.Split('|');
+
+                            if (stylearr != null && stylearr.Length > 0)
+                            {
+                                for (int m = 0; m < stylearr.Length; m++)
+                                {
+                                    if (stylearr[m].IndexOf("@img::") > -1)
+                                    {
+                                        vo.GridImageStyle = stylearr[m].Replace("@img::", "");
+                                    }
+                                    else if (stylearr[m].IndexOf("@value::") > -1)
+                                    {
+                                        vo.HtmlStyle = stylearr[m].Replace("@value::", "");
+                                    }
+                                }
+                            }
+
+                        }
+                        else
+                        {
+                            vo.HtmlStyle = htmlStyle;
+                        }
                     }
                     else if (columnName.Equals("ShowIcon", StringComparison.OrdinalIgnoreCase))
                     {
@@ -369,7 +394,7 @@ namespace VAdvantage.Controller
                     }
                     else if (columnName.Equals("isSwitch", StringComparison.OrdinalIgnoreCase))
                     {
-                        vo.IsSwitch= "Y".Equals(dr[i].ToString());
+                        vo.IsSwitch = "Y".Equals(dr[i].ToString());
                     }
 
                 }
@@ -747,8 +772,8 @@ namespace VAdvantage.Controller
             }
             if (DisplayType.IsLookup(displayType))
             {
-                if (IsDisplayedf || IsDisplayedMR || ColumnName.ToLower().Equals("createdby")|| ColumnName.ToLower().Equals("updatedby")
-                    || IsHeaderPanelitem) 
+                if (IsDisplayedf || IsDisplayedMR || ColumnName.ToLower().Equals("createdby") || ColumnName.ToLower().Equals("updatedby")
+                    || IsHeaderPanelitem)
                 {
                     try
                     {
@@ -875,6 +900,7 @@ namespace VAdvantage.Controller
             clone.IsUnique = IsUnique;
             clone.IsSwitch = IsSwitch;
             clone.IsIdentifier = IsIdentifier;
+            clone.GridImageStyle = GridImageStyle;
             return clone;
         }
 
