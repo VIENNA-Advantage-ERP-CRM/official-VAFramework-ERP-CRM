@@ -358,7 +358,9 @@
             this.aReport = this.addActions("Report", null, true, true, false, onAction, null, "Shct_Report");
             this.aPrint = this.addActions("Print", null, true, true, false, onAction, null, "Shct_Print");
 
-
+            //Ndw Back button
+            this.aBack = this.addActions("Back", null, true, true, false, onAction, null, "Shct_Back");
+            $ulToobar.append(this.aBack.getListItm());
             $ulToobar.append(this.aIgnore.getListItm());
             $ulToobar.append(this.aNew.getListItm());
             $ulToobar.append(this.aDelete.getListItm());
@@ -384,7 +386,7 @@
             this.aLast = this.addActions(this.ACTION_NAME_LAST, null, true, true, true, onAction, null, "Shct_LastRec");
             this.aNext = this.addActions(this.ACTION_NAME_NEXT, null, true, true, true, onAction, null, "Shct_NextRec");
             this.aMulti = this.addActions("Multi", null, false, true, true, onAction, true, "Shct_MultiRow");
-            this.aCard = this.addActions("Card", null, false, true, true, onAction, null, "Shct_CardView");
+            this.aCard = this.addActions("Card", null, false, true, true, onAction, true, "Shct_CardView");
 
             this.aMap = this.addActions("Map", null, false, true, true, onAction);
 
@@ -1271,6 +1273,12 @@
                     //}, 100);
                     //}
                     break;
+                case 66:      // B for Back to Multiview
+                    if (en) {
+                        if (this.aBack.getIsEnabled())
+                        this.actionPerformed(this.aBack.getAction());
+                    }
+                    break;
                 case 68:      // D for Delete
                     if (en)
                         this.actionPerformed(this.aDelete.getAction());
@@ -1816,14 +1824,26 @@
             tis.curGC.navigateRelative(+1);
         } else if (tis.aMulti.getAction() === action) {
             tis.aMulti.setPressed(!tis.curGC.getIsSingleRow());
+            tis.aCard.setPressed(false);
+            tis.aBack.setEnabled(!tis.curGC.getIsSingleRow());
             tis.curGC.switchRowPresentation();
         } else if (tis.aCard.getAction() === action) {
+            tis.aBack.setEnabled(false);
+            if (tis.curGC.getIsCardRow())
+                tis.curGC.switchMultiRow();
+            else { tis.curGC.switchCardRow(); } 
             tis.aMulti.setPressed(false);
-            tis.curGC.switchCardRow();
+           // tis.aBack.setEnabled(!tis.curGC.getIsCardRow());
         } else if (tis.aMap.getAction() === action) {
             tis.aMulti.setPressed(true);
+            tis.aCard.setPressed(false);
             tis.curGC.switchMapRow();
-        } else if (tis.aPageUp.getAction() === action) {
+        } else if (tis.aBack.getAction() === action) {
+            tis.aMulti.setPressed(!tis.curGC.getIsSingleRow());
+            tis.aCard.setPressed(false);
+            tis.curGC.switchRowPresentation();
+            tis.aBack.setEnabled(tis.curGC.getIsSingleRow());
+        }  else if (tis.aPageUp.getAction() === action) {
             tis.isDefaultFocusSet = false;
             tis.curGC.navigatePage(-1);
         } else if (tis.aPageFirst.getAction() === action) {
@@ -2840,6 +2860,8 @@
             this.aPageDown.setEnabled(false);
             //aAttachment.setEnabled(false);
             //aChat.setEnabled(false);
+
+            this.aBack.setEnabled(false);
         }
         else	//	Grid Tab
         {
@@ -3046,6 +3068,8 @@
 
         //	Single-Multi
         this.aMulti.setPressed(this.curGC.getIsSingleRow() || this.curGC.getIsMapRow());
+        this.aCard.setPressed(this.curGC.getIsCardRow());
+        this.aBack.setEnabled(this.curGC.getIsSingleRow());
         if (this.aChat) {
             this.aChat.setPressed(this.curTab.hasChat());
         }
