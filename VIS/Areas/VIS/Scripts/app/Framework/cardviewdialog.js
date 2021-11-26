@@ -251,8 +251,8 @@
             txtTabName = rootTextControl.find(".vis-txttabname");
             cmbGroupField = rootTextControl.find(".vis-cmbgroupfield");
             // Column Fields
-            rootGroupFieldsCombo = $("<div class='vis-third-header vis-pull-left' style='width:70%'></div>");            
-            rootGroupFieldsSeq = $("<div class='vis-third-header vis-pull-left' style='width:29%;margin-left: 5px;'></div>");            
+            rootGroupFieldsCombo = $("<div class='vis-third-header vis-pull-left' style='width:68%'></div>");            
+            rootGroupFieldsSeq = $("<div class='vis-third-header vis-pull-left' style='width:30%;margin-left: 15px;'></div>");            
            
             divLeftGroupFieldsCombo = $("<div class='vis-left-fields vis-pull-left'></div>");
             divRightGroupFieldsCombo = $("<div class='vis-left-fields vis-pull-left' ></div>");
@@ -283,7 +283,7 @@
             divGroupFieldsSeqCombo.append(divChildGroupSeqLable);
             divGroupFieldsSeqCombo.append(divChildSeqColumns);
 
-            GroupShifBtn = $('<div class="vis-cardviewbutton vis-pull-left"><button class="vis-Grpbtnup"><i class="vis vis-arrow-up"></i></button><button class="vis-btnGrpdown"><i class="vis vis-arrow-down"></i></button></div>');
+            GroupShifBtn = $('<div class="vis-cardviewbutton vis-pull-left" style="margin-top:25%;"><button class="vis-Grpbtnup"><i class="vis vis-arrow-up"></i></button><button class="vis-btnGrpdown"><i class="vis vis-arrow-down"></i></button></div>');
             rootGroupFieldsSeq.append(GroupShifBtn);
             rootCardViewUI.find(".vis-thirddiv").append(rootGroupFieldsCombo).append(rootGroupFieldsSeq);
             root.append(rootCardViewUI);
@@ -584,33 +584,38 @@
 
         };
 
+
+       
+
+
         var FillforGroupSeq = function (fieldID) {
-            ulGroupSeqColumns.html('');              
+            ulGroupSeqColumns.html('');
+            ulGroupSeqColumns.parent().removeAttr('style');
             if (lovcardList[fieldID]) {
+                for (var i = 0, ln = lovcardList[fieldID]; i < ln.length; i++) {
+                    if (ln[i].Key.length > 0) {
+                        ulGroupSeqColumns.append('<li key="' + ln[i].Key + '">' + ln[i].Name + '</li>');
+                    }
+                };
                 var seq = cmbCardView.find(":selected").attr("groupSequence");
-                if (seq && fieldID == cmbCardView.find(":selected").attr("ad_field_id")) {
+                if (seq) {
                     seq = seq.split(",");
                     for (var j = 0; j < seq.length; j++) {
-                        for (var i = 0, ln = lovcardList[fieldID]; i < ln.length; i++) {
-                            if (ln[i].Key.length > 0) {
-                                if (ln[i].Key == seq[j]) {
-                                    ulGroupSeqColumns.append('<li key="' + ln[i].Key + '">' + ln[i].Name + '</li>');
-                                }
-                            }
-
-                        }
-                    }
-
-                } else {
-                    for (var i = 0, ln = lovcardList[fieldID]; i < ln.length; i++) {
-                        if (ln[i].Key.length > 0) {
-                            ulGroupSeqColumns.append('<li key="' + ln[i].Key + '">' + ln[i].Name + '</li>');
-                        }
+                        var item = ulGroupSeqColumns.find("[key='" + seq[j] + "']");
+                        var before = ulGroupSeqColumns.find("li").eq(j);
+                        item.insertBefore(before);
+                        //if (item) {
+                        //    var temp = item;
+                        //    item.remove();
+                        //    ulGroupSeqColumns.find('li').eq(j).before(temp);
+                        //}
                     }
                 }
+            } else {
+                ulGroupSeqColumns.parent().css("background-color","rgba(var(--v-c-secondary), 1)");
+                ulGroupSeqColumns.append('<li style="padding-top:40%;text-align:center">'+VIS.Msg.getMsg("OnlyForLOV")+'</li>');
             }
-           // for (var i = 0; i < lovcardList.length;i++)
-           
+
         }
 
 

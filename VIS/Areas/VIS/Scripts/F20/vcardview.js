@@ -593,20 +593,34 @@
             }
             else {
                 $this.filterRecord(records);
-                if ($this.groupSequence != null && $this.groupSequence != "") {
+                for (var p in $this.cGroupInfo) {
+                    setCardGroup(p);
+                }
+
+                
+                if ($this.cGroup.lookup.displayType == VIS.DisplayType.List && $this.groupSequence != null && $this.groupSequence != "") {
                     var grpArr = $this.groupSequence.split(",");
-                    for (var a = 0; a < grpArr.length; a++) {
-                        for (var p in $this.cGroupInfo) {
-                            if (grpArr[a] == $this.cGroupInfo[p].key) {
-                                setCardGroup(p);
-                            }
-                        }
-                    }
-                } else {
-                    for (var p in $this.cGroupInfo) {
-                        setCardGroup(p);
+                    for (var j = 0; j < grpArr.length; j++) {
+                        var item = root.find("[data-key='" + grpArr[j] + "']").parent();
+                        var before = root.find(".vis-cv-cg").eq(j);
+                        item.insertBefore(before);
                     }
                 }
+
+                //if ($this.groupSequence != null && $this.groupSequence != "") {
+                //    var grpArr = $this.groupSequence.split(",");
+                //    for (var a = 0; a < grpArr.length; a++) {
+                //        for (var p in $this.cGroupInfo) {
+                //            if (grpArr[a] == $this.cGroupInfo[p].key) {
+                //                setCardGroup(p);
+                //            }
+                //        }
+                //    }
+                //} else {
+                //    for (var p in $this.cGroupInfo) {
+                //        setCardGroup(p);
+                //    }
+                //}
             }
 
             function setCardGroup(p) {
