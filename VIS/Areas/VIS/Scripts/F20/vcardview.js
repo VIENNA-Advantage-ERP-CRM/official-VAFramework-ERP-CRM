@@ -540,10 +540,10 @@
                 this.setHeader(field.getHeader());
             }
             else {
-                this.setHeader('');
+                this.setHeader(' ');
             }
         }
-        else { this.setHeader(''); }
+        else { this.setHeader(' '); }
         if (this.grpCount < 1 || $.isEmptyObject(this.cGroupInfo)) {//add one group by de
             this.cGroupInfo['All'] = { 'name': VIS.Msg.getMsg('All'), 'records': [], 'key': null };
             this.grpCount = 1;
