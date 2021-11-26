@@ -588,7 +588,7 @@
             ulGroupSeqColumns.html('');              
             if (lovcardList[fieldID]) {
                 var seq = cmbCardView.find(":selected").attr("groupSequence");
-                if (seq) {
+                if (seq && fieldID == cmbCardView.find(":selected").attr("ad_field_id")) {
                     seq = seq.split(",");
                     for (var j = 0; j < seq.length; j++) {
                         for (var i = 0, ln = lovcardList[fieldID]; i < ln.length; i++) {
