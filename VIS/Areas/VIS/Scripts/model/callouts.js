@@ -13773,15 +13773,13 @@
                     }
                 }
             }
-            //	Added by Vivek Kumar 14/12/2015
-            //mTab.setValue("LineTotalAmt", (Util.getValueOfDecimal(lineNetAmt) + taxAmt));
+            
             if (IsTaxIncluded) {
                 mTab.setValue("LineTotalAmt", (Util.getValueOfDecimal(lineNetAmt)));
             }
             else {
-                mTab.setValue("LineTotalAmt", (Util.getValueOfDecimal(lineNetAmt) + taxAmt));
+                mTab.setValue("LineTotalAmt", Util.getValueOfDecimal((lineNetAmt + taxAmt).toFixed(StdPrecision)));
             }
-            //}
         }
         catch (err) {
             this.setCalloutActive(false);
@@ -23543,7 +23541,7 @@
     VIS.Model.CalloutPaymentTerm = CalloutPaymentTerm;
     //**************CalloutPaymentTerm End*************
 
-    //*********** CalloutLead Start ****
+    //********** CalloutLead Start ***
     function CalloutLead() {
         VIS.CalloutEngine.call(this, "VIS.CalloutLead"); //must call
     };
@@ -23583,6 +23581,5 @@
 
     VIS.Model.CalloutLead = CalloutLead;
     //**************CalloutLead End*************
-
 
 })(VIS, jQuery);
