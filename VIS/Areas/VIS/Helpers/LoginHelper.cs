@@ -88,7 +88,7 @@ namespace VIS.Helpers
             }
             else
             {
-                    throw new Exception("UserNotFound");
+                throw new Exception("UserNotFound");
             }
 
             //if authenticated by LDAP or password is null(Means request from home page)
@@ -783,11 +783,18 @@ namespace VIS.Helpers
             {
                 if (_dictVAMobTokens.ContainsKey(model.Login1Model.UserValue))
                 {
-                    string TokenNo = _dictVAMobTokens[model.Login1Model.UserValue];
-                    if (TokenNo == model.Login1Model.OTP2FA)
+                    List<dynamic> tknDetails = _dictVAMobTokens[model.Login1Model.UserValue];
+                    if (tknDetails.Count > 0)
                     {
-                        _dictVAMobTokens.Remove(model.Login1Model.UserValue);
-                        return true;
+                        string TokenNo = tknDetails[0];
+                        DateTime? savedTime = tknDetails[1];
+                        if (TokenNo == model.Login1Model.OTP2FA)
+                        {
+                            _dictVAMobTokens.Remove(model.Login1Model.UserValue);
+                            return true;
+                        }
+                        else
+                            return false;
                     }
                     else
                         return false;
@@ -830,21 +837,24 @@ namespace VIS.Helpers
             return retRes;
         }
 
-        internal static Dictionary<string, string> _dictVAMobTokens = new Dictionary<string, string>();
+        internal static Dictionary<string, List<dynamic>> _dictVAMobTokens = new Dictionary<string, List<dynamic>>();
 
         /// <summary>
         /// Check if VA Mobile app is scanned for the user passed in the parameter
         /// </summary>
         /// <param name="AD_User_ID">User ID</param>
         /// <returns>true/false</returns>
-        public static bool IsDeviceLinked(int AD_User_ID)
+        public static bool IsDeviceLinked(Ctx ctx, int AD_User_ID)
         {
+            bool isLinked = true;
             if (X_AD_User.TWOFAMETHOD_VAMobileApp == Util.GetValueOfString(DB.ExecuteScalar("SELECT TwoFAMethod FROM AD_User WHERE AD_User_ID = " + AD_User_ID)))
             {
-                return Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(VA074_MobileLinked_ID) FROM VA074_MobileLinked 
+                isLinked = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(VA074_MobileLinked_ID) FROM VA074_MobileLinked 
                             WHERE VA074_AD_User_ID = " + AD_User_ID + " AND VA074_PushNotiToken IS NOT NULL AND IsActive = 'Y'")) > 0;
             }
-            return true;
+            if (isLinked)
+                VAdvantage.PushNotif.PushNotification.SendNotificationToUser(AD_User_ID, 0, 0, "", Msg.GetMsg(ctx, "OTPLoginSuccess"), "OTH");
+            return isLinked;
         }
 
         /// <summary>
@@ -855,11 +865,22 @@ namespace VIS.Helpers
         public static void SendPushNotToken(int ADUserID, string userSKey)
         {
             string TokenNo = GetRndNum(6);
+            List<dynamic> tokenDetails = new List<dynamic>();
             if (_dictVAMobTokens.ContainsKey(userSKey))
-                _dictVAMobTokens[userSKey] = TokenNo;
+            {
+                tokenDetails = _dictVAMobTokens[userSKey];
+                tokenDetails.Clear();
+                tokenDetails.Add(TokenNo);
+                tokenDetails.Add(System.DateTime.Now);
+                _dictVAMobTokens[userSKey] = tokenDetails;
+            }
             else
-                _dictVAMobTokens.Add(userSKey, TokenNo);
-            VAdvantage.PushNotif.PushNotification.SendNotificationToUser(ADUserID, 0, 0, "", Msg.GetMsg(new Ctx(), "VIS_UseVerCode") + " " + TokenNo + " " + Msg.GetMsg(new Ctx(), "VIS_VAAuthentication"), "");
+            {
+                tokenDetails.Add(TokenNo);
+                tokenDetails.Add(System.DateTime.Now);
+                _dictVAMobTokens.Add(userSKey, tokenDetails);
+            }
+            VAdvantage.PushNotif.PushNotification.SendNotificationToUser(ADUserID, 0, 0, "", TokenNo, "OTP");
         }
     }
 }
