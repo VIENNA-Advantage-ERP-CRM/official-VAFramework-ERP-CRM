@@ -88,7 +88,7 @@ namespace VIS.Helpers
             }
             else
             {
-                    throw new Exception("UserNotFound");
+                throw new Exception("UserNotFound");
             }
 
             //if authenticated by LDAP or password is null(Means request from home page)
