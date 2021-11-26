@@ -342,6 +342,12 @@ namespace VAdvantage.Model
             {
                 SetC_DocType_ID(Util.GetValueOfInt(dt.Get_Value("C_DocTypeConfrimation_ID")));
             }
+
+            // VIS0060: Set Trx Org from Shipment/Receipt to Confirmation
+            if(ship.GetAD_OrgTrx_ID() > 0)
+            {
+                Set_Value("AD_OrgTrx_ID", ship.GetAD_OrgTrx_ID());
+            }
         }
 
 

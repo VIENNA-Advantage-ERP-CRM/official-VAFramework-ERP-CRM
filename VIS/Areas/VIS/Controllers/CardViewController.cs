@@ -79,12 +79,12 @@ namespace VIS.Controllers
             CardViewModel objCardViewModel = new CardViewModel();
             if (isNewRecord)
             {
-                id = objCardViewModel.SaveCardViewRecord(lstCardView[0].CardViewName, lstCardView[0].AD_Window_ID, lstCardView[0].AD_Tab_ID, lstCardView[0].UserID, lstCardView[0].AD_GroupField_ID, ctx, 0/*, LstRoleID*/, lstCardViewCondition, lstCardView[0].AD_HeaderLayout_ID, lstCardView[0].isPublic);
+                id = objCardViewModel.SaveCardViewRecord(lstCardView[0].CardViewName, lstCardView[0].AD_Window_ID, lstCardView[0].AD_Tab_ID, lstCardView[0].UserID, lstCardView[0].AD_GroupField_ID, ctx, 0/*, LstRoleID*/, lstCardViewCondition, lstCardView[0].AD_HeaderLayout_ID, lstCardView[0].isPublic, lstCardView[0].groupSequence);
             }
             else
             {
                 objCardViewModel.DeleteAllCardViewColumns(lstCardView[0].CardViewID, ctx);
-                id = objCardViewModel.SaveCardViewRecord(lstCardView[0].CardViewName, lstCardView[0].AD_Window_ID, lstCardView[0].AD_Tab_ID, lstCardView[0].UserID, lstCardView[0].AD_GroupField_ID, ctx, lstCardView[0].CardViewID/*, LstRoleID*/, lstCardViewCondition, lstCardView[0].AD_HeaderLayout_ID,lstCardView[0].isPublic);
+                id = objCardViewModel.SaveCardViewRecord(lstCardView[0].CardViewName, lstCardView[0].AD_Window_ID, lstCardView[0].AD_Tab_ID, lstCardView[0].UserID, lstCardView[0].AD_GroupField_ID, ctx, lstCardView[0].CardViewID/*, LstRoleID*/, lstCardViewCondition, lstCardView[0].AD_HeaderLayout_ID,lstCardView[0].isPublic, lstCardView[0].groupSequence);
             }
 
             if (lstCardView[0].IsDefault)
@@ -138,7 +138,7 @@ namespace VIS.Controllers
         /// <param name="columnName"></param>
         /// <param name="tableName"></param>
         /// <returns>int</returns>
-        public int UpdateCardByDragDrop(string grpValue, int recordID, string columnName, string tableName, int dataType)
+        public string UpdateCardByDragDrop(string grpValue, int recordID, string columnName, string tableName, int dataType)
         {
 
             Ctx ctx = Session["ctx"] as Ctx;

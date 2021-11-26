@@ -331,7 +331,8 @@
             self.onTableRowSelect(event);
             //switch self.singleRow = false; //force single view
             if (!onlySelect)
-                self.switchSingleRow();
+                self.aPanel.actionPerformedCallback(self.aPanel, "Multi");
+                //self.switchSingleRow();
         };
 
         //On Sort event
@@ -705,6 +706,10 @@
 
     VIS.GridController.prototype.getIsSingleRow = function () {
         return this.singleRow;
+    };
+
+    VIS.GridController.prototype.getIsCardRow = function () {
+        return this.isCardRow;
     };
 
     VIS.GridController.prototype.getIsMapRow = function () {
@@ -1715,7 +1720,7 @@
     };
 
     VIS.GridController.prototype.switchMultiRow = function () {
-        if (this.singleRow) {
+        if (this.singleRow || this.isCardRow) {
 
             this.singleRow = false;
             this.isCardRow = false;

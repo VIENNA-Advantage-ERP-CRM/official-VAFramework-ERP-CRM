@@ -2540,7 +2540,9 @@ findImg {
 }
 
 .vis-cv-header {
+
     width: 94.5%;
+
     /* height: 11px; */
     text-align: right;
     background-color: #fff;
@@ -2550,11 +2552,13 @@ findImg {
     padding-top: 0;
     position: fixed;
     z-index: 1;
+
     right: 61px;
     display: flex;
     justify-content: flex-end;
     /* left: 10px; */
     /* top: 146px;*/
+
 }
 
     .vis-cv-header input {
@@ -2604,7 +2608,7 @@ findImg {
     white-space: nowrap;
     overflow: hidden;
     color: rgba(var(--v-c-primary), 1);
-    margin: 0 5px;
+    margin: 2px 5px;
     border-bottom: 2px solid rgba(var(--v-c-primary), 1);
     /*background-color: ghostwhite;*/
 }
@@ -2913,13 +2917,13 @@ findImg {
     width: 61px;
 }
 
-.vis-windowfield, .vis-cardviewcolumnfield {
+.vis-windowfield, .vis-cardviewcolumnfield, .vis-cardviewcolumnfield1 {
     list-style: none;
     /*margin: 0 10px;*/
     padding: 0;
 }
 
-    .vis-windowfield li, .vis-cardviewcolumnfield li {
+    .vis-windowfield li, .vis-cardviewcolumnfield li, .vis-cardviewcolumnfield1 li {
         list-style: none;
         cursor: pointer;
         padding: 2px 10px;
@@ -2977,7 +2981,7 @@ findImg {
     /* margin-right: 8px; */
     visibility: visible;
     transform: rotate( 360deg);
-    /*top: 149px;*/
+
     background: #fff;
     display: flex;
     height: 14px;
