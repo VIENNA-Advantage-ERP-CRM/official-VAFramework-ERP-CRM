@@ -2540,7 +2540,9 @@ findImg {
 }
 
 .vis-cv-header {
-    width: 95.75%;
+
+    width: 94.5%;
+
     /* height: 11px; */
     text-align: right;
     background-color: #fff;
@@ -2550,26 +2552,28 @@ findImg {
     padding-top: 0;
     position: fixed;
     z-index: 1;
-    right: 0;
+
+    right: 61px;
     display: flex;
     justify-content: flex-end;
-    left: 10px;
-    top: 146px;
+    /* left: 10px; */
+    /* top: 146px;*/
+
 }
 
     .vis-cv-header input {
         /*margin-right: .5rem;*/
-        position: relative;
-        z-index: 2;
-        padding-top: 2px;
-        border: none;
-        height: 17px;
-        text-align: right;
-    }
+    position: relative;
+    z-index: 2;
+    padding-top: 2px;
+    border: none;
+    height: 17px;
+    text-align: right;
+}
 
     .vis-cv-header p {
         position: absolute;
-        top: 0;
+        top: -2px;
         text-align: center !important;
         width: 100%;
         z-index: 0;
@@ -2977,9 +2981,10 @@ findImg {
     /* margin-right: 8px; */
     visibility: visible;
     transform: rotate( 360deg);
-    top: 146px;
+
     background: #fff;
     display: flex;
+    height: 14px;
 }
 
 .vis-ulrole {
