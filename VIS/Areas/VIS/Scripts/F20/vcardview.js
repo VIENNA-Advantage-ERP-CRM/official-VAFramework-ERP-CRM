@@ -531,28 +531,14 @@
                     lookup.fillCombobox(true, true, true, false);
 
                     var data = lookup.data;
-                    if (this.groupSequence != null && this.groupSequence != "") {
-                        var grpArr = this.groupSequence.split(",");
-                        for (var a = 0; a < grpArr.length; a++) {
-                            for (var i = 0; i < data.length; i++) {
-                                if (data[i].Key == grpArr[a]) {
-                                    this.cGroupInfo[data[i].Key] = { 'name': data[i].Name, 'records': [], 'key': data[i].Key };
-                                    this.grpCount += 1;
-                                    //if (i >= 4)
-                                    //    break;
-                                }
-                            }
-                        }
-                    } else {
-                        for (var i = 0; i < data.length; i++) {
-                            this.cGroupInfo[data[i].Key] = { 'name': data[i].Name, 'records': [], 'key': data[i].Key };
-                            this.grpCount += 1;
-                            //if (i >= 4)
-                            //    break;
-                        }
+                    for (var i = 0; i < data.length; i++) {
+                        this.cGroupInfo[data[i].Key] = { 'name': data[i].Name, 'records': [], 'key': data[i].Key };
+                        this.grpCount += 1;
+                        //if (i >= 4)
+                        //    break;
                     }
 
-                  
+
                 }
                 this.setHeader(field.getHeader());
             }
@@ -607,54 +593,67 @@
             }
             else {
                 $this.filterRecord(records);
-                for (var p in $this.cGroupInfo) {
-                    cardGroup = new VCardGroup($this.grpCount === 1, $this.cGroupInfo[p].records, VIS.Utility.Util.getIdentifierDisplayVal($this.cGroupInfo[p].name), $this.fields, $this.cConditions, $this.headerItems, $this.headerStyle, $this.headerPaddings, $this.cGroupInfo[p].key, $this.aPanel);
-                    $this.groupCtrls.push(cardGroup);
-                    root.append(cardGroup.getRoot());
-                    var sortable = new vaSortable(cardGroup.getBody()[0], {
-                        attr: 'data-recid',
-                        selfSort: false,
-                        ignore: ['.vis-cv-card-edit', '.vis-ev-col-wrap-button'],
-                        onSelect: function (e, item) {
-                            //$this.onCardEdit({ 'recid': item }, true);
-                            var obj = {
-                                grpValue: $(e).parent().attr('data-key'),
-                                recordID: $this.mTab.getRecord_ID(),
-                                columnName: $this.cGroup.getColumnName(),
-                                tableName: $this.mTab.getTableName(),
-                                dataType: $this.cGroup.getDisplayType()
+                if ($this.groupSequence != null && $this.groupSequence != "") {
+                    var grpArr = $this.groupSequence.split(",");
+                    for (var a = 0; a < grpArr.length; a++) {
+                        for (var p in $this.cGroupInfo) {
+                            if (grpArr[a] == $this.cGroupInfo[p].key) {
+                                setCardGroup(p);
                             }
-                            $.ajax({
-                                type: "POST",
-                                url: VIS.Application.contextUrl + "CardView/UpdateCardByDragDrop",
-                                dataType: "json",
-                                data: obj,
-                                success: function (data) {
-                                    if (data != "1") {
-                                        VIS.ADialog.error(data, true, "");
-                                        vaSortable.prototype.revertItem();                                       
-                                    } else {
-                                        $this.mTab.dataRefresh();
-                                        var rec = $.grep(records, function (element, index) {
-                                            return element.recid == item;
-                                        });
-                                        var changeCard = new VCard($this.fields, rec[0], $this.headerItems, $this.headerStyle, $this.headerPadding, windowNo, {}, $this.aPanel)
-                                        root.find("[name='vc_" + item + "']").replaceWith(changeCard.getRoot());
-                                        changeCard.evaluate($this.cConditions)
-                                    }
-                                },
-                                error: function (err) {
-                                    VIS.ADialog.error(err.responseText, true, "");
-                                    vaSortable.prototype.revertItem();
-                                }
-                            });
                         }
-                    });
+                    }
+                } else {
+                    for (var p in $this.cGroupInfo) {
+                        setCardGroup(p);
+                    }
                 }
             }
 
+            function setCardGroup(p) {
+                cardGroup = new VCardGroup($this.grpCount === 1, $this.cGroupInfo[p].records, VIS.Utility.Util.getIdentifierDisplayVal($this.cGroupInfo[p].name), $this.fields, $this.cConditions, $this.headerItems, $this.headerStyle, $this.headerPaddings, $this.cGroupInfo[p].key, $this.aPanel);
+                $this.groupCtrls.push(cardGroup);
+                root.append(cardGroup.getRoot());
+                var sortable = new vaSortable(cardGroup.getBody()[0], {
+                    attr: 'data-recid',
+                    selfSort: false,
+                    ignore: ['.vis-cv-card-edit', '.vis-ev-col-wrap-button'],
+                    onSelect: function (e, item) {
+                        //$this.onCardEdit({ 'recid': item }, true);
+                        var obj = {
+                            grpValue: $(e).parent().attr('data-key'),
+                            recordID: $this.mTab.getRecord_ID(),
+                            columnName: $this.cGroup.getColumnName(),
+                            tableName: $this.mTab.getTableName(),
+                            dataType: $this.cGroup.getDisplayType()
+                        }
+                        $.ajax({
+                            type: "POST",
+                            url: VIS.Application.contextUrl + "CardView/UpdateCardByDragDrop",
+                            dataType: "json",
+                            data: obj,
+                            success: function (data) {
+                                if (data != "1") {
+                                    VIS.ADialog.error(data, true, "");
+                                    vaSortable.prototype.revertItem();
+                                } else {
+                                    $this.mTab.dataRefresh();
+                                    var rec = $.grep(records, function (element, index) {
+                                        return element.recid == item;
+                                    });
+                                    var changeCard = new VCard($this.fields, rec[0], $this.headerItems, $this.headerStyle, $this.headerPadding, windowNo, {}, $this.aPanel)
+                                    root.find("[name='vc_" + item + "']").replaceWith(changeCard.getRoot());
+                                    changeCard.evaluate($this.cConditions)
+                                }
+                            },
+                            error: function (err) {
+                                VIS.ADialog.error(err.responseText, true, "");
+                                vaSortable.prototype.revertItem();
+                            }
+                        });
+                    }
+                });
+            }
             $this.calculateWidth(width);
-
         }, 10);
 
     };
