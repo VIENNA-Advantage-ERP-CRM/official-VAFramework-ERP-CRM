@@ -5265,8 +5265,8 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
                                     {
                                         if (Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]) == Util.GetValueOfInt(negList[k]["cinvoiceid"]))
                                         {
-                                            paid = Util.GetValueOfDecimal(negList[i]["paidAmt"]) + netAmt;
-                                            negList[i]["paidAmt"] = paid.ToString();
+                                            paid = Util.GetValueOfDecimal(negList[k]["paidAmt"]) + netAmt;
+                                            negList[k]["paidAmt"] = paid.ToString();
                                         }
                                     }
                                 }
