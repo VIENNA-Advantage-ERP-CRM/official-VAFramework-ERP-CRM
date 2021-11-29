@@ -2303,6 +2303,8 @@ namespace VAdvantage.Model
                             #endregion
                         }
 
+                        // Get the Provisional Invoice Account Date 
+                        DateTime? dateAcct = DateTime.Now;
                         if (windowName.Equals("ProvisionalInvoice"))
                         {
                             if (po.Get_ValueAsInt("M_InOutLine_ID") > 0)
@@ -2319,6 +2321,7 @@ namespace VAdvantage.Model
                             WHERE C_ProvisionalInvoice.C_ProvisionalInvoice_ID = " + po.Get_ValueAsInt("C_ProvisionalInvoice_ID"), null, trxName);
                             if (dsProductDetail != null && dsProductDetail.Tables.Count > 0 && dsProductDetail.Tables[0].Rows.Count > 0)
                             {
+                                dateAcct = Util.GetValueOfDateTime(dsProductDetail.Tables[0].Rows[0]["DateAcct"]);
                                 if (acctSchema.GetC_Currency_ID() != Util.GetValueOfInt(dsProductDetail.Tables[0].Rows[0]["C_Currency_ID"]))
                                 {
                                     Price = MConversionRate.Convert(ctx, Price,
@@ -2439,8 +2442,8 @@ namespace VAdvantage.Model
                                     if (OrderCurrency_ID != acctSchema.GetC_Currency_ID())
                                     {
                                         expectedAmt = MConversionRate.Convert(ctx, expectedAmt, OrderCurrency_ID, acctSchema.GetC_Currency_ID(),
-                                                                    Util.GetValueOfDateTime(po.Get_Value("DateAcct")),
-                                                                    Util.GetValueOfInt(dsExpectedLandedCostAllocation.Tables[0].Rows[lca]["C_ConversionType_ID"]), AD_Client_ID, AD_Org_ID);
+                                                                    dateAcct, Util.GetValueOfInt(dsExpectedLandedCostAllocation.Tables[0].Rows[lca]["C_ConversionType_ID"]),
+                                                                    AD_Client_ID, AD_Org_ID);
                                         if (expectedAmt == 0)
                                         {
                                             if (optionalstr != "window")
