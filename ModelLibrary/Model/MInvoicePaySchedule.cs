@@ -380,7 +380,7 @@ namespace VAdvantage.Model
                 }
             }
 
-            if (!newRecord && Get_ColumnIndex("IsHoldPayment") > 0 && (GetC_Payment_ID() == 0 && GetC_CashLine_ID() == 0))
+            if (!newRecord && Get_ColumnIndex("IsHoldPayment") > -1 && (GetC_Payment_ID() == 0 && GetC_CashLine_ID() == 0))
             {
                 if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(C_InvoicePaySchedule_ID) FROM C_InvoicePaySchedule " +
                     "WHERE IsHoldPayment='N' AND C_Invoice_ID=" + GetC_Invoice_ID(), null, Get_Trx())) > 0)
