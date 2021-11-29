@@ -783,21 +783,19 @@ namespace VIS.Helpers
             {
                 if (_dictVAMobTokens.ContainsKey(model.Login1Model.UserValue))
                 {
+                    // Get token details for the login user
                     List<dynamic> tknDetails = _dictVAMobTokens[model.Login1Model.UserValue];
-                    if (tknDetails.Count > 0)
+                    if (tknDetails != null && tknDetails.Count > 1)
                     {
+                        int totSeconds = Util.GetValueOfInt((System.DateTime.Now - tknDetails[1]).TotalSeconds);
                         string TokenNo = tknDetails[0];
-                        DateTime? savedTime = tknDetails[1];
-                        if (TokenNo == model.Login1Model.OTP2FA)
+                        // Checked time duration after token generation (60 secs)
+                        if (totSeconds <= 60 && TokenNo == model.Login1Model.OTP2FA)
                         {
                             _dictVAMobTokens.Remove(model.Login1Model.UserValue);
                             return true;
                         }
-                        else
-                            return false;
                     }
-                    else
-                        return false;
                 }
             }
             return isValid;
