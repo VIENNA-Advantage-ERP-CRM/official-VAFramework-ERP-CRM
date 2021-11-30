@@ -1330,6 +1330,8 @@
             else {
                 IsBusy(false);
                 ch.close();
+                if (gc.isCardRow)
+                    cardView.getCardViewData(null, AD_CardView_ID);
             }
         };
 
@@ -1573,7 +1575,14 @@
                         val = val.replace('.000Z', 'Z');
                     return val;
                 }
+
+                if (VIS.DisplayType.IsNumeric(crtlObj.getDisplayType())) {
+                    return 0;
+                }
                 // return control's value
+                if (crtlObj.getValue() == '') {
+                    return null;
+                }
                 return crtlObj.getValue();
             }
             return "";
