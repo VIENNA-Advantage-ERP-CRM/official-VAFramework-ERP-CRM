@@ -90,9 +90,9 @@
     content: "\e9be";
 }
 
-.vis-checkin-file:before {
+/*.vis-checkin-file:before {
     content: "\e9b1";
-}
+}*/
 
 .vis-checkout-file:before {
     content: "\e9b2";
@@ -908,4 +908,24 @@
 }
 .vis-back:before {
     content: "\e9d3";
+}
+
+.vis-doc-number:before {
+    content: "\e9b1";
+}
+
+.vis-recursive-doc:before {
+    content: "\e9d5";
+}
+
+.vis-signature-o:before {
+    content: "\e9d7";
+}
+
+.vis-signature:before {
+    content: "\e9d6";
+}
+
+.vis-checkin-file:before {
+    content: "\e9d4";
 }
