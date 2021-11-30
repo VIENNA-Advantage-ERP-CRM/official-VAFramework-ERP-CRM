@@ -2541,8 +2541,7 @@ findImg {
 
 .vis-cv-header {
 
-    width: 94.5%;
-
+    width: 100%;
     /* height: 11px; */
     text-align: right;
     background-color: #fff;
@@ -2550,10 +2549,10 @@ findImg {
     /* color: darkgray; */
     font-size: 12px;
     padding-top: 0;
-    position: fixed;
+    position: relative;
     z-index: 1;
 
-    right: 61px;
+   /* right: 61px;*/
     display: flex;
     justify-content: flex-end;
     /* left: 10px; */
@@ -2573,21 +2572,23 @@ findImg {
 
     .vis-cv-header p {
         position: absolute;
-        top: -2px;
         text-align: center !important;
         width: 100%;
         z-index: 0;
         background: #fff;
         font-weight:600;
+        height:14px;
+        line-height:11px;
     }
 
 .vis-cv-main {
     bottom: 0;
-    top: 12px;
+    top: 15px;
     position: absolute;
     z-index: 0;
     display:flex;
     width: 100%;
+    overflow:auto;
 }
 
 .vis-cv-cg {
@@ -2674,7 +2675,6 @@ findImg {
     visibility: hidden;
     position: fixed !important;
     right: 65px;
-    top: 150px;
 }
 
 .vis-cv-card-selected-card {
