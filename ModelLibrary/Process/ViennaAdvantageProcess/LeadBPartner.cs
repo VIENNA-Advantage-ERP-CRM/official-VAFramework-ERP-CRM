@@ -149,17 +149,17 @@ namespace ViennaAdvantage.Process
                 { // Commented few lines as it is overwriting data and few fields are not available on DB level
 
                     MUser _user = new MUser(GetCtx(), lead.GetAD_User_ID(), Get_TrxName());
-                   // _user.SetName(Util.GetValueOfString(lead.Get_Value("Name2") + " " + Util.GetValueOfString(lead.Get_Value("ContactName"))));
+                    // _user.SetName(Util.GetValueOfString(lead.Get_Value("Name2") + " " + Util.GetValueOfString(lead.Get_Value("ContactName"))));
                     //_user.Set_Value("FirstName", Util.GetValueOfString(lead.Get_Value("Name2")));
-                  //  _user.Set_Value("LastName", Util.GetValueOfString(lead.Get_Value("ContactName")));
+                    //  _user.Set_Value("LastName", Util.GetValueOfString(lead.Get_Value("ContactName")));
                     _user.SetC_Greeting_ID(lead.GetC_Greeting_ID());
-                  //  _user.Set_Value("Value", Util.GetValueOfString(lead.Get_Value("Name2")) + " " + Util.GetValueOfString(lead.Get_Value("ContactName")));
-                   // _user.Set_Value("FullName", Util.GetValueOfString(lead.Get_Value("Name2")) + " " + Util.GetValueOfString(lead.Get_Value("ContactName")));
+                    //  _user.Set_Value("Value", Util.GetValueOfString(lead.Get_Value("Name2")) + " " + Util.GetValueOfString(lead.Get_Value("ContactName")));
+                    // _user.Set_Value("FullName", Util.GetValueOfString(lead.Get_Value("Name2")) + " " + Util.GetValueOfString(lead.Get_Value("ContactName")));
                     _user.SetC_BPartner_Location_ID(lead.GetC_BPartner_Location_ID());
                     _user.SetMobile(lead.GetMobile());
                     _user.Set_Value("Phone", Util.GetValueOfString(lead.GetPhone()));
                     _user.Set_Value("Phone2", Util.GetValueOfString(lead.GetPhone2()));
-                   // _user.Set_Value("VA047_JobTitle", Util.GetValueOfString(lead.Get_Value("VA047_JobTitle")));
+                    // _user.Set_Value("VA047_JobTitle", Util.GetValueOfString(lead.Get_Value("VA047_JobTitle")));
                     _user.SetEMail(lead.GetEMail());
                     _user.SetDescription(lead.GetDescription());
                     if (!_user.Save())

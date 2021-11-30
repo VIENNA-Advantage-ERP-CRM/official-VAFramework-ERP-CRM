@@ -1147,6 +1147,6 @@ public void SetFirstName(String FirstName) { if (FirstName != null && FirstName.
 public void SetLastName(String LastName) { if (LastName != null && LastName.Length > 60) { log.Warning("Length > 60 - truncated"); LastName = LastName.Substring(0, 60); } Set_Value("LastName", LastName); }/** Get Last Name.
 @return Last Name */
 public String GetLastName() { return (String)Get_Value("LastName"); }
-    }
+}
 
 }
