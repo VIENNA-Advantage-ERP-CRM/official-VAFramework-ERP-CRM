@@ -17,7 +17,7 @@ using VAdvantage.Utility;
 using VAdvantage.DataBase;
 using VAdvantage.Common;
 using VAdvantage.Logging;
-using VAdvantage.Process;						 
+using VAdvantage.Process;
 
 namespace VAdvantage.Model
 {
@@ -270,7 +270,7 @@ namespace VAdvantage.Model
                 if (reverse)
                 {
                     cashLine.SetIsAllocated(false);
-                    if (!cashLine.Save(Get_Trx())) 
+                    if (!cashLine.Save(Get_Trx()))
                     {
                         ValueNamePair pp = VLogger.RetrieveError();
                         log.Log(Level.SEVERE, "Error found for updating cashLine  for  this Line ID = " + cashLine.GetC_CashLine_ID() +
@@ -278,7 +278,7 @@ namespace VAdvantage.Model
                     }
                 }
             }
-			
+
             //	Payment - Invoice
             if (C_Payment_ID != 0 && invoice != null)
             {
@@ -600,6 +600,12 @@ namespace VAdvantage.Model
                                 invoiceSchedule.SetVA009_PaidAmnt(0);
                                 // set Currency Variance amount as 0, when we reverse paymnet/ cash journalor allocation against this schedule
                                 invoiceSchedule.SetVA009_Variance(0);
+
+                                // Clear GL Journal line reference also on Reversal 
+                                if (invoiceSchedule.Get_ValueAsInt("GL_JournalLine_ID") > 0)
+                                {
+                                    invoiceSchedule.Set_Value("GL_JournalLine_ID", 0);
+                                }
                             }
                             if (!invoiceSchedule.Save(Get_TrxName()))
                             {

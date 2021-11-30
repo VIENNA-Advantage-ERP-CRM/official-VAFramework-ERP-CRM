@@ -724,19 +724,19 @@ namespace VAdvantage.Model
                                 SetProcessMsg(Msg.GetMsg(GetCtx(), "ScheduleNotSplitted") + "  " + (pp != null ? pp.GetName() : ""));
                                 return DocActionVariables.STATUS_INVALID;
                             }
+                        }
 
-                            // this is used to validate invoice and its schedule
-                            invoice.ValidatePaySchedule();
-                            if (!invoice.Save(Get_Trx()))
-                            {
-                                ValueNamePair pp = VLogger.RetrieveError();
-                                _log.Info("Error found for updating ispayschedulevalid as true at Invoice  for  this Line ID = " + newPaySch.GetC_Invoice_ID() +
-                                           " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
-                                Get_Trx().Rollback();
-                                //_processMsg = Msg.GetMsg(GetCtx(), "ScheduleNotSplitted");
-                                SetProcessMsg(Msg.GetMsg(GetCtx(), "ScheduleNotSplitted") + "  " + (pp != null ? pp.GetName() : ""));
-                                return DocActionVariables.STATUS_INVALID;
-                            }
+                        // this is used to validate invoice and its schedule
+                        invoice.ValidatePaySchedule();
+                        if (!invoice.Save(Get_Trx()))
+                        {
+                            ValueNamePair pp = VLogger.RetrieveError();
+                            _log.Info("Error found for updating ispayschedulevalid as true at Invoice  for  Invoice ID = " + invoice.GetC_Invoice_ID() +
+                                       " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                            Get_Trx().Rollback();
+                            //_processMsg = Msg.GetMsg(GetCtx(), "ScheduleNotSplitted");
+                            SetProcessMsg(Msg.GetMsg(GetCtx(), "ScheduleNotSplitted") + "  " + (pp != null ? pp.GetName() : ""));
+                            return DocActionVariables.STATUS_INVALID;
                         }
 
                         // update invoice if all schedule are paid then mark paid as true at invoice
@@ -998,7 +998,7 @@ namespace VAdvantage.Model
                 line.SetWithholdingAmt(Env.ZERO);
                 line.SetBackupWithholdingAmount(Env.ZERO);
                 line.Save();
-                
+
 
                 // Added by Amit for Payment Management 5-11-2015   
                 if (Env.IsModuleInstalled("VA009_"))
