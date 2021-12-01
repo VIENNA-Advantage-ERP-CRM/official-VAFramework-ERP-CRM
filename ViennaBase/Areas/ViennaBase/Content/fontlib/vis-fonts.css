@@ -919,7 +919,7 @@
 }
 
 .vis-signature-o:before {
-    content: "\e9d7";
+    content: "\e9d8";
 }
 
 .vis-signature:before {
@@ -928,4 +928,20 @@
 
 .vis-checkin-file:before {
     content: "\e9d4";
+}
+
+.vis-file-preview:before {
+    content: "\e9da";
+}
+
+.vis-doc-preview:before {
+    content: "\e9d9";
+}
+
+.vis-file-signature-o:before {
+    content: "\e9d7";
+}
+
+.vis-file-signature:before {
+    content: "\e9d6";
 }
