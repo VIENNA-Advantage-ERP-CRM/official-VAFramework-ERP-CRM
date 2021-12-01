@@ -513,7 +513,16 @@ namespace VAdvantage.Model
                 else
                     _user = new MUser(_bp);
             }
-            _user.SetName(GetContactName());
+            // If upgrade 4 module is not updated with new columns, then set contactname on user , else set firstname and lastname
+            if (Get_ColumnIndex("FirstName") < 0)
+            {
+                _user.SetName(GetContactName());
+            }
+            else
+            {
+                _user.SetName(GetFirstName());
+                _user.Set_ValueNoCheck("LastName", GetLastName());
+            }
             //
             if (GetC_Job_ID() != 0)
                 _user.SetC_Job_ID(GetC_Job_ID());
