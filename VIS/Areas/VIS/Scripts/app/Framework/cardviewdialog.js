@@ -252,7 +252,7 @@
             cmbGroupField = rootTextControl.find(".vis-cmbgroupfield");
             // Column Fields
             rootGroupFieldsCombo = $("<div class='vis-third-header vis-pull-left' style='width:68%'></div>");            
-            rootGroupFieldsSeq = $("<div class='vis-third-header vis-pull-left' style='width:30%;margin-left: 15px;'></div>");            
+            rootGroupFieldsSeq = $("<div class='vis-third-header vis-pull-left' style='width:28%;margin: 0 15px 0 15px;'></div>");            
            
             divLeftGroupFieldsCombo = $("<div class='vis-left-fields vis-pull-left'></div>");
             divRightGroupFieldsCombo = $("<div class='vis-left-fields vis-pull-left' ></div>");
