@@ -198,7 +198,7 @@
             return false;
         },
         IsInt: function (displayType) {
-            if (displayType == VIS.DisplayType.Integer) {
+            if (displayType == VIS.DisplayType.Integer || displayType == VIS.DisplayType.ProgressBar) {
                 return true;
             }
             return false;
@@ -241,13 +241,13 @@
         GetNumberFormat: function (displayType) {
 
             var format = null;
-            if (displayType == this.Integer) {
+            if (displayType == this.Integer || displayType == this.ProgressBar) {
                 format = new VIS.Format(this.INTEGER_DIGITS, 0, 0);
             }
             else if (displayType == this.Quantity) {
                 format = new VIS.Format(this.MAX_DIGITS, this.MAX_FRACTION, 0);
             }
-            else if (displayType == this.Amount || displayType == this.ProgressBar) {
+            else if (displayType == this.Amount ) {
                 format = new VIS.Format(this.MAX_DIGITS, this.MAX_FRACTION, this.AMOUNT_FRACTION);
             }
             else if (displayType == this.CostPrice) {
@@ -6493,7 +6493,7 @@
 
     function VProgressBar(columnName, isMandatory, isReadOnly, isUpdateable, displayLength, fieldLength, controlDisplayType) {
         var $ctrl = $('<div class="vis-progressCtrlWrap">');
-        var $rangeCtrl = $('<input>', { type: 'range', step: '0.01', name: columnName, maxlength: fieldLength, 'data-type': 'int' });
+        var $rangeCtrl = $('<input>', { type: 'range', step: '1', name: columnName, maxlength: fieldLength, 'data-type': 'int' });
         var $oputput = $('<output  class="vis-progress-output">');
 
         $ctrl.append($oputput).append($rangeCtrl);

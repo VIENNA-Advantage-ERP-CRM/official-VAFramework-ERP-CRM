@@ -46,7 +46,10 @@
                             isCompositView.find('.vis-edit').click();
                         }
                     } else {
-                        self.aPanel.getRoot().find(' .vis-multi:first').click();
+                        // main view
+                        //self.aPanel.getRoot().find(' .vis-multi:first').click();
+                        self.aPanel.actionPerformedCallback(self.aPanel, "Multi");
+                        self.aPanel.setLastView("Multi");
                     }
                 }
             } catch (err) {

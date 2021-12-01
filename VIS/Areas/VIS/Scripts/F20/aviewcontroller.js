@@ -330,8 +330,10 @@
         this.vCardView.onCardEdit = function (event, onlySelect) {
             self.onTableRowSelect(event);
             //switch self.singleRow = false; //force single view
-            if (!onlySelect)
+            if (!onlySelect) {
                 self.aPanel.actionPerformedCallback(self.aPanel, "Multi");
+                self.aPanel.setLastView("Card");
+            }
                 //self.switchSingleRow();
         };
 
