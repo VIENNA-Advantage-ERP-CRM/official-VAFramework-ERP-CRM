@@ -1136,6 +1136,17 @@ public DateTime? GetC_Followupdate() {return (DateTime?)Get_Value("C_Followupdat
 public void SetC_ProposalDdate(DateTime? C_ProposalDdate) { Set_Value("C_ProposalDdate", (DateTime?)C_ProposalDdate); }/** Get Proposal Due Date.
 @return Proposal Due Date */
 public DateTime? GetC_ProposalDdate() { return (DateTime?)Get_Value("C_ProposalDdate"); }
+/** Set First Name.
+@param FirstName Alphanumeric identifier of the entity */
+public void SetFirstName(String FirstName) { if (FirstName != null && FirstName.Length > 60) { log.Warning("Length > 60 - truncated"); FirstName = FirstName.Substring(0, 60); } Set_Value("FirstName", FirstName); }/** Get First Name.
+@return Alphanumeric identifier of the entity */
+ public String GetFirstName() { return (String)Get_Value("FirstName"); }
+
+/** Set Last Name.
+@param LastName Last Name */
+public void SetLastName(String LastName) { if (LastName != null && LastName.Length > 60) { log.Warning("Length > 60 - truncated"); LastName = LastName.Substring(0, 60); } Set_Value("LastName", LastName); }/** Get Last Name.
+@return Last Name */
+public String GetLastName() { return (String)Get_Value("LastName"); }
 }
 
 }
