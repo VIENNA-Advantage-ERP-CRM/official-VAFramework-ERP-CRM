@@ -17479,7 +17479,7 @@
      * @param {any} oldValue
      */
     CalloutTax.prototype.SetTaxExemptReason = function (ctx, windowNo, mTab, mField, value, oldValue) {
-        if (value == null || value == 0 || value.toString() == "") {
+        if (value == null || value == 0 || value.toString() == "" || this.isCalloutActive()) {
             return "";
         }
         try

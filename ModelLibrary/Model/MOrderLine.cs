@@ -4619,24 +4619,19 @@ namespace VAdvantage.Model
             return true;
         }
 
-       /// <summary>
-       /// Set IsTaxExempt and TaxExemptReason
-       /// </summary>
-       /// <writer>1052</writer>
+        /// <summary>
+        /// Set IsTaxExempt and TaxExemptReason
+        /// </summary>
+        /// <writer>1052</writer>
         private void SetTaxExemptReason()
         {
-            string DocStatus = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocStatus FROM C_Order WHERE C_Order_ID = " + GetC_Order_ID(),null,Get_Trx()));
-            if (DocStatus.Equals(MOrder.DOCSTATUS_Drafted))
+            if (GetC_Tax_ID() > 0 && GetC_TaxExemptReason_ID() == 0 && Util.GetValueOfInt(Get_Value("C_Quotation_Line_ID")) == 0)
             {
-                if (GetC_Tax_ID() > 0 && GetC_TaxExemptReason_ID() == 0 && Util.GetValueOfInt(Get_Value("C_Quotation_Line_ID")) == 0)
+                DataSet ds = DB.ExecuteDataset("SELECT IsTaxExempt,C_TaxExemptReason_ID FROM C_Tax WHERE IsActive='Y' AND IsTaxExempt='Y' AND C_Tax_ID=" + GetC_Tax_ID(), null, Get_Trx());
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
-                    DataSet ds = DB.ExecuteDataset("SELECT IsTaxExempt,C_TaxExemptReason_ID FROM C_Tax WHERE IsActive='Y' AND IsTaxExempt='Y' AND C_Tax_ID=" + GetC_Tax_ID(), null, Get_Trx());
-                    if (ds != null && ds.Tables[0].Rows.Count > 0)
-                    {
-                        SetC_TaxExemptReason_ID(Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_TaxExemptReason_ID"]));
-                        SetIsTaxExempt(Util.GetValueOfString(ds.Tables[0].Rows[0]["IsTaxExempt"]).Equals("Y") ? true : false);
-
-                    }
+                    SetC_TaxExemptReason_ID(Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_TaxExemptReason_ID"]));
+                    SetIsTaxExempt(Util.GetValueOfString(ds.Tables[0].Rows[0]["IsTaxExempt"]).Equals("Y") ? true : false);
                 }
             }
         }
@@ -4693,7 +4688,7 @@ namespace VAdvantage.Model
                 return false;
             }
             // VIS0060: UnLink all the Requisition Lines linked with this order line.
-            DB.ExecuteQuery("UPDATE M_RequisitionLine SET C_OrderLine_ID = NULL WHERE C_OrderLine_ID = " + Get_ID(), null, Get_Trx());            
+            DB.ExecuteQuery("UPDATE M_RequisitionLine SET C_OrderLine_ID = NULL WHERE C_OrderLine_ID = " + Get_ID(), null, Get_Trx());
             return true;
         }
 
