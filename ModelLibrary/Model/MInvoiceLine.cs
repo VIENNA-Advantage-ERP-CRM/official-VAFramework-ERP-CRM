@@ -3714,7 +3714,7 @@ namespace VAdvantage.Model
                             SetPrice();
                     }
                 }
-
+               
                 //	Set Tax
 
                 if (GetC_Tax_ID() == 0)
@@ -3727,6 +3727,29 @@ namespace VAdvantage.Model
                 else
                 {
                     SetC_Tax_ID(GetCtx().GetContextAsInt("C_Tax_ID"));
+                }
+
+                //Set IsTaxExempt and TaxExemptReason
+                if (GetC_Tax_ID() > 0 && GetC_TaxExemptReason_ID() == 0)
+                {
+                    string sql = "";
+
+                    if (GetC_OrderLine_ID() == 0) 
+                    { 
+                        //Get TaxExempt from Tax if Order refrence is not available
+                        sql = "SELECT IsTaxExempt, C_TaxExemptReason_ID FROM C_Tax WHERE IsActive = 'Y' AND IsTaxExempt = 'Y' AND C_Tax_ID = " + GetC_Tax_ID();
+                    }
+                    else
+                    {
+                        //Order reference case 
+                        sql = "SELECT IsTaxExempt, C_TaxExemptReason_ID FROM C_OrderLine WHERE IsTaxExempt = 'Y'AND C_OrderLine_ID= " + GetC_OrderLine_ID();
+                    }
+                    DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
+                    if (ds != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        SetC_TaxExemptReason_ID(Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_TaxExemptReason_ID"]));
+                        SetIsTaxExempt(Util.GetValueOfString(ds.Tables[0].Rows[0]["IsTaxExempt"]).Equals("Y") ? true : false);
+                    }
                 }
 
                 //	Get Line No

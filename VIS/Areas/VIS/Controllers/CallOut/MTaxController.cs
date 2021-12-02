@@ -84,5 +84,22 @@ namespace VIS.Controllers
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
+
+        /// <summary>
+        /// Get TaxExempt details from Tax Rate
+        /// </summary>
+        /// <param name="fields">Tax</param>
+        /// <returns>TaxExempt details</returns>
+        public JsonResult GetTaxExempt(string fields)
+        {
+            string retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                Ctx ctx = Session["ctx"] as Ctx;
+                MTaxModel tax = new MTaxModel();
+                retJSON = JsonConvert.SerializeObject(tax.GetTaxExempt(Util.GetValueOfInt(fields)));
+            }
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
     }
 }

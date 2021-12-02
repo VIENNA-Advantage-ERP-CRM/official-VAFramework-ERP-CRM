@@ -3859,6 +3859,17 @@ namespace VAdvantage.Model
                     return false;
                 }
             }
+            //Set IsTaxExempt and TaxExemptReason
+            if (GetC_Tax_ID()>0 && GetC_TaxExemptReason_ID() == 0 && Util.GetValueOfInt(Get_Value("C_Quotation_Line_ID"))==0)
+            {
+              DataSet ds=  DB.ExecuteDataset("SELECT IsTaxExempt,C_TaxExemptReason_ID FROM C_Tax WHERE IsActive='Y' AND IsTaxExempt='Y' AND C_Tax_ID=" + GetC_Tax_ID(), null, Get_Trx());
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    SetC_TaxExemptReason_ID(Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_TaxExemptReason_ID"]));
+                    SetIsTaxExempt(Util.GetValueOfString(ds.Tables[0].Rows[0]["IsTaxExempt"]).Equals("Y") ? true : false);
+
+               }
+            }
 
             MOrder Ord = GetParent();
             MDocType docType = MDocType.Get(GetCtx(), Ord.GetC_DocTypeTarget_ID());
