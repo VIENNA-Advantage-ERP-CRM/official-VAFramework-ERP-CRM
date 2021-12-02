@@ -89,6 +89,7 @@ namespace VIS.Controllers
         /// Get TaxExempt details from Tax Rate
         /// </summary>
         /// <param name="fields">Tax</param>
+        /// <writer>1052</writer>
         /// <returns>TaxExempt details</returns>
         public JsonResult GetTaxExempt(string fields)
         {

@@ -17495,8 +17495,10 @@
         catch (err)
         {
             this.log.log(Level.SEVERE, sql, err);
+            this.setCalloutActive(false);
             return err.message;
         }
+        this.setCalloutActive(false);
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";
     };

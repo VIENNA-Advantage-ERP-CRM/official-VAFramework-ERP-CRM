@@ -3859,17 +3859,13 @@ namespace VAdvantage.Model
                     return false;
                 }
             }
-            //Set IsTaxExempt and TaxExemptReason
-            if (GetC_Tax_ID()>0 && GetC_TaxExemptReason_ID() == 0 && Util.GetValueOfInt(Get_Value("C_Quotation_Line_ID"))==0)
+            if (newRecord)
             {
-              DataSet ds=  DB.ExecuteDataset("SELECT IsTaxExempt,C_TaxExemptReason_ID FROM C_Tax WHERE IsActive='Y' AND IsTaxExempt='Y' AND C_Tax_ID=" + GetC_Tax_ID(), null, Get_Trx());
-                if (ds != null && ds.Tables[0].Rows.Count > 0)
-                {
-                    SetC_TaxExemptReason_ID(Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_TaxExemptReason_ID"]));
-                    SetIsTaxExempt(Util.GetValueOfString(ds.Tables[0].Rows[0]["IsTaxExempt"]).Equals("Y") ? true : false);
-
-               }
+                //Set IsTaxExempt and TaxExemptReason
+                SetTaxExemptReason();
             }
+
+
 
             MOrder Ord = GetParent();
             MDocType docType = MDocType.Get(GetCtx(), Ord.GetC_DocTypeTarget_ID());
@@ -4623,6 +4619,27 @@ namespace VAdvantage.Model
             return true;
         }
 
+       /// <summary>
+       /// Set IsTaxExempt and TaxExemptReason
+       /// </summary>
+       /// <writer>1052</writer>
+        private void SetTaxExemptReason()
+        {
+            string DocStatus = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocStatus FROM C_Order WHERE C_Order_ID = " + GetC_Order_ID(),null,Get_Trx()));
+            if (DocStatus.Equals(MOrder.DOCSTATUS_Drafted))
+            {
+                if (GetC_Tax_ID() > 0 && GetC_TaxExemptReason_ID() == 0 && Util.GetValueOfInt(Get_Value("C_Quotation_Line_ID")) == 0)
+                {
+                    DataSet ds = DB.ExecuteDataset("SELECT IsTaxExempt,C_TaxExemptReason_ID FROM C_Tax WHERE IsActive='Y' AND IsTaxExempt='Y' AND C_Tax_ID=" + GetC_Tax_ID(), null, Get_Trx());
+                    if (ds != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        SetC_TaxExemptReason_ID(Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_TaxExemptReason_ID"]));
+                        SetIsTaxExempt(Util.GetValueOfString(ds.Tables[0].Rows[0]["IsTaxExempt"]).Equals("Y") ? true : false);
+
+                    }
+                }
+            }
+        }
         /// <summary>
         /// Set property to check wheater order's close event is called or any other event is called
         /// </summary>

@@ -140,6 +140,7 @@ namespace VIS.Models
         /// Get TaxExempt details from Tax
         /// </summary>
         /// <param name="Tax_ID">Tax</param>
+        /// <writer>1052</writer>
         /// <returns>TaxExempt details</returns>
         public Dictionary<String, Object> GetTaxExempt(int Tax_ID)
         {
