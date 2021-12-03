@@ -90,7 +90,7 @@ namespace VIS.Models
         {
             List<CardViewConditionPropeties> lstCardViewRole = null;
             CardViewConditionPropeties objCardView = null;
-            string sqlQuery = "SELECT * FROM AD_CARDVIEW_Condition WHERE AD_CardView_id=" + ad_CardView_ID + " AND AD_Client_ID=" + ctx.GetAD_Client_ID() + " ORDER BY AD_CARDVIEW_Condition_ID";
+            string sqlQuery = "SELECT * FROM AD_CARDVIEW_Condition WHERE AD_CardView_id=" + ad_CardView_ID + " ORDER BY AD_CARDVIEW_Condition_ID";
             //  string sqlQuery = "SELECT * FROM AD_CardView WHERE AD_Window_id=" + ad_Window_ID + " and AD_Tab_id=" + ad_Tab_ID + " AND (AD_USER_ID=" + ctx.GetAD_User_ID() + " OR AD_USER_ID Is NULL )" ;
             // sqlQuery = MRole.GetDefault(ctx).AddAccessSQL(sqlQuery, "AD_CardView", false, false);
             DataSet ds = DB.ExecuteDataset(sqlQuery);

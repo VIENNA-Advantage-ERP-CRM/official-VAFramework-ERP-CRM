@@ -852,6 +852,15 @@ html[dir="rtl"] .vis-vs-card-autoComplete {
 html[dir="rtl"] .ui-menu .ui-menu-item-wrapper {
     padding-right: 3px;
 }
+
+html[dir="rtl"] .vis-back {
+    transform:scaleX(-1);
+}
+html[dir="rtl"] .vis-cv-card-edit {
+left:5px;
+right:unset;
+transform:scaleX(-1);
+}
 /*rtl css End here*/
 
 
