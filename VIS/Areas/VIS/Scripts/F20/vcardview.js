@@ -598,7 +598,7 @@
                 }
 
                 
-                if ($this.cGroup.lookup.displayType == VIS.DisplayType.List && $this.groupSequence != null && $this.groupSequence != "") {
+                if ($this.cGroup.lookup && $this.cGroup.lookup.displayType == VIS.DisplayType.List && $this.groupSequence != null && $this.groupSequence != "") {
                     var grpArr = $this.groupSequence.split(",");
                     for (var j = 0; j < grpArr.length; j++) {
                         var item = root.find("[data-key='" + grpArr[j] + "']").parent();
@@ -634,7 +634,7 @@
                     onSelect: function (e, item) {
                         //$this.onCardEdit({ 'recid': item }, true);
                         var obj = {
-                            grpValue: $(e).parent().attr('data-key'),
+                            grpValue: ($(e).parent().attr('data-key') == 'null' ? null : $(e).parent().attr('data-key')),
                             recordID: $this.mTab.getRecord_ID(),
                             columnName: $this.cGroup.getColumnName(),
                             tableName: $this.mTab.getTableName(),
@@ -692,8 +692,9 @@
             }
             else {
                 if (!this.cGroupInfo['Other__1']) {
-                    this.cGroupInfo['Other__1'] = { 'name': 'Others', 'records': [] };
+                    this.cGroupInfo['Other__1'] = { 'name': 'Others', 'records': [], 'key':null };
                     this.grpCount += 1;
+                    isgrouprChanged = true;
                     isgrouprChanged = true;
                 }
                 this.cGroupInfo['Other__1'].records.push(record);
