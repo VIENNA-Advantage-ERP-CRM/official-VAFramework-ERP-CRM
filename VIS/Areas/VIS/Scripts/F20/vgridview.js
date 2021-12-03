@@ -446,7 +446,7 @@
                 oColumn.size = '100px';
             }
 
-            if (mField.getIsIdentifier() && this.hyperLinkCell == null) {
+            if (mField.getIsIdentifier() && mField.getDisplayType() != VIS.DisplayType.Image && this.hyperLinkCell == null) {
                 if (oColumn.hidden == false) {
                     this.hyperLinkCell = columnName;
                     oColumn.style = 'text-decoration:underline; color:rgba(var(--v-c-primary), 1) !important; cursor:pointer';

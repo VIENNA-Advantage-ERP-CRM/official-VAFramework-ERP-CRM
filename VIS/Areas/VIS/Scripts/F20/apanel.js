@@ -1848,7 +1848,7 @@
             else if (tis.getLastView() == "Card") {
                  tis.curGC.switchCardRow(); 
                 tis.aMulti.setPressed(false);
-                tis.aCard.setPressed(false);
+                tis.aCard.setPressed(true);
             }
             tis.setLastView("");
         }  else if (tis.aPageUp.getAction() === action) {
