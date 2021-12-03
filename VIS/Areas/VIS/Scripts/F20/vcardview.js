@@ -1210,7 +1210,10 @@
                         continue;
                     }
                     else if (VIS.DisplayType.IsLookup(dt)) {
-                        value = field.getLookup().getDisplay(value);
+                        if (field.getLookup()) {
+                            value = field.getLookup().getDisplay(value);
+                        }
+                        value = value;
                     }
                     else if (VIS.DisplayType.YesNo == dt) {
                         if (value || value == 'Y')

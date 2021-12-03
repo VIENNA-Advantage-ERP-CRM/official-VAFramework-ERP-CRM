@@ -1298,12 +1298,12 @@
             cardViewUserID = parseInt(cmbCardView.find(":selected").attr("ad_user_id"));
             if (VIS.context.getAD_User_ID() == cardViewUserID && !isNewRecord) {
                 AD_User_ID = VIS.context.getAD_User_ID();
-            } else if (VIS.context.getAD_User_ID() != cardViewUserID && !isNewRecord) {
+            } else if (VIS.context.getAD_User_ID() != cardViewUserID && !isNewRecord && isEdit) {
                 isNewRecord = true;
                 AD_User_ID = VIS.context.getAD_User_ID();                
                 isPublic.attr("checked", false);
-            } else {
-                isNewRecord = true;
+            } else  {
+              //  isNewRecord = true;
                 AD_User_ID = VIS.context.getAD_User_ID();                
             }
 

@@ -30,7 +30,7 @@ namespace VIS.Controllers
             {
                 for (int i = 0; i < lstCardView.Count; i++)
                 {
-                    lstCardViewRole.Add(objCardViewModel.GetCardViewRole(lstCardView[i].CardViewID, ctx));
+                    //lstCardViewRole.Add(objCardViewModel.GetCardViewRole(lstCardView[i].CardViewID, ctx));
                     lstCVConditon = objCardViewModel.GetCardViewCondition(lstCardView[i].CardViewID, ctx);
                 }
             }

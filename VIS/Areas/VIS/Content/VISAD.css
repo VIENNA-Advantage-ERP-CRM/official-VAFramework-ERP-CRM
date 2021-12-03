@@ -2698,7 +2698,7 @@ findImg {
 
 .vis-cv-card-edit {
     cursor: pointer;
-    float: right;
+   /* float: right;*/
     /*margin-top: -10px;*/
     color: rgb(229, 228, 228);
     position: absolute;
