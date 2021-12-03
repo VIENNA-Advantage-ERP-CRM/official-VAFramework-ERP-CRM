@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
+using VAdvantage.DataBase;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 
@@ -133,5 +135,25 @@ namespace VIS.Models
             retval["SurchargeAmt"] = surchargeAmt;
             return retval;
         }
+
+        /// <summary>
+        /// Get TaxExempt details from Tax
+        /// </summary>
+        /// <param name="Tax_ID">Tax</param>
+        /// <writer>1052</writer>
+        /// <returns>TaxExempt details</returns>
+        public Dictionary<String, Object> GetTaxExempt(int Tax_ID)
+        {
+            Dictionary<String, Object> retval = new Dictionary<String, Object>();
+            string sql = "SELECT IsTaxExempt, C_TaxExemptReason_ID FROM C_Tax WHERE IsActive='Y' AND C_Tax_ID= "+Tax_ID;
+            DataSet ds = DB.ExecuteDataset(sql);
+            if (ds != null && ds.Tables[0].Rows.Count>0)
+            {
+                retval["IsTaxExempt"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["IsTaxExempt"]);
+                retval["C_TaxExemptReason_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_TaxExemptReason_ID"]); 
+            }
+            return retval;
+        }
+
     }
 }

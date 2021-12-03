@@ -3859,6 +3859,13 @@ namespace VAdvantage.Model
                     return false;
                 }
             }
+            if (newRecord)
+            {
+                //Set IsTaxExempt and TaxExemptReason
+                SetTaxExemptReason();
+            }
+
+
 
             MOrder Ord = GetParent();
             MDocType docType = MDocType.Get(GetCtx(), Ord.GetC_DocTypeTarget_ID());
@@ -4613,6 +4620,22 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
+        /// Set IsTaxExempt and TaxExemptReason
+        /// </summary>
+        /// <writer>1052</writer>
+        private void SetTaxExemptReason()
+        {
+            if (GetC_Tax_ID() > 0 && GetC_TaxExemptReason_ID() == 0 && Util.GetValueOfInt(Get_Value("C_Quotation_Line_ID")) == 0)
+            {
+                DataSet ds = DB.ExecuteDataset("SELECT IsTaxExempt,C_TaxExemptReason_ID FROM C_Tax WHERE IsActive='Y' AND IsTaxExempt='Y' AND C_Tax_ID=" + GetC_Tax_ID(), null, Get_Trx());
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    SetC_TaxExemptReason_ID(Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_TaxExemptReason_ID"]));
+                    SetIsTaxExempt(Util.GetValueOfString(ds.Tables[0].Rows[0]["IsTaxExempt"]).Equals("Y") ? true : false);
+                }
+            }
+        }
+        /// <summary>
         /// Set property to check wheater order's close event is called or any other event is called
         /// </summary>
         /// <param name="closed"> True/False</param>
@@ -4665,7 +4688,7 @@ namespace VAdvantage.Model
                 return false;
             }
             // VIS0060: UnLink all the Requisition Lines linked with this order line.
-            DB.ExecuteQuery("UPDATE M_RequisitionLine SET C_OrderLine_ID = NULL WHERE C_OrderLine_ID = " + Get_ID(), null, Get_Trx());            
+            DB.ExecuteQuery("UPDATE M_RequisitionLine SET C_OrderLine_ID = NULL WHERE C_OrderLine_ID = " + Get_ID(), null, Get_Trx());
             return true;
         }
 
