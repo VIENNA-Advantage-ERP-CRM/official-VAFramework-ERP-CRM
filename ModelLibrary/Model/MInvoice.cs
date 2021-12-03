@@ -1033,7 +1033,12 @@ namespace VAdvantage.Model
 
                 //	New Tax
                 if (GetC_BPartner_ID() != otherInvoice.GetC_BPartner_ID())
-                    line.SetTax();	//	recalculate
+                {
+                    line.SetTax();                     //	recalculate
+                    //1052-- set tax exempt reason null if business partner is different
+                    line.SetIsTaxExempt(false);
+                    line.SetC_TaxExemptReason_ID(0);
+                }
                 //
 
                 // JID_1319: System should not copy Tax Amount, Line Total Amount and Taxable Amount field. System Should Auto Calculate thease field On save of lines.

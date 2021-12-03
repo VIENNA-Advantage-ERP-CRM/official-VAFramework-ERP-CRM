@@ -1340,7 +1340,12 @@ namespace VAdvantage.Model
                     line.SetDateInvoiced(null);
                     //	Tax
                     if (GetC_BPartner_ID() != otherOrder.GetC_BPartner_ID())
-                        line.SetTax();		//	recalculate
+                    {
+                        line.SetTax();                 //	recalculate
+                        //1052-- set tax exempt reason null if business partner is different
+                        line.SetIsTaxExempt(false);
+                        line.SetC_TaxExemptReason_ID(0);
+                    }
                     //
 
                     //	Tax Amount
@@ -3984,7 +3989,7 @@ namespace VAdvantage.Model
                         shipment = CreateShipment(dt, realTimePOS ? null : GetDateOrdered());
                         if (shipment == null)
                             return DocActionVariables.STATUS_INVALID;
-                        
+
                         //(1052)correct process message
                         Info.Append(Msg.GetMsg(GetCtx(), "SucessfullyCreatedMInout")).Append(shipment.GetDocumentNo());
                         _processMsg = Info.ToString();
