@@ -3686,8 +3686,10 @@
         }
 
         selectSql = null;
+
+        var randomNo = Math.random();
         if (hasImage) {
-            select.append(", (SELECT ImageURL from AD_Image img where img.AD_Image_ID=" + gt._tableName + "." + imgColName + ") as imgUrlColumn");
+            select.append(", (SELECT ImageURL||'?random=" + randomNo + "' from AD_Image img where img.AD_Image_ID=" + gt._tableName + "." + imgColName + ") as imgUrlColumn");
         }
 
         //
