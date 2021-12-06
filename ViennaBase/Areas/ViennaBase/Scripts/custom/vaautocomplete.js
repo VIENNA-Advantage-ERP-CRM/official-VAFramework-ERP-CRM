@@ -173,7 +173,9 @@
                 if (isSearch) {
                     ctrl.value = '';
                 }
-                a.remove();
+                if (a) {
+                    a.remove();
+                }
             }, 400);
 
             // closeAllLists(e.target);

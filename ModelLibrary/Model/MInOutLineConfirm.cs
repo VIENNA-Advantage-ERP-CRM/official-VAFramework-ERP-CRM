@@ -88,6 +88,12 @@ namespace VAdvantage.Model
             SetTargetQty(line.GetMovementQty());	//	Confirmations in Storage UOM	
             SetConfirmedQty(GetTargetQty());		//	suggestion
             _line = line;
+
+            // VIS0060: Set Trx Org from Shipment/Receipt to Confirmation
+            if (line.GetAD_OrgTrx_ID() > 0)
+            {
+                Set_Value("AD_OrgTrx_ID", line.GetAD_OrgTrx_ID());
+            }
         }	
 
         /// <summary>

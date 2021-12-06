@@ -207,6 +207,11 @@ namespace VAdvantage.Model
             SetIsInPosession(true);
             SetAssetServiceDate(shipment.GetDateAcct());
 
+            // VIS0060: Set Trx Organization on Asset from MR Line.
+            if (shipLine.GetAD_OrgTrx_ID() > 0)
+            {
+                Set_Value("AD_OrgTrx_ID", shipLine.GetAD_OrgTrx_ID());
+            }
             //	Line
             MProduct product = shipLine.GetProduct();
             SetM_Product_ID(product.GetM_Product_ID());
@@ -277,7 +282,7 @@ namespace VAdvantage.Model
                 SetIsOwned(false);
                 SetIsActive(true);
                 SetIsDisposed(false);
-                
+
                 Set_Value("VA077_SerialNo", shipLine.Get_Value("VA077_SerialNo"));
                 Set_Value("VA077_CNAutodesk", shipLine.Get_Value("VA077_CNAutodesk"));
                 Set_Value("VA077_RegEmail", shipLine.Get_Value("VA077_RegEmail"));

@@ -598,7 +598,7 @@
                 var divBtns = $("<div class='vis-feedTitleBar-buttons'>");
                 var ul = $("<ul>");
                 var liZoom = $("<li>");
-                var aZoom = $("<a href='javascript:void(0)'  data-index='" + (Number(10 * pageNumber) + Number(item)) + "' data-viswfazoom='wfZoom' >").append('<i class="vis vis-find"></i>');
+                var aZoom = $("<a href='javascript:void(0)'  data-index='" + (Number(10 * pageNumber) + Number(item)) + "' data-viswfazoom='wfZoom' >").append('<i class="vis vis-find" data-index="' + (Number(10 * pageNumber) + Number(item)) + '" data-viswfazoom="wfZoom"></i>');
                 //aZoom.append("View Feed");
 
                 liZoom.append(aZoom);

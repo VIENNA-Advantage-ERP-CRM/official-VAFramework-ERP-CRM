@@ -1125,7 +1125,34 @@ namespace VAdvantage.Model
 @return This field represents the calculated withholding amount */
         public Decimal GetWithholdingAmt() { Object bd = Get_Value("WithholdingAmt"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
 
-
+        /** ReversalDoc_ID AD_Reference_ID=1000215 */
+        public static int REVERSALDOC_ID_AD_Reference_ID = 1000215;/** Set Reversal Document.
+@param ReversalDoc_ID Reference of its original document */
+        public void SetReversalDoc_ID(int ReversalDoc_ID)
+        {
+            if (ReversalDoc_ID <= 0) Set_Value("ReversalDoc_ID", null);
+            else
+                Set_Value("ReversalDoc_ID", ReversalDoc_ID);
+        }/** Get Reversal Document.
+@return Reference of its original document */
+        public int GetReversalDoc_ID() { Object ii = Get_Value("ReversalDoc_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+       
+        /** Set Tax exempt. 
+@param IsTaxExempt Business partner is exempt from tax */
+        public void SetIsTaxExempt(Boolean IsTaxExempt) 
+        { Set_Value("IsTaxExempt", IsTaxExempt); }/** Get Tax exempt.
+@return Business partner is exempt from tax */
+        public Boolean IsTaxExempt() { Object oo = Get_Value("IsTaxExempt"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
+        /** Set Tax Exemption Reason.
+@param C_TaxExemptReason_ID Tax Exemption reason indicates the reason for the exemption for the items those are exempted from tax. */
+        public void SetC_TaxExemptReason_ID(int C_TaxExemptReason_ID)
+        {
+            if (C_TaxExemptReason_ID <= 0) Set_Value("C_TaxExemptReason_ID", null);
+            else
+                Set_Value("C_TaxExemptReason_ID", C_TaxExemptReason_ID);
+        }/** Get Tax Exemption Reason.
+@return Tax Exemption reason indicates the reason for the exemption for the items those are exempted from tax. */
+        public int GetC_TaxExemptReason_ID() { Object ii = Get_Value("C_TaxExemptReason_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
     }
 
 }

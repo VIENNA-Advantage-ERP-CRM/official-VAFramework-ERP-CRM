@@ -8,6 +8,7 @@
         var AD_Window_ID = mTab.getAD_Window_ID();
         var AD_Tab_ID = mTab.getAD_Tab_ID();
         var tabName = mTab.getName();
+        var WindowNo = mTab.getWindowNo();
         var WindowName = aPanel.curGC.aPanel.$parentWindow.getName();
         var AD_CardView_ID = cardView.getAD_CardView_ID();
         var AD_GroupField_ID = cardView.getField_Group_ID();
@@ -28,7 +29,6 @@
         var cardViewColumnFieldindex = -1;
         var WindowAD_Field_ID = 0;
         var cardViewColumnAD_Field_ID = 0;
-        var cardViewColumnAD_Field_ID = 0;
         var AD_CardViewColumn_ID = 0;
         var columnFieldArray = [];
         var cardViewColArray = [];
@@ -39,7 +39,7 @@
         var AD_User_ID = 0;
         var isNewRecord = false;
         var CardViewName = "";
-
+        var lovcardList = {};
 
 
 
@@ -96,6 +96,17 @@
         var isFirstLoad = false;
         var LastCVCondition = [];
         var isBusyRoot = null;
+        var $vSearchHeaderLayout = null;
+        var isdefault = null;
+        var isPublic = null;
+        var lblDefault = null;
+        var backgroundType = null;
+        var isGradient = null;
+        var rootGroupFieldsSeq = null;
+        var ulGroupSeqColumns = null;
+        var GroupShifBtn = null;
+        var btnGrpUp = null;
+        var btnGrpDown = null;
         // var 
         var root, ch;
         function init() {
@@ -124,13 +135,30 @@
         var CardViewUI = function () {
 
             // Card View Dropdown
+
+
+            var $divHeadderLay = $('<div class="input-group vis-input-wrap">');
+            lblDefault = $('<label class="vis-ec-col-lblchkbox" style="opacity: 1;width: 50%;display:none">' + defaultMsg + '</label>');
+            isdefault = $('<input type="checkbox" name="IsDefault" value="Default">');
+            lblDefault.prepend(isdefault);
+
+            var lblIsPublic = $('<label class="vis-ec-col-lblchkbox" style="opacity: 1;width: 50%;">' + VIS.Msg.getMsg("Shared") + '</label>');
+            isPublic = $('<input type="checkbox" checked="true" name="IsPublic" value="Public">');
+            lblIsPublic.prepend(isPublic);
+
+
             isBusyRoot = $("<div class='vis-apanel-busy vis-cardviewmainbusy'></div> ");
             rootCardViewUI = $("<div class='vis-cardviewmain'></div>");
             var divCardViewMainFirstChild = $("<div class='vis-cardviewmainfirstchild vis-pull-left'></div>");
             var CardViewTopFiledsWrap = $("<div class='vis-cardviewtopfieldswrap'></div>");
             var divCardViewMainSecondChild = $("<div class='vis-cardviewmainsecondchild'></div>");
             var divCardViewCondition = $("<div class='vis-cardviewCondition'></div>").append("<div class='vis-cardviewConditionControls'> </div>  <div class='vis-cardviewConditionGrid'> </div> ");
-            var divCardViewbtn = $("<div class='vis-cardviewbtn'><button class='vis-btnDelete'><i class='vis vis-delete'></i></button> <div class='vis-cdv-customokcancle'><button class='vis-btnOk'>  " + VIS.Msg.getMsg("Ok") + "  </button><button class='vis-btnCardViewCancle'>  " + VIS.Msg.getMsg("Cancel") + "  </button></div> </div>");
+            if (VIS.MRole.isAdministrator) {
+                var divLayout = $("<div class='vis-cardviewbtn'>").append(lblDefault).append(lblIsPublic);
+            } else {
+                var divLayout = $("<div class='vis-cardviewbtn'>").append(lblDefault);
+            }
+            var divCardViewbtn = $("<div class='vis-cardviewbtn'><button class='vis-btnDelete'><i title=" + VIS.Msg.getMsg("DeleteRecord") + " class='vis vis-delete'></i></button> <div class='vis-cdv-customokcancle'><button class='vis-btnOk'>  " + VIS.Msg.getMsg("Ok") + "  </button><button class='vis-btnCardViewCancle'>  " + VIS.Msg.getMsg("Cancel") + "  </button></div> </div>");
             rootCardViewUI.append(divCardViewMainFirstChild);
             divCardViewMainFirstChild.append(CardViewTopFiledsWrap);
             CardViewTopFiledsWrap.append("<div class='vis-firstdiv vis-pull-left' ></div>");
@@ -141,15 +169,32 @@
             var divCardView = $("<div class='vis-CardView vis-pull-left'> <div  class='vis-cardviewchild vis-pull-left'></div>  </div>");
             var divCardViewName = $("<input style='display:none' class='vis-txtcardviewname' type='text'>");
             var divUser = $("<div class='vis-User vis-pull-left'></div>");
-            var btnNewAndCancle = $("<div class='vis-pull-left'><button  class='vis-btnnew vis-cvd-btn'><i class='vis vis-plus'></i></button><button style='display:none' class='vis-btncancle vis-cvd-canclebtn'><i class='vis vis-mark'></i></button> <button class='vis-btnedit vis-cvd-editbtn'><i class='vis vis-pencil'></i></button></div>");
+            var btnNewAndCancle = $("<div class='vis-pull-left'><button  class='vis-btnnew vis-cvd-btn'><i title=" + VIS.Msg.getMsg("AddNew") + " class='vis vis-plus'></i></button><button style='display:none' title=" + VIS.Msg.getMsg("VIS_DialogCancel") + " class='vis-btncancle vis-cvd-canclebtn'><i class='vis vis-mark'></i></button> <button class='vis-btnedit vis-cvd-editbtn' title=" + VIS.Msg.getMsg("EditRecord") +"  ><i class='vis vis-pencil'></i></button></div>");
             divCardView.find(".vis-cardviewchild").append("<select class='vis-cmbcardview'> </select>");
 
 
             divUser.append("<Select type='text' class='vis-cmbuser'> </Select>");
 
+            var res = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "CardView/GetColumnIDWindowID", { tableName: 'AD_CardView', columnName: 'AD_HeaderLayout_ID' });
+            if (res) {
+                res = res.split(",");
+                //var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), WindowNo, res, VIS.DisplayType.Search);
+                var value = VIS.MLookupFactory.get(VIS.Env.getCtx(), WindowNo, res[0], VIS.DisplayType.Search, "AD_HeaderLayout_ID", 0, false, "IsHeaderView='N'");
+                $vSearchHeaderLayout = new VIS.Controls.VTextBoxButton("AD_HeaderLayout_ID", true, false, true, VIS.DisplayType.Search, value, Number(res[1]));
+
+                var $divCtrl = $('<div class="vis-control-wrap">');
+                var $divCtrlBtn = $('<div class="input-group-append">');
+                $divCtrl.append($vSearchHeaderLayout.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' ')).append('<label for="Name">' + VIS.Msg.getMsg("cardLayout") + '</label>');
+
+                $divHeadderLay.append($divCtrl).append($divCtrlBtn);
+                $divCtrlBtn.append($vSearchHeaderLayout.getBtn(0)).append($vSearchHeaderLayout.getBtn(1));
+                divLayout.append($divHeadderLay);
+            }
+
+
             if (VIS.MRole.isAdministrator) {
 
-                rootCardViewUI.append(divCardViewMainSecondChild);
+                //rootCardViewUI.append(divCardViewMainSecondChild);
                 rootCardViewUI.find(".vis-firstdiv").append(" <div style='display:none' class='vis-first-divHeader vis-pull-right'><label >" + VIS.Msg.getMsg("SelectUser") + "</label></div>");
                 rootCardViewUI.find(".vis-CardView").append("");
                 rootCardViewUI.find(".vis-firstdiv").append(divCardView);
@@ -160,6 +205,7 @@
                 cmbUser = rootCardViewUI.find(".vis-cmbuser");
                 AddCVConditionControl(divCardViewCondition.find(".vis-cardviewConditionControls"));
                 rootCardViewUI.append(divCardViewCondition);
+                rootCardViewUI.append(divLayout);
                 rootCardViewUI.append(divCardViewbtn);
                 rootCardViewUI.find(".vis-btnDelete").css("display", "block");
 
@@ -170,18 +216,20 @@
                 rootCardViewUI.find(".vis-firstdiv").append(divCardView);
                 rootCardViewUI.find(".vis-cardviewchild").append(divCardViewName);
                 rootCardViewUI.find(".vis-cardviewchild");
+                rootCardViewUI.find(".vis-CardView").append(btnNewAndCancle);
                 //divCardViewMainFirstChild.css({ "width": "100%", "float": "left" });
                 rootCardViewUI.find(".k ").css("display", "none");
                 AddCVConditionControl(divCardViewCondition.find(".vis-cardviewConditionControls"));
                 rootCardViewUI.append(divCardViewCondition);
+                rootCardViewUI.append(divLayout);
                 rootCardViewUI.append(divCardViewbtn);
                 // divCardViewbtn.css({ "float": "right" });
                 rootCardViewUI.find(".vis-btnDelete").css("display", "none");
             }
             CreateCVGrid(rootCardViewUI.find(".vis-cardviewConditionGrid"));
-            divCardViewMainSecondChild.append("<label class='vis-pull-left'> " + VIS.Msg.getMsg("SelectRole") + "</label>");
+            //divCardViewMainSecondChild.append("<label class='vis-pull-left'> " + VIS.Msg.getMsg("SelectRole") + "</label>");
 
-            divCardViewMainSecondChild.append("<div class='vis-cardviewmainsecondchildinner'><ul class='vis-ulrole'> </ul></div>");
+            //divCardViewMainSecondChild.append("<div class='vis-cardviewmainsecondchildinner'><ul class='vis-ulrole'> </ul></div>");
             ulRole = rootCardViewUI.find(".vis-ulrole");
             // controls 
             ddlCardView = rootCardViewUI.find(".vis-ddlcardview");
@@ -203,32 +251,41 @@
             txtTabName = rootTextControl.find(".vis-txttabname");
             cmbGroupField = rootTextControl.find(".vis-cmbgroupfield");
             // Column Fields
-            if (VIS.MRole.isAdministrator) {
-                rootGroupFieldsCombo = $("<div class='vis-third-header vis-pull-left'></div>");
-            }
-            else {
-                rootGroupFieldsCombo = $("<div style='width:101%' class='vis-third-header vis-pull-left'></div>");
-            }
+            rootGroupFieldsCombo = $("<div class='vis-third-header vis-pull-left' style='width:68%'></div>");            
+            rootGroupFieldsSeq = $("<div class='vis-third-header vis-pull-left' style='width:28%;margin: 0 15px 0 15px;'></div>");            
+           
             divLeftGroupFieldsCombo = $("<div class='vis-left-fields vis-pull-left'></div>");
             divRightGroupFieldsCombo = $("<div class='vis-left-fields vis-pull-left' ></div>");
+            var divGroupFieldsSeqCombo = $("<div class='vis-left-fields vis-pull-left' ></div>");
             centerBtn = $("<div class='vis-cardviewbutton vis-pull-left' ><button class='vis-btnup'><i class='vis vis-arrow-up'></i></button><button  class='vis-btnright'><i class='vis vis-shiftright'></i></button></div>");
             centerBtn.append("<button   class='vis-btnleft'><i class='vis vis-shiftleft'></i></button><button  class='vis-btndown'><i class='vis vis-arrow-down'></i></button>");
             divChildLeftLable = $("<div style='width:100%'><label>" + VIS.Msg.getMsg("SelectField") + "</label></div>");
             divChildRightLable = $("<div style='width:100%'><label>" + VIS.Msg.getMsg("IncludedField") + "</label></div>");
+            var divChildGroupSeqLable = $("<div style='width:100%'><label>" + VIS.Msg.getMsg("GroupSeq") + "</label></div>");
             divChildLeftColumns = $("<div class='vis-cv-filedslist-wrap'></div>");
+            var divChildSeqColumns = $("<div class='vis-cv-filedslist-wrap'></div>");
             divChildRightColumns = $("<div class='vis-cv-filedslist-wrap'></div>");
             ulLeftColumns = $("<ul  class='vis-windowfield'></ul>");
             ulRightColumns = $("<ul  class='vis-cardviewcolumnfield'></ul>");
+            ulGroupSeqColumns = $("<ul  class='vis-cardviewcolumnfield1'></ul>");
             divChildLeftColumns.append(ulLeftColumns);
             divChildRightColumns.append(ulRightColumns);
             divLeftGroupFieldsCombo.append(divChildLeftLable);
             divLeftGroupFieldsCombo.append(divChildLeftColumns);
             divRightGroupFieldsCombo.append(divChildRightLable);
             divRightGroupFieldsCombo.append(divChildRightColumns);
+
             rootGroupFieldsCombo.append(divLeftGroupFieldsCombo);
             rootGroupFieldsCombo.append(centerBtn);
             rootGroupFieldsCombo.append(divRightGroupFieldsCombo);
-            rootCardViewUI.find(".vis-thirddiv").append(rootGroupFieldsCombo);
+            divChildSeqColumns.append(ulGroupSeqColumns);
+            rootGroupFieldsSeq.append(divGroupFieldsSeqCombo);
+            divGroupFieldsSeqCombo.append(divChildGroupSeqLable);
+            divGroupFieldsSeqCombo.append(divChildSeqColumns);
+
+            GroupShifBtn = $('<div class="vis-cardviewbutton vis-pull-left" style="margin-top:25%;"><button class="vis-Grpbtnup"><i class="vis vis-arrow-up"></i></button><button class="vis-btnGrpdown"><i class="vis vis-arrow-down"></i></button></div>');
+            rootGroupFieldsSeq.append(GroupShifBtn);
+            rootCardViewUI.find(".vis-thirddiv").append(rootGroupFieldsCombo).append(rootGroupFieldsSeq);
             root.append(rootCardViewUI);
             rootCardViewUI.before(isBusyRoot);
 
@@ -242,6 +299,10 @@
             btnUp = rootCardViewUI.find(".vis-btnup");
             btnDown = rootCardViewUI.find(".vis-btndown");
             btnOk = rootCardViewUI.find(".vis-btnOk");
+
+            btnGrpDown = rootCardViewUI.find(".vis-btnGrpdown");
+            btnGrpUp = rootCardViewUI.find(".vis-Grpbtnup");
+
             btnCardViewCancle = rootCardViewUI.find(".vis-btnCardViewCancle");
             btnDelete = rootCardViewUI.find(".vis-btnDelete");
             cmbColumn = rootCardViewUI.find(".vis-cmbcolumn");
@@ -250,12 +311,16 @@
             btnSave = rootCardViewUI.find(".vis-btnsave");
             cvTable = rootCardViewUI.find(".vis-cv-rowtable");
             ctrColor = rootCardViewUI.find(".vis-cmbcolor");
-
+            isGradient = rootCardViewUI.find(".vis-gradient");
 
 
             isBusyRoot.css({
                 "display": "none"
             });
+
+            rootCardViewUI.find("*").attr("disabled", "disabled");
+            rootCardViewUI.find(".vis-firstdiv *").removeAttr("disabled");
+            rootCardViewUI.find(".vis-cardviewbtn:last *").removeAttr("disabled");
             Events();
 
         };
@@ -271,8 +336,20 @@
 
         var AddCVConditionControl = function (root) {
 
+            backgroundType = $('<div style="width:100%"> <input class="vis-firstcolor vis-pull-left" type="color" style="width: 20%;"><input class="vis-firstPer vis-pull-left" min="0" max="100" value="0" type="number" style="width: 20%;"><input class="vis-Lastcolor vis-pull-left" type="color" style="width: 20%;"><input class="vis-LastPer vis-pull-left" type="number" min="0" max="100" value="100" style="width: 20%;">'
+                + '<select class="vis-GrdType" style = "width: 20%;">'
+                + '<option value="to bottom">↓</option>'
+                + '<option value="to top">↑</option>'
+                + '<option value="to right">→</option>'
+                + '<option value="to left">←</option>'
+                + '<option value="to top left">↖</option>'
+                + '<option value="to top right">↗</option>'
+                + '<option value="to bottom left">↙</option>'
+                + '<option value="to bottom right">↘</option>'
+                + '</select></div>');
+
             var pDiv = $('<div class="vis-cv-condctrl-inner">');
-            var divCVConditionCmbColor = $("<div class='vis-divcvc-cmbcolor'><div style='width:100%'><lable>" + VIS.Msg.getMsg("BGColor") + "</lable></div> <div style='width:100%'> <input class='vis-cmbcolor' type='color' /></div></div>");
+            var divCVConditionCmbColor = $("<div class='vis-divcvc-cmbcolor'><div style='width:100%'><lable><input type='checkbox' class='vis-gradient' />" + VIS.Msg.getMsg("BGColor") + " </lable></div> <div class='vis-backgroundType' style='width:100%'> <input class='vis-cmbcolor' type='color' /></div></div>");            
             var divCVConditionCmbColumnColor = $("<div class='vis-divcvc-cmbcolumn'><div style='width:100%'><lable>" + VIS.Msg.getMsg("Column") + "</lable></div> <div><select class='vis-cmbcolumn'></select></div></div>");
             var divCVConditionCmbOperator = $("<div class='vis-divcvc-cmboperator'><div style='width:100%'><lable>" + VIS.Msg.getMsg("Operator") + "</lable></div>  <div><select class='vis-cmboperator'></select> </div></div>");
             var divCVConditionQueryValue = $("<div class='vis-divcvc-queryvalue'><div style='width:100%'><lable>" + VIS.Msg.getMsg("QueryValue") + "</lable></div> <div class='vis-cvd-valcontainer' style='width:100%'></div></div>");
@@ -301,12 +378,14 @@
                     roleInfo = dbResult[0].lstRoleData;
                     LstCardViewRole = dbResult[0].lstCardViewRoleData;
                     LstCardViewCondition = dbResult[0].lstCardViewConditonData;
+
                     if (cardViewInfo != null && cardViewInfo.length > 0) {
 
                         for (var i = 0; i < cardViewInfo.length; i++) {
                             // AD_CardView_ID = cardViewInfo[0].CardViewID;
-                            cmbCardView.append("<Option ad_user_id=" + cardViewInfo[i].UserID + " cardviewid=" + cardViewInfo[i].CardViewID + " ad_field_id=" + cardViewInfo[i].AD_GroupField_ID + "> " + w2utils.encodeTags(cardViewInfo[i].CardViewName) + "</Option>");
+                            cmbCardView.append("<Option is_shared=" + cardViewInfo[i].UserID + " ad_user_id=" + cardViewInfo[i].CreatedBy + " cardviewid=" + cardViewInfo[i].CardViewID + " groupSequence='" + cardViewInfo[i].groupSequence+"' ad_field_id=" + cardViewInfo[i].AD_GroupField_ID + " isdefault=" + cardViewInfo[i].DefaultID + " ad_headerLayout_id=" + cardViewInfo[i].AD_HeaderLayout_ID + "> " + w2utils.encodeTags(cardViewInfo[i].CardViewName) + "</Option>");
                         }
+
                     }
                     else {
                         btnNew.trigger("click");
@@ -319,18 +398,35 @@
                     orginalAD_CardView_ID = AD_CardView_ID;
 
                     //cardViewUserID = cmbCardView.find(":selected").attr("ad_user_id");
+                    isPublic.attr("checked", parseInt(cmbCardView.find(":selected").attr("is_shared")) > 0 ? false : true);
+                    isdefault.attr("checked", cmbCardView.find(":selected").attr("isdefault") == 'true' ? true : false);
+                    $vSearchHeaderLayout.setValue(cmbCardView.find(":selected").attr("ad_headerLayout_id"));
+                    cardViewUserID = parseInt(cmbCardView.find(":selected").attr("ad_user_id"));
+                    if (cardViewUserID == VIS.context.getAD_User_ID()) {
+                        rootCardViewUI.find(".vis-btnDelete").css("display", "block");
+                        rootCardViewUI.find(".vis-cvd-editbtn i").removeClass('vis-copy').addClass('vis-pencil');
+                        rootCardViewUI.find(".vis-cvd-editbtn").attr("title", VIS.Msg.getMsg("EditRecord"));                       
+                    } else {
+                        rootCardViewUI.find(".vis-btnDelete").css("display", "none");
+                        rootCardViewUI.find(".vis-cvd-editbtn i").removeClass('vis-pencil').addClass('vis-copy');
+                        rootCardViewUI.find(".vis-cvd-editbtn").attr("title", VIS.Msg.getMsg("CopyCard"));
+                    }
+
                     try {
                         if (!isDelete) {
-                            cardViewUserID = parseInt(cmbCardView.find(":selected").attr("ad_user_id"));
+                            //cardViewUserID = parseInt(cmbCardView.find(":selected").attr("ad_user_id"));
                             AD_User_ID = cardViewUserID;
-                            orginalcardViewUserID = cardViewUserID;
+                            orginalcardViewUserID = cardViewUserID;                           
                         }
                         else {
                             orginalAD_CardView_ID = cmbCardView.find(":selected").attr("cardviewid");
                             AD_GroupField_ID = cmbCardView.find(":selected").attr("ad_field_id");
-                            cardViewUserID = parseInt(cmbCardView.find(":selected").attr("ad_user_id"));
+                            //cardViewUserID = parseInt(cmbCardView.find(":selected").attr("ad_user_id"));
                             AD_CardView_ID = orginalAD_CardView_ID;
+                            if (gc.isCardRow)
+                                cardView.getCardViewData(null, AD_CardView_ID);
                         }
+                       
                     }
                     catch (e) {
                     }
@@ -339,11 +435,12 @@
                     //  txtCardViewName.val(cmbCardView.find(":selected").data('name'));
                     if (VIS.MRole.isAdministrator) {
                         // FillUserList(cmbUser);
-                        FillRoleList(ulRole);
+                        //FillRoleList(ulRole);
                     }
-                    if (AD_User_ID > 0) {
-                        ulRole.attr('disabled', 'disabled');
-                    }
+                    //if (AD_User_ID > 0) {
+                    //    ulRole.attr('disabled', 'disabled');
+                    //}
+                   
                 }, error: function (errorThrown) {
                     alert(errorThrown.statusText);
                 }
@@ -364,6 +461,18 @@
             if (sel.length > 0) {
                 AD_CardView_ID = parseInt(sel.attr("cardviewid"));
                 cardViewUserID = parseInt(sel.attr("ad_user_id"));
+                $vSearchHeaderLayout.setValue(sel.attr("ad_headerLayout_id"));
+                isdefault.attr("checked", sel.attr("isdefault")=='true'?true:false);
+                isPublic.attr("checked", parseInt(sel.attr("is_shared")) > 0 ? false : true);
+                if (cardViewUserID == VIS.context.getAD_User_ID()) {
+                    rootCardViewUI.find(".vis-btnDelete").css("display", "block");
+                    rootCardViewUI.find(".vis-cvd-editbtn i").removeClass('vis-copy').addClass('vis-pencil');
+                    rootCardViewUI.find(".vis-cvd-editbtn").attr("title", VIS.Msg.getMsg("EditRecord"));
+                } else {
+                    rootCardViewUI.find(".vis-btnDelete").css("display", "none");
+                    rootCardViewUI.find(".vis-cvd-editbtn i").removeClass('vis-pencil').addClass('vis-copy');
+                    rootCardViewUI.find(".vis-cvd-editbtn").attr("title", VIS.Msg.getMsg("CopyCard"));
+                }
             }
 
             //  txtCardViewName.val(sel.data('name'));
@@ -376,7 +485,7 @@
                 FillColumnInclude(false, false);
             }
             FillGroupFields();
-            FillRoleList(ulRole);
+            //FillRoleList(ulRole);
         }
 
         var FillTextControl = function () {
@@ -387,22 +496,29 @@
         };
 
         var FillGroupFields = function () {
-            if (cmbGroupField != null)
-            { cmbGroupField.children().remove(); }
+            if (cmbGroupField != null) { cmbGroupField.children().remove(); }
             var fields = null;
             var dbResult = null;
+            lovcardList = {};
             if (mTab != null && mTab.getFields().length > 0) {
                 cmbGroupField.append("<Option FieldID=" + -1 + "></Option>");
-                tabField = mTab.getFields();
+                tabField = mTab.getFields();                
                 for (var i = 0; i < tabField.length; i++) {
                     var c = tabField[i].getColumnName().toLower();
                     if (c == "created" || c == "createdby" || c == "updated" || c == "updatedby") {
                         continue;
-                    }
-                    if ((VIS.DisplayType.IsLookup(tabField[i].getDisplayType()) && tabField[i].getLookup() && tabField[i].getLookup().getIsValidated()) || (tabField[i].getDisplayType() == VIS.DisplayType.YesNo)) {
-                        cmbGroupField.append("<Option FieldID=" + tabField[i].getAD_Field_ID() + "> " + tabField[i].getHeader() + "</Option>");
+                    }    
+                    
+                    if ((VIS.DisplayType.IsLookup(tabField[i].getDisplayType()) && tabField[i].getLookup() && tabField[i].getLookup().getIsValidated() && tabField[i].getCallout() == '' && !tabField[i].getIsReadOnly()) || tabField[i].getDisplayType() == VIS.DisplayType.YesNo) {
+                        cmbGroupField.append("<Option FieldID=" + tabField[i].getAD_Field_ID() + "> " + tabField[i].getHeader() + "</Option>");  
+                        if (tabField[i].getDisplayType() == VIS.DisplayType.List) {
+                            if (tabField[i].lookup && tabField[i].lookup.getData()) {
+                                lovcardList[tabField[i].getAD_Field_ID()] = tabField[i].lookup.getData();
+                            }
+                        }
                     }
                 }
+               
             }
             if (AD_GroupField_ID != null && AD_GroupField_ID > 0) {
                 var result = jQuery.grep(tabField, function (value) {
@@ -411,12 +527,15 @@
                 cmbGroupField.find("[FieldID='" + AD_GroupField_ID + "']").attr("selected", "selected");
                 orginalAD_GroupField_ID = cmbGroupField.find(":selected").attr("fieldid");
             }
+            FillforGroupSeq(AD_GroupField_ID);
 
             if (cmbGroupField != null) {
                 cmbGroupField.on("change", function () {
                     AD_GroupField_ID = parseInt($(this).find(":selected").attr("fieldid"));
+                    FillforGroupSeq(AD_GroupField_ID);
                 });
             }
+            
         };
 
 
@@ -428,7 +547,12 @@
             fields = null; FillColumnInclude
             dbResult = null;
 
-            tabField = mTab.getFields();
+            tabField = mTab.getFields();   
+            tabField.sort(function (a, b) {
+                var a1 = a.getHeader().toLower(), b1 = b.getHeader().toLower();
+                if (a1 == b1) return 0;
+                return a1 > b1 ? 1 : -1;
+            });
             FillCardViewColumns(ulRightColumns, isReload);
             if (mTab != null && mTab.getFields().length > 0) {
                 for (var i = 0; i < tabField.length; i++) {
@@ -438,6 +562,10 @@
                     }
 
                     if (VIS.DisplayType.IsLOB(tabField[i].getDisplayType())) {
+                        continue;
+                    }
+
+                    if (!tabField[i].getIsDisplayed()) {
                         continue;
                     }
 
@@ -457,6 +585,39 @@
         };
 
 
+       
+
+
+        var FillforGroupSeq = function (fieldID) {
+            ulGroupSeqColumns.html('');
+            ulGroupSeqColumns.parent().removeAttr('style');
+            if (lovcardList[fieldID]) {
+                for (var i = 0, ln = lovcardList[fieldID]; i < ln.length; i++) {
+                    if (ln[i].Key.length > 0) {
+                        ulGroupSeqColumns.append('<li key="' + ln[i].Key + '">' + ln[i].Name + '</li>');
+                    }
+                };
+                var seq = cmbCardView.find(":selected").attr("groupSequence");
+                if (seq) {
+                    seq = seq.split(",");
+                    for (var j = 0; j < seq.length; j++) {
+                        var item = ulGroupSeqColumns.find("[key='" + seq[j] + "']");
+                        var before = ulGroupSeqColumns.find("li").eq(j);
+                        item.insertBefore(before);
+                        //if (item) {
+                        //    var temp = item;
+                        //    item.remove();
+                        //    ulGroupSeqColumns.find('li').eq(j).before(temp);
+                        //}
+                    }
+                }
+            } else {
+                ulGroupSeqColumns.parent().css("background-color","rgba(var(--v-c-secondary), 1)");
+                ulGroupSeqColumns.append('<li style="padding-top:40%;text-align:center">'+VIS.Msg.getMsg("OnlyForLOV")+'</li>');
+            }
+
+        }
+
 
         var Events = function () {
 
@@ -472,17 +633,21 @@
                     btnNew.css({ "display": "none" });
                     btnCancle.css({ "display": "block" });
                     btnEdit.css({ "display": "none" });
+                    lblDefault.css({ "display": "block" }).attr('checked', false);
+                    $vSearchHeaderLayout.setValue(null);
                     rootCardViewUI.find(".vis-cardviewchild");
                     isNewRecord = true;
                     LstRoleID = [];
-                    UnSelectRoleUl();
+                    //UnSelectRoleUl();
+                    cmbGroupField.find(":selected").removeAttr("selected");
                     cmbGroupField.find("[FieldID='" + -1 + "']").attr("selected", "selected");
                     FillColumnInclude(false, true);
                     ulRightColumns.children().remove();
-                    ulRole.find('input[type=checkbox]').attr('disabled', false);
+                    //ulRole.find('input[type=checkbox]').attr('disabled', false);
                     LastCVCondition = cardviewCondition;
                     cardviewCondition = [];
                     AddRow(cardviewCondition);
+                    rootCardViewUI.find("*").removeAttr("disabled");
                 });
             }
             if (btnCancle != null) {
@@ -497,12 +662,16 @@
                     btnCancle.css({ "display": "none" });
                     txtCardViewName.val("");
                     btnEdit.css({ "display": "block" });
+                    lblDefault.css({ "display": "none" });
                     rootCardViewUI.find(".vis-cardviewchild");
                     isNewRecord = false;
                     FillColumnInclude(true, false);
                     FillGroupFields();
-                    FillRoleList(ulRole);
+                    //FillRoleList(ulRole);
                     AddRow(LastCVCondition);
+                    rootCardViewUI.find("*").attr("disabled", "disabled");
+                    rootCardViewUI.find(".vis-firstdiv *").removeAttr("disabled");
+                    rootCardViewUI.find(".vis-cardviewbtn:last *").removeAttr("disabled");
                 });
             }
 
@@ -518,8 +687,14 @@
                     btnCancle.css({ "display": "block" });
                     btnEdit.css({ "display": "none" });
                     rootCardViewUI.find(".vis-cardviewchild");
+                    LastCVCondition = cardviewCondition;
                     txtCardViewName.val(cmbCardView.find(":selected").text().trim());
-
+                    if (cardViewInfo != null && cardViewInfo.length > 0) {
+                        lblDefault.css({ "display": "none" }).attr('checked', false);
+                    } else {
+                        lblDefault.css({ "display": "block" }).attr('checked', false);
+                    }
+                    rootCardViewUI.find("*").removeAttr("disabled");
                 });
             }
             if (cmbUser != null) {
@@ -542,35 +717,47 @@
             }
             if (ulWindowField != null) {
                 ulWindowField.on("click", "li", function () {
-                    if (lastSelectWindowFieldItem != null) {
-                        //lastSelectWindowFieldItem.css(vis-btnsave"background-color", "white");
-                        lastSelectWindowFieldItem.removeClass('vis-cv-liselected');
+                    if (isNewRecord || isEdit) {
+                        if (lastSelectWindowFieldItem != null) {
+                            //lastSelectWindowFieldItem.css(vis-btnsave"background-color", "white");
+                            lastSelectWindowFieldItem.removeClass('vis-cv-liselected');
+                        }
+                        //$(this).css("background-color", "#1aa0ed");
+                        $(this).addClass('vis-cv-liselected');
+                        lastSelectWindowFieldItem = $(this);
+                        //windowFieldindex = $(this).attr("index");
+                        windowFieldindex = $(this).index();
+                        WindowAD_Field_ID = $(this).attr("FieldID");
+                        FieldName = $(this).text();
                     }
-                    //$(this).css("background-color", "#1aa0ed");
-                    $(this).addClass('vis-cv-liselected');
-                    lastSelectWindowFieldItem = $(this);
-                    //windowFieldindex = $(this).attr("index");
-                    windowFieldindex = $(this).index();
-                    WindowAD_Field_ID = $(this).attr("FieldID");
-                    FieldName = $(this).text();
                 });
             }
             if (ulCardViewColumnField != null) {
                 ulCardViewColumnField.on("click", "li", function () {
-                    if (lastSelectCardViewColumnFieldItem != null) {
-                        //lastSelectCardViewColumnFieldItem.css("background-color", "white");
-                        lastSelectCardViewColumnFieldItem.removeClass('vis-cv-liselected');
+                    if (isNewRecord || isEdit) {
+                        if (lastSelectCardViewColumnFieldItem != null) {
+                            //lastSelectCardViewColumnFieldItem.css("background-color", "white");
+                            lastSelectCardViewColumnFieldItem.removeClass('vis-cv-liselected');
 
+                        }
+                        //$(this).css("background-color", "#1aa0ed");
+                        $(this).addClass('vis-cv-liselected');
+                        lastSelectCardViewColumnFieldItem = $(this);
+                        //cardViewColumnFieldindex = $(this).attr("index");
+                        cardViewColumnFieldindex = $(this).index();
+                        cardViewColumnAD_Field_ID = $(this).attr("FieldID");
+                        AD_CardViewColumn_ID = $(this).attr("cardviewcolumnid");
+                        FieldName = $(this).text();
+                        seqNo = $(this).attr("seqno");
                     }
-                    //$(this).css("background-color", "#1aa0ed");
-                    $(this).addClass('vis-cv-liselected');
-                    lastSelectCardViewColumnFieldItem = $(this);
-                    //cardViewColumnFieldindex = $(this).attr("index");
-                    cardViewColumnFieldindex = $(this).index();
-                    cardViewColumnAD_Field_ID = $(this).attr("FieldID");
-                    AD_CardViewColumn_ID = $(this).attr("cardviewcolumnid");
-                    FieldName = $(this).text();
-                    seqNo = $(this).attr("seqno");
+                });
+            }
+            if (ulGroupSeqColumns != null) {
+                ulGroupSeqColumns.on("click", "li", function () {
+                    if (isNewRecord || isEdit) {
+                        ulGroupSeqColumns.find('.vis-cv-liselected').removeClass('vis-cv-liselected');
+                        $(this).addClass('vis-cv-liselected');
+                    }
                 });
             }
             if (btnRight != null) {
@@ -637,6 +824,24 @@
                     e.preventDefault();
                 });
             }
+            if (btnGrpUp != null) {
+                btnGrpUp.on("click", function (e) {
+                    var item = ulGroupSeqColumns.find('.vis-cv-liselected');
+                    var before = item.prev();
+                    item.insertBefore(before);
+                    e.stopPropagation();
+                    e.preventDefault();
+                });
+            }
+            if (btnGrpDown != null) {
+                btnGrpDown.on("click", function (e) {
+                    var item = ulGroupSeqColumns.find('.vis-cv-liselected');
+                    var after = item.next();
+                    item.insertAfter(after);
+                    e.stopPropagation();
+                    e.preventDefault();
+                });
+            }
 
 
             if (ulRole != null) {
@@ -699,28 +904,31 @@
                             IsBusy(false);
                             return false;
                         }
+                        
 
 
-
-
-                        var retVal = {};
-                        retVal.FieldGroupID = AD_GroupField_ID;
-                        retVal.IncludedCols = SaveCardViewColumn(cardViewColArray);
-                        if (!retVal.IncludedCols) {
+                        //var retVal = {};
+                        //retVal.FieldGroupID = AD_GroupField_ID;
+                        var len = ulCardViewColumnField.children().length;
+                        if (len.length <= 0)
                             return false;
-                        }
-                        retVal.Conditions = strConditionArray;
-                        retVal.AD_CardView_ID = AD_CardView_ID;
-                        if (isNewRecord && parseInt(AD_User_ID) < 0) {
-                            retVal.FieldGroupID = orginalAD_GroupField_ID;
-                            retVal.IncludedCols = orginalIncludedCols;
-                            retVal.Conditions = strConditionArray;
-                            retVal.AD_CardView_ID = orginalAD_CardView_ID;
-                        }
-                        cardView.setCardViewData(retVal);
-                        if (gc.isCardRow)
-                            cardView.refreshUI(gc.getVCardPanel().width());
-                        ch.close();
+
+                        SaveCardViewColumn(cardViewColArray);
+                        //if (!retVal.IncludedCols) {
+                        //    return false;
+                        //}
+                        //retVal.Conditions = strConditionArray;
+                        //retVal.AD_CardView_ID = AD_CardView_ID;
+                        //if (isNewRecord && parseInt(AD_User_ID) < 0) {
+                        //    retVal.FieldGroupID = orginalAD_GroupField_ID;
+                        //    retVal.IncludedCols = orginalIncludedCols;
+                        //    retVal.Conditions = strConditionArray;
+                        //    retVal.AD_CardView_ID = orginalAD_CardView_ID;
+                        //}
+                        //cardView.setCardViewData(retVal);
+                        //if (gc.isCardRow)
+                        //    cardView.getCardViewData(null, AD_CardView_ID);
+                        // ch.close();
                         e.stopPropagation();
                         e.preventDefault();
                     }, 50);
@@ -728,6 +936,7 @@
             }
             if (btnCardViewCancle != null) {
                 btnCardViewCancle.on("click", function (e) {
+                   
                     ch.close();
                 });
             }
@@ -858,15 +1067,30 @@
                     cvConditionArray = {};
 
                     var colorValue = "";
+                    if ($(isGradient).is(':checked')) {
+                        var firstColor = rootCardViewUI.find('.vis-firstcolor');
+                        var LirstColor = rootCardViewUI.find('.vis-Lastcolor');
+                        if (!Modernizr.inputtypes.color) {
+                            firstColor = firstColor.spectrum('get');
+                            LirstColor = LirstColor.spectrum('get');
+                        }
+                        else {
+                            firstColor = firstColor.val();
+                            LirstColor = LirstColor.val();
+                        }
+                        var firstPer = rootCardViewUI.find('.vis-firstPer').val()||0;
+                        var LastPer = rootCardViewUI.find('.vis-LastPer').val()||0;
+                        var gredType = rootCardViewUI.find('.vis-GrdType option:selected').val();
+                        colorValue = 'linear-gradient(' + gredType + ', ' + firstColor + ' ' + firstPer + '%, ' + LirstColor + ' ' + LastPer+'%)';
+                    } else {
 
-                    if (!Modernizr.inputtypes.color) {
-                        colorValue = ctrColor.spectrum('get');
+                        if (!Modernizr.inputtypes.color) {
+                            colorValue = ctrColor.spectrum('get');
+                        }
+                        else {
+                            colorValue = ctrColor.val();
+                        }
                     }
-                    else {
-                        colorValue = ctrColor.val();
-                    }
-
-
 
                     var index = $.map(cardviewCondition, function (value, i) {
                         if (value.Color == colorValue) {
@@ -906,23 +1130,25 @@
 
             if (cvTable != null) {
                 cvTable.on("click", "tr td i", function () {
-                    var rowIndex = $(this).parent().parent().index();
-                    var selectRowColor = $(this).parent().parent().children().eq(0).attr("value");
-                    var colName = $(this).parent().parent().children().eq(1).attr("value");
-                    cvTable.find("tr").eq(rowIndex).remove();
-                    var idx = $.map(cardviewCondition, function (value, i) {
-                        if (value.Color == selectRowColor) {
-                            return i;
-                        }
-                    });
-                    for (i = 0; i < cardviewCondition[idx].Condition.length; i++) {
+                    if (isEdit || isNewRecord) {
+                        var rowIndex = $(this).parent().parent().index();
+                        var selectRowColor = $(this).parent().parent().children().eq(0).attr("value");
+                        var colName = $(this).parent().parent().children().eq(1).attr("value");
+                        cvTable.find("tr").eq(rowIndex).remove();
+                        var idx = $.map(cardviewCondition, function (value, i) {
+                            if (value.Color == selectRowColor) {
+                                return i;
+                            }
+                        });
+                        for (i = 0; i < cardviewCondition[idx].Condition.length; i++) {
 
-                        if (colName == cardviewCondition[idx].Condition[i].ColName) {
-                            cardviewCondition[idx].Condition.splice(i, 1);
-                        }
-                        if (cardviewCondition[idx].Condition.length <= 0) {
-                            cardviewCondition.splice(idx, 1);
-                            break;
+                            if (colName == cardviewCondition[idx].Condition[i].ColName) {
+                                cardviewCondition[idx].Condition.splice(i, 1);
+                            }
+                            if (cardviewCondition[idx].Condition.length <= 0) {
+                                cardviewCondition.splice(idx, 1);
+                                break;
+                            }
                         }
                     }
                 });
@@ -940,6 +1166,22 @@
                         }
                     }
                 });
+            }
+
+            if (isGradient != null) {
+                isGradient.on("click", function () {
+                    if ($(this).is(':checked')) {
+                        rootCardViewUI.find('.vis-backgroundType').html('').append(backgroundType);
+                        rootCardViewUI.find('.vis-divcvc-cmboperator').css({'width':'10%'});
+                        rootCardViewUI.find('.vis-divcvc-cmbcolor').css({'width':'40%'});
+
+                    } else {
+                        rootCardViewUI.find('.vis-divcvc-cmboperator').css({ 'width': '25%' });
+                        rootCardViewUI.find('.vis-divcvc-cmbcolor').css({ 'width': '25%' });
+                        ctrColor = $("<input class='vis-cmbcolor' type='color' />");
+                        rootCardViewUI.find('.vis-backgroundType').html("").append(ctrColor);
+                    }
+                })
             }
         };
 
@@ -1052,61 +1294,48 @@
         };
 
         var SaveCardViewColumn = function (lstCardView) {
+           
+            cardViewUserID = parseInt(cmbCardView.find(":selected").attr("ad_user_id"));
+            if (VIS.context.getAD_User_ID() == cardViewUserID && !isNewRecord) {
+                AD_User_ID = VIS.context.getAD_User_ID();
+            } else if (VIS.context.getAD_User_ID() != cardViewUserID && !isNewRecord && isEdit) {
+                isNewRecord = true;
+                AD_User_ID = VIS.context.getAD_User_ID();                
+                isPublic.attr("checked", false);
+            } else  {
+              //  isNewRecord = true;
+                AD_User_ID = VIS.context.getAD_User_ID();                
+            }
 
-            var isShow
-            if (VIS.MRole.isAdministrator) {
-                if (isNewRecord) {
-                    cardViewName = txtCardViewName.val();
-                    if (LstRoleID == null || LstRoleID.length <= 0) {
-                        if (AD_User_ID != VIS.context.getAD_User_ID()) {
-                            if (!confirm(VIS.Msg.getMsg("CardViewWarning"))) {
-                                AD_User_ID = 0;
-                                return false;
-                            }
-                            AD_User_ID = VIS.context.getAD_User_ID();
-                        }
-                        else
-                            AD_User_ID = 0;
-                    }
-                    else AD_User_ID = 0;
-                } else {
-                    cardViewName = txtCardViewName.val();
-                    if (AD_User_ID == cardViewUserID) {
-                        // if (orginalAD_CardView_ID > 0 && orginalcardViewUserID > 0){
-                        //     AD_CardView_ID = orginalAD_CardView_ID;
-                        //     cardViewUserID = orginalcardViewUserID;
-                        //}
-                    }
-                    else {
-                        AD_User_ID = 0;
+            if (isNewRecord && cardViewInfo!=null) {
+                for (var a = 0; a < cardViewInfo.length; a++) {
+                    if (cardViewInfo[a].CardViewName.trim() == txtCardViewName.val().trim()) {
+                        VIS.ADialog.error("cardAlreadyExist", true, "");
+                        IsBusy(false);
+                        return false;
                     }
                 }
+            }
+
+            //if (cardViewName.length < 1 && !isEdit) {
+            //    cardViewName = cmbCardView.find(":selected").text();
+            //}
+            //else if (isEdit) {
+            cardViewName = txtCardViewName.val().trim();
+            //}
+
+            if (isEdit || isNewRecord) {
+                SaveCardInfoFinal();
             }
             else {
+                IsBusy(false);
+                ch.close();
+                if (gc.isCardRow)
+                    cardView.getCardViewData(null, AD_CardView_ID);
+            }
+        };
 
-                if (!cardViewUserID || cardViewUserID < 1) {
-                    isNewRecord = true;
-                    AD_User_ID = VIS.context.getAD_User_ID();
-                }
-
-                if (isNewRecord) {
-                    if (orginalAD_CardView_ID > 0 && orginalcardViewUserID > 0) {
-                        isNewRecord = false;
-                        AD_CardView_ID = orginalAD_CardView_ID;
-                        cardViewUserID = orginalcardViewUserID;
-                        cardViewName = cmbCardView.find(":selected").text() + " (" + defaultMsg + ")";
-                    }
-                    else {
-                        cardViewName = cmbCardView.find(":selected").text() + " " + defaultMsg;
-                    }
-                }
-            }
-            if (cardViewName.length < 1 && !isEdit) {
-                cardViewName = cmbCardView.find(":selected").text();
-            }
-            else if (isEdit) {
-                cardViewName = txtCardViewName.val();
-            }
+        var SaveCardInfoFinal = function () {
             var len = ulCardViewColumnField.children().length;
             cardViewColArray = [];
             var includeCols = [];
@@ -1118,7 +1347,14 @@
                 includeCols.push(parseInt(f.AD_Field_ID));
             }
 
-            cardViewArray.push({ AD_Window_ID: AD_Window_ID, AD_Tab_ID: AD_Tab_ID, UserID: AD_User_ID, AD_GroupField_ID: AD_GroupField_ID, isNewRecord: isNewRecord, CardViewName: cardViewName, CardViewID: AD_CardView_ID });
+            var grpSeq = "";
+            $.each(ulGroupSeqColumns.find('li'), function () {
+                grpSeq += $(this).attr('key')+",";
+            });
+
+            grpSeq = grpSeq.replace(/,\s*$/, "");
+
+            cardViewArray.push({ AD_Window_ID: AD_Window_ID, AD_Tab_ID: AD_Tab_ID, UserID: AD_User_ID, AD_GroupField_ID: cmbGroupField.find(":selected").attr("fieldid"), isNewRecord: isNewRecord, CardViewName: cardViewName, CardViewID: AD_CardView_ID, IsDefault: isdefault.is(":checked"), AD_HeaderLayout_ID: $vSearchHeaderLayout.getValue(), isPublic: isPublic.is(":checked"), groupSequence:grpSeq });
             var url = VIS.Application.contextUrl + "CardView/SaveCardViewColumns";
             $.ajax({
                 type: "POST",
@@ -1126,19 +1362,21 @@
                 url: url,
                 dataType: "json",
                 contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify({ 'lstCardView': cardViewArray, 'lstCardViewColumns': cardViewColArray, 'LstRoleID': LstRoleID, 'lstCardViewCondition': strConditionArray }),
+                data: JSON.stringify({ 'lstCardView': cardViewArray, 'lstCardViewColumns': cardViewColArray, /*'LstRoleID': LstRoleID,*/ 'lstCardViewCondition': strConditionArray }),
                 success: function (data) {
                     var result = JSON.parse(data);
                     AD_CardView_ID = result;
                     IsBusy(false);
+                    if (gc.isCardRow)
+                        cardView.getCardViewData(null, AD_CardView_ID);
+                    ch.close();
+
                 }, error: function (errorThrown) {
                     alert(errorThrown.statusText);
                     IsBusy(false);
                 }
             });
             return includeCols;
-
-
         };
 
         var DeleteCardView = function () {
@@ -1157,11 +1395,10 @@
                     alert(errorThrown.statusText);
                 }
             });
-        };
+        };        
 
         var FillUserList = function (root) {
-            if (root != null)
-            { root.children().remove(); }
+            if (root != null) { root.children().remove(); }
             root.append("<Option ad_user_id=" + -1 + " ></Option>");
             for (var i = 0; i < userInfo.length; i++) {
                 root.append("<Option ad_user_id=" + userInfo[i].AD_User_ID + " > " + userInfo[i].UserName + "</Option>");
@@ -1178,8 +1415,7 @@
                 d = 'disabled';
             }
 
-            if (root != null)
-            { root.children().remove(); }
+            if (root != null) { root.children().remove(); }
             for (var i = 0; i < roleInfo.length; i++) {
                 root.append("<li ad_role_id=" + roleInfo[i].AD_Role_ID + " > <input type='checkbox' " + d + "> " + w2utils.encodeTags(roleInfo[i].RoleName) + "</li>");
             }
@@ -1198,24 +1434,26 @@
             //    root.find("[ad_role_id='" + cardViewUserID + "']").attr("selected", "selected");
         };
         var changeHeader = function () {
-            if (cardViewUserID > 0) {
-                if (ch != null)
-                    ch.changeTitle(VIS.Msg.getMsg("Card") + "(" + VIS.Msg.getMsg("IsPrivate") + ")");
-            }
-            else {
-                if (ch != null)
-                    ch.changeTitle(VIS.Msg.getMsg("Card"));
-            }
+            if (ch != null)
+                ch.changeTitle(VIS.Msg.getMsg("Card"));
+            //if (cardViewUserID > 0) {
+            //    if (ch != null)
+            //        ch.changeTitle(VIS.Msg.getMsg("Card") + "(" + VIS.Msg.getMsg("IsPrivate") + ")");
+            //}
+            //else {
+            //    if (ch != null)
+            //        ch.changeTitle(VIS.Msg.getMsg("Card"));
+            //}
         };
 
         var CreateCVGrid = function (root) {
             var cvHeaderTable = $("<Table class='vis-cv-headertable'><tr class='vis-cv-TableHead'>" +
-                                "<th >" + VIS.Msg.getMsg("BGColor") + "</th>" +
-                                "<th>" + VIS.Msg.getMsg("Column") + "</th>" +
-                                "<th>" + VIS.Msg.getMsg("Operator") + "</th>" +
-                                "<th>" + VIS.Msg.getMsg("QueryValue") + "</th>" +
-                                "<th>" + VIS.Msg.getMsg("Action") + "</th>" +
-                            "<tr></Table>");
+                "<th >" + VIS.Msg.getMsg("BGColorGrid") + "</th>" +
+                "<th>" + VIS.Msg.getMsg("Column") + "</th>" +
+                "<th>" + VIS.Msg.getMsg("Operator") + "</th>" +
+                "<th>" + VIS.Msg.getMsg("QueryValue") + "</th>" +
+                "<th>" + VIS.Msg.getMsg("Action") + "</th>" +
+                "<tr></Table>");
             var cvRowTable = $("<div class='vis-cv-divrowtable'><Table class='vis-cv-rowtable'></Table></div>");
             root.append(cvHeaderTable);
             root.append(cvRowTable);
@@ -1235,7 +1473,7 @@
                 for (var i = 0; i < data.length; i++) {
                     for (var j = 0; j < data[i].Condition.length; j++) {
                         row = $("<tr class='vis-cv-TableRow'></tr");
-                        row.append("<td value=" + data[i].Color + " style='width:" + col1Width + "px'><div class='vis-cvd-bgcolor' style='background-color:" + data[i].Color + ";cursor:pointer'>" + data[i].Color + "</div></td>");
+                        row.append("<td value='" + data[i].Color + "' style='width:" + col1Width + "px'><div class='vis-cvd-bgcolor' style='background:" + data[i].Color + ";cursor:pointer;color:transparent'>-</div></td>");
                         row.append("<td style='width:" + col2Width + "px' value=" + data[i].Condition[j].ColName + ">" + data[i].Condition[j].ColHeader + "</td>");
                         row.append("<td style='width:" + col3Width + "px' value=" + data[i].Condition[j].Operator + ">" + data[i].Condition[j].OperatorText + "</td>");
                         row.append("<td style='width:" + col4Width + "px' value=" + data[i].Condition[j].QueryValue + ">" + data[i].Condition[j].QueryText + "</td>");
@@ -1337,7 +1575,14 @@
                         val = val.replace('.000Z', 'Z');
                     return val;
                 }
+
+                if (VIS.DisplayType.IsNumeric(crtlObj.getDisplayType())) {
+                    return 0;
+                }
                 // return control's value
+                if (crtlObj.getValue() == '') {
+                    return null;
+                }
                 return crtlObj.getValue();
             }
             return "";
@@ -1455,7 +1700,7 @@
                 // if field id any key, then show number textbox 
                 if (field.getIsKey()) {
                     crt = new VIS.Controls.VNumTextBox(field.getColumnName(), false, false, true, field.getDisplayLength(), field.getFieldLength(),
-                                     field.getColumnName());
+                        field.getColumnName());
                 }
                 else {
                     crt = VIS.VControlFactory.getControl(null, field, true, true, false);
@@ -1464,7 +1709,7 @@
             else {
                 // if no field is given show an empty disabled textbox
                 crt = new VIS.Controls.VTextBox("columnName", false, true, false, 20, 20, "format",
-                          "GetObscureType", false);// VAdvantage.Controls.VTextBox.TextType.Text, DisplayType.String);
+                    "GetObscureType", false);// VAdvantage.Controls.VTextBox.TextType.Text, DisplayType.String);
             }
             if (crt != null) {
                 //crt.SetIsMandatory(false);
@@ -1608,23 +1853,28 @@
                 //    VIS.ADialog.error("FillMandatory", true, "GroupField");
                 //    return false;
                 //}
-                var retVal = {};
-                retVal.FieldGroupID = AD_GroupField_ID;
-                retVal.IncludedCols = SaveCardViewColumn(cardViewColArray);
-                if (!retVal.IncludedCols) {
+                //var retVal = {};
+                //retVal.FieldGroupID = AD_GroupField_ID;
+
+                var len = ulCardViewColumnField.children().length;
+                if (len.length <= 0)
                     return false;
-                }
-                retVal.Conditions = [];
-                retVal.AD_CardView_ID = AD_CardView_ID;
-                if (VIS.MRole.isAdministrator && AD_User_ID < 1 && orginalAD_CardView_ID > 0) {
-                    //retVal.FieldGroupID = orginalAD_GroupField_ID;
-                    //retVal.IncludedCols = orginalIncludedCols;
-                    retVal.Conditions = [];
-                    retVal.AD_CardView_ID = orginalAD_CardView_ID;
-                }
-                cardView.setCardViewData(retVal);
-                if (gc.isCardRow)
-                    cardView.refreshUI(gc.getVCardPanel().width());
+
+                SaveCardViewColumn(cardViewColArray);
+                //if (!retVal.IncludedCols) {
+                //    return false;
+                ////}
+                //retVal.Conditions = [];
+                //retVal.AD_CardView_ID = AD_CardView_ID;
+                //if (VIS.MRole.isAdministrator && AD_User_ID < 1 && orginalAD_CardView_ID > 0) {
+                //    //retVal.FieldGroupID = orginalAD_GroupField_ID;
+                //    //retVal.IncludedCols = orginalIncludedCols;
+                //    retVal.Conditions = [];
+                //    retVal.AD_CardView_ID = orginalAD_CardView_ID;
+                //}
+                //cardView.setCardViewData(retVal);
+                //if (gc.isCardRow)
+                //    cardView.getCardViewData(null, AD_CardView_ID);
 
                 //}
             };
@@ -1658,6 +1908,60 @@
 
 
     VIS.CVDialog = cvd;
+
+    function cardCopyDialog() {
+        var $root = $('<div style="padding-bottom:0px">');
+        var txtDescription = $('<span style="display:block;margin-bottom:5px;">' + VIS.Msg.getMsg('NewCardInfo') + '</span>');
+        var $txtName = $('<input style="margin-left:5px">');
+        var $lblName = $('<label>' + VIS.Msg.getMsg('EnterName') + '</label>');
+        $root.append(txtDescription).append($lblName).append($txtName);
+        var self = this;
+        this.show = function () {
+
+            ch = new VIS.ChildDialog();
+            ch.setTitle(VIS.Msg.getMsg("CardName"));
+            ch.setModal(true);
+            ch.setContent($root);
+            ch.show();
+            ch.onOkClick = ok;
+            ch.onCancelClick = cancel;
+            ch.onClose = cancel;
+        };
+
+        this.getName = function () {
+            return $txtName.val();
+        };
+
+        function ok() {
+            if ($txtName.val() == null || $txtName.val() == "") {
+                VIS.ADialog.info("FileNameMendatory");
+                return false;
+            }
+            self.onClose();
+            return true;
+        };
+
+        function cancel() {
+            self.onClose();
+            return true;
+        };
+
+
+        function dispose() {
+            $txtName.remove();
+            $txtName = null;
+            txtDescription.remove();
+            txtDescription = null;
+            $lblName.remove();
+            $lblName = null;
+            $root.remove();
+            $root = null;
+            ch = null;
+        };
+    };
+
+    VIS.CardCopyDialog = cardCopyDialog;
+
     //alert(VIS.CVDialog);
 
 }(VIS, jQuery));

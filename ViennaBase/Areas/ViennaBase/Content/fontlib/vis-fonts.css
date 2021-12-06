@@ -90,9 +90,9 @@
     content: "\e9be";
 }
 
-.vis-checkin-file:before {
+/*.vis-checkin-file:before {
     content: "\e9b1";
-}
+}*/
 
 .vis-checkout-file:before {
     content: "\e9b2";
@@ -252,6 +252,10 @@
 
 .vis-card:before {
     content: "\e914";
+}
+
+.vis-cardx:before {
+    content: "\e950";
 }
 
 .vis-carddialog:before {
@@ -880,4 +884,64 @@
 
 .vis-invalid:before {
     content: "\e9cd";
+}
+
+
+.vis-rate-1:before {
+    content: "\e9ce";
+}
+
+.vis-rate-2:before {
+    content: "\e9cf";
+}
+
+.vis-rate-3:before {
+    content: "\e9d0";
+}
+
+.vis-rate-4:before {
+    content: "\e9d1";
+}
+
+.vis-rate-5:before {
+    content: "\e9d2";
+}
+.vis-back:before {
+    content: "\e9d3";
+}
+
+.vis-doc-number:before {
+    content: "\e9b1";
+}
+
+.vis-recursive-doc:before {
+    content: "\e9d5";
+}
+
+.vis-signature-o:before {
+    content: "\e9d8";
+}
+
+.vis-signature:before {
+    content: "\e9d6";
+}
+
+.vis-checkin-file:before {
+    content: "\e9d4";
+}
+
+.vis-file-preview:before {
+    content: "\e9da";
+}
+
+.vis-doc-preview:before {
+    content: "\e9d9";
+}
+
+.vis-file-signature-o:before {
+    content: "\e9d7";
+}
+
+.vis-file-signature:before {
+    content: "\e9d6";
 }
