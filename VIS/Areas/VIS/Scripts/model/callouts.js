@@ -17469,6 +17469,39 @@
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";
     };
+    /**
+     * Set TaxExempt and TaxExemptReason AT Invoice Line and Ordert Line
+     * @param {any} ctx
+     * @param {any} windowNo
+     * @param {any} mTab
+     * @param {any} mField
+     * @param {any} value
+     * @param {any} oldValue
+     */
+    CalloutTax.prototype.SetTaxExemptReason = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (value == null || value == 0 || value.toString() == "" || this.isCalloutActive()) {
+            return "";
+        }
+        try
+        {
+            this.setCalloutActive(true);
+            var data = VIS.dataContext.getJSONRecord("MTax/GetTaxExempt", Util.getValueOfString(mTab.getValue("C_Tax_ID")));
+            if (data != null)
+            {
+                mTab.setValue("IsTaxExempt", Util.getValueOfString(data["IsTaxExempt"]).equals("Y") ? true : false);
+                mTab.setValue("C_TaxExemptReason_ID", Util.getValueOfInt(data["C_TaxExemptReason_ID"]));
+            }
+        }
+        catch (err)
+        {
+            this.log.log(Level.SEVERE, sql, err);
+            this.setCalloutActive(false);
+            return err.message;
+        }
+        this.setCalloutActive(false);
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
     VIS.Model.CalloutTax = CalloutTax;
     //***********CalloutTax End *************
 

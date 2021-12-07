@@ -148,33 +148,26 @@
             return o;
         };
 
-        this.GetConvertedNumber = function (val, dotFormatter) {
+        this.GetConvertedNumber = function (val, dotFormatter) {            
+            val = this.GetConvertedString(val, dotFormatter);
             if (dotFormatter) {
+
+                var inputSplit = val.split(".");
+                // Check value without exponetial
+                if (!Number.isSafeInteger(Number(inputSplit[0]))) {
+                    return Number.MAX_SAFE_INTEGER; // Set maximumn value
+                }
                 return Number(String(val).replace(/[^0-9.-]+/g, ""));
             } else {
+                var inputSplit = val.split(",");
+                // Check value without exponetial
+                if (!Number.isSafeInteger(Number(inputSplit[0]))) {
+                    return Number.MAX_SAFE_INTEGER; // Set maximumn value
+                }
                 return Number(String(val).replace(/[^0-9,-]+/g, "").replace(/[,]+/g, "."));
             }
-            //TO DO
-            //if (dotFormatter) {
-            //    //replace if comma exists
-            //    var num = String(val).replace(/[^0-9.-]+/g, "");
-            //    var inputSplit = num.split(".");
-            //    // Check value without exponetial
-            //    if (!Number.isSafeInteger(Number(inputSplit[0]))) {
-            //        return Number.MAX_SAFE_INTEGER; // Set maximumn value
-            //    }
-            //    return Number(num);
-            //} else {
-            //    var inputSplit = string(val).split(",");
-            //    //replace if dot exists
-            //    var num = String(inputSplit[0]).replace(/[^0-9.-]+/g, "");
-            //    // Check value without exponetial
-            //    if (!Number.isSafeInteger(Number(num))) {
-            //        return Number.MAX_SAFE_INTEGER; // Set maximumn value
-            //    }
-            //    num = String(val).replace(/[^0-9,-]+/g, "").replace(/[,]+/g, ".");
-            //    return Number(num);
-            //}
+
+           
         }
 
         // Function to convert String To Number in 1000 Format

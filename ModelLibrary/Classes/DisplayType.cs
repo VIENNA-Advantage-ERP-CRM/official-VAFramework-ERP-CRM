@@ -147,7 +147,7 @@ namespace VAdvantage.Classes
         /// <returns></returns>
         public static int GetDefaultPrecision(int displayType)
         {
-            if (displayType == Amount || displayType == ProgressBar)
+            if (displayType == Amount )
                 return 2;
             if (displayType == Number)
                 return 6;
@@ -385,7 +385,7 @@ namespace VAdvantage.Classes
             //else
             //    format = (DecimalFormat)NumberFormat.getNumberInstance(Locale.US);
             //
-            if (displayType == Integer)
+            if (displayType == Integer ||  displayType == ProgressBar)
             {
                 //format.setParseIntegerOnly(true);
                 format.MaxIntDigit = INTEGER_DIGITS;
@@ -396,7 +396,7 @@ namespace VAdvantage.Classes
                 format.MaxIntDigit = MAX_DIGITS;
                 format.MaxFractionDigit = MAX_FRACTION;
             }
-            else if (displayType == Amount || displayType == ProgressBar)
+            else if (displayType == Amount )
             {
                 format.MaxIntDigit = MAX_DIGITS;
                 format.MaxFractionDigit = MAX_FRACTION;

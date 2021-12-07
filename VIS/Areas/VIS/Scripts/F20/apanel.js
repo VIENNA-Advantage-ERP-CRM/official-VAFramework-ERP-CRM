@@ -115,6 +115,7 @@
         this.log = VIS.Logging.VLogger.getVLogger("APanel");
 
         this.isSummaryVisible = false;
+        this.lastView = "";
         //private 
         var $divContentArea, $ulNav, $ulToobar, $divStatus, $ulTabControl, $divTabControl, $divTabNav;
         var $txtSearch, $imgSearch, $btnClrSearch, $imgdownSearch, $btnFilter;
@@ -358,7 +359,9 @@
             this.aReport = this.addActions("Report", null, true, true, false, onAction, null, "Shct_Report");
             this.aPrint = this.addActions("Print", null, true, true, false, onAction, null, "Shct_Print");
 
-
+            //Ndw Back button
+            this.aBack = this.addActions("Back", null, true, true, false, onAction, null, "Shct_Back");
+            $ulToobar.append(this.aBack.getListItm());
             $ulToobar.append(this.aIgnore.getListItm());
             $ulToobar.append(this.aNew.getListItm());
             $ulToobar.append(this.aDelete.getListItm());
@@ -384,7 +387,7 @@
             this.aLast = this.addActions(this.ACTION_NAME_LAST, null, true, true, true, onAction, null, "Shct_LastRec");
             this.aNext = this.addActions(this.ACTION_NAME_NEXT, null, true, true, true, onAction, null, "Shct_NextRec");
             this.aMulti = this.addActions("Multi", null, false, true, true, onAction, true, "Shct_MultiRow");
-            this.aCard = this.addActions("Card", null, false, true, true, onAction, null, "Shct_CardView");
+            this.aCard = this.addActions("Card", null, false, true, true, onAction, true, "Shct_CardView");
 
             this.aMap = this.addActions("Map", null, false, true, true, onAction);
 
@@ -1271,6 +1274,12 @@
                     //}, 100);
                     //}
                     break;
+                case 66:      // B for Back to Multiview
+                    if (en) {
+                        if (this.aBack.getIsEnabled())
+                        this.actionPerformed(this.aBack.getAction());
+                    }
+                    break;
                 case 68:      // D for Delete
                     if (en)
                         this.actionPerformed(this.aDelete.getAction());
@@ -1816,14 +1825,33 @@
             tis.curGC.navigateRelative(+1);
         } else if (tis.aMulti.getAction() === action) {
             tis.aMulti.setPressed(!tis.curGC.getIsSingleRow());
+            tis.aCard.setPressed(false);
+            tis.setLastView("");
             tis.curGC.switchRowPresentation();
         } else if (tis.aCard.getAction() === action) {
+            tis.setLastView("");
+            if (tis.curGC.getIsCardRow())
+                tis.curGC.switchMultiRow();
+            else { tis.curGC.switchCardRow(); }
             tis.aMulti.setPressed(false);
-            tis.curGC.switchCardRow();
+            // tis.aBack.setEnabled(!tis.curGC.getIsCardRow());
         } else if (tis.aMap.getAction() === action) {
             tis.aMulti.setPressed(true);
+            tis.aCard.setPressed(false);
             tis.curGC.switchMapRow();
-        } else if (tis.aPageUp.getAction() === action) {
+        } else if (tis.aBack.getAction() === action) {
+            if (tis.getLastView() == "Multi") {
+                tis.aMulti.setPressed(!tis.curGC.getIsSingleRow());
+                tis.aCard.setPressed(false);
+                tis.curGC.switchRowPresentation();
+            }
+            else if (tis.getLastView() == "Card") {
+                 tis.curGC.switchCardRow(); 
+                tis.aMulti.setPressed(false);
+                tis.aCard.setPressed(true);
+            }
+            tis.setLastView("");
+        }  else if (tis.aPageUp.getAction() === action) {
             tis.isDefaultFocusSet = false;
             tis.curGC.navigatePage(-1);
         } else if (tis.aPageFirst.getAction() === action) {
@@ -2840,6 +2868,8 @@
             this.aPageDown.setEnabled(false);
             //aAttachment.setEnabled(false);
             //aChat.setEnabled(false);
+
+            
         }
         else	//	Grid Tab
         {
@@ -2896,6 +2926,7 @@
         else {
             this.aMap.hide();
         }
+        this.setLastView(""); //clear view history
     };
 
     APanel.prototype.setDefaultSearch = function (gc) {
@@ -3046,6 +3077,8 @@
 
         //	Single-Multi
         this.aMulti.setPressed(this.curGC.getIsSingleRow() || this.curGC.getIsMapRow());
+        this.aCard.setPressed(this.curGC.getIsCardRow());
+        this.aBack.setEnabled(this.getLastView().length>0);
         if (this.aChat) {
             this.aChat.setPressed(this.curTab.hasChat());
         }
@@ -4173,11 +4206,37 @@
         }
     };
 
-    /* END */
+/* END */
+
+   /**
+    *return Last selected view  (card Or Multi)
+    * */
+    APanel.prototype.getLastView = function () {
+        if (!this.lastView)
+            this.lastView = "";
+        return this.lastView;
+    };
+
+   /**
+    * Set Last selected view (Card Or Multi)
+    * @param {string} strView
+    */
+    APanel.prototype.setLastView = function (strView) {
+        if (strView == "Card" || strView == "Multi") {
+            this.aBack.setEnabled(true);
+        }
+        else {
+            this.aBack.setEnabled(false);
+            strview = "";
+        }
+        this.lastView = strView;
+    };
+
 
     /** 
      *  dispose
      */
+
 
     APanel.prototype.dispose = function () {
 

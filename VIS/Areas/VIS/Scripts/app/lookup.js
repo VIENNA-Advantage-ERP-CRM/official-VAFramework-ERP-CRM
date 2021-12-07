@@ -298,6 +298,10 @@
     Lookup.prototype.clear = function () {
         this.removeAllElements();
     };
+    Lookup.prototype.gethasImageIdentifier = function () {
+        return false;
+    };
+
     //END
 
 

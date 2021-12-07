@@ -164,23 +164,6 @@ namespace VIS.DataContracts
     }
 
 
-    public class CardViewData
-    {
-        public int FieldGroupID { get; set; }
-        public List<int> IncludedCols { get; set; }
-        public List<CardViewCondition> Conditions { get; set; }
-        public int AD_CardView_ID { get; set; }
-    }
-
-    public class CardViewCondition
-    {
-        public string Color {get;set;}
-        public string ConditionValue
-        {
-            get;
-            set;
-        }
-        public string FColor { get; set; }
-    }
+   
 
 }

@@ -198,7 +198,7 @@
             return false;
         },
         IsInt: function (displayType) {
-            if (displayType == VIS.DisplayType.Integer) {
+            if (displayType == VIS.DisplayType.Integer || displayType == VIS.DisplayType.ProgressBar) {
                 return true;
             }
             return false;
@@ -241,13 +241,13 @@
         GetNumberFormat: function (displayType) {
 
             var format = null;
-            if (displayType == this.Integer) {
+            if (displayType == this.Integer || displayType == this.ProgressBar) {
                 format = new VIS.Format(this.INTEGER_DIGITS, 0, 0);
             }
             else if (displayType == this.Quantity) {
                 format = new VIS.Format(this.MAX_DIGITS, this.MAX_FRACTION, 0);
             }
-            else if (displayType == this.Amount || displayType == this.ProgressBar) {
+            else if (displayType == this.Amount ) {
                 format = new VIS.Format(this.MAX_DIGITS, this.MAX_FRACTION, this.AMOUNT_FRACTION);
             }
             else if (displayType == this.CostPrice) {
@@ -557,13 +557,12 @@
                 //image.setField(mField);
                 image.setDimension(120, 140);
                 image.hideText();
+                image.hideEditIcon();
                 ctrl = image;
             }
             else if (displayType == VIS.DisplayType.Button) {
                 var btn = new VButton(columnName, isMandatory, isReadOnly, isUpdateable, mField.getHeader(), mField.getDescription(), mField.getHelp(), mField.getAD_Process_ID(), mField.getIsLink(), mField.getIsRightPaneLink(), mField.getAD_Form_ID(), mField.getIsBackgroundProcess(), mField.getAskUserBGProcess())
                 btn.setField(mField, true);
-
-                btn.setReferenceKey(mField.getAD_Reference_Value_ID());
                 ctrl = btn;
             }
             else {
@@ -1233,7 +1232,8 @@
      *  @param AD_Process_ID process to start
     
      ***************************************************************************/
-    function VButton(columnName, mandatory, isReadOnly, isUpdateable, text, description, help, AD_Process_ID, isLink, isRightLink, AD_Form_ID, isBGProcess, isAskUserBGProcess) {
+    function VButton(columnName, mandatory, isReadOnly, isUpdateable, text, description, help, AD_Process_ID, isLink, isRightLink
+        , AD_Form_ID, isBGProcess, isAskUserBGProcess) {
 
         this.actionListner;
         this.AD_Process_ID = AD_Process_ID;
@@ -1281,17 +1281,15 @@
             else
                 $img.addClass(img);
         };
-
+      
         //	Special Buttons
 
         if (columnName.equals("PaymentRule")) {
             this.readReference(195);
-            //$ctrl.css("color", "blue"); //
             this.setIcon("vis vis-payment");    //  29*14
         }
         else if (columnName.equals("DocAction")) {
             this.readReference(135);
-            //$ctrl.css("color", "blue"); //
             this.setIcon("vis vis-cog");    //  16*16
         }
         else if (columnName.equals("CreateFrom")) {
@@ -1429,6 +1427,8 @@
     };
     VIS.Utility.inheritPrototype(VButton, IControl);//Inherit
 
+    VButton.prototype.referenceList = {};
+
     VButton.prototype.setField = function (mField, isHeaderPnl) {
         this.mField = mField;
         // if (!this.isIconSet) {
@@ -1509,7 +1509,19 @@
      *  @param AD_Reference_ID reference
      */
     VButton.prototype.readReference = function (AD_Reference_ID) {
-        this.values = {};
+
+        this.values = null;
+        if (this.referenceList) {
+            this.values = this.referenceList[AD_Reference_ID];
+        }
+
+        if (this.values) {
+            return this.values;
+        }
+        else {
+            this.values = {};
+        }
+        
         var SQL;
         if (VIS.Env.isBaseLanguage(VIS.Env.getCtx(), "")) {
             SQL = "VIS_82";
@@ -1524,6 +1536,7 @@
 
                 this.values[dr.getString(0)] = dr.getString(1);
             }
+            this.referenceList[AD_Reference_ID] = this.values;
             dr.close();
         }
         catch (e) {
@@ -2521,7 +2534,7 @@
                         validation = " AND " + validation;
                     }
 
-                     if (posOrder != -1) {
+                    if (posOrder != -1) {
                         var orderByIdx = validation.toUpper().lastIndexOf(" ORDER BY ");
                         if (orderByIdx == -1) {
                             validation = validation + sql.substring(posOrder);
@@ -3409,6 +3422,9 @@
             if (self.mField != null && self.mField.getZoomWindow_ID() > 0) {
                 AD_Window_ID = self.mField.getZoomWindow_ID();
             }
+            else if (zoomWindow_ID && zoomWindow_ID > 0) {
+                AD_Window_ID = zoomWindow_ID;
+            }
             else {
                 AD_Window_ID = self.lookup.getZoomWindow(zoomQuery);
             }
@@ -3720,7 +3736,7 @@
 
         //Init Control
 
-        var $ctrl = $('<input>', { type: 'number', step: 'any', name: columnName, maxlength: length, 'data-type': 'int' });
+        var $ctrl = $('<input>', { type: 'number', step: 'any', name: columnName, maxlength: 16, 'data-type': 'int' });
         $ctrl.attr('autocomplete', 'off');
 
 
@@ -5163,6 +5179,21 @@
         this.hideText = function () {
             $txt.hide();
         }
+        /**
+         * hide edit icon
+         * */
+        this.hideEditIcon = function () {
+            $spanIcon.hide();
+        };
+
+        this.hideEditIcon = function () {
+            $spanIcon.hide();
+        };
+
+
+        this.hideEditIcon = function () {
+            $spanIcon.hide();
+        };
 
         this.disposeComponent = function () {
             $ctrl.off(VIS.Events.onClick);
@@ -6461,9 +6492,9 @@
     // VProgressBar
 
     function VProgressBar(columnName, isMandatory, isReadOnly, isUpdateable, displayLength, fieldLength, controlDisplayType) {
-        var $ctrl = $('<button class="vis-progressCtrlWrap">');
-        var $rangeCtrl = $('<input>', { type: 'range', step: '0.01', name: columnName, maxlength: fieldLength, 'data-type': 'int' });
-        var $oputput = $('<output class="vis-progress-output">');
+        var $ctrl = $('<div class="vis-progressCtrlWrap">');
+        var $rangeCtrl = $('<input>', { type: 'range', step: '1', name: columnName, maxlength: fieldLength, 'data-type': 'int' });
+        var $oputput = $('<output  class="vis-progress-output">');
 
         $ctrl.append($oputput).append($rangeCtrl);
 
@@ -6476,7 +6507,7 @@
         }
         this.rangeCtrl = $rangeCtrl;
         this.oputput = $oputput;
-
+        $oputput.text(0);
         this.setText = function (val) {
             $oputput.text(val);
         };
@@ -6499,10 +6530,27 @@
 
 
         /* Event */
+
+        $oputput.keypress(function (event) {
+            if (event.which < 46 || event.which > 59) {
+                event.preventDefault();
+            };
+            if ((event.which == 46 && $(this).val().indexOf('.') != -1) || (event.which == 44 && $(this).val().indexOf(',') != -1)) {
+                event.preventDefault();
+            };
+
+        }).on("blur", function () {
+            if ($.isNumeric($rangeCtrl.attr("max")) && Number($rangeCtrl.attr("max")) < Number($(this).text())) {
+                $(this).text($rangeCtrl.attr("max"));
+            }
+            $rangeCtrl.val($(this).text() || 0).change();
+        })
+
         $rangeCtrl.on("input", function (e) {
             e.stopPropagation();
             var newVal = $rangeCtrl.val();
             //self.setOutputPosition();
+            $oputput.show();
             $oputput.text(newVal);
             //$ctrl.val(newVal);
         });
@@ -6543,6 +6591,8 @@
     VProgressBar.prototype.setMaxValue = function (maxValue) {
         if ($.isNumeric(maxValue)) {
             this.rangeCtrl.attr("max", maxValue);
+        } else {
+            this.rangeCtrl.attr("max", 100);
         }
     };
 
@@ -6566,6 +6616,7 @@
     VProgressBar.prototype.setReadOnly = function (readOnly) {
         this.isReadOnly = readOnly;
         this.ctrl.find('input').prop('disabled', readOnly ? true : false);
+        this.ctrl.find('output').attr('contenteditable', readOnly ? false : true);
         this.setBackground(false);
     };
     //VProgressBar.prototype.setOutputPosition = function () {

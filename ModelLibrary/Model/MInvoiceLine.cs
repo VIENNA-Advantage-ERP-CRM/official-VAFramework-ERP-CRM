@@ -1121,7 +1121,7 @@ namespace VAdvantage.Model
                     base.SetTaxAmt(TaxAmt);
                     SetSurchargeAmt(surchargeAmt);
                 }
-                else 
+                else
                 {
                     TaxAmt = tax.CalculateTax(GetLineNetAmt(), IsTaxIncluded(), GetPrecision());
                     if (IsTaxIncluded())
@@ -3729,6 +3729,19 @@ namespace VAdvantage.Model
                     SetC_Tax_ID(GetCtx().GetContextAsInt("C_Tax_ID"));
                 }
 
+                //1052-Set IsTaxExempt and TaxExemptReason
+                if (newRecord && GetReversalDoc_ID() == 0 && Get_ColumnIndex("IsTaxExempt") > -1 && Get_ColumnIndex("C_TaxExemptReason_ID") > -1)
+                {
+                    SetTaxExemptReason();
+                }
+                else if (Get_ColumnIndex("IsTaxExempt") >-1  &&  Get_ColumnIndex("C_TaxExemptReason_ID")>-1 && Is_ValueChanged("IsTaxExempt") 
+                    && !IsTaxExempt() && GetC_TaxExemptReason_ID() > 0 && GetReversalDoc_ID() == 0)
+                {
+                    //taxExpemt is false but tax exempt reason is selected
+                    SetC_TaxExemptReason_ID(0);
+                }
+
+
                 //	Get Line No
                 if (GetLine() == 0)
                 {
@@ -4126,6 +4139,38 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
+        /// Set TaxExempt and TaxExemptReason
+        /// </summary>
+        /// <writer>1052</writer>
+        private void SetTaxExemptReason()
+        {
+            if (GetC_Tax_ID() > 0 && GetC_TaxExemptReason_ID() == 0)
+            {
+                string sql = "";
+                if (GetC_OrderLine_ID() == 0)
+                {
+                    //Get TaxExempt from Tax if Order refrence is not available
+                    sql = "SELECT IsTaxExempt, C_TaxExemptReason_ID FROM C_Tax WHERE IsActive = 'Y' AND IsTaxExempt = 'Y' AND C_Tax_ID = " + GetC_Tax_ID();
+                }
+                else
+                {
+                    //Order reference case 
+                    sql = "SELECT IsTaxExempt, C_TaxExemptReason_ID FROM C_OrderLine WHERE IsTaxExempt = 'Y'AND C_OrderLine_ID= " + GetC_OrderLine_ID();
+                }
+                DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    SetC_TaxExemptReason_ID(Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_TaxExemptReason_ID"]));
+                    SetIsTaxExempt(Util.GetValueOfString(ds.Tables[0].Rows[0]["IsTaxExempt"]).Equals("Y") ? true : false);
+                }
+            }
+            else if (GetC_Tax_ID() > 0 && GetC_TaxExemptReason_ID() > 0 && !IsTaxExempt())
+            {
+                //taxExpemt is false but  tax exempt reason is selected
+                SetC_TaxExemptReason_ID(0);
+            }
+        }
+        /// <summary>
         /// Update margins and other fields on header based on the lines saved
         /// </summary>
         /// <returns>true/false</returns>
@@ -4366,7 +4411,7 @@ namespace VAdvantage.Model
             else
                 sql = "UPDATE C_Invoice i "
                     + "SET GrandTotal=TotalLines+"
-                        + "(SELECT ROUND((COALESCE(SUM(TaxAmt),0)),"+ GetPrecision() + ") FROM C_InvoiceTax it WHERE i.C_Invoice_ID=it.C_Invoice_ID) "
+                        + "(SELECT ROUND((COALESCE(SUM(TaxAmt),0))," + GetPrecision() + ") FROM C_InvoiceTax it WHERE i.C_Invoice_ID=it.C_Invoice_ID) "
                         + (Get_ColumnIndex("WithholdingAmt") > 0 ? " , GrandTotalAfterWithholding = (TotalLines + (SELECT ROUND((COALESCE(SUM(TaxAmt),0))," + GetPrecision() + ") FROM C_InvoiceTax it WHERE i.C_Invoice_ID=it.C_Invoice_ID) - NVL(WithholdingAmt, 0) - NVL(BackupWithholdingAmount, 0))" : "")
                         + "WHERE C_Invoice_ID=" + GetC_Invoice_ID();
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());

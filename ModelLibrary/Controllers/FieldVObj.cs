@@ -161,6 +161,8 @@ namespace VAdvantage.Controller
         public int FieldLength = 0;
         /**	Format enforcement		*/
         public String VFormat = "";
+        /**	Format Error Message		*/
+        public String VFormatError = "";
         /**	Min. Value		*/
         public String ValueMin = "";
         /**	Max. Value		*/
@@ -271,6 +273,7 @@ namespace VAdvantage.Controller
 
         /* style logic stirng { expression [,]}*/
         public string StyleLogic = "";
+        public string GridImageStyle = null;
 
 
 

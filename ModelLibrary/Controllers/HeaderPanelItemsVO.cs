@@ -69,6 +69,12 @@ namespace VAdvantage.Controller
 
         public string ColSql = "";
 
+        public bool HideFieldIcon = false;
+
+        public bool HideFieldText = false;
+
+        public string FieldValueStyle = "";
+
     }
 
     public class HeaderPanelGrid
