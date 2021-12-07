@@ -3730,13 +3730,14 @@ namespace VAdvantage.Model
                 }
 
                 //1052-Set IsTaxExempt and TaxExemptReason
-                if (newRecord && GetReversalDoc_ID() == 0)
+                if (newRecord && GetReversalDoc_ID() == 0 && Get_ColumnIndex("IsTaxExempt") > -1 && Get_ColumnIndex("C_TaxExemptReason_ID") > -1)
                 {
                     SetTaxExemptReason();
                 }
-                else if (Is_ValueChanged("IsTaxExempt") && !IsTaxExempt() && GetC_TaxExemptReason_ID() > 0 && GetReversalDoc_ID() == 0)
+                else if (Get_ColumnIndex("IsTaxExempt") >-1  &&  Get_ColumnIndex("C_TaxExemptReason_ID")>-1 && Is_ValueChanged("IsTaxExempt") 
+                    && !IsTaxExempt() && GetC_TaxExemptReason_ID() > 0 && GetReversalDoc_ID() == 0)
                 {
-                    //set tax exemprteason null
+                    //taxExpemt is false but tax exempt reason is selected
                     SetC_TaxExemptReason_ID(0);
                 }
 
@@ -4165,6 +4166,7 @@ namespace VAdvantage.Model
             }
             else if (GetC_Tax_ID() > 0 && GetC_TaxExemptReason_ID() > 0 && !IsTaxExempt())
             {
+                //taxExpemt is false but  tax exempt reason is selected
                 SetC_TaxExemptReason_ID(0);
             }
         }
