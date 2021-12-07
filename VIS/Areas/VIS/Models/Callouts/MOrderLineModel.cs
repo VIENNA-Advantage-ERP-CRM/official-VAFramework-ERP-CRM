@@ -2156,7 +2156,26 @@ namespace VIS.Models
                 //}
             }
             retDic["taxId"] = taxId.ToString();
+            retDic = GetTaxExempt(taxId, retDic);
 
+            return retDic;
+        }
+
+        /// <summary>
+        /// Get Tax Exempt Details
+        /// </summary>
+        /// <param name="Tax_ID">Tax</param>
+        /// <param name="retDic">Dictionary object</param>
+        ///<writer>1052</writer>
+        /// <returns>Tax Exempt Details</returns>
+        public Dictionary<String, object> GetTaxExempt(int Tax_ID, Dictionary<String, object> retDic) {
+            string sql = "SELECT IsTaxExempt, C_TaxExemptReason_ID FROM C_Tax WHERE IsActive='Y' AND C_Tax_ID= " + Tax_ID;
+            DataSet ds = DB.ExecuteDataset(sql);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                retDic["IsTaxExempt"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["IsTaxExempt"]);
+                retDic["C_TaxExemptReason_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_TaxExemptReason_ID"]);
+            }
             return retDic;
         }
 

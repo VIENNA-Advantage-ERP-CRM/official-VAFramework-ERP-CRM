@@ -2116,6 +2116,11 @@
 
                 if (Util.getValueOfInt(taxId) > 0) {
                     mTab.setValue("C_Tax_ID", taxId);
+                    if (mTab.findColumn("C_TaxExemptReason_ID") > -1 && mTab.findColumn("IsTaxExempt") > -1) {
+                        //set Tax Exempt and Tax Exempt Reason 
+                        mTab.setValue("C_TaxExemptReason_ID", Util.getValueOfInt(recDic["C_TaxExemptReason_ID"]));
+                        mTab.setValue("IsTaxExempt", Util.getValueOfString(recDic["IsTaxExempt"]).equals("Y") ? true : false);
+                    }
                 }
                 else {
                     if (Util.getValueOfInt(mTab.getValue("M_Product_ID")) > 0) {
@@ -2212,6 +2217,14 @@
                 }
                 else {
                     mTab.setValue("C_Tax_ID", Util.getValueOfInt(C_Tax_ID));
+                    if (mTab.findColumn("C_TaxExemptReason_ID") > -1 && mTab.findColumn("IsTaxExempt") > -1) {
+                        //1052-set Tax Exempt and Tax Exempt Reason ID 
+                        var recDic = VIS.dataContext.getJSONRecord("MTax/GetTaxExempt", C_Tax_ID);
+                        if (recDic != null) {
+                            mTab.setValue("C_TaxExemptReason_ID", Util.getValueOfInt(recDic["C_TaxExemptReason_ID"]));
+                            mTab.setValue("IsTaxExempt", Util.getValueOfString(recDic["IsTaxExempt"]).equals("Y") ? true : false);
+                        }
+                    }
                 }
                 //
                 if (steps) {
@@ -13773,7 +13786,7 @@
                     }
                 }
             }
-            
+
             if (IsTaxIncluded) {
                 mTab.setValue("LineTotalAmt", (Util.getValueOfDecimal(lineNetAmt)));
             }
@@ -15809,9 +15822,9 @@
 
             //	No Product defined
             if (mTab.getValue("M_Product_ID") != null) {
-                mTab.setValue("M_Product_ID", null);                
+                mTab.setValue("M_Product_ID", null);
             }
-            mTab.setValue("M_AttributeSetInstance_ID", null);            
+            mTab.setValue("M_AttributeSetInstance_ID", null);
 
             //set default UOM for charge.
             var c_uom_id = ctx.getContextAsInt("#C_UOM_ID");
@@ -15822,11 +15835,11 @@
                 mTab.setValue("C_UOM_ID", 100);	//	EA
             }
 
-            var chargeAmt = VIS.dataContext.getJSONRecord("MCharge/GetCharge", C_Charge_ID.toString()); 
-            mTab.setValue("PriceActual", Util.getValueOfDecimal(chargeAmt));            
+            var chargeAmt = VIS.dataContext.getJSONRecord("MCharge/GetCharge", C_Charge_ID.toString());
+            mTab.setValue("PriceActual", Util.getValueOfDecimal(chargeAmt));
         }
         catch (err) {
-            this.setCalloutActive(false);            
+            this.setCalloutActive(false);
             return err.message;
         }
         this.setCalloutActive(false);
