@@ -3864,7 +3864,10 @@ namespace VAdvantage.Model
                 //Set IsTaxExempt and TaxExemptReason
                 SetTaxExemptReason();
             }
-
+            else if(Is_ValueChanged("IsTaxExempt") && !IsTaxExempt() && GetC_TaxExemptReason_ID()>0)
+            {
+                  SetC_TaxExemptReason_ID(0);               
+            }
 
 
             MOrder Ord = GetParent();
@@ -4633,6 +4636,10 @@ namespace VAdvantage.Model
                     SetC_TaxExemptReason_ID(Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_TaxExemptReason_ID"]));
                     SetIsTaxExempt(Util.GetValueOfString(ds.Tables[0].Rows[0]["IsTaxExempt"]).Equals("Y") ? true : false);
                 }
+            }
+            else if (GetC_Tax_ID() > 0 && GetC_TaxExemptReason_ID() > 0 && !IsTaxExempt())
+            {
+                SetC_TaxExemptReason_ID(0);
             }
         }
         /// <summary>
