@@ -889,7 +889,23 @@
 
                 oColumn.render = function (record, index, colIndex) {
                     var f = oColumns[colIndex].field;
-                    var val = record[f];
+
+                    var customStyle = oColumns[colIndex].gridField.getGridImageStyle();
+                    var winNo = oColumns[colIndex].gridField.getWindowNo();
+                    var customClass;
+                    if (customStyle) {
+                        customClass = oColumns[colIndex]['customClass'];
+                        if (!customClass) {
+                            oColumns[colIndex]['customClass'] = 'vis-grd-custom-' + oColumns[colIndex].gridField.getAD_Column_ID() + winNo;
+                            customClass = '.vis-grd-custom-' + oColumns[colIndex].gridField.getAD_Column_ID() + winNo + "{" + customStyle + "}";
+                            var styleTag = document.createElement('style');
+                            styleTag.type= 'text/css';
+                            styleTag.innerHTML = customClass;
+                            $($('head')[0]).append(styleTag);
+                        }
+                    }
+
+                    var val = record["imgurlcolumn"+f];
                     if (record.changes && typeof record.changes[f] != 'undefined') {
                         val = record.changes[f];
                     }
