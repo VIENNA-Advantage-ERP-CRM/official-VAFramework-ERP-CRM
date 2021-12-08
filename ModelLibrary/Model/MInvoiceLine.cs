@@ -36,7 +36,8 @@ namespace VAdvantage.Model
         private Boolean _IsSOTrx = true;
         private Boolean _priceSet = false;
         private MProduct _product = null;
-
+        //to identify if record is copied
+        public bool IsCopy = false;
         /**	Cached Name of the line		*/
         private String _name = null;
         /** Cached Precision			*/
@@ -3730,7 +3731,7 @@ namespace VAdvantage.Model
                 }
 
                 //1052-Set IsTaxExempt and TaxExemptReason
-                if (newRecord && GetReversalDoc_ID() == 0 && Get_ColumnIndex("IsTaxExempt") > -1 && Get_ColumnIndex("C_TaxExemptReason_ID") > -1)
+                if (newRecord && !IsCopy && !IsTaxExempt() && GetReversalDoc_ID() == 0 && Get_ColumnIndex("IsTaxExempt") > -1 && Get_ColumnIndex("C_TaxExemptReason_ID") > -1)
                 {
                     SetTaxExemptReason();
                 }

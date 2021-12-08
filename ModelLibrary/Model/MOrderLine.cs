@@ -3859,7 +3859,7 @@ namespace VAdvantage.Model
                     return false;
                 }
             }
-            if (newRecord && Get_ColumnIndex("IsTaxExempt") > -1 && Get_ColumnIndex("C_TaxExemptReason_ID") > -1)
+            if (newRecord && Get_ColumnIndex("IsTaxExempt") > -1 && Get_ColumnIndex("C_TaxExemptReason_ID") > -1 && !IsTaxExempt())
             {
                 //Set IsTaxExempt and TaxExemptReason
                 SetTaxExemptReason();

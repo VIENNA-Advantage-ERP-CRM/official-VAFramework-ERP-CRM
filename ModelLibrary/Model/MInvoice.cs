@@ -970,6 +970,8 @@ namespace VAdvantage.Model
                 line.SetC_Invoice_ID(GetC_Invoice_ID());
                 line.SetInvoice(this);
                 line.Set_ValueNoCheck("C_InvoiceLine_ID", I_ZERO);	// new
+               //1052--to identfy that this line is copied
+                line.IsCopy = true;
                 //	Reset
 
                 line.SetRef_InvoiceLine_ID(0);
