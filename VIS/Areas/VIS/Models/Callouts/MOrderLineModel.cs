@@ -2137,7 +2137,7 @@ namespace VIS.Models
                 var paramString = (_c_Order_Id).ToString() + "," + (_m_Product_Id).ToString() + "," + (_c_Charge_Id).ToString();
 
                 taxId = GetTax(ctx, paramString);
-                
+
                 //else
                 //{
                 //    sql = "SELECT VATAX_TaxType_ID FROM C_BPartner_Location WHERE C_BPartner_ID =" + Util.GetValueOfInt(_c_BPartner_Id) +
@@ -2168,13 +2168,28 @@ namespace VIS.Models
         /// <param name="retDic">Dictionary object</param>
         ///<writer>1052</writer>
         /// <returns>Tax Exempt Details</returns>
-        public Dictionary<String, object> GetTaxExempt(int Tax_ID, Dictionary<String, object> retDic) {
+        public Dictionary<String, object> GetTaxExempt(int Tax_ID, Dictionary<String, object> retDic)
+        {
+            DataSet ds = null;
             string sql = "SELECT IsTaxExempt, C_TaxExemptReason_ID FROM C_Tax WHERE IsActive='Y' AND C_Tax_ID= " + Tax_ID;
-            DataSet ds = DB.ExecuteDataset(sql);
+            try
+            {
+                ds = DB.ExecuteDataset(sql);
+            }
+            catch
+            {
+                log.Log(Level.SEVERE, "Tax Exempt Reason not found");
+            }
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 retDic["IsTaxExempt"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["IsTaxExempt"]);
                 retDic["C_TaxExemptReason_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_TaxExemptReason_ID"]);
+            }
+            else
+            {
+                //if columns not found
+                retDic["IsTaxExempt"] = "N";
+                retDic["C_TaxExemptReason_ID"] = 0;
             }
             return retDic;
         }
