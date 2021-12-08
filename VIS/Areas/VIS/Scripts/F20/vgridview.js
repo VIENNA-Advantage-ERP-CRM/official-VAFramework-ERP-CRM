@@ -921,7 +921,7 @@
                         }
                     }
 
-                    var val = record["imgurlcolumn"];
+                    var val = record["imgurlcolumn"+f];
                     if (record.changes && typeof record.changes[f] != 'undefined') {
                         val = record.changes[f];
                     }

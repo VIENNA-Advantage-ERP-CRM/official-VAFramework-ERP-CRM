@@ -3628,7 +3628,7 @@
         var selectDirect = null;
         var selectSql = null;
         var hasImage = false;
-        var imgColName = '';
+        var imgColName = [];
         for (var i = 0; i < this.gridFields.length; i++) {
             if (i > 0) {
                 select.append(", ");
@@ -3643,7 +3643,7 @@
             }
 
             if (field.getDisplayType() == VIS.DisplayType.Image) {
-                imgColName = selectSql;
+                imgColName.push(selectSql);
                 hasImage = true;
                // select.append(", (SELECT ImageURL from AD_Image img where img.AD_Image_ID=" + gt._tableName+"."+ selectSql+") as imgUrlColumn");
             }
@@ -3689,7 +3689,8 @@
 
         var randomNo = Math.random();
         if (hasImage) {
-            select.append(", (SELECT ImageURL||'?random=" + randomNo + "' from AD_Image img where img.AD_Image_ID=" + gt._tableName + "." + imgColName + ") as imgUrlColumn");
+            for (var im = 0; im < imgColName.length;im++)
+            select.append(", (SELECT ImageURL||'?random=" + randomNo + "' from AD_Image img where img.AD_Image_ID=CAST(" + gt._tableName + "." + imgColName[im] + " AS INTEGER)) as imgUrlColumn" + imgColName[im]);
         }
 
         //
