@@ -52,15 +52,23 @@ namespace VAdvantage.Model
         /// <returns>true/false</returns>
         protected override bool BeforeSave(bool newRecord)
         {
-            string sql = "SELECT COUNT(C_TaxExemptReason_ID) FROM C_TaxExemptReason WHERE IsActive='Y' AND IsDefault='Y' AND AD_Client_ID=" + GetAD_Client_ID();
-            if (!newRecord)
+            if (IsDefault())
             {
-                sql += " AND C_TaxExemptReason_ID!= "+GetC_TaxExemptReason_ID();
-            }
-            if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) >= 1)
-            {
-                log.SaveError("DefaultRecordFound","");
-                return false;
+                string sql = "SELECT COUNT(C_TaxExemptReason_ID) FROM C_TaxExemptReason WHERE IsActive='Y' AND IsDefault='Y' AND AD_Client_ID=" + GetAD_Client_ID();
+                if (GetAD_Org_ID() != 0)
+                {
+                    //only check for org if * is not selected 
+                    sql += " AND AD_Org_ID IN(0," + GetAD_Org_ID() + ")";
+                }
+                if (!newRecord)
+                {
+                    sql += " AND C_TaxExemptReason_ID!= " + GetC_TaxExemptReason_ID();
+                }
+                if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) >= 1)
+                {
+                    log.SaveError("DefaultRecordFound", "");
+                    return false;
+                }
             }
             return true;
         }
