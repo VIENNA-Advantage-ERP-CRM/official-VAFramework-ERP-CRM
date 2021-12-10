@@ -94,12 +94,12 @@
 
                 var li = null;
                 if (self.AD_CardView_ID == item.id) {
-                    li = $("<li>")
+                    li = $("<li style='white-space:normal !important'>")
                         .append($("<a  data-checkid='" + item.id + "'  class='vis-cv-card-selected-card' style='display:block' title='" + item.title + "'></a>").append(tickSpan).append("<p>" + item.label + "</p>").append(span))
                         .prependTo(ul);
                 }
                 else {
-                    li = $("<li>")
+                    li = $("<li style='white-space:normal !important'>")
                         .append($("<a  data-checkid='" + item.id + "'  style='display:block' title='" + item.title + "'></a>").append(tickSpan).append("<p>" + item.label + "</p>").append(span))
                         .prependTo(ul);
                 }
