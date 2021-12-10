@@ -647,6 +647,12 @@
                     LastCVCondition = cardviewCondition;
                     cardviewCondition = [];
                     AddRow(cardviewCondition);
+
+                    ulGroupSeqColumns.html('');
+                    ulGroupSeqColumns.parent().removeAttr('style');
+                    ulGroupSeqColumns.parent().css("background-color", "rgba(var(--v-c-secondary), 1)");
+                    ulGroupSeqColumns.append('<li style="padding-top:40%;text-align:center">' + VIS.Msg.getMsg("OnlyForLOV") + '</li>');
+
                     rootCardViewUI.find("*").removeAttr("disabled");
                 });
             }
