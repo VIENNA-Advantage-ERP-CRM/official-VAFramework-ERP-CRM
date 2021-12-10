@@ -254,7 +254,7 @@
 
         var curCard = null;
         var crid = null;
-        this.navigate = function (rid, oset, skipScroll) {
+        this.navigate = function (rid, oset, skipScroll, rec) {
             if (rid)
                 crid = rid;
             if (oset)
@@ -269,6 +269,13 @@
                 curCard.toggleClass("vis-cv-card-selected");
                 if (!skipScroll)
                     curCard[0].scrollIntoView();
+            }
+            if (rec) {
+                rec.recid = crid;
+                var changeCard = new VCard(self.fields, rec, self.headerItems, self.headerStyle, self.headerPadding, windowNo, {}, self.aPanel)
+                var style = root.find("[name='vc_" + crid + "']").attr('style');
+                root.find("[name='vc_" + crid + "']").replaceWith(changeCard.getRoot().attr('style', style));
+                changeCard.evaluate(self.cConditions)
             }
         };
 
@@ -383,7 +390,7 @@
             }
         }
         if (id) {
-            this.navigate(id);
+            this.navigate(id,null,null,args);
         }
     };
 
