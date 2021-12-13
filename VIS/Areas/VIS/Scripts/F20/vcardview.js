@@ -62,15 +62,6 @@
                     ev.stopPropagation();
                 },
                 minLength: 0,
-                open: function (ev, ui) {
-                    self.isAutoCompleteOpen = true;
-                },
-                close: function (event, ui) {
-                    //$imgdownSearch.css("transform", "rotate(360deg)");
-                    window.setTimeout(function () {
-                        self.isAutoCompleteOpen = false;
-                    }, 600);
-                },
                 source: []
             });
 
@@ -78,7 +69,7 @@
              * Handled render event to show make default icon in menu
              */
             $cmbCards.autocomplete().data('ui-autocomplete')._renderItem = function (ul, item) {
-
+               
                 var span = null;
                 var tickSpan = null;
                 if (item.isDefault == 'Y') {
@@ -94,12 +85,12 @@
 
                 var li = null;
                 if (self.AD_CardView_ID == item.id) {
-                    li = $("<li style='white-space:normal !important'>")
+                    li = $("<li style='white-space:normal !important;max-width:210px !important'>")
                         .append($("<a  data-checkid='" + item.id + "'  class='vis-cv-card-selected-card' style='display:block' title='" + item.title + "'></a>").append(tickSpan).append("<p>" + item.label + "</p>").append(span))
                         .prependTo(ul);
                 }
                 else {
-                    li = $("<li style='white-space:normal !important'>")
+                    li = $("<li style='white-space:normal !important;max-width:210px !important''>")
                         .append($("<a  data-checkid='" + item.id + "'  style='display:block' title='" + item.title + "'></a>").append(tickSpan).append("<p>" + item.label + "</p>").append(span))
                         .prependTo(ul);
                 }
