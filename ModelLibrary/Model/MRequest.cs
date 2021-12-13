@@ -1055,6 +1055,9 @@ namespace VAdvantage.Model
             CheckChange(ra, "TaskStatus");
             CheckChange(ra, "DateStartPlan");
             CheckChange(ra, "DateCompletePlan");
+            //new filed result added in list if anyone change/add anything in result email will send to user
+            if (CheckChange(ra, "Result"))
+                sendInfo.Add("Result");
             //
             if (_changed)
             {
@@ -1386,7 +1389,11 @@ namespace VAdvantage.Model
                 CheckChange(ra, "CloseDate");
                 CheckChange(ra, "TaskStatus");
                 CheckChange(ra, "DateStartPlan");
-                CheckChange(ra, "DateCompletePlan");
+                CheckChange(ra, "DateCompletePlan");               
+                //new filed result added in list if anyone change/add anything in result email will send to user
+                if (CheckChange(ra, "Result"))
+                    sendInfo.Add("Result");
+                //
                 //
                 //if (_changed)
                 //    ra.Save();
