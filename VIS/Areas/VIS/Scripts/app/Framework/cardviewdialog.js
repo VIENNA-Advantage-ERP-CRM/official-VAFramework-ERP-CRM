@@ -158,7 +158,7 @@
             } else {
                 var divLayout = $("<div class='vis-cardviewbtn'>").append(lblDefault);
             }
-            var divCardViewbtn = $("<div class='vis-cardviewbtn'><button class='vis-btnDelete'><i title=" + VIS.Msg.getMsg("DeleteRecord") + " class='vis vis-delete'></i></button> <div class='vis-cdv-customokcancle'><button class='vis-btnOk'>  " + VIS.Msg.getMsg("Ok") + "  </button><button class='vis-btnCardViewCancle'>  " + VIS.Msg.getMsg("Cancel") + "  </button></div> </div>");
+            var divCardViewbtn = $("<div class='vis-cardviewbtn' style='margin-top:0;'><button class='vis-btnDelete'><i title=" + VIS.Msg.getMsg("DeleteRecord") + " class='vis vis-delete'></i></button> <div class='vis-cdv-customokcancle'><button class='vis-btnOk'>  " + VIS.Msg.getMsg("Ok") + "  </button><button class='vis-btnCardViewCancle'>  " + VIS.Msg.getMsg("Cancel") + "  </button></div> </div>");
             rootCardViewUI.append(divCardViewMainFirstChild);
             divCardViewMainFirstChild.append(CardViewTopFiledsWrap);
             CardViewTopFiledsWrap.append("<div class='vis-firstdiv vis-pull-left' ></div>");
@@ -318,7 +318,7 @@
                 "display": "none"
             });
 
-            rootCardViewUI.find("*").attr("disabled", "disabled");
+            rootCardViewUI.find("*:not(.input-group-append button:last)").attr("disabled", "disabled");
             rootCardViewUI.find(".vis-firstdiv *").removeAttr("disabled");
             rootCardViewUI.find(".vis-cardviewbtn:last *").removeAttr("disabled");
             Events();
@@ -612,7 +612,7 @@
                     }
                 }
             } else {
-                ulGroupSeqColumns.parent().css("background-color","rgba(var(--v-c-secondary), 1)");
+                ulGroupSeqColumns.parent().css("background-color","rgba(var(--v-c-on-secondary), 0.04)");
                 ulGroupSeqColumns.append('<li style="padding-top:40%;text-align:center">'+VIS.Msg.getMsg("OnlyForLOV")+'</li>');
             }
 
@@ -647,10 +647,11 @@
                     LastCVCondition = cardviewCondition;
                     cardviewCondition = [];
                     AddRow(cardviewCondition);
+                    btnDelete.hide();
 
                     ulGroupSeqColumns.html('');
                     ulGroupSeqColumns.parent().removeAttr('style');
-                    ulGroupSeqColumns.parent().css("background-color", "rgba(var(--v-c-secondary), 1)");
+                    ulGroupSeqColumns.parent().css("background-color", "rgba(--v-c-on-secondary), 0.04)");
                     ulGroupSeqColumns.append('<li style="padding-top:40%;text-align:center">' + VIS.Msg.getMsg("OnlyForLOV") + '</li>');
 
                     rootCardViewUI.find("*").removeAttr("disabled");
@@ -675,9 +676,14 @@
                     FillGroupFields();
                     //FillRoleList(ulRole);
                     AddRow(LastCVCondition);
-                    rootCardViewUI.find("*").attr("disabled", "disabled");
+                    rootCardViewUI.find("*:not(.input-group-append button:last)").attr("disabled", "disabled");
                     rootCardViewUI.find(".vis-firstdiv *").removeAttr("disabled");
                     rootCardViewUI.find(".vis-cardviewbtn:last *").removeAttr("disabled");
+                    if (parseInt(cmbCardView.find(":selected").attr("ad_user_id")) == VIS.context.getAD_User_ID()) {
+                        rootCardViewUI.find(".vis-btnDelete").css("display", "block");
+                    } else {
+                        rootCardViewUI.find(".vis-btnDelete").css("display", "none");
+                    }
                 });
             }
 
@@ -700,6 +706,7 @@
                     } else {
                         lblDefault.css({ "display": "block" }).attr('checked', false);
                     }
+                    cvTable.find('.vis-delete').css({ "cursor": "pointer" });
                     rootCardViewUI.find("*").removeAttr("disabled");
                 });
             }

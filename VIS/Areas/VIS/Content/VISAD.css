@@ -5448,3 +5448,10 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
 .vis-cv-card-selected-card.ui-state-active {
     color: rgba(var(--v-c-on-primary), 1) !important;
 }
+.vis-cv-filedslist-wrap[disabled="disabled"], .vis-cardviewConditionGrid[disabled="disabled"] {
+    background-color: rgba(var(--v-c-on-secondary), .04);
+}
+
+.vis-cardviewbutton button[disabled="disabled"] {
+    background-color: rgba(var(--v-c-on-secondary), 0.7);
+}
