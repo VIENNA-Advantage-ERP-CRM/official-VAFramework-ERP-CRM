@@ -233,9 +233,20 @@ namespace VAdvantage.Model
                 SetIsFullyDepreciated(false);
             }
 
+            //VIS0060: Set Value of WIP, Month/Year and LIfe Units from AssetGroup to Asset.
+            if (_assetGroup.Get_ColumnIndex("VAFAM_IsWIP") >= 0 && Util.GetValueOfBool(_assetGroup.Get_Value("VAFAM_IsWIP")))
+            {
+                Set_Value("VAFAM_IsWIP", true);
+            }
+            if (_assetGroup.Get_ColumnIndex("VAFAM_LifeUseUnit") >= 0 && !String.IsNullOrEmpty(Util.GetValueOfString(_assetGroup.Get_Value("VAFAM_LifeUseUnit"))))
+            {
+                Set_Value("VAFAM_LifeUseUnit", Util.GetValueOfString(_assetGroup.Get_Value("VAFAM_LifeUseUnit")));
+                Set_Value("LifeUseUnits", Util.GetValueOfString(_assetGroup.Get_Value("VAFAM_AssetGroupLife")));
+            }
+
             //Change by Sukhwinder for setting Asset type and amortization template on Asset window, MANTIS ID:1762
-            int countVA038 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA038_' "));
-            int countVAFAM = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VAFAM_' "));
+            int countVA038 = Env.IsModuleInstalled("VA038_") ? 1 : 0;
+            int countVAFAM = Env.IsModuleInstalled("VAFAM_") ? 1 : 0;
             if (countVA038 > 0)
             {
                 Set_Value("VA038_AmortizationTemplate_ID", Utility.Util.GetValueOfInt(_assetGroup.Get_Value("VA038_AmortizationTemplate_ID")));
@@ -270,8 +281,8 @@ namespace VAdvantage.Model
             SetM_InOutLine_ID(shipLine.GetM_InOutLine_ID());
 
             //	Activate
-            MAssetGroup ag = MAssetGroup.Get(GetCtx(), GetA_Asset_Group_ID());
-            if (!ag.IsCreateAsActive())
+            //MAssetGroup ag = MAssetGroup.Get(GetCtx(), GetA_Asset_Group_ID());
+            if (!_assetGroup.IsCreateAsActive())
                 SetIsActive(false);
 
             //Check if the Software Industry module installed, update following fields on Asset window

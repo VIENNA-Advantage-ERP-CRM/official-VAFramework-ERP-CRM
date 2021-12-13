@@ -435,6 +435,12 @@ namespace ViennaAdvantage.Process
                     orderLine.SetPriceList(mOrderLine.GetPriceList());
                     orderLine.SetDiscount(mOrderLine.GetDiscount());
                     orderLine.SetC_Tax_ID(mOrderLine.GetC_Tax_ID());
+                    if (orderLine.Get_ColumnIndex("C_TaxExemptReason_ID") > -1 && orderLine.Get_ColumnIndex("IsTaxExempt") > -1)
+                    {
+                        //1052-- set IsTaxExempt and Tax Exempt Reason
+                        orderLine.SetC_TaxExemptReason_ID(mOrderLine.GetC_TaxExemptReason_ID());
+                        orderLine.SetIsTaxExempt(mOrderLine.IsTaxExempt());
+                    }
                     orderLine.SetTaxAmt(mOrderLine.GetTaxAmt());
                     orderLine.SetSurchargeAmt(mOrderLine.GetSurchargeAmt());
                     orderLine.SetC_ProjectTask_ID(mOrderLine.GetC_ProjectTask_ID());

@@ -36,7 +36,8 @@ namespace VAdvantage.Model
         private Boolean _IsSOTrx = true;
         private Boolean _priceSet = false;
         private MProduct _product = null;
-
+        //to identify if record is copied
+        public bool IsCopy = false;
         /**	Cached Name of the line		*/
         private String _name = null;
         /** Cached Precision			*/
@@ -3730,9 +3731,15 @@ namespace VAdvantage.Model
                 }
 
                 //1052-Set IsTaxExempt and TaxExemptReason
-                if (newRecord && GetReversalDoc_ID() == 0)
+                if (newRecord && !IsCopy && !IsTaxExempt() && GetReversalDoc_ID() == 0 && Get_ColumnIndex("IsTaxExempt") > -1 && Get_ColumnIndex("C_TaxExemptReason_ID") > -1)
                 {
                     SetTaxExemptReason();
+                }
+                else if (Get_ColumnIndex("IsTaxExempt") >-1  &&  Get_ColumnIndex("C_TaxExemptReason_ID")>-1 && Is_ValueChanged("IsTaxExempt") 
+                    && !IsTaxExempt() && GetC_TaxExemptReason_ID() > 0 && GetReversalDoc_ID() == 0)
+                {
+                    //taxExpemt is false but tax exempt reason is selected
+                    SetC_TaxExemptReason_ID(0);
                 }
 
 
@@ -4144,7 +4151,7 @@ namespace VAdvantage.Model
                 if (GetC_OrderLine_ID() == 0)
                 {
                     //Get TaxExempt from Tax if Order refrence is not available
-                     sql = "SELECT IsTaxExempt, C_TaxExemptReason_ID FROM C_Tax WHERE IsActive = 'Y' AND IsTaxExempt = 'Y' AND C_Tax_ID = " + GetC_Tax_ID();
+                    sql = "SELECT IsTaxExempt, C_TaxExemptReason_ID FROM C_Tax WHERE IsActive = 'Y' AND IsTaxExempt = 'Y' AND C_Tax_ID = " + GetC_Tax_ID();
                 }
                 else
                 {
@@ -4157,6 +4164,11 @@ namespace VAdvantage.Model
                     SetC_TaxExemptReason_ID(Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_TaxExemptReason_ID"]));
                     SetIsTaxExempt(Util.GetValueOfString(ds.Tables[0].Rows[0]["IsTaxExempt"]).Equals("Y") ? true : false);
                 }
+            }
+            else if (GetC_Tax_ID() > 0 && GetC_TaxExemptReason_ID() > 0 && !IsTaxExempt())
+            {
+                //taxExpemt is false but  tax exempt reason is selected
+                SetC_TaxExemptReason_ID(0);
             }
         }
         /// <summary>

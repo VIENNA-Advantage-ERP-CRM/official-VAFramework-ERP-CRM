@@ -3859,12 +3859,17 @@ namespace VAdvantage.Model
                     return false;
                 }
             }
-            if (newRecord)
+            if (newRecord && Get_ColumnIndex("IsTaxExempt") > -1 && Get_ColumnIndex("C_TaxExemptReason_ID") > -1 && !IsTaxExempt())
             {
                 //Set IsTaxExempt and TaxExemptReason
                 SetTaxExemptReason();
             }
-
+            else if(Is_ValueChanged("IsTaxExempt") && !IsTaxExempt() && GetC_TaxExemptReason_ID()>0 
+                && Get_ColumnIndex("IsTaxExempt") > -1 && Get_ColumnIndex("C_TaxExemptReason_ID") > -1)
+            {
+                //taxExpemt is false but  tax exempt reason is selected
+                  SetC_TaxExemptReason_ID(0);               
+            }
 
 
             MOrder Ord = GetParent();
@@ -4633,6 +4638,11 @@ namespace VAdvantage.Model
                     SetC_TaxExemptReason_ID(Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_TaxExemptReason_ID"]));
                     SetIsTaxExempt(Util.GetValueOfString(ds.Tables[0].Rows[0]["IsTaxExempt"]).Equals("Y") ? true : false);
                 }
+            }
+            else if (GetC_Tax_ID() > 0 && GetC_TaxExemptReason_ID() > 0 && !IsTaxExempt())
+            {
+                //taxExpemt is false but  tax exempt reason is selected
+                SetC_TaxExemptReason_ID(0);
             }
         }
         /// <summary>
