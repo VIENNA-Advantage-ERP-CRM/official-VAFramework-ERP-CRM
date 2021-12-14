@@ -109,9 +109,14 @@ namespace VAdvantage.Acct
                 return null;
             }
 
-            //Added By Bharat to Handle -ve entry
-
-            if (debitAmt < 0)
+            // when on same GL Line, Cr / Dr amount passed, then on reversal record posting overwrite credit amount with ZERO
+            if (debitAmt < 0 && creditAmt < 0)
+            {
+                decimal dAmt = debitAmt.Value;
+                debitAmt = Decimal.Negate(creditAmt.Value);
+                creditAmt = Decimal.Negate(dAmt);
+            }
+            else if (debitAmt < 0)
             {
                 creditAmt = Decimal.Negate(debitAmt.Value);
                 debitAmt = 0;
