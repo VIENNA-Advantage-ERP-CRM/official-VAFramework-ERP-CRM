@@ -5072,7 +5072,7 @@ namespace VAdvantage.Model
             String DocSubTypeSO = dt.GetDocSubTypeSO();
             if (MDocType.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO))
             {
-                if (Util.GetValueOfInt(GetVAPOS_POSTerminal_ID()) != 0)
+                if (Env.IsModuleInstalled("VAPOS_") && Util.GetValueOfInt(GetVAPOS_POSTerminal_ID()) != 0)
                 {
                     shipment.SetDocumentNo(GetDocumentNo());
                 }
@@ -5095,7 +5095,7 @@ namespace VAdvantage.Model
                 {
 
                     MOrderLine oLine = oLines[i];
-                    if (Util.GetValueOfInt(GetVAPOS_POSTerminal_ID()) > 0)
+                    if (Env.IsModuleInstalled("VAPOS_") && Util.GetValueOfInt(GetVAPOS_POSTerminal_ID()) > 0)
                     {
                         #region POS Terminal > 0
                         MInOutLine ioLine = new MInOutLine(shipment);
@@ -5279,7 +5279,7 @@ namespace VAdvantage.Model
                 }
 
                 /// Change Here for Warehouse and Home Delivery Orders In case of POS Orders
-                if (Util.GetValueOfInt(GetVAPOS_POSTerminal_ID()) > 0)
+                if (Env.IsModuleInstalled("VAPOS_") && Util.GetValueOfInt(GetVAPOS_POSTerminal_ID()) > 0)
                 {
                     if (MDocType.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO))
                     {
@@ -5545,7 +5545,7 @@ namespace VAdvantage.Model
         private MInvoice CreateInvoice(MDocType dt, MInOut shipment, DateTime? invoiceDate)
         {
             MInvoice invoice = new MInvoice(this, dt.GetC_DocTypeInvoice_ID(), invoiceDate);
-            if (Util.GetValueOfInt(GetVAPOS_POSTerminal_ID()) > 0)
+            if (Env.IsModuleInstalled("VAPOS_") && Util.GetValueOfInt(GetVAPOS_POSTerminal_ID()) > 0)
             {
                 #region VAPOS_POSTerminal_ID > 0
                 String DocSubTypeSO = dt.GetDocSubTypeSO();
@@ -6149,7 +6149,7 @@ namespace VAdvantage.Model
             {
                 log.Info(ToString());
 
-                if (GetVAPOS_POSTerminal_ID() > 0 && (GetVA018_VoucherAmount() > 0 || GetVA204_RewardAmt() > 0))
+                if (Env.IsModuleInstalled("VAPOS_") && GetVAPOS_POSTerminal_ID() > 0 && (GetVA018_VoucherAmount() > 0 || GetVA204_RewardAmt() > 0))
                 {
                     _processMsg = "Voucher Or Reward amount redeemed against this order, can-not reactivate";
                     log.Warning("Voucher  Or Reward amount redeemed against this order, can-not reactivate");
@@ -6282,7 +6282,7 @@ namespace VAdvantage.Model
                 {
                     if (!CreateReversals())
                         return false;
-                    else if (GetVAPOS_POSTerminal_ID() > 0) //POS Terminal Order
+                    else if (Env.IsModuleInstalled("VAPOS_") && GetVAPOS_POSTerminal_ID() > 0) //POS Terminal Order
                     {
                         if (GetVAPOS_RefPOSTerminal_ID() < 1)
                         {

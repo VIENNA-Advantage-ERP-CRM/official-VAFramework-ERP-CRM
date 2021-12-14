@@ -161,6 +161,7 @@
     <Compile Include="Classes\CommonFunctions.cs" />
     <Compile Include="Classes\ContactsInfo.cs" />
     <Compile Include="Classes\Context.cs" />
+    <Compile Include="Classes\CostingCheck.cs" />
     <Compile Include="Classes\CrystalParams.cs" />
     <Compile Include="Classes\DisplayType.cs" />
     <Compile Include="Classes\DocumentAction.cs" />

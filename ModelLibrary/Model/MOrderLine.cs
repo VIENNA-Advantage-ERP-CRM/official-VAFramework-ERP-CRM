@@ -980,7 +980,7 @@ namespace VAdvantage.Model
         public void SetLineNetAmt()
         {
             MOrder Ord = new MOrder(Env.GetCtx(), GetC_Order_ID(), null);
-            if (Util.GetValueOfInt(Ord.GetVAPOS_POSTerminal_ID()) > 0)
+            if (Ord.Get_ColumnIndex("VAPOS_POSTerminal_ID") >= 0 && Util.GetValueOfInt(Ord.GetVAPOS_POSTerminal_ID()) > 0)
             {
                 Decimal bd = Decimal.Multiply(GetPriceActual(), GetQtyEntered());
                 if (Env.Scale(bd) > GetPrecision())
@@ -3633,7 +3633,7 @@ namespace VAdvantage.Model
             Decimal discount = Decimal.Round(Decimal.Divide(Decimal.Multiply(Decimal.Subtract(list, GetPriceEntered()), new Decimal(100)), list), GetPrecision(), MidpointRounding.AwayFromZero);
 
             // Change ConvertUOMWise
-            if (DB.GetSQLValue(null, "SELECT VAPOS_POSTerminal_ID FROM C_Order WHERE C_Order_ID = " + GetC_Order_ID()) > 0)
+            if (Env.IsModuleInstalled("VAPOS_") && DB.GetSQLValue(null, "SELECT VAPOS_POSTerminal_ID FROM C_Order WHERE C_Order_ID = " + GetC_Order_ID()) > 0)
             {
                 string _CONVERTUOMWISE = Util.GetValueOfString(DB.ExecuteScalar("SELECT VAPOS_ConvertUomWise FROM M_Product WHERE M_product_ID=" + GetM_Product_ID()));
                 if (_CONVERTUOMWISE == "Y")
@@ -3961,7 +3961,7 @@ namespace VAdvantage.Model
             //pratap - added check  _IsReturnTrx==false 4/12/15
             _IsReturnTrx = Ord.IsReturnTrx();
 
-            if (Ord.GetVAPOS_POSTerminal_ID() > 0)
+            if (Ord.Get_ColumnIndex("VAPOS_POSTerminal_ID") >= 0 && Ord.GetVAPOS_POSTerminal_ID() > 0)
             {
                 if (GetC_Charge_ID() != 0 && GetM_Product_ID() != 0)
                     SetM_Product_ID(0);
@@ -4089,7 +4089,7 @@ namespace VAdvantage.Model
             //    }
             //}
 
-            if (!(Util.GetValueOfInt(Ord.GetVAPOS_POSTerminal_ID()) > 0))
+            if (!(Ord.Get_ColumnIndex("VAPOS_POSTerminal_ID") >=0 && Util.GetValueOfInt(Ord.GetVAPOS_POSTerminal_ID()) > 0))
             {
                 if (GetC_Charge_ID() != 0 && GetM_Product_ID() != 0)
                     SetM_Product_ID(0);
@@ -4665,7 +4665,7 @@ namespace VAdvantage.Model
                 return false;
             }
             // VIS0060: UnLink all the Requisition Lines linked with this order line.
-            DB.ExecuteQuery("UPDATE M_RequisitionLine SET C_OrderLine_ID = NULL WHERE C_OrderLine_ID = " + Get_ID(), null, Get_Trx());            
+            DB.ExecuteQuery("UPDATE M_RequisitionLine SET C_OrderLine_ID = NULL WHERE C_OrderLine_ID = " + Get_ID(), null, Get_Trx());
             return true;
         }
 

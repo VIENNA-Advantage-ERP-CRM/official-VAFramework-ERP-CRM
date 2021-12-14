@@ -44,6 +44,10 @@ namespace VAdvantage.Model
         /**	Static Logger	*/
         private static VLogger s_log = VLogger.GetVLogger(typeof(MMatchPO).FullName);
 
+        public String orderDocStatus = String.Empty;
+        public String inOutDocStatus = String.Empty;
+        public MInOutLine iol = null;
+
         /// <summary>
         /// Standard Constructor
         /// </summary>
@@ -553,9 +557,14 @@ namespace VAdvantage.Model
             //JID_0162: System should allow to delete the Matched PO of PO and MR with complete status only.
             if (GetC_OrderLine_ID() != 0)
             {
-                MOrderLine line = new MOrderLine(GetCtx(), GetC_OrderLine_ID(), Get_TrxName());
-                MOrder ord = new MOrder(GetCtx(), line.GetC_Order_ID(), Get_TrxName());
-                if (ord.GetDocStatus() != DocumentEngine.ACTION_COMPLETE)
+                if (String.IsNullOrEmpty(orderDocStatus))
+                {
+                    //MOrderLine line = new MOrderLine(GetCtx(), GetC_OrderLine_ID(), Get_TrxName());
+                    //MOrder ord = new MOrder(GetCtx(), line.GetC_Order_ID(), Get_TrxName());
+                    orderDocStatus = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT DocStatus FROM C_Order WHERE C_Order_ID = 
+                    (SELECT C_Order_ID from C_OrderLine WHERE C_OrderLine_ID = " + GetC_OrderLine_ID() + ") ", null, Get_Trx()));
+                }
+                if (orderDocStatus != DocumentEngine.ACTION_COMPLETE)
                 {
                     log.SaveError("Error", Msg.GetMsg(GetCtx(), "Order/ShipmentNotCompleted"));
                     return false;
@@ -564,9 +573,14 @@ namespace VAdvantage.Model
 
             if (GetM_InOutLine_ID() != 0)
             {
-                MInOutLine line = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_TrxName());
-                MInOut ino = new MInOut(GetCtx(), line.GetM_InOut_ID(), Get_TrxName());
-                if (ino.GetDocStatus() != DocumentEngine.ACTION_COMPLETE)
+                if (String.IsNullOrEmpty(inOutDocStatus))
+                {
+                    //MInOutLine line = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_TrxName());
+                    //MInOut ino = new MInOut(GetCtx(), line.GetM_InOut_ID(), Get_TrxName());
+                    inOutDocStatus = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT DocStatus FROM M_InOut WHERE M_InOut_ID = 
+                    (SELECT M_InOut_ID from M_InOutLine WHERE M_InOutLine_ID = " + GetM_InOutLine_ID() + ") ", null, Get_Trx()));
+                }
+                if (inOutDocStatus != DocumentEngine.ACTION_COMPLETE)
                 {
                     log.SaveError("Error", Msg.GetMsg(GetCtx(), "Order/ShipmentNotCompleted"));
                     return false;
@@ -596,7 +610,10 @@ namespace VAdvantage.Model
             //	Set ASI from Receipt
             if (GetM_AttributeSetInstance_ID() == 0 && GetM_InOutLine_ID() != 0)
             {
-                MInOutLine iol = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_Trx());
+                if (iol == null || iol.Get_ID() <= 0 || iol.Get_ID() != GetM_InOutLine_ID())
+                {
+                    iol = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_Trx());
+                }
                 SetM_AttributeSetInstance_ID(iol.GetM_AttributeSetInstance_ID());
             }
 
@@ -612,7 +629,10 @@ namespace VAdvantage.Model
                 }	//	get from invoice
                 if (GetC_OrderLine_ID() == 0 && GetM_InOutLine_ID() != 0)
                 {
-                    MInOutLine iol = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_Trx());
+                    if (iol == null || iol.Get_ID() <= 0)
+                    {
+                        iol = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_Trx());
+                    }
                     if (iol.GetC_OrderLine_ID() != 0)
                     {
                         SetC_OrderLine_ID(iol.GetC_OrderLine_ID());
