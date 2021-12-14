@@ -216,9 +216,16 @@
 					if (subItem === this._clickItem || subItem === this._dragItem) {
 						continue;
 					}
-					if (this._isOnTop(subItem, point.x, point.y)) {
-						this._hovItem = subItem;
-						this._swapItems(this._clickItem, subItem);
+					if (this._options.force) {
+						if (subItem != this._clickItem) {
+							this._hovItem = subItem;
+							this._swapItems(this._clickItem, subItem);
+						}
+					} else {
+						if (this._isOnTop(subItem, point.x, point.y)) {
+							this._hovItem = subItem;
+							this._swapItems(this._clickItem, subItem);
+						}
 					}
 				}
 			}

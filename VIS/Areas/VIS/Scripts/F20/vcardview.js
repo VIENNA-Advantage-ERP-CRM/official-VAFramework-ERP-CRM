@@ -63,22 +63,16 @@
                 },
                 minLength: 0,
                 open: function (ev, ui) {
-                    self.isAutoCompleteOpen = true;
+                    
                 },
-                close: function (event, ui) {
-                    //$imgdownSearch.css("transform", "rotate(360deg)");
-                    window.setTimeout(function () {
-                        self.isAutoCompleteOpen = false;
-                    }, 600);
-                },
+                
                 source: []
             });
 
             /*
              * Handled render event to show make default icon in menu
              */
-            $cmbCards.autocomplete().data('ui-autocomplete')._renderItem = function (ul, item) {
-
+            $cmbCards.autocomplete().data('ui-autocomplete')._renderItem = function (ul, item) {               
                 var span = null;
                 var tickSpan = null;
                 if (item.isDefault == 'Y') {
@@ -172,9 +166,10 @@
             //    }
             //}
             //else
-            //    body.width(body.parent().width() * (grpCtrlC));
-            this.navigate();
+            //    body.width(body.parent().width() * (grpCtrlC));           
+            this.navigate();           
         };
+        
 
         body.on('mousedown touchstart', 'div.vis-cv-card', function (e) {
 
@@ -614,6 +609,15 @@
                     }
                 }
 
+                var maxHeight = function (elems) {
+                    return Math.max.apply(null, elems.map(function () {
+                        return $(this)[0].scrollHeight;
+                    }).get());
+                }
+
+                root.find('.vis-cv-grpbody').height(maxHeight(root.find('.vis-cv-grpbody')));
+               
+
                 //if ($this.groupSequence != null && $this.groupSequence != "") {
                 //    var grpArr = $this.groupSequence.split(",");
                 //    for (var a = 0; a < grpArr.length; a++) {
@@ -629,13 +633,14 @@
                 //    }
                 //}
             }
-
+            
             function setCardGroup(p) {
                 cardGroup = new VCardGroup($this.grpCount === 1, $this.cGroupInfo[p].records, VIS.Utility.Util.getIdentifierDisplayVal($this.cGroupInfo[p].name), $this.fields, $this.cConditions, $this.headerItems, $this.headerStyle, $this.headerPaddings, $this.cGroupInfo[p].key, $this.aPanel);
                 $this.groupCtrls.push(cardGroup);
                 root.append(cardGroup.getRoot());
                 var sortable = new vaSortable(cardGroup.getBody()[0], {
                     attr: 'data-recid',
+                    force:true,
                     selfSort: false,
                     ignore: ['.vis-cv-card-edit', '.vis-ev-col-wrap-button'],
                     onSelect: function (e, item) {
@@ -1259,6 +1264,11 @@
                     else if (VIS.DisplayType.Image == dt) {
                         setValue(value, iControl, field);
                         root.append($label.getControl()).append(iControl.getControl());
+                        continue;
+                    }
+                    else if (VIS.DisplayType.Button == dt) {
+                        setValue(value, iControl, field);
+                        root.append(iControl.getControl());
                         continue;
                     }
 
