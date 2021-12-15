@@ -544,7 +544,7 @@
             var columnName = mField.getColumnName();
             var isMandatory = mField.getIsMandatory(false);
             var windowNo = mField.getWindowNo();//  no context check
-            var displayType = mField.getHeaderOverrideReference() || mField.getDisplayType();
+            var displayType = mField.getOrginalDisplayType();
             var isReadOnly = mField.getIsReadOnly();
             var isUpdateable = mField.getIsEditable(false);
 

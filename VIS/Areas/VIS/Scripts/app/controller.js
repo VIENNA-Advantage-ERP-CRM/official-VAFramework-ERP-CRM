@@ -5329,7 +5329,7 @@
     function GridField(gField) {
         this.gfield = gField;
         this.vo = gField._vo;
-
+        this.vo["orginalDispaly"] = gField._vo.displayType;
         this.oldValue;
         this.value;
         this.inserting;
@@ -5567,6 +5567,10 @@
 
     GridField.prototype.getDisplayType = function () {
         return this.vo.displayType;
+    };
+
+    GridField.prototype.getOrginalDisplayType = function () {
+        return this.vo.orginalDispaly;
     };
 
     GridField.prototype.getIsVirtualColumn = function () {

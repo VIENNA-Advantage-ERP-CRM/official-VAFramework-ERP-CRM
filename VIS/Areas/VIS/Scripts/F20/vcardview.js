@@ -993,7 +993,7 @@
                         $label = VIS.VControlFactory.getHeaderLabel(mField, true);
                         iControl = VIS.VControlFactory.getReadOnlyControl(this.curTab, mField, false, false, false);
 
-                        if (mField.getDisplayType() == VIS.DisplayType.Button) {
+                        if (mField.getOrginalDisplayType() == VIS.DisplayType.Button) {
                             if (iControl != null)
                                 iControl.addActionListner(this);
                         }
@@ -1079,7 +1079,7 @@
                             $spanIcon.addClass('vis-w-p-card-icon-fixed');
                             objctrls["imgspan"] = $spanIcon;
                             /*Set what do you want to show? Icon OR Label OR Both OR None*/
-                            if (mField.getDisplayType() == VIS.DisplayType.Button) {
+                            if (mField.getOrginalDisplayType() == VIS.DisplayType.Button) {
                                 $divIcon.remove(); // button has image with field
                             }
                             else if (!mField.isCardIconHide() && !mField.isCardTextHide()) {
@@ -1158,7 +1158,7 @@
                 for (var i = 0; i < fields.length; i++) {
                     field = fields[i];
                     var value = record[field.getColumnName().toLowerCase()];
-                    dt = field.getDisplayType();
+                    dt = field.getOrginalDisplayType();
 
                     var $label = VIS.VControlFactory.getHeaderLabel(field, true);
                     var iControl = VIS.VControlFactory.getReadOnlyControl(this.curTab, field, false, false, false);
@@ -1166,7 +1166,7 @@
                     if ($label) {
                         $lblControl = $label.getControl().addClass('vis-w-p-card-data-label');
                     }
-                    if (field.getDisplayType() == VIS.DisplayType.Button) {
+                    if (field.getOrginalDisplayType() == VIS.DisplayType.Button) {
                         if (iControl != null)
                             iControl.addActionListner(this);
                     }
@@ -1345,7 +1345,7 @@
 
                     iControl.setValue(null, false);
                 }
-                else if (mField.getDisplayType() == VIS.DisplayType.Button && mField.getAD_Reference_Value_ID() > 0) {
+                else if (mField.getOrginalDisplayType() == VIS.DisplayType.Button && mField.getAD_Reference_Value_ID() > 0) {
                     iControl.setText("- -");
                 }
                 else
