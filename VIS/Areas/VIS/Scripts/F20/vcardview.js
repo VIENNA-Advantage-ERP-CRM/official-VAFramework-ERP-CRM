@@ -1261,6 +1261,11 @@
                         root.append($label.getControl()).append(iControl.getControl());
                         continue;
                     }
+                    else if (VIS.DisplayType.Button == dt) {
+                        setValue(value, iControl, field);
+                        root.append(iControl.getControl());
+                        continue;
+                    }
 
                     if (!value && value != 0)
                         value = ' -- ';
