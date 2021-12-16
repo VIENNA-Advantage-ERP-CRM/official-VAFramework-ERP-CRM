@@ -1201,9 +1201,30 @@ namespace VAdvantage.Model
                                         Decimal.Add(Decimal.Multiply(cost.GetCurrentCostPrice(), cost.GetCurrentQty()), amt), cost.GetCurrentQty()), precision);
                                 cost.SetCurrentCostPrice(price);
                             }
-                            else if (ce.IsFifo() || ce.IsLifo() || ce.IsStandardCosting() || ce.IsLastInvoice() || ce.IsLastPOPrice())
+                            else if (ce.IsStandardCosting() || ce.IsLastInvoice() || ce.IsLastPOPrice())
                             {
                                 cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), amt));
+                            }
+                            else if (ce.IsFifo() || ce.IsLifo())
+                            {
+                                cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), amt));
+
+                                // we have to reduce price
+                                if (amt < 0 && price > 0)
+                                {
+                                    price = decimal.Negate(price);
+                                }
+
+                                // get Cost Queue List Detail
+                                MCostQueue[] cQueue = MCostQueue.GetQueue(product, M_ASI_ID,
+                                                      mas, Org_ID, ce, Get_TrxName(), cost.GetM_Warehouse_ID());
+                                if (cQueue != null && cQueue.Length > 0)
+                                {
+                                    cost.SetCurrentCostPrice(Decimal.Round((cQueue[0].GetCurrentCostPrice() + price), precision));
+
+                                    DB.ExecuteQuery("Update M_CostQueue SET CurrentCostPrice = " + (cQueue[0].GetCurrentCostPrice() + price) +
+                                                    @" WHERE M_CostQueue_ID = " + cQueue[0].GetM_CostQueue_ID(), null, Get_Trx());
+                                }
                             }
                             //change 3-5-2016
                             MCostElementDetail.CreateCostElementDetail(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product, M_ASI_ID,
