@@ -2428,12 +2428,6 @@ namespace VAdvantage.Model
 
                                     // movement qty
                                     expectedQty = Util.GetValueOfDecimal(po.Get_Value("QtyInvoiced"));
-                                    // when we reverese invoice, expected lanede cost calcualetd on invoice
-                                    // then make the qty Negate
-                                    if (!IsPOCostingMethod && Util.GetValueOfDecimal(po.Get_Value("QtyInvoiced")) < 0)
-                                    {
-                                        expectedQty = decimal.Negate(expectedQty);
-                                    }
 
                                     // during cost adjustment - all amount to be distributed
                                     if (!product.IsCostAdjustmentOnLost())

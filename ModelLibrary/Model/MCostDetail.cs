@@ -1555,12 +1555,18 @@ namespace VAdvantage.Model
                             else if (isProvisnalInvcalculated)
                             {
                                 cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), amt));
+                                // we have to reduce price
+                                if (amt < 0 && price > 0)
+                                {
+                                    price = decimal.Negate(price);
+                                }
                                 cost.SetCurrentCostPrice(Decimal.Add(cost.GetCurrentCostPrice(), price));
                             }
                             // this check is used to get previous invoice price from cost element detail 
                             // if invoice found then set that invoice price else 0
                             // this block is executed for reverse record
-                            if (GetC_InvoiceLine_ID() > 0 && isReturnTrx)
+                            // this block wll not execute when provisonal invoice linked with invoice
+                            if (GetC_InvoiceLine_ID() > 0 && isReturnTrx && !isProvisnalInvcalculated)
                             {
                                 invoiceline = new MInvoiceLine(GetCtx(), GetC_InvoiceLine_ID(), Get_Trx());
                                 invoice = new MInvoice(GetCtx(), invoiceline.GetC_Invoice_ID(), Get_Trx());
