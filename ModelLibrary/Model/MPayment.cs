@@ -5112,7 +5112,17 @@ namespace VAdvantage.Model
                             "AND bsl.C_Payment_ID = " + GetC_Payment_ID(), null, Get_Trx());
                     }
                 }
-
+                // if Payment aginst Claims is voided and payment is drafted remove reference of payment from Claim requisition lines and set Payment Generated to false on Header
+                if (Env.IsModuleInstalled("VA072_") && Get_ColumnIndex("VA072_ClaimSub_ID_1") >= 0 && Get_ColumnIndex("VA072_ClaimSub_ID") >= 0 &&
+                    (Util.GetValueOfInt(Get_Value("VA072_ClaimSub_ID")) > 0 || Util.GetValueOfInt(Get_Value("VA072_ClaimSub_ID_1")) > 0))
+                {
+                    string _msg = RemoveClaimsReference();
+                    if (_msg != "")
+                    {
+                        _processMsg = _msg;
+                        return false;
+                    }
+                }
                 //	Unlink & De-Allocate
                 DeAllocate();
             }
@@ -5229,6 +5239,17 @@ namespace VAdvantage.Model
 
                 }
             }
+            // if Payment aginst Claims is reversed remove reference of payment from Claim requisition lines and set Payment Generated to false on Header
+            if (Env.IsModuleInstalled("VA072_") && Get_ColumnIndex("VA072_ClaimSub_ID_1") >= 0 && Get_ColumnIndex("VA072_ClaimSub_ID") >= 0
+                && (Util.GetValueOfInt(Get_Value("VA072_ClaimSub_ID")) > 0 || Util.GetValueOfInt(Get_Value("VA072_ClaimSub_ID_1")) > 0))
+            {
+                string _msg = RemoveClaimsReference();
+                if (_msg != "")
+                {
+                    _processMsg = _msg;
+                    return false;
+                }
+            }
             //	Create Reversal
             MPayment reversal = new MPayment(GetCtx(), 0, Get_Trx());
             CopyValues(this, reversal);
@@ -5269,7 +5290,7 @@ namespace VAdvantage.Model
             if (Env.IsModuleInstalled("VA009_"))
             {
                 //(1052) Set Execution status as Rejected
-                reversal.SetVA009_ExecutionStatus(MPayment.VA009_EXECUTIONSTATUS_Rejected);                
+                reversal.SetVA009_ExecutionStatus(MPayment.VA009_EXECUTIONSTATUS_Rejected);
                 //Rakesh(VA228):Set contra value on reversal
                 if (Get_ColumnIndex("VA009_IsContra") >= 0)
                 {
@@ -5313,7 +5334,7 @@ namespace VAdvantage.Model
             {
                 reversal.SetTempDocumentNo("");
             }
-            
+
             if (!reversal.Save(Get_Trx()))
             {
                 ValueNamePair pp = VLogger.RetrieveError();
@@ -5849,6 +5870,48 @@ namespace VAdvantage.Model
 
 
 
+        #endregion
+        /// <summary>
+        /// Method to remove claims reference from Payment
+        /// </summary>
+        /// <returns>string</returns>
+        #region Claims References
+        public string RemoveClaimsReference()
+        {
+            int count = 0;
+            if (Util.GetValueOfInt(Get_Value("VA072_ClaimSub_ID_1")) > 0)
+            {
+                StringBuilder _qry = new StringBuilder("");
+                _qry.Append(@"SELECT SUB.DocumentNO FROM VA072_SubReq SR INNER JOIN VA072_ClaimSub SUB ON SUB.VA072_ClaimSub_ID=SR.VA072_ClaimSub_ID WHERE SR.IsActive='Y' 
+                              AND SR.VA072_ClaimSub_ID_1=" + Get_Value("VA072_ClaimSub_ID_1") + " AND SR.C_Currency_ID=" + GetC_Currency_ID());
+                string _docNo = "";
+                _docNo = Util.GetValueOfString(DB.ExecuteScalar(_qry.ToString(), null, null));
+                _qry.Clear();
+                //if Claim Requisition is mapped with Claim Submission
+                if (_docNo != "")
+                {
+                    return Msg.GetMsg(GetCtx(), "VA072_ReqMapped") + ":" + _docNo;
+                }
+                else
+                {
+                    _qry.Append(@"UPDATE VA072_ClaimSubLine SET C_Payment_ID= null WHERE C_Payment_ID =" + GetC_Payment_ID() + " AND VA072_ClaimSub_ID = " +
+                        Get_Value("VA072_ClaimSub_ID_1"));
+                    count = Util.GetValueOfInt(DB.ExecuteQuery(_qry.ToString(), null, Get_Trx()));
+                    if (count > 0)
+                    {
+                        count = Util.GetValueOfInt(DB.ExecuteQuery("UPDATE VA072_ClaimSub SET VA072_GenReqCashPay ='N' WHERE VA072_ClaimSub_ID = " +
+                            Get_Value("VA072_ClaimSub_ID_1"), null, Get_Trx()));
+                    }
+                }
+                _qry.Clear();
+            }
+            else
+            {
+                count = Util.GetValueOfInt(DB.ExecuteQuery("UPDATE VA072_ClaimSub SET C_Payment_ID = NULL"
+                + " WHERE VA072_ClaimSub_ID= " + Get_Value("VA072_ClaimSub_ID"), null, Get_Trx()));
+            }
+            return "";
+        }
         #endregion
     }
 }
