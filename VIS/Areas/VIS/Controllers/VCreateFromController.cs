@@ -255,7 +255,7 @@ namespace VIS.Controllers
                     sql.Append(isBaseLangess);
                 }
                 //Hanlded case: order not exist for the selected Business partner and on the change/selection of deliverydate excception's coming  missing expression
-                sql.Append(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) WHERE l.C_Order_ID=" + (C_Ord_IDs == null ? 0 : C_Ord_IDs) + " AND C.C_Charge_ID >0 "); 
+                sql.Append(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) WHERE l.C_Order_ID=" + (C_Ord_IDs == null ? 0 : C_Ord_IDs) + " AND C.C_Charge_ID >0 ");
 
                 if (DelivDates != "")
                 {
@@ -439,16 +439,33 @@ namespace VIS.Controllers
         }
 
         /// <summary>
-        /// Get Shipment data
+        /// Get Shipment data (for old signature)
         /// </summary>
         /// <param name="displays"></param>
-        /// <param name="CBPartnerIDs"></param>
-        /// <returns></returns>
+        /// <param name="CBPartnerIDs">business partner ids</param>
+        /// <param name="IsDrop">drop shipment</param>
+        /// <param name="IsSOTrx">is trx sales or not</param>
+        /// <returns>Shipment data</returns>
         public JsonResult GetShipments(string displays, int CBPartnerIDs, bool IsDrop, bool IsSOTrx)
+        {
+            return GetShipmentsData(displays, CBPartnerIDs, IsDrop, IsSOTrx);
+        }
+        /// <summary>
+        /// Author:VA230
+        /// Get Shipment data
+        /// </summary>
+        /// <param name="displays">record to disply</param>
+        /// <param name="CBPartnerIDs">bp ids</param>
+        /// <param name="IsDrop">drop shipment</param>
+        /// <param name="IsSOTrx">sales transaction or not</param>
+        /// <param name="isReturnTrxs">transaction is returned or not</param>
+        /// <param name="isProvisionlInvoices">record selected is Provisionl nvoice or not</param>
+        /// <returns>Get shipment data</returns>
+        public JsonResult GetShipmentsData(string displays, int CBPartnerIDs, bool IsDrop, bool IsSOTrx, bool isReturnTrxs = false, bool isProvisionlInvoices = false)
         {
             var ctx = Session["ctx"] as Ctx;
             VCreateFromModel obj = new VCreateFromModel();
-            var stValue = obj.GetShipments(ctx, displays, CBPartnerIDs, IsDrop, IsSOTrx);
+            var stValue = obj.GetShipments(ctx, displays, CBPartnerIDs, IsDrop, IsSOTrx, isReturnTrxs, isProvisionlInvoices);
             return Json(JsonConvert.SerializeObject(stValue), JsonRequestBehavior.AllowGet);
         }
 
@@ -1218,7 +1235,7 @@ namespace VIS.Controllers
 
 
                 sql.Append(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) WHERE l.C_ProvisionalInvoice_ID=" + cInvoiceID + " AND C.C_Charge_ID>0");
-                
+
                 if (orgId != null)
                 {
                     sql.Append(" AND L.AD_Org_ID=" + orgId + " ");

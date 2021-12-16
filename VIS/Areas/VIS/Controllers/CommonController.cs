@@ -2146,7 +2146,7 @@ namespace VIS.Controllers
                 return true;
             }
 
-           
+
             //Update PO_Reference from GRN to Provisional Invoice
             if (M_InOut_ID > 0)
             {
@@ -2313,6 +2313,12 @@ namespace VIS.Controllers
                         orderLine.GetQtyOrdered()),
                         orderLine.GetQtyEntered()), 12, MidpointRounding.AwayFromZero));
                     }
+                }
+                if (!string.IsNullOrEmpty(model[i]["M_AttributeSetInstance_ID"]))
+                {
+                    //VA230:Overrite attribute instance if exists
+                    if (Util.GetValueOfInt((model[i]["M_AttributeSetInstance_ID"])) > 0)
+                        invoiceLine.SetM_AttributeSetInstance_ID(Util.GetValueOfInt((model[i]["M_AttributeSetInstance_ID"])));
                 }
 
                 if (!invoiceLine.Save())
