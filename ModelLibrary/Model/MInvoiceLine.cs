@@ -3000,7 +3000,7 @@ namespace VAdvantage.Model
             }
 
             // if amount is ZERO, then calculate as usual with Line net amount
-            if (amt == 0)
+            if (amt == 0 && !isProvisionalInvoiceRecordFound)
             {
                 amt = invoiceline.GetLineNetAmt();
             }
