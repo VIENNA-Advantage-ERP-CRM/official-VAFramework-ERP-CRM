@@ -30,7 +30,7 @@ namespace VIS.Controllers
             {
                 for (int i = 0; i < lstCardView.Count; i++)
                 {
-                    lstCardViewRole.Add(objCardViewModel.GetCardViewRole(lstCardView[i].CardViewID, ctx));
+                    //lstCardViewRole.Add(objCardViewModel.GetCardViewRole(lstCardView[i].CardViewID, ctx));
                     lstCVConditon = objCardViewModel.GetCardViewCondition(lstCardView[i].CardViewID, ctx);
                 }
             }
@@ -71,7 +71,7 @@ namespace VIS.Controllers
         }
 
         [HttpPost]
-        public JsonResult SaveCardViewColumns(List<CardViewPropeties> lstCardView, List<CardViewPropeties> lstCardViewColumns, List<RolePropeties> LstRoleID, List<CardViewConditionPropeties> lstCardViewCondition)
+        public JsonResult SaveCardViewColumns(List<CardViewPropeties> lstCardView, List<CardViewPropeties> lstCardViewColumns/*, List<RolePropeties> LstRoleID*/, List<CardViewConditionPropeties> lstCardViewCondition)
         {
             bool isNewRecord = lstCardView[0].isNewRecord;
             int id = 0;
@@ -79,12 +79,12 @@ namespace VIS.Controllers
             CardViewModel objCardViewModel = new CardViewModel();
             if (isNewRecord)
             {
-                id = objCardViewModel.SaveCardViewRecord(lstCardView[0].CardViewName, lstCardView[0].AD_Window_ID, lstCardView[0].AD_Tab_ID, lstCardView[0].UserID, lstCardView[0].AD_GroupField_ID, ctx, 0, LstRoleID, lstCardViewCondition);
+                id = objCardViewModel.SaveCardViewRecord(lstCardView[0].CardViewName, lstCardView[0].AD_Window_ID, lstCardView[0].AD_Tab_ID, lstCardView[0].UserID, lstCardView[0].AD_GroupField_ID, ctx, 0/*, LstRoleID*/, lstCardViewCondition, lstCardView[0].AD_HeaderLayout_ID, lstCardView[0].isPublic, lstCardView[0].groupSequence);
             }
             else
             {
                 objCardViewModel.DeleteAllCardViewColumns(lstCardView[0].CardViewID, ctx);
-                id = objCardViewModel.SaveCardViewRecord(lstCardView[0].CardViewName, lstCardView[0].AD_Window_ID, lstCardView[0].AD_Tab_ID, lstCardView[0].UserID, lstCardView[0].AD_GroupField_ID, ctx, lstCardView[0].CardViewID, LstRoleID, lstCardViewCondition);
+                id = objCardViewModel.SaveCardViewRecord(lstCardView[0].CardViewName, lstCardView[0].AD_Window_ID, lstCardView[0].AD_Tab_ID, lstCardView[0].UserID, lstCardView[0].AD_GroupField_ID, ctx, lstCardView[0].CardViewID/*, LstRoleID*/, lstCardViewCondition, lstCardView[0].AD_HeaderLayout_ID,lstCardView[0].isPublic, lstCardView[0].groupSequence);
             }
 
             if (lstCardView[0].IsDefault)
@@ -101,7 +101,7 @@ namespace VIS.Controllers
                     {
                         lstCardViewColumns[i].CardViewID = id;
                     }
-                    sqNo = i * 10;
+                    sqNo = ((i+1) * 10);
                     objCardViewModel.SaveCardViewColumns(lstCardViewColumns[i].CardViewID, lstCardViewColumns[i].AD_Field_ID, sqNo, ctx);
                     id = lstCardViewColumns[i].CardViewID;
                 }
@@ -128,6 +128,27 @@ namespace VIS.Controllers
             objCardViewModel.SetDefaultView(ctx, AD_Tab_ID, cardView);
             var jsonResult = Json(JsonConvert.SerializeObject(""), JsonRequestBehavior.AllowGet);
             return jsonResult;
+        }
+
+        /// <summary>
+        /// Update card from Drag and drop
+        /// </summary>
+        /// <param name="grpID"></param>
+        /// <param name="recordID"></param>
+        /// <param name="columnName"></param>
+        /// <param name="tableName"></param>
+        /// <returns>int</returns>
+        public string UpdateCardByDragDrop(string grpValue, int recordID, string columnName, string tableName, int dataType)
+        {
+
+            Ctx ctx = Session["ctx"] as Ctx;
+            CardViewModel objCardViewModel = new CardViewModel();
+            return objCardViewModel.UpdateCardByDragDrop(ctx, grpValue, recordID, columnName, tableName, dataType);
+        }
+        public JsonResult GetColumnIDWindowID(string tableName, string columnName)
+        {
+            CardViewModel objCardViewModel = new CardViewModel();
+            return Json(JsonConvert.SerializeObject(objCardViewModel.GetColumnIDWindowID(tableName, columnName)), JsonRequestBehavior.AllowGet);
         }
     }
 }

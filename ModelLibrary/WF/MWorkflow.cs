@@ -332,6 +332,7 @@ namespace VAdvantage.WF
 
                 retValue = wfList.ToArray();
             }
+
             return retValue;
         }
 

@@ -379,6 +379,21 @@ namespace VAdvantage.Model
                              WHERE inv.IsActive = 'Y' AND inv.C_Invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx());
                 }
             }
+
+            if (!newRecord && Get_ColumnIndex("IsHoldPayment") > -1 && Is_ValueChanged("IsHoldPayment") && (GetC_Payment_ID() == 0 && GetC_CashLine_ID() == 0))
+            {
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(C_InvoicePaySchedule_ID) FROM C_InvoicePaySchedule " +
+                    "WHERE IsHoldPayment='N' AND C_Invoice_ID=" + GetC_Invoice_ID(), null, Get_Trx())) > 0)
+                {
+                    //If on any schedule hold payment is fasle  then On Invoice hold Payment should be marked false
+                    DB.ExecuteQuery("UPDATE C_Invoice SET IsHoldPayment= 'N' WHERE C_Invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx());
+                }
+                else
+                {
+                    //If on all schedule hold payment is true then On Invoice hold Payment should be marked true
+                    DB.ExecuteQuery("UPDATE C_Invoice SET IsHoldPayment= 'Y' WHERE C_Invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx());
+                }
+            }
             return success;
         }
 

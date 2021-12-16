@@ -86,6 +86,12 @@ namespace VAdvantage.Model
             SetConfirmedQty(0);
             //amit
             _line = line;
+
+            // VIS0060: Set Trx Org from Movement to Confirmation
+            if (Util.GetValueOfInt(line.Get_Value("AD_OrgTrx_ID")) > 0)
+            {
+                Set_Value("AD_OrgTrx_ID", Util.GetValueOfInt(line.Get_Value("AD_OrgTrx_ID")));
+            }
         }
 
         /// <summary>

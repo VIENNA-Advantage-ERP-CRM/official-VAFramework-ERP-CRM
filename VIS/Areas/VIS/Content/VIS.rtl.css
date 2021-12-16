@@ -137,7 +137,8 @@ html[dir="rtl"] .vis-filter-dialog label,
 html[dir="rtl"] .vis-ad-w-p-tb-lc li span,
 html[dir="rtl"] .vis-ad-w-p-tb-rc-a-list li span,
 html[dir="rtl"] .vis-feedTitleBar,
-html[dir="rtl"] .vis-ulrole li {
+html[dir="rtl"] .vis-ulrole li,
+html[dir="rtl"] .ui-menu .ui-menu-item-wrapper p {
     padding-left: 0;
     padding-right: 5px;
 }
@@ -798,16 +799,34 @@ html[dir="rtl"] .vis-css-treeview li.vis-subNavFirstElement ~ ul li a span {
 }
 
 html[dir="rtl"] .vis-progress-output {
-    right: 32px;
-    left: unset;
+    left: 0;
+    right: unset;
 }
+
+html[dir="rtl"] .vis-input-wrap input[type=range] {
+    width: calc(100% - 72px) !important;
+    margin-right: 22px;
+}
+
+html[dir="rtl"] .vis-input-wrap .vis-progressCtrlWrap + label {
+    right: 0px !important;
+}
+
 
 html[dir="rtl"] .vis-input-wrap input[type=range]::-webkit-slider-thumb,
 html[dir="rtl"] .vis-advancedSearchInput input[type=range]::-webkit-slider-thumb,
 html[dir="rtl"] .w2ui-editable input[type=range]::-webkit-slider-thumb {
+
     background: linear-gradient( -90deg, black 53%, rgba(var(--v-c-primary), 1) 47%);
     box-shadow: 330px 0 0 324px rgba(var(--v-c-primary), 1), inset 0 0 0 1px rgba(var(--v-c-on-secondary), 1);
 }
+
+
+html[dir="rtl"] .vis-advancedSearchInput input[type=range] {
+    width: calc(100% - 50px) !important;
+    margin-left: 25px !important;
+}
+
 
 html[dir="rtl"] .vis-input-wrap .vis-progressCtrlWrap ~ .vis-ev-ctrlinfowrap,
 html[dir="rtl"] .w2ui-editable .vis-progressCtrlWrap ~ .vis-ev-ctrlinfowrap {
@@ -817,7 +836,6 @@ html[dir="rtl"] .w2ui-editable .vis-progressCtrlWrap ~ .vis-ev-ctrlinfowrap {
 
 html[dir="rtl"] .w2ui-editable .vis-progress-output {
     /* position: relative !important;*/
-    margin-top: 8px !important;
     right: 3%;
 }
 
@@ -825,6 +843,23 @@ html[dir="rtl"] .w2ui-editable .vis-progress-output {
 html[dir="rtl"] .vis-removeFilter {
 
 right: 26px;
+}
+
+html[dir="rtl"] .vis-vs-card-autoComplete {
+    right: auto;
+    left: 8px;
+}
+html[dir="rtl"] .ui-menu .ui-menu-item-wrapper {
+    padding-right: 3px;
+}
+
+html[dir="rtl"] .vis-back {
+    transform:scaleX(-1);
+}
+html[dir="rtl"] .vis-cv-card-edit {
+left:5px;
+right:unset;
+transform:scaleX(-1);
 }
 /*rtl css End here*/
 

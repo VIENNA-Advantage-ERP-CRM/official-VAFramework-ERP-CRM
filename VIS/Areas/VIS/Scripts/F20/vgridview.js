@@ -46,7 +46,10 @@
                             isCompositView.find('.vis-edit').click();
                         }
                     } else {
-                        self.aPanel.getRoot().find(' .vis-multi:first').click();
+                        // main view
+                        //self.aPanel.getRoot().find(' .vis-multi:first').click();
+                        self.aPanel.actionPerformedCallback(self.aPanel, "Multi");
+                        self.aPanel.setLastView("Multi");
                     }
                 }
             } catch (err) {
@@ -443,7 +446,7 @@
                 oColumn.size = '100px';
             }
 
-            if (mField.getIsIdentifier() && this.hyperLinkCell == null) {
+            if (mField.getIsIdentifier() && mField.getDisplayType() != VIS.DisplayType.Image && this.hyperLinkCell == null) {
                 if (oColumn.hidden == false) {
                     this.hyperLinkCell = columnName;
                     oColumn.style = 'text-decoration:underline; color:rgba(var(--v-c-primary), 1) !important; cursor:pointer';
@@ -507,9 +510,9 @@
                     }
                     //return '<input id="rng' + index + '" type="range" min="' + minVal + '" max="' + maxVal + '" disabled="disabled" value="' + val + '" /><div style="position: absolute"><output class="vis-grid_progress_output"> ' + val+'</output></div>';
 
-                    return '<div class="vis-progress-gridbar" style="'+style+'">' +
-                        '<div class="vis-progress-percent-bar" style = "width:' + (val||0) + '%;'+style+'" ></div>' +
-                        '<div class="vis-progress-gridoutput" > ' + (val||'') + '</div></div >';
+                    return '<div class="vis-progress-gridbar" style="' + style + '">' +
+                        '<div class="vis-progress-percent-bar" style = "width:' + (val || 0) + '%;' + style + '" ></div>' +
+                        '<div class="vis-progress-gridoutput" > ' + (val || '') + '</div></div >';
                 }
             }
             else if (VIS.DisplayType.IsNumeric(displayType)) {
@@ -621,6 +624,22 @@
 
                         var f = oColumns[colIndex].field;
                         var val = record[f];
+
+                        var customStyle = oColumns[colIndex].gridField.getGridImageStyle();
+                        var winNo = oColumns[colIndex].gridField.getWindowNo();
+                        var customClass;
+                        if (customStyle) {
+                            customClass = oColumns[colIndex]['customClass'];
+                            if (!customClass) {
+                                oColumns[colIndex]['customClass'] = 'vis-grd-custom-' + oColumns[colIndex].gridField.getAD_Column_ID() + winNo;
+                                customClass = '.vis-grd-custom-' + oColumns[colIndex].gridField.getAD_Column_ID() + winNo + "{" + customStyle + "}";
+                                var styleTag = document.createElement('style');
+                                styleTag.type = 'text/css';
+                                styleTag.innerHTML = customClass;
+                                $($('head')[0]).append(styleTag);
+                            }
+                        }
+
                         if (record.changes && typeof record.changes[f] != 'undefined') {
                             //val = record.changes[f];
                         }
@@ -646,10 +665,10 @@
                                 strDiv = "<div class='vis-grid-td-icon-grp'>";
 
                                 if (listIcon) {
-                                    strDiv += "<div class='vis-grid-row-td-icon'> " + listIcon + "</div> ";
+                                    strDiv += "<div class='" + oColumns[colIndex]['customClass']+" vis-grid-row-td-icon'> " + listIcon + "</div> ";
                                 }
                                 else {
-                                    strDiv += "<div class='vis-grid-row-td-icon'><span>" + highlightChar + "</span></div>";
+                                    strDiv += "<div class='" + oColumns[colIndex]['customClass'] +" vis-grid-row-td-icon'><span>" + highlightChar + "</span></div>";
                                 }
                                 strDiv += "<span> " + d + "</span ><div>";
                             }
@@ -661,10 +680,10 @@
                             else if (lType == "I") {
                                 strDiv = "<div class='vis-grid-td-icon-grp' style='Justify-Content:center'>";
                                 if (listIcon) {
-                                    strDiv += "<div class='vis-grid-row-td-icon'> " + listIcon + "</div> ";
+                                    strDiv += "<div class='" + oColumns[colIndex]['customClass'] +" vis-grid-row-td-icon'> " + listIcon + "</div> ";
                                 }
                                 else {
-                                    strDiv += "<div class='vis-grid-row-td-icon'><span>" + highlightChar + "</span></div>";
+                                    strDiv += "<div class='" + oColumns[colIndex]['customClass'] +" vis-grid-row-td-icon'><span>" + highlightChar + "</span></div>";
                                 }
                                 strDiv += "<div>";
                             }
@@ -702,14 +721,14 @@
                                         //If image contains nothing.png that means image not found in identfier and 
                                         //we will Display highlightChar
                                         if (c > 0 && img.indexOf("nothing.png") > -1 && highlightChar.length > 0) {
-                                            strDiv += "<div class='vis-grid-row-td-icon'><span>" + highlightChar + "</span></div>";
+                                            strDiv += "<div class='" + oColumns[colIndex]['customClass'] +" vis-grid-row-td-icon'><span>" + highlightChar + "</span></div>";
                                         }
                                         strDiv += "<span>" + d[c] + "</span>";
                                     }
                                     //If image found, then display that image.
                                     if (c == 0 || img.indexOf("nothing.png") > -1) {
                                         if (img.indexOf("nothing.png") == -1) {
-                                            strDiv += "<div class='vis-grid-row-td-icon'"
+                                            strDiv += "<div class='" + oColumns[colIndex]['customClass']+" vis-grid-row-td-icon'"
                                                 + " > <img src='" + img +
                                                 "'></div > ";
                                             // "' onerror='this.style.display=\"none\"' ></img></div > ";
@@ -839,7 +858,6 @@
                 }
             }
 
-
             else if (displayType == VIS.DisplayType.Account || displayType == VIS.DisplayType.PAttribute) {
 
                 oColumn.sortable = true;
@@ -865,8 +883,6 @@
                 }
             }
 
-
-
             else if (displayType == VIS.DisplayType.PAttribute) {
 
                 oColumn.sortable = true;
@@ -889,21 +905,42 @@
 
                 oColumn.render = function (record, index, colIndex) {
                     var f = oColumns[colIndex].field;
-                    var val = record[f];
+
+                    var customStyle = oColumns[colIndex].gridField.getGridImageStyle();
+                    var winNo = oColumns[colIndex].gridField.getWindowNo();
+                    var customClass;
+                    if (customStyle) {
+                        customClass = oColumns[colIndex]['customClass'];
+                        if (!customClass) {
+                            oColumns[colIndex]['customClass'] = 'vis-grd-custom-' + oColumns[colIndex].gridField.getAD_Column_ID() + winNo;
+                            customClass = '.vis-grd-custom-' + oColumns[colIndex].gridField.getAD_Column_ID() + winNo + "{" + customStyle + "}";
+                            var styleTag = document.createElement('style');
+                            styleTag.type= 'text/css';
+                            styleTag.innerHTML = customClass;
+                            $($('head')[0]).append(styleTag);
+                        }
+                    }
+
+                    var val = record["imgurlcolumn"+f];
                     if (record.changes && typeof record.changes[f] != 'undefined') {
                         val = record.changes[f];
                     }
 
                     if (!val) {
-                        val = "-";
+                        val = '<div class="vis-grid-row-td-icon-center">-</div>';
                         return val;
                     }
-                    return VIS.Msg.getElement1('AD_Image_ID') + '-' + val;
-                    //var img = $('img').error(function () {
-                    //    $(this).attr("src", VIS.Application.contextUrl + "/Images/Thumb32x32/" + val + ".jpeg ");
-                    //}).attr("src", VIS.Application.contextUrl + "/Images/Thumb32x32/" + val+".png ");
-
-                    //return img.html();
+                    //return VIS.Msg.getElement1('AD_Image_ID') + '-' + val;
+                    val = val.replace("Images/", "Images/Thumb32x32/");
+                    //var img = $('<img>').attr("src", VIS.Application.contextUrl + val);
+                    var img;
+                    if (customClass) {
+                        img = '<div class="vis-grid-row-td-icon-center"><div class="' + oColumns[colIndex]['customClass'] + ' vis-grid-row-td-icon"><img src="' + VIS.Application.contextUrl + val + '"></div></div>';
+                    }
+                    else {
+                        img = '<div class="vis-grid-row-td-icon-center"><div class="vis-grid-row-td-icon"><img src="' + VIS.Application.contextUrl + val + '"></div></div>';
+                    }
+                    return img;
                 }
             }
 

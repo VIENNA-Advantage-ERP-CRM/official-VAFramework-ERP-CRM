@@ -1189,13 +1189,14 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
             reverse.SetIsFormData(true);
             //	Reverse indicator
             String description = reverse.GetDescription();
+            //Set append document number on new reversal record
             if (description == null)
             {
-                description = "** " + GetDocumentNo() + " **";
+                description = "{->" + GetDocumentNo() + ")";
             }
             else
             {
-                description += " ** " + GetDocumentNo() + " **";
+                description += " | {-> " + GetDocumentNo() + ")";
             }
             reverse.SetDescription(description);
 
@@ -1245,6 +1246,8 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
             _processMsg = Msg.GetMsg(GetCtx(), "VIS_DocumentReversed") + reverse.GetDocumentNo();
             SetProcessed(true);
             SetDocAction(DOCACTION_None);
+            //VA230:Append reverse document number in description
+            AddDescription("(" + reverse.GetDocumentNo() + "<-)");
             return reverse;
         }	//	reverseCorrectionIt
 
@@ -1564,8 +1567,22 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
             }
 
             return to;
-        }	//	copyFrom
-        //End Here
+        }   //	copyFrom
+            //End Here
+
+        /// <summary>
+        /// Author:VA230
+        /// Add description
+        /// </summary>
+        /// <param name="description">description</param>
+        public void AddDescription(String description)
+        {
+            String desc = GetDescription();
+            if (desc == null)
+                SetDescription(description);
+            else
+                SetDescription(desc + " | " + description);
+        }
     }	//	MJournal
 
 }

@@ -144,7 +144,7 @@ namespace VAdvantage.Model
             if (isContainerApplicable && newRecord && PO.Get_Table_ID("M_ContainerStorage") > 0 && GetMMpolicyDate() != null)
             {
                 // If Physical Inventory available afetr movement date - then not to do impacts on container storage 
-                bool isPhysicalInventory = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM M_ContainerStorage WHERE IsPhysicalInventory = 'Y'
+                bool isPhysicalInventory = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(M_Product_ID) FROM M_ContainerStorage WHERE IsPhysicalInventory = 'Y'
                                               AND MMPolicyDate > " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
                                               @" AND M_Product_ID = " + GetM_Product_ID() +
                                               @" AND NVL(M_AttributeSetInstance_ID , 0) = " + GetM_AttributeSetInstance_ID() +

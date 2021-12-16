@@ -551,6 +551,10 @@
         return this.vo.IsSingleRow;
     }
 
+    GridTab.prototype.getTabLayout = function () {
+        return this.vo.TabLayout;
+    }
+
     GridTab.prototype.getIsDisplayed = function (initialSetup) {
         //  no restrictions
 
@@ -3623,6 +3627,8 @@
         var select = new StringBuilder("SELECT ");
         var selectDirect = null;
         var selectSql = null;
+        var hasImage = false;
+        var imgColName = [];
         for (var i = 0; i < this.gridFields.length; i++) {
             if (i > 0) {
                 select.append(", ");
@@ -3634,6 +3640,12 @@
             }
             else {
                 select.append(VIS.Env.parseContext(this.ctx, gt._windowNo, selectSql, false));
+            }
+
+            if (field.getDisplayType() == VIS.DisplayType.Image) {
+                imgColName.push(selectSql);
+                hasImage = true;
+               // select.append(", (SELECT ImageURL from AD_Image img where img.AD_Image_ID=" + gt._tableName+"."+ selectSql+") as imgUrlColumn");
             }
 
             if (field.getLookup() != null && field.getLookup() instanceof VIS.MLookup) {
@@ -3674,6 +3686,13 @@
         }
 
         selectSql = null;
+
+        var randomNo = Math.random();
+        if (hasImage) {
+            for (var im = 0; im < imgColName.length;im++)
+            select.append(", (SELECT ImageURL||'?random=" + randomNo + "' from AD_Image img where img.AD_Image_ID=CAST(" + gt._tableName + "." + imgColName[im] + " AS INTEGER)) as imgUrlColumn" + imgColName[im]);
+        }
+
         //
         select.append(" FROM ").append(gt._tableName);
 
@@ -5310,7 +5329,7 @@
     function GridField(gField) {
         this.gfield = gField;
         this.vo = gField._vo;
-
+        this.vo["orginalDispaly"] = gField._vo.displayType;
         this.oldValue;
         this.value;
         this.inserting;
@@ -5548,6 +5567,9 @@
 
     GridField.prototype.getDisplayType = function () {
         return this.vo.displayType;
+    };
+    GridField.prototype.getOrginalDisplayType = function () {
+        return this.vo.orginalDispaly;
     };
 
     GridField.prototype.getIsVirtualColumn = function () {
@@ -5914,6 +5936,13 @@
      */
     GridField.prototype.getVFormat = function () {
         return this.vo.VFormat;
+    };
+
+    /**
+     * get format error message
+     * */
+    GridField.prototype.getVFormatError = function () {
+        return this.vo.VFormatError;
     };
 
     GridField.prototype.getLookup = function () {
@@ -6565,6 +6594,40 @@
         this.forcefirepropchange = this.inserting || this.vo.displayType == VIS.DisplayType.YesNo
     };
 
+    GridField.prototype.setCardViewSeqNo = function (seqNo) {
+        this.cardViewSeq = seqNo;
+    }
+
+    GridField.prototype.getCardViewSeqNo = function () {
+      return  this.cardViewSeq;
+    }
+
+    GridField.prototype.setCardFieldStyle = function (style) {
+        this.cardFieldStyle = style;
+    }
+
+    GridField.prototype.getCardFieldStyle = function () {
+        return this.cardFieldStyle;
+    }
+
+    GridField.prototype.setCardIconHide = function (hide) {
+        this.cardHideIcon = hide;
+    }
+
+    GridField.prototype.isCardIconHide = function () {
+        return this.cardHideIcon;
+    }
+
+    GridField.prototype.setCardTextHide = function (hide) {
+        this.cardTextHide = hide;
+    }
+
+    GridField.prototype.isCardTextHide = function () {
+        return this.cardTextHide;
+    }
+
+
+
     GridField.prototype.updateContext = function () {
 
         //	Set Context
@@ -6726,6 +6789,10 @@
 
     GridField.prototype.getHtmlStyle = function () {
         return this.vo.HtmlStyle;
+    };
+
+    GridField.prototype.getGridImageStyle = function () {
+        return this.vo.GridImageStyle;
     };
 
     GridField.prototype.getShowIcon = function () {

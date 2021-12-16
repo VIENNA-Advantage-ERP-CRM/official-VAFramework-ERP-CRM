@@ -564,10 +564,15 @@ namespace VAdvantage.Model
                             payment.SetVA034_DepositSlipNo(line.GetVA012_VoucherNo());
                         payment.Save(Get_TrxName());
 
-                        // update execution status as received on Invoice Schedule -  for those payment which are completed or closed
                         if (payment.GetDocStatus() == DOCSTATUS_Closed || payment.GetDocStatus() == DOCSTATUS_Completed)
                         {
+                            // update execution status as Received on Invoice Schedule -  for those payment which are completed or closed
                             int no = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE C_InvoicePaySchedule SET VA009_ExecutionStatus = 'R' WHERE C_Payment_ID = " + line.GetC_Payment_ID(), null, Get_Trx()));
+                            if (no == 0)
+                            {
+                                //(1052) update execution status as Received on Order Schedule -  for those payment which are completed or closed
+                                no = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE VA009_OrderPaySchedule SET VA009_ExecutionStatus = 'R' WHERE C_Payment_ID = " + line.GetC_Payment_ID(), null, Get_Trx()));
+                            }
                         }
                     }
                 }
@@ -701,12 +706,19 @@ namespace VAdvantage.Model
                         //inp.SetVA009_ExecutionStatus(status);
                         //inp.Save(Get_TrxName());
 
-                        // update execution status as set on Payment on Invoice Schedule -  for those payment which are completed or closed
                         if (payment.GetDocStatus() == DOCSTATUS_Closed || payment.GetDocStatus() == DOCSTATUS_Completed)
                         {
+                            // update execution status as InProgress on Invoice Schedule -  for those payment which are completed or closed
                             int no = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE C_InvoicePaySchedule
-                                                                          SET VA009_ExecutionStatus = '" + payment.GetVA009_ExecutionStatus() + @"'  
+                                                                          SET VA009_ExecutionStatus = '" + MPayment.VA009_EXECUTIONSTATUS_In_Progress + @"'  
                                                                           WHERE C_Payment_ID = " + line.GetC_Payment_ID(), null, Get_Trx()));
+                            if (no == 0)
+                            {
+                                //(1052)update execution status as InProgress on Order Schedule -  for those payment which are completed or closed
+                                no = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE VA009_OrderPaySchedule
+                                                                          SET VA009_ExecutionStatus = '" + MPayment.VA009_EXECUTIONSTATUS_In_Progress + @"'  
+                                                                          WHERE C_Payment_ID = " + line.GetC_Payment_ID(), null, Get_Trx()));
+                            }
                         }
                     }
                 }

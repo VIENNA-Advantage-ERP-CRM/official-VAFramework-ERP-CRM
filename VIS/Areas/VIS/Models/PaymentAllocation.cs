@@ -50,6 +50,7 @@ namespace VIS.Models
         public string SaveCashData(List<Dictionary<string, string>> rowsCash, List<Dictionary<string, string>> rowsInvoice, string currency,
             bool isCash, int _C_BPartner_ID, int _windowNo, string payment, DateTime DateTrx, string applied, string discount, string writeOff, string open, DateTime DateAcct, int _CurrencyType_ID, bool isInterBPartner, DateTime conversionDate, bool chkMultiCurrency)
         {
+            #region ValidateRecords
             //if (_noInvoices + _noCashLines == 0)
             //    return "";
             int C_Currency_ID = Convert.ToInt32(currency);
@@ -152,6 +153,8 @@ namespace VIS.Models
              *  - you cannot write-off a payment
              */
 
+            #endregion
+
             //  CashLines - Loop and Add them to cashList/CashAmountList
             #region CashLines-Loop
             // int cRows = vdgvCashLines.RowCount;
@@ -160,10 +163,12 @@ namespace VIS.Models
             List<int> cashList = new List<int>(rowsCash.Count);
             List<Decimal> CashAmtList = new List<Decimal>(rowsCash.Count);
             Decimal cashAppliedAmt = Env.ZERO;
-            MCash cashobj = null;
 
             List<Dictionary<string, string>> negInvList = new List<Dictionary<string, string>>();
             Decimal negInvtotAmt = 0;
+            //VA228:Variable to hold invoice and invoiceScheduleIds
+            List<int> invoiceIds = new List<int>();
+            List<int> invoiceScheduleIds = new List<int>();
             if (rowsInvoice.Count != 0)
             {
                 foreach (var item in rowsInvoice)
@@ -173,6 +178,11 @@ namespace VIS.Models
                         negInvList.Add(item);
                         negInvtotAmt = Decimal.Add(negInvtotAmt, Util.GetValueOfDecimal(item[applied]));
                     }
+                    //Get invoice ids
+                    if (!invoiceIds.Contains(Util.GetValueOfInt(item["cinvoiceid"])))
+                        invoiceIds.Add(Util.GetValueOfInt(item["cinvoiceid"]));
+                    //Get invoice pay schedule ids
+                    invoiceScheduleIds.Add(Util.GetValueOfInt(item["c_invoicepayschedule_id"]));
                 }
             }
             List<int> neg_Invoice_IDS = new List<int>(negInvList.Count);
@@ -217,6 +227,7 @@ namespace VIS.Models
             //  IList rowsInvoice = vdgvInvoice.ItemsSource as IList;
             Decimal totalAppliedAmt = Env.ZERO;
 
+            #region AllocationHeader
             //	Create Allocation - but don't save yet
             // allocation should be created with current date 
             MAllocationHdr alloc = new MAllocationHdr(ctx, true,	//	manual
@@ -230,16 +241,40 @@ namespace VIS.Models
             {
                 alloc.SetConversionDate(conversionDate);
             }
+            #endregion
 
             //	For all invoices
             int invoiceLines = 0;
             //for (int i = 0; i < rowsCash.Count; i++)
             MInvoicePaySchedule mpay = null;
-            MInvoice invoice = null;
             int C_InvoicePaySchedule_ID = 0;
             int Neg_C_InvoicePaySchedule_Id = 0;
             bool isScheduleAllocated = false;
             bool is_NegScheduleAllocated = false;
+
+            StringBuilder sbQuery = new StringBuilder();
+            DataSet DsInv = null;
+            DataSet DsInvSch = null;
+            if (rowsInvoice.Count > 0)
+            {
+                //VA228:Get invoice and invoice pay schedule data
+                sbQuery.Append("Select C_Invoice_ID,C_Currency_ID,C_ConversionType_ID,DateAcct,AD_Client_ID,AD_Org_ID from C_Invoice where C_Invoice_ID IN(" + string.Join(",", invoiceIds) + ")");
+                DsInv = DB.ExecuteDataset(sbQuery.ToString());
+
+                sbQuery.Clear();
+                sbQuery.Append("Select * from C_InvoicePaySchedule where C_InvoicePaySchedule_ID IN(" + string.Join(",", invoiceScheduleIds) + ")");
+                DsInvSch = DB.ExecuteDataset(sbQuery.ToString());
+            }
+            DataSet DsCashLine = null;
+            if (rowsCash.Count > 0)
+            {
+                //VA228:Get cashline data
+                sbQuery.Clear();
+                sbQuery.Append(@"SELECT CL.C_CashLine_ID,CL.C_Cash_ID,CL.C_ConversionType_ID,C.DateAcct from C_CashLine CL 
+                                    INNER JOIN C_Cash C ON C.C_Cash_ID = CL.C_Cash_ID WHERE C_CashLine_ID IN(" + string.Join(",", cashList) + ")");
+                DsCashLine = DB.ExecuteDataset(sbQuery.ToString());
+            }
+
             //loop for Invoice to Cash with Invoice to Invoice									
             for (int i = 0; i < rowsInvoice.Count; i++)
             {
@@ -249,13 +284,6 @@ namespace VIS.Models
                 isScheduleAllocated = false;
                 // if (boolValue)
                 {
-                    //mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"]), trx);
-
-                    //invoice = new MInvoice(ctx, Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]), trx);
-                    //invoiceLines++;
-                    //  Invoice variables
-                    /// int C_Invoice_ID = Util.GetValueOfInt(((BindableObject)rowsInvoice[i]).GetValue("C_INVOICE_ID"));
-
                     int C_Invoice_ID = 0;// Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]);
 
                     Decimal AppliedAmt = Util.GetValueOfDecimal(rowsInvoice[i][applied]);
@@ -274,20 +302,30 @@ namespace VIS.Models
                     //  loop through all payments until invoice applied
                     int noCashlines = 0;
                     MInvoicePaySchedule mpay2 = null;
-                    MCashLine objCashline = null;
+                    DataRow[] drSch = null;
+                    DataRow[] drNegSch = null;
+                    DataRow[] drInv = null;
+                    DataRow[] drNegInv = null;
                     for (int j = 0; j < cashList.Count && Env.Signum(AppliedAmt) != 0; j++)
                     {
-                        mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"]), trx);
-                        invoice = new MInvoice(ctx, Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]), trx);
+                        //VA228:fetch datarow of invoice and invoicepayschedule
+                        drSch = DsInvSch.Tables[0].Select("c_invoicepayschedule_id=" + Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"]));
+                        mpay = new MInvoicePaySchedule(ctx, drSch[0], trx);
+                        //Fetch invoice datarow based on invoiceid
+                        drInv = DsInv.Tables[0].Select("c_invoice_id=" + Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]));
+                        //Bypass payschedule condition
+                        mpay.ByPassValidatePayScheduleCondition(true);
+
                         invoiceLines++;
                         ////  Invoice variables
                         C_Invoice_ID = Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]);
                         #region cash to invoice matching
                         mpay2 = null;
                         C_CashLine_ID = Util.GetValueOfInt(cashList[j]);
-                        objCashline = new MCashLine(ctx, C_CashLine_ID, trx);
+                        //objCashline = new MCashLine(ctx, C_CashLine_ID, trx);
+                        DataRow[] drCashLine = DsCashLine.Tables[0].Select("C_CashLine_ID=" + C_CashLine_ID);
 
-                        cashobj = new MCash(ctx, objCashline.GetC_Cash_ID(), trx);
+                        //cashobj = new MCash(ctx, objCashline.GetC_Cash_ID(), trx);
                         Decimal PaymentAmt = Util.GetValueOfDecimal(CashAmtList[j]);
 
                         // check match receipt with receipt && payment with payment
@@ -343,13 +381,13 @@ namespace VIS.Models
                             if (!isScheduleAllocated)
                             {
                                 isScheduleAllocated = true;
-                                if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                if (Util.GetValueOfInt(drInv[0]["C_Currency_ID"]) != C_Currency_ID)
                                 {
-                                    var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)), Decimal.Add(DiscountAmt, WriteOffAmt)), C_Currency_ID, invoice.GetC_Currency_ID(), cashobj.GetDateAcct(), objCashline.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                                    var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)), Decimal.Add(DiscountAmt, WriteOffAmt)), C_Currency_ID, Util.GetValueOfInt(drInv[0]["C_Currency_ID"]), Util.GetValueOfDateTime(drCashLine[0]["DateAcct"]), Util.GetValueOfInt(drCashLine[0]["C_ConversionType_ID"]), Util.GetValueOfInt(drInv[0]["AD_Client_ID"]), Util.GetValueOfInt(drInv[0]["AD_Org_ID"]));
                                     if (AppliedAmt == amount)
                                     {
                                         //get the difference DueAmt by Compare with Total Invoice Amount with sum of Schedule DueAmt's
-                                        diffAmt = GetDifference(invoice, trx);
+                                        diffAmt = GetDifference(Util.GetValueOfInt(drInv[0]["C_Invoice_ID"]), trx);
                                         if (diffAmt != Env.ZERO)
                                         {
                                             mpay.SetDueAmt(Math.Abs(diffAmt));
@@ -379,13 +417,15 @@ namespace VIS.Models
                                 //Set AD_Org_ID and AD_Client_ID when we split the schedule
                                 mpay2.SetAD_Client_ID(mpay.GetAD_Client_ID());
                                 mpay2.SetAD_Org_ID(mpay.GetAD_Org_ID());
-                                if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                //Bypass update paid amount on invoice from invoice pay schedule
+                                mpay2.ByPassValidatePayScheduleCondition(true);
+                                if (Util.GetValueOfInt(drInv[0]["C_Currency_ID"]) != C_Currency_ID)
                                 {
-                                    var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, invoice.GetC_Currency_ID(), cashobj.GetDateAcct(), objCashline.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                                    var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, Util.GetValueOfInt(drInv[0]["C_Currency_ID"]), Util.GetValueOfDateTime(drCashLine[0]["DateAcct"]), Util.GetValueOfInt(drCashLine[0]["C_ConversionType_ID"]), Util.GetValueOfInt(drInv[0]["AD_Client_ID"]), Util.GetValueOfInt(drInv[0]["AD_Org_ID"]));
                                     if (AppliedAmt == amount)
                                     {
                                         //get the difference DueAmt by Compare with Total Invoice Amount with sum of Schedule DueAmt's
-                                        diffAmt = GetDifference(invoice, trx);
+                                        diffAmt = GetDifference(Util.GetValueOfInt(drInv[0]["C_Invoice_ID"]), trx);
                                         mpay2.SetDueAmt(Math.Abs(diffAmt));
                                     }
                                     else
@@ -494,11 +534,16 @@ namespace VIS.Models
                             MAllocationLine aLine;
                             for (int c = 0; c < negInvList.Count; c++)
                             {
-                                mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"]), trx);
-                                invoice = new MInvoice(ctx, Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]), trx);
+                                //VA228:fetch datarow of invoice and invoicepayschedule
+                                drSch = DsInvSch.Tables[0].Select("c_invoicepayschedule_id=" + Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"]));
+                                mpay = new MInvoicePaySchedule(ctx, drSch[0], trx);
+                                drInv = DsInv.Tables[0].Select("c_invoice_id=" + Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]));
+                                //Bypass update paid amount on invoice from invoice pay schedule
+                                mpay.ByPassValidatePayScheduleCondition(true);
                                 Decimal NDiscountAmt = Util.GetValueOfDecimal(negInvList[c][discount]);
                                 Decimal NWriteOffAmt = Util.GetValueOfDecimal(negInvList[c][writeOff]);
-                                MInvoice Neg_invoice = new MInvoice(ctx, Util.GetValueOfInt(negInvList[c]["cinvoiceid"]), trx);
+                                //VA228:Get negative invoice
+                                drNegInv = DsInv.Tables[0].Select("c_invoice_id=" + Util.GetValueOfInt(negInvList[c]["cinvoiceid"]));
 
                                 Decimal amount;
                                 mpay2 = null;
@@ -527,14 +572,14 @@ namespace VIS.Models
                                 if (!isScheduleAllocated)
                                 {
                                     isScheduleAllocated = true;
-                                    if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                    if (Util.GetValueOfInt(drInv[0]["C_Currency_ID"]) != C_Currency_ID)
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), C_Currency_ID, invoice.GetC_Currency_ID(),
-                                            (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : Neg_invoice.GetDateAcct()), Neg_invoice.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), C_Currency_ID, Util.GetValueOfInt(drInv[0]["C_Currency_ID"]),
+                                            (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : Util.GetValueOfDateTime(drNegInv[0]["DateAcct"])), Util.GetValueOfInt(drNegInv[0]["C_ConversionType_ID"]), Util.GetValueOfInt(drInv[0]["AD_Client_ID"]), Util.GetValueOfInt(drInv[0]["AD_Org_ID"]));
                                         if (AppliedAmt == amount)
                                         {
                                             //get the difference DueAmt by Compare with Total Invoice Amount with sum of Schedule DueAmt's
-                                            diffAmt = GetDifference(invoice, trx);
+                                            diffAmt = GetDifference(Util.GetValueOfInt(drInv[0]["C_Invoice_ID"]), trx);
                                             if (diffAmt != Env.ZERO)
                                             {
                                                 mpay.SetDueAmt(Math.Abs(diffAmt));
@@ -564,14 +609,16 @@ namespace VIS.Models
                                     //Set AD_Org_ID and AD_Client_ID when we split the schedule
                                     mpay2.SetAD_Client_ID(mpay.GetAD_Client_ID());
                                     mpay2.SetAD_Org_ID(mpay.GetAD_Org_ID());
-                                    if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                    //Bypass update paid amount on invoice from invoice pay schedule
+                                    mpay2.ByPassValidatePayScheduleCondition(true);
+                                    if (Util.GetValueOfInt(drInv[0]["C_Currency_ID"]) != C_Currency_ID)
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, invoice.GetC_Currency_ID(),
-                                            (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : Neg_invoice.GetDateAcct()), Neg_invoice.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                                        var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, Util.GetValueOfInt(drInv[0]["C_Currency_ID"]),
+                                            (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : Util.GetValueOfDateTime(drNegInv[0]["DateAcct"])), Util.GetValueOfInt(drNegInv[0]["C_ConversionType_ID"]), Util.GetValueOfInt(drInv[0]["AD_Client_ID"]), Util.GetValueOfInt(drInv[0]["AD_Org_ID"]));
                                         if (AppliedAmt == amount)
                                         {
                                             //get the difference DueAmt by Compare with Total Invoice Amount with sum of Schedule DueAmt's
-                                            diffAmt = GetDifference(invoice, trx);
+                                            diffAmt = GetDifference(Util.GetValueOfInt(drInv[0]["C_Invoice_ID"]), trx);
                                             mpay2.SetDueAmt(Math.Abs(diffAmt));
                                         }
                                         else
@@ -630,8 +677,13 @@ namespace VIS.Models
                                     return msg;
                                 }
                                 int aLine_ID = aLine.GetC_AllocationLine_ID();
-                                // when 
-                                mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(negInvList[c]["c_invoicepayschedule_id"]), trx);
+
+                                //VA228:Get negative invoice schedules
+                                drNegSch = DsInvSch.Tables[0].Select("c_invoicepayschedule_id=" + Util.GetValueOfInt(negInvList[c]["c_invoicepayschedule_id"]));
+                                // VA228:Get InvoicePaySchedule based on datarow
+                                mpay = new MInvoicePaySchedule(ctx, drNegSch[0], trx);
+                                //Bypass update paid amount on invoice from invoice pay schedule
+                                mpay.ByPassValidatePayScheduleCondition(true);
                                 mpay2 = null;
 
                                 //if the invoice id for -ve amount will contain in this list the overunderamt set as Zero.
@@ -652,14 +704,14 @@ namespace VIS.Models
                                 if (!is_NegScheduleAllocated)
                                 {
                                     is_NegScheduleAllocated = true;
-                                    if (Neg_invoice.GetC_Currency_ID() != C_Currency_ID)
+                                    if (Util.GetValueOfInt(drNegInv[0]["C_Currency_ID"]) != C_Currency_ID)
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(NOverUnderAmt)), Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))), C_Currency_ID, Neg_invoice.GetC_Currency_ID(),
-                                            (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : invoice.GetDateAcct()), invoice.GetC_ConversionType_ID(), Neg_invoice.GetAD_Client_ID(), Neg_invoice.GetAD_Org_ID());
+                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(NOverUnderAmt)), Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))), C_Currency_ID, Util.GetValueOfInt(drNegInv[0]["C_Currency_ID"]),
+                                            (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : Util.GetValueOfDateTime(drInv[0]["DateAcct"])), Util.GetValueOfInt(drInv[0]["C_ConversionType_ID"]), Util.GetValueOfInt(drNegInv[0]["AD_Client_ID"]), Util.GetValueOfInt(drNegInv[0]["AD_Org_ID"]));
                                         if (Math.Abs(postAppliedAmt) == amount)
                                         {
                                             //get the difference DueAmt by Compare with Total Invoice Amount with sum of Schedule DueAmt's
-                                            diffAmt = GetDifference(Neg_invoice, trx);
+                                            diffAmt = GetDifference(Util.GetValueOfInt(drNegInv[0]["C_Invoice_ID"]), trx);
                                             if (diffAmt != Env.ZERO)
                                             {
                                                 mpay.SetDueAmt(Math.Abs(diffAmt));
@@ -690,14 +742,16 @@ namespace VIS.Models
                                     //Set AD_Org_ID and AD_Client_ID when we split the schedule
                                     mpay2.SetAD_Client_ID(mpay.GetAD_Client_ID());
                                     mpay2.SetAD_Org_ID(mpay.GetAD_Org_ID());
-                                    if (Neg_invoice.GetC_Currency_ID() != C_Currency_ID)
+                                    //Bypass update paid amount on invoice from invoice pay schedule
+                                    mpay2.ByPassValidatePayScheduleCondition(true);
+                                    if (Util.GetValueOfInt(drNegInv[0]["C_Currency_ID"]) != C_Currency_ID)
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, Neg_invoice.GetC_Currency_ID(),
-                                            (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : invoice.GetDateAcct()), invoice.GetC_ConversionType_ID(), Neg_invoice.GetAD_Client_ID(), Neg_invoice.GetAD_Org_ID());
+                                        var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, Util.GetValueOfInt(drNegInv[0]["C_Currency_ID"]),
+                                            (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : Util.GetValueOfDateTime(drInv[0]["DateAcct"])), Util.GetValueOfInt(drInv[0]["C_ConversionType_ID"]), Util.GetValueOfInt(drNegInv[0]["AD_Client_ID"]), Util.GetValueOfInt(drNegInv[0]["AD_Org_ID"]));
                                         if (Math.Abs(postAppliedAmt) == amount)
                                         {
                                             //get the difference DueAmt by Compare with Total Invoice Amount with sum of Schedule DueAmt's
-                                            diffAmt = GetDifference(Neg_invoice, trx);
+                                            diffAmt = GetDifference(Util.GetValueOfInt(drNegInv[0]["C_Invoice_ID"]), trx);
                                             mpay2.SetDueAmt(Math.Abs(diffAmt));
                                         }
                                         else
@@ -834,11 +888,18 @@ namespace VIS.Models
                             MAllocationLine aLine = null;
                             for (int c = 0; c < negInvList.Count; c++)
                             {
-                                mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"]), trx);
-                                invoice = new MInvoice(ctx, Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]), trx);
+                                //mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"]), trx);
+                                //invoice = new MInvoice(ctx, Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]), trx);
+
+                                //VA228:fetch datarow of invoice and invoicepayschedule
+                                drSch = DsInvSch.Tables[0].Select("c_invoicepayschedule_id=" + Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"]));
+                                mpay = new MInvoicePaySchedule(ctx, drSch[0], trx);
+                                drInv = DsInv.Tables[0].Select("c_invoice_id=" + Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]));
+                                mpay.ByPassValidatePayScheduleCondition(true);
                                 Decimal NDiscountAmt = Util.GetValueOfDecimal(negInvList[c][discount]);
                                 Decimal NWriteOffAmt = Util.GetValueOfDecimal(negInvList[c][writeOff]);
-                                MInvoice Neg_invoice = new MInvoice(ctx, Util.GetValueOfInt(negInvList[c]["cinvoiceid"]), trx);
+                                //MInvoice Neg_invoice = new MInvoice(ctx, Util.GetValueOfInt(negInvList[c]["cinvoiceid"]), trx);
+                                drNegInv = DsInv.Tables[0].Select("c_invoice_id=" + Util.GetValueOfInt(negInvList[c]["cinvoiceid"]));
 
                                 Decimal amount = Env.ZERO;
                                 mpay2 = null;
@@ -867,14 +928,14 @@ namespace VIS.Models
                                 if (!isScheduleAllocated)
                                 {
                                     isScheduleAllocated = true;
-                                    if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                    if (Util.GetValueOfInt(drInv[0]["C_Currency_ID"]) != C_Currency_ID)
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), C_Currency_ID, invoice.GetC_Currency_ID(),
-                                            (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : Neg_invoice.GetDateAcct()), Neg_invoice.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), C_Currency_ID, Util.GetValueOfInt(drInv[0]["C_Currency_ID"]),
+                                            (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : Util.GetValueOfDateTime(drNegInv[0]["DateAcct"])), Util.GetValueOfInt(drNegInv[0]["C_ConversionType_ID"]), Util.GetValueOfInt(drInv[0]["AD_Client_ID"]), Util.GetValueOfInt(drInv[0]["AD_Org_ID"]));
                                         if (AppliedAmt == amount)
                                         {
                                             //get the difference DueAmt by Compare with Total Invoice Amount with sum of Schedule DueAmt's
-                                            diffAmt = GetDifference(invoice, trx);
+                                            diffAmt = GetDifference(Util.GetValueOfInt(drInv[0]["C_Invoice_ID"]), trx);
                                             if (diffAmt != Env.ZERO)
                                             {
                                                 mpay.SetDueAmt(Math.Abs(diffAmt));
@@ -905,14 +966,16 @@ namespace VIS.Models
                                     //Set AD_Org_ID and AD_Client_ID when we split the schedule
                                     mpay2.SetAD_Client_ID(mpay.GetAD_Client_ID());
                                     mpay2.SetAD_Org_ID(mpay.GetAD_Org_ID());
-                                    if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                    //VA228:Bypass update paid amount on invoice from invoice pay schedule
+                                    mpay2.ByPassValidatePayScheduleCondition(true);
+                                    if (Util.GetValueOfInt(drInv[0]["C_Currency_ID"]) != C_Currency_ID)
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, invoice.GetC_Currency_ID(),
-                                            (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : Neg_invoice.GetDateAcct()), Neg_invoice.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                                        var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, Util.GetValueOfInt(drInv[0]["C_Currency_ID"]),
+                                            (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : Util.GetValueOfDateTime(drNegInv[0]["DateAcct"])), Util.GetValueOfInt(drNegInv[0]["C_ConversionType_ID"]), Util.GetValueOfInt(drInv[0]["AD_Client_ID"]), Util.GetValueOfInt(drInv[0]["AD_Org_ID"]));
                                         if (AppliedAmt == amount)
                                         {
                                             //get the difference DueAmt by Compare with Total Invoice Amount with sum of Schedule DueAmt's
-                                            diffAmt = GetDifference(invoice, trx);
+                                            diffAmt = GetDifference(Util.GetValueOfInt(drInv[0]["C_Invoice_ID"]), trx);
                                             mpay2.SetDueAmt(Math.Abs(diffAmt));
                                         }
                                         else
@@ -972,7 +1035,13 @@ namespace VIS.Models
                                 }
                                 int aLine_ID = aLine.GetC_AllocationLine_ID();//get the ID and initialize to aLine_ID
                                 // when 
-                                mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(negInvList[c]["c_invoicepayschedule_id"]), trx);
+                                //mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(negInvList[c]["c_invoicepayschedule_id"]), trx);
+                                //mpay2 = null;
+
+                                drNegSch = DsInvSch.Tables[0].Select("c_invoicepayschedule_id=" + Util.GetValueOfInt(negInvList[c]["c_invoicepayschedule_id"]));
+                                // VA228:Get InvoicePaySchedule based on datarow
+                                mpay = new MInvoicePaySchedule(ctx, drNegSch[0], trx);
+                                mpay.ByPassValidatePayScheduleCondition(true);
                                 mpay2 = null;
 
                                 //if the invoice id for -ve amount will contain in this list the overunderamt set as Zero.
@@ -993,14 +1062,14 @@ namespace VIS.Models
                                 if (!is_NegScheduleAllocated)
                                 {
                                     is_NegScheduleAllocated = true;
-                                    if (Neg_invoice.GetC_Currency_ID() != C_Currency_ID)
+                                    if (Util.GetValueOfInt(drNegInv[0]["C_Currency_ID"]) != C_Currency_ID)
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(NOverUnderAmt)), Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))), C_Currency_ID, Neg_invoice.GetC_Currency_ID(),
-                                            (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : invoice.GetDateAcct()), invoice.GetC_ConversionType_ID(), Neg_invoice.GetAD_Client_ID(), Neg_invoice.GetAD_Org_ID());
+                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(NOverUnderAmt)), Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))), C_Currency_ID, Util.GetValueOfInt(drNegInv[0]["C_Currency_ID"]),
+                                            (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : Util.GetValueOfDateTime(drInv[0]["DateAcct"])), Util.GetValueOfInt(drInv[0]["C_ConversionType_ID"]), Util.GetValueOfInt(drNegInv[0]["AD_Client_ID"]), Util.GetValueOfInt(drNegInv[0]["AD_Org_ID"]));
                                         if (Math.Abs(postAppliedAmt) == amount)
                                         {
                                             //get the difference DueAmt by Compare with Total Invoice Amount with sum of Schedule DueAmt's
-                                            diffAmt = GetDifference(Neg_invoice, trx);
+                                            diffAmt = GetDifference(Util.GetValueOfInt(drNegInv[0]["C_Invoice_ID"]), trx);
                                             if (diffAmt != Env.ZERO)
                                             {
                                                 mpay.SetDueAmt(Math.Abs(diffAmt));
@@ -1030,14 +1099,16 @@ namespace VIS.Models
                                     //Set AD_Org_ID and AD_Client_ID when we split the schedule
                                     mpay2.SetAD_Client_ID(mpay.GetAD_Client_ID());
                                     mpay2.SetAD_Org_ID(mpay.GetAD_Org_ID());
-                                    if (Neg_invoice.GetC_Currency_ID() != C_Currency_ID)
+                                    //VA228:Bypass update paid amount on invoice from invoice pay schedule
+                                    mpay2.ByPassValidatePayScheduleCondition(true);
+                                    if (Util.GetValueOfInt(drNegInv[0]["C_Currency_ID"]) != C_Currency_ID)
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, Neg_invoice.GetC_Currency_ID(),
-                                            (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : invoice.GetDateAcct()), invoice.GetC_ConversionType_ID(), Neg_invoice.GetAD_Client_ID(), Neg_invoice.GetAD_Org_ID());
+                                        var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, Util.GetValueOfInt(drNegInv[0]["C_Currency_ID"]),
+                                            (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : Util.GetValueOfDateTime(drInv[0]["DateAcct"])), Util.GetValueOfInt(drInv[0]["C_ConversionType_ID"]), Util.GetValueOfInt(drNegInv[0]["AD_Client_ID"]), Util.GetValueOfInt(drNegInv[0]["AD_Org_ID"]));
                                         if (Math.Abs(postAppliedAmt) == amount)
                                         {
                                             //get the difference DueAmt by Compare with Total Invoice Amount with sum of Schedule DueAmt's
-                                            diffAmt = GetDifference(Neg_invoice, trx);
+                                            diffAmt = GetDifference(Util.GetValueOfInt(drNegInv[0]["C_Invoice_ID"]), trx);
                                             if (diffAmt != Env.ZERO)
                                             {
                                                 mpay2.SetDueAmt(Math.Abs(diffAmt));
@@ -1161,8 +1232,8 @@ namespace VIS.Models
 
             #endregion
 
-            #region Reversal Cash Journals
-            if ((rowsCash.Count > 0 && Env.Signum(cashAppliedAmt) == 0) || (CashAmtList.Count > 0 && (CashAmtList.Min() != 0 || CashAmtList.Max() != 0))) // PAYMENT TO PAYMENT ALLOCATION WITH INVOICE
+            #region Allocation Cash Journals
+            if ((rowsCash.Count > 0 && Env.Signum(cashAppliedAmt) == 0) || (CashAmtList.Count > 0 && (CashAmtList.Min() != 0 || CashAmtList.Max() != 0))) // Cash Journal TO Cash Journal ALLOCATION WITH INVOICE
             {
                 int noCashlines = 0;
                 for (int i = 0; i < cashList.Count; i++)
@@ -1297,47 +1368,6 @@ namespace VIS.Models
                 msg = alloc.GetDocumentNo();
             }
 
-            //  Test/Set IsPaid for Invoice - requires that allocation is posted
-            #region Set Invoice IsPaid
-            for (int i = 0; i < rowsInvoice.Count; i++)
-            {
-                // bool boolValue = false;
-                //  Invoice line is selected
-                // bool flag = false;
-                //Dispatcher.BeginInvoke(delegate
-                //{
-                //    boolValue = GetBoolValue(vdgvInvoice, i, 0);
-                //    flag = true;
-                //    SetBusy(false);
-                //});
-                //while (!flag)
-                //{
-                //    System.Threading.Thread.Sleep(1);
-                //}
-                // if (boolValue)
-                {
-                    //KeyNamePair pp = (KeyNamePair)vdgvInvoice.Rows[i].Cells[2].Value;    //  Value
-                    //KeyNamePair pp = (KeyNamePair)((BindableObject)rowsInvoice[i]).GetValue(2);    //  Value
-                    //  Invoice variables
-                    int C_Invoice_ID = Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]);
-                    String sql = "SELECT invoiceOpen(C_Invoice_ID, 0) "
-                        + "FROM C_Invoice WHERE C_Invoice_ID=@param1";
-                    Decimal opens = Util.GetValueOfDecimal(DB.GetSQLValueBD(trx, sql, C_Invoice_ID));
-                    if (open != null && Env.Signum(opens) == 0)
-                    {
-                        sql = "UPDATE C_Invoice SET IsPaid='Y' "
-                            + "WHERE C_Invoice_ID=" + C_Invoice_ID;
-                        int no = DB.ExecuteQuery(sql, null, trx);
-                        // log.Config("Invoice #" + i + " is paid");
-                    }
-                    else
-                    {
-                        // log.Config("Invoice #" + i + " is not paid - " + open);
-                    }
-                }
-            }
-            #endregion
-
             //  Test/Set CashLine is fully allocated
             #region Set CashLine Allocated
 
@@ -1347,8 +1377,7 @@ namespace VIS.Models
                 for (int i = 0; i < rowsCash.Count; i++)
                 {
                     int _cashine_ID = Util.GetValueOfInt(rowsCash[i]["ccashlineid"]);
-                    MCashLine cash = new MCashLine(ctx, _cashine_ID, trx);
-
+                    //VA228:Get open amount and removed MCashLine class object
                     string sqlGetOpenPayments = "SELECT  ALLOCCASHAVAILABLE(cl.C_CashLine_ID)  FROM C_CashLine cl Where C_CashLine_ID = " + _cashine_ID;
                     object result = DB.ExecuteScalar(sqlGetOpenPayments, null, trx);
                     Decimal? amtPayment = 0;
@@ -1360,16 +1389,8 @@ namespace VIS.Models
                     {
                         amtPayment = Util.GetValueOfDecimal(result);
                     }
-
-                    if (amtPayment == Env.ZERO)
-                    {
-                        cash.SetIsAllocated(true);
-                    }
-                    else
-                    {
-                        cash.SetIsAllocated(false);
-                    }
-                    if (!cash.Save())
+                    if (DB.ExecuteQuery("UPDATE C_CashLine set IsAllocated='" + (amtPayment == Env.ZERO ? "Y" : "N") + "' " +
+                              "WHERE C_CashLine_ID=" + _cashine_ID, null, trx) <= 0)
                     {
                         _log.SaveError("Error: ", "Cash Line not set allocated");
                         trx.Rollback();
@@ -1404,7 +1425,7 @@ namespace VIS.Models
             trx.Close();
             return Msg.GetMsg(ctx, "AllocationCreatedWith") + msg;
         }
-
+      
         /// <summary>
         /// Return Error Meassage if AllocationHdr is not Save
         /// </summary>
@@ -1586,7 +1607,7 @@ namespace VIS.Models
         public string SavePaymentData(List<Dictionary<string, string>> rowsPayment, List<Dictionary<string, string>> rowsInvoice, string currency,
    int _C_BPartner_ID, int _windowNo, string payment, DateTime DateTrx, string applied, string discount, string writeOff, string open, DateTime DateAcct, int _CurrencyType_ID, bool isInterBPartner, DateTime conversionDate, bool chkMultiCurrency)
         {
-
+            #region ValidateRecords
             //  fixed fields
             int AD_Client_ID = ctx.GetContextAsInt(_windowNo, "AD_Client_ID");
             int AD_Org_ID = ctx.GetContextAsInt(_windowNo, "AD_Org_ID");
@@ -1682,7 +1703,7 @@ namespace VIS.Models
              *  - you cannot write-off a payment
              */
 
-
+            #endregion
             //  Payment - Loop and Add them to paymentList/amountList
 
             try
@@ -1777,17 +1798,31 @@ namespace VIS.Models
                     }
                 }
 
-                //VA228:Get invoice and invoice pay schedule data
                 StringBuilder sbQuery = new StringBuilder();
-                sbQuery.Append("Select C_Invoice_ID,C_Currency_ID,C_ConversionType_ID,DateAcct,AD_Client_ID,AD_Org_ID from C_Invoice where C_Invoice_ID IN(" + string.Join(",", invoiceIds) + ")");
+                DataSet DsInv = null;
+                DataSet DsInvSch = null;
+                if (rowsInvoice.Count > 0)
+                {
+                    //VA228:Get invoice and invoice pay schedule data
+                    sbQuery.Append("Select C_Invoice_ID,C_Currency_ID,C_ConversionType_ID,DateAcct,AD_Client_ID,AD_Org_ID from C_Invoice where C_Invoice_ID IN(" + string.Join(",", invoiceIds) + ")");
+                    DsInv = DB.ExecuteDataset(sbQuery.ToString());
 
-                DataSet DsInv = DB.ExecuteDataset(sbQuery.ToString());
-
-                sbQuery.Clear();
-                sbQuery.Append("Select * from C_InvoicePaySchedule where C_InvoicePaySchedule_ID IN(" + string.Join(",", invoiceScheduleIds) + ")");
-
-                DataSet DsInvSch = DB.ExecuteDataset(sbQuery.ToString());
-
+                    sbQuery.Clear();
+                    sbQuery.Append("Select * from C_InvoicePaySchedule where C_InvoicePaySchedule_ID IN(" + string.Join(",", invoiceScheduleIds) + ")");
+                    DsInvSch = DB.ExecuteDataset(sbQuery.ToString());
+                }
+                DataSet DsPayment = null;
+                if (rowsPayment.Count > 0)
+                {
+                    //VA228:Get Payment data
+                    sbQuery.Clear();
+                    sbQuery.Append(@"SELECT P.C_Payment_ID,P.C_ConversionType_ID,P.DateAcct,P.C_Withholding_ID,P.BackupWithholding_ID,WH.PayPercentage,BWH.PayPercentage AS BackupPayPercentage 
+                                        FROM C_Payment P 
+                                        LEFT JOIN C_Withholding WH ON WH.C_Withholding_ID=P.C_Withholding_ID
+                                        LEFT JOIN C_Withholding BWH ON BWH.C_Withholding_ID=P.BackupWithholding_ID 
+                                        WHERE P.C_Payment_ID IN(" + string.Join(",", paymentList) + ")");
+                    DsPayment = DB.ExecuteDataset(sbQuery.ToString());
+                }
                 List<int> neg_Invoice_IDS = new List<int>(negPayList.Count);
 
                 // loop for invoices with payments
@@ -1815,7 +1850,6 @@ namespace VIS.Models
                         //  loop through all payments until invoice applied
                         int noPayments = 0;
                         MInvoicePaySchedule mpay2 = null;
-                        MPayment objPayment = null;
                         DataRow[] drSch = null;
                         DataRow[] drNegSch = null;
                         DataRow[] drInv = null;
@@ -1839,7 +1873,8 @@ namespace VIS.Models
                             #region payment match
                             mpay2 = null;
                             int C_Payment_ID = Util.GetValueOfInt(paymentList[j]);
-                            objPayment = new MPayment(ctx, C_Payment_ID, trx);
+                            //VA228:Get Payment record based on payment id
+                            DataRow[] drPayment = DsPayment.Tables[0].Select("C_Payment_ID=" + C_Payment_ID);
                             Decimal PaymentAmt = Util.GetValueOfDecimal(amountList[j]);
 
                             // check match receipt with receipt && payment with payment
@@ -1886,7 +1921,7 @@ namespace VIS.Models
                                     isScheduleAllocated = true;
                                     if (Util.GetValueOfInt(drInv[0]["C_Currency_ID"]) != C_Currency_ID)
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), C_Currency_ID, Util.GetValueOfInt(drInv[0]["C_Currency_ID"]), objPayment.GetDateAcct(), objPayment.GetC_ConversionType_ID(), Util.GetValueOfInt(drInv[0]["AD_Client_ID"]), Util.GetValueOfInt(drInv[0]["AD_Org_ID"]));
+                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), C_Currency_ID, Util.GetValueOfInt(drInv[0]["C_Currency_ID"]), Util.GetValueOfDateTime(drPayment[0]["DateAcct"]), Util.GetValueOfInt(drPayment[0]["C_ConversionType_ID"]), Util.GetValueOfInt(drInv[0]["AD_Client_ID"]), Util.GetValueOfInt(drInv[0]["AD_Org_ID"]));
                                         if (AppliedAmt == amount)
                                         {
                                             //get the difference DueAmt by Compare with Total Invoice Amount with sum of Schedule DueAmt's
@@ -1925,7 +1960,7 @@ namespace VIS.Models
 
                                     if (Util.GetValueOfInt(drInv[0]["C_Currency_ID"]) != C_Currency_ID)
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, Util.GetValueOfInt(drInv[0]["C_Currency_ID"]), objPayment.GetDateAcct(), objPayment.GetC_ConversionType_ID(), Util.GetValueOfInt(drInv[0]["AD_Client_ID"]), Util.GetValueOfInt(drInv[0]["AD_Org_ID"]));
+                                        var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, Util.GetValueOfInt(drInv[0]["C_Currency_ID"]), Util.GetValueOfDateTime(drPayment[0]["DateAcct"]), Util.GetValueOfInt(drPayment[0]["C_ConversionType_ID"]), Util.GetValueOfInt(drInv[0]["AD_Client_ID"]), Util.GetValueOfInt(drInv[0]["AD_Org_ID"]));
                                         if (AppliedAmt == amount)
                                         {
                                             //get the difference DueAmt by Compare with Total Invoice Amount with sum of Schedule DueAmt's
@@ -1973,18 +2008,24 @@ namespace VIS.Models
                                 aLine.SetDocInfo(C_BPartner_ID, C_Order_ID, C_Invoice_ID);
 
                                 // set withholding amount based on porpotionate
-                                if (objPayment.GetC_Withholding_ID() > 0 || objPayment.GetBackupWithholding_ID() > 0)
+                                if (Util.GetValueOfInt(drPayment[0]["C_Withholding_ID"]) > 0 || Util.GetValueOfInt(drPayment[0]["BackupWithholding_ID"]) > 0)
                                 {
-                                    DataSet ds = DB.ExecuteDataset(@"SELECT (SELECT ROUND((" + amount + @" * PayPercentage)/100 , 2) AS withholdingAmt
-                                                  FROM C_Withholding WHERE C_Withholding_ID = C_Payment.C_Withholding_ID ) AS withholdingAmt,
-                                                  (SELECT ROUND((" + amount + @" * PayPercentage)/100 , 2) AS withholdingAmt
-                                                  FROM C_Withholding WHERE C_Withholding_ID = C_Payment.BackupWithholding_ID ) AS BackupwithholdingAmt
-                                                FROM C_Payment WHERE C_Payment.IsActive   = 'Y' AND C_Payment.C_Payment_ID = " + C_Payment_ID, null, null);
-                                    if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-                                    {
-                                        aLine.SetWithholdingAmt(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["withholdingAmt"]));
-                                        aLine.SetBackupWithholdingAmount(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["BackupwithholdingAmt"]));
-                                    }
+                                    //VA228:Calculate withholding and backupwithholding amount
+                                    decimal withholdingAmt = (amount * Util.GetValueOfDecimal(drPayment[0]["PayPercentage"])) / 100;
+                                    decimal backupWithholdingAmt = (amount * Util.GetValueOfDecimal(drPayment[0]["BackupPayPercentage"])) / 100;
+                                    aLine.SetWithholdingAmt(Math.Round(withholdingAmt, 2, MidpointRounding.AwayFromZero));
+                                    aLine.SetBackupWithholdingAmount(Math.Round(backupWithholdingAmt, 2, MidpointRounding.AwayFromZero));
+
+                                    //DataSet ds = DB.ExecuteDataset(@"SELECT (SELECT ROUND((" + amount + @" * PayPercentage)/100 , 2) AS withholdingAmt
+                                    //              FROM C_Withholding WHERE C_Withholding_ID = C_Payment.C_Withholding_ID ) AS withholdingAmt,
+                                    //              (SELECT ROUND((" + amount + @" * PayPercentage)/100 , 2) AS withholdingAmt
+                                    //              FROM C_Withholding WHERE C_Withholding_ID = C_Payment.BackupWithholding_ID ) AS BackupwithholdingAmt
+                                    //            FROM C_Payment WHERE C_Payment.IsActive   = 'Y' AND C_Payment.C_Payment_ID = " + C_Payment_ID, null, null);
+                                    //if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                                    //{
+                                    //    aLine.SetWithholdingAmt(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["withholdingAmt"]));
+                                    //    aLine.SetBackupWithholdingAmount(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["BackupwithholdingAmt"]));
+                                    //}
                                 }
 
                                 //if (isInterBPartner)

@@ -109,7 +109,7 @@ namespace VIS.Models
                 + "   AND cd.RECORD_ID = " + RecordId;
             }
 
-            sql += " ) "
+            sql += " ) t"
                 + " ORDER BY CREATED DESC";
 
             DataSet _dsHistory = VIS.DBase.DB.ExecuteDatasetPaging(sql, (Util.GetValueOfInt(CurrentPage) > 0 ? Util.GetValueOfInt(CurrentPage) : 1), 10);
@@ -224,7 +224,7 @@ namespace VIS.Models
                  + "   AND cd.RECORD_ID = " + RecordId;
             }
 
-            sql += " ) ";
+            sql += " ) t";
 
             return Util.GetValueOfInt(DB.ExecuteScalar(sql));
         }

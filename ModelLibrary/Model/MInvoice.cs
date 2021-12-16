@@ -970,6 +970,8 @@ namespace VAdvantage.Model
                 line.SetC_Invoice_ID(GetC_Invoice_ID());
                 line.SetInvoice(this);
                 line.Set_ValueNoCheck("C_InvoiceLine_ID", I_ZERO);	// new
+               //1052--to identfy that this line is copied
+                line.IsCopy = true;
                 //	Reset
 
                 line.SetRef_InvoiceLine_ID(0);
@@ -983,6 +985,11 @@ namespace VAdvantage.Model
                     line.SetQtyEntered(Decimal.Negate(line.GetQtyEntered()));
                     line.SetQtyInvoiced(Decimal.Negate(line.GetQtyInvoiced()));
                     line.SetLineNetAmt(Decimal.Negate(line.GetLineNetAmt()));
+                    if (Get_ColumnIndex("ReversalDoc_ID") >= 0)
+                    {
+                        //(1052-Nov/1/2021) set Reversal Document
+                        line.SetReversalDoc_ID(fromLine.GetC_InvoiceLine_ID());
+                    }
                     if (((Decimal)line.GetTaxAmt()).CompareTo(Env.ZERO) != 0)
                         line.SetTaxAmt(Decimal.Negate((Decimal)line.GetTaxAmt()));
 
@@ -1028,7 +1035,12 @@ namespace VAdvantage.Model
 
                 //	New Tax
                 if (GetC_BPartner_ID() != otherInvoice.GetC_BPartner_ID())
-                    line.SetTax();	//	recalculate
+                {
+                    line.SetTax();                     //	recalculate
+                    //1052-- set tax exempt reason null if business partner is different
+                    line.SetIsTaxExempt(false);
+                    line.SetC_TaxExemptReason_ID(0);
+                }
                 //
 
                 // JID_1319: System should not copy Tax Amount, Line Total Amount and Taxable Amount field. System Should Auto Calculate thease field On save of lines.
@@ -5531,6 +5543,11 @@ namespace VAdvantage.Model
                 GetC_DocType_ID(), false, Get_TrxName(), true);
             // set original document reference
             reversal.SetRef_C_Invoice_ID(GetC_Invoice_ID());
+            if (Get_ColumnIndex("ReversalDoc_ID") >= 0)
+            {
+                //(1052-Nov/1/2021) set Reversal Document
+                reversal.SetReversalDoc_ID(GetC_Invoice_ID());
+            }
             if (Get_ColumnIndex("BackupWithholdingAmount") > 0)
             {
                 reversal.SetC_Withholding_ID(GetC_Withholding_ID()); // backup withholding refernce

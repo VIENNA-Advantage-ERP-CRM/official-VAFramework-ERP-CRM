@@ -5268,7 +5268,8 @@ namespace VAdvantage.Model
             // during creation of counter document, Payment Execution Status should be "In-Progress"
             if (Env.IsModuleInstalled("VA009_"))
             {
-                reversal.SetVA009_ExecutionStatus("I");
+                //(1052) Set Execution status as Rejected
+                reversal.SetVA009_ExecutionStatus(MPayment.VA009_EXECUTIONSTATUS_Rejected);                
                 //Rakesh(VA228):Set contra value on reversal
                 if (Get_ColumnIndex("VA009_IsContra") >= 0)
                 {
@@ -5312,7 +5313,7 @@ namespace VAdvantage.Model
             {
                 reversal.SetTempDocumentNo("");
             }
-
+            
             if (!reversal.Save(Get_Trx()))
             {
                 ValueNamePair pp = VLogger.RetrieveError();
@@ -5429,6 +5430,11 @@ namespace VAdvantage.Model
             SetDocStatus(DOCSTATUS_Reversed);
             SetDocAction(DOCACTION_None);
             SetProcessed(true);
+            if (Env.IsModuleInstalled("VA009_"))
+            {
+                //(1052) Set Execurion Status as Rejected
+                SetVA009_ExecutionStatus(MPayment.VA009_EXECUTIONSTATUS_Rejected);
+            }
             //Remove PostdatedCheck Reference
             if (Env.IsModuleInstalled("VA027_") && GetVA027_PostDatedCheck_ID() > 0)
             {
@@ -5519,38 +5525,38 @@ namespace VAdvantage.Model
             #endregion
 
             //---------------Anuj----------------------
-            if (Env.IsModuleInstalled("VA009_"))
-            {
-                if (GetC_InvoicePaySchedule_ID() > 0)
-                {
-                    MInvoicePaySchedule paySch = new MInvoicePaySchedule(GetCtx(), GetC_InvoicePaySchedule_ID(), Get_Trx());
-                    paySch.SetVA009_ExecutionStatus("C");
-                    paySch.SetVA009_IsPaid(false);
-                    if (!paySch.Save())
-                        log.SaveInfo("Not Saved", "");
-                }
+            //if (Env.IsModuleInstalled("VA009_"))
+            //{
+            //    if (GetC_InvoicePaySchedule_ID() > 0)
+            //    {
+            //        MInvoicePaySchedule paySch = new MInvoicePaySchedule(GetCtx(), GetC_InvoicePaySchedule_ID(), Get_Trx());
+            //        paySch.SetVA009_ExecutionStatus("C");
+            //        paySch.SetVA009_IsPaid(false);
+            //        if (!paySch.Save())
+            //            log.SaveInfo("Not Saved", "");
+            //    }
 
-                if (GetC_Invoice_ID() > 0)
-                {
-                    MInvoice inv = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_Trx());
-                    inv.SetIsPaid(false);
-                    if (!inv.Save())
-                        log.SaveInfo("Not Saved", "");
-                }
+            //    if (GetC_Invoice_ID() > 0)
+            //    {
+            //        MInvoice inv = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_Trx());
+            //        inv.SetIsPaid(false);
+            //        if (!inv.Save())
+            //            log.SaveInfo("Not Saved", "");
+            //    }
 
-                // update execution status as Rejecetd when we allocate payment through patyment allocation form or schedule are selected on payment allocate tab
-                if (GetC_InvoicePaySchedule_ID() <= 0 && GetC_Invoice_ID() <= 0 && dsSchedule != null && dsSchedule.Tables.Count > 0 && dsSchedule.Tables[0].Rows.Count > 0)
-                {
-                    for (int i = 0; i < dsSchedule.Tables[0].Rows.Count; i++)
-                    {
-                        MInvoicePaySchedule paySch = new MInvoicePaySchedule(GetCtx(), Util.GetValueOfInt(dsSchedule.Tables[0].Rows[i]["C_InvoicePaySchedule_ID"]), Get_Trx());
-                        paySch.SetVA009_ExecutionStatus("C");
-                        paySch.SetVA009_IsPaid(false);
-                        if (!paySch.Save())
-                            log.SaveInfo("Not Saved Execution status on Invoice schedule : " + paySch.GetC_InvoicePaySchedule_ID(), "");
-                    }
-                }
-            }
+            //    // update execution status as Rejecetd when we allocate payment through patyment allocation form or schedule are selected on payment allocate tab
+            //    if (GetC_InvoicePaySchedule_ID() <= 0 && GetC_Invoice_ID() <= 0 && dsSchedule != null && dsSchedule.Tables.Count > 0 && dsSchedule.Tables[0].Rows.Count > 0)
+            //    {
+            //        for (int i = 0; i < dsSchedule.Tables[0].Rows.Count; i++)
+            //        {
+            //            MInvoicePaySchedule paySch = new MInvoicePaySchedule(GetCtx(), Util.GetValueOfInt(dsSchedule.Tables[0].Rows[i]["C_InvoicePaySchedule_ID"]), Get_Trx());
+            //            paySch.SetVA009_ExecutionStatus("C");
+            //            paySch.SetVA009_IsPaid(false);
+            //            if (!paySch.Save())
+            //                log.SaveInfo("Not Saved Execution status on Invoice schedule : " + paySch.GetC_InvoicePaySchedule_ID(), "");
+            //        }
+            //    }
+            //}
             //---------------Anuj----------------------
 
             if (Env.IsModuleInstalled("VA027_"))
