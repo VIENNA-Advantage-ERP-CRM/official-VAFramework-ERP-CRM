@@ -5873,6 +5873,7 @@ namespace VAdvantage.Model
         #endregion
         /// <summary>
         /// Method to remove claims reference from Payment
+        /// Author: VIS0103
         /// </summary>
         /// <returns>string</returns>
         #region Claims References
