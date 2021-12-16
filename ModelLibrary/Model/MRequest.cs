@@ -1178,13 +1178,17 @@ namespace VAdvantage.Model
                 else
                     message.Append("\n").Append(Msg.Translate(GetCtx(), "Created"))
                         .Append(": ").Append(GetCreated());
-                //	Changes
-                for (int i = 0; i < list.Count; i++)
+
+                if (list != null)
                 {
-                    String columnName = (String)list[i];
-                    message.Append("\n").Append(Msg.GetElement(GetCtx(), columnName))
-                        .Append(": ").Append(Get_DisplayValue(columnName, false))
-                        .Append(" -> ").Append(Get_DisplayValue(columnName, true));
+                    //	Changes
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        String columnName = (String)list[i];
+                        message.Append("\n").Append(Msg.GetElement(GetCtx(), columnName))
+                            .Append(": ").Append(Get_DisplayValue(columnName, false))
+                            .Append(" -> ").Append(Get_DisplayValue(columnName, true));
+                    }
                 }
                 //	NextAction
                 if (GetDateNextAction() != null)
@@ -1655,7 +1659,7 @@ namespace VAdvantage.Model
             // VIS264 - Send push notification
             #region Push Notification
 
-            if (!IsProcessed() && ( newRecord || Is_ValueChanged("R_Status_ID")))
+            if (!IsProcessed() && (newRecord || Is_ValueChanged("R_Status_ID")))
             {
                 string IsClosedValue = $"SELECT IsClosed FROM R_Status S JOIN R_Request R ON S.R_Status_ID = R.R_Status_ID WHERE S.IsActive = 'Y' AND R.R_Request_ID = {GetR_Request_ID()}";
 
