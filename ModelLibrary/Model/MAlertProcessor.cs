@@ -12,6 +12,9 @@ namespace VAdvantage.Model
 {
     public class MAlertProcessor : X_AD_AlertProcessor, ViennaProcessor
     {
+        /**	Static Logger	*/
+        private static VLogger s_log = VLogger.GetVLogger(typeof(MAlertProcessor).FullName);
+
         public static MAlertProcessor[] GetActive(Ctx ctx)
         {
             List<MAlertProcessor> list = new List<MAlertProcessor>();
@@ -49,10 +52,63 @@ namespace VAdvantage.Model
             MAlertProcessor[] retValue = new MAlertProcessor[list.Count()];
             retValue = list.ToArray();
             return retValue;
-        }	//	getActive
+        }   //	getActive
 
-        /**	Static Logger	*/
-        private static VLogger s_log = VLogger.GetVLogger(typeof(MAlertProcessor).FullName);
+        /// <summary>
+        /// Get Active Alert Processors
+        /// VIS0060 - 21-Oct-2021
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="ExecuteProcess"></param>
+        /// <returns></returns>
+        public static MAlertProcessor[] GetActive(Ctx ctx, string ExecuteProcess)
+        {
+            List<MAlertProcessor> list = new List<MAlertProcessor>();
+            String sql = "SELECT * FROM AD_AlertProcessor WHERE IsActive='Y'";
+            string scheduleIP = null;
+            try
+            {
+                string machineIP = null;        // System.Net.Dns.GetHostEntry(Environment.MachineName).AddressList[0].ToString();
+                var host = System.Net.Dns.GetHostEntry(Environment.MachineName);
+                foreach (var ip in host.AddressList)
+                {
+                    if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    {
+                        machineIP = ip.ToString();
+                        break;
+                    }
+                }
+                s_log.SaveError("Console VServer Machine IP : " + machineIP, "Console VServer Machine IP : " + machineIP);
+
+                DataSet ds = DB.ExecuteDataset(sql);
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM AD_Schedule WHERE 
+                                                        AD_Schedule_ID = (SELECT AD_Schedule_ID FROM AD_AlertProcessor WHERE AD_AlertProcessor_ID =" + dr["AD_AlertProcessor_ID"] + " )"));
+
+                        if (ExecuteProcess.Equals("2") && (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP)))
+                        {
+                            list.Add(new MAlertProcessor(new Ctx(), dr, null));
+                        }
+                        else if (!string.IsNullOrEmpty(scheduleIP) && machineIP.Contains(scheduleIP))
+                        {
+                            list.Add(new MAlertProcessor(new Ctx(), dr, null));
+                        }
+                    }
+                }
+                ds = null;
+            }
+            catch (Exception e)
+            {
+                s_log.Log(Level.SEVERE, sql, e);
+            }
+
+            MAlertProcessor[] retValue = new MAlertProcessor[list.Count()];
+            retValue = list.ToArray();
+            return retValue;
+        }	//	getActive
 
         public MAlertProcessor(Ctx ctx, int AD_AlertProcessor_ID, Trx trx)
             : base(ctx, AD_AlertProcessor_ID, trx)
@@ -80,7 +136,7 @@ namespace VAdvantage.Model
                 SqlParameter[] param = new SqlParameter[1];
                 param[0] = new SqlParameter("@AD_AlertProcessor_ID", GetAD_AlertProcessor_ID());
                 DataSet ds = DB.ExecuteDataset(sql, param);
-                foreach(DataRow dr in ds.Tables[0].Rows)
+                foreach (DataRow dr in ds.Tables[0].Rows)
                     list.Add(new MAlertProcessorLog(GetCtx(), dr, null));
             }
             catch (Exception e)
@@ -130,7 +186,7 @@ namespace VAdvantage.Model
                 SqlParameter[] param = new SqlParameter[1];
                 param[0] = new SqlParameter("@AD_AlertProcessor_ID", GetAD_AlertProcessor_ID());
                 DataSet ds = DB.ExecuteDataset(sql, param);
-                foreach(DataRow dr in ds.Tables[0].Rows)
+                foreach (DataRow dr in ds.Tables[0].Rows)
                     list.Add(new MAlert(GetCtx(), dr, null));
             }
             catch (Exception e)

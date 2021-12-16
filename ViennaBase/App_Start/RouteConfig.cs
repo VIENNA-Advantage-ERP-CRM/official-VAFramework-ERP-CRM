@@ -29,7 +29,7 @@ namespace ViennaBase
            System.Globalization.CultureInfo.DefaultThreadCurrentCulture = c1;
            System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = c1;
 
-           //AntiForgeryConfig.SuppressIdentityHeuristicChecks = true;
+           // AntiForgeryConfig.SuppressXFrameOptionsHeader = true;
 
 
         }

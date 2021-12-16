@@ -1277,6 +1277,7 @@ html[dir="rtl"] .vis-auth-dialog
 .vis-navHeadRight {
     /*width: 30%;*/
     justify-content: flex-end;
+    flex:1;
 }
 
 .vis-navSearchWrap input {

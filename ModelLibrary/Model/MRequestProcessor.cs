@@ -91,6 +91,65 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
+        /// Get Active Request Processors
+        /// VIS0060 - 21-Oct-2021
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="ExecuteProcess"></param>
+        /// <returns>array of Request </returns>
+        public static MRequestProcessor[] GetActive(Ctx ctx, string ExecuteProcess)
+        {
+            List<MRequestProcessor> list = new List<MRequestProcessor>();
+            String sql = "SELECT * FROM R_RequestProcessor WHERE IsActive='Y'";
+            IDataReader idr = null;
+            string scheduleIP = null;
+            try
+            {
+                string machineIP = null;        // System.Net.Dns.GetHostEntry(Environment.MachineName).AddressList[0].ToString();
+                var host = System.Net.Dns.GetHostEntry(Environment.MachineName);
+                foreach (var ip in host.AddressList)
+                {
+                    if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    {
+                        machineIP = ip.ToString();
+                        break;
+                    }
+                }
+                _log.SaveError("Console VServer Machine IP : " + machineIP, "Console VServer Machine IP : " + machineIP);
+
+                idr = DataBase.DB.ExecuteReader(sql, null, null);
+                while (idr.Read())
+                {
+                    scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM AD_Schedule WHERE 
+                                                       AD_Schedule_ID = (SELECT AD_Schedule_ID FROM R_RequestProcessor WHERE R_RequestProcessor_ID =" + idr["R_RequestProcessor_ID"] + " )"));
+
+                    if (ExecuteProcess.Equals("2") && (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP)))
+                    {
+                        list.Add(new MRequestProcessor(new Ctx(), idr, null));
+                    }
+                    else if (!string.IsNullOrEmpty(scheduleIP) && machineIP.Contains(scheduleIP))
+                    {
+                        list.Add(new MRequestProcessor(new Ctx(), idr, null));
+                    }
+                }
+                idr.Close();
+            }
+            catch (Exception e)
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                    idr = null;
+                }
+                _log.Log(Level.SEVERE, sql, e);
+            }
+
+            MRequestProcessor[] retValue = new MRequestProcessor[list.Count];
+            retValue = list.ToArray();
+            return retValue;
+        }
+
+        /// <summary>
         /// 	Standard Constructor
         /// </summary>
         /// <param name="ctx"></param>
@@ -171,7 +230,7 @@ namespace VAdvantage.Model
                 }
                 log.Log(Level.SEVERE, sql, e);
             }
-            
+
             //
             _routes = new MRequestProcessorRoute[list.Count];
             _routes = list.ToArray();

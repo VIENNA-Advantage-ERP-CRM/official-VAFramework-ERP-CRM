@@ -28,6 +28,7 @@ using Oracle.ManagedDataAccess.Client;
 using System.Data.SqlClient;
 using System.Net.Http.Headers;
 using com.sun.xml.@internal.bind.v2.schemagen.xmlschema;
+using VAdvantage.ProcessEngine;
 
 namespace VAdvantage.Model
 {
@@ -2249,6 +2250,11 @@ namespace VAdvantage.Model
                             //
                             _processMsg = "Open @M_InOutConfirm_ID@: " +
                                 confirm.GetConfirmTypeName() + " - " + confirm.GetDocumentNo();
+                            // VIS-158 : Cable Industry specific change to set MR confirmation number
+                            if (Env.IsModuleInstalled("VA076_") && Get_ColumnIndex("VA076_ConfirmationNo") >= 0)
+                            {
+                                Set_Value("VA076_ConfirmationNo", confirm.GetDocumentNo());
+                            }
                             FreezeDoc();//Arpit
                             return DocActionVariables.STATUS_INPROGRESS;
                         }
@@ -2267,6 +2273,11 @@ namespace VAdvantage.Model
                         //
                         _processMsg = "Open @M_InOutConfirm_ID@: " +
                             confirm.GetConfirmTypeName() + " - " + confirm.GetDocumentNo();
+                        // VIS-158 : Cable Industry specific change to set MR confirmation number
+                        if (Env.IsModuleInstalled("VA076_") && Get_ColumnIndex("VA076_ConfirmationNo") >= 0)
+                        {
+                            Set_Value("VA076_ConfirmationNo", confirm.GetDocumentNo());
+                        }
                         FreezeDoc();//Arpit                  
                         return DocActionVariables.STATUS_INPROGRESS;
                     }

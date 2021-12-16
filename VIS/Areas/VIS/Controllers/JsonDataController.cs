@@ -975,9 +975,9 @@ namespace VIS.Controllers
 
         //Card View
 
-        public JsonResult GetCardViewDetail(int AD_Window_ID, int AD_Tab_ID)
+        public JsonResult GetCardViewDetail(int AD_Window_ID, int AD_Tab_ID,int AD_CardView_ID)
         {
-            return Json(JsonConvert.SerializeObject(WindowHelper.GetCardViewDetail(AD_Window_ID, AD_Tab_ID, Session["ctx"] as Ctx)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(WindowHelper.GetCardViewDetail(AD_Window_ID, AD_Tab_ID, Session["ctx"] as Ctx, AD_CardView_ID)), JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult InsertUpdateDefaultSearch(int AD_Tab_ID, int AD_Table_ID, int AD_User_ID, int? AD_UserQuery_ID)
@@ -1145,6 +1145,21 @@ namespace VIS.Controllers
             {
                 // blank
             }
+        }
+
+        public JsonResult GetCardsInfo(int AD_Tab_ID)
+        {
+            Ctx ctx = Session["ctx"] as Ctx;
+            WindowHelper help = new WindowHelper();
+            List<CardsInfo> cards = help.GetCards(ctx, AD_Tab_ID);
+            return Json(JsonConvert.SerializeObject(cards), JsonRequestBehavior.AllowGet);
+        }
+
+        public void InsertUpdateDefaultCard(int AD_Tab_ID, int AD_Card_ID)
+        {
+            Ctx ctx = Session["ctx"] as Ctx;
+            CardViewModel objCardViewModel = new CardViewModel();
+            objCardViewModel.SetDefaultCardView(ctx, AD_Card_ID, AD_Tab_ID);
         }
 
         public ContentResult MsgForToastr()

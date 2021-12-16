@@ -540,6 +540,7 @@
 
 
                 var fieldVFormat = mField.getVFormat();
+                var formatErr = mField.getVFormatError();
                 switch (fieldVFormat) {
                     case '': {
                         break;
@@ -551,8 +552,11 @@
                                 if ($(e.target).val() != null) {
                                     if ($(e.target).val().toString().trim().length > 0) {
                                         if (!patt.test($(e.target).val())) {
+                                            if (!formatErr && formatErr.length > 0) {
+                                                formatErr = VIS.Msg.getMsg('RegexFailed') + ":" + mField.getHeader()
+                                            }
                                             //Work DOne to set focus in field whose value does not match with regular expression.
-                                            VIS.ADialogUI.warn(VIS.Msg.getMsg('RegexFailed') + ":" + mField.getHeader(), "", function () {
+                                            VIS.ADialogUI.warn(formatErr, "", function () {
                                                 $(e.target).focus();
                                             });
 
