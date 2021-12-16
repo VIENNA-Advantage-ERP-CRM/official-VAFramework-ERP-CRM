@@ -58,9 +58,13 @@ namespace VIS.Models
                 }
             }
             //Added O.ISSALESQUOTATION='N' in where condition(Sales quotation will not display in Order dropdown)
-            StringBuilder sql = new StringBuilder("SELECT o.C_Order_ID," + display + " AS displays FROM C_Order o WHERE o.C_BPartner_ID=" + C_BPartner_ID + " AND o.IsSOTrx ='" + (IsSOTrx ? "Y" : "N")
-                + "' AND O.IsBlanketTrx = 'N' AND O.ISSALESQUOTATION='N' AND o.DocStatus IN ('CL','CO') ");
-
+            StringBuilder sql = new StringBuilder("SELECT o.C_Order_ID," + display + " AS displays FROM C_Order o ");
+            //if (forInvoices && !IsSOTrx)
+            //{
+            //    sql.Append(@" LEFT JOIN C_ProvisionalInvoice PI ON PI.C_Order_ID=o.C_Order_ID");
+            //}
+            sql.Append(@" WHERE o.C_BPartner_ID=" + C_BPartner_ID + " AND o.IsSOTrx ='" + (IsSOTrx ? "Y" : "N") + @"'
+                 AND O.IsBlanketTrx = 'N' AND O.ISSALESQUOTATION = 'N' AND o.DocStatus IN('CL', 'CO') ");
             if (OrgId > 0)
             {
                 sql.Append("AND o.AD_Org_ID = " + OrgId);
@@ -70,7 +74,17 @@ namespace VIS.Models
             {
                 sql.Append(whereCondition);
             }
-
+            //execute in case AP Invoice
+            if (forInvoices && !IsSOTrx)
+            {
+                //sql.Append(@" AND pi.C_Order_ID IS NULL AND (pi.DocStatus NOT IN('DR','CO','CL') OR pi.DocStatus IS NULL)");
+                //VA230:Do not select PO record which are exists on proviosional invoice line
+                sql.Append(@" AND O.C_Order_ID NOT IN(SELECT DISTINCT OL.C_Order_ID FROM C_ProvisionalInvoice PI
+                              INNER JOIN C_ProvisionalInvoiceLine IL ON IL.C_ProvisionalInvoice_ID=PI.C_ProvisionalInvoice_ID
+                              INNER JOIN C_OrderLine OL ON OL.C_OrderLine_ID=IL.C_OrderLine_ID AND OL.C_Order_ID=O.C_Order_ID
+                              WHERE  PI.IsActive='Y'
+                              AND pi.DocStatus  NOT IN('VO','RE'))");
+            }
             // when create lines fom open from M_Inout then pick records from match po having m_inoutline is not null 
             // when create lines fom open from M_Invoiceline then pick records from match po having m_invoiceline is not null 
             sql.Append("AND o.IsReturnTrx='" + (isReturnTrx ? "Y" : "N") + "' AND o.IsDropShip='" + (DropShip ? "Y" : "N") + "'  AND o.C_Order_ID IN "
@@ -109,26 +123,73 @@ namespace VIS.Models
         }
 
         /// <summary>
-        ///  Get Shipment data
+        /// Author:VA230
+        /// Get Shipment data for old dll
         /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="displays"></param>
-        /// <param name="CBPartnerIDs"></param>
-        /// <returns></returns>
+        /// <param name="ctx">session</param>
+        /// <param name="CBPartnerIDs">bp ids</param>
+        /// <param name="IsDrop">drop shipment</param>
+        /// <param name="IsSOTrx">sales transaction or not</param>
+        /// <returns>shipment data</returns>
         public List<VCreateFromGetCOrder> GetShipments(Ctx ctx, string displays, int CBPartnerIDs, bool IsDrop, bool IsSOTrx)
         {
+            return GetShipments(ctx, displays, CBPartnerIDs, IsDrop, IsSOTrx, null, null);
+        }
+        /// <summary>
+        /// Author:VA230
+        /// Get Shipment data
+        /// </summary>
+        /// <param name="ctx">session</param>
+        /// <param name="CBPartnerIDs">bp ids</param>
+        /// <param name="IsDrop">drop shipment</param>
+        /// <param name="IsSOTrx">sales transaction or not</param>
+        /// <param name="isReturnTrxs">transaction is returned or not</param>
+        /// <param name="isProvisionlInvoices">record selected is Provisionl nvoice or not</param>
+        /// <returns>shipment data</returns>
+        public List<VCreateFromGetCOrder> GetShipments(Ctx ctx, string displays, int CBPartnerIDs, bool IsDrop, bool IsSOTrx, bool? isReturnTrxs, bool? isProvisionlInvoices)
+        {
             List<VCreateFromGetCOrder> obj = new List<VCreateFromGetCOrder>();
-            string sql = "SELECT s.M_InOut_ID," + displays + " AS dis FROM M_InOut s "
-                + "WHERE s.C_BPartner_ID=" + CBPartnerIDs + " AND s.IsSOTrx='" + (IsSOTrx ? "Y" : "N") + "' AND s.DocStatus IN ('CL','CO')"
-               // New column added to fill invoice which drop ship is true
-               + " AND s.IsDropShip='" + (IsDrop ? "Y" : "N") + "' AND s.M_InOut_ID IN "
+            StringBuilder sql = new StringBuilder();
+            sql.Append(@"SELECT s.M_InOut_ID," + displays + @" AS dis FROM M_InOut s
+                WHERE s.C_BPartner_ID = " + CBPartnerIDs + " AND s.IsSOTrx = '" + (IsSOTrx ? "Y" : "N") + @"' AND s.DocStatus IN('CL', 'CO')");
 
-               // Changes done by Bharat on 06 July 2017 restrict to create invoice if Invoice already created against that for same quantity
+            // New column added to fill invoice which drop ship is true
+            sql.Append(" AND s.IsDropShip='" + (IsDrop ? "Y" : "N") + "'");
 
-               + "(SELECT M_InOut_ID FROM (SELECT sl.M_InOut_ID, sl.M_InOutLine_ID, sl.MovementQty, mi.QtyInvoiced FROM M_InOutLine sl "
-               + "LEFT OUTER JOIN (SELECT il.QtyInvoiced, il.M_InOutLine_ID FROM C_InvoiceLine il INNER JOIN C_Invoice I ON I.C_INVOICE_ID = il.C_INVOICE_ID "
-               + "WHERE i.DocStatus NOT IN ('VO','RE')) mi ON sl.M_InOutLine_ID=mi.M_InOutLine_ID) t "
-               + "GROUP BY M_InOut_ID, M_InOutLine_ID, MovementQty HAVING MovementQty > SUM(NVL(QtyInvoiced,0))) ORDER BY s.MovementDate, s.DocumentNo";
+            if (isReturnTrxs != null)
+            {
+                // New column added to get invoice with return trx is true/false
+                sql.Append(" AND S.IsReturnTrx='" + (isReturnTrxs == true ? "Y" : "N") + "'");
+            }
+            //execute in case AP Invoice
+            if (isProvisionlInvoices == false && !IsSOTrx)
+            {
+                //Do not select shipment record which are exists on proviosional invoice line
+                sql.Append(@" AND s.M_InOut_ID NOT IN (SELECT DISTINCT OL.M_InOut_ID FROM C_ProvisionalInvoice PI
+                          INNER JOIN C_ProvisionalInvoiceLine IL ON IL.C_ProvisionalInvoice_ID = PI.C_ProvisionalInvoice_ID
+                          INNER JOIN M_InOutLine OL ON OL.M_InOutLine_ID = IL.M_InOutLine_ID AND S.M_InOut_ID=OL.M_InOut_ID
+                          WHERE  PI.IsActive = 'Y'
+                          AND pi.DocStatus NOT IN('VO','RE'))");
+            }
+            //// Changes done by Bharat on 06 July 2017 restrict to create invoice if Invoice already created against that for same quantity
+            sql.Append(@" AND s.M_InOut_ID IN (SELECT M_InOut_ID FROM(SELECT sl.M_InOut_ID, sl.M_InOutLine_ID, sl.MovementQty, mi.QtyInvoiced FROM M_InOutLine sl 
+                    LEFT OUTER JOIN (SELECT il.QtyInvoiced, il.M_InOutLine_ID FROM C_InvoiceLine il INNER JOIN C_Invoice I ON I.C_INVOICE_ID = il.C_INVOICE_ID 
+                    WHERE i.DocStatus NOT IN ('VO','RE')) mi ON sl.M_InOutLine_ID=mi.M_InOutLine_ID) t
+                    GROUP BY M_InOut_ID, M_InOutLine_ID, MovementQty HAVING MovementQty > SUM(NVL(QtyInvoiced,0))) ORDER BY s.MovementDate, s.DocumentNo");
+
+            #region commented
+            // string sql1 = "SELECT s.M_InOut_ID, " + displays + " AS dis FROM M_InOut s "
+            // + "WHERE s.C_BPartner_ID=" + CBPartnerIDs + " AND s.IsSOTrx='" + (IsSOTrx ? "Y" : "N") + "' AND s.DocStatus IN ('CL','CO')"
+
+            //// New column added to fill invoice which drop ship is true
+            //+ " AND s.IsDropShip='" + (IsDrop ? "Y" : "N") + "' AND S.IsReturnTrx='" + (isReturnTrxs == true ? "Y" : "N") + "' AND s.M_InOut_ID IN "
+
+            //// Changes done by Bharat on 06 July 2017 restrict to create invoice if Invoice already created against that for same quantity
+
+            //+ "(SELECT M_InOut_ID FROM (SELECT sl.M_InOut_ID, sl.M_InOutLine_ID, sl.MovementQty, mi.QtyInvoiced FROM M_InOutLine sl "
+            //+ "LEFT OUTER JOIN (SELECT il.QtyInvoiced, il.M_InOutLine_ID FROM C_InvoiceLine il INNER JOIN C_Invoice I ON I.C_INVOICE_ID = il.C_INVOICE_ID "
+            //+ "WHERE i.DocStatus NOT IN ('VO','RE')) mi ON sl.M_InOutLine_ID=mi.M_InOutLine_ID) t "
+            //+ "GROUP BY M_InOut_ID, M_InOutLine_ID, MovementQty HAVING MovementQty > SUM(NVL(QtyInvoiced,0))) ORDER BY s.MovementDate, s.DocumentNo";
 
             //+ "(SELECT M_InOut_ID FROM (SELECT sl.M_InOut_ID,sl.M_InOutLine_ID,sl.MovementQty,mi.Qty,IL.QtyInvoiced FROM M_InOutLine sl "
             //+ "LEFT OUTER JOIN M_MatchInv mi ON (sl.M_InOutLine_ID=mi.M_InOutLine_ID) "
@@ -138,8 +199,9 @@ namespace VIS.Models
             //+ " WHERE (sl.MovementQty <> nvl(mi.Qty,0) OR SL.MovementQty     <> NVL(IL.QtyInvoiced,0)"
             //+ "AND mi.M_InOutLine_ID IS NOT NULL) OR mi.M_InOutLine_ID IS NULL ) GROUP BY M_InOut_ID,M_InOutLine_ID,MovementQty "
             //+ "HAVING MovementQty > SUM(nvl(Qty,0)) OR MovementQty    > SUM(NVL(QtyInvoiced,0)) ) ORDER BY s.MovementDate";
+            #endregion
 
-            DataSet ds = DB.ExecuteDataset(sql);
+            DataSet ds = DB.ExecuteDataset(sql.ToString());
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -152,7 +214,6 @@ namespace VIS.Models
             }
             return obj;
         }
-
         /// <summary>
         /// Unused Function
         /// </summary>
@@ -621,8 +682,16 @@ namespace VIS.Models
                         + "INNER JOIN C_DocType d ON (i.C_DocType_ID = d.C_DocType_ID) "
                         + "WHERE i.C_BPartner_ID=" + cBPartnerId + " AND i.IsSOTrx='N' "
                         + "AND d.IsReturnTrx='" + (isReturnTrxs ? "Y" : "N") + "' AND i.DocStatus IN ('CL','CO') "
-                        + "AND i.C_ProvisionalInvoice_ID NOT IN (SELECT C_ProvisionalInvoice_ID FROM C_Invoice WHERE IsActive='Y' AND IsSOTrx='N' AND C_ProvisionalInvoice_ID>0 AND DocStatus NOT IN ('VO','RE')) "
-                     );
+                     //+ "AND i.C_ProvisionalInvoice_ID NOT IN (SELECT C_ProvisionalInvoice_ID FROM C_Invoice WHERE IsActive='Y' AND IsSOTrx='N' AND C_ProvisionalInvoice_ID>0 AND DocStatus NOT IN ('VO','RE')) "
+                     + "AND i.C_ProvisionalInvoice_ID IN("
+                     + "SELECT DISTINCT PI.C_ProvisionalInvoice_ID "
+                      + "FROM C_ProvisionalInvoiceLine PI "
+                      + "LEFT JOIN C_InvoiceLine IL ON IL.C_ProvisionalInvoiceLine_ID = PI.C_ProvisionalInvoiceLine_ID "
+                      + "LEFT JOIN C_Invoice INV ON INV.C_ProvisionalInvoice_ID = PI.C_ProvisionalInvoice_ID AND INV.IsActive = 'Y' "
+                      + "AND INV.IsSOTrx = 'N' "
+                      + "AND INV.DocStatus NOT IN('VO', 'RE') "
+                      + "WHERE PI.C_ProvisionalInvoice_ID = I.C_ProvisionalInvoice_ID AND PI.IsACtive = 'Y' AND(IL.C_ProvisionalInvoiceLine_ID IS NULL OR INV.DOCUMENTNO IS NULL))"
+                        );
 
             string whereCondition = "";
             if (InvoiceID > 0)
@@ -645,7 +714,7 @@ namespace VIS.Models
                 sql.Append(whereCondition);
             }
             sql.Append(" AND i.AD_Client_ID=" + tenant.GetAD_Client_ID());
-            
+
             sql.Append(" ORDER BY i.DateInvoiced, i.DocumentNo");
 
             DataSet ds = DB.ExecuteDataset(sql.ToString());

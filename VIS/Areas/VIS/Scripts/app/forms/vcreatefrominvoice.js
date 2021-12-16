@@ -54,13 +54,16 @@
             var _isdrop = "Y".equals(VIS.Env.getCtx().getWindowContext(selfChild.windowNo, "IsDropShip"));
 
             var _isSoTrx = "Y".equals(VIS.Env.getCtx().getWindowContext(selfChild.windowNo, "IsSOTrx"));
+            //VA230:Get IsReturnTrx based on document type on invoice
+            var dt = VIS.dataContext.getJSONRecord("MDocType/GetDocType", VIS.Env.getCtx().getContextAsInt(selfChild.windowNo, "C_DocTypeTarget_ID").toString());
+            var isReturnTrx = VIS.Utility.Util.getValueOfBoolean(dt["IsReturnTrx"]);
 
             $.ajax({
-                url: VIS.Application.contextUrl + "VCreateFrom/GetShipments",
+                url: VIS.Application.contextUrl + "VCreateFrom/GetShipmentsData",
                 type: 'POST',
                 //async: false,
                 data: {
-                    displays: display, CBPartnerIDs: C_BPartner_ID, IsDrop: _isdrop, IsSOTrx: _isSoTrx
+                    displays: display, CBPartnerIDs: C_BPartner_ID, IsDrop: _isdrop, IsSOTrx: _isSoTrx, isReturnTrxs: isReturnTrx, isProvisionlInvoices: false
                 },
                 success: function (data) {
                     var ress = JSON.parse(data);
