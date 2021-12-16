@@ -1389,7 +1389,7 @@ namespace VAdvantage.Model
                 CheckChange(ra, "CloseDate");
                 CheckChange(ra, "TaskStatus");
                 CheckChange(ra, "DateStartPlan");
-                CheckChange(ra, "DateCompletePlan");               
+                CheckChange(ra, "DateCompletePlan");
                 //new filed result added in list if anyone change/add anything in result email will send to user
                 if (CheckChange(ra, "Result"))
                     sendInfo.Add("Result");
@@ -1600,6 +1600,12 @@ namespace VAdvantage.Model
             {
                 MRequestUpdate update = new MRequestUpdate(this);
                 update.Save();
+            }
+            else if (!newRecord && GetResult() != null)
+            {
+                // get message if someone is updating in Result field of Request Record.
+                //We need to send updated msg in email.
+                prepareNotificMsg(null);
             }
             MRequestType reqType = new MRequestType(GetCtx(), GetR_RequestType_ID(), null);
             //	Initial Mail
