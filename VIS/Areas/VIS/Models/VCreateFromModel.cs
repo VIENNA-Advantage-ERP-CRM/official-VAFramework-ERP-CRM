@@ -678,21 +678,24 @@ namespace VIS.Models
             List<VCreateFromGetCOrder> obj = new List<VCreateFromGetCOrder>();
             MClient tenant = MClient.Get(ctx);
             //fetch provisional Invoices whose invoice is not yet created or Invoice is reversed or void
-            StringBuilder sql = new StringBuilder("SELECT i.C_ProvisionalInvoice_ID," + displays + " AS displays FROM C_ProvisionalInvoice i "
-                        + "INNER JOIN C_DocType d ON (i.C_DocType_ID = d.C_DocType_ID) "
-                        + "WHERE i.C_BPartner_ID=" + cBPartnerId + " AND i.IsSOTrx='N' "
-                        + "AND d.IsReturnTrx='" + (isReturnTrxs ? "Y" : "N") + "' AND i.DocStatus IN ('CL','CO') "
-                     //+ "AND i.C_ProvisionalInvoice_ID NOT IN (SELECT C_ProvisionalInvoice_ID FROM C_Invoice WHERE IsActive='Y' AND IsSOTrx='N' AND C_ProvisionalInvoice_ID>0 AND DocStatus NOT IN ('VO','RE')) "
-                     + "AND i.C_ProvisionalInvoice_ID IN("
-                     + "SELECT DISTINCT PI.C_ProvisionalInvoice_ID "
-                      + "FROM C_ProvisionalInvoiceLine PI "
-                      + "LEFT JOIN C_InvoiceLine IL ON IL.C_ProvisionalInvoiceLine_ID = PI.C_ProvisionalInvoiceLine_ID "
-                      + "LEFT JOIN C_Invoice INV ON INV.C_ProvisionalInvoice_ID = PI.C_ProvisionalInvoice_ID AND INV.IsActive = 'Y' "
-                      + "AND INV.IsSOTrx = 'N' "
-                      + "AND INV.DocStatus NOT IN('VO', 'RE') "
-                      + "WHERE PI.C_ProvisionalInvoice_ID = I.C_ProvisionalInvoice_ID AND PI.IsACtive = 'Y' AND(IL.C_ProvisionalInvoiceLine_ID IS NULL OR INV.DOCUMENTNO IS NULL))"
-                        );
-
+            StringBuilder sql = new StringBuilder(@"SELECT DISTINCT i.C_ProvisionalInvoice_ID," + displays + @" AS displays,i.DocumentNo,i.DateInvoiced 
+                                    FROM C_ProvisionalInvoice i 
+                                    INNER JOIN C_DocType d ON (i.C_DocType_ID = d.C_DocType_ID) 
+                                    INNER JOIN C_ProvisionalInvoiceLine pil ON  i.C_ProvisionalInvoice_ID = pil.C_ProvisionalInvoice_ID
+                                    WHERE i.C_BPartner_ID=" + cBPartnerId + @" AND i.IsSOTrx='N'
+                                    AND d.IsReturnTrx='" + (isReturnTrxs ? "Y" : "N") + @"' AND i.DocStatus IN ('CL','CO')
+                                    AND pil.c_provisionalinvoiceline_id NOT IN (
+                                    SELECT C_ProvisionalInvoiceLine_id
+                                    FROM(
+                                    SELECT il.C_ProvisionalInvoiceLine_id
+                                    FROM c_invoiceline il
+                                    INNER JOIN c_invoice inv ON inv.c_invoice_id = il.c_invoice_id
+                                    WHERE inv.isactive = 'Y'
+                                                AND inv.issotrx = 'N'
+                                                AND inv.docstatus NOT IN('VO', 'RE')
+                                                and inv.c_provisionalinvoice_id = i.c_provisionalinvoice_id
+                                                ))");
+            
             string whereCondition = "";
             if (InvoiceID > 0)
             {
