@@ -1313,8 +1313,10 @@
                 AD_User_ID = VIS.context.getAD_User_ID();
             } else if (VIS.context.getAD_User_ID() != cardViewUserID && !isNewRecord && isEdit) {
                 isNewRecord = true;
-                AD_User_ID = VIS.context.getAD_User_ID();                
-                isPublic.attr("checked", false);
+                AD_User_ID = VIS.context.getAD_User_ID();    
+                if (!VIS.MRole.isAdministrator) {
+                    isPublic.attr("checked", false);
+                }
             } else  {
               //  isNewRecord = true;
                 AD_User_ID = VIS.context.getAD_User_ID();                

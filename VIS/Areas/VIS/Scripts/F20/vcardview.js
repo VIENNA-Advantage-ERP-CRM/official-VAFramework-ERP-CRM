@@ -31,6 +31,7 @@
         var $btnClrSearch = null;
         var $imgdownSearch = null;
         var self = this;
+        var groupHeader = null;
         this.isAutoCompleteOpen = false;
 
         //  var cardList;
@@ -41,8 +42,9 @@
             $cmbCards = $('<input  class="vis-vs-card-autoComplete" style="display:inline">')
             $lblGroup = $('<p>');
             $imgdownSearch = $('<span class="vis-ad-w-p-tb-s-icon-down vis-cv-cardlist"><i class="fa fa-ellipsis-h"></i></span>');
-            headerdiv.append($cmbCards).append($imgdownSearch).append($lblGroup);
-            root.append(headerdiv).append(body);
+            groupHeader = $("<div class='vis-cv-groupHeader'>");
+            headerdiv.append($cmbCards).append($imgdownSearch).append($lblGroup);            
+            root.append(headerdiv).append(groupHeader).append(body);
             createCardautoComplete();
         }
 
@@ -142,6 +144,9 @@
 
         this.getHeader = function () {
             return headerdiv;
+        }
+        this.getGroupHeader = function () {
+            return groupHeader;
         }
 
         this.sizeChanged = function (h, w) {
@@ -267,8 +272,8 @@
             if (curCard.length != 0) {
                 //curCard.find('span.vis-cv-card-selected').css({ 'display': 'block' });
                 curCard.toggleClass("vis-cv-card-selected");
-                if (!skipScroll)
-                    curCard[0].scrollIntoView();
+                //if (!skipScroll)
+                    //curCard[0].scrollIntoView();
             }
             if (rec) {
                 rec.recid = crid;
@@ -582,7 +587,7 @@
             $this.groupCtrls.length = 0;
 
             root.empty();
-
+            $this.getGroupHeader().html('');
             var cardGroup = null;
             if ($this.grpCount == 1) {
 
@@ -591,29 +596,42 @@
                 for (var p in $this.cGroupInfo) {
                     n = VIS.Utility.Util.getIdentifierDisplayVal($this.cGroupInfo[p].name);
                     key = $this.cGroupInfo[p].key;
+                    $this.getGroupHeader().append("<div class='vis-cv-head' >" + n + "</div>");
                     break;
                 }
 
                 cardGroup = new VCardGroup(true, records, n, $this.fields, $this.cConditions, $this.headerItems, $this.headerStyle, $this.headerPadding, key, $this.aPanel);
                 $this.groupCtrls.push(cardGroup);
                 root.append(cardGroup.getRoot())
+                $this.getGroupHeader().find('.vis-cv-head').width(root.find('.vis-cv-grpbody').width()-10);
             }
             else {
-                $this.filterRecord(records);
+                $this.filterRecord(records);    
+                
                 for (var p in $this.cGroupInfo) {
-                    setCardGroup(p);
+                    setCardGroup(p);    
+                    $this.getGroupHeader().append("<div class='vis-cv-head' data-key='" + $this.cGroupInfo[p].key+"' >" + VIS.Utility.Util.getIdentifierDisplayVal($this.cGroupInfo[p].name) + "</div>");
                 }
 
 
                 if ($this.cGroup.lookup && $this.cGroup.lookup.displayType == VIS.DisplayType.List && $this.groupSequence != null && $this.groupSequence != "") {
                     var grpArr = $this.groupSequence.split(",");
                     for (var j = 0; j < grpArr.length; j++) {
-                        var item = root.find("[data-key='" + grpArr[j] + "']").parent();
-                        var before = root.find(".vis-cv-cg").eq(j);
+                        var item = root.find(".vis-cv-grpbody[data-key='" + grpArr[j] + "']").parent();                        
+                        var before = root.find(".vis-cv-cg").eq(j);                        
                         item.insertBefore(before);
+
+                        var itemG = $this.getGroupHeader().find(".vis-cv-head[data-key='" + grpArr[j] + "']");
+                        itemG.insertBefore($this.getGroupHeader().find(".vis-cv-head").eq(j));
+
                     }
                 }
 
+               // var gWidth = 95.5 / $this.grpCount;
+               // root.find('.vis-cv-head').css({ "width": "calc(" + gWidth + "% - " + (54 / $this.grpCount)+"px)" });
+
+                root.find('.vis-cv-grpbody').height(maxHeight(root.find('.vis-cv-grpbody')));
+                $this.getGroupHeader().find('.vis-cv-head').width(root.find('.vis-cv-grpbody').width());
                 //if ($this.groupSequence != null && $this.groupSequence != "") {
                 //    var grpArr = $this.groupSequence.split(",");
                 //    for (var a = 0; a < grpArr.length; a++) {
@@ -637,6 +655,7 @@
                 var sortable = new vaSortable(cardGroup.getBody()[0], {
                     attr: 'data-recid',
                     selfSort: false,
+                    force: true,
                     ignore: ['.vis-cv-card-edit', '.vis-ev-col-wrap-button'],
                     onSelect: function (e, item) {
                         //$this.onCardEdit({ 'recid': item }, true);
@@ -674,6 +693,13 @@
                     }
                 });
             }
+
+           function maxHeight(elems) {
+                return Math.max.apply(null, elems.map(function () {
+                    return $(this)[0].scrollHeight;
+                }).get());
+            }
+
             $this.calculateWidth(width);
         }, 10);
 
@@ -740,11 +766,12 @@
         var body;
         var cards = [];
         windowNo = VIS.Env.getWindowNo();
-        function init() {
-            var str = "<div class='vis-cv-cg vis-pull-left'> <div class='vis-cv-head' >" + grpName
-                + "</div><div data-key='" + key + "'  class='vis-cv-grpbody'></div></div>";
+        function init() {            
+            var str = "<div class='vis-cv-cg vis-pull-left'>"
+                + "<div data-key='" + key + "'  class='vis-cv-grpbody'></div></div>";
             root = $(str);
             body = root.find('.vis-cv-grpbody');
+           
             if (onlyOne) {
                 root.css({ 'margin-right': '0px', 'width': '100%' });
                 //root.width('100%');

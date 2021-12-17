@@ -2549,10 +2549,10 @@ findImg {
     /* color: darkgray; */
     font-size: 12px;
     padding-top: 0;
-    position: relative;
+    position: fixed;
     z-index: 1;
 
-   /* right: 61px;*/
+    right: 45px;
     display: flex;
     justify-content: flex-end;
     /* left: 10px; */
@@ -2577,18 +2577,19 @@ findImg {
         z-index: 0;
         background: #fff;
         font-weight:600;
-        height:14px;
-        line-height:11px;
+        height:18px;
+        /*line-height:11px;*/
     }
 
 .vis-cv-main {
     bottom: 0;
-    top: 15px;
+    top: 45px;
     position: absolute;
     z-index: 0;
     display:flex;
     width: 100%;
-    overflow:auto;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .vis-cv-cg {
@@ -2607,10 +2608,10 @@ findImg {
     padding: 1px 5px;
     text-overflow: ellipsis;
     white-space: nowrap;
-    overflow: hidden;
+    overflow: auto;
     color: rgba(var(--v-c-primary), 1);
-    margin: 2px 5px;
-    border-bottom: 2px solid rgba(var(--v-c-primary), 1);
+    margin: 2px 9px;
+    border-bottom: 2px solid rgba(var(--v-c-primary), 1);    
     /*background-color: ghostwhite;*/
 }
 
@@ -2621,7 +2622,7 @@ findImg {
     left: 0;
     bottom: 0;
     right: 0;
-    top: 27px;
+    top: 7px;
     /*width: 248px;*/
     /*overflow: auto;*/
 }
@@ -5454,4 +5455,11 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
 
 .vis-cardviewbutton button[disabled="disabled"] {
     background-color: rgba(var(--v-c-on-secondary), 0.7);
+}
+
+.vis-cv-groupHeader {
+    white-space: nowrap;
+    margin-top: 17px;
+    display: flex;
+    background-color: #fff
 }
