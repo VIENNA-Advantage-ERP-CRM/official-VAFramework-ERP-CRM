@@ -5572,6 +5572,10 @@
         return this.vo.orginalDispaly;
     };
 
+    GridField.prototype.getOrginalDisplayType = function () {
+        return this.vo.orginalDispaly;
+    };
+
     GridField.prototype.getIsVirtualColumn = function () {
         if (this.vo.ColumnSQL && this.vo.ColumnSQL.length > 0)
             return true;
