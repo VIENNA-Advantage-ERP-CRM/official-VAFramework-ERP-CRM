@@ -3355,8 +3355,8 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 Ctx _ctxClient = client.GetCtx();
 
                 //Save to AD_MailQueue table
-                ViennaAdvantage.Model.X_AD_MailQueue mailQueue = new ViennaAdvantage.Model.X_AD_MailQueue(_ctxClient, 0, _trx);
-                mailQueue.SetAD_Role_ID(_ctxClient.GetAD_Role_ID());
+                ViennaAdvantage.Model.X_AD_MailQueue mailQueue = new ViennaAdvantage.Model.X_AD_MailQueue(GetCtx(), 0, _trx);
+                mailQueue.SetAD_Role_ID(GetCtx().GetAD_Role_ID());
                 mailQueue.SetToEMail(toEMail);
                 mailQueue.SetToName(toName);
                 mailQueue.SetMailSubject(subject);
