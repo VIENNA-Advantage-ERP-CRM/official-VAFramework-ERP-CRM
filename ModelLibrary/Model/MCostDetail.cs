@@ -1194,7 +1194,7 @@ namespace VAdvantage.Model
                                     cost.SetCurrentCostPrice(0);
                                 }
                             }
-                            else if (ce.IsWeightedAverageCost())
+                            else if (ce.IsWeightedAverageCost() || ce.IsWeightedAveragePO())
                             {
                                 cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), amt));
                                 price = Decimal.Round(Decimal.Divide(

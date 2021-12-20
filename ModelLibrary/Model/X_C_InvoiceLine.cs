@@ -1153,6 +1153,17 @@ namespace VAdvantage.Model
         }/** Get Tax Exemption Reason.
 @return Tax Exemption reason indicates the reason for the exemption for the items those are exempted from tax. */
         public int GetC_TaxExemptReason_ID() { Object ii = Get_Value("C_TaxExemptReason_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+
+        /** Set Warehouse.@param M_Warehouse_ID Storage Warehouse and Service Point */
+        public void SetM_Warehouse_ID(int M_Warehouse_ID)
+        {
+            if (M_Warehouse_ID <= 0) Set_Value("M_Warehouse_ID", null);
+            else
+                Set_Value("M_Warehouse_ID", M_Warehouse_ID);
+        }
+        /** Get Warehouse.@return Storage Warehouse and Service Point */
+        public int GetM_Warehouse_ID() { Object ii = Get_Value("M_Warehouse_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+
     }
 
 }
