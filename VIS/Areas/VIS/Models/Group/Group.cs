@@ -352,7 +352,7 @@ namespace VIS.Models
 
             sql += " ORDER BY upper(name) ";
             sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "AD_GroupInfo", true, false);
-            
+
             DataSet ds = DB.ExecuteDataset(sql);        // get All Groups.
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -454,7 +454,7 @@ namespace VIS.Models
                         setInActive.Append("(AD_GroupInfo_ID=" + groups[i].AD_Group_ID + " AND AD_Role_ID=" + AD_Role_ID + ")");
                     }
                 }
-               
+
                 DataRow[] drr = ds.Tables[0].Select("AD_GroupInfo_ID=" + groups[i].AD_Group_ID);
                 if ((drr != null && drr.Length > 0) || newGroupCreated)     // update group's window/ form/process/workflow    OR      window Create new entry in window/ form/process/workflow
                 {
@@ -503,10 +503,14 @@ namespace VIS.Models
         /// <param name="grantAccess"></param>
         private void ProvideWindowAccessToRole(int AD_Group_ID, int AD_Role_ID, bool grantAccess)
         {
-            string sql = "SELECT AD_Window_ID from AD_Group_Window WHERE IsActive='Y' AND AD_GroupInfo_ID=" + AD_Group_ID;
+            //Added new checkbox Read write on Group Rights Window Tab to save access on group window. 
+            string sql = "SELECT AD_Window_ID, IsReadWrite FROM AD_Group_Window WHERE IsActive='Y' AND AD_GroupInfo_ID=" + AD_Group_ID;
             DataSet ds = DB.ExecuteDataset(sql);
             List<int> groupWindowIDs = new List<int>();     // will contains all windows of group
             Dictionary<int, bool> roleWindowIDsDictinary = new Dictionary<int, bool>();     // this will contain all windows access for current role...
+            Dictionary<int, bool> groupWindowIDsDictinary = new Dictionary<int, bool>();  // this will contain all windows access for current group...
+            bool isReadWriteAccess = false;
+            string readwrite = "N";
             StringBuilder winIDs = new StringBuilder();
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -520,6 +524,7 @@ namespace VIS.Models
                         }
                         winIDs.Append(ds.Tables[0].Rows[i]["AD_Window_ID"].ToString());
                         groupWindowIDs.Add(Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Window_ID"]));
+                        groupWindowIDsDictinary[Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Window_ID"])] = ds.Tables[0].Rows[i]["IsReadWrite"].ToString() == "Y" ? true : false;
                     }
                 }
 
@@ -538,20 +543,25 @@ namespace VIS.Models
 
                 for (int i = 0; i < groupWindowIDs.Count(); i++)
                 {
-
+                    //Check Group window access need to update the access on Role window.
+                    isReadWriteAccess = groupWindowIDsDictinary[groupWindowIDs[i]];
+                    if (isReadWriteAccess)
+                        readwrite = "Y";
+                    else readwrite = "N";
                     if (roleWindowIDsDictinary.ContainsKey(groupWindowIDs[i]))      // if Role window access already have current window then set window active/ inactive in window access.
                     {
                         if (roleWindowIDsDictinary[groupWindowIDs[i]] != grantAccess)
                         {
                             //wAccess.SetIsReadWrite(grantAccess);
-                            //bool savenew = wAccess.Save();
+                            //bool savenew = wAccess.Save();                           
                             if (grantAccess)
                             {
-                                sql = "UPDATE AD_Window_Access Set IsReadWrite='Y',IsActive='Y' WHERE AD_Window_ID=" + groupWindowIDs[i] + " AND AD_Role_ID=" + AD_Role_ID;
+                                //update read write access from the groups right window 
+                                sql = "UPDATE AD_Window_Access Set IsReadWrite='" + readwrite + "',IsActive='Y' WHERE AD_Window_ID=" + groupWindowIDs[i] + " AND AD_Role_ID=" + AD_Role_ID;
                             }
                             else
                             {
-                                sql = "UPDATE AD_Window_Access Set IsReadWrite='N',IsActive='N' WHERE AD_Window_ID=" + groupWindowIDs[i] + " AND AD_Role_ID=" + AD_Role_ID;
+                                sql = "UPDATE AD_Window_Access Set IsReadWrite='" + readwrite + "',IsActive='N' WHERE AD_Window_ID=" + groupWindowIDs[i] + " AND AD_Role_ID=" + AD_Role_ID;
                             }
                             DB.ExecuteQuery(sql, null, null);
 
@@ -566,7 +576,7 @@ namespace VIS.Models
                         wAccess.SetAD_Org_ID(ctx.GetAD_Org_ID());
                         wAccess.SetAD_Role_ID(AD_Role_ID);
                         wAccess.SetAD_Window_ID(groupWindowIDs[i]);
-                        wAccess.SetIsReadWrite(grantAccess);
+                        wAccess.SetIsReadWrite(isReadWriteAccess); //update read write access from the groups right window 
                         bool savenew = wAccess.Save();
                     }
                 }
@@ -957,8 +967,8 @@ namespace VIS.Models
         /// <returns></returns>
         public String AddNewRole(string Name, string userLevel, List<int> OrgID)
         {
-            
-            string info ="";
+
+            string info = "";
             string msg;
             int AD_Role_Table_ID = Convert.ToInt32(DB.ExecuteScalar("SELECT AD_Table_ID FROM AD_Table WHERE TableName='AD_Role'", null, null));
 
@@ -1007,9 +1017,9 @@ namespace VIS.Models
                             roles.SetIsReadOnly(false);
                             roles.Save();
                         }
-                        
+
                     }
-                    
+
                 }
                 else
                 {
@@ -1026,7 +1036,7 @@ namespace VIS.Models
 
                 return info;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
                 return ex.Message;
@@ -1036,8 +1046,8 @@ namespace VIS.Models
             //rr.Set_Value(
 
 
-           
-                
+
+
         }
 
         /// <summary>
