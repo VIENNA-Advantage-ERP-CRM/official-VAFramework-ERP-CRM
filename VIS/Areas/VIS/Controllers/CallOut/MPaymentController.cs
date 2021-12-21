@@ -97,5 +97,18 @@ namespace VIS.Controllers
             MPaymentModel objCashBookModel = new MPaymentModel();
             return Json(JsonConvert.SerializeObject(objCashBookModel.GetBankAcctCurrency(fields)), JsonRequestBehavior.AllowGet);
         }
+        /// <summary>
+        /// Set override check based on autocheck control
+        /// Author:VA230
+        /// </summary>
+        /// <param name="fields">bank account id,paymentMethodId</param>
+        /// <returns>true/false</returns>
+        public JsonResult GetAutoCheckControl(string fields)
+        {
+            Ctx ctx = Session["ctx"] as Ctx;
+            MPaymentModel model = new MPaymentModel();
+            bool result = Util.GetValueOfBool(model.GetAutoCheckControl(fields));
+            return Json(JsonConvert.SerializeObject(result), JsonRequestBehavior.AllowGet);
+        }
     }
 }

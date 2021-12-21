@@ -17495,18 +17495,15 @@
         if (value == null || value == 0 || value.toString() == "" || this.isCalloutActive()) {
             return "";
         }
-        try
-        {
+        try {
             this.setCalloutActive(true);
             var data = VIS.dataContext.getJSONRecord("MTax/GetTaxExempt", Util.getValueOfString(mTab.getValue("C_Tax_ID")));
-            if (data != null)
-            {
+            if (data != null) {
                 mTab.setValue("IsTaxExempt", Util.getValueOfString(data["IsTaxExempt"]).equals("Y") ? true : false);
                 mTab.setValue("C_TaxExemptReason_ID", Util.getValueOfInt(data["C_TaxExemptReason_ID"]));
             }
         }
-        catch (err)
-        {
+        catch (err) {
             this.log.log(Level.SEVERE, sql, err);
             this.setCalloutActive(false);
             return err.message;
@@ -19994,6 +19991,9 @@
         try {
             var currency = Util.getValueOfInt(VIS.dataContext.getJSONRecord("MPayment/GetBankAcctCurrency", c_bankaccount_ID.toString()));
             mTab.setValue("C_Currency_ID", currency);
+
+            //VA230:Set value in override checkbox
+            setOverrideAutoCheckValue(mTab);
         }
         catch (err) {
             this.setCalloutActive(false);
@@ -20003,7 +20003,52 @@
         ctx = mTab = mField = value = oldValue = null;
         return "";
     };
+    /**
+     * Set value in override checkbox
+     * @param ctx context
+     * @param windowNo current Window No
+     * @param mTab Grid Tab
+     * @param mField Grid Field
+     * @param value New Value
+     * @param oldValue Old Value
+     * @return Error message or ""
+     */
+    CalloutPayment.prototype.SetOverrideAutoCheck = function (ctx, windowNo, mTab, mField, value, oldValue) {
 
+        if (value == null || value.toString() == "") {
+            mTab.setValue("IsOverrideAutoCheck", false);
+            return "";
+        }
+        if (this.isCalloutActive()) {
+            return "";
+        }
+        this.setCalloutActive(true);
+        try {
+            setOverrideAutoCheckValue(mTab);
+        }
+        catch (err) {
+            this.setCalloutActive(false);
+            return err.message;
+        }
+        this.setCalloutActive(false);
+        ctx = mTab = mField = value = oldValue = null;
+        return "";
+    };
+    /**
+     * VA230:Get autocheckcontrol and set override autocheck funcationlity based on condition
+     * @param {any} mTab
+     */
+    function setOverrideAutoCheckValue(mTab) {
+        var bankaccountId = Util.getValueOfInt(mTab.getValue("C_BankAccount_ID"));
+        var paymentMethodId = Util.getValueOfInt(mTab.getValue("VA009_PaymentMethod_ID"));
+        var checkNo = Util.getValueOfString(mTab.getValue("CheckNo"));
+        var autoCheck = false;
+        if (bankaccountId > 0 && paymentMethodId > 0 && checkNo != "" && Util.getValueOfString(mTab.getValue("TenderType")) == "K") {
+            var paramString = bankaccountId.toString() + "," + paymentMethodId.toString();
+            autoCheck = Util.getValueOfBoolean(VIS.dataContext.getJSONRecord("MPayment/GetAutoCheckControl", paramString.toString()));
+        }
+        mTab.setValue("IsOverrideAutoCheck", autoCheck);
+    }
     VIS.Model.CalloutPayment = CalloutPayment;
     //*********** CalloutPayment End ******
 
