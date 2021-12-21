@@ -797,6 +797,16 @@ namespace VAdvantage.Model
                                 M_Warehouse_Id = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT m_warehouse_id FROM m_inout WHERE m_inout_id = 
                                     ( SELECT m_inout_id FROM m_inoutline WHERE m_inoutline_id = " + invoiceline.GetM_InOutLine_ID() + " )", null, trxName));
                             }
+                            else if (invoiceline.Get_ColumnIndex("M_Warehouse_ID") >= 0 && invoice.Get_ColumnIndex("M_Warehouse_ID") >= 0
+                                && invoiceline.GetM_InOutLine_ID() <= 0 && invoiceline.GetC_OrderLine_ID() <= 0
+                                && !invoice.IsSOTrx() && invoice.IsReturnTrx() && invoice.IsTreatAsDiscount())
+                            {
+                                M_Warehouse_Id = invoiceline.GetM_Warehouse_ID();
+                                if (M_Warehouse_Id <= 0)
+                                {
+                                    M_Warehouse_Id = invoice.GetM_Warehouse_ID();
+                                }
+                            }
                             if (invoice.GetC_Currency_ID() != acctSchema.GetC_Currency_ID())
                             {
                                 Price = MConversionRate.Convert(ctx, Price, invoice.GetC_Currency_ID(), acctSchema.GetC_Currency_ID(),
@@ -2450,7 +2460,7 @@ namespace VAdvantage.Model
                                         }
                                         cd = MCostDetail.CreateCostDetail(acctSchema, AD_Org_ID, inoutline.GetM_Product_ID(),
                                             inoutline.GetM_AttributeSetInstance_ID(), windowName, inventoryLine, inoutline, movementline,
-                                             invoiceline, po, Util.GetValueOfInt(dsExpectedLandedCostAllocation.Tables[0].Rows[lca]["M_CostElement_ID"]), 
+                                             invoiceline, po, Util.GetValueOfInt(dsExpectedLandedCostAllocation.Tables[0].Rows[lca]["M_CostElement_ID"]),
                                              Decimal.Round(expectedAmt, acctSchema.GetCostingPrecision()),
                                              expectedQty, null, trxName, M_Warehouse_Id);
                                     }
@@ -3591,8 +3601,9 @@ namespace VAdvantage.Model
                                             costLevel = acctSchema.GetCostingLevel();
                                         }
                                     }
-                                    // when costing levele = warehouse or Warehouse + batch then not to calculate cost against indepenedent APC
-                                    if (!(costLevel == MProductCategory.COSTINGLEVEL_Warehouse || costLevel == MProductCategory.COSTINGLEVEL_WarehousePlusBatch))
+                                    // when costing level = warehouse or Warehouse + batch and warehouse is not defined on Invoice/line then not to calculate cost against indepenedent APC
+                                    if (!((costLevel == MProductCategory.COSTINGLEVEL_Warehouse || costLevel == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
+                                        && M_Warehouse_Id <= 0))
                                     {
                                         // in case of independent AP credit memo, accumulation amt reduce and current cost of AV. PO/Invoice will be calculated
                                         // discount is given only when document type having setting as "Treat As Discount" = True
@@ -3641,7 +3652,8 @@ namespace VAdvantage.Model
                                         }
                                     }
                                     // when costing levele = warehouse or Warehouse + batch then not to calculate cost against indepenedent APC
-                                    if (!(costLevel == MProductCategory.COSTINGLEVEL_Warehouse || costLevel == MProductCategory.COSTINGLEVEL_WarehousePlusBatch))
+                                    if (!((costLevel == MProductCategory.COSTINGLEVEL_Warehouse || costLevel == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
+                                        && M_Warehouse_Id <= 0))
                                     {
                                         cd.CreateCostForCombination(cd, acctSchema, product, M_ASI_ID, 0, windowName, optionalStrcc: optionalstr);
                                     }
