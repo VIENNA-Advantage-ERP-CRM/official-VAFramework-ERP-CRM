@@ -252,6 +252,32 @@ namespace VIS.Models
         }
 
         /// <summary>
+        /// Get auto check control based on selected bank
+        /// Author:VA230
+        /// </summary>
+        /// <param name="fields">bank account id,paymentMethodId</param>
+        /// <returns>true/false</returns>
+        public bool GetAutoCheckControl(string fields)
+        {
+            bool result = false;
+            string[] paramValue = fields.Split(',');
+            int bankAccountId = Util.GetValueOfInt(paramValue[0]);
+            int paymentMethodId = Util.GetValueOfInt(paramValue[1]);
+            DataSet ds = DB.ExecuteDataset(@"SELECT B.ChkNoAutoControl,COUNT(D.C_BankAccountDoc_ID) AS C_BankAccountDoc_ID FROM C_BankAccount B
+                                                INNER JOIN C_BankAccountDoc D ON D.C_BankAccount_ID = B.C_BankAccount_ID
+                                                WHERE B.C_BankAccount_ID=" + bankAccountId + @" AND D.VA009_PaymentMethod_ID=" + paymentMethodId + @" AND D.IsActive='Y'
+                                                GROUP BY B.ChkNoAutoControl");
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                if (Util.GetValueOfString(ds.Tables[0].Rows[0]["ChkNoAutoControl"]) == "Y" && Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_BankAccountDoc_ID"]) > 0)
+                {
+                    result = true;
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
         /// Get Provisional Invoice data
         /// </summary>
         /// <param name="C_ProvisionalInvoice_ID">Provisional Invoice</param>
