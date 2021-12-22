@@ -1749,8 +1749,10 @@
 
                 //$btnZoom = VIS.AEnv.getZoomButton(disabled);
                 options[VIS.Actions.zoom] = disabled;
+               
                 // btnCount += 1;
             }
+            options[VIS.Actions.addnewrec] = true;
 
             if ((this.lookup &&
                 (this.lookup.info.keyColumn.toLowerCase() == "ad_user.ad_user_id"
@@ -1762,6 +1764,7 @@
             // $btnPop = $('<button tabindex="-1" class="input-group-text"><img tabindex="-1" src="' + VIS.Application.contextUrl + "Areas/VIS/Images/base/Info20.png" + '" /></button>');
             $btnPop = $('<button tabindex="-1" class="input-group-text"><i tabindex="-1" class="fa fa-ellipsis-v" /></button>');
             options[VIS.Actions.refresh] = true;
+           
             if (VIS.MRole.getIsShowPreference())
                 options[VIS.Actions.preference] = true;
             $ulPopup = VIS.AEnv.getContextPopup(options);
@@ -1887,12 +1890,12 @@
             e.stopPropagation();
         });
 
-        function zoomAction() {
+        function zoomAction(value) {
             if (!self.lookup || disabled)
                 return;
             //
             var zoomQuery = self.lookup.getZoomQuery();
-            var value = self.getValue();
+           //var value = self.getValue();
             if (value == null) {
                 //   value = selectedItem;
             }
@@ -2017,8 +2020,13 @@
                 }
                 else if (action == VIS.Actions.zoom) {
                     if (!disabled)
-                        zoomAction();
+                        zoomAction(self.getValue());
                 }
+                else if (action == VIS.Actions.addnewrec) {
+                    if (!disabled)
+                        zoomAction(-10);
+                }
+                
             });
         }
 

@@ -974,7 +974,7 @@
 
             if (this.windowContainer.find('.vis-window-instruc-overlay-new').length <= 0) {
                 this.windowContainer.prepend('<div class="vis-window-instruc-overlay-new"><div class="vis-window-instruc-overlay-new-inn">'
-                    + '<p>' + VIS.Msg.getMsg('createnewRec') + '</p></div></div>');
+                    + '<p>' + VIS.Msg.getMsg('CreateNewRec') + '</p></div></div>');
 
                 this.$li.addClass('vis-window-instruc-overlay-new-li');
             }
