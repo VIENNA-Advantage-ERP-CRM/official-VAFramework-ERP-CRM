@@ -97,7 +97,6 @@ namespace VIS.Controllers
             MPaymentModel objCashBookModel = new MPaymentModel();
             return Json(JsonConvert.SerializeObject(objCashBookModel.GetBankAcctCurrency(fields)), JsonRequestBehavior.AllowGet);
         }
-
         /// <summary>
         /// Set override check based on autocheck control
         /// Author:VA230
