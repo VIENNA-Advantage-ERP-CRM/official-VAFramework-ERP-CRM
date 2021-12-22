@@ -250,7 +250,6 @@ namespace VIS.Models
             int Currency_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Currency_ID FROM C_BankAccount WHERE C_BankAccount_ID = " + Util.GetValueOfInt(fields)));
             return Currency_ID;
         }
-
         /// <summary>
         /// Get auto check control based on selected bank
         /// Author:VA230
