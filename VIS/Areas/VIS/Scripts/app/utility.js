@@ -47,7 +47,8 @@
         add: "add",
         update: "update",
         remove: "delete",
-        contact: "contact"
+        contact: "contact",
+        addnewrec:"AddNewRecord"
     };
 
     VIS.EnvConstants =
@@ -929,9 +930,13 @@
         function getContextPopup(options) {
 
             var ulPopup = $("<ul class='vis-apanel-rb-ul'>");
-            if (typeof options[VIS.Actions.zoom] !== "undefined")
+            if (typeof options[VIS.Actions.zoom] !== "undefined") {
                 ulPopup.append($("<li data-action='" + VIS.Actions.zoom + "' style='opacity:" + (options[VIS.Actions.zoom] ? .7 : 1) +
                     "'><i data-action='" + VIS.Actions.zoom + "' class='vis vis-find'></i><span data-action='" + VIS.Actions.zoom + "'>" + VIS.Msg.getMsg("Zoom") + "</span></li>"));
+                if (options[VIS.Actions.addnewrec])
+                    ulPopup.append($("<li data-action='" + VIS.Actions.addnewrec + "' style='opacity:" + (options[VIS.Actions.zoom] ? .7 : 1) +
+                        "'><i data-action='" + VIS.Actions.addnewrec + "' class='fa fa-plus'></i><span data-action='" + VIS.Actions.addnewrec + "'>" + VIS.Msg.getMsg("AddNew") + "</span></li>"));
+            }
             if (options[VIS.Actions.preference])
                 ulPopup.append($("<li data-action='" + VIS.Actions.preference + "'><i data-action='" + VIS.Actions.preference + "' class='fa fa-cog'></i><span data-action='" + VIS.Actions.preference + "'>" + VIS.Msg.getMsg("Preference") + "</span></li>"));
             if (options[VIS.Actions.refresh])
@@ -944,6 +949,8 @@
                 ulPopup.append($("<li data-action='" + VIS.Actions.remove + "'><i data-action='" + VIS.Actions.remove + "' class='fa fa-arrow-left'></i><span data-action='" + VIS.Actions.remove + "'>" + VIS.Msg.getMsg("Clear") + "</span></li>"));
             if (options[VIS.Actions.contact])
                 ulPopup.append($("<li data-action='" + VIS.Actions.contact + "'><i data-action='" + VIS.Actions.contact + "' class='fa fa-user'></i><span data-action='" + VIS.Actions.contact + "'>" + VIS.Msg.getMsg("Contact") + "</span></li>"));
+            
+            //
             return ulPopup;
         };
 

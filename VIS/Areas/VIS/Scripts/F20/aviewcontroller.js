@@ -1346,9 +1346,9 @@
         }
         //Set Initial record
         //  Set initial record
-        if (this.gTab.getTableModel().getTotalRowCount() == 0) {
+        if (this.gTab.getTableModel().getTotalRowCount() == 0 || this.gTab.getTableModel().getTotalRowCount() == null) {
             //	Automatically create New Record, if none & tab not RO
-            if (!this.gTab.getIsReadOnly() &&
+            if (!this.gTab.getIsReadOnly() && this.isZoomAction==true &&
                 (VIS.context.getIsAutoNew(this.windowNo)
                     || this.gTab.getIsQueryNewRecord()) && parentValid) {
                 if (this.gTab.getIsInsertRecord() && !this.skipInserting) {
