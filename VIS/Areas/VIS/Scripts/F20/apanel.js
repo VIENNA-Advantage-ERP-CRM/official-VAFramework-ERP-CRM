@@ -204,11 +204,22 @@
             $btnFPClose = $fltrPanel.find('.vis-fp-header .vis-mark');
 
             setToolTipMessages();
+
+            eventHandling();
         };
 
         var setToolTipMessages = function () {
             $btnFilter.attr('title', VIS.Msg.getMsg('FilterRecord'));
             $spanSetting.attr('title', VIS.Msg.getMsg('Settings'));
+        };
+
+        var eventHandling = function () {
+            $root.on('click', function (e) {
+                $root.find('.vis-window-instruc-overlay-new').remove();
+                $root.find('.vis-window-instruc-overlay-new-inn').remove();
+                $root.find('.vis-window-instruc-overlay-new-li').instructionPopRemoved = true;;
+                $root.find('.vis-window-instruc-overlay-new-li').removeClass('.vis-window-instruc-overlay-new-li');
+            });
         };
 
         this.createSearchAutoComplete = function (text) {
@@ -3073,6 +3084,10 @@
         if (e.getTotalRows() == 0 && insertRecord) {
             this.aNew.setEnabled(true);
             this.aDelete.setEnabled(false);
+            this.aNew.highlightNewButton(true);
+        }
+        else {
+            this.aNew.highlightNewButton(false);
         }
 
         //	Single-Multi

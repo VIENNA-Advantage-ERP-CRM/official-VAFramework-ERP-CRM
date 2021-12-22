@@ -460,7 +460,7 @@
                 }
 
 
-                iControl.setValue(w2utils.encodeTags(colValue), false);
+                iControl.setValue(VIS.Utility.decodeText(colValue), false);
 
 
             }
