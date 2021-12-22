@@ -1630,6 +1630,17 @@ namespace VAdvantage.Model
         }/** Get Reversal Document.
 @return Reference of its original document */
         public int GetReversalDoc_ID() { Object ii = Get_Value("ReversalDoc_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+
+        /** Set Warehouse.@param M_Warehouse_ID Storage Warehouse and Service Point */
+        public void SetM_Warehouse_ID(int M_Warehouse_ID)
+        {
+            if (M_Warehouse_ID <= 0) Set_Value("M_Warehouse_ID", null);
+            else
+                Set_Value("M_Warehouse_ID", M_Warehouse_ID);
+        }
+        /** Get Warehouse.@return Storage Warehouse and Service Point */
+        public int GetM_Warehouse_ID() { Object ii = Get_Value("M_Warehouse_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+
     }
 
 }
