@@ -952,6 +952,9 @@
     <Compile Include="Model\MProjectType.cs" />
     <Compile Include="Model\MProjectTypePhase.cs" />
     <Compile Include="Model\MProjectTypeTask.cs" />
+    <Compile Include="Model\MProvisionalInvoice.cs" />
+    <Compile Include="Model\MProvisionalInvoiceLine.cs" />
+    <Compile Include="Model\MProvisionalInvoiceTax.cs" />
     <Compile Include="Model\MRecurring.cs" />
     <Compile Include="Model\MRecurringRun.cs" />
     <Compile Include="Model\MReDistribution.cs" />
@@ -1241,6 +1244,9 @@
     <Compile Include="Model\X_C_ProjectTask.cs" />
     <Compile Include="Model\X_C_ProjectType.cs" />
     <Compile Include="Model\X_C_Project_Acct.cs" />
+    <Compile Include="Model\X_C_ProvisionalInvoice.cs" />
+    <Compile Include="Model\X_C_ProvisionalInvoiceLine.cs" />
+    <Compile Include="Model\X_C_ProvisionalInvoiceTax.cs" />
     <Compile Include="Model\X_C_Recurring.cs" />
     <Compile Include="Model\X_C_Recurring_Run.cs" />
     <Compile Include="Model\X_C_Region.cs" />

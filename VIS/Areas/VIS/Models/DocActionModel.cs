@@ -274,6 +274,15 @@ namespace VIS.Models
                     options[index++] = DocumentEngine.ACTION_REACTIVATE;
                 }
             }
+            // Provisional Invoice
+            if (AD_Table_ID == MProvisionalInvoice.Table_ID)
+            {
+                //	Complete                    ..  CO
+                if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))
+                {
+                    options[index++] = DocumentEngine.ACTION_REVERSE_CORRECT;
+                }
+            }
 
             // Added By Arpit
             else if (AD_Table_ID == MMovementConfirm.Table_ID)

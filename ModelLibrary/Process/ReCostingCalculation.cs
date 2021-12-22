@@ -77,6 +77,9 @@ namespace VAdvantage.Process
         bool isCostAdjustableOnLost = false;
         MLandedCostAllocation landedCostAllocation = null;
 
+        MProvisionalInvoice provisionalInvoice = null;
+        MProvisionalInvoiceLine provisionalInvoiceLine = null;
+
         MProduct product = null;
 
         MMatchInv matchInvoice = null;
@@ -111,6 +114,7 @@ namespace VAdvantage.Process
         string conversionNotFoundMovement1 = "";
         string conversionNotFoundProductionExecution1 = "";
         string conversionNotFound = "";
+        string conversionNotFoundProvisionalInvoice = "";
 
         List<ReCalculateRecord> ListReCalculatedRecords = new List<ReCalculateRecord>();
         public enum windowName { Shipment = 0, CustomerReturn, ReturnVendor, MaterialReceipt, MatchInvoice, Inventory, Movement, CreditMemo, AssetDisposal }
@@ -272,6 +276,13 @@ namespace VAdvantage.Process
                          FROM M_Production WHERE movementdate = " + GlobalVariable.TO_DATE(minDateRecord, true) + @" AND isactive       = 'Y'
                                AND ((PROCESSED = 'Y' AND iscostcalculated = 'N' AND IsReversed = 'N' ) OR (PROCESSED = 'Y' AND iscostcalculated  = 'Y'
                                AND ISREVERSEDCOSTCALCULATED= 'N' AND IsReversed = 'Y' AND Name LIKE '%{->%'))");
+                    sql.Append(@"UNION 
+                         SELECT ad_client_id , ad_org_id , isactive , to_char(created, 'DD-MON-YY HH24:MI:SS') as created , createdby ,  to_char(updated, 'DD-MON-YY HH24:MI:SS') as updated , updatedby ,
+                                documentno , C_ProvisionalInvoice_id AS Record_Id , issotrx , isreturntrx , '' AS IsInternalUse, 'C_ProvisionalInvoice' AS TableName,
+                                docstatus, DateAcct AS DateAcct, iscostcalculated , isreversedcostcalculated 
+                         FROM C_ProvisionalInvoice WHERE dateacct = " + GlobalVariable.TO_DATE(minDateRecord, true) + @" AND isactive     = 'Y'
+                              AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N' ) OR (docstatus  IN ('RE') AND iscostcalculated = 'Y'
+                              AND ISREVERSEDCOSTCALCULATED= 'N' AND IsReversal ='Y')) ");
                     if (count > 0)
                     {
                         sql.Append(@" UNION
@@ -327,6 +338,69 @@ namespace VAdvantage.Process
                             catch { }
                             #endregion
 
+                            #region Cost Calculation for Provisional Invoice
+                            if (Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["TableName"]).Equals("C_ProvisionalInvoice"))
+                            {
+                                provisionalInvoice = new MProvisionalInvoice(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
+
+                                sql.Clear();
+                                sql.Append(@"SELECT * FROM C_ProvisionalInvoiceLine WHERE IsActive = 'Y' 
+                                                AND " + (provisionalInvoice.IsReversal() ? " iscostcalculated = 'Y' AND IsReversedCostCalculated = 'N' "
+                                                : " iscostcalculated = 'N' ") +
+                                                " AND C_ProvisionalInvoice_ID = " + provisionalInvoice.GetC_ProvisionalInvoice_ID());
+                                if (!String.IsNullOrEmpty(productCategoryID) && String.IsNullOrEmpty(productID))
+                                {
+                                    sql.Append(" AND M_Product_ID IN (SELECT M_Product_ID FROM M_Product WHERE M_Product_Category_ID IN (" + productCategoryID + " ) ) ");
+                                }
+                                else
+                                {
+                                    sql.Append(" AND M_Product_ID IN (" + productID + " )");
+                                }
+                                sql.Append(" ORDER BY Line ");
+                                dsChildRecord = DB.ExecuteDataset(sql.ToString(), null, Get_Trx());
+                                if (dsChildRecord != null && dsChildRecord.Tables.Count > 0 && dsChildRecord.Tables[0].Rows.Count > 0)
+                                {
+                                    for (int j = 0; j < dsChildRecord.Tables[0].Rows.Count; j++)
+                                    {
+                                        provisionalInvoiceLine = new MProvisionalInvoiceLine(GetCtx(), dsChildRecord.Tables[0].Rows[j], Get_Trx());
+                                        if (client.IsCostImmediate() && provisionalInvoiceLine.GetM_Product_ID() > 0)
+                                        {
+                                            if (!provisionalInvoice.CostingCalculation(client, provisionalInvoiceLine, true))
+                                            {
+                                                if (!conversionNotFoundProvisionalInvoice.Contains(provisionalInvoice.GetDocumentNo()))
+                                                {
+                                                    conversionNotFoundProvisionalInvoice += provisionalInvoice.GetDocumentNo() + " , ";
+                                                }
+                                                _log.Info("Cost not Calculated for Provisional Invoice for this Line ID = " + provisionalInvoiceLine.GetC_ProvisionalInvoiceLine_ID());
+                                            }
+                                            else
+                                            {
+                                                _log.Fine("Cost Calculation updated for C_ProvisionalLine = " + provisionalInvoiceLine.GetC_ProvisionalInvoiceLine_ID());
+                                                Get_Trx().Commit();
+                                            }
+                                        }
+                                    }
+
+                                    // update Provisional Invoice Header
+                                    sql.Clear();
+                                    sql.Append(@"SELECT COUNT(C_ProvisionalInvoiceLine_ID) FROM C_ProvisionalInvoiceLine
+                                        WHERE " + (provisionalInvoice.IsReversal() ? "IsReversedCostCalculated = 'N'" : "IsCostCalculated = 'N'") + @"
+                                         AND IsActive = 'Y' AND C_ProvisionalInvoice_ID = " + provisionalInvoice.GetC_ProvisionalInvoice_ID());
+                                    if (Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_Trx())) <= 0)
+                                    {
+                                        //Update  IsCostCalculated, IsReversedCostCalculated  as True on Header
+                                        DB.ExecuteQuery(@"UPDATE C_ProvisionalInvoice SET IsCostCalculated = 'Y' "
+                                          + (provisionalInvoice.IsReversal() ? ", IsReversedCostCalculated = 'Y'" : "") + @"
+                                          WHERE C_ProvisionalInvoice_ID = " + provisionalInvoice.GetC_ProvisionalInvoice_ID(), null, Get_Trx());
+
+                                        _log.Fine("Cost Calculation updated for C_provisionalInvoice_ID = " + provisionalInvoice.GetC_ProvisionalInvoice_ID());
+                                        Get_Trx().Commit();
+                                    }
+                                    continue;
+                                }
+                            }
+                            #endregion
+
                             #region Cost Calculation for SO / PO / CRMA / VRMA
                             try
                             {
@@ -373,10 +447,10 @@ namespace VAdvantage.Process
                                             try
                                             {
                                                 product = new MProduct(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_Product_ID"]), Get_Trx());
-                                                invoiceLine = new MInvoiceLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["C_InvoiceLine_ID"]), Get_Trx());
+                                                invoiceLine = new MInvoiceLine(GetCtx(), dsChildRecord.Tables[0].Rows[j], Get_Trx());
                                                 if (invoiceLine != null && invoiceLine.Get_ID() > 0)
                                                 {
-                                                    ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine);
+                                                    ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine, true);
                                                 }
                                                 if (invoiceLine != null && invoiceLine.GetC_Invoice_ID() > 0 && invoiceLine.GetQtyInvoiced() == 0)
                                                     continue;
@@ -1110,7 +1184,7 @@ namespace VAdvantage.Process
                             {
                                 landedCostAllocation = new MLandedCostAllocation(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
                                 MInvoiceLine invoiceLine = new MInvoiceLine(GetCtx(), landedCostAllocation.GetC_InvoiceLine_ID(), Get_Trx());
-                                ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine);
+                                ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine, true);
                                 MProduct product = MProduct.Get(GetCtx(), landedCostAllocation.GetM_Product_ID());
                                 if (!MCostQueue.CreateProductCostsDetails(GetCtx(), landedCostAllocation.GetAD_Client_ID(), landedCostAllocation.GetAD_Org_ID(), product,
                                                                0, "LandedCost", null, null, null, invoiceLine, null, ProductInvoiceLineCost, 0, Get_Trx(), out conversionNotFoundInvoice))
@@ -1620,10 +1694,10 @@ namespace VAdvantage.Process
                                             try
                                             {
                                                 product = new MProduct(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_Product_ID"]), Get_Trx());
-                                                invoiceLine = new MInvoiceLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["C_InvoiceLine_ID"]), Get_Trx());
+                                                invoiceLine = new MInvoiceLine(GetCtx(), dsChildRecord.Tables[0].Rows[j], Get_Trx());
                                                 if (invoiceLine != null && invoiceLine.Get_ID() > 0)
                                                 {
-                                                    ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine);
+                                                    ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine, true);
                                                 }
                                                 if (invoiceLine != null && invoiceLine.GetC_Invoice_ID() > 0 && invoiceLine.GetQtyInvoiced() == 0)
                                                     continue;
@@ -2410,6 +2484,16 @@ namespace VAdvantage.Process
                 }
 
                 sql.Clear();
+                sql.Append(@"SELECT Min(DateAcct) FROM C_ProvisionalInvoice WHERE isactive = 'Y' AND
+                ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR 
+                (docstatus IN ('RE') AND iscostcalculated = 'Y' AND ISREVERSEDCOSTCALCULATED= 'N' AND IsReversal ='Y'))  AND AD_Client_ID = " + GetCtx().GetAD_Client_ID());
+                tempDate = Util.GetValueOfDateTime(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
+                if (minDate == null || (Util.GetValueOfDateTime(minDate) > Util.GetValueOfDateTime(tempDate) && tempDate != null))
+                {
+                    minDate = tempDate;
+                }
+
+                sql.Clear();
                 sql.Append("SELECT Min(DateAcct) FROM m_inout WHERE isactive = 'Y' AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR (docstatus IN ('RE') AND iscostcalculated = 'Y' AND ISREVERSEDCOSTCALCULATED= 'N' AND description like '%{->%'))  AND AD_Client_ID = " + GetCtx().GetAD_Client_ID());
                 tempDate = Util.GetValueOfDateTime(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
                 if (minDate == null || (Util.GetValueOfDateTime(minDate) > Util.GetValueOfDateTime(tempDate) && tempDate != null))
@@ -2473,6 +2557,17 @@ namespace VAdvantage.Process
                     DB.ExecuteQuery(@"UPDATE C_Invoice  SET  iscostcalculated = 'N',  isreversedcostcalculated = 'N'
                                        WHERE C_Invoice_ID IN ( 
                                         SELECT C_Invoice_ID FROM C_Invoiceline WHERE  M_Product_ID IN 
+                                        (SELECT M_Product_ID FROM M_Product WHERE M_Product_Category_ID IN (" + productCategoryID + " ) ) )", null, Get_Trx());
+
+                // for C_ProvisonalInvoice / C_ProvisionalInvoiceLine
+                countRecord = 0;
+                countRecord = DB.ExecuteQuery(@"UPDATE c_Provisionalinvoiceline SET iscostimmediate = 'N' , iscostcalculated = 'N',  isreversedcostcalculated = 'N' 
+                                                 WHERE M_Product_ID IN 
+                                                 (SELECT M_Product_ID FROM M_Product WHERE M_Product_Category_ID IN (" + productCategoryID + " ) )", null, Get_Trx());
+                if (countRecord > 0)
+                    DB.ExecuteQuery(@"UPDATE C_ProvisionalInvoice  SET  iscostcalculated = 'N',  isreversedcostcalculated = 'N'
+                                       WHERE C_ProvisionalInvoice_ID IN ( 
+                                        SELECT C_ProvisionalInvoice_ID FROM C_ProvisionalInvoiceline WHERE  M_Product_ID IN 
                                         (SELECT M_Product_ID FROM M_Product WHERE M_Product_Category_ID IN (" + productCategoryID + " ) ) )", null, Get_Trx());
 
                 // For Landed Cost Allocation
@@ -2594,6 +2689,15 @@ namespace VAdvantage.Process
                                        WHERE C_Invoice_ID IN ( 
                                         SELECT C_Invoice_ID FROM C_Invoiceline WHERE  M_Product_ID IN  (" + productID + " ) )", null, Get_Trx());
 
+                // for C_ProvisionalInvoice / C_ProvisionalInvoiceLine
+                countRecord = 0;
+                countRecord = DB.ExecuteQuery(@"UPDATE c_Provisionalinvoiceline SET iscostimmediate = 'N' , iscostcalculated = 'N',  isreversedcostcalculated = 'N' 
+                                                 WHERE M_Product_ID IN  (" + productID + " ) ", null, Get_Trx());
+                if (countRecord > 0)
+                    DB.ExecuteQuery(@"UPDATE C_ProvisionalInvoice  SET  iscostcalculated = 'N',  isreversedcostcalculated = 'N'
+                                       WHERE C_ProvisionalInvoice_ID IN ( 
+                                        SELECT C_ProvisionalInvoice_ID FROM C_ProvisionalInvoiceline WHERE  M_Product_ID IN  (" + productID + " ) )", null, Get_Trx());
+
                 // For Landed Cost Allocation
                 countRecord = 0;
                 countRecord = DB.ExecuteQuery(@"UPDATE C_LANDEDCOSTALLOCATION SET  iscostcalculated = 'N' 
@@ -2683,6 +2787,10 @@ namespace VAdvantage.Process
                 // for C_Invoice / C_InvoiceLine
                 DB.ExecuteQuery(@"UPDATE c_invoiceline SET iscostimmediate = 'N' , iscostcalculated = 'N',  isreversedcostcalculated = 'N', PostCurrentCostPrice = 0   WHERE AD_client_ID =  " + GetAD_Client_ID(), null, Get_Trx());
                 DB.ExecuteQuery(@"UPDATE C_Invoice  SET  iscostcalculated = 'N',  isreversedcostcalculated = 'N' WHERE AD_client_ID =  " + GetAD_Client_ID(), null, Get_Trx());
+
+                // for C_ProvisionalInvoice / C_ProvisionalInvoiceLine
+                DB.ExecuteQuery(@"UPDATE c_Provisionalinvoiceline SET iscostimmediate = 'N' , iscostcalculated = 'N',  isreversedcostcalculated = 'N'   WHERE AD_client_ID =  " + GetAD_Client_ID(), null, Get_Trx());
+                DB.ExecuteQuery(@"UPDATE C_ProvisionalInvoice  SET  iscostcalculated = 'N',  isreversedcostcalculated = 'N' WHERE AD_client_ID =  " + GetAD_Client_ID(), null, Get_Trx());
 
                 // For Landed Cost Allocation
                 DB.ExecuteQuery(@"UPDATE C_LANDEDCOSTALLOCATION SET  iscostcalculated = 'N' WHERE AD_client_ID =  " + GetAD_Client_ID(), null, Get_Trx());
@@ -3344,7 +3452,7 @@ namespace VAdvantage.Process
                 {
                     try
                     {
-                        inoutLine = new MInOutLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_InOutLine_ID"]), Get_Trx());
+                        inoutLine = new MInOutLine(GetCtx(), dsChildRecord.Tables[0].Rows[j], Get_Trx());
                         orderLine = new MOrderLine(GetCtx(), inoutLine.GetC_OrderLine_ID(), null);
                         if (orderLine != null && orderLine.GetC_Order_ID() > 0)
                         {
@@ -3603,7 +3711,7 @@ namespace VAdvantage.Process
                 {
                     try
                     {
-                        inoutLine = new MInOutLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_InOutLine_ID"]), Get_Trx());
+                        inoutLine = new MInOutLine(GetCtx(), dsChildRecord.Tables[0].Rows[j], Get_Trx());
                         orderLine = new MOrderLine(GetCtx(), inoutLine.GetC_OrderLine_ID(), null);
                         if (orderLine != null && orderLine.GetC_Order_ID() > 0)
                         {
@@ -3821,7 +3929,7 @@ namespace VAdvantage.Process
             int M_Warehouse_Id = inoutLine.GetM_Warehouse_ID();
             if (invoiceLine != null && invoiceLine.Get_ID() > 0)
             {
-                ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine);
+                ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine, true);
             }
             if (inoutLine.GetC_OrderLine_ID() > 0)
             {
@@ -4014,7 +4122,7 @@ namespace VAdvantage.Process
             invoice = new MInvoice(GetCtx(), invoiceLine.GetC_Invoice_ID(), Get_Trx());
             if (invoiceLine != null && invoiceLine.Get_ID() > 0)
             {
-                ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine);
+                ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine, true);
             }
             product = new MProduct(GetCtx(), invoiceLine.GetM_Product_ID(), Get_Trx());
             if (inoutLine.GetC_OrderLine_ID() > 0)
@@ -4124,7 +4232,7 @@ namespace VAdvantage.Process
                 for (int j = 0; j < dsChildRecord.Tables[0].Rows.Count; j++)
                 {
                     product = new MProduct(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_Product_ID"]), Get_Trx());
-                    inventoryLine = new MInventoryLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_InventoryLine_ID"]), Get_Trx());
+                    inventoryLine = new MInventoryLine(GetCtx(), dsChildRecord.Tables[0].Rows[j], Get_Trx());
                     if (product.GetProductType() == "I") // for Item Type product
                     {
                         costingMethod = MCostElement.CheckLifoOrFifoMethod(GetCtx(), GetAD_Client_ID(), product.GetM_Product_ID(), Get_Trx());
@@ -4404,7 +4512,7 @@ namespace VAdvantage.Process
                 for (int j = 0; j < dsChildRecord.Tables[0].Rows.Count; j++)
                 {
                     product = new MProduct(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_Product_ID"]), Get_Trx());
-                    movementLine = new MMovementLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_MovementLine_ID"]), Get_Trx());
+                    movementLine = new MMovementLine(GetCtx(), dsChildRecord.Tables[0].Rows[j], Get_Trx());
                     locatorTo = MLocator.Get(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_LocatorTo_ID"]));
                     costingMethod = MCostElement.CheckLifoOrFifoMethod(GetCtx(), GetAD_Client_ID(), product.GetM_Product_ID(), Get_Trx());
 
