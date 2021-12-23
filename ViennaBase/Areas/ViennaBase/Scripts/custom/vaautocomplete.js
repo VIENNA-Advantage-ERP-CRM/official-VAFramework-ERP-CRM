@@ -17,16 +17,18 @@
         var ctrl = this[0];
         var currentFocus, arr = [], setTime;
         var self, isSearch = false;
-        var a;
+        var a, isAdd = false;
         var response = function (data) {
             suggestion(data);
         };
 
         var suggestion = function (arr) {
             isSearch = true;
+            isAdd = false;
             var b, i, val = self.value;
             /*create a DIV element that will contain the items (values):*/
             a = document.createElement("DIV");
+            $('#' + self.name + "vis-autocomplete-list").remove();
             a.setAttribute("id", self.name + "vis-autocomplete-list");
             a.setAttribute("class", "vis-autocomplete-items");
             /*append the DIV element as a child of the autocomplete container:*/
@@ -41,7 +43,14 @@
                     /*make the matching letters bold:var idx*/
                     var boldVal = arr[i].value.substr(idx, val.length)
                     b.innerHTML = arr[i].value.replace(boldVal, "<strong>" + boldVal + "</strong>");
-                    //b.innerHTML += arr[i].value.substr(val.length);
+                    //b.innerHTML += arr[i].value.substr(val.length);                                      
+                } else if (arr[i].id == 'vis-AddNew') {
+                    isAdd = true;
+                    b = document.createElement("DIV");
+                    b.innerHTML += "<center>" + arr[i].msg + "</center><center><div style='display:inline-block;padding:5px 10px; margin: 5px;background-color:rgba(var(--v-c-secondary), 1);border-radius: 0.25rem;'>" + arr[i].value + "</div></center>";
+                }
+
+                if (b) {
                     /*insert a input field that will hold the current array item's value:*/
                     b.innerHTML += "<input type='hidden' data-id='" + arr[i].id + "'  value='" + arr[i].value + "'>";
                     /*execute a function when someone clicks on the item value (DIV element):*/
@@ -51,8 +60,10 @@
                         var obj = {
                             id: this.getElementsByTagName("input")[0].getAttribute('data-id'),
                             text: this.getElementsByTagName("input")[0].value
-                        }  
-                        isSearch = false;
+                        }
+                        if (obj.id == 'vis-AddNew') {
+                            isSearch = false;
+                        }
                         settings.onSelect(e, obj);
                         /*close the list of autocompleted values,
                         (or any other open lists of autocompleted values:*/
@@ -62,7 +73,7 @@
                 }
             }
 
-        /*calculate list postion*/
+            /*calculate list postion*/
             var slf = $(self);
             var ancr = $(a);
             var width = slf.outerWidth();
@@ -85,7 +96,7 @@
             }
             if (leftright == left) {
                 xPos = left - (listWidth - width);
-            }            
+            }
             ancr.attr("style", "left:" + xPos + "px; top:" + yPos + "px;min-width:" + width + "px;max-width:" + (width + 200) + "px");
         }
         ctrl.addEventListener("focus", function (e) {
@@ -147,7 +158,11 @@
             if (currentFocus >= x.length) currentFocus = 0;
             if (currentFocus < 0) currentFocus = (x.length - 1);
             /*add class "autocomplete-active":*/
+            if (isAdd && currentFocus == 0) {
+                currentFocus++;
+            }
             x[currentFocus].classList.add("vis-autocomplete-active");
+
         }
 
         function removeActive(x) {

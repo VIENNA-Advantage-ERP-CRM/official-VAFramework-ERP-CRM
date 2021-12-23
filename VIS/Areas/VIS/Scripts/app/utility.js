@@ -48,7 +48,7 @@
         update: "update",
         remove: "delete",
         contact: "contact",
-        addnewrec:"AddNewRecord"
+        addnewrec: "AddNewRecord"
     };
 
     VIS.EnvConstants =
@@ -149,7 +149,7 @@
             return o;
         };
 
-        this.GetConvertedNumber = function (val, dotFormatter) {            
+        this.GetConvertedNumber = function (val, dotFormatter) {
             val = this.GetConvertedString(val, dotFormatter);
             if (dotFormatter) {
 
@@ -168,7 +168,7 @@
                 return Number(String(val).replace(/[^0-9,-]+/g, "").replace(/[,]+/g, "."));
             }
 
-           
+
         }
 
         // Function to convert String To Number in 1000 Format
@@ -927,7 +927,7 @@
             return $('<button class="vis-controls-txtbtn-table-td2" ' + ((disabled) ? "disabled" : "") + ' ><i class="vis vis-find" /></button>');
         }
 
-        function getContextPopup(options) {
+        function getContextPopup(options, fieldName) {
 
             var ulPopup = $("<ul class='vis-apanel-rb-ul'>");
             if (typeof options[VIS.Actions.zoom] !== "undefined") {
@@ -935,7 +935,7 @@
                     "'><i data-action='" + VIS.Actions.zoom + "' class='vis vis-find'></i><span data-action='" + VIS.Actions.zoom + "'>" + VIS.Msg.getMsg("Zoom") + "</span></li>"));
                 if (options[VIS.Actions.addnewrec])
                     ulPopup.append($("<li data-action='" + VIS.Actions.addnewrec + "' style='opacity:" + (options[VIS.Actions.zoom] ? .7 : 1) +
-                        "'><i data-action='" + VIS.Actions.addnewrec + "' class='fa fa-plus'></i><span data-action='" + VIS.Actions.addnewrec + "'>" + VIS.Msg.getMsg("AddNew") + "</span></li>"));
+                        "'><i data-action='" + VIS.Actions.addnewrec + "' class='fa fa-plus'></i><span data-action='" + VIS.Actions.addnewrec + "'>" + VIS.Msg.getMsg("AddNew") + " " + fieldName + "</span></li>"));
             }
             if (options[VIS.Actions.preference])
                 ulPopup.append($("<li data-action='" + VIS.Actions.preference + "'><i data-action='" + VIS.Actions.preference + "' class='fa fa-cog'></i><span data-action='" + VIS.Actions.preference + "'>" + VIS.Msg.getMsg("Preference") + "</span></li>"));
@@ -949,7 +949,7 @@
                 ulPopup.append($("<li data-action='" + VIS.Actions.remove + "'><i data-action='" + VIS.Actions.remove + "' class='fa fa-arrow-left'></i><span data-action='" + VIS.Actions.remove + "'>" + VIS.Msg.getMsg("Clear") + "</span></li>"));
             if (options[VIS.Actions.contact])
                 ulPopup.append($("<li data-action='" + VIS.Actions.contact + "'><i data-action='" + VIS.Actions.contact + "' class='fa fa-user'></i><span data-action='" + VIS.Actions.contact + "'>" + VIS.Msg.getMsg("Contact") + "</span></li>"));
-            
+
             //
             return ulPopup;
         };
