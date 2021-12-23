@@ -2568,16 +2568,33 @@
                                         value: VIS.Utility.Util.getIdentifierDisplayVal(parseObj.finalvalue)
                                     });
                                 }
-
+                                response(res);
                             }
-                            response(res);
+                            if (res.length == 0) {
+                                res = [];
+                                res.push({
+                                    id: "vis-AddNew",
+                                    value: VIS.Msg.getMsg("AddNew"),
+                                    msg: VIS.Msg.getMsg("NoDataFound")//"No data found. Do you want to add?"                                    
+                                });
+                                response(res);
+                            }
+                            
                         },
                     });
 
                 },
                 minLength: 2,
                 onSelect: function (e, item) {
-                    self.setValue(item.id, true, true);
+                    if (item.id == "vis-AddNew") {
+                        zoomAction();
+                        setTimeout(function () {
+                            self.setValue(-1, true, true);
+                        }, 500);                        
+                    } else {
+                        self.setValue(item.id, true, true);
+                    }
+                    
                 }
             });
 
