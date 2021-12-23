@@ -2342,6 +2342,7 @@
 
         if (this.displayType == VIS.DisplayType.Time) {
             d = new Date(0);
+            d.setYear(1990);
             var parts = val.match(/(\d+)\:(\d+)/);
             var hours = parseInt(parts[1], 10),
                 minutes = parseInt(parts[2], 10);
