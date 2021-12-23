@@ -3084,7 +3084,9 @@
         if (e.getTotalRows() == 0 && insertRecord) {
             this.aNew.setEnabled(true);
             this.aDelete.setEnabled(false);
-            this.aNew.highlightNewButton(true);
+            if (!this.curGC.isZoomAction) {
+                this.aNew.highlightNewButton(true);
+            }
         }
         else {
             this.aNew.highlightNewButton(false);
