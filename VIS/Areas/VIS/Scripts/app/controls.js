@@ -1896,9 +1896,10 @@
             //
             var zoomQuery = self.lookup.getZoomQuery();
            //var value = self.getValue();
-            if (value == null) {
-                //   value = selectedItem;
-            }
+
+
+            if (!value)
+                value = self.getValue();
 
             if (value == "")
                 value = null;
@@ -2020,7 +2021,7 @@
                 }
                 else if (action == VIS.Actions.zoom) {
                     if (!disabled)
-                        zoomAction(self.getValue());
+                        zoomAction();
                 }
                 else if (action == VIS.Actions.addnewrec) {
                     if (!disabled)
@@ -2464,12 +2465,14 @@
             //$btnZoom = VIS.AEnv.getZoomButton(disabled);
             // btnCount += 1;
             options[VIS.Actions.zoom] = disabled;
+            options[VIS.Actions.addnewrec] = true;
 
             //$btnPop = $('<button  tabindex="-1" class="input-group-text"><img tabindex="-1" src="' + VIS.Application.contextUrl + "Areas/VIS/Images/base/Info20.png" + '" /></button>');
             $btnPop = $('<button  tabindex="-1" class="input-group-text"><i tabindex="-1" Class="fa fa-ellipsis-v" /></button>');
             //	VBPartner quick entry link
             var isBP = false;
             if (columnName === "C_BPartner_ID") {
+                options[VIS.Actions.addnewrec] = false;
                 options[VIS.Actions.add] = true;
                 options[VIS.Actions.update] = true;
             }
@@ -3380,16 +3383,15 @@
 
         $btnSearch.on(VIS.Events.onClick, self.openSearchForm);
 
-        function zoomAction() {
+        function zoomAction(value) {
 
             if (!self.lookup || disabled)
                 return;
             //
             var zoomQuery = self.lookup.getZoomQuery();
-            var value = self.getValue();
-            if (value == null) {
-                //   value = selectedItem;
-            }
+            //var value = self.getValue();
+            if (!value)
+                value = self.getValue();
 
             if (value == "")
                 value = null;
@@ -3480,6 +3482,11 @@
                     if (disabled)
                         return;
                     zoomAction();
+                }
+                else if (action == VIS.Actions.addnewrec) {
+                    if (disabled)
+                        return;
+                    zoomAction(-10);
                 }
                 else if (action == VIS.Actions.preference) {
                     var obj = new VIS.ValuePreference(self.mField, self.getValue(), self.getDisplay());
