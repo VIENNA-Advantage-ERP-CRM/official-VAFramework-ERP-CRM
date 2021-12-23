@@ -61,9 +61,7 @@
                             id: this.getElementsByTagName("input")[0].getAttribute('data-id'),
                             text: this.getElementsByTagName("input")[0].value
                         }
-                        if (obj.id == 'vis-AddNew') {
-                            isSearch = false;
-                        }
+                        isSearch = false;
                         settings.onSelect(e, obj);
                         /*close the list of autocompleted values,
                         (or any other open lists of autocompleted values:*/
