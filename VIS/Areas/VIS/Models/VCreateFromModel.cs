@@ -63,11 +63,22 @@ namespace VIS.Models
             //{
             //    sql.Append(@" LEFT JOIN C_ProvisionalInvoice PI ON PI.C_Order_ID=o.C_Order_ID");
             //}
-            sql.Append(@" WHERE o.C_BPartner_ID=" + C_BPartner_ID + " AND o.IsSOTrx ='" + (IsSOTrx ? "Y" : "N") + @"'
+            sql.Append(@" WHERE o.IsSOTrx ='" + (IsSOTrx ? "Y" : "N") + @"'
                  AND O.IsBlanketTrx = 'N' AND O.ISSALESQUOTATION = 'N' AND o.DocStatus IN('CL', 'CO') ");
             if (OrgId > 0)
             {
                 sql.Append("AND o.AD_Org_ID = " + OrgId);
+            }
+            if (C_BPartner_ID > 0)
+            {
+                if (isProvisionalInvoice || forInvoices)
+                {
+                    sql.Append("AND (o.C_BPartner_ID = " + C_BPartner_ID + " OR o.Bill_BPartner_ID = " + C_BPartner_ID + ")");
+                }
+                else
+                {
+                    sql.Append("AND o.C_BPartner_ID = " + C_BPartner_ID);
+                }
             }
 
             if (!String.IsNullOrEmpty(whereCondition))
@@ -695,7 +706,7 @@ namespace VIS.Models
                                                 AND inv.docstatus NOT IN('VO', 'RE')
                                                 and inv.c_provisionalinvoice_id = i.c_provisionalinvoice_id
                                                 ))");
-            
+
             string whereCondition = "";
             if (InvoiceID > 0)
             {
