@@ -665,10 +665,10 @@
                                 strDiv = "<div class='vis-grid-td-icon-grp'>";
 
                                 if (listIcon) {
-                                    strDiv += "<div class='" + oColumns[colIndex]['customClass']+" vis-grid-row-td-icon'> " + listIcon + "</div> ";
+                                    strDiv += "<div class='" + oColumns[colIndex]['customClass'] + " vis-grid-row-td-icon'> " + listIcon + "</div> ";
                                 }
                                 else {
-                                    strDiv += "<div class='" + oColumns[colIndex]['customClass'] +" vis-grid-row-td-icon'><span>" + highlightChar + "</span></div>";
+                                    strDiv += "<div class='" + oColumns[colIndex]['customClass'] + " vis-grid-row-td-icon'><span>" + highlightChar + "</span></div>";
                                 }
                                 strDiv += "<span> " + d + "</span ><div>";
                             }
@@ -680,10 +680,10 @@
                             else if (lType == "I") {
                                 strDiv = "<div class='vis-grid-td-icon-grp' style='Justify-Content:center'>";
                                 if (listIcon) {
-                                    strDiv += "<div class='" + oColumns[colIndex]['customClass'] +" vis-grid-row-td-icon'> " + listIcon + "</div> ";
+                                    strDiv += "<div class='" + oColumns[colIndex]['customClass'] + " vis-grid-row-td-icon'> " + listIcon + "</div> ";
                                 }
                                 else {
-                                    strDiv += "<div class='" + oColumns[colIndex]['customClass'] +" vis-grid-row-td-icon'><span>" + highlightChar + "</span></div>";
+                                    strDiv += "<div class='" + oColumns[colIndex]['customClass'] + " vis-grid-row-td-icon'><span>" + highlightChar + "</span></div>";
                                 }
                                 strDiv += "<div>";
                             }
@@ -721,14 +721,14 @@
                                         //If image contains nothing.png that means image not found in identfier and 
                                         //we will Display highlightChar
                                         if (c > 0 && img.indexOf("nothing.png") > -1 && highlightChar.length > 0) {
-                                            strDiv += "<div class='" + oColumns[colIndex]['customClass'] +" vis-grid-row-td-icon'><span>" + highlightChar + "</span></div>";
+                                            strDiv += "<div class='" + oColumns[colIndex]['customClass'] + " vis-grid-row-td-icon'><span>" + highlightChar + "</span></div>";
                                         }
                                         strDiv += "<span>" + d[c] + "</span>";
                                     }
                                     //If image found, then display that image.
                                     if (c == 0 || img.indexOf("nothing.png") > -1) {
                                         if (img.indexOf("nothing.png") == -1) {
-                                            strDiv += "<div class='" + oColumns[colIndex]['customClass']+" vis-grid-row-td-icon'"
+                                            strDiv += "<div class='" + oColumns[colIndex]['customClass'] + " vis-grid-row-td-icon'"
                                                 + " > <img src='" + img +
                                                 "'></div > ";
                                             // "' onerror='this.style.display=\"none\"' ></img></div > ";
@@ -915,13 +915,13 @@
                             oColumns[colIndex]['customClass'] = 'vis-grd-custom-' + oColumns[colIndex].gridField.getAD_Column_ID() + winNo;
                             customClass = '.vis-grd-custom-' + oColumns[colIndex].gridField.getAD_Column_ID() + winNo + "{" + customStyle + "}";
                             var styleTag = document.createElement('style');
-                            styleTag.type= 'text/css';
+                            styleTag.type = 'text/css';
                             styleTag.innerHTML = customClass;
                             $($('head')[0]).append(styleTag);
                         }
                     }
 
-                    var val = record["imgurlcolumn"+f];
+                    var val = record["imgurlcolumn" + f];
                     if (record.changes && typeof record.changes[f] != 'undefined') {
                         val = record.changes[f];
                     }
@@ -1239,6 +1239,10 @@
         this.grid.scrollIntoView(index);
     };
 
+    VTable.prototype.setDefaultFocusField = function (field) {
+        this.defaultFocusField = field;
+    };
+
     VTable.prototype.tableModelChanged = function (action, args, actionIndexOrId) {
 
         this.blockSelect = true;
@@ -1267,6 +1271,7 @@
                 id = args.recid; // row to select
                 this.grid.refresh(); //refresh Grid
                 this.blockSelect = true; // forcefully block select changed event
+               
             }
 
             else if (action === VIS.VTable.prototype.ROW_DELETE) {
@@ -1292,6 +1297,7 @@
             if (id) {
                 this.select(id); //Select Row
             }
+            this.setDefaultFocus();
         }
 
         this.blockSelect = false;
@@ -1299,11 +1305,13 @@
 
     //Set Default Focus for grid... Not in use Yet.
     VTable.prototype.setDefaultFocus = function (colName) {
+        if (!colName)
+            colName = this.defaultFocusField.getColumnName();
         var selIndices = this.grid.getSelection();  //this.grid.getSelection(true);
         var colIndex = this.grid.getColumn(colName.toLower(), true)
         if (selIndices && selIndices.length > 0) {
-            ///this.grid.editField(selIndices[0], colIndex);
-            this.grid.dblClick(selIndices[0], { metaKey: true });
+            this.grid.editField(selIndices[0], colIndex);
+            //this.grid.dblClick(selIndices[colIndex], { metaKey: true });
         }
     };
 
