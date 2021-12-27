@@ -426,7 +426,7 @@
         this.linkColumnName = gTab._linkColumnName;
         this.extendendWhere = gTab._extendedWhere;
         this.keyColumnName = "";
-
+        this.defaultFocusField;
         this.isThroughRoleCenter = false;
 
         this.query = new VIS.Query();
@@ -1313,6 +1313,9 @@
             var gridField = new GridField(this.gTab._gridTable.m_fields[i]);
             gridField.setGridTab(this);
             this.gridTable.gridFields.push(gridField);
+            if (gridField.getIsDefaultFocus()) {
+                this.defaultFocusField = gridField
+            }
 
             var columnName = gridField.getColumnName();
             //	Record Info
@@ -4619,7 +4622,7 @@
         var size = this.gridFields.length;// .size();
         this.rowData = {}; // //	"original" data
         var rowData = {};
-        var defaultfocusField;
+    
         var tempWindowNo = this.gTable._windowNo + VIS.EnvConstants.WINDOW_TEMP;
         //	fill data
         if (copyCurrent) {
@@ -4678,14 +4681,13 @@
                 var field = this.gridFields[i];
                 var oo = field.getDefault(this.ctx, tempWindowNo);
                 rowData[field.getColumnName().toLowerCase()] = oo;
-                if (field.getIsDefaultFocus()) {
-                    defaultfocusField = field;
-                }
                 if (oo != null)
                     this.ctx.setWindowContext(tempWindowNo, field.getColumnName(), oo.toString());
             }
         }
 
+
+        //this.mQueryCompletedListener
         this.ctx.removeWindow(tempWindowNo);
         this.changed = true;
         this.compareDB = true;
@@ -4711,7 +4713,7 @@
         this.pazeSize++;
         //	inform
         //log.finer("Current=" + currentRow + ", New=" + m_newRow);
-        this.fireTableModelChanged(VIS.VTable.prototype.ROW_ADD, rowData, this.newRow,null, defaultfocusField);
+        this.fireTableModelChanged(VIS.VTable.prototype.ROW_ADD, rowData, this.newRow,null);
         //this.fireDataStatusIEvent(copyCurrent ? "UpdateCopied" : "Inserted", "");
         this.log.fine("Current=" + this.currentRow + ", New=" + this.newRow + " - complete");
         return true;
@@ -5118,13 +5120,12 @@
         e = null;
     };
 
-    GridTable.prototype.fireTableModelChanged = function (type, record, index, fireSelect, defaultfocusField) {
+    GridTable.prototype.fireTableModelChanged = function (type, record, index, fireSelect) {
+        var defaultFocusField = this.mDataListener.defaultFocusField;
         if (this.mCardModelListener) {
             this.mCardModelListener.tableModelChanged(type, record, index, fireSelect);
         }
         if (this.mTableModelListener) {
-            if (defaultfocusField)
-                this.mTableModelListener.setDefaultFocusField(defaultfocusField);
             this.mTableModelListener.tableModelChanged(type, record, index, fireSelect);
         }
 
