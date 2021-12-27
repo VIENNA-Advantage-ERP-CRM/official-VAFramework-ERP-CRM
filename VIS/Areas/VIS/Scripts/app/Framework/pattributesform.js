@@ -322,7 +322,7 @@
                     windowNoParent: windowNoParent,
                     strLotString: txtLotString.val(),
                     strSerNo: txtSerNo.val(),
-                    dtGuaranteeDate: dtGuaranteeDate.val(),
+                    dtGuaranteeDate: new Date(dtGuaranteeDate.val()),
                     strAttrCode: txtAttrCode.val(),
                     productWindow: productWindow,
                     mAttributeSetInstanceId: mAttributeSetInstanceId,
