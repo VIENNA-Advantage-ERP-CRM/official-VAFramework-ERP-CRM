@@ -1239,9 +1239,9 @@
         this.grid.scrollIntoView(index);
     };
 
-    VTable.prototype.setDefaultFocusField = function (field) {
-        this.defaultFocusField = field;
-    };
+    //VTable.prototype.setDefaultFocusField = function (field) {
+    //    this.defaultFocusField = field;
+    //};
 
     VTable.prototype.tableModelChanged = function (action, args, actionIndexOrId) {
 
@@ -1305,8 +1305,12 @@
 
     //Set Default Focus for grid... Not in use Yet.
     VTable.prototype.setDefaultFocus = function (colName) {
-        if (!colName)
-            colName = this.defaultFocusField.getColumnName();
+       
+        if (!this.mTab.defaultFocusField)
+            return;
+        if (!colName
+        )
+            colName = this.mTab.defaultFocusField.getColumnName();
         var selIndices = this.grid.getSelection();  //this.grid.getSelection(true);
         var colIndex = this.grid.getColumn(colName.toLower(), true)
         if (selIndices && selIndices.length > 0) {
