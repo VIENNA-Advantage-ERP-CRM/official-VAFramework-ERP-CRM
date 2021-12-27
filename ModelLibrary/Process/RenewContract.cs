@@ -91,6 +91,7 @@ namespace ViennaAdvantageServer.Process
                             }
 
                             New = new X_C_Contract(GetCtx(), 0, Get_TrxName());
+                            New.SetAD_Org_ID(contact.GetAD_Org_ID());
                             New.SetRefContract(contact.GetDocumentNo());
                             New.SetC_Order_ID(contact.GetC_Order_ID());
                             New.SetC_OrderLine_ID(contact.GetC_OrderLine_ID());
@@ -276,6 +277,7 @@ namespace ViennaAdvantageServer.Process
                             }
 
                             New = new X_C_Contract(GetCtx(), 0, Get_TrxName());
+                            New.SetAD_Org_ID(contact.GetAD_Org_ID());
                             New.SetRefContract(contact.GetDocumentNo());
                             New.SetC_Order_ID(contact.GetC_Order_ID());
                             New.SetC_OrderLine_ID(contact.GetC_OrderLine_ID());
@@ -512,6 +514,7 @@ namespace ViennaAdvantageServer.Process
                 for (int i = 1; i <= cycles; i++)
                 {
                     CSchedule = new X_C_ContractSchedule(GetCtx(), 0, Get_TrxName());
+                    CSchedule.SetAD_Org_ID(contract.GetAD_Org_ID());
                     CSchedule.SetC_Contract_ID(C_Contract_ID);
                     CSchedule.SetC_BPartner_ID(contract.GetC_BPartner_ID());
                     CSchedule.SetFROMDATE(start);
