@@ -5445,24 +5445,21 @@ namespace VAdvantage.Model
             {
                 //(1052) Set Execurion Status as Rejected
                 SetVA009_ExecutionStatus(MPayment.VA009_EXECUTIONSTATUS_Rejected);
-            }
 
-            // VIS_0045: Payment Schedule Batch 
-            if (Env.IsModuleInstalled("VA009_"))
-            {
+                // VIS_0045: Payment Schedule Batch 
                 // Update Execution Status as "Assigned to Batch" on Invoice PaySchedule 
-                String sql = @"Update C_InvoicePaySchedule SET VA009_ExecutionStatus = '"
+                String sql = @"UPDATE C_InvoicePaySchedule SET VA009_ExecutionStatus = '"
                             + MInvoicePaySchedule.VA009_EXECUTIONSTATUS_AssignedToBatch +
                             @"' WHERE C_InvoicePaySchedule_ID IN ( SELECT C_InvoicePaySchedule_ID FROM VA009_BatchLineDetails 
                                     WHERE C_Payment_ID = " + GetC_Payment_ID() + ")";
                 DB.ExecuteQuery(sql, null, Get_Trx());
 
                 //update Payment Batch line set payment = null during reverse of this payment
-                sql = "UPDATE va009_batchlines SET  C_Payment_ID = null WHERE C_Payment_ID = " + GetC_Payment_ID();
+                sql = "UPDATE VA009_BatchLines SET  C_Payment_ID = null WHERE C_Payment_ID = " + GetC_Payment_ID();
                 DB.ExecuteQuery(sql, null, Get_Trx());
 
                 //update Payment Batch line Details set payment = null during reverse of this payment
-                sql = "UPDATE va009_batchlinedetails SET  C_Payment_ID = null WHERE C_Payment_ID = " + GetC_Payment_ID();
+                sql = "UPDATE VA009_BatchLineDetails SET  C_Payment_ID = null WHERE C_Payment_ID = " + GetC_Payment_ID();
                 DB.ExecuteQuery(sql, null, Get_Trx());
             }
 
