@@ -5121,7 +5121,6 @@
     };
 
     GridTable.prototype.fireTableModelChanged = function (type, record, index, fireSelect) {
-        var defaultFocusField = this.mDataListener.defaultFocusField;
         if (this.mCardModelListener) {
             this.mCardModelListener.tableModelChanged(type, record, index, fireSelect);
         }

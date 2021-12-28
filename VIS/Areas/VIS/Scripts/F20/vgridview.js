@@ -1271,7 +1271,7 @@
                 id = args.recid; // row to select
                 this.grid.refresh(); //refresh Grid
                 this.blockSelect = true; // forcefully block select changed event
-               
+              
             }
 
             else if (action === VIS.VTable.prototype.ROW_DELETE) {
@@ -1297,7 +1297,10 @@
             if (id) {
                 this.select(id); //Select Row
             }
-            this.setDefaultFocus();
+            if (action === VIS.VTable.prototype.ROW_ADD) {
+                this.setDefaultFocus();
+            }
+            //
         }
 
         this.blockSelect = false;
@@ -1308,13 +1311,14 @@
        
         if (!this.mTab.defaultFocusField)
             return;
-        if (!colName
-        )
+        if (!colName)
             colName = this.mTab.defaultFocusField.getColumnName();
         var selIndices = this.grid.getSelection();  //this.grid.getSelection(true);
         var colIndex = this.grid.getColumn(colName.toLower(), true)
         if (selIndices && selIndices.length > 0) {
-            this.grid.editField(selIndices[0], colIndex);
+            window.setTimeout(function () {
+                this.grid.editField(selIndices[0], colIndex);
+            }.bind(this), 200);
             //this.grid.dblClick(selIndices[colIndex], { metaKey: true });
         }
     };
