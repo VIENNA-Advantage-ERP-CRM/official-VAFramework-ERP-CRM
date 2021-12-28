@@ -1297,7 +1297,8 @@
             if (id) {
                 this.select(id); //Select Row
             }
-            if (action === VIS.VTable.prototype.ROW_ADD) {
+            if (action === VIS.VTable.prototype.ROW_ADD && this.mTab.mDataListenerList && this.mTab.mDataListenerList.length > 0
+                && !this.mTab.mDataListenerList[0].getIsCardRow() && !this.mTab.mDataListenerList[0].getIsSingleRow() && !this.mTab.mDataListenerList[0].getIsMapRow()) {
                 this.setDefaultFocus();
             }
             //
