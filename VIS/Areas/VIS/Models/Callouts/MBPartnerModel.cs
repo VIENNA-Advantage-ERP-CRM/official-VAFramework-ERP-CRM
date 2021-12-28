@@ -349,23 +349,24 @@ namespace VIS.Models
 
             StringBuilder _sql = new StringBuilder();
             _sql.Append("SELECT b.ISVENDOR, b.ISCUSTOMER  ");
-            
-            if (Env.IsModuleInstalled("VA009_"))
-                 _sql.Append(" , b.VA009_PAYMENTMETHOD_ID, B.VA009_PO_PAYMENTMETHOD_ID, PM.VA009_PAYMENTBASETYPE, PMM.VA009_PAYMENTBASETYPE AS VA009_PAYMENTBASETYPEPO");
 
-           _sql.Append(" FROM C_BPartner b");
-            
-             if (Env.IsModuleInstalled("VA009_"))
-               _sql.Append(" LEFT JOIN VA009_PAYMENTMETHOD PM on B.VA009_PAYMENTMETHOD_ID=PM.VA009_PAYMENTMETHOD_ID LEFT JOIN VA009_PAYMENTMETHOD PMM ON B.VA009_PO_PAYMENTMETHOD_ID = PMM.VA009_PAYMENTMETHOD_ID ");
-            
-             _sql.Append(" WHERE b.C_BPartner_ID=" + C_BPartner_ID);
+            if (Env.IsModuleInstalled("VA009_"))
+                _sql.Append(" , b.VA009_PAYMENTMETHOD_ID, B.VA009_PO_PAYMENTMETHOD_ID, PM.VA009_PAYMENTBASETYPE, PMM.VA009_PAYMENTBASETYPE AS VA009_PAYMENTBASETYPEPO");
+
+            _sql.Append(" FROM C_BPartner b");
+
+            if (Env.IsModuleInstalled("VA009_"))
+                _sql.Append(" LEFT JOIN VA009_PAYMENTMETHOD PM on B.VA009_PAYMENTMETHOD_ID=PM.VA009_PAYMENTMETHOD_ID LEFT JOIN VA009_PAYMENTMETHOD PMM ON B.VA009_PO_PAYMENTMETHOD_ID = PMM.VA009_PAYMENTMETHOD_ID ");
+
+            _sql.Append(" WHERE b.C_BPartner_ID=" + C_BPartner_ID);
 
             DataSet ds = DB.ExecuteDataset(_sql.ToString(), null, null);
-            if (ds != null && ds.Tables[0].Rows.Count > 0) {
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
                 retDic = new Dictionary<string, object>();
                 retDic["IsVendor"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["IsVendor"]);
                 retDic["IsCustomer"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["IsCustomer"]);
-            
+
                 if (Env.IsModuleInstalled("VA009_"))
                 {
                     retDic["VA009_PaymentMethod_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]);
@@ -373,6 +374,76 @@ namespace VIS.Models
                     retDic["VA009_PAYMENTBASETYPE"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["VA009_PAYMENTBASETYPE"]);
                     retDic["VA009_PAYMENTBASETYPEPO"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["VA009_PAYMENTBASETYPEPO"]);
                 }
+
+            }
+            return retDic;
+        }
+
+        /// <summary>
+        /// Get Data from BPartner
+        /// </summary>
+        /// <param name="ctx">Current Context</param>
+        /// <param name="fields">Input Parameters</param>
+        /// <returns>returns collection Data from BPartner</returns>
+        public Dictionary<string, object> GetBPDataForProvisionalInvoice(Ctx ctx, string fields)
+        {
+            Dictionary<string, object> retDic = null;
+            int C_BPartner_ID = Util.GetValueOfInt(fields);
+            //if VA009_ Module is installed then count the AD_MODULEINFO_ID
+            int countVA009 = Env.IsModuleInstalled("VA009_") ? 1 : 0;
+
+            string sql = "SELECT p.AD_Language,p.C_PaymentTerm_ID,"
+                + " COALESCE(p.M_PriceList_ID,g.M_PriceList_ID) AS M_PriceList_ID, p.PaymentRule,p.POReference,"
+                + " p.SO_Description,p.IsDiscountPrinted, p.C_IncoTerm_ID,p.C_IncoTermPO_ID, ";
+            //If count is more than zero then the query will add this line
+            if (countVA009 > 0)
+            {
+                sql += " p.VA009_PaymentMethod_ID, p.VA009_PO_PaymentMethod_ID, pm.VA009_PaymentBaseType, pmm.VA009_PaymentBaseType AS VA009_PaymentBaseTypePO,";
+            }
+            sql += "p.CreditStatusSettingOn,p.SO_CreditLimit, NVL(p.SO_CreditLimit,0) - NVL(p.SO_CreditUsed,0) AS CreditAvailable,"
+                + " l.C_BPartner_Location_ID,c.AD_User_ID,"
+                + " COALESCE(p.PO_PriceList_ID,g.PO_PriceList_ID) AS PO_PriceList_ID, p.PaymentRulePO,p.PO_PaymentTerm_ID, p.IsCustomer, p.IsVendor "
+                + " FROM C_BPartner p"
+                + " INNER JOIN C_BP_Group g ON (p.C_BP_Group_ID=g.C_BP_Group_ID)"
+                + " LEFT OUTER JOIN C_BPartner_Location l ON (p.C_BPartner_ID=l.C_BPartner_ID AND l.IsBillTo='Y' AND l.IsActive='Y')"
+                + " LEFT OUTER JOIN AD_User c ON (p.C_BPartner_ID=c.C_BPartner_ID) ";
+            if (countVA009 > 0)
+            {
+                sql += " LEFT JOIN VA009_PAYMENTMETHOD pm on p.VA009_PAYMENTMETHOD_ID = pm.VA009_PAYMENTMETHOD_ID" +
+                    " LEFT JOIN VA009_PAYMENTMETHOD pmm ON p.VA009_PO_PAYMENTMETHOD_ID = pmm.VA009_PAYMENTMETHOD_ID";
+            }
+            sql += " WHERE p.C_BPartner_ID=" + C_BPartner_ID + " AND p.IsActive='Y'";
+
+            DataSet ds = DB.ExecuteDataset(sql, null, null);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                retDic = new Dictionary<string, object>();
+                retDic["C_PaymentTerm_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_PaymentTerm_ID"]);
+                retDic["M_PriceList_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_PriceList_ID"]);
+                retDic["PaymentRule"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["PaymentRule"]);
+                retDic["POReference"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["POReference"]);
+                retDic["SO_Description"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["SO_Description"]);
+                retDic["IsDiscountPrinted"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["IsDiscountPrinted"]);
+                if (countVA009 > 0)
+                {
+                    retDic["VA009_PaymentMethod_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]);
+                    retDic["VA009_PaymentBaseType"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["VA009_PaymentBaseType"]);
+                    retDic["VA009_PaymentBaseTypePO"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["VA009_PaymentBaseTypePO"]);
+                    retDic["VA009_PO_PaymentMethod_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VA009_PO_PaymentMethod_ID"]);
+                }
+                retDic["CreditStatusSettingOn"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["CreditStatusSettingOn"]);
+                retDic["SO_CreditLimit"] = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["SO_CreditLimit"]);
+                retDic["CreditAvailable"] = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["CreditAvailable"]);
+                retDic["PO_PriceList_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["PO_PriceList_ID"]);
+                retDic["PaymentRulePO"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["PaymentRulePO"]);
+                retDic["PO_PaymentTerm_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["PO_PaymentTerm_ID"]);
+                retDic["C_BPartner_Location_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_BPartner_Location_ID"]);
+                retDic["AD_User_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["AD_User_ID"]);
+                retDic["C_IncoTerm_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_IncoTerm_ID"]);
+                retDic["C_IncoTermPO_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_IncoTermPO_ID"]);
+                retDic["IsCustomer"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["IsCustomer"]);
+                retDic["IsVendor"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["IsVendor"]);
+                retDic["countVA009"] = countVA009;
 
             }
             return retDic;

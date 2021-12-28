@@ -35,20 +35,20 @@ namespace VIS
 
 
 
-            //modScript.Include(
-            //     "~/Areas/VIS/Scripts/app/native-extension.js",
-            //    "~/Areas/VIS/Scripts/app/utility.js",
-            //    "~/Areas/VIS/Scripts/app/logger.js",
-            //    "~/Areas/VIS/Scripts/app/controls.js",
-            //    "~/Areas/VIS/Scripts/app/classes.js",
-            //    "~/Areas/VIS/Scripts/app/desktopmgr.js",
-            //    "~/Areas/VIS/Scripts/app/viewmanager.js",
-            //    "~/Areas/VIS/Scripts/app/context.js",
-            //    "~/Areas/VIS/Scripts/app/i18N.js",
-            //    "~/Areas/VIS/Scripts/app/role.js",
-            //    "~/Areas/VIS/Scripts/app/adialog.js",
-            //    "~/Areas/VIS/Scripts/app/lookup.js",
-            //    "~/Areas/VIS/Scripts/app/treepanel.js",
+            modScript.Include(
+                 "~/Areas/VIS/Scripts/app/native-extension.js",
+                "~/Areas/VIS/Scripts/app/utility.js",
+                "~/Areas/VIS/Scripts/app/logger.js",
+                "~/Areas/VIS/Scripts/app/controls.js",
+                "~/Areas/VIS/Scripts/app/classes.js",
+                "~/Areas/VIS/Scripts/app/desktopmgr.js",
+                "~/Areas/VIS/Scripts/app/viewmanager.js",
+                "~/Areas/VIS/Scripts/app/context.js",
+                "~/Areas/VIS/Scripts/app/i18N.js",
+                "~/Areas/VIS/Scripts/app/role.js",
+                "~/Areas/VIS/Scripts/app/adialog.js",
+                "~/Areas/VIS/Scripts/app/lookup.js",
+                "~/Areas/VIS/Scripts/app/treepanel.js",
 
             //    "~/Areas/VIS/Scripts/app/controller.js",
             //    "~/Areas/VIS/Scripts/app/formframe.js",
@@ -95,6 +95,7 @@ namespace VIS
             //    "~/Areas/VIS/Scripts/app/forms/form.js",
             //    "~/Areas/VIS/Scripts/app/forms/vcreatefrom.js",
             //    "~/Areas/VIS/Scripts/app/forms/vcreatefrominvoice.js",
+            //    "~/Areas/VIS/Scripts/app/forms/vcreateformprovisionalinvoice.js",
             //    "~/Areas/VIS/Scripts/app/forms/vcreatefromshipment.js",
             //    "~/Areas/VIS/Scripts/app/forms/vcreatefromstatement.js",
             //    "~/Areas/VIS/Scripts/app/forms/generatexmodel.js",
@@ -113,119 +114,119 @@ namespace VIS
             //    "~/Areas/VIS/Scripts/app/azoomacross.js",
             //    "~/Areas/VIS/Scripts/app/Framework/sms.js",
 
-            //     "~/Areas/VIS/Scripts/app/arequest.js",
-            //     "~/Areas/VIS/Scripts/app/Framework/vsetup.js",
-            //       "~/Areas/VIS/Scripts/home/favourite.js",
-            //       "~/Areas/VIS/Scripts/app/Framework/bpartner.js",
-            //        "~/Areas/VIS/Scripts/app/Framework/contactInfo.js",
-            //        "~/Areas/VIS/Scripts/app/favouritehelper.js",
-            //     "~/Areas/VIS/Scripts/app/Framework/email.js",
-            //     "~/Areas/VIS/Scripts/app/Framework/newmailformat.js",
-            //     "~/Areas/VIS/Scripts/app/Framework/openmailformats.js",
-            //     "~/Areas/VIS/Scripts/app/areport.js",
-            //        "~/Areas/VIS/Scripts/app/Framework/attachmentHistory.js",
-            //        "~/Areas/VIS/Scripts/app/Framework/recordaccessdialog.js",
-            //        "~/Areas/VIS/Scripts/app/forms/vallocation.js",
-            //    "~/Areas/VIS/Scripts/app/forms/vallocation-branch.js",
+                 "~/Areas/VIS/Scripts/app/arequest.js",
+                 "~/Areas/VIS/Scripts/app/Framework/vsetup.js",
+                   "~/Areas/VIS/Scripts/home/favourite.js",
+                   "~/Areas/VIS/Scripts/app/Framework/bpartner.js",
+                    "~/Areas/VIS/Scripts/app/Framework/contactInfo.js",
+                    "~/Areas/VIS/Scripts/app/favouritehelper.js",
+                 "~/Areas/VIS/Scripts/app/Framework/email.js",
+                 "~/Areas/VIS/Scripts/app/Framework/newmailformat.js",
+                 "~/Areas/VIS/Scripts/app/Framework/openmailformats.js",
+                 "~/Areas/VIS/Scripts/app/areport.js",
+                    "~/Areas/VIS/Scripts/app/Framework/attachmentHistory.js",
+                    "~/Areas/VIS/Scripts/app/Framework/recordaccessdialog.js",
+                    "~/Areas/VIS/Scripts/app/forms/vallocation.js",
+                "~/Areas/VIS/Scripts/app/forms/vallocation-branch.js",
 
-            //    "~/Areas/VIS/Scripts/app/grouprights/group.js",
-            //    "~/Areas/VIS/Scripts/app/grouprights/createuser.js",
-            //    "~/Areas/VIS/Scripts/app/grouprights/orgaccess.js",
-            //    "~/Areas/VIS/Scripts/app/grouprights/groupinfo.js",
-            //    "~/Areas/VIS/Scripts/app/grouprights/createrole.js",
-            //    "~/Areas/VIS/Scripts/app/Framework/markmodule.js",
-            //    "~/Areas/VIS/Scripts/app/Framework/cardviewdialog.js",
-            //    "~/Areas/VIS/Scripts/app/Framework/visimportfiles.js",
-            //    "~/Areas/VIS/Scripts/app/Framework/parameterdialog.js",
-            //    "~/Areas/VIS/Scripts/app/processwrapper.js",
-            //     "~/Areas/VIS/Scripts/app/TreeMaintenance/treeondemand.js",
+                "~/Areas/VIS/Scripts/app/grouprights/group.js",
+                "~/Areas/VIS/Scripts/app/grouprights/createuser.js",
+                "~/Areas/VIS/Scripts/app/grouprights/orgaccess.js",
+                "~/Areas/VIS/Scripts/app/grouprights/groupinfo.js",
+                "~/Areas/VIS/Scripts/app/grouprights/createrole.js",
+                "~/Areas/VIS/Scripts/app/Framework/markmodule.js",
+                "~/Areas/VIS/Scripts/app/Framework/cardviewdialog.js",
+                "~/Areas/VIS/Scripts/app/Framework/visimportfiles.js",
+                "~/Areas/VIS/Scripts/app/Framework/parameterdialog.js",
+                "~/Areas/VIS/Scripts/app/processwrapper.js",
+                 "~/Areas/VIS/Scripts/app/TreeMaintenance/treeondemand.js",
 
-            //     "~/Areas/VIS/Scripts/app/Framework/treemaintenance.js",
-            //     "~/Areas/VIS/Scripts/app/Framework/jquery-touch.js",
+                 "~/Areas/VIS/Scripts/app/Framework/treemaintenance.js",
+                 "~/Areas/VIS/Scripts/app/Framework/jquery-touch.js",
 
-            //     "~/Areas/VIS/Scripts/app/Framework/bulkdownload.js",
+                 "~/Areas/VIS/Scripts/app/Framework/bulkdownload.js",
 
-            //     "~/Areas/VIS/Scripts/app/forms/productContainer.js",
-            //     "~/Areas/VIS/Scripts/app/forms/productContainerMove.js",
-            //     "~/Areas/VIS/Scripts/app/forms/productContainerTree.js",
+                 "~/Areas/VIS/Scripts/app/forms/productContainer.js",
+                 "~/Areas/VIS/Scripts/app/forms/productContainerMove.js",
+                 "~/Areas/VIS/Scripts/app/forms/productContainerTree.js",
 
-            //     "~/Areas/VIS/Scripts/app/windowformcontainer.js",
-            //     "~/Areas/VIS/Scripts/app/masterdataversion.js",
+                 "~/Areas/VIS/Scripts/app/windowformcontainer.js",
+                 "~/Areas/VIS/Scripts/app/masterdataversion.js",
 
-            //     "~/Areas/VIS/Scripts/tabpanels/bipanel.js",
-            //     "~/Areas/VIS/Scripts/model/CalloutColumn.js",
-            //     "~/Areas/VIS/Scripts/app/forms/glDimensionValue.js",
-            //     "~/Areas/VIS/Scripts/app/forms/vcreaterelatedlines.js",
-            //     "~/Areas/VIS/Scripts/app/forms/createforecast.js",
-            //       "~/Areas/VIS/Scripts/app/ssemanager.js",
-
-
-            //       "~/Areas/VIS/Scripts/tabpanels/verinfo.js",
-            //        "~/Areas/VIS/Scripts/tabpanels/HistoryDetailsTabPanel.js",
-            //      "~/Areas/VIS/Scripts/TestPanel.js",
-            //     "~/Areas/VIS/Scripts/app/forms/form.js");
+                 "~/Areas/VIS/Scripts/tabpanels/bipanel.js",
+                 "~/Areas/VIS/Scripts/model/CalloutColumn.js",
+                 "~/Areas/VIS/Scripts/app/forms/glDimensionValue.js",
+                 "~/Areas/VIS/Scripts/app/forms/vcreaterelatedlines.js",
+                 "~/Areas/VIS/Scripts/app/forms/createforecast.js",
+                   "~/Areas/VIS/Scripts/app/ssemanager.js",
 
 
-            //modScript.Include(
-            //     "~/Areas/VIS/Scripts/F20/thememgr.js",
-            //    "~/Areas/VIS/Scripts/app/initialize.js" //bottom one (do-not chnage sequence
-            //);
-
-            //modScript_v1.Include("~/Areas/VIS/Scripts/app/windowframe.js"); //Old design , do-not alter 
-
-            //modScript_v2.Include(
-            //      "~/Areas/VIS/Scripts/F20/aheaderpanel.js",
-            //      "~/Areas/VIS/Scripts/F20/atabpanel.js",
-            //      "~/Areas/VIS/Scripts/F20/wframe.js",
-            //     "~/Areas/VIS/Scripts/F20/atabbedpane.js",
-            //     "~/Areas/VIS/Scripts/F20/veditview.js",
-            //     "~/Areas/VIS/Scripts/F20/vcardview.js",
-            //     "~/Areas/VIS/Scripts/F20/vgridview.js",
-            //     "~/Areas/VIS/Scripts/F20/vmapview.js",
-            //     "~/Areas/VIS/Scripts/F20/aviewcontroller.js",
-            //     "~/Areas/VIS/Scripts/F20/apanel.js",
-            //     "~/Areas/VIS/Scripts/F20/acontentpane.js",
-            //     "~/Areas/VIS/Scripts/F20/afilterpanel.js",
-            //     "~/Areas/VIS/Scripts/F20/themecnfgtr.js"
-            //     );
+                   "~/Areas/VIS/Scripts/tabpanels/verinfo.js",
+                    "~/Areas/VIS/Scripts/tabpanels/HistoryDetailsTabPanel.js",
+                  "~/Areas/VIS/Scripts/TestPanel.js",
+                 "~/Areas/VIS/Scripts/app/forms/form.js");
 
 
+            modScript.Include(
+                 "~/Areas/VIS/Scripts/F20/thememgr.js",
+                "~/Areas/VIS/Scripts/app/initialize.js" //bottom one (do-not chnage sequence
+            );
+
+            modScript_v1.Include("~/Areas/VIS/Scripts/app/windowframe.js"); //Old design , do-not alter 
+
+            modScript_v2.Include(
+                  "~/Areas/VIS/Scripts/F20/aheaderpanel.js",
+                  "~/Areas/VIS/Scripts/F20/atabpanel.js",
+                  "~/Areas/VIS/Scripts/F20/wframe.js",
+                 "~/Areas/VIS/Scripts/F20/atabbedpane.js",
+                 "~/Areas/VIS/Scripts/F20/veditview.js",
+                 "~/Areas/VIS/Scripts/F20/vcardview.js",
+                 "~/Areas/VIS/Scripts/F20/vgridview.js",
+                 "~/Areas/VIS/Scripts/F20/vmapview.js",
+                 "~/Areas/VIS/Scripts/F20/aviewcontroller.js",
+                 "~/Areas/VIS/Scripts/F20/apanel.js",
+                 "~/Areas/VIS/Scripts/F20/acontentpane.js",
+                 "~/Areas/VIS/Scripts/F20/afilterpanel.js",
+                 "~/Areas/VIS/Scripts/F20/themecnfgtr.js"
+                 );
 
 
-            //style.Include("~/Areas/VIS/Content/Site.css",
-
-            //    "~/Areas/VIS/Content/VISAD.css",
-            //    "~/Areas/VIS/Content/PrefStyle.css",
-            //    "~/Areas/VIS/Content/Home.css",
-            //    "~/Areas/VIS/Content/PaymentRule.css",
-            //    "~/Areas/VIS/Content/Style.css",
-            //    "~/Areas/VIS/Content/ClientSetup.css",
-            //    "~/Areas/VIS/Content/Find.css",
-            //    "~/Areas/VIS/Content/Email.css",
-            //    "~/Areas/VIS/Content/VPaySelect.css",
-            //     "~/Areas/VIS/Content/reportstyle.css",
-            //     "~/Areas/VIS/Content/RecordAccessDialog.css",
-            //    "~/Areas/VIS/Content/GroupStyle.css",
-            //     "~/Areas/VIS/Content/ProductContainer.css",
-            //    "~/Areas/VIS/Content/GlJournalDimension.css",
-            //    "~/Areas/VIS/Content/BudgetControl.css",
-            //    "~/Areas/VIS/Content/HistoryTabPanel.css"
-            //   );
-
-            //style.Include("~/Areas/VIS/Content/F20/Color.css",
-            //    "~/Areas/VIS/Content/F20/Site.css",
-            //    "~/Areas/VIS/Content/F20/Window.css",
-            //            "~/Areas/VIS/Content/F20/Controls.css",
-            //             "~/Areas/VIS/Content/F20/Media.css",
-            //             "~/Areas/VIS/Content/F20/ThemeCnfgtr.css"
-            //    );
-            //style.Include("~/Areas/VIS/Content/VIS.rtl.css");
 
 
-            style.Include("~/Areas/VIS/Content/VIS.all.min.css");
-            modScript.Include("~/Areas/VIS/Scripts/VIS.all.min.js");
-            modScript_v1.Include("~/Areas/VIS/Scripts/VIS1_0.min.js");
-            modScript_v2.Include("~/Areas/VIS/Scripts/VIS2_0.min.js");
+            style.Include("~/Areas/VIS/Content/Site.css",
+
+                "~/Areas/VIS/Content/VISAD.css",
+                "~/Areas/VIS/Content/PrefStyle.css",
+                "~/Areas/VIS/Content/Home.css",
+                "~/Areas/VIS/Content/PaymentRule.css",
+                "~/Areas/VIS/Content/Style.css",
+                "~/Areas/VIS/Content/ClientSetup.css",
+                "~/Areas/VIS/Content/Find.css",
+                "~/Areas/VIS/Content/Email.css",
+                "~/Areas/VIS/Content/VPaySelect.css",
+                 "~/Areas/VIS/Content/reportstyle.css",
+                 "~/Areas/VIS/Content/RecordAccessDialog.css",
+                "~/Areas/VIS/Content/GroupStyle.css",
+                 "~/Areas/VIS/Content/ProductContainer.css",
+                "~/Areas/VIS/Content/GlJournalDimension.css",
+                "~/Areas/VIS/Content/BudgetControl.css",
+                "~/Areas/VIS/Content/HistoryTabPanel.css"
+               );
+
+            style.Include("~/Areas/VIS/Content/F20/Color.css",
+                "~/Areas/VIS/Content/F20/Site.css",
+                "~/Areas/VIS/Content/F20/Window.css",
+                        "~/Areas/VIS/Content/F20/Controls.css",
+                         "~/Areas/VIS/Content/F20/Media.css",
+                         "~/Areas/VIS/Content/F20/ThemeCnfgtr.css"
+                );
+            style.Include("~/Areas/VIS/Content/VIS.rtl.css");
+
+
+            //style.Include("~/Areas/VIS/Content/VIS.all.min.css");
+            //modScript.Include("~/Areas/VIS/Scripts/VIS.all.min.js");
+            //modScript_v1.Include("~/Areas/VIS/Scripts/VIS1_0.min.js");
+            //modScript_v2.Include("~/Areas/VIS/Scripts/VIS2_0.min.js");
 
 
 
