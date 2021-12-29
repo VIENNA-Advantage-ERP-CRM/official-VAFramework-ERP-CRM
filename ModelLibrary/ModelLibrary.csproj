@@ -173,11 +173,13 @@
     <Compile Include="Classes\ManageSkippedWF.cs" />
     <Compile Include="Classes\ModelValidationEngine.cs" />
     <Compile Include="Classes\Obscure.cs" />
+    <Compile Include="Classes\PeriodicJob.cs" />
     <Compile Include="Classes\Query.cs" />
     <Compile Include="Classes\ServerEndPoint.cs" />
     <Compile Include="Classes\SessionEventHandler.cs" />
     <Compile Include="Classes\StringTokenizer.cs" />
     <Compile Include="Classes\TableSQL.cs" />
+    <Compile Include="Classes\ThreadInstance.cs" />
     <Compile Include="Classes\VLookUpFactory.cs" />
     <Compile Include="Classes\VTreeNode.cs" />
     <Compile Include="Classes\WindowCtx.cs" />
@@ -296,6 +298,7 @@
     <Compile Include="Interface\BankStatementLoaderInterface.cs" />
     <Compile Include="Interface\BankStatementMatcherInterface.cs" />
     <Compile Include="Interface\ReplenishInterface.cs" />
+    <Compile Include="Interface\ThreadInterface.cs" />
     <Compile Include="Interface\UserPricingInterface.cs" />
     <Compile Include="Logging\Filter.cs" />
     <Compile Include="Logging\Formatter.cs" />
