@@ -241,7 +241,7 @@ namespace VAdvantage.Model
             if (_assetGroup.Get_ColumnIndex("VAFAM_LifeUseUnit") >= 0 && !String.IsNullOrEmpty(Util.GetValueOfString(_assetGroup.Get_Value("VAFAM_LifeUseUnit"))))
             {
                 Set_Value("VAFAM_LifeUseUnit", Util.GetValueOfString(_assetGroup.Get_Value("VAFAM_LifeUseUnit")));
-                Set_Value("LifeUseUnits", Util.GetValueOfString(_assetGroup.Get_Value("VAFAM_AssetGroupLife")));
+                Set_Value("LifeUseUnits", Util.GetValueOfDecimal(_assetGroup.Get_Value("VAFAM_AssetGroupLife")));
             }
 
             //Change by Sukhwinder for setting Asset type and amortization template on Asset window, MANTIS ID:1762
