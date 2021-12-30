@@ -10,7 +10,8 @@
             minLength: 1,
             source: [],
             response: null,
-            onSelect: function (e, item) { }
+            onSelect: function (e, item) { },
+            html:""
         }, options);
 
 
@@ -25,6 +26,7 @@
         var suggestion = function (arr) {
             isSearch = true;
             var b, i, val = self.value;
+            $("#" + self.name + "vis-autocomplete-list").remove();
             /*create a DIV element that will contain the items (values):*/
             a = document.createElement("DIV");
             a.setAttribute("id", self.name + "vis-autocomplete-list");
@@ -38,6 +40,7 @@
                 if (idx != -1) {
                     /*create a DIV element for each matching element:*/
                     b = document.createElement("DIV");
+                    b.setAttribute("class", "vis-autocompleteList-item");
                     /*make the matching letters bold:var idx*/
                     var boldVal = arr[i].value.substr(idx, val.length)
                     b.innerHTML = arr[i].value.replace(boldVal, "<strong>" + boldVal + "</strong>");
@@ -61,7 +64,10 @@
                     a.appendChild(b);
                 }
             }
-
+            if (settings.html != "" && !b) {
+                $(a).append($('<div></div>')).append(settings.html);
+                $(a).find(".vis-autocomplete-active").removeClass("vis-autocomplete-active");
+            }
         /*calculate list postion*/
             var slf = $(self);
             var ancr = $(a);
@@ -116,7 +122,7 @@
         /*execute a function presses a key on the keyboard:*/
         ctrl.addEventListener("keydown", function (e) {
             var x = document.getElementById(this.name + "vis-autocomplete-list");
-            if (x) x = x.getElementsByTagName("div");
+            if (x) x = x.getElementsByClassName("vis-autocompleteList-item");
             if (e.keyCode == 40) {
                 /*If the arrow DOWN key is pressed,
                 increase the currentFocus variable:*/

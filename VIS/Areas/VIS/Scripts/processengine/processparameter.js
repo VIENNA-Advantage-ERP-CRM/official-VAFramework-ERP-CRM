@@ -536,7 +536,7 @@
             }
 
             //	Don't save NULL values
-            if ((result == null || result == "") && (result2 == null || result2 == ""))
+            if ((result === null || result === "") && (result2 === null || result2 === ""))
                 continue;
 
             //	Create Parameter

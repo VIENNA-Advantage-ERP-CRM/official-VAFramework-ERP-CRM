@@ -36,15 +36,19 @@
 
         //  var cardList;
         function init() {
+            var width = $('body').width()-65;
             root = $("<div class='vis-cv-body vis-noselect'>");
-            body = $("<div class='vis-cv-main'>");
+            body = $("<div class='vis-cv-main' style='max-width:" + width+"px'>");
             headerdiv = $("<div class='vis-cv-header'>");
             $cmbCards = $('<input  class="vis-vs-card-autoComplete" style="display:inline">')
             $lblGroup = $('<p>');
             $imgdownSearch = $('<span class="vis-ad-w-p-tb-s-icon-down vis-cv-cardlist"><i class="fa fa-ellipsis-h"></i></span>');
-            groupHeader = $("<div class='vis-cv-groupHeader'>");
+            groupHeader = $("<div class='vis-cv-groupHeader'style='overflow:hidden; max-width:" + width + "px'>");
             headerdiv.append($cmbCards).append($imgdownSearch).append($lblGroup);            
             root.append(headerdiv).append(groupHeader).append(body);
+            body.scroll(function () {
+                SyncScroll();
+            });
             createCardautoComplete();
         }
 
@@ -106,6 +110,9 @@
                         .prependTo(ul);
                 }
 
+                if (item.created != VIS.context.getAD_User_ID()) {
+                    li.find('p').text(item.label +" (S)");
+                }
                 // When user clicks on make default icon, then save details in DB.
                 span.on("click", function (e) {
                     var cardID = $(this).data('id');
@@ -126,6 +133,10 @@
                 return li;
             };
         };
+
+        function SyncScroll() {
+            groupHeader.scrollLeft(body.scrollLeft());
+        }
 
         init();
         //eventHandle();
@@ -259,7 +270,7 @@
 
         var curCard = null;
         var crid = null;
-        this.navigate = function (rid, oset, skipScroll, rec) {
+        this.navigate = function (rid, oset, skipScroll) {
             if (rid)
                 crid = rid;
             if (oset)
@@ -272,16 +283,10 @@
             if (curCard.length != 0) {
                 //curCard.find('span.vis-cv-card-selected').css({ 'display': 'block' });
                 curCard.toggleClass("vis-cv-card-selected");
-                //if (!skipScroll)
-                    //curCard[0].scrollIntoView();
+                if (!skipScroll)
+                    curCard[0].scrollIntoView();
             }
-            if (rec) {
-                rec.recid = crid;
-                var changeCard = new VCard(self.fields, rec, self.headerItems, self.headerStyle, self.headerPadding, windowNo, {}, self.aPanel)
-                var style = root.find("[name='vc_" + crid + "']").attr('style');
-                root.find("[name='vc_" + crid + "']").replaceWith(changeCard.getRoot().attr('style', style));
-                changeCard.evaluate(self.cConditions)
-            }
+            
         };
 
         this.dC = function () {
@@ -328,10 +333,10 @@
                 for (var i = 0; i < cards.length; i++) {
                     // $cmbCards.append('<option value="' + cards[i].AD_CardView_ID + '">' + cards[i].Name + '</option>');
                     if (cards[i].IsDefault) {
-                        userQueries.push({ 'title': cards[i].Name, 'label': cards[i].Name, 'value': cards[i].Name, 'id': cards[i].AD_CardView_ID, 'isDefault': 'Y' });
+                        userQueries.push({ 'title': cards[i].Name, 'label': cards[i].Name, 'value': cards[i].Name, 'id': cards[i].AD_CardView_ID, 'isDefault': 'Y', 'created': cards[i].created });
                     }
                     else {
-                        userQueries.push({ 'title': cards[i].Name, 'label': cards[i].Name, 'value': cards[i].Name, 'id': cards[i].AD_CardView_ID, 'isDefault': 'N' });
+                        userQueries.push({ 'title': cards[i].Name, 'label': cards[i].Name, 'value': cards[i].Name, 'id': cards[i].AD_CardView_ID, 'isDefault': 'N', 'created': cards[i].created });
                     }
                 }
                 $cmbCards.autocomplete('option', 'source', userQueries, "position", { my: "left top", at: "left bottom" });
@@ -395,9 +400,21 @@
             }
         }
         if (id) {
-            this.navigate(id, null, null, args)
+            if (args) {
+                this.replaceCard(args, id);
+            }
+            this.navigate(id, null, null);
         }
+       
     };
+
+    VCardView.prototype.replaceCard = function (rec,id) {
+        rec.recid = id;
+        var changeCard = new VCard(this.fields, rec, this.headerItems, this.headerStyle, this.headerPadding, windowNo, {}, this.aPanel)
+        //var style = this.getRoot().find("[name='vc_" + id + "']").attr('style');
+        this.getRoot().find("[name='vc_" + id + "']").replaceWith(changeCard.getRoot());
+        changeCard.evaluate(this.cConditions)
+    }
 
     VCardView.prototype.setupCardView = function (aPanel, mTab, cContainer, vCardId) {
         this.mTab = mTab;
@@ -609,20 +626,22 @@
                 $this.filterRecord(records);    
                 
                 for (var p in $this.cGroupInfo) {
-                    setCardGroup(p);    
-                    $this.getGroupHeader().append("<div class='vis-cv-head' data-key='" + $this.cGroupInfo[p].key+"' >" + VIS.Utility.Util.getIdentifierDisplayVal($this.cGroupInfo[p].name) + "</div>");
+                    setCardGroup(p); 
+                    var grp = $("<div data-key='" + $this.cGroupInfo[p].key + "' class='vis-cv-cg-grp'></div>");
+                    grp.append("<div class='vis-cv-head' >" + VIS.Utility.Util.getIdentifierDisplayVal($this.cGroupInfo[p].name) + "</div>");
+                    $this.getGroupHeader().append(grp);
                 }
 
-
-                if ($this.cGroup.lookup && $this.cGroup.lookup.displayType == VIS.DisplayType.List && $this.groupSequence != null && $this.groupSequence != "") {
+               
+                if ($this.cGroup.lookup && ($this.cGroup.lookup.displayType == VIS.DisplayType.List || $this.cGroup.lookup.displayType == VIS.DisplayType.TableDir || $this.cGroup.lookup.displayType == VIS.DisplayType.Table || $this.cGroup.lookup.displayType == VIS.DisplayType.Search) && $this.groupSequence != null && $this.groupSequence != "") {
                     var grpArr = $this.groupSequence.split(",");
                     for (var j = 0; j < grpArr.length; j++) {
                         var item = root.find(".vis-cv-grpbody[data-key='" + grpArr[j] + "']").parent();                        
                         var before = root.find(".vis-cv-cg").eq(j);                        
                         item.insertBefore(before);
 
-                        var itemG = $this.getGroupHeader().find(".vis-cv-head[data-key='" + grpArr[j] + "']");
-                        itemG.insertBefore($this.getGroupHeader().find(".vis-cv-head").eq(j));
+                        var itemG = $this.getGroupHeader().find(".vis-cv-cg-grp[data-key='" + grpArr[j] + "']");
+                        itemG.insertBefore($this.getGroupHeader().find(".vis-cv-cg-grp").eq(j));
 
                     }
                 }
@@ -631,7 +650,7 @@
                // root.find('.vis-cv-head').css({ "width": "calc(" + gWidth + "% - " + (54 / $this.grpCount)+"px)" });
 
                 root.find('.vis-cv-grpbody').height(maxHeight(root.find('.vis-cv-grpbody')));
-                $this.getGroupHeader().find('.vis-cv-head').width(root.find('.vis-cv-grpbody').width());
+                $this.getGroupHeader().find('.vis-cv-cg-grp').css("min-width", root.find('.vis-cv-cg').width());
                 //if ($this.groupSequence != null && $this.groupSequence != "") {
                 //    var grpArr = $this.groupSequence.split(",");
                 //    for (var a = 0; a < grpArr.length; a++) {
@@ -677,12 +696,12 @@
                                     vaSortable.prototype.revertItem();
                                 } else {
                                     $this.mTab.dataRefresh();
-                                    var rec = $.grep(records, function (element, index) {
-                                        return element.recid == item;
-                                    });
-                                    var changeCard = new VCard($this.fields, rec[0], $this.headerItems, $this.headerStyle, $this.headerPadding, windowNo, {}, $this.aPanel)
-                                    root.find("[name='vc_" + item + "']").replaceWith(changeCard.getRoot());
-                                    changeCard.evaluate($this.cConditions)
+                                    //var rec = $.grep(records, function (element, index) {
+                                    //    return element.recid == item;
+                                    //});
+                                    //var changeCard = new VCard($this.fields, rec[0], $this.headerItems, $this.headerStyle, $this.headerPadding, windowNo, {}, $this.aPanel)
+                                    //root.find("[name='vc_" + item + "']").replaceWith(changeCard.getRoot());
+                                    //changeCard.evaluate($this.cConditions);                                   
                                 }
                             },
                             error: function (err) {

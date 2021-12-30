@@ -510,8 +510,8 @@
                     }    
                     
                     if ((VIS.DisplayType.IsLookup(tabField[i].getDisplayType()) && tabField[i].getLookup() && tabField[i].getLookup().getIsValidated() && tabField[i].getCallout() == '' && !tabField[i].getIsReadOnly()) || tabField[i].getDisplayType() == VIS.DisplayType.YesNo) {
-                        cmbGroupField.append("<Option FieldID=" + tabField[i].getAD_Field_ID() + "> " + tabField[i].getHeader() + "</Option>");  
-                        if (tabField[i].getDisplayType() == VIS.DisplayType.List) {
+                        cmbGroupField.append("<Option FieldID=" + tabField[i].getAD_Field_ID() + "> " + tabField[i].getHeader() + "</Option>");
+                        if (tabField[i].getDisplayType() == VIS.DisplayType.List || tabField[i].getDisplayType() == VIS.DisplayType.TableDir || tabField[i].getDisplayType() == VIS.DisplayType.Table || tabField[i].getDisplayType() == VIS.DisplayType.Search) {
                             if (tabField[i].lookup && tabField[i].lookup.getData()) {
                                 lovcardList[tabField[i].getAD_Field_ID()] = tabField[i].lookup.getData();
                             }
@@ -593,7 +593,7 @@
             ulGroupSeqColumns.parent().removeAttr('style');
             if (lovcardList[fieldID]) {
                 for (var i = 0, ln = lovcardList[fieldID]; i < ln.length; i++) {
-                    if (ln[i].Key.length > 0) {
+                    if (ln[i].Key.toString().length > 0 && ln[i].Name.toString().length>0) {
                         ulGroupSeqColumns.append('<li key="' + ln[i].Key + '">' + ln[i].Name + '</li>');
                     }
                 };
@@ -613,7 +613,7 @@
                 }
             } else {
                 ulGroupSeqColumns.parent().css("background-color","rgba(var(--v-c-on-secondary), 0.04)");
-                ulGroupSeqColumns.append('<li style="padding-top:40%;text-align:center">'+VIS.Msg.getMsg("OnlyForLOV")+'</li>');
+                ulGroupSeqColumns.append('<li style="padding-top:40%;text-align:center" key="">'+VIS.Msg.getMsg("OnlyForLOV")+'</li>');
             }
 
         }
@@ -652,7 +652,7 @@
                     ulGroupSeqColumns.html('');
                     ulGroupSeqColumns.parent().removeAttr('style');
                     ulGroupSeqColumns.parent().css("background-color", "rgba(--v-c-on-secondary), 0.04)");
-                    ulGroupSeqColumns.append('<li style="padding-top:40%;text-align:center">' + VIS.Msg.getMsg("OnlyForLOV") + '</li>');
+                    ulGroupSeqColumns.append('<li style="padding-top:40%;text-align:center" key="">' + VIS.Msg.getMsg("OnlyForLOV") + '</li>');
 
                     rootCardViewUI.find("*").removeAttr("disabled");
                 });
@@ -948,27 +948,29 @@
                 });
             }
             if (btnCardViewCancle != null) {
-                btnCardViewCancle.on("click", function (e) {
-                   
+                btnCardViewCancle.on("click", function (e) {                   
                     ch.close();
                 });
             }
             if (btnDelete != null) {
                 btnDelete.on("click", function (e) {
-                    var diaDel = confirm(VIS.Msg.getMsg("SureWantToDelete"));
-                    if (diaDel) {
-                        isFirstLoad = false;
-                        DeleteCardView();
+                    VIS.ADialog.confirm("SureWantToDelete", true, "", VIS.Msg.getMsg("Confirm"), function (result) {
+                        if (result) {
+                            isFirstLoad = false;
+                            DeleteCardView();
 
-                        FillCardViewCombo(true);
-                        FillTextControl();
-                        FillGroupFields();
-                        FillColumnInclude(true, false);
-                        if (cardViewUserID == VIS.context.getAD_User_ID()) {
-                            AD_User_ID = 0;
-                            cardViewUserID = 0;
+                            FillCardViewCombo(true);
+                            FillTextControl();
+                            FillGroupFields();
+                            FillColumnInclude(true, false);
+                            if (cardViewUserID == VIS.context.getAD_User_ID()) {
+                                AD_User_ID = 0;
+                                cardViewUserID = 0;
+                            }
                         }
-                    }
+                    });
+                    //var diaDel = confirm(VIS.Msg.getMsg("SureWantToDelete"));
+                   
                     e.stopPropagation();
                     e.preventDefault();
                 });
@@ -1368,6 +1370,7 @@
             });
 
             grpSeq = grpSeq.replace(/,\s*$/, "");
+           
 
             cardViewArray.push({ AD_Window_ID: AD_Window_ID, AD_Tab_ID: AD_Tab_ID, UserID: AD_User_ID, AD_GroupField_ID: cmbGroupField.find(":selected").attr("fieldid"), isNewRecord: isNewRecord, CardViewName: cardViewName, CardViewID: AD_CardView_ID, IsDefault: isdefault.is(":checked"), AD_HeaderLayout_ID: $vSearchHeaderLayout.getValue(), isPublic: isPublic.is(":checked"), groupSequence:grpSeq });
             var url = VIS.Application.contextUrl + "CardView/SaveCardViewColumns";

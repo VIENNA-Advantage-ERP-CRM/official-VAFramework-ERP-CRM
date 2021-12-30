@@ -30,10 +30,9 @@
 	var _w = window,
 		_b = document.body,
 		_d = document.documentElement;
-	var fromItem, itemName, nextItem, dropClass = ".va-dragdrop", subItem, point;
-
+	var fromItem, itemName, nextItem, dropClass = ".va-dragdrop", subItem, point, mainDiv, startx, scrollLeft;	
 	// get position of mouse/touch in relation to viewport 
-	var getPoint = function (e) {		
+	var getPoint = function (e) {	
 		var scrollX = Math.max(0, _w.pageXOffset || _d.scrollLeft || _b.scrollLeft || 0) - (_d.clientLeft || 0),
 			scrollY = Math.max(0, _w.pageYOffset || _d.scrollTop || _b.scrollTop || 0) - (_d.clientTop || 0),
 			pointX = e ? (Math.max(0, e.pageX || e.clientX || 0) - scrollX) : 0,
@@ -169,7 +168,13 @@
 						return;
 					}
 				}
-			}			
+			}	
+
+			mainDiv = (e.target.closest('.vis-cv-main'));
+			if (mainDiv) {
+				startx = e.pageX - mainDiv.offsetLeft;
+				scrollLeft = mainDiv.scrollLeft;
+			}
 
 			if (e && e.target && e.target.closest(dropClass) && e.target.closest(dropClass).parentNode === this._container) {
 				this._isSwaped = false;
@@ -194,7 +199,7 @@
 				this._options.onSelect(this._clickItem, this._clickItem.getAttribute(this._options.attr));
 			}			
 			this._dragging = false;
-			this._trashDragItem();
+			this._trashDragItem();			
 		},
 		// on item drag/move
 		_onMove: function (e) {
@@ -204,6 +209,10 @@
 				var container = this._container;
 				// drag fake item 
 				this._moveItem(this._dragItem, (point.x - this._click.x), (point.y - this._click.y));
+
+				var x = e.pageX - mainDiv.offsetLeft;
+				var walk = (x - startx) * 3;
+				mainDiv.scrollLeft = scrollLeft + walk;
 				// keep an eye for other sortable lists and switch over to it on hover 
 				for (var a = 0; a < this._sortLists.length; ++a) {
 					var subContainer = this._sortLists[a];

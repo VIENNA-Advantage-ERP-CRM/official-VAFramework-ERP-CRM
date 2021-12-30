@@ -2549,7 +2549,7 @@ findImg {
     /* color: darkgray; */
     font-size: 12px;
     padding-top: 0;
-    position: fixed;
+    /*position: fixed;*/
     z-index: 1;
 
     right: 45px;
@@ -2586,13 +2586,13 @@ findImg {
     top: 45px;
     position: absolute;
     z-index: 0;
-    display:flex;
-    width: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
+    display: flex;
+    width: 100%;    
+    overflow: auto;
+    background: #fff;
 }
 
-.vis-cv-cg {
+.vis-cv-cg, .vis-cv-cg-grp {
     height: 100%;
     /*width: 250px;*/
     float: left;
@@ -2605,13 +2605,18 @@ findImg {
 }
 
 .vis-cv-head {
+    margin-left: 5px;
+    margin-right: 10px;
     padding: 1px 5px;
-    text-overflow: ellipsis;
+    overflow: hidden;
+    color: rgba(var(--v-c-primary), 1);
+    border-bottom: 2px solid rgba(var(--v-c-primary), 1);
+    /*text-overflow: ellipsis;
     white-space: nowrap;
     overflow: auto;
     color: rgba(var(--v-c-primary), 1);
-    margin: 2px 9px;
-    border-bottom: 2px solid rgba(var(--v-c-primary), 1);    
+    margin: 2px 13px;
+    border-bottom: 2px solid rgba(var(--v-c-primary), 1);*/
     /*background-color: ghostwhite;*/
 }
 
