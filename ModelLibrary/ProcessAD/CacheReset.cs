@@ -35,6 +35,7 @@ namespace VAdvantage.Process
         {
             log.Info("");
             Env.Reset(false);	// not final
+            Classes.ThreadInstance.Get().Start();
             return "Cache Reset";
         }
     }

@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VAdvantage.Interface;
+using VAdvantage.Logging;
 
 namespace VAdvantage.Classes
 {
@@ -39,6 +40,7 @@ namespace VAdvantage.Classes
         /// <param name="itho">Thread Observer to be registered for notification</param>
         public void Register(IThreadObserver itho)
         {
+            VLogger.Get().Log(Level.INFO, "Registered Thread : " + itho.GetName());
             _observersList.Add(itho);
         }
 
