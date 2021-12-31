@@ -1128,7 +1128,17 @@ namespace VAdvantage.Model
                 }
                 SetM_Locator_ID(il);
             }
+            if (newRecord || (Is_ValueChanged("C_OrderLine_ID")) || (Is_ValueChanged("M_Product_ID")) || (Is_ValueChanged("C_Charge_ID")))
+            {
+                //Get print description from Charge Or Product and set the PrintDescription
+                string printDes = string.Empty;
+                if (GetC_Charge_ID() > 0 && GetM_Product_ID() == 0)
+                    printDes = Util.GetValueOfString(DB.ExecuteScalar("SELECT PrintDescription FROM C_Charge WHERE C_Charge_ID=" + GetC_Charge_ID()));
+                else if (GetC_Charge_ID() == 0 && GetM_Product_ID() > 0)
+                    printDes = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocumentNote FROM M_Product WHERE M_Product_ID=" + GetM_Product_ID()));
 
+                Set_Value("PrintDescription", printDes);
+            }
             // check record is reversed or not
             //bool IsReveresed = false;
             //if (inO.GetDescription() != null)
@@ -1363,7 +1373,7 @@ namespace VAdvantage.Model
                         }
                     }
                 }
-            }
+            }            
 
             return true;
         }

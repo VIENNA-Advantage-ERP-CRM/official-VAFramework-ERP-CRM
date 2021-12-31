@@ -32,6 +32,7 @@ namespace VIS.Models
                 if(M_Warehouse_ID>0)
                 result["M_Locator_ID"] = MProductLocator.GetFirstM_Locator_ID(product, M_Warehouse_ID).ToString();
             }
+            result["DocumentNote"] = product.GetDocumentNote();
             //if (product.GetM_Product_Category_ID() > 0)
             //{
             //    result["M_Product_Category_ID"] = product.GetM_Product_Category_ID().ToString();

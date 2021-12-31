@@ -3864,11 +3864,11 @@ namespace VAdvantage.Model
                 //Set IsTaxExempt and TaxExemptReason
                 SetTaxExemptReason();
             }
-            else if(Is_ValueChanged("IsTaxExempt") && !IsTaxExempt() && GetC_TaxExemptReason_ID()>0 
+            else if (Is_ValueChanged("IsTaxExempt") && !IsTaxExempt() && GetC_TaxExemptReason_ID() > 0
                 && Get_ColumnIndex("IsTaxExempt") > -1 && Get_ColumnIndex("C_TaxExemptReason_ID") > -1)
             {
                 //taxExpemt is false but  tax exempt reason is selected
-                  SetC_TaxExemptReason_ID(0);               
+                SetC_TaxExemptReason_ID(0);
             }
 
 
@@ -4620,6 +4620,18 @@ namespace VAdvantage.Model
                         Set_Value("VA077_ChkRegEmail", regemail);
                     }
                 }
+            }
+
+            if (newRecord || (Is_ValueChanged("M_Product_ID")) || (Is_ValueChanged("C_Charge_ID")))
+            {
+                //Get print description from Charge Or Product and set the PrintDescription
+                string printDes = string.Empty;
+                if (GetC_Charge_ID() > 0 && GetM_Product_ID() == 0)
+                    printDes = Util.GetValueOfString(DB.ExecuteScalar("SELECT PrintDescription FROM C_Charge WHERE C_Charge_ID=" + GetC_Charge_ID()));
+                else if (GetC_Charge_ID() == 0 && GetM_Product_ID() > 0)
+                    printDes = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocumentNote FROM M_Product WHERE M_Product_ID=" + GetM_Product_ID()));
+
+                Set_Value("PrintDescription", printDes);
             }
             return true;
         }
