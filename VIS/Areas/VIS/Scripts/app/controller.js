@@ -3746,8 +3746,11 @@
 
             this.SQL = VIS.MRole.addAccessSQL(this.SQL,
                 gt._tableName, VIS.MRole.SQL_FULLYQUALIFIED, VIS.MRole.SQL_RO);
-            this.SQL_Count = VIS.MRole.addAccessSQL(this.SQL_Count,
-                gt._tableName, VIS.MRole.SQL_FULLYQUALIFIED, VIS.MRole.SQL_RO);
+
+            //this.SQL_Count = "SELECT COUNT(*) FROM " + gt._tableName + this.SQL.replaceAll(this.SQL_Select, '');
+            this.SQL_Count = "SELECT COUNT(*) FROM " + gt._tableName + this.SQL.substring(this.SQL_Select.length);
+            // this.SQL_Count = VIS.MRole.addAccessSQL(this.SQL_Count,
+            // gt._tableName, VIS.MRole.SQL_FULLYQUALIFIED, VIS.MRole.SQL_RO);
         }
 
         if (selectDirect != null)
