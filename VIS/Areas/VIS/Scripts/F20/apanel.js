@@ -1079,7 +1079,7 @@
          * If window don't have any record, then show instruction for new record
          * @param {any} highlight
          */
-        this.highlightNewButton = function (highlight, button) {
+        this.highlightButton = function (highlight, button) {
             var $bLi = button.$li;
             var $root = this.getRoot();
             if (button.getAction() == this.ACTION_NAME_NEW) {
@@ -3110,7 +3110,7 @@
             this.aNew.setEnabled(true);
             this.aDelete.setEnabled(false);
             if (!this.curGC.isZoomAction) {
-                this.highlightNewButton(true, this.aNew);
+                this.highlightButton(true, this.aNew);
             }
         }
 
