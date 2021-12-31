@@ -30,10 +30,9 @@
 	var _w = window,
 		_b = document.body,
 		_d = document.documentElement;
-	var fromItem, itemName, nextItem, dropClass = ".va-dragdrop";
-
+	var fromItem, itemName, nextItem, dropClass = ".va-dragdrop", subItem, point, mainDiv, startx, scrollLeft;	
 	// get position of mouse/touch in relation to viewport 
-	var getPoint = function (e) {		
+	var getPoint = function (e) {	
 		var scrollX = Math.max(0, _w.pageXOffset || _d.scrollLeft || _b.scrollLeft || 0) - (_d.clientLeft || 0),
 			scrollY = Math.max(0, _w.pageYOffset || _d.scrollTop || _b.scrollTop || 0) - (_d.clientTop || 0),
 			pointX = e ? (Math.max(0, e.pageX || e.clientX || 0) - scrollX) : 0,
@@ -110,20 +109,22 @@
 		},
 		// swap position of two item in sortable list container 
 		_swapItems: function (item1, item2) {
-			var parent1 = item1.parentNode,
-				parent2 = item2.parentNode;
-			if (parent1 !== parent2) {
-				// move to new list 
-				parent2.insertBefore(item1, item2);
-				this._isSwaped = true;
-			} else if (this._options.selfSort || this._options.selfSort == undefined) {
-				// sort is same list 
-				var temp = document.createElement("div");
-				parent1.insertBefore(temp, item1);
-				parent2.insertBefore(item1, item2);
-				parent1.insertBefore(item2, temp);
-				parent1.removeChild(temp);
-				this._isSwaped = true;
+			if (item1 && item2) {
+				var parent1 = item1.parentNode,
+					parent2 = item2.parentNode;
+				if (parent1 !== parent2) {
+					// move to new list 
+					parent2.insertBefore(item1, item2);
+					this._isSwaped = true;
+				} else if (this._options.selfSort || this._options.selfSort == undefined) {
+					// sort is same list 
+					var temp = document.createElement("div");
+					parent1.insertBefore(temp, item1);
+					parent2.insertBefore(item1, item2);
+					parent1.insertBefore(item2, temp);
+					parent1.removeChild(temp);
+					this._isSwaped = true;
+				}
 			}
 		},
 		// update item position 
@@ -164,11 +165,16 @@
 			if (this._options && this._options.ignore && e.target.closest(this._options.ignore)) {
 				for (var i = 0; i < this._options.ignore.length; i++) {
 					if (e.target.closest(this._options.ignore[i])) {
-						console.log(this._options.ignore[i]);
 						return;
 					}
 				}
-			}			
+			}	
+
+			mainDiv = (e.target.closest('.vis-cv-main'));
+			if (mainDiv) {
+				startx = e.pageX - mainDiv.offsetLeft;
+				scrollLeft = mainDiv.scrollLeft;
+			}
 
 			if (e && e.target && e.target.closest(dropClass) && e.target.closest(dropClass).parentNode === this._container) {
 				this._isSwaped = false;
@@ -184,20 +190,29 @@
 		},
 		// on item release/drop 
 		_onRelease: function (e) {
+			if (!this._isSwaped && this._options.force && subItem != this._clickItem) {
+				this._hovItem = subItem;
+				this._swapItems(this._clickItem, subItem);
+			}
+
 			if (e && e.target && e.target.closest(dropClass) && e.target.closest(dropClass).parentNode === this._container && this._options.attr && this._clickItem && this._isSwaped) {
 				this._options.onSelect(this._clickItem, this._clickItem.getAttribute(this._options.attr));
 			}			
 			this._dragging = false;
-			this._trashDragItem();
+			this._trashDragItem();			
 		},
 		// on item drag/move
 		_onMove: function (e) {
 			if (this._dragItem && this._dragging) {
 				e.preventDefault();
-				var point = getPoint(e);
+				point = getPoint(e);
 				var container = this._container;
 				// drag fake item 
 				this._moveItem(this._dragItem, (point.x - this._click.x), (point.y - this._click.y));
+
+				var x = e.pageX - mainDiv.offsetLeft;
+				var walk = (x - startx) * 3;
+				mainDiv.scrollLeft = scrollLeft + walk;
 				// keep an eye for other sortable lists and switch over to it on hover 
 				for (var a = 0; a < this._sortLists.length; ++a) {
 					var subContainer = this._sortLists[a];
@@ -212,10 +227,12 @@
 				}
 				// check if current drag item is over another item and swap places 
 				for (var b = 0; b < container.children.length; ++b) {
-					var subItem = container.children[b];
+					subItem = container.children[b];
 					if (subItem === this._clickItem || subItem === this._dragItem) {
 						continue;
 					}
+
+
 					if (this._isOnTop(subItem, point.x, point.y)) {
 						this._hovItem = subItem;
 						this._swapItems(this._clickItem, subItem);
