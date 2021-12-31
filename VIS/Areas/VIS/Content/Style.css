@@ -1179,7 +1179,9 @@ input[type="checkbox"].vis-tm-chkbox {
         background-color: rgba(var(--v-c-primary), 1) !important;
         color: #fff !important;
     }
-
+center {
+    text-align: center !important;
+}
 
 
 }
