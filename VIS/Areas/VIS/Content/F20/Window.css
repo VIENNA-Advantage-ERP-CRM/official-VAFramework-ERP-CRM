@@ -2550,9 +2550,14 @@ display:none !important;
     left: 72px;
     background: rgba(var(--v-c-primary), 1);
     color: rgba(var(--v-c-on-primary), 1);
-    max-width: 207px;
+    width:max-content;
     border-radius: 0.25rem;
     padding: 10px;
+}
+
+html[dir="rtl"] .vis-window-instruc-overlay-new-inn {
+    left:auto;
+    right:72px;
 }
 
 .vis-window-instruc-overlay-new-li {
