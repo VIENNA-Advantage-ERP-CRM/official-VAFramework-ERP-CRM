@@ -3025,7 +3025,7 @@ namespace VIS.Helpers
         {
             List<CardsInfo> cards = new List<CardsInfo>();
             // Get Login user's default card and other cards of  current tab
-          DataSet  ds = DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@" SELECT AD_CardView.ad_cardview_id, AD_CardView.name,AD_DefaultCardView.ad_cardview_id as dcard FROM AD_CardView AD_CardView
+          DataSet  ds = DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@" SELECT AD_CardView.ad_cardview_id, AD_CardView.name,AD_DefaultCardView.ad_cardview_id as dcard,AD_CardView.CreatedBy FROM AD_CardView AD_CardView
    LEFT OUTER JOIN AD_DefaultCardView AD_DefaultCardView ON (  AD_CardView.ad_cardview_id=AD_DefaultCardView.ad_cardview_id AND AD_DefaultCardView.IsActive='Y' AND AD_DefaultCardView.AD_User_ID=" + ctx.GetAD_User_ID() + @")
                         WHERE  AD_CardView.AD_Tab_ID=" + AD_Tab_ID + @" AND AD_CardView.IsActive = 'Y'   AND ( AD_CardView.ad_user_id IS NULL
                                                           OR AD_CardView.ad_user_id = " + ctx.GetAD_User_ID()+ @") " +
@@ -3034,7 +3034,7 @@ namespace VIS.Helpers
             if (ds == null || ds.Tables[0].Rows.Count == 0)
             {
                 //If no default card set, then get all cards of tab.
-                ds = DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name,0  as dcard FROM AD_CardView AD_CardView 
+                ds = DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name,0  as dcard,AD_CardView.CreatedBy FROM AD_CardView AD_CardView 
                     WHERE AD_CardView.AD_Tab_ID =" + AD_Tab_ID + " AND AD_CardView.IsActive='Y' ORDER BY AD_CardView.Name ASC", "AD_CardView", true, false));
             }
 
@@ -3046,7 +3046,8 @@ namespace VIS.Helpers
                     CardsInfo card = new CardsInfo()
                     {
                         Name = Util.GetValueOfString(ds.Tables[0].Rows[i]["Name"]),
-                        AD_CardView_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_CardView_ID"])
+                        AD_CardView_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_CardView_ID"]),
+                        created = Util.GetValueOfInt(ds.Tables[0].Rows[i]["CreatedBy"])
                     };
 
                     // dcard is default card ID. it can be 0

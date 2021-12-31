@@ -2452,7 +2452,8 @@
         var $btnDelete = null;
         var options = {};
         var disabled = false;
-
+        var addBtn = null;
+        var addItem = null;
 
         if (lookup != null && !this.isMultiKeyTextBox) {
 
@@ -2526,6 +2527,8 @@
         };
         // Autocomplete
         if (displayType == VIS.DisplayType.Search) {
+             addBtn = $("<div class='vis-autocompleteList-item vis-auto-addItem' style='background-color: rgba(var(--v-c-secondary), 1)'>" + VIS.Msg.getMsg("AddNew") + "</div>");
+             addItem = $("<div><center>" + VIS.Msg.getMsg("NoDataFoundSugg") + "</center></div>").append($("<center></center>").append(addBtn));
             $ctrl.vaautocomplete({
                 source: function (term, response) {
                     var sql = self.lookup.info.query;
@@ -2595,6 +2598,7 @@
 
                 },
                 minLength: 2,
+                html: addItem,
                 onSelect: function (e, item) {
                     if (item.id == "vis-AddNew") {
                         zoomAction();
@@ -2606,7 +2610,9 @@
                     }
                 }
             });
-
+            addBtn.on("click", function (event) {
+                zoomAction();
+            })
         }
         $ctrl.on("keydown", function (event) {
 
@@ -3565,6 +3571,12 @@
             $btnPop = null;
             this.getBtn = null;
             this.setVisible = null;
+            if (addBtn) {
+                addBtn.off("click");
+            }
+            addBtn = null;
+            addItem = null;
+            
         };
     };
 
