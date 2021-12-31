@@ -926,6 +926,10 @@ namespace VAdvantage.Process
                 {
                     GetColumn(id, false, false);
                 }
+                if (Util.GetValueOfInt(dr["AD_Val_Rule_ID"]) != 0)
+                {
+                    GetValRule(Util.GetValueOfInt(dr["AD_Val_Rule_ID"]));
+                }
                 InsertIntoDBSchema(X_AD_Column.Table_ID, id, X_AD_Column.Table_Name, Util.GetValueOfString(dr[1]), " AD_Column_ID = " + id);
             }
             dr.Close();
