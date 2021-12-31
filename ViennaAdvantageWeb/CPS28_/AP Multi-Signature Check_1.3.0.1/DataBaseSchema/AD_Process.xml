@@ -1,0 +1,155 @@
+<NewDataSet>
+  <xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop">
+    <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="AD_Process">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="AD_CLIENT_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_CTXAREA_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_ORG_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_PRINTFORMAT_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_PROCESS_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_REPORTVIEW_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_WORKFLOW_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="ACCESSLEVEL" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="CLASSNAME" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="CREATED" msprop:OraDbType="106" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="CREATEDBY" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="DESCRIPTION" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="ENTITYTYPE" msprop:OraDbType="126" type="xs:string" minOccurs="0" />
+                <xs:element name="HELP" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="ISACTIVE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISBETAFUNCTIONALITY" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISDIRECTPRINT" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISREPORT" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISSERVERPROCESS" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="NAME" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="PROCEDURENAME" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="STATISTIC_COUNT" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="STATISTIC_SECONDS" msprop:OraDbType="107" type="xs:decimal" minOccurs="0" />
+                <xs:element name="UPDATED" msprop:OraDbType="106" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="UPDATEDBY" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="VALUE" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="WORKFLOWVALUE" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="AD_IMAGE_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="ISEXTERNAL" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISDASHBOARD" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ADDMENU" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="AD_BVIEW_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_REPORTTEMPLATE_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="EXPORT_ID" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="ISCRYSTALREPORT" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="INCLUDEIMAGE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="SQLQUERY" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="IMAGEFIELD" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="IMAGEPATHFIELD" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="REPORTPATH" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="AD_REPORTFORMAT_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_REPORTMASTER_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="ISBACKGROUNDPROCESS" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ASKUSERBGPROCESS" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="VA039_BIREPORTID" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="VA039_JASPERREPORTPATH" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <AD_Process>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_PROCESS_ID>1000235</AD_PROCESS_ID>
+    <ACCESSLEVEL>7</ACCESSLEVEL>
+    <CREATED>2014-08-30T08:13:21+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <ISBETAFUNCTIONALITY>N</ISBETAFUNCTIONALITY>
+    <ISDIRECTPRINT>N</ISDIRECTPRINT>
+    <ISREPORT>Y</ISREPORT>
+    <ISSERVERPROCESS>N</ISSERVERPROCESS>
+    <NAME>VARPT_PaymentVoucher</NAME>
+    <STATISTIC_COUNT>0</STATISTIC_COUNT>
+    <STATISTIC_SECONDS>0</STATISTIC_SECONDS>
+    <UPDATED>2021-05-24T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <VALUE>Payment Voucher</VALUE>
+    <ISEXTERNAL>N</ISEXTERNAL>
+    <ISDASHBOARD>N</ISDASHBOARD>
+    <ADDMENU>N</ADDMENU>
+    <EXPORT_ID>VARPT_20000167</EXPORT_ID>
+    <ISCRYSTALREPORT>N</ISCRYSTALREPORT>
+    <INCLUDEIMAGE>N</INCLUDEIMAGE>
+    <AD_REPORTFORMAT_ID>1000001</AD_REPORTFORMAT_ID>
+    <ISBACKGROUNDPROCESS>N</ISBACKGROUNDPROCESS>
+    <ASKUSERBGPROCESS>N</ASKUSERBGPROCESS>
+  </AD_Process>
+  <AD_Process>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_PROCESS_ID>1000493</AD_PROCESS_ID>
+    <ACCESSLEVEL>3</ACCESSLEVEL>
+    <CREATED>2020-08-01T04:56:12+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <ISBETAFUNCTIONALITY>N</ISBETAFUNCTIONALITY>
+    <ISDIRECTPRINT>N</ISDIRECTPRINT>
+    <ISREPORT>Y</ISREPORT>
+    <ISSERVERPROCESS>N</ISSERVERPROCESS>
+    <NAME>CPS04_PaymentTableCheck</NAME>
+    <STATISTIC_COUNT>0</STATISTIC_COUNT>
+    <STATISTIC_SECONDS>0</STATISTIC_SECONDS>
+    <UPDATED>2021-12-07T10:07:08+00:00</UPDATED>
+    <UPDATEDBY>1005426</UPDATEDBY>
+    <VALUE>CPS04_PaymentTableCheck</VALUE>
+    <ISEXTERNAL>N</ISEXTERNAL>
+    <ISDASHBOARD>N</ISDASHBOARD>
+    <ADDMENU>N</ADDMENU>
+    <EXPORT_ID>CPS04_1000224</EXPORT_ID>
+    <ISCRYSTALREPORT>Y</ISCRYSTALREPORT>
+    <INCLUDEIMAGE>Y</INCLUDEIMAGE>
+    <SQLQUERY>SELECT AD_CLIENT_ID, AD_ORG_ID, CPS04_AYMENTVOUCHER_V_ID, C_PAYMENT_ID, VA009_BATCH_ID, VA009_BATCHLINES_ID, LABEL, DOCUMENTNO, DATEINVOICED, CPS04_CUSTOMER, CPS04_CUSTADDRESS, CPS04_CUSTADDRESS2, CPS04_CUSTPOSTAL, CPS04_CUSTCITY, CPS04_CUSTREGIONNAME, C_BPARTNER_ID, VALUE, MOBILE, GRANDTOTAL, DISCOUNTAMT, CPS04_GROSSAMOUNT, TRXNO, CPS04_CURRENCYNAME, CPS04_FRACTIONNAME, ISO_CODE, CPS04_ORGPHONE, CPS04_ORGFAX, CPS04_ORGNAME, CPS04_ORGADDRESS, CPS04_ORGADDRESS2, CPS04_ORGADDRESS3, CPS04_BANKNAME, CPS04_BANKACCOUNT, CMS01_ROUTINGNO, CPS04_BANKADDRESS, CPS04_BANKADDRESS2, CPS04_BANKPOSTAL, CPS04_BANKCITY, CPS04_BANKREGIONNAME, PAYMETHOD, DESCRIPTION, CHECKNO, C_CHARGE_ID, ORGLOGO, CPS04_SIGNATURE, CPS28_SIGNATURE2, CPS28_SIGNATURE2_THRESHOLD FROM CPS04_PAYMENTCHECK_V; SELECT AD_CLIENT_ID, AD_ORG_ID, CPS04_PAYMENTVOUCHER_V_ID, CPS04_PAYMENTVOUCHERLINE_V_ID, CPS04_INVOICENO, AMOUNT, DISCOUNTAMT, C_PAYMENT_ID, DATEACCT, CPS04_DISCOUNTPER, CPS04_GROSSAMOUNT, CPS04_LINECOUNT FROM CPS04_PAYMENTCHECKLINE_V;SELECT AD_CLIENT_ID, AD_ORG_ID, CPS04_PAYMENTVOUCHER_V_ID, CPS04_PAYMENTVOUCHERLINE_V_ID, CPS04_INVOICENO, AMOUNT, DISCOUNTAMT, C_PAYMENT_ID, DATEACCT, CPS04_DISCOUNTPER, CPS04_GROSSAMOUNT, CPS04_LINECOUNT  FROM CPS04_PAYMENTCHECKLINE_V</SQLQUERY>
+    <IMAGEFIELD>CPS04_SIGNATURE;CPS28_SIGNATURE2</IMAGEFIELD>
+    <IMAGEPATHFIELD>CPS04_SIGNATURE;CPS28_SIGNATURE2</IMAGEPATHFIELD>
+    <REPORTPATH>CPS04_PAYMENTCHECK_TABLE.rpt;CPS04_PAYMENTCHECKLINE.rpt;CPS04_PAYMENTCHECKLINE2.rpt</REPORTPATH>
+    <ISBACKGROUNDPROCESS>N</ISBACKGROUNDPROCESS>
+    <ASKUSERBGPROCESS>N</ASKUSERBGPROCESS>
+  </AD_Process>
+  <AD_Process>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_PROCESS_ID>1000492</AD_PROCESS_ID>
+    <ACCESSLEVEL>3</ACCESSLEVEL>
+    <CREATED>2020-08-01T04:59:07+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <ISBETAFUNCTIONALITY>N</ISBETAFUNCTIONALITY>
+    <ISDIRECTPRINT>N</ISDIRECTPRINT>
+    <ISREPORT>Y</ISREPORT>
+    <ISSERVERPROCESS>N</ISSERVERPROCESS>
+    <NAME>CPS04_PaymentWTCheck</NAME>
+    <STATISTIC_COUNT>0</STATISTIC_COUNT>
+    <STATISTIC_SECONDS>0</STATISTIC_SECONDS>
+    <UPDATED>2021-12-07T10:05:38+00:00</UPDATED>
+    <UPDATEDBY>1005426</UPDATEDBY>
+    <VALUE>CPS04_PaymentWTCheck</VALUE>
+    <ISEXTERNAL>N</ISEXTERNAL>
+    <ISDASHBOARD>N</ISDASHBOARD>
+    <ADDMENU>N</ADDMENU>
+    <EXPORT_ID>CPS04_1000223</EXPORT_ID>
+    <ISCRYSTALREPORT>Y</ISCRYSTALREPORT>
+    <INCLUDEIMAGE>Y</INCLUDEIMAGE>
+    <SQLQUERY>SELECT AD_CLIENT_ID, AD_ORG_ID, CPS04_AYMENTVOUCHER_V_ID, C_PAYMENT_ID, VA009_BATCH_ID, VA009_BATCHLINES_ID, LABEL, DOCUMENTNO, DATEINVOICED, CPS04_CUSTOMER, CPS04_CUSTADDRESS, CPS04_CUSTADDRESS2, CPS04_CUSTPOSTAL, CPS04_CUSTCITY, CPS04_CUSTREGIONNAME, C_BPARTNER_ID, VALUE, MOBILE, GRANDTOTAL, DISCOUNTAMT, CPS04_GROSSAMOUNT, TRXNO, CPS04_CURRENCYNAME, CPS04_FRACTIONNAME, ISO_CODE, CPS04_ORGPHONE, CPS04_ORGFAX, CPS04_ORGNAME, CPS04_ORGADDRESS, CPS04_ORGADDRESS2, CPS04_ORGADDRESS3, CPS04_BANKNAME, CPS04_BANKACCOUNT, CMS01_ROUTINGNO, CPS04_BANKADDRESS, CPS04_BANKADDRESS2, CPS04_BANKPOSTAL, CPS04_BANKCITY, CPS04_BANKREGIONNAME, PAYMETHOD, DESCRIPTION, CHECKNO, C_CHARGE_ID, ORGLOGO, CPS04_SIGNATURE, CPS28_SIGNATURE2, CPS28_SIGNATURE2_THRESHOLD FROM CPS04_PAYMENTCHECK_V; SELECT AD_CLIENT_ID, AD_ORG_ID, CPS04_PAYMENTVOUCHER_V_ID, CPS04_PAYMENTVOUCHERLINE_V_ID, CPS04_INVOICENO, AMOUNT, DISCOUNTAMT, C_PAYMENT_ID, DATEACCT, CPS04_DISCOUNTPER, CPS04_GROSSAMOUNT, CPS04_LINECOUNT  FROM CPS04_PAYMENTCHECKLINE_V;SELECT AD_CLIENT_ID, AD_ORG_ID, CPS04_PAYMENTVOUCHER_V_ID, CPS04_PAYMENTVOUCHERLINE_V_ID, CPS04_INVOICENO, AMOUNT, DISCOUNTAMT, C_PAYMENT_ID, DATEACCT, CPS04_DISCOUNTPER, CPS04_GROSSAMOUNT, CPS04_LINECOUNT  FROM CPS04_PAYMENTCHECKLINE_V</SQLQUERY>
+    <IMAGEFIELD>CPS04_SIGNATURE;CPS28_SIGNATURE2</IMAGEFIELD>
+    <IMAGEPATHFIELD>CPS04_SIGNATURE;CPS28_SIGNATURE2</IMAGEPATHFIELD>
+    <REPORTPATH>CPS04_PAYMENTCHECK_WT.rpt;CPS04_PAYMENTCHECKLINE.rpt;CPS04_PAYMENTCHECKLINE2.rpt</REPORTPATH>
+    <ISBACKGROUNDPROCESS>N</ISBACKGROUNDPROCESS>
+    <ASKUSERBGPROCESS>N</ASKUSERBGPROCESS>
+  </AD_Process>
+</NewDataSet>
