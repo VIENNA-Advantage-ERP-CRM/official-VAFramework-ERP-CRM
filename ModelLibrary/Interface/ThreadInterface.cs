@@ -31,5 +31,8 @@ namespace VAdvantage.Interface
     public interface IThreadObserver
     {
         void Update(IThreadObservable obsvl);
+
+        string GetName();
     }
+
 }
