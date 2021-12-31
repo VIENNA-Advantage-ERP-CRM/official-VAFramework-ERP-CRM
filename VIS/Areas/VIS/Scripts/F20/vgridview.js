@@ -1297,11 +1297,10 @@
             if (id) {
                 this.select(id); //Select Row
             }
-            if (action === VIS.VTable.prototype.ROW_ADD && this.mTab.mDataListenerList && this.mTab.mDataListenerList.length > 0
-                && !this.mTab.mDataListenerList[0].getIsCardRow() && !this.mTab.mDataListenerList[0].getIsSingleRow() && !this.mTab.mDataListenerList[0].getIsMapRow()) {
+            if (action === VIS.VTable.prototype.ROW_ADD && !this.aPanel.curGC.getIsCardRow() && !this.aPanel.curGC.getIsSingleRow()
+                && !this.aPanel.curGC.getIsMapRow()) {
                 this.setDefaultFocus();
             }
-            //
         }
 
         this.blockSelect = false;
