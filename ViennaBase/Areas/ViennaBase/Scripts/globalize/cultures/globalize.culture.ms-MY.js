@@ -61,7 +61,7 @@ Globalize.addCultureInfo( "ms-MY", "default", {
 				Y: "MMMM yyyy"
 			}
 		}
-    }
+    },
     // For localized strings
     messages: {
         "Connection": "Sambungan",

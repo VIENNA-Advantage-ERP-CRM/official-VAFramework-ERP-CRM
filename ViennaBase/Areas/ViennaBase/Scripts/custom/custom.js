@@ -160,7 +160,7 @@ if (jQuery.prototype.jquery == "3.4.1" && w2utils.version == "1.4.3") {
                 });
 
                 ctrl.on('keyup', function (event) {
-                    if (dt != VIS.DisplayType.Search) {
+                    if (dt != VIS.DisplayType.Search && dt != VIS.DisplayType.AmtDimension) {
                         btn.click();
                         return;
                     }

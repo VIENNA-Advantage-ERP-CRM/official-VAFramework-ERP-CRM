@@ -1107,7 +1107,13 @@
                                 $imageSpan.append(imgSpan);
                             }
                             else {
-                                $image.attr('src', img);
+                                if (VIS.DisplayType.List == mField.lookup.displayType) {
+                                     $image.attr('src', $(img).attr('src'));
+                                }
+                                else {
+                                    $image.attr('src', img);
+                                }
+                               
                             }
 
                             $divIcon.append($imageSpan);
@@ -1249,7 +1255,12 @@
                             $imageSpan.append(imgSpan);
                         }
                         else {
-                            $image.attr('src', img);
+                            if (VIS.DisplayType.List == field.lookup.displayType) {
+                                $image.attr('src', $(img).attr('src'));
+                            }
+                            else {
+                                $image.attr('src', img);
+                            }
                         }
 
                         $divIcon.append($imageSpan);
