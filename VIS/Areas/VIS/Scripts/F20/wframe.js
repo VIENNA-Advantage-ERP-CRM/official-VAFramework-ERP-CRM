@@ -963,6 +963,10 @@
         }
     };
 
+    /**
+     * If window don't have any record, then show instruction for new record
+     * @param {any} highlight
+     */
     AppsAction.prototype.highlightNewButton = function (highlight) {
         if (highlight) {
             if (this.$li.instructionPopRemoved)
