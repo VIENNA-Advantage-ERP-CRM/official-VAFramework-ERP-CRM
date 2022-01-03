@@ -705,7 +705,7 @@ namespace VIS.Models
                                                 AND inv.issotrx = 'N'
                                                 AND inv.docstatus NOT IN('VO', 'RE')
                                                 and inv.c_provisionalinvoice_id = i.c_provisionalinvoice_id
-                                                ))");
+                                                )pi)");
 
             string whereCondition = "";
             if (InvoiceID > 0)
