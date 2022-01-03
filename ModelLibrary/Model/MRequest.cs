@@ -1056,9 +1056,8 @@ namespace VAdvantage.Model
             CheckChange(ra, "DateStartPlan");
             CheckChange(ra, "DateCompletePlan");
             //new filed result added in list if anyone change/add anything in result email will send to user
-            if (CheckChange(ra, "Result"))
-                sendInfo.Add("Result");
-            //
+            CheckChange(ra, "Result");
+            
             if (_changed)
             {
                 if (sendInfo.Count > 0)
@@ -1203,7 +1202,7 @@ namespace VAdvantage.Model
             else
             {
                 message = new StringBuilder();
-
+                subject = string.Empty; // in case of Mail Template is selected subject was coming 2 times that's why we make it empty.
                 MRequest _req = new MRequest(GetCtx(), GetR_Request_ID(), null);
                 MMailText text = new MMailText(GetCtx(), mailText_ID, null);
                 text.SetPO(_req, true); //Set _Po Current value
