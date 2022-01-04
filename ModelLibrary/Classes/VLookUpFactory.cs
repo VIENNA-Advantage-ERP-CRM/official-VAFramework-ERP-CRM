@@ -310,12 +310,12 @@ namespace VAdvantage.Classes
             String displayCol = "AD_Ref_List.Name";
             if (Utility.Env.IsBaseLanguage(language, "AD_Ref_List"))
             {
-                realSQL.Append(displayCol + ", AD_Ref_List.IsActive, (Select COALESCE(FontName,ImageURL) FROM AD_Image WHERE AD_Image_ID=AD_Ref_List.AD_Image_ID) as Image,(select ListDisplayOption from AD_Reference where AD_Reference_ID=AD_Ref_List.AD_Reference_ID) as ListDisplayOption FROM AD_Ref_List AD_Ref_List");
+                realSQL.Append(displayCol + ", AD_Ref_List.IsActive, (Select COALESCE(FontName,ImageURL) from AD_Image where AD_Image_ID=AD_Ref_List.AD_Image_ID) as Image,(select ListDisplayOption from AD_Reference where AD_Reference_ID=AD_Ref_List.AD_Reference_ID) as ListDisplayOption FROM AD_Ref_List AD_Ref_List");
             }
             else
             {
                 displayCol = "trl.Name";
-                realSQL.Append(displayCol + ", AD_Ref_List.IsActive, (Select COALESCE(FontName,ImageURL) FROM AD_Image WHERE AD_Image_ID=AD_Ref_List.AD_Image_ID) as Image, (select ListDisplayOption from AD_Reference where AD_Reference_ID=AD_Ref_List.AD_Reference_ID) as ListDisplayOption "
+                realSQL.Append(displayCol + ", AD_Ref_List.IsActive, (Select COALESCE(FontName,ImageURL) from AD_Image where AD_Image_ID=AD_Ref_List.AD_Image_ID) as Image, (select ListDisplayOption from AD_Reference where AD_Reference_ID=AD_Ref_List.AD_Reference_ID) as ListDisplayOption "
                     + " FROM AD_Ref_List AD_Ref_List INNER JOIN AD_Ref_List_Trl trl "
                     + " ON (AD_Ref_List.AD_Ref_List_ID=trl.AD_Ref_List_ID AND trl.AD_Language='")
                         .Append(language.GetAD_Language()).Append("')");
