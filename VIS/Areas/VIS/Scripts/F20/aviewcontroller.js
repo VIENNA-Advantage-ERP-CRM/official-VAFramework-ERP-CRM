@@ -1353,9 +1353,9 @@
                     || this.gTab.getIsQueryNewRecord()) && parentValid) {
                 if (this.gTab.getIsInsertRecord() && !this.skipInserting) {
                     this.dataNew(false);
-                    if (this.isZoomAction) {
-                        this.switchSingleRow();
-                    }
+                    //if (this.isZoomAction) {
+                    //    this.switchSingleRow();
+                    //}
                     return true;
                 }
                 else {
