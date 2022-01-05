@@ -153,19 +153,19 @@ namespace VIS.Helpers
                 #region FollowUps
                 //To get the Folloups count
                 StringBuilder SqlQuery = new StringBuilder();
-                SqlQuery.Append("select COUNT(inn.ChatID) As Count");
+                SqlQuery.Append("SELECT COUNT(inn.ChatID) As Count");
 
-                SqlQuery.Append(" from (select * from (select CH.cm_chat_id as ChatID,  max(CE.cm_chatentry_id)as EntryID")
-                         .Append("  from cm_chatentry CE join cm_chat CH on CE.cm_chat_id= CH.cm_chat_id ")
+                SqlQuery.Append(" FROM (SELECT * FROM (SELECT CH.cm_chat_id AS ChatID,  max(CE.cm_chatentry_id) AS EntryID")
+                         .Append("  FROM cm_chatentry CE JOIN cm_chat CH ON (CE.cm_chat_id= CH.cm_chat_id) ")
                          .Append("  JOIN cm_subscribe CS  ON (CH.ad_table_id= CS.ad_table_id) AND (CH.record_id = CS.record_id)")
-                         .Append("  where cs.createdby=" + ctx.GetAD_User_ID() + " group by CH.cm_chat_id order by entryID )inn1) inn ")
-                         .Append("  JOIN cm_chatentry CH on inn.ChatID= ch.cm_chat_id ")
-                         .Append("  JOIN cm_chat CMH on (cmh.cm_chat_id= inn.chatid)")
+                         .Append("  WHERE cs.createdby=" + ctx.GetAD_User_ID() + " GROUP BY CH.cm_chat_id ORDER BY entryID )inn1) inn ")
+                         .Append("  JOIN cm_chatentry CH ON inn.ChatID= ch.cm_chat_id ")
+                         .Append("  JOIN cm_chat CMH ON (cmh.cm_chat_id= inn.chatid)")
                          .Append("  JOIN cm_subscribe CS  ON (CMH.ad_table_id= CS.ad_table_id) AND (CMH.record_id = CS.record_id)")
-                         .Append(" Join ad_user Au on au.ad_user_id= CH.createdBy")
-                         .Append(" left outer JOIN ad_image AI on(ai.ad_image_id=au.ad_image_id)")
-                         .Append("  join ad_window AW on(cs.ad_window_id= aw.ad_window_id) left outer  JOIN ad_image adi on(adi.ad_image_id= aw.ad_image_id)  where cs.createdby=" + ctx.GetAD_User_ID())
-                         .Append(" and ch.cm_chatentry_ID =(Select max(cm_chatentry_ID) from cm_chatentry where CM_Chat_ID= ch.cm_chat_id)");
+                         .Append(" JOIN ad_user Au ON au.ad_user_id= CH.createdBy")
+                         .Append(" LEFT OUTER JOIN ad_image AI ON (ai.ad_image_id=au.ad_image_id)")
+                         .Append("  JOIN ad_window AW ON (cs.ad_window_id= aw.ad_window_id) LEFT OUTER  JOIN ad_image adi ON (adi.ad_image_id= aw.ad_image_id)  WHERE cs.createdby=" + ctx.GetAD_User_ID())
+                         .Append(" AND ch.cm_chatentry_ID =(SELECT max(cm_chatentry_ID) FROM cm_chatentry WHERE CM_Chat_ID= ch.cm_chat_id)");
                        // .Append("  order by inn.EntryID desc,ch.cm_chatentry_id asc");
                 dsData = new DataSet();
                 dsData = DB.ExecuteDataset(SqlQuery.ToString());
