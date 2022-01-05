@@ -1,0 +1,99 @@
+<NewDataSet>
+  <xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop">
+    <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="AD_ModuleField">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="AD_CLIENT_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_MODULEFIELD_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_ORG_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="CREATED" msprop:OraDbType="106" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="CREATEDBY" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="ISACTIVE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="UPDATED" msprop:OraDbType="106" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="UPDATEDBY" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="DESCRIPTION" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="SEQNO" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="ISDISPLAYED" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="AD_MODULETAB_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_FIELD_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="NAME" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="EXPORT_ID" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <AD_ModuleField>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_MODULEFIELD_ID>1018335</AD_MODULEFIELD_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <CREATED>2021-10-08T06:39:53+00:00</CREATED>
+    <CREATEDBY>1005414</CREATEDBY>
+    <ISACTIVE>Y</ISACTIVE>
+    <UPDATED>2021-10-08T06:39:53+00:00</UPDATED>
+    <UPDATEDBY>1005414</UPDATEDBY>
+    <DESCRIPTION>Signature Two</DESCRIPTION>
+    <SEQNO>10</SEQNO>
+    <ISDISPLAYED>Y</ISDISPLAYED>
+    <AD_MODULETAB_ID>1001647</AD_MODULETAB_ID>
+    <AD_FIELD_ID>1013958</AD_FIELD_ID>
+    <NAME>Signature Two</NAME>
+    <EXPORT_ID>CPS28_1004120</EXPORT_ID>
+  </AD_ModuleField>
+  <AD_ModuleField>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_MODULEFIELD_ID>1018336</AD_MODULEFIELD_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <CREATED>2021-10-08T06:42:26+00:00</CREATED>
+    <CREATEDBY>1005414</CREATEDBY>
+    <ISACTIVE>Y</ISACTIVE>
+    <UPDATED>2021-10-08T06:44:34+00:00</UPDATED>
+    <UPDATEDBY>1005414</UPDATEDBY>
+    <DESCRIPTION>Signature Two Threshold</DESCRIPTION>
+    <SEQNO>20</SEQNO>
+    <ISDISPLAYED>Y</ISDISPLAYED>
+    <AD_MODULETAB_ID>1001647</AD_MODULETAB_ID>
+    <AD_FIELD_ID>1017850</AD_FIELD_ID>
+    <NAME>Signature Two Threshold</NAME>
+    <EXPORT_ID>CPS28_1004121</EXPORT_ID>
+  </AD_ModuleField>
+  <AD_ModuleField>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_MODULEFIELD_ID>1018368</AD_MODULEFIELD_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <CREATED>2021-11-08T09:21:41+00:00</CREATED>
+    <CREATEDBY>1005414</CREATEDBY>
+    <ISACTIVE>Y</ISACTIVE>
+    <UPDATED>2021-11-08T09:26:10+00:00</UPDATED>
+    <UPDATEDBY>1005414</UPDATEDBY>
+    <DESCRIPTION>Print Check With Format</DESCRIPTION>
+    <SEQNO>10</SEQNO>
+    <ISDISPLAYED>Y</ISDISPLAYED>
+    <AD_MODULETAB_ID>1001660</AD_MODULETAB_ID>
+    <AD_FIELD_ID>1011824</AD_FIELD_ID>
+    <NAME>Print Check With Format</NAME>
+    <EXPORT_ID>CPS28_1004128</EXPORT_ID>
+  </AD_ModuleField>
+  <AD_ModuleField>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_MODULEFIELD_ID>1018369</AD_MODULEFIELD_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <CREATED>2021-11-08T09:25:49+00:00</CREATED>
+    <CREATEDBY>1005414</CREATEDBY>
+    <ISACTIVE>Y</ISACTIVE>
+    <UPDATED>2021-11-08T09:25:49+00:00</UPDATED>
+    <UPDATEDBY>1005414</UPDATEDBY>
+    <DESCRIPTION>Print check</DESCRIPTION>
+    <SEQNO>20</SEQNO>
+    <ISDISPLAYED>Y</ISDISPLAYED>
+    <AD_MODULETAB_ID>1001660</AD_MODULETAB_ID>
+    <AD_FIELD_ID>1011823</AD_FIELD_ID>
+    <NAME>Print check</NAME>
+    <EXPORT_ID>CPS28_1004129</EXPORT_ID>
+  </AD_ModuleField>
+</NewDataSet>

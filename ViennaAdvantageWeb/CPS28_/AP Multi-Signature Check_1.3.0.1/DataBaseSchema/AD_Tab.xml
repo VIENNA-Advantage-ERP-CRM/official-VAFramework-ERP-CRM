@@ -1,0 +1,134 @@
+<NewDataSet>
+  <xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop">
+    <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="AD_Tab">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="AD_CLIENT_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_COLUMNSORTORDER_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_COLUMNSORTYESNO_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_COLUMN_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_CTXAREA_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_IMAGE_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_ORG_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_PROCESS_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_TAB_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_TABLE_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_WINDOW_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="COMMITWARNING" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="CREATED" msprop:OraDbType="106" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="CREATEDBY" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="DESCRIPTION" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="DISPLAYLOGIC" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="ENTITYTYPE" msprop:OraDbType="126" type="xs:string" minOccurs="0" />
+                <xs:element name="HASTREE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="HELP" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="IMPORTFIELDS" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="INCLUDED_TAB_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="ISACTIVE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISADVANCEDTAB" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISDISPLAYED" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISINFOTAB" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISINSERTRECORD" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISREADONLY" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISSINGLEROW" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISSORTTAB" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISTRANSLATIONTAB" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="NAME" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="ORDERBYCLAUSE" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="PROCESSING" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="READONLYLOGIC" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="REFERENCED_TAB_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="SEQNO" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="TABLEVEL" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="UPDATED" msprop:OraDbType="106" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="UPDATEDBY" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="WHERECLAUSE" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="EXPORT_ID" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="SHOWSUMMARYLEVELNODES" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="TABPANELALIGNMENT" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISHEADERPANEL" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="AD_HEADERLAYOUT_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="CREATEMASTERVERSIONTAB" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="MAINTAINVERONAPPROVAL" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="HPANELNOTSHOWINMULTIROW" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <AD_Tab>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_TAB_ID>228</AD_TAB_ID>
+    <AD_TABLE_ID>297</AD_TABLE_ID>
+    <AD_WINDOW_ID>158</AD_WINDOW_ID>
+    <CREATED>2000-01-02T07:30:00+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>Maintain Bank Account</DESCRIPTION>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <HASTREE>N</HASTREE>
+    <HELP>The Account Tab is used to define one or more accounts for a Bank.  Each account has a unique Account No and Currency.  The bank account organization is used for accounting.</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <ISADVANCEDTAB>N</ISADVANCEDTAB>
+    <ISDISPLAYED>Y</ISDISPLAYED>
+    <ISINFOTAB>N</ISINFOTAB>
+    <ISINSERTRECORD>Y</ISINSERTRECORD>
+    <ISREADONLY>N</ISREADONLY>
+    <ISSINGLEROW>Y</ISSINGLEROW>
+    <ISSORTTAB>N</ISSORTTAB>
+    <ISTRANSLATIONTAB>N</ISTRANSLATIONTAB>
+    <NAME>Account</NAME>
+    <PROCESSING>N</PROCESSING>
+    <SEQNO>20</SEQNO>
+    <TABLEVEL>1</TABLEVEL>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_228</EXPORT_ID>
+    <SHOWSUMMARYLEVELNODES>N</SHOWSUMMARYLEVELNODES>
+    <ISHEADERPANEL>N</ISHEADERPANEL>
+    <MAINTAINVERONAPPROVAL>N</MAINTAINVERONAPPROVAL>
+    <HPANELNOTSHOWINMULTIROW>N</HPANELNOTSHOWINMULTIROW>
+  </AD_Tab>
+  <AD_Tab>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_PROCESS_ID>1000235</AD_PROCESS_ID>
+    <AD_TAB_ID>330</AD_TAB_ID>
+    <AD_TABLE_ID>335</AD_TABLE_ID>
+    <AD_WINDOW_ID>195</AD_WINDOW_ID>
+    <CREATED>2012-12-21T00:00:00+00:00</CREATED>
+    <CREATEDBY>0</CREATEDBY>
+    <DESCRIPTION>Payment or Receipt</DESCRIPTION>
+    <ENTITYTYPE>CUST</ENTITYTYPE>
+    <HASTREE>N</HASTREE>
+    <HELP>Enter payment or receipt for a Business Partner.  If it is for a single invoice it can be allocated directly to that invoice using this screen. You can also apply over/under payments:&lt;br&gt;
+You have an over-payment, if you received more money than due for a single invoice. Instead of writing the difference off (i.e. would be a gain), you can leave the amount unallocated and use it for later invoices or credit memos. Please note that the Amount is the payment amount, so you need to enter the over-payment as a negative amount.&lt;br&gt;
+You can also receive a partial payment (under-payment). If you decide not to write off the remaining invoice amount, enter the under-payment as a positive amount.&lt;br&gt;
+Note that printed payments are archived in Payment Selection (Prepared Payment).
+&lt;br&gt;For Posting, the bank account organization is used, if it is not a charge.</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <ISADVANCEDTAB>N</ISADVANCEDTAB>
+    <ISDISPLAYED>Y</ISDISPLAYED>
+    <ISINFOTAB>N</ISINFOTAB>
+    <ISINSERTRECORD>Y</ISINSERTRECORD>
+    <ISREADONLY>N</ISREADONLY>
+    <ISSINGLEROW>Y</ISSINGLEROW>
+    <ISSORTTAB>N</ISSORTTAB>
+    <ISTRANSLATIONTAB>N</ISTRANSLATIONTAB>
+    <NAME>Payment</NAME>
+    <PROCESSING>N</PROCESSING>
+    <SEQNO>10</SEQNO>
+    <TABLEVEL>0</TABLEVEL>
+    <UPDATED>2021-12-17T12:08:42+00:00</UPDATED>
+    <UPDATEDBY>1005390</UPDATEDBY>
+    <WHERECLAUSE>C_Payment.TrxType&lt;&gt;'X' AND C_Payment.C_DocType_ID NOT IN(SELECT C_DocType_ID FROM C_DocType WHERE GL_CATEGORY_ID IN (SELECT GL_CATEGORY_ID FROM gl_Category WHERE TRIM(NAME) IN('3R Integrated Data','Thrive Integrated Data','AHT Integrated Data')))</WHERECLAUSE>
+    <EXPORT_ID>VIS_330</EXPORT_ID>
+    <ISHEADERPANEL>N</ISHEADERPANEL>
+    <HPANELNOTSHOWINMULTIROW>N</HPANELNOTSHOWINMULTIROW>
+  </AD_Tab>
+</NewDataSet>
