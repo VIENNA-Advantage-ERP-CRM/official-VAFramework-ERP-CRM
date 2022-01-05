@@ -1082,6 +1082,10 @@
         this.highlightButton = function (highlight, button) {
             var $bLi = button.$li;
             var $root = this.getRoot();
+
+            if (!highlight) {
+                this.instructionPop[this.ACTION_NAME_NEW] = true;
+            }
             if (button.getAction() == this.ACTION_NAME_NEW) {
                 if (this.instructionPop[this.ACTION_NAME_NEW]) {
                     if ($root.find('.vis-window-instruc-overlay-new').length > 0) {
@@ -3113,7 +3117,10 @@
                 this.highlightButton(true, this.aNew);
             }
         }
-
+        else {
+            this.highlightButton(false, this.aNew);
+        }
+            
 
         //	Single-Multi
         this.aMulti.setPressed(this.curGC.getIsSingleRow() || this.curGC.getIsMapRow());
