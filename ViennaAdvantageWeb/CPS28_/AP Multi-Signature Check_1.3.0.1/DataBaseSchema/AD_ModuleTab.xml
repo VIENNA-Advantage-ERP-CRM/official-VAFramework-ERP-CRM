@@ -1,0 +1,59 @@
+<NewDataSet>
+  <xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop">
+    <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="AD_ModuleTab">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="AD_CLIENT_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_MODULETAB_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_ORG_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_TAB_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="CREATED" msprop:OraDbType="106" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="CREATEDBY" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="DESCRIPTION" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="ISACTIVE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="UPDATED" msprop:OraDbType="106" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="UPDATEDBY" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_MODULEWINDOW_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="EXPORT_ID" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="CREATEFIELDS" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <AD_ModuleTab>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_MODULETAB_ID>1001647</AD_MODULETAB_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_TAB_ID>228</AD_TAB_ID>
+    <CREATED>2021-10-08T06:37:49+00:00</CREATED>
+    <CREATEDBY>1005414</CREATEDBY>
+    <DESCRIPTION>Bank_Account</DESCRIPTION>
+    <ISACTIVE>Y</ISACTIVE>
+    <UPDATED>2021-10-08T06:38:50+00:00</UPDATED>
+    <UPDATEDBY>1005414</UPDATEDBY>
+    <AD_MODULEWINDOW_ID>1001147</AD_MODULEWINDOW_ID>
+    <EXPORT_ID>CPS28_1000256</EXPORT_ID>
+    <CREATEFIELDS>N         </CREATEFIELDS>
+  </AD_ModuleTab>
+  <AD_ModuleTab>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_MODULETAB_ID>1001660</AD_MODULETAB_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_TAB_ID>330</AD_TAB_ID>
+    <CREATED>2021-11-08T09:20:48+00:00</CREATED>
+    <CREATEDBY>1005414</CREATEDBY>
+    <DESCRIPTION>Payment</DESCRIPTION>
+    <ISACTIVE>Y</ISACTIVE>
+    <UPDATED>2021-11-08T09:20:48+00:00</UPDATED>
+    <UPDATEDBY>1005414</UPDATEDBY>
+    <AD_MODULEWINDOW_ID>1001151</AD_MODULEWINDOW_ID>
+    <EXPORT_ID>CPS28_1000258</EXPORT_ID>
+    <CREATEFIELDS>N         </CREATEFIELDS>
+  </AD_ModuleTab>
+</NewDataSet>

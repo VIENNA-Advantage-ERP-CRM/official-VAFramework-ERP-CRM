@@ -1,0 +1,77 @@
+<NewDataSet>
+  <xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop">
+    <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="AD_Val_Rule">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="AD_CLIENT_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_ORG_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_VAL_RULE_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="CODE" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="CREATED" msprop:OraDbType="106" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="CREATEDBY" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="DESCRIPTION" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="ENTITYTYPE" msprop:OraDbType="126" type="xs:string" minOccurs="0" />
+                <xs:element name="ISACTIVE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="NAME" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="TYPE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="UPDATED" msprop:OraDbType="106" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="UPDATEDBY" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="EXPORT_ID" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <AD_Val_Rule>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_VAL_RULE_ID>129</AD_VAL_RULE_ID>
+    <CODE>AD_Client.AD_Client_ID &lt;&gt; 0</CODE>
+    <CREATED>2000-02-13T00:45:22+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>AD_Client Trx Security validation</NAME>
+    <TYPE>S</TYPE>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_129</EXPORT_ID>
+  </AD_Val_Rule>
+  <AD_Val_Rule>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_VAL_RULE_ID>1000574</AD_VAL_RULE_ID>
+    <CODE>(((SELECT AD_Org_ID FROM C_Bank  WHERE C_Bank_ID= @C_Bank_ID@) !=0  AND AD_Org_ID=(SELECT AD_Org_ID FROM C_Bank   WHERE C_Bank_ID= @C_Bank_ID@) ) OR ((SELECT AD_Org_ID FROM C_Bank   WHERE C_Bank_ID= @C_Bank_ID@) =0 AND AD_Org.IsSummary='N' AND AD_Org.IsCostCenter='N' AND AD_Org.IsProfitCenter='N' AND  AD_Org_ID&lt;&gt;0 ) )</CODE>
+    <CREATED>2021-07-28T01:00:26+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>BankAccount_Organization</DESCRIPTION>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>BankAccount_Organization</NAME>
+    <TYPE>S</TYPE>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_1000329</EXPORT_ID>
+  </AD_Val_Rule>
+  <AD_Val_Rule>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_VAL_RULE_ID>130</AD_VAL_RULE_ID>
+    <CODE>AD_Org.AD_Org_ID &lt;&gt; 0  AND AD_Org.IsSummary='N' AND AD_Org.IsCostCenter='N' AND AD_Org.IsProfitCenter='N'</CODE>
+    <CREATED>2019-10-11T06:10:59+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>Not Summary - Not 0</DESCRIPTION>
+    <ENTITYTYPE>CUST</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>AD_Org Trx Security validation</NAME>
+    <TYPE>S</TYPE>
+    <UPDATED>2020-05-21T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_130</EXPORT_ID>
+  </AD_Val_Rule>
+</NewDataSet>

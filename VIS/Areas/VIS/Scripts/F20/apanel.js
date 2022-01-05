@@ -1083,7 +1083,7 @@
             var $bLi = button.$li;
             var $root = this.getRoot();
 
-            
+
             if (button.getAction() == this.ACTION_NAME_NEW) {
 
                 if (!highlight || $txtSearch.val().length > 0) {

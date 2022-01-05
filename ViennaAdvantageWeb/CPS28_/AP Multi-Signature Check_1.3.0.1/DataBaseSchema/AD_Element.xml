@@ -1,0 +1,655 @@
+<NewDataSet>
+  <xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop">
+    <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="AD_Element">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="AD_CLIENT_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_ELEMENT_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_ORG_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_REFERENCE_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_REFERENCE_VALUE_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_VAL_RULE_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="COLUMNNAME" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="CREATED" msprop:OraDbType="106" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="CREATEDBY" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="DBDATATYPE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="DESCRIPTION" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="ENTITYTYPE" msprop:OraDbType="126" type="xs:string" minOccurs="0" />
+                <xs:element name="FIELDLENGTH" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="HELP" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="ISACTIVE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="NAME" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="PO_DESCRIPTION" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="PO_HELP" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="PO_NAME" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="PO_PRINTNAME" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="PRINTNAME" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="UPDATED" msprop:OraDbType="106" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="UPDATEDBY" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="EXPORT_ID" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>836</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>C_BankAccount_ID</COLUMNNAME>
+    <CREATED>2000-01-02T07:30:00+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>Account at the Bank</DESCRIPTION>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <FIELDLENGTH>0</FIELDLENGTH>
+    <HELP>The Bank Account identifies an account at this Bank.</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>Bank Account</NAME>
+    <PRINTNAME>Bank Account</PRINTNAME>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_836</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>1004492</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>CPS28_signature2</COLUMNNAME>
+    <CREATED>2021-10-26T10:32:47+00:00</CREATED>
+    <CREATEDBY>1005426</CREATEDBY>
+    <DESCRIPTION>This field is to be used to update signature image 2</DESCRIPTION>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>Signature Two</NAME>
+    <PRINTNAME>Signature Two</PRINTNAME>
+    <UPDATED>2021-10-26T10:32:47+00:00</UPDATED>
+    <UPDATEDBY>1005426</UPDATEDBY>
+    <EXPORT_ID>CPS28_1001854</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>1004485</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>CPS28_signature2_threshold</COLUMNNAME>
+    <CREATED>2021-10-06T08:24:24+00:00</CREATED>
+    <CREATEDBY>1005414</CREATEDBY>
+    <DESCRIPTION>The dollar amount at which a second signature is required on checks</DESCRIPTION>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>Signature Two Threshold</NAME>
+    <PRINTNAME>Signature Two Threshold</PRINTNAME>
+    <UPDATED>2021-10-06T08:24:24+00:00</UPDATED>
+    <UPDATEDBY>1005414</UPDATEDBY>
+    <EXPORT_ID>CPS28_1001851</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>102</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>AD_Client_ID</COLUMNNAME>
+    <CREATED>2000-01-02T07:30:00+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>Client/Tenant for this installation.</DESCRIPTION>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <FIELDLENGTH>0</FIELDLENGTH>
+    <HELP>A Client is a company or a legal entity. You cannot share data between Clients. Tenant is a synonym for Client.</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>Tenant</NAME>
+    <PRINTNAME>Tenant</PRINTNAME>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_102</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>113</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>AD_Org_ID</COLUMNNAME>
+    <CREATED>2000-01-02T07:30:00+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>Organizational entity within Tenant</DESCRIPTION>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <FIELDLENGTH>0</FIELDLENGTH>
+    <HELP>An organization is a unit of your Tenant or legal entity - examples are store, department. You can share data between organizations.</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>Organization</NAME>
+    <PRINTNAME>Organization</PRINTNAME>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_113</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>348</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>IsActive</COLUMNNAME>
+    <CREATED>2000-01-02T07:30:00+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>The record is active in the system</DESCRIPTION>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <FIELDLENGTH>0</FIELDLENGTH>
+    <HELP>There are two methods of making records unavailable in the system: One is to delete the record, the other is to de-activate the record. A de-activated record is not available for selection, but available for reports.
+There are two reasons for de-activating and not deleting records:
+(1) The system requires the record for audit purposes.
+(2) The record is referenced by other records. E.g., you cannot delete a Account, if there are invoices for this Account record existing. You de-activate the Account and prevent that this record is used for future entries.</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>Active</NAME>
+    <PRINTNAME>Active</PRINTNAME>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_348</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>1384</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>C_Payment_ID</COLUMNNAME>
+    <CREATED>2000-12-17T23:53:13+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>Payment identifier</DESCRIPTION>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <FIELDLENGTH>0</FIELDLENGTH>
+    <HELP>The Payment is a unique identifier of this payment.</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>Payment</NAME>
+    <PRINTNAME>Payment</PRINTNAME>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_1384</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>1001976</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>VARPT_PAYMENTVOUCHER_V_ID</COLUMNNAME>
+    <CREATED>2014-08-30T08:51:55+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>VARPT_PAYMENTVOUCHER_V_ID</NAME>
+    <PRINTNAME>VARPT_PAYMENTVOUCHER_V_ID</PRINTNAME>
+    <UPDATED>2021-05-24T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VARPT_20001671</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>1001987</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>VARPT_H_VOUCHERTYPE</COLUMNNAME>
+    <CREATED>2014-08-30T08:51:57+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>VARPT_H_VOUCHERTYPE</NAME>
+    <PRINTNAME>VARPT_H_VOUCHERTYPE</PRINTNAME>
+    <UPDATED>2021-05-24T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VARPT_20001677</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>196</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>C_DocType_ID</COLUMNNAME>
+    <CREATED>2012-12-20T18:00:00+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>Document type or rules</DESCRIPTION>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <FIELDLENGTH>0</FIELDLENGTH>
+    <HELP>The Document Type determines document sequence and processing rules</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>Document Type</NAME>
+    <PRINTNAME>Doc Type</PRINTNAME>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_196</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>1001988</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>VARPT_H_DATE</COLUMNNAME>
+    <CREATED>2014-08-29T01:09:48+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>VARPT_H_DATE</NAME>
+    <PRINTNAME>VARPT_H_DATE</PRINTNAME>
+    <UPDATED>2021-05-24T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VARPT_20001554</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>263</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>DateAcct</COLUMNNAME>
+    <CREATED>2000-01-02T07:30:00+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>General Ledger Date</DESCRIPTION>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <FIELDLENGTH>0</FIELDLENGTH>
+    <HELP>The Account Date indicates the date to be used on the General Ledger account entries generated from this document. It is also used for any currency conversion.</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>Account Date</NAME>
+    <PRINTNAME>Account Date</PRINTNAME>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_263</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>1001989</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>VARPT_BPARTNERID</COLUMNNAME>
+    <CREATED>2014-08-30T08:51:55+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>VARPT_BPARTNERID</NAME>
+    <PRINTNAME>VARPT_BPARTNERID</PRINTNAME>
+    <UPDATED>2021-05-24T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VARPT_20001678</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>1001990</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>VARPT_H_AUTHORISEDSIG</COLUMNNAME>
+    <CREATED>2014-08-30T08:51:58+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>VARPT_H_AUTHORISEDSIG</NAME>
+    <PRINTNAME>VARPT_H_AUTHORISEDSIG</PRINTNAME>
+    <UPDATED>2021-05-24T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VARPT_20001679</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>1001991</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>VARPT_H_SIGNATURE</COLUMNNAME>
+    <CREATED>2014-08-29T02:34:36+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>VARPT_H_SIGNATURE</NAME>
+    <PRINTNAME>VARPT_H_SIGNATURE</PRINTNAME>
+    <UPDATED>2021-05-24T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VARPT_20001561</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>968</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>C_Charge_ID</COLUMNNAME>
+    <CREATED>2000-01-02T07:30:00+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>Additional document charges</DESCRIPTION>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <FIELDLENGTH>0</FIELDLENGTH>
+    <HELP>The Charge indicates a type of Charge (Handling, Shipping, Restocking)</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>Charge</NAME>
+    <PRINTNAME>Charge</PRINTNAME>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_968</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>187</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>C_BPartner_ID</COLUMNNAME>
+    <CREATED>2000-01-02T07:30:00+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>Identifies a Customer/Prospect</DESCRIPTION>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <FIELDLENGTH>0</FIELDLENGTH>
+    <HELP>A Customer/Prospect is anyone with whom you transact.  This can include Vendor, Customer, Employee or Salesperson</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>Business Partner</NAME>
+    <PRINTNAME>Customer/Prospect</PRINTNAME>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_187</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>1001992</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>VARPT_H_PAYMENTDETAILS</COLUMNNAME>
+    <CREATED>2014-08-30T08:51:57+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>VARPT_H_PAYMENTDETAILS</NAME>
+    <PRINTNAME>VARPT_H_PAYMENTDETAILS</PRINTNAME>
+    <UPDATED>2021-05-24T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VARPT_20001680</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>193</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>C_Currency_ID</COLUMNNAME>
+    <CREATED>2000-01-02T07:30:00+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>The Currency for this record</DESCRIPTION>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <FIELDLENGTH>0</FIELDLENGTH>
+    <HELP>Indicates the Currency to be used when processing or reporting on this record</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>Currency</NAME>
+    <PRINTNAME>Currency</PRINTNAME>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_193</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>1001977</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>VARPT_H_DESCRIPTION</COLUMNNAME>
+    <CREATED>2014-08-29T01:22:28+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>VARPT_H_DESCRIPTION</NAME>
+    <PRINTNAME>VARPT_H_DESCRIPTION</PRINTNAME>
+    <UPDATED>2021-05-24T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VARPT_20001560</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>1001978</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>VARPT_H_BUSINESSPARTNER</COLUMNNAME>
+    <CREATED>2014-08-29T01:22:27+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>VARPT_H_BUSINESSPARTNER</NAME>
+    <PRINTNAME>VARPT_H_BUSINESSPARTNER</PRINTNAME>
+    <UPDATED>2021-05-24T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VARPT_20001555</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>1477</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>PayAmt</COLUMNNAME>
+    <CREATED>2000-12-23T05:57:31+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>Amount being paid</DESCRIPTION>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <FIELDLENGTH>0</FIELDLENGTH>
+    <HELP>Indicates the amount this payment is for.  The payment amount can be for single or multiple invoices or a partial payment for an invoice.</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>Payment amount</NAME>
+    <PRINTNAME>Payment Amt</PRINTNAME>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_1477</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>1001979</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>VARPT_AMTINWORDS</COLUMNNAME>
+    <CREATED>2014-08-26T10:04:03+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>VARPT_AMTINWORDS</NAME>
+    <PRINTNAME>VARPT_AMTINWORDS</PRINTNAME>
+    <UPDATED>2021-05-24T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VARPT_20001476</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>1001980</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>VARPT_H_ORDER</COLUMNNAME>
+    <CREATED>2014-08-30T08:51:57+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>VARPT_H_ORDER</NAME>
+    <PRINTNAME>VARPT_H_ORDER</PRINTNAME>
+    <UPDATED>2021-05-24T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VARPT_20001672</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>1001981</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>VARPT_H_INVOICE</COLUMNNAME>
+    <CREATED>2014-08-29T01:53:00+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>VARPT_H_INVOICE</NAME>
+    <PRINTNAME>VARPT_H_INVOICE</PRINTNAME>
+    <UPDATED>2021-05-24T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VARPT_20001609</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>1001982</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>VARPT_H_CHARGE</COLUMNNAME>
+    <CREATED>2014-08-29T01:22:28+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>VARPT_H_CHARGE</NAME>
+    <PRINTNAME>VARPT_H_CHARGE</PRINTNAME>
+    <UPDATED>2021-05-24T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VARPT_20001551</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>558</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>C_Order_ID</COLUMNNAME>
+    <CREATED>2000-01-02T07:30:00+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>Sales Order</DESCRIPTION>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <FIELDLENGTH>0</FIELDLENGTH>
+    <HELP>The Order is a control document.  The  Order is complete when the quantity ordered is the same as the quantity invoiced.</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>Order</NAME>
+    <PO_DESCRIPTION>Purchase Order</PO_DESCRIPTION>
+    <PO_HELP>The Purchase Order is a control document.  The Purchase Order is complete when the quantity ordered is the same as the quantity shipped and invoiced.  When you cloase an order, unshipped (backordered) quantities are cancelled.</PO_HELP>
+    <PO_NAME>Purchase Order</PO_NAME>
+    <PO_PRINTNAME>Purchase Order</PO_PRINTNAME>
+    <PRINTNAME>Order</PRINTNAME>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_558</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>1008</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>C_Invoice_ID</COLUMNNAME>
+    <CREATED>2000-01-02T07:30:00+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>Invoice Identifier</DESCRIPTION>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <FIELDLENGTH>0</FIELDLENGTH>
+    <HELP>The Invoice Document.</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>Invoice</NAME>
+    <PRINTNAME>Invoice</PRINTNAME>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_1008</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>1001983</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>VARPT_PAYMENT</COLUMNNAME>
+    <CREATED>2014-08-30T08:51:56+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>VARPT_PAYMENT</NAME>
+    <PRINTNAME>VARPT_PAYMENT</PRINTNAME>
+    <UPDATED>2021-05-24T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VARPT_20001673</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>275</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>Description</COLUMNNAME>
+    <CREATED>2000-01-02T07:30:00+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>Optional short description of the record</DESCRIPTION>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <FIELDLENGTH>0</FIELDLENGTH>
+    <HELP>A description is limited to 255 characters.</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>Description</NAME>
+    <PRINTNAME>Description</PRINTNAME>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_275</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>1001984</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>VARPT_H_PAYMENTREFERENCE</COLUMNNAME>
+    <CREATED>2014-08-30T08:51:57+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>VARPT_H_PAYMENTREFERENCE</NAME>
+    <PRINTNAME>VARPT_H_PAYMENTREFERENCE</PRINTNAME>
+    <UPDATED>2021-05-24T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VARPT_20001674</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>1001985</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>VARPT_H_VOUCHERNO</COLUMNNAME>
+    <CREATED>2014-08-30T08:51:56+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>VARPT_H_VOUCHERNO</NAME>
+    <PRINTNAME>VARPT_H_VOUCHERNO</PRINTNAME>
+    <UPDATED>2021-05-24T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VARPT_20001675</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>290</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>DocumentNo</COLUMNNAME>
+    <CREATED>2000-01-02T07:30:00+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>Document sequence number of the document</DESCRIPTION>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <FIELDLENGTH>0</FIELDLENGTH>
+    <HELP>The Document number is usually automatically generated by the system and determined by the document type of the document. If the document is not saved, the preliminary number is displayed between greater than and less than symbols
+
+If the document type of your document has no automatic document sequence defined, the field is empty if you create a new document. This is for documents which usually have an external number (like vendor invoice).  If you leave the field empty, the system will generate a document number for you. The document sequence used for this fallback number is defined in the "Maintain Sequence" window with the name "DocumentNo_&lt;TableName&gt;", where TableName is the actual name of the table (e.g. C_Order).</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>Document No.</NAME>
+    <PRINTNAME>Document No.</PRINTNAME>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_290</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>1001986</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>VARPT_H_PAYMENTVOUCHER</COLUMNNAME>
+    <CREATED>2014-08-30T08:51:56+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>VARPT_H_PAYMENTVOUCHER</NAME>
+    <PRINTNAME>VARPT_H_PAYMENTVOUCHER</PRINTNAME>
+    <UPDATED>2021-05-24T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VARPT_20001676</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>1003839</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>CPS04_PrintCheckTable</COLUMNNAME>
+    <CREATED>2020-08-01T05:05:04+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>This button will print check with customized format having table</DESCRIPTION>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <HELP>This button will print check with customized format having table</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>Print Check With Format</NAME>
+    <PRINTNAME>Print Check With Format</PRINTNAME>
+    <UPDATED>2020-09-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>CPS04_1001820</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>1003838</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>CPS04_PrintCheck</COLUMNNAME>
+    <CREATED>2020-08-01T05:08:22+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>This button will print check with customized format</DESCRIPTION>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <HELP>This button will print check with customized format</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>Print Check</NAME>
+    <PRINTNAME>Print Check</PRINTNAME>
+    <UPDATED>2020-09-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>CPS04_1001819</EXPORT_ID>
+  </AD_Element>
+  <AD_Element>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ELEMENT_ID>1001381</AD_ELEMENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <COLUMNNAME>Export_ID</COLUMNNAME>
+    <CREATED>2012-08-17T02:17:08+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>Export</NAME>
+    <PRINTNAME>Export</PRINTNAME>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_1001381</EXPORT_ID>
+  </AD_Element>
+</NewDataSet>
