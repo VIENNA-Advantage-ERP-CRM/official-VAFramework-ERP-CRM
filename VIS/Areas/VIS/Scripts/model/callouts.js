@@ -1722,7 +1722,7 @@
             var params = mTab.getValue("M_Product_ID").toString().concat(",", (mTab.getValue("C_BPartner_ID")).toString());
             var productInfo = VIS.dataContext.getJSONRecord("MOrderLine/GetProductInfo", params);
 
-            //Set Product description
+            //190 - Set Product description
             if (productInfo != null) {
                 mTab.setValue("PrintDescription", productInfo.DocumentNote);
             }
@@ -1992,45 +1992,25 @@
                 mTab.setValue("C_UOM_ID", 100);	//	EA
             }
             ctx.setContext(windowNo, "DiscountSchema", "N");
-            var sql = "SELECT ChargeAmt, PrintDescription FROM C_Charge WHERE C_Charge_ID=" + C_Charge_ID;
-            var dr = null;
-
-
+            
             // JID_1744 The Precision Shpould as per Currency precision
             var stdPrecision = VIS.dataContext.getJSONRecord("MOrder/GetPrecision", mTab.getValue("C_Order_ID").toString());
 
-            dr = VIS.DB.executeReader(sql);
-            var PriceEntered;
-            var PrintDescription;
+            //190 - Remove client side query and set print description
+            var dr = VIS.dataContext.getJSONRecord("MCharge/GetChargeDetails", C_Charge_ID.toString());
             if (dr != null) {
-                if (dr.read()) {
-                    // DataRow dr = ds.Tables[0].Rows[i];
-                    PriceEntered = Util.getValueOfDecimal(dr.get("chargeamt"));
-                    PrintDescription = Util.getValueOfString(dr.get("PrintDescription"))
-                    //mTab.setValue("PriceEntered", Util.getValueOfDecimal(dr[0]));
-                    //mTab.setValue("PriceActual", Util.getValueOfDecimal(dr[0]));
-                    //mTab.setValue("PriceLimit", VIS.Env.ZERO);
-                    //mTab.setValue("PriceList", VIS.Env.ZERO);
-                    //mTab.setValue("Discount", VIS.Env.ZERO);
-                }
+                mTab.setValue("PriceEntered", Util.getValueOfDecimal(dr["ChargeAmt"]).toFixed(stdPrecision));
+                mTab.setValue("PrintDescription", Util.getValueOfString(dr["PrintDescription"]));
+                mTab.setValue("PriceActual", Util.getValueOfDecimal(dr["ChargeAmt"]).toFixed(stdPrecision));
             }
-            mTab.setValue("PriceEntered", Util.getValueOfDecimal(PriceEntered.toFixed(stdPrecision)));
-            mTab.setValue("PrintDescription", PrintDescription);
-            //mTab.SetValue("PriceEntered", Utility.Util.GetValueOfDecimal(dr[0]));
-            //mTab.SetValue("PriceActual", Utility.Util.GetValueOfDecimal(dr[0]));
-            mTab.setValue("PriceActual", Util.getValueOfDecimal(PriceEntered.toFixed(stdPrecision)));
+
             mTab.setValue("PriceLimit", VIS.Env.ZERO);
             mTab.setValue("PriceList", VIS.Env.ZERO);
-            mTab.setValue("Discount", VIS.Env.ZERO);
-            dr.close();
+            mTab.setValue("Discount", VIS.Env.ZERO);           
         }
         catch (err) {
-            this.setCalloutActive(false);
-            if (dr != null) {
-                dr.close();
-                dr = null;
-            }
-            this.log.log(Level.SEVERE, sql, err);
+            this.setCalloutActive(false);           
+            this.log.log(Level.SEVERE, err.toString());
             return err
         }
         this.setCalloutActive(false);
@@ -12980,24 +12960,26 @@
                 mTab.setValue("C_UOM_ID", 100);	//	EA
             }
             ctx.setContext(windowNo, "DiscountSchema", "N");
-            var sql = "SELECT ChargeAmt, PrintDescription FROM C_Charge WHERE C_Charge_ID=" + C_Charge_ID;
-
 
             //JID_1744 The precision should be as per Currenct Precision
             //JID_1744 The precision should be as per Currenct Precision
             var stdPrecision = VIS.dataContext.getJSONRecord("MInvoice/GetPercision", mTab.getValue("C_Invoice_ID").toString());
 
-            dr = VIS.DB.executeReader(sql, null, null);
-            if (dr.read()) {
-                mTab.setValue("PriceEntered", Util.getValueOfDecimal(dr.get("chargeamt").toFixed(stdPrecision)));//.getBigDecimal(1));
-                mTab.setValue("PriceActual", Util.getValueOfDecimal(dr.get("chargeamt").toFixed(stdPrecision)));//dr.getBigDecimal(1));else if (mField.getColumnName() == "PriceActual") {
+            //190 - Remove client side query and set print description
+            var dr = VIS.dataContext.getJSONRecord("MCharge/GetChargeDetails", C_Charge_ID.toString());
+            if (dr != null) {
+                mTab.setValue("PriceEntered", Util.getValueOfDecimal(dr["ChargeAmt"]).toFixed(stdPrecision));
+                mTab.setValue("PrintDescription", Util.getValueOfString(dr["PrintDescription"]));
+                mTab.setValue("PriceActual", Util.getValueOfDecimal(dr["ChargeAmt"]).toFixed(stdPrecision));
                 mTab.setValue("PriceLimit", 0);
                 mTab.setValue("PriceList", 0);
                 mTab.setValue("Discount", 0);
-                mTab.setValue("PrintDescription", Util.getValueOfString(dr.get("PrintDescription")));
             }
-            dr.close();
 
+            mTab.setValue("PriceLimit", VIS.Env.ZERO);
+            mTab.setValue("PriceList", VIS.Env.ZERO);
+            mTab.setValue("Discount", VIS.Env.ZERO);
+            
             // Change Done By Mohit Aortization Process 02/11/2016
             //var isSOTrx = ctx.getWindowContext(windowNo, "IsSOTrx", true) == "Y";
             //var countVA038 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA038_' "));
@@ -13017,10 +12999,7 @@
             // End Change Amortization
         }
         catch (err) {
-            this.setCalloutActive(false);
-            if (dr != null) {
-                dr.close();
-            }
+            this.setCalloutActive(false);            
             return err.message;
         }
         oldValue = null;
@@ -15848,7 +15827,7 @@
             //var chargeAmt = VIS.dataContext.getJSONRecord("MCharge/GetCharge", C_Charge_ID.toString());
             //mTab.setValue("PriceActual", Util.getValueOfDecimal(chargeAmt));
 
-            //Set PriceActual and Print Description
+            //190 - Set PriceActual and Print Description
             var dr = VIS.dataContext.getJSONRecord("MCharge/GetChargeDetails", C_Charge_ID.toString());
             if (dr != null) {
                 mTab.setValue("PriceActual", Util.getValueOfDecimal(dr["ChargeAmt"]));
@@ -18161,7 +18140,7 @@
                 if (Util.getValueOfInt(dr["M_Product_ID"]) > 0) {
                     mTab.setValue("M_Product_ID", Util.getValueOfInt(dr["M_Product_ID"]));
                     mTab.setValue("C_Charge_ID", null);
-                    //Get the print description from product
+                    //190 - Get the print description from product
                     var prod = VIS.dataContext.getJSONRecord("MProduct/GetProduct", dr["M_Product_ID"].toString());
                     if (prod != null)
                         mTab.setValue("PrintDescription", prod.DocumentNote);
@@ -18169,7 +18148,7 @@
                 else {
                     mTab.setValue("C_Charge_ID", Util.getValueOfInt(dr["C_Charge_ID"]));
                     mTab.setValue("M_Product_ID", null);
-                    //Get the print description from charge
+                    //190 - Get the print description from charge
                     var charge = VIS.dataContext.getJSONRecord("MCharge/GetChargeDetails", dr["C_Charge_ID"].toString());
                     if (charge != null)
                         mTab.setValue("PrintDescription", charge.PrintDescription);
@@ -18327,7 +18306,7 @@
                 }
             }
 
-            //Get Print description from product and set print desc
+            //190 - Get Print description from product and set print desc
             var prod = VIS.dataContext.getJSONRecord("MProduct/GetProduct", M_Product_ID.toString());
             if (prod != null)
                 mTab.setValue("PrintDescription", prod.DocumentNote);
@@ -18610,7 +18589,7 @@
         return "";
     };
 
-    /// <summary>
+    /// <summary> 190
     /// M_InOutLine - Charge.
     /// </summary>
     /// <param name="ctx"></param>

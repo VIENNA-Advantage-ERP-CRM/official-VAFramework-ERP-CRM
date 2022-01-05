@@ -1135,7 +1135,7 @@ namespace VAdvantage.Model
                 if (GetC_Charge_ID() > 0 && GetM_Product_ID() == 0)
                     printDes = Util.GetValueOfString(DB.ExecuteScalar("SELECT PrintDescription FROM C_Charge WHERE C_Charge_ID=" + GetC_Charge_ID()));
                 else if (GetC_Charge_ID() == 0 && GetM_Product_ID() > 0)
-                    printDes = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocumentNote FROM M_Product WHERE M_Product_ID=" + GetM_Product_ID()));
+                    printDes = _Product.GetDocumentNote();                
 
                 Set_Value("PrintDescription", printDes);
             }
