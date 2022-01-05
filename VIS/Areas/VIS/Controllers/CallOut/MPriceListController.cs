@@ -49,5 +49,24 @@ namespace VIS.Controllers
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
+
+        /// <summary>
+        /// Get Price List Data
+        /// </summary>
+        /// <param name="ctx">Context</param>
+        /// <param name="fields">Parameters</param>
+        /// <returns>List of Data</returns>
+        public JsonResult GetPriceListDataForProvisionalInvoice(string fields)
+        {
+
+            string retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
+                MPriceListModel objPriceList = new MPriceListModel();
+                retJSON = JsonConvert.SerializeObject(objPriceList.GetPriceListDataForProvisionalInvoice(ctx, fields));
+            }
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
     }
 }

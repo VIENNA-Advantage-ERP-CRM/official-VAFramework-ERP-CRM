@@ -2224,6 +2224,19 @@ namespace VAdvantage.Model
             // IsCostImmediate = true - calculate cost on completion
             MClient client = MClient.Get(GetCtx(), GetAD_Client_ID());
 
+            // get Warehouse Stock availablity, PO price in base currency
+            DataSet dsAvailableStock = DB.ExecuteDataset(@"SELECT M_InOutLine.M_InOutLine_ID , M_Storage.QtyOnHand, 
+                                        NVL(CurrencyConvert(C_OrderLine.PriceEntered , C_Order.C_Currency_ID , " + GetCtx().GetContextAsInt("$C_Currency_ID") +
+                                        @", M_InOut.DateAcct, C_Order.C_ConversionType_ID, M_InOut.AD_Client_ID, M_InOut.AD_Org_ID) , 0) as PriceEntered
+                                        FROM M_InOutLine 
+                                        INNER JOIN M_InOut ON M_InOut.M_InOut_ID = M_InOutLine.M_InOut_ID
+                                        INNER JOIN M_Storage ON(M_InOutLine.M_Locator_ID = M_Storage.M_Locator_ID
+                                        AND M_InOutLine.M_Product_ID = M_Storage.M_Product_ID
+                                        AND NVL(M_InOutLine.M_AttributeSetInstance_ID, 0) = NVL(M_Storage.M_AttributeSetInstance_ID, 0))
+                                        LEFT JOIN C_OrderLine ON M_InOutLine.C_OrderLine_ID = C_OrderLine.C_OrderLine_ID
+                                        LEFT JOIN C_Order ON C_Order.C_Order_ID = C_OrderLine.C_Order_ID
+                                        WHERE M_InOut.M_InOut_ID = " + GetM_InOut_ID());
+
             //	Outstanding (not processed) Incoming Confirmations ?
             MInOutConfirm[] confirmations = GetConfirmations(true);
             Int32 confirmationCount = 0;
@@ -3102,6 +3115,7 @@ namespace VAdvantage.Model
                     }
                 }
 
+                MMatchPO Matchpo = null;
                 List<MMatchInv> matchedInvoice = new List<MMatchInv>();
                 //	Matching
                 if (!IsSOTrx()
@@ -3163,13 +3177,24 @@ namespace VAdvantage.Model
                     {
                         log.Fine("PO Matching");
                         //	Ship - PO
-                        MMatchPO po = MMatchPO.Create(null, sLine, GetMovementDate(), matchQty);
+                        Matchpo = MMatchPO.Create(null, sLine, GetMovementDate(), matchQty);
                         try
                         {
-                            po.Set_ValueNoCheck("C_BPartner_ID", GetC_BPartner_ID());
+                            Matchpo.Set_ValueNoCheck("C_BPartner_ID", GetC_BPartner_ID());
                         }
                         catch { }
-                        if (!po.Save(Get_TrxName()))
+
+                        Matchpo.SetIsSOTrx(IsSOTrx());
+                        Matchpo.SetIsReturnTrx(IsReturnTrx());
+                        if (dsAvailableStock != null && dsAvailableStock.Tables[0].Rows.Count>0)
+                        {
+                            Matchpo.SetAvailableStock(Util.GetValueOfDecimal(
+                                dsAvailableStock.Tables[0].Select("M_InOutLine_ID = " + sLine.GetM_InOutLine_ID())[0]["QtyOnHand"]));
+                            Matchpo.SetPricePO(Util.GetValueOfDecimal(
+                                dsAvailableStock.Tables[0].Select("M_InOutLine_ID = " + sLine.GetM_InOutLine_ID())[0]["PriceEntered"]));
+                        }
+
+                        if (!Matchpo.Save(Get_TrxName()))
                         {
                             _processMsg = "Could not create PO Matching";
                             return DocActionVariables.STATUS_INVALID;
@@ -3189,13 +3214,22 @@ namespace VAdvantage.Model
                             //	Invoice is created before  Shipment
                             log.Fine("PO(Inv) Matching");
                             //	Ship - Invoice
-                            MMatchPO po = MMatchPO.Create(iLine, sLine, GetMovementDate(), matchQty);
+                            Matchpo = MMatchPO.Create(iLine, sLine, GetMovementDate(), matchQty);
                             try
                             {
-                                po.Set_ValueNoCheck("C_BPartner_ID", GetC_BPartner_ID());
+                                Matchpo.Set_ValueNoCheck("C_BPartner_ID", GetC_BPartner_ID());
                             }
                             catch { }
-                            if (!po.Save(Get_TrxName()))
+                            Matchpo.SetIsSOTrx(IsSOTrx());
+                            Matchpo.SetIsReturnTrx(IsReturnTrx());
+                            if (dsAvailableStock != null)
+                            {
+                                Matchpo.SetAvailableStock(Util.GetValueOfDecimal(
+                                    dsAvailableStock.Tables[0].Select("M_InOutLine_ID = " + sLine.GetM_InOutLine_ID())[0]["QtyOnHand"]));
+                                Matchpo.SetPricePO(Util.GetValueOfDecimal(
+                               dsAvailableStock.Tables[0].Select("M_InOutLine_ID = " + sLine.GetM_InOutLine_ID())[0]["PriceEntered"]));
+                            }
+                            if (!Matchpo.Save(Get_TrxName()))
                             {
                                 _processMsg = "Could not create PO(Inv) Matching";
                                 return DocActionVariables.STATUS_INVALID;
@@ -3265,6 +3299,13 @@ namespace VAdvantage.Model
                         }
                         DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice = " + currentCostPrice +
                                                           @" WHERE M_InoutLine_ID = " + sLine.GetM_InOutLine_ID(), null, Get_Trx());
+
+                        // update Price Difference as (PO Cost - GRN Current Cost Price)) on match PO
+                        if (Matchpo != null && Matchpo.Get_ID() > 0)
+                        {
+                            DB.ExecuteQuery(@"UPDATE M_MatchPO SET PriceDifference = " + (currentCostPrice == 0 ? 0 : (Matchpo.GetPricePO() - currentCostPrice))
+                                + ", CurrentCostPrice = " + currentCostPrice + @" WHERE M_MatchPO_ID = " + Matchpo.GetM_MatchPO_ID(), null, Get_Trx());
+                        }
 
                         _partner = new MBPartner(GetCtx(), GetC_BPartner_ID(), null);
                         orderLine = new MOrderLine(GetCtx(), lines[lineIndex].GetC_OrderLine_ID(), null);

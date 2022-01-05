@@ -19994,6 +19994,9 @@
         try {
             var currency = Util.getValueOfInt(VIS.dataContext.getJSONRecord("MPayment/GetBankAcctCurrency", c_bankaccount_ID.toString()));
             mTab.setValue("C_Currency_ID", currency);
+
+            //VA230:Set value in override checkbox
+            setOverrideAutoCheckValue(mTab);
         }
         catch (err) {
             this.setCalloutActive(false);
@@ -20003,6 +20006,94 @@
         ctx = mTab = mField = value = oldValue = null;
         return "";
     };
+
+    /**
+     * Set value in override checkbox
+     * @param ctx context
+     * @param windowNo current Window No
+     * @param mTab Grid Tab
+     * @param mField Grid Field
+     * @param value New Value
+     * @param oldValue Old Value
+     * @return Error message or ""
+     */
+    CalloutPayment.prototype.SetOverrideAutoCheck = function (ctx, windowNo, mTab, mField, value, oldValue) {
+
+        if (value == null || value.toString() == "") {
+            mTab.setValue("IsOverrideAutoCheck", false);
+            return "";
+        }
+        if (this.isCalloutActive()) {
+            return "";
+        }
+        this.setCalloutActive(true);
+        try {
+            setOverrideAutoCheckValue(mTab);
+        }
+        catch (err) {
+            this.setCalloutActive(false);
+            return err.message;
+        }
+        this.setCalloutActive(false);
+        ctx = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
+    /**
+     * VA230:Get autocheckcontrol and set override autocheck funcationlity based on condition
+     * @param {any} mTab
+     */
+    function setOverrideAutoCheckValue(mTab) {
+        var bankaccountId = Util.getValueOfInt(mTab.getValue("C_BankAccount_ID"));
+        var paymentMethodId = Util.getValueOfInt(mTab.getValue("VA009_PaymentMethod_ID"));
+        var checkNo = Util.getValueOfString(mTab.getValue("CheckNo"));
+        var autoCheck = false;
+        if (bankaccountId > 0 && paymentMethodId > 0 && checkNo != "" && Util.getValueOfString(mTab.getValue("TenderType")) == "K") {
+            var paramString = bankaccountId.toString() + "," + paymentMethodId.toString();
+            autoCheck = Util.getValueOfBoolean(VIS.dataContext.getJSONRecord("MPayment/GetAutoCheckControl", paramString.toString()));
+        }
+        mTab.setValue("IsOverrideAutoCheck", autoCheck);
+    }
+
+    /**
+    * Get Provisional Invoice data
+    * @param ctx context
+    * @param windowNo current Window No
+    * @param mTab Grid Tab
+    * @param mField Grid Field
+    * @param value New Value
+    * @param oldValue Old Value
+    * @return Error message or ""
+    */
+    CalloutPayment.prototype.ProvisionalInvoice = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (value == null || value.toString() == "" || this.isCalloutActive()) {
+            return "";
+        }
+        this.setCalloutActive(true);
+        try {
+            //get the data of the selected  Provisional invoice 
+            var data = VIS.dataContext.getJSONRecord("MPayment/GetProvisionalInvoiceData", Util.getValueOfInt(mTab.getValue("C_ProvisionalInvoice_ID")));
+            if (data != null) {
+                mTab.setValue("C_BPartner_ID", data["C_BPartner_ID"]);
+                mTab.setValue("C_BPartner_Location_ID", data["C_BPartner_Location_ID"]);
+                mTab.setValue("PaymentAmount", data["GrandTotal"]);
+                mTab.setValue("PayAmt", data["GrandTotal"]);
+                //check if VA009 module is Installed 
+                var DataPrefix = VIS.dataContext.getJSONRecord("ModulePrefix/GetModulePrefix", "VA009_");
+                if (DataPrefix["VA009_"]) {
+                    // mTab.setValue("VA009_PaymentMethod_ID", Util.getValueOfInt(data["VA009_PaymentMethod_ID"]));
+                }
+            }
+        }
+        catch (err) {
+            this.setCalloutActive(false);
+            this.log.severe(err.toString());
+        }
+        this.setCalloutActive(false);
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
 
     VIS.Model.CalloutPayment = CalloutPayment;
     //*********** CalloutPayment End ******
@@ -23587,7 +23678,210 @@
     VIS.Model.CalloutPaymentTerm = CalloutPaymentTerm;
     //**************CalloutPaymentTerm End*************
 
-    //********** CalloutLead Start ***
+
+    //**************ProvisionalInvoice Start*********
+    function ProvisionalInvoice() {
+        VIS.CalloutEngine.call(this, "VIS.ProvisionalInvoice"); //must call
+    };
+    VIS.Utility.inheritPrototype(ProvisionalInvoice, VIS.CalloutEngine);//inherit CalloutEngine
+
+    //call when change the DateInvoiced field on Provisional Invoice window
+    ProvisionalInvoice.prototype.DateAcct = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (value == null || value.toString() == "" || this.isCalloutActive()) {
+            return "";
+        }
+
+        this.setCalloutActive(true);
+        try {
+            //Can be change according to DateInvoiced incase of Provisional Invoice window
+            mTab.setValue("DateAcct", value);
+        }
+        catch (err) {
+            this.setCalloutActive(false);
+            this.log.severe(err.toString());
+        }
+        this.setCalloutActive(false);
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
+    /// <summary>
+    /// Order Header - PriceList.
+    /// (used also in Invoice)
+    /// - C_Currency_ID
+    /// 	- IsTaxIncluded
+    /// 	Window Context:
+    /// 	- EnforcePriceLimit
+    /// 	- M_PriceList_Version_ID
+    /// </summary>
+    /// <param name="ctx">context</param>
+    /// <param name="windowNo">current Window No</param>
+    /// <param name="mTab">Grid Tab</param>
+    /// <param name="mField">Grid Field</param>
+    /// <param name="value">New Value</param>
+    /// <returns>null or error message</returns>
+    ProvisionalInvoice.prototype.PriceList = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (this.isCalloutActive() || value == null || value.toString() == "") {
+            return "";
+        }
+        try {
+
+            var M_PriceList_ID = value.toString();
+            if (Util.getValueOfInt(M_PriceList_ID) == 0)
+                return "";
+            this.setCalloutActive(true);
+            if (steps) {
+                this.log.warning("init");
+            }
+
+            //	Use net price list - may not be future
+            var dr = VIS.dataContext.getJSONRecord("MPriceList/GetPriceListDataForProvisionalInvoice", M_PriceList_ID);
+            if (dr != null) {
+                //	Tax Included
+                mTab.setValue("IsTaxIncluded", "Y" == dr["IsTaxIncluded"]);
+
+                //	Price Limit Enforce
+                ctx.setContext(windowNo, "EnforcePriceLimit", dr["EnforcePriceLimit"]);
+
+                //	Currency
+                var ii = Util.getValueOfInt(dr["C_Currency_ID"]);
+                mTab.setValue("C_Currency_ID", ii);
+
+                //	PriceList Version
+                var prislst = Util.getValueOfInt(dr["M_PriceList_Version_ID"]);
+                ctx.setContext(windowNo, "M_PriceList_Version_ID", prislst);
+
+            }
+        }
+        catch (err) {
+            this.setCalloutActive(false);
+            this.log(Level.SEVERE, "", err);
+            return err;
+        }
+        if (steps) {
+            this.log.warning("finish");
+        }
+        this.setCalloutActive(false);
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
+
+    /**
+     *	Invoice Header- BPartner.
+     *		- M_PriceList_ID (+ Context)
+     *		- C_BPartner_Location_ID
+     *		- AD_User_ID
+     *		- PaymentMethod
+     *		- C_PaymentTerm_ID
+     *	@param ctx context
+     *	@param windowNo window no
+     *	@param mTab tab
+     *	@param mField field
+     *	@param value value
+     *	@return null or error message
+     */
+    ProvisionalInvoice.prototype.BPartner = function (ctx, windowNo, mTab, mField, value, oldValue) {
+
+        if (this.isCalloutActive() || value == null || value.toString() == "") {
+            return "";
+        }
+        try {
+
+            var C_BPartner_ID = Util.getValueOfInt(value);
+            if (C_BPartner_ID == null || C_BPartner_ID == 0) {
+                return "";
+            }
+
+            this.isCalloutActive(true);
+
+            var isSOTrx = ctx.isSOTrx(windowNo);
+
+            var dr = VIS.dataContext.getJSONRecord("MBPartner/GetBPDataForProvisionalInvoice", C_BPartner_ID);
+            if (dr != null) {
+
+                //	PriceList 
+                var ii = Util.getValueOfInt(dr[isSOTrx ? "M_PriceList_ID" : "PO_PriceList_ID"]);
+                if (ii > 0) {
+                    mTab.setValue("M_PriceList_ID", ii);
+                }
+
+                // Payment Method
+                var _CountVA009 = dr["countVA009"];
+                if (_CountVA009 > 0) {
+                    var _PaymentMethod_ID = 0
+
+                    if (!isSOTrx && Util.getValueOfString(dr["IsVendor"]) == "Y") {
+                        //In case of Purchase Order and vendor
+                        _PaymentMethod_ID = Util.getValueOfInt(dr["VA009_PO_PaymentMethod_ID"]);
+                    }
+                    else if (isSOTrx && Util.getValueOfString(dr["IsCustomer"]) == "Y") {
+                        //In case of Sales Order and customer
+                        _PaymentMethod_ID = Util.getValueOfInt(dr["VA009_PaymentMethod_ID"]);
+                    }
+                    else {
+                        _PaymentMethod_ID = 0;
+                    }
+
+                    if (_PaymentMethod_ID == 0)
+                        mTab.setValue("VA009_PaymentMethod_ID", null);
+                    else {
+                        mTab.setValue("VA009_PaymentMethod_ID", _PaymentMethod_ID);
+                    }
+                }
+
+                //  Payment Term
+                ii = Util.getValueOfInt(dr[isSOTrx ? "C_PaymentTerm_ID" : "PO_PaymentTerm_ID"]);
+                if (ii > 0) {
+                    mTab.setValue("C_PaymentTerm_ID", ii);
+                }
+
+                //	Location
+                var locID = Util.getValueOfInt(dr["C_BPartner_Location_ID"]);
+                //	overwritten by InfoBP selection - works only if InfoWindow
+                //	was used otherwise creates error (uses last value, may bevar to differnt BP)
+                if (C_BPartner_ID.toString().equals(ctx.getContext("C_BPartner_ID"))) {
+                    var loc = ctx.getContext("C_BPartner_Location_ID");
+                    if (loc && loc.toString().length > 0) {
+                        locID = parseInt(loc);
+                    }
+                }
+                if (locID == 0) {
+                    mTab.setValue("C_BPartner_Location_ID", null);
+                }
+                else {
+                    mTab.setValue("C_BPartner_Location_ID", locID);
+                }
+
+                //	Contact - overwritten by InfoBP selection
+                var contID = Util.getValueOfInt(dr["AD_User_ID"]);
+                if (C_BPartner_ID.toString().equals(ctx.getContext("C_BPartner_ID"))) {
+                    var cont = ctx.getContext("AD_User_ID");
+                    if (cont && cont.toString().length > 0) {
+                        contID = parseInt(cont);
+                    }
+                }
+                if (contID == 0) {
+                    mTab.setValue("AD_User_ID", null);
+                }
+                else {
+                    mTab.setValue("AD_User_ID", contID);
+                }
+            }
+        }
+        catch (err) {
+            this.setCalloutActive(false);
+            this.log.severe(err.toString());
+        }
+        this.setCalloutActive(false);
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
+    VIS.Model.ProvisionalInvoice = ProvisionalInvoice;
+    //**************ProvisionalInvoice End*********
+
+    //*********** CalloutLead Start ****
     function CalloutLead() {
         VIS.CalloutEngine.call(this, "VIS.CalloutLead"); //must call
     };
