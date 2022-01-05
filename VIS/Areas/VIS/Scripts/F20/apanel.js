@@ -1083,10 +1083,14 @@
             var $bLi = button.$li;
             var $root = this.getRoot();
 
-            if (!highlight) {
-                this.instructionPop[this.ACTION_NAME_NEW] = true;
-            }
+            
             if (button.getAction() == this.ACTION_NAME_NEW) {
+
+                if (!highlight || $txtSearch.val().length > 0) {
+                    this.instructionPop[this.ACTION_NAME_NEW] = true;
+                }
+
+
                 if (this.instructionPop[this.ACTION_NAME_NEW]) {
                     if ($root.find('.vis-window-instruc-overlay-new').length > 0) {
                         $root.find('.vis-window-instruc-overlay-new').remove();
@@ -2999,6 +3003,7 @@
                         $selfpanel.curTab.setQuery(query);
                         $selfpanel.defaultSearch = false;
                         $selfpanel.curTab.searchText = data.tables[0].rows[i].cells["name"];
+                        toastr.success(VIS.Msg.getMsg("DefaultSerachExist"), '', { timeOut: 4000, "positionClass": "toast-top-center", "closeButton": true, });
                     }
                 }
                 if (!$selfpanel.curTab.hasSavedAdvancedSearch) {
