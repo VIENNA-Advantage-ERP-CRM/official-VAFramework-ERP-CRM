@@ -281,7 +281,7 @@ namespace ViennaAdvantage.Process
             if (invoice.GetC_ConversionType_ID() == 0)
             {
                 //1052-- setcurrency type in case order reference is not present
-                int currencyType = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_ConversionType_ID FROM C_ConversionType WHERE AD_Org_ID IN(" + ship.GetAD_Org_ID() + ",0) AND ISDefault = 'Y' Order By C_ConversionType_ID Desc"));
+                int currencyType = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_ConversionType_ID FROM C_ConversionType WHERE IsActive='Y'AND AD_Org_ID IN(" + ship.GetAD_Org_ID() + ",0) AND ISDefault = 'Y' Order By C_ConversionType_ID Desc"));
                 if (currencyType > 0)
                 {
                     invoice.SetC_ConversionType_ID(currencyType);
