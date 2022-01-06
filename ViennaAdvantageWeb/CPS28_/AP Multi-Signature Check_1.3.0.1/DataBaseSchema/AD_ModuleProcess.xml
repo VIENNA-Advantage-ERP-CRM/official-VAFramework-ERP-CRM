@@ -1,0 +1,64 @@
+<NewDataSet>
+  <xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop">
+    <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="AD_ModuleProcess">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="AD_CLIENT_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_MODULEINFO_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_MODULEPROCESS_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_ORG_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_PROCESS_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="CREATED" msprop:OraDbType="106" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="CREATEDBY" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="DESCRIPTION" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="ISACTIVE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="UPDATED" msprop:OraDbType="106" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="UPDATEDBY" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="EXPORT_ID" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="ISMENUITEM" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="PARENTFOLDER" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="MENUITEM" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="MENUITEMEXPORT_ID" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="AD_MODULEMENUFOLDER_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="SEQNO" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <AD_ModuleProcess>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_MODULEINFO_ID>1000090</AD_MODULEINFO_ID>
+    <AD_MODULEPROCESS_ID>1000559</AD_MODULEPROCESS_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_PROCESS_ID>1000493</AD_PROCESS_ID>
+    <CREATED>2021-12-06T06:47:45+00:00</CREATED>
+    <CREATEDBY>1005426</CREATEDBY>
+    <ISACTIVE>Y</ISACTIVE>
+    <UPDATED>2021-12-06T06:47:45+00:00</UPDATED>
+    <UPDATEDBY>1005426</UPDATEDBY>
+    <EXPORT_ID>CPS28_1000023</EXPORT_ID>
+    <ISMENUITEM>N</ISMENUITEM>
+    <SEQNO>9999</SEQNO>
+  </AD_ModuleProcess>
+  <AD_ModuleProcess>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_MODULEINFO_ID>1000090</AD_MODULEINFO_ID>
+    <AD_MODULEPROCESS_ID>1000560</AD_MODULEPROCESS_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_PROCESS_ID>1000492</AD_PROCESS_ID>
+    <CREATED>2021-12-06T06:48:23+00:00</CREATED>
+    <CREATEDBY>1005426</CREATEDBY>
+    <ISACTIVE>Y</ISACTIVE>
+    <UPDATED>2021-12-06T06:48:23+00:00</UPDATED>
+    <UPDATEDBY>1005426</UPDATEDBY>
+    <EXPORT_ID>CPS28_1000024</EXPORT_ID>
+    <ISMENUITEM>N</ISMENUITEM>
+    <SEQNO>9999</SEQNO>
+  </AD_ModuleProcess>
+</NewDataSet>

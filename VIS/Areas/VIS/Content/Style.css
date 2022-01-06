@@ -1169,7 +1169,19 @@ input[type="checkbox"].vis-tm-chkbox {
     padding-top: 2px;
 }
 
-
+.vis-auto-addItem {
+    display: inline-block;
+    padding: 5px 10px !important;
+    margin: 5px !important;
+    border-radius: 0.25rem !important;
+}
+    .vis-auto-addItem:hover {
+        background-color: rgba(var(--v-c-primary), 1) !important;
+        color: #fff !important;
+    }
+center {
+    text-align: center !important;
+}
 
 
 }

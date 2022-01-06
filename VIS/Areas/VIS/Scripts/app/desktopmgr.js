@@ -580,7 +580,8 @@
            - set active view to home page
         */
         function setAndLoadHomePage() {
-            if (!VIS.MRole.getIsDisableMenu() || (VIS.MRole.getIsDisableMenu() && VIS.MRole.getHomePage() == 0)) {
+           // if (!VIS.MRole.getIsDisableMenu() || (VIS.MRole.getIsDisableMenu() && VIS.MRole.getHomePage() == 0)) {
+            if (!VIS.MRole.getIsDisableMenu()) {
                 renderHomePage();
             }
             if (VIS.MRole.getIsDisableMenu()) {

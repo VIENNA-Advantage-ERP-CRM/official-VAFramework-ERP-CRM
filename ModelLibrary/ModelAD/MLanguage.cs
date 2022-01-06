@@ -236,6 +236,7 @@ namespace VAdvantage.Model
                 //throw new Exception("No Columns found for " + baseTable);
                 return 0;
             }
+
             StringBuilder cols = new StringBuilder();
             //maintain list of display columns
             StringBuilder displayColumns = new StringBuilder();

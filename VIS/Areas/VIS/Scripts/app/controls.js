@@ -1750,8 +1750,10 @@
 
                 //$btnZoom = VIS.AEnv.getZoomButton(disabled);
                 options[VIS.Actions.zoom] = disabled;
+               
                 // btnCount += 1;
             }
+            options[VIS.Actions.addnewrec] = true;
 
             if ((this.lookup &&
                 (this.lookup.info.keyColumn.toLowerCase() == "ad_user.ad_user_id"
@@ -1763,6 +1765,7 @@
             // $btnPop = $('<button tabindex="-1" class="input-group-text"><img tabindex="-1" src="' + VIS.Application.contextUrl + "Areas/VIS/Images/base/Info20.png" + '" /></button>');
             $btnPop = $('<button tabindex="-1" class="input-group-text"><i tabindex="-1" class="fa fa-ellipsis-v" /></button>');
             options[VIS.Actions.refresh] = true;
+           
             if (VIS.MRole.getIsShowPreference())
                 options[VIS.Actions.preference] = true;
             $ulPopup = VIS.AEnv.getContextPopup(options);
@@ -1888,15 +1891,16 @@
             e.stopPropagation();
         });
 
-        function zoomAction() {
+        function zoomAction(value) {
             if (!self.lookup || disabled)
                 return;
             //
             var zoomQuery = self.lookup.getZoomQuery();
-            var value = self.getValue();
-            if (value == null) {
-                //   value = selectedItem;
-            }
+           //var value = self.getValue();
+
+
+            if (!value)
+                value = self.getValue();
 
             if (value == "")
                 value = null;
@@ -2020,6 +2024,11 @@
                     if (!disabled)
                         zoomAction();
                 }
+                else if (action == VIS.Actions.addnewrec) {
+                    if (!disabled)
+                        zoomAction(-10);
+                }
+                
             });
         }
 
@@ -2445,7 +2454,8 @@
         var $btnDelete = null;
         var options = {};
         var disabled = false;
-
+        var addBtn = null;
+        var addItem = null;
 
         if (lookup != null && !this.isMultiKeyTextBox) {
 
@@ -2458,12 +2468,14 @@
             //$btnZoom = VIS.AEnv.getZoomButton(disabled);
             // btnCount += 1;
             options[VIS.Actions.zoom] = disabled;
+            options[VIS.Actions.addnewrec] = true;
 
             //$btnPop = $('<button  tabindex="-1" class="input-group-text"><img tabindex="-1" src="' + VIS.Application.contextUrl + "Areas/VIS/Images/base/Info20.png" + '" /></button>');
             $btnPop = $('<button  tabindex="-1" class="input-group-text"><i tabindex="-1" Class="fa fa-ellipsis-v" /></button>');
             //	VBPartner quick entry link
             var isBP = false;
             if (columnName === "C_BPartner_ID") {
+                options[VIS.Actions.addnewrec] = false;
                 options[VIS.Actions.add] = true;
                 options[VIS.Actions.update] = true;
             }
@@ -2517,6 +2529,8 @@
         };
         // Autocomplete
         if (displayType == VIS.DisplayType.Search) {
+             addBtn = $("<div class='vis-autocompleteList-item vis-auto-addItem' style='background-color: rgba(var(--v-c-secondary), 1)'>" + VIS.Msg.getMsg("AddNew") + "</div>");
+             addItem = $("<div><center>" + VIS.Msg.getMsg("NoDataFoundSugg") + "</center></div>").append($("<center></center>").append(addBtn));
             $ctrl.vaautocomplete({
                 source: function (term, response) {
                     var sql = self.lookup.info.query;
@@ -2570,19 +2584,37 @@
                                         value: VIS.Utility.Util.getIdentifierDisplayVal(parseObj.finalvalue)
                                     });
                                 }
-
+                                response(res);
                             }
-                            response(res);
+                            if (res.length == 0) {
+                                res = [];
+                                res.push({
+                                    id: "vis-AddNew",
+                                    value: VIS.Msg.getMsg("AddNew"),
+                                    msg: VIS.Msg.getMsg("NoDataFound")//"No data found. Do you want to add?"                                    
+                                });
+                                response(res);
+                            }
                         },
                     });
 
                 },
                 minLength: 2,
+                html: addItem,
                 onSelect: function (e, item) {
-                    self.setValue(item.id, true, true);
+                    if (item.id == "vis-AddNew") {
+                        zoomAction();
+                        setTimeout(function () {
+                            self.setValue(-1, true, true);
+                        }, 500);
+                    } else {
+                        self.setValue(item.id, true, true);
+                    }
                 }
             });
-
+            addBtn.on("click", function (event) {
+                zoomAction();
+            })
         }
         $ctrl.on("keydown", function (event) {
 
@@ -3374,16 +3406,15 @@
 
         $btnSearch.on(VIS.Events.onClick, self.openSearchForm);
 
-        function zoomAction() {
+        function zoomAction(value) {
 
             if (!self.lookup || disabled)
                 return;
             //
             var zoomQuery = self.lookup.getZoomQuery();
-            var value = self.getValue();
-            if (value == null) {
-                //   value = selectedItem;
-            }
+            //var value = self.getValue();
+            if (!value)
+                value = self.getValue();
 
             if (value == "")
                 value = null;
@@ -3475,6 +3506,11 @@
                         return;
                     zoomAction();
                 }
+                else if (action == VIS.Actions.addnewrec) {
+                    if (disabled)
+                        return;
+                    zoomAction(-10);
+                }
                 else if (action == VIS.Actions.preference) {
                     var obj = new VIS.ValuePreference(self.mField, self.getValue(), self.getDisplay());
                     if (obj != null) {
@@ -3537,6 +3573,12 @@
             $btnPop = null;
             this.getBtn = null;
             this.setVisible = null;
+            if (addBtn) {
+                addBtn.off("click");
+            }
+            addBtn = null;
+            addItem = null;
+            
         };
     };
 

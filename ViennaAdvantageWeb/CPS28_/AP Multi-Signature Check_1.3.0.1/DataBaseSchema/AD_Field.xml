@@ -1,0 +1,545 @@
+<NewDataSet>
+  <xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop">
+    <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="AD_Field">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="AD_CLIENT_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_COLUMN_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_FIELDGROUP_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_FIELD_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_ORG_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_REFERENCE_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_TAB_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="CREATED" msprop:OraDbType="106" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="CREATEDBY" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="DEFAULTVALUE" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="DESCRIPTION" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="DISPLAYLENGTH" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="DISPLAYLOGIC" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="ENTITYTYPE" msprop:OraDbType="126" type="xs:string" minOccurs="0" />
+                <xs:element name="HELP" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="ISACTIVE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISCENTRALLYMAINTAINED" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISDEFAULTFOCUS" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISDISPLAYED" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISENCRYPTED" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISFIELDONLY" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISHEADING" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISMANDATORYUI" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISREADONLY" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISSAMELINE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="MRSEQNO" msprop:OraDbType="107" type="xs:decimal" minOccurs="0" />
+                <xs:element name="NAME" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="OBSCURETYPE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="SEQNO" msprop:OraDbType="107" type="xs:decimal" minOccurs="0" />
+                <xs:element name="SORTNO" msprop:OraDbType="107" type="xs:decimal" minOccurs="0" />
+                <xs:element name="UPDATED" msprop:OraDbType="106" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="UPDATEDBY" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="MAXHEIGHT" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="MAXWIDTH" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="ISCOPY" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ZOOMWINDOW_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="EXPORT_ID" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="MOBILELISTINGFORMAT" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="AD_INFOWINDOW_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="MRISDISPLAYED" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="COLUMNWIDTH" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_IMAGE_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="SHOWICON" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="HTMLSTYLE" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="ISHEADERPANELITEM" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="HEADERICONONLY" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="HEADERSEQNO" msprop:OraDbType="107" type="xs:decimal" minOccurs="0" />
+                <xs:element name="HEADERHEADINGONLY" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="HEADEROVERRIDEREFERENCE" msprop:OraDbType="126" type="xs:string" minOccurs="0" />
+                <xs:element name="HEADERSTYLE" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="CELLSPACE" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="FIELDBREADTH" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="ISLINEBREAK" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="FIELDGROUPDEFAULT" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="STYLELOGIC" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <AD_Field>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_COLUMN_ID>1023947</AD_COLUMN_ID>
+    <AD_FIELD_ID>1013958</AD_FIELD_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_TAB_ID>228</AD_TAB_ID>
+    <CREATED>2020-12-15T08:19:44+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>This field is to be used to update signature image 2</DESCRIPTION>
+    <DISPLAYLENGTH>0</DISPLAYLENGTH>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <ISCENTRALLYMAINTAINED>Y</ISCENTRALLYMAINTAINED>
+    <ISDEFAULTFOCUS>N</ISDEFAULTFOCUS>
+    <ISDISPLAYED>Y</ISDISPLAYED>
+    <ISENCRYPTED>N</ISENCRYPTED>
+    <ISFIELDONLY>N</ISFIELDONLY>
+    <ISHEADING>N</ISHEADING>
+    <ISREADONLY>N</ISREADONLY>
+    <ISSAMELINE>Y</ISSAMELINE>
+    <MRSEQNO>190</MRSEQNO>
+    <NAME>Signature Two</NAME>
+    <SEQNO>210</SEQNO>
+    <SORTNO>0</SORTNO>
+    <UPDATED>2021-11-05T08:48:12+00:00</UPDATED>
+    <UPDATEDBY>1005414</UPDATEDBY>
+    <MAXHEIGHT>0</MAXHEIGHT>
+    <MAXWIDTH>0</MAXWIDTH>
+    <EXPORT_ID>CPS11_1007348</EXPORT_ID>
+    <MRISDISPLAYED>Y</MRISDISPLAYED>
+    <COLUMNWIDTH>100</COLUMNWIDTH>
+    <SHOWICON>N</SHOWICON>
+    <ISHEADERPANELITEM>N</ISHEADERPANELITEM>
+    <HEADERSEQNO>0</HEADERSEQNO>
+    <CELLSPACE>0</CELLSPACE>
+    <FIELDBREADTH>1</FIELDBREADTH>
+    <ISLINEBREAK>N</ISLINEBREAK>
+    <FIELDGROUPDEFAULT>N</FIELDGROUPDEFAULT>
+  </AD_Field>
+  <AD_Field>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_COLUMN_ID>1023937</AD_COLUMN_ID>
+    <AD_FIELD_ID>1017850</AD_FIELD_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_TAB_ID>228</AD_TAB_ID>
+    <CREATED>2021-10-06T09:30:17+00:00</CREATED>
+    <CREATEDBY>1005414</CREATEDBY>
+    <DESCRIPTION>The dollar amount at which a second signature is required on checks</DESCRIPTION>
+    <DISPLAYLENGTH>4</DISPLAYLENGTH>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <HELP>The dollar amount at which a second signature is required on checks</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <ISCENTRALLYMAINTAINED>N</ISCENTRALLYMAINTAINED>
+    <ISDEFAULTFOCUS>N</ISDEFAULTFOCUS>
+    <ISDISPLAYED>Y</ISDISPLAYED>
+    <ISENCRYPTED>N</ISENCRYPTED>
+    <ISFIELDONLY>N</ISFIELDONLY>
+    <ISHEADING>N</ISHEADING>
+    <ISREADONLY>N</ISREADONLY>
+    <ISSAMELINE>N</ISSAMELINE>
+    <MRSEQNO>185</MRSEQNO>
+    <NAME>Signature Two Threshold</NAME>
+    <SEQNO>185</SEQNO>
+    <SORTNO>0</SORTNO>
+    <UPDATED>2021-10-08T06:45:39+00:00</UPDATED>
+    <UPDATEDBY>1005414</UPDATEDBY>
+    <MAXHEIGHT>0</MAXHEIGHT>
+    <MAXWIDTH>0</MAXWIDTH>
+    <EXPORT_ID>CPS28_1009198</EXPORT_ID>
+    <MRISDISPLAYED>Y</MRISDISPLAYED>
+    <COLUMNWIDTH>100</COLUMNWIDTH>
+    <SHOWICON>N</SHOWICON>
+    <ISHEADERPANELITEM>N</ISHEADERPANELITEM>
+    <HEADERSEQNO>0</HEADERSEQNO>
+    <CELLSPACE>1</CELLSPACE>
+    <FIELDBREADTH>1</FIELDBREADTH>
+    <ISLINEBREAK>N</ISLINEBREAK>
+    <FIELDGROUPDEFAULT>N</FIELDGROUPDEFAULT>
+  </AD_Field>
+  <AD_Field>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_COLUMN_ID>3078</AD_COLUMN_ID>
+    <AD_FIELD_ID>2215</AD_FIELD_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_TAB_ID>228</AD_TAB_ID>
+    <CREATED>2000-01-02T07:30:00+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>Client/Tenant for this installation.</DESCRIPTION>
+    <DISPLAYLENGTH>14</DISPLAYLENGTH>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <HELP>A Client is a company or a legal entity. You cannot share data between Clients. Tenant is a synonym for Client.</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <ISCENTRALLYMAINTAINED>Y</ISCENTRALLYMAINTAINED>
+    <ISDEFAULTFOCUS>N</ISDEFAULTFOCUS>
+    <ISDISPLAYED>Y</ISDISPLAYED>
+    <ISENCRYPTED>N</ISENCRYPTED>
+    <ISFIELDONLY>N</ISFIELDONLY>
+    <ISHEADING>N</ISHEADING>
+    <ISREADONLY>Y</ISREADONLY>
+    <ISSAMELINE>N</ISSAMELINE>
+    <MRSEQNO>140</MRSEQNO>
+    <NAME>Tenant</NAME>
+    <SEQNO>10</SEQNO>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_2215</EXPORT_ID>
+    <SHOWICON>N</SHOWICON>
+    <ISHEADERPANELITEM>N</ISHEADERPANELITEM>
+    <ISLINEBREAK>N</ISLINEBREAK>
+    <FIELDGROUPDEFAULT>N</FIELDGROUPDEFAULT>
+  </AD_Field>
+  <AD_Field>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_COLUMN_ID>3079</AD_COLUMN_ID>
+    <AD_FIELD_ID>2216</AD_FIELD_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_TAB_ID>228</AD_TAB_ID>
+    <CREATED>2021-07-28T01:04:26+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>Organizational entity within Tenant</DESCRIPTION>
+    <DISPLAYLENGTH>14</DISPLAYLENGTH>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <HELP>An organization is a unit of your Tenant or legal entity - examples are store, department. You can share data between organizations. </HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <ISCENTRALLYMAINTAINED>Y</ISCENTRALLYMAINTAINED>
+    <ISDEFAULTFOCUS>N</ISDEFAULTFOCUS>
+    <ISDISPLAYED>Y</ISDISPLAYED>
+    <ISENCRYPTED>N</ISENCRYPTED>
+    <ISFIELDONLY>N</ISFIELDONLY>
+    <ISHEADING>N</ISHEADING>
+    <ISREADONLY>N</ISREADONLY>
+    <ISSAMELINE>Y</ISSAMELINE>
+    <MRSEQNO>130</MRSEQNO>
+    <NAME>Organization</NAME>
+    <SEQNO>20</SEQNO>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_2216</EXPORT_ID>
+    <SHOWICON>N</SHOWICON>
+    <ISHEADERPANELITEM>N</ISHEADERPANELITEM>
+    <ISLINEBREAK>N</ISLINEBREAK>
+    <FIELDGROUPDEFAULT>N</FIELDGROUPDEFAULT>
+  </AD_Field>
+  <AD_Field>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_COLUMN_ID>3077</AD_COLUMN_ID>
+    <AD_FIELD_ID>2218</AD_FIELD_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_TAB_ID>228</AD_TAB_ID>
+    <CREATED>2000-01-02T07:30:00+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>Account at the Bank</DESCRIPTION>
+    <DISPLAYLENGTH>14</DISPLAYLENGTH>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <HELP>The Bank Account identifies an account at this Bank.</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <ISCENTRALLYMAINTAINED>Y</ISCENTRALLYMAINTAINED>
+    <ISDEFAULTFOCUS>N</ISDEFAULTFOCUS>
+    <ISDISPLAYED>N</ISDISPLAYED>
+    <ISENCRYPTED>N</ISENCRYPTED>
+    <ISFIELDONLY>N</ISFIELDONLY>
+    <ISHEADING>N</ISHEADING>
+    <ISREADONLY>N</ISREADONLY>
+    <ISSAMELINE>N</ISSAMELINE>
+    <MRSEQNO>0</MRSEQNO>
+    <NAME>Bank Account</NAME>
+    <SEQNO>0</SEQNO>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_2218</EXPORT_ID>
+    <SHOWICON>N</SHOWICON>
+    <ISHEADERPANELITEM>N</ISHEADERPANELITEM>
+    <ISLINEBREAK>N</ISLINEBREAK>
+    <FIELDGROUPDEFAULT>N</FIELDGROUPDEFAULT>
+  </AD_Field>
+  <AD_Field>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_COLUMN_ID>3067</AD_COLUMN_ID>
+    <AD_FIELD_ID>2222</AD_FIELD_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_TAB_ID>228</AD_TAB_ID>
+    <CREATED>2000-01-02T07:30:00+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>The record is active in the system</DESCRIPTION>
+    <DISPLAYLENGTH>1</DISPLAYLENGTH>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <HELP>There are two methods of making records unavailable in the system: One is to delete the record, the other is to de-activate the record. A de-activated record is not available for selection, but available for reports.
+There are two reasons for de-activating and not deleting records:
+(1) The system requires the record for audit purposes.
+(2) The record is referenced by other records. E.g., you cannot delete a Account, if there are invoices for this Account record existing. You de-activate the Account and prevent that this record is used for future entries.</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <ISCENTRALLYMAINTAINED>Y</ISCENTRALLYMAINTAINED>
+    <ISDEFAULTFOCUS>N</ISDEFAULTFOCUS>
+    <ISDISPLAYED>Y</ISDISPLAYED>
+    <ISENCRYPTED>N</ISENCRYPTED>
+    <ISFIELDONLY>N</ISFIELDONLY>
+    <ISHEADING>N</ISHEADING>
+    <ISREADONLY>N</ISREADONLY>
+    <ISSAMELINE>N</ISSAMELINE>
+    <MRSEQNO>120</MRSEQNO>
+    <NAME>Active</NAME>
+    <SEQNO>80</SEQNO>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_2222</EXPORT_ID>
+    <SHOWICON>N</SHOWICON>
+    <ISHEADERPANELITEM>N</ISHEADERPANELITEM>
+    <ISLINEBREAK>N</ISLINEBREAK>
+    <FIELDGROUPDEFAULT>N</FIELDGROUPDEFAULT>
+  </AD_Field>
+  <AD_Field>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_COLUMN_ID>1021557</AD_COLUMN_ID>
+    <AD_FIELD_ID>1011824</AD_FIELD_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_TAB_ID>330</AD_TAB_ID>
+    <CREATED>2020-08-01T05:13:00+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>This button will print check with customized format having table</DESCRIPTION>
+    <DISPLAYLENGTH>0</DISPLAYLENGTH>
+    <DISPLAYLOGIC>@DocStatus@='CO' | @DocStatus@='CL' &amp; @IsReceipt@='N'</DISPLAYLOGIC>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <HELP>This button will print check with customized format having table</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <ISCENTRALLYMAINTAINED>Y</ISCENTRALLYMAINTAINED>
+    <ISDEFAULTFOCUS>N</ISDEFAULTFOCUS>
+    <ISDISPLAYED>Y</ISDISPLAYED>
+    <ISENCRYPTED>N</ISENCRYPTED>
+    <ISFIELDONLY>N</ISFIELDONLY>
+    <ISHEADING>N</ISHEADING>
+    <ISREADONLY>N</ISREADONLY>
+    <ISSAMELINE>N</ISSAMELINE>
+    <MRSEQNO>1040</MRSEQNO>
+    <NAME>Print Check With Format</NAME>
+    <SEQNO>880</SEQNO>
+    <SORTNO>0</SORTNO>
+    <UPDATED>2021-02-16T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <MAXHEIGHT>0</MAXHEIGHT>
+    <MAXWIDTH>0</MAXWIDTH>
+    <EXPORT_ID>CPS04_1006941</EXPORT_ID>
+    <MRISDISPLAYED>Y</MRISDISPLAYED>
+    <COLUMNWIDTH>100</COLUMNWIDTH>
+    <SHOWICON>N</SHOWICON>
+    <ISHEADERPANELITEM>N</ISHEADERPANELITEM>
+    <HEADERSEQNO>0</HEADERSEQNO>
+    <CELLSPACE>0</CELLSPACE>
+    <FIELDBREADTH>1</FIELDBREADTH>
+    <ISLINEBREAK>N</ISLINEBREAK>
+    <FIELDGROUPDEFAULT>N</FIELDGROUPDEFAULT>
+  </AD_Field>
+  <AD_Field>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_COLUMN_ID>1021556</AD_COLUMN_ID>
+    <AD_FIELD_ID>1011823</AD_FIELD_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_TAB_ID>330</AD_TAB_ID>
+    <CREATED>2020-08-01T05:12:47+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>This button will print check with customized format</DESCRIPTION>
+    <DISPLAYLENGTH>0</DISPLAYLENGTH>
+    <DISPLAYLOGIC>@DocStatus@='CO' | @DocStatus@='CL' &amp; @IsReceipt@='N'</DISPLAYLOGIC>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <HELP>This button will print check with customized format</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <ISCENTRALLYMAINTAINED>Y</ISCENTRALLYMAINTAINED>
+    <ISDEFAULTFOCUS>N</ISDEFAULTFOCUS>
+    <ISDISPLAYED>Y</ISDISPLAYED>
+    <ISENCRYPTED>N</ISENCRYPTED>
+    <ISFIELDONLY>N</ISFIELDONLY>
+    <ISHEADING>N</ISHEADING>
+    <ISREADONLY>N</ISREADONLY>
+    <ISSAMELINE>N</ISSAMELINE>
+    <MRSEQNO>1030</MRSEQNO>
+    <NAME>Print Check</NAME>
+    <SEQNO>870</SEQNO>
+    <SORTNO>0</SORTNO>
+    <UPDATED>2021-02-16T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <MAXHEIGHT>0</MAXHEIGHT>
+    <MAXWIDTH>0</MAXWIDTH>
+    <EXPORT_ID>CPS04_1006940</EXPORT_ID>
+    <MRISDISPLAYED>Y</MRISDISPLAYED>
+    <COLUMNWIDTH>100</COLUMNWIDTH>
+    <SHOWICON>N</SHOWICON>
+    <ISHEADERPANELITEM>N</ISHEADERPANELITEM>
+    <HEADERSEQNO>0</HEADERSEQNO>
+    <CELLSPACE>0</CELLSPACE>
+    <FIELDBREADTH>1</FIELDBREADTH>
+    <ISLINEBREAK>N</ISLINEBREAK>
+    <FIELDGROUPDEFAULT>N</FIELDGROUPDEFAULT>
+  </AD_Field>
+  <AD_Field>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_COLUMN_ID>3862</AD_COLUMN_ID>
+    <AD_FIELD_ID>4017</AD_FIELD_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_TAB_ID>330</AD_TAB_ID>
+    <CREATED>2018-05-29T08:12:14+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>Client/Tenant for this installation.</DESCRIPTION>
+    <DISPLAYLENGTH>15</DISPLAYLENGTH>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <HELP>A Client is a company or a legal entity. You cannot share data between Clients. Tenant is a synonym for Client.</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <ISCENTRALLYMAINTAINED>Y</ISCENTRALLYMAINTAINED>
+    <ISDEFAULTFOCUS>N</ISDEFAULTFOCUS>
+    <ISDISPLAYED>Y</ISDISPLAYED>
+    <ISENCRYPTED>N</ISENCRYPTED>
+    <ISFIELDONLY>N</ISFIELDONLY>
+    <ISHEADING>N</ISHEADING>
+    <ISREADONLY>N</ISREADONLY>
+    <ISSAMELINE>N</ISSAMELINE>
+    <MRSEQNO>980</MRSEQNO>
+    <NAME>Tenant</NAME>
+    <SEQNO>10</SEQNO>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_4017</EXPORT_ID>
+    <MRISDISPLAYED>Y</MRISDISPLAYED>
+    <COLUMNWIDTH>100</COLUMNWIDTH>
+    <SHOWICON>N</SHOWICON>
+    <ISHEADERPANELITEM>N</ISHEADERPANELITEM>
+    <CELLSPACE>0</CELLSPACE>
+    <FIELDBREADTH>0</FIELDBREADTH>
+    <ISLINEBREAK>N</ISLINEBREAK>
+    <FIELDGROUPDEFAULT>N</FIELDGROUPDEFAULT>
+  </AD_Field>
+  <AD_Field>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_COLUMN_ID>3863</AD_COLUMN_ID>
+    <AD_FIELD_ID>4018</AD_FIELD_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_TAB_ID>330</AD_TAB_ID>
+    <CREATED>2018-05-29T08:12:14+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>Organizational entity within Tenant</DESCRIPTION>
+    <DISPLAYLENGTH>15</DISPLAYLENGTH>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <HELP>An organization is a unit of your Tenant or legal entity - examples are store, department. You can share data between organizations.</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <ISCENTRALLYMAINTAINED>Y</ISCENTRALLYMAINTAINED>
+    <ISDEFAULTFOCUS>N</ISDEFAULTFOCUS>
+    <ISDISPLAYED>Y</ISDISPLAYED>
+    <ISENCRYPTED>N</ISENCRYPTED>
+    <ISFIELDONLY>N</ISFIELDONLY>
+    <ISHEADING>N</ISHEADING>
+    <ISREADONLY>N</ISREADONLY>
+    <ISSAMELINE>Y</ISSAMELINE>
+    <MRSEQNO>20</MRSEQNO>
+    <NAME>Organization</NAME>
+    <SEQNO>20</SEQNO>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_4018</EXPORT_ID>
+    <MRISDISPLAYED>Y</MRISDISPLAYED>
+    <COLUMNWIDTH>100</COLUMNWIDTH>
+    <SHOWICON>N</SHOWICON>
+    <ISHEADERPANELITEM>N</ISHEADERPANELITEM>
+    <CELLSPACE>0</CELLSPACE>
+    <FIELDBREADTH>0</FIELDBREADTH>
+    <ISLINEBREAK>N</ISLINEBREAK>
+    <FIELDGROUPDEFAULT>N</FIELDGROUPDEFAULT>
+  </AD_Field>
+  <AD_Field>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_COLUMN_ID>5043</AD_COLUMN_ID>
+    <AD_FIELD_ID>4031</AD_FIELD_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_TAB_ID>330</AD_TAB_ID>
+    <CREATED>2018-05-29T08:12:14+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>Payment identifier</DESCRIPTION>
+    <DISPLAYLENGTH>14</DISPLAYLENGTH>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <HELP>The Payment is a unique identifier of this payment.</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <ISCENTRALLYMAINTAINED>Y</ISCENTRALLYMAINTAINED>
+    <ISDEFAULTFOCUS>N</ISDEFAULTFOCUS>
+    <ISDISPLAYED>N</ISDISPLAYED>
+    <ISENCRYPTED>N</ISENCRYPTED>
+    <ISFIELDONLY>N</ISFIELDONLY>
+    <ISHEADING>N</ISHEADING>
+    <ISREADONLY>N</ISREADONLY>
+    <ISSAMELINE>N</ISSAMELINE>
+    <MRSEQNO>0</MRSEQNO>
+    <NAME>Payment</NAME>
+    <SEQNO>0</SEQNO>
+    <SORTNO>1</SORTNO>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_4031</EXPORT_ID>
+    <MRISDISPLAYED>N</MRISDISPLAYED>
+    <COLUMNWIDTH>100</COLUMNWIDTH>
+    <SHOWICON>N</SHOWICON>
+    <ISHEADERPANELITEM>N</ISHEADERPANELITEM>
+    <CELLSPACE>0</CELLSPACE>
+    <FIELDBREADTH>0</FIELDBREADTH>
+    <ISLINEBREAK>N</ISLINEBREAK>
+    <FIELDGROUPDEFAULT>N</FIELDGROUPDEFAULT>
+  </AD_Field>
+  <AD_Field>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_COLUMN_ID>1008632</AD_COLUMN_ID>
+    <AD_FIELD_ID>1007784</AD_FIELD_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_TAB_ID>330</AD_TAB_ID>
+    <CREATED>2014-08-26T04:55:29+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DISPLAYLENGTH>50</DISPLAYLENGTH>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <ISCENTRALLYMAINTAINED>Y</ISCENTRALLYMAINTAINED>
+    <ISDEFAULTFOCUS>N</ISDEFAULTFOCUS>
+    <ISDISPLAYED>N</ISDISPLAYED>
+    <ISENCRYPTED>N</ISENCRYPTED>
+    <ISFIELDONLY>N</ISFIELDONLY>
+    <ISHEADING>N</ISHEADING>
+    <ISREADONLY>N</ISREADONLY>
+    <ISSAMELINE>N</ISSAMELINE>
+    <MRSEQNO>500</MRSEQNO>
+    <NAME>Export</NAME>
+    <SEQNO>0</SEQNO>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_10007883</EXPORT_ID>
+    <MRISDISPLAYED>N</MRISDISPLAYED>
+    <COLUMNWIDTH>100</COLUMNWIDTH>
+    <SHOWICON>N</SHOWICON>
+    <ISHEADERPANELITEM>N</ISHEADERPANELITEM>
+    <CELLSPACE>0</CELLSPACE>
+    <FIELDBREADTH>0</FIELDBREADTH>
+    <ISLINEBREAK>N</ISLINEBREAK>
+    <FIELDGROUPDEFAULT>N</FIELDGROUPDEFAULT>
+  </AD_Field>
+  <AD_Field>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_COLUMN_ID>3864</AD_COLUMN_ID>
+    <AD_FIELD_ID>4038</AD_FIELD_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_TAB_ID>330</AD_TAB_ID>
+    <CREATED>2018-05-29T08:12:14+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>The record is active in the system</DESCRIPTION>
+    <DISPLAYLENGTH>1</DISPLAYLENGTH>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <HELP>There are two methods of making records unavailable in the system: One is to delete the record, the other is to de-activate the record. A de-activated record is not available for selection, but available for reports.
+There are two reasons for de-activating and not deleting records:
+(1) The system requires the record for audit purposes.
+(2) The record is referenced by other records. E.g., you cannot delete a Account, if there are invoices for this Account record existing. You de-activate the Account and prevent that this record is used for future entries.</HELP>
+    <ISACTIVE>Y</ISACTIVE>
+    <ISCENTRALLYMAINTAINED>Y</ISCENTRALLYMAINTAINED>
+    <ISDEFAULTFOCUS>N</ISDEFAULTFOCUS>
+    <ISDISPLAYED>N</ISDISPLAYED>
+    <ISENCRYPTED>N</ISENCRYPTED>
+    <ISFIELDONLY>N</ISFIELDONLY>
+    <ISHEADING>N</ISHEADING>
+    <ISREADONLY>N</ISREADONLY>
+    <ISSAMELINE>N</ISSAMELINE>
+    <MRSEQNO>0</MRSEQNO>
+    <NAME>Active</NAME>
+    <SEQNO>0</SEQNO>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <EXPORT_ID>VIS_4038</EXPORT_ID>
+    <MRISDISPLAYED>N</MRISDISPLAYED>
+    <COLUMNWIDTH>100</COLUMNWIDTH>
+    <SHOWICON>N</SHOWICON>
+    <ISHEADERPANELITEM>N</ISHEADERPANELITEM>
+    <CELLSPACE>0</CELLSPACE>
+    <FIELDBREADTH>0</FIELDBREADTH>
+    <ISLINEBREAK>N</ISLINEBREAK>
+    <FIELDGROUPDEFAULT>N</FIELDGROUPDEFAULT>
+  </AD_Field>
+</NewDataSet>
