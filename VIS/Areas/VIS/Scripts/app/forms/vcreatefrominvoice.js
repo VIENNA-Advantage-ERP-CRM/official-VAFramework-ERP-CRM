@@ -54,13 +54,16 @@
             var _isdrop = "Y".equals(VIS.Env.getCtx().getWindowContext(selfChild.windowNo, "IsDropShip"));
 
             var _isSoTrx = "Y".equals(VIS.Env.getCtx().getWindowContext(selfChild.windowNo, "IsSOTrx"));
+            //VA230:Get IsReturnTrx based on document type on invoice
+            var dt = VIS.dataContext.getJSONRecord("MDocType/GetDocType", VIS.Env.getCtx().getContextAsInt(selfChild.windowNo, "C_DocTypeTarget_ID").toString());
+            var isReturnTrx = VIS.Utility.Util.getValueOfBoolean(dt["IsReturnTrx"]);
 
             $.ajax({
-                url: VIS.Application.contextUrl + "VCreateFrom/GetShipments",
+                url: VIS.Application.contextUrl + "VCreateFrom/GetShipmentsData",
                 type: 'POST',
                 //async: false,
                 data: {
-                    displays: display, CBPartnerIDs: C_BPartner_ID, IsDrop: _isdrop, IsSOTrx: _isSoTrx
+                    displays: display, CBPartnerIDs: C_BPartner_ID, IsDrop: _isdrop, IsSOTrx: _isSoTrx, isReturnTrxs: isReturnTrx, isProvisionlInvoices: false
                 },
                 success: function (data) {
                     var ress = JSON.parse(data);
@@ -197,8 +200,11 @@
         var C_Invoice_ID = this.$super.mTab.getValue("C_Invoice_ID");
         var C_Order_ID = this.$super.cmbOrder.getControl().find('option:selected').val();
         var M_InOut_ID = this.$super.cmbShipment.getControl().find('option:selected').val();
+        var C_ProvisionalInvoice_ID = this.$super.cmbProvisionalInvoice.getControl().find('option:selected').val();
+        if (C_ProvisionalInvoice_ID == undefined || C_ProvisionalInvoice_ID == "")
+            C_ProvisionalInvoice_ID = 0;
 
-        return this.saveData(model, "", C_Order_ID, M_InOut_ID, C_Invoice_ID);
+        return this.saveData(model, "", C_Order_ID, M_InOut_ID, C_Invoice_ID, C_ProvisionalInvoice_ID);
     }
 
     //Added by Bharat for new search filters
@@ -279,10 +285,6 @@
         });
         return data;
     }
-
-
-
-
 
     //VCreateFromInvoice.prototype.getShipmentsData = function (ctx, M_InOut_ID, M_Product_ID, pNo) {
 
@@ -427,7 +429,6 @@
         this.$super.loadGrid(data);
     }
 
-
     /// Unused Function
     VCreateFromInvoice.prototype.getShipmentData = function (ctx, M_InOut_ID) {
 
@@ -482,7 +483,87 @@
         return data;
     }
 
+    // Start Provisional Invoice
+    VCreateFromInvoice.prototype.loadProvisionalInvoices = function (C_Invoice_ID, M_Product_ID, pNo) {
+        var data = this.getProvisionalInvoicesData(VIS.Env.getCtx(), C_Invoice_ID, M_Product_ID, pNo);
+    }
 
+    VCreateFromInvoice.prototype.getProvisionalInvoicesData = function (ctx, C_Invoice_ID, M_Product_ID, pNo) {
+        var data = [];
+        var self = this;
+
+        this.$super.record_ID = $self.mTab.getValue("C_Invoice_ID");
+        if (self.$super.dGrid != null) {
+            var selection = self.$super.dGrid.getSelection();
+            for (item in selection) {
+                var obj = $.grep(self.$super.multiValues, function (n, i) {
+                    return n.M_Product_ID_K == self.$super.dGrid.get(selection[item])["M_Product_ID_K"] && n.C_Invoice_ID_K == self.$super.dGrid.get(selection[item])["C_Invoice_ID_K"]
+                });
+                if (obj.length > 0) {
+
+                }
+                else {
+                    self.$super.multiValues.push(self.$super.dGrid.get(selection[item]));
+                }
+            }
+        }
+
+        var isBaseLangs = "";
+        var mProductID = "";
+        if (VIS.Env.isBaseLanguage(ctx, "C_UOM")) {
+
+            isBaseLangs = "FROM C_UOM uom INNER JOIN C_ProvisionalInvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID) ";
+        }
+        else {
+            isBaseLangs = "FROM C_UOM_Trl uom Left join C_UOM uom1 on (uom1.C_UOM_ID=uom.C_UOM_ID) INNER JOIN C_ProvisionalInvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.AD_Language='"
+                + VIS.Env.getAD_Language(ctx) + "') ";
+        }
+        if (M_Product_ID != null) {
+            mProductID = " AND l.M_Product_ID = " + M_Product_ID;
+        }
+
+        if (!pNo) {
+            pNo = 1;
+        }
+        var orgId = null
+        if (self.$super.relatedToOrg != null && self.$super.relatedToOrg.getValue()) {
+            orgId = self.$super.mTab.getValue("AD_Org_ID")
+        }
+        $.ajax({
+            url: VIS.Application.contextUrl + "VCreateFrom/GetProvisionalInvoicesDataVCreate",
+            dataType: "json",
+            type: "POST",
+            data: {
+                keyColumnName: self.$super.mTab.keyColumnName,
+                tableName: "C_ProvisionalInvoiceLine",
+                recordID: self.$super.record_ID,
+                pageNo: pNo,
+
+                isBaseLangss: isBaseLangs,
+                cInvoiceID: C_Invoice_ID,
+                mProductIDs: mProductID,
+                orgId: orgId
+            },
+            error: function (e) {
+                alert(VIS.Msg.getMsg('ErrorWhileGettingData'));
+                selfChild.log.info(e);
+                self.$super.setBusy(false);
+                return;
+            },
+            success: function (dyndata) {
+                var res = JSON.parse(dyndata);
+                if (res.Error) {
+                    VIS.ADialog.error(res.Error);
+                    self.$super.setBusy(false);
+                    return;
+                }
+                self.$super.resetPageCtrls(res.pSetting);
+                self.$super.loadGrid(res.data);
+                self.$super.setBusy(false);
+            }
+        });
+        return data;
+    }
 
 
 
@@ -548,7 +629,7 @@
     //    return data;
     //}
 
-    VCreateFromInvoice.prototype.saveData = function (model, selectedItems, C_Order_ID, M_inout_id, C_Invoice_ID) {
+    VCreateFromInvoice.prototype.saveData = function (model, selectedItems, C_Order_ID, M_inout_id, C_Invoice_ID, C_ProvisionalInvoice_ID) {
         var obj = this;
         $.ajax({
             type: "POST",
@@ -559,7 +640,8 @@
                 selectedItems: selectedItems,
                 C_Order_ID: C_Order_ID,
                 C_Invoice_ID: C_Invoice_ID,
-                M_inout_id: M_inout_id
+                M_inout_id: M_inout_id,
+                C_ProvisionalInvoice_ID: C_ProvisionalInvoice_ID
             },
             success: function (data) {
                 returnValue = data.result;
