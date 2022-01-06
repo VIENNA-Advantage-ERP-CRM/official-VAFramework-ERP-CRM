@@ -289,7 +289,7 @@ namespace ViennaAdvantage.Process
                 }
                 else
                 {
-                    currencyType = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_ConversionType_ID FROM C_ConversionType WHERE IsActive='Y'AND AD_Org_ID IN(" + ship.GetAD_Org_ID() + ",0) AND ISDefault = 'Y' Order By C_ConversionType_ID Desc"));
+                    currencyType = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_ConversionType_ID FROM C_ConversionType WHERE IsActive='Y'AND AD_Org_ID IN(" + ship.GetAD_Org_ID() + ",0) AND ISDefault = 'Y' AND AD_Client_ID= "+GetAD_Client_ID()+" ORDER BY C_ConversionType_ID Desc"));
                     if (currencyType > 0)
                     {
                         invoice.SetC_ConversionType_ID(currencyType);
