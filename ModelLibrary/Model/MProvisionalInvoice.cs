@@ -219,7 +219,7 @@ namespace VAdvantage.Model
                 bool isPOCostingMethod = MCostElement.IsPOCostingmethod(GetCtx(), line.GetAD_Client_ID(), product1.GetM_Product_ID(), product1.Get_Trx());
 
                 // Get Product Cost
-                Decimal ProductLineCost = line.GetProductLineCost(line , isPOCostingMethod);
+                Decimal ProductLineCost = line.GetProductLineCost(line, isPOCostingMethod);
 
                 // calculate invoice line costing after calculating costing of linked MR line 
                 if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
@@ -412,6 +412,14 @@ namespace VAdvantage.Model
             if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateAcct(), GetAD_Org_ID()))
             {
                 _processMsg = Common.Common.NONBUSINESSDAY;
+                return false;
+            }
+
+            // if Payment Refrence exist, then no to void the record
+            if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_Payment_ID) FROM C_Payment 
+                WHERE DocStatus NOT IN ('RE', 'VO') AND C_ProvisionalInvoice_ID = " + GetC_ProvisionalInvoice_ID(), null, Get_Trx())) > 0)
+            {
+                _processMsg = Msg.GetMsg(GetCtx(), "DeletePaymentFirst");
                 return false;
             }
 
