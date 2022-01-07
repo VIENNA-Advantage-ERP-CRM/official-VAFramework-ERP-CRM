@@ -789,6 +789,15 @@ namespace VIS.Controllers
                 //Helpers.MenuHelper mnuHelper = new Helpers.MenuHelper(Session["ctx"] as Ctx); // inilitilize menu class
                 Helpers.HomeHelper homeHelper = new HomeHelper();
                 var nodes = Session["barNodes"] as List<VTreeNode>;
+
+                if (nodes == null)
+                {
+                    Ctx ctx = Session["ctx"] as Ctx;
+                    //string diableMenu = ctx.GetContext("#DisableMenu");
+                    Helpers.MenuHelper mnuHelper = new Helpers.MenuHelper(ctx); // inilitilize menu class
+                    ViewBag.Menu = mnuHelper.GetMenuTree(); // create tree
+                    nodes = ViewBag.Menu.GetBarNodes();
+                }
                 Session["barNodes"] = null;
                 return Json(new { result = homeHelper.GetBarNodes(nodes) }, JsonRequestBehavior.AllowGet);
             }
