@@ -210,9 +210,9 @@
 				// drag fake item 
 				this._moveItem(this._dragItem, (point.x - this._click.x), (point.y - this._click.y));
 
-				var x = e.pageX - mainDiv.offsetLeft;
-				var walk = (x - startx) * 3;
-				mainDiv.scrollLeft = scrollLeft + walk;
+				//var x = e.pageX - mainDiv.offsetLeft;
+				//var walk = (x - startx) * 3;
+				//mainDiv.scrollLeft = scrollLeft + walk;
 				// keep an eye for other sortable lists and switch over to it on hover 
 				for (var a = 0; a < this._sortLists.length; ++a) {
 					var subContainer = this._sortLists[a];
