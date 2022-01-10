@@ -2076,8 +2076,8 @@ namespace VIS.Controllers
 
                     //}
 
-                        // End Amortization process
-                    }
+                    // End Amortization process
+                }
 
                 if (C_ProvisionalInvoice_ID > 0)
                 {
@@ -3706,13 +3706,12 @@ namespace VIS.Controllers
                                                                      + "    AND P.C_YEAR_ID   = " + YearId
                                                                      + "    AND Y.AD_CLIENT_ID= " + AdClientID));
 
-                    eDate = Util.GetValueOfDateTime(DB.ExecuteScalar(" SELECT P.ENDDATE AS ENDDATE    "
-                                                                     + "    FROM C_PERIOD P  "
-                                                                     + "    INNER JOIN C_YEAR Y                "
-                                                                     + "    ON P.C_YEAR_ID    =Y.C_YEAR_ID     "
-                                                                     + "    WHERE P.PERIODNO  ='12'             "
-                                                                     + "    AND P.C_YEAR_ID   = " + YearId
-                                                                     + "    AND Y.AD_CLIENT_ID= " + AdClientID));
+                    eDate = Util.GetValueOfDateTime(DB.ExecuteScalar(@" SELECT MAX(P.ENDDATE) AS ENDDATE    
+                                                                         FROM C_PERIOD P  
+                                                                         INNER JOIN C_YEAR Y ON (P.C_YEAR_ID = Y.C_YEAR_ID)
+                                                                         WHERE P.IsActive  ='Y'            
+                                                                         AND P.C_YEAR_ID   = " + YearId + @"
+                                                                         AND Y.AD_CLIENT_ID= " + AdClientID));
 
                     //DataSet ds = DB.ExecuteDataset(sql, null, null);
                     if (stDate != null && eDate != null)
