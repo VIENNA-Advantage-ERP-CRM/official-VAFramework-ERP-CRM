@@ -3472,6 +3472,11 @@
             //log.warning("Insert Record disabled for Tab");
             return;
         }
+
+        if (this.curGC.getIsCardRow()) {
+            this.curGC.switchSingleRow();
+        }
+
         //cmd_save(false);
         this.curGC.dataNew(copy);
     };// New
