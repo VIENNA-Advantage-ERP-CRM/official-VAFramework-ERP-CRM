@@ -51,5 +51,6 @@ namespace VAdvantage.Classes
         public int AD_CardView_ID { get; set; }
 
         public bool IsDefault { get; set; }
+        public int created { get; set; }
     }
 }

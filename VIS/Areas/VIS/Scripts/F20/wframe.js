@@ -201,7 +201,7 @@
 
             var clone = document.importNode(tmpWindow, true);
 
-            $table =$(clone.querySelector(".vis-ad-w"));
+            $table = $(clone.querySelector(".vis-ad-w"));
             //var td11 = $("<td style='max-height:42px;'>");
             $contentGrid = $table.find(".vis-ad-w-body");//  ("<td class='vis-height-full'>");
             $lblTitle = $table.find("h5"); //$("<h1>");//.addClass("vis-awindow-title-label");
@@ -211,8 +211,8 @@
             $toolDiv = $table.find(".vis-ad-w-toolbar"); //$("<div class='vis-awindow-toolbar' >");
             $header = $table.find(".vis-ad-w-header");
 
-           //     $header = $table.find $("<div class='vis-awindow-header vis-menuTitle' >").append($btnClose).append($lblTitle).append($toolDiv);
-          //  td11.append($header);
+            //     $header = $table.find $("<div class='vis-awindow-header vis-menuTitle' >").append($btnClose).append($lblTitle).append($toolDiv);
+            //  td11.append($header);
             //var tr1 = $("<tr>").append(td11);
             //var tr2 = $("<tr>").append($contentGrid);
             //$table.append(tr1).append(tr2);
@@ -327,12 +327,12 @@
     };
 
     AWindow.prototype.sizeChanged = function (height, width) {
-       
+
         if (!height)
             height = VIS.Env.getScreenHeight();
         if (!width)
             width = window.innerWidth;
-       // this.setSize(height);
+        // this.setSize(height);
         var hHeight = this.isHeaderVisible ? 85 : 43;
         try {
             this.cPanel.sizeChanged(height - hHeight, width);
@@ -372,12 +372,12 @@
     };
 
     /**
-	 *	Dynamic Initialization Single Window
-	 *  @param AD_Window_ID window
-	 *  @param query selection criteria
+     *	Dynamic Initialization Single Window
+     *  @param AD_Window_ID window
+     *  @param query selection criteria
      *  @param callback to add menu item for window
-	 *  @return true if loaded OK
-	 */
+     *  @return true if loaded OK
+     */
     AWindow.prototype.initWindow = function (AD_Window_ID, query, callback, action, sel) {
 
         this.cPanel = new VIS.APanel(); //initlize Apanel
@@ -390,7 +390,7 @@
 
         var self = this;
 
-        this.hideHeader(true); 
+        this.hideHeader(true);
 
 
         VIS.AEnv.getGridWindow(windowNo, AD_Window_ID, function (json) {
@@ -466,12 +466,13 @@
     };
 
     /**
-	 *	Dynamic Initialization form
-	 *  @param AD_Form_ID form
+     *	Dynamic Initialization form
+     *  @param AD_Form_ID form
      *  @param callback to add menu item for form
-	 *  @return true if loaded OK
+  	 *  @return true if loaded OK
 	 */
-    AWindow.prototype.initForm = function (AD_Form_ID, callback, action) {
+    AWindow.prototype.initForm = function (AD_Form_ID, callback, action, additionalInfo) {
+
 
         this.cPanel = new VIS.AForm(VIS.Env.getScreenHeight() - 85); //initlize AForm
 
@@ -502,10 +503,8 @@
 
             self.setTitle(jsonData.DisplayName);
             self.setName(jsonData.DisplayName);
-           
 
-
-            if (!self.cPanel.openForm(jsonData, self, windowNo)) {
+            if (!self.cPanel.openForm(jsonData, self, windowNo, additionalInfo)) {
                 self.dispose();
                 self = null;
                 return;
@@ -532,11 +531,11 @@
     };
 
     /**
-	 *	Dynamic Initialization process
-	 *  @param AD_Process_ID process
+     *	Dynamic Initialization process
+     *  @param AD_Process_ID process
      *  @param callback to add menu item for form
-	 *  @return true if loaded OK
-	 */
+     *  @return true if loaded OK
+     */
     AWindow.prototype.initProcess = function (AD_Process_ID, callback, action, splitUI, extrnalForm) {
 
         this.cPanel = new VIS.AProcess(AD_Process_ID, VIS.Env.getScreenHeight() - AWINDOW_HEADER_HEIGHT, splitUI, extrnalForm); //initlize AForm
@@ -591,7 +590,7 @@
                 img = "fa fa-cog";
             else
                 img = "vis vis-report";
-            
+
             self.img = img;
 
             if (callback) {
@@ -687,7 +686,7 @@
         //    return;
         //}
         //dispose all popover
-       // this.cPanel.getRoot().find('.vis-ev-ctrlinfowrap').popover('dispose');
+        // this.cPanel.getRoot().find('.vis-ev-ctrlinfowrap').popover('dispose');
         if (this.onClosed) {
             if (!this.onClosed(this.id, this.$layout, this.hid, this.AD_Window_ID))
                 return;
@@ -779,7 +778,7 @@
                 //imgUrl += this.action + "16.png";
                 imgUrl = this.iconName != '' ? this.iconName.toLowerCase() : this.action.toLowerCase();
                 if (this.toggle || this.enableDisable) {
-                   // imgUrlX += this.action + "X16.png";
+                    // imgUrlX += this.action + "X16.png";
                     imgUrlX = imgUrl + 'x';
                 }
             }
@@ -794,8 +793,8 @@
                     imgUrlX = imgUrl + 'x';
                 }
             }
-            this.imgUrl = "vis-"+imgUrl;
-            this.imgUrlX = "vis-"+imgUrlX;
+            this.imgUrl = "vis-" + imgUrl;
+            this.imgUrlX = "vis-" + imgUrlX;
         }
 
         var that = this;
@@ -829,12 +828,12 @@
                 li.append(d);
                 d.append(this.img);
             }
-            else {  
+            else {
                 //li.append('<ul class="vis-appsaction-ul-inner"><li><img src="' + this.imgUrl + '" title="' + this.text + '" /></li><li><span>' + this.text + '</span></li></ul>');
                 if (this.direction == "r")
                     li.append('<span>' + this.text + '</span> <i class="vis ' + this.imgUrl + '" title="' + this.toolTipText + '" ></i>');
                 else
-                li.append('<i class="vis ' + this.imgUrl + '" title="' + this.toolTipText + '"></i><span>' + this.text + '</span>');
+                    li.append('<i class="vis ' + this.imgUrl + '" title="' + this.toolTipText + '"></i><span>' + this.text + '</span>');
                 this.img = li.find("i");
             }
             this.$li = li;
@@ -884,7 +883,7 @@
                 if (this.direction == "r")
                     li.append('<span>' + this.text + '</span> <i class="vis ' + this.imgUrl + '" title="' + this.toolTipText + '" ></i>');
                 else
-                li.append('<i class="vis ' + this.imgUrl + '" title="' + this.toolTipText + '" ></i><span>' + this.text + '</span>');
+                    li.append('<i class="vis ' + this.imgUrl + '" title="' + this.toolTipText + '" ></i><span>' + this.text + '</span>');
                 this.img = li.find("i");
             }
             this.$li = li;
@@ -962,6 +961,35 @@
             // this.img.prop("src", enable ? this.imgUrl : this.imgUrlX);
         }
     };
+
+    
+    AppsAction.prototype.highlightNewButton = function (highlight) {
+        if (highlight) {
+            if (this.$li.instructionPopRemoved)
+                return;
+
+            if (!this.windowContainer) {
+                this.windowContainer = this.$li.closest('.vis-ad-w-p');
+            }
+
+            if (this.windowContainer.find('.vis-window-instruc-overlay-new').length <= 0) {
+                this.windowContainer.prepend('<div class="vis-window-instruc-overlay-new"><div class="vis-window-instruc-overlay-new-inn">'
+                    + '<p>' + VIS.Msg.getMsg('CreateNewRec') + '</p></div></div>');
+
+                this.$li.addClass('vis-window-instruc-overlay-new-li');
+            }
+        }
+        else {
+            if (!this.windowContainer) {
+                this.windowContainer = this.$li.closest('.vis-ad-w-p');
+            }
+            this.windowContainer.find('.vis-window-instruc-overlay-new').remove();
+            this.windowContainer.find('.vis-window-instruc-overlay-new-inn').remove();
+            this.$li.removeClass('vis-window-instruc-overlay-new-li');
+            this.$li.instructionPopRemoved = true;
+        }
+    };
+
 
     AppsAction.prototype.show = function () {
         //this.isEnabled = enable;
@@ -1076,10 +1104,10 @@
         //initilizeComponent();
         //page Numbers
         //$ulPages.append($("<li>").append(this.$statusDB));
-       // r2Col1.append($spanPageResult).append($seprator);
+        // r2Col1.append($spanPageResult).append($seprator);
         //r2Col2.append($("<div class='vis-statusbar-statusLine'>").append(this.$statusLine));
-       //r2Col3.append($ulPages);
-       // r1Col1.append(this.$infoLine);
+        //r2Col3.append($ulPages);
+        // r1Col1.append(this.$infoLine);
 
         if (!withInfo) {
             this.$infoLine.hide();
@@ -1091,8 +1119,8 @@
         };
 
         this.render = function () {
-           // $root.empty();
-           // $root.append($("<tr class='vis-height-auto'>").append(r1Col1)).append($("<tr class='vis-height-full'>").append(r2Col1).append(r2Col2).append(r2Col3));
+            // $root.empty();
+            // $root.append($("<tr class='vis-height-auto'>").append(r1Col1)).append($("<tr class='vis-height-full'>").append(r2Col1).append(r2Col2).append(r2Col3));
         };
 
         this.setPageItem = function (item) {
@@ -1686,7 +1714,7 @@
                     change = true;
                 }
             }
-            if (change ) {
+            if (change) {
                 this.notifyFireChanged(true);
                 //this.aPanel.aSave.setEnabled(true);
             }
@@ -2059,7 +2087,7 @@
 
 
 
-    
+
 
 
 
@@ -2152,7 +2180,7 @@
         };
     };
 
-   
+
 
 
 
@@ -2162,8 +2190,8 @@
     VIS.AWindow = AWindow;
     VIS.AppsAction = AppsAction;
     VIS.StatusBar = StatusBar
- 
-  
-   
-  
+
+
+
+
 }(VIS, jQuery));

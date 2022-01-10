@@ -448,6 +448,11 @@ namespace VIS.Models
             string result = "1";
             try
             {
+                if (string.IsNullOrEmpty(grpValue))
+                {
+                    grpValue = null;
+                }
+
                 PO _po = MTable.GetPO(ctx, tableName, recordID, null);
                 if (VAdvantage.Classes.DisplayType.YesNo == dataType)
                 {
