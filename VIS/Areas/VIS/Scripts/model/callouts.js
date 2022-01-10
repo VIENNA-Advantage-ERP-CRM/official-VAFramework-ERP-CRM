@@ -20078,6 +20078,8 @@
                 mTab.setValue("C_BPartner_Location_ID", data["C_BPartner_Location_ID"]);
                 mTab.setValue("PaymentAmount", data["GrandTotal"]);
                 mTab.setValue("PayAmt", data["GrandTotal"]);
+                mTab.setValue("C_Currency_ID", data["C_Currency_ID"]);
+                mTab.setValue("C_ConversionType_ID", data["C_ConversionType_ID"]);
                 //check if VA009 module is Installed 
                 var DataPrefix = VIS.dataContext.getJSONRecord("ModulePrefix/GetModulePrefix", "VA009_");
                 if (DataPrefix["VA009_"]) {

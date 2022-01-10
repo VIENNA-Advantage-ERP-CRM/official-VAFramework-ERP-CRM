@@ -2875,6 +2875,13 @@ namespace VAdvantage.Model
                 //	MProject project = new MProject(GetCtx(), GetC_Project_ID());
             }
 
+            // Update Paid on Provisional Invoice 
+            if (Get_ColumnIndex("C_ProvisionalInvoice_ID") >= 0 && Util.GetValueOfInt(Get_Value("C_ProvisionalInvoice_ID")) > 0)
+            {
+                DB.ExecuteQuery("UPDATE C_ProvisionalInvoice SET IsPaid = " + (GetReversalDoc_ID() == 0 ? "'Y'" : "'N'") +
+                    @" WHERE C_ProvisionalInvoice_ID = " + Util.GetValueOfInt(Get_Value("C_ProvisionalInvoice_ID")), null, Get_Trx());
+            }
+
             //	Counter Doc
             MPayment counter = CreateCounterDoc();
             if (counter != null)
@@ -5333,6 +5340,12 @@ namespace VAdvantage.Model
             if (reversal.Get_ColumnIndex("TempDocumentNo") > 0)
             {
                 reversal.SetTempDocumentNo("");
+            }
+
+            // Set Provisional reference
+            if (Get_ColumnIndex("C_ProvisionalInvoice_ID") >= 0)
+            {
+                reversal.Set_Value("C_ProvisionalInvoice_ID", Get_Value("C_ProvisionalInvoice_ID"));
             }
 
             if (!reversal.Save(Get_Trx()))

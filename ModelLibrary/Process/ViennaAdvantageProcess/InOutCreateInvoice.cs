@@ -88,6 +88,17 @@ namespace ViennaAdvantage.Process
             int count = Util.GetValueOfInt(DB.ExecuteScalar(" SELECT Count(M_Inout_ID) FROM M_Inout WHERE ISSOTRX='Y' AND M_Inout_ID=" + GetRecord_ID()));
             MInOut ship = null;
             bool isAllownonItem = Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("Y");
+
+            // check if reference found on Provisional Invoice, then not to create Invoice
+            if (_M_InOut_ID > 0 && Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(iol.M_InOut_ID)
+                                      FROM C_ProvisionalInvoiceLine pil
+                                      INNER JOIN C_ProvisionalInvoice  pi ON (pi.C_ProvisionalInvoice_ID = pil.C_ProvisionalInvoice_ID)
+                                      LEFT JOIN M_InOutLine iol ON (iol.M_InOutLine_ID = pil.M_InOutLine_ID)
+                                      WHERE pi.DocStatus NOT IN ( 'RE', 'VO' ) AND iol.M_InOut_ID = " + _M_InOut_ID, null, Get_Trx())) > 0)
+            {
+                throw new ArgumentException(Msg.GetMsg(GetCtx() , "VIS_ProvisionalInvoiceCreated"));
+            }
+
             if (count > 0)
             {
                 if (_M_InOut_ID == 0)

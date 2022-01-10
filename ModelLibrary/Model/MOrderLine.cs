@@ -5240,7 +5240,7 @@ namespace VAdvantage.Model
                                  SET (O.VA076_ALAlAlloyTotConMT, O.VA076_CUTotConMT,O.VA076_LeadTotConMT) =
                                     (
                                         SELECT ALMetal,CUMetal,LeadMetal FROM(
-                                        SELECT OL.C_Order_ID, Sum(NVL(Atr.VA076_ALMetalWeight,0)*QtyEntered) AS ALMetal,Sum(NVL(VA076_CUMetalWeight,0)*QtyEntered) AS CUMetal,Sum(NVL(VA076_LeadMetalWeight,0)*QtyEntered) AS LeadMetal 
+                                        SELECT OL.C_Order_ID, Sum(NVL(Atr.VA076_ALMetalWeight,0)*QtyEntered)/1000000 AS ALMetal,Sum(NVL(VA076_CUMetalWeight,0)*QtyEntered)/1000000 AS CUMetal,Sum(NVL(VA076_LeadMetalWeight,0)*QtyEntered)/1000000 AS LeadMetal 
                                         FROM C_OrderLine OL 
                                         INNER JOIN VA076_Attributes Atr ON Atr.M_Product_ID=OL.M_Product_ID
                                         WHERE OL.C_Order_ID=" + c_order_ID + @" group by OL.C_Order_ID) T
