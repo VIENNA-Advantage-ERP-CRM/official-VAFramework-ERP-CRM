@@ -1,0 +1,121 @@
+<NewDataSet>
+  <xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop">
+    <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="AD_Module_DBScript" msprop:BaseTable.0="AD_MODULE_DBSCRIPT">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="AD_CLIENT_ID" msprop:OraDbType="113" msprop:BaseColumn="AD_CLIENT_ID" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_MODULEINFO_ID" msprop:OraDbType="113" msprop:BaseColumn="AD_MODULEINFO_ID" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_MODULE_DBSCRIPT_ID" msprop:OraDbType="113" msprop:BaseColumn="AD_MODULE_DBSCRIPT_ID" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_ORG_ID" msprop:OraDbType="113" msprop:BaseColumn="AD_ORG_ID" type="xs:long" minOccurs="0" />
+                <xs:element name="CREATED" msprop:OraDbType="106" msprop:BaseColumn="CREATED" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="CREATEDBY" msprop:OraDbType="113" msprop:BaseColumn="CREATEDBY" type="xs:long" minOccurs="0" />
+                <xs:element name="ISACTIVE" msprop:OraDbType="104" msprop:BaseColumn="ISACTIVE" type="xs:string" minOccurs="0" />
+                <xs:element name="UPDATED" msprop:OraDbType="106" msprop:BaseColumn="UPDATED" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="UPDATEDBY" msprop:OraDbType="113" msprop:BaseColumn="UPDATEDBY" type="xs:long" minOccurs="0" />
+                <xs:element name="EXPORT_ID" msprop:OraDbType="119" msprop:BaseColumn="EXPORT_ID" type="xs:string" minOccurs="0" />
+                <xs:element name="SCRIPT" msprop:OraDbType="105" msprop:BaseColumn="SCRIPT" type="xs:string" minOccurs="0" />
+                <xs:element name="ISPREEXECUTESCRIPT" msprop:OraDbType="104" msprop:BaseColumn="ISPREEXECUTESCRIPT" type="xs:string" minOccurs="0" />
+                <xs:element name="DBTYPE" msprop:OraDbType="104" msprop:BaseColumn="DBTYPE" type="xs:string" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <AD_Module_DBScript>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_MODULEINFO_ID>1000090</AD_MODULEINFO_ID>
+    <AD_MODULE_DBSCRIPT_ID>1002540</AD_MODULE_DBSCRIPT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <CREATED>2021-11-05T10:18:46+00:00</CREATED>
+    <CREATEDBY>1005426</CREATEDBY>
+    <ISACTIVE>Y</ISACTIVE>
+    <UPDATED>2021-12-08T16:27:43+00:00</UPDATED>
+    <UPDATEDBY>1005426</UPDATEDBY>
+    <SCRIPT>DO $$
+BEGIN
+drop view cps04_paymentcheck_v;
+
+create or replace view cps04_paymentcheck_v as SELECT DISTINCT pay.ad_client_id,pay.ad_org_id,pay.c_payment_id AS cps04_aymentvoucher_v_id,pay.c_payment_id,btl.va009_batch_id,    btl.va009_batchlines_id, ' '::text AS label, pay.documentno, to_char(pay.datetrx, 'MM/DD/YYYY'::text) AS dateinvoiced, upper((cb.name)::text) AS cps04_customer,    upper(COALESCE(nvl2(btrim(nvl2((cl.address1)::text, ((cl.address1)::text || ' '::text), ''::text)), btrim(nvl2((cl.address1)::text, ((cl.address1)::text || ' '::text), ''::text)), ''::text), ''::text)) AS cps04_custaddress,upper(COALESCE(nvl2(btrim(nvl2((cl.address2)::text, ((cl.address2)::text || ' '::text), ''::text)), btrim(nvl2((cl.address2)::text, ((cl.address2)::text || ' '::text), ''::text)), ''::text), ''::text)) AS cps04_custaddress2,  nvl2((cl.postal)::text, ((cl.postal)::text || ' '::text), ''::text) AS cps04_custpostal,
+upper(btrim(nvl2((cl.city)::text, ((cl.city)::text || ' '::text), ''::text))) AS cps04_custcity,upper(btrim(nvl2((cl.regionname)::text, ((cl.regionname)::text || ' '::text), ''::text))) AS cps04_custregionname,cb.c_bpartner_id,cb.value,cb.mobile,pay.payamt AS grandtotal, pay.discountamt,(pay.payamt - pay.discountamt) AS cps04_grossamount,pay.trxno,    upper((curr.description)::text) AS cps04_currencyname,upper((curr.fractionname)::text) AS cps04_fractionname,curr.cursymbol AS iso_code,org.phone AS cps04_orgphone,org.fax AS cps04_orgfax,upper((og.name)::text) AS cps04_orgname,  upper(nvl2(btrim(nvl2((loc.address1)::text, ((loc.address1)::text || ' '::text), ''::text)), btrim(nvl2((loc.address1)::text, ((loc.address1)::text || ' '::text), ''::text)), ''::text)) AS cps04_orgaddress,upper(nvl2(btrim(nvl2((loc.address2)::text, ((loc.address2)::text || ' '::text), ''::text)), btrim(nvl2((loc.address2)::text, ((loc.address2)::text || ' '::text), ''::text)), ''::text)) AS cps04_orgaddress2, upper(nvl2(btrim(((nvl2((loc.city)::text, ((loc.city)::text || ' '::text), ''::text) || nvl2((loc.regionname)::text, ((loc.regionname)::text || ' '::text), ''::text)) || (nvl2(loc.postal, loc.postal, ''::character varying))::text)), btrim(((nvl2((loc.city)::text, ((loc.city)::text || ' '::text), ''::text) || nvl2((loc.regionname)::text, ((loc.regionname)::text || ' '::text), ''::text)) || nvl2((loc.postal)::text, ((loc.postal)::text || ' '::text), ''::text))), ''::text)) AS cps04_orgaddress3, upper((bk.name)::text) AS cps04_bankname, ba.accountno AS cps04_bankaccount,
+bk.routingno AS cms01_routingno, upper(COALESCE(nvl2(btrim(nvl2((bkl.address1)::text, ((bkl.address1)::text || ' '::text), ''::text)), btrim(nvl2((bkl.address1)::text,((bkl.address1)::text || ' '::text), ''::text)), ' '::text), ''::text)) AS cps04_bankaddress,upper(COALESCE(nvl2(btrim(nvl2((bkl.address2)::text, ((bkl.address2)::text || ' '::text), ''::text)), btrim(nvl2((bkl.address2)::text, ((bkl.address2)::text || ' '::text), ''::text)), ' '::text), ''::text)) AS cps04_bankaddress2,
+nvl2((bkl.postal)::text, ((bkl.postal)::text || ' '::text), ''::text) AS cps04_bankpostal,upper(btrim(nvl2((bkl.city)::text, ((bkl.city)::text || ' '::text), ''::text))) AS cps04_bankcity,upper(btrim(nvl2((bkl.regionname)::text, ((bkl.regionname)::text || ' '::text), ''::text))) AS cps04_bankregionname,upper((pm.va009_name)::text) AS paymethod,
+upper((pay.description)::text) AS description, pay.checkno, pay.c_charge_id, org.logo AS orglogo, img.binarydata AS cps04_signature, img.binarydata AS cps11_signature2,
+case when (select 1 from ad_column ac where export_id = 'CPS28_1010441' and columnname = 'CPS28_signature2') = 1 then (case when coalesce(ba.cps28_signature2_threshold,0) &lt;&gt; 0 	and ba.cps28_signature2_threshold &lt;= pay.payamt then img2.binarydata else null end) else img.binarydata end as CPS28_signature2,case when (select 1 from ad_column ac where export_id = 'CPS28_1010437' and columnname = 'CPS28_signature2_threshold') = 1	then ba.CPS28_signature2_threshold else 0 end as CPS28_signature2_threshold   FROM ((((((((((((((((((c_payment pay  JOIN c_bpartner cb ON ((pay.c_bpartner_id = cb.c_bpartner_id)))  LEFT JOIN c_bpartner_location cbloc ON (((pay.c_bpartner_id = cbloc.c_bpartner_id) AND (pay.c_bpartner_location_id = cbloc.c_bpartner_location_id))))  LEFT JOIN va009_batchlinedetails btld ON ((pay.c_payment_id = btld.c_payment_id))) LEFT JOIN va009_batchlines btl ON ((btld.va009_batchlines_id = btl.va009_batchlines_id)))  LEFT JOIN c_location cl ON ((cbloc.c_location_id = cl.c_location_id)))  LEFT JOIN c_city ctt ON ((ctt.c_city_id = cl.c_city_id)))  LEFT JOIN c_country cntt ON ((cntt.c_country_id = cl.c_country_id)))   LEFT JOIN c_region crr ON ((crr.c_region_id = cl.c_region_id)))   LEFT JOIN ad_orginfo org ON ((pay.ad_org_id = org.ad_org_id))) LEFT JOIN ad_org og ON ((pay.ad_org_id = og.ad_org_id)))  LEFT JOIN c_location loc ON ((loc.c_location_id = org.c_location_id)))  LEFT JOIN c_country orgcnt ON ((loc.c_country_id = orgcnt.c_country_id)))   LEFT JOIN c_currency curr ON ((pay.c_currency_id = curr.c_currency_id))) LEFT JOIN c_bankaccount ba ON ((pay.c_bankaccount_id = ba.c_bankaccount_id))) LEFT JOIN c_bank bk ON ((ba.c_bank_id = bk.c_bank_id)))  LEFT JOIN c_location bkl ON ((bk.c_location_id = bkl.c_location_id)))
+LEFT JOIN va009_paymentmethod pm ON ((pay.va009_paymentmethod_id = pm.va009_paymentmethod_id))) LEFT JOIN ad_image img ON (((ba.cps04_signature)::text = ((img.ad_image_id)::character varying)::text)) LEFT JOIN ad_image img2 ON ((((img2.ad_image_id)::character varying)::text= (case when (select 1 from ad_column ac where export_id = 'CPS28_1010441' and columnname = 'CPS28_signature2') = 1 then ba.CPS28_signature2 else ba.cps04_signature end) ::text )));
+
+
+END $$;</SCRIPT>
+    <ISPREEXECUTESCRIPT>N</ISPREEXECUTESCRIPT>
+    <DBTYPE>2</DBTYPE>
+  </AD_Module_DBScript>
+  <AD_Module_DBScript>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_MODULEINFO_ID>1000090</AD_MODULEINFO_ID>
+    <AD_MODULE_DBSCRIPT_ID>1002541</AD_MODULE_DBSCRIPT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <CREATED>2021-11-12T11:20:09+00:00</CREATED>
+    <CREATEDBY>1005426</CREATEDBY>
+    <ISACTIVE>Y</ISACTIVE>
+    <UPDATED>2021-12-07T09:46:47+00:00</UPDATED>
+    <UPDATEDBY>1005426</UPDATEDBY>
+    <SCRIPT> 
+DO $$
+begin
+ drop view cps04_paymentcheckline_v;
+
+ CREATE OR REPLACE VIEW cps04_paymentcheckline_v as 	
+ SELECT pay.ad_client_id,
+    pay.ad_org_id,
+    pay.c_payment_id AS cps04_paymentvoucher_v_id,
+    COALESCE(il.c_allocationline_id, '-1'::integer) AS cps04_paymentvoucherline_v_id,
+    (
+        CASE
+            WHEN (il.c_invoice_id &gt; 0) THEN trim(concat(inv.invoicereference, ' ', inv.description))
+            WHEN (il.c_order_id &gt; 0) THEN ord.documentno
+            WHEN (pay.c_charge_id &gt; 0) THEN chg.name
+            ELSE pay.documentno
+        END)::character varying(30) AS cps04_invoiceno,
+    (
+        CASE
+            WHEN ((il.c_invoice_id &gt; 0) OR (il.c_order_id &gt; 0)) THEN regexp_replace(btrim(to_char(abs(il.amount), '999,999,999,999,999,999,999.99'::text)), '[[:space:]]+'::text, chr(32))
+            ELSE regexp_replace(btrim(to_char(abs(pay.payamt), '999,999,999,999,999,999,999.99'::text)), '[[:space:]]+'::text, chr(32))
+        END)::character varying(50) AS amount,
+    (
+        CASE
+            WHEN ((il.c_invoice_id &gt; 0) OR (il.c_order_id &gt; 0)) THEN regexp_replace(btrim(to_char(abs(il.discountamt), '999,999,999,999,999,999,999.99'::text)), '[[:space:]]+'::text, chr(32))
+            ELSE regexp_replace(btrim(to_char(abs(pay.discountamt), '999,999,999,999,999,999,999.99'::text)), '[[:space:]]+'::text, chr(32))
+        END)::character varying(50) AS discountamt,
+    pay.c_payment_id,
+        CASE
+            WHEN (il.c_invoice_id &gt; 0) THEN inv.dateacct
+            WHEN (il.c_order_id &gt; 0) THEN ord.dateacct
+            ELSE pay.dateacct
+        END AS dateacct,
+        CASE
+            WHEN ((il.amount = (0)::numeric) OR (il.amount IS NULL)) THEN '0.00'::text
+            WHEN ((il.c_invoice_id &gt; 0) OR (il.c_order_id &gt; 0)) THEN rtrim(to_char(abs(((il.discountamt * (100)::numeric) / il.amount)), 'FM99.99'::text), '.'::text)
+            ELSE rtrim(to_char(abs(((pay.payamt * (100)::numeric) / pay.payamt)), 'FM99.99'::text), '.'::text)
+        END AS cps04_discountper,
+        CASE
+            WHEN ((il.c_invoice_id &gt; 0) OR (il.c_order_id &gt; 0)) THEN regexp_replace(btrim(to_char(abs((il.amount - il.discountamt)), '999,999,999,999,999,999,999.99'::text)), '[[:space:]]+'::text, chr(32))
+            ELSE regexp_replace(btrim(to_char(abs((pay.payamt - pay.discountamt)), '999,999,999,999,999,999,999.99'::text)), '[[:space:]]+'::text, chr(32))
+        END AS cps04_grossamount,
+    ( SELECT count(c_allocationline.c_allocationline_id) AS count
+           FROM c_allocationline
+          WHERE (c_allocationline.c_payment_id = pay.c_payment_id)) AS cps04_linecount
+   FROM ((((c_payment pay
+     LEFT JOIN c_allocationline il ON ((pay.c_payment_id = il.c_payment_id)))
+     LEFT JOIN c_invoice inv ON ((il.c_invoice_id = inv.c_invoice_id)))
+     LEFT JOIN c_order ord ON ((il.c_order_id = ord.c_order_id)))
+     LEFT JOIN c_charge chg ON ((pay.c_charge_id = chg.c_charge_id)));
+     
+    END $$;</SCRIPT>
+    <ISPREEXECUTESCRIPT>N</ISPREEXECUTESCRIPT>
+    <DBTYPE>2</DBTYPE>
+  </AD_Module_DBScript>
+</NewDataSet>
