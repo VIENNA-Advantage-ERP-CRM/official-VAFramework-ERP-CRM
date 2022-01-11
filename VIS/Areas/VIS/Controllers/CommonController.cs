@@ -1781,12 +1781,6 @@ namespace VIS.Controllers
                     precision = product.GetUOMPrecision();
                 }
 
-                //QtyEntered = Decimal.Round(QtyEntered, precision, MidpointRounding.AwayFromZero); //commnted by Bharat as it is already rounded
-
-                //s_log.fine("Line QtyEntered=" + QtyEntered
-                //    + ", Product_ID=" + M_Product_ID 
-                //    + ", OrderLine_ID=" + C_OrderLine_ID + ", InOutLine_ID=" + M_InOutLine_ID);
-
                 //	Create new Invoice Line
                 MInvoiceLine invoiceLine = new MInvoiceLine(_invoice);
                 invoiceLine.SetM_Product_ID(M_Product_ID, C_UOM_ID);	//	Line UOM
@@ -1837,90 +1831,9 @@ namespace VIS.Controllers
                     invoiceLine.SetShipLine(inoutLine);		//	overwrites
                     if (inoutLine.GetQtyEntered().CompareTo(inoutLine.GetMovementQty()) != 0)
                     {
-                        //invoiceLine.setQtyInvoiced(QtyEntered
-                        //.multiply(inoutLine.getMovementQty())
-                        //.divide(inoutLine.getQtyEntered(), 12, Decimal.ROUND_HALF_UP));
                         invoiceLine.SetQtyInvoiced(Decimal.Round(Decimal.Divide(Decimal.Multiply(QtyEntered,
                         inoutLine.GetMovementQty()),
                         inoutLine.GetQtyEntered()), 12, MidpointRounding.AwayFromZero));
-
-                        // Change By mohit Amortization proces
-                        //int countVA038 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA038_' "));
-                        //if (countVA038 > 0)
-                        //{
-
-                        //    if (Util.GetValueOfInt(inoutLine.GetM_Product_ID()) > 0)
-                        //    {
-                        //        MProduct pro = new MProduct(ctx, inoutLine.GetM_Product_ID(), null);
-                        //        if (Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
-                        //        {
-                        //            invoiceLine.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")));
-                        //            DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")));
-                        //            AmortStartDate = null;
-                        //            AmortEndDate = null;
-                        //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "A")
-                        //            {
-                        //                AmortStartDate = _invoice.GetDateAcct();
-                        //            }
-                        //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "T")
-                        //            {
-                        //                AmortStartDate = _invoice.GetDateInvoiced();
-                        //            }
-
-                        //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_PeriodType"]) == "M")
-                        //            {
-                        //                AmortEndDate = AmortStartDate.Value.AddMonths(Util.GetValueOfInt(amrtDS.Tables[0].Rows[0]["VA038_AmortizationPeriod"]));
-                        //            }
-                        //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_PeriodType"]) == "Y")
-                        //            {
-                        //                AmortEndDate = AmortStartDate.Value.AddYears(Util.GetValueOfInt(amrtDS.Tables[0].Rows[0]["VA038_AmortizationPeriod"]));
-                        //            }
-                        //            invoiceLine.Set_Value("FROMDATE", AmortStartDate);
-                        //            invoiceLine.Set_Value("EndDate", AmortEndDate);
-                        //            if (amrtDS != null)
-                        //            {
-                        //                amrtDS.Dispose();
-                        //            }
-                        //        }
-                        //    }
-                        //    if (Util.GetValueOfInt(inoutLine.GetC_Charge_ID()) > 0)
-                        //    {
-                        //        MCharge charge = new MCharge(ctx, inoutLine.GetC_Charge_ID(), null);
-                        //        if (Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
-                        //        {
-                        //            invoiceLine.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
-                        //            DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
-                        //            AmortStartDate = null;
-                        //            AmortEndDate = null;
-                        //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "A")
-                        //            {
-                        //                AmortStartDate = _invoice.GetDateAcct();
-                        //            }
-                        //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "T")
-                        //            {
-                        //                AmortStartDate = _invoice.GetDateInvoiced();
-                        //            }
-
-                        //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_PeriodType"]) == "M")
-                        //            {
-                        //                AmortEndDate = AmortStartDate.Value.AddMonths(Util.GetValueOfInt(amrtDS.Tables[0].Rows[0]["VA038_AmortizationPeriod"]));
-                        //            }
-                        //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_PeriodType"]) == "Y")
-                        //            {
-                        //                AmortEndDate = AmortStartDate.Value.AddYears(Util.GetValueOfInt(amrtDS.Tables[0].Rows[0]["VA038_AmortizationPeriod"]));
-                        //            }
-                        //            invoiceLine.Set_Value("FROMDATE", AmortStartDate);
-                        //            invoiceLine.Set_Value("EndDate", AmortEndDate);
-                        //            if (amrtDS != null)
-                        //            {
-                        //                amrtDS.Dispose();
-                        //            }
-                        //        }
-                        //    }
-
-                        //}
-
-                        // End Amortization process
                     }
                 }
                 else
@@ -1933,14 +1846,17 @@ namespace VIS.Controllers
                 {
                     invoiceLine.SetOrderLine(orderLine);	//	overwrites
 
+                    // VIS0060: Handle case of Attribute Set Instance, was overwritten by Order Line Attribute Set Instance
+                    if (inoutLine != null)
+                    {
+                        invoiceLine.SetM_AttributeSetInstance_ID(inoutLine.GetM_AttributeSetInstance_ID());
+                    }
+
                     /* nnayak - Bug 1567690. The organization from the Orderline can be different from the organization 
                     on the header */
                     invoiceLine.SetClientOrg(orderLine.GetAD_Client_ID(), orderLine.GetAD_Org_ID());
                     if (orderLine.GetQtyEntered().CompareTo(orderLine.GetQtyOrdered()) != 0)
                     {
-                        //invoiceLine.setQtyInvoiced(QtyEntered
-                        //    .multiply(orderLine.getQtyOrdered())
-                        //    .divide(orderLine.getQtyEntered(), 12, Decimal.ROUND_HALF_UP));
                         invoiceLine.SetQtyInvoiced(Decimal.Round(Decimal.Divide(Decimal.Multiply(QtyEntered,
                         orderLine.GetQtyOrdered()),
                         orderLine.GetQtyEntered()), 12, MidpointRounding.AwayFromZero));
@@ -2001,82 +1917,6 @@ namespace VIS.Controllers
                         invoiceLine.SetPrice();
                     }
                     invoiceLine.SetTax();
-                    // Change By mohit Amortization proces
-                    //int countVA038 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA038_' "));
-                    //if (countVA038 > 0)
-                    //{
-                    //    if (Util.GetValueOfInt(inoutLine.GetM_Product_ID()) > 0)
-                    //    {
-                    //        MProduct pro = new MProduct(ctx, inoutLine.GetM_Product_ID(), null);
-                    //        if (Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
-                    //        {
-                    //            invoiceLine.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")));
-                    //            DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")));
-                    //            AmortStartDate = null;
-                    //            AmortEndDate = null;
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "A")
-                    //            {
-                    //                AmortStartDate = _invoice.GetDateAcct();
-                    //            }
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "T")
-                    //            {
-                    //                AmortStartDate = _invoice.GetDateInvoiced();
-                    //            }
-
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_PeriodType"]) == "M")
-                    //            {
-                    //                AmortEndDate = AmortStartDate.Value.AddMonths(Util.GetValueOfInt(amrtDS.Tables[0].Rows[0]["VA038_AmortizationPeriod"]));
-                    //            }
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_PeriodType"]) == "Y")
-                    //            {
-                    //                AmortEndDate = AmortStartDate.Value.AddYears(Util.GetValueOfInt(amrtDS.Tables[0].Rows[0]["VA038_AmortizationPeriod"]));
-                    //            }
-                    //            invoiceLine.Set_Value("FROMDATE", AmortStartDate);
-                    //            invoiceLine.Set_Value("EndDate", AmortEndDate);
-                    //            if (amrtDS != null)
-                    //            {
-                    //                amrtDS.Dispose();
-                    //            }
-                    //        }
-                    //    }
-                    //    if (Util.GetValueOfInt(inoutLine.GetC_Charge_ID()) > 0)
-                    //    {
-                    //        MCharge charge = new MCharge(ctx, inoutLine.GetC_Charge_ID(), null);
-                    //        if (Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
-                    //        {
-                    //            invoiceLine.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
-                    //            DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
-                    //            AmortStartDate = null;
-                    //            AmortEndDate = null;
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "A")
-                    //            {
-                    //                AmortStartDate = _invoice.GetDateAcct();
-                    //            }
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "T")
-                    //            {
-                    //                AmortStartDate = _invoice.GetDateInvoiced();
-                    //            }
-
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_PeriodType"]) == "M")
-                    //            {
-                    //                AmortEndDate = AmortStartDate.Value.AddMonths(Util.GetValueOfInt(amrtDS.Tables[0].Rows[0]["VA038_AmortizationPeriod"]));
-                    //            }
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_PeriodType"]) == "Y")
-                    //            {
-                    //                AmortEndDate = AmortStartDate.Value.AddYears(Util.GetValueOfInt(amrtDS.Tables[0].Rows[0]["VA038_AmortizationPeriod"]));
-                    //            }
-                    //            invoiceLine.Set_Value("FROMDATE", AmortStartDate);
-                    //            invoiceLine.Set_Value("EndDate", AmortEndDate);
-                    //            if (amrtDS != null)
-                    //            {
-                    //                amrtDS.Dispose();
-                    //            }
-                    //        }
-                    //    }
-
-                    //}
-
-                    // End Amortization process
                 }
 
                 if (C_ProvisionalInvoice_ID > 0)
