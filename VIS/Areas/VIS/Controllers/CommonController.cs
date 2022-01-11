@@ -1735,6 +1735,8 @@ namespace VIS.Controllers
                 _inout.SetC_Invoice_ID(C_Invoice_ID);
                 _inout.Save();
             }
+            //DateTime? AmortStartDate = null;
+            //DateTime? AmortEndDate = null;
 
             // VIS0060: Get Max Line No from Invoice Lines.
             lineNo = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COALESCE(MAX(Line), 0) + 10 FROM C_InvoiceLine WHERE C_Invoice_ID =" + C_Invoice_ID));
@@ -1823,10 +1825,32 @@ namespace VIS.Controllers
                     }
                 }	//	get Ship info
 
+                //	Shipment Info
+                if (inoutLine != null)
+                {
+                    invoiceLine.SetShipLine(inoutLine);		//	overwrites
+                    if (inoutLine.GetQtyEntered().CompareTo(inoutLine.GetMovementQty()) != 0)
+                    {
+                        invoiceLine.SetQtyInvoiced(Decimal.Round(Decimal.Divide(Decimal.Multiply(QtyEntered,
+                        inoutLine.GetMovementQty()),
+                        inoutLine.GetQtyEntered()), 12, MidpointRounding.AwayFromZero));
+                    }
+                }
+                else
+                {
+                    //s_log.fine("No Receipt Line");
+                }
+
                 //	Order Info
                 if (orderLine != null)
                 {
                     invoiceLine.SetOrderLine(orderLine);	//	overwrites
+
+                    // VIS0060: Handle case of Attribute Set Instance, was overwritten by Order Line Attribute Set Instance
+                    if (inoutLine != null)
+                    {
+                        invoiceLine.SetM_AttributeSetInstance_ID(inoutLine.GetM_AttributeSetInstance_ID());
+                    }
 
                     /* nnayak - Bug 1567690. The organization from the Orderline can be different from the organization 
                     on the header */
@@ -1883,6 +1907,8 @@ namespace VIS.Controllers
                             invoiceLine.Set_Value("VA077_EndDate", inoutLine.Get_Value("VA077_EndDate"));
                             invoiceLine.Set_Value("VA077_ServiceContract_ID", inoutLine.Get_Value("VA077_ServiceContract_ID"));
                         }
+
+
                     }
 
                     // VA228: SetPrice when invoice is not provisional
@@ -1892,25 +1918,6 @@ namespace VIS.Controllers
                     }
                     invoiceLine.SetTax();
                 }
-
-                // VIS0060: Handle case of Attribute Set Instance, was overwritten by Order Line Attribute Set Instance
-                // Shipment Info
-                if (inoutLine != null)
-                {
-                    invoiceLine.SetShipLine(inoutLine);		//	overwrites
-                    if (inoutLine.GetQtyEntered().CompareTo(inoutLine.GetMovementQty()) != 0)
-                    {
-                        invoiceLine.SetQtyInvoiced(Decimal.Round(Decimal.Divide(Decimal.Multiply(QtyEntered,
-                        inoutLine.GetMovementQty()),
-                        inoutLine.GetQtyEntered()), 12, MidpointRounding.AwayFromZero));
-                    }
-                }
-                else
-                {
-                    //s_log.fine("No Receipt Line");
-                }
-
-
 
                 if (C_ProvisionalInvoice_ID > 0)
                 {
