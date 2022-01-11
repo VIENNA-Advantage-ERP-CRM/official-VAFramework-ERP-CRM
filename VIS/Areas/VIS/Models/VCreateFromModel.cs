@@ -695,10 +695,10 @@ namespace VIS.Models
                                     INNER JOIN C_ProvisionalInvoiceLine pil ON  i.C_ProvisionalInvoice_ID = pil.C_ProvisionalInvoice_ID
                                     WHERE i.C_BPartner_ID=" + cBPartnerId + @" AND i.IsSOTrx='N'
                                     AND d.IsReturnTrx='" + (isReturnTrxs ? "Y" : "N") + @"' AND i.DocStatus IN ('CL','CO')
-                                    AND pil.c_provisionalinvoiceline_id NOT IN (
-                                    SELECT C_ProvisionalInvoiceLine_id
+                                    AND NVL(pil.C_ProvisionalInvoiceLine_ID, 0) NOT IN (
+                                    SELECT NVL(C_ProvisionalInvoiceLine_ID, 0)
                                     FROM(
-                                    SELECT il.C_ProvisionalInvoiceLine_id
+                                    SELECT NVL(il.C_ProvisionalInvoiceLine_ID, 0) AS C_ProvisionalInvoiceLine_ID
                                     FROM c_invoiceline il
                                     INNER JOIN c_invoice inv ON inv.c_invoice_id = il.c_invoice_id
                                     WHERE inv.isactive = 'Y'
