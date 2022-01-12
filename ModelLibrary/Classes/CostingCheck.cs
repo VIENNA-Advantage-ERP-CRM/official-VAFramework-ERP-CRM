@@ -1,4 +1,14 @@
-﻿using System;
+﻿/********************************************************
+ * Project Name   : VAdvantage
+ * Module Name    : ModelLibrary
+ * Class Name     : CostingCheck
+ * Purpose        : costing checks
+ * Class Used     : none
+ * Chronological  : Development
+ * Amit           : 12-Jan-2022
+  ******************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -33,24 +43,41 @@ namespace ModelLibrary.Classes
         public String costinglevel = String.Empty;
         public bool isReversal = false;
         public DataSet dsAccountingSchema = null;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="ctx">ctx</param>
         public CostingCheck(Ctx ctx)
         {
             _ctx = ctx;
             log = VLogger.GetVLogger(this.GetType().FullName);
         }
 
+        /// <summary>
+        /// Setter Property of Ctx
+        /// </summary>
+        /// <param name="ctx">ctx</param>
         public void SetCtx(Ctx ctx)
         {
             _ctx = ctx;
             return;
         }
 
+        /// <summary>
+        /// Setter Property of Product
+        /// </summary>
+        /// <param name="_product">Product</param>
         public void SetProduct(MProduct _product)
         {
             product = _product;
             return;
         }
 
+        /// <summary>
+        /// Setter Property of Inventory
+        /// </summary>
+        /// <param name="_inventory">inventory</param>
         public void SetInventory(MInventory _inventory)
         {
             inventory = _inventory;
