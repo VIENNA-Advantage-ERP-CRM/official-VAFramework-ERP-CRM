@@ -402,6 +402,9 @@ namespace VAdvantage.Process
 
                                 // Set value in Property From Process to check on Before Save.
                                 poLine.SetFromProcess(true);
+                                //190 - Set Print Description
+                                poLine.Set_Value("PrintDescription", soLines[i].Get_Value("PrintDescription"));
+
                                 if (!poLine.Save())
                                 {
                                     ValueNamePair pp = VLogger.RetrieveError();
@@ -596,7 +599,7 @@ namespace VAdvantage.Process
             po.SetC_Campaign_ID(so.GetC_Campaign_ID());
             po.SetC_Project_ID(so.GetC_Project_ID());
             po.SetUser1_ID(so.GetUser1_ID());
-            po.SetUser2_ID(so.GetUser2_ID());
+            po.SetUser2_ID(so.GetUser2_ID());            
 
             //Set VA077 values on header level
             if (Env.IsModuleInstalled("VA077_"))

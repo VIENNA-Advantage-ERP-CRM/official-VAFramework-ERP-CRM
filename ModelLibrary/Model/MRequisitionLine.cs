@@ -439,18 +439,7 @@ namespace VAdvantage.Model
                 {
                     SetLineNetAmt();
                 }
-
-                if (newRecord || (Is_ValueChanged("M_Product_ID")) || (Is_ValueChanged("C_Charge_ID")))
-                {
-                    //Get print description from Charge Or Product and set the PrintDescription
-                    string printDes = string.Empty;
-                    if (GetC_Charge_ID() > 0 && GetM_Product_ID() == 0)
-                        printDes = Util.GetValueOfString(DB.ExecuteScalar("SELECT PrintDescription FROM C_Charge WHERE C_Charge_ID=" + GetC_Charge_ID()));
-                    else if (GetC_Charge_ID() == 0 && GetM_Product_ID() > 0)
-                        printDes = product.GetDocumentNote();
-
-                    Set_Value("PrintDescription", printDes);
-                }
+                
             }
             catch
             {

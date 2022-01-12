@@ -69,6 +69,7 @@ namespace VIS.Models
 
             retDic["QtyReleased"] = Util.GetValueOfString(orderline.GetQtyReleased());
             retDic["IsDropShip"] = orderline.IsDropShip() ? "Y" : "N";
+            retDic["PrintDescription"] = Util.GetValueOfString(orderline.Get_Value("PrintDescription"));
 
             if (Env.IsModuleInstalled("VA077_"))
             {

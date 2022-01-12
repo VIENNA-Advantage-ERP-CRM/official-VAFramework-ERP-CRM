@@ -18139,20 +18139,14 @@
                 // when order line contains charge, it will be selected on Shipment Line on selection of Order Line
                 if (Util.getValueOfInt(dr["M_Product_ID"]) > 0) {
                     mTab.setValue("M_Product_ID", Util.getValueOfInt(dr["M_Product_ID"]));
-                    mTab.setValue("C_Charge_ID", null);
-                    //190 - Get the print description from product
-                    var prod = VIS.dataContext.getJSONRecord("MProduct/GetProduct", dr["M_Product_ID"].toString());
-                    if (prod != null)
-                        mTab.setValue("PrintDescription", prod.DocumentNote);
+                    mTab.setValue("C_Charge_ID", null);                    
                 }
                 else {
                     mTab.setValue("C_Charge_ID", Util.getValueOfInt(dr["C_Charge_ID"]));
-                    mTab.setValue("M_Product_ID", null);
-                    //190 - Get the print description from charge
-                    var charge = VIS.dataContext.getJSONRecord("MCharge/GetChargeDetails", dr["C_Charge_ID"].toString());
-                    if (charge != null)
-                        mTab.setValue("PrintDescription", charge.PrintDescription);
+                    mTab.setValue("M_Product_ID", null);                    
                 }
+                
+                mTab.setValue("PrintDescription", dr["PrintDescription"].toString());
                 mTab.setValue("M_AttributeSetInstance_ID", Util.getValueOfInt(dr["M_AttributeSetInstance_ID"]));
                 mTab.setValue("C_UOM_ID", Util.getValueOfInt(dr["C_UOM_ID"]));
                 //var movementQty = Decimal.Subtract(ol.GetQtyOrdered(), ol.GetQtyDelivered());
