@@ -190,11 +190,21 @@ namespace VAdvantage.CrystalReport
                                             continue;
                                         }
 
-                                        if (loopCount > 0)
-                                            sb.Append(" AND ");
+                                        //if (loopCount > 0)
+                                        //    sb.Append(" AND ");
                                         //string paramName = parameters[para].GetParameterName();
                                         object paramValue = parameters[para].GetParameter();
                                         object paramValueTo = parameters[para].GetParameter_To();
+
+                                        //if parameter value is not null then only we need to append it in query.
+                                        if (loopCount > 0 && (paramValue != null || paramValueTo != null))
+                                        {
+                                            sb.Append(" AND ");
+                                        }
+                                        else
+                                        {
+                                            continue;
+                                        }
 
                                         if (paramValue is DateTime || paramValueTo is DateTime)
                                         {

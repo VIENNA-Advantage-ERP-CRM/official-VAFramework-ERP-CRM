@@ -49,7 +49,7 @@ namespace VIS.Models
             //End Assign parameter value
             List<Dictionary<string, Object>> _paymentDetails = null;
             //required PaymentMethod Details so added PaymentMethod, CheckNo, CheckDate and TenderType
-            string qry = "SELECT PayAmt, C_Currency_ID, C_ConversionType_ID, VA009_PaymentMethod_ID, CheckDate, CheckNo, TenderType FROM C_Payment_V v WHERE C_Payment_ID=" + c_payment_ID;
+            string qry = "SELECT v.PayAmt, v.C_Currency_ID, v.C_ConversionType_ID, pay.VA009_PaymentMethod_ID, v.CheckDate, v.CheckNo, v.TenderType FROM C_Payment_V v INNER JOIN C_Payment pay ON pay.C_Payment_ID=v.C_Payment_ID WHERE v.C_Payment_ID=" + c_payment_ID;
             DataSet ds = DB.ExecuteDataset(qry, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {

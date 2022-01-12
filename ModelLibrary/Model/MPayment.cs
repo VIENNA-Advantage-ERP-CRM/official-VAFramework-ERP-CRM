@@ -2875,6 +2875,13 @@ namespace VAdvantage.Model
                 //	MProject project = new MProject(GetCtx(), GetC_Project_ID());
             }
 
+            // Update Paid on Provisional Invoice 
+            if (Get_ColumnIndex("C_ProvisionalInvoice_ID") >= 0 && Util.GetValueOfInt(Get_Value("C_ProvisionalInvoice_ID")) > 0)
+            {
+                DB.ExecuteQuery("UPDATE C_ProvisionalInvoice SET IsPaid = " + (GetReversalDoc_ID() == 0 ? "'Y'" : "'N'") +
+                    @" WHERE C_ProvisionalInvoice_ID = " + Util.GetValueOfInt(Get_Value("C_ProvisionalInvoice_ID")), null, Get_Trx());
+            }
+
             //	Counter Doc
             MPayment counter = CreateCounterDoc();
             if (counter != null)
@@ -5335,6 +5342,12 @@ namespace VAdvantage.Model
                 reversal.SetTempDocumentNo("");
             }
 
+            // Set Provisional reference
+            if (Get_ColumnIndex("C_ProvisionalInvoice_ID") >= 0)
+            {
+                reversal.Set_Value("C_ProvisionalInvoice_ID", Get_Value("C_ProvisionalInvoice_ID"));
+            }
+
             if (!reversal.Save(Get_Trx()))
             {
                 ValueNamePair pp = VLogger.RetrieveError();
@@ -5396,17 +5409,6 @@ namespace VAdvantage.Model
             reversal.SetIsAllocated(true);
             reversal.Save(Get_Trx());
 
-            if (Env.IsModuleInstalled("VA009_"))
-            {
-                //update Payment Batch line set payment = null during reverse of this payment
-                string sql = "UPDATE va009_batchlines SET  C_Payment_ID = null WHERE C_Payment_ID = " + GetC_Payment_ID();
-                DB.ExecuteQuery(sql, null, null);
-
-                //update Payment Batch line Details set payment = null during reverse of this payment
-                sql = "UPDATE va009_batchlinedetails SET  C_Payment_ID = null WHERE C_Payment_ID = " + GetC_Payment_ID();
-                DB.ExecuteQuery(sql, null, null);
-            }
-
             if (Env.IsModuleInstalled("VA026_"))
             {
                 MDocType docType = new MDocType(GetCtx(), GetC_DocType_ID(), Get_Trx());
@@ -5437,10 +5439,10 @@ namespace VAdvantage.Model
                 invoice_ID = GetC_Invoice_ID();
 
             // Get all schedule which are paid against this payment, so that after deAllocate we can set Payment Execution status as Rejected on respective schedules
-            string sql1 = @"SELECT C_InvoicePaySchedule_ID FROM c_allocationhdr ahr 
-                           INNER JOIN c_allocationline aline ON ahr.c_allocationhdr_ID=aline.c_allocationhdr_ID 
-                            WHERE ahr.IsActive = 'Y' AND aline.IsActive = 'Y' AND ahr.docstatus in ('CO','CL') AND aline.C_Payment_ID = " + GetC_Payment_ID();
-            DataSet dsSchedule = DB.ExecuteDataset(sql1, null, Get_Trx());
+            //string sql1 = @"SELECT C_InvoicePaySchedule_ID FROM c_allocationhdr ahr 
+            //               INNER JOIN c_allocationline aline ON ahr.c_allocationhdr_ID=aline.c_allocationhdr_ID 
+            //                WHERE ahr.IsActive = 'Y' AND aline.IsActive = 'Y' AND ahr.docstatus in ('CO','CL') AND aline.C_Payment_ID = " + GetC_Payment_ID();
+            //DataSet dsSchedule = DB.ExecuteDataset(sql1, null, Get_Trx());
 
             //	Unlink & De-Allocate
             DeAllocate();
@@ -5451,21 +5453,34 @@ namespace VAdvantage.Model
             SetDocStatus(DOCSTATUS_Reversed);
             SetDocAction(DOCACTION_None);
             SetProcessed(true);
+
             if (Env.IsModuleInstalled("VA009_"))
             {
                 //(1052) Set Execurion Status as Rejected
                 SetVA009_ExecutionStatus(MPayment.VA009_EXECUTIONSTATUS_Rejected);
+
+                // VIS_0045: Payment Schedule Batch 
+                // Update Execution Status as "Assigned to Batch" on Invoice PaySchedule 
+                String sql = @"UPDATE C_InvoicePaySchedule SET VA009_ExecutionStatus = '"
+                            + MInvoicePaySchedule.VA009_EXECUTIONSTATUS_AssignedToBatch +
+                            @"' WHERE C_InvoicePaySchedule_ID IN ( SELECT C_InvoicePaySchedule_ID FROM VA009_BatchLineDetails 
+                                    WHERE C_Payment_ID = " + GetC_Payment_ID() + ")";
+                DB.ExecuteQuery(sql, null, Get_Trx());
+
+                //update Payment Batch line set payment = null during reverse of this payment
+                sql = "UPDATE VA009_BatchLines SET  C_Payment_ID = null WHERE C_Payment_ID = " + GetC_Payment_ID();
+                DB.ExecuteQuery(sql, null, Get_Trx());
+
+                //update Payment Batch line Details set payment = null during reverse of this payment
+                sql = "UPDATE VA009_BatchLineDetails SET  C_Payment_ID = null WHERE C_Payment_ID = " + GetC_Payment_ID();
+                DB.ExecuteQuery(sql, null, Get_Trx());
             }
+
             //Remove PostdatedCheck Reference
             if (Env.IsModuleInstalled("VA027_") && GetVA027_PostDatedCheck_ID() > 0)
             {
                 SetVA027_PostDatedCheck_ID(0);
             }
-
-            // new change when allocation exist for already made payments then it will create allocation 
-            // otherwise it will not create allocation against that payment
-            // Changes done by Vivek Kumar on 26/06/2017 assigned by Mandeep sir
-            //	Create automatic Allocation
 
             //JID_0889: show on void full message Reversal Document created
             StringBuilder Info = new StringBuilder(Msg.GetMsg(GetCtx(), "VIS_DocumentReversed") + reversal.GetDocumentNo());
@@ -5481,69 +5496,6 @@ namespace VAdvantage.Model
                     }
                 }
             }
-
-            #region Code Commented open balanace is already updating while completion of reversal of same payment document
-            // done by Vivek on 24/11/2017
-            //	Update BPartner
-            //if (GetC_BPartner_ID() != 0)
-            //{
-            //    // nnayak - update BP open balance and credit used
-            //    MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_Trx());
-            //    Decimal newCreditAmt = 0;
-            //    if (bp.GetCreditStatusSettingOn() == "CH")
-            //    {
-            //        Decimal? payAmt = MConversionRate.ConvertBase(GetCtx(), Decimal.Add(Decimal.Add(GetPayAmt(false), GetDiscountAmt()), GetWriteOffAmt()),	//	CM adjusted 
-            //            GetC_Currency_ID(), GetDateAcct(), 0, GetAD_Client_ID(), GetAD_Org_ID());
-            //        if (payAmt == null)
-            //        {
-            //            _processMsg = "Could not convert C_Currency_ID=" + GetC_Currency_ID()
-            //                + " to base C_Currency_ID=" + MClient.Get(GetCtx()).GetC_Currency_ID();
-            //            return false;
-            //        }
-            //        //	Total Balance
-            //        Decimal newBalance = bp.GetTotalOpenBalance(false);
-            //        //if (newBalance == null)
-            //        //    newBalance = Env.ZERO;
-            //        if (IsReceipt())
-            //        {
-            //            newBalance = Decimal.Add(newBalance, (Decimal)payAmt);
-
-            //            newCreditAmt = bp.GetSO_CreditUsed();
-            //            //if (newCreditAmt == null)
-            //            //    newCreditAmt = (Decimal)payAmt;
-            //            //else
-            //            newCreditAmt = Decimal.Add(newCreditAmt, (Decimal)payAmt);
-            //            //
-            //            log.Fine("TotalOpenBalance=" + bp.GetTotalOpenBalance(false) + "(" + payAmt
-            //                + ", Credit=" + bp.GetSO_CreditUsed() + "->" + newCreditAmt
-            //                + ", Balance=" + bp.GetTotalOpenBalance(false) + " -> " + newBalance);
-            //            bp.SetSO_CreditUsed(newCreditAmt);
-            //        }	//	SO
-            //        else
-            //        {
-            //            newBalance = Decimal.Add(newBalance, (Decimal)payAmt);
-            //            log.Fine("Payment Amount =" + GetPayAmt(false) + "(" + payAmt
-            //                + ") Balance=" + bp.GetTotalOpenBalance(false) + " -> " + newBalance);
-            //        }
-            //        bp.SetTotalOpenBalance(newBalance);
-            //        //if (bp.GetSO_CreditLimit() > 0)
-            //        //{
-            //        //    if (((newCreditAmt / bp.GetSO_CreditLimit()) * 100) >= 90)
-            //        //    {
-            //        //        bp.SetSOCreditStatus("S");
-            //        //    }
-            //        //}
-            //        if (!bp.Save(Get_Trx()))
-            //        {
-            //            _processMsg = "Could not update Business Partner";
-            //            return false;
-            //        }
-
-            //        bp.Save(Get_Trx());
-            //    }
-
-            //}
-            #endregion
 
             //---------------Anuj----------------------
             //if (Env.IsModuleInstalled("VA009_"))
@@ -5578,7 +5530,6 @@ namespace VAdvantage.Model
             //        }
             //    }
             //}
-            //---------------Anuj----------------------
 
             if (Env.IsModuleInstalled("VA027_"))
             {

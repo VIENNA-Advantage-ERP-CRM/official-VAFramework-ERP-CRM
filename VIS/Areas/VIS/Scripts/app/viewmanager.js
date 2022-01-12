@@ -204,7 +204,11 @@
         /* Start form
         *@param id id of form
         */
-        function startForm(id, additionalInfo) {
+        function startForm(id, additionalInfo) {           
+            if (id.toString().indexOf("&") != -1) {
+                additionalInfo = id.split("&")[1];
+                id = id.split("&")[0];
+            }
             var windw = new VIS.AWindow();
             if (VIS.MRole.getIsDisableMenu())
             {
@@ -278,7 +282,13 @@
                             if (ACTION_FORM === action) {
                                 if (!VIS.MRole.getFormAccess(id)) {
                                     console.log("No Form Access");
+                                    if (sel && sel.length > 0) {
+                                        sel.shift();
+                                    }
                                     continue;
+                                }
+                                if (sel && sel.length > 0) {
+                                    id += "&" + sel.shift();
                                 }
                             }
                             else if (ACTION_PROCESS === action || ACTION_REPORT === action) {
@@ -290,6 +300,9 @@
                             else if (ACTION_WINDOW === action) {
                                 if (!VIS.MRole.getWindowAccess(id)) {
                                     console.log("No Window Access");
+                                    if (sel && sel.length > 0) {
+                                        sel.shift();
+                                    }
                                     continue;
                                 }
                                 if (sel && sel.length > 0) {
