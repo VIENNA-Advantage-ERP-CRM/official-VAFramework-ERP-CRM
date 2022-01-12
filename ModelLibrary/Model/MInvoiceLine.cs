@@ -533,7 +533,7 @@ namespace VAdvantage.Model
                 _productPricing.SetPriceDate(_DateInvoiced);
                 _productPricing.SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
                 //Amit 25-nov-2014
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='ED011_'")) > 0)
+                if (Env.IsModuleInstalled("ED011_"))
                 {
                     _productPricing.SetC_UOM_ID(GetC_UOM_ID());
                 }
@@ -616,7 +616,7 @@ namespace VAdvantage.Model
                 MInvoice inv = new MInvoice(Env.GetCtx(), Util.GetValueOfInt(Get_Value("C_Invoice_ID")), Get_TrxName());
                 // Table ID Fixed for OrgInfo Table
                 string taxrule = string.Empty;
-                int _CountED002 = (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX IN ('ED002_' , 'VATAX_' )")));
+                int _CountED002 = Env.IsModuleInstalled("VATAX_") ? 1 : 0;
 
                 string sql = "SELECT VATAX_TaxRule FROM AD_OrgInfo WHERE AD_Org_ID=" + inv.GetAD_Org_ID() + " AND IsActive ='Y' AND AD_Client_ID =" + GetCtx().GetAD_Client_ID();
                 if (_CountED002 > 0)
@@ -3504,31 +3504,36 @@ namespace VAdvantage.Model
                     //}
                     QtyEntered = GetQtyEntered();
                     QtyInvoiced = GetQtyInvoiced();
-                    int gp = MUOM.GetPrecision(GetCtx(), GetC_UOM_ID());
-                    Decimal? QtyEntered1 = Decimal.Round(QtyEntered.Value, gp, MidpointRounding.AwayFromZero);
-                    if (QtyEntered != QtyEntered1)
+
+                    // when document staus is completed/closed/ reversed or voided then no need to change the qtyentered or invoiced
+                    if (!(inv.GetDocStatus() == "CO" || inv.GetDocStatus() == "CL" || inv.GetDocStatus() == "RE" || inv.GetDocStatus() == "VO"))
                     {
-                        this.log.Fine("Corrected QtyEntered Scale UOM=" + GetC_UOM_ID()
-                            + "; QtyEntered=" + QtyEntered + "->" + QtyEntered1);
-                        QtyEntered = QtyEntered1;
-                        SetQtyEntered(QtyEntered);
-                    }
-                    Decimal? pc = MUOMConversion.ConvertProductFrom(GetCtx(), GetM_Product_ID(), GetC_UOM_ID(), QtyEntered);
-                    QtyInvoiced = pc;
-                    bool conversion = false;
-                    if (QtyInvoiced != null)
-                    {
-                        conversion = QtyEntered != QtyInvoiced;
-                    }
-                    if (QtyInvoiced == null)
-                    {
-                        conversion = false;
-                        QtyInvoiced = 1;
-                        SetQtyInvoiced(QtyInvoiced * QtyEntered1);
-                    }
-                    else
-                    {
-                        SetQtyInvoiced(QtyInvoiced);
+                        int gp = MUOM.GetPrecision(GetCtx(), GetC_UOM_ID());
+                        Decimal? QtyEntered1 = Decimal.Round(QtyEntered.Value, gp, MidpointRounding.AwayFromZero);
+                        if (QtyEntered != QtyEntered1)
+                        {
+                            this.log.Fine("Corrected QtyEntered Scale UOM=" + GetC_UOM_ID()
+                                + "; QtyEntered=" + QtyEntered + "->" + QtyEntered1);
+                            QtyEntered = QtyEntered1;
+                            SetQtyEntered(QtyEntered);
+                        }
+                        Decimal? pc = MUOMConversion.ConvertProductFrom(GetCtx(), GetM_Product_ID(), GetC_UOM_ID(), QtyEntered);
+                        QtyInvoiced = pc;
+                        bool conversion = false;
+                        if (QtyInvoiced != null)
+                        {
+                            conversion = QtyEntered != QtyInvoiced;
+                        }
+                        if (QtyInvoiced == null)
+                        {
+                            conversion = false;
+                            QtyInvoiced = 1;
+                            SetQtyInvoiced(QtyInvoiced * QtyEntered1);
+                        }
+                        else
+                        {
+                            SetQtyInvoiced(QtyInvoiced);
+                        }
                     }
                     // Added by Bharat on 06 July 2017 restrict to create invoice line for quantity greater than Received Quantity.
 
@@ -3594,9 +3599,8 @@ namespace VAdvantage.Model
                     }
 
                     // Set Converted Price                     
-                    StringBuilder sql = new StringBuilder();
-                    Tuple<String, String, String> iInfo = null;
-                    if (Env.HasModulePrefix("ED011_", out iInfo))
+                    //StringBuilder sql = new StringBuilder();
+                    if (Env.IsModuleInstalled("ED011_"))
                     {
                         //decimal convertedprice = 0;
                         //MInvoice invoice1 = new MInvoice(GetCtx(), Util.GetValueOfInt(GetC_Invoice_ID()), null);
@@ -3804,9 +3808,13 @@ namespace VAdvantage.Model
                     SetPriceList(Decimal.Round(GetPriceList(), priceListPrcision, MidpointRounding.AwayFromZero));
 
                 //	Calculations & Rounding
-                SetLineNetAmt();
-                if (((Decimal)GetTaxAmt()).CompareTo(Env.ZERO) == 0 || (Get_ColumnIndex("SurchargeAmt") > 0 && GetSurchargeAmt().CompareTo(Env.ZERO) == 0))
-                    SetTaxAmt();
+                // when document staus is completed/closed/ reversed or voided then no need to re-calculate the linenetamount / taxamount
+                if (!(inv.GetDocStatus() == "CO" || inv.GetDocStatus() == "CL" || inv.GetDocStatus() == "RE" || inv.GetDocStatus() == "VO"))
+                {
+                    SetLineNetAmt();
+                    if (((Decimal)GetTaxAmt()).CompareTo(Env.ZERO) == 0 || (Get_ColumnIndex("SurchargeAmt") > 0 && GetSurchargeAmt().CompareTo(Env.ZERO) == 0))
+                        SetTaxAmt();
+                }
 
                 // set Tax Amount in base currency
                 if (!((!String.IsNullOrEmpty(inv.GetConditionalFlag()) && inv.GetConditionalFlag().Equals(MInvoice.CONDITIONALFLAG_Reversal))
@@ -3996,7 +4004,7 @@ namespace VAdvantage.Model
             }
             catch (Exception ex)
             {
-                // MessageBox.Show("MinvoiceLine--BeforeSave");
+                log.Severe(ex.Message);
             }
             return true;
         }
