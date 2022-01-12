@@ -3986,17 +3986,17 @@ namespace VAdvantage.Model
             #endregion
 
             // By Amit For Foreign cost
-            try
-            {
-                if (!IsSOTrx() && !IsReturnTrx()) // for MR against PO
-                {
-                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(M_InoutLine_ID) FROM M_InoutLine WHERE IsFutureCostCalculated = 'N' AND M_InOut_ID = " + GetM_InOut_ID(), null, Get_Trx())) <= 0)
-                    {
-                        int no = Util.GetValueOfInt(DB.ExecuteQuery("UPDATE M_Inout Set IsFutureCostCalculated = 'Y' WHERE M_Inout_ID = " + GetM_InOut_ID(), null, Get_Trx()));
-                    }
-                }
-            }
-            catch (Exception) { }
+            //try
+            //{
+            //    if (!IsSOTrx() && !IsReturnTrx()) // for MR against PO
+            //    {
+            //        if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(M_InoutLine_ID) FROM M_InoutLine WHERE IsFutureCostCalculated = 'N' AND M_InOut_ID = " + GetM_InOut_ID(), null, Get_Trx())) <= 0)
+            //        {
+            //            int no = Util.GetValueOfInt(DB.ExecuteQuery("UPDATE M_Inout Set IsFutureCostCalculated = 'Y' WHERE M_Inout_ID = " + GetM_InOut_ID(), null, Get_Trx()));
+            //        }
+            //    }
+            //}
+            //catch (Exception) { }
             //end
 
             //	Counter Documents
