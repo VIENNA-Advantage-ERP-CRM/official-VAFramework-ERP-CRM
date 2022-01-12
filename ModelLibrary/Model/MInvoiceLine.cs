@@ -533,7 +533,7 @@ namespace VAdvantage.Model
                 _productPricing.SetPriceDate(_DateInvoiced);
                 _productPricing.SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
                 //Amit 25-nov-2014
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='ED011_'")) > 0)
+                if (Env.IsModuleInstalled("ED011_"))
                 {
                     _productPricing.SetC_UOM_ID(GetC_UOM_ID());
                 }
@@ -2947,7 +2947,7 @@ namespace VAdvantage.Model
         /// <param name="invoiceline">Invoice Line reference</param>
         /// <param name="difference">is to calculate difference between order and actual invoice</param>
         /// <returns>LineNetAmount of Product</returns>
-        public Decimal GetProductLineCost(MInvoiceLine invoiceline , bool difference = false)
+        public Decimal GetProductLineCost(MInvoiceLine invoiceline, bool difference = false)
         {
             if (invoiceline == null || invoiceline.Get_ID() <= 0)
             {
@@ -2959,7 +2959,7 @@ namespace VAdvantage.Model
 
             // Get Amount from Provisional Invoice
             DataSet ds = null;
-            if (difference && invoiceline.Get_ColumnIndex("C_ProvisionalInvoiceLine_ID") >=0 && invoiceline.Get_ValueAsInt("C_ProvisionalInvoiceLine_ID") > 0)
+            if (difference && invoiceline.Get_ColumnIndex("C_ProvisionalInvoiceLine_ID") >= 0 && invoiceline.Get_ValueAsInt("C_ProvisionalInvoiceLine_ID") > 0)
             {
                 ds = DB.ExecuteDataset(@"SELECT ROUND((TaxBaseAmt/QtyInvoiced) * " + Math.Abs(invoiceline.GetQtyInvoiced()) + @", 10) AS TaxableAmt  
                                                     , ROUND((TaxAmt/QtyInvoiced) * " + Math.Abs(invoiceline.GetQtyInvoiced()) + @", 10) AS TaxAmt 
@@ -2987,7 +2987,7 @@ namespace VAdvantage.Model
                 // add Tax amount in product cost
                 if (tax.IsIncludeInCost())
                 {
-                    amt += (invoiceline.GetTaxAmt() - (isProvisionalInvoiceRecordFound ? (multiplier * Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["TaxAmt"])) : 0)); 
+                    amt += (invoiceline.GetTaxAmt() - (isProvisionalInvoiceRecordFound ? (multiplier * Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["TaxAmt"])) : 0));
                 }
 
                 // add Surcharge amount in product cost
@@ -2995,7 +2995,7 @@ namespace VAdvantage.Model
                 {
                     if (MTax.Get(invoiceline.GetCtx(), tax.GetSurcharge_Tax_ID()).IsIncludeInCost())
                     {
-                        amt += (invoiceline.GetSurchargeAmt() - (isProvisionalInvoiceRecordFound ? (multiplier * Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["SurchargeAmt"])) : 0)); 
+                        amt += (invoiceline.GetSurchargeAmt() - (isProvisionalInvoiceRecordFound ? (multiplier * Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["SurchargeAmt"])) : 0));
                     }
                 }
             }
@@ -3770,7 +3770,7 @@ namespace VAdvantage.Model
                 {
                     SetTaxExemptReason();
                 }
-                else if (Get_ColumnIndex("IsTaxExempt") >-1  &&  Get_ColumnIndex("C_TaxExemptReason_ID")>-1 && Is_ValueChanged("IsTaxExempt") 
+                else if (Get_ColumnIndex("IsTaxExempt") > -1 && Get_ColumnIndex("C_TaxExemptReason_ID") > -1 && Is_ValueChanged("IsTaxExempt")
                     && !IsTaxExempt() && GetC_TaxExemptReason_ID() > 0 && GetReversalDoc_ID() == 0)
                 {
                     //taxExpemt is false but tax exempt reason is selected
@@ -3859,6 +3859,34 @@ namespace VAdvantage.Model
                         {
                             SetBasePrice(GetPriceEntered());
                         }
+                    }
+                }
+
+                // VIS0060: Calculate Profit/Loss in case of Sale of Asset.
+                if (newRecord && inv.IsSOTrx() && GetA_Asset_ID() > 0 && Env.IsModuleInstalled("VAFAM_") && Util.GetValueOfDecimal(Get_Value("VAFAM_ProfitLoss")).Equals(0))
+                {
+                    decimal wdv, dep, grv, astQty, profit;
+                    string sql = "SELECT VAFAM_WrittenDownValue,VAFAM_SLMDepreciation, VAFAM_AssetGrossValue, Qty FROM A_Asset WHERE A_Asset_ID =" + GetA_Asset_ID();
+                    DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
+                    if (ds != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        wdv = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["VAFAM_WrittenDownValue"]);
+                        dep = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["VAFAM_SLMDepreciation"]);
+                        grv = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["VAFAM_AssetGrossValue"]);
+                        astQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["Qty"]);
+
+                        if (astQty > 1)
+                        {
+                            grv = decimal.Divide(grv, astQty);
+                            dep = decimal.Divide(dep, astQty);
+                            wdv = decimal.Subtract(grv, dep);
+                        }
+                        profit = decimal.Subtract(GetLineNetAmt(), decimal.Multiply(wdv, GetQtyEntered()));
+
+                        Set_Value("VAFAM_SLMDepreciation", decimal.Round(dep, priceListPrcision, MidpointRounding.AwayFromZero));
+                        Set_Value("VAFAM_AssetGrossValue", decimal.Round(grv, priceListPrcision, MidpointRounding.AwayFromZero));
+                        Set_Value("VAFAM_WrittenDownValue", decimal.Round(wdv, priceListPrcision, MidpointRounding.AwayFromZero));
+                        Set_Value("VAFAM_ProfitLoss", decimal.Round(profit, priceListPrcision, MidpointRounding.AwayFromZero));
                     }
                 }
 
