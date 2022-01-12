@@ -1829,6 +1829,13 @@ namespace VIS.Controllers
                 if (inoutLine != null)
                 {
                     invoiceLine.SetShipLine(inoutLine);		//	overwrites
+
+                    // VIS0060: Set Asset ID from Shipment Line to AR Invoice Line
+                    if (_invoice.IsSOTrx() && inoutLine.GetA_Asset_ID() > 0)
+                    {
+                        invoiceLine.SetA_Asset_ID(inoutLine.GetA_Asset_ID());                        
+                    }
+
                     if (inoutLine.GetQtyEntered().CompareTo(inoutLine.GetMovementQty()) != 0)
                     {
                         invoiceLine.SetQtyInvoiced(Decimal.Round(Decimal.Divide(Decimal.Multiply(QtyEntered,
