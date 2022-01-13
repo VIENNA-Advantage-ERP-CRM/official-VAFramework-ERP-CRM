@@ -182,6 +182,11 @@ namespace VIS.Models
                           WHERE  PI.IsActive = 'Y'
                           AND pi.DocStatus NOT IN('VO','RE'))");
             }
+            // 1052-execute in provisional invoice case : independent shipment should not be fetched.
+            if (isProvisionlInvoices==true)
+            {
+                sql.Append(@" AND (s.C_Invoice_ID IS NOT NULL OR s.C_Order_ID IS NOT NULL)");
+            }
             //// Changes done by Bharat on 06 July 2017 restrict to create invoice if Invoice already created against that for same quantity
             sql.Append(@" AND s.M_InOut_ID IN (SELECT M_InOut_ID FROM(SELECT sl.M_InOut_ID, sl.M_InOutLine_ID, sl.MovementQty, mi.QtyInvoiced FROM M_InOutLine sl 
                     LEFT OUTER JOIN (SELECT il.QtyInvoiced, il.M_InOutLine_ID FROM C_InvoiceLine il INNER JOIN C_Invoice I ON I.C_INVOICE_ID = il.C_INVOICE_ID 

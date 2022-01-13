@@ -14,7 +14,7 @@
     <RootNamespace>ViennaAdvantageWeb</RootNamespace>
     <AssemblyName>ViennaAdvantageWeb</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -198,9 +198,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>3971</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/VAdvantageHtml321</IISUrl>
-          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost/VAdvantageHtml321</IISAppRootUrl>
+          <IISUrl>http://localhost:3971/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
