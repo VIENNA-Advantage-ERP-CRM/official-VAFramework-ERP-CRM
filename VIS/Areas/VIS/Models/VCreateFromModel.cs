@@ -183,7 +183,7 @@ namespace VIS.Models
                           AND pi.DocStatus NOT IN('VO','RE'))");
             }
             // 1052-execute in provisional invoice case : independent shipment should not be fetched.
-            if (isProvisionlInvoices == true)
+            else if (isProvisionlInvoices == true)
             {
                 sql.Append(@" AND (s.C_Invoice_ID IS NOT NULL OR s.C_Order_ID IS NOT NULL)");
             }
