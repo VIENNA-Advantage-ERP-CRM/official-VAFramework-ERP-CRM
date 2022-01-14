@@ -3884,8 +3884,8 @@ namespace VAdvantage.Model
 
                         // Calculate Asset values for Qty Entered
                         grv = decimal.Multiply(grv, GetQtyEntered());
-                        dep = decimal.Divide(dep, GetQtyEntered());
-                        wdv = decimal.Subtract(grv, GetQtyEntered());
+                        dep = decimal.Multiply(dep, GetQtyEntered());
+                        wdv = decimal.Multiply(grv, GetQtyEntered());
                         profit = decimal.Subtract(GetLineNetAmt(), wdv);
 
                         Set_Value("VAFAM_SLMDepreciation", decimal.Round(dep, priceListPrcision, MidpointRounding.AwayFromZero));
