@@ -1101,6 +1101,12 @@ namespace VAdvantage.Model
                                     }
 
                                     ast.SetM_Locator_ID(line.GetM_LocatorTo_ID());
+
+                                    // VIS0060: Set Trx Organization from Movement Line to Asset
+                                    if(Util.GetValueOfInt(line.Get_Value("AD_OrgTrx_ID")) > 0)
+                                    {
+                                        ast.Set_Value("AD_OrgTrx_ID", Util.GetValueOfInt(line.Get_Value("AD_OrgTrx_ID")));
+                                    }
                                     ast.Save();
                                 }
                                 else
@@ -1597,6 +1603,12 @@ namespace VAdvantage.Model
                                 }
                                 ast.SetC_BPartner_ID(line.GetC_BPartner_ID());
                                 ast.SetM_Locator_ID(line.GetM_LocatorTo_ID());
+
+                                // VIS0060: Set Trx Organization from Movement Line to Asset
+                                if (Util.GetValueOfInt(line.Get_Value("AD_OrgTrx_ID")) > 0)
+                                {
+                                    ast.Set_Value("AD_OrgTrx_ID", Util.GetValueOfInt(line.Get_Value("AD_OrgTrx_ID")));
+                                }
                                 ast.Save();
                             }
                             else
