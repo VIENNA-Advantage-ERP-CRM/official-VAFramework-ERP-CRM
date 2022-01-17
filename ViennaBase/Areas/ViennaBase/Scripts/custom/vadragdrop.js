@@ -30,7 +30,24 @@
 	var _w = window,
 		_b = document.body,
 		_d = document.documentElement;
-	var fromItem, itemName, nextItem, dropClass = ".va-dragdrop", subItem, point, mainDiv, startx, scrollLeft;	
+	var fromItem, itemName, nextItem, dropClass = ".va-dragdrop", subItem, point, mainDiv;	
+	var _scroll = {
+		maxScrollH: 0,
+		maxScrollV: 0,
+		lastScrollLeft: 0,
+		lastScrollRight: 0,
+		lastScrollTop: 0,
+		lastScrollBottom: 0,
+		lastmousex: -1,
+		lastmousey: -1,
+		lastDirectionH: "",
+		lastDirectionV: ""
+	};
+	
+	var xPos = 0;
+	var yPos = 0;
+	var isScrolled = false;
+	
 	// get position of mouse/touch in relation to viewport 
 	var getPoint = function (e) {	
 		var scrollX = Math.max(0, _w.pageXOffset || _d.scrollLeft || _b.scrollLeft || 0) - (_d.clientLeft || 0),
@@ -42,6 +59,7 @@
 			y: pointY
 		};
 	};
+	
 	// class constructor
 	var Factory = function (container, options) {
 
@@ -111,10 +129,10 @@
 		_swapItems: function (item1, item2) {
 			if (item1 && item2) {
 				var parent1 = item1.parentNode,
-					parent2 = item2.parentNode;
+					parent2 = item2.parentNode;				
 				if (parent1 !== parent2) {
 					// move to new list 
-					parent2.insertBefore(item1, item2);
+					parent2.insertBefore(item1, item2);					
 					this._isSwaped = true;
 				} else if (this._options.selfSort || this._options.selfSort == undefined) {
 					// sort is same list 
@@ -130,7 +148,7 @@
 		// update item position 
 		_moveItem: function (item, x, y) {
 			item.style["-webkit-transform"] = "translateX( " + x + "px ) translateY( " + y + "px )";
-			item.style["-moz-transform"] = "translateX( " + x + "px ) translateY( " + y + "px )";
+			item.style["-moz-transform"]= "translateX( " + x + "px ) translateY( " + y + "px )";
 			item.style["-ms-transform"] = "translateX( " + x + "px ) translateY( " + y + "px )";
 			item.style["transform"] = "translateX( " + x + "px ) translateY( " + y + "px )";
 		},
@@ -170,12 +188,21 @@
 				}
 			}	
 
-			mainDiv = (e.target.closest('.vis-cv-main'));
+			mainDiv = (e.target.closest(this._options.mainNode));
 			if (mainDiv) {
-				startx = e.pageX - mainDiv.offsetLeft;
-				scrollLeft = mainDiv.scrollLeft;
+				_scroll.maxScrollH = mainDiv.scrollWidth;
+				_scroll.maxScrollV = mainDiv.scrollHeight;
+				_scroll.lastScrollLeft = mainDiv.scrollLeft;
+				_scroll.lastScrollRight = (_scroll.maxScrollH - ($(mainDiv).width() + _scroll.lastScrollLeft));
+				_scroll.lastScrollTop = mainDiv.scrollTop;
+				_scroll.lastScrollBottom = (_scroll.maxScrollV - ($(mainDiv).height() + _scroll.lastScrollTop));
+				_scroll.lastDirectionH = "";
+				_scroll.lastDirectionV = "";
+				isScrolled = false;
+				
 			}
-
+			
+			
 			if (e && e.target && e.target.closest(dropClass) && e.target.closest(dropClass).parentNode === this._container) {
 				this._isSwaped = false;
 				fromItem = e.target.closest(dropClass).parentNode;
@@ -190,13 +217,13 @@
 		},
 		// on item release/drop 
 		_onRelease: function (e) {
-			if (!this._isSwaped && this._options.force && subItem != this._clickItem) {
-				this._hovItem = subItem;
-				this._swapItems(this._clickItem, subItem);
-			}
+			//if (!this._isSwaped && this._options.force && subItem != this._clickItem) {
+			//	this._hovItem = subItem;
+			//	this._swapItems(this._clickItem, subItem);
+			//}
 
 			if (e && e.target && e.target.closest(dropClass) && e.target.closest(dropClass).parentNode === this._container && this._options.attr && this._clickItem && this._isSwaped) {
-				this._options.onSelect(this._clickItem, this._clickItem.getAttribute(this._options.attr));
+				this._options.onSelect(this._clickItem, this._clickItem.getAttribute(this._options.attr), fromItem);
 			}			
 			this._dragging = false;
 			this._trashDragItem();			
@@ -207,12 +234,100 @@
 				e.preventDefault();
 				point = getPoint(e);
 				var container = this._container;
-				// drag fake item 
-				this._moveItem(this._dragItem, (point.x - this._click.x), (point.y - this._click.y));
+				var diffH = (point.x - this._click.x);
+				var diffV = (point.y - this._click.y);
 
-				var x = e.pageX - mainDiv.offsetLeft;
-				var walk = (x - startx) * 3;
-				mainDiv.scrollLeft = scrollLeft + walk;
+				// auto scroll left or right with drag item
+				if (mainDiv) {
+					var trvl = 0;
+					var rect = mainDiv.getBoundingClientRect();					
+
+					if (_scroll.lastmousex > -1) {
+						trvl = Math.max(Math.abs(point.x - _scroll.lastmousex), Math.abs(point.y - _scroll.lastmousey));
+					}
+					var sLeft = mainDiv.scrollLeft;
+					var sTop = mainDiv.scrollTop;					
+					var x = point.x;
+					var y = point.y;
+
+					if (VIS.Application.isRTL) {
+						sLeft *= -1;
+						x = (window.innerWidth - rect.left) - point.x;
+					}
+					
+					var sWidth = mainDiv.scrollWidth;
+					var sHeight = mainDiv.scrollHeight;
+					trvl = trvl * 10;
+					if (x < rect.left || ((x - rect.left) + sLeft > (rect.width))) {
+						if (x < rect.left) {
+							if (VIS.Application.isRTL) {
+								mainDiv.scrollLeft += trvl;
+							} else {
+								mainDiv.scrollLeft -= trvl;
+							}
+							
+							isScrolled = true;
+							if (_scroll.lastDirectionH == "") {
+								_scroll.lastDirectionH = 'L';
+							}
+						} else if (((x - rect.left) > rect.width) && (sLeft + rect.width + 50) < (_scroll.maxScrollH)) {
+							if (VIS.Application.isRTL) {
+								mainDiv.scrollLeft -= trvl;
+							} else {
+								mainDiv.scrollLeft += trvl;
+							}
+							
+							isScrolled = true;
+							if (_scroll.lastDirectionH == "") {
+								_scroll.lastDirectionH = 'R';
+							}
+						}
+					}
+
+					if (y < rect.top || ((y - rect.top) + sTop > (rect.height))) {
+						if (y < rect.top) {
+							isScrolled = true;
+							mainDiv.scrollTop -= trvl;
+							if (_scroll.lastDirectionV == "") {
+								_scroll.lastDirectionV = 'T';
+							}
+						} else if ((y - rect.top) > rect.height && (sTop + rect.height) < (_scroll.maxScrollV)) {
+							isScrolled = true;
+							mainDiv.scrollTop += trvl;
+							if (_scroll.lastDirectionV == "") {
+								_scroll.lastDirectionV = 'B';
+							}
+						}
+					}
+
+					_scroll.lastmousex = point.x;
+					_scroll.lastmousey = point.y;
+				}
+
+				if (isScrolled && mainDiv) {
+					if (_scroll.lastDirectionH == 'L') {
+						xPos = diffH - (sWidth - (rect.width + mainDiv.scrollLeft)) + _scroll.lastScrollRight;
+					} else if (_scroll.lastDirectionH == 'R') {
+						xPos = diffH + mainDiv.scrollLeft - _scroll.lastScrollLeft;
+					} else {
+						xPos = diffH;
+					}
+
+					if (_scroll.lastDirectionV == 'T') {
+						yPos = diffV - (sHeight - (rect.height + mainDiv.scrollTop)) + _scroll.lastScrollBottom;
+					} else if (_scroll.lastDirectionV == 'B') {
+						yPos = diffV + mainDiv.scrollTop - _scroll.lastScrollTop;
+					} else {
+						yPos = diffV;
+					}
+
+				} else {
+					xPos = diffH;
+					yPos = diffV;
+				}
+
+				this._moveItem(this._dragItem, xPos, yPos);
+
 				// keep an eye for other sortable lists and switch over to it on hover 
 				for (var a = 0; a < this._sortLists.length; ++a) {
 					var subContainer = this._sortLists[a];
@@ -231,7 +346,6 @@
 					if (subItem === this._clickItem || subItem === this._dragItem) {
 						continue;
 					}
-
 
 					if (this._isOnTop(subItem, point.x, point.y)) {
 						this._hovItem = subItem;

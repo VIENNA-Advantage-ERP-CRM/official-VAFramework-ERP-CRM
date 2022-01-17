@@ -3075,8 +3075,8 @@ findImg {
 }
 
 .vis-cv-liselected {
-    background: rgba(var(--v-c-primary), 1);
-    color: rgba(var(--v-c-on-primary), 1);
+    background: rgba(var(--v-c-primary), 0.4);
+   /* color: rgba(var(--v-c-on-primary), 1);*/
 }
 
 .vis-btnsave {

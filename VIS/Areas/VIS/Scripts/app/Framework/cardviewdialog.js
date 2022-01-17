@@ -383,7 +383,7 @@
 
                         for (var i = 0; i < cardViewInfo.length; i++) {
                             // AD_CardView_ID = cardViewInfo[0].CardViewID;
-                            cmbCardView.append("<Option is_shared=" + cardViewInfo[i].UserID + " ad_user_id=" + cardViewInfo[i].CreatedBy + " cardviewid=" + cardViewInfo[i].CardViewID + " groupSequence='" + cardViewInfo[i].groupSequence+"' ad_field_id=" + cardViewInfo[i].AD_GroupField_ID + " isdefault=" + cardViewInfo[i].DefaultID + " ad_headerLayout_id=" + cardViewInfo[i].AD_HeaderLayout_ID + "> " + w2utils.encodeTags(cardViewInfo[i].CardViewName) + "</Option>");
+                            cmbCardView.append("<Option is_shared=" + cardViewInfo[i].UserID + " ad_user_id=" + cardViewInfo[i].CreatedBy + " cardviewid=" + cardViewInfo[i].CardViewID + " groupSequence='" + cardViewInfo[i].groupSequence + "' excludedGroup='" + cardViewInfo[i].excludedGroup +"'  ad_field_id=" + cardViewInfo[i].AD_GroupField_ID + " isdefault=" + cardViewInfo[i].DefaultID + " ad_headerLayout_id=" + cardViewInfo[i].AD_HeaderLayout_ID + "> " + w2utils.encodeTags(cardViewInfo[i].CardViewName) + "</Option>");
                         }
 
                     }
@@ -584,24 +584,26 @@
 
         };
 
-
-       
-
-
         var FillforGroupSeq = function (fieldID) {
             ulGroupSeqColumns.html('');
             ulGroupSeqColumns.parent().removeAttr('style');
             if (lovcardList[fieldID]) {
                 for (var i = 0, ln = lovcardList[fieldID]; i < ln.length; i++) {
                     if (ln[i].Key.toString().length > 0 && ln[i].Name.toString().length>0) {
-                        ulGroupSeqColumns.append('<li key="' + ln[i].Key + '">' + ln[i].Name + '</li>');
+                        ulGroupSeqColumns.append('<li key="' + ln[i].Key + '"><input type="checkbox" checked="true" />' + ln[i].Name + '</li>');
                     }
                 };
                 var seq = cmbCardView.find(":selected").attr("groupSequence");
+                var excGrp = cmbCardView.find(":selected").attr("excludedGroup");
                 if (seq) {
                     seq = seq.split(",");
+                    excGrp = excGrp.split(",");
                     for (var j = 0; j < seq.length; j++) {
                         var item = ulGroupSeqColumns.find("[key='" + seq[j] + "']");
+                        if (excGrp.lastIndexOf(seq[j]) != -1) {
+                            item.find('input').prop('checked', false);
+                        }
+                        
                         var before = ulGroupSeqColumns.find("li").eq(j);
                         item.insertBefore(before);
                         //if (item) {
@@ -1365,14 +1367,19 @@
             }
 
             var grpSeq = "";
+            var skipGrp = "";
             $.each(ulGroupSeqColumns.find('li'), function () {
-                grpSeq += $(this).attr('key')+",";
+                grpSeq += $(this).attr('key') + ",";
+                if (!$(this).find('input').is(':checked')) {
+                    skipGrp += $(this).attr('key') + ",";
+                }
             });
 
             grpSeq = grpSeq.replace(/,\s*$/, "");
+            skipGrp = skipGrp.replace(/,\s*$/, "");
            
 
-            cardViewArray.push({ AD_Window_ID: AD_Window_ID, AD_Tab_ID: AD_Tab_ID, UserID: AD_User_ID, AD_GroupField_ID: cmbGroupField.find(":selected").attr("fieldid"), isNewRecord: isNewRecord, CardViewName: cardViewName, CardViewID: AD_CardView_ID, IsDefault: isdefault.is(":checked"), AD_HeaderLayout_ID: $vSearchHeaderLayout.getValue(), isPublic: isPublic.is(":checked"), groupSequence:grpSeq });
+            cardViewArray.push({ AD_Window_ID: AD_Window_ID, AD_Tab_ID: AD_Tab_ID, UserID: AD_User_ID, AD_GroupField_ID: cmbGroupField.find(":selected").attr("fieldid"), isNewRecord: isNewRecord, CardViewName: cardViewName, CardViewID: AD_CardView_ID, IsDefault: isdefault.is(":checked"), AD_HeaderLayout_ID: $vSearchHeaderLayout.getValue(), isPublic: isPublic.is(":checked"), groupSequence: grpSeq });
             var url = VIS.Application.contextUrl + "CardView/SaveCardViewColumns";
             $.ajax({
                 type: "POST",
@@ -1380,7 +1387,7 @@
                 url: url,
                 dataType: "json",
                 contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify({ 'lstCardView': cardViewArray, 'lstCardViewColumns': cardViewColArray, /*'LstRoleID': LstRoleID,*/ 'lstCardViewCondition': strConditionArray }),
+                data: JSON.stringify({ 'lstCardView': cardViewArray, 'lstCardViewColumns': cardViewColArray, /*'LstRoleID': LstRoleID,*/ 'lstCardViewCondition': strConditionArray, 'excludeGrp': skipGrp }),
                 success: function (data) {
                     var result = JSON.parse(data);
                     AD_CardView_ID = result;

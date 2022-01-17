@@ -54,6 +54,7 @@ namespace VIS.Models
                         CreatedBy = Convert.ToInt32(ds.Tables[0].Rows[i]["CREATEDBY"]),
                         AD_HeaderLayout_ID = VAdvantage.Utility.Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_HEADERLAYOUT_ID"]),
                         groupSequence=Convert.ToString(ds.Tables[0].Rows[i]["GROUPSEQUENCE"]),
+                        excludedGroup = Convert.ToString(ds.Tables[0].Rows[i]["EXCLUDEDGROUP"]),
                         //IsDefault = VAdvantage.Utility.Util.GetValueOfString(ds.Tables[0].Rows[i]["ISDEFAULT"])=="Y"?true:false,
                         DefaultID = isDefault
                     };
@@ -202,7 +203,7 @@ namespace VIS.Models
             }
             return lstCardViewColumns;
         }
-        public int SaveCardViewRecord(string cardViewName, int ad_Window_ID, int ad_Tab_ID, int ad_User_ID, int ad_Field_ID, Ctx ctx, int cardViewID/*, List<RolePropeties> lstRoleId*/, List<CardViewConditionPropeties> lstCVCondition, int AD_HeaderLayout_ID,bool isPublic,string groupSequence)
+        public int SaveCardViewRecord(string cardViewName, int ad_Window_ID, int ad_Tab_ID, int ad_User_ID, int ad_Field_ID, Ctx ctx, int cardViewID/*, List<RolePropeties> lstRoleId*/, List<CardViewConditionPropeties> lstCVCondition, int AD_HeaderLayout_ID,bool isPublic,string groupSequence,string excludeGrp)
         {
             string conditionValue = string.Empty;
             string conditionText = string.Empty;
@@ -231,6 +232,7 @@ namespace VIS.Models
             objCardView.SetName(cardViewName);
             objCardView.Set_ValueNoCheck("AD_HeaderLayout_ID", AD_HeaderLayout_ID);
             objCardView.Set_ValueNoCheck("groupSequence", groupSequence);
+            objCardView.Set_ValueNoCheck("excludedGroup", excludeGrp);
             if (!objCardView.Save())
             {
             }
@@ -445,6 +447,10 @@ namespace VIS.Models
             string result = "1";
             try
             {
+                if (string.IsNullOrEmpty(grpValue)) {
+                    grpValue = null;
+                }
+
                 PO _po = MTable.GetPO(ctx, tableName, recordID, null);
                 if (VAdvantage.Classes.DisplayType.YesNo == dataType)
                 {
@@ -454,7 +460,7 @@ namespace VIS.Models
                 {
                     _po.Set_ValueNoCheck(columnName, Convert.ToDateTime(grpValue));
                 }
-                else
+                else 
                 {
                     _po.Set_ValueNoCheck(columnName, grpValue);
                 }
@@ -514,6 +520,7 @@ namespace VIS.Models
 
         public string FieldName { get; set; }
         public string groupSequence { get; set; }
+        public string excludedGroup { get; set; }
         public int AD_Field_ID { get; set; }
         public int AD_GroupField_ID { get; set; }
         public int AD_CardViewColumn_ID { get; set; }

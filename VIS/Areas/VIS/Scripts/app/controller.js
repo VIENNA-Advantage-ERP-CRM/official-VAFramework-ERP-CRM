@@ -431,6 +431,7 @@
 
         this.query = new VIS.Query();
         this.oldQuery = "0=9";
+        this.oldCardQuery = "0=9";
         this.linkValue = "999999";
         this.currentRow = -1;
         this.hasPanel = false;
@@ -450,6 +451,7 @@
         this.loadData(windowVo);
         windowVo = null;
         this.gridWindow = null;
+        this.cardWhereCondition = null;
     };
 
     /**
@@ -1112,6 +1114,10 @@
         return this.vo.WhereClause;
     };
 
+    GridTab.prototype.setWhereClause = function (conition) {
+        this.cardWhereCondition = conition;
+    }
+
     GridTab.prototype.getSearchQuery = function (val) {
         var query = null;
         var fields = this.getFields();
@@ -1660,8 +1666,7 @@
                 this.gridTable.setDoPaging(true);// _gridTable.DoPaging = false;
                 refresh = false;
             }
-        }
-
+        }       
 
         this.oldQuery = this.query.getWhereClause();
         this.vo.onlyCurrentDays = onlyCurrentDays;
@@ -1765,6 +1770,15 @@
                 where += q;
             }
 
+        }
+        if (this.oldCardQuery != this.cardWhereCondition) {
+            refresh = false;
+        }
+        this.oldCardQuery = this.cardWhereCondition;
+        if (this.cardWhereCondition != null) {           
+            if (where.length > 0)
+                where += " AND ";
+            where += this.cardWhereCondition;
         }
 
         /* Query */
@@ -3065,6 +3079,7 @@
         this.mSortList;
         this.AD_Tab_ID = 0;
         this.log = VIS.Logging.VLogger.getVLogger("VIS.GridTable");
+        this._orderClauseCard = "";
     };
 
     GridTable.prototype.ctx = VIS.context;			//	the only OK condition
@@ -3465,6 +3480,12 @@
             this.gTable._orderClause = "";
     };
 
+    GridTable.prototype.setOrderClauseCard = function (newOrderClause) {
+        this._orderClauseCard = newOrderClause;
+        if (this._orderClauseCard == null)
+            this._orderClauseCard = "";
+    };
+
     GridTable.prototype.setSelectWhereClause = function (newWhereClause) {
         if (this.isOpen) {
             //log.Log(Level.SEVERE, "Table already open - ignored");
@@ -3753,7 +3774,11 @@
             this.SQL_Direct = "";
 
         //	ORDER BY
-        if (!gt._orderClause.equals("")) {
+
+        if (!this._orderClauseCard.equals("")) {
+            this.SQL += " ORDER BY " + this._orderClauseCard;
+            this.SQL_Direct += " ORDER BY " + this._orderClauseCard;
+        } else if (!gt._orderClause.equals("")) {
             this.SQL += " ORDER BY " + gt._orderClause;
             this.SQL_Direct += " ORDER BY " + gt._orderClause;
         }
