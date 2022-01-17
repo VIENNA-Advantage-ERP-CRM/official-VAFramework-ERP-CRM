@@ -4034,6 +4034,7 @@ namespace VAdvantage.Model
                     Set_Value("VA077_MarginPercent", marginper);
 
                 }
+
             }
             catch (Exception ex)
             {

@@ -475,6 +475,9 @@ namespace ViennaAdvantage.Process
                     line.SetQtyEntered(sLine.GetQtyEntered());
                     line.SetQtyInvoiced(sLine.GetMovementQty());
                     line.Set_ValueNoCheck("IsDropShip", sLine.Get_Value("IsDropShip")); //Arpit Rai 20-Sept-2017              
+                    //190 - Set Print Description
+                    if (line.Get_ColumnIndex("PrintDescription") >= 0)
+                        line.Set_ValueNoCheck("PrintDescription", sLine.Get_Value("PrintDescription"));
 
                     // Change By Mohit Amortization process -------------
                     if (_CountVA038 > 0)
