@@ -138,7 +138,15 @@ namespace VAdvantage.Controller
                     else if (columnName.Equals("SORTNO"))
                         vo.SortNo = Utility.Util.GetValueOfInt(dr[i]);
                     else if (columnName.Equals("FIELDLENGTH"))
+                    {
                         vo.FieldLength = Utility.Util.GetValueOfInt(dr[i]);
+                    }
+                    else if (columnName.Equals("OVERWRITEFIELDLENGTH"))
+                    {
+                        int length = Utility.Util.GetValueOfInt(dr[i]);
+                        if (length > 0)
+                            vo.FieldLength = length;
+                    }
                     else if (columnName.Equals("VFORMAT"))
                         vo.VFormat = dr[i].ToString();
                     else if (columnName.Equals("VFORMATERROR"))
