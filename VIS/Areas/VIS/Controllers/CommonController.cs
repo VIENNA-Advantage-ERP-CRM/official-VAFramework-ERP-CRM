@@ -1443,7 +1443,8 @@ namespace VIS.Controllers
                     }
 
                     //190 - Get Print description from order line and set
-                    po.Set_Value("PrintDescription", ol.Get_Value("PrintDescription"));
+                    if (po.Get_ColumnIndex("PrintDescription") >= 0)
+                        po.Set_Value("PrintDescription", ol.Get_Value("PrintDescription"));
                    
                     //iol.SetDescription(ol.GetDescription());
                     //iol.SetC_Project_ID(ol.GetC_Project_ID());
@@ -1539,7 +1540,8 @@ namespace VIS.Controllers
                     }
 
                     //190 - Get Print description from invoice line and set
-                    po.Set_Value("PrintDescription", il.Get_Value("PrintDescription"));
+                    if (po.Get_ColumnIndex("PrintDescription") >= 0)
+                        po.Set_Value("PrintDescription", il.Get_Value("PrintDescription"));
                     //iol.SetDescription(il.GetDescription());
                     //iol.SetC_Project_ID(il.GetC_Project_ID());
                     //iol.SetC_ProjectPhase_ID(il.GetC_ProjectPhase_ID());
@@ -1953,9 +1955,9 @@ namespace VIS.Controllers
                     }
 
                     //190 - Get the Print description from SO and Set to invoice line 
-                    if (orderLine.Get_ColumnIndex("PrintDescription") > 0)
+                    if (orderLine.Get_ColumnIndex("PrintDescription") >= 0)
                         invoiceLine.Set_Value("PrintDescription", orderLine.Get_Value("PrintDescription"));
-                    if (inoutLine != null)
+                    if (inoutLine != null && inoutLine.Get_ColumnIndex("PrintDescription") >= 0)
                         invoiceLine.Set_Value("PrintDescription", inoutLine.Get_Value("PrintDescription"));
 
                     if (Env.IsModuleInstalled("VA077_"))
@@ -1985,7 +1987,8 @@ namespace VIS.Controllers
                     if (inoutLine != null)
                     {
                         invoiceLine.SetClientOrg(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID());
-                        invoiceLine.Set_Value("PrintDescription", inoutLine.Get_Value("PrintDescription"));
+                        if (invoiceLine.Get_ColumnIndex("PrintDescription") >= 0)
+                            invoiceLine.Set_Value("PrintDescription", inoutLine.Get_Value("PrintDescription"));
 
                         if (Env.IsModuleInstalled("VA077_"))
                         {

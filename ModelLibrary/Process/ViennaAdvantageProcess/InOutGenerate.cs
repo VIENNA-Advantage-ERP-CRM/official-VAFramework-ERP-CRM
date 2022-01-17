@@ -663,7 +663,8 @@ namespace ViennaAdvantage.Process
                 }
 
                 //190 - Set Print Description
-                line.Set_Value("PrintDescription", orderLine.Get_Value("PrintDescription"));
+                if (line.Get_ColumnIndex("PrintDescription") >= 0)
+                    line.Set_Value("PrintDescription", orderLine.Get_Value("PrintDescription"));
 
                 if (Env.IsModuleInstalled("VA077_"))
                 {
@@ -795,7 +796,8 @@ namespace ViennaAdvantage.Process
                     }
 
                     //190 - Set Print Description
-                    line.Set_Value("PrintDescription", orderLine.Get_Value("PrintDescription"));
+                    if (line.Get_ColumnIndex("PrintDescription") >= 0)
+                        line.Set_Value("PrintDescription", orderLine.Get_Value("PrintDescription"));
 
                     if (Env.IsModuleInstalled("VA077_"))
                     {
@@ -912,7 +914,8 @@ namespace ViennaAdvantage.Process
                         line.SetDTD001_IsAttributeNo(true);
                     }
                     //190 - Set Print Description
-                    line.Set_Value("PrintDescription", orderLine.Get_Value("PrintDescription"));
+                    if (line.Get_ColumnIndex("PrintDescription") >= 0)
+                        line.Set_Value("PrintDescription", orderLine.Get_Value("PrintDescription"));
 
                     if (Env.IsModuleInstalled("VA077_"))
                     {

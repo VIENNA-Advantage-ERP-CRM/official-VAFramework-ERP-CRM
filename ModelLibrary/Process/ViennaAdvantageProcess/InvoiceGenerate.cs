@@ -570,7 +570,8 @@ namespace ViennaAdvantage.Process
             line.SetLine(_line + orderLine.GetLine());
 
             //190 - Set Print Description
-            line.Set_Value("PrintDescription", orderLine.Get_Value("PrintDescription"));
+            if (line.Get_ColumnIndex("PrintDescription") >= 0)
+                line.Set_Value("PrintDescription", orderLine.Get_Value("PrintDescription"));
 
             if (Env.IsModuleInstalled("VA077_"))
             {
@@ -766,7 +767,8 @@ namespace ViennaAdvantage.Process
             }
 
             //190 - Set Print Description
-            line1.Set_Value("PrintDescription", sLine.Get_Value("PrintDescription"));
+            if (line1.Get_ColumnIndex("PrintDescription") >= 0)
+                line1.Set_Value("PrintDescription", sLine.Get_Value("PrintDescription"));
 
             if (Env.IsModuleInstalled("VA077_"))
             {

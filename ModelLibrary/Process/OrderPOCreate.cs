@@ -403,7 +403,8 @@ namespace VAdvantage.Process
                                 // Set value in Property From Process to check on Before Save.
                                 poLine.SetFromProcess(true);
                                 //190 - Set Print Description
-                                poLine.Set_Value("PrintDescription", soLines[i].Get_Value("PrintDescription"));
+                                if (poLine.Get_ColumnIndex("PrintDescription") >= 0)
+                                    poLine.Set_Value("PrintDescription", soLines[i].Get_Value("PrintDescription"));
 
                                 if (!poLine.Save())
                                 {
