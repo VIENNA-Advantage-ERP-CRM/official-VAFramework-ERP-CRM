@@ -933,9 +933,9 @@
             if (typeof options[VIS.Actions.zoom] !== "undefined") {
                 ulPopup.append($("<li data-action='" + VIS.Actions.zoom + "' style='opacity:" + (options[VIS.Actions.zoom] ? .7 : 1) +
                     "'><i data-action='" + VIS.Actions.zoom + "' class='vis vis-find'></i><span data-action='" + VIS.Actions.zoom + "'>" + VIS.Msg.getMsg("Zoom") + "</span></li>"));
-                //if (options[VIS.Actions.addnewrec])
-                //    ulPopup.append($("<li data-action='" + VIS.Actions.addnewrec + "' style='opacity:" + (options[VIS.Actions.zoom] ? .7 : 1) +
-                //        "'><i data-action='" + VIS.Actions.addnewrec + "' class='fa fa-plus'></i><span data-action='" + VIS.Actions.addnewrec + "'>" + VIS.Msg.getMsg("AddNew") + "</span></li>"));
+                if (options[VIS.Actions.addnewrec])
+                    ulPopup.append($("<li data-action='" + VIS.Actions.addnewrec + "' style='opacity:" + (options[VIS.Actions.zoom] ? .7 : 1) +
+                        "'><i data-action='" + VIS.Actions.addnewrec + "' class='fa fa-plus'></i><span data-action='" + VIS.Actions.addnewrec + "'>" + VIS.Msg.getMsg("AddNew") + "</span></li>"));
             }
             if (options[VIS.Actions.preference])
                 ulPopup.append($("<li data-action='" + VIS.Actions.preference + "'><i data-action='" + VIS.Actions.preference + "' class='fa fa-cog'></i><span data-action='" + VIS.Actions.preference + "'>" + VIS.Msg.getMsg("Preference") + "</span></li>"));

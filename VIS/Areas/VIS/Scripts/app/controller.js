@@ -555,6 +555,11 @@
         return this.vo.TabLayout;
     }
 
+    //NewRecordView
+    GridTab.prototype.getNewRecordView = function () {
+        return this.vo.NewRecordView;
+    }
+
     GridTab.prototype.getIsDisplayed = function (initialSetup) {
         //  no restrictions
 

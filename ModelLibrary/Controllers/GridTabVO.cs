@@ -156,6 +156,9 @@ namespace VAdvantage.Controller
         /** Tab Layout		*/
         public string TabLayout = "N";
 
+        /** New Record View		*/
+        public string NewRecordView = "C";
+
         public List<CardViewData> Cards = new List<CardViewData>();
 
         public int DefaultCardID = 0;
@@ -522,6 +525,8 @@ namespace VAdvantage.Controller
                 vo.IsMaintainVersions = Utility.Util.GetValueOfString(dr["IsMaintainVersions"]).Equals("Y");
 
                 vo.TabLayout = Utility.Util.GetValueOfString(dr["TabLayout"]);
+
+                vo.NewRecordView = Util.GetValueOfString(dr["NewRecordView"]);
             }
             catch (System.Exception ex)
             {
@@ -966,6 +971,7 @@ namespace VAdvantage.Controller
             clone.TabLayout = TabLayout;
             clone.DefaultCardID = DefaultCardID;
             clone.Cards = Cards;
+            clone.NewRecordView = NewRecordView;
 
             clone.fields = new List<GridFieldVO>();
             for (int i = 0; i < fields.Count; i++)

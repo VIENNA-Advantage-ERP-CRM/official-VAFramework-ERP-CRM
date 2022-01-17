@@ -1352,10 +1352,12 @@
                 (this.isZoomAction ==true || VIS.context.getIsAutoNew(this.windowNo)
                     || this.gTab.getIsQueryNewRecord()) && parentValid) {
                 if (this.gTab.getIsInsertRecord() && !this.skipInserting) {
+                    this.setNewRecordLayout();
                     this.dataNew(false);
                     //if (this.isZoomAction) {
                     //    this.switchSingleRow();
                     //}
+                   
                     return true;
                 }
                 else {
@@ -1366,6 +1368,21 @@
         }
         //reset
         return false;
+    };
+
+    VIS.GridController.prototype.setNewRecordLayout = function () {
+        var newRecordView = this.gTab.getNewRecordView();
+        if (newRecordView == "C") {
+            if (this.getIsCardRow()) {
+                this.switchSingleRow();
+            }
+        }
+        else if (newRecordView == "S") {
+            this.switchSingleRow();
+        }
+        else if (newRecordView == "G") {
+            this.switchMultiRow();
+        }
     };
     /*
       - Handle Control's Change value Event
