@@ -424,14 +424,14 @@
         this.depOnField = []; //Fields against columnname
         this.tabPanels = [];
         this.linkColumnName = gTab._linkColumnName;
-        this.extendendWhere = gTab._extendedWhere;
+        this.extendedWhere = gTab._extendedWhere;
         this.keyColumnName = "";
 
         this.isThroughRoleCenter = false;
 
         this.query = new VIS.Query();
         this.oldQuery = "0=9";
-        this.oldCardQuery = "0=9";
+        //this.oldCardQuery = "0=9";
         this.linkValue = "999999";
         this.currentRow = -1;
         this.hasPanel = false;
@@ -451,7 +451,7 @@
         this.loadData(windowVo);
         windowVo = null;
         this.gridWindow = null;
-        this.cardWhereCondition = null;
+        this.outerWhereCondition = null;
     };
 
     /**
@@ -1114,9 +1114,15 @@
         return this.vo.WhereClause;
     };
 
-    GridTab.prototype.setWhereClause = function (conition) {
-        this.cardWhereCondition = conition;
+    GridTab.prototype.setOuterWhereClause = function (conition) {
+        this.outerWhereCondition = conition;
     }
+
+    GridTab.prototype.resetOuterClauses = function () {
+        this.setOuterWhereClause("");
+        this.getTableModel().setOuterOrderClause("");
+        this.getTableModel().setDoPaging(true);
+    };
 
     GridTab.prototype.getSearchQuery = function (val) {
         var query = null;
@@ -1758,7 +1764,7 @@
             }	//	isDetail
         }
 
-        this.extendedWhere = where.toString();
+        
 
         //	Final Query
         if (this.query.getIsActive()) {
@@ -1771,14 +1777,16 @@
             }
 
         }
-        if (this.oldCardQuery != this.cardWhereCondition) {
-            refresh = false;
-        }
-        this.oldCardQuery = this.cardWhereCondition;
-        if (this.cardWhereCondition != null) {           
+        this.extendedWhere = where.toString();
+        //if (this.oldCardQuery != this.cardWhereCondition) {
+        //    refresh = false;
+        //}
+        //this.oldCardQuery = this.cardWhereCondition;
+        if (this.outerWhereCondition && this.outerWhereCondition.length>0) {           
             if (where.length > 0)
                 where += " AND ";
-            where += this.cardWhereCondition;
+            where += this.outerWhereCondition;
+            refresh = false;
         }
 
         /* Query */
@@ -3079,7 +3087,7 @@
         this.mSortList;
         this.AD_Tab_ID = 0;
         this.log = VIS.Logging.VLogger.getVLogger("VIS.GridTable");
-        this._orderClauseCard = "";
+        this.outerOrderClause = "";
     };
 
     GridTable.prototype.ctx = VIS.context;			//	the only OK condition
@@ -3480,10 +3488,10 @@
             this.gTable._orderClause = "";
     };
 
-    GridTable.prototype.setOrderClauseCard = function (newOrderClause) {
-        this._orderClauseCard = newOrderClause;
-        if (this._orderClauseCard == null)
-            this._orderClauseCard = "";
+    GridTable.prototype.setOuterOrderClause = function (newOrderClause) {
+        this.outerOrderClause = newOrderClause;
+        if (this.outerOrderClause == null)
+            this.outerOrderClause = "";
     };
 
     GridTable.prototype.setSelectWhereClause = function (newWhereClause) {
@@ -3775,9 +3783,9 @@
 
         //	ORDER BY
 
-        if (!this._orderClauseCard.equals("")) {
-            this.SQL += " ORDER BY " + this._orderClauseCard;
-            this.SQL_Direct += " ORDER BY " + this._orderClauseCard;
+        if (!this.outerOrderClause.equals("")) {
+            this.SQL += " ORDER BY " + this.outerOrderClause;
+            this.SQL_Direct += " ORDER BY " + this.outerOrderClause;
         } else if (!gt._orderClause.equals("")) {
             this.SQL += " ORDER BY " + gt._orderClause;
             this.SQL_Direct += " ORDER BY " + gt._orderClause;

@@ -666,7 +666,7 @@
             this.switchSingleRow(true);
         else if (defaultTabLayout == "C") {
             this.isCardRow = false;
-            this.switchCardRow(false);
+            this.switchCardRow(true);
         }
 
     };
@@ -1108,6 +1108,14 @@
 
         }
         this.activateTree();
+
+        //check for defalut view 
+        if (!this.cardSetup && this.gTab.getTabLayout() == "C") {
+            var cardTmp = this.gTab.vo.Cards[0];
+            this.vCardView.setCardSqlInTabModel(this.gTab, cardTmp);
+            this.vCardView.setCardViewData(cardTmp);
+            this.cardSetup = true;
+        }
 
     };
 
@@ -1748,11 +1756,12 @@
                 if (this.vHeaderPanel.sizeChangedListner && this.vHeaderPanel.sizeChangedListner.onSizeChanged)
                     this.vHeaderPanel.sizeChangedListner.onSizeChanged();
             }
+            this.gTab.resetOuterClauses();
         }
 
     };
 
-    VIS.GridController.prototype.switchCardRow = function (avoidRefresh) {
+    VIS.GridController.prototype.switchCardRow = function (avoidRequery) {
         if (!this.isCardRow) {
 
             this.singleRow = false;
@@ -1773,8 +1782,8 @@
             else p1.css({ "float": '' });
 
             p1.css('display', 'block');
-            if (!avoidRefresh)
-                this.vCardView.refreshUI(this.getVCardPanel().width());
+            if (!avoidRequery)
+                this.vCardView.requeryData();
             p1 = null;
         }
     };

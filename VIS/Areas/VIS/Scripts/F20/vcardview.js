@@ -24,6 +24,8 @@
         // this.aPanel;
         this.onCardEdit = null;
 
+        this.cardViewData = null;
+
         var root;
         var body = null;
         var headerdiv;
@@ -442,10 +444,10 @@
         this.fillCardViewList(mTab.vo.Cards);
 
         // this.getCardViewData(mTab, 0);
-        var cardss = mTab.vo.Cards[0];
-
-        this.setCardViewData(cardss);
-        this.refreshUI(this.getBody().width());
+        //var cardss = mTab.vo.Cards[0];
+        this.cardViewData = mTab.vo.Cards[0];
+        //this.setCardViewData(cardss);
+        //this.refreshUI(this.getBody().width());
 
         //cContainer.append(this.getHeader());
         cContainer.append(this.getRoot());
@@ -472,31 +474,41 @@
 
         var sql = "";
 
-        VIS.dataContext.getCardViewInfo(windowID, tabID, cardID,sql, function (retData) {
-            var griTable = self.aPanel.curTab.gridTable;  
-            if (retData.excludedGroup.length > 0) {
-                var WhrCondition = retData.FieldGroupName + " NOT IN (" + retData.excludedGroup + ")";
-                self.aPanel.curTab.setWhereClause(WhrCondition);
-            }
-           
-            
-            griTable.setOrderClauseCard(retData.OrderByClause.replace(/,\s*$/, ""));
-            griTable.setDoPaging(!retData.disableWindowPageSize);
-            var rslt= self.aPanel.curTab.prepareQuery(0, 0, false);
-            if (rslt) {
-                self.setCardViewData(retData);
-                self.refreshUI(self.getBody().width());
+        VIS.dataContext.getCardViewInfo(windowID, tabID, cardID, sql, function (retData) {
+
+            self.cardViewData = retData;
+            self.requeryData();
                 if (cardID) {
                     self.getCardCmb().val(retData.Name);
                 }
-                //self.aPanel.curTab.setWhereClause(null);
-                //griTable.setOrderClauseCard(null);
-                //griTable.setDoPaging(true);
-                //self.aPanel.curTab.prepareQuery(0, 0, false);
-            }
-            
+           
+       });
+    };
 
-        });
+    VCardView.prototype.requeryData = function () {
+        if (this.cardViewData) {
+            this.setCardSqlInTabModel(this.mTab, this.cardViewData);
+
+            //var rslt = this.mTab.prepareQuery(0, 0, false);
+
+            this.aPanel.curGC.query(this.mTab.getOnlyCurrentDays(), 0, false);
+            //if (rslt) {
+            this.setCardViewData(this.cardViewData);
+        }
+    }
+
+
+    VCardView.prototype.setCardSqlInTabModel = function (mTab,cModel) {
+        var griTable = mTab.getTableModel();
+        if (cModel.excludedGroup.length > 0) {
+            var WhrCondition = cModel.FieldGroupName + " NOT IN (" + cModel.excludedGroup + ")";
+            mTab.setOuterWhereClause(WhrCondition);
+        }
+        else {
+            mTab.setOuterWhereClause("");
+        }
+        griTable.setOuterOrderClause(cModel.OrderByClause.replace(/,\s*$/, ""));
+        griTable.setDoPaging(!cModel.disableWindowPageSize);
     };
 
     VCardView.prototype.setCardViewData = function (retData) {
@@ -766,11 +778,7 @@
                 });
             }
 
-           function maxHeight(elems) {
-                return Math.max.apply(null, elems.map(function () {
-                    return $(this)[0].scrollHeight;
-                }).get());
-            }
+           
 
             function emptyCardSetup() {      
                 $this.getRoot().removeClass('emptyGroup').removeAttr('style');
@@ -795,13 +803,22 @@
 
                 });
                
-                root.find('.vis-cv-grpbody').height(maxHeight(root.find('.vis-cv-grpbody')));
+                //root.find('.vis-cv-grpbody').height(maxHeight(root.find('.vis-cv-grpbody')));
             }
 
             $this.calculateWidth(width);
             $this.SyncScroll();
+            $this.aPanel.setBusy(false);
         }, 10);
 
+
+        //Reset Variables
+       
+        while (this.groupCtrls.length > 0) {
+            this.groupCtrls.pop().dispose();
+        }
+        //this.getBody().empty();
+        this.aPanel.setBusy(true);
     };
 
     VCardView.prototype.filterRecord = function (records) {
@@ -928,6 +945,7 @@
 
     VCardGroup.prototype.dispose = function () {
         this.dC();
+        vaSortable.prototype.dispose();
     };
 
     /* Card View Control */
@@ -1857,7 +1875,7 @@
 
     VCard.prototype.dispose = function () {
         this.dC();
-        vaSortable.prototype.dispose();
+        //vaSortable.prototype.dispose();
     };
 
     VIS.VCardView = VCardView;
