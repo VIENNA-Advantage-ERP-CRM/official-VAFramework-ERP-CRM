@@ -267,8 +267,8 @@
         }
 
         this.getLocaleAmount = function (amount) {
-            var formattedAmount = this.GetFormatedValue(amount).toLocaleString();//.toFixed(2);
-            return this.GetFormatAmount(formattedAmount, "init", VIS.Env.isDecimalPoint());
+            var formattedAmount = this.GetFormatedValue(amount).toLocaleString(undefined, { minimumFractionDigits: 4 });//.toFixed(2);
+            return this.GetFormatAmount(formattedAmount, "formatOnly", VIS.Env.isDecimalPoint());
         };
 
         /* privilized function */
