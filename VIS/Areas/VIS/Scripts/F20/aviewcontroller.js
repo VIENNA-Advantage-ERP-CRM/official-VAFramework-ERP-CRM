@@ -1352,12 +1352,10 @@
                 (this.isZoomAction ==true || VIS.context.getIsAutoNew(this.windowNo)
                     || this.gTab.getIsQueryNewRecord()) && parentValid) {
                 if (this.gTab.getIsInsertRecord() && !this.skipInserting) {
+
+                    //When user clicks on new record from combo or search button, then switch view 
                     this.setNewRecordLayout();
                     this.dataNew(false);
-                    //if (this.isZoomAction) {
-                    //    this.switchSingleRow();
-                    //}
-                   
                     return true;
                 }
                 else {
@@ -1370,6 +1368,12 @@
         return false;
     };
 
+    /**
+     * Check new record setting and switch to relevent view.
+     * C--> Current View (if current view is card then switch to single otherwise current view)
+     * S--> Single View(on click new switch to single view)
+     * G--> Grid View(on click new, switch to grid view)
+     * */
     VIS.GridController.prototype.setNewRecordLayout = function () {
         var newRecordView = this.gTab.getNewRecordView();
         if (newRecordView == "C") {

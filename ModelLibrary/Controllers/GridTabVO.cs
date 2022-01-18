@@ -156,7 +156,11 @@ namespace VAdvantage.Controller
         /** Tab Layout		*/
         public string TabLayout = "N";
 
-        /** New Record View		*/
+        /** New Record View
+         *C---> Current View
+         *S---> Single View
+         *G---> Grid View
+         */
         public string NewRecordView = "C";
 
         public List<CardViewData> Cards = new List<CardViewData>();

@@ -497,6 +497,7 @@
         if (iconobj) {
             var iconpath = iconobj["ico"];
             var iconstyle = iconobj["icohtml"];
+            //Apply style on icon
             if (iconstyle) {
                 iconstyle = " style='" + iconstyle + "'";
             }

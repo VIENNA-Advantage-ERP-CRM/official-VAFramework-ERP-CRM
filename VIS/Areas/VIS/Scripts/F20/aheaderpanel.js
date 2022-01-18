@@ -90,6 +90,7 @@
 
                             if (mField.lookup.displayType == VIS.DisplayType.List) {
                                 img = mField.lookup.getLOVIconElement(mField.getValue(), true, true);
+                                //Fetch style of icon for list from image window and apply style on that icon
                                 imgStyle = mField.lookup.getLOVIconStyle(mField.getValue());
                                 var imgSpan = "";
                                 if (!img && colValue) {
@@ -350,6 +351,7 @@
                                 if (VIS.DisplayType.List == mField.lookup.displayType) {
 
                                     img = mField.lookup.getLOVIconElement(mField.getValue(), true);
+                                    //Fetch style of icon for list from image window and apply style on that icon
                                     imgStyle = mField.lookup.getLOVIconStyle(mField.getValue());
                                     if (!img && colValue) {
                                         imgSpan = colValue.substring(0, 1);
