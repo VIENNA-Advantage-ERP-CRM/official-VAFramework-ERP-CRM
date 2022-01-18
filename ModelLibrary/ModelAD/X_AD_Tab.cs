@@ -247,5 +247,44 @@ public String GetWhereClause() {return (String)Get_Value("WhereClause");}
         public void SetMaintainVerOnApproval(Boolean MaintainVerOnApproval) { Set_Value("MaintainVerOnApproval", MaintainVerOnApproval); }/** Get Maintain Versions on Approval.
 @return Maintain Versions on Approval */
         public Boolean IsMaintainVerOnApproval() { Object oo = Get_Value("MaintainVerOnApproval"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
+
+        /** TabLayout AD_Reference_ID=1000497 */
+        public static int TABLAYOUT_AD_Reference_ID = 1000497;/** Card View Layout = C */
+        public static String TABLAYOUT_CardViewLayout = "C";/** Grid Layout = N */
+        public static String TABLAYOUT_GridLayout = "N";/** Single Row Layout = Y */
+        public static String TABLAYOUT_SingleRowLayout = "Y";/** Is test a valid value.
+@param test testvalue
+@returns true if valid **/
+        public bool IsTabLayoutValid(String test) { return test == null || test.Equals("C") || test.Equals("N") || test.Equals("Y"); }/** Set Tab Layout.
+@param TabLayout Tab Layout */
+        public void SetTabLayout(String TabLayout)
+        {
+            if (!IsTabLayoutValid(TabLayout))
+                throw new ArgumentException("TabLayout Invalid value - " + TabLayout + " - Reference_ID=1000497 - C - N - Y"); if (TabLayout != null && TabLayout.Length > 1) { log.Warning("Length > 1 - truncated"); TabLayout = TabLayout.Substring(0, 1); }
+            Set_Value("TabLayout", TabLayout);
+        }/** Get Tab Layout.
+@return Tab Layout */
+        public String GetTabLayout() { return (String)Get_Value("TabLayout"); }
+
+
+        /** NewRecordView AD_Reference_ID=1000499 */
+        public static int NEWRECORDVIEW_AD_Reference_ID = 1000499;/** Grid Layout = G */
+        public static String NEWRECORDVIEW_GridLayout = "G";/** Single Row Layout = S */
+        public static String NEWRECORDVIEW_SingleRowLayout = "S";/** Is test a valid value.
+@param test testvalue
+@returns true if valid **/
+        public bool IsNewRecordViewValid(String test) { return test == null || test.Equals("G") || test.Equals("S"); }/** Set New Record View.
+@param NewRecordView New Record View */
+        public void SetNewRecordView(String NewRecordView)
+        {
+            if (!IsNewRecordViewValid(NewRecordView))
+                throw new ArgumentException("NewRecordView Invalid value - " + NewRecordView + " - Reference_ID=1000499 - G - S"); if (NewRecordView != null && NewRecordView.Length > 1) { log.Warning("Length > 1 - truncated"); NewRecordView = NewRecordView.Substring(0, 1); }
+            Set_Value("NewRecordView", NewRecordView);
+        }/** Get New Record View.
+@return New Record View */
+        public String GetNewRecordView() { return (String)Get_Value("NewRecordView"); }
+
+
+
     }
 }
