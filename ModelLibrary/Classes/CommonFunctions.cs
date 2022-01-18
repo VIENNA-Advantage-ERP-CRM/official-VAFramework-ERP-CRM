@@ -931,23 +931,23 @@ namespace VAdvantage.Classes
         /// <param name="AD_CardView_ID"></param>
         /// <param name="ctx"></param>
         /// <returns></returns>
-        public CardViewData GetCardViewDetails(int AD_User_ID, int AD_Tab_ID, int AD_CardView_ID, Ctx ctx)
+        public CardViewData GetCardViewDetails(int AD_User_ID, int AD_Tab_ID, int AD_CardView_ID, Ctx ctx, string SQLWhereCond = "")
         {
             DataSet ds = null;
             bool hasDefaultCard = false;
             if (AD_CardView_ID > 0)
             {
                 // If fetching specific card
-                ds = DataBase.DB.ExecuteDataset(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name, AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,AD_CardView.groupsequence,AD_HeaderLayout.backgroundcolor,AD_HeaderLayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
+                ds = DataBase.DB.ExecuteDataset(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name, AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,AD_CardView.groupsequence,AD_CardView.excludedGroup,AD_HeaderLayout.backgroundcolor,AD_HeaderLayout.padding,AD_CardView.OrderByClause,AD_CardView.disableWindowPageSize FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
                         ON (AD_CardView.AD_HeaderLayout_ID = AD_HeaderLayout.AD_HeaderLayout_ID) WHERE AD_CardView.AD_CardView_ID = " + AD_CardView_ID);
             }
             else
             {
 
                 //Fetch default card for login user
-                ds = DataBase.DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@" SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,AD_CardView.groupsequence,AD_HeaderLayout.backgroundcolor,AD_HeaderLayout.padding,
-    AD_DefaultCardView.ad_client_id,
-    AD_DefaultCardView.ad_user_ID FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
+                ds = DataBase.DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@" SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,AD_CardView.groupsequence,AD_CardView.excludedGroup,AD_HeaderLayout.backgroundcolor,AD_HeaderLayout.padding,
+                        AD_DefaultCardView.ad_client_id,
+                        AD_DefaultCardView.ad_user_ID,AD_CardView.OrderByClause,AD_CardView.disableWindowPageSize FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
                         ON ( AD_CardView.AD_HeaderLayout_ID = AD_HeaderLayout.AD_HeaderLayout_ID)
                         INNER JOIN AD_DefaultCardView AD_DefaultCardView ON ( AD_DefaultCardView.ad_cardview_id = AD_CardView.ad_cardview_id AND AD_DefaultCardView.IsActive = 'Y')
                        WHERE  AD_CardView.AD_Tab_ID=" + AD_Tab_ID + " AND AD_CardView.IsActive = 'Y' AND (AD_CardView.ad_user_id IS NULL OR AD_CardView.ad_user_id = " + ctx.GetAD_User_ID() + @") " +
@@ -956,7 +956,7 @@ namespace VAdvantage.Classes
                 if (ds == null || ds.Tables[0].Rows.Count == 0)
                 {
                     //If no default card found, then load other cards of tABS
-                    ds = DataBase.DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,AD_CardView.groupsequence,AD_HeaderLayout.backgroundcolor,AD_HeaderLayout.padding FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
+                    ds = DataBase.DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name,AD_CardView.AD_HeaderLayout_ID,AD_CardView.AD_Field_ID,AD_CardView.groupsequence,AD_CardView.excludedGroup,AD_HeaderLayout.backgroundcolor,AD_HeaderLayout.padding,AD_CardView.OrderByClause,AD_CardView.disableWindowPageSize FROM AD_CardView AD_CardView LEFT OUTER JOIN AD_HeaderLayout AD_HeaderLayout
                         ON (AD_CardView.AD_HeaderLayout_ID = AD_HeaderLayout.AD_HeaderLayout_ID) WHERE AD_CardView.AD_Tab_ID =" + AD_Tab_ID + " AND  (AD_CardView.AD_User_ID Is Null OR AD_CardView.AD_User_ID=" + ctx.GetAD_User_ID() + @") AND AD_CardView.IsActive='Y' ORDER BY AD_CardView.Name ASC", "AD_CardView", true, false));
                 }
                 else
@@ -983,70 +983,125 @@ namespace VAdvantage.Classes
                         }
                     }
                 }
-                else {
+                else
+                {
                     rows = ds.Tables[0].Select();
                 }
 
-
+                string columnName = GetColumnNameByField(Util.GetValueOfInt(rows[0]["AD_Field_ID"]));
                 //for (int i = 0; i < rows.Length; i++)
                 //{
-                    CardViewData card = new CardViewData()
-                    {
-                        AD_CardView_ID = Convert.ToInt32(rows[0]["AD_CardView_ID"]),
-                        IsDefault = true,
-                        Name = Util.GetValueOfString(rows[0]["Name"]),
-                        AD_HeaderLayout_ID = Util.GetValueOfInt(rows[0]["AD_HeaderLayout_ID"]),
-                        FieldGroupID = Util.GetValueOfInt(rows[0]["AD_Field_ID"]),
-                        Style = Util.GetValueOfString(rows[0]["backgroundcolor"]),
-                        Padding = Util.GetValueOfString(rows[0]["Padding"]),
-                        groupSequence = Util.GetValueOfString(rows[0]["groupsequence"])
-                    };
+                CardViewData card = new CardViewData()
+                {
+                    AD_CardView_ID = Convert.ToInt32(rows[0]["AD_CardView_ID"]),
+                    IsDefault = true,
+                    Name = Util.GetValueOfString(rows[0]["Name"]),
+                    AD_HeaderLayout_ID = Util.GetValueOfInt(rows[0]["AD_HeaderLayout_ID"]),
+                    FieldGroupID = Util.GetValueOfInt(rows[0]["AD_Field_ID"]),
+                    FieldGroupName = columnName,
+                    Style = Util.GetValueOfString(rows[0]["backgroundcolor"]),
+                    Padding = Util.GetValueOfString(rows[0]["Padding"]),
+                    groupSequence = Util.GetValueOfString(rows[0]["groupsequence"]),
+                    excludedGroup = Util.GetValueOfString(rows[0]["excludedGroup"]),
+                    OrderByClause = Util.GetValueOfString(rows[0]["OrderByClause"]),
+                    disableWindowPageSize = Util.GetValueOfString(rows[0]["disableWindowPageSize"]) == "Y" 
+                };
 
-                    card.IncludedCols = new List<CardViewCol>();
-                    card.Conditions = new List<CardViewCondition>();
+                card.IncludedCols = new List<CardViewCol>();
+                card.Conditions = new List<CardViewCondition>();
+                card.GroupCount = new List<CardGroupCount>();
 
-                    string sql = "";
-                    IDataReader dr = null;
-                    int AD_CV_ID = card.AD_CardView_ID;
-                    if (AD_CV_ID > 0)
-                    {
+                string sql = "";
+                IDataReader dr = null;
+                int AD_CV_ID = card.AD_CardView_ID;
+                if (AD_CV_ID > 0)
+                {
+                    string sortBy = "";
                     // Fetch included columns
-                        sql = "SELECT AD_Field_ID, SeqNo, FieldValueStyle FROM AD_CardView_Column WHERE IsActive='Y' AND AD_CardView_ID = " + AD_CV_ID + " ORDER BY SeqNo";
-                        dr = DB.ExecuteReader(sql);
-                        while (dr.Read())
-                        {
-                            card.IncludedCols.Add(
-                                new CardViewCol()
-                                {
-                                    AD_Field_ID = VAdvantage.Utility.Util.GetValueOfInt(dr[0]),
-                                    SeqNo = VAdvantage.Utility.Util.GetValueOfInt(dr[1]),
-                                    HTMLStyle = VAdvantage.Utility.Util.GetValueOfString(dr[2])
-                                });
-                        }
-                        dr.Close();
-                    }
-                    if (AD_CV_ID > 0)
+                    sql = "SELECT AD_Field_ID, SeqNo, FieldValueStyle,SortNo FROM AD_CardView_Column WHERE IsActive='Y' AND AD_CardView_ID = " + AD_CV_ID + " ORDER BY SeqNo";
+                    dr = DB.ExecuteReader(sql);
+                    while (dr.Read())
                     {
+                        string SeqColumnName = GetColumnNameByField(Util.GetValueOfInt(dr[0]));
+                        card.IncludedCols.Add(
+                            new CardViewCol()
+                            {
+                                AD_Field_ID = VAdvantage.Utility.Util.GetValueOfInt(dr[0]),
+                                SeqNo = VAdvantage.Utility.Util.GetValueOfInt(dr[1]),
+                                HTMLStyle = VAdvantage.Utility.Util.GetValueOfString(dr[2]),
+                                SortNo = VAdvantage.Utility.Util.GetValueOfInt(dr[3]),
+                            });
+                        if (Util.GetValueOfInt(dr[3]) == 1) {
+                            sortBy += SeqColumnName + " ASC,";
+                        } else if (Util.GetValueOfInt(dr[3]) == -1) {
+                            sortBy += SeqColumnName + " DESC,";
+                        }
+                        
+                    }
+                    dr.Close();
+                    if (!string.IsNullOrEmpty(card.OrderByClause))
+                    {
+                        card.OrderByClause = card.OrderByClause + "," + sortBy;
+                    }
+                    else {
+                        card.OrderByClause = sortBy;
+                    }
+                }
+                if (AD_CV_ID > 0)
+                {
                     //Fetch Conditions
-                        sql = "SELECT ConditionValue,Color  FROM AD_CardView_Condition WHERE IsActive='Y' AND AD_CardView_ID = " + AD_CV_ID + " ORDER BY AD_CardView_Condition_ID ";
+                    sql = "SELECT ConditionValue,Color  FROM AD_CardView_Condition WHERE IsActive='Y' AND AD_CardView_ID = " + AD_CV_ID + " ORDER BY AD_CardView_Condition_ID ";
+                    dr = DB.ExecuteReader(sql);
+                    while (dr.Read())
+                    {
+                        var cdc = new CardViewCondition();
+                        cdc.Color = dr[1].ToString();
+                        cdc.ConditionValue = dr[0].ToString();
+                        card.Conditions.Add(cdc);
+                    }
+                    dr.Close();
+                }
+
+                //Fetch Card Template
+                card.HeaderItems = GetCardTemplateItems(card.AD_HeaderLayout_ID);
+
+                if (!string.IsNullOrEmpty(SQLWhereCond))
+                {
+                    
+                    if (!string.IsNullOrEmpty(columnName))
+                    {
+                        sql = "SELECT " + columnName + ", COUNT(NVL(" + columnName + ",0)) AS GroupCount " + SQLWhereCond + " GROUP BY " + columnName;
                         dr = DB.ExecuteReader(sql);
                         while (dr.Read())
                         {
-                            var cdc = new CardViewCondition();
-                            cdc.Color = dr[1].ToString();
-                            cdc.ConditionValue = dr[0].ToString();
-                            card.Conditions.Add(cdc);
+                            var cgc = new CardGroupCount();
+                            cgc.Group = dr[0].ToString() == "" ? "null" : dr[0].ToString();
+                            cgc.Count = Util.GetValueOfInt(dr[1].ToString());
+                            card.GroupCount.Add(cgc);
                         }
                         dr.Close();
                     }
 
-                    //Fetch Card Template
-                    card.HeaderItems = GetCardTemplateItems(card.AD_HeaderLayout_ID);
+                }
 
-                    return card;
-               // }
+                return card;
+                // }
             }
             return null;
+        }
+        /// <summary>
+        /// Get Column Name by field ID
+        /// </summary>
+        /// <param name="fieldID"></param>
+        /// <returns></returns>
+        public string GetColumnNameByField(int fieldID)
+        {
+            string columnName = "";
+            if (fieldID > 0)
+            {
+                columnName = Util.GetValueOfString(DB.ExecuteScalar("SELECT ColumnName FROM AD_column WHERE AD_column_ID=(SELECT AD_column_ID FROM AD_Field WHERE  AD_Field_ID=" + fieldID + ")"));
+            }
+            return columnName;
         }
 
         /// <summary>
