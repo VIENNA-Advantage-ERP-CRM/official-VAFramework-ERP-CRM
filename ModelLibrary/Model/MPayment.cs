@@ -2540,22 +2540,24 @@ namespace VAdvantage.Model
                 return base.GetPayAmt();
             return Decimal.Negate(base.GetPayAmt());
         }
-        /**
-        * 	Get Discount Amt
-        * 	@param absolute if true the absolute amount (i.e. negative if payment)
-        *	@return amount
-        */
+        /// <summary>
+        /// Get Discount amount
+        /// absolute param used to override (i.e. negative if payment)
+        /// </summary>
+        /// <param name="absolute">true/false</param>
+        /// <returns>DiscountAmt</returns>
         public Decimal GetDiscountAmt(bool absolute)
         {
             if (IsReceipt())
                 return base.GetDiscountAmt();
             return Decimal.Negate(base.GetDiscountAmt());
         }
-        /**
-        * 	Get WriteOffAmt
-        * 	@param absolute if true the absolute amount (i.e. negative if payment)
-        *	@return amount
-        */
+        /// <summary>
+        /// Get WriteOffAmt
+        /// absolute param used to override (i.e. negative if payment)
+        /// </summary>
+        /// <param name="absolute">true/false</param>
+        /// <returns>WriteOffAmt</returns>
         public Decimal GetWriteOffAmt(bool absolute)
         {
             if (IsReceipt())
