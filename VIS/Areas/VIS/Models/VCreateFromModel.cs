@@ -182,6 +182,11 @@ namespace VIS.Models
                           WHERE  PI.IsActive = 'Y'
                           AND pi.DocStatus NOT IN('VO','RE'))");
             }
+            // 1052-execute in provisional invoice case : independent shipment should not be fetched.
+            else if (isProvisionlInvoices == true)
+            {
+                sql.Append(@" AND (s.C_Invoice_ID IS NULL AND s.C_Order_ID IS NOT NULL)");
+            }
             //// Changes done by Bharat on 06 July 2017 restrict to create invoice if Invoice already created against that for same quantity
             sql.Append(@" AND s.M_InOut_ID IN (SELECT M_InOut_ID FROM(SELECT sl.M_InOut_ID, sl.M_InOutLine_ID, sl.MovementQty, mi.QtyInvoiced FROM M_InOutLine sl 
                     LEFT OUTER JOIN (SELECT il.QtyInvoiced, il.M_InOutLine_ID FROM C_InvoiceLine il INNER JOIN C_Invoice I ON I.C_INVOICE_ID = il.C_INVOICE_ID 
@@ -695,10 +700,10 @@ namespace VIS.Models
                                     INNER JOIN C_ProvisionalInvoiceLine pil ON  i.C_ProvisionalInvoice_ID = pil.C_ProvisionalInvoice_ID
                                     WHERE i.C_BPartner_ID=" + cBPartnerId + @" AND i.IsSOTrx='N'
                                     AND d.IsReturnTrx='" + (isReturnTrxs ? "Y" : "N") + @"' AND i.DocStatus IN ('CL','CO')
-                                    AND pil.c_provisionalinvoiceline_id NOT IN (
-                                    SELECT C_ProvisionalInvoiceLine_id
+                                    AND NVL(pil.C_ProvisionalInvoiceLine_ID, 0) NOT IN (
+                                    SELECT NVL(C_ProvisionalInvoiceLine_ID, 0)
                                     FROM(
-                                    SELECT il.C_ProvisionalInvoiceLine_id
+                                    SELECT NVL(il.C_ProvisionalInvoiceLine_ID, 0) AS C_ProvisionalInvoiceLine_ID
                                     FROM c_invoiceline il
                                     INNER JOIN c_invoice inv ON inv.c_invoice_id = il.c_invoice_id
                                     WHERE inv.isactive = 'Y'

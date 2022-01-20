@@ -1102,8 +1102,8 @@ namespace VAdvantage.Model
                 if (!isRev && GetC_BPartner_ID() != 0)
                 {
                     MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_Trx());
-
-                    Decimal payAmt = Decimal.Add(Decimal.Add(GetPayAmt(false), GetDiscountAmt()), GetWriteOffAmt());
+                    //VA230:Fixed open balance issue in case of AP Invoice
+                    Decimal payAmt = Decimal.Add(Decimal.Add(GetPayAmt(false), GetDiscountAmt(false)), GetWriteOffAmt(false));
                     // If Amount is ZERO then no need to check currency conversion
                     if (!payAmt.Equals(Env.ZERO))
                     {
@@ -2540,6 +2540,30 @@ namespace VAdvantage.Model
                 return base.GetPayAmt();
             return Decimal.Negate(base.GetPayAmt());
         }
+        /// <summary>
+        /// Get Discount amount
+        /// absolute param used to override (i.e. negative if payment)
+        /// </summary>
+        /// <param name="absolute">true/false</param>
+        /// <returns>DiscountAmt</returns>
+        public Decimal GetDiscountAmt(bool absolute)
+        {
+            if (IsReceipt())
+                return base.GetDiscountAmt();
+            return Decimal.Negate(base.GetDiscountAmt());
+        }
+        /// <summary>
+        /// Get WriteOffAmt
+        /// absolute param used to override (i.e. negative if payment)
+        /// </summary>
+        /// <param name="absolute">true/false</param>
+        /// <returns>WriteOffAmt</returns>
+        public Decimal GetWriteOffAmt(bool absolute)
+        {
+            if (IsReceipt())
+                return base.GetWriteOffAmt();
+            return Decimal.Negate(base.GetWriteOffAmt());
+        }
 
         /**
          * 	Get Pay Amt in cents
@@ -2680,7 +2704,7 @@ namespace VAdvantage.Model
                 {
                     MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_Trx());
 
-                    Decimal payAmt = Decimal.Add(Decimal.Add(GetPayAmt(false), GetDiscountAmt()), GetWriteOffAmt());
+                    Decimal payAmt = Decimal.Add(Decimal.Add(GetPayAmt(false), GetDiscountAmt(false)), GetWriteOffAmt(false));
                     // If Amount is ZERO then no need to check currency conversion
                     if (!payAmt.Equals(Env.ZERO))
                     {
@@ -2875,6 +2899,13 @@ namespace VAdvantage.Model
                 //	MProject project = new MProject(GetCtx(), GetC_Project_ID());
             }
 
+            // Update Paid on Provisional Invoice 
+            if (Get_ColumnIndex("C_ProvisionalInvoice_ID") >= 0 && Util.GetValueOfInt(Get_Value("C_ProvisionalInvoice_ID")) > 0)
+            {
+                DB.ExecuteQuery("UPDATE C_ProvisionalInvoice SET IsPaid = " + (GetReversalDoc_ID() == 0 ? "'Y'" : "'N'") +
+                    @" WHERE C_ProvisionalInvoice_ID = " + Util.GetValueOfInt(Get_Value("C_ProvisionalInvoice_ID")), null, Get_Trx());
+            }
+
             //	Counter Doc
             MPayment counter = CreateCounterDoc();
             if (counter != null)
@@ -2960,7 +2991,7 @@ namespace VAdvantage.Model
                 //}
 
                 Decimal? newCreditAmt = 0;
-                Decimal payAmt = Decimal.Add(Decimal.Add(GetPayAmt(false), GetDiscountAmt()), GetWriteOffAmt());
+                Decimal payAmt = Decimal.Add(Decimal.Add(GetPayAmt(false), GetDiscountAmt(false)), GetWriteOffAmt(false));
                 // If Amount is ZERO then no need to check currency conversion
                 if (!payAmt.Equals(Env.ZERO))
                 {
@@ -5333,6 +5364,12 @@ namespace VAdvantage.Model
             if (reversal.Get_ColumnIndex("TempDocumentNo") > 0)
             {
                 reversal.SetTempDocumentNo("");
+            }
+
+            // Set Provisional reference
+            if (Get_ColumnIndex("C_ProvisionalInvoice_ID") >= 0)
+            {
+                reversal.Set_Value("C_ProvisionalInvoice_ID", Get_Value("C_ProvisionalInvoice_ID"));
             }
 
             if (!reversal.Save(Get_Trx()))
