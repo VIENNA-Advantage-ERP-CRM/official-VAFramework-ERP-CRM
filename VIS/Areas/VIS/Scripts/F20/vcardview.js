@@ -442,26 +442,21 @@
         
     }
 
+    /**
+     * Set up card view fill cards list, set default card ID
+     * @param {any} aPanel
+     * @param {any} mTab
+     * @param {any} cContainer
+     * @param {any} vCardId
+     */
     VCardView.prototype.setupCardView = function (aPanel, mTab, cContainer, vCardId) {
         this.mTab = mTab;
         this.aPanel = aPanel;
 
         this.fillCardViewList(mTab.vo.Cards);
-
-        // this.getCardViewData(mTab, 0);
-        //var cardss = mTab.vo.Cards[0];
-        //this.cardViewData = mTab.vo.Cards[0];
         if (mTab.vo.Cards && mTab.vo.Cards[0] && mTab.vo.Cards[0].AD_CardView_ID) {
             this.cardID = mTab.vo.Cards[0].AD_CardView_ID;
-        } else {
-            //this.setCardViewData();
-            //this.refreshUI(this.getBody().width());
         }
-       
-        //this.setCardViewData(cardss);
-        //this.refreshUI(this.getBody().width());
-
-        //cContainer.append(this.getHeader());
         cContainer.append(this.getRoot());
     };
 
@@ -494,24 +489,28 @@
        });
     };
 
+    /**
+     * Ftech Card Details and create card's schema.
+     * */
     VCardView.prototype.requeryData = function () {
         if (this.cardViewData) {
             this.setCardSqlInTabModel(this.mTab, this.cardViewData);
-
-            //var rslt = this.mTab.prepareQuery(0, 0, false);
-
             this.aPanel.curGC.query(this.mTab.getOnlyCurrentDays(), 0, false);
-            //if (rslt) {
-            this.setCardViewData(this.cardViewData);
-        } else if (this.cardID != 0) {
+            this.setCardViewData(this.cardViewData);// Create Card
+        } else if (this.cardID != 0) {// Fetch card details
             this.getCardViewData(this.mTab, this.cardID, "");
-        } else {
+        } else {// If no template linked then show Name, description and comment
             this.setCardViewData();
             this.refreshUI(this.getBody().width());
         }
     }
 
-
+    /**
+     * Setup Card's Orderby clause and where clause
+     * Setup paging required or not
+     * @param {any} mTab
+     * @param {any} cModel
+     */
     VCardView.prototype.setCardSqlInTabModel = function (mTab,cModel) {
         var griTable = mTab.getTableModel();
         if (cModel.excludedGroup.length > 0) {
@@ -530,6 +529,10 @@
         griTable.setDoPaging(!cModel.disableWindowPageSize);
     };
 
+    /**
+     * Create Card's Schema, like fields included, groupby etc.
+     * @param {any} retData
+     */
     VCardView.prototype.setCardViewData = function (retData) {
         this.hasIncludedCols = false;
         this.fields = [];
@@ -609,6 +612,9 @@
         this.isProcessed = false;
     };
 
+    /**
+     * Get Group's details
+     * */
     VCardView.prototype.createGroups = function () {
         //1 get Grup field
         // var groupName = [];
@@ -664,6 +670,10 @@
         this.isProcessed = true;
     };
 
+    /**
+     * Create cards and groups
+     * @param {any} width
+     */
     VCardView.prototype.refreshUI = function (width) {
 
         var $this = this;
