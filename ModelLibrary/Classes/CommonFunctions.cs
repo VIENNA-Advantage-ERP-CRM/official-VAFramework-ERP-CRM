@@ -1020,6 +1020,7 @@ namespace VAdvantage.Classes
                     // Fetch included columns
                     sql = "SELECT AD_Field_ID, SeqNo, FieldValueStyle,SortNo FROM AD_CardView_Column WHERE IsActive='Y' AND AD_CardView_ID = " + AD_CV_ID + " ORDER BY SeqNo";
                     dr = DB.ExecuteReader(sql);
+                    int i = 0;
                     while (dr.Read())
                     {
                         string SeqColumnName = GetColumnNameByField(Util.GetValueOfInt(dr[0]));
@@ -1031,10 +1032,18 @@ namespace VAdvantage.Classes
                                 HTMLStyle = VAdvantage.Utility.Util.GetValueOfString(dr[2]),
                                 SortNo = VAdvantage.Utility.Util.GetValueOfInt(dr[3]),
                             });
-                        if (Util.GetValueOfInt(dr[3]) == 1) {
-                            sortBy += SeqColumnName + " ASC,";
-                        } else if (Util.GetValueOfInt(dr[3]) == -1) {
-                            sortBy += SeqColumnName + " DESC,";
+                        if (i < 3)
+                        {
+                            if (Util.GetValueOfInt(dr[3]) == 1)
+                            {
+                                i++;
+                                sortBy += SeqColumnName + " ASC,";
+                            }
+                            else if (Util.GetValueOfInt(dr[3]) == -1)
+                            {
+                                i++;
+                                sortBy += SeqColumnName + " DESC,";
+                            }
                         }
                         
                     }
@@ -1071,6 +1080,7 @@ namespace VAdvantage.Classes
                     if (!string.IsNullOrEmpty(columnName))
                     {
                         sql = "SELECT " + columnName + ", COUNT(NVL(" + columnName + ",0)) AS GroupCount " + SQLWhereCond + " GROUP BY " + columnName;
+                       
                         dr = DB.ExecuteReader(sql);
                         while (dr.Read())
                         {

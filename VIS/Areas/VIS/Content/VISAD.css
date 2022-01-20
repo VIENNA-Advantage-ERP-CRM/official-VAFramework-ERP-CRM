@@ -1179,10 +1179,11 @@ html[dir="rtl"] .vis-apanel-bar-fixpart a {
 
 .vis-processpara-table {
     width: 100%;
+    margin-top:5px;
 }
 
     .vis-processpara-table label sup {
-        color: red;
+        /*color: red;*/
     }
 
 .vis-processpara-table-td3 {
@@ -2928,6 +2929,16 @@ findImg {
     /*margin: 0 10px;*/
     padding: 0;
 }
+
+    .vis-cardviewcolumnfield li select {
+        width: 50px;
+        float: right;
+        height: 20px;
+        min-height: 21px;
+        font-size: 11px;
+        padding-top: 0px;
+        padding-bottom: 0;
+    }
 
     .vis-windowfield li, .vis-cardviewcolumnfield li, .vis-cardviewcolumnfield1 li {
         list-style: none;
@@ -5468,3 +5479,4 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
     display: flex;
     background-color: #fff
 }
+
