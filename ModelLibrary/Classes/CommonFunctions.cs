@@ -1001,10 +1001,10 @@ namespace VAdvantage.Classes
                     FieldGroupName = columnName,
                     Style = Util.GetValueOfString(rows[0]["backgroundcolor"]),
                     Padding = Util.GetValueOfString(rows[0]["Padding"]),
-                    groupSequence = Util.GetValueOfString(rows[0]["groupsequence"]),
-                    excludedGroup = Util.GetValueOfString(rows[0]["excludedGroup"]),
+                    GroupSequence = Util.GetValueOfString(rows[0]["groupsequence"]),
+                    ExcludedGroup = Util.GetValueOfString(rows[0]["excludedGroup"]),
                     OrderByClause = Util.GetValueOfString(rows[0]["OrderByClause"]),
-                    disableWindowPageSize = Util.GetValueOfString(rows[0]["disableWindowPageSize"]) == "Y" 
+                    DisableWindowPageSize = Util.GetValueOfString(rows[0]["disableWindowPageSize"]) == "Y" 
                 };
 
                 card.IncludedCols = new List<CardViewCol>();
@@ -1076,7 +1076,7 @@ namespace VAdvantage.Classes
 
                 if (!string.IsNullOrEmpty(SQLWhereCond))
                 {
-                    
+
                     if (!string.IsNullOrEmpty(columnName))
                     {
                         sql = "SELECT " + columnName + ", COUNT(NVL(" + columnName + ",0)) AS GroupCount " + SQLWhereCond + " GROUP BY " + columnName;

@@ -21,10 +21,10 @@ namespace VAdvantage.Classes
         public int AD_HeaderLayout_ID { get; set; }
         public string Style { get; set; }
         public string Padding { get; set; }
-        public string groupSequence { get; set; }
-        public string excludedGroup { get; set; }
+        public string GroupSequence { get; set; }
+        public string ExcludedGroup { get; set; }
         public string OrderByClause { get; set; }
-        public bool disableWindowPageSize { get; set; }
+        public bool DisableWindowPageSize { get; set; }
 
         public List<HeaderPanelGrid> HeaderItems { get; set; }
         public List<CardGroupCount> GroupCount { get; set; }
@@ -57,7 +57,7 @@ namespace VAdvantage.Classes
         public int AD_CardView_ID { get; set; }
 
         public bool IsDefault { get; set; }
-        public int created { get; set; }
+        public int Created { get; set; }
     }
 
     public class CardGroupCount {

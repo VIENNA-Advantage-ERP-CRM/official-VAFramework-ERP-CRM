@@ -19,8 +19,8 @@
         this.oldGrpCount = 0;
         this.grpColName = '';
         this.hasIncludedCols = false;
-        this.groupSequence = null;
-        this.excludedGroup = null;
+        this.GroupSequence = null;
+        this.ExcludedGroup = null;
         // this.aPanel;
         this.onCardEdit = null;
 
@@ -118,7 +118,7 @@
                         .prependTo(ul);
                 }
 
-                if (item.created != VIS.context.getAD_User_ID()) {
+                if (item.Created != VIS.context.getAD_User_ID()) {
                     li.find('p').text(item.label +" (S)");
                 }
                 // When user clicks on make default icon, then save details in DB.
@@ -349,10 +349,10 @@
                 for (var i = 0; i < cards.length; i++) {
                     // $cmbCards.append('<option value="' + cards[i].AD_CardView_ID + '">' + cards[i].Name + '</option>');
                     if (cards[i].IsDefault) {
-                        userQueries.push({ 'title': cards[i].Name, 'label': cards[i].Name, 'value': cards[i].Name, 'id': cards[i].AD_CardView_ID, 'isDefault': 'Y', 'created': cards[i].created });
+                        userQueries.push({ 'title': cards[i].Name, 'label': cards[i].Name, 'value': cards[i].Name, 'id': cards[i].AD_CardView_ID, 'isDefault': 'Y', 'Created': cards[i].Created });
                     }
                     else {
-                        userQueries.push({ 'title': cards[i].Name, 'label': cards[i].Name, 'value': cards[i].Name, 'id': cards[i].AD_CardView_ID, 'isDefault': 'N', 'created': cards[i].created });
+                        userQueries.push({ 'title': cards[i].Name, 'label': cards[i].Name, 'value': cards[i].Name, 'id': cards[i].AD_CardView_ID, 'isDefault': 'N', 'Created': cards[i].Created });
                     }
                 }
                 $cmbCards.autocomplete('option', 'source', userQueries, "position", { my: "left top", at: "left bottom" });
@@ -423,7 +423,11 @@
         }
        
     };
-
+    /**
+     * Replace card after drag drop for apply new condition
+     * @param {any} rec
+     * @param {any} id
+     */
     VCardView.prototype.replaceCard = function (rec,id) {
         rec.recid = id;
 
@@ -481,7 +485,8 @@
 
         var sql = " FROM " + mTab.getTableName();
         if (mTab.extendedWhere) {
-            sql += " WHERE " + mTab.extendedWhere;
+            sql += " WHERE " + VIS.Env.parseContext(VIS.context, mTab.getWindowNo(), mTab.extendedWhere, false);;
+            
         }
         sql = VIS.secureEngine.encrypt(sql);
 
@@ -525,8 +530,8 @@
      */
     VCardView.prototype.setCardSqlInTabModel = function (mTab,cModel) {
         var griTable = mTab.getTableModel();
-        if (cModel.excludedGroup.length > 0) {
-            var str = cModel.excludedGroup.split(',');
+        if (cModel.ExcludedGroup.length > 0) {
+            var str = cModel.ExcludedGroup.split(',');
             var notIN = "";
             for (var i = 0; i < str.length; i++) {
                 notIN += "'" + str[i] + "',"
@@ -538,7 +543,7 @@
             mTab.setOuterWhereClause("1=1");
         }
         griTable.setOuterOrderClause(cModel.OrderByClause.replace(/,\s*$/, ""));
-        griTable.setDoPaging(!cModel.disableWindowPageSize);
+        griTable.setDoPaging(!cModel.DisableWindowPageSize);
     };
 
     /**
@@ -559,8 +564,8 @@
             //$cmbCards.autocomplete("search", "");
             //$cmbCards.trigger("focus");
             this.cardName = retData.Name;
-            this.groupSequence = retData.groupSequence;
-            this.excludedGroup = retData.excludedGroup;
+            this.GroupSequence = retData.GroupSequence;
+            this.ExcludedGroup = retData.ExcludedGroup;
 
             for (var i = 0; i < retData.GroupCount.length; i++) {
                 this.GroupCount[retData.GroupCount[i].Group] = retData.GroupCount[i].Count;
@@ -766,8 +771,8 @@
 
 
 
-                if ($this.cGroup.lookup && ($this.cGroup.lookup.displayType == VIS.DisplayType.List || $this.cGroup.lookup.displayType == VIS.DisplayType.TableDir || $this.cGroup.lookup.displayType == VIS.DisplayType.Table || $this.cGroup.lookup.displayType == VIS.DisplayType.Search) && $this.groupSequence != null && $this.groupSequence != "") {
-                    var grpArr = $this.groupSequence.split(",");
+                if ($this.cGroup.lookup && ($this.cGroup.lookup.displayType == VIS.DisplayType.List || $this.cGroup.lookup.displayType == VIS.DisplayType.TableDir || $this.cGroup.lookup.displayType == VIS.DisplayType.Table || $this.cGroup.lookup.displayType == VIS.DisplayType.Search) && $this.GroupSequence != null && $this.GroupSequence != "") {
+                    var grpArr = $this.GroupSequence.split(",");
                     for (var j = 0; j < grpArr.length; j++) {
                         var item = root.find(".vis-cv-grpbody[data-key='" + grpArr[j] + "']").parent();
                         var itemG = $this.getGroupHeader().find(".vis-cv-cg-grp[data-key='" + grpArr[j] + "']");
@@ -847,7 +852,7 @@
             function emptyCardSetup() {
                 $this.getRoot().removeClass('emptyGroup').removeAttr('style');
                 root.find('.cardEmpty').remove();
-                var excludeGrp = $this.excludedGroup;
+                var excludeGrp = $this.ExcludedGroup;
                 excludeGrp = excludeGrp.split(',');
 
                 root.find('.vis-cv-grpbody').each(function (i, e) {

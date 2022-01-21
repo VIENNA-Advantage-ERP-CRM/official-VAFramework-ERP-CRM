@@ -1114,11 +1114,18 @@
         return this.vo.WhereClause;
     };
 
+    /*
+     * Set where condition from outside 
+     * @param {any} conition
+     */
     GridTab.prototype.setOuterWhereClause = function (conition) {
         this.outerWhereCondition = conition;
     }
 
-    GridTab.prototype.resetOuterClauses = function () {
+    /*
+     *Reset outside condition
+     */
+     GridTab.prototype.resetOuterClauses = function () {
         this.setOuterWhereClause("");
         this.getTableModel().setOuterOrderClause("");
         this.getTableModel().setDoPaging(true);

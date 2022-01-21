@@ -3048,7 +3048,7 @@ namespace VIS.Helpers
                     {
                         Name = Util.GetValueOfString(ds.Tables[0].Rows[i]["Name"]),
                         AD_CardView_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_CardView_ID"]),
-                        created = Util.GetValueOfInt(ds.Tables[0].Rows[i]["CreatedBy"])
+                        Created = Util.GetValueOfInt(ds.Tables[0].Rows[i]["CreatedBy"])
                     };
 
                     // dcard is default card ID. it can be 0
