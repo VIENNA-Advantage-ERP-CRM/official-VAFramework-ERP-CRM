@@ -129,7 +129,7 @@
                                     $imgCtrl.hide();
                                 }
                                 else {
-                                    $imgCtrl.attr('src', img);
+                                    $imgCtrl.attr('src', img ? img : '');
                                     $imgSpanCtrl.hide();
                                     $imgCtrl.show();
                                 }
@@ -375,7 +375,7 @@
                                         $image.attr('src', img);
                                     }
                                 }
-                                
+
 
                                 $divIcon.append($imageSpan);
                                 $divIcon.append($image);
