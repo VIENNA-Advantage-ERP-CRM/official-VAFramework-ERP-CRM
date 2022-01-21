@@ -554,6 +554,19 @@ html[dir="rtl"] .vis-ctrl-switchSlider {
     opacity: 0.5;
 }
 
+.cardEmpty {
+    border: 1px dashed #d4d4d4;
+    height:90%;
+}
+
+.emptyGroup {
+    min-width: 100px;    
+}
+    .emptyGroup .vis-cv-head {
+        white-space: nowrap;
+        overflow: hidden !important;
+        text-overflow: ellipsis;
+    }
 
 
 

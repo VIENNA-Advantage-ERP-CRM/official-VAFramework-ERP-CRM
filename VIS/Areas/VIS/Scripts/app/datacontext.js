@@ -45,8 +45,8 @@
         };
 
 
-        function getCardViewInfo(AD_Window_ID, AD_Tab_ID,AD_CardView_ID, callback) {
-            var data = { AD_Window_ID: AD_Window_ID, AD_Tab_ID: AD_Tab_ID, AD_CardView_ID: AD_CardView_ID };
+        function getCardViewInfo(AD_Window_ID, AD_Tab_ID,AD_CardView_ID,sql, callback) {
+            var data = { AD_Window_ID: AD_Window_ID, AD_Tab_ID: AD_Tab_ID, AD_CardView_ID: AD_CardView_ID, SQL: sql };
             $.ajax({
                 url: cardViewUrl,
                 type: "POST",

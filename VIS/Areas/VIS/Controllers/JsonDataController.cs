@@ -975,9 +975,9 @@ namespace VIS.Controllers
 
         //Card View
 
-        public JsonResult GetCardViewDetail(int AD_Window_ID, int AD_Tab_ID,int AD_CardView_ID)
+        public JsonResult GetCardViewDetail(int AD_Window_ID, int AD_Tab_ID,int AD_CardView_ID,string SQL)
         {
-            return Json(JsonConvert.SerializeObject(WindowHelper.GetCardViewDetail(AD_Window_ID, AD_Tab_ID, Session["ctx"] as Ctx, AD_CardView_ID)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(WindowHelper.GetCardViewDetail(AD_Window_ID, AD_Tab_ID, Session["ctx"] as Ctx, AD_CardView_ID,SQL)), JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult InsertUpdateDefaultSearch(int AD_Tab_ID, int AD_Table_ID, int AD_User_ID, int? AD_UserQuery_ID)
