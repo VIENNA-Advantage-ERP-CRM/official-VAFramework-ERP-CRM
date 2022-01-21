@@ -217,10 +217,10 @@
 		},
 		// on item release/drop 
 		_onRelease: function (e) {
-			//if (!this._isSwaped && this._options.force && subItem != this._clickItem) {
-			//	this._hovItem = subItem;
-			//	this._swapItems(this._clickItem, subItem);
-			//}
+			if (!this._isSwaped && this._options.force && subItem != this._clickItem) {
+				this._hovItem = subItem;
+				this._swapItems(this._clickItem, subItem);
+			}
 
 			if (e && e.target && e.target.closest(dropClass) && e.target.closest(dropClass).parentNode === this._container && this._options.attr && this._clickItem && this._isSwaped) {
 				this._options.onSelect(this._clickItem, this._clickItem.getAttribute(this._options.attr), fromItem);

@@ -144,7 +144,7 @@
 
         function SyncScroll() {
             groupHeader.scrollLeft(body.scrollLeft());
-        }
+        }       
 
         this.SyncScroll = function () {
             SyncScroll();            
@@ -428,25 +428,22 @@
         rec.recid = id;
 
         var changeCard = new VCard(this.fields, rec, this.headerItems, this.headerStyle, this.headerPadding, windowNo, {}, this.aPanel)
-        var style = this.getRoot().find("[name='vc_" + id + "']").attr('style');
-
+        if (this.grpCount==1) {
+            changeCard.getRoot().width("240px").css({ 'margin': '5px 12px 12px 5px', 'float': (VIS.Application.isRTL ? 'right' : 'left') });
+        }
         if ($('head:contains("' + changeCard.headerCustom + '")').length == 0) {
             changeCard.addStyleToDom();
         }
-
-        setTimeout(function () {
-            this.getRoot().find("[name='vc_" + id + "']").replaceWith(changeCard.getRoot());
-            changeCard.evaluate(this.cConditions);
-        }, 100);
         
-        
+       this.getRoot().find("[name='vc_" + id + "']").replaceWith(changeCard.getRoot());
+        changeCard.evaluate(this.cConditions);
     }
 
     VCardView.prototype.setupCardView = function (aPanel, mTab, cContainer, vCardId) {
         this.mTab = mTab;
         this.aPanel = aPanel;
 
-        this.fillCardViewList(mTab.vo.Cards);
+       // this.fillCardViewList(mTab.vo.Cards);
 
         // this.getCardViewData(mTab, 0);
         //var cardss = mTab.vo.Cards[0];
@@ -454,7 +451,7 @@
         if (mTab.vo.Cards && mTab.vo.Cards[0] && mTab.vo.Cards[0].AD_CardView_ID) {
             this.cardID = mTab.vo.Cards[0].AD_CardView_ID;
         } else {
-            //this.setCardViewData();
+            this.setCardViewData();
             //this.refreshUI(this.getBody().width());
         }
        
@@ -471,7 +468,7 @@
      * @param {any} cardID
      * @param {any} cardName
      */
-    VCardView.prototype.getCardViewData = function (mTab, cardID, cardName) {
+    VCardView.prototype.getCardViewData = function (mTab, cardID, cardName, refresh) {
         var self = this;
         var windowID = 0;
         var tabID = 0;
@@ -480,18 +477,26 @@
             tabID = mTab.getAD_Tab_ID();
         }
 
-       
-        var sql = VIS.secureEngine.encrypt(" FROM "+ mTab.getTableName()+" WHERE "+mTab.extendedWhere);
+        var sql = " FROM " + mTab.getTableName();
+        if (mTab.extendedWhere) {
+            sql += " WHERE " + mTab.extendedWhere;
+        }
+        sql = VIS.secureEngine.encrypt(sql);
 
         VIS.dataContext.getCardViewInfo(windowID, tabID, cardID, sql, function (retData) {
 
             self.cardViewData = retData;
-            self.requeryData();
-                if (cardID) {
-                    self.getCardCmb().val(retData.Name);
-                }
-           
-       });
+            if (!refresh) {
+                self.requeryData();
+            } else {
+                self.setCardViewData(retData);
+                self.refresh(self.getBody().width());
+            }
+            if (cardID) {
+                self.getCardCmb().val(retData.Name);
+            }
+
+        });
     };
 
     VCardView.prototype.requeryData = function () {
@@ -507,7 +512,7 @@
             this.getCardViewData(this.mTab, this.cardID, "");
         } else {
             this.setCardViewData();
-            this.refreshUI(this.getBody().width());
+            this.refresh(this.getBody().width());
         }
     }
 
@@ -667,6 +672,29 @@
     VCardView.prototype.refreshUI = function (width) {
 
         var $this = this;
+
+        if (!this.cardViewData && this.cardID>0) {
+            this.getCardViewData(this.mTab, this.cardID, "", true);
+        } else {            
+            this.refresh(width);
+        }
+
+        
+
+        //Reset Variables
+       
+        while (this.groupCtrls.length > 0) {
+            this.groupCtrls.pop().dispose();
+        }
+
+
+
+        //this.getBody().empty();
+        this.aPanel.setBusy(true);
+    };
+
+    VCardView.prototype.refresh = function (width) {
+        var $this = this;
         window.setTimeout(function () {
             if (width == 0) {
                 width = $this.getBody().width();
@@ -707,7 +735,7 @@
                 $this.filterRecord(records);
                 for (var p in $this.cGroupInfo) {
                     setCardGroup(p);
-                    var gc = $this.cGroupInfo[p].key;                    
+                    var gc = $this.cGroupInfo[p].key;
                     if ($this.GroupCount[gc]) {
                         gc = $this.GroupCount[gc];
                     } else {
@@ -743,8 +771,8 @@
                     selfSort: false,
                     force: true,
                     mainNode: '.vis-cv-main',
-                    ignore: ['.vis-cv-card-edit', '.vis-ev-col-wrap-button','.cardEmpty'],
-                    onSelect: function (e, item,fromItem) { 
+                    ignore: ['.vis-cv-card-edit', '.vis-ev-col-wrap-button', '.cardEmpty'],
+                    onSelect: function (e, item, fromItem) {
                         var toKey = $(e).parent().attr('data-key');
                         var obj = {
                             grpValue: (toKey == 'null' ? null : toKey),
@@ -761,24 +789,24 @@
                             beforeSend: function () {
                                 $this.setBusy(true);
                             },
-                            success: function (data) {                                
+                            success: function (data) {
                                 if (data != "1") {
                                     VIS.ADialog.error(data, true, "");
                                     vaSortable.prototype.revertItem();
-                                } else {                                  
-                                   
-                                    var fromkey = $(fromItem).attr('data-key'); 
+                                } else {
+
+                                    var fromkey = $(fromItem).attr('data-key');
                                     if (!$this.GroupCount[toKey]) {
                                         $this.GroupCount[toKey] = 0;
-                                    }                                    
+                                    }
 
                                     $this.GroupCount[toKey] = $this.GroupCount[toKey] + 1;
                                     $this.GroupCount[fromkey] = $this.GroupCount[fromkey] - 1;
 
 
                                     $this.getGroupHeader().find(".vis-cv-cg-grp[data-key='" + fromkey + "']").find('span').text(' (' + $this.GroupCount[fromkey] + ')');
-                                    $this.getGroupHeader().find(".vis-cv-cg-grp[data-key='" + toKey + "']").removeClass('emptyGroup').find('span').text(' (' + $this.GroupCount[toKey] + ')') ;
-                                    $this.getBody().find('.cardEmpty').closest('.emptyGroup').removeClass('emptyGroup');  
+                                    $this.getGroupHeader().find(".vis-cv-cg-grp[data-key='" + toKey + "']").removeClass('emptyGroup').find('span').text(' (' + $this.GroupCount[toKey] + ')');
+                                    $this.getBody().find('.cardEmpty').closest('.emptyGroup').removeClass('emptyGroup');
 
                                     emptyCardSetup();
                                     $this.mTab.dataRefresh();
@@ -797,9 +825,9 @@
                 });
             }
 
-           
 
-            function emptyCardSetup() {      
+
+            function emptyCardSetup() {
                 $this.getRoot().removeClass('emptyGroup').removeAttr('style');
                 root.find('.cardEmpty').remove();
                 var excludeGrp = $this.excludedGroup;
@@ -808,10 +836,10 @@
                 root.find('.vis-cv-grpbody').each(function (i, e) {
                     var evnt = $(e);
                     evnt.parent().removeAttr('style');
-                    if (evnt.is(':empty')) {                        
+                    if (evnt.is(':empty')) {
                         evnt.append("<div class='va-dragdrop cardEmpty'>").parent().addClass('emptyGroup');
                         $this.getGroupHeader().find('.vis-cv-cg-grp').eq(i).addClass('emptyGroup').removeAttr('style');
-                    } else {                      
+                    } else {
                         $this.getGroupHeader().find('.vis-cv-cg-grp').eq(i).css("min-width", evnt.parent().width());
                         evnt.parent().css('min-width', evnt.parent().width());
                     }
@@ -822,24 +850,19 @@
                     }
 
                 });
-               
-                //root.find('.vis-cv-grpbody').height(maxHeight(root.find('.vis-cv-grpbody')));
-            }
 
+                root.find('.vis-cv-grpbody').height(maxHeight(root.find('.vis-cv-grpbody')));
+            }
+            function maxHeight(elems) {
+                return Math.max.apply(null, elems.map(function () {
+                    return $(this)[0].scrollHeight;
+                }).get());
+            }
             $this.calculateWidth(width);
             $this.SyncScroll();
             $this.aPanel.setBusy(false);
         }, 10);
-
-
-        //Reset Variables
-       
-        while (this.groupCtrls.length > 0) {
-            this.groupCtrls.pop().dispose();
-        }
-        //this.getBody().empty();
-        this.aPanel.setBusy(true);
-    };
+    }
 
     VCardView.prototype.filterRecord = function (records) {
 

@@ -176,7 +176,7 @@
             lbldisabledWindowPage.prepend(disabledWindowPage);
 
 
-            var divinputctrl = $("<div class='input-group vis-input-wrap'></div>").append($("<div class='vis-control-wrap'></div>").append(orderByClause).append('<label for="Name">' + VIS.Msg.getMsg("orderByClause") + '</label>'));
+            var divinputctrl = $("<div class='input-group vis-input-wrap'></div>").append($("<div class='vis-control-wrap'></div>"));//.append(orderByClause).append('<label for="Name">' + VIS.Msg.getMsg("orderByClause") + '</label>'));
             var cardviewCondition = $("<div class='vis-cardviewbtn'>").append(lbldisabledWindowPage).append(divinputctrl);
 
             var divCardViewbtn = $("<div class='vis-cardviewbtn' style='margin-top:0;'><button class='vis-btnDelete'><i title=" + VIS.Msg.getMsg("DeleteRecord") + " class='vis vis-delete'></i></button> <div class='vis-cdv-customokcancle'><button class='vis-btnOk'>  " + VIS.Msg.getMsg("Ok") + "  </button><button class='vis-btnCardViewCancle'>  " + VIS.Msg.getMsg("Cancel") + "  </button></div> </div>");
@@ -281,7 +281,7 @@
             centerBtn = $("<div class='vis-cardviewbutton vis-pull-left' ><button class='vis-btnup'><i class='vis vis-arrow-up'></i></button><button  class='vis-btnright'><i class='vis vis-shiftright'></i></button></div>");
             centerBtn.append("<button   class='vis-btnleft'><i class='vis vis-shiftleft'></i></button><button  class='vis-btndown'><i class='vis vis-arrow-down'></i></button>");
             divChildLeftLable = $("<div style='width:100%'><label>" + VIS.Msg.getMsg("SelectField") + "</label></div>");
-            divChildRightLable = $("<div style='width:100%'><label>" + VIS.Msg.getMsg("IncludedField") + "</label></div>");
+            divChildRightLable = $("<div style='width:100%'><label>" + VIS.Msg.getMsg("IncludedField") + "</label><label class='vis-pull-right'>" + VIS.Msg.getMsg("SortOrder") + "</label></div>");
             var divChildGroupSeqLable = $("<div style='width:100%'><label>" + VIS.Msg.getMsg("GroupSeq") + "</label></div>");
             divChildLeftColumns = $("<div class='vis-cv-filedslist-wrap'></div>");
             var divChildSeqColumns = $("<div class='vis-cv-filedslist-wrap'></div>");
@@ -404,7 +404,7 @@
 
                         for (var i = 0; i < cardViewInfo.length; i++) {
                             // AD_CardView_ID = cardViewInfo[0].CardViewID;
-                            cmbCardView.append("<Option is_shared=" + cardViewInfo[i].UserID + " ad_user_id=" + cardViewInfo[i].CreatedBy + " cardviewid=" + cardViewInfo[i].CardViewID + " groupSequence='" + cardViewInfo[i].groupSequence + "' excludedGroup='" + cardViewInfo[i].excludedGroup +"'  ad_field_id=" + cardViewInfo[i].AD_GroupField_ID + " isdefault=" + cardViewInfo[i].DefaultID + " ad_headerLayout_id=" + cardViewInfo[i].AD_HeaderLayout_ID + "> " + w2utils.encodeTags(cardViewInfo[i].CardViewName) + "</Option>");
+                            cmbCardView.append("<Option idx="+i+" is_shared=" + cardViewInfo[i].UserID + " ad_user_id=" + cardViewInfo[i].CreatedBy + " cardviewid=" + cardViewInfo[i].CardViewID + " groupSequence='" + cardViewInfo[i].groupSequence + "' excludedGroup='" + cardViewInfo[i].excludedGroup +"'  ad_field_id=" + cardViewInfo[i].AD_GroupField_ID + " isdefault=" + cardViewInfo[i].DefaultID + " ad_headerLayout_id=" + cardViewInfo[i].AD_HeaderLayout_ID + "> " + w2utils.encodeTags(cardViewInfo[i].CardViewName) + "</Option>");
                         }
 
                     }
@@ -417,10 +417,19 @@
                     cmbCardView.find("[cardviewid='" + AD_CardView_ID + "']").attr("selected", "selected");
 
                     orginalAD_CardView_ID = AD_CardView_ID;
-
+                    var idx = cmbCardView.find(":selected").attr("idx");
                     //cardViewUserID = cmbCardView.find(":selected").attr("ad_user_id");
                     isPublic.attr("checked", parseInt(cmbCardView.find(":selected").attr("is_shared")) > 0 ? false : true);
-                    isdefault.attr("checked", cmbCardView.find(":selected").attr("isdefault") == 'true' ? true : false);
+                    isdefault.attr("checked", cmbCardView.find(":selected").attr("isdefault") == 'true' ? true : false);                    
+                    if (cardViewInfo && cardViewInfo[idx].disableWindowPageSize) {
+                        disabledWindowPage.attr("checked", true);
+                    } else {
+                        disabledWindowPage.attr("checked", false);
+                    }
+                    if (cardViewInfo) {
+                        orderByClause.val(cardViewInfo[idx].OrderByClause);
+                    }
+
                     $vSearchHeaderLayout.setValue(cmbCardView.find(":selected").attr("ad_headerLayout_id"));
                     cardViewUserID = parseInt(cmbCardView.find(":selected").attr("ad_user_id"));
                     if (cardViewUserID == VIS.context.getAD_User_ID()) {
@@ -485,6 +494,16 @@
                 $vSearchHeaderLayout.setValue(sel.attr("ad_headerLayout_id"));
                 isdefault.attr("checked", sel.attr("isdefault")=='true'?true:false);
                 isPublic.attr("checked", parseInt(sel.attr("is_shared")) > 0 ? false : true);
+                var idx = sel.attr("idx");
+                if (cardViewInfo && cardViewInfo[idx].disableWindowPageSize) {
+                    disabledWindowPage.attr("checked", true);
+                } else {
+                    disabledWindowPage.attr("checked", false);
+                }
+                if (cardViewInfo) {
+                    orderByClause.val(cardViewInfo[idx].OrderByClause);
+                }
+
                 if (cardViewUserID == VIS.context.getAD_User_ID()) {
                     rootCardViewUI.find(".vis-btnDelete").css("display", "block");
                     rootCardViewUI.find(".vis-cvd-editbtn i").removeClass('vis-copy').addClass('vis-pencil');
@@ -1293,7 +1312,9 @@
                                 if (fieldItem.length > 0) {
                                     columnFieldArray.push(fieldItem[0].getAD_Field_ID());
                                 }
-                                ulRoot.append("<li seqno=" + 0 + " index=" + i + " CardViewColumnID=" + 0 + " FieldID=" + CVColumns[i].AD_Field_ID + "> <span>" + CVColumns[i].FieldName + "</span> "+sortDDL+"</li>");
+                               // var ddl = $(sortDDL).val(CVColumns[i].sort);
+                                ulRoot.append("<li seqno=" + 0 + " index=" + i + " CardViewColumnID=" + 0 + " FieldID=" + CVColumns[i].AD_Field_ID + "> <span>" + CVColumns[i].FieldName + "</span> " + sortDDL + "</li>");
+                                ulRoot.find('li:eq(' + i + ') select').val(CVColumns[i].sort);
                             }
                         }
                         if (LstCardViewCondition != null && LstCardViewCondition.length > 0) {
@@ -1409,7 +1430,7 @@
                 url: url,
                 dataType: "json",
                 contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify({ 'lstCardView': cardViewArray, 'lstCardViewColumns': cardViewColArray, /*'LstRoleID': LstRoleID,*/ 'lstCardViewCondition': strConditionArray, 'excludeGrp': skipGrp, 'pageSize': disabledWindowPage.is(":checked"), 'orderByClause': orderByClause.text() }),
+                data: JSON.stringify({ 'lstCardView': cardViewArray, 'lstCardViewColumns': cardViewColArray, /*'LstRoleID': LstRoleID,*/ 'lstCardViewCondition': strConditionArray, 'excludeGrp': skipGrp, 'pageSize': disabledWindowPage.is(":checked"), 'orderByClause': orderByClause.val() }),
                 success: function (data) {
                     var result = JSON.parse(data);
                     AD_CardView_ID = result;

@@ -55,8 +55,8 @@ namespace VIS.Models
                         AD_HeaderLayout_ID = VAdvantage.Utility.Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_HEADERLAYOUT_ID"]),
                         groupSequence=Convert.ToString(ds.Tables[0].Rows[i]["GROUPSEQUENCE"]),
                         excludedGroup = Convert.ToString(ds.Tables[0].Rows[i]["EXCLUDEDGROUP"]),
-                        order = Convert.ToString(ds.Tables[0].Rows[i]["EXCLUDEDGROUP"]),
-                        excludedGroup = Convert.ToString(ds.Tables[0].Rows[i]["EXCLUDEDGROUP"]),
+                        OrderByClause = Convert.ToString(ds.Tables[0].Rows[i]["ORDERBYCLAUSE"]),
+                        disableWindowPageSize = Convert.ToString(ds.Tables[0].Rows[i]["DISABLEWINDOWPAGESIZE"])=="Y",
                         //IsDefault = VAdvantage.Utility.Util.GetValueOfString(ds.Tables[0].Rows[i]["ISDEFAULT"])=="Y"?true:false,
                         DefaultID = isDefault
                     };
@@ -185,6 +185,7 @@ namespace VIS.Models
                         FieldName = Convert.ToString(ds.Tables[0].Rows[i]["NAME"]),
                         AD_Field_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_FIELD_ID"]),
                         AD_GroupField_ID = fid,
+                        sort = Util.GetValueOfInt(ds.Tables[0].Rows[i]["SORTNO"]),
                         UserID = uid
 
                     };
@@ -236,7 +237,7 @@ namespace VIS.Models
             objCardView.Set_ValueNoCheck("groupSequence", groupSequence);
             objCardView.Set_ValueNoCheck("excludedGroup", excludeGrp);
             objCardView.Set_Value("disableWindowPageSize", pageSize);
-            objCardView.Set_Value("orderByClause", orderByClause);
+            objCardView.Set_Value("OrderByClause", orderByClause);
             if (!objCardView.Save())
             {
             }
