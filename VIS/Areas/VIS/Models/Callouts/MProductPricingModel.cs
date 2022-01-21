@@ -120,8 +120,8 @@ namespace VIS.Models
                 //QtyOrdered= mTab.GetValue("QtyEntered"));
                 EnforcePriceLimit = pp.IsEnforcePriceLimit(),
                 DiscountSchema = pp.IsDiscountSchema(),
-                IsStocked = product.IsStocked()
-
+                IsStocked = product.IsStocked(),
+                DocumentNote = product.GetDocumentNote()
             };
             product = null;
             pp = null;

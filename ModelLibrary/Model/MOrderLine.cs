@@ -3864,11 +3864,11 @@ namespace VAdvantage.Model
                 //Set IsTaxExempt and TaxExemptReason
                 SetTaxExemptReason();
             }
-            else if(Is_ValueChanged("IsTaxExempt") && !IsTaxExempt() && GetC_TaxExemptReason_ID()>0 
+            else if (Is_ValueChanged("IsTaxExempt") && !IsTaxExempt() && GetC_TaxExemptReason_ID() > 0
                 && Get_ColumnIndex("IsTaxExempt") > -1 && Get_ColumnIndex("C_TaxExemptReason_ID") > -1)
             {
                 //taxExpemt is false but  tax exempt reason is selected
-                  SetC_TaxExemptReason_ID(0);               
+                SetC_TaxExemptReason_ID(0);
             }
 
 
@@ -4621,6 +4621,7 @@ namespace VAdvantage.Model
                     }
                 }
             }
+                        
             return true;
         }
 
