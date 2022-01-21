@@ -561,8 +561,13 @@ namespace VIS.Models
             }
             else
             {
+                ValueNamePair pp = VLogger.RetrieveError();
+                if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
+                {
+                    strError.Append("BPSaveError -- " + pp.GetName());
+                }
                 // Classes.ShowMessage.Error("SearchKeyExist", null);
-                strError.Append("SearchKeyExist");
+                //strError.Append("SearchKeyExist");
                 //this.Cursor = Cursors.Arrow;
                 return strError.ToString();
             }

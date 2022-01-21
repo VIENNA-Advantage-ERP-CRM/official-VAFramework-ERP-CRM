@@ -732,9 +732,10 @@ namespace VAdvantage.Model
         /// <returns>true if success</returns>
         public Boolean UpdateJournalTotal()
         {
+            //VA230:Applied NVL function to set default 0 if null return while selecting sum of AmtAcctDr,AmtAcctCr
             //	Update Journal Total
             String sql = "UPDATE GL_Journal j"
-            + " SET (TotalDr, TotalCr) = (SELECT SUM(AmtAcctDr), SUM(AmtAcctCr)"
+            + " SET (TotalDr, TotalCr) = (SELECT NVL(SUM(AmtAcctDr),0), NVL(SUM(AmtAcctCr),0)"
                 + " FROM GL_JournalLine jl WHERE jl.IsActive='Y' AND j.GL_Journal_ID=jl.GL_Journal_ID) "
             + "WHERE GL_Journal_ID=" + GetGL_Journal_ID();
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
@@ -755,7 +756,7 @@ namespace VAdvantage.Model
 
             //	Update Batch Total
             sql = "UPDATE GL_JournalBatch jb"
-                + " SET (TotalDr, TotalCr) = (SELECT SUM(TotalDr), SUM(TotalCr)"
+                + " SET (TotalDr, TotalCr) = (SELECT NVL(SUM(TotalDr),0), NVL(SUM(TotalCr),0)"
                     + " FROM GL_Journal j WHERE jb.GL_JournalBatch_ID=j.GL_JournalBatch_ID) "
                 + "WHERE GL_JournalBatch_ID="
                     + "(SELECT DISTINCT GL_JournalBatch_ID FROM GL_Journal WHERE GL_Journal_ID="

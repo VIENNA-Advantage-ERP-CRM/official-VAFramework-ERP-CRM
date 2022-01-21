@@ -1,0 +1,338 @@
+<NewDataSet>
+  <xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop">
+    <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="AD_ReportFormat">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="AD_CLIENT_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_ORG_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_REPORTFORMAT_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_REPORTTEMPLATE" msprop:OraDbType="105" type="xs:string" minOccurs="0" />
+                <xs:element name="AD_SHOWGRIDFORMAT" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="CREATED" msprop:OraDbType="106" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="CREATEDBY" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="DESCRIPTION" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="EXPORT_ID" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="ISACTIVE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="NAME" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="UPDATED" msprop:OraDbType="106" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="UPDATEDBY" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_SHOWPARAMETER" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISFINANCIALREPORT" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="PA_REPORT_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <AD_ReportFormat>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_REPORTFORMAT_ID>1000001</AD_REPORTFORMAT_ID>
+    <AD_REPORTTEMPLATE>&lt;t:RadDocument xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:t="clr-namespace:Telerik.Windows.Documents.Model;assembly=Telerik.Windows.Documents" xmlns:s="clr-namespace:Telerik.Windows.Documents.Model.Styles;assembly=Telerik.Windows.Documents" xmlns:r="clr-namespace:Telerik.Windows.Documents.Model.Revisions;assembly=Telerik.Windows.Documents" xmlns:n="clr-namespace:Telerik.Windows.Documents.Model.Notes;assembly=Telerik.Windows.Documents" xmlns:th="clr-namespace:Telerik.Windows.Documents.Model.Themes;assembly=Telerik.Windows.Documents" version="1.2" LayoutMode="Paged" LineSpacing="1.14999997615814" LineSpacingType="Auto" ParagraphDefaultSpacingAfter="12" ParagraphDefaultSpacingBefore="0" SelectedBibliographicStyleName="\APA.XSL" StyleName="defaultDocumentStyle"&gt;
+  &lt;t:RadDocument.Captions&gt;
+    &lt;t:CaptionDefinition IsDefault="True" IsLinkedToHeading="False" Label="Figure" LinkedHeadingLevel="0" NumberingFormat="Arabic" SeparatorType="Hyphen" /&gt;
+    &lt;t:CaptionDefinition IsDefault="True" IsLinkedToHeading="False" Label="Table" LinkedHeadingLevel="0" NumberingFormat="Arabic" SeparatorType="Hyphen" /&gt;
+  &lt;/t:RadDocument.Captions&gt;
+  &lt;t:RadDocument.ProtectionSettings&gt;
+    &lt;t:DocumentProtectionSettings EnableDocumentProtection="False" Enforce="False" HashingAlgorithm="None" HashingSpinCount="0" ProtectionMode="ReadOnly" /&gt;
+  &lt;/t:RadDocument.ProtectionSettings&gt;
+  &lt;t:RadDocument.Styles&gt;
+    &lt;s:StyleDefinition DisplayName="Document Default Style" IsCustom="False" IsDefault="False" IsPrimary="True" Name="defaultDocumentStyle" Type="Default"&gt;
+      &lt;s:StyleDefinition.ParagraphStyle&gt;
+        &lt;s:ParagraphProperties LineSpacing="1.14999997615814" SpacingAfter="12" /&gt;
+      &lt;/s:StyleDefinition.ParagraphStyle&gt;
+      &lt;s:StyleDefinition.SpanStyle&gt;
+        &lt;s:SpanProperties FontFamily="Verdana" FontSize="16" FontStyle="Normal" FontWeight="Normal" /&gt;
+      &lt;/s:StyleDefinition.SpanStyle&gt;
+    &lt;/s:StyleDefinition&gt;
+    &lt;s:StyleDefinition DisplayName="Normal" IsCustom="False" IsDefault="True" IsPrimary="True" Name="Normal" Type="Paragraph" UIPriority="0" /&gt;
+    &lt;s:StyleDefinition BasedOnName="TableNormal" DisplayName="Table Grid" IsCustom="False" IsDefault="False" IsPrimary="False" Name="TableGrid" Type="Table" UIPriority="59"&gt;
+      &lt;s:StyleDefinition.ParagraphStyle&gt;
+        &lt;s:ParagraphProperties LineSpacing="1" SpacingAfter="0" /&gt;
+      &lt;/s:StyleDefinition.ParagraphStyle&gt;
+      &lt;s:StyleDefinition.TableStyle&gt;
+        &lt;s:TableProperties Borders="1,Single,#FF000000,none,,"&gt;
+          &lt;s:TableProperties.TableLook&gt;
+            &lt;t:TableLook /&gt;
+          &lt;/s:TableProperties.TableLook&gt;
+        &lt;/s:TableProperties&gt;
+      &lt;/s:StyleDefinition.TableStyle&gt;
+    &lt;/s:StyleDefinition&gt;
+    &lt;s:StyleDefinition DisplayName="Table Normal" IsCustom="False" IsDefault="True" IsPrimary="False" Name="TableNormal" Type="Table" UIPriority="59"&gt;
+      &lt;s:StyleDefinition.TableStyle&gt;
+        &lt;s:TableProperties CellPadding="5,0,5,0"&gt;
+          &lt;s:TableProperties.TableLook&gt;
+            &lt;t:TableLook /&gt;
+          &lt;/s:TableProperties.TableLook&gt;
+        &lt;/s:TableProperties&gt;
+      &lt;/s:StyleDefinition.TableStyle&gt;
+    &lt;/s:StyleDefinition&gt;
+  &lt;/t:RadDocument.Styles&gt;
+  &lt;t:Section HeaderTopMargin="12" PageMargin="95,48,95,95"&gt;
+    &lt;t:Section.Headers&gt;
+      &lt;t:Headers&gt;
+        &lt;t:Headers.Default&gt;
+          &lt;t:Header IsLinkedToPrevious="False"&gt;
+            &lt;t:Header.WatermarkSettings&gt;
+              &lt;t:DocumentWatermarkSettings Type="NoWatermark" /&gt;
+            &lt;/t:Header.WatermarkSettings&gt;
+          &lt;/t:Header&gt;
+        &lt;/t:Headers.Default&gt;
+      &lt;/t:Headers&gt;
+    &lt;/t:Section.Headers&gt;
+    &lt;t:Paragraph&gt;
+      &lt;t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+        &lt;s:SpanProperties FlowDirection="LeftToRight" FontFamily="Courier New" FontSize="13.3400001525879" /&gt;
+      &lt;/t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+    &lt;/t:Paragraph&gt;
+    &lt;t:Table Borders="1,None,#FF000000,none,," GridColumnWidthsSerializationInfo="Fixed,696" HasFixedStructure="False" LayoutMode="Fixed" PreferredWidth="Auto" StyleName="TableGrid" TableIndent="-24"&gt;
+      &lt;t:Table.TableLook&gt;
+        &lt;t:TableLook /&gt;
+      &lt;/t:Table.TableLook&gt;
+      &lt;t:TableRow Height="19.445333480835"&gt;
+        &lt;t:TableCell Borders="0,Inherit,#FF000000,none,," ColumnSpan="1" RowSpan="1"&gt;
+          &lt;t:Paragraph FontSize="13.3400001525879"&gt;
+            &lt;t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+              &lt;s:SpanProperties FontFamily="Courier New" FontSize="13.3400001525879" /&gt;
+            &lt;/t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+            &lt;t:Span FontFamily="Courier New" FontSize="13.3400001525879" Text="ORGLOGO(50,150,#)" /&gt;
+          &lt;/t:Paragraph&gt;
+        &lt;/t:TableCell&gt;
+      &lt;/t:TableRow&gt;
+    &lt;/t:Table&gt;
+    &lt;t:Paragraph AutomaticSpacingAfter="False" AutomaticSpacingBefore="False" Background="#00FFFFFF" FirstLineIndent="0" FontSize="13.3400001525879" LeftIndent="0" LineSpacing="2.66666674613953" LineSpacingType="Exact" RightIndent="0" SpacingAfter="2.66666674613953" SpacingBefore="0" TextAlignment="Left"&gt;
+      &lt;t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+        &lt;s:SpanProperties FontFamily="Courier New" FontSize="13.3400001525879" /&gt;
+      &lt;/t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+    &lt;/t:Paragraph&gt;
+    &lt;t:Paragraph AutomaticSpacingAfter="False" AutomaticSpacingBefore="False" Background="#00FFFFFF" FirstLineIndent="0" FontSize="13.3400001525879" LeftIndent="0" LineSpacing="0.133333340287209" LineSpacingType="Exact" RightIndent="0" SpacingAfter="0" SpacingBefore="0" TextAlignment="Left"&gt;
+      &lt;t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+        &lt;s:SpanProperties FontFamily="Courier New" FontSize="13.3400001525879" FontWeight="Bold" /&gt;
+      &lt;/t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+    &lt;/t:Paragraph&gt;
+    &lt;t:Paragraph AutomaticSpacingAfter="False" AutomaticSpacingBefore="False" Background="#00FFFFFF" FirstLineIndent="0" FontSize="13.3400001525879" LeftIndent="0" LineSpacing="0.133333340287209" LineSpacingType="Exact" RightIndent="0" SpacingAfter="0" SpacingBefore="0" TextAlignment="Left"&gt;
+      &lt;t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+        &lt;s:SpanProperties FlowDirection="LeftToRight" FontFamily="Courier New" FontSize="13.3400001525879" /&gt;
+      &lt;/t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+    &lt;/t:Paragraph&gt;
+    &lt;t:Table Borders="1,Single,#FF808080,none,,;1,Single,#FF808080,none,,;1,Single,#FF808080,none,,;1,Single,#FF808080,none,,;1,None,#FF000000,none,,;1,None,#FF000000,none,," CellPadding="5,5,5,0" GridColumnWidthsSerializationInfo="Fixed,231.238098144531;Fixed,280.317443847656;Fixed,184.444458007813" HasFixedStructure="False" LayoutMode="Fixed" PreferredWidth="Fixed,626" StyleName="TableGrid" TableIndent="-24"&gt;
+      &lt;t:Table.TableLook&gt;
+        &lt;t:TableLook /&gt;
+      &lt;/t:Table.TableLook&gt;
+      &lt;t:TableRow Height="30.9894943237305"&gt;
+        &lt;t:TableCell Background="#FFDBEEF4" Borders="1,Single,#FF808080,none,," ColumnSpan="3" Padding="5,5,5,0" RowSpan="1" TextAlignment="Center" VerticalAlignment="Center"&gt;
+          &lt;t:Paragraph FontSize="13.3400001525879" TextAlignment="Center"&gt;
+            &lt;t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+              &lt;s:SpanProperties FontFamily="Courier New" FontSize="13.3400001525879" FontWeight="Bold" /&gt;
+            &lt;/t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+            &lt;t:Span FontFamily="Courier New" FontSize="16.0066661834717" FontWeight="Bold" Text="●VARPT_PAYMENTVOUCHER_V.VARPT_H_PAYMENTVOUCHER●" /&gt;
+          &lt;/t:Paragraph&gt;
+        &lt;/t:TableCell&gt;
+      &lt;/t:TableRow&gt;
+      &lt;t:TableRow Height="65.4462127685547"&gt;
+        &lt;t:TableCell Borders="0,Inherit,#FF000000,none,,;1,Inherit,#FF000000,none,,;0,Inherit,#FF000000,none,,;0,Inherit,#FF000000,none,," ColumnSpan="1" RowSpan="1" TextAlignment="Left" VerticalAlignment="Center"&gt;
+          &lt;t:Paragraph FontSize="13.3400001525879" TextAlignment="Left"&gt;
+            &lt;t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+              &lt;s:SpanProperties FontFamily="Courier New" FontSize="13.3400001525879" /&gt;
+            &lt;/t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+            &lt;t:Span FontFamily="Courier New" FontSize="13.3400001525879" FontWeight="Bold" Text="●VARPT_PAYMENTVOUCHER_V.VARPT_H_VOUCHERNO●" /&gt;
+          &lt;/t:Paragraph&gt;
+          &lt;t:Paragraph FontSize="13.3400001525879" TextAlignment="Left"&gt;
+            &lt;t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+              &lt;s:SpanProperties FontFamily="Courier New" FontSize="13.3400001525879" /&gt;
+            &lt;/t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+            &lt;t:Span FontFamily="Courier New" FontSize="13.3400001525879" Text="●VARPT_PAYMENTVOUCHER_V.DocumentNo●" /&gt;
+          &lt;/t:Paragraph&gt;
+        &lt;/t:TableCell&gt;
+        &lt;t:TableCell Borders="0,Inherit,#FF000000,none,,;1,Inherit,#FF000000,none,,;0,Inherit,#FF000000,none,,;0,Inherit,#FF000000,none,," ColumnSpan="1" RowSpan="1" TextAlignment="Left" VerticalAlignment="Center"&gt;
+          &lt;t:Paragraph FontSize="13.3400001525879" TextAlignment="Left"&gt;
+            &lt;t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+              &lt;s:SpanProperties FontFamily="Courier New" FontSize="13.3400001525879" FontWeight="Bold" /&gt;
+            &lt;/t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+            &lt;t:Span FontFamily="Courier New" FontSize="13.3400001525879" FontWeight="Bold" Text="●VARPT_PAYMENTVOUCHER_V.VARPT_H_VOUCHERTYPE●" /&gt;
+          &lt;/t:Paragraph&gt;
+          &lt;t:Paragraph FontSize="13.3400001525879" TextAlignment="Left"&gt;
+            &lt;t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+              &lt;s:SpanProperties FontFamily="Courier New" FontSize="13.3400001525879" /&gt;
+            &lt;/t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+            &lt;t:Span FontFamily="Courier New" FontSize="13.3400001525879" Text="●VARPT_PAYMENTVOUCHER_V.C_DocType_ID●" /&gt;
+          &lt;/t:Paragraph&gt;
+        &lt;/t:TableCell&gt;
+        &lt;t:TableCell Borders="0,Inherit,#FF000000,none,,;1,Inherit,#FF000000,none,,;0,Inherit,#FF000000,none,,;0,Inherit,#FF000000,none,," ColumnSpan="1" RowSpan="1" TextAlignment="Left" VerticalAlignment="Center"&gt;
+          &lt;t:Paragraph FontSize="13.3400001525879" TextAlignment="Left"&gt;
+            &lt;t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+              &lt;s:SpanProperties FontFamily="Courier New" FontSize="13.3400001525879" /&gt;
+            &lt;/t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+            &lt;t:Span FontFamily="Courier New" FontSize="13.3400001525879" FontWeight="Bold" Text="●VARPT_PAYMENTVOUCHER_V.VARPT_H_DATE●" /&gt;
+          &lt;/t:Paragraph&gt;
+          &lt;t:Paragraph FontSize="13.3400001525879" TextAlignment="Left"&gt;
+            &lt;t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+              &lt;s:SpanProperties FontFamily="Courier New" FontSize="13.3400001525879" /&gt;
+            &lt;/t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+            &lt;t:Span FontFamily="Courier New" FontSize="13.3400001525879" Text="●VARPT_PAYMENTVOUCHER_V.DateAcct●" /&gt;
+          &lt;/t:Paragraph&gt;
+        &lt;/t:TableCell&gt;
+      &lt;/t:TableRow&gt;
+      &lt;t:TableRow Height="35.2231063842773"&gt;
+        &lt;t:TableCell Borders="0,Inherit,#FF000000,none,," ColumnSpan="3" RowSpan="1" TextAlignment="Left" VerticalAlignment="Center"&gt;
+          &lt;t:Paragraph FontSize="13.3400001525879" TextAlignment="Left"&gt;
+            &lt;t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+              &lt;s:SpanProperties FontFamily="Courier New" FontSize="13.3400001525879" /&gt;
+            &lt;/t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+            &lt;t:Span FontFamily="Courier New" FontSize="13.3400001525879" FontWeight="Bold" Text="●VARPT_PAYMENTVOUCHER_V.VARPT_H_BUSINESSPARTNER● " /&gt;
+            &lt;t:Span FontFamily="Courier New" FontSize="13.3400001525879" Text="●VARPT_PAYMENTVOUCHER_V.C_BPartner_ID●,●VARPT_PAYMENTVOUCHER_V.VARPT_BPARTNERID●" /&gt;
+          &lt;/t:Paragraph&gt;
+        &lt;/t:TableCell&gt;
+      &lt;/t:TableRow&gt;
+      &lt;t:TableRow Height="33.9731063842773"&gt;
+        &lt;t:TableCell Borders="0,Inherit,#FF000000,none,," ColumnSpan="3" RowSpan="1" TextAlignment="Left" VerticalAlignment="Center"&gt;
+          &lt;t:Paragraph FontSize="13.3400001525879" TextAlignment="Left"&gt;
+            &lt;t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+              &lt;s:SpanProperties FontFamily="Courier New" FontSize="13.3400001525879" /&gt;
+            &lt;/t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+            &lt;t:Span FontFamily="Courier New" FontSize="13.3400001525879" FontWeight="Bold" Text="●VARPT_PAYMENTVOUCHER_V.VARPT_H_PAYMENTDETAILS●" /&gt;
+            &lt;t:Span FontFamily="Courier New" FontSize="13.3400001525879" Text=" ●VARPT_PAYMENTVOUCHER_V.VARPT_PAYMENT●" /&gt;
+          &lt;/t:Paragraph&gt;
+        &lt;/t:TableCell&gt;
+      &lt;/t:TableRow&gt;
+      &lt;t:TableRow Height="25.1115531921387"&gt;
+        &lt;t:TableCell Borders="0,Inherit,#FF000000,none,,;0,Inherit,#FF000000,none,,;0,Inherit,#FF000000,none,,;1,Inherit,#FF000000,none,," ColumnSpan="3" RowSpan="1" TextAlignment="Left" VerticalAlignment="Center"&gt;
+          &lt;t:Paragraph FontSize="13.3400001525879" TextAlignment="Left"&gt;
+            &lt;t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+              &lt;s:SpanProperties FontFamily="Courier New" FontSize="13.3400001525879" /&gt;
+            &lt;/t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+            &lt;t:Span FontFamily="Courier New" FontSize="13.3400001525879" FontWeight="Bold" Text="●VARPT_PAYMENTVOUCHER_V.VARPT_H_DESCRIPTION● " /&gt;
+            &lt;t:Span FontFamily="Courier New" FontSize="13.3400001525879" Text="●VARPT_PAYMENTVOUCHER_V.Description●" /&gt;
+          &lt;/t:Paragraph&gt;
+        &lt;/t:TableCell&gt;
+      &lt;/t:TableRow&gt;
+      &lt;t:TableRow Height="35.4462127685547"&gt;
+        &lt;t:TableCell Borders="1,Single,#FF808080,none,," ColumnSpan="1" RowSpan="1" TextAlignment="Center" VerticalAlignment="Center"&gt;
+          &lt;t:Paragraph FontSize="13.3400001525879" TextAlignment="Center"&gt;
+            &lt;t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+              &lt;s:SpanProperties FontFamily="Courier New" FontSize="13.3400001525879" FontWeight="Normal" /&gt;
+            &lt;/t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+            &lt;t:Span FontFamily="Courier New" FontSize="13.3400001525879" FontWeight="Normal" Text="●VARPT_PAYMENTVOUCHER_V.C_Currency_ID● ●VARPT_PAYMENTVOUCHER_V.PayAmt●" /&gt;
+          &lt;/t:Paragraph&gt;
+        &lt;/t:TableCell&gt;
+        &lt;t:TableCell Borders="1,Inherit,#FF000000,none,,;0,Inherit,#FF000000,none,,;0,Inherit,#FF000000,none,,;0,Inherit,#FF000000,none,," ColumnSpan="2" RowSpan="1" TextAlignment="Left" VerticalAlignment="Center"&gt;
+          &lt;t:Paragraph FontSize="13.3400001525879" TextAlignment="Left"&gt;
+            &lt;t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+              &lt;s:SpanProperties FontFamily="Courier New" FontSize="13.3400001525879" /&gt;
+            &lt;/t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+            &lt;t:Span FontFamily="Courier New" FontSize="13.3400001525879" FontWeight="Bold" Text="●VARPT_PAYMENTVOUCHER_V.VARPT_AMTINWORDS●" /&gt;
+          &lt;/t:Paragraph&gt;
+        &lt;/t:TableCell&gt;
+      &lt;/t:TableRow&gt;
+      &lt;t:TableRow Height="24.445333480835"&gt;
+        &lt;t:TableCell Borders="0,Inherit,#FF000000,none,,;1,Inherit,#FF000000,none,,;0,Inherit,#FF000000,none,,;0,Inherit,#FF000000,none,," ColumnSpan="3" RowSpan="1"&gt;
+          &lt;t:Paragraph /&gt;
+        &lt;/t:TableCell&gt;
+      &lt;/t:TableRow&gt;
+      &lt;t:TableRow Height="23.8615531921387"&gt;
+        &lt;t:TableCell Borders="0,Inherit,#FF000000,none,,;0,Inherit,#FF000000,none,,;0,Inherit,#FF000000,none,,;1,Inherit,#FF000000,none,," ColumnSpan="3" RowSpan="1"&gt;
+          &lt;t:Paragraph FontSize="13.3400001525879"&gt;
+            &lt;t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+              &lt;s:SpanProperties FontFamily="Courier New" FontSize="13.3400001525879" /&gt;
+            &lt;/t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+            &lt;t:Span FontFamily="Courier New" FontSize="13.3400001525879" FontWeight="Bold" Text="●VARPT_PAYMENTVOUCHER_V.VARPT_H_PAYMENTREFERENCE●" /&gt;
+          &lt;/t:Paragraph&gt;
+        &lt;/t:TableCell&gt;
+      &lt;/t:TableRow&gt;
+      &lt;t:TableRow Height="36.6962127685547"&gt;
+        &lt;t:TableCell Borders="1,Single,#FF808080,none,,;1,None,#FF000000,none,,;1,Inherit,#FF000000,none,,;1,None,#FF000000,none,," ColumnSpan="1" RowSpan="1"&gt;
+          &lt;t:Paragraph FontSize="13.3400001525879"&gt;
+            &lt;t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+              &lt;s:SpanProperties FontFamily="Courier New" FontSize="13.3400001525879" /&gt;
+            &lt;/t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+            &lt;t:Span FontFamily="Courier New" FontSize="13.3400001525879" Text="●VARPT_PAYMENTVOUCHER_V.VARPT_H_ORDER●" /&gt;
+          &lt;/t:Paragraph&gt;
+          &lt;t:Paragraph FontSize="13.3400001525879"&gt;
+            &lt;t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+              &lt;s:SpanProperties FontFamily="Courier New" FontSize="13.3400001525879" /&gt;
+            &lt;/t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+            &lt;t:Span FontFamily="Courier New" FontSize="13.3400001525879" Text="●VARPT_PAYMENTVOUCHER_V.C_Order_ID●" /&gt;
+          &lt;/t:Paragraph&gt;
+        &lt;/t:TableCell&gt;
+        &lt;t:TableCell Borders="1,None,#FF000000,none,,;1,None,#FF000000,none,,;1,Inherit,#FF000000,none,,;1,None,#FF000000,none,," ColumnSpan="1" RowSpan="1"&gt;
+          &lt;t:Paragraph FontSize="13.3400001525879"&gt;
+            &lt;t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+              &lt;s:SpanProperties FontFamily="Courier New" FontSize="13.3400001525879" /&gt;
+            &lt;/t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+            &lt;t:Span FontFamily="Courier New" FontSize="13.3400001525879" Text="●VARPT_PAYMENTVOUCHER_V.VARPT_H_INVOICE●" /&gt;
+          &lt;/t:Paragraph&gt;
+          &lt;t:Paragraph FontSize="13.3400001525879"&gt;
+            &lt;t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+              &lt;s:SpanProperties FontFamily="Courier New" FontSize="13.3400001525879" /&gt;
+            &lt;/t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+            &lt;t:Span FontFamily="Courier New" FontSize="13.3400001525879" Text="●VARPT_PAYMENTVOUCHER_V.C_Invoice_ID●" /&gt;
+          &lt;/t:Paragraph&gt;
+        &lt;/t:TableCell&gt;
+        &lt;t:TableCell Borders="1,None,#FF000000,none,,;1,None,#FF000000,none,,;1,Single,#FF808080,none,,;1,None,#FF000000,none,," ColumnSpan="1" RowSpan="1"&gt;
+          &lt;t:Paragraph FontSize="13.3400001525879"&gt;
+            &lt;t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+              &lt;s:SpanProperties FontFamily="Courier New" FontSize="13.3400001525879" /&gt;
+            &lt;/t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+            &lt;t:Span FontFamily="Courier New" FontSize="13.3400001525879" Text="●VARPT_PAYMENTVOUCHER_V.VARPT_H_CHARGE●" /&gt;
+          &lt;/t:Paragraph&gt;
+          &lt;t:Paragraph FontSize="13.3400001525879"&gt;
+            &lt;t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+              &lt;s:SpanProperties FontFamily="Courier New" FontSize="13.3400001525879" /&gt;
+            &lt;/t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+            &lt;t:Span FontFamily="Courier New" FontSize="13.3400001525879" Text="●VARPT_PAYMENTVOUCHER_V.C_Charge_ID●" /&gt;
+          &lt;/t:Paragraph&gt;
+        &lt;/t:TableCell&gt;
+      &lt;/t:TableRow&gt;
+    &lt;/t:Table&gt;
+    &lt;t:Paragraph AutomaticSpacingAfter="False" AutomaticSpacingBefore="False" Background="#00FFFFFF" FirstLineIndent="0" FontSize="13.3400001525879" LeftIndent="0" LineSpacing="0.133333335320155" LineSpacingType="Exact" RightIndent="0" SpacingAfter="0" SpacingBefore="0" TextAlignment="Left"&gt;
+      &lt;t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+        &lt;s:SpanProperties FlowDirection="LeftToRight" FontFamily="Courier New" FontSize="13.3400001525879" /&gt;
+      &lt;/t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+    &lt;/t:Paragraph&gt;
+    &lt;t:Table Borders="1,Single,#FF808080,none,,;1,None,#FF000000,none,,;1,Single,#FF808080,none,,;1,Single,#FF808080,none,,;1,None,#FF000000,none,,;1,None,#FF000000,none,," CellPadding="5,5,5,0" GridColumnWidthsSerializationInfo="Fixed,388.714294433594;Fixed,307.285705566406" HasFixedStructure="False" LayoutMode="Fixed" PreferredWidth="Fixed,626" StyleName="TableGrid" TableIndent="-24.0000019073486"&gt;
+      &lt;t:Table.TableLook&gt;
+        &lt;t:TableLook /&gt;
+      &lt;/t:Table.TableLook&gt;
+      &lt;t:TableRow Height="83.2231063842773"&gt;
+        &lt;t:TableCell Borders="0,Inherit,#FF000000,none,," ColumnSpan="1" RowSpan="1" TextAlignment="Left" VerticalAlignment="Bottom"&gt;
+          &lt;t:Paragraph FontSize="13.3400001525879" TextAlignment="Left"&gt;
+            &lt;t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+              &lt;s:SpanProperties FontFamily="Courier New" FontSize="13.3400001525879" FontWeight="Bold" /&gt;
+            &lt;/t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+            &lt;t:Span FontFamily="Courier New" FontSize="13.3400001525879" FontWeight="Bold" Text="●VARPT_PAYMENTVOUCHER_V.VARPT_H_SIGNATURE●_________________" /&gt;
+          &lt;/t:Paragraph&gt;
+        &lt;/t:TableCell&gt;
+        &lt;t:TableCell Borders="0,Inherit,#FF000000,none,," ColumnSpan="1" RowSpan="1" TextAlignment="Right" VerticalAlignment="Bottom"&gt;
+          &lt;t:Paragraph FontSize="13.3400001525879" TextAlignment="Right"&gt;
+            &lt;t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+              &lt;s:SpanProperties FontFamily="Courier New" FontSize="13.3400001525879" FontWeight="Bold" /&gt;
+            &lt;/t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+            &lt;t:Span FontFamily="Courier New" FontSize="13.3400001525879" FontWeight="Bold" Text="●VARPT_PAYMENTVOUCHER_V.VARPT_H_AUTHORISEDSIG●_______________" /&gt;
+          &lt;/t:Paragraph&gt;
+        &lt;/t:TableCell&gt;
+      &lt;/t:TableRow&gt;
+    &lt;/t:Table&gt;
+    &lt;t:Paragraph&gt;
+      &lt;t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+        &lt;s:SpanProperties FlowDirection="LeftToRight" /&gt;
+      &lt;/t:Paragraph.ParagraphSymbolPropertiesStyle&gt;
+    &lt;/t:Paragraph&gt;
+  &lt;/t:Section&gt;
+&lt;/t:RadDocument&gt;</AD_REPORTTEMPLATE>
+    <AD_SHOWGRIDFORMAT>N</AD_SHOWGRIDFORMAT>
+    <CREATED>2014-08-30T07:32:55+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <EXPORT_ID>VARPT_1000021</EXPORT_ID>
+    <ISACTIVE>Y</ISACTIVE>
+    <NAME>VARPT_PaymentVoucher</NAME>
+    <UPDATED>2021-05-24T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <AD_SHOWPARAMETER>N</AD_SHOWPARAMETER>
+    <ISFINANCIALREPORT>N</ISFINANCIALREPORT>
+  </AD_ReportFormat>
+</NewDataSet>

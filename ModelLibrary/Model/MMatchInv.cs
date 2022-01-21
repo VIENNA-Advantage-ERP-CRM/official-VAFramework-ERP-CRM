@@ -28,6 +28,12 @@ namespace VAdvantage.Model
     {
         /**	Static Logger	*/
         private static VLogger _log = VLogger.GetVLogger(typeof(MMatchInv).FullName);
+
+        public int C_OrderLine_ID = 0;
+        public String orderDocStatus = String.Empty;
+        public String inOutDocStatus = String.Empty;
+        public MInOutLine iol = null;
+
         /**
        * 	Get InOut-Invoice Matches
        *	@param ctx context
@@ -314,7 +320,10 @@ namespace VAdvantage.Model
 
             if (GetM_AttributeSetInstance_ID() == 0 && GetM_InOutLine_ID() != 0)
             {
-                MInOutLine iol = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_TrxName());
+                if (iol == null || iol.Get_ID() <= 0 || iol.Get_ID() != GetM_InOutLine_ID())
+                {
+                    iol = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_TrxName());
+                }
                 SetM_AttributeSetInstance_ID(iol.GetM_AttributeSetInstance_ID());
             }
 
@@ -326,10 +335,10 @@ namespace VAdvantage.Model
             if (IsCostCalculated() || IsCostImmediate())
             {
                 X_M_MatchInvCostTrack costTrack = null;
-                int M_MatchInvCostTrack_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_MatchInvCostTrack_ID FROM M_MatchInvCostTrack WHERE M_MatchInv_ID = " + GetM_MatchInv_ID()));
-                if (M_MatchInvCostTrack_ID > 0)
+                DataSet M_MatchInvCostTrack_ID = DB.ExecuteDataset("SELECT * FROM M_MatchInvCostTrack WHERE M_MatchInv_ID = " + GetM_MatchInv_ID());
+                if (M_MatchInvCostTrack_ID != null && M_MatchInvCostTrack_ID.Tables[0].Rows.Count > 0)
                 {
-                    costTrack = new X_M_MatchInvCostTrack(GetCtx(), M_MatchInvCostTrack_ID, null);
+                    costTrack = new X_M_MatchInvCostTrack(GetCtx(), M_MatchInvCostTrack_ID.Tables[0].Rows[0], null);
                     costTrack.SetIsCostCalculated(IsCostCalculated());
                     costTrack.SetIsCostImmediate(IsCostImmediate());
                 }
@@ -450,12 +459,15 @@ namespace VAdvantage.Model
             if (success)
             {
                 //	Get Order and decrease invoices
-                MInvoiceLine iLine = new MInvoiceLine(GetCtx(), GetC_InvoiceLine_ID(), Get_TrxName());
-                int C_OrderLine_ID = iLine.GetC_OrderLine_ID();
                 if (C_OrderLine_ID == 0)
                 {
-                    MInOutLine ioLine = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_TrxName());
-                    C_OrderLine_ID = ioLine.GetC_OrderLine_ID();
+                    MInvoiceLine iLine = new MInvoiceLine(GetCtx(), GetC_InvoiceLine_ID(), Get_TrxName());
+                    C_OrderLine_ID = iLine.GetC_OrderLine_ID();
+                    if (C_OrderLine_ID == 0)
+                    {
+                        MInOutLine ioLine = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_TrxName());
+                        C_OrderLine_ID = ioLine.GetC_OrderLine_ID();
+                    }
                 }
                 //	No Order Found
                 if (C_OrderLine_ID == 0)
@@ -465,7 +477,11 @@ namespace VAdvantage.Model
                 for (int i = 0; i < mPO.Length; i++)
                 {
                     if (mPO[i].GetM_InOutLine_ID() == 0)
+                    {
+                        mPO[i].orderDocStatus = orderDocStatus;
+                        mPO[i].inOutDocStatus = inOutDocStatus;
                         mPO[i].Delete(true);
+                    }
                     else
                     {
                         mPO[i].SetC_InvoiceLine_ID(null);

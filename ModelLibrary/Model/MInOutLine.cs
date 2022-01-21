@@ -1128,7 +1128,7 @@ namespace VAdvantage.Model
                 }
                 SetM_Locator_ID(il);
             }
-
+            
             // check record is reversed or not
             //bool IsReveresed = false;
             //if (inO.GetDescription() != null)
@@ -1363,7 +1363,7 @@ namespace VAdvantage.Model
                         }
                     }
                 }
-            }
+            }            
 
             return true;
         }

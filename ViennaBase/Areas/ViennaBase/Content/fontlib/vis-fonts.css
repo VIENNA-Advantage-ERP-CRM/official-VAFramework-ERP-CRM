@@ -945,3 +945,19 @@
 .vis-file-signature:before {
     content: "\e9d6";
 }
+
+.vis-pending:before {
+    content: "\e9dc";
+}
+
+.vis-reverse:before {
+    content: "\e9dd";
+}
+
+.vis-void:before {
+    content: "\e9de";
+}
+
+.vis-folder-plus:before {
+    content: "\e9db";
+}

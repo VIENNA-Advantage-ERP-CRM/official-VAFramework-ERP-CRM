@@ -20,5 +20,6 @@ namespace VIS.DataContracts
         public bool EnforcePriceLimit { get; set; }
         public bool DiscountSchema { get; set; }
         public bool IsStocked { get; set; }
+        public string DocumentNote { get; set; }
     }
 }
