@@ -267,8 +267,10 @@
         }
 
         this.getLocaleAmount = function (amount) {
-            var formattedAmount = this.GetFormatedValue(amount).toLocaleString();//.toFixed(2);
-            return this.GetFormatAmount(formattedAmount, "init", VIS.Env.isDecimalPoint());
+            //maximumFractionDigits set to 6, so that same decimal value can be generated. We assume that in our system there will be no amount more than 6 decimal places
+            var formattedAmount = this.GetFormatedValue(amount).toLocaleString(undefined, { maximumFractionDigits: 6 });//.toFixed(2);
+            // 2nd parameter changed from init to formatonly because init was checking . only.
+            return this.GetFormatAmount(formattedAmount, "formatOnly", VIS.Env.isDecimalPoint());
         };
 
         /* privilized function */
@@ -933,9 +935,10 @@
             if (typeof options[VIS.Actions.zoom] !== "undefined") {
                 ulPopup.append($("<li data-action='" + VIS.Actions.zoom + "' style='opacity:" + (options[VIS.Actions.zoom] ? .7 : 1) +
                     "'><i data-action='" + VIS.Actions.zoom + "' class='vis vis-find'></i><span data-action='" + VIS.Actions.zoom + "'>" + VIS.Msg.getMsg("Zoom") + "</span></li>"));
-                //if (options[VIS.Actions.addnewrec])
-                //    ulPopup.append($("<li data-action='" + VIS.Actions.addnewrec + "' style='opacity:" + (options[VIS.Actions.zoom] ? .7 : 1) +
-                //        "'><i data-action='" + VIS.Actions.addnewrec + "' class='fa fa-plus'></i><span data-action='" + VIS.Actions.addnewrec + "'>" + VIS.Msg.getMsg("AddNew") + "</span></li>"));
+                //New option for combo and search control.
+                if (options[VIS.Actions.addnewrec])
+                    ulPopup.append($("<li data-action='" + VIS.Actions.addnewrec + "' style='opacity:" + (options[VIS.Actions.zoom] ? .7 : 1) +
+                        "'><i data-action='" + VIS.Actions.addnewrec + "' class='fa fa-plus'></i><span data-action='" + VIS.Actions.addnewrec + "'>" + VIS.Msg.getMsg("AddNew") + "</span></li>"));
             }
             if (options[VIS.Actions.preference])
                 ulPopup.append($("<li data-action='" + VIS.Actions.preference + "'><i data-action='" + VIS.Actions.preference + "' class='fa fa-cog'></i><span data-action='" + VIS.Actions.preference + "'>" + VIS.Msg.getMsg("Preference") + "</span></li>"));

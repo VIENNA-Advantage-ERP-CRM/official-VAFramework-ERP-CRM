@@ -3125,7 +3125,7 @@
         else {
             this.highlightButton(false, this.aNew);
         }
-            
+
 
         //	Single-Multi
         this.aMulti.setPressed(this.curGC.getIsSingleRow() || this.curGC.getIsMapRow());
@@ -3472,7 +3472,7 @@
             //log.warning("Insert Record disabled for Tab");
             return;
         }
-        //cmd_save(false);
+        this.curGC.setNewRecordLayout();
         this.curGC.dataNew(copy);
     };// New
 
