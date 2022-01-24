@@ -2377,12 +2377,17 @@ namespace VAdvantage.Model
                         if (IsSOTrx() && sLine.GetA_Asset_ID() != 0)
                         {
                             MAsset ast = new MAsset(Env.GetCtx(), sLine.GetA_Asset_ID(), Get_TrxName());
-                            ast.SetIsDisposed(true);
-                            ast.SetAssetDisposalDate(GetDateAcct());
-                            if (!ast.Save(Get_TrxName()))
+                            // VIS0060: Set Disposal on Asset only if full Asset is Sale.
+                            if (sLine.GetQtyEntered().Equals(ast.GetQty()))
                             {
-                                _processMsg = "AssetNotUpdated" + sLine.GetLine() + " :-->" + sLine.GetDescription();
-                                return DocActionVariables.STATUS_INPROGRESS;
+                                ast.SetIsDisposed(true);
+                                ast.SetAssetDisposalDate(GetDateAcct());
+
+                                if (!ast.Save(Get_TrxName()))
+                                {
+                                    _processMsg = "AssetNotUpdated" + sLine.GetLine() + " :-->" + sLine.GetDescription();
+                                    return DocActionVariables.STATUS_INPROGRESS;
+                                }
                             }
                         }
                     }
@@ -3186,7 +3191,7 @@ namespace VAdvantage.Model
 
                         Matchpo.SetIsSOTrx(IsSOTrx());
                         Matchpo.SetIsReturnTrx(IsReturnTrx());
-                        if (dsAvailableStock != null && dsAvailableStock.Tables[0].Rows.Count>0)
+                        if (dsAvailableStock != null && dsAvailableStock.Tables[0].Rows.Count > 0)
                         {
                             Matchpo.SetAvailableStock(Util.GetValueOfDecimal(
                                 dsAvailableStock.Tables[0].Select("M_InOutLine_ID = " + sLine.GetM_InOutLine_ID())[0]["QtyOnHand"]));
@@ -3981,17 +3986,17 @@ namespace VAdvantage.Model
             #endregion
 
             // By Amit For Foreign cost
-            try
-            {
-                if (!IsSOTrx() && !IsReturnTrx()) // for MR against PO
-                {
-                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(M_InoutLine_ID) FROM M_InoutLine WHERE IsFutureCostCalculated = 'N' AND M_InOut_ID = " + GetM_InOut_ID(), null, Get_Trx())) <= 0)
-                    {
-                        int no = Util.GetValueOfInt(DB.ExecuteQuery("UPDATE M_Inout Set IsFutureCostCalculated = 'Y' WHERE M_Inout_ID = " + GetM_InOut_ID(), null, Get_Trx()));
-                    }
-                }
-            }
-            catch (Exception) { }
+            //try
+            //{
+            //    if (!IsSOTrx() && !IsReturnTrx()) // for MR against PO
+            //    {
+            //        if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(M_InoutLine_ID) FROM M_InoutLine WHERE IsFutureCostCalculated = 'N' AND M_InOut_ID = " + GetM_InOut_ID(), null, Get_Trx())) <= 0)
+            //        {
+            //            int no = Util.GetValueOfInt(DB.ExecuteQuery("UPDATE M_Inout Set IsFutureCostCalculated = 'Y' WHERE M_Inout_ID = " + GetM_InOut_ID(), null, Get_Trx()));
+            //        }
+            //    }
+            //}
+            //catch (Exception) { }
             //end
 
             //	Counter Documents

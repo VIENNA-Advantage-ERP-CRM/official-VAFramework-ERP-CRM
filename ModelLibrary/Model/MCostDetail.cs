@@ -18,6 +18,7 @@ using VAdvantage.Utility;
 using VAdvantage.DataBase;
 using VAdvantage.Process;
 using VAdvantage.Logging;
+using ModelLibrary.Classes;
 
 namespace VAdvantage.Model
 {
@@ -215,7 +216,24 @@ namespace VAdvantage.Model
 
         public bool UpdateProductCost(String windowName, MCostDetail cd, MAcctSchema acctSchema, MProduct product, int M_ASI_ID, int cq_AD_Org_ID, string optionalStrCd = "process")
         {
-            //bool ProvisionalInvCalculated = false;
+            return UpdateProductCost(windowName, cd, acctSchema, product, M_ASI_ID, cq_AD_Org_ID, null, optionalStrCd);
+        }
+
+        /// <summary>
+        /// Create or Update Product Cost
+        /// </summary>
+        /// <param name="windowName">Window Name</param>
+        /// <param name="cd">cost Detail</param>
+        /// <param name="acctSchema">Accounting Schema</param>
+        /// <param name="product">Product</param>
+        /// <param name="M_ASI_ID">ASI</param>
+        /// <param name="cq_AD_Org_ID">queue Organization</param>
+        /// <param name="costingCheck">Costing Check</param>
+        /// <param name="optionalStrCd">optional String</param>
+        /// <returns>true, when success</returns>
+        public bool UpdateProductCost(String windowName, MCostDetail cd, MAcctSchema acctSchema, MProduct product,
+            int M_ASI_ID, int cq_AD_Org_ID, CostingCheck costingCheck, string optionalStrCd = "process")
+        {
             int AD_Org_ID = 0;
             // Get Org based on Costing Level
             dynamic pc = null;
@@ -302,18 +320,16 @@ namespace VAdvantage.Model
                     {
                         MCostElement ce = ces[i];
 
-                        // will not execute this  section for ProvisionalWeightedAverage
                         if (ce.GetM_CostElement_ID() != costElementId)
-                        //&& !ce.GetCostingMethod().Equals(MCostElement.COSTINGMETHOD_ProvisionalWeightedAverage))
                         {
-                            if (!UpdateCost(acctSchema, product, ce, AD_Org_ID, M_ASI_ID, 0, cq_AD_Org_ID, windowName, cd, costingMethod, costElementId, M_Warehouse_ID))
+                            if (!UpdateCost(acctSchema, product, ce, AD_Org_ID, M_ASI_ID, 0, cq_AD_Org_ID, windowName, cd, costingCheck, costingMethod, costElementId, M_Warehouse_ID))
                             {
                                 return false;
                             }
                         }
                         else if (!client.IsCostImmediate())
                         {
-                            if (!UpdateCost(acctSchema, product, ce, AD_Org_ID, M_ASI_ID, 0, cq_AD_Org_ID, windowName, cd, costingMethod, costElementId, M_Warehouse_ID))
+                            if (!UpdateCost(acctSchema, product, ce, AD_Org_ID, M_ASI_ID, 0, cq_AD_Org_ID, windowName, cd, costingCheck, costingMethod, costElementId, M_Warehouse_ID))
                             {
                                 return false;
                             }
@@ -361,7 +377,7 @@ namespace VAdvantage.Model
                             }
                             if (isCostImmediate == "N")
                             {
-                                if (!UpdateCost(acctSchema, product, ce, AD_Org_ID, M_ASI_ID, 0, cq_AD_Org_ID, windowName, cd, costingMethod, costElementId, M_Warehouse_ID))
+                                if (!UpdateCost(acctSchema, product, ce, AD_Org_ID, M_ASI_ID, 0, cq_AD_Org_ID, windowName, cd, costingCheck, costingMethod, costElementId, M_Warehouse_ID))
                                 {
                                     return false;
                                 }
@@ -376,19 +392,7 @@ namespace VAdvantage.Model
             }
             else
             {
-                //ProvisionalInvCalculated = false;
-                //bool isPOCostingMethod = MCostElement.IsPOCostingmethod(GetCtx(), cd.GetAD_Client_ID(), cd.GetM_Product_ID(), product.Get_Trx());
-
-                // Get Costing Element of ProvisionalWeightedAverage
-                //if (windowName.Equals("ProvisionalInvoice") && isPOCostingMethod)
-                //{
-                //    // Get Costing Element of Weighted Provisional Invoice
-                //    costElementId = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT DISTINCT M_CostElement_ID FROM M_CostElement WHERE IsActive = 'Y' 
-                //            AND CostingMethod = 'B' AND AD_Client_ID = " + product.GetAD_Client_ID()));
-                //}
-
                 // when calculate cost on completion, then calculate cost of defined costing method either on product category or on Accounting Schema
-                //WeightedProvisionalInvoice:
                 MCostElement ce = null;
                 if (optionalStrCd == "window" && GetM_CostElement_ID() == 0)
                 {
@@ -398,27 +402,40 @@ namespace VAdvantage.Model
                 {
                     ce = MCostElement.Get(GetCtx(), GetM_CostElement_ID());
                 }
-                if (!UpdateCost(acctSchema, product, ce, AD_Org_ID, M_ASI_ID, 0, cq_AD_Org_ID, windowName, cd, costingMethod, costElementId, M_Warehouse_ID))
+                if (!UpdateCost(acctSchema, product, ce, AD_Org_ID, M_ASI_ID, 0, cq_AD_Org_ID, windowName, cd, costingCheck, costingMethod, costElementId, M_Warehouse_ID))
                 {
                     return false;
                 }
-
-                // when we are calculating cost from Material Receipt, at the same time we have to calculate ProvisionalWeightedAverage 
-                // when we are calculating cost from ProvisionalInvoice and Costing method not belongs to PO costing Method
-                //if (windowName.Equals("Material Receipt") && optionalStrCd != "process" && isPOCostingMethod && !ProvisionalInvCalculated)
-                //{
-                //    // Get Costing Element of Weighted Provisional Invoice
-                //    costElementId = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT DISTINCT M_CostElement_ID FROM M_CostElement WHERE IsActive = 'Y' 
-                //            AND CostingMethod = 'B' AND AD_Client_ID = " + product.GetAD_Client_ID()));
-                //    ProvisionalInvCalculated = true;
-                //    goto WeightedProvisionalInvoice;
-                //}
             }
             return true;
         }
 
         private bool UpdateCost(MAcctSchema mas, MProduct product, MCostElement ce, int Org_ID, int M_ASI_ID, int A_Asset_ID, int cq_AD_Org_ID,
                                 string windowName, MCostDetail cd, string costingMethod = "", int costCominationelement = 0, int M_Warehouse_ID = 0)
+        {
+            return UpdateCost(mas, product, ce, Org_ID, M_ASI_ID, A_Asset_ID, cq_AD_Org_ID,
+                                        windowName, cd, null, costingMethod, costCominationelement, M_Warehouse_ID);
+        }
+
+        /// <summary>
+        /// Update or Create product Cost
+        /// </summary>
+        /// <param name="mas">Accouting Schema</param>
+        /// <param name="product">Product</param>
+        /// <param name="ce">Cost Element</param>
+        /// <param name="Org_ID">Organization</param>
+        /// <param name="M_ASI_ID">ASI</param>
+        /// <param name="A_Asset_ID">Asset</param>
+        /// <param name="cq_AD_Org_ID">Queue Organization</param>
+        /// <param name="windowName">Window Name</param>
+        /// <param name="cd">Cost Detail</param>
+        /// <param name="costingCheck">Costing Check</param>
+        /// <param name="costingMethod">Costing Method</param>
+        /// <param name="costCominationelement">Combination Element ID</param>
+        /// <param name="M_Warehouse_ID">Warehouse ID</param>
+        /// <returns></returns>
+        private bool UpdateCost(MAcctSchema mas, MProduct product, MCostElement ce, int Org_ID, int M_ASI_ID, int A_Asset_ID, int cq_AD_Org_ID,
+           string windowName, MCostDetail cd, CostingCheck costingCheck, string costingMethod = "", int costCominationelement = 0, int M_Warehouse_ID = 0)
         {
             MCost cost = null;
             MInOutLine inoutline = null;
@@ -1004,19 +1021,42 @@ namespace VAdvantage.Model
             //	*** Purchase Order Detail Record ***
             if (GetC_OrderLine_ID() != 0 && windowName == "Material Receipt")
             {
+                MOrderLine oLine = null;
                 #region Material Receipt with Purchase Order
-                MOrderLine oLine = new MOrderLine(GetCtx(), GetC_OrderLine_ID(), null);
+                if (costingCheck != null && costingCheck.orderline != null)
+                {
+                    oLine = costingCheck.orderline;
+                }
+                if (oLine == null || oLine.Get_ID() <= 0 || oLine.Get_ID() != GetC_OrderLine_ID())
+                {
+                    oLine = new MOrderLine(GetCtx(), GetC_OrderLine_ID(), null);
+                }
                 bool isReturnTrx = Env.Signum(qty) < 0;
                 log.Fine(" ");
 
-                inoutline = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_Trx());
-                inout = new MInOut(GetCtx(), inoutline.GetM_InOut_ID(), Get_Trx());
+                if (costingCheck != null && costingCheck.inoutline != null)
+                {
+                    inoutline = costingCheck.inoutline;
+                }
+                if (inoutline == null || inoutline.Get_ID() <= 0 || inoutline.Get_ID() != GetM_InOutLine_ID())
+                {
+                    inoutline = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_Trx());
+                }
+
+                if (costingCheck != null && costingCheck.inout != null)
+                {
+                    inout = costingCheck.inout;
+                }
+                if (inout == null || inout.Get_ID() <= 0 || inout.Get_ID() != inoutline.GetM_InOut_ID())
+                {
+                    inout = new MInOut(GetCtx(), inoutline.GetM_InOut_ID(), Get_Trx());
+                }
+
                 if (ce.IsCostingMethod() && isReturnTrx && inout != null && inout.GetDescription() != null && !inout.GetDescription().Contains("{->")) // -ve Entry on completion of MR
                 {
                     if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                     {
                         return false;
-                        cost.SetCurrentQty(0);
                     }
                     else
                     {
@@ -1028,7 +1068,6 @@ namespace VAdvantage.Model
                     if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                     {
                         return false;
-                        cost.SetCurrentQty(0);
                     }
                     else
                     {
@@ -1037,12 +1076,6 @@ namespace VAdvantage.Model
                 }
                 else if (ce.IsAveragePO())
                 {
-                    //if (!isReturnTrx)
-                    //    cost.SetWeightedAverage(amt, qty);
-                    //else
-                    //    cost.Add(amt, qty);
-
-                    /**********************************/
                     cost.Add(amt, qty);
                     if (Env.Signum(cost.GetCumulatedQty()) != 0)
                     {
@@ -1161,20 +1194,10 @@ namespace VAdvantage.Model
                 {
                     if (ce.IsFifo() || ce.IsLifo())
                     {
-                        decimal totalPrice = 0;
-                        decimal totalQty = 0;
-                        //MCostQueue[] cQueue = MCostQueue.GetQueue(product, M_ASI_ID,
-                        //    mas, cq_AD_Org_ID, ce, Get_TrxName());
                         MCostQueue[] cQueue = MCostQueue.GetQueue(product, M_ASI_ID,
                         mas, Org_ID, ce, Get_TrxName(), cost.GetM_Warehouse_ID());
                         if (cQueue != null && cQueue.Length > 0)
                         {
-                            //for (int j = 0; j < cQueue.Length; j++)
-                            //{
-                            //    totalPrice += Decimal.Multiply(cQueue[j].GetCurrentCostPrice(), cQueue[j].GetCurrentQty());
-                            //    totalQty += cQueue[j].GetCurrentQty();
-                            //}
-                            //cost.SetCurrentCostPrice(Decimal.Round((totalPrice / totalQty), precision));
                             cost.SetCurrentCostPrice(Decimal.Round(cQueue[0].GetCurrentCostPrice(), precision));
                         }
                         else if (cQueue.Length == 0)
@@ -1186,8 +1209,6 @@ namespace VAdvantage.Model
                 //change 3-5-2016
                 if (ce.IsAveragePO() || ce.IsLastPOPrice() || ce.IsWeightedAveragePO())
                 {
-                    //MCostElementDetail.CreateCostElementDetail(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product, M_ASI_ID,
-                    //                                             mas, ce.GetM_CostElement_ID(), windowName, cd, amt, qty);
                     MCostElementDetail.CreateCostElementDetail(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product, M_ASI_ID,
                                                     mas, ce.GetM_CostElement_ID(), windowName, cd, (cost.GetCurrentCostPrice() * qty), qty);
                 }
@@ -1202,8 +1223,23 @@ namespace VAdvantage.Model
 
                 if (GetM_InOutLine_ID() > 0 || GetC_OrderLine_ID() > 0)
                 {
-                    invoiceline = new MInvoiceLine(GetCtx(), GetC_InvoiceLine_ID(), Get_Trx());
-                    invoice = new MInvoice(GetCtx(), invoiceline.GetC_Invoice_ID(), Get_Trx());
+                    if (costingCheck != null && costingCheck.invoiceline != null)
+                    {
+                        invoiceline = costingCheck.invoiceline;
+                    }
+                    if (invoiceline == null || invoiceline.Get_ID() <= 0 || invoiceline.Get_ID() != GetC_InvoiceLine_ID())
+                    {
+                        invoiceline = new MInvoiceLine(GetCtx(), GetC_InvoiceLine_ID(), Get_Trx());
+                    }
+
+                    if (costingCheck != null && costingCheck.invoice != null)
+                    {
+                        invoice = costingCheck.invoice;
+                    }
+                    if (invoice == null || invoice.Get_ID() <= 0 || invoice.Get_ID() != invoiceline.GetC_Invoice_ID())
+                    {
+                        invoice = new MInvoice(GetCtx(), invoiceline.GetC_Invoice_ID(), Get_Trx());
+                    }
                     // checking invoice contain reverse invoice ref or not
                 }
                 bool isProvisnalInvcalculated = invoiceline != null ? !((invoiceline.Get_ColumnIndex("C_ProvisionalInvoiceLine_ID") >= 0 &&
@@ -1278,12 +1314,6 @@ namespace VAdvantage.Model
                     else
                     {
                         #region Av Invoice
-                        //if (!isReturnTrx)
-                        //    cost.SetWeightedAverage(amt, qty);
-                        //else
-                        //    cost.Add(amt, qty);
-
-                        /**********************************/
                         if (isReturnTrx && invoice != null && invoice.GetDescription() != null && !invoice.GetDescription().Contains("{->"))
                         {
                             if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
@@ -1306,25 +1336,6 @@ namespace VAdvantage.Model
                                 cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                             }
                         }
-                        //else if (isReturnTrx && invoice != null && invoice.GetDescription() != null && invoice.GetDescription().Contains("{->") && windowName != "Invoice(Customer)")
-                        //{
-                        //    // change 9-5-2016
-                        //    // when invoice (vendor) -> reverse ->  Acc. Amt & Current cost to update based on current cost else Invoice price
-                        //    if (cost.GetCurrentCostPrice() != 0)
-                        //    {
-                        //        amt = cost.GetCurrentCostPrice() * qty;
-                        //    }
-                        //    cost.Add(amt, qty);
-                        //    if (Env.Signum(cost.GetCumulatedQty()) != 0)
-                        //    {
-                        //        price = Decimal.Round(Decimal.Divide(cost.GetCumulatedAmt(), cost.GetCumulatedQty()), precision, MidpointRounding.AwayFromZero);
-                        //        cost.SetCurrentCostPrice(price);
-                        //    }
-                        //    else
-                        //    {
-                        //        cost.SetCurrentCostPrice(0);
-                        //    }
-                        //}
                         else
                         {
                             if (!isProvisnalInvcalculated)
@@ -1387,7 +1398,6 @@ namespace VAdvantage.Model
                             if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                             {
                                 return false;
-                                cost.SetCurrentQty(0);
                             }
                             else if (Decimal.Add(cost.GetCurrentQty(), qty) == 0 && !isProvisnalInvcalculated)
                             {
@@ -1424,28 +1434,11 @@ namespace VAdvantage.Model
                 else if ((ce.IsFifo() || ce.IsLifo()) && windowName != "Invoice(Customer)")
                 {
                     #region Lifo / Fifo
-                    //	Real ASI - costing level Org
-
-                    // commented by Amit because cost queue is created from complete 16-12-2015
-                    //MCostQueue cq = MCostQueue.Get(product, GetM_AttributeSetInstance_ID(),
-                    //    mas, Org_ID, ce.GetM_CostElement_ID(), Get_TrxName());
-                    //cq.SetCosts(amt, qty, precision);
-                    //cq.Save(Get_TrxName());
-
-                    //end
                     //	Get Costs - costing level Org/ASI
-                    decimal totalPrice = 0;
-                    decimal totalQty = 0;
                     MCostQueue[] cQueue = MCostQueue.GetQueue(product, M_ASI_ID,
                         mas, Org_ID, ce, Get_TrxName(), cost.GetM_Warehouse_ID());
                     if (cQueue != null && cQueue.Length > 0)
                     {
-                        //for (int j = 0; j < cQueue.Length; j++)
-                        //{
-                        //    totalPrice += Decimal.Multiply(cQueue[j].GetCurrentCostPrice(), cQueue[j].GetCurrentQty());
-                        //    totalQty += cQueue[j].GetCurrentQty();
-                        //}
-                        //cost.SetCurrentCostPrice(Decimal.Round((totalPrice / totalQty), precision));
                         cost.SetCurrentCostPrice(Decimal.Round(cQueue[0].GetCurrentCostPrice(), precision));
                     }
                     if (cQueue.Length == 0)
@@ -1470,16 +1463,6 @@ namespace VAdvantage.Model
                             cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                         }
                     }
-                    //else if (isReturnTrx && invoice != null && invoice.GetDescription() != null && invoice.GetDescription().Contains("{->") && windowName != "Invoice(Customer)")
-                    //{
-                    //    // change 9-5-2016
-                    //    // when invoice (vendor) -> reverse ->  Acc. Amt, Acc. Qty, On Hand Qty & Current cost to update based on current cost else Invoice price
-                    //    if (cost.GetCurrentCostPrice() != 0)
-                    //    {
-                    //        amt = cost.GetCurrentCostPrice() * qty;
-                    //    }
-                    //    cost.Add(amt, qty);
-                    //}
                     else
                     {
                         if (windowName != "Invoice(Customer)" && !isProvisnalInvcalculated)
@@ -1507,7 +1490,6 @@ namespace VAdvantage.Model
                             if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                             {
                                 return false;
-                                cost.SetCurrentQty(0);
                             }
                             else if (!isProvisnalInvcalculated)
                             {
@@ -1519,23 +1501,12 @@ namespace VAdvantage.Model
                             if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                             {
                                 return false;
-                                cost.SetCurrentQty(0);
                             }
                             else if (!isProvisnalInvcalculated)
                             {
                                 cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                             }
                         }
-                        //else if (isReturnTrx && invoice != null && invoice.GetDescription() != null && invoice.GetDescription().Contains("{->") && windowName != "Invoice(Customer)")
-                        //{
-                        //    // change 9-5-2016
-                        //    // when invoice (vendor) -> reverse ->  Acc. Amt, Acc. Qty, On Hand Qty & Current cost to update based on current cost else Invoice price
-                        //    if (cost.GetCurrentCostPrice() != 0)
-                        //    {
-                        //        amt = cost.GetCurrentCostPrice() * qty;
-                        //    }
-                        //    cost.Add(amt, qty);
-                        //}
                         else
                         {
                             if (!isProvisnalInvcalculated)
@@ -1630,33 +1601,12 @@ namespace VAdvantage.Model
                             if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                             {
                                 return false;
-                                cost.SetCurrentQty(0);
                             }
                             else if (!isProvisnalInvcalculated)
                             {
                                 cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                             }
                         }
-                        //else if (isReturnTrx && invoice != null && invoice.GetDescription() != null && invoice.GetDescription().Contains("{->") && windowName != "Invoice(Customer)")
-                        //{
-                        //    // change 9-5-2016
-                        //    // when invoice (vendor) -> reverse ->  Acc. Amt, Acc. Qty, On Hand Qty & Current cost to update based on current cost else Invoice price
-                        //    if (Env.Signum(cost.GetCurrentCostPrice()) == 0)
-                        //    {
-                        //        cost.SetCurrentCostPrice(price);
-                        //        //	seed initial price
-                        //        if (Env.Signum(cost.GetCurrentCostPrice()) == 0 && cost.Get_ID() == 0)
-                        //        {
-                        //            cost.SetCurrentCostPrice(MCost.GetSeedCosts(product, M_ASI_ID,
-                        //                    mas, Org_ID, ce.GetCostingMethod(), GetC_OrderLine_ID()));
-                        //        }
-                        //    }
-                        //    if (cost.GetCurrentCostPrice() != 0)
-                        //    {
-                        //        amt = cost.GetCurrentCostPrice() * qty;
-                        //    }
-                        //    cost.Add(amt, qty);
-                        //}
                         else
                         {
                             if (Env.Signum(cost.GetCurrentCostPrice()) == 0)
@@ -1743,9 +1693,6 @@ namespace VAdvantage.Model
                 }
                 else if ((ce.IsFifo() || ce.IsLifo() || ce.IsStandardCosting() || ce.IsLastInvoice() || ce.IsAverageInvoice()) && windowName != "Invoice(Customer)")
                 {
-                    //MCostElementDetail.CreateCostElementDetail(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product, M_ASI_ID,
-                    //                                mas, ce.GetM_CostElement_ID(), windowName, cd, amt, qty);
-
                     MCostElementDetail.CreateCostElementDetail(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product, M_ASI_ID,
                                                     mas, ce.GetM_CostElement_ID(), windowName, cd, (cost.GetCurrentCostPrice() * qty), qty);
                 }
@@ -1765,8 +1712,23 @@ namespace VAdvantage.Model
                 bool addition = Env.Signum(qty) > 0;
                 if (GetM_InOutLine_ID() > 0)
                 {
-                    inoutline = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_Trx());
-                    inout = new MInOut(GetCtx(), inoutline.GetM_InOut_ID(), Get_Trx());
+                    if (costingCheck != null && costingCheck.inoutline != null)
+                    {
+                        inoutline = costingCheck.inoutline;
+                    }
+                    if (inoutline == null || inoutline.Get_ID() <= 0 || inoutline.Get_ID() != GetM_InOutLine_ID())
+                    {
+                        inoutline = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_Trx());
+                    }
+
+                    if (costingCheck != null && costingCheck.inout != null)
+                    {
+                        inout = costingCheck.inout;
+                    }
+                    if (inout == null || inout.Get_ID() <= 0 || inout.Get_ID() != inoutline.GetM_InOut_ID())
+                    {
+                        inout = new MInOut(GetCtx(), inoutline.GetM_InOut_ID(), Get_Trx());
+                    }
                 }
                 if (GetM_MovementLine_ID() > 0)
                 {
@@ -3873,25 +3835,6 @@ namespace VAdvantage.Model
             }
             else if (GetC_ProvisionalInvoiceLine_ID() != 0)
             {
-                // Update Product Costs for Provisional Weighted Average
-                //amt = cd.GetAmt();
-                //if (ce.IsProvisionalWeightedAverage())
-                //{
-                //    if (cost.GetCurrentQty() != 0)
-                //    {
-                //        price = Decimal.Round(Decimal.Divide(
-                //                                              Decimal.Add(
-                //                                              Decimal.Multiply(cost.GetCurrentCostPrice(), cost.GetCurrentQty()), amt),
-                //                                              cost.GetCurrentQty())
-                //                                              , precision, MidpointRounding.AwayFromZero);
-                //        cost.SetCurrentCostPrice(price);
-
-                //        // calculate cost element detail
-                //        MCostElementDetail.CreateCostElementDetail(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product, M_ASI_ID,
-                //                                        mas, ce.GetM_CostElement_ID(), windowName, cd, (cost.GetCurrentCostPrice() * qty), qty);
-                //    }
-                //}
-
                 #region AP Invoice Detail Record
                 bool isReturnTrx = Env.Signum(qty) < 0;
                 DataSet dsProvisionlInvoice = DB.ExecuteDataset(@"SELECT IsSOTrx,IsReturnTrx, IsReversal FROM C_ProvisionalInvoice pi INNER JOIN 
