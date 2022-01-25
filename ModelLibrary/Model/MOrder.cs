@@ -2336,7 +2336,7 @@ namespace VAdvantage.Model
                 // If lines are available and user is changing the pricelist, Order or Ship/Receipt on header than we have to restrict it because
                 // JID_0399_1: After change the receipt or order system will give the error message
                 if (!newRecord && (Is_ValueChanged("M_PriceList_ID") || Is_ValueChanged("Orig_Order_ID") || Is_ValueChanged("Orig_InOut_ID")))
-                {
+                {                   
                     //MOrderLine[] lines = GetLines(false, null);
                     //if (lines.Length > 0)
                     //{
@@ -2352,7 +2352,18 @@ namespace VAdvantage.Model
                     }
                 }
                 //End
-
+                if(!newRecord && Is_ValueChanged("C_DocTypeTarget_ID"))
+                {
+                    //1052--if doctype is changed from release order to another then blanket order line reference
+                    //should not be preset at order line if present order should not be updated  
+                    string sql = "SELECT COUNT(C_OrderLine_ID) FROM C_OrderLine WHERE C_Order_ID = " + GetC_Order_ID() + " AND IsActive = 'Y' " +
+                    "AND C_OrderLine_Blanket_ID IS NOT NULL ";
+                    if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
+                    {
+                        log.SaveWarning("pleaseDeleteLinesFirst", "");
+                        return false;
+                    }
+                }
                 //	No Partner Info - set Template
                 if (GetC_BPartner_ID() == 0)
                     SetBPartner(MBPartner.GetTemplate(GetCtx(), GetAD_Client_ID()));
