@@ -424,13 +424,14 @@
         this.depOnField = []; //Fields against columnname
         this.tabPanels = [];
         this.linkColumnName = gTab._linkColumnName;
-        this.extendendWhere = gTab._extendedWhere;
+        this.extendedWhere = gTab._extendedWhere;
         this.keyColumnName = "";
         this.defaultFocusField;
         this.isThroughRoleCenter = false;
 
         this.query = new VIS.Query();
         this.oldQuery = "0=9";
+        //this.oldCardQuery = "0=9";
         this.linkValue = "999999";
         this.currentRow = -1;
         this.hasPanel = false;
@@ -450,6 +451,7 @@
         this.loadData(windowVo);
         windowVo = null;
         this.gridWindow = null;
+        this.outerWhereCondition = null;
     };
 
     /**
@@ -553,6 +555,11 @@
 
     GridTab.prototype.getTabLayout = function () {
         return this.vo.TabLayout;
+    }
+
+    //NewRecordView
+    GridTab.prototype.getNewRecordView = function () {
+        return this.vo.NewRecordView;
     }
 
     GridTab.prototype.getIsDisplayed = function (initialSetup) {
@@ -1112,6 +1119,23 @@
         return this.vo.WhereClause;
     };
 
+    /*
+     * Set where condition from outside 
+     * @param {any} conition
+     */
+    GridTab.prototype.setOuterWhereClause = function (conition) {
+        this.outerWhereCondition = conition;
+    }
+
+    /*
+     *Reset outside condition
+     */
+     GridTab.prototype.resetOuterClauses = function () {
+        this.setOuterWhereClause("");
+        this.getTableModel().setOuterOrderClause("");
+        this.getTableModel().setDoPaging(true);
+    };
+
     GridTab.prototype.getSearchQuery = function (val) {
         var query = null;
         var fields = this.getFields();
@@ -1663,8 +1687,7 @@
                 this.gridTable.setDoPaging(true);// _gridTable.DoPaging = false;
                 refresh = false;
             }
-        }
-
+        }       
 
         this.oldQuery = this.query.getWhereClause();
         this.vo.onlyCurrentDays = onlyCurrentDays;
@@ -1756,7 +1779,7 @@
             }	//	isDetail
         }
 
-        this.extendedWhere = where.toString();
+        
 
         //	Final Query
         if (this.query.getIsActive()) {
@@ -1768,6 +1791,17 @@
                 where += q;
             }
 
+        }
+        this.extendedWhere = where.toString();
+        //if (this.oldCardQuery != this.cardWhereCondition) {
+        //    refresh = false;
+        //}
+        //this.oldCardQuery = this.cardWhereCondition;
+        if (this.outerWhereCondition && this.outerWhereCondition.length>0) {           
+            if (where.length > 0)
+                where += " AND ";
+            where += this.outerWhereCondition;
+            refresh = false;
         }
 
         /* Query */
@@ -3068,6 +3102,7 @@
         this.mSortList;
         this.AD_Tab_ID = 0;
         this.log = VIS.Logging.VLogger.getVLogger("VIS.GridTable");
+        this.outerOrderClause = "";
     };
 
     GridTable.prototype.ctx = VIS.context;			//	the only OK condition
@@ -3468,6 +3503,12 @@
             this.gTable._orderClause = "";
     };
 
+    GridTable.prototype.setOuterOrderClause = function (newOrderClause) {
+        this.outerOrderClause = newOrderClause;
+        if (this.outerOrderClause == null)
+            this.outerOrderClause = "";
+    };
+
     GridTable.prototype.setSelectWhereClause = function (newWhereClause) {
         if (this.isOpen) {
             //log.Log(Level.SEVERE, "Table already open - ignored");
@@ -3759,7 +3800,11 @@
             this.SQL_Direct = "";
 
         //	ORDER BY
-        if (!gt._orderClause.equals("")) {
+
+        if (!this.outerOrderClause.equals("")) {
+            this.SQL += " ORDER BY " + this.outerOrderClause;
+            this.SQL_Direct += " ORDER BY " + this.outerOrderClause;
+        } else if (!gt._orderClause.equals("")) {
             this.SQL += " ORDER BY " + gt._orderClause;
             this.SQL_Direct += " ORDER BY " + gt._orderClause;
         }

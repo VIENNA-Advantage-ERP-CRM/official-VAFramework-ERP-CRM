@@ -4,6 +4,11 @@
     var AWINDOW_HEADER_HEIGHT = 43;
     var APANEL_HEADER_HEIGHT = 50; //margin adjust of first tr
     var APANEL_FOOTER_HEIGHT = 40
+    var NEWRECORDVIEW_GridLayout = "G";
+    var NEWRECORDVIEW_SingleRowLayout = "S"
+    var TABLAYOUT_CardViewLayout = "C";
+    var TABLAYOUT_GridLayout = "N";
+    var TABLAYOUT_SingleRowLayout = "Y";
 
 
     var tmpvc = document.querySelector('#vis-ad-viewctrltmp').content;// $("#vis-ad-windowtmp");
@@ -334,7 +339,7 @@
                 self.aPanel.actionPerformedCallback(self.aPanel, "Multi");
                 self.aPanel.setLastView("Card");
             }
-                //self.switchSingleRow();
+            //self.switchSingleRow();
         };
 
         //On Sort event
@@ -657,16 +662,16 @@
 
         var defaultTabLayout = mTab.getTabLayout();
         // check default layout of tab
-        //N means multirow lauoyt
+        //N means multirow layout
         //Y means Single row layout
         //C means Card view layout
-        if (defaultTabLayout == "N")
+        if (defaultTabLayout == TABLAYOUT_GridLayout)
             this.singleRow = false;
-        else if (defaultTabLayout == "Y")
+        else if (defaultTabLayout == TABLAYOUT_SingleRowLayout)
             this.switchSingleRow(true);
-        else if (defaultTabLayout == "C") {
+        else if (defaultTabLayout == TABLAYOUT_CardViewLayout) {
             this.isCardRow = false;
-            this.switchCardRow(false);
+            this.switchCardRow(true);
         }
 
     };
@@ -1109,6 +1114,14 @@
         }
         this.activateTree();
 
+        //check for defalut view 
+        if (!this.cardSetup && this.gTab.getTabLayout() == "C") {
+            var cardTmp = this.gTab.vo.Cards[0];
+            this.vCardView.setCardSqlInTabModel(this.gTab, cardTmp);
+            this.vCardView.setCardViewData(cardTmp);
+            this.cardSetup = true;
+        }
+
     };
 
     VIS.GridController.prototype.multiRowResize = function () {
@@ -1348,14 +1361,14 @@
         //  Set initial record
         if (this.gTab.getTableModel().getTotalRowCount() == 0 || this.gTab.getTableModel().getTotalRowCount() == null) {
             //	Automatically create New Record, if none & tab not RO
-            if (!this.gTab.getIsReadOnly() && this.isZoomAction==true &&
-                (this.isZoomAction ==true || VIS.context.getIsAutoNew(this.windowNo)
+            if (!this.gTab.getIsReadOnly() && this.isZoomAction == true &&
+                (this.isZoomAction == true || VIS.context.getIsAutoNew(this.windowNo)
                     || this.gTab.getIsQueryNewRecord()) && parentValid) {
                 if (this.gTab.getIsInsertRecord() && !this.skipInserting) {
+
+                    //When user clicks on new record from combo or search button, then switch view 
+                    this.setNewRecordLayout();
                     this.dataNew(false);
-                    //if (this.isZoomAction) {
-                    //    this.switchSingleRow();
-                    //}
                     return true;
                 }
                 else {
@@ -1366,6 +1379,27 @@
         }
         //reset
         return false;
+    };
+
+    /**
+     * Check new record setting and switch to relevent view.
+     * S--> Single View(on click new switch to single view)
+     * G--> Grid View(on click new, switch to grid view)
+     * else --> Current View (if current view is card then switch to single otherwise current view)
+     * */
+    VIS.GridController.prototype.setNewRecordLayout = function () {
+        var newRecordView = this.gTab.getNewRecordView();
+        if (newRecordView == NEWRECORDVIEW_SingleRowLayout) {
+            this.switchSingleRow();
+        }
+        else if (newRecordView == NEWRECORDVIEW_GridLayout) {
+            this.switchMultiRow();
+        }
+        else {
+            if (this.getIsCardRow()) {
+                this.switchSingleRow();
+            }
+        }
     };
     /*
       - Handle Control's Change value Event
@@ -1751,11 +1785,12 @@
                 if (this.vHeaderPanel.sizeChangedListner && this.vHeaderPanel.sizeChangedListner.onSizeChanged)
                     this.vHeaderPanel.sizeChangedListner.onSizeChanged();
             }
+            this.gTab.resetOuterClauses();
         }
 
     };
 
-    VIS.GridController.prototype.switchCardRow = function (avoidRefresh) {
+    VIS.GridController.prototype.switchCardRow = function (avoidRequery) {
         if (!this.isCardRow) {
 
             this.singleRow = false;
@@ -1776,8 +1811,8 @@
             else p1.css({ "float": '' });
 
             p1.css('display', 'block');
-            if (!avoidRefresh)
-                this.vCardView.refreshUI(this.getVCardPanel().width());
+            if (!avoidRequery)
+                this.vCardView.requeryData();
             p1 = null;
         }
     };

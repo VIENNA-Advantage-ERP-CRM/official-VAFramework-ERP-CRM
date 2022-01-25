@@ -2949,10 +2949,11 @@ namespace VIS.Helpers
         /// clean up
         /// </summary>
 
-        internal static CardViewData GetCardViewDetail(int AD_Window_ID, int AD_Tab_ID, Ctx ctx, int AD_CardView_ID)
+        internal static CardViewData GetCardViewDetail(int AD_Window_ID, int AD_Tab_ID, Ctx ctx, int AD_CardView_ID,string SQL)
         {
+            
             VAdvantage.Classes.CommonFunctions cFun = new VAdvantage.Classes.CommonFunctions();
-            CardViewData cv = cFun.GetCardViewDetails(ctx.GetAD_User_ID(), AD_Tab_ID, AD_CardView_ID, ctx);
+            CardViewData cv = cFun.GetCardViewDetails(ctx.GetAD_User_ID(), AD_Tab_ID, AD_CardView_ID, ctx, SecureEngineBridge.DecryptByClientKey(SQL, ctx.GetSecureKey()));
             return cv;
             //CardViewData cv = new CardViewData();
             //cv.IncludedCols = new List<CardViewCol>();
@@ -3047,7 +3048,7 @@ namespace VIS.Helpers
                     {
                         Name = Util.GetValueOfString(ds.Tables[0].Rows[i]["Name"]),
                         AD_CardView_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_CardView_ID"]),
-                        created = Util.GetValueOfInt(ds.Tables[0].Rows[i]["CreatedBy"])
+                        Created = Util.GetValueOfInt(ds.Tables[0].Rows[i]["CreatedBy"])
                     };
 
                     // dcard is default card ID. it can be 0

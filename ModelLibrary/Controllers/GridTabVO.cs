@@ -156,6 +156,13 @@ namespace VAdvantage.Controller
         /** Tab Layout		*/
         public string TabLayout = "N";
 
+        /** New Record View
+         *S---> Single View
+         *G---> Grid View
+         *else--> Current View
+         */
+        public string NewRecordView = "";
+
         public List<CardViewData> Cards = new List<CardViewData>();
 
         public int DefaultCardID = 0;
@@ -522,6 +529,8 @@ namespace VAdvantage.Controller
                 vo.IsMaintainVersions = Utility.Util.GetValueOfString(dr["IsMaintainVersions"]).Equals("Y");
 
                 vo.TabLayout = Utility.Util.GetValueOfString(dr["TabLayout"]);
+
+                vo.NewRecordView = Util.GetValueOfString(dr["NewRecordView"]);
             }
             catch (System.Exception ex)
             {
@@ -654,7 +663,8 @@ namespace VAdvantage.Controller
         private static void CreateCardPanels(GridTabVO mTabVO, Ctx ctx)
         {
             VAdvantage.Classes.CommonFunctions cFun = new VAdvantage.Classes.CommonFunctions();
-            CardViewData card = cFun.GetCardViewDetails(ctx.GetAD_User_ID(), mTabVO.AD_Tab_ID, 0, ctx);
+            string sql = " FROM " + mTabVO.TableName;
+            CardViewData card = cFun.GetCardViewDetails(ctx.GetAD_User_ID(), mTabVO.AD_Tab_ID, 0, ctx, sql);
             if (card != null)
             {
                 mTabVO.Cards.Add(card);
@@ -966,6 +976,7 @@ namespace VAdvantage.Controller
             clone.TabLayout = TabLayout;
             clone.DefaultCardID = DefaultCardID;
             clone.Cards = Cards;
+            clone.NewRecordView = NewRecordView;
 
             clone.fields = new List<GridFieldVO>();
             for (int i = 0; i < fields.Count; i++)
