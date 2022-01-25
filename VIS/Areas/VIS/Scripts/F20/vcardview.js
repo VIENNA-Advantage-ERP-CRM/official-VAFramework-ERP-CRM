@@ -431,7 +431,7 @@
     VCardView.prototype.replaceCard = function (rec,id) {
         rec.recid = id;
 
-        var changeCard = new VCard(this.fields, rec, this.headerItems, this.headerStyle, this.headerPadding, windowNo, {}, this.aPanel)
+        var changeCard = new VCard(this.fields, rec, this.headerItems, this.headerStyle, this.headerPadding, this.mTab.getWindowNo(), {}, this.aPanel)
         if (this.grpCount==1) {
             changeCard.getRoot().width("240px").css({ 'margin': '5px 12px 12px 5px', 'float': (VIS.Application.isRTL ? 'right' : 'left') });
         }
