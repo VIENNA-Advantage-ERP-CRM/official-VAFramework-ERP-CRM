@@ -195,7 +195,8 @@ namespace VAdvantage.Model
                 {
                     from.SetProcessMsg("Could not create Order.");
                 }
-                throw new Exception("Could not create Order. " + (pp != null && pp.GetName() != null ? pp.GetName() : ""));
+                throw new Exception("Could not create Order. " + (pp != null && !String.IsNullOrEmpty(pp.GetName()) ? pp.GetName() :
+                    (pp != null && !String.IsNullOrEmpty(pp.GetValue()) ? Msg.GetMsg(from.GetCtx(), pp.GetValue()) : "")));
             }
             if (counter)
             {
@@ -213,7 +214,8 @@ namespace VAdvantage.Model
                 {
                     from.SetProcessMsg("Could not create Order Lines.");
                 }
-                throw new Exception("Could not create Order Lines. " + (pp != null && pp.GetName() != null ? pp.GetName() : ""));
+                throw new Exception("Could not create Order Lines. " + (pp != null && !String.IsNullOrEmpty(pp.GetName()) ? pp.GetName() :
+                    (pp != null && !String.IsNullOrEmpty(pp.GetValue()) ? Msg.GetMsg(from.GetCtx(), pp.GetValue()) : "")));
             }
 
             if (to.Get_ColumnIndex("ConditionalFlag") > -1)
@@ -1373,6 +1375,11 @@ namespace VAdvantage.Model
                 if (fromLines.Length != count)
                 {
                     log.Log(Level.SEVERE, "Line difference - From=" + fromLines.Length + " <> Saved=" + count);
+                }
+
+                if (count == 0)
+                {
+                    return count;
                 }
 
                 if (!CalculateTaxTotal())   //	setTotals

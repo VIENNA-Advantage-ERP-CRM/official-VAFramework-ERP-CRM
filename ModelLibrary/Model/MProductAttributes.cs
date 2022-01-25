@@ -112,10 +112,10 @@ namespace VAdvantage.Model
         /// <returns>true if it can be deleted</returns>
         protected override bool BeforeDelete()
         {
-            string uqry = "SELECT SUM(cc) as count FROM  (SELECT COUNT(*) AS cc FROM M_MovementLine WHERE M_Product_ID = " + GetM_Product_ID() + " AND M_AttributeSetInstance_ID = "
-                + GetM_AttributeSetInstance_ID() + " UNION SELECT COUNT(*) AS cc FROM M_InventoryLine WHERE M_Product_ID = " + GetM_Product_ID() + " AND M_AttributeSetInstance_ID = "
-                + GetM_AttributeSetInstance_ID() + " UNION SELECT COUNT(*) AS cc FROM C_OrderLine WHERE M_Product_ID = " + GetM_Product_ID() + " AND M_AttributeSetInstance_ID = "
-                + GetM_AttributeSetInstance_ID() + " UNION  SELECT COUNT(*) AS cc FROM M_InOutLine WHERE M_Product_ID = " + GetM_Product_ID() + " AND M_AttributeSetInstance_ID = "
+            string uqry = "SELECT SUM(cc) AS count FROM (SELECT COUNT(M_MovementLine_ID) AS cc FROM M_MovementLine WHERE M_Product_ID = " + GetM_Product_ID() + " AND M_AttributeSetInstance_ID = "
+                + GetM_AttributeSetInstance_ID() + " UNION SELECT COUNT(M_InventoryLine_ID) AS cc FROM M_InventoryLine WHERE M_Product_ID = " + GetM_Product_ID() + " AND M_AttributeSetInstance_ID = "
+                + GetM_AttributeSetInstance_ID() + " UNION SELECT COUNT(C_OrderLine_ID) AS cc FROM C_OrderLine WHERE M_Product_ID = " + GetM_Product_ID() + " AND M_AttributeSetInstance_ID = "
+                + GetM_AttributeSetInstance_ID() + " UNION SELECT COUNT(M_InOutLine_ID) AS cc FROM M_InOutLine WHERE M_Product_ID = " + GetM_Product_ID() + " AND M_AttributeSetInstance_ID = "
                 + GetM_AttributeSetInstance_ID() + ") t";
             int no = Util.GetValueOfInt(DB.ExecuteScalar(uqry));
             if (no > 0)
@@ -124,10 +124,9 @@ namespace VAdvantage.Model
                 return false;
             }
 
-            Tuple<String, String, String> aInfo = null;
-            if (Env.HasModulePrefix("VAICNT_", out aInfo))
+            if (Env.IsModuleInstalled("VAICNT_"))
             {
-                uqry = "SELECT COUNT(*) AS cc FROM VAICNT_InventoryCountLine WHERE M_Product_ID = " + GetM_Product_ID() + " AND M_AttributeSetInstance_ID = " + GetM_AttributeSetInstance_ID();
+                uqry = "SELECT COUNT(VAICNT_InventoryCountLine_ID) AS cc FROM VAICNT_InventoryCountLine WHERE M_Product_ID = " + GetM_Product_ID() + " AND M_AttributeSetInstance_ID = " + GetM_AttributeSetInstance_ID();
                 no = Util.GetValueOfInt(DB.ExecuteScalar(uqry));
                 if (no > 0)
                 {

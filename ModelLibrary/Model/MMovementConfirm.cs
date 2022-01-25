@@ -150,7 +150,7 @@ namespace VAdvantage.Model
                 cLine.Save(move.Get_TrxName());
             }
             // Change By Arpit Rai on 24th August,2017 To Check if VA Material Quality Control Module exists or not
-            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM AD_ModuleInfo WHERE Prefix='VA010_'", null, null)) > 0)
+            if (Env.IsModuleInstalled("VA010_"))
             {
                 CreateConfirmParameters(move, confirm.GetM_MovementConfirm_ID(), confirm.GetCtx());
             }
@@ -697,8 +697,7 @@ namespace VAdvantage.Model
             }
 
             //Amit 21-nov-2014 (Reduce reserved quantity from requisition and warehouse distribution center)
-            Tuple<String, String, String> mInfo = null;
-            if (Env.HasModulePrefix("DTD001_", out mInfo))
+            if (Env.IsModuleInstalled("DTD001_"))
             {
                 MMovementLine movementLine = null;
                 MRequisitionLine requisitionLine = null;
@@ -741,10 +740,10 @@ namespace VAdvantage.Model
             SetDocAction(DOCACTION_Close);
             Save(Get_Trx());
             //Adde by Arpit To complete The Inventory Move if Move Confirmation is completed ,16th Dec,2016
-            MMovement Mov = new MMovement(GetCtx(), GetM_Movement_ID(), Get_Trx());
+            //MMovement Mov = new MMovement(GetCtx(), GetM_Movement_ID(), Get_Trx());
             if (move.GetDocStatus() != DOCSTATUS_Completed)
             {
-                string Status = Mov.CompleteIt();
+                string Status = move.CompleteIt();
                 if (Status == "CO")
                 {
                     move.SetDocStatus(DOCSTATUS_Completed);
@@ -755,7 +754,7 @@ namespace VAdvantage.Model
                 else
                 {
                     Get_Trx().Rollback();
-                    _processMsg = Mov.GetProcessMsg();
+                    _processMsg = move.GetProcessMsg();
                     return DocActionVariables.STATUS_INVALID;
                 }
             }
@@ -782,35 +781,42 @@ namespace VAdvantage.Model
             //Opening Stock , Qunatity Book => CurrentQty From Transaction of MovementDate
             //As On Date Count = Opening Stock - Diff Qty
             //Qty Count = Qty Book - Diff Qty
-            query = "SELECT COUNT(*) FROM M_Transaction WHERE movementdate = " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) + @" 
-                           AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID();
-            result = Util.GetValueOfInt(DB.ExecuteScalar(query));
-            if (result > 0)
-            {
-                query = @"SELECT currentqty FROM M_Transaction WHERE M_Transaction_ID =
-                            (SELECT MAX(M_Transaction_ID)   FROM M_Transaction
-                            WHERE movementdate =     (SELECT MAX(movementdate) FROM M_Transaction WHERE movementdate <= " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) + @" 
-                            AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID() + @")
-                            AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID() + @")
-                            AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID();
-                currentQty = Util.GetValueOfDecimal(DB.ExecuteScalar(query));
-            }
-            else
-            {
-                query = "SELECT COUNT(*) FROM M_Transaction WHERE movementdate < " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) + @" 
-                            AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID();
-                result = Util.GetValueOfInt(DB.ExecuteScalar(query));
-                if (result > 0)
-                {
-                    query = @"SELECT currentqty FROM M_Transaction WHERE M_Transaction_ID =
-                            (SELECT MAX(M_Transaction_ID)   FROM M_Transaction
-                            WHERE movementdate =     (SELECT MAX(movementdate) FROM M_Transaction WHERE movementdate < " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) + @" 
-                            AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID() + @")
-                            AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID() + @")
-                            AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID();
-                    currentQty = Util.GetValueOfDecimal(DB.ExecuteScalar(query));
-                }
-            }
+
+            query = @"SELECT DISTINCT FIRST_VALUE(t.CurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
+                            INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) +
+                              " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND t.M_Locator_ID = " + mLine.GetM_Locator_ID() +
+                          " AND t.M_Product_ID = " + mLine.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + mLine.GetM_AttributeSetInstance_ID();
+            currentQty = Util.GetValueOfDecimal(DB.ExecuteScalar(query, null, Get_Trx()));
+
+            //query = "SELECT COUNT(*) FROM M_Transaction WHERE movementdate = " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) + @" 
+            //               AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID();
+            //result = Util.GetValueOfInt(DB.ExecuteScalar(query));
+            //if (result > 0)
+            //{
+            //    query = @"SELECT currentqty FROM M_Transaction WHERE M_Transaction_ID =
+            //                (SELECT MAX(M_Transaction_ID)   FROM M_Transaction
+            //                WHERE movementdate =     (SELECT MAX(movementdate) FROM M_Transaction WHERE movementdate <= " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) + @" 
+            //                AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID() + @")
+            //                AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID() + @")
+            //                AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID();
+            //    currentQty = Util.GetValueOfDecimal(DB.ExecuteScalar(query));
+            //}
+            //else
+            //{
+            //    query = "SELECT COUNT(*) FROM M_Transaction WHERE movementdate < " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) + @" 
+            //                AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID();
+            //    result = Util.GetValueOfInt(DB.ExecuteScalar(query));
+            //    if (result > 0)
+            //    {
+            //        query = @"SELECT currentqty FROM M_Transaction WHERE M_Transaction_ID =
+            //                (SELECT MAX(M_Transaction_ID)   FROM M_Transaction
+            //                WHERE movementdate =     (SELECT MAX(movementdate) FROM M_Transaction WHERE movementdate < " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) + @" 
+            //                AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID() + @")
+            //                AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID() + @")
+            //                AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID();
+            //        currentQty = Util.GetValueOfDecimal(DB.ExecuteScalar(query));
+            //    }
+            //}
             //End
 
 

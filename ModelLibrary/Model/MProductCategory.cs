@@ -149,13 +149,13 @@ namespace VAdvantage.Model
             if (count > 0)
             {
                 _sql.Clear();
-                _sql.Append("Select L.Value From Ad_Ref_List L inner join AD_Reference r on R.AD_REFERENCE_ID=L.AD_REFERENCE_ID where r.name='FRPT_RelatedTo' and l.name='Product'");
+                _sql.Append("SELECT L.Value FROM Ad_Ref_List L INNER JOIN AD_Reference r ON r.AD_Reference_ID=L.AD_Reference_ID WHERE r.Name='FRPT_RelatedTo' AND l.Name='Product'");
                 var relatedtoProduct = Convert.ToString(DB.ExecuteScalar(_sql.ToString()));
 
                 PO prdctact = null;
                 _client_ID = GetAD_Client_ID();
                 _sql.Clear();
-                _sql.Append("select C_AcctSchema_ID from C_AcctSchema where AD_CLIENT_ID=" + _client_ID);
+                _sql.Append("SELECT C_AcctSchema_ID FROM C_AcctSchema WHERE AD_CLIENT_ID=" + _client_ID);
                 DataSet ds3 = new DataSet();
                 ds3 = DB.ExecuteDataset(_sql.ToString(), null);
                 if (ds3 != null && ds3.Tables[0].Rows.Count > 0)
@@ -164,7 +164,8 @@ namespace VAdvantage.Model
                     {
                         int _AcctSchema_ID = Util.GetValueOfInt(ds3.Tables[0].Rows[k]["C_AcctSchema_ID"]);
                         _sql.Clear();
-                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND AD_CLIENT_ID=" + _client_ID + "AND C_Acctschema_Id=" + _AcctSchema_ID);
+                        _sql.Append("SELECT FRPT_AcctDefault_ID, C_ValidCombination_ID, FRPT_RelatedTo FROM FRPT_AcctSchema_Default WHERE IsActive='Y' AND AD_Client_ID=" 
+                            + _client_ID + " AND C_Acctschema_ID=" + _AcctSchema_ID);
                         DataSet ds = new DataSet();
                         ds = DB.ExecuteDataset(_sql.ToString(), null, Get_Trx());
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -172,34 +173,21 @@ namespace VAdvantage.Model
                             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                             {
                                 // DataSet ds2 = new DataSet();
-                                string _relatedTo = ds.Tables[0].Rows[i]["Frpt_Relatedto"].ToString();
+                                string _relatedTo = ds.Tables[0].Rows[i]["FRPT_RelatedTo"].ToString();
                                 if (_relatedTo != "")
                                 {
 
                                     if (_relatedTo == relatedtoProduct)
                                     {
                                         _sql.Clear();
-                                        //                                        _sql.Append(@"Select Bp.M_Product_Category_ID,ca.Frpt_Acctdefault_Id From M_Product_Category Bp
-                                        //                                                                                               Left Join FRPT_Product_Category_Acct ca On Bp.M_Product_Category_ID=ca.M_Product_Category_ID 
-                                        //                                                                                                And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]
-                                        //                                                        + " WHERE Bp.IsActive='Y' AND Bp.AD_Client_ID=" + _client_ID +
-                                        //                                                        " AND C_Validcombination_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]));
-                                        _sql.Append(@"Select count(*) From M_Product_Category Bp
-                                                       Left Join FRPT_Product_Category_Acct ca On Bp.M_Product_Category_ID=ca.M_Product_Category_ID 
-                                                        And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]
-                                                       + " WHERE Bp.IsActive='Y' AND Bp.AD_Client_ID=" + _client_ID +
-                                                       " AND ca.C_Validcombination_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]) +
-                                                       " AND Bp.M_Product_Category_ID = " + GetM_Product_Category_ID());
+                                        _sql.Append(@"SELECT COUNT(Bp.M_Product_Category_ID) FROM M_Product_Category Bp
+                                        LEFT JOIN FRPT_Product_Category_Acct ca ON Bp.M_Product_Category_ID=ca.M_Product_Category_ID 
+                                        And ca.FRPT_AcctDefault_ID=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]
+                                        + " WHERE Bp.IsActive='Y' AND Bp.AD_Client_ID=" + _client_ID +
+                                        " AND ca.C_ValidCombination_ID = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ValidCombination_ID"]) +
+                                        " AND Bp.M_Product_Category_ID = " + GetM_Product_Category_ID());
                                         //ds2 = DB.ExecuteDataset(_sql.ToString(), null , Get_Trx());
                                         int recordFound = Convert.ToInt32(DB.ExecuteScalar(_sql.ToString(), null, Get_Trx()));
-                                        //if (ds2 != null && ds2.Tables[0].Rows.Count > 0)
-                                        //{
-                                        //    for (int j = 0; j < ds2.Tables[0].Rows.Count; j++)
-                                        //    {
-                                        //        int value = Util.GetValueOfInt(ds2.Tables[0].Rows[j]["Frpt_Acctdefault_Id"]);
-                                        //        if (value == 0)
-                                        //        {
-                                        //prdctact = new X_FRPT_Product_Category_Acct(GetCtx(), 0, null);
                                         if (recordFound == 0)
                                         {
                                             prdctact = MTable.GetPO(GetCtx(), "FRPT_Product_Category_Acct", 0, null);
@@ -207,7 +195,7 @@ namespace VAdvantage.Model
                                             //prdctact.Set_ValueNoCheck("M_Product_Category_ID", Util.GetValueOfInt(ds2.Tables[0].Rows[j]["M_Product_Category_ID"]));
                                             prdctact.Set_ValueNoCheck("M_Product_Category_ID", Util.GetValueOfInt(GetM_Product_Category_ID()));
                                             prdctact.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
-                                            prdctact.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]));
+                                            prdctact.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ValidCombination_ID"]));
                                             prdctact.Set_ValueNoCheck("C_AcctSchema_ID", _AcctSchema_ID);
                                             if (!prdctact.Save())
                                             {
