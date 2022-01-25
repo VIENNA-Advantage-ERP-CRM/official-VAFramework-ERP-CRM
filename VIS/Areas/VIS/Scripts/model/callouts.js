@@ -140,7 +140,7 @@
 
         var oldC_DocType_ID = Util.getValueOfInt(mTab.getValue("C_DocType_ID"));
 
-        var sql = "SELECT d.DocSubTypeSO,d.HasCharges,'N',"			//	1..3
+        var sql = "SELECT d.DocSubTypeSO,d.HasCharges,'N',d.IsReleaseDocument,"			//	1..3
             + "d.IsDocNoControlled,s.CurrentNext,s.CurrentNextSys,"     //  4..6
             + "s.AD_Sequence_ID,d.IsSOTrx, d.IsReturnTrx, d.value, d.IsBlanketTrx "              //	7..9
             + "FROM C_DocType d "
@@ -190,9 +190,13 @@
                     ctx.setContext(windowNo, "BlanketOrderType", DocSubTypeSO);
                     mTab.setValue("BlanketOrderType", DocSubTypeSO);
                 }
+                else if (Util.getValueOfString(idr.get("IsReleaseDocument")).equals("Y")) {
+                    mTab.setValue("BlanketOrderType", "BO");
+                }
                 else {
                     ctx.setContext(windowNo, "BlanketOrderType", "OO");
                     mTab.setValue("BlanketOrderType", "OO");
+                    mTab.setValue("C_Order_Blanket",null);
                 }
 
                 //	No Drop Ship other than Standard
