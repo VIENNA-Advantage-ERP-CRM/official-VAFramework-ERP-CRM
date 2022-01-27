@@ -679,6 +679,7 @@ input::-webkit-input-placeholder {
     color: #fff;
     font-size: 1.2rem;
     text-decoration: underline;
+    float: right;
 }
 
     .vis-login-skipLink:hover, .vis-login-skipLink:focus {

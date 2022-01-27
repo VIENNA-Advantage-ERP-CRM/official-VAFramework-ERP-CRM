@@ -103,7 +103,7 @@
                             loginQRLbl.css("margin-bottom", "40px");
                             if (json.ctx.TwoFAMethod == "VA") {
                                 $('#login3Data2').val('false');
-                                $(".vis-login-resendOTP").css("display", "block");
+                                $(".vis-login-resendOTP").css("display", "inline-block");
                             }
                         }
                         $otpTwoFA.val("");
