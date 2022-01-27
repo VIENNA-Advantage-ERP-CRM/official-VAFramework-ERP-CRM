@@ -26,11 +26,12 @@ namespace VIS.Models
                 if (isBaseLangage)
                 {
                     sql = @"SELECT c.ColumnName,
-                            c.name,
+                            c.Name,
                             c.IsIdentifier,
                             t.AD_Table_ID,
                             t.TableName,
-                            C.IsTranslated 
+                            C.IsTranslated,
+                            t.Name AS TableDisplayName
                          FROM AD_Table t
                             INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID)
                             WHERE c.AD_Reference_ID=10
@@ -43,11 +44,12 @@ namespace VIS.Models
                 else
                 {
                     sql = @"SELECT c.ColumnName,  
-                          trl.name,
+                          trl.Name,
                           c.IsIdentifier,
                           t.AD_Table_ID,
                           t.TableName,
-                          C.IsTranslated
+                          C.IsTranslated,
+                          t.Name AS TableDisplayName
                         FROM AD_Table t
                         INNER JOIN AD_Column c
                         ON (t.AD_Table_ID      =c.AD_Table_ID)
@@ -79,6 +81,7 @@ namespace VIS.Models
                     item.AD_Table_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Table_ID"]);
                     item.ColumnName = ds.Tables[0].Rows[i]["ColumnName"].ToString();
                     item.Name = ds.Tables[0].Rows[i]["Name"].ToString();
+                    item.TableDisplayName = ds.Tables[0].Rows[i]["TableDisplayName"].ToString();
                     item.IsIdentifier = ds.Tables[0].Rows[i]["IsIdentifier"].ToString() == "Y" ? true : false;
                     // Change done by mohit asked by mukesh sir to show the data on info window from translated tab if logged in with langauge other than base language- 22/03/2018
                     item.IsTranslated = ds.Tables[0].Rows[i]["IsTranslated"].ToString() == "Y" ? true : false;
@@ -357,7 +360,11 @@ namespace VIS.Models
             get;
             set;
         }
-
+        public string TableDisplayName
+        {
+            get;
+            set;
+        }
     }
 
     public class InfoColumn
