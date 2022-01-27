@@ -163,6 +163,8 @@ namespace VAdvantage.Process
                     #endregion
 
                     ln.SetPriceEntered(Decimal.Round(Decimal.Subtract(ln.GetPriceEntered(), discountAmountOnTotal), precision));
+                    // set tax amount as 0, so that on before save we calculate tax again on discounted price
+                    ln.SetTaxAmt(0);
                     if (!ln.Save(Get_TrxName()))
                     {
                         Rollback();
@@ -181,6 +183,7 @@ namespace VAdvantage.Process
                     ln.SetPriceEntered(Decimal.Add(ln.GetPriceEntered(), ln.GetAmountAfterApplyDiscount()));
                     ln.SetPriceActual(Decimal.Add(ln.GetPriceActual(), ln.GetAmountAfterApplyDiscount()));
                     ln.SetAmountAfterApplyDiscount(0);
+                    ln.SetTaxAmt(0);
                     if (!ln.Save())
                     {
                         Rollback();
