@@ -26,12 +26,12 @@ namespace VIS.Models
                 if (isBaseLangage)
                 {
                     sql = @"SELECT c.ColumnName,
-                            c.name,
+                            c.Name,
                             c.IsIdentifier,
                             t.AD_Table_ID,
                             t.TableName,
                             C.IsTranslated,
-                            t.name AS TableDisplayName
+                            t.Name AS TableDisplayName
                          FROM AD_Table t
                             INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID)
                             WHERE c.AD_Reference_ID=10
@@ -44,12 +44,12 @@ namespace VIS.Models
                 else
                 {
                     sql = @"SELECT c.ColumnName,  
-                          trl.name,
+                          trl.Name,
                           c.IsIdentifier,
                           t.AD_Table_ID,
                           t.TableName,
                           C.IsTranslated,
-                          t.name AS TableDisplayName
+                          t.Name AS TableDisplayName
                         FROM AD_Table t
                         INNER JOIN AD_Column c
                         ON (t.AD_Table_ID      =c.AD_Table_ID)
