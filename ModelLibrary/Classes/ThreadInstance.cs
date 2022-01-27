@@ -1,9 +1,8 @@
 ﻿/********************************************************
  * Module Name    : VAdvantage
  * Purpose        : Background thread initiated at login
- * Class Used     : 
  * Chronological Development
- * Lokesh Chauhan (VIS0008)   20-Dec-2021
+ * VIS0008   20-Dec-2021
  ******************************************************/
 
 using System;

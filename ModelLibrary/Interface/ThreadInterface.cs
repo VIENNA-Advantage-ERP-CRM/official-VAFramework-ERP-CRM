@@ -4,7 +4,7 @@
  * Purpose        : Interface to be implemented by classes which will be called after specified time
  * Class Used     :  ..
  * Chronological    Development
- * Lokesh Chauhan (VIS0008)   20-Dec-2021
+ * VIS0008   20-Dec-2021
   ******************************************************/
 
 using System;
