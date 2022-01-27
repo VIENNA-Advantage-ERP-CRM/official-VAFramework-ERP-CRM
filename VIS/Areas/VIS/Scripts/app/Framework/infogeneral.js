@@ -316,7 +316,7 @@
                 width: 1020,
                 height: 500,
                 resizable: false,
-
+                title: schema[0].TableDisplayName,
                 modal: true
                 
                 ,
