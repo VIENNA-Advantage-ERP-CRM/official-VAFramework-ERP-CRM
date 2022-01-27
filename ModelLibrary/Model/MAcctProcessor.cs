@@ -88,28 +88,18 @@ namespace VAdvantage.Model
             string scheduleIP = null;
             try
             {
-                string machineIP = null;        // System.Net.Dns.GetHostEntry(Environment.MachineName).AddressList[0].ToString();
-                var host = System.Net.Dns.GetHostEntry(Environment.MachineName);
-                foreach (var ip in host.AddressList)
-                {
-                    if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                    {
-                        machineIP = ip.ToString();
-                        break;
-                    }
-                }
-
+                string machineIP = Classes.CommonFunctions.GetMachineIPPort();
                 idr = DataBase.DB.ExecuteReader(sql, null, null);
                 while (idr.Read())
                 {
                     scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM AD_Schedule WHERE 
                                                        AD_Schedule_ID = (SELECT AD_Schedule_ID FROM C_AcctProcessor WHERE C_AcctProcessor_ID =" + idr["C_AcctProcessor_ID"] + " )"));
 
-                    if (ExecuteProcess.Equals("2") && (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP)))
+                    if (ExecuteProcess.Equals("2") && (string.IsNullOrEmpty(scheduleIP) || machineIP.Equals(scheduleIP)))
                     {
                         list.Add(new MAcctProcessor(new Ctx(), idr, null));
                     }
-                    else if (!string.IsNullOrEmpty(scheduleIP) && machineIP.Contains(scheduleIP))
+                    else if (!string.IsNullOrEmpty(scheduleIP) && machineIP.Equals(scheduleIP))
                     {
                         list.Add(new MAcctProcessor(new Ctx(), idr, null));
                     }
