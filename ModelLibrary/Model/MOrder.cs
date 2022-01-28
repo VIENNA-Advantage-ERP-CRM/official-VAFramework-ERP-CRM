@@ -4039,7 +4039,8 @@ namespace VAdvantage.Model
 
                         //Info.Append(" - @C_Invoice_ID@: ").Append(invoice.GetDocumentNo());
                         //Info.Append(" & @C_Invoice_ID@ No: ").Append(invoice.GetDocumentNo()).Append(" generated successfully");
-                        Info.Append(" & @C_Invoice_ID@ No: ").Append(invoice.GetDocumentNo());
+                        //(1052)correct process message
+                        Info.Append(Msg.GetMsg(GetCtx(), "InvNo")).Append(invoice.GetDocumentNo());
                         _processMsg += Info.ToString();
 
                         String msg = invoice.GetProcessMsg();
