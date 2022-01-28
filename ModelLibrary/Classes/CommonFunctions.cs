@@ -27,6 +27,7 @@ using System.Data;
 using VAdvantage.Utility;
 using VAdvantage.Model;
 using VAdvantage.Controller;
+using System.Web;
 
 namespace VAdvantage.Classes
 {
@@ -1200,6 +1201,33 @@ namespace VAdvantage.Classes
                 _cacheTblName.Add(tableName.ToUpper(), tblExists);
                 return tblExists;
             }
+        }
+
+        private static string _machineIP = "";
+
+        /// <summary>
+        /// Function to return Machine IP and Port from where link is running
+        /// </summary>
+        /// <returns>string of Machine IP and Port</returns>
+        public static string GetMachineIPPort()
+        {
+            if (_machineIP != "")
+                return _machineIP;
+            string hostName = Environment.MachineName; // System.Net.Dns.GetHostName();
+
+            var host = System.Net.Dns.GetHostEntry(hostName);
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                {
+                    _machineIP = ip.ToString();
+                    break;
+                }
+            }
+            int port = HttpContext.Current.Request.Url.Port;
+            if (port != 80)
+                _machineIP = _machineIP + ":" + port.ToString();
+            return _machineIP;
         }
     }
 
