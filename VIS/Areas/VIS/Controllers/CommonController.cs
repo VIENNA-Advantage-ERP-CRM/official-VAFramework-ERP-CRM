@@ -16,6 +16,7 @@ using VAdvantage.ProcessEngine;
 using VAdvantage.Utility;
 using VIS.Classes;
 using VIS.DataContracts;
+using VIS.Helpers;
 using VIS.Models;
 
 namespace VIS.Controllers
@@ -506,6 +507,21 @@ namespace VIS.Controllers
                 hasRecords = cmm.HasVersions(ctx, RowData);
             }
             return Json(new { result = hasRecords }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Method to get parent tab records ID.
+        /// </summary>
+        /// <param name="SelectColumn">Column  to be selected</param>
+        /// <param name="SelectTable">From table</param>
+        /// <param name="WhereColumn">Where column</param>
+        /// <param name="WhereValue">ID of child column</param>
+        /// <returns></returns>
+        public ActionResult GetZoomParentRec(string SelectColumn, string SelectTable, string WhereColumn, string WhereValue)
+        {
+            //ZoomChildTab
+            WindowHelper obj = new Helpers.WindowHelper();
+            return Json(JsonConvert.SerializeObject(obj.GetZoomParentRecord(SelectColumn, SelectTable, WhereColumn, WhereValue)), JsonRequestBehavior.AllowGet);
         }
     }
 

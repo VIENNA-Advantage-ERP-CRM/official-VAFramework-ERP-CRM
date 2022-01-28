@@ -3211,6 +3211,7 @@ namespace VIS.Helpers
 
 
         }
+       
         /// <summary>
         /// Method to get parent tab records ID.
         /// </summary>
@@ -3221,6 +3222,7 @@ namespace VIS.Helpers
         /// <returns></returns>
         public int GetZoomParentRecord(string SelectColumn, string SelectTable, string WhereColumn, string WhereValue)
         {
+            //ZoomChildTab
             int recordID = 0;
             string sql = "SELECT " + SelectColumn + " FROM " + SelectTable + " WHERE " + WhereColumn + "=" + Util.GetValueOfInt(WhereValue);
             recordID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
