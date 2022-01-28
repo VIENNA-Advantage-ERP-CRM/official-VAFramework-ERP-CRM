@@ -153,6 +153,10 @@ Globalize.addCultureInfo( "ms-MY", "default", {
         "AdminActDisabled": "Akaun Pentadbir telah dilumpuhkan",
         "AdminActExpired": "Akaun Pentadbir Tamat Tempoh",
         "AdminMaxFailedLoginAttempts": "Akaun Pengguna Pentadbir dikunci. Percubaan masuk yang gagal maksimum melebihi had yang ditentukan. Sila hubungi pentadbir.",
+        "EnterVAVerCode": "Masukkan OTP yang diterima di telefon bimbit berdaftar anda",
+        "SkipThisTime": "Langkau kali ini",
+        "ResendOTP": "Hantar semula OTP",
+        "CapsLockOn": "Kunci topi dihidupkan",
     }
 });
 

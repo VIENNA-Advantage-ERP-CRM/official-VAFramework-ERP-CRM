@@ -132,7 +132,11 @@ Globalize.addCultureInfo( "pt-BR", "default", {
         "EnterOTP": "Digite OTP",
         "WrongOTP": "OTP incorreto digitado",
         "ScanQRCode": "Digitalize o código com o Google Authenticator",
-        "EnterVerCode": "Digite o OTP gerado pelo seu aplicativo móvel"
+		"EnterVerCode": "Digite o OTP gerado pelo seu aplicativo móvel",
+		"EnterVAVerCode": "Insira OTP recebido em seu celular registrado",
+		"SkipThisTime": "Pular desta vez",
+		"ResendOTP": "Reenviar OTP",
+		"CapsLockOn": "Caps Lock está ativado",
 	}
 });
 

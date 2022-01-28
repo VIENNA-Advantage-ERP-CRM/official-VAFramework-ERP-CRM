@@ -131,7 +131,11 @@ Globalize.addCultureInfo( "fi-FI", "default", {
         "EnterOTP": "Syötä OTP",
         "WrongOTP": "Väärä OTP kirjoitettu",
         "ScanQRCode": "Skannaa koodi Google Authenticatorilla",
-        "EnterVerCode": "Kirjoita mobiilisovelluksesi luoma OTP",
+		"EnterVerCode": "Kirjoita mobiilisovelluksesi luoma OTP",
+		"EnterVAVerCode": "Kirjoita rekisteröityyn matkapuhelimeesi vastaanotettu OTP",
+		"SkipThisTime": "Ohita tällä kertaa",
+		"ResendOTP": "Lähetä OTP uudelleen",
+		"CapsLockOn": "CAPS LOCK on päällä",
 	}
 });
 

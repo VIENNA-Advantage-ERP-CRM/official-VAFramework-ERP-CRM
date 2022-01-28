@@ -142,6 +142,10 @@ Globalize.addCultureInfo( "sv-SE", "default", {
         "AdminActDisabled": "Administratörskonto har inaktiverats",
         "AdminActExpired": "Administratörskonto har gått ut",
         "AdminMaxFailedLoginAttempts": "Admin-användarkontot är låst. Maximalt misslyckade inloggningsförsök överskrider den definierade gränsen. Vänligen kontakta till administratören.",
+        "EnterVAVerCode": "Ange OTP mottagen på din registrerade mobil",
+        "SkipThisTime": "Hoppa över den här gången",
+        "ResendOTP": "Skicka om OTP",
+        "CapsLockOn": "Caps Lock är på",
 	}
 });
 
