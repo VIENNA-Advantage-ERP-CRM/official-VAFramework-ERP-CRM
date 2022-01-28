@@ -616,6 +616,7 @@ namespace VAdvantage.Model
                             || Is_ValueChanged("AD_Org_ID")
                             || Is_ValueChanged("C_Project_ID")
                             || Is_ValueChanged("C_Campaign_ID")
+                            || Is_ValueChanged("AD_OrgTrx_ID")
                             || Is_ValueChanged("C_Activity_ID"))))
             {
                 MJournal gl = new MJournal(GetCtx(), GetGL_Journal_ID(), Get_TrxName());
