@@ -2890,7 +2890,8 @@ namespace VAdvantage.Model
                                             _processMsg = "Could not Save Cash Journal Line";
                                             return DocActionVariables.STATUS_INVALID;
                                         }
-                                        Info.Append("@C_Cash_ID@: " + cash.GetName() + " #" + cl.GetLine());
+                                        //(1052)correct process message
+                                        Info.Append(Msg.GetMsg(GetCtx(),"CashJournal") + cash.GetName() + " #" + cl.GetLine());
                                     }
                                 }
                                 ds.Dispose();
@@ -2904,7 +2905,8 @@ namespace VAdvantage.Model
                                     _processMsg = "Could not Save Cash Journal Line";
                                     return DocActionVariables.STATUS_INVALID;
                                 }
-                                Info.Append("@C_Cash_ID@: " + cash.GetName() + " #" + cl.GetLine());
+                                //(1052)correct process message
+                                Info.Append(Msg.GetMsg(GetCtx(), "CashJournal") + cash.GetName() + " #" + cl.GetLine());
                                 SetC_CashLine_ID(cl.GetC_CashLine_ID());
                             }
                         } //End Std Pos Order
