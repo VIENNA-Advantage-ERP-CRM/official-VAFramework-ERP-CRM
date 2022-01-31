@@ -196,6 +196,7 @@
     }
 
     var showLogin = function (e) {
+        $("#login3Data1").val(false);
         $("#login2Panel").hide();//  "slide", function () {
         $("#loginPanel").show();//"slide", function () {
         $("#loginName").focus();
