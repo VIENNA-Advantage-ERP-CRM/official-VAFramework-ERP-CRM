@@ -670,7 +670,7 @@
         else if (defaultTabLayout == TABLAYOUT_SingleRowLayout)
             this.switchSingleRow(true);
         else if (defaultTabLayout == TABLAYOUT_CardViewLayout) {
-            this.isCardRow = false;
+            this.isCardRow = false;           
             this.switchCardRow(true);
         }
 
@@ -1115,12 +1115,12 @@
         this.activateTree();
 
         //check for defalut view 
-        if (!this.cardSetup && this.gTab.getTabLayout() == "C") {
-            var cardTmp = this.gTab.vo.Cards[0];
-            this.vCardView.setCardSqlInTabModel(this.gTab, cardTmp);
-            this.vCardView.setCardViewData(cardTmp);
-            this.cardSetup = true;
-        }
+        //if (!this.cardSetup && this.gTab.getTabLayout() == "C") {
+        //    var cardTmp = this.gTab.vo.Cards[0];
+        //    this.vCardView.setCardSqlInTabModel(this.gTab, cardTmp);
+        //    this.vCardView.setCardViewData(cardTmp);
+        //    this.cardSetup = true;
+        //}
 
     };
 
@@ -1785,7 +1785,8 @@
                 if (this.vHeaderPanel.sizeChangedListner && this.vHeaderPanel.sizeChangedListner.onSizeChanged)
                     this.vHeaderPanel.sizeChangedListner.onSizeChanged();
             }
-            this.gTab.resetOuterClauses();
+
+            this.gTab.getTableModel().resetCard();
         }
 
     };
@@ -1811,8 +1812,13 @@
             else p1.css({ "float": '' });
 
             p1.css('display', 'block');
-            if (!avoidRequery)
-                this.vCardView.requeryData();
+            this.gTab.getTableModel().setCardID(this.vCardView.cardID);
+            if (!avoidRequery) {
+                this.query(this.gTab.getOnlyCurrentDays(), 0, false);
+            }
+                //this.vCardView.requeryData();
+            
+            
             p1 = null;
         }
     };

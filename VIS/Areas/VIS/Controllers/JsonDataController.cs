@@ -135,11 +135,28 @@ namespace VIS.Controllers
                     sqlIn.sql = Server.HtmlDecode(sqlIn.sql);
                     sqlIn.sqlDirect = Server.HtmlDecode(sqlIn.sqlDirect);
                     data = w.GetWindowRecords(sqlIn, fields, ctx, rowCount, sqlCount, AD_Table_ID, obscureFields);
+
                 }
             }
             return Json(JsonConvert.SerializeObject(data), JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Get Total card record count 
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="cardID"></param>
+        /// <returns></returns>
+        public int GetRecordCountWithCard(string sql, int cardID) {
+            int count = 0;
+            using (var w = new WindowHelper())
+            {
+                Ctx ctx = Session["ctx"] as Ctx;
+                sql = SecureEngineBridge.DecryptByClientKey(sql, ctx.GetSecureKey());
+                count= w.GetRecordCountWithCard(sql, cardID);
+            }
+                return count;
+        }
 
         protected override JsonResult Json(object data, string contentType, System.Text.Encoding contentEncoding, JsonRequestBehavior behavior)
         {

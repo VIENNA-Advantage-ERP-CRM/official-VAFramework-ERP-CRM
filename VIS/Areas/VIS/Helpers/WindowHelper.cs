@@ -2191,6 +2191,40 @@ namespace VIS.Helpers
         }
 
         /// <summary>
+        /// Get Total card record count 
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="cardID"></param>
+        /// <returns></returns>
+        internal int GetRecordCountWithCard(string sql, int cardID) {
+            string cardCondition =Util.GetValueOfString(DB.ExecuteScalar("SELECT excludedGroup FROM AD_CARDVIEW WHERE AD_CARDVIEW_ID=" + cardID));
+            if (!string.IsNullOrEmpty(cardCondition)) {
+                string[] textSplit = cardCondition.Split(',');                
+                if (textSplit.Length > 0)
+                {
+                    string whereCondition = "";
+                    for (int i = 0; i < textSplit.Length; i++) {
+                        whereCondition += "'" + textSplit[i] + "'";
+                        if (i != (textSplit.Length - 1))
+                        {
+                            whereCondition += ",";
+                        }
+                     }
+                    if (sql.LastIndexOf("ORDER") != -1)
+                    {
+                        sql = sql.Substring(0, sql.LastIndexOf("ORDER"));
+                    }
+                    int AD_Field_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Field_ID FROM AD_CARDVIEW WHERE AD_CARDVIEW_ID=" + cardID));
+                    string columnName = Util.GetValueOfString(DB.ExecuteScalar("SELECT ColumnName FROM AD_column WHERE AD_column_ID=(SELECT AD_column_ID FROM AD_Field WHERE  AD_Field_ID=" + AD_Field_ID + ")"));
+
+                    sql = sql + " AND (" + columnName + " NOT IN (" + whereCondition + ") OR " + columnName + " IS NULL) ";
+                }
+            }
+
+            return Util.GetValueOfInt(DB.ExecuteScalar(sql));
+        }
+
+        /// <summary>
         /// Get Recoprds of window
         /// </summary>
         /// <param name="sqlIn">sqlparameter</param>
@@ -2203,10 +2237,62 @@ namespace VIS.Helpers
 
             //Loookup fileds 
             var lookupDirect = new Dictionary<string, Dictionary<object, string>>();
-
             List<JTable> outO = new List<JTable>();
 
             JTable obj = null;
+            if (sqlIn.card_ID > 0)
+            {
+                string SQL = sqlIn.sql.Substring(sqlIn.sql.LastIndexOf(" FROM"));
+                SQL = SQL.Substring(0, SQL.LastIndexOf("ORDER"));
+                retVal.CardViewTpl = WindowHelper.GetCardViewDetail(0, sqlIn.ad_Tab_ID, ctx, sqlIn.card_ID, SQL);
+                if (retVal.CardViewTpl.DisableWindowPageSize)
+                {
+                    sqlIn.page = 0;
+                    sqlIn.pageSize = 0;
+                }
+
+                string condition = "";
+                string getCondition = sqlIn.sql.Substring(sqlIn.sql.LastIndexOf("WHERE"));
+                string whereCondition = getCondition.Substring(0, getCondition.LastIndexOf("ORDER"));
+                string orderBY = getCondition.Substring(getCondition.LastIndexOf("ORDER"));
+                if (!string.IsNullOrEmpty(retVal.CardViewTpl.ExcludedGroup))
+                {
+                    string[] textSplit = retVal.CardViewTpl.ExcludedGroup.Split(',');
+                    if (textSplit.Length > 0)
+                    {
+                        string ExcludedGroup = "";
+                        for (int i = 0; i < textSplit.Length; i++)
+                        {
+                            ExcludedGroup += "'" + textSplit[i] + "'";
+                            if (i != (textSplit.Length - 1))
+                            {
+                                ExcludedGroup += ",";
+                            }
+                        }
+                        condition = whereCondition + " AND (" + retVal.CardViewTpl.FieldGroupName + " NOT IN (" + ExcludedGroup + ") OR " + retVal.CardViewTpl.FieldGroupName + " IS NULL )";
+                    }
+                        
+                }
+                else
+                {
+                    condition = whereCondition;
+                }
+                
+                if (!string.IsNullOrEmpty(retVal.CardViewTpl.OrderByClause))
+                {
+                    condition = condition + " ORDER BY " + retVal.CardViewTpl.OrderByClause;
+                }
+                else
+                {
+                    condition = whereCondition+" "+ orderBY;
+                }
+                if (!string.IsNullOrEmpty(condition))
+                {
+                    sqlIn.sql = sqlIn.sql.Substring(0, sqlIn.sql.LastIndexOf("WHERE")) + " " + condition;
+                    sqlIn.sqlDirect = sqlIn.sqlDirect.Substring(0, sqlIn.sqlDirect.LastIndexOf("WHERE")) + " " + condition;
+                    sqlCount = sqlCount.Substring(0, sqlCount.LastIndexOf("WHERE")) + " " + condition;
+                }
+            }
 
             MSession session = MSession.Get(ctx, true);
             session.QueryLog(ctx.GetAD_Client_ID(), ctx.GetAD_Org_ID(), AD_Table_ID,
@@ -2318,7 +2404,6 @@ namespace VIS.Helpers
 
             retVal.Tables = outO;
             retVal.LookupDirect = lookupDirect;
-
             return retVal;
         }
         /// <summary>
@@ -2953,7 +3038,7 @@ namespace VIS.Helpers
         {
             
             VAdvantage.Classes.CommonFunctions cFun = new VAdvantage.Classes.CommonFunctions();
-            CardViewData cv = cFun.GetCardViewDetails(ctx.GetAD_User_ID(), AD_Tab_ID, AD_CardView_ID, ctx, SecureEngineBridge.DecryptByClientKey(SQL, ctx.GetSecureKey()));
+            CardViewData cv = cFun.GetCardViewDetails(ctx.GetAD_User_ID(), AD_Tab_ID, AD_CardView_ID, ctx, SQL);
             return cv;
             //CardViewData cv = new CardViewData();
             //cv.IncludedCols = new List<CardViewCol>();

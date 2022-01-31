@@ -158,11 +158,13 @@
                     var retObj = JSON.parse(jString);
                     var dataSet = null;
                     var lookupDirect = null;
+                    var cardViewData = null;
                     if (retObj) {
                         dataSet = new VIS.DB.DataSet().toJson(retObj.Tables);
                         lookupDirect = retObj.LookupDirect;
+                        cardViewData = retObj.CardViewTpl;
                     }
-                    callback(dataSet, lookupDirect);
+                    callback(dataSet, lookupDirect, cardViewData);
                 }
             })
         };

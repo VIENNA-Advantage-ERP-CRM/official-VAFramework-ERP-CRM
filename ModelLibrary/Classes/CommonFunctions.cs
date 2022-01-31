@@ -1050,10 +1050,10 @@ namespace VAdvantage.Classes
                     dr.Close();
                     if (!string.IsNullOrEmpty(card.OrderByClause))
                     {
-                        card.OrderByClause = card.OrderByClause + "," + sortBy;
+                        card.OrderByClause = card.OrderByClause + "," + sortBy.Remove(sortBy.Length - 1);
                     }
-                    else {
-                        card.OrderByClause = sortBy;
+                    else if(!string.IsNullOrEmpty(sortBy)) {
+                        card.OrderByClause = sortBy.Remove(sortBy.Length-1);
                     }
                 }
                 if (AD_CV_ID > 0)

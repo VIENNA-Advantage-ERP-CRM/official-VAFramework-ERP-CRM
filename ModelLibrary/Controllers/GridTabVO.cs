@@ -663,11 +663,10 @@ namespace VAdvantage.Controller
         private static void CreateCardPanels(GridTabVO mTabVO, Ctx ctx)
         {
             VAdvantage.Classes.CommonFunctions cFun = new VAdvantage.Classes.CommonFunctions();
-            string sql = " FROM " + mTabVO.TableName;
-            CardViewData card = cFun.GetCardViewDetails(ctx.GetAD_User_ID(), mTabVO.AD_Tab_ID, 0, ctx, sql);
+            CardViewData card = cFun.GetCardViewDetails(ctx.GetAD_User_ID(), mTabVO.AD_Tab_ID, 0, ctx );
             if (card != null)
             {
-                mTabVO.Cards.Add(card);
+                //mTabVO.Cards.Add(card);
                 mTabVO.DefaultCardID = card.AD_CardView_ID;
             }
         }
