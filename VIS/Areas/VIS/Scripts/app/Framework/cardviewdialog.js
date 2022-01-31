@@ -123,6 +123,10 @@
             isFirstLoad = true;
             cmbVardChange();
             FillCVConditionCmbColumn(cmbColumn);
+            if (!isNewRecord || !isEdit) {
+                ulGroupSeqColumns.find('input').prop("disabled", true);
+                ulCardViewColumnField.find('select').prop("disabled", true);
+            }
 
         };
         var ArrayTotalTabFields = function () {
@@ -139,8 +143,8 @@
 
             sortDDL = '<select>'
                 + '<option value=""></option>'
-                + '<option value="1">↓</option>'
-                + '<option value="-1">↑</option></select>';
+                + '<option value="1">↑</option>'
+                + '<option value="-1">↓</option></select>';
 
             // Card View Dropdown
 
@@ -162,13 +166,15 @@
             var divCardViewMainSecondChild = $("<div class='vis-cardviewmainsecondchild'></div>");
             var divCardViewCondition = $("<div class='vis-cardviewCondition'></div>").append("<div class='vis-cardviewConditionControls'> </div>  <div class='vis-cardviewConditionGrid'> </div> ");
 
-            if (VIS.MRole.isAdministrator) {
-                var divLayout = $("<div class='vis-cardviewbtn'>").append(lblDefault).append(lblIsPublic);
-            } else {
-                var divLayout = $("<div class='vis-cardviewbtn'>").append(lblDefault);
-            }
 
-            
+            var cardviewCondition = $("<div class='vis-cardviewbtn'>");
+            if (VIS.MRole.isAdministrator) {
+                cardviewCondition.append(lblDefault).append(lblIsPublic);
+            } else {
+                cardviewCondition.append(lblDefault);
+            }
+           
+            var divLayout = $("<div class='vis-cardviewbtn'>");
 
             orderByClause = $('<input type="text" name="OrderByClause" >');
             var lbldisabledWindowPage = $('<label class="vis-ec-col-lblchkbox" style="opacity: 1;width: 50%;">' + VIS.Msg.getMsg("disabledWindowPage") + '</label>');
@@ -177,7 +183,7 @@
 
 
             var divinputctrl = $("<div class='input-group vis-input-wrap'></div>").append($("<div class='vis-control-wrap'></div>"));//.append(orderByClause).append('<label for="Name">' + VIS.Msg.getMsg("orderByClause") + '</label>'));
-            var cardviewCondition = $("<div class='vis-cardviewbtn'>").append(lbldisabledWindowPage).append(divinputctrl);
+             cardviewCondition.append(lbldisabledWindowPage);
 
             var divCardViewbtn = $("<div class='vis-cardviewbtn' style='margin-top:0;'><button class='vis-btnDelete'><i title=" + VIS.Msg.getMsg("DeleteRecord") + " class='vis vis-delete'></i></button> <div class='vis-cdv-customokcancle'><button class='vis-btnOk'>  " + VIS.Msg.getMsg("Ok") + "  </button><button class='vis-btnCardViewCancle'>  " + VIS.Msg.getMsg("Cancel") + "  </button></div> </div>");
             rootCardViewUI.append(divCardViewMainFirstChild);
@@ -226,8 +232,8 @@
                 cmbUser = rootCardViewUI.find(".vis-cmbuser");
                 AddCVConditionControl(divCardViewCondition.find(".vis-cardviewConditionControls"));
                 rootCardViewUI.append(divCardViewCondition);
-                rootCardViewUI.append(divLayout);
-                rootCardViewUI.append(cardviewCondition).append(divCardViewbtn);
+                rootCardViewUI.append(cardviewCondition);
+                rootCardViewUI.append(divLayout).append(divCardViewbtn);
                 rootCardViewUI.find(".vis-btnDelete").css("display", "block");
 
             }
@@ -242,7 +248,7 @@
                 rootCardViewUI.find(".k ").css("display", "none");
                 AddCVConditionControl(divCardViewCondition.find(".vis-cardviewConditionControls"));
                 rootCardViewUI.append(divCardViewCondition);
-                rootCardViewUI.append(cardviewCondition).append(divLayout);
+                rootCardViewUI.append(divLayout).append(cardviewCondition);
                 rootCardViewUI.append(divCardViewbtn);
                 // divCardViewbtn.css({ "float": "right" });
                 rootCardViewUI.find(".vis-btnDelete").css("display", "none");
@@ -339,7 +345,7 @@
                 "display": "none"
             });
 
-            rootCardViewUI.find("*:not(.input-group-append button:last)").attr("disabled", "disabled");
+            rootCardViewUI.find("*:not(.input-group-append button:last)").attr("disabled", "disabled");            
             rootCardViewUI.find(".vis-firstdiv *").removeAttr("disabled");
             rootCardViewUI.find(".vis-cardviewbtn:last *").removeAttr("disabled");
             Events();
@@ -398,7 +404,7 @@
                     cardViewInfo = dbResult[0].lstCardViewData;
                     roleInfo = dbResult[0].lstRoleData;
                     LstCardViewRole = dbResult[0].lstCardViewRoleData;
-                    LstCardViewCondition = dbResult[0].lstCardViewConditonData;
+                    LstCardViewCondition = dbResult[0].lstCardViewConditonData;                   
 
                     if (cardViewInfo != null && cardViewInfo.length > 0) {
 
@@ -718,6 +724,7 @@
                     FillGroupFields();
                     //FillRoleList(ulRole);
                     AddRow(LastCVCondition);
+                    $vSearchHeaderLayout.setValue(cmbCardView.find(":selected").attr("ad_headerLayout_id"));
                     rootCardViewUI.find("*:not(.input-group-append button:last)").attr("disabled", "disabled");
                     rootCardViewUI.find(".vis-firstdiv *").removeAttr("disabled");
                     rootCardViewUI.find(".vis-cardviewbtn:last *").removeAttr("disabled");
@@ -1392,7 +1399,8 @@
                 IsBusy(false);
                 ch.close();
                 if (gc.isCardRow)
-                    cardView.requeryData();
+                    //cardView.requeryData();
+                    cardView.getCardViewData(mTab, AD_CardView_ID);
             }
         };
 
