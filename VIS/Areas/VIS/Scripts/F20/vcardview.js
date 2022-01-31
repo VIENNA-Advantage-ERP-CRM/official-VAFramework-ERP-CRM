@@ -468,12 +468,11 @@
      * @param {any} cardID
      * @param {any} cardName
      */
-    VCardView.prototype.getCardViewData = function (mTab, cardID, cardName) {
-        var self = this;
-        self.cardID = cardID;
-        self.mTab.getTableModel().setCardID(cardID);
-        self.aPanel.curGC.query(self.mTab.getOnlyCurrentDays(), 0, false);
-        self.getCardCmb().val(cardName);
+    VCardView.prototype.getCardViewData = function (mTab, cardID, cardName) {        
+        this.cardID = cardID;
+        this.mTab.getTableModel().setCardID(cardID);
+        this.aPanel.curGC.query(this.mTab.getOnlyCurrentDays(), 0, false);
+        this.getCardCmb().val(cardName);
         //var windowID = 0;
         //var tabID = 0;
         //if (mTab) {
