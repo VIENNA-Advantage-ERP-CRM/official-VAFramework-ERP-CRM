@@ -1123,18 +1123,17 @@
      * Set where condition from outside 
      * @param {any} conition
      */
-    GridTab.prototype.setOuterWhereClause = function (conition) {
-        this.outerWhereCondition = conition;
-    }
+    //GridTab.prototype.setOuterWhereClause = function (conition) {
+    //    this.outerWhereCondition = conition;
+    //}
 
     /*
      *Reset outside condition
      */
-     GridTab.prototype.resetOuterClauses = function () {
-        this.setOuterWhereClause("");
-        this.getTableModel().setOuterOrderClause("");
-        this.getTableModel().setDoPaging(true);
-    };
+    // GridTab.prototype.resetCard = function () {
+    //    //this.setOuterWhereClause("");
+    //    //this.getTableModel().setOuterOrderClause("");           
+    //};
 
     GridTab.prototype.getSearchQuery = function (val) {
         var query = null;
@@ -1797,12 +1796,12 @@
         //    refresh = false;
         //}
         //this.oldCardQuery = this.cardWhereCondition;
-        if (this.outerWhereCondition && this.outerWhereCondition.length>0) {           
-            if (where.length > 0)
-                where += " AND ";
-            where += this.outerWhereCondition;
-            refresh = false;
-        }
+        //if (this.outerWhereCondition && this.outerWhereCondition.length>0) {           
+        //    if (where.length > 0)
+        //        where += " AND ";
+        //    where += this.outerWhereCondition;
+        //    refresh = false;
+        //}
 
         /* Query */
         this.mDataStatusEvent = null; //reset 
@@ -3103,6 +3102,7 @@
         this.AD_Tab_ID = 0;
         this.log = VIS.Logging.VLogger.getVLogger("VIS.GridTable");
         this.outerOrderClause = "";
+        this.card_ID = 0;
     };
 
     GridTable.prototype.ctx = VIS.context;			//	the only OK condition
@@ -3503,11 +3503,11 @@
             this.gTable._orderClause = "";
     };
 
-    GridTable.prototype.setOuterOrderClause = function (newOrderClause) {
-        this.outerOrderClause = newOrderClause;
-        if (this.outerOrderClause == null)
-            this.outerOrderClause = "";
-    };
+    //GridTable.prototype.setOuterOrderClause = function (newOrderClause) {
+    //    this.outerOrderClause = newOrderClause;
+    //    if (this.outerOrderClause == null)
+    //        this.outerOrderClause = "";
+    //};
 
     GridTable.prototype.setSelectWhereClause = function (newWhereClause) {
         if (this.isOpen) {
@@ -3547,6 +3547,18 @@
     GridTable.prototype.setSortModel = function (mSort) {
         this.mSortList = null;
         this.mSortList = mSort;
+    };
+    /**
+     * Set Card ID for featch card data
+     * @param {any} cardID
+     */
+    GridTable.prototype.setCardID = function (cardID) {
+        this.card_ID = cardID;
+    };
+
+    GridTable.prototype.resetCard = function () {        
+        this.cardTempalte = null;
+        this.setCardID(0);
     };
 
     GridTable.prototype.setValueAt = function (value, row, col, force) {
@@ -3801,10 +3813,11 @@
 
         //	ORDER BY
 
-        if (!this.outerOrderClause.equals("")) {
-            this.SQL += " ORDER BY " + this.outerOrderClause;
-            this.SQL_Direct += " ORDER BY " + this.outerOrderClause;
-        } else if (!gt._orderClause.equals("")) {
+        //if (!this.outerOrderClause.equals("")) {
+        //    this.SQL += " ORDER BY " + this.outerOrderClause;
+        //    this.SQL_Direct += " ORDER BY " + this.outerOrderClause;
+        //} else
+        if (!gt._orderClause.equals("")) {
             this.SQL += " ORDER BY " + gt._orderClause;
             this.SQL_Direct += " ORDER BY " + gt._orderClause;
         }
@@ -3849,7 +3862,21 @@
             });
         }
         else {
-            rCount = executeDScalar(this.SQL_Count, null);
+            if (this.card_ID>0) {
+                $.ajax({
+                    url: VIS.Application.contextUrl + "jsonData/GetRecordCountWithCard",
+                    data: { sql: VIS.secureEngine.encrypt(this.SQL_Count) , cardID: this.card_ID },
+                    type: 'POST',
+                    async: false,
+                    success: function (resultt) {
+                        rCount = JSON.parse(resultt);
+                    },
+                    error: function (e) { }
+                });
+            } else {
+                rCount = executeDScalar(this.SQL_Count, null);
+            }
+
         }
 
         this.rowCount = rCount;
@@ -3918,7 +3945,7 @@
         this.SQL_Count = VIS.secureEngine.encrypt(this.SQL_Count);
 
         var gFieldsIn = this.createGridFieldArr(this.gridFields, true);
-        var dataIn = { sql: this.SQL, page: this.dopaging ? this.currentPage : 0, pageSize: this.dopaging ? this.pazeSize : 0, treeID: 0, treeNode_ID: 0 };
+        var dataIn = { sql: this.SQL, page: this.dopaging ? this.currentPage : 0, pageSize: this.dopaging ? this.pazeSize : 0, treeID: 0, treeNode_ID: 0, card_ID: this.card_ID,ad_Tab_ID:this.AD_Tab_ID };
 
         var obscureFields = this.createObsecureFields(this.gridFields);
 
@@ -3970,7 +3997,7 @@
         }
         else {
 
-            VIS.dataContext.getWindowRecords(dataIn, gFieldsIn, this.rowCount, this.SQL_Count, this.AD_Table_ID, obscureFields, function (buffer, lookupDirect) {
+            VIS.dataContext.getWindowRecords(dataIn, gFieldsIn, this.rowCount, this.SQL_Count, this.AD_Table_ID, obscureFields, function (buffer, lookupDirect, cardViewData) {
 
                 try {
 
@@ -3999,16 +4026,27 @@
                     }
                     if (lookupDirect)
                         VIS.MLookupCache.addRecordLookup(that.gTable._windowNo, that.gTable._tabNo, lookupDirect);
+                  
+                    that.cardTempalte = cardViewData;
+                    if (dataIn.card_ID > 0 && cardViewData && cardViewData.DisableWindowPageSize) {
+                        that.pazeSize = that.rowCount;
+                        that.currentPage = 1;
+                    }
                 }
                 catch (e) {
                     //alert(e);
-                    this.log.Log(Level.SEVERE, that.SQL, e);
+                    that.log.Log(Level.SEVERE, that.SQL, e);
                 }
                 that.fireQueryCompleted(true); // inform gridcontroller
                 that = null;
             });
         }
     };
+
+    GridTable.prototype.getCardTemplate = function () {
+        return this.cardTempalte;
+    }
+
 
     GridTable.prototype.readDataOfColumn = function (colName, colValue) {
 

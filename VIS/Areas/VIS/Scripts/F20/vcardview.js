@@ -38,7 +38,7 @@
         this.isAutoCompleteOpen = false;
         var bsyDiv = null;
         this.cardID = 0;
-
+        var records = null;
         //  var cardList;
         function init() {
             var width = $('body').width()-65;
@@ -280,7 +280,7 @@
          * @param {any} cardID
          * @param {any} cardName
          */
-        var cardChanged = function (cardID, cardName) {
+        var cardChanged = function (cardID, cardName) {            
             self.getCardViewData(self.mTab, cardID, cardName);
         };       
 
@@ -435,7 +435,7 @@
         if (this.grpCount==1) {
             changeCard.getRoot().width("240px").css({ 'margin': '5px 12px 12px 5px', 'float': (VIS.Application.isRTL ? 'right' : 'left') });
         }
-        if ($('head:contains("' + changeCard.headerCustom + '")').length == 0) {
+        if ($('head:contains("' + changeCard.headerCustom + ' {")').length == 0) {
             changeCard.addStyleToDom();
         }
         
@@ -452,15 +452,9 @@
      */
     VCardView.prototype.setupCardView = function (aPanel, mTab, cContainer, vCardId) {
         this.mTab = mTab;
-        this.aPanel = aPanel;
-
-       // this.fillCardViewList(mTab.vo.Cards);
-
-        // this.getCardViewData(mTab, 0);
-        //var cardss = mTab.vo.Cards[0];
-        //this.cardViewData = mTab.vo.Cards[0];
-        if (mTab.vo.Cards && mTab.vo.Cards[0] && mTab.vo.Cards[0].AD_CardView_ID) {
-            this.cardID = mTab.vo.Cards[0].AD_CardView_ID;
+        this.aPanel = aPanel;        
+        if (mTab.vo && mTab.vo.DefaultCardID) {
+            this.cardID = (mTab.vo.DefaultCardID);
         } else {
             this.setCardViewData();
             //this.refreshUI(this.getBody().width());
@@ -474,53 +468,57 @@
      * @param {any} cardID
      * @param {any} cardName
      */
-    VCardView.prototype.getCardViewData = function (mTab, cardID, cardName, refresh) {
+    VCardView.prototype.getCardViewData = function (mTab, cardID, cardName) {
         var self = this;
-        var windowID = 0;
-        var tabID = 0;
-        if (mTab) {
-            windowID = mTab.getAD_Window_ID();
-            tabID = mTab.getAD_Tab_ID();
-        }
+        self.cardID = cardID;
+        self.mTab.getTableModel().setCardID(cardID);
+        self.aPanel.curGC.query(self.mTab.getOnlyCurrentDays(), 0, false);
+        self.getCardCmb().val(cardName);
+        //var windowID = 0;
+        //var tabID = 0;
+        //if (mTab) {
+        //    windowID = mTab.getAD_Window_ID();
+        //    tabID = mTab.getAD_Tab_ID();
+        //}
 
-        var sql = " FROM " + mTab.getTableName();
-        if (mTab.extendedWhere) {
-            sql += " WHERE " + VIS.Env.parseContext(VIS.context, mTab.getWindowNo(), mTab.extendedWhere, false);;
+        //var sql = " FROM " + mTab.getTableName();
+        //if (mTab.extendedWhere) {
+        //    sql += " WHERE " + VIS.Env.parseContext(VIS.context, mTab.getWindowNo(), mTab.extendedWhere, false);
             
-        }
-        sql = VIS.secureEngine.encrypt(sql);
+        //}
+        //sql = VIS.secureEngine.encrypt(sql);
 
-        VIS.dataContext.getCardViewInfo(windowID, tabID, cardID, sql, function (retData) {
+        //VIS.dataContext.getCardViewInfo(windowID, tabID, cardID, sql, function (retData) {
 
-            self.cardViewData = retData;
-            if (!refresh) {
-                self.requeryData();
-            } else {
-                self.setCardViewData(retData);
-                self.refresh(self.getBody().width());
-            }
-            if (cardID) {
-                self.getCardCmb().val(retData.Name);
-            }
+        //    self.cardViewData = retData;
+        //    if (!refresh) {
+        //        self.requeryData();
+        //    } else {
+        //        self.setCardViewData(retData);
+        //        self.refresh(self.getBody().width());
+        //    }
+        //    if (cardID) {
+        //        self.getCardCmb().val(retData.Name);
+        //    }
 
-        });
+        //});
     };
 
     /**
      * Ftech Card Details and create card's schema.
      * */
-    VCardView.prototype.requeryData = function () {
-        if (this.cardViewData) {
-            this.setCardSqlInTabModel(this.mTab, this.cardViewData);
-            this.aPanel.curGC.query(this.mTab.getOnlyCurrentDays(), 0, false);
-            this.setCardViewData(this.cardViewData);// Create Card
-        } else if (this.cardID != 0) {// Fetch card details
-            this.getCardViewData(this.mTab, this.cardID, "");
-        } else {// If no template linked then show Name, description and comment
-            this.setCardViewData();
-            this.refresh(this.getBody().width());
-        }
-    }
+    //VCardView.prototype.requeryData = function () {
+    //    if (this.cardViewData) {
+    //        this.setCardSqlInTabModel(this.mTab, this.cardViewData);
+    //        this.aPanel.curGC.query(this.mTab.getOnlyCurrentDays(), 0, false);
+    //        this.setCardViewData(this.cardViewData);// Create Card
+    //    } else if (this.cardID != 0) {// Fetch card details
+    //        this.getCardViewData(this.mTab, this.cardID, "");
+    //    } else {// If no template linked then show Name, description and comment
+    //        this.setCardViewData();
+    //        this.refresh(this.getBody().width());
+    //    }
+    //}
 
     /**
      * Setup Card's Orderby clause and where clause
@@ -528,23 +526,23 @@
      * @param {any} mTab
      * @param {any} cModel
      */
-    VCardView.prototype.setCardSqlInTabModel = function (mTab,cModel) {
-        var griTable = mTab.getTableModel();
-        if (cModel.ExcludedGroup.length > 0) {
-            var str = cModel.ExcludedGroup.split(',');
-            var notIN = "";
-            for (var i = 0; i < str.length; i++) {
-                notIN += "'" + str[i] + "',"
-            }
-            var WhrCondition = cModel.FieldGroupName + " NOT IN (" + notIN.replace(/,\s*$/, "") + ")";
-            mTab.setOuterWhereClause(WhrCondition);
-        }
-        else {
-            mTab.setOuterWhereClause("1=1");
-        }
-        griTable.setOuterOrderClause(cModel.OrderByClause.replace(/,\s*$/, ""));
-        griTable.setDoPaging(!cModel.DisableWindowPageSize);
-    };
+    //VCardView.prototype.setCardSqlInTabModel = function (mTab,cModel) {
+    //    var griTable = mTab.getTableModel();
+    //    if (cModel.ExcludedGroup.length > 0) {
+    //        var str = cModel.ExcludedGroup.split(',');
+    //        var notIN = "";
+    //        for (var i = 0; i < str.length; i++) {
+    //            notIN += "'" + str[i] + "',"
+    //        }
+    //        var WhrCondition ="("+cModel.FieldGroupName + " NOT IN (" + notIN.replace(/,\s*$/, "") + ") OR " + cModel.FieldGroupName+ " IS NULL)" ;
+    //        mTab.setOuterWhereClause(WhrCondition);
+    //    }
+    //    else {
+    //        mTab.setOuterWhereClause("1=1");
+    //    }
+    //    griTable.setOuterOrderClause(cModel.OrderByClause.replace(/,\s*$/, ""));
+    //    griTable.setDoPaging(!cModel.DisableWindowPageSize);
+    //};
 
     /**
      * Create Card's Schema, like fields included, groupby etc.
@@ -695,21 +693,22 @@
 
         var $this = this;
 
-        if (!this.cardViewData && this.cardID>0) {
-            this.getCardViewData(this.mTab, this.cardID, "", true);
-        } else {            
-            this.refresh(width);
-        }
+        //if (!this.cardViewData && this.cardID>0) {
+        //    this.getCardViewData(this.mTab, this.cardID, "", true);
+        //} else {            
+        //    this.refresh(width);
+        //}
 
+        var temp= this.mTab.getTableModel().getCardTemplate();
         
-
         //Reset Variables
        
         while (this.groupCtrls.length > 0) {
             this.groupCtrls.pop().dispose();
         }
 
-
+        this.setCardViewData(temp);
+        this.refresh(width);
 
         //this.getBody().empty();
         this.aPanel.setBusy(true);
@@ -724,7 +723,7 @@
             $this.isProcessed = false;
             $this.createGroups();
 
-            var records = $this.mTab.getTableModel().mSortList;
+            records = $this.mTab.getTableModel().mSortList;
 
             var root = $this.getBody();
 
