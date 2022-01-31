@@ -3101,7 +3101,7 @@
         this.mSortList;
         this.AD_Tab_ID = 0;
         this.log = VIS.Logging.VLogger.getVLogger("VIS.GridTable");
-        this.outerOrderClause = "";
+        //this.outerOrderClause = "";
         this.card_ID = 0;
     };
 
@@ -3556,6 +3556,9 @@
         this.card_ID = cardID;
     };
 
+    /**
+     * Reset card details for other view
+     * */
     GridTable.prototype.resetCard = function () {        
         this.cardTempalte = null;
         this.setCardID(0);
@@ -4042,7 +4045,9 @@
             });
         }
     };
-
+    /**
+     * Get Card tempatate for cardview
+     * */
     GridTable.prototype.getCardTemplate = function () {
         return this.cardTempalte;
     }
