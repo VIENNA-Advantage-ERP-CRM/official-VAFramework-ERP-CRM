@@ -5453,6 +5453,11 @@ namespace VAdvantage.Model
                             ioLine.SetQtyEntered(Decimal.Multiply(lineCreatedQty, (Decimal.Divide(oLine.GetQtyEntered(), (oLine.GetQtyOrdered())))));
                         }
                         ioLine.SetM_AttributeSetInstance_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]));
+
+                        //190 - Get Print description and set
+                        if (ioLine.Get_ColumnIndex("PrintDescription") >= 0 && oLine.Get_ColumnIndex("PrintDescription") >= 0)
+                            ioLine.Set_Value("PrintDescription", oLine.Get_Value("PrintDescription"));
+
                         if (!ioLine.Save(Get_TrxName()))
                         {
                             ValueNamePair pp = VLogger.RetrieveError();
@@ -5526,6 +5531,9 @@ namespace VAdvantage.Model
                 {
                     ioLine.SetQtyEntered(Decimal.Multiply(Qty, (Decimal.Divide(oLine.GetQtyEntered(), (oLine.GetQtyOrdered())))));
                 }
+                //190 - Get Print description and set
+                if (ioLine.Get_ColumnIndex("PrintDescription") >= 0 && oLine.Get_ColumnIndex("PrintDescription") >= 0)
+                    ioLine.Set_Value("PrintDescription", oLine.Get_Value("PrintDescription"));
                 if (!ioLine.Save(Get_TrxName()))
                 {
                     ValueNamePair pp = VLogger.RetrieveError();
@@ -5621,6 +5629,9 @@ namespace VAdvantage.Model
                         //	Qty = Delivered	
                         iLine.SetQtyEntered(sLine.GetQtyEntered());
                         iLine.SetQtyInvoiced(sLine.GetMovementQty());
+                        //190 - Get Print description and set
+                        if (iLine.Get_ColumnIndex("PrintDescription") >= 0 && sLine.Get_ColumnIndex("PrintDescription") >= 0)
+                            iLine.Set_Value("PrintDescription", sLine.Get_Value("PrintDescription"));
                         if (!iLine.Save(Get_TrxName()))
                         {
                             _processMsg = "Could not create Invoice Line from Shipment Line";
@@ -5658,6 +5669,10 @@ namespace VAdvantage.Model
                                 iLine.SetQtyEntered(iLine.GetQtyInvoiced());
                             else
                                 iLine.SetQtyEntered(Decimal.Multiply(iLine.GetQtyInvoiced(), (Decimal.Divide(oLine.GetQtyEntered(), oLine.GetQtyOrdered()))));
+                            
+                            //190 - Get Print description and set
+                            if (iLine.Get_ColumnIndex("PrintDescription") >= 0 && oLine.Get_ColumnIndex("PrintDescription") >= 0)
+                                iLine.Set_Value("PrintDescription", oLine.Get_Value("PrintDescription"));
                             if (!iLine.Save(Get_TrxName()))
                             {
                                 _processMsg = "Could not create Invoice Line from Order Line";
@@ -5684,6 +5699,10 @@ namespace VAdvantage.Model
                             iLine.SetQtyEntered(iLine.GetQtyInvoiced());
                         else
                             iLine.SetQtyEntered(Decimal.Multiply(iLine.GetQtyInvoiced(), (Decimal.Divide(oLine.GetQtyEntered(), oLine.GetQtyOrdered()))));
+
+                        //190 - Get Print description and set
+                        if (iLine.Get_ColumnIndex("PrintDescription") >= 0 && oLine.Get_ColumnIndex("PrintDescription") >= 0)
+                            iLine.Set_Value("PrintDescription", oLine.Get_Value("PrintDescription"));
                         if (!iLine.Save(Get_TrxName()))
                         {
                             _processMsg = "Could not create Invoice Line from Order Line";
