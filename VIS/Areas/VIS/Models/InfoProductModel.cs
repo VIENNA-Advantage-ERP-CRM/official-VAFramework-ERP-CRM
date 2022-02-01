@@ -51,37 +51,37 @@ namespace VIS.Models
             {
                 InfoColumn[] frieLayout =
             {
-				new InfoColumn(Msg.Translate(ctx,"M_Product_ID"),"M_Product_ID", true, "p.M_Product_ID",DisplayType.ID).Seq(10),
-				new InfoColumn(Msg.Translate(ctx, "Name"), "Name", true, "p.Name",DisplayType.String).Seq(20),
-                new InfoColumn(Msg.Translate(ctx,"QtyEntered"), "QtyEntered", false, "1 as QtyEntered" , DisplayType.Quantity).Seq(30), 
-				new InfoColumn(Msg.Translate(ctx, "QtyAvailable"), "QtyAvailable",true,
-					"bomQtyAvailable(p.M_Product_ID,w.M_Warehouse_ID,0) AS QtyAvailable", DisplayType.Quantity).Seq(40),
-				new InfoColumn(s_headerPriceList, "M_PriceList_Version_ID",true, "plv.Name", DisplayType.Amount).Seq(50),
+                new InfoColumn(Msg.Translate(ctx,"M_Product_ID"),"M_Product_ID", true, "p.M_Product_ID",DisplayType.ID).Seq(10),
+                new InfoColumn(Msg.Translate(ctx, "Name"), "Name", true, "p.Name",DisplayType.String).Seq(20),
+                new InfoColumn(Msg.Translate(ctx,"QtyEntered"), "QtyEntered", false, "1 as QtyEntered" , DisplayType.Quantity).Seq(30),
+                new InfoColumn(Msg.Translate(ctx, "QtyAvailable"), "QtyAvailable",true,
+                    "bomQtyAvailable(p.M_Product_ID,w.M_Warehouse_ID,0) AS QtyAvailable", DisplayType.Quantity).Seq(40),
+                new InfoColumn(s_headerPriceList, "M_PriceList_Version_ID",true, "plv.Name", DisplayType.Amount).Seq(50),
                 new InfoColumn(s_headerWarehouse, "M_Warehouse_ID",true, "w.Name", DisplayType.String).Seq(60),
-				new InfoColumn(Msg.Translate(ctx, "PriceList"), "PriceList",true,
-					"bomPriceList(p.M_Product_ID, pr.M_PriceList_Version_ID) AS PriceList",  DisplayType.Amount).Seq(70),
-				new InfoColumn(Msg.Translate(ctx, "PriceStd"), "PriceStd",true,
-					"bomPriceStd(p.M_Product_ID, pr.M_PriceList_Version_ID) AS PriceStd", DisplayType.Amount).Seq(80),
-				new InfoColumn("Einzel MWSt", "",true,
-					"pr.PriceStd * 1.19", DisplayType.Amount).Seq(90),
-				new InfoColumn("Einzel kompl", "",true,
-					"(pr.PriceStd+13) * 1.19", DisplayType.Amount).Seq(100),
-				new InfoColumn("Satz kompl", "", true,
-					"((pr.PriceStd+13) * 1.19) * 4", DisplayType.Amount).Seq(110),
-				new InfoColumn(Msg.Translate(ctx, "QtyOnHand"), "QtyOnHand",true,
-					"bomQtyOnHand(p.M_Product_ID,w.M_Warehouse_ID,0) AS QtyOnHand", DisplayType.Quantity).Seq(120),
-				new InfoColumn(Msg.Translate(ctx, "QtyReserved"), "QtyReserved",true,
-					"bomQtyReserved(p.M_Product_ID,w.M_Warehouse_ID,0) AS QtyReserved", DisplayType.Quantity).Seq(130),
-				new InfoColumn(Msg.Translate(ctx, "QtyOrdered"), "QtyOrdered",true,
-					"bomQtyOrdered(p.M_Product_ID,w.M_Warehouse_ID,0) AS QtyOrdered", DisplayType.Quantity).Seq(140),
-				new InfoColumn(Msg.Translate(ctx, "Discontinued").Substring(0, 1), "Discontinued",true,
-					"p.Discontinued", DisplayType.YesNo).Seq(150),
-				new InfoColumn(Msg.Translate(ctx, "SalesMargin"), "SalesMargin",true,
-					"bomPriceStd(p.M_Product_ID, pr.M_PriceList_Version_ID)-bomPriceLimit(p.M_Product_ID, pr.M_PriceList_Version_ID) AS Margin", DisplayType.Amount).Seq(160),
-				new InfoColumn(Msg.Translate(ctx, "PriceLimit"), "PriceLimit",true,
-					"bomPriceLimit(p.M_Product_ID, pr.M_PriceList_Version_ID) AS PriceLimit", DisplayType.Amount).Seq(170),
-				new InfoColumn(Msg.Translate(ctx, "IsInstanceAttribute"), "IsInstanceAttribute",true,
-					"pa.IsInstanceAttribute", DisplayType.YesNo).Seq(180),
+                new InfoColumn(Msg.Translate(ctx, "PriceList"), "PriceList",true,
+                    "bomPriceList(p.M_Product_ID, pr.M_PriceList_Version_ID) AS PriceList",  DisplayType.Amount).Seq(70),
+                new InfoColumn(Msg.Translate(ctx, "PriceStd"), "PriceStd",true,
+                    "bomPriceStd(p.M_Product_ID, pr.M_PriceList_Version_ID) AS PriceStd", DisplayType.Amount).Seq(80),
+                new InfoColumn("Einzel MWSt", "",true,
+                    "pr.PriceStd * 1.19", DisplayType.Amount).Seq(90),
+                new InfoColumn("Einzel kompl", "",true,
+                    "(pr.PriceStd+13) * 1.19", DisplayType.Amount).Seq(100),
+                new InfoColumn("Satz kompl", "", true,
+                    "((pr.PriceStd+13) * 1.19) * 4", DisplayType.Amount).Seq(110),
+                new InfoColumn(Msg.Translate(ctx, "QtyOnHand"), "QtyOnHand",true,
+                    "bomQtyOnHand(p.M_Product_ID,w.M_Warehouse_ID,0) AS QtyOnHand", DisplayType.Quantity).Seq(120),
+                new InfoColumn(Msg.Translate(ctx, "QtyReserved"), "QtyReserved",true,
+                    "bomQtyReserved(p.M_Product_ID,w.M_Warehouse_ID,0) AS QtyReserved", DisplayType.Quantity).Seq(130),
+                new InfoColumn(Msg.Translate(ctx, "QtyOrdered"), "QtyOrdered",true,
+                    "bomQtyOrdered(p.M_Product_ID,w.M_Warehouse_ID,0) AS QtyOrdered", DisplayType.Quantity).Seq(140),
+                new InfoColumn(Msg.Translate(ctx, "Discontinued").Substring(0, 1), "Discontinued",true,
+                    "p.Discontinued", DisplayType.YesNo).Seq(150),
+                new InfoColumn(Msg.Translate(ctx, "SalesMargin"), "SalesMargin",true,
+                    "bomPriceStd(p.M_Product_ID, pr.M_PriceList_Version_ID)-bomPriceLimit(p.M_Product_ID, pr.M_PriceList_Version_ID) AS Margin", DisplayType.Amount).Seq(160),
+                new InfoColumn(Msg.Translate(ctx, "PriceLimit"), "PriceLimit",true,
+                    "bomPriceLimit(p.M_Product_ID, pr.M_PriceList_Version_ID) AS PriceLimit", DisplayType.Amount).Seq(170),
+                new InfoColumn(Msg.Translate(ctx, "IsInstanceAttribute"), "IsInstanceAttribute",true,
+                    "pa.IsInstanceAttribute", DisplayType.YesNo).Seq(180),
                 new InfoColumn(Msg.Translate(ctx,"GuranteeDays"),"GuranteeDays",true, "adddays(Sysdate, p.GuaranteeDays) as GuranteeDays",DisplayType.Date).Seq(190)
                     //new InfoColumn(Msg.Translate(ctx, "Quantity"), "0 as Quantity" , typeof(Boolean)).Seq(180) 
                    
@@ -527,6 +527,13 @@ namespace VIS.Models
                             _attribute_ID, Util.GetValueOfInt(po.Get_Value("C_UOM_ID")), dsProducts,
                             Util.GetValueOfDecimal(po.Get_Value("QtyEntered")), M_DiscountSchema_ID, bpFlatDiscount));
                     }
+                    //190- Set the print description.
+                    if (hasProducts)
+                    {
+                        DataRow[] dr = dsProducts.Tables[0].Select(" M_Product_ID = " + _m_Product_ID);
+                        if (dr != null && dr.Length > 0 && po.Get_ColumnIndex("PrintDescription") >= 0)
+                            po.Set_Value("PrintDescription", Util.GetValueOfString(dr[0]["DocumentNote"]));
+                    }
                     if (!po.Save())
                     {
                         count++;
@@ -585,6 +592,13 @@ namespace VIS.Models
                             _attribute_ID, Util.GetValueOfInt(po.Get_Value("C_UOM_ID")), dsProducts,
                             Util.GetValueOfDecimal(po.Get_Value("QtyEntered")), M_DiscountSchema_ID, bpFlatDiscount));
                     }
+                    //190- Set the print description.
+                    if (hasProducts)
+                    {
+                        DataRow[] dr = dsProducts.Tables[0].Select(" M_Product_ID = " + _m_Product_ID);
+                        if (dr != null && dr.Length > 0 && po.Get_ColumnIndex("PrintDescription") >= 0)
+                            po.Set_Value("PrintDescription", Util.GetValueOfString(dr[0]["DocumentNote"]));
+                    }
                     if (!po.Save())
                     {
                         count++;
@@ -602,6 +616,7 @@ namespace VIS.Models
                 int ordID = 0;
 
                 bool saved = true;
+                bool IsPrintDes = false;
                 MInOut io = new MInOut(ctx, recordID, null);
 
                 if (Locator_ID <= 0)
@@ -613,6 +628,7 @@ namespace VIS.Models
                         error = Msg.GetMsg(ctx, "DefaultLocatorNotFound");
                     }
                 }
+                
 
                 // check applied for Locator 
                 if (Locator_ID > 0)
@@ -639,11 +655,22 @@ namespace VIS.Models
                         if (ordID > 0)
                         {
                             string selColumn = "";
+                            #region 190 - Check if PrintDescription Column exists
+
+                            int ct = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(AD_Column_ID) FROM 
+                                                                AD_Column WHERE UPPER(ColumnName)=UPPER('PrintDescription') AND AD_Table_ID=260"));
+                            if (ct > 0)
+                                IsPrintDes = true;
+
+                            #endregion
+
                             if (Env.IsModuleInstalled("DTD001_"))
                                 selColumn = " , ol.DTD001_Org_ID ";
+                            if (IsPrintDes)
+                                selColumn += " , ol.PrintDescription ";
 
                             _sqlQuery.Clear();
-                            _sqlQuery.Append("SELECT ol.C_OrderLine_ID, ol.M_Product_ID, ol.M_AttributeSetInstance_ID, ol.C_UOM_ID " + selColumn + " FROM C_OrderLine ol WHERE ol.C_Order_ID = " + ordID);
+                            _sqlQuery.Append("SELECT ol.C_OrderLine_ID, ol.M_Product_ID, ol.M_AttributeSetInstance_ID, ol.C_UOM_ID " + selColumn + "  FROM C_OrderLine ol WHERE ol.C_Order_ID = " + ordID);
                             dsOrderLines = DB.ExecuteDataset(_sqlQuery.ToString());
                             if (dsOrderLines != null && dsOrderLines.Tables[0].Rows.Count > 0)
                             {
@@ -691,6 +718,8 @@ namespace VIS.Models
                                     string selColumn = "";
                                     if (Env.IsModuleInstalled("DTD001_"))
                                         selColumn = " , ol.DTD001_Org_ID ";
+                                    if (IsPrintDes)
+                                        selColumn += " , ol.PrintDescription ";
 
                                     _sqlQuery.Clear();
                                     _sqlQuery.Append("SELECT ol.C_OrderLine_ID, ol.M_Product_ID, ol.M_AttributeSetInstance_ID, ol.C_UOM_ID " + selColumn
@@ -715,6 +744,14 @@ namespace VIS.Models
                             po.Set_Value("QtyEntered", Util.GetValueOfDecimal(qty[i]));
                             po.Set_Value("MovementQty", Util.GetValueOfDecimal(qty[i]));
                             po.Set_ValueNoCheck("M_InOut_ID", recordID);
+
+                            //190- Set the print description.
+                            if (hasProducts)
+                            {
+                                DataRow[] dr = dsProducts.Tables[0].Select(" M_Product_ID = " + Util.GetValueOfInt(product[i]));
+                                if (dr != null && dr.Length > 0 && po.Get_ColumnIndex("PrintDescription") >= 0)
+                                    po.Set_Value("PrintDescription", Util.GetValueOfString(dr[0]["DocumentNote"]));
+                            }
                             if (hasOrderLines)
                             {
                                 DataRow[] drOL = null;
@@ -737,7 +774,12 @@ namespace VIS.Models
                                         drOL = dsOrderLines.Tables[0].Select(" M_Product_ID = " + Util.GetValueOfInt(product[i]));
                                 }
                                 if (drOL != null && drOL.Length > 0)
+                                {
                                     po.Set_ValueNoCheck("C_OrderLine_ID", Util.GetValueOfInt(drOL[0]["C_OrderLine_ID"]));
+                                    //190- Set the print description.
+                                    if (IsPrintDes)
+                                        po.Set_Value("PrintDescription", Util.GetValueOfString(drOL[0]["PrintDescription"]));
+                                }
                             }
                             po.Set_Value("M_Locator_ID", Util.GetValueOfInt(Locator_ID));
                             if (Util.GetValueOfInt(attribute[i]) != 0)
@@ -1234,7 +1276,13 @@ namespace VIS.Models
                             po.Set_ValueNoCheck("PriceActual", pPrice["PriceActual"]);
                         //po.Set_Value("PriceEntered", pPrice["PriceEntered"]);
                     }
-
+                    //190- Set the print description.
+                    if (hasProducts)
+                    {
+                        DataRow[] dr = dsProducts.Tables[0].Select(" M_Product_ID = " + Util.GetValueOfInt(product[i]));
+                        if (dr != null && dr.Length > 0 && po.Get_ColumnIndex("PrintDescription") >= 0)
+                            po.Set_Value("PrintDescription", Util.GetValueOfString(dr[0]["DocumentNote"]));
+                    }
                     if (!po.Save())
                     {
                         count++;
@@ -2214,7 +2262,7 @@ namespace VIS.Models
         {
             DataSet dsProds = null;
             _sqlQuery.Clear();
-            _sqlQuery.Append(@"SELECT M_Product_ID, C_UOM_ID, Name FROM M_Product WHERE AD_Client_ID = " + AD_Client_ID);
+            _sqlQuery.Append(@"SELECT M_Product_ID, C_UOM_ID, Name, DocumentNote FROM M_Product WHERE AD_Client_ID = " + AD_Client_ID);
             dsProds = DB.ExecuteDataset(_sqlQuery.ToString());
             return dsProds;
         }

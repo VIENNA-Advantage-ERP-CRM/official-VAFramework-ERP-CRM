@@ -1459,9 +1459,12 @@ namespace VIS.Controllers
                     }
 
                     //190 - Get Print description from order line and set
-                    if (po.Get_ColumnIndex("PrintDescription") >= 0)
+                    if (po.Get_ColumnIndex("PrintDescription") >= 0 && ol.Get_ColumnIndex("PrintDescription") >= 0)
                         po.Set_Value("PrintDescription", ol.Get_Value("PrintDescription"));
-                   
+                    //Get Print description from invoice line if invoice line exists
+                    if (il != null && po.Get_ColumnIndex("PrintDescription") >= 0 && il.Get_ColumnIndex("PrintDescription") >= 0)
+                        po.Set_Value("PrintDescription", il.Get_Value("PrintDescription"));                    
+
                     //iol.SetDescription(ol.GetDescription());
                     //iol.SetC_Project_ID(ol.GetC_Project_ID());
                     //iol.SetC_ProjectPhase_ID(ol.GetC_ProjectPhase_ID());
