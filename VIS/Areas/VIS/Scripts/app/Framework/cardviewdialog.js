@@ -110,6 +110,8 @@
         var orderByClause = null;
         var disabledWindowPage = null;
         var sortDDL = null;
+        var btnApply;
+        var closeDialog = true;
         // var 
         var root, ch;
         function init() {
@@ -185,7 +187,7 @@
             var divinputctrl = $("<div class='input-group vis-input-wrap'></div>").append($("<div class='vis-control-wrap'></div>"));//.append(orderByClause).append('<label for="Name">' + VIS.Msg.getMsg("orderByClause") + '</label>'));
              cardviewCondition.append(lbldisabledWindowPage);
 
-            var divCardViewbtn = $("<div class='vis-cardviewbtn' style='margin-top:0;'><button class='vis-btnDelete'><i title=" + VIS.Msg.getMsg("DeleteRecord") + " class='vis vis-delete'></i></button> <div class='vis-cdv-customokcancle'><button class='vis-btnOk'>  " + VIS.Msg.getMsg("Ok") + "  </button><button class='vis-btnCardViewCancle'>  " + VIS.Msg.getMsg("Cancel") + "  </button></div> </div>");
+            var divCardViewbtn = $("<div class='vis-cardviewbtn' style='margin-top:0;'><button class='vis-btnDelete'><i title=" + VIS.Msg.getMsg("DeleteRecord") + " class='vis vis-delete'></i></button> <div class='vis-cdv-customokcancle'><button class='vis-btnCardApply'>  " + VIS.Msg.getMsg("Apply") + "  </button><button class='vis-btnOk'>  " + VIS.Msg.getMsg("Ok") + "  </button><button class='vis-btnCardViewCancle'>  " + VIS.Msg.getMsg("close") + "  </button></div> </div>");
             rootCardViewUI.append(divCardViewMainFirstChild);
             divCardViewMainFirstChild.append(CardViewTopFiledsWrap);
             CardViewTopFiledsWrap.append("<div class='vis-firstdiv vis-pull-left' ></div>");
@@ -326,6 +328,7 @@
             btnUp = rootCardViewUI.find(".vis-btnup");
             btnDown = rootCardViewUI.find(".vis-btndown");
             btnOk = rootCardViewUI.find(".vis-btnOk");
+            btnApply = rootCardViewUI.find(".vis-btnCardApply");
 
             btnGrpDown = rootCardViewUI.find(".vis-btnGrpdown");
             btnGrpUp = rootCardViewUI.find(".vis-Grpbtnup");
@@ -928,79 +931,24 @@
 
             if (btnOk != null) {
                 btnOk.on("click", function (e) {
-                    IsBusy(true);
-                    window.setTimeout(function () {
-                        var cvConditionValue = "";
-                        var cvConditionText = "";
-                        strConditionArray = [];
-                        var queryValue = "";
-                        for (i = 0; i < cardviewCondition.length; i++) {
-                            cvConditionValue = "";
-                            cvConditionText = "";
-                            for (j = 0; j < cardviewCondition[i].Condition.length; j++) {
-                                if (j == 0) {
-                                    cvConditionValue += "@" + cardviewCondition[i].Condition[j].ColName + "@" + cardviewCondition[i].Condition[j].Operator + cardviewCondition[i].Condition[j].QueryValue;
-                                    cvConditionText += "@" + cardviewCondition[i].Condition[j].ColHeader + "@" + cardviewCondition[i].Condition[j].Operator + cardviewCondition[i].Condition[j].QueryText;
-                                }
-                                else {
-                                    cvConditionValue += " & " + "@" + cardviewCondition[i].Condition[j].ColName + "@" + cardviewCondition[i].Condition[j].Operator + cardviewCondition[i].Condition[j].QueryValue;
-                                    cvConditionText += " & " + "@" + cardviewCondition[i].Condition[j].ColHeader + "@" + cardviewCondition[i].Condition[j].Operator + cardviewCondition[i].Condition[j].QueryText
-                                }
-                                //  cvConditionValue += "@" + cardviewCondition[i].Condition[j].ColName + "@" + cardviewCondition[i].Condition[j].Operator + cardviewCondition[i].Condition[j].QueryValue + " & ";
-                                //cvConditionText += "@" + cardviewCondition[i].Condition[j].ColHeader + "@" + cardviewCondition[i].Condition[j].Operator + cardviewCondition[i].Condition[j].QueryText + " & ";
-                            }
-                            strConditionArray.push({ "Color": cardviewCondition[i].Color.toString(), "ConditionValue": cvConditionValue, "ConditionText": cvConditionText })
-                        }
-
-
-                        if (isNewRecord) {
-                            if (txtCardViewName.val() == "") {
-                                VIS.ADialog.error("FillMandatory", true, "Name");
-                                IsBusy(false);
-                                return false;
-                            }
-
-                        }
-                        else if (!isNewRecord && (AD_CardView_ID < 1 && VIS.MRole.isAdministrator)) {
-                            VIS.ADialog.error("ClickNew", true, "");
-                            IsBusy(false);
-                            return false;
-                        }
-                        
-
-
-                        //var retVal = {};
-                        //retVal.FieldGroupID = AD_GroupField_ID;
-                        var len = ulCardViewColumnField.children().length;
-                        if (len.length <= 0)
-                            return false;
-
-                        SaveCardViewColumn(cardViewColArray);
-                        //if (!retVal.IncludedCols) {
-                        //    return false;
-                        //}
-                        //retVal.Conditions = strConditionArray;
-                        //retVal.AD_CardView_ID = AD_CardView_ID;
-                        //if (isNewRecord && parseInt(AD_User_ID) < 0) {
-                        //    retVal.FieldGroupID = orginalAD_GroupField_ID;
-                        //    retVal.IncludedCols = orginalIncludedCols;
-                        //    retVal.Conditions = strConditionArray;
-                        //    retVal.AD_CardView_ID = orginalAD_CardView_ID;
-                        //}
-                        //cardView.setCardViewData(retVal);
-                        //if (gc.isCardRow)
-                        //    cardView.getCardViewData(null, AD_CardView_ID);
-                        // ch.close();
-                        e.stopPropagation();
-                        e.preventDefault();
-                    }, 50);
+                    closeDialog = false;
+                    SaveChanges();
                 });
             }
+
+            if (btnApply != null) {
+                btnApply.on("click", function (e) {
+                    closeDialog = true;
+                    SaveChanges();
+                });
+            }
+
             if (btnCardViewCancle != null) {
                 btnCardViewCancle.on("click", function (e) {                   
                     ch.close();
                 });
             }
+
             if (btnDelete != null) {
                 btnDelete.on("click", function (e) {
                     VIS.ADialog.confirm("SureWantToDelete", true, "", VIS.Msg.getMsg("Confirm"), function (result) {
@@ -1249,6 +1197,54 @@
             }
         };
 
+        function SaveChanges() {
+            IsBusy(true);
+            window.setTimeout(function () {
+                var cvConditionValue = "";
+                var cvConditionText = "";
+                strConditionArray = [];
+                var queryValue = "";
+                for (i = 0; i < cardviewCondition.length; i++) {
+                    cvConditionValue = "";
+                    cvConditionText = "";
+                    for (j = 0; j < cardviewCondition[i].Condition.length; j++) {
+                        if (j == 0) {
+                            cvConditionValue += "@" + cardviewCondition[i].Condition[j].ColName + "@" + cardviewCondition[i].Condition[j].Operator + cardviewCondition[i].Condition[j].QueryValue;
+                            cvConditionText += "@" + cardviewCondition[i].Condition[j].ColHeader + "@" + cardviewCondition[i].Condition[j].Operator + cardviewCondition[i].Condition[j].QueryText;
+                        }
+                        else {
+                            cvConditionValue += " & " + "@" + cardviewCondition[i].Condition[j].ColName + "@" + cardviewCondition[i].Condition[j].Operator + cardviewCondition[i].Condition[j].QueryValue;
+                            cvConditionText += " & " + "@" + cardviewCondition[i].Condition[j].ColHeader + "@" + cardviewCondition[i].Condition[j].Operator + cardviewCondition[i].Condition[j].QueryText
+                        }
+                    }
+                    strConditionArray.push({ "Color": cardviewCondition[i].Color.toString(), "ConditionValue": cvConditionValue, "ConditionText": cvConditionText })
+                }
+
+
+                if (isNewRecord) {
+                    if (txtCardViewName.val() == "") {
+                        VIS.ADialog.error("FillMandatory", true, "Name");
+                        IsBusy(false);
+                        return false;
+                    }
+
+                }
+                else if (!isNewRecord && (AD_CardView_ID < 1 && VIS.MRole.isAdministrator)) {
+                    VIS.ADialog.error("ClickNew", true, "");
+                    IsBusy(false);
+                    return false;
+                }
+
+                var len = ulCardViewColumnField.children().length;
+                if (len.length <= 0)
+                    return false;
+
+                SaveCardViewColumn(cardViewColArray);
+                e.stopPropagation();
+                e.preventDefault();
+            }, 50);
+        };
+
 
         function UnSelectRoleUl() {
             if (ulRole != null) {
@@ -1397,10 +1393,15 @@
             }
             else {
                 IsBusy(false);
-                ch.close();
-                if (gc.isCardRow)
-                    //cardView.requeryData();
-                    cardView.getCardViewData(mTab, AD_CardView_ID);
+                if (closeDialog) {
+                    ch.close();
+                    if (gc.isCardRow)
+                        //cardView.requeryData();
+                        cardView.getCardViewData(mTab, AD_CardView_ID);
+                }
+                else {
+                    btnCancle.trigger("click");
+                }
             }
         };
 
@@ -1428,8 +1429,7 @@
 
             grpSeq = grpSeq.replace(/,\s*$/, "");
             skipGrp = skipGrp.replace(/,\s*$/, "");
-           
-
+            cardViewArray = [];
             cardViewArray.push({ AD_Window_ID: AD_Window_ID, AD_Tab_ID: AD_Tab_ID, UserID: AD_User_ID, AD_GroupField_ID: cmbGroupField.find(":selected").attr("fieldid"), isNewRecord: isNewRecord, CardViewName: cardViewName, CardViewID: AD_CardView_ID, IsDefault: isdefault.is(":checked"), AD_HeaderLayout_ID: $vSearchHeaderLayout.getValue(), isPublic: isPublic.is(":checked"), groupSequence: grpSeq });
             var url = VIS.Application.contextUrl + "CardView/SaveCardViewColumns";
             $.ajax({
@@ -1443,9 +1443,14 @@
                     var result = JSON.parse(data);
                     AD_CardView_ID = result;
                     IsBusy(false);
-                    if (gc.isCardRow)
-                        cardView.getCardViewData(mTab, AD_CardView_ID);
-                    ch.close();
+                    if (closeDialog) {
+                        if (gc.isCardRow)
+                            cardView.getCardViewData(mTab, AD_CardView_ID);
+                        ch.close();
+                    }
+                    else {
+                        btnCancle.trigger("click");
+                    }
 
                 }, error: function (errorThrown) {
                     alert(errorThrown.statusText);
