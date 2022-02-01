@@ -41,6 +41,7 @@ namespace VIS.DataContracts
         public int treeNode_ID { get; set; }
         public int card_ID { get; set; }
         public int ad_Tab_ID { get; set; }
+        public string tableName { get; set; }
     }
 
     /// <summary>

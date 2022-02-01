@@ -2242,7 +2242,7 @@ namespace VIS.Helpers
             JTable obj = null;
             if (sqlIn.card_ID > 0)
             {
-                string SQL = sqlIn.sql.Substring(sqlIn.sql.LastIndexOf(" FROM"));
+                string SQL = sqlIn.sql.Substring(sqlIn.sql.LastIndexOf(" FROM "+ sqlIn.tableName));
                 SQL = SQL.Substring(0, SQL.LastIndexOf("ORDER"));
                 retVal.CardViewTpl = WindowHelper.GetCardViewDetail(0, sqlIn.ad_Tab_ID, ctx, sqlIn.card_ID, SQL);
                 if (retVal.CardViewTpl.DisableWindowPageSize)
