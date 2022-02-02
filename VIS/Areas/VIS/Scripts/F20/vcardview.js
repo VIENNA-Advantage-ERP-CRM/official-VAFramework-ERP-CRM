@@ -39,11 +39,12 @@
         var bsyDiv = null;
         this.cardID = 0;
         var records = null;
+        this.editID = 0;
         //  var cardList;
         function init() {
             var width = $('body').width()-65;
             root = $("<div class='vis-cv-body vis-noselect'>");
-            bsyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
+            bsyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div></div>');
             root.append(bsyDiv);
             bsyDiv.css("display", 'none');
             body = $("<div class='vis-cv-main' style='max-width:" + width+"px'>");
@@ -216,6 +217,7 @@
                 if (d[0].nodeName == 'SPAN' && d.hasClass('vis-cv-card-edit')) {
                     s = d.data('recid');
                     if (s || s === 0) {
+                        self.editID = s;
                         self.onCardEdit({ 'recid': s })
                     }
                 }
@@ -229,7 +231,7 @@
                     }
                     s = d.data('recid');
                     if (s || s === 0) {
-                        self.onCardEdit({ 'recid': s }, true)
+                        self.onCardEdit({ 'recid': s }, true);
                         self.navigate(s, false, true);
                     }
                 }
@@ -502,6 +504,15 @@
 
         //});
     };
+    /**
+     * Rest card on view change
+     * */
+    VCardView.prototype.resetCard = function () {
+        this.getGroupHeader().empty();
+        while (this.groupCtrls.length > 0) {
+            this.groupCtrls.pop().dispose();
+        }
+    }
 
     /**
      * Ftech Card Details and create card's schema.
@@ -688,10 +699,7 @@
      * Create cards and groups
      * @param {any} width
      */
-    VCardView.prototype.refreshUI = function (width) {
-
-        var $this = this;
-
+    VCardView.prototype.refreshUI = function (width) {      
         //if (!this.cardViewData && this.cardID>0) {
         //    this.getCardViewData(this.mTab, this.cardID, "", true);
         //} else {            
@@ -701,16 +709,11 @@
         var temp= this.mTab.getTableModel().getCardTemplate();
         
         //Reset Variables
-       
-        while (this.groupCtrls.length > 0) {
-            this.groupCtrls.pop().dispose();
-        }
-
+        this.setBusy(true);
         this.setCardViewData(temp);
         this.refresh(width);
-
         //this.getBody().empty();
-        this.aPanel.setBusy(true);
+        
     };
 
     VCardView.prototype.refresh = function (width) {
@@ -732,7 +735,7 @@
 
             $this.groupCtrls.length = 0;
 
-            root.empty();
+            root.not('.vis-busyindicatorouterwrap').empty();
             $this.getGroupHeader().html('');
             var cardGroup = null;
             if ($this.grpCount == 1) {
@@ -779,6 +782,11 @@
                         itemG.insertBefore($this.getGroupHeader().find(".vis-cv-cg-grp").eq(j));
                     }
                 }
+                if ($this.editID == 0) {
+                    $this.onCardEdit({ 'recid': root.find(".vis-cv-card:first").attr('data-recid') }, true);                   
+                }
+                $this.editID = 0;
+
                 emptyCardSetup();
             }
 
@@ -788,12 +796,28 @@
                 root.append(cardGroup.getRoot());
                 var sortable = new vaSortable(cardGroup.getBody()[0], {
                     attr: 'data-recid',
-                    selfSort: false,
-                    force: true,
+                    selfSort: true,
+                    force: false,
                     mainNode: '.vis-cv-main',
                     ignore: ['.vis-cv-card-edit', '.vis-ev-col-wrap-button', '.cardEmpty'],
+                    onclick: function (e, item) {
+                        var recID = $(item).attr("data-recid");
+                        $this.onCardEdit({ 'recid': recID }, true);
+                        var m_field = $this.mTab.getFieldById($this.getField_Group_ID());
+                        if (m_field.getIsReadOnly() || m_field.getCallout() != '' || !m_field.getIsEditable(true,true)) {
+                            vaSortable.prototype.setStopDrag(true);
+                            $(item).css("cursor","not-allowed");
+                        } else {
+                            $(item).css("cursor", "default");
+                            vaSortable.prototype.setStopDrag(false);
+                        }
+
+                    },
                     onSelect: function (e, item, fromItem) {
                         var toKey = $(e).parent().attr('data-key');
+                        if (toKey == $(fromItem).attr('data-key')) {
+                            return;
+                        }
                         var obj = {
                             grpValue: (toKey == 'null' ? null : toKey),
                             recordID: $this.mTab.getRecord_ID(),
@@ -845,8 +869,6 @@
                 });
             }
 
-
-
             function emptyCardSetup() {
                 $this.getRoot().removeClass('emptyGroup').removeAttr('style');
                 root.find('.cardEmpty').remove();
@@ -857,7 +879,7 @@
                     var evnt = $(e);
                     evnt.parent().removeAttr('style');
                     if (evnt.is(':empty')) {
-                        evnt.append("<div class='va-dragdrop cardEmpty'>").parent().addClass('emptyGroup');
+                        evnt.append("<div class='va-dragdrop cardEmpty' style='height:" + root.height() + "px'>").parent().addClass('emptyGroup');
                         $this.getGroupHeader().find('.vis-cv-cg-grp').eq(i).addClass('emptyGroup').removeAttr('style');
                     } else {
                         $this.getGroupHeader().find('.vis-cv-cg-grp').eq(i).css("min-width", evnt.parent().width());
@@ -872,6 +894,7 @@
                 });
 
                 root.find('.vis-cv-grpbody').height(maxHeight(root.find('.vis-cv-grpbody')));
+
             }
             function maxHeight(elems) {
                 return Math.max.apply(null, elems.map(function () {
@@ -880,7 +903,7 @@
             }
             $this.calculateWidth(width);
             $this.SyncScroll();
-            $this.aPanel.setBusy(false);
+            $this.setBusy(false);
         }, 10);
     }
 
@@ -944,7 +967,7 @@
         var root = null;
         var body;
         var cards = [];
-        windowNo = VIS.Env.getWindowNo();
+        windowNo = aPanel.curTab.getWindowNo();//  VIS.Env.getWindowNo();
         function init() {            
             var str = "<div class='vis-cv-cg vis-pull-left'>"
                 + "<div data-key='" + key + "'  class='vis-cv-grpbody'></div></div></div>";

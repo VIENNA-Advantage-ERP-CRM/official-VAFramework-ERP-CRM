@@ -1812,6 +1812,7 @@
             else p1.css({ "float": '' });
 
             p1.css('display', 'block');
+            this.vCardView.resetCard();
             this.gTab.getTableModel().setCardID(this.vCardView.cardID);
             if (!avoidRequery) {
                 this.query(this.gTab.getOnlyCurrentDays(), 0, false);
