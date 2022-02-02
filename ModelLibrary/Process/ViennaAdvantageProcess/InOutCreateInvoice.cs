@@ -595,31 +595,26 @@ namespace ViennaAdvantage.Process
                     for (int index = 0; index < OrderDS.Tables[0].Rows.Count; index++)
                     {
                         ds = null;
-                        ChargesSql.Clear();
-                        #region Old query
-                        //ChargesSql.Append(" SELECT C_CHARGE_ID,                                             "
-                        //         + "   C_ORDERLINE_ID,                                                      "
-                        //         + "   C_ORDER_ID,                                                          "
-                        //         + "   C_CURRENCY_ID,                                                       "
-                        //         + "   PRICEENTERED,                                                        "
-                        //         + "   PRICEACTUAL,                                                         "
-                        //         + "   LINENETAMT,                                                          "
-                        //         + "   QTYENTERED,                                                          "
-                        //         + "   C_UOM_ID,                                                            "
-                        //         + "   C_Tax_ID,                                                            "
-                        //         + "   IsDropShip                                                           "
-                        //         + " FROM C_ORDERLINE                                                       "
-                        //         + " WHERE C_ORDER_ID IN                                                    "
-                        //         + "   ( " + Util.GetValueOfInt(OrderDS.Tables[0].Rows[index]["C_ORDER_ID"])
-                        //         + "   )                                                                    "
-                        //         + " AND C_CHARGE_ID IS NOT NULL                                            "
-                        //         + " AND C_CHARGE_ID  > 0                                                   ");
-                        #endregion
-                        ChargesSql.Append(@"SELECT OL.C_CHARGE_ID, OL.C_ORDERLINE_ID, OL.C_ORDER_ID,OL.C_CURRENCY_ID,OL.PRICEENTERED,                                                        
-                                            OL.PRICEACTUAL, OL.LINENETAMT, OL.QTYENTERED, OL.C_UOM_ID, OL.C_Tax_ID, OL.IsDropShip,IOL.PrintDescription
-                                            FROM C_ORDERLINE OL INNER JOIN M_INOUTLINE IOL ON OL.C_ORDERLINE_ID= IOL.C_ORDERLINE_ID
-                                            WHERE OL.C_ORDER_ID IN (" + Util.GetValueOfInt(OrderDS.Tables[0].Rows[index]["C_ORDER_ID"]) + @") 
-                                            AND IOL.M_INOUT_ID  = " + _M_InOut_ID + @" AND OL.C_CHARGE_ID IS NOT NULL  AND OL.C_CHARGE_ID  > 0 ");
+                        ChargesSql.Clear();                        
+                        ChargesSql.Append(" SELECT C_CHARGE_ID,                                             "
+                                 + "   C_ORDERLINE_ID,                                                      "
+                                 + "   C_ORDER_ID,                                                          "
+                                 + "   C_CURRENCY_ID,                                                       "
+                                 + "   PRICEENTERED,                                                        "
+                                 + "   PRICEACTUAL,                                                         "
+                                 + "   LINENETAMT,                                                          "
+                                 + "   QTYENTERED,                                                          "
+                                 + "   C_UOM_ID,                                                            "
+                                 + "   C_Tax_ID,                                                            "
+                                 + "   IsDropShip,                                                          "
+                                 + "   PrintDescription                                                     "
+                                 + " FROM C_ORDERLINE                                                       "
+                                 + " WHERE C_ORDER_ID IN                                                    "
+                                 + "   ( " + Util.GetValueOfInt(OrderDS.Tables[0].Rows[index]["C_ORDER_ID"])
+                                 + "   )                                                                    "
+                                 + " AND C_CHARGE_ID IS NOT NULL                                            "
+                                 + " AND C_CHARGE_ID  > 0                                                   ");
+                       
 
                         ds = DB.ExecuteDataset(ChargesSql.ToString(), null, Get_Trx());
 
