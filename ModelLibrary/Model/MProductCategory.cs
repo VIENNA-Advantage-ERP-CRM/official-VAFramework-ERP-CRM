@@ -151,19 +151,20 @@ namespace VAdvantage.Model
                 string _RelatedToAsset = String.Empty;
                 _sql.Clear();
                 _sql.Append(@"SELECT L.Value, l.Name FROM AD_Ref_List L INNER JOIN AD_Reference r on (R.AD_Reference_ID=L.AD_Reference_ID)
-                                    WHERE r.Name='FRPT_RelatedTo' AND (l.Name='Asset' OR l.Name='Product')");
+                                    WHERE l.isActive = 'Y' AND r.Name='FRPT_RelatedTo' AND (l.Name='Asset' OR l.Name='Product')");
                 DataSet dsRealtedTo = DB.ExecuteDataset(_sql.ToString());
                 if (dsRealtedTo != null && dsRealtedTo.Tables[0].Rows.Count > 0)
                 {
-                    if (Util.GetValueOfString(dsRealtedTo.Tables[0].Rows[0]["Name"]).Equals("Product"))
+                    for (int i = 0; i < dsRealtedTo.Tables[0].Rows.Count; i++)
                     {
-                        relatedtoProduct = Convert.ToString(dsRealtedTo.Tables[0].Rows[0]["Value"]);
-                        _RelatedToAsset = Convert.ToString(dsRealtedTo.Tables[0].Rows[1]["Value"]);
-                    }
-                    else
-                    {
-                        relatedtoProduct = Convert.ToString(dsRealtedTo.Tables[0].Rows[1]["Value"]);
-                        _RelatedToAsset = Convert.ToString(dsRealtedTo.Tables[0].Rows[0]["Value"]);
+                        if (Util.GetValueOfString(dsRealtedTo.Tables[0].Rows[i]["Name"]).Equals("Product"))
+                        {
+                            relatedtoProduct = Convert.ToString(dsRealtedTo.Tables[0].Rows[i]["Value"]);
+                        }
+                        if (Util.GetValueOfString(dsRealtedTo.Tables[0].Rows[i]["Name"]).Equals("Asset"))
+                        {
+                            _RelatedToAsset = Convert.ToString(dsRealtedTo.Tables[0].Rows[i]["Value"]);
+                        }
                     }
                 }
 
