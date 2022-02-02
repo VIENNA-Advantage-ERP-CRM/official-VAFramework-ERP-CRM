@@ -47,7 +47,7 @@
 	var xPos = 0;
 	var yPos = 0;
 	var isScrolled = false;
-	
+	var stopDrag = false;
 	// get position of mouse/touch in relation to viewport 
 	var getPoint = function (e) {	
 		var scrollX = Math.max(0, _w.pageXOffset || _d.scrollLeft || _b.scrollLeft || 0) - (_d.clientLeft || 0),
@@ -72,7 +72,7 @@
 			this._sortLists = [];
 			this._click = {};
 			this._dragging = false;
-			this._isSwaped = false;
+			this._isSwaped = false;				
 			this._container.setAttribute("data-is-sortable", 1);
 			this._container.style["position"] = "static";			
 			window.addEventListener("mousedown", this._onPress.bind(this), true);
@@ -86,6 +86,9 @@
 	// class prototype
 	Factory.prototype = {
 		constructor: Factory,
+		setStopDrag: function (v) {
+			stopDrag = v;
+		},
 		// serialize order into array list 
 		toArray: function (attr) {
 			attr = attr || "id";
@@ -110,8 +113,8 @@
 		_isOnTop: function (item, x, y) {
 			var box = item.getBoundingClientRect(),
 				isx = (x > box.left && x < (box.left + box.width)),
-				isy = (y > box.top && y < (box.top + box.height));
-			return (isx && isy);
+				isy = (y > box.top && y < (box.top + box.height));			
+				return (isx && isy);
 		},
 		// manipulate the className of an item (for browsers that lack classList support)
 		_itemClass: function (item, task, cls) {
@@ -132,8 +135,10 @@
 					parent2 = item2.parentNode;				
 				if (parent1 !== parent2) {
 					// move to new list 
+					parent1.style["border"] = "none";
+					parent2.style["border"] = "1px dotted rgba(var(--v-c-primary),1)";
 					parent2.insertBefore(item1, item2);					
-					this._isSwaped = true;
+					this._isSwaped = true;					
 				} else if (this._options.selfSort || this._options.selfSort == undefined) {
 					// sort is same list 
 					var temp = document.createElement("div");
@@ -186,7 +191,7 @@
 						return;
 					}
 				}
-			}	
+			}
 
 			mainDiv = (e.target.closest(this._options.mainNode));
 			if (mainDiv) {
@@ -204,6 +209,15 @@
 			
 			
 			if (e && e.target && e.target.closest(dropClass) && e.target.closest(dropClass).parentNode === this._container) {
+
+				if(this._options.onclick) {
+					this._options.onclick(e, e.target.closest(dropClass));
+				}
+
+				if (stopDrag) {
+					return;
+				}
+
 				this._isSwaped = false;
 				fromItem = e.target.closest(dropClass).parentNode;
 				itemName = e.target.closest(dropClass);
@@ -223,7 +237,9 @@
 			}
 
 			if (e && e.target && e.target.closest(dropClass) && e.target.closest(dropClass).parentNode === this._container && this._options.attr && this._clickItem && this._isSwaped) {
+				this._clickItem.parentNode.style["border"] = "none";
 				this._options.onSelect(this._clickItem, this._clickItem.getAttribute(this._options.attr), fromItem);
+
 			}			
 			this._dragging = false;
 			this._trashDragItem();			
@@ -346,8 +362,12 @@
 					if (subItem === this._clickItem || subItem === this._dragItem) {
 						continue;
 					}
-
+					
 					if (this._isOnTop(subItem, point.x, point.y)) {
+						this._hovItem = subItem;
+						this._swapItems(this._clickItem, subItem);
+					}
+					else if (this._clickItem.parentNode != subItem.parentNode) {						
 						this._hovItem = subItem;
 						this._swapItems(this._clickItem, subItem);
 					}

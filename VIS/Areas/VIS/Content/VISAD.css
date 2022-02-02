@@ -5396,6 +5396,7 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
     display: flex;
     align-items: center;
     justify-content: center;
+    color: rgba(var(--v-c-primary),1);
 }
 
 .vis-busyindicatordiv {

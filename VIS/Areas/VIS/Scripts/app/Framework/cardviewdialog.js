@@ -534,6 +534,11 @@
                 FillColumnInclude(false, false);
             }
             FillGroupFields();
+
+            if (!isNewRecord || !isEdit) {
+                ulGroupSeqColumns.find('input').prop("disabled", true);
+                ulCardViewColumnField.find('select').prop("disabled", true);
+            }
             //FillRoleList(ulRole);
         }
 
