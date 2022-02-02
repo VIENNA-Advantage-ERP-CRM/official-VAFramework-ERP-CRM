@@ -254,23 +254,43 @@ namespace VIS.Models
                 " c_invoice_id     =" + invoiceID + ")) as adj  from dual";
 
 
-            var dr = DB.ExecuteReader(postValue);
-            if (dr.Read())
+            IDataReader dr = null;
+            try
             {
-                // check if value is null
-                if (!(dr[0] is DBNull && dr[1] is DBNull))
+                dr = DB.ExecuteReader(postValue);
+                if (dr.Read())
                 {
-                    if (dr.GetInt32(0) - dr.GetInt32(1) == 0)
+                    // check if value is null
+                    if (!(dr[0] is DBNull && dr[1] is DBNull))
                     {
-                        //reposting
-                        var sql = "update c_allocationhdr alh set alh.posted ='N' where alh.c_allocationhdr_id in (select c_allocationhdr_id from c_allocationline where c_invoice_id=" + invoiceID + "))";
-                        DB.ExecuteQuery(sql);
+                        if (dr.GetInt32(0) - dr.GetInt32(1) == 0)
+                        {
+                            //reposting
+                            var sql = "update c_allocationhdr alh set alh.posted ='N' where alh.c_allocationhdr_id in (select c_allocationhdr_id from c_allocationline where c_invoice_id=" + invoiceID + "))";
+                            DB.ExecuteQuery(sql);
+                        }
                     }
                 }
+                dr.Close();
+                dr = null;
             }
-            dr.Close();
-            dr = null;
-
+            catch (Exception e)
+            {
+                if (dr != null)
+                {
+                    dr.Close();
+                    dr = null;
+                }
+                VAdvantage.Logging.Logger.global.Severe("AcctViewerRePost" + e.Message);
+            }
+            finally
+            {
+                if (dr != null)
+                {
+                    dr.Close();
+                    dr = null;
+                }
+            }
             return repostval;
         }
 
