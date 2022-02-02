@@ -3115,13 +3115,13 @@ namespace VIS.Helpers
    LEFT OUTER JOIN AD_DefaultCardView AD_DefaultCardView ON (  AD_CardView.ad_cardview_id=AD_DefaultCardView.ad_cardview_id AND AD_DefaultCardView.IsActive='Y' AND AD_DefaultCardView.AD_User_ID=" + ctx.GetAD_User_ID() + @")
                         WHERE  AD_CardView.AD_Tab_ID=" + AD_Tab_ID + @" AND AD_CardView.IsActive = 'Y'   AND ( AD_CardView.ad_user_id IS NULL
                                                           OR AD_CardView.ad_user_id = " + ctx.GetAD_User_ID()+ @") " +
-                        "ORDER BY lower(AD_DefaultCardView.name) ASC", "AD_CardView", true, false));
+                        "ORDER BY lower(AD_CardView.name) ASC", "AD_CardView", true, false));
 
             if (ds == null || ds.Tables[0].Rows.Count == 0)
             {
                 //If no default card set, then get all cards of tab.
                 ds = DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(@"SELECT AD_CardView.AD_CardView_ID, AD_CardView.Name,0  as dcard,AD_CardView.CreatedBy FROM AD_CardView AD_CardView 
-                    WHERE AD_CardView.AD_Tab_ID =" + AD_Tab_ID + " AND AD_CardView.IsActive='Y' ORDER BY AD_CardView.Name ASC", "AD_CardView", true, false));
+                    WHERE AD_CardView.AD_Tab_ID =" + AD_Tab_ID + " AND AD_CardView.IsActive='Y' ORDER BY lower(AD_CardView.Name) ASC", "AD_CardView", true, false));
             }
 
 
