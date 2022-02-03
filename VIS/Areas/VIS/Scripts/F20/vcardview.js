@@ -709,7 +709,7 @@
         var temp= this.mTab.getTableModel().getCardTemplate();
         
         //Reset Variables
-        this.setBusy(true);
+        //this.aPanel.setBusy(true);
         this.setCardViewData(temp);
         this.refresh(width);
         //this.getBody().empty();
@@ -903,7 +903,7 @@
             }
             $this.calculateWidth(width);
             $this.SyncScroll();
-            $this.setBusy(false);
+            $this.aPanel.setBusy(false);
         }, 10);
     }
 

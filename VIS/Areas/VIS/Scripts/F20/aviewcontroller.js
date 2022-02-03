@@ -1336,7 +1336,7 @@
             this.vMapView.refreshUI(this.getVMapPanel().width());
 
         if (this.aPanel) {
-            this.aPanel.setBusy(false);
+            this.aPanel.setBusy(this.isCardRow);
         }
 
         this.skipInserting = false; // reset 

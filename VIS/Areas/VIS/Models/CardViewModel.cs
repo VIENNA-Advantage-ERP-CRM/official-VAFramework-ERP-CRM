@@ -453,7 +453,8 @@ namespace VIS.Models
             string result = "1";
             try
             {
-                if (string.IsNullOrEmpty(grpValue)) {
+                if (string.IsNullOrEmpty(grpValue))
+                {
                     grpValue = null;
                 }
 
@@ -466,25 +467,42 @@ namespace VIS.Models
                 {
                     _po.Set_ValueNoCheck(columnName, Convert.ToDateTime(grpValue));
                 }
-                else 
+                else
                 {
                     _po.Set_ValueNoCheck(columnName, grpValue);
                 }
 
-                
+
                 if (!_po.Save())
                 {
                     ValueNamePair pp = VAdvantage.Logging.VLogger.RetrieveError();
-                   
+
                     string error = pp != null ? pp.GetName() : ""; ;
                     if (string.IsNullOrEmpty(error))
                     {
                         error = pp != null ? pp.GetValue() : "";
                     }
+
+                    if (string.IsNullOrEmpty(error))
+                    {
+                        ValueNamePair pp1 = VAdvantage.Logging.VLogger.RetrieveWarning();
+                        error = pp1 != null ? pp1.GetName() : ""; ;
+                        if (string.IsNullOrEmpty(error))
+                        {
+                            error = pp1 != null ? pp1.GetValue() : "";
+                        }
+                    }
+
+                    if (string.IsNullOrEmpty(error))
+                    {
+                        error = Msg.GetMsg(ctx, "Error");
+                    }
+
                     result = error;
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 result = e.Message;
             }
             //string keyColumn = tableName + "_ID";
