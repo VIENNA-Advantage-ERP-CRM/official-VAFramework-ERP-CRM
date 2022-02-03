@@ -316,6 +316,10 @@
 						}
 					}
 
+					if (!isScrolled) {
+						mainDiv.scrollTop = _scroll.lastScrollTop;
+					}
+
 					_scroll.lastmousex = point.x;
 					_scroll.lastmousey = point.y;
 				}
