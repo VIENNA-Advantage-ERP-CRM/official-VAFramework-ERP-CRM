@@ -2931,7 +2931,8 @@ findImg {
 }
 
     .vis-cardviewcolumnfield li select {
-        width: 50px;
+        max-width: 50px;
+        min-width:50px;
         float: right;
         height: 20px;
         min-height: 21px;
@@ -2939,6 +2940,11 @@ findImg {
         padding-top: 0px;
         padding-bottom: 0;
     }
+
+ul.vis-cardviewcolumnfield li {
+    display: flex;
+    justify-content: space-between;
+}
 
     .vis-windowfield li, .vis-cardviewcolumnfield li, .vis-cardviewcolumnfield1 li {
         list-style: none;
