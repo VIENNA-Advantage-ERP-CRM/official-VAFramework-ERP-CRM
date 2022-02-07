@@ -927,7 +927,7 @@
             }
             else {
                 if (!this.cGroupInfo['Other__1']) {
-                    this.cGroupInfo['Other__1'] = { 'name': 'Others', 'records': [], 'key': null };
+                    this.cGroupInfo['Other__1'] = { 'name': VIS.Msg.getMsg("No")+ ' ' + this.cGroup.getHeader() , 'records': [], 'key': null };
                     this.grpCount += 1;
                     isgrouprChanged = true;
                     isgrouprChanged = true;
