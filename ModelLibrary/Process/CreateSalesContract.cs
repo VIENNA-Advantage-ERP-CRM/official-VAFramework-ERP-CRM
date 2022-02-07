@@ -205,6 +205,7 @@ namespace ViennaAdvantageServer.Process
                         contact.SetRenewContract("N");
                         if (!contact.Save())
                         {
+                            dr.Close();
                             //Neha----If Service Contract not saved then will show the exception---17 Sep,2018
                             ValueNamePair pp = VAdvantage.Logging.VLogger.RetrieveError();
                             if (pp != null)
@@ -215,6 +216,7 @@ namespace ViennaAdvantageServer.Process
                         {
                             if (!line.Save())
                             {
+                                dr.Close();
                                 //Neha----If Order Line not saved then will show the exception---17 Sep,2018
                                 ValueNamePair pp = VAdvantage.Logging.VLogger.RetrieveError();
                                 if (pp != null)

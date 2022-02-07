@@ -97,10 +97,20 @@ namespace VAdvantage.Process
                 }
                 catch
                 {
-
+                    if (idr != null)
+                    {
+                        idr.Close();
+                        idr = null;
+                    }
                 }
-                if (idr != null)
-                    idr.Close();
+                finally
+                {
+                    if (idr != null)
+                    {
+                        idr.Close();
+                        idr = null;
+                    }
+                }
             }
             else
             {
