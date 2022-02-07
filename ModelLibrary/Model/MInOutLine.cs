@@ -1083,6 +1083,12 @@ namespace VAdvantage.Model
             if (GetM_Product_ID() > 0)
             {
                 _Product = new MProduct(GetCtx(), GetM_Product_ID(), Get_TrxName());
+                //VA230:Check IsAssetRelated column exists or not
+                if (Get_ColumnIndex("VAFAM_IsAssetRelated") >= 0)
+                {
+                    //Set VAFAM_IsAssetRelated value based on product category if linked then true else false
+                    SetVAFAM_IsAssetRelated(MProduct.Get(GetCtx(), GetM_Product_ID()).IsCreateAsset());
+                }
             }
 
             if (_Product != null && GetC_UOM_ID() != _Product.GetC_UOM_ID())
@@ -1363,8 +1369,8 @@ namespace VAdvantage.Model
                         }
                     }
                 }
-            }            
-
+            }
+           
             return true;
         }
 
