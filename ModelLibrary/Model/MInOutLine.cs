@@ -1090,6 +1090,10 @@ namespace VAdvantage.Model
                     SetVAFAM_IsAssetRelated(MProduct.Get(GetCtx(), GetM_Product_ID()).IsCreateAsset());
                 }
             }
+            else
+            {
+                SetVAFAM_IsAssetRelated(false);
+            }
 
             if (_Product != null && GetC_UOM_ID() != _Product.GetC_UOM_ID())
             {
