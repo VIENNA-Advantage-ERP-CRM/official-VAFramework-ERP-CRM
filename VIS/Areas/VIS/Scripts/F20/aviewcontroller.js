@@ -1758,8 +1758,11 @@
         this.dynamicDisplay(-1);
     };
 
-    VIS.GridController.prototype.switchMultiRow = function () {
+    VIS.GridController.prototype.switchMultiRow = function () {        
         if (this.singleRow || this.isCardRow) {
+            if (this.isCardRow) {
+                this.gTab.getTableModel().setCurrentPage(1);
+            }
 
             this.singleRow = false;
             this.isCardRow = false;
@@ -1785,8 +1788,10 @@
                 if (this.vHeaderPanel.sizeChangedListner && this.vHeaderPanel.sizeChangedListner.onSizeChanged)
                     this.vHeaderPanel.sizeChangedListner.onSizeChanged();
             }
-
-            this.gTab.getTableModel().resetCard();
+            this.gTab.getTableModel().resetCard();            
+            var query = new VIS.Query();
+            this.getMTab().setQuery(query);
+            this.query(0, 0, null);
         }
 
     };
