@@ -98,6 +98,8 @@
         var isBusyRoot = null;
         var $vSearchHeaderLayout = null;
         var cmbOrderClause = null;
+        var btnCardAsc = null;
+        var btnCardDesc = null;
         var isdefault = null;
         var chkPublic = null;
         var lblDefault = null;
@@ -157,7 +159,7 @@
 
 
             var $divHeadderLay = $('<div class="input-group vis-input-wrap vis-card-input-wrap">');
-           
+
 
 
             isBusyRoot = $("<div class='vis-apanel-busy vis-cardviewmainbusy'></div> ");
@@ -188,7 +190,7 @@
 
             var divCardViewbtn = $("<div class='vis-cardviewbtn' style='margin-top:0;'> </div>");
 
-            
+
             rootCardViewUI.append(divCardViewMainFirstChild);
             divCardViewMainFirstChild.append(CardViewTopFiledsWrap);
             CardViewTopFiledsWrap.append("<div class='vis-firstdiv vis-pull-left' ></div>");
@@ -230,12 +232,12 @@
             lblDefault = $('<label class="vis-ec-col-lblchkbox" style="opacity: 1;display:none">' + defaultMsg + '</label>');
             isdefault = $('<input type="checkbox" name="IsDefault" value="Default">');
             lblDefault.prepend(isdefault);
-           // divCardViewbtn.append(lblDefault);
+            // divCardViewbtn.append(lblDefault);
 
             lblIsPublic = $('<label class="vis-ec-col-lblchkbox" style="opacity: 1;">' + VIS.Msg.getMsg("Shared") + '</label>');
             chkPublic = $('<input type="checkbox" checked="true" name="IsPublic" value="Public">');
             lblIsPublic.prepend(chkPublic);
-           //divCardViewbtn.append(lblIsPublic);
+            //divCardViewbtn.append(lblIsPublic);
 
 
             if (VIS.MRole.isAdministrator) {
@@ -292,22 +294,58 @@
 
                 + '</div>');
 
-            var btnCardAsc = sortHTML.find('.vis-sortCardAsc');
-            var btnCardDesc = sortHTML.find('.vis-sortCardDesc');
+            btnCardAsc = sortHTML.find('.vis-sortCardAsc');
+            btnCardDesc = sortHTML.find('.vis-sortCardDesc');
             var btnAddOrder = sortHTML.find('.VIS_Pref_btn-2');
             sortList = sortHTML.find('.vis-sortingList');
+
             btnCardAsc.on('click', function () {
+
+                if (cmbOrderClause.val() == -1 || cmbOrderClause.val() == null)
+                    return;
+
+                btnCardAsc.css('color', 'rgba(var(--v-c-primary), 1)');
+                btnCardDesc.css('color', 'rgba(var(--v-c-on-secondary), 1)');
                 isAsc = "ASC";
             });
 
             btnCardDesc.on('click', function () {
+
+                if (cmbOrderClause.val() == -1 || cmbOrderClause.val() == null)
+                    return;
+
+                btnCardAsc.css('color', 'rgba(var(--v-c-on-secondary), 1)');
+                btnCardDesc.css('color', 'rgba(var(--v-c-primary), 1)');
                 isAsc = "DESC";
             });
 
-
             cmbOrderClause = sortHTML.find('.vis-cardOrderClause');
+            cmbOrderClause.append('<option value="-1"> </option>)');
+
+            totalTabFileds.sort(function (a, b) {
+                var n1 = a.getHeader().toUpperCase();
+                if (n1 == null || n1.length == 0) {
+                    n1 = VIS.Msg.getElement(VIS.context, a.getColumnName());
+                }
+                var n2 = b.getHeader().toUpperCase();
+                if (n2 == null || n2.length == 0) {
+                    n2 = VIS.Msg.getElement(VIS.context, b.getColumnName());
+                }
+                if (n1 > n2) return 1;
+                if (n1 < n2) return -1;
+                return 0;
+            });
+
             for (var j = 0; j < totalTabFileds.length; j++) {
-                cmbOrderClause.append('<option value="' + totalTabFileds[j].getColumnName() + '">' + totalTabFileds[j].getHeader() + '</option>')
+                var header = totalTabFileds[j].getHeader();
+                if (header == null || header.length == 0) {
+                    header = VIS.Msg.getElement(VIS.context, totalTabFileds[j].getColumnName());
+                    if (header == null || header.Length == 0)
+                        continue;
+                }
+
+
+                cmbOrderClause.append('<option value="' + totalTabFileds[j].getColumnName() + '">' + header + '</option>')
             }
 
             divLayout.append(sortHTML);
@@ -317,14 +355,30 @@
             //$divHeadderLay.append(btnSaveOrder);
 
             btnAddOrder.on("click", function (e) {
+                var selectedVal = cmbOrderClause.val();
+
+                if (selectedVal == -1) {
+                    return;
+                }
+
+                btnCardAsc.css('color', 'rgba(var(--v-c-on-secondary), 1)');
+                btnCardDesc.css('color', 'rgba(var(--v-c-on-secondary), 1)');
+
                 if (sortOrderArray && sortOrderArray.length < 3) {
                     var selectedColtext = cmbOrderClause.find(':selected').text();
-                    var selectedVal = cmbOrderClause.val()
+
+
+                    if (sortOrderArray.indexOf(selectedVal + ' ASC') > -1 || sortOrderArray.indexOf(selectedVal + ' DESC') > -1) {
+                        VIS.ADialog.warn("CardSortColAdded");
+                        return;
+                    }
+
                     addOrderByClauseItems(selectedColtext, selectedVal, isAsc);
                     sortOrderArray.push(selectedVal + ' ' + isAsc);
+                    cmbOrderClause.val(-1);
                 }
                 else {
-                    VIS.ADialog.warn("NoMoreThan3");
+                    VIS.ADialog.warn("MaxSortColumn");
                 }
             });
 
@@ -343,6 +397,10 @@
             });
 
             cmbOrderClause.on("change", function () {
+                if (cmbOrderClause.val() == -1 || cmbOrderClause.val() == null) {
+                    btnCardAsc.css('color', 'rgba(var(--v-c-on-secondary), 1)');
+                    btnCardDesc.css('color', 'rgba(var(--v-c-on-secondary), 1)');
+                }
                 isAsc = "ASC";
             });
 
@@ -416,7 +474,7 @@
             centerBtn = $("<div class='vis-cardviewbutton vis-pull-left' ><button class='vis-btnup'><i class='vis vis-arrow-up'></i></button><button  class='vis-btnright'><i class='vis vis-shiftright'></i></button></div>");
             centerBtn.append("<button   class='vis-btnleft'><i class='vis vis-shiftleft'></i></button><button  class='vis-btndown'><i class='vis vis-arrow-down'></i></button>");
             divChildLeftLable = $("<div style='width:100%'><label>" + VIS.Msg.getMsg("SelectField") + "</label></div>");
-            divChildRightLable = $("<div style='width:100%'><label>" + VIS.Msg.getMsg("IncludedField") + "</label><label class='vis-pull-right'>" + VIS.Msg.getMsg("SortOrder") + "</label></div>");
+            divChildRightLable = $("<div style='width:100%'><label>" + VIS.Msg.getMsg("IncludedField") + "</label></div>");
             var divChildGroupSeqLable = $("<div style='width:100%'><label>" + VIS.Msg.getMsg("GroupSeq") + "</label></div>");
             divChildLeftColumns = $("<div class='vis-cv-filedslist-wrap'></div>");
             var divChildSeqColumns = $("<div class='vis-cv-filedslist-wrap'></div>");
@@ -430,7 +488,6 @@
             divLeftGroupFieldsCombo.append(divChildLeftColumns);
             divRightGroupFieldsCombo.append(divChildRightLable);
             divRightGroupFieldsCombo.append(divChildRightColumns);
-
             rootGroupFieldsCombo.append(divLeftGroupFieldsCombo);
             rootGroupFieldsCombo.append(centerBtn);
             rootGroupFieldsCombo.append(divRightGroupFieldsCombo);
@@ -500,7 +557,7 @@
                 for (var m = 0; m < sortOrderArray.length; m++) {
                     var val = sortOrderArray[m].split(' ');
                     var f = mTab.getField(val[0]);
-                    addOrderByClauseItems(f.getHeader(),val[0], val[1]);
+                    addOrderByClauseItems(f.getHeader(), val[0], val[1]);
                 }
             }
         };
@@ -510,7 +567,7 @@
         };
 
 
-        function addOrderByClauseItems(selectedColtext,val, isAsc) {
+        function addOrderByClauseItems(selectedColtext, val, isAsc) {
             var item = '<div class="vis-sortListItem">'
                 + '<p>' + selectedColtext + '</p>'
                 + '<div class="vis-sortListIcons">'
@@ -677,6 +734,7 @@
 
             var sel = cmbCardView.find(":selected");
             if (sel.length > 0) {
+                cmbOrderClause.val(-1);
                 sortOrderArray = [];
                 lastSortOrderArray = [];
                 //AD_CardView_ID = parseInt(sel.attr("cardviewid"));
@@ -915,6 +973,9 @@
                 btnCancle.on("click", function (e) {
                     e.stopPropagation();
                     isEdit = false;
+                    cmbOrderClause.val(-1);
+                    btnCardAsc.css('color', 'rgba(var(--v-c-on-secondary), 1)');
+                    btnCardDesc.css('color', 'rgba(var(--v-c-on-secondary), 1)');
                     toggleNewRecord();
                     FillColumnInclude(true, false);
                     FillGroupFields();
@@ -1682,7 +1743,7 @@
                                 idx = 0;
                             //<Option idx="+i+" is_shared=" + cardViewInfo[i].UserID + " ad_user_id=" + cardViewInfo[i].CreatedBy + " cardviewid=" + cardViewInfo[i].CardViewID + " groupSequence='" + cardViewInfo[i].groupSequence + "' excludedGroup='" + cardViewInfo[i].excludedGroup +"' ad_field_id=" + cardViewInfo[i].AD_GroupField_ID + " isdefault=" + cardViewInfo[i].DefaultID + " ad_headerLayout_id=" + cardViewInfo[i].AD_HeaderLayout_ID + "> " + w2utils.encodeTags(cardViewInfo[i].CardViewName) + "</Option>");
                             cardViewInfo.push({
-                                'CardViewName': cardViewName,'UserID': AD_User_ID, 'CreatedBy': VIS.context.getAD_User_ID(), 'CardViewID': AD_CardView_ID, 'groupSequence': grpSeq, 'excludedGroup': skipGrp, 'AD_GroupField_ID': cmbGroupField.find(":selected").attr("fieldid"), 'DefaultID': isdefault.is(":checked"), 'AD_HeaderLayout_ID': $vSearchHeaderLayout.getValue(), 'CardViewName': cardViewName, 'OrderByClause': sortOrder
+                                'CardViewName': cardViewName, 'UserID': AD_User_ID, 'CreatedBy': VIS.context.getAD_User_ID(), 'CardViewID': AD_CardView_ID, 'groupSequence': grpSeq, 'excludedGroup': skipGrp, 'AD_GroupField_ID': cmbGroupField.find(":selected").attr("fieldid"), 'DefaultID': isdefault.is(":checked"), 'AD_HeaderLayout_ID': $vSearchHeaderLayout.getValue(), 'CardViewName': cardViewName, 'OrderByClause': sortOrder
                             });
                             cmbCardView.append("<Option idx=" + idx + " is_shared=" + AD_User_ID + " ad_user_id=" + VIS.context.getAD_User_ID() + " cardviewid=" + AD_CardView_ID + " groupSequence='" + grpSeq + "' excludedGroup='" + skipGrp + "'  ad_field_id=" + cmbGroupField.find(":selected").attr("fieldid") + " isdefault=" + isdefault.is(":checked") + " ad_headerLayout_id=" + $vSearchHeaderLayout.getValue() + "> " + w2utils.encodeTags(cardViewName) + "</Option>");
                             cmbCardView.find('[cardviewid="' + AD_CardView_ID + '"]').prop("selected", true).trigger("change");
