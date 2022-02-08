@@ -30,6 +30,7 @@ namespace VAdvantage.Process
         protected override String DoIt()
         {
             int C_Contract_ID = 0;
+            String Sql = String.Empty;
             VAdvantage.Model.X_C_Order order = new VAdvantage.Model.X_C_Order(GetCtx(), orderID, null);
             string DocStatus = order.GetDocStatus();
             if (DocStatus != "CO")
@@ -39,7 +40,7 @@ namespace VAdvantage.Process
 
             try
             {
-                String Sql = "Select C_OrderLine_ID from C_OrderLine where C_Order_ID=" + orderID;
+                Sql = "Select C_OrderLine_ID from C_OrderLine where C_Order_ID=" + orderID;
                 dr = DB.ExecuteReader(Sql);
                 while (dr.Read())
                 {
@@ -148,6 +149,10 @@ namespace VAdvantage.Process
                     }
                     log.Log(Level.SEVERE, "Could Not Save Order. " + error);
                 }
+            }
+            catch (Exception ex)
+            {
+                log.Log(Level.SEVERE, "CreateSalesContract" + Sql, ex);
             }
             finally
             {

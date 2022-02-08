@@ -478,8 +478,9 @@ namespace VAdvantage.Model
                     dr.Close();
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                log.Log(Level.SEVERE, "MLead" + ex.Message, ex);
                 if (dr != null)
                 {
                     dr.Close();

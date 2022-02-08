@@ -65,16 +65,17 @@ namespace VAdvantage.Process
         protected override String DoIt()
         {
             IDataReader MainDr = null;
-            IDataReader dr = null; ;
+            IDataReader dr = null;
+            string query = String.Empty;
             try
             {
-                string query = "Select C_CampaignTargetList_id from C_CampaignTargetList where C_Campaign_id=" + GetRecord_ID() + " and ad_client_id = " + GetCtx().GetAD_Client_ID();
+                query = "Select C_CampaignTargetList_id from C_CampaignTargetList where C_Campaign_id=" + GetRecord_ID() + " and ad_client_id = " + GetCtx().GetAD_Client_ID();
                 MainDr = DB.ExecuteReader(query, null, Get_Trx());
                 query = "Delete From C_InviteeList  where C_Campaign_id=" + GetRecord_ID();
                 int value = DB.ExecuteQuery(query);
                 while (MainDr.Read())
                 {
-                    query = "Delete From C_InviteeList where   ";
+                    //query = "Delete From C_InviteeList where   ";
 
                     int id = Util.GetValueOfInt(MainDr[0]);
                     VAdvantage.Model.X_C_CampaignTargetList MCapTarget = new VAdvantage.Model.X_C_CampaignTargetList(GetCtx(), id, null);
@@ -269,6 +270,10 @@ namespace VAdvantage.Process
                     }
                 }
                 MainDr.Close();
+            }
+            catch (Exception ex)
+            {
+                log.Log(Level.SEVERE, "CreateInviteeList" + query, ex);
             }
             finally
             {

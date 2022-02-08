@@ -29,7 +29,7 @@ namespace VAdvantage.Process
 
         protected override String DoIt()
         {
-            string Sql, newcon = "";
+            string Sql = "", newcon = "";
             IDataReader dr = null;
             int COUNT = 0;
             String date = string.Format("{0:dd/MM/yy}", today);
@@ -327,6 +327,10 @@ namespace VAdvantage.Process
                     }
                 }
                 dr.Close();
+            }
+            catch (Exception ex)
+            {
+                log.Log(Level.SEVERE, "RenewContract" + Sql, ex);
             }
             finally
             {

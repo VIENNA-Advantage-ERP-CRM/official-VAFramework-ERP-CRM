@@ -645,9 +645,9 @@ namespace VAdvantage.Model
                     }
                 }
             }
-            catch
+            catch (Exception e)
             {
-
+                log.Log(Level.SEVERE, "MOrder" + e.Message, e);
             }
             finally
             {
@@ -803,9 +803,9 @@ namespace VAdvantage.Model
 
                 //dt.Dispose();
             }
-            catch
+            catch (Exception e)
             {
-
+                log.Log(Level.SEVERE, "MOrder" + sql, e);
             }
             finally
             {
@@ -1585,9 +1585,9 @@ namespace VAdvantage.Model
                 }
 
             }
-            catch
+            catch (Exception e)
             {
-                //ShowMessage.Error("MOrder", null, "SetM_PriceList_ID-CallOut");
+                log.Log(Level.SEVERE, "MOrder" + sql, e);
             }
             finally
             {
@@ -2225,10 +2225,10 @@ namespace VAdvantage.Model
                     list.Add(new MInOutLine(GetCtx(), dr, Get_TrxName()));
                 }
             }
-            catch
+            catch(Exception e)
             {
 
-                //ShowMessage.Error("MOrder", null, "GetShipmentLines");
+                log.Log(Level.SEVERE, "MOrder" + sql, e);
             }
             finally
             {

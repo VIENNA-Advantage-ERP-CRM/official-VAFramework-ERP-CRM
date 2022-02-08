@@ -56,9 +56,10 @@ namespace VAdvantage.Process
         protected override String DoIt()
         {
             IDataReader dr = null;
+            string Sql = "";
             try
             {
-                string Sql = "Select C_Lead_ID From C_Lead where SalesRep_ID=" + FromSalesRep_ID + " and isactive='Y' and Ad_Org_id=" + GetCtx().GetAD_Org_ID();
+                 Sql = "Select C_Lead_ID From C_Lead where SalesRep_ID=" + FromSalesRep_ID + " and isactive='Y' and Ad_Org_id=" + GetCtx().GetAD_Org_ID();
                 dr = DB.ExecuteReader(Sql);
                 while (dr.Read())
                 {
@@ -100,6 +101,10 @@ namespace VAdvantage.Process
 
                 }
                 dr.Close();
+            }
+            catch (Exception ex)
+            {
+                log.Log(Level.SEVERE, "TransferOwnerShip" + Sql, ex);
             }
             finally
             {

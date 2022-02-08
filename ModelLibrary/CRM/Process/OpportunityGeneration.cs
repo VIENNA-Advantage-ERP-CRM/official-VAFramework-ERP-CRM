@@ -113,6 +113,10 @@ namespace VAdvantage.Process
                 }
                 idr.Close();
             }
+            catch (Exception ex)
+            {
+                log.Log(Level.SEVERE, "OpportunityGeneration" + sql, ex);
+            }
             finally
             {
                 if (idr != null)

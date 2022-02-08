@@ -95,8 +95,9 @@ namespace VAdvantage.Process
                     }
                     msg = Msg.GetMsg(GetCtx(), "NewVersionIsCreatedSuccessfully");
                 }
-                catch
+                catch(Exception ex)
                 {
+                    log.Log(Level.SEVERE, "UpdateVersion" + sql, ex);
                     if (idr != null)
                     {
                         idr.Close();
