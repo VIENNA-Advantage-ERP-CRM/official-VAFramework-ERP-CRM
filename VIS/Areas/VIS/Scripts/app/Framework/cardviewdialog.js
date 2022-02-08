@@ -475,9 +475,10 @@
                 "display": "none"
             });
 
-            rootCardViewUI.find("*:not(.input-group-append button:last)").attr("disabled", "disabled");
+            rootCardViewUI.find("*").attr("disabled", "disabled");
             rootCardViewUI.find(".vis-firstdiv *").removeAttr("disabled");
-            rootCardViewUI.find(".vis-cardviewbtn:last *").removeAttr("disabled");
+            rootCardViewUI.find(".vis-btnDelete").removeAttr("disabled");
+            rootCardViewUI.find(".vis-cardviewbtn .vis-cdv-customokcancle *").removeAttr("disabled");
             Events();
 
         };
@@ -926,9 +927,10 @@
                     chkPublic.prop("checked", cardViewInfo[idx].UserID > 0 ? false : true);
                     isdefault.prop("checked", cardViewInfo[idx].DefaultID ? true : false);
                     $vSearchHeaderLayout.setValue(cardViewInfo[idx].AD_HeaderLayout_ID);
-                    rootCardViewUI.find("*:not(.input-group-append button:last)").attr("disabled", "disabled");
+                    rootCardViewUI.find("*").attr("disabled", "disabled");
                     rootCardViewUI.find(".vis-firstdiv *").removeAttr("disabled");
-                    rootCardViewUI.find(".vis-cardviewbtn:last *").removeAttr("disabled");
+                    rootCardViewUI.find(".vis-cardviewbtn .vis-cdv-customokcancle *").removeAttr("disabled");
+                    rootCardViewUI.find(".vis-btnDelete").removeAttr("disabled");
                     if (cardViewInfo[idx].CreatedBy == VIS.context.getAD_User_ID()) {
                         rootCardViewUI.find(".vis-btnDelete").css("display", "block");
                     } else {
