@@ -932,7 +932,7 @@ namespace VAdvantage.Classes
         /// <param name="AD_CardView_ID"></param>
         /// <param name="ctx"></param>
         /// <returns></returns>
-        public CardViewData GetCardViewDetails(int AD_User_ID, int AD_Tab_ID, int AD_CardView_ID, Ctx ctx, string SQLWhereCond = "")
+        public CardViewData GetCardViewDetails(int AD_User_ID, int AD_Tab_ID, int AD_CardView_ID, Ctx ctx, string SQLWhereCond = "", bool onlyHeaderTab=false)
         {
             DataSet ds = null;
             bool hasDefaultCard = false;
@@ -1008,6 +1008,9 @@ namespace VAdvantage.Classes
                     DisableWindowPageSize = Util.GetValueOfString(rows[0]["disableWindowPageSize"]) == "Y" 
                 };
 
+                if (onlyHeaderTab)
+                    return card;
+
                 card.IncludedCols = new List<CardViewCol>();
                 card.Conditions = new List<CardViewCondition>();
                 card.GroupCount = new List<CardGroupCount>();
@@ -1051,7 +1054,11 @@ namespace VAdvantage.Classes
                     dr.Close();
                     if (!string.IsNullOrEmpty(card.OrderByClause))
                     {
-                        card.OrderByClause = card.OrderByClause + "," + sortBy.Remove(sortBy.Length - 1);
+                        card.OrderByClause = card.OrderByClause;
+                        if (!string.IsNullOrEmpty(sortBy))
+                        {
+                            card.OrderByClause += "," + sortBy.Remove(sortBy.Length - 1);
+                        }
                     }
                     else if(!string.IsNullOrEmpty(sortBy)) {
                         card.OrderByClause = sortBy.Remove(sortBy.Length-1);

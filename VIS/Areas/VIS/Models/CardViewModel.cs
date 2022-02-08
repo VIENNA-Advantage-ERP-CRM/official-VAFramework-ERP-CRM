@@ -164,13 +164,15 @@ namespace VIS.Models
         {
             int uid = 0;
             int fid = 0;
+            string sortOrder = "";
             List<CardViewPropeties> lstCardViewColumns = new List<CardViewPropeties>();
-            string sqlQuery1 = "SELECT AD_User_ID,AD_Field_ID  FROM AD_CardView WHERE ad_cardview_id=" + ad_cardview_id;
+            string sqlQuery1 = "SELECT AD_User_ID,AD_Field_ID, orderByClause  FROM AD_CardView WHERE ad_cardview_id=" + ad_cardview_id;
             DataSet ds1 = DB.ExecuteDataset(sqlQuery1);
             if (ds1 != null && ds1.Tables.Count > 0 && ds1.Tables[0].Rows.Count > 0)
             {
                 uid = VAdvantage.Utility.Util.GetValueOfInt(ds1.Tables[0].Rows[0][0]);
                 fid = VAdvantage.Utility.Util.GetValueOfInt(ds1.Tables[0].Rows[0][1]);
+                sortOrder = VAdvantage.Utility.Util.GetValueOfString(ds1.Tables[0].Rows[0][2]);
             }
             string sqlQuery = "SELECT * FROM(SELECT crdcol.*,fl.name FROM ad_cardview_column crdcol INNER JOIN ad_field fl on crdcol.ad_field_id=fl.ad_field_id  WHERE ad_cardview_id=" + ad_cardview_id + ") cardviewcols";
             //  sqlQuery = MRole.GetDefault(ctx).AddAccessSQL(sqlQuery, "cardviewcols", false, false);
@@ -186,7 +188,8 @@ namespace VIS.Models
                         AD_Field_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_FIELD_ID"]),
                         AD_GroupField_ID = fid,
                         sort = Util.GetValueOfInt(ds.Tables[0].Rows[i]["SORTNO"]),
-                        UserID = uid
+                        UserID = uid,
+                        OrderByClause= sortOrder
 
                     };
                     lstCardViewColumns.Add(objCardView);
@@ -206,7 +209,7 @@ namespace VIS.Models
             }
             return lstCardViewColumns;
         }
-        public int SaveCardViewRecord(string cardViewName, int ad_Window_ID, int ad_Tab_ID, int ad_User_ID, int ad_Field_ID, Ctx ctx, int cardViewID/*, List<RolePropeties> lstRoleId*/, List<CardViewConditionPropeties> lstCVCondition, int AD_HeaderLayout_ID,bool isPublic,string groupSequence,string excludeGrp,bool pageSize,string orderByClause)
+        public int SaveCardViewRecord(string cardViewName, int ad_Window_ID, int ad_Tab_ID, int ad_User_ID, int ad_Field_ID, Ctx ctx, int cardViewID/*, List<RolePropeties> lstRoleId*/, List<CardViewConditionPropeties> lstCVCondition, int AD_HeaderLayout_ID,bool isPublic,string groupSequence,string excludeGrp,string orderByClause)
         {
             string conditionValue = string.Empty;
             string conditionText = string.Empty;
@@ -236,7 +239,6 @@ namespace VIS.Models
             objCardView.Set_ValueNoCheck("AD_HeaderLayout_ID", AD_HeaderLayout_ID);
             objCardView.Set_ValueNoCheck("groupSequence", groupSequence);
             objCardView.Set_ValueNoCheck("excludedGroup", excludeGrp);
-            objCardView.Set_Value("disableWindowPageSize", pageSize);
             objCardView.Set_Value("OrderByClause", orderByClause);
             if (!objCardView.Save())
             {
