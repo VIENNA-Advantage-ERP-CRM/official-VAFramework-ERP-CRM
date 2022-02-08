@@ -163,8 +163,6 @@ namespace VAdvantage.Controller
          */
         public string NewRecordView = "";
 
-        public List<CardViewData> Cards = new List<CardViewData>();
-
         public int DefaultCardID = 0;
 
         public List<GridFieldVO> GetFields()
@@ -973,8 +971,7 @@ namespace VAdvantage.Controller
 
             clone.IsMaintainVersions = IsMaintainVersions;
             clone.TabLayout = TabLayout;
-            clone.DefaultCardID = DefaultCardID;
-            clone.Cards = Cards;
+           // clone.DefaultCardID = DefaultCardID;
             clone.NewRecordView = NewRecordView;
 
             clone.fields = new List<GridFieldVO>();

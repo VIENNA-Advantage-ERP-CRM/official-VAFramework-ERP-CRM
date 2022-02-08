@@ -5497,3 +5497,129 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
     background-color: #fff
 }
 
+
+
+
+.vis-sortOrderContainer {
+    padding: 0.5rem;
+    border: 1px solid rgba(var(--v-c-on-secondary), .2);
+    margin-bottom: 10px;
+    border-radius: 0.3rem;
+    width: 100%;
+}
+
+.vis-sortOrderData {
+    display: flex;
+}
+
+.vis-sortBtn {
+    width: 35px;
+    height: 35px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(var(--v-c-secondary), 1);
+    margin-left: 1px;
+    cursor: pointer;
+}
+
+    .vis-sortBtn:hover {
+        color: rgba(var(--v-c-primary), 1);
+    }
+
+.vis-sortButtons {
+    display: flex;
+    padding-left: 9px;
+    padding-right: 10px;
+}
+
+.vis-sortOrderData .VIS_Pref_btn-2 {
+    margin: 0;
+    padding: .5rem 1rem;
+    height: 35px;
+    background: rgba(var(--v-c-on-secondary), 1);
+}
+.vis-sortOrderData .VIS_Pref_btn-2:disabled {
+    background: rgba(var(--v-c-on-secondary), 1) !important;
+    opacity:1;
+}
+
+.vis-sortAsc {
+    border-top-left-radius: .3rem;
+    border-bottom-left-radius: 0.3rem;
+}
+
+.vis-sortDesc {
+    border-top-right-radius: 0.3rem;
+    border-bottom-right-radius: 0.3rem;
+}
+
+.vis-sortingList {
+    display: flex;
+    white-space: nowrap;
+    overflow-x: auto;
+}
+
+.vis-sortListItem {
+    display: inline-flex;
+    background: rgba(var(--v-c-secondary), .5);
+    align-items: center;
+    padding: .2rem .5rem;
+    border-radius: 1rem;
+    min-width: 160px;
+    margin-right: 10px;
+}
+
+    .vis-sortListItem p {
+        margin: 0;
+        font-size: .8rem;
+        flex: 1;
+    }
+
+
+.vis-sortIcon {
+    padding: 0.3rem;
+    cursor: pointer;
+}
+
+.vis-sortListIcons .vis-sortAsc {
+    color: rgba(var(--v-c-primary), 1);
+}
+
+.vis-sortDesc .fa-sort-amount-asc {
+    transform: rotate(180deg);
+}
+
+.vis-sortOrderData .vis-input-wrap {
+    margin-bottom: 5px;
+}
+
+.vis-sortListItemClose {
+    padding-right: 0;
+}
+
+
+
+.vis-sortCardAsc {
+    border-top-left-radius: 0.3rem;
+    border-bottom-left-radius: 0.3rem;
+}
+
+.vis-sortCardDesc {
+    border-top-right-radius: 0.3rem;
+    border-bottom-right-radius: 0.3rem;
+}
+
+.vis-sortCardDesc .fa-sort-amount-asc {
+    transform: rotate( 180deg );
+}
+
+.vis-card-input-wrap {
+    width: auto;
+    margin: 0 0 0 10px !important;
+}
+
+.vis-cardviewsortContainer {
+    float: left;
+    width: 100%;
+}
