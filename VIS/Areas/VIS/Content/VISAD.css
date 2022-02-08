@@ -5538,11 +5538,12 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
     padding: .5rem 1rem;
     height: 35px;
     background: rgba(var(--v-c-on-secondary), 1);
+    box-shadow:none;
 }
-.vis-sortOrderData .VIS_Pref_btn-2:disabled {
-    background: rgba(var(--v-c-on-secondary), 1) !important;
-    opacity:1;
-}
+    .vis-sortOrderData .VIS_Pref_btn-2:disabled, .vis-sortOrderData .VIS_Pref_btn-2:hover {
+        background: rgba(var(--v-c-on-secondary), 1) !important;
+        opacity: 1;
+    }
 
 .vis-sortAsc {
     border-top-left-radius: .3rem;
