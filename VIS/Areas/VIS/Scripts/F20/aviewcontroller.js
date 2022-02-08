@@ -1393,6 +1393,7 @@
             this.switchSingleRow();
         }
         else if (newRecordView == NEWRECORDVIEW_GridLayout) {
+            this.isNewClick = true; // use for stop requery data
             this.switchMultiRow();
         }
         else {
@@ -1760,7 +1761,7 @@
 
     VIS.GridController.prototype.switchMultiRow = function () {        
         if (this.singleRow || this.isCardRow) {
-            if (this.isCardRow) {
+            if (this.isCardRow && !this.isNewClick) {
                 this.gTab.getTableModel().setCurrentPage(1);
             }
 
@@ -1788,10 +1789,13 @@
                 if (this.vHeaderPanel.sizeChangedListner && this.vHeaderPanel.sizeChangedListner.onSizeChanged)
                     this.vHeaderPanel.sizeChangedListner.onSizeChanged();
             }
-            this.gTab.getTableModel().resetCard();            
-            var query = new VIS.Query();
-            this.getMTab().setQuery(query);
-            this.query(0, 0, null);
+            this.gTab.getTableModel().resetCard();
+            if (!this.isNewClick) {
+                var query = new VIS.Query();
+                this.getMTab().setQuery(query);
+                this.query(0, 0, null);
+            }
+            this.isNewClick = false;
         }
 
     };
