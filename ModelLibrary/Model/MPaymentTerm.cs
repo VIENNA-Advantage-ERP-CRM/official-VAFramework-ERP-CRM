@@ -567,7 +567,7 @@ namespace VAdvantage.Model
         {
             var runForBaseCurrency = true;
             Dictionary<string, int> baseTypeIds = new Dictionary<string, int>();
-            var dr = DB.ExecuteReader("SELECT VA009_PaymentBaseType,VA009_PaymentMethod_ID FROM VA009_PaymentMethod WHERE IsActive='Y' AND C_Currency_ID IS NULL AND AD_Client_ID=" + order.GetAD_Client_ID()
+            IDataReader dr = DB.ExecuteReader("SELECT VA009_PaymentBaseType,VA009_PaymentMethod_ID FROM VA009_PaymentMethod WHERE IsActive='Y' AND C_Currency_ID IS NULL AND AD_Client_ID=" + order.GetAD_Client_ID()
                        + " AND VA009_PaymentBaseType IN ('" + X_C_Order.PAYMENTRULE_Cash + "','" + X_C_Order.PAYMENTRULE_OnCredit + "','" + X_C_Order.PAYMENTRULE_CreditCard + "','" + X_C_Order.PAYMENTRULE_ThirdPartyPayment + "')");
             ///currency id null
             while (dr.Read())

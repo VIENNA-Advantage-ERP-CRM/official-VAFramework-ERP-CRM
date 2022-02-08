@@ -434,6 +434,7 @@ namespace VAdvantage.Model
                 return error;
             CreateBPLocation();
 
+            IDataReader dr = null;
             try
             {
                 int id = _bp.GetC_BPartner_ID();
@@ -446,7 +447,7 @@ namespace VAdvantage.Model
                 if (GetR_InterestArea_ID() != 0)
                 {
                     string sql = "Select R_InterestArea_ID from vss_lead_interestarea where C_Lead_ID=" + GetC_Lead_ID();
-                    IDataReader dr = DB.ExecuteReader(sql, null, Get_TrxName());
+                    dr = DB.ExecuteReader(sql, null, Get_TrxName());
                     while (dr.Read())
                     {
                         X_R_ContactInterest Prospect = new X_R_ContactInterest(GetCtx(), 0, Get_TrxName());
@@ -477,9 +478,14 @@ namespace VAdvantage.Model
                     dr.Close();
                 }
             }
-            catch
+            catch(Exception ex)
             {
-
+                log.Log(Level.SEVERE, "MLead" + ex.Message, ex);
+                if (dr != null)
+                {
+                    dr.Close();
+                    dr = null;
+                }
             }
 
             return null;

@@ -55,56 +55,68 @@ namespace VAdvantage.Process
 
         protected override String DoIt()
         {
-            string Sql = "Select C_Lead_ID From C_Lead where SalesRep_ID=" + FromSalesRep_ID+" and isactive='Y' and Ad_Org_id="+GetCtx().GetAD_Org_ID();
-            IDataReader dr =DB.ExecuteReader(Sql);
-            while (dr.Read())
+            IDataReader dr = null;
+            string Sql = "";
+            try
             {
-                VAdvantage.Model.X_C_Lead lead = new VAdvantage.Model.X_C_Lead(GetCtx(), Util.GetValueOfInt(dr[0]), null);
-                lead.SetSalesRep_ID(ToSalesRep_ID);
-                lead.Save();
+                 Sql = "Select C_Lead_ID From C_Lead where SalesRep_ID=" + FromSalesRep_ID + " and isactive='Y' and Ad_Org_id=" + GetCtx().GetAD_Org_ID();
+                dr = DB.ExecuteReader(Sql);
+                while (dr.Read())
                 {
-                    
-                }
+                    VAdvantage.Model.X_C_Lead lead = new VAdvantage.Model.X_C_Lead(GetCtx(), Util.GetValueOfInt(dr[0]), null);
+                    lead.SetSalesRep_ID(ToSalesRep_ID);
+                    lead.Save();
+                    {
 
-            }
-            
-            dr.Close();
-
-            Sql = "Select C_Project_ID From C_Project where SalesRep_ID=" + FromSalesRep_ID + " and isactive='Y' and Ad_Org_id=" + GetCtx().GetAD_Org_ID();
-            dr = DB.ExecuteReader(Sql);
-            while (dr.Read())
-            {
-                VAdvantage.Model.X_C_Project Project = new VAdvantage.Model.X_C_Project(GetCtx(), Util.GetValueOfInt(dr[0]), null);
-                Project.SetSalesRep_ID(ToSalesRep_ID);
-                Project.Save();
-                {
+                    }
 
                 }
 
-            }
-            dr.Close();
+                dr.Close();
 
-            Sql = "Select C_BPartner_ID From C_BPartner where SalesRep_ID=" + FromSalesRep_ID + " and isactive='Y' and Ad_Org_id=" + GetCtx().GetAD_Org_ID();
-            dr = DB.ExecuteReader(Sql);
-            while (dr.Read())
-            {
-                VAdvantage.Model.X_C_BPartner BP = new VAdvantage.Model.X_C_BPartner(GetCtx(), Util.GetValueOfInt(dr[0]), null);
-                BP.SetSalesRep_ID(ToSalesRep_ID);
-                BP.Save();
+                Sql = "Select C_Project_ID From C_Project where SalesRep_ID=" + FromSalesRep_ID + " and isactive='Y' and Ad_Org_id=" + GetCtx().GetAD_Org_ID();
+                dr = DB.ExecuteReader(Sql);
+                while (dr.Read())
                 {
+                    VAdvantage.Model.X_C_Project Project = new VAdvantage.Model.X_C_Project(GetCtx(), Util.GetValueOfInt(dr[0]), null);
+                    Project.SetSalesRep_ID(ToSalesRep_ID);
+                    Project.Save();
+                    {
+
+                    }
 
                 }
+                dr.Close();
 
+                Sql = "Select C_BPartner_ID From C_BPartner where SalesRep_ID=" + FromSalesRep_ID + " and isactive='Y' and Ad_Org_id=" + GetCtx().GetAD_Org_ID();
+                dr = DB.ExecuteReader(Sql);
+                while (dr.Read())
+                {
+                    VAdvantage.Model.X_C_BPartner BP = new VAdvantage.Model.X_C_BPartner(GetCtx(), Util.GetValueOfInt(dr[0]), null);
+                    BP.SetSalesRep_ID(ToSalesRep_ID);
+                    BP.Save();
+                    {
+
+                    }
+
+                }
+                dr.Close();
             }
-            dr.Close();
-
-
-
-
-
+            catch (Exception ex)
+            {
+                log.Log(Level.SEVERE, "TransferOwnerShip" + Sql, ex);
+            }
+            finally
+            {
+                if (dr != null)
+                {
+                    dr.Close();
+                    dr = null;
+                }
+            }
             return Msg.GetMsg(GetCtx(), "RecordsTransferedSuccessfully"); ;
         }
-      
+
 
 
 
