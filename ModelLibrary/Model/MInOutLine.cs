@@ -1254,12 +1254,12 @@ namespace VAdvantage.Model
                         log.SaveError("Error", Msg.GetMsg(GetCtx(), "QtyCanNotbeGreater"));
                         return false;
                     }
-                    //VA230:Qty Entered cannot be greater than asset quantity in case of shipment only
-                    if (GetMovementQty() > GetVAFAM_Quantity() && GetA_Asset_ID()>0 && inO.IsSOTrx())
-                    {
-                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "QtyCanNotbeGreaterThanAssetQty"));
-                        return false;
-                    }
+                }
+                //VA230:Qty Entered cannot be greater than asset quantity in case of shipment only
+                if (GetMovementQty() > GetVAFAM_Quantity() && GetA_Asset_ID() > 0 && inO.IsSOTrx())
+                {
+                    log.SaveError("Error", Msg.GetMsg(GetCtx(), "QtyCanNotbeGreaterThanAssetQty"));
+                    return false;
                 }
             }
 
