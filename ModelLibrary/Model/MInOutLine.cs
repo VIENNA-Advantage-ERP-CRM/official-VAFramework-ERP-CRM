@@ -1083,6 +1083,20 @@ namespace VAdvantage.Model
             if (GetM_Product_ID() > 0)
             {
                 _Product = new MProduct(GetCtx(), GetM_Product_ID(), Get_TrxName());
+                //VA230:Check IsAssetRelated column exists or not
+                if (Get_ColumnIndex("VAFAM_IsAssetRelated") >= 0)
+                {
+                    //Execute when saving new record or product value get changed
+                    if (newRecord || Is_ValueChanged("M_Product_ID"))
+                    {
+                        //Set VAFAM_IsAssetRelated value based on product category if linked then true else false
+                        SetVAFAM_IsAssetRelated(MProduct.Get(GetCtx(), GetM_Product_ID()).IsCreateAsset());
+                    }
+                }
+            }
+            else
+            {
+                SetVAFAM_IsAssetRelated(false);
             }
 
             if (_Product != null && GetC_UOM_ID() != _Product.GetC_UOM_ID())
@@ -1128,7 +1142,7 @@ namespace VAdvantage.Model
                 }
                 SetM_Locator_ID(il);
             }
-            
+
             // check record is reversed or not
             //bool IsReveresed = false;
             //if (inO.GetDescription() != null)
@@ -1363,7 +1377,7 @@ namespace VAdvantage.Model
                         }
                     }
                 }
-            }            
+            }
 
             return true;
         }
