@@ -582,7 +582,7 @@
             if (isAsc == "ASC")
                 item += '<i class="fa fa-sort-amount-asc"></i>';
             else
-                item += '<i class="fa fa-sort-amount-asc" style="transform: rotate(180deg);"></i>';
+                item += '<i class="fa fa-sort-amount-asc" style="transform: rotate(180deg);padding-top:1px"></i>';
             item += '</span>'
                 + '<span class="vis-sortIcon vis-sortListItemClose" data-text="' + val + ' ' + isAsc + '">'
                 + '<i class="fa fa-close"></i>'

@@ -5559,6 +5559,7 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
     display: flex;
     white-space: nowrap;
     overflow-x: auto;
+    overflow-y:hidden;
 }
 
 .vis-sortListItem {
