@@ -146,27 +146,11 @@ namespace VAdvantage.Model
             int count = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
             if (count > 0)
             {
-                // Get "Related-to" of "Asset" or "Product"
-                String relatedtoProduct = String.Empty;
-                string _RelatedToAsset = String.Empty;
+                // Get "Related-to" of "Product"
                 _sql.Clear();
-                _sql.Append(@"SELECT L.Value, l.Name FROM AD_Ref_List L INNER JOIN AD_Reference r on (R.AD_Reference_ID=L.AD_Reference_ID)
-                                    WHERE l.isActive = 'Y' AND r.Name='FRPT_RelatedTo' AND (l.Name='Asset' OR l.Name='Product')");
-                DataSet dsRealtedTo = DB.ExecuteDataset(_sql.ToString());
-                if (dsRealtedTo != null && dsRealtedTo.Tables[0].Rows.Count > 0)
-                {
-                    for (int i = 0; i < dsRealtedTo.Tables[0].Rows.Count; i++)
-                    {
-                        if (Util.GetValueOfString(dsRealtedTo.Tables[0].Rows[i]["Name"]).Equals("Product"))
-                        {
-                            relatedtoProduct = Convert.ToString(dsRealtedTo.Tables[0].Rows[i]["Value"]);
-                        }
-                        if (Util.GetValueOfString(dsRealtedTo.Tables[0].Rows[i]["Name"]).Equals("Asset"))
-                        {
-                            _RelatedToAsset = Convert.ToString(dsRealtedTo.Tables[0].Rows[i]["Value"]);
-                        }
-                    }
-                }
+                _sql.Append(@"SELECT L.Value FROM AD_Ref_List L INNER JOIN AD_Reference r on (R.AD_Reference_ID=L.AD_Reference_ID)
+                                    WHERE l.isActive = 'Y' AND r.Name='FRPT_RelatedTo' AND (l.Name='Product')");
+                string relatedtoProduct = Convert.ToString(DB.ExecuteScalar(_sql.ToString()));
 
                 PO prdctact = null;
                 _client_ID = GetAD_Client_ID();
@@ -221,12 +205,6 @@ namespace VAdvantage.Model
                         }
                     }
                 }
-
-                // Get and Insert Default Account from Asset Group 
-                if (GetA_Asset_Group_ID() > 0 && !String.IsNullOrEmpty(_RelatedToAsset))
-                {
-                    InsertDefaultAcctFromAssetGroup(_RelatedToAsset, prdctact);
-                }
             }
             else
             {
@@ -244,62 +222,6 @@ namespace VAdvantage.Model
                 return success;
             }
             return success;
-        }
-
-        /// <summary>
-        /// Insert Default Accounting from Asset Group
-        /// </summary>
-        /// <param name="RelatedToAsset">Related to Asset</param>
-        /// <param name="prdctact">PO object of Product Category Default Accounting</param>
-        /// <writer>VIS0045</writer>
-        /// <Date>02/Feb/2022</Date>
-        private void InsertDefaultAcctFromAssetGroup(String RelatedToAsset, PO prdctact)
-        {
-            // Get Asset Group Accounting 
-            DataSet ds = DB.ExecuteDataset(@"SELECT  PCA.C_AcctSchema_ID, PCA.C_ValidCombination_ID, PCA.FRPT_AcctDefault_ID 
-                 FROM FRPT_Asset_Group_Acct PCA 
-                 INNER JOIN FRPT_AcctDefault ACC ON (acc.FRPT_AcctDefault_ID= PCA.FRPT_AcctDefault_ID) 
-                 WHERE PCA.A_Asset_Group_ID=" + GetA_Asset_Group_ID() +
-                " AND acc.frpt_relatedto=" + GlobalVariable.TO_STRING(RelatedToAsset) +
-                " AND PCA.IsActive = 'Y' AND PCA.AD_Client_ID = " + GetAD_Client_ID());
-            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-            {
-                int recordFound = 0;
-                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                {
-                    // check record already exist or not
-                    recordFound = Convert.ToInt32(DB.ExecuteScalar(@"SELECT COUNT(Bp.M_Product_Category_ID) FROM M_Product_Category Bp
-                                       LEFT JOIN FRPT_Product_Category_Acct ca On (Bp.M_Product_Category_ID=ca.M_Product_Category_ID) 
-                                       AND ca.Frpt_Acctdefault_ID=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]
-                                       + " WHERE Bp.IsActive='Y' AND Bp.AD_Client_ID=" + GetAD_Client_ID() +
-                                       " AND ca.C_Validcombination_ID = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_ID"]) +
-                                       " AND Bp.M_Product_Category_ID = " + GetM_Product_Category_ID(), null, Get_Trx()));
-                    if (recordFound == 0)
-                    {
-                        // Insert Default Accounting
-                        prdctact = MTable.GetPO(GetCtx(), "FRPT_Product_Category_Acct", 0, null);
-                        prdctact.Set_ValueNoCheck("AD_Org_ID", 0);
-                        prdctact.Set_ValueNoCheck("M_Product_Category_ID", Util.GetValueOfInt(GetM_Product_Category_ID()));
-                        prdctact.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
-                        prdctact.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]));
-                        prdctact.Set_ValueNoCheck("C_AcctSchema_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_AcctSchema_ID"]));
-                        if (!prdctact.Save())
-                        {
-                            ValueNamePair pp = VLogger.RetrieveError();
-                            String error = String.Empty;
-                            if (pp != null)
-                            {
-                                error = pp.GetValue();
-                                if (String.IsNullOrEmpty(error))
-                                {
-                                    error = pp.GetName();
-                                }
-                            }
-                            _log.Log(Level.SEVERE, "Could Not create FRPT_Product_Category_Acct. " + error);
-                        }
-                    }
-                }
-            }
         }
 
         /// <summary>
