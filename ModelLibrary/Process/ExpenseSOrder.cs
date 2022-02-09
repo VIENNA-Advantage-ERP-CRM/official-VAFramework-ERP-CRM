@@ -401,11 +401,17 @@ namespace VAdvantage.Process
 
             //	OrderLine
             MOrderLine ol = new MOrderLine(_order);
+            MProduct prod = null;
+            MCharge charge = null;
             //
             if (tel.GetM_Product_ID() != 0)
             {
                 ol.SetM_Product_ID(tel.GetM_Product_ID(),
                     tel.GetC_UOM_ID());
+                //190 - Get Print description and set
+                prod = new MProduct(GetCtx(), tel.GetM_Product_ID(), Get_TrxName());                
+                if (ol.Get_ColumnIndex("PrintDescription") >= 0 && prod != null)
+                    ol.Set_Value("PrintDescription", prod.GetDocumentNote());
             }
             if (tel.GetS_ResourceAssignment_ID() != 0)
             {
@@ -417,6 +423,10 @@ namespace VAdvantage.Process
                 ol.SetC_Charge_ID(tel.GetC_Charge_ID());
                 ol.SetPriceActual(tel.GetExpenseAmt());
                 ol.SetQty(tel.GetQty());
+                //190 - Get Print description and set
+                charge = new MCharge(GetCtx(), tel.GetC_Charge_ID(), Get_TrxName());                
+                if (ol.Get_ColumnIndex("PrintDescription") >= 0 && charge != null && charge.Get_ColumnIndex("PrintDescription") >= 0)
+                    ol.Set_Value("PrintDescription", charge.Get_Value("PrintDescription"));
             }
             ol.SetQty(tel.GetQtyInvoiced());        //	
             ol.SetDescription(tel.GetDescription());

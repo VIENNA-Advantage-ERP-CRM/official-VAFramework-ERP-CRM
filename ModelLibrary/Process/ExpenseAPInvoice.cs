@@ -191,7 +191,7 @@ namespace VAdvantage.Process
                                         {
                                             bpNameNoPM += bp.GetName() + ", ";
                                         }
-                                      return  Msg.GetMsg(GetCtx(), "NoPayMethEmp") + bpNameNoPM;
+                                        return Msg.GetMsg(GetCtx(), "NoPayMethEmp") + bpNameNoPM;
                                     }
 
                                 }
@@ -212,7 +212,7 @@ namespace VAdvantage.Process
                                 }
                                 else
                                 {
-                                     return Msg.GetMsg(GetCtx(), "IsActivePaymentMethodInv"); ;
+                                    return Msg.GetMsg(GetCtx(), "IsActivePaymentMethodInv"); ;
                                 }
                             }
 
@@ -241,9 +241,9 @@ namespace VAdvantage.Process
 
                                 }
                                 else
-                                {                       
+                                {
                                     invoice.SetC_PaymentTerm_ID(payterm);
-                               
+
                                 }
 
 
@@ -295,7 +295,7 @@ namespace VAdvantage.Process
                             //commented by Arpit on Jan 4,2015       Mentis issue no.   0000310
                             //invoice.SetDocumentNo(te.GetDocumentNo());
                             //
-                           
+
                             invoice.SetM_PriceList_ID(te.GetM_PriceList_ID());
                             invoice.SetSalesRep_ID(te.GetDoc_User_ID());
                             String descr = Msg.Translate(GetCtx(), "S_TimeExpense_ID")
@@ -356,15 +356,25 @@ namespace VAdvantage.Process
 
                             //	Create OrderLine
                             MInvoiceLine il = new MInvoiceLine(invoice);
+                            MProduct prod = null;
+                            MCharge charge = null;
                             //
                             if (line.GetM_Product_ID() != 0)
                             {
                                 il.SetM_Product_ID(line.GetM_Product_ID(), true);
+                                //190 - Get Print description and set
+                                prod = new MProduct(GetCtx(), line.GetM_Product_ID(), Get_TrxName());                                
+                                if (il.Get_ColumnIndex("PrintDescription") >= 0 && prod != null)
+                                    il.Set_Value("PrintDescription", prod.GetDocumentNote());
                             }
                             //added by arpit asked by Surya Sir on 28/12/2015_____***************************
                             if (line.GetC_Charge_ID() != 0)
                             {
                                 il.SetC_Charge_ID(line.GetC_Charge_ID());
+                                //190 - Get Print description and set
+                                charge = new MCharge(GetCtx(), line.GetC_Charge_ID(), Get_TrxName());                                
+                                if (il.Get_ColumnIndex("PrintDescription") >= 0 && charge != null && charge.Get_ColumnIndex("PrintDescription") >= 0)
+                                    il.Set_Value("PrintDescription", charge.Get_Value("PrintDescription"));
                             }
                             //end here *****************************
                             il.SetQty(line.GetQtyReimbursed());     //	Entered/Invoiced
@@ -467,7 +477,7 @@ namespace VAdvantage.Process
         public int GetPaymentMethod(MTimeExpense te)
         {
             //JID_1783_1 add isActive Check
-            sqlqry = "SELECT VA009_PaymentMethod_ID FROM VA009_PaymentMethod WHERE VA009_PAYMENTBASETYPE='S' AND AD_Client_ID= " + te.GetAD_Client_ID()+" AND AD_Org_ID IN(0," + te.GetAD_Org_ID() + ") AND IsActive='Y' ORDER BY AD_Org_ID DESC, VA009_PAYMENTMETHOD_ID DESC FETCH NEXT 1 ROWS ONLY";
+            sqlqry = "SELECT VA009_PaymentMethod_ID FROM VA009_PaymentMethod WHERE VA009_PAYMENTBASETYPE='S' AND AD_Client_ID= " + te.GetAD_Client_ID() + " AND AD_Org_ID IN(0," + te.GetAD_Org_ID() + ") AND IsActive='Y' ORDER BY AD_Org_ID DESC, VA009_PAYMENTMETHOD_ID DESC FETCH NEXT 1 ROWS ONLY";
             pm = Util.GetValueOfInt(DB.ExecuteScalar(sqlqry));
             return pm;
         }
@@ -480,7 +490,7 @@ namespace VAdvantage.Process
         public int GetPaymentTerm(MTimeExpense te)
         {
             //JID_1783_1 add isActive Check
-            sqlqry1 = "SELECT C_PaymentTerm_ID FROM C_PaymentTerm WHERE ISDEFAULT='Y' AND AD_Client_ID= "+te.GetAD_Client_ID()+"  AND AD_Org_ID IN(0, " + te.GetAD_Org_ID() + " ) AND IsActive='Y' ORDER BY AD_Org_ID DESC, C_PaymentTerm_ID DESC FETCH NEXT 1 ROWS ONLY";
+            sqlqry1 = "SELECT C_PaymentTerm_ID FROM C_PaymentTerm WHERE ISDEFAULT='Y' AND AD_Client_ID= " + te.GetAD_Client_ID() + "  AND AD_Org_ID IN(0, " + te.GetAD_Org_ID() + " ) AND IsActive='Y' ORDER BY AD_Org_ID DESC, C_PaymentTerm_ID DESC FETCH NEXT 1 ROWS ONLY";
             pt = Util.GetValueOfInt(DB.ExecuteScalar(sqlqry1));
             return pt;
         }
