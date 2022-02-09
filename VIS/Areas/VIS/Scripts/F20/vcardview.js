@@ -348,7 +348,9 @@
             //$imgdownSearch.css('visibility', 'visible');
             if (cards && cards.length > 0) {
                 //headerdiv.show();
-                for (var i = cards.length-1; i >= 0; i--) {
+                for (var i = cards.length - 1; i >= 0; i--) {
+
+                    cards[i].Name = VIS.Utility.decodeText(cards[i].Name);
                     // $cmbCards.append('<option value="' + cards[i].AD_CardView_ID + '">' + cards[i].Name + '</option>');
                     if (cards[i].IsDefault) {
                         userQueries.push({ 'title': cards[i].Name, 'label': cards[i].Name, 'value': cards[i].Name, 'id': cards[i].AD_CardView_ID, 'isDefault': 'Y', 'Created': cards[i].Created });

@@ -74,6 +74,7 @@
         var ddlCardView = null;
         var btnNew = null;
         var btnCancle = null;
+        var btnEdit = null;
         var ulRole = null;
         var LstRoleID = [];
         var LstCardViewRole = null;
@@ -532,12 +533,16 @@
                 "display": "none"
             });
 
+            disableView();
+            Events();
+
+        };
+
+        function disableView() {
             rootCardViewUI.find("*").attr("disabled", "disabled");
             rootCardViewUI.find(".vis-firstdiv *").removeAttr("disabled");
             rootCardViewUI.find(".vis-btnDelete").removeAttr("disabled");
             rootCardViewUI.find(".vis-cardviewbtn .vis-cdv-customokcancle *").removeAttr("disabled");
-            Events();
-
         };
 
         function IsBusy(isBusy) {
@@ -1225,10 +1230,17 @@
                             FillTextControl();
                             FillGroupFields();
                             FillColumnInclude(true, false);
+                            toggleNewRecord();
                             if (cardViewUserID == VIS.context.getAD_User_ID()) {
                                 AD_User_ID = 0;
                                 cardViewUserID = 0;
+                                btnEdit.find("i").removeClass('vis-copy').addClass('vis-pencil');
                             }
+                            else {
+                                btnEdit.find("i").removeClass('vis-pencil').addClass('vis-copy');
+                            }
+                            disableView();
+                            
                         }
                     });
                     //var diaDel = confirm(VIS.Msg.getMsg("SureWantToDelete"));
