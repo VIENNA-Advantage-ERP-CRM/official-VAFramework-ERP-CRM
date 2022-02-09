@@ -36,9 +36,9 @@ namespace VAdvantage.Process
         private int _noOrders = 0;
         /**	Current Order			*/
         private MOrder _order = null;
-        private string message="";
+        private string message = "";
         // Time Expense Line
-        MTimeExpenseLine tel=null;
+        MTimeExpenseLine tel = null;
 
 
         /// <summary>
@@ -144,11 +144,11 @@ namespace VAdvantage.Process
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();
-                if (dt !=null && dt.Rows.Count > 0)
+                if (dt != null && dt.Rows.Count > 0)
                 {
                     foreach (DataRow dr in dt.Rows)             //	********* Expense Line Loop
                     {
-                         tel = new MTimeExpenseLine(GetCtx(), dr, Get_TrxName());
+                        tel = new MTimeExpenseLine(GetCtx(), dr, Get_TrxName());
                         if (!tel.IsInvoiced())
                         {
                             continue;
@@ -211,9 +211,9 @@ namespace VAdvantage.Process
                 }
             }
             CompleteOrder();
-            if(_noOrders>0)
+            if (_noOrders > 0)
             {
-                message= "" + _noOrders + " " + Msg.GetMsg(GetCtx(), "OrderCrtdTimeRep");
+                message = "" + _noOrders + " " + Msg.GetMsg(GetCtx(), "OrderCrtdTimeRep");
             }
             return message;
         }   //	doIt
@@ -245,7 +245,8 @@ namespace VAdvantage.Process
                 _order.SetM_Warehouse_ID(te.GetM_Warehouse_ID());
                 //Bhupendra: Add payment term 
                 // to check for if payment term is null
-                if (bp.GetC_PaymentTerm_ID() == 0) {
+                if (bp.GetC_PaymentTerm_ID() == 0)
+                {
                     // set the default payment method as check
                     int payTerm = GetPaymentTerm();
                     if (payTerm <= 0)
@@ -258,7 +259,8 @@ namespace VAdvantage.Process
                         _order.SetC_PaymentTerm_ID(payTerm);
                     }
                 }
-                else {
+                else
+                {
                     //check weather paymentterm is active or not
                     if (Util.GetValueOfString(DB.ExecuteScalar("SELECT IsActive FROM C_PaymentTerm WHERE C_PaymentTerm_ID=" + bp.GetC_PaymentTerm_ID(), null, Get_Trx())).Equals("Y"))
                     {
@@ -272,9 +274,10 @@ namespace VAdvantage.Process
                 }
                 // Bhupendra: added a cond to check for payment method if null
                 // Added by mohit - to set payment method and sales rep id.
-                if(bp.GetVA009_PaymentMethod_ID()==0){
+                if (bp.GetVA009_PaymentMethod_ID() == 0)
+                {
                     // set the default payment method as check
-                   int paymethod = GetPaymentMethod();
+                    int paymethod = GetPaymentMethod();
                     if (paymethod <= 0)
                     {
                         message = Msg.GetMsg(GetCtx(), "IsActivePaymentMethod");
@@ -328,7 +331,7 @@ namespace VAdvantage.Process
                             return;
                         }
                 }
-                else 
+                else
                 {
                     if (bp.GetM_PriceList_ID() != 0)
                         if (Util.GetValueOfString(DB.ExecuteScalar("SELECT IsActive FROM M_PriceList WHERE M_PriceList_ID=" + bp.GetM_PriceList_ID(), null, Get_Trx())).Equals("Y"))
@@ -401,17 +404,17 @@ namespace VAdvantage.Process
 
             //	OrderLine
             MOrderLine ol = new MOrderLine(_order);
-            MProduct prod = null;
-            MCharge charge = null;
-            //
+                        
             if (tel.GetM_Product_ID() != 0)
             {
                 ol.SetM_Product_ID(tel.GetM_Product_ID(),
                     tel.GetC_UOM_ID());
-                //190 - Get Print description and set
-                prod = new MProduct(GetCtx(), tel.GetM_Product_ID(), Get_TrxName());                
-                if (ol.Get_ColumnIndex("PrintDescription") >= 0 && prod != null)
-                    ol.Set_Value("PrintDescription", prod.GetDocumentNote());
+                //190 - Get Print description and set                                
+                if (ol.Get_ColumnIndex("PrintDescription") >= 0)
+                {
+                    string printDesc = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT DocumentNote FROM M_Product WHERE M_Product_ID=" + tel.GetM_Product_ID()));
+                    ol.Set_Value("PrintDescription", printDesc);
+                }
             }
             if (tel.GetS_ResourceAssignment_ID() != 0)
             {
@@ -423,10 +426,12 @@ namespace VAdvantage.Process
                 ol.SetC_Charge_ID(tel.GetC_Charge_ID());
                 ol.SetPriceActual(tel.GetExpenseAmt());
                 ol.SetQty(tel.GetQty());
-                //190 - Get Print description and set
-                charge = new MCharge(GetCtx(), tel.GetC_Charge_ID(), Get_TrxName());                
-                if (ol.Get_ColumnIndex("PrintDescription") >= 0 && charge != null && charge.Get_ColumnIndex("PrintDescription") >= 0)
-                    ol.Set_Value("PrintDescription", charge.Get_Value("PrintDescription"));
+                //190 - Get Print description and set                
+                if (ol.Get_ColumnIndex("PrintDescription") >= 0)
+                {
+                    string printDesc = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT PrintDescription FROM C_Charge WHERE C_Charge_ID=" + tel.GetC_Charge_ID()));
+                    ol.Set_Value("PrintDescription", printDesc);
+                }
             }
             ol.SetQty(tel.GetQtyInvoiced());        //	
             ol.SetDescription(tel.GetDescription());
@@ -516,25 +521,27 @@ namespace VAdvantage.Process
         /// to get the payment method if no payment method found on the business partner
         /// </summary>
         /// <returns>returns payment meyhod ID</returns>
-        public int GetPaymentMethod(){
+        public int GetPaymentMethod()
+        {
             //get organisation default 
             //added IsActive condition to check weather the paymentmethod is active or not
-            string sql = "SELECT VA009_PaymentMethod_ID FROM VA009_PaymentMethod WHERE VA009_PAYMENTBASETYPE='S' AND AD_ORG_ID IN(@param1,0) AND AD_Client_ID="+tel.GetAD_Client_ID()+"  AND IsActive='Y' ORDER BY AD_ORG_ID DESC, VA009_PAYMENTMETHOD_ID DESC";
+            string sql = "SELECT VA009_PaymentMethod_ID FROM VA009_PaymentMethod WHERE VA009_PAYMENTBASETYPE='S' AND AD_ORG_ID IN(@param1,0) AND AD_Client_ID=" + tel.GetAD_Client_ID() + "  AND IsActive='Y' ORDER BY AD_ORG_ID DESC, VA009_PAYMENTMETHOD_ID DESC";
             SqlParameter[] param = new SqlParameter[1];
             param[0] = new SqlParameter("@param1", tel.GetAD_Org_ID());
-            dynamic pri = DataBase.DB.ExecuteScalar(sql,param, Get_TrxName());
+            dynamic pri = DataBase.DB.ExecuteScalar(sql, param, Get_TrxName());
             return Convert.ToInt32(pri);
         }
         /// <summary>
         ///   to get the payment method if no payment term found on the business partner
         /// </summary>
         /// <returns> returns payment term ID</returns>
-        public int GetPaymentTerm(){
+        public int GetPaymentTerm()
+        {
             //added IsActive condition to check weather the term is active or not
             string sql = "SELECT C_PaymentTerm_ID FROM C_PaymentTerm WHERE ISDEFAULT='Y' AND AD_ORG_ID IN(@param1,0) AND IsActive='Y' AND AD_Client_ID=" + tel.GetAD_Client_ID() + " ORDER BY AD_ORG_ID DESC, C_PaymentTerm_ID DESC";
             SqlParameter[] param = new SqlParameter[1];
             param[0] = new SqlParameter("@param1", tel.GetAD_Org_ID());
-            dynamic pri= DataBase.DB.ExecuteScalar(sql,param, Get_TrxName());
+            dynamic pri = DataBase.DB.ExecuteScalar(sql, param, Get_TrxName());
             return Convert.ToInt32(pri);
         }
     }	//	ExpenseSOrder

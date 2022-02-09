@@ -356,25 +356,27 @@ namespace VAdvantage.Process
 
                             //	Create OrderLine
                             MInvoiceLine il = new MInvoiceLine(invoice);
-                            MProduct prod = null;
-                            MCharge charge = null;
-                            //
+                            
                             if (line.GetM_Product_ID() != 0)
                             {
                                 il.SetM_Product_ID(line.GetM_Product_ID(), true);
-                                //190 - Get Print description and set
-                                prod = new MProduct(GetCtx(), line.GetM_Product_ID(), Get_TrxName());                                
-                                if (il.Get_ColumnIndex("PrintDescription") >= 0 && prod != null)
-                                    il.Set_Value("PrintDescription", prod.GetDocumentNote());
+                                //190 - Get Print description and set                                                              
+                                if (il.Get_ColumnIndex("PrintDescription") >= 0)
+                                {
+                                    string printDesc = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT DocumentNote FROM M_Product WHERE M_Product_ID=" + line.GetM_Product_ID()));
+                                    il.Set_Value("PrintDescription", printDesc);
+                                }
                             }
                             //added by arpit asked by Surya Sir on 28/12/2015_____***************************
                             if (line.GetC_Charge_ID() != 0)
                             {
                                 il.SetC_Charge_ID(line.GetC_Charge_ID());
-                                //190 - Get Print description and set
-                                charge = new MCharge(GetCtx(), line.GetC_Charge_ID(), Get_TrxName());                                
-                                if (il.Get_ColumnIndex("PrintDescription") >= 0 && charge != null && charge.Get_ColumnIndex("PrintDescription") >= 0)
-                                    il.Set_Value("PrintDescription", charge.Get_Value("PrintDescription"));
+                                //190 - Get Print description and set                                                                
+                                if (il.Get_ColumnIndex("PrintDescription") >= 0)
+                                {
+                                    string printDesc = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT PrintDescription FROM C_Charge WHERE C_Charge_ID=" + line.GetC_Charge_ID()));
+                                    il.Set_Value("PrintDescription", printDesc);
+                                }
                             }
                             //end here *****************************
                             il.SetQty(line.GetQtyReimbursed());     //	Entered/Invoiced
