@@ -563,7 +563,9 @@
         };
 
         function clearOrderByClause() {
-            sortList.empty()
+            sortList.empty();
+            sortOrderArray = [];
+            lastSortOrderArray = [];
         };
 
 
@@ -737,6 +739,7 @@
                 cmbOrderClause.val(-1);
                 sortOrderArray = [];
                 lastSortOrderArray = [];
+                LastCVCondition = [];
                 //AD_CardView_ID = parseInt(sel.attr("cardviewid"));
                 //cardViewUserID = parseInt(sel.attr("ad_user_id"));
                 //$vSearchHeaderLayout.setValue(sel.attr("ad_headerLayout_id"));
@@ -974,6 +977,7 @@
                     e.stopPropagation();
                     isEdit = false;
                     cmbOrderClause.val(-1);
+                    clearOrderByClause();
                     btnCardAsc.css('color', 'rgba(var(--v-c-on-secondary), 1)');
                     btnCardDesc.css('color', 'rgba(var(--v-c-on-secondary), 1)');
                     toggleNewRecord();
