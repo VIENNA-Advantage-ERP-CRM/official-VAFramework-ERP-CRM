@@ -22,6 +22,8 @@ using System.IO;
 using javax.crypto;
 using System.Net;
 using System.Data.SqlClient;
+using System.Web;
+using VAdvantage.AzureBlob;
 
 namespace VAdvantage.Model
 {
@@ -1498,6 +1500,61 @@ namespace VAdvantage.Model
                     return true;
                 }
 
+                // If file saving location is Azure Blob Storage
+                if (GetFileLocation() == FILELOCATION_AzureBlobStorage)
+                {
+                    try
+                    {
+                        SetFileLocation(FILELOCATION_AzureBlobStorage);
+
+                        // Create client info object
+                        if (cInfo == null)
+                        {
+                            if (AD_Client_ID > 0)
+                            {
+                                cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                            }
+                            else
+                            {
+                                cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                            }
+                        }
+
+                        // Get file information
+                        FileInfo fInfo = new FileInfo(filePath + "\\" + folderKey + "\\" + fileName);
+                        //byte[] bytes = System.IO.File.ReadAllBytes(filePath + "\\" + folderKey + "\\" + fileName);
+
+                        string resURI = AzureBlobStorage.UploadFile(fInfo.FullName);
+
+                        // Add resURI to attachment table
+                        MAttachmentReference attRef = new MAttachmentReference(GetCtx(), 0, Get_Trx());
+
+                        attRef.SetAD_AttachmentLine_ID(AD_AttachmentLine_ID);
+                        attRef.SetAD_AttachmentRef(resURI);
+                        if (!attRef.Save(Get_Trx()))
+                        {
+                            log.Severe("MAttachmentReference not saved " + VLogger.RetrieveError().Name);
+                            return false;
+                        }
+
+                        return true;
+                    }
+                    catch (Exception e)
+                    {
+                        log.Severe("AzureBlobStorage Location->" + e.Message);
+                        error.Append(e.Message);
+                        if (!Force)
+                        {
+                            return false;
+                        }
+                    }
+                    finally
+                    {
+                        CleanUp(filePath + "\\" + folderKey, filePath + "\\" + folderKey + "\\" + fileName, filePath + "\\" + fileName, null);
+                    }
+                    return true;
+                }
+
 
                 Directory.CreateDirectory(zipinput);
 
@@ -1891,6 +1948,41 @@ namespace VAdvantage.Model
                             string savedFile = Path.Combine(filePath, "TempDownload", folder, Util.GetValueOfString(ds.Tables[0].Rows[0]["FileName"]));
 
                             using (FileStream fs = new FileStream(savedFile, FileMode.Create, FileAccess.Write))
+                            {
+                                fs.Write(byteData, 0, byteData.Length);
+                            }
+                            return folder;
+                        }
+                        return "";
+                    }
+                    else if(fileLocation == X_AD_Attachment.FILELOCATION_AzureBlobStorage)
+                    {
+                        // Get file from Azure Blob container and save it in temp folder
+
+                        // Create client info object
+                        MClientInfo cInfo = null;
+                        if (AD_Client_ID > 0)
+                        {
+                            cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                        }
+                        else
+                        {
+                            cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                        }
+
+                        string documentURI = GetDocumentURI(AD_Attachment_ID);
+
+                        if (!string.IsNullOrEmpty(documentURI))
+                        {
+                            string fileName = Util.GetValueOfString(ds.Tables[0].Rows[0]["FileName"]);
+
+                            string downloadFullPath = Path.Combine(filePath, "TempDownload", folder, fileName);
+
+                            string resFile = AzureBlobStorage.DownloadFile(documentURI, downloadFullPath, fileName);
+
+                            byte[] byteData = Convert.FromBase64String(resFile);
+
+                            using (FileStream fs = new FileStream(downloadFullPath, FileMode.Create, FileAccess.Write))
                             {
                                 fs.Write(byteData, 0, byteData.Length);
                             }
