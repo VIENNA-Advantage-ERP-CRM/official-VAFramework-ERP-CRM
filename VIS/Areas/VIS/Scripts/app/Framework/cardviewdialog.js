@@ -1477,51 +1477,53 @@
         }
 
         function SaveChanges(e) {
-            IsBusy(true);
-            window.setTimeout(function () {
-                var cvConditionValue = "";
-                var cvConditionText = "";
-                strConditionArray = [];
-                var queryValue = "";
-                for (i = 0; i < cardviewCondition.length; i++) {
-                    cvConditionValue = "";
-                    cvConditionText = "";
-                    for (j = 0; j < cardviewCondition[i].Condition.length; j++) {
-                        if (j == 0) {
-                            cvConditionValue += "@" + cardviewCondition[i].Condition[j].ColName + "@" + cardviewCondition[i].Condition[j].Operator + cardviewCondition[i].Condition[j].QueryValue;
-                            cvConditionText += "@" + cardviewCondition[i].Condition[j].ColHeader + "@" + cardviewCondition[i].Condition[j].Operator + cardviewCondition[i].Condition[j].QueryText;
+            if (isNewRecord || isEdit) {
+                IsBusy(true);
+                window.setTimeout(function () {
+                    var cvConditionValue = "";
+                    var cvConditionText = "";
+                    strConditionArray = [];
+                    var queryValue = "";
+                    for (i = 0; i < cardviewCondition.length; i++) {
+                        cvConditionValue = "";
+                        cvConditionText = "";
+                        for (j = 0; j < cardviewCondition[i].Condition.length; j++) {
+                            if (j == 0) {
+                                cvConditionValue += "@" + cardviewCondition[i].Condition[j].ColName + "@" + cardviewCondition[i].Condition[j].Operator + cardviewCondition[i].Condition[j].QueryValue;
+                                cvConditionText += "@" + cardviewCondition[i].Condition[j].ColHeader + "@" + cardviewCondition[i].Condition[j].Operator + cardviewCondition[i].Condition[j].QueryText;
+                            }
+                            else {
+                                cvConditionValue += " & " + "@" + cardviewCondition[i].Condition[j].ColName + "@" + cardviewCondition[i].Condition[j].Operator + cardviewCondition[i].Condition[j].QueryValue;
+                                cvConditionText += " & " + "@" + cardviewCondition[i].Condition[j].ColHeader + "@" + cardviewCondition[i].Condition[j].Operator + cardviewCondition[i].Condition[j].QueryText
+                            }
                         }
-                        else {
-                            cvConditionValue += " & " + "@" + cardviewCondition[i].Condition[j].ColName + "@" + cardviewCondition[i].Condition[j].Operator + cardviewCondition[i].Condition[j].QueryValue;
-                            cvConditionText += " & " + "@" + cardviewCondition[i].Condition[j].ColHeader + "@" + cardviewCondition[i].Condition[j].Operator + cardviewCondition[i].Condition[j].QueryText
-                        }
+                        strConditionArray.push({ "Color": cardviewCondition[i].Color.toString(), "ConditionValue": cvConditionValue, "ConditionText": cvConditionText })
                     }
-                    strConditionArray.push({ "Color": cardviewCondition[i].Color.toString(), "ConditionValue": cvConditionValue, "ConditionText": cvConditionText })
-                }
 
 
-                if (isNewRecord) {
-                    if (txtCardViewName.val() == "") {
-                        VIS.ADialog.error("FillMandatory", true, "Name");
+                    if (isNewRecord) {
+                        if (txtCardViewName.val() == "") {
+                            VIS.ADialog.error("FillMandatory", true, "Name");
+                            IsBusy(false);
+                            return false;
+                        }
+
+                    }
+                    else if (!isNewRecord && (AD_CardView_ID < 1 && VIS.MRole.isAdministrator)) {
+                        VIS.ADialog.error("ClickNew", true, "");
                         IsBusy(false);
                         return false;
                     }
 
-                }
-                else if (!isNewRecord && (AD_CardView_ID < 1 && VIS.MRole.isAdministrator)) {
-                    VIS.ADialog.error("ClickNew", true, "");
-                    IsBusy(false);
-                    return false;
-                }
+                    var len = ulCardViewColumnField.children().length;
+                    if (len.length <= 0)
+                        return false;
 
-                var len = ulCardViewColumnField.children().length;
-                if (len.length <= 0)
-                    return false;
-
-                SaveCardViewColumn(cardViewColArray);
-                e.stopPropagation();
-                e.preventDefault();
-            }, 50);
+                    SaveCardViewColumn(cardViewColArray);
+                    e.stopPropagation();
+                    e.preventDefault();
+                }, 50);
+            }
         };
 
 
