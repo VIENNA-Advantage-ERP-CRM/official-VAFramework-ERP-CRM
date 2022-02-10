@@ -3738,6 +3738,13 @@ namespace VAdvantage.Model
                 }
                 else	//	Set Product Price
                 {
+                    //VIS0060: Quantity cannot be greater than Asset Quantity in case of AR Invoice.
+                    if (GetA_Asset_ID() > 0 && Env.IsModuleInstalled("VAFAM_") && Get_ColumnIndex("VAFAM_Quantity") >= 0 && GetQtyInvoiced() > GetVAFAM_Quantity())
+                    {
+                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "QtyCanNotbeGreaterThanAssetQty"));
+                        return false;
+                    }
+
                     if (!_priceSet
                         && Env.ZERO.CompareTo(GetPriceActual()) == 0
                         && Env.ZERO.CompareTo(GetPriceList()) == 0)
@@ -3895,6 +3902,12 @@ namespace VAdvantage.Model
                         dep = decimal.Multiply(dep, GetQtyEntered());
                         wdv = decimal.Multiply(grv, GetQtyEntered());
                         profit = decimal.Subtract(GetLineNetAmt(), wdv);
+
+                        // Set Asset Quantity on Invoice Line from Asset.
+                        if (Get_ColumnIndex("VAFAM_Quantity") >= 0)
+                        {
+                            Set_Value("VAFAM_Quantity", astQty);
+                        }
 
                         Set_Value("VAFAM_SLMDepreciation", decimal.Round(dep, priceListPrcision, MidpointRounding.AwayFromZero));
                         Set_Value("VAFAM_AssetGrossValue", decimal.Round(grv, priceListPrcision, MidpointRounding.AwayFromZero));
