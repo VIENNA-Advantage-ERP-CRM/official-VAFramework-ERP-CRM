@@ -1082,22 +1082,8 @@ namespace VAdvantage.Model
             // Check if Product_ID is non zero then only create the object
             if (GetM_Product_ID() > 0)
             {
-                _Product = new MProduct(GetCtx(), GetM_Product_ID(), Get_TrxName());
-                //VA230:Check IsAssetRelated column exists or not
-                if (Get_ColumnIndex("VAFAM_IsAssetRelated") >= 0)
-                {
-                    //Execute when saving new record or product value get changed
-                    if (newRecord || Is_ValueChanged("M_Product_ID"))
-                    {
-                        //Set VAFAM_IsAssetRelated value based on product category if linked then true else false
-                        SetVAFAM_IsAssetRelated(MProduct.Get(GetCtx(), GetM_Product_ID()).IsCreateAsset());
-                    }
-                }
-            }
-            else
-            {
-                SetVAFAM_IsAssetRelated(false);
-            }
+                _Product = new MProduct(GetCtx(), GetM_Product_ID(), Get_TrxName());                
+            }            
 
             if (_Product != null && GetC_UOM_ID() != _Product.GetC_UOM_ID())
             {
@@ -1255,8 +1241,9 @@ namespace VAdvantage.Model
                         return false;
                     }
                 }
-                //VA230:Qty Entered cannot be greater than asset quantity in case of shipment only
-                if (GetMovementQty() > GetVAFAM_Quantity() && GetA_Asset_ID() > 0 && inO.IsSOTrx())
+
+                //VA230: Quantity cannot be greater than Asset Quantity in case of shipment.
+                if (inO.IsSOTrx() && GetA_Asset_ID() > 0 && Env.IsModuleInstalled("VAFAM_") && Get_ColumnIndex("VAFAM_Quantity") >= 0 && GetMovementQty() > GetVAFAM_Quantity())
                 {
                     log.SaveError("Error", Msg.GetMsg(GetCtx(), "QtyCanNotbeGreaterThanAssetQty"));
                     return false;
