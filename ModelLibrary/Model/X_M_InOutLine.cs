@@ -803,11 +803,13 @@ namespace VAdvantage.Model
 @param VAFAM_AssetValue Asset Value */
         public void SetVAFAM_AssetValue(Decimal? VAFAM_AssetValue) { Set_Value("VAFAM_AssetValue", (Decimal?)VAFAM_AssetValue); }/** Get Asset Value.
 @return Asset Value */
-        public Decimal GetVAFAM_AssetValue() { Object bd = Get_Value("VAFAM_AssetValue"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }/** Set Asset Related.
-@param VAFAM_IsAssetRelated This Checbox represents that this invoice line expense is related to an asset. If this checkbox is set as true then  Captial/ Expense  and Asset  fields should appear on screen. */
-        public void SetVAFAM_IsAssetRelated(Boolean VAFAM_IsAssetRelated) { Set_Value("VAFAM_IsAssetRelated", VAFAM_IsAssetRelated); }/** Get Asset Related.
-@return This Checbox represents that this invoice line expense is related to an asset. If this checkbox is set as true then  Captial/ Expense  and Asset  fields should appear on screen. */
-        public Boolean IsVAFAM_IsAssetRelated() { Object oo = Get_Value("VAFAM_IsAssetRelated"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }/** Set Asset Quantity.
+        public Decimal GetVAFAM_AssetValue() { Object bd = Get_Value("VAFAM_AssetValue"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
+        /** Set Depreciation Amount.
+@param VAFAM_DepAmount The amount to be depreciated from the Asset. */
+        public void SetVAFAM_DepAmount(Decimal? VAFAM_DepAmount) { Set_Value("VAFAM_DepAmount", (Decimal?)VAFAM_DepAmount); }/** Get Depreciation Amount.
+@return The amount to be depreciated from the Asset. */
+        public Decimal GetVAFAM_DepAmount() { Object bd = Get_Value("VAFAM_DepAmount"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
+        /** Set Asset Quantity.
 @param VAFAM_Quantity Asset Quantity */
         public void SetVAFAM_Quantity(Decimal? VAFAM_Quantity) { Set_Value("VAFAM_Quantity", (Decimal?)VAFAM_Quantity); }/** Get Asset Quantity.
 @return Asset Quantity */
