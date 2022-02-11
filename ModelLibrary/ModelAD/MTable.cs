@@ -78,6 +78,7 @@ namespace VAdvantage.Model
 
 
         private MColumn[] m_columns = null;
+        private bool isHasKeyColumn = false;
         /**
 	 * 	Load Constructor
 	 *	@param ctx context
@@ -251,7 +252,10 @@ namespace VAdvantage.Model
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow dr = ds.Tables[0].Rows[i];
-                    list.Add(new MColumn(GetCtx(), dr, Get_TrxName()));
+                    MColumn mCol = new MColumn(GetCtx(), dr, Get_TrxName());
+                    list.Add(mCol);
+                    if (mCol.IsKey())
+                        isHasKeyColumn = true;
                 }
                 ds = null;
             }
@@ -650,7 +654,7 @@ namespace VAdvantage.Model
         public bool IsSingleKey()
         {
             String[] keys = GetKeyColumns();
-            return keys.Length == 1;
+            return keys.Length == 1 && isHasKeyColumn;
         }	//	isSingleKey
 
 
