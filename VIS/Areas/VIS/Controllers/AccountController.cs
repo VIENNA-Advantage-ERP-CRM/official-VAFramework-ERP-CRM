@@ -379,6 +379,7 @@ namespace VIS.Controllers
 
 
             FormsAuthentication.SignOut();
+            Session.Timeout = 20;
             //if (Session != null)
             //    Session.Abandon();
             return RedirectToAction("Index", "Home");
