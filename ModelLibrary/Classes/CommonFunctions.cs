@@ -1087,7 +1087,7 @@ namespace VAdvantage.Classes
 
                     if (!string.IsNullOrEmpty(columnName))
                     {
-                        sql = DBFunctionCollection.GetCardCount(columnName, SQLWhereCond);// "SELECT " + columnName + ", COUNT(NVL(" + columnName + ",0)) AS GroupCount " + SQLWhereCond + " GROUP BY " + columnName;
+                        sql = "SELECT " + columnName + ", COUNT(NVL(" + columnName + ",'0')) AS GroupCount " + SQLWhereCond + " GROUP BY " + columnName;
 
 
                         dr = DB.ExecuteReader(sql);
