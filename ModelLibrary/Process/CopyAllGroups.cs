@@ -20,15 +20,17 @@ namespace VAdvantage.Process
         }
         protected override String DoIt()
         {
+            IDataReader Idr = null;
             try
             {
-                MFinRptConfig Report = new MFinRptConfig(GetCtx(), _C_FinRptConfig_ID, null );
+                MFinRptConfig Report = new MFinRptConfig(GetCtx(), _C_FinRptConfig_ID, null);
                 _C_AccountGroup_ID = Report.GetC_AccountGroupBatch_ID();
-                String Query = "Select * from c_accountgroup where c_accountgroupbatch_id=" + _C_AccountGroup_ID ;
+                String Query = "Select * from c_accountgroup where c_accountgroupbatch_id=" + _C_AccountGroup_ID;
                 //String _sql="Select * from c_accountgroup g inner join C_AccountSubGroup s on (g.c_accountgroup_ID=s.c_accountgroup_ID AND C_AccountBatchGroup_ID="+ _C_AccountGroup_ID +" ) ";
                 DataTable Dt = new DataTable();
-                IDataReader Idr = DB.ExecuteReader(Query);
+                Idr = DB.ExecuteReader(Query);
                 Dt.Load(Idr);
+                Idr.Close();
                 if (Dt.Rows.Count > 0)
                 {
                     foreach (DataRow dr in Dt.Rows)
@@ -45,6 +47,7 @@ namespace VAdvantage.Process
                             DataTable DT1 = new DataTable();
                             IDataReader Idr1 = DB.ExecuteReader(qry);
                             DT1.Load(Idr1);
+                            Idr1.Close();
                             foreach (DataRow dr1 in DT1.Rows)
                             {
                                 MFinRptAcctSubGroup AcctSubGroup = new MFinRptAcctSubGroup(GetCtx(), 0, null);
@@ -56,7 +59,7 @@ namespace VAdvantage.Process
                                 if (!AcctSubGroup.Save())
                                 {
                                     return GetRetrievedError(AcctSubGroup, "Lines not generated");
-                                   /// return Msg.GetMsg(GetCtx(), "Lines not generated");
+                                    /// return Msg.GetMsg(GetCtx(), "Lines not generated");
                                 }
                             }
                         }
@@ -70,6 +73,11 @@ namespace VAdvantage.Process
             }
             catch (Exception ex)
             {
+                if (Idr != null)
+                {
+                    Idr.Close();
+                    Idr = null;
+                }
                 return ex.Message;
             }
         }

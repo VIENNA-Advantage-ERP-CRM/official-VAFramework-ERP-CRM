@@ -132,6 +132,15 @@ namespace VAdvantage.Model
                         }	//	parents.size > 1
                     }	//	set Link column
                     mTab.SetLinkColumnName(null);	//	overwrites, if AD_Column_ID exists
+
+                    VAdvantage.Classes.CommonFunctions cFun = new VAdvantage.Classes.CommonFunctions();
+                    CardViewData card = cFun.GetCardViewDetails(mTabVO.GetCtx().GetAD_User_ID(), mTabVO.AD_Tab_ID, 0, mTabVO.GetCtx(),"",true);
+                    if (card != null)
+                    {
+                        //mTabVO.Cards.Add(card);
+                        mTabVO.DefaultCardID = card.AD_CardView_ID;
+                    }
+
                     //
                     _tabs.Add(mTab);
                 }

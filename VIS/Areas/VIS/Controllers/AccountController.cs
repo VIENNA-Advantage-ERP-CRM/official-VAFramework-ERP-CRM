@@ -45,9 +45,10 @@ namespace VIS.Controllers
                     roles = (List<KeyNamePair>)TempData.Peek("roles");
                     model.Login2Model = (Login2Model)TempData.Peek("Login2Model");
                     bool resetPwd = Util.GetValueOfBool(TempData.Peek("ResetPwd"));
-                    bool Is2FAEnabled = Util.GetValueOfBool(TempData.Peek("Is2FAEnabled"));
+                    string TwoFAMethod = Util.GetValueOfString(TempData.Peek("TwoFAMethod"));
                     model.Login1Model.AD_User_ID = Util.GetValueOfInt(TempData.Peek("AD_User_ID"));
                     model.Login1Model.QRFirstTime = Util.GetValueOfBool(TempData.Peek("QRFirstTime"));
+                    model.Login1Model.NoLoginSet = Util.GetValueOfBool(TempData.Peek("NoLoginSet"));
                     model.Login1Model.TokenKey2FA = Util.GetValueOfString(TempData.Peek("TokenKey2FA"));
                     model.Login1Model.QRCodeURL = Util.GetValueOfString(TempData.Peek("QRCodeURL"));
 
@@ -78,9 +79,9 @@ namespace VIS.Controllers
                         {
                             proceedToLogin2 = 2;
                         }
-                        if (Is2FAEnabled)
+                        if (TwoFAMethod != "" && !model.Login1Model.NoLoginSet)
                         {
-                            model.Login1Model.Is2FAEnabled = Is2FAEnabled;
+                            model.Login1Model.TwoFAMethod = TwoFAMethod;
                             model.Login1Model.ResetPwd = false;
                             TempData.Remove("ResetPwd");
                             return Json(new { step2 = false, redirect = returnUrl, ctx = model.Login1Model });
@@ -92,24 +93,33 @@ namespace VIS.Controllers
                         proceedToLogin2 = 1;
                     }
 
-                    if (Is2FAEnabled && proceedToLogin2 != 1)
+                    // VIS0008 Changes done to handle VA 2FA from VA mobile app
+                    if (TwoFAMethod != "" && proceedToLogin2 != 1)
                     {
-                        if (model.Login1Model.Login1DataOTP != null)
+                        if (!model.Login1Model.SkipNow)
                         {
-                            var otp = model.Login1Model.OTP2FA;
-                            model.Login1Model = JsonHelper.Deserialize(model.Login1Model.Login1DataOTP, typeof(Login1Model)) as Login1Model;
-                            model.Login1Model.OTP2FA = otp;
-                            bool valOTP = LoginHelper.Validate2FAOTP(model);
-                            if (valOTP)
+                            if (model.Login1Model.Login1DataOTP != null && !model.Login1Model.ResendOTP)
                             {
-                                proceedToLogin2 = 2;
-                                model.Login1Model.Is2FAEnabled = false;
+                                var otp = model.Login1Model.OTP2FA;
+                                model.Login1Model = JsonHelper.Deserialize(model.Login1Model.Login1DataOTP, typeof(Login1Model)) as Login1Model;
+                                model.Login1Model.OTP2FA = otp;
+                                bool valOTP = LoginHelper.Validate2FAOTP(model, TwoFAMethod);
+                                if (valOTP)
+                                {
+                                    proceedToLogin2 = 2;
+                                    model.Login1Model.TwoFAMethod = "";
+                                }
+                                else
+                                {
+                                    ModelState.AddModelError("", "WrongOTP");
+                                    return Json(new { errors = GetErrorsFromModelState() });
+                                }
                             }
-                            else
-                            {
-                                ModelState.AddModelError("", "WrongOTP");
-                                return Json(new { errors = GetErrorsFromModelState() });
-                            }
+                        }
+                        else
+                        {
+                            proceedToLogin2 = 2;
+                            model.Login1Model.TwoFAMethod = "";
                         }
                     }
 
@@ -125,13 +135,17 @@ namespace VIS.Controllers
                         TempData["roles"] = roles;
                         TempData["Login2Model"] = model.Login2Model;
                         TempData["ResetPwd"] = model.Login1Model.ResetPwd;
-                        TempData["Is2FAEnabled"] = model.Login1Model.Is2FAEnabled;
+                        TempData["TwoFAMethod"] = model.Login1Model.TwoFAMethod;
                         TempData["AD_User_ID"] = model.Login1Model.AD_User_ID;
                         TempData["QRFirstTime"] = model.Login1Model.QRFirstTime;
+                        TempData["NoLoginSet"] = model.Login1Model.NoLoginSet;
                         TempData["TokenKey2FA"] = model.Login1Model.TokenKey2FA;
                         TempData["QRCodeURL"] = model.Login1Model.QRCodeURL;
+                        TempData["TwoFAMethod"] = model.Login1Model.TwoFAMethod;
                         //model.Login1Model.Password = null;
-                        if (model.Login1Model.ResetPwd || model.Login1Model.Is2FAEnabled)
+                        //if (!model.Login1Model.NoLoginSet && (model.Login1Model.ResetPwd || Util.GetValueOfString(model.Login1Model.TwoFAMethod) != ""))
+                        if (model.Login1Model.ResetPwd
+                            || (Util.GetValueOfString(model.Login1Model.TwoFAMethod) != "" && !model.Login1Model.NoLoginSet))
                         {
                             return Json(new { step2 = false, redirect = returnUrl, ctx = model.Login1Model });
                         }
@@ -180,14 +194,14 @@ namespace VIS.Controllers
                     saveSetting = true;
                 }
 
-                
+
 
 
                 if (!string.IsNullOrEmpty(model.Login1Model.UserValue))
                 {
                     if (Response != null)
                     {
-                        SetAuthCookie(model,  Response);
+                        SetAuthCookie(model, Response);
                     }
 
 
@@ -229,7 +243,7 @@ namespace VIS.Controllers
         /// </summary>
         /// <param name="model">login model</param>
         /// <param name="response">http response</param>
-        internal void SetAuthCookie(LoginModel model, HttpResponseBase  response)
+        internal void SetAuthCookie(LoginModel model, HttpResponseBase response)
         {
             LoginContext lCtx = LoginHelper.GetLoginContext(model);
             response.Cookies.Clear();

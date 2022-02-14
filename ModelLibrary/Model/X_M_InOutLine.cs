@@ -799,7 +799,21 @@ namespace VAdvantage.Model
                 Set_Value("ReversalDoc_ID", ReversalDoc_ID);
         }
         /** Get Reversal Document.@return Reversal Document */
-        public int GetReversalDoc_ID() { Object ii = Get_Value("ReversalDoc_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetReversalDoc_ID() { Object ii = Get_Value("ReversalDoc_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Asset Value.
+@param VAFAM_AssetValue Asset Value */
+        public void SetVAFAM_AssetValue(Decimal? VAFAM_AssetValue) { Set_Value("VAFAM_AssetValue", (Decimal?)VAFAM_AssetValue); }/** Get Asset Value.
+@return Asset Value */
+        public Decimal GetVAFAM_AssetValue() { Object bd = Get_Value("VAFAM_AssetValue"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
+        /** Set Depreciation Amount.
+@param VAFAM_DepAmount The amount to be depreciated from the Asset. */
+        public void SetVAFAM_DepAmount(Decimal? VAFAM_DepAmount) { Set_Value("VAFAM_DepAmount", (Decimal?)VAFAM_DepAmount); }/** Get Depreciation Amount.
+@return The amount to be depreciated from the Asset. */
+        public Decimal GetVAFAM_DepAmount() { Object bd = Get_Value("VAFAM_DepAmount"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
+        /** Set Asset Quantity.
+@param VAFAM_Quantity Asset Quantity */
+        public void SetVAFAM_Quantity(Decimal? VAFAM_Quantity) { Set_Value("VAFAM_Quantity", (Decimal?)VAFAM_Quantity); }/** Get Asset Quantity.
+@return Asset Quantity */
+        public Decimal GetVAFAM_Quantity() { Object bd = Get_Value("VAFAM_Quantity"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
     }
 
 }

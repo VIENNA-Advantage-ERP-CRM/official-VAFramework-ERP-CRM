@@ -82,8 +82,9 @@ namespace VAdvantage.Process
                    dt.GetDocumentTypeforReleases(), false, true, Get_TrxName(), false);
 
                 rposo.SetPOReference(Util.GetValueOfString(from.GetDocumentNo()));
-                rposo.Set_Value("IsBlanketTrx", false);
-
+                rposo.Set_Value("IsBlanketTrx", false);                
+                //1052-- set blanketordertype so that display logic could work if order is created from process
+                rposo.Set_Value("BlanketOrderType","BO");              
                 // JID_0890: On Blanket Sales/Purchase Order, Create Release Purchase/Sales Order Process was not working.
                 //rposo.SetOrig_Order_ID(order_ID);
                 rposo.SetC_Order_Blanket(GetRecord_ID()); //Set Blanket Order ID to release SO/PO

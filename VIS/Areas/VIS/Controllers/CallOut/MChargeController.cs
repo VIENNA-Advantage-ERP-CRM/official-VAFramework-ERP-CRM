@@ -30,6 +30,25 @@ namespace VIS.Controllers
            
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
-     
+
+        /// <summary>
+        /// Get charge details 
+        /// </summary>
+        /// <param name="fields">fields</param>
+        /// <returns>Data in JSON Format</returns>
+        public JsonResult GetChargeDetails(string fields)
+        {
+
+            string retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
+                MChargeModel objChargeModel = new MChargeModel();
+                retJSON = JsonConvert.SerializeObject(objChargeModel.GetChargeDetails(ctx, fields));
+            }
+
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

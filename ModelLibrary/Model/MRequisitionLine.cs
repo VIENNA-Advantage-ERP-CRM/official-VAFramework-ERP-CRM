@@ -439,6 +439,7 @@ namespace VAdvantage.Model
                 {
                     SetLineNetAmt();
                 }
+                
             }
             catch
             {

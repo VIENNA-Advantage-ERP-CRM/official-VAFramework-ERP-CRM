@@ -1102,8 +1102,8 @@ namespace VAdvantage.Model
                 if (!isRev && GetC_BPartner_ID() != 0)
                 {
                     MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_Trx());
-
-                    Decimal payAmt = Decimal.Add(Decimal.Add(GetPayAmt(false), GetDiscountAmt()), GetWriteOffAmt());
+                    //VA230:Fixed open balance issue in case of AP Invoice
+                    Decimal payAmt = Decimal.Add(Decimal.Add(GetPayAmt(false), GetDiscountAmt(false)), GetWriteOffAmt(false));
                     // If Amount is ZERO then no need to check currency conversion
                     if (!payAmt.Equals(Env.ZERO))
                     {
@@ -2540,6 +2540,30 @@ namespace VAdvantage.Model
                 return base.GetPayAmt();
             return Decimal.Negate(base.GetPayAmt());
         }
+        /// <summary>
+        /// Get Discount amount
+        /// absolute param used to override (i.e. negative if payment)
+        /// </summary>
+        /// <param name="absolute">true/false</param>
+        /// <returns>DiscountAmt</returns>
+        public Decimal GetDiscountAmt(bool absolute)
+        {
+            if (IsReceipt())
+                return base.GetDiscountAmt();
+            return Decimal.Negate(base.GetDiscountAmt());
+        }
+        /// <summary>
+        /// Get WriteOffAmt
+        /// absolute param used to override (i.e. negative if payment)
+        /// </summary>
+        /// <param name="absolute">true/false</param>
+        /// <returns>WriteOffAmt</returns>
+        public Decimal GetWriteOffAmt(bool absolute)
+        {
+            if (IsReceipt())
+                return base.GetWriteOffAmt();
+            return Decimal.Negate(base.GetWriteOffAmt());
+        }
 
         /**
          * 	Get Pay Amt in cents
@@ -2680,7 +2704,7 @@ namespace VAdvantage.Model
                 {
                     MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_Trx());
 
-                    Decimal payAmt = Decimal.Add(Decimal.Add(GetPayAmt(false), GetDiscountAmt()), GetWriteOffAmt());
+                    Decimal payAmt = Decimal.Add(Decimal.Add(GetPayAmt(false), GetDiscountAmt(false)), GetWriteOffAmt(false));
                     // If Amount is ZERO then no need to check currency conversion
                     if (!payAmt.Equals(Env.ZERO))
                     {
@@ -2967,7 +2991,7 @@ namespace VAdvantage.Model
                 //}
 
                 Decimal? newCreditAmt = 0;
-                Decimal payAmt = Decimal.Add(Decimal.Add(GetPayAmt(false), GetDiscountAmt()), GetWriteOffAmt());
+                Decimal payAmt = Decimal.Add(Decimal.Add(GetPayAmt(false), GetDiscountAmt(false)), GetWriteOffAmt(false));
                 // If Amount is ZERO then no need to check currency conversion
                 if (!payAmt.Equals(Env.ZERO))
                 {

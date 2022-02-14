@@ -186,6 +186,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     sLine.SetQtyEntered(Decimal.Negate(sLine.GetQtyEntered()));//.negate());
                     sLine.SetMovementQty(Decimal.Negate(sLine.GetMovementQty()));//.negate());
                 }
+                //190 - Get Print description and set
+                if (sLine.Get_ColumnIndex("PrintDescription") >= 0 && invoiceLine.Get_ColumnIndex("PrintDescription") >= 0)
+                    sLine.Set_Value("PrintDescription", invoiceLine.Get_Value("PrintDescription"));
                 if (!sLine.Save())
                 {
                     ship.Get_Trx().Rollback();

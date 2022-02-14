@@ -2230,7 +2230,7 @@ namespace VAdvantage.Model
                                         @", M_InOut.DateAcct, C_Order.C_ConversionType_ID, M_InOut.AD_Client_ID, M_InOut.AD_Org_ID) , 0) as PriceEntered
                                         FROM M_InOutLine 
                                         INNER JOIN M_InOut ON M_InOut.M_InOut_ID = M_InOutLine.M_InOut_ID
-                                        INNER JOIN M_Storage ON(M_InOutLine.M_Locator_ID = M_Storage.M_Locator_ID
+                                        LEFT JOIN M_Storage ON(M_InOutLine.M_Locator_ID = M_Storage.M_Locator_ID
                                         AND M_InOutLine.M_Product_ID = M_Storage.M_Product_ID
                                         AND NVL(M_InOutLine.M_AttributeSetInstance_ID, 0) = NVL(M_Storage.M_AttributeSetInstance_ID, 0))
                                         LEFT JOIN C_OrderLine ON M_InOutLine.C_OrderLine_ID = C_OrderLine.C_OrderLine_ID

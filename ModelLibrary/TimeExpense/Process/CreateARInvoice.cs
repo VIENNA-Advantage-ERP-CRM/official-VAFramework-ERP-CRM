@@ -269,6 +269,11 @@ namespace VAdvantage.Process
                 }
                 catch
                 {
+                    if (idr != null)
+                    {
+                        idr.Close();
+                        idr = null;
+                    }
                     return Msg.GetMsg(GetCtx(), "ProcessTerminated");
                 }
             }

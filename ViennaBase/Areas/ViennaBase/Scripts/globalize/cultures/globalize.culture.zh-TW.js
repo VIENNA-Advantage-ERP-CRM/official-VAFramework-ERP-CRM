@@ -153,7 +153,11 @@ Globalize.addCultureInfo( "zh-TW", "default", {
         "EnterOTP": "輸入一次性密碼",
         "WrongOTP": "輸入的OTP錯誤",
         "ScanQRCode": "掃描與谷歌身份驗證碼",
-        "EnterVerCode": "輸入您的移動應用程序生成的OTP"
+		"EnterVerCode": "輸入您的移動應用程序生成的OTP",
+		"EnterVAVerCode": "输入在您注册的手机上收到的 OTP",
+		"SkipThisTime": "这次跳过",
+		"ResendOTP": "重新发送动态密码",
+		"CapsLockOn": "大寫鎖定已開啟",
 	}
 });
 

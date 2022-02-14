@@ -58,9 +58,9 @@ namespace VAdvantage.Model
                     _cache.Add(key, retValue);
                 }
             }
-            catch 
+            catch
             {
-               
+
             }
             return retValue;
         }
@@ -247,6 +247,48 @@ namespace VAdvantage.Model
                 _precision = c.GetStdPrecision();
             }
             return (int)_precision;
+        }
+
+        /// <summary>
+        /// Get PriceList VersionId
+        /// Author:VA230
+        /// </summary>
+        /// <param name="priceListId">PriceList Id</param>
+        /// <param name="isEnforcePriceLimit">EnforcePriceLimit</param>
+        /// <returns>PriceList VersionId</returns>
+        public static int GetPriceListVersionId(int priceListId, out bool isEnforcePriceLimit)
+        {
+            isEnforcePriceLimit = false;
+            int priceListVersionId = 0;
+            //Get latest pricelist versionId based on validfrom date
+            string sql = @"WITH CTE AS (
+                            SELECT PL.EnforcePriceLimit,PV.M_PriceList_Version_ID,ROW_NUMBER() OVER(ORDER BY PV.ValidFrom DESC) AS ROWNO 
+                            FROM M_PriceList PL
+                            LEFT JOIN M_PriceList_Version PV ON PV.M_PriceList_ID=PL.M_PriceList_ID AND PV.IsActive='Y'
+                            WHERE PL.M_PriceList_ID=" + priceListId + @"
+                            )
+                            SELECT * FROM CTE WHERE ROWNO=1";
+            DataSet ds = DB.ExecuteDataset(sql);
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                isEnforcePriceLimit = Util.GetValueOfBool(Util.GetValueOfString(ds.Tables[0].Rows[0]["EnforcePriceLimit"]) == "Y" ? true : false);
+                priceListVersionId = Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_PriceList_Version_ID"]);
+            }
+            return priceListVersionId;
+        }
+        /// <summary>
+        /// Get product price data
+        /// Author:VA230
+        /// </summary>
+        /// <param name="priceListVersionId">PriceList VersionId</param>
+        /// <param name="productIds">comma seperated product ids</param>
+        /// <returns>Product Price Dataset</returns>
+        public static DataSet GetPriceListVersionProductPriceData(int priceListVersionId, string productIds)
+        {
+            string sql = @"SELECT PriceLimit,NVL(M_AttributeSetInstance_ID,0) AS M_AttributeSetInstance_ID,C_UOM_ID,M_Product_ID FROM M_ProductPrice PP 
+                            WHERE PP.IsActive='Y' AND PP.M_PriceList_Version_ID=" + priceListVersionId + " AND PP.M_Product_ID IN (" + productIds + ")";
+            DataSet ds = DB.ExecuteDataset(sql);
+            return ds;
         }
     }
 }

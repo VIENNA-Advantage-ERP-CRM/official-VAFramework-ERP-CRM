@@ -502,11 +502,10 @@ namespace VAdvantage.Model
             bool isSOTrx = IsSOTrx();
 
             DataTable dt = null;
-
+            IDataReader idr = null;
             try
             {
-
-                IDataReader idr = DataBase.DB.ExecuteReader(sql, null, null);
+                idr = DataBase.DB.ExecuteReader(sql, null, null);
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();
@@ -646,11 +645,19 @@ namespace VAdvantage.Model
                     }
                 }
             }
-            catch
+            catch (Exception e)
             {
-                //ShowMessage.Error("MOrder", null, "SetC_BPartner_ID");
+                log.Log(Level.SEVERE, "MOrder" + e.Message, e);
             }
-            finally { dt = null; }
+            finally
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                    idr = null;
+                }
+                dt = null;
+            }
         }
 
 
@@ -688,10 +695,11 @@ namespace VAdvantage.Model
 
             bool isSOTrx = IsSOTrx();
             DataTable dt = null;
+            IDataReader idr = null;
             try
             {
 
-                IDataReader idr = DataBase.DB.ExecuteReader(sql, null, null);
+                idr = DataBase.DB.ExecuteReader(sql, null, null);
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();
@@ -795,12 +803,17 @@ namespace VAdvantage.Model
 
                 //dt.Dispose();
             }
-            catch
+            catch (Exception e)
             {
-                //ShowMessage.Error("MOrder", null, "SetC_BPartner_ID-CallOut");
+                log.Log(Level.SEVERE, "MOrder" + sql, e);
             }
             finally
             {
+                if (idr != null)
+                {
+                    idr.Close();
+                    idr = null;
+                }
                 dt = null;
             }
         }
@@ -943,11 +956,11 @@ namespace VAdvantage.Model
                 + "LEFT OUTER JOIN AD_Sequence s ON (d.DocNoSequence_ID=s.AD_Sequence_ID) "
                 + "WHERE C_DocType_ID=";	//	#1
             DataTable dt = null;
+            IDataReader idr = null;
             try
             {
                 int AD_Sequence_ID = 0;
 
-                IDataReader idr = null;
                 //	Get old AD_SeqNo for comparison
                 if (!newDocNo && oldC_DocType_ID != 0)
                 {
@@ -1118,6 +1131,11 @@ namespace VAdvantage.Model
             }
             finally
             {
+                if (idr != null)
+                {
+                    idr.Close();
+                    idr = null;
+                }
                 dt = null;
 
             }
@@ -1543,10 +1561,10 @@ namespace VAdvantage.Model
 
             //	Use newest price list - may not be future
             DataTable dt = null;
+            IDataReader idr = null;
             try
             {
-
-                IDataReader idr = DataBase.DB.ExecuteReader(sql, null, null);
+                idr = DataBase.DB.ExecuteReader(sql, null, null);
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();
@@ -1567,12 +1585,17 @@ namespace VAdvantage.Model
                 }
 
             }
-            catch
+            catch (Exception e)
             {
-                //ShowMessage.Error("MOrder", null, "SetM_PriceList_ID-CallOut");
+                log.Log(Level.SEVERE, "MOrder" + sql, e);
             }
             finally
             {
+                if (idr != null)
+                {
+                    idr.Close();
+                    idr = null;
+                }
                 dt = null;
             }
         }
@@ -1983,9 +2006,10 @@ namespace VAdvantage.Model
             List<MOrderTax> list = new List<MOrderTax>();
             String sql = "SELECT * FROM C_OrderTax WHERE C_Order_ID=" + GetC_Order_ID();
             DataTable dt = null;
+            IDataReader idr = null;
             try
             {
-                IDataReader idr = DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
+                idr = DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
                 dt = new DataTable();
                 dt.Load(idr);
 
@@ -2002,6 +2026,11 @@ namespace VAdvantage.Model
             }
             finally
             {
+                if (idr != null)
+                {
+                    idr.Close();
+                    idr = null;
+                }
                 dt = null;
             }
             _taxes = new MOrderTax[list.Count];
@@ -2019,9 +2048,10 @@ namespace VAdvantage.Model
             List<MInvoice> list = new List<MInvoice>();
             String sql = "SELECT * FROM C_Invoice WHERE C_Order_ID=" + GetC_Order_ID() + " ORDER BY Created DESC";
             DataTable dt = null;
+            IDataReader idr = null;
             try
             {
-                IDataReader idr = DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
+                idr = DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();
@@ -2035,7 +2065,15 @@ namespace VAdvantage.Model
             {
                 log.Log(Level.SEVERE, sql, e);
             }
-            finally { dt = null; }
+            finally
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                    idr = null;
+                }
+                dt = null;
+            }
 
             MInvoice[] retValue = new MInvoice[list.Count];
             retValue = list.ToArray();
@@ -2052,9 +2090,10 @@ namespace VAdvantage.Model
                 + "WHERE C_Order_ID=" + GetC_Order_ID() + " AND DocStatus IN ('CO','CL') "
                 + "ORDER BY Created DESC";
             DataTable dt = null;
+            IDataReader idr = null;
             try
             {
-                IDataReader idr = DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
+                idr = DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();
@@ -2068,7 +2107,15 @@ namespace VAdvantage.Model
             {
                 log.Log(Level.SEVERE, "getC_Invoice_ID", e);
             }
-            finally { dt = null; }
+            finally
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                    idr = null;
+                }
+                dt = null;
+            }
             return C_Invoice_ID;
         }
 
@@ -2082,9 +2129,10 @@ namespace VAdvantage.Model
             List<MInOut> list = new List<MInOut>();
             String sql = "SELECT * FROM M_InOut WHERE C_Order_ID=" + GetC_Order_ID() + " ORDER BY Created DESC";
             DataTable dt = null;
+            IDataReader idr = null;
             try
             {
-                IDataReader idr = DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
+                idr = DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();
@@ -2097,7 +2145,15 @@ namespace VAdvantage.Model
             {
                 log.Log(Level.SEVERE, sql, e);
             }
-            finally { dt = null; }
+            finally
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                    idr = null;
+                }
+                dt = null;
+            }
 
             MInOut[] retValue = new MInOut[list.Count];
             retValue = list.ToArray();
@@ -2112,9 +2168,10 @@ namespace VAdvantage.Model
             List<MOrder> list = new List<MOrder>();
             String sql = "SELECT * FROM C_Order WHERE Orig_Order_ID=" + GetC_Order_ID() + " ORDER BY Created DESC";
             DataTable dt = null;
+            IDataReader idr = null;
             try
             {
-                IDataReader idr = DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
+                idr = DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();
@@ -2127,7 +2184,15 @@ namespace VAdvantage.Model
             {
                 log.Log(Level.SEVERE, sql, e);
             }
-            finally { dt = null; }
+            finally
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                    idr = null;
+                }
+                dt = null;
+            }
 
 
             MOrder[] retValue = new MOrder[list.Count];
@@ -2146,11 +2211,12 @@ namespace VAdvantage.Model
                     + "(SELECT C_OrderLine_ID FROM C_OrderLine WHERE C_Order_ID=@C_Order_ID) "
                 + "ORDER BY M_InOutLine_ID";
             DataTable dt = null;
+            IDataReader idr = null;
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
                 param[0] = new SqlParameter("@C_Order_ID", GetC_Order_ID());
-                IDataReader idr = DataBase.DB.ExecuteReader(sql, param, Get_TrxName());
+                idr = DataBase.DB.ExecuteReader(sql, param, Get_TrxName());
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();
@@ -2159,12 +2225,20 @@ namespace VAdvantage.Model
                     list.Add(new MInOutLine(GetCtx(), dr, Get_TrxName()));
                 }
             }
-            catch
+            catch(Exception e)
             {
 
-                //ShowMessage.Error("MOrder", null, "GetShipmentLines");
+                log.Log(Level.SEVERE, "MOrder" + sql, e);
             }
-            finally { dt = null; }
+            finally
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                    idr = null;
+                }
+                dt = null;
+            }
 
             MInOutLine[] retValue = new MInOutLine[list.Count];
             retValue = list.ToArray();
@@ -2352,7 +2426,18 @@ namespace VAdvantage.Model
                     }
                 }
                 //End
-
+                if (!newRecord && Is_ValueChanged("C_DocTypeTarget_ID"))
+                {
+                    //1052--if doctype is changed from release order to another then blanket order line reference
+                    //should not be preset at order line if present order should not be updated  
+                    string sql = "SELECT COUNT(C_OrderLine_ID) FROM C_OrderLine WHERE C_Order_ID = " + GetC_Order_ID() + " AND IsActive = 'Y' " +
+                    "AND C_OrderLine_Blanket_ID IS NOT NULL ";
+                    if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
+                    {
+                        log.SaveWarning("pleaseDeleteLinesFirst", "");
+                        return false;
+                    }
+                }
                 //	No Partner Info - set Template
                 if (GetC_BPartner_ID() == 0)
                     SetBPartner(MBPartner.GetTemplate(GetCtx(), GetAD_Client_ID()));
@@ -4028,7 +4113,8 @@ namespace VAdvantage.Model
 
                         //Info.Append(" - @C_Invoice_ID@: ").Append(invoice.GetDocumentNo());
                         //Info.Append(" & @C_Invoice_ID@ No: ").Append(invoice.GetDocumentNo()).Append(" generated successfully");
-                        Info.Append(" & @C_Invoice_ID@ No: ").Append(invoice.GetDocumentNo());
+                        //(1052)correct process message
+                        Info.Append(Msg.GetMsg(GetCtx(), "InvNo")).Append(invoice.GetDocumentNo());
                         _processMsg += Info.ToString();
 
                         String msg = invoice.GetProcessMsg();
@@ -5453,6 +5539,11 @@ namespace VAdvantage.Model
                             ioLine.SetQtyEntered(Decimal.Multiply(lineCreatedQty, (Decimal.Divide(oLine.GetQtyEntered(), (oLine.GetQtyOrdered())))));
                         }
                         ioLine.SetM_AttributeSetInstance_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]));
+
+                        //190 - Get Print description and set
+                        if (ioLine.Get_ColumnIndex("PrintDescription") >= 0 && oLine.Get_ColumnIndex("PrintDescription") >= 0)
+                            ioLine.Set_Value("PrintDescription", oLine.Get_Value("PrintDescription"));
+
                         if (!ioLine.Save(Get_TrxName()))
                         {
                             ValueNamePair pp = VLogger.RetrieveError();
@@ -5526,6 +5617,9 @@ namespace VAdvantage.Model
                 {
                     ioLine.SetQtyEntered(Decimal.Multiply(Qty, (Decimal.Divide(oLine.GetQtyEntered(), (oLine.GetQtyOrdered())))));
                 }
+                //190 - Get Print description and set
+                if (ioLine.Get_ColumnIndex("PrintDescription") >= 0 && oLine.Get_ColumnIndex("PrintDescription") >= 0)
+                    ioLine.Set_Value("PrintDescription", oLine.Get_Value("PrintDescription"));
                 if (!ioLine.Save(Get_TrxName()))
                 {
                     ValueNamePair pp = VLogger.RetrieveError();
@@ -5621,6 +5715,9 @@ namespace VAdvantage.Model
                         //	Qty = Delivered	
                         iLine.SetQtyEntered(sLine.GetQtyEntered());
                         iLine.SetQtyInvoiced(sLine.GetMovementQty());
+                        //190 - Get Print description and set
+                        if (iLine.Get_ColumnIndex("PrintDescription") >= 0 && sLine.Get_ColumnIndex("PrintDescription") >= 0)
+                            iLine.Set_Value("PrintDescription", sLine.Get_Value("PrintDescription"));
                         if (!iLine.Save(Get_TrxName()))
                         {
                             _processMsg = "Could not create Invoice Line from Shipment Line";
@@ -5658,6 +5755,10 @@ namespace VAdvantage.Model
                                 iLine.SetQtyEntered(iLine.GetQtyInvoiced());
                             else
                                 iLine.SetQtyEntered(Decimal.Multiply(iLine.GetQtyInvoiced(), (Decimal.Divide(oLine.GetQtyEntered(), oLine.GetQtyOrdered()))));
+                            
+                            //190 - Get Print description and set
+                            if (iLine.Get_ColumnIndex("PrintDescription") >= 0 && oLine.Get_ColumnIndex("PrintDescription") >= 0)
+                                iLine.Set_Value("PrintDescription", oLine.Get_Value("PrintDescription"));
                             if (!iLine.Save(Get_TrxName()))
                             {
                                 _processMsg = "Could not create Invoice Line from Order Line";
@@ -5684,6 +5785,10 @@ namespace VAdvantage.Model
                             iLine.SetQtyEntered(iLine.GetQtyInvoiced());
                         else
                             iLine.SetQtyEntered(Decimal.Multiply(iLine.GetQtyInvoiced(), (Decimal.Divide(oLine.GetQtyEntered(), oLine.GetQtyOrdered()))));
+
+                        //190 - Get Print description and set
+                        if (iLine.Get_ColumnIndex("PrintDescription") >= 0 && oLine.Get_ColumnIndex("PrintDescription") >= 0)
+                            iLine.Set_Value("PrintDescription", oLine.Get_Value("PrintDescription"));
                         if (!iLine.Save(Get_TrxName()))
                         {
                             _processMsg = "Could not create Invoice Line from Order Line";

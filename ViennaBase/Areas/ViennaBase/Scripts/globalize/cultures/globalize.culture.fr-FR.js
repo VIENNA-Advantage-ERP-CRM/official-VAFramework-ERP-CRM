@@ -133,6 +133,10 @@
             "WrongOTP": "OTP incorrect entré",
             "ScanQRCode": "Scannez le code avec Google Authenticator",
             "EnterVerCode": "Entrez OTP généré par votre application mobile",
+            "EnterVAVerCode": "Entrez OTP reçu sur votre mobile enregistré",
+            "SkipThisTime": "Passer cette fois",
+            "ResendOTP": "Renvoyer OTP",
+            "CapsLockOn": "Touche Maj activée",
         }
 });
 

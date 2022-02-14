@@ -34,7 +34,7 @@ namespace VAdvantage.Process
         protected override String DoIt()
         {
             log.Info("");
-            Env.Reset(false);	// not final
+            Env.Reset(false);	// not final            
             return "Cache Reset";
         }
     }
