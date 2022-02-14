@@ -155,7 +155,7 @@ namespace VIS.Controllers
                         //if (Session.Timeout < 2)
                         //{
                         SessionEventHandler.SessionEnd(ctx);
-                        Session.Timeout = 17;
+                        Session.Timeout = 20;
                         //}
                         Session["ctx"] = null;
 
