@@ -1076,5 +1076,42 @@ namespace VAdvantage.DataBase
             }
             return sql.ToString();
         }
+
+        /// <summary>
+        /// Used to create query for List lookup.
+        /// </summary>
+        /// <returns></returns>
+        public static string GetFontStyleString()
+        {
+            if (DB.IsPostgreSQL())
+            {
+                return " COALESCE(FontName,ImageURL)||'|'|| COALESCE(FontStyle,'') ";
+            }
+            else
+            {
+                return " COALESCE(FontName,ImageURL)||'|'|| FontStyle ";
+            }
+        }
+
+        /// <summary>
+        /// Get Card Count
+        /// </summary>
+        /// <param name="columnName"></param>
+        /// <param name="SQLWhereCond"></param>
+        /// <returns></returns>
+        public static string GetCardCount(string columnName, string SQLWhereCond)
+        {
+            string sql = "";
+            if (DB.IsPostgreSQL())
+            {
+                sql = "SELECT " + columnName + ", COUNT(COALESCE(" + columnName + ",'0')) AS GroupCount " + SQLWhereCond + " GROUP BY " + columnName;
+            }
+            else
+            {
+                sql = "SELECT " + columnName + ", COUNT(NVL(" + columnName + ",0)) AS GroupCount " + SQLWhereCond + " GROUP BY " + columnName;
+            }
+            return sql;
+        }
+
     }
 }

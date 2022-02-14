@@ -164,15 +164,17 @@ namespace VIS.Models
         {
             int uid = 0;
             int fid = 0;
+            int cid = 0;
             string sortOrder = "";
             List<CardViewPropeties> lstCardViewColumns = new List<CardViewPropeties>();
-            string sqlQuery1 = "SELECT AD_User_ID,AD_Field_ID, orderByClause  FROM AD_CardView WHERE ad_cardview_id=" + ad_cardview_id;
+            string sqlQuery1 = "SELECT AD_User_ID,AD_Field_ID, orderByClause,createdBy  FROM AD_CardView WHERE ad_cardview_id=" + ad_cardview_id;
             DataSet ds1 = DB.ExecuteDataset(sqlQuery1);
             if (ds1 != null && ds1.Tables.Count > 0 && ds1.Tables[0].Rows.Count > 0)
             {
                 uid = VAdvantage.Utility.Util.GetValueOfInt(ds1.Tables[0].Rows[0][0]);
                 fid = VAdvantage.Utility.Util.GetValueOfInt(ds1.Tables[0].Rows[0][1]);
                 sortOrder = VAdvantage.Utility.Util.GetValueOfString(ds1.Tables[0].Rows[0][2]);
+                cid = VAdvantage.Utility.Util.GetValueOfInt(ds1.Tables[0].Rows[0][3]);
             }
             string sqlQuery = "SELECT * FROM(SELECT crdcol.*,fl.name FROM ad_cardview_column crdcol INNER JOIN ad_field fl on crdcol.ad_field_id=fl.ad_field_id  WHERE ad_cardview_id=" + ad_cardview_id + ") cardviewcols";
             //  sqlQuery = MRole.GetDefault(ctx).AddAccessSQL(sqlQuery, "cardviewcols", false, false);
@@ -189,7 +191,8 @@ namespace VIS.Models
                         AD_GroupField_ID = fid,
                         sort = Util.GetValueOfInt(ds.Tables[0].Rows[i]["SORTNO"]),
                         UserID = uid,
-                        OrderByClause= sortOrder
+                        OrderByClause = sortOrder,
+                        CreatedBy = cid
 
                     };
                     lstCardViewColumns.Add(objCardView);
