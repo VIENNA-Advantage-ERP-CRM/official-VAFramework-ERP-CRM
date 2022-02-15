@@ -645,6 +645,15 @@ namespace VAdvantage.Model
             return sb.ToString();
         }	//	getSelectColum
 
+        /// <summary>
+        /// function to check whether table has the key column
+        /// </summary>
+        /// <returns>true/false</returns>
+        public bool HasPKColumn()
+        {
+            GetColumns(false);
+            return isHasKeyColumn;
+        }
 
 
         /// <summary>
@@ -654,7 +663,7 @@ namespace VAdvantage.Model
         public bool IsSingleKey()
         {
             String[] keys = GetKeyColumns();
-            return keys.Length == 1 && isHasKeyColumn;
+            return keys.Length == 1;
         }	//	isSingleKey
 
 
