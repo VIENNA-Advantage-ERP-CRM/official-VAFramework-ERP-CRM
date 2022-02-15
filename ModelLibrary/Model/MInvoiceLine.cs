@@ -3592,40 +3592,7 @@ namespace VAdvantage.Model
                         log.SaveError("Error", Msg.GetMsg(GetCtx(), "QtyCanNotbeGreaterThanAssetQty"));
                         return false;
                     }
-
-                    // VIS0060: Calculate Profit/Loss in case of Sale of Asset.
-                    if (inv.IsSOTrx() && GetA_Asset_ID() > 0 && GetM_InOutLine_ID() > 0 && Env.IsModuleInstalled("VAFAM_") && Util.GetValueOfDecimal(Get_Value("VAFAM_ProfitLoss")).Equals(0))
-                    {
-                        decimal wdv, dep, grv, shipQty, profit;
-                        string sql = "SELECT VAFAM_DepAmount, VAFAM_AssetValue, MovementQty FROM M_InOutLine WHERE M_InOutLine_ID =" + GetM_InOutLine_ID();
-                        DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
-                        if (ds != null && ds.Tables[0].Rows.Count > 0)
-                        {
-                            dep = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["VAFAM_DepAmount"]);
-                            grv = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["VAFAM_AssetValue"]);
-                            shipQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["MovementQty"]);
-
-                            if (shipQty > 1)
-                            {
-                                grv = decimal.Divide(grv, shipQty);
-                                dep = decimal.Divide(dep, shipQty);
-                            }
-
-                            wdv = decimal.Subtract(grv, dep);
-
-                            // Calculate Asset values for Qty Entered
-                            grv = decimal.Multiply(grv, GetQtyEntered());
-                            dep = decimal.Multiply(dep, GetQtyEntered());
-                            wdv = decimal.Multiply(wdv, GetQtyEntered());
-                            profit = decimal.Subtract(GetLineNetAmt(), wdv);
-
-                            Set_Value("VAFAM_SLMDepreciation", decimal.Round(dep, priceListPrcision, MidpointRounding.AwayFromZero));
-                            Set_Value("VAFAM_AssetGrossValue", decimal.Round(grv, priceListPrcision, MidpointRounding.AwayFromZero));
-                            Set_Value("VAFAM_WrittenDownValue", decimal.Round(wdv, priceListPrcision, MidpointRounding.AwayFromZero));
-                            Set_Value("VAFAM_ProfitLoss", decimal.Round(profit, priceListPrcision, MidpointRounding.AwayFromZero));
-                        }
-                    }
-
+                    
                     if (!_priceSet
                         && Env.ZERO.CompareTo(GetPriceActual()) == 0
                         && Env.ZERO.CompareTo(GetPriceList()) == 0)
@@ -3731,6 +3698,39 @@ namespace VAdvantage.Model
                     else
                     {
                         SetTaxBaseAmt(Decimal.Subtract(GetLineTotalAmt(), GetTaxAmt()));
+                    }
+                }
+
+                // VIS0060: Calculate Profit/Loss in case of Sale of Asset.
+                if (inv.IsSOTrx() && GetA_Asset_ID() > 0 && GetM_InOutLine_ID() > 0 && Env.IsModuleInstalled("VAFAM_") && Util.GetValueOfDecimal(Get_Value("VAFAM_ProfitLoss")).Equals(0))
+                {
+                    decimal wdv, dep, grv, shipQty, profit;
+                    string sql = "SELECT VAFAM_DepAmount, VAFAM_AssetValue, MovementQty FROM M_InOutLine WHERE M_InOutLine_ID =" + GetM_InOutLine_ID();
+                    DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
+                    if (ds != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        dep = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["VAFAM_DepAmount"]);
+                        grv = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["VAFAM_AssetValue"]);
+                        shipQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["MovementQty"]);
+
+                        if (shipQty > 1)
+                        {
+                            grv = decimal.Divide(grv, shipQty);
+                            dep = decimal.Divide(dep, shipQty);
+                        }
+
+                        wdv = decimal.Subtract(grv, dep);
+
+                        // Calculate Asset values for Qty Entered
+                        grv = decimal.Multiply(grv, GetQtyEntered());
+                        dep = decimal.Multiply(dep, GetQtyEntered());
+                        wdv = decimal.Multiply(wdv, GetQtyEntered());
+                        profit = decimal.Subtract(GetLineNetAmt(), wdv);
+
+                        Set_Value("VAFAM_SLMDepreciation", decimal.Round(dep, priceListPrcision, MidpointRounding.AwayFromZero));
+                        Set_Value("VAFAM_AssetGrossValue", decimal.Round(grv, priceListPrcision, MidpointRounding.AwayFromZero));
+                        Set_Value("VAFAM_WrittenDownValue", decimal.Round(wdv, priceListPrcision, MidpointRounding.AwayFromZero));
+                        Set_Value("VAFAM_ProfitLoss", decimal.Round(profit, priceListPrcision, MidpointRounding.AwayFromZero));
                     }
                 }
 

@@ -1034,6 +1034,7 @@ namespace VAdvantage.Model
                 log.SaveError("VIS_NOProductOrCharge", "");
                 return false;
             }
+
             //	Get Line No
             if (GetLine() == 0)
             {
@@ -1079,11 +1080,22 @@ namespace VAdvantage.Model
             MDocType dt = MDocType.Get(GetCtx(), inO.GetC_DocType_ID());
             MProduct _Product = null;
 
+            // VIS0060: if the Shipment date is less than Asset Depreciation Date it will not save the record
+            if (Is_ValueChanged("A_Asset_ID") && inO.IsSOTrx() && Env.IsModuleInstalled("VAFAM_") && GetA_Asset_ID() > 0)
+            {
+                DateTime? depDate = Util.GetValueOfDateTime(DB.ExecuteScalar("SELECT MAX(VAFAM_DepDate) FROM VAFAM_AssetSchedule WHERE VAFAM_DepAmor='Y' AND A_Asset_ID=" + GetA_Asset_ID()));
+                if (inO.GetDateAcct() <= depDate)
+                {
+                    log.SaveError("VAFAM_CouldNotSave", "");
+                    return false;
+                }
+            }
+
             // Check if Product_ID is non zero then only create the object
             if (GetM_Product_ID() > 0)
             {
-                _Product = new MProduct(GetCtx(), GetM_Product_ID(), Get_TrxName());                
-            }            
+                _Product = new MProduct(GetCtx(), GetM_Product_ID(), Get_TrxName());
+            }
 
             if (_Product != null && GetC_UOM_ID() != _Product.GetC_UOM_ID())
             {
