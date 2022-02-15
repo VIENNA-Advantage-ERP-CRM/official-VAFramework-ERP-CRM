@@ -1020,6 +1020,17 @@ namespace VAdvantage.Model
                     }
                     //
                     line.Set_Value("C_ProvisionalInvoiceLine_ID", fromLine.Get_ValueAsInt("C_ProvisionalInvoiceLine_ID"));
+
+                    // VIS0060: Set Asset Values on Reversal Line in case of Sale of Asset.
+                    if (otherInvoice.IsSOTrx() && fromLine.GetA_Asset_ID() > 0 && Env.IsModuleInstalled("VAFAM_") && fromLine.Get_ColumnIndex("VAFAM_Quantity") >= 0)
+                    {
+                        line.SetA_Asset_ID(fromLine.GetA_Asset_ID());
+                        line.SetVAFAM_Quantity(fromLine.GetVAFAM_Quantity());
+                        line.Set_Value("VAFAM_AssetGrossValue", decimal.Negate(Util.GetValueOfDecimal(fromLine.Get_Value("VAFAM_AssetGrossValue"))));
+                        line.Set_Value("VAFAM_SLMDepreciation", decimal.Negate(Util.GetValueOfDecimal(fromLine.Get_Value("VAFAM_SLMDepreciation"))));
+                        line.Set_Value("VAFAM_WrittenDownValue", decimal.Negate(Util.GetValueOfDecimal(fromLine.Get_Value("VAFAM_WrittenDownValue"))));
+                        line.Set_Value("VAFAM_ProfitLoss", decimal.Negate(Util.GetValueOfDecimal(fromLine.Get_Value("VAFAM_ProfitLoss"))));
+                    }
                 }
 
                 // enhanced by Amit 4-1-2016
@@ -1028,7 +1039,7 @@ namespace VAdvantage.Model
                 //if (!setOrder)
                 //    line.SetC_OrderLine_ID(0);
                 //end
-                line.SetA_Asset_ID(0);
+                //line.SetA_Asset_ID(0);
                 if (line.Get_ColumnIndex("S_ResourceAssignment_ID") >= 0)
                 {
                     line.SetS_ResourceAssignment_ID(0);
