@@ -1,4 +1,4 @@
-﻿/*version 1.0.35.4*/
+﻿/*version 1.1.0.0*/
 /* Minification failed. Returning unminified contents.
 (36,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
 (37,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
@@ -23080,8 +23080,6 @@ html[dir="rtl"] .vis-cv-card-edit {
     transform: scaleX(-1);
 }
 /*rtl css End here*/
-
-
 
 
 
