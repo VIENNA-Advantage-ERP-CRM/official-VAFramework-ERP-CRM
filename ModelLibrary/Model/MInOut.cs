@@ -2392,6 +2392,11 @@ namespace VAdvantage.Model
                                 ast.SetIsDisposed(true);
                                 ast.SetAssetDisposalDate(GetDateAcct());
                             }
+                            else if(IsReversal())
+                            {
+                                ast.SetIsDisposed(false);
+                                ast.SetAssetDisposalDate(null);
+                            }
                             ast.SetQty(decimal.Subtract(Util.GetValueOfDecimal(ast.Get_Value("Qty")), sLine.GetMovementQty()));
 
                             // VIS0060: Set Disposal Qty and Asset Values on related Asset.
