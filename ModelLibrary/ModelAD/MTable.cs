@@ -78,7 +78,7 @@ namespace VAdvantage.Model
 
 
         private MColumn[] m_columns = null;
-        
+        private bool isHasKeyColumn = false;
         /**
 	 * 	Load Constructor
 	 *	@param ctx context
@@ -254,6 +254,8 @@ namespace VAdvantage.Model
                     DataRow dr = ds.Tables[0].Rows[i];
                     MColumn mCol = new MColumn(GetCtx(), dr, Get_TrxName());
                     list.Add(mCol);
+                    if (mCol.IsKey())
+                        isHasKeyColumn = true;
                 }
                 ds = null;
             }
@@ -647,16 +649,10 @@ namespace VAdvantage.Model
         /// function to check whether table has the key column
         /// </summary>
         /// <returns>true/false</returns>
-        public bool hasPKColumn()
+        public bool HasPKColumn()
         {
             GetColumns(false);
-            for (int i = 0; i < m_columns.Length; i++)
-            {
-                MColumn column = m_columns[i];
-                if (column.IsKey())
-                    return true;
-            }
-            return false;
+            return isHasKeyColumn;
         }
 
 

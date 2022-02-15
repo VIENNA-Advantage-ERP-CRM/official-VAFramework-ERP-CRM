@@ -1504,7 +1504,7 @@ namespace VIS.Helpers
             MTable table = MTable.Get(ctx, AD_Table_ID);
             PO po = null;
             // VIS0008 change to handle save of OrgInfo (record without PK) through PO
-            if ((table.IsSingleKey() && table.hasPKColumn()) || Record_ID == 0)
+            if ((table.IsSingleKey() && table.HasPKColumn()) || Record_ID == 0)
             {
                 po = table.GetPO(ctx, Record_ID, trx);
             }
