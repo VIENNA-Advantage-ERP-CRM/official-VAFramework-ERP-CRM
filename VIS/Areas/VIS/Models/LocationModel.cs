@@ -343,7 +343,7 @@ namespace VIS.Models
                 {
                     if (count > MAX_ROWS)
                         break;
-                    MLocation loc = MLocation.Get(ctx, Convert.ToInt32(dr["C_Location_ID"]), null);
+                    MLocation loc = MLocation.Get(ctx, dr, null);
                     locs[loc.Get_ID()] = new KeyNamePair(loc.Get_ID(), loc.ToString());
 
                     lstLatLng[loc.Get_ID()] = new LatLng() { Latitude = loc.GetLatitude(), Longitude = loc.GetLongitude() };

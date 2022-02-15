@@ -388,14 +388,14 @@ namespace VAdvantage.Controller
                     {
                         vo.ShowFilterOption = "Y".Equals(dr[i].ToString());
                     }
-                    else if (columnName.Equals("IsUnique", StringComparison.OrdinalIgnoreCase))
-                    {
-                        vo.IsUnique = "Y".Equals(dr[i].ToString());
-                    }
-                    else if (columnName.Equals("isSwitch", StringComparison.OrdinalIgnoreCase))
-                    {
-                        vo.IsSwitch = "Y".Equals(dr[i].ToString());
-                    }
+                    //else if (columnName.Equals("IsUnique", StringComparison.OrdinalIgnoreCase))
+                    //{
+                    //    vo.IsUnique = "Y".Equals(dr[i].ToString());
+                    //}
+                    //else if (columnName.Equals("isSwitch", StringComparison.OrdinalIgnoreCase))
+                    //{
+                    //    vo.IsSwitch = "Y".Equals(dr[i].ToString());
+                    //}
 
                 }
                 if (vo.Header == null)

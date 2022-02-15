@@ -65,6 +65,27 @@ namespace VAdvantage.Model
             return null;					//	not found
         }
 
+
+        public static MLocation Get(Ctx ctx,IDataReader dr, Trx trxName)
+        {
+            int C_Location_ID = Util.GetValueOfInt(dr["C_Location_ID"]);
+            //	New
+            if (C_Location_ID == 0)
+                return new MLocation(ctx, C_Location_ID, trxName);
+            //
+            int key = (int)C_Location_ID;
+            MLocation retValue = (MLocation)s_cache[key];
+            if (retValue != null)
+                return retValue;
+            retValue = new MLocation(ctx, dr, trxName);
+            if (retValue.Get_ID() != 0)		//	found
+            {
+                s_cache.Add(key, retValue);
+                return retValue;
+            }
+            return null;					//	not found
+        }
+
         /// <summary>
         /// Load Location with ID if Business Partner Location
         /// </summary>
@@ -154,6 +175,20 @@ namespace VAdvantage.Model
         /// <param name="dr">datarow</param>
         /// <param name="trxName">transaction</param>
         public MLocation(Ctx ctx, DataRow dr, Trx trxName)
+            : base(ctx, dr, trxName)
+        {
+
+        }
+
+
+
+        /// <summary>
+        /// Load Constructor
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="dr">datarow</param>
+        /// <param name="trxName">transaction</param>
+        public MLocation(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 

@@ -498,7 +498,7 @@ namespace VAdvantage.Controller
                 vo.IsHeaderPanel = dr["Isheaderpanel"].Equals("Y");
 
                 /***************Worked For Header Panel By Mandeep * ****************/
-                vo.HPanelNotShowInMultiRow = dr["HPanelNotShowInMultiRow"].Equals("Y");
+            //    vo.HPanelNotShowInMultiRow = dr["HPanelNotShowInMultiRow"].Equals("Y");
 
                 vo.AD_HeaderLayout_ID = Util.GetValueOfInt(dr["AD_HeaderLayout_ID"]);
 
@@ -517,11 +517,11 @@ namespace VAdvantage.Controller
                 /***************** End Header panel work ***************/
 
                 // set property for Maintain version on approval
-                vo.MaintainVerOnApproval = Utility.Util.GetValueOfString(dr["MaintainVerOnApproval"]).Equals("Y");
+                //vo.MaintainVerOnApproval = Utility.Util.GetValueOfString(dr["MaintainVerOnApproval"]).Equals("Y");
 
-                vo.IsMaintainVersions = Utility.Util.GetValueOfString(dr["IsMaintainVersions"]).Equals("Y");
+                //vo.IsMaintainVersions = Utility.Util.GetValueOfString(dr["IsMaintainVersions"]).Equals("Y");
 
-                vo.TabLayout = Utility.Util.GetValueOfString(dr["TabLayout"]);
+                //vo.TabLayout = Utility.Util.GetValueOfString(dr["TabLayout"]);
             }
             catch (System.Exception ex)
             {
