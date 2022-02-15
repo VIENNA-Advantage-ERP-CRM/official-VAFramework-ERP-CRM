@@ -629,6 +629,9 @@
 
         var FillCardViewCombo = function (isDelete) {
             cmbCardView.children().remove();
+            if (isDelete) {
+                AD_CardView_ID = 0;
+            }
             var url = VIS.Application.contextUrl + "CardView/GetCardView";
             $.ajax({
                 type: "GET",
@@ -642,12 +645,14 @@
                     cardViewInfo = dbResult[0].lstCardViewData;
                     roleInfo = dbResult[0].lstRoleData;
                     LstCardViewRole = dbResult[0].lstCardViewRoleData;
-                    LstCardViewCondition = dbResult[0].lstCardViewConditonData;
+                    LstCardViewCondition = dbResult[0].lstCardViewConditonData; 
 
                     if (cardViewInfo != null && cardViewInfo.length > 0) {
 
                         for (var i = 0; i < cardViewInfo.length; i++) {
-                            // AD_CardView_ID = cardViewInfo[0].CardViewID;
+                            if (isDelete && i == 0) {
+                                AD_CardView_ID = cardViewInfo[0].CardViewID;
+                            }
                             cmbCardView.append("<Option idx=" + i + " is_shared=" + cardViewInfo[i].UserID + " ad_user_id=" + cardViewInfo[i].CreatedBy + " cardviewid=" + cardViewInfo[i].CardViewID + " groupSequence='" + cardViewInfo[i].groupSequence + "' excludedGroup='" + cardViewInfo[i].excludedGroup + "'  ad_field_id=" + cardViewInfo[i].AD_GroupField_ID + " isdefault=" + cardViewInfo[i].DefaultID + " ad_headerLayout_id=" + cardViewInfo[i].AD_HeaderLayout_ID + "> " + w2utils.encodeTags(cardViewInfo[i].CardViewName) + "</Option>");
                         }
 
@@ -1764,6 +1769,9 @@
                                 idx = cmbCardView.find('option').length;
                             else
                                 idx = 0;
+                            if (!cardViewInfo) {
+                                cardViewInfo = [];
+                            }
                             //<Option idx="+i+" is_shared=" + cardViewInfo[i].UserID + " ad_user_id=" + cardViewInfo[i].CreatedBy + " cardviewid=" + cardViewInfo[i].CardViewID + " groupSequence='" + cardViewInfo[i].groupSequence + "' excludedGroup='" + cardViewInfo[i].excludedGroup +"' ad_field_id=" + cardViewInfo[i].AD_GroupField_ID + " isdefault=" + cardViewInfo[i].DefaultID + " ad_headerLayout_id=" + cardViewInfo[i].AD_HeaderLayout_ID + "> " + w2utils.encodeTags(cardViewInfo[i].CardViewName) + "</Option>");
                             cardViewInfo.push({
                                 'CardViewName': cardViewName, 'UserID': AD_User_ID, 'CreatedBy': VIS.context.getAD_User_ID(), 'CardViewID': AD_CardView_ID, 'groupSequence': grpSeq, 'excludedGroup': skipGrp, 'AD_GroupField_ID': cmbGroupField.find(":selected").attr("fieldid"), 'DefaultID': isdefault.is(":checked"), 'AD_HeaderLayout_ID': $vSearchHeaderLayout.getValue(), 'CardViewName': cardViewName, 'OrderByClause': sortOrder
@@ -2020,9 +2028,9 @@
                     else {
                         return "N";
                     }
-                }
+                } 
                 // return control's value
-                crtlObj.setValue("");
+                crtlObj.setValue(null);
             }
 
         };
