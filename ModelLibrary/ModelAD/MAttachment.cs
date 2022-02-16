@@ -1500,14 +1500,13 @@ namespace VAdvantage.Model
                     return true;
                 }
 
-                // If file saving location is Azure Blob Storage
+                // VIS264 - If file upload location is Azure Blob Storage
                 if (GetFileLocation() == FILELOCATION_AzureBlobStorage)
                 {
                     try
                     {
                         SetFileLocation(FILELOCATION_AzureBlobStorage);
 
-                        // Create client info object
                         if (cInfo == null)
                         {
                             if (AD_Client_ID > 0)
@@ -1520,20 +1519,14 @@ namespace VAdvantage.Model
                             }
                         }
 
-                        // Get file information
-                        FileInfo fInfo = new FileInfo(filePath + "\\" + folderKey + "\\" + fileName);
-                        //byte[] bytes = System.IO.File.ReadAllBytes(filePath + "\\" + folderKey + "\\" + fileName);
+                        // VIS264 - Get file information
+                        FileInfo fileInfo = new FileInfo(filePath + "\\" + folderKey + "\\" + fileName);
 
-                        string resURI = AzureBlobStorage.UploadFile(fInfo.FullName);
+                        string res = AzureBlobStorage.UploadFile(GetCtx(), cInfo.GetAD_WebServiceURL(), fileInfo.FullName);
 
-                        // Add resURI to attachment table
-                        MAttachmentReference attRef = new MAttachmentReference(GetCtx(), 0, Get_Trx());
-
-                        attRef.SetAD_AttachmentLine_ID(AD_AttachmentLine_ID);
-                        attRef.SetAD_AttachmentRef(resURI);
-                        if (!attRef.Save(Get_Trx()))
+                        if (res != null)
                         {
-                            log.Severe("MAttachmentReference not saved " + VLogger.RetrieveError().Name);
+                            error.Append(res);
                             return false;
                         }
 
@@ -1554,7 +1547,6 @@ namespace VAdvantage.Model
                     }
                     return true;
                 }
-
 
                 Directory.CreateDirectory(zipinput);
 
@@ -1955,11 +1947,11 @@ namespace VAdvantage.Model
                         }
                         return "";
                     }
+                    // VIS264 - If file location is Azure Blob Storage
                     else if(fileLocation == X_AD_Attachment.FILELOCATION_AzureBlobStorage)
                     {
-                        // Get file from Azure Blob container and save it in temp folder
+                        // VIS264 - Get file from Azure Blob container and save it in temp folder
 
-                        // Create client info object
                         MClientInfo cInfo = null;
                         if (AD_Client_ID > 0)
                         {
@@ -1970,23 +1962,18 @@ namespace VAdvantage.Model
                             cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
                         }
 
-                        string documentURI = GetDocumentURI(AD_Attachment_ID);
+                        string containerUri = cInfo.GetAD_WebServiceURL();
 
-                        if (!string.IsNullOrEmpty(documentURI))
+                        if (!string.IsNullOrEmpty(containerUri))
                         {
                             string fileName = Util.GetValueOfString(ds.Tables[0].Rows[0]["FileName"]);
 
                             string downloadFullPath = Path.Combine(filePath, "TempDownload", folder, fileName);
 
-                            string resFile = AzureBlobStorage.DownloadFile(documentURI, downloadFullPath, fileName);
+                            string res = AzureBlobStorage.DownloadFile(GetCtx() ,containerUri, downloadFullPath, fileName);
 
-                            byte[] byteData = Convert.FromBase64String(resFile);
-
-                            using (FileStream fs = new FileStream(downloadFullPath, FileMode.Create, FileAccess.Write))
-                            {
-                                fs.Write(byteData, 0, byteData.Length);
-                            }
-                            return folder;
+                            if (res == null)
+                                return folder;
                         }
                         return "";
                     }

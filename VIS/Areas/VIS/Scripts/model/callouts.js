@@ -23967,4 +23967,31 @@
     VIS.Model.CalloutLead = CalloutLead;
     //**************CalloutLead End*************
 
+    
+    //VIS264*************CalloutAzureBlob Start**************
+    function CalloutAzureBlob() {
+        VIS.CalloutEngine.call(this, "VIS.CalloutAzureBlob");//must call
+    };
+    VIS.Utility.inheritPrototype(CalloutAzureBlob, VIS.CalloutEngine); //inherit prototype
+    CalloutAzureBlob.prototype.CheckModule = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (this.isCalloutActive() || value == null || value.toString() == "") {
+            return "";
+        }
+        this.setCalloutActive(true);
+
+        //check if VA090 module is Installed 
+        var modulePrefix = VIS.dataContext.getJSONRecord("VIS/ModulePrefix/GetModulePrefix", "VA090_");
+        var fileLocation = Util.getValueOfString(mTab.getValue("SaveAttachmentOn"));
+
+        if (fileLocation == "AB" && !modulePrefix["VA090_"]) {
+            mTab.setValue("SaveAttachmentOn", null);
+            return VIS.Msg.getMsg("VIS_VA090NotInstalled");
+        }
+
+        this.setCalloutActive(false);
+        return "";
+    };
+    VIS.Model.CalloutAzureBlob = CalloutAzureBlob;
+    //VIS264**************CalloutAzureBlob End*************
+
 })(VIS, jQuery);
