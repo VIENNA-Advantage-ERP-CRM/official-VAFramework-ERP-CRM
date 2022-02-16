@@ -3410,7 +3410,7 @@ namespace VAdvantage.Model
                     #endregion
 
                     // VIS0060: Set Disposal Qty and Asset Values on related Asset.
-                    if (IsSOTrx() && line.GetA_Asset_ID() != 0 && Env.IsModuleInstalled("VAFAM_"))
+                    if (IsSOTrx() && line.GetA_Asset_ID() != 0 && Env.IsModuleInstalled("VAFAM_") && line.Get_ColumnIndex("VAFAM_Quantity") >= 0)
                     {
                         if (!UpdateAssetValues(line))
                         {
