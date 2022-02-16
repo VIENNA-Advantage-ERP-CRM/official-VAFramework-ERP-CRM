@@ -768,7 +768,7 @@
                     }
 
                     var grp = $("<div data-key='" + $this.cGroupInfo[p].key + "' class='vis-cv-cg-grp'></div>");
-                    grp.append("<div class='vis-cv-head' title='" + VIS.Utility.Util.getIdentifierDisplayVal($this.cGroupInfo[p].name) + "' >" + VIS.Utility.Util.getIdentifierDisplayVal($this.cGroupInfo[p].name) + "<span> (" + gc + ")</span></div>");
+                    grp.append("<div class='vis-cv-head' title='" + VIS.Utility.Util.getIdentifierDisplayVal($this.cGroupInfo[p].name) + " (" + gc + ")' >" + VIS.Utility.Util.getIdentifierDisplayVal($this.cGroupInfo[p].name) + "<span> (" + gc + ")</span></div>");
                     $this.getGroupHeader().append(grp);
                 }
 
@@ -853,6 +853,9 @@
                                     $this.getGroupHeader().find(".vis-cv-cg-grp[data-key='" + fromkey + "']").find('span').text(' (' + $this.GroupCount[fromkey] + ')');
                                     $this.getGroupHeader().find(".vis-cv-cg-grp[data-key='" + toKey + "']").removeClass('emptyGroup').find('span').text(' (' + $this.GroupCount[toKey] + ')');
                                     $this.getBody().find('.cardEmpty').closest('.emptyGroup').removeClass('emptyGroup');
+
+                                    $this.getGroupHeader().find(".vis-cv-cg-grp[data-key='" + fromkey + "'] .vis-cv-head").attr("title", $this.getGroupHeader().find(".vis-cv-cg-grp[data-key='" + fromkey + "']").text());
+                                    $this.getGroupHeader().find(".vis-cv-cg-grp[data-key='" + toKey + "'] .vis-cv-head").attr("title", $this.getGroupHeader().find(".vis-cv-cg-grp[data-key='" + toKey + "']").text());
 
                                     emptyCardSetup();
                                     $this.mTab.dataRefresh();

@@ -236,7 +236,14 @@ namespace VIS.Models
             }
             objCardView.SetAD_Field_ID(ad_Field_ID);
             objCardView.SetName(cardViewName);
-            objCardView.Set_ValueNoCheck("AD_HeaderLayout_ID", AD_HeaderLayout_ID);
+            if (AD_HeaderLayout_ID > 0)
+            {
+                objCardView.Set_ValueNoCheck("AD_HeaderLayout_ID", AD_HeaderLayout_ID);
+            }
+            else
+            {
+                objCardView.Set_ValueNoCheck("AD_HeaderLayout_ID", null);
+            }
             objCardView.Set_ValueNoCheck("groupSequence", groupSequence);
             objCardView.Set_ValueNoCheck("excludedGroup", excludeGrp);
             objCardView.Set_Value("OrderByClause", orderByClause);
