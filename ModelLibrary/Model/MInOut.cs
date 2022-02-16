@@ -4428,8 +4428,10 @@ namespace VAdvantage.Model
             disDetails.SetAD_Client_ID(GetAD_Client_ID());
             disDetails.SetAD_Org_ID(GetAD_Org_ID());
             disDetails.Set_ValueNoCheck("A_Asset_ID", Asset_ID);
-            disDetails.Set_Value("M_Product_ID", M_Product_ID);
-            disDetails.Set_Value("C_Charge_ID", C_Charge_ID);
+            if (M_Product_ID > 0)
+                disDetails.Set_Value("M_Product_ID", M_Product_ID);
+            if (C_Charge_ID > 0)
+                disDetails.Set_Value("C_Charge_ID", C_Charge_ID);
             disDetails.Set_Value("VAFAM_DisposedQty", qty);
             disDetails.Set_Value("VAFAM_GrossValDispAsset", grossValue);
             disDetails.Set_Value("VAFAM_AccDepforDispAsset", depAmt);

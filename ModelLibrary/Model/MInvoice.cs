@@ -4820,14 +4820,9 @@ namespace VAdvantage.Model
             // VIS0060: In Case of Existing Disposal, need to update the Disposal details with Invoice Line reference.
             if (Util.GetValueOfInt(line.Get_Value("VAFAM_AssetDisposal_ID")) > 0)
             {
-                int disposalID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAFAM_DisposalDetails_ID FROM VAFAM_DisposalDetails WHERE VAFAM_AssetDisposal_ID="
-                    + Util.GetValueOfInt(line.Get_Value("VAFAM_AssetDisposal_ID")), null, Get_TrxName()));
-                if (disposalID > 0)
-                {
-                    disposalID = DB.ExecuteQuery("UPDATE VAFAM_DisposalDetails SET C_InvoiceLine_ID=" + line.Get_ID()
+                int disposalID = DB.ExecuteQuery("UPDATE VAFAM_DisposalDetails SET " + (IsReversal() ? "C_InvoiceLine_ID = NULL" : "C_InvoiceLine_ID=" + line.Get_ID())
                         + " WHERE VAFAM_AssetDisposal_ID=" + Util.GetValueOfInt(line.Get_Value("VAFAM_AssetDisposal_ID")), null, Get_TrxName());
-                }
-                if (disposalID <= 0)
+                if (disposalID < 0)
                 {
                     Get_TrxName().Rollback();
                     _processMsg = Msg.GetMsg(GetCtx(), "VAFAM_DisDetailsNotSaved");
@@ -4837,14 +4832,9 @@ namespace VAdvantage.Model
             // VIS0060: In Case of Invoice Line has reference of Shiment Line, need to update the Disposal details with Invoice Line reference.
             else if (line.GetM_InOutLine_ID() > 0)
             {
-                int disposalID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAFAM_DisposalDetails_ID FROM VAFAM_DisposalDetails WHERE M_InOutLine_ID="
-                    + line.GetM_InOutLine_ID(), null, Get_TrxName()));
-                if (disposalID > 0)
-                {
-                    disposalID = DB.ExecuteQuery("UPDATE VAFAM_DisposalDetails SET C_InvoiceLine_ID=" + line.Get_ID()
+                int disposalID = DB.ExecuteQuery("UPDATE VAFAM_DisposalDetails SET " + (IsReversal() ? "C_InvoiceLine_ID = NULL" : "C_InvoiceLine_ID=" + line.Get_ID())
                         + " WHERE M_InOutLine_ID=" + line.GetM_InOutLine_ID(), null, Get_TrxName());
-                }
-                if (disposalID <= 0)
+                if (disposalID < 0)
                 {
                     Get_TrxName().Rollback();
                     _processMsg = Msg.GetMsg(GetCtx(), "VAFAM_DisDetailsNotSaved");
@@ -5068,8 +5058,10 @@ namespace VAdvantage.Model
             disDetails.SetAD_Client_ID(GetAD_Client_ID());
             disDetails.SetAD_Org_ID(GetAD_Org_ID());
             disDetails.Set_ValueNoCheck("A_Asset_ID", Asset_ID);
-            disDetails.Set_Value("M_Product_ID", M_Product_ID);
-            disDetails.Set_Value("C_Charge_ID", C_Charge_ID);
+            if (M_Product_ID > 0)
+                disDetails.Set_Value("M_Product_ID", M_Product_ID);
+            if (C_Charge_ID > 0)
+                disDetails.Set_Value("C_Charge_ID", C_Charge_ID);
             disDetails.Set_Value("VAFAM_DisposedQty", qty);
             disDetails.Set_Value("VAFAM_GrossValDispAsset", grossValue);
             disDetails.Set_Value("VAFAM_AccDepforDispAsset", depAmt);
