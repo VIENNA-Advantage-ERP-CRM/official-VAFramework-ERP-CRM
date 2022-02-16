@@ -4808,7 +4808,8 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Update Values on Asset 
+        /// Update Values on Asset
+        /// VIS0060: 16-Feb-2022
         /// </summary>
         /// <param name="line">Invoice Line</param>
         /// <returns>FAlse, if not updated</returns>

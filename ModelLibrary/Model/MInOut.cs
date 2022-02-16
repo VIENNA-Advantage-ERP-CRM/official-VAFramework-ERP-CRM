@@ -4190,14 +4190,15 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Update Values on Asset 
+        /// Update Values on Asset
+        /// VIS0060: 16-Feb-2022
         /// </summary>
         /// <param name="line">Invoice Line</param>
-        /// <returns>FAlse, if not updated</returns>
+        /// <returns>False, if not updated</returns>
         private bool UpdateAssetValues(MInOutLine sLine)
         {
             StringBuilder sql = new StringBuilder();
-            MAsset ast = new MAsset(Env.GetCtx(), sLine.GetA_Asset_ID(), Get_TrxName());
+            MAsset ast = new MAsset(GetCtx(), sLine.GetA_Asset_ID(), Get_TrxName());
             // VIS0060: Set Disposal on Asset only if full Asset is Sale.
             if (sLine.GetMovementQty().Equals(sLine.GetVAFAM_Quantity()))
             {
