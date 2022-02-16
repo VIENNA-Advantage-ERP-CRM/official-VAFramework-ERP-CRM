@@ -631,6 +631,7 @@
             cmbCardView.children().remove();
             if (isDelete) {
                 AD_CardView_ID = 0;
+                AD_GroupField_ID = 0;
             }
             var url = VIS.Application.contextUrl + "CardView/GetCardView";
             $.ajax({
@@ -652,6 +653,7 @@
                         for (var i = 0; i < cardViewInfo.length; i++) {
                             if (isDelete && i == 0) {
                                 AD_CardView_ID = cardViewInfo[0].CardViewID;
+                                AD_GroupField_ID = cardViewInfo[0].AD_GroupField_ID;
                             }
                             cmbCardView.append("<Option idx=" + i + " is_shared=" + cardViewInfo[i].UserID + " ad_user_id=" + cardViewInfo[i].CreatedBy + " cardviewid=" + cardViewInfo[i].CardViewID + " groupSequence='" + cardViewInfo[i].groupSequence + "' excludedGroup='" + cardViewInfo[i].excludedGroup + "'  ad_field_id=" + cardViewInfo[i].AD_GroupField_ID + " isdefault=" + cardViewInfo[i].DefaultID + " ad_headerLayout_id=" + cardViewInfo[i].AD_HeaderLayout_ID + "> " + w2utils.encodeTags(cardViewInfo[i].CardViewName) + "</Option>");
                         }
@@ -910,9 +912,10 @@
             if (lovcardList[fieldID]) {
                 for (var i = 0, ln = lovcardList[fieldID]; i < ln.length; i++) {
                     if (ln[i].Key.toString().length > 0 && ln[i].Name.toString().length > 0) {
-                        ulGroupSeqColumns.append('<li key="' + ln[i].Key + '"><input type="checkbox" checked="true" />' + ln[i].Name + '</li>');
+                        ulGroupSeqColumns.append('<li key="' + ln[i].Key + '"><input type="checkbox"/>' + ln[i].Name + '</li>');
                     }
                 };
+                ulGroupSeqColumns.find('input').prop('checked', true)
                 var idx = cmbCardView.find(":selected").attr('idx');
                 var seq = cardViewInfo[idx].groupSequence;
                 var excGrp = cardViewInfo[idx].excludedGroup;
@@ -1237,19 +1240,21 @@
                             DeleteCardView();
 
                             FillCardViewCombo(true);
-                            FillTextControl();
-                            FillGroupFields();
-                            FillColumnInclude(true, false);
-                            toggleNewRecord();
-                            if (cardViewUserID == VIS.context.getAD_User_ID()) {
-                                AD_User_ID = 0;
-                                cardViewUserID = 0;
-                                btnEdit.find("i").removeClass('vis-copy').addClass('vis-pencil');
+                            if (cardViewInfo != null && cardViewInfo.length > 0) {
+                                FillTextControl();
+                                FillGroupFields();
+                                FillColumnInclude(true, false);
+                                toggleNewRecord();
+                                if (cardViewUserID == VIS.context.getAD_User_ID()) {
+                                    AD_User_ID = 0;
+                                    cardViewUserID = 0;
+                                    btnEdit.find("i").removeClass('vis-copy').addClass('vis-pencil');
+                                }
+                                else {
+                                    btnEdit.find("i").removeClass('vis-pencil').addClass('vis-copy');
+                                }
+                                disableView();
                             }
-                            else {
-                                btnEdit.find("i").removeClass('vis-pencil').addClass('vis-copy');
-                            }
-                            disableView();
 
                         }
                     });
@@ -1787,7 +1792,7 @@
                             cardViewInfo[selIdx].CardViewName = cardViewName;
                             cardViewInfo[selIdx].UserID = AD_User_ID;
                             cardViewInfo[selIdx].OrderByClause = sortOrder;
-
+                            cmbCardView.find("[cardviewid='" + AD_CardView_ID + "']").text(cardViewName);
                         }
                         btnCancle.trigger("click");
 
