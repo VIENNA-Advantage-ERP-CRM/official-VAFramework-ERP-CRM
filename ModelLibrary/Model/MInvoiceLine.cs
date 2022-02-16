@@ -3393,6 +3393,17 @@ namespace VAdvantage.Model
 
                 MInvoice inv = GetParent();
 
+                // VIS0060: if the Invoice date is less than Asset Depreciation Date it will not save the record
+                if (Is_ValueChanged("A_Asset_ID") && inv.IsSOTrx() && Env.IsModuleInstalled("VAFAM_") && GetA_Asset_ID() > 0)
+                {
+                    DateTime? depDate = Util.GetValueOfDateTime(DB.ExecuteScalar("SELECT MAX(VAFAM_DepDate) FROM VAFAM_AssetSchedule WHERE VAFAM_DepAmor='Y' AND A_Asset_ID=" + GetA_Asset_ID()));
+                    if (inv.GetDateAcct() <= depDate)
+                    {
+                        log.SaveError("VAFAM_CouldNotSave", "");
+                        return false;
+                    }
+                }
+
                 // Check if new columns found on Asset table
                 //bool forComponent = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(AD_Column_ID) FROM AD_Column WHERE ColumnName='VAFAM_HasComponent'
                 //                     AND AD_Table_ID = " + MAsset.Table_ID, null, null)) > 0;

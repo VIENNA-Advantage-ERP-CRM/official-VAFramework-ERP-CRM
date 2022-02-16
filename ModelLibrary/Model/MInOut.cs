@@ -4213,14 +4213,12 @@ namespace VAdvantage.Model
             ast.SetQty(decimal.Subtract(Util.GetValueOfDecimal(ast.Get_Value("Qty")), sLine.GetMovementQty()));
 
             // VIS0060: Set Disposal Qty and Asset Values on related Asset.
-            if (Env.IsModuleInstalled("VAFAM_"))
+            if (Env.IsModuleInstalled("VAFAM_") && sLine.Get_ColumnIndex("VAFAM_AssetValue") >= 0)
             {
-                if (sLine.Get_ColumnIndex("VAFAM_AssetValue") >= 0)
-                {
-                    ast.Set_Value("VAFAM_DisposeQty", decimal.Add(Util.GetValueOfDecimal(ast.Get_Value("VAFAM_DisposeQty")), sLine.GetMovementQty()));
-                    ast.Set_Value("VAFAM_AssetGrossValue", decimal.Subtract(Util.GetValueOfDecimal(ast.Get_Value("VAFAM_AssetGrossValue")), sLine.GetVAFAM_AssetValue()));
-                    ast.Set_Value("VAFAM_SLMDepreciation", decimal.Subtract(Util.GetValueOfDecimal(ast.Get_Value("VAFAM_SLMDepreciation")), sLine.GetVAFAM_DepAmount()));
-                }
+                ast.Set_Value("VAFAM_DisposeQty", decimal.Add(Util.GetValueOfDecimal(ast.Get_Value("VAFAM_DisposeQty")), sLine.GetMovementQty()));
+                ast.Set_Value("VAFAM_AssetGrossValue", decimal.Subtract(Util.GetValueOfDecimal(ast.Get_Value("VAFAM_AssetGrossValue")), sLine.GetVAFAM_AssetValue()));
+                ast.Set_Value("VAFAM_SLMDepreciation", decimal.Subtract(Util.GetValueOfDecimal(ast.Get_Value("VAFAM_SLMDepreciation")), sLine.GetVAFAM_DepAmount()));
+
                 if (!ast.Save(Get_TrxName()))
                 {
                     Get_TrxName().Rollback();
