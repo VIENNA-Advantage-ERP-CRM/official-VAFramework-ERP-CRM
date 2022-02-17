@@ -639,6 +639,13 @@
             return $fltrPnlBody;
         };
 
+
+        /**Clear search box
+         * */
+        this.clearSearchBox = function () {
+            $txtSearch.val('');
+        }
+
         /**
         *   Show OR hide tab panel depending on, if linked tab panel or not
         *   @param {boolean} show - show tab panel if true
@@ -4058,7 +4065,6 @@
             this.curGC.searchCode = "";
             this.curTab.searchText = "";
         }
-        $txtSearch.val('');
     };
 
     APanel.prototype.cmd_finddialog = function () {
