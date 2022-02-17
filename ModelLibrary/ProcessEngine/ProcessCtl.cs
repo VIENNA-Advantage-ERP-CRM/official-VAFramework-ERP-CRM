@@ -1272,7 +1272,7 @@ namespace VAdvantage.ProcessEngine
                     //MessageBox.Show("no Type");
                 }
 
-                if ( type != null && type.IsClass)
+                if (type.IsClass)
                 {
                     ProcessEngine.ProcessCall oClass = (ProcessEngine.ProcessCall)Activator.CreateInstance(type);
                     if (oClass == null)
