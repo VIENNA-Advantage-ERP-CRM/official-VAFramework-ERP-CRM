@@ -10,6 +10,10 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.AzureBlob
 {
+    /// <summary>
+    /// Purpose: This class is used for saving files on Azure Blob Storage
+    /// Employee Code: VIS264
+    /// </summary>
     public static class AzureBlobStorage
     {
         private static VLogger _log = VLogger.GetVLogger(typeof(AzureBlobStorage).FullName);
@@ -37,11 +41,7 @@ namespace VAdvantage.AzureBlob
             param[2] = fullFilePath;
             var resultObj = type.GetMethod("UploadFile").Invoke(null, param);
 
-            if (resultObj != null)
-            {
-                return resultObj.ToString();
-            }
-            return null;
+            return resultObj?.ToString();
         }
 
         /// <summary>
@@ -70,11 +70,7 @@ namespace VAdvantage.AzureBlob
             param[3] = fileName;
             var resultObj = type.GetMethod("DownloadFile").Invoke(null, param);
 
-            if (resultObj != null)
-            {
-                return resultObj.ToString();
-            }
-            return null;
+            return resultObj?.ToString();
         }
     }
 }
