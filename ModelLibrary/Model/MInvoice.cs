@@ -1030,6 +1030,7 @@ namespace VAdvantage.Model
                         line.Set_Value("VAFAM_SLMDepreciation", decimal.Negate(Util.GetValueOfDecimal(fromLine.Get_Value("VAFAM_SLMDepreciation"))));
                         line.Set_Value("VAFAM_WrittenDownValue", decimal.Negate(Util.GetValueOfDecimal(fromLine.Get_Value("VAFAM_WrittenDownValue"))));
                         line.Set_Value("VAFAM_ProfitLoss", decimal.Negate(Util.GetValueOfDecimal(fromLine.Get_Value("VAFAM_ProfitLoss"))));
+                        line.Set_Value("VAFAM_AssetDisposal_ID", fromLine.Get_Value("VAFAM_AssetDisposal_ID"));
                     }
                 }
 
