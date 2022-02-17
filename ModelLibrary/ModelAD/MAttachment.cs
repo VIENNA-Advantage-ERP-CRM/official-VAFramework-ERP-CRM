@@ -1519,6 +1519,12 @@ namespace VAdvantage.Model
                             }
                         }
 
+                        if(string.IsNullOrEmpty(cInfo.GetAD_WebServiceURL()))
+                        {
+                            error.Append(Msg.GetMsg(GetCtx(), "VIS_AzureContainerUriEmpty"));
+                            return false;
+                        }
+
                         // VIS264 - Get file information
                         FileInfo fileInfo = new FileInfo(filePath + "\\" + folderKey + "\\" + fileName);
 
@@ -1975,6 +1981,11 @@ namespace VAdvantage.Model
                             if (res == null)
                                 return folder;
                         }
+                        else
+                        {
+                            return Msg.GetMsg(GetCtx(), "VIS_AzureContainerUriEmpty");
+                        }
+
                         return "";
                     }
                     //unzipfile
