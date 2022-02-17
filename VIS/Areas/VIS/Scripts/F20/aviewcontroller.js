@@ -1794,6 +1794,7 @@
 
             this.gTab.getTableModel().resetCard();
             if (!this.isNewClick) {
+                this.aPanel.clearSearchText();
                 var query = new VIS.Query();
                 this.getMTab().setQuery(query);
                 this.query(0, 0, null);

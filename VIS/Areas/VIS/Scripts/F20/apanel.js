@@ -1075,6 +1075,7 @@
             $spnTitle.text(title);
         };
 
+
         /**
          * If window don't have any record, then show instruction for new record
          * @param {any} highlight
@@ -1613,6 +1614,9 @@
                     this.curTab = gTab;
                     this.curGC = gc;
                     this.firstTabId = id;
+                    if (query != null) {
+                        gTab.setQuery(query);
+                    }
                 //}
 
 
@@ -4054,6 +4058,7 @@
             this.curGC.searchCode = "";
             this.curTab.searchText = "";
         }
+        $txtSearch.val('');
     };
 
     APanel.prototype.cmd_finddialog = function () {
