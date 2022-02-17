@@ -639,6 +639,11 @@
             return $fltrPnlBody;
         };
 
+        /**Clear search box
+         * */
+        this.clearSearchBox = function () {
+            $txtSearch.val('');
+        }
         /**
         *   Show OR hide tab panel depending on, if linked tab panel or not
         *   @param {boolean} show - show tab panel if true
@@ -1613,6 +1618,9 @@
                     this.curTab = gTab;
                     this.curGC = gc;
                     this.firstTabId = id;
+                    if (query != null) {
+                        gTab.setQuery(query);
+                    }
                 //}
 
 
@@ -4053,7 +4061,7 @@
         if (this.curGC) {
             this.curGC.searchCode = "";
             this.curTab.searchText = "";
-        }
+        }        
     };
 
     APanel.prototype.cmd_finddialog = function () {
