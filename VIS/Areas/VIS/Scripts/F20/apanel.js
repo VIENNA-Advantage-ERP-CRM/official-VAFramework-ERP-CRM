@@ -643,6 +643,9 @@
          * */
         this.clearSearchBox = function () {
             $txtSearch.val('');
+            $btnClrSearch.css("visibility", "hidden");
+            self.defaultSearch = true;
+            self.clearSearchText();
         }
         /**
         *   Show OR hide tab panel depending on, if linked tab panel or not
