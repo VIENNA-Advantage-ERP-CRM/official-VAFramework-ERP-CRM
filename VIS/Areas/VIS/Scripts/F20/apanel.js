@@ -639,6 +639,16 @@
             return $fltrPnlBody;
         };
 
+
+        /**Clear search box
+         * */
+        this.clearSearchBox = function () {
+            $btnClrSearch.css("visibility", "hidden");
+            self.defaultSearch = true;
+            self.clearSearchText();
+            $txtSearch.val("");
+        }
+
         /**
         *   Show OR hide tab panel depending on, if linked tab panel or not
         *   @param {boolean} show - show tab panel if true
@@ -1074,6 +1084,7 @@
         this.setTitle = function (title) {
             $spnTitle.text(title);
         };
+
 
         /**
          * If window don't have any record, then show instruction for new record
@@ -1613,6 +1624,9 @@
                     this.curTab = gTab;
                     this.curGC = gc;
                     this.firstTabId = id;
+                    if (query != null) {
+                        gTab.setQuery(query);
+                    }
                 //}
 
 
