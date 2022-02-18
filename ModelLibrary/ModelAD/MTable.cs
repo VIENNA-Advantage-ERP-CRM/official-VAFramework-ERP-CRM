@@ -405,7 +405,7 @@ namespace VAdvantage.Model
                 while (dr.Read())
                 {
                     //s_cacheHasKey[dr.GetInt32(0)] = dr.GetInt32(1) > 0;
-                    // postgres cast issue 
+                    // fix postgres return long type for number
                     s_cacheHasKey[Convert.ToInt32(dr[0])] = Convert.ToInt32(dr[1]) > 0;
                 }
                 dr.Close();
