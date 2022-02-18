@@ -4821,6 +4821,18 @@ namespace VAdvantage.Model
             // VIS0060: In Case of Existing Disposal, need to update the Disposal details with Invoice Line reference.
             if (Util.GetValueOfInt(line.Get_Value("VAFAM_AssetDisposal_ID")) > 0)
             {
+                // On Reversal of Invoice Set Invoice Created Checkbox false on Asset Disposal
+                if (IsReversal())
+                {
+                    if (DB.ExecuteQuery("UPDATE VAFAM_AssetDisposal SET VAFAM_InvoiceCreated='N' WHERE VAFAM_AssetDisposal_ID="
+                                + Util.GetValueOfInt(line.Get_Value("VAFAM_AssetDisposal_ID")), null, Get_TrxName()) < 0)
+                    {
+                        Get_TrxName().Rollback();
+                        _processMsg = Msg.GetMsg(GetCtx(), "VAFAM_AssetDisposalNotUpdated");
+                        return false;
+                    }
+                }
+
                 int disposalID = DB.ExecuteQuery("UPDATE VAFAM_DisposalDetails SET " + (IsReversal() ? "C_InvoiceLine_ID = NULL" : "C_InvoiceLine_ID=" + line.Get_ID())
                         + " WHERE VAFAM_AssetDisposal_ID=" + Util.GetValueOfInt(line.Get_Value("VAFAM_AssetDisposal_ID")), null, Get_TrxName());
                 if (disposalID < 0)
