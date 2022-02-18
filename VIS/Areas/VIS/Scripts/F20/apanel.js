@@ -643,7 +643,10 @@
         /**Clear search box
          * */
         this.clearSearchBox = function () {
-            $txtSearch.val('');
+            $btnClrSearch.css("visibility", "hidden");
+            self.defaultSearch = true;
+            self.clearSearchText();
+            $txtSearch.val("");
         }
 
         /**
