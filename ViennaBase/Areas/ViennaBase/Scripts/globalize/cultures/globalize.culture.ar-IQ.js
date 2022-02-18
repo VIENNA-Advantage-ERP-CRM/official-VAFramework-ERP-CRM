@@ -520,6 +520,10 @@ Globalize.addCultureInfo( "ar-IQ", "default", {
         "AdminActDisabled": "تم تعطيل حساب المسؤول",
         "AdminActExpired": "انتهت صلاحية حساب المسؤول",
         "AdminMaxFailedLoginAttempts": "حساب المستخدم المسؤول مغلق. تجاوزت محاولات تسجيل الدخول الفاشلة الحد المحدد. يرجى الاتصال بالمسؤول.",
+        "EnterVAVerCode": "أدخل OTP المستلم على هاتفك المحمول المسجل",
+        "SkipThisTime": "تخطي هذه المرة",
+        "ResendOTP": "إعادة إرسال OTP",
+        "CapsLockOn": "الحروف الكبيرة مفعلة",
     }
 });
 

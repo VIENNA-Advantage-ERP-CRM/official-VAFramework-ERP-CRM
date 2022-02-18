@@ -6,7 +6,7 @@
 
     var getValidationSummaryErrors = function ($form) {
         var errorSummary = $form.find('.validation-summary-errors, .validation-summary-valid');
-        return errorSummary; 
+        return errorSummary;
     };
 
     var displayErrors = function (form, errors) {
@@ -65,7 +65,6 @@
             $.post($form.attr('action'), $form.serializeArray())
                 .done(function (json) {
                     json = json || {};
-
                     // In case of success, we redirect to the provided URL or the same page.
 
                     if (json.step2) {
@@ -88,20 +87,30 @@
                         showLoginResetPwd();
                         $('#ResetPwd').val(json.ctx.ResetPwd);
                     }
-                    else if (json.ctx && json.ctx.Is2FAEnabled) {
+                        // VIS0008 enhancement for VA Mobile app 2FA
+                    else if (json.ctx && json.ctx.TwoFAMethod != "") {
                         showLogin2FA();
+                        if (json.ctx.TwoFAMethod == "GA")
+                            $(".vis-loginGALbl").css('display', 'block');
+                        else
+                            $(".vis-loginVALbl").css('display', 'block');
                         $("#QRCdeimg").attr('src', json.ctx.QRCodeURL);
                         if (json.ctx.QRFirstTime)
-                            $(".vis-loginQRSec").css("display", "block");
+                            $(".vis-firstLoginAuth").css("display", "block");
                         else {
                             var loginQRLbl = $(".vis-loginQRLabel");
                             loginQRLbl.css("margin-top", "15px");
                             loginQRLbl.css("margin-bottom", "40px");
+                            if (json.ctx.TwoFAMethod == "VA") {
+                                $('#login3Data2').val('false');
+                                $(".vis-login-resendOTP").css("display", "inline-block");
+                            }
                         }
                         $otpTwoFA.val("");
                         $('#login3Data').val(JSON.stringify(json.ctx));
                         $otpTwoFA.focus();
                         $imgbusy1.css('display', 'none');
+                        $imgAuto.hide();
                     }
                     else if (json.success) {
                         window.location = json.redirect || location.href;
@@ -138,13 +147,13 @@
 
     var validatePassword = function (password) {
         var regex = /^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*[@$!%*?&])[a-zA-Z][A-Za-z\d@$!%*?& ]{4,}$/;// Start with Alphabet, minimum 4 length
-       //@$!%*#?& allowed only
+        //@$!%*#?& allowed only
 
         var passed = 0;
 
-       if(!regex.test(password)) {
+        if (!regex.test(password)) {
 
-           return false;
+            return false;
         }
         return true;
     };
@@ -157,12 +166,13 @@
         $cmbOrg.empty();
         $cmbWarehouse.empty();
         $("#login2Panel").find("ul").empty();
+        $(".login-content").show();
     };
 
     var showLoginResetPwd = function () {
         $('#login-form-1').hide();
         $('#login-form-3').hide();
-        $('#login-form-2').show(); 
+        $('#login-form-2').show();
         $btnLogin1.prop('disabled', false);
         $newPwd.focus();
     };
@@ -171,14 +181,26 @@
         $('#login-form-1').hide();
         $('#login-form-2').hide();
         $('#login-form-3').show();
+        $(".login-content").show();
         $btnLogin1.prop('disabled', false);
     };
 
+    var skipClick = function (e) {
+        $("#login3Data1").val(true);
+        $btnLogin1.submit();
+    }
+
+    var resendClick = function (e) {
+        $("#login3Data2").val(true);
+        $btnLogin1.submit();
+    }
+
     var showLogin = function (e) {
+        $("#login3Data1").val(false);
         $("#login2Panel").hide();//  "slide", function () {
         $("#loginPanel").show();//"slide", function () {
         $("#loginName").focus();
-      //  $imgAuto.hide();
+        $imgAuto.hide();
         e.preventDefault();
     };
 
@@ -315,7 +337,10 @@
 
         $otpTwoFA.attr("placeholder", Globalize.localize("EnterOTP"));
         $lblScanQRCode.text(Globalize.localize("ScanQRCode"));
-        $lblEnterVerCode.text(Globalize.localize("EnterVerCode"));
+        $lblEnterGAOTP.text(Globalize.localize("EnterVerCode"));
+        $lblEnterVAOTP.text(Globalize.localize("EnterVAVerCode"));
+        $lblSkip.text(Globalize.localize("SkipThisTime"));
+        $lblResend.text(Globalize.localize("ResendOTP"));
 
         $lblRole.text(Globalize.localize("Role"));
         $lblClient.text(Globalize.localize("Client"));
@@ -326,10 +351,34 @@
         $backButton.val(Globalize.localize("Back"));
     }
 
+    // VIS0008 Check for Caps lock on
+    var checkCapsLock = function (e) {
+        var caps = event.getModifierState && event.getModifierState('CapsLock');
+        var $form = $loginForm;
+        if (caps)
+            displayErrors($form, ['CapsLockOn']);
+        else
+            displayErrors($form, "");
+    }
+
     $("#loginForm").submit(formSubmitHandler);
     $("#login2Form").submit(formSubmitHandler);
     $("#showLogin").click(showLogin);
     $("#login2Form select").change(comboChange);
+
+    $("#txtPwd").on("keydown", checkCapsLock);
+
+    $("#login-form-2").on("keydown", checkCapsLock);
+
+   
+
+    var $lblSkip = $("#lblSkip");
+    var $lblResend = $("#lblResend");
+
+    $lblSkip.click(skipClick);
+    $lblResend.click(resendClick);
+
+    var $loginForm = $("#loginForm");
 
     var $cmbRole = $("#role");
     var $cmbClient = $("#client");
@@ -343,7 +392,8 @@
     var $newCPwd = $('#txtCNewPwd');
     var $otpTwoFA = $('#txt2FAOTP');
     var $lblScanQRCode = $('#lblScanQRCode');
-    var $lblEnterVerCode = $('#lblEnterVerCode');
+    var $lblEnterGAOTP = $('#lblEnterGAOTP');
+    var $lblEnterVAOTP = $('#lblEnterVAOTP');
     //var $lblUser = $('label[for="Login1Model_UserName"]');
     //var $lblPwd = $('label[for="Login1Model_Password"]');
     //var $lblLang = $('label[for="Login1Model_LoginLanguage"]');
@@ -419,7 +469,7 @@
     else {
         $txtUser.focus();
     }
-    
+
 
 });
 

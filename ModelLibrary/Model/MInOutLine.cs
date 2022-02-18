@@ -1082,8 +1082,8 @@ namespace VAdvantage.Model
             // Check if Product_ID is non zero then only create the object
             if (GetM_Product_ID() > 0)
             {
-                _Product = new MProduct(GetCtx(), GetM_Product_ID(), Get_TrxName());
-            }
+                _Product = new MProduct(GetCtx(), GetM_Product_ID(), Get_TrxName());                
+            }            
 
             if (_Product != null && GetC_UOM_ID() != _Product.GetC_UOM_ID())
             {
@@ -1240,6 +1240,13 @@ namespace VAdvantage.Model
                         log.SaveError("Error", Msg.GetMsg(GetCtx(), "QtyCanNotbeGreater"));
                         return false;
                     }
+                }
+
+                //VA230: Quantity cannot be greater than Asset Quantity in case of shipment.
+                if (inO.IsSOTrx() && GetA_Asset_ID() > 0 && Env.IsModuleInstalled("VAFAM_") && Get_ColumnIndex("VAFAM_Quantity") >= 0 && GetMovementQty() > GetVAFAM_Quantity())
+                {
+                    log.SaveError("Error", Msg.GetMsg(GetCtx(), "QtyCanNotbeGreaterThanAssetQty"));
+                    return false;
                 }
             }
 

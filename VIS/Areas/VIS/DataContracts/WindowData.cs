@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using VAdvantage.Classes;
 
 /// <summary>
 /// window Data Contract To pass between Client -Server
@@ -124,6 +125,7 @@ namespace VIS.DataContracts
     {
         public List<JTable> Tables { get; set; }
         public Dictionary<string, Dictionary<object, string>> LookupDirect  { get;set; }
+        public CardViewData CardViewTpl { get; set; }
     }
 
     public class RecordInfoIn

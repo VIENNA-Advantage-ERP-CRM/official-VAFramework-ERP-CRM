@@ -138,7 +138,11 @@
             "EnterOTP": "Wpisz OTP",
             "WrongOTP": "Wprowadzono nieprawidłowy kod OTP",
             "ScanQRCode": "Zeskanuj kod za pomocą Google Authenticator",
-            "EnterVerCode": "Wpisz OTP wygenerowane przez aplikację mobilną"
+            "EnterVerCode": "Wpisz OTP wygenerowane przez aplikację mobilną",
+            "EnterVAVerCode": "Wpisz hasło OTP otrzymane na zarejestrowany telefon komórkowy",
+            "SkipThisTime": "Pomiń ten czas",
+            "ResendOTP": "Wyślij ponownie OTP",
+            "CapsLockOn": "Caps Lock jest włączony",
 }
 });
 

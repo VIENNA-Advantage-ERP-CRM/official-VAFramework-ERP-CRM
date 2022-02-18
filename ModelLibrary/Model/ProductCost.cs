@@ -497,6 +497,11 @@ namespace VAdvantage.Model
             }
             catch (Exception e)
             {
+                if(idr != null)
+                {
+                    idr.Close();
+                    idr = null;
+                }
                 log.Log(Level.SEVERE, sql.ToString(), e);
             }
             //  nothing found

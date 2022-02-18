@@ -19,7 +19,8 @@ using System.Data;
 using System.Data.SqlClient;
 using VAdvantage.Logging;
 using VAdvantage.Utility;
-using VAdvantage.ProcessEngine;namespace VAdvantage.Process
+using VAdvantage.ProcessEngine;
+namespace VAdvantage.Process
 {
     public class ImportAccount : ProcessEngine.SvrProcess
     {
@@ -644,6 +645,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
             catch (Exception e)
             {
+                if (idr != null)
+                {
+                    idr.Close();
+                }
                 log.Log(Level.SEVERE, sql.ToString(), e);
             }
 

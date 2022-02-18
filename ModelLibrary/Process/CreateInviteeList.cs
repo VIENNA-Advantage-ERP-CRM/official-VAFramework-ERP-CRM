@@ -73,8 +73,6 @@ namespace ViennaAdvantageServer.Process
 
                 while (MainDr.Read())
                 {
-                    query = "Delete From C_InviteeList where   ";
-
                     int id = Util.GetValueOfInt(MainDr[0]);
                     VAdvantage.Model.X_C_CampaignTargetList MCapTarget = new VAdvantage.Model.X_C_CampaignTargetList(GetCtx(), id, null);
 

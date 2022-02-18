@@ -3695,8 +3695,8 @@
             this.setDynamicActions();
             //PopulateSerachCombo(false);
             /*	Refresh only current row when tab is current(parent)*/
-
-            if (!gc.isZoomAction && this.curTab.getTabLevel() > 0) {
+            if (!this.curTab.getIsZoomAction() && this.curTab.getTabLevel() > 0) {
+            //if (!gc.isZoomAction && this.curTab.getTabLevel() > 0) {
                 var queryy = new VIS.Query();
                 this.curTab.query = queryy;
             }

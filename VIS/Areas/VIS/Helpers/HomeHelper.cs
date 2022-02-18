@@ -1176,6 +1176,10 @@ namespace VIS.Helpers
         {
             List<FavNode> items = new List<FavNode>();
             FavNode itm = null;
+
+            if (nodes == null || nodes.Count == 0)
+                return items;
+
             for (int i = 0; i < nodes.Count; i++)
             {
                 itm = new FavNode();

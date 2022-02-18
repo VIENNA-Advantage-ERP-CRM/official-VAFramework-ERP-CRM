@@ -133,7 +133,11 @@ Globalize.addCultureInfo( "sl-SI", "default", {
         "EnterOTP": "Vnesite OTP",
         "WrongOTP": "Vpisan napačen OTP",
         "ScanQRCode": "Optično preglejte kodo Google Authenticator",
-        "EnterVerCode": "Vnesite OTP, ki ga ustvari vaša mobilna aplikacija"
+		"EnterVerCode": "Vnesite OTP, ki ga ustvari vaša mobilna aplikacija",
+		"EnterVAVerCode": "Vnesite OTP, prejet na registrirani mobilni telefon",
+		"SkipThisTime": "Tokrat preskočite",
+		"ResendOTP": "Znova pošljite OTP",
+		"CapsLockOn": "Caps Lock je vklopljen",
 	}
 });
 

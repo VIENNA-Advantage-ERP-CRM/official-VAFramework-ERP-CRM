@@ -33,7 +33,7 @@ namespace VAdvantage.Process
             url = url.ToLower();
 
             url = url.Replace("http://", "");
-            url = url.Replace("https://", ""); 
+            url = url.Replace("https://", "");
 
             //if (url.Contains("https://"))
             //{
@@ -59,212 +59,236 @@ namespace VAdvantage.Process
                 url = "http://" + url;
             }
 
-            
+
         }
 
         protected override String DoIt()
         {
-            string query = "Select C_CampaignTargetList_id from C_CampaignTargetList where C_Campaign_id=" + GetRecord_ID() + " and ad_client_id = " + GetCtx().GetAD_Client_ID();
-            IDataReader MainDr = DB.ExecuteReader(query, null, Get_Trx());
-            query = "Delete From C_InviteeList  where C_Campaign_id=" + GetRecord_ID();
-            int value = DB.ExecuteQuery(query);
-            while (MainDr.Read())
+            IDataReader MainDr = null;
+            IDataReader dr = null;
+            string query = String.Empty;
+            try
             {
-                query = "Delete From C_InviteeList where   ";
-
-                int id = Util.GetValueOfInt(MainDr[0]);
-                VAdvantage.Model.X_C_CampaignTargetList MCapTarget = new VAdvantage.Model.X_C_CampaignTargetList(GetCtx(), id, null);
-
-                if (MCapTarget.GetC_MasterTargetList_ID() != 0)
+                query = "Select C_CampaignTargetList_id from C_CampaignTargetList where C_Campaign_id=" + GetRecord_ID() + " and ad_client_id = " + GetCtx().GetAD_Client_ID();
+                MainDr = DB.ExecuteReader(query, null, Get_Trx());
+                query = "Delete From C_InviteeList  where C_Campaign_id=" + GetRecord_ID();
+                int value = DB.ExecuteQuery(query);
+                while (MainDr.Read())
                 {
-                    query = "Select C_BPartner_ID from C_TargetList where C_MasterTargetList_ID=" + MCapTarget.GetC_MasterTargetList_ID() + " and C_BPartner_ID is not null";
-                    IDataReader dr = DB.ExecuteReader(query, null, Get_Trx());
-                    while (dr.Read())
+                    //query = "Delete From C_InviteeList where   ";
+
+                    int id = Util.GetValueOfInt(MainDr[0]);
+                    VAdvantage.Model.X_C_CampaignTargetList MCapTarget = new VAdvantage.Model.X_C_CampaignTargetList(GetCtx(), id, null);
+
+                    if (MCapTarget.GetC_MasterTargetList_ID() != 0)
                     {
-                        invitee(Util.GetValueOfInt(dr[0]));
-
-                    }
-                    dr.Close();
-
-                    query = "Select Ref_BPartner_ID from C_TargetList where C_MasterTargetList_ID=" + MCapTarget.GetC_MasterTargetList_ID() + " and Ref_BPartner_ID is not null";
-                    dr = DB.ExecuteReader(query, null, Get_Trx());
-                    while (dr.Read())
-                    {
-                        invitee(Util.GetValueOfInt(dr[0]));
-
-                    }
-                    dr.Close();
-
-                    query = "Select C_Lead_ID from C_TargetList where C_MasterTargetList_ID=" + MCapTarget.GetC_MasterTargetList_ID() + " and C_Lead_ID is not null";
-                    dr = DB.ExecuteReader(query, null, Get_Trx());
-                    while (dr.Read())
-                    {
-                        string sql = "Select C_InviteeList_id from C_InviteeList where C_Lead_id=" + Util.GetValueOfInt(dr[0]);
-                        object Leadid = DB.ExecuteScalar(sql, null, Get_Trx());
-                        if (Util.GetValueOfInt(Leadid) == 0)
+                        query = "Select C_BPartner_ID from C_TargetList where C_MasterTargetList_ID=" + MCapTarget.GetC_MasterTargetList_ID() + " and C_BPartner_ID is not null";
+                        dr = DB.ExecuteReader(query, null, Get_Trx());
+                        while (dr.Read())
                         {
-                            VAdvantage.Model.X_C_Lead lead = new VAdvantage.Model.X_C_Lead(GetCtx(), Util.GetValueOfInt(dr[0]), Get_Trx());
-                            if (lead.GetC_BPartner_ID() != 0)
+                            invitee(Util.GetValueOfInt(dr[0]));
+
+                        }
+                        dr.Close();
+
+                        query = "Select Ref_BPartner_ID from C_TargetList where C_MasterTargetList_ID=" + MCapTarget.GetC_MasterTargetList_ID() + " and Ref_BPartner_ID is not null";
+                        dr = DB.ExecuteReader(query, null, Get_Trx());
+                        while (dr.Read())
+                        {
+                            invitee(Util.GetValueOfInt(dr[0]));
+
+                        }
+                        dr.Close();
+
+                        query = "Select C_Lead_ID from C_TargetList where C_MasterTargetList_ID=" + MCapTarget.GetC_MasterTargetList_ID() + " and C_Lead_ID is not null";
+                        dr = DB.ExecuteReader(query, null, Get_Trx());
+                        while (dr.Read())
+                        {
+                            string sql = "Select C_InviteeList_id from C_InviteeList where C_Lead_id=" + Util.GetValueOfInt(dr[0]);
+                            object Leadid = DB.ExecuteScalar(sql, null, Get_Trx());
+                            if (Util.GetValueOfInt(Leadid) == 0)
                             {
-                                invitee(lead.GetC_BPartner_ID());
-
-                            }
-                            else if (lead.GetRef_BPartner_ID() != 0)
-                            {
-                                invitee(lead.GetRef_BPartner_ID());
-                            }
-
-                            else if (lead.GetContactName() != null)
-                            {
-
-                                VAdvantage.Model.X_C_InviteeList Invt = new VAdvantage.Model.X_C_InviteeList(GetCtx(), 0, Get_Trx());
-                                //Invt.SetC_TargetList_ID(Util.GetValueOfInt(dr[0]));
-                                Invt.SetC_Campaign_ID(GetRecord_ID());
-
-                                Invt.SetName(lead.GetContactName());
-                                Invt.SetEMail(lead.GetEMail());
-                                Invt.SetPhone(lead.GetPhone());
-                                Invt.SetC_Lead_ID(lead.GetC_Lead_ID());
-                                Invt.SetAddress1(lead.GetAddress1());
-                                Invt.SetAddress1(lead.GetAddress2());
-                                Invt.SetC_City_ID(lead.GetC_City_ID());
-                                Invt.SetCity(lead.GetCity());
-                                Invt.SetC_Region_ID(lead.GetC_Region_ID());
-                                Invt.SetRegionName(lead.GetRegionName());
-                                Invt.SetC_Country_ID(lead.GetC_Country_ID());
-                                Invt.SetPostal(lead.GetPostal());
-                                // Invt.SetURL(url);
-                                if (!Invt.Save())
+                                VAdvantage.Model.X_C_Lead lead = new VAdvantage.Model.X_C_Lead(GetCtx(), Util.GetValueOfInt(dr[0]), Get_Trx());
+                                if (lead.GetC_BPartner_ID() != 0)
                                 {
-                                    Msg.GetMsg(GetCtx(), "InviteeCteationNotDone");
+                                    invitee(lead.GetC_BPartner_ID());
+
+                                }
+                                else if (lead.GetRef_BPartner_ID() != 0)
+                                {
+                                    invitee(lead.GetRef_BPartner_ID());
                                 }
 
-                                string ID = Invt.GetC_InviteeList_ID().ToString();
-                                string encrypt = FormsAuthentication.HashPasswordForStoringInConfigFile(ID, "SHA1");
-                                string urlFinal = "";
-                                urlFinal = url + "?" + encrypt;
-                                sql = "update c_inviteelist set url = '" + urlFinal + "' where c_inviteelist_id = " + Invt.GetC_InviteeList_ID();
-                                int res = Util.GetValueOfInt(DB.ExecuteQuery(sql, null, Get_Trx()));
+                                else if (lead.GetContactName() != null)
+                                {
 
-                                //Random rand = new Random();
-                                //String s = "";
-                                //for (int i = 0; i < 9; i++)
-                                //    s = String.Concat(s, rand.Next(10).ToString());
-                                //string urlFinal = "";
-                                //// urlFinal = url + "?" + Invt.GetC_InviteeList_ID().ToString();
-                                //urlFinal = url + "?" + s;
-                                ////string urlFinal = "";
-                                ////urlFinal = url + "?" + Invt.GetC_InviteeList_ID().ToString();
-                                //Invt.SetURL(urlFinal);
-                                //if (!Invt.Save(Get_Trx()))
-                                //{
-                                //    Msg.GetMsg(GetCtx(), "InviteeCteationNotDone");
-                                //}
+                                    VAdvantage.Model.X_C_InviteeList Invt = new VAdvantage.Model.X_C_InviteeList(GetCtx(), 0, Get_Trx());
+                                    //Invt.SetC_TargetList_ID(Util.GetValueOfInt(dr[0]));
+                                    Invt.SetC_Campaign_ID(GetRecord_ID());
 
+                                    Invt.SetName(lead.GetContactName());
+                                    Invt.SetEMail(lead.GetEMail());
+                                    Invt.SetPhone(lead.GetPhone());
+                                    Invt.SetC_Lead_ID(lead.GetC_Lead_ID());
+                                    Invt.SetAddress1(lead.GetAddress1());
+                                    Invt.SetAddress1(lead.GetAddress2());
+                                    Invt.SetC_City_ID(lead.GetC_City_ID());
+                                    Invt.SetCity(lead.GetCity());
+                                    Invt.SetC_Region_ID(lead.GetC_Region_ID());
+                                    Invt.SetRegionName(lead.GetRegionName());
+                                    Invt.SetC_Country_ID(lead.GetC_Country_ID());
+                                    Invt.SetPostal(lead.GetPostal());
+                                    // Invt.SetURL(url);
+                                    if (!Invt.Save())
+                                    {
+                                        Msg.GetMsg(GetCtx(), "InviteeCteationNotDone");
+                                    }
+
+                                    string ID = Invt.GetC_InviteeList_ID().ToString();
+                                    string encrypt = FormsAuthentication.HashPasswordForStoringInConfigFile(ID, "SHA1");
+                                    string urlFinal = "";
+                                    urlFinal = url + "?" + encrypt;
+                                    sql = "update c_inviteelist set url = '" + urlFinal + "' where c_inviteelist_id = " + Invt.GetC_InviteeList_ID();
+                                    int res = Util.GetValueOfInt(DB.ExecuteQuery(sql, null, Get_Trx()));
+
+                                    //Random rand = new Random();
+                                    //String s = "";
+                                    //for (int i = 0; i < 9; i++)
+                                    //    s = String.Concat(s, rand.Next(10).ToString());
+                                    //string urlFinal = "";
+                                    //// urlFinal = url + "?" + Invt.GetC_InviteeList_ID().ToString();
+                                    //urlFinal = url + "?" + s;
+                                    ////string urlFinal = "";
+                                    ////urlFinal = url + "?" + Invt.GetC_InviteeList_ID().ToString();
+                                    //Invt.SetURL(urlFinal);
+                                    //if (!Invt.Save(Get_Trx()))
+                                    //{
+                                    //    Msg.GetMsg(GetCtx(), "InviteeCteationNotDone");
+                                    //}
+
+                                }
                             }
-                        }
 
+                        }
+                        dr.Close();
                     }
+
+                    if (MCapTarget.GetR_InterestArea_ID() != 0)
+                    {
+
+                        query = "Select C_BPartner_ID from R_ContactInterest where R_InterestArea_ID=" + MCapTarget.GetR_InterestArea_ID() + " and C_BPartner_ID is not null";
+                        dr = DB.ExecuteReader(query, null, Get_Trx());
+                        while (dr.Read())
+                        {
+                            invitee(Util.GetValueOfInt(dr[0]));
+
+                        }
+                        dr.Close();
+
+                        //query = "Select C_BPartner_ID from C_TargetList where R_InterestArea_ID=" + MCapTarget.GetR_InterestArea_ID();
+                        //dr = DB.ExecuteReader(query);
+                        //while (dr.Read())
+                        //{
+                        //    invitee(Util.GetValueOfInt(dr[0]));
+
+                        //}
+                        //dr.Close();
+
+                        query = "Select C_Lead_ID from vss_lead_interestarea where R_InterestArea_ID=" + MCapTarget.GetR_InterestArea_ID() + " and C_Lead_ID is not null";
+                        dr = DB.ExecuteReader(query, null, Get_Trx());
+                        while (dr.Read())
+                        {
+
+                            string sql = "Select C_InviteeList_id from C_InviteeList where C_Lead_id=" + Util.GetValueOfInt(dr[0]);
+                            object Leadid = DB.ExecuteScalar(sql, null, Get_Trx());
+                            if (Util.GetValueOfInt(Leadid) == 0)
+                            {
+
+                                VAdvantage.Model.X_C_Lead lead = new VAdvantage.Model.X_C_Lead(GetCtx(), Util.GetValueOfInt(dr[0]), Get_Trx());
+                                if (lead.GetC_BPartner_ID() != 0)
+                                {
+                                    invitee(lead.GetC_BPartner_ID());
+
+                                }
+                                else if (lead.GetRef_BPartner_ID() != 0)
+                                {
+                                    invitee(lead.GetRef_BPartner_ID());
+                                }
+
+                                else if (lead.GetContactName() != null)
+                                {
+
+                                    VAdvantage.Model.X_C_InviteeList Invt = new VAdvantage.Model.X_C_InviteeList(GetCtx(), 0, Get_Trx());
+                                    //Invt.SetC_TargetList_ID(Util.GetValueOfInt(dr[0]));
+                                    Invt.SetC_Campaign_ID(GetRecord_ID());
+                                    Invt.SetName(lead.GetContactName());
+                                    Invt.SetEMail(lead.GetEMail());
+                                    Invt.SetPhone(lead.GetPhone());
+                                    Invt.SetC_Lead_ID(lead.GetC_Lead_ID());
+                                    Invt.SetAddress1(lead.GetAddress1());
+                                    Invt.SetAddress1(lead.GetAddress2());
+                                    Invt.SetC_City_ID(lead.GetC_City_ID());
+                                    Invt.SetCity(lead.GetCity());
+                                    Invt.SetC_Region_ID(lead.GetC_Region_ID());
+                                    Invt.SetRegionName(lead.GetRegionName());
+                                    Invt.SetC_Country_ID(lead.GetC_Country_ID());
+                                    Invt.SetPostal(lead.GetPostal());
+                                    //Invt.SetURL(url);
+                                    if (!Invt.Save(Get_Trx()))
+                                    {
+                                        Msg.GetMsg(GetCtx(), "InviteeCteationNotDone");
+                                    }
+
+                                    string ID = Invt.GetC_InviteeList_ID().ToString();
+                                    string encrypt = FormsAuthentication.HashPasswordForStoringInConfigFile(ID, "SHA1");
+                                    string urlFinal = "";
+                                    urlFinal = url + "?" + encrypt;
+                                    sql = "update c_inviteelist set url = '" + urlFinal + "' where c_inviteelist_id = " + Invt.GetC_InviteeList_ID();
+                                    int res = Util.GetValueOfInt(DB.ExecuteQuery(sql, null, Get_Trx()));
+
+
+                                    //Random rand = new Random();
+                                    //String s = "";
+                                    //for (int i = 0; i < 9; i++)
+                                    //    s = String.Concat(s, rand.Next(10).ToString());
+                                    //string urlFinal = "";
+                                    //urlFinal = url + "?" + s;
+                                    ////string urlFinal = "";
+                                    ////urlFinal = url + "?" + Invt.GetC_InviteeList_ID().ToString();
+                                    //Invt.SetURL(urlFinal);
+                                    //if (!Invt.Save(Get_Trx()))
+                                    //{
+                                    //    Msg.GetMsg(GetCtx(), "InviteeCteationNotDone");
+                                    //}
+
+
+                                }
+                            }
+
+                        }
+                        dr.Close();
+                    }
+                }
+                MainDr.Close();
+            }
+            catch (Exception ex)
+            {
+                log.Log(Level.SEVERE, "CreateInviteeList" + query, ex);
+            }
+            finally
+            {
+                if (dr != null)
+                {
                     dr.Close();
+                    dr = null;
                 }
 
-                if (MCapTarget.GetR_InterestArea_ID() != 0)
+                if (MainDr != null)
                 {
-
-                    query = "Select C_BPartner_ID from R_ContactInterest where R_InterestArea_ID=" + MCapTarget.GetR_InterestArea_ID() + " and C_BPartner_ID is not null";
-                    IDataReader dr = DB.ExecuteReader(query, null, Get_Trx());
-                    while (dr.Read())
-                    {
-                        invitee(Util.GetValueOfInt(dr[0]));
-
-                    }
-                    dr.Close();
-
-                    //query = "Select C_BPartner_ID from C_TargetList where R_InterestArea_ID=" + MCapTarget.GetR_InterestArea_ID();
-                    //dr = DB.ExecuteReader(query);
-                    //while (dr.Read())
-                    //{
-                    //    invitee(Util.GetValueOfInt(dr[0]));
-
-                    //}
-                    //dr.Close();
-
-                    query = "Select C_Lead_ID from vss_lead_interestarea where R_InterestArea_ID=" + MCapTarget.GetR_InterestArea_ID() + " and C_Lead_ID is not null";
-                    dr = DB.ExecuteReader(query, null, Get_Trx());
-                    while (dr.Read())
-                    {
-
-                        string sql = "Select C_InviteeList_id from C_InviteeList where C_Lead_id=" + Util.GetValueOfInt(dr[0]);
-                        object Leadid = DB.ExecuteScalar(sql, null, Get_Trx());
-                        if (Util.GetValueOfInt(Leadid) == 0)
-                        {
-
-                            VAdvantage.Model.X_C_Lead lead = new VAdvantage.Model.X_C_Lead(GetCtx(), Util.GetValueOfInt(dr[0]), Get_Trx());
-                            if (lead.GetC_BPartner_ID() != 0)
-                            {
-                                invitee(lead.GetC_BPartner_ID());
-
-                            }
-                            else if (lead.GetRef_BPartner_ID() != 0)
-                            {
-                                invitee(lead.GetRef_BPartner_ID());
-                            }
-
-                            else if (lead.GetContactName() != null)
-                            {
-
-                                VAdvantage.Model.X_C_InviteeList Invt = new VAdvantage.Model.X_C_InviteeList(GetCtx(), 0, Get_Trx());
-                                //Invt.SetC_TargetList_ID(Util.GetValueOfInt(dr[0]));
-                                Invt.SetC_Campaign_ID(GetRecord_ID());
-                                Invt.SetName(lead.GetContactName());
-                                Invt.SetEMail(lead.GetEMail());
-                                Invt.SetPhone(lead.GetPhone());
-                                Invt.SetC_Lead_ID(lead.GetC_Lead_ID());
-                                Invt.SetAddress1(lead.GetAddress1());
-                                Invt.SetAddress1(lead.GetAddress2());
-                                Invt.SetC_City_ID(lead.GetC_City_ID());
-                                Invt.SetCity(lead.GetCity());
-                                Invt.SetC_Region_ID(lead.GetC_Region_ID());
-                                Invt.SetRegionName(lead.GetRegionName());
-                                Invt.SetC_Country_ID(lead.GetC_Country_ID());
-                                Invt.SetPostal(lead.GetPostal());
-                                //Invt.SetURL(url);
-                                if (!Invt.Save(Get_Trx()))
-                                {
-                                    Msg.GetMsg(GetCtx(), "InviteeCteationNotDone");
-                                }
-
-                                string ID = Invt.GetC_InviteeList_ID().ToString();
-                                string encrypt = FormsAuthentication.HashPasswordForStoringInConfigFile(ID, "SHA1");
-                                string urlFinal = "";
-                                urlFinal = url + "?" + encrypt;
-                                sql = "update c_inviteelist set url = '" + urlFinal + "' where c_inviteelist_id = " + Invt.GetC_InviteeList_ID();
-                                int res = Util.GetValueOfInt(DB.ExecuteQuery(sql, null, Get_Trx()));
-
-
-                                //Random rand = new Random();
-                                //String s = "";
-                                //for (int i = 0; i < 9; i++)
-                                //    s = String.Concat(s, rand.Next(10).ToString());
-                                //string urlFinal = "";
-                                //urlFinal = url + "?" + s;
-                                ////string urlFinal = "";
-                                ////urlFinal = url + "?" + Invt.GetC_InviteeList_ID().ToString();
-                                //Invt.SetURL(urlFinal);
-                                //if (!Invt.Save(Get_Trx()))
-                                //{
-                                //    Msg.GetMsg(GetCtx(), "InviteeCteationNotDone");
-                                //}
-
-
-                            }
-                        }
-
-                    }
-                    dr.Close();
+                    MainDr.Close();
+                    MainDr = null;
                 }
             }
-            MainDr.Close();
             return Msg.GetMsg(GetCtx(), "InviteeCteationDone");
         }
 

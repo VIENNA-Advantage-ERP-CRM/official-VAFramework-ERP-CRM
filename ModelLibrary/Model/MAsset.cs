@@ -205,7 +205,6 @@ namespace VAdvantage.Model
             SetAD_User_ID(shipment.GetAD_User_ID());
             SetM_Locator_ID(shipLine.GetM_Locator_ID());
             SetIsInPosession(true);
-            SetAssetServiceDate(shipment.GetDateAcct());
 
             // VIS0060: Set Trx Organization on Asset from MR Line.
             if (shipLine.GetAD_OrgTrx_ID() > 0)
@@ -238,6 +237,11 @@ namespace VAdvantage.Model
             {
                 Set_Value("VAFAM_IsWIP", true);
             }
+            else
+            {
+                SetAssetServiceDate(shipment.GetDateAcct());
+            }
+
             if (_assetGroup.Get_ColumnIndex("VAFAM_LifeUseUnit") >= 0 && !String.IsNullOrEmpty(Util.GetValueOfString(_assetGroup.Get_Value("VAFAM_LifeUseUnit"))))
             {
                 Set_Value("VAFAM_LifeUseUnit", Util.GetValueOfString(_assetGroup.Get_Value("VAFAM_LifeUseUnit")));
@@ -779,8 +783,36 @@ namespace VAdvantage.Model
             }
             #region Fixed Asset Management
             /*to Set Written Down Value on Asset i.e. Gross value of Asset-Depreciated/ Amortized Value Arpit*/
-            if (Util.GetValueOfInt(DB.ExecuteScalar("select ad_moduleinfo_id from ad_moduleinfo where prefix='VAFAM_' and isactive='Y'")) > 0)
+            if (Env.IsModuleInstalled("VAFAM_"))
             {
+                // VIS0060: Handle case when Life related data updated on Asset.
+                if (!newRecord && (Is_ValueChanged("LifeUseUnits") || Is_ValueChanged("VAFAM_LifeUseUnit") || Is_ValueChanged("VAFAM_DepreciationType_ID")))
+                {
+                    var LastSchedDate = DB.ExecuteScalar("SELECT MAX(VAFAM_DepDate) FROM VAFAM_ASSETSCHEDULE WHERE IsActive='Y' AND VAFAM_DepAmor='Y' AND A_Asset_ID="
+                        + Get_ID(), null, Get_TrxName());
+                    if (LastSchedDate != null)
+                    {
+                        // Check if SLM-Rate Based depreciation, Then don not check Life with Schedule date.
+                        string rateBased = Util.GetValueOfString(DB.ExecuteScalar("SELECT VAFAM_IsRateBased FROM VAFAM_DepreciationType WHERE VAFAM_DepreciationType = 'SLM'" +
+                            " AND VAFAM_DepreciationType_ID = " + Util.GetValueOfInt(Get_Value("VAFAM_DepreciationType_ID")), null, Get_TrxName()));
+                        if (!rateBased.Equals("Y"))
+                        {
+                            DateTime assetDate = Util.GetValueOfString(Get_Value("VAFAM_LifeUseUnit")).Equals("Y") ?
+                                GetAssetServiceDate().Value.AddYears(Util.GetValueOfInt(GetLifeUseUnits())) :
+                                GetAssetServiceDate().Value.AddMonths(Util.GetValueOfInt(GetLifeUseUnits()));
+
+                            // VIS0060: Life of Asset can not be less than the date of last charged depreciation
+                            if (assetDate < Util.GetValueOfDateTime(LastSchedDate))
+                            {
+                                log.Info("Life of Asset can not be less than the date of last charged depreciation. - Asset Service Date : " + GetAssetServiceDate().Value.Date +
+                                    " - Last Schedule Date : " + Util.GetValueOfDateTime(LastSchedDate).Value.Date);
+                                log.SaveError("VAFAM_LifeUseLess", "");
+                                return false;
+                            }
+                        }
+                    }
+                }
+
                 if (Get_ColumnIndex("VAFAM_WrittenDownValue") > 0 &&
                     Get_ColumnIndex("VAFAM_AssetGrossValue") > 0 && Get_ColumnIndex("VAFAM_SLMDepreciation") > 0)
                 {
