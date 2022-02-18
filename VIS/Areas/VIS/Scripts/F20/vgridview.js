@@ -7,6 +7,7 @@
         this.grid = null;
         this.id = null;
         this.$container = null;
+        this.aPanel = null;
         this.rendered = false;
 
         this.onSelect = null;
@@ -17,8 +18,10 @@
         this.onSort = null;
         this.onEdit = null;
         this.onAdd = null;
+        this.hyperLinkCell = null;
 
         this.editColumnIndex = -1;
+        var clickCount = 0;
 
 
         var self = this;
@@ -31,11 +34,35 @@
             size: '25px'
         };
 
+        function toggleToSingleView(evt) {
+            try {
+                if (self.grid.columns[evt.column].columnName == self.hyperLinkCell) {
+                    self.grid.select(Number(evt.recid));
+                    var isCompositView = self.aPanel.getRoot().find('[name=' + evt.target + ']').closest('.vis-ad-w-p-center-inctab');
+                    if (isCompositView.length > 0) {
+                        if (isCompositView.find('.vis-multi').length > 0) {
+                            isCompositView.find('.vis-multi').click();
+                        } else {
+                            isCompositView.find('.vis-edit').click();
+                        }
+                    } else {
+                        // main view
+                        //self.aPanel.getRoot().find(' .vis-multi:first').click();
+                        self.aPanel.actionPerformedCallback(self.aPanel, "Multi");
+                        self.aPanel.setLastView("Multi");
+                    }
+                }
+            } catch (err) {
+
+            }
+        }
+
         this.getEditColumn = function () {
             return editColumn;
         }
 
         this.onClick = function (evt) {
+            clickCount++;
             // console.log(evt);
             if (this.readOnly)
                 return;
@@ -65,7 +92,16 @@
 
         this.onSingleClick = function (evt) {
             //this.cRecid = evt.recid;
-            //console.log("click");
+            clickCount++;
+            singleClickTimer = setTimeout(function () {
+                if (clickCount === 1) {
+                    clickCount = 0;
+                    toggleToSingleView(evt);
+                } else if (clickCount === 2) {
+                    clearTimeout(singleClickTimer);
+                    clickCount = 0;
+                }
+            }, 400);
         };
 
         this.onSelectLocal = function (evt) {
@@ -153,6 +189,21 @@
         this.onRowAdd = function (evt) {
             self.paintRow(evt.index);
         };
+
+        /**
+         * cell render handler 
+         * @param {any} rIndex row index
+         * @param {any} cIndex cell index
+         */
+        this.cellStyleRender = function (rIndex, cIndex) {
+            var col = self.grid.columns[cIndex];
+            if (!col.selfCellStyleRender && col.gridField && col.gridField.getStyleLogic() != '') // get from property
+            {
+                return self.evaluateStyleLogic(rIndex, col.gridField.getStyleLogic());
+            }
+            return null;
+        };
+
 
         this.paintRow = function (index) {
 
@@ -281,16 +332,41 @@
     VTable.prototype.ROW_REFRESH = 'F';
     VTable.prototype.ROW_UNDO = 'U';
 
+    /**
+     * Evaluate style logic
+     * @param {any} rIndex row Index
+     * @param {any} styleLogic logic string {expression [,]}
+     */
+    VTable.prototype.evaluateStyleLogic = function (rIndex, styleLogic) {
+        this.cellRowIndex = rIndex;
+        var arr = styleLogic.split(',');
+
+        //this.cellColumnName = col.field;
+        var ret = null;
+        for (var j = 0; j < arr.length; j++) {
+            var cArr = arr[j].split("?");
+            if (cArr.length != 2)
+                continue;
+            if (VIS.Evaluator.evaluateLogic(this, cArr[0])) {
+                ret = cArr[1];
+                break;
+            }
+        }
+        return ret;
+
+    };
+
+
     VTable.prototype.setupGridTable = function (aPanel, grdFields, $container, name, mTab, gc) {
 
         if (!mTab.getIsDisplayed(true))
             return 0;
 
         this.id = name;
+        this.aPanel = aPanel;
         this.$container = $container;
         this.mTab = mTab;
         this.AD_Table_ID = this.mTab.getAD_Table_ID();
-
 
         var oColumns = [];
         var mField = null;
@@ -298,6 +374,7 @@
         var visibleFields = 0;
 
         var mFields = grdFields.slice(0);
+
 
         mFields.sort(function (a, b) { return a.getMRSeqNo() - b.getMRSeqNo() });
 
@@ -335,13 +412,17 @@
             var updateable = mField.getIsEditable(false);      //  no context check
             //int WindowNo = mField.getWindowNo();
 
+
+
+
             //  Not a Field
             if (mField.getIsHeading())
                 continue;
 
             var oColumn = {
 
-                resizable: true
+                resizable: true,
+                selfCellStyleRender: false  /* self evalauate Style conditions*/
             }
 
             oColumn.gridField = mField;
@@ -363,6 +444,13 @@
             }
             else {
                 oColumn.size = '100px';
+            }
+
+            if (mField.getIsIdentifier() && mField.getDisplayType() != VIS.DisplayType.Image && this.hyperLinkCell == null) {
+                if (oColumn.hidden == false) {
+                    this.hyperLinkCell = columnName;
+                    oColumn.style = 'text-decoration:underline; color:rgba(var(--v-c-primary), 1) !important; cursor:pointer';
+                }
             }
 
             if (displayType == VIS.DisplayType.Amount) {
@@ -402,6 +490,31 @@
                 };
                 //oColumn.caption = 'class="vis-control-wrap-int-amount"';
             }
+            else if (displayType == VIS.DisplayType.ProgressBar) {
+                oColumn.sortable = true;
+                oColumn.selfCellStyleRender = true;
+                oColumn.render = function (record, index, colIndex) {
+                    var f = oColumns[colIndex].field;
+
+                    var gField = oColumns[colIndex].gridField;
+                    var style = '';
+                    if (gField.getStyleLogic() != '')
+                        style = self.evaluateStyleLogic(index, gField.getStyleLogic());
+                    if (!style) style = '';
+
+                    var val = record[f];
+                    //var maxVal = gField.getMaxValue();
+                    //var minVal = gField.getMinValue();
+                    if (record.changes && typeof record.changes[f] != 'undefined') {
+                        val = record.changes[f];
+                    }
+                    //return '<input id="rng' + index + '" type="range" min="' + minVal + '" max="' + maxVal + '" disabled="disabled" value="' + val + '" /><div style="position: absolute"><output class="vis-grid_progress_output"> ' + val+'</output></div>';
+
+                    return '<div class="vis-progress-gridbar" style="' + style + '">' +
+                        '<div class="vis-progress-percent-bar" style = "width:' + (val || 0) + '%;' + style + '" ></div>' +
+                        '<div class="vis-progress-gridoutput" > ' + (val || '') + '</div></div >';
+                }
+            }
             else if (VIS.DisplayType.IsNumeric(displayType)) {
                 oColumn.sortable = true;
                 oColumn.customFormat = VIS.DisplayType.GetNumberFormat(displayType);
@@ -427,12 +540,18 @@
 
                 oColumn.sortable = true;
                 var lCol = columnName.toLowerCase();
-                //oColumn.render = function (record, index, colIndex) {
-                //    var chk = (record[oColumns[colIndex].field]) ? "checked" : "";
-                //    //console.log(chk);
-                //    return '<input type="checkbox" ' + chk + ' disabled="disabled" >';
-                //}
+                if (oColumn.gridField.getIsSwitch()) {
+                    oColumn.render = "switch";
+                    //oColumn.render = function (record, index, colIndex) {
+
+                    //    var chk = (record[oColumns[colIndex].field]) ? "checked" : "";
+                    //    //console.log(chk);
+                    //   // return '<input type="checkbox" ' + chk + ' onclick="var obj = w2ui[\'' + name + '\'];     obj.editChange.call(obj, this, ' + index + ', ' + colIndex +', event)" class="vis-switch"><i for="switch" onclick="$(this).prev().click();"   class="vis-switchSlider">Toggle</i></div>';
+                    //}
+                }
+
                 oColumn.editable = { type: 'checkbox' };
+
             }
             //	String (clear/password)
             else if (displayType == VIS.DisplayType.String
@@ -441,6 +560,12 @@
 
 
                 oColumn.sortable = true;
+                //if (oColumn.hidden == false && (this.hyperLinkCell[name] == "undefined" || this.hyperLinkCell[name] == null)) {
+                //    if (columnName.toLowerCase() == "value" || columnName.toLowerCase() == "name" || columnName.toLowerCase() == "documentno") {
+                //        this.hyperLinkCell[name] = columnName;
+                //        oColumn.style = 'text-decoration:underline; color:rgba(var(--v-c-primary), 1) !important; cursor:pointer';
+                //    }
+                //}
 
                 if (mField.getIsEncryptedField()) {
                     oColumn.render = function (record, index, colIndex) {
@@ -499,20 +624,132 @@
 
                         var f = oColumns[colIndex].field;
                         var val = record[f];
+
+                        var customStyle = oColumns[colIndex].gridField.getGridImageStyle();
+                        var winNo = oColumns[colIndex].gridField.getWindowNo();
+                        var customClass;
+                        if (customStyle) {
+                            customClass = oColumns[colIndex]['customClass'];
+                            if (!customClass) {
+                                oColumns[colIndex]['customClass'] = 'vis-grd-custom-' + oColumns[colIndex].gridField.getAD_Column_ID() + winNo;
+                                customClass = '.vis-grd-custom-' + oColumns[colIndex].gridField.getAD_Column_ID() + winNo + "{" + customStyle + "}";
+                                var styleTag = document.createElement('style');
+                                styleTag.type = 'text/css';
+                                styleTag.innerHTML = customClass;
+                                $($('head')[0]).append(styleTag);
+                            }
+                        }
+
                         if (record.changes && typeof record.changes[f] != 'undefined') {
                             //val = record.changes[f];
                         }
                         var d;
                         if (l) {
-                            d = l.getDisplay(val, true);
+                            d = l.getDisplay(val, true, true);
                             //if (d.startsWith("<"))
                             //  d = l.getDisplay(nd, false);
                             //d = w2utils.encodeTags(d);
                         }
 
-                        return d;
+                        var strDiv = "";
+                        if (l && VIS.DisplayType.List == l.displayType) {
+                            var lType = l.getLovIconType(val, true);
+
+                            var listIcon = l.getLOVIconElement(val, true);
+                            var highlightChar = '';
+                            if (!listIcon) {
+                                highlightChar = d.substring(0, 1);
+                            }
+                            // If both , then show text and image
+                            if (lType == "B") {
+                                strDiv = "<div class='vis-grid-td-icon-grp'>";
+
+                                if (listIcon) {
+                                    strDiv += "<div class='" + oColumns[colIndex]['customClass'] + " vis-grid-row-td-icon'> " + listIcon + "</div> ";
+                                }
+                                else {
+                                    strDiv += "<div class='" + oColumns[colIndex]['customClass'] + " vis-grid-row-td-icon'><span>" + highlightChar + "</span></div>";
+                                }
+                                strDiv += "<span> " + d + "</span ><div>";
+                            }
+                            // if Text, then show text only
+                            else if (lType == "T") {
+                                return d;
+                            }
+                            //Show icon only
+                            else if (lType == "I") {
+                                strDiv = "<div class='vis-grid-td-icon-grp' style='Justify-Content:center'>";
+                                if (listIcon) {
+                                    strDiv += "<div class='" + oColumns[colIndex]['customClass'] + " vis-grid-row-td-icon'> " + listIcon + "</div> ";
+                                }
+                                else {
+                                    strDiv += "<div class='" + oColumns[colIndex]['customClass'] + " vis-grid-row-td-icon'><span>" + highlightChar + "</span></div>";
+                                }
+                                strDiv += "<div>";
+                            }
+                        }
+
+                        else
+                            // Based on sequence of image in idenitifer, perform logic and display image with text
+                            if (l && l.gethasImageIdentifier()) {
+                                var imgIndex = d.indexOf("Images/");
+
+                                if (imgIndex == -1)
+                                    return d;
+
+                                //Find Image from Identifier string 
+                                var img = d.substring(imgIndex + 7, d.lastIndexOf("^^"));
+                                img = VIS.Application.contextUrl + "Images/Thumb32x32/" + img;
+
+                                //Replace Image string with ^^^, so that ^^^ can be used to split Rest of identifer value
+                                d = d.replace("^^" + d.substring(imgIndex, d.lastIndexOf("^^") + 2), "^^^")
+                                if (d.indexOf("Images/") > -1)
+                                    d = d.replace(d.substring(imgIndex, d.lastIndexOf("^^") + 2), "^^^");
+
+                                d = d.split("^^^");
+
+                                //Start HTMl string to be rendered inside Cell
+                                strDiv = "<div class='vis-grid-td-icon-grp'>";
+                                var highlightChar = '';
+
+                                //Now 'd' may contains identifier values to be displayed before and after image
+                                for (var c = 0; c < d.length; c++) {
+                                    if (d[c].trim().length > 0) {
+                                        //If highlightChar is not found, then get it from first item encounterd.
+                                        if (highlightChar.length == 0)
+                                            highlightChar = d[c].trim().substring(0, 1).toUpper();
+                                        //If image contains nothing.png that means image not found in identfier and 
+                                        //we will Display highlightChar
+                                        if (c > 0 && img.indexOf("nothing.png") > -1 && highlightChar.length > 0) {
+                                            strDiv += "<div class='" + oColumns[colIndex]['customClass'] + " vis-grid-row-td-icon'><span>" + highlightChar + "</span></div>";
+                                        }
+                                        strDiv += "<span>" + d[c] + "</span>";
+                                    }
+                                    //If image found, then display that image.
+                                    if (c == 0 || img.indexOf("nothing.png") > -1) {
+                                        if (img.indexOf("nothing.png") == -1) {
+                                            strDiv += "<div class='" + oColumns[colIndex]['customClass'] + " vis-grid-row-td-icon'"
+                                                + " > <img src='" + img +
+                                                "'></div > ";
+                                            // "' onerror='this.style.display=\"none\"' ></img></div > ";
+                                        }
+
+                                    }
+                                }
+                                +"</div > ";
+
+                            }
+
+
+                        if (strDiv == "")
+                            return d;
+
+
+
+                        return strDiv;
                         //return '<span>' + d + '</span>';
                     }
+
                 }
             }
             //Date /////////
@@ -621,7 +858,6 @@
                 }
             }
 
-
             else if (displayType == VIS.DisplayType.Account || displayType == VIS.DisplayType.PAttribute) {
 
                 oColumn.sortable = true;
@@ -647,8 +883,6 @@
                 }
             }
 
-
-
             else if (displayType == VIS.DisplayType.PAttribute) {
 
                 oColumn.sortable = true;
@@ -671,21 +905,42 @@
 
                 oColumn.render = function (record, index, colIndex) {
                     var f = oColumns[colIndex].field;
-                    var val = record[f];
+
+                    var customStyle = oColumns[colIndex].gridField.getGridImageStyle();
+                    var winNo = oColumns[colIndex].gridField.getWindowNo();
+                    var customClass;
+                    if (customStyle) {
+                        customClass = oColumns[colIndex]['customClass'];
+                        if (!customClass) {
+                            oColumns[colIndex]['customClass'] = 'vis-grd-custom-' + oColumns[colIndex].gridField.getAD_Column_ID() + winNo;
+                            customClass = '.vis-grd-custom-' + oColumns[colIndex].gridField.getAD_Column_ID() + winNo + "{" + customStyle + "}";
+                            var styleTag = document.createElement('style');
+                            styleTag.type = 'text/css';
+                            styleTag.innerHTML = customClass;
+                            $($('head')[0]).append(styleTag);
+                        }
+                    }
+
+                    var val = record["imgurlcolumn" + f];
                     if (record.changes && typeof record.changes[f] != 'undefined') {
                         val = record.changes[f];
                     }
 
                     if (!val) {
-                        val = "-";
+                        val = '<div class="vis-grid-row-td-icon-center">-</div>';
                         return val;
                     }
-                    return VIS.Msg.getElement1('AD_Image_ID') + '-' + val;
-                    //var img = $('img').error(function () {
-                    //    $(this).attr("src", VIS.Application.contextUrl + "/Images/Thumb32x32/" + val + ".jpeg ");
-                    //}).attr("src", VIS.Application.contextUrl + "/Images/Thumb32x32/" + val+".png ");
-
-                    //return img.html();
+                    //return VIS.Msg.getElement1('AD_Image_ID') + '-' + val;
+                    val = val.replace("Images/", "Images/Thumb32x32/");
+                    //var img = $('<img>').attr("src", VIS.Application.contextUrl + val);
+                    var img;
+                    if (customClass) {
+                        img = '<div class="vis-grid-row-td-icon-center"><div class="' + oColumns[colIndex]['customClass'] + ' vis-grid-row-td-icon"><img src="' + VIS.Application.contextUrl + val + '"></div></div>';
+                    }
+                    else {
+                        img = '<div class="vis-grid-row-td-icon-center"><div class="vis-grid-row-td-icon"><img src="' + VIS.Application.contextUrl + val + '"></div></div>';
+                    }
+                    return img;
                 }
             }
 
@@ -743,8 +998,10 @@
             var iControl = VIS.VControlFactory.getControl(mTab, mField, false, false, false);
             iControl.setReadOnly(false);
 
-            if (!oColumn.editable)
+            if (!oColumn.editable) {
                 oColumn.editable = { type: 'custom', ctrl: iControl };
+            }
+
 
             iControl.addVetoableChangeListener(gc);
 
@@ -767,11 +1024,17 @@
                         //oColumns[p].size = w + '%';
                         oColumns[p].min = 100;
                     }
+                    //if (oColumns[p].gridField.getIsSwitch()) {
+                    //    oColumns[p].editable = { type: 'checkbox' };
+                    //}
 
+                    if (this.hyperLinkCell == null) {
+                        this.hyperLinkCell = oColumns[p].columnName;
+                        oColumns[p].style = 'text-decoration:underline; color:rgba(var(--v-c-primary), 1) !important; cursor:pointer';
+                    }
                 }
             }
         }
-
 
         //oColumns[oColumns.length - 1].size = "100%";
         this.grid = $().w2grid({
@@ -817,12 +1080,28 @@
             onDblClick: this.onClick,
             onEditField: this.onEditField,
             onChange: this.onChange,
-            onRowAdd: this.onRowAdd
+            onRowAdd: this.onRowAdd,
+            onCellStyleRender: this.cellStyleRender
             //onResize: function () { alert('resize') }
 
         });
+        var self = this;
+
         //this.grid.selectType = 'cell';;
         return size;
+    };
+
+    /**
+     * return current cell-row value as string
+     * called form Evaluator class
+     * @param {any} field name of field /column 
+     */
+    VTable.prototype.getValueAsString = function (field) {
+        var record = this.grid.records[this.cellRowIndex];
+        var data = this.grid.parseField(record, field.toLowerCase());
+        if (!data)
+            return '';
+        return data.toString();
     };
 
     VTable.prototype.get = function (recid, isIndex) {
@@ -876,6 +1155,7 @@
 
     VTable.prototype.refresh = function () {
         this.grid.refresh();
+        console.log("refresh");
     };
 
     VTable.prototype.resize = function () {
@@ -959,6 +1239,10 @@
         this.grid.scrollIntoView(index);
     };
 
+    //VTable.prototype.setDefaultFocusField = function (field) {
+    //    this.defaultFocusField = field;
+    //};
+
     VTable.prototype.tableModelChanged = function (action, args, actionIndexOrId) {
 
         this.blockSelect = true;
@@ -987,6 +1271,7 @@
                 id = args.recid; // row to select
                 this.grid.refresh(); //refresh Grid
                 this.blockSelect = true; // forcefully block select changed event
+              
             }
 
             else if (action === VIS.VTable.prototype.ROW_DELETE) {
@@ -1012,6 +1297,10 @@
             if (id) {
                 this.select(id); //Select Row
             }
+            if (action === VIS.VTable.prototype.ROW_ADD && !this.aPanel.curGC.getIsCardRow() && !this.aPanel.curGC.getIsSingleRow()
+                && !this.aPanel.curGC.getIsMapRow()) {
+                this.setDefaultFocus();
+            }
         }
 
         this.blockSelect = false;
@@ -1019,11 +1308,18 @@
 
     //Set Default Focus for grid... Not in use Yet.
     VTable.prototype.setDefaultFocus = function (colName) {
+       
+        if (!this.mTab.defaultFocusField)
+            return;
+        if (!colName)
+            colName = this.mTab.defaultFocusField.getColumnName();
         var selIndices = this.grid.getSelection();  //this.grid.getSelection(true);
         var colIndex = this.grid.getColumn(colName.toLower(), true)
         if (selIndices && selIndices.length > 0) {
-            ///this.grid.editField(selIndices[0], colIndex);
-            this.grid.dblClick(selIndices[0], { metaKey: true });
+            window.setTimeout(function () {
+                this.grid.editField(selIndices[0], colIndex);
+            }.bind(this), 200);
+            //this.grid.dblClick(selIndices[colIndex], { metaKey: true });
         }
     };
 

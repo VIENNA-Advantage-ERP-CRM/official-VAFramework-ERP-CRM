@@ -45,8 +45,8 @@
         };
 
 
-        function getCardViewInfo(AD_Window_ID, AD_Tab_ID, callback) {
-            var data = { AD_Window_ID: AD_Window_ID, AD_Tab_ID: AD_Tab_ID };
+        function getCardViewInfo(AD_Window_ID, AD_Tab_ID,AD_CardView_ID,sql, callback) {
+            var data = { AD_Window_ID: AD_Window_ID, AD_Tab_ID: AD_Tab_ID, AD_CardView_ID: AD_CardView_ID, SQL: sql };
             $.ajax({
                 url: cardViewUrl,
                 type: "POST",
@@ -158,11 +158,13 @@
                     var retObj = JSON.parse(jString);
                     var dataSet = null;
                     var lookupDirect = null;
+                    var cardViewData = null;
                     if (retObj) {
                         dataSet = new VIS.DB.DataSet().toJson(retObj.Tables);
                         lookupDirect = retObj.LookupDirect;
+                        cardViewData = retObj.CardViewTpl;
                     }
-                    callback(dataSet, lookupDirect);
+                    callback(dataSet, lookupDirect, cardViewData);
                 }
             })
         };

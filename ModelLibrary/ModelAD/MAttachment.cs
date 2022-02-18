@@ -671,7 +671,7 @@ namespace VAdvantage.Model
                 }
                 else if (GetFileLocation() == FILELOCATION_ServerFileSystem)
                 {
-                    String path = GlobalVariable.AttachmentPath;
+                    String path = GetAttachmentPath();
 
                     //Create Directory
                     try
@@ -723,7 +723,7 @@ namespace VAdvantage.Model
                 } // No need to implement for now, but do not delete
                 if (GetFileLocation() == FILELOCATION_WebService)
                 {
-                    string filePath = GlobalVariable.AttachmentPath;
+                    string filePath = GetAttachmentPath();
                     string folderKey = "0";
                     int AD_AttachmentLine_ID = 0;
                     try
@@ -986,7 +986,7 @@ namespace VAdvantage.Model
             try
             {
 
-                String path = GlobalVariable.AttachmentPath;
+                String path = GetAttachmentPath();
                 //path = path.Substring(0,path.IndexOf("bin"));
                 if (Directory.Exists(path))
                 {
@@ -1036,7 +1036,7 @@ namespace VAdvantage.Model
                 else if (GetFileLocation() == FILELOCATION_ServerFileSystem)
                 {
                     fileName = this.GetAD_Table_ID() + "_" + this.GetRecord_ID();
-                    String filePath = GlobalVariable.AttachmentPath + "\\" + fileName;
+                    String filePath = Path.Combine(GetAttachmentPath(), fileName);
                     if (System.IO.File.Exists(filePath))
                     {
                         sdata = System.IO.File.ReadAllBytes(filePath);
@@ -1065,7 +1065,8 @@ namespace VAdvantage.Model
 
                         //(filename, Path.Combine(filePath, "TempDownload", folder));
 
-                        string filePath = GlobalVariable.PhysicalPath;
+
+                        string filePath = GetServerLocation();
 
                         // Create client info object
                         MClientInfo cInfo = null;
@@ -1176,9 +1177,11 @@ namespace VAdvantage.Model
                     // get next entry in zip
 
                     //Write file In Temp Download
-                    Directory.CreateDirectory(System.IO.Path.Combine(GlobalVariable.PhysicalPath, "TempDownload", FolderKey));
 
-                    System.IO.File.WriteAllBytes(System.IO.Path.Combine(GlobalVariable.PhysicalPath, "TempDownload", FolderKey, name), dataEntry);
+                    Directory.CreateDirectory(System.IO.Path.Combine(GetServerLocation(), "TempDownload", FolderKey));
+
+                    System.IO.File.WriteAllBytes(System.IO.Path.Combine(GetServerLocation(), "TempDownload", FolderKey, name), dataEntry);
+
 
                     entry = zip.getNextEntry();
                 }
@@ -1191,6 +1194,21 @@ namespace VAdvantage.Model
                 return false;
             }
             return true;
+        }
+
+        /// <summary>
+        /// Get the server location
+        /// </summary>
+        /// <returns>Returns server location</returns>
+        private static string GetServerLocation()
+        {
+            string serverLocation = System.Web.Configuration.WebConfigurationManager.AppSettings["serverLocation"];
+
+            if (serverLocation != null && serverLocation != "")
+            {
+                return serverLocation;
+            }
+            return GlobalVariable.PhysicalPath;
         }
 
         /// <summary>
@@ -1308,7 +1326,8 @@ namespace VAdvantage.Model
         {
             try
             {
-                string filePath = System.IO.Path.Combine(GlobalVariable.PhysicalPath, "TempDownload");
+
+                string filePath = System.IO.Path.Combine(GetServerLocation(), "TempDownload");
                 string zipinput = filePath + "\\" + folderKey + "\\zipInput";
                 string zipfileName = System.IO.Path.Combine(filePath, folderKey, DateTime.Now.Ticks.ToString());
 
@@ -1496,7 +1515,7 @@ namespace VAdvantage.Model
 
 
                 //zipData = Utility.SecureEngine.EncryptFile(zipData, Password);
-                if (!SecureEngine.EncryptFile(zipfileName, Password, outputfileName))
+                if (!SecureEngine.EncryptFile(zipfileName, Password, Path.Combine(filePath, outputfileName)))
                 {
                     error.Append("ErrorInEncryption:" + zipfileName);
                     CleanUp(filePath + "\\" + folderKey, zipfileName, null, zipinput);
@@ -1547,7 +1566,7 @@ namespace VAdvantage.Model
 
                 else if (GetFileLocation() == FILELOCATION_ServerFileSystem)
                 {
-                    String path = GlobalVariable.AttachmentPath;
+                    string path = GetAttachmentPath();
 
                     //Create Directory
                     try
@@ -1611,6 +1630,15 @@ namespace VAdvantage.Model
             }
         }
 
+        /// <summary>
+        /// Get attachment path
+        /// </summary>
+        /// <returns>Returns attachment path</returns>
+        private static string GetAttachmentPath()
+        {
+            return GetServerLocation() == GlobalVariable.PhysicalPath ?
+                        GlobalVariable.AttachmentPath : Path.Combine(GetServerLocation(), "Attachments");
+        }
 
         private void CleanUp(string dirpath, string zipfile, string encryptedfile, string zipInput)
         {
@@ -1714,11 +1742,13 @@ namespace VAdvantage.Model
                     res = CreateAttachmentLine(attachmentFiles[i].Name, attachmentFiles[i].Size, FolderKey);
                     if (res.Equals("False"))
                     {
-                        Directory.Delete(System.IO.Path.Combine(GlobalVariable.PhysicalPath, "TempDownload", FolderKey));
+
+                        Directory.Delete(System.IO.Path.Combine(GetServerLocation(), "TempDownload", FolderKey));
                         return false;
                     }
                 }
-                Directory.Delete(System.IO.Path.Combine(GlobalVariable.PhysicalPath, "TempDownload", FolderKey));
+                Directory.Delete(System.IO.Path.Combine(GetServerLocation(), "TempDownload", FolderKey));
+
 
             }
             return true;
@@ -1734,7 +1764,8 @@ namespace VAdvantage.Model
                 {
                     string fileLocation = GetFileLocation();
                     string folder = DateTime.Now.Ticks.ToString();
-                    string filePath = System.IO.Path.Combine(GlobalVariable.PhysicalPath);
+
+                    string filePath = System.IO.Path.Combine(GetServerLocation());
                     Directory.CreateDirectory(Path.Combine(filePath, "TempDownload", folder));
                     string filename = GetAD_Table_ID() + "_" + GetRecord_ID() + "_" + AD_AttachmentLine_ID;
                     string zipFileName = "zip" + DateTime.Now.Ticks.ToString();
@@ -1964,6 +1995,82 @@ WHERE att.IsActive = 'Y' AND al.IsActive = 'Y' AND ar.IsActive = 'Y' AND att.AD_
                 return Util.GetValueOfString(attRefDs.Tables[0].Rows[0]["DocumentURI"]);
             }
             return "";
+        }
+
+        /// <summary>
+        /// Delete actual attachment files
+        /// </summary>
+        /// <param name="AttachmentLineIDs"></param>
+        /// <returns></returns>
+        public void DeleteAttachments(string[] AttachmentLineIDs)
+        {
+            try
+            {
+                string fileLocation = GetFileLocation();
+                string filePath = System.IO.Path.Combine(GetServerLocation(), "Attachments");
+
+                for (int i = 0; i < AttachmentLineIDs.Length; i++)
+                {
+                    string filename = GetAD_Table_ID() + "_" + GetRecord_ID() + "_" + AttachmentLineIDs[i];
+
+                    if (fileLocation == X_AD_Attachment.FILELOCATION_ServerFileSystem)
+                    {
+                        // VIS_264: Delete file from attachments folder if exists
+                        if (System.IO.File.Exists(Path.Combine(filePath, filename)))
+                        {
+                            System.IO.File.Delete(Path.Combine(filePath, filename));
+                        }
+                        continue;
+                    }
+                    if (fileLocation == X_AD_Attachment.FILELOCATION_FTPLocation)
+                    {
+                        DeleteFileFromFtpServer(filename);
+                        continue;
+                    }
+                    if (fileLocation == X_AD_Attachment.FILELOCATION_Database)
+                    {
+                        // VIS_264: If file location is database, no action needed since whole attachment line row 
+                        // will be deleted afterwards
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.Log(Level.WARNING, "DeleteAttachments -> ", ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Delete attachment file from ftp server
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        private void DeleteFileFromFtpServer(string filename)
+        {
+            try
+            {
+                MClientInfo cInfo = null;
+                if (AD_Client_ID > 0)
+                {
+                    cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                }
+                else
+                {
+                    cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                }
+
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(cInfo.GetFTPUrl() + "//" + cInfo.GetFTPFolder() + "//" + filename);
+                request.Credentials = new NetworkCredential(cInfo.GetFTPUsername(), cInfo.GetFTPPwd());
+                request.Method = WebRequestMethods.Ftp.DeleteFile;
+
+                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+
+                response.Close();
+            }
+            catch(Exception ex)
+            {
+                _log.Log(Level.WARNING, "DeleteFileFromFtpServer -> ", ex.Message);
+            }
         }
     }
 

@@ -135,11 +135,28 @@ namespace VIS.Controllers
                     sqlIn.sql = Server.HtmlDecode(sqlIn.sql);
                     sqlIn.sqlDirect = Server.HtmlDecode(sqlIn.sqlDirect);
                     data = w.GetWindowRecords(sqlIn, fields, ctx, rowCount, sqlCount, AD_Table_ID, obscureFields);
+
                 }
             }
             return Json(JsonConvert.SerializeObject(data), JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Get Total card record count 
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="cardID"></param>
+        /// <returns></returns>
+        public int GetRecordCountWithCard(string sql, int cardID) {
+            int count = 0;
+            using (var w = new WindowHelper())
+            {
+                Ctx ctx = Session["ctx"] as Ctx;
+                sql = SecureEngineBridge.DecryptByClientKey(sql, ctx.GetSecureKey());
+                count= w.GetRecordCountWithCard(sql, cardID);
+            }
+                return count;
+        }
 
         protected override JsonResult Json(object data, string contentType, System.Text.Encoding contentEncoding, JsonRequestBehavior behavior)
         {
@@ -438,7 +455,16 @@ namespace VIS.Controllers
                 if (rep.Report != null && (rep.Report.Length > 1048576 || Util.GetValueOfInt(rep.ReportProcessInfo["Record_ID"]) > 0))
                 {
                     rep.AskForNewTab = true;
-                    string filePath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + "TempDownload" + "\\temp_" + DateTime.Now.Ticks + ".pdf";
+                    string filePath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + "TempDownload" + "\\temp_" + DateTime.Now.Ticks;
+                    if (processInfo["FileType"] == "C")
+                    {
+                        filePath += ".csv";
+                    }
+                    else
+                    {
+                        filePath += ".pdf";
+                    }
+
                     System.IO.File.WriteAllBytes(filePath, rep.Report);
                     rep.ReportFilePath = filePath.Substring(filePath.IndexOf("TempDownload"));
                     rep.HTML = null;
@@ -469,10 +495,20 @@ namespace VIS.Controllers
         /// <returns></returns>
         private int GetDoctypeBasedReport(Ctx ctx, int tableID, int record_ID)
         {
+            string tableName = MTable.GetTableName(ctx, tableID);
             #region To Override Default Process With Process Linked To Document Type
 
             string colName = "C_DocTypeTarget_ID";
-
+            int invoiceReportID = VAdvantage.Common.Common.GetBusinessInvoiceReportID(ctx, tableID, record_ID);
+            if (invoiceReportID > 0)
+            {
+                string lang = VAdvantage.Common.Common.GetCustomerLanguage(ctx, tableID, record_ID);
+                if (lang != "" && ctx.GetContext("#AD_Language") != lang)
+                {
+                    ctx.SetContext("Report_Lang", lang);
+                }
+                return invoiceReportID;
+            }
 
             string sql1 = "SELECT COUNT(*) FROM AD_Column WHERE AD_Table_ID=" + tableID + " AND ColumnName   ='C_DocTypeTarget_ID'";
             int id = Util.GetValueOfInt(DB.ExecuteScalar(sql1));
@@ -485,8 +521,6 @@ namespace VIS.Controllers
 
             if (id > 0)
             {
-
-                string tableName = MTable.GetTableName(ctx, tableID);
                 sql1 = "SELECT " + colName + ", AD_Org_ID FROM " + tableName + " WHERE " + tableName + "_ID =" + Util.GetValueOfString(record_ID);
                 DataSet ds = DB.ExecuteDataset(sql1);
 
@@ -521,6 +555,28 @@ namespace VIS.Controllers
             return 0;
 
             #endregion
+        }
+
+        /// <summary>
+        /// Get Report Language from Coustomer Master
+        /// </summary>
+        /// <param name="tableID"></param>
+        /// <param name="record_ID"></param>
+        /// <param name="tableName"></param>
+        /// <returns></returns>
+        private string GetCustomerLanguage(int tableID, int record_ID, string tableName)
+        {
+            string lang = "";
+            try
+            {
+                lang = Util.GetValueOfString(DB.ExecuteScalar("SELECT AD_Language FROM C_BPartner WHERE C_BPartner_ID=(SELECT C_BPartner_ID FROM " + tableName + " WHERE " + tableName + "_ID=" + record_ID + ")"));
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return lang;
         }
 
         #endregion
@@ -589,11 +645,11 @@ namespace VIS.Controllers
         /// json dataset</returns>
         /// 
 
-        public async System.Threading.Tasks.Task <JsonResult> JDataSetWithCode(SqlParamsIn sqlIn)
+        public async System.Threading.Tasks.Task<JsonResult> JDataSetWithCode(SqlParamsIn sqlIn)
         {
             return await System.Threading.Tasks.Task.Run(() => JDataSetWithCodeAsync(sqlIn));
         }
-            public JsonResult JDataSetWithCodeAsync(SqlParamsIn sqlIn)
+        public JsonResult JDataSetWithCodeAsync(SqlParamsIn sqlIn)
         {
             SqlHelper h = new SqlHelper();
             Ctx ctx = Session["ctx"] as Ctx;
@@ -745,7 +801,7 @@ namespace VIS.Controllers
         {
             return await System.Threading.Tasks.Task.Run(() => GeneratePrintAsync(AD_Process_ID, Name, AD_Table_ID, Record_ID, WindowNo, filetype, actionOrigin, originName));
         }
-        public  JsonResult GeneratePrintAsync(int AD_Process_ID, string Name, int AD_Table_ID, int Record_ID, int WindowNo, string filetype, string actionOrigin, string originName)
+        public JsonResult GeneratePrintAsync(int AD_Process_ID, string Name, int AD_Table_ID, int Record_ID, int WindowNo, string filetype, string actionOrigin, string originName)
         {
             if (Session["ctx"] != null)
             {
@@ -758,6 +814,7 @@ namespace VIS.Controllers
                 }
                 ProcessReportInfo rep = (ProcessHelper.GeneratePrint(Session["ctx"] as Ctx, AD_Process_ID, Name, AD_Table_ID, Record_ID, WindowNo, "", filetype, actionOrigin, originName));
                 ctx.SetContext("FetchingDocReport", "N");
+                ctx.SetContext("Report_Lang", "");
                 return Json(JsonConvert.SerializeObject(rep), JsonRequestBehavior.AllowGet);
             }
             else
@@ -935,9 +992,9 @@ namespace VIS.Controllers
 
         //Card View
 
-        public JsonResult GetCardViewDetail(int AD_Window_ID, int AD_Tab_ID)
+        public JsonResult GetCardViewDetail(int AD_Window_ID, int AD_Tab_ID,int AD_CardView_ID,string SQL)
         {
-            return Json(JsonConvert.SerializeObject(WindowHelper.GetCardViewDetail(AD_Window_ID, AD_Tab_ID, Session["ctx"] as Ctx)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(WindowHelper.GetCardViewDetail(AD_Window_ID, AD_Tab_ID, Session["ctx"] as Ctx, AD_CardView_ID,SQL)), JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult InsertUpdateDefaultSearch(int AD_Tab_ID, int AD_Table_ID, int AD_User_ID, int? AD_UserQuery_ID)
@@ -1032,6 +1089,10 @@ namespace VIS.Controllers
                 }
             }
 
+            //If DB is postgre, then append foo at end of subquery
+            if (DB.IsPostgreSQL())
+                sql += " AS foo ";
+
             Dictionary<string, object> result = new Dictionary<string, object>();
             List<FilterDataContract> keyva = new List<FilterDataContract>();
             DataSet ds = VIS.DBase.DB.ExecuteDatasetPaging(sql, 1, 10);
@@ -1081,13 +1142,41 @@ namespace VIS.Controllers
 
 
         #region Toaster notification
+       [Obsolete]
         [NonAction]
         public static void AddMessageForToastr(string key, string value)
         {
-            lock (_object)
+            try
             {
-                toastrMessage[key] = value;
+                if (key.Contains("_"))
+                {
+                    key = key.Substring(key.IndexOf("_") + 1);
+                }
+                int val = 0;
+                if (int.TryParse(key, out val))
+                {
+                    ModelLibrary.PushNotif.SSEManager.Get().AddMessage(val, value);
+                }
             }
+            catch
+            {
+                // blank
+            }
+        }
+
+        public JsonResult GetCardsInfo(int AD_Tab_ID)
+        {
+            Ctx ctx = Session["ctx"] as Ctx;
+            WindowHelper help = new WindowHelper();
+            List<CardsInfo> cards = help.GetCards(ctx, AD_Tab_ID);
+            return Json(JsonConvert.SerializeObject(cards), JsonRequestBehavior.AllowGet);
+        }
+
+        public void InsertUpdateDefaultCard(int AD_Tab_ID, int AD_Card_ID)
+        {
+            Ctx ctx = Session["ctx"] as Ctx;
+            CardViewModel objCardViewModel = new CardViewModel();
+            objCardViewModel.SetDefaultCardView(ctx, AD_Card_ID, AD_Tab_ID);
         }
 
         public ContentResult MsgForToastr()
@@ -1099,16 +1188,17 @@ namespace VIS.Controllers
                 string sessionID = ctx.GetAD_Session_ID().ToString();
                 JavaScriptSerializer ser = new JavaScriptSerializer();
 
-                IEnumerable<KeyValuePair<string, string>> newDic = toastrMessage.Where(kvp => kvp.Key.Contains(sessionID));
+                //IEnumerable<KeyValuePair<string, string>> Dic = toastrMessage.Where(kvp => kvp.Key.Contains(sessionID));
+                var newDic = ModelLibrary.PushNotif.SSEManager.Get().GetMessages(ctx.GetAD_Session_ID());
                 if (newDic != null && newDic.Count() > 0)
                 {
-                    for (int i = 0; i < newDic.Count();)
-                    {
-                        KeyValuePair<string, string> keyVal = newDic.ElementAt(i);
-                        toastrMessage.Remove(keyVal.Key);
-                        serializedObject = ser.Serialize(new { item = keyVal.Value, message = keyVal.Value });
+                   /// for (int i = 0; i < newDic.Count();)
+                   // {
+                    //    KeyValuePair<string, string> keyVal = newDic.ElementAt(i);
+                    //    toastrMessage.Remove(keyVal.Key);
+                        serializedObject = ser.Serialize(newDic);
                         return Content(string.Format("data: {0}\n\n", serializedObject), "text/event-stream");
-                    }
+                    //}
                 }
             }
             JavaScriptSerializer se1r = new JavaScriptSerializer();

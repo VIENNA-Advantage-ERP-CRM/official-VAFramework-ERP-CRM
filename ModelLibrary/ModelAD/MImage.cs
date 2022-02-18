@@ -38,8 +38,11 @@ namespace VAdvantage.Model
 
         public string ImageFormat
         {
-            get { return imageFormat; }
-            set { imageFormat = value; }
+            get { 
+                return imageFormat; }
+            set { imageFormat = value;
+                SetImageExtension(imageFormat);
+            }
         }
         public static MImage Get(Ctx ctx, int AD_Image_ID)
         {
@@ -175,6 +178,7 @@ namespace VAdvantage.Model
         {
             if (byteArray != null)
             {
+                String imageExt = GetImageExtension();
                 String imageUrl = GetImageURL();
                 //if (GetImageURL() != null)
                 //{
@@ -183,25 +187,26 @@ namespace VAdvantage.Model
                 //        return false;
                 //    }
                 //}
-                if (!string.IsNullOrEmpty(imageUrl) && !string.IsNullOrEmpty(ImageFormat))
+                if (!string.IsNullOrEmpty(imageExt))
                 {
                     //imageUrl = imageUrl.Insert(imageUrl.Length, "/" + GetAD_Image_ID() + ImageFormat);
                     imageUrl = "Images/" + GetAD_Image_ID() + imageFormat;
                     int count = DB.ExecuteQuery("UPDATE AD_IMAGE SET IMAGEURL='" + imageUrl + "' WHERE AD_IMAGE_ID=" + GetAD_Image_ID());
                 }
 
-                ConvertByteArrayToThumbnail(byteArray, GetAD_Image_ID().ToString() + ImageFormat);
+                ConvertByteArrayToThumbnail(byteArray, GetAD_Image_ID().ToString() + imageExt);
             }
             else if (GetBinaryData() != null)
             {
+                String imageExt = GetImageExtension();
                 String imageUrl = GetImageURL();
-                if (!string.IsNullOrEmpty(imageUrl) && imageUrl.Contains("."))
+                if (!string.IsNullOrEmpty(imageExt) && imageExt.Contains("."))
                 {
-                    imageFormat = imageUrl.Substring(imageUrl.LastIndexOf("."));
-                    imageUrl = "Images/" + GetAD_Image_ID() + imageFormat;
+                   // imageFormat = imageUrl.Substring(imageUrl.LastIndexOf("."));
+                    imageUrl = "Images/" + GetAD_Image_ID() + imageExt;
                     int count = DB.ExecuteQuery("UPDATE AD_IMAGE SET IMAGEURL='" + imageUrl + "' WHERE AD_IMAGE_ID=" + GetAD_Image_ID());
                 }
-                ConvertByteArrayToThumbnail(GetBinaryData(), GetAD_Image_ID().ToString() + ImageFormat);
+                ConvertByteArrayToThumbnail(GetBinaryData(), GetAD_Image_ID().ToString() + imageExt);
             }
             return success;
         }
@@ -748,12 +753,34 @@ namespace VAdvantage.Model
         {
             if (GetAD_Org_ID() != 0)
                 SetAD_Org_ID(0);
-            string imageUrl = GetImageURL().ToLower();
-            if (!imageUrl.Contains(".") || imageExtensions.IndexOf(imageUrl.Substring(imageUrl.LastIndexOf("."))) < 0)
+            string imageUrl = GetImageURL();
+            if (String.IsNullOrEmpty(imageUrl) && String.IsNullOrEmpty(GetFontName()) && GetBinaryData() ==null)
             {
-                log.SaveError("AddExtension", "");
+                log.SaveError("EnterFontNameOrUrl", "");
                 return false;
             }
+
+            if (!String.IsNullOrEmpty(imageUrl))
+            {
+                imageUrl = imageUrl.ToLower();
+                if (!imageUrl.Contains(".") || imageExtensions.IndexOf(imageUrl.Substring(imageUrl.LastIndexOf("."))) < 0)
+                {
+                    log.SaveError("AddExtension", "");
+                    return false;
+                }
+            }
+
+            
+            if (GetBinaryData() != null )
+            {
+                String imgExt = GetImageExtension();
+                if (String.IsNullOrEmpty(imgExt) || !imgExt.Contains(".") || imageExtensions.IndexOf(imgExt.Substring(imgExt.LastIndexOf("."))) < 0)
+                {
+                    log.SaveError("AddExtension", "");
+                    return false;
+                }
+            }
+
 
             return true;
         }

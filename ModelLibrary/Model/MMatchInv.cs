@@ -28,6 +28,12 @@ namespace VAdvantage.Model
     {
         /**	Static Logger	*/
         private static VLogger _log = VLogger.GetVLogger(typeof(MMatchInv).FullName);
+
+        public int C_OrderLine_ID = 0;
+        public String orderDocStatus = String.Empty;
+        public String inOutDocStatus = String.Empty;
+        public MInOutLine iol = null;
+
         /**
        * 	Get InOut-Invoice Matches
        *	@param ctx context
@@ -267,11 +273,60 @@ namespace VAdvantage.Model
                     ts = GetDateTrx();
                 SetDateAcct(ts);
             }
+
+            // 
+            DataSet ds = DB.ExecuteDataset(@"SELECT  M_Storage.QtyOnHand,
+                            NVL(currencyConvert(C_OrderLine.PriceEntered, C_Order.C_Currency_ID, " + GetCtx().GetContextAsInt("$C_Currency_ID") +
+                            @", M_InOut.DateAcct, C_Order.C_ConversionType_ID,
+                            M_InOut.AD_Client_ID, M_InOut.AD_Org_ID), 0) as POPriceEntered,
+                            NVL(currencyConvert(C_InvoiceLine.PriceEntered, C_Invoice.C_Currency_ID, " + GetCtx().GetContextAsInt("$C_Currency_ID") +
+                            @", C_Invoice.DateAcct, C_Invoice.C_ConversionType_ID,
+                            C_Invoice.AD_Client_ID, C_Invoice.AD_Org_ID), 0) as InvPriceEntered,
+                            NVL(currencyConvert(C_ProvisionalInvoiceLine.PriceEntered, C_ProvisionalInvoice.C_Currency_ID, " + GetCtx().GetContextAsInt("$C_Currency_ID") +
+                            @", C_ProvisionalInvoice.DateAcct, C_ProvisionalInvoice.C_ConversionType_ID,
+                            C_ProvisionalInvoice.AD_Client_ID, C_ProvisionalInvoice.AD_Org_ID), 0) as ProvisionalPriceEntered,
+                            M_InOut.IsSOTrx, M_InOut.IsReturnTrx,
+                            C_ProvisionalInvoiceline.C_ProvisionalInvoiceline_ID,
+                            M_InOutLine.M_AttributeSetInstance_ID
+                            FROM M_InOutLine
+                            INNER JOIN M_InOut ON M_InOut.M_InOut_ID = M_InOutLine.M_InOut_ID
+                            INNER JOIN M_Storage ON(M_InOutLine.M_Locator_ID = M_Storage.M_Locator_ID
+                            AND M_InOutLine.M_Product_ID = M_Storage.M_Product_ID
+                            AND NVL(M_InOutLine.M_AttributeSetInstance_ID, 0) = NVL(M_Storage.M_AttributeSetInstance_ID, 0))
+                            INNER JOIN C_InvoiceLine ON C_InvoiceLine.C_InvoiceLine_ID = " + GetC_InvoiceLine_ID() + @"
+                            INNER JOIN C_Invoice ON C_Invoice.C_Invoice_ID = C_InvoiceLine.C_Invoice_ID
+                            LEFT JOIN C_OrderLine ON M_InOutLine.C_OrderLine_ID = C_OrderLine.C_OrderLine_ID
+                            LEFT JOIN C_Order ON C_Order.C_Order_ID = C_OrderLine.C_Order_ID
+                            LEFT JOIN C_ProvisionalInvoiceline ON C_ProvisionalInvoiceline.C_ProvisionalInvoiceline_ID = C_InvoiceLine.C_ProvisionalInvoiceline_ID
+                            LEFT JOIN C_ProvisionalInvoice ON C_ProvisionalInvoice.C_ProvisionalInvoice_ID = C_ProvisionalInvoiceline.C_ProvisionalInvoice_ID
+                            WHERE M_InOutLine.M_InOutLine_ID = " + GetM_InOutLine_ID(), null, Get_TrxName());
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                SetAvailableStock(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["QtyOnHand"]));
+                SetPricePO(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["POPriceEntered"]));
+                SetProvisionalInvPrice(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["ProvisionalPriceEntered"]));
+                SetInvoicedAmt(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["InvPriceEntered"]));
+                SetIsSOTrx(Util.GetValueOfString(ds.Tables[0].Rows[0]["IsSOTrx"]).Equals("Y"));
+                SetIsReturnTrx(Util.GetValueOfString(ds.Tables[0].Rows[0]["IsReturnTrx"]).Equals("Y"));
+                SetC_ProvisionalInvoiceLine_ID(Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_ProvisionalInvoiceline_ID"]));
+                SetPriceDifferenceAPPI(Decimal.Subtract(GetInvoicedAmt(), GetProvisionalInvPrice()));
+                SetPriceDifferencePIPO(Decimal.Subtract(GetProvisionalInvPrice(), GetPricePO()));
+                SetPriceDifferenceAPPO(Decimal.Subtract(GetInvoicedAmt(), GetPricePO()));
+                if (GetM_AttributeSetInstance_ID() == 0 && GetM_InOutLine_ID() != 0)
+                {
+                    SetM_AttributeSetInstance_ID(Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_AttributeSetInstance_ID"]));
+                }
+            }
+
             if (GetM_AttributeSetInstance_ID() == 0 && GetM_InOutLine_ID() != 0)
             {
-                MInOutLine iol = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_TrxName());
+                if (iol == null || iol.Get_ID() <= 0 || iol.Get_ID() != GetM_InOutLine_ID())
+                {
+                    iol = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_TrxName());
+                }
                 SetM_AttributeSetInstance_ID(iol.GetM_AttributeSetInstance_ID());
             }
+
             return true;
         }
 
@@ -280,23 +335,23 @@ namespace VAdvantage.Model
             if (IsCostCalculated() || IsCostImmediate())
             {
                 X_M_MatchInvCostTrack costTrack = null;
-                int M_MatchInvCostTrack_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_MatchInvCostTrack_ID FROM M_MatchInvCostTrack WHERE M_MatchInv_ID = " + GetM_MatchInv_ID()));
-                if (M_MatchInvCostTrack_ID > 0)
+                DataSet M_MatchInvCostTrack_ID = DB.ExecuteDataset("SELECT * FROM M_MatchInvCostTrack WHERE M_MatchInv_ID = " + GetM_MatchInv_ID());
+                if (M_MatchInvCostTrack_ID != null && M_MatchInvCostTrack_ID.Tables[0].Rows.Count > 0)
                 {
-                    costTrack = new X_M_MatchInvCostTrack(GetCtx(), M_MatchInvCostTrack_ID, null);
+                    costTrack = new X_M_MatchInvCostTrack(GetCtx(), M_MatchInvCostTrack_ID.Tables[0].Rows[0], null);
                     costTrack.SetIsCostCalculated(IsCostCalculated());
                     costTrack.SetIsCostImmediate(IsCostImmediate());
                 }
                 else
                 {
-                     costTrack = new X_M_MatchInvCostTrack(GetCtx(), 0, null);
-                     costTrack.SetM_MatchInv_ID(GetM_MatchInv_ID());
-                     costTrack.SetM_InOutLine_ID(GetM_InOutLine_ID());
-                     costTrack.SetC_InvoiceLine_ID(GetC_InvoiceLine_ID());
-                     costTrack.SetQty(GetQty());
-                     costTrack.SetM_Product_ID(GetM_Product_ID());
-                     costTrack.SetIsCostCalculated(IsCostCalculated());
-                     costTrack.SetIsCostImmediate(IsCostImmediate());
+                    costTrack = new X_M_MatchInvCostTrack(GetCtx(), 0, null);
+                    costTrack.SetM_MatchInv_ID(GetM_MatchInv_ID());
+                    costTrack.SetM_InOutLine_ID(GetM_InOutLine_ID());
+                    costTrack.SetC_InvoiceLine_ID(GetC_InvoiceLine_ID());
+                    costTrack.SetQty(GetQty());
+                    costTrack.SetM_Product_ID(GetM_Product_ID());
+                    costTrack.SetIsCostCalculated(IsCostCalculated());
+                    costTrack.SetIsCostImmediate(IsCostImmediate());
                 }
                 costTrack.Save();
             }
@@ -326,7 +381,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    invoiceDate =Utility.Util.GetValueOfDateTime(dr[0]);//.getTimestamp(1);
+                    invoiceDate = Utility.Util.GetValueOfDateTime(dr[0]);//.getTimestamp(1);
                 }
             }
             catch (Exception e)
@@ -363,6 +418,11 @@ namespace VAdvantage.Model
             }
             finally
             {
+                if (idr != null)
+                {
+                    idr.Close();
+                    idr = null;
+                }
                 dt = null;
             }
 
@@ -404,12 +464,15 @@ namespace VAdvantage.Model
             if (success)
             {
                 //	Get Order and decrease invoices
-                MInvoiceLine iLine = new MInvoiceLine(GetCtx(), GetC_InvoiceLine_ID(), Get_TrxName());
-                int C_OrderLine_ID = iLine.GetC_OrderLine_ID();
                 if (C_OrderLine_ID == 0)
                 {
-                    MInOutLine ioLine = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_TrxName());
-                    C_OrderLine_ID = ioLine.GetC_OrderLine_ID();
+                    MInvoiceLine iLine = new MInvoiceLine(GetCtx(), GetC_InvoiceLine_ID(), Get_TrxName());
+                    C_OrderLine_ID = iLine.GetC_OrderLine_ID();
+                    if (C_OrderLine_ID == 0)
+                    {
+                        MInOutLine ioLine = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_TrxName());
+                        C_OrderLine_ID = ioLine.GetC_OrderLine_ID();
+                    }
                 }
                 //	No Order Found
                 if (C_OrderLine_ID == 0)
@@ -419,7 +482,11 @@ namespace VAdvantage.Model
                 for (int i = 0; i < mPO.Length; i++)
                 {
                     if (mPO[i].GetM_InOutLine_ID() == 0)
+                    {
+                        mPO[i].orderDocStatus = orderDocStatus;
+                        mPO[i].inOutDocStatus = inOutDocStatus;
                         mPO[i].Delete(true);
+                    }
                     else
                     {
                         mPO[i].SetC_InvoiceLine_ID(null);

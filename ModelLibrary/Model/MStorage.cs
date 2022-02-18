@@ -1054,10 +1054,15 @@ namespace VAdvantage.Model
                             {
                                 storage.SetQtyOnHand(Decimal.Add(storage.GetQtyOnHand(), diffQtyOnHand));//here no check of -ve qty
                             }
-
+                            idrattr.Close();
                         }
                         catch
                         {
+                            if (idrattr != null)
+                            {
+                                idrattr.Close();
+                                idrattr = null;
+                            }
                         }
                     }
                 }

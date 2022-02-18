@@ -222,10 +222,10 @@
     };
 
     /**
-	 *	Get tab by index 
-	 *  @param i index
-	 *  @return MTab
-	 */
+     *	Get tab by index 
+     *  @param i index
+     *  @return MTab
+     */
     GridWindow.prototype.getTab = function (index) {
         if (index < 0 || index + 1 > this.tabs.length)
             return null;
@@ -424,19 +424,20 @@
         this.depOnField = []; //Fields against columnname
         this.tabPanels = [];
         this.linkColumnName = gTab._linkColumnName;
-        this.extendendWhere = gTab._extendedWhere;
+        this.extendedWhere = gTab._extendedWhere;
         this.keyColumnName = "";
-
+        this.defaultFocusField;
         this.isThroughRoleCenter = false;
 
         this.query = new VIS.Query();
         this.oldQuery = "0=9";
+        //this.oldCardQuery = "0=9";
         this.linkValue = "999999";
         this.currentRow = -1;
         this.hasPanel = false;
         this.isHeaderPanel = false;
         this.headerPanel = null;
-
+        this.isHPanelNotShowInMultiRow = false;
         this.mDataStatusEvent;
         this.mDataListenerList = [];
 
@@ -450,6 +451,7 @@
         this.loadData(windowVo);
         windowVo = null;
         this.gridWindow = null;
+        this.outerWhereCondition = null;
     };
 
     /**
@@ -468,9 +470,9 @@
     };
 
     /**
-	 * get Parent Tab No
-	 * @return Tab No
-	 */
+     * get Parent Tab No
+     * @return Tab No
+     */
     GridTab.prototype.getParentTabNo = function () {
         var tabNo = this.vo.tabNo;
         var currentLevel = this.vo.TabLevel;
@@ -551,6 +553,15 @@
         return this.vo.IsSingleRow;
     }
 
+    GridTab.prototype.getTabLayout = function () {
+        return this.vo.TabLayout;
+    }
+
+    //NewRecordView
+    GridTab.prototype.getNewRecordView = function () {
+        return this.vo.NewRecordView;
+    }
+
     GridTab.prototype.getIsDisplayed = function (initialSetup) {
         //  no restrictions
 
@@ -575,7 +586,7 @@
     };	//	i
 
     GridTab.prototype.getValueAsString = function (variableName) {
-        var value = VIS.context.getWindowContext(this.vo.windowNo, this.vo.windowNo, variableName, true);
+        var value = VIS.context.getWindowContext(this.vo.windowNo, this.vo.tabNo, variableName, true);
         if (!value) {
             return '';
         }
@@ -756,9 +767,9 @@
     };	//	isReadOnly
 
     /**
-	 *	Is Query New Record
-	 *  @return true if query active
-	 */
+     *	Is Query New Record
+     *  @return true if query active
+     */
     GridTab.prototype.getIsQueryNewRecord = function () {
         if (this.query != null)
             return this.query.getIsNewRecordQuery();
@@ -798,26 +809,26 @@
     };
 
     /**
-	 *	Get Process ID
-	 *  @return Process ID
-	 */
+     *	Get Process ID
+     *  @return Process ID
+     */
     GridTab.prototype.getAD_Process_ID = function () {
         return this.vo.AD_Process_ID;
     };	//	getAD_Process_ID
 
     /**
-	 *  Get Current Table Key ID
-	 *  @return Record_ID
-	 */
+     *  Get Current Table Key ID
+     *  @return Record_ID
+     */
     GridTab.prototype.getRecord_ID = function () {
         return this.gridTable.getKeyID(this.currentRow);
     };   //  getRecord_ID
 
     /**
-	 *  Get Key ID of row
-	 *  @param  row row number
-	 *  @return The Key ID of the row or -1 if not found
-	 */
+     *  Get Key ID of row
+     *  @param  row row number
+     *  @return The Key ID of the row or -1 if not found
+     */
     GridTab.prototype.getKeyID = function (row) {
         return this.gridTable.getKeyID(row);
     };   //  get
@@ -969,17 +980,17 @@
             if (mf == null || mfMC == null)
                 return " ";
             /**********************************************************************
-			 *	** Message: OrderSummary/MC **
-			 *	{0} Line(s) - {1,number,#,##0.00} - Total: {3}{2,number,#,##0.00} = {5}{4,number,#,##0.00}
-			 *	{0} Line(s) - {1,number,#,##0.00} - Total: {3}{2,number,#,##0.00}
-			 *
-			 *	{0} - Number of lines
-			 *	{1} - Line toral
-			 *	{2} - Grand total (including tax, etc.)
-			 *	{3} - Source Currency
-			 *	(4) - Grand total converted to local currency
-			 *	{5} - Base Currency
-			 */
+             *	** Message: OrderSummary/MC **
+             *	{0} Line(s) - {1,number,#,##0.00} - Total: {3}{2,number,#,##0.00} = {5}{4,number,#,##0.00}
+             *	{0} Line(s) - {1,number,#,##0.00} - Total: {3}{2,number,#,##0.00}
+             *
+             *	{0} - Number of lines
+             *	{1} - Line toral
+             *	{2} - Grand total (including tax, etc.)
+             *	{3} - Source Currency
+             *	(4) - Grand total converted to local currency
+             *	{5} - Base Currency
+             */
             var arguments = [];//new Object[6];
             var filled = false;
             //
@@ -1047,9 +1058,9 @@
     };
 
     /**
-	 * 	Is Processed
-	 *	@return true if current record is processed
-	 */
+     * 	Is Processed
+     *	@return true if current record is processed
+     */
     GridTab.prototype.getIsProcessed = function () {
         var index = this.gridTable.findColumn("Processed");
         if (index != -1) {
@@ -1067,9 +1078,9 @@
     };
 
     /**
-	 * 	Get Order column for sort tab
-	 * 	@return AD_Column_ID
-	 */
+     * 	Get Order column for sort tab
+     * 	@return AD_Column_ID
+     */
     GridTab.prototype.getAD_ColumnSortOrder_ID = function () {
         return this.vo.AD_ColumnSortOrder_ID;
     };	//	getAD_ColumnSortOrder_ID
@@ -1078,9 +1089,9 @@
 
 
     /**
-	 * 	Get Order column for sort tab
-	 * 	@return AD_Column_ID
-	 */
+     * 	Get Order column for sort tab
+     * 	@return AD_Column_ID
+     */
     GridTab.prototype.getIsMapView = function () {
         if (this.vo.locationCols && this.vo.locationCols.length > 0)
             return true;
@@ -1093,9 +1104,9 @@
 
 
     /**
-	 * 	Get Yes/No column for sort tab
-	 * 	@return AD_Column_ID
-	 */
+     * 	Get Yes/No column for sort tab
+     * 	@return AD_Column_ID
+     */
     GridTab.prototype.getAD_ColumnSortYesNo_ID = function () {
         return this.vo.AD_ColumnSortYesNo_ID;
     };	//	getAD_ColumnSortYesNo_ID
@@ -1107,6 +1118,22 @@
     GridTab.prototype.getWhereClause = function () {
         return this.vo.WhereClause;
     };
+
+    /*
+     * Set where condition from outside 
+     * @param {any} conition
+     */
+    //GridTab.prototype.setOuterWhereClause = function (conition) {
+    //    this.outerWhereCondition = conition;
+    //}
+
+    /*
+     *Reset outside condition
+     */
+    // GridTab.prototype.resetCard = function () {
+    //    //this.setOuterWhereClause("");
+    //    //this.getTableModel().setOuterOrderClause("");           
+    //};
 
     GridTab.prototype.getSearchQuery = function (val) {
         var query = null;
@@ -1234,11 +1261,11 @@
     };
 
     /**
-	 *  Set New Value & call Callout
-	 *  @param field field
-	 *  @param value value
-	 *  @return error message or ""
-	 */
+     *  Set New Value & call Callout
+     *  @param field field
+     *  @param value value
+     *  @return error message or ""
+     */
     GridTab.prototype.setValue = function (field, value) {
 
         if (!(field instanceof VIS.GridField)) {
@@ -1309,6 +1336,9 @@
             var gridField = new GridField(this.gTab._gridTable.m_fields[i]);
             gridField.setGridTab(this);
             this.gridTable.gridFields.push(gridField);
+            if (gridField.getIsDefaultFocus()) {
+                this.defaultFocusField = gridField
+            }
 
             var columnName = gridField.getColumnName();
             //	Record Info
@@ -1374,6 +1404,7 @@
         if (this.vo.HeaderItems) {
             this.isHeaderPanel = true;
             headerPanel = this.vo.HeaderItems;
+            this.isHPanelNotShowInMultiRow = this.vo.HPanelNotShowInMultiRow;
         }
     };
 
@@ -1655,8 +1686,7 @@
                 this.gridTable.setDoPaging(true);// _gridTable.DoPaging = false;
                 refresh = false;
             }
-        }
-
+        }       
 
         this.oldQuery = this.query.getWhereClause();
         this.vo.onlyCurrentDays = onlyCurrentDays;
@@ -1748,7 +1778,7 @@
             }	//	isDetail
         }
 
-        this.extendedWhere = where.toString();
+        
 
         //	Final Query
         if (this.query.getIsActive()) {
@@ -1761,6 +1791,17 @@
             }
 
         }
+        this.extendedWhere = where.toString();
+        //if (this.oldCardQuery != this.cardWhereCondition) {
+        //    refresh = false;
+        //}
+        //this.oldCardQuery = this.cardWhereCondition;
+        //if (this.outerWhereCondition && this.outerWhereCondition.length>0) {           
+        //    if (where.length > 0)
+        //        where += " AND ";
+        //    where += this.outerWhereCondition;
+        //    refresh = false;
+        //}
 
         /* Query */
         this.mDataStatusEvent = null; //reset 
@@ -2345,9 +2386,9 @@
     };
 
     /**
-	 *  Get Commit Warning
-	 *  @return commit warning
-	 */
+     *  Get Commit Warning
+     *  @return commit warning
+     */
     GridTab.prototype.getCommitWarning = function () {
         return this.vo.CommitWarning;
     };
@@ -3060,6 +3101,8 @@
         this.mSortList;
         this.AD_Tab_ID = 0;
         this.log = VIS.Logging.VLogger.getVLogger("VIS.GridTable");
+        //this.outerOrderClause = "";
+        this.card_ID = 0;
     };
 
     GridTable.prototype.ctx = VIS.context;			//	the only OK condition
@@ -3241,19 +3284,19 @@
                 maxValue = field.getMaxValue();
                 minValue = field.getMinValue();
                 if ($.isNumeric(maxValue) && $.isNumeric(minValue)) {
-                    if (field.getValue() > field.getMaxValue() || field.getValue() < field.getMinValue()) {
+                    if (Number(field.getValue()) > Number(field.getMaxValue()) || Number(field.getValue()) < Number(field.getMinValue())) {
                         VIS.ADialog.error("ValidationError", true, ": " + VIS.Msg.getMsg("VIS_ValueOf") + " " + field.getHeader() + " " + VIS.Msg.getMsg("VIS_MustBetween") + " " + field.getMinValue() + " " + VIS.Msg.getMsg("VIS_And") + " " + field.getMaxValue());
                         return false;
                     }
                 }
                 else if ($.isNumeric(maxValue)) {
-                    if (field.getValue() > maxValue) {
+                    if (Number(field.getValue()) > Number(maxValue)) {
                         VIS.ADialog.error("ValidationError", true, ": " + VIS.Msg.getMsg("VIS_ValueOf") + " " + field.getHeader() + " " + VIS.Msg.getMsg("VIS_Lessthan") + " " + maxValue);
                         return false;
                     }
                 }
                 else if ($.isNumeric(minValue)) {
-                    if (field.getValue() < minValue) {
+                    if (Number(field.getValue()) < Number(minValue)) {
                         VIS.ADialog.error("ValidationError", true, ": " + VIS.Msg.getMsg("VIS_ValueOf") + " " + field.getHeader() + " " + VIS.Msg.getMsg("VIS_Greaterthan") + " " + minValue);
                         return false;
                     }
@@ -3460,6 +3503,12 @@
             this.gTable._orderClause = "";
     };
 
+    //GridTable.prototype.setOuterOrderClause = function (newOrderClause) {
+    //    this.outerOrderClause = newOrderClause;
+    //    if (this.outerOrderClause == null)
+    //        this.outerOrderClause = "";
+    //};
+
     GridTable.prototype.setSelectWhereClause = function (newWhereClause) {
         if (this.isOpen) {
             //log.Log(Level.SEVERE, "Table already open - ignored");
@@ -3498,6 +3547,21 @@
     GridTable.prototype.setSortModel = function (mSort) {
         this.mSortList = null;
         this.mSortList = mSort;
+    };
+    /**
+     * Set Card ID for featch card data
+     * @param {any} cardID
+     */
+    GridTable.prototype.setCardID = function (cardID) {
+        this.card_ID = cardID;
+    };
+
+    /**
+     * Reset card details for other view
+     * */
+    GridTable.prototype.resetCard = function () {        
+        this.cardTempalte = null;
+        this.setCardID(0);
     };
 
     GridTable.prototype.setValueAt = function (value, row, col, force) {
@@ -3622,6 +3686,8 @@
         var select = new StringBuilder("SELECT ");
         var selectDirect = null;
         var selectSql = null;
+        var hasImage = false;
+        var imgColName = [];
         for (var i = 0; i < this.gridFields.length; i++) {
             if (i > 0) {
                 select.append(", ");
@@ -3635,9 +3701,15 @@
                 select.append(VIS.Env.parseContext(this.ctx, gt._windowNo, selectSql, false));
             }
 
+            if (field.getDisplayType() == VIS.DisplayType.Image) {
+                imgColName.push(selectSql);
+                hasImage = true;
+                // select.append(", (SELECT ImageURL from AD_Image img where img.AD_Image_ID=" + gt._tableName+"."+ selectSql+") as imgUrlColumn");
+            }
+
             if (field.getLookup() != null && field.getLookup() instanceof VIS.MLookup) {
                 var lInfo = field.getLookup().info;
-                if (lInfo.displayColSubQ && lInfo.displayColSubQ != "" && gt._tableName.toLowerCase() !=lInfo.tableName.toLowerCase()) {
+                if (lInfo.displayColSubQ && lInfo.displayColSubQ != "" && gt._tableName.toLowerCase() != lInfo.tableName.toLowerCase()) {
 
 
                     if (selectDirect == null)
@@ -3673,6 +3745,13 @@
         }
 
         selectSql = null;
+
+        var randomNo = Math.random();
+        if (hasImage) {
+            for (var im = 0; im < imgColName.length; im++)
+                select.append(", (SELECT ImageURL||'?random=" + randomNo + "' from AD_Image img where img.AD_Image_ID=CAST(" + gt._tableName + "." + imgColName[im] + " AS INTEGER)) as imgUrlColumn" + imgColName[im]);
+        }
+
         //
         select.append(" FROM ").append(gt._tableName);
 
@@ -3723,8 +3802,11 @@
 
             this.SQL = VIS.MRole.addAccessSQL(this.SQL,
                 gt._tableName, VIS.MRole.SQL_FULLYQUALIFIED, VIS.MRole.SQL_RO);
-            this.SQL_Count = VIS.MRole.addAccessSQL(this.SQL_Count,
-                gt._tableName, VIS.MRole.SQL_FULLYQUALIFIED, VIS.MRole.SQL_RO);
+
+            //this.SQL_Count = "SELECT COUNT(*) FROM " + gt._tableName + this.SQL.replaceAll(this.SQL_Select, '');
+            this.SQL_Count = "SELECT COUNT(*) FROM " + gt._tableName + this.SQL.substring(this.SQL_Select.length);
+            // this.SQL_Count = VIS.MRole.addAccessSQL(this.SQL_Count,
+            // gt._tableName, VIS.MRole.SQL_FULLYQUALIFIED, VIS.MRole.SQL_RO);
         }
 
         if (selectDirect != null)
@@ -3733,6 +3815,11 @@
             this.SQL_Direct = "";
 
         //	ORDER BY
+
+        //if (!this.outerOrderClause.equals("")) {
+        //    this.SQL += " ORDER BY " + this.outerOrderClause;
+        //    this.SQL_Direct += " ORDER BY " + this.outerOrderClause;
+        //} else
         if (!gt._orderClause.equals("")) {
             this.SQL += " ORDER BY " + gt._orderClause;
             this.SQL_Direct += " ORDER BY " + gt._orderClause;
@@ -3778,7 +3865,21 @@
             });
         }
         else {
-            rCount = executeDScalar(this.SQL_Count, null);
+            if (this.card_ID>0) {
+                $.ajax({
+                    url: VIS.Application.contextUrl + "jsonData/GetRecordCountWithCard",
+                    data: { sql: VIS.secureEngine.encrypt(this.SQL_Count) , cardID: this.card_ID },
+                    type: 'POST',
+                    async: false,
+                    success: function (resultt) {
+                        rCount = JSON.parse(resultt);
+                    },
+                    error: function (e) { }
+                });
+            } else {
+                rCount = executeDScalar(this.SQL_Count, null);
+            }
+
         }
 
         this.rowCount = rCount;
@@ -3847,7 +3948,7 @@
         this.SQL_Count = VIS.secureEngine.encrypt(this.SQL_Count);
 
         var gFieldsIn = this.createGridFieldArr(this.gridFields, true);
-        var dataIn = { sql: this.SQL, page: this.dopaging ? this.currentPage : 0, pageSize: this.dopaging ? this.pazeSize : 0, treeID: 0, treeNode_ID: 0 };
+        var dataIn = { sql: this.SQL, page: this.dopaging ? this.currentPage : 0, pageSize: this.dopaging ? this.pazeSize : 0, treeID: 0, treeNode_ID: 0, card_ID: this.card_ID, ad_Tab_ID: this.AD_Tab_ID, tableName:this.gTable._tableName };
 
         var obscureFields = this.createObsecureFields(this.gridFields);
 
@@ -3899,7 +4000,7 @@
         }
         else {
 
-            VIS.dataContext.getWindowRecords(dataIn, gFieldsIn, this.rowCount, this.SQL_Count, this.AD_Table_ID, obscureFields, function (buffer, lookupDirect) {
+            VIS.dataContext.getWindowRecords(dataIn, gFieldsIn, this.rowCount, this.SQL_Count, this.AD_Table_ID, obscureFields, function (buffer, lookupDirect, cardViewData) {
 
                 try {
 
@@ -3928,16 +4029,29 @@
                     }
                     if (lookupDirect)
                         VIS.MLookupCache.addRecordLookup(that.gTable._windowNo, that.gTable._tabNo, lookupDirect);
+                  
+                    that.cardTempalte = cardViewData;
+                    if (dataIn.card_ID > 0 && cardViewData && cardViewData.DisableWindowPageSize) {
+                        that.pazeSize = that.rowCount;
+                        that.currentPage = 1;
+                    }
                 }
                 catch (e) {
                     //alert(e);
-                    this.log.Log(Level.SEVERE, that.SQL, e);
+                    that.log.Log(Level.SEVERE, that.SQL, e);
                 }
                 that.fireQueryCompleted(true); // inform gridcontroller
                 that = null;
             });
         }
     };
+    /**
+     * Get Card tempatate for cardview
+     * */
+    GridTable.prototype.getCardTemplate = function () {
+        return this.cardTempalte;
+    }
+
 
     GridTable.prototype.readDataOfColumn = function (colName, colValue) {
 
@@ -4224,11 +4338,11 @@
         if (obscureFields && obscureFields.length > 0) {
             var len = obscureFields.length;
             for (var i = 0; i < len; i++) {
-                if (RowData[obscureFields[i]]) {
+                if (RowData[obscureFields[i]] || RowData[obscureFields[i]] == 0) {
                     RowData[obscureFields[i]] = this.encrypt(RowData[obscureFields[i]]);
                 }
 
-                if (OldRowData[obscureFields[i]]) {
+                if (OldRowData[obscureFields[i]] || OldRowData[obscureFields[i]] == 0) {
                     OldRowData[obscureFields[i]] = this.encrypt(OldRowData[obscureFields[i]]);
                 }
             }
@@ -4599,7 +4713,7 @@
         var size = this.gridFields.length;// .size();
         this.rowData = {}; // //	"original" data
         var rowData = {};
-
+    
         var tempWindowNo = this.gTable._windowNo + VIS.EnvConstants.WINDOW_TEMP;
         //	fill data
         if (copyCurrent) {
@@ -4663,6 +4777,8 @@
             }
         }
 
+
+        //this.mQueryCompletedListener
         this.ctx.removeWindow(tempWindowNo);
         this.changed = true;
         this.compareDB = true;
@@ -4688,7 +4804,7 @@
         this.pazeSize++;
         //	inform
         //log.finer("Current=" + currentRow + ", New=" + m_newRow);
-        this.fireTableModelChanged(VIS.VTable.prototype.ROW_ADD, rowData, this.newRow);
+        this.fireTableModelChanged(VIS.VTable.prototype.ROW_ADD, rowData, this.newRow,null);
         //this.fireDataStatusIEvent(copyCurrent ? "UpdateCopied" : "Inserted", "");
         this.log.fine("Current=" + this.currentRow + ", New=" + this.newRow + " - complete");
         return true;
@@ -5126,7 +5242,7 @@
 
     //AD_Message, info, isError
     //errorLog
-    GridTable.prototype.fireDataStatusEEvent = function (AD_Message, info, isError,isWarn) {
+    GridTable.prototype.fireDataStatusEEvent = function (AD_Message, info, isError, isWarn) {
 
         if (arguments.length === 1) {
             this.fireDataStatusEEvent(arguments[0].value, arguments[0].name, true, false);
@@ -5309,7 +5425,7 @@
     function GridField(gField) {
         this.gfield = gField;
         this.vo = gField._vo;
-
+        this.vo["orginalDispaly"] = gField._vo.displayType;
         this.oldValue;
         this.value;
         this.inserting;
@@ -5320,7 +5436,8 @@
 
         var m_lookup = null;
         /* Load Lookup */
-        if (this.vo.IsDisplayedf || this.vo.ColumnName.toLower().equals("createdby") || gField._vo.ColumnName.toLower().equals("updatedby")) {
+        if (this.vo.IsDisplayedf || this.vo.ColumnName.toLower().equals("createdby") || gField._vo.ColumnName.toLower().equals("updatedby")
+            || this.vo.IsHeaderPanelitem) {
             if (gField._vo.lookupInfo != null && VIS.DisplayType.IsLookup(gField._vo.displayType)) {
                 if (VIS.DisplayType.IsLookup(gField._vo.displayType)) {
 
@@ -5516,7 +5633,6 @@
         return 4;
     };
 
-
     GridField.prototype.getIsMandatory = function (checkContext) {
 
         //  Do we have mandatory logic
@@ -5547,6 +5663,13 @@
 
     GridField.prototype.getDisplayType = function () {
         return this.vo.displayType;
+    };
+    GridField.prototype.getOrginalDisplayType = function () {
+        return this.vo.orginalDispaly;
+    };
+
+    GridField.prototype.getOrginalDisplayType = function () {
+        return this.vo.orginalDispaly;
     };
 
     GridField.prototype.getIsVirtualColumn = function () {
@@ -5710,12 +5833,9 @@
         return this.vo.AD_Process_ID;
     };
 
-
     GridField.prototype.getAD_Form_ID = function () {
         return this.vo.AD_Form_ID;
     };
-
-
 
     GridField.prototype.getAD_Column_ID = function () {
         return this.vo.AD_Column_ID;
@@ -5732,6 +5852,7 @@
     GridField.prototype.getIsFieldOnly = function () {
         return this.vo.IsFieldOnly;
     };
+
     GridField.prototype.getShowLabel = function () {
         return true;
     };
@@ -5755,6 +5876,7 @@
     GridField.prototype.getMRSeqNo = function () {
         return this.vo.mrSeqNo;
     };
+
     GridField.prototype.getIsSelectionColumn = function () {
         return this.vo.IsSelectionColumn;
     };
@@ -5795,13 +5917,14 @@
         //}
         return list;
     };
+
     GridField.prototype.getAD_Window_ID = function () {
         return this.vo.AD_Window_ID;
-    }
+    };
 
     GridField.prototype.getAD_InfoWindow_ID = function () {
         return this.vo.AD_InfoWindow_ID;
-    }
+    };
 
     GridField.prototype.getValueAsString = function (variableName) {
         var value = VIS.context.getWindowContext(this.vo.windowNo, this.vo.tabNo, variableName, true);
@@ -5840,7 +5963,6 @@
             return this.vo.ColumnName;
         }
     };
-
 
     GridField.prototype.getIsLink = function () {
         return this.vo.isLink;
@@ -5885,7 +6007,6 @@
         return this.vo.DisplayLength;
     };
 
-
     /**
      * Get Field Length
      * @return fieldLength
@@ -5893,7 +6014,6 @@
     GridField.prototype.getFieldLength = function () {
         return this.vo.FieldLength;
     };
-
 
     /**
     * Get Field Length
@@ -5910,14 +6030,19 @@
     GridField.prototype.getMaxValue = function () {
         return this.vo.ValueMax;
     };
-
-
     /**
      * Get VFormat
      * @return vformat string
      */
     GridField.prototype.getVFormat = function () {
         return this.vo.VFormat;
+    };
+
+    /**
+     * get format error message
+     * */
+    GridField.prototype.getVFormatError = function () {
+        return this.vo.VFormatError;
     };
 
     GridField.prototype.getLookup = function () {
@@ -5940,6 +6065,10 @@
         return this.value;
     };
 
+    GridField.prototype.getIsIdentifier = function () {
+        return this.vo.IsIdentifier;
+    };
+
     /**
      *  Get old/previous Value.
      * 	Called from MTab.processCallout
@@ -5952,7 +6081,6 @@
     GridField.prototype.getIsRange = function () {
         return this.vo.isRange;
     };
-
 
     GridField.prototype.getIsRange = function () {
         return this.vo.isRange;
@@ -6094,6 +6222,8 @@
                 if (variable.equals("@SysDate@") || variable.equals("@Now@"))	//	System Time
                 {
                     var d = new Date();
+                    d.setMilliseconds(0);
+                    d.setSeconds(0);
                     var n = d.toISOString();
                     //console.log(vo.ColumnName + " <==>" + variable +"==>"+ n);
                     return n;
@@ -6203,7 +6333,6 @@
         this.log.fine("[NONE] " + vo.ColumnName);
         return null;
     };	//	getDefault
-
 
     GridField.prototype.getDefault2 = function (ctx, windowNo) {
         /**************************************************************************
@@ -6425,7 +6554,6 @@
         return null;
     };	//	getDefault
 
-
     GridField.prototype.getIsEncryptedColumn = function () {
         return this.vo.IsEncryptedColumn;
     };
@@ -6438,7 +6566,11 @@
         return this.vo.IsDefaultFocus;
     };
 
-
+    GridField.prototype.getStyleLogic = function () {
+        if (!this.vo.StyleLogic)
+            this.vo.StyleLogic = '';
+        return this.vo.StyleLogic;
+    };
 
     GridField.prototype.createDefault = function (variable, value) {
 
@@ -6485,6 +6617,8 @@
                         // console.log(this.vo.ColumnName + "==>[2] " + d);
                         console.log(this.vo.ColumnName + "==>[3n] " + d.toISOString());
                     }
+                    d.setMilliseconds(0);
+                    d.setSeconds(0);
                     return d.toISOString();
                 }
                 catch (ex) {
@@ -6498,7 +6632,10 @@
                 catch (exx) {
                     this.log.warning("Cannot convert to Timestamp: " + tsString);
                 }
-                return new Date().toISOString();
+                var d = new Date();
+                d.setMilliseconds(0);
+                d.setSeconds(0);
+                return d.toISOString();
             }
 
             //	Boolean
@@ -6533,8 +6670,6 @@
         return null;
     };	//	createDefaul
 
-
-
     GridField.prototype.setValue = function (newValue, inserting) {
 
         if (!this.inserting)      //  set the old value
@@ -6558,6 +6693,40 @@
         }
         this.forcefirepropchange = this.inserting || this.vo.displayType == VIS.DisplayType.YesNo
     };
+
+    GridField.prototype.setCardViewSeqNo = function (seqNo) {
+        this.cardViewSeq = seqNo;
+    }
+
+    GridField.prototype.getCardViewSeqNo = function () {
+        return this.cardViewSeq;
+    }
+
+    GridField.prototype.setCardFieldStyle = function (style) {
+        this.cardFieldStyle = style;
+    }
+
+    GridField.prototype.getCardFieldStyle = function () {
+        return this.cardFieldStyle;
+    }
+
+    GridField.prototype.setCardIconHide = function (hide) {
+        this.cardHideIcon = hide;
+    }
+
+    GridField.prototype.isCardIconHide = function () {
+        return this.cardHideIcon;
+    }
+
+    GridField.prototype.setCardTextHide = function (hide) {
+        this.cardTextHide = hide;
+    }
+
+    GridField.prototype.isCardTextHide = function () {
+        return this.cardTextHide;
+    }
+
+
 
     GridField.prototype.updateContext = function () {
 
@@ -6722,6 +6891,10 @@
         return this.vo.HtmlStyle;
     };
 
+    GridField.prototype.getGridImageStyle = function () {
+        return this.vo.GridImageStyle;
+    };
+
     GridField.prototype.getShowIcon = function () {
         return this.vo.ShowIcon;
     };
@@ -6764,6 +6937,9 @@
 
     GridField.prototype.getIsUnique = function () {
         return this.vo.IsUnique;
+    };
+    GridField.prototype.getIsSwitch = function () {
+        return this.vo.IsSwitch;
     };
 
     /**

@@ -402,6 +402,12 @@
         var columnName = evt.propertyName;
         for (var i = 0; i < this.mFields.length; i++) {
             if (this.mFields[i].getColumnName().toLower() == columnName.toLower()) {
+                var comp = this.vEditors[i];
+                if (comp instanceof VIS.Controls.IControl) {
+                    var rw = this.mFields[i].getIsEditable(true);
+                    comp.setReadOnly(rw);
+                }
+
                 if (this.mFields[i].getDisplayType() == VIS.DisplayType.YesNo) {
                     if (value.toString() == "Y" || value.toString() == "N") {
                         VIS.Env.getCtx().setWindowContext(this.windowNo, columnName, value.toString());
@@ -414,6 +420,7 @@
                     VIS.Env.getCtx().setWindowContext(this.windowNo, columnName, value);
                     break;
                 }
+
             }
         }
 
@@ -536,7 +543,7 @@
             }
 
             //	Don't save NULL values
-            if ((result == null) && (result2 == null))
+            if ((result === null || result === "") && (result2 === null || result2 === ""))
                 continue;
 
             //	Create Parameter

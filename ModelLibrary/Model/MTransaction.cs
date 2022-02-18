@@ -105,23 +105,25 @@ namespace VAdvantage.Model
         /// <returns></returns>
         protected override bool BeforeSave(bool newRecord)
         {
+            return true;
+            // VIS0060: Code commented to handle case of reversed Future date transaction exist.
             // is used to check Container applicable into system
-            isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
+            //isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
 
             // system will check - if container qty goes negative then not to save Transaction
-            MLocator locator = MLocator.Get(GetCtx(), GetM_Locator_ID());
-            MWarehouse warehouse = MWarehouse.Get(GetCtx(), locator.GetM_Warehouse_ID());
-            if (isContainerApplicable && warehouse.IsDisallowNegativeInv() && Get_ColumnIndex("ContainerCurrentQty") >= 0 && GetContainerCurrentQty() < 0)
-            {
-                log.SaveError("Info", Msg.GetMsg(GetCtx(), "VIS_FutureContainerQtygoesNegative"));
-                return false;
-            }
-            else if (warehouse.IsDisallowNegativeInv() && GetCurrentQty() < 0)
-            {
-                log.SaveError("Info", Msg.GetMsg(GetCtx(), "VIS_FutureQtygoesNegative"));
-                return false;
-            }
-            return base.BeforeSave(newRecord);
+            //MLocator locator = MLocator.Get(GetCtx(), GetM_Locator_ID());
+            //MWarehouse warehouse = MWarehouse.Get(GetCtx(), locator.GetM_Warehouse_ID());
+            //if (isContainerApplicable && warehouse.IsDisallowNegativeInv() && Get_ColumnIndex("ContainerCurrentQty") >= 0 && GetContainerCurrentQty() < 0)
+            //{
+            //    log.SaveError("Info", Msg.GetMsg(GetCtx(), "VIS_FutureContainerQtygoesNegative"));
+            //    return false;
+            //}
+            //else if (warehouse.IsDisallowNegativeInv() && GetCurrentQty() < 0)
+            //{
+            //    log.SaveError("Info", Msg.GetMsg(GetCtx(), "VIS_FutureQtygoesNegative"));
+            //    return false;
+            //}
+            //return base.BeforeSave(newRecord);
         }
 
         /// <summary>
@@ -142,7 +144,7 @@ namespace VAdvantage.Model
             if (isContainerApplicable && newRecord && PO.Get_Table_ID("M_ContainerStorage") > 0 && GetMMpolicyDate() != null)
             {
                 // If Physical Inventory available afetr movement date - then not to do impacts on container storage 
-                bool isPhysicalInventory = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM M_ContainerStorage WHERE IsPhysicalInventory = 'Y'
+                bool isPhysicalInventory = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(M_Product_ID) FROM M_ContainerStorage WHERE IsPhysicalInventory = 'Y'
                                               AND MMPolicyDate > " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
                                               @" AND M_Product_ID = " + GetM_Product_ID() +
                                               @" AND NVL(M_AttributeSetInstance_ID , 0) = " + GetM_AttributeSetInstance_ID() +
@@ -455,7 +457,7 @@ namespace VAdvantage.Model
             {
                 return Msg.GetMsg(Env.GetCtx(), "AlreadyFound");
             }
-            return string.Empty;            
+            return string.Empty;
         }
 
         public void UpdateStockSummary()
@@ -657,7 +659,14 @@ namespace VAdvantage.Model
         {
             if (ctx != null)
             {
-                return Util.GetValueOfString(ctx.GetContext("#PRODUCT_CONTAINER_APPLICABLE")).Equals("Y");
+                string containerApplicable = Util.GetValueOfString(ctx.GetContext("#PRODUCT_CONTAINER_APPLICABLE"));
+
+                if (String.IsNullOrEmpty(containerApplicable))
+                {
+                    containerApplicable = Util.GetValueOfString(DB.ExecuteScalar("SELECT Value FROM AD_SysConfig WHERE IsActive = 'Y' AND Name = 'PRODUCT_CONTAINER_APPLICABLE'"));                    
+                }
+
+                return containerApplicable.Equals("Y");
             }
             else
             {
@@ -837,8 +846,10 @@ namespace VAdvantage.Model
                         if (Util.GetValueOfString(dataSet.Tables[0].Rows[index]["MovementType"]) == "I+" && Util.GetValueOfInt(dataSet.Tables[0].Rows[index]["M_InventoryLine_ID"]) > 0)
                         {
                             MInventoryLine minventoryLine = new MInventoryLine(ctx, Util.GetValueOfInt(dataSet.Tables[0].Rows[index]["M_InventoryLine_ID"]), _trx);
-                            if (!new MInventory(ctx, Util.GetValueOfInt(minventoryLine.GetM_Inventory_ID()), _trx).IsInternalUse())
+                            MInventory inventory = new MInventory(ctx, Util.GetValueOfInt(minventoryLine.GetM_Inventory_ID()), _trx);
+                            if (!inventory.IsInternalUse())
                             {
+                                minventoryLine.SetParent(inventory);
                                 minventoryLine.SetQtyBook(qtyMove);
                                 minventoryLine.SetOpeningStock(qtyMove);
                                 minventoryLine.SetDifferenceQty(Decimal.Subtract(qtyMove, Util.GetValueOfDecimal(dataSet.Tables[0].Rows[index]["currentqty"])));
@@ -918,10 +929,12 @@ namespace VAdvantage.Model
                         if (Util.GetValueOfString(dataSet.Tables[0].Rows[index]["MovementType"]) == "I+" && Util.GetValueOfInt(dataSet.Tables[0].Rows[index]["M_InventoryLine_ID"]) > 0)
                         {
                             MInventoryLine minventoryLine = new MInventoryLine(ctx, Util.GetValueOfInt(dataSet.Tables[0].Rows[index]["M_InventoryLine_ID"]), _trx);
-                            if (!new MInventory(ctx, Util.GetValueOfInt(minventoryLine.GetM_Inventory_ID()), (Trx)null).IsInternalUse())
+                            MInventory inventory = new MInventory(ctx, Util.GetValueOfInt(minventoryLine.GetM_Inventory_ID()), _trx);
+                            if (!inventory.IsInternalUse())
                             {
                                 if (minventoryLine.GetM_ProductContainer_ID() == containerId)
                                 {
+                                    minventoryLine.SetParent(inventory);
                                     minventoryLine.SetQtyBook(containerCurrentQty);
                                     minventoryLine.SetOpeningStock(containerCurrentQty);
                                     minventoryLine.SetDifferenceQty(Decimal.Subtract(containerCurrentQty, Util.GetValueOfDecimal(dataSet.Tables[0].Rows[index]["ContainerCurrentQty"])));

@@ -250,5 +250,51 @@ namespace VIS.Models
             int Currency_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Currency_ID FROM C_BankAccount WHERE C_BankAccount_ID = " + Util.GetValueOfInt(fields)));
             return Currency_ID;
         }
+        /// <summary>
+        /// Get auto check control based on selected bank
+        /// Author:VA230
+        /// </summary>
+        /// <param name="fields">bank account id,paymentMethodId</param>
+        /// <returns>true/false</returns>
+        public bool GetAutoCheckControl(string fields)
+        {
+            string[] paramValue = fields.Split(',');
+            string autoCheck = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT ChkNoAutoControl FROM C_BankAccount WHERE C_BankAccount_ID=" + Util.GetValueOfInt(paramValue[0])));
+            bool result = autoCheck == "Y" ? true : false;
+            return result;
+        }
+
+        /// <summary>
+        /// Get Provisional Invoice data
+        /// </summary>
+        /// <param name="C_ProvisionalInvoice_ID">Provisional Invoice</param>
+        /// <writer>209</writer>
+        /// <returns>ProvisionalInvoice Data</returns>
+        public Dictionary<String, Object> GetProvisionalInvoiceData(int C_ProvisionalInvoice_ID)
+        {
+            Dictionary<String, Object> retDic = null;
+
+            string sql = "SELECT C_BPartner_ID,C_BPartner_Location_ID,GrandTotal, C_Currency_ID, C_ConversionType_ID ";
+            if (Env.IsModuleInstalled("VA009_"))
+            {
+              //  sql += ", VA009_PaymentMethod_ID";
+            }
+            sql += " FROM C_ProvisionalInvoice  WHERE C_ProvisionalInvoice_ID=" + C_ProvisionalInvoice_ID;
+            DataSet ds = DB.ExecuteDataset(sql, null, null);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                retDic = new Dictionary<string, object>();
+                retDic["C_BPartner_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_BPartner_ID"]);
+                retDic["C_BPartner_Location_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_BPartner_Location_ID"]);
+                retDic["GrandTotal"] = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["GrandTotal"]);
+                retDic["C_Currency_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Currency_ID"]);
+                retDic["C_ConversionType_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_ConversionType_ID"]);
+                if (Env.IsModuleInstalled("VA009_"))
+                {
+                   // retDic["VA009_PaymentMethod_ID"] = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]);
+                }
+            }
+            return retDic;
+        }
     }
 }

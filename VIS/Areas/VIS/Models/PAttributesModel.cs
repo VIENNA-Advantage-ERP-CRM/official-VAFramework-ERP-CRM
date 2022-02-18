@@ -553,7 +553,7 @@ namespace VIS.Models
             bool hasValue = codeCount > 0 ? true : false;
             if (hasValue)
             {
-                attrsetQry = @"SELECT M_AttributeSet_ID FROM M_AttributeSetInstance WHERE Value='" + attrcode + "'";
+                attrsetQry = @"SELECT M_AttributeSet_ID FROM M_AttributeSetInstance WHERE AD_Client_ID = " + ctx.GetAD_Client_ID() + " AND Value='" + attrcode + "'";
             }
             else
             {
@@ -597,11 +597,12 @@ namespace VIS.Models
             {
                 if (hasValue)
                 {
-                    sql.Append(@" FROM M_AttributeSetInstance WHERE Value='" + attrcode + "'");
+                    sql.Append(@" FROM M_AttributeSetInstance WHERE AD_Client_ID = " + ctx.GetAD_Client_ID() + " AND Value='" + attrcode + "'");
                 }
                 else
                 {
-                    sql.Append(@" FROM M_ProductAttributes patr INNER JOIN M_AttributeSetInstance ats ON (patr.m_attributesetinstance_id=ats.m_attributesetinstance_id) WHERE patr.UPC='" + attrcode + "'");
+                    sql.Append(@" FROM M_ProductAttributes patr INNER JOIN M_AttributeSetInstance ats ON (patr.m_attributesetinstance_id=ats.m_attributesetinstance_id) 
+                                    WHERE patr.AD_Client_ID = " + ctx.GetAD_Client_ID() + " AND patr.UPC='" + attrcode + "'");
                 }
                 DataSet ds1 = null;
                 try

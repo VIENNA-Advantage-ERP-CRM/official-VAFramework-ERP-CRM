@@ -284,7 +284,19 @@
             if (dr.Table.length > 0) {
                 this.htmlUI.push('<tbody>');
                 for (var r = 0; r < dr.Table.length; r++) {
-                    var recRow = dr.Table[r];
+
+                    var recRowOld = dr.Table[r];
+                    //recRow = Object.keys(recRow).reduce((c, k) => (c[k.toUpperCase()] = recRow[k], c), {});
+
+                    var keys = Object.keys(recRowOld);
+                    var recRow = {};
+                    for (var j = 0; j < keys.length; j++) {
+                        recRow[keys[j].toUpperCase()] = recRowOld[keys[j]];
+                    }
+
+
+
+
                     var bckColor = "";
                     // for alternate row colors
                     if ((r % 2) == 0)

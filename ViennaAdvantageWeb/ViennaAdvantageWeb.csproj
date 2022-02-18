@@ -51,6 +51,10 @@
     <Reference Include="ExpressionEvaluator">
       <HintPath>E:\Github\FRPT_FinancialManagment-New\ViennaAdvantageWeb\bin\ExpressionEvaluator.dll</HintPath>
     </Reference>
+    <Reference Include="FirebaseAdmin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=97c8d00c348326ed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\FirebaseAdmin.dll</HintPath>
+    </Reference>
     <Reference Include="FRPTSvc">
       <HintPath>E:\Github\FRPT_FinancialManagment-New\ViennaAdvantageWeb\bin\FRPTSvc.dll</HintPath>
     </Reference>
@@ -194,17 +198,17 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-			<UseIIS>True</UseIIS>
-			<AutoAssignPort>True</AutoAssignPort>
-			<DevelopmentServerPort>3971</DevelopmentServerPort>
-			<DevelopmentServerVPath>/</DevelopmentServerVPath>
-			<IISUrl>http://localhost/VAdvantageHtml55121</IISUrl>
-			<OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-			<IISAppRootUrl>http://localhost/VAdvantageHtml55</IISAppRootUrl>
-			<NTLMAuthentication>False</NTLMAuthentication>
-			<UseCustomServer>False</UseCustomServer>
-			<CustomServerUrl>
-			</CustomServerUrl>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>3971</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost/VAdvantageHtml55121</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost/VAdvantageHtml55</IISAppRootUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>

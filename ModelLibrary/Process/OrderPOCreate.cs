@@ -305,6 +305,7 @@ namespace VAdvantage.Process
                 GetErrorOrSetting(sqlErrorMessage.ToString(), Get_TrxName());
             }
 
+
             IDataReader idr = null;
             DataTable dt = null;
             MOrder po = null;
@@ -359,7 +360,7 @@ namespace VAdvantage.Process
                             listConsolidatePO.Add(consolidatePO);
                         }
                     }
-
+                    
                     _Dropship = Utility.Util.GetValueOfString(dr["ISDROPSHIP"]);
                     // int M_Product_ID = Utility.Util.GetValueOfInt(dr["M_PRODUCT_ID"]);
                     //	Create PO Line
@@ -401,6 +402,10 @@ namespace VAdvantage.Process
 
                                 // Set value in Property From Process to check on Before Save.
                                 poLine.SetFromProcess(true);
+                                //190 - Set Print Description
+                                if (poLine.Get_ColumnIndex("PrintDescription") >= 0)
+                                    poLine.Set_Value("PrintDescription", soLines[i].Get_Value("PrintDescription"));
+
                                 if (!poLine.Save())
                                 {
                                     ValueNamePair pp = VLogger.RetrieveError();
@@ -437,6 +442,18 @@ namespace VAdvantage.Process
                         }
                     }
 
+                    if (po.Get_ColumnIndex("ConditionalFlag") > -1)
+                    {
+                        if (!po.CalculateTaxTotal())   //	setTotals
+                        {
+                            log.Info(Msg.GetMsg(GetCtx(), "ErrorCalculateTax") + ": " + po.GetDocumentNo().ToString());
+                        }
+
+                        // Update order header
+                        po.UpdateHeader();
+
+                        DB.ExecuteQuery("UPDATE C_Order SET ConditionalFlag = null WHERE C_Order_ID = " + po.GetC_Order_ID(), null, Get_Trx());
+                    }
                 }
                 //idr.Close();
             }
@@ -583,7 +600,7 @@ namespace VAdvantage.Process
             po.SetC_Campaign_ID(so.GetC_Campaign_ID());
             po.SetC_Project_ID(so.GetC_Project_ID());
             po.SetUser1_ID(so.GetUser1_ID());
-            po.SetUser2_ID(so.GetUser2_ID());
+            po.SetUser2_ID(so.GetUser2_ID());            
 
             //Set VA077 values on header level
             if (Env.IsModuleInstalled("VA077_"))
@@ -603,6 +620,12 @@ namespace VAdvantage.Process
                 {
                     po.SetAD_OrgTrx_ID(so.GetAD_OrgTrx_ID());
                 }
+            }
+
+            // Set Conditional Flag to skip repeated logic on lines save.
+            if (po.Get_ColumnIndex("ConditionalFlag") > -1)
+            {
+                po.SetConditionalFlag(MOrder.CONDITIONALFLAG_PrepareIt);
             }
 
             // Handle error done by rakesh kumar on 17/Mar/2021

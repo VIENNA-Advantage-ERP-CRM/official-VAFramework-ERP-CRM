@@ -43,7 +43,9 @@
             if (Util.getValueOfInt(dr["ID"]) != 0) {
                 mTab.setValue("DateOrdered", dr["DateOrdered"]);
                 mTab.setValue("POReference", dr["POReference"]);
-                mTab.setValue("AD_Org_ID", Util.getValueOfInt(dr["AD_Org_ID"]));
+                if (mTab.getValue("AD_Org_ID") != Util.getValueOfInt(dr["AD_Org_ID"])) {    // If Org ID is same then no need to update the Org ID, else Document type gets refreshed
+                    mTab.setValue("AD_Org_ID", Util.getValueOfInt(dr["AD_Org_ID"]));
+                }
                 //
                 mTab.setValue("DeliveryRule", dr["DeliveryRule"]);
                 mTab.setValue("DeliveryViaRule", dr["DeliveryViaRule"]);

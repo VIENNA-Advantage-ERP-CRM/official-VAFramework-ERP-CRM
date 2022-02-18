@@ -47,29 +47,30 @@
         add: "add",
         update: "update",
         remove: "delete",
-        contact: "contact"
+        contact: "contact",
+        addnewrec: "AddNewRecord"
     };
 
     VIS.EnvConstants =
-        {
-            /** WindowNo for Find           */
-            WINDOW_FIND: 1110,
-            /** WinowNo for MLookup         */
-            WINDOW_MLOOKUP: 1111,
-            /** WindowNo for PrintCustomize */
-            WINDOW_CUSTOMIZE: 1112,
+    {
+        /** WindowNo for Find           */
+        WINDOW_FIND: 1110,
+        /** WinowNo for MLookup         */
+        WINDOW_MLOOKUP: 1111,
+        /** WindowNo for PrintCustomize */
+        WINDOW_CUSTOMIZE: 1112,
 
-            /** WindowNo for PrintCustomize */
-            WINDOW_INFO: 1113,
-            /** Tab for Info                */
-            TAB_INFO: 1113,
-            /** WindowNo for AccountEditor */
-            WINDOW_ACCOUNT: 1114,
-            /** Temp WindowNo for GridField */
-            WINDOW_TEMP: 11100000,
-            /** Maximum int value --code by raghu*/
-            INT32MAXVALUE: 2147483647
-        }
+        /** WindowNo for PrintCustomize */
+        WINDOW_INFO: 1113,
+        /** Tab for Info                */
+        TAB_INFO: 1113,
+        /** WindowNo for AccountEditor */
+        WINDOW_ACCOUNT: 1114,
+        /** Temp WindowNo for GridField */
+        WINDOW_TEMP: 11100000,
+        /** Maximum int value --code by raghu*/
+        INT32MAXVALUE: 2147483647
+    }
 
 
 
@@ -149,11 +150,25 @@
         };
 
         this.GetConvertedNumber = function (val, dotFormatter) {
+            val = this.GetConvertedString(val, dotFormatter);
             if (dotFormatter) {
+
+                var inputSplit = val.split(".");
+                // Check value without exponetial
+                if (!Number.isSafeInteger(Number(inputSplit[0]))) {
+                    return Number.MAX_SAFE_INTEGER; // Set maximumn value
+                }
                 return Number(String(val).replace(/[^0-9.-]+/g, ""));
             } else {
+                var inputSplit = val.split(",");
+                // Check value without exponetial
+                if (!Number.isSafeInteger(Number(inputSplit[0]))) {
+                    return Number.MAX_SAFE_INTEGER; // Set maximumn value
+                }
                 return Number(String(val).replace(/[^0-9,-]+/g, "").replace(/[,]+/g, "."));
             }
+
+
         }
 
         // Function to convert String To Number in 1000 Format
@@ -252,8 +267,10 @@
         }
 
         this.getLocaleAmount = function (amount) {
-            var formattedAmount = this.GetFormatedValue(amount).toLocaleString();//.toFixed(2);
-            return this.GetFormatAmount(formattedAmount, "init", VIS.Env.isDecimalPoint());
+            //maximumFractionDigits set to 6, so that same decimal value can be generated. We assume that in our system there will be no amount more than 6 decimal places
+            var formattedAmount = this.GetFormatedValue(amount).toLocaleString(undefined, { maximumFractionDigits: 6 });//.toFixed(2);
+            // 2nd parameter changed from init to formatonly because init was checking . only.
+            return this.GetFormatAmount(formattedAmount, "formatOnly", VIS.Env.isDecimalPoint());
         };
 
         /* privilized function */
@@ -460,6 +477,28 @@
                 return 0;
             }
             return pieces[1].length;
+        },
+
+        /**
+         * @param {any} Name Removes image from identifier and returns text
+         */
+        getIdentifierDisplayVal: function (Name) {
+            var val = "";
+            if (Name && Name.indexOf("Images/") > -1) {
+                val = Name.replace("^^" + Name.substring(Name.indexOf("Images/"), Name.lastIndexOf("^^") + 3), "_")
+                if (val.indexOf("Images/") > -1) {
+                    val = val.replace(val.substring(val.indexOf("Images/"), val.lastIndexOf("^^") + 3), "_")
+                }
+                if (val.endsWith("_")) {
+                    val = val.substring(0, val.length - 1);
+                }
+                if (val.startsWith("_")) {
+                    val = val.substring(1);
+                }
+            }
+            else
+                val = Name;
+            return val;
         }
     };
 
@@ -715,11 +754,11 @@
 
 
         /**
-	 *  Check Base Language
-	 *  @param ctx context
-	 * 	@param tableName table to be translated
-	 * 	@return true if base language and table not translated
-	 */
+     *  Check Base Language
+     *  @param ctx context
+     * 	@param tableName table to be translated
+     * 	@return true if base language and table not translated
+     */
         function isBaseLanguage(ctx, tableName) {
 
             var lang = "";
@@ -890,16 +929,21 @@
             return $('<button class="vis-controls-txtbtn-table-td2" ' + ((disabled) ? "disabled" : "") + ' ><i class="vis vis-find" /></button>');
         }
 
-        function getContextPopup(options) {
+        function getContextPopup(options, fieldName) {
 
             var ulPopup = $("<ul class='vis-apanel-rb-ul'>");
-            if (typeof options[VIS.Actions.zoom] !== "undefined")
+            if (typeof options[VIS.Actions.zoom] !== "undefined") {
                 ulPopup.append($("<li data-action='" + VIS.Actions.zoom + "' style='opacity:" + (options[VIS.Actions.zoom] ? .7 : 1) +
-                    "'><i data-action='" + VIS.Actions.zoom + "' class='vis vis-find'></i><span data-action='" + VIS.Actions.zoom + "'>" + VIS.Msg.getMsg("Zoom") + "</span></li>"));
+                    "'><i data-action='" + VIS.Actions.zoom + "' class='fa fa-search-plus'></i><span data-action='" + VIS.Actions.zoom + "'>" + VIS.Msg.getMsg("Zoom") + "</span></li>"));
+                //New option for combo and search control.
+                if (options[VIS.Actions.addnewrec])
+                    ulPopup.append($("<li data-action='" + VIS.Actions.addnewrec + "' style='opacity:" + (options[VIS.Actions.zoom] ? .7 : 1) +
+                        "'><i data-action='" + VIS.Actions.addnewrec + "' class='fa fa-plus'></i><span data-action='" + VIS.Actions.addnewrec + "'>" + VIS.Msg.getMsg("AddNew") + "</span></li>"));
+            }
             if (options[VIS.Actions.preference])
                 ulPopup.append($("<li data-action='" + VIS.Actions.preference + "'><i data-action='" + VIS.Actions.preference + "' class='fa fa-cog'></i><span data-action='" + VIS.Actions.preference + "'>" + VIS.Msg.getMsg("Preference") + "</span></li>"));
             if (options[VIS.Actions.refresh])
-                ulPopup.append($("<li data-action='" + VIS.Actions.refresh + "'><i data-action='" + VIS.Actions.refresh + "' class='vis vis-refresh'></i><span data-action='" + VIS.Actions.refresh + "'>" + VIS.Msg.getMsg("Requery") + "</span></li>"));
+                ulPopup.append($("<li data-action='" + VIS.Actions.refresh + "'><i data-action='" + VIS.Actions.refresh + "' class='fa fa-refresh'></i><span data-action='" + VIS.Actions.refresh + "'>" + VIS.Msg.getMsg("Requery") + "</span></li>"));
             if (options[VIS.Actions.add])
                 ulPopup.append($("<li data-action='" + VIS.Actions.add + "'><i data-action='" + VIS.Actions.add + "' class='vis vis-addbp'></i><span data-action='" + VIS.Actions.add + "'>" + VIS.Msg.getMsg("Add") + "</span></li>"));
             if (options[VIS.Actions.update])
@@ -908,13 +952,15 @@
                 ulPopup.append($("<li data-action='" + VIS.Actions.remove + "'><i data-action='" + VIS.Actions.remove + "' class='fa fa-arrow-left'></i><span data-action='" + VIS.Actions.remove + "'>" + VIS.Msg.getMsg("Clear") + "</span></li>"));
             if (options[VIS.Actions.contact])
                 ulPopup.append($("<li data-action='" + VIS.Actions.contact + "'><i data-action='" + VIS.Actions.contact + "' class='fa fa-user'></i><span data-action='" + VIS.Actions.contact + "'>" + VIS.Msg.getMsg("Contact") + "</span></li>"));
+
+            //
             return ulPopup;
         };
 
         /**
-	      * 	Is Workflow Process view enabled.
-	      *	@return true if enabled
-	      */
+          * 	Is Workflow Process view enabled.
+          *	@return true if enabled
+          */
         function getIsWorkflowProcess() {
             if (s_workflow == null) {
                 s_workflow = false;

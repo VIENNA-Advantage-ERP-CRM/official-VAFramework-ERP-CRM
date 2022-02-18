@@ -342,6 +342,12 @@ namespace VAdvantage.Model
             {
                 SetC_DocType_ID(Util.GetValueOfInt(dt.Get_Value("C_DocTypeConfrimation_ID")));
             }
+
+            // VIS0060: Set Trx Org from Shipment/Receipt to Confirmation
+            if(ship.GetAD_OrgTrx_ID() > 0)
+            {
+                Set_Value("AD_OrgTrx_ID", ship.GetAD_OrgTrx_ID());
+            }
         }
 
 
@@ -1009,7 +1015,11 @@ namespace VAdvantage.Model
                 splitLine.SetRef_InOutLine_ID(oldLine.GetRef_InOutLine_ID());
                 splitLine.AddDescription("Split: from " + oldLine.GetMovementQty());
                 //	Qtys
-                splitLine.SetQty(differenceQty);		//	Entered/Movement
+                splitLine.SetQty(differenceQty);        //	Entered/Movement
+
+                //190 - Get Print description and set
+                if (splitLine.Get_ColumnIndex("PrintDescription") >= 0)
+                    splitLine.Set_Value("PrintDescription", oldLine.Get_Value("PrintDescription"));
 
                 /* Update QtyEntered/Qtymovement on Shipment Line to whom we are splitting*/
                 /** Otherwise system can not save splited line because system founf mote qty to be shipped from Ordered Qty **/

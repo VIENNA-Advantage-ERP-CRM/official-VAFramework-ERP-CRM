@@ -84,11 +84,12 @@ namespace VAdvantage.Model
                 //int port=System.Web.HttpContext.Current.Request.Url.Port;
                 //string machineIPPort =machineIP+ ":" + port.ToString();
                 DataSet ds = DataBase.DB.ExecuteDataset(sql);
+                s_log.SaveError("Console VServer Machine IP : " + machineIP, "Console VServer Machine IP : " + machineIP);
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
                     scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM AD_Schedule WHERE 
                                                         AD_Schedule_ID = (SELECT AD_Schedule_ID FROM AD_Scheduler WHERE AD_Scheduler_ID =" + dr["AD_Scheduler_ID"] + " )"));
-
+                    s_log.SaveError("Console VServer Schedule IP : " + scheduleIP, "Console VServer Schedule IP : " + scheduleIP);
                     //if (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP) || machineIPPort.Contains(scheduleIP))
                     if (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP))
                     {
@@ -107,8 +108,55 @@ namespace VAdvantage.Model
             MScheduler[] retValue = new MScheduler[list.Count()];
             retValue = list.ToArray();
             return retValue;
-        }	//	getActive
+        }   //	getActive
 
+        /// <summary>
+        /// Get Active Schedulers
+        /// VIS0060 - 21-Oct-2021
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name= ExecuteProcess"></param >
+        /// <returns>active processors</returns>
+        public static MScheduler[] GetActive(Ctx ctx, string ExecuteProcess)
+        {
+            List<MScheduler> list = new List<MScheduler>();
+            String sql = "SELECT * FROM AD_Scheduler WHERE IsActive='Y'";
+            string scheduleIP = null;
+            try
+            {
+                string machineIP = Classes.CommonFunctions.GetMachineIPPort();
+                s_log.SaveError("Console VServer Machine IP : " + machineIP, "Console VServer Machine IP : " + machineIP);
+
+                DataSet ds = DataBase.DB.ExecuteDataset(sql);
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM AD_Schedule WHERE 
+                                                        AD_Schedule_ID = (SELECT AD_Schedule_ID FROM AD_Scheduler WHERE AD_Scheduler_ID =" + dr["AD_Scheduler_ID"] + " )"));
+                        s_log.SaveError("Console VServer Schedule IP : " + scheduleIP, "Console VServer Schedule IP : " + scheduleIP);
+
+                        if (ExecuteProcess.Equals("2") && (string.IsNullOrEmpty(scheduleIP) || machineIP.Equals(scheduleIP)))
+                        {
+                            list.Add(new MScheduler(new Ctx(), dr, null));
+                        }
+                        else if (!string.IsNullOrEmpty(scheduleIP) && machineIP.Equals(scheduleIP))
+                        {
+                            list.Add(new MScheduler(new Ctx(), dr, null));
+                        }
+                    }
+                }
+                ds = null;
+            }
+            catch (Exception e)
+            {
+                s_log.Log(Level.SEVERE, sql, e);
+            }
+
+            MScheduler[] retValue = new MScheduler[list.Count()];
+            retValue = list.ToArray();
+            return retValue;
+        }	//	getActive
 
         /**	Static Logger	*/
         private static VLogger s_log = VLogger.GetVLogger(typeof(MScheduler).FullName);
@@ -420,13 +468,13 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="trx">optional transaction</param>
         /// <returns></returns>
-        
+
         private String RunReport(Trx trx)
         {
             log.Info(m_process.ToString());
             if (!m_process.IsReport() || (m_process.GetAD_PrintFormat_ID() == 0
                                              && m_process.GetAD_ReportView_ID() == 0
-                //&& !m_process.GetIsCrystalReport()
+                                             //&& !m_process.GetIsCrystalReport()
                                              && m_process.GetIsCrystalReport() == "N"
                                               && m_process.GetAD_ReportFormat_ID() == 0
                                               && !m_process.Get_Value("IsCrystalReport").Equals("B")
@@ -488,7 +536,7 @@ namespace VAdvantage.Model
                     isDocxFile = true;
                     //p_ctx.SetContext("ReportFromSchdular", true);
                     pi.IsArabicReportFromOutside = true;
-                    
+
                 }
                 else
                 {
@@ -1007,7 +1055,7 @@ namespace VAdvantage.Model
                                     ts = DateTime.Parse(value.ToString());
                                 //if (DisplayType.Date == sPara.GetDisplayType())
                                 //{
-                                    iPara.SetP_Date(ts);
+                                iPara.SetP_Date(ts);
                                 //}
                                 //else if (DisplayType.DateTime == sPara.GetDisplayType())
                                 //{

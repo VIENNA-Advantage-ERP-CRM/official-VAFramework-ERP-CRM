@@ -990,12 +990,14 @@ namespace VIS.Models
             if (Env.IsModuleInstalled("VA009_"))
             {
                 //Added 2 new fields to get VA009_PaymentMethod_ID and VA009_PaymentBaseType To Set the corrosponding value on Payment Window..
+                //(1052) apply IsHoldPayment check
                 _Sql = "SELECT * FROM (SELECT ips.C_InvoicePaySchedule_ID,"
                              + " NVL(ips.DueAmt , 0) - NVL(ips.va009_paidamntinvce , 0) AS DueAmt, i.IsReturnTrx, IPS.VA009_PaymentMethod_ID, PM.VA009_PaymentBaseType FROM C_Invoice i"
                              + " INNER JOIN C_InvoicePaySchedule ips ON (i.C_Invoice_ID = ips.C_Invoice_ID) "
                              + " INNER JOIN VA009_PAYMENTMETHOD PM  ON (ips.VA009_PaymentMethod_ID = PM.VA009_paymentMethod_ID) WHERE i.IsPayScheduleValid='Y' "
                              + " AND ips.IsValid ='Y' AND ips.isactive ='Y' "
                              + " AND i.C_Invoice_ID = " + Invoice_ID
+                             + " AND ips.IsHoldPayment = 'N'"
                              + " AND ips.C_InvoicePaySchedule_ID NOT IN"
                              + "(SELECT NVL(C_InvoicePaySchedule_ID,0) FROM C_InvoicePaySchedule WHERE c_payment_id IN"
                              + "(SELECT NVL(c_payment_id,0) FROM C_InvoicePaySchedule)  union "
@@ -1010,6 +1012,7 @@ namespace VIS.Models
                                 + " ON (i.C_Invoice_ID = ips.C_Invoice_ID)  WHERE i.IsPayScheduleValid='Y' "
                                 + " AND ips.IsValid = 'Y' AND ips.isactive = 'Y' "
                             + " AND i.C_Invoice_ID = " + Invoice_ID
+                            + " AND ips.IsHoldPayment = 'N'"
                             + "  AND ips.C_InvoicePaySchedule_ID NOT IN"
                             + "(SELECT NVL(C_InvoicePaySchedule_ID,0) FROM C_InvoicePaySchedule WHERE c_payment_id IN"
                             + "(SELECT NVL(c_payment_id,0) FROM C_InvoicePaySchedule)  union "

@@ -104,6 +104,9 @@ namespace VAdvantage.Classes
         /** Display Type 48	Product Container*/
         public static int ProductContainer = 48;
 
+        /** Display Type 49	ProgressBar*/
+        public static int ProgressBar = 49;
+
         /** Display Type 101 Label */
         //public static int Label = 101;
         #endregion
@@ -131,7 +134,7 @@ namespace VAdvantage.Classes
         public static bool IsNumeric(int displayType)
         {
             if (displayType == Amount || displayType == Number || displayType == CostPrice
-                || displayType == Integer || displayType == Quantity)
+                || displayType == Integer || displayType == Quantity || displayType == ProgressBar)
                 return true;
             return false;
         }	//	isNumeric
@@ -144,7 +147,7 @@ namespace VAdvantage.Classes
         /// <returns></returns>
         public static int GetDefaultPrecision(int displayType)
         {
-            if (displayType == Amount)
+            if (displayType == Amount )
                 return 2;
             if (displayType == Number)
                 return 6;
@@ -382,7 +385,7 @@ namespace VAdvantage.Classes
             //else
             //    format = (DecimalFormat)NumberFormat.getNumberInstance(Locale.US);
             //
-            if (displayType == Integer)
+            if (displayType == Integer ||  displayType == ProgressBar)
             {
                 //format.setParseIntegerOnly(true);
                 format.MaxIntDigit = INTEGER_DIGITS;
@@ -393,7 +396,7 @@ namespace VAdvantage.Classes
                 format.MaxIntDigit = MAX_DIGITS;
                 format.MaxFractionDigit = MAX_FRACTION;
             }
-            else if (displayType == Amount)
+            else if (displayType == Amount )
             {
                 format.MaxIntDigit = MAX_DIGITS;
                 format.MaxFractionDigit = MAX_FRACTION;

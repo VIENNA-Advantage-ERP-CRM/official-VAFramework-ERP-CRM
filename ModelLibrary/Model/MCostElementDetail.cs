@@ -46,6 +46,21 @@ namespace VAdvantage.Model
             return base.AfterSave(newRecord, success);
         }
 
+        /// <summary>
+        /// This function is used to Create cost Element Detail
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="AD_Client_ID">Client</param>
+        /// <param name="AD_Org_ID">organization</param>
+        /// <param name="Product">Product</param>
+        /// <param name="M_ASI_ID">Attribute Set Instance</param>
+        /// <param name="mas">Accounting Schema</param>
+        /// <param name="M_costElement_ID">Cost Element</param>
+        /// <param name="windowName">WindowName</param>
+        /// <param name="cd">Cost Detail</param>
+        /// <param name="amt">Amount</param>
+        /// <param name="qty">Quantity</param>
+        /// <returns>true, when success</returns>
         public static bool CreateCostElementDetail(Ctx ctx, int AD_Client_ID, int AD_Org_ID, MProduct Product, int M_ASI_ID,
                                                      MAcctSchema mas, int M_costElement_ID, string windowName, MCostDetail cd, decimal amt, decimal qty)
         {
@@ -90,6 +105,10 @@ namespace VAdvantage.Model
                     {
                         ced.Set_Value("VAMFG_M_WrkOdrTrnsctionLine_ID", cd.GetVAMFG_M_WrkOdrTrnsctionLine_ID());
                     }
+                }
+                if (ced.Get_ColumnIndex("C_ProvisionalInvoiceLine_ID") > -1)
+                {
+                    ced.Set_Value("C_ProvisionalInvoiceLine_ID", cd.Get_Value("C_ProvisionalInvoiceLine_ID"));
                 }
                 ced.SetM_Warehouse_ID(cd.GetM_Warehouse_ID());
                 if (!ced.Save())

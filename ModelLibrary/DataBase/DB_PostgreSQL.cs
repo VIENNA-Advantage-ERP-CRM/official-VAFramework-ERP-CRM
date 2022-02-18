@@ -406,7 +406,7 @@ namespace VAdvantage.DataBase
                 connection.Open();
                 NpgsqlDataAdapter adapter = new NpgsqlDataAdapter();
                 adapter.SelectCommand = new NpgsqlCommand(sql + " limit " + pageSize + " offset " + ((page - 1) * pageSize));
-                // adapter.SelectCommand.CommandTimeout = 500;
+                adapter.SelectCommand.CommandTimeout = 150;
                 adapter.SelectCommand.Connection = (NpgsqlConnection)connection;
                 ds = new DataSet();
 
@@ -427,7 +427,7 @@ namespace VAdvantage.DataBase
                 //    ds.Tables.Remove(schema);
                 //}
             }
-            catch
+            catch(Exception ex)
             {
                 //
                 ds = null;

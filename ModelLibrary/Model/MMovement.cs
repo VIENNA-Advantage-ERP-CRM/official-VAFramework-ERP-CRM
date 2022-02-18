@@ -37,7 +37,8 @@ namespace VAdvantage.Model
         private String _processMsg = null;
         /**	Just Prepared Flag			*/
         private Boolean _justPrepared = false;
-
+        //	Cache						
+        private static CCache<int, MMovement> _cache = new CCache<int, MMovement>("M_Movement", 5, 5);
         private string query = "";
         private Decimal? trxQty = 0;
         private bool isGetFromStorage = false;
@@ -240,7 +241,7 @@ namespace VAdvantage.Model
             // when we have record on movement line - then we can't change warehouse
             if (!newRecord && Is_ValueChanged("M_Warehouse_ID"))
             {
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM M_MovementLine WHERE M_Movement_ID = " + GetM_Movement_ID(), null, Get_Trx())) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(M_MovementLine_ID) FROM M_MovementLine WHERE M_Movement_ID = " + GetM_Movement_ID(), null, Get_Trx())) > 0)
                 {
                     log.SaveError("VIS_ToWarehouseCantChange", "");
                     return false;
@@ -465,47 +466,50 @@ namespace VAdvantage.Model
         {
             // is used to check Container applicable into system
             isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
+            MMovementLine[] lines = GetLines(false);
 
             #region[Prevent from completing, If on hand quantity of Product not available as per qty entered at line and Disallow negative is true at Warehouse. By Sukhwinder on 22 Dec, 2017. Only if DTD001 Module Installed.]
             if (Env.IsModuleInstalled("DTD001_"))
             {
-                string sql = "";
-                sql = "SELECT ISDISALLOWNEGATIVEINV FROM M_Warehouse WHERE M_Warehouse_ID = " + Util.GetValueOfInt(GetDTD001_MWarehouseSource_ID());
-                string disallow = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_TrxName()));
-                int[] movementLine = MInOutLine.GetAllIDs("M_MovementLine", "M_Movement_ID = " + GetM_Movement_ID(), Get_TrxName());
-                if (disallow.ToUpper() == "Y")
+                StringBuilder sql = new StringBuilder();
+                sql.Append("SELECT ISDISALLOWNEGATIVEINV FROM M_Warehouse WHERE M_Warehouse_ID = " + Util.GetValueOfInt(GetDTD001_MWarehouseSource_ID()));
+                string disallow = Util.GetValueOfString(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
+                //int[] movementLine = MInOutLine.GetAllIDs("M_MovementLine", "M_Movement_ID = " + GetM_Movement_ID(), Get_TrxName());
+                if (disallow.ToUpper().Equals("Y"))
                 {
                     int m_locator_id = 0;
                     int m_product_id = 0;
                     StringBuilder products = new StringBuilder();
                     StringBuilder locators = new StringBuilder();
                     bool check = false;
-                    for (int i = 0; i < movementLine.Length; i++)
+                    for (int i = 0; i < lines.Length; i++)
                     {
-                        MMovementLine mmLine = new MMovementLine(Env.GetCtx(), movementLine[i], Get_TrxName());
+                        //MMovementLine mmLine = new MMovementLine(Env.GetCtx(), movementLine[i], Get_TrxName());
                         //MInOutLine iol = new MInOutLine(Env.GetCtx(), movementLine[i], Get_TrxName());
+                        MMovementLine mmLine = lines[i];
                         m_locator_id = Util.GetValueOfInt(mmLine.GetM_Locator_ID());
                         m_product_id = Util.GetValueOfInt(mmLine.GetM_Product_ID());
 
-
-                        sql = "SELECT M_AttributeSet_ID FROM M_Product WHERE M_Product_ID = " + m_product_id;
-                        int m_attribute_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
+                        sql.Clear();
+                        sql.Append("SELECT M_AttributeSet_ID FROM M_Product WHERE M_Product_ID = " + m_product_id);
+                        int m_attribute_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
                         if (m_attribute_ID == 0)
                         {
+                            sql.Clear();
                             if (!isContainerApplicable)
                             {
-                                sql = "SELECT SUM(QtyOnHand) FROM M_Storage WHERE M_Locator_ID = " + m_locator_id + " AND M_Product_ID = " + m_product_id;
+                                sql.Append("SELECT SUM(QtyOnHand) FROM M_Storage WHERE M_Locator_ID = " + m_locator_id + " AND M_Product_ID = " + m_product_id);
                             }
                             else
                             {
-                                sql = @"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, 
-                        t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
-                            INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
+                                sql.Append(@"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, 
+                                   t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
+                                   INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
                                    " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND t.M_Locator_ID = " + mmLine.GetM_Locator_ID() +
                                    " AND t.M_Product_ID = " + mmLine.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + mmLine.GetM_AttributeSetInstance_ID() +
-                                   " AND NVL(t.M_ProductContainer_ID, 0) = " + mmLine.GetM_ProductContainer_ID();
+                                   " AND NVL(t.M_ProductContainer_ID, 0) = " + mmLine.GetM_ProductContainer_ID());
                             }
-                            decimal qty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_TrxName()));
+                            decimal qty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
                             decimal qtyToMove = mmLine.GetMovementQty();
                             if (qty < qtyToMove)
                             {
@@ -517,20 +521,21 @@ namespace VAdvantage.Model
                         }
                         else
                         {
+                            sql.Clear();
                             if (!isContainerApplicable)
                             {
-                                sql = "SELECT SUM(QtyOnHand) FROM M_Storage WHERE M_Locator_ID = " + m_locator_id + " AND M_Product_ID = " + m_product_id + " AND NVL(M_AttributeSetInstance_ID , 0) = " + mmLine.GetM_AttributeSetInstance_ID();
+                                sql.Append("SELECT SUM(QtyOnHand) FROM M_Storage WHERE M_Locator_ID = " + m_locator_id + " AND M_Product_ID = " + m_product_id + " AND NVL(M_AttributeSetInstance_ID , 0) = " + mmLine.GetM_AttributeSetInstance_ID());
                             }
                             else
                             {
-                                sql = @"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, 
-                        t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
-                            INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
+                                sql.Append(@"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, 
+                                 t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
+                                 INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
                                  " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND t.M_Locator_ID = " + mmLine.GetM_Locator_ID() +
                                  " AND t.M_Product_ID = " + mmLine.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + mmLine.GetM_AttributeSetInstance_ID() +
-                                 " AND NVL(t.M_ProductContainer_ID, 0) = " + mmLine.GetM_ProductContainer_ID();
+                                 " AND NVL(t.M_ProductContainer_ID, 0) = " + mmLine.GetM_ProductContainer_ID());
                             }
-                            decimal qty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_TrxName()));
+                            decimal qty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
                             decimal qtyToMove = mmLine.GetMovementQty();
                             if (qty < qtyToMove)
                             {
@@ -544,11 +549,13 @@ namespace VAdvantage.Model
 
                     if (check)
                     {
-                        sql = DBFunctionCollection.ConcatinateListOfLocators(locators.ToString());
-                        string loc = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_TrxName()));
+                        sql.Clear();
+                        sql.Append(DBFunctionCollection.ConcatinateListOfLocators(locators.ToString()));
+                        string loc = Util.GetValueOfString(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
 
-                        sql = DBFunctionCollection.ConcatinateListOfProducts(products.ToString());
-                        string prod = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_TrxName()));
+                        sql.Clear();
+                        sql.Append(DBFunctionCollection.ConcatinateListOfProducts(products.ToString()));
+                        string prod = Util.GetValueOfString(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
 
                         _processMsg = Msg.GetMsg(Env.GetCtx(), "VIS_InsufficientQuantityFor") + prod + Msg.GetMsg(Env.GetCtx(), "VIS_OnLocators") + loc;
                         return DocActionVariables.STATUS_DRAFTED;
@@ -560,9 +567,10 @@ namespace VAdvantage.Model
                 {
                     StringBuilder delReq = new StringBuilder();
                     bool delivered = false;
-                    for (int i = 0; i < movementLine.Length; i++)
+                    for (int i = 0; i < lines.Length; i++)
                     {
-                        MMovementLine mmLine = new MMovementLine(Env.GetCtx(), movementLine[i], Get_TrxName());
+                        //MMovementLine mmLine = new MMovementLine(Env.GetCtx(), movementLine[i], Get_TrxName());
+                        MMovementLine mmLine = lines[i];
                         if (mmLine.GetM_RequisitionLine_ID() != 0)
                         {
                             MRequisitionLine reqLine = new MRequisitionLine(GetCtx(), mmLine.GetM_RequisitionLine_ID(), Get_TrxName());
@@ -576,8 +584,9 @@ namespace VAdvantage.Model
 
                     if (delivered)
                     {
-                        sql = DBFunctionCollection.ConcatnatedListOfRequisition(delReq.ToString());
-                        string req = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));
+                        sql.Clear();
+                        sql.Append(DBFunctionCollection.ConcatnatedListOfRequisition(delReq.ToString()));
+                        string req = Util.GetValueOfString(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
 
                         _processMsg = Msg.GetMsg(Env.GetCtx(), "RequisitionAlreadyDone") + ": " + req;
                         return DocActionVariables.STATUS_DRAFTED;
@@ -668,11 +677,11 @@ namespace VAdvantage.Model
                     return status;
             }
 
-            // JID_1290: Set the document number from completede document sequence after completed (if needed)
-            SetCompletedDocumentNo();
+            // Set Document Date based on setting on Document Type
+            SetCompletedDocumentDate();
 
             // To check weather future date records are available in Transaction window
-            // this check implement after "SetCompletedDocumentNo" function, because this function overwrit movement date
+            // this check implement after "SetCompletedDocumentDate" function, because this function overwrit movement date
             _processMsg = MTransaction.CheckFutureDateRecord(GetMovementDate(), Get_TableName(), GetM_Movement_ID(), Get_Trx());
             if (!string.IsNullOrEmpty(_processMsg))
             {
@@ -680,7 +689,7 @@ namespace VAdvantage.Model
             }
 
             // check column name new 12 jan 0 vikas
-            int _count = Util.GetValueOfInt(DB.ExecuteScalar(" SELECT Count(*) FROM AD_Column WHERE columnname = 'DTD001_SourceReserve' "));
+            int _count = Util.GetValueOfInt(DB.ExecuteScalar(" SELECT Count(AD_Column_ID) FROM AD_Column WHERE columnname = 'DTD001_SourceReserve' "));
 
             //	Outstanding (not processed) Incoming Confirmations ?
             MMovementConfirm[] confirmations = GetConfirmations(true);
@@ -733,16 +742,6 @@ namespace VAdvantage.Model
             // IsCostImmediate = true - calculate cost on completion
             MClient client = MClient.Get(GetCtx(), GetAD_Client_ID());
 
-            //int countVA024 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE ISACTIVE = 'Y' AND  PREFIX='VA024_'"));
-            //int tableId = 0;
-            //try
-            //{
-            //    query = @"SELECT AD_TABLE_ID  FROM AD_TABLE WHERE tablename LIKE 'VA024_T_ObsoleteInventory' AND IsActive = 'Y'";
-            //    tableId = Util.GetValueOfInt(DB.ExecuteScalar(query, null, Get_Trx()));
-            //}
-            //catch { }
-
-            //query = "SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA203_'";
             int countKarminati = Env.IsModuleInstalled("VA203_") ? 1 : 0;
 
             if (isContainerApplicable)
@@ -762,7 +761,6 @@ namespace VAdvantage.Model
                 }
             }
 
-            MMovementLine[] lines = GetLines(false);
             for (int i = 0; i < lines.Length; i++)
             {
                 MMovementLine line = lines[i];
@@ -925,16 +923,16 @@ namespace VAdvantage.Model
                         //UpdateCurrentRecord(line, trxFrom, Decimal.Negate(ma.GetMovementQty()), line.GetM_Locator_ID());
                         #endregion
                         /*************************************************************************************************/
-                        Tuple<String, String, String> mInfo = null;
-                        if (Env.HasModulePrefix("DTD001_", out mInfo))
+                        if (Env.IsModuleInstalled("DTD001_"))
                         {
                             if (line.GetM_RequisitionLine_ID() > 0)
                             {
                                 #region Requisition Case handled
                                 decimal reverseRequisitionQty = 0;
                                 MRequisitionLine reqLine = new MRequisitionLine(GetCtx(), line.GetM_RequisitionLine_ID(), Get_Trx());
-                                MRequisition req = new MRequisition(GetCtx(), reqLine.GetM_Requisition_ID(), Get_Trx());        // Trx used to handle query stuck problem
-
+                                //MRequisition req = new MRequisition(GetCtx(), reqLine.GetM_Requisition_ID(), Get_Trx());        // Trx used to handle query stuck problem
+                                string reqStatus = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocStatus FROM M_Requisition WHERE M_Requisition_ID="
+                                                + reqLine.GetM_Requisition_ID(), null, Get_Trx()));
                                 if (!IsReversal())
                                 {
                                     // ((qty Request) - (qty delivered)) >= (Attribute qty) then reduce (Attribute qty) from Requisition Ordered / Reserved qty
@@ -989,7 +987,7 @@ namespace VAdvantage.Model
                                     {
                                         ResLocator_ID = line.GetM_Locator_ID();
                                     }
-                                    if (ResLocator_ID > 0 && req.GetDocStatus() != "CL")
+                                    if (ResLocator_ID > 0 && reqStatus != "CL")
                                     {
                                         // JID_0657: Requistion is without ASI but on move selected the ASI system is minus the Reserved qty from ASI field but not removing the reserved qty without ASI
                                         MStorage ordStorage = MStorage.Get(GetCtx(), ResLocator_ID, line.GetM_Product_ID(), reqLine.GetM_AttributeSetInstance_ID(), Get_TrxName());
@@ -1019,7 +1017,7 @@ namespace VAdvantage.Model
                                 }
                                 if (OrdLocator_ID > 0)
                                 {
-                                    if (req.GetDocStatus() != "CL" && countKarminati > 0)
+                                    if (reqStatus != "CL" && countKarminati > 0)
                                     {
                                         MStorage newsg = MStorage.Get(GetCtx(), OrdLocator_ID, line.GetM_Product_ID(), reqLine.GetM_AttributeSetInstance_ID(), Get_Trx());
                                         //if (newsg == null)
@@ -1034,7 +1032,7 @@ namespace VAdvantage.Model
                                             return DocActionVariables.STATUS_INVALID;
                                         }
                                     }
-                                    else if (req.GetDocStatus() != "CL")
+                                    else if (reqStatus != "CL")
                                     {
                                         MStorage newsg = MStorage.Get(GetCtx(), OrdLocator_ID, line.GetM_Product_ID(), reqLine.GetM_AttributeSetInstance_ID(), Get_Trx());
                                         newsg.SetDTD001_QtyReserved(Decimal.Subtract(newsg.GetDTD001_QtyReserved(), reverseRequisitionQty));
@@ -1082,8 +1080,7 @@ namespace VAdvantage.Model
                                 if (line.GetA_Asset_ID() > 0)
                                 {
                                     ast = new MAsset(GetCtx(), line.GetA_Asset_ID(), Get_Trx());
-                                    Tuple<String, String, String> aInfo = null;
-                                    if (Env.HasModulePrefix("VAFAM_", out aInfo))
+                                    if (Env.IsModuleInstalled("VAFAM_"))
                                     {
                                         MVAFAMAssetHistory aHist = new MVAFAMAssetHistory(GetCtx(), 0, Get_Trx());
                                         ast.CopyTo(aHist);
@@ -1104,6 +1101,12 @@ namespace VAdvantage.Model
                                     }
 
                                     ast.SetM_Locator_ID(line.GetM_LocatorTo_ID());
+
+                                    // VIS0060: Set Trx Organization from Movement Line to Asset
+                                    if(Util.GetValueOfInt(line.Get_Value("AD_OrgTrx_ID")) > 0)
+                                    {
+                                        ast.Set_Value("AD_OrgTrx_ID", Util.GetValueOfInt(line.Get_Value("AD_OrgTrx_ID")));
+                                    }
                                     ast.Save();
                                 }
                                 else
@@ -1217,13 +1220,16 @@ namespace VAdvantage.Model
                     #region WHEN ASI available on line -- when Data on Attribute Tab not found
                     Decimal? containerCurrentQty = 0;
                     MRequisitionLine reqLine = null;
-                    MRequisition req = null;
+                    //MRequisition req = null;
+                    string reqStatus = "";
                     decimal reverseRequisitionQty = 0;
                     if (line.GetM_RequisitionLine_ID() > 0)
                     {
                         #region Requisition Case Handling
                         reqLine = new MRequisitionLine(GetCtx(), line.GetM_RequisitionLine_ID(), Get_Trx());
-                        req = new MRequisition(GetCtx(), reqLine.GetM_Requisition_ID(), Get_Trx());         // Trx used to handle query stuck problem
+                        //req = new MRequisition(GetCtx(), reqLine.GetM_Requisition_ID(), Get_Trx());         // Trx used to handle query stuck problem
+                        reqStatus = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocStatus FROM M_Requisition WHERE M_Requisition_ID="
+                                                + reqLine.GetM_Requisition_ID(), null, Get_Trx()));
                         if (!IsReversal())
                         {
                             // ((qty Request) - (qty delivered)) >= (movement qty) then reduce (movement qty) from Requisition Ordered / Reserved qty
@@ -1295,7 +1301,7 @@ namespace VAdvantage.Model
                             {
                                 ResLocator_ID = line.GetM_LocatorTo_ID();
                             }
-                            if (ResLocator_ID > 0 && req.GetDocStatus() != "CL")
+                            if (ResLocator_ID > 0 && reqStatus != "CL")
                             {
                                 // JID_0657: Requistion is without ASI but on move selected the ASI system is minus the Reserved qty from ASI field but not removing the reserved qty without ASI
                                 MStorage ordStorage = MStorage.Get(GetCtx(), ResLocator_ID, line.GetM_Product_ID(), reqLine.GetM_AttributeSetInstance_ID(), Get_TrxName());
@@ -1322,7 +1328,7 @@ namespace VAdvantage.Model
                         {
                             OrdLocator_ID = line.GetM_Locator_ID();
                         }
-                        if (OrdLocator_ID > 0 && req.GetDocStatus() != "CL")
+                        if (OrdLocator_ID > 0 && reqStatus != "CL")
                         {
                             #region Commented
                             //Update product Qty at storage and Checks Product have Attribute Set Or Not.
@@ -1353,7 +1359,7 @@ namespace VAdvantage.Model
                             //            Tuple<String, String, String> aInfo = null;
                             //            if (Env.HasModulePrefix("DTD001_", out aInfo))
                             //            {
-                            //                if (newsg.GetDTD001_QtyReserved() != null && Util.GetValueOfString(req.GetDocStatus()) != "CL")
+                            //                if (newsg.GetDTD001_QtyReserved() != null && Util.GetValueOfString(reqStatus) != "CL")
                             //                {
                             //                    if (line.GetM_RequisitionLine_ID() > 0)
                             //                    {
@@ -1366,7 +1372,7 @@ namespace VAdvantage.Model
                             //                        return DocActionVariables.STATUS_INVALID;
                             //                    }
                             //                }
-                            //                else if (Util.GetValueOfString(req.GetDocStatus()) != "CL")
+                            //                else if (Util.GetValueOfString(reqStatus) != "CL")
                             //                {
                             //                    if (line.GetM_RequisitionLine_ID() > 0)
                             //                    {
@@ -1406,7 +1412,7 @@ namespace VAdvantage.Model
                             //            Tuple<String, String, String> aInfo = null;
                             //            if (Env.HasModulePrefix("DTD001_", out aInfo))
                             //            {
-                            //                if (newsg.GetDTD001_QtyReserved() != null && Util.GetValueOfString(req.GetDocStatus()) != "CL")
+                            //                if (newsg.GetDTD001_QtyReserved() != null && Util.GetValueOfString(reqStatus) != "CL")
                             //                {
                             //                    if (line.GetM_RequisitionLine_ID() > 0)
                             //                    {
@@ -1419,7 +1425,7 @@ namespace VAdvantage.Model
                             //                        return DocActionVariables.STATUS_INVALID;
                             //                    }
                             //                }
-                            //                else if (Util.GetValueOfString(req.GetDocStatus()) != "CL")
+                            //                else if (Util.GetValueOfString(reqStatus) != "CL")
                             //                {
                             //                    if (line.GetM_RequisitionLine_ID() > 0)
                             //                    {
@@ -1444,7 +1450,7 @@ namespace VAdvantage.Model
                             //        Tuple<String, String, String> aInfo = null;
                             //        if (Env.HasModulePrefix("DTD001_", out aInfo))
                             //        {
-                            //            if (newsg.GetDTD001_QtyReserved() != null && Util.GetValueOfString(req.GetDocStatus()) != "CL")
+                            //            if (newsg.GetDTD001_QtyReserved() != null && Util.GetValueOfString(reqStatus) != "CL")
                             //            {
                             //                if (line.GetM_RequisitionLine_ID() > 0)
                             //                {
@@ -1457,7 +1463,7 @@ namespace VAdvantage.Model
                             //                    return DocActionVariables.STATUS_INVALID;
                             //                }
                             //            }
-                            //            else if (Util.GetValueOfString(req.GetDocStatus()) != "CL")
+                            //            else if (Util.GetValueOfString(reqStatus) != "CL")
                             //            {
                             //                if (line.GetM_RequisitionLine_ID() > 0)
                             //                {
@@ -1481,7 +1487,7 @@ namespace VAdvantage.Model
                             //        Tuple<String, String, String> aInfo = null;
                             //        if (Env.HasModulePrefix("DTD001_", out aInfo))
                             //        {
-                            //            if (newsg.GetDTD001_QtyReserved() != null && Util.GetValueOfString(req.GetDocStatus()) != "CL")
+                            //            if (newsg.GetDTD001_QtyReserved() != null && Util.GetValueOfString(reqStatus) != "CL")
                             //            {
                             //                if (line.GetM_RequisitionLine_ID() > 0)
                             //                {
@@ -1494,7 +1500,7 @@ namespace VAdvantage.Model
                             //                    return DocActionVariables.STATUS_INVALID;
                             //                }
                             //            }
-                            //            else if (Util.GetValueOfString(req.GetDocStatus()) != "CL")
+                            //            else if (Util.GetValueOfString(reqStatus) != "CL")
                             //            {
                             //                if (line.GetM_RequisitionLine_ID() > 0)
                             //                {
@@ -1558,8 +1564,7 @@ namespace VAdvantage.Model
                     }
                     /***************************************************/
                     #region Asset Work
-                    Tuple<String, String, String> iInfo = null;
-                    if (Env.HasModulePrefix("DTD001_", out iInfo))
+                    if (Env.IsModuleInstalled("DTD001_"))
                     {
                         string sql = "SELECT DTD001_ISCONSUMABLE FROM M_Product WHERE M_Product_ID=" + line.GetM_Product_ID();
                         if (Util.GetValueOfString(DB.ExecuteScalar(sql)) != "Y")
@@ -1585,8 +1590,7 @@ namespace VAdvantage.Model
                             if (line.GetA_Asset_ID() > 0)
                             {
                                 ast = new MAsset(GetCtx(), line.GetA_Asset_ID(), Get_Trx());
-                                Tuple<String, String, String> aInfo = null;
-                                if (Env.HasModulePrefix("VAFAM_", out aInfo))
+                                if (Env.IsModuleInstalled("VAFAM_"))
                                 {
                                     MVAFAMAssetHistory aHist = new MVAFAMAssetHistory(GetCtx(), 0, Get_Trx());
                                     ast.CopyTo(aHist);
@@ -1599,6 +1603,12 @@ namespace VAdvantage.Model
                                 }
                                 ast.SetC_BPartner_ID(line.GetC_BPartner_ID());
                                 ast.SetM_Locator_ID(line.GetM_LocatorTo_ID());
+
+                                // VIS0060: Set Trx Organization from Movement Line to Asset
+                                if (Util.GetValueOfInt(line.Get_Value("AD_OrgTrx_ID")) > 0)
+                                {
+                                    ast.Set_Value("AD_OrgTrx_ID", Util.GetValueOfInt(line.Get_Value("AD_OrgTrx_ID")));
+                                }
                                 ast.Save();
                             }
                             else
@@ -1834,8 +1844,8 @@ namespace VAdvantage.Model
                     //int ToWarehouseOrg = MLocator.Get(GetCtx(), line.GetM_LocatorTo_ID()).GetAD_Org_ID();
                     //if (GetAD_Org_ID() != ToWarehouseOrg)
                     //{
-                    product1 = new MProduct(GetCtx(), line.GetM_Product_ID(), Get_TrxName());
-                    if (product1.GetProductType() == "I") // for Item Type product
+                    product1 = new MProduct(GetCtx(), line.GetM_Product_ID(), Get_Trx());
+                    if (product1.GetProductType().Equals("I")) // for Item Type product
                     {
                         if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
                           "Inventory Move", null, null, line, null, null, 0, line.GetMovementQty(), Get_TrxName(), out conversionNotFoundInOut, optionalstr: "window"))
@@ -1900,6 +1910,9 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
             }
 
+            // JID_1290: Set the document number from completede document sequence after completed (if needed)
+            SetCompletedDocumentNo();
+
             //
             SetProcessed(true);
             SetDocAction(DOCACTION_Close);
@@ -1919,18 +1932,6 @@ namespace VAdvantage.Model
 
             MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
 
-            // if Overwrite Date on Complete checkbox is true.
-            if (dt.IsOverwriteDateOnComplete())
-            {
-                SetMovementDate(DateTime.Now.Date);
-
-                //	Std Period open?
-                if (!MPeriod.IsOpen(GetCtx(), GetMovementDate(), dt.GetDocBaseType(), GetAD_Org_ID()))
-                {
-                    throw new Exception("@PeriodClosed@");
-                }
-            }
-
             // if Overwrite Sequence on Complete checkbox is true.
             if (dt.IsOverwriteSeqOnComplete())
             {
@@ -1945,6 +1946,32 @@ namespace VAdvantage.Model
                 if (value != null)
                 {
                     SetDocumentNo(value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Overwrite the document date based on setting on Document Type
+        /// </summary>
+        private void SetCompletedDocumentDate()
+        {
+            // if Reversal document then no need to get Document no from Completed sequence
+            if (IsReversal())
+            {
+                return;
+            }
+
+            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+
+            // if Overwrite Date on Complete checkbox is true.
+            if (dt.IsOverwriteDateOnComplete())
+            {
+                SetMovementDate(DateTime.Now.Date);
+
+                //	Std Period open?
+                if (!MPeriod.IsOpen(GetCtx(), GetMovementDate(), dt.GetDocBaseType(), GetAD_Org_ID()))
+                {
+                    throw new Exception("@PeriodClosed@");
                 }
             }
         }
@@ -2440,7 +2467,7 @@ namespace VAdvantage.Model
                                 inventory = new MInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetM_Inventory_ID()), Get_TrxName());         // Trx used to handle query stuck problem
                                 if (!inventory.IsInternalUse())
                                 {
-                                    //break;
+                                    inventoryLine.SetParent(inventory);
                                     inventoryLine.SetQtyBook(qtyMove);
                                     inventoryLine.SetOpeningStock(qtyMove);
                                     inventoryLine.SetDifferenceQty(Decimal.Subtract(qtyMove, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["currentqty"])));
@@ -2564,6 +2591,7 @@ namespace VAdvantage.Model
                                 {
                                     if (inventoryLine.GetM_ProductContainer_ID() == containerId)
                                     {
+                                        inventoryLine.SetParent(inventory);
                                         inventoryLine.SetQtyBook(containerCurrentQty);
                                         inventoryLine.SetOpeningStock(containerCurrentQty);
                                         inventoryLine.SetDifferenceQty(Decimal.Subtract(containerCurrentQty, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["ContainerCurrentQty"])));
@@ -3359,7 +3387,7 @@ namespace VAdvantage.Model
                 MMovementLine rLine = new MMovementLine(GetCtx(), 0, Get_TrxName());
                 CopyValues(oLine, rLine, oLine.GetAD_Client_ID(), oLine.GetAD_Org_ID());
                 rLine.SetM_Movement_ID(reversal.GetM_Movement_ID());
-                //
+                rLine.SetParent(reversal);
                 rLine.SetMovementQty(Decimal.Negate(rLine.GetMovementQty()));
                 rLine.SetQtyEntered(Decimal.Negate(rLine.GetQtyEntered()));
                 rLine.SetTargetQty(Env.ZERO);
@@ -3414,8 +3442,7 @@ namespace VAdvantage.Model
                 if (mline.GetA_Asset_ID() > 0)
                 {
                     ast = new MAsset(GetCtx(), mline.GetA_Asset_ID(), Get_Trx());
-                    Tuple<String, String, String> aInfo = null;
-                    if (Env.HasModulePrefix("VAFAM_", out aInfo))
+                    if (Env.IsModuleInstalled("VAFAM_"))
                     {
                         MVAFAMAssetHistory aHist = new MVAFAMAssetHistory(GetCtx(), 0, Get_Trx());
                         ast.CopyTo(aHist);

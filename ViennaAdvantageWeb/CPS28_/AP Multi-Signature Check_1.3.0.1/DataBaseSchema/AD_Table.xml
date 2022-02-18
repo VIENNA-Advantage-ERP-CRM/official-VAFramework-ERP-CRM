@@ -1,0 +1,138 @@
+<NewDataSet>
+  <xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop">
+    <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="AD_Table">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="AD_CLIENT_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_ORG_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_TABLE_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_VAL_RULE_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="AD_WINDOW_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="ACCESSLEVEL" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="CREATED" msprop:OraDbType="106" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="CREATEDBY" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="DESCRIPTION" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="ENTITYTYPE" msprop:OraDbType="126" type="xs:string" minOccurs="0" />
+                <xs:element name="HELP" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="IMPORTTABLE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISACTIVE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISCHANGELOG" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISDELETEABLE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISHIGHVOLUME" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISSECURITYENABLED" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISVIEW" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="LOADSEQ" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="NAME" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="PO_WINDOW_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="REFERENCED_TABLE_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="REPLICATIONTYPE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="TABLENAME" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="UPDATED" msprop:OraDbType="106" type="xs:dateTime" minOccurs="0" />
+                <xs:element name="UPDATEDBY" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="BASE_TABLE_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="CHANGELOGLEVEL" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="DATECOLUMN_ID" msprop:OraDbType="113" type="xs:long" minOccurs="0" />
+                <xs:element name="EXPORTVIEW" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="IMPORTVIEW" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="SUBTABLETYPE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="TABLETRXTYPE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISREPORTINGTABLE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="EXPORT_ID" msprop:OraDbType="119" type="xs:string" minOccurs="0" />
+                <xs:element name="VALIDATETABLE" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+                <xs:element name="ISMAINTAINVERSIONS" msprop:OraDbType="104" type="xs:string" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <AD_Table>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_TABLE_ID>297</AD_TABLE_ID>
+    <AD_WINDOW_ID>158</AD_WINDOW_ID>
+    <ACCESSLEVEL>3</ACCESSLEVEL>
+    <CREATED>2000-01-02T07:30:00+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>Account at the Bank</DESCRIPTION>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <ISCHANGELOG>N</ISCHANGELOG>
+    <ISDELETEABLE>Y</ISDELETEABLE>
+    <ISHIGHVOLUME>N</ISHIGHVOLUME>
+    <ISSECURITYENABLED>N</ISSECURITYENABLED>
+    <ISVIEW>N</ISVIEW>
+    <LOADSEQ>75</LOADSEQ>
+    <NAME>Bank Account</NAME>
+    <REPLICATIONTYPE>L</REPLICATIONTYPE>
+    <TABLENAME>C_BankAccount</TABLENAME>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <CHANGELOGLEVEL>N</CHANGELOGLEVEL>
+    <TABLETRXTYPE>O</TABLETRXTYPE>
+    <ISREPORTINGTABLE>N</ISREPORTINGTABLE>
+    <EXPORT_ID>VIS_297</EXPORT_ID>
+    <ISMAINTAINVERSIONS>N</ISMAINTAINVERSIONS>
+  </AD_Table>
+  <AD_Table>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_TABLE_ID>335</AD_TABLE_ID>
+    <AD_WINDOW_ID>195</AD_WINDOW_ID>
+    <ACCESSLEVEL>1</ACCESSLEVEL>
+    <CREATED>2000-01-25T00:33:25+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <DESCRIPTION>Payment identifier</DESCRIPTION>
+    <ENTITYTYPE>D</ENTITYTYPE>
+    <ISACTIVE>Y</ISACTIVE>
+    <ISCHANGELOG>Y</ISCHANGELOG>
+    <ISDELETEABLE>Y</ISDELETEABLE>
+    <ISHIGHVOLUME>N</ISHIGHVOLUME>
+    <ISSECURITYENABLED>N</ISSECURITYENABLED>
+    <ISVIEW>N</ISVIEW>
+    <LOADSEQ>90</LOADSEQ>
+    <NAME>Payment</NAME>
+    <REPLICATIONTYPE>L</REPLICATIONTYPE>
+    <TABLENAME>C_Payment</TABLENAME>
+    <UPDATED>2021-12-30T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <CHANGELOGLEVEL>N</CHANGELOGLEVEL>
+    <TABLETRXTYPE>O</TABLETRXTYPE>
+    <ISREPORTINGTABLE>N</ISREPORTINGTABLE>
+    <EXPORT_ID>VIS_335</EXPORT_ID>
+    <ISMAINTAINVERSIONS>N</ISMAINTAINVERSIONS>
+  </AD_Table>
+  <AD_Table>
+    <AD_CLIENT_ID>0</AD_CLIENT_ID>
+    <AD_ORG_ID>0</AD_ORG_ID>
+    <AD_TABLE_ID>1000463</AD_TABLE_ID>
+    <ACCESSLEVEL>3</ACCESSLEVEL>
+    <CREATED>2014-08-30T08:51:40+00:00</CREATED>
+    <CREATEDBY>100</CREATEDBY>
+    <ENTITYTYPE>U</ENTITYTYPE>
+    <IMPORTTABLE>N</IMPORTTABLE>
+    <ISACTIVE>Y</ISACTIVE>
+    <ISCHANGELOG>N</ISCHANGELOG>
+    <ISDELETEABLE>N</ISDELETEABLE>
+    <ISHIGHVOLUME>N</ISHIGHVOLUME>
+    <ISSECURITYENABLED>N</ISSECURITYENABLED>
+    <ISVIEW>Y</ISVIEW>
+    <LOADSEQ>0</LOADSEQ>
+    <NAME>VARPT_PAYMENTVOUCHER_V_ID</NAME>
+    <REPLICATIONTYPE>L</REPLICATIONTYPE>
+    <TABLENAME>VARPT_PAYMENTVOUCHER_V</TABLENAME>
+    <UPDATED>2021-05-24T00:00:00+00:00</UPDATED>
+    <UPDATEDBY>100</UPDATEDBY>
+    <CHANGELOGLEVEL>N</CHANGELOGLEVEL>
+    <EXPORTVIEW>N</EXPORTVIEW>
+    <IMPORTVIEW>N</IMPORTVIEW>
+    <TABLETRXTYPE>O</TABLETRXTYPE>
+    <ISREPORTINGTABLE>N</ISREPORTINGTABLE>
+    <EXPORT_ID>VARPT_20000300</EXPORT_ID>
+    <ISMAINTAINVERSIONS>N</ISMAINTAINVERSIONS>
+  </AD_Table>
+</NewDataSet>

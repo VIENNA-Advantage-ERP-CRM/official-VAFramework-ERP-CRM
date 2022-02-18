@@ -115,6 +115,7 @@
         this.log = VIS.Logging.VLogger.getVLogger("APanel");
 
         this.isSummaryVisible = false;
+        this.lastView = "";
         //private 
         var $divContentArea, $ulNav, $ulToobar, $divStatus, $ulTabControl, $divTabControl, $divTabNav;
         var $txtSearch, $imgSearch, $btnClrSearch, $imgdownSearch, $btnFilter;
@@ -135,6 +136,8 @@
         var tabItems = [], tabLIObj = {};
         this.defaultSearch = true;
         this.isAutoCompleteOpen = false;
+        this.instructionPop = {};
+        this.instructionPop[this.ACTION_NAME_NEW] = false;
 
         function initComponenet() {
 
@@ -203,11 +206,20 @@
             $btnFPClose = $fltrPanel.find('.vis-fp-header .vis-mark');
 
             setToolTipMessages();
+
+            eventHandling();
         };
 
         var setToolTipMessages = function () {
             $btnFilter.attr('title', VIS.Msg.getMsg('FilterRecord'));
             $spanSetting.attr('title', VIS.Msg.getMsg('Settings'));
+        };
+
+        var eventHandling = function () {
+            $root.on('click', function (e) {
+                $root.find('.vis-window-instruc-overlay-new').remove();
+                $root.find('.vis-window-instruc-overlay-new-li').removeClass('.vis-window-instruc-overlay-new-li');
+            });
         };
 
         this.createSearchAutoComplete = function (text) {
@@ -358,7 +370,9 @@
             this.aReport = this.addActions("Report", null, true, true, false, onAction, null, "Shct_Report");
             this.aPrint = this.addActions("Print", null, true, true, false, onAction, null, "Shct_Print");
 
-
+            //Ndw Back button
+            this.aBack = this.addActions("Back", null, true, true, false, onAction, null, "Shct_Back");
+            $ulToobar.append(this.aBack.getListItm());
             $ulToobar.append(this.aIgnore.getListItm());
             $ulToobar.append(this.aNew.getListItm());
             $ulToobar.append(this.aDelete.getListItm());
@@ -384,7 +398,7 @@
             this.aLast = this.addActions(this.ACTION_NAME_LAST, null, true, true, true, onAction, null, "Shct_LastRec");
             this.aNext = this.addActions(this.ACTION_NAME_NEXT, null, true, true, true, onAction, null, "Shct_NextRec");
             this.aMulti = this.addActions("Multi", null, false, true, true, onAction, true, "Shct_MultiRow");
-            this.aCard = this.addActions("Card", null, false, true, true, onAction, null, "Shct_CardView");
+            this.aCard = this.addActions("Card", null, false, true, true, onAction, true, "Shct_CardView");
 
             this.aMap = this.addActions("Map", null, false, true, true, onAction);
 
@@ -409,28 +423,28 @@
             var mWindow = this.gridWindow;
             actionItemCount_Right = 0;
             if (mWindow.getIsAppointment()) {
-                this.aAppointment = this.addActions("Appointment", null, false, false, false, onAction); //1
+                this.aAppointment = this.addActions("APT", null, false, false, false, onAction); //1
                 this.aAppointment.setTextDirection("r");
                 $ulactionbar.append(this.aAppointment.getListItmIT());
             }
             if (mWindow.getIsTask()) {
-                this.aTask = this.addActions("Task", null, false, false, false, onAction); //1
+                this.aTask = this.addActions("TAK", null, false, false, false, onAction); //1
                 this.aTask.setTextDirection("r");
                 $ulactionbar.append(this.aTask.getListItmIT());
 
             }
             if (mWindow.getIsEmail()) {
-                this.aEmail = this.addActions("EMail", null, false, false, false, onAction); //1
+                this.aEmail = this.addActions("EML", null, false, false, false, onAction); //1
                 this.aEmail.setTextDirection("r");
                 $ulactionbar.append(this.aEmail.getListItmIT());
             }
             if (mWindow.getIsLetter()) {
-                this.aLetter = this.addActions("Letter", null, false, false, false, onAction); //1
+                this.aLetter = this.addActions("LER", null, false, false, false, onAction); //1
                 this.aLetter.setTextDirection("r");
                 $ulactionbar.append(this.aLetter.getListItmIT());
             }
             if (mWindow.getIsSms()) {
-                this.aSms = this.addActions("Sms", null, false, false, false, onAction); //1
+                this.aSms = this.addActions("SMS", null, false, false, false, onAction); //1
                 this.aSms.setTextDirection("r");
                 $ulactionbar.append(this.aSms.getListItmIT());
             }
@@ -447,17 +461,17 @@
                 $ulactionbar.append(this.aChat.getListItmIT());
             }
             if (mWindow.getIsAttachment()) {
-                this.aAttachment = this.addActions("Attachment", null, false, false, false, onAction, true); //1
+                this.aAttachment = this.addActions("ATT", null, false, false, false, onAction, true); //1
                 this.aAttachment.setTextDirection("r");
                 $ulactionbar.append(this.aAttachment.getListItmIT());
             }
             if (mWindow.getIsHistory()) {
-                this.aHistory = this.addActions("History", null, false, false, false, onAction); //1
+                this.aHistory = this.addActions("HIY", null, false, false, false, onAction); //1
                 this.aHistory.setTextDirection("r");
                 $ulactionbar.append(this.aHistory.getListItmIT());
             }
             if (mWindow.getIsCheckRequest()) {
-                this.aRequest = this.addActions("Request", null, true, false, false, onAction);
+                this.aRequest = this.addActions("CRT", null, true, false, false, onAction);
                 this.aRequest.setTextDirection("r");
                 $ulactionbar.append(this.aRequest.getListItmIT());
             }
@@ -469,48 +483,51 @@
             }
 
             if (mWindow.getIsCopyReocrd()) {
-                this.aCopy = this.addActions("Copy", null, false, false, false, onAction);
+                this.aCopy = this.addActions("CRD", null, false, false, false, onAction);
                 this.aCopy.setTextDirection("r");
                 $ulactionbar.append(this.aCopy.getListItmIT());
             }
             if (mWindow.getIsSubscribedRecord()) {
-                this.aSubscribe = this.addActions("Subscribe", null, true, false, false, onAction, true);
+                this.aSubscribe = this.addActions("SRD", null, true, false, false, onAction, true);
                 this.aSubscribe.setTextDirection("r");
                 $ulactionbar.append(this.aSubscribe.getListItmIT());
             }
             if (mWindow.getIsZoomAcross()) {
-                this.aZoomAcross = this.addActions("ZoomAcross", null, true, false, false, onAction);
+                this.aZoomAcross = this.addActions("ZAS", null, true, false, false, onAction);
                 this.aZoomAcross.setTextDirection("r");
                 $ulactionbar.append(this.aZoomAcross.getListItmIT());
             }
-            if (mWindow.getIsCreatedDocument()) {
-                this.aCreateDocument = this.addActions("CreateDocument", null, false, false, false, onAction); //1
-                this.aCreateDocument.setTextDirection("r");
-                $ulactionbar.append(this.aCreateDocument.getListItmIT());
-            }
-            if (mWindow.getIsUploadedDocument()) {
-                this.aUploadDocument = this.addActions("UploadDocument", null, false, false, false, onAction); //1
-                this.aUploadDocument.setTextDirection("r");
-                $ulactionbar.append(this.aUploadDocument.getListItmIT());
-            }
-            if (mWindow.getIsViewDocument()) {
-                this.aViewDocument = this.addActions("ViewDocument", null, false, false, false, onAction, true); //1
-                this.aViewDocument.setTextDirection("r");
-                $ulactionbar.append(this.aViewDocument.getListItmIT());
-            }
-            if (mWindow.getIsAttachDocumentFrom()) {
-                this.aAttachFrom = this.addActions("AttachDocumentFrom", null, false, false, false, onAction, true); //1
-                this.aAttachFrom.setTextDirection("r");
-                $ulactionbar.append(this.aAttachFrom.getListItmIT());
+            // VIS0008 Check applied if access is there for DMS form to this Role then only display these actions for the window
+            if (VIS.MRole.getFormAccess(this.ctx.getContextAsInt("DMS_Form_ID"))) {
+                if (mWindow.getIsCreatedDocument()) {
+                    this.aCreateDocument = this.addActions("CDT", null, false, false, false, onAction); //1
+                    this.aCreateDocument.setTextDirection("r");
+                    $ulactionbar.append(this.aCreateDocument.getListItmIT());
+                }
+                if (mWindow.getIsUploadedDocument()) {
+                    this.aUploadDocument = this.addActions("UDT", null, false, false, false, onAction); //1
+                    this.aUploadDocument.setTextDirection("r");
+                    $ulactionbar.append(this.aUploadDocument.getListItmIT());
+                }
+                if (mWindow.getIsViewDocument()) {
+                    this.aViewDocument = this.addActions("VDT", null, false, false, false, onAction, true); //1
+                    this.aViewDocument.setTextDirection("r");
+                    $ulactionbar.append(this.aViewDocument.getListItmIT());
+                }
+                if (mWindow.getIsAttachDocumentFrom()) {
+                    this.aAttachFrom = this.addActions("ADF", null, false, false, false, onAction, true); //1
+                    this.aAttachFrom.setTextDirection("r");
+                    $ulactionbar.append(this.aAttachFrom.getListItmIT());
+                }
             }
             if (mWindow.getIsMarkToExport()) {
-                this.aMarkToExport = this.addActions("Mark", null, false, false, false, onAction, true); //1
+                this.aMarkToExport = this.addActions("MTE", null, false, false, false, onAction, true); //1
                 this.aMarkToExport.setTextDirection("r");
                 $ulactionbar.append(this.aMarkToExport.getListItmIT());
             }
 
             if (mWindow.getIsImportMap()) {
-                this.aImportMap = this.addActions("Import", null, false, false, false, onAction); //1
+                this.aImportMap = this.addActions("IMP", null, false, false, false, onAction); //1
                 this.aImportMap.setTextDirection("r");
                 $ulactionbar.append(this.aImportMap.getListItmIT());
             }
@@ -622,6 +639,14 @@
             return $fltrPnlBody;
         };
 
+        /**Clear search box
+         * */
+        this.clearSearchBox = function () {
+            $txtSearch.val('');
+            $btnClrSearch.css("visibility", "hidden");
+            self.defaultSearch = true;
+            self.clearSearchText();
+        }
         /**
         *   Show OR hide tab panel depending on, if linked tab panel or not
         *   @param {boolean} show - show tab panel if true
@@ -1058,6 +1083,39 @@
             $spnTitle.text(title);
         };
 
+        /**
+         * If window don't have any record, then show instruction for new record
+         * @param {any} highlight
+         */
+        this.highlightButton = function (highlight, button) {
+            var $bLi = button.$li;
+            var $root = this.getRoot();
+
+
+            if (button.getAction() == this.ACTION_NAME_NEW) {
+
+                if (!highlight || $txtSearch.val().length > 0) {
+                    this.instructionPop[this.ACTION_NAME_NEW] = true;
+                }
+
+
+                if (this.instructionPop[this.ACTION_NAME_NEW]) {
+                    if ($root.find('.vis-window-instruc-overlay-new').length > 0) {
+                        $root.find('.vis-window-instruc-overlay-new').remove();
+                        $bLi.removeClass('vis-window-instruc-overlay-new-li');
+                    }
+                    return;
+                }
+                if ($root.find('.vis-window-instruc-overlay-new').length <= 0) {
+                    $root.prepend('<div class="vis-window-instruc-overlay-new"><div class="vis-window-instruc-overlay-new-inn">'
+                        + '<p>' + VIS.Msg.getMsg('CreateNewRec') + '</p></div></div>');
+
+                    $bLi.addClass('vis-window-instruc-overlay-new-li');
+                    this.instructionPop[this.ACTION_NAME_NEW] = true;
+                }
+            }
+        };
+
         //End
 
         $btnClose.on('click', function (e) {
@@ -1245,7 +1303,7 @@
     APanel.prototype.ACTION_NAME_DELETE = "Delete";
     APanel.prototype.ACTION_NAME_REFRESH = "Refresh";
     APanel.prototype.ACTION_NAME_FIND = "Find";
-    APanel.prototype.ACTION_NAME_CHAT = "Chat";
+    APanel.prototype.ACTION_NAME_CHAT = "CHT";
     APanel.prototype.ACTION_NAME_APPOINTMENT = "Appointment";
     APanel.prototype.ACTION_NAME_ARCHIVE = "Archive";
 
@@ -1267,6 +1325,12 @@
                     //selfPanel.setSearchFocus(false);
                     //}, 100);
                     //}
+                    break;
+                case 66:      // B for Back to Multiview
+                    if (en) {
+                        if (this.aBack.getIsEnabled())
+                            this.actionPerformed(this.aBack.getAction());
+                    }
                     break;
                 case 68:      // D for Delete
                     if (en)
@@ -1475,7 +1539,8 @@
 
         var includedMap = {};
 
-
+        var setCurrent = false;
+        var isCheckCurrentTab = true;
         for (var i = 0; i < tabs.length; i++) {
 
             var id = curWindowNo + "_" + tabs[i].getAD_Tab_ID(); //uniqueID
@@ -1491,14 +1556,40 @@
             tabActions[i] = new VIS.AppsAction(tObj); //Create Apps Action
 
             gTab = tabs[i];
-            if (i === 0) {
-                this.curTab = gTab;
-                if (query != null) {
+            //if (i === 0) {
+            //    this.curTab = gTab;
+            //    if (query != null) {
 
-                    gTab.setQuery(query);
+            //        gTab.setQuery(query);
+            //    }
+            //}	//	query on first tab
+            //ZoomChildTab
+            if (isCheckCurrentTab) {
+                if (i === 0 && (query == null || (query.list != null && query.list.length == 0))) {
+                    this.curTab = gTab;
+                    this.firstTabId = id;
+                    setCurrent = true;
+                    isCheckCurrentTab = false;
+                    if (query != null) {
+
+                        gTab.setQuery(query);
+                    }
                 }
-            }	//	query on first tab
-
+                else {
+                    if (query != null && query.list != null && query.list.length > 0) {
+                        if (gTab.getKeyColumnName().toUpperCase() == query.list[0].columnName.toUpperCase()) {
+                            this.firstTabId = id;
+                            gTab.setQuery(query);
+                            this.curTab = gTab;
+                            setCurrent = true;
+                            isCheckCurrentTab = false;
+                            if (i > 0) {
+                                this.setParentsContext(tabs, i);
+                            }
+                        }
+                    }
+                }//	query on first tab
+            }
             var tabElement = null;
             //        //  GridController
             if (gTab.getIsSortTab())//     .IsSortTab())
@@ -1518,13 +1609,36 @@
                 var gc = new VIS.GridController(true, true, id);
                 gc.initGrid(false, curWindowNo, this, gTab);
 
-                //Set Title of Tab
-                if (i === 0) {
+                //ZoomChildTab
+
+                // set current grid  controller
+                if (setCurrent) {
+                    this.curGC = gc;
+                    setCurrent = false;
+                }
+                // Set first tab as current tab in case not marked aby tab as current tab.
+                if (i === 0 && !setCurrent) {
+                    this.curTab = gTab;
                     this.curGC = gc;
                     this.firstTabId = id;
+                    if (query != null) {
+                        gTab.setQuery(query);
+                    }
+                //}
+
+
+                ////Set Title of Tab
+                //if (i === 0) {
+                //    this.curGC = gc;
+                //    this.firstTabId = id;
 
                     if (gTab.getIsHeaderPanel()) {
                         gc.initHeaderPanel(this.getParentDetailPane());
+                        if (gTab.isHPanelNotShowInMultiRow && !gTab.getIsSingleRow()) {
+                            gc.vHeaderPanel.hidePanel();
+                            if (gc.vHeaderPanel.sizeChangedListner && gc.vHeaderPanel.sizeChangedListner.onSizeChanged)
+                                gc.vHeaderPanel.sizeChangedListner.onSizeChanged();
+                        }
                     }
                 }
                 gc.initFilterPanel(curWindowNo, this.getFilterPane());
@@ -1669,6 +1783,41 @@
         }
     };
 
+    //ZoomChildTab
+    // if zoomed to any child tab - find all the parents and set the values in context and set the query on parent tab.
+    APanel.prototype.setParentsContext = function (gTabs, index) {
+        var parentDict = [];
+        var parentRecID = gTabs[index].query.list[0].code;
+        for (var i = index - 1; i >= 0; i--) {
+            if (gTabs[i].getTabLevel() != gTabs[index].getTabLevel() && gTabs[i].getTabLevel() < gTabs[index].getTabLevel()) {
+                parentDict.push({ "TabNo": gTabs[i].getTabNo(), "columnName": gTabs[i].getKeyColumnName(), "childTableKeyColumn": gTabs[index].getKeyColumnName(), "index": i });
+                index = i;
+            }
+        }
+        if (parentDict) {
+
+            var windowNo = gTabs[index].getWindowNo();
+            for (var i = 0; i < parentDict.length; i++) {
+                if (parentRecID) {
+                    gTabs[parentDict[i].index].query.addRestriction(parentDict[i].childTableKeyColumn, VIS.Query.prototype.EQUAL, parentRecID);
+                    gTabs[parentDict[i].index].setIsZoomAction(true);
+                }
+
+                var data = {
+                    SelectColumn: parentDict[i].columnName,
+                    SelectTable: parentDict[i].childTableKeyColumn.substr(0, parentDict[i].childTableKeyColumn.length - 3),
+                    WhereColumn: parentDict[i].childTableKeyColumn,
+                    WhereValue: parentRecID
+                };
+
+                parentRecID = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "JsonData/GetZoomParentRec", data);
+
+                if (parentRecID) {
+                    VIS.context.setWindowContext(windowNo, parentDict[i].columnName, parentRecID.toString());
+                }
+            }
+        }
+    }
 
 
     //Updated by raghu 
@@ -1678,7 +1827,7 @@
         //this.curGC.isZoomAction = isSelect;
         this.curTab.setIsZoomAction(isSelect);
         setTimeout(function (that) {
-            that.curGC.isZoomAction = isSelect;
+            //that.curGC.isZoomAction = isSelect;
             that.tabActionPerformed(that.firstTabId);
             that.setTabNavigation();
             that = null;
@@ -1762,19 +1911,25 @@
     /**
      *	Action Listener
      *  @param action string or object
+     *  Controller object called fron header panel
      */
-    APanel.prototype.actionPerformed = function (action) {
+    APanel.prototype.actionPerformed = function (action, controller) {
 
         if (this.getIsUILocked())
             return;
+
+        if (action.source instanceof VIS.Controls.VButton) {
+            if (!action.source.getField().getIsEditable(true) || this.curTab.getIsReadOnly()) {
+                return;
+            }
+        }
         //	Do Screenrt w/o busy
         this.setBusy(true);
         var selfPan = this;
         setTimeout(function () {
             //  Command Buttons
-
             if (action.source instanceof VIS.Controls.VButton) {
-                if (!selfPan.actionButton(action.source)) {
+                if (!selfPan.actionButton(action.source, controller)) {
                     selfPan.setBusy(false, true);
                 }
                 return;
@@ -1802,13 +1957,32 @@
             tis.curGC.navigateRelative(+1);
         } else if (tis.aMulti.getAction() === action) {
             tis.aMulti.setPressed(!tis.curGC.getIsSingleRow());
+            tis.aCard.setPressed(false);
+            tis.setLastView("");
             tis.curGC.switchRowPresentation();
         } else if (tis.aCard.getAction() === action) {
+            tis.setLastView("");
+            if (tis.curGC.getIsCardRow())
+                tis.curGC.switchMultiRow();
+            else { tis.curGC.switchCardRow(); }
             tis.aMulti.setPressed(false);
-            tis.curGC.switchCardRow();
+            // tis.aBack.setEnabled(!tis.curGC.getIsCardRow());
         } else if (tis.aMap.getAction() === action) {
             tis.aMulti.setPressed(true);
+            tis.aCard.setPressed(false);
             tis.curGC.switchMapRow();
+        } else if (tis.aBack.getAction() === action) {
+            if (tis.getLastView() == "Multi") {
+                tis.aMulti.setPressed(!tis.curGC.getIsSingleRow());
+                tis.aCard.setPressed(false);
+                tis.curGC.switchRowPresentation();
+            }
+            else if (tis.getLastView() == "Card") {
+                tis.curGC.switchCardRow();
+                tis.aMulti.setPressed(false);
+                tis.aCard.setPressed(true);
+            }
+            tis.setLastView("");
         } else if (tis.aPageUp.getAction() === action) {
             tis.isDefaultFocusSet = false;
             tis.curGC.navigatePage(-1);
@@ -1922,97 +2096,19 @@
             tis.cmd_print();
         }
         else if (tis.aCreateDocument && tis.aCreateDocument.getAction() === action) {
-            if (window.VADMS) {
-                var frame = new VIS.CFrame();
-                var editDoc = new window.VADMS.editDocument(0, "", 0, "", 0, null, "", tis.curTab.getAD_Window_ID(), tis.curTab.getAD_Table_ID(), tis.curTab.getRecord_ID());
-                frame.setName(VIS.Msg.getMsg("VADMS_CreateDocument"));
-                frame.setTitle(VIS.Msg.getMsg("VADMS_CreateDocument"));
-                frame.hideHeader(true);
-                frame.setContent(editDoc);
-                editDoc.initialize();
-                frame.show();
-            }
-            else {
-                VIS.ADialog.error('PleaseInstallDMSModule', true, "");
-            }
+            actionVADMSDocument(tis, action);
 
         }
         else if (tis.aUploadDocument && tis.aUploadDocument.getAction() === action) {
 
-            if (window.VADMS) {
-                // New parameter add for upload document dialoag to sent current window name and tab name
-                window.VADMS.uploaddocument(0, tis.curTab.getAD_Window_ID(), tis.curTab.getAD_Table_ID(), tis.curTab.getRecord_ID(), tis.$parentWindow.name, tis.curTab.getName());
-
-            }
-            else {
-                VIS.ADialog.error('PleaseInstallDMSModule', true, "");
-            }
+            actionVADMSDocument(tis, action);
 
         }
         else if (tis.aViewDocument && tis.aViewDocument.getAction() === action) {
-            if (window.VADMS) {
-                var frame = new VIS.CFrame();
-                var doc = new window.VADMS.DocumentManagementSystem();
-                frame.setName(VIS.Msg.getMsg("VADMS_Document"));
-                frame.setTitle(VIS.Msg.getMsg("VADMS_Document"));
-                frame.hideHeader(true);
-                doc.setWindowNo(VIS.Env.getWindowNo());
-                doc.setWindowID(tis.curTab.getAD_Window_ID());
-                doc.setTableID(tis.curTab.getAD_Table_ID());
-                doc.setRecordID(tis.curTab.getRecord_ID());
-                doc.setWindowName(tis.gridWindow.getName());
-                frame.setContent(doc);
-                doc.initialize();
-                frame.show();
-
-            }
-            else {
-                VIS.ADialog.error('PleaseInstallDMSModule', true, "");
-            }
+            actionVADMSDocument(tis, action);
         }
         else if (tis.aAttachFrom && tis.aAttachFrom.getAction() === action) {
-            if (window.VADMS) {
-                var self = tis;
-                var documentID = VIS.context.getContext("VADMS_Document_ID");
-                if (documentID.length > 0) {
-                    var dataIn = {
-                        docID: documentID,
-                        winID: tis.curTab.getAD_Window_ID(),
-                        tableID: tis.curTab.getAD_Table_ID(),
-                        recID: tis.curTab.getRecord_ID()
-                    };
-                    $.ajax({
-                        url: VIS.Application.contextUrl + "JsonData/AttachFrom",
-                        dataType: "json",
-                        data: dataIn,
-                        success: function (data) {
-                            if (JSON.parse(data) == "OK") {
-                                self.curTab.loadDocuments();
-                                self.aViewDocument.setPressed(self.curTab.hasDocument());
-                                //if (!VIS.ADialog.ask("AttachWithOther")) {
-                                //    VIS.context.setContext("VADMS_Document_ID", 0);
-                                //}
-
-
-                                VIS.ADialog.confirm("AttachWithOther", true, "", "Confirm", function (result) {
-                                    if (!result) {
-                                        VIS.context.setContext("VADMS_Document_ID", 0);
-                                    }
-                                });
-
-
-                                self = null;
-                            }
-                            else {
-                                VIS.ADialog.error('NotAttached', true, "");
-                            }
-                        }
-                    });
-                }
-            }
-            else {
-                VIS.ADialog.error('PleaseInstallDMSModule', true, "");
-            }
+            actionVADMSDocument(tis, action);
         }
         else if (tis.aMarkToExport && tis.aMarkToExport.getAction() === action) {
 
@@ -2379,9 +2475,59 @@
                 VIS.ADialog.warn("AccessTableNoView");
             }
         }
-        curTab = curGC = aPanel = null;
 
-    };
+        if (vButton.mField.getAD_Reference_Value_ID() == 435) {
+
+            switch (vButton.value) {
+                case 'APT':
+                    aPanel.cmd_appointment();
+                    break;
+                case 'EML':
+                    aPanel.cmd_email();
+                    break;
+                case 'SMS':
+                    aPanel.cmd_sms();
+                    break;
+                case 'LER':
+                    aPanel.cmd_letter();
+                    break;
+                case 'TAK':
+                    aPanel.cmd_task();
+                    break;
+                case 'CHT':
+                    aPanel.cmd_chat();
+                    break;
+                case 'ATT':
+                    aPanel.cmd_attachment();
+                    break;
+                case 'HIY':
+                    aPanel.cmd_history();
+                    break;
+                case 'CRT':
+                    aPanel.cmd_request();
+                    break;
+                case 'CRD':
+                    aPanel.cmd_new(true);
+                    break;
+                case 'SRD':
+                    aPanel.cmd_subscribe();
+                    break;
+                case 'ZAS':
+                    aPanel.cmd_zoomAcross();
+                    break;
+                case 'MTE':
+                    aPanel.cmd_markToExport();
+                    break;
+                case 'IMP':
+                    aPanel.cmd_ImportMap();
+                    break;
+                default: actionVADMSDocument(aPanel, vButton.value)
+            }
+
+            curTab = curGC = aPanel = null;
+
+        };
+    }
 
     function checkPostingByNewLogic(callback) {
         $.ajax({
@@ -2520,6 +2666,79 @@
         return ret;
     };
 
+    function actionVADMSDocument(aPanel, action) {
+        if (window.VADMS) {
+            if (action == 'CDT') {
+                var frame = new VIS.CFrame();
+                var editDoc = new window.VADMS.editDocument(0, "", 0, "", 0, null, "", aPanel.curTab.getAD_Window_ID(), aPanel.curTab.getAD_Table_ID(), aPanel.curTab.getRecord_ID());
+                frame.setName(VIS.Msg.getMsg("VADMS_CreateDocument"));
+                frame.setTitle(VIS.Msg.getMsg("VADMS_CreateDocument"));
+                frame.hideHeader(true);
+                frame.setContent(editDoc);
+                editDoc.initialize();
+                frame.show();
+            }
+            else if (action == 'ADF') {
+                var documentID = VIS.context.getContext("VADMS_Document_ID");
+                if (documentID.length > 0) {
+                    var dataIn = {
+                        docID: documentID,
+                        winID: aPanel.curTab.getAD_Window_ID(),
+                        tableID: aPanel.curTab.getAD_Table_ID(),
+                        recID: aPanel.curTab.getRecord_ID()
+                    };
+                    $.ajax({
+                        url: VIS.Application.contextUrl + "JsonData/AttachFrom",
+                        dataType: "json",
+                        data: dataIn,
+                        success: function (data) {
+                            if (JSON.parse(data) == "OK") {
+                                aPanel.curTab.loadDocuments();
+                                aPanel.aViewDocument.setPressed(aPanel.curTab.hasDocument());
+                                //if (!VIS.ADialog.ask("AttachWithOther")) {
+                                //    VIS.context.setContext("VADMS_Document_ID", 0);
+                                //}
+
+
+                                VIS.ADialog.confirm("AttachWithOther", true, "", "Confirm", function (result) {
+                                    if (!result) {
+                                        VIS.context.setContext("VADMS_Document_ID", 0);
+                                    }
+                                });
+
+
+                                aPanel = null;
+                            }
+                            else {
+                                VIS.ADialog.error('NotAttached', true, "");
+                            }
+                        }
+                    });
+                }
+            }
+            else if (action == 'VDT') {
+                var frame = new VIS.CFrame();
+                var doc = new window.VADMS.DocumentManagementSystem();
+                frame.setName(VIS.Msg.getMsg("VADMS_Document"));
+                frame.setTitle(VIS.Msg.getMsg("VADMS_Document"));
+                frame.hideHeader(true);
+                doc.setWindowNo(VIS.Env.getWindowNo());
+                doc.setWindowID(aPanel.curTab.getAD_Window_ID());
+                doc.setTableID(aPanel.curTab.getAD_Table_ID());
+                doc.setRecordID(aPanel.curTab.getRecord_ID());
+                doc.setWindowName(aPanel.gridWindow.getName());
+                frame.setContent(doc);
+                doc.initialize();
+                frame.show();
+            }
+            else if (action == 'UDT') {
+                window.VADMS.uploaddocument(0, aPanel.curTab.getAD_Window_ID(), aPanel.curTab.getAD_Table_ID(), aPanel.curTab.getRecord_ID(), aPanel.$parentWindow.name, aPanel.curTab.getName());
+            }
+        } else {
+            VIS.ADialog.error('PleaseInstallDMSModule', true, "");
+        }
+
+    }
     /**
      *	tab change
      *  @param action tab item's id
@@ -2700,8 +2919,8 @@
             this.setDynamicActions();
             //PopulateSerachCombo(false);
             /*	Refresh only current row when tab is current(parent)*/
-
-            if (!gc.isZoomAction && this.curTab.getTabLevel() > 0) {
+            if (!this.curTab.getIsZoomAction() && this.curTab.getTabLevel() > 0) {
+            //if (!gc.isZoomAction && this.curTab.getTabLevel() > 0) {
                 var queryy = new VIS.Query();
                 this.curTab.query = queryy;
                 keepFilters = false;
@@ -2781,6 +3000,8 @@
             this.aPageDown.setEnabled(false);
             //aAttachment.setEnabled(false);
             //aChat.setEnabled(false);
+
+
         }
         else	//	Grid Tab
         {
@@ -2837,6 +3058,7 @@
         else {
             this.aMap.hide();
         }
+        this.setLastView(""); //clear view history
     };
 
     APanel.prototype.setDefaultSearch = function (gc) {
@@ -2869,6 +3091,7 @@
                         $selfpanel.curTab.setQuery(query);
                         $selfpanel.defaultSearch = false;
                         $selfpanel.curTab.searchText = data.tables[0].rows[i].cells["name"];
+                        toastr.success(VIS.Msg.getMsg("DefaultSerachExist"), '', { timeOut: 4000, "positionClass": "toast-top-center", "closeButton": true, });
                     }
                 }
                 if (!$selfpanel.curTab.hasSavedAdvancedSearch) {
@@ -2912,7 +3135,7 @@
         //	Set Message / Info
         if (e.getAD_Message() != null || e.getInfo() != null) {
             var sb = new StringBuilder();
-            var msg = e.getMessage();
+            var msg = e.getAD_Message();
             if (msg != null && msg.length > 0)
                 sb.append(VIS.Msg.getMsg(e.getAD_Message()));
             var info = e.getInfo();
@@ -2983,10 +3206,19 @@
         if (e.getTotalRows() == 0 && insertRecord) {
             this.aNew.setEnabled(true);
             this.aDelete.setEnabled(false);
+            if (!this.curGC.isZoomAction) {
+                this.highlightButton(true, this.aNew);
+            }
         }
+        else {
+            this.highlightButton(false, this.aNew);
+        }
+
 
         //	Single-Multi
         this.aMulti.setPressed(this.curGC.getIsSingleRow() || this.curGC.getIsMapRow());
+        this.aCard.setPressed(this.curGC.getIsCardRow());
+        this.aBack.setEnabled(this.getLastView().length > 0);
         if (this.aChat) {
             this.aChat.setPressed(this.curTab.hasChat());
         }
@@ -3270,26 +3502,31 @@
             return;
         }
 
+        return this.cmd_save2(manual, this.curTab, this.curGC, this, callback);
+
+    };
+
+    APanel.prototype.cmd_save2 = function (manual, curTab, curGC, selfPanel, callback) {
         var needExecute = true;
 
-        if (this.curTab.getCommitWarning().length > 0 && this.curTab.needSave(true, false)) {
+        if (curTab.getCommitWarning().length > 0 && curTab.needSave(true, false)) {
             needExecute = false;
 
-            var selfPanel = this;
+            //var selfPanel = this;
 
-            VIS.ADialog.confirm("SaveChanges?", true, this.curTab.getCommitWarning(), "Confirm", function (result) {
+            VIS.ADialog.confirm("SaveChanges?", true, curTab.getCommitWarning(), "Confirm", function (result) {
 
                 if (!result) {
                     return;
                 }
-                var retValue = selfPanel.curGC.dataSave(manual);
+                var retValue = curGC.dataSave(manual);
 
                 if (manual && !retValue && !selfPanel.errorDisplayed) {
 
                 }
-                selfPanel.curGC.refreshTabPanelData(selfPanel.curTab.getRecord_ID());
+                curGC.refreshTabPanelData(selfPanel.curTab.getRecord_ID());
                 if (manual)
-                    selfPanel.curGC.dynamicDisplay(-1);
+                    curGC.dynamicDisplay(-1);
 
             });
 
@@ -3300,19 +3537,19 @@
 
         if (needExecute) {
 
-            var retValue = this.curGC.dataSave(manual);
+            var retValue = curGC.dataSave(manual);
 
-            if (manual && !retValue && !this.errorDisplayed) {
+            if (manual && !retValue && !selfPanel.errorDisplayed) {
 
             }
 
             if (manual)
-                this.curGC.dynamicDisplay(-1);
+                curGC.dynamicDisplay(-1);
 
             if (callback) {
                 callback(retValue);
             }
-            this.curGC.refreshTabPanelData(this.curTab.getRecord_ID());
+            curGC.refreshTabPanelData(curTab.getRecord_ID());
             return retValue;
         }
 
@@ -3323,7 +3560,7 @@
             //log.warning("Insert Record disabled for Tab");
             return;
         }
-        //cmd_save(false);
+        this.curGC.setNewRecordLayout();
         this.curGC.dataNew(copy);
     };// New
 
@@ -3827,7 +4064,7 @@
         if (this.curGC) {
             this.curGC.searchCode = "";
             this.curTab.searchText = "";
-        }
+        }        
     };
 
     APanel.prototype.cmd_finddialog = function () {
@@ -4111,9 +4348,35 @@
 
     /* END */
 
+    /**
+     *return Last selected view  (card Or Multi)
+     * */
+    APanel.prototype.getLastView = function () {
+        if (!this.lastView)
+            this.lastView = "";
+        return this.lastView;
+    };
+
+    /**
+     * Set Last selected view (Card Or Multi)
+     * @param {string} strView
+     */
+    APanel.prototype.setLastView = function (strView) {
+        if (strView == "Card" || strView == "Multi") {
+            this.aBack.setEnabled(true);
+        }
+        else {
+            this.aBack.setEnabled(false);
+            strview = "";
+        }
+        this.lastView = strView;
+    };
+
+
     /** 
      *  dispose
      */
+
 
     APanel.prototype.dispose = function () {
 

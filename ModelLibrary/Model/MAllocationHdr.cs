@@ -428,6 +428,7 @@ namespace VAdvantage.Model
 
             int _invoice_id = 0;
             int _invoicePaySchedule_ID = 0;
+            List<int> invoiceIds = new List<int>();
             //	Link
             GetLines(false);
             HashSet<int> bps = new HashSet<int>();
@@ -443,9 +444,12 @@ namespace VAdvantage.Model
                     if (line.GetC_Invoice_ID() > 0 && line.GetC_InvoicePaySchedule_ID() > 0)
                     {
                         log.Info("Start setting value of Paid Amount on Invoice Schedule");
+                        //VA228:Get invoice ids
+                        if (!invoiceIds.Contains(Util.GetValueOfInt(line.GetC_Invoice_ID())))
+                            invoiceIds.Add(Util.GetValueOfInt(line.GetC_Invoice_ID()));
 
                         //check no of schedule left for Payment for Currenct Invoice except this schedule
-                        int countUnPaidSchedule = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM C_InvoicePaySchedule WHERE IsActive = 'Y' AND 
+                        int countUnPaidSchedule = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_InvoicePaySchedule_ID) FROM C_InvoicePaySchedule WHERE IsActive = 'Y' AND 
                                                    VA009_IsPaid = 'N' AND C_Invoice_ID = " + line.GetC_Invoice_ID() +
                                                    @" AND C_InvoicePaySchedule_ID <> " + line.GetC_InvoicePaySchedule_ID(), null, Get_Trx()));
 
@@ -477,12 +481,12 @@ namespace VAdvantage.Model
                         ShiftVarianceOnOther = 0;
 
                         _sql.Clear();
-                        _sql.Append(@"SELECT DISTINCT asch.C_Currency_ID FROM c_acctschema asch INNER JOIN ad_clientinfo ci ON ci.c_acctschema1_id = asch.c_acctschema_id
-                                 INNER JOIN ad_client c ON c.ad_client_id = ci.ad_client_id INNER JOIN c_invoice i ON c.ad_client_id    = i.ad_client_id
-                                 WHERE i.ad_client_id = " + invoice.GetAD_Client_ID());
-                        int BaseCurrency = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString(), null, null));
+                        //_sql.Append(@"SELECT DISTINCT asch.C_Currency_ID FROM c_acctschema asch INNER JOIN ad_clientinfo ci ON ci.c_acctschema1_id = asch.c_acctschema_id
+                        //         INNER JOIN ad_client c ON c.ad_client_id = ci.ad_client_id INNER JOIN c_invoice i ON c.ad_client_id    = i.ad_client_id
+                        //         WHERE i.ad_client_id = " + invoice.GetAD_Client_ID());
+                        //int BaseCurrency = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString(), null, null));
 
-
+                        int BaseCurrency = GetCtx().GetContextAsInt("$C_Currency_ID");
 
                         #region set Invoice Paid Amount
                         //added check for payment and cash if cash/payment exist than create object otherwise that will be null
@@ -625,7 +629,7 @@ namespace VAdvantage.Model
                         // update open amount in base / invoice currency when we splitted record
                         paySch.SetVA009_OpenAmnt(BaseCurrency != invoice.GetC_Currency_ID() ? (paySch.GetDueAmt() * multiplyRate) : paySch.GetDueAmt());
                         paySch.SetVA009_OpnAmntInvce(paySch.GetDueAmt());
-
+                        paySch.ByPassValidatePayScheduleCondition(true);
                         if (!paySch.Save(Get_Trx()))
                         {
                             log.Info("Not Updated Paid Amount on Invoice Schedule for this schedule <==> " + line.GetC_InvoicePaySchedule_ID());
@@ -709,7 +713,7 @@ namespace VAdvantage.Model
                             // convert due amount into Base Currency
                             newPaySch.SetVA009_OpenAmnt(BaseCurrency != invoice.GetC_Currency_ID() ? Decimal.Multiply(newPaySch.GetDueAmt(), multiplyRate) : newPaySch.GetDueAmt());
                             newPaySch.SetVA009_OpnAmntInvce(newPaySch.GetDueAmt());
-
+                            newPaySch.ByPassValidatePayScheduleCondition(true);
                             if (!newPaySch.Save(Get_Trx()))
                             {
                                 ValueNamePair pp = VLogger.RetrieveError();
@@ -720,38 +724,51 @@ namespace VAdvantage.Model
                                 SetProcessMsg(Msg.GetMsg(GetCtx(), "ScheduleNotSplitted") + "  " + (pp != null ? pp.GetName() : ""));
                                 return DocActionVariables.STATUS_INVALID;
                             }
+                        }
 
-                            // this is used to validate invoice and its schedule
-                            invoice.ValidatePaySchedule();
-                            if (!invoice.Save(Get_Trx()))
-                            {
-                                ValueNamePair pp = VLogger.RetrieveError();
-                                _log.Info("Error found for updating ispayschedulevalid as true at Invoice  for  this Line ID = " + newPaySch.GetC_Invoice_ID() +
-                                           " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
-                                Get_Trx().Rollback();
-                                //_processMsg = Msg.GetMsg(GetCtx(), "ScheduleNotSplitted");
-                                SetProcessMsg(Msg.GetMsg(GetCtx(), "ScheduleNotSplitted") + "  " + (pp != null ? pp.GetName() : ""));
-                                return DocActionVariables.STATUS_INVALID;
-                            }
+                        // this is used to validate invoice and its schedule
+                        invoice.ValidatePaySchedule();
+                        if (!invoice.Save(Get_Trx()))
+                        {
+                            ValueNamePair pp = VLogger.RetrieveError();
+                            _log.Info("Error found for updating ispayschedulevalid as true at Invoice  for  Invoice ID = " + invoice.GetC_Invoice_ID() +
+                                       " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                            Get_Trx().Rollback();
+                            //_processMsg = Msg.GetMsg(GetCtx(), "ScheduleNotSplitted");
+                            SetProcessMsg(Msg.GetMsg(GetCtx(), "ScheduleNotSplitted") + "  " + (pp != null ? pp.GetName() : ""));
+                            return DocActionVariables.STATUS_INVALID;
                         }
 
                         // update invoice if all schedule are paid then mark paid as true at invoice
-                        if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM C_InvoicePaySchedule WHERE va009_ispaid = 'N' AND C_Invoice_ID = " + Util.GetValueOfInt(line.GetC_Invoice_ID()), null, Get_Trx())) == 0)
+                        if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(C_InvoicePaySchedule_ID) FROM C_InvoicePaySchedule WHERE va009_ispaid = 'N' AND C_Invoice_ID = " + Util.GetValueOfInt(line.GetC_Invoice_ID()), null, Get_Trx())) == 0)
                         {
-                            MInvoice inv = new MInvoice(GetCtx(), line.GetC_Invoice_ID(), Get_Trx());
-                            inv.SetIsPaid(true);
-                            inv.Save(Get_Trx());
+                            //MInvoice inv = new MInvoice(GetCtx(), line.GetC_Invoice_ID(), Get_Trx());
+                            //inv.SetIsPaid(true);
+                            //inv.Save(Get_Trx());
+                            DB.ExecuteQuery("UPDATE C_Invoice SET IsPaid = 'Y' WHERE C_Invoice_ID = " + line.GetC_Invoice_ID(), null, Get_Trx());
                         }
                         else
                         {
-                            MInvoice inv = new MInvoice(GetCtx(), line.GetC_Invoice_ID(), Get_Trx());
-                            inv.SetIsPaid(false);
-                            inv.Save(Get_Trx());
+                            //MInvoice inv = new MInvoice(GetCtx(), line.GetC_Invoice_ID(), Get_Trx());
+                            //inv.SetIsPaid(false);
+                            //inv.Save(Get_Trx());
+                            DB.ExecuteQuery("UPDATE C_Invoice SET IsPaid = 'N' WHERE C_Invoice_ID = " + line.GetC_Invoice_ID(), null, Get_Trx());
                         }
                     }
                 }
 
                 //End
+            }
+            //VA228:update amount paid on invoice,get total of paid schedule invoice amount from C_InvoicePaySchedule and update on invoice header
+            if (invoiceIds.Count > 0)
+            {
+                string query = @"UPDATE C_Invoice INV SET VA009_PaidAmount=(SELECT VA009_PaidAmntInvce FROM (
+                                SELECT SUM(VA009_PaidAmntInvce) AS VA009_PaidAmntInvce , inv.C_Invoice_id
+                                FROM C_Invoice inv
+                                INNER JOIN C_InvoicePaySchedule ps ON ps.C_Invoice_id=inv.C_Invoice_id
+                                WHERE inv.C_Invoice_id IN(" + string.Join(",", invoiceIds) + @")
+                                GROUP BY inv.C_Invoice_id)t WHERE INV.C_Invoice_id=t.C_Invoice_id) WHERE INV.C_Invoice_id IN(" + string.Join(",", invoiceIds) + @")";
+                DB.ExecuteQuery(query, null, Get_Trx());
             }
             //UpdateBP(bps);
 
@@ -953,6 +970,7 @@ namespace VAdvantage.Model
             //	Set Inactive
             SetIsActive(false);
             SetDocumentNo(GetDocumentNo() + "^");
+            SetApprovalAmt(Env.ZERO);
             SetDocStatus(DOCSTATUS_Reversed);	//	for direct calls
             if (!Save() || IsActive())
                 throw new Exception("Cannot de-activate allocation");
@@ -969,9 +987,19 @@ namespace VAdvantage.Model
             for (int i = 0; i < _lines.Length; i++)
             {
                 MAllocationLine line = _lines[i];
-                line.SetIsActive(false);
-                line.Save();
+
                 bps.Add(line.ProcessIt(true));	//	reverse
+
+                line.SetIsActive(false);
+                // set Amount as ZERO on Reversal of Allocation
+                line.SetAmount(Env.ZERO);
+                line.SetDiscountAmt(Env.ZERO);
+                line.SetWriteOffAmt(Env.ZERO);
+                line.SetOverUnderAmt(Env.ZERO);
+                line.SetWithholdingAmt(Env.ZERO);
+                line.SetBackupWithholdingAmount(Env.ZERO);
+                line.Save();
+
 
                 // Added by Amit for Payment Management 5-11-2015   
                 if (Env.IsModuleInstalled("VA009_"))

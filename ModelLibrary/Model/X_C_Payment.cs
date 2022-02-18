@@ -1047,7 +1047,11 @@ SetTrxType (null);// S
         }/** Get Backup Withholding.
 @return Backup Withholding */
         public int GetBackupWithholding_ID() { Object ii = Get_Value("BackupWithholding_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-
+        /** Set Override Auto Check.
+@param IsOverrideAutoCheck If this checkbox is marked true it will replace the Current Next No. with Statement Line Check No. */
+        public void SetIsOverrideAutoCheck(Boolean IsOverrideAutoCheck) { Set_Value("IsOverrideAutoCheck", IsOverrideAutoCheck); }/** Get Override Auto Check.
+@return If this checkbox is marked true it will replace the Current Next No. with Statement Line Check No. */
+        public Boolean IsOverrideAutoCheck() { Object oo = Get_Value("IsOverrideAutoCheck"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
 
     }
 }

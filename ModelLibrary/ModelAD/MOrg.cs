@@ -269,7 +269,7 @@ namespace VAdvantage.Model
         internal MAcctSchema GetAcctSchema()
         {
             if (info == null)
-                info = MOrgInfo.Get(GetCtx(), GetAD_Client_ID(), Get_TrxName());
+                info = MOrgInfo.Get(GetCtx(), GetAD_Org_ID(), Get_TrxName());
             if (info != null)
             {
                 int C_AcctSchema_ID = info.GetC_AcctSchema_ID();

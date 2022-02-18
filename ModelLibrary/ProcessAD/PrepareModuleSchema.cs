@@ -658,8 +658,6 @@ namespace VAdvantage.Process
                     newTable = true;
                 }
 
-
-
                 if (sTab.GetAD_Column_ID() != 0)
                 {
                     //  if (HasModulePrefix("ColumnName", "AD_Column", "AD_Column_ID = " + sTab.GetAD_Column_ID(), out name))
@@ -703,31 +701,19 @@ namespace VAdvantage.Process
                 }
 
                 InsertIntoDBSchema(MTab.Table_ID, sAD_Tab_ID, MTab.Table_Name, sTab.GetName(), " AD_Tab_ID = " + sAD_Tab_ID);
-
-
                 GetTabPanel(sAD_Tab_ID);
-
-
                 //Insert AD_ModuleTab Info
-
                 //int Id = GetID("AD_ModuleTab", "AD_ModuleTab_ID", "AD_ModuleInfo_ID = " + AD_ModuleInfo_ID + " AND  AD_Window_ID =" + windowIds[i]);
                 InsertIntoDBSchema(X_AD_ModuleTab.Table_ID, lstModuleTab[i], X_AD_ModuleTab.Table_Name, "_ModuleTab" + i, "AD_ModuleTab_ID =" + lstModuleTab[i]);
-
-
                 List<int> lstModuleField = GetIDs("AD_ModuleField", "AD_ModuleField_ID", "AD_ModuleTab_ID = " + lstModuleTab[i], " ORDER BY SeqNo");
 
                 int sAD_Field_ID = 0;
                 List<int> fields = new List<int>();
                 for (int f = 0; f < lstModuleField.Count; f++)
                 {
-
                     sAD_Field_ID = GetID("AD_ModuleField", "AD_Field_ID", "AD_ModuleField_ID =" + lstModuleField[f]);
-
-
                     name = InsertField(newTable, name, sAD_Field_ID);
-
                     fields.Add(sAD_Field_ID);
-
                     InsertIntoDBSchema(X_AD_ModuleField.Table_ID, lstModuleField[f], X_AD_ModuleField.Table_Name, "_ModuleField" + i, "AD_ModuleField_ID =" + lstModuleField[f]);
                 }
 
@@ -750,6 +736,9 @@ namespace VAdvantage.Process
                 }
                 fields.Clear();
                 fields = null;
+
+                //Insert Card view
+                GetCardView(sAD_Window_ID, sAD_Tab_ID);
             }
         }
 
@@ -769,6 +758,63 @@ namespace VAdvantage.Process
                 }
             }
         }
+
+
+        /// <summary>
+        /// Mark card view with tab and window
+        /// </summary>
+        /// <param name="sAD_Window_ID">window id</param>
+        /// <param name="sAD_Tab_ID">tab id</param>
+        private void GetCardView(int sAD_Window_ID, int sAD_Tab_ID)
+        {
+            DataSet ds = DB.ExecuteDataset("SELECT * FROM AD_CardView WHERE AD_Window_ID=" + sAD_Window_ID
+                                            + " AND AD_Tab_ID=" + sAD_Tab_ID + " AND AD_Client_ID = 0 AND IsActive='Y'");
+            for (int i = 0; i < ds.Tables[0].Rows.Count; i++) //Grid View
+            {
+                DataRow dr = ds.Tables[0].Rows[0];
+                if (Util.GetValueOfInt(dr["AD_HeaderLayout_ID"]) > 0)
+                {
+                    //insert
+                    GetHeaderLayout(Util.GetValueOfInt(dr["AD_HeaderLayout_ID"]));
+                }
+
+                int sAD_CardView_ID = Convert.ToInt32(dr["AD_CardView_ID"]);
+
+                string name = "";
+                if (HasModulePrefix("Name", "AD_CardView", "AD_CardView_ID=" + sAD_CardView_ID, out name))
+                {
+                    InsertIntoDBSchema(X_AD_CardView.Table_ID, sAD_CardView_ID, X_AD_CardView.Table_Name, name, "AD_CardView_ID =" + sAD_CardView_ID);
+                } //Header
+
+                // Card view column
+                List<int> lstCardCol = GetIDs("AD_CardView_Column", "AD_CardView_Column_ID", "AD_CardView_ID=" + sAD_CardView_ID);
+
+                for (int col = 0; col < lstCardCol.Count; col++)
+                {
+                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_ModuleField.AD_Field_ID FROM AD_ModuleField "
+                                         +" WHERE AD_ModuleField.AD_Field_ID = (SELECT AD_CardView_Column.AD_Field_ID "
+                                         +" FROM AD_CardView_Column WHERE AD_CardView_Column_ID=" + lstCardCol[col] + ")"))>0)
+                    // if (HasModulePrefix("Sequence", "AD_CardView_Column", "AD_CardView_Column_ID=" + lstCardCol[col], out name))
+                    {
+                        InsertIntoDBSchema(X_AD_CardView_Column.Table_ID, lstCardCol[col], X_AD_CardView_Column.Table_Name, name, "AD_CardView_Column_ID=" + lstCardCol[col]);
+                    }
+                   
+                }
+                List<int> lstCardCondition = GetIDs("AD_CardView_Condition", "AD_CardView_Condition_ID", "AD_CardView_ID=" + sAD_CardView_ID);
+                for (int cnd = 0; cnd < lstCardCondition.Count; cnd++)
+                {
+                    InsertIntoDBSchema(X_AD_CardView_Condition.Table_ID, lstCardCondition[cnd], X_AD_CardView_Condition.Table_Name, name, "AD_CardView_Condition_ID=" + lstCardCondition[cnd]);
+                }
+
+                //mark default card 
+                List<int> dcids = GetIDs("AD_DefaultCardView", "AD_DefaultCardView_ID","AD_CardView_ID=" + sAD_CardView_ID);
+                for (int crd = 0; crd < dcids.Count; crd++)
+                {
+                    InsertIntoDBSchema(X_AD_DefaultCardView.Table_ID, dcids[crd], X_AD_DefaultCardView.Table_Name, name, "AD_DefaultCardView_ID =" + dcids[crd]);
+                }
+            }
+        }
+
 
         private void GetHeaderLayout(int sAD_HeaderLayout_ID)
         {
@@ -867,7 +913,7 @@ namespace VAdvantage.Process
             string stdWhere = " ColumnName IN ('IsActive','AD_Client_ID', 'AD_Org_ID','Created','CreatedBy','Updated','UpdatedBy','"
                               + tableName + "_ID','Export_ID')";
 
-            IDataReader dr = DB.ExecuteReader("SELECT AD_Column_ID,Name,ColumnName FROM AD_Column WHERE AD_Table_ID = " + sAD_Table_ID + " AND  " + stdWhere);
+            IDataReader dr = DB.ExecuteReader("SELECT AD_Column_ID,Name,ColumnName,AD_Val_Rule_ID FROM AD_Column WHERE AD_Table_ID = " + sAD_Table_ID + " AND  " + stdWhere);
             int id = 0;
             // string colName = "";
             while (dr.Read())
@@ -879,6 +925,10 @@ namespace VAdvantage.Process
                 if (dr[2].ToString() == tableName + "_ID")
                 {
                     GetColumn(id, false, false);
+                }
+                if (Util.GetValueOfInt(dr["AD_Val_Rule_ID"]) != 0)
+                {
+                    GetValRule(Util.GetValueOfInt(dr["AD_Val_Rule_ID"]));
                 }
                 InsertIntoDBSchema(X_AD_Column.Table_ID, id, X_AD_Column.Table_Name, Util.GetValueOfString(dr[1]), " AD_Column_ID = " + id);
             }
@@ -1023,9 +1073,14 @@ namespace VAdvantage.Process
 
                 if (sReference.GetValidationType() == X_AD_Reference.VALIDATIONTYPE_ListValidation)
                 {
-                    IDataReader dr = DataBase.DB.ExecuteReader("Select AD_Ref_List_ID,Name From AD_Ref_List Where AD_Reference_ID =" + sReference.GetAD_Reference_ID());
+                    IDataReader dr = DataBase.DB.ExecuteReader("Select AD_Ref_List_ID,Name,AD_Image_ID From AD_Ref_List Where AD_Reference_ID =" + sReference.GetAD_Reference_ID());
                     while (dr.Read())
                     {
+                        int ad_image_ID = Util.GetValueOfInt(dr[2]);
+                        if (ad_image_ID > 0)
+                        {
+                            CheckImage(ad_image_ID); 
+                        }
                         InsertIntoDBSchema(X_AD_Ref_List.Table_ID, Convert.ToInt32(dr[0]), X_AD_Ref_List.Table_Name, dr[1].ToString(), "AD_Ref_List_ID = " + Convert.ToInt32(dr[0]));
                     }
                     dr.Close();

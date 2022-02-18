@@ -156,6 +156,20 @@
                     }
                 });
 
+                // Validate From date and To Date
+                $dateFrom.on('focusout', function () {
+                    if ($dateFrom.val() != "" && $dateTo.val() != "" && $dateFrom.val() > $dateTo.val()) {
+                        $dateTo.val('');
+                    }
+                });
+
+                $dateTo.on('focusout', function () {
+                    if ($dateFrom.val() != "" && $dateTo.val() != "" && $dateFrom.val() > $dateTo.val()) {
+                        $dateTo.val('');
+                        VIS.ADialog.info("ToDateMustGreater");
+                    }
+                });
+
                 /**
                 *  Show and hide search and set height activites area .
                 *
@@ -410,20 +424,20 @@
 
         var scrollWF = true;
         function loadOnScroll(e) {
-            
-                // do something
+
+            // do something
             if ($(this).scrollTop() + $(this).innerHeight() >= (this.scrollHeight * 0.75) && scrollWF) {//Condition true when 75 scroll is done
-                    scrollWF = false;
-                    tabdataLastPage = parseInt($divActivity.html());
-                    tabdatacntpage = pageNo * PageSize;
-                    if (tabdatacntpage <= tabdataLastPage) {
-                        pageNo += 1;
-                        self.AppendRecord(pageNo, PageSize);
-                    }
-                    else {
-                        scrollWF = true;
-                    }
+                scrollWF = false;
+                tabdataLastPage = parseInt($divActivity.html());
+                tabdatacntpage = pageNo * PageSize;
+                if (tabdatacntpage <= tabdataLastPage) {
+                    pageNo += 1;
+                    self.AppendRecord(pageNo, PageSize);
                 }
+                else {
+                    scrollWF = true;
+                }
+            }
         };
 
         this.AppendRecord = function (pageNo, paeSize, refresh) {
@@ -584,7 +598,7 @@
                 var divBtns = $("<div class='vis-feedTitleBar-buttons'>");
                 var ul = $("<ul>");
                 var liZoom = $("<li>");
-                var aZoom = $("<a href='javascript:void(0)'  data-index='" + (Number(10 * pageNumber) + Number(item)) + "' data-viswfazoom='wfZoom' >").append('<i class="vis vis-find"></i>');
+                var aZoom = $("<a href='javascript:void(0)'  data-index='" + (Number(10 * pageNumber) + Number(item)) + "' data-viswfazoom='wfZoom' >").append('<i class="vis vis-find" data-index="' + (Number(10 * pageNumber) + Number(item)) + '" data-viswfazoom="wfZoom"></i>');
                 //aZoom.append("View Feed");
 
                 liZoom.append(aZoom);
@@ -1071,53 +1085,53 @@
                     return;
                 }
                 aOk.data('clicked', 'Y');
-                 // Digital signature work - Apply default sign at default location with selected status
-                    if (window.VA055 && window.VADMS && info.ColName == 'VADMS_SignStatus') {
+                // Digital signature work - Apply default sign at default location with selected status
+                if (window.VA055 && window.VADMS && info.ColName == 'VADMS_SignStatus') {
 
-                        var signData = {
-                            documentNo: docnameval[docnameval.length - 1],
-                            defaultReasonKey: $('[name="VADMS_SignStatus"]').children("option:selected").val(),
-                            defaultReason: $('[name="VADMS_SignStatus"]').children("option:selected").text(),
-                            //defaultDigitalSignatureID: $('#pdfsignreason').children("option:selected").data('digitalsignatureid')
-                        };
+                    var signData = {
+                        documentNo: docnameval[docnameval.length - 1],
+                        defaultReasonKey: $('[name="VADMS_SignStatus"]').children("option:selected").val(),
+                        defaultReason: $('[name="VADMS_SignStatus"]').children("option:selected").text(),
+                        //defaultDigitalSignatureID: $('#pdfsignreason').children("option:selected").data('digitalsignatureid')
+                    };
 
-                        if (signData.defaultReasonKey == undefined || signData.defaultReasonKey == '' || signData.defaultReason == undefined || signData.defaultReason == '') {
+                    if (signData.defaultReasonKey == undefined || signData.defaultReasonKey == '' || signData.defaultReason == undefined || signData.defaultReason == '') {
+                        aOk.data('clicked', 'N');
+                        VIS.ADialog.info('VA055_ChooseStatus');
+                        return;
+                    }
+
+                    $.post(VIS.Application.contextUrl + 'VADMS/Document/SignatureUsingWorkflow', signData, function (res) {
+
+                        if (res && res != 'null' && res.result == 'success') {
+
+                            $("#divfeedbsy")[0].style.visibility = "hidden";
+                            divScroll.empty();
+                            adjust_size();
+                            lstDetailCtrls = [];
+                            selectedItems = [];
+                            $busyIndicator.show();
+
+                            window.setTimeout(function () {
+                                loadWindows(true);
+                            }, 5000);
+                        }
+                        else {
                             aOk.data('clicked', 'N');
-                            VIS.ADialog.info('VA055_ChooseStatus');
-                            return;
+                            VIS.ADialog.error(res.result);
                         }
 
-                        $.post(VIS.Application.contextUrl + 'VADMS/Document/SignatureUsingWorkflow', signData, function (res) {
+                    }, 'json').fail(function (jqXHR, exception) {
+                        aOk.data('clicked', 'N');
+                        VIS.ADialog.error(exception);
+                    });
+                }
+                else {
+                    var id = $(this).data("id");
+                    approveIt(id, aOk);
+                }
 
-                            if (res && res != 'null' && res.result == 'success') {
 
-                                $("#divfeedbsy")[0].style.visibility = "hidden";
-                                divScroll.empty();
-                                adjust_size();
-                                lstDetailCtrls = [];
-                                selectedItems = [];
-                                $busyIndicator.show();
-
-                                window.setTimeout(function () {
-                                    loadWindows(true);
-                                }, 5000);
-                            }
-                            else {
-                                aOk.data('clicked', 'N');
-                                VIS.ADialog.error(res.result);
-                            }
-
-                        }, 'json').fail(function (jqXHR, exception) {
-                            aOk.data('clicked', 'N');
-                            VIS.ADialog.error(exception);
-                        });
-                    }
-                    else {
-                        var id = $(this).data("id");
-                        approveIt(id, aOk);
-                    }
-               
-             
             });
             ulA.append(liDoit);
 
@@ -1238,10 +1252,10 @@
             /*
             //alert(index);
             //data[index].Record_ID;
-
+ 
             var sql = "SELECT TableName, AD_Window_ID, PO_Window_ID FROM AD_Table WHERE AD_Table_ID=" + fulldata[index].AD_Table_ID;
-
-
+ 
+ 
             //var sql = "select ad_window_id from ad_window where name='Mail Configuration'";// Upper( name)=Upper('user' )
             var ad_window_Id = -1;
             var tableName = '';
@@ -1256,7 +1270,7 @@
             catch (e) {
                 this.log.log(VIS.Logging.Level.SEVERE, sql, e);
             }
-
+ 
             var zoomQuery = new VIS.Query();
             zoomQuery.addRestriction(tableName + "_ID", VIS.Query.prototype.EQUAL, fulldata[index].Record_ID);
             VIS.viewManager.startWindow(ad_window_Id, zoomQuery);

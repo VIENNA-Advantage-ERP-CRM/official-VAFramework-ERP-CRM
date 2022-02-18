@@ -225,150 +225,117 @@ namespace ViennaAdvantageServer.Process
         /// <param name="contSchedule"></param>
         private void GenerateInvoice(VAdvantage.Model.X_C_ContractSchedule contSchedule)
         {
-            if (contSchedule.IsActive())
+            try
             {
-                int res = 0;
-
-                Decimal? price = null;
-                if (!cont.IsCancel())
+                if (contSchedule.IsActive())
                 {
-                    price = Decimal.Multiply(cont.GetPriceEntered(), cont.GetQtyEntered());
-                }
-                else
-                {
-                    sql.Clear();
-                    sql.Append("UPDATE C_Contract SET RenewalType = NULL WHERE C_Contract_ID = " + cont.GetC_Contract_ID());
-                    int res2 = Util.GetValueOfInt(DB.ExecuteQuery(sql.ToString(), null, Get_TrxName()));
+                    int res = 0;
 
-                    if (contSchedule.GetEndDate() <= cont.GetCancellationDate())
+                    Decimal? price = null;
+                    if (!cont.IsCancel())
                     {
                         price = Decimal.Multiply(cont.GetPriceEntered(), cont.GetQtyEntered());
                     }
                     else
                     {
                         sql.Clear();
-                        sql.Append("SELECT MAX(C_ContractSchedule_ID) FROM C_ContractSchedule WHERE NVL(C_INVOICE_ID,0) > 0 AND C_Contract_ID = " + cont.GetC_Contract_ID());
-                        int c_contractschedule_id = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
-                        if (c_contractschedule_id != 0)
+                        sql.Append("UPDATE C_Contract SET RenewalType = NULL WHERE C_Contract_ID = " + cont.GetC_Contract_ID());
+                        int res2 = Util.GetValueOfInt(DB.ExecuteQuery(sql.ToString(), null, Get_TrxName()));
+
+                        if (contSchedule.GetEndDate() <= cont.GetCancellationDate())
                         {
-                            string date = cont.GetCancellationDate().Value.ToString("dd-MMM-yyyy");
-
-                            sql.Clear();
-                            sql.Append("SELECT DaysBetween('" + date + "', EndDate) FROM C_ContractSchedule WHERE C_ContractSchedule_ID = " + c_contractschedule_id);
-                            Decimal? diffDays = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
-
                             price = Decimal.Multiply(cont.GetPriceEntered(), cont.GetQtyEntered());
-
-                            sql.Clear();
-                            sql.Append("UPDATE C_ContractSchedule SET IsActive = 'N' WHERE EndDate > '" + date + "' AND C_Contract_ID = " + cont.GetC_Contract_ID());
-                            res = Util.GetValueOfInt(DB.ExecuteQuery(sql.ToString(), null, Get_TrxName()));
                         }
                         else
                         {
                             sql.Clear();
-                            sql.Append("SELECT DaysBetween(CancellationDate, StartDate) FROM C_Contract WHERE C_Contract_ID = " + cont.GetC_Contract_ID());
-                            Decimal? diffDays = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
-
-                            price = Decimal.Multiply(cont.GetPriceEntered(), cont.GetQtyEntered());
-
-                            if (diffDays > 0)
+                            sql.Append("SELECT MAX(C_ContractSchedule_ID) FROM C_ContractSchedule WHERE NVL(C_INVOICE_ID,0) > 0 AND C_Contract_ID = " + cont.GetC_Contract_ID());
+                            int c_contractschedule_id = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
+                            if (c_contractschedule_id != 0)
                             {
+                                string date = cont.GetCancellationDate().Value.ToString("dd-MMM-yyyy");
+
                                 sql.Clear();
-                                sql.Append("UPDATE C_ContractSchedule SET IsActive = 'N' WHERE C_Contract_ID = " + cont.GetC_Contract_ID());
+                                sql.Append("SELECT DaysBetween('" + date + "', EndDate) FROM C_ContractSchedule WHERE C_ContractSchedule_ID = " + c_contractschedule_id);
+                                Decimal? diffDays = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
+
+                                price = Decimal.Multiply(cont.GetPriceEntered(), cont.GetQtyEntered());
+
+                                sql.Clear();
+                                sql.Append("UPDATE C_ContractSchedule SET IsActive = 'N' WHERE EndDate > '" + date + "' AND C_Contract_ID = " + cont.GetC_Contract_ID());
                                 res = Util.GetValueOfInt(DB.ExecuteQuery(sql.ToString(), null, Get_TrxName()));
                             }
                             else
                             {
                                 sql.Clear();
-                                sql.Append("UPDATE C_ContractSchedule SET IsActive = 'N' WHERE C_Contract_ID = " + cont.GetC_Contract_ID());
-                                res = Util.GetValueOfInt(DB.ExecuteQuery(sql.ToString(), null, Get_TrxName()));
+                                sql.Append("SELECT DaysBetween(CancellationDate, StartDate) FROM C_Contract WHERE C_Contract_ID = " + cont.GetC_Contract_ID());
+                                Decimal? diffDays = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
+
+                                price = Decimal.Multiply(cont.GetPriceEntered(), cont.GetQtyEntered());
+
+                                if (diffDays > 0)
+                                {
+                                    sql.Clear();
+                                    sql.Append("UPDATE C_ContractSchedule SET IsActive = 'N' WHERE C_Contract_ID = " + cont.GetC_Contract_ID());
+                                    res = Util.GetValueOfInt(DB.ExecuteQuery(sql.ToString(), null, Get_TrxName()));
+                                }
+                                else
+                                {
+                                    sql.Clear();
+                                    sql.Append("UPDATE C_ContractSchedule SET IsActive = 'N' WHERE C_Contract_ID = " + cont.GetC_Contract_ID());
+                                    res = Util.GetValueOfInt(DB.ExecuteQuery(sql.ToString(), null, Get_TrxName()));
+                                }
                             }
                         }
                     }
-                }
 
-                //price = Decimal.Round(price.Value, 2, MidpointRounding.AwayFromZero);
+                    //price = Decimal.Round(price.Value, 2, MidpointRounding.AwayFromZero);
 
-                inv = new VAdvantage.Model.MInvoice(GetCtx(), 0, Get_TrxName());
-                inv.SetAD_Client_ID(cont.GetAD_Client_ID());
-                inv.SetAD_Org_ID(cont.GetAD_Org_ID());
-                inv.SetC_BPartner_ID(cont.GetC_BPartner_ID());
-                if (Util.GetValueOfInt(cont.GetC_Order_ID()) != 0)
-                {
-                    inv.SetC_Order_ID(cont.GetC_Order_ID());
-                }
-                // JID_0872: System has To pick the Payment Method defined with the Business Partner against whom the Invoice is getting generated.
-                if (Env.IsModuleInstalled("VA009_"))
-                {
-                    // When ContractType is Accounts Receivable
-                    // If Contract type not found consider as AR Invoice by default Done by Rakesh 21/May/2021 suggested by Kanika
-                    if (bp.GetVA009_PaymentMethod_ID() > 0 && (string.IsNullOrEmpty(cont.GetContractType()) || cont.GetContractType().Equals(X_C_Contract.CONTRACTTYPE_AccountsReceivable)))
+                    inv = new VAdvantage.Model.MInvoice(GetCtx(), 0, Get_TrxName());
+                    inv.SetAD_Client_ID(cont.GetAD_Client_ID());
+                    inv.SetAD_Org_ID(cont.GetAD_Org_ID());
+                    inv.SetC_BPartner_ID(cont.GetC_BPartner_ID());
+                    if (Util.GetValueOfInt(cont.GetC_Order_ID()) != 0)
                     {
-                        inv.SetVA009_PaymentMethod_ID(bp.GetVA009_PaymentMethod_ID());
-                        inv.SetIsSOTrx(true);
+                        inv.SetC_Order_ID(cont.GetC_Order_ID());
                     }
-                    else if (bp.GetVA009_PO_PaymentMethod_ID() > 0 && (cont.GetContractType().Equals(X_C_Contract.CONTRACTTYPE_AccountsPayable)))
+                    // JID_0872: System has To pick the Payment Method defined with the Business Partner against whom the Invoice is getting generated.
+                    if (Env.IsModuleInstalled("VA009_"))
                     {
-                        // When ContractType is Accounts Payable
-                        inv.SetVA009_PaymentMethod_ID(bp.GetVA009_PO_PaymentMethod_ID());
-                        inv.SetIsSOTrx(false);
+                        // When ContractType is Accounts Receivable
+                        // If Contract type not found consider as AR Invoice by default Done by Rakesh 21/May/2021 suggested by Kanika
+                        if (bp.GetVA009_PaymentMethod_ID() > 0 && (string.IsNullOrEmpty(cont.GetContractType()) || cont.GetContractType().Equals(X_C_Contract.CONTRACTTYPE_AccountsReceivable)))
+                        {
+                            inv.SetVA009_PaymentMethod_ID(bp.GetVA009_PaymentMethod_ID());
+                            inv.SetIsSOTrx(true);
+                        }
+                        else if (bp.GetVA009_PO_PaymentMethod_ID() > 0 && (cont.GetContractType().Equals(X_C_Contract.CONTRACTTYPE_AccountsPayable)))
+                        {
+                            // When ContractType is Accounts Payable
+                            inv.SetVA009_PaymentMethod_ID(bp.GetVA009_PO_PaymentMethod_ID());
+                            inv.SetIsSOTrx(false);
+                        }
                     }
-                }
-                // Get count contract schedule of invoice
-                sql.Clear();
-                sql.Append("SELECT COUNT(C_ContractSchedule_ID)+1 From C_ContractSchedule Where NVL(C_INVOICE_ID,0) > 0 AND C_Contract_ID=" + cont.GetC_Contract_ID());
-                int scheduledInvoiceCount = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
-                inv.Set_Value("InvoiceReference", cont.GetDocumentNo() + "_" + Util.GetValueOfString(scheduledInvoiceCount));
-                inv.SetC_DocType_ID(_C_DocType_ID);
-                inv.SetC_DocTypeTarget_ID(_C_DocType_ID);
-                inv.SetC_BPartner_Location_ID(cont.GetBill_Location_ID());
-                inv.SetC_Currency_ID(cont.GetC_Currency_ID());
-                // JID_1536_3
-                inv.SetC_ConversionType_ID(cont.GetC_ConversionType_ID());
-                inv.SetC_PaymentTerm_ID(cont.GetC_PaymentTerm_ID());
-                inv.SetC_Campaign_ID(cont.GetC_Campaign_ID());
+                    // Get count contract schedule of invoice
+                    sql.Clear();
+                    sql.Append("SELECT COUNT(C_ContractSchedule_ID)+1 From C_ContractSchedule Where NVL(C_INVOICE_ID,0) > 0 AND C_Contract_ID=" + cont.GetC_Contract_ID());
+                    int scheduledInvoiceCount = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
+                    inv.Set_Value("InvoiceReference", cont.GetDocumentNo() + "_" + Util.GetValueOfString(scheduledInvoiceCount));
+                    inv.SetC_DocType_ID(_C_DocType_ID);
+                    inv.SetC_DocTypeTarget_ID(_C_DocType_ID);
+                    inv.SetC_BPartner_Location_ID(cont.GetBill_Location_ID());
+                    inv.SetC_Currency_ID(cont.GetC_Currency_ID());
+                    // JID_1536_3
+                    inv.SetC_ConversionType_ID(cont.GetC_ConversionType_ID());
+                    inv.SetC_PaymentTerm_ID(cont.GetC_PaymentTerm_ID());
+                    inv.SetC_Campaign_ID(cont.GetC_Campaign_ID());
 
-                inv.SetM_PriceList_ID(cont.GetM_PriceList_ID());
-                inv.SetSalesRep_ID(cont.GetSalesRep_ID());
-                inv.SetC_Contract_ID(cont.GetC_Contract_ID());
-                // When invoice created from service contract set ServiceContract always true
-                inv.SetServiceContract(true);
-                if (!inv.Save(Get_TrxName()))
-                {
-                    Get_TrxName().Rollback();
-                    msgInvoiceNotSaved.Append(cont.GetDocumentNo() + "_" + contSchedule.GetFROMDATE().Value.ToString("ddMMMyyyy") + ",");
-                    ValueNamePair pp = VLogger.RetrieveError();
-                    if (pp != null)
-                    {
-                        msg = pp.GetName();
-                        //if GetName is Empty then it will check GetValue
-                        if (string.IsNullOrEmpty(msg))
-                            msg = Msg.GetMsg("", pp.GetValue());
-                    }
-                    // save error log info file
-                    log.Info("Invoice not saved DocumentNo: " + cont.GetDocumentNo() + " - Schedule From Date: " + contSchedule.GetFROMDATE().Value.ToString("dd-MMM-yyyy") + " Error: " + msg);
-                }
-                else
-                {
-                    VAdvantage.Model.MInvoiceLine invLine = new VAdvantage.Model.MInvoiceLine(GetCtx(), 0, Get_TrxName());
-                    invLine.SetAD_Client_ID(inv.GetAD_Client_ID());
-                    invLine.SetAD_Org_ID(inv.GetAD_Org_ID());
-                    invLine.SetC_Campaign_ID(inv.GetC_Campaign_ID());
-                    invLine.SetC_Invoice_ID(inv.GetC_Invoice_ID());
-                    invLine.SetC_UOM_ID(cont.GetC_UOM_ID());
-                    invLine.SetM_Product_ID(cont.GetM_Product_ID());
-                    invLine.SetM_AttributeSetInstance_ID(cont.GetM_AttributeSetInstance_ID());
-                    if (Util.GetValueOfInt(cont.GetC_OrderLine_ID()) != 0)
-                    {
-                        invLine.SetC_OrderLine_ID(cont.GetC_OrderLine_ID());
-                    }
-                    invLine.SetC_Tax_ID(cont.GetC_Tax_ID());
-                    invLine.SetQty(cont.GetQtyEntered());
-                    invLine.SetQtyEntered(cont.GetQtyEntered());
-                    invLine.SetPriceActual(cont.GetPriceEntered());
-                    invLine.SetPriceEntered(cont.GetPriceEntered());
-                    invLine.SetPriceList(cont.GetPriceList());
-                    if (!invLine.Save(Get_TrxName()))
+                    inv.SetM_PriceList_ID(cont.GetM_PriceList_ID());
+                    inv.SetSalesRep_ID(cont.GetSalesRep_ID());
+                    inv.SetC_Contract_ID(cont.GetC_Contract_ID());
+                    // When invoice created from service contract set ServiceContract always true
+                    inv.SetServiceContract(true);
+                    if (!inv.Save(Get_TrxName()))
                     {
                         Get_TrxName().Rollback();
                         msgInvoiceNotSaved.Append(cont.GetDocumentNo() + "_" + contSchedule.GetFROMDATE().Value.ToString("ddMMMyyyy") + ",");
@@ -381,27 +348,68 @@ namespace ViennaAdvantageServer.Process
                                 msg = Msg.GetMsg("", pp.GetValue());
                         }
                         // save error log info file
-                        log.Info("Invoice Line not saved DocumentNo: " + cont.GetDocumentNo() + " - Schedule From Date: " + contSchedule.GetFROMDATE().Value.ToString("dd-MMM-yyyy") + " Error: " + msg);
+                        log.Info("Invoice not saved DocumentNo: " + cont.GetDocumentNo() + " - Schedule From Date: " + contSchedule.GetFROMDATE().Value.ToString("dd-MMM-yyyy") + " Error: " + msg);
                     }
                     else
                     {
-                        //Set InvoiceId Created against Contract Schedule
-                        sql.Clear();
-                        sql.Append("UPDATE C_ContractSchedule SET C_Invoice_ID = " + inv.GetC_Invoice_ID() + ", Processed = 'Y' WHERE C_ContractSchedule_ID = " + contSchedule.GetC_ContractSchedule_ID());
-                        Util.GetValueOfInt(DB.ExecuteQuery(sql.ToString(), null, Get_TrxName()));
-                        msgInvoiceSaved.Append(inv.GetDocumentNo() + ",");
-                        //Commit Transaction to execute workflow associated
-                        Get_TrxName().Commit();
-
-                        //Complete Invoice and Generate Invoice Payment
-                        string msg = CompleteInvoicePayment(GetCtx(), inv.GetC_Invoice_ID(), _processId, MInvoice.DOCACTION_Complete, cont.GetC_Contract_ID());
-                        if (!string.IsNullOrEmpty(msg))
+                        VAdvantage.Model.MInvoiceLine invLine = new VAdvantage.Model.MInvoiceLine(GetCtx(), 0, Get_TrxName());
+                        invLine.SetInvoice(inv);
+                        invLine.SetAD_Client_ID(inv.GetAD_Client_ID());
+                        invLine.SetAD_Org_ID(inv.GetAD_Org_ID());
+                        invLine.SetC_Campaign_ID(inv.GetC_Campaign_ID());
+                        invLine.SetC_Invoice_ID(inv.GetC_Invoice_ID());
+                        invLine.SetC_UOM_ID(cont.GetC_UOM_ID());
+                        invLine.SetM_Product_ID(cont.GetM_Product_ID());
+                        invLine.SetM_AttributeSetInstance_ID(cont.GetM_AttributeSetInstance_ID());
+                        if (Util.GetValueOfInt(cont.GetC_OrderLine_ID()) != 0)
                         {
-                            log.Info("Workflow not completed: " + msg);
+                            invLine.SetC_OrderLine_ID(cont.GetC_OrderLine_ID());
                         }
+                        invLine.SetC_Tax_ID(cont.GetC_Tax_ID());
+                        invLine.SetQty(cont.GetQtyEntered());
+                        invLine.SetQtyEntered(cont.GetQtyEntered());
+                        invLine.SetPriceActual(cont.GetPriceEntered());
+                        invLine.SetPriceEntered(cont.GetPriceEntered());
+                        invLine.SetPriceList(cont.GetPriceList());
+                        if (!invLine.Save(Get_TrxName()))
+                        {
+                            Get_TrxName().Rollback();
+                            msgInvoiceNotSaved.Append(cont.GetDocumentNo() + "_" + contSchedule.GetFROMDATE().Value.ToString("ddMMMyyyy") + ",");
+                            ValueNamePair pp = VLogger.RetrieveError();
+                            if (pp != null)
+                            {
+                                msg = pp.GetName();
+                                //if GetName is Empty then it will check GetValue
+                                if (string.IsNullOrEmpty(msg))
+                                    msg = Msg.GetMsg("", pp.GetValue());
+                            }
+                            // save error log info file
+                            log.Info("Invoice Line not saved DocumentNo: " + cont.GetDocumentNo() + " - Schedule From Date: " + contSchedule.GetFROMDATE().Value.ToString("dd-MMM-yyyy") + " Error: " + msg);
+                        }
+                        else
+                        {
+                            //Set InvoiceId Created against Contract Schedule
+                            sql.Clear();
+                            sql.Append("UPDATE C_ContractSchedule SET C_Invoice_ID = " + inv.GetC_Invoice_ID() + ", Processed = 'Y' WHERE C_ContractSchedule_ID = " + contSchedule.GetC_ContractSchedule_ID());
+                            Util.GetValueOfInt(DB.ExecuteQuery(sql.ToString(), null, Get_TrxName()));
+                            msgInvoiceSaved.Append(inv.GetDocumentNo() + ",");
+                            //Commit Transaction to execute workflow associated
+                            Get_TrxName().Commit();
 
+                            //Complete Invoice and Generate Invoice Payment
+                            string msg = CompleteInvoicePayment(GetCtx(), inv.GetC_Invoice_ID(), _processId, MInvoice.DOCACTION_Complete, cont.GetC_Contract_ID());
+                            if (!string.IsNullOrEmpty(msg))
+                            {
+                                log.Info("Workflow not completed: " + msg);
+                            }
+
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                log.Info(ex.Message);
             }
         }
         /// <summary>

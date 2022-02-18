@@ -28,6 +28,7 @@ using Oracle.ManagedDataAccess.Client;
 using System.Data.SqlClient;
 using System.Net.Http.Headers;
 using com.sun.xml.@internal.bind.v2.schemagen.xmlschema;
+using VAdvantage.ProcessEngine;
 
 namespace VAdvantage.Model
 {
@@ -70,6 +71,7 @@ namespace VAdvantage.Model
 
         /**is container applicable */
         private bool isContainrApplicable = false;
+
 
         #endregion
 
@@ -251,11 +253,13 @@ namespace VAdvantage.Model
             //	Check if we can create the lines
             MInOutLine[] iolines = inout.GetLines(false);
             int AttributeSetInstance_ID = 0;
-            //MOrderLine[] oLines = order.GetLines('
+            MClient client = MClient.Get(order.GetCtx());
             for (int i = 0; i < iolines.Length; i++)
             {
-                MOrderLine ol = new MOrderLine(inout.GetCtx(), iolines[i].GetC_OrderLine_ID(), inout.Get_Trx());
-                MOrderLine olines = new MOrderLine(inout.GetCtx(), ol.GetRef_OrderLine_ID(), inout.Get_Trx());
+                //MOrderLine ol = new MOrderLine(inout.GetCtx(), iolines[i].GetC_OrderLine_ID(), inout.Get_Trx());
+                int Ref_OrderLine_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Ref_OrderLine_ID FROM C_OrderLine WHERE C_OrderLine_ID ="
+                                    + iolines[i].GetC_OrderLine_ID(), null, inout.Get_Trx()));
+                MOrderLine olines = new MOrderLine(inout.GetCtx(), Ref_OrderLine_ID, inout.Get_Trx());
                 Decimal qty = olines.GetQtyEntered();
                 // Done by Rakesh Kumar 31/Mar/2021 suggested by Mandeep Singh and Bharat Singla
                 // When AttributeInstanceId set on Orderline
@@ -282,7 +286,6 @@ namespace VAdvantage.Model
                     String MMPolicy = pc.GetMMPolicy();
                     if (MMPolicy == null || MMPolicy.Length == 0)
                     {
-                        MClient client = MClient.Get(order.GetCtx());
                         MMPolicy = client.GetMMPolicy();
                     }
                     storages = MStorage.GetWarehouse(order.GetCtx(), M_Warehouse_ID,
@@ -1534,7 +1537,7 @@ namespace VAdvantage.Model
             else if (Is_ValueChanged("M_Warehouse_ID"))
             {
                 //JID_0858: when line exist then not able to update / change warehouse
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM M_InoutLine WHERE M_Inout_ID = " + GetM_InOut_ID(), null, Get_Trx())) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(M_InoutLine_ID) FROM M_InoutLine WHERE M_Inout_ID = " + GetM_InOut_ID(), null, Get_Trx())) > 0)
                 {
                     log.SaveError("VIS_WarehouseCantChange", "");
                     return false;
@@ -1550,10 +1553,19 @@ namespace VAdvantage.Model
                 log.SaveError("FillMandatory", Msg.Translate(GetCtx(), "C_Order_ID"));
                 return false;
             }
+
+            // VIS0060: Check if Document Type is not selected.
+            if (newRecord && GetC_Order_ID() > 0 && GetC_DocType_ID() == 0)
+            {
+                log.SaveError("VIS_ShipDocTypeNotFound", "");
+                return false;
+            }
+
             if (newRecord || Is_ValueChanged("C_BPartner_ID"))
             {
-                MBPartner bp = MBPartner.Get(GetCtx(), GetC_BPartner_ID());
-                if (!bp.IsActive())
+                //MBPartner bp = MBPartner.Get(GetCtx(), GetC_BPartner_ID());
+                string bpActive = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsActive FROM C_BPartner WHERE C_BPartner_ID = " + GetC_BPartner_ID(), null, Get_Trx()));
+                if (bpActive.Equals("N"))
                 {
                     log.SaveError("NotActive", Msg.GetMsg(GetCtx(), "C_BPartner_ID"));
                     return false;
@@ -1756,8 +1768,9 @@ namespace VAdvantage.Model
             // check if Linked PO is not in completed or closed stage then not complete this record
             if (GetC_Order_ID() != 0 && !IsSOTrx() && !IsReturnTrx())
             {
-                MOrder order = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
-                if (order.GetDocStatus() != "CO" && order.GetDocStatus() != "CL")
+                //MOrder order = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
+                string docStatus = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocStatus FROM C_Order WHERE C_Order_ID = " + GetC_Order_ID(), null, Get_Trx()));
+                if (docStatus != "CO" && docStatus != "CL")
                 {
                     _processMsg = Msg.GetMsg(GetCtx(), "LinkedPOStatus");
                     return DocActionVariables.STATUS_INVALID;
@@ -1821,10 +1834,10 @@ namespace VAdvantage.Model
             {
                 if (GetC_Order_ID() != 0)
                 {
-                    int _countschedule = Util.GetValueOfInt(DB.ExecuteScalar("Select Count(*) From VA009_OrderPaySchedule Where C_Order_ID=" + GetC_Order_ID()));
+                    int _countschedule = Util.GetValueOfInt(DB.ExecuteScalar("Select Count(VA009_OrderPaySchedule_ID) From VA009_OrderPaySchedule Where C_Order_ID=" + GetC_Order_ID()));
                     if (_countschedule > 0)
                     {
-                        if (Util.GetValueOfInt(DB.ExecuteScalar("Select Count(*) From VA009_OrderPaySchedule Where C_Order_ID=" + GetC_Order_ID() + " AND VA009_Ispaid='Y'")) != _countschedule)
+                        if (Util.GetValueOfInt(DB.ExecuteScalar("Select Count(VA009_OrderPaySchedule_ID) From VA009_OrderPaySchedule Where C_Order_ID=" + GetC_Order_ID() + " AND VA009_Ispaid='Y'")) != _countschedule)
                         {
                             _processMsg = Msg.GetMsg(Env.GetCtx(), "VIS_PayAdvance"); // "Please Do Advance Payment against order";
                             return DocActionVariables.STATUS_INVALID;
@@ -2167,11 +2180,11 @@ namespace VAdvantage.Model
                     return status;
             }
 
-            // JID_1290: Set the document number from completede document sequence after completed (if needed)
-            SetCompletedDocumentNo();
+            // Set Document Date based on setting on Document Type
+            SetCompletedDocumentDate();
 
             // To check weather future date records are available in Transaction window
-            // this check implement after "SetCompletedDocumentNo" function, because this function overwrit movement date
+            // this check implement after "SetCompletedDocumentDate" function, because this function overwrit movement date
             _processMsg = MTransaction.CheckFutureDateRecord(GetMovementDate(), Get_TableName(), GetM_InOut_ID(), Get_Trx());
             if (!string.IsNullOrEmpty(_processMsg))
             {
@@ -2211,6 +2224,19 @@ namespace VAdvantage.Model
             // IsCostImmediate = true - calculate cost on completion
             MClient client = MClient.Get(GetCtx(), GetAD_Client_ID());
 
+            // get Warehouse Stock availablity, PO price in base currency
+            DataSet dsAvailableStock = DB.ExecuteDataset(@"SELECT M_InOutLine.M_InOutLine_ID , M_Storage.QtyOnHand, 
+                                        NVL(CurrencyConvert(C_OrderLine.PriceEntered , C_Order.C_Currency_ID , " + GetCtx().GetContextAsInt("$C_Currency_ID") +
+                                        @", M_InOut.DateAcct, C_Order.C_ConversionType_ID, M_InOut.AD_Client_ID, M_InOut.AD_Org_ID) , 0) as PriceEntered
+                                        FROM M_InOutLine 
+                                        INNER JOIN M_InOut ON M_InOut.M_InOut_ID = M_InOutLine.M_InOut_ID
+                                        LEFT JOIN M_Storage ON(M_InOutLine.M_Locator_ID = M_Storage.M_Locator_ID
+                                        AND M_InOutLine.M_Product_ID = M_Storage.M_Product_ID
+                                        AND NVL(M_InOutLine.M_AttributeSetInstance_ID, 0) = NVL(M_Storage.M_AttributeSetInstance_ID, 0))
+                                        LEFT JOIN C_OrderLine ON M_InOutLine.C_OrderLine_ID = C_OrderLine.C_OrderLine_ID
+                                        LEFT JOIN C_Order ON C_Order.C_Order_ID = C_OrderLine.C_Order_ID
+                                        WHERE M_InOut.M_InOut_ID = " + GetM_InOut_ID());
+
             //	Outstanding (not processed) Incoming Confirmations ?
             MInOutConfirm[] confirmations = GetConfirmations(true);
             Int32 confirmationCount = 0;
@@ -2237,6 +2263,11 @@ namespace VAdvantage.Model
                             //
                             _processMsg = "Open @M_InOutConfirm_ID@: " +
                                 confirm.GetConfirmTypeName() + " - " + confirm.GetDocumentNo();
+                            // VIS-158 : Cable Industry specific change to set MR confirmation number
+                            if (Env.IsModuleInstalled("VA076_") && Get_ColumnIndex("VA076_ConfirmationNo") >= 0)
+                            {
+                                Set_Value("VA076_ConfirmationNo", confirm.GetDocumentNo());
+                            }
                             FreezeDoc();//Arpit
                             return DocActionVariables.STATUS_INPROGRESS;
                         }
@@ -2255,6 +2286,11 @@ namespace VAdvantage.Model
                         //
                         _processMsg = "Open @M_InOutConfirm_ID@: " +
                             confirm.GetConfirmTypeName() + " - " + confirm.GetDocumentNo();
+                        // VIS-158 : Cable Industry specific change to set MR confirmation number
+                        if (Env.IsModuleInstalled("VA076_") && Get_ColumnIndex("VA076_ConfirmationNo") >= 0)
+                        {
+                            Set_Value("VA076_ConfirmationNo", confirm.GetDocumentNo());
+                        }
                         FreezeDoc();//Arpit                  
                         return DocActionVariables.STATUS_INPROGRESS;
                     }
@@ -2282,20 +2318,27 @@ namespace VAdvantage.Model
             MInOutLine[] lines = GetLines(false);
             if (!(VAPOS_POSTerminal_ID > 0))
             {
-                for (int Index = 0; Index < lines.Length; Index++)
+                //for (int Index = 0; Index < lines.Length; Index++)
+                //{
+                //    MInOutLine Line = lines[Index];
+                //    // Change done by mohit as discussed by ravikant and mukesh sir - do not check locator if there is charge on shipment line- 01/06/2017 (PMS TaskID=3893)
+                //    if (Line.GetM_Locator_ID() == 0 && Line.GetM_Product_ID() != 0)
+                //    {
+                //        _processMsg = Msg.GetMsg(Env.GetCtx(), "LocatorNotFound");
+                //        return DocActionVariables.STATUS_INVALID;
+                //    }
+                //}
+
+                int noLocCnt = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(M_InOutLine_ID) FROM M_InOutLine WHERE IsActive = 'Y' AND M_InOut_ID =" + GetM_InOut_ID()
+                    + " AND M_Locator_ID = 0 AND M_Product_ID != 0", null, Get_Trx()));
+                if (noLocCnt > 0)
                 {
-                    MInOutLine Line = lines[Index];
-                    // Change done by mohit as discussed by ravikant and mukesh sir - do not check locator if there is charge on shipment line- 01/06/2017 (PMS TaskID=3893)
-                    if (Line.GetM_Locator_ID() == 0 && Line.GetM_Product_ID() != 0)
-                    {
-                        _processMsg = Msg.GetMsg(Env.GetCtx(), "LocatorNotFound");
-                        return DocActionVariables.STATUS_INVALID;
-                    }
+                    _processMsg = Msg.GetMsg(Env.GetCtx(), "LocatorNotFound");
+                    return DocActionVariables.STATUS_INVALID;
                 }
             }
-            ////Pratap- For Asset Cost
-            //List<int> _assetList = new List<int>();
-            ////
+
+            bool countVA026 = Env.IsModuleInstalled("VA009_") && Env.IsModuleInstalled("VA026_");
             #region [Process All Lines]
             for (int lineIndex = 0; lineIndex < lines.Length; lineIndex++)
             {
@@ -2311,7 +2354,7 @@ namespace VAdvantage.Model
                     #region Asset Work
                     if (product != null)
                     {
-                        MProductCategory pc = new MProductCategory(Env.GetCtx(), product.GetM_Product_Category_ID(), Get_TrxName());
+                        MProductCategory pc = MProductCategory.Get(GetCtx(), product.GetM_Product_Category_ID());
                         if (VAPOS_POSTerminal_ID > 0)
                         {
                             if (IsSOTrx() && pc.GetA_Asset_Group_ID() > 0 && sLine.GetA_Asset_ID() == 0)
@@ -2334,12 +2377,17 @@ namespace VAdvantage.Model
                         if (IsSOTrx() && sLine.GetA_Asset_ID() != 0)
                         {
                             MAsset ast = new MAsset(Env.GetCtx(), sLine.GetA_Asset_ID(), Get_TrxName());
-                            ast.SetIsDisposed(true);
-                            ast.SetAssetDisposalDate(GetDateAcct());
-                            if (!ast.Save(Get_TrxName()))
+                            // VIS0060: Set Disposal on Asset only if full Asset is Sale.
+                            if (sLine.GetQtyEntered().Equals(ast.GetQty()))
                             {
-                                _processMsg = "AssetNotUpdated" + sLine.GetLine() + " :-->" + sLine.GetDescription();
-                                return DocActionVariables.STATUS_INPROGRESS;
+                                ast.SetIsDisposed(true);
+                                ast.SetAssetDisposalDate(GetDateAcct());
+
+                                if (!ast.Save(Get_TrxName()))
+                                {
+                                    _processMsg = "AssetNotUpdated" + sLine.GetLine() + " :-->" + sLine.GetDescription();
+                                    return DocActionVariables.STATUS_INPROGRESS;
+                                }
                             }
                         }
                     }
@@ -2536,7 +2584,10 @@ namespace VAdvantage.Model
                             {
                                 #region Update Storage when record created with refenece of Orderline and not a RETURN trx
                                 MOrderLine ordLine = new MOrderLine(GetCtx(), sLine.GetC_OrderLine_ID(), Get_TrxName());
-                                MOrder ord = new MOrder(GetCtx(), ordLine.GetC_Order_ID(), Get_TrxName());
+                                //MOrder ord = new MOrder(GetCtx(), ordLine.GetC_Order_ID(), Get_TrxName());
+                                int OrdWh_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_Warehouse_ID FROM C_Order WHERE C_Order_ID ="
+                                    + ordLine.GetC_Order_ID(), null, Get_Trx()));
+
                                 if (!IsReversal())
                                 {
                                     qtytoset = Decimal.Subtract(ordLine.GetQtyOrdered(), ordLine.GetQtyDelivered());
@@ -2596,7 +2647,7 @@ namespace VAdvantage.Model
                                     if (!sLine.IsDropShip())
                                     {
                                         if (!MStorage.Add(GetCtx(), GetM_Warehouse_ID(),
-                                        sLine.GetM_Locator_ID(), ord.GetM_Warehouse_ID(),
+                                        sLine.GetM_Locator_ID(), OrdWh_ID,
                                         sLine.GetM_Product_ID(),
                                         sLine.GetM_AttributeSetInstance_ID(), reservationAttributeSetInstance_ID,
                                              //Qty, QtySO, QtyPO, Get_TrxName()))
@@ -2733,7 +2784,10 @@ namespace VAdvantage.Model
                         if (sLine.GetC_OrderLine_ID() != 0 && !IsReturnTrx())
                         {
                             MOrderLine ordLine = new MOrderLine(GetCtx(), sLine.GetC_OrderLine_ID(), Get_TrxName());
-                            MOrder ord = new MOrder(GetCtx(), ordLine.GetC_Order_ID(), Get_TrxName());
+                            //MOrder ord = new MOrder(GetCtx(), ordLine.GetC_Order_ID(), Get_TrxName());
+                            int OrdWh_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_Warehouse_ID FROM C_Order WHERE C_Order_ID ="
+                                   + ordLine.GetC_Order_ID(), null, Get_Trx()));
+
                             if (!IsReversal())
                             {
                                 qtytoset = Decimal.Subtract(ordLine.GetQtyOrdered(), ordLine.GetQtyDelivered());
@@ -2785,7 +2839,7 @@ namespace VAdvantage.Model
                                 if (!sLine.IsDropShip())
                                 {
                                     if (!MStorage.Add(GetCtx(), GetM_Warehouse_ID(),
-                                                                sLine.GetM_Locator_ID(), ord.GetM_Warehouse_ID(),
+                                                                sLine.GetM_Locator_ID(), OrdWh_ID,
                                                                 sLine.GetM_Product_ID(),
                                                                 sLine.GetM_AttributeSetInstance_ID(), reservationAttributeSetInstance_ID,
                                                                 Qty, QtySO, QtyPO, Get_TrxName()))
@@ -3066,6 +3120,7 @@ namespace VAdvantage.Model
                     }
                 }
 
+                MMatchPO Matchpo = null;
                 List<MMatchInv> matchedInvoice = new List<MMatchInv>();
                 //	Matching
                 if (!IsSOTrx()
@@ -3127,13 +3182,24 @@ namespace VAdvantage.Model
                     {
                         log.Fine("PO Matching");
                         //	Ship - PO
-                        MMatchPO po = MMatchPO.Create(null, sLine, GetMovementDate(), matchQty);
+                        Matchpo = MMatchPO.Create(null, sLine, GetMovementDate(), matchQty);
                         try
                         {
-                            po.Set_ValueNoCheck("C_BPartner_ID", GetC_BPartner_ID());
+                            Matchpo.Set_ValueNoCheck("C_BPartner_ID", GetC_BPartner_ID());
                         }
                         catch { }
-                        if (!po.Save(Get_TrxName()))
+
+                        Matchpo.SetIsSOTrx(IsSOTrx());
+                        Matchpo.SetIsReturnTrx(IsReturnTrx());
+                        if (dsAvailableStock != null && dsAvailableStock.Tables[0].Rows.Count > 0)
+                        {
+                            Matchpo.SetAvailableStock(Util.GetValueOfDecimal(
+                                dsAvailableStock.Tables[0].Select("M_InOutLine_ID = " + sLine.GetM_InOutLine_ID())[0]["QtyOnHand"]));
+                            Matchpo.SetPricePO(Util.GetValueOfDecimal(
+                                dsAvailableStock.Tables[0].Select("M_InOutLine_ID = " + sLine.GetM_InOutLine_ID())[0]["PriceEntered"]));
+                        }
+
+                        if (!Matchpo.Save(Get_TrxName()))
                         {
                             _processMsg = "Could not create PO Matching";
                             return DocActionVariables.STATUS_INVALID;
@@ -3153,13 +3219,22 @@ namespace VAdvantage.Model
                             //	Invoice is created before  Shipment
                             log.Fine("PO(Inv) Matching");
                             //	Ship - Invoice
-                            MMatchPO po = MMatchPO.Create(iLine, sLine, GetMovementDate(), matchQty);
+                            Matchpo = MMatchPO.Create(iLine, sLine, GetMovementDate(), matchQty);
                             try
                             {
-                                po.Set_ValueNoCheck("C_BPartner_ID", GetC_BPartner_ID());
+                                Matchpo.Set_ValueNoCheck("C_BPartner_ID", GetC_BPartner_ID());
                             }
                             catch { }
-                            if (!po.Save(Get_TrxName()))
+                            Matchpo.SetIsSOTrx(IsSOTrx());
+                            Matchpo.SetIsReturnTrx(IsReturnTrx());
+                            if (dsAvailableStock != null)
+                            {
+                                Matchpo.SetAvailableStock(Util.GetValueOfDecimal(
+                                    dsAvailableStock.Tables[0].Select("M_InOutLine_ID = " + sLine.GetM_InOutLine_ID())[0]["QtyOnHand"]));
+                                Matchpo.SetPricePO(Util.GetValueOfDecimal(
+                               dsAvailableStock.Tables[0].Select("M_InOutLine_ID = " + sLine.GetM_InOutLine_ID())[0]["PriceEntered"]));
+                            }
+                            if (!Matchpo.Save(Get_TrxName()))
                             {
                                 _processMsg = "Could not create PO(Inv) Matching";
                                 return DocActionVariables.STATUS_INVALID;
@@ -3176,26 +3251,26 @@ namespace VAdvantage.Model
                 }	//	PO Matching
 
                 #region Calculate Foreign Cost for Average PO
-                try
-                {
-                    if (!IsSOTrx() && !IsReturnTrx() && sLine.GetC_OrderLine_ID() > 0) // for MR against PO
-                    {
-                        MProduct product1 = new MProduct(GetCtx(), sLine.GetM_Product_ID(), Get_Trx());
-                        MOrderLine orderLine = new MOrderLine(GetCtx(), lines[lineIndex].GetC_OrderLine_ID(), null);
-                        MOrder order = new MOrder(GetCtx(), orderLine.GetC_Order_ID(), Get_Trx());
-                        if (product1 != null && product1.GetProductType() == "I" && product1.GetM_Product_ID() > 0) // for Item Type product
-                        {
-                            //if (!MCostForeignCurrency.InsertForeignCostAveragePO(GetCtx(), order, orderLine, sLine, Get_Trx()))
-                            //{
-                            //    Get_Trx().Rollback();
-                            //    log.Severe("Error occured during updating/inserting M_Cost_ForeignCurrency against Average PO.");
-                            //    _processMsg = "Could not update Foreign Currency Cost";
-                            //    return DocActionVariables.STATUS_INVALID;
-                            //}
-                        }
-                    }
-                }
-                catch (Exception) { }
+                //try
+                //{
+                //    if (!IsSOTrx() && !IsReturnTrx() && sLine.GetC_OrderLine_ID() > 0) // for MR against PO
+                //    {
+                //        MProduct product1 = new MProduct(GetCtx(), sLine.GetM_Product_ID(), Get_Trx());
+                //        MOrderLine orderLine = new MOrderLine(GetCtx(), lines[lineIndex].GetC_OrderLine_ID(), null);
+                //        MOrder order = new MOrder(GetCtx(), orderLine.GetC_Order_ID(), Get_Trx());
+                //        if (product1 != null && product1.GetProductType() == "I" && product1.GetM_Product_ID() > 0) // for Item Type product
+                //        {
+                //            //if (!MCostForeignCurrency.InsertForeignCostAveragePO(GetCtx(), order, orderLine, sLine, Get_Trx()))
+                //            //{
+                //            //    Get_Trx().Rollback();
+                //            //    log.Severe("Error occured during updating/inserting M_Cost_ForeignCurrency against Average PO.");
+                //            //    _processMsg = "Could not update Foreign Currency Cost";
+                //            //    return DocActionVariables.STATUS_INVALID;
+                //            //}
+                //        }
+                //    }
+                //}
+                //catch (Exception) { }
                 #endregion
 
                 //Enhanced By amit
@@ -3207,7 +3282,7 @@ namespace VAdvantage.Model
                     String costingMethod = MCostElement.CheckLifoOrFifoMethod(GetCtx(), GetAD_Client_ID(), sLine.GetM_Product_ID(), Get_Trx());
 
                     productCQ = new MProduct(GetCtx(), sLine.GetM_Product_ID(), Get_Trx());
-                    if (productCQ.GetProductType() == "I") // for Item Type product
+                    if (sLine.GetM_Product_ID() > 0 && productCQ.GetProductType() == "I") // for Item Type product
                     {
                         //if (GetReversalDoc_ID() > 0 || (GetDescription() != null && GetDescription().Contains("RC")))
                         //{
@@ -3229,6 +3304,13 @@ namespace VAdvantage.Model
                         }
                         DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice = " + currentCostPrice +
                                                           @" WHERE M_InoutLine_ID = " + sLine.GetM_InOutLine_ID(), null, Get_Trx());
+
+                        // update Price Difference as (PO Cost - GRN Current Cost Price)) on match PO
+                        if (Matchpo != null && Matchpo.Get_ID() > 0)
+                        {
+                            DB.ExecuteQuery(@"UPDATE M_MatchPO SET PriceDifference = " + (currentCostPrice == 0 ? 0 : (Matchpo.GetPricePO() - currentCostPrice))
+                                + ", CurrentCostPrice = " + currentCostPrice + @" WHERE M_MatchPO_ID = " + Matchpo.GetM_MatchPO_ID(), null, Get_Trx());
+                        }
 
                         _partner = new MBPartner(GetCtx(), GetC_BPartner_ID(), null);
                         orderLine = new MOrderLine(GetCtx(), lines[lineIndex].GetC_OrderLine_ID(), null);
@@ -3277,7 +3359,7 @@ namespace VAdvantage.Model
                                 #region MR with PO
                                 // check IsCostAdjustmentOnLost exist on product 
                                 sql.Clear();
-                                sql.Append(@"SELECT COUNT(*) FROM AD_Column WHERE IsActive = 'Y' AND 
+                                sql.Append(@"SELECT COUNT(AD_Column_ID) FROM AD_Column WHERE IsActive = 'Y' AND 
                                        AD_Table_ID =  ( SELECT AD_Table_ID FROM AD_Table WHERE IsActive = 'Y' AND TableName LIKE 'M_Product' ) 
                                         AND ColumnName LIKE 'IsCostAdjustmentOnLost' ");
                                 count = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, null));
@@ -3287,8 +3369,11 @@ namespace VAdvantage.Model
                                     isCostAdjustableOnLost = productCQ.IsCostAdjustmentOnLost();
                                 }
 
-                                MOrder order = new MOrder(GetCtx(), orderLine.GetC_Order_ID(), null);
-                                if (order.GetDocStatus() != "VO")
+                                //MOrder order = new MOrder(GetCtx(), orderLine.GetC_Order_ID(), null);
+                                string Ord_DocStatus = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocStatus FROM C_Order WHERE C_Order_ID ="
+                                                + orderLine.GetC_Order_ID(), null, Get_Trx()));
+
+                                if (Ord_DocStatus != "VO")
                                 {
                                     if (orderLine.GetQtyOrdered() == 0)
                                         continue;
@@ -3298,22 +3383,22 @@ namespace VAdvantage.Model
                                 Decimal ProductOrderPriceActual = ProductOrderLineCost / orderLine.GetQtyEntered();
 
                                 amt = 0;
-                                if (isCostAdjustableOnLost && sLine.GetMovementQty() < orderLine.GetQtyOrdered() && order.GetDocStatus() != "VO")
+                                if (isCostAdjustableOnLost && sLine.GetMovementQty() < orderLine.GetQtyOrdered() && Ord_DocStatus != "VO")
                                 {
                                     if (sLine.GetMovementQty() > 0)
                                         amt = ProductOrderLineCost;
                                     else
                                         amt = Decimal.Negate(ProductOrderLineCost);
                                 }
-                                else if (!isCostAdjustableOnLost && sLine.GetMovementQty() < orderLine.GetQtyOrdered() && order.GetDocStatus() != "VO")
+                                else if (!isCostAdjustableOnLost && sLine.GetMovementQty() < orderLine.GetQtyOrdered() && Ord_DocStatus != "VO")
                                 {
                                     amt = Decimal.Multiply(Decimal.Divide(ProductOrderLineCost, orderLine.GetQtyOrdered()), sLine.GetMovementQty());
                                 }
-                                else if (order.GetDocStatus() != "VO")
+                                else if (Ord_DocStatus != "VO")
                                 {
                                     amt = Decimal.Multiply(Decimal.Divide(ProductOrderLineCost, orderLine.GetQtyOrdered()), sLine.GetMovementQty());
                                 }
-                                else if (order.GetDocStatus() == "VO")
+                                else if (Ord_DocStatus == "VO")
                                 {
                                     amt = Decimal.Multiply(ProductOrderPriceActual, sLine.GetQtyEntered());
                                 }
@@ -3551,15 +3636,17 @@ namespace VAdvantage.Model
                             else if (orderLine != null && orderLine.GetC_Order_ID() > 0)
                             {
                                 #region Return To Vendor -- with order refernce
-                                MOrder order = new MOrder(GetCtx(), orderLine.GetC_Order_ID(), null);
-                                if (order.GetDocStatus() != "VO")
+                                //MOrder order = new MOrder(GetCtx(), orderLine.GetC_Order_ID(), null);
+                                string Ord_DocStatus = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocStatus FROM C_Order WHERE C_Order_ID ="
+                                                + orderLine.GetC_Order_ID(), null, Get_Trx()));
+                                if (Ord_DocStatus != "VO")
                                 {
                                     if (orderLine.GetQtyOrdered() == 0)
                                         continue;
                                 }
                                 // check IsCostAdjustmentOnLost exist on product 
                                 sql.Clear();
-                                sql.Append(@"SELECT COUNT(*) FROM AD_Column WHERE IsActive = 'Y' AND 
+                                sql.Append(@"SELECT COUNT(AD_Column_ID) FROM AD_Column WHERE IsActive = 'Y' AND 
                                        AD_Table_ID =  ( SELECT AD_Table_ID FROM AD_Table WHERE IsActive = 'Y' AND TableName LIKE 'M_Product' ) 
                                        AND ColumnName LIKE 'IsCostAdjustmentOnLost' ");
                                 count = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, null));
@@ -3573,7 +3660,7 @@ namespace VAdvantage.Model
                                 Decimal ProductOrderPriceActual = ProductOrderLineCost / orderLine.GetQtyEntered();
 
                                 amt = 0;
-                                if (isCostAdjustableOnLost && sLine.GetMovementQty() < orderLine.GetQtyOrdered() && order.GetDocStatus() != "VO")
+                                if (isCostAdjustableOnLost && sLine.GetMovementQty() < orderLine.GetQtyOrdered() && Ord_DocStatus != "VO")
                                 {
                                     // Cost Adjustment case
                                     if (sLine.GetMovementQty() < 0)
@@ -3581,15 +3668,15 @@ namespace VAdvantage.Model
                                     else
                                         amt = Decimal.Negate(ProductOrderLineCost);
                                 }
-                                else if (!isCostAdjustableOnLost && sLine.GetMovementQty() < orderLine.GetQtyOrdered() && order.GetDocStatus() != "VO")
+                                else if (!isCostAdjustableOnLost && sLine.GetMovementQty() < orderLine.GetQtyOrdered() && Ord_DocStatus != "VO")
                                 {
                                     amt = Decimal.Multiply(Decimal.Divide(ProductOrderLineCost, orderLine.GetQtyOrdered()), Decimal.Negate(sLine.GetMovementQty()));
                                 }
-                                else if (order.GetDocStatus() != "VO")
+                                else if (Ord_DocStatus != "VO")
                                 {
                                     amt = Decimal.Multiply(Decimal.Divide(ProductOrderLineCost, orderLine.GetQtyOrdered()), Decimal.Negate(sLine.GetMovementQty()));
                                 }
-                                else if (order.GetDocStatus() == "VO")
+                                else if (Ord_DocStatus == "VO")
                                 {
                                     amt = Decimal.Multiply(ProductOrderPriceActual, Decimal.Negate(sLine.GetQtyEntered()));
                                 }
@@ -3657,10 +3744,10 @@ namespace VAdvantage.Model
                             {
                                 if (i > 0)
                                     Info.Append(" - ");
-                                int deliveryCount = i + 1;
-                                if (product.IsOneAssetPerUOM())
-                                    deliveryCount = 0;
-                                MAsset asset = new MAsset(this, sLine, deliveryCount);
+                                //int deliveryCount = i + 1;
+                                //if (product.IsOneAssetPerUOM())
+                                //    deliveryCount = 0;
+                                MAsset asset = new MAsset(this, sLine, 0);
                                 if (!asset.Save(Get_TrxName()))
                                 {
                                     _processMsg = "Could not create Asset";
@@ -3803,7 +3890,7 @@ namespace VAdvantage.Model
                     try
                     {
                         string PaymentBaseType = "";
-                        if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE IsActive = 'Y' AND PREFIX IN ('VA009_' , 'VA026_' ) ")) >= 2)
+                        if (countVA026)
                         {
                             MOrderLine ordLine = new MOrderLine(GetCtx(), sLine.GetC_OrderLine_ID(), Get_TrxName());
                             MOrder ord = new MOrder(GetCtx(), ordLine.GetC_Order_ID(), Get_TrxName());
@@ -3899,29 +3986,36 @@ namespace VAdvantage.Model
             #endregion
 
             // By Amit For Foreign cost
-            try
-            {
-                if (!IsSOTrx() && !IsReturnTrx()) // for MR against PO
-                {
-                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM M_InoutLine WHERE IsFutureCostCalculated = 'N' AND M_InOut_ID = " + GetM_InOut_ID(), null, Get_Trx())) <= 0)
-                    {
-                        int no = Util.GetValueOfInt(DB.ExecuteQuery("UPDATE M_Inout Set IsFutureCostCalculated = 'Y' WHERE M_Inout_ID = " + GetM_InOut_ID(), null, Get_Trx()));
-                    }
-                }
-            }
-            catch (Exception) { }
+            //try
+            //{
+            //    if (!IsSOTrx() && !IsReturnTrx()) // for MR against PO
+            //    {
+            //        if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(M_InoutLine_ID) FROM M_InoutLine WHERE IsFutureCostCalculated = 'N' AND M_InOut_ID = " + GetM_InOut_ID(), null, Get_Trx())) <= 0)
+            //        {
+            //            int no = Util.GetValueOfInt(DB.ExecuteQuery("UPDATE M_Inout Set IsFutureCostCalculated = 'Y' WHERE M_Inout_ID = " + GetM_InOut_ID(), null, Get_Trx()));
+            //        }
+            //    }
+            //}
+            //catch (Exception) { }
             //end
 
             //	Counter Documents
             try
             {
+                //if counter document not created due to some error not to completed the record
+                //and it should return the error message to the user
                 MInOut counter = CreateCounterDoc();
                 if (counter != null)
+                {
                     Info.Append(" - @CounterDoc@: @M_InOut_ID@=").Append(counter.GetDocumentNo());
+                }
             }
             catch (Exception e)
             {
-                Info.Append(" - @CounterDoc@: ").Append(e.Message.ToString());
+                //if get exception while creating counter document then return the message to the user
+                //Info.Append(" - @CounterDoc@: ").Append(e.Message.ToString());
+                _processMsg = e.Message.ToString();
+                return DocActionVariables.STATUS_INPROGRESS;
             }
 
             //	User Validation
@@ -3983,17 +4077,33 @@ namespace VAdvantage.Model
                         MOrder ref_order = new MOrder(GetCtx(), order.GetRef_Order_ID(), Get_Trx());
                         MInOut ret_Shipment = CreateShipment(ref_order, this, GetMovementDate(),
                                     true, false, GetM_Warehouse_ID(), GetMovementDate(), Get_Trx());
+
+                        // VIS0060: Commit the Transaction here to call workflow to complete Shipment.
+                        Get_Trx().Commit();
                         // Show respective message if shipment completed or not completed
                         // Done by Rakesh Kumar On 29/Apr/2021 suggested by Mandeep and Bharat
-                        if (ret_Shipment.CompleteIt() == "CO")
-                        {
-                            ret_Shipment.SetDocStatus(DOCACTION_Complete);
-                            _processMsg = Msg.GetMsg(GetCtx(), "VIS_ShipmentGenerated") + ": " + ret_Shipment.GetDocumentNo();
-                        }
-                        else
+
+                        // VIS0060: Work done to call workflow to complete Shipment.
+                        string result = DocumentEngine.CompleteOrReverse(GetCtx(), MInOut.Table_Name, MInOut.Table_ID, ret_Shipment.GetM_InOut_ID(), 109, DOCACTION_Complete);
+                        if (!String.IsNullOrEmpty(result))
                         {
                             _processMsg = Msg.GetMsg(GetCtx(), "VIS_ShipmentNotCompleted") + ": " + ret_Shipment.GetProcessMsg() + " - @DocumentNo@: " + ret_Shipment.GetDocumentNo();
                         }
+                        else
+                        {
+                            _processMsg = Msg.GetMsg(GetCtx(), "VIS_ShipmentGenerated") + ": " + ret_Shipment.GetDocumentNo();
+                        }
+
+                        //if (ret_Shipment.CompleteIt() == "CO")
+                        //{
+                        //    ret_Shipment.SetDocStatus(DOCACTION_Complete);
+                        //    _processMsg = Msg.GetMsg(GetCtx(), "VIS_ShipmentGenerated") + ": " + ret_Shipment.GetDocumentNo();
+                        //}
+                        //else
+                        //{
+                        //    _processMsg = Msg.GetMsg(GetCtx(), "VIS_ShipmentNotCompleted") + ": " + ret_Shipment.GetProcessMsg() + " - @DocumentNo@: " + ret_Shipment.GetDocumentNo();
+                        //}
+
                         // Set References
                         ret_Shipment.SetRef_ShipMR_ID(GetM_InOut_ID());
                         ret_Shipment.Save(Get_Trx());
@@ -4009,6 +4119,10 @@ namespace VAdvantage.Model
             // Handled Drop shipment issues
             SetDateReceived(GetMovementDate());
             SetPickDate(DateTime.Now);
+
+            // Set the document number from completede document sequence after completed (if needed)
+            SetCompletedDocumentNo();
+
             SetProcessed(true);
             SetDocAction(DOCACTION_Close);
             return DocActionVariables.STATUS_COMPLETED;
@@ -4018,6 +4132,37 @@ namespace VAdvantage.Model
         /// Set the document number from Completed Doxument Sequence after completed
         /// </summary>
         protected void SetCompletedDocumentNo()
+        {
+            // if Reversal document then no need to get Document no from Completed sequence
+            if (IsReversal())
+            {
+                return;
+            }
+
+            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+
+            // if Overwrite Sequence on Complete checkbox is true.
+            if (dt.IsOverwriteSeqOnComplete())
+            {
+                // Set Drafted Document No into Temp Document No.
+                if (Get_ColumnIndex("TempDocumentNo") > 0)
+                {
+                    SetTempDocumentNo(GetDocumentNo());
+                }
+
+                // Get current next from Completed document sequence defined on Document type
+                String value = MSequence.GetDocumentNo(GetC_DocType_ID(), Get_TrxName(), GetCtx(), true, this);
+                if (value != null)
+                {
+                    SetDocumentNo(value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Overwrite the document date based on setting on Document Type
+        /// </summary>
+        private void SetCompletedDocumentDate()
         {
             // if Reversal document then no need to get Document no from Completed sequence
             if (IsReversal())
@@ -4040,23 +4185,6 @@ namespace VAdvantage.Model
                     {
                         throw new Exception("@PeriodClosed@");
                     }
-                }
-            }
-
-            // if Overwrite Sequence on Complete checkbox is true.
-            if (dt.IsOverwriteSeqOnComplete())
-            {
-                // Set Drafted Document No into Temp Document No.
-                if (Get_ColumnIndex("TempDocumentNo") > 0)
-                {
-                    SetTempDocumentNo(GetDocumentNo());
-                }
-
-                // Get current next from Completed document sequence defined on Document type
-                String value = MSequence.GetDocumentNo(GetC_DocType_ID(), Get_TrxName(), GetCtx(), true, this);
-                if (value != null)
-                {
-                    SetDocumentNo(value);
                 }
             }
         }
@@ -4160,12 +4288,13 @@ namespace VAdvantage.Model
                                  Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_InventoryLine_ID"]) > 0)
                             {
                                 inventoryLine = new MInventoryLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_InventoryLine_ID"]), Get_TrxName());
-                                inventory = new MInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetM_Inventory_ID()), null);
+                                inventory = new MInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetM_Inventory_ID()), Get_TrxName());
                                 if (!inventory.IsInternalUse())
                                 {
                                     #region update Physical Inventory
                                     if (inventoryLine.GetM_ProductContainer_ID() == sLine.GetM_ProductContainer_ID())
                                     {
+                                        inventoryLine.SetParent(inventory);
                                         inventoryLine.SetQtyBook(containerCurrentQty);
                                         inventoryLine.SetOpeningStock(containerCurrentQty);
                                         inventoryLine.SetDifferenceQty(Decimal.Subtract(containerCurrentQty, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["ContainerCurrentQty"])));
@@ -4378,10 +4507,10 @@ namespace VAdvantage.Model
                                  Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_InventoryLine_ID"]) > 0)
                             {
                                 inventoryLine = new MInventoryLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_InventoryLine_ID"]), Get_TrxName());
-                                inventory = new MInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetM_Inventory_ID()), null);
+                                inventory = new MInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetM_Inventory_ID()), Get_TrxName());
                                 if (!inventory.IsInternalUse())
                                 {
-                                    //break;
+                                    inventoryLine.SetParent(inventory);
                                     inventoryLine.SetQtyBook(Qty);
                                     inventoryLine.SetOpeningStock(Qty);
                                     inventoryLine.SetDifferenceQty(Decimal.Subtract(Qty, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["currentqty"])));
@@ -4666,7 +4795,7 @@ namespace VAdvantage.Model
 
             // check is any record available of physical Inventory after date Movement -
             // if available - then not to create Attribute Record - neither to take impacts on Container Storage
-            if (isContainrApplicable && Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM M_ContainerStorage WHERE IsPhysicalInventory = 'Y'
+            if (isContainrApplicable && Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(M_Product_ID) FROM M_ContainerStorage WHERE IsPhysicalInventory = 'Y'
                  AND MMPolicyDate > " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
                       @" AND M_Product_ID = " + line.GetM_Product_ID() +
                       @" AND NVL(M_AttributeSetInstance_ID , 0) = " + line.GetM_AttributeSetInstance_ID() +
@@ -4990,11 +5119,12 @@ namespace VAdvantage.Model
         {
             // Is Used to get Material Policy
             MProductCategory pc = MProductCategory.Get(GetCtx(), product.GetM_Product_Category_ID());
+            string MMPolicy = pc.GetMMPolicy();
 
             // Is Used to get all Negative records from Contaner Storage
             X_M_ContainerStorage[] storages = MProductContainer.GetContainerStorageNegative(GetCtx(), GetM_Warehouse_ID(), line.GetM_Locator_ID(),
                                               line.GetM_ProductContainer_ID(), line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(),
-                    null, MClient.MMPOLICY_FiFo.Equals(pc.GetMMPolicy()), Get_Trx());
+                    null, MClient.MMPOLICY_FiFo.Equals(MMPolicy), Get_Trx());
 
             DateTime? dateMPolicy = null;
 
@@ -5034,40 +5164,76 @@ namespace VAdvantage.Model
         {
             //	Is this a counter doc ?
             if (GetRef_InOut_ID() != 0)
+            {
                 return null;
-
-            //	Org Must be linked to BPartner
-            MOrg org = MOrg.Get(GetCtx(), GetAD_Org_ID());
-            //jz int counterC_BPartner_ID = org.getLinkedC_BPartner_ID(get_TrxName()); 
-            int counterC_BPartner_ID = org.GetLinkedC_BPartner_ID(Get_TrxName());
-            if (counterC_BPartner_ID == 0)
-                return null;
-            //	Business Partner needs to be linked to Org
-            //jz MBPartner bp = new MBPartner (getCtx(), getC_BPartner_ID(), null);
-            MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_TrxName());
-            int counterAD_Org_ID = bp.GetAD_OrgBP_ID_Int();
-            if (counterAD_Org_ID == 0)
-                return null;
-
-            //jz MBPartner counterBP = new MBPartner (getCtx(), counterC_BPartner_ID, null);
-            MBPartner counterBP = new MBPartner(GetCtx(), counterC_BPartner_ID, Get_TrxName());
-            MOrgInfo counterOrgInfo = MOrgInfo.Get(GetCtx(), counterAD_Org_ID, null);
-            log.Info("Counter BP=" + counterBP.GetName());
+            }
 
             //	Document Type
+            //check weather Counter Document created & Acitve or not 
             int C_DocTypeTarget_ID = 0;
             bool isReturnTrx = false;
             MDocTypeCounter counterDT = MDocTypeCounter.GetCounterDocType(GetCtx(), GetC_DocType_ID());
             if (counterDT != null)
             {
                 log.Fine(counterDT.ToString());
+                //if Created Inter Company Document is not Valid the does not allow user to complete the record
+                //it should return message to user the Counter Document is not Valid
                 if (!counterDT.IsCreateCounter() || !counterDT.IsValid())
+                {
+                    //erro save into the log
+                    log.Info("Counter Document Type is not Valid one!");
                     return null;
+                }
                 C_DocTypeTarget_ID = counterDT.GetCounter_C_DocType_ID();
                 isReturnTrx = counterDT.GetCounterDocType().IsReturnTrx();
+                //if Counter document type not found then return message to the user
+                if (C_DocTypeTarget_ID <= 0)
+                {
+                    //Info save into the log
+                    log.Info("Counter Document Type not found on Inter Company Document window.");
+                    return null;
+                }
             }
-            if (C_DocTypeTarget_ID <= 0)
+            else
+            {
                 return null;
+            }
+
+
+            //	Org Must be linked to BPartner
+            MOrg org = MOrg.Get(GetCtx(), GetAD_Org_ID());
+            //jz int counterC_BPartner_ID = org.getLinkedC_BPartner_ID(get_TrxName()); 
+            int counterC_BPartner_ID = org.GetLinkedC_BPartner_ID(Get_TrxName());
+            //if counter BP not found the return the message Counter Bp not found for Linked Org
+            if (counterC_BPartner_ID == 0)
+            {
+                //Info save into the log
+                log.Info("Business Partner is not found on Customer/Vendor master window to create the Counter Document.");
+                return null;
+            }
+            //	Business Partner needs to be linked to Org
+            //jz MBPartner bp = new MBPartner (getCtx(), getC_BPartner_ID(), null);
+            MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_TrxName());
+            int counterAD_Org_ID = bp.GetAD_OrgBP_ID_Int();
+            //if Org is not link the for BP then save info into the log, not found Link Org with the BP
+            if (counterAD_Org_ID == 0)
+            {
+                //if Link Org not found then save the info into the log
+                log.Info("Linked Organization is not found on Customer/Vendor master window to create the Counter Document.");
+                return null;
+            }
+
+            //System should not allow to create counter document with same BP and organization.
+            if (counterAD_Org_ID == GetAD_Org_ID() || counterC_BPartner_ID == GetC_BPartner_ID())
+            {
+                log.Info("On Counter Document Organization or Business Partner should not allow the same with the Document.");
+                return null;
+            }
+
+            //jz MBPartner counterBP = new MBPartner (getCtx(), counterC_BPartner_ID, null);
+            MBPartner counterBP = new MBPartner(GetCtx(), counterC_BPartner_ID, Get_TrxName());
+            MOrgInfo counterOrgInfo = MOrgInfo.Get(GetCtx(), counterAD_Org_ID, null);
+            log.Info("Counter BP=" + counterBP.GetName());
 
             // ReversalDoc_ID --> contain reference of Orignal Document which is to be reversed
             // Ref_InOut_ID --> contain reference of counter document which is to be created against this document

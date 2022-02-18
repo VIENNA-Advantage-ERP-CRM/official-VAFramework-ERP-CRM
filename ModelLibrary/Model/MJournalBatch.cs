@@ -27,6 +27,9 @@ namespace VAdvantage.Model
 {
     public class MJournalBatch : X_GL_JournalBatch, DocAction
     {
+        // Logger	
+        private static VLogger _log = VLogger.GetVLogger(typeof(MJournalBatch).FullName);
+
         /// <summary>
         ///	Create new Journal Batch by copying
         /// </summary>
@@ -58,6 +61,18 @@ namespace VAdvantage.Model
             //
             if (!to.Save())
             {
+                String error = "";
+                ValueNamePair pp = VLogger.RetrieveError();
+                if (pp != null)
+                {
+                    error = pp.GetName();
+                    if (String.IsNullOrEmpty(error))
+                    {
+                        error = pp.GetValue();
+                    }
+                    _log.Log(Level.SEVERE, String.IsNullOrEmpty(error) ? "Could not create Journal Batch" : Msg.GetMsg(to.GetCtx(), error));
+                }
+                to.SetProcessMsg(String.IsNullOrEmpty(error) ? "Could not create Journal Batch" : Msg.GetMsg(to.GetCtx(), error));
                 throw new Exception("Could not create Journal Batch");
             }
 
@@ -176,6 +191,11 @@ namespace VAdvantage.Model
             }
             catch (Exception ex)
             {
+                if (idr != null)
+                {
+                    idr.Close();
+                    idr = null;
+                }
                 log.Log(Level.SEVERE, sql, ex);
             }
             //
@@ -218,7 +238,22 @@ namespace VAdvantage.Model
                 toJournal.SetIsPrinted(false);
                 toJournal.SetPosted(false);
                 toJournal.SetProcessed(false);
-                if (toJournal.Save())
+                if (!toJournal.Save())
+                {
+                    String error = "";
+                    ValueNamePair pp = VLogger.RetrieveError();
+                    if (pp != null)
+                    {
+                        error = pp.GetName();
+                        if (String.IsNullOrEmpty(error))
+                        {
+                            error = pp.GetValue();
+                        }
+                        _log.Log(Level.SEVERE, String.IsNullOrEmpty(error) ? "Could not create Batch Journal" : Msg.GetMsg(toJournal.GetCtx(), error));
+                    }
+                    SetProcessMsg(String.IsNullOrEmpty(error) ? "Could not create Batch Journal" : Msg.GetMsg(toJournal.GetCtx(), error));
+                }
+                else
                 {
                     count++;
                     lineCount += toJournal.CopyLinesFrom(fromJournals[i], GetDateAcct(), 'x');
@@ -533,9 +568,6 @@ namespace VAdvantage.Model
                 }
             }
 
-            // JID_1290: Set the document number from completed document sequence after completed (if needed)
-            SetCompletedDocumentNo();
-
             //	Implicit Approval
             ApproveIt();
 
@@ -590,6 +622,10 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
             }
             //
+
+            // JID_1290: Set the document number from completed document sequence after completed (if needed)
+            SetCompletedDocumentNo();
+
             SetProcessed(true);
             SetDocAction(DOCACTION_Close);
             return DocActionVariables.STATUS_COMPLETED;
@@ -757,7 +793,7 @@ namespace VAdvantage.Model
             else
             {
                 description += " ** " + GetDocumentNo() + " **";
-                reverse.SetDescription(description);                
+                reverse.SetDescription(description);
             }
             if (!reverse.Save())
             {
@@ -784,7 +820,7 @@ namespace VAdvantage.Model
                 }
                 if (journal.ReverseCorrectIt(reverse.GetGL_JournalBatch_ID()) == null)
                 {
-                    m_processMsg = "Could not reverse " + journal;                    
+                    m_processMsg = "Could not reverse " + journal;
                     return false;
                 }
                 journal.Save();
@@ -1019,7 +1055,7 @@ namespace VAdvantage.Model
 
         public void SetProcessMsg(string processMsg)
         {
-
+            m_processMsg = processMsg;
         }
 
 

@@ -95,7 +95,7 @@ namespace VAdvantage.DataBase
         }
 
         /** Database Type       */
-        private String m_type = DatabaseType.DB_ORACLE;
+        private String m_type =    DatabaseType.DB_ORACLE;
 
         public String Db_Type
         {
@@ -134,6 +134,9 @@ namespace VAdvantage.DataBase
             get { return m_db_searchPath; }
             set { m_db_searchPath = value; }
         }
+
+        //initialize connection string and other properties*/
+        
 
         /// <summary>
         /// Is Oracle
@@ -290,7 +293,10 @@ namespace VAdvantage.DataBase
                     index = attributes.IndexOf("Password=", StringComparison.OrdinalIgnoreCase);
                     Db_pwd = Substring(attributes, index + 9, attributes.IndexOf(";", index));
                     index = attributes.IndexOf("SearchPath=", StringComparison.OrdinalIgnoreCase);
-                    Db_searchPath = Substring(attributes, index + 11, attributes.IndexOf(";", index));
+                    if (index > 0)
+                    {
+                        Db_searchPath = Substring(attributes, index + 11, attributes.IndexOf(";", index));
+                    }
                     Db_name = attributes.Substring(attributes.IndexOf("Database=", StringComparison.OrdinalIgnoreCase) + 9);
                 }
             }
@@ -354,6 +360,7 @@ namespace VAdvantage.DataBase
                 //else	//	existing environment properties
                 //{
                 s_cc = new VConnection();
+
                 //s_cc.SetAttributes(attributes);
                 //}
                 //log.Fine(s_cc.ToString());

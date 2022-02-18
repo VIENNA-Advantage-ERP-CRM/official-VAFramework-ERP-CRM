@@ -18,27 +18,28 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Process
 {
-    public class GenerateGroupSubGroup: SvrProcess
+    public class GenerateGroupSubGroup : SvrProcess
     {
         private int _C_FinRecordConfig_ID = 0;
         protected override void Prepare()
         {
             _C_FinRecordConfig_ID = GetRecord_ID();
-           
+
         }
 
         protected override String DoIt()
         {
             DataTable dt = null;
             IDataReader idr = null;
+            IDataReader Idr1 = null;
             try
             {
                 MFinRptConfig Report = new MFinRptConfig(GetCtx(), _C_FinRecordConfig_ID, Get_TrxName());
                 Report.GetC_AccountGroupBatch_ID();
                 Report.GetC_ReportType();
 
-                StringBuilder sql =new StringBuilder();
-                sql.Append( "Select * from c_accountgroup where c_accountgroupbatch_id=" + Report.GetC_AccountGroupBatch_ID());
+                StringBuilder sql = new StringBuilder();
+                sql.Append("Select * from c_accountgroup where c_accountgroupbatch_id=" + Report.GetC_AccountGroupBatch_ID());
 
                 if (Report.GetC_ReportType() == "B")
                 {
@@ -58,7 +59,7 @@ namespace VAdvantage.Process
                 }
 
                 dt = new DataTable();
-                idr = DB.ExecuteReader(sql.ToString(), null,null);
+                idr = DB.ExecuteReader(sql.ToString(), null, null);
                 dt.Load(idr);
                 idr.Close();
                 if (dt.Rows.Count > 0)
@@ -93,8 +94,9 @@ namespace VAdvantage.Process
                                 ;
                             }
                             DataTable DT1 = new DataTable();
-                            IDataReader Idr1 = DB.ExecuteReader(query.ToString());
+                            Idr1 = DB.ExecuteReader(query.ToString());
                             DT1.Load(Idr1);
+                            Idr1.Close();
                             foreach (DataRow dr1 in DT1.Rows)
                             {
                                 MFinRptAcctSubGroup AcctSubGroup = new MFinRptAcctSubGroup(GetCtx(), 0, null);
@@ -125,6 +127,10 @@ namespace VAdvantage.Process
                 {
                     idr.Close();
                 }
+                if (Idr1 != null)
+                {
+                    Idr1.Close();
+                }
                 return e.Message;
             }
             finally
@@ -133,6 +139,10 @@ namespace VAdvantage.Process
                 if (idr != null)
                 {
                     idr.Close();
+                }
+                if (Idr1 != null)
+                {
+                    Idr1.Close();
                 }
             }
             return "";

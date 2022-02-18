@@ -130,8 +130,9 @@ namespace VIS.Models
 
             /************************************/
             _bpGroup = FillBPGroup();
-            _bpRelation = FillBPRelation();
-            _bpLocation = FillBPLocation(0, ctx);
+            // VIS0060
+            //_bpRelation = FillBPRelation();
+            //_bpLocation = FillBPLocation(0, ctx);
             /************************************/
             ro = _readOnly;
             if (!ro)
@@ -560,8 +561,13 @@ namespace VIS.Models
             }
             else
             {
+                ValueNamePair pp = VLogger.RetrieveError();
+                if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
+                {
+                    strError.Append("BPSaveError -- " + pp.GetName());
+                }
                 // Classes.ShowMessage.Error("SearchKeyExist", null);
-                strError.Append("SearchKeyExist");
+                //strError.Append("SearchKeyExist");
                 //this.Cursor = Cursors.Arrow;
                 return strError.ToString();
             }

@@ -99,7 +99,12 @@ namespace VAdvantage.Model
             {
                 SetC_DocType_ID(Util.GetValueOfInt(dt.Get_Value("C_DocTypeConfrimation_ID")));
             }
-            ////////
+
+            // VIS0060: Set Trx Org from Movement to Confirmation
+            if (move.GetAD_OrgTrx_ID() > 0)
+            {
+                Set_Value("AD_OrgTrx_ID", move.GetAD_OrgTrx_ID());
+            }
         }
 
         /// <summary>
@@ -772,7 +777,7 @@ namespace VAdvantage.Model
             int result = 0;
             decimal currentQty = 0;
             MMovementLine mLine = confirm.GetLine();
-
+            mLine.SetParent(move);
             //Added By amit 11-jun-2015 
             //Opening Stock , Qunatity Book => CurrentQty From Transaction of MovementDate
             //As On Date Count = Opening Stock - Diff Qty
@@ -847,6 +852,7 @@ namespace VAdvantage.Model
                     }
                     log.Info("CreateMaterialMoveDoc - Scrapped=" + confirm.GetScrappedQty());
                     MMovementLine mmLine = new MMovementLine(GetCtx(), 0, Get_Trx());
+                    mmLine.SetParent(momementDiffrence);
                     mmLine.SetM_Movement_ID(momementDiffrence.GetM_Movement_ID());
                     mmLine.SetAD_Client_ID(mLine.GetAD_Client_ID());
                     mmLine.SetAD_Org_ID(mLine.GetAD_Org_ID());
@@ -987,6 +993,7 @@ namespace VAdvantage.Model
                     }
                     log.Info("CreateMaterialMoveDoc - Scrapped=" + confirm.GetScrappedQty());
                     MMovementLine mmLine = new MMovementLine(GetCtx(), 0, Get_Trx());
+                    mmLine.SetParent(movementScrap);
                     mmLine.SetM_Movement_ID(movementScrap.GetM_Movement_ID());
                     mmLine.SetAD_Client_ID(mLine.GetAD_Client_ID());
                     mmLine.SetAD_Org_ID(mLine.GetAD_Org_ID());

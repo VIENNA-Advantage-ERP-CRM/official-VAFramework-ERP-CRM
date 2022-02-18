@@ -292,6 +292,13 @@ namespace VAdvantage.Model
             //	Null Tax
             if (IsZeroTax())
                 return Env.ZERO;
+
+            // VIS0060: Work done to Round off Tax Amount based on setting taken on Tenant.
+            MClient client = MClient.Get(GetCtx());
+            if (client.Get_ColumnIndex("IsRoundLineTaxAmt") >= 0 && !client.IsRoundLineTaxAmt())
+            {
+                scale = 7;      //SET 7 By VIS0228 As discussed with Mukesh Sir
+            }
             Decimal multiplier = Decimal.Round(Decimal.Divide(GetRate(), ONEHUNDRED), 12, MidpointRounding.AwayFromZero);
             //BigDecimal multiplier = getRate().divide(ONEHUNDRED, 12, BigDecimal.ROUND_HALF_UP);		
             Decimal? tax = null;

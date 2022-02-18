@@ -23,7 +23,7 @@ namespace VIS
                                new { controller = "Home", action = "Index", id = UrlParameter.Optional }
                                , new[] { "VIS.Controllers" }
                                );
-
+            
             StyleBundle style = new StyleBundle("~/Areas/VIS/Content/VISstyle");
             //StyleBundle styleRTL = new StyleBundle("~/Areas/VIS/Content/VISstyleRTL");
 
@@ -36,7 +36,7 @@ namespace VIS
 
 
             modScript.Include(
-                 "~/Areas/VIS/Scripts/app/native-extension.js",
+                  "~/Areas/VIS/Scripts/app/native-extension.js",
                 "~/Areas/VIS/Scripts/app/utility.js",
                 "~/Areas/VIS/Scripts/app/logger.js",
                 "~/Areas/VIS/Scripts/app/controls.js",
@@ -95,6 +95,7 @@ namespace VIS
                 "~/Areas/VIS/Scripts/app/forms/form.js",
                 "~/Areas/VIS/Scripts/app/forms/vcreatefrom.js",
                 "~/Areas/VIS/Scripts/app/forms/vcreatefrominvoice.js",
+                "~/Areas/VIS/Scripts/app/forms/vcreateformprovisionalinvoice.js",
                 "~/Areas/VIS/Scripts/app/forms/vcreatefromshipment.js",
                 "~/Areas/VIS/Scripts/app/forms/vcreatefromstatement.js",
                 "~/Areas/VIS/Scripts/app/forms/generatexmodel.js",
@@ -157,10 +158,13 @@ namespace VIS
                  "~/Areas/VIS/Scripts/app/forms/glDimensionValue.js",
                  "~/Areas/VIS/Scripts/app/forms/vcreaterelatedlines.js",
                  "~/Areas/VIS/Scripts/app/forms/createforecast.js",
+                   "~/Areas/VIS/Scripts/app/ssemanager.js",
 
 
                    "~/Areas/VIS/Scripts/tabpanels/verinfo.js",
-                  "~/Areas/VIS/Scripts/TestPanel.js");
+                    "~/Areas/VIS/Scripts/tabpanels/HistoryDetailsTabPanel.js",
+                  "~/Areas/VIS/Scripts/TestPanel.js",
+                 "~/Areas/VIS/Scripts/app/forms/form.js");
 
 
             modScript.Include(
@@ -205,7 +209,8 @@ namespace VIS
                 "~/Areas/VIS/Content/GroupStyle.css",
                  "~/Areas/VIS/Content/ProductContainer.css",
                 "~/Areas/VIS/Content/GlJournalDimension.css",
-                "~/Areas/VIS/Content/BudgetControl.css"
+                "~/Areas/VIS/Content/BudgetControl.css",
+                "~/Areas/VIS/Content/HistoryTabPanel.css"
                );
 
             style.Include("~/Areas/VIS/Content/F20/Color.css",

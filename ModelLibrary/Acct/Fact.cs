@@ -109,9 +109,14 @@ namespace VAdvantage.Acct
                 return null;
             }
 
-            //Added By Bharat to Handle -ve entry
-
-            if (debitAmt < 0)
+            // when on same GL Line, Cr / Dr amount passed, then on reversal record posting overwrite credit amount with ZERO
+            if (debitAmt < 0 && creditAmt < 0)
+            {
+                decimal dAmt = debitAmt.Value;
+                debitAmt = Decimal.Negate(creditAmt.Value);
+                creditAmt = Decimal.Negate(dAmt);
+            }
+            else if (debitAmt < 0)
             {
                 creditAmt = Decimal.Negate(debitAmt.Value);
                 debitAmt = 0;
@@ -125,7 +130,7 @@ namespace VAdvantage.Acct
             //
             FactLine line = new FactLine(_doc.GetCtx(), _doc.Get_Table_ID(),
                 _doc.Get_ID(),
-                docLine == null ? 0 : (docLine.GetPrimaryKeyValue != 0 ? docLine.GetPrimaryKeyValue : docLine.Get_ID()), _trx);
+                docLine == null ? 0 : (docLine.GetPrimaryKeyValue != 0 ? docLine.GetPrimaryKeyValue : docLine.Get_ID()), _doc.GetAD_Window_ID(), _trx);
             // set accounting schema reference 
             line.SetC_AcctSchema_ID(_acctSchema.GetC_AcctSchema_ID());
             //  Set Info & Account
@@ -211,7 +216,7 @@ namespace VAdvantage.Acct
             Add(line);
             return line;
         }
-
+       
         /// <summary>
         ///  Add Fact Line
         /// </summary>

@@ -93,8 +93,8 @@
             "C_Period_ID",
             "C_DocType_ID",
             "M_Product_Category_ID",
-            "C_Forecast_ID",
-            "C_MasterForecast_ID",
+            "TeamForecast",
+            "MasterForecast",
             "M_PriceList_ID"
         ];
 
@@ -302,6 +302,9 @@
             divPeriodCtrl.append(_PeriodBtnWrap);
             _PeriodBtnWrap.append(_PeriodCtrl.getBtn(0));
             _PeriodBtnWrap.append(_PeriodCtrl.getBtn(1));
+            _PeriodCtrl.getControl().prop('disabled', true);
+            _PeriodCtrl.getBtn(0).prop('disabled', true);
+            _PeriodCtrl.getBtn(1).prop('disabled', true);
 
             ////columnName, mandatory, isReadOnly, isUpdateable, text, description, tableEditor
             _IncludeSOCtrl = new VIS.Controls.VCheckBox("IncludeSO", false, false, true, VIS.Msg.getMsg("IncludeSO"), null);
@@ -370,7 +373,7 @@
                 var _TeamForecastCtrlWrap = $('<div class="vis-control-wrap">');
                 var _TeamForecastBtnWrap = $('<div class="input-group-append">');
                 divTeamForecastCtrl.append(_TeamForecastCtrlWrap);
-                _TeamForecastCtrlWrap.append(_TeamForecastCtrl.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' ')).append('<label>' + VIS.translatedTexts.C_Forecast_ID + '</label>');
+                _TeamForecastCtrlWrap.append(_TeamForecastCtrl.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' ')).append('<label>' + VIS.translatedTexts.TeamForecast + '</label>');
                 divTeamForecastCtrl.append(_TeamForecastBtnWrap);
                 _TeamForecastBtnWrap.append(_TeamForecastCtrl.getBtn(0));
                 _TeamForecastBtnWrap.append(_TeamForecastCtrl.getBtn(1));
@@ -383,7 +386,7 @@
                 var _BudgetForecastCtrlWrap = $('<div class="vis-control-wrap">');
                 var _BudgetForecastBtnWrap = $('<div class="input-group-append">');
                 divBudgetForecastCtrl.append(_BudgetForecastCtrlWrap);
-                _BudgetForecastCtrlWrap.append(_BudgetForecastCtrl.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' ')).append('<label>' + VIS.translatedTexts.C_MasterForecast_ID + '</label>');
+                _BudgetForecastCtrlWrap.append(_BudgetForecastCtrl.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' ')).append('<label>' + VIS.translatedTexts.MasterForecast + '</label>');
                 divBudgetForecastCtrl.append(_BudgetForecastBtnWrap);
                 _BudgetForecastBtnWrap.append(_BudgetForecastCtrl.getBtn(0));
                 _BudgetForecastBtnWrap.append(_BudgetForecastCtrl.getBtn(1));
@@ -419,7 +422,7 @@
 
             }
 
-            _BudgetQuantityCtrl = new VIS.Controls.VAmountTextBox("BudgetQuantity", true, false, true, 50, 100, VIS.DisplayType.Quantity);
+            _BudgetQuantityCtrl = new VIS.Controls.VAmountTextBox("BudgetQuantity", false, false, true, 50, 100, VIS.DisplayType.Quantity);
             _BudgetQuantityCtrl.getControl().prop('disabled', true);
             var _BudgetQuantityCtrlWrap = $('<div class="vis-control-wrap">');
             divBudgetQuantityCtrl.append(_BudgetQuantityCtrlWrap);
@@ -444,10 +447,13 @@
             _IncludeSOCtrl.getControl().on("click", function (ev) {
                 // when Include Sales Order True, then make the document type as selectable
                 _DocumentTypeCtrl.getControl().prop('disabled', _IncludeSOCtrl.getValue() ? false : true);
-
+                _PeriodCtrl.getControl().prop('disabled', _IncludeSOCtrl.getValue() ? false : true);
+                _PeriodCtrl.getBtn(0).prop('disabled', _IncludeSOCtrl.getValue() ? false : true);
+                _PeriodCtrl.getBtn(1).prop('disabled', _IncludeSOCtrl.getValue() ? false : true);
                 // when document type contain values, but user mark Include SO false after selection, then make it as null
                 if (!_IncludeSOCtrl.getValue()) {
                     _DocumentTypeCtrl.setValue();
+                    _PeriodCtrl.setValue();
                 }
 
                 // Disable Product Category, if include open SO selected as true and vice versa

@@ -88,6 +88,17 @@ namespace ViennaAdvantage.Process
             int count = Util.GetValueOfInt(DB.ExecuteScalar(" SELECT Count(M_Inout_ID) FROM M_Inout WHERE ISSOTRX='Y' AND M_Inout_ID=" + GetRecord_ID()));
             MInOut ship = null;
             bool isAllownonItem = Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("Y");
+
+            // check if reference found on Provisional Invoice, then not to create Invoice
+            if (_M_InOut_ID > 0 && Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(iol.M_InOut_ID)
+                                      FROM C_ProvisionalInvoiceLine pil
+                                      INNER JOIN C_ProvisionalInvoice  pi ON (pi.C_ProvisionalInvoice_ID = pil.C_ProvisionalInvoice_ID)
+                                      LEFT JOIN M_InOutLine iol ON (iol.M_InOutLine_ID = pil.M_InOutLine_ID)
+                                      WHERE pi.DocStatus NOT IN ( 'RE', 'VO' ) AND iol.M_InOut_ID = " + _M_InOut_ID, null, Get_Trx())) > 0)
+            {
+                throw new ArgumentException(Msg.GetMsg(GetCtx() , "VIS_ProvisionalInvoiceCreated"));
+            }
+
             if (count > 0)
             {
                 if (_M_InOut_ID == 0)
@@ -278,6 +289,30 @@ namespace ViennaAdvantage.Process
             {
                 invoice.SetPaymentMethod(invoice.GetPaymentRule());
             }
+            if (invoice.GetC_ConversionType_ID() == 0)
+            {
+                //1052-- setcurrency type in case order reference is not present
+                int currencyType = 0;
+                currencyType= Util.GetValueOfInt(GetCtx().GetContext("#C_ConversionType_ID"));
+                if (currencyType > 0)
+                {
+                    invoice.SetC_ConversionType_ID(currencyType);
+                }
+                else
+                {
+                    currencyType = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_ConversionType_ID FROM C_ConversionType WHERE IsActive='Y'AND AD_Org_ID IN(" + ship.GetAD_Org_ID() + ",0) AND ISDefault = 'Y' AND AD_Client_ID= "+GetAD_Client_ID()+" ORDER BY C_ConversionType_ID Desc"));
+                    if (currencyType > 0)
+                    {
+                        invoice.SetC_ConversionType_ID(currencyType);
+                    }
+                    else
+                    {
+                        throw new ArgumentException(Msg.GetMsg(GetCtx(),"DefaultCurrencyTypeNotFound"));
+                    }
+                }
+            }
+            invoice.SetConditionalFlag(MInvoice.CONDITIONALFLAG_PrepareIt);
+
             if (!invoice.Save())
             {
                 //SI_0708 - message was not upto the mark
@@ -440,6 +475,9 @@ namespace ViennaAdvantage.Process
                     line.SetQtyEntered(sLine.GetQtyEntered());
                     line.SetQtyInvoiced(sLine.GetMovementQty());
                     line.Set_ValueNoCheck("IsDropShip", sLine.Get_Value("IsDropShip")); //Arpit Rai 20-Sept-2017              
+                    //190 - Set Print Description
+                    if (line.Get_ColumnIndex("PrintDescription") >= 0)
+                        line.Set_ValueNoCheck("PrintDescription", sLine.Get_Value("PrintDescription"));
 
                     // Change By Mohit Amortization process -------------
                     if (_CountVA038 > 0)
@@ -557,7 +595,7 @@ namespace ViennaAdvantage.Process
                     for (int index = 0; index < OrderDS.Tables[0].Rows.Count; index++)
                     {
                         ds = null;
-                        ChargesSql.Clear();
+                        ChargesSql.Clear();                        
                         ChargesSql.Append(" SELECT C_CHARGE_ID,                                             "
                                  + "   C_ORDERLINE_ID,                                                      "
                                  + "   C_ORDER_ID,                                                          "
@@ -568,14 +606,15 @@ namespace ViennaAdvantage.Process
                                  + "   QTYENTERED,                                                          "
                                  + "   C_UOM_ID,                                                            "
                                  + "   C_Tax_ID,                                                            "
-                                 + "   IsDropShip                                                           "
+                                 + "   IsDropShip,                                                          "
+                                 + "   PrintDescription                                                     "
                                  + " FROM C_ORDERLINE                                                       "
                                  + " WHERE C_ORDER_ID IN                                                    "
                                  + "   ( " + Util.GetValueOfInt(OrderDS.Tables[0].Rows[index]["C_ORDER_ID"])
                                  + "   )                                                                    "
                                  + " AND C_CHARGE_ID IS NOT NULL                                            "
                                  + " AND C_CHARGE_ID  > 0                                                   ");
-
+                       
 
                         ds = DB.ExecuteDataset(ChargesSql.ToString(), null, Get_Trx());
 
@@ -648,6 +687,10 @@ namespace ViennaAdvantage.Process
                                     }
                                 }
 
+                                //190 - Get Print description and set
+                                if (line.Get_ColumnIndex("PrintDescription") >= 0)
+                                    line.Set_Value("PrintDescription", Util.GetValueOfString(ds.Tables[0].Rows[i]["PrintDescription"]));
+
                                 if (!line.Save())
                                 {
                                     //SI_0708 - message was not upto the mark
@@ -665,6 +708,12 @@ namespace ViennaAdvantage.Process
 
             if (count > 0)
             {
+                if (!invoice.CalculateTaxTotal())   //	setTotals
+                {
+                    throw new ArgumentException(Msg.GetMsg(GetCtx(), "ErrorCalculateTax") + ": " + invDocumentNo.ToString());
+                }
+                UpdateInvoiceHeader(invoice);
+                DB.ExecuteQuery("UPDATE C_Invoice SET ConditionalFlag = null WHERE C_Invoice_ID = " + invoice.GetC_Invoice_ID(), null, Get_Trx());
                 return invoice.GetDocumentNo();
             }
             else
@@ -672,6 +721,61 @@ namespace ViennaAdvantage.Process
                 //Get_Trx().Rollback();
                 throw new ArgumentException(Msg.GetMsg(GetCtx(), "InvoiceExist") + ": " + invDocumentNo.ToString());
             }
+        }
+
+        /// <summary>
+        /// Update Sub Total and Grand Total on header
+        /// </summary>
+        /// <param name="invoice">Invoice</param>
+        /// <returns>true when success</returns>
+        private bool UpdateInvoiceHeader(MInvoice invoice)
+        {
+            //	Update Invoice Header
+            String sql = "UPDATE C_Invoice i"
+            + " SET TotalLines="
+                + "(SELECT COALESCE(SUM(LineNetAmt),0) FROM C_InvoiceLine il WHERE i.C_Invoice_ID=il.C_Invoice_ID) "
+                + ", AmtDimSubTotal = null "      // reset Amount Dimension if Sub Total Amount is different
+                + ", AmtDimGrandTotal = null "     // reset Amount Dimension if Grand Total Amount is different
+                + (invoice.Get_ColumnIndex("WithholdingAmt") > 0 ? ", WithholdingAmt = ((SELECT COALESCE(SUM(WithholdingAmt),0) FROM C_InvoiceLine il WHERE i.C_Invoice_ID=il.C_Invoice_ID))" : "")
+            + "WHERE C_Invoice_ID=" + invoice.GetC_Invoice_ID();
+            int no = DB.ExecuteQuery(sql, null, Get_TrxName());
+            if (no != 1)
+            {
+                log.Warning("(1) #" + no);
+            }
+
+            if (invoice.IsTaxIncluded())
+                sql = "UPDATE C_Invoice i "
+                    + "SET GrandTotal=TotalLines "
+                    + (invoice.Get_ColumnIndex("WithholdingAmt") > 0 ? " , GrandTotalAfterWithholding = (TotalLines - NVL(WithholdingAmt, 0) - NVL(BackupWithholdingAmount, 0)) " : "")
+                    + "WHERE C_Invoice_ID=" + invoice.GetC_Invoice_ID();
+            else
+                sql = "UPDATE C_Invoice i "
+                    + "SET GrandTotal=TotalLines+"
+                        + "(SELECT COALESCE(SUM(TaxAmt),0) FROM C_InvoiceTax it WHERE i.C_Invoice_ID=it.C_Invoice_ID) "
+                        + (invoice.Get_ColumnIndex("WithholdingAmt") > 0 ? " , GrandTotalAfterWithholding = (TotalLines + (SELECT COALESCE(SUM(TaxAmt),0) FROM C_InvoiceTax it WHERE i.C_Invoice_ID=it.C_Invoice_ID) - NVL(WithholdingAmt, 0) - NVL(BackupWithholdingAmount, 0))" : "")
+                        + "WHERE C_Invoice_ID=" + invoice.GetC_Invoice_ID();
+            no = DB.ExecuteQuery(sql, null, Get_TrxName());
+            if (no != 1)
+            {
+                log.Warning("(2) #" + no);
+            }
+            else
+            {
+                // calculate withholdng on header 
+                if (invoice.GetC_Withholding_ID() > 0)
+                {
+                    if (!invoice.SetWithholdingAmount(invoice))
+                    {
+                        log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "WrongBackupWithholding"));
+                    }
+                    else
+                    {
+                        invoice.Save();
+                    }
+                }
+            }
+            return no == 1;
         }
     }
 }

@@ -269,7 +269,7 @@ namespace ViennaAdvantage.Process
                     //}
                 }
                 // Credit Limit End
-                
+
                 //	New Invoice Location
                 // JID_1237 : While creating invoice need to consolidate order on the basis of Org, Payment Term, BP Location (Bill to Location) and Pricelist.
                 if (!_ConsolidateDocument
@@ -335,10 +335,10 @@ namespace ViennaAdvantage.Process
                             continue;
                         }
                         //JID_1139 Avoided the duplicate charge records
-                        if(shipLine.GetM_Product_ID() >0 || isAllownonItem )
+                        if (shipLine.GetM_Product_ID() > 0 || isAllownonItem)
                         {
                             CreateLine(order, shipment, shipLine);
-                        }           
+                        }
                     }//	shipment lines
 
                     //JID_1139 Avoided the duplicate charge records
@@ -368,7 +368,7 @@ namespace ViennaAdvantage.Process
                             }
                         }
                     }
-                    
+
                 }
                 //	After Order Delivered, Immediate
                 else
@@ -548,6 +548,8 @@ namespace ViennaAdvantage.Process
                     _invoice.Set_Value("VA077_TotalSalesAmt", order.Get_Value("VA077_TotalSalesAmt"));
                 }
 
+                _invoice.SetConditionalFlag(MInvoice.CONDITIONALFLAG_PrepareIt);
+
                 if (!_invoice.Save())
                 {
                     ValueNamePair pp = VAdvantage.Logging.VLogger.RetrieveError();
@@ -567,6 +569,9 @@ namespace ViennaAdvantage.Process
             line.SetQtyEntered(qtyEntered);
             line.SetLine(_line + orderLine.GetLine());
 
+            //190 - Set Print Description
+            if (line.Get_ColumnIndex("PrintDescription") >= 0)
+                line.Set_Value("PrintDescription", orderLine.Get_Value("PrintDescription"));
 
             if (Env.IsModuleInstalled("VA077_"))
             {
@@ -661,7 +666,9 @@ namespace ViennaAdvantage.Process
                     _invoice.Set_Value("VA077_TotalSalesAmt", order.Get_Value("VA077_TotalSalesAmt"));
                 }
 
-                    if (!_invoice.Save())
+                _invoice.SetConditionalFlag(MInvoice.CONDITIONALFLAG_PrepareIt);
+
+                if (!_invoice.Save())
                 {
                     ValueNamePair pp = VAdvantage.Logging.VLogger.RetrieveError();
                     if (pp != null)
@@ -759,7 +766,9 @@ namespace ViennaAdvantage.Process
                 }
             }
 
-
+            //190 - Set Print Description
+            if (line1.Get_ColumnIndex("PrintDescription") >= 0)
+                line1.Set_Value("PrintDescription", sLine.Get_Value("PrintDescription"));
 
             if (Env.IsModuleInstalled("VA077_"))
             {
@@ -780,8 +789,6 @@ namespace ViennaAdvantage.Process
             }
 
 
-
-
             if (!line1.Save())
             {
                 ValueNamePair pp = VAdvantage.Logging.VLogger.RetrieveError();
@@ -789,15 +796,17 @@ namespace ViennaAdvantage.Process
                     throw new ArgumentException("Could not create Invoice Line (s). " + pp.GetName());
                 throw new Exception("Could not create Invoice Line (s)");
             }
+
             //	Link
-            sLine.SetIsInvoiced(true);
-            if (!sLine.Save())
-            {
-                ValueNamePair pp = VAdvantage.Logging.VLogger.RetrieveError();
-                if (pp != null)
-                    throw new ArgumentException("Could not update Shipment Line. " + pp.GetName());
-                throw new Exception("Could not update Shipment Line");
-            }
+            //sLine.SetIsInvoiced(true);
+            //if (!sLine.Save())
+            //{
+            //    ValueNamePair pp = VAdvantage.Logging.VLogger.RetrieveError();
+            //    if (pp != null)
+            //        throw new ArgumentException("Could not update Shipment Line. " + pp.GetName());
+            //    throw new Exception("Could not update Shipment Line");
+            //}
+            DB.ExecuteQuery("UPDATE M_InOutLine SET IsInvoiced = 'Y', Updated = SYSDATE WHERE M_InOutLine_ID = " + sLine.IsInvoiced(), null, Get_Trx());
 
             log.Fine(line1.ToString());
         }
@@ -866,10 +875,14 @@ namespace ViennaAdvantage.Process
         {
             if (_invoice != null)
             {
+                // Update Subtotal, GrandTotal, backupWithholding Amount
+                UpdateInvoiceHeader(_invoice);
+
                 if (!_invoice.ProcessIt(_docAction))
                 {
                     log.Warning("completeInvoice - failed: " + _invoice);
                 }
+                _invoice.SetConditionalFlag(null);
                 _invoice.Save();
                 //
                 if (_msg != null)
@@ -883,6 +896,61 @@ namespace ViennaAdvantage.Process
             _invoice = null;
             _ship = null;
             _line = 0;
+        }
+
+        /// <summary>
+        /// This function is used to update Header Tax
+        /// </summary>
+        /// <param name="invoice">Invoice Object</param>
+        /// <returns>true when updated</returns>
+        private bool UpdateInvoiceHeader(MInvoice invoice)
+        {
+            //	Update Invoice Header
+            String sql = "UPDATE C_Invoice i"
+            + " SET TotalLines="
+                + "(SELECT COALESCE(SUM(LineNetAmt),0) FROM C_InvoiceLine il WHERE i.C_Invoice_ID=il.C_Invoice_ID) "
+                + ", AmtDimSubTotal = null "      // reset Amount Dimension if Sub Total Amount is different
+                + ", AmtDimGrandTotal = null "     // reset Amount Dimension if Grand Total Amount is different
+                + (invoice.Get_ColumnIndex("WithholdingAmt") > 0 ? ", WithholdingAmt = ((SELECT COALESCE(SUM(WithholdingAmt),0) FROM C_InvoiceLine il WHERE i.C_Invoice_ID=il.C_Invoice_ID))" : "")
+            + "WHERE C_Invoice_ID=" + invoice.GetC_Invoice_ID();
+            int no = DB.ExecuteQuery(sql, null, Get_TrxName());
+            if (no != 1)
+            {
+                log.Warning("(1) #" + no);
+            }
+
+            if (invoice.IsTaxIncluded())
+                sql = "UPDATE C_Invoice i "
+                    + "SET GrandTotal=TotalLines "
+                    + (invoice.Get_ColumnIndex("WithholdingAmt") > 0 ? " , GrandTotalAfterWithholding = (TotalLines - NVL(WithholdingAmt, 0) - NVL(BackupWithholdingAmount, 0)) " : "")
+                    + "WHERE C_Invoice_ID=" + invoice.GetC_Invoice_ID();
+            else
+                sql = "UPDATE C_Invoice i "
+                    + "SET GrandTotal=TotalLines+"
+                        + "(SELECT ROUND((COALESCE(SUM(TaxAmt),0)),"+invoice.GetPrecision()+") FROM C_InvoiceTax it WHERE i.C_Invoice_ID=it.C_Invoice_ID) "
+                        + (invoice.Get_ColumnIndex("WithholdingAmt") > 0 ? " , GrandTotalAfterWithholding = (TotalLines + (SELECT ROUND((COALESCE(SUM(TaxAmt),0))," + invoice.GetPrecision() + ") FROM C_InvoiceTax it WHERE i.C_Invoice_ID=it.C_Invoice_ID) - NVL(WithholdingAmt, 0) - NVL(BackupWithholdingAmount, 0))" : "")
+                        + "WHERE C_Invoice_ID=" + invoice.GetC_Invoice_ID();
+            no = DB.ExecuteQuery(sql, null, Get_TrxName());
+            if (no != 1)
+            {
+                log.Warning("(2) #" + no);
+            }
+            else
+            {
+                // calculate withholdng on header 
+                if (invoice.GetC_Withholding_ID() > 0)
+                {
+                    if (!invoice.SetWithholdingAmount(invoice))
+                    {
+                        log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "WrongBackupWithholding"));
+                    }
+                    else
+                    {
+                        invoice.Save();
+                    }
+                }
+            }
+            return no == 1;
         }
 
     }

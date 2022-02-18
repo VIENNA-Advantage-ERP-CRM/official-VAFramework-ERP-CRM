@@ -48,14 +48,19 @@ namespace VIS.Models
             Decimal rate = 0;
             //End Assign parameter value
             List<Dictionary<string, Object>> _paymentDetails = null;
-
-            string qry = "SELECT PayAmt, C_Currency_ID, C_ConversionType_ID FROM C_Payment_v WHERE C_Payment_ID=" + c_payment_ID;
+            //required PaymentMethod Details so added PaymentMethod, CheckNo, CheckDate and TenderType
+            string qry = "SELECT v.PayAmt, v.C_Currency_ID, v.C_ConversionType_ID, pay.VA009_PaymentMethod_ID, v.CheckDate, v.CheckNo, v.TenderType FROM C_Payment_V v INNER JOIN C_Payment pay ON pay.C_Payment_ID=v.C_Payment_ID WHERE v.C_Payment_ID=" + c_payment_ID;
             DataSet ds = DB.ExecuteDataset(qry, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 decimal payAmt = Util.GetValueOfDecimal(ds.Tables[0].Rows[0][0]);
                 int c_currency_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0][1]);
                 int c_conversionType_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0][2]);
+                //PaymentMethod Details from payment window
+                int paymentMethod = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]);
+                string checkNo = Util.GetValueOfString(ds.Tables[0].Rows[0]["CheckNo"]);
+                DateTime? checkDate = Util.GetValueOfDateTime(ds.Tables[0].Rows[0]["CheckDate"]);
+                string tenderType = Util.GetValueOfString(ds.Tables[0].Rows[0]["TenderType"]);
                 //as per requirment should not want dateAcct value
                 //DateTime? dateAcct = Util.GetValueOfDateTime(ds.Tables[0].Rows[0][3]);          // JID_0333: Currency conversion should be based on Payment Account Date and Currency type
                 //rate = MConversionRate.Convert(ctx, payAmt, c_currency_ID, CurTo_ID, dateAcct, c_conversionType_ID, ctx.GetAD_Client_ID(), ctx.GetAD_Org_ID());
@@ -70,6 +75,11 @@ namespace VIS.Models
                 }
                 Dictionary<string, Object> _list = new Dictionary<string, object>();
                 _list.Add("C_ConversionType_ID", c_conversionType_ID);
+                //added variable values to the List
+                _list.Add("VA009_PaymentMethod_ID", paymentMethod);
+                _list.Add("EFTCheckNo", checkNo);
+                _list.Add("EFTValutaDate", checkDate);
+                _list.Add("TenderType", tenderType);
                 //_list.Add("DateAcct", dateAcct);
                 _list.Add("payAmt", rate);
                 if (payAmt != 0 && rate == 0)

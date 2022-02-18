@@ -1055,7 +1055,9 @@ namespace VAdvantage.Model
             CheckChange(ra, "TaskStatus");
             CheckChange(ra, "DateStartPlan");
             CheckChange(ra, "DateCompletePlan");
-            //
+            //new filed result added in list if anyone change/add anything in result email will send to user
+            CheckChange(ra, "Result");
+            
             if (_changed)
             {
                 if (sendInfo.Count > 0)
@@ -1175,13 +1177,17 @@ namespace VAdvantage.Model
                 else
                     message.Append("\n").Append(Msg.Translate(GetCtx(), "Created"))
                         .Append(": ").Append(GetCreated());
-                //	Changes
-                for (int i = 0; i < list.Count; i++)
+
+                if (list != null)
                 {
-                    String columnName = (String)list[i];
-                    message.Append("\n").Append(Msg.GetElement(GetCtx(), columnName))
-                        .Append(": ").Append(Get_DisplayValue(columnName, false))
-                        .Append(" -> ").Append(Get_DisplayValue(columnName, true));
+                    //	Changes
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        String columnName = (String)list[i];
+                        message.Append("\n").Append(Msg.GetElement(GetCtx(), columnName))
+                            .Append(": ").Append(Get_DisplayValue(columnName, false))
+                            .Append(" -> ").Append(Get_DisplayValue(columnName, true));
+                    }
                 }
                 //	NextAction
                 if (GetDateNextAction() != null)
@@ -1196,7 +1202,7 @@ namespace VAdvantage.Model
             else
             {
                 message = new StringBuilder();
-
+                subject = string.Empty; // in case of Mail Template is selected subject was coming 2 times that's why we make it empty.
                 MRequest _req = new MRequest(GetCtx(), GetR_Request_ID(), null);
                 MMailText text = new MMailText(GetCtx(), mailText_ID, null);
                 text.SetPO(_req, true); //Set _Po Current value
@@ -1387,6 +1393,10 @@ namespace VAdvantage.Model
                 CheckChange(ra, "TaskStatus");
                 CheckChange(ra, "DateStartPlan");
                 CheckChange(ra, "DateCompletePlan");
+                //new filed result added in list if anyone change/add anything in result email will send to user
+                if (CheckChange(ra, "Result"))
+                    sendInfo.Add("Result");
+                //
                 //
                 //if (_changed)
                 //    ra.Save();
@@ -1594,6 +1604,12 @@ namespace VAdvantage.Model
                 MRequestUpdate update = new MRequestUpdate(this);
                 update.Save();
             }
+            else if (!newRecord && GetResult() != null)
+            {
+                // get message if someone is updating in Result field of Request Record.
+                //We need to send updated msg in email.
+                prepareNotificMsg(null);
+            }
             MRequestType reqType = new MRequestType(GetCtx(), GetR_RequestType_ID(), null);
             //	Initial Mail
             if (reqType.Get_ID() > 0 && reqType.IsR_AllowSaveNotify())
@@ -1642,7 +1658,7 @@ namespace VAdvantage.Model
             // VIS264 - Send push notification
             #region Push Notification
 
-            if (!IsProcessed() && ( newRecord || Is_ValueChanged("R_Status_ID")))
+            if (!IsProcessed() && (newRecord || Is_ValueChanged("R_Status_ID")))
             {
                 string IsClosedValue = $"SELECT IsClosed FROM R_Status S JOIN R_Request R ON S.R_Status_ID = R.R_Status_ID WHERE S.IsActive = 'Y' AND R.R_Request_ID = {GetR_Request_ID()}";
 

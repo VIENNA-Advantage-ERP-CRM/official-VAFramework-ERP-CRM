@@ -155,7 +155,7 @@ namespace VIS.Controllers
                         //if (Session.Timeout < 2)
                         //{
                         SessionEventHandler.SessionEnd(ctx);
-                        Session.Timeout = 17;
+                        Session.Timeout = 20;
                         //}
                         Session["ctx"] = null;
 
@@ -252,8 +252,15 @@ namespace VIS.Controllers
                         //get current user info
                         ViewBag.Menu = mnuHelper.GetMenuTree(); // create tree
                         Session["barNodes"] = ViewBag.Menu.GetBarNodes(); /* add is session to get it in favourite call */
-
-                        ViewBag.TreeHtml = mnuHelper.GetMenuTreeUI(ViewBag.Menu.GetRootNode(), @Url.Content("~/"));
+                        ViewBag.IsMobile = Request.Browser.IsMobileDevice;
+                        if (Request.Browser.IsMobileDevice)
+                        {
+                            ViewBag.TreeHtml = mnuHelper.GetMobileMenuTreeUI(ViewBag.Menu.GetRootNode(), @Url.Content("~/"));
+                        }
+                        else
+                        {
+                            ViewBag.TreeHtml = mnuHelper.GetNewMenuTreeUI(ViewBag.Menu.GetRootNode(), @Url.Content("~/"));
+                        }
                     }
 
                     ViewBag.disableMenu = disableMenu;
@@ -275,7 +282,10 @@ namespace VIS.Controllers
                     {
                         //Cretae new Sessin
                         MSession sessionNew = MSession.Get(ctx, true, GetVisitorIPAddress(true));
-
+                        ModelLibrary.PushNotif.SessionData sessionData = new ModelLibrary.PushNotif.SessionData();
+                        sessionData.UserId = ctx.GetAD_User_ID();
+                        sessionData.Name = ctx.GetAD_User_Name();
+                        ModelLibrary.PushNotif.SessionManager.Get().AddSession(ctx.GetAD_Session_ID(), sessionData);
 
                         var lst = VAdvantage.ModuleBundles.GetStyleBundles(); //Get All Style Bundle
                         foreach (var b in lst)
@@ -331,7 +341,15 @@ namespace VIS.Controllers
                         }
                         //check system setting// set to skipped lib
 
+
                     }
+
+                    /// VIS0008
+                    /// Check applied for adding message to toastr if 2FA method is VA and VA App is not linked with device
+                    if (!LoginHelper.IsDeviceLinked(ctx, AD_User_ID))
+                        ModelLibrary.PushNotif.SSEManager.Get().AddMessage(ctx.GetAD_Session_ID(), Msg.GetMsg(ctx, "PlzLinkVAApp"));
+
+                    VAdvantage.Classes.ThreadInstance.Get().Start();
                 }
             }
 
@@ -779,7 +797,25 @@ namespace VIS.Controllers
                 //Helpers.MenuHelper mnuHelper = new Helpers.MenuHelper(Session["ctx"] as Ctx); // inilitilize menu class
                 Helpers.HomeHelper homeHelper = new HomeHelper();
                 var nodes = Session["barNodes"] as List<VTreeNode>;
+
+                if (nodes == null)
+                {
+                    Ctx ctx = Session["ctx"] as Ctx;
+                    //string diableMenu = ctx.GetContext("#DisableMenu");
+                    Helpers.MenuHelper mnuHelper = new Helpers.MenuHelper(ctx); // inilitilize menu class
+                    ViewBag.Menu = mnuHelper.GetMenuTree(); // create tree
+                    nodes = ViewBag.Menu.GetBarNodes();
+                }
                 Session["barNodes"] = null;
+
+                if (nodes == null)
+                {
+                    Ctx ctx = Session["ctx"] as Ctx;
+                    //string diableMenu = ctx.GetContext("#DisableMenu");
+                    Helpers.MenuHelper mnuHelper = new Helpers.MenuHelper(ctx); // inilitilize menu class
+                    ViewBag.Menu = mnuHelper.GetMenuTree(); // create tree
+                    nodes = ViewBag.Menu.GetBarNodes();
+                }
                 return Json(new { result = homeHelper.GetBarNodes(nodes) }, JsonRequestBehavior.AllowGet);
             }
             catch

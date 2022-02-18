@@ -110,30 +110,30 @@ namespace VAdvantage.CrystalReport
                     rptBurndown.Load(reportPathArray[0]);
 
                     //Set Connection Info
-                    ConnectionInfo.Get().SetAttributes(System.Configuration.ConfigurationManager.AppSettings["oracleConnectionString"]);
+                    //ConnectionInfo.Get().SetAttributes(System.Configuration.ConfigurationManager.AppSettings["oracleConnectionString"]);
 
 
                     //Application will pick database info from the property file.
-                    CrystalDecisions.Shared.ConnectionInfo crDbConnection = new CrystalDecisions.Shared.ConnectionInfo();
-                    crDbConnection.IntegratedSecurity = false;
-                    crDbConnection.DatabaseName = ConnectionInfo.Get().Db_name;
-                    crDbConnection.UserID = ConnectionInfo.Get().Db_uid;
-                    crDbConnection.Password = ConnectionInfo.Get().Db_pwd;
+                    //CrystalDecisions.Shared.ConnectionInfo crDbConnection = new CrystalDecisions.Shared.ConnectionInfo();
+                    //crDbConnection.IntegratedSecurity = false;
+                    //crDbConnection.DatabaseName = ConnectionInfo.Get().Db_name;
+                    //crDbConnection.UserID = ConnectionInfo.Get().Db_uid;
+                    //crDbConnection.Password = ConnectionInfo.Get().Db_pwd;
                     //crDbConnection.Type = ConnectionInfoType.Unknown;
-                    crDbConnection.ServerName = ConnectionInfo.Get().Db_host;
+                    //crDbConnection.ServerName = ConnectionInfo.Get().Db_host;
                     CrystalDecisions.CrystalReports.Engine.Database crDatabase = rptBurndown.Database;
                     CrystalDecisions.Shared.TableLogOnInfo oCrTableLoginInfo;
                     foreach (CrystalDecisions.CrystalReports.Engine.Table oCrTable in crDatabase.Tables)
                     {
-                        crDbConnection.IntegratedSecurity = false;
-                        crDbConnection.DatabaseName = ConnectionInfo.Get().Db_name;
-                        crDbConnection.UserID = ConnectionInfo.Get().Db_uid;
-                        crDbConnection.Password = ConnectionInfo.Get().Db_pwd;
+                        //crDbConnection.IntegratedSecurity = false;
+                        //crDbConnection.DatabaseName = ConnectionInfo.Get().Db_name;
+                        //crDbConnection.UserID = ConnectionInfo.Get().Db_uid;
+                        //crDbConnection.Password = ConnectionInfo.Get().Db_pwd;
                         //crDbConnection.Type = ConnectionInfoType.Unknown;
-                        crDbConnection.ServerName = ConnectionInfo.Get().Db_host;
+                        //crDbConnection.ServerName = ConnectionInfo.Get().Db_host;
 
                         oCrTableLoginInfo = oCrTable.LogOnInfo;
-                        oCrTableLoginInfo.ConnectionInfo = crDbConnection;
+                        //oCrTableLoginInfo.ConnectionInfo = crDbConnection;
                         oCrTable.ApplyLogOnInfo(oCrTableLoginInfo);
                     }
 
@@ -190,11 +190,21 @@ namespace VAdvantage.CrystalReport
                                             continue;
                                         }
 
-                                        if (loopCount > 0)
-                                            sb.Append(" AND ");
+                                        //if (loopCount > 0)
+                                        //    sb.Append(" AND ");
                                         //string paramName = parameters[para].GetParameterName();
                                         object paramValue = parameters[para].GetParameter();
                                         object paramValueTo = parameters[para].GetParameter_To();
+
+                                        //if parameter value is not null then only we need to append it in query.
+                                        if (loopCount > 0 && (paramValue != null || paramValueTo != null))
+                                        {
+                                            sb.Append(" AND ");
+                                        }
+                                        else
+                                        {
+                                            continue;
+                                        }
 
                                         if (paramValue is DateTime || paramValueTo is DateTime)
                                         {
@@ -1009,28 +1019,28 @@ namespace VAdvantage.CrystalReport
                     rptBurndown.Load(reportPathArray[0]);
 
                     //Set Connection Info
-                    ConnectionInfo.Get().SetAttributes(System.Configuration.ConfigurationManager.AppSettings["oracleConnectionString"]);
+                    //ConnectionInfo.Get().SetAttributes(System.Configuration.ConfigurationManager.AppSettings["oracleConnectionString"]);
 
 
                     //Application will pick database info from the property file.
-                    CrystalDecisions.Shared.ConnectionInfo crDbConnection = new CrystalDecisions.Shared.ConnectionInfo();
-                    crDbConnection.IntegratedSecurity = false;
-                    crDbConnection.DatabaseName = ConnectionInfo.Get().Db_name;
-                    crDbConnection.UserID = ConnectionInfo.Get().Db_uid;
-                    crDbConnection.Password = ConnectionInfo.Get().Db_pwd;
-                    crDbConnection.ServerName = ConnectionInfo.Get().Db_host;
+                    //CrystalDecisions.Shared.ConnectionInfo crDbConnection = new CrystalDecisions.Shared.ConnectionInfo();
+                    //crDbConnection.IntegratedSecurity = false;
+                    //crDbConnection.DatabaseName = ConnectionInfo.Get().Db_name;
+                    //crDbConnection.UserID = ConnectionInfo.Get().Db_uid;
+                    //crDbConnection.Password = ConnectionInfo.Get().Db_pwd;
+                    //crDbConnection.ServerName = ConnectionInfo.Get().Db_host;
                     CrystalDecisions.CrystalReports.Engine.Database crDatabase = rptBurndown.Database;
                     CrystalDecisions.Shared.TableLogOnInfo oCrTableLoginInfo;
                     foreach (CrystalDecisions.CrystalReports.Engine.Table oCrTable in crDatabase.Tables)
                     {
-                        crDbConnection.IntegratedSecurity = false;
-                        crDbConnection.DatabaseName = ConnectionInfo.Get().Db_name;
-                        crDbConnection.UserID = ConnectionInfo.Get().Db_uid;
-                        crDbConnection.Password = ConnectionInfo.Get().Db_pwd;
-                        crDbConnection.ServerName = ConnectionInfo.Get().Db_host;
+                        //crDbConnection.IntegratedSecurity = false;
+                        //crDbConnection.DatabaseName = ConnectionInfo.Get().Db_name;
+                        //crDbConnection.UserID = ConnectionInfo.Get().Db_uid;
+                        //crDbConnection.Password = ConnectionInfo.Get().Db_pwd;
+                        //crDbConnection.ServerName = ConnectionInfo.Get().Db_host;
 
                         oCrTableLoginInfo = oCrTable.LogOnInfo;
-                        oCrTableLoginInfo.ConnectionInfo = crDbConnection;
+                        //oCrTableLoginInfo.ConnectionInfo = crDbConnection;
                         oCrTable.ApplyLogOnInfo(oCrTableLoginInfo);
                     }
 

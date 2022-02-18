@@ -109,6 +109,8 @@ namespace VAdvantage.Controller
                         vo.IsDisplayedMR = "Y".Equals(dr[i].ToString());
                     else if (columnName.Equals("DISPLAYLOGIC"))
                         vo.DisplayLogic = dr[i].ToString();
+                    else if (columnName.Equals("STYLELOGIC"))
+                        vo.StyleLogic = dr[i].ToString();
                     else if (columnName.Equals("DEFAULTVALUE"))
                         vo.DefaultValue = dr[i].ToString();
                     else if (columnName.Equals("ISMANDATORYUI"))
@@ -136,9 +138,22 @@ namespace VAdvantage.Controller
                     else if (columnName.Equals("SORTNO"))
                         vo.SortNo = Utility.Util.GetValueOfInt(dr[i]);
                     else if (columnName.Equals("FIELDLENGTH"))
+                    {
                         vo.FieldLength = Utility.Util.GetValueOfInt(dr[i]);
+                       var overWriteLength= Utility.Util.GetValueOfInt(dr["OVERWRITEFIELDLENGTH"]);
+                        if (overWriteLength > 0)
+                            vo.FieldLength = overWriteLength;
+                    }
+                    //else if (columnName.Equals(""))
+                    //{
+                    //    int length = Utility.Util.GetValueOfInt(dr[i]);
+                    //    if (length > 0)
+                    //        vo.FieldLength = length;
+                    //}
                     else if (columnName.Equals("VFORMAT"))
                         vo.VFormat = dr[i].ToString();
+                    else if (columnName.Equals("VFORMATERROR"))
+                        vo.VFormatError = dr[i].ToString();
                     else if (columnName.Equals("VALUEMIN"))
                         vo.ValueMin = dr[i].ToString();
                     else if (columnName.Equals("VALUEMAX"))
@@ -277,6 +292,11 @@ namespace VAdvantage.Controller
                     {
                         vo.AskUserBGProcess = "Y".Equals(dr[i].ToString());
                     }
+
+                    else if (columnName.Equals("ISIDENTIFIER"))
+                    {
+                        vo.IsIdentifier = "Y".Equals(dr[i].ToString());
+                    }
                     /******************************/
                     else if (columnName.Equals("Isheaderpanelitem", StringComparison.OrdinalIgnoreCase))
                     {
@@ -304,7 +324,31 @@ namespace VAdvantage.Controller
                     }
                     else if (columnName.Equals("HtmlStyle", StringComparison.OrdinalIgnoreCase))
                     {
-                        vo.HtmlStyle = dr[i].ToString();
+                        string htmlStyle = dr[i].ToString();
+                        if (htmlStyle != null && htmlStyle.Length > 0 && htmlStyle.IndexOf("@") > -1)
+                        {
+                            string[] stylearr = htmlStyle.Split('|');
+
+                            if (stylearr != null && stylearr.Length > 0)
+                            {
+                                for (int m = 0; m < stylearr.Length; m++)
+                                {
+                                    if (stylearr[m].IndexOf("@img::") > -1)
+                                    {
+                                        vo.GridImageStyle = stylearr[m].Replace("@img::", "");
+                                    }
+                                    else if (stylearr[m].IndexOf("@value::") > -1)
+                                    {
+                                        vo.HtmlStyle = stylearr[m].Replace("@value::", "");
+                                    }
+                                }
+                            }
+
+                        }
+                        else
+                        {
+                            vo.HtmlStyle = htmlStyle;
+                        }
                     }
                     else if (columnName.Equals("ShowIcon", StringComparison.OrdinalIgnoreCase))
                     {
@@ -358,6 +402,10 @@ namespace VAdvantage.Controller
                     else if (columnName.Equals("IsUnique", StringComparison.OrdinalIgnoreCase))
                     {
                         vo.IsUnique = "Y".Equals(dr[i].ToString());
+                    }
+                    else if (columnName.Equals("isSwitch", StringComparison.OrdinalIgnoreCase))
+                    {
+                        vo.IsSwitch = "Y".Equals(dr[i].ToString());
                     }
 
                 }
@@ -677,6 +725,7 @@ namespace VAdvantage.Controller
             vo.DefaultValue = f.DefaultValue;
             vo.DefaultValue2 = f.DefaultValue2;
             vo.VFormat = f.VFormat;
+            vo.VFormatError = f.VFormatError;
             vo.ValueMin = f.ValueMin;
             vo.ValueMax = f.ValueMax;
             vo.isRange = f.isRange;
@@ -722,6 +771,8 @@ namespace VAdvantage.Controller
                 Callout = "";
             if (ReadOnlyLogic == null)
                 ReadOnlyLogic = "";
+            if (StyleLogic == null)
+                StyleLogic = "";
 
 
             //  Create Lookup, if not ID
@@ -732,7 +783,8 @@ namespace VAdvantage.Controller
             }
             if (DisplayType.IsLookup(displayType))
             {
-                if (IsDisplayedf || IsDisplayedMR || ColumnName.ToLower().Equals("createdby")|| ColumnName.ToLower().Equals("updatedby")) 
+                if (IsDisplayedf || IsDisplayedMR || ColumnName.ToLower().Equals("createdby") || ColumnName.ToLower().Equals("updatedby")
+                    || IsHeaderPanelitem)
                 {
                     try
                     {
@@ -784,6 +836,7 @@ namespace VAdvantage.Controller
             clone.IsDisplayedf = IsDisplayedf;
             clone.IsDisplayedMR = IsDisplayedMR;
             clone.DisplayLogic = DisplayLogic;
+            clone.StyleLogic = StyleLogic;
             clone.DefaultValue = DefaultValue;
             clone.IsMandatoryUI = IsMandatoryUI;
             clone.IsReadOnly = IsReadOnly;
@@ -799,6 +852,7 @@ namespace VAdvantage.Controller
             clone.SortNo = SortNo;
             clone.FieldLength = FieldLength;
             clone.VFormat = VFormat;
+            clone.VFormatError = VFormatError;
             clone.ValueMin = ValueMin;
             clone.ValueMax = ValueMax;
             clone.FieldGroup = FieldGroup;
@@ -855,6 +909,9 @@ namespace VAdvantage.Controller
             clone.FieldGroupDefault = FieldGroupDefault;
             clone.ShowFilterOption = ShowFilterOption;
             clone.IsUnique = IsUnique;
+            clone.IsSwitch = IsSwitch;
+            clone.IsIdentifier = IsIdentifier;
+            clone.GridImageStyle = GridImageStyle;
             return clone;
         }
 

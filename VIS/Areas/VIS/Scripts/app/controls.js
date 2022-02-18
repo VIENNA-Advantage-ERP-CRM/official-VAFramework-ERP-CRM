@@ -13,6 +13,7 @@
     var baseUrl = VIS.Application.contextUrl;
     var dataSetUrl = baseUrl + "JsonData/JDataSetWithCode";
     var nonQueryUrl = baseUrl + "JsonData/ExecuteNonQuer";
+    var dSetUrl = baseUrl + "Form/JDataSet";
 
     var executeReader = function (sql, param, callback) {
         var async = callback ? true : false;
@@ -124,12 +125,59 @@
         return result;
     };
 
+    var executeScalarEn = function (sql, params, callback) {
+        var async = callback ? true : false;
+        var dataIn = { sql: sql, page: 1, pageSize: 0 }
+        dataIn.sql = VIS.secureEngine.encrypt(dataIn.sql);
+        if (params) {
+            dataIn.param = params;
+        }
+        var value = null;
+
+
+        getDataSetJStringEn(dataIn, async, function (jString) {
+            dataSet = new VIS.DB.DataSet().toJson(jString);
+            var dataSet = new VIS.DB.DataSet().toJson(jString);
+            if (dataSet.getTable(0).getRows().length > 0) {
+                value = dataSet.getTable(0).getRow(0).getCell(0);
+            }
+            else { value = null; }
+            dataSet.dispose();
+            dataSet = null;
+            if (async) {
+                callback(value);
+            }
+        });
+
+        return value;
+    };
+
+    function getDataSetJStringEn(data, async, callback) {
+        var result = null;
+        //data.sql = VIS.secureEngine.encrypt(data.sql);
+        $.ajax({
+            url: dSetUrl,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset=utf-8",
+            async: async,
+            data: JSON.stringify(data)
+        }).done(function (json) {
+            result = json;
+            if (callback) {
+                callback(json);
+            }
+            //return result;
+        });
+        return result;
+    };
+
 
     VIS.DisplayType = {
         String: 10, Integer: 11, Amount: 12, ID: 13, Text: 14, Date: 15, DateTime: 16, List: 17, Table: 18, TableDir: 19,
         YesNo: 20, Location: 21, Number: 22, Binary: 23, Time: 24, Account: 25, RowID: 26, Color: 27, Button: 28, Quantity: 29,
         Search: 30, Locator: 31, Image: 32, Assignment: 33, Memo: 34, PAttribute: 35, TextLong: 36, CostPrice: 37, FilePath: 38,
-        FileName: 39, URL: 40, PrinterName: 42, Label: 44, MultiKey: 45, GAttribute: 46, AmtDimension: 47, ProductContainer: 48,
+        FileName: 39, URL: 40, PrinterName: 42, Label: 44, MultiKey: 45, GAttribute: 46, AmtDimension: 47, ProductContainer: 48, ProgressBar: 49,
 
         IsString: function (displayType) {
             return VIS.DisplayType.String == displayType;
@@ -150,7 +198,7 @@
             return false;
         },
         IsInt: function (displayType) {
-            if (displayType == VIS.DisplayType.Integer) {
+            if (displayType == VIS.DisplayType.Integer || displayType == VIS.DisplayType.ProgressBar) {
                 return true;
             }
             return false;
@@ -171,7 +219,7 @@
         },
         IsNumeric: function (displayType) {
             if (displayType == VIS.DisplayType.Amount || displayType == VIS.DisplayType.Number || displayType == VIS.DisplayType.CostPrice
-                || displayType == VIS.DisplayType.Integer || displayType == VIS.DisplayType.Quantity)
+                || displayType == VIS.DisplayType.Integer || displayType == VIS.DisplayType.Quantity || displayType == VIS.DisplayType.ProgressBar)
                 return true;
             return false;
         },	//	
@@ -193,13 +241,13 @@
         GetNumberFormat: function (displayType) {
 
             var format = null;
-            if (displayType == this.Integer) {
+            if (displayType == this.Integer || displayType == this.ProgressBar) {
                 format = new VIS.Format(this.INTEGER_DIGITS, 0, 0);
             }
             else if (displayType == this.Quantity) {
                 format = new VIS.Format(this.MAX_DIGITS, this.MAX_FRACTION, 0);
             }
-            else if (displayType == this.Amount) {
+            else if (displayType == this.Amount ) {
                 format = new VIS.Format(this.MAX_DIGITS, this.MAX_FRACTION, this.AMOUNT_FRACTION);
             }
             else if (displayType == this.CostPrice) {
@@ -276,7 +324,7 @@
             }
             else if (displayType == VIS.DisplayType.YesNo) {
                 //columnName, mandatory, isReadOnly, isUpdateable, text, description, tableEditor
-                var chk = new VCheckBox(columnName, isMandatory, isReadOnly, isUpdateable, mField.getHeader(), mField.getDescription());
+                var chk = new VCheckBox(columnName, isMandatory, isReadOnly, isUpdateable, mField.getHeader(), mField.getDescription(), mField.getIsSwitch());
                 chk.setField(mField);
                 ctrl = chk;
             }
@@ -369,6 +417,13 @@
                     num.setMinValue(minValue);
                     num.setMaxValue(maxValue);
                     ctrl = num;
+                }
+                else if (displayType == VIS.DisplayType.ProgressBar) {
+                    var bar = new VProgressBar(columnName, isMandatory, isReadOnly, isUpdateable, mField.getDisplayLength(), mField.getFieldLength(), displayType);
+                    bar.setField(mField);
+                    bar.setMinValue(minValue);
+                    bar.setMaxValue(maxValue);
+                    ctrl = bar;
                 }
             }
             else if (displayType == VIS.DisplayType.PAttribute) {
@@ -488,17 +543,35 @@
                 return null;
             var columnName = mField.getColumnName();
             var isMandatory = mField.getIsMandatory(false);
-            var windowNo = mField.getWindowNo();//  no context check
-            var displayType = mField.getHeaderOverrideReference() || mField.getDisplayType();
+            var windowNo = mField.getWindowNo();//  no context check  
+            var displayType = mField.getOrginalDisplayType();
+           
+            var isReadOnly = mField.getIsReadOnly();
+            var isUpdateable = mField.getIsEditable(false);
+
             var ctrl = null;
+
+
+
             if (displayType == VIS.DisplayType.Image) {
                 var image = new VImage(columnName, isMandatory, true, windowNo);
                 //image.setField(mField);
                 image.setDimension(120, 140);
+                image.hideText();
+                image.hideEditIcon();
                 ctrl = image;
+            }
+            else if (displayType == VIS.DisplayType.Button) {
+                var btn = new VButton(columnName, isMandatory, isReadOnly, isUpdateable, mField.getHeader(), mField.getDescription(), mField.getHelp(), mField.getAD_Process_ID(), mField.getIsLink(), mField.getIsRightPaneLink(), mField.getAD_Form_ID(), mField.getIsBackgroundProcess(), mField.getAskUserBGProcess())
+                btn.setField(mField, true);
+                ctrl = btn;
             }
             else {
                 var $ctrl = new VSpan(mField.getHelp(), columnName, false, true);
+                if (VIS.DisplayType.IsNumeric(displayType)) {
+                    $ctrl.format = VIS.DisplayType.GetNumberFormat(displayType);
+                }
+
                 ctrl = $ctrl;
             }
 
@@ -506,6 +579,7 @@
             return ctrl;
 
         },
+
         ///Checks if class is applied, then return i tag with className
         //Otherwise return image tag along with source.
         getIcon: function (mField) {
@@ -555,7 +629,9 @@
      *	Get control
      * 	@return control
      */
-    IControl.prototype.getControl = function () { return this.ctrl };
+    IControl.prototype.getControl = function () {
+        return this.ctrl
+    };
 
     /**
     *	Get root
@@ -672,6 +748,35 @@
         this.setBackground(false);
     };
 
+    /**
+     * set/reset style on control
+     * @param {any} style inline style / class
+     */
+    IControl.prototype.setHtmlStyle = function (style) {
+        if (style && this.dynStyle != style) {
+
+            if (style.contains(':')) {
+                if (!this.dynStyle) this.oldStyle = this.ctrl.attr('style');
+                this.ctrl.removeAttr(style).attr('style', style);
+            }
+            else {
+                this.ctrl.addClass(style);
+            }
+            this.dynStyle = style;
+        }
+        else if (!style && this.dynStyle) {
+            if (this.dynStyle.contains(':')) {
+                this.ctrl.removeAttr('style');
+                if (this.oldStyle) this.ctrl.attr('style', this.oldStyle);
+            }
+            else {
+                this.ctrl.removeClass(this.dynStyle);
+            }
+            this.oldStyle = null;
+            this.dynStyle = null;
+        }
+    }
+
     /*
     Set Default Focus
     */
@@ -690,6 +795,7 @@
         this.isMandatory = isMandatory;
         this.setBackground(false);
     };
+
     /**
      *	set backgoud color of control
      *
@@ -698,7 +804,7 @@
     IControl.prototype.setBackground = function (e) {
 
         if (this.colName.startsWith("lbl") || this.displayType == VIS.DisplayType.Label ||
-            this.displayType == VIS.DisplayType.YesNo || this.displayType == VIS.DisplayType.Button)
+            this.displayType == VIS.DisplayType.YesNo || this.displayType == VIS.DisplayType.Button || this.displayType == VIS.DisplayType.ProgressBar)
             return;
 
 
@@ -740,6 +846,7 @@
     IControl.prototype.setDisplayType = function (displayType) {
         this.displayType = displayType;
     };
+
     /**
      *	value Change Listener 
      *  @param listener
@@ -747,6 +854,7 @@
     IControl.prototype.addVetoableChangeListener = function (listner) {
         this.vetoablechangeListner = listner;
     };
+
     /**
      *	Notify value changed
      *  @param event
@@ -785,6 +893,7 @@
             }, 10, this);
         }
     };
+
     /**
      *	Refresh UI
      *  @param event
@@ -800,7 +909,6 @@
 
     };
 
-
     /**
     *	action listner
     *   @param event
@@ -808,6 +916,7 @@
     IControl.prototype.addActionListner = function (listner) {
         this.actionListner = listner;
     };
+
     /**
      *	Notify action (eg click )
      *  @param event
@@ -1064,6 +1173,9 @@
         this.disposeComponent = function () {
             $ctrl = null;
             self = null;
+            if (this.format)
+                this.format.dispose();
+            this.format = null;
         }
     };
 
@@ -1097,6 +1209,7 @@
 
 
 
+
     //3. VButton 
     /***************************************************************************
      *  General Button.
@@ -1120,7 +1233,8 @@
      *  @param AD_Process_ID process to start
     
      ***************************************************************************/
-    function VButton(columnName, mandatory, isReadOnly, isUpdateable, text, description, help, AD_Process_ID, isLink, isRightLink, AD_Form_ID, isBGProcess, isAskUserBGProcess) {
+    function VButton(columnName, mandatory, isReadOnly, isUpdateable, text, description, help, AD_Process_ID, isLink, isRightLink
+        , AD_Form_ID, isBGProcess, isAskUserBGProcess) {
 
         this.actionListner;
         this.AD_Process_ID = AD_Process_ID;
@@ -1137,54 +1251,65 @@
         this.isBackgroundProcess = isBGProcess;
 
         this.values = null;
+        this.isIconSet = true;
 
-        var $img = $("<i title='" + text + "'>");
+        var $img = $("<i style='color:inherit' title='" + text + "'>");
 
-        var $txt = $("<span>").text(text);
+        var $txt = $("<span style='color:inherit'>").text(text);
         var rootPath = VIS.Application.contextUrl + "Areas/VIS/Images/base/";
 
         var $ctrl = null;
         //Init Control
         if (!isLink) {
-            $ctrl = $('<button>', { type: 'button', name: columnName });
+            $ctrl = $('<button class="vis-ev-col-wrap-button">', { type: 'button', name: columnName });
             $img.css("margin-right", "8px");
             $ctrl.append($img).append($txt);
         }
         else {
-            $ctrl = $('<li>');
-            $ctrl.append($txt).append($img);
+            if (isRightLink) {
+                $ctrl = $('<li>');
+                $ctrl.append($txt).append($img);
+            }
+            else {
+                $ctrl = $('<button type="button" class="vis-ev-col-wrap-button vis-ev-col-linkbutton"></button>');
+                $ctrl.append($img).append($txt);
+            }
         }
 
+        this.setIcon = function (img, isSrc) {
+            if (isSrc)
+                $img.src = img;
+            else
+                $img.addClass(img);
+        };
+      
         //	Special Buttons
+
         if (columnName.equals("PaymentRule")) {
             this.readReference(195);
-            $ctrl.css("color", "blue"); //
-            setIcon("vis vis-payment");    //  29*14
+            this.setIcon("vis vis-payment");    //  29*14
         }
         else if (columnName.equals("DocAction")) {
             this.readReference(135);
-            $ctrl.css("color", "blue"); //
-            setIcon("vis vis-cog");    //  16*16
+            this.setIcon("vis vis-cog");    //  16*16
         }
         else if (columnName.equals("CreateFrom")) {
-            setIcon("vis vis-copy");       //  16*16
+            this.setIcon("vis vis-copy");       //  16*16
         }
         else if (columnName.equals("Record_ID")) {
-            setIcon("vis vis-find");       //  16*16
+            this.setIcon("vis vis-find");       //  16*16
             $ctrl.text(VIS.Msg.getMsg("ZoomDocument"));
         }
         else if (columnName.equals("Posted")) {
             this.readReference(234);
-            $ctrl.css("color", "magenta"); //
-            setIcon("fa fa-line-chart");    //  16*16
+            //$ctrl.css("color", "magenta"); //
+            this.setIcon("fa fa-line-chart");    //  16*16
         }
         else if (isLink) {
-            setIcon("vis vis-action");
+            this.isIconSet = false;
+            this.setIcon("vis vis-action");
         }
 
-        function setIcon(img) {
-            $img.addClass(img);
-        };
 
         IControl.call(this, $ctrl, VIS.DisplayType.Button, isReadOnly, columnName, mandatory);
 
@@ -1207,7 +1332,6 @@
             ullst.append($("<li data-action='P'>").text(VIS.Msg.getMsg("OpenPDF")));
             return ullst;
         };
-
 
         $ctrl.on(VIS.Events.onClick, function (evt) { //click handler
             evt.stopPropagation();
@@ -1256,7 +1380,6 @@
             });
         }
 
-
         this.setText = function (text) {
             if (text == null) {
                 $txt.text("");
@@ -1275,6 +1398,23 @@
 
         };
 
+        this.setLayout = function (isHeaderPnl) {
+            if (!this.mField)
+                return;
+            if (!isHeaderPnl) {
+                if (this.mField.getIsFieldOnly() && this.mField.getShowIcon())
+                    $txt.remove();
+                else if (this.mField.getIsFieldOnly())
+                    $img.remove();
+            }
+            else {
+                if (this.mField.getHeaderHeadingOnly())
+                    $img.remove();
+                else if (this.mField.getHeaderIconOnly())
+                    $txt.remove();
+            }
+        };
+
         this.disposeComponent = function () {
             $ctrl.off(VIS.Events.onClick);
             $ctrl = null;
@@ -1287,6 +1427,23 @@
         };
     };
     VIS.Utility.inheritPrototype(VButton, IControl);//Inherit
+
+    VButton.prototype.referenceList = {};
+
+    VButton.prototype.setField = function (mField, isHeaderPnl) {
+        this.mField = mField;
+        // if (!this.isIconSet) {
+        if (mField.getShowIcon() && (mField.getFontClass() != '' || mField.getImageName() != '')) {
+            if (mField.getFontClass() != '')
+                this.setIcon(mField.getFontClass());
+            else
+                this.setIcon(VIS.Application.contextUrl + 'Images/Thumb16x16/' + mField.getImageName(), true);
+        }
+        // }
+        this.setLayout(isHeaderPnl);
+    };
+
+
 
     VButton.prototype.setReferenceKey = function (refid) {
         if (refid && refid > 0 && refid != 195 && refid != 135 && refid != 234) {
@@ -1353,7 +1510,19 @@
      *  @param AD_Reference_ID reference
      */
     VButton.prototype.readReference = function (AD_Reference_ID) {
-        this.values = {};
+
+        this.values = null;
+        if (this.referenceList) {
+            this.values = this.referenceList[AD_Reference_ID];
+        }
+
+        if (this.values) {
+            return this.values;
+        }
+        else {
+            this.values = {};
+        }
+        
         var SQL;
         if (VIS.Env.isBaseLanguage(VIS.Env.getCtx(), "")) {
             SQL = "VIS_82";
@@ -1368,6 +1537,7 @@
 
                 this.values[dr.getString(0)] = dr.getString(1);
             }
+            this.referenceList[AD_Reference_ID] = this.values;
             dr.close();
         }
         catch (e) {
@@ -1435,11 +1605,16 @@
     *  @param description
     **********************************************************************/
 
-    function VCheckBox(columnName, mandatory, isReadOnly, isUpdateable, text, description) {
+    function VCheckBox(columnName, mandatory, isReadOnly, isUpdateable, text, description, isSwitch) {
         var $ctrl = $('<input>', { type: 'checkbox', name: columnName, value: text });
-        var $lbl = $('<label class="vis-ec-col-lblchkbox" />').html(text).prepend($ctrl);
+        var $lbl = $('<label class="vis-ec-col-lblchkbox" />').html(text);
+        if (isSwitch) {
+            $ctrl.addClass('vis-ctrl-switch');
+            $lbl.prepend('<i for="switch" class="vis-ctrl-switchSlider">Toggle</i>');
+        }
+        $lbl.prepend($ctrl);
+        //var $lbl = $('<label class="vis-ec-col-lblchkbox" />').html(text).prepend('<i for="switch" class="vis-switchSlider">Toggle</i>').prepend($ctrl);
         IControl.call(this, $lbl, VIS.DisplayType.YesNo, isReadOnly, columnName, mandatory);
-
         this.cBox = $ctrl;
         var self = this;
 
@@ -1523,8 +1698,11 @@
         if (!displayType)
             displayType = VIS.DisplayType.Table;
 
+        // var $ctrl = $('<input>', { name: columnName });
         var $ctrl = $('<select>', { name: columnName });
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, mandatory);
+
+
         this.lookup = lookup;
         this.lastDisplay = "";
         this.settingFocus = false;
@@ -1572,8 +1750,10 @@
 
                 //$btnZoom = VIS.AEnv.getZoomButton(disabled);
                 options[VIS.Actions.zoom] = disabled;
+               
                 // btnCount += 1;
             }
+            options[VIS.Actions.addnewrec] = true;
 
             if ((this.lookup &&
                 (this.lookup.info.keyColumn.toLowerCase() == "ad_user.ad_user_id"
@@ -1585,6 +1765,7 @@
             // $btnPop = $('<button tabindex="-1" class="input-group-text"><img tabindex="-1" src="' + VIS.Application.contextUrl + "Areas/VIS/Images/base/Info20.png" + '" /></button>');
             $btnPop = $('<button tabindex="-1" class="input-group-text"><i tabindex="-1" class="fa fa-ellipsis-v" /></button>');
             options[VIS.Actions.refresh] = true;
+           
             if (VIS.MRole.getIsShowPreference())
                 options[VIS.Actions.preference] = true;
             $ulPopup = VIS.AEnv.getContextPopup(options);
@@ -1600,6 +1781,13 @@
         this.getBtnCount = function () {
             return btnCount;
         };
+
+        //this.createAutoComplete = function () {
+        //    $ctrl.autocomplete({
+        //    });
+        //};
+
+        //this.createAutoComplete();
 
         /** 
             get contols button by index 
@@ -1703,15 +1891,16 @@
             e.stopPropagation();
         });
 
-        function zoomAction() {
+        function zoomAction(value) {
             if (!self.lookup || disabled)
                 return;
             //
             var zoomQuery = self.lookup.getZoomQuery();
-            var value = self.getValue();
-            if (value == null) {
-                //   value = selectedItem;
-            }
+           //var value = self.getValue();
+
+
+            if (!value)
+                value = self.getValue();
 
             if (value == "")
                 value = null;
@@ -1753,7 +1942,8 @@
             }
 
             var AD_Window_ID = 0;
-            if (self.mField.getZoomWindow_ID() > 0) {
+            // VIS0045 : Handle Zoom Issue on Combo when control used on Form
+            if (self.mField != null && self.mField.getZoomWindow_ID() > 0) {
                 AD_Window_ID = self.mField.getZoomWindow_ID();
             }
             else {
@@ -1834,6 +2024,11 @@
                     if (!disabled)
                         zoomAction();
                 }
+                else if (action == VIS.Actions.addnewrec) {
+                    if (!disabled)
+                        zoomAction(-10);
+                }
+                
             });
         }
 
@@ -1950,7 +2145,8 @@
                             pp = this.lookup.get(newValue);
                         }
                         if (pp != null) {
-                            this.ctrl.append('<option value="' + pp.Key + '">' + pp.Name + '</option>');
+                            var valName = VIS.Utility.Util.getIdentifierDisplayVal(pp.Name);
+                            this.ctrl.append('<option value="' + pp.Key + '">' + valName + '</option>');
                             this.ctrl.val(newValue);
                         }
                     }
@@ -1965,6 +2161,23 @@
         }
         this.inserting = false;
     };
+
+    /**
+     * if Identifer value contains image path, then remove it and return remaining Identifier
+     * @param {any} Name
+     */
+    VComboBox.prototype.getDisplayValue = function (Name) {
+        var val = "";
+        if (Name.indexOf("Images/") > -1) {
+            val = Name.replace("^^" + Name.substring(Name.indexOf("Images/"), Name.lastIndexOf("^^") + 3), "_")
+            if (val.indexOf("Images/") > -1) {
+                val = val.replace(val.substring(val.indexOf("Images/"), val.lastIndexOf("^^") + 3), "_")
+            }
+        }
+        else
+            val = Name;
+        return val;
+    }
 
     VComboBox.prototype.getValue = function () {
         var val = this.ctrl.val();
@@ -1982,14 +2195,23 @@
     VComboBox.prototype.refreshOptions = function (data, selVal) {
         var output = [];
         var selIndex = -1;
+        //userQueries = [];
         for (var i = 0; i < data.length; i++) {
             if (selVal && selVal == data[i].Key) {
                 selIndex = i;
             }
-            output[i] = '<option value="' + data[i].Key + '">' + data[i].Name + '</option>';
+            var val = VIS.Utility.Util.getIdentifierDisplayVal(data[i].Name);
+
+            output[i] = '<option value="' + data[i].Key + '">' + val + '</option>';
+
+            //userQueries.push({
+            //    'title': val, 'label': val, 'value': val, 'id': data[i].Key
+            //});
         }
         this.ctrl.empty();
         this.ctrl.html(output.join(''));
+
+        //this.ctrl.autocomplete('option', 'source', userQueries);
 
         //if (selVal) {
         this.ctrl[0].selectedIndex = selIndex;
@@ -2129,6 +2351,7 @@
 
         if (this.displayType == VIS.DisplayType.Time) {
             d = new Date(0);
+            d.setYear(1990);
             var parts = val.match(/(\d+)\:(\d+)/);
             var hours = parseInt(parts[1], 10),
                 minutes = parseInt(parts[2], 10);
@@ -2218,7 +2441,8 @@
 
         var btnCount = 0;
         //create ui
-        var $ctrl = $('<input >', { type: 'text', name: columnName });
+        var $ctrl = $('<input>', { type: 'text', name: columnName });
+        $ctrl.attr('autocomplete', 'off');
 
         var $btnSearch = $('<button  tabindex="-1" class="input-group-text"><i  tabindex="-1" class="' + src + '"></i></button>');
         btnCount += 1;
@@ -2230,7 +2454,8 @@
         var $btnDelete = null;
         var options = {};
         var disabled = false;
-
+        var addBtn = null;
+        var addItem = null;
 
         if (lookup != null && !this.isMultiKeyTextBox) {
 
@@ -2243,12 +2468,14 @@
             //$btnZoom = VIS.AEnv.getZoomButton(disabled);
             // btnCount += 1;
             options[VIS.Actions.zoom] = disabled;
+            options[VIS.Actions.addnewrec] = true;
 
             //$btnPop = $('<button  tabindex="-1" class="input-group-text"><img tabindex="-1" src="' + VIS.Application.contextUrl + "Areas/VIS/Images/base/Info20.png" + '" /></button>');
             $btnPop = $('<button  tabindex="-1" class="input-group-text"><i tabindex="-1" Class="fa fa-ellipsis-v" /></button>');
             //	VBPartner quick entry link
             var isBP = false;
             if (columnName === "C_BPartner_ID") {
+                options[VIS.Actions.addnewrec] = false;
                 options[VIS.Actions.add] = true;
                 options[VIS.Actions.update] = true;
             }
@@ -2300,8 +2527,95 @@
             }
 
         };
+        // Autocomplete
+        if (displayType == VIS.DisplayType.Search) {
+             addBtn = $("<div class='vis-autocompleteList-item vis-auto-addItem' style='background-color: rgba(var(--v-c-secondary), 1)'>" + VIS.Msg.getMsg("AddNew") + "</div>");
+             addItem = $("<div><center>" + VIS.Msg.getMsg("NoDataFoundSugg") + "</center></div>").append($("<center></center>").append(addBtn));
+            $ctrl.vaautocomplete({
+                source: function (term, response) {
+                    var sql = self.lookup.info.query;
+                    var keyColumn = self.lookup.info.keyColumn;
+                    var displayColumn = self.lookup.info.displayColSubQ;
+                    sql = sql.replace(displayColumn, '');
 
+                    var posFrom = sql.indexOf(" FROM ");
+                    var hasWhere = sql.indexOf(" WHERE ", posFrom) != -1;
+                    var posOrder = sql.lastIndexOf(" ORDER BY ");
+                    var validation = "";
+                    if (!self.lookup.info.isValidated) {
+                        validation = VIS.Env.parseContext(VIS.context, self.lookup.windowNo, self.lookup.tabNo, self.lookup.info.validationCode, false, true);
+                        if (validation.length == 0 && self.lookup.info.validationCode.length > 0) {
+                            return;
+                        }
+                        validation = " AND " + validation;
+                    }
 
+                    if (posOrder != -1) {
+                        var orderByIdx = validation.toUpper().lastIndexOf(" ORDER BY ");
+                        if (orderByIdx == -1) {
+                            validation = validation + sql.substring(posOrder);
+                        }
+                        sql = sql.substring(0, posOrder) + (hasWhere ? " AND " : " WHERE ") + self.lookup.info.tableName + ".isActive='Y' " + validation;
+                    }
+                    else {
+                        sql += (hasWhere ? " AND " : " WHERE ") + self.lookup.info.tableName + ".isActive='Y' " + validation;
+                    }
+
+                    var lastPart = sql.substr(sql.indexOf('FROM'), sql.length);
+                    sql = "SELECT " + keyColumn + " AS ID,NULL," + displayColumn + " AS finalValue " + lastPart;
+
+                    term = term.toUpper();
+                    term = "%" + term + "%";
+                    $.ajax({
+                        type: 'Post',
+                        url: VIS.Application.contextUrl + "Form/GetAccessSqlAutoComplete",
+                        data: { sql: VIS.secureEngine.encrypt(sql), columnName: columnName, text: term },
+                        success: function (data) {
+                            var res = [];
+                            if (JSON.parse(data) != null) {
+                                result = JSON.parse(data).Table;
+                                for (var i = 0; i < result.length; i++) {
+                                    var parseObj = {};
+                                    parseObj[Object.keys(result[i])[0].toLowerCase()] = result[i][Object.keys(result[i])[0]];
+                                    parseObj[Object.keys(result[i])[1].toLowerCase()] = result[i][Object.keys(result[i])[1]];
+                                    parseObj[Object.keys(result[i])[2].toLowerCase()] = result[i][Object.keys(result[i])[2]];
+                                    res.push({
+                                        id: parseObj.id,
+                                        value: VIS.Utility.Util.getIdentifierDisplayVal(parseObj.finalvalue)
+                                    });
+                                }
+                                response(res);
+                            }
+                            if (res.length == 0) {
+                                res = [];
+                                res.push({
+                                    id: "vis-AddNew",
+                                    value: VIS.Msg.getMsg("AddNew"),
+                                    msg: VIS.Msg.getMsg("NoDataFound")//"No data found. Do you want to add?"                                    
+                                });
+                                response(res);
+                            }
+                        },
+                    });
+
+                },
+                minLength: 2,
+                html: addItem,
+                onSelect: function (e, item) {
+                    if (item.id == "vis-AddNew") {
+                        zoomAction();
+                        setTimeout(function () {
+                            self.setValue(-1, true, true);
+                        }, 500);
+                    } else {
+                        self.setValue(item.id, true, true);
+                    }
+                }
+            });
+            addBtn.on("click", function (event) {
+                zoomAction();
+            })
+        }
         $ctrl.on("keydown", function (event) {
 
             //if (event.shiftKey && event.keyCode == 13) {
@@ -2315,7 +2629,7 @@
             //    }
 
             //else 
-            if ((event.keyCode == 13 || (event.keyCode == 9 && $ctrl.val().trim() != '')) && !event.shiftKey) {//will work on press of Tab key OR Enter Key
+            if ((event.keyCode == 13 || (event.keyCode == 9 && $ctrl.val().trim() != '')) && !event.shiftKey && $ctrl.val().length == 0) {//will work on press of Tab key OR Enter Key
                 if (self.actionText()) {
                     event.stopPropagation();
                     event.preventDefault();
@@ -2471,7 +2785,7 @@
 
             text = "";
 
-            self.setValue(keyId, true, true);; //bind value and text
+            self.setValue(keyId, true, true); //bind value and text
             return false;
 
 
@@ -3092,16 +3406,15 @@
 
         $btnSearch.on(VIS.Events.onClick, self.openSearchForm);
 
-        function zoomAction() {
+        function zoomAction(value) {
 
             if (!self.lookup || disabled)
                 return;
             //
             var zoomQuery = self.lookup.getZoomQuery();
-            var value = self.getValue();
-            if (value == null) {
-                //   value = selectedItem;
-            }
+            //var value = self.getValue();
+            if (!value)
+                value = self.getValue();
 
             if (value == "")
                 value = null;
@@ -3141,6 +3454,9 @@
             var AD_Window_ID = 0;
             if (self.mField != null && self.mField.getZoomWindow_ID() > 0) {
                 AD_Window_ID = self.mField.getZoomWindow_ID();
+            }
+            else if (zoomWindow_ID && zoomWindow_ID > 0) {
+                AD_Window_ID = zoomWindow_ID;
             }
             else {
                 AD_Window_ID = self.lookup.getZoomWindow(zoomQuery);
@@ -3189,6 +3505,11 @@
                     if (disabled)
                         return;
                     zoomAction();
+                }
+                else if (action == VIS.Actions.addnewrec) {
+                    if (disabled)
+                        return;
+                    zoomAction(-10);
                 }
                 else if (action == VIS.Actions.preference) {
                     var obj = new VIS.ValuePreference(self.mField, self.getValue(), self.getDisplay());
@@ -3252,6 +3573,12 @@
             $btnPop = null;
             this.getBtn = null;
             this.setVisible = null;
+            if (addBtn) {
+                addBtn.off("click");
+            }
+            addBtn = null;
+            addItem = null;
+            
         };
     };
 
@@ -3307,7 +3634,9 @@
             }
 
             this.value = newValue;
-            this.ctrl.val(VIS.Utility.decodeText(this.lastDisplay));
+
+            var ctrlval = VIS.Utility.Util.getIdentifierDisplayVal(this.lastDisplay);
+            this.ctrl.val(VIS.Utility.decodeText(ctrlval));
 
             this.settingValue = false;
             //this.setBackground("white");
@@ -3450,7 +3779,10 @@
         var length = fieldLength;
 
         //Init Control
-        var $ctrl = $('<input>', { type: 'number', step: 'any', name: columnName, maxlength: length, 'data-type': 'int' });
+
+        var $ctrl = $('<input>', { type: 'number', step: 'any', name: columnName, maxlength: 16, 'data-type': 'int' });
+        $ctrl.attr('autocomplete', 'off');
+
 
         //Call base class
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory);
@@ -3621,7 +3953,7 @@
             e.stopPropagation();
             // var newVal = $ctrl.val();
 
-            var newVal = self.getValue();
+            var newVal = self.getValue();          
             this.value = newVal;
 
             if (newVal !== self.oldValue) {
@@ -3794,7 +4126,7 @@
         // text change Event 
         $ctrl.on("change", function (e) {
             e.stopPropagation();
-            //var newVal = $ctrl.val();
+            //var newVal = $ctrl.val();    
             var newVal = self.getValue();
             newVal = Globalize.parseInt(newVal.toString());
             //alert(newVal);
@@ -3855,7 +4187,7 @@
         return this.ctrl.val();
     };
 
-    /***END VNumTextBox***/
+        /***END VNumTextBox***/
 
 
 
@@ -4382,7 +4714,7 @@
 
 
         //create ui
-        var $ctrl = $('<input >', { type: 'text', name: columnName });
+        var $ctrl = $('<input>', { type: 'text', name: columnName });
         var $btn = $('<button class="input-group-text"><i class="' + src + '"></i></button>');
         var btnCount = 1;
 
@@ -4887,6 +5219,26 @@
                 this.ctrl.removeClass('vis-input-wrap-button-image-add');
             }
         };
+
+        this.hideText = function () {
+            $txt.hide();
+        }
+        /**
+         * hide edit icon
+         * */
+        this.hideEditIcon = function () {
+            $spanIcon.hide();
+        };
+
+        this.hideEditIcon = function () {
+            $spanIcon.hide();
+        };
+
+
+        this.hideEditIcon = function () {
+            $spanIcon.hide();
+        };
+
         this.disposeComponent = function () {
             $ctrl.off(VIS.Events.onClick);
             $ctrl = null;
@@ -5358,11 +5710,11 @@
         this.value = null;
         var btnCount = 0;
 
-        var $ctrl = $('<input>', { type: 'text', name: columnName });
+        var $ctrl = $('<input>', { type: 'text', name: columnName});
         var $btnSearch = $('<button class="input-group-text"><i class="' + src + '" /></button>');
         btnCount += 1;
 
-        var inputCtrl = $("<input type='file' class='file' name='file'/>");
+        var inputCtrl = $("<input autocomplete='off' type='file' class='file' name='file'/>");
         $ctrl.append($btnSearch);
 
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, mandatoryField);
@@ -5777,6 +6129,7 @@
 
         //create ui
         var $ctrl = $('<input>', { type: 'text', name: columnName });
+        $ctrl.attr('autocomplete', 'off');
         var $btnpContainer = $('<button class="input-group-text"><i class="vis vis-pcontainer" /></button>');
         //var $btnPop = $('<button  tabindex="-1" class="input-group-text"><img tabindex="-1" src="' + VIS.Application.contextUrl + "Areas/VIS/Images/base/Info20.png" + '" /></button>');
         var $btnPop = $('<button  tabindex="-1" class="input-group-text"><i tabindex="-1" Class="fa fa-ellipsis-v" /></button>');
@@ -5940,6 +6293,7 @@
         * Decide if open container dialog or not.
         * If Must Open that means must open dialog.(when user click Icon)
         */
+
         this.actionText = function (mustOpen) {
             if (!self.value) {
                 self.value = 0;
@@ -6083,10 +6437,255 @@
     };
 
 
-    //VLabel
+    /**
+     *  VKeyText with Mnemonics interpretation
+     *  VKeyText against header panel item key-value pair
+     *  @param value  The text to be displayed by the VSpan.
+     *  @param name  name of control to bind VSpan with
+     */
+    function VKeyText(colSql, windowNo, name) {
+        this.colSql = colSql;
+        this.windowNo = windowNo;
+        this.cache = {};
+        // this.col = '';
+        this.needtoParse = false;
+
+        if (colSql.contains('@')) {
+            this.needtoParse = true;
+        }
 
 
 
+        var strFor = ' for="' + name + '"';
+
+        var $ctrl = $('<span ' + strFor + '></span>');
+
+        IControl.call(this, $ctrl, VIS.DisplayType.Label, true, "lbl" + name);
+
+        this.disposeComponent = function () {
+            $ctrl = null;
+            self = null;
+            if (this.format)
+                this.format.dispose();
+            this.format = null;
+            this.cache = {};
+            this.cache = null;
+        }
+    };
+
+
+    VIS.Utility.inheritPrototype(VKeyText, IControl); //Inherit
+
+    VKeyText.prototype.setValue = function (newValue, isHTML) {
+        var validation = null;
+        if (this.needtoParse) {
+            validation = VIS.Env.parseContext(VIS.context, this.windowNo, 0, this.colSql, false, true);
+        }
+        else {
+            validation = this.colSql;
+        }
+
+        if (!validation || validation.length == 0)
+            //console.log(this.info.keyColumn + ": Loader NOT Validated: " + this.info.validationCode);
+            return;
+
+
+        var wIndex = validation.toUpperCase().lastIndexOf('WHERE');
+        var where = '-1';
+        if (wIndex > -1) {
+            where = validation.substring(wIndex);
+        }
+
+        if (this.cache[where]) {
+            // if (this.oldValue != newValue) {
+            //  this.oldValue = newValue;
+            this.ctrl.text(this.cache[where]);
+            if (isHTML) {
+                this.ctrl.html(this.cache[where]);
+            }
+        }
+        else {
+            if (validation.toLowerCase().indexOf("select") == -1) {
+                this.cache[where] = validation;
+                this.ctrl.text(validation);
+                return;
+            }
+
+            var self = this;
+            executeScalarEn(validation, null, function (val) {
+                if (val) {
+                    self.ctrl.text(val);
+                }
+                else
+                    self.ctrl.text("");
+                self.cache[where] = val;
+            });
+        }
+    };
+
+    VKeyText.prototype.getValue = function () {
+        if (this.value != null) {
+            return this.ctrl.text().toString();
+        }
+        else {
+            return null;
+        }
+    };
+
+
+    // VProgressBar
+
+    function VProgressBar(columnName, isMandatory, isReadOnly, isUpdateable, displayLength, fieldLength, controlDisplayType) {
+        var $ctrl = $('<div class="vis-progressCtrlWrap">');
+        var $rangeCtrl = $('<input>', { type: 'range', step: '1', name: columnName, maxlength: fieldLength, 'data-type': 'int' });
+        var $oputput = $('<output  class="vis-progress-output">');
+
+        $ctrl.append($oputput).append($rangeCtrl);
+
+        IControl.call(this, $ctrl, controlDisplayType, isReadOnly, columnName, isMandatory);
+        if (isReadOnly || !isUpdateable) {
+            this.setReadOnly(true);
+        }
+        else {
+            this.setReadOnly(false);
+        }
+        this.rangeCtrl = $rangeCtrl;
+        this.oputput = $oputput;
+        $oputput.text(0);
+        this.setText = function (val) {
+            $oputput.text(val);
+        };
+        this.setRange = function (val) {
+            if (val != null) {
+                $rangeCtrl.val(val);
+            } else {
+                $rangeCtrl.val(0);
+            }
+
+        };
+
+        this.getRange = function () {
+            return $rangeCtrl.val();
+        };
+
+        var self = this; //self pointer
+
+
+
+
+        /* Event */
+
+        $oputput.keypress(function (event) {
+            if (event.which < 46 || event.which > 59) {
+                event.preventDefault();
+            };
+            if ((event.which == 46 && $(this).val().indexOf('.') != -1) || (event.which == 44 && $(this).val().indexOf(',') != -1)) {
+                event.preventDefault();
+            };
+
+        }).on("blur", function () {
+            if ($.isNumeric($rangeCtrl.attr("max")) && Number($rangeCtrl.attr("max")) < Number($(this).text())) {
+                $(this).text($rangeCtrl.attr("max"));
+            }
+            $rangeCtrl.val($(this).text() || 0).change();
+        })
+
+        $rangeCtrl.on("input", function (e) {
+            e.stopPropagation();
+            var newVal = $rangeCtrl.val();
+            //self.setOutputPosition();
+            $oputput.show();
+            $oputput.text(newVal);
+            //$ctrl.val(newVal);
+        });
+
+        $rangeCtrl.on("change", function (e) {
+            e.stopPropagation();
+            var newVal = $rangeCtrl.val();
+            //$ctrl.val(newVal);
+            if (newVal !== self.oldValue) {
+                var evt = { newValue: newVal, propertyName: self.getName() };
+                self.fireValueChanged(evt);
+                evt = null;
+                //self.setOutputPosition();
+            }
+        });
+
+        this.disposeComponent = function () {
+            $ctrl = null;
+            $rangeCtrl = null;
+            this.rangeCtrl = this.$oputput = null;
+            self = null;
+        }
+    };
+
+    VIS.Utility.inheritPrototype(VProgressBar, IControl);
+    VProgressBar.prototype.setValue = function (newValue) {
+        if (this.oldValue != newValue) {
+            this.oldValue = newValue;
+            this.setText(newValue);
+            this.setRange(newValue);
+            //this.setOutputPosition();
+        }
+    };
+
+    VProgressBar.prototype.getValue = function () {
+        return this.getRange();
+    };
+    VProgressBar.prototype.setMaxValue = function (maxValue) {
+        if ($.isNumeric(maxValue)) {
+            this.rangeCtrl.attr("max", maxValue);
+        } else {
+            this.rangeCtrl.attr("max", 100);
+        }
+    };
+
+    VProgressBar.prototype.setMinValue = function (minValue) {
+        if ($.isNumeric(minValue)) {
+            this.rangeCtrl.attr("min", minValue);
+        }
+    };
+    VProgressBar.prototype.getDisplay = function () {
+        return this.rangeCtrl.val();
+    };
+    VProgressBar.prototype.getControl = function (parent) {
+        if (parent) {
+            parent.addClass("vis-progressCtrlWrap");
+            parent.append(this.oputput);
+            return this.rangeCtrl;
+        }
+        return this.ctrl;
+    };
+
+    VProgressBar.prototype.setReadOnly = function (readOnly) {
+        this.isReadOnly = readOnly;
+        this.ctrl.find('input').prop('disabled', readOnly ? true : false);
+        this.ctrl.find('output').attr('contenteditable', readOnly ? false : true);
+        this.setBackground(false);
+    };
+    //VProgressBar.prototype.setOutputPosition = function () {
+    //    var offset = 30;
+    //    if (this.editingGrid) {
+    //        offset = 0;
+    //    }
+    //    var width = this.ctrl.width();
+    //    var val = this.getValue();
+    //    var min = this.mField.getMinValue() ? this.mField.getMinValue() : 0;
+    //    var max = this.mField.getMaxValue() ? this.mField.getMaxValue() : 100;
+    //    var newPoint = (val - Number(min)) / (Number(max) - Number(min));
+    //    if (newPoint < 0) {
+    //        newPlace = 0;
+    //    }
+    //    else if (newPoint > 1) {
+    //        newPlace = width;
+    //    }
+    //    else {
+    //        newPlace = width * newPoint;
+    //    }
+
+    //    this.getProgressOutput().css({ left: (newPlace / 2) + offset }).text(val);
+
+    //}
 
     //To implement culture change
     //1.Control type number to textbox:number text not comma in un english culture
@@ -6114,5 +6713,7 @@
     VIS.Controls.VFile = VFile;
     VIS.Controls.VAmtDimension = VAmtDimension;
     VIS.Controls.VProductContainer = VProductContainer;
+    VIS.Controls.VKeyText = VKeyText;
+    VIS.Controls.VProgressBar = VProgressBar;
     /* END */
 }(jQuery, VIS));

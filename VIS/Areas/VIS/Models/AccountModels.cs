@@ -65,6 +65,13 @@ namespace VIS.Models
 
         public string TokenKey2FA { get; set; }
 
+        // VIS0008 added new properties
+        public string TwoFAMethod { get; set; }
+
+        public bool SkipNow { get; set; }
+
+        public bool ResendOTP { get; set; }
+
         public string QRCodeURL { get; set; }
 
         [DataType(DataType.Password)]
@@ -72,6 +79,8 @@ namespace VIS.Models
         public string OTP2FA { get; set; }
 
         public bool QRFirstTime { get; set; }
+
+        public bool NoLoginSet { get; set; }
 
         public String Login1DataOTP { get; set; }
     }

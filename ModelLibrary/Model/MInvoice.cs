@@ -49,20 +49,19 @@ namespace VAdvantage.Model
         private int counterOrgId = 0; // counter Organization
 
         /** Reversal Flag		*/
-        private bool _reversal = false;
+        public bool _reversal = false;
         //	Cache					
         private static CCache<int, MInvoice> _cache = new CCache<int, MInvoice>("C_Invoice", 20, 2);	//	2 minutes
         //	Logger			
         private static VLogger _log = VLogger.GetVLogger(typeof(MInvoice).FullName);
 
-        private MAcctSchema acctSchema = null;
 
         decimal currentCostPrice = 0;
         string conversionNotFoundInvoice = "";
         string conversionNotFoundInvoice1 = "";
         string conversionNotFoundInOut = "";
         MInOutLine sLine = null;
-
+        StringBuilder query = new StringBuilder();
         #endregion
 
         /// <summary>
@@ -126,7 +125,26 @@ namespace VAdvantage.Model
             to.Set_TrxName(trxName);
             PO.CopyValues(from, to, from.GetAD_Client_ID(), from.GetAD_Org_ID());
             to.Set_ValueNoCheck("C_Invoice_ID", I_ZERO);
-            to.Set_ValueNoCheck("DocumentNo", null);
+            if (!counter && setOrder)
+            {
+                // On Reversal, Set Document No with Indicator (^)
+                to.Set_ValueNoCheck("DocumentNo", from.GetDocumentNo() + "^");
+                to.SetReversal(true);
+                to.SetConditionalFlag(MInvoice.CONDITIONALFLAG_Reversal);
+                to.SetBackupWithholdingAmount(Decimal.Negate(from.GetBackupWithholdingAmount()));
+                to.SetGrandTotalAfterWithholding(Decimal.Negate(from.GetGrandTotalAfterWithholding()));
+                to.Set_Value("C_ProvisionalInvoice_ID", from.Get_ValueAsInt("C_ProvisionalInvoice_ID"));
+            }
+            else
+            {
+                to.Set_ValueNoCheck("DocumentNo", null);
+
+                // Set Conditional Flag to skip repeated logic on lines save.
+                if (to.Get_ColumnIndex("ConditionalFlag") > -1)
+                {
+                    to.SetConditionalFlag(MInvoice.CONDITIONALFLAG_PrepareIt);
+                }
+            }
             if (!counter)
             {
                 to.AddDescription("{->" + from.GetDocumentNo() + ")");
@@ -184,16 +202,26 @@ namespace VAdvantage.Model
                 //when record is of SO then price list must be Sale price list and vice versa
                 if (from.GetCounterBPartner() != null && ((to.IsSOTrx() && !pl.IsSOPriceList()) || (!to.IsSOTrx() && pl.IsSOPriceList())))
                 {
+                    //changed query according to PriceList join with Business Partner
                     /* 1. check first with same currency , same Org , same client and IsDefault as True
                      * 2. check 2nd with same currency , same Org , same client and IsDefault as False
                      * 3. check 3rd with same currency , (*) Org , same client and IsDefault as True
                      * 4. check 3rd with same currency , (*) Org , same client and IsDefault as False */
-                    string sql = @"SELECT M_PriceList_ID FROM M_PriceList 
-                               WHERE IsActive = 'Y' AND AD_Client_ID IN ( " + to.GetAD_Client_ID() + @" , 0 ) " +
-                                    @" AND C_Currency_ID = " + to.GetC_Currency_ID() +
-                                    @" AND AD_Org_ID IN ( " + to.GetAD_Org_ID() + @" , 0 ) " +
-                                    @" AND IsSOPriceList = '" + (to.IsSOTrx() ? "Y" : "N") + "' " +
-                                    @" ORDER BY AD_Org_ID DESC , IsDefault DESC,  M_PriceList_ID DESC , AD_Client_ID DESC";
+                    //string sql = @"SELECT M_PriceList_ID FROM M_PriceList 
+                    //           WHERE IsActive = 'Y' AND AD_Client_ID IN ( " + to.GetAD_Client_ID() + @" , 0 ) " +
+                    //                @" AND C_Currency_ID = " + to.GetC_Currency_ID() +
+                    //                @" AND AD_Org_ID IN ( " + to.GetAD_Org_ID() + @" , 0 ) " +
+                    //                @" AND IsSOPriceList = '" + (to.IsSOTrx() ? "Y" : "N") + "' " +
+                    //                @" ORDER BY AD_Org_ID DESC , IsDefault DESC,  M_PriceList_ID DESC , AD_Client_ID DESC";
+                    //Get the PriceList from CounterBPartner
+                    string sql = @"SELECT pl.M_PriceList_ID FROM M_PriceList pl
+                               INNER JOIN C_BPartner bp ON pl.M_PriceList_ID=" + (to.IsSOTrx() ? "bp.M_PriceList_ID" : "bp.PO_PriceList_ID") +
+                               @" WHERE pl.IsActive = 'Y' AND pl.AD_Client_ID IN ( " + to.GetAD_Client_ID() + @" , 0 ) " +
+                                    @" AND pl.C_Currency_ID = " + to.GetC_Currency_ID() +
+                                    @" AND pl.AD_Org_ID IN ( " + to.GetAD_Org_ID() + @" , 0 ) " +
+                                    @" AND pl.IsSOPriceList = '" + (to.IsSOTrx() ? "Y" : "N") + "' " +
+                                    @" AND bp.C_BPartner_ID = " + from.GetCounterBPartner().GetC_BPartner_ID() +
+                                    @" ORDER BY pl.AD_Org_ID DESC , pl.IsDefault DESC,  pl.M_PriceList_ID DESC , pl.AD_Client_ID DESC";
                     int priceListId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, trxName));
                     if (priceListId > 0)
                     {
@@ -203,7 +231,9 @@ namespace VAdvantage.Model
                     {
                         //Could not create Invoice. Price List not avialable
                         from.SetProcessMsg(Msg.GetMsg(from.GetCtx(), "VIS_PriceListNotFound"));
-                        throw new Exception("Could not create Invoice. Price List not avialable");
+                        //get message from message window
+                        //throw new Exception("Could not create Invoice. Price List not avialable");
+                        throw new Exception(Msg.GetMsg(from.GetCtx(), "VIS_PriceListNotFound"));
                     }
                 }
 
@@ -254,6 +284,13 @@ namespace VAdvantage.Model
                 }
                 throw new Exception("Could not create Invoice Lines. " + (pp != null && pp.GetName() != null ? pp.GetName() : ""));
             }
+
+            // Set Conditional Flag to null.
+            if (to.Get_ColumnIndex("ConditionalFlag") > -1)
+            {
+                DB.ExecuteQuery("UPDATE C_Invoice SET ConditionalFlag = null WHERE C_Invoice_ID = " + to.GetC_Invoice_ID(), null, trxName);
+            }
+
             return to;
         }
 
@@ -923,6 +960,7 @@ namespace VAdvantage.Model
             int count = 0;
             for (int i = 0; i < fromLines.Length; i++)
             {
+                log.Log(Level.INFO, i.ToString());
                 MInvoiceLine line = new MInvoiceLine(GetCtx(), 0, Get_TrxName());
                 MInvoiceLine fromLine = fromLines[i];
                 if (counter)	//	header
@@ -931,10 +969,58 @@ namespace VAdvantage.Model
                     PO.CopyValues(fromLine, line, fromLine.GetAD_Client_ID(), fromLine.GetAD_Org_ID());
                 line.SetC_Invoice_ID(GetC_Invoice_ID());
                 line.SetInvoice(this);
-                line.Set_ValueNoCheck("C_InvoiceLine_ID", I_ZERO);	// new
+                line.Set_ValueNoCheck("C_InvoiceLine_ID", I_ZERO);  // new
+                                                                    //1052--to identfy that this line is copied
+                line.IsCopy = true;
                 //	Reset
 
                 line.SetRef_InvoiceLine_ID(0);
+
+                //when reversal record, copy line no as well
+                if (!counter && setOrder)
+                {
+                    line.SetLine(fromLine.GetLine());
+                    line.SetReversal(true);
+
+                    line.SetQtyEntered(Decimal.Negate(line.GetQtyEntered()));
+                    line.SetQtyInvoiced(Decimal.Negate(line.GetQtyInvoiced()));
+                    line.SetLineNetAmt(Decimal.Negate(line.GetLineNetAmt()));
+                    if (Get_ColumnIndex("ReversalDoc_ID") >= 0)
+                    {
+                        //(1052-Nov/1/2021) set Reversal Document
+                        line.SetReversalDoc_ID(fromLine.GetC_InvoiceLine_ID());
+                    }
+                    if (((Decimal)line.GetTaxAmt()).CompareTo(Env.ZERO) != 0)
+                        line.SetTaxAmt(Decimal.Negate((Decimal)line.GetTaxAmt()));
+
+                    // In Case of Reversal set Surcharge Amount as Negative if available.
+                    if (line.Get_ColumnIndex("SurchargeAmt") > 0 && (((Decimal)line.GetSurchargeAmt()).CompareTo(Env.ZERO) != 0))
+                    {
+                        line.SetSurchargeAmt(Decimal.Negate((Decimal)line.GetSurchargeAmt()));
+                    }
+                    if (((Decimal)line.GetLineTotalAmt()).CompareTo(Env.ZERO) != 0)
+                        line.SetLineTotalAmt(Decimal.Negate((Decimal)line.GetLineTotalAmt()));
+                    line.SetTaxBaseCurrencyAmt(Decimal.Negate(fromLine.GetTaxBaseCurrencyAmt()));
+
+                    line.SetC_OrderLine_ID(fromLine.GetC_OrderLine_ID());
+                    line.SetM_InOutLine_ID(fromLine.GetM_InOutLine_ID());
+
+                    //
+                    line.SetIsFutureCostCalculated(false);
+                    if (line.Get_ColumnIndex("IsCostImmediate") >= 0)
+                    {
+                        line.SetIsCostImmediate(false);
+                    }
+
+                    //
+                    if (Get_ColumnIndex("BackupWithholdingAmount") > 0)
+                    {
+                        line.SetC_Withholding_ID(fromLine.GetC_Withholding_ID()); //  withholding refernce
+                        line.SetWithholdingAmt(Decimal.Negate(fromLine.GetWithholdingAmt())); // withholding amount
+                    }
+                    //
+                    line.Set_Value("C_ProvisionalInvoiceLine_ID", fromLine.Get_ValueAsInt("C_ProvisionalInvoiceLine_ID"));
+                }
 
                 // enhanced by Amit 4-1-2016
                 //line.SetM_AttributeSetInstance_ID(0);
@@ -943,11 +1029,19 @@ namespace VAdvantage.Model
                 //    line.SetC_OrderLine_ID(0);
                 //end
                 line.SetA_Asset_ID(0);
+                if (line.Get_ColumnIndex("S_ResourceAssignment_ID") >= 0)
+                {
+                    line.SetS_ResourceAssignment_ID(0);
+                }
 
-                line.SetS_ResourceAssignment_ID(0);
                 //	New Tax
                 if (GetC_BPartner_ID() != otherInvoice.GetC_BPartner_ID())
-                    line.SetTax();	//	recalculate
+                {
+                    line.SetTax();                     //	recalculate
+                    //1052-- set tax exempt reason null if business partner is different
+                    line.SetIsTaxExempt(false);
+                    line.SetC_TaxExemptReason_ID(0);
+                }
                 //
 
                 // JID_1319: System should not copy Tax Amount, Line Total Amount and Taxable Amount field. System Should Auto Calculate thease field On save of lines.
@@ -1018,7 +1112,55 @@ namespace VAdvantage.Model
             {
                 log.Log(Level.SEVERE, "Line difference - From=" + fromLines.Length + " <> Saved=" + count);
             }
+
+            if (!(!counter && setOrder))
+            {
+                if (!CalculateTaxTotal())   //	setTotals
+                {
+                    log.Info(Msg.GetMsg(GetCtx(), "ErrorCalculateTax") + ": " + GetDocumentNo().ToString());
+                }
+            }
+
+            // Update header Tax
+            UpdateHeadertax();
+
             return count;
+        }
+
+        /// <summary>
+        /// this function is used to update header tax
+        /// </summary>
+        public void UpdateHeadertax()
+        {
+            String sql = "UPDATE C_Invoice i"
+                   + " SET TotalLines="
+                   + "(SELECT COALESCE(SUM(LineNetAmt),0) FROM C_InvoiceLine il WHERE i.C_Invoice_ID=il.C_Invoice_ID) "
+                   + ", AmtDimSubTotal = null "
+                   + ", AmtDimGrandTotal = null "
+                   + (Get_ColumnIndex("WithholdingAmt") > 0 ? ", WithholdingAmt = ((SELECT COALESCE(SUM(WithholdingAmt),0) FROM C_InvoiceLine il WHERE i.C_Invoice_ID=il.C_Invoice_ID))" : "")
+                   + " WHERE C_Invoice_ID=" + GetC_Invoice_ID();
+            int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
+            if (no != 1)
+            {
+                log.Warning("(1) #" + no);
+            }
+
+            if (IsTaxIncluded())
+                sql = "UPDATE C_Invoice i "
+                    + "SET GrandTotal=TotalLines "
+                    + (Get_ColumnIndex("WithholdingAmt") > 0 ? " , GrandTotalAfterWithholding = (TotalLines - NVL(WithholdingAmt, 0) - NVL(BackupWithholdingAmount, 0)) " : "")
+                    + "WHERE C_Invoice_ID=" + GetC_Invoice_ID();
+            else
+                sql = "UPDATE C_Invoice i "
+                    + "SET GrandTotal=TotalLines+"
+                        + "(SELECT ROUND((COALESCE(SUM(TaxAmt),0))," + GetPrecision() + ")  FROM C_InvoiceTax it WHERE i.C_Invoice_ID=it.C_Invoice_ID) "
+                        + (Get_ColumnIndex("WithholdingAmt") > 0 ? " , GrandTotalAfterWithholding = (TotalLines + (SELECT ROUND((COALESCE(SUM(TaxAmt),0))," + GetPrecision() + ")  FROM C_InvoiceTax it WHERE i.C_Invoice_ID=it.C_Invoice_ID) - NVL(WithholdingAmt, 0) - NVL(BackupWithholdingAmount, 0))" : "")
+                        + "WHERE C_Invoice_ID=" + GetC_Invoice_ID();
+            no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
+            if (no != 1)
+            {
+                log.Warning("(2) #" + no);
+            }
         }
 
         /// <summary>
@@ -1128,7 +1270,7 @@ namespace VAdvantage.Model
          * 	Is Reversal
          *	@return reversal
          */
-        private bool IsReversal()
+        public bool IsReversal()
         {
             return _reversal;
         }
@@ -1257,6 +1399,13 @@ namespace VAdvantage.Model
                     schedule[i].Save(Get_Trx());
                 }
             }
+
+            //String sql = "UPDATE C_InvoicePaySchedule Set IsValid = '" + (valid ? "Y" : "N") +
+            //            @"' WHERE IsValid != '" + (valid ? "Y" : "N") + @"' 
+            //                AND C_InvoicePaySchedule_ID IN (SELECT C_InvoicePaySchedule_ID FROM C_InvoicePaySchedule ips 
+            //                WHERE C_Invoice_ID=" + GetC_Invoice_ID() + ")";
+            //DB.ExecuteQuery(sql, null, Get_Trx());
+
             return valid;
         }
 
@@ -1280,74 +1429,77 @@ namespace VAdvantage.Model
             if (GetC_BPartner_Location_ID() == 0)
                 SetBPartner(new MBPartner(GetCtx(), GetC_BPartner_ID(), null));
 
-            // Check Unique column marked on Database table
-            StringBuilder colHeaders = new StringBuilder("");
-            int displayType;
-            string colName;
-            StringBuilder sb = new StringBuilder("SELECT ColumnName, Name FROM AD_Column WHERE IsActive = 'Y' AND IsUnique = 'Y' AND  AD_Table_ID = " + Get_Table_ID());
-            DataSet UnqFields = DB.ExecuteDataset(sb.ToString(), null, Get_Trx());
-
-            if (UnqFields != null && UnqFields.Tables[0].Rows.Count > 0)
+            if (!(GetDocStatus().Equals(DOCSTATUS_Completed) || GetDocStatus().Equals(DOCSTATUS_Closed)))
             {
-                sb.Clear();
-                for (int l = 0; l < UnqFields.Tables[0].Rows.Count; l++)
+                // Check Unique column marked on Database table
+                StringBuilder colHeaders = new StringBuilder("");
+                int displayType;
+                string colName;
+                StringBuilder sb = new StringBuilder("SELECT ColumnName, Name FROM AD_Column WHERE IsActive = 'Y' AND IsUnique = 'Y' AND  AD_Table_ID = " + Get_Table_ID());
+                DataSet UnqFields = DB.ExecuteDataset(sb.ToString(), null, Get_Trx());
+
+                if (UnqFields != null && UnqFields.Tables[0].Rows.Count > 0)
                 {
-                    if (sb.Length == 0)
+                    sb.Clear();
+                    for (int l = 0; l < UnqFields.Tables[0].Rows.Count; l++)
                     {
-                        sb.Append(" SELECT COUNT(1) FROM ");
-                        sb.Append(Get_TableName()).Append(" WHERE ");
-                    }
-                    else
-                    {
-                        sb.Append(" AND ");
-                        colHeaders.Append(", ");
-                    }
-
-                    colName = Util.GetValueOfString(UnqFields.Tables[0].Rows[l]["ColumnName"]);
-                    colHeaders.Append(UnqFields.Tables[0].Rows[l]["Name"]);
-                    object colval = Get_Value(colName);
-                    displayType = Get_ColumnDisplayType(Get_ColumnIndex(colName));
-
-                    if (colval == null || colval == DBNull.Value)
-                    {
-                        sb.Append(UnqFields.Tables[0].Rows[l]["ColumnName"]).Append(" IS NULL ");
-                    }
-                    else
-                    {
-                        sb.Append(UnqFields.Tables[0].Rows[l]["ColumnName"]).Append(" = ");
-                        if (DisplayType.IsID(displayType))
+                        if (sb.Length == 0)
                         {
-                            sb.Append(colval);
-                        }
-                        else if (DisplayType.IsDate(displayType))
-                        {
-
-                            sb.Append(DB.TO_DATE(Convert.ToDateTime(colval), DisplayType.Date == displayType));
-                        }
-                        else if (DisplayType.YesNo == displayType)
-                        {
-                            string boolval = "N";
-                            if (VAdvantage.Utility.Util.GetValueOfBool(colval))
-                                boolval = "Y";
-                            sb.Append("'").Append(boolval).Append("'");
+                            sb.Append(" SELECT COUNT(1) FROM ");
+                            sb.Append(Get_TableName()).Append(" WHERE ");
                         }
                         else
                         {
-                            sb.Append("'").Append(colval).Append("'");
+                            sb.Append(" AND ");
+                            colHeaders.Append(", ");
+                        }
+
+                        colName = Util.GetValueOfString(UnqFields.Tables[0].Rows[l]["ColumnName"]);
+                        colHeaders.Append(UnqFields.Tables[0].Rows[l]["Name"]);
+                        object colval = Get_Value(colName);
+                        displayType = Get_ColumnDisplayType(Get_ColumnIndex(colName));
+
+                        if (colval == null || colval == DBNull.Value)
+                        {
+                            sb.Append(UnqFields.Tables[0].Rows[l]["ColumnName"]).Append(" IS NULL ");
+                        }
+                        else
+                        {
+                            sb.Append(UnqFields.Tables[0].Rows[l]["ColumnName"]).Append(" = ");
+                            if (DisplayType.IsID(displayType))
+                            {
+                                sb.Append(colval);
+                            }
+                            else if (DisplayType.IsDate(displayType))
+                            {
+
+                                sb.Append(DB.TO_DATE(Convert.ToDateTime(colval), DisplayType.Date == displayType));
+                            }
+                            else if (DisplayType.YesNo == displayType)
+                            {
+                                string boolval = "N";
+                                if (VAdvantage.Utility.Util.GetValueOfBool(colval))
+                                    boolval = "Y";
+                                sb.Append("'").Append(boolval).Append("'");
+                            }
+                            else
+                            {
+                                sb.Append("'").Append(colval).Append("'");
+                            }
                         }
                     }
-                }
 
-                sb.Append(" AND " + Get_TableName() + "_ID != " + Get_ID());
+                    sb.Append(" AND " + Get_TableName() + "_ID != " + Get_ID());
 
-                //Check unique record in DB 
-                int count = Util.GetValueOfInt(DB.ExecuteScalar(sb.ToString(), null, Get_Trx()));
-                sb = null;
-                if (count > 0)
-                {
-                    log.SaveError("SaveErrorNotUnique", colHeaders.ToString());
-                    return false;
+                    //Check unique record in DB 
+                    int count = Util.GetValueOfInt(DB.ExecuteScalar(sb.ToString(), null, Get_Trx()));
+                    sb = null;
+                    if (count > 0)
+                    {
+                        log.SaveError("SaveErrorNotUnique", colHeaders.ToString());
+                        return false;
 
+                    }
                 }
             }
 
@@ -1476,7 +1628,8 @@ namespace VAdvantage.Model
             }
 
             // set backup withholding tax amount
-            if (!IsProcessing() && Get_ColumnIndex("C_Withholding_ID") > 0 && GetC_Withholding_ID() > 0)
+            if (!IsProcessing() && Get_ColumnIndex("C_Withholding_ID") > 0 && GetC_Withholding_ID() > 0
+                && !(GetDocStatus().Equals(DOCSTATUS_Completed) || GetDocStatus().Equals(DOCSTATUS_Closed)))
             {
                 if (!SetWithholdingAmount(this))
                 {
@@ -1631,7 +1784,7 @@ namespace VAdvantage.Model
                     // JID_0822: if conversion not found system will give message Message: Could not convert currency to base currency - Conversion type: XXXX
                     if (invAmt == 0)
                     {
-                        MConversionType conv = new MConversionType(GetCtx(), GetC_ConversionType_ID(), Get_TrxName());
+                        MConversionType conv = MConversionType.Get(GetCtx(), GetC_ConversionType_ID());
                         retMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
                             + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
 
@@ -2177,9 +2330,9 @@ namespace VAdvantage.Model
                             _processMsg = Msg.GetMsg(GetCtx(), "VIS_SelectAdvancePayment");
                             return DocActionVariables.STATUS_INVALID;
                         }
-                        else if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM C_PaySchedule WHERE IsActive = 'Y' AND C_PaymentTerm_ID=" + GetC_PaymentTerm_ID())) > 0)
+                        else if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(C_PaySchedule_ID) FROM C_PaySchedule WHERE IsActive = 'Y' AND C_PaymentTerm_ID=" + GetC_PaymentTerm_ID())) > 0)
                         {
-                            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM C_PaySchedule WHERE IsActive = 'Y' AND IsValid = 'Y' AND C_PaymentTerm_ID="
+                            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(C_PaySchedule_ID) FROM C_PaySchedule WHERE IsActive = 'Y' AND IsValid = 'Y' AND C_PaymentTerm_ID="
                                                                     + GetC_PaymentTerm_ID() + " AND VA009_Advance='Y'")) == 1)
                             {
                                 _processMsg = Msg.GetMsg(GetCtx(), "PaymentTermIsInValid");
@@ -2222,7 +2375,7 @@ namespace VAdvantage.Model
 
                 if (invAmt == 0)
                 {
-                    MConversionType conv = new MConversionType(GetCtx(), GetC_ConversionType_ID(), Get_TrxName());
+                    MConversionType conv = MConversionType.Get(GetCtx(), GetC_ConversionType_ID());
                     _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
                         + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
 
@@ -2440,6 +2593,13 @@ namespace VAdvantage.Model
                 DataBase.DB.ExecuteQuery("DELETE FROM C_InvoiceTax WHERE C_Invoice_ID=" + GetC_Invoice_ID(), null, Get_TrxName());
                 _taxes = null;
 
+                //
+                DataSet dsInvoiceLine = DB.ExecuteDataset(@"SELECT il.TaxBaseAmt, COALESCE(il.TaxAmt,0), i.IsSOTrx  , 
+                                            i.C_Currency_ID , i.DateAcct , i.C_ConversionType_ID , il.C_Invoice_ID, il.C_Tax_ID, il.LineNetAmt  
+                                           FROM C_InvoiceLine il 
+                                           INNER JOIN C_Invoice i ON (il.C_Invoice_ID=i.C_Invoice_ID) 
+                                           WHERE il.C_Invoice_ID=" + GetC_Invoice_ID(), null, Get_TrxName());
+
                 //	Lines
                 Decimal totalLines = Env.ZERO;
                 Decimal totalWithholdingAmt = Env.ZERO;
@@ -2462,7 +2622,7 @@ namespace VAdvantage.Model
                         if (iTax != null)
                         {
                             //iTax.SetIsTaxIncluded(IsTaxIncluded());
-                            if (!iTax.CalculateTaxFromLines())
+                            if (!iTax.CalculateTaxFromLines(dsInvoiceLine))
                                 return false;
                             if (!iTax.Save())
                                 return false;
@@ -2518,8 +2678,7 @@ namespace VAdvantage.Model
                                     if (newITax.Get_ColumnIndex("TaxBaseCurrencyAmt") > 0)
                                     {
                                         Decimal baseTaxAmt = taxAmt;
-                                        int primaryAcctSchemaCurrency_ = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_Currency_ID FROM C_AcctSchema WHERE C_AcctSchema_ID = 
-                                            (SELECT C_AcctSchema1_ID FROM AD_ClientInfo WHERE AD_Client_ID = " + GetAD_Client_ID() + ")", null, Get_Trx()));
+                                        int primaryAcctSchemaCurrency_ = GetCtx().GetContextAsInt("$C_Currency_ID");
                                         if (GetC_Currency_ID() != primaryAcctSchemaCurrency_)
                                         {
                                             baseTaxAmt = MConversionRate.Convert(GetCtx(), taxAmt, primaryAcctSchemaCurrency_, GetC_Currency_ID(),
@@ -2548,8 +2707,7 @@ namespace VAdvantage.Model
                                 if (newITax.Get_ColumnIndex("TaxBaseCurrencyAmt") > 0)
                                 {
                                     decimal? baseTaxAmt = taxAmt;
-                                    int primaryAcctSchemaCurrency_ = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_Currency_ID FROM C_AcctSchema WHERE C_AcctSchema_ID = 
-                                            (SELECT c_acctschema1_id FROM ad_clientinfo WHERE ad_client_id = " + GetAD_Client_ID() + ")", null, Get_Trx()));
+                                    int primaryAcctSchemaCurrency_ = GetCtx().GetContextAsInt("$C_Currency_ID");
                                     if (GetC_Currency_ID() != primaryAcctSchemaCurrency_)
                                     {
                                         baseTaxAmt = MConversionRate.Convert(GetCtx(), taxAmt, primaryAcctSchemaCurrency_, GetC_Currency_ID(),
@@ -2575,11 +2733,11 @@ namespace VAdvantage.Model
                 }
                 //
                 SetTotalLines(totalLines);
-                SetGrandTotal(grandTotal);
+                SetGrandTotal(Decimal.Round(grandTotal, GetPrecision()));
                 if (Get_ColumnIndex("WithholdingAmt") > 0)
                 {
                     base.SetWithholdingAmt(totalWithholdingAmt);
-                    SetGrandTotalAfterWithholding(grandTotal - totalWithholdingAmt);
+                    SetGrandTotalAfterWithholding(Decimal.Round((grandTotal - totalWithholdingAmt), GetPrecision()));
                 }
             }
             catch (Exception)
@@ -2647,8 +2805,8 @@ namespace VAdvantage.Model
                         return status;
                 }
 
-                // JID_1290: Set the document number from completed document sequence after completed (if needed)
-                SetCompletedDocumentNo();
+                // Set Document Date based on setting on Document Type
+                SetCompletedDocumentDate();
 
                 //	Implicit Approval
                 if (!IsApproved())
@@ -2656,7 +2814,7 @@ namespace VAdvantage.Model
 
                 log.Info(ToString());
                 StringBuilder Info = new StringBuilder();
-                MDocType dt = new MDocType(GetCtx(), GetC_DocTypeTarget_ID(), Get_Trx());
+                MDocType dt = MDocType.Get(GetCtx(), GetC_DocTypeTarget_ID());
                 //	Create Cash when the invoice againt order and payment method cash and  order is of POS type
                 if ((PAYMENTRULE_Cash.Equals(GetPaymentRule()) || PAYMENTRULE_CashAndCredit.Equals(GetPaymentRule())) && GetC_Order_ID() > 0)
                 {
@@ -2732,7 +2890,8 @@ namespace VAdvantage.Model
                                             _processMsg = "Could not Save Cash Journal Line";
                                             return DocActionVariables.STATUS_INVALID;
                                         }
-                                        Info.Append("@C_Cash_ID@: " + cash.GetName() + " #" + cl.GetLine());
+                                        //(1052)correct process message
+                                        Info.Append(Msg.GetMsg(GetCtx(),"CashJournal") + cash.GetName() + " #" + cl.GetLine());
                                     }
                                 }
                                 ds.Dispose();
@@ -2746,7 +2905,8 @@ namespace VAdvantage.Model
                                     _processMsg = "Could not Save Cash Journal Line";
                                     return DocActionVariables.STATUS_INVALID;
                                 }
-                                Info.Append("@C_Cash_ID@: " + cash.GetName() + " #" + cl.GetLine());
+                                //(1052)correct process message
+                                Info.Append(Msg.GetMsg(GetCtx(), "CashJournal") + cash.GetName() + " #" + cl.GetLine());
                                 SetC_CashLine_ID(cl.GetC_CashLine_ID());
                             }
                         } //End Std Pos Order
@@ -2757,14 +2917,68 @@ namespace VAdvantage.Model
                 //	Update Order & Match
                 int matchInv = 0;
                 int matchPO = 0;
-                //decimal AmortizedValue = 0;
-                //DateTime? AmortStartDate = null;
-                //DateTime? AmortEndDate = null;
+
+                // get Invoice Lines
                 MInvoiceLine[] lines = GetLines(false);
+
+                // VIS_0045: get OrderLine detail (for Optimization)
+                DataSet dsOrderLine = DB.ExecuteDataset(@"SELECT * FROM C_OrderLine WHERE C_OrderLine_ID IN
+                        (SELECT NVL(C_OrderLine_ID , 0) FROM C_InvoiceLine WHERE C_Invoice_ID = " + GetC_Invoice_ID() + ")", null, Get_Trx());
+                DataRow[] drOrderLine = null;
+
+                //VIS_0045: get inoutline deatil (for Optimization)
+                DataSet dsInOutLine = DB.ExecuteDataset(@"SELECT * FROM M_InOutLine WHERE M_InOutLine_ID IN
+                        (SELECT NVL(M_InOutLine_ID , 0) FROM C_InvoiceLine WHERE C_Invoice_ID = " + GetC_Invoice_ID() + ")", null, Get_Trx());
+
+                //VIS_0045: is used to maintain details of Order if line repetitive
+                List<OrderDetails> orderDetails = new List<OrderDetails>();
+
+                //VIS_0045: is Skip LOC block if not any order selected whose payement method is "Lettre of Credit (for Optimization)
+                bool isNotPayBaseTypeLOC = false;
+                if (Env.IsModuleInstalled("VA026_"))
+                {
+                    isNotPayBaseTypeLOC = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(il.C_InvoiceLine_ID) FROM C_InvoiceLine il 
+                     INNER JOIN C_Orderline ol ON il.C_OrderLine_ID = ol.C_OrderLine_ID 
+                     INNER JOIN C_Order o ON o.C_Order_ID = ol.C_Order_ID
+                     INNER JOIN VA009_PaymentMethod pm ON pm.VA009_PaymentMethod_ID = o.VA009_PaymentMethod_ID
+                     WHERE pm.VA009_PaymentBaseType = 'L'  AND il.C_Invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx())) > 0 ? false : true;
+                }
 
                 // for checking - costing calculate on completion or not
                 // IsCostImmediate = true - calculate cost on completion
                 MClient client = MClient.Get(GetCtx(), GetAD_Client_ID());
+
+                //VIS_0045: get all accountingtasetschema in which we have to calculate cost (for Optimization)
+                DataSet dsAccountingSchema = null;
+                if (client.IsCostImmediate())
+                {
+                    query.Clear();
+                    query.Append(@"Select C_Acctschema_Id From C_Acctschema
+                                WHERE Isactive = 'Y' AND C_Acctschema_Id = (SELECT C_Acctschema1_Id FROM Ad_Clientinfo 
+                                WHERE Ad_Client_Id = " + GetAD_Client_ID() + @" )
+                                Union
+                                Select C_Acctschema_Id From C_Acctschema Where Isactive = 'Y' And Ad_Client_Id = " + GetAD_Client_ID() + @"
+                                AND C_Acctschema_Id != (SELECT C_Acctschema1_Id FROM Ad_Clientinfo WHERE Ad_Client_Id = " + GetAD_Client_ID() + " )");
+                    dsAccountingSchema = DB.ExecuteDataset(query.ToString(), null, null);
+                }
+
+                //VIS_0045: PO Purchasing Tab (for Optimization)
+                DataSet dspurchasing = null;
+                DataSet dsPPCurVendorCount = null;
+                if (!IsSOTrx() && !IsReturnTrx() && dt.GetDocBaseType() == "API")
+                {
+                    dspurchasing = DB.ExecuteDataset(@"SELECT * FROM M_Product_PO 
+                                    WHERE C_BPartner_ID=" + GetC_BPartner_ID() + @" AND M_Product_ID IN 
+                                    (SELECT NVL(M_Product_ID , 0) FROM C_InvoiceLine WHERE 
+                                    NVL(M_Product_ID , 0) > 0 AND C_Invoice_ID = " + GetC_Invoice_ID() + ")", null, Get_Trx());
+
+                    dsPPCurVendorCount = DB.ExecuteDataset(@"SELECT COUNT(M_Product_ID), M_Product_ID FROM M_Product_PO 
+                                    WHERE IsActive='Y' AND IsCurrentVendor='Y' AND  M_Product_ID IN 
+                                    (SELECT NVL(M_Product_ID , 0) FROM C_InvoiceLine WHERE 
+                                    NVL(M_Product_ID , 0) > 0 AND C_Invoice_ID = " + GetC_Invoice_ID() + @")
+                                     GROUP BY M_Product_ID HAVING COUNT(M_Product_ID) > 1", null, Get_Trx());
+                }
+
                 for (int i = 0; i < lines.Length; i++)
                 {
                     MInvoiceLine line = lines[i];
@@ -2777,21 +2991,21 @@ namespace VAdvantage.Model
                         if (IsSOTrx()
                             || line.GetM_Product_ID() == 0)
                         {
-                            ol = new MOrderLine(GetCtx(), line.GetC_OrderLine_ID(), Get_TrxName());
-                            // if (line.GetQtyInvoiced() != null)
+                            if (dsOrderLine != null && dsOrderLine.Tables[0].Rows.Count > 0)
                             {
-                                // special check to Update orderline's Qty Invoiced
-                                // if Qtyentered == QtyInvoiced Then do not update 
-
-                                // Commented this check as it was not updating QtyInvoiced at Orderline //Lokesh Chauhan
-                                // if (ol.GetQtyInvoiced() < ol.GetQtyEntered())
-                                //{
-                                //    ol.SetQtyInvoiced(Decimal.Add(ol.GetQtyInvoiced(), line.GetQtyInvoiced()));
-                                //}
-
-                                ol.SetQtyInvoiced(Decimal.Add(ol.GetQtyInvoiced(), line.GetQtyInvoiced()));
-
+                                drOrderLine = dsOrderLine.Tables[0].Select("C_OrderLine_ID =" + line.GetC_OrderLine_ID());
+                                if (drOrderLine.Length > 0)
+                                {
+                                    ol = new MOrderLine(GetCtx(), drOrderLine[0], Get_TrxName());
+                                }
                             }
+                            if (ol == null || ol.Get_ID() <= 0 || ol.Get_ID() != line.GetC_OrderLine_ID())
+                            {
+                                ol = new MOrderLine(GetCtx(), line.GetC_OrderLine_ID(), Get_TrxName());
+                            }
+
+                            ol.SetQtyInvoiced(Decimal.Add(ol.GetQtyInvoiced(), line.GetQtyInvoiced()));
+
                             if (!ol.Save(Get_TrxName()))
                             {
                                 _processMsg = "Could not update Order Line";
@@ -2811,6 +3025,20 @@ namespace VAdvantage.Model
                                 po.Set_ValueNoCheck("C_BPartner_ID", GetC_BPartner_ID());
                             }
                             catch { }
+
+                            // create object of inout when asi not available on match inv (optimization)
+                            if (po.GetM_AttributeSetInstance_ID() == 0 && po.GetM_InOutLine_ID() != 0)
+                            {
+                                if (dsInOutLine != null && dsInOutLine.Tables[0].Rows.Count > 0)
+                                {
+                                    drOrderLine = dsInOutLine.Tables[0].Select("M_InOutLine_ID =" + po.GetM_InOutLine_ID());
+                                    if (drOrderLine.Length > 0)
+                                    {
+                                        po.iol = new MInOutLine(GetCtx(), drOrderLine[0], Get_TrxName());
+                                    }
+                                }
+                            }
+
                             if (!po.Save(Get_TrxName()))
                             {
                                 _processMsg = "Could not create PO Matching";
@@ -2822,7 +3050,15 @@ namespace VAdvantage.Model
 
                         if (line.GetC_OrderLine_ID() > 0)
                         {
-                            if (ol == null || ol.Get_ID() == 0)
+                            if (dsOrderLine != null && dsOrderLine.Tables[0].Rows.Count > 0)
+                            {
+                                drOrderLine = dsOrderLine.Tables[0].Select("C_OrderLine_ID =" + line.GetC_OrderLine_ID());
+                                if (drOrderLine.Length > 0)
+                                {
+                                    ol = new MOrderLine(GetCtx(), drOrderLine[0], Get_TrxName());
+                                }
+                            }
+                            if (ol == null || ol.Get_ID() == 0 || ol.Get_ID() != line.GetC_OrderLine_ID())
                             {
                                 ol = new MOrderLine(GetCtx(), line.GetC_OrderLine_ID(), Get_TrxName());
                             }
@@ -2847,7 +3083,7 @@ namespace VAdvantage.Model
 
                     #region Validate LOC which is created or not against Order 
                     // Validate LOC which is created or not against Order
-                    if (line.GetC_OrderLine_ID() != 0)
+                    if (line.GetC_OrderLine_ID() != 0 && !isNotPayBaseTypeLOC)
                     {
                         int VA026_LCDetail_ID = 0;
                         if (Env.IsModuleInstalled("VA026_") && Env.IsModuleInstalled("VA009_"))
@@ -2898,7 +3134,19 @@ namespace VAdvantage.Model
                         && line.GetM_Product_ID() != 0
                         && !IsReversal())
                     {
-                        MInOutLine receiptLine = new MInOutLine(GetCtx(), line.GetM_InOutLine_ID(), Get_TrxName());
+                        MInOutLine receiptLine = null;
+                        if (dsInOutLine != null && dsInOutLine.Tables[0].Rows.Count > 0)
+                        {
+                            drOrderLine = dsInOutLine.Tables[0].Select("M_InOutLine_ID =" + line.GetM_InOutLine_ID());
+                            if (drOrderLine.Length > 0)
+                            {
+                                receiptLine = new MInOutLine(GetCtx(), drOrderLine[0], Get_TrxName());
+                            }
+                        }
+                        if (receiptLine == null || receiptLine.Get_ID() <= 0 || receiptLine.Get_ID() != line.GetM_InOutLine_ID())
+                        {
+                            receiptLine = new MInOutLine(GetCtx(), line.GetM_InOutLine_ID(), Get_TrxName());
+                        }
                         Decimal matchQty = line.GetQtyInvoiced();
 
                         /////////////////////////
@@ -2938,6 +3186,10 @@ namespace VAdvantage.Model
                                 inv.Set_ValueNoCheck("C_BPartner_ID", GetC_BPartner_ID());
                             }
                             catch { }
+
+                            // assignmnet of minout object for optimization
+                            inv.iol = receiptLine;
+
                             if (!inv.Save(Get_TrxName()))
                             {
                                 _processMsg = "Could not create Invoice Matching";
@@ -2962,7 +3214,7 @@ namespace VAdvantage.Model
                        && !IsReversal())
                     {
                         int noAssets = (int)line.GetQtyEntered();
-                        MProduct product = new MProduct(GetCtx(), line.GetM_Product_ID(), Get_TrxName());
+                        MProduct product = MProduct.Get(GetCtx(), line.GetM_Product_ID());
                         if (product != null &&
                             (product.GetProductType() == X_M_Product.PRODUCTTYPE_Service || product.GetProductType() == X_M_Product.PRODUCTTYPE_ExpenseType) &&
                             product.IsCreateAsset())
@@ -3028,73 +3280,35 @@ namespace VAdvantage.Model
                     line.CreateLeadRequest(this);
 
                     //Enhaced by amit 09-12-2016 for calculating Foriegn Cost
+                    // commented after discussion with Mukesh sir and Ashish
                     #region calculating Foriegn Cost
-                    try
-                    {
-                        if (!IsSOTrx() && !IsReturnTrx() && line.GetM_InOutLine_ID() > 0) // for Invoice(vendor)
-                        {
-                            MProduct product1 = new MProduct(GetCtx(), line.GetM_Product_ID(), Get_Trx());
-                            MInvoice invoice = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_Trx());
-                            if (product1 != null && product1.GetProductType() == "I" && product1.GetM_Product_ID() > 0) // for Item Type product
-                            {
-                                if (!MCostForeignCurrency.InsertForeignCostAverageInvoice(GetCtx(), invoice, line, Get_Trx()))
-                                {
-                                    Get_Trx().Rollback();
-                                    log.Severe("Error occured during updating/inserting M_Cost_ForeignCurrency  against Average Invoice.");
-                                    _processMsg = "Could not update Foreign Currency Cost";
-                                    return DocActionVariables.STATUS_INVALID;
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception) { }
+                    //try
+                    //{
+                    //    if (!IsSOTrx() && !IsReturnTrx() && line.GetM_InOutLine_ID() > 0) // for Invoice(vendor)
+                    //    {
+                    //        MProduct product1 = new MProduct(GetCtx(), line.GetM_Product_ID(), Get_Trx());
+                    //        MInvoice invoice = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_Trx());
+                    //        if (product1 != null && product1.GetProductType() == "I" && product1.GetM_Product_ID() > 0) // for Item Type product
+                    //        {
+                    //            if (!MCostForeignCurrency.InsertForeignCostAverageInvoice(GetCtx(), invoice, line, Get_Trx()))
+                    //            {
+                    //                Get_Trx().Rollback();
+                    //                log.Severe("Error occured during updating/inserting M_Cost_ForeignCurrency  against Average Invoice.");
+                    //                _processMsg = "Could not update Foreign Currency Cost";
+                    //                return DocActionVariables.STATUS_INVALID;
+                    //            }
+                    //        }
+                    //    }
+                    //}
+                    //catch (Exception) { }
                     #endregion
 
                     //Added by Bharat on 11-April-2017 for Asset Expenses
                     #region Calculating Cost on Expenses
-                    Tuple<String, String, String> mInfo = null;
-                    if (Env.HasModulePrefix("VAFAM_", out mInfo) && line.Get_ColumnIndex("VAFAM_IsAssetRelated") > 0)
+                    if (Env.IsModuleInstalled("VAFAM_") && line.Get_ColumnIndex("VAFAM_IsAssetRelated") > 0)
                     {
                         if (!IsSOTrx() && !IsReturnTrx() && Util.GetValueOfBool(line.Get_Value("VAFAM_IsAssetRelated")))
                         {
-                            //                            DataSet _dsAsset = null;
-                            //                            StringBuilder _sql = new StringBuilder();
-                            //                            _sql.Append(@" SELECT M_COST.AD_CLIENT_ID, M_COST.AD_ORG_ID, M_COST.M_COSTELEMENT_ID,
-                            //                                       M_COST.C_ACCTSCHEMA_ID, M_COST.M_COSTTYPE_ID,
-                            //                                       M_COST.BASISTYPE, M_PRODUCT.C_UOM_ID, M_COSTELEMENT.COSTINGMETHOD,
-                            //                                       M_COST.M_ATTRIBUTESETINSTANCE_ID, M_COST.CURRENTCOSTPRICE, M_COST.FUTURECOSTPRICE
-                            //                                       FROM M_COST M_COSTELEMENT ON(M_COSTELEMENT.M_COSTELEMENT_ID  =M_COST.M_COSTELEMENT_ID)
-                            //                                       WHERE M_COSTELEMENT.COSTELEMENTTYPE='M' AND M_COST.AD_CLIENT_ID =" + GetCtx().GetAD_Client_ID() +
-                            //                                       @" AND M_COST.ISACTIVE ='Y' AND M_COST.IsAssetCost='Y' AND M_COST.A_ASSET_ID =" + line.GetA_Asset_ID());
-                            //                            _dsAsset = DB.ExecuteDataset(_sql.ToString());
-                            //                            _sql.Clear();
-                            //                            if (_dsAsset != null && _dsAsset.Tables[0].Rows.Count > 0)
-                            //                            {                               
-                            //                                MAsset _asset = new MAsset(GetCtx(), line.GetA_Asset_ID(), Get_Trx());
-                            //                                for (int k = 0; k < _dsAsset.Tables[0].Rows.Count; k++)
-                            //                                {
-                            //                                    MCostElement _costElement = new MCostElement(GetCtx(), Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["M_COSTELEMENT_ID"]), Get_TrxName());
-                            //                                    MAcctSchema _acctsch = null;
-                            //                                    MCost _cost = null;
-                            //                                    Decimal lineAmt = MConversionRate.ConvertBase(GetCtx(), line.GetLineTotalAmt(), GetC_Currency_ID(), GetDateAcct(), 0, GetAD_Client_ID(), GetAD_Org_ID());
-                            //                                    _acctsch = new MAcctSchema(GetCtx(), Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["C_ACCTSCHEMA_ID"]), Get_TrxName());
-                            //                                    _cost = new MCost(line.GetProduct(), Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["M_ATTRIBUTESETINSTANCE_ID"]),
-                            //                                        _acctsch, Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["AD_ORG_ID"]),
-                            //                                        Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["M_COSTELEMENT_ID"]),
-                            //                                        line.GetA_Asset_ID());
-                            //                                    _cost.SetCurrentCostPrice(Util.GetValueOfDecimal(_dsAsset.Tables[0].Rows[k]["CURRENTCOSTPRICE"]) + lineAmt);
-                            //                                    _cost.SetFutureCostPrice(Util.GetValueOfDecimal(_dsAsset.Tables[0].Rows[k]["FUTURECOSTPRICE"]) + lineAmt);
-                            //                                    if (!_cost.Save(Get_TrxName()))
-                            //                                    {
-                            //                                        _log.Info("Asset Cost Line Not Saved For Costing Element " + _costElement.GetName());
-                            //                                    }
-                            //                                }
-                            //                            }
-                            //                            else
-                            //                            {
-                            //                                _processMsg = "Asset Cost Not Found";
-                            //                                return DocActionVariables.STATUS_INVALID;
-                            //                            }
                             //Ned to get conversion based on selected conversion type on Invoice.
                             Decimal lineAmt = MConversionRate.ConvertBase(GetCtx(), line.GetLineTotalAmt(), GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
                             //Pratap: Added check to update asset cost only in case of Capital/Expense=Capital
@@ -3171,11 +3385,10 @@ namespace VAdvantage.Model
                             #endregion
                         }
                     }
-
                     #endregion
 
                     #region Create Asset against Ammortization Charge
-                    if (Env.HasModulePrefix("VAFAM_", out mInfo) && line.GetC_Charge_ID() > 0 && !IsSOTrx() && !IsReturnTrx() && !IsReversal() && countVA038 > 0)
+                    if (Env.IsModuleInstalled("VAFAM_") && line.GetC_Charge_ID() > 0 && !IsSOTrx() && !IsReturnTrx() && !IsReversal() && countVA038 > 0)
                     {
                         if (!GenerateAssetForAmortizationCharge(Info, line))
                         {
@@ -3188,19 +3401,28 @@ namespace VAdvantage.Model
                     //Enhaced by amit 16-12-2015 for Cost Queue
                     if (client.IsCostImmediate())
                     {
+                        ModelLibrary.Classes.CostingCheck costingCheck = new ModelLibrary.Classes.CostingCheck(GetCtx());
+                        costingCheck.dsAccountingSchema = dsAccountingSchema;
+                        costingCheck.invoiceline = line;
+                        costingCheck.invoice = this;
+                        if ((GetDescription() != null && GetDescription().Contains("{->")) || IsReversal())
+                        {
+                            costingCheck.isReversal = true;
+                        }
+
                         bool isCostAdjustableOnLost = false;
                         int count = 0;
                         #region costing calculation
                         if (line != null && line.GetC_Invoice_ID() > 0 && line.GetQtyInvoiced() == 0)
                             continue;
 
-                        Decimal ProductLineCost = line.GetProductLineCost(line);
+                        Decimal ProductLineCost = line.GetProductLineCost(line, true);
 
                         // check IsCostAdjustmentOnLost exist on product 
-                        string sql = @"SELECT COUNT(*) FROM AD_Column WHERE IsActive = 'Y' AND 
-                                       AD_Table_ID =  ( SELECT AD_Table_ID FROM AD_Table WHERE IsActive = 'Y' AND TableName LIKE 'M_Product' ) 
-                                       AND ColumnName LIKE 'IsCostAdjustmentOnLost' ";
-                        count = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                        //string sql = @"SELECT COUNT(AD_Column_ID) FROM AD_Column WHERE IsActive = 'Y' AND 
+                        //               AD_Table_ID =  ( SELECT AD_Table_ID FROM AD_Table WHERE IsActive = 'Y' AND TableName = 'M_Product' ) 
+                        //               AND ColumnName = 'IsCostAdjustmentOnLost' ";
+                        //count = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
                         if (line.GetC_OrderLine_ID() > 0)
                         {
@@ -3209,76 +3431,11 @@ namespace VAdvantage.Model
                                 #region landed cost Allocation
                                 if (!IsSOTrx() && !IsReturnTrx())
                                 {
-                                    if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), null, 0, "Invoice(Vendor)", null, null, null, line,
-                                         null, ProductLineCost, 0, Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
+                                    if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_LandedCost_ID) FROM
+                                          C_LandedCost WHERE C_InvoiceLine_ID = " + line.GetC_InvoiceLine_ID(), null, Get_Trx())) > 0)
                                     {
-                                        if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
-                                        {
-                                            conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
-                                        }
-                                        _processMsg = Msg.GetMsg(GetCtx(), "VIS_CostNotCalculated");// "Could not create Product Costs";
-                                        if (client.Get_ColumnIndex("IsCostMandatory") > 0 && client.IsCostMandatory())
-                                        {
-                                            return DocActionVariables.STATUS_INVALID;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        line.SetIsCostImmediate(true);
-                                        line.Save();
-                                    }
-                                }
-                                #endregion
-                            }
-                            else
-                            {
-                                MProduct product1 = new MProduct(GetCtx(), line.GetM_Product_ID(), Get_Trx());
-                                if (product1.GetProductType() == "E" && product1.GetM_Product_ID() > 0) // for Expense type product
-                                {
-                                    #region for Expense type product
-                                    if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, 0, "Invoice(Vendor)", null, null, null, line,
-                                        null, ProductLineCost, 0, Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
-                                    {
-                                        if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
-                                        {
-                                            conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
-                                        }
-                                        _processMsg = Msg.GetMsg(GetCtx(), "VIS_CostNotCalculated");// "Could not create Product Costs";
-                                        if (client.Get_ColumnIndex("IsCostMandatory") > 0 && client.IsCostMandatory())
-                                        {
-                                            return DocActionVariables.STATUS_INVALID;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        line.SetIsCostImmediate(true);
-                                        line.Save();
-                                    }
-                                    #endregion
-                                }
-                                else if (product1.GetProductType() == "I" && product1.GetM_Product_ID() > 0) // for Item Type product
-                                {
-                                    #region for Item Type product
-                                    // check isCostAdjutableonLost is true on product and mr qty is less than invoice qty then consider mr qty else inv qty
-                                    if (count > 0)
-                                    {
-                                        isCostAdjustableOnLost = product1.IsCostAdjustmentOnLost();
-                                    }
-
-                                    MOrder order1 = new MOrder(GetCtx(), GetC_Order_ID(), null);
-                                    MOrderLine ol1 = new MOrderLine(GetCtx(), line.GetC_OrderLine_ID(), Get_Trx());
-                                    if (order1.GetC_Order_ID() == 0)
-                                    {
-                                        //MOrderLine ol1 = new MOrderLine(GetCtx(), line.GetC_OrderLine_ID(), Get_Trx());
-                                        order1 = new MOrder(GetCtx(), ol1.GetC_Order_ID(), Get_Trx());
-                                    }
-                                    if (order1.IsSOTrx() && !order1.IsReturnTrx()) // SO
-                                    {
-                                        #region against SO
-                                        if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
-                                              "Invoice(Customer)", null, null, null, line, null,
-                                              Decimal.Negate(ProductLineCost), Decimal.Negate(line.GetQtyInvoiced()),
-                                              Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
+                                        if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), null, 0, "Invoice(Vendor)", null, null, null, line,
+                                         null, ProductLineCost, 0, Get_Trx(), costingCheck, out conversionNotFoundInvoice, optionalstr: "window"))
                                         {
                                             if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
                                             {
@@ -3292,6 +3449,103 @@ namespace VAdvantage.Model
                                         }
                                         else
                                         {
+                                            line.SetIsCostImmediate(true);
+                                            DB.ExecuteQuery(@"UPDATE C_InvoiceLine SET IsCostImmediate= 'Y' 
+                                              WHERE C_Invoiceline_ID = " + line.GetC_InvoiceLine_ID(), null, Get_Trx());
+                                        }
+                                    }
+                                }
+                                #endregion
+                            }
+                            else
+                            {
+                                MProduct product1 = new MProduct(GetCtx(), line.GetM_Product_ID(), Get_Trx());
+                                costingCheck.product = product1;
+                                count = product1.Get_ColumnIndex("IsCostAdjustmentOnLost") >= 0 ? 1 : 0;
+
+                                if (product1.GetProductType() == "E" && product1.GetM_Product_ID() > 0) // for Expense type product
+                                {
+                                    #region for Expense type product
+                                    if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, 0, "Invoice(Vendor)", null, null, null, line,
+                                        null, ProductLineCost, 0, Get_Trx(), costingCheck, out conversionNotFoundInvoice, optionalstr: "window"))
+                                    {
+                                        if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
+                                        {
+                                            conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
+                                        }
+                                        _processMsg = Msg.GetMsg(GetCtx(), "VIS_CostNotCalculated");// "Could not create Product Costs";
+                                        if (client.Get_ColumnIndex("IsCostMandatory") > 0 && client.IsCostMandatory())
+                                        {
+                                            return DocActionVariables.STATUS_INVALID;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        line.SetIsCostImmediate(true);
+                                        DB.ExecuteQuery(@"UPDATE C_InvoiceLine SET IsCostImmediate= 'Y' 
+                                              WHERE C_Invoiceline_ID = " + line.GetC_InvoiceLine_ID(), null, Get_Trx());
+                                    }
+                                    #endregion
+                                }
+                                else if (product1.GetProductType() == "I" && product1.GetM_Product_ID() > 0) // for Item Type product
+                                {
+                                    #region for Item Type product
+                                    // check isCostAdjutableonLost is true on product and mr qty is less than invoice qty then consider mr qty else inv qty
+                                    if (count > 0)
+                                    {
+                                        isCostAdjustableOnLost = product1.IsCostAdjustmentOnLost();
+                                    }
+
+                                    // create Orderline object
+                                    MOrderLine ol1 = null;
+                                    if (ol != null && ol.Get_ID() > 0 && ol.Get_ID() == line.GetC_OrderLine_ID())
+                                    {
+                                        ol1 = ol;
+                                    }
+                                    else
+                                    {
+                                        ol1 = new MOrderLine(GetCtx(), line.GetC_OrderLine_ID(), Get_Trx());
+                                    }
+
+                                    // create order object
+                                    MOrder order1 = null;
+                                    if (orderDetails.Count > 0)
+                                    {
+                                        // if order already exist then get object 
+                                        order1 = orderDetails.Find(x => (x.C_Order_ID == ol1.GetC_Order_ID()))?.Order ?? null;
+                                    }
+                                    if (order1 == null || order1.GetC_Order_ID() == 0)
+                                    {
+                                        order1 = new MOrder(GetCtx(), ol1.GetC_Order_ID(), Get_Trx());
+                                        orderDetails.Add(new OrderDetails { C_Order_ID = order1.GetC_Order_ID(), Order = order1 });
+                                    }
+
+                                    //
+                                    costingCheck.order = order1;
+                                    costingCheck.orderline = ol1;
+
+                                    if (order1.IsSOTrx() && !order1.IsReturnTrx()) // SO
+                                    {
+                                        #region against SO
+                                        if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
+                                              "Invoice(Customer)", null, null, null, line, null,
+                                              Decimal.Negate(ProductLineCost), Decimal.Negate(line.GetQtyInvoiced()),
+                                              Get_Trx(), costingCheck, out conversionNotFoundInvoice, optionalstr: "window"))
+                                        {
+                                            if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
+                                            {
+                                                conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
+                                            }
+                                            _processMsg = Msg.GetMsg(GetCtx(), "VIS_CostNotCalculated");// "Could not create Product Costs";
+                                            if (client.Get_ColumnIndex("IsCostMandatory") > 0 && client.IsCostMandatory())
+                                            {
+                                                return DocActionVariables.STATUS_INVALID;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            query.Clear();
+                                            query.Append(@"UPDATE C_InvoiceLine SET IsCostImmediate= 'Y' ");
                                             if (line.GetM_InOutLine_ID() > 0)
                                             {
                                                 DataSet ds = DB.ExecuteDataset(@"SELECT M_InOutLine.CurrentCostPrice, M_InOut.M_Warehouse_ID 
@@ -3300,15 +3554,18 @@ namespace VAdvantage.Model
                                                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                                                 {
                                                     line.SetCurrentCostPrice(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["CurrentCostPrice"]));
+                                                    query.Append(" , CurrentCostPrice =" + Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["CurrentCostPrice"]));
 
                                                     currentCostPrice = MCost.GetproductCosts(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
                                                                                line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(),
                                                                                Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_Warehouse_ID"]));
                                                     line.SetPostCurrentCostPrice(currentCostPrice);
+                                                    query.Append(" , PostCurrentCostPrice =" + currentCostPrice);
                                                 }
                                             }
                                             line.SetIsCostImmediate(true);
-                                            line.Save();
+                                            query.Append(@" WHERE C_Invoiceline_ID = " + line.GetC_InvoiceLine_ID());
+                                            DB.ExecuteQuery(query.ToString(), null, Get_Trx());
                                         }
                                         #endregion
                                     }
@@ -3319,9 +3576,24 @@ namespace VAdvantage.Model
                                         bool isUpdatePostCurrentcostPriceFromMR = MCostElement.IsPOCostingmethod(GetCtx(), GetAD_Client_ID(), product1.GetM_Product_ID(), Get_Trx());
                                         if (line.GetM_InOutLine_ID() > 0)
                                         {
-                                            sLine = new MInOutLine(GetCtx(), line.GetM_InOutLine_ID(), Get_Trx());
+                                            if (dsInOutLine != null && dsInOutLine.Tables[0].Rows.Count > 0)
+                                            {
+                                                drOrderLine = dsInOutLine.Tables[0].Select("M_InOutLine_ID =" + line.GetM_InOutLine_ID());
+                                                if (drOrderLine.Length > 0)
+                                                {
+                                                    sLine = new MInOutLine(GetCtx(), drOrderLine[0], Get_TrxName());
+                                                }
+                                            }
+                                            if (sLine == null || sLine.Get_ID() <= 0 || sLine.Get_ID() != line.GetM_InOutLine_ID())
+                                            {
+                                                sLine = new MInOutLine(GetCtx(), line.GetM_InOutLine_ID(), Get_Trx());
+                                            }
+                                            costingCheck.inoutline = sLine;
+
                                             // get warehouse refernce from header -- InOut
                                             int m_Warehouse_Id = sLine.GetM_Warehouse_ID();
+                                            costingCheck.inout = sLine.GetParent();
+
                                             if (!sLine.IsCostImmediate())
                                             {
                                                 // get cost from Product Cost before cost calculation
@@ -3338,7 +3610,7 @@ namespace VAdvantage.Model
                                             "Material Receipt", null, sLine, null, line, null,
                                             order1 != null && order1.GetDocStatus() != "VO" ? Decimal.Multiply(Decimal.Divide(ProductOrderLineCost, ol1.GetQtyOrdered()), sLine.GetMovementQty())
                                                 : Decimal.Multiply(ProductOrderPriceActual, sLine.GetQtyEntered()),
-                                             sLine.GetMovementQty(), Get_Trx(), out conversionNotFoundInOut, optionalstr: "window"))
+                                             sLine.GetMovementQty(), Get_Trx(), costingCheck, out conversionNotFoundInOut, optionalstr: "window"))
                                                 {
                                                     _processMsg = Msg.GetMsg(GetCtx(), "VIS_CostNotCalculated");// "Could not create Product Costs";
                                                     if (client.Get_ColumnIndex("IsCostMandatory") > 0 && client.IsCostMandatory())
@@ -3368,12 +3640,11 @@ namespace VAdvantage.Model
                                             }
 
                                             // calculate invoice line costing after calculating costing of linked MR line 
-                                            if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
+                                            if (ProductLineCost != 0 && !MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
                                                   "Invoice(Vendor)", null, sLine, null, line, null,
                                                   count > 0 && isCostAdjustableOnLost && ((inv != null && inv.GetM_InOutLine_ID() > 0) ? inv.GetQty() : Decimal.Negate(matchInvQty)) < (GetDescription() != null && GetDescription().Contains("{->") ? Decimal.Negate(line.GetQtyInvoiced()) : line.GetQtyInvoiced()) ? ProductLineCost : Decimal.Multiply(Decimal.Divide(ProductLineCost, line.GetQtyInvoiced()), (inv != null && inv.GetM_InOutLine_ID() > 0) ? inv.GetQty() : matchInvQty),
-                                                //count > 0 && isCostAdjustableOnLost && line.GetM_InOutLine_ID() > 0 && sLine.GetMovementQty() < (GetDescription() != null && GetDescription().Contains("{->") ? Decimal.Negate(line.GetQtyInvoiced()) : line.GetQtyInvoiced()) ? (GetDescription() != null && GetDescription().Contains("{->") ? Decimal.Negate(sLine.GetMovementQty()) : sLine.GetMovementQty()) : line.GetQtyInvoiced(),
                                                 GetDescription() != null && GetDescription().Contains("{->") ? matchInvQty : inv.GetQty(),
-                                                Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
+                                                Get_Trx(), costingCheck, out conversionNotFoundInvoice, optionalstr: "window"))
                                             {
                                                 if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
                                                 {
@@ -3387,27 +3658,32 @@ namespace VAdvantage.Model
                                             }
                                             else
                                             {
+                                                query.Clear();
+                                                query.Append(@"UPDATE C_InvoiceLine SET IsCostImmediate= 'Y' ");
+
                                                 line.SetCurrentCostPrice(currentCostPrice);
 
                                                 // get cost from Product Cost after cost calculation
                                                 currentCostPrice = MCost.GetproductCostAndQtyMaterial(GetAD_Client_ID(), GetAD_Org_ID(),
                                                                                          product1.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), m_Warehouse_Id, false);
                                                 line.SetPostCurrentCostPrice(currentCostPrice);
+                                                query.Append(" , PostCurrentCostPrice =" + currentCostPrice);
 
                                                 if (!isUpdatePostCurrentcostPriceFromMR)
                                                 {
                                                     line.SetCurrentCostPrice(currentCostPrice);
                                                 }
+                                                query.Append(" , CurrentCostPrice =" + line.GetCurrentCostPrice());
+
                                                 line.SetIsCostImmediate(true);
-                                                line.Save(Get_Trx());
+                                                query.Append(@" WHERE C_Invoiceline_ID = " + line.GetC_InvoiceLine_ID());
+                                                DB.ExecuteQuery(query.ToString(), null, Get_Trx());
 
                                                 if (inv != null && inv.GetM_MatchInv_ID() > 0)
                                                 {
                                                     if (inv.Get_ColumnIndex("PostCurrentCostPrice") >= 0)
                                                     {
                                                         // get cost from Product Cost after cost calculation
-                                                        //currentCostPrice = MCost.GetproductCostAndQtyMaterial(GetAD_Client_ID(), GetAD_Org_ID(),
-                                                        //                                         product1.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), m_Warehouse_Id, false);
                                                         inv.SetPostCurrentCostPrice(currentCostPrice);
                                                     }
                                                     inv.SetIsCostImmediate(true);
@@ -3453,7 +3729,7 @@ namespace VAdvantage.Model
                                         #region CRMA
                                         if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
                                           "Invoice(Customer)", null, null, null, line, null, ProductLineCost,
-                                           line.GetQtyInvoiced(), Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
+                                           line.GetQtyInvoiced(), Get_Trx(), costingCheck, out conversionNotFoundInvoice, optionalstr: "window"))
                                         {
                                             if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
                                             {
@@ -3467,6 +3743,9 @@ namespace VAdvantage.Model
                                         }
                                         else
                                         {
+                                            query.Clear();
+                                            query.Append(@"UPDATE C_InvoiceLine SET IsCostImmediate= 'Y' ");
+
                                             if (line.GetM_InOutLine_ID() > 0)
                                             {
                                                 DataSet ds = DB.ExecuteDataset(@"SELECT M_InOutLine.CurrentCostPrice, M_InOut.M_Warehouse_ID 
@@ -3475,15 +3754,18 @@ namespace VAdvantage.Model
                                                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                                                 {
                                                     line.SetCurrentCostPrice(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["CurrentCostPrice"]));
+                                                    query.Append(" , CurrentCostPrice =" + Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["CurrentCostPrice"]));
 
                                                     currentCostPrice = MCost.GetproductCostAndQtyMaterial(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
                                                                                line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(),
                                                                                Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_Warehouse_ID"]), false);
                                                     line.SetPostCurrentCostPrice(currentCostPrice);
+                                                    query.Append(" , PostCurrentCostPrice =" + currentCostPrice);
                                                 }
                                             }
                                             line.SetIsCostImmediate(true);
-                                            line.Save();
+                                            query.Append(@" WHERE C_Invoiceline_ID = " + line.GetC_InvoiceLine_ID());
+                                            DB.ExecuteQuery(query.ToString(), null, Get_Trx());
                                         }
                                         #endregion
                                     }
@@ -3498,7 +3780,7 @@ namespace VAdvantage.Model
                                         {
                                             if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
                                               "Invoice(Vendor)", null, null, null, line, null, Decimal.Negate(ProductLineCost), Decimal.Negate(line.GetQtyInvoiced())
-                                              , Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
+                                              , Get_Trx(), costingCheck, out conversionNotFoundInvoice, optionalstr: "window"))
                                             {
                                                 if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
                                                 {
@@ -3512,15 +3794,20 @@ namespace VAdvantage.Model
                                             }
                                             else
                                             {
+                                                query.Clear();
+                                                query.Append(@"UPDATE C_InvoiceLine SET IsCostImmediate= 'Y' ");
+
                                                 if (line.Get_ColumnIndex("PostCurrentCostPrice") >= 0)
                                                 {
                                                     // get post cost after invoice cost calculation and update on invoice
                                                     currentCostPrice = MCost.GetproductCosts(GetAD_Client_ID(), line.GetAD_Org_ID(),
                                                                                                     product1.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
                                                     line.SetPostCurrentCostPrice(currentCostPrice);
+                                                    query.Append(" , PostCurrentCostPrice =" + currentCostPrice);
                                                 }
                                                 line.SetIsCostImmediate(true);
-                                                line.Save();
+                                                query.Append(@" WHERE C_Invoiceline_ID = " + line.GetC_InvoiceLine_ID());
+                                                DB.ExecuteQuery(query.ToString(), null, Get_Trx());
                                             }
                                         }
                                         #endregion
@@ -3531,8 +3818,22 @@ namespace VAdvantage.Model
                                         {
                                             bool isUpdatePostCurrentcostPriceFromMR = MCostElement.IsPOCostingmethod(GetCtx(), GetAD_Client_ID(), product1.GetM_Product_ID(), Get_Trx());
                                             // if qty is reduced through Return to vendor then we reduce amount else not
-                                            sLine = new MInOutLine(GetCtx(), line.GetM_InOutLine_ID(), Get_Trx());
+                                            if (dsInOutLine != null && dsInOutLine.Tables[0].Rows.Count > 0)
+                                            {
+                                                drOrderLine = dsInOutLine.Tables[0].Select("M_InOutLine_ID =" + line.GetM_InOutLine_ID());
+                                                if (drOrderLine.Length > 0)
+                                                {
+                                                    sLine = new MInOutLine(GetCtx(), drOrderLine[0], Get_TrxName());
+                                                }
+                                            }
+                                            if (sLine == null || sLine.Get_ID() <= 0 || sLine.Get_ID() != line.GetM_InOutLine_ID())
+                                            {
+                                                sLine = new MInOutLine(GetCtx(), line.GetM_InOutLine_ID(), Get_Trx());
+                                            }
+
+                                            costingCheck.inoutline = sLine;
                                             int m_Warehouse_Id = sLine.GetM_Warehouse_ID();
+                                            costingCheck.inout = sLine.GetParent();
                                             if (sLine.IsCostImmediate())
                                             {
                                                 // for reverse record -- pick qty from M_MatchInvCostTrack 
@@ -3550,7 +3851,7 @@ namespace VAdvantage.Model
                                                   ? Decimal.Negate(ProductLineCost)
                                                   : Decimal.Negate(Decimal.Multiply(Decimal.Divide(ProductLineCost, line.GetQtyInvoiced()), (inv != null && inv.GetM_InOutLine_ID() > 0) ? inv.GetQty() : Decimal.Negate(matchInvQty))),
                                                   GetDescription() != null && GetDescription().Contains("{->") ? (matchInvQty) : Decimal.Negate(inv.GetQty()),
-                                                   Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
+                                                   Get_Trx(), costingCheck, out conversionNotFoundInvoice, optionalstr: "window"))
                                                 {
                                                     if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
                                                     {
@@ -3591,7 +3892,11 @@ namespace VAdvantage.Model
                                                                                              product1.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), m_Warehouse_Id);
                                                     line.SetPostCurrentCostPrice(currentCostPrice);
                                                     line.SetIsCostImmediate(true);
-                                                    line.Save();
+                                                    query.Clear();
+                                                    query.Append(@"UPDATE C_InvoiceLine SET IsCostImmediate= 'Y' ");
+                                                    query.Append(" , PostCurrentCostPrice =" + currentCostPrice);
+                                                    query.Append(@" WHERE C_Invoiceline_ID = " + line.GetC_InvoiceLine_ID());
+                                                    DB.ExecuteQuery(query.ToString(), null, Get_Trx());
 
                                                     if (inv != null && inv.GetM_MatchInv_ID() > 0)
                                                     {
@@ -3622,7 +3927,7 @@ namespace VAdvantage.Model
                                                         DB.ExecuteQuery("UPDATE M_MatchInv SET CurrentCostPrice = " + currentCostPrice +
                                                                          @" WHERE M_MatchInv_ID = " + inv.GetM_MatchInv_ID(), null, Get_Trx());
                                                         DB.ExecuteQuery("UPDATE C_InvoiceLine SET CurrentCostPrice = " + currentCostPrice +
-                                                                   @" WHERE C_InvoiceLine = " + line.GetC_InvoiceLine_ID(), null, Get_Trx());
+                                                                   @" WHERE C_InvoiceLine_ID = " + line.GetC_InvoiceLine_ID(), null, Get_Trx());
 
                                                     }
 
@@ -3642,33 +3947,41 @@ namespace VAdvantage.Model
                                 if (!IsSOTrx() && !IsReturnTrx())
                                 {
                                     #region landed cost allocation
-                                    if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), null, 0, "Invoice(Vendor)", null, null, null, line,
-                                        null, ProductLineCost, 0, Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
+                                    if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_LandedCost_ID) FROM
+                                          C_LandedCost WHERE  C_InvoiceLine_ID = " + line.GetC_InvoiceLine_ID(), null, Get_Trx())) > 0)
                                     {
-                                        if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
+                                        if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), null, 0, "Invoice(Vendor)", null, null, null, line,
+                                            null, ProductLineCost, 0, Get_Trx(), costingCheck, out conversionNotFoundInvoice, optionalstr: "window"))
                                         {
-                                            conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
+                                            if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
+                                            {
+                                                conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
+                                            }
+                                            _processMsg = Msg.GetMsg(GetCtx(), "VIS_CostNotCalculated");// "Could not create Product Costs";
+                                            if (client.Get_ColumnIndex("IsCostMandatory") > 0 && client.IsCostMandatory())
+                                            {
+                                                return DocActionVariables.STATUS_INVALID;
+                                            }
                                         }
-                                        _processMsg = Msg.GetMsg(GetCtx(), "VIS_CostNotCalculated");// "Could not create Product Costs";
-                                        if (client.Get_ColumnIndex("IsCostMandatory") > 0 && client.IsCostMandatory())
+                                        else
                                         {
-                                            return DocActionVariables.STATUS_INVALID;
+                                            //line.SetIsCostImmediate(true);
+                                            DB.ExecuteQuery(@"UPDATE C_InvoiceLine SET IsCostImmediate= 'Y' 
+                                              WHERE C_Invoiceline_ID = " + line.GetC_InvoiceLine_ID(), null, Get_Trx());
                                         }
-                                    }
-                                    else
-                                    {
-                                        line.SetIsCostImmediate(true);
-                                        line.Save();
                                     }
                                     #endregion
                                 }
                             }
                             MProduct product1 = new MProduct(GetCtx(), line.GetM_Product_ID(), Get_Trx());
+                            costingCheck.product = product1;
+                            count = product1.Get_ColumnIndex("IsCostAdjustmentOnLost") >= 0 ? 1 : 0;
+
                             if (product1.GetProductType() == "E" && product1.GetM_Product_ID() > 0) // for Expense type product
                             {
                                 #region for Expense type product
                                 if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, 0, "Invoice(Vendor)", null, null, null, line,
-                                    null, ProductLineCost, 0, Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
+                                    null, ProductLineCost, 0, Get_Trx(), costingCheck, out conversionNotFoundInvoice, optionalstr: "window"))
                                 {
                                     if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
                                     {
@@ -3683,7 +3996,8 @@ namespace VAdvantage.Model
                                 else
                                 {
                                     line.SetIsCostImmediate(true);
-                                    line.Save();
+                                    DB.ExecuteQuery(@"UPDATE C_InvoiceLine SET IsCostImmediate= 'Y' 
+                                              WHERE C_Invoiceline_ID = " + line.GetC_InvoiceLine_ID(), null, Get_Trx());
                                 }
                                 #endregion
                             }
@@ -3699,7 +4013,7 @@ namespace VAdvantage.Model
                                 {
                                     if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
                                           "Invoice(Customer)", null, null, null, line, null, Decimal.Negate(ProductLineCost),
-                                          Decimal.Negate(line.GetQtyInvoiced()), Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
+                                          Decimal.Negate(line.GetQtyInvoiced()), Get_Trx(), costingCheck, out conversionNotFoundInvoice, optionalstr: "window"))
                                     {
                                         if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
                                         {
@@ -3713,6 +4027,8 @@ namespace VAdvantage.Model
                                     }
                                     else
                                     {
+                                        query.Clear();
+                                        query.Append(@"UPDATE C_InvoiceLine SET IsCostImmediate= 'Y' ");
                                         if (line.GetM_InOutLine_ID() > 0)
                                         {
                                             DataSet ds = DB.ExecuteDataset(@"SELECT M_InOutLine.CurrentCostPrice, M_InOut.M_Warehouse_ID 
@@ -3721,15 +4037,18 @@ namespace VAdvantage.Model
                                             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                                             {
                                                 line.SetCurrentCostPrice(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["CurrentCostPrice"]));
+                                                query.Append(" , CurrentCostPrice =" + Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["CurrentCostPrice"]));
 
                                                 currentCostPrice = MCost.GetproductCosts(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
                                                                            line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(),
                                                                            Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_Warehouse_ID"]));
                                                 line.SetPostCurrentCostPrice(currentCostPrice);
+                                                query.Append(" , PostCurrentCostPrice =" + currentCostPrice);
                                             }
                                         }
                                         line.SetIsCostImmediate(true);
-                                        line.Save();
+                                        query.Append(@" WHERE C_Invoiceline_ID = " + line.GetC_InvoiceLine_ID());
+                                        DB.ExecuteQuery(query.ToString(), null, Get_Trx());
                                     }
                                 }
                                 else if (!IsSOTrx() && !IsReturnTrx()) // PO
@@ -3739,8 +4058,22 @@ namespace VAdvantage.Model
                                     int m_Warehouse_Id = 0;
                                     if (line.GetM_InOutLine_ID() > 0)
                                     {
-                                        sLine = new MInOutLine(GetCtx(), line.GetM_InOutLine_ID(), Get_Trx());
+                                        if (dsInOutLine != null && dsInOutLine.Tables[0].Rows.Count > 0)
+                                        {
+                                            drOrderLine = dsInOutLine.Tables[0].Select("M_InOutLine_ID =" + line.GetM_InOutLine_ID());
+                                            if (drOrderLine.Length > 0)
+                                            {
+                                                sLine = new MInOutLine(GetCtx(), drOrderLine[0], Get_TrxName());
+                                            }
+                                        }
+                                        if (sLine == null || sLine.Get_ID() <= 0 || sLine.Get_ID() != line.GetM_InOutLine_ID())
+                                        {
+                                            sLine = new MInOutLine(GetCtx(), line.GetM_InOutLine_ID(), Get_Trx());
+                                        }
+                                        costingCheck.inoutline = sLine;
+
                                         m_Warehouse_Id = sLine.GetM_Warehouse_ID();
+                                        costingCheck.inout = sLine.GetParent();
                                         if (!sLine.IsCostImmediate())
                                         {
                                             // get cost from Product Cost before cost calculation
@@ -3751,7 +4084,7 @@ namespace VAdvantage.Model
 
                                             // calculate cost
                                             if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, sLine.GetM_AttributeSetInstance_ID(),
-                                        "Material Receipt", null, sLine, null, line, null, 0, sLine.GetMovementQty(), Get_Trx(), out conversionNotFoundInOut, optionalstr: "window"))
+                                        "Material Receipt", null, sLine, null, line, null, 0, sLine.GetMovementQty(), Get_Trx(), costingCheck, out conversionNotFoundInOut, optionalstr: "window"))
                                             {
                                                 _processMsg = Msg.GetMsg(GetCtx(), "VIS_CostNotCalculated");// "Could not create Product Costs";
                                                 if (client.Get_ColumnIndex("IsCostMandatory") > 0 && client.IsCostMandatory())
@@ -3810,13 +4143,21 @@ namespace VAdvantage.Model
                                             currentCostPrice = MCost.GetproductCostAndQtyMaterial(GetAD_Client_ID(), GetAD_Org_ID(),
                                                                                      product1.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), m_Warehouse_Id, false);
                                             line.SetPostCurrentCostPrice(currentCostPrice);
+                                            query.Clear();
+                                            query.Append(@" UPDATE C_InvoiceLine SET PostCurrentCostPrice = " + currentCostPrice);
 
                                             if (!isUpdatePostCurrentcostPriceFromMR)
                                             {
                                                 line.SetCurrentCostPrice(currentCostPrice);
                                             }
+
+                                            query.Append(@" , CurrentCostPrice = " + line.GetCurrentCostPrice());
+
                                             line.SetIsCostImmediate(true);
-                                            line.Save(Get_Trx());
+                                            query.Append(@" , IsCostImmediate = 'Y'");
+                                            query.Append(@" WHERE C_Invoiceline_ID = " + line.GetC_InvoiceLine_ID());
+                                            DB.ExecuteQuery(query.ToString(), null, Get_Trx());
+
 
                                             if (inv != null && inv.GetM_MatchInv_ID() > 0)
                                             {
@@ -3864,7 +4205,7 @@ namespace VAdvantage.Model
                                 {
                                     if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
                                       "Invoice(Customer)", null, null, null, line, null, ProductLineCost, line.GetQtyInvoiced(),
-                                      Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
+                                      Get_Trx(), costingCheck, out conversionNotFoundInvoice, optionalstr: "window"))
                                     {
                                         if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
                                         {
@@ -3878,6 +4219,8 @@ namespace VAdvantage.Model
                                     }
                                     else
                                     {
+                                        query.Clear();
+                                        query.Append(@" UPDATE C_InvoiceLine SET IsCostImmediate = 'Y'");
                                         if (line.GetM_InOutLine_ID() > 0)
                                         {
                                             DataSet ds = DB.ExecuteDataset(@"SELECT M_InOutLine.CurrentCostPrice, M_InOut.M_Warehouse_ID 
@@ -3886,15 +4229,18 @@ namespace VAdvantage.Model
                                             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                                             {
                                                 line.SetCurrentCostPrice(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["CurrentCostPrice"]));
+                                                query.Append(@" , CurrentCostPrice = " + Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["CurrentCostPrice"]));
 
                                                 currentCostPrice = MCost.GetproductCostAndQtyMaterial(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
                                                                            line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(),
                                                                            Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_Warehouse_ID"]), false);
                                                 line.SetPostCurrentCostPrice(currentCostPrice);
+                                                query.Append(@" , PostCurrentCostPrice = " + currentCostPrice);
                                             }
                                         }
                                         line.SetIsCostImmediate(true);
-                                        line.Save();
+                                        query.Append(@" WHERE C_Invoiceline_ID = " + line.GetC_InvoiceLine_ID());
+                                        DB.ExecuteQuery(query.ToString(), null, Get_Trx());
                                     }
                                 }
                                 else if (!IsSOTrx() && IsReturnTrx()) // VRMA
@@ -3907,7 +4253,7 @@ namespace VAdvantage.Model
                                     {
                                         if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
                                           "Invoice(Vendor)", null, null, null, line, null, Decimal.Negate(ProductLineCost), Decimal.Negate(line.GetQtyInvoiced()),
-                                          Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
+                                          Get_Trx(), costingCheck, out conversionNotFoundInvoice, optionalstr: "window"))
                                         {
                                             if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
                                             {
@@ -3921,15 +4267,19 @@ namespace VAdvantage.Model
                                         }
                                         else
                                         {
+                                            query.Clear();
+                                            query.Append(@" UPDATE C_InvoiceLine SET IsCostImmediate = 'Y'");
                                             if (line.Get_ColumnIndex("PostCurrentCostPrice") >= 0)
                                             {
                                                 // get post cost after invoice cost calculation and update on invoice
                                                 currentCostPrice = MCost.GetproductCosts(GetAD_Client_ID(), line.GetAD_Org_ID(),
                                                                                                 product1.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
                                                 line.SetPostCurrentCostPrice(currentCostPrice);
+                                                query.Append(@" , PostCurrentCostPrice = " + currentCostPrice);
                                             }
                                             line.SetIsCostImmediate(true);
-                                            line.Save();
+                                            query.Append(@" WHERE C_Invoiceline_ID = " + line.GetC_InvoiceLine_ID());
+                                            DB.ExecuteQuery(query.ToString(), null, Get_Trx());
                                         }
                                     }
                                     #endregion
@@ -3940,10 +4290,25 @@ namespace VAdvantage.Model
                                     {
                                         bool isUpdatePostCurrentcostPriceFromMR = MCostElement.IsPOCostingmethod(GetCtx(), GetAD_Client_ID(), product1.GetM_Product_ID(), Get_Trx());
                                         // if qty is reduced through Return to vendor then we reduce amount else not
-                                        sLine = new MInOutLine(GetCtx(), line.GetM_InOutLine_ID(), Get_Trx());
+                                        if (dsInOutLine != null && dsInOutLine.Tables[0].Rows.Count > 0)
+                                        {
+                                            drOrderLine = dsInOutLine.Tables[0].Select("M_InOutLine_ID =" + line.GetM_InOutLine_ID());
+                                            if (drOrderLine.Length > 0)
+                                            {
+                                                sLine = new MInOutLine(GetCtx(), drOrderLine[0], Get_TrxName());
+                                            }
+                                        }
+                                        if (sLine == null || sLine.Get_ID() <= 0 || sLine.Get_ID() != line.GetM_InOutLine_ID())
+                                        {
+                                            sLine = new MInOutLine(GetCtx(), line.GetM_InOutLine_ID(), Get_Trx());
+                                        }
+                                        costingCheck.inoutline = sLine;
+
                                         if (sLine.IsCostImmediate())
                                         {
                                             int m_Warehouse_Id = sLine.GetM_Warehouse_ID();
+                                            costingCheck.inout = sLine.GetParent();
+
                                             // for reverse record -- pick qty from M_MatchInvCostTrack 
                                             decimal matchInvQty = 0;
                                             if (GetDescription() != null && GetDescription().Contains("{->"))
@@ -3959,7 +4324,7 @@ namespace VAdvantage.Model
                                               ? Decimal.Negate(ProductLineCost)
                                               : Decimal.Negate(Decimal.Multiply(Decimal.Divide(ProductLineCost, line.GetQtyInvoiced()), (inv != null && inv.GetM_InOutLine_ID() > 0) ? inv.GetQty() : Decimal.Negate(matchInvQty))),
                                               GetDescription() != null && GetDescription().Contains("{->") ? (matchInvQty) : Decimal.Negate(inv.GetQty()),
-                                               Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
+                                               Get_Trx(), costingCheck, out conversionNotFoundInvoice, optionalstr: "window"))
                                             {
                                                 if (!conversionNotFoundInvoice1.Contains(conversionNotFoundInvoice))
                                                 {
@@ -3994,7 +4359,11 @@ namespace VAdvantage.Model
                                                                                          product1.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), m_Warehouse_Id);
                                                 line.SetPostCurrentCostPrice(currentCostPrice);
                                                 line.SetIsCostImmediate(true);
-                                                line.Save();
+                                                query.Clear();
+                                                query.Append(@" UPDATE C_InvoiceLine SET IsCostImmediate = 'Y'");
+                                                query.Append(@" , PostCurrentCostPrice = " + currentCostPrice);
+                                                query.Append(@" WHERE C_Invoiceline_ID = " + line.GetC_InvoiceLine_ID());
+                                                DB.ExecuteQuery(query.ToString(), null, Get_Trx());
 
                                                 if (inv != null && inv.GetM_MatchInv_ID() > 0)
                                                 {
@@ -4029,7 +4398,7 @@ namespace VAdvantage.Model
                                                     DB.ExecuteQuery("UPDATE M_MatchInv SET CurrentCostPrice = " + currentCostPrice +
                                                                      @" WHERE M_MatchInv_ID = " + inv.GetM_MatchInv_ID(), null, Get_Trx());
                                                     DB.ExecuteQuery("UPDATE C_InvoiceLine SET CurrentCostPrice = " + currentCostPrice +
-                                                                    @" WHERE C_InvoiceLine = " + line.GetC_InvoiceLine_ID(), null, Get_Trx());
+                                                                    @" WHERE C_InvoiceLine_ID = " + line.GetC_InvoiceLine_ID(), null, Get_Trx());
 
                                                 }
                                             }
@@ -4050,12 +4419,21 @@ namespace VAdvantage.Model
                         MProductPO po = null;
                         if (line.GetM_Product_ID() > 0)
                         {
-
-                            po = MProductPO.GetOfVendorProduct(GetCtx(), GetC_BPartner_ID(), line.GetM_Product_ID(), Get_Trx());
+                            //VIS_0045: M_Product_PO object (for optimization)
+                            if (dspurchasing != null && dspurchasing.Tables[0].Rows.Count > 0)
+                            {
+                                drOrderLine = dspurchasing.Tables[0].Select("M_Product_ID =" + line.GetM_Product_ID());
+                                if (drOrderLine.Length > 0)
+                                {
+                                    po = new MProductPO(GetCtx(), drOrderLine[0], Get_Trx());
+                                }
+                            }
                             if (po != null)
                             {
                                 // Check if multiple vendors exist as current vwndor.Mohit
-                                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM M_Product_PO WHERE IsActive='Y' AND IsCurrentVendor='Y' AND  M_Product_ID = " + line.GetM_Product_ID(), null, Get_Trx())) > 1)
+                                //VIS_0045: current vendor count (for optimization)
+                                if (dsPPCurVendorCount != null && dsPPCurVendorCount.Tables[0].Rows.Count > 0 &&
+                                     (dsPPCurVendorCount.Tables[0].Select("M_Product_ID =" + line.GetM_Product_ID())).Length > 0)
                                 {
                                     // Update all vendors on purchasing tab as current vendor = False.
                                     DB.ExecuteQuery("UPDATE M_Product_PO SET IsCurrentVendor='N' WHERE C_BPartner_ID !=" + GetC_BPartner_ID() + " AND M_Product_ID= " + line.GetM_Product_ID(), null, Get_Trx());
@@ -4086,13 +4464,13 @@ namespace VAdvantage.Model
 
 
                 // By Amit For Foreign cost
-                if (!IsSOTrx() && !IsReturnTrx()) // for Invoice with MR
-                {
-                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM C_InvoiceLine WHERE IsFutureCostCalculated = 'N' AND C_Invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx())) <= 0)
-                    {
-                        int no = Util.GetValueOfInt(DB.ExecuteQuery("UPDATE C_Invoice Set IsFutureCostCalculated = 'Y' WHERE C_Invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx()));
-                    }
-                }
+                //if (!IsSOTrx() && !IsReturnTrx()) // for Invoice with MR
+                //{
+                //    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(C_InvoiceLine_ID) FROM C_InvoiceLine WHERE IsFutureCostCalculated = 'N' AND C_Invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx())) <= 0)
+                //    {
+                //        int no = Util.GetValueOfInt(DB.ExecuteQuery("UPDATE C_Invoice Set IsFutureCostCalculated = 'Y' WHERE C_Invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx()));
+                //    }
+                //}
                 //end
 
 
@@ -4193,7 +4571,7 @@ namespace VAdvantage.Model
                         //    }
                         //}
                     }	//	SO
-                    else
+                    else  //VA228:Applied else condition
                     {
                         newBalance = Decimal.Subtract(newBalance, invAmt);
                         log.Fine("GrandTotal=" + GetGrandTotal(true) + "(" + invAmt
@@ -4362,16 +4740,23 @@ namespace VAdvantage.Model
                     //	Counter Documents
                     MInvoice counter = CreateCounterDoc();
                     if (counter != null)
+                    {
                         Info.Append(" - @CounterDoc@: @C_Invoice_ID@=").Append(counter.GetDocumentNo());
+                    }
                 }
                 catch (Exception e)
                 {
-                    Info.Append(" - @CounterDoc@: ").Append(e.Message.ToString());
+                    //Info.Append(" - @CounterDoc@: ").Append(e.Message.ToString());
+                    _processMsg = e.Message.ToString();
+                    return DocActionVariables.STATUS_INPROGRESS;
                 }
 
                 timeEstimation += " End at " + DateTime.Now.ToUniversalTime();
 
                 log.Warning(timeEstimation + " - " + GetDocumentNo());
+
+                // JID_1290: Set the document number from completed document sequence after completed (if needed)
+                SetCompletedDocumentNo();
 
                 _processMsg = Info.ToString().Trim();
                 SetProcessed(true);
@@ -4391,7 +4776,14 @@ namespace VAdvantage.Model
                     return DocActionVariables.STATUS_INVALID;
                 }
             }
-
+            //Some times when complete the Invoice with zero amount the header ispaid check box not getting true but on 
+            //but on schedule the IsPaid check is true - so handled here
+            //Trx is added to get current changes
+            int _IsNotPaid = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(C_InvoicePayschedule_ID) AS IsPaid FROM C_InvoicePayschedule WHERE VA009_IsPaid='N' AND IsActive='Y' AND C_Invoice_ID=" + GetC_Invoice_ID(), null, Get_Trx()));
+            if (_IsNotPaid == 0)
+            {
+                SetIsPaid(true);
+            }
             return DocActionVariables.STATUS_COMPLETED;
         }
 
@@ -4593,22 +4985,6 @@ namespace VAdvantage.Model
 
             MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
 
-            // if Overwrite Date on Complete checkbox is true.
-            if (dt.IsOverwriteDateOnComplete())
-            {
-                SetDateInvoiced(DateTime.Now.Date);
-                if (GetDateAcct().Value.Date < GetDateInvoiced().Value.Date)
-                {
-                    SetDateAcct(GetDateInvoiced());
-
-                    //	Std Period open?
-                    if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetAD_Org_ID()))
-                    {
-                        throw new Exception("@PeriodClosed@");
-                    }
-                }
-            }
-
             // if Overwrite Sequence on Complete checkbox is true.
             if (dt.IsOverwriteSeqOnComplete())
             {
@@ -4623,6 +4999,36 @@ namespace VAdvantage.Model
                 if (value != null)
                 {
                     SetDocumentNo(value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Overwrite the document date based on setting on Document Type
+        /// </summary>
+        private void SetCompletedDocumentDate()
+        {
+            // if Reversal document then no need to get Document no from Completed sequence
+            if (IsReversal())
+            {
+                return;
+            }
+
+            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+
+            // if Overwrite Date on Complete checkbox is true.
+            if (dt.IsOverwriteDateOnComplete())
+            {
+                SetDateInvoiced(DateTime.Now.Date);
+                if (GetDateAcct().Value.Date < GetDateInvoiced().Value.Date)
+                {
+                    SetDateAcct(GetDateInvoiced());
+
+                    //	Std Period open?
+                    if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetAD_Org_ID()))
+                    {
+                        throw new Exception("@PeriodClosed@");
+                    }
                 }
             }
         }
@@ -5035,35 +5441,66 @@ namespace VAdvantage.Model
         {
             //	Is this a counter doc ?
             if (GetRef_Invoice_ID() != 0)
+            {
                 return null;
-
-            //	Org Must be linked to BPartner
-            MOrg org = MOrg.Get(GetCtx(), GetAD_Org_ID());
-            int counterC_BPartner_ID = org.GetLinkedC_BPartner_ID(Get_TrxName()); //jz
-            if (counterC_BPartner_ID == 0)
-                return null;
-            //	Business Partner needs to be linked to Org
-            MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), null);
-            int counterAD_Org_ID = bp.GetAD_OrgBP_ID_Int();
-            if (counterAD_Org_ID == 0)
-                return null;
-
-            MBPartner counterBP = new MBPartner(GetCtx(), counterC_BPartner_ID, null);
-            MOrgInfo counterOrgInfo = MOrgInfo.Get(GetCtx(), counterAD_Org_ID, null);
-            log.Info("Counter BP=" + counterBP.GetName());
+            }
 
             //	Document Type
+            //check weather Counter Document created & Acitve or not 
             int C_DocTypeTarget_ID = 0;
             MDocTypeCounter counterDT = MDocTypeCounter.GetCounterDocType(GetCtx(), GetC_DocType_ID());
             if (counterDT != null)
             {
                 log.Fine(counterDT.ToString());
+                //if counter DocType is not valid then save the message in log
                 if (!counterDT.IsCreateCounter() || !counterDT.IsValid())
+                {
+                    log.Info("Counter Document Type is not Valid one!");
                     return null;
+                }
                 C_DocTypeTarget_ID = counterDT.GetCounter_C_DocType_ID();
+                if (C_DocTypeTarget_ID <= 0)
+                {
+                    //if counter DocType is not found then save the message in log
+                    log.Info("Counter Document Type not found on Inter Company Document window.");
+                    return null;
+                }
             }
-            if (C_DocTypeTarget_ID <= 0)
+            else
+            {
                 return null;
+            }
+
+            //	Org Must be linked to BPartner
+            MOrg org = MOrg.Get(GetCtx(), GetAD_Org_ID());
+            int counterC_BPartner_ID = org.GetLinkedC_BPartner_ID(Get_TrxName()); //jz
+            if (counterC_BPartner_ID == 0)
+            {
+                //if Linked BP is not found then save the message in log
+                log.Info("Business Partner is not found on Customer/Vendor master window to create the Counter Document.");
+                return null;
+            }
+            //	Business Partner needs to be linked to Org
+            MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), null);
+            int counterAD_Org_ID = bp.GetAD_OrgBP_ID_Int();
+            if (counterAD_Org_ID == 0)
+            {
+                //if Linked Org_ID is not found then save the message into log
+                log.Info("Linked Organization is not found on Customer/Vendor master window to create the Counter Document.");
+                return null;
+            }
+
+            //System should not allow to create counter document with same BP and organization.
+            if (counterAD_Org_ID == GetAD_Org_ID() || counterC_BPartner_ID == GetC_BPartner_ID())
+            {
+                //erro save into the log
+                log.Info("On Counter Document Organization or Business Partner should not allow the same with the Document.");
+                return null;
+            }
+
+            MBPartner counterBP = new MBPartner(GetCtx(), counterC_BPartner_ID, null);
+            //MOrgInfo counterOrgInfo = MOrgInfo.Get(GetCtx(), counterAD_Org_ID, null);//not in Use
+            log.Info("Counter BP=" + counterBP.GetName());
 
             // Ref_C_Invoice_ID --> contain reference of Orignal Document which is to be reversed
             // Ref_Invoice_ID --> contain reference of counter document which is to be created against this document
@@ -5157,6 +5594,7 @@ namespace VAdvantage.Model
                     Decimal old = line.GetQtyInvoiced();
                     if (old.CompareTo(Env.ZERO) != 0)
                     {
+                        line.SetInvoice(this);
                         line.SetQty(Env.ZERO);
                         line.SetTaxAmt(Env.ZERO);
                         line.SetLineNetAmt(Env.ZERO);
@@ -5165,9 +5603,10 @@ namespace VAdvantage.Model
                         //	Unlink Shipment
                         if (line.GetM_InOutLine_ID() != 0)
                         {
-                            MInOutLine ioLine = new MInOutLine(GetCtx(), line.GetM_InOutLine_ID(), Get_TrxName());
-                            ioLine.SetIsInvoiced(false);
-                            ioLine.Save(Get_TrxName());
+                            int no = DB.ExecuteQuery("UPDATE M_InOutLine SET IsInvoiced = 'N' WHERE M_InOutLine_ID = " + line.GetM_InOutLine_ID(), null, Get_TrxName());
+                            //MInOutLine ioLine = new MInOutLine(GetCtx(), line.GetM_InOutLine_ID(), Get_TrxName());
+                            //ioLine.SetIsInvoiced(false);
+                            //ioLine.Save(Get_TrxName());
                             line.SetM_InOutLine_ID(0);
                         }
                         line.Save(Get_TrxName());
@@ -5205,10 +5644,13 @@ namespace VAdvantage.Model
         /// <returns>return true if success</returns>
         public bool ReverseCorrectIt()
         {
-            //added by shubham JID_1501 to check payment shedule or not during void_
+            //JID_1501 to check payment shedule or not during void
             if (Env.IsModuleInstalled("VA009_"))
             {
-                int checkpayshedule = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(c_invoicepayschedule_ID) FROM C_invoicepayschedule WHERE c_invoice_ID=" + GetC_Invoice_ID() + " AND VA009_ISpaid='Y'", null, Get_Trx()));
+                // query chnaged, bcz when we create invoice with negative amount, on completion system mark schedule as paid 
+                // while on reversal of same document system said, reverse dependant payment first while it is not available
+                int checkpayshedule = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(c_invoicepayschedule_ID) FROM C_invoicepayschedule 
+                WHERE c_invoice_ID=" + GetC_Invoice_ID() + " AND ( NVL(C_Payment_ID , 0) > 0 or NVL(C_cashline_ID , 0) > 0 )", null, Get_Trx()));
                 if (checkpayshedule != 0)
                 {
                     _processMsg = Msg.GetMsg(GetCtx(), "DeleteAllowcationFirst");
@@ -5284,8 +5726,39 @@ namespace VAdvantage.Model
             if (!IsSOTrx())
             {
                 MMatchInv[] mInv = MMatchInv.GetInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
+
+                // get orderline detail so that object not to be created on match invoice after save
+                DataSet dsInvLineDetail = DB.ExecuteDataset(@"SELECT il.C_InvoiceLine_ID, il.c_orderline_id, il.m_inoutline_id, 
+                                            o.DocStatus AS OrderDocStatus, m.DocStatus AS InOutDocStatus, ml.M_Attributesetinstance_ID
+                                            FROM M_MatchPO mi
+                                             INNER JOIN C_InvoiceLine il ON (mi.C_InvoiceLine_ID=il.C_InvoiceLine_ID) 
+                                             INNER JOIN C_OrderLine ol ON (ol.C_OrderLine_ID = il.C_OrderLine_ID)
+                                             INNER JOIN C_Order o ON (o.C_Order_ID = ol.C_Order_ID)
+                                             LEFT JOIN M_InoutLine ml ON (ml.M_InOutLine_ID = mi.M_InoutLine_ID)
+                                             LEFT JOIN M_InOut m ON (m.M_InOut_ID = ml.M_InOut_ID)
+                                            WHERE il.C_Invoice_ID= " + GetC_Invoice_ID(), null, Get_TrxName());
+                MMatchInv inv = null;
+                DataRow[] dr = null;
                 for (int i = 0; i < mInv.Length; i++)
-                    mInv[i].Delete(true);
+                {
+                    inv = mInv[i];
+
+                    // Get OrderLine
+                    if (dsInvLineDetail != null && dsInvLineDetail.Tables[0].Rows.Count > 0)
+                    {
+                        dr = dsInvLineDetail.Tables[0].Select("C_InvoiceLine_ID = " + inv.GetC_InvoiceLine_ID());
+                        if (dr.Length > 0)
+                        {
+                            inv.C_OrderLine_ID = Util.GetValueOfInt(dr[0]["C_OrderLine_ID"]);
+                            inv.orderDocStatus = Util.GetValueOfString(dr[0]["OrderDocStatus"]);
+                            inv.inOutDocStatus = Util.GetValueOfString(dr[0]["InOutDocStatus"]);
+                        }
+                    }
+
+                    // delete Match Invoice Line
+                    inv.Delete(true);
+                }
+
                 MMatchPO[] mPO = MMatchPO.GetInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
                 for (int i = 0; i < mPO.Length; i++)
                 {
@@ -5314,6 +5787,11 @@ namespace VAdvantage.Model
                 GetC_DocType_ID(), false, Get_TrxName(), true);
             // set original document reference
             reversal.SetRef_C_Invoice_ID(GetC_Invoice_ID());
+            if (Get_ColumnIndex("ReversalDoc_ID") >= 0)
+            {
+                //(1052-Nov/1/2021) set Reversal Document
+                reversal.SetReversalDoc_ID(GetC_Invoice_ID());
+            }
             if (Get_ColumnIndex("BackupWithholdingAmount") > 0)
             {
                 reversal.SetC_Withholding_ID(GetC_Withholding_ID()); // backup withholding refernce
@@ -5332,13 +5810,33 @@ namespace VAdvantage.Model
 
             if (!reversal.Save(Get_TrxName()))
             {
-                _processMsg = "Could not create Invoice Reversal";
+                ValueNamePair vp = VLogger.RetrieveError();
+                string val = String.Empty;
+                if (vp != null)
+                {
+                    val = vp.GetName();
+                    if (String.IsNullOrEmpty(val))
+                    {
+                        val = vp.GetValue();
+                    }
+                }
+                _processMsg = "Could not create Invoice Reversal : " + val;
                 return false;
             }
 
             if (reversal == null)
             {
-                _processMsg = "Could not create Invoice Reversal";
+                ValueNamePair vp = VLogger.RetrieveError();
+                string val = String.Empty;
+                if (vp != null)
+                {
+                    val = vp.GetName();
+                    if (String.IsNullOrEmpty(val))
+                    {
+                        val = vp.GetValue();
+                    }
+                }
+                _processMsg = "Could not create Invoice Reversal : " + val;
                 return false;
             }
             reversal.SetReversal(true);
@@ -5350,72 +5848,83 @@ namespace VAdvantage.Model
             {
                 MInvoiceLine rLine = rLines[i];
                 MInvoiceLine oldline = OldLines[i];
-                rLine.SetQtyEntered(Decimal.Negate(rLine.GetQtyEntered()));
-                rLine.SetQtyInvoiced(Decimal.Negate(rLine.GetQtyInvoiced()));
-                rLine.SetLineNetAmt(Decimal.Negate(rLine.GetLineNetAmt()));
-                if (((Decimal)rLine.GetTaxAmt()).CompareTo(Env.ZERO) != 0)
-                    rLine.SetTaxAmt(Decimal.Negate((Decimal)rLine.GetTaxAmt()));
+                //rLine.SetReversal(true);
+                //rLine.SetQtyEntered(Decimal.Negate(rLine.GetQtyEntered()));
+                //rLine.SetQtyInvoiced(Decimal.Negate(rLine.GetQtyInvoiced()));
+                //rLine.SetLineNetAmt(Decimal.Negate(rLine.GetLineNetAmt()));
+                //if (((Decimal)rLine.GetTaxAmt()).CompareTo(Env.ZERO) != 0)
+                //    rLine.SetTaxAmt(Decimal.Negate((Decimal)rLine.GetTaxAmt()));
 
-                // In Case of Reversal set Surcharge Amount as Negative if available.
-                if (rLine.Get_ColumnIndex("SurchargeAmt") > 0 && (((Decimal)rLine.GetSurchargeAmt()).CompareTo(Env.ZERO) != 0))
-                {
-                    rLine.SetSurchargeAmt(Decimal.Negate((Decimal)rLine.GetSurchargeAmt()));
-                }
-                if (((Decimal)rLine.GetLineTotalAmt()).CompareTo(Env.ZERO) != 0)
-                    rLine.SetLineTotalAmt(Decimal.Negate((Decimal)rLine.GetLineTotalAmt()));
-                // bcz we set this field value as ZERO in Copy From Process
-                rLine.SetC_OrderLine_ID(oldline.GetC_OrderLine_ID());
-                rLine.SetM_InOutLine_ID(oldline.GetM_InOutLine_ID());
-                try
-                {
-                    rLine.SetIsFutureCostCalculated(false);
-                }
-                catch (Exception) { }
-                if (rLine.Get_ColumnIndex("IsCostImmediate") >= 0)
-                {
-                    rLine.SetIsCostImmediate(false);
-                }
-                if (Get_ColumnIndex("BackupWithholdingAmount") > 0)
-                {
-                    rLine.SetC_Withholding_ID(oldline.GetC_Withholding_ID()); //  withholding refernce
-                    rLine.SetWithholdingAmt(Decimal.Negate(oldline.GetWithholdingAmt())); // withholding amount
-                }
-                if (!rLine.Save(Get_TrxName()))
-                {
-                    _processMsg = "Could not correct Invoice Reversal Line";
-                    return false;
-                }
+                //// In Case of Reversal set Surcharge Amount as Negative if available.
+                //if (rLine.Get_ColumnIndex("SurchargeAmt") > 0 && (((Decimal)rLine.GetSurchargeAmt()).CompareTo(Env.ZERO) != 0))
+                //{
+                //    rLine.SetSurchargeAmt(Decimal.Negate((Decimal)rLine.GetSurchargeAmt()));
+                //}
+                //if (((Decimal)rLine.GetLineTotalAmt()).CompareTo(Env.ZERO) != 0)
+                //    rLine.SetLineTotalAmt(Decimal.Negate((Decimal)rLine.GetLineTotalAmt()));
+                //// bcz we set this field value as ZERO in Copy From Process
+                //rLine.SetC_OrderLine_ID(oldline.GetC_OrderLine_ID());
+                //rLine.SetM_InOutLine_ID(oldline.GetM_InOutLine_ID());
+                //try
+                //{
+                //    rLine.SetIsFutureCostCalculated(false);
+                //}
+                //catch (Exception) { }
+                //if (rLine.Get_ColumnIndex("IsCostImmediate") >= 0)
+                //{
+                //    rLine.SetIsCostImmediate(false);
+                //}
+                //if (Get_ColumnIndex("BackupWithholdingAmount") > 0)
+                //{
+                //    rLine.SetC_Withholding_ID(oldline.GetC_Withholding_ID()); //  withholding refernce
+                //    rLine.SetWithholdingAmt(Decimal.Negate(oldline.GetWithholdingAmt())); // withholding amount
+                //}
+                //if (!rLine.Save(Get_TrxName()))
+                //{
+                //    ValueNamePair vp = VLogger.RetrieveError();
+                //    string val = String.Empty;
+                //    if (vp != null)
+                //    {
+                //        val = vp.GetName();
+                //        if (String.IsNullOrEmpty(val))
+                //        {
+                //            val = vp.GetValue();
+                //        }
+                //    }
+                //    _processMsg = "Could not correct Invoice Reversal Line" + val;
+                //    return false;
+                //}
                 #region Calculating Cost on Expenses Arpit
-                else
-                {
-                    Tuple<String, String, String> mInfo = null;
-                    if (Env.HasModulePrefix("VAFAM_", out mInfo) && rLine.Get_ColumnIndex("VAFAM_IsAssetRelated") > 0)
-                    {
-                        if (!IsSOTrx() && !IsReturnTrx() && Util.GetValueOfBool(rLine.Get_Value("VAFAM_IsAssetRelated")))
-                        {
-                            if (Util.GetValueOfBool(rLine.Get_Value("VAFAM_IsAssetRelated")))
-                            {
-                                PO po = MTable.GetPO(GetCtx(), "VAFAM_Expense", 0, Get_Trx());
-                                if (po != null)
-                                {
-                                    CreateExpenseAgainstReverseInvoice(rLine, oldline, po);
+                //else
+                //{
 
-                                    if (!po.Save())
-                                    {
-                                        _log.Info("Asset Expense Not Saved For Asset ");
-                                    }
-                                    //In Case of Capital Expense ..Asset Gross Value will be updated  //Arpit //Ashish 12 Feb,2017
-                                    else
-                                    {
-                                        UpdateDescriptionInOldExpnse(oldline, rLine);
-                                        UpdateAssetGrossValue(rLine, po);
-                                    }
+                if (Env.IsModuleInstalled("VAFAM_") && rLine.Get_ColumnIndex("VAFAM_IsAssetRelated") > 0)
+                {
+                    if (!IsSOTrx() && !IsReturnTrx() && Util.GetValueOfBool(rLine.Get_Value("VAFAM_IsAssetRelated")))
+                    {
+                        if (Util.GetValueOfBool(rLine.Get_Value("VAFAM_IsAssetRelated")))
+                        {
+                            PO po = MTable.GetPO(GetCtx(), "VAFAM_Expense", 0, Get_Trx());
+                            if (po != null)
+                            {
+                                CreateExpenseAgainstReverseInvoice(rLine, oldline, po);
+
+                                if (!po.Save())
+                                {
+                                    _log.Info("Asset Expense Not Saved For Asset ");
                                 }
-                                //
+                                //In Case of Capital Expense ..Asset Gross Value will be updated  //Arpit //Ashish 12 Feb,2017
+                                else
+                                {
+                                    UpdateDescriptionInOldExpnse(oldline, rLine);
+                                    UpdateAssetGrossValue(rLine, po);
+                                }
                             }
+                            //
                         }
                     }
                 }
+                //}
                 #endregion
 
                 //else
@@ -5452,6 +5961,7 @@ namespace VAdvantage.Model
                 _processMsg = "Reversal ERROR: " + reversal.GetProcessMsg();
                 return false;
             }
+
             reversal.SetC_Payment_ID(0);
             reversal.SetIsPaid(true);
             reversal.CloseIt();
@@ -5468,71 +5978,43 @@ namespace VAdvantage.Model
             SetRef_C_Invoice_ID(reversal.GetC_Invoice_ID());
 
             //	Clean up Reversed (this)
-            MInvoiceLine[] iLines = GetLines(false);
-            for (int i = 0; i < iLines.Length; i++)
-            {
-                MInvoiceLine iLine = iLines[i];
-                if (iLine.GetM_InOutLine_ID() != 0)
-                {
-                    MInOutLine ioLine = new MInOutLine(GetCtx(), iLine.GetM_InOutLine_ID(), Get_TrxName());
-                    ioLine.SetIsInvoiced(false);
-                    ioLine.Save(Get_TrxName());
-                    //	Reconsiliation
-                    iLine.SetM_InOutLine_ID(0);
-                    iLine.Save(Get_TrxName());
-                }
-            }
+            //MInvoiceLine[] iLines = GetLines(false);
+            //for (int i = 0; i < iLines.Length; i++)
+            //{
+            //MInvoiceLine iLine = iLines[i];
+            //if (iLine.GetM_InOutLine_ID() != 0)
+            //{
+            //MInOutLine ioLine = new MInOutLine(GetCtx(), iLine.GetM_InOutLine_ID(), Get_TrxName());
+            //ioLine.SetIsInvoiced(false);
+            //ioLine.Save(Get_TrxName());
+            DB.ExecuteQuery(@"UPDATE M_InOutLine SET IsInvoiced = 'N' WHERE M_InOutLine_ID IN
+                    (SELECT M_InOutLine_ID FROM C_InvoiceLine WHERE NVL(M_InOutLine_ID, 0) != 0 AND C_Invoice_ID = " + GetC_Invoice_ID() + ")", null, Get_TrxName());
+
+            //	Reconsiliation
+            //iLine.SetM_InOutLine_ID(0);
+            //iLine.Save(Get_TrxName());
+            DB.ExecuteQuery(@"UPDATE C_InvoiceLine SET M_InOutLine_ID = null WHERE C_InvoiceLine_ID  IN
+                    (SELECT C_InvoiceLine_ID FROM C_InvoiceLine WHERE NVL(M_InOutLine_ID, 0) != 0 AND C_Invoice_ID = " + GetC_Invoice_ID() + ")", null, Get_TrxName());
+            //}
+            //}
             SetProcessed(true);
-            SetDocStatus(DOCSTATUS_Reversed);	//	may come from void
+            SetDocStatus(DOCSTATUS_Reversed);   //	may come from void
             SetDocAction(DOCACTION_None);
             SetC_Payment_ID(0);
             SetIsPaid(true);
-
-            //	Create Allocation
-            if (!isCash)
-            {
-                MAllocationHdr alloc = new MAllocationHdr(GetCtx(), false, GetDateAcct(),
-                    GetC_Currency_ID(),
-                    Msg.Translate(GetCtx(), "C_Invoice_ID") + ": " + GetDocumentNo() + "/" + reversal.GetDocumentNo(),
-                    Get_TrxName());
-                alloc.SetAD_Org_ID(GetAD_Org_ID());
-                // Update conversion type from Invoice to view allocation (required for posting)
-                if (alloc.Get_ColumnIndex("C_ConversionType_ID") > 0)
-                {
-                    alloc.SetC_ConversionType_ID(GetC_ConversionType_ID());
-                }
-                if (alloc.Save())
-                {
-                    //	Amount
-                    Decimal gt = GetGrandTotal(true);
-                    if (!IsSOTrx())
-                        gt = Decimal.Negate(gt);
-                    //	Orig Line
-                    MAllocationLine aLine = new MAllocationLine(alloc, gt, Env.ZERO, Env.ZERO, Env.ZERO);
-                    aLine.SetC_Invoice_ID(GetC_Invoice_ID());
-                    aLine.Save();
-                    //	Reversal Line
-                    MAllocationLine rLine = new MAllocationLine(alloc, Decimal.Negate(gt), Env.ZERO, Env.ZERO, Env.ZERO);
-                    rLine.SetC_Invoice_ID(reversal.GetC_Invoice_ID());
-                    rLine.Save();
-                    //	Process It
-                    if (alloc.ProcessIt(DocActionVariables.ACTION_COMPLETE))
-                        alloc.Save();
-                }
-            }	//	notCash
 
             //	Explicitly Save for balance calc.
             Save();
 
             #region Commented by Manjot Suggested by Amit/Mukesh/Surya Sir on 30/04/2018, As discussed that we don't need to delete the schedules in case of reversal and Mark all the schedules as Paid
-
-            //Modeule Prefix VA009--- For Deletion Of Payment Schedules
-            //int _CountVA009 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
             if (Env.IsModuleInstalled("VA009_"))
             {
                 //TODO Verify why schedules are deleted and , why transaction is not used here
                 //int count = Convert.ToInt32(DB.ExecuteScalar("DELETE FROM C_InvoicePaySchedule WHERE C_Invoice_ID=" + GetC_Invoice_ID(), null, Get_Trx()));
                 int count = Convert.ToInt32(DB.ExecuteScalar("UPDATE C_InvoicePaySchedule SET VA009_Ispaid='Y' WHERE C_Invoice_ID=" + GetC_Invoice_ID(), null, Get_Trx()));
+
+                // mark paid as true for reversal record as well
+                DB.ExecuteScalar("UPDATE C_InvoicePaySchedule SET VA009_Ispaid='Y' WHERE C_Invoice_ID=" + reversal.GetC_Invoice_ID(), null, Get_Trx());
             }
             //End OF VA009..........................................................................................................
             #endregion
@@ -5750,7 +6232,7 @@ namespace VAdvantage.Model
                 + "FROM M_PriceList pl,C_Currency c,M_PriceList_Version plv "
                 + "WHERE pl.C_Currency_ID=c.C_Currency_ID"
                 + " AND pl.M_PriceList_ID=plv.M_PriceList_ID"
-                + " AND pl.M_PriceList_ID=" + M_PriceList_ID						//	1
+                + " AND pl.M_PriceList_ID=" + M_PriceList_ID                        //	1
                 + "ORDER BY plv.ValidFrom DESC";
             //	Use newest price list - may not be future
             IDataReader dr = null;
@@ -5804,7 +6286,7 @@ namespace VAdvantage.Model
                 return;
             int C_PaymentTerm_ID = int.Parse(newC_PaymentTerm_ID);
             int C_Invoice_ID = GetC_Invoice_ID();
-            if (C_PaymentTerm_ID == 0 || C_Invoice_ID == 0)	//	not saved yet
+            if (C_PaymentTerm_ID == 0 || C_Invoice_ID == 0) //	not saved yet
                 return;
 
             MPaymentTerm pt = new MPaymentTerm(GetCtx(), C_PaymentTerm_ID, null);
@@ -5855,7 +6337,7 @@ namespace VAdvantage.Model
                 */
                 + "FROM C_DocType d "
                 + "LEFT OUTER JOIN AD_Sequence s ON (d.DocNoSequence_ID=s.AD_Sequence_ID) "
-                + "WHERE C_DocType_ID=" + C_DocType_ID;		//	1
+                + "WHERE C_DocType_ID=" + C_DocType_ID;     //	1
 
             IDataReader dr = null;
             try
@@ -5928,7 +6410,7 @@ namespace VAdvantage.Model
                 + " INNER JOIN C_BP_Group g ON (p.C_BP_Group_ID=g.C_BP_Group_ID)"
                 + " LEFT OUTER JOIN C_BPartner_Location l ON (p.C_BPartner_ID=l.C_BPartner_ID AND l.IsBillTo='Y' AND l.IsActive='Y')"
                 + " LEFT OUTER JOIN AD_User c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
-                + "WHERE p.C_BPartner_ID=" + C_BPartner_ID + " AND p.IsActive='Y'";		//	#1
+                + "WHERE p.C_BPartner_ID=" + C_BPartner_ID + " AND p.IsActive='Y'";     //	#1
 
             bool isSOTrx = IsSOTrx();
             try
@@ -5943,7 +6425,7 @@ namespace VAdvantage.Model
                     if (dr != null)
                         SetM_PriceList_ID(ii);
                     else
-                    {	//	get default PriceList
+                    {   //	get default PriceList
                         int i = GetCtx().GetContextAsInt("#M_PriceList_ID");
                         if (i != 0)
                             SetM_PriceList_ID(i);
@@ -5953,10 +6435,10 @@ namespace VAdvantage.Model
                     String s = dr[isSOTrx ? "PaymentRule" : "PaymentRulePO"].ToString();
                     if (s != null && s.Length != 0)
                     {
-                        if (GetCtx().GetContext(WindowNo, "DocBaseType").EndsWith("C"))	//	Credits are Payment Term
+                        if (GetCtx().GetContext(WindowNo, "DocBaseType").EndsWith("C")) //	Credits are Payment Term
                             s = "P";
-                        else if (isSOTrx && (s.Equals("S") || s.Equals("U")))	//	No Check/Transfer for SO_Trx
-                            s = "P";											//  Payment Term
+                        else if (isSOTrx && (s.Equals("S") || s.Equals("U")))   //	No Check/Transfer for SO_Trx
+                            s = "P";                                            //  Payment Term
                         SetPaymentRule(s);
                     }
                     //  Payment Term
@@ -6003,7 +6485,7 @@ namespace VAdvantage.Model
                             if (dr != null && CreditAvailable < 0)
                             {
                                 String msg = Msg.GetMsg(GetCtx(), "CreditLimitOver");//, DisplayType.getNumberFormat(DisplayType.Amount).format(CreditAvailable));
-                                //addError(msg);
+                                                                                     //addError(msg);
                             }
                         }
                     }
@@ -6369,5 +6851,11 @@ namespace VAdvantage.Model
 
         #endregion
 
+    }
+
+    public class OrderDetails
+    {
+        public int C_Order_ID { get; set; }
+        public MOrder Order { get; set; }
     }
 }

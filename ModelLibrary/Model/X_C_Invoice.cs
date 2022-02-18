@@ -698,7 +698,7 @@ namespace VAdvantage.Model
         {
             return new KeyNamePair(Get_ID(), GetDocumentNo());
         }
-        
+
         /** Adhoc Payment - Adding a new column (DueDate) for Payment Term ** Dt: 18/01/2021 ** Modified By: Kumar **/
         /** Set Due Date.
         @param DueDate Date when the payment is due */
@@ -1085,7 +1085,7 @@ namespace VAdvantage.Model
         public bool IsPaymentRuleValid(String test)
         {
             return test.Equals("B") || test.Equals("D") || test.Equals("K") || test.Equals("L") || test.Equals("P") || test.Equals("S") || test.Equals("T") || test.Equals("C")
-                || test.Equals("W") || test.Equals("O"); 
+                || test.Equals("W") || test.Equals("O");
         }
         /** Set Payment Method.
         @param PaymentRule How you pay the invoice */
@@ -1336,14 +1336,15 @@ namespace VAdvantage.Model
         public bool IsPaymentMethodValid(String test)
         {
             return test == null || test.Equals("B") || test.Equals("C") || test.Equals("D") || test.Equals("K") || test.Equals("L") || test.Equals("P") || test.Equals("S") || test.Equals("T")
-                || test.Equals("W") || test.Equals("O"); 
+                || test.Equals("W") || test.Equals("O");
         }
         /** Set Payment Method.
         @param PaymentMethod Payment Method */
         public void SetPaymentMethod(String PaymentMethod)
         {
             if (!IsPaymentMethodValid(PaymentMethod))
-                throw new ArgumentException("PaymentMethod Invalid value - " + PaymentMethod + " - Reference_ID=195 - B - C - D - K - L - P - S - T - W -O"); if (PaymentMethod != null && PaymentMethod.Length > 1) { log.Warning("Length > 1 - truncated"); PaymentMethod = PaymentMethod.Substring(0, 1); } Set_Value("PaymentMethod", PaymentMethod);
+                throw new ArgumentException("PaymentMethod Invalid value - " + PaymentMethod + " - Reference_ID=195 - B - C - D - K - L - P - S - T - W -O"); if (PaymentMethod != null && PaymentMethod.Length > 1) { log.Warning("Length > 1 - truncated"); PaymentMethod = PaymentMethod.Substring(0, 1); }
+            Set_Value("PaymentMethod", PaymentMethod);
         }
         /** Get Payment Method.
         @return Payment Method */
@@ -1599,6 +1600,47 @@ namespace VAdvantage.Model
         public void SetServiceContract(Boolean ServiceContract) { Set_Value("ServiceContract", ServiceContract); }/** Get Service Contract.
 @return This Checkbox is true when the Invoice is generated through the Service Contract. */
         public Boolean IsServiceContract() { Object oo = Get_Value("ServiceContract"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
+
+        /** ConditionalFlag AD_Reference_ID=1000246 */
+        public static int CONDITIONALFLAG_AD_Reference_ID = 1000246;/** Reversal = 00 */
+        public static String CONDITIONALFLAG_Reversal = "00";/** PrepareIt = 01 */
+        public static String CONDITIONALFLAG_PrepareIt = "01";/** CompleteIt = 02 */
+        public static String CONDITIONALFLAG_CompleteIt = "02";/** Is test a valid value.
+@param test testvalue
+@returns true if valid **/
+        public bool IsConditionalFlagValid(String test) { return test == null || test.Equals("00") || test.Equals("01") || test.Equals("02"); }/** Set Conditional Flag.
+@param ConditionalFlag This Field is used to bypass constraint on different action */
+        public void SetConditionalFlag(String ConditionalFlag)
+        {
+            if (!IsConditionalFlagValid(ConditionalFlag))
+                throw new ArgumentException("ConditionalFlag Invalid value - " + ConditionalFlag + " - Reference_ID=1000246 - 00 - 01 - 02"); if (ConditionalFlag != null && ConditionalFlag.Length > 2) { log.Warning("Length > 2 - truncated"); ConditionalFlag = ConditionalFlag.Substring(0, 2); }
+            Set_Value("ConditionalFlag", ConditionalFlag);
+        }/** Get Conditional Flag.
+@return This Field is used to bypass constraint on different action */
+        public String GetConditionalFlag() { return (String)Get_Value("ConditionalFlag"); }
+
+        /** ReversalDoc_ID AD_Reference_ID=336 */
+        public static int REVERSALDOC_ID_AD_Reference_ID = 336;/** Set Reversal Document.
+@param ReversalDoc_ID Reference of its original document */
+        public void SetReversalDoc_ID(int ReversalDoc_ID)
+        {
+            if (ReversalDoc_ID <= 0) Set_Value("ReversalDoc_ID", null);
+            else
+                Set_Value("ReversalDoc_ID", ReversalDoc_ID);
+        }/** Get Reversal Document.
+@return Reference of its original document */
+        public int GetReversalDoc_ID() { Object ii = Get_Value("ReversalDoc_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+
+        /** Set Warehouse.@param M_Warehouse_ID Storage Warehouse and Service Point */
+        public void SetM_Warehouse_ID(int M_Warehouse_ID)
+        {
+            if (M_Warehouse_ID <= 0) Set_Value("M_Warehouse_ID", null);
+            else
+                Set_Value("M_Warehouse_ID", M_Warehouse_ID);
+        }
+        /** Get Warehouse.@return Storage Warehouse and Service Point */
+        public int GetM_Warehouse_ID() { Object ii = Get_Value("M_Warehouse_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+
     }
 
 }

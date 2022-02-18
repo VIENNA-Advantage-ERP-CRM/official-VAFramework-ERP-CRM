@@ -38,7 +38,10 @@
         var multiValues = [];
         var singlevalue = null;
         var grdname = null;
-        var divPaging, ulPaging, liFirstPage, liPrevPage, liCurrPage, liNextPage, liLastPage, cmbPage;
+        var divPaging, ulPaging, liFirstPage, liPrevPage, liCurrPage, liNextPage, liLastPage, cmbPage, liPageNo;
+        var $spanPageResult = null;
+        var showText = VIS.Msg.getMsg("ShowingResult");
+        var ofText = VIS.Msg.getMsg("of");
 
         function initializeComponent() {
             inforoot.css("width", "100%");
@@ -313,7 +316,7 @@
                 width: 1020,
                 height: 500,
                 resizable: false,
-
+                title: schema[0].TableDisplayName,
                 modal: true
                 
                 ,
@@ -633,7 +636,7 @@
 
                     toolbar: true,  // indicates if toolbar is v isible
                     columnHeaders: true,   // indicates if columns is visible
-                    lineNumbers: true,  // indicates if line numbers column is visible
+                    lineNumbers: false,  // indicates if line numbers column is visible
                     selectColumn: true,  // indicates if select column is visible
                     toolbarReload: false,   // indicates if toolbar reload button is visible
                     toolbarColumns: true,   // indicates if toolbar columns button is visible
@@ -776,6 +779,8 @@
         function createPageSettings() {
             ulPaging = $('<ul class="vis-statusbar-ul">');
 
+            liPageNo = $('<li class="flex-fill"><div class="vis-ad-w-p-s-result"><span></span></div></li>');
+
             liFirstPage = $('<li style="opacity: 1;"><div><i class="vis vis-shiftleft" title="' + VIS.Msg.getMsg("FirstPage") + '" style="opacity: 0.6;"></i></div></li>');
 
             liPrevPage = $('<li style="opacity: 1;"><div><i class="vis vis-pageup" title="' + VIS.Msg.getMsg("PageUp") + '" style="opacity: 0.6;"></i></div></li>');
@@ -788,8 +793,9 @@
 
             liLastPage = $('<li style="opacity: 1;"><div><i class="vis vis-shiftright" title="' + VIS.Msg.getMsg("LastPage") + '" style="opacity: 0.6;"></i></div></li>');
 
+            $spanPageResult = liPageNo.find(".vis-ad-w-p-s-result").find("span");
 
-            ulPaging.append(liFirstPage).append(liPrevPage).append(liCurrPage).append(liNextPage).append(liLastPage);
+            ulPaging.append(liPageNo).append(liFirstPage).append(liPrevPage).append(liCurrPage).append(liNextPage).append(liLastPage);
             pageEvents();
         }
 
@@ -862,6 +868,21 @@
                 liNextPage.css("opacity", "0.6");
                 liLastPage.css("opacity", "0.6");
             }
+
+            // Show pages information
+            var cp = psetting.CurrentPage;
+            var ps = psetting.PageSize;
+            var tr = psetting.TotalRecords;
+
+            var s = (cp - 1) * ps;
+            var e = s + ps;
+            if (e > tr) e = tr;
+            if (tr == 0) {
+                s -= 1;
+            }
+            var text = showText + " " + (s + 1) + "-" + e + " " + ofText + " " + tr;
+
+            $spanPageResult.text(text);
         }
 
     };

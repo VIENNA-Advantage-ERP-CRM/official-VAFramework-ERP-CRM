@@ -198,7 +198,9 @@ namespace VIS.Helpers
                             ret.Result = ret.Result.Substring(0, 100) + "...";
                         }
 
-                        VIS.Controllers.JsonDataController.AddMessageForToastr(Convert.ToInt32(processInfo["Process_ID"]) + "_P_" + ctx.GetAD_Session_ID(), pro.GetName() + " " + Msg.GetMsg(ctx, "Completed") + ": " + ret.Result);
+                        //VIS.Controllers.JsonDataController.AddMessageForToastr(Convert.ToInt32(processInfo["Process_ID"]) + "_P_" + ctx.GetAD_Session_ID(), pro.GetName() + " " + Msg.GetMsg(ctx, "Completed") + ": " + ret.Result);
+                        ModelLibrary.PushNotif.SSEManager.Get().AddMessage(ctx.GetAD_Session_ID(),  pro.GetName() + " " + Msg.GetMsg(ctx, "Completed") + ": " + ret.Result );
+                       
 
                     });
                 }
@@ -746,6 +748,10 @@ namespace VIS.Helpers
             //ReportEngine_N re = null;
 
             string lang = ctx.GetAD_Language().Replace("_", "-");
+            // Set Report Language -VIS0228
+            if (!string.IsNullOrEmpty(ctx.GetContext("Report_Lang"))) {
+                lang = ctx.GetContext("Report_Lang").Replace("_", "-");
+            }
             System.Globalization.CultureInfo original = System.Threading.Thread.CurrentThread.CurrentCulture;
 
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(lang);
@@ -829,6 +835,20 @@ namespace VIS.Helpers
         {
             try
             {
+
+                string tableName = Util.GetValueOfString(DB.ExecuteScalar("SELECT TableName FROM AD_Table WHERE AD_Table_ID=" + _pi.GetTable_ID()));
+
+                if (tableName.ToLower() == "c_invoice")
+                {
+
+                    int Report_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT InvoiceReport_ID FROM C_BPartner WHERE C_BPartner_ID=(SELECT C_BPartner_ID FROM " + tableName + " WHERE " + tableName + "_ID=" + _pi.GetRecord_ID() + ")"));
+
+                    if (Report_ID > 0)
+                    {                       
+                        return;
+                    }
+                }
+
                 string colName = "C_DocTypeTarget_ID";
                 string sql = "SELECT COUNT(*) FROM AD_Column WHERE AD_Table_ID=" + _pi.GetTable_ID() + " AND ColumnName   ='C_DocTypeTarget_ID'";
                 int id = Util.GetValueOfInt(DB.ExecuteScalar(sql));
@@ -842,7 +862,7 @@ namespace VIS.Helpers
                         return;
                     }
                 }
-                string tableName = Util.GetValueOfString(DB.ExecuteScalar("SELECT TableName FROM AD_Table WHERE AD_Table_ID=" + _pi.GetTable_ID()));
+               
                 sql = "SELECT " + colName + " FROM " + tableName + " WHERE " + tableName + "_ID =" + _pi.GetRecord_ID();
                 id = Util.GetValueOfInt(DB.ExecuteScalar(sql));
                 if (id < 1)

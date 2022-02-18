@@ -213,6 +213,15 @@ namespace VAdvantage.Model
             return _parent;
         }
 
+        /// <summary>
+        /// Set Parent
+        /// </summary>
+        /// <param name="parent">parent</param>
+        public void SetParent(MInOut parent)
+        {
+            _parent = parent;
+        }
+
         /**
      * 	Set Order Line.
      * 	Does not set Quantity!
@@ -1066,15 +1075,15 @@ namespace VAdvantage.Model
             Decimal newMoveQty = movementQty ?? 0; //Arpit
 
             //Checking for conversion of UOM 
-            MInOut inO = new MInOut(GetCtx(), GetM_InOut_ID(), Get_TrxName());
-            MDocType dt = new MDocType(GetCtx(), inO.GetC_DocType_ID(), Get_TrxName());
+            MInOut inO = GetParent();
+            MDocType dt = MDocType.Get(GetCtx(), inO.GetC_DocType_ID());
             MProduct _Product = null;
 
             // Check if Product_ID is non zero then only create the object
             if (GetM_Product_ID() > 0)
             {
-                _Product = new MProduct(GetCtx(), GetM_Product_ID(), Get_TrxName());
-            }
+                _Product = new MProduct(GetCtx(), GetM_Product_ID(), Get_TrxName());                
+            }            
 
             if (_Product != null && GetC_UOM_ID() != _Product.GetC_UOM_ID())
             {
@@ -1144,14 +1153,17 @@ namespace VAdvantage.Model
             // on Ship/Receipt, do not check qty in warehouse for Lines of Charge.
             if ((!inO.IsProcessing() || newRecord) && _Product != null && _Product.IsStocked())
             {
-                int M_Warehouse_ID = 0; MWarehouse wh = null;
+                //int M_Warehouse_ID = 0; MWarehouse wh = null;
                 StringBuilder qry = new StringBuilder();
-                qry.Append("select m_warehouse_id from m_locator where m_locator_id=" + GetM_Locator_ID());
-                M_Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry.ToString()));
+                //qry.Append("select m_warehouse_id from m_locator where m_locator_id=" + GetM_Locator_ID());
+                //M_Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry.ToString()));
 
-                wh = MWarehouse.Get(GetCtx(), M_Warehouse_ID);
+                //wh = MWarehouse.Get(GetCtx(), M_Warehouse_ID);
+
+                string IsDisallowNegativeInv = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT IsDisallowNegativeInv FROM M_Warehouse WHERE M_Warehouse_ID = 
+                            (SELECT M_Warehouse_ID FROM M_Locator WHERE M_Locator_ID = " + GetM_Locator_ID() + ")", null, Get_Trx()));
                 qry.Clear();
-                qry.Append("SELECT QtyOnHand FROM M_Storage where m_locator_id=" + GetM_Locator_ID() + " and m_product_id=" + GetM_Product_ID());
+                qry.Append("SELECT QtyOnHand FROM M_Storage WHERE M_Locator_ID=" + GetM_Locator_ID() + " AND M_Product_ID=" + GetM_Product_ID());
                 if (GetM_AttributeSetInstance_ID() != 0)
                 {
                     qry.Append(" AND M_AttributeSetInstance_ID=" + GetM_AttributeSetInstance_ID());
@@ -1163,7 +1175,7 @@ namespace VAdvantage.Model
                 }
                 OnHandQty = Convert.ToDecimal(DB.ExecuteScalar(qry.ToString(), null, Get_Trx()));
                 // when record is in completed & closed stage - then no need to check qty availablity in warehouse
-                if (wh.IsDisallowNegativeInv() == true &&
+                if (IsDisallowNegativeInv.Equals("Y") &&
                     (!(inO.GetDocStatus() == "CO" || inO.GetDocStatus() == "CL" || inO.GetDocStatus() == "RE" || inO.GetDocStatus() == "VO")))
                 {
                     // pick container current qty from transaction based on locator / product / ASI / Container / Movement Date 
@@ -1229,6 +1241,13 @@ namespace VAdvantage.Model
                         return false;
                     }
                 }
+
+                //VA230: Quantity cannot be greater than Asset Quantity in case of shipment.
+                if (inO.IsSOTrx() && GetA_Asset_ID() > 0 && Env.IsModuleInstalled("VAFAM_") && Get_ColumnIndex("VAFAM_Quantity") >= 0 && GetMovementQty() > GetVAFAM_Quantity())
+                {
+                    log.SaveError("Error", Msg.GetMsg(GetCtx(), "QtyCanNotbeGreaterThanAssetQty"));
+                    return false;
+                }
             }
 
             //	Order Line
@@ -1288,9 +1307,9 @@ namespace VAdvantage.Model
                     SetM_AttributeSetInstance_ID(GetM_AttributeSetInstance_ID());
                 else
                 {
-                    MProduct product = GetProduct();
-                    if (product != null
-                        && product.GetM_AttributeSet_ID() != 0)
+                    //MProduct product = GetProduct();
+                    if (_Product != null
+                        && _Product.GetM_AttributeSet_ID() != 0)
                     {
                         //MAttributeSet mas = MAttributeSet.Get(GetCtx(), product.GetM_AttributeSet_ID());
                         //if (mas.IsInstanceAttribute() 
@@ -1337,9 +1356,9 @@ namespace VAdvantage.Model
                     }
                     else
                     {
-                        if (product != null)
+                        if (_Product != null)
                         {
-                            if (product.GetM_AttributeSet_ID() == 0 && (GetDTD001_Attribute() == "" || GetDTD001_Attribute() == null))
+                            if (_Product.GetM_AttributeSet_ID() == 0 && (GetDTD001_Attribute() == "" || GetDTD001_Attribute() == null))
                                 return true;
                             else
                             {
@@ -1351,7 +1370,7 @@ namespace VAdvantage.Model
                         }
                     }
                 }
-            }            
+            }
 
             return true;
         }

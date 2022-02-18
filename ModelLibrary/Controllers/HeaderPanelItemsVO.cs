@@ -65,6 +65,16 @@ namespace VAdvantage.Controller
 
         public string Padding = "";
 
+        public bool IsDynamic = false;
+
+        public string ColSql = "";
+
+        public bool HideFieldIcon = false;
+
+        public bool HideFieldText = false;
+
+        public string FieldValueStyle = "";
+
     }
 
     public class HeaderPanelGrid

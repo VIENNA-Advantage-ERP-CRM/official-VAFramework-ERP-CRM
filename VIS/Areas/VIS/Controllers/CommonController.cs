@@ -16,6 +16,7 @@ using VAdvantage.ProcessEngine;
 using VAdvantage.Utility;
 using VIS.Classes;
 using VIS.DataContracts;
+using VIS.Helpers;
 using VIS.Models;
 
 namespace VIS.Controllers
@@ -69,14 +70,35 @@ namespace VIS.Controllers
         /// </summary>
         /// <param name="pref"></param>
         /// <returns></returns>
-        public JsonResult SaveInvoice(List<Dictionary<string, string>> model, string selectedItems, string C_Order_ID, string C_Invoice_ID, string M_inout_id)
+        public JsonResult SaveInvoice(List<Dictionary<string, string>> model, string selectedItems, string C_Order_ID, string C_Invoice_ID, string M_inout_id, string C_ProvisionalInvoice_ID = "0")
         {
             var value = false;
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
                 CommonModel obj = new CommonModel();
-                value = obj.SaveInvoiceData(ctx, model, selectedItems, Convert.ToInt32(C_Order_ID), Convert.ToInt32(C_Invoice_ID), Convert.ToInt32(M_inout_id));
+                value = obj.SaveInvoiceData(ctx, model, selectedItems, Convert.ToInt32(C_Order_ID), Convert.ToInt32(C_Invoice_ID), Convert.ToInt32(M_inout_id), Convert.ToInt32(C_ProvisionalInvoice_ID));
+            }
+            return Json(new { result = value }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// This function is used to save provisional Invoice
+        /// </summary>
+        /// <param name="model">data model</param>
+        /// <param name="selectedItems">Selected Items</param>
+        /// <param name="C_Order_ID">Order</param>
+        /// <param name="C_ProvisionalInvoice_ID">Provisonal Invoice</param>
+        /// <param name="M_inout_id">Receipt/Shipment</param>
+        /// <returns></returns>
+        public JsonResult SaveProvisionalInvoice(List<Dictionary<string, string>> model, string selectedItems, string C_Order_ID, string C_ProvisionalInvoice_ID, string M_inout_id)
+        {
+            var value = false;
+            if (Session["Ctx"] != null)
+            {
+                var ctx = Session["ctx"] as Ctx;
+                CommonModel obj = new CommonModel();
+                value = obj.SaveProvisionalInvoiceData(ctx, model, selectedItems, Util.GetValueOfInt(C_Order_ID), Util.GetValueOfInt(C_ProvisionalInvoice_ID), Util.GetValueOfInt(M_inout_id));
             }
             return Json(new { result = value }, JsonRequestBehavior.AllowGet);
         }
@@ -103,14 +125,20 @@ namespace VIS.Controllers
         #endregion
 
         #region Menual Forms
-
+        /// <summary>
+        /// Get the Generated Invoice Info
+        /// </summary>
+        /// <param name="whereClause">WHERE Condition Value or C_Order_ID</param>
+        /// <returns>returns Invoice Info</returns>
         public JsonResult GenerateInvoices(string whereClause)
         {
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
                 CommonModel obj = new CommonModel();
-                var value = obj.GenerateInvoices(ctx, whereClause);
+                //not use of var value
+                //var value = obj.GenerateInvoices(ctx, whereClause);
+                obj.GenerateInvoices(ctx, whereClause);
                 return Json(new { obj.ErrorMsg, obj.lblStatusInfo, obj.statusBar, obj.DocumentText }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { result = "ok" }, JsonRequestBehavior.AllowGet);
@@ -480,6 +508,21 @@ namespace VIS.Controllers
             }
             return Json(new { result = hasRecords }, JsonRequestBehavior.AllowGet);
         }
+
+        /// <summary>
+        /// Method to get parent tab records ID.
+        /// </summary>
+        /// <param name="SelectColumn">Column  to be selected</param>
+        /// <param name="SelectTable">From table</param>
+        /// <param name="WhereColumn">Where column</param>
+        /// <param name="WhereValue">ID of child column</param>
+        /// <returns></returns>
+        public ActionResult GetZoomParentRec(string SelectColumn, string SelectTable, string WhereColumn, string WhereValue)
+        {
+            //ZoomChildTab
+            WindowHelper obj = new Helpers.WindowHelper();
+            return Json(JsonConvert.SerializeObject(obj.GetZoomParentRecord(SelectColumn, SelectTable, WhereColumn, WhereValue)), JsonRequestBehavior.AllowGet);
+        }
     }
 
     public class AttributeGrid
@@ -716,7 +759,7 @@ namespace VIS.Controllers
                 bool IsInvoicePTAdvance = false; // payment term binded on Invoice is advance or not
 
                 // get invoice header payment tern and is advance or not
-                if (keyColumnName == "C_Invoice_ID")
+                if (keyColumnName == "C_Invoice_ID" || keyColumnName.Equals("C_ProvisionalInvoice_ID"))
                 {
                     DataSet ds = DB.ExecuteDataset(@"SELECT c_paymentterm.c_paymentterm_ID,
                                     SUM(  CASE WHEN c_paymentterm.VA009_Advance!= COALESCE(C_PaySchedule.VA009_Advance,'N') THEN 1 ELSE 0 END) AS IsAdvance
@@ -725,15 +768,15 @@ namespace VIS.Controllers
                                     GROUP BY c_paymentterm.c_paymentterm_ID ");
                     if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
-                        C_InvoicePaymentTerm_ID = Convert.ToInt32(ds.Tables[0].Rows[0]["c_paymentterm_ID"]);
-                        IsInvoicePTAdvance = Convert.ToInt32(ds.Tables[0].Rows[0]["IsAdvance"]) > 0 ? true : false;
+                        C_InvoicePaymentTerm_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["c_paymentterm_ID"]);
+                        IsInvoicePTAdvance = Util.GetValueOfInt(ds.Tables[0].Rows[0]["IsAdvance"]) > 0 ? true : false;
                     }
                 }
 
                 for (int i = 0; i < data.Tables[0].Rows.Count; i++)  //columns
                 {
                     int recordid = 0;
-                    int rec = 0;
+                    Decimal rec = 0;
                     decimal SavedQty = 0;
                     bool select = false;
                     string qry = "";
@@ -777,7 +820,7 @@ namespace VIS.Controllers
                             if (recordid > 0)
                             {
                                 qry = "SELECT SUM(QtyEntered) FROM M_InOutLine WHERE M_InOut_ID = " + recordID + " AND C_OrderLine_ID = " + recordid;
-                                rec = Util.GetValueOfInt(DB.ExecuteScalar(qry));
+                                rec = Util.GetValueOfDecimal(DB.ExecuteScalar(qry));
                                 if (rec > 0)
                                 {
                                     // Change By Mohit 30/06/2016
@@ -790,7 +833,7 @@ namespace VIS.Controllers
                             {
                                 qry = "SELECT QtyEntered FROM M_InOutLine WHERE M_InOut_ID = " + recordID + " AND M_Product_ID = " + Util.GetValueOfInt(data.Tables[0].Rows[i]["m_product_id"]) +
                                     " AND M_AttributeSetInstance_ID = " + Util.GetValueOfInt(data.Tables[0].Rows[i]["m_attributesetinstance_id"]);
-                                rec = Util.GetValueOfInt(DB.ExecuteScalar(qry));
+                                rec = Util.GetValueOfDecimal(DB.ExecuteScalar(qry));
                                 if (rec > 0)
                                 {
                                     // Change By Mohit 30/06/2016
@@ -806,7 +849,7 @@ namespace VIS.Controllers
                             if (recordid > 0)
                             {
                                 qry = "SELECT SUM(QtyEntered) FROM C_InvoiceLine WHERE C_Invoice_ID = " + recordID + " AND C_OrderLine_ID = " + recordid;
-                                rec = Util.GetValueOfInt(DB.ExecuteScalar(qry));
+                                rec = Util.GetValueOfDecimal(DB.ExecuteScalar(qry));
                                 if (rec > 0)
                                 {
                                     // Change By Mohit 30/06/2016
@@ -818,10 +861,41 @@ namespace VIS.Controllers
                             {
                                 qry = "SELECT QtyEntered FROM C_InvoiceLine WHERE C_Invoice_ID = " + recordID + " AND M_Product_ID = " + Util.GetValueOfInt(data.Tables[0].Rows[i]["m_product_id"]) +
                                     " AND M_AttributeSetInstance_ID = " + Util.GetValueOfInt(data.Tables[0].Rows[i]["m_attributesetinstance_id"]);
-                                rec = Util.GetValueOfInt(DB.ExecuteScalar(qry));
+                                rec = Util.GetValueOfDecimal(DB.ExecuteScalar(qry));
                                 if (rec > 0)
                                 {
                                     // Change By Mohit 30/06/2016
+                                    select = true;
+                                    item.QuantityEntered = rec;
+                                }
+                            }
+                        }
+                        else if (keyColumnName == "C_ProvisionalInvoice_ID")
+                        {
+                            item.POPrice = Util.GetValueOfDecimal(data.Tables[0].Rows[i]["PriceEntered"]);
+                            item.ProvisionalPrice = item.POPrice;
+
+                            // Reduce Quantity Entered, if created line already
+                            recordid = Util.GetValueOfInt(data.Tables[0].Rows[i]["c_orderline_id"]);
+                            if (recordid > 0)
+                            {
+                                qry = "SELECT SUM(QtyEntered) FROM C_ProvisionalInvoiceLine WHERE C_ProvisionalInvoice_ID = " + recordID +
+                                    @" AND C_OrderLine_ID = " + recordid;
+                                rec = Util.GetValueOfDecimal(DB.ExecuteScalar(qry));
+                                if (rec > 0)
+                                {
+                                    select = true;
+                                    item.QuantityEntered -= rec;
+                                }
+                            }
+                            else
+                            {
+                                qry = "SELECT QtyEntered FROM C_ProvisionalInvoiceLine WHERE C_ProvisionalInvoice_ID = " + recordID +
+                                    @" AND M_Product_ID = " + Util.GetValueOfInt(data.Tables[0].Rows[i]["m_product_id"]) +
+                                    " AND M_AttributeSetInstance_ID = " + Util.GetValueOfInt(data.Tables[0].Rows[i]["m_attributesetinstance_id"]);
+                                rec = Util.GetValueOfDecimal(DB.ExecuteScalar(qry));
+                                if (rec > 0)
+                                {
                                     select = true;
                                     item.QuantityEntered = rec;
                                 }
@@ -841,7 +915,7 @@ namespace VIS.Controllers
                         if (recordid > 0)
                         {
                             qry = "SELECT QtyEntered FROM M_InOutLine WHERE M_InOut_ID = " + recordID + " AND C_OrderLine_ID = " + recordid;
-                            rec = Util.GetValueOfInt(DB.ExecuteScalar(qry));
+                            rec = Util.GetValueOfDecimal(DB.ExecuteScalar(qry));
                             if (rec > 0)
                             {
                                 // Change By Mohit 30/06/2016
@@ -853,7 +927,7 @@ namespace VIS.Controllers
                         {
                             qry = "SELECT QtyEntered FROM M_InOutLine WHERE M_InOut_ID = " + recordID + " AND M_Product_ID = " + Util.GetValueOfInt(data.Tables[0].Rows[i]["m_product_id"]) +
                                 " AND M_AttributeSetInstance_ID = " + Util.GetValueOfInt(data.Tables[0].Rows[i]["m_attributesetinstance_id"]);
-                            rec = Util.GetValueOfInt(DB.ExecuteScalar(qry));
+                            rec = Util.GetValueOfDecimal(DB.ExecuteScalar(qry));
                             if (rec > 0)
                             {
                                 // Change By Mohit 30/06/2016
@@ -869,30 +943,67 @@ namespace VIS.Controllers
                         item.M_InOut_ID_K = 0;
                         item.C_Invoice_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["c_invoiceline_id"]);
                     }
+                    else if (tableName == "C_ProvisionalInvoiceLine")
+                    {
+                        item.C_Order_ID = null;
+                        item.M_InOut_ID = null;
+                        item.C_Invoice_ID = Util.GetValueOfString(data.Tables[0].Rows[i]["line"]);
+                        item.C_Order_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["c_orderline_id"]);
+                        item.M_InOut_ID_K = 0;
+                        item.C_Invoice_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["c_provisionalinvoiceline_id"]);
+                        item.POPrice = Util.GetValueOfDecimal(data.Tables[0].Rows[i]["PricePO"]);
+                        item.ProvisionalPrice = Util.GetValueOfDecimal(data.Tables[0].Rows[i]["PriceEntered"]);
+                        item.InvoicePrice = Util.GetValueOfDecimal(data.Tables[0].Rows[i]["PriceEntered"]);
+                    }
                     else
                     {
                         recordid = Util.GetValueOfInt(data.Tables[0].Rows[i]["m_inoutline_id"]);
-                        if (recordid > 0)
+
+                        if (keyColumnName == "C_ProvisionalInvoice_ID")
                         {
-                            qry = "SELECT QtyEntered FROM C_InvoiceLine WHERE C_Invoice_ID = " + recordID + " AND M_InOutLine_ID = " + recordid;
-                            rec = Util.GetValueOfInt(DB.ExecuteScalar(qry));
-                            if (rec > 0)
+                            item.POPrice = Util.GetValueOfDecimal(data.Tables[0].Rows[i]["PriceEntered"]);
+                            item.ProvisionalPrice = item.POPrice;
+                            qry = "SELECT QtyEntered FROM C_ProvisionalInvoiceLine WHERE C_ProvisionalInvoice_ID = " + recordID + " AND M_InOutLine_ID = " + recordid;
+                            if (Util.GetValueOfDecimal(DB.ExecuteScalar(qry)) > 0)
                             {
-                                // Change By Mohit 30/06/2016
                                 select = true;
-                                item.QuantityEntered = rec;
+                            }
+                            else
+                            {
+                                qry = "SELECT QtyEntered FROM C_ProvisionalInvoiceLine WHERE C_ProvisionalInvoice_ID = " + recordID +
+                                      " AND M_Product_ID = " + Util.GetValueOfInt(data.Tables[0].Rows[i]["m_product_id"]) +
+                                      " AND M_AttributeSetInstance_ID = " + Util.GetValueOfInt(data.Tables[0].Rows[i]["m_attributesetinstance_id"]);
+                                if (Util.GetValueOfDecimal(DB.ExecuteScalar(qry)) > 0)
+                                {
+                                    select = true;
+                                }
                             }
                         }
-                        else
+
+                        if (keyColumnName != "C_ProvisionalInvoice_ID")
                         {
-                            qry = "SELECT QtyEntered FROM C_InvoiceLine WHERE C_Invoice_ID = " + recordID + " AND M_Product_ID = " + Util.GetValueOfInt(data.Tables[0].Rows[i]["m_product_id"]) +
-                                " AND M_AttributeSetInstance_ID = " + Util.GetValueOfInt(data.Tables[0].Rows[i]["m_attributesetinstance_id"]);
-                            rec = Util.GetValueOfInt(DB.ExecuteScalar(qry));
-                            if (rec > 0)
+                            if (recordid > 0)
                             {
-                                // Change By Mohit 30/06/2016
-                                select = true;
-                                item.QuantityEntered = rec;
+                                qry = "SELECT QtyEntered FROM C_InvoiceLine WHERE C_Invoice_ID = " + recordID + " AND M_InOutLine_ID = " + recordid;
+                                rec = Util.GetValueOfDecimal(DB.ExecuteScalar(qry));
+                                if (rec > 0)
+                                {
+                                    // Change By Mohit 30/06/2016
+                                    select = true;
+                                    item.QuantityEntered = rec;
+                                }
+                            }
+                            else
+                            {
+                                qry = "SELECT QtyEntered FROM C_InvoiceLine WHERE C_Invoice_ID = " + recordID + " AND M_Product_ID = " + Util.GetValueOfInt(data.Tables[0].Rows[i]["m_product_id"]) +
+                                         " AND M_AttributeSetInstance_ID = " + Util.GetValueOfInt(data.Tables[0].Rows[i]["m_attributesetinstance_id"]);
+                                rec = Util.GetValueOfDecimal(DB.ExecuteScalar(qry));
+                                if (rec > 0)
+                                {
+                                    // Change By Mohit 30/06/2016
+                                    select = true;
+                                    item.QuantityEntered = rec;
+                                }
                             }
                         }
                         item.Select = select;
@@ -1134,11 +1245,11 @@ namespace VIS.Controllers
                         //{ 
                         SqlIOL += " AND NVL(M_AttributeSetInstance_ID, 0) = " + M_AttributeSetInstance_ID;
                         //}
-                        if (isContainerApplicable)
-                        {
-                            // To check with containerID to get Record
-                            SqlIOL += " AND NVL(M_ProductContainer_ID , 0) = " + Container_ID;
-                        }
+                        //if (isContainerApplicable)
+                        //{
+                        //    // To check with containerID to get Record
+                        //    SqlIOL += " AND NVL(M_ProductContainer_ID , 0) = " + Container_ID;
+                        //}
 
                         M_InoutLine_ID = Util.GetValueOfInt(DB.ExecuteScalar(SqlIOL));
                         if (M_InoutLine_ID == 0)
@@ -1347,6 +1458,13 @@ namespace VIS.Controllers
                         po.Set_Value("User2_ID", ol.GetUser2_ID());
                     }
 
+                    //190 - Get Print description from order line and set
+                    if (po.Get_ColumnIndex("PrintDescription") >= 0 && ol.Get_ColumnIndex("PrintDescription") >= 0)
+                        po.Set_Value("PrintDescription", ol.Get_Value("PrintDescription"));
+                    //Get Print description from invoice line if invoice line exists
+                    if (il != null && po.Get_ColumnIndex("PrintDescription") >= 0 && il.Get_ColumnIndex("PrintDescription") >= 0)
+                        po.Set_Value("PrintDescription", il.Get_Value("PrintDescription"));                    
+
                     //iol.SetDescription(ol.GetDescription());
                     //iol.SetC_Project_ID(ol.GetC_Project_ID());
                     //iol.SetC_ProjectPhase_ID(ol.GetC_ProjectPhase_ID());
@@ -1439,6 +1557,10 @@ namespace VIS.Controllers
                     {
                         po.Set_Value("User2_ID", il.GetUser2_ID());
                     }
+
+                    //190 - Get Print description from invoice line and set
+                    if (po.Get_ColumnIndex("PrintDescription") >= 0)
+                        po.Set_Value("PrintDescription", il.Get_Value("PrintDescription"));
                     //iol.SetDescription(il.GetDescription());
                     //iol.SetC_Project_ID(il.GetC_Project_ID());
                     //iol.SetC_ProjectPhase_ID(il.GetC_ProjectPhase_ID());
@@ -1564,8 +1686,9 @@ namespace VIS.Controllers
             return retObj;
         }
 
-        public bool SaveInvoiceData(Ctx ctx, List<Dictionary<string, string>> model, string selectedItems, int C_Order_ID, int C_Invoice_ID, int M_InOut_ID)
+        public bool SaveInvoiceData(Ctx ctx, List<Dictionary<string, string>> model, string selectedItems, int C_Order_ID, int C_Invoice_ID, int M_InOut_ID, int C_ProvisionalInvoice_ID)
         {
+            int lineNo = 0;
             MOrder _order = null;
             if (C_Order_ID > 0)
             {
@@ -1576,6 +1699,14 @@ namespace VIS.Controllers
             if (C_Invoice_ID > 0)
             {
                 _invoice = new MInvoice(ctx, C_Invoice_ID, null);
+                // Added By VA228(Rakesh Kumar): Set Provisional Invoice Reference
+                if (C_ProvisionalInvoice_ID > 0)
+                {
+                    if (_invoice.Get_ColumnIndex("C_ProvisionalInvoice_ID") >= 0)
+                    {
+                        DB.ExecuteScalar("UPDATE C_Invoice Set C_ProvisionalInvoice_ID=" + C_ProvisionalInvoice_ID + " Where C_Invoice_ID=" + C_Invoice_ID);
+                    }
+                }
             }
 
 
@@ -1620,7 +1751,7 @@ namespace VIS.Controllers
                     _invoice.Set_Value("VA077_TotalPurchaseAmt", _order.Get_Value("VA077_TotalPurchaseAmt"));
                     _invoice.Set_Value("VA077_TotalSalesAmt", _order.Get_Value("VA077_TotalSalesAmt"));
                     _invoice.Set_Value("VA077_MarginPercent", _order.Get_Value("VA077_MarginPercent"));
-                    
+
                 }
 
                 _invoice.Save();
@@ -1633,6 +1764,9 @@ namespace VIS.Controllers
             }
             //DateTime? AmortStartDate = null;
             //DateTime? AmortEndDate = null;
+
+            // VIS0060: Get Max Line No from Invoice Lines.
+            lineNo = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COALESCE(MAX(Line), 0) + 10 FROM C_InvoiceLine WHERE C_Invoice_ID =" + C_Invoice_ID));
             //  Lines
             for (int i = 0; i < model.Count; i++)
             {
@@ -1674,17 +1808,10 @@ namespace VIS.Controllers
                     precision = product.GetUOMPrecision();
                 }
 
-                //QtyEntered = Decimal.Round(QtyEntered, precision, MidpointRounding.AwayFromZero); //commnted by Bharat as it is already rounded
-
-                //s_log.fine("Line QtyEntered=" + QtyEntered
-                //    + ", Product_ID=" + M_Product_ID 
-                //    + ", OrderLine_ID=" + C_OrderLine_ID + ", InOutLine_ID=" + M_InOutLine_ID);
-
                 //	Create new Invoice Line
                 MInvoiceLine invoiceLine = new MInvoiceLine(_invoice);
                 invoiceLine.SetM_Product_ID(M_Product_ID, C_UOM_ID);	//	Line UOM
-                invoiceLine.SetQty(QtyEntered);							//	Invoiced/Entered
-
+                invoiceLine.SetQty(QtyEntered);                         //	Invoiced/Entered
 
 
                 //  Info
@@ -1729,92 +1856,18 @@ namespace VIS.Controllers
                 if (inoutLine != null)
                 {
                     invoiceLine.SetShipLine(inoutLine);		//	overwrites
+
+                    // VIS0060: Set Asset ID from Shipment Line to AR Invoice Line
+                    if (_invoice.IsSOTrx() && inoutLine.GetA_Asset_ID() > 0)
+                    {
+                        invoiceLine.SetA_Asset_ID(inoutLine.GetA_Asset_ID());                        
+                    }
+
                     if (inoutLine.GetQtyEntered().CompareTo(inoutLine.GetMovementQty()) != 0)
                     {
-                        //invoiceLine.setQtyInvoiced(QtyEntered
-                        //.multiply(inoutLine.getMovementQty())
-                        //.divide(inoutLine.getQtyEntered(), 12, Decimal.ROUND_HALF_UP));
                         invoiceLine.SetQtyInvoiced(Decimal.Round(Decimal.Divide(Decimal.Multiply(QtyEntered,
                         inoutLine.GetMovementQty()),
                         inoutLine.GetQtyEntered()), 12, MidpointRounding.AwayFromZero));
-
-                        // Change By mohit Amortization proces
-                        //int countVA038 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA038_' "));
-                        //if (countVA038 > 0)
-                        //{
-
-                        //    if (Util.GetValueOfInt(inoutLine.GetM_Product_ID()) > 0)
-                        //    {
-                        //        MProduct pro = new MProduct(ctx, inoutLine.GetM_Product_ID(), null);
-                        //        if (Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
-                        //        {
-                        //            invoiceLine.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")));
-                        //            DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")));
-                        //            AmortStartDate = null;
-                        //            AmortEndDate = null;
-                        //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "A")
-                        //            {
-                        //                AmortStartDate = _invoice.GetDateAcct();
-                        //            }
-                        //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "T")
-                        //            {
-                        //                AmortStartDate = _invoice.GetDateInvoiced();
-                        //            }
-
-                        //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_PeriodType"]) == "M")
-                        //            {
-                        //                AmortEndDate = AmortStartDate.Value.AddMonths(Util.GetValueOfInt(amrtDS.Tables[0].Rows[0]["VA038_AmortizationPeriod"]));
-                        //            }
-                        //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_PeriodType"]) == "Y")
-                        //            {
-                        //                AmortEndDate = AmortStartDate.Value.AddYears(Util.GetValueOfInt(amrtDS.Tables[0].Rows[0]["VA038_AmortizationPeriod"]));
-                        //            }
-                        //            invoiceLine.Set_Value("FROMDATE", AmortStartDate);
-                        //            invoiceLine.Set_Value("EndDate", AmortEndDate);
-                        //            if (amrtDS != null)
-                        //            {
-                        //                amrtDS.Dispose();
-                        //            }
-                        //        }
-                        //    }
-                        //    if (Util.GetValueOfInt(inoutLine.GetC_Charge_ID()) > 0)
-                        //    {
-                        //        MCharge charge = new MCharge(ctx, inoutLine.GetC_Charge_ID(), null);
-                        //        if (Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
-                        //        {
-                        //            invoiceLine.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
-                        //            DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
-                        //            AmortStartDate = null;
-                        //            AmortEndDate = null;
-                        //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "A")
-                        //            {
-                        //                AmortStartDate = _invoice.GetDateAcct();
-                        //            }
-                        //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "T")
-                        //            {
-                        //                AmortStartDate = _invoice.GetDateInvoiced();
-                        //            }
-
-                        //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_PeriodType"]) == "M")
-                        //            {
-                        //                AmortEndDate = AmortStartDate.Value.AddMonths(Util.GetValueOfInt(amrtDS.Tables[0].Rows[0]["VA038_AmortizationPeriod"]));
-                        //            }
-                        //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_PeriodType"]) == "Y")
-                        //            {
-                        //                AmortEndDate = AmortStartDate.Value.AddYears(Util.GetValueOfInt(amrtDS.Tables[0].Rows[0]["VA038_AmortizationPeriod"]));
-                        //            }
-                        //            invoiceLine.Set_Value("FROMDATE", AmortStartDate);
-                        //            invoiceLine.Set_Value("EndDate", AmortEndDate);
-                        //            if (amrtDS != null)
-                        //            {
-                        //                amrtDS.Dispose();
-                        //            }
-                        //        }
-                        //    }
-
-                        //}
-
-                        // End Amortization process
                     }
                 }
                 else
@@ -1827,20 +1880,29 @@ namespace VIS.Controllers
                 {
                     invoiceLine.SetOrderLine(orderLine);	//	overwrites
 
+                    // VIS0060: Handle case of Attribute Set Instance, was overwritten by Order Line Attribute Set Instance
+                    if (inoutLine != null)
+                    {
+                        invoiceLine.SetM_AttributeSetInstance_ID(inoutLine.GetM_AttributeSetInstance_ID());
+                    }
+
                     /* nnayak - Bug 1567690. The organization from the Orderline can be different from the organization 
                     on the header */
                     invoiceLine.SetClientOrg(orderLine.GetAD_Client_ID(), orderLine.GetAD_Org_ID());
                     if (orderLine.GetQtyEntered().CompareTo(orderLine.GetQtyOrdered()) != 0)
                     {
-                        //invoiceLine.setQtyInvoiced(QtyEntered
-                        //    .multiply(orderLine.getQtyOrdered())
-                        //    .divide(orderLine.getQtyEntered(), 12, Decimal.ROUND_HALF_UP));
                         invoiceLine.SetQtyInvoiced(Decimal.Round(Decimal.Divide(Decimal.Multiply(QtyEntered,
                         orderLine.GetQtyOrdered()),
                         orderLine.GetQtyEntered()), 12, MidpointRounding.AwayFromZero));
                     }
 
-                    if(Env.IsModuleInstalled("VA077_"))
+                    //190 - Get the Print description from SO and Set to invoice line 
+                    if (orderLine.Get_ColumnIndex("PrintDescription") >= 0)
+                        invoiceLine.Set_Value("PrintDescription", orderLine.Get_Value("PrintDescription"));
+                    if (inoutLine != null && inoutLine.Get_ColumnIndex("PrintDescription") >= 0)
+                        invoiceLine.Set_Value("PrintDescription", inoutLine.Get_Value("PrintDescription"));
+
+                    if (Env.IsModuleInstalled("VA077_"))
                     {
                         invoiceLine.Set_Value("VA077_CNAutodesk", orderLine.Get_Value("VA077_CNAutodesk"));
                         invoiceLine.Set_Value("VA077_Duration", orderLine.Get_Value("VA077_Duration"));
@@ -1857,86 +1919,6 @@ namespace VIS.Controllers
                         invoiceLine.Set_Value("VA077_EndDate", orderLine.Get_Value("VA077_EndDate"));
                         invoiceLine.Set_Value("VA077_ServiceContract_ID", orderLine.Get_Value("VA077_ServiceContract_ID"));
                     }
-
-
-
-                    // Change By mohit Amortization proces
-                    //int countVA038 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA038_' "));
-                    //if (countVA038 > 0)
-                    //{
-                    //    if (Util.GetValueOfInt(orderLine.GetM_Product_ID()) > 0)
-                    //    {
-                    //        MProduct pro = new MProduct(ctx, orderLine.GetM_Product_ID(), null);
-                    //        if (Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
-                    //        {
-                    //            invoiceLine.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")));
-                    //            DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")));
-                    //            AmortStartDate = null;
-                    //            AmortEndDate = null;
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "A")
-                    //            {
-                    //                AmortStartDate = _invoice.GetDateAcct();
-                    //            }
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "T")
-                    //            {
-                    //                AmortStartDate = _invoice.GetDateInvoiced();
-                    //            }
-
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_PeriodType"]) == "M")
-                    //            {
-                    //                AmortEndDate = AmortStartDate.Value.AddMonths(Util.GetValueOfInt(amrtDS.Tables[0].Rows[0]["VA038_AmortizationPeriod"]));
-                    //            }
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_PeriodType"]) == "Y")
-                    //            {
-                    //                AmortEndDate = AmortStartDate.Value.AddYears(Util.GetValueOfInt(amrtDS.Tables[0].Rows[0]["VA038_AmortizationPeriod"]));
-                    //            }
-                    //            invoiceLine.Set_Value("FROMDATE", AmortStartDate);
-                    //            invoiceLine.Set_Value("EndDate", AmortEndDate);
-                    //            if (amrtDS != null)
-                    //            {
-                    //                amrtDS.Dispose();
-                    //            }
-                    //        }
-                    //    }
-                    //    if (Util.GetValueOfInt(orderLine.GetC_Charge_ID()) > 0)
-                    //    {
-                    //        MCharge charge = new MCharge(ctx, orderLine.GetC_Charge_ID(), null);
-                    //        if (Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
-                    //        {
-                    //            invoiceLine.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
-                    //            DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
-                    //            AmortStartDate = null;
-                    //            AmortEndDate = null;
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "A")
-                    //            {
-                    //                AmortStartDate = _invoice.GetDateAcct();
-                    //            }
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "T")
-                    //            {
-                    //                AmortStartDate = _invoice.GetDateInvoiced();
-                    //            }
-
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_PeriodType"]) == "M")
-                    //            {
-                    //                AmortEndDate = AmortStartDate.Value.AddMonths(Util.GetValueOfInt(amrtDS.Tables[0].Rows[0]["VA038_AmortizationPeriod"]));
-                    //            }
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_PeriodType"]) == "Y")
-                    //            {
-                    //                AmortEndDate = AmortStartDate.Value.AddYears(Util.GetValueOfInt(amrtDS.Tables[0].Rows[0]["VA038_AmortizationPeriod"]));
-                    //            }
-                    //            invoiceLine.Set_Value("FROMDATE", AmortStartDate);
-                    //            invoiceLine.Set_Value("EndDate", AmortEndDate);
-                    //            if (amrtDS != null)
-                    //            {
-                    //                amrtDS.Dispose();
-                    //            }
-                    //        }
-                    //    }
-
-                    //}
-
-                    // End Amortization process
-
                 }
                 else
                 {
@@ -1947,6 +1929,8 @@ namespace VIS.Controllers
                     if (inoutLine != null)
                     {
                         invoiceLine.SetClientOrg(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID());
+                        if (invoiceLine.Get_ColumnIndex("PrintDescription") >= 0)
+                            invoiceLine.Set_Value("PrintDescription", inoutLine.Get_Value("PrintDescription"));
 
                         if (Env.IsModuleInstalled("VA077_"))
                         {
@@ -1969,91 +1953,34 @@ namespace VIS.Controllers
 
                     }
 
-                    invoiceLine.SetPrice();
+                    // VA228: SetPrice when invoice is not provisional
+                    if (C_ProvisionalInvoice_ID == 0)
+                    {
+                        invoiceLine.SetPrice();
+                    }
                     invoiceLine.SetTax();
-                    // Change By mohit Amortization proces
-                    //int countVA038 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA038_' "));
-                    //if (countVA038 > 0)
-                    //{
-                    //    if (Util.GetValueOfInt(inoutLine.GetM_Product_ID()) > 0)
-                    //    {
-                    //        MProduct pro = new MProduct(ctx, inoutLine.GetM_Product_ID(), null);
-                    //        if (Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
-                    //        {
-                    //            invoiceLine.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")));
-                    //            DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(pro.Get_Value("VA038_AmortizationTemplate_ID")));
-                    //            AmortStartDate = null;
-                    //            AmortEndDate = null;
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "A")
-                    //            {
-                    //                AmortStartDate = _invoice.GetDateAcct();
-                    //            }
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "T")
-                    //            {
-                    //                AmortStartDate = _invoice.GetDateInvoiced();
-                    //            }
-
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_PeriodType"]) == "M")
-                    //            {
-                    //                AmortEndDate = AmortStartDate.Value.AddMonths(Util.GetValueOfInt(amrtDS.Tables[0].Rows[0]["VA038_AmortizationPeriod"]));
-                    //            }
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_PeriodType"]) == "Y")
-                    //            {
-                    //                AmortEndDate = AmortStartDate.Value.AddYears(Util.GetValueOfInt(amrtDS.Tables[0].Rows[0]["VA038_AmortizationPeriod"]));
-                    //            }
-                    //            invoiceLine.Set_Value("FROMDATE", AmortStartDate);
-                    //            invoiceLine.Set_Value("EndDate", AmortEndDate);
-                    //            if (amrtDS != null)
-                    //            {
-                    //                amrtDS.Dispose();
-                    //            }
-                    //        }
-                    //    }
-                    //    if (Util.GetValueOfInt(inoutLine.GetC_Charge_ID()) > 0)
-                    //    {
-                    //        MCharge charge = new MCharge(ctx, inoutLine.GetC_Charge_ID(), null);
-                    //        if (Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
-                    //        {
-                    //            invoiceLine.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
-                    //            DataSet amrtDS = DB.ExecuteDataset("SELECT VA038_AmortizationType,VA038_AmortizationPeriod,VA038_TermSource,VA038_PeriodType,Name FROM VA038_AmortizationTemplate WHERE IsActive='Y' AND VA038_AMORTIZATIONTEMPLATE_ID=" + Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
-                    //            AmortStartDate = null;
-                    //            AmortEndDate = null;
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "A")
-                    //            {
-                    //                AmortStartDate = _invoice.GetDateAcct();
-                    //            }
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_TermSource"]) == "T")
-                    //            {
-                    //                AmortStartDate = _invoice.GetDateInvoiced();
-                    //            }
-
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_PeriodType"]) == "M")
-                    //            {
-                    //                AmortEndDate = AmortStartDate.Value.AddMonths(Util.GetValueOfInt(amrtDS.Tables[0].Rows[0]["VA038_AmortizationPeriod"]));
-                    //            }
-                    //            if (Util.GetValueOfString(amrtDS.Tables[0].Rows[0]["VA038_PeriodType"]) == "Y")
-                    //            {
-                    //                AmortEndDate = AmortStartDate.Value.AddYears(Util.GetValueOfInt(amrtDS.Tables[0].Rows[0]["VA038_AmortizationPeriod"]));
-                    //            }
-                    //            invoiceLine.Set_Value("FROMDATE", AmortStartDate);
-                    //            invoiceLine.Set_Value("EndDate", AmortEndDate);
-                    //            if (amrtDS != null)
-                    //            {
-                    //                amrtDS.Dispose();
-                    //            }
-                    //        }
-                    //    }
-
-                    //}
-
-                    // End Amortization process
                 }
+
+                if (C_ProvisionalInvoice_ID > 0)
+                {
+                    // Added By VA228(Rakesh Kumar): Set Priceentered and priceactual
+                    invoiceLine.SetPriceEntered(Convert.ToDecimal((model[i]["InvoicePrice"])));
+                    invoiceLine.SetPriceActual(Convert.ToDecimal((model[i]["InvoicePrice"])));
+                    invoiceLine.SetPriceList(Convert.ToDecimal((model[i]["InvoicePrice"])));
+
+                    // Set Provisional InvoiceLine Reference
+                    if (invoiceLine.Get_ColumnIndex("C_ProvisionalInvoiceLine_ID") >= 0)
+                        invoiceLine.Set_Value("C_ProvisionalInvoiceLine_ID", Convert.ToInt32((model[i]["C_Invoice_ID_K"])));
+                }
+                // VIS0060: Set Line no on Invoice Line.
+                invoiceLine.SetLine(lineNo);
                 if (!invoiceLine.Save())
                 {
                     //s_log.log(Level.SEVERE, "Line NOT created #" + i);
                 }
                 else  // Added by Bharat issue given by Sumit - Order ID not set on Invoice Header.
                 {
+                    lineNo += 10;
                     if (C_Order_ID == 0 && C_OrderLine_ID > 0)
                     {
                         MOrderLine ordLine = new MOrderLine(ctx, C_OrderLine_ID, null);
@@ -2072,6 +1999,218 @@ namespace VIS.Controllers
                     }
                 }
 
+            }   //  for all rows
+
+            return true;
+        }
+
+        /// <summary>
+        /// This function is used to save provisiona Lines
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="model">data model</param>
+        /// <param name="selectedItems">selected items</param>
+        /// <param name="C_Order_ID">OrderPr</param>
+        /// <param name="C_ProvisionalInvoice_ID">Provisional Invoice</param>
+        /// <param name="M_InOut_ID">Receipt/Shipment</param>
+        /// <returns>true, when saved</returns>
+        public bool SaveProvisionalInvoiceData(Ctx ctx, List<Dictionary<string, string>> model, string selectedItems,
+            int C_Order_ID, int C_ProvisionalInvoice_ID, int M_InOut_ID)
+        {
+            // Create Provisional Header Object
+            MProvisionalInvoice _invoice = null;
+            if (C_ProvisionalInvoice_ID > 0)
+            {
+                _invoice = new MProvisionalInvoice(ctx, C_ProvisionalInvoice_ID, null);
+            }
+            else
+            {
+                return true;
+            }
+
+
+            //Update PO_Reference from GRN to Provisional Invoice
+            if (M_InOut_ID > 0)
+            {
+                DataSet ds = DB.ExecuteDataset(@"SELECT POReference , C_Order_ID FROM M_InOut WHERE  M_InOut_ID = " + M_InOut_ID);
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    _invoice.SetPOReference(Util.GetValueOfString(ds.Tables[0].Rows[0]["POReference"]));
+                    if (C_Order_ID == 0)
+                    {
+                        C_Order_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Order_ID"]);
+                    }
+                }
+            }
+
+            // Create Order Object 
+            MOrder _order = null;
+            if (C_Order_ID > 0)
+            {
+                _order = new MOrder(ctx, C_Order_ID, null);
+            }
+
+            // Update Order Detail on Provisional Header 
+            if (_order != null && _order.Get_ID() > 0)
+            {
+                _invoice.SetC_Order_ID(_order.GetC_Order_ID());
+                _invoice.SetIsSOTrx(_order.IsSOTrx());
+                _invoice.SetIsReturnTrx(_order.IsReturnTrx());
+                _invoice.SetPOReference(_order.GetPOReference());
+                _invoice.SetDescription(_order.GetDescription());
+                _invoice.SetDateOrdered(_order.GetDateOrdered());
+                _invoice.SetC_Project_ID(_order.GetC_Project_ID());
+                _invoice.SetC_Campaign_ID(_order.GetC_Campaign_ID());
+            }
+
+            // when found GRN and order object, then save Provisonal Header 
+            if (M_InOut_ID > 0 || (_order != null && _order.Get_ID() > 0))
+            {
+                if (!_invoice.Save())
+                {
+                    ValueNamePair pp = VLogger.RetrieveError();
+                    if (pp != null)
+                    {
+                        Logger.global.Info("Provisional Invoive Header not saved. Value : " + pp.GetValue() + ", Name : " + pp.GetName());
+                    }
+                }
+            }
+
+            //  Create Lines
+            for (int i = 0; i < model.Count; i++)
+            {
+                // when Lines already lines created then not to create again
+                if (Util.GetValueOfBool(model[i]["Select"]) == true)
+                {
+                    continue;
+                }
+
+                //  variable values
+                int C_UOM_ID = 0;
+                int M_Product_ID = 0;
+                int C_OrderLine_ID = 0;
+                int M_InOutLine_ID = 0;
+
+                Double d = 0;
+                if (model[i].Keys.Contains("QuantityEntered"))
+                {
+                    d = Convert.ToDouble(model[i]["QuantityEntered"]);
+                }
+                else if (model[i].Keys.Contains("Quantity"))
+                {
+                    d = Convert.ToDouble(model[i]["Quantity"]);
+                }
+                Decimal QtyEntered = Convert.ToDecimal(d);
+
+                // when qty zero, then not to add line
+                if (QtyEntered == 0)
+                {
+                    continue;
+                }
+
+
+                if (model[i]["C_UOM_ID_K"] != "")
+                    C_UOM_ID = Convert.ToInt32((model[i]["C_UOM_ID_K"]));               //  2-UOM
+                if (model[i]["M_Product_ID_K"] != "")
+                    M_Product_ID = Convert.ToInt32((model[i]["M_Product_ID_K"]));       //  3-Product
+                if (model[i]["C_Order_ID_K"] != "")
+                    C_OrderLine_ID = Convert.ToInt32((model[i]["C_Order_ID_K"]));       //  4-OrderLine
+                if (model[i]["M_InOut_ID_K"] != "")
+                    M_InOutLine_ID = Convert.ToInt32((model[i]["M_InOut_ID_K"]));   //  5-Shipment
+
+
+                //	Create new Invoice Line
+                MProvisionalInvoiceLine invoiceLine = new MProvisionalInvoiceLine(_invoice);
+                invoiceLine.SetM_Product_ID(M_Product_ID);
+                invoiceLine.SetC_UOM_ID(C_UOM_ID);
+                invoiceLine.SetQtyEntered(QtyEntered);
+                invoiceLine.SetQtyInvoiced(QtyEntered);
+                invoiceLine.SetPricePO(Util.GetValueOfDecimal((model[i]["POPrice"])));
+                invoiceLine.SetPerUnitDifference(Decimal.Subtract(Util.GetValueOfDecimal((model[i]["POPrice"])), Util.GetValueOfDecimal((model[i]["ProvisionalPrice"]))));
+                //  Info
+                MOrderLine orderLine = null;
+                if (C_OrderLine_ID != 0)
+                {
+                    orderLine = new MOrderLine(ctx, C_OrderLine_ID, null);
+                }
+
+                MInOutLine inoutLine = null;
+                if (M_InOutLine_ID != 0)
+                {
+                    inoutLine = new MInOutLine(ctx, M_InOutLine_ID, null);
+                    if (orderLine == null && inoutLine.GetC_OrderLine_ID() != 0)
+                    {
+                        C_OrderLine_ID = inoutLine.GetC_OrderLine_ID();
+                        orderLine = new MOrderLine(ctx, C_OrderLine_ID, null);
+                    }
+                }
+                else
+                {
+                    MInOutLine[] lines = MInOutLine.GetOfOrderLine(ctx, C_OrderLine_ID, null, null);
+                    if (lines.Length > 0)
+                    {
+                        for (int j = 0; j < lines.Length; j++)
+                        {
+                            MInOutLine line = lines[j];
+                            if (line.GetQtyEntered().CompareTo(QtyEntered) == 0)
+                            {
+                                inoutLine = line;
+                                M_InOutLine_ID = inoutLine.GetM_InOutLine_ID();
+                                break;
+                            }
+                        }
+                        if (inoutLine == null)
+                        {
+                            inoutLine = lines[0];	//	first as default
+                            M_InOutLine_ID = inoutLine.GetM_InOutLine_ID();
+                        }
+                    }
+                }	//	get Ship info
+
+                //	Shipment Info
+                if (inoutLine != null)
+                {
+                    //invoiceLine.SetShipLine(inoutLine);		//	overwrites
+                    invoiceLine.SetM_InOutLine_ID(inoutLine.GetM_InOutLine_ID());
+                    invoiceLine.SetClientOrg(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID());
+                    if (inoutLine.GetQtyEntered().CompareTo(inoutLine.GetMovementQty()) != 0)
+                    {
+                        invoiceLine.SetQtyInvoiced(Decimal.Round(Decimal.Divide(Decimal.Multiply(QtyEntered,
+                        inoutLine.GetMovementQty()),
+                        inoutLine.GetQtyEntered()), 12, MidpointRounding.AwayFromZero));
+                    }
+                }
+
+                //	Order Info
+                if (orderLine != null)
+                {
+                    invoiceLine.SetClientOrg(orderLine.GetAD_Client_ID(), orderLine.GetAD_Org_ID());
+                    invoiceLine.SetOrderLine(orderLine);	//	overwrites
+                    invoiceLine.SetPriceEntered(Util.GetValueOfDecimal((model[i]["ProvisionalPrice"])));
+                    invoiceLine.SetPriceList(invoiceLine.GetPriceEntered());
+                    invoiceLine.SetUnitPrice(invoiceLine.GetPriceEntered());
+                    if (orderLine.GetQtyEntered().CompareTo(orderLine.GetQtyOrdered()) != 0)
+                    {
+                        invoiceLine.SetQtyInvoiced(Decimal.Round(Decimal.Divide(Decimal.Multiply(QtyEntered,
+                        orderLine.GetQtyOrdered()),
+                        orderLine.GetQtyEntered()), 12, MidpointRounding.AwayFromZero));
+                    }
+                }
+                if (!string.IsNullOrEmpty(model[i]["M_AttributeSetInstance_ID"]))
+                {
+                    //VA230:Overrite attribute instance if exists
+                    if (Util.GetValueOfInt((model[i]["M_AttributeSetInstance_ID"])) > 0)
+                        invoiceLine.SetM_AttributeSetInstance_ID(Util.GetValueOfInt((model[i]["M_AttributeSetInstance_ID"])));
+                }
+
+                if (!invoiceLine.Save())
+                {
+                    ValueNamePair pp = VLogger.RetrieveError();
+                    if (pp != null)
+                    {
+                        Logger.global.Severe("Provisional Invoive Line not saved. Value : " + pp.GetValue() + ", Name : " + pp.GetName());
+                    }
+                }
             }   //  for all rows
 
             return true;
@@ -2137,8 +2276,26 @@ namespace VIS.Controllers
                 if (type == "P")
                 {
                     bsl.SetC_Payment_ID(C_Payment_ID);
-                    //Get C_BPartner_ID
-                    _bpartner_Id = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_BPartner_ID FROM C_Payment WHERE IsActive='Y' AND C_Payment_ID=" + C_Payment_ID, null, null));
+                    //Rakesh(VA228):Get BPartner,CheckNo
+                    DataSet ds = DB.ExecuteDataset("SELECT C_BPartner_ID,CheckNo,Checkdate,VA009_PaymentMethod_ID,TenderType FROM C_Payment WHERE IsActive='Y' AND C_Payment_ID=" + C_Payment_ID, null, null);
+                    if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                    {
+                        _bpartner_Id = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_BPartner_ID"]);
+                        if (bsl.Get_ColumnIndex("EftCheckNo") >= 0)
+                        {
+                            bsl.SetEftCheckNo(Util.GetValueOfString(ds.Tables[0].Rows[0]["CheckNo"]));
+                            bsl.SetEftValutaDate(Util.GetValueOfDateTime(ds.Tables[0].Rows[0]["Checkdate"]));
+                        }
+                        if (bsl.Get_ColumnIndex("VA009_PaymentMethod_ID") >= 0)
+                        {
+                            bsl.Set_Value("VA009_PaymentMethod_ID", Util.GetValueOfString(ds.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]));
+
+                        }
+                        if (bsl.Get_ColumnIndex("TenderType") >= 0)
+                        {
+                            bsl.Set_Value("TenderType", Util.GetValueOfString(ds.Tables[0].Rows[0]["TenderType"]));
+                        }
+                    }
                 }
                 else
                 {
@@ -2172,7 +2329,7 @@ namespace VIS.Controllers
                     {
                         error = pp != null ? pp.GetName() : "";
                     }
-                    ErrorMsg= !string.IsNullOrEmpty(error) ? error : "VIS.BankStatementLineNotCreated";
+                    ErrorMsg = !string.IsNullOrEmpty(error) ? error : "VIS.BankStatementLineNotCreated";
                     Logger.global.Info(ErrorMsg);
                     return false;
                 }
@@ -2262,6 +2419,9 @@ namespace VIS.Controllers
             public int C_InvoicePaymentTerm_ID { get; set; }
             public bool IsInvoicePTAdvance { get; set; }
             public string M_Product_SearchKey { get; set; }
+            public decimal POPrice { get; set; }
+            public decimal ProvisionalPrice { get; set; }
+            public decimal InvoicePrice { get; set; }
         }
 
         public class PageSetting
@@ -2436,7 +2596,9 @@ namespace VIS.Controllers
         {
             ProcessInfoUtil.SetLogFromDB(pi);
             StringBuilder iText = new StringBuilder();
-            iText.Append("<b>").Append(pi.GetSummary())
+            //get the Proper Message to understand by user so replaced GetSummery with Message
+            //iText.Append("<b>").Append(pi.GetSummary())
+            iText.Append("<b>").Append(Msg.GetMsg(ctx, "VIS_InvSuccessfullyCreated"))
                 .Append("</b><br>(")
                 .Append(Msg.GetMsg(ctx, "InvGenerateInfo"))
                 //Invoices are generated depending on the Invoicing Rule selection in the Order
@@ -2651,10 +2813,20 @@ namespace VIS.Controllers
                             //	Create PO - Invoice Link = corrects PO
                             if (iLine.GetC_OrderLine_ID() != 0 && iLine.GetM_Product_ID() != 0)
                             {
-                                MMatchPO matchPO = MMatchPO.Create(iLine, sLine, inv.GetDateInvoiced(), qty);
+                                MMatchPO matchPO = null;
+                                if (qty > 0)
+                                {
+                                    // VIS0060: In Case of UnMatch Invoice-Receipt, do not set Qty Delivered to zero on Purchase order
+                                    matchPO = MMatchPO.Create(iLine, sLine, inv.GetDateInvoiced(), qty);
+                                    matchPO.SetM_InOutLine_ID(M_InOutLine_ID);
+                                }
+                                else
+                                {
+                                    matchPO = MMatchPO.Create(iLine, null, inv.GetDateInvoiced(), qty);
+                                }
+
                                 matchPO.Set_ValueNoCheck("C_BPartner_ID", inv.GetC_BPartner_ID());
                                 matchPO.SetC_InvoiceLine_ID(iLine);
-                                matchPO.SetM_InOutLine_ID(M_InOutLine_ID);
                                 if (!matchPO.Save())
                                 {
                                     ValueNamePair pp = VLogger.RetrieveError();
@@ -3416,13 +3588,12 @@ namespace VIS.Controllers
                                                                      + "    AND P.C_YEAR_ID   = " + YearId
                                                                      + "    AND Y.AD_CLIENT_ID= " + AdClientID));
 
-                    eDate = Util.GetValueOfDateTime(DB.ExecuteScalar(" SELECT P.ENDDATE AS ENDDATE    "
-                                                                     + "    FROM C_PERIOD P  "
-                                                                     + "    INNER JOIN C_YEAR Y                "
-                                                                     + "    ON P.C_YEAR_ID    =Y.C_YEAR_ID     "
-                                                                     + "    WHERE P.PERIODNO  ='12'             "
-                                                                     + "    AND P.C_YEAR_ID   = " + YearId
-                                                                     + "    AND Y.AD_CLIENT_ID= " + AdClientID));
+                    eDate = Util.GetValueOfDateTime(DB.ExecuteScalar(@" SELECT MAX(P.ENDDATE) AS ENDDATE    
+                                                                         FROM C_PERIOD P  
+                                                                         INNER JOIN C_YEAR Y ON (P.C_YEAR_ID = Y.C_YEAR_ID)
+                                                                         WHERE P.IsActive  ='Y'            
+                                                                         AND P.C_YEAR_ID   = " + YearId + @"
+                                                                         AND Y.AD_CLIENT_ID= " + AdClientID));
 
                     //DataSet ds = DB.ExecuteDataset(sql, null, null);
                     if (stDate != null && eDate != null)

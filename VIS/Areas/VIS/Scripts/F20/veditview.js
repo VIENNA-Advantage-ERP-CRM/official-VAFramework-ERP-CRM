@@ -482,7 +482,7 @@
             var insertRow = false;
 
             /* Dont Add in control panel */
-            if (mField.getIsLink()) {
+            if (mField.getIsLink() && mField.getIsRightPaneLink()) {
                 allControls[++allControlCount] = editor;
                 //allControls.push(editor);
                 allLinkControls.push(editor);
@@ -540,6 +540,7 @@
 
 
                 var fieldVFormat = mField.getVFormat();
+                var formatErr = mField.getVFormatError();
                 switch (fieldVFormat) {
                     case '': {
                         break;
@@ -551,8 +552,11 @@
                                 if ($(e.target).val() != null) {
                                     if ($(e.target).val().toString().trim().length > 0) {
                                         if (!patt.test($(e.target).val())) {
+                                            if (!formatErr && formatErr.length > 0) {
+                                                formatErr = VIS.Msg.getMsg('RegexFailed') + ":" + mField.getHeader()
+                                            }
                                             //Work DOne to set focus in field whose value does not match with regular expression.
-                                            VIS.ADialogUI.warn(VIS.Msg.getMsg('RegexFailed') + ":" + mField.getHeader(), "", function () {
+                                            VIS.ADialogUI.warn(formatErr, "", function () {
                                                 $(e.target).focus();
                                             });
 
@@ -677,15 +681,18 @@
 
         var ctrl = $(wraper);
 
-        if (mField.getShowIcon() && (mField.getFontClass() != '' || mField.getImageName() != '')) {
-            var btns = ['<div class="input-group-prepend"><span class="input-group-text vis-color-primary">'];
-            if (mField.getFontClass() != '')
-                btns.push('<i class="' + mField.getFontClass() + '"></i>');
-            else
-                btns.push('<img src="' + VIS.Application.contextUrl + 'Images/Thumb16x16/' + mField.getImageName() + '"></img>');
-            btns.push('</span></div>');
-            ctrl.append(btns.join(' '));
+        if (!mField.getIsLink() && mField.getDisplayType() != VIS.DisplayType.Button) {
+            if (mField.getShowIcon() && (mField.getFontClass() != '' || mField.getImageName() != '')) {
 
+                var btns = ['<div class="input-group-prepend"><span class="input-group-text vis-color-primary">'];
+                if (mField.getFontClass() != '')
+                    btns.push('<i class="' + mField.getFontClass() + '"></i>');
+                else
+                    btns.push('<img src="' + VIS.Application.contextUrl + 'Images/Thumb16x16/' + mField.getImageName() + '"></img>');
+                btns.push('</span></div>');
+                ctrl.append(btns.join(' '));
+
+            }
         }
 
         if (editor != null && customStyle != "") {
@@ -695,7 +702,7 @@
         var ctrlP = $("<div class='vis-control-wrap'>");
 
         if (editor && (editor.getControl()[0].tagName == 'INPUT' || editor.getControl()[0].tagName == "SELECT" ||
-            editor.getControl()[0].tagName == 'TEXTAREA') && editor.getControl()[0].type != 'checkbox') {
+            editor.getControl()[0].tagName == 'TEXTAREA' || editor.getControl()[0].className == 'vis-progressCtrlWrap') && editor.getControl()[0].type != 'checkbox') {
             //editor.getControl().addClass("custom-select");
             ctrlP.append(editor.getControl().attr("placeholder", " ").attr("data-placeholder", ""));
             if (label != null) {
@@ -711,10 +718,17 @@
 
 
 
-        if (mField.getDisplayType() != VIS.DisplayType.Label) { // exclude Label display type
+        if (mField.getDisplayType() != VIS.DisplayType.Label && !mField.getIsLink()) { // exclude Label display type
             ctrlP.append("<span class='vis-ev-ctrlinfowrap' data-colname='" + mField.getColumnName() + "' title='" + mField.getDescription() + "'  tabindex='-1' data-toggle='popover' data-trigger='focus'>" +
                 "<i class='vis vis-info' aria-hidden='true'></i></span'>");
         }
+
+        //if (editor && mField.getDisplayType() == VIS.DisplayType.ProgressBar) {
+        //    if (customStyle != "") {
+        //        editor.getProgressOutput().attr('style', customStyle);
+        //    }
+        //    ctrlP.prepend(editor.getProgressOutput());
+        //}
 
         ctrlP.append("<span class='vis-ev-col-msign'><i class='fa fa-exclamation' aria-hidden='true'></span'>");
         ctrl.append(ctrlP);
@@ -736,10 +750,6 @@
         }
         parent.append(ctrl);
     }
-
-
-
-
 
 }(VIS, jQuery));
 

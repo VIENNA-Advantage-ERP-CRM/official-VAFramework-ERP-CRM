@@ -27,6 +27,9 @@ namespace VAdvantage.Model
 {
     public class MJournalLine : X_GL_JournalLine
     {
+        /** Is record save from Create Jourmnal Reversal Process **/
+        public bool _isReverseByProcess = false;
+
         /// <summary>
         /// Standard Constructor
         /// </summary>
@@ -85,7 +88,7 @@ namespace VAdvantage.Model
         }	//	MJournalLine
 
         /**	Currency Precision		*/
-        private int m_precision = 2;
+        public int m_precision = 0;
         /**	Account Combination		*/
         private MAccount m_account = null;
         /** Account Element			*/
@@ -461,8 +464,12 @@ namespace VAdvantage.Model
             Decimal? rate = GetCurrencyRate();
 
             // set precision value based on cuurenncy define on GL Journal
-            m_precision = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT stdprecision FROM c_currency WHERE c_currency_id = 
-                            ( SELECT c_currency_id FROM GL_journal WHERE GL_Journal_ID=" + GetGL_Journal_ID() + " )", null, Get_Trx()));
+            if (m_precision == 0)
+            {
+                m_precision = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT StdPrecision FROM C_Currency WHERE C_Currency_ID = 
+                            ( SELECT C_Currency_ID FROM GL_Journal WHERE GL_Journal_ID=" + GetGL_Journal_ID() + " )", null, Get_Trx()));
+
+            }
 
             Decimal valuesRate = 0;
             Decimal valuesRateCredit = 0;
@@ -476,7 +483,6 @@ namespace VAdvantage.Model
             }
 
             Decimal? amt = Decimal.Multiply(valuesRate, GetAmtSourceDr());
-            //            Decimal? amt = Decimal.Multiply(rate.Value, GetAmtSourceDr());
             if (Env.Scale(amt.Value) > GetPrecision())
             {
                 amt = Decimal.Round(amt.Value, GetPrecision(), MidpointRounding.AwayFromZero);
@@ -493,7 +499,6 @@ namespace VAdvantage.Model
             }
 
             amt = Decimal.Multiply(valuesRateCredit, GetAmtSourceCr());
-            //            amt = Decimal.Multiply(rate.Value, GetAmtSourceCr());
 
             if (Env.Scale(amt.Value) > GetPrecision())
             {
@@ -502,7 +507,11 @@ namespace VAdvantage.Model
             SetAmtAcctCr(amt.Value);
 
             // Added by Bharat on 18 July 2018 to Generate Account Combination as discussed with Mukesh Sir.
-            GetOrCreateCombination(newRecord);
+            // 0045 : not to check valid combination during reversal record
+            if (!((Get_ColumnIndex("ReversalDoc_ID") > 0 && GetReversalDoc_ID() != 0) || _isReverseByProcess))
+            {
+                GetOrCreateCombination(newRecord);
+            }
 
             //	Set Line Org to Acct Org
             if (newRecord
@@ -512,12 +521,10 @@ namespace VAdvantage.Model
                 SetAD_Org_ID(GetAccount().GetAD_Org_ID());
             }
 
-            //18/7/2016
-            //MAnish before save journal line. if journal line has some dimention and user update debit or credit field,, first chk is there dimention or not.
-            string sql = "Select Count(*) FROM GL_LineDimension WHERE GL_JournalLine_ID=" + Get_Value("GL_JournalLine_ID");
-            int count = Util.GetValueOfInt(DB.ExecuteScalar(sql));
-
-            if (!newRecord && Is_ValueChanged("ElementType") && count > 0)
+            // if journal line has some dimention and user update debit or credit field, first chk is there dimention or not.
+            if (!newRecord && Is_ValueChanged("ElementType")
+                && Util.GetValueOfInt(DB.ExecuteScalar(@"Select Count(GL_LineDimension_ID) FROM GL_LineDimension 
+                   WHERE GL_JournalLine_ID=" + Get_Value("GL_JournalLine_ID"))) > 0)
             {
                 log.SaveWarning("DeleteDimention", "");
                 log.SaveError("DeleteDimention", "");
@@ -555,7 +562,7 @@ namespace VAdvantage.Model
                     }
                 }
             }
-            //end 18/7/2016.            
+
             return true;
         }	//	beforeSave
 
@@ -571,7 +578,12 @@ namespace VAdvantage.Model
             {
                 return success;
             }
-            return UpdateJournalTotal();
+            // 0045 : not to check valid combination during reversal record
+            if (!((Get_ColumnIndex("ReversalDoc_ID") > 0 && GetReversalDoc_ID() != 0) || _isReverseByProcess))
+            {
+                return UpdateJournalTotal();
+            }
+            return true;
         }	//	afterSave
 
 
@@ -604,6 +616,7 @@ namespace VAdvantage.Model
                             || Is_ValueChanged("AD_Org_ID")
                             || Is_ValueChanged("C_Project_ID")
                             || Is_ValueChanged("C_Campaign_ID")
+                            || Is_ValueChanged("AD_OrgTrx_ID")
                             || Is_ValueChanged("C_Activity_ID"))))
             {
                 MJournal gl = new MJournal(GetCtx(), GetGL_Journal_ID(), Get_TrxName());
@@ -664,8 +677,8 @@ namespace VAdvantage.Model
             }
             else
             {
-                fillDimensionsFromCombination();                
-               
+                fillDimensionsFromCombination();
+
             }
             return true;
         }
@@ -718,20 +731,21 @@ namespace VAdvantage.Model
         ///	Update Journal and Batch Total
         /// </summary>
         /// <returns>true if success</returns>
-        private Boolean UpdateJournalTotal()
+        public Boolean UpdateJournalTotal()
         {
+            //VA230:Applied NVL function to set default 0 if null return while selecting sum of AmtAcctDr,AmtAcctCr
             //	Update Journal Total
             String sql = "UPDATE GL_Journal j"
-                + " SET (TotalDr, TotalCr) = (SELECT SUM(AmtAcctDr), SUM(AmtAcctCr)" //jz ", "
-                    + " FROM GL_JournalLine jl WHERE jl.IsActive='Y' AND j.GL_Journal_ID=jl.GL_Journal_ID) "
-                + "WHERE GL_Journal_ID=" + GetGL_Journal_ID();
+            + " SET (TotalDr, TotalCr) = (SELECT NVL(SUM(AmtAcctDr),0), NVL(SUM(AmtAcctCr),0)"
+                + " FROM GL_JournalLine jl WHERE jl.IsActive='Y' AND j.GL_Journal_ID=jl.GL_Journal_ID) "
+            + "WHERE GL_Journal_ID=" + GetGL_Journal_ID();
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 1)
             {
                 log.Warning("afterSave - Update Journal #" + no);
             }
 
-            // Manish 18/7/2016 .. chk is gl_journalbatch_id there or not.
+            // chk is gl_journalbatch_id there or not.
             string sqlquery = @"SELECT gl_journalbatch_id FROM gl_journal WHERE gl_journal_id IN
                                 ( SELECT gl_journal_id FROM GL_JournalLine WHERE GL_JournalLine_ID=" + GetGL_JournalLine_ID() + " )";
 
@@ -743,7 +757,7 @@ namespace VAdvantage.Model
 
             //	Update Batch Total
             sql = "UPDATE GL_JournalBatch jb"
-                + " SET (TotalDr, TotalCr) = (SELECT SUM(TotalDr), SUM(TotalCr)" //jz hard coded ", "
+                + " SET (TotalDr, TotalCr) = (SELECT NVL(SUM(TotalDr),0), NVL(SUM(TotalCr),0)"
                     + " FROM GL_Journal j WHERE jb.GL_JournalBatch_ID=j.GL_JournalBatch_ID) "
                 + "WHERE GL_JournalBatch_ID="
                     + "(SELECT DISTINCT GL_JournalBatch_ID FROM GL_Journal WHERE GL_Journal_ID="
@@ -791,7 +805,7 @@ namespace VAdvantage.Model
                 toLine.SetSeqNo(fromLines[i].GetSeqNo());
                 toLine.SetLineType(fromLines[i].GetLineType());
                 toLine.SetGL_JournalLine_ID(newlineID);
-
+                toLine.SetDimensionValue(fromLines[i].GetDimensionValue());
                 if (typeCR == 'C')
                 {
                     toLine.SetAmount(Decimal.Negate(fromLines[i].GetAmount()));

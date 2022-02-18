@@ -13,6 +13,7 @@ namespace VIS.Models
 {
     public class MOrderLineModel
     {
+        bool IsModuleinstalled = Env.IsModuleInstalled("VATAX_");
         /// <summary>
         /// GetOrderLine
         /// </summary>
@@ -68,6 +69,7 @@ namespace VIS.Models
 
             retDic["QtyReleased"] = Util.GetValueOfString(orderline.GetQtyReleased());
             retDic["IsDropShip"] = orderline.IsDropShip() ? "Y" : "N";
+            retDic["PrintDescription"] = Util.GetValueOfString(orderline.Get_Value("PrintDescription"));
 
             if (Env.IsModuleInstalled("VA077_"))
             {
@@ -1910,10 +1912,11 @@ namespace VIS.Models
             int _c_BPartner_Id = Util.GetValueOfInt(paramValue[1].ToString());
             //End Assign parameter value
             string sql = null;
+            DataSet dsProductInfo = null;
 
-            sql = "SELECT producttype FROM m_product where isactive = 'Y' AND M_Product_ID = " + _m_Product_Id;
-            string productType = Util.GetValueOfString(DB.ExecuteScalar(sql, null, null));
-            retDic["productType"] = Convert.ToString(productType);
+            //sql = "SELECT producttype FROM m_product where isactive = 'Y' AND M_Product_ID = " + _m_Product_Id;
+            //string productType = Util.GetValueOfString(DB.ExecuteScalar(sql, null, null));
+            //retDic["productType"] = Convert.ToString(productType);
 
             sql = "SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='ED011_'";
             int countEd011 = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
@@ -1924,14 +1927,25 @@ namespace VIS.Models
             int purchasingUom = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
             retDic["purchasingUom"] = Convert.ToString(purchasingUom);
 
-            sql = "SELECT C_UOM_ID FROM M_Product WHERE IsActive = 'Y' AND M_Product_ID = " + _m_Product_Id;
-            int headerUom = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-            retDic["headerUom"] = Convert.ToString(headerUom);
+            //sql = "SELECT C_UOM_ID FROM M_Product WHERE IsActive = 'Y' AND M_Product_ID = " + _m_Product_Id;
+            //int headerUom = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+            //retDic["headerUom"] = Convert.ToString(headerUom);
 
-            sql = "SELECT IsDropShip FROM M_Product WHERE IsActive = 'Y' AND M_Product_ID = " + _m_Product_Id;
-            string IsDropShip = Util.GetValueOfString(DB.ExecuteScalar(sql, null, null));
-            retDic["IsDropShip"] = Convert.ToString(IsDropShip);
+            //sql = "SELECT IsDropShip FROM M_Product WHERE IsActive = 'Y' AND M_Product_ID = " + _m_Product_Id;
+            //string IsDropShip = Util.GetValueOfString(DB.ExecuteScalar(sql, null, null));
+            //retDic["IsDropShip"] = Convert.ToString(IsDropShip);
 
+            sql = @"SELECT producttype, C_UOM_ID, IsDropShip, DocumentNote FROM M_Product WHERE
+                    IsActive = 'Y' AND M_Product_ID = " + _m_Product_Id;
+
+            dsProductInfo = DB.ExecuteDataset(sql);
+            if (dsProductInfo != null && dsProductInfo.Tables[0].Rows.Count > 0)
+            {
+                retDic["productType"]= Util.GetValueOfString(dsProductInfo.Tables[0].Rows[0]["producttype"]);
+                retDic["headerUom"] = Util.GetValueOfString(dsProductInfo.Tables[0].Rows[0]["C_UOM_ID"]);
+                retDic["IsDropShip"] = Util.GetValueOfString(dsProductInfo.Tables[0].Rows[0]["IsDropShip"]);
+                retDic["DocumentNote"] = Util.GetValueOfString(dsProductInfo.Tables[0].Rows[0]["DocumentNote"]);
+            }
             return retDic;
         }
 
@@ -2113,10 +2127,10 @@ namespace VIS.Models
             int taxId = 0;
             int _c_BPartner_Id = 0;
             int _c_Bill_Location_Id = 0;
-            int _CountVATAX = 0;
+            //int _CountVATAX = 0;
 
-            _CountVATAX = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX IN ('VATAX_' )", null, null));
-            retDic["_CountVATAX"] = _CountVATAX.ToString();
+            //_CountVATAX = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX IN ('VATAX_' )", null, null));
+            retDic["_CountVATAX"] = IsModuleinstalled ? 1 : 0;
 
             MOrderModel objOrder = new MOrderModel();
             Dictionary<String, object> order = objOrder.GetOrder(ctx, _c_Order_Id.ToString());
@@ -2127,38 +2141,69 @@ namespace VIS.Models
             MBPartner bp = new MBPartner(ctx, _c_BPartner_Id, null);
             retDic["TaxExempt"] = bp.IsTaxExempt() ? "Y" : "N";
 
-            if (_CountVATAX > 0)
+            if (IsModuleinstalled)
             {
                 sql = "SELECT VATAX_TaxRule FROM AD_OrgInfo WHERE AD_Org_ID=" + Util.GetValueOfInt(order["AD_Org_ID"]) + " AND IsActive ='Y' AND AD_Client_ID =" + ctx.GetAD_Client_ID();
                 string taxRule = Util.GetValueOfString(DB.ExecuteScalar(sql, null, null));
                 retDic["taxRule"] = taxRule.ToString();
 
-                sql = "SELECT Count(*) FROM AD_Column WHERE ColumnName = 'C_Tax_ID' AND AD_Table_ID = (SELECT AD_Table_ID FROM AD_Table WHERE TableName = 'C_TaxCategory')";
-                if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null)) > 0)
-                {
-                    var paramString = (_c_Order_Id).ToString() + "," + (_m_Product_Id).ToString() + "," + (_c_Charge_Id).ToString();
+                var paramString = (_c_Order_Id).ToString() + "," + (_m_Product_Id).ToString() + "," + (_c_Charge_Id).ToString();
 
-                    taxId = GetTax(ctx, paramString);
-                }
-                else
-                {
-                    sql = "SELECT VATAX_TaxType_ID FROM C_BPartner_Location WHERE C_BPartner_ID =" + Util.GetValueOfInt(_c_BPartner_Id) +
-                                      " AND IsActive = 'Y'  AND C_BPartner_Location_ID = " + Util.GetValueOfInt(_c_Bill_Location_Id);
-                    var taxType = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                    if (taxType == 0)
-                    {
-                        sql = "SELECT VATAX_TaxType_ID FROM C_BPartner WHERE C_BPartner_ID =" + Util.GetValueOfInt(_c_BPartner_Id) + " AND IsActive = 'Y'";
-                        taxType = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                    }
+                taxId = GetTax(ctx, paramString);
 
-                    MProductModel objProduct = new MProductModel();
-                    var prodtaxCategory = objProduct.GetTaxCategory(ctx, _m_Product_Id.ToString());
-                    sql = "SELECT C_Tax_ID FROM VATAX_TaxCatRate WHERE C_TaxCategory_ID = " + prodtaxCategory + " AND IsActive ='Y' AND VATAX_TaxType_ID =" + taxType;
-                    taxId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                }
+                //else
+                //{
+                //    sql = "SELECT VATAX_TaxType_ID FROM C_BPartner_Location WHERE C_BPartner_ID =" + Util.GetValueOfInt(_c_BPartner_Id) +
+                //                      " AND IsActive = 'Y'  AND C_BPartner_Location_ID = " + Util.GetValueOfInt(_c_Bill_Location_Id);
+                //    var taxType = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                //    if (taxType == 0)
+                //    {
+                //        sql = "SELECT VATAX_TaxType_ID FROM C_BPartner WHERE C_BPartner_ID =" + Util.GetValueOfInt(_c_BPartner_Id) + " AND IsActive = 'Y'";
+                //        taxType = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                //    }
+
+                //    MProductModel objProduct = new MProductModel();
+                //    var prodtaxCategory = objProduct.GetTaxCategory(ctx, _m_Product_Id.ToString());
+                //    sql = "SELECT C_Tax_ID FROM VATAX_TaxCatRate WHERE C_TaxCategory_ID = " + prodtaxCategory + " AND IsActive ='Y' AND VATAX_TaxType_ID =" + taxType;
+                //    taxId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                //}
             }
             retDic["taxId"] = taxId.ToString();
+            retDic = GetTaxExempt(taxId, retDic);
 
+            return retDic;
+        }
+
+        /// <summary>
+        /// Get Tax Exempt Details
+        /// </summary>
+        /// <param name="Tax_ID">Tax</param>
+        /// <param name="retDic">Dictionary object</param>
+        ///<writer>1052</writer>
+        /// <returns>Tax Exempt Details</returns>
+        public Dictionary<String, object> GetTaxExempt(int Tax_ID, Dictionary<String, object> retDic)
+        {
+            DataSet ds = null;
+            string sql = "SELECT IsTaxExempt, C_TaxExemptReason_ID FROM C_Tax WHERE IsActive='Y' AND C_Tax_ID= " + Tax_ID;
+            try
+            {
+                ds = DB.ExecuteDataset(sql);
+            }
+            catch
+            {
+                log.Log(Level.SEVERE, "Tax Exempt Reason not found");
+            }
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                retDic["IsTaxExempt"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["IsTaxExempt"]);
+                retDic["C_TaxExemptReason_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_TaxExemptReason_ID"]);
+            }
+            else
+            {
+                //if columns not found
+                retDic["IsTaxExempt"] = "N";
+                retDic["C_TaxExemptReason_ID"] = 0;
+            }
             return retDic;
         }
 

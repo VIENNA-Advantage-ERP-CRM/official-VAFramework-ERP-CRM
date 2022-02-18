@@ -301,6 +301,14 @@ namespace VAdvantage.Model
                 }
             }
 
+            // VIS0060: if no period found for statement date, then give message.
+            MPeriod period = MPeriod.Get(GetCtx(), GetStatementDate(), GetAD_Org_ID());
+            if (period == null)
+            {
+                log.SaveError("PeriodNotValid", "");
+                return false;
+            }
+
             //JID_1325: System should not allow to save bank statment with previous date, statement date should be equal or greater than previous created bank statment record with same bank account. 
             no = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_BankStatement_ID) FROM C_BankStatement WHERE IsActive = 'Y' AND DocStatus != 'VO' AND StatementDate > "
                 + GlobalVariable.TO_DATE(GetStatementDate(), true) + " AND C_BankAccount_ID = " + GetC_BankAccount_ID() + " AND C_BankStatement_ID != " + Get_ID(), null, Get_Trx()));
@@ -428,6 +436,18 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
             }
 
+            // If all lines are not matched then give message.
+            foreach (MBankStatementLine line in lines)
+            {
+                // if Transaction amount exist but no payment reference or Charge amount exist with no Charge then give message for Unmatched lines
+                if ((line.GetTrxAmt() != Env.ZERO && line.GetC_Payment_ID() == 0 && line.GetC_CashLine_ID() == 0)
+                    || (line.GetChargeAmt() != Env.ZERO && line.GetC_Charge_ID() == 0))
+                {
+                    m_processMsg = Msg.GetMsg(Env.GetCtx(), "LinesNotMatchedYet");
+                    return DocActionVariables.STATUS_INVALID;
+                }
+            }
+
 
             m_justPrepared = true;
             if (!DOCACTION_Complete.Equals(GetDocAction()))
@@ -490,24 +510,13 @@ namespace VAdvantage.Model
             }
             log.Info("completeIt - " + ToString());
 
-            int _CountVA034 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA034_'  AND IsActive = 'Y'"));
+            int _CountVA034 = Env.IsModuleInstalled("VA034_") ? 1 : 0;
 
             //	Set Payment reconciled
             MBankStatementLine[] lines = GetLines(false);
 
-            //Changes by SUkhwinder on 20 April, if all lines are not matched then dont allow complete.
-            foreach (MBankStatementLine line in lines)
-            {
-                // if Transaction amount exist but no payment reference or Charge amount exist with no Charge then give message for Unmatched lines
-                if ((line.GetTrxAmt() != Env.ZERO && line.GetC_Payment_ID() == 0 && line.GetC_CashLine_ID() == 0)
-                    || (line.GetChargeAmt() != Env.ZERO && line.GetC_Charge_ID() == 0))
-                {
-                    m_processMsg = Msg.GetMsg(Env.GetCtx(), "LinesNotMatchedYet");
-                    return DocActionVariables.STATUS_INVALID;
-                }
-            }
-            //Changes by SUkhwinder on 20 April, if all lines are not matched then dont allow complete.
-            Decimal transactionAmt = 0; //Arpit to update only transaction amount in Bank Account UnMatched Balance asked by Ashish Gandhi
+            // to update only transaction amount in Bank Account UnMatched Balance asked by Ashish Gandhi
+            Decimal transactionAmt = 0;
             for (int i = 0; i < lines.Length; i++)
             {
                 MBankStatementLine line = lines[i];
@@ -521,9 +530,8 @@ namespace VAdvantage.Model
                     payment.Save(Get_TrxName());
                 }
 
-                //Pratap 1-2-16
-                /////	Set Cash Line reconciled
-                int _CountVA012 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA012_'  AND IsActive = 'Y'"));
+                //	Set Cash Line reconciled
+                int _CountVA012 = Env.IsModuleInstalled("VA012_") ? 1 : 0;
                 if (_CountVA012 > 0)
                 {
                     if (line.GetC_CashLine_ID() != 0)
@@ -538,13 +546,10 @@ namespace VAdvantage.Model
             //	Update Bank Account
             MBankAccount ba = MBankAccount.Get(GetCtx(), GetC_BankAccount_ID());
             ba.SetCurrentBalance(GetEndingBalance());
-            ba.SetUnMatchedBalance(Decimal.Subtract(ba.GetUnMatchedBalance(), transactionAmt));//Arpit
+            ba.SetUnMatchedBalance(Decimal.Subtract(ba.GetUnMatchedBalance(), transactionAmt));
             ba.Save(Get_TrxName());
 
 
-
-            //VA009----------------------------------Anuj----------------------
-            //int _CountVA009 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
             if (Env.IsModuleInstalled("VA009_"))
             {
                 MBankStatementLine[] STlines = GetLines(false);
@@ -559,20 +564,19 @@ namespace VAdvantage.Model
                             payment.SetVA034_DepositSlipNo(line.GetVA012_VoucherNo());
                         payment.Save(Get_TrxName());
 
-                        //MInvoicePaySchedule inp = new MInvoicePaySchedule(GetCtx(), payment.GetC_InvoicePaySchedule_ID(), Get_TrxName());
-                        //inp.SetVA009_ExecutionStatus("R");
-                        //inp.Save(Get_TrxName());
-
-                        // update execution status as received on Invoice Schedule -  for those payment which are completed or closed
                         if (payment.GetDocStatus() == DOCSTATUS_Closed || payment.GetDocStatus() == DOCSTATUS_Completed)
                         {
+                            // update execution status as Received on Invoice Schedule -  for those payment which are completed or closed
                             int no = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE C_InvoicePaySchedule SET VA009_ExecutionStatus = 'R' WHERE C_Payment_ID = " + line.GetC_Payment_ID(), null, Get_Trx()));
+                            if (no == 0)
+                            {
+                                //(1052) update execution status as Received on Order Schedule -  for those payment which are completed or closed
+                                no = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE VA009_OrderPaySchedule SET VA009_ExecutionStatus = 'R' WHERE C_Payment_ID = " + line.GetC_Payment_ID(), null, Get_Trx()));
+                            }
                         }
                     }
                 }
             }
-
-            //END----------------------------------Anuj----------------------
 
             //	User Validation
             String valid = ModelValidationEngine.Get().FireDocValidate(this, ModalValidatorVariables.DOCTIMING_AFTER_COMPLETE);
@@ -702,12 +706,19 @@ namespace VAdvantage.Model
                         //inp.SetVA009_ExecutionStatus(status);
                         //inp.Save(Get_TrxName());
 
-                        // update execution status as set on Payment on Invoice Schedule -  for those payment which are completed or closed
                         if (payment.GetDocStatus() == DOCSTATUS_Closed || payment.GetDocStatus() == DOCSTATUS_Completed)
                         {
+                            // update execution status as InProgress on Invoice Schedule -  for those payment which are completed or closed
                             int no = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE C_InvoicePaySchedule
-                                                                          SET VA009_ExecutionStatus = '" + payment.GetVA009_ExecutionStatus() + @"'  
+                                                                          SET VA009_ExecutionStatus = '" + MPayment.VA009_EXECUTIONSTATUS_In_Progress + @"'  
                                                                           WHERE C_Payment_ID = " + line.GetC_Payment_ID(), null, Get_Trx()));
+                            if (no == 0)
+                            {
+                                //(1052)update execution status as InProgress on Order Schedule -  for those payment which are completed or closed
+                                no = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE VA009_OrderPaySchedule
+                                                                          SET VA009_ExecutionStatus = '" + MPayment.VA009_EXECUTIONSTATUS_In_Progress + @"'  
+                                                                          WHERE C_Payment_ID = " + line.GetC_Payment_ID(), null, Get_Trx()));
+                            }
                         }
                     }
                 }

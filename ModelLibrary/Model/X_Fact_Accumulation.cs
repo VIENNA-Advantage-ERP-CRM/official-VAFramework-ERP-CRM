@@ -97,9 +97,9 @@ public void SetISBUSINESSPARTNER (Boolean ISBUSINESSPARTNER){Set_Value ("ISBUSIN
 @return ISBUSINESSPARTNER */
 public Boolean IsBUSINESSPARTNER() {Object oo = Get_Value("ISBUSINESSPARTNER");if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo);}return false;}/** Set ISCAMPAIGN.
 @param ISCAMPAIGN ISCAMPAIGN */
-public void SetISCAMPAIGN (Boolean ISCAMPAIGN){Set_Value ("ISCAMPAIGN", ISCAMPAIGN);}/** Get ISCAMPAIGN.
+public void SetISCAMPAIGN (Boolean ISCAMPAIGN){Set_Value ("IsCampaign", ISCAMPAIGN);}/** Get ISCAMPAIGN.
 @return ISCAMPAIGN */
-public Boolean IsCAMPAIGN() {Object oo = Get_Value("ISCAMPAIGN");if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo);}return false;}/** Set ISLOCATIONFROM.
+public Boolean IsCAMPAIGN() {Object oo = Get_Value("IsCampaign");if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo);}return false;}/** Set ISLOCATIONFROM.
 @param ISLOCATIONFROM ISLOCATIONFROM */
 public void SetISLOCATIONFROM (Boolean ISLOCATIONFROM){Set_Value ("ISLOCATIONFROM", ISLOCATIONFROM);}/** Get ISLOCATIONFROM.
 @return ISLOCATIONFROM */

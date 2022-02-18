@@ -205,8 +205,12 @@ namespace VAdvantage.Model
             SetAD_User_ID(shipment.GetAD_User_ID());
             SetM_Locator_ID(shipLine.GetM_Locator_ID());
             SetIsInPosession(true);
-            SetAssetServiceDate(shipment.GetDateAcct());
 
+            // VIS0060: Set Trx Organization on Asset from MR Line.
+            if (shipLine.GetAD_OrgTrx_ID() > 0)
+            {
+                Set_Value("AD_OrgTrx_ID", shipLine.GetAD_OrgTrx_ID());
+            }
             //	Line
             MProduct product = shipLine.GetProduct();
             SetM_Product_ID(product.GetM_Product_ID());
@@ -228,9 +232,25 @@ namespace VAdvantage.Model
                 SetIsFullyDepreciated(false);
             }
 
+            //VIS0060: Set Value of WIP, Month/Year and LIfe Units from AssetGroup to Asset.
+            if (_assetGroup.Get_ColumnIndex("VAFAM_IsWIP") >= 0 && Util.GetValueOfBool(_assetGroup.Get_Value("VAFAM_IsWIP")))
+            {
+                Set_Value("VAFAM_IsWIP", true);
+            }
+            else
+            {
+                SetAssetServiceDate(shipment.GetDateAcct());
+            }
+
+            if (_assetGroup.Get_ColumnIndex("VAFAM_LifeUseUnit") >= 0 && !String.IsNullOrEmpty(Util.GetValueOfString(_assetGroup.Get_Value("VAFAM_LifeUseUnit"))))
+            {
+                Set_Value("VAFAM_LifeUseUnit", Util.GetValueOfString(_assetGroup.Get_Value("VAFAM_LifeUseUnit")));
+                Set_Value("LifeUseUnits", Util.GetValueOfDecimal(_assetGroup.Get_Value("VAFAM_AssetGroupLife")));
+            }
+
             //Change by Sukhwinder for setting Asset type and amortization template on Asset window, MANTIS ID:1762
-            int countVA038 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA038_' "));
-            int countVAFAM = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VAFAM_' "));
+            int countVA038 = Env.IsModuleInstalled("VA038_") ? 1 : 0;
+            int countVAFAM = Env.IsModuleInstalled("VAFAM_") ? 1 : 0;
             if (countVA038 > 0)
             {
                 Set_Value("VA038_AmortizationTemplate_ID", Utility.Util.GetValueOfInt(_assetGroup.Get_Value("VA038_AmortizationTemplate_ID")));
@@ -265,8 +285,8 @@ namespace VAdvantage.Model
             SetM_InOutLine_ID(shipLine.GetM_InOutLine_ID());
 
             //	Activate
-            MAssetGroup ag = MAssetGroup.Get(GetCtx(), GetA_Asset_Group_ID());
-            if (!ag.IsCreateAsActive())
+            //MAssetGroup ag = MAssetGroup.Get(GetCtx(), GetA_Asset_Group_ID());
+            if (!_assetGroup.IsCreateAsActive())
                 SetIsActive(false);
 
             //Check if the Software Industry module installed, update following fields on Asset window
@@ -277,7 +297,7 @@ namespace VAdvantage.Model
                 SetIsOwned(false);
                 SetIsActive(true);
                 SetIsDisposed(false);
-                
+
                 Set_Value("VA077_SerialNo", shipLine.Get_Value("VA077_SerialNo"));
                 Set_Value("VA077_CNAutodesk", shipLine.Get_Value("VA077_CNAutodesk"));
                 Set_Value("VA077_RegEmail", shipLine.Get_Value("VA077_RegEmail"));
@@ -763,8 +783,36 @@ namespace VAdvantage.Model
             }
             #region Fixed Asset Management
             /*to Set Written Down Value on Asset i.e. Gross value of Asset-Depreciated/ Amortized Value Arpit*/
-            if (Util.GetValueOfInt(DB.ExecuteScalar("select ad_moduleinfo_id from ad_moduleinfo where prefix='VAFAM_' and isactive='Y'")) > 0)
+            if (Env.IsModuleInstalled("VAFAM_"))
             {
+                // VIS0060: Handle case when Life related data updated on Asset.
+                if (!newRecord && (Is_ValueChanged("LifeUseUnits") || Is_ValueChanged("VAFAM_LifeUseUnit") || Is_ValueChanged("VAFAM_DepreciationType_ID")))
+                {
+                    var LastSchedDate = DB.ExecuteScalar("SELECT MAX(VAFAM_DepDate) FROM VAFAM_ASSETSCHEDULE WHERE IsActive='Y' AND VAFAM_DepAmor='Y' AND A_Asset_ID="
+                        + Get_ID(), null, Get_TrxName());
+                    if (LastSchedDate != null)
+                    {
+                        // Check if SLM-Rate Based depreciation, Then don not check Life with Schedule date.
+                        string rateBased = Util.GetValueOfString(DB.ExecuteScalar("SELECT VAFAM_IsRateBased FROM VAFAM_DepreciationType WHERE VAFAM_DepreciationType = 'SLM'" +
+                            " AND VAFAM_DepreciationType_ID = " + Util.GetValueOfInt(Get_Value("VAFAM_DepreciationType_ID")), null, Get_TrxName()));
+                        if (!rateBased.Equals("Y"))
+                        {
+                            DateTime assetDate = Util.GetValueOfString(Get_Value("VAFAM_LifeUseUnit")).Equals("Y") ?
+                                GetAssetServiceDate().Value.AddYears(Util.GetValueOfInt(GetLifeUseUnits())) :
+                                GetAssetServiceDate().Value.AddMonths(Util.GetValueOfInt(GetLifeUseUnits()));
+
+                            // VIS0060: Life of Asset can not be less than the date of last charged depreciation
+                            if (assetDate < Util.GetValueOfDateTime(LastSchedDate))
+                            {
+                                log.Info("Life of Asset can not be less than the date of last charged depreciation. - Asset Service Date : " + GetAssetServiceDate().Value.Date +
+                                    " - Last Schedule Date : " + Util.GetValueOfDateTime(LastSchedDate).Value.Date);
+                                log.SaveError("VAFAM_LifeUseLess", "");
+                                return false;
+                            }
+                        }
+                    }
+                }
+
                 if (Get_ColumnIndex("VAFAM_WrittenDownValue") > 0 &&
                     Get_ColumnIndex("VAFAM_AssetGrossValue") > 0 && Get_ColumnIndex("VAFAM_SLMDepreciation") > 0)
                 {

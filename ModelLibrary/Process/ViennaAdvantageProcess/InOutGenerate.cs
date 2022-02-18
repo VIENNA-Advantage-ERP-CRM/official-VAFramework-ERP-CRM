@@ -605,10 +605,10 @@ namespace ViennaAdvantage.Process
                 {
                     //shipment  fields copied
                     _shipment.Set_Value("VA077_HistoricContractDate", order.Get_Value("VA077_HistoricContractDate"));
-                   _shipment.Set_Value("VA077_ChangeStartDate",order.Get_Value("VA077_ChangeStartDate"));
-                    _shipment.Set_Value("VA077_ContractCPStartDate",order.Get_Value("VA077_ContractCPStartDate"));
-                    _shipment.Set_Value("VA077_ContractCPEndDate",order.Get_Value("VA077_ContractCPEndDate"));
-                    _shipment.Set_Value("VA077_PartialAmtCatchUp",order.Get_Value("VA077_PartialAmtCatchUp"));
+                    _shipment.Set_Value("VA077_ChangeStartDate", order.Get_Value("VA077_ChangeStartDate"));
+                    _shipment.Set_Value("VA077_ContractCPStartDate", order.Get_Value("VA077_ContractCPStartDate"));
+                    _shipment.Set_Value("VA077_ContractCPEndDate", order.Get_Value("VA077_ContractCPEndDate"));
+                    _shipment.Set_Value("VA077_PartialAmtCatchUp", order.Get_Value("VA077_PartialAmtCatchUp"));
 
                     _shipment.Set_Value("VA077_OldAnnualContractTotal", order.Get_Value("VA077_OldAnnualContractTotal"));
                     _shipment.Set_Value("VA077_AdditionalAnnualCharge", order.Get_Value("VA077_AdditionalAnnualCharge"));
@@ -619,10 +619,10 @@ namespace ViennaAdvantage.Process
                     _shipment.Set_Value("VA077_TotalMarginAmt", order.Get_Value("VA077_TotalMarginAmt"));
                     _shipment.Set_Value("VA077_TotalPurchaseAmt", order.Get_Value("VA077_TotalPurchaseAmt"));
                     _shipment.Set_Value("VA077_TotalSalesAmt", order.Get_Value("VA077_TotalSalesAmt"));
-                  
+
                     _shipment.Set_Value("VA077_MarginPercent", order.Get_Value("VA077_MarginPercent"));
                     _shipment.Set_Value("VA077_IsLegalEntity", order.Get_Value("VA077_IsLegalEntity"));
-                                                          
+
                 }
 
 
@@ -637,7 +637,7 @@ namespace ViennaAdvantage.Process
                     pp = VLogger.RetrieveError();
                     if (pp != null)
                     {
-                        _msg.Append(!string.IsNullOrEmpty(pp.GetName()) ? pp.GetName() : pp.GetValue());
+                        _msg.Append(!string.IsNullOrEmpty(pp.GetName()) ? pp.GetName() : Msg.GetMsg(GetCtx(), pp.GetValue()));
                     }
                     return;
                 }
@@ -661,6 +661,11 @@ namespace ViennaAdvantage.Process
                 {
                     line.SetDTD001_IsAttributeNo(true);
                 }
+
+                //190 - Set Print Description
+                if (line.Get_ColumnIndex("PrintDescription") >= 0)
+                    line.Set_Value("PrintDescription", orderLine.Get_Value("PrintDescription"));
+
                 if (Env.IsModuleInstalled("VA077_"))
                 {
                     line.Set_Value("VA077_SerialNo", orderLine.Get_Value("VA077_SerialNo"));
@@ -680,7 +685,7 @@ namespace ViennaAdvantage.Process
 
                 }
 
-                    if (!line.Save())
+                if (!line.Save())
                 {
                     //throw new Exception("Could not create Shipment Line");
                     log.Fine("Failed: Could not create Shipment Line against Order No : " + order.GetDocumentNo() + " for orderline id : " + orderLine.GetC_OrderLine_ID());
@@ -789,6 +794,10 @@ namespace ViennaAdvantage.Process
                     {
                         line.SetDTD001_IsAttributeNo(true);
                     }
+
+                    //190 - Set Print Description
+                    if (line.Get_ColumnIndex("PrintDescription") >= 0)
+                        line.Set_Value("PrintDescription", orderLine.Get_Value("PrintDescription"));
 
                     if (Env.IsModuleInstalled("VA077_"))
                     {
@@ -904,6 +913,9 @@ namespace ViennaAdvantage.Process
                     {
                         line.SetDTD001_IsAttributeNo(true);
                     }
+                    //190 - Set Print Description
+                    if (line.Get_ColumnIndex("PrintDescription") >= 0)
+                        line.Set_Value("PrintDescription", orderLine.Get_Value("PrintDescription"));
 
                     if (Env.IsModuleInstalled("VA077_"))
                     {
