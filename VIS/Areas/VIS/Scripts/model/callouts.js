@@ -23979,18 +23979,23 @@
         }
         this.setCalloutActive(true);
 
-        //check if VA090 module is Installed 
-        var modulePrefix = VIS.dataContext.getJSONRecord("VIS/ModulePrefix/GetModulePrefix", "VA090_");
         var fileLocation = Util.getValueOfString(mTab.getValue("SaveAttachmentOn"));
 
-        if (fileLocation == "AB" && !modulePrefix["VA090_"]) {
-            mTab.setValue("SaveAttachmentOn", null);
-            return VIS.Msg.getMsg("VIS_VA090NotInstalled");
+        if (fileLocation == "AB") {
+
+            //check if VA090 module is Installed 
+            var modulePrefix = VIS.dataContext.getJSONRecord("VIS/ModulePrefix/GetModulePrefix", "VA090_");
+            if (!modulePrefix["VA090_"]) {
+                mTab.setValue("SaveAttachmentOn", null);
+                this.setCalloutActive(false);
+                return VIS.Msg.getMsg("VIS_VA090NotInstalled");
+            }
         }
 
         this.setCalloutActive(false);
         return "";
     };
+
     VIS.Model.CalloutAzureBlob = CalloutAzureBlob;
     //VIS264**************CalloutAzureBlob End*************
 
