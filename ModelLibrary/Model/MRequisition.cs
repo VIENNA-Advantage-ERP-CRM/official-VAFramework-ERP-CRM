@@ -934,7 +934,7 @@ namespace VAdvantage.Model
          */
         public bool VoidIt()
         {
-            log.Info("reActivateIt - " + ToString());
+            log.Info("VoidIt - " + ToString());
             StringBuilder sql = new StringBuilder();
             //	Not Processed
             if (!(DOCSTATUS_Drafted.Equals(GetDocStatus())
@@ -946,7 +946,7 @@ namespace VAdvantage.Model
 
 
                 //VIS0060: To check if associated PO is exist but not reversed
-                sql.Append("SELECT COUNT(M_RequisitionLine_ID) FROM M_RequisitionLine Where M_Requisition_ID=" + GetM_Requisition_ID() +
+                sql.Append("SELECT COUNT(M_RequisitionLine_ID) FROM M_RequisitionLine WHERE M_Requisition_ID=" + GetM_Requisition_ID() +
                 " AND NVL(C_OrderLine_ID, 0) > 0");
 
                 if (Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName())) > 0)
@@ -1165,7 +1165,7 @@ namespace VAdvantage.Model
          */
         public bool ReActivateIt()
         {
-            log.Info("reActivateIt - " + ToString());
+            log.Info("ReActivateIT - " + ToString());
             StringBuilder sql = new StringBuilder();
             // In case of purchase order reverse budget breach
             // Done by Rakesh Kumar 19/Feb/2020
@@ -1176,7 +1176,7 @@ namespace VAdvantage.Model
             }
 
             //VIS0060: To check if associated PO is exist but not reversed
-            sql.Append("SELECT COUNT(M_RequisitionLine_ID) FROM M_RequisitionLine Where M_Requisition_ID=" + GetM_Requisition_ID() +
+            sql.Append("SELECT COUNT(M_RequisitionLine_ID) FROM M_RequisitionLine WHERE M_Requisition_ID=" + GetM_Requisition_ID() +
                 " AND (NVL(C_OrderLine_ID, 0) > 0");                // OR NVL(Ref_OrderLine_ID, 0) > 0");
 
             //if (Env.IsModuleInstalled("VAMFG_"))
