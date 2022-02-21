@@ -1146,7 +1146,7 @@
             }
         }
         // VIS0008 load location data based on setting in system config
-        if (VIS.context.getLocationBulkReload() == 'Y') {
+        if (VIS.context.getLocationBulkReload()) {
             var data = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "Location" + "/GetLocation", { id: key })
             this.lookup[key] = data.LocItem;
             this.lstLatLng[key] = data.LocLatLng;

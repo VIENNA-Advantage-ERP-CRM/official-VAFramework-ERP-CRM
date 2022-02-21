@@ -419,7 +419,7 @@ VIS.context.getIsUseCrystalReportViewer = function ()
 
 // VIS0008 added for bulk location name reload
 VIS.context.getLocationBulkReload = function () {
-    return VIS.context.getContext('#LOCATION_NAME_BULK_REQUEST');
+    return VIS.context.getContext('#LOCATION_NAME_BULK_REQUEST') == "Y";
 };
 
 
