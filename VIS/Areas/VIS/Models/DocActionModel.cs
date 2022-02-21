@@ -296,6 +296,19 @@ namespace VIS.Models
             }
             //End
 
+            /********************
+             *  Requisition
+             */
+            else if (AD_Table_ID == X_M_Requisition.Table_ID)
+            {
+                //	Complete                    ..  CO
+                if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))
+                {
+                    options[index++] = DocumentEngine.ACTION_VOID;
+                    options[index++] = DocumentEngine.ACTION_REACTIVATE;
+                }
+            }
+
             //    /********************
             //*  Warehouse Task  New Add by raghu 11 april,2011
             //*/
