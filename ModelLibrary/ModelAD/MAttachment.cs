@@ -1528,7 +1528,7 @@ namespace VAdvantage.Model
                         // VIS264 - Get file information
                         FileInfo fileInfo = new FileInfo(filePath + "\\" + folderKey + "\\" + fileName);
 
-                        string res = AzureBlobStorage.UploadFile(GetCtx(), cInfo.GetAD_WebServiceURL(), fileInfo.FullName);
+                        string res = AzureBlobStorage.UploadFile(GetCtx(), cInfo.GetAD_WebServiceURL(), fileInfo.FullName, outputfileName);
 
                         if (res != null)
                         {
@@ -1972,11 +1972,9 @@ namespace VAdvantage.Model
 
                         if (!string.IsNullOrEmpty(containerUri))
                         {
-                            string fileName = Util.GetValueOfString(ds.Tables[0].Rows[0]["FileName"]);
+                            string downloadFullPath = Path.Combine(filePath, "TempDownload", folder, Util.GetValueOfString(ds.Tables[0].Rows[0]["FileName"]));
 
-                            string downloadFullPath = Path.Combine(filePath, "TempDownload", folder, fileName);
-
-                            string res = AzureBlobStorage.DownloadFile(GetCtx() ,containerUri, downloadFullPath, fileName);
+                            string res = AzureBlobStorage.DownloadFile(GetCtx(), containerUri, downloadFullPath, filename);
 
                             if (res == null)
                                 return folder;

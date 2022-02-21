@@ -19,12 +19,14 @@ namespace VAdvantage.AzureBlob
         private static VLogger _log = VLogger.GetVLogger(typeof(AzureBlobStorage).FullName);
 
         /// <summary>
-        /// Upload the specified file to the specified Azure blob container
+        /// Upload the file specified by fullFilePath to the Azure container blob specified by containerUrl and remotefileName
         /// </summary>
+        /// <param name="ctx"></param>
         /// <param name="containerUrl"></param>
         /// <param name="fullFilePath"></param>
+        /// <param name="remotefileName"></param>
         /// <returns>true if succeeded, false if failed</returns>
-        public static string UploadFile(Ctx ctx, string containerUrl, string fullFilePath)
+        public static string UploadFile(Ctx ctx, string containerUrl, string fullFilePath, string remotefileName)
         {
             if (!Env.IsModuleInstalled("VA090_"))
             {
@@ -35,23 +37,25 @@ namespace VAdvantage.AzureBlob
             Assembly assembly = Assembly.Load("VA090Svc");
             Type type = assembly.GetType("VA090Svc.Classes.AzureBlobStorage");
 
-            object[] param = new object[3];
+            object[] param = new object[4];
             param[0] = ctx;
             param[1] = containerUrl;
             param[2] = fullFilePath;
+            param[3] = remotefileName;
             var resultObj = type.GetMethod("UploadFile").Invoke(null, param);
 
             return resultObj?.ToString();
         }
 
         /// <summary>
-        /// Download the specified file to the specified Azure blob container
+        /// Download remote file specified by containerUrl and remotefileName to the path specified by downloadFullPath
         /// </summary>
+        /// <param name="ctx"></param>
         /// <param name="containerUrl"></param>
         /// <param name="downloadFullPath"></param>
-        /// <param name="fileName"></param>
+        /// <param name="remotefileName"></param>
         /// <returns>true if succeeded, false if failed</returns>
-        public static string DownloadFile(Ctx ctx, string containerUrl, string downloadFullPath, string fileName)
+        public static string DownloadFile(Ctx ctx, string containerUrl, string downloadFullPath, string remotefileName)
         {
 
             if (!Env.IsModuleInstalled("VA090_"))
@@ -67,7 +71,7 @@ namespace VAdvantage.AzureBlob
             param[0] = ctx;
             param[1] = containerUrl;
             param[2] = downloadFullPath;
-            param[3] = fileName;
+            param[3] = remotefileName;
             var resultObj = type.GetMethod("DownloadFile").Invoke(null, param);
 
             return resultObj?.ToString();
