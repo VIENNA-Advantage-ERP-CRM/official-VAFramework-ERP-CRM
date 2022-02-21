@@ -441,7 +441,7 @@ namespace VAdvantage.Model
                         }
                     }
                 }
-                
+
                 //	Implicit Approval
                 if (!IsApproved())
                 {
@@ -456,14 +456,8 @@ namespace VAdvantage.Model
                     _processMsg = valid;
                     return DocActionVariables.STATUS_INVALID;
                 }
-                //
-                
-                /**************************************************************************************************************/
-                // Check Column Name  new 6jan 0 vikas
-                int _count = Util.GetValueOfInt(DB.ExecuteScalar(" SELECT Count(*) FROM AD_Column WHERE columnname = 'DTD001_SourceReserve' "));
 
-                Tuple<String, String, String> mInfo = null;
-                if (Env.HasModulePrefix("DTD001_", out mInfo))
+                if (Env.IsModuleInstalled("DTD001_"))
                 {
                     MRequisitionLine[] lines = GetLines();
                     MProduct product = null;
@@ -488,45 +482,58 @@ namespace VAdvantage.Model
                             _processMsg = Msg.GetMsg(GetCtx(), "DTD001_DefineLocator"); //"Define Locator For That Warehouse";
                             return DocActionVariables.STATUS_INVALID;
                         }
+
+                        Decimal difference = 0;
+
+                        if (line.Get_ColumnIndex("QtyReserved") > 0)
+                        {
+                            difference = Decimal.Subtract(line.GetQty(), line.GetQtyReserved());
+                        }
+                        else
+                        {
+                            difference = line.GetQty();
+                        }
+
                         if (line.Get_ColumnIndex("OrderLocator_ID") > 0)
                         {
                             line.SetOrderLocator_ID(loc_id);
                             line.SetReserveLocator_ID(Sourcewhloc_id);
+
+                            if (line.Get_ColumnIndex("QtyReserved") > 0)
+                            {
+                                line.SetQtyReserved(Decimal.Add(line.GetQtyReserved(), difference));
+                            }
                             if (!line.Save())
                             {
                                 _processMsg = Msg.GetMsg(GetCtx(), "ReqLineNotSaved");
                                 return DocActionVariables.STATUS_INVALID;
                             }
                         }
-                        //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA203_'", null, null)) > 0)
+
                         // SI_0686_2 :  storage should not update in case of product is other than item type.
-                        if (Env.IsModuleInstalled("VA203_") && product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item)
+                        if (Env.IsModuleInstalled("VA203_") && product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item && product.IsStocked())
                         {
                             storage = MStorage.Get(GetCtx(), loc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
                             if (storage == null)
                             {
                                 storage = MStorage.GetCreate(GetCtx(), loc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
                             }
-                            storage.SetDTD001_QtyReserved((Decimal.Add(storage.GetDTD001_QtyReserved(), (Decimal)line.GetQty())));
+                            storage.SetDTD001_QtyReserved(Decimal.Add(storage.GetDTD001_QtyReserved(), difference));
                             if (!storage.Save())
                             {
                                 log.Info("Requisition Reserverd Quantity not saved at storage at locator " + loc_id + " and product is " + line.GetM_Product_ID());
                             }
-                            ///new 6jan 2
-                            if (_count > 0)
+
+                            Swhstorage = MStorage.Get(GetCtx(), Sourcewhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
+                            if (Swhstorage == null)
                             {
-                                Swhstorage = MStorage.Get(GetCtx(), Sourcewhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
-                                if (Swhstorage == null)
-                                {
-                                    Swhstorage = MStorage.GetCreate(GetCtx(), Sourcewhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
-                                }
-                                Swhstorage.SetDTD001_SourceReserve((Decimal.Add(Swhstorage.GetDTD001_SourceReserve(), (Decimal)line.GetQty())));
-                                if (!Swhstorage.Save())
-                                {
-                                    log.Info("Requisition Reserverd Quantity not saved at storage at locator " + Sourcewhloc_id + " and product is " + line.GetM_Product_ID());
-                                }
+                                Swhstorage = MStorage.GetCreate(GetCtx(), Sourcewhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
                             }
-                            //End
+                            Swhstorage.SetDTD001_SourceReserve(Decimal.Add(Swhstorage.GetDTD001_SourceReserve(), difference));
+                            if (!Swhstorage.Save())
+                            {
+                                log.Info("Requisition Reserverd Quantity not saved at storage at locator " + Sourcewhloc_id + " and product is " + line.GetM_Product_ID());
+                            }
                         }
                         //(JID_1365)shubham add code below line after && 
                         else if (product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item && product.IsStocked())
@@ -536,33 +543,30 @@ namespace VAdvantage.Model
                             if (storage == null)
                             {
                                 //MStorage.Add(GetCtx(), GetM_Warehouse_ID(), loc_id, line.GetM_Product_ID(), 0, 0, 0, 0, line.GetQty(), null);
-                                MStorage.Add(GetCtx(), GetM_Warehouse_ID(), loc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), line.GetM_AttributeSetInstance_ID(), (Decimal)0, (Decimal)0, (Decimal)0, line.GetQty(), Get_Trx());
+                                MStorage.Add(GetCtx(), GetM_Warehouse_ID(), loc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(),
+                                    line.GetM_AttributeSetInstance_ID(), (Decimal)0, (Decimal)0, (Decimal)0, difference, Get_Trx());
                             }
                             else
                             {
-                                storage.SetDTD001_QtyReserved((Decimal.Add(storage.GetDTD001_QtyReserved(), (Decimal)line.GetQty())));
+                                storage.SetDTD001_QtyReserved(Decimal.Add(storage.GetDTD001_QtyReserved(), difference));
                                 storage.Save();
                             }
-                            //new 6jan 3
-                            if (_count > 0)
-                            {
-                                Swhstorage = MStorage.Get(GetCtx(), Sourcewhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
-                                if (Swhstorage == null)
-                                {
 
-                                    MStorage.Add(GetCtx(), GetDTD001_MWarehouseSource_ID(), Sourcewhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), line.GetM_AttributeSetInstance_ID(), (Decimal)0, (Decimal)0, (Decimal)0, 0, Get_Trx());
-                                    MStorage StrgResrvQty = null;
-                                    StrgResrvQty = MStorage.GetCreate(GetCtx(), Sourcewhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
-                                    StrgResrvQty.SetDTD001_SourceReserve(Decimal.Add(StrgResrvQty.GetDTD001_SourceReserve(), line.GetQty()));
-                                    StrgResrvQty.Save();
-                                }
-                                else
-                                {
-                                    Swhstorage.SetDTD001_SourceReserve((Decimal.Add(Swhstorage.GetDTD001_SourceReserve(), (Decimal)line.GetQty())));
-                                    Swhstorage.Save();
-                                }
+                            Swhstorage = MStorage.Get(GetCtx(), Sourcewhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
+                            if (Swhstorage == null)
+                            {
+                                MStorage.Add(GetCtx(), GetDTD001_MWarehouseSource_ID(), Sourcewhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(),
+                                    line.GetM_AttributeSetInstance_ID(), (Decimal)0, (Decimal)0, (Decimal)0, 0, Get_Trx());
+                                MStorage StrgResrvQty = null;
+                                StrgResrvQty = MStorage.GetCreate(GetCtx(), Sourcewhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
+                                StrgResrvQty.SetDTD001_SourceReserve(Decimal.Add(StrgResrvQty.GetDTD001_SourceReserve(), difference));
+                                StrgResrvQty.Save();
                             }
-                            //End
+                            else
+                            {
+                                Swhstorage.SetDTD001_SourceReserve(Decimal.Add(Swhstorage.GetDTD001_SourceReserve(), difference));
+                                Swhstorage.Save();
+                            }
                         }
                     }
                 }
@@ -930,7 +934,36 @@ namespace VAdvantage.Model
          */
         public bool VoidIt()
         {
-            // Added by Bharat for JID_1007: void Requisition is not marking fields readonly.
+            log.Info("reActivateIt - " + ToString());
+            StringBuilder sql = new StringBuilder();
+            //	Not Processed
+            if (!(DOCSTATUS_Drafted.Equals(GetDocStatus())
+                || DOCSTATUS_Invalid.Equals(GetDocStatus())
+                || DOCSTATUS_InProgress.Equals(GetDocStatus())
+                || DOCSTATUS_Approved.Equals(GetDocStatus())
+                || DOCSTATUS_NotApproved.Equals(GetDocStatus())))
+            {
+
+
+                //VIS0060: To check if associated PO is exist but not reversed
+                sql.Append("SELECT COUNT(M_RequisitionLine_ID) FROM M_RequisitionLine Where M_Requisition_ID=" + GetM_Requisition_ID() +
+                " AND NVL(C_OrderLine_ID, 0) > 0");
+
+                if (Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName())) > 0)
+                {
+                    _processMsg = Msg.GetMsg(GetCtx(), "VIS_VoidPOFirst");
+                    return false;
+                }
+
+                //VIS0060: To check if associated Movement is exist but not reversed, If Reserved Qty on Requisition line, system should not allow to Void the record.
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(M_RequisitionLine_ID) FROM M_RequisitionLine WHERE M_Requisition_ID =" + GetM_Requisition_ID()
+                    + " AND (DTD001_ReservedQty > 0 OR DTD001_DeliveredQty > 0)", null, Get_TrxName())) > 0)
+                {
+                    _processMsg = Msg.GetMsg(GetCtx(), "VIS_VoidMovementFirst");
+                    return false;
+                }
+            }
+
             SetProcessed(true);
             log.Info("voidIt - " + ToString());
             return CloseIt();
@@ -991,11 +1024,9 @@ namespace VAdvantage.Model
                     if (Env.IsModuleInstalled("DTD001_"))
                     {
                         unprocessQty = line.GetQty() - line.GetDTD001_DeliveredQty();
-                        // new 6jan  0
-                        int _count = Util.GetValueOfInt(DB.ExecuteScalar(" SELECT Count(*) FROM AD_Column WHERE columnname = 'DTD001_SourceReserve' "));
 
                         //Update storage requisition reserved qty                        
-                        if (Env.IsModuleInstalled("VA203_") && product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item)
+                        if (Env.IsModuleInstalled("VA203_") && product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item && product.IsStocked())
                         {
                             if (GetDocAction() != "VO" && GetDocStatus() != "DR")
                             {
@@ -1010,24 +1041,19 @@ namespace VAdvantage.Model
                                     }
                                     storage.SetDTD001_QtyReserved(Decimal.Subtract(storage.GetDTD001_QtyReserved(), unprocessQty));
                                     storage.Save();
-                                    //new 6jan 5
-                                    if (_count > 0)
+
+                                    int Swhloc_id = line.GetReserveLocator_ID();
+                                    Swhstorage = MStorage.Get(GetCtx(), Swhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
+                                    if (Swhstorage == null)
                                     {
-                                        //int Swhloc_id = GetSwhLocation(GetDTD001_MWarehouseSource_ID());
-                                        int Swhloc_id = line.GetReserveLocator_ID();
-                                        Swhstorage = MStorage.Get(GetCtx(), Swhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
-                                        if (Swhstorage == null)
-                                        {
-                                            Swhstorage = MStorage.GetCreate(GetCtx(), Swhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
-                                        }
-                                        Swhstorage.SetDTD001_SourceReserve(Decimal.Subtract(Swhstorage.GetDTD001_SourceReserve(), unprocessQty));
-                                        Swhstorage.Save();
+                                        Swhstorage = MStorage.GetCreate(GetCtx(), Swhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
                                     }
-                                    //end
+                                    Swhstorage.SetDTD001_SourceReserve(Decimal.Subtract(Swhstorage.GetDTD001_SourceReserve(), unprocessQty));
+                                    Swhstorage.Save();
                                 }
                             }
                         }
-                        else if (GetDocAction() != "VO" && GetDocStatus() != "DR" && product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item)
+                        else if (GetDocAction() != "VO" && GetDocStatus() != "DR" && product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item && product.IsStocked())
                         {
                             if (unprocessQty > 0)
                             {
@@ -1048,27 +1074,22 @@ namespace VAdvantage.Model
                                 storage.SetDTD001_QtyReserved(Decimal.Subtract(storage.GetDTD001_QtyReserved(), unprocessQty));
                                 storage.Save();
 
-                                //new 6jan 6
-                                if (_count > 0)
+                                int Swhloc_id = 0;
+                                if (line.Get_ColumnIndex("ReserveLocator_ID") > 0)
                                 {
-                                    int Swhloc_id = 0;
-                                    if (line.Get_ColumnIndex("ReserveLocator_ID") > 0)
-                                    {
-                                        Swhloc_id = line.GetReserveLocator_ID();
-                                    }
-                                    else
-                                    {
-                                        Swhloc_id = GetSwhLocation(GetM_Warehouse_ID());
-                                    }
-                                    Swhstorage = MStorage.Get(GetCtx(), Swhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
-                                    if (Swhstorage == null)
-                                    {
-                                        Swhstorage = MStorage.GetCreate(GetCtx(), Swhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
-                                    }
-                                    Swhstorage.SetDTD001_SourceReserve(Decimal.Subtract(Swhstorage.GetDTD001_SourceReserve(), unprocessQty));
-                                    Swhstorage.Save();
+                                    Swhloc_id = line.GetReserveLocator_ID();
                                 }
-                                //end
+                                else
+                                {
+                                    Swhloc_id = GetSwhLocation(GetM_Warehouse_ID());
+                                }
+                                Swhstorage = MStorage.Get(GetCtx(), Swhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
+                                if (Swhstorage == null)
+                                {
+                                    Swhstorage = MStorage.GetCreate(GetCtx(), Swhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
+                                }
+                                Swhstorage.SetDTD001_SourceReserve(Decimal.Subtract(Swhstorage.GetDTD001_SourceReserve(), unprocessQty));
+                                Swhstorage.Save();
                             }
                         }
                     }
@@ -1145,7 +1166,7 @@ namespace VAdvantage.Model
         public bool ReActivateIt()
         {
             log.Info("reActivateIt - " + ToString());
-            //	setProcessed(false);
+            StringBuilder sql = new StringBuilder();
             // In case of purchase order reverse budget breach
             // Done by Rakesh Kumar 19/Feb/2020
             if (Env.IsModuleInstalled("FRPT_"))
@@ -1153,11 +1174,27 @@ namespace VAdvantage.Model
                 SetIsBudgetBreach(false);
                 SetIsBudgetBreachApproved(false);
             }
-            if (ReverseCorrectIt())
+
+            //VIS0060: To check if associated PO is exist but not reversed
+            sql.Append("SELECT COUNT(M_RequisitionLine_ID) FROM M_RequisitionLine Where M_Requisition_ID=" + GetM_Requisition_ID() +
+                " AND (NVL(C_OrderLine_ID, 0) > 0");                // OR NVL(Ref_OrderLine_ID, 0) > 0");
+
+            //if (Env.IsModuleInstalled("VAMFG_"))
+            //{
+            //    sql.Append("OR NVL(VAMFG_M_WorkOrder_ID, 0) > 0");
+            //}
+
+            sql.Append(")");
+
+            if (Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName())) > 0)
             {
-                return true;
+                _processMsg = "Associated Purchase Order must be voided or reversed first";
+                return false;
             }
-            return false;
+
+            SetDocAction(DOCACTION_Complete);
+            SetProcessed(false);
+            return true;
         }
 
         /*
