@@ -1188,7 +1188,7 @@ namespace VAdvantage.Model
 
             if (Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName())) > 0)
             {
-                _processMsg = "Associated Purchase Order must be voided or reversed first";
+                _processMsg = Msg.GetMsg(GetCtx(), "VIS_VoidPOFirst");
                 return false;
             }
 
