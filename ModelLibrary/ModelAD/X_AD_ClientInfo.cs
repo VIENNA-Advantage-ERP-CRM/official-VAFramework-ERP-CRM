@@ -726,10 +726,10 @@ namespace VAdvantage.Model
          * @param AD_WebServiceURL URL of Web service. */
         public void SetAD_WebServiceURL(String AD_WebServiceURL)
         {
-            if (AD_WebServiceURL != null && AD_WebServiceURL.Length > 100)
+            if (AD_WebServiceURL != null && AD_WebServiceURL.Length > 500)
             {
-                log.Warning("Length > 100 - truncated");
-                AD_WebServiceURL = AD_WebServiceURL.Substring(0, 100);
+                log.Warning("Length > 500 - truncated");
+                AD_WebServiceURL = AD_WebServiceURL.Substring(0, 500);
             }
 
             Set_Value("AD_WebServiceURL", AD_WebServiceURL);

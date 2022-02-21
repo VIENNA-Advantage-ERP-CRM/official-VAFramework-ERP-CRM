@@ -1093,6 +1093,22 @@ namespace VAdvantage.Login
                     m_ctx.SetContext("#" + dr[0].ToString(), (dr[1].ToString()));
                 }
             dr.Close();
+
+
+            //	BULK Location name load
+            m_ctx.SetContext("#LOCATION_NAME_BULK_REQUEST", "Y");
+            sql = "SELECT NAME, VALUE FROM AD_SysConfig WHERE NAME = 'LOCATION_NAME_BULK_REQUEST'";
+            DataSet ds = DataBase.DB.ExecuteDataset(sql);
+            if (ds != null && ds.Tables != null && ds.Tables[0].Rows.Count > 0)
+            {
+                if (!string.IsNullOrEmpty(ds.Tables[0].Rows[0][1].ToString()))
+                {
+                    Regex regex = new Regex(@"Y|N");
+                    if (regex.IsMatch(ds.Tables[0].Rows[0][1].ToString()))
+                        m_ctx.SetContext("#LOCATION_NAME_BULK_REQUEST", (ds.Tables[0].Rows[0][1].ToString()));
+                }
+            }
+
         }
 
     }

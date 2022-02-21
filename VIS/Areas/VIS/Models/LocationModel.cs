@@ -328,38 +328,32 @@ namespace VIS.Models
         /// <returns>keyname pair dictionary</returns>
         internal static LocationData GetAllLocations(VAdvantage.Utility.Ctx ctx)
         {
-            IDataReader dr = null;
             LocationData locData = new LocationData();
-
-
-            int MAX_ROWS = 10000;
+            int MAX_ROWS = 500;
             int count = 0;
             Dictionary<int, KeyNamePair> locs = new Dictionary<int, KeyNamePair>();
             Dictionary<int, LatLng> lstLatLng = new Dictionary<int, LatLng>();
             try
             {
-                dr = VAdvantage.DataBase.DB.ExecuteReader("SELECT * FROM C_Location");
-                while (dr.Read())
+                // VIS0008 change to fetch location data, first 500 records only
+                DataSet ds = VAdvantage.DataBase.DB.ExecuteDataset("SELECT * FROM C_Location", null, null, 500, 1);
+                // dr = VAdvantage.DataBase.DB.ExecuteReader("SELECT * FROM C_Location");
+                //while (dr.Read())
+                if (ds != null && ds.Tables != null && ds.Tables[0].Rows.Count > 0)
                 {
-                    if (count > MAX_ROWS)
-                        break;
-                    MLocation loc = MLocation.Get(ctx, Convert.ToInt32(dr["C_Location_ID"]), null);
-                    locs[loc.Get_ID()] = new KeyNamePair(loc.Get_ID(), loc.ToString());
-
-                    lstLatLng[loc.Get_ID()] = new LatLng() { Latitude = loc.GetLatitude(), Longitude = loc.GetLongitude() };
-                    count++;
-
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        if (count > MAX_ROWS)
+                            break;
+                        MLocation loc = MLocation.Get(ctx, ds.Tables[0].Rows[i], null);
+                        locs[loc.Get_ID()] = new KeyNamePair(loc.Get_ID(), loc.ToString());
+                        lstLatLng[loc.Get_ID()] = new LatLng() { Latitude = loc.GetLatitude(), Longitude = loc.GetLongitude() };
+                        count++;
+                    }
                 }
-                dr.Close();
             }
             catch
             {
-                if (dr != null)
-                {
-                    dr.Close();
-                    dr = null;
-                }
-
             }
             locData.LocLookup = locs;
             locData.LocLatLng = lstLatLng;

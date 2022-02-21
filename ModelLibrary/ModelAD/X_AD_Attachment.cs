@@ -237,12 +237,15 @@ namespace VAdvantage.Model
         /** IDP = ID */
         public static String FILELOCATION_IDP = "ID";
 
+        /** AzureBlobStorage = AB */
+        public static String FILELOCATION_AzureBlobStorage = "AB";
+
         /** Is test a valid value.
         @param test testvalue
         @returns true if valid **/
         public bool IsFileLocationValid(String test)
         {
-            return test.Equals("DB") || test.Equals("FT") || test.Equals("SR") || test.Equals("WS") || test.Equals("ID");
+            return test.Equals("DB") || test.Equals("FT") || test.Equals("SR") || test.Equals("WS") || test.Equals("ID") || test.Equals("AB");
         }
         /** Set File Location.
         @param FileLocation File Location */

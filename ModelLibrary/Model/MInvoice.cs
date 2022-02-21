@@ -1020,6 +1020,18 @@ namespace VAdvantage.Model
                     }
                     //
                     line.Set_Value("C_ProvisionalInvoiceLine_ID", fromLine.Get_ValueAsInt("C_ProvisionalInvoiceLine_ID"));
+
+                    // VIS0060: Set Asset Values on Reversal Line in case of Sale of Asset.
+                    if (otherInvoice.IsSOTrx() && fromLine.GetA_Asset_ID() > 0 && Env.IsModuleInstalled("VAFAM_") && fromLine.Get_ColumnIndex("VAFAM_Quantity") >= 0)
+                    {
+                        line.SetA_Asset_ID(fromLine.GetA_Asset_ID());
+                        line.SetVAFAM_Quantity(fromLine.GetVAFAM_Quantity());
+                        line.Set_Value("VAFAM_AssetGrossValue", decimal.Negate(Util.GetValueOfDecimal(fromLine.Get_Value("VAFAM_AssetGrossValue"))));
+                        line.Set_Value("VAFAM_SLMDepreciation", decimal.Negate(Util.GetValueOfDecimal(fromLine.Get_Value("VAFAM_SLMDepreciation"))));
+                        line.Set_Value("VAFAM_WrittenDownValue", decimal.Negate(Util.GetValueOfDecimal(fromLine.Get_Value("VAFAM_WrittenDownValue"))));
+                        line.Set_Value("VAFAM_ProfitLoss", decimal.Negate(Util.GetValueOfDecimal(fromLine.Get_Value("VAFAM_ProfitLoss"))));
+                        line.Set_Value("VAFAM_AssetDisposal_ID", fromLine.Get_Value("VAFAM_AssetDisposal_ID"));
+                    }
                 }
 
                 // enhanced by Amit 4-1-2016
@@ -1028,7 +1040,7 @@ namespace VAdvantage.Model
                 //if (!setOrder)
                 //    line.SetC_OrderLine_ID(0);
                 //end
-                line.SetA_Asset_ID(0);
+                //line.SetA_Asset_ID(0);
                 if (line.Get_ColumnIndex("S_ResourceAssignment_ID") >= 0)
                 {
                     line.SetS_ResourceAssignment_ID(0);
@@ -2891,7 +2903,7 @@ namespace VAdvantage.Model
                                             return DocActionVariables.STATUS_INVALID;
                                         }
                                         //(1052)correct process message
-                                        Info.Append(Msg.GetMsg(GetCtx(),"CashJournal") + cash.GetName() + " #" + cl.GetLine());
+                                        Info.Append(Msg.GetMsg(GetCtx(), "CashJournal") + cash.GetName() + " #" + cl.GetLine());
                                     }
                                 }
                                 ds.Dispose();
@@ -3397,6 +3409,15 @@ namespace VAdvantage.Model
                         }
                     }
                     #endregion
+
+                    // VIS0060: Set Disposal Qty and Asset Values on related Asset.
+                    if (IsSOTrx() && line.GetA_Asset_ID() != 0 && Env.IsModuleInstalled("VAFAM_") && line.Get_ColumnIndex("VAFAM_Quantity") >= 0)
+                    {
+                        if (!UpdateAssetValues(line))
+                        {
+                            return DocActionVariables.STATUS_INPROGRESS;
+                        }
+                    }
 
                     //Enhaced by amit 16-12-2015 for Cost Queue
                     if (client.IsCostImmediate())
@@ -4786,6 +4807,300 @@ namespace VAdvantage.Model
             }
             return DocActionVariables.STATUS_COMPLETED;
         }
+
+        /// <summary>
+        /// Update Values on Asset
+        /// VIS0060: 16-Feb-2022
+        /// </summary>
+        /// <param name="line">Invoice Line</param>
+        /// <returns>FAlse, if not updated</returns>
+        private bool UpdateAssetValues(MInvoiceLine line)
+        {
+            StringBuilder sql = new StringBuilder();
+            MAsset obj;
+            // VIS0060: In Case of Existing Disposal, need to update the Disposal details with Invoice Line reference.
+            if (Util.GetValueOfInt(line.Get_Value("VAFAM_AssetDisposal_ID")) > 0)
+            {
+                // On Reversal of Invoice Set Invoice Created Checkbox false on Asset Disposal
+                if (IsReversal())
+                {
+                    if (DB.ExecuteQuery("UPDATE VAFAM_AssetDisposal SET VAFAM_InvoiceCreated='N' WHERE VAFAM_AssetDisposal_ID="
+                                + Util.GetValueOfInt(line.Get_Value("VAFAM_AssetDisposal_ID")), null, Get_TrxName()) < 0)
+                    {
+                        Get_TrxName().Rollback();
+                        _processMsg = Msg.GetMsg(GetCtx(), "VAFAM_AssetDisposalNotUpdated");
+                        return false;
+                    }
+                }
+
+                int disposalID = DB.ExecuteQuery("UPDATE VAFAM_DisposalDetails SET " + (IsReversal() ? "C_InvoiceLine_ID = NULL" : "C_InvoiceLine_ID=" + line.Get_ID())
+                        + " WHERE VAFAM_AssetDisposal_ID=" + Util.GetValueOfInt(line.Get_Value("VAFAM_AssetDisposal_ID")), null, Get_TrxName());
+                if (disposalID < 0)
+                {
+                    Get_TrxName().Rollback();
+                    _processMsg = Msg.GetMsg(GetCtx(), "VAFAM_DisDetailsNotSaved");
+                    return false;
+                }
+            }
+            // VIS0060: In Case of Invoice Line has reference of Shiment Line, need to update the Disposal details with Invoice Line reference.
+            else if (line.GetM_InOutLine_ID() > 0)
+            {
+                int disposalID = DB.ExecuteQuery("UPDATE VAFAM_DisposalDetails SET " + (IsReversal() ? "C_InvoiceLine_ID = NULL" : "C_InvoiceLine_ID=" + line.Get_ID())
+                        + " WHERE M_InOutLine_ID=" + line.GetM_InOutLine_ID(), null, Get_TrxName());
+                if (disposalID < 0)
+                {
+                    Get_TrxName().Rollback();
+                    _processMsg = Msg.GetMsg(GetCtx(), "VAFAM_DisDetailsNotSaved");
+                    return false;
+                }
+            }
+            else
+            {
+                //updating the asset details 
+                obj = new MAsset(GetCtx(), line.GetA_Asset_ID(), Get_Trx());
+                if (line.GetQtyInvoiced().Equals(Util.GetValueOfDecimal(obj.Get_Value("Qty"))))
+                {
+                    obj.SetIsDisposed(true);
+                    obj.SetAssetDisposalDate(GetDateAcct());
+                }
+                else
+                {
+                    obj.SetIsDisposed(false);
+                    obj.SetAssetDisposalDate(null);
+                }
+                obj.SetQty(Util.GetValueOfDecimal(obj.Get_Value("Qty")) - line.GetQtyInvoiced());
+                obj.Set_Value("VAFAM_DisposeQty", Util.GetValueOfDecimal(obj.Get_Value("VAFAM_DisposeQty")) + line.GetQtyInvoiced());
+                obj.Set_Value("VAFAM_AssetGrossValue", Util.GetValueOfDecimal(obj.Get_Value("VAFAM_AssetGrossValue")) - Util.GetValueOfDecimal(line.Get_Value("VAFAM_AssetGrossValue")));
+                obj.SetVAFAM_SLMDepreciation(obj.GetVAFAM_SLMDepreciation() - Util.GetValueOfDecimal(line.Get_Value("VAFAM_SLMDepreciation")));
+                if (!obj.Save())
+                {
+                    ValueNamePair pp = VLogger.RetrieveError();
+                    _processMsg = Msg.GetMsg(GetCtx(), "AssetNotSaved") + ": " + obj.GetName()
+                        + (pp != null ? " - " + Msg.GetMsg(GetCtx(), pp.GetValue()) + " " + pp.ToString() : "");
+                    Get_TrxName().Rollback();
+                    return false;
+                }
+
+                if (!string.IsNullOrEmpty(CreateDisposalDetailsEntry(line.GetM_Product_ID(), line.GetC_Charge_ID(), line.Get_ID(), line.GetA_Asset_ID(), line.GetQtyInvoiced(),
+                    GetDateAcct(), Util.GetValueOfDecimal(line.Get_Value("VAFAM_AssetGrossValue")), Util.GetValueOfDecimal(line.Get_Value("VAFAM_SLMDepreciation")))))
+                {
+                    return false;
+                }
+
+                MAsset asset = null;
+                decimal cmpQty = 0, assetCost = 0, chargedDepreciation = 0;
+
+                if (obj.Get_ColumnIndex("VAFAM_HasComponent") >= 0 && Util.GetValueOfBool(obj.Get_Value("VAFAM_HasComponent")))
+                {
+                    DataSet dsDsp;
+                    DataSet dscmp = DB.ExecuteDataset(@"SELECT VAFAM_AssetComponent_ID, VAFAM_Quantity FROM VAFAM_ComponentAsset WHERE A_Asset_ID = "
+                            + line.GetA_Asset_ID(), null, Get_TrxName());
+
+                    if (dscmp != null && dscmp.Tables.Count > 0 && dscmp.Tables[0].Rows.Count > 0)
+                    {
+                        for (int j = 0; j < dscmp.Tables[0].Rows.Count; j++)
+                        {
+                            assetCost = 0;
+                            chargedDepreciation = 0;
+                            asset = new MAsset(GetCtx(), Util.GetValueOfInt(dscmp.Tables[0].Rows[j]["VAFAM_AssetComponent_ID"]), Get_Trx());
+                            cmpQty = Decimal.Multiply(line.GetQtyInvoiced(), Util.GetValueOfDecimal(dscmp.Tables[0].Rows[j]["VAFAM_Quantity"]));
+
+                            // In Case of Reversal get Gross Value, Dep Value and Quantity of component from Disposal details.
+                            if (line.GetReversalDoc_ID() > 0)
+                            {
+                                sql.Clear();
+                                sql.Append(@"SELECT VAFAM_GrossValDispAsset, VAFAM_DisposedQty, VAFAM_AccDepforDispAsset FROM VAFAM_DisposalDetails WHERE A_Asset_ID = "
+                                        + line.GetA_Asset_ID() + " AND C_InvoiceLine_ID=" + line.GetReversalDoc_ID());
+                                dsDsp = DB.ExecuteDataset(sql.ToString(), null, Get_Trx());
+                                if (dsDsp != null && dsDsp.Tables.Count > 0 && dsDsp.Tables[0].Rows.Count > 0)
+                                {
+                                    assetCost = Decimal.Negate(Util.GetValueOfDecimal(dsDsp.Tables[0].Rows[0]["VAFAM_GrossValDispAsset"]));
+                                    chargedDepreciation = Decimal.Negate(Util.GetValueOfDecimal(dsDsp.Tables[0].Rows[0]["VAFAM_AccDepforDispAsset"]));
+                                    cmpQty = Decimal.Negate(Util.GetValueOfDecimal(dsDsp.Tables[0].Rows[0]["VAFAM_DisposedQty"]));
+
+                                    asset.Set_Value("VAFAM_AssetGrossValue", Util.GetValueOfDecimal(asset.Get_Value("VAFAM_AssetGrossValue")) - assetCost);
+                                    asset.SetVAFAM_SLMDepreciation(asset.GetVAFAM_SLMDepreciation() - chargedDepreciation);
+
+                                    asset.SetQty(Util.GetValueOfDecimal(asset.Get_Value("Qty")) - cmpQty);
+                                    asset.Set_Value("VAFAM_DisposeQty", Util.GetValueOfDecimal(asset.Get_Value("VAFAM_DisposeQty")) + cmpQty);
+                                }
+                                else
+                                {
+                                    continue;
+                                }
+
+                                asset.SetIsDisposed(false);
+                                asset.SetAssetDisposalDate(null);
+                            }
+                            else if (Util.GetValueOfDecimal(asset.Get_Value("Qty")) > 0)
+                            {
+                                if (cmpQty > Util.GetValueOfDecimal(asset.Get_Value("Qty")))
+                                {
+                                    cmpQty = Util.GetValueOfDecimal(asset.Get_Value("Qty"));
+                                }
+
+                                assetCost = Decimal.Multiply(Decimal.Divide(Util.GetValueOfDecimal(asset.Get_Value("VAFAM_AssetGrossValue")), Util.GetValueOfDecimal(asset.Get_Value("Qty"))), cmpQty);
+                                chargedDepreciation = Decimal.Multiply(Decimal.Divide(Util.GetValueOfDecimal(asset.Get_Value("VAFAM_SLMDepreciation")), Util.GetValueOfDecimal(asset.Get_Value("Qty"))), cmpQty);
+
+                                asset.Set_Value("VAFAM_AssetGrossValue", Util.GetValueOfDecimal(asset.Get_Value("VAFAM_AssetGrossValue")) - assetCost);
+                                asset.SetVAFAM_SLMDepreciation(asset.GetVAFAM_SLMDepreciation() - chargedDepreciation);
+
+                                if (obj.IsDisposed())
+                                {
+                                    asset.SetIsDisposed(true);
+                                    asset.SetAssetDisposalDate(GetDateAcct());
+
+                                    asset.Set_Value("VAFAM_DisposeQty", Util.GetValueOfDecimal(asset.Get_Value("VAFAM_DisposeQty")) + Util.GetValueOfDecimal(asset.Get_Value("Qty")));
+                                    asset.SetQty(0);
+                                }
+                                else
+                                {
+                                    if (cmpQty.Equals(Util.GetValueOfDecimal(asset.Get_Value("Qty"))))
+                                    {
+                                        asset.SetIsDisposed(true);
+                                        asset.SetAssetDisposalDate(GetDateAcct());
+                                    }
+                                    else
+                                    {
+                                        asset.SetIsDisposed(false);
+                                        asset.SetAssetDisposalDate(null);
+                                    }
+
+                                    asset.SetQty(Util.GetValueOfDecimal(asset.Get_Value("Qty")) - cmpQty);
+                                    asset.Set_Value("VAFAM_DisposeQty", Util.GetValueOfDecimal(asset.Get_Value("VAFAM_DisposeQty")) + cmpQty);
+                                }
+                            }
+                            else
+                            {
+                                continue;
+                            }
+
+                            if (!asset.Save())
+                            {
+                                ValueNamePair pp = VLogger.RetrieveError();
+                                _processMsg = Msg.GetMsg(GetCtx(), "AssetNotSaved") + ": " + asset.GetName()
+                                    + (pp != null ? " - " + Msg.GetMsg(GetCtx(), pp.GetValue()) + " " + pp.ToString() : "");
+                                Get_TrxName().Rollback();
+                                return false;
+                            }
+
+                            if (!string.IsNullOrEmpty(CreateDisposalDetailsEntry(asset.GetM_Product_ID(), Util.GetValueOfInt(asset.Get_Value("C_Charge_ID")),
+                            line.Get_ID(), Util.GetValueOfInt(dscmp.Tables[0].Rows[j]["VAFAM_AssetComponent_ID"]), cmpQty, GetDateAcct(), assetCost, chargedDepreciation)))
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+                else if (Util.GetValueOfBool(obj.Get_Value("VAFAM_IsComponent")))
+                {
+                    assetCost = Util.GetValueOfDecimal(line.Get_Value("VAFAM_AssetGrossValue"));
+                    chargedDepreciation = Util.GetValueOfDecimal(line.Get_Value("VAFAM_SLMDepreciation"));
+
+                    asset = new MAsset(GetCtx(), Util.GetValueOfInt(obj.Get_Value("VAFAM_ParentAsset_ID")), Get_Trx());
+                    asset.Set_Value("VAFAM_AssetGrossValue", Util.GetValueOfDecimal(asset.Get_Value("VAFAM_AssetGrossValue")) - assetCost);
+                    asset.SetVAFAM_SLMDepreciation(asset.GetVAFAM_SLMDepreciation() - chargedDepreciation);
+
+                    // Set Asset to disposed if all the components are disposed.
+                    sql.Clear();
+                    sql.Append("SELECT COUNT(ast.A_Asset_ID) FROM VAFAM_ComponentAsset cmp INNER JOIN A_Asset ast ON ast.A_Asset_ID = cmp.VAFAM_AssetComponent_ID" +
+                                    " WHERE cmp.A_Asset_ID =" + Util.GetValueOfInt(obj.Get_Value("VAFAM_ParentAsset_ID")) + " AND ast.IsDisposed = 'N'");
+                    if (Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_Trx())) == 0)
+                    {
+                        asset.SetIsDisposed(true);
+                        asset.SetAssetDisposalDate(GetDateAcct());
+
+                        cmpQty = Util.GetValueOfDecimal(asset.Get_Value("Qty"));
+                        asset.Set_Value("VAFAM_DisposeQty", Util.GetValueOfDecimal(asset.Get_Value("VAFAM_DisposeQty")) + cmpQty);
+                        asset.SetQty(0);
+                    }
+
+                    // In Case of Reversal get Quantity of Asset from Disposal details.
+                    if (line.GetReversalDoc_ID() > 0)
+                    {
+                        sql.Clear();
+                        sql.Append(@"SELECT VAFAM_DisposedQty FROM VAFAM_DisposalDetails WHERE AND A_Asset_ID = " + Util.GetValueOfInt(obj.Get_Value("VAFAM_ParentAsset_ID"))
+                            + "C_InvoiceLine_ID = " + line.GetReversalDoc_ID());
+                        cmpQty = Decimal.Negate(Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, Get_Trx())));
+
+                        asset.SetQty(Util.GetValueOfDecimal(asset.Get_Value("Qty")) - cmpQty);
+                        asset.Set_Value("VAFAM_DisposeQty", Util.GetValueOfDecimal(asset.Get_Value("VAFAM_DisposeQty")) + cmpQty);
+
+                        asset.SetIsDisposed(false);
+                        asset.SetAssetDisposalDate(null);
+
+                        assetCost = Decimal.Negate(assetCost);
+                        chargedDepreciation = Decimal.Negate(chargedDepreciation);
+                    }
+
+                    if (!asset.Save())
+                    {
+                        ValueNamePair pp = VLogger.RetrieveError();
+                        _processMsg = Msg.GetMsg(GetCtx(), "AssetNotSaved") + ": " + asset.GetName()
+                            + (pp != null ? " - " + Msg.GetMsg(GetCtx(), pp.GetValue()) + " " + pp.ToString() : "");
+                        Get_TrxName().Rollback();
+                        return false;
+                    }
+
+                    if (!string.IsNullOrEmpty(CreateDisposalDetailsEntry(asset.GetM_Product_ID(), Util.GetValueOfInt(asset.Get_Value("C_Charge_ID")), line.Get_ID(),
+                        Util.GetValueOfInt(obj.Get_Value("VAFAM_ParentAsset_ID")), cmpQty, GetDateAcct(), assetCost, chargedDepreciation)))
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// to save record on disposal details tab against selected asset
+        /// </summary>
+        /// <param name="M_Product_ID"> Product ID</param>
+        /// <param name="C_Charge_ID">Charge ID</param>
+        /// <param name="LineID">Invoice Line ID</param>
+        /// <param name="Asset_ID">Asset ID</param>
+        /// <param name="qty">Qty Entered</param>
+        /// <param name="dateAcct">Account Date</param>
+        /// <param name="grossValue">Written Down Amount</param>
+        /// <param name="depAmt">Depreciation Amount</param>
+        /// <returns>If saved then return empty otherwise Error Msg</returns>
+        private string CreateDisposalDetailsEntry(int M_Product_ID, int C_Charge_ID, int LineID, int Asset_ID, decimal qty, DateTime? dateAcct, decimal grossValue, decimal depAmt)
+        {
+            MTable table = MTable.Get(GetCtx(), "VAFAM_DisposalDetails");
+            PO disDetails = table.GetPO(GetCtx(), 0, Get_TrxName());
+            disDetails.SetAD_Client_ID(GetAD_Client_ID());
+            disDetails.SetAD_Org_ID(GetAD_Org_ID());
+            disDetails.Set_ValueNoCheck("A_Asset_ID", Asset_ID);
+            if (M_Product_ID > 0)
+                disDetails.Set_Value("M_Product_ID", M_Product_ID);
+            if (C_Charge_ID > 0)
+                disDetails.Set_Value("C_Charge_ID", C_Charge_ID);
+            disDetails.Set_Value("VAFAM_DisposedQty", qty);
+            disDetails.Set_Value("VAFAM_GrossValDispAsset", grossValue);
+            disDetails.Set_Value("VAFAM_AccDepforDispAsset", depAmt);
+            disDetails.Set_Value("C_InvoiceLine_ID", LineID);
+            disDetails.Set_Value("IsDisposed", true);
+            disDetails.Set_Value("DateTrx", dateAcct);
+            if (!disDetails.Save())
+            {
+                Get_TrxName().Rollback();
+                ValueNamePair pp = VLogger.RetrieveError();
+                if (pp != null && !String.IsNullOrEmpty(pp.GetName()))
+                {
+                    _processMsg = pp.GetName();
+                    log.Info(_processMsg);
+                    return _processMsg;
+                }
+                else
+                {
+                    _processMsg = Msg.GetMsg(GetCtx(), "VAFAM_DisDetailsNotSaved");
+                    log.Info(_processMsg);
+                    return _processMsg;
+                }
+            }
+            return string.Empty;
+        }
+
 
         /// <summary>
         ///  Creation of allocation against invoice whose payment is done against order

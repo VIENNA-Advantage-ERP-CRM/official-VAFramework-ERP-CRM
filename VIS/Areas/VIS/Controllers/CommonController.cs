@@ -1860,7 +1860,13 @@ namespace VIS.Controllers
                     // VIS0060: Set Asset ID from Shipment Line to AR Invoice Line
                     if (_invoice.IsSOTrx() && inoutLine.GetA_Asset_ID() > 0)
                     {
-                        invoiceLine.SetA_Asset_ID(inoutLine.GetA_Asset_ID());                        
+                        invoiceLine.SetA_Asset_ID(inoutLine.GetA_Asset_ID());
+
+                        // VIS0060: Set Asset Quantity from Shipment to Invoice.
+                        if (inoutLine.Get_ColumnIndex("VAFAM_Quantity") >= 0)
+                        {
+                            invoiceLine.SetVAFAM_Quantity(inoutLine.GetVAFAM_Quantity());
+                        }
                     }
 
                     if (inoutLine.GetQtyEntered().CompareTo(inoutLine.GetMovementQty()) != 0)
