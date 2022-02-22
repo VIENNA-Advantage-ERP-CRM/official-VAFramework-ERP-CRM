@@ -1507,6 +1507,7 @@ namespace VAdvantage.Model
                     {
                         SetFileLocation(FILELOCATION_AzureBlobStorage);
 
+                        // Create client info object
                         if (cInfo == null)
                         {
                             if (AD_Client_ID > 0)
@@ -1519,20 +1520,20 @@ namespace VAdvantage.Model
                             }
                         }
 
-                        if(string.IsNullOrEmpty(cInfo.GetAD_WebServiceURL()))
+                        // Get file information
+                        FileInfo fInfo = new FileInfo(filePath + "\\" + folderKey + "\\" + fileName);
+                        //byte[] bytes = System.IO.File.ReadAllBytes(filePath + "\\" + folderKey + "\\" + fileName);
+
+                        string resURI = AzureBlobStorage.UploadFile(fInfo.FullName);
+
+                        // Add resURI to attachment table
+                        MAttachmentReference attRef = new MAttachmentReference(GetCtx(), 0, Get_Trx());
+
+                        attRef.SetAD_AttachmentLine_ID(AD_AttachmentLine_ID);
+                        attRef.SetAD_AttachmentRef(resURI);
+                        if (!attRef.Save(Get_Trx()))
                         {
-                            error.Append(Msg.GetMsg(GetCtx(), "VIS_AzureContainerUriEmpty"));
-                            return false;
-                        }
-
-                        // VIS264 - Get file information
-                        FileInfo fileInfo = new FileInfo(filePath + "\\" + folderKey + "\\" + fileName);
-
-                        string res = AzureBlobStorage.UploadFile(GetCtx(), cInfo.GetAD_WebServiceURL(), fileInfo.FullName);
-
-                        if (res != null)
-                        {
-                            error.Append(res);
+                            log.Severe("MAttachmentReference not saved " + VLogger.RetrieveError().Name);
                             return false;
                         }
 
@@ -1956,8 +1957,9 @@ namespace VAdvantage.Model
                     // VIS264 - If file location is Azure Blob Storage
                     else if(fileLocation == X_AD_Attachment.FILELOCATION_AzureBlobStorage)
                     {
-                        // VIS264 - Get file from Azure Blob container and save it in temp folder
+                        // Get file from Azure Blob container and save it in temp folder
 
+                        // Create client info object
                         MClientInfo cInfo = null;
                         if (AD_Client_ID > 0)
                         {
@@ -1968,24 +1970,24 @@ namespace VAdvantage.Model
                             cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
                         }
 
-                        string containerUri = cInfo.GetAD_WebServiceURL();
+                        string documentURI = GetDocumentURI(AD_Attachment_ID);
 
-                        if (!string.IsNullOrEmpty(containerUri))
+                        if (!string.IsNullOrEmpty(documentURI))
                         {
                             string fileName = Util.GetValueOfString(ds.Tables[0].Rows[0]["FileName"]);
 
                             string downloadFullPath = Path.Combine(filePath, "TempDownload", folder, fileName);
 
-                            string res = AzureBlobStorage.DownloadFile(GetCtx() ,containerUri, downloadFullPath, fileName);
+                            string resFile = AzureBlobStorage.DownloadFile(documentURI, downloadFullPath, fileName);
 
-                            if (res == null)
-                                return folder;
-                        }
-                        else
-                        {
-                            return Msg.GetMsg(GetCtx(), "VIS_AzureContainerUriEmpty");
-                        }
+                            byte[] byteData = Convert.FromBase64String(resFile);
 
+                            using (FileStream fs = new FileStream(downloadFullPath, FileMode.Create, FileAccess.Write))
+                            {
+                                fs.Write(byteData, 0, byteData.Length);
+                            }
+                            return folder;
+                        }
                         return "";
                     }
                     //unzipfile
