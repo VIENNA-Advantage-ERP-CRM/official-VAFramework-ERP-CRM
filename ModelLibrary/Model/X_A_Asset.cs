@@ -641,10 +641,10 @@ namespace VAdvantage.Model
         public void SetName(String Name)
         {
             if (Name == null) throw new ArgumentException("Name is mandatory.");
-            if (Name.Length > 60)
+            if (Name.Length > 200)
             {
-                log.Warning("Length > 60 - truncated");
-                Name = Name.Substring(0, 60);
+                log.Warning("Length > 200 - truncated");
+                Name = Name.Substring(0, 200);
             }
             Set_Value("Name", Name);
         }
@@ -799,10 +799,10 @@ namespace VAdvantage.Model
         public void SetValue(String Value)
         {
             if (Value == null) throw new ArgumentException("Value is mandatory.");
-            if (Value.Length > 40)
+            if (Value.Length > 100)
             {
-                log.Warning("Length > 40 - truncated");
-                Value = Value.Substring(0, 40);
+                log.Warning("Length > 100 - truncated");
+                Value = Value.Substring(0, 100);
             }
             Set_Value("Value", Value);
         }

@@ -1135,16 +1135,37 @@
     MLocationLookup.prototype.getLocation = function (key, isLatLong) {
         if (key == null)
             return null;
-        if (key in this.lookup) {
-            return this.lookup[key];
+        if (!isLatLong) {
+            if (key in this.lookup) {
+                return this.lookup[key];
+            }
         }
-
-        var data = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "Location" + "/GetLocation", { id: key })
-        this.lookup[key] = data.LocItem;
-        this.lstLatLng[key] = data.LocLatLng;
-        if (!isLatLong)
-            return data.LocItem;
-        return data.LocLatLng;
+        else {
+            if (key in this.lstLatLng) {
+                return this.lstLatLng[key];
+            }
+        }
+        // VIS0008 load location data based on setting in system config
+        if (VIS.context.getLocationBulkReload()) {
+            var data = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "Location" + "/GetLocation", { id: key })
+            this.lookup[key] = data.LocItem;
+            this.lstLatLng[key] = data.LocLatLng;
+            if (!isLatLong)
+                return data.LocItem;
+            return data.LocLatLng;
+        }
+        else {
+            var self = this;
+            VIS.dataContext.getJSONData(VIS.Application.contextUrl + "Location" + "/GetLocation", { id: key }, function (data) {
+                if (key in self.lookup) {
+                }
+                else {
+                    self.lookup[key] = data.LocItem;
+                    self.lstLatLng[key] = data.LocLatLng;
+                }
+            });
+            return null;
+        }
     };	//
 
     MLocationLookup.prototype.refreshLocation = function (key) {

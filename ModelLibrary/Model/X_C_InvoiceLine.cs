@@ -1164,6 +1164,11 @@ namespace VAdvantage.Model
         /** Get Warehouse.@return Storage Warehouse and Service Point */
         public int GetM_Warehouse_ID() { Object ii = Get_Value("M_Warehouse_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
+        /** Set Asset Quantity.
+@param VAFAM_Quantity Asset Quantity */
+        public void SetVAFAM_Quantity(Decimal? VAFAM_Quantity) { Set_Value("VAFAM_Quantity", (Decimal?)VAFAM_Quantity); }/** Get Asset Quantity.
+@return Asset Quantity */
+        public Decimal GetVAFAM_Quantity() { Object bd = Get_Value("VAFAM_Quantity"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
     }
 
 }

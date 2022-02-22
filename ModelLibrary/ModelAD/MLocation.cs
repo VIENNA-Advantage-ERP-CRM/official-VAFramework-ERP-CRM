@@ -65,6 +65,34 @@ namespace VAdvantage.Model
             return null;					//	not found
         }
 
+        // VIS0008 function to get location from cache based on datarow
+        /// <summary>
+        /// Get Location from Cache
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="dr"></param>
+        /// <param name="trxName"></param>
+        /// <returns></returns>
+        public static MLocation Get(Ctx ctx, DataRow dr, Trx trxName)
+        {
+            //	New
+            int key = Util.GetValueOfInt(dr["C_Location_ID"]);
+            if (key == 0)
+                return new MLocation(ctx, dr, trxName);
+            //
+            //int key = (int)C_Location_ID;
+            MLocation retValue = (MLocation)s_cache[key];
+            if (retValue != null)
+                return retValue;
+            retValue = new MLocation(ctx, dr, trxName);
+            if (retValue.Get_ID() != 0)		//	found
+            {
+                s_cache.Add(key, retValue);
+                return retValue;
+            }
+            return null;					//	not found
+        }
+
         /// <summary>
         /// Load Location with ID if Business Partner Location
         /// </summary>
