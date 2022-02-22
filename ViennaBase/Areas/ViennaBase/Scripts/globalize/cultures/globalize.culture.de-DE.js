@@ -148,6 +148,10 @@
             "AdminActDisabled": "Das Administratorkonto wurde deaktiviert",
             "AdminActExpired": "Das Administratorkonto ist abgelaufen",
             "AdminMaxFailedLoginAttempts": "Admin-Benutzerkonto ist gesperrt. Die maximale Anzahl fehlgeschlagener Anmeldeversuche überschreitet das definierte Limit. Bitte wenden Sie sich an den Administrator.",
+            "EnterVAVerCode": "Geben Sie OTP ein, das Sie auf Ihrem registrierten Mobiltelefon erhalten haben",
+            "SkipThisTime": "Diesmal überspringen",
+            "ResendOTP": "OTP erneut senden",
+            "CapsLockOn": "Die Feststelltaste ist aktiviert",
         }
 
 

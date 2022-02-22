@@ -66,7 +66,7 @@ namespace VAdvantage.Process
 
         protected override String DoIt()
         {
-
+            
             MInvoice obj = new MInvoice(GetCtx(), GetRecord_ID(), Get_Trx());
 
             // get Precision for rounding
@@ -91,6 +91,25 @@ namespace VAdvantage.Process
 
                 // when we are giving discount in terms of amount, then we have to calculate discount in term of percentage
                 discountPercentageOnTotalAmount = GetDiscountPercentageOnTotal(subTotal, _DiscountAmt, 12);
+
+                #region GetPriceListDetail
+                DataSet dsProductPrice = null;
+                bool isEnforcePriceLimit = false;
+                if (lines != null && lines.Length > 0)
+                {
+                    //VA230:Get pricelist version id
+                    int priceListVersionId = MPriceList.GetPriceListVersionId(obj.GetM_PriceList_ID(), out bool enforcePriceLimit);
+                    isEnforcePriceLimit = enforcePriceLimit;
+
+                    //Get distinct product ids from invoice lines
+                    string productIds = string.Join(",", lines.Select(x => x.GetM_Product_ID()).Distinct());
+                    if (priceListVersionId > 0 && !string.IsNullOrEmpty(productIds))
+                    {
+                        //Get product price detail based in pricelist versionid
+                        dsProductPrice = MPriceList.GetPriceListVersionProductPriceData(priceListVersionId, productIds);
+                    }
+                }
+                #endregion
 
                 for (int i = 0; i < lines.Length; i++)
                 {
@@ -117,6 +136,33 @@ namespace VAdvantage.Process
 
                     ln.SetAmountAfterApplyDiscount(Decimal.Round(Decimal.Add(ln.GetAmountAfterApplyDiscount(), discountAmountOnTotal), precision));
                     ln.SetPriceActual(Decimal.Round(Decimal.Subtract(ln.GetPriceActual(), discountAmountOnTotal), precision));
+                    
+                    #region EnforcePriceLimit
+                    //VA230:Check if EnforcePriceLimit true on selected pricelist
+                    if (isEnforcePriceLimit)
+                    {
+                        //Check null dataset
+                        if (dsProductPrice != null && dsProductPrice.Tables.Count > 0)
+                        {
+                            //Get price limit
+                            DataRow[] dr = dsProductPrice.Tables[0].Select("M_Product_ID=" + Util.GetValueOfInt(ln.GetM_Product_ID()) + " AND M_AttributeSetInstance_ID=" + Util.GetValueOfInt(ln.GetM_AttributeSetInstance_ID())
+                                + " AND C_UOM_ID=" + Util.GetValueOfInt(ln.GetC_UOM_ID()));
+                            decimal priceLimit = 0;
+                            if (dr != null && dr.Length > 0)
+                            {
+                                priceLimit = Util.GetValueOfDecimal(dr[0]["PriceLimit"]);
+                            }
+                            //If Actual price is less than limit price
+                            if (ln.GetPriceActual() < priceLimit)
+                            {
+                                Rollback();
+                                log.Info("ApplyDiscountInvoiceVendor : Price Actual cannot be less than limit price");
+                                return Msg.GetMsg(GetCtx(), "VIS_PriceActualIsCantLessThanPriceLimit");
+                            }
+                        }
+                    }
+                    #endregion
+
                     ln.SetPriceEntered(Decimal.Round(Decimal.Subtract(ln.GetPriceEntered(), discountAmountOnTotal), precision));
                     // set tax amount as 0, so that on before save we calculate tax again on discounted price
                     ln.SetTaxAmt(0);

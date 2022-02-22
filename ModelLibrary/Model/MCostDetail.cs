@@ -1202,7 +1202,8 @@ namespace VAdvantage.Model
                         }
                         else if (cQueue.Length == 0)
                         {
-                            cost.SetCurrentCostPrice(0);
+                            // not to set CC as ZERO, bcz if user want to do physical inventory then then can enter stock with previous CC.
+                            // cost.SetCurrentCostPrice(0);
                         }
                     }
                 }
@@ -1443,7 +1444,8 @@ namespace VAdvantage.Model
                     }
                     if (cQueue.Length == 0)
                     {
-                        cost.SetCurrentCostPrice(0);
+                        // not to set CC as ZERO, bcz if user want to do physical inventory then then can enter stock with previous CC.
+                        // cost.SetCurrentCostPrice(0);
                     }
 
                     if (invoice != null && ((invoice.IsSOTrx() && invoice.IsReturnTrx()) || (!invoice.IsSOTrx() && invoice.IsReturnTrx())))
@@ -3036,12 +3038,7 @@ namespace VAdvantage.Model
                             }
                             cost.Add(amt, qty);
                         }
-                        //	Real ASI - costing level Org
-                        // commented by Amit because cost queue is created from complete 16-12-2015
-                        //MCostQueue cq = MCostQueue.Get(product, GetM_AttributeSetInstance_ID(),
-                        //    mas, Org_ID, ce.GetM_CostElement_ID(), Get_TrxName());
-                        //cq.SetCosts(amt, qty, precision);
-                        //cq.Save();
+
                     }
                     else if (windowName.Equals("Material Receipt"))
                     {
@@ -3124,14 +3121,10 @@ namespace VAdvantage.Model
                         {
                             cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                         }
-                        //	Adjust Queue - costing level Org/ASI
-                        // commented by Amit because cost queue is created from complete 16-12-2015
-                        //MCostQueue.AdjustQty(product, M_ASI_ID,
-                        //    mas, Org_ID, ce, Decimal.Negate(qty), Get_TrxName());
+
                     }
+
                     //	Get Costs - costing level Org/ASI
-                    decimal totalPrice = 0;
-                    decimal totalQty = 0;
                     MCostQueue[] cQueue;
                     if (windowName == "Inventory Move")
                     {
@@ -3145,19 +3138,13 @@ namespace VAdvantage.Model
                     }
                     if (cQueue != null && cQueue.Length > 0)
                     {
-                        //for (int j = 0; j < cQueue.Length; j++)
-                        //{
-                        //    totalPrice += Decimal.Multiply(cQueue[j].GetCurrentCostPrice(), cQueue[j].GetCurrentQty());
-                        //    totalQty += cQueue[j].GetCurrentQty();
-                        //}
-                        //cost.SetCurrentCostPrice(Decimal.Round(Decimal.Divide(totalPrice, totalQty), precision));
-
                         // we have to update current cost price either of first record having current qty <> 0 (IN FIFO) and vice versa for LIFO
                         cost.SetCurrentCostPrice(Decimal.Round(cQueue[0].GetCurrentCostPrice(), precision));
                     }
                     else
                     {
-                        cost.SetCurrentCostPrice(0);
+                        // not to set CC as ZERO, bcz if user want to do physical inventory then then can enter stock with previous CC.
+                        // cost.SetCurrentCostPrice(0);
                     }
 
                     log.Finer("QtyAdjust - FiFo/Lifo - " + cost);
@@ -3940,7 +3927,8 @@ namespace VAdvantage.Model
                         }
                         if (cQueue.Length == 0)
                         {
-                            cost.SetCurrentCostPrice(0);
+                            // not to set CC as ZERO, bcz if user want to do physical inventory then then can enter stock with previous CC.
+                            // cost.SetCurrentCostPrice(0);
                         }
 
                         if (((RecordIsSOtrx && RecordIsReturnTrx)

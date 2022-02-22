@@ -105,16 +105,7 @@ namespace VAdvantage.Model
             string scheduleIP = null;
             try
             {
-                string machineIP = null;        // System.Net.Dns.GetHostEntry(Environment.MachineName).AddressList[0].ToString();
-                var host = System.Net.Dns.GetHostEntry(Environment.MachineName);
-                foreach (var ip in host.AddressList)
-                {
-                    if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                    {
-                        machineIP = ip.ToString();
-                        break;
-                    }
-                }
+                string machineIP = Classes.CommonFunctions.GetMachineIPPort();
                 _log.SaveError("Console VServer Machine IP : " + machineIP, "Console VServer Machine IP : " + machineIP);
 
                 idr = DataBase.DB.ExecuteReader(sql, null, null);
@@ -123,11 +114,11 @@ namespace VAdvantage.Model
                     scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM AD_Schedule WHERE 
                                                        AD_Schedule_ID = (SELECT AD_Schedule_ID FROM R_RequestProcessor WHERE R_RequestProcessor_ID =" + idr["R_RequestProcessor_ID"] + " )"));
 
-                    if (ExecuteProcess.Equals("2") && (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP)))
+                    if (ExecuteProcess.Equals("2") && (string.IsNullOrEmpty(scheduleIP) || machineIP.Equals(scheduleIP)))
                     {
                         list.Add(new MRequestProcessor(new Ctx(), idr, null));
                     }
-                    else if (!string.IsNullOrEmpty(scheduleIP) && machineIP.Contains(scheduleIP))
+                    else if (!string.IsNullOrEmpty(scheduleIP) && machineIP.Equals(scheduleIP))
                     {
                         list.Add(new MRequestProcessor(new Ctx(), idr, null));
                     }

@@ -496,12 +496,21 @@
 
         if (iconobj) {
             var iconpath = iconobj["ico"];
+            var iconstyle = iconobj["icohtml"];
+            //Apply style on icon
+            if (iconstyle) {
+                iconstyle = " style='" + iconstyle + "'";
+            }
+            else {
+                iconstyle = '';
+            }
+
             if (iconpath) {
                 if (iconpath.indexOf(" ") > -1) {
                     if (getsource)
                         return iconpath;
                     else
-                        return "<i class='" + iconpath + "'></i>";
+                        return "<i class='" + iconpath + "'" + iconstyle + "></i>";
                 }
                 else {
                     var img = iconpath.substring(iconpath.indexOf("Images/") + 7);
@@ -509,12 +518,22 @@
                     if (getsource)
                         return img;
                     else
-                        return "<img src='" + img + "'></img>";
+                        return "<img src='" + img + "'" + iconstyle + "></img>";
                 }
             }
         }
 
     };
+
+    MLookup.prototype.getLOVIconStyle = function (value) {
+        var iconobj = this.lookup[" " + value];
+
+        if (iconobj) {
+            var iconHTML = iconobj["icohtml"];
+            return iconHTML;
+        }
+    }
+
 
 
 
@@ -950,7 +969,18 @@
             }
 
             if (dr.tables[0].columns.length > 4) {
-                p["ico"] = dr.getString(4);
+               /// p["ico"] = dr.getString(4);
+                var iconInfo = dr.getString(4);
+                if (iconInfo && iconInfo.length > 0) {
+                    var ico = iconInfo.split('|');
+                    p["ico"] = ico[0];
+                    p["icohtml"] = ico[1];
+
+                }
+                else {
+                    p["ico"] = iconInfo;
+                }
+
                 p["icoType"] = dr.getString(5);
             }
             lookup[" " + key] = p;

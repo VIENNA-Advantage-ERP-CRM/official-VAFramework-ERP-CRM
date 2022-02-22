@@ -135,11 +135,28 @@ namespace VIS.Controllers
                     sqlIn.sql = Server.HtmlDecode(sqlIn.sql);
                     sqlIn.sqlDirect = Server.HtmlDecode(sqlIn.sqlDirect);
                     data = w.GetWindowRecords(sqlIn, fields, ctx, rowCount, sqlCount, AD_Table_ID, obscureFields);
+
                 }
             }
             return Json(JsonConvert.SerializeObject(data), JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Get Total card record count 
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="cardID"></param>
+        /// <returns></returns>
+        public int GetRecordCountWithCard(string sql, int cardID) {
+            int count = 0;
+            using (var w = new WindowHelper())
+            {
+                Ctx ctx = Session["ctx"] as Ctx;
+                sql = SecureEngineBridge.DecryptByClientKey(sql, ctx.GetSecureKey());
+                count= w.GetRecordCountWithCard(sql, cardID);
+            }
+                return count;
+        }
 
         protected override JsonResult Json(object data, string contentType, System.Text.Encoding contentEncoding, JsonRequestBehavior behavior)
         {
@@ -975,9 +992,9 @@ namespace VIS.Controllers
 
         //Card View
 
-        public JsonResult GetCardViewDetail(int AD_Window_ID, int AD_Tab_ID,int AD_CardView_ID)
+        public JsonResult GetCardViewDetail(int AD_Window_ID, int AD_Tab_ID,int AD_CardView_ID,string SQL)
         {
-            return Json(JsonConvert.SerializeObject(WindowHelper.GetCardViewDetail(AD_Window_ID, AD_Tab_ID, Session["ctx"] as Ctx, AD_CardView_ID)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(WindowHelper.GetCardViewDetail(AD_Window_ID, AD_Tab_ID, Session["ctx"] as Ctx, AD_CardView_ID,SQL)), JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult InsertUpdateDefaultSearch(int AD_Tab_ID, int AD_Table_ID, int AD_User_ID, int? AD_UserQuery_ID)

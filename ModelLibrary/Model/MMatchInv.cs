@@ -273,7 +273,7 @@ namespace VAdvantage.Model
                     ts = GetDateTrx();
                 SetDateAcct(ts);
             }
-            
+
             // 
             DataSet ds = DB.ExecuteDataset(@"SELECT  M_Storage.QtyOnHand,
                             NVL(currencyConvert(C_OrderLine.PriceEntered, C_Order.C_Currency_ID, " + GetCtx().GetContextAsInt("$C_Currency_ID") +
@@ -418,6 +418,11 @@ namespace VAdvantage.Model
             }
             finally
             {
+                if (idr != null)
+                {
+                    idr.Close();
+                    idr = null;
+                }
                 dt = null;
             }
 

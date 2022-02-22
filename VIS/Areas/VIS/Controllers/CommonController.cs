@@ -16,6 +16,7 @@ using VAdvantage.ProcessEngine;
 using VAdvantage.Utility;
 using VIS.Classes;
 using VIS.DataContracts;
+using VIS.Helpers;
 using VIS.Models;
 
 namespace VIS.Controllers
@@ -506,6 +507,21 @@ namespace VIS.Controllers
                 hasRecords = cmm.HasVersions(ctx, RowData);
             }
             return Json(new { result = hasRecords }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Method to get parent tab records ID.
+        /// </summary>
+        /// <param name="SelectColumn">Column  to be selected</param>
+        /// <param name="SelectTable">From table</param>
+        /// <param name="WhereColumn">Where column</param>
+        /// <param name="WhereValue">ID of child column</param>
+        /// <returns></returns>
+        public ActionResult GetZoomParentRec(string SelectColumn, string SelectTable, string WhereColumn, string WhereValue)
+        {
+            //ZoomChildTab
+            WindowHelper obj = new Helpers.WindowHelper();
+            return Json(JsonConvert.SerializeObject(obj.GetZoomParentRecord(SelectColumn, SelectTable, WhereColumn, WhereValue)), JsonRequestBehavior.AllowGet);
         }
     }
 
@@ -1442,6 +1458,13 @@ namespace VIS.Controllers
                         po.Set_Value("User2_ID", ol.GetUser2_ID());
                     }
 
+                    //190 - Get Print description from order line and set
+                    if (po.Get_ColumnIndex("PrintDescription") >= 0 && ol.Get_ColumnIndex("PrintDescription") >= 0)
+                        po.Set_Value("PrintDescription", ol.Get_Value("PrintDescription"));
+                    //Get Print description from invoice line if invoice line exists
+                    if (il != null && po.Get_ColumnIndex("PrintDescription") >= 0 && il.Get_ColumnIndex("PrintDescription") >= 0)
+                        po.Set_Value("PrintDescription", il.Get_Value("PrintDescription"));                    
+
                     //iol.SetDescription(ol.GetDescription());
                     //iol.SetC_Project_ID(ol.GetC_Project_ID());
                     //iol.SetC_ProjectPhase_ID(ol.GetC_ProjectPhase_ID());
@@ -1534,6 +1557,10 @@ namespace VIS.Controllers
                     {
                         po.Set_Value("User2_ID", il.GetUser2_ID());
                     }
+
+                    //190 - Get Print description from invoice line and set
+                    if (po.Get_ColumnIndex("PrintDescription") >= 0)
+                        po.Set_Value("PrintDescription", il.Get_Value("PrintDescription"));
                     //iol.SetDescription(il.GetDescription());
                     //iol.SetC_Project_ID(il.GetC_Project_ID());
                     //iol.SetC_ProjectPhase_ID(il.GetC_ProjectPhase_ID());
@@ -1869,6 +1896,12 @@ namespace VIS.Controllers
                         orderLine.GetQtyEntered()), 12, MidpointRounding.AwayFromZero));
                     }
 
+                    //190 - Get the Print description from SO and Set to invoice line 
+                    if (orderLine.Get_ColumnIndex("PrintDescription") >= 0)
+                        invoiceLine.Set_Value("PrintDescription", orderLine.Get_Value("PrintDescription"));
+                    if (inoutLine != null && inoutLine.Get_ColumnIndex("PrintDescription") >= 0)
+                        invoiceLine.Set_Value("PrintDescription", inoutLine.Get_Value("PrintDescription"));
+
                     if (Env.IsModuleInstalled("VA077_"))
                     {
                         invoiceLine.Set_Value("VA077_CNAutodesk", orderLine.Get_Value("VA077_CNAutodesk"));
@@ -1896,6 +1929,8 @@ namespace VIS.Controllers
                     if (inoutLine != null)
                     {
                         invoiceLine.SetClientOrg(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID());
+                        if (invoiceLine.Get_ColumnIndex("PrintDescription") >= 0)
+                            invoiceLine.Set_Value("PrintDescription", inoutLine.Get_Value("PrintDescription"));
 
                         if (Env.IsModuleInstalled("VA077_"))
                         {

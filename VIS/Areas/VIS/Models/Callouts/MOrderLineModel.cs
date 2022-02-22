@@ -69,6 +69,7 @@ namespace VIS.Models
 
             retDic["QtyReleased"] = Util.GetValueOfString(orderline.GetQtyReleased());
             retDic["IsDropShip"] = orderline.IsDropShip() ? "Y" : "N";
+            retDic["PrintDescription"] = Util.GetValueOfString(orderline.Get_Value("PrintDescription"));
 
             if (Env.IsModuleInstalled("VA077_"))
             {
@@ -1911,10 +1912,11 @@ namespace VIS.Models
             int _c_BPartner_Id = Util.GetValueOfInt(paramValue[1].ToString());
             //End Assign parameter value
             string sql = null;
+            DataSet dsProductInfo = null;
 
-            sql = "SELECT producttype FROM m_product where isactive = 'Y' AND M_Product_ID = " + _m_Product_Id;
-            string productType = Util.GetValueOfString(DB.ExecuteScalar(sql, null, null));
-            retDic["productType"] = Convert.ToString(productType);
+            //sql = "SELECT producttype FROM m_product where isactive = 'Y' AND M_Product_ID = " + _m_Product_Id;
+            //string productType = Util.GetValueOfString(DB.ExecuteScalar(sql, null, null));
+            //retDic["productType"] = Convert.ToString(productType);
 
             sql = "SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='ED011_'";
             int countEd011 = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
@@ -1925,14 +1927,25 @@ namespace VIS.Models
             int purchasingUom = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
             retDic["purchasingUom"] = Convert.ToString(purchasingUom);
 
-            sql = "SELECT C_UOM_ID FROM M_Product WHERE IsActive = 'Y' AND M_Product_ID = " + _m_Product_Id;
-            int headerUom = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-            retDic["headerUom"] = Convert.ToString(headerUom);
+            //sql = "SELECT C_UOM_ID FROM M_Product WHERE IsActive = 'Y' AND M_Product_ID = " + _m_Product_Id;
+            //int headerUom = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+            //retDic["headerUom"] = Convert.ToString(headerUom);
 
-            sql = "SELECT IsDropShip FROM M_Product WHERE IsActive = 'Y' AND M_Product_ID = " + _m_Product_Id;
-            string IsDropShip = Util.GetValueOfString(DB.ExecuteScalar(sql, null, null));
-            retDic["IsDropShip"] = Convert.ToString(IsDropShip);
+            //sql = "SELECT IsDropShip FROM M_Product WHERE IsActive = 'Y' AND M_Product_ID = " + _m_Product_Id;
+            //string IsDropShip = Util.GetValueOfString(DB.ExecuteScalar(sql, null, null));
+            //retDic["IsDropShip"] = Convert.ToString(IsDropShip);
 
+            sql = @"SELECT producttype, C_UOM_ID, IsDropShip, DocumentNote FROM M_Product WHERE
+                    IsActive = 'Y' AND M_Product_ID = " + _m_Product_Id;
+
+            dsProductInfo = DB.ExecuteDataset(sql);
+            if (dsProductInfo != null && dsProductInfo.Tables[0].Rows.Count > 0)
+            {
+                retDic["productType"]= Util.GetValueOfString(dsProductInfo.Tables[0].Rows[0]["producttype"]);
+                retDic["headerUom"] = Util.GetValueOfString(dsProductInfo.Tables[0].Rows[0]["C_UOM_ID"]);
+                retDic["IsDropShip"] = Util.GetValueOfString(dsProductInfo.Tables[0].Rows[0]["IsDropShip"]);
+                retDic["DocumentNote"] = Util.GetValueOfString(dsProductInfo.Tables[0].Rows[0]["DocumentNote"]);
+            }
             return retDic;
         }
 

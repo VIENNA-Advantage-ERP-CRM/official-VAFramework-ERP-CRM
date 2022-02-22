@@ -86,22 +86,26 @@
                             var $imgSpanCtrl = objControl["imgspan"];
 
                             var img = null;
+                            var imgStyle = null;
+
                             if (mField.lookup.displayType == VIS.DisplayType.List) {
                                 img = mField.lookup.getLOVIconElement(mField.getValue(), true, true);
+                                //Fetch style of icon for list from image window and apply style on that icon
+                                imgStyle = mField.lookup.getLOVIconStyle(mField.getValue());
                                 var imgSpan = "";
                                 if (!img && colValue) {
                                     imgSpan = colValue.substring(0, 1);
                                 }
                                 if (img) {
                                     if (img.contains("Images/")) {
-                                        $imgCtrl.attr('src', img);
+                                        $imgCtrl.attr('src', img).attr('style', imgStyle);
                                         $imgSpanCtrl.hide();
                                         $imgCtrl.show();
                                     }
                                     else {
                                         imgSpan = img;
                                         $imgSpanCtrl.empty();
-                                        $imgSpanCtrl.append("<i class='" + imgSpan + "'></i>");
+                                        $imgSpanCtrl.append("<i class='" + imgSpan + "' style='" + imgStyle + "'></i>");
                                         $imgSpanCtrl.show();
                                         $imgCtrl.hide();
                                     }
@@ -110,7 +114,7 @@
                                     if (!imgSpan)
                                         imgSpan = "";
                                     $imgSpanCtrl.empty();
-                                    $imgSpanCtrl.text(imgSpan);
+                                    $imgSpanCtrl.text(imgSpan).attr('style', imgStyle);
                                     $imgSpanCtrl.show();
                                     $imgCtrl.hide();
                                 }
@@ -342,25 +346,36 @@
 
                                 var img = null;
                                 var imgSpan = null;
+                                var imgStyle = null;
                                 var styleArr = null;
                                 if (VIS.DisplayType.List == mField.lookup.displayType) {
 
                                     img = mField.lookup.getLOVIconElement(mField.getValue(), true);
+                                    //Fetch style of icon for list from image window and apply style on that icon
+                                    imgStyle = mField.lookup.getLOVIconStyle(mField.getValue());
                                     if (!img && colValue) {
                                         imgSpan = colValue.substring(0, 1);
+                                    }
+                                    if (img && !img.contains("Images/")) {
+                                        imgSpan = img;//img contains First charater of Name or Identifier text
+                                        $imageSpan.text(imgSpan);//.attr('style', imgStyle);
+                                    }
+                                    else {
+                                        $image.attr('src', img);//.attr('style', imgStyle);
                                     }
                                 }
                                 else {
                                     colValue = VIS.Utility.Util.getIdentifierDisplayVal(colValue);
                                     img = getIdentifierImage(mField);
+                                    if (img && !img.contains("Images/")) {
+                                        imgSpan = img;//img contains First charater of Name or Identifier text
+                                        $imageSpan.text(imgSpan);
+                                    }
+                                    else {
+                                        $image.attr('src', img);
+                                    }
                                 }
-                                if (img && !img.contains("Images/")) {
-                                    imgSpan = img;//img contains First charater of Name or Identifier text
-                                    $imageSpan.text(imgSpan);
-                                }
-                                else {
-                                    $image.attr('src', img);
-                                }
+                                
 
                                 $divIcon.append($imageSpan);
                                 $divIcon.append($image);

@@ -23,7 +23,7 @@ namespace VIS
                                new { controller = "Home", action = "Index", id = UrlParameter.Optional }
                                , new[] { "VIS.Controllers" }
                                );
-
+            
             StyleBundle style = new StyleBundle("~/Areas/VIS/Content/VISstyle");
             //StyleBundle styleRTL = new StyleBundle("~/Areas/VIS/Content/VISstyleRTL");
 
@@ -36,7 +36,7 @@ namespace VIS
 
 
             //modScript.Include(
-            //     "~/Areas/VIS/Scripts/app/native-extension.js",
+            //      "~/Areas/VIS/Scripts/app/native-extension.js",
             //    "~/Areas/VIS/Scripts/app/utility.js",
             //    "~/Areas/VIS/Scripts/app/logger.js",
             //    "~/Areas/VIS/Scripts/app/controls.js",

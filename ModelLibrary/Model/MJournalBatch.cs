@@ -191,6 +191,11 @@ namespace VAdvantage.Model
             }
             catch (Exception ex)
             {
+                if (idr != null)
+                {
+                    idr.Close();
+                    idr = null;
+                }
                 log.Log(Level.SEVERE, sql, ex);
             }
             //

@@ -475,6 +475,9 @@ namespace ViennaAdvantage.Process
                     line.SetQtyEntered(sLine.GetQtyEntered());
                     line.SetQtyInvoiced(sLine.GetMovementQty());
                     line.Set_ValueNoCheck("IsDropShip", sLine.Get_Value("IsDropShip")); //Arpit Rai 20-Sept-2017              
+                    //190 - Set Print Description
+                    if (line.Get_ColumnIndex("PrintDescription") >= 0)
+                        line.Set_ValueNoCheck("PrintDescription", sLine.Get_Value("PrintDescription"));
 
                     // Change By Mohit Amortization process -------------
                     if (_CountVA038 > 0)
@@ -592,7 +595,7 @@ namespace ViennaAdvantage.Process
                     for (int index = 0; index < OrderDS.Tables[0].Rows.Count; index++)
                     {
                         ds = null;
-                        ChargesSql.Clear();
+                        ChargesSql.Clear();                        
                         ChargesSql.Append(" SELECT C_CHARGE_ID,                                             "
                                  + "   C_ORDERLINE_ID,                                                      "
                                  + "   C_ORDER_ID,                                                          "
@@ -603,14 +606,15 @@ namespace ViennaAdvantage.Process
                                  + "   QTYENTERED,                                                          "
                                  + "   C_UOM_ID,                                                            "
                                  + "   C_Tax_ID,                                                            "
-                                 + "   IsDropShip                                                           "
+                                 + "   IsDropShip,                                                          "
+                                 + "   PrintDescription                                                     "
                                  + " FROM C_ORDERLINE                                                       "
                                  + " WHERE C_ORDER_ID IN                                                    "
                                  + "   ( " + Util.GetValueOfInt(OrderDS.Tables[0].Rows[index]["C_ORDER_ID"])
                                  + "   )                                                                    "
                                  + " AND C_CHARGE_ID IS NOT NULL                                            "
                                  + " AND C_CHARGE_ID  > 0                                                   ");
-
+                       
 
                         ds = DB.ExecuteDataset(ChargesSql.ToString(), null, Get_Trx());
 
@@ -682,6 +686,10 @@ namespace ViennaAdvantage.Process
                                         }
                                     }
                                 }
+
+                                //190 - Get Print description and set
+                                if (line.Get_ColumnIndex("PrintDescription") >= 0)
+                                    line.Set_Value("PrintDescription", Util.GetValueOfString(ds.Tables[0].Rows[i]["PrintDescription"]));
 
                                 if (!line.Save())
                                 {

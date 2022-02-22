@@ -970,6 +970,7 @@ namespace VAdvantage.Model
             //	Set Inactive
             SetIsActive(false);
             SetDocumentNo(GetDocumentNo() + "^");
+            SetApprovalAmt(Env.ZERO);
             SetDocStatus(DOCSTATUS_Reversed);	//	for direct calls
             if (!Save() || IsActive())
                 throw new Exception("Cannot de-activate allocation");
