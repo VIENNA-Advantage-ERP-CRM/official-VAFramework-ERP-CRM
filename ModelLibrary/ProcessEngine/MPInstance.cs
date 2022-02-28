@@ -325,8 +325,8 @@ namespace VAdvantage.ProcessEngine
                 && Is_ValueChanged("IsProcessing"))
             {
                 //long ms = System.currentTimeMillis() - GetCreated().getTime();
-                long ms = CommonFunctions.CurrentTimeMillis() - GetCreated().Millisecond;
-                int seconds = (int)(ms / 1000);
+                long ms =DateTime.Now.Millisecond - GetCreated().Millisecond;
+                long seconds = (long)(ms / 1000);
                 if (seconds < 1)
                 {
                     seconds = 1;
