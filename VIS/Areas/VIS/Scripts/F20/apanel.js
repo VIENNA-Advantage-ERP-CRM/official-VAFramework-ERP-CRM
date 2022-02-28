@@ -1568,7 +1568,7 @@
             //}	//	query on first tab
             //ZoomChildTab
             if (isCheckCurrentTab) {
-                if (i === 0 && (query == null || (query.list != null && query.list.length == 0))) {
+                if (i === 0 && (query == null || (query.list != null && query.list.length == 0) || (query.list[0].code==-10))) {
                     this.curTab = gTab;
                     this.firstTabId = id;
                     setCurrent = true;
@@ -1579,6 +1579,8 @@
                     }
                 }
                 else {
+                    //if (i === 0)
+                    //    this.curTab = gTab;
                     if (query != null && query.list != null && query.list.length > 0) {
                         if (gTab.getKeyColumnName().toUpperCase() == query.list[0].columnName.toUpperCase()) {
                             this.firstTabId = id;
@@ -1591,6 +1593,7 @@
                             }
                         }
                     }
+
                 }//	query on first tab
             }
             var tabElement = null;
@@ -1612,6 +1615,12 @@
                 var gc = new VIS.GridController(true, true, id);
                 gc.initGrid(false, curWindowNo, this, gTab);
 
+                //if (i === 0 && !setCurrent) {
+                //    if (query != null) {
+                //        gTab.setQuery(query);
+                //    }
+                //}
+
                 //ZoomChildTab
 
                 // set current grid  controller
@@ -1619,14 +1628,17 @@
                     this.curGC = gc;
                     setCurrent = false;
                 }
+               
+
+
                 // Set first tab as current tab in case not marked aby tab as current tab.
                 if (i === 0 && !setCurrent) {
                     this.curTab = gTab;
                     this.curGC = gc;
                     this.firstTabId = id;
-                    if (query != null) {
-                        gTab.setQuery(query);
-                    }
+                    //if (query != null) {
+                    //    gTab.setQuery(query);
+                    //}
                 //}
 
 
@@ -1674,6 +1686,9 @@
             //}
             //TabChange Action Callback
             tabActions[i].onAction = this.onTabChange; //Perform tab Change
+        }
+        if (isCheckCurrentTab && (query != null && query.list != null && query.list.length > 0)) {
+            this.curTab.setQuery(query);
         }
 
         // for (var item = 0 ; item < this.vTabbedPane.Items.length ; item++) {
