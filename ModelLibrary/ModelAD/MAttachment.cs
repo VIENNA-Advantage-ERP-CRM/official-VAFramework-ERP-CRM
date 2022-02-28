@@ -1525,60 +1525,7 @@ namespace VAdvantage.Model
 
                 System.IO.File.Delete(zipfileName);
 
-                // VIS264 - If file upload location is Azure Blob Storage
-                if (GetFileLocation() == FILELOCATION_AzureBlobStorage)
-                {
-                    try
-                    {
-                        SetFileLocation(FILELOCATION_AzureBlobStorage);
-
-                        if (cInfo == null)
-                        {
-                            if (AD_Client_ID > 0)
-                            {
-                                cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
-                            }
-                            else
-                            {
-                                cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
-                            }
-                        }
-
-                        if (string.IsNullOrEmpty(cInfo.GetAD_WebServiceURL()))
-                        {
-                            error.Append(Msg.GetMsg(GetCtx(), "VIS_AzureContainerUriEmpty"));
-                            CleanUp(filePath + "\\" + folderKey + "\\" + fileName, zipfileName, filePath + "\\" + outputfileName, zipinput);
-                            return false;
-                        }
-
-                        string res = AzureBlobStorage.UploadFile(GetCtx(), cInfo.GetAD_WebServiceURL(), filePath + "\\" + outputfileName, outputfileName);
-
-                        if (res != null)
-                        {
-                            error.Append(res);
-                            CleanUp(filePath + "\\" + folderKey + "\\" + fileName, zipfileName, filePath + "\\" + outputfileName, zipinput);
-                            return false;
-                        }
-
-                        CleanUp(filePath + "\\" + folderKey + "\\" + fileName, zipfileName, filePath + "\\" + outputfileName, zipinput);
-                        return true;
-                    }
-                    catch (Exception e)
-                    {
-                        log.Severe("AzureBlobStorage Location->" + e.Message);
-                        error.Append(e.Message);
-                        if (!Force)
-                        {
-                            CleanUp(filePath + "\\" + folderKey + "\\" + fileName, zipfileName, filePath + "\\" + outputfileName, zipinput);
-                            return false;
-                        }
-                    }
-                    finally
-                    {
-                        CleanUp(filePath + "\\" + folderKey + "\\" + fileName, zipfileName, filePath + "\\" + outputfileName, zipinput);
-                    }
-                    return true;
-                }
+                
                 if (GetFileLocation() == FILELOCATION_FTPLocation)
                 {
                     try
@@ -1654,6 +1601,60 @@ namespace VAdvantage.Model
                     //SetBinaryData(zipData);
                     return true;
 
+                }
+                // VIS264 - If file upload location is Azure Blob Storage
+                else if (GetFileLocation() == FILELOCATION_AzureBlobStorage)
+                {
+                    try
+                    {
+                        SetFileLocation(FILELOCATION_AzureBlobStorage);
+
+                        if (cInfo == null)
+                        {
+                            if (AD_Client_ID > 0)
+                            {
+                                cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                            }
+                            else
+                            {
+                                cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                            }
+                        }
+
+                        if (string.IsNullOrEmpty(cInfo.GetAD_WebServiceURL()))
+                        {
+                            error.Append(Msg.GetMsg(GetCtx(), "VIS_AzureContainerUriEmpty"));
+                            CleanUp(filePath + "\\" + folderKey + "\\" + fileName, zipfileName, filePath + "\\" + outputfileName, zipinput);
+                            return false;
+                        }
+
+                        string res = AzureBlobStorage.UploadFile(GetCtx(), cInfo.GetAD_WebServiceURL(), filePath + "\\" + outputfileName, outputfileName);
+
+                        if (res != null)
+                        {
+                            error.Append(res);
+                            CleanUp(filePath + "\\" + folderKey + "\\" + fileName, zipfileName, filePath + "\\" + outputfileName, zipinput);
+                            return false;
+                        }
+
+                        CleanUp(filePath + "\\" + folderKey + "\\" + fileName, zipfileName, filePath + "\\" + outputfileName, zipinput);
+                        return true;
+                    }
+                    catch (Exception e)
+                    {
+                        log.Severe("AzureBlobStorage Location->" + e.Message);
+                        error.Append(e.Message);
+                        if (!Force)
+                        {
+                            CleanUp(filePath + "\\" + folderKey + "\\" + fileName, zipfileName, filePath + "\\" + outputfileName, zipinput);
+                            return false;
+                        }
+                    }
+                    finally
+                    {
+                        CleanUp(filePath + "\\" + folderKey + "\\" + fileName, zipfileName, filePath + "\\" + outputfileName, zipinput);
+                    }
+                    return true;
                 }
                 else
                 {
