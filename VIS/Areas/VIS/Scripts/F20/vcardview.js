@@ -70,8 +70,6 @@
         divDownArrow.on('click', function () { clkHandler('down') });
     }
 
-
-
     /**
          *	Card view Container
          * 
