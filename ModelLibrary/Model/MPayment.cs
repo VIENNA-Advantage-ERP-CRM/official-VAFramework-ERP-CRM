@@ -905,13 +905,13 @@ namespace VAdvantage.Model
                     {
                         // chcek -- cheque no exist on Post dated record or not
                         // check on first tab
+                        //VA230:Check duplicate checkno on bankaccount within bank
                         if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM  VA027_PostDatedCheck pdc 
                                                         INNER JOIN  C_BankAccount ba ON ba.C_BankAccount_ID = pdc.C_BankAccount_ID 
-                                                        INNER JOIN C_Bank b ON b.C_Bank_ID = ba.C_Bank_ID 
                                                         INNER JOIN C_DocType dt ON dt.C_DocType_ID = pdc.C_DocType_ID
                                                         WHERE pdc.IsActive = 'Y' AND pdc.DocStatus NOT IN ('RE', 'VO') AND dt.DocBaseType <> 'PDR'
-                                                        AND b.C_Bank_ID = (SELECT C_Bank_ID FROM c_bankaccount WHERE C_BankAccount_ID =" + GetC_BankAccount_ID() +
-                                    @" ) AND pdc.VA027_CheckNo = '" + GetCheckNo() + @"'", null, Get_Trx())) > 0)
+                                                        AND pdc.C_BankAccount_ID=" + GetC_BankAccount_ID() +
+                                    @" AND pdc.VA027_CheckNo = '" + GetCheckNo() + @"'", null, Get_Trx())) > 0)
                         {
                             log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_CheckNoAlreadyExistOnPDC"));
                             return false;
@@ -921,12 +921,11 @@ namespace VAdvantage.Model
                         if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM VA027_ChequeDetails cd 
                                                     INNER JOIN VA027_PostDatedCheck pdc ON pdc.VA027_PostDatedCheck_ID = cd.VA027_PostDatedCheck_ID
                                                     INNER JOIN  C_BankAccount ba ON ba.C_BankAccount_ID = pdc.C_BankAccount_ID 
-                                                    INNER JOIN C_Bank b ON b.C_Bank_ID = ba.C_Bank_ID  
                                                     INNER JOIN C_DocType dt ON dt.C_DocType_ID = pdc.C_DocType_ID 
                                                     WHERE cd.IsActive = 'Y' AND pdc.IsActive = 'Y' AND pdc.VA027_MultiCheque = 'Y' 
                                                     AND pdc.DocStatus NOT IN ('RE', 'VO') AND dt.DocBaseType <> 'PDR' AND
-                                                    b.C_Bank_ID = (SELECT C_Bank_ID FROM c_bankaccount WHERE C_BankAccount_ID =" + GetC_BankAccount_ID() +
-                                @" ) AND cd.VA027_CheckNo = '" + GetCheckNo() + @"'", null, Get_Trx())) > 0)
+                                                    pdc.C_BankAccount_ID =" + GetC_BankAccount_ID() +
+                                @" AND cd.VA027_CheckNo = '" + GetCheckNo() + @"'", null, Get_Trx())) > 0)
                         {
                             log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_CheckNoAlreadyExistOnPDC"));
                             return false;
@@ -942,13 +941,13 @@ namespace VAdvantage.Model
                 {
                     if (newRecord)
                     {
+                        //VA230:Check duplicate checkno on bankaccount within bank
                         if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM  C_Payment pdc
                         INNER JOIN  C_BankAccount ba ON ba.C_BankAccount_ID = pdc.C_BankAccount_ID 
-                        INNER JOIN C_Bank b ON b.C_Bank_ID = ba.C_Bank_ID  
                         INNER JOIN C_DocType dt ON dt.C_DocType_ID = pdc.C_DocType_ID
                         WHERE  pdc.IsActive = 'Y' AND
-                        b.C_Bank_ID = (SELECT C_Bank_ID FROM c_bankaccount WHERE C_BankAccount_ID =" + GetC_BankAccount_ID() +
-                                @" ) AND pdc.CheckNo = '" + GetCheckNo() + @"' AND dt.DocBaseType <> 'ARR' AND DocStatus NOT IN ('RE', 'VO')", null, Get_Trx())) > 0)
+                        pdc.C_BankAccount_ID =" + GetC_BankAccount_ID() +
+                                @" AND pdc.CheckNo = '" + GetCheckNo() + @"' AND dt.DocBaseType <> 'ARR' AND DocStatus NOT IN ('RE', 'VO')", null, Get_Trx())) > 0)
                         {
                             log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_CheckNoAlreadyExist"));
                             return false;
@@ -958,11 +957,10 @@ namespace VAdvantage.Model
                     {
                         if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM  C_Payment pdc
                         INNER JOIN  C_BankAccount ba ON ba.C_BankAccount_ID = pdc.C_BankAccount_ID 
-                        INNER JOIN C_Bank b ON b.C_Bank_ID = ba.C_Bank_ID 
                         INNER JOIN C_DocType dt ON dt.C_DocType_ID = pdc.C_DocType_ID
                         WHERE  pdc.IsActive = 'Y' AND
-                        b.C_Bank_ID = (SELECT C_Bank_ID FROM c_bankaccount WHERE C_BankAccount_ID =" + GetC_BankAccount_ID() +
-                        @" ) AND pdc.CheckNo = '" + GetCheckNo() + @"' AND dt.DocBaseType <> 'ARR'  AND DocStatus NOT IN ('RE', 'VO') 
+                        pdc.C_BankAccount_ID =" + GetC_BankAccount_ID() +
+                        @" AND pdc.CheckNo = '" + GetCheckNo() + @"' AND dt.DocBaseType <> 'ARR'  AND DocStatus NOT IN ('RE', 'VO') 
                         AND pdc.C_Payment_ID <> " + GetC_Payment_ID(), null, Get_Trx())) > 0)
                         {
                             log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_CheckNoAlreadyExist"));
