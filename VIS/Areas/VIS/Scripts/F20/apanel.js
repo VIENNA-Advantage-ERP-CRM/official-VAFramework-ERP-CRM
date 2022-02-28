@@ -1959,15 +1959,29 @@
             tis.isDefaultFocusSet = false;
             tis.curGC.navigateRelative(+1);
         } else if (tis.aMulti.getAction() === action) {
+            tis.setLastView("");
+            if (!tis.curGC.getIsSingleRow() && tis.curGC.getIsCardRow()) {
+                tis.setLastView("Card");
+            }
+            else if (!tis.curGC.getIsSingleRow()) {
+                tis.setLastView("Multi");
+            }
+            //    tis.setLastView("Multi");
+            //else 
+           
             tis.aMulti.setPressed(!tis.curGC.getIsSingleRow());
             tis.aCard.setPressed(false);
-            tis.setLastView("");
             tis.curGC.switchRowPresentation();
         } else if (tis.aCard.getAction() === action) {
             tis.setLastView("");
-            if (tis.curGC.getIsCardRow())
+            if (tis.curGC.getIsCardRow()) {
+                //tis.setLastView("Multi");
                 tis.curGC.switchMultiRow();
-            else { tis.curGC.switchCardRow(); }
+            }
+            else {
+                //tis.setLastView("Card");
+                tis.curGC.switchCardRow();
+            }
             tis.aMulti.setPressed(false);
             // tis.aBack.setEnabled(!tis.curGC.getIsCardRow());
         } else if (tis.aMap.getAction() === action) {
@@ -1978,10 +1992,10 @@
             if (tis.getLastView() == "Multi") {
                 tis.aMulti.setPressed(!tis.curGC.getIsSingleRow());
                 tis.aCard.setPressed(false);
-                tis.curGC.switchRowPresentation();
+                tis.curGC.switchMultiRow(true);
             }
             else if (tis.getLastView() == "Card") {
-                tis.curGC.switchCardRow();
+                tis.curGC.switchCardRow(true);
                 tis.aMulti.setPressed(false);
                 tis.aCard.setPressed(true);
             }
