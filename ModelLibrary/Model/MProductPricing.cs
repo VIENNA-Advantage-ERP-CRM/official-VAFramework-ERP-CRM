@@ -195,15 +195,13 @@ namespace VAdvantage.Model
         /// <returns>true if calculated</returns>
         private bool CalculatePLV()
         {
-            String sql = "";            
+            String sql = "";
             if (_M_Product_ID == 0 || _M_PriceList_Version_ID == 0)
                 return false;
             // Check For Advance Pricing Module
-            Tuple<String, String, String> mInfo = null;
-            if (Env.HasModulePrefix("VAPRC_", out mInfo))
+            if (Env.IsModuleInstalled("VAPRC_"))
             {
-                Tuple<String, String, String> mInfo1 = null;
-                if (Env.HasModulePrefix("ED011_", out mInfo1))
+                if (Env.IsModuleInstalled("ED011_"))
                 {
                     /** Price List - Ensuring valid Uom id ** Dt:01/02/2021 ** Modified By: Kumar **/
                     if (_C_UOM_ID <= 0)
@@ -212,7 +210,6 @@ namespace VAdvantage.Model
                         string _sql = null;
                         _sql = "SELECT C_UOM_ID FROM M_Product WHERE  M_Product_ID=" + _M_Product_ID;
                         _C_UOM_ID = Util.GetValueOfInt(DB.ExecuteScalar(_sql));
-                        //end
                     }
                     sql = "SELECT bomPriceStdUOM(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID , pp.C_UOM_ID) AS PriceStd,"	//	1
                        + " bomPriceListUOM(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID , pp.C_UOM_ID) AS PriceList,"		//	2
@@ -308,62 +305,22 @@ namespace VAdvantage.Model
             if (_M_Product_ID == 0)
                 return false;
 
-            //	Get Price List
-            /**
-            if (_M_PriceList_ID == 0)
-            {
-                String sql = "SELECT M_PriceList_ID, IsTaxIncluded "
-                    + "FROM M_PriceList pl"
-                    + " INNER JOIN M_Product p ON (pl.AD_Client_ID=p.AD_Client_ID) "
-                    + "WHERE M_Product_ID=? "
-                    + "ORDER BY IsDefault DESC";
-                PreparedStatement pstmt = null;
-                try
-                {
-                    pstmt = DataBase.prepareStatement(sql);
-                    pstmt.setInt(1, _M_Product_ID);
-                    ResultSet dr = pstmt.executeQuery();
-                    if (dr.next())
-                    {
-                        _M_PriceList_ID = dr.getInt(1);
-                        _isTaxIncluded = "Y".equals(dr.getString(2));
-                    }
-                    dr.close();
-                    pstmt.close();
-                    pstmt = null;
-                }
-                catch (Exception e)
-                {
-                    log.Log(Level.SEVERE, "calculatePL (PL)", e);
-                }
-                finally
-                {
-                    try
-                    {
-                        if (pstmt != null)
-                            pstmt.close ();
-                    }
-                    catch (Exception e)
-                    {}
-                    pstmt = null;
-                }
-            }
-            /** **/
             if (_M_PriceList_ID == 0)
             {
                 log.Log(Level.SEVERE, "No PriceList");
-                //Trace.printStack();//*******************************************
                 return false;
             }
 
             //	Get Prices for Price List
             // Check For Advance Pricing Module
-            Tuple<String, String, String> mInfo = null;
-            if (Env.HasModulePrefix("VAPRC_", out mInfo))
+            if (Env.IsModuleInstalled("VAPRC_"))
             {
-                Tuple<String, String, String> mInfo1 = null;
-                if (Env.HasModulePrefix("ED011_", out mInfo1))
+                if (Env.IsModuleInstalled("ED011_"))
                 {
+                    if (_C_UOM_ID <= 0)
+                    {
+                        _C_UOM_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_UOM_ID FROM M_Product WHERE  M_Product_ID=" + _M_Product_ID));
+                    }
                     sql = "SELECT bomPriceStdUOM(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID , pp.C_UOM_ID) AS PriceStd,"	//	1
                        + " bomPriceListUOM(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID , pp.C_UOM_ID) AS PriceList,"		//	2
                        + " bomPriceLimitUOM(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID , pp.C_UOM_ID) AS PriceLimit,"	//	3
@@ -419,7 +376,6 @@ namespace VAdvantage.Model
             try
             {
                 dr = ExecuteQuery.ExecuteReader(sql, null);
-                // ResultSet dr = pstmt.executeQuery();
                 while (!_calculated && dr.Read())
                 {
                     DateTime? plDate = Utility.Util.GetValueOfDateTime(dr[4]);
@@ -479,12 +435,14 @@ namespace VAdvantage.Model
             if (_M_Product_ID == 0 || _M_PriceList_ID == 0)
                 return false;
             // Check For Advance Pricing Module
-            Tuple<String, String, String> mInfo = null;
-            if (Env.HasModulePrefix("VAPRC_", out mInfo))
+            if (Env.IsModuleInstalled("VAPRC_"))
             {
-                Tuple<String, String, String> mInfo1 = null;
-                if (Env.HasModulePrefix("ED011_", out mInfo1))
+                if (Env.IsModuleInstalled("ED011_"))
                 {
+                    if (_C_UOM_ID <= 0)
+                    {
+                        _C_UOM_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_UOM_ID FROM M_Product WHERE  M_Product_ID=" + _M_Product_ID));
+                    }
                     sql = "SELECT bomPriceStdUOM(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID , pp.C_UOM_ID) AS PriceStd,"	//	1
                         + " bomPriceListUOM(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID , pp.C_UOM_ID) AS PriceList,"		//	2
                         + " bomPriceLimitUOM(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID , pp.C_UOM_ID) AS PriceLimit,"	//	3
