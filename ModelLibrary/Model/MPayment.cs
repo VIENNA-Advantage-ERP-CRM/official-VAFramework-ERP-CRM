@@ -906,7 +906,7 @@ namespace VAdvantage.Model
                         // chcek -- cheque no exist on Post dated record or not
                         // check on first tab
                         //VA230:Check duplicate checkno on bankaccount within bank
-                        if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM  VA027_PostDatedCheck pdc 
+                        if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(pdc.VA027_PostDatedCheck_ID) FROM  VA027_PostDatedCheck pdc 
                                                         INNER JOIN  C_BankAccount ba ON ba.C_BankAccount_ID = pdc.C_BankAccount_ID 
                                                         INNER JOIN C_DocType dt ON dt.C_DocType_ID = pdc.C_DocType_ID
                                                         WHERE pdc.IsActive = 'Y' AND pdc.DocStatus NOT IN ('RE', 'VO') AND dt.DocBaseType <> 'PDR'
@@ -918,7 +918,7 @@ namespace VAdvantage.Model
                         }
 
                         // check on Check Detail tab
-                        if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM VA027_ChequeDetails cd 
+                        if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(pdc.VA027_PostDatedCheck_ID) FROM VA027_ChequeDetails cd 
                                                     INNER JOIN VA027_PostDatedCheck pdc ON pdc.VA027_PostDatedCheck_ID = cd.VA027_PostDatedCheck_ID
                                                     INNER JOIN  C_BankAccount ba ON ba.C_BankAccount_ID = pdc.C_BankAccount_ID 
                                                     INNER JOIN C_DocType dt ON dt.C_DocType_ID = pdc.C_DocType_ID 
@@ -942,7 +942,7 @@ namespace VAdvantage.Model
                     if (newRecord)
                     {
                         //VA230:Check duplicate checkno on bankaccount within bank
-                        if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM  C_Payment pdc
+                        if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(pdc.C_Payment_ID) FROM  C_Payment pdc
                         INNER JOIN  C_BankAccount ba ON ba.C_BankAccount_ID = pdc.C_BankAccount_ID 
                         INNER JOIN C_DocType dt ON dt.C_DocType_ID = pdc.C_DocType_ID
                         WHERE  pdc.IsActive = 'Y' AND
@@ -955,7 +955,7 @@ namespace VAdvantage.Model
                     }
                     else
                     {
-                        if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM  C_Payment pdc
+                        if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(pdc.C_Payment_ID) FROM  C_Payment pdc
                         INNER JOIN  C_BankAccount ba ON ba.C_BankAccount_ID = pdc.C_BankAccount_ID 
                         INNER JOIN C_DocType dt ON dt.C_DocType_ID = pdc.C_DocType_ID
                         WHERE  pdc.IsActive = 'Y' AND
