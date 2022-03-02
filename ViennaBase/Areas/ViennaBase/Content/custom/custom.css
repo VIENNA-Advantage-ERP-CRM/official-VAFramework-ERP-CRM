@@ -572,6 +572,11 @@ html[dir="rtl"] .vis-ctrl-switchSlider {
     position: relative;
 }
 
+.vis-grid-row-td-icon-center button.vis-ev-col-img-ctrl {
+    position: relative;
+    height:40px;
+}
+
 .vis-grid-row-td-icon-center span.vis-img-ctrl-icon {
     right: 18px;
     background: gray;
