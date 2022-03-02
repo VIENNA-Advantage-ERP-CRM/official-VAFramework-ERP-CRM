@@ -931,7 +931,7 @@
                         return val;
                     }
                     //return VIS.Msg.getElement1('AD_Image_ID') + '-' + val;
-                    val = val.replace("Images/", "Images/Thumb32x32/");
+                    val = val.toString().replace("Images/", "Images/Thumb32x32/");
                     //var img = $('<img>').attr("src", VIS.Application.contextUrl + val);
                     var img;
                     if (customClass) {
