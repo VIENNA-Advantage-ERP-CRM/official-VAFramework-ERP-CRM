@@ -581,6 +581,7 @@
         this.VCardRightPanel.reset();
         this.getGroupHeader().empty();
         this.groupCtrls.length = 0;
+        this.editID = 0;
     }
        
     /**
