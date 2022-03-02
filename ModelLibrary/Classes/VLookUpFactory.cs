@@ -310,18 +310,18 @@ namespace VAdvantage.Classes
             String displayCol = "AD_Ref_List.Name";
             if (Utility.Env.IsBaseLanguage(language, "AD_Ref_List"))
             {
-                realSQL.Append(displayCol + ", AD_Ref_List.IsActive, (SELECT  NVL(FontName,ImageURL)||'|'|| NVL(FontStyle,'')  FROM AD_Image WHERE AD_Image_ID=AD_Ref_List.AD_Image_ID) AS Image,(SELECT ListDisplayOption FROM AD_Reference WHERE AD_Reference_ID=AD_Ref_List.AD_Reference_ID) AS ListDisplayOption FROM AD_Ref_List AD_Ref_List");
+                realSQL.Append(displayCol + ", AD_Ref_List.IsActive, ( NVL(FontName,ImageURL)||'|'|| NVL(FontStyle,'')) AS Image,(SELECT ListDisplayOption FROM AD_Reference WHERE AD_Reference_ID=AD_Ref_List.AD_Reference_ID) AS ListDisplayOption FROM AD_Ref_List AD_Ref_List");
             }
             else
             {
                 displayCol = "trl.Name";
-                realSQL.Append(displayCol + ", AD_Ref_List.IsActive, (SELECT  NVL(FontName,ImageURL)||'|'|| NVL(FontStyle,'')  FROM AD_Image WHERE AD_Image_ID=AD_Ref_List.AD_Image_ID) AS Image, (SELECT ListDisplayOption FROM AD_Reference WHERE AD_Reference_ID=AD_Ref_List.AD_Reference_ID) AS ListDisplayOption "
+                realSQL.Append(displayCol + ", AD_Ref_List.IsActive, (NVL(FontName,ImageURL)||'|'|| NVL(FontStyle,'')) AS Image, (SELECT ListDisplayOption FROM AD_Reference WHERE AD_Reference_ID=AD_Ref_List.AD_Reference_ID) AS ListDisplayOption "
                     + " FROM AD_Ref_List AD_Ref_List INNER JOIN AD_Ref_List_Trl trl "
                     + " ON (AD_Ref_List.AD_Ref_List_ID=trl.AD_Ref_List_ID AND trl.AD_Language='")
                         .Append(language.GetAD_Language()).Append("')");
             }
             //realSQL.Append(" INNER JOIN AD_Reference ref ON (ref.AD_Reference_ID=AD_Ref_List.AD_Reference_ID) ");
-            //realSQL.Append(" LEFT OUTER JOIN AD_Image img ON (AD_Ref_List.AD_Image_ID=img.AD_Image_ID) ");
+            realSQL.Append(" LEFT OUTER JOIN AD_Image img ON (AD_Ref_List.AD_Image_ID=img.AD_Image_ID) ");
 
             realSQL.Append(" WHERE AD_Ref_List.AD_Reference_ID=").Append(AD_Reference_Value_ID);
             realSQL.Append(" ORDER BY 2");
