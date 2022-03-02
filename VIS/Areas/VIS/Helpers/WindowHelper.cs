@@ -2285,7 +2285,7 @@ namespace VIS.Helpers
                 }
                 else
                 {
-                    condition = whereCondition+" "+ orderBY;
+                    condition = condition + " "+ orderBY;
                 }
                 if (!string.IsNullOrEmpty(condition))
                 {
