@@ -266,8 +266,9 @@
             this.calculateWidth(w);
         }
 
-        this.setBusy=function(isBusy) {
-            bsyDiv.css("display", isBusy ? 'block' : 'none');
+        this.setBusy = function (isBusy) {
+            this.aPanel.setBusy(false);
+           // bsyDiv.css("display", isBusy ? 'block' : 'none');
         };
 
         this.calculateWidth = function (width) {
@@ -580,6 +581,7 @@
         this.VCardRightPanel.reset();
         this.getGroupHeader().empty();
         this.groupCtrls.length = 0;
+        this.editID = 0;
     }
        
     /**
