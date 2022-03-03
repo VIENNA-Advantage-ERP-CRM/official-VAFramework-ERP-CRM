@@ -582,21 +582,34 @@
         function getObscureValue(type, value) {
             if (value) {
                 if (type == obscureTypes.DigitButLast4) {
-                    //return value.replace(/\d(?=\w{4})/g, "*");
                     return value.replace(/[^a-zA-Z0-9\.\-\@]/gi, '').replace(/[0-9](?=[\w\.\-\@]{4})/g, "*");
                 }
                 else if (type == obscureTypes.DigitButFirstLast4) {
-                    //return value.replace(/(?<=\w{4})[\d](?=\w{4})/g, "*");
-                    return value.replace(/[^a-zA-Z0-9\.\-\@\s]/gi, '').replace(/(?<=[\w\.\-\@\s]{4})[0-9](?=[\w\.\-\@\s]{4})/g, "*");
+                    value = value.replace(/[^a-zA-Z0-9\.\-\@\s]/gi, '');
+                    var len = value.length;
+                    var retVal = '';
+                    for (var i = 0; i < len; i++) {
+                        var cur = value[i];
+                        if ((i > 3 && i < len - 4) && !isNaN(cur))  // skip first four and last four 
+                            cur = '*'
+                        retVal += cur;
+                    }
+                    return retVal;
                 }
                 else if (type == obscureTypes.AlphanumButLast4) {
                     return value.replace(/[^a-zA-Z0-9\.\s\@\-]/gi, '').replace(/[a-zA-Z0-9\s\.\@\-](?=[a-zA-Z0-9\s\.\@\-]{4})/g, "*");
-                    //return value.replace(/[_\W]/g, "*").replace(/[^a-z0-9\s]/gi, '').replace(/[\w](?=\w{4})/g, "*");
                 }
                 else if (type == obscureTypes.AlphaNumButFirstLast4) {
-                    //.replace(/[^a-z0-9\.\s]/gi, '').replace(/(?<=\w{4})[\w]|[\W](?=\w{4})/g, "*")
-                    //return value.replace(/[_\W]/g, "*").replace(/[^a-z0-9\s]/gi, '').replace(/(?<=\w{4})[\w](?=\w{4})/g, "*");
-                    return value.replace(/[^a-zA-Z0-9\@\.\s\-]/gi, '').replace(/(?<=[a-zA-Z0-9\@\.\s\-]{4})([\w]|[\W])(?=[a-zA-Z0-9\s\@\.\-]{4})/g, "*");
+                    value = value.replace(/[^a-zA-Z0-9\@\.\s\-]/gi, '');
+                    var len = value.length;
+                    var retVal = '';
+                    for (var i = 0; i < len; i++) {
+                        var cur = value[i];
+                        if (i > 3 && i < len - 4)  // skip first four and last four 
+                            cur = '*'
+                        retVal += cur;
+                    }
+                    return retVal;
                 }
             }
         };
