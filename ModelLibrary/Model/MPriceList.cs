@@ -281,13 +281,46 @@ namespace VAdvantage.Model
         /// Author:VA230
         /// </summary>
         /// <param name="priceListVersionId">PriceList VersionId</param>
-        /// <param name="productIds">comma seperated product ids</param>
+        /// <param name="productIds">product ids list</param>
         /// <returns>Product Price Dataset</returns>
-        public static DataSet GetPriceListVersionProductPriceData(int priceListVersionId, string productIds)
+        public static DataSet GetPriceListVersionProductPriceData(int priceListVersionId, List<int> productIds)
         {
-            string sql = @"SELECT PriceLimit,NVL(M_AttributeSetInstance_ID,0) AS M_AttributeSetInstance_ID,C_UOM_ID,M_Product_ID FROM M_ProductPrice PP 
-                            WHERE PP.IsActive='Y' AND PP.M_PriceList_Version_ID=" + priceListVersionId + " AND PP.M_Product_ID IN (" + productIds + ")";
-            DataSet ds = DB.ExecuteDataset(sql);
+            decimal totalPages = productIds.Count();
+            //to fixed 999 ids per page
+            totalPages = Math.Ceiling(totalPages / 999);
+
+            StringBuilder sql = new StringBuilder();
+            sql.Append(@"SELECT PriceLimit,NVL(M_AttributeSetInstance_ID,0) AS M_AttributeSetInstance_ID,C_UOM_ID,M_Product_ID FROM M_ProductPrice PP 
+                            WHERE PP.IsActive='Y' AND PP.M_PriceList_Version_ID=" + priceListVersionId);
+
+            List<string> product_Ids = new List<string>();
+            //loop through each page
+            for (int i = 0; i <= totalPages - 1; i++)
+            {
+                //get comma seperated product ids max 999
+                product_Ids.Add(string.Join(",", productIds.Select(r => r.ToString()).Skip(i * 999).Take(999)));
+            }
+            if (product_Ids.Count > 0)
+            {
+                //append product in sql statement use OR keyword when records are more than 999
+                for (int i = 0; i < product_Ids.Count; i++)
+                {
+                    if (i == 0)
+                    {
+                        sql.Append(@" AND (");
+                    }
+                    else
+                    {
+                        sql.Append(" OR ");
+                    }
+                    sql.Append(" PP.M_Product_ID IN (" + product_Ids[i] + @")");
+                    if (i == product_Ids.Count - 1)
+                    {
+                        sql.Append(" ) ");
+                    }
+                }
+            }
+            DataSet ds = DB.ExecuteDataset(sql.ToString());
             return ds;
         }
     }

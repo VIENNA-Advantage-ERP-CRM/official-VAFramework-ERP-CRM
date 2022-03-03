@@ -66,7 +66,7 @@ namespace VAdvantage.Process
 
         protected override String DoIt()
         {
-            
+
             MInvoice obj = new MInvoice(GetCtx(), GetRecord_ID(), Get_Trx());
 
             // get Precision for rounding
@@ -101,9 +101,15 @@ namespace VAdvantage.Process
                     int priceListVersionId = MPriceList.GetPriceListVersionId(obj.GetM_PriceList_ID(), out bool enforcePriceLimit);
                     isEnforcePriceLimit = enforcePriceLimit;
 
+                    //Get overwrite pricelimit from logined Role
+                    bool isOverwritePriceLimit = MRole.GetDefault(GetCtx()).IsOverwritePriceLimit();
+                    //if enforcepricelimit on selected pricelist and OverwritePriceLimit(from logined role) are true then overwrite enforcepricelimit
+                    if (isEnforcePriceLimit && isOverwritePriceLimit)
+                        isEnforcePriceLimit = false;
+
                     //Get distinct product ids from invoice lines
-                    string productIds = string.Join(",", lines.Select(x => x.GetM_Product_ID()).Distinct());
-                    if (priceListVersionId > 0 && !string.IsNullOrEmpty(productIds))
+                    List<int> productIds = lines.Select(x => x.GetM_Product_ID()).Distinct().ToList();
+                    if (priceListVersionId > 0 && productIds.Count > 0)
                     {
                         //Get product price detail based in pricelist versionid
                         dsProductPrice = MPriceList.GetPriceListVersionProductPriceData(priceListVersionId, productIds);
@@ -136,7 +142,7 @@ namespace VAdvantage.Process
 
                     ln.SetAmountAfterApplyDiscount(Decimal.Round(Decimal.Add(ln.GetAmountAfterApplyDiscount(), discountAmountOnTotal), precision));
                     ln.SetPriceActual(Decimal.Round(Decimal.Subtract(ln.GetPriceActual(), discountAmountOnTotal), precision));
-                    
+
                     #region EnforcePriceLimit
                     //VA230:Check if EnforcePriceLimit true on selected pricelist
                     if (isEnforcePriceLimit)

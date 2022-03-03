@@ -498,6 +498,10 @@
     content: "\e947";
 }
 
+.vis-map:before {
+    content: "\e947";
+}
+
 .vis-locator:before {
     content: "\e948";
 }
