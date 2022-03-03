@@ -102,9 +102,9 @@ namespace VAdvantage.Process
 
                     //Get overwrite pricelimit from logined Role
                     bool isOverwritePriceLimit = MRole.GetDefault(GetCtx()).IsOverwritePriceLimit();
-                    //if enforce pricelimit on selected pricelist false then give preference to overwrite pricelimit set on logined role
-                    if (!isEnforcePriceLimit)
-                        isEnforcePriceLimit = isOverwritePriceLimit;
+                    //if enforcepricelimit on selected pricelist and OverwritePriceLimit(from logined role) are true then overwrite enforcepricelimit
+                    if (isEnforcePriceLimit && isOverwritePriceLimit)
+                        isEnforcePriceLimit = false;
 
                     //Get distinct product ids from invoice lines
                     List<int> productIds = lines.Select(x => x.GetM_Product_ID()).Distinct().ToList();
