@@ -1686,7 +1686,7 @@
                 this.gridTable.setDoPaging(true);// _gridTable.DoPaging = false;
                 refresh = false;
             }
-        }       
+        }
 
         this.oldQuery = this.query.getWhereClause();
         this.vo.onlyCurrentDays = onlyCurrentDays;
@@ -1778,7 +1778,7 @@
             }	//	isDetail
         }
 
-        
+
 
         //	Final Query
         if (this.query.getIsActive()) {
@@ -3559,7 +3559,7 @@
     /**
      * Reset card details for other view
      * */
-    GridTable.prototype.resetCard = function () {        
+    GridTable.prototype.resetCard = function () {
         this.cardTempalte = null;
         this.setCardID(0);
     };
@@ -3865,10 +3865,10 @@
             });
         }
         else {
-            if (this.card_ID>0) {
+            if (this.card_ID > 0) {
                 $.ajax({
                     url: VIS.Application.contextUrl + "jsonData/GetRecordCountWithCard",
-                    data: { sql: VIS.secureEngine.encrypt(this.SQL_Count) , cardID: this.card_ID },
+                    data: { sql: VIS.secureEngine.encrypt(this.SQL_Count), cardID: this.card_ID },
                     type: 'POST',
                     async: false,
                     success: function (resultt) {
@@ -3948,7 +3948,7 @@
         this.SQL_Count = VIS.secureEngine.encrypt(this.SQL_Count);
 
         var gFieldsIn = this.createGridFieldArr(this.gridFields, true);
-        var dataIn = { sql: this.SQL, page: this.dopaging ? this.currentPage : 0, pageSize: this.dopaging ? this.pazeSize : 0, treeID: 0, treeNode_ID: 0, card_ID: this.card_ID, ad_Tab_ID: this.AD_Tab_ID, tableName:this.gTable._tableName };
+        var dataIn = { sql: this.SQL, page: this.dopaging ? this.currentPage : 0, pageSize: this.dopaging ? this.pazeSize : 0, treeID: 0, treeNode_ID: 0, card_ID: this.card_ID, ad_Tab_ID: this.AD_Tab_ID, tableName: this.gTable._tableName };
 
         var obscureFields = this.createObsecureFields(this.gridFields);
 
@@ -4029,7 +4029,7 @@
                     }
                     if (lookupDirect)
                         VIS.MLookupCache.addRecordLookup(that.gTable._windowNo, that.gTable._tabNo, lookupDirect);
-                  
+
                     that.cardTempalte = cardViewData;
                     if (dataIn.card_ID > 0 && cardViewData && cardViewData.DisableWindowPageSize) {
                         that.pazeSize = that.rowCount;
@@ -4713,7 +4713,7 @@
         var size = this.gridFields.length;// .size();
         this.rowData = {}; // //	"original" data
         var rowData = {};
-    
+
         var tempWindowNo = this.gTable._windowNo + VIS.EnvConstants.WINDOW_TEMP;
         //	fill data
         if (copyCurrent) {
@@ -4804,7 +4804,7 @@
         this.pazeSize++;
         //	inform
         //log.finer("Current=" + currentRow + ", New=" + m_newRow);
-        this.fireTableModelChanged(VIS.VTable.prototype.ROW_ADD, rowData, this.newRow,null);
+        this.fireTableModelChanged(VIS.VTable.prototype.ROW_ADD, rowData, this.newRow, null);
         //this.fireDataStatusIEvent(copyCurrent ? "UpdateCopied" : "Inserted", "");
         this.log.fine("Current=" + this.currentRow + ", New=" + this.newRow + " - complete");
         return true;
@@ -5099,14 +5099,24 @@
         var rowDB = {};
         var size = this.gridFields.length;
         var columnName = null;
+        var imgColList = [];
         //	Types see also MField.createDefault
         try {
             //	get row data
             for (var j = 0; j < size; j++) {
                 columnName = this.gridFields[j].getColumnName().toLowerCase();
                 rowDB[columnName] = this.readDataOfColumn(columnName, obj[columnName]);
+                if (this.gridFields[j].getDisplayType() == VIS.DisplayType.Image) {
+                    imgColList.push("imgurlcolumn" + columnName)
+                }
                 columnName = null;
             }
+            if (imgColList && imgColList.length > 0) {
+                for (k = 0; k < imgColList.length; k++) {
+                    rowDB[imgColList[k]] = this.readDataOfColumn(imgColList[k], obj[imgColList[k]]);
+                }
+            }
+
             return rowDB;
         }
         catch (e) {
