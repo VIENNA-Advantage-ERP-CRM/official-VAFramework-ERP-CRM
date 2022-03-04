@@ -1759,7 +1759,7 @@
         this.dynamicDisplay(-1);
     };
 
-    VIS.GridController.prototype.switchMultiRow = function () {        
+    VIS.GridController.prototype.switchMultiRow = function (avoidRequery) {        
         if (this.singleRow || this.isCardRow) {
 
             if (this.isCardRow && !this.isNewClick) {
@@ -1793,8 +1793,9 @@
             }
 
             this.gTab.getTableModel().resetCard();
-            if (!this.isNewClick) {
+            if (!this.isNewClick && !avoidRequery) {
                 this.aPanel.clearSearchBox();
+                this.refreshFilterPanelData();
                 var query = new VIS.Query();
                 this.getMTab().setQuery(query);
                 this.query(0, 0, null);
@@ -1826,9 +1827,13 @@
             else p1.css({ "float": '' });
 
             p1.css('display', 'block');
-            this.vCardView.resetCard();
             this.gTab.getTableModel().setCardID(this.vCardView.cardID);
             if (!avoidRequery) {
+                this.aPanel.clearSearchBox();
+                this.refreshFilterPanelData();
+                this.vCardView.resetCard();
+                var query = new VIS.Query();
+                this.getMTab().setQuery(query);
                 this.query(this.gTab.getOnlyCurrentDays(), 0, false);
             }
                 //this.vCardView.requeryData();

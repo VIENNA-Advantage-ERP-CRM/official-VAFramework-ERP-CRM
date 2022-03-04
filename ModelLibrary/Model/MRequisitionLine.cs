@@ -380,6 +380,27 @@ namespace VAdvantage.Model
         {
             try
             {
+                //VIS0060 : After Reactivation, When we change Product, then system will check isqtyReserved, isqtyDelivered then not to save this records
+                if (!newRecord && Is_ValueChanged("M_Product_ID"))
+                {
+                    if (GetDTD001_DeliveredQty() != 0)
+                    {
+                        log.SaveError("", Msg.Translate(GetCtx(), "DTD001_DeliveredQty") + "=" + GetDTD001_DeliveredQty());
+                        return false;
+                    }
+                    if (GetDTD001_ReservedQty() != 0)
+                    {
+                        log.SaveError("", Msg.Translate(GetCtx(), "DTD001_ReservedQty") + "=" + GetDTD001_ReservedQty());
+                        return false;
+                    }
+                    if (Get_ColumnIndex("QtyReserved") >= 0 && GetQtyReserved() != 0)
+                    {
+                        log.SaveError("", Msg.Translate(GetCtx(), "DTD001_QtyReserved") + "=" + GetQtyReserved());
+                        return false;
+                    }
+                }	//	Product Changed
+
+                MRequisition Req = GetParent();
                 MProduct product = MProduct.Get(GetCtx(), GetM_Product_ID());
                 if (GetLine() == 0)
                 {
@@ -393,6 +414,17 @@ namespace VAdvantage.Model
                 {
                     log.SaveError("VIS_NOProductOrCharge", "");
                     return false;
+                }
+
+                // VIS0060: if product is there then requisition qty can not be less than delivered qty
+                if (GetM_Product_ID() > 0)
+                {
+                    if (!newRecord && (Math.Abs(GetQty()) < Math.Abs(Decimal.Add(GetDTD001_DeliveredQty(), GetDTD001_ReservedQty()))) &&
+                        (string.IsNullOrEmpty(GetDescription()) || !(!string.IsNullOrEmpty(GetDescription()) && GetDescription().Contains("Voided"))))
+                    {
+                        log.SaveError("", Msg.GetMsg(GetCtx(), "ReqQtyNotLessReserved"));
+                        return false;
+                    }
                 }
                 // change to set Converted Quantity in Movement quantity if there is differnce in UOM of Base Product and UOM Selected on line
                 if (GetM_Product_ID() > 0 && Get_ColumnIndex("QtyEntered") > 0 && (newRecord || Is_ValueChanged("QtyEntered") || Is_ValueChanged("C_UOM_ID")))
@@ -428,6 +460,53 @@ namespace VAdvantage.Model
                 {
                     SetM_AttributeSetInstance_ID(0);
                 }
+
+                // VIS0060: If Attribute is changes after ReActivate then Unreserve the Qty against the old Attribute and Reserver against the new Attribute.
+                if (Get_ColumnIndex("QtyReserved") >= 0 && DocActionVariables.STATUS_INPROGRESS.Equals(Req.GetDocStatus()) && Is_ValueChanged("M_AttributeSetInstance_ID"))
+                {
+                    MStorage storage = null;
+                    MStorage Swhstorage = null;
+
+                    if (GetM_Product_ID() != 0 && product.IsStocked())
+                    {
+                        Decimal difference = Decimal.Negate(GetQtyReserved());
+                        if (GetQtyReserved() > 0)
+                        {
+                            int loc_id = GetOrderLocator_ID();
+
+                            storage = MStorage.Get(GetCtx(), loc_id, GetM_Product_ID(), GetM_AttributeSetInstance_ID(), Get_Trx());
+                            if (storage == null)
+                            {
+                                MStorage.Add(GetCtx(), Req.GetM_Warehouse_ID(), loc_id, GetM_Product_ID(), Util.GetValueOfInt(Get_ValueOld("M_AttributeSetInstance_ID")),
+                                    Util.GetValueOfInt(Get_ValueOld("M_AttributeSetInstance_ID")), (Decimal)0, (Decimal)0, (Decimal)0, difference, Get_Trx());
+                            }
+                            else
+                            {
+                                storage.SetDTD001_QtyReserved(Decimal.Add(storage.GetDTD001_QtyReserved(), difference));
+                                storage.Save();
+                            }
+
+                            int Sourcewhloc_id = GetReserveLocator_ID();
+                            Swhstorage = MStorage.Get(GetCtx(), Sourcewhloc_id, GetM_Product_ID(), GetM_AttributeSetInstance_ID(), Get_Trx());
+                            if (Swhstorage == null)
+                            {
+                                MStorage.Add(GetCtx(), Req.GetDTD001_MWarehouseSource_ID(), Sourcewhloc_id, GetM_Product_ID(), Util.GetValueOfInt(Get_ValueOld("M_AttributeSetInstance_ID")),
+                                    Util.GetValueOfInt(Get_ValueOld("M_AttributeSetInstance_ID")), (Decimal)0, (Decimal)0, (Decimal)0, 0, Get_Trx());
+                                MStorage StrgResrvQty = null;
+                                StrgResrvQty = MStorage.GetCreate(GetCtx(), Sourcewhloc_id, GetM_Product_ID(), Util.GetValueOfInt(Get_ValueOld("M_AttributeSetInstance_ID")), Get_Trx());
+                                StrgResrvQty.SetDTD001_SourceReserve(Decimal.Add(StrgResrvQty.GetDTD001_SourceReserve(), difference));
+                                StrgResrvQty.Save();
+                            }
+                            else
+                            {
+                                Swhstorage.SetDTD001_SourceReserve(Decimal.Add(Swhstorage.GetDTD001_SourceReserve(), difference));
+                                Swhstorage.Save();
+                            }
+
+                            SetQtyReserved(Decimal.Add(GetQtyReserved(), difference));
+                        }
+                    }
+                }
                 //
                 if (GetPriceActual().CompareTo(Env.ZERO) == 0)
                 {
@@ -439,7 +518,7 @@ namespace VAdvantage.Model
                 {
                     SetLineNetAmt();
                 }
-                
+
             }
             catch
             {

@@ -451,10 +451,10 @@ namespace VAdvantage.Model
          */
 
       
-        public void AddStatistics(int seconds)
+        public void AddStatistics(decimal seconds)
         {
             SetStatistic_Count(GetStatistic_Count() + 1);
-            // SetStatistic_Seconds(GetStatistic_Seconds().add(new BigDecimal(seconds)));
+            SetStatistic_Seconds(GetStatistic_Seconds() +seconds);
         }	//	addStatistics
 
    
