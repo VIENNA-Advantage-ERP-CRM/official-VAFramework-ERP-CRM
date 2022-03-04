@@ -236,6 +236,17 @@ namespace VAdvantage.Model
          */
         protected override bool BeforeSave(bool newRecord)
         {
+            // VIS0060: If lines are available, it will not allow the user to change header information.
+            if (!newRecord && (Is_ValueChanged("M_PriceList_ID") || Is_ValueChanged("M_Warehouse_ID") || Is_ValueChanged("DTD001_MWarehouseSource_ID")))
+            {
+                string sql = "SELECT COUNT(M_RequisitionLine_ID) FROM M_RequisitionLine WHERE M_Requisition_ID=" + GetM_Requisition_ID() + " AND IsActive='Y'";
+                if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
+                {
+                    log.SaveWarning("pleaseDeleteLinesFirst", "");
+                    return false;
+                }
+            }
+
             if (GetM_PriceList_ID() == 0)
             {
                 SetM_PriceList_ID();
@@ -460,10 +471,10 @@ namespace VAdvantage.Model
                 if (Env.IsModuleInstalled("DTD001_"))
                 {
                     MRequisitionLine[] lines = GetLines();
-                    MProduct product = null;
                     for (int i = 0; i < lines.Length; i++)
                     {
                         MRequisitionLine line = lines[i];
+                        MProduct product = null;
                         if (line.GetM_Product_ID() > 0)
                             product = MProduct.Get(GetCtx(), line.GetM_Product_ID());
 
@@ -575,6 +586,8 @@ namespace VAdvantage.Model
             {
                 //MessageBox.Show("MRequisition--CompleteIt");
                 log.Severe(ex.ToString());
+                _processMsg = ex.Message.ToString();
+                return DocActionVariables.STATUS_INVALID;
             }
 
             // Set the document number from completed document sequence after completed (if needed)
@@ -938,13 +951,10 @@ namespace VAdvantage.Model
             StringBuilder sql = new StringBuilder();
             //	Not Processed
             if (!(DOCSTATUS_Drafted.Equals(GetDocStatus())
-                || DOCSTATUS_Invalid.Equals(GetDocStatus())
-                || DOCSTATUS_InProgress.Equals(GetDocStatus())
+                || DOCSTATUS_Invalid.Equals(GetDocStatus())                
                 || DOCSTATUS_Approved.Equals(GetDocStatus())
                 || DOCSTATUS_NotApproved.Equals(GetDocStatus())))
             {
-
-
                 //VIS0060: To check if associated PO is exist but not reversed
                 sql.Append("SELECT COUNT(M_RequisitionLine_ID) FROM M_RequisitionLine WHERE M_Requisition_ID=" + GetM_Requisition_ID() +
                 " AND NVL(C_OrderLine_ID, 0) > 0");
@@ -962,6 +972,112 @@ namespace VAdvantage.Model
                     _processMsg = Msg.GetMsg(GetCtx(), "VIS_VoidMovementFirst");
                     return false;
                 }
+
+                MRequisitionLine[] lines = GetLines();
+                Decimal totalLines = Env.ZERO;
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    MRequisitionLine line = lines[i];
+                    MProduct product = null;
+                    if (line.GetM_Product_ID() > 0)
+                        product = MProduct.Get(GetCtx(), line.GetM_Product_ID());
+
+                    if (Env.IsModuleInstalled("DTD001_"))
+                    {
+                        //Update storage requisition reserved qty                        
+                        if (Env.IsModuleInstalled("VA203_") && product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item && product.IsStocked())
+                        {
+                            if (line.Get_ColumnIndex("QtyReserved") >= 0 && line.GetQtyReserved() != 0)
+                            {
+                                int loc_id = line.GetOrderLocator_ID();
+                                storage = MStorage.Get(GetCtx(), loc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
+                                if (storage == null)
+                                {
+                                    storage = MStorage.GetCreate(GetCtx(), loc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
+                                }
+                                storage.SetDTD001_QtyReserved(Decimal.Subtract(storage.GetDTD001_QtyReserved(), line.GetQtyReserved()));
+                                storage.Save();
+
+                                int Swhloc_id = line.GetReserveLocator_ID();
+                                Swhstorage = MStorage.Get(GetCtx(), Swhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
+                                if (Swhstorage == null)
+                                {
+                                    Swhstorage = MStorage.GetCreate(GetCtx(), Swhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
+                                }
+                                Swhstorage.SetDTD001_SourceReserve(Decimal.Subtract(Swhstorage.GetDTD001_SourceReserve(), line.GetQtyReserved()));
+                                Swhstorage.Save();
+                            }
+                        }
+                        else if (GetDocStatus() != "DR" && product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item && product.IsStocked())
+                        {
+                            if (line.Get_ColumnIndex("QtyReserved") >= 0 && line.GetQtyReserved() != 0)
+                            {
+                                int loc_id = 0;
+                                if (line.Get_ColumnIndex("OrderLocator_ID") > 0)
+                                {
+                                    loc_id = line.GetOrderLocator_ID();
+                                }
+                                else
+                                {
+                                    loc_id = GetLocation(GetM_Warehouse_ID());
+                                }
+                                storage = MStorage.Get(GetCtx(), loc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
+                                if (storage == null)
+                                {
+                                    storage = MStorage.GetCreate(GetCtx(), loc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
+                                }
+                                storage.SetDTD001_QtyReserved(Decimal.Subtract(storage.GetDTD001_QtyReserved(), line.GetQtyReserved()));
+                                storage.Save();
+
+                                int Swhloc_id = 0;
+                                if (line.Get_ColumnIndex("ReserveLocator_ID") > 0)
+                                {
+                                    Swhloc_id = line.GetReserveLocator_ID();
+                                }
+                                else
+                                {
+                                    Swhloc_id = GetSwhLocation(GetM_Warehouse_ID());
+                                }
+                                Swhstorage = MStorage.Get(GetCtx(), Swhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
+                                if (Swhstorage == null)
+                                {
+                                    Swhstorage = MStorage.GetCreate(GetCtx(), Swhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
+                                }
+                                Swhstorage.SetDTD001_SourceReserve(Decimal.Subtract(Swhstorage.GetDTD001_SourceReserve(), line.GetQtyReserved()));
+                                Swhstorage.Save();
+                            }
+                        }
+                    }
+
+                    String description = line.GetDescription();
+                    if (description == null)
+                        description = "";
+                    description += Msg.GetMsg(Env.GetContext(), "Voided", true) + " (" + line.GetQty() + ")";
+                    line.SetDescription(description);
+                    line.SetQty(0);
+                    line.SetQtyEntered(0);
+                    if (line.Get_ColumnIndex("QtyReserved") > 0)
+                    {
+                        line.SetQtyReserved(Env.ZERO);
+                    }                   
+                    line.SetLineNetAmt(Env.ZERO);
+                    if (!line.Save())
+                    {
+                        _processMsg = Msg.GetMsg(GetCtx(), "ReqLineNotSaved");
+                        return false;
+                    }
+
+                    //get Grand Total or SubTotal
+                    totalLines = Decimal.Add(totalLines, line.GetLineNetAmt());
+                }
+                if (totalLines.CompareTo(GetTotalLines()) != 0)
+                {
+                    SetTotalLines(totalLines);
+                    Save();
+                }
+                SetProcessed(true);
+                log.Info("voidIt - " + ToString());
+                return true;
             }
 
             SetProcessed(true);
@@ -982,7 +1098,6 @@ namespace VAdvantage.Model
                 //	Close Not delivered Qty
                 MRequisitionLine[] lines = GetLines();
                 Decimal totalLines = Env.ZERO;
-                MProduct product = null;
 
                 //If there Reserved Qty on Requisition line, system should not allow to close the record.
                 if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(M_RequisitionLine_ID) FROM M_RequisitionLine WHERE M_Requisition_ID =" + GetM_Requisition_ID()
@@ -1005,7 +1120,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < lines.Length; i++)
                 {
                     MRequisitionLine line = lines[i];
-
+                    MProduct product = null;
                     if (line.GetM_Product_ID() > 0)
                         product = MProduct.Get(GetCtx(), line.GetM_Product_ID());
 
@@ -1135,6 +1250,8 @@ namespace VAdvantage.Model
             {
                 // MessageBox.Show("MRequisition--CloseIt");
                 log.Severe(ex.ToString());
+                _processMsg = ex.Message.ToString();
+                return false;
             }
             return true;
         }

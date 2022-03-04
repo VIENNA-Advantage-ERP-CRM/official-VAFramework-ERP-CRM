@@ -380,8 +380,8 @@ namespace VAdvantage.Model
         {
             try
             {
-                //VIS0060 : After Reactivation, When we change Product, then system will check isqtyReserved, isqtyDelivered then not to save this records
-                if (!newRecord && Is_ValueChanged("M_Product_ID"))
+                //VIS0060 : After Reactivation, When we change Product, Attribute then system will check isqtyReserved, isqtyDelivered then not to save this records
+                if (!newRecord && (Is_ValueChanged("M_Product_ID") || Is_ValueChanged("M_AttributeSetInstance_ID")))
                 {
                     if (GetDTD001_DeliveredQty() != 0)
                     {
@@ -435,12 +435,15 @@ namespace VAdvantage.Model
                         SetQty(MUOMConversion.ConvertProductFrom(GetCtx(), GetM_Product_ID(), Util.GetValueOfInt(Get_Value("C_UOM_ID")), Util.GetValueOfDecimal(Get_Value("QtyEntered"))));
                     }
                 }
+
                 //QtyEntered should not be zero
-                if (Util.GetValueOfDecimal(Get_Value("QtyEntered")) == 0)
-                {
-                    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "Quantity"));
-                    return false;
-                }
+                // VIS0060: code commented to handle case of Void.
+                //if (Util.GetValueOfDecimal(Get_Value("QtyEntered")) == 0)
+                //{
+                //    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "Quantity"));
+                //    return false;
+                //}
+
                 // SI_0657_3 - precision of Qty should be according to the precision of UOM attached.
                 if (newRecord || Is_ValueChanged("Qty"))
                 {
@@ -541,6 +544,32 @@ namespace VAdvantage.Model
                 return success;
             }
             return UpdateHeader();
+        }
+
+        /// <summary>
+        /// Before Delete
+        /// </summary>
+        /// <returns>true if it can be deleted</returns>
+        protected override bool BeforeDelete()
+        {
+            // VIS0060: Check if some quantities are reserved or delivered against this Requisition Line 
+            if (GetDTD001_DeliveredQty() != 0)
+            {
+                log.SaveError("DeleteError", Msg.Translate(GetCtx(), "DTD001_DeliveredQty") + "=" + GetDTD001_DeliveredQty());
+                return false;
+            }
+            if (GetDTD001_ReservedQty() != 0)
+            {
+                log.SaveError("DeleteError", Msg.Translate(GetCtx(), "DTD001_ReservedQty()") + "=" + GetDTD001_ReservedQty());
+                return false;
+            }            
+            if (Get_ColumnIndex("QtyReserved") >= 0 && GetQtyReserved() != 0)
+            {
+                //	For PO should be On Order
+                log.SaveError("DeleteError", Msg.Translate(GetCtx(), "QtyReserved") + "=" + GetQtyReserved());
+                return false;
+            }
+            return true;
         }
 
         /**
