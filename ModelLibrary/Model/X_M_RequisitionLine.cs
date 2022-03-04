@@ -346,6 +346,23 @@ namespace VAdvantage.Model
             if (bd == null) return Env.ZERO;
             return Convert.ToDecimal(bd);
         }
+
+        /** Set Quantity Reserved.
+        @param QtyReserved Quantity Reserved */
+        public void SetQtyReserved(Decimal? QtyReserved)
+        {
+            Set_Value("QtyReserved", (Decimal?)QtyReserved);
+        }
+        /** Get Quantity Reserved.
+        @return Quantity Reserved */
+        public Decimal GetQtyReserved()
+        {
+            Object bd = Get_Value("QtyReserved");
+            if (bd == null)
+                return Env.ZERO;
+            return Convert.ToDecimal(bd);
+        }
+
         /** ReserveLocator_ID AD_Reference_ID=191 */
         public static int RESERVELOCATOR_ID_AD_Reference_ID = 191;
         /** Set Reserve Locator.

@@ -1,4 +1,75 @@
 ﻿; (function (VIS, $) {
+
+    function VCardPanel(root) {
+
+        var divTopArrow = $('<div class=vis-cv-rd-top><i class="vis vis-arrow-up"></i></div>');
+        var divDownArrow = $('<div class=vis-cv-rd-down><i class="vis vis-arrow-down"></i></div>');
+        var divbody = $('<div class=vis-cv-rd-body>');
+        root.append(divTopArrow).append(divbody).append(divDownArrow);
+
+        this.addItem = function (name) {
+            var $spn = $('<span class="vis-cv-rd-body-item">');
+            $spn.text(name);
+            divbody.append($spn);
+            if (divbody[0].clientHeight < divbody[0].scrollHeight) {
+                divDownArrow.css('opacity', '1');
+            }
+        };
+
+        this.reset = function () {
+            divbody.empty();
+            divTopArrow.css('opacity', '.5');
+            divDownArrow.css('opacity', '.5');
+        }
+
+        this.dispose = function () {
+            divbody.empty();
+            //clear events
+            divTopArrow.off();
+            divDownArrow.off();
+        }
+
+        
+
+        function clkHandler(btn) {
+           
+            if (divbody[0].clientHeight + divbody[0].scrollTop >= divbody[0].scrollHeight) {
+                divDownArrow.css('opacity', '.6');
+                // return;
+            }
+            else {
+                divDownArrow.css('opacity', '1');
+            }
+            if (divbody[0].scrollTop == 0) {
+                divTopArrow.css('opacity', '.6');
+                //return;
+            }
+            else {
+                divTopArrow.css('opacity', '1');
+            }
+            //else if (divbody.scrollTop >= divbody.height()) {
+            //    divDownArrow.css('opacity', '.6');
+            //    return;
+            //}
+            //if (btn.css('opacity') < 1)
+            //    return;
+
+            if (btn == 'up') {
+                if (divTopArrow.css('opacity') < 1)
+                    return;
+                divbody[0].scrollTop -= 60;
+            }
+            else {
+                if (divDownArrow.css('opacity') < 1)
+                    return;
+                divbody[0].scrollTop += 60; 
+            }
+
+            };
+        divTopArrow.on('click', function () { clkHandler('up') });
+        divDownArrow.on('click', function () { clkHandler('down') });
+    }
+
     /**
          *	Card view Container
          * 
@@ -37,29 +108,38 @@
         var groupHeader = null;
         this.isAutoCompleteOpen = false;
         var bsyDiv = null;
+        var rightDiv = null;
+        var leftDiv = null;
         this.cardID = 0;
         var records = null;
         this.editID = 0;
+
+        this.VCardRightPanel = null;
         //  var cardList;
         function init() {
             var width = $('body').width()-65;
             root = $("<div class='vis-cv-body vis-noselect'>");
-            bsyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div></div>');
-            root.append(bsyDiv);
-            bsyDiv.css("display", 'none');
+            leftDiv = $("<div class='vis-cv-ld'>");
+            rightDiv = $("<div class='vis-cv-rd'>");
+            //bsyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div></div>');
+            //root.append(bsyDiv);
+            //bsyDiv.css("display", 'none');
             body = $("<div class='vis-cv-main' style='max-width:" + width+"px'>");
             headerdiv = $("<div class='vis-cv-header'>");
             $cmbCards = $('<input  class="vis-vs-card-autoComplete" style="display:inline">')
             $lblGroup = $('<p>');
             $imgdownSearch = $('<span class="vis-ad-w-p-tb-s-icon-down vis-cv-cardlist"><i class="fa fa-ellipsis-h"></i></span>');
             groupHeader = $("<div class='vis-cv-groupHeader'style='overflow:hidden; max-width:" + width + "px'>");
-            headerdiv.append($cmbCards).append($imgdownSearch).append($lblGroup);            
-            root.append(headerdiv).append(groupHeader).append(body);
+            headerdiv.append($cmbCards).append($imgdownSearch).append($lblGroup); 
+            leftDiv.append(headerdiv).append(groupHeader).append(body);
+            root.append(leftDiv).append(rightDiv);
             body.scroll(function () {
                 SyncScroll();
             });
             createCardautoComplete();           
         }
+
+       
 
         /**
          * create autocomplete box to show list of cards
@@ -152,10 +232,17 @@
         }
 
         init();
+
+        //set right pnae div for excluded group
+        this.VCardRightPanel = new VCardPanel(rightDiv);
         //eventHandle();
 
         this.getRoot = function () {
             return root;
+        };
+
+        this.getRightDiv = function () {
+            return rightDiv;
         };
 
         this.getBody = function () {
@@ -175,11 +262,13 @@
 
         this.sizeChanged = function (h, w) {
             root.height((h - 12) + 'px');
+            rightDiv.height((h - 12) + 'px');
             this.calculateWidth(w);
         }
 
-        this.setBusy=function(isBusy) {
-            bsyDiv.css("display", isBusy ? 'block' : 'none');
+        this.setBusy = function (isBusy) {
+            this.aPanel.setBusy(false);
+           // bsyDiv.css("display", isBusy ? 'block' : 'none');
         };
 
         this.calculateWidth = function (width) {
@@ -336,6 +425,9 @@
             while (this.groupCtrls.length > 0) {
                 this.groupCtrls.pop().dispose();
             }
+            if (this.VCardRightPanel)
+                this.VCardRightPanel.dispose();
+            this.VCardRightPanel = null;
         };
 
         /**
@@ -477,85 +569,21 @@
         this.mTab.getTableModel().setCardID(cardID);
         this.aPanel.curGC.query(this.mTab.getOnlyCurrentDays(), 0, false);
         this.getCardCmb().val(cardName);
-        //var windowID = 0;
-        //var tabID = 0;
-        //if (mTab) {
-        //    windowID = mTab.getAD_Window_ID();
-        //    tabID = mTab.getAD_Tab_ID();
-        //}
-
-        //var sql = " FROM " + mTab.getTableName();
-        //if (mTab.extendedWhere) {
-        //    sql += " WHERE " + VIS.Env.parseContext(VIS.context, mTab.getWindowNo(), mTab.extendedWhere, false);
-            
-        //}
-        //sql = VIS.secureEngine.encrypt(sql);
-
-        //VIS.dataContext.getCardViewInfo(windowID, tabID, cardID, sql, function (retData) {
-
-        //    self.cardViewData = retData;
-        //    if (!refresh) {
-        //        self.requeryData();
-        //    } else {
-        //        self.setCardViewData(retData);
-        //        self.refresh(self.getBody().width());
-        //    }
-        //    if (cardID) {
-        //        self.getCardCmb().val(retData.Name);
-        //    }
-
-        //});
     };
     /**
      * Rest card on view change
      * */
     VCardView.prototype.resetCard = function () {
-        this.getGroupHeader().empty();
+        
         while (this.groupCtrls.length > 0) {
             this.groupCtrls.pop().dispose();
         }
+        this.VCardRightPanel.reset();
+        this.getGroupHeader().empty();
+        this.groupCtrls.length = 0;
+        this.editID = 0;
     }
-
-    /**
-     * Ftech Card Details and create card's schema.
-     * */
-    //VCardView.prototype.requeryData = function () {
-    //    if (this.cardViewData) {
-    //        this.setCardSqlInTabModel(this.mTab, this.cardViewData);
-    //        this.aPanel.curGC.query(this.mTab.getOnlyCurrentDays(), 0, false);
-    //        this.setCardViewData(this.cardViewData);// Create Card
-    //    } else if (this.cardID != 0) {// Fetch card details
-    //        this.getCardViewData(this.mTab, this.cardID, "");
-    //    } else {// If no template linked then show Name, description and comment
-    //        this.setCardViewData();
-    //        this.refresh(this.getBody().width());
-    //    }
-    //}
-
-    /**
-     * Setup Card's Orderby clause and where clause
-     * Setup paging required or not
-     * @param {any} mTab
-     * @param {any} cModel
-     */
-    //VCardView.prototype.setCardSqlInTabModel = function (mTab,cModel) {
-    //    var griTable = mTab.getTableModel();
-    //    if (cModel.ExcludedGroup.length > 0) {
-    //        var str = cModel.ExcludedGroup.split(',');
-    //        var notIN = "";
-    //        for (var i = 0; i < str.length; i++) {
-    //            notIN += "'" + str[i] + "',"
-    //        }
-    //        var WhrCondition ="("+cModel.FieldGroupName + " NOT IN (" + notIN.replace(/,\s*$/, "") + ") OR " + cModel.FieldGroupName+ " IS NULL)" ;
-    //        mTab.setOuterWhereClause(WhrCondition);
-    //    }
-    //    else {
-    //        mTab.setOuterWhereClause("1=1");
-    //    }
-    //    griTable.setOuterOrderClause(cModel.OrderByClause.replace(/,\s*$/, ""));
-    //    griTable.setDoPaging(!cModel.DisableWindowPageSize);
-    //};
-
+       
     /**
      * Create Card's Schema, like fields included, groupby etc.
      * @param {any} retData
@@ -731,14 +759,14 @@
 
             var root = $this.getBody();
 
-            while ($this.groupCtrls.length > 0) {
-                $this.groupCtrls.pop().dispose();
-            }
+            //while ($this.groupCtrls.length > 0) {
+            //    $this.groupCtrls.pop().dispose();
+            //}
 
-            $this.groupCtrls.length = 0;
+            $this.resetCard();
 
-            root.not('.vis-busyindicatorouterwrap').empty();
-            $this.getGroupHeader().html('');
+            //root.not('.vis-busyindicatorouterwrap').empty();
+           // $this.getGroupHeader().html('');
             var cardGroup = null;
             if ($this.grpCount == 1) {
 
@@ -755,6 +783,7 @@
                 $this.groupCtrls.push(cardGroup);
                 root.append(cardGroup.getRoot())
                 $this.getGroupHeader().find('.vis-cv-head').width(root.find('.vis-cv-grpbody').width() - 10);
+                $this.getRightDiv().css('display', 'none');
             }
             else {
                 $this.filterRecord(records);
@@ -879,7 +908,7 @@
                 root.find('.cardEmpty').remove();
                 var excludeGrp = $this.ExcludedGroup;
                 excludeGrp = excludeGrp.split(',');
-
+                var hasItems = false;
                 root.find('.vis-cv-grpbody').each(function (i, e) {
                     var evnt = $(e);
                     evnt.parent().removeAttr('style');
@@ -892,13 +921,21 @@
                     }
 
                     if (excludeGrp.indexOf(evnt.attr('data-key')) != -1) {
+                        //show item info in right panel
                         evnt.parent().hide();
-                        $this.getGroupHeader().find(".vis-cv-cg-grp[data-key='" + evnt.attr('data-key') + "']").hide();
+                        var grpHeader = $this.getGroupHeader().find(".vis-cv-cg-grp[data-key='" + evnt.attr('data-key') + "']");
+                        $this.VCardRightPanel.addItem(grpHeader.find('.vis-cv-head').text());
+                        hasItems = true;
+                        grpHeader.hide();
                     }
 
                 });
 
+                $this.getRightDiv().height($this.getRoot().height());
                 root.find('.vis-cv-grpbody').height(maxHeight(root.find('.vis-cv-grpbody')));
+                if (hasItems)
+                    $this.getRightDiv().css('display', 'flex');
+                else $this.getRightDiv().css('display', 'none');
 
             }
             function maxHeight(elems) {

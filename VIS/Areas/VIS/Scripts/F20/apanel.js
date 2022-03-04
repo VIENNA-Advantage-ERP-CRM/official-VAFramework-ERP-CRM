@@ -1566,7 +1566,7 @@
             //}	//	query on first tab
             //ZoomChildTab
             if (isCheckCurrentTab) {
-                if (i === 0 && (query == null || (query.list != null && query.list.length == 0))) {
+                if (i === 0 && (query == null || (query.list != null && query.list.length == 0) || (query.list[0].code==-10))) {
                     this.curTab = gTab;
                     this.firstTabId = id;
                     setCurrent = true;
@@ -1577,6 +1577,8 @@
                     }
                 }
                 else {
+                    //if (i === 0)
+                    //    this.curTab = gTab;
                     if (query != null && query.list != null && query.list.length > 0) {
                         if (gTab.getKeyColumnName().toUpperCase() == query.list[0].columnName.toUpperCase()) {
                             this.firstTabId = id;
@@ -1589,6 +1591,7 @@
                             }
                         }
                     }
+
                 }//	query on first tab
             }
             var tabElement = null;
@@ -1610,6 +1613,12 @@
                 var gc = new VIS.GridController(true, true, id);
                 gc.initGrid(false, curWindowNo, this, gTab);
 
+                //if (i === 0 && !setCurrent) {
+                //    if (query != null) {
+                //        gTab.setQuery(query);
+                //    }
+                //}
+
                 //ZoomChildTab
 
                 // set current grid  controller
@@ -1617,14 +1626,17 @@
                     this.curGC = gc;
                     setCurrent = false;
                 }
+               
+
+
                 // Set first tab as current tab in case not marked aby tab as current tab.
                 if (i === 0 && !setCurrent) {
                     this.curTab = gTab;
                     this.curGC = gc;
                     this.firstTabId = id;
-                    if (query != null) {
-                        gTab.setQuery(query);
-                    }
+                    //if (query != null) {
+                    //    gTab.setQuery(query);
+                    //}
                 //}
 
 
@@ -1672,6 +1684,9 @@
             //}
             //TabChange Action Callback
             tabActions[i].onAction = this.onTabChange; //Perform tab Change
+        }
+        if (isCheckCurrentTab && (query != null && query.list != null && query.list.length > 0)) {
+            this.curTab.setQuery(query);
         }
 
         // for (var item = 0 ; item < this.vTabbedPane.Items.length ; item++) {
@@ -1957,15 +1972,29 @@
             tis.isDefaultFocusSet = false;
             tis.curGC.navigateRelative(+1);
         } else if (tis.aMulti.getAction() === action) {
+            tis.setLastView("");
+            if (!tis.curGC.getIsSingleRow() && tis.curGC.getIsCardRow()) {
+                tis.setLastView("Card");
+            }
+            else if (!tis.curGC.getIsSingleRow()) {
+                tis.setLastView("Multi");
+            }
+            //    tis.setLastView("Multi");
+            //else 
+           
             tis.aMulti.setPressed(!tis.curGC.getIsSingleRow());
             tis.aCard.setPressed(false);
-            tis.setLastView("");
             tis.curGC.switchRowPresentation();
         } else if (tis.aCard.getAction() === action) {
             tis.setLastView("");
-            if (tis.curGC.getIsCardRow())
+            if (tis.curGC.getIsCardRow()) {
+                //tis.setLastView("Multi");
                 tis.curGC.switchMultiRow();
-            else { tis.curGC.switchCardRow(); }
+            }
+            else {
+                //tis.setLastView("Card");
+                tis.curGC.switchCardRow();
+            }
             tis.aMulti.setPressed(false);
             // tis.aBack.setEnabled(!tis.curGC.getIsCardRow());
         } else if (tis.aMap.getAction() === action) {
@@ -1976,10 +2005,10 @@
             if (tis.getLastView() == "Multi") {
                 tis.aMulti.setPressed(!tis.curGC.getIsSingleRow());
                 tis.aCard.setPressed(false);
-                tis.curGC.switchRowPresentation();
+                tis.curGC.switchMultiRow(true);
             }
             else if (tis.getLastView() == "Card") {
-                tis.curGC.switchCardRow();
+                tis.curGC.switchCardRow(true);
                 tis.aMulti.setPressed(false);
                 tis.aCard.setPressed(true);
             }

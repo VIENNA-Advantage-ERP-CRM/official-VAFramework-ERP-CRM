@@ -18,6 +18,7 @@ using VAdvantage.DataBase;
 using VAdvantage.Logging;
 using System.Runtime.CompilerServices;
 using ModelLibrary.Classes;
+using System.Threading;
 
 namespace VAdvantage.Model
 {
@@ -537,6 +538,7 @@ namespace VAdvantage.Model
                      MInvoiceLine invoiceline, PO po, Decimal Price, Decimal Qty, Trx trxName, CostingCheck costingCheck, out string conversionNotFound,
                      string optionalstr = "process")
         {
+            Thread.Sleep(50);
             MAcctSchema acctSchema = null;
             dynamic pca = null;
             string costingMethodMatchPO = null;
@@ -3151,7 +3153,7 @@ namespace VAdvantage.Model
                                      " ( SELECT MMPolicy FROM M_Product_Category WHERE IsActive = 'Y' AND M_Product_Category_ID = " +
                                      " (SELECT M_Product_Category_ID FROM M_Product WHERE IsActive = 'Y' AND M_Product_ID = " + product.GetM_Product_ID() + " )) AND AD_Client_ID = " + AD_Client_ID);
                             costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
-                            costElement =  MCostElement.Get(ctx, costingElementId);
+                            costElement = MCostElement.Get(ctx, costingElementId);
                         backwardInOut:
                             if (windowName == "Physical Inventory" || windowName == "Internal Use Inventory")
                             {
@@ -3496,7 +3498,7 @@ namespace VAdvantage.Model
                                         query.Append(@"SELECT M_CostElement_ID FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'F' AND AD_Client_ID = " + AD_Client_ID);
                                     }
                                     costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
-                                    costElement =  MCostElement.Get(ctx, costingElementId);
+                                    costElement = MCostElement.Get(ctx, costingElementId);
                                     updateCostQueue(product, M_ASI_ID, acctSchema, inoutline.GetAD_Org_ID(), costElement, Decimal.Negate(Qty), M_Warehouse_Id, cd);
                                 }
                                 #endregion
@@ -3537,7 +3539,7 @@ namespace VAdvantage.Model
                                     + (costElement.GetCostingMethod().Equals(MCostElement.COSTINGMETHOD_Fifo) ? MCostElement.COSTINGMETHOD_Lifo :
                                         MCostElement.COSTINGMETHOD_Fifo) + "' AND AD_Client_ID = " + AD_Client_ID);
                                     costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
-                                    costElement =  MCostElement.Get(ctx, costingElementId);
+                                    costElement = MCostElement.Get(ctx, costingElementId);
 
                                     result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty,
                                                                                         inoutline.GetReversalDoc_ID() != 0 ? true : false, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
@@ -3585,7 +3587,7 @@ namespace VAdvantage.Model
                                     + (costElement.GetCostingMethod().Equals(MCostElement.COSTINGMETHOD_Fifo) ? MCostElement.COSTINGMETHOD_Lifo :
                                         MCostElement.COSTINGMETHOD_Fifo) + "' AND AD_Client_ID = " + AD_Client_ID);
                                     costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
-                                    costElement =  MCostElement.Get(ctx, costingElementId);
+                                    costElement = MCostElement.Get(ctx, costingElementId);
 
                                     result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Decimal.Negate(Qty),
                                                                                         inoutline.GetReversalDoc_ID() != 0 ? true : false, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
@@ -3667,7 +3669,7 @@ namespace VAdvantage.Model
                                         query.Append(@"SELECT M_CostElement_ID FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'F' AND AD_Client_ID = " + AD_Client_ID);
                                     }
                                     costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
-                                    costElement =  MCostElement.Get(ctx, costingElementId);
+                                    costElement = MCostElement.Get(ctx, costingElementId);
 
                                     if (movementline.GetReversalDoc_ID() > 0)
                                     {
@@ -3757,7 +3759,7 @@ namespace VAdvantage.Model
                                         query.Append(@"SELECT M_CostElement_ID FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'F' AND AD_Client_ID = " + AD_Client_ID);
                                     }
                                     costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
-                                    costElement =  MCostElement.Get(ctx, costingElementId);
+                                    costElement = MCostElement.Get(ctx, costingElementId);
 
                                     if (movementline.GetReversalDoc_ID() > 0)
                                     {
@@ -3810,7 +3812,7 @@ namespace VAdvantage.Model
                                             query.Clear();
                                             query.Append("SELECT M_CostElement_ID FROM M_CostQueue WHERE M_CostQueue_ID = " + Util.GetValueOfInt(ds1.Tables[0].Rows[k]["M_CostQueue_ID"]));
                                             costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, trxName));
-                                            costElement =  MCostElement.Get(ctx, costingElementId);
+                                            costElement = MCostElement.Get(ctx, costingElementId);
 
                                             price = MCostQueue.CalculateCostQueuePrice(invoice, invoiceline, tempCostDetail.GetAmt(), acctSchema, AD_Client_ID, AD_Org_ID, costElement, trxName, client.IsCostImmediate(), optionalstr, matchInoutLine, costingCheck);
 
@@ -3993,7 +3995,7 @@ namespace VAdvantage.Model
                                     {
                                         // in case of independent AP credit memo, accumulation amt reduce and current cost of AV. PO/Invoice will be calculated
                                         // discount is given only when document type having setting as "Treat As Discount" = True
-                                        MDocType docType =  MDocType.Get(ctx, invoice.GetC_DocTypeTarget_ID());
+                                        MDocType docType = MDocType.Get(ctx, invoice.GetC_DocTypeTarget_ID());
                                         if (docType.GetDocBaseType() == "APC" && docType.IsTreatAsDiscount())
                                         {
                                             result = cd.UpdateProductCost("Invoice(APC)", cd, acctSchema, product, M_ASI_ID, invoiceline.GetAD_Org_ID(), costingCheck, optionalStrCd: optionalstr);
@@ -5976,7 +5978,7 @@ namespace VAdvantage.Model
             MBPartner bpartner = new MBPartner(inout.GetCtx(), inout.GetC_BPartner_ID(), inout.Get_Trx());
             if (bpartner.GetPO_PriceList_ID() > 0)
             {
-                MPriceList pl =  MPriceList.Get(bpartner.GetCtx(), bpartner.GetPO_PriceList_ID(), bpartner.Get_Trx());
+                MPriceList pl = MPriceList.Get(bpartner.GetCtx(), bpartner.GetPO_PriceList_ID(), bpartner.Get_Trx());
                 c_currency_id = pl.GetC_Currency_ID();
             }
             string sql = "";
@@ -6168,7 +6170,7 @@ namespace VAdvantage.Model
             string sql = "";
             dynamic pc = null;
 
-            pc =  MProductCategory.Get(ctx, product.GetM_Product_Category_ID());
+            pc = MProductCategory.Get(ctx, product.GetM_Product_Category_ID());
             String costingLevel = "";
             try
             {
@@ -6719,7 +6721,7 @@ namespace VAdvantage.Model
                 int queueRecordId = costQueue.GetM_CostQueue_ID();
 
                 #region 2nd Entry Either FIFO or LIFO opposite of 1st entry
-                costElement =  MCostElement.Get(ctx, costQueue.GetM_CostElement_ID());
+                costElement = MCostElement.Get(ctx, costQueue.GetM_CostElement_ID());
                 if (costElement.GetCostingMethod() == "F")
                 {
                     sql = @"SELECT M_CostElement_ID FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'L' AND AD_Client_ID = " + AD_Client_ID;
@@ -6881,7 +6883,7 @@ namespace VAdvantage.Model
                 costQueue.SetM_AttributeSetInstance_ID(M_ASI_ID);
                 costQueue.SetCurrentQty(Qty);
 
-                costElement =  MCostElement.Get(ctx, M_CostElement_ID);
+                costElement = MCostElement.Get(ctx, M_CostElement_ID);
                 amtWithSurcharge = Decimal.Add(Price, Decimal.Round(Decimal.Divide(Decimal.Multiply(Price, costElement.GetSurchargePercentage()), 100), acctSchema.GetCostingPrecision()));
                 costQueue.SetCurrentCostPrice(amtWithSurcharge);
 
@@ -6940,7 +6942,7 @@ namespace VAdvantage.Model
                 costQueue.SetM_AttributeSetInstance_ID(M_ASI_ID);
                 costQueue.SetCurrentQty(Qty);
 
-                costElement =  MCostElement.Get(ctx, M_CostElement_ID);
+                costElement = MCostElement.Get(ctx, M_CostElement_ID);
                 amtWithSurcharge = Decimal.Add(Price, Decimal.Round(Decimal.Divide(Decimal.Multiply(Price, costElement.GetSurchargePercentage()), 100), acctSchema.GetCostingPrecision()));
                 costQueue.SetCurrentCostPrice(amtWithSurcharge);
                 //costQueue.SetCurrentCostPrice(Price);

@@ -1816,6 +1816,12 @@ namespace VIS.Helpers
                         //	Column Info
 
                         displayType = field.DisplayType;
+
+                        // Special cae hadled by Karan. This is to fill image url in extra column added. 
+                        if (displayType == DisplayType.Image)
+                        {
+                            rowData["imgurlcolumn" + colLower] = dr["imgUrlColumn" + colLower].ToString();
+                        }
                         //	Integer, ID, Lookup (UpdatedBy is a numeric column)
                         if ((DisplayType.IsID(displayType) // JJ: don't touch!
                                 && (columnName.EndsWith("_ID") || columnName.EndsWith("_Acct")))
@@ -1895,6 +1901,7 @@ namespace VIS.Helpers
                                 rowData[colLower] = value;
                             }
                         }
+                       
                         //	String
                         else
                             rowData[colLower] = dr[j].ToString();//string
@@ -2285,7 +2292,7 @@ namespace VIS.Helpers
                 }
                 else
                 {
-                    condition = whereCondition+" "+ orderBY;
+                    condition = condition + " "+ orderBY;
                 }
                 if (!string.IsNullOrEmpty(condition))
                 {

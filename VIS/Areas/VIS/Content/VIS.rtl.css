@@ -861,6 +861,11 @@ left:5px;
 right:unset;
 transform:scaleX(-1);
 }
+
+html[dir="rtl"] .vis-cv-rd{
+    margin-right:5px;
+    margin-left:unset;
+}
 /*rtl css End here*/
 
 
