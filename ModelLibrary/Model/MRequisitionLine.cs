@@ -555,18 +555,18 @@ namespace VAdvantage.Model
             // VIS0060: Check if some quantities are reserved or delivered against this Requisition Line 
             if (GetDTD001_DeliveredQty() != 0)
             {
-                log.SaveError("DeleteError", Msg.Translate(GetCtx(), "DTD001_DeliveredQty") + "=" + GetDTD001_DeliveredQty());
+                log.SaveError("", Msg.Translate(GetCtx(), "DTD001_DeliveredQty") + "=" + GetDTD001_DeliveredQty());
                 return false;
             }
             if (GetDTD001_ReservedQty() != 0)
             {
-                log.SaveError("DeleteError", Msg.Translate(GetCtx(), "DTD001_ReservedQty()") + "=" + GetDTD001_ReservedQty());
+                log.SaveError("", Msg.Translate(GetCtx(), "DTD001_ReservedQty()") + "=" + GetDTD001_ReservedQty());
                 return false;
             }            
             if (Get_ColumnIndex("QtyReserved") >= 0 && GetQtyReserved() != 0)
             {
                 //	For PO should be On Order
-                log.SaveError("DeleteError", Msg.Translate(GetCtx(), "QtyReserved") + "=" + GetQtyReserved());
+                log.SaveError("", Msg.Translate(GetCtx(), "QtyReserved") + "=" + GetQtyReserved());
                 return false;
             }
             return true;
