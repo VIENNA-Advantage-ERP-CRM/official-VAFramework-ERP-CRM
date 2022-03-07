@@ -156,10 +156,8 @@
     <Compile Include="Classes\AttachmentHelper.cs" />
     <Compile Include="Classes\BudgetCheck.cs" />
     <Compile Include="Classes\CardViewInfo.cs" />
-    <Compile Include="Classes\CCache.cs" />
     <Compile Include="Classes\CleanUp.cs" />
     <Compile Include="Classes\CommonFunction.cs" />
-    <Compile Include="Classes\CommonFunctions.cs" />
     <Compile Include="Classes\ContactsInfo.cs" />
     <Compile Include="Classes\Context.cs" />
     <Compile Include="Classes\CostingCheck.cs" />
@@ -168,20 +166,15 @@
     <Compile Include="Classes\DocumentAction.cs" />
     <Compile Include="Classes\Evaluator.cs" />
     <Compile Include="Classes\Format.cs" />
-    <Compile Include="Classes\Info_Column.cs" />
-    <Compile Include="Classes\KeyEdition.cs" />
     <Compile Include="Classes\ManageSkippedWF.cs" />
     <Compile Include="Classes\ModelValidationEngine.cs" />
     <Compile Include="Classes\Obscure.cs" />
     <Compile Include="Classes\PeriodicJob.cs" />
-    <Compile Include="Classes\Query.cs" />
-    <Compile Include="Classes\ServerEndPoint.cs" />
     <Compile Include="Classes\SessionEventHandler.cs" />
     <Compile Include="Classes\StringTokenizer.cs" />
     <Compile Include="Classes\TableSQL.cs" />
     <Compile Include="Classes\ThreadInstance.cs" />
     <Compile Include="Classes\VLookUpFactory.cs" />
-    <Compile Include="Classes\VTreeNode.cs" />
     <Compile Include="Classes\WindowCtx.cs" />
     <Compile Include="Classes\ZoomTarget.cs" />
     <Compile Include="CM\CacheClearAll.cs" />
@@ -268,8 +261,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DataBase\GlobalVariable.cs" />
-    <Compile Include="DataBase\Ini.cs" />
-    <Compile Include="DataBase\IniPreference.cs" />
     <Compile Include="DataBase\Trx.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -373,7 +364,6 @@
     <Compile Include="ModelAD\MAcctSchemaDefault.cs" />
     <Compile Include="ModelAD\MAcctSchemaElement.cs" />
     <Compile Include="ModelAD\MAcctSchemaGL.cs" />
-    <Compile Include="ModelAD\MActionLog.cs" />
     <Compile Include="ModelAD\MAppointment.cs" />
     <Compile Include="ModelAD\MAppointmentsInfo.cs" />
     <Compile Include="ModelAD\MAssignCriteria.cs" />
@@ -389,7 +379,6 @@
     <Compile Include="ModelAD\MCardViewColumn.cs" />
     <Compile Include="ModelAD\MCardViewCondition.cs" />
     <Compile Include="ModelAD\MCardViewRole.cs" />
-    <Compile Include="ModelAD\MChangeLog.cs" />
     <Compile Include="ModelAD\MChart.cs" />
     <Compile Include="ModelAD\MChartAccess.cs" />
     <Compile Include="ModelAD\MChat.cs" />
@@ -543,7 +532,6 @@
     <Compile Include="ModelAD\MWarehouse.cs" />
     <Compile Include="ModelAD\MWindow.cs" />
     <Compile Include="ModelAD\MWindowAccess.cs" />
-    <Compile Include="ModelAD\MWindowLog.cs" />
     <Compile Include="ModelAD\M_Element.cs" />
     <Compile Include="ModelAD\M_Registration.cs" />
     <Compile Include="ModelAD\NamePair.cs" />

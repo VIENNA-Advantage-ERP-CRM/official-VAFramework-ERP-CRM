@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{11B07F0B-50D9-44D4-B2E7-F9C3E6A00F1B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BaseLibrary</RootNamespace>
+    <AssemblyName>BaseLibrary</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Audit\MActionLog.cs" />
+    <Compile Include="Audit\MChangeLog.cs" />
+    <Compile Include="Audit\MQueryLog.cs" />
+    <Compile Include="Audit\MSession.cs" />
+    <Compile Include="Audit\MWindowLog.cs" />
+    <Compile Include="Audit\X_AD_ActionLog.cs" />
+    <Compile Include="Audit\X_AD_ChangeLog.cs" />
+    <Compile Include="Audit\X_AD_Issue.cs" />
+    <Compile Include="Audit\X_AD_QueryLog.cs" />
+    <Compile Include="Audit\X_AD_Session.cs" />
+    <Compile Include="Audit\X_AD_WindowLog.cs" />
+    <Compile Include="Classes\AccessSqlParser.cs" />
+    <Compile Include="Classes\CCache.cs" />
+    <Compile Include="Classes\CommonFunctions.cs" />
+    <Compile Include="Classes\GlobalVariable.cs" />
+    <Compile Include="Classes\Info_Column.cs" />
+    <Compile Include="Classes\Ini.cs" />
+    <Compile Include="Classes\IniPreference.cs" />
+    <Compile Include="Classes\KeyEdition.cs" />
+    <Compile Include="Classes\Query.cs" />
+    <Compile Include="Classes\ServerEndPoint.cs" />
+    <Compile Include="Classes\VLookUpInfo.cs" />
+    <Compile Include="Classes\VTreeNode.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
