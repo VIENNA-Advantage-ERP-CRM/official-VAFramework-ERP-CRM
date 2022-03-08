@@ -196,7 +196,7 @@
                 else {
                     ctx.setContext(windowNo, "BlanketOrderType", "OO");
                     mTab.setValue("BlanketOrderType", "OO");
-                    mTab.setValue("C_Order_Blanket",null);
+                    mTab.setValue("C_Order_Blanket", null);
                 }
 
                 //	No Drop Ship other than Standard
@@ -1694,14 +1694,12 @@
         if (this.isCalloutActive() || value == null || value.toString() == "") {
             return "";
         }
-        var sql = "";
-        var _priceListVersion_ID = 0;
+
         var M_Product_ID = Util.getValueOfInt(value);
         if (M_Product_ID == null || M_Product_ID == 0)
             return "";
 
-        var isReturnTrx = "Y" == (ctx.getContext("IsReturnTrx"));
-        if (isReturnTrx)
+        if ("Y" == ctx.getWindowContext(windowNo, "IsReturnTrx", true))
             return "";
 
         this.setCalloutActive(true);
@@ -1711,92 +1709,19 @@
             }
             //
             mTab.setValue("C_Charge_ID", null);
-            //	Set Attribute
-            // JID_0910: On change of product on line system is not removing the ASI. if product is changed then also update the ASI field.
-
-            //if (ctx.getContextAsInt(windowNo, "M_Product_ID", false) == M_Product_ID
-            //    && ctx.getContextAsInt(windowNo, "M_AttributeSetInstance_ID", false) != 0) {
-            //    mTab.setValue("M_AttributeSetInstance_ID", Util.getValueOfInt(ctx.getContextAsInt(windowNo, "M_AttributeSetInstance_ID", false)));
-            //}
-            //else {
+            //	Set Attribute            
             mTab.setValue("M_AttributeSetInstance_ID", null);
-            //}
-
-            // Amit 26-05-2015
-            var params = mTab.getValue("M_Product_ID").toString().concat(",", (mTab.getValue("C_BPartner_ID")).toString());
-            var productInfo = VIS.dataContext.getJSONRecord("MOrderLine/GetProductInfo", params);
-
-            //190 - Set Product description
-            if (productInfo != null) {
-                mTab.setValue("PrintDescription", productInfo.DocumentNote);
-            }
-            //
-            //var sql = "SELECT producttype FROM m_product where isactive = 'Y' AND M_Product_ID = " + M_Product_ID;
-            //var productType = Util.getValueOfString(VIS.DB.executeScalar(sql, null, null));
-            var productType = productInfo["productType"].toString();
-            if (productType == "S") {
-                mTab.setValue("IsContract", true);
-            }
-            else {
-                mTab.setValue("IsContract", false);
-                mTab.setValue("NoofCycle", null);
-                mTab.setValue("QtyPerCycle", null);
-                mTab.setValue("StartDate", null);
-                mTab.setValue("C_Contract_ID", 0); // Contract
-                mTab.setValue("EndDate", null);
-                mTab.setValue("C_Frequency_ID", 0);  // Billing frequncy
-            }
-            //
-            //CalloutOrder.prototype.BPartner
-
-            // JID_0165 -  Not updating current cost price on product selection, it will update on Before Save 
-            //var params = mTab.getValue("M_Product_ID").toString();
-            //var productCost = VIS.dataContext.getJSONRecord("MOrderLine/GetProductCost", params);
-            //var cost = productCost["Cost"].toString();
-            //mTab.setValue("CurrentCostPrice", cost);
-
 
             var isSOTrx = ctx.getWindowContext(windowNo, "IsSOTrx", true) == "Y";
             var isReturnTrx = ctx.getWindowContext(windowNo, "IsReturnTrx", true) == "Y";
-
-            if (productInfo["IsDropShip"].toString() == "Y") {
-                mTab.setValue("IsDropShip", true);
-            }
-            else {
-                mTab.setValue("IsDropShip", false);
-            }
-
-            /***** Amit ****/
-
-            countEd011 = Util.getValueOfInt(productInfo["countEd011"]);
-
-            var purchasingUom = 0;
-            if (countEd011 > 0) {
-                purchasingUom = Util.getValueOfInt(productInfo["purchasingUom"]);
-
-                if (purchasingUom > 0 && isSOTrx == false && isReturnTrx == false) {
-                    mTab.setValue("C_UOM_ID", purchasingUom);
-                }
-                else {
-                    mTab.setValue("C_UOM_ID", Util.getValueOfInt(productInfo["headerUom"]));
-                }
-            }
-
-            /*****Amit done *******/
-
-            /*****	Price Calculation see also qty	****/
             var C_BPartner_ID = ctx.getContextAsInt(windowNo, "C_BPartner_ID", false);
             var Qty = Util.getValueOfDecimal(mTab.getValue("QtyOrdered"));
-            var isSOTrx = ctx.getWindowContext(windowNo, "IsSOTrx", true) == "Y";
             var M_PriceList_ID = ctx.getContextAsInt(windowNo, "M_PriceList_ID", false);
             var M_PriceList_Version_ID = ctx.getContextAsInt(windowNo, "M_PriceList_Version_ID", false);
             var M_AttributeSetInstance_ID = ctx.getContextAsInt(windowNo, "M_AttributeSetInstance_ID", false);
-
             var orderDate = mTab.getValue("DateOrdered");
-
-            /*** Amit ***/
-            var C_UOM_ID = Util.getValueOfInt(mTab.getValue("C_UOM_ID"))
-            /*** Amit Done ***/
+            var StdPrecision = 2;
+            var PriceListPrecision = 2;
 
             var paramString = M_Product_ID.toString().concat(",", C_BPartner_ID.toString(), ",", //2
                 Qty.toString(), ",", //3
@@ -1804,38 +1729,51 @@
                 M_PriceList_ID.toString(), ",", //5
                 M_PriceList_Version_ID.toString(), ",", //6
                 orderDate.toString(), ",",         //7
-                null, ",", M_AttributeSetInstance_ID.toString(), ",",  //8 , 9
-                C_UOM_ID, ",", countEd011); // 10 , 11
+                null, ",", M_AttributeSetInstance_ID.toString()); // 8 , 9
+
             try {
-                //Get product price information
-                var dr = null;
+                var productInfo = VIS.dataContext.getJSONRecord("MOrderLine/GetProductInfo", paramString);
 
-                // JID_1744 The Precision Shpould as per Currency precision
-                //var stdPrecision = VIS.dataContext.getJSONRecord("MOrder/GetPrecision", mTab.getValue("C_Order_ID").toString());
-                dr = VIS.dataContext.getJSONRecord("MPriceList/GetPriceList", M_PriceList_ID.toString());
-                var StdPrecision = 2;
-                var PriceListPrecision = 2;
-                if (dr != null) {
-                    StdPrecision = Util.getValueOfInt(dr["StdPrecision"]);
-                    PriceListPrecision = Util.getValueOfInt(dr["PriceListPrecision"]);
-                }
+                if (productInfo != null) {
+                    //190 - Set Product description
+                    mTab.setValue("PrintDescription", productInfo.DocumentNote);
 
-                dr = VIS.dataContext.getJSONRecord("MProductPricing/GetProductPricing", paramString);
-                if (dr != null) {
-                    mTab.setValue("PriceList", dr["PriceList"]);
-                    mTab.setValue("PriceLimit", dr.PriceLimit);
-                    mTab.setValue("PriceActual", Util.getValueOfDecimal(dr.PriceActual.toFixed(PriceListPrecision)));
-                    mTab.setValue("PriceEntered", Util.getValueOfDecimal(dr.PriceEntered.toFixed(PriceListPrecision)));
-                    mTab.setValue("C_Currency_ID", Util.getValueOfInt(dr.C_Currency_ID));
-                    mTab.setValue("Discount", Util.getValueOfDecimal(dr.Discount.toFixed(PriceListPrecision)));
-                    if (countEd011 <= 0) {
-                        mTab.setValue("C_UOM_ID", Util.getValueOfInt(dr.C_UOM_ID));
+                    var productType = productInfo["productType"].toString();
+                    ctx.setContext(windowNo, "ProductType", productType);
+                    if (productType == "S") {
+                        mTab.setValue("IsContract", true);
                     }
-                    mTab.setValue("QtyOrdered", mTab.getValue("QtyEntered"));
+                    else {
+                        mTab.setValue("IsContract", false);
+                        mTab.setValue("NoofCycle", null);
+                        mTab.setValue("QtyPerCycle", null);
+                        mTab.setValue("StartDate", null);
+                        mTab.setValue("C_Contract_ID", 0); // Contract
+                        mTab.setValue("EndDate", null);
+                        mTab.setValue("C_Frequency_ID", 0);  // Billing frequncy
+                    }
 
-                    //Start UOM
-                    if (countEd011 > 0 && purchasingUom > 0 && isSOTrx == false && isReturnTrx == false) {
+                    if (productInfo["IsDropShip"].toString() == "Y") {
+                        mTab.setValue("IsDropShip", true);
+                    }
+                    else {
+                        mTab.setValue("IsDropShip", false);
+                    }
 
+                    countEd011 = Util.getValueOfInt(productInfo["countEd011"]);
+                    var purchasingUom = Util.getValueOfInt(productInfo["purchasingUom"]);
+
+                    if (purchasingUom > 0 && !isSOTrx) {
+                        mTab.setValue("C_UOM_ID", purchasingUom);
+                    }
+                    else {
+                        mTab.setValue("C_UOM_ID", Util.getValueOfInt(productInfo["headerUom"]));
+                    }
+
+                    StdPrecision = Util.getValueOfInt(productInfo["StdPrecision"]);
+                    PriceListPrecision = Util.getValueOfInt(productInfo["PriceListPrecision"]);
+
+                    if (purchasingUom > 0 && !isSOTrx) {
                         var params = mTab.getValue("M_Product_ID").toString().concat("," + ctx.getAD_Client_ID().toString() + "," + (mTab.getValue("C_Order_ID")).toString() +
                             "," + (C_BPartner_ID).toString() + "," + (mTab.getValue("QtyEntered")).toString() + "," + Util.getValueOfString(purchasingUom));
                         var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPricesOnProductChange", params);
@@ -1848,29 +1786,20 @@
                         mTab.setValue("PriceActual", PriceActual);
                         mTab.setValue("QtyOrdered", Util.getValueOfDecimal(prices["QtyOrdered"].toFixed(prices["UOMStdPrecision"])));
                     }
-                    //End UOM
+                    else {
+                        mTab.setValue("PriceList", productInfo["PriceList"]);
+                        mTab.setValue("PriceLimit", productInfo.PriceLimit);
+                        mTab.setValue("PriceActual", Util.getValueOfDecimal(productInfo.PriceActual.toFixed(PriceListPrecision)));
+                        mTab.setValue("PriceEntered", Util.getValueOfDecimal(productInfo.PriceEntered.toFixed(PriceListPrecision)));
+                        mTab.setValue("C_Currency_ID", Util.getValueOfInt(productInfo.C_Currency_ID));
+                        mTab.setValue("Discount", Util.getValueOfDecimal(productInfo.Discount.toFixed(PriceListPrecision)));
+                        mTab.setValue("QtyOrdered", mTab.getValue("QtyEntered"));
+                    }
 
-                    ctx.setContext(windowNo, "EnforcePriceLimit", dr.IsEnforcePriceLimit ? "Y" : "N");
-                    ctx.setContext(windowNo, "DiscountSchema", dr.IsDiscountSchema ? "Y" : "N");
+                    ctx.setContext(windowNo, "EnforcePriceLimit", productInfo.EnforcePriceLimit ? "Y" : "N");
+                    ctx.setContext(windowNo, "DiscountSchema", productInfo.DiscountSchema ? "Y" : "N");
 
-                    //	Check/Update Warehouse Setting
-                    //	var M_Warehouse_ID = ctx.getContextAsInt( Env.WINDOW_INFO, "M_Warehouse_ID");
-                    //	var wh = (int)mTab.getValue("M_Warehouse_ID");
-                    //	if (wh.intValue() != M_Warehouse_ID)
-                    //	{
-                    //		mTab.setValue("M_Warehouse_ID", new int(M_Warehouse_ID));
-                    //		ADialog.warn(,windowNo, "WarehouseChanged");
-                    //	}
-
-                    if (ctx.isSOTrx()) {
-
-                        //MProduct product = MProduct.get(ctx, M_Product_ID);
-                        //Check product Stock
-                        //var dr = null;
-                        // dr = VIS.dataContext.getJSONRecord("CalloutOrder/GetProductStock", M_Product_ID.toString());
-
-
-                        //if (dr.IsStocked) {
+                    if (isSOTrx) {
                         var QtyOrdered = Util.getValueOfDecimal(mTab.getValue("QtyOrdered"));
                         var M_Warehouse_ID = ctx.getContextAsInt(windowNo, "M_Warehouse_ID");
                         var M_AttributeSetInstance_ID = ctx.getContextAsInt(windowNo, "M_AttributeSetInstance_ID");
@@ -1893,15 +1822,12 @@
                         if (available == null)
                             available = VIS.Env.ZERO;
                         if (available == 0) {
-                            //mTab.fireDataStatusEEvent("NoQtyAvailable", "0", false);
-                            // VIS.ADialog.info("NoQtyAvailable", true, "0", "");
+
                         }
                         else if (available.toString().compareTo(QtyOrdered) < 0) {
-                            //mTab.fireDataStatusEEvent("InsufficientQtyAvailable", available.toString(), false);
-                            // VIS.ADialog.info("InsufficientQtyAvailable", true, available.toString(), "");
+
                         }
                         else {
-
                             var paramString = M_Warehouse_ID.toString() + "," + M_Product_ID.toString() + "," + M_AttributeSetInstance_ID.toString() + "," + C_OrderLine_ID.toString();
                             var notReserved = VIS.dataContext.getJSONRecord("MOrderLine/GetNotReserved", paramString);
 
@@ -1996,7 +1922,7 @@
                 mTab.setValue("C_UOM_ID", 100);	//	EA
             }
             ctx.setContext(windowNo, "DiscountSchema", "N");
-            
+
             // JID_1744 The Precision Shpould as per Currency precision
             var stdPrecision = VIS.dataContext.getJSONRecord("MOrder/GetPrecision", mTab.getValue("C_Order_ID").toString());
 
@@ -2010,10 +1936,10 @@
 
             mTab.setValue("PriceLimit", VIS.Env.ZERO);
             mTab.setValue("PriceList", VIS.Env.ZERO);
-            mTab.setValue("Discount", VIS.Env.ZERO);           
+            mTab.setValue("Discount", VIS.Env.ZERO);
         }
         catch (err) {
-            this.setCalloutActive(false);           
+            this.setCalloutActive(false);
             this.log.log(Level.SEVERE, err.toString());
             return err
         }
@@ -2062,48 +1988,17 @@
             var recDic = VIS.dataContext.getJSONRecord("MOrderLine/GetTaxId", params);
             //end 
 
-            //var _CountVATAX = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX IN ('VATAX_' )"));
             var _CountVATAX = Util.getValueOfInt(recDic["_CountVATAX"]);
 
             var isSOTrx = ctx.getWindowContext(windowNo, "IsSOTrx", true) == "Y";
             var isReturnTrx = ctx.getWindowContext(windowNo, "IsReturnTrx", true) == "Y";
 
-            //paramString = mTab.getValue("C_Order_ID").toString();
-            //var order = VIS.dataContext.getJSONRecord("MOrder/GetOrder", paramString);
-
-            //sql = "SELECT VATAX_TaxRule FROM AD_OrgInfo WHERE AD_Org_ID=" + Util.getValueOfInt(order["AD_Org_ID"]) + " AND IsActive ='Y' AND AD_Client_ID =" + ctx.getAD_Client_ID();
             if (_CountVATAX > 0) {
-                //taxRule = Util.getValueOfString(VIS.DB.executeScalar(sql));
                 taxRule = Util.getValueOfString(recDic["taxRule"]);
             }
-            if (taxRule == "T" && ((isSOTrx == true && isReturnTrx == false)
-                || (isSOTrx == false && isReturnTrx == false))) {
+
+            if (taxRule == "T" && !isReturnTrx) {
                 var taxId = Util.getValueOfInt(recDic["taxId"]);
-
-                //sql = "SELECT Count(*) FROM AD_Column WHERE ColumnName = 'C_Tax_ID' AND AD_Table_ID = (SELECT AD_Table_ID FROM AD_Table WHERE TableName = 'C_TaxCategory')";
-                //if (Util.getValueOfInt(VIS.DB.executeScalar(sql)) > 0) {
-                //    paramString = Util.getValueOfInt(mTab.getValue("C_Order_ID")).toString() + "," + Util.getValueOfInt(mTab.getValue("M_Product_ID")).toString() +
-                //        "," + Util.getValueOfInt(mTab.getValue("C_Charge_ID")).toString();
-                //    taxId = VIS.dataContext.getJSONRecord("MOrderLine/GetTax", paramString);
-                //}
-                //else {
-                //    sql = "SELECT VATAX_TaxType_ID FROM C_BPartner_Location WHERE C_BPartner_ID =" + Util.getValueOfInt(order["C_BPartner_ID"]) +
-                //                      " AND IsActive = 'Y'  AND C_BPartner_Location_ID = " + Util.getValueOfInt(order["Bill_Location_ID"]);
-                //    var taxType = Util.getValueOfInt(VIS.DB.executeScalar(sql));
-                //    if (taxType == 0) {
-                //        sql = "SELECT VATAX_TaxType_ID FROM C_BPartner WHERE C_BPartner_ID =" + Util.getValueOfInt(order["C_BPartner_ID"]) + " AND IsActive = 'Y'";
-                //        taxType = Util.getValueOfInt(VIS.DB.executeScalar(sql));
-                //    }
-                //    var prodtaxCategory = VIS.dataContext.getJSONRecord("MProduct/GetTaxCategory", value.toString());
-                //    sql = "SELECT C_Tax_ID FROM VATAX_TaxCatRate WHERE C_TaxCategory_ID = " + prodtaxCategory + " AND IsActive ='Y' AND VATAX_TaxType_ID =" + taxType;
-                //    taxId = Util.getValueOfInt(VIS.DB.executeScalar(sql));
-                //}
-
-                //change by amit 7-june-2016
-                //var params = mTab.getValue("M_Product_ID").toString().concat(",", (mTab.getValue("C_Order_ID")).toString() + "," + Util.getValueOfString(mTab.getValue("C_Charge_ID")) +
-                //    "," + Util.getValueOfString(order["C_BPartner_ID"]) + "," + Util.getValueOfString(order["Bill_Location_ID"]));
-                //taxId = VIS.dataContext.getJSONRecord("MOrderLine/GetTaxId", params);
-                //end 
 
                 if (Util.getValueOfInt(taxId) > 0) {
                     mTab.setValue("C_Tax_ID", taxId);
@@ -2265,9 +2160,11 @@
             var C_UOM_To_ID = ctx.getContextAsInt(windowNo, "C_UOM_ID");
             var M_Product_ID = ctx.getContextAsInt(windowNo, "M_Product_ID");
             var M_PriceList_ID = ctx.getContextAsInt(windowNo, "M_PriceList_ID");
+            var isSOTrx = (ctx.getWindowContext(windowNo, "IsSOTrx", true) == "Y");
 
             var isBlanketOrderLine = Util.getValueOfInt(mTab.getValue("C_OrderLine_Blanket_ID")) > 0 ? true : false;
             var isQuotationOrderLine = Util.getValueOfInt(mTab.getValue("C_Quotation_Line_ID")) > 0 ? true : false;
+
             // if order line having sales quotation ID then set isBlanketOrderLine AS TRUE
             if (isQuotationOrderLine) { isBlanketOrderLine = isQuotationOrderLine }
 
@@ -2277,19 +2174,20 @@
                 isReactivation = Util.getValueOfDecimal(mTab.getValue("QtyInvoiced")) > 0 ? true : false;
             }
 
-            //Get Qty information from server side
-            var pStr = M_PriceList_ID.toString(); //1
-
             //Get product price information
             var dr;
             dr = VIS.dataContext.getJSONRecord("MPriceList/GetPriceList", M_PriceList_ID.toString());
             var StdPrecision = 2;
             var PriceListPrecision = 2;
+            var epl = "Y";
+            var IsTaxIncluded = "N";
             if (dr != null) {
                 StdPrecision = Util.getValueOfInt(dr["StdPrecision"]);
                 PriceListPrecision = Util.getValueOfInt(dr["PriceListPrecision"]);
+                epl = Util.getValueOfString(dr["EnforcePriceLimit"]);
+                IsTaxIncluded = Util.getValueOfString(dr["IsTaxIncluded"]);
             }
-            var QtyEntered, QtyOrdered, PriceEntered, PriceActual, PriceLimit, Discount, PriceList;
+            var QtyEntered, QtyOrdered, PriceEntered, PriceActual, PriceLimit, Discount, PriceList, DiscountSchema;
             //	get values
             QtyEntered = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
             QtyOrdered = Util.getValueOfDecimal(mTab.getValue("QtyOrdered"));
@@ -2304,159 +2202,106 @@
             this.log.fine("PriceList=" + PriceList + ", Limit=" + PriceLimit + ", Precision=" + PriceListPrecision);
             this.log.fine("PriceEntered=" + PriceEntered + ", Actual=" + PriceActual + ", Discount=" + Discount);
 
-            //countEd011 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='ED011_'"));
-
             var C_BPartner_ID1 = ctx.getContextAsInt(windowNo, "C_BPartner_ID", false);
-            /** Price List - ValidFrom date validation ** Dt:11/03/2021 ** Modified By: Kumar **/
-            var params = M_Product_ID.toString().concat(",", Util.getValueOfString(mTab.getValue("C_Order_ID")) +
-                "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
-                "," + Util.getValueOfString(mTab.getValue("C_UOM_ID")) + "," + ctx.getAD_Client_ID().toString() + "," + Util.getValueOfString(C_BPartner_ID1) +
-                "," + Util.getValueOfString(mTab.getValue("QtyEntered")) + "," + Util.getValueOfString(mTab.getValue("StartDate")) +
-                "," + Util.getValueOfString(mTab.getValue("M_PriceList_ID")));
-            var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPrices", params);
-
-            countEd011 = Util.getValueOfInt(prices["countEd011"]);
-            var countVAPRC = Util.getValueOfInt(prices["countVAPRC"]);
-
-            // start vikas dec/8/2014
-            //if (Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO  WHERE PREFIX IN('VAPRC_','ED011_')")) >= 1) {
-            if (countEd011 >= 1 || countVAPRC >= 1) {
-                PriceActual = PriceEntered;
-            }
-            // end vikas dec/8/2014
 
             //Start Amit UOM
-            if (mField.getColumnName() == "QtyEntered" && countEd011 > 0) {
-
-                // Added by Bharat on 29 August 2017 to handle the case of Return
-                if (Util.getValueOfInt(mTab.getValue("Orig_OrderLine_ID")) > 0) {
-                }
-                else {
+            if (mField.getColumnName() == "QtyEntered") {
+                if (Util.getValueOfInt(mTab.getValue("Orig_OrderLine_ID")) <= 0) {
                     // SI_0605: not to update price when blanket order line exist
                     // JID_1362: when qty delivered / invoiced > 0, then priace acual and entererd not change
-                    if (!isBlanketOrderLine && !isReactivation) {
-                        PriceList = Util.getValueOfDecimal(prices["PriceList"]);
-                        mTab.setValue("PriceList", Util.getValueOfDecimal(prices["PriceList"]));
-                        PriceEntered = Util.getValueOfDecimal(prices["PriceEntered"]);
-                        mTab.setValue("PriceEntered", Util.getValueOfDecimal(prices["PriceEntered"]));
-                        PriceActual = Util.getValueOfDecimal(prices["PriceEntered"]);
-                        mTab.setValue("PriceActual", PriceActual);
-                    }
+                    //if (!isBlanketOrderLine && !isReactivation) {
+                    //    /** Price List - ValidFrom date validation ** Dt:11/03/2021 ** Modified By: Kumar **/
+                    //    var params = M_Product_ID.toString().concat(",", Util.getValueOfString(mTab.getValue("C_Order_ID")) +
+                    //        "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
+                    //        "," + Util.getValueOfString(mTab.getValue("C_UOM_ID")) + "," + ctx.getAD_Client_ID().toString() + "," + Util.getValueOfString(C_BPartner_ID1) +
+                    //        "," + Util.getValueOfString(mTab.getValue("QtyEntered")) + "," + Util.getValueOfString(mTab.getValue("StartDate")) +
+                    //        "," + Util.getValueOfString(mTab.getValue("M_PriceList_ID")));
+                    //    var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPrices", params);
+
+                    //    PriceList = Util.getValueOfDecimal(prices["PriceList"]);
+                    //    mTab.setValue("PriceList", Util.getValueOfDecimal(prices["PriceList"]));
+                    //    PriceEntered = Util.getValueOfDecimal(prices["PriceEntered"]);
+                    //    mTab.setValue("PriceEntered", Util.getValueOfDecimal(prices["PriceEntered"]));
+                    //    PriceActual = Util.getValueOfDecimal(prices["PriceEntered"]);
+                    //    mTab.setValue("PriceActual", PriceActual);
+                    //}
                 }
             }
-            //end Amit UOM
 
             //	Qty changed - recalc price
             if ((mField.getColumnName() == "QtyOrdered"
                 || mField.getColumnName() == "QtyEntered"
                 || mField.getColumnName() == "M_Product_ID")
                 && !("N" == (ctx.getContext("DiscountSchema")))) {
-                var C_BPartner_ID = ctx.getContextAsInt(windowNo, "C_BPartner_ID");
-                if (mField.getColumnName() == "QtyEntered") {
-                    var paramString = M_Product_ID.toString().concat(",", C_UOM_To_ID.toString() + "," + QtyEntered.toString());
-
-                    var dr = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductTo", paramString);
-
-                    QtyOrdered = dr;
-                }
+                //var C_BPartner_ID = ctx.getContextAsInt(windowNo, "C_BPartner_ID");
+                //if (mField.getColumnName() == "QtyEntered") {
+                //    var paramString = M_Product_ID.toString().concat(",", C_UOM_To_ID.toString() + "," + QtyEntered.toString());
+                //    var dr = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductTo", paramString);
+                //    QtyOrdered = dr;
+                //}
 
                 if (QtyOrdered == null)
                     QtyOrdered = QtyEntered;
                 // Added by Bharat on 29 August 2017 to handle the case of Return
-                if (Util.getValueOfInt(mTab.getValue("Orig_OrderLine_ID")) > 0) {
-                }
-                else {
-                    var isSOTrx = (ctx.getWindowContext(windowNo, "IsSOTrx", true) == "Y");
-                    var orderDate = mTab.getValue("DateOrdered");
-                    var paramStr = M_Product_ID.toString().concat(",", C_BPartner_ID.toString(), ",", //2
-                        QtyOrdered.toString(), ",", //3
-                        isSOTrx, ",", //4 
-                        M_PriceList_ID.toString(), ",", //5
-                        "0,", //6
-                        orderDate.toString(), ",", null, ",", null, ",",  //7
-                        C_UOM_To_ID, ",", countEd011);
+                if (Util.getValueOfInt(mTab.getValue("Orig_OrderLine_ID")) <= 0) {
+                    //var orderDate = mTab.getValue("DateOrdered");
+                    //var paramStr = M_Product_ID.toString().concat(",", C_BPartner_ID.toString(), ",", //2
+                    //    QtyOrdered.toString(), ",", //3
+                    //    isSOTrx, ",", //4 
+                    //    M_PriceList_ID.toString(), ",", //5
+                    //    "0,", //6
+                    //    orderDate.toString(), ",", null, ",", null, ",",  //7
+                    //    C_UOM_To_ID, ",", 1);
 
-                    //Get product price information
-                    var pp = null;
-                    pp = VIS.dataContext.getJSONRecord("MProductPricing/GetProductPricing", paramStr);
-                    var stdPrice = pp.PriceStd;
+                    ////Get product price information
+                    //var pp = null;
+                    //pp = VIS.dataContext.getJSONRecord("MProductPricing/GetProductPricing", paramStr);
+                    //var stdPrice = pp.PriceStd;
 
-                    if (countEd011 <= 0 && countVAPRC <= 0) {
-                        paramStr = M_Product_ID.toString().concat(",", C_UOM_To_ID.toString(), ",", //2
-                            stdPrice.toString()); //3
+                    var C_BPartner_ID1 = ctx.getContextAsInt(windowNo, "C_BPartner_ID", false);
 
-                        var drPC = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
-                        PriceEntered = drPC;
+                    // SI_0605: not to update price when blanket order line exist
+                    // JID_1362: when qty delivered / invoiced > 0, then priace acual and entererd not change
+                    if (!isBlanketOrderLine && !isReactivation) {
+                        var params = M_Product_ID.toString().concat(",", (mTab.getValue("C_Order_ID")).toString() +
+                            "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
+                            "," + Util.getValueOfString(mTab.getValue("C_UOM_ID")) + "," + ctx.getAD_Client_ID().toString() +
+                            "," + C_BPartner_ID1.toString() +
+                            "," + (mTab.getValue("QtyEntered")).toString() + "," + 1 + "," + 1);
+                        var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPricesOnChange", params);
+
+                        PriceList = Util.getValueOfDecimal(prices["PriceList"]);
+                        mTab.setValue("PriceList", Util.getValueOfDecimal(prices["PriceList"]));
+                        PriceEntered = Util.getValueOfDecimal(prices["PriceEntered"]);
+                        DiscountSchema = Util.getValueOfString(prices["DiscountSchema"]);
                     }
-                    else {
-                        //Start Amit Uom Conversion                        
-                        var C_BPartner_ID1 = ctx.getContextAsInt(windowNo, "C_BPartner_ID", false);
-
-                        // SI_0605: not to update price when blanket order line exist
-                        // JID_1362: when qty delivered / invoiced > 0, then priace acual and entererd not change
-                        if (!isBlanketOrderLine && !isReactivation) {
-                            var params = M_Product_ID.toString().concat(",", (mTab.getValue("C_Order_ID")).toString() +
-                                "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
-                                "," + Util.getValueOfString(mTab.getValue("C_UOM_ID")) + "," + ctx.getAD_Client_ID().toString() +
-                                "," + C_BPartner_ID1.toString() +
-                                "," + (mTab.getValue("QtyEntered")).toString() + "," + countEd011.toString() + "," + countVAPRC.toString());
-                            var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPricesOnChange", params);
-
-                            PriceList = Util.getValueOfDecimal(prices["PriceList"]);
-                            mTab.setValue("PriceList", Util.getValueOfDecimal(prices["PriceList"]));
-                            PriceEntered = Util.getValueOfDecimal(prices["PriceEntered"]);
-                        }
-                    }
-                    if (PriceEntered == null)
-                        PriceEntered = stdPrice;
+                    //if (PriceEntered == null)
+                    //    PriceEntered = stdPrice;
                     //
-                    this.log.fine("QtyChanged -> PriceActual=" + stdPrice
-                        + ", PriceEntered=" + PriceEntered + ", Discount=" + pp.Discount);
-                    PriceActual = Util.getValueOfDecimal(pp.PriceStd.toFixed(PriceListPrecision));
-                    //mTab.setValue("PriceActual", PriceActual);
+                    this.log.fine("QtyChanged -> PriceActual=" + PriceEntered
+                        + ", PriceEntered=" + PriceEntered + ", Discount=" + Discount);
+                    PriceActual = Util.getValueOfDecimal(PriceEntered.toFixed(PriceListPrecision));
+
                     // SI_0605: not to update price when blanket order line exist
                     // JID_1362: when qty delivered / invoiced > 0, then priace acual and entererd not change
                     if (!isBlanketOrderLine && !isReactivation) {
                         mTab.setValue("PriceActual", PriceEntered);
                     }
-                    if (countEd011 <= 0 && countVAPRC <= 0) {
-                        // SI_0605: not to update price when blanket order line exist
-                        // JID_1362: when qty delivered / invoiced > 0, then priace acual and entererd not change
-                        if (!isBlanketOrderLine && !isReactivation) {
-                            mTab.setValue("Discount", pp.Discount);
-                        }
-                    }
-                    else {
-                        // SI_0605: not to update price when blanket order line exist
-                        // JID_1362: when qty delivered / invoiced > 0, then priace acual and entererd not change
-                        if (!isBlanketOrderLine && !isReactivation) {
-                            PriceActual = PriceEntered;
-                            mTab.setValue("Discount", ((Util.getValueOfDecimal(mTab.getValue("PriceList")) - PriceEntered) / Util.getValueOfDecimal(mTab.getValue("PriceList"))) * 100);
-                        }
+
+                    // SI_0605: not to update price when blanket order line exist
+                    // JID_1362: when qty delivered / invoiced > 0, then priace acual and entererd not change
+                    if (!isBlanketOrderLine && !isReactivation) {
+                        PriceActual = PriceEntered;
+                        mTab.setValue("Discount", ((Util.getValueOfDecimal(mTab.getValue("PriceList")) - PriceEntered) / Util.getValueOfDecimal(mTab.getValue("PriceList"))) * 100);
                     }
                     mTab.setValue("PriceEntered", PriceEntered);
-                    ctx.setContext(windowNo, "DiscountSchema", pp.DiscountSchema ? "Y" : "N");
+                    ctx.setContext(windowNo, "DiscountSchema", DiscountSchema);
                 }
             }
             else if (mField.getColumnName() == "PriceActual") {
                 PriceActual = Util.getValueOfDecimal(value.toFixed(PriceListPrecision));
-                // commneted by Amit on behalf of Ravikant 15-10-2015
-                //make parameter string
-                //paramStr = M_Product_ID.toString().concat(",", C_UOM_To_ID.toString(), ",", //2
-                //      PriceActual.toString()); //3
-
-                //var drPC = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
-
-                //PriceEntered = drPC;//(Decimal?)MUOMConversion.ConvertProductFrom(ctx, M_Product_ID,
-                //C_UOM_To_ID, PriceActual.Value);
-
-
-
-                //if (PriceEntered == null)
                 PriceEntered = PriceActual;
-                //end
 
-                //
                 this.log.fine("PriceActual=" + PriceActual
                     + " -> PriceEntered=" + PriceEntered);
                 mTab.setValue("PriceEntered", PriceEntered);
@@ -2464,25 +2309,8 @@
             }
             else if (mField.getColumnName() == "PriceEntered") {
                 PriceEntered = Util.getValueOfDecimal(value.toFixed(PriceListPrecision));
+                PriceActual = PriceEntered;
 
-                //make parameter string
-                paramStr = M_Product_ID.toString().concat(",", C_UOM_To_ID.toString(), ",", //2
-                    PriceEntered.toString()); //3
-
-                var drPC = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductTo", paramStr);
-
-                PriceActual = drPC;//(Decimal?)MUOMConversion.ConvertProductTo(ctx, M_Product_ID,
-                //C_UOM_To_ID, PriceEntered);
-
-                // vikas dec/8/2014
-                if (Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO  WHERE PREFIX IN('VAPRC_','ED011_')")) > 1) {
-                    PriceActual = PriceEntered;
-                }
-                //
-
-                if (PriceActual == null)
-                    PriceActual = PriceEntered;
-                //
                 this.log.fine("PriceEntered=" + PriceEntered
                     + " -> PriceActual=" + PriceActual);
                 mTab.setValue("PriceActual", PriceActual);
@@ -2491,22 +2319,12 @@
 
             //  Discount entered - Calculate Actual/Entered
             if (mField.getColumnName() == "Discount") {
-                //PriceActual = Util.getValueOfDecimal(((100.0 - Decimal.ToDouble(Discount.Value))
-                //    / 100.0 * Decimal.ToDouble(PriceList.Value)));
                 PriceActual = Util.getValueOfDecimal((100.0 - Discount)
                     / 100.0 * PriceList);
 
-                //if (Env.Scale(PriceActual.Value) > StdPrecision)
                 if (Util.scale(PriceActual) > PriceListPrecision)
-                    //PriceActual = Decimal.Round(PriceActual.Value, StdPrecision);//, MidpointRounding.AwayFromZero);
-                    PriceActual = PriceActual.toFixed(PriceListPrecision);//, MidpointRounding.AwayFromZero);
+                    PriceActual = PriceActual.toFixed(PriceListPrecision);
 
-                //paramStr = M_Product_ID.toString().concat(",", C_UOM_To_ID.toString(), ",", //2
-                //     PriceActual.toString()); //3
-
-                //var drPC = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
-                //PriceEntered = drPC;// (Decimal?)MUOMConversion.ConvertProductFrom(ctx, M_Product_ID,
-                //C_UOM_To_ID, PriceActual.Value);
                 PriceEntered = PriceActual;
                 if (PriceEntered == null)
                     PriceEntered = PriceActual;
@@ -2519,16 +2337,13 @@
                     Discount = VIS.Env.ZERO;
                 }
                 else {
-                    //Discount = new Bigvar ((PriceList.doubleValue() - PriceActual.doubleValue()) / PriceList.doubleValue() * 100.0);
-                    //Discount = Util.getValueOfDecimal(((Decimal.ToDouble(PriceList.Value) - Decimal.ToDouble(PriceActual.Value)) / Decimal.ToDouble(PriceList.Value) * 100.0));
                     Discount = Util.getValueOfDecimal(((PriceList - PriceActual) / PriceList * 100.0));
                     if (isNaN(Discount)) {
                         this.setCalloutActive(false);
                         return "PriceListNotSelected";
                     }
                 }
-                //if (Discount.Scale() > 2)
-                //   Discount = Decimal.Round(Discount.Value, 2);//, MidpointRounding.AwayFromZero);
+
                 Discount = Util.getValueOfDecimal(Discount.toFixed(PriceListPrecision));
                 mTab.setValue("PriceList", Util.getValueOfDecimal(PriceList.toFixed(PriceListPrecision)));
 
@@ -2542,21 +2357,10 @@
 
             //	Check PriceLimit
             var OverwritePriceLimit = false;
-            var epl = ctx.getContext("EnforcePriceLimit");
-            var enforce = (ctx.isSOTrx() && epl != null && epl == "Y");
-            // change by Amit 15-10-2015
-            if (epl == "") {
-                var paramString = Util.getValueOfInt(mTab.getValue("C_Order_ID")).toString();
-                var C_Order = VIS.dataContext.getJSONRecord("MOrder/GetOrder", paramString);
-                var sql = "SELECT EnforcePriceLimit FROM M_PriceList WHERE IsActive = 'Y' AND M_PriceList_ID = " + C_Order["M_PriceList_ID"];
-                epl = VIS.DB.executeScalar(sql);
-                enforce = (C_Order["IsSOTrx"] && epl != null && epl == "Y");
-                sql = "SELECT OverwritePriceLimit FROM AD_Role WHERE IsActive = 'Y' AND AD_Role_ID = " + ctx.getContext("#AD_Role_ID");
-                OverwritePriceLimit = Util.getValueOfBoolean(VIS.DB.executeScalar(sql));
-            }
-            //end
-            var isReturnTrx = "Y" == (ctx.getContext("IsReturnTrx"));
-            // if (enforce && (VIS.MRole.getDefault().IsOverwritePriceLimit() || isReturnTrx))
+            var enforce = (isSOTrx && epl != null && epl == "Y");
+            OverwritePriceLimit = VIS.MRole.getDefault().getIsOverwritePriceLimit();
+            var isReturnTrx = "Y" == (ctx.getWindowContext(windowNo, "IsReturnTrx", true));
+
             if (enforce && (OverwritePriceLimit || isReturnTrx))
                 enforce = false;
 
@@ -2565,13 +2369,6 @@
                 && PriceActual.compareTo(PriceLimit) < 0) {
                 PriceActual = PriceLimit;
 
-                //paramStr = M_Product_ID.toString().concat(",", C_UOM_To_ID.toString(), ",", //2
-                //    PriceLimit.toString()); //3
-
-                //var drPC = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
-
-                //PriceEntered = drPC; //(Decimal?)MUOMConversion.ConvertProductFrom(ctx, M_Product_ID,
-                //C_UOM_To_ID, PriceLimit.Value);
                 PriceEntered = PriceActual;
                 if (PriceEntered == null)
                     PriceEntered = PriceLimit;
@@ -2582,17 +2379,11 @@
                     mTab.setValue("PriceActual", PriceLimit);
                     mTab.setValue("PriceEntered", PriceEntered);
                 }
-                //mTab.fireDataStatusEEvent("UnderLimitPrice", "", false);
+
                 VIS.ADialog.info("UnderLimitPrice", true, "", "");
                 //	Repeat Discount calc
                 if (PriceList != 0) {
-                    //Discount = Util.getValueOfDecimal(((Decimal.ToDouble(PriceList.Value) - Decimal.ToDouble(PriceActual.Value)) / Decimal.ToDouble(PriceList.Value) * 100.0));
                     Discount = Util.getValueOfDecimal(((PriceList - PriceActual) / PriceList * 100.0));
-                    //if (Env.scale(Discount.Value) > 2)
-                    //{
-
-                    //    Discount = Decimal.Round(Discount.Value, 2);//, MidpointRounding.AwayFromZero);
-                    //}
                     Discount = Discount.toFixed(2);
                     // SI_0605: not to update price when blanket order line exist
                     // JID_1362: when qty delivered / invoiced > 0, then priace acual and entererd not change
@@ -2613,7 +2404,6 @@
                 if (BlanketOrderLineID > 0) {
                     dr = VIS.dataContext.getJSONRecord("MOrderLine/GetOrderLine", BlanketOrderLineID.toString());
                     if (dr != null) {
-
                         var PriceList = Util.getValueOfDouble(dr["PriceList"]);
                         var PriceActual = Util.getValueOfDouble(dr["PriceActual"]);
                         var PriceEntered = Util.getValueOfDouble(dr["PriceEntered"]);
@@ -2657,9 +2447,9 @@
                 var taxID = mTab.getValue("C_Tax_ID");
                 if (taxID != null) {
                     var C_Tax_ID = taxID;//.intValue();
-                    var IsTaxIncluded = this.IsTaxIncluded(windowNo, ctx);
+                    /*var IsTaxIncluded = this.IsTaxIncluded(windowNo, ctx);*/
                     var paramString = C_Tax_ID.toString().concat(",", LineNetAmt.toString(), ",", //2
-                        IsTaxIncluded, ",", //3
+                        IsTaxIncluded == "Y", ",", //3
                         StdPrecision.toString() //4 
                     ); //7          
                     var dr = null;
@@ -2899,257 +2689,233 @@
             // if order line having sales quotation ID then set isBlanketOrderLine AS TRUE
             if (isQuotationOrderLine) { isBlanketOrderLine = isQuotationOrderLine }
             var C_BPartner_ID = ctx.getContextAsInt(windowNo, "C_BPartner_ID", false);
-            var bpartner = VIS.dataContext.getJSONRecord("MBPartner/GetBPartner", C_BPartner_ID.toString());
-            var prodC_UOM_ID = VIS.dataContext.getJSONRecord("MProduct/GetC_UOM_ID", M_Product_ID.toString());
+            //var bpartner = VIS.dataContext.getJSONRecord("MBPartner/GetBPartner", C_BPartner_ID.toString());
+            //var prodC_UOM_ID = VIS.dataContext.getJSONRecord("MProduct/GetC_UOM_ID", M_Product_ID.toString());
             //	No Product
             if (M_Product_ID == 0) {
                 QtyEntered = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
                 QtyOrdered = QtyEntered;
                 mTab.setValue("QtyOrdered", QtyOrdered);
             }
-            /** Price List - ValidFrom date validation ** Dt:11/03/2021 ** Modified By: Kumar **/
             //	UOM Changed - convert from Entered -> Product
             else if (mField.getColumnName() == "C_UOM_ID" || mField.getColumnName() == "M_AttributeSetInstance_ID" || mField.getColumnName() == "StartDate") {
                 var C_UOM_To_ID = Util.getValueOfInt(mTab.getValue("C_UOM_ID"));
                 QtyEntered = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
 
-                /*** Start Amit ***/
-                /** Price List - getting price list version based on start date for contract screen as order id is not available yet ** Dt:11/03/2021 ** Modified By: Kumar **/
-                var params = Util.getValueOfString(C_BPartner_ID).concat(",", Util.getValueOfString(mTab.getValue("C_Order_ID")) +
+                //var params = Util.getValueOfString(C_BPartner_ID).concat(",", Util.getValueOfString(mTab.getValue("C_Order_ID")) +
+                //    "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
+                //    "," + Util.getValueOfString(C_UOM_To_ID) + "," + Util.getValueOfString(ctx.getAD_Client_ID()) +
+                //    "," + Util.getValueOfString(mTab.getValue("M_Product_ID")) + "," + Util.getValueOfString(mTab.getValue("QtyEntered")) +
+                //    "," + Util.getValueOfString(mTab.getValue("StartDate")) + "," + Util.getValueOfString(mTab.getValue("M_PriceList_ID")));
+                //var productPrices = VIS.dataContext.getJSONRecord("MOrderLine/GetProductPriceOnUomChange", params);
+
+                //countEd011 = Util.getValueOfInt(productPrices["countEd011"]);
+
+                var params = M_Product_ID.toString().concat(",", (mTab.getValue("C_Order_ID")).toString() +
                     "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
-                    "," + Util.getValueOfString(C_UOM_To_ID) + "," + Util.getValueOfString(ctx.getAD_Client_ID()) +
-                    "," + Util.getValueOfString(mTab.getValue("M_Product_ID")) + "," + Util.getValueOfString(mTab.getValue("QtyEntered")) +
-                    "," + Util.getValueOfString(mTab.getValue("StartDate")) + "," + Util.getValueOfString(mTab.getValue("M_PriceList_ID")));
-                var productPrices = VIS.dataContext.getJSONRecord("MOrderLine/GetProductPriceOnUomChange", params);
+                    "," + Util.getValueOfString(mTab.getValue("C_UOM_ID")) + "," + ctx.getAD_Client_ID().toString() +
+                    "," + Util.getValueOfString(C_BPartner_ID) + "," + QtyEntered.toString() + "," + 1 + "," + 1);
+                var productPrices = VIS.dataContext.getJSONRecord("MOrderLine/GetPricesOnChange", params);
 
-                countEd011 = Util.getValueOfInt(productPrices["countEd011"]);
-
-                if (countEd011 > 0) {
-
-                    var isAttributeValue = Util.getValueOfInt(productPrices["isAttributeValue"]);
-
-                    if (isAttributeValue == 1) {
-
-                        var actualPrice1 = Util.getValueOfDecimal(productPrices["PriceEntered"]);
-                        // SI_0605: not to update price when blanket order line exist
-                        if (!isBlanketOrderLine) {
-                            mTab.setValue("PriceList", Util.getValueOfDecimal(productPrices["PriceList"]));
-                            mTab.setValue("PriceLimit", Util.getValueOfDecimal(productPrices["PriceLimit"]));
-                            mTab.setValue("PriceActual", Util.getValueOfDecimal(productPrices["PriceEntered"]));
-                            mTab.setValue("PriceEntered", Util.getValueOfDecimal(productPrices["PriceEntered"]));
-                        }
-
-                        //Get precision from server side
-                        paramStr = C_UOM_To_ID.toString().concat(",");
-                        var gp = VIS.dataContext.getJSONRecord("MUOM/GetPrecision", paramStr);
-
-                        var QtyEntered1 = QtyEntered.toFixed(Util.getValueOfInt(gp));
-
-                        if (QtyEntered != QtyEntered1) {
-                            this.log.fine("Corrected QtyEntered Scale UOM=" + C_UOM_To_ID
-                                + "; QtyEntered=" + QtyEntered + "->" + QtyEntered1);
-                            QtyEntered = QtyEntered1;
-                            mTab.setValue("QtyEntered", QtyEntered);
-                        }
-
-                        //Conversion of Qty Ordered
-                        paramStr = M_Product_ID.toString().concat(",", C_UOM_To_ID.toString(), ","
-                            , QtyEntered.toString());
-                        var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
-                        QtyOrdered = pc;
-
-                        var conversion = false
-                        if (QtyOrdered != null) {
-                            conversion = QtyEntered != QtyOrdered;
-                        }
-                        if (QtyOrdered == null) {
-                            conversion = false;
-                            QtyOrdered = 1;
-                        }
-                        if (conversion) {
-                            mTab.setValue("QtyOrdered", QtyOrdered);
-                        }
-                        else {
-                            //mTab.setValue("QtyOrdered", Decimal.Multiply(QtyOrdered, QtyEntered1));
-                            mTab.setValue("QtyOrdered", (QtyOrdered * QtyEntered1));
-                        }
-
-                        // SI_0605: not to update price when blanket order line exist
-                        if (!isBlanketOrderLine) {
-                            mTab.setValue("PriceActual", actualPrice1);
-                            //mTab.setValue("PriceList", Util.getValueOfDecimal(ds.getTables()[0].getRows()[0].getCell("PriceList")));
-                            mTab.setValue("PriceList", Util.getValueOfDecimal(productPrices["PriceList"]));
-                        }
-                        // End Pick Price based on attribute and seleceted UOM
-                    }
-                    //else if (isAttributeValue == false) {
-                    else if (isAttributeValue == 2 || isAttributeValue == 0) {
-                        if (isAttributeValue == 2) {
-                            var actualPrice2 = Util.getValueOfDecimal(productPrices["PriceEntered"]);
-                            // SI_0605: not to update price when blanket order line exist
-                            if (!isBlanketOrderLine) {
-                                mTab.setValue("PriceList", Util.getValueOfDecimal(productPrices["PriceList"]));
-                                mTab.setValue("PriceLimit", Util.getValueOfDecimal(productPrices["PriceLimit"]));
-                                mTab.setValue("PriceActual", Util.getValueOfDecimal(productPrices["PriceEntered"]));
-                                mTab.setValue("PriceEntered", Util.getValueOfDecimal(productPrices["PriceEntered"]));
-                            }
-
-                            //Get precision from server side
-                            paramStr = C_UOM_To_ID.toString().concat(",");
-                            var gp = VIS.dataContext.getJSONRecord("MUOM/GetPrecision", paramStr);
-
-                            var QtyEntered1 = QtyEntered.toFixed(Util.getValueOfInt(gp));
-
-                            if (QtyEntered != QtyEntered1) {
-                                this.log.fine("Corrected QtyEntered Scale UOM=" + C_UOM_To_ID
-                                    + "; QtyEntered=" + QtyEntered + "->" + QtyEntered1);
-                                QtyEntered = QtyEntered1;
-                                mTab.setValue("QtyEntered", QtyEntered);
-                            }
-
-                            //Conversion of Qty Ordered
-                            paramStr = M_Product_ID.toString().concat(",", C_UOM_To_ID.toString(), ","
-                                , QtyEntered.toString());
-                            var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
-                            QtyOrdered = pc;
-
-                            var conversion = false
-                            if (QtyOrdered != null) {
-                                conversion = QtyEntered != QtyOrdered;
-                            }
-                            if (QtyOrdered == null) {
-                                conversion = false;
-                                QtyOrdered = 1;
-                            }
-                            if (conversion) {
-                                mTab.setValue("QtyOrdered", QtyOrdered);
-                            }
-                            else {
-                                mTab.setValue("QtyOrdered", (QtyOrdered * QtyEntered1));
-                            }
-
-                            // SI_0605: not to update price when blanket order line exist
-                            if (!isBlanketOrderLine) {
-                                mTab.setValue("PriceActual", actualPrice2);
-                                //mTab.setValue("PriceList", Util.getValueOfDecimal(ds.getTables()[0].getRows()[0].getCell("PriceList")));
-                                mTab.setValue("PriceList", Util.getValueOfDecimal(productPrices["PriceList"]));
-                            }
-                            // End Pick Price of selected UOM
-                        }
-                        else {
-                            //start Conversion based on product header UOM
-                            paramStr = C_UOM_To_ID.toString().concat(",");
-                            var gp = VIS.dataContext.getJSONRecord("MUOM/GetPrecision", paramStr);
-
-                            var QtyEntered1 = QtyEntered.toFixed(Util.getValueOfInt(gp));
-
-                            if (QtyEntered != QtyEntered1) {
-                                this.log.fine("Corrected QtyEntered Scale UOM=" + C_UOM_To_ID
-                                    + "; QtyEntered=" + QtyEntered + "->" + QtyEntered1);
-                                QtyEntered = QtyEntered1;
-                                mTab.setValue("QtyEntered", QtyEntered);
-                            }
-
-                            //Conversion of Qty Ordered
-                            paramStr = M_Product_ID.toString().concat(",", C_UOM_To_ID.toString(), ","
-                                , QtyEntered.toString());
-                            var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
-                            QtyOrdered = pc;
-                            if (QtyOrdered == null)
-                                QtyOrdered = QtyEntered;
-                            var conversion = QtyEntered != QtyOrdered;
-
-                            PriceActual = Util.getValueOfDecimal(mTab.getValue("PriceEntered"));
-                            //Conversion of Price Entered
-                            paramStr = M_Product_ID.toString().concat(",", C_UOM_To_ID.toString(), ",", //2
-                                PriceActual.toString()); //3
-                            var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
-
-                            PriceEntered = pc;
-                            if (PriceEntered == null)
-                                PriceEntered = PriceActual;
-                            this.log.fine("UOM=" + C_UOM_To_ID
-                                + ", QtyEntered/PriceActual=" + QtyEntered + "/" + PriceActual
-                                + " -> " + conversion
-                                + " QtyOrdered/PriceEntered=" + QtyOrdered + "/" + PriceEntered);
-                            ctx.setContext(windowNo, "UOMConversion", conversion ? "Y" : "N");
-                            mTab.setValue("QtyOrdered", QtyOrdered);
-                            mTab.setValue("PriceEntered", PriceEntered);
-
-                            var pricelist = 0;
-                            var pricestd = 0;
-
-                            // SI_0605: not to update price when blanket order line exist
-                            if (!isBlanketOrderLine) {
-                                /** Price List - ValidFrom date validation ** Dt:11/03/2021 ** Modified By: Kumar **/
-                                //change by amit 6-june-2016
-                                var params = Util.getValueOfString(M_Product_ID).concat(",", Util.getValueOfString(mTab.getValue("C_Order_ID")) + "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
-                                    "," + Util.getValueOfString(C_UOM_To_ID) + "," + Util.getValueOfString(ctx.getAD_Client_ID()) + "," + Util.getValueOfString(bpartner["M_DiscountSchema_ID"]) +
-                                    "," + Util.getValueOfString(bpartner["FlatDiscount"]) + "," + Util.getValueOfString(mTab.getValue("QtyEntered")) + "," + Util.getValueOfString(prodC_UOM_ID));
-                                var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPricesOnUomChange", params);
-
-                                PriceList = Util.getValueOfDecimal(prices["PriceList"]);
-                                mTab.setValue("PriceList", Util.getValueOfDecimal(prices["PriceList"]));
-                                PriceEntered = Util.getValueOfDecimal(prices["PriceEntered"]);
-                                mTab.setValue("PriceEntered", Util.getValueOfDecimal(prices["PriceEntered"]));
-                                PriceActual = Util.getValueOfDecimal(prices["PriceEntered"]);
-                                mTab.setValue("PriceActual", PriceActual);
-                            }
-                            //end Conversion based on product header UOM
-                        }
-                        //}
-                        //}
-                    }
+                if (!isBlanketOrderLine) {
+                    mTab.setValue("PriceList", Util.getValueOfDecimal(productPrices["PriceList"]));
+                    mTab.setValue("PriceLimit", Util.getValueOfDecimal(productPrices["PriceLimit"]));
+                    mTab.setValue("PriceActual", Util.getValueOfDecimal(productPrices["PriceEntered"]));
+                    mTab.setValue("PriceEntered", Util.getValueOfDecimal(productPrices["PriceEntered"]));
                 }
-                // End
-                else {
-                    //Get precision from server side
-                    paramStr = C_UOM_To_ID.toString().concat(","); //1
 
-                    var gp = VIS.dataContext.getJSONRecord("MUOM/GetPrecision", paramStr);
+                var QtyEntered1 = QtyEntered.toFixed(Util.getValueOfInt(productPrices["UOMPrecision"]));
 
-
-
-                    //var QtyEntered1 = Decimal.Round(QtyEntered.Value, MUOM.getPrecision(ctx, C_UOM_To_ID));//, MidpointRounding.AwayFromZero);
-                    var QtyEntered1 = QtyEntered.toFixed(Util.getValueOfInt(gp));//, MidpointRounding.AwayFromZero);
-
-                    if (QtyEntered != QtyEntered1) {
-                        this.log.fine("Corrected QtyEntered Scale UOM=" + C_UOM_To_ID
-                            + "; QtyEntered=" + QtyEntered + "->" + QtyEntered1);
-                        QtyEntered = QtyEntered1;
-                        mTab.setValue("QtyEntered", QtyEntered);
-                    }
-
-
-                    paramStr = M_Product_ID.toString().concat(",", C_UOM_To_ID.toString(), ",", //2
-                        QtyEntered.toString()); //3
-                    var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
-
-                    QtyOrdered = pc;// (Decimal?) MUOMConversion.ConvertProductFrom(ctx, M_Product_ID,
-                    //C_UOM_To_ID, QtyEntered.Value);
-
-
-                    if (QtyOrdered == null)
-                        QtyOrdered = QtyEntered;
-                    var conversion = QtyEntered != QtyOrdered;
-                    PriceActual = Util.getValueOfDecimal(mTab.getValue("PriceActual"));
-
-                    paramStr = M_Product_ID.toString().concat(",", C_UOM_To_ID.toString(), ",", //2
-                        PriceActual.toString()); //3
-                    var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
-
-                    PriceEntered = pc;//(Decimal?)MUOMConversion.ConvertProductFrom(ctx, M_Product_ID,
-                    //C_UOM_To_ID, PriceActual.Value);
-                    if (PriceEntered == null)
-                        PriceEntered = PriceActual;
-                    this.log.fine("UOM=" + C_UOM_To_ID
-                        + ", QtyEntered/PriceActual=" + QtyEntered + "/" + PriceActual
-                        + " -> " + conversion
-                        + " QtyOrdered/PriceEntered=" + QtyOrdered + "/" + PriceEntered);
-                    ctx.setContext(windowNo, "UOMConversion", conversion ? "Y" : "N");
-                    mTab.setValue("QtyOrdered", QtyOrdered);
-                    mTab.setValue("PriceEntered", PriceEntered);
+                if (QtyEntered != QtyEntered1) {
+                    this.log.fine("Corrected QtyEntered Scale UOM=" + C_UOM_To_ID
+                        + "; QtyEntered=" + QtyEntered + "->" + QtyEntered1);
+                    QtyEntered = QtyEntered1;
+                    mTab.setValue("QtyEntered", QtyEntered);
                 }
+
+                QtyOrdered = productPrices["QtyOrdered"];
+
+                if (QtyOrdered == null) {
+                    QtyOrdered = QtyEntered
+                }
+
+                mTab.setValue("QtyOrdered", QtyOrdered);
+
+                //if (countEd011 > 0) {
+                //    var isAttributeValue = Util.getValueOfInt(productPrices["isAttributeValue"]);
+                //    if (isAttributeValue == 1) {
+
+                //        var actualPrice1 = Util.getValueOfDecimal(productPrices["PriceEntered"]);
+                //        // SI_0605: not to update price when blanket order line exist
+                //        if (!isBlanketOrderLine) {
+                //            mTab.setValue("PriceList", Util.getValueOfDecimal(productPrices["PriceList"]));
+                //            mTab.setValue("PriceLimit", Util.getValueOfDecimal(productPrices["PriceLimit"]));
+                //            mTab.setValue("PriceActual", Util.getValueOfDecimal(productPrices["PriceEntered"]));
+                //            mTab.setValue("PriceEntered", Util.getValueOfDecimal(productPrices["PriceEntered"]));
+                //        }
+
+                //        //Get precision from server side
+                //        paramStr = C_UOM_To_ID.toString().concat(",");
+                //        var gp = VIS.dataContext.getJSONRecord("MUOM/GetPrecision", paramStr);
+
+                //        var QtyEntered1 = QtyEntered.toFixed(Util.getValueOfInt(gp));
+
+                //        if (QtyEntered != QtyEntered1) {
+                //            this.log.fine("Corrected QtyEntered Scale UOM=" + C_UOM_To_ID
+                //                + "; QtyEntered=" + QtyEntered + "->" + QtyEntered1);
+                //            QtyEntered = QtyEntered1;
+                //            mTab.setValue("QtyEntered", QtyEntered);
+                //        }
+
+                //        //Conversion of Qty Ordered
+                //        paramStr = M_Product_ID.toString().concat(",", C_UOM_To_ID.toString(), ","
+                //            , QtyEntered.toString());
+                //        var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
+                //        QtyOrdered = pc;
+
+                //        var conversion = false
+                //        if (QtyOrdered != null) {
+                //            conversion = QtyEntered != QtyOrdered;
+                //        }
+                //        if (QtyOrdered == null) {
+                //            conversion = false;
+                //            QtyOrdered = 1;
+                //        }
+                //        if (conversion) {
+                //            mTab.setValue("QtyOrdered", QtyOrdered);
+                //        }
+                //        else {
+                //            //mTab.setValue("QtyOrdered", Decimal.Multiply(QtyOrdered, QtyEntered1));
+                //            mTab.setValue("QtyOrdered", (QtyOrdered * QtyEntered1));
+                //        }
+
+                //        // SI_0605: not to update price when blanket order line exist
+                //        if (!isBlanketOrderLine) {
+                //            mTab.setValue("PriceActual", actualPrice1);
+                //            //mTab.setValue("PriceList", Util.getValueOfDecimal(ds.getTables()[0].getRows()[0].getCell("PriceList")));
+                //            mTab.setValue("PriceList", Util.getValueOfDecimal(productPrices["PriceList"]));
+                //        }
+                //        // End Pick Price based on attribute and seleceted UOM
+                //    }
+                //    //else if (isAttributeValue == false) {
+                //    else if (isAttributeValue == 2 || isAttributeValue == 0) {
+                //        if (isAttributeValue == 2) {
+                //            var actualPrice2 = Util.getValueOfDecimal(productPrices["PriceEntered"]);
+                //            // SI_0605: not to update price when blanket order line exist
+                //            if (!isBlanketOrderLine) {
+                //                mTab.setValue("PriceList", Util.getValueOfDecimal(productPrices["PriceList"]));
+                //                mTab.setValue("PriceLimit", Util.getValueOfDecimal(productPrices["PriceLimit"]));
+                //                mTab.setValue("PriceActual", Util.getValueOfDecimal(productPrices["PriceEntered"]));
+                //                mTab.setValue("PriceEntered", Util.getValueOfDecimal(productPrices["PriceEntered"]));
+                //            }
+
+                //            //Get precision from server side
+                //            paramStr = C_UOM_To_ID.toString().concat(",");
+                //            var gp = VIS.dataContext.getJSONRecord("MUOM/GetPrecision", paramStr);
+
+                //            var QtyEntered1 = QtyEntered.toFixed(Util.getValueOfInt(gp));
+
+                //            if (QtyEntered != QtyEntered1) {
+                //                this.log.fine("Corrected QtyEntered Scale UOM=" + C_UOM_To_ID
+                //                    + "; QtyEntered=" + QtyEntered + "->" + QtyEntered1);
+                //                QtyEntered = QtyEntered1;
+                //                mTab.setValue("QtyEntered", QtyEntered);
+                //            }
+
+                //            //Conversion of Qty Ordered
+                //            paramStr = M_Product_ID.toString().concat(",", C_UOM_To_ID.toString(), ","
+                //                , QtyEntered.toString());
+                //            var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
+                //            QtyOrdered = pc;
+
+                //            var conversion = false
+                //            if (QtyOrdered != null) {
+                //                conversion = QtyEntered != QtyOrdered;
+                //            }
+                //            if (QtyOrdered == null) {
+                //                conversion = false;
+                //                QtyOrdered = 1;
+                //            }
+                //            if (conversion) {
+                //                mTab.setValue("QtyOrdered", QtyOrdered);
+                //            }
+                //            else {
+                //                mTab.setValue("QtyOrdered", (QtyOrdered * QtyEntered1));
+                //            }
+
+                //            // SI_0605: not to update price when blanket order line exist
+                //            if (!isBlanketOrderLine) {
+                //                mTab.setValue("PriceActual", actualPrice2);
+                //                //mTab.setValue("PriceList", Util.getValueOfDecimal(ds.getTables()[0].getRows()[0].getCell("PriceList")));
+                //                mTab.setValue("PriceList", Util.getValueOfDecimal(productPrices["PriceList"]));
+                //            }
+                //            // End Pick Price of selected UOM
+                //        }
+                //        else {
+                //            //start Conversion based on product header UOM
+                //            paramStr = C_UOM_To_ID.toString().concat(",");
+                //            var gp = VIS.dataContext.getJSONRecord("MUOM/GetPrecision", paramStr);
+
+                //            var QtyEntered1 = QtyEntered.toFixed(Util.getValueOfInt(gp));
+
+                //            if (QtyEntered != QtyEntered1) {
+                //                this.log.fine("Corrected QtyEntered Scale UOM=" + C_UOM_To_ID
+                //                    + "; QtyEntered=" + QtyEntered + "->" + QtyEntered1);
+                //                QtyEntered = QtyEntered1;
+                //                mTab.setValue("QtyEntered", QtyEntered);
+                //            }
+
+                //            //Conversion of Qty Ordered
+                //            paramStr = M_Product_ID.toString().concat(",", C_UOM_To_ID.toString(), ","
+                //                , QtyEntered.toString());
+                //            var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
+                //            QtyOrdered = pc;
+                //            if (QtyOrdered == null)
+                //                QtyOrdered = QtyEntered;
+                //            var conversion = QtyEntered != QtyOrdered;
+
+                //            PriceActual = Util.getValueOfDecimal(mTab.getValue("PriceEntered"));
+                //            //Conversion of Price Entered
+                //            paramStr = M_Product_ID.toString().concat(",", C_UOM_To_ID.toString(), ",", //2
+                //                PriceActual.toString()); //3
+                //            var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
+
+                //            PriceEntered = pc;
+                //            if (PriceEntered == null)
+                //                PriceEntered = PriceActual;
+                //            this.log.fine("UOM=" + C_UOM_To_ID
+                //                + ", QtyEntered/PriceActual=" + QtyEntered + "/" + PriceActual
+                //                + " -> " + conversion
+                //                + " QtyOrdered/PriceEntered=" + QtyOrdered + "/" + PriceEntered);
+                //            ctx.setContext(windowNo, "UOMConversion", conversion ? "Y" : "N");
+                //            mTab.setValue("QtyOrdered", QtyOrdered);
+                //            mTab.setValue("PriceEntered", PriceEntered);
+
+                //            var pricelist = 0;
+                //            var pricestd = 0;
+
+                //            // SI_0605: not to update price when blanket order line exist
+                //            if (!isBlanketOrderLine) {
+                //                /** Price List - ValidFrom date validation ** Dt:11/03/2021 ** Modified By: Kumar **/
+                //                //change by amit 6-june-2016
+                //                var params = Util.getValueOfString(M_Product_ID).concat(",", Util.getValueOfString(mTab.getValue("C_Order_ID")) + "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
+                //                    "," + Util.getValueOfString(C_UOM_To_ID) + "," + Util.getValueOfString(ctx.getAD_Client_ID()) + "," + Util.getValueOfString(bpartner["M_DiscountSchema_ID"]) +
+                //                    "," + Util.getValueOfString(bpartner["FlatDiscount"]) + "," + Util.getValueOfString(mTab.getValue("QtyEntered")) + "," + Util.getValueOfString(prodC_UOM_ID));
+                //                var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPricesOnUomChange", params);
+
+                //                PriceList = Util.getValueOfDecimal(prices["PriceList"]);
+                //                mTab.setValue("PriceList", Util.getValueOfDecimal(prices["PriceList"]));
+                //                PriceEntered = Util.getValueOfDecimal(prices["PriceEntered"]);
+                //                mTab.setValue("PriceEntered", Util.getValueOfDecimal(prices["PriceEntered"]));
+                //                PriceActual = Util.getValueOfDecimal(prices["PriceEntered"]);
+                //                mTab.setValue("PriceActual", PriceActual);
+                //            }
+                //            //end Conversion based on product header UOM
+                //        }
+                //        //}
+                //        //}
+                //    }
+                //}
             }
             //	QtyEntered changed - calculate QtyOrdered
             else if (mField.getColumnName() == "QtyEntered") {
@@ -3275,361 +3041,83 @@
             }
 
             //Start Amit (Attribute selection then get price according to attribute n uom)  (Purchase side only)
-            if (M_Product_ID != 0
-                //&& ctx.isSOTrx()
-                && QtyOrdered > 0
-                && !isReturnTrx		//	no negative (returns)
-                && (mField.getColumnName() == "M_AttributeSetInstance_ID")) {
-                QtyEntered = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
-                var pricelist = 0;
-                /** Price List - ValidFrom date validation ** Dt:11/03/2021 ** Modified By: Kumar **/
-                var params = M_Product_ID.toString().concat(",", Util.getValueOfString(mTab.getValue("C_Order_ID")) +
-                    "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
-                    "," + Util.getValueOfString(mTab.getValue("C_UOM_ID")) + "," + ctx.getAD_Client_ID().toString() + "," + Util.getValueOfString(C_BPartner_ID) +
-                    "," + Util.getValueOfString(QtyEntered) + "," + Util.getValueOfString(mTab.getValue("StartDate")) +
-                    "," + Util.getValueOfString(mTab.getValue("M_PriceList_ID")));
+            //if (M_Product_ID != 0
+            //    && QtyOrdered > 0
+            //    && !isReturnTrx		//	no negative (returns)
+            //    && (mField.getColumnName() == "M_AttributeSetInstance_ID")) {
+            //    QtyEntered = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
+            //    var pricelist = 0;
+                //var params = M_Product_ID.toString().concat(",", Util.getValueOfString(mTab.getValue("C_Order_ID")) +
+                //    "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
+                //    "," + Util.getValueOfString(mTab.getValue("C_UOM_ID")) + "," + ctx.getAD_Client_ID().toString() + "," + Util.getValueOfString(C_BPartner_ID) +
+                //    "," + Util.getValueOfString(QtyEntered) + "," + Util.getValueOfString(mTab.getValue("StartDate")) +
+                //    "," + Util.getValueOfString(mTab.getValue("M_PriceList_ID")));
 
-                var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPrices", params);
-                if (prices != null) {
+                //var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPrices", params);
+                //if (prices != null) {
 
-                    countEd011 = Util.getValueOfInt(prices["countEd011"]);
-                    var _countVAPRC = Util.getValueOfInt(prices["countVAPRC"]);
-                    PriceEntered = prices["PriceEntered"];
-                    pricelist = prices["PriceList"];
+                //    countEd011 = Util.getValueOfInt(prices["countEd011"]);
+                //    var _countVAPRC = Util.getValueOfInt(prices["countVAPRC"]);
+                //    PriceEntered = prices["PriceEntered"];
+                //    pricelist = prices["PriceList"];
 
-                    if (!isBlanketOrderLine) {
-                        mTab.setValue("PriceList", pricelist);
-                        mTab.setValue("PriceActual", PriceEntered);
-                        mTab.setValue("PriceEntered", PriceEntered);
-                    }
-
-                    if (countEd011 <= 0 && _countVAPRC <= 0) {
-
-                        //start Conversion of Price and qty Ordered
-                        params = mTab.getValue("C_UOM_ID").toString().concat(",");
-                        var gp = VIS.dataContext.getJSONRecord("MUOM/GetPrecision", params);
-
-                        var QtyEntered1 = QtyEntered.toFixed(Util.getValueOfInt(gp));
-
-                        if (QtyEntered != QtyEntered1) {
-                            this.log.fine("Corrected QtyEntered Scale UOM=" + Util.getValueOfInt(mTab.getValue("C_UOM_ID"))
-                                + "; QtyEntered=" + QtyEntered + "->" + QtyEntered1);
-                            QtyEntered = QtyEntered1;
-                            mTab.setValue("QtyEntered", QtyEntered);
-                        }
-
-                        //Conversion of Qty Ordered
-                        params = M_Product_ID.toString().concat(",", mTab.getValue("C_UOM_ID").toString(), ","
-                            , QtyEntered.toString());
-                        var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", params);
-                        QtyOrdered = pc;
-                        if (QtyOrdered == null)
-                            QtyOrdered = QtyEntered;
-                        var conversion = QtyEntered != QtyOrdered;
-
-                        PriceActual = Util.getValueOfDecimal(mTab.getValue("PriceEntered"));
-                        //Conversion of Price Entered
-                        paramStr = M_Product_ID.toString().concat(",", mTab.getValue("C_UOM_ID").toString(), ",", //2
-                            PriceActual.toString()); //3
-                        var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
-
-                        PriceEntered = pc;
-                        if (PriceEntered == null)
-                            PriceEntered = PriceActual;
-                        this.log.fine("UOM=" + C_UOM_To_ID
-                            + ", QtyEntered/PriceActual=" + QtyEntered + "/" + PriceActual
-                            + " -> " + conversion
-                            + " QtyOrdered/PriceEntered=" + QtyOrdered + "/" + PriceEntered);
-                        ctx.setContext(windowNo, "UOMConversion", conversion ? "Y" : "N");
-                        mTab.setValue("QtyOrdered", QtyOrdered);
-                        mTab.setValue("PriceEntered", PriceEntered);
-                    }
-                    else {
-                        if (!isBlanketOrderLine) {
-                            /** Price List - ValidFrom date validation ** Dt:11/03/2021 ** Modified By: Kumar **/
-                            params = M_Product_ID.toString().concat(",", Util.getValueOfString(mTab.getValue("C_Order_ID")) + "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
-                                "," + Util.getValueOfString(mTab.getValue("C_UOM_ID")) + "," + ctx.getAD_Client_ID().toString() + "," + Util.getValueOfString(C_BPartner_ID) +
-                                "," + Util.getValueOfString(QtyEntered) + "," + Util.getValueOfString(countEd011) + "," + Util.getValueOfString(_countVAPRC) +
-                                "," + Util.getValueOfString(mTab.getValue("StartDate")) + "," + Util.getValueOfString(mTab.getValue("M_PriceList_ID")));
-
-                            var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPricesOnChange", params);
-
-                            pricelist = Util.getValueOfDecimal(prices["PriceList"]);
-                            mTab.setValue("PriceList", pricelist);
-                            PriceEntered = Util.getValueOfDecimal(prices["PriceEntered"]);
-                            mTab.setValue("PriceEntered", PriceEntered);
-                            PriceActual = Util.getValueOfDecimal(prices["PriceEntered"]);
-                            mTab.setValue("PriceActual", PriceActual);
-                        }
-
-                        paramStr = mTab.getValue("C_UOM_ID").toString().concat(",");
-                        var gp = VIS.dataContext.getJSONRecord("MUOM/GetPrecision", paramStr);
-
-                        var QtyEntered1 = QtyEntered.toFixed(Util.getValueOfInt(gp));
-
-                        if (QtyEntered != QtyEntered1) {
-                            this.log.fine("Corrected QtyEntered Scale UOM=" + Util.getValueOfInt(mTab.getValue("C_UOM_ID"))
-                                + "; QtyEntered=" + QtyEntered + "->" + QtyEntered1);
-                            QtyEntered = QtyEntered1;
-                            mTab.setValue("QtyEntered", QtyEntered);
-                        }
-
-                        //Conversion of Qty Ordered
-                        paramStr = M_Product_ID.toString().concat(",", mTab.getValue("C_UOM_ID").toString(), ","
-                            , QtyEntered.toString());
-                        var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
-                        QtyOrdered = pc;
-
-                        var conversion = false
-                        if (QtyOrdered != null) {
-                            conversion = QtyEntered != QtyOrdered;
-                        }
-                        if (QtyOrdered == null) {
-                            conversion = false;
-                            QtyOrdered = 1;
-                        }
-                        if (conversion) {
-                            mTab.setValue("QtyOrdered", QtyOrdered);
-                        }
-                        else {
-                            mTab.setValue("QtyOrdered", (QtyOrdered * QtyEntered1));
-                        }
-                    }
-                }
-                //countEd011 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='ED011_'"));
-                //var _countVAPRC = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VAPRC_'"));
-
-                //paramString = (mTab.getValue("C_Order_ID")).toString();
-                //var M_PriceList_ID = VIS.dataContext.getJSONRecord("MOrder/GetM_PriceList", paramString);
-
-                ////Get PriceListversion based on Pricelist
-                //var _priceListVersion_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetM_PriceList_Version_ID", M_PriceList_ID.toString());
-
-                //var C_BPartner_ID1 = ctx.getContextAsInt(windowNo, "C_BPartner_ID", false);
-                //var bpartner1 = VIS.dataContext.getJSONRecord("MBPartner/GetBPartner", C_BPartner_ID1.toString());
-
-                //if (countEd011 > 0 && _countVAPRC > 0) {
-                //    sql = "SELECT PriceList , PriceStd , PriceLimit FROM M_ProductPrice WHERE IsActive='Y' AND M_Product_ID = " + M_Product_ID +
-                //                      " AND C_UOM_ID =" + Util.getValueOfInt(mTab.getValue("C_UOM_ID")) +
-                //                      " AND M_AttributeSetInstance_ID = " + value +
-                //                      " AND M_PriceList_Version_ID = " + _priceListVersion_ID;
-                //    var dsPrice = VIS.DB.executeDataSet(sql);
-                //    if (dsPrice != null) {
-                //        if (dsPrice.getTables().length > 0) {
-                //            // Start Based On Attribute and UOM(On current Record)
-                //            if (dsPrice.getTables()[0].getRows().length > 0) {
-                //                // SI_0605: not to update price when blanket order line exist
-                //                if (!isBlanketOrderLine) {
-                //                    //Flat Discount
-
-                //                    //var actualPrice4 = this.FlatDiscount(M_Product_ID, ctx.getAD_Client_ID(), Util.getValueOfDecimal(dsPrice.getTables()[0].getRows()[0].getCell("PriceStd")),
-                //                    //                        bpartner1["M_DiscountSchema_ID"], Util.getValueOfDecimal(bpartner1["FlatDiscount"]), Util.getValueOfInt(mTab.getValue("QtyEntered")));
-
-                //                    // JID_0487: Calculate Discount based on Discount Schema selected on Business Partner
-                //                    paramStr = M_Product_ID.toString().concat(",", ctx.getAD_Client_ID().toString(), ",", dsPrice.getTables()[0].getRows()[0].getCell("PriceStd").toString(), ",",
-                //                    bpartner1["M_DiscountSchema_ID"].toString(), ",", bpartner1["FlatDiscount"].toString(), ",", mTab.getValue("QtyEntered").toString());
-                //                    var actualPrice4 = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MOrderLine/FlatDiscount", paramStr));
-
-                //                    mTab.setValue("PriceList", Util.getValueOfDecimal(dsPrice.getTables()[0].getRows()[0].getCell("PriceList")));
-                //                    mTab.setValue("PriceLimit", Util.getValueOfDecimal(dsPrice.getTables()[0].getRows()[0].getCell("PriceLimit")));
-                //                    mTab.setValue("PriceActual", actualPrice4);
-                //                    mTab.setValue("PriceEntered", actualPrice4);
-                //                }
-                //            }
-                //                //End Based On Attribute and UOM(On current Record)
-                //            else {
-                //                QtyEntered = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
-                //                sql = "SELECT PriceList , PriceStd , PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + Util.getValueOfInt(mTab.getValue("M_Product_ID"))
-                //                                + " AND M_PriceList_Version_ID = " + _priceListVersion_ID
-                //                                + " AND ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) AND C_UOM_ID=" + Util.getValueOfInt(mTab.getValue("C_UOM_ID"));
-                //                var ds = VIS.DB.executeDataSet(sql);
-                //                if (ds.getTables().length > 0) {
-                //                    // Start Set Price based on Only UOM, consider Attribute as 0 and conversion of qty Ordered
-                //                    if (ds.getTables()[0].getRows().length > 0) {
-                //                        var actualPrice5 = 0;
-                //                        // SI_0605: not to update price when blanket order line exist
-                //                        if (!isBlanketOrderLine) {
-                //                            //flat Discount
-
-                //                            //actualPrice5 = this.FlatDiscount(M_Product_ID, ctx.getAD_Client_ID(), Util.getValueOfDecimal(ds.getTables()[0].getRows()[0].getCell("PriceStd")),
-                //                            //              bpartner1["M_DiscountSchema_ID"], Util.getValueOfDecimal(bpartner1["FlatDiscount"]), Util.getValueOfInt(mTab.getValue("QtyEntered")));
-
-                //                            // JID_0487: Calculate Discount based on Discount Schema selected on Business Partner
-                //                            paramStr = M_Product_ID.toString().concat(",", ctx.getAD_Client_ID().toString(), ",", ds.getTables()[0].getRows()[0].getCell("PriceStd").toString(), ",",
-                //                            bpartner1["M_DiscountSchema_ID"].toString(), ",", bpartner1["FlatDiscount"].toString(), ",", mTab.getValue("QtyEntered").toString());
-                //                            actualPrice5 = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MOrderLine/FlatDiscount", paramStr));
-
-                //                            mTab.setValue("PriceList", Util.getValueOfDecimal(ds.getTables()[0].getRows()[0].getCell("PriceList")));
-                //                            mTab.setValue("PriceLimit", Util.getValueOfDecimal(ds.getTables()[0].getRows()[0].getCell("PriceLimit")));
-                //                            mTab.setValue("PriceActual", actualPrice5);
-                //                            mTab.setValue("PriceEntered", actualPrice5);
-                //                        }
-
-                //                        paramStr = mTab.getValue("C_UOM_ID").toString().concat(",");
-                //                        var gp = VIS.dataContext.getJSONRecord("MUOM/GetPrecision", paramStr);
-
-                //                        var QtyEntered1 = QtyEntered.toFixed(Util.getValueOfInt(gp));
-
-                //                        if (QtyEntered != QtyEntered1) {
-                //                            this.log.fine("Corrected QtyEntered Scale UOM=" + Util.getValueOfInt(mTab.getValue("C_UOM_ID"))
-                //                                + "; QtyEntered=" + QtyEntered + "->" + QtyEntered1);
-                //                            QtyEntered = QtyEntered1;
-                //                            mTab.setValue("QtyEntered", QtyEntered);
-                //                        }
-
-                //                        //Conversion of Qty Ordered
-                //                        paramStr = M_Product_ID.toString().concat(",", mTab.getValue("C_UOM_ID").toString(), ","
-                //                                                                     , QtyEntered.toString());
-                //                        var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
-                //                        QtyOrdered = pc;
-
-                //                        var conversion = false
-                //                        if (QtyOrdered != null) {
-                //                            conversion = QtyEntered != QtyOrdered;
-                //                        }
-                //                        if (QtyOrdered == null) {
-                //                            conversion = false;
-                //                            QtyOrdered = 1;
-                //                        }
-                //                        if (conversion) {
-                //                            mTab.setValue("QtyOrdered", QtyOrdered);
-                //                        }
-                //                        else {
-                //                            mTab.setValue("QtyOrdered", (QtyOrdered * QtyEntered1));
-                //                        }
-                //                        // SI_0605: not to update price when blanket order line exist
-                //                        if (!isBlanketOrderLine) {
-                //                            mTab.setValue("PriceActual", actualPrice5);
-                //                            mTab.setValue("PriceList", Util.getValueOfDecimal(ds.getTables()[0].getRows()[0].getCell("PriceList")));
-                //                        }
-                //                        //end Set Price based on Only UOM, consider Attribute as 0 and conversion of qty Ordered
-                //                    }
-                //                    else {
-                //                        //start Conversion of Price and qty Ordered
-                //                        paramStr = mTab.getValue("C_UOM_ID").toString().concat(",");
-                //                        var gp = VIS.dataContext.getJSONRecord("MUOM/GetPrecision", paramStr);
-
-                //                        var QtyEntered1 = QtyEntered.toFixed(Util.getValueOfInt(gp));
-
-                //                        if (QtyEntered != QtyEntered1) {
-                //                            this.log.fine("Corrected QtyEntered Scale UOM=" + Util.getValueOfInt(mTab.getValue("C_UOM_ID"))
-                //                                + "; QtyEntered=" + QtyEntered + "->" + QtyEntered1);
-                //                            QtyEntered = QtyEntered1;
-                //                            mTab.setValue("QtyEntered", QtyEntered);
-                //                        }
-
-                //                        //Conversion of Qty Ordered
-                //                        paramStr = M_Product_ID.toString().concat(",", mTab.getValue("C_UOM_ID").toString(), ","
-                //                                                                     , QtyEntered.toString());
-                //                        var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
-                //                        QtyOrdered = pc;
-                //                        if (QtyOrdered == null)
-                //                            QtyOrdered = QtyEntered;
-                //                        var conversion = QtyEntered != QtyOrdered;
-
-                //                        PriceActual = Util.getValueOfDecimal(mTab.getValue("PriceEntered"));
-                //                        //Conversion of Price Entered
-                //                        paramStr = M_Product_ID.toString().concat(",", mTab.getValue("C_UOM_ID").toString(), ",", //2
-                //                        PriceActual.toString()); //3
-                //                        var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
-
-                //                        PriceEntered = pc;
-                //                        if (PriceEntered == null)
-                //                            PriceEntered = PriceActual;
-                //                        this.log.fine("UOM=" + C_UOM_To_ID
-                //                            + ", QtyEntered/PriceActual=" + QtyEntered + "/" + PriceActual
-                //                            + " -> " + conversion
-                //                            + " QtyOrdered/PriceEntered=" + QtyOrdered + "/" + PriceEntered);
-                //                        ctx.setContext(windowNo, "UOMConversion", conversion ? "Y" : "N");
-                //                        mTab.setValue("QtyOrdered", QtyOrdered);
-                //                        mTab.setValue("PriceEntered", PriceEntered);
-
-                //                        paramStr = M_Product_ID.toString();
-                //                        var prodC_UOM_ID = VIS.dataContext.getJSONRecord("MProduct/GetC_UOM_ID", paramStr);                                       
-
-                //                        // SI_0605: not to update price when blanket order line exist
-                //                        if (!isBlanketOrderLine) {
-                //                            var params = (mTab.getValue("M_Product_ID")).toString().concat(",", (mTab.getValue("C_Order_ID")).toString() + "," + Util.getValueOfString(0) +
-                //                           "," + Util.getValueOfString(mTab.getValue("C_UOM_ID")) + "," + ctx.getAD_Client_ID().toString() + "," + bpartner1["M_DiscountSchema_ID"].toString() +
-                //                           "," + (bpartner1["FlatDiscount"]).toString() + "," + (mTab.getValue("QtyEntered")).toString() + "," + Util.getValueOfString(prodC_UOM_ID));
-                //                            var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPricesOnUomChange", params);
-
-                //                            PriceList = Util.getValueOfDecimal(prices["PriceList"]);
-                //                            mTab.setValue("PriceList", Util.getValueOfDecimal(prices["PriceList"]));
-                //                            mTab.setValue("PriceEntered", Util.getValueOfDecimal(prices["PriceEntered"]));
-                //                            mTab.setValue("PriceActual", Util.getValueOfDecimal(prices["PriceEntered"]));
-                //                        }
-
-                //                        //end Conversion of Price and qty Ordered
-                //                    }
-                //                }
-                //            }
-                //        }
+                //    if (!isBlanketOrderLine) {
+                //        mTab.setValue("PriceList", pricelist);
+                //        mTab.setValue("PriceActual", PriceEntered);
+                //        mTab.setValue("PriceEntered", PriceEntered);
                 //    }
+
+                //if (!isBlanketOrderLine) {
+                //    /** Price List - ValidFrom date validation ** Dt:11/03/2021 ** Modified By: Kumar **/
+                //    params = M_Product_ID.toString().concat(",", Util.getValueOfString(mTab.getValue("C_Order_ID")) + "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
+                //        "," + Util.getValueOfString(mTab.getValue("C_UOM_ID")) + "," + ctx.getAD_Client_ID().toString() + "," + Util.getValueOfString(C_BPartner_ID) +
+                //        "," + Util.getValueOfString(QtyEntered) + "," + Util.getValueOfString(countEd011) + "," + Util.getValueOfString(_countVAPRC) +
+                //        "," + Util.getValueOfString(mTab.getValue("StartDate")) + "," + Util.getValueOfString(mTab.getValue("M_PriceList_ID")));
+
+                //    var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPricesOnChange", params);
+
+                //    pricelist = Util.getValueOfDecimal(prices["PriceList"]);
+                //    mTab.setValue("PriceList", pricelist);
+                //    PriceEntered = Util.getValueOfDecimal(prices["PriceEntered"]);
+                //    mTab.setValue("PriceEntered", PriceEntered);
+                //    PriceActual = Util.getValueOfDecimal(prices["PriceEntered"]);
+                //    mTab.setValue("PriceActual", PriceActual);
                 //}
 
-                // start when not UOM but  Vienna Advance Pricing
-                //if (countEd011 <= 0 && _countVAPRC > 0) {
-                //    sql = "SELECT PriceList , PriceStd , PriceLimit FROM M_ProductPrice WHERE IsActive='Y' AND M_Product_ID = " + M_Product_ID +
-                //                      " AND M_AttributeSetInstance_ID =  " + value +
-                //                      " AND M_PriceList_Version_ID = " + _priceListVersion_ID;
-                //    var dsPrice1 = VIS.DB.executeDataSet(sql);
-                //    if (dsPrice1.getTables().length > 0) {
-                //        // Start Based On Attribute and UOM(On current Record)
-                //        if (dsPrice1.getTables()[0].getRows().length > 0) {
-                //            // SI_0605: not to update price when blanket order line exist
-                //            if (!isBlanketOrderLine) {
-                //                //flat Discount
+                //paramStr = mTab.getValue("C_UOM_ID").toString().concat(",");
+                //var gp = VIS.dataContext.getJSONRecord("MUOM/GetPrecision", paramStr);
 
-                //                //var actualPrice7 = this.FlatDiscount(M_Product_ID, ctx.getAD_Client_ID(), Util.getValueOfDecimal(dsPrice1.getTables()[0].getRows()[0].getCell("PriceStd")),
-                //                //                         bpartner1["M_DiscountSchema_ID"], Util.getValueOfDecimal(bpartner1["FlatDiscount"]), Util.getValueOfInt(mTab.getValue("QtyEntered")));
+                //var QtyEntered1 = QtyEntered.toFixed(Util.getValueOfInt(gp));
 
-                //                // JID_0487: Calculate Discount based on Discount Schema selected on Business Partner
-                //                paramStr = M_Product_ID.toString().concat(",", ctx.getAD_Client_ID().toString(), ",", dsPrice1.getTables()[0].getRows()[0].getCell("PriceStd").toString(), ",",
-                //                bpartner1["M_DiscountSchema_ID"].toString(), ",", bpartner1["FlatDiscount"].toString(), ",", mTab.getValue("QtyEntered").toString());
-                //                var actualPrice7 = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MOrderLine/FlatDiscount", paramStr));
-
-                //                mTab.setValue("PriceList", Util.getValueOfDecimal(dsPrice1.getTables()[0].getRows()[0].getCell("PriceList")));
-                //                mTab.setValue("PriceLimit", Util.getValueOfDecimal(dsPrice1.getTables()[0].getRows()[0].getCell("PriceLimit")));
-                //                mTab.setValue("PriceActual", actualPrice7);
-                //                mTab.setValue("PriceEntered", actualPrice7);
-                //            }
-                //        }
-                //        else {
-                //            sql = "SELECT PriceList , PriceStd , PriceLimit FROM M_ProductPrice WHERE IsActive='Y' AND M_Product_ID = " + M_Product_ID +
-                //                              " AND M_AttributeSetInstance_ID = 0 " +
-                //                              " AND M_PriceList_Version_ID = " + _priceListVersion_ID;
-                //            var dsPrice = VIS.DB.executeDataSet(sql);
-                //            if (dsPrice != null) {
-                //                if (dsPrice.getTables().length > 0) {
-                //                    if (dsPrice.getTables()[0].getRows().length > 0) {
-                //                        // SI_0605: not to update price when blanket order line exist
-                //                        if (!isBlanketOrderLine) {
-                //                            //flat discount
-
-                //                            //var actualPrice8 = this.FlatDiscount(M_Product_ID, ctx.getAD_Client_ID(), Util.getValueOfDecimal(dsPrice1.getTables()[0].getRows()[0].getCell("PriceStd")),
-                //                            //           bpartner1["M_DiscountSchema_ID"], Util.getValueOfDecimal(bpartner1["FlatDiscount"]), Util.getValueOfInt(mTab.getValue("QtyEntered")));
-
-                //                            // JID_0487: Calculate Discount based on Discount Schema selected on Business Partner
-                //                            paramStr = M_Product_ID.toString().concat(",", ctx.getAD_Client_ID().toString(), ",", dsPrice1.getTables()[0].getRows()[0].getCell("PriceStd").toString(), ",",
-                //                            bpartner1["M_DiscountSchema_ID"].toString(), ",", bpartner1["FlatDiscount"].toString(), ",", mTab.getValue("QtyEntered").toString());
-                //                            var actualPrice8 = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MOrderLine/FlatDiscount", paramStr));
-
-                //                            mTab.setValue("PriceList", Util.getValueOfDecimal(dsPrice.getTables()[0].getRows()[0].getCell("PriceList")));
-                //                            mTab.setValue("PriceLimit", Util.getValueOfDecimal(dsPrice.getTables()[0].getRows()[0].getCell("PriceLimit")));
-                //                            mTab.setValue("PriceActual", actualPrice8);
-                //                            mTab.setValue("PriceEntered", actualPrice8);
-                //                        }
-                //                    }
-                //                }
-                //            }
-                //        }
-                //    }
+                //if (QtyEntered != QtyEntered1) {
+                //    this.log.fine("Corrected QtyEntered Scale UOM=" + Util.getValueOfInt(mTab.getValue("C_UOM_ID"))
+                //        + "; QtyEntered=" + QtyEntered + "->" + QtyEntered1);
+                //    QtyEntered = QtyEntered1;
+                //    mTab.setValue("QtyEntered", QtyEntered);
                 //}
-                //End when not UOM but  Vienna Advance Pricing
-            }
-            //End Amit (Attribute selection then get price according to attribute n uom)  (Purchase side only)
 
+                ////Conversion of Qty Ordered
+                //paramStr = M_Product_ID.toString().concat(",", mTab.getValue("C_UOM_ID").toString(), ","
+                //    , QtyEntered.toString());
+                //var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
+                //QtyOrdered = pc;
+
+                //var conversion = false
+                //if (QtyOrdered != null) {
+                //    conversion = QtyEntered != QtyOrdered;
+                //}
+                //if (QtyOrdered == null) {
+                //    conversion = false;
+                //    QtyOrdered = 1;
+                //}
+                //if (conversion) {
+                //    mTab.setValue("QtyOrdered", QtyOrdered);
+                //}
+                //else {
+                //    mTab.setValue("QtyOrdered", (QtyOrdered * QtyEntered1));
+                //}
+                //}
+            //}
             //	Storage
             if (M_Product_ID != 0
                 && ctx.isSOTrx()
@@ -12616,7 +12104,7 @@
             mTab.setValue("PriceEntered", Util.getValueOfDecimal(dr.PriceEntered.toFixed(stdPrecision)));
             mTab.setValue("C_Currency_ID", Util.getValueOfInt(dr.C_Currency_ID));
             mTab.setValue("PrintDescription", dr.DocumentNote);
-            
+
             // mTab.setValue("Discount", dr.Discount);
             if (countEd011 <= 0) {
                 mTab.setValue("C_UOM_ID", Util.getValueOfInt(dr.C_UOM_ID));
@@ -12983,7 +12471,7 @@
             mTab.setValue("PriceLimit", VIS.Env.ZERO);
             mTab.setValue("PriceList", VIS.Env.ZERO);
             mTab.setValue("Discount", VIS.Env.ZERO);
-            
+
             // Change Done By Mohit Aortization Process 02/11/2016
             //var isSOTrx = ctx.getWindowContext(windowNo, "IsSOTrx", true) == "Y";
             //var countVA038 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA038_' "));
@@ -13003,7 +12491,7 @@
             // End Change Amortization
         }
         catch (err) {
-            this.setCalloutActive(false);            
+            this.setCalloutActive(false);
             return err.message;
         }
         oldValue = null;
@@ -13698,11 +13186,9 @@
                 var sql = "SELECT EnforcePriceLimit FROM M_PriceList WHERE IsActive = 'Y' AND M_PriceList_ID = " + C_Invoice["M_PriceList_ID"];
                 epl = VIS.DB.executeScalar(sql);
                 enforce = (C_Invoice["IsSOTrx"] && epl != null && epl == "Y");
-                sql = "SELECT OverwritePriceLimit FROM AD_Role WHERE IsActive = 'Y' AND AD_Role_ID = " + ctx.getContext("#AD_Role_ID");
-                OverwritePriceLimit = Util.getValueOfBoolean(VIS.DB.executeScalar(sql));
             }
-            //end
-            //if (enforce && VIS.MRole.getDefault().IsOverwritePriceLimit()) {
+
+            OverwritePriceLimit = VIS.MRole.getDefault().getIsOverwritePriceLimit();
             if (enforce && OverwritePriceLimit) {
                 enforce = false;
             }
@@ -17495,18 +16981,15 @@
         if (value == null || value == 0 || value.toString() == "" || this.isCalloutActive()) {
             return "";
         }
-        try
-        {
+        try {
             this.setCalloutActive(true);
             var data = VIS.dataContext.getJSONRecord("MTax/GetTaxExempt", Util.getValueOfString(mTab.getValue("C_Tax_ID")));
-            if (data != null)
-            {
+            if (data != null) {
                 mTab.setValue("IsTaxExempt", Util.getValueOfString(data["IsTaxExempt"]).equals("Y") ? true : false);
                 mTab.setValue("C_TaxExemptReason_ID", Util.getValueOfInt(data["C_TaxExemptReason_ID"]));
             }
         }
-        catch (err)
-        {
+        catch (err) {
             this.log.log(Level.SEVERE, sql, err);
             this.setCalloutActive(false);
             return err.message;
@@ -18143,13 +17626,13 @@
                 // when order line contains charge, it will be selected on Shipment Line on selection of Order Line
                 if (Util.getValueOfInt(dr["M_Product_ID"]) > 0) {
                     mTab.setValue("M_Product_ID", Util.getValueOfInt(dr["M_Product_ID"]));
-                    mTab.setValue("C_Charge_ID", null);                    
+                    mTab.setValue("C_Charge_ID", null);
                 }
                 else {
                     mTab.setValue("C_Charge_ID", Util.getValueOfInt(dr["C_Charge_ID"]));
-                    mTab.setValue("M_Product_ID", null);                    
+                    mTab.setValue("M_Product_ID", null);
                 }
-                
+
                 mTab.setValue("PrintDescription", dr["PrintDescription"].toString());
                 mTab.setValue("M_AttributeSetInstance_ID", Util.getValueOfInt(dr["M_AttributeSetInstance_ID"]));
                 mTab.setValue("C_UOM_ID", Util.getValueOfInt(dr["C_UOM_ID"]));
@@ -21111,7 +20594,7 @@
             var epl = ctx.getContext("EnforcePriceLimit");
             var enforce = (ctx.getWindowContext(windowNo, "IsSOTrx", true) == "Y") && epl != null && epl.toString().equals("Y");
             var isReturnTrx = "Y".toString().equals(ctx.getContext("IsReturnTrx"));
-            if (enforce && (VIS.MRole.getDefault().IsOverwritePriceLimit() || isReturnTrx))
+            if (enforce && (VIS.MRole.getDefault().getIsOverwritePriceLimit() || isReturnTrx))
                 enforce = false; //Temporary Commented
             //	Check Price Limit?
             if (enforce && Util.getValueOfDouble(PriceLimit) != 0.0
@@ -21906,11 +21389,13 @@
         try {
             var M_Product_ID = ctx.getContextAsInt(windowNo, "M_Product_ID");
             var paramStr = M_Product_ID.toString().concat(","); //1
-            var productType = VIS.dataContext.getJSONRecord("MProduct/GetProductType", paramStr);
 
-            // var precision = gp;//MProduct.get(ctx, M_Product_ID).getUOMPrecision();
+            var productType = ctx.getWindowContext(windowNo, "ProductType", true);
 
-            // MProduct prod = new MProduct(ctx, M_Product_ID, null);
+            if (Util.getValueOfString(productType) == "") {
+                productType = VIS.dataContext.getJSONRecord("MProduct/GetProductType", paramStr);
+            }
+
             if (productType == "S") {
                 mTab.getField("IsContract").setReadOnly(false);
             }
@@ -23967,7 +23452,7 @@
     VIS.Model.CalloutLead = CalloutLead;
     //**************CalloutLead End*************
 
-    
+
     //VIS264*************CalloutAzureBlob Start**************
     function CalloutAzureBlob() {
         VIS.CalloutEngine.call(this, "VIS.CalloutAzureBlob");//must call
