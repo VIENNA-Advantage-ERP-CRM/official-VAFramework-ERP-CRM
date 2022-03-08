@@ -351,12 +351,10 @@
     <Compile Include="Controllers\GridWorkbench.cs" />
     <Compile Include="ModelAD\html\MTree.cs" />
     <Compile Include="ModelAD\KeyNamePair.cs" />
-    <Compile Include="Controllers\Lookup\LookUp.cs" />
     <Compile Include="Controllers\Lookup\MAccountLookup.cs" />
     <Compile Include="Controllers\Lookup\MLocationLookup.cs" />
     <Compile Include="Controllers\Lookup\MLocatorLookup.cs" />
     <Compile Include="Controllers\Lookup\MLookup.cs" />
-    <Compile Include="Controllers\Lookup\MLookupCache.cs" />
     <Compile Include="Controllers\Lookup\MPAttributeLookup.cs" />
     <Compile Include="ModelAD\MAccessLog.cs" />
     <Compile Include="ModelAD\MAccount.cs" />

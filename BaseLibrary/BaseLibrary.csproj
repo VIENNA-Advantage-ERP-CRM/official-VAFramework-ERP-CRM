@@ -64,6 +64,10 @@
     <Compile Include="Classes\ServerEndPoint.cs" />
     <Compile Include="Classes\VLookUpInfo.cs" />
     <Compile Include="Classes\VTreeNode.cs" />
+    <Compile Include="Common\Common.cs" />
+    <Compile Include="Controllers\Lookup\LookUp.cs" />
+    <Compile Include="Controllers\Lookup\MLookupCache.cs" />
+    <Compile Include="DBase\DB.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
