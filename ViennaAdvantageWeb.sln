@@ -25,7 +25,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VAWorkflow", "VAWorkflow\VA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VISModel", "VISModel\VISModel.csproj", "{AE558AA6-C414-462F-935E-CD705BAF2DB8}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "VAS", "VAS\VAS.vbproj", "{0E09CF69-529C-4D0F-B0CB-9D39710BE03A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VAS", "VAS\VAS.csproj", "{AC2E105F-03F2-4E7B-9EA8-51C2D97B7060}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,10 +77,10 @@ Global
 		{AE558AA6-C414-462F-935E-CD705BAF2DB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE558AA6-C414-462F-935E-CD705BAF2DB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE558AA6-C414-462F-935E-CD705BAF2DB8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0E09CF69-529C-4D0F-B0CB-9D39710BE03A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0E09CF69-529C-4D0F-B0CB-9D39710BE03A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0E09CF69-529C-4D0F-B0CB-9D39710BE03A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0E09CF69-529C-4D0F-B0CB-9D39710BE03A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC2E105F-03F2-4E7B-9EA8-51C2D97B7060}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC2E105F-03F2-4E7B-9EA8-51C2D97B7060}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC2E105F-03F2-4E7B-9EA8-51C2D97B7060}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC2E105F-03F2-4E7B-9EA8-51C2D97B7060}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
