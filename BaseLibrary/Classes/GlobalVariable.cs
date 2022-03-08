@@ -300,23 +300,7 @@ namespace VAdvantage.DataBase
             //return outt.ToString();
         }	//	TO_STRING
 
-        public static DateTime? SetDateTimeUTC(DateTime? dateTime)
-        {
-            if (dateTime != null)
-            {
-                if (dateTime.Value.Kind == DateTimeKind.Unspecified)
-                {
-                    dateTime = new DateTime(dateTime.Value.Ticks, DateTimeKind.Local);// .ToUniversalTime().ToLocalTime().ToUniversalTime();
-                    dateTime = dateTime.Value.ToUniversalTime();
-                }
-                else if (dateTime.Value.Kind == DateTimeKind.Local)
-                {
-                    dateTime = dateTime.Value.ToUniversalTime();
-                }
-
-            }
-            return dateTime;
-        }
+       
 
         /// <summary>
         /// Retrun Date time string 

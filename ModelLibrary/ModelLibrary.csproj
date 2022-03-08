@@ -1941,7 +1941,6 @@
     <Compile Include="VOS\DocActionConstants.cs" />
     <Compile Include="VOS\ProductInfo.cs" />
     <Compile Include="WF\DocWorkflowManager.cs" />
-    <Compile Include="WF\DocWorkflowMgr.cs" />
     <Compile Include="WF\MWFActivity.cs" />
     <Compile Include="WF\MWFBlock.cs" />
     <Compile Include="WF\MWFEventAudit.cs" />

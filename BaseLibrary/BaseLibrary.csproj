@@ -112,6 +112,7 @@
     <Compile Include="ModelAD\PORecord.cs" />
     <Compile Include="ModelAD\PO_LOB.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility\DocWorkflowMgr.cs" />
     <Compile Include="Utility\Env.cs" />
     <Compile Include="Utility\ModuleTypeContainer.cs" />
     <Compile Include="Utility\Msg.cs" />

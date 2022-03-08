@@ -316,34 +316,8 @@ namespace VAdvantage.Classes
             return AD_Tree_ID;
         }
 
-        /// <summary>
-        /// Return string value
-        /// </summary>
-        /// <param name="obj">value to convert</param>
-        /// <returns>Object</returns>
-        /// <Author>Harwinder</Author> 
-        public static string GetString(object obj)
-        {
-            if (obj == null)
-            {
-                return "";
-            }
-            return obj.ToString();
-        }
-        /// <summary>
-        /// return Int value
-        /// </summary>
-        /// <param name="obj">value to convert</param>
-        /// <returns></returns>
-        /// <Author>Harwinder</Author> 
-        public static int GetInt(object obj)
-        {
-            if (obj == null || obj.ToString() == "")
-            {
-                return 0;
-            }
-            return int.Parse(obj.ToString());
-        }
+       
+       
 
         /// <summary>
         /// Set The cursors
@@ -544,86 +518,10 @@ namespace VAdvantage.Classes
 
         }
 
-        /// <summary>
-        /// Gets whether specified value is a number
-        /// </summary>
-        /// <param name="value">value</param>
-        /// <returns>true if given string is a number</returns>
-        /// <author>Veena</author>
-        public static bool IsNumeric(string value)
-        {
-            return System.Text.RegularExpressions.Regex.IsMatch(value, @"^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$");
-        }
+       
+        
 
-        /// <summary>
-        /// Gets time in mili seconds since 1970
-        /// </summary>
-        /// <returns>long</returns>
-        public static long CurrentTimeMillis()
-        {
-            TimeSpan ts = (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc));
-            return (long)ts.TotalMilliseconds;
-        }
-
-        /// <summary>
-        /// Gets time in mili seconds since 1970
-        /// </summary>
-        /// <param name="start">datetime</param>
-        /// <returns>Returns the number of milliseconds since January 1, 1970, 00:00:00 GMT represented by passed object</returns>
-        public static long CurrentTimeMillis(DateTime start)
-        {
-            TimeSpan ts = (start - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc));
-            long mils = (long)ts.TotalMilliseconds;
-            //long l = dt.Ticks / TimeSpan.TicksPerMillisecond;
-            DateTime myDate = new DateTime((mils * TimeSpan.TicksPerMillisecond) + 621355968000000000);
-            return mils;
-        }
-
-        /// <summary>
-        /// covertmillisecond to date
-        /// </summary>
-        /// <param name="milliseconds"></param>
-        /// <returns>DateTime</returns>
-        public static DateTime CovertMilliToDate(long milliseconds)
-        {
-            DateTime myDate = new DateTime((milliseconds * TimeSpan.TicksPerMillisecond) + 621355968000000000);
-            //new DateTime(
-
-            return myDate;
-
-        }
-
-        /// <summary>
-        /// covertmillisecond to date
-        /// </summary>
-        /// <param name="milliseconds"></param>
-        /// <returns>DateTime</returns>
-        public static String CovertMilliToDateString(long milliseconds)
-        {
-            DateTime myDate = new DateTime((milliseconds * TimeSpan.TicksPerMillisecond) + 621355968000000000);
-            //new DateTime(
-
-            return myDate.ToString();
-
-        }
-
-
-
-
-        private static int counter = -1;
-        /// <summary>
-        /// Generate random Number
-        /// </summary>
-        /// <returns>randam number</returns>
-        public static int GenerateRandomNo()
-        {
-            if (counter == -1)
-            {
-                counter = new Random().Next() & 0xffff;
-            }
-            counter++;
-            return counter;
-        }
+        
 
         /// <summary>
         /// Adds specified number of value to current datetime
@@ -917,7 +815,7 @@ namespace VAdvantage.Classes
             }
 
             // Show Amount according to browser culture
-            if (column.GetAD_Reference_ID() == DisplayType.Amount || column.GetAD_Reference_ID() == DisplayType.CostPrice)
+            if (column.GetAD_Reference_ID() == DisplayType column.GetAD_Reference_ID() == DisplayType.CostPrice)
             {
                 return DisplayType.GetNumberFormat(column.GetAD_Reference_ID()).GetFormatAmount(value, po.GetCtx().GetContext("#ClientLanguage"));
             }
