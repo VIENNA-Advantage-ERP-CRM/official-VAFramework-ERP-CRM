@@ -43,6 +43,13 @@
   <ItemGroup>
     <Compile Include="Classes\CCache.cs" />
     <Compile Include="Classes\CommonFunctions.cs" />
+    <Compile Include="Classes\Context.cs" />
+    <Compile Include="Classes\DisplayType.cs" />
+    <Compile Include="Classes\Evaluatee.cs" />
+    <Compile Include="Classes\Format.cs" />
+    <Compile Include="Classes\MultipleMap.cs" />
+    <Compile Include="Classes\StringTokenizer.cs" />
+    <Compile Include="Classes\TrxActionNotifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
