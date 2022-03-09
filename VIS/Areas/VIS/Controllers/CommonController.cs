@@ -1463,7 +1463,7 @@ namespace VIS.Controllers
                         po.Set_Value("PrintDescription", ol.Get_Value("PrintDescription"));
                     //Get Print description from invoice line if invoice line exists
                     if (il != null && po.Get_ColumnIndex("PrintDescription") >= 0 && il.Get_ColumnIndex("PrintDescription") >= 0)
-                        po.Set_Value("PrintDescription", il.Get_Value("PrintDescription"));                    
+                        po.Set_Value("PrintDescription", il.Get_Value("PrintDescription"));
 
                     //iol.SetDescription(ol.GetDescription());
                     //iol.SetC_Project_ID(ol.GetC_Project_ID());
@@ -2292,9 +2292,10 @@ namespace VIS.Controllers
                             bsl.SetEftCheckNo(Util.GetValueOfString(ds.Tables[0].Rows[0]["CheckNo"]));
                             bsl.SetEftValutaDate(Util.GetValueOfDateTime(ds.Tables[0].Rows[0]["Checkdate"]));
                         }
-                        if (bsl.Get_ColumnIndex("VA009_PaymentMethod_ID") >= 0)
+                        //VA230:Check if payment method column and value exists
+                        if (bsl.Get_ColumnIndex("VA009_PaymentMethod_ID") >= 0 && Util.GetValueOfInt(ds.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]) > 0)
                         {
-                            bsl.Set_Value("VA009_PaymentMethod_ID", Util.GetValueOfString(ds.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]));
+                            bsl.Set_Value("VA009_PaymentMethod_ID", Util.GetValueOfInt(ds.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]));
 
                         }
                         if (bsl.Get_ColumnIndex("TenderType") >= 0)
