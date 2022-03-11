@@ -174,7 +174,7 @@ namespace VIS.Models
                                     + @" AND plv.VALIDFROM <= (SELECT t." + _columnName + " FROM " + _tableName + " t WHERE t.IsActive = 'Y' AND t." + _keyColumnName + "=" + Util.GetValueOfInt(transactionId) + ") "
                                     + " AND NVL(pp.M_Product_ID, 0) = " + Util.GetValueOfInt(productId)
                                     + " AND NVL(pp.M_AttributeSetInstance_ID, 0) = " + Util.GetValueOfInt(attrSetInstId)
-                                    + " AND NVL(pp.C_UOM_ID, 0) = " + Util.GetValueOfInt(uomId) 
+                                    + " AND NVL(pp.C_UOM_ID, 0) = " + Util.GetValueOfInt(uomId)
                                     + " ORDER BY plv.VALIDFROM DESC, plv.M_PriceList_Version_ID DESC";
                         }
                         else if (Util.GetValueOfInt(uomId) > 0 && Util.GetValueOfInt(attrSetInstId) <= 0)
@@ -220,14 +220,14 @@ namespace VIS.Models
 
                     priceListVersionId = Util.GetValueOfInt(DB.ExecuteScalar(sql));
 
-                    if (Util.GetValueOfInt(uomId) > 0 && Util.GetValueOfInt(uomId) != Util.GetValueOfInt(UOM_EACH) && priceListVersionId==0 && Util.GetValueOfInt(attrSetInstId)<=0)
+                    if (Util.GetValueOfInt(uomId) > 0 && Util.GetValueOfInt(uomId) != Util.GetValueOfInt(UOM_EACH) && priceListVersionId == 0)
                     {
                         sql = "SELECT plv.M_PriceList_Version_ID FROM M_PriceList_Version plv "
                                 + " JOIN M_ProductPrice pp ON plv.M_PriceList_Version_ID = pp.M_PriceList_Version_ID "
                                 + " WHERE plv.IsActive = 'Y' AND pp.IsActive = 'Y' AND plv.M_PriceList_ID = " + priceListId
                                 + @" AND plv.VALIDFROM <= (SELECT t." + _columnName + " FROM " + _tableName + " t WHERE t.IsActive = 'Y' AND t." + _keyColumnName + "=" + Util.GetValueOfInt(transactionId) + ") "
                                 + " AND NVL(pp.M_Product_ID, 0) = " + Util.GetValueOfInt(productId)
-                                + " AND NVL(pp.M_AttributeSetInstance_ID, 0) = 0"
+                                + " AND NVL(pp.M_AttributeSetInstance_ID, 0)=" + attrSetInstId
                                 + " AND NVL(pp.C_UOM_ID, 0) = " + Util.GetValueOfInt(UOM_EACH)
                                 + " ORDER BY plv.VALIDFROM DESC, plv.M_PriceList_Version_ID DESC";
 
@@ -253,7 +253,7 @@ namespace VIS.Models
         public int GetM_PriceList_Version_ID_On_Transaction_Date(Ctx ctx, string fields)
         {
             /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
-            int M_PriceList_ID = 0, productId = 0, priceListVersionId= 0, uomId = 0, attrSetInstId = 0;
+            int M_PriceList_ID = 0, productId = 0, priceListVersionId = 0, uomId = 0, attrSetInstId = 0;
 
             if (!string.IsNullOrEmpty(fields))
             {
@@ -280,8 +280,8 @@ namespace VIS.Models
                             + " JOIN M_ProductPrice pp ON plv.M_PriceList_Version_ID = pp.M_PriceList_Version_ID "
                             + " WHERE plv.IsActive = 'Y' AND pp.IsActive = 'Y' AND plv.M_PriceList_ID = " + M_PriceList_ID
                             + @" AND plv.VALIDFROM <= " + GlobalVariable.TO_DATE(_transactionDate, true)
-                            + " AND NVL(pp.M_Product_ID, 0) = " + Util.GetValueOfInt(productId);     
-                
+                            + " AND NVL(pp.M_Product_ID, 0) = " + Util.GetValueOfInt(productId);
+
                 if (uomId > 0)
                     sql = sql + " AND NVL(pp.C_UOM_ID, 0) = " + uomId;
 
