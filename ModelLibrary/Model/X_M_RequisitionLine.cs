@@ -347,6 +347,22 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
 
+        /** Set Entered Quantity.
+        @param QtyEntered Quantity */
+        public void SetQtyEntered(Decimal? QtyEntered)
+        {
+            if (QtyEntered == null) throw new ArgumentException("QtyEntered is mandatory.");
+            Set_Value("QtyEntered", (Decimal?)QtyEntered);
+        }
+        /** Get Entered Quantity.
+        @return Quantity */
+        public Decimal GetQtyEntered()
+        {
+            Object bd = Get_Value("QtyEntered");
+            if (bd == null) return Env.ZERO;
+            return Convert.ToDecimal(bd);
+        }
+
         /** Set Quantity Reserved.
         @param QtyReserved Quantity Reserved */
         public void SetQtyReserved(Decimal? QtyReserved)
@@ -399,22 +415,22 @@ namespace VAdvantage.Model
             }
             return false;
         }
-       
+
         /** Set UnProcessed Quantity.
         @param UnProcessQty 
         Un Processed quantity for this requisition */
-        public void SetUnProcessQty(Decimal? UnProcessQty) 
-        { 
-            Set_Value("UnProcessQty", (Decimal?)UnProcessQty); 
+        public void SetUnProcessQty(Decimal? UnProcessQty)
+        {
+            Set_Value("UnProcessQty", (Decimal?)UnProcessQty);
         }
         /** Get UnProcessed Quantity.
         @return Un Processed quantity for this requisition */
-        public Decimal GetUnProcessQty() 
-        { 
-            Object bd = Get_Value("UnProcessQty"); 
-            if (bd == null) 
-                return Env.ZERO; 
-            return Convert.ToDecimal(bd); 
+        public Decimal GetUnProcessQty()
+        {
+            Object bd = Get_Value("UnProcessQty");
+            if (bd == null)
+                return Env.ZERO;
+            return Convert.ToDecimal(bd);
         }
     }
 

@@ -163,18 +163,22 @@ namespace VIS.Controllers
         //    return Json(retJSON, JsonRequestBehavior.AllowGet);
         //}
 
-        //// Get enforce price limit from price list
-        //public JsonResult GetEnfPriceLimit(string fields)
-        //{
-        //    String retJSON = "";
-        //    if (Session["ctx"] != null)
-        //    {
-        //        VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-        //        MOrderLineModel objOrderLine = new MOrderLineModel();
-        //        retJSON = JsonConvert.SerializeObject(objOrderLine.GetEnforcePriceLimit(fields));
-        //    }
-        //    return Json(retJSON, JsonRequestBehavior.AllowGet);
-        //}
+        /// <summary>
+        /// Get enforce price limit from price list
+        /// </summary>
+        /// <param name="fields">Parameters</param>
+        /// <returns>Price List data</returns>
+        public JsonResult GetEnfPriceLimit(string fields)
+        {
+            String retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
+                MOrderLineModel objOrderLine = new MOrderLineModel();
+                retJSON = JsonConvert.SerializeObject(objOrderLine.GetEnforcePriceLimit(fields));
+            }
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
 
         //// get Attribute from product
         //public JsonResult GetProductASI(string fields)

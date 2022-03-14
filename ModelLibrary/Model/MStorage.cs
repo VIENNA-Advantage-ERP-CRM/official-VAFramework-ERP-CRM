@@ -350,7 +350,7 @@ namespace VAdvantage.Model
                     //sql += "AND (asi.GuaranteeDate IS NULL OR asi.GuaranteeDate>'" + String.Format("{0:dd-MMM-yy}", minGuaranteeDate) + "') "
                     //    + "ORDER BY asi.GuaranteeDate, M_AttributeSetInstance_ID";	//	Has Prio over Locator
                     sql += "AND (asi.GuaranteeDate IS NULL OR asi.GuaranteeDate>" + GlobalVariable.TO_DATE(minGuaranteeDate, true) + ")"         // Changes done by Bharat for Italian Language
-                        + "ORDER BY asi.GuaranteeDate, M_AttributeSetInstance_ID";	//	Has Prio over Locator
+                        + "ORDER BY NVL(asi.GuaranteeDate, TO_DATE('1970-01-01', 'YYYY-MM-DD')) , M_AttributeSetInstance_ID";	//	Has Prio over Locator
                     if (!FiFo)
                         sql += " DESC";
                     sql += ", l.PriorityNo DESC, s.QtyOnHand DESC";
