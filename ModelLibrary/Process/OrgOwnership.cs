@@ -190,20 +190,23 @@ namespace VAdvantage.Process
             }
 
             //	VIS_0045: 11-03-22 -> Set Container Storage
-            sql = new StringBuilder();
-            sql.Append("UPDATE M_ContainerStorage s "
-                + "SET AD_Org_ID=").Append(_AD_Org_ID)
-                .Append(" WHERE EXISTS "
-                    + "(SELECT * FROM M_Locator l WHERE l.M_Locator_ID=s.M_Locator_ID"
-                    + " AND l.M_Warehouse_ID=").Append(_M_Warehouse_ID)
-                .Append(") AND AD_Client_ID=").Append(GetAD_Client_ID())
-                .Append(" AND AD_Org_ID<>").Append(_AD_Org_ID);
-            no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
-            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "M_ContainerStorage_ID"));
-            // maintain query log
-            if (no > 0)
+            if (Util.GetValueOfString(GetCtx().GetContext("#PRODUCT_CONTAINER_APPLICABLE")).Equals("Y"))
             {
-                session.QueryLog(GetAD_Client_ID(), GetAD_Org_ID(), X_M_ContainerStorage.Table_ID, sql.ToString(), 1);
+                sql = new StringBuilder();
+                sql.Append("UPDATE M_ContainerStorage s "
+                    + "SET AD_Org_ID=").Append(_AD_Org_ID)
+                    .Append(" WHERE EXISTS "
+                        + "(SELECT * FROM M_Locator l WHERE l.M_Locator_ID=s.M_Locator_ID"
+                        + " AND l.M_Warehouse_ID=").Append(_M_Warehouse_ID)
+                    .Append(") AND AD_Client_ID=").Append(GetAD_Client_ID())
+                    .Append(" AND AD_Org_ID<>").Append(_AD_Org_ID);
+                no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
+                AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "M_ContainerStorage_ID"));
+                // maintain query log
+                if (no > 0)
+                {
+                    session.QueryLog(GetAD_Client_ID(), GetAD_Org_ID(), X_M_ContainerStorage.Table_ID, sql.ToString(), 1);
+                }
             }
             return "";
         }
@@ -253,6 +256,11 @@ namespace VAdvantage.Process
             sql = "UPDATE M_Product_BOM x " + set;
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "M_Product_BOM_ID"));
+            // maintain query log
+            if (no > 0)
+            {
+                session.QueryLog(GetAD_Client_ID(), GetAD_Org_ID(), X_M_Product_BOM.Table_ID, sql, 1);
+            }
 
             //	PO
             sql = "UPDATE M_Product_PO x " + set;
@@ -360,15 +368,6 @@ namespace VAdvantage.Process
             if (no > 0)
             {
                 session.QueryLog(GetAD_Client_ID(), GetAD_Org_ID(), X_M_ProductAttributes.Table_ID, sql, 1);
-            }
-
-            sql = "UPDATE M_Attribute  x " + set;
-            no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
-            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "M_Attribute_ID"));
-            // maintain query log
-            if (no > 0)
-            {
-                session.QueryLog(GetAD_Client_ID(), GetAD_Org_ID(), X_M_Attribute.Table_ID, sql, 1);
             }
 
             sql = "UPDATE M_ProductAttributeImage  x " + set;
