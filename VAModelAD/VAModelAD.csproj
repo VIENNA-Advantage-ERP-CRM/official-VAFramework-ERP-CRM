@@ -41,7 +41,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BundleCollection\ModuleBundles.cs" />
+    <Compile Include="Classes\AEnv.cs" />
+    <Compile Include="Classes\Evaluator.cs" />
+    <Compile Include="Classes\LDAP.cs" />
+    <Compile Include="Classes\ModelFactory.cs" />
+    <Compile Include="Classes\Obscure.cs" />
+    <Compile Include="Classes\Query.cs" />
+    <Compile Include="Classes\SessionEventHandler.cs" />
+    <Compile Include="Classes\TableSQL.cs" />
+    <Compile Include="Classes\WindowCtx.cs" />
+    <Compile Include="Classes\ZoomTarget.cs" />
+    <Compile Include="Common\Common.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BaseLibrary\BaseLibrary.csproj">
+      <Project>{11b07f0b-50d9-44d4-b2e7-f9c3e6a00f1b}</Project>
+      <Name>BaseLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CoreLibrary\CoreLibrary.csproj">
+      <Project>{ed61579e-017f-478f-98a2-6432a9c59f41}</Project>
+      <Name>CoreLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

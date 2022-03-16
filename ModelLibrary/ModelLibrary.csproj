@@ -155,7 +155,6 @@
     <Compile Include="AzureBlob\AzureBlobStorage.cs" />
     <Compile Include="BundleCollection\ModuleBundles.cs" />
     <Compile Include="Classes\AdvanceDocumentType.cs" />
-    <Compile Include="Classes\AEnv.cs" />
     <Compile Include="Classes\AttachmentHelper.cs" />
     <Compile Include="Classes\BudgetCheck.cs" />
     <Compile Include="Classes\CardViewInfo.cs" />
@@ -165,17 +164,11 @@
     <Compile Include="Classes\CostingCheck.cs" />
     <Compile Include="Classes\CrystalParams.cs" />
     <Compile Include="Classes\DocumentAction.cs" />
-    <Compile Include="Classes\Evaluator.cs" />
     <Compile Include="Classes\ManageSkippedWF.cs" />
     <Compile Include="Classes\ModelValidationEngine.cs" />
-    <Compile Include="Classes\Obscure.cs" />
     <Compile Include="Classes\PeriodicJob.cs" />
-    <Compile Include="Classes\SessionEventHandler.cs" />
-    <Compile Include="Classes\TableSQL.cs" />
     <Compile Include="Classes\ThreadInstance.cs" />
     <Compile Include="Classes\VLookUpFactory.cs" />
-    <Compile Include="Classes\WindowCtx.cs" />
-    <Compile Include="Classes\ZoomTarget.cs" />
     <Compile Include="CM\CacheClearAll.cs" />
     <Compile Include="CM\CacheClearServer.cs" />
     <Compile Include="CM\CacheHandler.cs" />
@@ -184,7 +177,6 @@
     <Compile Include="CM\MediaDirectDeploy.cs" />
     <Compile Include="CM\TemplateValidate.cs" />
     <Compile Include="CM\WebProjectDeploy.cs" />
-    <Compile Include="Common\Common.cs" />
     <Compile Include="Controllers\FieldVObj.cs" />
     <Compile Include="Controllers\GridFieldVO.cs" />
     <Compile Include="Controllers\GridTabPanel.cs" />
@@ -238,7 +230,6 @@
     <Compile Include="CrystalReport\BiReportEngine.cs" />
     <Compile Include="CrystalReport\CrystalReportEngine.cs" />
     <Compile Include="DataBase\DBFunctionCollection.cs" />
-    <Compile Include="DataBase\LDAP.cs" />
     <Compile Include="ImpExp\ExcelHelper.cs">
       <SubType>Code</SubType>
     </Compile>
