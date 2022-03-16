@@ -5110,48 +5110,35 @@ namespace VAdvantage.Model
         {
             MAllocationHdr AllHdr = null;
             MAllocationLine Allline = null;
-            int PaymentId = 0;
             StringBuilder _msg = new StringBuilder(); // is used to maintain document no
-
-            // get record detail of Invoice pay schedule and payment
-            DataSet dsPayment = DB.ExecuteDataset(@"SELECT C_invoicepayschedule.C_Payment_ID , c_invoicepayschedule.C_InvoicePaySchedule_ID ,
+            StringBuilder query = new StringBuilder();
+            //VA230:Get record detail of Invoice pay schedule and payment
+            query.Append(@"SELECT * FROM (SELECT C_invoicepayschedule.C_Payment_ID , c_invoicepayschedule.C_InvoicePaySchedule_ID ,
                                                            CASE WHEN c_invoicepayschedule.C_Currency_ID = C_Payment.C_Currency_ID THEN C_invoicepayschedule.DueAmt
                                                            ELSE CurrencyConvert(c_invoicepayschedule.DueAmt,c_invoicepayschedule.C_Currency_ID, C_Payment.C_Currency_ID,
                                                                 C_Payment.DateAcct, C_Payment.C_ConversionType_ID , C_Payment.AD_Client_ID,C_Payment.AD_Org_ID) END AS DueAmt,
                                                            C_Payment.C_Currency_ID,   C_Payment.C_ConversionType_ID, C_Payment.AD_Org_ID,
-                                                           C_Payment.DateTrx, C_Payment.DateAcct, C_Payment.DocumentNo, C_Payment.C_BPartner_ID, C_Payment.C_Order_ID
+                                                           C_Payment.DateTrx, C_Payment.DateAcct, C_Payment.DocumentNo, C_Payment.C_BPartner_ID, C_Payment.C_Order_ID,c_invoicepayschedule.C_CashLine_ID
                                                     FROM c_invoicepayschedule INNER JOIN C_Payment ON c_invoicepayschedule.C_Payment_ID = C_Payment.C_Payment_ID
                                                     WHERE c_invoicepayschedule.VA009_orderpayschedule_id != 0
-                                                          AND c_invoicepayschedule.C_Invoice_ID = " + invoice.GetC_Invoice_ID() + @"
-                                                    ORDER BY c_invoicepayschedule.C_Payment_ID ASC ", null, invoice.Get_Trx());
+                                                          AND c_invoicepayschedule.C_Invoice_ID = " + invoice.GetC_Invoice_ID());
+            //Get record detail of Invoice pay schedule and Cash journal
+            query.Append(@" UNION SELECT C_invoicepayschedule.C_Payment_ID , c_invoicepayschedule.C_InvoicePaySchedule_ID ,
+                                                           CASE WHEN c_invoicepayschedule.C_Currency_ID = CL.C_Currency_ID THEN C_invoicepayschedule.DueAmt
+                                                           ELSE CurrencyConvert(c_invoicepayschedule.DueAmt,c_invoicepayschedule.C_Currency_ID, CL.C_Currency_ID,
+                                                                C_Cash.DateAcct, CL.C_ConversionType_ID , CL.AD_Client_ID,CL.AD_Org_ID) END AS DueAmt,
+                                                           CL.C_Currency_ID,   CL.C_ConversionType_ID, CL.AD_Org_ID,
+                                                           C_Cash.StatementDate, C_Cash.DateAcct, CL.VSS_RECEIPTNO  AS DocumentNo, CL.C_BPartner_ID, CL.C_Order_ID,c_invoicepayschedule.C_CashLine_ID
+                                                    FROM c_invoicepayschedule INNER JOIN C_CashLine CL  ON c_invoicepayschedule.C_CashLine_ID = CL.C_CashLine_ID
+                                                    INNER JOIN C_CASH ON C_Cash.C_Cash_ID=CL.C_Cash_ID
+                                                    WHERE c_invoicepayschedule.VA009_orderpayschedule_id != 0 AND
+                                                           c_invoicepayschedule.C_Invoice_ID = " + invoice.GetC_Invoice_ID() +
+                                                       ") Schedules ORDER BY Schedules.C_Payment_ID,Schedules.C_CashLine_ID ASC");
+            DataSet dsPayment = DB.ExecuteDataset(query.ToString(), null, invoice.Get_Trx());
             if (dsPayment != null && dsPayment.Tables.Count > 0 && dsPayment.Tables[0].Rows.Count > 0)
             {
                 for (int i = 0; i < dsPayment.Tables[0].Rows.Count; i++)
                 {
-                    // create new allocation for first record or when we found different Payment Reference (but complete the previous document first)
-                    //if (i == 0 || PaymentId != Convert.ToInt32(dsPayment.Tables[0].Rows[i]["C_Payment_ID"]))
-                    //{
-                    // complete previous allocation before creation of new allocation
-                    //if (i != 0 && AllHdr.Get_ID() > 0 && AllHdr.CompleteIt() == "CO")
-                    //{
-                    //    AllHdr.SetProcessed(true);
-                    //    AllHdr.SetDocStatus(DOCACTION_Complete);
-                    //    AllHdr.SetDocAction(DOCACTION_Close);
-                    //    if (GetDescription() != null && GetDescription().Contains("{->"))
-                    //    {
-                    //        AllHdr.SetDocumentNo(GetDocumentNo() + "^");
-                    //    }
-                    //    AllHdr.Save(Get_TrxName());
-                    //    if (_msg.Length > 0)
-                    //    {
-                    //        _msg.Append("," + AllHdr.GetDocumentNo());
-                    //    }
-                    //    else
-                    //    {
-                    //        _msg.Append(AllHdr.GetDocumentNo());
-                    //    }
-                    //}
-
                     #region created new allocation for diferent payment
                     AllHdr = new MAllocationHdr(GetCtx(), 0, Get_TrxName());
                     AllHdr.SetAD_Client_ID(GetAD_Client_ID());
@@ -5185,9 +5172,6 @@ namespace VAdvantage.Model
                     }
                     #endregion
 
-                    //}
-
-                    PaymentId = Convert.ToInt32(dsPayment.Tables[0].Rows[i]["C_Payment_ID"]);
                     if (AllHdr.Get_ID() > 0)
                     {
                         #region created Allocation Line
@@ -5196,7 +5180,12 @@ namespace VAdvantage.Model
                         Allline.SetC_Invoice_ID(GetC_Invoice_ID());
                         Allline.SetC_InvoicePaySchedule_ID(Util.GetValueOfInt(dsPayment.Tables[0].Rows[i]["C_InvoicePaySchedule_ID"]));
                         Allline.SetC_Order_ID(Util.GetValueOfInt(dsPayment.Tables[0].Rows[i]["C_Order_ID"]));
-                        Allline.SetC_Payment_ID(PaymentId);
+                        //VA230:Set PaymentId or CashLineId reference on allocation line
+                        if (Util.GetValueOfInt(dsPayment.Tables[0].Rows[i]["C_Payment_ID"]) > 0)
+                            Allline.SetC_Payment_ID(Util.GetValueOfInt(dsPayment.Tables[0].Rows[i]["C_Payment_ID"]));
+                        else if (Util.GetValueOfInt(dsPayment.Tables[0].Rows[i]["C_CashLine_ID"]) > 0)
+                            Allline.SetC_CashLine_ID(Util.GetValueOfInt(dsPayment.Tables[0].Rows[i]["C_CashLine_ID"]));
+
                         Allline.SetDateTrx(DateTime.Now);
 
                         MDocType doctype = MDocType.Get(GetCtx(), GetC_DocTypeTarget_ID());

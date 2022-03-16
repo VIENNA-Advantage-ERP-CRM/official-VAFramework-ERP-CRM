@@ -277,6 +277,14 @@ namespace VAdvantage.Model
                                    " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                     }
                 }
+                else
+                {
+                    //VA230:Update Allocated status on cashline
+                    if (Util.GetValueOfInt(DB.ExecuteQuery("UPDATE C_CashLine SET IsAllocated='" + (cashLine.TestAllocation() ? 'Y' : 'N') + "' WHERE C_CashLine_ID=" + C_CashLine_ID, null, Get_TrxName())) <= 0)
+                    {
+                        log.Log(Level.SEVERE, "Error found for updating cashLine  for  this Line ID = " + cashLine.GetC_CashLine_ID() + " ,VoucherNo: " + cashLine.GetVSS_RECEIPTNO());
+                    }
+                }
             }
 
             //	Payment - Invoice

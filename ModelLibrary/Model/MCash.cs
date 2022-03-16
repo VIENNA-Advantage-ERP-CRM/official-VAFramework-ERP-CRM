@@ -1059,7 +1059,7 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
             }
             //
-
+            int OrderPayScheduleExists = 0;
             // check payment is received or not against any cash line which is created with the reerence of invoice & its schedule
             // if yes, then not able to complete this record
             if (Env.IsModuleInstalled("VA009_"))
@@ -1068,7 +1068,17 @@ namespace VAdvantage.Model
                 // when multiple user try to pay agaisnt same schedule from different scenarion at that tym lock record
                 lock (objLock)
                 {
-                    if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM C_Cash c INNER JOIN C_CashLine cl ON c.c_cash_id = cl.c_cash_id 
+                    try
+                    {
+                        //VA230:To check Order Pay Schedule reference column exists or not
+                        DB.ExecuteScalar("SELECT COUNT(VA009_OrderPaySchedule_ID) FROM C_CashLine WHERE C_Cash_ID = " + GetC_Cash_ID(), null, null);
+                        OrderPayScheduleExists = 1;
+                    }
+                    catch (Exception ex)
+                    {
+                        OrderPayScheduleExists = 0;
+                    }
+                    if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C.C_Cash_ID) FROM C_Cash c INNER JOIN C_CashLine cl ON c.c_cash_id = cl.c_cash_id 
                                                            INNER JOIN C_InvoicePaySchedule cs ON cs.C_InvoicePaySchedule_ID = cl.C_InvoicePaySchedule_ID
                                                            INNER JOIN C_Invoice inv ON inv.C_Invoice_ID = cl.C_Invoice_ID AND inv.DocStatus NOT IN ('RE' , 'VO') 
                                          WHERE cl.CashType = 'I' AND cs.DueAmt > 0  AND (nvl(cs.c_payment_id,0) != 0 or nvl(cs.c_cashline_id , 0) != 0 OR cs.VA009_IsPaid = 'Y')
@@ -1091,6 +1101,32 @@ namespace VAdvantage.Model
                         }
 
                         _processMsg = Msg.GetMsg(GetCtx(), "VIS_PayAlreadyDoneforInvoiceSchedule") + schedule;
+                        return DocActionVariables.STATUS_INVALID;
+                    }
+                    //VA230:Check order pay schedule paid status
+                    if (OrderPayScheduleExists == 1 && Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C.C_Cash_ID) FROM C_Cash c INNER JOIN C_CashLine cl ON c.c_cash_id = cl.c_cash_id 
+                                                           INNER JOIN VA009_OrderPaySchedule cs ON cs.VA009_OrderPaySchedule_ID = cl.VA009_OrderPaySchedule_ID
+                                                           INNER JOIN C_Order ord ON ord.C_Order_ID = cl.C_Order_ID AND ord.DocStatus NOT IN ('RE' , 'VO') 
+                                         WHERE cl.CashType = 'O' AND cs.DueAmt > 0  AND (nvl(cs.c_payment_id,0) != 0 or nvl(cs.c_cashline_id , 0) != 0 OR cs.VA009_IsPaid = 'Y')
+                                         AND cl.IsActive = 'Y' AND c.c_cash_id = " + GetC_Cash_ID(), null, Get_Trx())) > 0)
+                    {
+                        String schedule = string.Empty;
+                        string sql = "";
+                        try
+                        {
+                            //used DBFunctionCollection method to get the query which will execute SQL as well as PostGre.
+                            sql = DBFunctionCollection.CashLineRefOrerPayScheduleDuePaidOrNot(GetC_Cash_ID());
+                            if (!string.IsNullOrEmpty(sql))
+                                schedule = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));
+                        }
+                        catch (Exception ex)
+                        {
+                            //ex to ex.Message to get Explanation about the Exception.
+                            //log.Log(Level.SEVERE, sql, ex);
+                            log.Log(Level.SEVERE, sql, ex.Message);
+                        }
+
+                        _processMsg = Msg.GetMsg(GetCtx(), "VA009_OrderScheduleAlreadyPaid") + schedule;
                         return DocActionVariables.STATUS_INVALID;
                     }
                 }
@@ -1138,6 +1174,21 @@ namespace VAdvantage.Model
             //*****************************END*********************************************************************************//
             MCashLine[] lines = GetLines(false);
             MInvoice invoice = null; // is created for getting detail from Invoice Header
+            DataSet dsPaymentMethod = null;
+            DataSet dsPaymentBaseType = null;
+            if (OrderPayScheduleExists == 1)
+            {
+                //VA230:Get Payment Method having PaymentBaseType Cash only
+                dsPaymentMethod = DB.ExecuteDataset(@"SELECT VA009_PaymentMethod_ID,VA009_PaymentMode, VA009_PaymentType, VA009_PaymentTrigger,VA009_PaymentBaseType FROM VA009_PaymentMethod
+                                          WHERE IsActive = 'Y' AND VA009_PaymentBaseType='B' AND  AD_Client_ID = " + GetAD_Client_ID() +
+                                          " AND AD_Org_ID IN(0," + GetAD_Org_ID() + ") ORDER BY AD_Org_ID DESC", null, Get_Trx());
+                //Get distinct OrderPaySchedule ids from Cash lines
+                List<int> ids = lines.Select(x => x.GetVA009_OrderPaySchedule_ID()).Distinct().ToList();
+                if (ids.Count > 0)
+                {
+                    dsPaymentBaseType = GetOrderPaySchedulePaymentBaseTypeData(ids);
+                }
+            }
             for (int i = 0; i < lines.Length; i++)
             {
                 MCashLine line = lines[i];
@@ -1155,6 +1206,53 @@ namespace VAdvantage.Model
                                 _processMsg = pp.GetName();
                             return DocActionVariables.STATUS_INVALID;
                         }
+                    }
+                }
+                //VA230:Check if Order Payment Schedule Column exists
+                else if (line.Get_ColumnIndex("VA009_OrderPaySchedule_ID") >= 0 && Util.GetValueOfInt(line.GetVA009_OrderPaySchedule_ID()) != 0)
+                {
+                    Decimal basePaidAmt = line.GetAmount();
+                    Decimal orderPaidAmt = line.GetAmount();
+
+                    if (GetCtx().GetContextAsInt("$C_Currency_ID") != line.GetC_Currency_ID())
+                    {
+                        basePaidAmt = MConversionRate.Convert(GetCtx(), basePaidAmt, line.GetC_Currency_ID(), GetCtx().GetContextAsInt("$C_Currency_ID"), GetDateAcct(), line.GetC_ConversionType_ID(), line.GetAD_Client_ID(), line.GetAD_Org_ID());
+                    }
+
+                    StringBuilder sql = new StringBuilder();
+                    //VA230:Update paid amount and payment method related detail
+                    sql.Append("UPDATE VA009_OrderPaySchedule SET VA009_IsPaid='Y',C_CashLine_ID=" + line.GetC_CashLine_ID() +
+                                    @" , VA009_PaidAmntInvce = " + Math.Abs(orderPaidAmt) +
+                                    @" , VA009_PaidAmnt = " + Math.Abs(basePaidAmt) +
+                                    @" , VA009_ExecutionStatus = 'I' ");
+                    if (dsPaymentMethod != null && dsPaymentMethod.Tables.Count > 0 && dsPaymentMethod.Tables[0].Rows.Count > 0)
+                    {
+                        if (dsPaymentBaseType != null && dsPaymentBaseType.Tables.Count > 0 && dsPaymentBaseType.Tables[0].Rows.Count > 0)
+                        {
+                            DataRow[] dr = dsPaymentBaseType.Tables[0].Select("VA009_OrderPaySchedule_ID=" + Util.GetValueOfInt(line.GetVA009_OrderPaySchedule_ID()));
+                            if (dr != null && dr.Length > 0)
+                            {
+                                //VA230:If existing paymentbasetype not equal to cash journal paymentbasetype
+                                if (!String.IsNullOrEmpty(Util.GetValueOfString(dsPaymentMethod.Tables[0].Rows[0]["VA009_PaymentBaseType"]))
+                            && Util.GetValueOfString(dr[0]["VA009_PaymentBaseType"]) != Util.GetValueOfString(dsPaymentMethod.Tables[0].Rows[0]["VA009_PaymentBaseType"]))
+                                {
+                                    if (!String.IsNullOrEmpty(Util.GetValueOfString(dsPaymentMethod.Tables[0].Rows[0]["VA009_PaymentMode"])))
+                                        sql.Append(",VA009_PaymentMode='" + Util.GetValueOfString(dsPaymentMethod.Tables[0].Rows[0]["VA009_PaymentMode"]) + "'");
+                                    if (!String.IsNullOrEmpty(Util.GetValueOfString(dsPaymentMethod.Tables[0].Rows[0]["VA009_PaymentType"])))
+                                        sql.Append(",VA009_PaymentType='" + Util.GetValueOfString(dsPaymentMethod.Tables[0].Rows[0]["VA009_PaymentType"]) + "'");
+                                    if (!String.IsNullOrEmpty(Util.GetValueOfString(dsPaymentMethod.Tables[0].Rows[0]["VA009_PaymentType"])))
+                                        sql.Append(",VA009_PaymentTrigger='" + Util.GetValueOfString(dsPaymentMethod.Tables[0].Rows[0]["VA009_PaymentTrigger"]) + "'");
+                                    if (Util.GetValueOfInt(dsPaymentMethod.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]) > 0)
+                                        sql.Append(",VA009_PaymentMethod_ID=" + Util.GetValueOfInt(dsPaymentMethod.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]));
+                                }
+                            }
+                        }
+                    }
+                    sql.Append(" WHERE VA009_OrderPaySchedule_ID=" + line.GetVA009_OrderPaySchedule_ID());
+                    //VA230:Update CashLineID Reference and Paid Status on Order Pay Schedule
+                    if (Util.GetValueOfInt(DB.ExecuteQuery(sql.ToString(), null, Get_TrxName())) <= 0)
+                    {
+                        return DocActionVariables.STATUS_INVALID;
                     }
                 }
                 else
@@ -1405,8 +1503,8 @@ namespace VAdvantage.Model
                 {
 
                 }
-
-                if (MCashLine.CASHTYPE_Invoice.Equals(line.GetCashType()))
+                //VA230:Update Open Balance in case when selected cash type is Invoice or Order
+                if (MCashLine.CASHTYPE_Invoice.Equals(line.GetCashType()) || MCashLine.CASHTYPE_Order.Equals(line.GetCashType()))
                 {
                     if (line.GetC_BPartner_ID() != 0)
                     {
@@ -1586,7 +1684,7 @@ namespace VAdvantage.Model
                     if (cashAmt == null || cashAmt == 0)
                     {
                         //JID_0821: If Cashbook currency conversion is not found. On completion of cash journal System give error "IN".
-                        MConversionType conv =  MConversionType.Get(GetCtx(), line.GetC_ConversionType_ID());
+                        MConversionType conv = MConversionType.Get(GetCtx(), line.GetC_ConversionType_ID());
                         errorMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), line.GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
                             + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
                         return errorMsg;
@@ -2070,6 +2168,51 @@ namespace VAdvantage.Model
         public string GetDocBaseType()
         {
             return null;
+        }
+        /// <summary>
+        /// Get OrderPaySchedule ids and PaymentBaseType of selected PaymentMethod on OrderPaySchedule
+        /// Author:VA230
+        /// </summary>
+        /// <param name="ids">OrderPaySchedule ids list</param>
+        /// <returns>Order Pay Schedule Dataset</returns>
+        public static DataSet GetOrderPaySchedulePaymentBaseTypeData(List<int> ids)
+        {
+            decimal totalPages = ids.Count();
+            //to fixed 999 ids per page
+            totalPages = Math.Ceiling(totalPages / 999);
+
+            StringBuilder sql = new StringBuilder();
+            sql.Append(@"SELECT PM.VA009_PaymentBaseType,PS.VA009_OrderPaySchedule_ID FROM VA009_PaymentMethod PM 
+                                    INNER JOIN VA009_OrderPaySchedule PS ON PS.VA009_PaymentMethod_ID=PM.VA009_PaymentMethod_ID");
+            List<string> schedule_Ids = new List<string>();
+            //loop through each page
+            for (int i = 0; i <= totalPages - 1; i++)
+            {
+                //get comma seperated product ids max 999
+                schedule_Ids.Add(string.Join(",", ids.Select(r => r.ToString()).Skip(i * 999).Take(999)));
+            }
+            if (schedule_Ids.Count > 0)
+            {
+                //append product in sql statement use OR keyword when records are more than 999
+                for (int i = 0; i < schedule_Ids.Count; i++)
+                {
+                    if (i == 0)
+                    {
+                        sql.Append(@" AND (");
+                    }
+                    else
+                    {
+                        sql.Append(" OR ");
+                    }
+                    sql.Append(" PS.VA009_OrderPaySchedule_ID IN (" + schedule_Ids[i] + @")");
+                    if (i == schedule_Ids.Count - 1)
+                    {
+                        sql.Append(" ) ");
+                    }
+                }
+            }
+            DataSet ds = DB.ExecuteDataset(sql.ToString());
+            return ds;
         }
     }
 }

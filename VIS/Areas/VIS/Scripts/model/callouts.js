@@ -3047,76 +3047,76 @@
             //    && (mField.getColumnName() == "M_AttributeSetInstance_ID")) {
             //    QtyEntered = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
             //    var pricelist = 0;
-                //var params = M_Product_ID.toString().concat(",", Util.getValueOfString(mTab.getValue("C_Order_ID")) +
-                //    "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
-                //    "," + Util.getValueOfString(mTab.getValue("C_UOM_ID")) + "," + ctx.getAD_Client_ID().toString() + "," + Util.getValueOfString(C_BPartner_ID) +
-                //    "," + Util.getValueOfString(QtyEntered) + "," + Util.getValueOfString(mTab.getValue("StartDate")) +
-                //    "," + Util.getValueOfString(mTab.getValue("M_PriceList_ID")));
+            //var params = M_Product_ID.toString().concat(",", Util.getValueOfString(mTab.getValue("C_Order_ID")) +
+            //    "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
+            //    "," + Util.getValueOfString(mTab.getValue("C_UOM_ID")) + "," + ctx.getAD_Client_ID().toString() + "," + Util.getValueOfString(C_BPartner_ID) +
+            //    "," + Util.getValueOfString(QtyEntered) + "," + Util.getValueOfString(mTab.getValue("StartDate")) +
+            //    "," + Util.getValueOfString(mTab.getValue("M_PriceList_ID")));
 
-                //var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPrices", params);
-                //if (prices != null) {
+            //var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPrices", params);
+            //if (prices != null) {
 
-                //    countEd011 = Util.getValueOfInt(prices["countEd011"]);
-                //    var _countVAPRC = Util.getValueOfInt(prices["countVAPRC"]);
-                //    PriceEntered = prices["PriceEntered"];
-                //    pricelist = prices["PriceList"];
+            //    countEd011 = Util.getValueOfInt(prices["countEd011"]);
+            //    var _countVAPRC = Util.getValueOfInt(prices["countVAPRC"]);
+            //    PriceEntered = prices["PriceEntered"];
+            //    pricelist = prices["PriceList"];
 
-                //    if (!isBlanketOrderLine) {
-                //        mTab.setValue("PriceList", pricelist);
-                //        mTab.setValue("PriceActual", PriceEntered);
-                //        mTab.setValue("PriceEntered", PriceEntered);
-                //    }
+            //    if (!isBlanketOrderLine) {
+            //        mTab.setValue("PriceList", pricelist);
+            //        mTab.setValue("PriceActual", PriceEntered);
+            //        mTab.setValue("PriceEntered", PriceEntered);
+            //    }
 
-                //if (!isBlanketOrderLine) {
-                //    /** Price List - ValidFrom date validation ** Dt:11/03/2021 ** Modified By: Kumar **/
-                //    params = M_Product_ID.toString().concat(",", Util.getValueOfString(mTab.getValue("C_Order_ID")) + "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
-                //        "," + Util.getValueOfString(mTab.getValue("C_UOM_ID")) + "," + ctx.getAD_Client_ID().toString() + "," + Util.getValueOfString(C_BPartner_ID) +
-                //        "," + Util.getValueOfString(QtyEntered) + "," + Util.getValueOfString(countEd011) + "," + Util.getValueOfString(_countVAPRC) +
-                //        "," + Util.getValueOfString(mTab.getValue("StartDate")) + "," + Util.getValueOfString(mTab.getValue("M_PriceList_ID")));
+            //if (!isBlanketOrderLine) {
+            //    /** Price List - ValidFrom date validation ** Dt:11/03/2021 ** Modified By: Kumar **/
+            //    params = M_Product_ID.toString().concat(",", Util.getValueOfString(mTab.getValue("C_Order_ID")) + "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
+            //        "," + Util.getValueOfString(mTab.getValue("C_UOM_ID")) + "," + ctx.getAD_Client_ID().toString() + "," + Util.getValueOfString(C_BPartner_ID) +
+            //        "," + Util.getValueOfString(QtyEntered) + "," + Util.getValueOfString(countEd011) + "," + Util.getValueOfString(_countVAPRC) +
+            //        "," + Util.getValueOfString(mTab.getValue("StartDate")) + "," + Util.getValueOfString(mTab.getValue("M_PriceList_ID")));
 
-                //    var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPricesOnChange", params);
+            //    var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPricesOnChange", params);
 
-                //    pricelist = Util.getValueOfDecimal(prices["PriceList"]);
-                //    mTab.setValue("PriceList", pricelist);
-                //    PriceEntered = Util.getValueOfDecimal(prices["PriceEntered"]);
-                //    mTab.setValue("PriceEntered", PriceEntered);
-                //    PriceActual = Util.getValueOfDecimal(prices["PriceEntered"]);
-                //    mTab.setValue("PriceActual", PriceActual);
-                //}
+            //    pricelist = Util.getValueOfDecimal(prices["PriceList"]);
+            //    mTab.setValue("PriceList", pricelist);
+            //    PriceEntered = Util.getValueOfDecimal(prices["PriceEntered"]);
+            //    mTab.setValue("PriceEntered", PriceEntered);
+            //    PriceActual = Util.getValueOfDecimal(prices["PriceEntered"]);
+            //    mTab.setValue("PriceActual", PriceActual);
+            //}
 
-                //paramStr = mTab.getValue("C_UOM_ID").toString().concat(",");
-                //var gp = VIS.dataContext.getJSONRecord("MUOM/GetPrecision", paramStr);
+            //paramStr = mTab.getValue("C_UOM_ID").toString().concat(",");
+            //var gp = VIS.dataContext.getJSONRecord("MUOM/GetPrecision", paramStr);
 
-                //var QtyEntered1 = QtyEntered.toFixed(Util.getValueOfInt(gp));
+            //var QtyEntered1 = QtyEntered.toFixed(Util.getValueOfInt(gp));
 
-                //if (QtyEntered != QtyEntered1) {
-                //    this.log.fine("Corrected QtyEntered Scale UOM=" + Util.getValueOfInt(mTab.getValue("C_UOM_ID"))
-                //        + "; QtyEntered=" + QtyEntered + "->" + QtyEntered1);
-                //    QtyEntered = QtyEntered1;
-                //    mTab.setValue("QtyEntered", QtyEntered);
-                //}
+            //if (QtyEntered != QtyEntered1) {
+            //    this.log.fine("Corrected QtyEntered Scale UOM=" + Util.getValueOfInt(mTab.getValue("C_UOM_ID"))
+            //        + "; QtyEntered=" + QtyEntered + "->" + QtyEntered1);
+            //    QtyEntered = QtyEntered1;
+            //    mTab.setValue("QtyEntered", QtyEntered);
+            //}
 
-                ////Conversion of Qty Ordered
-                //paramStr = M_Product_ID.toString().concat(",", mTab.getValue("C_UOM_ID").toString(), ","
-                //    , QtyEntered.toString());
-                //var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
-                //QtyOrdered = pc;
+            ////Conversion of Qty Ordered
+            //paramStr = M_Product_ID.toString().concat(",", mTab.getValue("C_UOM_ID").toString(), ","
+            //    , QtyEntered.toString());
+            //var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
+            //QtyOrdered = pc;
 
-                //var conversion = false
-                //if (QtyOrdered != null) {
-                //    conversion = QtyEntered != QtyOrdered;
-                //}
-                //if (QtyOrdered == null) {
-                //    conversion = false;
-                //    QtyOrdered = 1;
-                //}
-                //if (conversion) {
-                //    mTab.setValue("QtyOrdered", QtyOrdered);
-                //}
-                //else {
-                //    mTab.setValue("QtyOrdered", (QtyOrdered * QtyEntered1));
-                //}
-                //}
+            //var conversion = false
+            //if (QtyOrdered != null) {
+            //    conversion = QtyEntered != QtyOrdered;
+            //}
+            //if (QtyOrdered == null) {
+            //    conversion = false;
+            //    QtyOrdered = 1;
+            //}
+            //if (conversion) {
+            //    mTab.setValue("QtyOrdered", QtyOrdered);
+            //}
+            //else {
+            //    mTab.setValue("QtyOrdered", (QtyOrdered * QtyEntered1));
+            //}
+            //}
             //}
             //	Storage
             if (M_Product_ID != 0
@@ -21306,7 +21306,7 @@
             mTab.setValue("VSS_PAYMENTTYPE", "R");
             mTab.getField("VSS_PAYMENTTYPE").setReadOnly(true);
         }
-        else if (Util.getValueOfString(mTab.getValue("CashType")) == "I") {
+        else if (Util.getValueOfString(mTab.getValue("CashType")) == "I" || Util.getValueOfString(mTab.getValue("CashType")) == "O") { //VA230:Invoice and Order
             mTab.getField("VSS_PAYMENTTYPE").setReadOnly(true);
         }
         else {
