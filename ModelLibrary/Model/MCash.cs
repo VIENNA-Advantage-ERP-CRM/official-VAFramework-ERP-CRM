@@ -1071,8 +1071,8 @@ namespace VAdvantage.Model
                     try
                     {
                         //VA230:To check Order Pay Schedule reference column exists or not
-                        DB.ExecuteScalar("SELECT COUNT(VA009_OrderPaySchedule_ID) FROM C_CashLine WHERE C_Cash_ID = " + GetC_Cash_ID(), null, null);
-                        OrderPayScheduleExists = 1;
+                        if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VA009_OrderPaySchedule_ID) FROM C_CashLine WHERE C_Cash_ID = " + GetC_Cash_ID(), null, null)) > 0)
+                            OrderPayScheduleExists = 1;
                     }
                     catch (Exception ex)
                     {
@@ -1106,7 +1106,7 @@ namespace VAdvantage.Model
                     //VA230:Check order pay schedule paid status
                     if (OrderPayScheduleExists == 1 && Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C.C_Cash_ID) FROM C_Cash c INNER JOIN C_CashLine cl ON c.c_cash_id = cl.c_cash_id 
                                                            INNER JOIN VA009_OrderPaySchedule cs ON cs.VA009_OrderPaySchedule_ID = cl.VA009_OrderPaySchedule_ID
-                                                           INNER JOIN C_Order ord ON ord.C_Order_ID = cl.C_Order_ID AND ord.DocStatus NOT IN ('RE' , 'VO') 
+                                                           INNER JOIN C_Order ord ON ord.C_Order_ID = cl.C_Order_ID AND ord.DocStatus NOT IN ('RE' , 'VO', 'CL') 
                                          WHERE cl.CashType = 'O' AND cs.DueAmt > 0  AND (nvl(cs.c_payment_id,0) != 0 or nvl(cs.c_cashline_id , 0) != 0 OR cs.VA009_IsPaid = 'Y')
                                          AND cl.IsActive = 'Y' AND c.c_cash_id = " + GetC_Cash_ID(), null, Get_Trx())) > 0)
                     {
@@ -1212,7 +1212,6 @@ namespace VAdvantage.Model
                 else if (line.Get_ColumnIndex("VA009_OrderPaySchedule_ID") >= 0 && Util.GetValueOfInt(line.GetVA009_OrderPaySchedule_ID()) != 0)
                 {
                     Decimal basePaidAmt = line.GetAmount();
-                    Decimal orderPaidAmt = line.GetAmount();
 
                     if (GetCtx().GetContextAsInt("$C_Currency_ID") != line.GetC_Currency_ID())
                     {
@@ -1222,7 +1221,7 @@ namespace VAdvantage.Model
                     StringBuilder sql = new StringBuilder();
                     //VA230:Update paid amount and payment method related detail
                     sql.Append("UPDATE VA009_OrderPaySchedule SET VA009_IsPaid='Y',C_CashLine_ID=" + line.GetC_CashLine_ID() +
-                                    @" , VA009_PaidAmntInvce = " + Math.Abs(orderPaidAmt) +
+                                    @" , VA009_PaidAmntInvce = " + Math.Abs(line.GetAmount()) +
                                     @" , VA009_PaidAmnt = " + Math.Abs(basePaidAmt) +
                                     @" , VA009_ExecutionStatus = 'I' ");
                     if (dsPaymentMethod != null && dsPaymentMethod.Tables.Count > 0 && dsPaymentMethod.Tables[0].Rows.Count > 0)
@@ -1232,7 +1231,7 @@ namespace VAdvantage.Model
                             DataRow[] dr = dsPaymentBaseType.Tables[0].Select("VA009_OrderPaySchedule_ID=" + Util.GetValueOfInt(line.GetVA009_OrderPaySchedule_ID()));
                             if (dr != null && dr.Length > 0)
                             {
-                                //VA230:If existing paymentbasetype not equal to cash journal paymentbasetype
+                                //VA230:If existing paymentbasetype not equal to cash journal paymentbasetype (not cash type)
                                 if (!String.IsNullOrEmpty(Util.GetValueOfString(dsPaymentMethod.Tables[0].Rows[0]["VA009_PaymentBaseType"]))
                             && Util.GetValueOfString(dr[0]["VA009_PaymentBaseType"]) != Util.GetValueOfString(dsPaymentMethod.Tables[0].Rows[0]["VA009_PaymentBaseType"]))
                                 {
@@ -1252,6 +1251,9 @@ namespace VAdvantage.Model
                     //VA230:Update CashLineID Reference and Paid Status on Order Pay Schedule
                     if (Util.GetValueOfInt(DB.ExecuteQuery(sql.ToString(), null, Get_TrxName())) <= 0)
                     {
+                        _processMsg = Msg.GetMsg(GetCtx(), "VA009_OrderPayScheduleNotUpdated");
+                        log.Log(Level.SEVERE, "Order pay schedule not updated for CashLineId = " + line.GetC_CashLine_ID() +
+                                   " Query is: " + sql.ToString());
                         return DocActionVariables.STATUS_INVALID;
                     }
                 }

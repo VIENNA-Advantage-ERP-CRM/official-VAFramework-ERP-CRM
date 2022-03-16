@@ -5119,7 +5119,7 @@ namespace VAdvantage.Model
                                                                 C_Payment.DateAcct, C_Payment.C_ConversionType_ID , C_Payment.AD_Client_ID,C_Payment.AD_Org_ID) END AS DueAmt,
                                                            C_Payment.C_Currency_ID,   C_Payment.C_ConversionType_ID, C_Payment.AD_Org_ID,
                                                            C_Payment.DateTrx, C_Payment.DateAcct, C_Payment.DocumentNo, C_Payment.C_BPartner_ID, C_Payment.C_Order_ID,c_invoicepayschedule.C_CashLine_ID
-                                                    FROM c_invoicepayschedule INNER JOIN C_Payment ON c_invoicepayschedule.C_Payment_ID = C_Payment.C_Payment_ID
+                                                    FROM C_InvoicePaySchedule INNER JOIN C_Payment ON(c_invoicepayschedule.C_Payment_ID = C_Payment.C_Payment_ID)
                                                     WHERE c_invoicepayschedule.VA009_orderpayschedule_id != 0
                                                           AND c_invoicepayschedule.C_Invoice_ID = " + invoice.GetC_Invoice_ID());
             //Get record detail of Invoice pay schedule and Cash journal
@@ -5129,8 +5129,8 @@ namespace VAdvantage.Model
                                                                 C_Cash.DateAcct, CL.C_ConversionType_ID , CL.AD_Client_ID,CL.AD_Org_ID) END AS DueAmt,
                                                            CL.C_Currency_ID,   CL.C_ConversionType_ID, CL.AD_Org_ID,
                                                            C_Cash.StatementDate, C_Cash.DateAcct, CL.VSS_RECEIPTNO  AS DocumentNo, CL.C_BPartner_ID, CL.C_Order_ID,c_invoicepayschedule.C_CashLine_ID
-                                                    FROM c_invoicepayschedule INNER JOIN C_CashLine CL  ON c_invoicepayschedule.C_CashLine_ID = CL.C_CashLine_ID
-                                                    INNER JOIN C_CASH ON C_Cash.C_Cash_ID=CL.C_Cash_ID
+                                                    FROM C_InvoicePaySchedule INNER JOIN C_CashLine CL  ON(c_invoicepayschedule.C_CashLine_ID = CL.C_CashLine_ID)
+                                                    INNER JOIN C_Cash ON(C_Cash.C_Cash_ID=CL.C_Cash_ID)
                                                     WHERE c_invoicepayschedule.VA009_orderpayschedule_id != 0 AND
                                                            c_invoicepayschedule.C_Invoice_ID = " + invoice.GetC_Invoice_ID() +
                                                        ") Schedules ORDER BY Schedules.C_Payment_ID,Schedules.C_CashLine_ID ASC");

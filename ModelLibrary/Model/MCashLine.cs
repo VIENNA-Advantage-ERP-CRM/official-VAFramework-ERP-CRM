@@ -590,6 +590,7 @@ namespace VAdvantage.Model
             {
                 if (newRecord || Is_ValueChanged("C_Order_ID") || Is_ValueChanged("VA009_OrderPaySchedule_ID"))
                 {
+                    //Check duplicate record except current row
                     string sql = @"SELECT COUNT(C_CashLine_ID) FROM C_CashLine CL 
                                                         INNER JOIN C_Cash C ON C.C_Cash_ID=CL.C_Cash_ID 
                                                         WHERE C_Order_ID = " + Get_Value("C_Order_ID") + @" AND VA009_OrderPaySchedule_ID=" + GetVA009_OrderPaySchedule_ID() + @" 
@@ -1092,8 +1093,6 @@ namespace VAdvantage.Model
                 alloc = Env.ZERO;
             Decimal total = GetAmount();
 
-            //if (GetVSS_PAYMENTTYPE().Equals(X_C_CashLine.VSS_PAYMENTTYPE_Payment))
-            //    total = Decimal.Negate(total);
             bool test = total.CompareTo((Decimal)alloc) == 0;
             bool change = test != IsAllocated();
             log.Fine("Cash Allocated=" + test
