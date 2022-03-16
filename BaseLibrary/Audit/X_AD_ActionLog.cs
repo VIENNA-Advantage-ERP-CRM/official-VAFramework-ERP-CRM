@@ -4,10 +4,9 @@ namespace VAdvantage.Model
     using System;
     using System.Text;
     using VAdvantage.DataBase;
-    using VAdvantage.Common;
+    
     using VAdvantage.Classes;
-    using VAdvantage.Process;
-    using VAdvantage.Model;
+    
     using VAdvantage.Utility;
     using System.Data;/** Generated Model for AD_ActionLog
  *  @author Raghu (Updated) 

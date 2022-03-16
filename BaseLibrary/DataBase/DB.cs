@@ -12,13 +12,7 @@ using System.Data.SqlClient;
 using System.Data;
 
 using VAdvantage.Utility;
-//using System.Data.OracleClient;
 
-using VAdvantage.Logging;
-using System.Drawing;
-
-using java.io;
-using java.util.zip;
 using BaseLibrary.Engine;
 
 namespace VAdvantage.DataBase
@@ -27,34 +21,7 @@ namespace VAdvantage.DataBase
     public class DB
     {
 
-
-
-        /// <summary>
-        ///Get next number for Key column = 0 is Error.
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="TableName"></param>
-        /// <param name="trx"></param>
-        /// <returns></returns>
-        public static int GetNextID(Ctx ctx, String TableName, Trx trx)
-        {
-            if (ctx == null)
-                throw new ArgumentException("Context missing");
-            if ((TableName == null) || (TableName.Length == 0))
-                throw new ArgumentException("TableName missing");
-            return GetNextID(ctx.GetAD_Client_ID(), TableName, trx);
-        }	//	getNextID
-
-
-
-        /// <summary>
-        /// Get next number for Key column = 0 is Error.
-        /// </summary>
-        /// <param name="AD_Client_ID">client</param>
-        /// <param name="TableName">table name</param>
-        /// <param name="trxName">optional Transaction Name</param>
-        /// <returns>next no</returns>
-        public static int GetNextID(int AD_Client_ID, String TableName, Trx trxName)
+        public static int GetNextID(int VAF_Client_ID, String TableName, Trx trxName)
         {
             //if ((trxName == null || trxName.Length() == 0) && isRemoteObjects())
             //{
@@ -63,7 +30,7 @@ namespace VAdvantage.DataBase
             //    {
             //        if (server != null)
             //        {	//	See ServerBean
-            //            int id = server.getNextID(AD_Client_ID, TableName, null);
+            //            int id = server.getNextID(VAF_Client_ID, TableName, null);
             //            log.finest("server => " + id);
             //            if (id < 0)
             //                throw new DBException("No NextID");
@@ -82,11 +49,15 @@ namespace VAdvantage.DataBase
             //TODO
             //if (isDB2())
             //    trxName = null;	//	tries 3 times
-            int id = POActionEngine.Get().GetNextID(AD_Client_ID, TableName, trxName);	//	tries 3 times
+            int id = POActionEngine.Get().GetNextID(VAF_Client_ID, TableName, trxName);	//	tries 3 times
             //	if (id <= 0)
             //		throw new DBException("No NextID (" + id + ")");
             return id;
-        }	//	getNextID
+        }   //	getNextID
+
+
+
+
 
         /// <summary>
         /// Execute SQL Query
@@ -750,222 +721,9 @@ namespace VAdvantage.DataBase
 
         }
 
-        public static bool SaveZipEntries(List<KeyValuePair<String, byte[]>> list, string tableName, int Id)
-        {
+     
 
-            ByteArrayOutputStream bOut = new ByteArrayOutputStream();
-            // initialize zip
-            ZipOutputStream zip = new ZipOutputStream(bOut);
-            zip.setMethod(ZipOutputStream.DEFLATED);
-            zip.setLevel(Deflater.BEST_COMPRESSION);
-
-            try
-            {
-                int isize = list.Count;
-                for (int i = 0; i < isize; i++)
-                {
-                    // get item
-                    KeyValuePair<String, byte[]> item = list[i];
-                    // make zip entry
-                    ZipEntry entry = new ZipEntry(item.Key);
-                    // set time
-                    entry.setTime(long.Parse(System.DateTime.Now.Millisecond.ToString()));
-                    entry.setMethod(ZipEntry.DEFLATED);
-                    // start setting zip entry into zip file
-                    zip.putNextEntry(entry);
-                    byte[] data = item.Value;
-                    object obj = (object)data;
-                    // set data into zip
-                    zip.write((byte[])obj, 0, data.Length);
-                    // close zip entry
-                    zip.closeEntry();
-                }
-                // close zip
-                zip.close();
-
-                byte[] sObjData = bOut.toByteArray();
-                byte[] zipData = ConvertTobyte(sObjData);
-
-                // Set binary data in PO and return
-                //    SetBinaryData(zipData);
-
-
-                System.Data.SqlClient.SqlParameter[] param = new System.Data.SqlClient.SqlParameter[1];
-
-                param[0] = new System.Data.SqlClient.SqlParameter("@param1", zipData);
-
-                // string sql = "Update AD_Attachment Set BinaryData = @param1 Where AD_Attachment_ID = " + AD_Attachment_ID;
-
-                string sql = "Update " + tableName + " Set BinaryData = @param1 Where " + tableName + "_ID = " + Id;
-
-                return VAdvantage.DataBase.DB.ExecuteQuery(sql, param, null) != -1;
-            }
-
-            catch
-            {
-                return false;
-            }
-
-
-
-
-        }
-
-        public static List<KeyValuePair<string, byte[]>> GetZipEntries(byte[] sdata)
-        {
-
-            List<KeyValuePair<string, byte[]>> list = new List<KeyValuePair<string, byte[]>>();
-
-
-
-
-            ByteArrayInputStream inBt = new ByteArrayInputStream(sdata);
-            // initialize zip
-            ZipInputStream zip = new ZipInputStream(inBt);
-            // get next entry i.e. 1st entry in zip
-            ZipEntry entry = zip.getNextEntry();
-            // for every entry in zip
-            while (entry != null)
-            {
-                // get file name
-                string name = entry.getName();
-                ByteArrayOutputStream outBt = new ByteArrayOutputStream();
-                byte[] buffer = new byte[2048];
-                int length = zip.read(buffer);
-                while (length != -1)
-                {
-                    // get data
-                    outBt.write(buffer, 0, length);
-                    length = zip.read(buffer);
-                }
-                //
-                byte[] sdataEntry = outBt.toByteArray();
-                byte[] dataEntry = ConvertTobyte(sdataEntry);
-
-
-
-
-                // add the entry into _items list
-
-                KeyValuePair<string, byte[]> keyVal = new KeyValuePair<string, byte[]>(name, dataEntry);
-
-                list.Add(keyVal);
-                //info.AttachmentEntries.Add(new AttachmentEntry(name, dataEntry, info.AttachmentEntries.Count + 1));
-                // get next entry in zip
-                entry = zip.getNextEntry();
-            }
-            return list;
-
-        }
-
-
-
-
-        public static byte[] ConvertTobyte(byte[] byteVar)
-        {
-            if (byteVar != null)
-            {
-                //int len = byteVar.Length;
-                //byte[] byteData = new byte[len];
-                //for (int i = 0; i < len; i++)
-                //{
-                //    byteData[i] = (byte)byteVar[i];
-                //}
-                byte[] byteData = new byte[byteVar.Length];
-                System.Buffer.BlockCopy(byteVar, 0, byteData, 0, byteVar.Length);
-
-                return byteData;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        public static DataSet SetUtcDateTime(DataSet dataSet)
-        {
-            var ds = new DataSet { Locale = System.Globalization.CultureInfo.InvariantCulture };
-            foreach (DataTable source in dataSet.Tables)
-            {
-                bool containsDate = false;
-                var target = source.Clone();
-
-                foreach (DataColumn col in target.Columns)
-                {
-                    if (col.DataType == System.Type.GetType("System.DateTime"))
-                    {
-                        col.DateTimeMode = DataSetDateTime.Utc;
-                        containsDate = true;
-                    }
-                }
-
-                if (containsDate)
-                {
-                    foreach (DataRow row in source.Rows)
-                        target.ImportRow(row);
-                    ds.Tables.Add(target);
-                }
-                else
-                {
-                    ds.Tables.Add(source.Copy());
-                }
-            }
-            dataSet.Tables.Clear();
-            dataSet.Dispose();
-            dataSet = ds;
-            return dataSet;
-        }
-
-        public static DataTable SetUtcDateTime(DataTable source)
-        {
-            //var ds = new DataSet { Locale = CultureInfo.InvariantCulture };
-
-            var target = source.Clone();
-
-            //foreach (DataTable source in dataSet.Tables)
-            //{
-            bool containsDate = false;
-            //    var target = source.Clone();
-
-            foreach (DataColumn col in target.Columns)
-            {
-                if (col.DataType == System.Type.GetType("System.DateTime"))
-                {
-                    col.DateTimeMode = DataSetDateTime.Utc;
-                    containsDate = true;
-                }
-            }
-
-            if (containsDate)
-            {
-                foreach (DataRow row in source.Rows)
-                    target.ImportRow(row);
-                return target;
-                //ds.Tables.Add(target);
-            }
-            //else
-            //{
-            //    ds.Tables.Add(source.Copy());
-            //}
-            //}
-
-            return source;
-        }
-
-        /// <summary>
-        /// Get Connection String 
-        /// </summary>
-        /// <returns></returns>
-        internal static string GetConnectionString()
-        {
-            return DBConn.CreateConnectionString();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sql"></param>
-        /// <returns></returns>
+        
         public static string ConvertSqlQuery(string sql)
         {
             return CoreLibrary.DataBase.DB.ConvertSqlQuery(sql);

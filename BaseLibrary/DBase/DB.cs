@@ -8,7 +8,7 @@ using VAdvantage.DataBase;
 using VAdvantage.Utility;
 using System.Data.SqlClient;
 using VIS.DataContracts;
-using Oracle.ManagedDataAccess.Client;
+
 
 namespace VIS.DBase
 {
@@ -16,31 +16,14 @@ namespace VIS.DBase
     public class DB
     {
 
-        private static string connectionString = System.Configuration.ConfigurationManager.AppSettings["oracleConnectionString"];
+       
 
 
         /// <summary>
         /// GetOracle Params by converting Data Contract sql Param
         /// </summary>
         /// <param name="arrParam">class sqlpaparam(data contract)</param>
-        /// <returns> oracle parameter</returns>
-        public static OracleParameter[] GetOracleParameter(SqlParams[] arrParam)
-        {
-            if (arrParam == null)
-                return null;
-            //create and instance of OracleParameter and initialize the length with the length of arrParam
-            OracleParameter[] param = new OracleParameter[arrParam.Length];
-            //loop through all the values of arrParam
-            for (int i = 0; i <= arrParam.Length - 1; i++)
-            {
-                //set one by one all the values to the OracleParameter
-                //replace @ with ? for use in Oracle
-                //string str = arrParam[i].SqlDbType.ToString();
-                //string strVal = to_date(arrParam[i].Value.ToString(), "mm/dd/yyyy");
-                param[i] = new OracleParameter(arrParam[i].name, arrParam[i].value);
-            }
-            return param;   //return the parameter
-        }
+       
 
         public static System.Data.SqlClient.SqlParameter[] GetSqlParameter(SqlParams[] arrParam)
         {

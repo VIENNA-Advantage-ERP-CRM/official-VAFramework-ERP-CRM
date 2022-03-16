@@ -24,6 +24,8 @@ namespace VAdvantage.Model
             ? new CCache<int, MSession>("AD_Session_ID", 1, 0)		//	one client session 
             : new CCache<int, MSession>("AD_Session_ID", 30, 0);    //	no time-out	
 
+        private static CCache<int, bool> roleChangeLog = new CCache<int, bool>("AD_Session_RoleLog", 10, 0);
+
         /* Do-not use CCache class :: cacahe list get clear at time cache reset process*/
         //private static Dictionary<int, MSession> cache = new Dictionary<int, MSession>(10);
 
@@ -332,11 +334,11 @@ namespace VAdvantage.Model
                 return null;
 
             //	Role Logging
-            MRole role = MRole.GetDefault(GetCtx(), false);
+            //MRole role = MRole.GetDefault(GetCtx(), false);
             //	Do we need to log
             if (_webStoreSession						//	log if WebStore
                 || MChangeLog.IsLogged(AD_Table_ID, type)		//	im/explicit log
-                || (role != null && role.IsChangeLog()))//	Role Logging
+                || (IsRoleChangeLog(GetCtx()))) //	Role Logging
             {; }
             else
             {
@@ -372,6 +374,21 @@ namespace VAdvantage.Model
                + ", AD_Session_ID=" + GetAD_Session_ID()
                + ", AD_Table_ID=" + AD_Table_ID + ", AD_Column_ID=" + AD_Column_ID);
             return null;
+        }
+
+        private bool IsRoleChangeLog(Ctx ctx)
+        {
+            int AD_Role_ID = ctx.GetAD_Role_ID();
+            bool isChangeLog = false;
+            if (roleChangeLog.ContainsKey(AD_Role_ID))
+                isChangeLog = roleChangeLog[AD_Role_ID];
+            else
+            {
+                isChangeLog = Utility.Util.GetValueOfBool(
+                    DB.ExecuteScalar("SELECT IsChangeLog FROM AD_Role WHERE AD_Role_ID = " + AD_Role_ID) == "Y");
+                roleChangeLog[AD_Role_ID] = isChangeLog;
+            }
+            return isChangeLog;
         }
 
         /// <summary>
@@ -568,11 +585,11 @@ namespace VAdvantage.Model
             if (MChangeLog.IsNotLogged(AD_Table_ID, tableName, 0, type))
                 return false;
             //	Role Logging
-            MRole role = MRole.GetDefault(GetCtx(), false);
+           // MRole role = MRole.GetDefault(GetCtx(), false);
             //	Do we need to log
             if (IsWebStoreSession()						//	log if WebStore
                 || MChangeLog.IsLogged(AD_Table_ID, type)		//	im/explicit log
-                || role != null && role.IsChangeLog())	//	Role Logging
+                || IsRoleChangeLog(GetCtx()))	//	Role Logging
                 return true;
             //
             return false;

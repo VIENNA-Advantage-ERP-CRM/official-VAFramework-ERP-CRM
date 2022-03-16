@@ -11,6 +11,7 @@ using System.Data;
 using VAdvantage.Classes;
 
 using System.Runtime.CompilerServices;
+using VAdvantage.DataBase;
 
 namespace VAdvantage.Login
 {
@@ -142,6 +143,14 @@ namespace VAdvantage.Login
         //};
 
         // [MethodImpl(MethodImplOptions.Synchronized)]
+        public static DataTable GetSystemLanguage()
+        {
+            DataSet ds = DB.ExecuteDataset("SELECT AD_Language,Name,Name AS DisplayName FROM AD_Language WHERE IsSystemLanguage = 'Y' AND IsActive='Y' Order BY  Name asc");
+            if (ds != null)
+                return ds.Tables[0];
+            return null;
+        }
+
         static object _lock = new object();
         public static void FillLanguage()
         {
@@ -158,7 +167,7 @@ namespace VAdvantage.Login
                 }
 
                 langList.Clear();
-                DataTable dt = MLanguage.GetSystemLanguage();
+                DataTable dt = GetSystemLanguage();
                 _languages.Add(0, new Language("English", AD_Language_en_US, new System.Globalization.CultureInfo("en-US"), null, "", MediaSize.NA.LETTER));
                 langList.Add(new ValueNamePair("en_US", "English"));
                 _loginLanguage = _languages[0];

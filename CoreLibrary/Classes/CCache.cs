@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
-using System.Runtime.CompilerServices;
+using VAdvantage.Classes;
 using VAdvantage.Logging;
 using VAdvantage.Utility;
-using VAdvantage.Classes;
 
 namespace CoreLibrary.Classes
 {
-   
-
-    /// <summary>
+   /// <summary>
     /// Cache class
     /// </summary>
     /// <typeparam name="K"></typeparam>
@@ -237,7 +231,7 @@ namespace CoreLibrary.Classes
             }
             catch (Exception ex)
             {
-                VLogger.Get().Log(Logging.Level.SEVERE, "CCache-->" + ex.ToString());
+                VLogger.Get().Log(VAdvantage.Logging.Level.SEVERE, "CCache-->" + ex.ToString());
             }
         }
 
@@ -361,12 +355,12 @@ namespace CoreLibrary.Classes
                 v = cacheDic[key];
             }
 
-            if ((ctx != null) && (v is PO))
-            {
-                PO b = (PO)Convert.ChangeType(v, typeof(V));
-                PO b1 = PO.Copy(ctx, b, null);
-                return (V)Convert.ChangeType(b1, typeof(V)); ;
-            }
+            //if ((ctx != null) && (v is PO))
+            //{
+            //    PO b = (PO)Convert.ChangeType(v, typeof(V));
+            //    PO b1 = PO.Copy(ctx, b, null);
+            //    return (V)Convert.ChangeType(b1, typeof(V)); ;
+            //}
             return v;
         }
     }

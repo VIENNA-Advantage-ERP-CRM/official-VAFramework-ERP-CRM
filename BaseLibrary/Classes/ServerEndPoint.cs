@@ -12,7 +12,7 @@ namespace VAdvantage.Classes
     public class ServerEndPoint
     {
 
-        public static ModelLibrary.CloudService.ServiceSoapClient GetCloudClient()
+        public static BaseLibrary.CloudService.ServiceSoapClient GetCloudClient()
         {
             object CloudURL = System.Configuration.ConfigurationManager.AppSettings["CloudURL"];
             if (CloudURL != null && CloudURL.ToString() != "")
@@ -32,7 +32,7 @@ namespace VAdvantage.Classes
                     binding.Security.Mode = BasicHttpSecurityMode.Transport;
                 }
 
-                return new ModelLibrary.CloudService.ServiceSoapClient(binding, new EndpointAddress(CloudURL.ToString()));
+                return new BaseLibrary.CloudService.ServiceSoapClient(binding, new EndpointAddress(CloudURL.ToString()));
             }
             else
             {

@@ -12,18 +12,12 @@ using System.Text;
 using VAdvantage.Classes;
 using System.Data;
 using System.Data.SqlClient;
-using System.Reflection;
-
-using VAdvantage.Model;
-using VAdvantage.Process;
 using VAdvantage.WF;
 using VAdvantage.DataBase;
 using VAdvantage.Utility;
 using VAdvantage.Logging;
 using VAdvantage.Print;
-using System.Diagnostics;
-using VAdvantage.Controller;
-
+using BaseLibrary.Engine;
 
 namespace VAdvantage.Model
 {
@@ -75,7 +69,7 @@ namespace VAdvantage.Model
         private int _idOld = 0;
 
         /**	Attachment with entriess	*/
-        private MAttachment _attachment = null;
+        private dynamic _attachment = null;
         /** Document Value Workflow Manager		*/
         private static DocWorkflowMgr s_docWFMgr = null;
 
@@ -2380,7 +2374,7 @@ namespace VAdvantage.Model
                 int no = SaveNew_GetID();
                 if (no <= 0)
                 {
-                    no = DB.GetNextID(GetAD_Client_ID(), p_info.GetTableName(), Get_Trx());
+                    no = POActionEngine.Get().GetNextID(GetAD_Client_ID(), p_info.GetTableName(), Get_Trx());
 
 
                     //if (DatabaseType.IsOracle)
@@ -2429,27 +2423,33 @@ namespace VAdvantage.Model
                     value = null;
                 if (value == null || value.Length == 0)
                 {
+                    int docTypeId = -1;
                     int dt = p_info.GetColumnIndex("C_DocTypeTarget_ID");
                     if (dt == -1)
                         dt = p_info.GetColumnIndex("C_DocType_ID");
-                    if (dt != -1)		//	get based on Doc Type (might return null)
-                        //value = MSequence.GetDocumentNo(get_ValueAsInt(dt), _trx, GetCtx());
-                        value = MSequence.GetDocumentNo(get_ValueAsInt(dt), _trx, GetCtx(), false, this);
-                    if (value == null)  //	not overwritten by DocType and not manually entered
-                    {
-                        if (masDet != null && masDet.TableName != null && masDet.TableName != "")
-                        {
-                            // Handled to get DocumentNo based on Organization
-                            //value = MSequence.GetDocumentNo(GetAD_Client_ID(), masDet.TableName, _trx, GetCtx());
-                            value = MSequence.GetDocumentNo(masDet.TableName, _trx, GetCtx(), this);
-                        }
-                        else
-                        {
-                            // Handled to get DocumentNo based on Organization
-                            //value = MSequence.GetDocumentNo(GetAD_Client_ID(), p_info.GetTableName(), _trx, GetCtx());
-                            value = MSequence.GetDocumentNo(p_info.GetTableName(), _trx, GetCtx(), this);
-                        }
-                    }
+                    if (dt != -1)       //	get based on Doc Type (might return null)
+                        
+                            docTypeId = get_ValueAsInt(dt);
+
+
+                    //value = MSequence.GetDocumentNo(get_ValueAsInt(dt), _trx, GetCtx());
+                    //value = MSequence.GetDocumentNo(get_ValueAsInt(dt), _trx, GetCtx(), false, this);
+                    value = POActionEngine.Get().GetDocumentNo(docTypeId, this);
+                    //if (value == null)  //	not overwritten by DocType and not manually entered
+                    //{
+                    //    if (masDet != null && masDet.TableName != null && masDet.TableName != "")
+                    //    {
+                    //        // Handled to get DocumentNo based on Organization
+                    //        //value = MSequence.GetDocumentNo(GetAD_Client_ID(), masDet.TableName, _trx, GetCtx());
+                    //        value = MSequence.GetDocumentNo(masDet.TableName, _trx, GetCtx(), this);
+                    //    }
+                    //    else
+                    //    {
+                    //        // Handled to get DocumentNo based on Organization
+                    //        //value = MSequence.GetDocumentNo(GetAD_Client_ID(), p_info.GetTableName(), _trx, GetCtx());
+                    //        value = MSequence.GetDocumentNo(p_info.GetTableName(), _trx, GetCtx(), this);
+                    //    }
+                    //}
                     Set_ValueNoCheck(columnName, value);
                 }
             }
@@ -2463,11 +2463,13 @@ namespace VAdvantage.Model
                 if (value == null || value.Length == 0)
                 {
                     //value = MSequence.GetDocumentNo(GetAD_Client_ID(), p_info.GetTableName(), _trx, GetCtx());
-                    if (masDet != null && masDet.TableName != null && masDet.TableName != "")
-                        value = MSequence.GetDocumentNo(masDet.TableName, _trx, GetCtx(), this);
-                    else
-                        // Handled to get Search Key based on Organization same as Document No.
-                        value = MSequence.GetDocumentNo(p_info.GetTableName(), _trx, GetCtx(), this);
+                    //if (masDet != null && masDet.TableName != null && masDet.TableName != "")
+                    //    value = MSequence.GetDocumentNo(masDet.TableName, _trx, GetCtx(), this);
+                    //else
+                    //    // Handled to get Search Key based on Organization same as Document No.
+                    //    value = MSequence.GetDocumentNo(p_info.GetTableName(), _trx, GetCtx(), this);
+                    
+                    value = POActionEngine.Get().GetDocumentNo(this);
                     Set_ValueNoCheck(columnName, value);
                 }
             }
@@ -2557,14 +2559,18 @@ namespace VAdvantage.Model
                     {
                         value = null;
                         int AD_Client_ID = GetAD_Client_ID();
+                        int docId = -1;
                         int index = p_info.GetColumnIndex("C_DocTypeTarget_ID");
                         if (index == -1)
                             index = p_info.GetColumnIndex("C_DocType_ID");
                         if (index != -1)		//	get based on Doc Type (might return null)
-                            //value = MSequence.GetDocumentNo(get_ValueAsInt(index), _trx, GetCtx());
-                            value = MSequence.GetDocumentNo(get_ValueAsInt(dt), _trx, GetCtx(), false, this);
-                        if (value == null)	//	not overwritten by DocType and not manually entered
-                            value = MSequence.GetDocumentNo(AD_Client_ID, p_info.GetTableName(), _trx, GetCtx());
+                            docId = Get_ValueAsInt(index);
+                        //if (index != -1)		//	get based on Doc Type (might return null)
+                        //    //value = MSequence.GetDocumentNo(get_ValueAsInt(index), _trx, GetCtx());
+                        //    value = MSequence.GetDocumentNo(get_ValueAsInt(dt), _trx, GetCtx(), false, this);
+                        //if (value == null)	//	not overwritten by DocType and not manually entered
+                        //    value = MSequence.GetDocumentNo(AD_Client_ID, p_info.GetTableName(), _trx, GetCtx());
+                        value = POActionEngine.Get().GetDocumentNo(docId, this);
                     }
                     else
                         log.Warning("DocumentNo updated: " + _mOldValues[i] + " -> " + value);
@@ -2742,8 +2748,9 @@ namespace VAdvantage.Model
             try
             {
                 success = AfterSave(newRecord, success);
-                if (success && newRecord)
-                    InsertTreeNode();
+                POActionEngine.Get().AfterSave(newRecord, success, this);
+                //if (success && newRecord)
+                //    InsertTreeNode();
             }
             catch (Exception ex)
             {
@@ -2753,97 +2760,99 @@ namespace VAdvantage.Model
             }
 
             // Case for Master Data Versioning, check if the record being saved is in Version table
-            if (GetTable().ToLower().EndsWith("_ver"))
-            {
-                // Get Master Data Properties
-                var MasterDetails = GetMasterDetails();
-                // check if Record has any Workflow (Value Type) linked, or Is Immediate save etc
-                if (MasterDetails != null && MasterDetails.AD_Table_ID > 0 &&
-                    (MasterDetails.ImmediateSave || MasterDetails.IsLatestVersion) && !MasterDetails.HasDocValWF)
-                {
-                    // create object of parent table
-                    MTable tbl = MTable.Get(p_ctx, MasterDetails.AD_Table_ID);
-                    PO po = null;
-                    bool updateMasID = false;
-                    // check if Master table has single key or multiple keys or single key
-                    // then create object 
-                    if (tbl.IsSingleKey())
-                    {
-                        po = tbl.GetPO(p_ctx, MasterDetails.Record_ID, _trx);
-                        if (po.Get_ID() <= 0)
-                            updateMasID = true;
-                    }
-                    else
-                    {
-                        // fetch key columns for parent table
-                        string[] keyCols = tbl.GetKeyColumns();
-                        StringBuilder whereCond = new StringBuilder("");
-                        for (int w = 0; w < keyCols.Length; w++)
-                        {
-                            if (w == 0)
-                            {
-                                if (keyCols[w] != null)
-                                    whereCond.Append(keyCols[w] + " = " + Get_Value(keyCols[w]));
-                                else
-                                    whereCond.Append(" COALESCE(" + keyCols[w] + ",0) = 0");
-                            }
-                            else
-                            {
-                                if (keyCols[w] != null)
-                                    whereCond.Append(" AND " + keyCols[w] + " = " + Get_Value(keyCols[w]));
-                                else
-                                    whereCond.Append(" AND COALESCE(" + keyCols[w] + ",0) = 0");
-                            }
-                        }
-                        po = tbl.GetPO(p_ctx, whereCond.ToString(), _trx);
-                    }
-                    if (po != null)
-                    {
-                        po.SetAD_Window_ID(MasterDetails.AD_Window_ID);
-                        // copy date from Version table to Master table
-                        bool saveSuccess = CopyVersionToMaster(po);
-                        if (!saveSuccess)
-                        {
-                            if (_trx != null)
-                            {
-                                _trx.Rollback();
-                                _trx.Close();
-                                return false;
-                            }
-                        }
-                        else
-                        {
-                            if (updateMasID)
-                            {
-                                MasterDetails.Record_ID = po.Get_ID();
-                                // set new values in MaserDetails Object
-                                SetMasterDetails(MasterDetails);
-                                // Update key column in version table against Master table 
-                                // only in case of single key column and in case of new record
-                                string sqlQuery = "UPDATE " + GetTable() + " SET " + po.Get_TableName() + "_ID = " + po.Get_ID() + " WHERE " + GetTable() + "_ID = " + Get_ID();
-                                int count = DB.ExecuteQuery(sqlQuery, null, _trx);
-                            }
-                        }
-                    }
-                }
-            }
+            //if (GetTable().ToLower().EndsWith("_ver"))
+            //{
+            //    // Get Master Data Properties
+            //    var MasterDetails = GetMasterDetails();
+            //    // check if Record has any Workflow (Value Type) linked, or Is Immediate save etc
+            //    if (MasterDetails != null && MasterDetails.AD_Table_ID > 0 &&
+            //        (MasterDetails.ImmediateSave || MasterDetails.IsLatestVersion) && !MasterDetails.HasDocValWF)
+            //    {
+            //        // create object of parent table
+            //        MTable tbl = MTable.Get(p_ctx, MasterDetails.AD_Table_ID);
+            //        PO po = null;
+            //        bool updateMasID = false;
+            //        // check if Master table has single key or multiple keys or single key
+            //        // then create object 
+            //        if (tbl.IsSingleKey())
+            //        {
+            //            po = tbl.GetPO(p_ctx, MasterDetails.Record_ID, _trx);
+            //            if (po.Get_ID() <= 0)
+            //                updateMasID = true;
+            //        }
+            //        else
+            //        {
+            //            // fetch key columns for parent table
+            //            string[] keyCols = tbl.GetKeyColumns();
+            //            StringBuilder whereCond = new StringBuilder("");
+            //            for (int w = 0; w < keyCols.Length; w++)
+            //            {
+            //                if (w == 0)
+            //                {
+            //                    if (keyCols[w] != null)
+            //                        whereCond.Append(keyCols[w] + " = " + Get_Value(keyCols[w]));
+            //                    else
+            //                        whereCond.Append(" COALESCE(" + keyCols[w] + ",0) = 0");
+            //                }
+            //                else
+            //                {
+            //                    if (keyCols[w] != null)
+            //                        whereCond.Append(" AND " + keyCols[w] + " = " + Get_Value(keyCols[w]));
+            //                    else
+            //                        whereCond.Append(" AND COALESCE(" + keyCols[w] + ",0) = 0");
+            //                }
+            //            }
+            //            po = tbl.GetPO(p_ctx, whereCond.ToString(), _trx);
+            //        }
+            //        if (po != null)
+            //        {
+            //            po.SetAD_Window_ID(MasterDetails.AD_Window_ID);
+            //            // copy date from Version table to Master table
+            //            bool saveSuccess = CopyVersionToMaster(po);
+            //            if (!saveSuccess)
+            //            {
+            //                if (_trx != null)
+            //                {
+            //                    _trx.Rollback();
+            //                    _trx.Close();
+            //                    return false;
+            //                }
+            //            }
+            //            else
+            //            {
+            //                if (updateMasID)
+            //                {
+            //                    MasterDetails.Record_ID = po.Get_ID();
+            //                    // set new values in MaserDetails Object
+            //                    SetMasterDetails(MasterDetails);
+            //                    // Update key column in version table against Master table 
+            //                    // only in case of single key column and in case of new record
+            //                    string sqlQuery = "UPDATE " + GetTable() + " SET " + po.Get_TableName() + "_ID = " + po.Get_ID() + " WHERE " + GetTable() + "_ID = " + Get_ID();
+            //                    int count = DB.ExecuteQuery(sqlQuery, null, _trx);
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
 
             if (success)
             {
-                if (s_docWFMgr == null)
-                {
-                    try
-                    {
-                        //s_docWFMgr = (DocWorkflowMgr)Activator.GetObject(typeof(DocWorkflowMgr), "VAdvantage.WF.DocWorkflowManager");
-                        s_docWFMgr = DocWorkflowManager.Get();
-                    }
-                    catch
-                    {
-                    }
-                }
-                if (s_docWFMgr != null)
-                    s_docWFMgr.Process(this, p_info.getAD_Table_ID());
-
+                //if (s_docWFMgr == null)
+                //{
+                //    try
+                //    {
+                //        //s_docWFMgr = (DocWorkflowMgr)Activator.GetObject(typeof(DocWorkflowMgr), "VAdvantage.WF.DocWorkflowManager");
+                //        System.Reflection.Assembly asm = System.Reflection.Assembly.Load("VAWorkflow");
+                //        s_docWFMgr = (DocWorkflowMgr)asm.GetType("VAdvantage.WF.DocWorkflowManager").GetMethod("Get").Invoke(null, null);
+                //        //s_docWFMgr = DocWorkflowManager.Get();
+                //    }
+                //    catch
+                //    {
+                //    }
+                //}
+                //if (s_docWFMgr != null)
+                //    s_docWFMgr.Process(this, p_info.getAD_Table_ID());
+                ExecuteWF();
                 //	Copy to Old values
                 int size = p_info.GetColumnCount();
                 for (int i = 0; i < size; i++)
@@ -2909,7 +2918,10 @@ namespace VAdvantage.Model
             {
                 String keyColumn = p_info.GetTableName() + "_ID";
                 String keyValue = Get_ID().ToString();
-                MPreference.Delete(keyColumn, keyValue);
+                //MPreference.Delete(keyColumn, keyValue);
+                StringBuilder sql = new StringBuilder("DELETE FROM AD_ValuePreference WHERE Attribute='")
+                   .Append(keyColumn).Append("' AND Value='").Append(keyValue).Append("'");
+                DataBase.DB.ExecuteQuery(sql.ToString(), null, null);
                 GetCtx().DeletePreference(keyColumn, keyValue);
             }
         }
@@ -2967,34 +2979,34 @@ namespace VAdvantage.Model
             //log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "AD_Org_ID"));
             //log.SaveError("Other One", Msg.GetElement(GetCtx(), "AD_Org_ID"));
 
-            if (GetAD_Org_ID() == 0
-                && (Get_AccessLevel() == ACCESSLEVEL_ORG
-                    || (Get_AccessLevel() == ACCESSLEVEL_CLIENTORG
-                        && MClientShare.IsOrgLevelOnly(GetAD_Client_ID(), Get_Table_ID()))))
-            {
-                log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "AD_Org_ID"));
-                return false;
-            }
+            //if (GetAD_Org_ID() == 0
+            //    && (Get_AccessLevel() == ACCESSLEVEL_ORG
+            //        || (Get_AccessLevel() == ACCESSLEVEL_CLIENTORG
+            //            && MClientShare.IsOrgLevelOnly(GetAD_Client_ID(), Get_Table_ID()))))
+            //{
+            //    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "AD_Org_ID"));
+            //    return false;
+            //}
 
-            //	Should be Org 0
-            if (GetAD_Org_ID() != 0)
-            {
-                bool reset = Get_AccessLevel() == ACCESSLEVEL_SYSTEM;
-                if (!reset && MClientShare.IsClientLevelOnly(GetAD_Client_ID(), Get_Table_ID()))
-                {
-                    reset = Get_AccessLevel() == ACCESSLEVEL_CLIENT
-                        || Get_AccessLevel() == ACCESSLEVEL_SYSTEMCLIENT
-                        || Get_AccessLevel() == ACCESSLEVEL_CLIENTORG;
-                }
-                if (reset)
-                {
-                    log.Warning("Set Org to 0");
-                    SetAD_Org_ID(0);
-                }
-            }
+            ////	Should be Org 0
+            //if (GetAD_Org_ID() != 0)
+            //{
+            //    bool reset = Get_AccessLevel() == ACCESSLEVEL_SYSTEM;
+            //    if (!reset && MClientShare.IsClientLevelOnly(GetAD_Client_ID(), Get_Table_ID()))
+            //    {
+            //        reset = Get_AccessLevel() == ACCESSLEVEL_CLIENT
+            //            || Get_AccessLevel() == ACCESSLEVEL_SYSTEMCLIENT
+            //            || Get_AccessLevel() == ACCESSLEVEL_CLIENTORG;
+            //    }
+            //    if (reset)
+            //    {
+            //        log.Warning("Set Org to 0");
+            //        SetAD_Org_ID(0);
+            //    }
+            //}
 
             //	Before Save
-            MAssignSet.Execute(this, newRecord);	//	Automatic Assignment
+           // MAssignSet.Execute(this, newRecord);    //	Automatic Assignment
 
             // Commented this function as Not required 
             // Check For Advance Document Type Module
@@ -3005,6 +3017,8 @@ namespace VAdvantage.Model
             //        return false;
             //    }
             //}
+            if (!POActionEngine.Get().BeforeSave(this))
+                return false;
 
             try
             {
@@ -3021,6 +3035,15 @@ namespace VAdvantage.Model
                 //	throw new DBException(e);
                 return false;
 
+            }
+
+            String errorMsg = ModelValidationEngine.Get().FireModelChange
+            (this, newRecord ? ModalValidatorVariables.CHANGETYPE_NEW : ModalValidatorVariables.CHANGETYPE_CHANGE);
+            if (errorMsg != null)
+            {
+                s_log.Warning("Validation failed - " + errorMsg);
+                s_log.SaveError("Error", errorMsg);
+                return false;
             }
 
             if (newRecord)
@@ -3164,14 +3187,14 @@ namespace VAdvantage.Model
             if (!trlColumnChanged)
                 return true;
             //
-            MClient client = MClient.Get(GetCtx());
+           // MClient client = MClient.Get(GetCtx());
             //
             String tableName = p_info.GetTableName();
             String keyColumn = _mKeyColumns[0];
             StringBuilder sql = new StringBuilder("UPDATE ")
                 .Append(tableName).Append("_Trl SET ");
             //
-            if (client.IsAutoUpdateTrl(tableName))
+            if (POActionEngine.Get().IsAutoUpdateTrl(GetCtx(), tableName))
             {
                 for (int i = 0; i < p_info.GetColumnCount(); i++)
                 {
@@ -3531,8 +3554,9 @@ namespace VAdvantage.Model
             try
             {
                 success = AfterDelete(success);
-                if (success)
-                    DeleteTreeNode();
+                POActionEngine.Get().AfterDelete(this, success);
+                //if (success)
+                //    DeleteTreeNode();
             }
             catch (Exception e)
             {
@@ -3577,96 +3601,96 @@ namespace VAdvantage.Model
         ///Insert id data into Tree
         /// </summary>
         /// <returns></returns>
-        private bool InsertTreeNode()
-        {
-            int AD_Table_ID = Get_Table_ID();
-            if (!MTree.HasTree(AD_Table_ID, GetCtx()))
-                return false;
-            int id = Get_ID();
-            int AD_Client_ID = GetAD_Client_ID();
-            String treeTableName = MTree.GetNodeTableName(AD_Table_ID, GetCtx());
-            int C_Element_ID = 0;
-            if (AD_Table_ID == X_C_ElementValue.Table_ID)
-            {
-                int? ii = (int?)Get_Value("C_Element_ID");
-                if (ii != null)
-                    C_Element_ID = ii.Value;
-            }
-            //
-            StringBuilder sb = new StringBuilder("INSERT INTO ")
-                .Append(treeTableName)
-                .Append(" (AD_Client_ID,AD_Org_ID, IsActive,Created,CreatedBy,Updated,UpdatedBy, ")
-                .Append("AD_Tree_ID, Node_ID, Parent_ID, SeqNo) ")
-                //
-                .Append("SELECT t.AD_Client_ID,0, 'Y', SysDate, 0, SysDate, 0,")
-                .Append("t.AD_Tree_ID, ").Append(id).Append(", 0, 999 ")
-                .Append("FROM AD_Tree t ")
-                .Append("WHERE t.AD_Client_ID=").Append(AD_Client_ID).Append(" AND t.IsActive='Y'");
-            //	Account Element Value handling
-            if (C_Element_ID != 0)
-                sb.Append(" AND EXISTS (SELECT * FROM C_Element ae WHERE ae.C_Element_ID=")
-                    .Append(C_Element_ID).Append(" AND t.AD_Tree_ID=ae.AD_Tree_ID)");
-            else	//	std trees
-                sb.Append(" AND t.IsAllNodes='Y' AND t.AD_Table_ID=").Append(AD_Table_ID);
-            //	Duplicate Check
-            sb.Append(" AND NOT EXISTS (SELECT * FROM ").Append(treeTableName).Append(" e ")
-                .Append("WHERE e.AD_Tree_ID=t.AD_Tree_ID AND Node_ID=").Append(id).Append(")");
-            //
-            // Check applied to insert the node in treenode from organization units window in only default tree - Changed by Mohit asked by mukesh sir and ashish
-            if (AD_Table_ID == X_AD_Org.Table_ID)
-            {
-                MOrg Org = new MOrg(GetCtx(), id, null);
-                if (Org.Get_ColumnIndex("IsOrgUnit") > -1)
-                {
-                    if (Org.IsOrgUnit())
-                    {
-                        int DefaultTree_ID = MTree.GetDefaultAD_Tree_ID(GetAD_Client_ID(), AD_Table_ID);
-                        sb.Append(" AND t.AD_Tree_ID=").Append(DefaultTree_ID);
-                    }
-                }
-            }
-            int no = DB.ExecuteQuery(sb.ToString(), null, Get_Trx());
-            if (no > 0)
-            {
-                log.Fine("#" + no.ToString() + " - AD_Table_ID=" + AD_Table_ID);
-            }
-            else
-            {
-                log.Warning("#" + no.ToString() + " - AD_Table_ID=" + AD_Table_ID);
-            }
-            return no > 0;
-        }
+        //private bool InsertTreeNode()
+        //{
+        //    int AD_Table_ID = Get_Table_ID();
+        //    if (!MTree.HasTree(AD_Table_ID, GetCtx()))
+        //        return false;
+        //    int id = Get_ID();
+        //    int AD_Client_ID = GetAD_Client_ID();
+        //    String treeTableName = MTree.GetNodeTableName(AD_Table_ID, GetCtx());
+        //    int C_Element_ID = 0;
+        //    if (AD_Table_ID == X_C_ElementValue.Table_ID)
+        //    {
+        //        int? ii = (int?)Get_Value("C_Element_ID");
+        //        if (ii != null)
+        //            C_Element_ID = ii.Value;
+        //    }
+        //    //
+        //    StringBuilder sb = new StringBuilder("INSERT INTO ")
+        //        .Append(treeTableName)
+        //        .Append(" (AD_Client_ID,AD_Org_ID, IsActive,Created,CreatedBy,Updated,UpdatedBy, ")
+        //        .Append("AD_Tree_ID, Node_ID, Parent_ID, SeqNo) ")
+        //        //
+        //        .Append("SELECT t.AD_Client_ID,0, 'Y', SysDate, 0, SysDate, 0,")
+        //        .Append("t.AD_Tree_ID, ").Append(id).Append(", 0, 999 ")
+        //        .Append("FROM AD_Tree t ")
+        //        .Append("WHERE t.AD_Client_ID=").Append(AD_Client_ID).Append(" AND t.IsActive='Y'");
+        //    //	Account Element Value handling
+        //    if (C_Element_ID != 0)
+        //        sb.Append(" AND EXISTS (SELECT * FROM C_Element ae WHERE ae.C_Element_ID=")
+        //            .Append(C_Element_ID).Append(" AND t.AD_Tree_ID=ae.AD_Tree_ID)");
+        //    else	//	std trees
+        //        sb.Append(" AND t.IsAllNodes='Y' AND t.AD_Table_ID=").Append(AD_Table_ID);
+        //    //	Duplicate Check
+        //    sb.Append(" AND NOT EXISTS (SELECT * FROM ").Append(treeTableName).Append(" e ")
+        //        .Append("WHERE e.AD_Tree_ID=t.AD_Tree_ID AND Node_ID=").Append(id).Append(")");
+        //    //
+        //    // Check applied to insert the node in treenode from organization units window in only default tree - Changed by Mohit asked by mukesh sir and ashish
+        //    if (AD_Table_ID == X_AD_Org.Table_ID)
+        //    {
+        //        MOrg Org = new MOrg(GetCtx(), id, null);
+        //        if (Org.Get_ColumnIndex("IsOrgUnit") > -1)
+        //        {
+        //            if (Org.IsOrgUnit())
+        //            {
+        //                int DefaultTree_ID = MTree.GetDefaultAD_Tree_ID(GetAD_Client_ID(), AD_Table_ID);
+        //                sb.Append(" AND t.AD_Tree_ID=").Append(DefaultTree_ID);
+        //            }
+        //        }
+        //    }
+        //    int no = DB.ExecuteQuery(sb.ToString(), null, Get_Trx());
+        //    if (no > 0)
+        //    {
+        //        log.Fine("#" + no.ToString() + " - AD_Table_ID=" + AD_Table_ID);
+        //    }
+        //    else
+        //    {
+        //        log.Warning("#" + no.ToString() + " - AD_Table_ID=" + AD_Table_ID);
+        //    }
+        //    return no > 0;
+        //}
 
         /// <summary>
         /// Delete ID Tree Nodes
         /// </summary>
         /// <returns>true if actually deleted (could be non existing)</returns>
-        private bool DeleteTreeNode()
-        {
-            int id = Get_ID();
-            if (id == 0)
-                id = Get_IDOld();
-            int AD_Table_ID = Get_Table_ID();
-            if (!MTree.HasTree(AD_Table_ID, GetCtx()))
-                return false;
-            String treeTableName = MTree.GetNodeTableName(AD_Table_ID, GetCtx());
-            if (treeTableName == null)
-                return false;
-            //
-            StringBuilder sb = new StringBuilder("DELETE FROM ")
-                .Append(treeTableName)
-                .Append(" n WHERE Node_ID=").Append(id)
-                .Append(" AND EXISTS (SELECT * FROM AD_Tree t ")
-                .Append("WHERE t.AD_Tree_ID=n.AD_Tree_ID AND t.AD_Table_ID=")
-                .Append(AD_Table_ID).Append(")");
-            //
-            int no = DB.ExecuteQuery(sb.ToString(), null, Get_Trx());
-            if (no > 0)
-                log.Fine("#" + no.ToString() + " - AD_Table_ID=" + AD_Table_ID);
-            else
-                log.Warning("#" + no.ToString() + " - AD_Table_ID=" + AD_Table_ID);
-            return no > 0;
-        }
+        //private bool DeleteTreeNode()
+        //{
+        //    int id = Get_ID();
+        //    if (id == 0)
+        //        id = Get_IDOld();
+        //    int AD_Table_ID = Get_Table_ID();
+        //    if (!MTree.HasTree(AD_Table_ID, GetCtx()))
+        //        return false;
+        //    String treeTableName = MTree.GetNodeTableName(AD_Table_ID, GetCtx());
+        //    if (treeTableName == null)
+        //        return false;
+        //    //
+        //    StringBuilder sb = new StringBuilder("DELETE FROM ")
+        //        .Append(treeTableName)
+        //        .Append(" n WHERE Node_ID=").Append(id)
+        //        .Append(" AND EXISTS (SELECT * FROM AD_Tree t ")
+        //        .Append("WHERE t.AD_Tree_ID=n.AD_Tree_ID AND t.AD_Table_ID=")
+        //        .Append(AD_Table_ID).Append(")");
+        //    //
+        //    int no = DB.ExecuteQuery(sb.ToString(), null, Get_Trx());
+        //    if (no > 0)
+        //        log.Fine("#" + no.ToString() + " - AD_Table_ID=" + AD_Table_ID);
+        //    else
+        //        log.Warning("#" + no.ToString() + " - AD_Table_ID=" + AD_Table_ID);
+        //    return no > 0;
+        //}
 
 
 
@@ -3886,7 +3910,7 @@ namespace VAdvantage.Model
         ///Get Attachments.	An attachment may have multiple entries
         /// </summary>
         /// <returns> Attachment or null</returns>
-        public MAttachment GetAttachment()
+        public dynamic GetAttachment()
         {
             return GetAttachment(false);
         }
@@ -3895,10 +3919,10 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="requery">requery</param>
         /// <returns>Attachment or null</returns>
-        public MAttachment GetAttachment(bool requery)
+        public dynamic   GetAttachment(bool requery)
         {
             if (_attachment == null || requery)
-                _attachment = MAttachment.Get(GetCtx(), p_info.getAD_Table_ID(), Get_ID());
+                _attachment = POActionEngine.Get().GetAttachment(GetCtx(), p_info.getAD_Table_ID(), Get_ID());
             return _attachment;
         }
 
@@ -4197,7 +4221,8 @@ namespace VAdvantage.Model
      */
         protected Lookup Get_ColumnLookup(int index)
         {
-            return p_info.GetColumnLookup(index);
+            POInfoColumn col = p_info.GetColumnInfo(index);
+            return POActionEngine.Get().GetLookup(GetCtx(), col);
         }
 
         /**
@@ -4472,11 +4497,11 @@ namespace VAdvantage.Model
             // map of SQL statements to sets of PO objects 
             Dictionary<String, HashSet<PO>> sqls = new Dictionary<String, HashSet<PO>>();
             /** map of PO objects to QueryParams */
-            Dictionary<PO, Env.QueryParams> queries = new Dictionary<PO, Env.QueryParams>();
+            Dictionary<PO, QueryParams> queries = new Dictionary<PO, QueryParams>();
 
             foreach (PO po in objects)
             {
-                Env.QueryParams param = null;
+                QueryParams param = null;
                 try
                 {
                     param = po.Is_New() ? po.GetSaveNewQueryInfo() :
@@ -4585,39 +4610,42 @@ namespace VAdvantage.Model
 
             Boolean newRecord = po.Is_New();	//	save locally as load resets
 
-            //	Organization Check
-            String TableTrxType = po.p_info.GetTableTrxType();
-            Boolean orgRequired = X_AD_Table.TABLETRXTYPE_MandatoryOrganization.Equals(TableTrxType);
-            if (po.GetAD_Org_ID() == 0)
-            {
-                if (!orgRequired)
-                {
-                    Boolean? shared = MClientShare.IsShared(po.GetAD_Client_ID(), po.Get_Table_ID());
-                    orgRequired = shared != null && !Util.GetValueOfBool(shared);
-                }
-                if (orgRequired)
-                {
-                    s_log.SaveError("FillMandatory", Msg.GetElement(po.GetCtx(), "AD_Org_ID"));
-                    return false;
-                }
-            }
-            else if (!orgRequired)	//	Org <> 0
-            {
-                Boolean reset = X_AD_Table.TABLETRXTYPE_NoOrganization.Equals(TableTrxType);
-                if (!reset)
-                {
-                    Boolean? shared = MClientShare.IsShared(po.GetAD_Client_ID(), po.Get_Table_ID());
-                    reset = shared != null && Util.GetValueOfBool(shared);
-                }
-                if (reset)
-                {
-                    s_log.Warning("Set Org to 0");
-                    po.SetAD_Org_ID(0);
-                }
-            }
+            ////	Organization Check
+            //String TableTrxType = po.p_info.GetTableTrxType();
+            //Boolean orgRequired = X_AD_Table.TABLETRXTYPE_MandatoryOrganization.Equals(TableTrxType);
+            //if (po.GetAD_Org_ID() == 0)
+            //{
+            //    if (!orgRequired)
+            //    {
+            //        Boolean? shared = MClientShare.IsShared(po.GetAD_Client_ID(), po.Get_Table_ID());
+            //        orgRequired = shared != null && !Util.GetValueOfBool(shared);
+            //    }
+            //    if (orgRequired)
+            //    {
+            //        s_log.SaveError("FillMandatory", Msg.GetElement(po.GetCtx(), "AD_Org_ID"));
+            //        return false;
+            //    }
+            //}
+            //else if (!orgRequired)	//	Org <> 0
+            //{
+            //    Boolean reset = X_AD_Table.TABLETRXTYPE_NoOrganization.Equals(TableTrxType);
+            //    if (!reset)
+            //    {
+            //        Boolean? shared = MClientShare.IsShared(po.GetAD_Client_ID(), po.Get_Table_ID());
+            //        reset = shared != null && Util.GetValueOfBool(shared);
+            //    }
+            //    if (reset)
+            //    {
+            //        s_log.Warning("Set Org to 0");
+            //        po.SetAD_Org_ID(0);
+            //    }
+            //}
 
-            //	Before Save
-            MAssignSet.Execute(po, newRecord);	//	Auto Value Assignment
+            ////	Before Save
+            //MAssignSet.Execute(po, newRecord);  //	Auto Value Assignment
+
+            if (!POActionEngine.Get().BeforeSave(po))
+                return false;
             try
             {
                 if (!po.BeforeSave(newRecord))
@@ -4656,7 +4684,7 @@ namespace VAdvantage.Model
         /// <returns>true if new record inserted</returns>
         ///  ///  /// <writer>Raghu</writer>
         /// <Date>03-March-2011</Date>
-        private VAdvantage.Utility.Env.QueryParams GetSaveNewQueryInfo()
+        private VAdvantage.Utility.QueryParams GetSaveNewQueryInfo()
         {
             //String[] keyColumns = p_info.GetKeyColumns();
             String[] keyColumns = Get_KeyColumns();
@@ -4689,10 +4717,11 @@ namespace VAdvantage.Model
                     int dtIndex = p_info.GetColumnIndex("C_DocTypeTarget_ID");
                     if (dtIndex == -1)
                         dtIndex = p_info.GetColumnIndex("C_DocType_ID");
-                    if (dtIndex != -1)		//	get based on Doc Type (might return null)
-                        value = DB.GetDocumentNo(Get_ValueAsInt(dtIndex), Get_Trx(), GetCtx());
-                    if (value == null)	//	not overwritten by DocType and not manually entered
-                        value = DB.GetDocumentNo(GetAD_Client_ID(), p_info.GetTableName(), Get_Trx(), GetCtx());
+                    //if (dtIndex != -1)		//	get based on Doc Type (might return null)
+                    //    value = POActionEngine.Get().GetDocumentNo(Get_ValueAsInt(dtIndex), Get_Trx(), GetCtx());
+                    //if (value == null)	//	not overwritten by DocType and not manually entered
+                    //    value = DB.GetDocumentNo(GetAD_Client_ID(), p_info.GetTableName(), Get_Trx(), GetCtx());
+                    value = POActionEngine.Get().GetDocumentNo(dtIndex, this);
                     Set_ValueNoCheck(columnName, value);
                 }
             }
@@ -4706,10 +4735,10 @@ namespace VAdvantage.Model
                 {
                     // If import table, get the underlying data table to get the "Value"
                     String tableName = p_info.GetTableName();
-                    if (p_info.GetTableName().StartsWith("I_"))
-                        tableName = GetTable();
+                    //if (p_info.GetTableName().StartsWith("I_"))
+                     //   tableName = GetTable();
 
-                    value = DB.GetDocumentNo(GetAD_Client_ID(), tableName, Get_Trx(), GetCtx());
+                    value = POActionEngine.Get().GetDocumentNo(-1, this);
                     Set_ValueNoCheck(columnName, value);
                 }
             }
@@ -4924,7 +4953,7 @@ namespace VAdvantage.Model
             }
             sqlInsert.Append(sqlValues).Append(")");
             //
-            return new VAdvantage.Utility.Env.QueryParams(sqlInsert.ToString(), paramst.ToArray());
+            return new VAdvantage.Utility.QueryParams(sqlInsert.ToString(), paramst.ToArray());
         }
 
         private string ReplaceCharWithChar(ref string text, int index, char charToUse)
@@ -4940,7 +4969,7 @@ namespace VAdvantage.Model
         /// <returns> true if updated</returns>
         ///   ///  ///  /// <writer>Raghu</writer>
         /// <Date>04-March-2011</Date>
-        protected VAdvantage.Utility.Env.QueryParams GetSaveUpdateQueryInfo()
+        protected VAdvantage.Utility.QueryParams GetSaveUpdateQueryInfo()
         {
             //
             Boolean changes = false;
@@ -5012,13 +5041,17 @@ namespace VAdvantage.Model
                     {
                         value = null;
                         int AD_Client_ID = GetAD_Client_ID();
+                        int docId = -1;
                         int index = p_info.GetColumnIndex("C_DocTypeTarget_ID");
                         if (index == -1)
                             index = p_info.GetColumnIndex("C_DocType_ID");
                         if (index != -1)		//	get based on Doc Type (might return null)
-                            value = DB.GetDocumentNo(Get_ValueAsInt(index), _trx, GetCtx());
-                        if (value == null)	//	not overwritten by DocType and not manually entered
-                            value = DB.GetDocumentNo(AD_Client_ID, p_info.GetTableName(), _trx, GetCtx());
+                            docId = Get_ValueAsInt(index);
+                        //if (index != -1)		//	get based on Doc Type (might return null)
+                        //    value = DB.GetDocumentNo(Get_ValueAsInt(index), _trx, GetCtx());
+                        //if (value == null)	//	not overwritten by DocType and not manually entered
+                        //    value = DB.GetDocumentNo(AD_Client_ID, p_info.GetTableName(), _trx, GetCtx());
+                        value = POActionEngine.Get().GetDocumentNo(docId, this);
                     }
                     else if (!Util.IsEqual(_mOldValues[i], value))
                         log.Info("DocumentNo updated: " + _mOldValues[i] + " -> " + value);
@@ -5222,7 +5255,7 @@ namespace VAdvantage.Model
                 aParams.AddRange(Get_WhereClauseParams());
                 //
                 log.Finest(sql.ToString());
-                return new VAdvantage.Utility.Env.QueryParams(sql.ToString(), aParams.ToArray());
+                return new VAdvantage.Utility.QueryParams(sql.ToString(), aParams.ToArray());
             }
 
             //  nothing changed, so OK
@@ -5290,87 +5323,87 @@ namespace VAdvantage.Model
             return Get_ValueAsInt(index);
         }
 
-        private String GetTable()
-        {
-            String tableName = p_info.GetTableName();
-            if (!tableName.StartsWith("I_"))
-            {
-                return p_info.GetTableName();
-            }
+        //private String GetTable()
+        //{
+        //    String tableName = p_info.GetTableName();
+        //    if (!tableName.StartsWith("I_"))
+        //    {
+        //        return p_info.GetTableName();
+        //    }
 
-            tableName = p_info.GetTableName().Replace("I_", "AD_");
-            int tableID = MTable.Get_Table_ID(tableName);
-            if (tableID > 0)
-                return tableName;
+        //    tableName = p_info.GetTableName().Replace("I_", "AD_");
+        //    int tableID = MTable.Get_Table_ID(tableName);
+        //    if (tableID > 0)
+        //        return tableName;
 
-            tableName = p_info.GetTableName().Replace("I_", "M_");
-            tableID = MTable.Get_Table_ID(tableName);
-            if (tableID > 0)
-                return tableName;
+        //    tableName = p_info.GetTableName().Replace("I_", "M_");
+        //    tableID = MTable.Get_Table_ID(tableName);
+        //    if (tableID > 0)
+        //        return tableName;
 
-            tableName = p_info.GetTableName().Replace("I_", "C_");
-            tableID = MTable.Get_Table_ID(tableName);
-            if (tableID > 0)
-                return tableName;
+        //    tableName = p_info.GetTableName().Replace("I_", "C_");
+        //    tableID = MTable.Get_Table_ID(tableName);
+        //    if (tableID > 0)
+        //        return tableName;
 
-            tableName = p_info.GetTableName().Replace("I_", "R_");
-            tableID = MTable.Get_Table_ID(tableName);
-            if (tableID > 0)
-                return tableName;
+        //    tableName = p_info.GetTableName().Replace("I_", "R_");
+        //    tableID = MTable.Get_Table_ID(tableName);
+        //    if (tableID > 0)
+        //        return tableName;
 
-            tableName = p_info.GetTableName().Replace("I_", "MRP_");
-            tableID = MTable.Get_Table_ID(tableName);
-            if (tableID > 0)
-                return tableName;
+        //    tableName = p_info.GetTableName().Replace("I_", "MRP_");
+        //    tableID = MTable.Get_Table_ID(tableName);
+        //    if (tableID > 0)
+        //        return tableName;
 
-            tableName = p_info.GetTableName().Replace("I_", "A_");
-            tableID = MTable.Get_Table_ID(tableName);
-            if (tableID > 0)
-                return tableName;
+        //    tableName = p_info.GetTableName().Replace("I_", "A_");
+        //    tableID = MTable.Get_Table_ID(tableName);
+        //    if (tableID > 0)
+        //        return tableName;
 
-            tableName = p_info.GetTableName().Replace("I_", "B_");
-            tableID = MTable.Get_Table_ID(tableName);
-            if (tableID > 0)
-                return tableName;
+        //    tableName = p_info.GetTableName().Replace("I_", "B_");
+        //    tableID = MTable.Get_Table_ID(tableName);
+        //    if (tableID > 0)
+        //        return tableName;
 
-            tableName = p_info.GetTableName().Replace("I_", "CM_");
-            tableID = MTable.Get_Table_ID(tableName);
-            if (tableID > 0)
-                return tableName;
+        //    tableName = p_info.GetTableName().Replace("I_", "CM_");
+        //    tableID = MTable.Get_Table_ID(tableName);
+        //    if (tableID > 0)
+        //        return tableName;
 
-            tableName = p_info.GetTableName().Replace("I_", "GL_");
-            tableID = MTable.Get_Table_ID(tableName);
-            if (tableID > 0)
-                return tableName;
+        //    tableName = p_info.GetTableName().Replace("I_", "GL_");
+        //    tableID = MTable.Get_Table_ID(tableName);
+        //    if (tableID > 0)
+        //        return tableName;
 
-            tableName = p_info.GetTableName().Replace("I_", "K_");
-            tableID = MTable.Get_Table_ID(tableName);
-            if (tableID > 0)
-                return tableName;
+        //    tableName = p_info.GetTableName().Replace("I_", "K_");
+        //    tableID = MTable.Get_Table_ID(tableName);
+        //    if (tableID > 0)
+        //        return tableName;
 
-            tableName = p_info.GetTableName().Replace("I_", "PA_");
-            tableID = MTable.Get_Table_ID(tableName);
-            if (tableID > 0)
-                return tableName;
+        //    tableName = p_info.GetTableName().Replace("I_", "PA_");
+        //    tableID = MTable.Get_Table_ID(tableName);
+        //    if (tableID > 0)
+        //        return tableName;
 
-            tableName = p_info.GetTableName().Replace("I_", "S_");
-            tableID = MTable.Get_Table_ID(tableName);
-            if (tableID > 0)
-                return tableName;
+        //    tableName = p_info.GetTableName().Replace("I_", "S_");
+        //    tableID = MTable.Get_Table_ID(tableName);
+        //    if (tableID > 0)
+        //        return tableName;
 
-            tableName = p_info.GetTableName().Replace("I_", "T_");
-            tableID = MTable.Get_Table_ID(tableName);
-            if (tableID > 0)
-                return tableName;
+        //    tableName = p_info.GetTableName().Replace("I_", "T_");
+        //    tableID = MTable.Get_Table_ID(tableName);
+        //    if (tableID > 0)
+        //        return tableName;
 
-            tableName = p_info.GetTableName().Replace("I_", "W_");
-            tableID = MTable.Get_Table_ID(tableName);
-            if (tableID > 0)
-                return tableName;
+        //    tableName = p_info.GetTableName().Replace("I_", "W_");
+        //    tableID = MTable.Get_Table_ID(tableName);
+        //    if (tableID > 0)
+        //        return tableName;
 
-            return p_info.GetTableName();
+        //    return p_info.GetTableName();
 
-        }
+        //}
 
         /// <summary>
         /// Create/return Attachment for PO.
@@ -5379,11 +5412,11 @@ namespace VAdvantage.Model
         /// <returns>attachment</returns>
         /// <date>07-march-2011</date>
         /// <writer>raghu</writer>
-        public MAttachment CreateAttachment()
+        public dynamic CreateAttachment()
         {
             GetAttachment(false);
             if (_attachment == null)
-                _attachment = new MAttachment(GetCtx(), p_info.GetAD_Table_ID(), Get_ID(), null);
+                _attachment = POActionEngine.Get().CreateAttachment(GetCtx(), p_info.GetAD_Table_ID(), Get_ID(), null);
             return _attachment;
         }
 
@@ -5394,7 +5427,9 @@ namespace VAdvantage.Model
                 try
                 {
                     //s_docWFMgr = (DocWorkflowMgr)Activator.GetObject(typeof(DocWorkflowMgr), "VAdvantage.WF.DocWorkflowManager");
-                    s_docWFMgr = DocWorkflowManager.Get();
+                    System.Reflection.Assembly asm = System.Reflection.Assembly.Load("VAWorkflow");
+                    s_docWFMgr = (DocWorkflowMgr)asm.GetType("VAdvantage.WF.DocWorkflowManager").GetMethod("Get").Invoke(null, null);
+                    //s_docWFMgr = DocWorkflowManager.Get();
                 }
                 catch
                 {

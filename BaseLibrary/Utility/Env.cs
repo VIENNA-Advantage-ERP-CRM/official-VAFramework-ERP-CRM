@@ -19,13 +19,8 @@ using System.Collections;
 using VAdvantage.Login;
 using VAdvantage.Logging;
 
-using System.Drawing;
-using System.Resources;
-using VAdvantage.SqlExec;
-using VAdvantage.Process;
-using VAdvantage.Common;
 using VAdvantage.DataBase;
-using VAdvantage.Controller;
+
 
 namespace VAdvantage.Utility
 {
@@ -425,12 +420,12 @@ namespace VAdvantage.Utility
         }
 
 
-        public static int GetAD_Language_ID()
-        {
-            string sLang = GetLoginLanguage(Env.GetCtx()).GetAD_Language();
-            MLanguage language = MLanguage.Get(Env.GetCtx(), sLang, null);
-            return language.GetAD_Language_ID();
-        }
+        //public static int GetAD_Language_ID()
+        //{
+        //    string sLang = GetLoginLanguage(Env.GetCtx()).GetAD_Language();
+        //    MLanguage language = MLanguage.Get(Env.GetCtx(), sLang, null);
+        //    return language.GetAD_Language_ID();
+        //}
 
         /// <summary>
         /// Verify Language.
@@ -613,11 +608,11 @@ namespace VAdvantage.Utility
         /// </summary>
         /// <param name="ctx"></param>
         /// <returns>rue if multi lingual documents</returns>
-        public static bool IsMultiLingualDocument(Ctx ctx)
-        {
-            return VAdvantage.Model.MClient.Get((Ctx)ctx).IsMultiLingualDocument();//
-            //MClient.get(ctx).isMultiLingualDocument();
-        }	//	isMultiLingualDocument
+        //public static bool IsMultiLingualDocument(Ctx ctx)
+        //{
+        //    return VAdvantage.Model.MClient.Get((Ctx)ctx).IsMultiLingualDocument();//
+        //    //MClient.get(ctx).isMultiLingualDocument();
+        //}	//	isMultiLingualDocument
 
         /// <summary>
         ///Get Header info (connection, org, user)
@@ -666,58 +661,8 @@ namespace VAdvantage.Utility
         /// <returns></returns>
 
 
-        /// <summary>
-        /// Get ImageIcon.
-        /// </summary>
-        /// <param name="fileNameInImageDir"></param>
-        /// <returns></returns>
-        public static Image GetImageIcon(String fileNameInImageDir)
-        {
-            Image image = null;
-            //ResourceManager rm = new ResourceManager("VAdvantage.Properties.Resources", typeof(VAdvantage.Properties.Resources).Assembly);
-            //if (image == null && fileNameInImageDir.EndsWith("24.gif"))
-            //{
-            //    String png = fileNameInImageDir.Substring(0, fileNameInImageDir.Length - 6) + "32";// "32";//.png";
-            //    object img = rm.GetObject(png);
-            //    if (img != null)
-            //        image = (Image)img;
-            //}
-
-            //if (image == null && fileNameInImageDir.EndsWith("10.gif"))
-            //{
-            //    String png = fileNameInImageDir.Substring(0, fileNameInImageDir.Length - 6) + "12";//;//; .png";
-
-
-            //    object img = rm.GetObject(png);
-            //    if (img != null)
-            //        image = (Image)img;
-            //}
-
-            //if (image == null && fileNameInImageDir.EndsWith(".gif"))
-            //{
-            //    String png = fileNameInImageDir.Substring(0, fileNameInImageDir.Length - 4);//".png";
-
-            //    object img = rm.GetObject(png);
-            //    if (img != null)
-            //        image = (Image)img;
-            //}
-
-            //if (image == null)
-            //{
-            //   
-            //    string png = fileNameInImageDir.Substring(0, fileNameInImageDir.Length - 4);
-            //    object img = rm.GetObject(png);
-            //    if (img != null)
-            //        image = (Image)img;
-            //    else
-            //    {
-            //        _log.Log(Level.WARNING, "Not found: " + fileNameInImageDir);
-            //    }
-            //}
-            //rm = null;
-            return image;
-        }
-
+      
+        
         /// <summary>
         /// Return the Form pointer of WindowNo - or null
         /// </summary>
@@ -784,11 +729,11 @@ namespace VAdvantage.Utility
             {
                 //DataBase.DB.SetDBTarget(CConnection.get());
                 //DataBase.DB.SetDBTarget(DataBase.DB.GetConnection());
-                MRole defaultRole = MRole.GetDefault(_sCtx, false);
-                if (defaultRole != null)
-                {
-                    defaultRole.LoadAccess(true);	//	Reload
-                }
+                //MRole defaultRole = MRole.GetDefault(_sCtx, false);
+                //if (defaultRole != null)
+                //{
+                //    defaultRole.LoadAccess(true);	//	Reload
+                //}
             }
         }
 

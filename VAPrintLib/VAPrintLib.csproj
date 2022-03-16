@@ -31,8 +31,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="IKVM.OpenJDK.ClassLibrary">
+      <HintPath>..\ViennaAdvantageWeb\Dll\IKVM.OpenJDK.ClassLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp">
+      <HintPath>..\ViennaAdvantageWeb\Dll\PdfSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,6 +49,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Print\AmtInWords.cs" />
+    <Compile Include="Print\ArrayDataView.cs" />
+    <Compile Include="Print\ArrayPropertyDescriptor.cs" />
+    <Compile Include="Print\ArrayRowView.cs" />
+    <Compile Include="Print\AttributedCharacterIterator.cs" />
+    <Compile Include="Print\AttributedString.cs" />
+    <Compile Include="Print\AttributedStringIterator.cs" />
+    <Compile Include="Print\DBGraphics.cs" />
+    <Compile Include="Print\Dimension2DImpl.cs" />
+    <Compile Include="Print\EnumSyntax.cs" />
+    <Compile Include="Print\IPrintInfo.cs" />
+    <Compile Include="Print\LineBreakMeasurer.cs" />
+    <Compile Include="Print\Media.cs" />
+    <Compile Include="Print\MediaPrintableArea.cs" />
+    <Compile Include="Print\MediaSize.cs" />
+    <Compile Include="Print\MediaSizeName.cs" />
+    <Compile Include="Print\PageFormat.cs" />
+    <Compile Include="Print\Paper.cs" />
+    <Compile Include="Print\PrintDataColumn.cs" />
+    <Compile Include="Print\PrintEngine.cs" />
+    <Compile Include="Print\Size2DSyntax.cs" />
+    <Compile Include="Print\TextAttribute.cs" />
+    <Compile Include="Print\TextLayout.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

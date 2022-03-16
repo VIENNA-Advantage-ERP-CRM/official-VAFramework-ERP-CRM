@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using System.Data;
+using System.Data.SqlClient;
+
+using VAdvantage.Logging;
 
 namespace VAdvantage.Classes
 {
@@ -30,7 +31,7 @@ namespace VAdvantage.Classes
         /** Zoom Window     */
         public int zoomWindowPO;
         /** Zoom Query      */
-        public Query zoomQuery = null;
+        public IQuery zoomQuery = null;
 
         /** Direct Access Query 	*/
         public string queryDirect = "";
@@ -76,7 +77,7 @@ namespace VAdvantage.Classes
         /// <param name="zoomWindowId">zoom win id</param>
         /// <param name="zoomWindowPOId">zoom windoe po id</param>
         /// <param name="zoomqry">zoom sql qury text</param>
-        public VLookUpInfo(string qry, string tablename, string keyColName, int zoomWindowId, int zoomWindowPOId, Query zoomqry)
+        public VLookUpInfo(string qry, string tablename, string keyColName, int zoomWindowId, int zoomWindowPOId, IQuery zoomqry)
         {
             if (qry == null)
                 throw new System.Exception("SqlQuery is null");

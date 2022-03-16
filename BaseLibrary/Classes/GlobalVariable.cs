@@ -231,7 +231,8 @@ namespace VAdvantage.DataBase
         /// <returns></returns>
         public static string GetTitle()
         {
-            return Utility.Env.GetContext().GetVAF_UserContact_Name() + "@" + Utility.Env.GetContext().GetVAF_Org_Name() + '.' + Utility.Env.GetContext().GetVAF_Role_Name() + "[ " + GetHost + " ]";
+            return "";
+           // return Utility.Env.GetContext().GetVAF_UserContact_Name() + "@" + Utility.Env.GetContext().GetVAF_Org_Name() + '.' + Utility.Env.GetContext().GetVAF_Role_Name() + "[ " + GetHost + " ]";
         }
 
         private static string _LAST_EXECUTED_QUERY = "";

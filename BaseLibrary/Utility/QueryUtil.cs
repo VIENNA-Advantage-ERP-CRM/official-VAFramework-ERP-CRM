@@ -9,12 +9,7 @@ using VAdvantage.Login;
 using VAdvantage.Logging;
 //using VAdvantage.Apps;
 using System.Drawing;
-using System.Resources;
-using VAdvantage.SqlExec;
-using VAdvantage.Process;
-using VAdvantage.Common;
 using VAdvantage.DataBase;
-using VAdvantage.Controller;
 using System.Data;
 using System.Data.SqlClient;
 

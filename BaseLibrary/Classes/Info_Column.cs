@@ -1,16 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using VAdvantage.DataBase;
-using System.Data.SqlClient;
-using System.Data;
-using VAdvantage.Classes;
-using VAdvantage.Common;
-using System.Threading;
-using VAdvantage.Model;
-using VAdvantage.Process;
+
 namespace VAdvantage.Classes
 {
 

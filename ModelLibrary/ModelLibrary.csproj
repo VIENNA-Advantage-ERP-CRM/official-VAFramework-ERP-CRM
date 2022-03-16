@@ -149,6 +149,9 @@
     <Compile Include="Acct\Doc_Requisition.cs" />
     <Compile Include="Acct\Fact.cs" />
     <Compile Include="Acct\FactLine.cs" />
+    <Compile Include="Print\AmtInWords_AR.cs" />
+    <Compile Include="Print\AmtInWords_EN.cs" />
+    <Compile Include="Print\AReport.cs" />
     <Compile Include="AzureBlob\AzureBlobStorage.cs" />
     <Compile Include="BundleCollection\ModuleBundles.cs" />
     <Compile Include="Classes\AdvanceDocumentType.cs" />
@@ -235,41 +238,7 @@
     <Compile Include="CrystalReport\BiReportEngine.cs" />
     <Compile Include="CrystalReport\CrystalReportEngine.cs" />
     <Compile Include="DataBase\DBFunctionCollection.cs" />
-    <Compile Include="DataBase\DB_MsSQL.cs" />
     <Compile Include="DataBase\LDAP.cs" />
-    <Compile Include="DBPort\ConvertSQL.cs" />
-    <Compile Include="DBPort\ConvertSQL_MSSQL.cs" />
-    <Compile Include="DBPort\ConvertSQL_MySQL.cs" />
-    <Compile Include="DBPort\ConvertSQL_Oracle.cs" />
-    <Compile Include="DataBase\DatabaseType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DataBase\DB.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DataBase\DBConn.cs" />
-    <Compile Include="DataBase\DBUtils.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DataBase\DB_MySQL.cs" />
-    <Compile Include="DataBase\DB_Oracle.cs" />
-    <Compile Include="DataBase\DB_PostgreSQL.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DataBase\GlobalVariable.cs" />
-    <Compile Include="DataBase\Trx.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DataBase\VConnection.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DataBase\ViennaDatabase.cs" />
-    <Compile Include="DBPort\ConvertMap_MSSQL.cs" />
-    <Compile Include="DBPort\ConvertMap_MySQL.cs" />
-    <Compile Include="DBPort\ConvertMap_PostgreSQL.cs" />
-    <Compile Include="DBPort\ConvertSQL_SQL92.cs" />
-    <Compile Include="DBPort\ConvertSQL_PostgreSQL.cs" />
-    <Compile Include="DBPort\Join.cs" />
     <Compile Include="ImpExp\ExcelHelper.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -777,67 +746,38 @@
     <Compile Include="ModelAD\SubTableUtil.cs" />
     <Compile Include="Model\Tax.cs" />
     <Compile Include="Model\UserPricingVO.cs" />
-    <Compile Include="Print\AmtInWords.cs" />
-    <Compile Include="Print\AmtInWords_EN.cs" />
-    <Compile Include="Print\AReport.cs" />
-    <Compile Include="Print\ArrayDataView.cs" />
-    <Compile Include="Print\ArrayPropertyDescriptor.cs" />
-    <Compile Include="Print\ArrayRowView.cs" />
-    <Compile Include="Print\AttributedCharacterIterator.cs" />
-    <Compile Include="Print\AttributedString.cs" />
-    <Compile Include="Print\AttributedStringIterator.cs" />
     <Compile Include="Print\BarcodeElement.cs" />
     <Compile Include="Print\BarcodeGenerator.cs" />
     <Compile Include="Print\BoxElement.cs" />
-    <Compile Include="Print\AmtInWords_AR.cs" />
     <Compile Include="Print\CPaper.cs" />
     <Compile Include="Print\DataEngine.cs" />
-    <Compile Include="Print\DBGraphics.cs" />
-    <Compile Include="Print\Dimension2DImpl.cs" />
-    <Compile Include="Print\EnumSyntax.cs" />
     <Compile Include="Print\GridElement.cs" />
-    <Compile Include="Print\HashMap.cs" />
     <Compile Include="Print\HeaderFooter.cs" />
     <Compile Include="Print\HTMLElement.cs" />
     <Compile Include="Print\ImageElement.cs" />
     <Compile Include="Print\IReportEngine.cs" />
     <Compile Include="Print\LayoutEngine.cs" />
-    <Compile Include="Print\LineBreakMeasurer.cs" />
     <Compile Include="Print\LocationElement.cs" />
     <Compile Include="Print\MArchive.cs" />
-    <Compile Include="Print\Media.cs" />
-    <Compile Include="Print\MediaPrintableArea.cs" />
-    <Compile Include="Print\MediaSize.cs" />
-    <Compile Include="Print\MediaSizeName.cs" />
     <Compile Include="Print\MPrintFont.cs" />
     <Compile Include="Print\MPrintFormat.cs" />
     <Compile Include="Print\MPrintFormatItem.cs" />
     <Compile Include="Print\MPrintFormatProcess.cs" />
     <Compile Include="Print\MPrintTableFormat.cs" />
     <Compile Include="Print\Page.cs" />
-    <Compile Include="Print\PageFormat.cs" />
-    <Compile Include="Print\Paper.cs" />
     <Compile Include="Print\ParameterElement.cs" />
     <Compile Include="Print\PrintData.cs" />
-    <Compile Include="Print\PrintDataColumn.cs" />
     <Compile Include="Print\PrintDataElement.cs" />
     <Compile Include="Print\PrintDataFunction.cs" />
     <Compile Include="Print\PrintDataGroup.cs" />
     <Compile Include="Print\PrintElement.cs" />
-    <Compile Include="Print\PrintEngine.cs" />
     <Compile Include="Print\PrintFormatUtil.cs" />
     <Compile Include="Print\PrintInfo.cs" />
     <Compile Include="Print\ReportCtl.cs" />
     <Compile Include="Print\ReportEngine_N.cs" />
-    <Compile Include="Print\Size2DSyntax.cs" />
     <Compile Include="Print\StringElement.cs" />
     <Compile Include="Print\TableElement.cs" />
     <Compile Include="Print\TableReference.cs" />
-    <Compile Include="Print\TextAttribute.cs" />
-    <Compile Include="Print\TextLayout.cs" />
-    <Compile Include="Print\View.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="ProcessAD\CacheReset.cs" />
     <Compile Include="ProcessAD\ChangeLogProcess.cs" />
     <Compile Include="ProcessAD\ColumnEncryption.cs" />
@@ -1153,34 +1093,22 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="SqlExec\ExecuteQuery.cs" />
-    <Compile Include="SqlExec\MySqlHelper.cs" />
-    <Compile Include="SqlExec\OracleHelper.cs" />
-    <Compile Include="SqlExec\PostgreHelper.cs" />
-    <Compile Include="SqlExec\SQLHelper.cs" />
     <Compile Include="System\class1.cs" />
     <Compile Include="TimeExpense\Process\CreateAPInvoice.cs" />
     <Compile Include="TimeExpense\Process\CreateARInvoice.cs" />
     <Compile Include="Utility\BankVerificationInterface.cs" />
-    <Compile Include="Utility\Ctx.cs" />
-    <Compile Include="Utility\DatabaseMetaData.cs" />
     <Compile Include="Utility\EMail.cs" />
     <Compile Include="Utility\EmailMessageSerializable.cs" />
     <Compile Include="Utility\EmailMSMQ.cs" />
     <Compile Include="Utility\EmailSingleton.cs" />
-    <Compile Include="Utility\EnvConstants.cs" />
-    <Compile Include="Utility\ExternalWebMethod.cs" />
     <Compile Include="Utility\NativeDigitConverter.cs" />
-    <Compile Include="Utility\Null.cs" />
-    <Compile Include="Utility\Properties.cs" />
     <Compile Include="Utility\ReplenishInterface.cs" />
     <Compile Include="Utility\ResourceBundle.cs" />
-    <Compile Include="Utility\SecureEngine.cs" />
     <Compile Include="Utility\Sms.cs" />
-    <Compile Include="Utility\TimeUtil.cs" />
-    <Compile Include="Utility\Umlout.cs" />
-    <Compile Include="Utility\Util.cs" />
     <Compile Include="Utility\ViewUtil.cs" />
+    <Compile Include="Print\View.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="VOS\DocActionConstants.cs" />
     <Compile Include="VOS\ProductInfo.cs" />
     <Compile Include="WF\DocWorkflowManager.cs" />
@@ -1214,7 +1142,6 @@
     <Fakes Include="Fakes\System.Web.Helpers.fakes" />
     <None Include="packages.config" />
     <None Include="Properties\DataSources\System.Data.DataSet.datasource" />
-    <None Include="Resources\vienna.png" />
     <None Include="Service References\AcctService\AccountService.wsdl" />
     <None Include="Service References\AcctService\ModelLibrary.AcctService.AccountingFileInfo.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -1280,12 +1207,6 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\CloudService\Service.wsdl" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\tick1.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\cross.gif" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

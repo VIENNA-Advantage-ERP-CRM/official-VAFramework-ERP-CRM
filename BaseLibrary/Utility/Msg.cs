@@ -17,7 +17,7 @@ using VAdvantage.SqlExec;
 using VAdvantage.Login;
 using System.Data.SqlClient;
 using VAdvantage.Logging;
-using VAdvantage.Common;
+
 using System.IO;
 namespace VAdvantage.Utility
 {

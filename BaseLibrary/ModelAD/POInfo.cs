@@ -23,13 +23,30 @@ namespace VAdvantage.Model
     {
 
         #region "Declaration"
-
+        public static String ACCESSLEVEL_Organization = "1";
+        /** Client only = 2 */
+        public static String ACCESSLEVEL_ClientOnly = "2";
+        /** Client+Organization = 3 */
+        public static String ACCESSLEVEL_ClientPlusOrganization = "3";
+        /** System only = 4 */
+        public static String ACCESSLEVEL_SystemOnly = "4";
+        /** System+Client = 6 */
+        public static String ACCESSLEVEL_SystemPlusClient = "6";
+        /** All = 7 */
+        public static String ACCESSLEVEL_All = "7";
+        /** TableTrxType VAF_Control_Ref_ID=493 */
+        /** Mandatory Organization = M */
+        public static String TABLETRXTYPE_MandatoryOrganization = "M";
+        /** No Organization = N */
+        public static String TABLETRXTYPE_NoOrganization = "N";
+        /** Optional Organization = O */
+        public static String TABLETRXTYPE_OptionalOrganization = "O";
         Ctx m_ctx;
         int _AD_Table_ID;
         private POInfoColumn[] m_columns = null;
         private string m_TableName = "";
         public bool m_hasKeyColumn;
-        string m_AccessLevel = MTable.ACCESSLEVEL_Organization;
+        string m_AccessLevel = ACCESSLEVEL_Organization;
         /** Cache of POInfo     */
         private static CCache<int, POInfo> s_cache = new CCache<int, POInfo>("POInfo", 200);
 
@@ -41,7 +58,7 @@ namespace VAdvantage.Model
         //private POInfoColumn[] _mcolumns = null;
 
         //Transaction Table		//Add by raghu on 4-March-2011
-        private String _TableTrxType = X_AD_Table.TABLETRXTYPE_OptionalOrganization;
+        private String _TableTrxType = TABLETRXTYPE_OptionalOrganization;
         /** Key Columns					*/
         private String[] _KeyColumns = null;
 
@@ -216,74 +233,74 @@ namespace VAdvantage.Model
         /// Get SQL Query for table
         /// </summary>
         /// <returns>SQL Query (String)</returns>
-        public string GetSQLQuery()
-        {
-            StringBuilder _querySQL = new StringBuilder("");
-            if (m_columns.Length > 0)
-            {
-                _querySQL.Append("SELECT ");
-                MTable tbl = new MTable(m_ctx, _AD_Table_ID, null);
-                // append all columns from table and get comma separated string
-                _querySQL.Append(tbl.GetSelectColumns());
-                foreach (var column in m_columns)
-                {
-                    // check if column name length is less than 26, then only add this column in selection column
-                    // else only ID will be displayed
-                    // as limitation in oracle to restrict column name to 30 characters
-                    if ((column.ColumnName.Length + 4) < 30)
-                    {
-                        // for Lookup type of columns
-                        if (DisplayType.IsLookup(column.DisplayType))
-                        {
-                            VLookUpInfo lookupInfo = VLookUpFactory.GetLookUpInfo(m_ctx, 0, column.DisplayType,
-                                column.AD_Column_ID, Env.GetLanguage(m_ctx), column.ColumnName, column.AD_Reference_Value_ID,
-                                column.IsParent, column.ValidationCode);
+        //public string GetSQLQuery()
+        //{
+        //    StringBuilder _querySQL = new StringBuilder("");
+        //    if (m_columns.Length > 0)
+        //    {
+        //        _querySQL.Append("SELECT ");
+        //        MTable tbl = new MTable(m_ctx, _AD_Table_ID, null);
+        //        // append all columns from table and get comma separated string
+        //        _querySQL.Append(tbl.GetSelectColumns());
+        //        foreach (var column in m_columns)
+        //        {
+        //            // check if column name length is less than 26, then only add this column in selection column
+        //            // else only ID will be displayed
+        //            // as limitation in oracle to restrict column name to 30 characters
+        //            if ((column.ColumnName.Length + 4) < 30)
+        //            {
+        //                // for Lookup type of columns
+        //                if (DisplayType.IsLookup(column.DisplayType))
+        //                {
+        //                    VLookUpInfo lookupInfo = VLookUpFactory.GetLookUpInfo(m_ctx, 0, column.DisplayType,
+        //                        column.AD_Column_ID, Env.GetLanguage(m_ctx), column.ColumnName, column.AD_Reference_Value_ID,
+        //                        column.IsParent, column.ValidationCode);
 
-                            if (lookupInfo != null && lookupInfo.displayColSubQ != null && lookupInfo.displayColSubQ.Trim() != "")
-                            {
-                                if (lookupInfo.queryDirect.Length > 0)
-                                {
-                                    // create columnname as columnname_TXT for lookup type of columns
-                                    lookupInfo.displayColSubQ = " (SELECT MAX(" + lookupInfo.displayColSubQ + ") " + lookupInfo.queryDirect.Substring(lookupInfo.queryDirect.LastIndexOf(" FROM " + lookupInfo.tableName + " "), lookupInfo.queryDirect.Length - (lookupInfo.queryDirect.LastIndexOf(" FROM " + lookupInfo.tableName + " "))) + ") AS " + column.ColumnName + "_TXT";
+        //                    if (lookupInfo != null && lookupInfo.displayColSubQ != null && lookupInfo.displayColSubQ.Trim() != "")
+        //                    {
+        //                        if (lookupInfo.queryDirect.Length > 0)
+        //                        {
+        //                            // create columnname as columnname_TXT for lookup type of columns
+        //                            lookupInfo.displayColSubQ = " (SELECT MAX(" + lookupInfo.displayColSubQ + ") " + lookupInfo.queryDirect.Substring(lookupInfo.queryDirect.LastIndexOf(" FROM " + lookupInfo.tableName + " "), lookupInfo.queryDirect.Length - (lookupInfo.queryDirect.LastIndexOf(" FROM " + lookupInfo.tableName + " "))) + ") AS " + column.ColumnName + "_TXT";
 
-                                    lookupInfo.displayColSubQ = lookupInfo.displayColSubQ.Replace("@key", tbl.GetTableName() + "." + column.ColumnName);
-                                }
-                                _querySQL.Append(", " + lookupInfo.displayColSubQ);
-                            }
-                        }
-                        // VIS0008
-                        // Changed to pick date from subquery in case of Location, Locator, Attribute and Account References
-                        // case for Location type of columns
-                        else if (column.DisplayType == DisplayType.Location)
-                        {
-                            _querySQL.Append(", (SELECT l.Address1 || ', ' || l.City || ', ' || c.Name FROM C_Location l LEFT JOIN C_Country c ON (c.C_Country_ID = l.C_Country_ID) WHERE l.C_Location_ID = " + tbl.GetTableName() + "." + column.ColumnName + ") AS " + column.ColumnName + "_LOC");
-                        }
-                        // case for Locator type of columns
-                        else if (column.DisplayType == DisplayType.Locator)
-                        {
-                            _querySQL.Append(", (SELECT Value FROM M_Locator WHERE M_Locator_ID = " + tbl.GetTableName() + "." + column.ColumnName + ") AS " + column.ColumnName + "_LTR");
-                        }
-                        // case for Attribute Set Instance & General Attribute columns
-                        else if (column.DisplayType == DisplayType.PAttribute)
-                        {
-                            _querySQL.Append(", (SELECT Description FROM M_AttributeSetInstance WHERE M_AttributeSetInstance_ID = " + tbl.GetTableName() + "." + column.ColumnName + ") AS " + column.ColumnName + "_ASI");
-                        }
-                        else if (column.DisplayType == DisplayType.GAttribute)
-                        {
-                            _querySQL.Append(", (SELECT Description FROM C_GenAttributeSetInstance WHERE C_GenAttributeSetInstance_ID = " + tbl.GetTableName() + "." + column.ColumnName + ") AS " + column.ColumnName + "_ASI");
-                        }
-                        // case for Account type of columns
-                        else if (column.DisplayType == DisplayType.Account)
-                        {
-                            _querySQL.Append(", (SELECT Description FROM C_ValidCombination WHERE C_ValidCombination_ID = " + tbl.GetTableName() + "." + column.ColumnName + ") AS " + column.ColumnName + "_ACT");
-                        }
-                    }
-                }
-                // Append FROM table name to query
-                _querySQL.Append(" FROM " + tbl.GetTableName());
-            }
-            return _querySQL.ToString();
-        }
+        //                            lookupInfo.displayColSubQ = lookupInfo.displayColSubQ.Replace("@key", tbl.GetTableName() + "." + column.ColumnName);
+        //                        }
+        //                        _querySQL.Append(", " + lookupInfo.displayColSubQ);
+        //                    }
+        //                }
+        //                // VIS0008
+        //                // Changed to pick date from subquery in case of Location, Locator, Attribute and Account References
+        //                // case for Location type of columns
+        //                else if (column.DisplayType == DisplayType.Location)
+        //                {
+        //                    _querySQL.Append(", (SELECT l.Address1 || ', ' || l.City || ', ' || c.Name FROM C_Location l LEFT JOIN C_Country c ON (c.C_Country_ID = l.C_Country_ID) WHERE l.C_Location_ID = " + tbl.GetTableName() + "." + column.ColumnName + ") AS " + column.ColumnName + "_LOC");
+        //                }
+        //                // case for Locator type of columns
+        //                else if (column.DisplayType == DisplayType.Locator)
+        //                {
+        //                    _querySQL.Append(", (SELECT Value FROM M_Locator WHERE M_Locator_ID = " + tbl.GetTableName() + "." + column.ColumnName + ") AS " + column.ColumnName + "_LTR");
+        //                }
+        //                // case for Attribute Set Instance & General Attribute columns
+        //                else if (column.DisplayType == DisplayType.PAttribute)
+        //                {
+        //                    _querySQL.Append(", (SELECT Description FROM M_AttributeSetInstance WHERE M_AttributeSetInstance_ID = " + tbl.GetTableName() + "." + column.ColumnName + ") AS " + column.ColumnName + "_ASI");
+        //                }
+        //                else if (column.DisplayType == DisplayType.GAttribute)
+        //                {
+        //                    _querySQL.Append(", (SELECT Description FROM C_GenAttributeSetInstance WHERE C_GenAttributeSetInstance_ID = " + tbl.GetTableName() + "." + column.ColumnName + ") AS " + column.ColumnName + "_ASI");
+        //                }
+        //                // case for Account type of columns
+        //                else if (column.DisplayType == DisplayType.Account)
+        //                {
+        //                    _querySQL.Append(", (SELECT Description FROM C_ValidCombination WHERE C_ValidCombination_ID = " + tbl.GetTableName() + "." + column.ColumnName + ") AS " + column.ColumnName + "_ACT");
+        //                }
+        //            }
+        //        }
+        //        // Append FROM table name to query
+        //        _querySQL.Append(" FROM " + tbl.GetTableName());
+        //    }
+        //    return _querySQL.ToString();
+        //}
 
         /// <summary>
         /// Get ColumnCount
@@ -637,33 +654,40 @@ namespace VAdvantage.Model
                 m_columns[i].IsUpdateable = updateable;
         }
 
+        public POInfoColumn GetColumnInfo(int index)
+        {
+            if (!IsColumnLookup(index))
+                return null;
+            return m_columns[index].Clone();
+        }
+
         /// <summary>
         /// Get Lookup
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public Lookup GetColumnLookup(int index)
-        {
-            if (!IsColumnLookup(index))
-                return null;
-            //
-            int WindowNo = 0;
-            //  List, Table, TableDir
-            Lookup lookup = null;
-            try
-            {
-                lookup = VLookUpFactory.Get(m_ctx, WindowNo, m_columns[index].AD_Column_ID,
-                    m_columns[index].DisplayType,
-                    m_columns[index].ColumnName,
-                    m_columns[index].AD_Reference_Value_ID,
-                    m_columns[index].IsParent, m_columns[index].ValidationCode);
-            }
-            catch
-            {
-                lookup = null;          //  cannot create Lookup
-            }
-            return lookup;
-        }
+        //public Lookup GetColumnLookup(int index)
+        //{
+        //    if (!IsColumnLookup(index))
+        //        return null;
+        //    //
+        //    int WindowNo = 0;
+        //    //  List, Table, TableDir
+        //    Lookup lookup = null;
+        //    try
+        //    {
+        //        lookup = VLookUpFactory.Get(m_ctx, WindowNo, m_columns[index].AD_Column_ID,
+        //            m_columns[index].DisplayType,
+        //            m_columns[index].ColumnName,
+        //            m_columns[index].AD_Reference_Value_ID,
+        //            m_columns[index].IsParent, m_columns[index].ValidationCode);
+        //    }
+        //    catch
+        //    {
+        //        lookup = null;          //  cannot create Lookup
+        //    }
+        //    return lookup;
+        //}
 
 
 
@@ -675,28 +699,28 @@ namespace VAdvantage.Model
         /// <remarks>
         /// Used for MMailTemplate for fetch text against Id Column
         /// </remarks>
-        public VLookUpInfo GetColumnLookupInfo(int index)
-        {
-            if (!IsColumnLookup(index))
-                return null;
-            //
-            int WindowNo = 0;
-            //  List, Table, TableDir
-            VLookUpInfo lookup = null;
-            try
-            {
-                lookup = VLookUpFactory.GetLookUpInfo(m_ctx, WindowNo, m_columns[index].DisplayType, m_columns[index].AD_Column_ID, Env.GetLanguage(m_ctx),
-                    m_columns[index].ColumnName, m_columns[index].AD_Reference_Value_ID,
-                    m_columns[index].IsParent, m_columns[index].ValidationCode);
-            }
-            catch
-            {
+        //public VLookUpInfo GetColumnLookupInfo(int index)
+        //{
+        //    if (!IsColumnLookup(index))
+        //        return null;
+        //    //
+        //    int WindowNo = 0;
+        //    //  List, Table, TableDir
+        //    VLookUpInfo lookup = null;
+        //    try
+        //    {
+        //        lookup = VLookUpFactory.GetLookUpInfo(m_ctx, WindowNo, m_columns[index].DisplayType, m_columns[index].AD_Column_ID, Env.GetLanguage(m_ctx),
+        //            m_columns[index].ColumnName, m_columns[index].AD_Reference_Value_ID,
+        //            m_columns[index].IsParent, m_columns[index].ValidationCode);
+        //    }
+        //    catch
+        //    {
 
 
-                lookup = null;          //  cannot create Lookup
-            }
-            return lookup;
-        }
+        //        lookup = null;          //  cannot create Lookup
+        //    }
+        //    return lookup;
+        //}
 
 
         /**
@@ -737,6 +761,7 @@ namespace VAdvantage.Model
             return _KeyColumns;
         }
 
+
         /*******************************************************************************/
         //    POInfoColumn Class
         /*******************************************************************************/
@@ -744,136 +769,168 @@ namespace VAdvantage.Model
         /// <summary>
         /// PO Info Column Info Value Object
         /// </summary>
-        public class POInfoColumn
+        
+    }
+    public class POInfoColumn
+    {
+        #region "Declaration"
+        /** Column ID		*/
+        public int AD_Column_ID;
+        /** Column Name		*/
+        public string ColumnName;
+        /** Virtual Column 	*/
+        public string ColumnSQL;
+        /** Display Type	*/
+        public int DisplayType;
+        ///**	Data Type		*/
+        //public Class<?>		ColumnClass;
+
+        /**	Mandatory		*/
+        public bool IsMandatory;
+        /**	Default Value	*/
+        public string DefaultLogic;
+        /**	Updateable		*/
+        public bool IsUpdateable;
+        /**	Label			*/
+        public string ColumnLabel;
+        /**	Description		*/
+        public string ColumnDescription;
+        /**	PK				*/
+        public bool IsKey;
+        /**	FK to Parent	*/
+        public bool IsParent;
+        /**	Translated		*/
+        public bool IsTranslated;
+        /**	Encryoted		*/
+        public bool IsEncrypted;
+
+        /** Reference Value	*/
+        public int AD_Reference_Value_ID;
+        /** Validation		*/
+        public string ValidationCode;
+        public Type ColumnClass;
+        /** Field Length	*/
+        public int FieldLength;
+        /**	Min Value		*/
+        public string ValueMin;
+        /**	Max Value		*/
+        public string ValueMax;
+        /**	Min Value		*/
+        public decimal ValueMin_BD;
+        /**	Max Value		*/
+        public decimal ValueMax_BD;
+        // Is Copy Value
+        public bool IsCopy;
+
+        #endregion
+
+        public POInfoColumn()
         {
-            #region "Declaration"
-            /** Column ID		*/
-            public int AD_Column_ID;
-            /** Column Name		*/
-            public string ColumnName;
-            /** Virtual Column 	*/
-            public string ColumnSQL;
-            /** Display Type	*/
-            public int DisplayType;
-            ///**	Data Type		*/
-            //public Class<?>		ColumnClass;
+        }
 
-            /**	Mandatory		*/
-            public bool IsMandatory;
-            /**	Default Value	*/
-            public string DefaultLogic;
-            /**	Updateable		*/
-            public bool IsUpdateable;
-            /**	Label			*/
-            public string ColumnLabel;
-            /**	Description		*/
-            public string ColumnDescription;
-            /**	PK				*/
-            public bool IsKey;
-            /**	FK to Parent	*/
-            public bool IsParent;
-            /**	Translated		*/
-            public bool IsTranslated;
-            /**	Encryoted		*/
-            public bool IsEncrypted;
+        public POInfoColumn(int ad_Column_ID, string columnName, string columnSQL, int displayType,
+                             bool isMandatory, bool isUpdateable, string defaultLogic,
+                             string columnLabel, string columnDescription,
+                             bool isKey, bool isParent,
+                             int ad_Reference_Value_ID, string validationCode,
+                             int fieldLength, string valueMin, string valueMax,
+                             bool isTranslated, bool isEncrypted, bool isCopy)
+        {
 
-            /** Reference Value	*/
-            public int AD_Reference_Value_ID;
-            /** Validation		*/
-            public string ValidationCode;
-            public Type ColumnClass;
-            /** Field Length	*/
-            public int FieldLength;
-            /**	Min Value		*/
-            public string ValueMin;
-            /**	Max Value		*/
-            public string ValueMax;
-            /**	Min Value		*/
-            public decimal ValueMin_BD;
-            /**	Max Value		*/
-            public decimal ValueMax_BD;
-            // Is Copy Value
-            public bool IsCopy;
+            AD_Column_ID = ad_Column_ID;
+            ColumnName = columnName;
+            ColumnSQL = columnSQL;
+            DisplayType = displayType;
 
-            #endregion
-
-            public POInfoColumn()
+            if (columnName.Equals("AD_Language")
+            || columnName.Equals("EntityType")
+            || columnName.Equals("DocBaseType"))
             {
+                DisplayType = VAdvantage.Classes.DisplayType.String;
+                ColumnClass = typeof(System.String);
             }
-
-            public POInfoColumn(int ad_Column_ID, string columnName, string columnSQL, int displayType,
-                                 bool isMandatory, bool isUpdateable, string defaultLogic,
-                                 string columnLabel, string columnDescription,
-                                 bool isKey, bool isParent,
-                                 int ad_Reference_Value_ID, string validationCode,
-                                 int fieldLength, string valueMin, string valueMax,
-                                 bool isTranslated, bool isEncrypted, bool isCopy)
+            else if (columnName.Equals("Posted")
+            || columnName.Equals("Processed")
+            || columnName.Equals("Processing"))
             {
-
-                AD_Column_ID = ad_Column_ID;
-                ColumnName = columnName;
-                ColumnSQL = columnSQL;
-                DisplayType = displayType;
-
-                if (columnName.Equals("AD_Language")
-                || columnName.Equals("EntityType")
-                || columnName.Equals("DocBaseType"))
-                {
-                    DisplayType = VAdvantage.Classes.DisplayType.String;
-                    ColumnClass = typeof(System.String);
-                }
-                else if (columnName.Equals("Posted")
-                || columnName.Equals("Processed")
-                || columnName.Equals("Processing"))
-                {
-                    ColumnClass = typeof(System.Boolean);
-                    //ColumnClass = typeof(System.Boolean);
-                }
-                else if (columnName.Equals("Record_ID"))
-                {
-                    DisplayType = VAdvantage.Classes.DisplayType.ID;
-                    ColumnClass = typeof(System.Int32);
-                }
-                else
-                {
-                    ColumnClass = VAdvantage.Classes.DisplayType.GetClass(displayType, true);
-                }
-                IsMandatory = isMandatory;
-                IsUpdateable = isUpdateable;
-                DefaultLogic = defaultLogic;
-                ColumnLabel = columnLabel;
-                ColumnDescription = columnDescription;
-                IsKey = isKey;
-                IsParent = isParent;
-                //
-                AD_Reference_Value_ID = ad_Reference_Value_ID;
-                ValidationCode = validationCode;
-                FieldLength = fieldLength;
-                ValueMin = valueMin;
-                try
-                {
-                    if (valueMin != null && valueMin.Length > 0)
-                        ValueMin_BD = decimal.Parse(valueMin);
-                }
-                catch
-                {
-                    //log error
-                }
-                ValueMax = valueMax;
-
-                try
-                {
-                    if (valueMax != null && valueMax.Length > 0)
-                        ValueMax_BD = decimal.Parse(ValueMax);
-                }
-                catch (Exception ex)
-                {
-                    VLogger.Get().Log(Level.SEVERE, "ValueMin=" + valueMin, ex);
-                }
-                IsTranslated = isTranslated;
-                IsEncrypted = isEncrypted;
-                IsCopy = isCopy;
+                ColumnClass = typeof(System.Boolean);
+                //ColumnClass = typeof(System.Boolean);
             }
+            else if (columnName.Equals("Record_ID"))
+            {
+                DisplayType = VAdvantage.Classes.DisplayType.ID;
+                ColumnClass = typeof(System.Int32);
+            }
+            else
+            {
+                ColumnClass = VAdvantage.Classes.DisplayType.GetClass(displayType, true);
+            }
+            IsMandatory = isMandatory;
+            IsUpdateable = isUpdateable;
+            DefaultLogic = defaultLogic;
+            ColumnLabel = columnLabel;
+            ColumnDescription = columnDescription;
+            IsKey = isKey;
+            IsParent = isParent;
+            //
+            AD_Reference_Value_ID = ad_Reference_Value_ID;
+            ValidationCode = validationCode;
+            FieldLength = fieldLength;
+            ValueMin = valueMin;
+            try
+            {
+                if (valueMin != null && valueMin.Length > 0)
+                    ValueMin_BD = decimal.Parse(valueMin);
+            }
+            catch
+            {
+                //log error
+            }
+            ValueMax = valueMax;
+
+            try
+            {
+                if (valueMax != null && valueMax.Length > 0)
+                    ValueMax_BD = decimal.Parse(ValueMax);
+            }
+            catch (Exception ex)
+            {
+                VLogger.Get().Log(Level.SEVERE, "ValueMin=" + valueMin, ex);
+            }
+            IsTranslated = isTranslated;
+            IsEncrypted = isEncrypted;
+            IsCopy = isCopy;
+        }
+
+        public POInfoColumn Clone()
+        {
+            POInfoColumn clone = new POInfoColumn();
+            clone.AD_Column_ID = AD_Column_ID;
+            clone.ColumnName = ColumnName;
+            clone.ColumnSQL = ColumnSQL;
+            clone.DisplayType = DisplayType;
+            clone.ColumnClass = ColumnClass;
+            clone.DisplayType = DisplayType;
+            clone.ColumnClass = ColumnClass;
+            clone.IsMandatory = IsMandatory;
+            clone.IsUpdateable = IsUpdateable;
+            clone.DefaultLogic = DefaultLogic;
+            clone.ColumnLabel = ColumnLabel;
+            clone.ColumnDescription = ColumnDescription;
+            clone.IsKey = IsKey;
+            clone.IsParent = IsParent;
+            clone.AD_Reference_Value_ID = AD_Reference_Value_ID;
+            clone.ValidationCode = ValidationCode;
+            clone.FieldLength = FieldLength;
+            clone.ValueMin = ValueMin;
+            clone.ValueMin_BD = ValueMin_BD;
+            clone.ValueMax = ValueMax;
+            clone.ValueMax_BD = ValueMax_BD;
+            clone.IsTranslated = IsTranslated;
+            clone.IsEncrypted = IsEncrypted;
+            clone.IsCopy = IsCopy;
+            return clone;
         }
     }
+
 }

@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using VAdvantage.Common;
+
 using VAdvantage.Classes;
 using System.Data;
 using System.Data.SqlClient;
 using VAdvantage.DataBase;
 
-using VAdvantage.ProcessEngine;
+
 using VAdvantage.Logging;
 
-namespace VAdvantage.Process
+namespace VAdvantage.Model
 {
     [Serializable]
     public class PO_LOB

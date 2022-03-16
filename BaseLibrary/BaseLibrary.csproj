@@ -9,9 +9,12 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BaseLibrary</RootNamespace>
     <AssemblyName>BaseLibrary</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,8 +34,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="SecureEngineUtility">
+      <HintPath>..\ViennaAdvantageWeb\Dll\SecureEngineUtility.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -65,6 +76,11 @@
     <Compile Include="Classes\VLookUpInfo.cs" />
     <Compile Include="Classes\VTreeNode.cs" />
     <Compile Include="Common\Common.cs" />
+    <Compile Include="Connected Services\CloudService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\Lookup\LookUp.cs" />
     <Compile Include="Controllers\Lookup\MLookupCache.cs" />
     <Compile Include="DataBase\DB.cs" />
@@ -104,7 +120,6 @@
     <Compile Include="Login\Language.cs" />
     <Compile Include="Login\LanguageCall.cs" />
     <Compile Include="Login\LanguageProcess.cs" />
-    <Compile Include="Login\LoginProcess.cs" />
     <Compile Include="ModelAD\GenericPO.cs" />
     <Compile Include="ModelAD\IModelFactory.cs" />
     <Compile Include="ModelAD\PO.cs" />
@@ -112,7 +127,7 @@
     <Compile Include="ModelAD\PORecord.cs" />
     <Compile Include="ModelAD\PO_LOB.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utility\DocWorkflowMgr.cs" />
+    <Compile Include="WF\DocWorkflowMgr.cs" />
     <Compile Include="Utility\Env.cs" />
     <Compile Include="Utility\ModuleTypeContainer.cs" />
     <Compile Include="Utility\Msg.cs" />
@@ -121,6 +136,152 @@
     <Compile Include="Utility\StackTraceElement.cs" />
     <Compile Include="Utility\Task.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\CoreLibrary\CoreLibrary.csproj">
+      <Project>{ed61579e-017f-478f-98a2-6432a9c59f41}</Project>
+      <Name>CoreLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VAPrintLib\VAPrintLib.csproj">
+      <Project>{cdd5abc0-66da-41ae-9a64-f28dee789262}</Project>
+      <Name>VAPrintLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.AboutUs.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.AssetInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.AssetNotInUse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.BackupInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.CustomerBISetting.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.CustomerPServerInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.DBInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.DBMigrationInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.DNSInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.DownloadDumpResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.DownloadFileResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.DummyDBMigrationInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.DummyDBWithFTpInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.FTPInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.GetAmountResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.GetInstructionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.GetTopicInfoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.GetUnassignedIp.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.InCompleteDBInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.MigrationRecordAndServerInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.RegisterInfoFromModuleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.RegisterTempInfoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.RequestedModuleInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.SaveErrorInLogM1Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.SaveErrorLogResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.ServerAndFtpInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.ServerInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.SetCustomerNewTicketResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.SetCustomerTicketHistoryLinesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.SetForwardTicketsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.Site.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.SiteProduct.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.SiteZone.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.SubscribeProductResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.UpdateAssetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.VRegisterInfoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.VRegisterInfoTResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CloudService\service.wsdl" />
+    <None Include="Properties\DataSources\System.Data.DataSet.datasource" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\CloudService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\CloudService\service.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\CloudService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\CloudService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\CloudService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

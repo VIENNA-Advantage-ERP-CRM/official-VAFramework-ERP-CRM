@@ -247,7 +247,7 @@ namespace VAdvantage.Model
         /// Get Zoom Query String - default implementation
         /// </summary>
         /// <returns>Zoom Query</returns>
-        public virtual Query GetZoomQuery()
+        public virtual IQuery GetZoomQuery()
         {
             return null;
         }
@@ -261,7 +261,7 @@ namespace VAdvantage.Model
             return 0;
         }
 
-        public virtual int GetZoomWindow(Query query)
+        public virtual int GetZoomWindow(IQuery query)
         {
             return 0;
         }

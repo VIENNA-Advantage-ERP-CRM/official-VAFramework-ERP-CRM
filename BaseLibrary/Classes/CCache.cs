@@ -7,15 +7,7 @@
  ******************************************************/
 
 using System;
-using System.Collections.Generic;
-//using System.Linq;
-using System.Text;
-//using VAdvantage.Classes;
-//using VAdvantage.Common;
-//using VAdvantage.Model;
-using System.Threading;
-using System.Runtime.CompilerServices;
-using VAdvantage.Logging;
+
 using VAdvantage.Model;
 using VAdvantage.Utility;
 
@@ -24,10 +16,10 @@ namespace VAdvantage.Classes
 
     /// <summary>
     /// Cache class
-    /// </summary>
+    /// </summary>  
     /// <typeparam name="K"></typeparam>
     /// <typeparam name="V"></typeparam>
-    public class CCache<K, V> : CoreLibrary.Classes.Cache<K, V>
+    public class CCache<K, V> : CoreLibrary.Classes.CCache<K, V>
     {
 
         /// <summary>
