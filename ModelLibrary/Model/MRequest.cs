@@ -1056,7 +1056,10 @@ namespace VAdvantage.Model
             CheckChange(ra, "DateStartPlan");
             CheckChange(ra, "DateCompletePlan");
             //new filed result added in list if anyone change/add anything in result email will send to user
-            CheckChange(ra, "Result");
+            if(CheckChange(ra, "Result"))
+            {
+                sendInfo.Add("Result");
+            }
 
             if (_changed)
             {
