@@ -126,6 +126,7 @@
     <Compile Include="ModelAD\POInfo.cs" />
     <Compile Include="ModelAD\PORecord.cs" />
     <Compile Include="ModelAD\PO_LOB.cs" />
+    <Compile Include="Process\Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WF\DocWorkflowMgr.cs" />
     <Compile Include="Utility\Env.cs" />

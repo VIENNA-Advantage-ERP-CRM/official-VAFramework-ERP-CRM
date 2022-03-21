@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>XModel</RootNamespace>
     <AssemblyName>XModel</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,6 +32,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BaseLibrary">
+      <HintPath>..\BaseLibrary\bin\Debug\BaseLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="CoreLibrary">
+      <HintPath>..\BaseLibrary\bin\Debug\CoreLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Class1.cs" />
     <Compile Include="ModelAD\X_AD_AccessLog.cs" />
     <Compile Include="ModelAD\X_AD_Alert.cs" />
     <Compile Include="ModelAD\X_AD_AlertProcessor.cs" />
@@ -795,12 +803,6 @@
     <Compile Include="Model\X_W_MailMsg.cs" />
     <Compile Include="Model\X_W_Store.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\BaseLibrary\BaseLibrary.csproj">
-      <Project>{11b07f0b-50d9-44d4-b2e7-f9c3e6a00f1b}</Project>
-      <Name>BaseLibrary</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

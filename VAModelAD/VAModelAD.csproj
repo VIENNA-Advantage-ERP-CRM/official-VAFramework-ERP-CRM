@@ -165,6 +165,7 @@
     <Compile Include="ModelAD\MSeriesFilter.cs" />
     <Compile Include="ModelAD\MSystem.cs" />
     <Compile Include="ModelAD\MTab.cs" />
+    <Compile Include="ModelAD\MTable.cs" />
     <Compile Include="ModelAD\MTabPanel.cs" />
     <Compile Include="ModelAD\MTask.cs" />
     <Compile Include="ModelAD\MTest.cs" />
