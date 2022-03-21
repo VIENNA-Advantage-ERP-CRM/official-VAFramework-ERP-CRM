@@ -804,7 +804,7 @@ namespace VAdvantage.Common
             }
 
             // Show Amount according to browser culture
-            if (column.GetAD_Reference_ID() == DisplayType column.GetAD_Reference_ID() == DisplayType.CostPrice)
+            if (column.GetAD_Reference_ID() == DisplayType.Amount || column.GetAD_Reference_ID() == DisplayType.CostPrice)
             {
                 return DisplayType.GetNumberFormat(column.GetAD_Reference_ID()).GetFormatAmount(value, po.GetCtx().GetContext("#ClientLanguage"));
             }

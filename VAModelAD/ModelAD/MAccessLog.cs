@@ -96,6 +96,38 @@ namespace VAdvantage.Model
             SetAD_User_ID(AD_User_ID);
         }
 
+
+        private int GetAD_User_ID(String email, int AD_Client_ID)
+        {
+            int AD_User_ID = 0;
+            IDataReader idr = null;
+            String sql = "SELECT AD_User_ID FROM AD_User "
+                + "WHERE UPPER(EMail)=@param1"
+                + " AND AD_Client_ID=@param2";
+            try
+            {
+                SqlParameter[] param = new SqlParameter[2];
+                param[0] = new SqlParameter("@param1", email.ToUpper());
+                param[1] = new SqlParameter("@param2", AD_Client_ID);
+                idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, param, null);
+                while (idr.Read())
+                {
+                    AD_User_ID = Utility.Util.GetValueOfInt(idr[0].ToString());//.getInt(1);
+                }
+                idr.Close();
+            }
+            catch (Exception e)
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                }
+                _log.Log(Level.SEVERE, email, e);
+            }
+
+            return AD_User_ID;
+        }
+
         /// <summary>
         /// Add to Reply
         /// </summary>
