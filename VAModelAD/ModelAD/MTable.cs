@@ -23,6 +23,7 @@ namespace VAdvantage.Model
         private static VLogger s_log = VLogger.GetVLogger(typeof(MTable).FullName);
         private MColumn[] m_columns = null;
         private MViewComponent[] m_vcs = null;
+        private bool isHasKeyColumn = false;
 
 
         public MTable(Ctx ctx, DataRow rs, Trx trxName)
@@ -197,8 +198,8 @@ namespace VAdvantage.Model
                     DataRow dr = ds.Tables[0].Rows[i];
                     MColumn mCol = new MColumn(GetCtx(), dr, Get_TrxName());
                     list.Add(mCol);
-                    //if (mCol.IsKey())
-                    //    isHasKeyColumn = true;
+                    if (mCol.IsKey())
+                        isHasKeyColumn = true;
                 }
                 ds = null;
             }
@@ -568,6 +569,16 @@ namespace VAdvantage.Model
             return sb.ToString();
         }   //	getSelectColum
 
+
+        /// <summary>
+        /// function to check whether table has the key column
+        /// </summary>
+        /// <returns>true/false</returns>
+        public bool HasPKColumn()
+        {
+            GetColumns(false);
+            return isHasKeyColumn;
+        }
 
         /// <summary>
         ///Table has a single Key

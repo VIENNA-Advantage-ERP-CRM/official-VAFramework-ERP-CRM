@@ -7,7 +7,7 @@
     * Amit Bansal     08-June-2018
 ******************************************************/
 
-using Oracle.ManagedDataAccess.Client;
+
 using System;
 using System.Collections.Generic;
 using System.Data;

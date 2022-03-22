@@ -9,8 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using System.Runtime.CompilerServices;
-using ViennaLogger.Logging;
+
 using VAdvantage.Model;
 
 namespace VAdvantage.Logging

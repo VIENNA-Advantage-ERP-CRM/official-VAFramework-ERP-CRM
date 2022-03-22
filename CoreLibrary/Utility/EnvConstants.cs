@@ -72,5 +72,17 @@ namespace VAdvantage.Utility
         /** File Name				*/
         //private static String FILENAME = "Environment.properties";
 
+        #region "Calendar Variables"
+        // used in workflow
+        public static int Minute = 12;
+        public static int Second = 13;
+        public static int Hour = 10;
+        public static int DayOfMonth = 5;
+        public static int DayOfYear = 6;
+        public static int Month = 2;
+        public static int Year = 1;
+
+        #endregion
+
     }
 }

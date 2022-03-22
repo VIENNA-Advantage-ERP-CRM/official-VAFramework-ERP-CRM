@@ -35,7 +35,7 @@ namespace VIS.Helpers
         private List<String> _createSqlColumn = new List<String>();
         private List<String> _createSqlValue = new List<String>();
         private List<string> _defaultTblCols = new List<string> { "created", "updated", "createdby", "updatedby", "export_id" };
-        List<VAdvantage.Process.PO_LOB> _lobInfo = null;
+        List<PO_LOB> _lobInfo = null;
         string key;
 
         //format record info
@@ -2014,11 +2014,11 @@ namespace VIS.Helpers
             _createSqlValue = new List<String>();
         }	//	createUpdateSqlReset
 
-        private void LobAdd(VAdvantage.Process.PO_LOB lob)
+        private void LobAdd(PO_LOB lob)
         {
             //		log.fine("LOB=" + lob);
             if (_lobInfo == null)
-                _lobInfo = new List<VAdvantage.Process.PO_LOB>();
+                _lobInfo = new List<PO_LOB>();
             _lobInfo.Add(lob);
         }	//
 
@@ -2028,7 +2028,7 @@ namespace VIS.Helpers
                 return;
             for (int i = 0; i < _lobInfo.Count; i++)
             {
-                VAdvantage.Process.PO_LOB lob = (VAdvantage.Process.PO_LOB)_lobInfo[i];
+                PO_LOB lob = (PO_LOB)_lobInfo[i];
                 lob.Save(whereClause, null);		//	no trx
             }	//	for all LOBs
             LobReset();
@@ -3045,7 +3045,7 @@ namespace VIS.Helpers
         internal static CardViewData GetCardViewDetail(int AD_Window_ID, int AD_Tab_ID, Ctx ctx, int AD_CardView_ID,string SQL)
         {
             
-            VAdvantage.Classes.CommonFunctions cFun = new VAdvantage.Classes.CommonFunctions();
+            VAdvantage.Common.Common cFun = new VAdvantage.Common.Common();
             CardViewData cv = cFun.GetCardViewDetails(ctx.GetAD_User_ID(), AD_Tab_ID, AD_CardView_ID, ctx, SQL);
             return cv;
             //CardViewData cv = new CardViewData();

@@ -236,33 +236,33 @@ namespace VAdvantage.WF
         {
             if (GetDurationUnit() == null)
             {
-                return GlobalVariable.Minute;
+                return EnvConstants.Minute;
             }
             else if (DURATIONUNIT_Second.Equals(GetDurationUnit()))
             {
-                return GlobalVariable.Second;
+                return EnvConstants.Second;
             }
             else if (DURATIONUNIT_Minute.Equals(GetDurationUnit()))
             {
-                return GlobalVariable.Minute;
+                return EnvConstants.Minute;
             }
             else if (DURATIONUNIT_Hour.Equals(GetDurationUnit()))
             {
-                return GlobalVariable.Hour;
+                return EnvConstants.Hour;
             }
             else if (DURATIONUNIT_Day.Equals(GetDurationUnit()))
             {
-                return GlobalVariable.DayOfYear;
+                return EnvConstants.DayOfYear;
             }
             else if (DURATIONUNIT_Month.Equals(GetDurationUnit()))
             {
-                return GlobalVariable.Month;
+                return EnvConstants.Month;
             }
             else if (DURATIONUNIT_Year.Equals(GetDurationUnit()))
             {
-                return GlobalVariable.Year;
+                return EnvConstants.Year;
             }
-            return GlobalVariable.Month;
+            return EnvConstants.Month;
         }
 
         /// <summary>

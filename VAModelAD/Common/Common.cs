@@ -934,41 +934,41 @@ namespace VAdvantage.Common
             return lang;
         }
 
-        /// <summary>
-        /// Adds specified number of value to current datetime
-        /// </summary>
-        /// <param name="duration">integer number from CommonFuctions.Calendar enum</param>
-        /// <param name="time"></param>
-        /// <returns>new date</returns>
-        /// <author>Veena</author>
-        public static DateTime AddDate(int duration, object time)
-        {
-            if (duration == GlobalVariable.DayOfYear)
-            {
-                return DateTime.Now.AddDays(Convert.ToDouble(time));
-            }
-            else if (duration == GlobalVariable.Month)
-            {
-                return DateTime.Now.AddMonths(Utility.Util.GetValueOfInt(time.ToString()));
-            }
-            else if (duration == GlobalVariable.Hour)
-            {
-                return DateTime.Now.AddHours(Convert.ToDouble(time));
-            }
-            else if (duration == GlobalVariable.Minute)
-            {
-                return DateTime.Now.AddMinutes(Convert.ToDouble(time));
-            }
-            else if (duration == GlobalVariable.Second)
-            {
-                return DateTime.Now.AddSeconds(Convert.ToDouble(time));
-            }
-            else if (duration == GlobalVariable.Year)
-            {
-                return DateTime.Now.AddYears(Utility.Util.GetValueOfInt(time.ToString()));
-            }
-            return DateTime.Now;
-        }
+        ///// <summary>
+        ///// Adds specified number of value to current datetime
+        ///// </summary>
+        ///// <param name="duration">integer number from CommonFuctions.Calendar enum</param>
+        ///// <param name="time"></param>
+        ///// <returns>new date</returns>
+        ///// <author>Veena</author>
+        //public static DateTime AddDate(int duration, object time)
+        //{
+        //    if (duration == GlobalVariable.DayOfYear)
+        //    {
+        //        return DateTime.Now.AddDays(Convert.ToDouble(time));
+        //    }
+        //    else if (duration == GlobalVariable.Month)
+        //    {
+        //        return DateTime.Now.AddMonths(Utility.Util.GetValueOfInt(time.ToString()));
+        //    }
+        //    else if (duration == GlobalVariable.Hour)
+        //    {
+        //        return DateTime.Now.AddHours(Convert.ToDouble(time));
+        //    }
+        //    else if (duration == GlobalVariable.Minute)
+        //    {
+        //        return DateTime.Now.AddMinutes(Convert.ToDouble(time));
+        //    }
+        //    else if (duration == GlobalVariable.Second)
+        //    {
+        //        return DateTime.Now.AddSeconds(Convert.ToDouble(time));
+        //    }
+        //    else if (duration == GlobalVariable.Year)
+        //    {
+        //        return DateTime.Now.AddYears(Utility.Util.GetValueOfInt(time.ToString()));
+        //    }
+        //    return DateTime.Now;
+        //}
 
         /// <summary>
         /// Get Root Node

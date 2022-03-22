@@ -323,34 +323,7 @@ namespace VAdvantage.DataBase
         /// <param name="time"></param>
         /// <returns>new date</returns>
         /// <author>Veena</author>
-        public static DateTime AddDate(int duration, object time)
-        {
-            if (duration == GlobalVariable.DayOfYear)
-            {
-                return DateTime.Now.AddDays(Convert.ToDouble(time));
-            }
-            else if (duration == GlobalVariable.Month)
-            {
-                return DateTime.Now.AddMonths(Utility.Util.GetValueOfInt(time.ToString()));
-            }
-            else if (duration == GlobalVariable.Hour)
-            {
-                return DateTime.Now.AddHours(Convert.ToDouble(time));
-            }
-            else if (duration == GlobalVariable.Minute)
-            {
-                return DateTime.Now.AddMinutes(Convert.ToDouble(time));
-            }
-            else if (duration == GlobalVariable.Second)
-            {
-                return DateTime.Now.AddSeconds(Convert.ToDouble(time));
-            }
-            else if (duration == GlobalVariable.Year)
-            {
-                return DateTime.Now.AddYears(Utility.Util.GetValueOfInt(time.ToString()));
-            }
-            return DateTime.Now;
-        }
+        
 
         public static String SetDateFormat(DateTime time, bool dayOnly)
         {
@@ -428,17 +401,17 @@ namespace VAdvantage.DataBase
 
 
 
-        #region "Calendar Variables"
-        // used in workflow
-        public static int Minute = 12;
-        public static int Second = 13;
-        public static int Hour = 10;
-        public static int DayOfMonth = 5;
-        public static int DayOfYear = 6;
-        public static int Month = 2;
-        public static int Year = 1;
+        //#region "Calendar Variables"
+        //// used in workflow
+        //public static int Minute = 12;
+        //public static int Second = 13;
+        //public static int Hour = 10;
+        //public static int DayOfMonth = 5;
+        //public static int DayOfYear = 6;
+        //public static int Month = 2;
+        //public static int Year = 1;
 
-        #endregion
+        //#endregion
 
         public static string GetLanguageCode()
         {

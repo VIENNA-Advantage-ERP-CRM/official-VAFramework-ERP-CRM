@@ -19,6 +19,7 @@ using System.Data;
 using System.Data.SqlClient;
 using VAdvantage.Logging;
 using VAdvantage.Utility;
+using VAdvantage.Interface;
 //using VAdvantage.ImpExp;
 namespace VAdvantage.Model
 {

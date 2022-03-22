@@ -19,7 +19,7 @@ using VAdvantage.Logging;
 using VAdvantage.Model;
 using VAdvantage.ProcessEngine;
 using VAdvantage.Utility;
-using Oracle.ManagedDataAccess.Client;
+
 
 namespace VAdvantage.Process
 {

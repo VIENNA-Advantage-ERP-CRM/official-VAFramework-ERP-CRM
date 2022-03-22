@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>VIS</RootNamespace>
     <AssemblyName>VIS</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -26,6 +26,7 @@
     <SccProvider>SAK</SccProvider>
     <Use64BitIISExpress />
     <UseGlobalApplicationHostFile />
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -48,14 +49,16 @@
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.CrystalReports.Engine">
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ViennaAdvantageWeb\Dll\CrystalDecisions.CrystalReports.Engine.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\ViennaAdvantageWeb\Dll\CrystalDecisions.Shared.dll</HintPath>
+      <HintPath>..\ViennaAdvantageWeb\Dll\CrystalDecisions.ReportSource.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Web">
+    <Reference Include="CrystalDecisions.Web, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ViennaAdvantageWeb\Dll\CrystalDecisions.Web.dll</HintPath>
     </Reference>
     <Reference Include="DotNetOpenAuth, Version=4.0.0.11165, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
@@ -106,9 +109,7 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Oracle.ManagedDataAccess, Version=4.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
-      <HintPath>..\packages\Oracle.ManagedDataAccess.19.6.0\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -118,7 +119,9 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -161,6 +164,7 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WebGrease, Version=1.5.2.14234, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -756,74 +760,26 @@
     <Content Include="Areas\VIS\Templates\VIS_Templates.html" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Areas\VIS\Classes\AcctViewerDataClass.cs" />
     <Compile Include="Areas\VIS\Classes\ClientCredentials.cs" />
     <Compile Include="Areas\VIS\Classes\GmailConfig.cs" />
     <Compile Include="Areas\VIS\Classes\LookupHelper.cs" />
     <Compile Include="Areas\VIS\Classes\QueryCollection.cs" />
     <Compile Include="Areas\VIS\Classes\SecureEngineBridge.cs" />
-    <Compile Include="Areas\VIS\Classes\VChargeModelClass.cs" />
     <Compile Include="Areas\VIS\Controllers\AccountController.cs" />
-    <Compile Include="Areas\VIS\Controllers\AccountFormController.cs" />
-    <Compile Include="Areas\VIS\Controllers\AcctViewerDataController.cs" />
     <Compile Include="Areas\VIS\Controllers\AmountDivisionController.cs" />
     <Compile Include="Areas\VIS\Controllers\ASearchController.cs" />
     <Compile Include="Areas\VIS\Controllers\AttachmentController.cs" />
     <Compile Include="Areas\VIS\Controllers\AttachmentHistoryController.cs" />
     <Compile Include="Areas\VIS\Controllers\Bitmap.cs" />
     <Compile Include="Areas\VIS\Controllers\BPartnerController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CalloutOrderController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\CalloutColumnController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MAcctSchemaController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MBankStatementController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MBPartnerController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MCashBookController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MCashJournalController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MChargeController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MConversionRateController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MCurrencyController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MDocTypeController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MExpenseReportController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MInOutController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MInOutLineController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MInventoryController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MInventoryLineController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MInvoiceBatchLineController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MInvoiceController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MLocatorContoller.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\ModulePrefixController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MOrderController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MOrderLineController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MPaymentController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MPaymentTermController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MPeriodController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MPriceListController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MPriceListVersionController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MProductCategoryController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MProductController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MProductionLineController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MProductLocatorController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MProductPricingController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MProjectController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MRequestController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MRequestTypeController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MStorageController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MTaxController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MTeamForcastController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MUOMController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MUOMConversionController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CallOut\MWarehouseController.cs" />
     <Compile Include="Areas\VIS\Controllers\CardViewController.cs" />
-    <Compile Include="Areas\VIS\Controllers\MessageController.cs" />
     <Compile Include="Areas\VIS\Controllers\Chat\ChatController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CommonController.cs" />
     <Compile Include="Areas\VIS\Controllers\DocActionController.cs" />
     <Compile Include="Areas\VIS\Controllers\EmailController.cs" />
-    <Compile Include="Areas\VIS\Controllers\ForecastFormController.cs" />
     <Compile Include="Areas\VIS\Controllers\FormController.cs" />
     <Compile Include="Areas\VIS\Controllers\GenerateXModelController.cs" />
     <Compile Include="Areas\VIS\Controllers\GenralAttributeController.cs" />
-    <Compile Include="Areas\VIS\Controllers\GlJournalController.cs" />
     <Compile Include="Areas\VIS\Controllers\Group\GmailContactsController.cs" />
     <Compile Include="Areas\VIS\Controllers\Group\GroupController.cs" />
     <Compile Include="Areas\VIS\Controllers\HomeController.cs" />
@@ -831,22 +787,13 @@
     <Compile Include="Areas\VIS\Controllers\InfoMenuController.cs" />
     <Compile Include="Areas\VIS\Controllers\InfoProductController.cs" />
     <Compile Include="Areas\VIS\Controllers\InfoWindowController.cs" />
-    <Compile Include="Areas\VIS\Controllers\InOutController.cs" />
     <Compile Include="Areas\VIS\Controllers\JsonDataController.cs" />
     <Compile Include="Areas\VIS\Controllers\LocationController.cs" />
     <Compile Include="Areas\VIS\Controllers\LocatorController.cs" />
     <Compile Include="Areas\VIS\Controllers\LoginController.cs" />
     <Compile Include="Areas\VIS\Controllers\MarkModuleController.cs" />
-    <Compile Include="Areas\VIS\Controllers\OrderController.cs" />
     <Compile Include="Areas\VIS\Controllers\PAttributesController.cs" />
-    <Compile Include="Areas\VIS\Controllers\PaymentAllocationController.cs" />
-    <Compile Include="Areas\VIS\Controllers\PaymentController.cs" />
-    <Compile Include="Areas\VIS\Controllers\PaymentRuleController.cs" />
-    <Compile Include="Areas\VIS\Controllers\PostingController.cs" />
-    <Compile Include="Areas\VIS\Controllers\ProductContainerController.cs" />
-    <Compile Include="Areas\VIS\Controllers\ProductController.cs" />
     <Compile Include="Areas\VIS\Controllers\RecordAccessController.cs" />
-    <Compile Include="Areas\VIS\Controllers\RelatedProductController.cs" />
     <Compile Include="Areas\VIS\Controllers\ResourceController.cs" />
     <Compile Include="Areas\VIS\Controllers\SmsController.cs" />
     <Compile Include="Areas\VIS\Controllers\Subscribe\SubscribeController.cs" />
@@ -856,17 +803,10 @@
     <Compile Include="Areas\VIS\Controllers\TreeMaintenanceController.cs" />
     <Compile Include="Areas\VIS\Controllers\UserPreferenceController.cs" />
     <Compile Include="Areas\VIS\Controllers\ValuePreferenceController.cs" />
-    <Compile Include="Areas\VIS\Controllers\VBOMDropController.cs" />
-    <Compile Include="Areas\VIS\Controllers\VChargeController.cs" />
     <Compile Include="Areas\VIS\Controllers\VController.cs" />
-    <Compile Include="Areas\VIS\Controllers\VCreateFromController.cs" />
     <Compile Include="Areas\VIS\Controllers\VImageFormController.cs" />
-    <Compile Include="Areas\VIS\Controllers\VPayPrintController.cs" />
-    <Compile Include="Areas\VIS\Controllers\VPaySelectController.cs" />
     <Compile Include="Areas\VIS\Controllers\VSetupController.cs" />
-    <Compile Include="Areas\VIS\Controllers\VTrxMaterialController.cs" />
     <Compile Include="Areas\VIS\Controllers\WFActivityController.cs" />
-    <Compile Include="Areas\VIS\DataContracts\CalloutData.cs" />
     <Compile Include="Areas\VIS\DataContracts\FormData.cs" />
     <Compile Include="Areas\VIS\DataContracts\ProcessData.cs" />
     <Compile Include="Areas\VIS\DataContracts\ThemeData.cs" />
@@ -886,58 +826,16 @@
     <Compile Include="Areas\VIS\Helpers\ShortcutHelper.cs" />
     <Compile Include="Areas\VIS\Helpers\SqlHelper.cs" />
     <Compile Include="Areas\VIS\Helpers\WindowHelper.cs" />
-    <Compile Include="Areas\VIS\Models\AccountFormModel.cs" />
     <Compile Include="Areas\VIS\Models\AccountModels.cs" />
-    <Compile Include="Areas\VIS\Models\AcctViewerData.cs" />
     <Compile Include="Areas\VIS\Models\AmountDivisionModel.cs" />
     <Compile Include="Areas\VIS\Models\ASearchModel.cs" />
     <Compile Include="Areas\VIS\Models\AttachmentHistoryModel.cs" />
     <Compile Include="Areas\VIS\Models\AttachmentModel.cs" />
     <Compile Include="Areas\VIS\Models\BPartnerModel.cs" />
-    <Compile Include="Areas\VIS\Models\CalloutPaymentModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MAcctSchemaModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MBankStatementModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MBPartnerModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MCashBookModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MCashJournalModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MChargeModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MConversionRateModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MCurrencyModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MDocTypeModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MExpenseReportModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MInOutLineModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MInOutModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MInventoryLineModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MInventoryModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MInvoiceBatchLineModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MInvoiceModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MLocatorModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\ModulePrefixModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MOrderLineModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MOrderModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MPaymentModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MPaymentTermModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MPeriodModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MPriceListModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MPriceListVersionModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MProductCategoryModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MProductionLineModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MProductLocatorModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MProductModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MProductPricingModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MProjectModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MRequestTypeModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MStorageModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MTaxModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MTeamForcastModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MUOMConversionModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MUOMModel.cs" />
-    <Compile Include="Areas\VIS\Models\Callouts\MWarehouseModel.cs" />
     <Compile Include="Areas\VIS\Models\CardViewModel.cs" />
     <Compile Include="Areas\VIS\Models\Chat\ChatModel.cs" />
     <Compile Include="Areas\VIS\Models\DocActionModel.cs" />
     <Compile Include="Areas\VIS\Models\EmailModel.cs" />
-    <Compile Include="Areas\VIS\Models\ForecastFormModel.cs" />
     <Compile Include="Areas\VIS\Models\FormModel.cs" />
     <Compile Include="Areas\VIS\Models\GenerateModel.cs" />
     <Compile Include="Areas\VIS\Models\GenerateXModelModel.cs" />
@@ -953,14 +851,8 @@
     <Compile Include="Areas\VIS\Models\InfoWindowModel.cs" />
     <Compile Include="Areas\VIS\Models\LocationModel.cs" />
     <Compile Include="Areas\VIS\Models\LocatorModel.cs" />
-    <Compile Include="Areas\VIS\Models\MChart.cs" />
-    <Compile Include="Areas\VIS\Models\PAttributesModel.cs" />
-    <Compile Include="Areas\VIS\Models\PaymentAllocation.cs" />
-    <Compile Include="Areas\VIS\Models\PaymentAllocationModel.cs" />
-    <Compile Include="Areas\VIS\Models\PaymentModel.cs" />
     <Compile Include="Areas\VIS\Models\ProductContainerModel.cs" />
     <Compile Include="Areas\VIS\Models\RecordAccessModel.cs" />
-    <Compile Include="Areas\VIS\Models\RelatedProductModel.cs" />
     <Compile Include="Areas\VIS\Models\ShortcutModel.cs" />
     <Compile Include="Areas\VIS\Models\SmsModel.cs" />
     <Compile Include="Areas\VIS\Models\Subscribe\SubscribeModel.cs" />
@@ -970,16 +862,10 @@
     <Compile Include="Areas\VIS\Models\TreeMaintenanceModel.cs" />
     <Compile Include="Areas\VIS\Models\UserPreferenceModel.cs" />
     <Compile Include="Areas\VIS\Models\ValuePreferenceModel.cs" />
-    <Compile Include="Areas\VIS\Models\VBOMDropModel.cs" />
-    <Compile Include="Areas\VIS\Models\VChargeModel.cs" />
-    <Compile Include="Areas\VIS\Models\VCreateFromModel.cs" />
     <Compile Include="Areas\VIS\Models\VImageModel.cs" />
-    <Compile Include="Areas\VIS\Models\VPayPrintModel.cs" />
-    <Compile Include="Areas\VIS\Models\VPaySelectModel.cs" />
     <Compile Include="Areas\VIS\Models\VSetupModel.cs" />
     <Compile Include="Areas\VIS\Models\VTree.cs" />
     <Compile Include="Areas\VIS\Models\VTreeMaintenance.cs" />
-    <Compile Include="Areas\VIS\Models\VTrxMaterialModel.cs" />
     <Compile Include="Areas\VIS\Models\WFActivityModel.cs" />
     <Compile Include="Areas\VIS\VISAreaRegistration.cs" />
     <Compile Include="Areas\VIS\WebPages\CreateUser.aspx.cs">
@@ -1027,7 +913,6 @@
     <Content Include="Areas\VIS\Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\VIS\DBase\" />
     <Folder Include="Areas\VIS\Scripts\app\processengine\" />
     <Folder Include="Areas\VIS\Views\AmountDivision\" />
     <Folder Include="Areas\VIS\Views\Channel\" />
@@ -1070,9 +955,33 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BaseLibrary\BaseLibrary.csproj">
+      <Project>{11b07f0b-50d9-44d4-b2e7-f9c3e6a00f1b}</Project>
+      <Name>BaseLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CoreLibrary\CoreLibrary.csproj">
+      <Project>{ed61579e-017f-478f-98a2-6432a9c59f41}</Project>
+      <Name>CoreLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ModelLibrary\ModelLibrary.csproj">
       <Project>{f8f980fc-83ef-4495-812e-5def569b9242}</Project>
       <Name>ModelLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VAModelAD\VAModelAD.csproj">
+      <Project>{ef955712-f147-4a6a-8d11-8fecc5fe3942}</Project>
+      <Name>VAModelAD</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VAWorkflow\VAWorkflow.csproj">
+      <Project>{e7e3c709-33bf-4526-9bd3-64fc5b3092dd}</Project>
+      <Name>VAWorkflow</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VISModel\VISLogic.csproj">
+      <Project>{ae558aa6-c414-462f-935e-cd705baf2db8}</Project>
+      <Name>VISLogic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XModel\XModel.csproj">
+      <Project>{7d3a626f-274d-4d29-87e3-272f0a33204b}</Project>
+      <Name>XModel</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

@@ -121,9 +121,11 @@
     <Compile Include="Classes\LDAP.cs" />
     <Compile Include="Classes\ModelFactory.cs" />
     <Compile Include="Classes\Obscure.cs" />
+    <Compile Include="Classes\PeriodicJob.cs" />
     <Compile Include="Classes\Query.cs" />
     <Compile Include="Classes\SessionEventHandler.cs" />
     <Compile Include="Classes\TableSQL.cs" />
+    <Compile Include="Classes\ThreadInstance.cs" />
     <Compile Include="Classes\WindowCtx.cs" />
     <Compile Include="Classes\ZoomTarget.cs" />
     <Compile Include="Common\Common.cs" />
@@ -146,6 +148,7 @@
     <Compile Include="Install\LanguageMaintenance.cs" />
     <Compile Include="Install\Translation.cs" />
     <Compile Include="Install\TranslationHandler.cs" />
+    <Compile Include="Interface\ThreadInterface.cs" />
     <Compile Include="Lookup\MAccountLookup.cs" />
     <Compile Include="Lookup\MAmtDivision.cs" />
     <Compile Include="Lookup\MLocationLookup.cs" />

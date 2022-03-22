@@ -1241,9 +1241,9 @@ namespace VAdvantage.Utility
         /// Get Warehouse Id from List
         /// </summary>
         /// <returns></returns>
-        public int GetVAM_Warehouse_ID()
+        public int GetAD_Warehouse_ID()
         {
-            return GetContextAsInt("#VAM_Warehouse_ID");
+            return GetContextAsInt("#M_Warehouse_ID");
         }
 
         /// <summary>
@@ -1350,6 +1350,16 @@ namespace VAdvantage.Utility
         public bool GetIsSSL()
         {
            return  GetContext("#IsSSL") == "Y";
+        }
+
+        public void SetContextUrl(string url)
+        {
+            SetContext("#ContextUrl", url);
+        }
+
+        public string GetContextUrl()
+        {
+            return GetContext("#ContextUrl");
         }
 
         //public void SetApplicationFullUrl(string url)

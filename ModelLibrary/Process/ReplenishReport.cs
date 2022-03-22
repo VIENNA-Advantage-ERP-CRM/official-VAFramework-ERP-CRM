@@ -22,6 +22,8 @@ using VAdvantage.Utility;
 
 
 using VAdvantage.ProcessEngine;
+using VAdvantage.Interface;
+
 namespace VAdvantage.Process
 {
     public class ReplenishReport : ProcessEngine.SvrProcess

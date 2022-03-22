@@ -112,20 +112,20 @@ namespace VAdvantage.Model
 	/**	Action - 8			*/
 	public static int		TYPE_DOCACTION = 8;
 
-	/** 16* 16 Icons		*/
-	public static Image[] IMAGES = new Image[]
-	{
-		null,
+	/** 16* 16 Icons	TODO	*/
+	//public static Image[] IMAGES = new Image[]
+	//{
+	//	null,
 
-		Env.GetImageIcon("mWindow.gif"),
-		Env.GetImageIcon("mReport.gif"),
-		Env.GetImageIcon("mProcess.gif"),
-		Env.GetImageIcon("mWorkFlow.gif"),
-		Env.GetImageIcon("mWorkbench.gif"),
-		Env.GetImageIcon("mSetVariable.gif"),
-		Env.GetImageIcon("mUserChoice.gif"),
-		Env.GetImageIcon("mDocAction.gif")
-	};
+	//	Env.GetImageIcon("mWindow.gif"),
+	//	Env.GetImageIcon("mReport.gif"),
+	//	Env.GetImageIcon("mProcess.gif"),
+	//	Env.GetImageIcon("mWorkFlow.gif"),
+	//	Env.GetImageIcon("mWorkbench.gif"),
+	//	Env.GetImageIcon("mSetVariable.gif"),
+	//	Env.GetImageIcon("mUserChoice.gif"),
+	//	Env.GetImageIcon("mDocAction.gif")
+	//};
 
 
 	/**************************************************************************
@@ -414,21 +414,21 @@ namespace VAdvantage.Model
 	 *  @param index image index
 	 *  @return Icon
 	 */
-	public static Image GetIcon (int index)
-	{
-		if (index == 0 || IMAGES == null || index > IMAGES.Length)
-			return null;
-		return IMAGES[index];
-	}	//	getIcon
+	//public static Image GetIcon (int index)
+	//{
+	//	if (index == 0 || IMAGES == null || index > IMAGES.Length)
+	//		return null;
+	//	return IMAGES[index];
+	//}	//	getIcon
 
 	/**
 	 *	Get Image Icon
 	 *  @return Icon
 	 */
-	public Image GetIcon()
-	{ 
-		return GetIcon(m_imageIndex);
-	}	//	getIcon
+	//public Image GetIcon()
+	//{ 
+	//	return GetIcon(m_imageIndex);
+	//}	//	getIcon
 
 	/**
 	 *  Get Shortcut Bar info

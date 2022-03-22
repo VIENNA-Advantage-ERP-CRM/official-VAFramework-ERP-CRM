@@ -792,6 +792,77 @@ namespace VAdvantage.DataBase
         {
             return CoreLibrary.DataBase.DB.NULL(sqlClause, dataType);
         }
+
+
+        public static DataSet SetUtcDateTime(DataSet dataSet)
+        {
+            var ds = new DataSet { Locale = System.Globalization.CultureInfo.InvariantCulture };
+            foreach (DataTable source in dataSet.Tables)
+            {
+                bool containsDate = false;
+                var target = source.Clone();
+
+                foreach (DataColumn col in target.Columns)
+                {
+                    if (col.DataType == System.Type.GetType("System.DateTime"))
+                    {
+                        col.DateTimeMode = DataSetDateTime.Utc;
+                        containsDate = true;
+                    }
+                }
+
+                if (containsDate)
+                {
+                    foreach (DataRow row in source.Rows)
+                        target.ImportRow(row);
+                    ds.Tables.Add(target);
+                }
+                else
+                {
+                    ds.Tables.Add(source.Copy());
+                }
+            }
+            dataSet.Tables.Clear();
+            dataSet.Dispose();
+            dataSet = ds;
+            return dataSet;
+        }
+
+        public static DataTable SetUtcDateTime(DataTable source)
+        {
+            //var ds = new DataSet { Locale = CultureInfo.InvariantCulture };
+
+            var target = source.Clone();
+
+            //foreach (DataTable source in dataSet.Tables)
+            //{
+            bool containsDate = false;
+            //    var target = source.Clone();
+
+            foreach (DataColumn col in target.Columns)
+            {
+                if (col.DataType == System.Type.GetType("System.DateTime"))
+                {
+                    col.DateTimeMode = DataSetDateTime.Utc;
+                    containsDate = true;
+                }
+            }
+
+            if (containsDate)
+            {
+                foreach (DataRow row in source.Rows)
+                    target.ImportRow(row);
+                return target;
+                //ds.Tables.Add(target);
+            }
+            //else
+            //{
+            //    ds.Tables.Add(source.Copy());
+            //}
+            //}
+
+            return source;
+        }
     }
 #pragma warning restore 612, 618
 }

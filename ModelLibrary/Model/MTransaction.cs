@@ -17,7 +17,7 @@ using VAdvantage.SqlExec;
 using VAdvantage.Utility;
 using VAdvantage.DataBase;
 using VAdvantage.Logging;
-using Oracle.ManagedDataAccess.Client;
+
 using System.Data.SqlClient;
 
 namespace VAdvantage.Model

@@ -24,7 +24,7 @@ using VAdvantage.Utility;
 using System.Data;
 using System.IO;
 using VAdvantage.Logging;
-using Oracle.ManagedDataAccess.Client;
+
 using System.Data.SqlClient;
 using System.Net.Http.Headers;
 using com.sun.xml.@internal.bind.v2.schemagen.xmlschema;

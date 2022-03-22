@@ -23,6 +23,7 @@ using ViennaAdvantage.Model;
 using System.Web.Script.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using VISLogic.Model;
 
 namespace VIS.Controllers
 {

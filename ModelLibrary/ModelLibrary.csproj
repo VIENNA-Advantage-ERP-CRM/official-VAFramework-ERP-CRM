@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ModelLibrary</RootNamespace>
     <AssemblyName>ModelLibrary</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -41,20 +41,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CrystalDecisions.CrystalReports.Engine">
-      <HintPath>..\ViennaAdvantageWeb\Dll\CrystalDecisions.CrystalReports.Engine.dll</HintPath>
-    </Reference>
-    <Reference Include="CrystalDecisions.Shared">
-      <HintPath>..\ViennaAdvantageWeb\Dll\CrystalDecisions.Shared.dll</HintPath>
-    </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\ViennaAdvantageWeb\Dll\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
     <Reference Include="IKVM.OpenJDK.ClassLibrary">
       <HintPath>..\ViennaAdvantageWeb\Dll\IKVM.OpenJDK.ClassLibrary.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.Runtime">
-      <HintPath>..\ViennaAdvantageWeb\Dll\IKVM.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Interop.Excel">
       <HintPath>..\ViennaAdvantageWeb\Dll\Interop.Excel.dll</HintPath>
@@ -63,27 +51,11 @@
     <Reference Include="Mail">
       <HintPath>..\ViennaAdvantageWeb\Dll\Mail.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Mono.Security">
-      <HintPath>..\ViennaAdvantageWeb\Dll\Mono.Security.dll</HintPath>
-    </Reference>
-    <Reference Include="MySql.Data">
-      <HintPath>..\ViennaAdvantageWeb\Dll\MySql.Data.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Npgsql">
-      <HintPath>..\ViennaAdvantageWeb\Dll\Npgsql.dll</HintPath>
-    </Reference>
-    <Reference Include="Oracle.ManagedDataAccess, Version=4.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
-      <HintPath>..\packages\Oracle.ManagedDataAccess.19.6.0\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
-    </Reference>
-    <Reference Include="PdfSharp">
-      <HintPath>..\ViennaAdvantageWeb\Dll\PdfSharp.dll</HintPath>
     </Reference>
     <Reference Include="SecureEngineUtility">
       <HintPath>..\ViennaAdvantageWeb\Dll\SecureEngineUtility.dll</HintPath>
@@ -91,11 +63,8 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.DirectoryServices" />
-    <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Drawing.Design" />
-    <Reference Include="System.Messaging" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -149,10 +118,10 @@
     <Compile Include="Acct\Doc_Requisition.cs" />
     <Compile Include="Acct\Fact.cs" />
     <Compile Include="Acct\FactLine.cs" />
-    <Compile Include="AzureBlob\AzureBlobStorage.cs" />
     <Compile Include="BundleCollection\ModuleBundles.cs" />
     <Compile Include="Classes\AdvanceDocumentType.cs" />
     <Compile Include="Classes\BudgetCheck.cs" />
+    <Compile Include="Classes\CostingCheck.cs" />
     <Compile Include="Classes\MyModelValidator.cs" />
     <Compile Include="CM\CacheClearAll.cs" />
     <Compile Include="CM\CacheClearServer.cs" />
@@ -203,7 +172,6 @@
     <Compile Include="CRM\Process\SubscribeInterestArea.cs" />
     <Compile Include="CRM\Process\TransferOwnerShip.cs" />
     <Compile Include="CRM\Process\UpdateVersion.cs" />
-    <Compile Include="CrystalReport\BiReportEngine.cs" />
     <Compile Include="DataBase\DBFunctionCollection.cs" />
     <Compile Include="ImpExp\ExcelHelper.cs">
       <SubType>Code</SubType>
@@ -217,7 +185,6 @@
     <Compile Include="Interface\BankStatementLoaderInterface.cs" />
     <Compile Include="Interface\BankStatementMatcherInterface.cs" />
     <Compile Include="Interface\ReplenishInterface.cs" />
-    <Compile Include="Interface\ThreadInterface.cs" />
     <Compile Include="Interface\UserPricingInterface.cs" />
     <Compile Include="Interface\AccountingInterface.cs" />
     <Compile Include="Model\ListBoxVO.cs" />
@@ -258,7 +225,6 @@
     <Compile Include="Model\MRegion.cs" />
     <Compile Include="Model\MSalesRegion.cs" />
     <Compile Include="ModelAD\MSetup.cs" />
-    <Compile Include="Model\MTable.cs" />
     <Compile Include="Model\MWarehouse.cs" />
     <Compile Include="Model\UserPricingInterface.cs" />
     <Compile Include="Model\AcctViewerData.cs" />
@@ -411,7 +377,6 @@
     <Compile Include="Model\MLineDimension.cs" />
     <Compile Include="Model\MLot.cs" />
     <Compile Include="Model\MLotCtl.cs" />
-    <Compile Include="Model\MMailMsg.cs" />
     <Compile Include="Model\MManufacturer.cs" />
     <Compile Include="Model\MMasterForecast.cs" />
     <Compile Include="Model\MMasterForecastLineDetails.cs" />
@@ -817,11 +782,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="Service References\CloudService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="System\class1.cs" />
     <Compile Include="TimeExpense\Process\CreateAPInvoice.cs" />
     <Compile Include="TimeExpense\Process\CreateARInvoice.cs" />
@@ -853,65 +813,12 @@
     <None Include="Service References\AcctService\ModelLibrary.AcctService.TaxMgmt.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\CloudService\ModelLibrary.CloudService.AboutUs.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\CloudService\ModelLibrary.CloudService.AssetInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\CloudService\ModelLibrary.CloudService.AssetNotInUse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\CloudService\ModelLibrary.CloudService.BackupInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\CloudService\ModelLibrary.CloudService.CustomerPServerInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\CloudService\ModelLibrary.CloudService.DBInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\CloudService\ModelLibrary.CloudService.DBMigrationInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\CloudService\ModelLibrary.CloudService.DNSInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\CloudService\ModelLibrary.CloudService.DummyDBMigrationInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\CloudService\ModelLibrary.CloudService.DummyDBWithFTpInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\CloudService\ModelLibrary.CloudService.FTPInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\CloudService\ModelLibrary.CloudService.GetUnassignedIp.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\CloudService\ModelLibrary.CloudService.InCompleteDBInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\CloudService\ModelLibrary.CloudService.MigrationRecordAndServerInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\CloudService\ModelLibrary.CloudService.RequestedModuleInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\CloudService\ModelLibrary.CloudService.ServerAndFtpInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\CloudService\ModelLibrary.CloudService.ServerInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\CloudService\Service.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\AcctService\" />
-    <WCFMetadataStorage Include="Service References\CloudService\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\AcctService\AccountService.disco" />
@@ -928,24 +835,24 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Print\" />
-    <Folder Include="Server\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\CloudService\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\CloudService\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\CloudService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\CloudService\Service.disco" />
+    <ProjectReference Include="..\BaseLibrary\BaseLibrary.csproj">
+      <Project>{11b07f0b-50d9-44d4-b2e7-f9c3e6a00f1b}</Project>
+      <Name>BaseLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CoreLibrary\CoreLibrary.csproj">
+      <Project>{ed61579e-017f-478f-98a2-6432a9c59f41}</Project>
+      <Name>CoreLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VAModelAD\VAModelAD.csproj">
+      <Project>{ef955712-f147-4a6a-8d11-8fecc5fe3942}</Project>
+      <Name>VAModelAD</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XModel\XModel.csproj">
+      <Project>{7d3a626f-274d-4d29-87e3-272f0a33204b}</Project>
+      <Name>XModel</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

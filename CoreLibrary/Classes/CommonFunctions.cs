@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
+using VAdvantage.Utility;
 
 namespace VAdvantage.Classes
 {
@@ -212,6 +214,67 @@ namespace VAdvantage.Classes
         public const char YES = '1';
         public const char NO = '0';
 
+        private static string _machineIP = "";
 
+        /// <summary>
+        /// Function to return Machine IP and Port from where link is running
+        /// </summary>
+        /// <returns>string of Machine IP and Port</returns>
+        public static string GetMachineIPPort()
+        {
+            if (_machineIP != "")
+                return _machineIP;
+            string hostName = Environment.MachineName; // System.Net.Dns.GetHostName();
+
+            var host = System.Net.Dns.GetHostEntry(hostName);
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                {
+                    _machineIP = ip.ToString();
+                    break;
+                }
+            }
+            int port = HttpContext.Current.Request.Url.Port;
+            if (port != 80)
+                _machineIP = _machineIP + ":" + port.ToString();
+            return _machineIP;
+        }
+
+        /// <summary>
+        /// Adds specified number of value to current datetime
+        /// </summary>
+        /// <param name="duration">integer number from CommonFuctions.Calendar enum</param>
+        /// <param name="time"></param>
+        /// <returns>new date</returns>
+        /// <author>Veena</author>
+        public static DateTime AddDate(int duration, object time)
+        {
+            if (duration == EnvConstants.DayOfYear)
+            {
+                return DateTime.Now.AddDays(Convert.ToDouble(time));
+            }
+            else if (duration == EnvConstants.Month)
+            {
+                return DateTime.Now.AddMonths(Utility.Util.GetValueOfInt(time.ToString()));
+            }
+            else if (duration == EnvConstants.Hour)
+            {
+                return DateTime.Now.AddHours(Convert.ToDouble(time));
+            }
+            else if (duration == EnvConstants.Minute)
+            {
+                return DateTime.Now.AddMinutes(Convert.ToDouble(time));
+            }
+            else if (duration == EnvConstants.Second)
+            {
+                return DateTime.Now.AddSeconds(Convert.ToDouble(time));
+            }
+            else if (duration == EnvConstants.Year)
+            {
+                return DateTime.Now.AddYears(Utility.Util.GetValueOfInt(time.ToString()));
+            }
+            return DateTime.Now;
+        }
     }
 }
