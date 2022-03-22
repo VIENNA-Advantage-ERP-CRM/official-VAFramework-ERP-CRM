@@ -262,6 +262,34 @@ namespace VAdvantage.Process
                 session.QueryLog(GetAD_Client_ID(), GetAD_Org_ID(), X_M_Product_BOM.Table_ID, sql, 1);
             }
 
+            sql = "UPDATE M_BOM  x " + set;
+            no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
+            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "M_BOM_ID"));
+            // maintain query log
+            if (no > 0)
+            {
+                session.QueryLog(GetAD_Client_ID(), GetAD_Org_ID(), X_M_BOM.Table_ID, sql, 1);
+            }
+
+            sql = "UPDATE M_BOMProduct x SET AD_Org_ID = " + _AD_Org_ID +
+                  " WHERE AD_Client_ID=" + GetAD_Client_ID() + " AND AD_Org_ID<>" + _AD_Org_ID;
+            if (_M_Product_Category_ID > 0)
+            {
+                sql += @" AND M_BOM_ID IN  (SELECT M_BOM_ID FROM M_BOM WHERE M_Product_ID IN (SELECT M_Product_ID FROM M_Product p
+                         WHERE p.M_Product_Category_ID=" + _M_Product_Category_ID + "))";
+            }
+            else
+            {
+                sql += " AND M_BOM_ID IN (SELECT M_BOM_ID FROM M_BOM WHERE M_Product_ID = " + _M_Product_ID + ")";
+            }
+            no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
+            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "M_BOMProduct_ID"));
+            // maintain query log
+            if (no > 0)
+            {
+                session.QueryLog(GetAD_Client_ID(), GetAD_Org_ID(), X_M_BOMProduct.Table_ID, sql, 1);
+            }
+
             //	PO
             sql = "UPDATE M_Product_PO x " + set;
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
@@ -477,7 +505,17 @@ namespace VAdvantage.Process
             }
 
             // VIS_0045: 11-03-22 -> BP Access
-            sql = "UPDATE AD_UserBPAccess x " + set;
+            sql = "UPDATE AD_UserBPAccess x SET AD_Org_ID=" + _AD_Org_ID +
+                   @" WHERE AD_Client_ID=" + GetAD_Client_ID() + " AND AD_Org_ID<>" + _AD_Org_ID;
+            if (_C_BP_Group_ID > 0)
+            {
+                sql += @" AND AD_User_ID IN (SELECT AD_User_ID FROM AD_User WHERE C_BPartner_ID IN (
+                            (SELECT C_BPartner_ID FROM C_BPartner bp WHERE bp.C_BP_Group_ID=" + _C_BP_Group_ID + "))";
+            }
+            else
+            {
+                sql += " AND AD_User_ID IN (SELECT AD_User_ID FROM AD_User WHERE C_BPartner_ID=" + _C_BPartner_ID + ")";
+            }
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "AD_UserBPAccess_ID"));
             // maintain query log
@@ -503,7 +541,7 @@ namespace VAdvantage.Process
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 0)
             {
-                log.Fine("generalOwnership - R_ContactInterest=" + no);                
+                log.Fine("generalOwnership - R_ContactInterest=" + no);
             }
             // maintain query log
             if (no > 0)
