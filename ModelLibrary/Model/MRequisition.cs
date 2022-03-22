@@ -1012,24 +1012,41 @@ namespace VAdvantage.Model
                     {
                         line.SetQtyReserved(Env.ZERO);
                     }
+
+                    // VIS0060: Remove Sales Order Line reference from Requisition Line in case of Void.
+                    line.Set_Value("Ref_OrderLine_ID", null);
+
+                    // VIS0060: Remove Production Order reference from Requisition Line in case of Void.
+                    if (Env.IsModuleInstalled("VAMFG_"))
+                    {
+                        line.Set_Value("VAMFG_M_WorkOrderComponent_ID", null);
+                        line.Set_Value("VAMFG_M_WorkOrder_ID", null);
+                    }
                     line.SetLineNetAmt(Env.ZERO);
                     if (!line.Save())
                     {
                         _processMsg = Msg.GetMsg(GetCtx(), "ReqLineNotSaved");
                         return false;
-                    }                    
+                    }
                 }
+
+                // VIS0060: Remove Requisition Line reference from Sales Order line in case of void.
+                DB.ExecuteQuery(@"UPDATE C_OrderLine SET M_RequisitionLine_ID = NULL WHERE M_RequisitionLine_ID IN (SELECT M_RequisitionLine_ID 
+                            FROM M_RequisitionLine WHERE M_Requisition_ID = " + GetM_Requisition_ID() + ")", null, Get_TrxName());
 
                 SetProcessed(true);
                 SetDocAction(DOCACTION_None);
                 log.Info("voidIt - " + ToString());
                 return true;
             }
-
+            if (!CloseIt())
+            {
+                return false;
+            }
             SetProcessed(true);
             SetDocAction(DOCACTION_None);
             log.Info("voidIt - " + ToString());
-            return CloseIt();
+            return true;
         }
 
         /**
@@ -1044,7 +1061,7 @@ namespace VAdvantage.Model
                 log.Info("closeIt - " + ToString());
                 //	Close Not delivered Qty
                 MRequisitionLine[] lines = GetLines();
-                
+
                 //If there Reserved Qty on Requisition line, system should not allow to close the record.
                 if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(M_RequisitionLine_ID) FROM M_RequisitionLine WHERE M_Requisition_ID =" + GetM_Requisition_ID()
                     + " AND DTD001_ReservedQty > 0", null, Get_TrxName())) > 0)
@@ -1138,8 +1155,32 @@ namespace VAdvantage.Model
                         line.SetDescription(description);
                         line.SetUnProcessQty(unprocessQty);
                         line.SetLineNetAmt(Decimal.Multiply(line.GetDTD001_DeliveredQty(), line.GetPriceActual()));
-                        line.Save();
+
+                        // VIS0060: Remove Sales Order Line reference from Requisition Line in case of Void.
+                        if (GetDocAction().Equals(DOCACTION_Void))
+                        {
+                            line.Set_Value("Ref_OrderLine_ID", null);
+
+                            // VIS0060: Remove Production Order reference from Requisition Line in case of Void.
+                            if (Env.IsModuleInstalled("VAMFG_"))
+                            {
+                                line.Set_Value("VAMFG_M_WorkOrderComponent_ID", null);
+                                line.Set_Value("VAMFG_M_WorkOrder_ID", null);
+                            }
+                        }
+                        if (!line.Save())
+                        {
+                            _processMsg = Msg.GetMsg(GetCtx(), "ReqLineNotSaved");
+                            return false;
+                        }
                     }
+                }
+
+                // VIS0060: Remove Requisition Line reference from Sales Order line in case of void.
+                if (GetDocAction().Equals(DOCACTION_Void))
+                {
+                    DB.ExecuteQuery(@"UPDATE C_OrderLine SET M_RequisitionLine_ID = NULL WHERE M_RequisitionLine_ID IN (SELECT M_RequisitionLine_ID 
+                            FROM M_RequisitionLine WHERE M_Requisition_ID = " + GetM_Requisition_ID() + ")", null, Get_TrxName());
                 }
             }
             catch (Exception ex)

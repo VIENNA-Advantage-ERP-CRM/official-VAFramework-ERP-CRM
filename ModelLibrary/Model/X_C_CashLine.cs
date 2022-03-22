@@ -275,52 +275,29 @@ namespace VAdvantage.Model
         }
 
         /** CashType AD_Reference_ID=217 */
-        public static int CASHTYPE_AD_Reference_ID = 217;
-        /** Cash Book Transfer = A */
-        public static String CASHTYPE_CashBookTransfer = "A";
-        /** Business Partner = B */
-        public static String CASHTYPE_BusinessPartner = "B";
-        /** Charge = C */
-        public static String CASHTYPE_Charge = "C";
-        /** Difference = D */
-        public static String CASHTYPE_Difference = "D";
-        /** General Expense = E */
-        public static String CASHTYPE_GeneralExpense = "E";
-        /** Cash Recieved From = F */
-        public static String CASHTYPE_CashRecievedFrom = "F";
-        /** Invoice = I */
-        public static String CASHTYPE_Invoice = "I";
-        /** General Receipts = R */
-        public static String CASHTYPE_GeneralReceipts = "R";
-        /** Bank Account Transfer = T */
-        public static String CASHTYPE_BankAccountTransfer = "T";
-        /** Is test a valid value.
-        @param test testvalue
-        @returns true if valid **/
-        public bool IsCashTypeValid(String test)
-        {
-            return test.Equals("A") || test.Equals("B") || test.Equals("C") || test.Equals("D") || test.Equals("E") || test.Equals("F") || test.Equals("I") || test.Equals("R") || test.Equals("T");
-        }
-        /** Set Cash Type.
-        @param CashType Source of Cash */
+        public static int CASHTYPE_AD_Reference_ID = 217;/** Cash Book Transfer = A */
+        public static String CASHTYPE_CashBookTransfer = "A";/** Business Partner = B */
+        public static String CASHTYPE_BusinessPartner = "B";/** Charge = C */
+        public static String CASHTYPE_Charge = "C";/** Difference = D */
+        public static String CASHTYPE_Difference = "D";/** General Expense = E */
+        public static String CASHTYPE_GeneralExpense = "E";/** Cash Recieved From = F */
+        public static String CASHTYPE_CashRecievedFrom = "F";/** Invoice = I */
+        public static String CASHTYPE_Invoice = "I";/** Order = O */
+        public static String CASHTYPE_Order = "O";/** General Receipts = R */
+        public static String CASHTYPE_GeneralReceipts = "R";/** Bank Account Transfer = T */
+        public static String CASHTYPE_BankAccountTransfer = "T";/** Is test a valid value.
+@param test testvalue
+@returns true if valid **/
+        public bool IsCashTypeValid(String test) { return test.Equals("A") || test.Equals("B") || test.Equals("C") || test.Equals("D") || test.Equals("E") || test.Equals("F") || test.Equals("I") || test.Equals("O") || test.Equals("R") || test.Equals("T"); }/** Set Cash Type.
+@param CashType Source of Cash */
         public void SetCashType(String CashType)
         {
-            if (CashType == null) throw new ArgumentException("CashType is mandatory");
-            if (!IsCashTypeValid(CashType))
-                throw new ArgumentException("CashType Invalid value - " + CashType + " - Reference_ID=217 - A - B - C - D - E - F - I - R - T");
-            if (CashType.Length > 1)
-            {
-                log.Warning("Length > 1 - truncated");
-                CashType = CashType.Substring(0, 1);
-            }
+            if (CashType == null) throw new ArgumentException("CashType is mandatory"); if (!IsCashTypeValid(CashType))
+                throw new ArgumentException("CashType Invalid value - " + CashType + " - Reference_ID=217 - A - B - C - D - E - F - I - O - R - T"); if (CashType.Length > 1) { log.Warning("Length > 1 - truncated"); CashType = CashType.Substring(0, 1); }
             Set_ValueNoCheck("CashType", CashType);
-        }
-        /** Get Cash Type.
-        @return Source of Cash */
-        public String GetCashType()
-        {
-            return (String)Get_Value("CashType");
-        }
+        }/** Get Cash Type.
+@return Source of Cash */
+        public String GetCashType() { return (String)Get_Value("CashType"); }
         /** Set Description.
         @param Description Optional short description of the record */
         public void SetDescription(String Description)
@@ -463,9 +440,9 @@ namespace VAdvantage.Model
         public static String VSS_PAYMENTTYPE_Receipt = "R";
 
         /* Payment Return = A */
-         public static String VSS_PAYMENTTYPE_PaymentReturn = "A";
-         /* Receipt Return = E */
-         public static String VSS_PAYMENTTYPE_ReceiptReturn = "E";																  
+        public static String VSS_PAYMENTTYPE_PaymentReturn = "A";
+        /* Receipt Return = E */
+        public static String VSS_PAYMENTTYPE_ReceiptReturn = "E";
         /** Is test a valid value.
         @param test testvalue
         @returns true if valid **/
@@ -965,7 +942,29 @@ namespace VAdvantage.Model
                 return "Y".Equals(oo);
             }
             return false;
-        }
+        }/** Set Order.
+@param C_Order_ID Sales Order */
+        public void SetC_Order_ID(int C_Order_ID)
+        {
+            if (C_Order_ID <= 0) Set_Value("C_Order_ID", null);
+            else
+                Set_Value("C_Order_ID", C_Order_ID);
+        }/** Get Order.
+@return Sales Order */
+        public int GetC_Order_ID() { Object ii = Get_Value("C_Order_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Order Payment Schedule.
+@param VA009_OrderPaySchedule_ID Order Payment Schedule */
+        public void SetVA009_OrderPaySchedule_ID(int VA009_OrderPaySchedule_ID)
+        {
+            if (VA009_OrderPaySchedule_ID <= 0) Set_Value("VA009_OrderPaySchedule_ID", null);
+            else
+                Set_Value("VA009_OrderPaySchedule_ID", VA009_OrderPaySchedule_ID);
+        }/** Get Order Payment Schedule.
+@return Order Payment Schedule */
+        public int GetVA009_OrderPaySchedule_ID() { Object ii = Get_Value("VA009_OrderPaySchedule_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Prepayment.
+@param IsPrepayment The Payment/Receipt is a Prepayment */
+        public void SetIsPrepayment(Boolean IsPrepayment) { Set_Value("IsPrepayment", IsPrepayment); }/** Get Prepayment.
+@return The Payment/Receipt is a Prepayment */
+        public Boolean IsPrepayment() { Object oo = Get_Value("IsPrepayment"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
 
     }
 

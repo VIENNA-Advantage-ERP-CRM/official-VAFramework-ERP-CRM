@@ -1056,8 +1056,11 @@ namespace VAdvantage.Model
             CheckChange(ra, "DateStartPlan");
             CheckChange(ra, "DateCompletePlan");
             //new filed result added in list if anyone change/add anything in result email will send to user
-            CheckChange(ra, "Result");
-            
+            if(CheckChange(ra, "Result"))
+            {
+                sendInfo.Add("Result");
+            }
+
             if (_changed)
             {
                 if (sendInfo.Count > 0)
@@ -1818,11 +1821,13 @@ namespace VAdvantage.Model
                         continue;
                     userList.Add(ii);
 
-                    // check the user roles for organization access.
+                    // check the user roles for organization access.                    
                     MUser user = new MUser(GetCtx(), AD_User_ID, null);
-                    MRole[] role = user.GetRoles(GetAD_Org_ID());
-                    if (role.Length == 0)
-                        continue;
+
+                    // VIS0060: Commented after discussion with Mukesh and Mohit, as there will be no role of requested User.
+                    //MRole[] role = user.GetRoles(GetAD_Org_ID());
+                    //if (role.Length == 0)
+                    //    continue;
 
 
                     //
