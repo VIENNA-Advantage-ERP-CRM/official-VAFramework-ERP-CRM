@@ -288,6 +288,8 @@
     <Compile Include="ProcessEngine\ProcessParameter.cs" />
     <Compile Include="ProcessEngine\SvrProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PushNotif\PushNotification.cs" />
+    <Compile Include="PushNotif\SSEManager.cs" />
     <Compile Include="Reflection\GetTypes.cs" />
     <Compile Include="Report\ReportFormatEngine.cs" />
     <Compile Include="Utility\CleanUp.cs" />

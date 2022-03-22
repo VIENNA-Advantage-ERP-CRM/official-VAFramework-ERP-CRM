@@ -41,7 +41,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\DocumentAction.cs" />
+    <Compile Include="Classes\EmailSingleton.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WF\DocWorkflowManager.cs" />
+    <Compile Include="WF\MWFActivity.cs" />
+    <Compile Include="WF\MWFBlock.cs" />
+    <Compile Include="WF\MWFEventAudit.cs" />
+    <Compile Include="WF\MWFNextCondition.cs" />
+    <Compile Include="WF\MWFNode.cs" />
+    <Compile Include="WF\MWFNodeNext.cs" />
+    <Compile Include="WF\MWFNodePara.cs" />
+    <Compile Include="WF\MWFProcess.cs" />
+    <Compile Include="WF\MWFResponsible.cs" />
+    <Compile Include="WF\MWorkflow.cs" />
+    <Compile Include="WF\MWorkflowAccess.cs" />
+    <Compile Include="WF\MWorkflowProcessor.cs" />
+    <Compile Include="WF\MWorkflowProcessorLog.cs" />
+    <Compile Include="WF\WFActivityManage.cs" />
+    <Compile Include="WF\WFProcessManage.cs" />
+    <Compile Include="WF\WorkflowMoveToClient.cs" />
+    <Compile Include="WF\WorkflowValidate.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

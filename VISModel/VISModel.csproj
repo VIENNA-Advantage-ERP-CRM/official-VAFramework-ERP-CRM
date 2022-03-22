@@ -41,6 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\AttachmentHelper.cs" />
+    <Compile Include="Classes\CardViewInfo.cs" />
+    <Compile Include="Classes\CommonFunction.cs" />
+    <Compile Include="Classes\ContactsInfo.cs" />
+    <Compile Include="Classes\CostingCheck.cs" />
+    <Compile Include="Classes\GetMessage.cs" />
+    <Compile Include="Classes\ManageSkippedWF.cs" />
+    <Compile Include="Classes\PeriodicJob.cs" />
+    <Compile Include="Classes\ThreadInstance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

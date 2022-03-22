@@ -9,44 +9,20 @@ namespace VAdvantage
 {
     public class ModuleBundles
     {
-        //static ScriptBundle modScript = null;
-        //static StyleBundle modStyle = null;
-
-        static SortedDictionary<int, Dictionary<string, ScriptBundle>> modScriptList = new SortedDictionary<int, Dictionary<string, ScriptBundle>>();
-        static SortedDictionary<int, Dictionary<string, StyleBundle>> modStyleList = new SortedDictionary<int, Dictionary<string, StyleBundle>>();
-        static SortedDictionary<int, Dictionary<string, StyleBundle>> modRTLStyleList = new SortedDictionary<int, Dictionary<string, StyleBundle>>();
 
         public static List<ScriptBundle> GetScriptBundles()
         {
-            var lst = new List<ScriptBundle>();
-
-            foreach (var o in modScriptList)
-            {
-                lst.AddRange(o.Value.Values);
-            }
-            return lst;
+            return VAModelAD.ModuleBundles.GetScriptBundles();
         }
 
         public static List<StyleBundle> GetStyleBundles()
         {
-            var lst = new List<StyleBundle>();
-
-            foreach (var o in modStyleList)
-            {
-                lst.AddRange(o.Value.Values);
-            }
-            return lst;
+            return VAModelAD.ModuleBundles.GetStyleBundles();
         }
 
         public static List<StyleBundle> GetRTLStyleBundles()
         {
-            var lst = new List<StyleBundle>();
-
-            foreach (var o in modRTLStyleList)
-            {
-                lst.AddRange(o.Value.Values);
-            }
-            return lst;
+            return VAModelAD.ModuleBundles.GetRTLStyleBundles();
         }
 
         /// <summary>
@@ -60,34 +36,7 @@ namespace VAdvantage
         /// <param name="order">higher value late loading </param>
         public static void RegisterScriptBundle(ScriptBundle modScript, string prefix, int order = 1)
         {
-            if (order == int.MaxValue)
-            {
-                order--;
-            }
-
-            if (order < 0 && !prefix.Equals("VIS"))
-            {
-                order = 0;
-            }
-
-            if (prefix.Equals("ViennaAdvantage"))
-            {
-                order = int.MaxValue;
-            }
-
-
-            if (modScriptList.ContainsKey(order))
-            {
-                var lst = modScriptList[order];
-                lst[prefix] = modScript;
-            }
-            else
-            {
-                var lst = new Dictionary<string, ScriptBundle>();
-                lst[prefix] = modScript;
-                modScriptList[order] = lst;
-
-            }
+            VAModelAD.ModuleBundles.RegisterScriptBundle(modScript, prefix, order);
         }
 
         /// <summary>
@@ -101,66 +50,12 @@ namespace VAdvantage
         /// <param name="order">higher value late loading </param>
         public static void RegisterStyleBundle(StyleBundle styleBundle, string prefix, int order)
         {
-            if (order == int.MaxValue)
-            {
-                order--;
-            }
-            if (order < 0 && !prefix.Equals("VIS"))
-            {
-                order = 0;
-            }
-
-            if (prefix.Equals("ViennaAdvantage"))
-            {
-                order = int.MaxValue;
-            }
-            if (modStyleList.ContainsKey(order))
-            {
-                var lst = modStyleList[order];
-                lst[prefix] = styleBundle;
-            }
-            else
-            {
-                var lst = new Dictionary<string, StyleBundle>();
-                lst[prefix] = styleBundle;
-                modStyleList[order] = lst;
-            }
+            VAModelAD.ModuleBundles.RegisterStyleBundle(styleBundle, prefix, order);
         }
 
         public static void RegisterRTLStyleBundle(StyleBundle styleBundle, string prefix, int order)
         {
-            if (order == int.MaxValue)
-            {
-                order--;
-            }
-            if (order < 0 && !prefix.Equals("VIS"))
-            {
-                order = 0;
-            }
-
-            if (prefix.Equals("ViennaAdvantage"))
-            {
-                order = int.MaxValue;
-            }
-            if (modRTLStyleList.ContainsKey(order))
-            {
-                var lst = modRTLStyleList[order];
-                lst[prefix] = styleBundle;
-            }
-            else
-            {
-                var lst = new Dictionary<string, StyleBundle>();
-                lst[prefix] = styleBundle;
-                modRTLStyleList[order] = lst;
-            }
-        }
-    }
-
-    public class CustomBundleOrderer : IBundleOrderer
-    {
-        public IEnumerable<BundleFile> OrderFiles(BundleContext context, IEnumerable<BundleFile> files)
-        {
-            return files;
+            VAModelAD.ModuleBundles.RegisterRTLStyleBundle(styleBundle, prefix, order);
         }
     }
 }
