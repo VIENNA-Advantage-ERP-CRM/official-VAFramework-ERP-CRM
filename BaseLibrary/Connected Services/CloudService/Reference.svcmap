@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="d155d68b-6ba6-4cba-a98c-610c72b49835" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
-    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
-    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <GenerateAsynchronousMethods>true</GenerateAsynchronousMethods>
     <EnableDataBinding>true</EnableDataBinding>
     <ExcludedTypes />
     <ImportXmlTypes>false</ImportXmlTypes>
@@ -21,11 +20,11 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://sbcloudservice.softwareonthecloud.com/service.asmx" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://cloudservice.softwareonthecloud.com/service.asmx" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="ef704a47-bd2a-41b3-ad98-5a1670de00e0" SourceId="1" SourceUrl="http://sbcloudservice.softwareonthecloud.com/service.asmx?wsdl" />
-    <MetadataFile FileName="service.disco" MetadataType="Disco" ID="5dc76467-a428-4eaa-9f22-709c376ddda5" SourceId="1" SourceUrl="http://sbcloudservice.softwareonthecloud.com/service.asmx?disco" />
+    <MetadataFile FileName="service1.wsdl" MetadataType="Wsdl" ID="0f9149e0-e256-4df7-9702-57b57483ce3b" SourceId="1" SourceUrl="http://cloudservice.softwareonthecloud.com/service.asmx?wsdl" />
+    <MetadataFile FileName="service1.disco" MetadataType="Disco" ID="c00bb967-cbb2-4828-99fb-66efc60ef155" SourceId="1" SourceUrl="http://cloudservice.softwareonthecloud.com/service.asmx?disco" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

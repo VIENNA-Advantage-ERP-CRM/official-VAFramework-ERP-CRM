@@ -17,7 +17,7 @@ using VAdvantage.Print;
 using VAdvantage.Classes;
 using Oracle.ManagedDataAccess.Client;
 using CrystalDecisions.Shared;
-using VAdvantage.Report;
+using VAModelAD.DataBase;
 
 namespace VAdvantage.CrystalReport
 {
@@ -45,8 +45,8 @@ namespace VAdvantage.CrystalReport
         public byte[] GenerateCrystalReport()
         {
 
-            string reportPath = System.IO.Path.Combine(GlobalVariable.PhysicalPath, "CReports\\Reports");
-            string reportImagePath = System.IO.Path.Combine(GlobalVariable.PhysicalPath, "");
+            string reportPath = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "CReports\\Reports");
+            string reportImagePath = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "");
 
             string[] reportNameArray;
             string[] reportPathArray;
@@ -938,7 +938,7 @@ namespace VAdvantage.CrystalReport
                     bytes = null;
                 }
 
-                string FILE_PATH = GlobalVariable.PhysicalPath + "TempDownload";
+                string FILE_PATH = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + "TempDownload";
 
                 if (!Directory.Exists(FILE_PATH))
                     Directory.CreateDirectory(FILE_PATH);
@@ -984,8 +984,8 @@ namespace VAdvantage.CrystalReport
         {
             ReportDocument rptBurndown = null;
 
-            string reportPath = System.IO.Path.Combine(GlobalVariable.PhysicalPath, "CReports\\Reports");
-            string reportImagePath = System.IO.Path.Combine(GlobalVariable.PhysicalPath, "");
+            string reportPath = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "CReports\\Reports");
+            string reportImagePath = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "");
 
             string[] reportNameArray;
             string[] reportPathArray;
@@ -1568,7 +1568,7 @@ namespace VAdvantage.CrystalReport
                     string Name = col.GetColumnName();
                     if (sql.Contains(Name) && !MRole.GetDefault(_ctx).IsColumnAccess(col.GetAD_Table_ID(), col.GetAD_Column_ID(), false))
                     {
-                        string obscureColumn = DBFunctionCollection.GetObscureColumn(col.GetObscureType(), tableName, Name) + " as " + Name;
+                        string obscureColumn = DBFunctionCollections.GetObscureColumn(col.GetObscureType(), tableName, Name) + " as " + Name;
                         sql = sql.Replace(Name, obscureColumn);
                     }
                 }

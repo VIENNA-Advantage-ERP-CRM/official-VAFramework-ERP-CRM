@@ -541,7 +541,7 @@ namespace VAdvantage.Process
             MColumn column = new MColumn(GetCtx(), AD_Column_ID, _trx);
             int noColumns = 0;
             // sync table in database
-            string sql = CommonFunctions.SyncColumn(table, column, out noColumns);
+            string sql = VAdvantage.Common.Common.SyncColumn(table, column, out noColumns);
             string exception = "";
             int no = 0;
             if (sql.IndexOf(";") == -1)

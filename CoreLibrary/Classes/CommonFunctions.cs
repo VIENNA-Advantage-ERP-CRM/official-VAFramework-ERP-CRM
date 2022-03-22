@@ -212,5 +212,6 @@ namespace VAdvantage.Classes
         public const char YES = '1';
         public const char NO = '0';
 
+
     }
 }

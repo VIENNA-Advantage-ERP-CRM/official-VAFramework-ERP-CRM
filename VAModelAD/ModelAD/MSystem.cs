@@ -22,7 +22,6 @@ using VAdvantage.Utility;
 using System.Data;
 using VAdvantage.Logging;
 using System.Data.SqlClient;
-using VAdvantage.Acct;
 
 namespace VAdvantage.Model
 {

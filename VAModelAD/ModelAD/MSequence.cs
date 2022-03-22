@@ -567,6 +567,20 @@ namespace VAdvantage.Model
         /// <returns>document no or null</returns>
         /// 
 
+
+        private static CCache<int, X_C_DocType> s_doctypecache = new CCache<int, X_C_DocType>("AD_seq_doctype", 10);
+        private static X_C_DocType GetDocType(Ctx ctx, int C_DocType_ID)
+        {
+            int key = (int)C_DocType_ID;
+            X_C_DocType retValue = (X_C_DocType)s_doctypecache[key];
+            if (retValue == null)
+            {
+                retValue = new X_C_DocType(ctx, C_DocType_ID, null);
+                s_doctypecache.Add(key, retValue);
+            }
+            return retValue;
+        }
+
         public static String GetDocumentNo(int C_DocType_ID, Trx trxName, Ctx ctx, Boolean definite, PO po)
         {
             if (C_DocType_ID == 0)
@@ -575,7 +589,7 @@ namespace VAdvantage.Model
                 return null;
             }
 
-            MDocType dt = MDocType.Get(ctx, C_DocType_ID);	//	wrong for SERVER, but r/o
+            X_C_DocType dt = GetDocType(ctx, C_DocType_ID);	//	wrong for SERVER, but r/o
             if (dt != null && !dt.IsDocNoControlled())
             {
                 s_log.Finer("DocType_ID=" + C_DocType_ID + " Not DocNo controlled");
@@ -1360,7 +1374,7 @@ namespace VAdvantage.Model
                 s_log.Severe("C_DocType_ID=0");
                 return null;
             }
-            MDocType dt = MDocType.Get(ctx, C_DocType_ID);	//	wrong for SERVER, but r/o
+            X_C_DocType dt = GetDocType(ctx, C_DocType_ID);	//	wrong for SERVER, but r/o
             if (dt != null && !dt.IsDocNoControlled())
             {
                 s_log.Finer("DocType_ID=" + C_DocType_ID + " Not DocNo controlled");

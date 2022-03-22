@@ -23,6 +23,7 @@ using System.Threading;
 //using System.Data.OracleClient;
 using Oracle.ManagedDataAccess.Client;
 using System.Reflection;
+using VAModelAD.Model;
 
 namespace VAdvantage.Model
 {
@@ -124,7 +125,8 @@ namespace VAdvantage.Model
             string scheduleIP = null;
             try
             {
-                string machineIP = Classes.CommonFunctions.GetMachineIPPort();
+                //string machineIP = Classes.CommonFunctions.GetMachineIPPort();
+                string machineIP = System.Net.Dns.GetHostEntry(Environment.MachineName).AddressList[0].ToString();
                 s_log.SaveError("Console VServer Machine IP : " + machineIP, "Console VServer Machine IP : " + machineIP);
 
                 DataSet ds = DataBase.DB.ExecuteDataset(sql);

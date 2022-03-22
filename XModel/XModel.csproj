@@ -32,12 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BaseLibrary">
-      <HintPath>..\BaseLibrary\bin\Debug\BaseLibrary.dll</HintPath>
-    </Reference>
-    <Reference Include="CoreLibrary">
-      <HintPath>..\BaseLibrary\bin\Debug\CoreLibrary.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -803,6 +797,16 @@
     <Compile Include="Model\X_W_MailMsg.cs" />
     <Compile Include="Model\X_W_Store.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BaseLibrary\BaseLibrary.csproj">
+      <Project>{11b07f0b-50d9-44d4-b2e7-f9c3e6a00f1b}</Project>
+      <Name>BaseLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CoreLibrary\CoreLibrary.csproj">
+      <Project>{ed61579e-017f-478f-98a2-6432a9c59f41}</Project>
+      <Name>CoreLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

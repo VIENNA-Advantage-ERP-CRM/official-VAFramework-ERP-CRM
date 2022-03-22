@@ -224,17 +224,17 @@ namespace VAdvantage.Print
         public static ReportEngine_N StartCheckPrint(Ctx ctx, int C_Payment_ID, bool IsDirectPrint)
         {
             int C_PaySelectionCheck_ID = 0;
-            MPaySelectionCheck psc = MPaySelectionCheck.GetOfPayment(ctx, C_Payment_ID, null);
-            if (psc != null)
-            {
-                C_PaySelectionCheck_ID = psc.GetC_PaySelectionCheck_ID();
-            }
-            else
-            {
-                psc = MPaySelectionCheck.CreateForPayment(ctx, C_Payment_ID, null);
-                if (psc != null)
-                    C_PaySelectionCheck_ID = psc.GetC_PaySelectionCheck_ID();
-            }
+            //MPaySelectionCheck psc = MPaySelectionCheck.GetOfPayment(ctx, C_Payment_ID, null);
+            //if (psc != null)
+            //{
+            //    C_PaySelectionCheck_ID = psc.GetC_PaySelectionCheck_ID();
+            //}
+            //else
+            //{
+            //    psc = MPaySelectionCheck.CreateForPayment(ctx, C_Payment_ID, null);
+            //    if (psc != null)
+            //        C_PaySelectionCheck_ID = psc.GetC_PaySelectionCheck_ID();
+            //}
             return StartDocumentPrint(ctx, ReportEngine_N.CHECK, C_PaySelectionCheck_ID, IsDirectPrint);
         }	//	startCheckPrint
     }

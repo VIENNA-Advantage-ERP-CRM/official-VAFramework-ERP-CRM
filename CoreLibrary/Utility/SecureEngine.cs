@@ -113,7 +113,7 @@ namespace VAdvantage.Utility
         }
 
 
-        internal static string GetClassName()
+        public static string GetClassName()
         {
             return SecureEngineUtility.SecureEngine.GetClassName();
         }

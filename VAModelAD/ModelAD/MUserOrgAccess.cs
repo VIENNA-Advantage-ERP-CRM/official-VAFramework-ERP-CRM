@@ -121,7 +121,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="org">org</param>
         /// <param name="AD_User_ID"> role</param>
-        public MUserOrgAccess(MOrg org, int AD_User_ID)
+        public MUserOrgAccess(X_AD_Org org, int AD_User_ID)
             : this(org.GetCtx(), 0, org.Get_TrxName())
         {
             //this (org.GetCtx(), 0, org.Get_TrxName());

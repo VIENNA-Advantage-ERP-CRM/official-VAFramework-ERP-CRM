@@ -6,6 +6,7 @@ using VAdvantage.Model;
 using System.Drawing;
 using VAdvantage.Classes;
 using VAdvantage.Utility;
+using VAModelAD.Model;
 
 namespace VAdvantage.Print
 {
@@ -14,7 +15,7 @@ namespace VAdvantage.Print
         public LocationElement(Ctx ctx, int C_Location_ID, Font font, Color color) : base(10, 1)		//	max
         {
             SetGap(0, 0);
-            MLocation ml = MLocation.Get(ctx, C_Location_ID, null);
+            dynamic ml = MLocation.Get(ctx, C_Location_ID, null);
             //	log.fine("C_Location_ID=" + C_Location_ID);
             if (ml != null)
             {

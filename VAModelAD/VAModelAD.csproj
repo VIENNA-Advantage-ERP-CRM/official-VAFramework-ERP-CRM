@@ -9,9 +9,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>VAModelAD</RootNamespace>
     <AssemblyName>VAModelAD</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+    <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,24 +33,90 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ViennaAdvantageWeb\Dll\CrystalDecisions.CrystalReports.Engine.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ViennaAdvantageWeb\Dll\CrystalDecisions.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.Web, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ViennaAdvantageWeb\Dll\CrystalDecisions.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis">
+      <HintPath>..\ViennaAdvantageWeb\Dll\Google.Apis.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\ViennaAdvantageWeb\Dll\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.ClassLibrary">
+      <HintPath>..\ViennaAdvantageWeb\Dll\IKVM.OpenJDK.ClassLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.Runtime">
+      <HintPath>..\ViennaAdvantageWeb\Dll\IKVM.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.Excel">
+      <HintPath>..\ViennaAdvantageWeb\Dll\Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Program Files (x86)\Microsoft Visual Studio 11.0\Common7\IDE\PublicAssemblies\Microsoft.QualityTools.Testing.Fakes.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Security">
+      <HintPath>..\ViennaAdvantageWeb\Dll\Mono.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data">
+      <HintPath>..\ViennaAdvantageWeb\Dll\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.5.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Npgsql">
-      <HintPath>..\ViennaAdvantageWeb\Dll\Npgsql.dll</HintPath>
+      <HintPath>..\packages\Npgsql.6.0.3\lib\netstandard2.0\Npgsql.dll</HintPath>
     </Reference>
     <Reference Include="Oracle.ManagedDataAccess">
-      <HintPath>..\ViennaAdvantageWeb\Dll\Oracle.ManagedDataAccess.dll</HintPath>
+      <HintPath>..\packages\Oracle.ManagedDataAccess.21.5.0\lib\net462\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp">
+      <HintPath>..\ViennaAdvantageWeb\Dll\PdfSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Messaging" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WebGrease, Version=1.5.2.14234, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AzureBlob\AzureBlobStorage.cs" />
     <Compile Include="BundleCollection\ModuleBundles.cs" />
     <Compile Include="Classes\AEnv.cs" />
+    <Compile Include="Classes\CardViewInfo.cs" />
     <Compile Include="Classes\Evaluator.cs" />
     <Compile Include="Classes\LDAP.cs" />
     <Compile Include="Classes\ModelFactory.cs" />
@@ -71,6 +139,7 @@
     <Compile Include="Controller\GridWindowVO.cs" />
     <Compile Include="Controller\GridWorkbench.cs" />
     <Compile Include="Controller\HeaderPanelItemsVO.cs" />
+    <Compile Include="CrystalReport\BiReportEngine.cs" />
     <Compile Include="CrystalReport\CrystalParams.cs" />
     <Compile Include="CrystalReport\CrystalReportEngine.cs" />
     <Compile Include="DataBase\DBFunctionCollections.cs" />
@@ -131,6 +200,7 @@
     <Compile Include="ModelAD\MInfoWindow.cs" />
     <Compile Include="ModelAD\MLanguage.cs" />
     <Compile Include="ModelAD\MMailAttachment1.cs" />
+    <Compile Include="ModelAD\MMailMsg.cs" />
     <Compile Include="ModelAD\MMailText.cs" />
     <Compile Include="ModelAD\MMenu.cs" />
     <Compile Include="ModelAD\MMessage.cs" />
@@ -163,6 +233,7 @@
     <Compile Include="ModelAD\MSequence.cs" />
     <Compile Include="ModelAD\MSeries.cs" />
     <Compile Include="ModelAD\MSeriesFilter.cs" />
+    <Compile Include="ModelAD\MSysConfig.cs" />
     <Compile Include="ModelAD\MSystem.cs" />
     <Compile Include="ModelAD\MTab.cs" />
     <Compile Include="ModelAD\MTable.cs" />
@@ -288,12 +359,15 @@
     <Compile Include="ProcessEngine\ProcessParameter.cs" />
     <Compile Include="ProcessEngine\SvrProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PushNotif\PushNotification.cs" />
+    <Compile Include="PushNotif\SSEManager.cs" />
     <Compile Include="Reflection\GetTypes.cs" />
     <Compile Include="Report\ReportFormatEngine.cs" />
     <Compile Include="Utility\CleanUp.cs" />
     <Compile Include="Utility\EMail.cs" />
     <Compile Include="Utility\EmailMessageSerializable.cs" />
     <Compile Include="Utility\EmailMSMQ.cs" />
+    <Compile Include="Utility\ExternalWebMethod.cs" />
     <Compile Include="Utility\NativeDigitConverter.cs" />
     <Compile Include="Utility\Sms.cs" />
   </ItemGroup>
@@ -306,11 +380,22 @@
       <Project>{ed61579e-017f-478f-98a2-6432a9c59f41}</Project>
       <Name>CoreLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\VAPrintLib\VAPrintLib.csproj">
+      <Project>{cdd5abc0-66da-41ae-9a64-f28dee789262}</Project>
+      <Name>VAPrintLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\XModel\XModel.csproj">
       <Project>{7d3a626f-274d-4d29-87e3-272f0a33204b}</Project>
       <Name>XModel</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="Properties\DataSources\System.Data.DataSet.datasource" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

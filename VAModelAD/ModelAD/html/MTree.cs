@@ -20,6 +20,7 @@ using System.Windows.Forms;
 using VAdvantage.DataBase;
 using VAdvantage.Logging;
 using VAdvantage.Utility;
+using VAModelAD.Model;
 //using VAdvantage.StartMenu;
 
 
@@ -254,7 +255,7 @@ namespace VAdvantage.Model
         /// <param name="client">client</param>
         /// <param name="name">name</param>
         /// <param name="treeType">tree type</param>
-        public MTree(MClient client, String name, String treeType)
+        public MTree(X_AD_Client client, String name, String treeType)
             : this(client.GetCtx(), 0, client.Get_TrxName())
         {
             SetClientOrg(client);

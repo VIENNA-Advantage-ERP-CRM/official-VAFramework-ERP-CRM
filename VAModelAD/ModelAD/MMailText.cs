@@ -31,7 +31,7 @@ namespace VAdvantage.Model
         /**	Parse User			*/
         private MUser _user = null;
         /** Parse BPartner		*/
-        private MBPartner _bpartner = null;
+        private X_C_BPartner _bpartner = null;
         /** Parse PO			*/
         /**parse  Lookup column **/
         private POInfo _poInfo = null;
@@ -336,7 +336,8 @@ namespace VAdvantage.Model
             //Get lookup display column name for ID 
             if (_poInfo != null && _poInfo.getAD_Table_ID() == po.Get_Table_ID() && _poInfo.IsColumnLookup(index) && value != null)
             {
-                VLookUpInfo lookup = _poInfo.GetColumnLookupInfo(index); //create lookup info for column
+                //VLookUpInfo lookup = _poInfo.GetColumnLookupInfo(index); //create lookup info for column
+                VLookUpInfo lookup = Common.Common.GetColumnLookupInfo(GetCtx(), _poInfo.GetColumnInfo(index)); //create lookup info for column
                 DataSet ds = DB.ExecuteDataset(lookup.queryDirect.Replace("@key", DB.TO_STRING(value.ToString())), null); //Get Name from data
 
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -356,10 +357,10 @@ namespace VAdvantage.Model
 
         public void SetBPartner(int C_BPartner_ID)
         {
-            _bpartner = new MBPartner(GetCtx(), C_BPartner_ID, Get_TrxName());
+            _bpartner = new X_C_BPartner(GetCtx(), C_BPartner_ID, Get_TrxName());
         }
 
-        public void SetBPartner(MBPartner bpartner)
+        public void SetBPartner(X_C_BPartner bpartner)
         {
             _bpartner = bpartner;
         }

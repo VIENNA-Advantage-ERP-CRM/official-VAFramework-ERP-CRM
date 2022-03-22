@@ -131,7 +131,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="org">org</param>
         /// <param name="AD_Role_ID">role id</param>
-        public MRoleOrgAccess(MOrg org, int AD_Role_ID)
+        public MRoleOrgAccess(PO org, int AD_Role_ID)
             : this(org.GetCtx(), 0, org.Get_TrxName())
         {
             SetClientOrg(org);
@@ -156,7 +156,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="org">org</param>
         /// <returns>true if created</returns>
-        public static bool CreateForOrg(MOrg org)
+        public static bool CreateForOrg(PO org)
         {
             int counter = 0;
             MRole[] roles = MRole.GetOfClient(org.GetCtx());

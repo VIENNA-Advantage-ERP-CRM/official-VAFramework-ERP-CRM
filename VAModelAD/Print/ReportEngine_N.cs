@@ -30,6 +30,8 @@ using System.Reflection;
 using System.Drawing.Printing;
 using System.Windows.Forms;
 using VAdvantage.ProcessEngine;
+using VAModelAD.Model;
+
 namespace VAdvantage.Print
 {
 

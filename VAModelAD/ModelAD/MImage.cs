@@ -130,7 +130,7 @@ namespace VAdvantage.Model
             try
             {
                 //    Toolkit tk = Toolkit.getDefaultToolkit();
-                _image = Utility.Env.GetImageIcon(url);
+                _image = null;// Utility.Env.GetImageIcon(url);
 
 
                 //    m_image = tk.getImage(url);
@@ -355,16 +355,16 @@ namespace VAdvantage.Model
                 //OriginalImage = System.Drawing.Image.FromStream(ms);
                 if (height == 0 && width == 0)
                 {
-                    OriginalImage.Save(Path.Combine(GlobalVariable.PhysicalPath, "Images", imageName));
+                    OriginalImage.Save(Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "Images", imageName));
                     return;
                 }
-                if (!Directory.Exists((Path.Combine(GlobalVariable.PhysicalPath, "Images", "Thumb" + width.ToString() + "x" + height.ToString()))))
+                if (!Directory.Exists((Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "Images", "Thumb" + width.ToString() + "x" + height.ToString()))))
                 {
-                    Directory.CreateDirectory(Path.Combine(GlobalVariable.PhysicalPath, "Images", "Thumb" + width.ToString() + "x" + height.ToString()));       //Create Thumbnail Folder if doesnot exists
+                    Directory.CreateDirectory(Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "Images", "Thumb" + width.ToString() + "x" + height.ToString()));       //Create Thumbnail Folder if doesnot exists
                 }
                 // Shrink the Original Image to a thumbnail size.
                 int percenetage = 0;
-                string filepath = Path.Combine(GlobalVariable.PhysicalPath, "Images", "Thumb" + width.ToString() + "x" + height.ToString() + "/" + imageName);
+                string filepath = Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "Images", "Thumb" + width.ToString() + "x" + height.ToString() + "/" + imageName);
                 if (!(OriginalImage.Height < height && OriginalImage.Width < width))
                 {
                     if (OriginalImage.Height > OriginalImage.Width)
@@ -435,9 +435,9 @@ namespace VAdvantage.Model
             {
                 string filepath = "";
                 if (x == "0")
-                    filepath = Path.Combine(GlobalVariable.PhysicalPath, "Images", imageName);
+                    filepath = Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "Images", imageName);
                 else
-                    filepath = Path.Combine(GlobalVariable.PhysicalPath, "Images", "Thumb" + x + "x" + y + "/" + imageName);
+                    filepath = Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "Images", "Thumb" + x + "x" + y + "/" + imageName);
 
                 FileInfo file = new FileInfo(filepath);
                 if (file.Exists)
@@ -455,7 +455,7 @@ namespace VAdvantage.Model
             if (GetImageURL() != null)
             {
                 string imageName = GetImageURL().Substring(GetImageURL().LastIndexOf('/') + 1);
-                string url = Path.Combine(GlobalVariable.PhysicalPath, "Images", "Thumb" + height.ToString() + "x" + width.ToString() + "\\" + imageName);
+                string url = Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "Images", "Thumb" + height.ToString() + "x" + width.ToString() + "\\" + imageName);
                 if (File.Exists(url))
                 {
                     //  url = HostingEnvironment.ApplicationPhysicalPath.ToString().Substring(0, HostingEnvironment.ApplicationPhysicalPath.LastIndexOf("\\"));
@@ -478,11 +478,11 @@ namespace VAdvantage.Model
                 string url = string.Empty;
                 if (height == 0 && width == 0)
                 {
-                    url = Path.Combine(GlobalVariable.PhysicalPath, "Images", imageName);
+                    url = Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "Images", imageName);
                 }
                 else
                 {
-                    url = Path.Combine(GlobalVariable.PhysicalPath, "Images", "Thumb" + height.ToString() + "x" + width.ToString() + "\\" + imageName);
+                    url = Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "Images", "Thumb" + height.ToString() + "x" + width.ToString() + "\\" + imageName);
                 }
                 if (File.Exists(url))
                 {
@@ -528,11 +528,11 @@ namespace VAdvantage.Model
                 string url = string.Empty;
                 if (height == 0 && width == 0)
                 {
-                    url = Path.Combine(GlobalVariable.PhysicalPath, "Images", imageName);
+                    url = Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "Images", imageName);
                 }
                 else
                 {
-                    url = Path.Combine(GlobalVariable.PhysicalPath, "Images", "Thumb" + height.ToString() + "x" + width.ToString() + "\\" + imageName);
+                    url = Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "Images", "Thumb" + height.ToString() + "x" + width.ToString() + "\\" + imageName);
                 }
                 if (File.Exists(url))
                 {

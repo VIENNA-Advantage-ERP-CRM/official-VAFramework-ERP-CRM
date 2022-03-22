@@ -1624,7 +1624,7 @@ namespace VAdvantage.Model
 
                             else if (field.GetDisplayType() == DisplayType.TextLong)
                             {
-                                VAdvantage.Process.PO_LOB lob = new VAdvantage.Process.PO_LOB(_tableName, columnName, null,
+                                PO_LOB lob = new PO_LOB(_tableName, columnName, null,
                                                                 field.GetDisplayType(), colNewValue);
 
                                 LobAdd(lob);
@@ -1634,7 +1634,7 @@ namespace VAdvantage.Model
                             else if (field.GetDisplayType() == DisplayType.Binary
                                 || field.GetDisplayType() == DisplayType.Image)
                             {
-                                VAdvantage.Process.PO_LOB lob = new VAdvantage.Process.PO_LOB(_tableName, columnName, null,
+                                PO_LOB lob = new PO_LOB(_tableName, columnName, null,
                                                             field.GetDisplayType(), colNewValue);
                                 LobAdd(lob);
                                 type = "BLOB";
@@ -2130,11 +2130,11 @@ namespace VAdvantage.Model
         ///Prepare LOB save
         /// </summary>
         /// <param name="lob"></param>
-        private void LobAdd(VAdvantage.Process.PO_LOB lob)
+        private void LobAdd(PO_LOB lob)
         {
             //		log.fine("LOB=" + lob);
             if (_lobInfo == null)
-                _lobInfo = new List<VAdvantage.Process.PO_LOB>();
+                _lobInfo = new List<PO_LOB>();
             _lobInfo.Add(lob);
         }	//	lobAdd
 
@@ -2148,7 +2148,7 @@ namespace VAdvantage.Model
                 return;
             for (int i = 0; i < _lobInfo.Count; i++)
             {
-                VAdvantage.Process.PO_LOB lob = (VAdvantage.Process.PO_LOB)_lobInfo[i];
+                PO_LOB lob = (PO_LOB)_lobInfo[i];
                 lob.Save(whereClause, null);		//	no trx
             }	//	for all LOBs
             LobReset();
@@ -2784,7 +2784,7 @@ namespace VAdvantage.Model
         }
 
         /**	LOB Info				*/
-        private List<VAdvantage.Process.PO_LOB> _lobInfo = null;
+        private List<PO_LOB> _lobInfo = null;
 
         /// <summary>
         /// Reset Lob Info

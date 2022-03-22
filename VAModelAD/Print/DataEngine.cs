@@ -16,6 +16,7 @@ using VAdvantage.DataBase;
 using VAdvantage.Utility;
 using VAdvantage.Login;
 using VAdvantage.Logging;
+using VAModelAD.DataBase;
 
 namespace VAdvantage.Print
 {
@@ -513,7 +514,7 @@ namespace VAdvantage.Print
                             string obscureType = col.GetObscureType();
                             if (obscureType != null && obscureType.Length > 0 && !MRole.GetDefault(ctx).IsColumnAccess(col.GetAD_Table_ID(),AD_Column_ID,false))
                             {
-                                sb.Append(DBFunctionCollection.GetObscureColumn(obscureType, tableName, ColumnName)).Append(",");
+                                sb.Append(DBFunctionCollections.GetObscureColumn(obscureType, tableName, ColumnName)).Append(",");
                             }
                             else
                             {

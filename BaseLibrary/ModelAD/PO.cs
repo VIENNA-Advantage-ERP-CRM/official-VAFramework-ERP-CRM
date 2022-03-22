@@ -1042,6 +1042,22 @@ namespace VAdvantage.Model
         {
         }
 
+        public int GetAccessLevel()
+        {
+            return Get_AccessLevel();
+        }
+
+        public VLogger GetLog()
+        {
+            return log;
+        }
+
+        public string GetTableName()
+        {
+            return p_info.GetTableName();
+        }
+
+
         /// <summary>
         /// Load from the current position of a ResultSet
         /// </summary>
@@ -1233,10 +1249,10 @@ namespace VAdvantage.Model
         /// return column count
         /// </summary>
         /// <returns></returns>
-        protected int Get_ColumnCount()
-        {
-            return p_info.GetColumnCount();
-        }
+        //protected int Get_ColumnCount()
+        //{
+        //    return p_info.GetColumnCount();
+        //}
 
         /// <summary>
         /// Create Single/Multi Key (Included (DateTime and Boolean)) Where Clause
@@ -2950,17 +2966,28 @@ namespace VAdvantage.Model
         }
 
         /** Access Level S__ 100	4	System info			*/
-        private static int ACCESSLEVEL_SYSTEM = 4;
+        public const int ACCESSLEVEL_SYSTEM = 4;
         /** Access Level _C_ 010	2	Client info			*/
-        private static int ACCESSLEVEL_CLIENT = 2;
+        public const int ACCESSLEVEL_CLIENT = 2;
         /** Access Level __O 001	1	Organization info	*/
-        private static int ACCESSLEVEL_ORG = 1;
+        public const int ACCESSLEVEL_ORG = 1;
         /**	Access Level SCO 111	7	System shared info	*/
-        public static int ACCESSLEVEL_ALL = 7;
+        public const int ACCESSLEVEL_ALL = 7;
         /** Access Level SC_ 110	6	System/Client info	*/
-        private static int ACCESSLEVEL_SYSTEMCLIENT = 6;
+        public const int ACCESSLEVEL_SYSTEMCLIENT = 6;
         /** Access Level _CO 011	3	Client shared info	*/
-        private static int ACCESSLEVEL_CLIENTORG = 3;
+        public const int ACCESSLEVEL_CLIENTORG = 3;
+
+
+        /// <summary>
+        /// Get Column Count
+        /// return column count
+        /// </summary>
+        /// <returns></returns>
+        public int Get_ColumnCount()
+        {
+            return p_info.GetColumnCount();
+        }
 
         abstract protected int Get_AccessLevel();
 

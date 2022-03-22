@@ -211,15 +211,15 @@ namespace VAdvantage.Model
 
     
 
-        /// <summary>
-        /// function to check whether table has the key column
-        /// </summary>
-        /// <returns>true/false</returns>
-        public bool HasPKColumn()
-        {
-            GetColumns(false);
-            return isHasKeyColumn;
-        }
+        ///// <summary>
+        ///// function to check whether table has the key column
+        ///// </summary>
+        ///// <returns>true/false</returns>
+        //public bool HasPKColumn()
+        //{
+        //    GetColumns(false);
+        //    return isHasKeyColumn;
+        //}
 
 
        

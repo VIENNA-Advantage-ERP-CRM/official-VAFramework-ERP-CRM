@@ -407,7 +407,7 @@ namespace VAdvantage.Print
             //	translate base entry if single language - trigger copies to trl tables
 
             //Boolean trl = !Env.IsMultiLingualDocument(format.GetCtx()) && !GlobalVariable.IsBaseLanguage();
-            Boolean trl = !Env.IsMultiLingualDocument(format.GetCtx()) && !Language.IsBaseLanguage(Login.Language.GetBaseAD_Language());
+            Boolean trl = !Common.Common.IsMultiLingualDocument(format.GetCtx()) && !Language.IsBaseLanguage(Login.Language.GetBaseAD_Language());
             if (trl)
                 sql = "SELECT c.ColumnName,e.Name,e.PrintName, "		//	1..3
                     + "c.AD_Reference_ID,c.IsKey,c.SeqNo "				//	4..6
@@ -499,7 +499,7 @@ namespace VAdvantage.Print
             //	translate base entry if single language - trigger copies to trl tables
 
             //Boolean trl = !Env.IsMultiLingualDocument(format.GetCtx()) && !GlobalVariable.IsBaseLanguage();
-            Boolean trl = !Env.IsMultiLingualDocument(format.GetCtx()) && !Language.IsBaseLanguage(Login.Language.GetBaseAD_Language());
+            Boolean trl = !Common.Common.IsMultiLingualDocument(format.GetCtx()) && !Language.IsBaseLanguage(Login.Language.GetBaseAD_Language());
             if (trl)
                 sql = "SELECT c.ColumnName,e.Name,e.PrintName, "		//	1..3
                     + "c.AD_Reference_ID,c.IsKey,c.SeqNo , f.MRSeqNo,  f.MRIsDisplayed,f.IsDisplayed "				//	4..6

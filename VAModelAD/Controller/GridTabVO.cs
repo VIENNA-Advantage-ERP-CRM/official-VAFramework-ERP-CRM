@@ -14,6 +14,7 @@ using System.Data;
 using VAdvantage.Logging;
 using VAdvantage.Utility;
 using VAdvantage.Classes;
+using VAdvantage.Common;
 
 namespace VAdvantage.Controller
 {
@@ -365,14 +366,14 @@ namespace VAdvantage.Controller
                     //	Document Translation
                     vo.TableName = Utility.Util.GetValueOfString(dr["TableName"]);
                     if (!Env.IsBaseTranslation(vo.TableName)	//	C_UOM, ...
-                        && !Env.IsMultiLingualDocument(vo.ctx))
+                        && !Common.Common.IsMultiLingualDocument(vo.ctx))
                         showTrl = false;
                     if (!showTrl)
                     {
                         VLogger.Get().Config("TrlTab Not displayed - AD_Tab_ID="
                             + vo.AD_Tab_ID + "=" + vo.Name + ", Table=" + vo.TableName
                             + ", BaseTrl=" + Env.IsBaseTranslation(vo.TableName)
-                            + ", MultiLingual=" + Env.IsMultiLingualDocument(vo.ctx));
+                            + ", MultiLingual=" + Common.Common.IsMultiLingualDocument(vo.ctx));
                         return false;
                     }
                 }
@@ -647,7 +648,7 @@ namespace VAdvantage.Controller
         /// <returns></returns>
         public static List<HeaderPanelGrid> GetHeaderPanelItems(int headerLayoutID)
         {
-            CommonFunctions fun = new CommonFunctions();
+            VAdvantage.Common.Common fun = new Common.Common();
             List<HeaderPanelGrid> hitems = fun.GetCardTemplateItems(headerLayoutID);
             return hitems;
 
@@ -660,7 +661,7 @@ namespace VAdvantage.Controller
         /// <param name="ctx"></param>
         private static void CreateCardPanels(GridTabVO mTabVO, Ctx ctx)
         {
-            VAdvantage.Classes.CommonFunctions cFun = new VAdvantage.Classes.CommonFunctions();
+            VAdvantage.Common.Common cFun = new VAdvantage.Common.Common();
             CardViewData card = cFun.GetCardViewDetails(ctx.GetAD_User_ID(), mTabVO.AD_Tab_ID, 0, ctx );
             if (card != null)
             {

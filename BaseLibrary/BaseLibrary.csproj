@@ -179,12 +179,6 @@
     <None Include="Connected Services\CloudService\BaseLibrary.CloudService.DNSInfo.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.DownloadDumpResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.DownloadFileResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
     <None Include="Connected Services\CloudService\BaseLibrary.CloudService.DummyDBMigrationInfo.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -192,15 +186,6 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\CloudService\BaseLibrary.CloudService.FTPInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.GetAmountResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.GetInstructionResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.GetTopicInfoResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\CloudService\BaseLibrary.CloudService.GetUnassignedIp.datasource">
@@ -212,34 +197,13 @@
     <None Include="Connected Services\CloudService\BaseLibrary.CloudService.MigrationRecordAndServerInfo.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.RegisterInfoFromModuleResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.RegisterTempInfoResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
     <None Include="Connected Services\CloudService\BaseLibrary.CloudService.RequestedModuleInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.SaveErrorInLogM1Response.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.SaveErrorLogResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\CloudService\BaseLibrary.CloudService.ServerAndFtpInfo.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\CloudService\BaseLibrary.CloudService.ServerInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.SetCustomerNewTicketResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.SetCustomerTicketHistoryLinesResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.SetForwardTicketsResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\CloudService\BaseLibrary.CloudService.Site.datasource">
@@ -251,26 +215,11 @@
     <None Include="Connected Services\CloudService\BaseLibrary.CloudService.SiteZone.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.SubscribeProductResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.UpdateAssetResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.VRegisterInfoResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\CloudService\BaseLibrary.CloudService.VRegisterInfoTResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\CloudService\service.wsdl" />
+    <None Include="Connected Services\CloudService\service1.wsdl" />
     <None Include="Properties\DataSources\System.Data.DataSet.datasource" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\CloudService\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\CloudService\service.disco" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Connected Services\CloudService\configuration91.svcinfo" />
@@ -283,6 +232,9 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\CloudService\service1.disco" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
