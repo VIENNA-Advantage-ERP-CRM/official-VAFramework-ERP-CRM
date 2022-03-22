@@ -15,6 +15,7 @@ using VAdvantage.Common;
 using VAdvantage.Model;
 using System.Data;
 using System.Data.SqlClient;
+using VAModelAD.Model;
 
 namespace VAdvantage.Print
 {
@@ -209,7 +210,7 @@ namespace VAdvantage.Print
                 int C_Location_ID = int.Parse(GetValueKey());
                 if (C_Location_ID != 0)
                 {
-                    MLocation loc = new MLocation(Env.GetContext(), C_Location_ID, null);
+                    var loc = VAModelAD.Model.MLocation.Get(Env.GetContext(), C_Location_ID, null);
                     if (loc != null)
                         return loc.ToStringCR();
                 }
@@ -232,7 +233,8 @@ namespace VAdvantage.Print
                 int C_BPartner_Location_ID = int.Parse(GetValueKey());
                 if (C_BPartner_Location_ID != 0)
                 {
-                    MLocation loc = MLocation.GetBPLocation(Env.GetContext(), C_BPartner_Location_ID, null);
+                    //MLocation loc = MLocation.GetBPLocation(Env.GetContext(), C_BPartner_Location_ID, null);
+                    dynamic loc = VAModelAD.Model.MLocation.GetBPLocation(Env.GetContext(), C_BPartner_Location_ID, null);
                     if (loc != null)
                         return loc.ToStringCR();
                 }

@@ -61,14 +61,27 @@ namespace VAdvantage.ProcessEngine
             //	Run locally
             if (!started)
             {
-                MWorkflow WF = new MWorkflow(_ctx, AD_Workflow_ID, null);
-                MWFProcess wfProcess = null;
-                if (_pi.IsBatch())
-                    wfProcess = WF.Start(_pi);		//	may return null
-                else
-                    wfProcess = WF.StartWait(_pi);	//	may return null
+                Type type = null;
+                System.Reflection.Assembly asm = null;
+                try
+                {
+                    asm = System.Reflection.Assembly.Load(GlobalVariable.PACKAGES[0]);
+                    type = asm.GetType("VAdvantage.WF.MWorkflow");
 
-                started = wfProcess != null;
+                    ConstructorInfo constructor = type.GetConstructor(new Type[] { typeof(Ctx), typeof(int), typeof(Trx) });
+                    Object WF = constructor.Invoke(new object[] { _ctx, AD_Workflow_ID, null });
+
+                    MethodInfo mInfo = type.GetMethod("StartWF", new Type[] { typeof(ProcessInfo) });
+
+                    started = Convert.ToBoolean(mInfo.Invoke(WF, new object[] { _pi }));
+
+                }
+                catch (Exception ex)
+                {
+                    log.Fine("Error Starting Workflow: " + ex.Message);
+                    //blank
+                    return started;
+                }
             }
 
             return started;
@@ -929,7 +942,7 @@ namespace VAdvantage.ProcessEngine
                         if (_pi.GetFileType() == ReportType_CSV)
                         {
                             report = _rep.CreateCSV(_ctx);
-                            string filePath = GlobalVariable.PhysicalPath + "TempDownload";
+                            string filePath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + "TempDownload";
 
                             if (!Directory.Exists(filePath))
                                 Directory.CreateDirectory(filePath);

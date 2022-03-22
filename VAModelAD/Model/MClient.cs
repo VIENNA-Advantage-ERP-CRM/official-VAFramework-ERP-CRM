@@ -22,12 +22,11 @@ using VAdvantage.Model;
 using VAdvantage.Utility;
 using VAdvantage.Logging;
 
-namespace VAdvantage.Model
+namespace VAModelAD.Model
 {
     public class MClient : X_AD_Client
     {
-        //Client Info					
-        private MClientInfo _info = null;
+       
         /**	Cache						*/
         private static CCache<int, MClient> s_cache = new CCache<int, MClient>("AD_Client", 3);
 
@@ -37,7 +36,35 @@ namespace VAdvantage.Model
 
         private bool m_createNew = false;
 
-       
+        public MClient(Ctx ctx, int AD_Client_ID, Trx trxName)
+           : base(ctx, AD_Client_ID, trxName)
+        {
+
+        }
+
+        public MClient(Ctx ctx, DataRow dr, Trx trx) : base(ctx, dr, trx)
+        {
+        }
+
+        internal static MClient Get(Ctx ctx)
+        {
+            return Get(ctx, ctx.GetAD_Client_ID());
+        }
+
+        internal static MClient Get(Ctx ctx, int AD_Client_ID)
+        {
+            int key = AD_Client_ID;
+            MClient client = (MClient)s_cache[key];
+            if (client != null)
+                return client;
+            client = new MClient(ctx, AD_Client_ID, null);
+            if (AD_Client_ID == 0)
+                client.Load((Trx)null);
+            s_cache.Add(key, client);
+            return client;
+        }
+
+
 
         public VAdvantage.Login.Language GetLanguage()
         {
@@ -85,7 +112,7 @@ namespace VAdvantage.Model
             String sql = "SELECT * FROM AD_Client";
             try
             {
-                DataSet ds = DataBase.DB.ExecuteDataset(sql, null, null);
+                DataSet ds = DB.ExecuteDataset(sql, null, null);
 
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
@@ -380,7 +407,7 @@ namespace VAdvantage.Model
                 //log.warning("No To user");
                 return null;
             }
-            string toEMail = Utility.Util.GetValueOfString(to.Get_Value("EMail"));
+            string toEMail = VAdvantage.Utility.Util.GetValueOfString(to.Get_Value("EMail"));
             if (toEMail == null || toEMail.Length == 0)
             {
                 //log.warning("No To address: " + to);
@@ -391,7 +418,7 @@ namespace VAdvantage.Model
                 //log.warning("EMail bounced: " + to.GetBouncedInfo() + " - " + to.GetEMail());
                 return null;
             }
-            return CreateEMail(from, Utility.Util.GetValueOfString(to.Get_Value("GetEMail")), Utility.Util.GetValueOfString(to.Get_Value("Name")), subject, message);
+            return CreateEMail(from, VAdvantage.Utility.Util.GetValueOfString(to.Get_Value("GetEMail")), VAdvantage.Utility.Util.GetValueOfString(to.Get_Value("Name")), subject, message);
         }
 
 
@@ -493,12 +520,12 @@ namespace VAdvantage.Model
                 //}
             }
             if (email == null)
-                email = new EMail(this, Utility.Util.GetValueOfString(from.Get_Value("EMail")), Utility.Util.GetValueOfString(from.Get_Value("Name")), toEMail, toName,
+                email = new EMail(this, VAdvantage.Utility.Util.GetValueOfString(from.Get_Value("EMail")), VAdvantage.Utility.Util.GetValueOfString(from.Get_Value("Name")), toEMail, toName,
                         subject, message);
             if (!email.IsValid())
                 return null;
             if (IsSmtpAuthorization())
-                email.CreateAuthenticator(Utility.Util.GetValueOfString(from.Get_Value("EMailUser")), Utility.Util.GetValueOfString(from.Get_Value("EMailUserPW")));
+                email.CreateAuthenticator(VAdvantage.Utility.Util.GetValueOfString(from.Get_Value("EMailUser")), VAdvantage.Utility.Util.GetValueOfString(from.Get_Value("EMailUserPW")));
             return email;
         }
 
@@ -631,7 +658,7 @@ namespace VAdvantage.Model
                 //log.warning("No To user");
                 return null;
             }
-            string toEMail = Utility.Util.GetValueOfString(to.Get_Value("EMail"));
+            string toEMail = VAdvantage.Utility.Util.GetValueOfString(to.Get_Value("EMail"));
             if (toEMail == null || toEMail.Length == 0)
             {
                 //log.warning("No To address: " + to);
@@ -642,7 +669,7 @@ namespace VAdvantage.Model
                 //log.warning("EMail bounced: " + to.GetBouncedInfo() + " - " + to.GetEMail());
                 return null;
             }
-            return CreateEMail(from, Utility.Util.GetValueOfString(to.Get_Value("GetEMail")), Utility.Util.GetValueOfString(to.Get_Value("Name")), subject, message, isHTML);
+            return CreateEMail(from, VAdvantage.Utility.Util.GetValueOfString(to.Get_Value("GetEMail")), VAdvantage.Utility.Util.GetValueOfString(to.Get_Value("Name")), subject, message, isHTML);
         }
 
 
@@ -748,14 +775,14 @@ namespace VAdvantage.Model
             }
             if (email == null)
             {
-                email = new EMail(this, Utility.Util.GetValueOfString(from.Get_Value("EMail")), Utility.Util.GetValueOfString(from.Get_Value("Name")), toEMail, toName,
+                email = new EMail(this, VAdvantage.Utility.Util.GetValueOfString(from.Get_Value("EMail")), VAdvantage.Utility.Util.GetValueOfString(from.Get_Value("Name")), toEMail, toName,
                         subject, message);
                 email.ISHTML = isHTML;
             }
             if (!email.IsValid())
                 return null;
             if (IsSmtpAuthorization())
-                email.CreateAuthenticator(Utility.Util.GetValueOfString(from.Get_Value("EMailUser")), Utility.Util.GetValueOfString(from.Get_Value("EMailUserPW")));
+                email.CreateAuthenticator(VAdvantage.Utility.Util.GetValueOfString(from.Get_Value("EMailUser")), VAdvantage.Utility.Util.GetValueOfString(from.Get_Value("EMailUserPW")));
             return email;
         }
 
@@ -961,7 +988,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < mAttach._lines.Count; i++)
                 {
 
-                    filePath = System.IO.Path.Combine(GlobalVariable.PhysicalPath, "TempDownload");
+                    filePath = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "TempDownload");
                     filePath = System.IO.Path.Combine(filePath, mAttach.GetFile(mAttach._lines[i].Line_ID));
                     if (filePath.IndexOf("ERROR") > -1)
                     {

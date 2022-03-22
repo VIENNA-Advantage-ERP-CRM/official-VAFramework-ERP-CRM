@@ -19,6 +19,7 @@ using VAdvantage.Common;
 using VAdvantage.Utility;
 using VAdvantage.Logging;
 using System.Runtime.CompilerServices;
+using VAModelAD.Model;
 
 namespace VAdvantage.Model
 {
@@ -1686,6 +1687,59 @@ namespace VAdvantage.Model
         }
 
 
+        /**	Cache						*/
+        private static CCache<int, String> s_clientcache = new CCache<int, String>("AD_Role_ClientC", 10);
+        /**	Cache						*/
+        private static CCache<int, List<String>> s_orgcache = new CCache<int, List<String>>("AD_Role_OrgC", 10);
+
+        internal static string GetClientName(int AD_Client_ID)
+        {
+            String name = s_clientcache[AD_Client_ID];
+            if (name == null)
+            {
+                name = Util.GetValueOfString(
+                    DB.ExecuteScalar("SELECT Name FROM AD_Client WHERE AD_Client_ID=" + AD_Client_ID));
+                s_clientcache[AD_Client_ID] = name;
+            }
+            return name;
+        }
+
+        internal static string GetOrgInfo(int AD_Org_ID, bool nameOnly)
+        {
+            List<String> lst = s_orgcache[AD_Org_ID];
+            string retval = "";
+            if (lst == null)
+            {
+                IDataReader dr = null;
+                try
+                {
+                    dr = DB.ExecuteReader("SELECT Name,IsSummary FROM AD_Org WHERE AD_Org_ID=" + AD_Org_ID);
+                    lst = new List<string>();
+                    if (dr.Read())
+                    {
+                        lst.Add(dr[0].ToString());
+                        lst.Add(dr[1].ToString());
+                        s_orgcache[AD_Org_ID] = lst;
+                    }
+                }
+                finally
+                {
+                    if (dr != null)
+                        dr.Close();
+                }
+
+            }
+            if (lst != null)
+            {
+                if (nameOnly)
+                    retval = lst[0];
+                else
+                    retval = lst[1];
+            }
+            return retval;
+        }
+
+
         /// <summary>
         ///	Load Org Access User
         /// </summary>
@@ -1772,8 +1826,10 @@ namespace VAdvantage.Model
             {
                 return;
             }
-            MOrg org = MOrg.Get(GetCtx(), oa.AD_Org_ID);
-            if (!org.IsSummary())
+            //
+            //MOrg org = MOrg.Get(GetCtx(), oa.AD_Org_ID);
+            bool isSummary = GetOrgInfo(oa.AD_Org_ID, false) == "Y";
+            if (!isSummary)
             {
                 return;
             }
@@ -1782,7 +1838,7 @@ namespace VAdvantage.Model
             String sql = "SELECT AD_Client_ID, AD_Org_ID FROM AD_Org "
                 + "WHERE IsActive='Y' AND AD_Org_ID IN (SELECT Node_ID FROM "
                 + tree.GetNodeTableName()
-                + " WHERE AD_Tree_ID=" + tree.GetAD_Tree_ID() + " AND Parent_ID=" + org.GetAD_Org_ID() + " AND IsActive='Y')";
+                + " WHERE AD_Tree_ID=" + tree.GetAD_Tree_ID() + " AND Parent_ID=" + oa.AD_Org_ID + " AND IsActive='Y')";
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -2980,10 +3036,10 @@ namespace VAdvantage.Model
             {
                 String clientName = "System";
                 if (AD_Client_ID != 0)
-                    clientName = VAdvantage.Model.MClient.Get(Env.GetContext(), AD_Client_ID).GetName();
+                    clientName = GetClientName(AD_Client_ID);//MClient.Get(Env.GetContext(), AD_Client_ID).GetName();
                 String orgName = "*";
                 if (AD_Org_ID != 0)
-                    orgName = MOrg.Get(Env.GetContext(), AD_Org_ID).GetName();
+                    orgName = GetOrgInfo(AD_Org_ID, true); //MOrg.Get(Env.GetContext(), AD_Org_ID).GetName();
                 StringBuilder sb = new StringBuilder();
                 sb.Append(Msg.Translate(Env.GetContext(), "AD_Client_ID")).Append("=")
                     .Append(clientName).Append(" - ")

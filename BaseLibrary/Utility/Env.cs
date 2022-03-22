@@ -419,6 +419,31 @@ namespace VAdvantage.Utility
             return GetLanguage(ctx);
         }
 
+        /// <summary>
+        /// Get Type from packages
+        /// </summary>
+        /// <param name="fqClassame">Fully qualified classname</param>
+        /// <returns>Return Type of class</returns>
+        public static Type GetTypeFromPackage(string fqClassame)
+        {
+            Type type = null;
+            foreach (string asm in GlobalVariable.PACKAGES)
+            {
+                try
+                {
+                    var asmbly = System.Reflection.Assembly.Load(asm);
+                    type = asmbly.GetType(fqClassame);
+                    if (type != null)
+                        return type;
+                }
+                catch
+                {
+                    VLogger.Get().Warning("Error loading type " + fqClassame);
+                }
+            }
+            return type;
+        }
+
 
         //public static int GetAD_Language_ID()
         //{
@@ -1276,7 +1301,7 @@ namespace VAdvantage.Utility
             _keyEdition = key;
         }
 
-        internal static string GetApplicationURL(Ctx ctx)
+        public static string GetApplicationURL(Ctx ctx)
         {
             return ctx.GetApplicationUrl();
         }

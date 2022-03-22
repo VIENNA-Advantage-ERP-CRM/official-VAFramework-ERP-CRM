@@ -203,14 +203,14 @@ namespace VAdvantage.Model
         private void GetSetFileLocation()
         {
 
-            MClientInfo cInfo = null;
+            X_AD_ClientInfo cInfo = null;
             if (AD_Client_ID > 0)
             {
-                cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                cInfo = new X_AD_ClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
             }
             else
             {
-                cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                cInfo = new X_AD_ClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
             }
 
             if (string.IsNullOrEmpty(cInfo.GetSaveAttachmentOn()))
@@ -524,7 +524,7 @@ namespace VAdvantage.Model
         {
             //File name
             fileName = GetAD_Table_ID().ToString() + "_" + GetRecord_ID().ToString();
-            MClientInfo cInfo = null;
+            X_AD_ClientInfo cInfo = null;
 
 
             if (_items == null || _items.Count == 0)
@@ -535,11 +535,11 @@ namespace VAdvantage.Model
                 DeleteFileData(fileName);
                 //if (AD_Client_ID > 0)
                 //{
-                //    cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                //    cInfo = new X_AD_ClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
                 //}
                 //else
                 //{
-                //    cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                //    cInfo = new X_AD_ClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
                 //}
                 //SetFileLocation(cInfo.GetSaveAttachmentOn());
                 return true;
@@ -593,11 +593,11 @@ namespace VAdvantage.Model
 
                     if (AD_Client_ID > 0)
                     {
-                        cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                        cInfo = new X_AD_ClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
                     }
                     else
                     {
-                        cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                        cInfo = new X_AD_ClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
                     }
                     string fileLocation = cInfo.GetSaveAttachmentOn();
                     if (string.IsNullOrEmpty(fileLocation))
@@ -735,11 +735,11 @@ namespace VAdvantage.Model
                         {
                             if (AD_Client_ID > 0)
                             {
-                                cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                                cInfo = new X_AD_ClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
                             }
                             else
                             {
-                                cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                                cInfo = new X_AD_ClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
                             }
                         }
 
@@ -850,7 +850,7 @@ namespace VAdvantage.Model
             return false;
         }
 
-        private bool UploadFtpFile(string fileName, byte[] file, MClientInfo cInfo)
+        private bool UploadFtpFile(string fileName, byte[] file, X_AD_ClientInfo cInfo)
         {
 
             FtpWebRequest request;
@@ -858,14 +858,14 @@ namespace VAdvantage.Model
             {
                 if (cInfo == null)
                 {
-                    // MClientInfo cInfo = null;
+                    // X_AD_ClientInfo cInfo = null;
                     if (AD_Client_ID > 0)
                     {
-                        cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                        cInfo = new X_AD_ClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
                     }
                     else
                     {
-                        cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                        cInfo = new X_AD_ClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
                     }
                 }
                 request = WebRequest.Create(new Uri(string.Format(@"{0}/{1}/{2}", cInfo.GetFTPUrl(), cInfo.GetFTPFolder(), fileName))) as FtpWebRequest;
@@ -896,14 +896,14 @@ namespace VAdvantage.Model
 
             try
             {
-                MClientInfo cInfo = null;
+                X_AD_ClientInfo cInfo = null;
                 if (AD_Client_ID > 0)
                 {
-                    cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                    cInfo = new X_AD_ClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
                 }
                 else
                 {
-                    cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                    cInfo = new X_AD_ClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
                 }
                 request.Credentials = new NetworkCredential(cInfo.GetFTPUsername(), cInfo.GetFTPPwd());
                 retVal = request.DownloadData(new Uri(string.Format(@"{0}/{1}/{2}", cInfo.GetFTPUrl(), cInfo.GetFTPFolder(), fileName)));
@@ -1071,14 +1071,14 @@ namespace VAdvantage.Model
                         string filePath = GetServerLocation();
 
                         // Create client info object
-                        MClientInfo cInfo = null;
+                        X_AD_ClientInfo cInfo = null;
                         if (AD_Client_ID > 0)
                         {
-                            cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                            cInfo = new X_AD_ClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
                         }
                         else
                         {
-                            cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                            cInfo = new X_AD_ClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
                         }
 
                         string documentURI = GetDocumentURI(AD_Attachment_ID);
@@ -1210,7 +1210,7 @@ namespace VAdvantage.Model
             {
                 return serverLocation;
             }
-            return GlobalVariable.PhysicalPath;
+            return System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath;
         }
 
         /// <summary>
@@ -1339,17 +1339,17 @@ namespace VAdvantage.Model
                     return false;
                 }
 
-                MClientInfo cInfo = null;
+                X_AD_ClientInfo cInfo = null;
                 if (string.IsNullOrEmpty(GetFileLocation()))
                 {
 
                     if (AD_Client_ID > 0)
                     {
-                        cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                        cInfo = new X_AD_ClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
                     }
                     else
                     {
-                        cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                        cInfo = new X_AD_ClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
                     }
                     string fileLocation = cInfo.GetSaveAttachmentOn();
                     if (string.IsNullOrEmpty(fileLocation))
@@ -1372,11 +1372,11 @@ namespace VAdvantage.Model
                         {
                             if (AD_Client_ID > 0)
                             {
-                                cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                                cInfo = new X_AD_ClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
                             }
                             else
                             {
-                                cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                                cInfo = new X_AD_ClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
                             }
                         }
 
@@ -1438,11 +1438,11 @@ namespace VAdvantage.Model
                         {
                             if (AD_Client_ID > 0)
                             {
-                                cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                                cInfo = new X_AD_ClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
                             }
                             else
                             {
-                                cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                                cInfo = new X_AD_ClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
                             }
                         }
 
@@ -1613,11 +1613,11 @@ namespace VAdvantage.Model
                         {
                             if (AD_Client_ID > 0)
                             {
-                                cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                                cInfo = new X_AD_ClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
                             }
                             else
                             {
-                                cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                                cInfo = new X_AD_ClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
                             }
                         }
 
@@ -1693,7 +1693,7 @@ namespace VAdvantage.Model
         /// <returns>Returns attachment path</returns>
         private static string GetAttachmentPath()
         {
-            return GetServerLocation() == GlobalVariable.PhysicalPath ?
+            return GetServerLocation() == System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath ?
                         GlobalVariable.AttachmentPath : Path.Combine(GetServerLocation(), "Attachments");
         }
 
@@ -1726,7 +1726,7 @@ namespace VAdvantage.Model
         }
 
 
-        private bool UploadFtpFileWithoutRAM(string fullname, MClientInfo cInfo, string fNameFTP)
+        private bool UploadFtpFileWithoutRAM(string fullname, X_AD_ClientInfo cInfo, string fNameFTP)
         {
 
             FtpWebRequest request;
@@ -1734,14 +1734,14 @@ namespace VAdvantage.Model
             {
                 if (cInfo == null)
                 {
-                    // MClientInfo cInfo = null;
+                    // X_AD_ClientInfo cInfo = null;
                     if (AD_Client_ID > 0)
                     {
-                        cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                        cInfo = new X_AD_ClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
                     }
                     else
                     {
-                        cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                        cInfo = new X_AD_ClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
                     }
                 }
 
@@ -1866,14 +1866,14 @@ namespace VAdvantage.Model
                         //(filename, Path.Combine(filePath, "TempDownload", folder));
 
                         // Create client info object
-                        MClientInfo cInfo = null;
+                        X_AD_ClientInfo cInfo = null;
                         if (AD_Client_ID > 0)
                         {
-                            cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                            cInfo = new X_AD_ClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
                         }
                         else
                         {
-                            cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                            cInfo = new X_AD_ClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
                         }
 
                         string documentURI = GetDocumentURI(AD_Attachment_ID);
@@ -1911,14 +1911,14 @@ namespace VAdvantage.Model
                         // Get file from web service and save it in temp folder
 
                         // Create client info object
-                        MClientInfo cInfo = null;
+                        X_AD_ClientInfo cInfo = null;
                         if (AD_Client_ID > 0)
                         {
-                            cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                            cInfo = new X_AD_ClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
                         }
                         else
                         {
-                            cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                            cInfo = new X_AD_ClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
                         }
 
                         string documentURI = GetDocumentURI(AD_Attachment_ID);
@@ -1960,14 +1960,14 @@ namespace VAdvantage.Model
                     {
                         // VIS264 - Get file from Azure Blob container and save it in temp folder
 
-                        MClientInfo cInfo = null;
+                        X_AD_ClientInfo cInfo = null;
                         if (AD_Client_ID > 0)
                         {
-                            cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                            cInfo = new X_AD_ClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
                         }
                         else
                         {
-                            cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                            cInfo = new X_AD_ClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
                         }
 
                         string containerUri = cInfo.GetAD_WebServiceURL();
@@ -2025,14 +2025,14 @@ namespace VAdvantage.Model
             {
 
 
-                MClientInfo cInfo = null;
+                X_AD_ClientInfo cInfo = null;
                 if (AD_Client_ID > 0)
                 {
-                    cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                    cInfo = new X_AD_ClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
                 }
                 else
                 {
-                    cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                    cInfo = new X_AD_ClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
                 }
 
 
@@ -2146,14 +2146,14 @@ WHERE att.IsActive = 'Y' AND al.IsActive = 'Y' AND ar.IsActive = 'Y' AND att.AD_
         {
             try
             {
-                MClientInfo cInfo = null;
+                X_AD_ClientInfo cInfo = null;
                 if (AD_Client_ID > 0)
                 {
-                    cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                    cInfo = new X_AD_ClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
                 }
                 else
                 {
-                    cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                    cInfo = new X_AD_ClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
                 }
 
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(cInfo.GetFTPUrl() + "//" + cInfo.GetFTPFolder() + "//" + filename);

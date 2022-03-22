@@ -21,6 +21,23 @@ namespace VAdvantage.DataBase
     public class DB
     {
 
+
+        /// <summary>
+        ///Get next number for Key column = 0 is Error.
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="TableName"></param>
+        /// <param name="trx"></param>
+        /// <returns></returns>
+        public static int GetNextID(Ctx ctx, String TableName, Trx trx)
+        {
+            if (ctx == null)
+                throw new ArgumentException("Context missing");
+            if ((TableName == null) || (TableName.Length == 0))
+                throw new ArgumentException("TableName missing");
+            return GetNextID(ctx.GetAD_Client_ID(), TableName, trx);
+        }	//	getNextID
+
         public static int GetNextID(int VAF_Client_ID, String TableName, Trx trxName)
         {
             //if ((trxName == null || trxName.Length() == 0) && isRemoteObjects())
@@ -54,10 +71,6 @@ namespace VAdvantage.DataBase
             //		throw new DBException("No NextID (" + id + ")");
             return id;
         }   //	getNextID
-
-
-
-
 
         /// <summary>
         /// Execute SQL Query
@@ -320,6 +333,15 @@ namespace VAdvantage.DataBase
         //        return SqlExec.ExecuteQuery.ExecuteDataset(sql, param);
         //    }
         //}
+
+        /// <summary>
+        /// Get Connection String 
+        /// </summary>
+        /// <returns></returns>
+        public static string GetConnectionString()
+        {
+            return DBConn.CreateConnectionString();
+        }
 
         public static DataSet ExecuteDataset(string sql, SqlParameter[] param, Trx trx)
         {

@@ -14,6 +14,7 @@ using VAdvantage.SqlExec;
 using System.Reflection;
 using VAdvantage.Logging;
 using VAdvantage.Utility;
+using BaseLibrary.Model;
 
 namespace VAdvantage.Model
 {
@@ -196,8 +197,8 @@ namespace VAdvantage.Model
                     DataRow dr = ds.Tables[0].Rows[i];
                     MColumn mCol = new MColumn(GetCtx(), dr, Get_TrxName());
                     list.Add(mCol);
-                    if (mCol.IsKey())
-                        isHasKeyColumn = true;
+                    //if (mCol.IsKey())
+                    //    isHasKeyColumn = true;
                 }
                 ds = null;
             }

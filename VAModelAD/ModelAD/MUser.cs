@@ -1112,7 +1112,7 @@ namespace VAdvantage.Model
         public static bool GetIsEmployee(Ctx ctx, int AD_USER_ID)
         {
             MUser user = MUser.Get(ctx, AD_USER_ID);
-            MBPartner bp = MBPartner.Get(ctx, user.GetC_BPartner_ID());
+            X_C_BPartner bp = new X_C_BPartner(ctx, user.GetC_BPartner_ID(), null);
             user = null;
             if (bp == null)
                 return false;

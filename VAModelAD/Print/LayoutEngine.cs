@@ -124,9 +124,9 @@ namespace VAdvantage.Print
         public static java.awt.Dimension IMAGE_SIZE = new java.awt.Dimension(10, 10);
 
         /** True Image				*/
-        public static Image IMAGE_TRUE = ModelLibrary.Properties.Resources.tick1;
+        public static Image IMAGE_TRUE = CoreLibrary.Properties.Resource.tick1;
         /** False Image				*/
-        public static Image IMAGE_FALSE = ModelLibrary.Properties.Resources.cross;
+        public static Image IMAGE_FALSE = CoreLibrary.Properties.Resource.cross;
 
         /*************************************************************************/
 
@@ -510,7 +510,7 @@ namespace VAdvantage.Print
                                 element = ImageElement.Get(item.Get_ID());
                             else
                             {
-                                element = ImageElement.Get(ModelLibrary.Properties.Resources.vienna);
+                                element = ImageElement.Get(CoreLibrary.Properties.Resource.vienna);
                                 element.Layout(maxWidth, item.GetMaxHeight(), false, alignment);
                             }
                         }
@@ -530,12 +530,12 @@ namespace VAdvantage.Print
                                 /////////////////
                                 else
                                 {
-                                    element = ImageElement.Get(ModelLibrary.Properties.Resources.vienna);
+                                    element = ImageElement.Get(CoreLibrary.Properties.Resource.vienna);
                                 }
                             }
                             else
                             {
-                                element = ImageElement.Get(ModelLibrary.Properties.Resources.vienna);
+                                element = ImageElement.Get(CoreLibrary.Properties.Resource.vienna);
                             }
                             element.Layout(maxWidth, item.GetMaxHeight(), false, alignment);
 
@@ -1246,7 +1246,7 @@ namespace VAdvantage.Print
             //}
 
 
-            PrintElement element = new ImageElement(VAdvantage.DataBase.DB.GetImageLogoSmall(true), "Vienna Small Log");	//	48x15
+            PrintElement element = new ImageElement(CoreLibrary.DataBase.DB.GetImageLogoSmall(true), "Vienna Small Log");	//	48x15
             //PrintElement element = new ImageElement(img, "Vienna Small Log");	//	48x15
             //element = new ImageElement(org.Vienna.Vienna.getImageLogo());	//	100x30
             element.Layout(48, 15, false, MPrintFormatItem.FIELDALIGNMENTTYPE_LeadingLeft);
@@ -1328,7 +1328,7 @@ namespace VAdvantage.Print
         private void CreateStandardHeaderFooterForPdf()
         {
             /** Removing/modifying the Vienna logo/trademark/copyright is a violation of the license	*/
-            PrintElement element = new ImageElement(VAdvantage.DataBase.DB.GetImageLogoSmall(true), "Vienna Small Log");	//	48x15
+            PrintElement element = new ImageElement(CoreLibrary.DataBase.DB.GetImageLogoSmall(true), "Vienna Small Log");	//	48x15
             //	element = new ImageElement(org.Vienna.Vienna.getImageLogo());	//	100x30
             element.Layout(48, 15, false, MPrintFormatItem.FIELDALIGNMENTTYPE_LeadingLeft);
             element.SetLocation(m_header.Location);

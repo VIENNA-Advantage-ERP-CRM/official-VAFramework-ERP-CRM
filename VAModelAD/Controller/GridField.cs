@@ -9,7 +9,7 @@ using VAdvantage.Model;
 using VAdvantage.Controller;
 namespace VAdvantage.Model
 {
-    public class GridField : Evaluatee
+    public class GridField : Classes.Evaluatee
     {
         #region "Declaration"
 

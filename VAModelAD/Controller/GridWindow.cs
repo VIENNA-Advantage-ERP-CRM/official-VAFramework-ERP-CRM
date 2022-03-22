@@ -133,7 +133,7 @@ namespace VAdvantage.Model
                     }	//	set Link column
                     mTab.SetLinkColumnName(null);	//	overwrites, if AD_Column_ID exists
 
-                    VAdvantage.Classes.CommonFunctions cFun = new VAdvantage.Classes.CommonFunctions();
+                    VAdvantage.Common.Common cFun = new VAdvantage.Common.Common();
                     CardViewData card = cFun.GetCardViewDetails(mTabVO.GetCtx().GetAD_User_ID(), mTabVO.AD_Tab_ID, 0, mTabVO.GetCtx(),"",true);
                     if (card != null)
                     {

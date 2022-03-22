@@ -67,7 +67,7 @@ namespace VAdvantage.Model
        /// <param name="Message">Message</param>
        /// <param name="Message2">Message</param>
        /// <param name="Message3">Message</param>
-        public MMailMsg(MStore parent, String MailMsgType,
+        public MMailMsg(X_W_Store parent, String MailMsgType,
             String Name, String Subject, String Message, String Message2, String Message3):this(parent.GetCtx(), 0, parent.Get_TrxName())
          {
             

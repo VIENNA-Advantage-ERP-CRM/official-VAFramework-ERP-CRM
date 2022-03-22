@@ -23,7 +23,7 @@ using VAdvantage.Controller;
 using VAdvantage.DataBase;
 namespace VAdvantage.Model
 {
-    public class GridTab : Evaluatee
+    public class GridTab : Classes.Evaluatee
     {
 
         #region "Declaration"

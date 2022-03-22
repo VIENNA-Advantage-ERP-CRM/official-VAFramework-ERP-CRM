@@ -108,7 +108,7 @@ namespace VAdvantage.Utility
         /// <param name="toName"></param>
         /// <param name="subject"></param>
         /// <param name="message"></param>
-        public EMail(MClient client, String fromEMail, String fromName, String toEMail, String toName,
+        public EMail(X_AD_Client client, String fromEMail, String fromName, String toEMail, String toName,
             String subject, String message)
             : this(client.GetCtx(), client.GetSmtpHost(), client.GetSmtpPort(), client.IsSmtpTLS(),
                 fromEMail, fromName, toEMail, toName, subject, message)
@@ -130,7 +130,7 @@ namespace VAdvantage.Utility
         /// <param name="subject"></param>
         /// <param name="message"></param>
         /// <param name="isHtml"></param>
-        public EMail(MClient client, String fromEMail, String fromName, String toEMail, String toName,
+        public EMail(X_AD_Client client, String fromEMail, String fromName, String toEMail, String toName,
             String subject, String message, bool? isHtml)
             : this(client.GetCtx(), client.GetSmtpHost(), client.GetSmtpPort(), client.IsSmtpTLS(),
                 fromEMail, fromName, toEMail, toName, subject, message, isHtml)
@@ -1575,7 +1575,7 @@ namespace VAdvantage.Utility
             }
             if (string.IsNullOrEmpty(password) || string.IsNullOrEmpty(username) || string.IsNullOrEmpty(GetSmtpHost()) || sendFromClient)
             {
-                MClient client = new MClient(ctx, ctx.GetAD_Client_ID(), null);
+                X_AD_Client client = new X_AD_Client(ctx, ctx.GetAD_Client_ID(), null);
                 SetSmtpHost(client.GetSmtpHost());
                 smtpport = client.GetSmtpPort();
                 if (smtpport != 0)
@@ -1625,7 +1625,7 @@ namespace VAdvantage.Utility
             string host = userConfig.GetSmtpHost();
             if (string.IsNullOrEmpty(password) || string.IsNullOrEmpty(username) || string.IsNullOrEmpty(host) || IsSendFromClient)
             {
-                MClient client = new MClient(ctx, ctx.GetAD_Client_ID(), null);
+                X_AD_Client client = new X_AD_Client(ctx, ctx.GetAD_Client_ID(), null);
                 host = client.GetSmtpHost();
                 int smtpport = client.GetSmtpPort();
                 if (!IsSendFromClient)

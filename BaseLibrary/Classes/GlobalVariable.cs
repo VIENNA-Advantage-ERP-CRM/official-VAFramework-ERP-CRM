@@ -22,6 +22,8 @@ namespace VAdvantage.DataBase
 
         public static string ACCESSKEY = "caff4eb4fbd6273e37e8a325e19f0991";
         private static bool _isEditor = false;
+
+        public static string PhysicalPath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath;
         /// <summary>
         /// Property used in Visual Editor From
         /// </summary>

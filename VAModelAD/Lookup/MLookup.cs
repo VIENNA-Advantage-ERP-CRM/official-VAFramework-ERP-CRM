@@ -710,7 +710,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="query">query</param>
         /// <returns>Zoom Window</returns>
-        public override  int GetZoomWindow(Query query)
+        public override  int GetZoomWindow(IQuery query)
         {
 
             /* Handle cases where you have multiple windows for a single table.
@@ -727,7 +727,7 @@ namespace VAdvantage.Model
         /// Get Zoom Query String
         /// </summary>
         /// <returns>Zoom SQL Where Clause</returns>
-        public override Query GetZoomQuery()
+        public override IQuery GetZoomQuery()
         {
             return _vInfo.zoomQuery;
         }

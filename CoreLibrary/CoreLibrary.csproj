@@ -167,7 +167,6 @@
     <Compile Include="Utility\Ctx.cs" />
     <Compile Include="Utility\DatabaseMetaData.cs" />
     <Compile Include="Utility\EnvConstants.cs" />
-    <Compile Include="Utility\ExternalWebMethod.cs" />
     <Compile Include="Utility\Null.cs" />
     <Compile Include="Utility\Properties.cs" />
     <Compile Include="Utility\SecureEngine.cs" />

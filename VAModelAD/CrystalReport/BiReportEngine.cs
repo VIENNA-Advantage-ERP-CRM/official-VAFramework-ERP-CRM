@@ -9,6 +9,7 @@ using VAdvantage.DataBase;
 using VAdvantage.Logging;
 using VAdvantage.Model;
 using VAdvantage.Utility;
+using VAModelAD.Model;
 
 namespace VAdvantage.BiReport
 {

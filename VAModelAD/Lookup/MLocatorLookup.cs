@@ -231,7 +231,7 @@ namespace VAdvantage.Model
         /// <returns></returns>
         public NamePair GetDirect(Object keyValue, bool saveInCache, Trx trxName)
         {
-            MLocator loc = GetMLocator(keyValue, trxName);
+            X_M_Locator loc = GetMLocator(keyValue, trxName);
             if (loc == null)
                 return null;
             //
@@ -248,7 +248,7 @@ namespace VAdvantage.Model
         /// <param name="keyValue"></param>
         /// <param name="trxName"></param>
         /// <returns></returns>
-        public MLocator GetMLocator(Object keyValue, Trx trxName)
+        public X_M_Locator GetMLocator(Object keyValue, Trx trxName)
         {
             //	log.fine( "MLocatorLookup.getDirect " + keyValue.getClass() + "=" + keyValue);
             int M_Locator_ID = -1;
@@ -263,7 +263,7 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, "Invalid key=" + keyValue);
                 return null;
             }
-            return new MLocator((Context)GetCtx(), M_Locator_ID, trxName);
+            return new X_M_Locator((Context)GetCtx(), M_Locator_ID, trxName);
         }
 
         /// <summary>
@@ -366,7 +366,7 @@ namespace VAdvantage.Model
                         log.Warning("Over Max Rows - " + rows);
                         break;
                     }
-                    MLocator loc = new MLocator((Context)GetCtx(), dr, null);
+                    X_M_Locator loc = new X_M_Locator((Context)GetCtx(), dr, null);
                     int M_Locator_ID = loc.GetM_Locator_ID();
                     KeyNamePair pp = new KeyNamePair(M_Locator_ID, loc.ToString());
                     _lookup.Add(M_Locator_ID, pp);

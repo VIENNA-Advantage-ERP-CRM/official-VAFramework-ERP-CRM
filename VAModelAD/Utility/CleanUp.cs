@@ -52,7 +52,7 @@ namespace VAdvantage.Classes
             // isThreadRunning = true;
             try
             {
-                string tempPath = Path.Combine(GlobalVariable.PhysicalPath, "TempDownload");
+                string tempPath = Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "TempDownload");
                 string[] files = Directory.GetFiles(tempPath);
 
                 //delete files which are Older than 12 hours 
