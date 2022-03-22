@@ -5465,9 +5465,9 @@ namespace VAdvantage.Model
                         sql += " AND NVL(s.M_AttributeSetInstance_ID , 0)=" + oLine.GetM_AttributeSetInstance_ID();
                     }
                     if (productCategory.GetMMPolicy() == X_M_Product_Category.MMPOLICY_LiFo)
-                        sql += " ORDER BY asi.GuaranteeDate ASC, s.MMPolicyDate DESC, s.M_ContainerStorage_ID DESC";
+                        sql += " ORDER BY NVL(asi.GuaranteeDate, TO_DATE('1970-01-01', 'YYYY-MM-DD')) ASC, s.MMPolicyDate DESC, s.M_ContainerStorage_ID DESC";
                     else if (productCategory.GetMMPolicy() == X_M_Product_Category.MMPOLICY_FiFo)
-                        sql += " ORDER BY asi.GuaranteeDate ASC, s.MMPolicyDate ASC , s.M_ContainerStorage_ID ASC";
+                        sql += " ORDER BY NVL(asi.GuaranteeDate, TO_DATE('1970-01-01', 'YYYY-MM-DD')) ASC, s.MMPolicyDate ASC , s.M_ContainerStorage_ID ASC";
                 }
                 else
                 {
@@ -5482,9 +5482,9 @@ namespace VAdvantage.Model
 
                     // VIS0060: Handle case of Material Policy on Shipment and Order without Attribute.
                     if (productCategory.GetMMPolicy() == X_M_Product_Category.MMPOLICY_LiFo)
-                        sql += " ORDER BY l.PriorityNo DESC, s.M_AttributeSetInstance_ID DESC";
+                        sql += " ORDER BY s.M_AttributeSetInstance_ID DESC";
                     else if (productCategory.GetMMPolicy() == X_M_Product_Category.MMPOLICY_FiFo)
-                        sql += " ORDER BY l.PriorityNo DESC, s.M_AttributeSetInstance_ID ASC";
+                        sql += " ORDER BY s.M_AttributeSetInstance_ID ASC";
                 }
                 DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
