@@ -5486,7 +5486,7 @@ namespace VAdvantage.Model
                     if (productCategory.GetMMPolicy() == X_M_Product_Category.MMPOLICY_LiFo)
                         sql += " ORDER BY NVL(asi.GuaranteeDate, TO_DATE('1970-01-01', 'YYYY-MM-DD')) ASC, s.M_AttributeSetInstance_ID DESC";
                     else if (productCategory.GetMMPolicy() == X_M_Product_Category.MMPOLICY_FiFo)
-                        sql += " NVL(asi.GuaranteeDate, TO_DATE('1970-01-01', 'YYYY-MM-DD')) ASC, ORDER BY s.M_AttributeSetInstance_ID ASC";
+                        sql += " ORDER BY NVL(asi.GuaranteeDate, TO_DATE('1970-01-01', 'YYYY-MM-DD')) ASC, s.M_AttributeSetInstance_ID ASC";
                 }
                 DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
