@@ -5472,7 +5472,9 @@ namespace VAdvantage.Model
                 else
                 {
                     sql = @"SELECT s.M_AttributeSetInstance_ID ,0 AS M_ProductContainer_ID, s.QtyOnHand AS Qty
-                        FROM M_Storage s WHERE s.M_Locator_ID = " + M_Locator_ID + @" 
+                           FROM M_Storage s 
+                           LEFT OUTER JOIN M_AttributeSetInstance asi ON (s.M_AttributeSetInstance_ID=asi.M_AttributeSetInstance_ID)
+                           WHERE s.M_Locator_ID = " + M_Locator_ID + @" 
                            AND s.M_Product_ID=" + oLine.GetM_Product_ID() + @"
                            AND s.QtyOnHand > 0 ";
                     if (oLine.GetM_AttributeSetInstance_ID() != 0)
@@ -5482,9 +5484,9 @@ namespace VAdvantage.Model
 
                     // VIS0060: Handle case of Material Policy on Shipment and Order without Attribute.
                     if (productCategory.GetMMPolicy() == X_M_Product_Category.MMPOLICY_LiFo)
-                        sql += " ORDER BY s.M_AttributeSetInstance_ID DESC";
+                        sql += " ORDER BY NVL(asi.GuaranteeDate, TO_DATE('1970-01-01', 'YYYY-MM-DD')) ASC, s.M_AttributeSetInstance_ID DESC";
                     else if (productCategory.GetMMPolicy() == X_M_Product_Category.MMPOLICY_FiFo)
-                        sql += " ORDER BY s.M_AttributeSetInstance_ID ASC";
+                        sql += " NVL(asi.GuaranteeDate, TO_DATE('1970-01-01', 'YYYY-MM-DD')) ASC, ORDER BY s.M_AttributeSetInstance_ID ASC";
                 }
                 DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
