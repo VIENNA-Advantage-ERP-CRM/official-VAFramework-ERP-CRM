@@ -185,18 +185,13 @@ namespace VAdvantage.Model
                 {
                     // when gurantee date is null then record to be filtered based on material Policy date
                     sql += "AND (asi.GuaranteeDate IS NULL OR asi.GuaranteeDate>" + GlobalVariable.TO_DATE(minGuaranteeDate, true) + ")"
-                        + @" ORDER BY l.PriorityNo DESC , asi.GuaranteeDate, CASE  WHEN asi.GuaranteeDate IS NULL THEN s.MMPolicyDate ELSE asi.GuaranteeDate END ";
+                        + @" ORDER BY l.PriorityNo DESC , NVL(asi.GuaranteeDate, TO_DATE('1970-01-01', 'YYYY-MM-DD')), s.MMPolicyDate";
                     if (!FiFo)
                         sql += (greater ? " ASC" : " DESC");
 
                     sql += " , NVL(s.M_AttributeSetInstance_ID , 0)";	//	Has Prior over Locator
                     if (!FiFo)
-                        sql += " DESC";
-
-                    sql += ", s.MMPolicyDate ";
-                    if (!FiFo)
-                        //sql += " DESC";
-                        sql += (greater ? " ASC" : " DESC");
+                        sql += " DESC";                    
                 }
                 else
                 {
