@@ -61,14 +61,14 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="ExecuteProcess"></param>
         /// <returns></returns>
-        public static MAlertProcessor[] GetActive(Ctx ctx, string ExecuteProcess)
+        public static MAlertProcessor[] GetActive(Ctx ctx, string ExecuteProcess, string machineIP)
         {
             List<MAlertProcessor> list = new List<MAlertProcessor>();
             String sql = "SELECT * FROM AD_AlertProcessor WHERE IsActive='Y'";
             string scheduleIP = null;
             try
             {
-                string machineIP = Classes.CommonFunctions.GetMachineIPPort();
+                //string machineIP = Classes.CommonFunctions.GetMachineIPPort();
                 s_log.SaveError("Console VServer Machine IP : " + machineIP, "Console VServer Machine IP : " + machineIP);
 
                 DataSet ds = DB.ExecuteDataset(sql);
