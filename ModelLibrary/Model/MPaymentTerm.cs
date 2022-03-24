@@ -1539,6 +1539,8 @@ namespace VAdvantage.Model
             }
             schedule.SetVA009_PaymentTrigger(Util.GetValueOfString(_ds["va009_paymenttrigger"]));
             schedule.SetVA009_ExecutionStatus(Util.GetValueOfString(_ds["VA009_ExecutionStatus"]));
+            //VA230:Copy Cash Line Id discussed with amit
+            schedule.SetC_CashLine_ID(Util.GetValueOfInt(_ds["C_CashLine_ID"]));
             schedule.SetProcessed(true);
         }
 
