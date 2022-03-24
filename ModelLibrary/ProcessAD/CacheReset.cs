@@ -14,6 +14,7 @@ using VAdvantage.Logging;
 using VAdvantage.Utility;
 
 using VAdvantage.ProcessEngine;
+using System.Threading;
 
 namespace VAdvantage.Process
 {
@@ -35,7 +36,85 @@ namespace VAdvantage.Process
         {
             log.Info("");
             Env.Reset(false);	// not final            
-            return "Cache Reset";
+
+            Thread t1 = new Thread(thread1);
+            t1.Start();
+
+            Thread t2 = new Thread(thread2);
+            t2.Start();
+
+            Thread t3 = new Thread(thread3);
+            t3.Start();
+
+
+            return "";
+
+        }
+
+        private void thread1()
+        {
+            for (int i = 0; i < 20; i++)
+            {
+                int AD_Process_ID = 1000366;  // HARDCODED    C_InvoiceCreate
+                MPInstance instance = new MPInstance(GetCtx(), AD_Process_ID, 0);
+                if (!instance.Save())
+                {
+                    //lblStatusInfo = Msg.GetMsg(GetCtx(), "ProcessNoInstance");
+                   // return Msg.GetMsg(GetCtx(), "ProcessNoInstance");
+                }
+
+                ProcessInfo pi = new ProcessInfo("", AD_Process_ID);
+                pi.SetAD_PInstance_ID(instance.GetAD_PInstance_ID());
+
+                pi.SetAD_Client_ID(GetCtx().GetAD_Client_ID());
+                ProcessCtl worker = new ProcessCtl(GetCtx(), null, pi, Get_TrxName());
+                worker.Run();
+                Thread.Sleep(10000);
+            }
+        }
+
+        private void thread2()
+        {
+            for (int i = 0; i < 20; i++)
+            {
+                int AD_Process_ID = 1000366;  // HARDCODED    C_InvoiceCreate
+                MPInstance instance = new MPInstance(GetCtx(), AD_Process_ID, 0);
+                if (!instance.Save())
+                {
+                    //lblStatusInfo = Msg.GetMsg(GetCtx(), "ProcessNoInstance");
+                    // return Msg.GetMsg(GetCtx(), "ProcessNoInstance");
+                }
+
+                ProcessInfo pi = new ProcessInfo("", AD_Process_ID);
+                pi.SetAD_PInstance_ID(instance.GetAD_PInstance_ID());
+
+                pi.SetAD_Client_ID(GetCtx().GetAD_Client_ID());
+                ProcessCtl worker = new ProcessCtl(GetCtx(), null, pi, Get_TrxName());
+                worker.Run();
+                Thread.Sleep(10000);
+            }
+        }
+
+        private void thread3()
+        {
+            for (int i = 0; i < 20; i++)
+            {
+                int AD_Process_ID = 1000366;  // HARDCODED    C_InvoiceCreate
+                MPInstance instance = new MPInstance(GetCtx(), AD_Process_ID, 0);
+                if (!instance.Save())
+                {
+                    //lblStatusInfo = Msg.GetMsg(GetCtx(), "ProcessNoInstance");
+                    // return Msg.GetMsg(GetCtx(), "ProcessNoInstance");
+                }
+
+                ProcessInfo pi = new ProcessInfo("", AD_Process_ID);
+                pi.SetAD_PInstance_ID(instance.GetAD_PInstance_ID());
+
+                pi.SetAD_Client_ID(GetCtx().GetAD_Client_ID());
+                ProcessCtl worker = new ProcessCtl(GetCtx(), null, pi, Get_TrxName());
+                worker.Run();
+                Thread.Sleep(10000);
+            }
         }
     }
 }
