@@ -116,7 +116,7 @@
             var classType = "";
 
             $.ajax({
-                url: VIS.Application.contextUrl + "Common/GenerateXClasses",
+                url: VIS.Application.contextUrl + "Form/GenerateXClasses",
                 dataType: "json",
                 data: {
                     directory: directory,

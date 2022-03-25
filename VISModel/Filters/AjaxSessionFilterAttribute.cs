@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace VISModel.Filters
+namespace VISLogic.Filters
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true, AllowMultiple = true)]
     public class AjaxSessionFilterAttribute : System.Web.Mvc.ActionFilterAttribute

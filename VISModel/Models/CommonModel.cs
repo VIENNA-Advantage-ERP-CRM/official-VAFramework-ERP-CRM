@@ -9,8 +9,9 @@ using VAdvantage.Classes;
 using VAdvantage.DataBase;
 using VAdvantage.Model;
 using VAdvantage.Utility;
+using VIS.DataContracts;
 
-namespace VISLogic.Model
+namespace VISLogic.Models
 {
     public class CommonModel
     {
@@ -200,8 +201,90 @@ namespace VISLogic.Model
             return _querySQL.ToString();
         }
 
+        /// <summary>
+        /// function to check versions against table
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="rowData"></param>
+        /// <returns>True/False</returns>
+        public bool HasVersions(Ctx ctx, SaveRecordIn rowData)
+        {
+            if (rowData != null)
+            {
+                MTable tbl = new MTable(ctx, rowData.AD_Table_ID, null);
 
+                StringBuilder sbSql = new StringBuilder("SELECT COUNT(AD_Table_ID) FROM AD_Table WHERE TableName = '" + rowData.TableName + "_Ver'");
 
+                int Count = Util.GetValueOfInt(DB.ExecuteScalar(sbSql.ToString(), null, null));
+
+                if (Count > 0)
+                {
+                    if (tbl.IsSingleKey())
+                    {
+                        if (rowData.Record_ID > 0)
+                        {
+                            sbSql.Clear();
+                            sbSql.Append(@"SELECT COUNT(" + rowData.TableName + "_ID) FROM " + rowData.TableName + "_Ver " +
+                                " WHERE " + rowData.TableName + "_ID = " + rowData.Record_ID + " AND ProcessedVersion = 'N' AND VersionLog IS NULL AND TRUNC(VersionValidFrom) >= TRUNC(SYSDATE)");
+                            Count = Util.GetValueOfInt(DB.ExecuteScalar(sbSql.ToString()));
+                            if (Count > 0)
+                                return true;
+                        }
+                        return false;
+                    }
+                    else
+                    {
+                        sbSql.Clear();
+
+                        string[] keyCols = tbl.GetKeyColumns();
+                        bool hasCols = false;
+                        for (int w = 0; w < keyCols.Length; w++)
+                        {
+                            hasCols = true;
+                            if (w == 0)
+                            {
+                                sbSql.Append(@"SELECT COUNT(" + keyCols[w] + ") FROM " + rowData.TableName + "_Ver WHERE ");
+
+                                if (keyCols[w] != null)
+                                    sbSql.Append(keyCols[w] + " = " + rowData.RowData[keyCols[w].ToLower()]);
+                                else
+                                    sbSql.Append(" NVL(" + keyCols[w] + ",0) = 0");
+                            }
+                            else
+                            {
+                                if (keyCols[w] != null)
+                                    sbSql.Append(" AND " + keyCols[w] + " = " + rowData.RowData[keyCols[w].ToLower()]);
+                                else
+                                    sbSql.Append(" AND NVL(" + keyCols[w] + ",0) = 0");
+                            }
+                        }
+                        if (hasCols)
+                        {
+                            sbSql.Append(" AND ProcessedVersion = 'N' AND VersionLog IS NULL AND TRUNC(VersionValidFrom) >= TRUNC(SYSDATE)");
+                            Count = Util.GetValueOfInt(DB.ExecuteScalar(sbSql.ToString()));
+                            if (Count > 0)
+                                return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Get Dataset for the query passed in the parameter
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="sql"></param>
+        /// <returns>Dataset for query passed in parameter</returns>
+        public DataSet GetIDTextData(Ctx ctx, string sql)
+        {
+            DataSet dsIDText = DB.ExecuteDataset(sql, null, null);
+            if (dsIDText != null && dsIDText.Tables[0].Rows.Count > 0)
+                return dsIDText;
+
+            return dsIDText;
+        }
         /// <summary>
         /// Get Theme list
         /// </summary>

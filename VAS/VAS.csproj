@@ -51,6 +51,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -101,9 +104,6 @@
     <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WebGrease">
@@ -231,6 +231,7 @@
     <Compile Include="Areas\VAS\Models\PaymentAllocation.cs" />
     <Compile Include="Areas\VAS\Models\PaymentAllocationModel.cs" />
     <Compile Include="Areas\VAS\Models\PaymentModel.cs" />
+    <Compile Include="Areas\VAS\Models\ProductContainerModel.cs" />
     <Compile Include="Areas\VAS\Models\RelatedProductModel.cs" />
     <Compile Include="Areas\VAS\Models\VBOMDropModel.cs" />
     <Compile Include="Areas\VAS\Models\VChargeModel.cs" />
@@ -238,6 +239,7 @@
     <Compile Include="Areas\VAS\Models\VPayPrintModel.cs" />
     <Compile Include="Areas\VAS\Models\VPaySelectModel.cs" />
     <Compile Include="Areas\VAS\Models\VTrxMaterialModel.cs" />
+    <Compile Include="Areas\VAS\VASAreaRegistration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -265,9 +267,43 @@
       <Project>{e7e3c709-33bf-4526-9bd3-64fc5b3092dd}</Project>
       <Name>VAWorkflow</Name>
     </ProjectReference>
+    <ProjectReference Include="..\VISModel\VISLogic.csproj">
+      <Project>{ae558aa6-c414-462f-935e-cd705baf2db8}</Project>
+      <Name>VISLogic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XModel\XModel.csproj">
+      <Project>{7d3a626f-274d-4d29-87e3-272f0a33204b}</Project>
+      <Name>XModel</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\VAS\Content\PaymentRule.css" />
+    <Content Include="Areas\VAS\Content\VPaySelect.css" />
+    <Content Include="Areas\VAS\Views\web.config" />
+    <Content Include="Areas\VAS\Views\AccountForm\Index.cshtml" />
+    <Content Include="Areas\VAS\Views\PaymentAllocation\Index.cshtml" />
     <None Include="packages.config" />
+    <Content Include="Areas\VAS\Scripts\app\forms\acctviewer.js" />
+    <Content Include="Areas\VAS\Scripts\app\forms\acctviewermenu.js" />
+    <Content Include="Areas\VAS\Scripts\app\forms\createforecast.js" />
+    <Content Include="Areas\VAS\Scripts\app\forms\glDimensionValue.js" />
+    <Content Include="Areas\VAS\Scripts\app\forms\vallocation.js" />
+    <Content Include="Areas\VAS\Scripts\app\forms\vattributegrid.js" />
+    <Content Include="Areas\VAS\Scripts\app\forms\vBOMdrop.js" />
+    <Content Include="Areas\VAS\Scripts\app\forms\vcharge.js" />
+    <Content Include="Areas\VAS\Scripts\app\forms\vcreateformprovisionalinvoice.js" />
+    <Content Include="Areas\VAS\Scripts\app\forms\vcreatefrom.js" />
+    <Content Include="Areas\VAS\Scripts\app\forms\vcreatefrominvoice.js" />
+    <Content Include="Areas\VAS\Scripts\app\forms\vcreatefromshipment.js" />
+    <Content Include="Areas\VAS\Scripts\app\forms\vcreatefromstatement.js" />
+    <Content Include="Areas\VAS\Scripts\app\forms\vcreaterelatedlines.js" />
+    <Content Include="Areas\VAS\Scripts\app\forms\vinoutgen.js" />
+    <Content Include="Areas\VAS\Scripts\app\forms\vinvoicegen.js" />
+    <Content Include="Areas\VAS\Scripts\app\forms\vmatch.js" />
+    <Content Include="Areas\VAS\Scripts\app\forms\vpayprint.js" />
+    <Content Include="Areas\VAS\Scripts\app\forms\vpayselect.js" />
+    <Content Include="Areas\VAS\Scripts\app\forms\vtrxmaterial.js" />
+    <Content Include="Areas\VAS\Scripts\model\callouts.js" />
     <Content Include="web.config" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
@@ -275,6 +311,10 @@
     <None Include="web.Release.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Areas\VAS\Data\" />
+    <Folder Include="Areas\VAS\Views\Shared\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

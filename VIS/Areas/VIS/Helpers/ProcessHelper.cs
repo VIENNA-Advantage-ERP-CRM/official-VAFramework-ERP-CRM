@@ -15,7 +15,8 @@ using VAdvantage.Print;
 using VAdvantage.ProcessEngine;
 using VAdvantage.Report;
 using VAdvantage.Utility;
-using VIS.DataContracts;
+
+using VIS.Models;
 
 namespace VIS.Helpers
 {
@@ -128,7 +129,7 @@ namespace VIS.Helpers
             }
         }
         // vinay bhatt window id
-        internal static ProcessReportInfo ExecuteProcessCommon(Ctx ctx, Dictionary<string, string> processInfo, ProcessPara[] pList)
+        public static ProcessReportInfo ExecuteProcessCommon(Ctx ctx, Dictionary<string, string> processInfo, ProcessPara[] pList)
         {
             ProcessReportInfo ret = new ProcessReportInfo();
 
@@ -210,7 +211,7 @@ namespace VIS.Helpers
 
         //[MethodImpl(MethodImplOptions.Synchronized)]
         // vinay bhatt window id
-        internal static ProcessReportInfo ExecuteProcess(Ctx ctx, Dictionary<string, string> processInfo, ProcessPara[] pList)
+        public static ProcessReportInfo ExecuteProcess(Ctx ctx, Dictionary<string, string> processInfo, ProcessPara[] pList)
         {
             ProcessInfo pi = new ProcessInfo().FromList(processInfo);
 
@@ -416,7 +417,7 @@ namespace VIS.Helpers
         /// <param name="fileType"></param>
         /// <param name="AD_Window_ID"></param>
         /// <returns></returns>
-        internal static ProcessReportInfo Process(Ctx ctx, Dictionary<string, string> processInfo)
+        public static ProcessReportInfo Process(Ctx ctx, Dictionary<string, string> processInfo)
         {
             ProcessReportInfo ret = new ProcessReportInfo();
             MPInstance instance = null;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace VISModel.Filters
+namespace VISLogic.Filters
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public  class AjaxAuthorizeAttribute : AuthorizeAttribute

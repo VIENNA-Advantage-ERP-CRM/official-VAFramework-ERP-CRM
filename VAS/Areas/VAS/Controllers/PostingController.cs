@@ -9,7 +9,7 @@ using VAdvantage.Acct;
 using VAdvantage.Logging;
 using VAdvantage.Model;
 using VAdvantage.Utility;
-using VIS.Filters;
+using VISLogic.Filters;
 
 namespace VIS.Controllers
 {

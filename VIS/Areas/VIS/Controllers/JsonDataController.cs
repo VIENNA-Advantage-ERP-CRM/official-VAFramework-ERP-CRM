@@ -23,7 +23,7 @@ using ViennaAdvantage.Model;
 using System.Web.Script.Serialization;
 using System.Text;
 using System.Threading.Tasks;
-using VISLogic.Model;
+using VISLogic.Models;
 
 namespace VIS.Controllers
 {
@@ -1128,6 +1128,71 @@ namespace VIS.Controllers
             CommonModel cm = new CommonModel();
             var retRes = cm.GetVerDetails(ctx, od);
             return Json(JsonConvert.SerializeObject(retRes), JsonRequestBehavior.AllowGet);
+        }
+
+
+        public JsonResult CheckVersions(SaveRecordIn RowData)
+        {
+            bool hasRecords = false;
+            if (Session["Ctx"] != null)
+            {
+                Ctx ctx = Session["ctx"] as Ctx;
+                CommonModel cmm = new CommonModel();
+                hasRecords = cmm.HasVersions(ctx, RowData);
+            }
+            return Json(new { result = hasRecords }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Function to get data based on the query generated for table
+        /// </summary>
+        /// <param name="fields"></param>
+        /// <returns></returns>
+        public JsonResult GetIDTextData(string fields)
+        {
+            if (Session["Ctx"] != null)
+            {
+                string retJSON = "";
+                Ctx ctx = Session["ctx"] as Ctx;
+
+                // get parameters and split with comma
+                string[] paramValue = !string.IsNullOrEmpty(fields) ? fields.Split(',') : null;
+                // get table name from first index
+                string TableName = Util.GetValueOfString(paramValue[0]);
+
+                // check if second parameter is true for Version Table
+                if (Util.GetValueOfBool(paramValue[1]))
+                    TableName = TableName + "_Ver";
+
+                int AD_Table_ID = MTable.Get_Table_ID(TableName);
+                CommonModel objCommonModel = new CommonModel();
+                POInfo inf = POInfo.GetPOInfo(ctx, AD_Table_ID);
+                // Get SQL Query from PO Info for selected table
+                string sqlCol = objCommonModel.GetSQLQuery(ctx,AD_Table_ID,inf.GetPoInfoColumns());
+
+                // Append where Clause, passed in the parameter
+                string whClause = Util.GetValueOfString(paramValue[2]);
+                if (whClause != "")
+                    sqlCol += " WHERE " + whClause;
+
+                // Apply Role check
+                if (sqlCol.Trim() != "")
+                    sqlCol = MRole.GetDefault(ctx).AddAccessSQL(sqlCol, TableName, MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+
+                // if SQL is being generated for Version table
+                if (Util.GetValueOfBool(paramValue[1]))
+                {
+                    if (sqlCol.Contains("WHERE"))
+                    {
+                        sqlCol += " AND " + TableName + ".ProcessedVersion = 'N' ";
+                    }
+                    sqlCol += " ORDER BY " + TableName + ".VERSIONVALIDFROM DESC, " + TableName + ".RecordVersion DESC";
+                }
+               
+                retJSON = JsonConvert.SerializeObject(objCommonModel.GetIDTextData(ctx, sqlCol));
+                return Json(retJSON, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { result = "ok" }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>

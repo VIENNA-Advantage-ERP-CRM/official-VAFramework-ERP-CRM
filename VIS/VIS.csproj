@@ -46,8 +46,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Antlr3.Runtime">
-      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -106,14 +106,13 @@
       <HintPath>..\ViennaAdvantageWeb\Dll\itextsharp.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net.Http.Formatting, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.1.2\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -124,40 +123,31 @@
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.1.2\lib\net45\System.Web.Helpers.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Http, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.1.2\lib\net45\System.Web.Http.dll</HintPath>
+    <Reference Include="System.Web.Http, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.7\lib\net45\System.Web.Http.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Http.WebHost, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.1.2\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.7\lib\net45\System.Web.Http.WebHost.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.1.2\lib\net45\System.Web.Mvc.dll</HintPath>
+    <Reference Include="System.Web.Mvc, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.AspNet.Razor.3.1.2\lib\net45\System.Web.Razor.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.1.2\lib\net45\System.Web.WebPages.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.1.2\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.1.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Drawing" />
@@ -196,7 +186,6 @@
     <Content Include="Areas\VIS\Content\Login.css" />
     <Content Include="Areas\VIS\Content\notify.mp3" />
     <Content Include="Areas\VIS\Content\notify.wav" />
-    <Content Include="Areas\VIS\Content\PaymentRule.css" />
     <Content Include="Areas\VIS\Content\PrefStyle.css" />
     <Content Include="Areas\VIS\Content\ProductContainer.css" />
     <Content Include="Areas\VIS\Content\RecordAccessDialog.css" />
@@ -206,7 +195,6 @@
     <Content Include="Areas\VIS\Content\VIS.rtl.css" />
     <Content Include="Areas\VIS\Content\VIS.all.min.css" />
     <Content Include="Areas\VIS\Content\VISAD.css" />
-    <Content Include="Areas\VIS\Content\VPaySelect.css" />
     <Content Include="Areas\VIS\Images\11.png" />
     <Content Include="Areas\VIS\Images\12.png" />
     <Content Include="Areas\VIS\Images\21.png" />
@@ -626,31 +614,11 @@
     <Content Include="Areas\VIS\Scripts\app\desktopmgr.js" />
     <Content Include="Areas\VIS\Scripts\app\favouritehelper.js" />
     <Content Include="Areas\VIS\Scripts\app\formframe.js" />
-    <Content Include="Areas\VIS\Scripts\app\forms\acctviewer.js" />
-    <Content Include="Areas\VIS\Scripts\app\forms\acctviewermenu.js" />
-    <Content Include="Areas\VIS\Scripts\app\forms\createforecast.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\form.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\generatexmodel.js" />
-    <Content Include="Areas\VIS\Scripts\app\forms\glDimensionValue.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\productcontainer.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\productcontainermove.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\productContainerTree.js" />
-    <Content Include="Areas\VIS\Scripts\app\forms\vallocation.js" />
-    <Content Include="Areas\VIS\Scripts\app\forms\vattributegrid.js" />
-    <Content Include="Areas\VIS\Scripts\app\forms\vBOMdrop.js" />
-    <Content Include="Areas\VIS\Scripts\app\forms\vcharge.js" />
-    <Content Include="Areas\VIS\Scripts\app\forms\vcreateformprovisionalinvoice.js" />
-    <Content Include="Areas\VIS\Scripts\app\forms\vcreatefrom.js" />
-    <Content Include="Areas\VIS\Scripts\app\forms\vcreatefrominvoice.js" />
-    <Content Include="Areas\VIS\Scripts\app\forms\vcreatefromshipment.js" />
-    <Content Include="Areas\VIS\Scripts\app\forms\vcreatefromstatement.js" />
-    <Content Include="Areas\VIS\Scripts\app\forms\vcreaterelatedlines.js" />
-    <Content Include="Areas\VIS\Scripts\app\forms\vinoutgen.js" />
-    <Content Include="Areas\VIS\Scripts\app\forms\vinvoicegen.js" />
-    <Content Include="Areas\VIS\Scripts\app\forms\vmatch.js" />
-    <Content Include="Areas\VIS\Scripts\app\forms\vpayprint.js" />
-    <Content Include="Areas\VIS\Scripts\app\forms\vpayselect.js" />
-    <Content Include="Areas\VIS\Scripts\app\forms\vtrxmaterial.js" />
     <Content Include="Areas\VIS\Scripts\app\Framework\accountform.js" />
     <Content Include="Areas\VIS\Scripts\app\Framework\amountdivision.js" />
     <Content Include="Areas\VIS\Scripts\app\Framework\appointments.js" />
@@ -746,7 +714,6 @@
     <Content Include="Areas\VIS\Scripts\home\home.js" />
     <Content Include="Areas\VIS\Scripts\home\shortcut.js" />
     <Content Include="Areas\VIS\Scripts\model\calloutColumn.js" />
-    <Content Include="Areas\VIS\Scripts\model\callouts.js" />
     <Content Include="Areas\VIS\Scripts\processengine\processctl.js" />
     <Content Include="Areas\VIS\Scripts\processengine\processinfo.js" />
     <Content Include="Areas\VIS\Scripts\processengine\processparameter.js" />
@@ -760,11 +727,7 @@
     <Content Include="Areas\VIS\Templates\VIS_Templates.html" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Areas\VIS\Classes\ClientCredentials.cs" />
     <Compile Include="Areas\VIS\Classes\GmailConfig.cs" />
-    <Compile Include="Areas\VIS\Classes\LookupHelper.cs" />
-    <Compile Include="Areas\VIS\Classes\QueryCollection.cs" />
-    <Compile Include="Areas\VIS\Classes\SecureEngineBridge.cs" />
     <Compile Include="Areas\VIS\Controllers\AccountController.cs" />
     <Compile Include="Areas\VIS\Controllers\AmountDivisionController.cs" />
     <Compile Include="Areas\VIS\Controllers\ASearchController.cs" />
@@ -807,66 +770,23 @@
     <Compile Include="Areas\VIS\Controllers\VImageFormController.cs" />
     <Compile Include="Areas\VIS\Controllers\VSetupController.cs" />
     <Compile Include="Areas\VIS\Controllers\WFActivityController.cs" />
-    <Compile Include="Areas\VIS\DataContracts\FormData.cs" />
-    <Compile Include="Areas\VIS\DataContracts\ProcessData.cs" />
-    <Compile Include="Areas\VIS\DataContracts\ThemeData.cs" />
-    <Compile Include="Areas\VIS\DataContracts\WindowData.cs" />
     <Compile Include="Areas\VIS\Filters\AjaxAuthorizeAttribute.cs" />
     <Compile Include="Areas\VIS\Filters\AjaxSessionFilterAttribute.cs" />
     <Compile Include="Areas\VIS\Filters\AjaxValidateAntiForgeryTokenAttribute.cs" />
-    <Compile Include="Areas\VIS\Helpers\ContextHelper.cs" />
-    <Compile Include="Areas\VIS\Helpers\FormHelper.cs" />
     <Compile Include="Areas\VIS\Helpers\HomeHelper.cs" />
     <Compile Include="Areas\VIS\Helpers\JsonHelper.cs" />
     <Compile Include="Areas\VIS\Helpers\LoginHelper.cs" />
-    <Compile Include="Areas\VIS\Helpers\MarkModuleHelper.cs" />
+    <Compile Include="Areas\VIS\Helpers\LookupHelper.cs" />
     <Compile Include="Areas\VIS\Helpers\MenuHelper.cs" />
     <Compile Include="Areas\VIS\Helpers\ProcessHelper.cs" />
-    <Compile Include="Areas\VIS\Helpers\RoleHelper.cs" />
-    <Compile Include="Areas\VIS\Helpers\ShortcutHelper.cs" />
-    <Compile Include="Areas\VIS\Helpers\SqlHelper.cs" />
-    <Compile Include="Areas\VIS\Helpers\WindowHelper.cs" />
-    <Compile Include="Areas\VIS\Models\AccountModels.cs" />
-    <Compile Include="Areas\VIS\Models\AmountDivisionModel.cs" />
-    <Compile Include="Areas\VIS\Models\ASearchModel.cs" />
-    <Compile Include="Areas\VIS\Models\AttachmentHistoryModel.cs" />
-    <Compile Include="Areas\VIS\Models\AttachmentModel.cs" />
     <Compile Include="Areas\VIS\Models\BPartnerModel.cs" />
-    <Compile Include="Areas\VIS\Models\CardViewModel.cs" />
-    <Compile Include="Areas\VIS\Models\Chat\ChatModel.cs" />
-    <Compile Include="Areas\VIS\Models\DocActionModel.cs" />
     <Compile Include="Areas\VIS\Models\EmailModel.cs" />
-    <Compile Include="Areas\VIS\Models\FormModel.cs" />
-    <Compile Include="Areas\VIS\Models\GenerateModel.cs" />
-    <Compile Include="Areas\VIS\Models\GenerateXModelModel.cs" />
-    <Compile Include="Areas\VIS\Models\GenralAttributeModel.cs" />
-    <Compile Include="Areas\VIS\Models\Group\CreateUser.cs" />
-    <Compile Include="Areas\VIS\Models\Group\CTX.cs" />
-    <Compile Include="Areas\VIS\Models\Group\GmailContactsSettings.cs" />
-    <Compile Include="Areas\VIS\Models\Group\Group.cs" />
-    <Compile Include="Areas\VIS\Models\HomeModels.cs" />
-    <Compile Include="Areas\VIS\Models\InfoGeneralModel.cs" />
-    <Compile Include="Areas\VIS\Models\InfoMenuModel.cs" />
-    <Compile Include="Areas\VIS\Models\InfoProductModel.cs" />
-    <Compile Include="Areas\VIS\Models\InfoWindowModel.cs" />
-    <Compile Include="Areas\VIS\Models\LocationModel.cs" />
-    <Compile Include="Areas\VIS\Models\LocatorModel.cs" />
-    <Compile Include="Areas\VIS\Models\ProductContainerModel.cs" />
-    <Compile Include="Areas\VIS\Models\RecordAccessModel.cs" />
-    <Compile Include="Areas\VIS\Models\ShortcutModel.cs" />
-    <Compile Include="Areas\VIS\Models\SmsModel.cs" />
-    <Compile Include="Areas\VIS\Models\Subscribe\SubscribeModel.cs" />
-    <Compile Include="Areas\VIS\Models\TabPanels\BiPanelModel.cs" />
-    <Compile Include="Areas\VIS\Models\TabPanels\HistoryDetailsDataModel.cs" />
-    <Compile Include="Areas\VIS\Models\ThemeModel.cs" />
+    <Compile Include="Areas\VIS\Models\GmailContactsSettings.cs" />
+    <Compile Include="Areas\VIS\Models\HistoryDetailsDataModel.cs" />
     <Compile Include="Areas\VIS\Models\TreeMaintenanceModel.cs" />
     <Compile Include="Areas\VIS\Models\UserPreferenceModel.cs" />
-    <Compile Include="Areas\VIS\Models\ValuePreferenceModel.cs" />
     <Compile Include="Areas\VIS\Models\VImageModel.cs" />
-    <Compile Include="Areas\VIS\Models\VSetupModel.cs" />
     <Compile Include="Areas\VIS\Models\VTree.cs" />
-    <Compile Include="Areas\VIS\Models\VTreeMaintenance.cs" />
-    <Compile Include="Areas\VIS\Models\WFActivityModel.cs" />
     <Compile Include="Areas\VIS\VISAreaRegistration.cs" />
     <Compile Include="Areas\VIS\WebPages\CreateUser.aspx.cs">
       <DependentUpon>CreateUser.aspx</DependentUpon>
@@ -890,7 +810,6 @@
     <Content Include="Areas\VIS\WebPages\CreateUser.aspx" />
     <Content Include="Areas\VIS\WebPages\CrystalReprotViewer.aspx" />
     <Content Include="packages.config" />
-    <Content Include="Areas\VIS\Views\AccountForm\Index.cshtml" />
     <Content Include="Areas\VIS\Views\ASearch\Index.cshtml" />
     <Content Include="Areas\VIS\Views\Chat\LoadChat.cshtml" />
     <Content Include="Areas\VIS\Views\Email\Index.cshtml" />
@@ -934,7 +853,6 @@
     <Folder Include="Areas\VIS\Views\VTrxMaterial\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\VIS\Views\PaymentAllocation\Index.cshtml" />
     <Content Include="Areas\VIS\Views\TelerikReport\Index.cshtml" />
     <Content Include="Areas\VIS\Views\Home\IndexOld.cshtml" />
     <Content Include="Areas\VIS\Views\Shared\View.cshtml" />

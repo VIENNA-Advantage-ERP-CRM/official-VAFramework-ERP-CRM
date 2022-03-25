@@ -36,9 +36,11 @@
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Dynamic" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
@@ -67,13 +69,60 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\AttachmentHelper.cs" />
+    <Compile Include="Classes\ClientCredentials.cs" />
     <Compile Include="Classes\ContactsInfo.cs" />
     <Compile Include="Classes\LoginProcess.cs" />
+    <Compile Include="Classes\QueryCollection.cs" />
+    <Compile Include="Classes\SecureEngineBridge.cs" />
+    <Compile Include="DataContracts\FormData.cs" />
+    <Compile Include="DataContracts\InfoSchema.cs" />
+    <Compile Include="DataContracts\ProcessData.cs" />
+    <Compile Include="DataContracts\ThemeData.cs" />
+    <Compile Include="DataContracts\WindowData.cs" />
     <Compile Include="Filters\AjaxAuthorizeAttribute.cs" />
     <Compile Include="Filters\AjaxSessionFilterAttribute.cs" />
     <Compile Include="Filters\AjaxValidateAntiForgeryTokenAttribute.cs" />
-    <Compile Include="Model\CommonModel.cs" />
-    <Compile Include="Model\PAttributesModel.cs" />
+    <Compile Include="Helpers\ContextHelper.cs" />
+    <Compile Include="Helpers\FormHelper.cs" />
+    <Compile Include="Helpers\MarkModuleHelper.cs" />
+    <Compile Include="Helpers\RoleHelper.cs" />
+    <Compile Include="Helpers\ShortcutHelper.cs" />
+    <Compile Include="Helpers\SqlHelper.cs" />
+    <Compile Include="Helpers\WindowHelper.cs" />
+    <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\AmountDivisionModel.cs" />
+    <Compile Include="Models\ASearchModel.cs" />
+    <Compile Include="Models\AttachmentHistoryModel.cs" />
+    <Compile Include="Models\AttachmentModel.cs" />
+    <Compile Include="Models\CardViewModel.cs" />
+    <Compile Include="Models\Chat\ChatModel.cs" />
+    <Compile Include="Models\DocActionModel.cs" />
+    <Compile Include="Models\FormModel.cs" />
+    <Compile Include="Models\GenerateModel.cs" />
+    <Compile Include="Models\GenerateXModelModel.cs" />
+    <Compile Include="Models\GenralAttributeModel.cs" />
+    <Compile Include="Models\Group\CreateUser.cs" />
+    <Compile Include="Models\Group\CTX.cs" />
+    <Compile Include="Models\Group\Group.cs" />
+    <Compile Include="Models\HomeModels.cs" />
+    <Compile Include="Models\InfoGeneralModel.cs" />
+    <Compile Include="Models\InfoMenuModel.cs" />
+    <Compile Include="Models\InfoProductModel.cs" />
+    <Compile Include="Models\InfoWindowModel.cs" />
+    <Compile Include="Models\LocationModel.cs" />
+    <Compile Include="Models\LocatorModel.cs" />
+    <Compile Include="Models\RecordAccessModel.cs" />
+    <Compile Include="Models\ShortcutModel.cs" />
+    <Compile Include="Models\SmsModel.cs" />
+    <Compile Include="Models\Subscribe\SubscribeModel.cs" />
+    <Compile Include="Models\TabPanels\BiPanelModel.cs" />
+    <Compile Include="Models\ThemeModel.cs" />
+    <Compile Include="Models\ValuePreferenceModel.cs" />
+    <Compile Include="Models\VSetupModel.cs" />
+    <Compile Include="Models\VTreeMaintenance.cs" />
+    <Compile Include="Models\WFActivityModel.cs" />
+    <Compile Include="Models\CommonModel.cs" />
+    <Compile Include="Models\PAttributesModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -97,10 +146,17 @@
       <Project>{ef955712-f147-4a6a-8d11-8fecc5fe3942}</Project>
       <Name>VAModelAD</Name>
     </ProjectReference>
+    <ProjectReference Include="..\VAWorkflow\VAWorkflow.csproj">
+      <Project>{e7e3c709-33bf-4526-9bd3-64fc5b3092dd}</Project>
+      <Name>VAWorkflow</Name>
+    </ProjectReference>
     <ProjectReference Include="..\XModel\XModel.csproj">
       <Project>{7d3a626f-274d-4d29-87e3-272f0a33204b}</Project>
       <Name>XModel</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

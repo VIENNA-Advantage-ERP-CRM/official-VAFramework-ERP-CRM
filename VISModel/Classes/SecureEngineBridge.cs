@@ -79,7 +79,7 @@ namespace VIS.Classes
         /// Generate sercure key (client side)
         /// </summary>
         /// <returns>string key</returns>
-        internal static string GetRandomKey()
+        public static string GetRandomKey()
         {
             var RnNum = new Random().Next(10000000, 99999999);
             var RnNum2 = new Random().Next(10000000, 99999999);

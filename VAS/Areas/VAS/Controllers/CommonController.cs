@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
@@ -14,9 +13,6 @@ using VAdvantage.Logging;
 using VAdvantage.Model;
 using VAdvantage.ProcessEngine;
 using VAdvantage.Utility;
-using VIS.Classes;
-using VIS.DataContracts;
-using VIS.Helpers;
 using VIS.Models;
 
 namespace VIS.Controllers
@@ -295,24 +291,7 @@ namespace VIS.Controllers
 
         #endregion
 
-        #region Generate XClasses
-
-        public JsonResult GenerateXClasses(string directory, bool chkStatus, string tableId, string classType)
-        {
-            if (Session["Ctx"] != null)
-            {
-                var ctx = Session["ctx"] as Ctx;
-                StringBuilder sbTextCopy = new StringBuilder();
-                string fileName = string.Empty;
-
-                var msg = VAdvantage.Tool.GenerateModel.StartProcess("ViennaAdvantage.Model", directory, chkStatus, tableId, classType, out sbTextCopy, out fileName);
-                string contant = sbTextCopy.ToString();
-                return Json(new { contant, fileName, msg }, JsonRequestBehavior.AllowGet);
-            }
-
-            return Json(new { result = "Error" }, JsonRequestBehavior.AllowGet);
-        }
-        #endregion
+     
 
         #region VAttributeGrid
         public JsonResult GetDataQueryAttribute()
@@ -410,57 +389,7 @@ namespace VIS.Controllers
             return Json(new { result = "ok" }, JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// Function to get data based on the query generated for table
-        /// </summary>
-        /// <param name="fields"></param>
-        /// <returns></returns>
-        public JsonResult GetIDTextData(string fields)
-        {
-            if (Session["Ctx"] != null)
-            {
-                string retJSON = "";
-                Ctx ctx = Session["ctx"] as Ctx;
-
-                // get parameters and split with comma
-                string[] paramValue = !string.IsNullOrEmpty(fields) ? fields.Split(',') : null;
-                // get table name from first index
-                string TableName = Util.GetValueOfString(paramValue[0]);
-
-                // check if second parameter is true for Version Table
-                if (Util.GetValueOfBool(paramValue[1]))
-                    TableName = TableName + "_Ver";
-
-                int AD_Table_ID = MTable.Get_Table_ID(TableName);
-
-                POInfo inf = POInfo.GetPOInfo(ctx, AD_Table_ID);
-                // Get SQL Query from PO Info for selected table
-                string sqlCol = inf.GetSQLQuery();
-
-                // Append where Clause, passed in the parameter
-                string whClause = Util.GetValueOfString(paramValue[2]);
-                if (whClause != "")
-                    sqlCol += " WHERE " + whClause;
-
-                // Apply Role check
-                if (sqlCol.Trim() != "")
-                    sqlCol = MRole.GetDefault(ctx).AddAccessSQL(sqlCol, TableName, MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
-
-                // if SQL is being generated for Version table
-                if (Util.GetValueOfBool(paramValue[1]))
-                {
-                    if (sqlCol.Contains("WHERE"))
-                    {
-                        sqlCol += " AND " + TableName + ".ProcessedVersion = 'N' ";
-                    }
-                    sqlCol += " ORDER BY " + TableName + ".VERSIONVALIDFROM DESC, " + TableName + ".RecordVersion DESC";
-                }
-                CommonModel objCommonModel = new CommonModel();
-                retJSON = JsonConvert.SerializeObject(objCommonModel.GetIDTextData(ctx, sqlCol));
-                return Json(retJSON, JsonRequestBehavior.AllowGet);
-            }
-            return Json(new { result = "ok" }, JsonRequestBehavior.AllowGet);
-        }
+        
 
         public JsonResult CheckTableDeletable(string fields)
         {
@@ -497,32 +426,6 @@ namespace VIS.Controllers
             return Json(new { result = "ok" }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult CheckVersions(SaveRecordIn RowData)
-        {
-            bool hasRecords = false;
-            if (Session["Ctx"] != null)
-            {
-                Ctx ctx = Session["ctx"] as Ctx;
-                CommonModel cmm = new CommonModel();
-                hasRecords = cmm.HasVersions(ctx, RowData);
-            }
-            return Json(new { result = hasRecords }, JsonRequestBehavior.AllowGet);
-        }
-
-        /// <summary>
-        /// Method to get parent tab records ID.
-        /// </summary>
-        /// <param name="SelectColumn">Column  to be selected</param>
-        /// <param name="SelectTable">From table</param>
-        /// <param name="WhereColumn">Where column</param>
-        /// <param name="WhereValue">ID of child column</param>
-        /// <returns></returns>
-        public ActionResult GetZoomParentRec(string SelectColumn, string SelectTable, string WhereColumn, string WhereValue)
-        {
-            //ZoomChildTab
-            WindowHelper obj = new Helpers.WindowHelper();
-            return Json(JsonConvert.SerializeObject(obj.GetZoomParentRecord(SelectColumn, SelectTable, WhereColumn, WhereValue)), JsonRequestBehavior.AllowGet);
-        }
     }
 
     public class AttributeGrid
@@ -3630,20 +3533,7 @@ namespace VIS.Controllers
             return retDic;
         }
 
-        /// <summary>
-        /// Get Dataset for the query passed in the parameter
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="sql"></param>
-        /// <returns>Dataset for query passed in parameter</returns>
-        public DataSet GetIDTextData(Ctx ctx, string sql)
-        {
-            DataSet dsIDText = DB.ExecuteDataset(sql, null, null);
-            if (dsIDText != null && dsIDText.Tables[0].Rows.Count > 0)
-                return dsIDText;
-
-            return dsIDText;
-        }
+        
 
         /// <summary>
         /// Check whether table is deletable on AD_Table window
@@ -3688,75 +3578,7 @@ namespace VIS.Controllers
             return retRes;
         }
 
-        /// <summary>
-        /// function to check versions against table
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="rowData"></param>
-        /// <returns>True/False</returns>
-        public bool HasVersions(Ctx ctx, SaveRecordIn rowData)
-        {
-            if (rowData != null)
-            {
-                MTable tbl = new MTable(ctx, rowData.AD_Table_ID, null);
-
-                StringBuilder sbSql = new StringBuilder("SELECT COUNT(AD_Table_ID) FROM AD_Table WHERE TableName = '" + rowData.TableName + "_Ver'");
-
-                int Count = Util.GetValueOfInt(DB.ExecuteScalar(sbSql.ToString(), null, null));
-
-                if (Count > 0)
-                {
-                    if (tbl.IsSingleKey())
-                    {
-                        if (rowData.Record_ID > 0)
-                        {
-                            sbSql.Clear();
-                            sbSql.Append(@"SELECT COUNT(" + rowData.TableName + "_ID) FROM " + rowData.TableName + "_Ver " +
-                                " WHERE " + rowData.TableName + "_ID = " + rowData.Record_ID + " AND ProcessedVersion = 'N' AND VersionLog IS NULL AND TRUNC(VersionValidFrom) >= TRUNC(SYSDATE)");
-                            Count = Util.GetValueOfInt(DB.ExecuteScalar(sbSql.ToString()));
-                            if (Count > 0)
-                                return true;
-                        }
-                        return false;
-                    }
-                    else
-                    {
-                        sbSql.Clear();
-
-                        string[] keyCols = tbl.GetKeyColumns();
-                        bool hasCols = false;
-                        for (int w = 0; w < keyCols.Length; w++)
-                        {
-                            hasCols = true;
-                            if (w == 0)
-                            {
-                                sbSql.Append(@"SELECT COUNT(" + keyCols[w] + ") FROM " + rowData.TableName + "_Ver WHERE ");
-
-                                if (keyCols[w] != null)
-                                    sbSql.Append(keyCols[w] + " = " + rowData.RowData[keyCols[w].ToLower()]);
-                                else
-                                    sbSql.Append(" NVL(" + keyCols[w] + ",0) = 0");
-                            }
-                            else
-                            {
-                                if (keyCols[w] != null)
-                                    sbSql.Append(" AND " + keyCols[w] + " = " + rowData.RowData[keyCols[w].ToLower()]);
-                                else
-                                    sbSql.Append(" AND NVL(" + keyCols[w] + ",0) = 0");
-                            }
-                        }
-                        if (hasCols)
-                        {
-                            sbSql.Append(" AND ProcessedVersion = 'N' AND VersionLog IS NULL AND TRUNC(VersionValidFrom) >= TRUNC(SYSDATE)");
-                            Count = Util.GetValueOfInt(DB.ExecuteScalar(sbSql.ToString()));
-                            if (Count > 0)
-                                return true;
-                        }
-                    }
-                }
-            }
-            return false;
-        }
+       
 
         /// <summary>
         /// Get Version information for changed columns

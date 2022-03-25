@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using VAdvantage.Model;
-using VIS.Models;
 
-namespace VIS.DataContracts
+
+namespace VIS.Models
 {
 
     /// <summary>

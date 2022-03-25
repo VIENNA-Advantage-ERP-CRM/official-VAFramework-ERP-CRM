@@ -326,7 +326,7 @@ namespace VIS.Models
         /// </summary>
         /// <param name="ctx">client context</param>
         /// <returns>keyname pair dictionary</returns>
-        internal static LocationData GetAllLocations(VAdvantage.Utility.Ctx ctx)
+        public static LocationData GetAllLocations(VAdvantage.Utility.Ctx ctx)
         {
             LocationData locData = new LocationData();
             int MAX_ROWS = 500;

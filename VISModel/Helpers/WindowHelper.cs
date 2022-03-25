@@ -2045,7 +2045,7 @@ namespace VIS.Helpers
         /// <param name="dInn">row info</param>
         /// <param name="ctx"></param>
         /// <returns>dleted row info to client</returns>
-        internal DeleteRecordOut DeleteRecord(DeleteRecordIn dInn, Ctx ctx)
+        public DeleteRecordOut DeleteRecord(DeleteRecordIn dInn, Ctx ctx)
         {
             DeleteRecordOut outt = new DeleteRecordOut();
 
@@ -2204,7 +2204,7 @@ namespace VIS.Helpers
         /// <param name="sql"></param>
         /// <param name="cardID"></param>
         /// <returns></returns>
-        internal int GetRecordCountWithCard(string sql, int cardID) {
+        public int GetRecordCountWithCard(string sql, int cardID) {
             string cardCondition =Util.GetValueOfString(DB.ExecuteScalar("SELECT excludedGroup FROM AD_CARDVIEW WHERE AD_CARDVIEW_ID=" + cardID));
             if (!string.IsNullOrEmpty(cardCondition)) {
                 string[] textSplit = cardCondition.Split(',');                
@@ -2239,7 +2239,7 @@ namespace VIS.Helpers
         /// <param name="encryptedColnames">lsit encrypted column of window</param>
         /// <param name="ctx">context</param>
         /// <returns>Json cutom equalvalent to dataset</returns>
-        internal object GetWindowRecords(SqlParamsIn sqlIn, List<string> encryptedColNames, Ctx ctx, int rowCount, string sqlCount, int AD_Table_ID, List<string> obscureFields)
+        public object GetWindowRecords(SqlParamsIn sqlIn, List<string> encryptedColNames, Ctx ctx, int rowCount, string sqlCount, int AD_Table_ID, List<string> obscureFields)
         {
             WindowRecordOut retVal = new WindowRecordOut();
 
@@ -2484,7 +2484,7 @@ namespace VIS.Helpers
         /// <param name="encryptedColNames">list of encrypted columna names</param>
         /// <param name="ctx"></param>
         /// <returns>JTable object</returns>
-        internal object GetWindowRecord(string sql, List<string> encryptedColNames, Ctx ctx, List<string> obscureFields)
+        public object GetWindowRecord(string sql, List<string> encryptedColNames, Ctx ctx, List<string> obscureFields)
         {
 
             var h = new SqlHelper();
@@ -2558,7 +2558,7 @@ namespace VIS.Helpers
         /// <param name="encryptedColnames">lsit encrypted column of window</param>
         /// <param name="ctx">context</param>
         /// <returns>Json cutom equalvalent to dataset</returns>
-        internal object GetWindowRecordsForTreeNode(SqlParamsIn sqlIn, List<string> encryptedColNames, Ctx ctx, int rowCount, string sqlCount, int AD_Table_ID, int treeID, int treeNodeID, List<string> obscureFields)
+        public  object GetWindowRecordsForTreeNode(SqlParamsIn sqlIn, List<string> encryptedColNames, Ctx ctx, int rowCount, string sqlCount, int AD_Table_ID, int treeID, int treeNodeID, List<string> obscureFields)
         {
             List<JTable> outO = new List<JTable>();
             JTable obj = null;
@@ -2773,7 +2773,7 @@ namespace VIS.Helpers
         /// <param name="encryptedColnames">lsit encrypted column of window</param>
         /// <param name="ctx">context</param>
         /// <returns>Json cutom equalvalent to dataset</returns>
-        internal int GetRecordCountForTreeNode(string whereClause, Ctx ctx, int AD_Table_ID, int treeID, int treeNodeID, int windowNo, bool ShowSummaryNodes)
+        public int GetRecordCountForTreeNode(string whereClause, Ctx ctx, int AD_Table_ID, int treeID, int treeNodeID, int windowNo, bool ShowSummaryNodes)
         {
             MSession session = MSession.Get(ctx, true);
             session.QueryLog(ctx.GetAD_Client_ID(), ctx.GetAD_Org_ID(), AD_Table_ID,
@@ -2822,7 +2822,7 @@ namespace VIS.Helpers
 
 
 
-        internal RecordInfoOut GetRecordInfo(RecordInfoIn dse, Ctx ctx)
+        public RecordInfoOut GetRecordInfo(RecordInfoIn dse, Ctx ctx)
         {
             RecordInfoOut outt = new RecordInfoOut();
 
@@ -3042,7 +3042,7 @@ namespace VIS.Helpers
         /// clean up
         /// </summary>
 
-        internal static CardViewData GetCardViewDetail(int AD_Window_ID, int AD_Tab_ID, Ctx ctx, int AD_CardView_ID,string SQL)
+        public static CardViewData GetCardViewDetail(int AD_Window_ID, int AD_Tab_ID, Ctx ctx, int AD_CardView_ID,string SQL)
         {
             
             VAdvantage.Common.Common cFun = new VAdvantage.Common.Common();
