@@ -193,8 +193,9 @@ namespace VAdvantage.Logging
                     }
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                File.WriteAllText(baseDirName + "//text", "error" + ex.Message);
                 _file = null;
                 return false;
             }
@@ -231,7 +232,7 @@ namespace VAdvantage.Logging
                 //    Initialize(_viennaHome, true, true);
                 //}
 
-                if (DateTime.Now > Convert.ToDateTime(_lastFileDate).AddHours(1)) //Set Now Date
+                if (DateTime.Now > Convert.ToDateTime(_lastFileDate).AddMinutes(1)) //Set Now Date
                 {
                     Initialize(_viennaHome, true, true);
                 }

@@ -14,6 +14,7 @@ using VAdvantage.Logging;
 using VAdvantage.Utility;
 
 using VAdvantage.ProcessEngine;
+using System.Threading;
 
 namespace VAdvantage.Process
 {
@@ -35,7 +36,8 @@ namespace VAdvantage.Process
         {
             log.Info("");
             Env.Reset(false);	// not final            
-            return "Cache Reset";
+            return "";
+
         }
     }
 }
