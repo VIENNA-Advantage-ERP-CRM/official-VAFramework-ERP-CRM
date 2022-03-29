@@ -195,7 +195,6 @@ namespace VAdvantage.Logging
             }
             catch(Exception ex)
             {
-                File.WriteAllText(baseDirName + "//text", "error" + ex.Message);
                 _file = null;
                 return false;
             }
