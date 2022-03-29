@@ -76,12 +76,11 @@ namespace VAdvantage.Utility
             //step 3
             if (type == null)
             {
-                type = Type.GetType(fqClassame);
+                type = Env.GetTypeFromPackage(fqClassame);
             }
             else
             {
-
-                //customozation
+                //customization
             }
 
             return type;
