@@ -24,7 +24,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MClient : X_AD_Client
+    public class MClient : VAModelAD.Model.MClient
     {
         //Client Info					
         private MClientInfo _info = null;
@@ -152,6 +152,30 @@ namespace VAdvantage.Model
             }
             return null;
         }
+
+        public static MClient[] GetAll(Ctx ctx)
+        {
+            List<MClient> list = new List<MClient>();
+            String sql = "SELECT * FROM AD_Client";
+            try
+            {
+                DataSet ds = DB.ExecuteDataset(sql, null, null);
+
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    MClient client = new MClient(ctx, dr, null);
+                    list.Add(client);
+                }
+            }
+            catch (Exception e)
+            {
+                s_log.Log(Level.SEVERE, sql, e);
+            }
+
+            MClient[] RetValue = new MClient[list.Count()];
+            RetValue = list.ToArray();
+            return RetValue;
+        }   //	getAll
 
         /// <summary>
         /// Get Primary Accounting Schema ID
