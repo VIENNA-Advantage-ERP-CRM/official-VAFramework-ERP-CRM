@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -116,13 +115,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
-      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Areas\VAS\Classes\AcctViewerDataClass.cs" />
-    <Compile Include="Areas\VAS\Classes\VChargeModelClass.cs" />
     <Compile Include="Areas\VAS\Controllers\AccountFormController.cs" />
     <Compile Include="Areas\VAS\Controllers\AcctViewerDataController.cs" />
     <Compile Include="Areas\VAS\Controllers\CalloutOrderController.cs" />
@@ -184,61 +176,6 @@
     <Compile Include="Areas\VAS\Controllers\VPayPrintController.cs" />
     <Compile Include="Areas\VAS\Controllers\VPaySelectController.cs" />
     <Compile Include="Areas\VAS\Controllers\VTrxMaterialController.cs" />
-    <Compile Include="Areas\VAS\DataContracts\CalloutData.cs" />
-    <Compile Include="Areas\VAS\Models\AccountFormModel.cs" />
-    <Compile Include="Areas\VAS\Models\AcctViewerData.cs" />
-    <Compile Include="Areas\VAS\Models\CalloutPaymentModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MAcctSchemaModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MBankStatementModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MBPartnerModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MCashBookModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MCashJournalModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MChargeModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MConversionRateModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MCurrencyModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MDocTypeModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MExpenseReportModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MInOutLineModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MInOutModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MInventoryLineModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MInventoryModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MInvoiceBatchLineModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MInvoiceModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MLocatorModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\ModulePrefixModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MOrderLineModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MOrderModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MPaymentModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MPaymentTermModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MPeriodModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MPriceListModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MPriceListVersionModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MProductCategoryModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MProductionLineModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MProductLocatorModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MProductModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MProductPricingModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MProjectModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MRequestTypeModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MStorageModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MTaxModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MTeamForcastModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MUOMConversionModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MUOMModel.cs" />
-    <Compile Include="Areas\VAS\Models\Callouts\MWarehouseModel.cs" />
-    <Compile Include="Areas\VAS\Models\ForecastFormModel.cs" />
-    <Compile Include="Areas\VAS\Models\MChart.cs" />
-    <Compile Include="Areas\VAS\Models\PaymentAllocation.cs" />
-    <Compile Include="Areas\VAS\Models\PaymentAllocationModel.cs" />
-    <Compile Include="Areas\VAS\Models\PaymentModel.cs" />
-    <Compile Include="Areas\VAS\Models\ProductContainerModel.cs" />
-    <Compile Include="Areas\VAS\Models\RelatedProductModel.cs" />
-    <Compile Include="Areas\VAS\Models\VBOMDropModel.cs" />
-    <Compile Include="Areas\VAS\Models\VChargeModel.cs" />
-    <Compile Include="Areas\VAS\Models\VCreateFromModel.cs" />
-    <Compile Include="Areas\VAS\Models\VPayPrintModel.cs" />
-    <Compile Include="Areas\VAS\Models\VPaySelectModel.cs" />
-    <Compile Include="Areas\VAS\Models\VTrxMaterialModel.cs" />
     <Compile Include="Areas\VAS\VASAreaRegistration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -259,7 +196,7 @@
       <Project>{ef955712-f147-4a6a-8d11-8fecc5fe3942}</Project>
       <Name>VAModelAD</Name>
     </ProjectReference>
-    <ProjectReference Include="..\VASModel\VASLogic.csproj">
+    <ProjectReference Include="..\VASLogic\VASLogic.csproj">
       <Project>{8c7533eb-0edb-49f7-9628-4a2d708af52b}</Project>
       <Name>VASLogic</Name>
     </ProjectReference>
@@ -267,7 +204,7 @@
       <Project>{e7e3c709-33bf-4526-9bd3-64fc5b3092dd}</Project>
       <Name>VAWorkflow</Name>
     </ProjectReference>
-    <ProjectReference Include="..\VISModel\VISLogic.csproj">
+    <ProjectReference Include="..\VISLogic\VISLogic.csproj">
       <Project>{ae558aa6-c414-462f-935e-cd705baf2db8}</Project>
       <Name>VISLogic</Name>
     </ProjectReference>
@@ -344,12 +281,6 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
-  </Target>
   <PropertyGroup>
     <PostBuildEvent>xcopy /E /Y /I  "$(ProjectDir)Areas\*" "$(ProjectDir)..\ViennaAdvantageWeb\Areas"</PostBuildEvent>
   </PropertyGroup>

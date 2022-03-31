@@ -181,10 +181,6 @@
       <Project>{cdd5abc0-66da-41ae-9a64-f28dee789262}</Project>
       <Name>VAPrintLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\VASModel\VASLogic.csproj">
-      <Project>{8c7533eb-0edb-49f7-9628-4a2d708af52b}</Project>
-      <Name>VASLogic</Name>
-    </ProjectReference>
     <ProjectReference Include="..\VAS\VAS.csproj">
       <Project>{ac2e105f-03f2-4e7b-9ea8-51c2d97b7060}</Project>
       <Name>VAS</Name>
@@ -196,10 +192,6 @@
     <ProjectReference Include="..\ViennaBase\ViennaBase.csproj">
       <Project>{349c7a2b-fad9-428a-bcd1-7f7262a0419d}</Project>
       <Name>ViennaBase</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\VISModel\VISLogic.csproj">
-      <Project>{ae558aa6-c414-462f-935e-cd705baf2db8}</Project>
-      <Name>VISLogic</Name>
     </ProjectReference>
     <ProjectReference Include="..\VIS\VIS.csproj">
       <Project>{c9421e8f-f38e-417a-96c5-90e1ba817465}</Project>

@@ -893,7 +893,7 @@
       <Project>{e7e3c709-33bf-4526-9bd3-64fc5b3092dd}</Project>
       <Name>VAWorkflow</Name>
     </ProjectReference>
-    <ProjectReference Include="..\VISModel\VISLogic.csproj">
+    <ProjectReference Include="..\VISLogic\VISLogic.csproj">
       <Project>{ae558aa6-c414-462f-935e-cd705baf2db8}</Project>
       <Name>VISLogic</Name>
     </ProjectReference>

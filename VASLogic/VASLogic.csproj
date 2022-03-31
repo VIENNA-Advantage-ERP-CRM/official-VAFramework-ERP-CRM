@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8C7533EB-0EDB-49F7-9628-4A2D708AF52B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>VASLogic</RootNamespace>
+    <AssemblyName>VASLogic</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BaseLibrary">
+      <HintPath>..\BaseLibrary\bin\Debug\BaseLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="CoreLibrary">
+      <HintPath>..\CoreLibrary\bin\Debug\CoreLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="ModelLibrary">
+      <HintPath>..\ModelLibrary\bin\Debug\ModelLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="VAModelAD">
+      <HintPath>..\VAModelAD\bin\Debug\VAModelAD.dll</HintPath>
+    </Reference>
+    <Reference Include="VIS">
+      <HintPath>..\VIS\bin\VIS.dll</HintPath>
+    </Reference>
+    <Reference Include="XModel">
+      <HintPath>..\XModel\bin\Debug\XModel.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Class1.cs" />
+    <Compile Include="Classes\AcctViewerDataClass.cs" />
+    <Compile Include="Classes\VChargeModelClass.cs" />
+    <Compile Include="DataContracts\CalloutData.cs" />
+    <Compile Include="Models\AccountFormModel.cs" />
+    <Compile Include="Models\AcctViewerData.cs" />
+    <Compile Include="Models\CalloutPaymentModel.cs" />
+    <Compile Include="Models\Callouts\MAcctSchemaModel.cs" />
+    <Compile Include="Models\Callouts\MBankStatementModel.cs" />
+    <Compile Include="Models\Callouts\MBPartnerModel.cs" />
+    <Compile Include="Models\Callouts\MCashBookModel.cs" />
+    <Compile Include="Models\Callouts\MCashJournalModel.cs" />
+    <Compile Include="Models\Callouts\MChargeModel.cs" />
+    <Compile Include="Models\Callouts\MConversionRateModel.cs" />
+    <Compile Include="Models\Callouts\MCurrencyModel.cs" />
+    <Compile Include="Models\Callouts\MDocTypeModel.cs" />
+    <Compile Include="Models\Callouts\MExpenseReportModel.cs" />
+    <Compile Include="Models\Callouts\MInOutLineModel.cs" />
+    <Compile Include="Models\Callouts\MInOutModel.cs" />
+    <Compile Include="Models\Callouts\MInventoryLineModel.cs" />
+    <Compile Include="Models\Callouts\MInventoryModel.cs" />
+    <Compile Include="Models\Callouts\MInvoiceBatchLineModel.cs" />
+    <Compile Include="Models\Callouts\MInvoiceModel.cs" />
+    <Compile Include="Models\Callouts\MLocatorModel.cs" />
+    <Compile Include="Models\Callouts\ModulePrefixModel.cs" />
+    <Compile Include="Models\Callouts\MOrderLineModel.cs" />
+    <Compile Include="Models\Callouts\MOrderModel.cs" />
+    <Compile Include="Models\Callouts\MPaymentModel.cs" />
+    <Compile Include="Models\Callouts\MPaymentTermModel.cs" />
+    <Compile Include="Models\Callouts\MPeriodModel.cs" />
+    <Compile Include="Models\Callouts\MPriceListModel.cs" />
+    <Compile Include="Models\Callouts\MPriceListVersionModel.cs" />
+    <Compile Include="Models\Callouts\MProductCategoryModel.cs" />
+    <Compile Include="Models\Callouts\MProductionLineModel.cs" />
+    <Compile Include="Models\Callouts\MProductLocatorModel.cs" />
+    <Compile Include="Models\Callouts\MProductModel.cs" />
+    <Compile Include="Models\Callouts\MProductPricingModel.cs" />
+    <Compile Include="Models\Callouts\MProjectModel.cs" />
+    <Compile Include="Models\Callouts\MRequestTypeModel.cs" />
+    <Compile Include="Models\Callouts\MStorageModel.cs" />
+    <Compile Include="Models\Callouts\MTaxModel.cs" />
+    <Compile Include="Models\Callouts\MTeamForcastModel.cs" />
+    <Compile Include="Models\Callouts\MUOMConversionModel.cs" />
+    <Compile Include="Models\Callouts\MUOMModel.cs" />
+    <Compile Include="Models\Callouts\MWarehouseModel.cs" />
+    <Compile Include="Models\ForecastFormModel.cs" />
+    <Compile Include="Models\MChart.cs" />
+    <Compile Include="Models\PaymentAllocation.cs" />
+    <Compile Include="Models\PaymentAllocationModel.cs" />
+    <Compile Include="Models\PaymentModel.cs" />
+    <Compile Include="Models\ProductContainerModel.cs" />
+    <Compile Include="Models\RelatedProductModel.cs" />
+    <Compile Include="Models\VBOMDropModel.cs" />
+    <Compile Include="Models\VChargeModel.cs" />
+    <Compile Include="Models\VCreateFromModel.cs" />
+    <Compile Include="Models\VPayPrintModel.cs" />
+    <Compile Include="Models\VPaySelectModel.cs" />
+    <Compile Include="Models\VTrxMaterialModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
