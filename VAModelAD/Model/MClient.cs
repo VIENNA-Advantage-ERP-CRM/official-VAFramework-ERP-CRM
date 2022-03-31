@@ -106,7 +106,7 @@ namespace VAModelAD.Model
         /// </summary>
         /// <param name="ctx">context</param>
         /// <returns>clients</returns>
-        public static MClient[] GetAll(Ctx ctx)
+        internal static MClient[] GetAll(Ctx ctx)
         {
             List<MClient> list = new List<MClient>();
             String sql = "SELECT * FROM AD_Client";
