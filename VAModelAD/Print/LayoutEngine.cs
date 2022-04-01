@@ -1503,7 +1503,7 @@ namespace VAdvantage.Print
             String pkColumnName = null;
             List<int> functionRows = new List<int>();
             List<int> pageBreak = new List<int>();
-
+            List<string> fieldAlignment = new List<string>();
 
 
             //	for all rows
@@ -1600,12 +1600,33 @@ namespace VAdvantage.Print
                             //	System.out.println("  row=" + row + ",col=" + col + " - " + item.getAD_Column_ID() + " => " + dataElement);
                             data[row, col] = dataElement;
                         }
+                        if (item.GetFieldAlignmentType().Equals(X_AD_PrintFormatItem.FIELDALIGNMENTTYPE_LeadingLeft))
+                        {
+                            fieldAlignment.Add("Left");
+                        }
+                        else if (item.GetFieldAlignmentType().Equals(X_AD_PrintFormatItem.FIELDALIGNMENTTYPE_TrailingRight))
+                        {
+                            fieldAlignment.Add("right");
+                        }
+                        else if (item.GetFieldAlignmentType().Equals(X_AD_PrintFormatItem.FIELDALIGNMENTTYPE_Center))
+                        {
+                            fieldAlignment.Add("center");
+                        }
+                        else if (item.GetFieldAlignmentType().Equals(X_AD_PrintFormatItem.FIELDALIGNMENTTYPE_Block))
+                        {
+                            fieldAlignment.Add("justify");
+                        }
+                        else if (item.GetFieldAlignmentType().Equals(X_AD_PrintFormatItem.FIELDALIGNMENTTYPE_Default))
+                        {
+                            fieldAlignment.Add("");
+                        }
+                        //fieldAlignment.Add(item.GetFieldAlignmentType());
+
                         col++;
                     }	//	printed
-                }	//	for all columns
+                }   //	for all columns
 
-
-
+                
                 PrintDataElement pdel = printData.GetPKey();
                 if (pdel != null)	//	for FunctionRows
                 {
@@ -1625,7 +1646,8 @@ namespace VAdvantage.Print
             StringBuilder colHeaderHtml = new StringBuilder("<thead><tr class='vis-report-table-head'>");
             for (int colh = 0; colh < columnHeader.Length; colh++)
             {
-                colHeaderHtml.Append("<th style=\'text-align:" +( GetCtx().GetIsRightToLeft()?"right":"left") + ";\'>" + columnHeader[colh] + "</th>");
+                //colHeaderHtml.Append("<th style=\'text-align:" +( GetCtx().GetIsRightToLeft()?"right":"left") + ";\'>" + columnHeader[colh] + "</th>");
+                colHeaderHtml.Append("<th style=\'text-align:" + fieldAlignment[colh] + ";\'>" + columnHeader[colh] + "</th>");
             }
             colHeaderHtml.Append("</tr></thead>");
 
