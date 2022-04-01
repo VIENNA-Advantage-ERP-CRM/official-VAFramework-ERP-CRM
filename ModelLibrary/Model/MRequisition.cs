@@ -251,6 +251,13 @@ namespace VAdvantage.Model
             {
                 SetM_PriceList_ID();
             }
+
+            // VIS0060: Show message if Default Price List is not found.
+            if (GetM_PriceList_ID() == 0)
+            {
+                log.SaveError("", Msg.GetMsg(GetCtx(), "VIS_NoDefaultPriceList"));
+                return false;
+            }
             return true;
         }
 
