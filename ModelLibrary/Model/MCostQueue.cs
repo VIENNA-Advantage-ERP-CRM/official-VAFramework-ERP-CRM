@@ -1813,7 +1813,11 @@ namespace VAdvantage.Model
                             }
 
                             // Update Cost Queue Price
-                            UpdateCostQueuePrice(0, MRPriceAvPo, Qty, Price, inoutline.GetM_InOutLine_ID(), acctSchema.GetCostingPrecision());
+                            if (!UpdateCostQueuePrice(0, MRPriceAvPo, Qty, Price, inoutline.GetM_InOutLine_ID(), acctSchema.GetCostingPrecision()))
+                            {
+                                _log.Severe("Cost Queue Cost not updated for GRN Line= " + inoutline.GetM_InOutLine_ID());
+                                return false;
+                            }
 
                             #endregion
                         }
@@ -6089,6 +6093,16 @@ namespace VAdvantage.Model
             return PriceLifoOrFifo;
         }
 
+        /// <summary>
+        /// This Method is used to update urrent Cost Price on Cos Queue
+        /// </summary>
+        /// <param name="CostQueue_ID">Cost Queue ID</param>
+        /// <param name="oldPrice">Old Price</param>
+        /// <param name="qty">Quantity</param>
+        /// <param name="newPrice">New Price</param>
+        /// <param name="InOutLine_ID">GRN Lline</param>
+        /// <param name="precision">Precision</param>
+        /// <returns>true, when updated</returns>
         public static bool UpdateCostQueuePrice(int CostQueue_ID, Decimal oldPrice, Decimal qty, Decimal newPrice, int InOutLine_ID, int precision)
         {
             Decimal price = Decimal.Subtract(Decimal.Multiply(newPrice, qty), Decimal.Multiply(oldPrice, qty));
