@@ -2780,7 +2780,7 @@ namespace VIS.Controllers
                         }
                         else
                         {
-                            //client = MClient.Get(ctx, Util.GetValueOfInt(inv.GetAD_Client_ID()));
+                            client = MClient.Get(ctx, Util.GetValueOfInt(inv.GetAD_Client_ID()));
 
                             //	Create Shipment - Invoice Link
                             if (iLine.GetM_Product_ID() != 0)
@@ -2795,14 +2795,23 @@ namespace VIS.Controllers
                                     // Check applied by mohit asked by ravikant to restrict the recalcualtion of costing for invoice for which the costing is already calculated.06/07/2017 PMS TaskID=4170
                                     if (iLine.GetC_OrderLine_ID() == 0 && !iLine.IsCostCalculated())
                                     {
-                                        // updated by Amit 31-12-2015
-                                        MProduct product = new MProduct(ctx, match.GetM_Product_ID(), trx);
+                                        if (client.IsCostImmediate())
+                                        {
+                                            MProduct product = new MProduct(ctx, match.GetM_Product_ID(), trx);
 
-                                        // Not returning any value as No effect
-                                        MCostQueue.CreateProductCostsDetails(ctx, match.GetAD_Client_ID(), match.GetAD_Org_ID(), product,
-                                             match.GetM_AttributeSetInstance_ID(), "Match IV", null, sLine, null, iLine, null,
-                                             Decimal.Multiply(Decimal.Divide(iLine.GetLineNetAmt(), iLine.GetQtyInvoiced()), match.GetQty()),
-                                             match.GetQty(), trx, out conversionNotFoundMatch, "window");
+                                            // Not returning any value as No effect
+                                            MCostQueue.CreateProductCostsDetails(ctx, match.GetAD_Client_ID(), match.GetAD_Org_ID(), product,
+                                                 match.GetM_AttributeSetInstance_ID(), "Match IV", null, sLine, null, iLine, null,
+                                                 Decimal.Multiply(Decimal.Divide(iLine.GetProductLineCost(iLine), iLine.GetQtyInvoiced()), match.GetQty()),
+                                                 match.GetQty(), trx, out conversionNotFoundMatch, "window");
+                                            if (!string.IsNullOrEmpty(conversionNotFoundMatch))
+                                            {
+                                                if (client.Get_ColumnIndex("IsCostMandatory") > 0 && client.IsCostMandatory())
+                                                {
+                                                    success = false;
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                                 else
@@ -2844,14 +2853,24 @@ namespace VIS.Controllers
                                 else
                                 {
                                     MatchedPO_ID = matchPO.GetDocumentNo();
-                                    // updated by Amit 31-12-2015
-                                    MProduct product = new MProduct(ctx, matchPO.GetM_Product_ID(), trx);
 
-                                    // Not returning any value as No effect
-                                    MCostQueue.CreateProductCostsDetails(ctx, matchPO.GetAD_Client_ID(), matchPO.GetAD_Org_ID(), product,
-                                          matchPO.GetM_AttributeSetInstance_ID(), "Match IV", null, sLine, null, iLine, null,
-                                          Decimal.Multiply(Decimal.Divide(iLine.GetLineNetAmt(), iLine.GetQtyInvoiced()), matchPO.GetQty()),
-                                          matchPO.GetQty(), trx, out conversionNotFoundMatch, "window");
+                                    if (client.IsCostImmediate())
+                                    {
+                                        MProduct product = new MProduct(ctx, matchPO.GetM_Product_ID(), trx);
+
+                                        // Not returning any value as No effect
+                                        MCostQueue.CreateProductCostsDetails(ctx, matchPO.GetAD_Client_ID(), matchPO.GetAD_Org_ID(), product,
+                                              matchPO.GetM_AttributeSetInstance_ID(), "Match IV", null, sLine, null, iLine, null,
+                                              Decimal.Multiply(Decimal.Divide(iLine.GetProductLineCost(iLine), iLine.GetQtyInvoiced()), matchPO.GetQty()),
+                                              matchPO.GetQty(), trx, out conversionNotFoundMatch, "window");
+                                        if (!string.IsNullOrEmpty(conversionNotFoundMatch))
+                                        {
+                                            if (client.Get_ColumnIndex("IsCostMandatory") > 0 && client.IsCostMandatory())
+                                            {
+                                                success = false;
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -2883,7 +2902,7 @@ namespace VIS.Controllers
                                 }
                             }
 
-                            //client = MClient.Get(ctx, Util.GetValueOfInt(sLine.GetAD_Client_ID()));
+                            client = MClient.Get(ctx, Util.GetValueOfInt(sLine.GetAD_Client_ID()));
 
                             //	Create PO - Shipment Link
                             if (sLine.GetM_Product_ID() != 0)
@@ -2907,18 +2926,24 @@ namespace VIS.Controllers
                                     MProduct product = new MProduct(ctx, match.GetM_Product_ID(), trx);
 
                                     // Not returning any value as No effect
-                                    MCostQueue.CreateProductCostsDetails(ctx, match.GetAD_Client_ID(), match.GetAD_Org_ID(), product, match.GetM_AttributeSetInstance_ID(),
-                                        "Match PO", null, sLine, null, null, null, oLine.GetC_OrderLine_ID(), match.GetQty(), trx, out conversionNotFoundMatch, "window");
-                                    if (!string.IsNullOrEmpty(conversionNotFoundMatch))
+                                    if (client.IsCostImmediate())
                                     {
-
-                                    }
-                                    else
-                                    {
-                                        sLine.SetIsCostCalculated(true);
-                                        if (!sLine.Save())
+                                        MCostQueue.CreateProductCostsDetails(ctx, match.GetAD_Client_ID(), match.GetAD_Org_ID(), product, match.GetM_AttributeSetInstance_ID(),
+                                            "Match PO", null, sLine, null, null, null, oLine.GetC_OrderLine_ID(), match.GetQty(), trx, out conversionNotFoundMatch, "window");
+                                        if (!string.IsNullOrEmpty(conversionNotFoundMatch))
                                         {
-                                            success = false;
+                                            if (client.Get_ColumnIndex("IsCostMandatory") > 0 && client.IsCostMandatory())
+                                            {
+                                                success = false;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            sLine.SetIsCostCalculated(true);
+                                            if (!sLine.Save())
+                                            {
+                                                success = false;
+                                            }
                                         }
                                     }
 

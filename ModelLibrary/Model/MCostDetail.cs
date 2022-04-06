@@ -697,7 +697,7 @@ namespace VAdvantage.Model
                                            and i.docstatus in ('CO' , 'CL') AND ced.C_AcctSchema_ID = " + GetC_AcctSchema_ID() +
                                            @" AND ced.M_Product_ID = " + GetM_Product_ID() + @" AND ced.AD_Org_ID = " + Org_ID +
                                            @" AND NVL(ced.M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + @"
-                                           ORDER BY ced.m_costelementdetail_id DESC ) where rnm <=1";
+                                           ORDER BY ced.m_costelementdetail_id DESC )t where rnm <=1";
                             DataSet ds = DB.ExecuteDataset(sql, null, null);
                             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                             {
