@@ -80,7 +80,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="ExecuteProcess"></param>
         /// <returns>active processors</returns>
-        public static MAcctProcessor[] GetActive(Ctx ctx, string ExecuteProcess)
+        public static MAcctProcessor[] GetActive(Ctx ctx, string ExecuteProcess, string machineIP)
         {
             List<MAcctProcessor> list = new List<MAcctProcessor>();
             String sql = "SELECT * FROM C_AcctProcessor WHERE IsActive='Y'";
@@ -88,7 +88,7 @@ namespace VAdvantage.Model
             string scheduleIP = null;
             try
             {
-                string machineIP = Classes.CommonFunctions.GetMachineIPPort();
+                // string machineIP = Classes.CommonFunctions.GetMachineIPPort();
                 idr = DataBase.DB.ExecuteReader(sql, null, null);
                 while (idr.Read())
                 {

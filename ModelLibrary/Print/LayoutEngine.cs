@@ -324,11 +324,11 @@ namespace VAdvantage.Print
             else
             {
                 //	Parameter
-                
+
                 PrintElement element = LayoutParameter();
                 if (element != null)
                 {
-                   
+
                     m_currPage.AddElement(element);
                     element.SetLocation(m_position[AREA_CONTENT]);
                     m_position[AREA_CONTENT].Y += (int)element.GetHeight() + 9;	//	GAP
@@ -346,15 +346,15 @@ namespace VAdvantage.Print
                     {
                         if (p != 1)
                         {
-                            NewPage(true, false);                          
+                            NewPage(true, false);
                         }
-                        
+
                         m_currPage.AddElement(element);
                     }
                     for (int i = 0; i < dynamicPageHtml.Length; i++)
                     {
-                        finalHtml.Append(newPageHtml + headerHtml );
-                        ReplaceFirstOccurrence("@*Page@", (i+1).ToString());
+                        finalHtml.Append(newPageHtml + headerHtml);
+                        ReplaceFirstOccurrence("@*Page@", (i + 1).ToString());
                         ReplaceFirstOccurrence("@*PageCount@", dynamicPageHtml.Length.ToString());
                         if (i == 0)
                         {
@@ -377,12 +377,12 @@ namespace VAdvantage.Print
             for (int i = 0; i < pages; i++)
             {
                 //StringElement
-                Page page = (Page)m_pages[i];                
+                Page page = (Page)m_pages[i];
                 int pageNo = page.GetPageNo();
                 pageInfo = (pageNo + GetPageInfo(pageNo)).ToString();
                 page.SetPageInfo(pageInfo);
                 page.SetPageCount(pages);
-               
+
             }
 
             finalHtml.Append("</div>");
@@ -1280,7 +1280,7 @@ namespace VAdvantage.Print
             //               "</div>";
 
             headerHtml = "<div class='vis-report-content'>" +
-                "<h4 style='text-align:"+(GetCtx().GetIsRightToLeft()?"right":"left")+";'>@*ReportName@</h4>" +
+                "<h4 style='text-align:" + (GetCtx().GetIsRightToLeft() ? "right" : "left") + ";'>@*ReportName@</h4>" +
                           "</div>";
 
             ////	Footer
@@ -1503,6 +1503,7 @@ namespace VAdvantage.Print
             String pkColumnName = null;
             List<int> functionRows = new List<int>();
             List<int> pageBreak = new List<int>();
+            List<string> fieldAlignment = new List<string>();
 
 
 
@@ -1538,6 +1539,8 @@ namespace VAdvantage.Print
                             rowColFont.Put(new Point(row, TableElement.ALL), new Font(basef.Name, basef.Size - levelNo, FontStyle.Regular, GraphicsUnit.World));
                     }
                 }
+
+
                 //	for all columns
                 col = 0;
                 for (int c = 0; c < format.GetItemCount(); c++)
@@ -1600,6 +1603,27 @@ namespace VAdvantage.Print
                             //	System.out.println("  row=" + row + ",col=" + col + " - " + item.getAD_Column_ID() + " => " + dataElement);
                             data[row, col] = dataElement;
                         }
+                        if (item.GetFieldAlignmentType().Equals(X_AD_PrintFormatItem.FIELDALIGNMENTTYPE_LeadingLeft))
+                        {
+                            fieldAlignment.Add("Left");
+                        }
+                        else if (item.GetFieldAlignmentType().Equals(X_AD_PrintFormatItem.FIELDALIGNMENTTYPE_TrailingRight))
+                        {
+                            fieldAlignment.Add("right");
+                        }
+                        else if (item.GetFieldAlignmentType().Equals(X_AD_PrintFormatItem.FIELDALIGNMENTTYPE_Center))
+                        {
+                            fieldAlignment.Add("center");
+                        }
+                        else if (item.GetFieldAlignmentType().Equals(X_AD_PrintFormatItem.FIELDALIGNMENTTYPE_Block))
+                        {
+                            fieldAlignment.Add("justify");
+                        }
+                        else if (item.GetFieldAlignmentType().Equals(X_AD_PrintFormatItem.FIELDALIGNMENTTYPE_Default))
+                        {
+                            fieldAlignment.Add("");
+                        }
+                        //fieldAlignment.Add(item.GetFieldAlignmentType());
                         col++;
                     }	//	printed
                 }	//	for all columns
@@ -1625,7 +1649,8 @@ namespace VAdvantage.Print
             StringBuilder colHeaderHtml = new StringBuilder("<thead><tr class='vis-report-table-head'>");
             for (int colh = 0; colh < columnHeader.Length; colh++)
             {
-                colHeaderHtml.Append("<th style=\'text-align:" +( GetCtx().GetIsRightToLeft()?"right":"left") + ";\'>" + columnHeader[colh] + "</th>");
+                //colHeaderHtml.Append("<th style=\'text-align:" +( GetCtx().GetIsRightToLeft()?"right":"left") + ";\'>" + columnHeader[colh] + "</th>");
+                colHeaderHtml.Append("<th style=\'text-align:" + fieldAlignment[colh] + ";\'>" + columnHeader[colh] + "</th>");
             }
             colHeaderHtml.Append("</tr></thead>");
 
@@ -1640,24 +1665,25 @@ namespace VAdvantage.Print
                     htmlTable.Append("</table></div>●<div class='vis-report-data' style='margin-bottom: 20px;'><table class='vis-reptabledetect' style='white-space: nowrap;'>");
                     htmlTable.Append(colHeaderHtml);
                 }
-                if(row>0 && row % 2>0)
+                if (row > 0 && row % 2 > 0)
                 {
                     htmlTable.Append("<tr class='vis-report-table-row vis-report-gray'>");
                 }
-                else{
+                else
+                {
                     htmlTable.Append("<tr class='vis-report-table-row'>");
                 }
-                
+
 
                 for (int c = 0; c < col; c++)
                 {
                     if (data[row, c] == null)
                     {
-                        htmlTable.Append("<td>" + data[row, c] +"</td>");
+                        htmlTable.Append("<td style=\'text-align:" + fieldAlignment[c] + ";\'>" + data[row, c] + "</td>");
                     }
                     else
                     {
-                        htmlTable.Append("<td>" + HttpUtility.HtmlEncode(data[row, c].ToString()) + "</td>");
+                        htmlTable.Append("<td style=\'text-align:" + fieldAlignment[c] + ";\'>" + HttpUtility.HtmlEncode(data[row, c].ToString()) + "</td>");
                     }
                 }
                 htmlTable.Append("</tr>");
@@ -1667,9 +1693,9 @@ namespace VAdvantage.Print
                 }
             }
             htmlTable.Append("</table>");
-            
+
             //
-            
+
             TableElement table = new TableElement(columnHeader,
                 columnMaxWidth, columnMaxHeight, columnJustification,
                 fixedWidth, functionRows, multiLineHeader,
@@ -1685,7 +1711,7 @@ namespace VAdvantage.Print
         }	//	layoutTable
 
         string[] dynamicPageHtml = null;
-      
+
 
 
         public IPrintable GetPrintable(int pageIndex)
