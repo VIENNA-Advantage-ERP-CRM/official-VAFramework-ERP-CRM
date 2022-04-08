@@ -406,7 +406,10 @@ namespace VAdvantage.DataBase
                 connection.Open();
                 NpgsqlDataAdapter adapter = new NpgsqlDataAdapter();
                 adapter.SelectCommand = new NpgsqlCommand(sql + " limit " + pageSize + " offset " + ((page - 1) * pageSize));
-                adapter.SelectCommand.CommandTimeout = 150;
+                if (adapter.SelectCommand.CommandType == CommandType.StoredProcedure)
+                    adapter.SelectCommand.CommandTimeout = 0;
+                else
+                    adapter.SelectCommand.CommandTimeout = 150;
                 adapter.SelectCommand.Connection = (NpgsqlConnection)connection;
                 ds = new DataSet();
 
