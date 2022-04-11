@@ -1268,7 +1268,8 @@
         }
 
         var result = this.gTab.prepareQuery(onlyCurrentDays, maxRows, created, false);
-       
+        if (this.getIsSingleRow())
+            this.switchMultiRow(true);
     };
 
     VIS.GridController.prototype.applyFilters = function (qry) {
@@ -1297,8 +1298,7 @@
         this.getMTab().getTableModel().setCurrentPage(1);
         this.getMTab().setQuery(qry);
         this.query(0, 0, null);
-        if (this.getIsSingleRow())
-            this.switchMultiRow(true);
+
       
     };
 
