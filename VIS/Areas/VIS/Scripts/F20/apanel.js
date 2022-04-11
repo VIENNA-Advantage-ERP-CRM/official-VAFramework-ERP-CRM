@@ -4144,7 +4144,8 @@
                 }
                 var findPressed = self.curTab.getIsQueryActive() || self.curTab.getOnlyCurrentDays() > 0;
                 self.aFind.setPressed(findPressed);
-
+                if (self.curGC.getIsSingleRow())
+                    self.curGC.switchMultiRow(true);
 
             }
             ////Refresh everytime bcoz smtimes user create an ASearch and save it, 
