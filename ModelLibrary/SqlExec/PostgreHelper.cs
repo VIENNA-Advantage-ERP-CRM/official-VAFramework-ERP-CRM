@@ -99,6 +99,10 @@ namespace VAdvantage.SqlExec.PostgreSql
             //associate the connection with the command
             command.Connection = connection;
 
+            if (commandType == CommandType.StoredProcedure)
+                command.CommandTimeout = 0;
+            
+
             //set the command text (stored procedure name or SQL statement)
             command.CommandText = commandText;
 

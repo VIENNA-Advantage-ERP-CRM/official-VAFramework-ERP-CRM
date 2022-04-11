@@ -355,7 +355,7 @@ namespace VAdvantage.DataBase
         public bool CreateSequence(string name, int increment, int minvalue, int maxvalue, int start, Trx trxName)
         {
             int no = DB.ExecuteQuery("DROP SEQUENCE " + name.ToUpper() + "_SEQ", null, trxName);
-            string sql= "CREATE SEQUENCE " + name.ToUpper() + "_SEQ"
+            string sql = "CREATE SEQUENCE " + name.ToUpper() + "_SEQ"
                                 + " MINVALUE " + minvalue
                                 + " MAXVALUE " + maxvalue
                                 + " START WITH " + start
@@ -406,7 +406,12 @@ namespace VAdvantage.DataBase
                 connection.Open();
                 NpgsqlDataAdapter adapter = new NpgsqlDataAdapter();
                 adapter.SelectCommand = new NpgsqlCommand(sql + " limit " + pageSize + " offset " + ((page - 1) * pageSize));
-                adapter.SelectCommand.CommandTimeout = 150;
+
+                if (adapter.SelectCommand.CommandType == CommandType.StoredProcedure)
+                    adapter.SelectCommand.CommandTimeout = 0;
+                else
+                    adapter.SelectCommand.CommandTimeout = 150;
+
                 adapter.SelectCommand.Connection = (NpgsqlConnection)connection;
                 ds = new DataSet();
 
@@ -427,7 +432,7 @@ namespace VAdvantage.DataBase
                 //    ds.Tables.Remove(schema);
                 //}
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 //
                 ds = null;
