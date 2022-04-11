@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PdfSharp.Pdf;
+using PdfSharp.Pdf.IO;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -23,6 +25,7 @@ namespace VIS.Helpers
     {
         private static VLogger _log = VLogger.GetVLogger(typeof(ProcessHelper).FullName);
         private static int msgID = 0;
+        static List<string> totalBytes = new List<string>();
         public static ProcessDataOut GetProcessInfo(int AD_Process_ID, Ctx ctx)
         {
             ProcessDataOut outt = new ProcessDataOut();
@@ -684,7 +687,27 @@ namespace VIS.Helpers
                     }
                 }
 
-                ps.TotalPage = pf.TotalPage;
+                totalBytes.Add(rep.ReportFilePath);
+                if (totalBytes.Count > 51)
+                {
+
+                    string outputPdfPath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + "TempDownload\\new.pdf"; ;
+                    using (var targetDoc = new PdfDocument())
+                    {
+                        foreach (var pdf in totalBytes)
+                        {
+                            string fileName = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + pdf;
+                            using (var pdfDoc = PdfReader.Open(fileName, PdfDocumentOpenMode.Import))
+                            {
+                                for (var i = 0; i < pdfDoc.PageCount; i++)
+                                    targetDoc.AddPage(pdfDoc.Pages[i]);
+                            }
+                        }
+                        targetDoc.Save(outputPdfPath);
+                    }
+                }
+
+                    ps.TotalPage = pf.TotalPage;
                 ps.CurrentPage = pageNo;
                 // b = re.CreatePDF();
                 //rep.Report = b;
