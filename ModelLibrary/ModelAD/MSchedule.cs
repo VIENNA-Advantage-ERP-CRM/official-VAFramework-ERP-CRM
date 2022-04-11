@@ -223,6 +223,10 @@ namespace VAdvantage.Model
             while (st.HasMoreElements())
             {
                 String ip = st.NextToken();
+                if (ip.IndexOf(":") > 0)
+                {
+                    ip = ip.Substring(0, ip.IndexOf(":"));
+                }
                 if (CheckIP(ip))
                     return true;
             }
@@ -245,19 +249,28 @@ namespace VAdvantage.Model
                 string strHostName = Dns.GetHostName();
                 // Then using host name, get the IP address list..
                 IPHostEntry ipEntry = Dns.GetHostEntry(strHostName);
+
+                log.Info("Host Name: " + strHostName);
                 IPAddress[] addr = ipEntry.AddressList;
 
                 String ip = "";
                 for (int i = 0; i < addr.Length; i++)
                 {
-                    ip = addr[i].ToString();
+                    if (addr[i].AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    {
+                        ip = addr[i].ToString();
+                        log.Info("Host IP Address: " + ip);
+                        break;
+                    }                    
                 }
                 if (ipOnly.IndexOf(ip) == -1)
                 {
                     // TODO: We need to handle this better, for the moment reduced to fine.
                     log.Fine("Not allowed here - IP=" + ip + " does not match " + ipOnly);
+                    log.Info("Not allowed here - IP=" + ip + " does not match " + ipOnly);
                     return false;
                 }
+                log.Info("Allowed here - IP=" + ip + " matches " + ipOnly);
                 log.Fine("Allowed here - IP=" + ip + " matches " + ipOnly);
             }
             catch (Exception e)

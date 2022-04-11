@@ -32,18 +32,17 @@ namespace VAdvantage.Process
         private String subject = "";
         protected override string DoIt()
         {
-            _req = new MRequest(GetCtx(), GetRecord_ID(), null);
-
+            _req = new MRequest(GetCtx(), GetRecord_ID(), Get_Trx());
+            MRequestType reqType = MRequestType.Get(GetCtx(), _req.GetR_RequestType_ID());
             // check mail template if found on request or request type.
             mailText_ID = _req.GetR_MailText_ID();
             if (mailText_ID == 0)
             {
-                MRequestType reqType = new MRequestType(GetCtx(), _req.GetR_RequestType_ID(), null);
+
                 if (reqType.GetR_MailText_ID() > 0)
                 {
                     mailText_ID = reqType.GetR_MailText_ID();
                 }
-
             }
             if (mailText_ID == 0)
             {
@@ -54,7 +53,7 @@ namespace VAdvantage.Process
                 }
                 string changedValues = _reqAction.GetChangedValues();
                 bool _changed = false;
-                 sendInfo = new List<String>();
+                sendInfo = new List<String>();
 
                 if (!string.IsNullOrEmpty(changedValues))
                 {
@@ -119,9 +118,38 @@ namespace VAdvantage.Process
                 //    sendInfo.Add("Summary");
                 //}
                 #endregion
-                if (sendInfo.Count > 0 && _changed)
+                if ((sendInfo.Count > 0 && _changed) || _req.GetResult() != null)
                 {
                     prepareNotificMsg(sendInfo);
+
+                    //	Update Request Result
+                    if (mailText_ID == 0 && !reqType.IsR_AllowSaveNotify())
+                    {
+                        if (_reqAction != null)
+                            _req.SetDateLastAction(_reqAction.GetCreated());
+                        _req.SetLastResult(_req.GetResult());
+                        _req.SetDueType();
+                        //	ReSet Reqiuest  Values
+                        _req.SetConfidentialTypeEntry(_req.GetConfidentialType());
+                        _req.SetStartDate(null);
+                        _req.SetEndTime(null);
+                        _req.SetR_StandardResponse_ID(0);
+                        _req.SetR_MailText_ID(0);
+                        _req.SetResult(null);
+                        if (!_req.Save())
+                        {
+                            ValueNamePair pp = VLogger.RetrieveError();
+                            if (pp != null)
+                            {
+                                return !string.IsNullOrEmpty(pp.GetName()) ? pp.GetName() : Msg.GetMsg(GetCtx(), pp.GetValue());
+                            }
+                            else
+                            {
+                                return Msg.GetMsg(GetCtx(), "R_NoReqChanges");
+                            }
+                        }
+                    }
+
                     // For Role Changes
                     Thread thread = new Thread(new ThreadStart(() => SendNotices(sendInfo)));
                     thread.Start();
@@ -392,10 +420,10 @@ namespace VAdvantage.Process
             else
             {
                 message = new StringBuilder();
-                
+
                 MMailText text = new MMailText(GetCtx(), mailText_ID, null);
                 text.SetPO(_req, true); //Set _Po Current value
-                subject += _req. GetDocumentNo() + ": " + text.GetMailHeader();
+                subject += _req.GetDocumentNo() + ": " + text.GetMailHeader();
 
                 message.Append(text.GetMailText(true));
                 if (_req.GetDateNextAction() != null)

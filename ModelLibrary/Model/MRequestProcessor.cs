@@ -97,7 +97,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="ExecuteProcess"></param>
         /// <returns>array of Request </returns>
-        public static MRequestProcessor[] GetActive(Ctx ctx, string ExecuteProcess)
+        public static MRequestProcessor[] GetActive(Ctx ctx, string ExecuteProcess, string machineIP)
         {
             List<MRequestProcessor> list = new List<MRequestProcessor>();
             String sql = "SELECT * FROM R_RequestProcessor WHERE IsActive='Y'";
@@ -105,7 +105,7 @@ namespace VAdvantage.Model
             string scheduleIP = null;
             try
             {
-                string machineIP = Classes.CommonFunctions.GetMachineIPPort();
+                // string machineIP = Classes.CommonFunctions.GetMachineIPPort();
                 _log.SaveError("Console VServer Machine IP : " + machineIP, "Console VServer Machine IP : " + machineIP);
 
                 idr = DataBase.DB.ExecuteReader(sql, null, null);

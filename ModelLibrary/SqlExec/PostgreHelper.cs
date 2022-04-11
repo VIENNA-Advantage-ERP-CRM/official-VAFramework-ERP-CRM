@@ -101,7 +101,6 @@ namespace VAdvantage.SqlExec.PostgreSql
 
             if (commandType == CommandType.StoredProcedure)
                 command.CommandTimeout = 0;
-            
 
             //set the command text (stored procedure name or SQL statement)
             command.CommandText = commandText;

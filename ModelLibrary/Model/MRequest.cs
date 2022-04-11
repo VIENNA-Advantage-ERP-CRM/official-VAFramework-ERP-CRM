@@ -914,8 +914,8 @@ namespace VAdvantage.Model
                 if (GetR_Status_ID() != 0)
                 {
                     MStatus sta = MStatus.Get(GetCtx(), GetR_Status_ID());
-                    MRequestType rt = MRequestType.Get(GetCtx(), GetR_RequestType_ID());
-                    if (sta.GetR_StatusCategory_ID() != rt.GetR_StatusCategory_ID())
+
+                    if (_requestType != null && sta.GetR_StatusCategory_ID() != _requestType.GetR_StatusCategory_ID())
                         SetR_Status_ID();	//	Set to default
                 }
             }
@@ -1056,10 +1056,7 @@ namespace VAdvantage.Model
             CheckChange(ra, "DateStartPlan");
             CheckChange(ra, "DateCompletePlan");
             //new filed result added in list if anyone change/add anything in result email will send to user
-            if(CheckChange(ra, "Result"))
-            {
-                sendInfo.Add("Result");
-            }
+            CheckChange(ra, "Result");
 
             if (_changed)
             {
@@ -1086,19 +1083,16 @@ namespace VAdvantage.Model
             }
             if (mailText_ID == 0)
             {
-                MRequestType reqType = new MRequestType(GetCtx(), GetR_RequestType_ID(), null);
-                if (reqType.GetR_MailText_ID() > 0)
+                if (_requestType != null && _requestType.GetR_MailText_ID() > 0)
                 {
-                    mailText_ID = reqType.GetR_MailText_ID();
+                    mailText_ID = _requestType.GetR_MailText_ID();
                 }
-
             }
-
 
             if (mailText_ID == 0)
             {
                 _emailTo = new StringBuilder();
-                if (update != null || sendInfo.Count > 0)
+                if (_requestType.IsR_AllowSaveNotify() && (update != null || sendInfo.Count > 0))
                 {
                     prepareNotificMsg(sendInfo);
                     //	Update
@@ -1115,10 +1109,6 @@ namespace VAdvantage.Model
                     SetResult(null);
                     //	SetQtySpent(null);
                     //	SetQtyInvoiced(null);
-
-
-
-
                 }
             }
             else
@@ -1613,9 +1603,9 @@ namespace VAdvantage.Model
                 //We need to send updated msg in email.
                 prepareNotificMsg(null);
             }
-            MRequestType reqType = new MRequestType(GetCtx(), GetR_RequestType_ID(), null);
+
             //	Initial Mail
-            if (reqType.Get_ID() > 0 && reqType.IsR_AllowSaveNotify())
+            if (_requestType != null && _requestType.IsR_AllowSaveNotify())
             {
                 SendNotifications(newRecord);
             }
@@ -1653,7 +1643,7 @@ namespace VAdvantage.Model
 
             //}
 
-            if (reqType.Get_ID() > 0 && reqType.IsR_AllowSaveNotify())
+            if (_requestType != null && _requestType.IsR_AllowSaveNotify())
             {
                 log.SaveInfo("R_EmailSentBackgrnd", "");
             }
