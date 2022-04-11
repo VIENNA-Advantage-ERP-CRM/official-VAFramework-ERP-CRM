@@ -272,6 +272,7 @@ namespace VAdvantage.Print
                     p_width = p_maxWidth;
                     for (int i = 0; i < m_string_paper.Length; i++)
                     {
+                        continue;
                         AttributedCharacterIterator iter = m_string_paper[i].GetIterator();
                         if (iter.GetBeginIndex() == iter.GetEndIndex())
                             continue;
