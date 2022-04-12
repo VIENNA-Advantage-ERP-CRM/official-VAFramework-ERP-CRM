@@ -833,10 +833,12 @@ namespace VAdvantage.Model
                         }
                         else
                         {
-                            // cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
+                            if (costingCheck != null && costingCheck.isMatchFromForm.Equals("N"))
+                                cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                         }
 
-                        // cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
+                        if (costingCheck != null && costingCheck.isMatchFromForm.Equals("N"))
+                            cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
                     }
 
                     if (Env.Signum(cost.GetCumulatedQty()) != 0)
@@ -859,9 +861,12 @@ namespace VAdvantage.Model
                         }
                         else
                         {
-                            //cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
+                            if (costingCheck != null && costingCheck.isMatchFromForm.Equals("N"))
+                                cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                         }
-                        //cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
+
+                        if (costingCheck != null && costingCheck.isMatchFromForm.Equals("N"))
+                            cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
                     }
                     cost.SetCurrentCostPrice(price);
                 }
@@ -896,9 +901,12 @@ namespace VAdvantage.Model
                         }
                         else
                         {
-                            // cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
+                            if (costingCheck != null && costingCheck.isMatchFromForm.Equals("N"))
+                                cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                         }
-                        // cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
+
+                        if (costingCheck != null && costingCheck.isMatchFromForm.Equals("N"))
+                            cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
                     }
                     if (cost.GetCurrentCostPrice() == 0)
                     {
@@ -923,9 +931,11 @@ namespace VAdvantage.Model
                         }
                         else
                         {
-                            // cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
+                            if (costingCheck != null && costingCheck.isMatchFromForm.Equals("N"))
+                                cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                         }
-                        // cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
+                        if (costingCheck != null && costingCheck.isMatchFromForm.Equals("N"))
+                            cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
                     }
                     MCostQueue[] cQueue = MCostQueue.GetQueue(product, M_ASI_ID,
                         mas, Org_ID, ce, Get_TrxName(), cost.GetM_Warehouse_ID());
@@ -3804,8 +3814,8 @@ namespace VAdvantage.Model
                 if (ce.IsLastInvoice() || ce.IsLastPOPrice() || ce.IsWeightedAverageCost() || ce.IsWeightedAveragePO())
                 {
                     MCostElementDetail.CreateCostElementDetail(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product, M_ASI_ID,
-                                                    mas, ce.GetM_CostElement_ID(), windowName, cd, 
-                                                    (cost.GetCurrentCostPrice() * qty) != 0 ? (cost.GetCurrentCostPrice() * qty) : amt , qty);
+                                                    mas, ce.GetM_CostElement_ID(), windowName, cd,
+                                                    (cost.GetCurrentCostPrice() * qty) != 0 ? (cost.GetCurrentCostPrice() * qty) : amt, qty);
                 }
                 else if (!ce.IsWeightedAverageCost())
                 {

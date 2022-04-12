@@ -43,6 +43,7 @@ namespace ModelLibrary.Classes
         public String costinglevel = String.Empty;
         public bool isReversal = false;
         public DataSet dsAccountingSchema = null;
+        public String isMatchFromForm = "N";
 
         /// <summary>
         /// Constructor
