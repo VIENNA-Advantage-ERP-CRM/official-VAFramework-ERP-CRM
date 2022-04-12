@@ -3961,7 +3961,7 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
         {
             List<VIS_DocbaseType> DocbaseType = new List<VIS_DocbaseType>();
             //string _sql = "SELECT DB.DocBaseType, DB.Name FROM C_DOCTYPE C_DOCTYPE INNER JOIN C_DOCBASETYPE DB ON C_DocType.DOCBASETYPE=DB.DOCBASETYPE WHERE DB.DOCBASETYPE IN ('API','APR','APC','ARC') AND C_DocType.ISACTIVE='Y'";
-            string _sql = "SELECT C_DOCBASETYPE.DocBaseType, C_DOCBASETYPE.Name FROM C_DocBaseType C_DOCBASETYPE WHERE C_DOCBASETYPE.DOCBASETYPE IN ('APP','ARR') AND C_DOCBASETYPE.ISACTIVE='Y'";
+            string _sql = "SELECT C_DOCBASETYPE.DocBaseType, C_DOCBASETYPE.Name FROM C_DocBaseType C_DOCBASETYPE WHERE C_DOCBASETYPE.DOCBASETYPE IN ('API','ARI','APC','ARC') AND C_DOCBASETYPE.ISACTIVE='Y'";
             _sql = MRole.GetDefault(ctx).AddAccessSQL(_sql, "C_DocBaseType", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
             DataSet ds = DB.ExecuteDataset(_sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
