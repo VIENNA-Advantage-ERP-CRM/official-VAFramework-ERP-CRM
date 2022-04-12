@@ -757,7 +757,8 @@ namespace VIS.Models
         /// <param name="columns">Column Name</param>
         /// <param name="forInvoices">For Invoice</param>
         ///  <param name="recordID">C_Invoice_ID</param>
-        /// <returns>WhereCindition</returns>
+        /// <param name="Table">Table Alias</param>
+        /// <returns>WhereCondition</returns>
 
         public string GetConversionWhere(string column, bool forInvoices, int InvoiceID, string table)
         {

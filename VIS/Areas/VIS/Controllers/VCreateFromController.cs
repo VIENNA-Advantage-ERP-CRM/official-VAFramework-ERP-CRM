@@ -1263,8 +1263,9 @@ namespace VIS.Controllers
         /// </summary>
         /// <param name="columns">Column Name</param>
         /// <param name="forInvoices">For Invoice</param>
-        ///  <param name="recordID">C_Invoice_ID</param>
-        /// <returns>WhereCindition</returns>
+        /// <param name="recordID">C_Invoice_ID</param>
+        /// <param name="Table">Table Alias</param>
+        /// <returns>WhereCondition</returns>
         public JsonResult GetConversionWhere(string columns, bool forInvoices, int recordID, string Table)
         {
             var ctx = Session["ctx"] as Ctx;
