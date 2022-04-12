@@ -2379,6 +2379,7 @@ namespace VAdvantage.Model
                                     // update m_cost with accumulation qty , amt , and current cost
                                     if (isMatchFromForm == "Y" || handlingWindowName == "Match IV")
                                     {
+                                        costingCheck.isMatchFromForm = isMatchFromForm;
                                         result = cd.UpdateProductCost("Product Cost IV Form", cd, acctSchema, product, M_ASI_ID, invoiceline.GetAD_Org_ID(), costingCheck, optionalStrCd: optionalstr);
                                     }
                                     else
