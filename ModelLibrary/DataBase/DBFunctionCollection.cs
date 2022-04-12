@@ -360,6 +360,47 @@ namespace VAdvantage.DataBase
             return sql;
         }
 
+        /// <summary>
+        /// Based on Cash_ID it will check the reference Order Schedule's 
+        /// are paid or not in the CashLines and returns those if it is paid.
+        /// Author: VA230
+        /// </summary>
+        /// <param name="cash_ID">C_Cash_ID</param>
+        /// <returns>string query</returns>
+        public static string CashLineRefOrerPayScheduleDuePaidOrNot(int cash_ID)
+        {
+            string sql = null;
+            if (DB.IsOracle())
+            {
+                sql = @" SELECT LTRIM(SYS_CONNECT_BY_PATH( PaidSchedule, ' , '),',') PaidSchedule FROM
+                                              (SELECT PaidSchedule, ROW_NUMBER () OVER (ORDER BY PaidSchedule ) RN, COUNT (*) OVER () CNT FROM 
+                                                (SELECT cs.duedate || '_' || cs.dueamt AS PaidSchedule FROM C_Cash c 
+                                                 INNER JOIN C_CashLine cl ON c.c_cash_id = cl.c_cash_id 
+                                                 INNER JOIN VA009_OrderPaySchedule cs ON cs.VA009_OrderPaySchedule_ID = cl.VA009_OrderPaySchedule_ID 
+                                                 INNER JOIN C_Order ord ON ord.C_Order = cl.C_Order_ID AND ord.DocStatus NOT IN ('RE' , 'VO') 
+                                                 WHERE cl.CashType = 'I' AND  cl.IsActive = 'Y' AND c.IsActive = 'Y' AND cs.IsActive = 'Y' 
+                                                 AND NVL(cl.C_Order_ID , 0)  <> 0 AND (NVL(cs.c_payment_id,0)  != 0
+                                                 OR NVL(cs.c_cashline_id , 0) != 0 OR cs.VA009_IsPaid = 'Y') AND c.c_cash_id = " + cash_ID + @"
+                                                 AND ROWNUM <= 100 )  )
+                                                 WHERE RN = CNT START WITH RN = 1 CONNECT BY RN = PRIOR RN + 1";
+            }
+            else if (DB.IsPostgreSQL())
+            {
+                sql = @"SELECT string_agg(PaidSchedule, ', ') PaidSchedule FROM
+                                              (SELECT PaidSchedule, ROW_NUMBER () OVER (ORDER BY PaidSchedule ) RN, COUNT (*) OVER () CNT FROM 
+                                                (SELECT cs.duedate || '_' || cs.dueamt AS PaidSchedule FROM C_Cash c 
+                                                 INNER JOIN C_CashLine cl ON c.c_cash_id = cl.c_cash_id 
+                                                 INNER JOIN VA009_OrderPaySchedule cs ON cs.VA009_OrderPaySchedule_ID = cl.VA009_OrderPaySchedule_ID 
+                                                 INNER JOIN C_Order ord ON ord.C_Order_ID = cl.C_Order_ID AND ord.DocStatus NOT IN ('RE' , 'VO') 
+                                                 WHERE cl.CashType = 'I' AND  cl.IsActive = 'Y' AND c.IsActive = 'Y' AND cs.IsActive = 'Y' 
+                                                 AND NVL(cl.C_Order_ID , 0)  <> 0 AND (NVL(cs.c_payment_id,0)  != 0
+                                                 OR NVL(cs.c_cashline_id , 0) != 0 OR cs.VA009_IsPaid = 'Y') AND c.c_cash_id = " + cash_ID +
+                                                 @") t ORDER BY PaidSchedule LIMIT 100) tb
+                                                 WHERE PaidSchedule IS NOT NULL";
+            }
+            return sql;
+        }
+
         public static string MInOutContainerNotAvailable(int M_InOut_ID)
         {
             StringBuilder sql = new StringBuilder();

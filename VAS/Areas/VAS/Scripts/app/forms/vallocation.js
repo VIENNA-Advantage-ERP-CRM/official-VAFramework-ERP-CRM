@@ -2519,7 +2519,7 @@
             //    + '<span class="vis-allocation-lbldifferenceAmt" style="float:right;">'
             //    + '</span>');
 
-            $resultDiv.append('<div class="vis-allocation-leftControls"><div class="input-group vis-input-wrap"><div class="vis-control-wrap"> <select class="vis-allocation-currencycmb" id=VIS_cmbOrg_' + $self.windowNo + '></select><label title="View allocation will be created in this organization" >' + VIS.translatedTexts.AD_OrgTrx_ID + '</label>');
+            $resultDiv.append('<div class="vis-allocation-leftControls"><div class="input-group vis-input-wrap"><div class="vis-control-wrap"> <select class="vis-allocation-currencycmb" id=VIS_cmbOrg_' + $self.windowNo + '></select><label title=' + VIS.Msg.getMsg("VIS_AllocOrgTitle") + '>' + VIS.Msg.getMsg("VIS_AllocOrg") + '</label>');
 
             $resultDiv.append('<div class="vis-allocation-leftControls">'
                 + '<div class="input-group vis-input-wrap">'

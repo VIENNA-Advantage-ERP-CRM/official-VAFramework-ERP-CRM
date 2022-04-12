@@ -1167,18 +1167,19 @@ namespace VAdvantage.Model
                             #endregion
 
                             // when we are matching PO with MR // costing calculate on completion = true
-                            // costing method is not Avregae PO / Last PO 
+                            // costing method is not Avregae PO / Last PO / We Av PO
                             // then no need to calculate cost but we are creating cost detail with PO price and qty
                             if (client.IsCostImmediate())
                             {
                                 #region cost detail creation or not
-                                if (costingMethodMatchPO == "A" || costingMethodMatchPO == "p")
+                                if (costingMethodMatchPO == "A" || costingMethodMatchPO == "p" ||
+                                    costingMethodMatchPO == MCostElement.COSTINGMETHOD_WeightedAveragePO)
                                 {
-                                    // not to create cost detail by this section if costing method is either Average PO or Last PO
+                                    // not to create cost detail by this section if costing method is either Average PO or Last PO oe We AV PO
                                 }
                                 else if (inoutline.IsCostCalculated())
                                 {
-                                    //  need to calculate cost for Average PO and Last PO 
+                                    //  need to calculate cost for Average PO and Last PO / We Av PO
                                     // bcz we alreadyy calculate cost against this mr otherwise costing not to be calculated
                                 }
                                 else
@@ -1369,7 +1370,7 @@ namespace VAdvantage.Model
                                 int costElementId = 0;
                                 // when iscostimmediate = true
                                 // if mr line cost already calculated then during match PO with MR we have to calculate both Average PO and Last PO
-                                if ((optionalstr == "window" && (costingMethodMatchPO == "A" || inoutline.IsCostCalculated())) || optionalstr == "process")
+                                if ((optionalstr == "window" && (costingMethodMatchPO == "A")) || optionalstr == "process")
                                 {
                                     query.Clear();
                                     query.Append(@"SELECT M_CostElement_ID FROM M_CostElement WHERE  AD_Client_ID=" + AD_Client_ID +
@@ -1468,7 +1469,7 @@ namespace VAdvantage.Model
 
                                 }
 
-                                if ((optionalstr == "window" && (costingMethodMatchPO == "p" || inoutline.IsCostCalculated())) || optionalstr == "process")
+                                if ((optionalstr == "window" && (costingMethodMatchPO == "p")) || optionalstr == "process")
                                 {
                                     #region last po
                                     query.Clear();
@@ -1536,6 +1537,88 @@ namespace VAdvantage.Model
                                     }
                                     #endregion
                                 }
+
+                                if ((optionalstr == "window" && (costingMethodMatchPO == MCostElement.COSTINGMETHOD_WeightedAveragePO)) || optionalstr == "process")
+                                {
+                                    query.Clear();
+                                    query.Append(@"SELECT M_CostElement_ID FROM M_CostElement WHERE  AD_Client_ID=" + AD_Client_ID +
+                                                 @" AND IsActive='Y' AND CostElementType='M'  AND CostingMethod = 'O'");
+                                    costElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, trxName));
+
+                                    costElement = MCostElement.Get(ctx, costElementId);
+
+                                    #region Weighted Av. PO
+                                    if (cl == MProductCategory.COSTINGLEVEL_Client || cl == MProductCategory.COSTINGLEVEL_Organization)
+                                    {
+                                        cost = MCost.Get(product, 0, acctSchema, AD_Org_ID, costElementId);
+                                    }
+                                    else if (cl == MProductCategory.COSTINGLEVEL_BatchLot || cl == MProductCategory.COSTINGLEVEL_OrgPlusBatch)
+                                    {
+                                        cost = MCost.Get(product, M_ASI_ID, acctSchema, AD_Org_ID, costElementId);
+                                    }
+                                    else if (cl == MProductCategory.COSTINGLEVEL_Warehouse || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
+                                    {
+                                        cost = MCost.Get(product, (cl == MProductCategory.COSTINGLEVEL_Warehouse ? 0 : M_ASI_ID), acctSchema, AD_Org_ID, costElementId, inout.GetM_Warehouse_ID());
+                                    }
+
+                                    cd.SetC_OrderLine_ID(orderLineId);
+                                    cd.SetQty(Qty);
+                                    cd.SetAmt(Decimal.Round(Decimal.Multiply(Price, Qty), acctSchema.GetCostingPrecision()));
+                                    if (!cd.Save(trxName))
+                                    {
+                                        if (optionalstr != "window")
+                                        {
+                                            trxName.Rollback();
+                                        }
+                                        ValueNamePair pp = VLogger.RetrieveError();
+                                        _log.Severe("Error occured during saving a record, M_InoutLine_Id = " + inoutline.GetM_InOutLine_ID() + " in cost detail -> MatchPO. Error Value :  " + pp.GetValue() + " AND Error Name : " + pp.GetName());
+                                        return false;
+                                    }
+
+                                    Decimal WACcost = Decimal.Add(cd.GetAmt(),
+                                                           Decimal.Round(Decimal.Divide(Decimal.Multiply(cd.GetAmt(), costElement.GetSurchargePercentage()), 100), acctSchema.GetCostingPrecision()));
+
+                                    if (Decimal.Add(cost.GetCurrentQty(), cd.GetQty()) != 0)
+                                    {
+                                        cost.SetCurrentCostPrice(Decimal.Round(Decimal.Divide(
+                                               Decimal.Add(
+                                               Decimal.Multiply(cost.GetCurrentCostPrice(), cost.GetCurrentQty()), WACcost),
+                                               Decimal.Add(cost.GetCurrentQty(), cd.GetQty()))
+                                               , acctSchema.GetCostingPrecision(), MidpointRounding.AwayFromZero));
+                                    }
+
+                                    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), WACcost));
+                                    cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), cd.GetQty()));
+                                    cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), cd.GetQty()));
+
+                                    if (!cost.Save())
+                                    {
+                                        if (optionalstr != "window")
+                                        {
+                                            trxName.Rollback();
+                                        }
+                                        ValueNamePair pp = VLogger.RetrieveError();
+                                        _log.Severe("Error occured during saving a record, M_InoutLine_ID = " + inoutline.GetM_InOutLine_ID() + " in M-Cost -> MatchPO. Error Value :  " + pp.GetValue() + " AND Error Name : " + pp.GetName());
+                                        return false;
+                                    }
+                                    else
+                                    {
+                                        if (cl == MProductCategory.COSTINGLEVEL_Client || cl == MProductCategory.COSTINGLEVEL_Warehouse
+                                            || cl == MProductCategory.COSTINGLEVEL_Organization)
+                                        {
+                                            MCostElementDetail.CreateCostElementDetail(ctx, AD_Client_ID, AD_Org_ID, product, 0,
+                                                                 acctSchema, costElementId, windowName, cd, Decimal.Round(Decimal.Multiply(cost.GetCurrentCostPrice(), Qty), acctSchema.GetCostingPrecision()), Qty);
+                                        }
+                                        else if (cl == MProductCategory.COSTINGLEVEL_BatchLot || cl == MProductCategory.COSTINGLEVEL_OrgPlusBatch
+                                            || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
+                                        {
+                                            MCostElementDetail.CreateCostElementDetail(ctx, AD_Client_ID, AD_Org_ID, product, M_ASI_ID,
+                                                                     acctSchema, costElementId, windowName, cd, Decimal.Round(Decimal.Multiply(cost.GetCurrentCostPrice(), Qty), acctSchema.GetCostingPrecision()), Qty);
+                                        }
+                                    }
+                                    #endregion
+
+                                }
                             }
                             else
                             {
@@ -1556,7 +1639,7 @@ namespace VAdvantage.Model
                                 }
 
                                 int costElementId = 0;
-                                if ((optionalstr == "window" && (costingMethodMatchPO == "A" || inoutline.IsCostCalculated())) || optionalstr == "process")
+                                if ((optionalstr == "window" && (costingMethodMatchPO == "A")) || optionalstr == "process")
                                 {
                                     #region Av. PO
                                     query.Clear();
@@ -1616,7 +1699,7 @@ namespace VAdvantage.Model
                                     }
                                     #endregion
                                 }
-                                if ((optionalstr == "window" && (costingMethodMatchPO == "p" || inoutline.IsCostCalculated())) || optionalstr == "process")
+                                if ((optionalstr == "window" && (costingMethodMatchPO == "p")) || optionalstr == "process")
                                 {
                                     #region last po
                                     query.Clear();
@@ -1672,6 +1755,68 @@ namespace VAdvantage.Model
                                     }
                                     #endregion
                                 }
+                                if ((optionalstr == "window" && (costingMethodMatchPO == MCostElement.COSTINGMETHOD_WeightedAveragePO)) || optionalstr == "process")
+                                {
+                                    #region We Av. PO
+                                    query.Clear();
+                                    query.Append("SELECT M_CostElement_ID FROM M_CostElement WHERE  AD_Client_ID=" + AD_Client_ID + " AND IsActive='Y' AND CostElementType='M'  AND CostingMethod = 'O'");
+                                    costElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, trxName));
+
+                                    costElement = MCostElement.Get(ctx, costElementId);
+
+                                    if (cl == MProductCategory.COSTINGLEVEL_Client || cl == MProductCategory.COSTINGLEVEL_Organization) //(cl != "B")
+                                    {
+                                        cost = MCost.Get(product, 0, acctSchema, AD_Org_ID, costElementId);
+                                    }
+                                    else if (cl == MProductCategory.COSTINGLEVEL_BatchLot || cl == MProductCategory.COSTINGLEVEL_OrgPlusBatch)
+                                    {
+                                        cost = MCost.Get(product, M_ASI_ID, acctSchema, AD_Org_ID, costElementId);
+                                    }
+                                    else if (cl == MProductCategory.COSTINGLEVEL_Warehouse || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
+                                    {
+                                        cost = MCost.Get(product, (cl == MProductCategory.COSTINGLEVEL_Warehouse ? 0 : M_ASI_ID), acctSchema, AD_Org_ID, costElementId, inout.GetM_Warehouse_ID());
+                                    }
+
+                                    Decimal WACcost = Decimal.Add(cd.GetAmt(),
+                                                           Decimal.Round(Decimal.Divide(Decimal.Multiply(cd.GetAmt(), costElement.GetSurchargePercentage()), 100), acctSchema.GetCostingPrecision()));
+
+                                    if (Decimal.Add(cost.GetCurrentQty(), cd.GetQty()) != 0)
+                                    {
+                                        cost.SetCurrentCostPrice(Decimal.Round(Decimal.Divide(
+                                               Decimal.Add(
+                                               Decimal.Multiply(cost.GetCurrentCostPrice(), cost.GetCurrentQty()), WACcost),
+                                               Decimal.Add(cost.GetCurrentQty(), cd.GetQty()))
+                                               , acctSchema.GetCostingPrecision(), MidpointRounding.AwayFromZero));
+                                    }
+
+                                    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), WACcost));
+                                    cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), cd.GetQty()));
+                                    cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), cd.GetQty()));
+
+                                    if (!cost.Save())
+                                    {
+                                        if (optionalstr != "window")
+                                        {
+                                            trxName.Rollback();
+                                        }
+                                        ValueNamePair pp = VLogger.RetrieveError();
+                                        _log.Severe("Error occured during saving a record, M_inoutLine_Id = " + inoutline.GetM_InOutLine_ID() + " in M-Cost -> MatchPO. Error Value :  " + pp.GetValue() + " AND Error Name : " + pp.GetName());
+                                        return false;
+                                    }
+                                    else
+                                    {
+                                        MCostElementDetail.CreateCostElementDetail(ctx, AD_Client_ID, AD_Org_ID, product, M_ASI_ID,
+                                                             acctSchema, costElementId, windowName, cd, Decimal.Round(Decimal.Multiply(cost.GetCurrentCostPrice(), Qty), acctSchema.GetCostingPrecision()), Qty);
+                                    }
+                                    #endregion
+                                }
+                            }
+
+                            // Update Cost Queue Price
+                            if (!UpdateCostQueuePrice(0, MRPriceAvPo, Qty, Price, inoutline.GetM_InOutLine_ID(), acctSchema.GetCostingPrecision()))
+                            {
+                                _log.Severe("Cost Queue Cost not updated for GRN Line= " + inoutline.GetM_InOutLine_ID());
+                                return false;
                             }
 
                             #endregion
@@ -2234,6 +2379,7 @@ namespace VAdvantage.Model
                                     // update m_cost with accumulation qty , amt , and current cost
                                     if (isMatchFromForm == "Y" || handlingWindowName == "Match IV")
                                     {
+                                        costingCheck.isMatchFromForm = isMatchFromForm;
                                         result = cd.UpdateProductCost("Product Cost IV Form", cd, acctSchema, product, M_ASI_ID, invoiceline.GetAD_Org_ID(), costingCheck, optionalStrCd: optionalstr);
                                     }
                                     else
@@ -5949,6 +6095,30 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
+        /// This Method is used to update urrent Cost Price on Cos Queue
+        /// </summary>
+        /// <param name="CostQueue_ID">Cost Queue ID</param>
+        /// <param name="oldPrice">Old Price</param>
+        /// <param name="qty">Quantity</param>
+        /// <param name="newPrice">New Price</param>
+        /// <param name="InOutLine_ID">GRN Lline</param>
+        /// <param name="precision">Precision</param>
+        /// <returns>true, when updated</returns>
+        public static bool UpdateCostQueuePrice(int CostQueue_ID, Decimal oldPrice, Decimal qty, Decimal newPrice, int InOutLine_ID, int precision)
+        {
+            Decimal price = Decimal.Subtract(Decimal.Multiply(newPrice, qty), Decimal.Multiply(oldPrice, qty));
+            int no = DB.ExecuteQuery("UPDATE M_CostQueue SET CurrentCostPrice =ROUND(((CurrentCostPrice * CurrentQty) + " + price +
+                            @")/ (CASE WHEN CurrentQty = 0 THEN 1 ELSE CurrentQty END) ," + precision + @" )
+                            WHERE M_CostQueue_ID IN (SELECT M_CostQueue_ID FROM M_CostQueueTransaction WHERE M_InOutLine_ID
+                            = " + InOutLine_ID + ")");
+            if (no < 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
         /// is used to get price from price list and convert it into "currency to" with default "currency type" and "acct date" of Inout
         /// </summary>
         /// <param name="inoutline">Line reference</param>
@@ -6854,7 +7024,8 @@ namespace VAdvantage.Model
         /// <param name="M_Warehouse_ID">warehouse</param>
         /// <returns>TRUE - if success</returns>
         private static bool CreateCostQueueForMatchPO(Ctx ctx, MAcctSchema acctSchema, MProduct product, int M_ASI_ID, int AD_Client_ID,
-                                                      int AD_Org_ID, Decimal Price, Decimal Qty, MInOutLine inoutline, Trx trxName, int M_Warehouse_ID, string optionalStrPO = "process")
+                                                      int AD_Org_ID, Decimal Price, Decimal Qty, MInOutLine inoutline,
+                                                      Trx trxName, int M_Warehouse_ID, string optionalStrPO = "process")
         {
             if (optionalStrPO == "window")
             {

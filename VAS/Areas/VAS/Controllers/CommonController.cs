@@ -291,7 +291,7 @@ namespace VIS.Controllers
 
         #endregion
 
-     
+
 
         #region VAttributeGrid
         public JsonResult GetDataQueryAttribute()
@@ -389,7 +389,7 @@ namespace VIS.Controllers
             return Json(new { result = "ok" }, JsonRequestBehavior.AllowGet);
         }
 
-        
+
 
         public JsonResult CheckTableDeletable(string fields)
         {
@@ -1366,7 +1366,7 @@ namespace VIS.Controllers
                         po.Set_Value("PrintDescription", ol.Get_Value("PrintDescription"));
                     //Get Print description from invoice line if invoice line exists
                     if (il != null && po.Get_ColumnIndex("PrintDescription") >= 0 && il.Get_ColumnIndex("PrintDescription") >= 0)
-                        po.Set_Value("PrintDescription", il.Get_Value("PrintDescription"));                    
+                        po.Set_Value("PrintDescription", il.Get_Value("PrintDescription"));
 
                     //iol.SetDescription(ol.GetDescription());
                     //iol.SetC_Project_ID(ol.GetC_Project_ID());
@@ -1560,7 +1560,7 @@ namespace VIS.Controllers
             return true;
         }
 
-       
+
 
         public bool SaveInvoiceData(Ctx ctx, List<Dictionary<string, string>> model, string selectedItems, int C_Order_ID, int C_Invoice_ID, int M_InOut_ID, int C_ProvisionalInvoice_ID)
         {
@@ -2168,9 +2168,10 @@ namespace VIS.Controllers
                             bsl.SetEftCheckNo(Util.GetValueOfString(ds.Tables[0].Rows[0]["CheckNo"]));
                             bsl.SetEftValutaDate(Util.GetValueOfDateTime(ds.Tables[0].Rows[0]["Checkdate"]));
                         }
-                        if (bsl.Get_ColumnIndex("VA009_PaymentMethod_ID") >= 0)
+                        //VA230:Check if payment method column and value exists
+                        if (bsl.Get_ColumnIndex("VA009_PaymentMethod_ID") >= 0 && Util.GetValueOfInt(ds.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]) > 0)
                         {
-                            bsl.Set_Value("VA009_PaymentMethod_ID", Util.GetValueOfString(ds.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]));
+                            bsl.Set_Value("VA009_PaymentMethod_ID", Util.GetValueOfInt(ds.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]));
 
                         }
                         if (bsl.Get_ColumnIndex("TenderType") >= 0)
@@ -2655,7 +2656,7 @@ namespace VIS.Controllers
                         }
                         else
                         {
-                            //client = MClient.Get(ctx, Util.GetValueOfInt(inv.GetAD_Client_ID()));
+                            client = MClient.Get(ctx, Util.GetValueOfInt(inv.GetAD_Client_ID()));
 
                             //	Create Shipment - Invoice Link
                             if (iLine.GetM_Product_ID() != 0)
@@ -2670,14 +2671,23 @@ namespace VIS.Controllers
                                     // Check applied by mohit asked by ravikant to restrict the recalcualtion of costing for invoice for which the costing is already calculated.06/07/2017 PMS TaskID=4170
                                     if (iLine.GetC_OrderLine_ID() == 0 && !iLine.IsCostCalculated())
                                     {
-                                        // updated by Amit 31-12-2015
-                                        MProduct product = new MProduct(ctx, match.GetM_Product_ID(), trx);
+                                        if (client.IsCostImmediate())
+                                        {
+                                            MProduct product = new MProduct(ctx, match.GetM_Product_ID(), trx);
 
-                                        // Not returning any value as No effect
-                                        MCostQueue.CreateProductCostsDetails(ctx, match.GetAD_Client_ID(), match.GetAD_Org_ID(), product,
-                                             match.GetM_AttributeSetInstance_ID(), "Match IV", null, sLine, null, iLine, null,
-                                             Decimal.Multiply(Decimal.Divide(iLine.GetLineNetAmt(), iLine.GetQtyInvoiced()), match.GetQty()),
-                                             match.GetQty(), trx, out conversionNotFoundMatch, "window");
+                                            // Not returning any value as No effect
+                                            MCostQueue.CreateProductCostsDetails(ctx, match.GetAD_Client_ID(), match.GetAD_Org_ID(), product,
+                                                 match.GetM_AttributeSetInstance_ID(), "Match IV", null, sLine, null, iLine, null,
+                                                 Decimal.Multiply(Decimal.Divide(iLine.GetProductLineCost(iLine), iLine.GetQtyInvoiced()), match.GetQty()),
+                                                 match.GetQty(), trx, out conversionNotFoundMatch, "window");
+                                            if (!string.IsNullOrEmpty(conversionNotFoundMatch))
+                                            {
+                                                if (client.Get_ColumnIndex("IsCostMandatory") > 0 && client.IsCostMandatory())
+                                                {
+                                                    success = false;
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                                 else
@@ -2719,14 +2729,23 @@ namespace VIS.Controllers
                                 else
                                 {
                                     MatchedPO_ID = matchPO.GetDocumentNo();
-                                    // updated by Amit 31-12-2015
-                                    MProduct product = new MProduct(ctx, matchPO.GetM_Product_ID(), trx);
+                                    if (client.IsCostImmediate())
+                                    {
+                                        MProduct product = new MProduct(ctx, matchPO.GetM_Product_ID(), trx);
 
-                                    // Not returning any value as No effect
-                                    MCostQueue.CreateProductCostsDetails(ctx, matchPO.GetAD_Client_ID(), matchPO.GetAD_Org_ID(), product,
-                                          matchPO.GetM_AttributeSetInstance_ID(), "Match IV", null, sLine, null, iLine, null,
-                                          Decimal.Multiply(Decimal.Divide(iLine.GetLineNetAmt(), iLine.GetQtyInvoiced()), matchPO.GetQty()),
-                                          matchPO.GetQty(), trx, out conversionNotFoundMatch, "window");
+                                        // Not returning any value as No effect
+                                        MCostQueue.CreateProductCostsDetails(ctx, matchPO.GetAD_Client_ID(), matchPO.GetAD_Org_ID(), product,
+                                              matchPO.GetM_AttributeSetInstance_ID(), "Match IV", null, sLine, null, iLine, null,
+                                              Decimal.Multiply(Decimal.Divide(iLine.GetProductLineCost(iLine), iLine.GetQtyInvoiced()), matchPO.GetQty()),
+                                              matchPO.GetQty(), trx, out conversionNotFoundMatch, "window");
+                                        if (!string.IsNullOrEmpty(conversionNotFoundMatch))
+                                        {
+                                            if (client.Get_ColumnIndex("IsCostMandatory") > 0 && client.IsCostMandatory())
+                                            {
+                                                success = false;
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -2758,7 +2777,7 @@ namespace VIS.Controllers
                                 }
                             }
 
-                            //client = MClient.Get(ctx, Util.GetValueOfInt(sLine.GetAD_Client_ID()));
+                            client = MClient.Get(ctx, Util.GetValueOfInt(sLine.GetAD_Client_ID()));
 
                             //	Create PO - Shipment Link
                             if (sLine.GetM_Product_ID() != 0)
@@ -2782,11 +2801,15 @@ namespace VIS.Controllers
                                     MProduct product = new MProduct(ctx, match.GetM_Product_ID(), trx);
 
                                     // Not returning any value as No effect
-                                    MCostQueue.CreateProductCostsDetails(ctx, match.GetAD_Client_ID(), match.GetAD_Org_ID(), product, match.GetM_AttributeSetInstance_ID(),
+                                    if (client.IsCostImmediate())
+                                        MCostQueue.CreateProductCostsDetails(ctx, match.GetAD_Client_ID(), match.GetAD_Org_ID(), product, match.GetM_AttributeSetInstance_ID(),
                                         "Match PO", null, sLine, null, null, null, oLine.GetC_OrderLine_ID(), match.GetQty(), trx, out conversionNotFoundMatch, "window");
                                     if (!string.IsNullOrEmpty(conversionNotFoundMatch))
                                     {
-
+                                        if (client.Get_ColumnIndex("IsCostMandatory") > 0 && client.IsCostMandatory())
+                                        {
+                                            success = false;
+                                        }
                                     }
                                     else
                                     {
@@ -3533,7 +3556,7 @@ namespace VIS.Controllers
             return retDic;
         }
 
-        
+
 
         /// <summary>
         /// Check whether table is deletable on AD_Table window
@@ -3578,7 +3601,7 @@ namespace VIS.Controllers
             return retRes;
         }
 
-       
+
 
         /// <summary>
         /// Get Version information for changed columns
@@ -3586,7 +3609,7 @@ namespace VIS.Controllers
         /// <param name="ctx"></param>
         /// <param name="od"></param>
         /// <returns></returns>
-        
+
     }
 
     public class AccountViewClass

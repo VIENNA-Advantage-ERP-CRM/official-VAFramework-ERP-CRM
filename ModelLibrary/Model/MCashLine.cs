@@ -584,6 +584,30 @@ namespace VAdvantage.Model
             //}
             // End
 
+            #region OrderPaySchedule
+            //VA230:Check Cash type if Order and Order Payment Schedule
+            if (GetCashType().Equals(CASHTYPE_Order) && Get_ColumnIndex("VA009_OrderPaySchedule_ID") >= 0)
+            {
+                if (newRecord || Is_ValueChanged("C_Order_ID") || Is_ValueChanged("VA009_OrderPaySchedule_ID"))
+                {
+                    //Check duplicate record except current row
+                    string sql = @"SELECT COUNT(C_CashLine_ID) FROM C_CashLine CL 
+                                                        INNER JOIN C_Cash C ON C.C_Cash_ID=CL.C_Cash_ID 
+                                                        WHERE C_Order_ID = " + Get_Value("C_Order_ID") + @" AND VA009_OrderPaySchedule_ID=" + GetVA009_OrderPaySchedule_ID() + @" 
+                                                        AND DocStatus NOT IN('" + MCash.DOCSTATUS_Voided + @"','" + MCash.DOCSTATUS_Reversed + @"') AND C_CashLine_ID<>" + GetC_CashLine_ID();
+                    //Check duplicate order pay schedule
+                    if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
+                    {
+                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "VA009_DuplicateOrderPaySchedule"));
+                        return false;
+                    }
+                    if (Get_ColumnIndex("IsPrepayment") >= 0)
+                    {
+                        SetIsPrepayment(true);
+                    }
+                }
+            }
+            #endregion
             //	Cannot change generated Invoices
             if (Is_ValueChanged("C_Invoice_ID"))
             {
@@ -594,12 +618,13 @@ namespace VAdvantage.Model
                     return false;
                 }
 
-               //JID_0615_1 prevent saving record if conversion not found
-                if (Util.GetValueOfDecimal(Get_Value("ConvertedAmt")) == 0 ) { 
+                //JID_0615_1 prevent saving record if conversion not found
+                if (Util.GetValueOfDecimal(Get_Value("ConvertedAmt")) == 0)
+                {
                     log.SaveError(Msg.GetMsg(GetCtx(), "NoConversion"), "");
                     return false;
                 };
-                
+
             }
 
             // during saving a new record, system will check same invoice schedule reference exist on same cash line or not
@@ -771,7 +796,7 @@ namespace VAdvantage.Model
             else if (CASHTYPE_BusinessPartner.Equals(GetCashType()) && VSS_PAYMENTTYPE_ReceiptReturn.Equals(GetVSS_PAYMENTTYPE()) && GetAmount() > 0)
             {
                 SetAmount(Decimal.Negate(GetAmount()));
-            }			 
+            }
 
             // Reset Amount Dimension if Amount is different
             if (Util.GetValueOfInt(Get_Value("AmtDimAmount")) > 0)
@@ -1056,8 +1081,58 @@ namespace VAdvantage.Model
             SetIsGenerated(true);
             _invoice = invoice;
         }
+        /// <summary>
+        ///   Set allocation
+        ///   Author:VA230
+        /// </summary>
+        /// <returns>true/false</returns>
+        public bool TestAllocation()
+        {
+            Decimal? alloc = GetAllocatedAmt();
+            if (alloc == null)
+                alloc = Env.ZERO;
+            Decimal total = GetAmount();
 
-
+            bool test = total.CompareTo((Decimal)alloc) == 0;
+            bool change = test != IsAllocated();
+            log.Fine("Cash Allocated=" + test
+                + " (" + alloc + "=" + total + ")");
+            return change;
+        }
+        /// <summary>
+        ///   Get Allocated Amt in Payment Currency
+        ///   Author:VA230
+        /// </summary>
+        /// <returns>amount or null</returns>
+        public Decimal? GetAllocatedAmt()
+        {
+            Decimal? retValue = null;
+            //
+            String sql = "SELECT SUM(currencyConvert(al.Amount,"
+                    + "ah.C_Currency_ID, cl.C_Currency_ID,ah.DateTrx,cl.C_ConversionType_ID, al.AD_Client_ID,al.AD_Org_ID)) "
+                + " FROM C_AllocationLine al"
+                + " INNER JOIN C_AllocationHdr ah ON (al.C_AllocationHdr_ID=ah.C_AllocationHdr_ID) "
+                + " INNER JOIN C_CashLine cl ON (al.C_CashLine_ID=cl.C_CashLine_ID) "
+                + " WHERE al.C_CashLine_ID=" + GetC_CashLine_ID() + ""
+                + " AND ah.IsActive='Y' AND al.IsActive='Y'";
+            IDataReader idr = null;
+            try
+            {
+                idr = DataBase.DB.ExecuteReader(sql, null, Get_Trx());
+                if (idr.Read())
+                    retValue = Utility.Util.GetValueOfDecimal(idr[0]);
+                idr.Close();
+            }
+            catch (Exception e)
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                }
+                log.Log(Level.SEVERE, "GetAllocatedAmt", e);
+            }
+            return retValue;
+        }
 
 
     }
