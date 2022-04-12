@@ -46,7 +46,7 @@
 
         /* Intialize Shipment/Receipt Detail */
         function initBPDetails(C_BPartner_ID) {
-            baseObj.cmbShipment.getControl().html("");
+            //baseObj.cmbShipment.getControl().html("");
             getShipments(VIS.Env.getCtx(), C_BPartner_ID);
         }
 
@@ -54,8 +54,8 @@
         function getShipments(ctx, C_BPartner_ID) {
             //var pairs = [];
 
-            var display = ("s.DocumentNo||' - '||")
-                .concat(VIS.DB.to_char("s.MovementDate", VIS.DisplayType.Date, VIS.Env.getAD_Language(VIS.Env.getCtx())));
+            //var display = ("s.DocumentNo||' - '||")
+            //    .concat(VIS.DB.to_char("s.MovementDate", VIS.DisplayType.Date, VIS.Env.getAD_Language(VIS.Env.getCtx())));
 
             var _isdrop = "Y".equals(VIS.Env.getCtx().getWindowContext(selfChild.windowNo, "IsDropShip"));
             var _isSoTrx = "Y".equals(VIS.Env.getCtx().getWindowContext(selfChild.windowNo, "IsSOTrx"));
@@ -64,34 +64,50 @@
             var dt = VIS.dataContext.getJSONRecord("MDocType/GetDocType", VIS.Env.getCtx().getContextAsInt(selfChild.windowNo, "C_DocType_ID").toString());
             var isReturnTrx = VIS.Utility.Util.getValueOfBoolean(dt["IsReturnTrx"]);
 
-            $.ajax({
-                url: VIS.Application.contextUrl + "VCreateFrom/GetShipmentsData",
-                type: 'POST',
-                //async: false,
-                data: {
-                    displays: display, CBPartnerIDs: C_BPartner_ID, IsDrop: _isdrop, IsSOTrx: _isSoTrx, isReturnTrxs: isReturnTrx, isProvisionlInvoices: true
-                },
-                success: function (data) {
-                    var ress = JSON.parse(data);
-                    if (ress && ress.length > 0) {
-                        var key, value;
-                        for (var i = 0; i < ress.length; i++) {
-                            key = VIS.Utility.Util.getValueOfInt(ress[i]["key"]);
-                            value = VIS.Utility.encodeText(ress[i]["value"]);
-                            //pairs.push({ ID: key, value: value });
+            var sql = " M_InOut_ID IN (SELECT s.M_InOut_ID FROM M_InOut s WHERE s.C_BPartner_ID = " + C_BPartner_ID + " AND s.IsSOTrx = '"
+                + (_isSoTrx ? "Y" : "N") + "' AND s.DocStatus IN('CL', 'CO') AND s.IsDropShip='" + (_isdrop ? "Y" : "N") + "'";
 
-                            if (i == 0) {
-                                baseObj.cmbShipment.getControl().append(" <option value=0> </option>");
-                            }
-                            baseObj.cmbShipment.getControl().append(" <option value=" + key + ">" + value + "</option>");
-                        }
-                        baseObj.cmbShipment.getControl().prop('selectedIndex', 0);
-                    }
-                },
-                error: function (e) {
-                    selfChild.log.info(e);
-                },
-            });
+            if (isReturnTrx != null) {
+                sql += " AND S.IsReturnTrx='" + (isReturnTrx == true ? "Y" : "N") + "'";
+            }            
+
+            sql += " AND s.M_InOut_ID IN (SELECT t.M_InOut_ID FROM (SELECT sl.M_InOut_ID, sl.M_InOutLine_ID, sl.MovementQty, "
+                + " (SELECT SUM(NVL(il.QtyInvoiced, 0)) FROM C_InvoiceLine il INNER JOIN C_Invoice I ON I.C_INVOICE_ID = il.C_INVOICE_ID"
+                + " WHERE i.DocStatus NOT IN ('VO', 'RE') AND sl.M_InOutLine_ID = il.M_InOutLine_ID) AS QtyInvoiced"
+                + " FROM M_InOutLine sl) t"
+                + " GROUP BY t.M_InOut_ID, t.M_InOutLine_ID, t.MovementQty HAVING t.MovementQty > SUM(NVL(t.QtyInvoiced, 0))))";
+
+            var lookupShipment = VIS.MLookupFactory.get(VIS.Env.getCtx(), baseObj.windowNo, 0, VIS.DisplayType.Search, "M_InOut_ID", 0, false, sql);
+            baseObj.cmbShipment = new VIS.Controls.VTextBoxButton("M_InOut_ID", true, false, true, VIS.DisplayType.Search, lookupShipment);
+
+            //$.ajax({
+            //    url: VIS.Application.contextUrl + "VCreateFrom/GetShipmentsData",
+            //    type: 'POST',
+            //    //async: false,
+            //    data: {
+            //        displays: display, CBPartnerIDs: C_BPartner_ID, IsDrop: _isdrop, IsSOTrx: _isSoTrx, isReturnTrxs: isReturnTrx, isProvisionlInvoices: true
+            //    },
+            //    success: function (data) {
+            //        var ress = JSON.parse(data);
+            //        if (ress && ress.length > 0) {
+            //            var key, value;
+            //            for (var i = 0; i < ress.length; i++) {
+            //                key = VIS.Utility.Util.getValueOfInt(ress[i]["key"]);
+            //                value = VIS.Utility.encodeText(ress[i]["value"]);
+            //                //pairs.push({ ID: key, value: value });
+
+            //                if (i == 0) {
+            //                    baseObj.cmbShipment.getControl().append(" <option value=0> </option>");
+            //                }
+            //                baseObj.cmbShipment.getControl().append(" <option value=" + key + ">" + value + "</option>");
+            //            }
+            //            baseObj.cmbShipment.getControl().prop('selectedIndex', 0);
+            //        }
+            //    },
+            //    error: function (e) {
+            //        selfChild.log.info(e);
+            //    },
+            //});
         }
 
         /* Dispose Components */
@@ -203,8 +219,8 @@
 
         //	Get Shipment
         var C_ProvisionalInvoice_ID = this.$super.mTab.getValue("C_ProvisionalInvoice_ID");
-        var C_Order_ID = this.$super.cmbOrder.getControl().find('option:selected').val();
-        var M_InOut_ID = this.$super.cmbShipment.getControl().find('option:selected').val();
+        var C_Order_ID = VIS.Utility.Util.getValueOfInt(this.$super.cmbOrder.getValue());
+        var M_InOut_ID = VIS.Utility.Util.getValueOfInt(this.$super.cmbShipment.getValue());
 
         return this.saveData(model, "", C_Order_ID, M_InOut_ID, C_ProvisionalInvoice_ID);
     }
