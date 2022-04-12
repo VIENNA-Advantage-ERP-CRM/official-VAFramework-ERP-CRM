@@ -750,6 +750,43 @@ namespace VIS.Models
             }
             return obj;
         }
+
+        /// <summary>
+        /// Get Currency Conversion Where Condition
+        /// </summary>
+        /// <param name="columns">Column Name</param>
+        /// <param name="forInvoices">For Invoice</param>
+        ///  <param name="recordID">C_Invoice_ID</param>
+        /// <returns>WhereCindition</returns>
+
+        public string GetConversionWhere(string column, bool forInvoices, int InvoiceID, string table)
+        {
+            // check order is loading for Provisional Invoice or not
+            bool isProvisionalInvoice = false;
+            if (!String.IsNullOrEmpty(column) && column.Equals("m.C_InvoiceLine_ID") && !forInvoices)
+            {
+                isProvisionalInvoice = true;
+            }
+
+            string whereCondition = "";
+            if (InvoiceID > 0)
+            {
+                DataSet dsInvoice = DB.ExecuteDataset(@"SELECT C_Currency_ID  ,
+                CASE WHEN NVL(C_ConversionType_ID , 0) != 0  THEN C_ConversionType_ID ELSE 
+                (SELECT MAX(C_ConversionType_ID) FROM C_ConversionType WHERE C_ConversionType.AD_Client_ID IN (0 , invoice.AD_Client_ID )
+                AND C_ConversionType.AD_Org_ID      IN (0 , invoice.AD_Org_ID ) AND C_ConversionType.IsDefault = 'Y') END AS C_ConversionType_ID,
+                M_PriceList_ID FROM " + (!isProvisionalInvoice ? "C_Invoice" : "C_ProvisionalInvoice") + " invoice WHERE" +
+                " " + (!isProvisionalInvoice ? "C_Invoice_ID" : "C_ProvisionalInvoice_ID") + " = " + InvoiceID);
+                if (dsInvoice != null && dsInvoice.Tables.Count > 0 && dsInvoice.Tables[0].Rows.Count > 0)
+                {
+                    whereCondition = " AND " + table + ".C_Currency_ID = " + Convert.ToInt32(dsInvoice.Tables[0].Rows[0]["C_Currency_ID"]) +
+                        " AND " + table + ".C_ConversionType_ID = " + Util.GetValueOfInt(dsInvoice.Tables[0].Rows[0]["C_ConversionType_ID"]) +
+                        " AND " + table + ".M_PriceList_ID = " + Convert.ToInt32(dsInvoice.Tables[0].Rows[0]["M_PriceList_ID"]);
+                }
+            }
+            return whereCondition;
+        }
+
     }
 
 

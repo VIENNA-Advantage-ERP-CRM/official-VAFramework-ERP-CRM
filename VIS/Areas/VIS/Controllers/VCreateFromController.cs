@@ -1257,5 +1257,20 @@ namespace VIS.Controllers
                 "WHERE C_InvoiceLine.IsActive = 'Y' AND C_PROVISIONALINVOICELINE_ID > 0 AND C_Invoice.DocStatus NOT IN('VO', 'RE')) ORDER BY Line");
             return sql.ToString();
         }
+
+        /// <summary>
+        /// Get Currency Conversion Where Condition
+        /// </summary>
+        /// <param name="columns">Column Name</param>
+        /// <param name="forInvoices">For Invoice</param>
+        ///  <param name="recordID">C_Invoice_ID</param>
+        /// <returns>WhereCindition</returns>
+        public JsonResult GetConversionWhere(string columns, bool forInvoices, int recordID, string Table)
+        {
+            var ctx = Session["ctx"] as Ctx;
+            VCreateFromModel obj = new VCreateFromModel();
+            var value = obj.GetConversionWhere(columns, forInvoices, recordID, Table);
+            return Json(JsonConvert.SerializeObject(value), JsonRequestBehavior.AllowGet);
+        }
     }
 }
