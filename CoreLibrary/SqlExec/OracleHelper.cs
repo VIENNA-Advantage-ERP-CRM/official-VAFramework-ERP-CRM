@@ -183,6 +183,7 @@ namespace VAdvantage.SqlExec.Oracle
 
             //create a command and prepare it for execution
             OracleCommand cmd = new OracleCommand();
+           // cmd.CommandTimeout = 150;
             PrepareCommand(cmd, connection, (OracleTransaction)null, commandType, commandText, commandParameters);
 
             int retval = 0;

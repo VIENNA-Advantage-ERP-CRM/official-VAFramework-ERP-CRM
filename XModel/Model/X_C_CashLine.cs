@@ -967,6 +967,31 @@ namespace VAdvantage.Model
             return false;
         }
 
+        /** Set Order.
+@param C_Order_ID Sales Order */
+        public void SetC_Order_ID(int C_Order_ID)
+        {
+            if (C_Order_ID <= 0) Set_Value("C_Order_ID", null);
+            else
+                Set_Value("C_Order_ID", C_Order_ID);
+        }/** Get Order.
+@return Sales Order */
+        public int GetC_Order_ID() { Object ii = Get_Value("C_Order_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Order Payment Schedule.
+@param VA009_OrderPaySchedule_ID Order Payment Schedule */
+        public void SetVA009_OrderPaySchedule_ID(int VA009_OrderPaySchedule_ID)
+        {
+            if (VA009_OrderPaySchedule_ID <= 0) Set_Value("VA009_OrderPaySchedule_ID", null);
+            else
+                Set_Value("VA009_OrderPaySchedule_ID", VA009_OrderPaySchedule_ID);
+        }/** Get Order Payment Schedule.
+@return Order Payment Schedule */
+        public int GetVA009_OrderPaySchedule_ID() { Object ii = Get_Value("VA009_OrderPaySchedule_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Prepayment.
+@param IsPrepayment The Payment/Receipt is a Prepayment */
+        public void SetIsPrepayment(Boolean IsPrepayment) { Set_Value("IsPrepayment", IsPrepayment); }/** Get Prepayment.
+@return The Payment/Receipt is a Prepayment */
+        public Boolean IsPrepayment() { Object oo = Get_Value("IsPrepayment"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
+
+
     }
 
 }
