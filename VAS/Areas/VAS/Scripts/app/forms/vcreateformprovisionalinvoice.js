@@ -133,13 +133,11 @@
             }
         });
         baseObj.arrListColumns.push({
-            field: "ProvisionalPrice", caption: VIS.Msg.getMsg("ProvisionalPrice"), editable: { type: 'number', style: 'background-color: #f8f8f8;' }, sortable: false, size: '150px', hidden: false,
+            field: "ProvisionalPrice", caption: VIS.Msg.getMsg("ProvisionalPrice"), sortable: false, size: '150px', hidden: false,
             render: function (record, index, col_index) {
                 var val = record["ProvisionalPrice"];
-                val = baseObj.checkcommaordot(event, val);
                 return parseFloat(val).toLocaleString(undefined, { minimumFractionDigits: 4 });
-            },
-            style: 'background-color: #d1d1d14a'
+            }
         });
 
         baseObj.arrListColumns.push({ field: "C_UOM_ID", caption: VIS.Msg.getMsg("UomName"), sortable: false, size: '150px', hidden: false });

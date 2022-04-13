@@ -769,6 +769,11 @@ namespace VAdvantage.Model
                                 WHERE inv.C_Invoice_id IN(" + string.Join(",", invoiceIds) + @")
                                 GROUP BY inv.C_Invoice_id)t WHERE INV.C_Invoice_id=t.C_Invoice_id) WHERE INV.C_Invoice_id IN(" + string.Join(",", invoiceIds) + @")";
                 DB.ExecuteQuery(query, null, Get_Trx());
+
+                // update Open Amount 
+                query = @"UPDATE C_Invoice INV SET VA009_OpenAmount= (CASE WHEN GrandTotalAfterWithholding != 0 THEN GrandTotalAfterWithholding ELSE GrandTotal END)
+                                - VA009_PaidAmount WHERE INV.C_Invoice_id IN(" + string.Join(",", invoiceIds) + @")";
+                DB.ExecuteQuery(query, null, Get_Trx());
             }
             //UpdateBP(bps);
 

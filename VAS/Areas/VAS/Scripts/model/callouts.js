@@ -21306,7 +21306,7 @@
             mTab.setValue("VSS_PAYMENTTYPE", "R");
             mTab.getField("VSS_PAYMENTTYPE").setReadOnly(true);
         }
-        else if (Util.getValueOfString(mTab.getValue("CashType")) == "I") {
+        else if (Util.getValueOfString(mTab.getValue("CashType")) == "I" || Util.getValueOfString(mTab.getValue("CashType")) == "O") { //VA230:Invoice and Order
             mTab.getField("VSS_PAYMENTTYPE").setReadOnly(true);
         }
         else {

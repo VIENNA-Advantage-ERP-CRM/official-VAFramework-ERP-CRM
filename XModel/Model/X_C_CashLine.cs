@@ -290,6 +290,8 @@ namespace VAdvantage.Model
         public static String CASHTYPE_CashRecievedFrom = "F";
         /** Invoice = I */
         public static String CASHTYPE_Invoice = "I";
+        /** Order = O */
+        public static String CASHTYPE_Order = "O";
         /** General Receipts = R */
         public static String CASHTYPE_GeneralReceipts = "R";
         /** Bank Account Transfer = T */
@@ -299,7 +301,7 @@ namespace VAdvantage.Model
         @returns true if valid **/
         public bool IsCashTypeValid(String test)
         {
-            return test.Equals("A") || test.Equals("B") || test.Equals("C") || test.Equals("D") || test.Equals("E") || test.Equals("F") || test.Equals("I") || test.Equals("R") || test.Equals("T");
+            return test.Equals("A") || test.Equals("B") || test.Equals("C") || test.Equals("D") || test.Equals("E") || test.Equals("F") || test.Equals("I") || test.Equals("O") || test.Equals("R") || test.Equals("T");
         }
         /** Set Cash Type.
         @param CashType Source of Cash */
@@ -307,7 +309,7 @@ namespace VAdvantage.Model
         {
             if (CashType == null) throw new ArgumentException("CashType is mandatory");
             if (!IsCashTypeValid(CashType))
-                throw new ArgumentException("CashType Invalid value - " + CashType + " - Reference_ID=217 - A - B - C - D - E - F - I - R - T");
+                throw new ArgumentException("CashType Invalid value - " + CashType + " - Reference_ID=217 - A - B - C - D - E - F - I - O - R - T");
             if (CashType.Length > 1)
             {
                 log.Warning("Length > 1 - truncated");
