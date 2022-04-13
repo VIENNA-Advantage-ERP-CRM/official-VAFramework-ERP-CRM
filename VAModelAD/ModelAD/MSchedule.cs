@@ -35,7 +35,7 @@ namespace VAdvantage.Model
             int key = AD_Schedule_ID;
             MSchedule retValue = null;
 
-            if(s_cache.ContainsKey(key))
+            if (s_cache.ContainsKey(key))
                 retValue = (MSchedule)s_cache[key];
 
             if (retValue != null)
@@ -49,7 +49,7 @@ namespace VAdvantage.Model
         /**	Cache						*/
         private static CCache<int, MSchedule> s_cache = new CCache<int, MSchedule>("AD_Schedule", 20);
 
-       // int s = 0;
+        // int s = 0;
         /// <summary>
         /// Default Constructor
         /// </summary>
@@ -223,6 +223,10 @@ namespace VAdvantage.Model
             while (st.HasMoreElements())
             {
                 String ip = st.NextToken();
+                if (ip.IndexOf(":") > 0)
+                {
+                    ip = ip.Substring(0, ip.IndexOf(":"));
+                }
                 if (CheckIP(ip))
                     return true;
             }
@@ -245,19 +249,28 @@ namespace VAdvantage.Model
                 string strHostName = Dns.GetHostName();
                 // Then using host name, get the IP address list..
                 IPHostEntry ipEntry = Dns.GetHostEntry(strHostName);
+
+                log.Info("Host Name: " + strHostName);
                 IPAddress[] addr = ipEntry.AddressList;
 
                 String ip = "";
                 for (int i = 0; i < addr.Length; i++)
                 {
-                    ip = addr[i].ToString();
+                    if (addr[i].AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    {
+                        ip = addr[i].ToString();
+                        log.Info("Host IP Address: " + ip);
+                        break;
+                    }
                 }
                 if (ipOnly.IndexOf(ip) == -1)
                 {
                     // TODO: We need to handle this better, for the moment reduced to fine.
                     log.Fine("Not allowed here - IP=" + ip + " does not match " + ipOnly);
+                    log.Info("Not allowed here - IP=" + ip + " does not match " + ipOnly);
                     return false;
                 }
+                log.Info("Allowed here - IP=" + ip + " matches " + ipOnly);
                 log.Fine("Allowed here - IP=" + ip + " matches " + ipOnly);
             }
             catch (Exception e)
@@ -353,7 +366,7 @@ namespace VAdvantage.Model
 
                     calNext = calNext.Subtract(new TimeSpan(0, calNext.Minute, 0));
                     calNext = calNext.AddMinutes(minute);
-                    if(increment)
+                    if (increment)
                         calNext = calNext.AddHours(frequency);
                 }	//	Hour
 
@@ -361,7 +374,7 @@ namespace VAdvantage.Model
                 else if (X_R_RequestProcessor.FREQUENCYTYPE_Minute.Equals(frequencyType))
                 {
                     //calNext.add(java.util.Calendar.MINUTE, frequency);
-                    if(increment)
+                    if (increment)
                         calNext = calNext.AddMinutes(frequency);
                 }	//	Minute
             }
@@ -374,7 +387,7 @@ namespace VAdvantage.Model
                 calNext = calNext.Subtract(new TimeSpan(calNext.Hour, calNext.Minute, 0));
                 calNext = calNext.AddHours(hour);
                 calNext = calNext.AddMinutes(minute);
-                
+
                 //
                 int day = GetMonthDay();
                 int dd = calNext.Day; //.get(java.util.Calendar.DAY_OF_MONTH);
@@ -434,7 +447,7 @@ namespace VAdvantage.Model
                 else if (WEEKDAY_Sunday.Equals(weekDay))
                     dayOfWeek = SUNDAY;
 
-                calNext = calNext.Subtract(new TimeSpan(((int)calNext.DayOfWeek)+ 1, calNext.Hour, calNext.Minute, calNext.Second, calNext.Millisecond));
+                calNext = calNext.Subtract(new TimeSpan(((int)calNext.DayOfWeek) + 1, calNext.Hour, calNext.Minute, calNext.Second, calNext.Millisecond));
                 calNext = calNext.AddDays(dayOfWeek);
                 calNext = calNext.AddHours(hour);
                 calNext = calNext.AddMinutes(minute);
@@ -451,9 +464,9 @@ namespace VAdvantage.Model
                 {
                     calNext = calNext.AddDays(7);
                 }
-            }	//	week
+            }   //	week
 
-            
+
             long delta = CommonFunctions.CurrentTimeMillis(calNext) - CommonFunctions.CurrentTimeMillis(calNow);
             //long delta = calNext.getTimeInMillis() - calNow.getTimeInMillis();
             String info = "Now=" + calNow.ToString()
