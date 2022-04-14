@@ -572,10 +572,10 @@
     };
 
     /**
-	 *  Lock User Interface
-	 *  Called from the process before processing
-	 *  @param pi process info
-	 */
+     *  Lock User Interface
+     *  Called from the process before processing
+     *  @param pi process info
+     */
 
 
 
@@ -585,10 +585,10 @@
     };
 
     /**
-	 *  Unlock User Interface.
-	 *  Called from the complete when processing is done
-	 *  @param pi process info
-	 */
+     *  Unlock User Interface.
+     *  Called from the complete when processing is done
+     *  @param pi process info
+     */
     AProcess.prototype.unlockUI = function (pi) {
         if (pi.logs && pi.logs.length > 0) {
             pi.logs = null;
@@ -619,17 +619,17 @@
     };
 
     /**
-	 *  Is the UI locked (Internal method)
-	 *  @return true, if UI is locked
-	 */
+     *  Is the UI locked (Internal method)
+     *  @return true, if UI is locked
+     */
     AProcess.prototype.getIsUILocked = function () {
         return this.isLocked;
     };
 
     /**
-	 *  clean up
-	 *  @return true, if UI is locked
-	 */
+     *  clean up
+     *  @return true, if UI is locked
+     */
     AProcess.prototype.dispose = function () {
         if (this.disposed)
             return;
@@ -757,6 +757,7 @@
         var $menu = null;
         var btnSaveCsvAll = null;
         var btnsavepdfall = null;
+        var btnCombinedPdf = null;
         var self = this;
         var toolbar = null;
 
@@ -813,10 +814,12 @@
             $cmbPages = $('<select class="vis-selectcsview-page">');
             $menu = $("<ul class='vis-apanel-rb-ul'>");
             if (self.cssForAll) {
-                btnSaveCsvAll = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllRecordCsv") + "' class='vis vis-csv-all'></a></li>");
+                btnSaveCsvAll = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllRecordCsv") + "' class='vis vis-pdf-all'></a></li>");
+                btnCombinedPdf = $("<li><a  title='" + VIS.Msg.getMsg("Combine PDF") + "' class='vis vis-csv-all'></a></li>");
                 btnsavepdfall = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllPagePdf") + "' class='vis vis-pdf-all'></a></li>");
             }
             else {
+                btnCombinedPdf = $("<li><a  title='" + VIS.Msg.getMsg("Combine PDF") + "' class='vis vis-pdf-all'></a></li>");
                 btnSaveCsvAll = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllRecordCsv") + "' class='vis vis-csv-all'></a></li>");
                 btnsavepdfall = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllPagePdf") + "' class='vis vis-pdf-all'></a></li>");
             }
@@ -861,6 +864,7 @@
 
             if (pctl.pi.getSupportPaging() && canExport) {
                 ulAction.append(btnsavepdfall);
+                ulAction.append(btnCombinedPdf);
             }
             else {
                 btnSaveCsv.find('a').attr("title", VIS.Msg.getMsg("SaveCSV"));
@@ -870,6 +874,7 @@
             if (VIS.context.ctx["#BULK_REPORT_DOWNLOAD"] == 'Y') {
                 btnSaveCsvAll.css('display', '');
                 btnsavepdfall.css('display', '');
+                btnCombinedPdf.css('display', '');
             }
             else {
                 btnSaveCsvAll.css('display', 'none');
@@ -1240,6 +1245,20 @@
                     }
                 });
 
+                btnCombinedPdf.on("click", function () {
+                    pctl.pi.setFileType(pctl.REPORT_TYPE_PDF);
+                    panel.setBusy(true);
+                    pctl.pi.setCombinePages("Y");
+                    executeProcess(getExeProcessParameter(pctl.REPORT_TYPE_PDF), function (json) {
+                        manageRepTable(json, panel);
+                    });
+
+
+                });
+
+
+
+
                 function loadReportData() {
                     panel.setBusy(true);
 
@@ -1379,6 +1398,8 @@
                         }
                     });
                 };
+
+
 
 
 

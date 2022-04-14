@@ -636,7 +636,7 @@ namespace VAdvantage.ProcessEngine
             return _pi.ToList();
         }
 
-        public Dictionary<string, object> Process(ProcessInfo pi, Ctx ctx, out byte[] report, out string reportFilePath)
+        public Dictionary<string, object> Process(ProcessInfo pi, Ctx ctx, out byte[] report, out string reportFilePath, IReportEngine _re)
 
         {
             reportFilePath = null;
@@ -765,6 +765,7 @@ namespace VAdvantage.ProcessEngine
 
                 byte[] repByt = null;
                 re = ReportCtl.Report;
+                _re = re;
                 if (re != null)
                 {
                     // int reportTable_ID = 0;
@@ -861,6 +862,7 @@ namespace VAdvantage.ProcessEngine
                             _pi.SetDynamicAction(dynamicAction);
 
                             re = VAdvanatge.Report.ReportEngine.GetReportEngine(_ctx, pi, _trx, assemblyName, cName);
+                            _re = re;
                         }
                     }
                     catch (Exception e)
@@ -885,6 +887,7 @@ namespace VAdvantage.ProcessEngine
                         _pi.SetSummary(Msg.GetMsg(ctx, "ReportNotExist"));
                         return _pi.ToList();
                     }
+                    _re = re;
                     Unlock();
 
                     // "#REPORT_PAGE_SIZE"
@@ -912,6 +915,7 @@ namespace VAdvantage.ProcessEngine
                     //	Start Report	-----------------------------------------------
                     re = ReportCtl.Start(_ctx, _pi, IsDirectPrint);
                     ReportEngine_N _rep = (ReportEngine_N)re;
+                    _re = re;
                     //null check Implemented by raghu 22-May-2015
                     if (_rep != null)
                     {

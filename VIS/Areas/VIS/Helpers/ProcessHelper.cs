@@ -26,6 +26,8 @@ namespace VIS.Helpers
         private static VLogger _log = VLogger.GetVLogger(typeof(ProcessHelper).FullName);
         private static int msgID = 0;
         static List<string> totalBytes = new List<string>();
+        public const string ReportType_CSV = "C";
+        public const string ReportType_PDF = "P";
         public static ProcessDataOut GetProcessInfo(int AD_Process_ID, Ctx ctx)
         {
             ProcessDataOut outt = new ProcessDataOut();
@@ -202,8 +204,8 @@ namespace VIS.Helpers
                         }
 
                         //VIS.Controllers.JsonDataController.AddMessageForToastr(Convert.ToInt32(processInfo["Process_ID"]) + "_P_" + ctx.GetAD_Session_ID(), pro.GetName() + " " + Msg.GetMsg(ctx, "Completed") + ": " + ret.Result);
-                        ModelLibrary.PushNotif.SSEManager.Get().AddMessage(ctx.GetAD_Session_ID(),  pro.GetName() + " " + Msg.GetMsg(ctx, "Completed") + ": " + ret.Result );
-                       
+                        ModelLibrary.PushNotif.SSEManager.Get().AddMessage(ctx.GetAD_Session_ID(), pro.GetName() + " " + Msg.GetMsg(ctx, "Completed") + ": " + ret.Result);
+
 
                     });
                 }
@@ -371,10 +373,68 @@ namespace VIS.Helpers
             {
                 pi.IsArabicReportFromOutside = false;
                 ProcessCtl ctl = new ProcessCtl();
-                Dictionary<string, object> d = ctl.Process(pi, ctx, out report, out rptFilePath);
+                IReportEngine re = null;
+                Dictionary<string, object> d = ctl.Process(pi, ctx, out report, out rptFilePath, re);
                 rep = new ProcessReportInfo();
                 rep.ReportProcessInfo = d;
                 rep.Report = report;
+
+                if (processInfo["CombinePages"] == "Y" && pi.GetFileType() == ReportType_PDF)
+                {
+                    
+                    var totalpages = pi.GetTotalPage();
+                    if (pi.GetIsReportFormat())
+                    {
+                        string outputPdfPath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + "TempDownload\\new.pdf"; ;
+                        using (var targetDoc = new PdfDocument())
+                        {
+                            for (int i = 0; i < totalpages; i++)
+                            {
+                                pi.SetPageNo(i + 1);
+                                re = VAdvanatge.Report.ReportEngine.GetReportEngine(ctx, pi, null, "VARCOMSvc", "ViennaAdvantage.Classes.ReportFromatWrapper");
+                                string fileName = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + re.GetReportFilePath(true, out report);
+                                using (var pdfDoc = PdfReader.Open(fileName, PdfDocumentOpenMode.Import))
+                                {
+                                    for (var p = 0; p < pdfDoc.PageCount; p++)
+                                        targetDoc.AddPage(pdfDoc.Pages[p]);
+                                }
+                                targetDoc.Save(outputPdfPath);
+                            }
+                        }
+                        outputPdfPath = "\\" + outputPdfPath.Substring(outputPdfPath.IndexOf("TempD"));
+                        rptFilePath = outputPdfPath;
+
+                    }
+                    else
+                    {
+                        string outputPdfPath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + "TempDownload\\new.pdf"; ;
+                        using (var targetDoc = new PdfDocument())
+                        {
+                            for (int i = 0; i < totalpages; i++)
+                            {
+                                pi.SetPageNo(i + 1);
+                                re = ReportCtl.Start(ctx, pi, false);
+                                ReportEngine_N _rep = (ReportEngine_N)re;
+                                //null check Implemented by raghu 22-May-2015
+                                if (_rep != null)
+                                {
+                                    //reportTable_ID = _rep.GetPrintFormat().GetAD_Table_ID();
+                                    _rep.GetView();
+                                    string fileName = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + re.GetReportFilePath(true, out report);
+                                    using (var pdfDoc = PdfReader.Open(fileName, PdfDocumentOpenMode.Import))
+                                    {
+                                        for (var p = 0; p < pdfDoc.PageCount; p++)
+                                            targetDoc.AddPage(pdfDoc.Pages[p]);
+                                    }
+                                    targetDoc.Save(outputPdfPath);
+                                }
+                            }
+                        }
+                        outputPdfPath = "\\" + outputPdfPath.Substring(outputPdfPath.IndexOf("TempD"));
+                        rptFilePath = outputPdfPath;
+
+                    }
+                }
 
 
                 rep.ReportString = ctl.ReportString;
@@ -655,6 +715,7 @@ namespace VIS.Helpers
                     Util.GetValueOfInt(nProcessInfo["AD_PInstance_ID"]) == 0))
                 {
                     PrintInfo info = new PrintInfo(pf.GetName(), pf.GetAD_Table_ID(), Record_ID);
+                    pf.AD_PInstance_ID = pf.GetAD_PrintFormat_ID();
                     info.SetDescription(_query == null ? "" : _query.GetInfo());
                     re = new ReportEngine_N(_ctx, pf, _query, info);
                 }
@@ -671,7 +732,37 @@ namespace VIS.Helpers
                     re.GetView();
                     if (fileType == ProcessCtl.ReportType_PDF)
                     {
-                        rep.ReportFilePath = re.GetReportFilePath(true, out b);
+                        if (nProcessInfo["CombinePages"] == "Y" && pf.TotalPage > 1)
+                        {
+                            string outputPdfPath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + "TempDownload\\new.pdf"; ;
+                            using (var targetDoc = new PdfDocument())
+                            {
+                                for (int i = 0; i < pf.TotalPage; i++)
+                                {
+                                    pf.PageNo = i + 1;
+                                    PrintInfo info = new PrintInfo(pf.GetName(), pf.GetAD_Table_ID(), Record_ID);
+                                    info.SetDescription(_query == null ? "" : _query.GetInfo());
+                                    pf.CombinedPages = true;
+                                    re = new ReportEngine_N(_ctx, pf, _query, info);
+                                    re.GetView();
+
+                                    string fileName = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + re.GetReportFilePath(true, out b);
+                                    using (var pdfDoc = PdfReader.Open(fileName, PdfDocumentOpenMode.Import))
+                                    {
+                                        for (var p = 0; p < pdfDoc.PageCount; p++)
+                                            targetDoc.AddPage(pdfDoc.Pages[p]);
+                                    }
+                                    targetDoc.Save(outputPdfPath);
+                                }
+                                Page.ClearPageNunmbers(pf.AD_PInstance_ID.ToString(), MSession.Get(_ctx).GetAD_Session_ID().ToString());
+                            }
+                            outputPdfPath = "\\" + outputPdfPath.Substring(outputPdfPath.IndexOf("TempD"));
+                            rep.ReportFilePath = outputPdfPath;
+                        }
+                        else
+                        {
+                            rep.ReportFilePath = re.GetReportFilePath(true, out b);
+                        }
                     }
                     else if (fileType == ProcessCtl.ReportType_CSV)
                     {
@@ -687,27 +778,27 @@ namespace VIS.Helpers
                     }
                 }
 
-                totalBytes.Add(rep.ReportFilePath);
-                if (totalBytes.Count > 51)
-                {
+                //totalBytes.Add(rep.ReportFilePath);
+                //if (totalBytes.Count > 51)
+                //{
 
-                    string outputPdfPath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + "TempDownload\\new.pdf"; ;
-                    using (var targetDoc = new PdfDocument())
-                    {
-                        foreach (var pdf in totalBytes)
-                        {
-                            string fileName = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + pdf;
-                            using (var pdfDoc = PdfReader.Open(fileName, PdfDocumentOpenMode.Import))
-                            {
-                                for (var i = 0; i < pdfDoc.PageCount; i++)
-                                    targetDoc.AddPage(pdfDoc.Pages[i]);
-                            }
-                        }
-                        targetDoc.Save(outputPdfPath);
-                    }
-                }
+                //    string outputPdfPath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + "TempDownload\\new.pdf"; ;
+                //    using (var targetDoc = new PdfDocument())
+                //    {
+                //        foreach (var pdf in totalBytes)
+                //        {
+                //            string fileName = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + pdf;
+                //            using (var pdfDoc = PdfReader.Open(fileName, PdfDocumentOpenMode.Import))
+                //            {
+                //                for (var i = 0; i < pdfDoc.PageCount; i++)
+                //                    targetDoc.AddPage(pdfDoc.Pages[i]);
+                //            }
+                //        }
+                //        targetDoc.Save(outputPdfPath);
+                //    }
+                //}
 
-                    ps.TotalPage = pf.TotalPage;
+                ps.TotalPage = pf.TotalPage;
                 ps.CurrentPage = pageNo;
                 // b = re.CreatePDF();
                 //rep.Report = b;
@@ -743,6 +834,7 @@ namespace VIS.Helpers
         {
             ProcessReportInfo ret = new ProcessReportInfo();
             MPInstance instance = null;
+            IReportEngine _re = null;
             //Saved Action Log
             VAdvantage.Common.Common.SaveActionLog(ctx, actionOrigin, originName, AD_Table_ID, Record_ID, AD_Process_ID, MProcess.Get(ctx, AD_Process_ID).GetName(), fileType, "", "");
 
@@ -772,7 +864,8 @@ namespace VIS.Helpers
 
             string lang = ctx.GetAD_Language().Replace("_", "-");
             // Set Report Language -VIS0228
-            if (!string.IsNullOrEmpty(ctx.GetContext("Report_Lang"))) {
+            if (!string.IsNullOrEmpty(ctx.GetContext("Report_Lang")))
+            {
                 lang = ctx.GetContext("Report_Lang").Replace("_", "-");
             }
             System.Globalization.CultureInfo original = System.Threading.Thread.CurrentThread.CurrentCulture;
@@ -814,7 +907,7 @@ namespace VIS.Helpers
                 //ctl.IsArabicReportFromOutside = false;
                 //ctl.SetIsPrintCsv(csv);
                 //ctl.SetFileType(fileType);
-                Dictionary<string, object> d = ctl.Process(pi, ctx, out report, out rptFilePath);
+                Dictionary<string, object> d = ctl.Process(pi, ctx, out report, out rptFilePath, _re);
                 //rep = new ProcessReportInfo();
                 ret.ReportProcessInfo = d;
                 ret.Report = report;
@@ -867,7 +960,7 @@ namespace VIS.Helpers
                     int Report_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT InvoiceReport_ID FROM C_BPartner WHERE C_BPartner_ID=(SELECT C_BPartner_ID FROM " + tableName + " WHERE " + tableName + "_ID=" + _pi.GetRecord_ID() + ")"));
 
                     if (Report_ID > 0)
-                    {                       
+                    {
                         return;
                     }
                 }
@@ -885,7 +978,7 @@ namespace VIS.Helpers
                         return;
                     }
                 }
-               
+
                 sql = "SELECT " + colName + " FROM " + tableName + " WHERE " + tableName + "_ID =" + _pi.GetRecord_ID();
                 id = Util.GetValueOfInt(DB.ExecuteScalar(sql));
                 if (id < 1)

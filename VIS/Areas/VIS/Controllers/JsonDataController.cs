@@ -776,6 +776,11 @@ namespace VIS.Controllers
             return await System.Threading.Tasks.Task.Run(() => GenerateReportAsync(processInfo, queryInfo, code, isCreateNew, treeID, node_ID, IsSummary));
         }
 
+        public async System.Threading.Tasks.Task<JsonResult> GenerateCombinedReport(Dictionary<string, string> processInfo, string queryInfo, Object code, bool isCreateNew, int? treeID, int? node_ID, bool IsSummary)
+        {
+            return await System.Threading.Tasks.Task.Run(() => GenerateReportAsync(processInfo, queryInfo, code, isCreateNew, treeID, node_ID, IsSummary));
+        }
+
         [HttpPost]
         public JsonResult GenerateReportAsync(Dictionary<string, string> processInfo, string queryInfo, Object code, bool isCreateNew, int? treeID, int? node_ID, bool IsSummary)
         {

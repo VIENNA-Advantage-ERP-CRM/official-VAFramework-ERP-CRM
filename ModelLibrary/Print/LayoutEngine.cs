@@ -41,6 +41,7 @@ namespace VAdvantage.Print
             log.Info(format + " - " + data + " - " + query);
             SetPrintFormat(format, false);
             SetPrintData(data, query, false);
+            CombinedPages = format.CombinedPages;
             Layout();
         }
 
@@ -132,6 +133,13 @@ namespace VAdvantage.Print
 
 
         private int _ad_org_id = 0;
+        private bool isCombinedPages = false;
+
+        public bool CombinedPages
+        {
+            get { return isCombinedPages; }
+            set { isCombinedPages = value; }
+        }
 
         /// <summary>
         /// Set Print Format
@@ -368,6 +376,7 @@ namespace VAdvantage.Print
             //
             String pageInfo = (m_pages.Count() + GetPageInfo(m_pages.Count())).ToString();
             m_printCtx.SetContext(Page.CONTEXT_PAGECOUNT, pageInfo);
+            //m_printCtx.SetContext(Page.CONTEXT_PAGECOUNT, "");
             DateTime now = DateTime.Now;
             m_printCtx.SetContext(Page.CONTEXT_DATE, DisplayType.GetDateFormat(DisplayType.Date).Format(now));
             m_printCtx.SetContext(Page.CONTEXT_TIME,
@@ -379,8 +388,15 @@ namespace VAdvantage.Print
                 //StringElement
                 Page page = (Page)m_pages[i];
                 int pageNo = page.GetPageNo();
-                pageInfo = (pageNo + GetPageInfo(pageNo)).ToString();
-                page.SetPageInfo(pageInfo);
+                if (!isCombinedPages)
+                {
+                    pageInfo = (pageNo + GetPageInfo(pageNo)).ToString();
+                    page.SetPageInfo(pageInfo);
+                }
+                else
+                {
+                    page.SetPageInfo(page.GetCombinedPageNo(m_format.AD_PInstance_ID).ToString());
+                }
                 page.SetPageCount(pages);
 
             }
@@ -942,7 +958,8 @@ namespace VAdvantage.Print
             }
 
             m_pageNo++;
-            m_currPage = new Page(m_printCtx, m_pageNo);
+            m_currPage = new Page(m_printCtx, m_pageNo,m_format.AD_PInstance_ID);
+            m_currPage.CombinedPages(isCombinedPages);
             m_pages.Add(m_currPage);
             //
             m_position[AREA_HEADER].X = m_header.X;
@@ -1261,8 +1278,10 @@ namespace VAdvantage.Print
             element.Layout(m_header.Width, 0, true, MPrintFormatItem.FIELDALIGNMENTTYPE_Center);
             element.SetLocation(m_header.Location);
             m_headerFooter.AddElement(element);
-
-            element = new StringElement("@Page@ @*Page@ @of@ @*PageCount@", font, color, null, true);
+            if (!isCombinedPages)
+                element = new StringElement("@Page@ @*Page@ @of@ @*PageCount@", font, color, null, true);
+            else
+                element = new StringElement("@Page@ @*Page@", font, color, null, true);
             element.Layout(m_header.Width, 0, true, MPrintFormatItem.FIELDALIGNMENTTYPE_TrailingRight);
             element.SetLocation(m_header.Location);
             m_headerFooter.AddElement(element);

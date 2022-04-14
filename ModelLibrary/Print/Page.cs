@@ -20,13 +20,27 @@ namespace VAdvantage.Print
 {
     public class Page
     {
-        public Page(Ctx ctx, int pageNo)
+        public Page(Ctx ctx, int pageNo,int AD_PInstance_ID)
         {
             m_ctx = ctx;
             m_pageNo = pageNo;
             if (m_pageInfo == null || m_pageInfo.Length == 0)
                 m_pageInfo = m_pageNo.ToString();
+
+            if (combinedPageNo.Count == 0)
+            {
+                MSession session = MSession.Get(m_ctx);
+                combinedPageNo[session.GetAD_Session_ID().ToString()+ AD_PInstance_ID.ToString()] = 0;
+            }
         }	//	Page
+
+        private bool isCombinedPages = false;
+
+        public void CombinedPages(bool val)
+        {
+            isCombinedPages = val;
+        }
+
 
         /**	Current Page No	(set here)				*/
         public static String CONTEXT_PAGE = "*Page";
@@ -56,6 +70,7 @@ namespace VAdvantage.Print
         private Ctx m_ctx;
         /** Page content				*/
         private List<PrintElement> m_elements = new List<PrintElement>();
+        private static Dictionary<string, int> combinedPageNo = new Dictionary<string, int>();
 
         /// <summary>
         /// Get Page Number
@@ -86,6 +101,23 @@ namespace VAdvantage.Print
                 m_pageInfo = m_pageNo.ToString();
             m_pageInfo = pageInfo;
         }	//	getPageInfo
+
+        public int GetCombinedPageNo(int AD_PInstance_ID)
+        {
+            MSession session = MSession.Get(m_ctx);
+            if (combinedPageNo.ContainsKey(session.GetAD_Session_ID().ToString()+ AD_PInstance_ID.ToString()))
+            {
+                combinedPageNo[session.GetAD_Session_ID().ToString()+ AD_PInstance_ID.ToString()]++;
+                return combinedPageNo[session.GetAD_Session_ID().ToString() + AD_PInstance_ID];
+            }
+            return 1;
+        }
+
+        public static void ClearPageNunmbers(string pInstance_ID,string sessionID)
+        {
+            if (combinedPageNo.ContainsKey(sessionID + pInstance_ID))
+                combinedPageNo.Remove(sessionID + pInstance_ID);
+        }
 
         /// <summary>
         /// Set Page Count
@@ -122,7 +154,7 @@ namespace VAdvantage.Print
             if (m_pageCount != 1)		//	set to "Page 1 of 2"
                 sb.Append(Msg.GetMessageText(m_ctx, "Page")).Append(" ")
                     .Append(m_pageNo)
-                    .Append(" ").Append(Msg.GetMessageText(m_ctx,"of")).Append(" ")
+                    .Append(" ").Append(Msg.GetMessageText(m_ctx, "of")).Append(" ")
                     .Append(m_pageCount);
             sb.Append(" ");
             m_ctx.Put(CONTEXT_MULTIPAGE, sb.ToString());
@@ -158,19 +190,31 @@ namespace VAdvantage.Print
             //	log.finest( "PrintContext", CONTEXT_PAGE + "=" + m_pageInfo);
             //
             StringBuilder sb = new StringBuilder();
-            if (m_pageCount != 1)		//	set to "Page 1 of 2"
-                sb.Append(Msg.GetMsg(m_ctx, "Page")).Append(" ")
-                    .Append(m_pageNo)
-                    .Append(" ").Append(Msg.GetMsg(m_ctx, "of")).Append(" ")
-                    .Append(m_pageCount);
-            sb.Append(" ");
+
+            if (!isCombinedPages)
+            {
+                if (m_pageCount != 1)       //	set to "Page 1 of 2"
+                    sb.Append(Msg.GetMsg(m_ctx, "Page")).Append(" ")
+                        .Append(m_pageNo)
+                        .Append(" ").Append(Msg.GetMsg(m_ctx, "of")).Append(" ")
+                        .Append(m_pageCount);
+                sb.Append(" ");
+            }
+            else
+            {
+                if (m_pageCount != 1)       //	set to "Page 1 of 2"
+                    sb.Append(Msg.GetMsg(m_ctx, "Page")).Append(" ")
+                        .Append(m_pageNo);
+
+                sb.Append(" ");
+            }
             m_ctx.Put(CONTEXT_MULTIPAGE, sb.ToString());
             //	log.finest( "PrintContext", CONTEXT_MULTIPAGE + "=" + sb.toString());
             //
             sb = new StringBuilder();
             if (isCopy)					//	set to "(Copy)"
                 sb.Append("(")
-                    .Append( Msg.GetMsg(m_ctx, "DocumentCopy"))
+                    .Append(Msg.GetMsg(m_ctx, "DocumentCopy"))
                     .Append(")");
             sb.Append(" ");
             m_ctx.Put(CONTEXT_COPY, sb.ToString());

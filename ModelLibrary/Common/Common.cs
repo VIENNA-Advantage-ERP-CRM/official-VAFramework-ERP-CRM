@@ -411,7 +411,7 @@ namespace VAdvantage.Common
                 pi.SetAD_PInstance_ID(instance.GetAD_PInstance_ID());
                 ProcessCtl ctl = new ProcessCtl();
                 d = new Dictionary<string, object>();
-                d = ctl.Process(pi, ctx, out report, out rptFilePath);
+                d = ctl.Process(pi, ctx, out report, out rptFilePath,null);
                 ctl.ReportString = null;
 
             }

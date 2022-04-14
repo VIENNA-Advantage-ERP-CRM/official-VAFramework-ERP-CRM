@@ -33,6 +33,8 @@ namespace VAdvantage.Print
         private bool isGridReport;
         private int pageNo;
         private int totalPages;
+        private bool isCombinedPages = false;
+        private int _AD_PInstance_ID = 0;
        
 
         public new Ctx GetCtx()
@@ -234,6 +236,24 @@ namespace VAdvantage.Print
 
 
         private MPrintTableFormat _tFormat;
+
+        public bool CombinedPages
+        {
+            get { return isCombinedPages; }
+            set {
+                isCombinedPages = value;
+            }
+        }
+
+        public int AD_PInstance_ID
+        {
+            get { return _AD_PInstance_ID; }
+            set
+            {
+                _AD_PInstance_ID = value;
+            }
+        }
+
 
 
         /// <summary>

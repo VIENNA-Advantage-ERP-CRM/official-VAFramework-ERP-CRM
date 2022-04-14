@@ -42,6 +42,7 @@
         this.ActionOrigin = "";
         this.OriginName = "";
         this.isBiHtml = false;
+        this.CombinePages = "N";
     };
 
     ProcessInfo.prototype.toJson = function () {
@@ -77,7 +78,8 @@
             "IsReport": this.isReport,
             "IsBackground": this.isBackground,
             "ActionOrigin": this.ActionOrigin,
-            "OriginName":this.OriginName
+            "OriginName": this.OriginName,
+            "CombinePages": this.CombinePages
         }
         return o;
 
@@ -131,6 +133,7 @@
         info.isBackground = o.IsBackground;
         info.ActionOrigin = o.ActionOrigin;
         info.OriginName = o.OriginName;
+        info.CombinePages = o.CombinePages;
     };
 
     ProcessInfo.prototype.setPrintFormatTableName = function (tableName) {
@@ -417,6 +420,16 @@
 
     ProcessInfo.prototype.setOriginName = function (OriginName) {
         this.OriginName = OriginName;
+    }
+
+    //
+
+    ProcessInfo.prototype.getCombinePages = function () {
+        return this.CombinePages;
+    }
+
+    ProcessInfo.prototype.setCombinePages = function (CombinePages) {
+        this.CombinePages = CombinePages;
     }
 
     ProcessInfo.prototype.setIsBiHtml = function (isRF) {

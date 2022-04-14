@@ -118,6 +118,7 @@ namespace VAdvantage.ProcessEngine
         private bool isReport = false;
         private string ActionOrigin = "W";
         private string OriginName = "";
+        private string CombinePages = "N";
 
         private Dictionary<string, string> ctxLocal = new Dictionary<string, string>();
 
@@ -163,6 +164,7 @@ namespace VAdvantage.ProcessEngine
             lst.Add("IsReport", isReport);
             lst.Add("ActionOrigin", ActionOrigin);
             lst.Add("OriginName", OriginName);
+            lst.Add("CombinePages", CombinePages);
             return lst;
         }
 
@@ -205,6 +207,7 @@ namespace VAdvantage.ProcessEngine
             info._windowNo = Util.GetValueOfInt(lst["WindowNo"]);
             info.ActionOrigin = Util.GetValueOfString(lst["ActionOrigin"]);
             info.OriginName = Util.GetValueOfString(lst["OriginName"]);
+            info.CombinePages = Util.GetValueOfString(lst["CombinePages"]);
             return info;
         }
 
@@ -450,6 +453,16 @@ namespace VAdvantage.ProcessEngine
         public String GetOriginName()
         {
             return OriginName;
+        }
+
+
+        /// <summary>
+        /// Get Action Origin Name
+        /// </summary>
+        /// <returns></returns>
+        public String GetCombinePages()
+        {
+            return CombinePages;
         }
 
         /// <summary>
