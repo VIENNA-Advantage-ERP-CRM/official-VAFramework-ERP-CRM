@@ -2379,7 +2379,17 @@ namespace VAdvantage.Model
                                     // update m_cost with accumulation qty , amt , and current cost
                                     if (isMatchFromForm == "Y" || handlingWindowName == "Match IV")
                                     {
-                                        costingCheck.isMatchFromForm = isMatchFromForm;
+                                        if (isMatchFromForm.Equals("N") && MatchPO_OrderLineId > 0)
+                                        {
+                                            // check PO is matched with GRN through matching form or direct linkage on Matched PO (first order)
+                                            costingCheck.isMatchFromForm = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT IsMatchPOForm FROM M_MatchPO WHERE IsActive = 'Y'
+                                            AND NVL(C_InvoiceLine_ID, 0) = 0 AND M_Product_ID =" + product.GetM_Product_ID() + @"
+                                            AND M_InOutLine_ID = " + inoutline.GetM_InOutLine_ID()));
+                                        }
+                                        else
+                                        {
+                                            costingCheck.isMatchFromForm = isMatchFromForm;
+                                        }
                                         result = cd.UpdateProductCost("Product Cost IV Form", cd, acctSchema, product, M_ASI_ID, invoiceline.GetAD_Org_ID(), costingCheck, optionalStrCd: optionalstr);
                                     }
                                     else
