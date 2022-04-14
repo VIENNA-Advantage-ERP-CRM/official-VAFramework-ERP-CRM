@@ -628,6 +628,39 @@ SetValue (null);
             }
             return false;
         }
+
+        /** PLClosing AD_Reference_ID=1000258 */
+        public static int PLCLOSING_AD_Reference_ID = 1000258;
+        /** Individual Organization Wise = IOW */
+        public static String PLCLOSING_IndividualOrganizationWise = "IOW";
+        /** Legal Organization Wise = LOW */
+        public static String PLCLOSING_LegalOrganizationWise = "LOW";
+        /** Is test a valid value.
+        @param test testvalue
+        @returns true if valid **/
+        public bool IsPLClosingValid(String test)
+        {
+            return test == null || test.Equals("IOW") || test.Equals("LOW");
+        }
+        /** Set Profit & Loss closing.
+        @param PLClosing It specifies the organization type for Profit & Loss closing */
+        public void SetPLClosing(String PLClosing)
+        {
+            if (!IsPLClosingValid(PLClosing))
+                throw new ArgumentException("PLClosing Invalid value - " + PLClosing + " - Reference_ID=1000258 - IOW - LOW");
+            if (PLClosing != null && PLClosing.Length > 3)
+            {
+                log.Warning("Length > 3 - truncated");
+                PLClosing = PLClosing.Substring(0, 3);
+            }
+            Set_Value("PLClosing", PLClosing);
+        }
+        /** Get Profit & Loss closing.
+        @return It specifies the organization type for Profit & Loss closing */
+        public String GetPLClosing()
+        {
+            return (String)Get_Value("PLClosing");
+        }
     }
 
 }

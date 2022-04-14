@@ -26,6 +26,7 @@ namespace VAdvantage.Process
 
         protected override string DoIt()
         {
+            MClient client = MClient.Get(GetCtx());
             MProfitLoss PL = new MProfitLoss(GetCtx(), GetRecord_ID(), null);
             prof = new MProfitLoss(GetCtx(), GetRecord_ID(), Get_Trx());
 
@@ -36,21 +37,30 @@ namespace VAdvantage.Process
             lock (lockRecord)
             {
                 sql.Clear();
-                sql.Append("SELECT distinct CP.* FROM C_ProfitLoss CP INNER JOIN Fact_Acct ft ON ft.C_AcctSchema_ID = Cp.C_AcctSchema_ID                             "
-                            + " INNER JOIN c_elementvalue ev ON ft.account_id         =ev.c_elementvalue_id                                                           "
-                            + " WHERE CP.ad_client_id    = " + GetAD_Client_ID());
+                sql.Append("SELECT DISTINCT CP.* FROM C_ProfitLoss CP INNER JOIN Fact_Acct ft ON ft.C_AcctSchema_ID = Cp.C_AcctSchema_ID                             "
+                            + " INNER JOIN C_ElementValue ev ON ft.Account_ID=ev.C_ElementValue_ID                                                           "
+                            + " WHERE CP.AD_Client_ID=" + GetAD_Client_ID());
 
                 if (prof.Get_Value("PostingType") != null)
                 {
-                    sql.Append(" and CP.PostingType = '" + prof.Get_Value("PostingType") + "' ");
+                    sql.Append(" AND CP.PostingType = '" + prof.Get_Value("PostingType") + "'");
                 }
                 sql.Append(" AND (( " + GlobalVariable.TO_DATE(prof.GetDateFrom(), true) + " >= CP.DateFrom "
                          + " AND " + GlobalVariable.TO_DATE(prof.GetDateFrom(), true) + " <= CP.DateTo "
                          + " OR " + GlobalVariable.TO_DATE(prof.GetDateTo(), true) + " <= CP.DateFrom "
                          + " AND " + GlobalVariable.TO_DATE(prof.GetDateTo(), true) + " <= CP.DateTo ))  "
-                         + " AND (ev.accounttype      ='E' OR ev.accounttype        ='R')     "
-                         + " AND ev.isintermediatecode='N' AND CP.AD_Org_ID        IN (    (SELECT Ad_Org_ID   FROM AD_Org   WHERE isactive      = 'Y'             "
-                         + " AND ( " + DBFunctionCollection.TypecastColumnAsInt("legalentityorg") + " =" + PL.GetAD_Org_ID() + "  OR Ad_Org_ID = " + PL.GetAD_Org_ID() + ")  )) AND DOCstatus in ('CO', 'CL') ");
+                         + " AND (ev.AccountType='E' OR ev.AccountType='R')"
+                         + " AND ev.IsIntermediateCode='N' AND CP.DocStatus IN ('CO', 'CL') AND CP.AD_Org_ID IN (SELECT Ad_Org_ID FROM AD_Org WHERE IsActive='Y'");
+
+                // VIS0060: Handle Organization filter based on Profit & Loss closing settings on Tenant
+                if (client.Get_ColumnIndex("PLClosing") >= 0 && !string.IsNullOrEmpty(client.GetPLClosing()) && !client.GetPLClosing().Equals("LOW"))
+                {
+                    sql.Append(" AND Ad_Org_ID = " + PL.GetAD_Org_ID() + ")");
+                }
+                else
+                {
+                    sql.Append(" AND (" + DBFunctionCollection.TypecastColumnAsInt("LegalEntityOrg") + "=" + PL.GetAD_Org_ID() + "  OR Ad_Org_ID = " + PL.GetAD_Org_ID() + "))");
+                }
 
                 if (Util.GetValueOfInt(PL.Get_Value("C_AcctSchema_ID")) > 0)
                 {
@@ -84,11 +94,21 @@ namespace VAdvantage.Process
                 // Added by SUkhwinder on 27 Nov 2017, for filtering query on the basis of postingtype. And string variable converted to stringBuilder also.
                 if (prof.Get_Value("PostingType") != null)
                 {
-                    qry.Append(" and ft.PostingType = '" + prof.Get_Value("PostingType") + "'");
+                    qry.Append(" AND ft.PostingType = '" + prof.Get_Value("PostingType") + "'");
                 }
 
-                qry.Append(" and ft.DateAcct >=" + GlobalVariable.TO_DATE(prof.GetDateFrom(), true) + " AND ft.DateAcct <= " + GlobalVariable.TO_DATE(prof.GetDateTo(), true) + " AND (ev.accounttype='E' OR ev.accounttype='R') and ev.isintermediatecode='N'"
-                + "   AND ft.AD_Org_ID IN ( (SELECT Ad_Org_ID FROM AD_Org WHERE isactive = 'Y' AND (" + DBFunctionCollection.TypecastColumnAsInt("legalentityorg") + " =" + PL.GetAD_Org_ID() + " OR Ad_Org_ID = " + PL.GetAD_Org_ID() + ")))");
+                qry.Append(" AND ft.DateAcct >=" + GlobalVariable.TO_DATE(prof.GetDateFrom(), true) + " AND ft.DateAcct <= " + GlobalVariable.TO_DATE(prof.GetDateTo(), true) + " AND (ev.accounttype='E' OR ev.accounttype='R') and ev.isintermediatecode='N'"
+                + " AND ft.AD_Org_ID IN (SELECT Ad_Org_ID FROM AD_Org WHERE IsActive='Y'");
+
+                // VIS0060: Handle Organization filter based on Profit & Loss closing settings on Tenant.
+                if (client.Get_ColumnIndex("PLClosing") >= 0 && !string.IsNullOrEmpty(client.GetPLClosing()) && !client.GetPLClosing().Equals("LOW"))
+                {
+                    qry.Append(" AND Ad_Org_ID = " + PL.GetAD_Org_ID() + ")");
+                }
+                else
+                {
+                    qry.Append(" AND (" + DBFunctionCollection.TypecastColumnAsInt("LegalEntityOrg") + "=" + PL.GetAD_Org_ID() + "  OR Ad_Org_ID = " + PL.GetAD_Org_ID() + "))");
+                }
 
                 if (Util.GetValueOfInt(PL.Get_Value("C_AcctSchema_ID")) > 0)
                 {

@@ -118,15 +118,14 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name= ExecuteProcess"></param >
         /// <returns>active processors</returns>
-        public static MScheduler[] GetActive(Ctx ctx, string ExecuteProcess)
+        public static MScheduler[] GetActive(Ctx ctx, string ExecuteProcess, string machineIP)
         {
             List<MScheduler> list = new List<MScheduler>();
             String sql = "SELECT * FROM AD_Scheduler WHERE IsActive='Y'";
             string scheduleIP = null;
             try
             {
-                //string machineIP = Classes.CommonFunctions.GetMachineIPPort();
-                string machineIP = System.Net.Dns.GetHostEntry(Environment.MachineName).AddressList[0].ToString();
+                // string machineIP = Classes.CommonFunctions.GetMachineIPPort();
                 s_log.SaveError("Console VServer Machine IP : " + machineIP, "Console VServer Machine IP : " + machineIP);
 
                 DataSet ds = DataBase.DB.ExecuteDataset(sql);

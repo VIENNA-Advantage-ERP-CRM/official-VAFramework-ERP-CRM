@@ -89,7 +89,7 @@ namespace VAdvantage.WF
         /// <param name="ctx">context</param>
         /// <param name="ExecuteProcess"></param>
         /// <returns>active processors</returns>
-        public static MWorkflowProcessor[] GetActive(Ctx ctx, string ExecuteProcess)
+        public static MWorkflowProcessor[] GetActive(Ctx ctx, string ExecuteProcess, string machineIP)
         {
             List<MWorkflowProcessor> list = new List<MWorkflowProcessor>();
             String sql = "SELECT * FROM AD_WorkflowProcessor WHERE IsActive='Y'";
@@ -97,7 +97,7 @@ namespace VAdvantage.WF
             string scheduleIP = null;
             try
             {
-                string machineIP = Classes.CommonFunctions.GetMachineIPPort();
+                // string machineIP = Classes.CommonFunctions.GetMachineIPPort();
                 _log.SaveError("Console VServer Machine IP : " + machineIP, "Console VServer Machine IP : " + machineIP);
 
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, null, null);
