@@ -1469,7 +1469,7 @@ namespace VAdvantage.Model
 
                                 }
 
-                                if ((optionalstr == "window" && (costingMethodMatchPO == "p" )) || optionalstr == "process")
+                                if ((optionalstr == "window" && (costingMethodMatchPO == "p")) || optionalstr == "process")
                                 {
                                     #region last po
                                     query.Clear();
@@ -1538,7 +1538,7 @@ namespace VAdvantage.Model
                                     #endregion
                                 }
 
-                                if ((optionalstr == "window" && (costingMethodMatchPO == MCostElement.COSTINGMETHOD_WeightedAveragePO )) || optionalstr == "process")
+                                if ((optionalstr == "window" && (costingMethodMatchPO == MCostElement.COSTINGMETHOD_WeightedAveragePO)) || optionalstr == "process")
                                 {
                                     query.Clear();
                                     query.Append(@"SELECT M_CostElement_ID FROM M_CostElement WHERE  AD_Client_ID=" + AD_Client_ID +
@@ -1548,7 +1548,7 @@ namespace VAdvantage.Model
                                     costElement = MCostElement.Get(ctx, costElementId);
 
                                     #region Weighted Av. PO
-                                    if (cl == MProductCategory.COSTINGLEVEL_Client || cl == MProductCategory.COSTINGLEVEL_Organization) 
+                                    if (cl == MProductCategory.COSTINGLEVEL_Client || cl == MProductCategory.COSTINGLEVEL_Organization)
                                     {
                                         cost = MCost.Get(product, 0, acctSchema, AD_Org_ID, costElementId);
                                     }
@@ -1639,7 +1639,7 @@ namespace VAdvantage.Model
                                 }
 
                                 int costElementId = 0;
-                                if ((optionalstr == "window" && (costingMethodMatchPO == "A" )) || optionalstr == "process")
+                                if ((optionalstr == "window" && (costingMethodMatchPO == "A")) || optionalstr == "process")
                                 {
                                     #region Av. PO
                                     query.Clear();
@@ -1699,7 +1699,7 @@ namespace VAdvantage.Model
                                     }
                                     #endregion
                                 }
-                                if ((optionalstr == "window" && (costingMethodMatchPO == "p" )) || optionalstr == "process")
+                                if ((optionalstr == "window" && (costingMethodMatchPO == "p")) || optionalstr == "process")
                                 {
                                     #region last po
                                     query.Clear();
@@ -1755,7 +1755,7 @@ namespace VAdvantage.Model
                                     }
                                     #endregion
                                 }
-                                if ((optionalstr == "window" && (costingMethodMatchPO == MCostElement.COSTINGMETHOD_WeightedAveragePO )) || optionalstr == "process")
+                                if ((optionalstr == "window" && (costingMethodMatchPO == MCostElement.COSTINGMETHOD_WeightedAveragePO)) || optionalstr == "process")
                                 {
                                     #region We Av. PO
                                     query.Clear();
@@ -2379,7 +2379,17 @@ namespace VAdvantage.Model
                                     // update m_cost with accumulation qty , amt , and current cost
                                     if (isMatchFromForm == "Y" || handlingWindowName == "Match IV")
                                     {
-                                        costingCheck.isMatchFromForm = isMatchFromForm;
+                                        if (isMatchFromForm.Equals("N") && MatchPO_OrderLineId > 0)
+                                        {
+                                            // check PO is matched with GRN through matching form or direct linkage on Matched PO (first order)
+                                            costingCheck.isMatchFromForm = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT IsMatchPOForm FROM M_MatchPO WHERE IsActive = 'Y'
+                                            AND NVL(C_InvoiceLine_ID, 0) = 0 AND M_Product_ID =" + product.GetM_Product_ID() + @"
+                                            AND M_InOutLine_ID = " + inoutline.GetM_InOutLine_ID()));
+                                        }
+                                        else
+                                        {
+                                            costingCheck.isMatchFromForm = isMatchFromForm;
+                                        }
                                         result = cd.UpdateProductCost("Product Cost IV Form", cd, acctSchema, product, M_ASI_ID, invoiceline.GetAD_Org_ID(), costingCheck, optionalStrCd: optionalstr);
                                     }
                                     else
