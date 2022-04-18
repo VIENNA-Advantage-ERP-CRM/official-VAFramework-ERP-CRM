@@ -74,7 +74,7 @@
                 + " LEFT OUTER JOIN M_MatchInv mi ON (il.C_InvoiceLine_ID=mi.C_InvoiceLine_ID) ";
 
             // Get Invoices based on the setting taken on Tenant to allow non item Product
-            if (VIS.Utility.Util.getValueOfString(VIS.Env.getCtx().getContext("$AllowNonItem")) == "Y") {
+            if (VIS.Utility.Util.getValueOfString(VIS.Env.getCtx().getContext("$AllowNonItem")) == "N") {
                 sql += " INNER JOIN M_Product Mp On Mp.M_Product_ID = il.M_Product_ID WHERE Mp.ProductType = 'I' AND";
             }
             else {
