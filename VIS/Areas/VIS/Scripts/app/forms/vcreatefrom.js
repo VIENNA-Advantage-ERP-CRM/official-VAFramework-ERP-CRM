@@ -999,7 +999,7 @@
             + " WHERE il.ISACTIVE = 'Y' AND I.DOCSTATUS NOT IN('VO', 'RE') AND OL.C_ORDERLINE_ID = IL.C_ORDERLINE_ID) AS QtyProvisional FROM C_OrderLine ol ";
 
         // Get Orders based on the setting taken on Tenant to allow non item Product
-        if (!forInvoice && VIS.Utility.Util.getValueOfString(VIS.Env.getCtx().getContext("$AllowNonItem")) == "Y") {
+        if (!forInvoice && VIS.Utility.Util.getValueOfString(VIS.Env.getCtx().getContext("$AllowNonItem")) == "N") {
             sql += " INNER JOIN M_Product p ON ol.M_Product_ID = p.M_Product_ID AND p.ProductType = 'I'";
         }
 
@@ -1173,7 +1173,7 @@
             + " WHERE il.ISACTIVE = 'Y' AND I.DOCSTATUS NOT IN('VO', 'RE') AND OL.C_ORDERLINE_ID = IL.C_ORDERLINE_ID) AS QtyProvisional FROM C_OrderLine ol ";
 
         // Get Orders based on the setting taken on Tenant to allow non item Product
-        if (VIS.Utility.Util.getValueOfString(VIS.Env.getCtx().getContext("$AllowNonItem")) == "Y") {
+        if (VIS.Utility.Util.getValueOfString(VIS.Env.getCtx().getContext("$AllowNonItem")) == "N") {
             sql += " INNER JOIN M_Product p ON ol.M_Product_ID = p.M_Product_ID AND p.ProductType = 'I'";
         }
 
