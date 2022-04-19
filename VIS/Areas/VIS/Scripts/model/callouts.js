@@ -4347,7 +4347,7 @@
                 // when conversion type not selected then given message and clear value
                 if (Util.getValueOfInt(mTab.getValue("C_ConversionType_ID")) <= 0) {
                     mTab.setValue("C_CashLine_ID_1", "");
-                    VIS.ADialog.info("VA009_SelectConversion");
+                    VIS.ADialog.info("VIS_SelectConversion");
                     this.setCalloutActive(false);
                     return "";
                 }
