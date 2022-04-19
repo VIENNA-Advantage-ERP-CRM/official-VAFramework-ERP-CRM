@@ -144,7 +144,7 @@
                 var C_ProvisionalInvoice_ID = VIS.Utility.Util.getValueOfInt($self.cmbProvisionalInvoice.getValue());
                 var M_Product_ID = $self.vProduct.getValue();
                 var deliveryDate = $self.deliveryDate.getValue();
-                if (C_Order_ID != null) {
+                if (C_Order_ID > 0) {
                     if ($self.locatorField != null) {
                         //for shipment haveing locator filed
                         $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, false, 1);
@@ -154,10 +154,10 @@
                         $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, true, 1);
                     }
                 }
-                else if (C_Invoice_ID != null) {
+                else if (C_Invoice_ID > 0) {
                     VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, 1);
                 }
-                else if (M_InOut_ID != null) {
+                else if (M_InOut_ID > 0) {
                     // call loadshipments from VCreateFormProvisionalInvoice.js for Provisiona Invoice
                     if ($self.mTab.keyColumnName == "C_ProvisionalInvoice_ID") {
                         VIS.VCreateFormProvisionalInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, 1);
@@ -165,7 +165,7 @@
                     else {
                         VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, 1);
                     }
-                } else if (C_ProvisionalInvoice_ID != null) {
+                } else if (C_ProvisionalInvoice_ID > 0) {
                     // VA228:Load provisional invoice data in grid from AP invoice window
                     VIS.VCreateFromInvoice.prototype.loadProvisionalInvoices(C_ProvisionalInvoice_ID, M_Product_ID, 1);
                 }
@@ -366,7 +366,7 @@
                     if ($self.deliveryDate != null) {
                         deliveryDate = $self.deliveryDate.getValue();
                     }
-                    if (C_Order_ID != null) {
+                    if (C_Order_ID > 0) {
                         if ($self.locatorField != null) {
                             //for shipment haveing locator filed
                             $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, false, 1);
@@ -376,10 +376,10 @@
                             $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, true, 1);
                         }
                     }
-                    else if (C_Invoice_ID != null) {
+                    else if (C_Invoice_ID > 0) {
                         VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, 1);
                     }
-                    else if (M_InOut_ID != null) {
+                    else if (M_InOut_ID > 0) {
                         // call loadshipments from VCreateFormProvisionalInvoice.js for Provisiona Invoice
                         if ($self.mTab.keyColumnName == "C_ProvisionalInvoice_ID") {
                             VIS.VCreateFormProvisionalInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, 1);
@@ -398,7 +398,8 @@
                         var Amount = $self.Amount.getValue();
                         VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, 1);
                         //VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, 1);
-                    } else if (C_ProvisionalInvoice_ID != null) {
+                    }
+                    else if (C_ProvisionalInvoice_ID > 0) {
                         // VA228:Load provisional invoice from AP invoice window
                         VIS.VCreateFromInvoice.prototype.loadProvisionalInvoices(C_ProvisionalInvoice_ID, M_Product_ID, 1);
                     }
@@ -424,7 +425,7 @@
                     if ($self.deliveryDate != null) {
                         deliveryDate = $self.deliveryDate.getValue();
                     }
-                    if (C_Order_ID != null) {
+                    if (C_Order_ID > 0) {
                         if ($self.locatorField != null) {
                             //for shipment haveing locator filed
                             $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, false, parseInt($self.cmbPage.val()) - 1);
@@ -434,10 +435,10 @@
                             $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, true, parseInt($self.cmbPage.val()) - 1);
                         }
                     }
-                    else if (C_Invoice_ID != null) {
+                    else if (C_Invoice_ID > 0) {
                         VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, parseInt($self.cmbPage.val()) - 1);
                     }
-                    else if (M_InOut_ID != null) {
+                    else if (M_InOut_ID > 0) {
                         // call loadshipments from VCreateFormProvisionalInvoice.js for Provisiona Invoice
                         if ($self.mTab.keyColumnName == "C_ProvisionalInvoice_ID") {
                             VIS.VCreateFormProvisionalInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, parseInt($self.cmbPage.val()) - 1);
@@ -456,7 +457,8 @@
                         var Amount = $self.Amount.getValue();
                         VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, parseInt($self.cmbPage.val()) - 1);
                         //VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, parseInt($self.cmbPage.val()) - 1);
-                    } else if (C_ProvisionalInvoice_ID != null) {
+                    }
+                    else if (C_ProvisionalInvoice_ID > 0) {
                         // VA228:Load provisional invoice from AP invoice window
                         VIS.VCreateFromInvoice.prototype.loadProvisionalInvoices(C_ProvisionalInvoice_ID, M_Product_ID, parseInt($self.cmbPage.val()) - 1);
                     }
@@ -482,7 +484,7 @@
                     if ($self.deliveryDate != null) {
                         deliveryDate = $self.deliveryDate.getValue();
                     }
-                    if (C_Order_ID != null) {
+                    if (C_Order_ID > 0) {
                         if ($self.locatorField != null) {
                             //for shipment haveing locator filed
                             $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, false, parseInt($self.cmbPage.val()) + 1);
@@ -492,10 +494,10 @@
                             $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, true, parseInt($self.cmbPage.val()) + 1);
                         }
                     }
-                    else if (C_Invoice_ID != null) {
+                    else if (C_Invoice_ID > 0) {
                         VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, parseInt($self.cmbPage.val()) + 1);
                     }
-                    else if (M_InOut_ID != null) {
+                    else if (M_InOut_ID > 0) {
                         // call loadshipments from VCreateFormProvisionalInvoice.js for Provisiona Invoice
                         if ($self.mTab.keyColumnName == "C_ProvisionalInvoice_ID") {
                             VIS.VCreateFormProvisionalInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, parseInt($self.cmbPage.val()) + 1);
@@ -514,7 +516,8 @@
                         var Amount = $self.Amount.getValue();
                         VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, parseInt($self.cmbPage.val()) + 1);
                         //VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, parseInt($self.cmbPage.val()) + 1);
-                    } else if (C_ProvisionalInvoice_ID != null) {
+                    }
+                    else if (C_ProvisionalInvoice_ID > 0) {
                         // VA228:Load provisional invoice from AP invoice window
                         VIS.VCreateFromInvoice.prototype.loadProvisionalInvoices(C_ProvisionalInvoice_ID, M_Product_ID, parseInt($self.cmbPage.val()) + 1);
                     }
@@ -540,7 +543,7 @@
                     if ($self.deliveryDate != null) {
                         deliveryDate = $self.deliveryDate.getValue();
                     }
-                    if (C_Order_ID != null) {
+                    if (C_Order_ID > 0) {
                         if ($self.locatorField != null) {
                             //for shipment haveing locator filed
                             $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, false, parseInt($self.cmbPage.find("Option:last").val()));
@@ -550,10 +553,10 @@
                             $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, true, parseInt($self.cmbPage.find("Option:last").val()));
                         }
                     }
-                    else if (C_Invoice_ID != null) {
+                    else if (C_Invoice_ID > 0) {
                         VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, parseInt($self.cmbPage.find("Option:last").val()));
                     }
-                    else if (M_InOut_ID != null) {
+                    else if (M_InOut_ID > 0) {
                         // call loadshipments from VCreateFormProvisionalInvoice.js for Provisiona Invoice
                         if ($self.mTab.keyColumnName == "C_ProvisionalInvoice_ID") {
                             VIS.VCreateFormProvisionalInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, parseInt($self.cmbPage.find("Option:last").val()));
@@ -572,7 +575,8 @@
                         var Amount = $self.Amount.getValue();
                         VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, parseInt($self.cmbPage.find("Option:last").val()));
                         //VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, parseInt($self.cmbPage.find("Option:last").val()));
-                    } else if (C_ProvisionalInvoice_ID != null) {
+                    }
+                    else if (C_ProvisionalInvoice_ID > 0) {
                         // VA228:Load provisional invoice from AP invoice window
                         VIS.VCreateFromInvoice.prototype.loadProvisionalInvoices(C_ProvisionalInvoice_ID, M_Product_ID, parseInt($self.cmbPage.find("Option:last").val()));
                     }
@@ -597,7 +601,7 @@
                 if ($self.deliveryDate != null) {
                     deliveryDate = $self.deliveryDate.getValue();
                 }
-                if (C_Order_ID != null) {
+                if (C_Order_ID > 0) {
                     if ($self.locatorField != null) {
                         //for shipment haveing locator filed
                         $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, false, $self.cmbPage.val());
@@ -607,10 +611,10 @@
                         $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, true, $self.cmbPage.val());
                     }
                 }
-                else if (C_Invoice_ID != null) {
+                else if (C_Invoice_ID > 0) {
                     VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, $self.cmbPage.val());
                 }
-                else if (M_InOut_ID != null) {
+                else if (M_InOut_ID > 0) {
                     // call loadshipments from VCreateFormProvisionalInvoice.js for Provisiona Invoice
                     if ($self.mTab.keyColumnName == "C_ProvisionalInvoice_ID") {
                         VIS.VCreateFormProvisionalInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, $self.cmbPage.val());
@@ -629,7 +633,8 @@
                     var Amount = $self.Amount.getValue();
                     VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, $self.cmbPage.val());
                     //VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, $self.cmbPage.val());
-                } else if (C_ProvisionalInvoice_ID != null) {
+                }
+                else if (C_ProvisionalInvoice_ID > 0) {
                     // VA228:Load provisional invoice from AP invoice window
                     VIS.VCreateFromInvoice.prototype.loadProvisionalInvoices(C_ProvisionalInvoice_ID, M_Product_ID, $self.cmbPage.val());
                 }
@@ -692,13 +697,13 @@
                     var selectprd = $self.editedItems[items]["M_Product_ID_K"];
                     var obj = $.grep($self.multiValues, function (n, i) {
 
-                        if (C_Order_ID != null) {
+                        if (C_Order_ID > 0) {
                             return n.M_Product_ID_K == selectprd && n.C_Order_ID_K == $self.editedItems[items]["C_Order_ID_K"]
                         }
-                        else if (C_Invoice_ID != null) {
+                        else if (C_Invoice_ID > 0) {
                             return n.M_Product_ID_K == selectprd && n.C_Invoice_ID_K == $self.editedItems[items]["C_Invoice_ID_K"]
                         }
-                        else if (M_InOut_ID != null) {
+                        else if (M_InOut_ID > 0) {
                             return n.M_Product_ID_K == selectprd && n.M_InOut_ID_K == $self.editedItems[items]["M_InOut_ID_K"]
                         }
                         else {
@@ -1876,7 +1881,7 @@
                 // Change By Mohit 30/06/2016
                 //$self.multiValues = [];
                 //for shipment haveing locator filed                
-                if ($self.dGrid != null && C_Order_ID != null) {
+                if ($self.dGrid != null && C_Order_ID > 0) {
                     //var selection = $self.dGrid.getSelection();
                     for (item in selection) {
                         var obj = $.grep($self.multiValues, function (n, i) {
@@ -1892,7 +1897,7 @@
                         }
                     }
                 }
-                else if ($self.dGrid != null && C_Invoice_ID != null) {
+                else if ($self.dGrid != null && C_Invoice_ID > 0) {
                     //var selection = $self.dGrid.getSelection();
                     for (item in selection) {
                         var obj = $.grep($self.multiValues, function (n, i) {
@@ -1940,7 +1945,7 @@
                 $self.middelDiv.css("height", "61%");
             }
             else {
-                if ($self.dGrid != null && C_Order_ID != null) {
+                if ($self.dGrid != null && C_Order_ID > 0) {
                     //var selection = $self.dGrid.getSelection();
                     for (item in selection) {
                         var obj = $.grep($self.multiValues, function (n, i) {
@@ -1956,7 +1961,7 @@
                         }
                     }
                 }
-                if ($self.dGrid != null && M_InOut_ID != null) {
+                if ($self.dGrid != null && M_InOut_ID > 0) {
                     //var selection = $self.dGrid.getSelection();
                     for (item in selection) {
                         var obj = $.grep($self.multiValues, function (n, i) {
@@ -1973,7 +1978,7 @@
                     }
                 }
                 // When provisional invoice selected by VA228(Rakesh) 29/July/2021
-                if ($self.dGrid != null && C_ProvisionalInvoice_ID != null) {
+                if ($self.dGrid != null && C_ProvisionalInvoice_ID > 0) {
                     for (item in selection) {
                         // Check duplicate key and add value to dictionary object
                         var obj = $.grep($self.multiValues, function (n, i) {
@@ -2022,7 +2027,7 @@
                 // Change By Mohit 30/06/2016
                 //$self.multiValues = [];
                 //for shipment haveing locator filed                
-                if ($self.dGrid != null && C_Order_ID != null) {
+                if ($self.dGrid != null && C_Order_ID > 0) {
                     //var selection = $self.dGrid.getSelection();
                     for (item in selection) {
                         var obj = $.grep($self.multiValues, function (n, i) {
@@ -2038,7 +2043,7 @@
                         }
                     }
                 }
-                else if ($self.dGrid != null && C_Invoice_ID != null) {
+                else if ($self.dGrid != null && C_Invoice_ID > 0) {
                     //var selection = $self.dGrid.getSelection();
                     for (item in selection) {
                         var obj = $.grep($self.multiValues, function (n, i) {
@@ -2085,7 +2090,7 @@
                 $self.middelDiv.css("height", "61%");
             }
             else {
-                if ($self.dGrid != null && C_Order_ID != null) {
+                if ($self.dGrid != null && C_Order_ID > 0) {
                     //var selection = $self.dGrid.getSelection();
                     for (item in selection) {
                         var obj = $.grep($self.multiValues, function (n, i) {
@@ -2101,7 +2106,7 @@
                         }
                     }
                 }
-                if ($self.dGrid != null && M_InOut_ID != null) {
+                if ($self.dGrid != null && M_InOut_ID > 0) {
                     //var selection = $self.dGrid.getSelection();
                     for (item in selection) {
                         var obj = $.grep($self.multiValues, function (n, i) {
@@ -2203,14 +2208,14 @@
                 }
                 var C_Order_ID = VIS.Utility.Util.getValueOfInt($self.cmbOrder.getValue());
                 var C_ProvisionalInvoice_Id = VIS.Utility.Util.getValueOfInt($self.cmbProvisionalInvoice.getValue());
-                if (C_Order_ID != null) {
+                if (C_Order_ID > 0) {
                     $self.cmbInvoice.setValue(-1);
                     $self.cmbShipment.setValue(-1);
                     //$self.loadOrder(C_Order_ID, false);
                     var M_Product_ID = $self.vProduct.getValue();
                     var deliveryDate = $self.deliveryDate.getValue();
                     $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, false, 1);
-                } else if (C_ProvisionalInvoice_Id != null) {
+                } else if (C_ProvisionalInvoice_Id > 0) {
                     // VA228:Load provisional invoice data into grid
                     $self.cmbOrder.setValue(-1);
                     $self.cmbInvoice.setValue(-1);
@@ -3419,13 +3424,13 @@
                 //    $self.dGrid.select(parseInt(item) + 1);
                 //}
                 var obj = $.grep($self.multiValues, function (n, i) {
-                    if (C_Order_ID != null) {
+                    if (C_Order_ID > 0) {
                         return n.M_Product_ID_K == $self.dGrid.records[item]["M_Product_ID_K"] && n.C_Order_ID_K == $self.dGrid.records[item]["C_Order_ID_K"]
                     }
-                    else if (C_Invoice_ID != null) {
+                    else if (C_Invoice_ID > 0) {
                         return n.M_Product_ID_K == $self.dGrid.records[item]["M_Product_ID_K"] && n.C_Invoice_ID_K == $self.dGrid.records[item]["C_Invoice_ID_K"]
                     }
-                    else if (M_InOut_ID != null) {
+                    else if (M_InOut_ID > 0) {
                         return n.M_Product_ID_K == $self.dGrid.records[item]["M_Product_ID_K"] && n.M_InOut_ID_K == $self.dGrid.records[item]["M_InOut_ID_K"]
                     }
                     else {
@@ -3544,13 +3549,13 @@
             //    $self.multiValues.splice($self.multiValues.indexOf(unselectedVal), 1);
             //}
             var obj = $.grep($self.editedItems, function (n, i) {
-                if (C_Order_ID != null) {
+                if (C_Order_ID > 0) {
                     return n.M_Product_ID_K == selectprd && n.C_Order_ID_K == $self.dGrid.records[index]["C_Order_ID_K"]
                 }
-                else if (C_Invoice_ID != null) {
+                else if (C_Invoice_ID > 0) {
                     return n.M_Product_ID_K == selectprd && n.C_Invoice_ID_K == $self.dGrid.records[index]["C_Invoice_ID_K"]
                 }
-                else if (M_InOut_ID != null) {
+                else if (M_InOut_ID > 0) {
                     return n.M_Product_ID_K == selectprd && n.M_InOut_ID_K == $self.dGrid.records[index]["M_InOut_ID_K"]
                 }
                 else {
@@ -3713,13 +3718,13 @@
                         //    $self.dGrid.select(parseInt(item) + 1);
                         //}
                         var obj = $.grep($self.multiValues, function (n, i) {
-                            if (C_Order_ID != null) {
+                            if (C_Order_ID > 0) {
                                 return n.M_Product_ID_K == $self.dGrid.records[item]["M_Product_ID_K"] && n.C_Order_ID_K == $self.dGrid.records[item]["C_Order_ID_K"]
                             }
-                            else if (C_Invoice_ID != null) {
+                            else if (C_Invoice_ID > 0) {
                                 return n.M_Product_ID_K == $self.dGrid.records[item]["M_Product_ID_K"] && n.C_Invoice_ID_K == $self.dGrid.records[item]["C_Invoice_ID_K"]
                             }
-                            else if (M_InOut_ID != null) {
+                            else if (M_InOut_ID > 0) {
                                 return n.M_Product_ID_K == $self.dGrid.records[item]["M_Product_ID_K"] && n.M_InOut_ID_K == $self.dGrid.records[item]["M_InOut_ID_K"]
                             }
                             else {
@@ -3739,13 +3744,13 @@
                 //    $self.multiValues.splice($self.multiValues.indexOf(unselectedVal), 1);
                 //}
                 var obj = $.grep($self.multiValues, function (n, i) {
-                    if (C_Order_ID != null) {
+                    if (C_Order_ID > 0) {
                         return n.M_Product_ID_K == unselectprd && n.C_Order_ID_K == w2ui[e.target].records[e.index]["C_Order_ID_K"]
                     }
-                    else if (C_Invoice_ID != null) {
+                    else if (C_Invoice_ID > 0) {
                         return n.M_Product_ID_K == unselectprd && n.C_Invoice_ID_K == w2ui[e.target].records[e.index]["C_Invoice_ID_K"]
                     }
-                    else if (M_InOut_ID != null) {
+                    else if (M_InOut_ID > 0) {
                         return n.M_Product_ID_K == unselectprd && n.M_InOut_ID_K == w2ui[e.target].records[e.index]["M_InOut_ID_K"]
                     }
                     else {
