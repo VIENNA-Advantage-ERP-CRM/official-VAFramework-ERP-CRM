@@ -1115,5 +1115,24 @@ namespace VAdvantage.DataBase
             }
             return sql.ToString();
         }
+
+        /// <summary>
+        /// This function is used to type cast column from String to Decimal
+        /// </summary>
+        /// <param name="columnName">Column Name</param>
+        /// <returns>type cast column</returns>
+        /// <writer>VIS_0045</writer>
+        public static string TypecastColumnAsDecimal(string columnName)
+        {
+            if (DB.IsOracle())
+            {
+                return "CAST(" + columnName + " AS NUMBER)";
+            }
+            else if (DB.IsPostgreSQL())
+            {
+                return "Cast(" + columnName + " AS DECIMAL)";
+            }
+            return columnName;
+        }
     }
 }
