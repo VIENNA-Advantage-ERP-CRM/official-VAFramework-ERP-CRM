@@ -467,7 +467,7 @@ namespace ViennaAdvantage.Process
                         }
                     }
 
-                    msg = Msg.GetMsg(GetCtx(), "ImportedSuccessfully");
+                    msg = "ImportedSuccessfully";//Msg.GetMsg(GetCtx(), "ImportedSuccessfully");
                     return msg;
                 }
                 catch
