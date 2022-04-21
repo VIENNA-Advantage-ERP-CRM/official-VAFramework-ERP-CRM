@@ -7065,7 +7065,7 @@
                             var keys = Object.keys($gridPayment.get(0));
                             payment = keys[keys.indexOf("AppliedAmt")];
                             C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
-                            payment = keys[10];
+                            //payment = keys[10];
                             if (rowsPayment[i].AppliedAmt != undefined && rowsPayment[i].AppliedAmt != 0) {
                                 var appliedAmt = rowsPayment[i].AppliedAmt;
                                 appliedAmt = convertAppliedAmtculture(appliedAmt, dotFormatter);
