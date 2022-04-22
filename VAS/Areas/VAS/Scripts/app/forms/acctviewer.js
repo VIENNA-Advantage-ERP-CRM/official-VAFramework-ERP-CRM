@@ -1016,8 +1016,8 @@
                         else if (row[j] != null && typeof (row[j]) == "number" &&
                             (VIS.translatedTexts.AmtAcctCr == dataObj.Columns[j] ||
                                 VIS.translatedTexts.AmtAcctDr == dataObj.Columns[j] ||
-                            VIS.translatedTexts.AmtSourceCr == dataObj.Columns[j] ||
-                            VIS.translatedTexts.AmtSourceDr == dataObj.Columns[j])) {
+                                VIS.translatedTexts.AmtSourceCr == dataObj.Columns[j] ||
+                                VIS.translatedTexts.AmtSourceDr == dataObj.Columns[j])) {
                             line[dataObj.Columns[j]] = parseFloat(row[j]).toLocaleString();
                         }
                         else {
@@ -2164,76 +2164,81 @@
         }
 
         function actionRePost() {
-            if (VIS.ADialog.ask("PostImmediate?")) {
-                if (_data.documentQuery && _data.AD_Table_ID != 0 && _data.Record_ID != 0) {
-                    var force = chkforcePost.prop("checked");
+            VIS.ADialog.confirm("PostImmediate?", true, "", "Confirm", function (result) {
+                if (result) {
+                    setBusy(true);
+                    if (_data.documentQuery && _data.AD_Table_ID != 0 && _data.Record_ID != 0) {
+                        var force = chkforcePost.prop("checked");
 
-                    //check for old and new posting logic
-                    checkPostingByNewLogic(function (result) {
-                        var postingByNewLogic = false;
-                        if (result == "Yes") {
-                            postingByNewLogic = true;
-                        }
+                        //check for old and new posting logic
+                        checkPostingByNewLogic(function (result) {
+                            var postingByNewLogic = false;
+                            if (result == "Yes") {
+                                postingByNewLogic = true;
+                            }
 
-                        if (window.FRPT && postingByNewLogic) {
-                            var orgID = Number(VIS.context.getWindowTabContext(windowNo, 0, "AD_Org_ID"));
-                            var docTypeID = Number(VIS.context.getWindowTabContext(windowNo, 0, "C_DocType_ID"));
+                            if (window.FRPT && postingByNewLogic) {
+                                var orgID = Number(VIS.context.getWindowTabContext(windowNo, 0, "AD_Org_ID"));
+                                var docTypeID = Number(VIS.context.getWindowTabContext(windowNo, 0, "C_DocType_ID"));
 
-                            $.ajax({
-                                url: VIS.Application.contextUrl + "FRPT/PostingLogicFRPT/PostImediateFRPT",
-                                dataType: "json",
-                                async: true,
-                                data: {
-                                    'AD_Client_ID': _data.AD_Client_ID,
-                                    'AD_Table_ID': _data.AD_Table_ID,
-                                    'Record_ID': _data.Record_ID,
-                                    'force': force,
-                                    'OrgID': orgID,
-                                    'AD_Window_ID': _AD_Window_ID,
-                                    'DocTypeID': docTypeID
-                                },
-                                error: function (e) {
-                                    setBusy(false);
-                                    VIS.ADialog.info(VIS.Msg.getMsg('ERRORGettingPostingServer'));
-                                },
-                                success: function (data) {
-                                    if (data.result) {
-                                        actionQuery();
+                                $.ajax({
+                                    url: VIS.Application.contextUrl + "FRPT/PostingLogicFRPT/PostImediateFRPT",
+                                    dataType: "json",
+                                    async: true,
+                                    data: {
+                                        'AD_Client_ID': _data.AD_Client_ID,
+                                        'AD_Table_ID': _data.AD_Table_ID,
+                                        'Record_ID': _data.Record_ID,
+                                        'force': force,
+                                        'OrgID': orgID,
+                                        'AD_Window_ID': _AD_Window_ID,
+                                        'DocTypeID': docTypeID
+                                    },
+                                    error: function (e) {
+                                        setBusy(false);
+                                        VIS.ADialog.info(VIS.Msg.getMsg('ERRORGettingPostingServer'));
+                                    },
+                                    success: function (data) {
+                                        if (data.result) {
+                                            /*VIS_0045: Display Message on UI during Re-Post Document*/
+                                            VIS.ADialog.info("", true, data.result, null);
+                                            actionQuery();
+                                        }
+                                        setBusy(false);
                                     }
-                                    //  setBusy(false);
-                                }
-                            });
-                        }
-                        else {
-                            $.ajax({
-                                url: VIS.Application.contextUrl + "Posting/PostImmediate",
-                                dataType: "json",
-                                data: {
-                                    AD_Client_ID: _data.AD_Client_ID,
-                                    AD_Table_ID: _data.AD_Table_ID,
-                                    Record_ID: _data.Record_ID,
-                                    force: force
-                                },
-                                error: function (e) {
-                                    setBusy(false);
-                                    VIS.ADialog.info(VIS.Msg.getMsg('ERRORGettingPostingServer'));
-                                },
-                                success: function (data) {
-                                    if (data.result == "OK") {
-                                        actionQuery();
+                                });
+                            }
+                            else {
+                                $.ajax({
+                                    url: VIS.Application.contextUrl + "Posting/PostImmediate",
+                                    dataType: "json",
+                                    data: {
+                                        AD_Client_ID: _data.AD_Client_ID,
+                                        AD_Table_ID: _data.AD_Table_ID,
+                                        Record_ID: _data.Record_ID,
+                                        force: force
+                                    },
+                                    error: function (e) {
+                                        setBusy(false);
+                                        VIS.ADialog.info(VIS.Msg.getMsg('ERRORGettingPostingServer'));
+                                    },
+                                    success: function (data) {
+                                        if (data.result == "OK") {
+                                            actionQuery();
+                                        }
+                                        setBusy(false);
                                     }
-                                    // setBusy(false);
-                                }
-                            });
-                        }
-                    });
+                                });
+                            }
+                        });
+                    }
+                    return true;
                 }
-                return true;
-            }
-            else {
-                setBusy(false);
-                return false;
-            }
+                else {
+                    setBusy(false);
+                    return false;
+                }
+            });
         }
 
         function checkPostingByNewLogic(callback) {
