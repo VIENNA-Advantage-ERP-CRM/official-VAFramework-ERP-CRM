@@ -81,14 +81,14 @@ namespace VAdvantage.Model
         /* TODO */
         protected override POInfo InitPO(Ctx ctx)
         {
-            //PropertiesWrapper wrapper = (PropertiesWrapper)ctx;
-            //p_ctx = wrapper.source;
-            //tableName = wrapper.tableName;
-            //tableID = MTable.Get_Table_ID(tableName);
-            //// log.info("Table_ID: "+Table_ID);
-            //POInfo poi = POInfo.GetPOInfo(ctx, tableID); 
-            //return poi;
-            return null;
+            PropertiesWrapper wrapper = (PropertiesWrapper)ctx;
+            p_ctx = wrapper.source;
+            tableName = wrapper.tableName;
+            tableID = DB.GetSQLValue(null, "SELECT AD_Table_ID FROM AD_Table WHERE TableName=@param1", tableName);
+            // log.info("Table_ID: "+Table_ID);
+            POInfo poi = POInfo.GetPOInfo(ctx, tableID);
+            return poi;
+           // return null;
         }
 
         protected override POInfo InitPO(Context ctx)
