@@ -2463,7 +2463,7 @@
                 }
             }
 
-            if (IsTaxIncluded) {
+            if (IsTaxIncluded == "Y") {
                 mTab.setValue("LineTotalAmt", (Util.getValueOfDecimal(LineNetAmt.toFixed(StdPrecision))));
             }
             else {
