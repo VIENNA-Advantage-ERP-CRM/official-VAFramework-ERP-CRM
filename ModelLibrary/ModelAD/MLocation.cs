@@ -633,7 +633,8 @@ namespace VAdvantage.Model
 
         public string[] GetLongitudeAndLatitude(string address, string sensor)
         {
-            string urlAddress = "http://maps.googleapis.com/maps/api/geocode/xml?address=" + HttpUtility.UrlEncode(address) + "&sensor=" + sensor;
+            string API = MClient.Get(p_ctx).GetGoogleMapAPI();
+            string urlAddress = "https://maps.googleapis.com/maps/api/geocode/xml?address=" + HttpUtility.UrlEncode(address) + "&key="+ API;
             string[] returnValue = new string[2];
             try
             {
