@@ -327,16 +327,11 @@ namespace VAdvantage.Model
             with negative onhand. */
             if (Is_ValueChanged("IsDisallowNegativeInv") && IsDisallowNegativeInv())
             {
-                //String sql = "SELECT M_Product_ID FROM M_StorageDetail s " +
-                //             "WHERE s.QtyType = 'H' AND s.M_Locator_ID IN (SELECT M_Locator_ID FROM M_Locator l " +
-                //                            "WHERE M_Warehouse_ID=" + GetM_Warehouse_ID() + " )" +
-                //             " GROUP BY M_Product_ID, M_Locator_ID " +
-                //             " HAVING SUM(s.Qty) < 0 ";
                 String sql = "SELECT M_Product_ID FROM M_Storage s " +
                             "WHERE s.M_Locator_ID IN (SELECT M_Locator_ID FROM M_Locator l " +
                                            "WHERE M_Warehouse_ID=" + GetM_Warehouse_ID() + " )" +
                             " GROUP BY M_Product_ID, M_Locator_ID " +
-                            " HAVING SUM(s.Qty) < 0 ";
+                            " HAVING SUM(s.QtyOnHand) < 0 ";
 
                 IDataReader idr = null;
                 Boolean negInvExists = false;

@@ -1,8 +1,8 @@
 ﻿; (function (VIS, $) {
 
     function VAllocation() {
-        this.frame = null;
-        this.windowNo = 0;
+        this.frame;
+        this.windowNo;
         var ctx = VIS.Env.getCtx();
         var $self = this;
         var $root = $('<div class="vis-allocate-root vis-forms-container">');
@@ -283,9 +283,9 @@
             return result;
         };
 
-        initialize();
+        //initialize();
 
-        function initialize() {
+        this.Initialize = function () {
             _C_Currency_ID = ctx.getContextAsInt("$C_Currency_ID");   //  default
             countVA009 = executeScalar("VIS_131");
             fillLookups();
@@ -368,6 +368,9 @@
         function eventHandling() {
             //Organization 
             $OrgFilter.on("change", function (e) {
+                ctx.setContext($self.windowNo, "OrgID", VIS.Utility.Util.getValueOfInt($OrgFilter.val()));
+               // Clear conversion type on Org Change
+                $vConversionType.getControl().val('');
                 //when select MultiCurrency without selecting conversionDate it will clear the grids
                 if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
                     blankAllGrids();
@@ -2115,7 +2118,8 @@
             $vSearchBPartner = new VIS.Controls.VTextBoxButton("C_BPartner_ID", true, false, true, VIS.DisplayType.Search, value);
 
             //VIS_0045: create and assin control to conversion type
-            value = VIS.MLookupFactory.get(ctx, $self.windowNo, 10294, VIS.DisplayType.TableDir, "C_ConversionType_ID", 0, false, "C_ConversionType.IsActive = 'Y'");
+            value = VIS.MLookupFactory.get(ctx, self.windowNo, 10294, VIS.DisplayType.TableDir, "C_ConversionType_ID", 0, false,
+                "C_ConversionType.IsActive = 'Y' AND C_ConversionType.AD_Org_ID IN (0, @OrgID@)");
             $vConversionType = new VIS.Controls.VComboBox("C_ConversionType_ID", false, false, true, value, 50);
 
             value = VIS.MLookupFactory.get(ctx, self.windowNo, 0, VIS.DisplayType.TableDir, "VA009_PaymentMethod_ID", 0, false,
@@ -6955,7 +6959,7 @@
             // also check is Non Business Day?
             $.ajax({
                 url: VIS.Application.contextUrl + "PaymentAllocation/CheckPeriodState",
-                data: { DateTrx: $date.val(), AD_Org_ID: $cmbOrg.val() },
+                data: { DateTrx: $dateAcct.val(), AD_Org_ID: $cmbOrg.val() },
                 async: false,
                 success: function (result) {
                     if (result != "") {
@@ -7549,6 +7553,7 @@
     VAllocation.prototype.init = function (windowNo, frame) {
         this.frame = frame;
         this.windowNo = windowNo;
+        this.Initialize();
         this.frame.getContentGrid().append(this.getRoot());
     };
 
