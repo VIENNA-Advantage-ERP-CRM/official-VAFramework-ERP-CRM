@@ -1,8 +1,8 @@
 ﻿; (function (VIS, $) {
 
     function VAllocation() {
-        this.frame = null;
-        this.windowNo = 0;
+        this.frame;
+        this.windowNo;
         var ctx = VIS.Env.getCtx();
         var $self = this;
         var $root = $('<div class="vis-allocate-root vis-forms-container">');
@@ -21,6 +21,8 @@
 
         var $OrgFilter = null;
         var $vSearchBPartner = null;
+        //VIS_0045: control for conversion type in left panel
+        var $vConversionType = null;
         //Search Filter for Invoice and Payment Grid
         var $vInvPayMethod = null;
         var $vPayMethod = null;
@@ -281,9 +283,9 @@
             return result;
         };
 
-        initialize();
+        //initialize();
 
-        function initialize() {
+        this.Initialize = function () {
             _C_Currency_ID = ctx.getContextAsInt("$C_Currency_ID");   //  default
             countVA009 = executeScalar("VIS_131");
             fillLookups();
@@ -361,11 +363,14 @@
             $root.find(".vis-allocation-resultdiv").css({ "width": "100%", "margin": "0", "bottom": "0", "position": "inherit" });
             $bsyDiv[0].style.visibility = "hidden";
         };
-        
+
 
         function eventHandling() {
             //Organization 
             $OrgFilter.on("change", function (e) {
+                ctx.setContext($self.windowNo, "OrgID", VIS.Utility.Util.getValueOfInt($OrgFilter.val()));
+               // Clear conversion type on Org Change
+                $vConversionType.getControl().val('');
                 //when select MultiCurrency without selecting conversionDate it will clear the grids
                 if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
                     blankAllGrids();
@@ -401,7 +406,12 @@
                     blankAllGrids();
                 }
             });
+
             $vSearchBPartner.fireValueChanged = bpValueChanged;
+
+            //VIS_0045: event when we change conversion type in left panel
+            $vConversionType.fireValueChanged = conversionTypeChanged;
+
             $cmbCurrency.on("change", function (e) {
                 vetoableChange("C_Currency_ID", $cmbCurrency.val());
                 //when select MultiCurrency without selecting conversionDate it will clear the grid's
@@ -447,6 +457,7 @@
                 //////loadBPartner();
                 //loadCurrencyPrecision(parseInt($cmbCurrency.val()));
             });
+
             $vchkMultiCurrency.on("change", function (e) {
                 vetoableChange("Date", $vchkMultiCurrency.is(':checked'));
                 //when select MultiCurrency without selecting conversionDate it will clear the grid's 
@@ -487,6 +498,7 @@
                 //Commetd code because now we want to search data on search button not on every control's event
                 //////loadBPartner();
             });
+
             $vchkAllocation.on("change", function (e) {
                 if ($vchkGlVoucher.is(':checked')) {
                     $(".vis-allocate-invoicediv").insertBefore(".vis-allocate-gldiv");
@@ -504,8 +516,18 @@
 
             $vbtnSearch.on("click", function (e) {
                 //when select MultiCurrency without selecting conversionDate it will return a Message
-                if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
-                    VIS.ADialog.warn("VIS_SlctcnvrsnDate");
+                //VIS_0045: Conversion type message thorw only when Inv to Inv or Inv to Pay allocation
+                if ($vchkMultiCurrency.is(':checked') && ($conversionDate.val() == "" ||
+                    ($vConversionType.getValue() == null &&
+                        (($allocationFrom.val() == "I" && $allocationTo.val() == "P") ||
+                            ($allocationFrom.val() == "P" && $allocationTo.val() == "I") ||
+                            ($allocationFrom.val() == "I" && $allocationTo.val() == "I"))))) {
+                    if ($conversionDate.val() == "") {
+                        VIS.ADialog.warn("VIS_SlctcnvrsnDate");
+                    }
+                    else if ($vConversionType.getValue() == null) {
+                        VIS.ADialog.warn("VIS_SlctcnvrsnType");
+                    }
                     blankAllGrids();
                     clearRightPanelFilters(); //clear right side  filters and selected records
                     return;
@@ -551,6 +573,7 @@
                 }
                 //////loadGLDataGrid(e);
             });
+
             $vchkGlInvoice.on("change", function (e) {
             });
             //end
@@ -2094,6 +2117,11 @@
             value = VIS.MLookupFactory.getMLookUp(ctx, self.windowNo, 3499, VIS.DisplayType.Search);
             $vSearchBPartner = new VIS.Controls.VTextBoxButton("C_BPartner_ID", true, false, true, VIS.DisplayType.Search, value);
 
+            //VIS_0045: create and assin control to conversion type
+            value = VIS.MLookupFactory.get(ctx, self.windowNo, 10294, VIS.DisplayType.TableDir, "C_ConversionType_ID", 0, false,
+                "C_ConversionType.IsActive = 'Y' AND C_ConversionType.AD_Org_ID IN (0, @OrgID@)");
+            $vConversionType = new VIS.Controls.VComboBox("C_ConversionType_ID", false, false, true, value, 50);
+
             value = VIS.MLookupFactory.get(ctx, self.windowNo, 0, VIS.DisplayType.TableDir, "VA009_PaymentMethod_ID", 0, false,
                 "VA009_PAYMENTMETHOD.VA009_PAYMENTMETHOD_ID IN (SELECT VA009_PAYMENTMETHOD_ID FROM VA009_PAYMENTMETHOD WHERE VA009_PAYMENTBASETYPE NOT IN ('B','C','P') )");
             $vPayMethod = new VIS.Controls.VComboBox("VA009_PaymentMethod_ID", false, false, true, value, 50);
@@ -2294,7 +2322,13 @@
 
                 $.ajax({
                     url: VIS.Application.contextUrl + "PaymentAllocation/GetInvoice",
-                    data: { AD_Org_ID: AD_Org_ID, _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID, isInterBPartner: _isInterBPartner, chk: chk, date: getDate, page: pageNoInvoice, size: PAGESIZE, docNo: docNo, c_docType_ID: c_docType_ID, docBaseType: docBaseType, PaymentMethod_ID: payMethod_ID, fromDate: fromDate, toDate: toDate, conversionDate: conversionDate, srchText: srchText, isInterComp: _isInterCompany },
+                    data: {
+                        AD_Org_ID: AD_Org_ID, _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID,
+                        isInterBPartner: _isInterBPartner, chk: chk, date: getDate, page: pageNoInvoice,
+                        size: PAGESIZE, docNo: docNo, c_docType_ID: c_docType_ID, docBaseType: docBaseType,
+                        PaymentMethod_ID: payMethod_ID, fromDate: fromDate, toDate: toDate, conversionDate: conversionDate,
+                        srchText: srchText, isInterComp: _isInterCompany, conversionType_ID: $vConversionType.getValue()
+                    },
                     async: true,
                     success: function (result) {
                         var data = JSON.parse(result);
@@ -2400,6 +2434,15 @@
                 + '<label title="View allocation will be created on this date" type="date" >' + VIS.Msg.getMsg("ConversionDate") + '</label>'
                 + '</div></div></div>');
             $innerRow.append($multiCurr);
+
+            // VIS_0045: Add Currency Type
+            $divCu = $('<div class="vis-allocation-leftControls vis-conversionType" style="display:none">');
+            $Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
+            $Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
+            $divCu.append($Leftformfieldwrp);
+            $Leftformfieldwrp.append($Leftformfieldctrlwrp);
+            $Leftformfieldctrlwrp.append($vConversionType.getControl()).append('<label>' + VIS.translatedTexts.C_ConversionType_ID + '</label>');
+            $innerRow.append($divCu);
             //end
 
             //added for enhancement of new combo regarding allocation from and to
@@ -2519,7 +2562,7 @@
             //    + '<span class="vis-allocation-lbldifferenceAmt" style="float:right;">'
             //    + '</span>');
 
-            $resultDiv.append('<div class="vis-allocation-leftControls"><div class="input-group vis-input-wrap"><div class="vis-control-wrap"> <select class="vis-allocation-currencycmb" id=VIS_cmbOrg_' + $self.windowNo + '></select><label title="View allocation will be created in this organization" >' + VIS.translatedTexts.AD_OrgTrx_ID + '</label>');
+            $resultDiv.append('<div class="vis-allocation-leftControls"><div class="input-group vis-input-wrap"><div class="vis-control-wrap"> <select class="vis-allocation-currencycmb" id=VIS_cmbOrg_' + $self.windowNo + '></select><label title=' + VIS.Msg.getMsg("VIS_AllocOrgTitle") + '>' + VIS.Msg.getMsg("VIS_AllocOrg") + '</label>');
 
             $resultDiv.append('<div class="vis-allocation-leftControls">'
                 + '<div class="input-group vis-input-wrap">'
@@ -3234,7 +3277,13 @@
 
             $.ajax({
                 url: VIS.Application.contextUrl + "PaymentAllocation/GetInvoice",
-                data: { AD_Org_ID: AD_Org_ID, _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID, isInterBPartner: _isInterBPartner, chk: chk, date: getDate, page: pageNoInvoice, size: PAGESIZE, docNo: docNo, c_docType_ID: c_docType_ID, docBaseType: docBaseType, PaymentMethod_ID: payMethod_ID, fromDate: fromDate, toDate: toDate, conversionDate: conversionDate, srchText: srchText, isInterComp: _isInterCompany },
+                data: {
+                    AD_Org_ID: AD_Org_ID, _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID,
+                    isInterBPartner: _isInterBPartner, chk: chk, date: getDate, page: pageNoInvoice,
+                    size: PAGESIZE, docNo: docNo, c_docType_ID: c_docType_ID, docBaseType: docBaseType,
+                    PaymentMethod_ID: payMethod_ID, fromDate: fromDate, toDate: toDate, conversionDate: conversionDate,
+                    srchText: srchText, isInterComp: _isInterCompany, conversionType_ID: $vConversionType.getValue()
+                },
                 async: true,
                 success: function (result) {
                     var data = JSON.parse(result);
@@ -4799,7 +4848,8 @@
                         if (C_ConversionType_ID == 0) {
                             C_ConversionType_ID = $gridInvoice.get(event.recid).C_ConversionType_ID;
                         }
-                        else if (C_ConversionType_ID != $gridInvoice.get(event.recid).C_ConversionType_ID) {
+                        /*VIS_0045: conversion type matched when allocate with GL and Cash*/
+                        else if ((!readOnlyCash || !readOnlyGL) && C_ConversionType_ID != $gridInvoice.get(event.recid).C_ConversionType_ID) {
 
                             var $x = document.getElementsByName(event.target);
                             if ($x.length > 0)
@@ -4890,6 +4940,10 @@
                 }
                 else {
                     if (element[0].SelectRow == true) {
+                        // when multicurrency true, then get conversion type from parameter
+                        if ($vchkMultiCurrency.is(':checked')) {
+                            C_ConversionType_ID = $vConversionType.getValue();
+                        }
                         // when we select a record, check conversion type is same or not.
                         // if not then not to select this record
                         if (C_ConversionType_ID == 0) {
@@ -5701,7 +5755,7 @@
 
                         var amount = parseFloat($gridPayment.get(row)[columns[_openPay].field]);
 
-                        _value = removeAllButLast1(parseFloat(amount).toLocaleString(), dotFormatter ? "," : ".");
+                        _value = removeAllButLast1(parseFloat(amount).toLocaleString(navigator.language, { minimumFractionDigits: stdPrecision, maximumFractionDigits: stdPrecision }), dotFormatter ? "," : ".");
 
                         //Date1--//get column index from grid
                         var _date1 = getIndexFromArray(columns, "Date1");
@@ -5818,7 +5872,7 @@
                         _open = getIndexFromArray(columns, "OpenAmt");
                         var amount = parseFloat($gridCashline.get(row)[columns[_open].field]);
                         //remove the thousand separator from the value
-                        _value = removeAllButLast1(parseFloat(amount).toLocaleString(), dotFormatter ? "," : ".");
+                        _value = removeAllButLast1(parseFloat(amount).toLocaleString(navigator.language, { minimumFractionDigits: stdPrecision, maximumFractionDigits: stdPrecision }), dotFormatter ? "," : ".");
                         if (payemntCol == "AppliedAmt") {
                             if (changes != null && changes != undefined) {
                                 changes.AppliedAmt = _value;
@@ -5937,14 +5991,14 @@
                     _discount = getIndexFromArray(columns, "Discount");
                     amount = amount - parseFloat($gridInvoice.get(row)[columns[_discount].field]);
                     //remove the thousand separator form the value
-                    _value = removeAllButLast1(parseFloat(amount).toLocaleString(), dotFormatter ? "," : ".");
+                    _value = removeAllButLast1(parseFloat(amount).toLocaleString(navigator.language, { minimumFractionDigits: stdPrecision, maximumFractionDigits: stdPrecision }), dotFormatter ? "," : ".");
                     if (applied == "AppliedAmt") {
                         if (changes != null && changes != undefined) {
                             changes.Writeoff = 0;
                             changes.AppliedAmt = _value;
                             //get column index from grid
                             _discount = getIndexFromArray(columns, "Discount");
-                            changes.Discount = removeAllButLast1(parseFloat($gridInvoice.get(row)[columns[_discount].field]).toLocaleString(), dotFormatter ? "," : ".");
+                            changes.Discount = removeAllButLast1(parseFloat($gridInvoice.get(row)[columns[_discount].field]).toLocaleString(navigator.language, { minimumFractionDigits: stdPrecision, maximumFractionDigits: stdPrecision }), dotFormatter ? "," : ".");
                             $gridInvoice.refreshCell(row, "Writeoff");
                             $gridInvoice.refreshCell(row, "AppliedAmt");
                             $gridInvoice.refreshCell(row, "Discount");
@@ -6225,6 +6279,11 @@
             vetoableChange($vSearchBPartner.getName(), $vSearchBPartner.value);
             //added for gl-allocation
             //////loadGLDataGrid($vSearchBPartner.event);
+        };
+
+        // Conversion Type Change Event
+        function conversionTypeChanged() {
+            vetoableChange($vConversionType.getName(), $vConversionType.getValue());
         };
 
         function getMaxDate() {
@@ -6754,10 +6813,25 @@
             //$('.vis-allocation-leftControls').prop('style', ' margin-bottom: 5px');
             $('#cashMaindiv').css('display', 'none');
             $('#glMaindiv').css('display', 'none');
-            if ($vchkMultiCurrency.is(':checked'))
+            if ($vchkMultiCurrency.is(':checked')) {
                 $conversionDiv.css('display', 'block');
-            else
+                //VIS_0045: Show Conversion Type when either allocaton From/To is Invoice
+                if (($allocationFrom.val() == "I" && $allocationTo.val() == "P") ||
+                    ($allocationFrom.val() == "P" && $allocationTo.val() == "I") ||
+                    ($allocationFrom.val() == "I" && $allocationTo.val() == "I")) {
+                    $innerRow.find('.vis-conversionType').css('display', 'block');
+                }
+                else {
+                    $innerRow.find('.vis-conversionType').css('display', 'none');
+                    $vConversionType.getControl().val('');
+                }
+            }
+            else {
                 $conversionDiv.css('display', 'none');
+                //VIS_0045: Hide Conversion Type when either allocaton From/To is Invoice
+                $innerRow.find('.vis-conversionType').css('display', 'none');
+                $vConversionType.getControl().val('');
+            }
         };
 
         function vchkapplocationChange() {
@@ -6885,7 +6959,7 @@
             // also check is Non Business Day?
             $.ajax({
                 url: VIS.Application.contextUrl + "PaymentAllocation/CheckPeriodState",
-                data: { DateTrx: $date.val(), AD_Org_ID: $cmbOrg.val() },
+                data: { DateTrx: $dateAcct.val(), AD_Org_ID: $cmbOrg.val() },
                 async: false,
                 success: function (result) {
                     if (result != "") {
@@ -7064,8 +7138,14 @@
                             var row = $gridPayment.get(rowsPayment[i].recid);
                             var keys = Object.keys($gridPayment.get(0));
                             payment = keys[keys.indexOf("AppliedAmt")];
-                            C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
-                            payment = keys[10];
+                            //VIS_0045: In case of Multi-Currency, pass conversion type as selected conversion type
+                            if (chk) {
+                                C_CurrencyType_ID = $vConversionType.getValue();
+                            }
+                            else {
+                                C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
+                            }
+                            //payment = keys[10];
                             if (rowsPayment[i].AppliedAmt != undefined && rowsPayment[i].AppliedAmt != 0) {
                                 var appliedAmt = rowsPayment[i].AppliedAmt;
                                 appliedAmt = convertAppliedAmtculture(appliedAmt, dotFormatter);
@@ -7096,7 +7176,13 @@
                             open = keys[keys.indexOf("Amount")];
                             for (var i = 0; i < rowsInvoice.length; i++) {
                                 var row = $gridInvoice.get(rowsInvoice[i].recid);
-                                C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
+                                //VIS_0045: In case of Multi-Currency, pass conversion type as selected conversion type
+                                if (chk) {
+                                    C_CurrencyType_ID = $vConversionType.getValue();
+                                }
+                                else {
+                                    C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
+                                }
                                 var discounts = rowsInvoice[i].Discount;
                                 if (discounts == undefined) {
                                     discounts = row.Discount;
@@ -7368,6 +7454,8 @@
             console.info("Allocation From : " + $allocationFrom.val());
             console.info("Allocation To : " + $allocationTo.val());
             console.info("MultiCurrency : " + $vchkMultiCurrency.is(':checked'));
+            //VIS_0045: Selection Parameter value
+            console.info("Currency Type : " + $vConversionType.getName() + " , Value : " + $vConversionType.getValue());
             console.info("Organization : " + $cmbOrg.val());
             console.info("Document Number : " + $txtDocNo.val());
             console.info("Document Type : " + $cmbDocType.val());
@@ -7465,6 +7553,7 @@
     VAllocation.prototype.init = function (windowNo, frame) {
         this.frame = frame;
         this.windowNo = windowNo;
+        this.Initialize();
         this.frame.getContentGrid().append(this.getRoot());
     };
 

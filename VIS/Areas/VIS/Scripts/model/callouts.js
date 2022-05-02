@@ -2463,7 +2463,7 @@
                 }
             }
 
-            if (IsTaxIncluded) {
+            if (IsTaxIncluded == "Y") {
                 mTab.setValue("LineTotalAmt", (Util.getValueOfDecimal(LineNetAmt.toFixed(StdPrecision))));
             }
             else {
@@ -4320,6 +4320,7 @@
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";
     };
+
     /// <summary>
     /// ConvertedAmt calculation
     /// </summary>
@@ -4339,32 +4340,39 @@
             return "";
         }
         this.setCalloutActive(true);
-        var sql = "SELECT CASHLINE.Amount FROM C_CashLine CASHLINE INNER JOIN C_Cashbook CB ON (CB.C_Cashbook_ID=CASHLINE.C_Cashbook_ID) WHERE CASHLINE.C_CashLine_ID =" + value;
-        try {
-            var currTo = Util.getValueOfInt(VIS.DB.executeScalar("SELECT C_Currency_ID FROM C_CashBook WHERE C_CashBook_ID=(SELECT C_CashBook_ID FROM C_Cash WHERE C_Cash_ID=" + mTab.getValue("C_Cash_ID") + ")"));
-            if (currTo == 0) {
-                // ShowMessage.Info("PleaseSelectCashBook", true, null, null);
-                this.setCalloutActive(false);
-                return "";
-            }
-            var amt = Util.getValueOfDecimal(VIS.DB.executeScalar(sql));
-            var CurrFrom = Util.getValueOfInt(VIS.DB.executeScalar("SELECT C_Currency_ID FROM C_Cashbook WHERE C_Cashbook_ID= (SELECT C_CashBook_ID FROM C_Cash WHERE C_Cash_ID="
-                + " (SELECT C_Cash_ID FROM C_CashLine WHERE C_CashLine_ID= " + value + "))"));
-            var paramString = amt.toString() + "," + CurrFrom.toString() + "," + currTo.toString() + "," +
-                ctx.getAD_Client_ID().toString() + "," + ctx.getAD_Org_ID().toString();
 
-            //ConvertedAmt = VAdvantage.Model.MConversionRate.Convert(ctx,
-            //    ConvertedAmt, Util.getValueOfInt(C_Currency_From_ID), C_Currency_To_ID,
-            //    DateExpense, 0, AD_Client_ID, AD_Org_ID);
-            var transferdAmt = VIS.dataContext.getJSONRecord("MConversionRate/Convert", paramString);
-            //var transferdAmt = MConversionRate.Convert(Env.GetCtx(),amt,CurrFrom,currTo,
-            //     Env.GetCtx().GetAD_Client_ID(), Env.GetCtx().GetAD_Org_ID());
-            if (amt != 0 && transferdAmt == 0) {
-                VIS.ADialog.info("NoCurrencyConversion");
+        try {
+            if (value > 0) {
+
+                // when conversion type not selected then given message and clear value
+                if (Util.getValueOfInt(mTab.getValue("C_ConversionType_ID")) <= 0) {
+                    mTab.setValue("C_CashLine_ID_1", "");
+                    VIS.ADialog.info("VIS_SelectConversion");
+                    this.setCalloutActive(false);
+                    return "";
+                }
+
+                var paramString = value.toString() + "," + mTab.getValue("C_Cash_ID").toString() +
+                    "," + mTab.getValue("AD_Org_ID").toString() + "," + mTab.getValue("C_ConversionType_ID").toString();
+                var result = VIS.dataContext.getJSONRecord("MCashJournal/ConvertedAmt", paramString);
+
+                if (Util.getValueOfInt(result["currTo"]) == 0) {
+                    this.setCalloutActive(false);
+                    return "";
+                }
+
+                if (Util.getValueOfDecimal(result["amt"]) != 0 && Util.getValueOfDecimal(result["transferdAmt"]) == 0) {
+                    VIS.ADialog.info("NoCurrencyConversion");
+                }
+
+                mTab.setValue("ConvertedAmt", Util.getValueOfDecimal(result["transferdAmt"]));
+                mTab.setValue("Amount", Util.getValueOfDecimal(result["amt"]));
             }
-            mTab.setValue("ConvertedAmt", transferdAmt);
-            mTab.setValue("Amount", amt);
-            //mTab.setValue("Amount", transferdAmt);
+            else {
+                mTab.setValue("ConvertedAmt", 0);
+                mTab.setValue("Amount", 0);
+            }
+
         }
         catch (err) {
             this.setCalloutActive(false);

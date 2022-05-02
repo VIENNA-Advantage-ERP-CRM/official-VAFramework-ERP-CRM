@@ -3110,7 +3110,7 @@
 
         if (data && data.tables[0].rows && data.tables[0].rows.length > 0) {
             $selfpanel.curTab.hasSavedAdvancedSearch = true;
-            if ($selfpanel.curTab.getTabLevel() == 0 && !gc.isZoomAction) {
+            if ($selfpanel.curTab.getTabLevel() == 0 && !gc.gTab.getIsZoomAction()) {
                 var hasDefaultSearch = false;
                 for (var i = 0; i < data.tables[0].rows.length; i++) {
                     if (data.tables[0].rows[i].cells["ad_defaultuserquery_id"] > 0) {
@@ -4142,7 +4142,6 @@
                 }
                 var findPressed = self.curTab.getIsQueryActive() || self.curTab.getOnlyCurrentDays() > 0;
                 self.aFind.setPressed(findPressed);
-
                 if (self.curGC.getIsSingleRow())
                     self.curGC.switchMultiRow(true);
 

@@ -798,61 +798,6 @@ namespace VAdvantage.Model
             }
             #endregion
 
-            // Created By Sunil 17/9/2016
-            // Complete Shipment
-            //MInOut io = new MInOut(GetCtx(), GetM_InOut_ID(), Get_TrxName());
-            //if (io.GetDocStatus() == DOCSTATUS_Reversed)
-            //{
-            //    GetCtx().SetContext("DifferenceQty_", "0");
-            //    VoidIt(); //To set document void if MR is aleady in reversed case
-            //    SetDocAction(DOCACTION_Void);
-            //    return DocActionVariables.STATUS_VOIDED;
-            //}
-            //else if (io.GetDocStatus() == DOCSTATUS_Completed || io.GetDocStatus() == DOCSTATUS_Closed)
-            //{
-            //    SetProcessed(true);
-            //    //Not to Complete MR/Shipment when it is already comepleted/ handled case when a completed record generates a confirmation
-            //}
-            //else
-            //{
-            MInOut io = new MInOut(GetCtx(), GetM_InOut_ID(), Get_TrxName());
-            SetProcessed(true);
-            if (!Save(Get_TrxName()))
-            {
-                GetCtx().SetContext("DifferenceQty_", "0");
-                Get_Trx().Rollback();
-                _processMsg = "Confirmation Not Completed";
-                return DocActionVariables.STATUS_INVALID;
-            }
-            string Status_ = io.CompleteIt();
-            if (Status_ == "CO")
-            {
-
-                io.SetProcessed(true);
-                io.SetDocStatus(DocActionVariables.STATUS_COMPLETED);
-                io.SetDocAction(DocActionVariables.ACTION_CLOSE);
-                if (io.Save(Get_TrxName()))
-                {
-                    GetCtx().SetContext("DifferenceQty_", "0"); //To set difference Qty zero in context if document get comepleted
-                }
-                else
-                {
-                    GetCtx().SetContext("DifferenceQty_", "0");
-                    Get_Trx().Rollback();
-                    // SI_0713_1 - message should be correct
-                    _processMsg = io.GetProcessMsg() + "Shipment Not Completed";
-                    return DocActionVariables.STATUS_INVALID;
-                }
-            }
-            else
-            {
-                GetCtx().SetContext("DifferenceQty_", "0");
-                Get_Trx().Rollback();
-                // SI_0713_1 - message should be correct
-                _processMsg = io.GetProcessMsg() + " Shipment Not Completed";
-                return DocActionVariables.STATUS_INVALID;
-            }
-
             //	All lines
             bool internalInventory = false; //Arpit
             for (int i = 0; i < lines.Length; i++)
@@ -890,6 +835,44 @@ namespace VAdvantage.Model
                 }
             }	//	for all lines
 
+            MInOut io = new MInOut(GetCtx(), GetM_InOut_ID(), Get_TrxName());
+            SetProcessed(true);
+            if (!Save(Get_TrxName()))
+            {
+                GetCtx().SetContext("DifferenceQty_", "0");
+                Get_Trx().Rollback();
+                _processMsg = "Confirmation Not Completed";
+                return DocActionVariables.STATUS_INVALID;
+            }
+            string Status_ = io.CompleteIt();
+            if (Status_ == "CO")
+            {
+
+                io.SetProcessed(true);
+                io.SetDocStatus(DocActionVariables.STATUS_COMPLETED);
+                io.SetDocAction(DocActionVariables.ACTION_CLOSE);
+                if (io.Save(Get_TrxName()))
+                {
+                    GetCtx().SetContext("DifferenceQty_", "0"); //To set difference Qty zero in context if document get comepleted
+                }
+                else
+                {
+                    GetCtx().SetContext("DifferenceQty_", "0");
+                    Get_Trx().Rollback();
+                    // SI_0713_1 - message should be correct
+                    _processMsg = io.GetProcessMsg() + "Shipment Not Completed";
+                    return DocActionVariables.STATUS_INVALID;
+                }
+            }
+            else
+            {
+                GetCtx().SetContext("DifferenceQty_", "0");
+                Get_Trx().Rollback();
+                // SI_0713_1 - message should be correct
+                _processMsg = io.GetProcessMsg() + " Shipment Not Completed";
+                return DocActionVariables.STATUS_INVALID;
+            }
+            
             //To freeze Quality Control Lines
             FreezeQualityControlLines();
 
