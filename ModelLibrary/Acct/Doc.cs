@@ -625,7 +625,7 @@ namespace VAdvantage.Acct
                 {
                     log.Log(Level.WARNING, ToString() + " - Period Closed for already posed document");
                     Unlock();
-                    return "PeriodClosed";
+                    return Msg.GetMsg(GetCtx(), "PeriodClosed");
                 }
                 if (Get_TableName() != "GL_Journal")
                 {

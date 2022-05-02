@@ -411,10 +411,10 @@ namespace VAdvantage.Model
         @param DocumentNo Document sequence number of the document */
         public void SetDocumentNo(String DocumentNo)
         {
-            if (DocumentNo != null && DocumentNo.Length > 10)
+            if (DocumentNo != null && DocumentNo.Length > 30)
             {
-                log.Warning("Length > 10 - truncated");
-                DocumentNo = DocumentNo.Substring(0, 10);
+                log.Warning("Length > 30 - truncated");
+                DocumentNo = DocumentNo.Substring(0, 30);
             }
             Set_Value("DocumentNo", DocumentNo);
         }
