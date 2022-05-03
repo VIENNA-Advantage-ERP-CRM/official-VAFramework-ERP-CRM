@@ -369,7 +369,7 @@
             //Organization 
             $OrgFilter.on("change", function (e) {
                 ctx.setContext($self.windowNo, "OrgID", VIS.Utility.Util.getValueOfInt($OrgFilter.val()));
-               // Clear conversion type on Org Change
+                // Clear conversion type on Org Change
                 $vConversionType.getControl().val('');
                 //when select MultiCurrency without selecting conversionDate it will clear the grids
                 if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
@@ -4940,9 +4940,19 @@
                 }
                 else {
                     if (element[0].SelectRow == true) {
+                        // Get conversion type of selected record
+                        let elementConversion = $.grep(getChanges, function (ele, index) {
+                            return ele.SelectRow == true;
+                        });
+
                         // when multicurrency true, then get conversion type from parameter
                         if ($vchkMultiCurrency.is(':checked')) {
                             C_ConversionType_ID = $vConversionType.getValue();
+                        }
+                        else if (readOnlyGL && (elementConversion != null || elementConversion[0] != undefined
+                            || elementConversion[0] != 0)) {
+                            /* when not allocated with GL, and first payment selected then overwrite conversion type with payment record */
+                            C_ConversionType_ID = $gridPayment.get(elementConversion[0].recid).C_ConversionType_ID;
                         }
                         // when we select a record, check conversion type is same or not.
                         // if not then not to select this record
