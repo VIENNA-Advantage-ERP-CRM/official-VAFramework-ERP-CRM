@@ -4949,8 +4949,7 @@
                         if ($vchkMultiCurrency.is(':checked')) {
                             C_ConversionType_ID = $vConversionType.getValue();
                         }
-                        else if (readOnlyGL && (elementConversion != null || elementConversion[0] != undefined
-                            || elementConversion[0] != 0)) {
+                        else if (readOnlyGL && (elementConversion != null && elementConversion.length > 0)) {
                             /* when not allocated with GL, and first payment selected then overwrite conversion type with payment record */
                             C_ConversionType_ID = $gridPayment.get(elementConversion[0].recid).C_ConversionType_ID;
                         }
