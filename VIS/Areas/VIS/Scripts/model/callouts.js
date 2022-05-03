@@ -2269,14 +2269,13 @@
                             "," + C_BPartner_ID1.toString() +
                             "," + (mTab.getValue("QtyEntered")).toString() + "," + 1 + "," + 1);
                         var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPricesOnChange", params);
-
-                        PriceEntered = Util.getValueOfDecimal(prices["PriceEntered"]);
                         DiscountSchema = Util.getValueOfString(prices["DiscountSchema"]);
 
                         // VIS0060: Handle zero price issue on quantity change.
                         if (mField.getColumnName() == "M_Product_ID" || (Util.getValueOfDecimal(prices["PriceList"]) != 0 && mTab.getValue("PriceList") == 0)) {
                             PriceList = Util.getValueOfDecimal(prices["PriceList"]);
-                            mTab.setValue("PriceList", Util.getValueOfDecimal(prices["PriceList"]));                            
+                            mTab.setValue("PriceList", Util.getValueOfDecimal(prices["PriceList"]));       
+                            PriceEntered = Util.getValueOfDecimal(prices["PriceEntered"]);                            
                         }
                     }
                     //if (PriceEntered == null)
