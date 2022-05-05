@@ -1091,6 +1091,9 @@
          * @param {any} highlight
          */
         this.highlightButton = function (highlight, button) {
+
+            return;
+
             var $bLi = button.$li;
             var $root = this.getRoot();
 
@@ -3243,7 +3246,7 @@
             }
         }
         else {
-            this.highlightButton(false, this.aNew);
+           this.highlightButton(false, this.aNew);
         }
 
 
