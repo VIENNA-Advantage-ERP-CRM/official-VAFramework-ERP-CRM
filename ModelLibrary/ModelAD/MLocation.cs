@@ -546,8 +546,8 @@ namespace VAdvantage.Model
                     retStr.Append(GetAddress4()).Append(", ");
                 //	City, Region, Postal
                 if (ParseCRP(GetCountry()).Trim() != ",")
-                {                    
-                        retStr.Append(ParseCRP(GetCountry()));
+                {
+                    retStr.Append(ParseCRP(GetCountry()));
                 }
                 //	Add Country would come here
             }
@@ -633,8 +633,15 @@ namespace VAdvantage.Model
 
         public string[] GetLongitudeAndLatitude(string address, string sensor)
         {
-            string urlAddress = "http://maps.googleapis.com/maps/api/geocode/xml?address=" + HttpUtility.UrlEncode(address) + "&sensor=" + sensor;
             string[] returnValue = new string[2];
+            string API = MClient.Get(p_ctx).GetGoogleMapAPI();
+            if (string.IsNullOrEmpty(API))
+            {
+                log.SaveWarning("MapApiKeyNotFound",null);
+                return returnValue;
+            }
+            string urlAddress = "https://maps.googleapis.com/maps/api/geocode/xml?address=" + HttpUtility.UrlEncode(address) + "&key=" + API;
+           
             try
             {
                 XmlDocument objXmlDocument = new XmlDocument();
@@ -648,9 +655,16 @@ namespace VAdvantage.Model
                     // GET Longitude 
                     returnValue[1] = objXmlNode.ChildNodes.Item(1).InnerText;
                 }
+
+                if (string.IsNullOrEmpty(returnValue[0]) && string.IsNullOrEmpty(returnValue[1]))
+                {
+                    log.SaveWarning("LongOrLatNotFound", "address is " + address);
+                }
+
             }
-            catch
+            catch (Exception ex)
             {
+                log.SaveError("ErrorFetchingLocaDetails", ex.Message);
                 // Process an error action here if needed  
             }
             return returnValue;

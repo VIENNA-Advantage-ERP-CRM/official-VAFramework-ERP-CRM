@@ -714,7 +714,7 @@ namespace ViennaAdvantage.Process
                 }
                 UpdateInvoiceHeader(invoice);
                 DB.ExecuteQuery("UPDATE C_Invoice SET ConditionalFlag = null WHERE C_Invoice_ID = " + invoice.GetC_Invoice_ID(), null, Get_Trx());
-                return invoice.GetDocumentNo();
+                return Msg.GetMsg(GetCtx(), "InvoiceNo") + ":- " + invoice.GetDocumentNo();
             }
             else
             {

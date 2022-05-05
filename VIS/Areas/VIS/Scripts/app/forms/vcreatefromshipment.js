@@ -60,49 +60,71 @@
         function getInvoices(ctx, C_BPartner_ID, isReturnTrx) {
             //var pairs = [];
 
-            var display = ("i.DocumentNo||' - '||").concat(
-                    VIS.DB.to_char("DateInvoiced", VIS.DisplayType.Date, VIS.Env.getAD_Language(ctx))).concat("|| ' - ' ||")
-                    .concat(VIS.DB.to_char("GrandTotal", VIS.DisplayType.Amount, VIS.Env.getAD_Language(ctx)));
+            //var display = ("i.DocumentNo||' - '||").concat(
+            //        VIS.DB.to_char("DateInvoiced", VIS.DisplayType.Date, VIS.Env.getAD_Language(ctx))).concat("|| ' - ' ||")
+            //        .concat(VIS.DB.to_char("GrandTotal", VIS.DisplayType.Amount, VIS.Env.getAD_Language(ctx)));
             // New column added to fill invoice which drop ship is true
             // Added by Vivek on 09/10/2017 advised by Pradeep
             var _isdrop = "Y".equals(VIS.Env.getCtx().getWindowContext(selfChild.windowNo, "IsDropShip"));
 
-            $.ajax({
-                url: VIS.Application.contextUrl + "VCreateFrom/GetInvoicesVCreate",
-                type: 'POST',
-                //async: false,
-                data: {
-                    displays: display,
-                    cBPartnerId: C_BPartner_ID,
-                    isReturnTrxs: isReturnTrx,
-                    IsDrops: _isdrop
-                },
-                success: function (data) {
-                    var ress = JSON.parse(data);
-                    if (ress && ress.length > 0) {
-                        try {
-                            var key, value;
-                            for (var i = 0; i < ress.length; i++) {
-                                key = VIS.Utility.Util.getValueOfInt(ress[i].key);
-                                value = VIS.Utility.encodeText(ress[i].value);
-                                //pairs.push({ ID: key, value: value });
+            var sql = " C_Invoice.C_Invoice_ID IN (SELECT i.C_Invoice_ID FROM C_Invoice i INNER JOIN C_DocType d ON (i.C_DocType_ID = d.C_DocType_ID) "
+                + "WHERE i.C_BPartner_ID=" + C_BPartner_ID + " AND i.IsSOTrx='N' AND i.IsDropShip='" + (_isdrop ? "Y" : "N") + "' "
+                + "AND d.IsReturnTrx='" + (isReturnTrx ? "Y" : "N") + "' AND i.DocStatus IN ('CL','CO') AND i.TreatAsDiscount = 'N' AND i.C_Invoice_ID IN "
+                + "(SELECT C_Invoice_ID FROM (SELECT il.C_Invoice_ID,il.C_InvoiceLine_ID,il.QtyInvoiced,mi.Qty FROM C_InvoiceLine il "
+                + " LEFT OUTER JOIN M_MatchInv mi ON (il.C_InvoiceLine_ID=mi.C_InvoiceLine_ID) ";
 
-                                if (i == 0) {
-                                    baseObj.cmbInvoice.getControl().append(" <option value=0> </option>");
-                                }
-                                baseObj.cmbInvoice.getControl().append(" <option value=" + key + ">" + value + "</option>");
-                            }
-                            baseObj.cmbInvoice.getControl().prop('selectedIndex', 0);
-                        }
-                        catch (e) {
+            // Get Invoices based on the setting taken on Tenant to allow non item Product
+            if (VIS.Utility.Util.getValueOfString(VIS.Env.getCtx().getContext("$AllowNonItem")) == "N") {
+                sql += " INNER JOIN M_Product Mp On Mp.M_Product_ID = il.M_Product_ID WHERE Mp.ProductType = 'I' AND";
+            }
+            else {
+                sql += " LEFT JOIN M_Product Mp On Mp.M_Product_ID = il.M_Product_ID WHERE";
+            }
 
-                        }
-                    }
-                },
-                error: function (e) {
-                    selfChild.log.info(e);
-                },
-            });
+            sql += " (il.QtyInvoiced <> nvl(mi.Qty,0) AND mi.C_InvoiceLine_ID IS NOT NULL And Mp.Iscostadjustmentonlost = 'N') "
+                + " OR (NVL(Mi.Qty,0) = 0 AND Mi.C_Invoiceline_Id IS NOT NULL AND Mp.Iscostadjustmentonlost = 'Y') "
+                + " OR mi.C_InvoiceLine_ID IS NULL ) t GROUP BY C_Invoice_ID,C_InvoiceLine_ID,QtyInvoiced "
+                + " HAVING QtyInvoiced > SUM(nvl(Qty,0))))";
+
+            var lookupInvoice = VIS.MLookupFactory.get(VIS.Env.getCtx(), baseObj.windowNo, 0, VIS.DisplayType.Search, "C_Invoice_ID", 0, false, sql);
+            baseObj.cmbInvoice = new VIS.Controls.VTextBoxButton("C_Invoice_ID", true, false, true, VIS.DisplayType.Search, lookupInvoice);
+
+            //$.ajax({
+            //    url: VIS.Application.contextUrl + "VCreateFrom/GetInvoicesVCreate",
+            //    type: 'POST',
+            //    //async: false,
+            //    data: {
+            //        displays: display,
+            //        cBPartnerId: C_BPartner_ID,
+            //        isReturnTrxs: isReturnTrx,
+            //        IsDrops: _isdrop
+            //    },
+            //    success: function (data) {
+            //        var ress = JSON.parse(data);
+            //        if (ress && ress.length > 0) {
+            //            try {
+            //                var key, value;
+            //                for (var i = 0; i < ress.length; i++) {
+            //                    key = VIS.Utility.Util.getValueOfInt(ress[i].key);
+            //                    value = VIS.Utility.encodeText(ress[i].value);
+            //                    //pairs.push({ ID: key, value: value });
+
+            //                    if (i == 0) {
+            //                        baseObj.cmbInvoice.getControl().append(" <option value=0> </option>");
+            //                    }
+            //                    baseObj.cmbInvoice.getControl().append(" <option value=" + key + ">" + value + "</option>");
+            //                }
+            //                baseObj.cmbInvoice.getControl().prop('selectedIndex', 0);
+            //            }
+            //            catch (e) {
+
+            //            }
+            //        }
+            //    },
+            //    error: function (e) {
+            //        selfChild.log.info(e);
+            //    },
+            //});
             //return pairs;
         }
 
@@ -152,10 +174,9 @@
         //}
 
         function initBPDetails(C_BPartner_ID) {
-            baseObj.cmbInvoice.getControl().html("")
+            //baseObj.cmbInvoice.getControl().html("")
             var isReturnTrx = "Y".equals(VIS.Env.getCtx().getWindowContext(baseObj.windowNo, "IsReturnTrx"));
-            //var invoices =
-
+            
             //// JID_0350: "When user create MR with refrence to order OR by invoice by using "Create Line From" charge should not shows on grid.
             getInvoices(VIS.Env.getCtx(), C_BPartner_ID, isReturnTrx);
 
@@ -221,8 +242,8 @@
 
         //	Get Shipment
         var M_InOut_ID = this.$super.mTab.getValue("M_InOut_ID");
-        var C_Invoice_ID = this.$super.cmbInvoice.getControl().find('option:selected').val();
-        var C_Order_ID = this.$super.cmbOrder.getControl().find('option:selected').val();
+        var C_Invoice_ID = VIS.Utility.Util.getValueOfInt(this.$super.cmbInvoice.getValue());
+        var C_Order_ID = VIS.Utility.Util.getValueOfInt(this.$super.cmbOrder.getValue());
 
         return this.saveData(model, "", C_Order_ID, C_Invoice_ID, M_Locator_ID, M_InOut_ID, Container_ID, fromApply);
     }
@@ -261,7 +282,7 @@
         }
         else {
             isBaseLangs = "FROM C_UOM_Trl uom Left join C_UOM uom1 on (uom1.C_UOM_ID=uom.C_UOM_ID) INNER JOIN C_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.AD_Language='"
-               + VIS.Env.getAD_Language(ctx) + "') ";
+                + VIS.Env.getAD_Language(ctx) + "') ";
         }
         if (M_Product_ID != null) {
             mProductID = " AND l.M_Product_ID = " + M_Product_ID;
@@ -473,16 +494,16 @@
         }
         else {
             sql = sql.concat("FROM C_UOM_Trl uom ")
-               .concat("INNER JOIN C_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.AD_Language='")
-               .concat(VIS.Env.getAD_Language(ctx)).concat("') ");
+                .concat("INNER JOIN C_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.AD_Language='")
+                .concat(VIS.Env.getAD_Language(ctx)).concat("') ");
         }
         sql = sql.concat("INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID) ")
-           .concat("LEFT OUTER JOIN M_MatchInv mi ON (l.C_InvoiceLine_ID=mi.C_InvoiceLine_ID) ")
-           .concat("WHERE l.C_Invoice_ID=" + C_Invoice_ID 									//  #1
-            + " GROUP BY l.QtyInvoiced,l.QtyEntered,"
-            + "l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name),"
+            .concat("LEFT OUTER JOIN M_MatchInv mi ON (l.C_InvoiceLine_ID=mi.C_InvoiceLine_ID) ")
+            .concat("WHERE l.C_Invoice_ID=" + C_Invoice_ID 									//  #1
+                + " GROUP BY l.QtyInvoiced,l.QtyEntered,"
+                + "l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name),"
                 + "l.M_Product_ID,p.Name, l.C_InvoiceLine_ID,l.Line,l.C_OrderLine_ID "
-            + "ORDER BY l.Line");
+                + "ORDER BY l.Line");
 
         var dr = null;
         try {

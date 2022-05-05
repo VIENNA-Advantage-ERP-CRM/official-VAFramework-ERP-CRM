@@ -704,7 +704,7 @@ namespace VIS.Models
 
 
             SqlParamsIn sqlP = new SqlParamsIn();
-            sqlP.sql = sql;
+            sqlP.sql = finalSql;
             sqlP.param = param;
             VIS.Helpers.SqlHelper help = new Helpers.SqlHelper();
             return help.ExecuteJDataSet(sqlP);

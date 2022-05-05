@@ -376,6 +376,9 @@ namespace VAdvantage.Model
                 {
                     DB.ExecuteQuery(@"UPDATE C_Invoice inv SET VA009_PaidAmount = 
                               (SELECT SUM(VA009_PaidAmntInvce) FROM C_InvoicePaySchedule isch WHERE isch.C_Invoice_ID = inv.C_Invoice_ID AND isch.IsActive = 'Y')
+                            , VA009_OpenAmount = (CASE WHEN GrandTotalAfterWithholding != 0 THEN GrandTotalAfterWithholding ELSE GrandTotal END)
+                                - (SELECT SUM(VA009_PaidAmntInvce) FROM C_InvoicePaySchedule isch WHERE isch.C_Invoice_ID = inv.C_Invoice_ID
+                                    AND isch.IsActive = 'Y')
                              WHERE inv.IsActive = 'Y' AND inv.C_Invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx());
                 }
             }

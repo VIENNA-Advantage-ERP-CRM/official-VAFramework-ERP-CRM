@@ -272,8 +272,12 @@ namespace VIS.Controllers
                     ClientList = LoginHelper.GetClients(ctx.GetAD_Role_ID());// .Add(new KeyNamePair(ctx.GetAD_Client_ID(), ctx.GetAD_Client_Name()));
                     OrgList = LoginHelper.GetOrgs(ctx.GetAD_Role_ID(), ctx.GetAD_User_ID(), ctx.GetAD_Client_ID());// .Add(new KeyNamePair(ctx.GetAD_Org_ID(), ctx.GetAD_Org_Name()));
                     WareHouseList = LoginHelper.GetWarehouse(ctx.GetAD_Org_ID());// .Add(new KeyNamePair(ctx.GetAD_Warehouse_ID(), ctx.GetContext("#M_Warehouse_Name")));
-
-
+                    string mapAPI = MClient.Get(ctx).GetGoogleMapAPI();
+                    if (mapAPI == null)
+                    {
+                        ViewBag.MapAPI = "";
+                    }
+                    ViewBag.MapAPI = mapAPI;
                     ViewBag.RoleList = RoleList;
                     ViewBag.ClientList = ClientList;
                     ViewBag.OrgList = OrgList;
