@@ -52,5 +52,18 @@ namespace VIS.Controllers
             return Json(JsonConvert.SerializeObject(objCJModel.GetBeginningBalCalc(ctx, fields)), JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Get Amount, Converted Amount in case when cash type is "Cash Received From"
+        /// </summary>
+        /// <param name="fields">Ids of CashLine, Cash, Org, ConversionType</param>
+        /// <returns>Amount</returns>
+        /// <writer>VIS_0045</writer>
+        public JsonResult ConvertedAmt(string fields)
+        {
+            Ctx ctx = Session["ctx"] as Ctx;
+            MCashJournalModel objCJModel = new MCashJournalModel();
+            return Json(JsonConvert.SerializeObject(objCJModel.ConvertedAmt(ctx, fields)), JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

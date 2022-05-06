@@ -62,7 +62,7 @@ namespace VAdvantage.Model
             base(ctx, dr, trxName)
         {
             //super(ctx, dr, trxName);
-        }	
+        }
 
         /// <summary>
         /// Parent Construvtor
@@ -73,7 +73,7 @@ namespace VAdvantage.Model
         {
             SetClientOrg(header);
             SetM_InOutConfirm_ID(header.GetM_InOutConfirm_ID());
-        }	
+        }
 
         //Ship Line				*/
         private MInOutLine _line = null;
@@ -94,7 +94,7 @@ namespace VAdvantage.Model
             {
                 Set_Value("AD_OrgTrx_ID", line.GetAD_OrgTrx_ID());
             }
-        }	
+        }
 
         /// <summary>
         ///  	Get Shipment Line
@@ -105,7 +105,7 @@ namespace VAdvantage.Model
             if (_line == null)
                 _line = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_TrxName());
             return _line;
-        }	
+        }
 
 
         /// <summary>
@@ -154,12 +154,12 @@ namespace VAdvantage.Model
                 {
                     decimal? pc = null;
                     pc = MUOMConversion.ConvertProductFrom(GetCtx(), line.GetM_Product_ID(), GetC_UOM_ID(), GetTargetQty());
-                    line.SetTargetQty(Util.GetValueOfDecimal( pc)); //TargetQty
+                    line.SetTargetQty(Util.GetValueOfDecimal(pc)); //TargetQty
 
                     //Lakhwinder 24feb 2021
                     //Change Movement qty
-                    //Decimal qty = GetConfirmedQty();
-                    Decimal qty = GetConfirmedQty()+GetScrappedQty();
+                    Decimal qty = GetConfirmedQty();
+                    //Decimal qty = GetConfirmedQty() + GetScrappedQty();
 
                     Boolean isReturnTrx = line.GetParent().IsReturnTrx();
                     /* In PO receipts and SO Returns, we have the responsibility 
@@ -183,8 +183,8 @@ namespace VAdvantage.Model
 
                     //Lakhwinder 24feb 2021
                     //Change Movement qty
-                    //Decimal qty = GetConfirmedQty();
-                    Decimal qty = GetConfirmedQty() + GetScrappedQty();
+                    Decimal qty = GetConfirmedQty();
+                    //Decimal qty = GetConfirmedQty() + GetScrappedQty();
 
                     Boolean isReturnTrx = line.GetParent().IsReturnTrx();
 
@@ -207,7 +207,7 @@ namespace VAdvantage.Model
             }
 
             return line.Save(Get_TrxName());
-        }	
+        }
 
         /// <summary>
         ///	Is Fully Confirmed
@@ -228,7 +228,7 @@ namespace VAdvantage.Model
         {
             log.SaveError("Error", Msg.GetMsg(GetCtx(), "CannotDelete"));
             return false;
-        }	
+        }
 
         /// <summary>
         /// Before Save
@@ -244,7 +244,7 @@ namespace VAdvantage.Model
             SetDifferenceQty(difference);
             //
             return true;
-        }	
+        }
 
     }
 }

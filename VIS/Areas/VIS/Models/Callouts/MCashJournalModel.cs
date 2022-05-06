@@ -98,6 +98,51 @@ namespace VIS.Models
             return Util.GetValueOfDecimal(DB.ExecuteScalar(sql));
         }
 
+        /// <summary>
+        /// This function is used to get the Amoun and Converted Amount When cash Type is "Cash Received From"
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="fields">Ids</param>
+        /// <returns>Dictionary Object</returns>
+        /// <writer>VIS_0045</writer>
+        public Dictionary<string, object> ConvertedAmt(Ctx ctx, string fields)
+        {
+            Dictionary<string, object> result = new Dictionary<string, object>();
+            string[] paramValue = fields.Split(',');
+            int C_CashLine_ID = Util.GetValueOfInt(paramValue[0]);
+            int C_Cash_ID = Util.GetValueOfInt(paramValue[1]);
+            int AD_Org_ID = Util.GetValueOfInt(paramValue[2]);
+            int C_ConversionType_ID = Util.GetValueOfInt(paramValue[3]) <= 0 ? 0 : Util.GetValueOfInt(paramValue[3]);
+
+            String sql = @"SELECT C_Currency_ID FROM C_CashBook WHERE C_CashBook_ID=
+                            (SELECT C_CashBook_ID FROM C_Cash WHERE C_Cash_ID=" + C_Cash_ID + ")";
+            result["currTo"] = Util.GetValueOfInt(DB.ExecuteScalar(sql));
+
+            // When CashBook Currency not found
+            if (Util.GetValueOfInt(result["currTo"]) <= 0)
+            {
+                return result;
+            }
+
+            // Get from Currency of selected cash journal line
+            sql = "SELECT C_Currency_ID FROM C_Cashbook WHERE C_Cashbook_ID= (SELECT C_CashBook_ID FROM C_Cash WHERE C_Cash_ID="
+                + " (SELECT C_Cash_ID FROM C_CashLine WHERE C_CashLine_ID= " + C_CashLine_ID + "))";
+            result["CurrFrom"] = Util.GetValueOfInt(DB.ExecuteScalar(sql));
+
+            // Get Amount From Cash Line
+            sql = @"SELECT CASE WHEN CashType = 'A' THEN " + DBFunctionCollection.TypecastColumnAsDecimal("cashline.convertedamt")
+                    + @" ELSE CASHLINE.Amount END AS Amount FROM C_CashLine CASHLINE
+                    INNER JOIN C_Cashbook CB ON (CB.C_Cashbook_ID=CASHLINE.C_Cashbook_ID)
+                    WHERE CASHLINE.C_CashLine_ID =" + C_CashLine_ID;
+            result["amt"] = Util.GetValueOfDecimal(DB.ExecuteScalar(sql));
+
+            // get Converted Amount
+            result["transferdAmt"] = MConversionRate.Convert(ctx, Util.GetValueOfDecimal(result["amt"]), Util.GetValueOfInt(result["CurrFrom"]),
+                Util.GetValueOfInt(result["currTo"]), null, C_ConversionType_ID, ctx.GetAD_Client_ID(), AD_Org_ID);
+
+            return result;
+        }
+
     }
 
 }

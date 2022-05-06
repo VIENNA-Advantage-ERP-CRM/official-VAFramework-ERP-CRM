@@ -1821,7 +1821,8 @@ namespace VAdvantage.Model
                         _processMsg = "@BPartnerOverSCreditHold@ - @TotalOpenBalance@="
                             + bp.GetTotalOpenBalance() + ", @NotInvoicedAmt@=" + notInvoicedAmt
                             + ", @SO_CreditLimit@=" + bp.GetSO_CreditLimit();
-                        return DocActionVariables.STATUS_INVALID;
+                        // VIS0060: Code commented to apply Credit Validation defined on BPartner
+                        //return DocActionVariables.STATUS_INVALID;                     
                     }
 
                     // check for Credit limit and Credit validation on Customer Master or Location

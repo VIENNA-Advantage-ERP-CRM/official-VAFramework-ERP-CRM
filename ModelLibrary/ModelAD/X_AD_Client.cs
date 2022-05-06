@@ -661,6 +661,13 @@ SetValue (null);
         { 
             return (String)Get_Value("PLClosing"); 
         }
+
+
+        /** Set Google Map API.
+@param GoogleMapAPI Google Map API */
+        public void SetGoogleMapAPI(String GoogleMapAPI) { if (GoogleMapAPI != null && GoogleMapAPI.Length > 200) { log.Warning("Length > 200 - truncated"); GoogleMapAPI = GoogleMapAPI.Substring(0, 200); } Set_Value("GoogleMapAPI", GoogleMapAPI); }/** Get Google Map API.
+@return Google Map API */
+        public String GetGoogleMapAPI() { return (String)Get_Value("GoogleMapAPI"); }
     }
 
 }
