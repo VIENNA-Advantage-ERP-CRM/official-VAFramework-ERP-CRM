@@ -203,12 +203,17 @@ namespace VIS.Controllers
         /// <param name="conversionDate">ConversionType Date</param>
         /// <param name="srchText">Search the Document No</param>
         /// <param name="isInterComp">Inter Company Flag</param>
+        /// <param name="conversionType_ID">Conversion Type ID</param>
         /// <returns></returns>
-        public JsonResult GetInvoice(int AD_Org_ID, int _C_Currency_ID, int _C_BPartner_ID, bool isInterBPartner, bool chk, string date, int page, int size, string docNo, int c_docType_ID,string docBaseType, int PaymentMethod_ID, DateTime? fromDate, DateTime? toDate, string conversionDate,string srchText, bool isInterComp)
+        public JsonResult GetInvoice(int AD_Org_ID, int _C_Currency_ID, int _C_BPartner_ID, bool isInterBPartner, bool chk, string date,
+            int page, int size, string docNo, int c_docType_ID, string docBaseType, int PaymentMethod_ID, DateTime? fromDate,
+            DateTime? toDate, string conversionDate, string srchText, bool isInterComp, int? conversionType_ID)
         {
             Ctx ct = Session["ctx"] as Ctx;
             PaymentAllocation payments = new PaymentAllocation(ct);
-            return Json(JsonConvert.SerializeObject(payments.GetInvoice(AD_Org_ID,_C_Currency_ID, _C_BPartner_ID, isInterBPartner, chk, date, page, size, docNo, c_docType_ID, docBaseType, PaymentMethod_ID, fromDate, toDate, conversionDate, srchText, isInterComp)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(payments.GetInvoice(AD_Org_ID, _C_Currency_ID, _C_BPartner_ID, isInterBPartner, chk,
+                date, page, size, docNo, c_docType_ID, docBaseType, PaymentMethod_ID, fromDate, toDate,
+                conversionDate, srchText, isInterComp, conversionType_ID)), JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>

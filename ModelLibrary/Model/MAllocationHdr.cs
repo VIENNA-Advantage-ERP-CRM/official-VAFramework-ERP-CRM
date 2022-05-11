@@ -235,6 +235,12 @@ namespace VAdvantage.Model
                 log.Severe("Cannot Re-Activate deactivated Allocations");
                 return false;
             }
+
+            //VIS_0045: set conversion date as account date when null (same curreny allocation case)
+            if (GetConversionDate() == null)
+            {
+                SetConversionDate(GetDateAcct());
+            }
             return true;
         }
 
