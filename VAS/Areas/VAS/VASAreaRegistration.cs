@@ -41,7 +41,7 @@ namespace VAS
                   "~/Areas/VAS/Scripts/app/forms/vpayprint.js",
                   "~/Areas/VAS/Scripts/app/forms/vBOMdrop.js",
                   "~/Areas/VAS/Scripts/app/forms/vtrxmaterial.js",
-                   "~/Areas/v/Scripts/model/Callouts.js");
+                   "~/Areas/VAS/Scripts/model/Callouts.js");
 
 
             style.Include("~/Areas/VAS/Content/PaymentRule.css",
