@@ -409,7 +409,7 @@ namespace VAdvantage.Model
                 int primaryAcctSchemaCurrency = GetCtx().GetContextAsInt("$C_Currency_ID");
                 if (c_Currency_ID != primaryAcctSchemaCurrency)
                 {
-                    taxAmtBaseCurrency = MConversionRate.Convert(GetCtx(), GetTaxAmt(), primaryAcctSchemaCurrency, c_Currency_ID,
+                    taxAmtBaseCurrency = MConversionRate.Convert(GetCtx(), GetTaxAmt(), c_Currency_ID, primaryAcctSchemaCurrency,
                                                                                dateAcct, c_ConversionType_ID, GetAD_Client_ID(), GetAD_Org_ID());
                 }
                 SetTaxBaseCurrencyAmt(taxAmtBaseCurrency);
@@ -545,7 +545,7 @@ namespace VAdvantage.Model
                 int primaryAcctSchemaCurrency = GetCtx().GetContextAsInt("$C_Currency_ID");
                 if (c_Currency_ID != primaryAcctSchemaCurrency)
                 {
-                    taxAmtBaseCurrency = MConversionRate.Convert(GetCtx(), GetTaxAmt(), primaryAcctSchemaCurrency, c_Currency_ID,
+                    taxAmtBaseCurrency = MConversionRate.Convert(GetCtx(), GetTaxAmt(), c_Currency_ID, primaryAcctSchemaCurrency,
                                                                                dateAcct, c_ConversionType_ID, GetAD_Client_ID(), GetAD_Org_ID());
                 }
                 SetTaxBaseCurrencyAmt(taxAmtBaseCurrency);

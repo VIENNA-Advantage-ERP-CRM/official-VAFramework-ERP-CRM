@@ -3859,7 +3859,7 @@ namespace VAdvantage.Model
                                 primaryAcctSchemaCurrency = GetCtx().GetContextAsInt("$C_Currency_ID");
                                 if (inv.GetC_Currency_ID() != primaryAcctSchemaCurrency)
                                 {
-                                    taxAmt = MConversionRate.Convert(GetCtx(), GetTaxAmt(), primaryAcctSchemaCurrency, inv.GetC_Currency_ID(),
+                                    taxAmt = MConversionRate.Convert(GetCtx(), GetTaxAmt(), inv.GetC_Currency_ID(), primaryAcctSchemaCurrency,
                                                                                                inv.GetDateAcct(), inv.GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
                                 }
                                 else
