@@ -681,7 +681,7 @@ namespace VAdvantage.Model
             }
 
             // if conversion amount not found then not to save record
-            if (Util.GetValueOfDecimal(GetConvertedAmt()) == 0)
+            if (Util.GetValueOfDecimal(Get_Value("ConvertedAmt")) == 0)
             {
                 log.SaveError("NoConversion", "");
                 return false;
