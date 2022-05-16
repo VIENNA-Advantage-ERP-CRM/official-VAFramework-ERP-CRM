@@ -79,6 +79,7 @@ namespace VAdvantage.Model
             GregorianCalendar cal = new GregorianCalendar(System.Globalization.GregorianCalendarTypes.Localized);
             String year = cal.GetYear(DateTime.Now).ToString();
             base.SetFiscalYear(year);
+            base.SetCalendarYears(year);
         }
 
         /// <summary>
