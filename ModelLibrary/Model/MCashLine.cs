@@ -523,67 +523,6 @@ namespace VAdvantage.Model
          */
         protected override bool BeforeSave(bool newRecord)
         {
-            // Added by Amit 1-8-2015 VAMRP
-            //if (Env.HasModulePrefix("VAMRP_", out mInfo))
-            //{
-            //    //for kc
-            //    //charge
-            //    if (GetCashType() == "C")
-            //    {
-            //        SetC_Invoice_ID(0);
-            //        SetDiscountAmt(0);
-            //        SetWriteOffAmt(0);
-            //        SetC_BankAccount_ID(0);
-            //    }
-            //    //invoice
-            //    if (GetCashType() == "I")
-            //    {
-            //        SetC_BPartner_ID(0);
-            //        SetC_Charge_ID(0);
-            //        SetC_BankAccount_ID(0);
-            //    }
-            //    //bank a/c transfer
-            //    if (GetCashType() == "T")
-            //    {
-            //        SetC_Invoice_ID(0);
-            //        SetDiscountAmt(0);
-            //        SetWriteOffAmt(0);
-            //        SetC_BPartner_ID(0);
-            //        SetC_Charge_ID(0);
-            //    }
-            //    //genral expense
-            //    if (GetCashType() == "E")
-            //    {
-            //        SetC_Invoice_ID(0);
-            //        SetDiscountAmt(0);
-            //        SetWriteOffAmt(0);
-            //        SetC_BPartner_ID(0);
-            //        SetC_Charge_ID(0);
-            //        SetC_BankAccount_ID(0);
-            //    }
-            //    //genral receipt
-            //    if (GetCashType() == "R")
-            //    {
-            //        SetC_Invoice_ID(0);
-            //        SetDiscountAmt(0);
-            //        SetWriteOffAmt(0);
-            //        SetC_BPartner_ID(0);
-            //        SetC_Charge_ID(0);
-            //        SetC_BankAccount_ID(0);
-            //    }
-            //    //differennce
-            //    if (GetCashType() == "D")
-            //    {
-            //        SetC_Invoice_ID(0);
-            //        SetDiscountAmt(0);
-            //        SetWriteOffAmt(0);
-            //        SetC_BPartner_ID(0);
-            //        SetC_Charge_ID(0);
-            //        SetC_BankAccount_ID(0);
-            //    }
-            //}
-            // End
-
             #region OrderPaySchedule
             //VA230:Check Cash type if Order and Order Payment Schedule
             if (GetCashType().Equals(CASHTYPE_Order) && Get_ColumnIndex("VA009_OrderPaySchedule_ID") >= 0)
@@ -608,6 +547,7 @@ namespace VAdvantage.Model
                 }
             }
             #endregion
+
             //	Cannot change generated Invoices
             if (Is_ValueChanged("C_Invoice_ID"))
             {
@@ -621,7 +561,7 @@ namespace VAdvantage.Model
                 //JID_0615_1 prevent saving record if conversion not found
                 if (Util.GetValueOfDecimal(Get_Value("ConvertedAmt")) == 0)
                 {
-                    log.SaveError(Msg.GetMsg(GetCtx(), "NoConversion"), "");
+                    log.SaveError("NoConversion", "");
                     return false;
                 };
 
@@ -717,12 +657,6 @@ namespace VAdvantage.Model
                     SetAD_Org_ID(GetParent().GetAD_Org_ID());
             }
 
-            /**	General fix of Currency 
-            UPDATE C_CashLine cl SET C_Currency_ID = (SELECT C_Currency_ID FROM C_Invoice i WHERE i.C_Invoice_ID=cl.C_Invoice_ID) WHERE C_Currency_ID IS NULL AND C_Invoice_ID IS NOT NULL;
-            UPDATE C_CashLine cl SET C_Currency_ID = (SELECT C_Currency_ID FROM C_BankAccount b WHERE b.C_BankAccount_ID=cl.C_BankAccount_ID) WHERE C_Currency_ID IS NULL AND C_BankAccount_ID IS NOT NULL;
-            UPDATE C_CashLine cl SET C_Currency_ID = (SELECT b.C_Currency_ID FROM C_Cash c, C_CashBook b WHERE c.C_Cash_ID=cl.C_Cash_ID AND c.C_CashBook_ID=b.C_CashBook_ID) WHERE C_Currency_ID IS NULL;
-            **/
-
             //	Get Line No
             if (GetLine() == 0)
             {
@@ -737,58 +671,6 @@ namespace VAdvantage.Model
                 SetVSS_RECEIPTNO(Util.GetValueOfString(GetParent().Get_Value("DocumentNo")) + "-" + GetLine());
             }
 
-            // Added by Amit 1-8-2015 VAMRP
-            //if (Env.HasModulePrefix("VAMRP_", out mInfo))
-            //{
-            //    if (GetVSS_RECEIPTNO() == null || GetVSS_RECEIPTNO() == "")
-            //    {
-            //        MOrg mo = new MOrg(GetCtx(), GetAD_Org_ID(), Get_TrxName());
-            //        String org_name = mo.GetName();
-            //        //modified by ashish.bisht on 04-feb-10
-            //        String paymenttype = GetVSS_PAYMENTTYPE();
-            //        String test_name = "DocNo_" + org_name + "_" + paymenttype;
-
-            //        int[] s = MSequence.GetAllIDs("AD_Sequence", "Name= '" + test_name + "'", Get_TrxName());
-
-            //        if (s != null && s.Length != 0)
-            //        {
-            //            MSequence sqq = new MSequence(GetCtx(), s[0], Get_TrxName());
-            //            String ss = sqq.GetName();
-
-            //            if (ss.Equals(test_name))
-            //            {
-            //                int inc = sqq.GetIncrementNo();
-            //                String pre = sqq.GetPrefix();
-            //                String suff = sqq.GetSuffix();
-
-            //                int curr = sqq.GetCurrentNext();
-            //                curr = curr + inc;
-            //                sqq.SetCurrentNext(curr);
-            //                sqq.Save();
-            //                String StrCurr = "" + curr;
-
-            //                if (pre == null && suff == null)
-            //                {
-            //                    SetVSS_RECEIPTNO(StrCurr);
-            //                }
-            //                if (pre != null && suff == null)
-            //                {
-            //                    SetVSS_RECEIPTNO(pre + StrCurr);
-            //                }
-            //                if (pre == null && suff != null)
-            //                {
-            //                    SetVSS_RECEIPTNO(StrCurr + suff);
-            //                }
-
-            //                if (pre != null && suff != null)
-            //                {
-            //                    SetVSS_RECEIPTNO(pre + StrCurr + suff);
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-            //End
             if (CASHTYPE_BusinessPartner.Equals(GetCashType()) && VSS_PAYMENTTYPE_PaymentReturn.Equals(GetVSS_PAYMENTTYPE()) && GetAmount() < 0)
             {
                 SetAmount(Math.Abs(GetAmount()));
@@ -796,6 +678,13 @@ namespace VAdvantage.Model
             else if (CASHTYPE_BusinessPartner.Equals(GetCashType()) && VSS_PAYMENTTYPE_ReceiptReturn.Equals(GetVSS_PAYMENTTYPE()) && GetAmount() > 0)
             {
                 SetAmount(Decimal.Negate(GetAmount()));
+            }
+
+            // if conversion amount not found then not to save record
+            if (Util.GetValueOfDecimal(Get_Value("ConvertedAmt")) == 0)
+            {
+                log.SaveError("NoConversion", "");
+                return false;
             }
 
             // Reset Amount Dimension if Amount is different
