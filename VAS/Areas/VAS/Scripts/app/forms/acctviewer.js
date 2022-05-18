@@ -1018,7 +1018,7 @@
                                 VIS.translatedTexts.AmtAcctDr == dataObj.Columns[j] ||
                                 VIS.translatedTexts.AmtSourceCr == dataObj.Columns[j] ||
                                 VIS.translatedTexts.AmtSourceDr == dataObj.Columns[j])) {
-                            line[dataObj.Columns[j]] = parseFloat(row[j]).toLocaleString();
+                            line[dataObj.Columns[j]] = parseFloat(row[j]).toLocaleString(undefined, { minimumFractionDigits: dataObj.Precision, maximumFractionDigits: dataObj.Precision });
                         }
                         else {
                             line[dataObj.Columns[j]] = row[j];
