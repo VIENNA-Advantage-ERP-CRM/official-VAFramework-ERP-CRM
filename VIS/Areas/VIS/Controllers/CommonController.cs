@@ -3161,13 +3161,14 @@ namespace VIS.Controllers
                     int totalRec = Util.GetValueOfInt(dsFactAcct.Tables[0].Rows[0]["TotalRecord"]);
                     decimal amtAcctCr = Util.GetValueOfDecimal(dsFactAcct.Tables[0].Rows[0]["AMTACCTCR"]);
                     decimal amtAcctDr = Util.GetValueOfDecimal(dsFactAcct.Tables[0].Rows[0]["AMTACCTDR"]);
-                    obj.DebitandCredit = Msg.GetMsg(ctx, "TotalDRandCR") + DisplayType.GetNumberFormat(DisplayType.Amount).GetFormatAmount(amtAcctDr, ctx.GetContext("#ClientLanguage"))
-                        + " / " + DisplayType.GetNumberFormat(DisplayType.Amount).GetFormatAmount(amtAcctCr, ctx.GetContext("#ClientLanguage"));
+                    obj.DebitandCredit = Msg.GetMsg(ctx, "TotalDRandCR") + DisplayType.GetNumberFormat(DisplayType.Amount).GetFormatAmount(amtAcctDr, ctx.GetContext("#ClientLanguage"), ASchema.GetStdPrecision())
+                        + " / " + DisplayType.GetNumberFormat(DisplayType.Amount).GetFormatAmount(amtAcctCr, ctx.GetContext("#ClientLanguage"), ASchema.GetStdPrecision());
                     int pageSize = 50;
                     PageSetting pSetting = new PageSetting();
                     pSetting.CurrentPage = pageNo;
                     pSetting.TotalPage = (totalRec % pageSize) == 0 ? (totalRec / pageSize) : ((totalRec / pageSize) + 1);
                     obj.pSetting = pSetting;
+                    obj.Precision = ASchema.GetStdPrecision();
                 }
             }
             return obj;
@@ -3940,6 +3941,7 @@ namespace VIS.Controllers
         public List<List<object>> Data { get; set; }
         public CommonModel.PageSetting pSetting { get; internal set; }
         public string DebitandCredit { get; set; }
+        public int Precision { get; set; }
     }
 
     public class GetOrderDataCommonsProperties
