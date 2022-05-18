@@ -177,7 +177,7 @@
             // if (IsPosReport != "IsPosReport") {
             $root.dialog({
                 modal: true,
-                width: "auto",
+                minWidth:250,
                 closeText: VIS.Msg.getMsg("close"),
                 close: function () {
                     if (self.parent)

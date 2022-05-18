@@ -502,7 +502,7 @@
 
             //if (!mField.getIsDisplayed())
             //    return "";
-            if (colValue) {
+            if (colValue != null && colValue != undefined) {
                 var displayType = mField.getDisplayType();
 
 
@@ -526,7 +526,11 @@
                     var str = colValue.toString();
                     if (mField.getIsEncryptedColumn())
                         str = VIS.secureEngine.decrypt(str);
-                    colValue = str.equals("true");	//	Boolean
+                    //colValue = str.equals("true");	//	Boolean=
+                    if (str.equals("true"))
+                        colValue = "Yes";
+                    else
+                        colValue = "No";
                 }
 
                 //	LOB 
