@@ -124,6 +124,7 @@
     <Compile Include="Classes\AdvanceDocumentType.cs" />
     <Compile Include="Classes\BudgetCheck.cs" />
     <Compile Include="Classes\CostingCheck.cs" />
+    <Compile Include="Classes\MMOrder.cs" />
     <Compile Include="Classes\MyModelValidator.cs" />
     <Compile Include="CM\CacheClearAll.cs" />
     <Compile Include="CM\CacheClearServer.cs" />
@@ -525,9 +526,7 @@
     <Compile Include="Model\Storage.cs" />
     <Compile Include="Model\Tax.cs" />
     <Compile Include="Model\UserPricingVO.cs" />
-    <Compile Include="Process\DocAction.cs" />
     <Compile Include="Process\DocumentEngine.cs" />
-    <Compile Include="Process\StateEngine.cs" />
     <Compile Include="Process\YearCreatePeriods.cs" />
     <Compile Include="Process\AcctSchemaCopyAcct.cs" />
     <Compile Include="Process\AcctSchemaDefaultCopy.cs" />

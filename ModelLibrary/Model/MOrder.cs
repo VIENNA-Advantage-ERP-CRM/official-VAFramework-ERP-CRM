@@ -2315,6 +2315,13 @@ namespace VAdvantage.Model
         */
         protected override bool BeforeSave(bool newRecord)
         {
+            bool skipBase;
+            if (this.ModelAction != null)
+            {
+               bool ret =  this.ModelAction.OnBeforeSave(newRecord, out skipBase);
+                if (skipBase) return ret;
+            }
+
             MBPartner bp = null;
             try
             {

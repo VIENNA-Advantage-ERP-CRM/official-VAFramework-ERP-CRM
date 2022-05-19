@@ -231,51 +231,7 @@ namespace VAdvantage.Model
 
 
 
-        //void Init(Context ctx, int ID, DataRow rs, Trx trx)
-        //{
-        //    if (ctx == null)
-        //        throw new ArgumentException("No Context");
-        //    if (ID == 0 && rs == null && ctx.GetAD_Client_ID() < 0)
-        //        throw new ArgumentException("R/O Context - no new instances allowed");
-        //    p_ctx = ctx;
-        //    p_info = InitPO(ctx);
-        //    if (p_info == null || p_info.GetTableName() == null)
-        //        throw new ArgumentException("Invalid PO Info - " + p_info);
-        //    //
-        //    int size = p_info.GetColumnCount();
-        //    _mOldValues = new Object[size];
-        //    _mNewValues = new Object[size];
-        //    _mtrxName = trx;
-        //    if (rs != null)
-        //        Load(rs);		//	will not have virtual columns
-        //    else
-        //        Load(ID, trx);
-        //}   // past
-
-        //void Init(Ctx ctx, int ID, DataRow rs, string trx)
-        //{
-        //    if (ctx == null)
-        //    {
-        //        throw new ArgumentException("No Context");
-        //    }
-        //    if (ID == 0 && rs == null && ctx.GetAD_Client_ID() < 0)
-        //        throw new ArgumentException("R/O Context - no new instances allowed");
-        //    p_ctx = ctx;
-        //    p_info = InitPO(ctx);
-        //    if (p_info == null || p_info.GetTableName() == null)
-        //        throw new ArgumentException("Invalid PO Info - " + p_info);
-        //    //
-        //    int size = p_info.GetColumnCount();
-        //    _mOldValues = new Object[size];
-        //    _mNewValues = new Object[size];
-        //    _mtrxName = trx;
-        //    if (rs != null)
-        //    {
-        //        Load(rs);		//	will not have virtual columns
-        //    }
-        //    else
-        //        Load(ID, trx);
-        //}   //  present
+      
 
         void Init(Ctx ctx, int ID, DataRow rs, Trx trx) //future
         {
@@ -300,6 +256,9 @@ namespace VAdvantage.Model
             }
             else
                 Load(ID, trx);
+
+            //initialize Model action 
+            ModelValidationEngine.Get().InitializeModelAction(this);
         }   //  future
 
         void Init(Ctx ctx, int ID, IDataReader dr, Trx trx, bool extra)
@@ -323,6 +282,8 @@ namespace VAdvantage.Model
             }
             else
                 Load(ID, trx);
+
+            ModelValidationEngine.Get().InitializeModelAction(this);
         }   //future
 
         /// <summary>
@@ -4379,6 +4340,8 @@ namespace VAdvantage.Model
             }
         }
 
+        public ModelAction ModelAction{ get; set; }
+
         public bool CopyTo(PO dCopy)
         {
 
@@ -4644,6 +4607,7 @@ namespace VAdvantage.Model
             //{
             //    if (!orgRequired)
             //    {
+
             //        Boolean? shared = MClientShare.IsShared(po.GetAD_Client_ID(), po.Get_Table_ID());
             //        orgRequired = shared != null && !Util.GetValueOfBool(shared);
             //    }
@@ -4658,7 +4622,7 @@ namespace VAdvantage.Model
             //    Boolean reset = X_AD_Table.TABLETRXTYPE_NoOrganization.Equals(TableTrxType);
             //    if (!reset)
             //    {
-            //        Boolean? shared = MClientShare.IsShared(po.GetAD_Client_ID(), po.Get_Table_ID());
+            //        Boolean? shared = M .IsShared(po.GetAD_Client_ID(), po.Get_Table_ID());
             //        reset = shared != null && Util.GetValueOfBool(shared);
             //    }
             //    if (reset)
