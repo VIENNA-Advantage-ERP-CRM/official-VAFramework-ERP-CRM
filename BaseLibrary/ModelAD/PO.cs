@@ -3017,20 +3017,22 @@ namespace VAdvantage.Model
 
             try
             {
+                bool skipBase = false;
                 if (ModelAction != null)
                 {
-                    bool skipBase;
-                    if (!ModelAction.BeforeSave(newRecord, out skipBase) && skipBase)
+                    if (!ModelAction.BeforeSave(newRecord, out skipBase))
                     {
                         s_log.Warning("Model action beforeSave failed - " + ToString());
                         return false;
                     }
                 }
-
-                if (!BeforeSave(newRecord))
+                if (!skipBase)
                 {
-                    log.Warning("beforeSave failed - " + ToString());
-                    return false;
+                    if (!BeforeSave(newRecord))
+                    {
+                        log.Warning("beforeSave failed - " + ToString());
+                        return false;
+                    }
                 }
             }
             catch (Exception ex)
@@ -4673,26 +4675,28 @@ namespace VAdvantage.Model
                 return false;
             try
             {
-                if(po.ModelAction != null)
+                bool skipBase = false;
+                if (po.ModelAction != null)
                 {
-                    bool skipBase;
-                    if (!po.ModelAction.BeforeSave(newRecord, out skipBase) && skipBase)
+                    if (!po.ModelAction.BeforeSave(newRecord, out skipBase))
                     {
                         s_log.Warning("Model action beforeSave failed - " + po.ToString());
                         return false;
                     }
                 }
-
-                if (!po.BeforeSave(newRecord))
+                if (!skipBase)
                 {
-                    s_log.Warning("beforeSave failed - " + po.ToString());
-                    // the subclasses of PO that return false in beforeDelete()
-                    // should have already called CLogger.SaveError()
-                    //if (!CLogger.hasError())
-                    //{
-                    //    log.SaveError("Error", "BeforeSave failed", false);
-                    //}
-                    return false;
+                    if (!po.BeforeSave(newRecord))
+                    {
+                        s_log.Warning("beforeSave failed - " + po.ToString());
+                        // the subclasses of PO that return false in beforeDelete()
+                        // should have already called CLogger.SaveError()
+                        //if (!CLogger.hasError())
+                        //{
+                        //    log.SaveError("Error", "BeforeSave failed", false);
+                        //}
+                        return false;
+                    }
                 }
             }
             catch (Exception e)
