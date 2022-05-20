@@ -7,6 +7,10 @@ using VAdvantage.Model;
 
 namespace ModelLibrary.Classes
 {
+    /// <summary>
+    /// MMOrder extendable class 
+    /// action 
+    /// </summary>
     public class MMOrder : ModelAction
     {
         private MOrder morder;
@@ -16,7 +20,12 @@ namespace ModelLibrary.Classes
             this.morder = (MOrder)order;
         }
 
-
+        /// <summary>
+        /// On before save function
+        /// </summary>
+        /// <param name="newRecord"></param>
+        /// <param name="skipBase"></param>
+        /// <returns></returns>
         public override bool BeforeSave(bool newRecord, out bool skipBase)
         {
             skipBase = true;
