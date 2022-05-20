@@ -359,7 +359,8 @@ namespace VAdvantage.Model
                 }
                 else if (X_R_RequestProcessor.FREQUENCYTYPE_Hour.Equals(frequencyType))
                 {
-                    while ((ct < 8) && !(validDays.Contains(((int)calNext.Hour) + frequency)))
+                    //calNext = calNext.AddHours(frequency);
+                    while ((ct < 8) && !(validDays.Contains(((int)calNext.AddHours(frequency).DayOfWeek))))
                     {
                         calNext = calNext.AddDays(1);
                         ct++;
@@ -368,7 +369,8 @@ namespace VAdvantage.Model
                 }
                 else if (X_R_RequestProcessor.FREQUENCYTYPE_Minute.Equals(frequencyType))
                 {
-                    while ((ct < 8) && !(validDays.Contains(((int)calNext.Minute) + frequency)))
+                    //calNext = calNext.AddMinutes(frequency);
+                    while ((ct < 8) && !(validDays.Contains(((int)calNext.AddMinutes(frequency).DayOfWeek))))
                     {
                         calNext = calNext.AddDays(1);
                         ct++;
