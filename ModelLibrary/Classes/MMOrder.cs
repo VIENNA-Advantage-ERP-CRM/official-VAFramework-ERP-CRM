@@ -7,6 +7,7 @@ using VAdvantage.Model;
 
 namespace ModelLibrary.Classes
 {
+    /*Exemple */
     /// <summary>
     /// MMOrder extendable class 
     /// action 

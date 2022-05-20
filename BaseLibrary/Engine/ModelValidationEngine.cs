@@ -17,11 +17,22 @@ namespace VAdvantage.Model
             skipBase = false;
             return true;
         }
+        public virtual bool AfterSave(bool newRecord, out bool skipBase)
+        {
+            skipBase = false;
+            return true;
+        }
         public virtual bool BeforeDelete(out bool skipBase)
         {
             skipBase = false;
             return true;
         }
+        public virtual bool AfterDelete(out bool skipBase)
+        {
+            skipBase = false;
+            return true;
+        }
+
         public virtual string PrepareIt(out bool skipBase)
         {
             skipBase = false;
@@ -32,11 +43,17 @@ namespace VAdvantage.Model
             skipBase = false;
             return "";
         }
-        public virtual string OnReverse(out bool skipBase)
+        public virtual string ApproveIt(out bool skipBase)
         {
             skipBase = false;
             return "";
         }
+        public virtual string VoidIt(out bool skipBase)
+        {
+            skipBase = true;
+            return "";
+        }
+      
     }
 
     /// <summary>
