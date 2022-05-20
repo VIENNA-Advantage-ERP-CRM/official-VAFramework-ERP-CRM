@@ -2315,12 +2315,13 @@ namespace VAdvantage.Model
         */
         protected override bool BeforeSave(bool newRecord)
         {
-            bool skipBase;
-            if (this.ModelAction != null)
-            {
-               bool ret =  this.ModelAction.BeforeSave(newRecord, out skipBase);
-                if (skipBase) return ret;
-            }
+            /* No need to write this code , handled in PO for Beforesave,afterSave,BeforeDelete,AfterDelete */
+            //if (this.ModelAction != null)
+            //{
+            //    bool skipBase;
+            //    bool ret =  this.ModelAction.BeforeSave(newRecord, out skipBase);
+            //    if (skipBase) return ret;
+            //}
 
             MBPartner bp = null;
             try

@@ -17,20 +17,20 @@ namespace VAdvantage.Model
             skipBase = false;
             return true;
         }
-        public virtual bool AfterSave(bool newRecord, out bool skipBase)
+        public virtual bool AfterSave(bool newRecord,bool success, out bool skipBase)
         {
             skipBase = false;
-            return true;
+            return success;
         }
         public virtual bool BeforeDelete(out bool skipBase)
         {
             skipBase = false;
             return true;
         }
-        public virtual bool AfterDelete(out bool skipBase)
+        public virtual bool AfterDelete(bool success,out bool skipBase)
         {
             skipBase = false;
-            return true;
+            return success;
         }
 
         public virtual string PrepareIt(out bool skipBase)

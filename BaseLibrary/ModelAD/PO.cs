@@ -2724,7 +2724,14 @@ namespace VAdvantage.Model
 
             try
             {
-                success = AfterSave(newRecord, success);
+                bool skipBase = false;
+                if (ModelAction != null)
+                {
+                    success = ModelAction.AfterSave(newRecord, success, out skipBase);
+                }
+                if (!skipBase) {
+                    success = AfterSave(newRecord, success);
+                }
                 POActionEngine.Get().AfterSave(newRecord, success, this);
                 //if (success && newRecord)
                 //    InsertTreeNode();
@@ -3010,6 +3017,16 @@ namespace VAdvantage.Model
 
             try
             {
+                if (ModelAction != null)
+                {
+                    bool skipBase;
+                    if (!ModelAction.BeforeSave(newRecord, out skipBase) && skipBase)
+                    {
+                        s_log.Warning("Model action beforeSave failed - " + ToString());
+                        return false;
+                    }
+                }
+
                 if (!BeforeSave(newRecord))
                 {
                     log.Warning("beforeSave failed - " + ToString());
@@ -3398,6 +3415,15 @@ namespace VAdvantage.Model
 
             try
             {
+                if (ModelAction != null)
+                {
+                    bool skipBase;
+                    if (!ModelAction.BeforeDelete(out skipBase) && skipBase)
+                    {
+                        log.Warning("Model action beforeDelete failed");
+                        return false;
+                    }
+                }
                 if (!BeforeDelete())
                 {
                     log.Warning("beforeDelete failed");
@@ -3541,7 +3567,15 @@ namespace VAdvantage.Model
 
             try
             {
-                success = AfterDelete(success);
+                bool skipBase = false;
+                if (ModelAction !=null)
+                {
+                    success = ModelAction.AfterDelete(success, out skipBase);
+                }
+                if (!skipBase)
+                {
+                    success = AfterDelete(success);
+                }
                 POActionEngine.Get().AfterDelete(this, success);
                 //if (success)
                 //    DeleteTreeNode();
@@ -4639,6 +4673,16 @@ namespace VAdvantage.Model
                 return false;
             try
             {
+                if(po.ModelAction != null)
+                {
+                    bool skipBase;
+                    if (!po.ModelAction.BeforeSave(newRecord, out skipBase) && skipBase)
+                    {
+                        s_log.Warning("Model action beforeSave failed - " + po.ToString());
+                        return false;
+                    }
+                }
+
                 if (!po.BeforeSave(newRecord))
                 {
                     s_log.Warning("beforeSave failed - " + po.ToString());
