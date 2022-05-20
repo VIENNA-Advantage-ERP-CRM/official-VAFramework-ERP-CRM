@@ -17,7 +17,7 @@ namespace ModelLibrary.Classes
         }
 
 
-        public override bool OnBeforeSave(bool newRecord, out bool skipBase)
+        public override bool BeforeSave(bool newRecord, out bool skipBase)
         {
             skipBase = true;
            

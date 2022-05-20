@@ -2318,7 +2318,7 @@ namespace VAdvantage.Model
             bool skipBase;
             if (this.ModelAction != null)
             {
-               bool ret =  this.ModelAction.OnBeforeSave(newRecord, out skipBase);
+               bool ret =  this.ModelAction.BeforeSave(newRecord, out skipBase);
                 if (skipBase) return ret;
             }
 
