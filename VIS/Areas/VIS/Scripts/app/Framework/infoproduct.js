@@ -6,9 +6,10 @@
  * Date           :     01-May-2015
   ******************************************************/
 ; (function (VIS, $) {
-    function infoProduct(modal, WindowNo, M_Warehouse_ID, M_PriceList_ID, value, tableName, keyColumn, multiSelection, validationCode) {
+    function infoProduct(modal, WindowNo, M_Warehouse_ID, M_PriceList_ID, value, tableName, keyColumn, multiSelection, validationCode, selectedIDs) {
 
         this.onClose = null;
+        this.selectedIDs = selectedIDs;
 
         var inforoot = $("<div>");
         var isExpanded = true;
@@ -138,6 +139,11 @@
             subroot.append(searchTab);
             subroot.append(datasec);
             subroot.append(btnsec);
+
+            if (multiSelection == true && self.selectedIDs != null && self.selectedIDs.length > 0) {
+                multiValues = self.selectedIDs.split(',').map(Number);
+                ctrlValue = null;
+            }
 
             lblValuetxt = VIS.Msg.getMsg("Value");
             if (lblValuetxt.indexOf('&') > -1) {
