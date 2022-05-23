@@ -2225,7 +2225,7 @@ namespace VAdvantage.Model
                     list.Add(new MInOutLine(GetCtx(), dr, Get_TrxName()));
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
 
                 log.Log(Level.SEVERE, "MOrder" + sql, e);
@@ -2315,6 +2315,14 @@ namespace VAdvantage.Model
         */
         protected override bool BeforeSave(bool newRecord)
         {
+            /* No need to write this code , handled in PO for Beforesave,afterSave,BeforeDelete,AfterDelete */
+            //if (this.ModelAction != null)
+            //{
+            //    bool skipBase;
+            //    bool ret =  this.ModelAction.BeforeSave(newRecord, out skipBase);
+            //    if (skipBase) return ret;
+            //}
+
             MBPartner bp = null;
             try
             {
@@ -2881,10 +2889,24 @@ namespace VAdvantage.Model
         /// <returns>new status (In Progress or Invalid)</returns>
         public String PrepareIt()
         {
-            log.Info(ToString());
+            log.Info(ToString());            
+
             _processMsg = ModelValidationEngine.Get().FireDocValidate(this, ModalValidatorVariables.DOCTIMING_BEFORE_PREPARE);
             if (_processMsg != null)
                 return DocActionVariables.STATUS_INVALID;
+
+            // VIS0060: Check if Model Validator class is implemented.
+            if (this.ModelAction != null)
+            {
+                bool skipBase;
+                string ret = this.ModelAction.PrepareIt(out skipBase);
+
+                if (skipBase)
+                {
+                    return ret;
+                }
+            }
+
             MDocType dt = MDocType.Get(GetCtx(), GetC_DocTypeTarget_ID());
             SetIsReturnTrx(dt.IsReturnTrx());
             SetIsSOTrx(dt.IsSOTrx());
@@ -3226,7 +3248,7 @@ namespace VAdvantage.Model
         /* 	Explode non stocked BOM.
          * 	@return true if bom exploded
          */
-        private bool ExplodeBOM()
+        public bool ExplodeBOM()
         {
             bool retValue = false;
             String where = "AND IsActive='Y' AND EXISTS "
@@ -3313,7 +3335,7 @@ namespace VAdvantage.Model
         * 	@param lines order lines (ordered by M_Product_ID for deadlock prevention)
         * 	@return true if (un) reserved
         */
-        private bool ReserveStock(MDocType dt, MOrderLine[] lines)
+        public bool ReserveStock(MDocType dt, MOrderLine[] lines)
         {
             try
             {
@@ -5761,7 +5783,7 @@ namespace VAdvantage.Model
                                 iLine.SetQtyEntered(iLine.GetQtyInvoiced());
                             else
                                 iLine.SetQtyEntered(Decimal.Multiply(iLine.GetQtyInvoiced(), (Decimal.Divide(oLine.GetQtyEntered(), oLine.GetQtyOrdered()))));
-                            
+
                             //190 - Get Print description and set
                             if (iLine.Get_ColumnIndex("PrintDescription") >= 0 && oLine.Get_ColumnIndex("PrintDescription") >= 0)
                                 iLine.Set_Value("PrintDescription", oLine.Get_Value("PrintDescription"));
@@ -6693,6 +6715,11 @@ namespace VAdvantage.Model
         public void SetProcessMsg(string processMsg)
         {
             _processMsg = processMsg;
+        }
+
+        public void SetJustPrePared(bool justPrepared)
+        {
+            _justPrepared = justPrepared;
         }
 
         private void SetCounterBPartner(MBPartner BPartner, int counterAdOrgId, int counterMWarehouseId)

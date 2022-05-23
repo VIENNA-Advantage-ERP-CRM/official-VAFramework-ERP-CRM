@@ -273,9 +273,11 @@
     <Compile Include="ModelAD\ViennatProcessor.cs" />
     <Compile Include="Model\Callout.cs" />
     <Compile Include="Model\CalloutEngine.cs" />
+    <Compile Include="Model\DocAction.cs" />
     <Compile Include="Model\MClient.cs" />
     <Compile Include="Model\MLocation.cs" />
     <Compile Include="Model\POValidator.cs" />
+    <Compile Include="Model\StateEngine.cs" />
     <Compile Include="Print\AmtInWords_AR.cs" />
     <Compile Include="Print\AmtInWords_EN.cs" />
     <Compile Include="Print\AReport.cs" />

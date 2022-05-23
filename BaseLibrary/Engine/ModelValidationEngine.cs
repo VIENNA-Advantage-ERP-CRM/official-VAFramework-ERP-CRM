@@ -9,6 +9,53 @@ using System.Data;
 
 namespace VAdvantage.Model
 {
+
+    public abstract class ModelAction
+    {
+        public virtual bool BeforeSave(bool newRecord,out bool skipBase)
+        {
+            skipBase = false;
+            return true;
+        }
+        public virtual bool AfterSave(bool newRecord,bool success, out bool skipBase)
+        {
+            skipBase = false;
+            return success;
+        }
+        public virtual bool BeforeDelete(out bool skipBase)
+        {
+            skipBase = false;
+            return true;
+        }
+        public virtual bool AfterDelete(bool success,out bool skipBase)
+        {
+            skipBase = false;
+            return success;
+        }
+
+        public virtual string PrepareIt(out bool skipBase)
+        {
+            skipBase = false;
+            return "";
+        }
+        public virtual string CompleteIt(out bool skipBase)
+        {
+            skipBase = false;
+            return "";
+        }
+        public virtual string ApproveIt(out bool skipBase)
+        {
+            skipBase = false;
+            return "";
+        }
+        public virtual string VoidIt(out bool skipBase)
+        {
+            skipBase = true;
+            return "";
+        }
+      
+    }
+
     /// <summary>
     /// Model Validator
     /// </summary>
@@ -21,6 +68,8 @@ namespace VAdvantage.Model
         /// //client ID <0 for global Validator
         /// 
         void Initialize(ModelValidationEngine engine, int ClientId);
+
+        void InitializeModelAction(PO po);
 
         /// <summary>
         /// Get Client to be monitored
@@ -70,7 +119,7 @@ namespace VAdvantage.Model
         /// <param name="sqlFrom">from clause, can be modified</param>
         /// <param name="sqlOrder">order by clause, can me modified</param>
         /// <returns>true if you updated columns, sequence or sql From clause</returns>
-        bool UpdateInfoColumns(List<Info_Column> columns, StringBuilder sqlFrom, StringBuilder sqlOrder);
+       // bool UpdateInfoColumns(List<Info_Column> columns, StringBuilder sqlFrom, StringBuilder sqlOrder);
     }
 
     /// <summary>
@@ -81,28 +130,25 @@ namespace VAdvantage.Model
         /** Model Change Type New		*/
         public const int CHANGETYPE_NEW = 1;
 
-        /** Mo      del Change Type New		*/
-        public const int TYPE_NEW = 1;
-
         /** Model Change Type Change	*/
         public const int CHANGETYPE_CHANGE = 2;
 
         /** Model Change Type Delete	*/
         public const int CHANGETYPE_DELETE = 3;
 
-        /* Model change Type after new */
-        public const int TYPE_AFTER_NEW = 4;
 
-        /* Model after change */
-        public const int TYPE_AFTER_CHANGE = 5;
+        /*Overridable types*/
 
-        /* Model change Type delete */
-        public const int TYPE_AFTER_DELETE = 6;
+      
 
         /** Called before document is prepared		*/
-        public const int DOCTIMING_BEFORE_PREPARE = 1;
+        public const int DOCTIMING_BEFORE_PREPARE = 8; 
+
+      
         /** Called after document is processed		*/
-        public const int DOCTIMING_AFTER_COMPLETE = 9;
+        public const int DOCTIMING_AFTER_COMPLETE = 10;
+
+       
     }
 
     /// <summary>
@@ -121,8 +167,14 @@ namespace VAdvantage.Model
         private Dictionary<String, List<ModelValidator>> _modelChangeListeners = new Dictionary<String, List<ModelValidator>>();
         /**	Document Validation Listeners			*/
         private Dictionary<String, List<ModelValidator>> _docValidateListeners = new Dictionary<String, List<ModelValidator>>();
+
+        /**	Model Change Listeners			*/
+        private Dictionary<String, List<ModelValidator>> _modelActionListeners = new Dictionary<String, List<ModelValidator>>();
+
         //log class object
         private static VLogger s_log = VLogger.GetVLogger(typeof(ModelValidationEngine).FullName);
+       
+
 
         /// <summary>
         /// Add model validation classes
@@ -290,7 +342,7 @@ namespace VAdvantage.Model
                 {
                     try
                     {
-                        bool bb = validator.UpdateInfoColumns(columns, sqlFrom, sqlOrder);
+                        bool bb = false;// validator.UpdateInfoColumns(columns, sqlFrom, sqlOrder);
                         if (bb)
                             retValue = true;
                     }
@@ -392,6 +444,7 @@ namespace VAdvantage.Model
             return null;
         }
 
+
         /// <summary>
         /// Add Model change Listner
         /// </summary>
@@ -415,6 +468,10 @@ namespace VAdvantage.Model
             _modelChangeListeners[propertyName].Add(listener);
         }   //	AddModelValidator
 
+
+
+
+
         /// <summary>
         /// Remove model change listner
         /// </summary>
@@ -436,6 +493,92 @@ namespace VAdvantage.Model
             if (_modelChangeListeners[propertyName].Count == 0)
                 _modelChangeListeners.Remove(propertyName);
         }   //RemoveModelValidator
+
+
+        public void AddModelAction(String tableName, ModelValidator listener)
+        {
+            if (tableName == null || listener == null)
+                return;
+            //
+            String propertyName =
+                _globalValidators.Contains(listener)
+                    ? tableName + "*"
+                    : tableName + listener.GetAD_Client_ID();
+
+            if (!_modelActionListeners.ContainsKey(propertyName))
+            {
+                _modelActionListeners.Add(propertyName, new List<ModelValidator>());
+            }
+
+            _modelActionListeners[propertyName].Add(listener);
+        }   //	
+
+        public void RemoveModelAction(String tableName, ModelValidator listener)
+        {
+            if (tableName == null || listener == null)
+                return;
+            String propertyName =
+               _globalValidators.Contains(listener)
+                    ? tableName + "*"
+                    : tableName + listener.GetAD_Client_ID();
+
+            if (!_modelActionListeners.ContainsKey(propertyName))
+                return;
+
+            _modelActionListeners[propertyName].Remove(listener);
+            if (_modelActionListeners[propertyName].Count == 0)
+                _modelActionListeners.Remove(propertyName);
+        }   //RemoveModelValidator
+
+        public void InitializeModelAction(PO po)
+        {
+            if (po == null || _modelActionListeners.Count == 0)
+                return;
+            //
+            String propertyName = po.Get_TableName() + po.GetAD_Client_ID();
+            List<ModelValidator> list = null;
+            if (_modelActionListeners.ContainsKey(propertyName))
+            {
+                list = _modelActionListeners[propertyName];
+            }
+            if (list == null || list.Count == 0)
+                return;
+
+            //
+            for (int i = 0; i < list.Count; i++)
+            {
+                try
+                {
+                    ModelValidator validator = (ModelValidator)list[i];
+                    if (validator.GetAD_Client_ID() == po.GetAD_Client_ID())
+                    {
+                        validator.InitializeModelAction(po);
+                    }
+                }
+                catch (Exception e)
+                {
+                    String error = e.Message;
+                }
+            }
+            return ;
+        }
+            //if (listener == null)
+            //    return;
+          
+            //foreach( var validator in _validators)
+            //{
+            //    if(validator.GetAD_Client_ID() == listener.GetAD_Client_ID())
+            //    {
+            //        validator.InitializeModelAction(listener);
+            //    }
+            //}
+       // }   //	AddModelValidator
+
+        /// <summary>
+        /// Remove model change listner
+        /// </summary>
+        /// <param name="tableName">table name</param>
+       
 
         /// <summary>
         /// Add Document validation listner

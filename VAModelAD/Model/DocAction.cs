@@ -252,6 +252,12 @@ namespace VAdvantage.Process
         FileInfo CreatePDF ();
 
         /// <summary>
+        /// Set Process Message
+        /// </summary>
+        /// <param name="processMsg">new Process message</param>
+        void SetProcessMsg(string processMsg);
+
+        /// <summary>
         /// Get Process Message
         /// </summary>
         /// <returns>clear text message</returns>

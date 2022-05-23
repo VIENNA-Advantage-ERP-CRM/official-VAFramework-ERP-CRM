@@ -2118,10 +2118,19 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
 
-        /**
-         * 	Get Process Message
-         *	@return clear text error message
-         */
+        /// <summary>
+        /// Set Process Msg
+        /// </summary>
+        /// <param name="processMsg">new Process Msg</param>
+        public void SetProcessMsg(string processMsg)
+        {
+            _processMsg = processMsg;
+        }
+
+        /// <summary>
+        /// Get Process Message
+        /// </summary>
+        /// <returns>clear text error message</returns>
         public String GetProcessMsg()
         {
             return _processMsg;
@@ -2215,6 +2224,6 @@ namespace VAdvantage.Model
             }
             DataSet ds = DB.ExecuteDataset(sql.ToString());
             return ds;
-        }
+        }        
     }
 }
