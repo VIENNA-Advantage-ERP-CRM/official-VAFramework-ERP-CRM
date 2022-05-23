@@ -6,9 +6,10 @@
  * Date           :     10-Aug-2014
   ******************************************************/
 ; (function (VIS, $) {
-    function infoGeneral(modal, WindowNo, value, tableName, keyColumn, multiSelection, validationCode) {
+    function infoGeneral(modal, WindowNo, value, tableName, keyColumn, multiSelection, validationCode, selectedIDs) {
 
         this.onClose = null;
+        this.selectedIDs = selectedIDs;
 
         var inforoot = $("<div class='vis-forms-container'>");
         var isExpanded = true;
@@ -140,6 +141,10 @@
 
             inforoot.append(subroot);
             inforoot.append(bsyDiv);
+
+            if (multiSelection == true && self.selectedIDs != null && self.selectedIDs.length > 0) {
+                multiValues = self.selectedIDs.split(',').map(Number);
+            }
         };
 
         initializeComponent();

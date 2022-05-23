@@ -5,10 +5,10 @@
  * Date           :     2-Aug-2014
   ******************************************************/
 ; (function (VIS, $) {
-    function InfoWindow(_AD_InfoWindow_ID, ctrlValue, windowNo, validationCode, multiSelection) {
+    function InfoWindow(_AD_InfoWindow_ID, ctrlValue, windowNo, validationCode, multiSelection, selectedIDs) {
 
         this.onClose = null;
-
+        this.selectedIDs = selectedIDs;
 
         var inforoot = $("<div class='vis-forms-container'>");
         var subroot = $("<div class='vis-info-subroot'>");
@@ -102,6 +102,10 @@
 
             inforoot.append(subroot);
             inforoot.append(bsyDiv);
+
+            if (multiSelection == true && self.selectedIDs != null && self.selectedIDs.length > 0) {
+                multiValues = self.selectedIDs.split(',').map(Number);
+            }
         };
 
         initializeComponent();

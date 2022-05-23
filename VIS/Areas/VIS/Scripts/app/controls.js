@@ -247,7 +247,7 @@
             else if (displayType == this.Quantity) {
                 format = new VIS.Format(this.MAX_DIGITS, this.MAX_FRACTION, 0);
             }
-            else if (displayType == this.Amount ) {
+            else if (displayType == this.Amount) {
                 format = new VIS.Format(this.MAX_DIGITS, this.MAX_FRACTION, this.AMOUNT_FRACTION);
             }
             else if (displayType == this.CostPrice) {
@@ -1281,7 +1281,7 @@
             else
                 $img.addClass(img);
         };
-      
+
         //	Special Buttons
 
         if (columnName.equals("PaymentRule")) {
@@ -1521,7 +1521,7 @@
         else {
             this.values = {};
         }
-        
+
         var SQL;
         if (VIS.Env.isBaseLanguage(VIS.Env.getCtx(), "")) {
             SQL = "VIS_82";
@@ -1749,7 +1749,7 @@
 
                 //$btnZoom = VIS.AEnv.getZoomButton(disabled);
                 options[VIS.Actions.zoom] = disabled;
-               
+
                 // btnCount += 1;
             }
             options[VIS.Actions.addnewrec] = true;
@@ -1764,7 +1764,7 @@
             // $btnPop = $('<button tabindex="-1" class="input-group-text"><img tabindex="-1" src="' + VIS.Application.contextUrl + "Areas/VIS/Images/base/Info20.png" + '" /></button>');
             $btnPop = $('<button tabindex="-1" class="input-group-text"><i tabindex="-1" class="fa fa-ellipsis-v" /></button>');
             options[VIS.Actions.refresh] = true;
-           
+
             if (VIS.MRole.getIsShowPreference())
                 options[VIS.Actions.preference] = true;
             $ulPopup = VIS.AEnv.getContextPopup(options);
@@ -1895,7 +1895,7 @@
                 return;
             //
             var zoomQuery = self.lookup.getZoomQuery();
-           //var value = self.getValue();
+            //var value = self.getValue();
 
 
             if (!value)
@@ -2027,7 +2027,7 @@
                     if (!disabled)
                         zoomAction(-10);
                 }
-                
+
             });
         }
 
@@ -2527,8 +2527,8 @@
         };
         // Autocomplete
         if (displayType == VIS.DisplayType.Search) {
-             addBtn = $("<div class='vis-autocompleteList-item vis-auto-addItem' style='background-color: rgba(var(--v-c-secondary), 1)'>" + VIS.Msg.getMsg("AddNew") + "</div>");
-             addItem = $("<div><center>" + VIS.Msg.getMsg("NoDataFoundSugg") + "</center></div>").append($("<center></center>").append(addBtn));
+            addBtn = $("<div class='vis-autocompleteList-item vis-auto-addItem' style='background-color: rgba(var(--v-c-secondary), 1)'>" + VIS.Msg.getMsg("AddNew") + "</div>");
+            addItem = $("<div><center>" + VIS.Msg.getMsg("NoDataFoundSugg") + "</center></div>").append($("<center></center>").append(addBtn));
             $ctrl.vaautocomplete({
                 source: function (term, response) {
                     var sql = self.lookup.info.query;
@@ -3166,6 +3166,12 @@
             if (typeof (text) == "object") {
                 text = "";
             }
+
+            var selectedIDs = '';
+
+            if (self.isMultiKeyTextBox)
+                selectedIDs = self.getValue();
+
             if (self.isReadOnly)
                 return;
             if (self.lookup == null)
@@ -3196,7 +3202,7 @@
             var InfoWindow = null;
 
             if (infoWinID != 0) {
-                InfoWindow = new VIS.InfoWindow(infoWinID, text, self.lookup.windowNo, wc, self.isMultiKeyTextBox);
+                InfoWindow = new VIS.InfoWindow(infoWinID, text, self.lookup.windowNo, wc, self.isMultiKeyTextBox, selectedIDs);
 
             }
             else {
@@ -3272,7 +3278,7 @@
                             ;
                     }
                     InfoWindow = new VIS.infoProduct(true, self.lookup.windowNo, M_Warehouse_ID, M_PriceList_ID,
-                        text, tableName, _keyColumnName, multipleSelection, wc);
+                        text, tableName, _keyColumnName, multipleSelection, wc, selectedIDs);
                 }
                 else {
                     //try get dynamic window
@@ -3289,11 +3295,11 @@
                     dr.close();
                     dr = null;
                     if (infoWinID > 0) {
-                        InfoWindow = new VIS.InfoWindow(infoWinID, text, self.lookup.windowNo, wc, self.isMultiKeyTextBox);
+                        InfoWindow = new VIS.InfoWindow(infoWinID, text, self.lookup.windowNo, wc, self.isMultiKeyTextBox, selectedIDs);
                     }
                     else {
                         InfoWindow = new VIS.infoGeneral(true, self.lookup.windowNo, text,
-                            tableName, _keyColumnName, self.isMultiKeyTextBox, wc);
+                            tableName, _keyColumnName, self.isMultiKeyTextBox, wc, selectedIDs);
                     }
                 }
             }
@@ -3576,7 +3582,7 @@
             }
             addBtn = null;
             addItem = null;
-            
+
         };
     };
 
@@ -3951,7 +3957,7 @@
             e.stopPropagation();
             // var newVal = $ctrl.val();
 
-            var newVal = self.getValue();          
+            var newVal = self.getValue();
             this.value = newVal;
 
             if (newVal !== self.oldValue) {
@@ -4185,7 +4191,7 @@
         return this.ctrl.val();
     };
 
-        /***END VNumTextBox***/
+    /***END VNumTextBox***/
 
 
 
@@ -5708,7 +5714,7 @@
         this.value = null;
         var btnCount = 0;
 
-        var $ctrl = $('<input>', { type: 'text', name: columnName});
+        var $ctrl = $('<input>', { type: 'text', name: columnName });
         var $btnSearch = $('<button class="input-group-text"><i class="' + src + '" /></button>');
         btnCount += 1;
 
