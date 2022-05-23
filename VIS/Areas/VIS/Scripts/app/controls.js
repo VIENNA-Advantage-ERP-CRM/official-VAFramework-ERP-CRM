@@ -3374,8 +3374,13 @@
                         }
                         sb += "," + objResult[i];
                     }
-
-                    self.setValue(sb, false, true);
+                    if (self.isMultiKeyTextBox) {
+                        self.setValue(sb, true, true);
+                    }
+                    else {
+                        self.setValue(sb, false, true);
+                    }
+                  
                 }
                 else {
 
@@ -3399,7 +3404,12 @@
                             }
                         }
                         if (newVal != null) {
-                            self.setValue(newVal, false, true);
+                            if (self.isMultiKeyTextBox) {
+                                self.setValue(newVal, true, true);
+                            }
+                            else {
+                                self.setValue(newVal, false, true);
+                            }
                         }
                     }
                 }

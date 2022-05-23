@@ -142,6 +142,7 @@
 
             if (multiSelection == true && self.selectedIDs != null && self.selectedIDs.length > 0) {
                 multiValues = self.selectedIDs.split(',').map(Number);
+                ctrlValue = null;
             }
 
             lblValuetxt = VIS.Msg.getMsg("Value");
