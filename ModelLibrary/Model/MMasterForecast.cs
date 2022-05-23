@@ -290,6 +290,15 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
+        /// Set Process Msg
+        /// </summary>
+        /// <param name="processMsg">new Process Msg</param>
+        public void SetProcessMsg(string processMsg)
+        {
+            _processMsg = processMsg;
+        }
+
+        /// <summary>
         /// Get Process Message
         /// </summary>
         /// <returns>clear text error message</returns>
