@@ -7557,6 +7557,14 @@
         this.getRoot = function () {
             return $root;
         };
+
+        this.refreshUI = function () {
+            /*Refresh Grid on Focus*/
+            $gridPayment.resize();
+            $gridCashline.resize();
+            $gridInvoice.resize();
+            $glLineGrid.resize();
+        };
     };
 
     VAllocation.prototype.init = function (windowNo, frame) {
@@ -7564,6 +7572,10 @@
         this.windowNo = windowNo;
         this.Initialize();
         this.frame.getContentGrid().append(this.getRoot());
+    };
+
+    VAllocation.prototype.refresh = function () {
+        this.refreshUI();
     };
 
     VAllocation.prototype.dispose = function () {
