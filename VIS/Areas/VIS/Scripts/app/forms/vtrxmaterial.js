@@ -541,6 +541,12 @@
         this.getRoot = function () {
             return $root;
         };
+
+        this.refreshUI = function () {
+            /*Refresh Grid on Focus*/
+            gridController.vTable.resize();            
+        };
+
         //*******************
         //dataStatusChanged
         //*******************
@@ -597,6 +603,10 @@
         this.windowNo = windowNo;
         this.frame.getContentGrid().append(this.getRoot());
         this.initialize();
+    };
+
+    VTrxMaterial.prototype.refresh = function () {
+        this.refreshUI();
     };
 
     //Must implement dispose
