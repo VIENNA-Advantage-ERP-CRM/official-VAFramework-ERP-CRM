@@ -362,9 +362,10 @@ namespace VAdvantage.Model
                     //calNext = calNext.AddHours(frequency);
                     while ((ct < 8) && !(validDays.Contains(((int)calNext.AddHours(frequency).DayOfWeek))))
                     {
-                        calNext = calNext.AddDays(1);
+                        calNext = calNext.AddHours(frequency).AddDays(1);
+                        calNext = calNext.Add(new TimeSpan(0, 0, 0));
                         ct++;
-                        //increment = false;
+                        increment = false;
                     }
                 }
                 else if (X_R_RequestProcessor.FREQUENCYTYPE_Minute.Equals(frequencyType))
@@ -372,9 +373,10 @@ namespace VAdvantage.Model
                     //calNext = calNext.AddMinutes(frequency);
                     while ((ct < 8) && !(validDays.Contains(((int)calNext.AddMinutes(frequency).DayOfWeek))))
                     {
-                        calNext = calNext.AddDays(1);
+                        calNext = calNext.AddMinutes(frequency).AddDays(1);
+                        calNext = calNext.Add(new TimeSpan(0, 0, 0));
                         ct++;
-                        // increment = false;
+                        increment = false;
                     }
                 }
 
@@ -399,13 +401,13 @@ namespace VAdvantage.Model
                 /*****	HOUR	******/
                 else if (X_R_RequestProcessor.FREQUENCYTYPE_Hour.Equals(frequencyType))
                 {
-                    //calNext.set(java.util.Calendar.MINUTE, minute);
-                    //calNext.add(java.util.Calendar.HOUR_OF_DAY, frequency);
 
-                    calNext = calNext.Subtract(new TimeSpan(0, calNext.Minute, 0));
-                    calNext = calNext.AddMinutes(minute);
                     if (increment)
+                    {
+                        calNext = calNext.Subtract(new TimeSpan(0, calNext.Minute, 0));
+                        calNext = calNext.AddMinutes(minute);
                         calNext = calNext.AddHours(frequency);
+                    }
                 }	//	Hour
 
                 /*****	MINUTE	******/
