@@ -363,7 +363,7 @@ namespace VAdvantage.Model
                     while ((ct < 8) && !(validDays.Contains(((int)calNext.AddHours(frequency).DayOfWeek))))
                     {
                         calNext = calNext.AddHours(frequency).AddDays(1);
-                        calNext = calNext.Add(new TimeSpan(0, 0, 0));
+                        calNext = calNext.AddHours(-calNext.Hour).AddMinutes(-calNext.Minute).AddSeconds(-calNext.Second);
                         ct++;
                         increment = false;
                     }
@@ -374,7 +374,7 @@ namespace VAdvantage.Model
                     while ((ct < 8) && !(validDays.Contains(((int)calNext.AddMinutes(frequency).DayOfWeek))))
                     {
                         calNext = calNext.AddMinutes(frequency).AddDays(1);
-                        calNext = calNext.Add(new TimeSpan(0, 0, 0));
+                        calNext = calNext.AddHours(-calNext.Hour).AddMinutes(-calNext.Minute).AddSeconds(-calNext.Second);
                         ct++;
                         increment = false;
                     }
