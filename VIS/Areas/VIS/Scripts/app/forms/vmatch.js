@@ -1577,8 +1577,8 @@
 
         this.refreshUI = function () {
             /*Refresh Grid on Focus*/
-            this.vdgvInvoice.resize();
-            this.vdgvReceipt.resize();
+            this.vdgvInvoice.refresh();
+            this.vdgvReceipt.refresh();
         };
 
         this.callConsolidate = function () {
