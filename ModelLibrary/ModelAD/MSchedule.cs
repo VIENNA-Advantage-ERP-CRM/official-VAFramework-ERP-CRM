@@ -345,6 +345,7 @@ namespace VAdvantage.Model
                             //Example:-- today is wednesday and frequency is 3. so saturday should be next day.
                             // But saturday is not checked, so add frequency +1 to set next date sunday and check that one.
                             calNext = calNext.AddDays(((ct > 0) ? 0 : frequency) + 1);
+                            calNext = calNext.AddHours(-calNext.Hour).AddMinutes(-calNext.Minute).AddSeconds(-calNext.Second);
                             ct++;
                             increment = false;
                         }
@@ -352,6 +353,10 @@ namespace VAdvantage.Model
                         {
                             // if nextday is checked, then set that day as next run time
                             calNext = calNext.AddDays(((ct > 0) ? 1 : frequency));
+                            if (ct > 0)
+                            {
+                                calNext = calNext.AddHours(-calNext.Hour).AddMinutes(-calNext.Minute).AddSeconds(-calNext.Second);
+                            }
                             increment = false;
                             break;
                         }
