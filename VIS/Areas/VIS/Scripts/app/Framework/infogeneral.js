@@ -61,20 +61,20 @@
             //sSContainer.append(ssHeader);
 
             //if (VIS.Application.isRTL) {
-                //searchTab = $("<div class='background-color: rgb(241, 241, 241);height:88.9%;display: inline-block;width:23%;height:87.8%;overflow:auto;padding-right: 10px;margin-left: 10px;'>");
-                //searchSec = $("<div style='background-color: rgb(241, 241, 241);display: inline-block;height:87.8%;'>");
-                //searchTab.append(searchSec);
-                //datasec = $("<div style='display: inline-block;width:75%;height:87.8%;overflow:auto;'>");
-                //btnsec = $("<div style='display: inline-block;width:99%;height:auto;margin-top: 2px;'>");
+            //searchTab = $("<div class='background-color: rgb(241, 241, 241);height:88.9%;display: inline-block;width:23%;height:87.8%;overflow:auto;padding-right: 10px;margin-left: 10px;'>");
+            //searchSec = $("<div style='background-color: rgb(241, 241, 241);display: inline-block;height:87.8%;'>");
+            //searchTab.append(searchSec);
+            //datasec = $("<div style='display: inline-block;width:75%;height:87.8%;overflow:auto;'>");
+            //btnsec = $("<div style='display: inline-block;width:99%;height:auto;margin-top: 2px;'>");
             //}
             //else {
             searchTab = $("<div class='vis-info-l-s-wrap vis-leftsidebarouterwrap'>");
-                searchSec = $("<div>");
-                searchTab.append(searchSec);
-                datasec = $("<div class='vis-info-datasec'>");
-                btnsec = $("<div class='vis-info-btnsec'>");
-           // }
-            
+            searchSec = $("<div>");
+            searchTab.append(searchSec);
+            datasec = $("<div class='vis-info-datasec'>");
+            btnsec = $("<div class='vis-info-btnsec'>");
+            // }
+
             subroot.append(searchTab);
             subroot.append(datasec);
             subroot.append(btnsec);
@@ -97,8 +97,8 @@
             //    btnOK = $("<button class='VIS_Pref_btn-2' style='margin-top: 0px;'>").append(Oktxt);
             //}
             //else {
-                btnCancel = $("<button class='VIS_Pref_btn-2'>").append(canceltxt);
-                btnOK = $("<button class='VIS_Pref_btn-2'>").append(Oktxt);
+            btnCancel = $("<button class='VIS_Pref_btn-2'>").append(canceltxt);
+            btnOK = $("<button class='VIS_Pref_btn-2'>").append(Oktxt);
             //}
 
             divbtnRight.append(btnCancel);
@@ -121,9 +121,9 @@
             //    divbtnRight.append(btnRequery);
             //}
             //else {
-                divbtnRight.append(btnCancel);
-                divbtnRight.append(btnOK);
-                divbtnLeft.append(btnRequery);
+            divbtnRight.append(btnCancel);
+            divbtnRight.append(btnOK);
+            divbtnLeft.append(btnRequery);
             //}
 
             // divbtnLeft.append(btnRequery);
@@ -150,7 +150,7 @@
 
         initializeComponent();
 
-        function bindEvent() {            
+        function bindEvent() {
 
             if (!VIS.Application.isMobile) {
                 inforoot.on('keyup', function (e) {
@@ -276,7 +276,7 @@
 
                 var td = $("<td>");
                 var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
-                var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">'); 
+                var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
 
                 tr = $("<tr>");
                 tableSArea.append(tr);
@@ -324,7 +324,7 @@
                 resizable: false,
                 title: schema[0].TableDisplayName,
                 modal: true
-                
+
                 ,
                 close: onClosing,
                 closeText: VIS.Msg.getMsg("close")
@@ -408,6 +408,11 @@
 
             }
 
+            if (selectedIDs != null && selectedIDs.length > 0) {
+                sql += ", 'N' AS ordcol";
+            }
+
+
             sql += " FROM " + tableName + " " + tableName;
             // Change done by mohit asked by mukesh sir to show the data on info window from translated tab if logged in with langauge other than base language- 22/03/2018
             if (isTrlColExist) {
@@ -458,6 +463,9 @@
                     appendAND = true;
                 }
 
+
+
+
                 if (whereClause.length > 1) {
                     sql += " WHERE " + whereClause;
                     if (validationCode != null && validationCode.length > 0) {
@@ -467,6 +475,24 @@
                 else if (validationCode != null && validationCode.length > 0) {
                     sql += " WHERE " + validationCode;
                 }
+
+                sql = VIS.MRole.addAccessSQL(sql, tableName, true, true);
+                var sqlUnion = " UNION " + sql;
+                sqlUnion = sqlUnion.replace("'N' AS ordcol", "'Y' AS ordcol");
+
+                if (selectedIDs != null && selectedIDs.length > 0) {
+                    if (sql.toUpperCase().indexOf("WHERE") > -1) {
+                        sql += " AND " + keyCol + " IN(" + selectedIDs + ")";
+                        sql += sqlUnion;
+                        sql += " AND " + keyCol + " NOT IN(" + selectedIDs + ")";
+                    }
+                    else {
+                        sql += " WHERE " + keyCol + " IN(" + selectedIDs + ")";
+                        sql += sqlUnion;
+                        sql += " WHERE " + keyCol + " NOT IN(" + selectedIDs + ")";
+                    }
+                }
+
             }
             else {
                 if (validationCode.length > 0 && validationCode.trim().toUpperCase().startsWith('WHERE')) {
@@ -479,6 +505,17 @@
                     sql += " WHERE " + tableName + "." + tableName + "_ID=-1";
                 }
             }
+
+            if (selectedIDs != null && selectedIDs.length > 0) {
+                if (sql.toUpperCase().indexOf("ORDER BY") > -1) {
+                    sql = sql.toUpperCase().replace("ORDER BY", "ORDER BY ordcol ASC,");
+                }
+                else {
+                    sql += " ORDER BY ordcol ASC";
+                }
+            }
+
+
             if (!pNo) {
                 pNo = 1;
             }
@@ -536,6 +573,10 @@
 
                     resizable: true
                 }
+
+                if (!displayCols[item])
+                    continue;
+
                 displayType = displayCols[item].AD_Reference_ID;
 
                 oColumn.caption = displayCols[item].Name;
@@ -557,18 +598,18 @@
                         oColumn.render = 'number:1';
                     }
                 }
-                    //	YesNo
-                    //else if (displayType == VIS.DisplayType.YesNo) {
+                //	YesNo
+                //else if (displayType == VIS.DisplayType.YesNo) {
 
-                    //    oColumn.render = function (record, index, colIndex) {
+                //    oColumn.render = function (record, index, colIndex) {
 
-                    //        var chk = (record[grdCols[colIndex].field]) == 'True' ? "checked" : "";
+                //        var chk = (record[grdCols[colIndex].field]) == 'True' ? "checked" : "";
 
-                    //        return '<input type="checkbox" ' + chk + ' disabled="disabled" >';
-                    //    }
-                    //}
+                //        return '<input type="checkbox" ' + chk + ' disabled="disabled" >';
+                //    }
+                //}
 
-                    //Date /////////
+                //Date /////////
                 else if (VIS.DisplayType.IsDate(displayType)) {
                     oColumn.render = function (record, index, colIndex) {
 
