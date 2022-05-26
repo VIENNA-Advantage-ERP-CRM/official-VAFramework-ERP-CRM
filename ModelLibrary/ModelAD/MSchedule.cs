@@ -334,32 +334,37 @@ namespace VAdvantage.Model
                 int ct = 0;
                 if (X_R_RequestProcessor.FREQUENCYTYPE_Day.Equals(frequencyType))
                 {
-                    while ((ct < 8))
+                    while ((ct < 8) && (!(validDays.Contains(((int)calNext.AddDays(((ct > 0) ? 1 : frequency)).DayOfWeek)))))
                     {
                         //Add frequency to today and check next date is checked or not.
                         // if yes then set that day as next date otherwise add 1 day to new date and check if checked or not.
                         // check next date
-                        if (!(validDays.Contains(((int)calNext.DayOfWeek) + ((ct > 0) ? 1 : frequency))))
-                        {
-                            //Add frequency +1
-                            //Example:-- today is wednesday and frequency is 3. so saturday should be next day.
-                            // But saturday is not checked, so add frequency +1 to set next date sunday and check that one.
-                            calNext = calNext.AddDays(((ct > 0) ? 0 : frequency) + 1);
-                            calNext = calNext.AddHours(-calNext.Hour).AddMinutes(-calNext.Minute).AddSeconds(-calNext.Second);
-                            ct++;
-                            increment = false;
-                        }
-                        else
-                        {
-                            // if nextday is checked, then set that day as next run time
-                            calNext = calNext.AddDays(((ct > 0) ? 1 : frequency));
-                            if (ct > 0)
-                            {
-                                calNext = calNext.AddHours(-calNext.Hour).AddMinutes(-calNext.Minute).AddSeconds(-calNext.Second);
-                            }
-                            increment = false;
-                            break;
-                        }
+
+                        //{
+                        //Add frequency +1
+                        //Example:-- today is wednesday and frequency is 3. so saturday should be next day.
+                        // But saturday is not checked, so add frequency +1 to set next date sunday and check that one.
+                        calNext = calNext.AddDays(((ct > 0) ? 1 : frequency));
+                        //calNext = calNext.AddHours(-calNext.Hour).AddMinutes(-calNext.Minute).AddSeconds(-calNext.Second);
+                        calNext = calNext.Subtract(new TimeSpan(calNext.Hour, 0, 0));
+                        calNext = calNext.AddHours(hour);
+
+                        calNext = calNext.Subtract(new TimeSpan(0, calNext.Minute, 0));
+                        calNext = calNext.AddMinutes(minute);
+                        ct++;
+                        increment = false;
+                        //}
+                        //else
+                        //{
+                        //    // if nextday is checked, then set that day as next run time
+                        //    calNext = calNext.AddDays(((ct > 0) ? 1 : frequency));
+                        //    if (ct > 0)
+                        //    {
+                        //        calNext = calNext.AddHours(-calNext.Hour).AddMinutes(-calNext.Minute).AddSeconds(-calNext.Second);
+                        //    }
+                        //    increment = false;
+                        //    break;
+                        //}
                     }
                 }
                 else if (X_R_RequestProcessor.FREQUENCYTYPE_Hour.Equals(frequencyType))
