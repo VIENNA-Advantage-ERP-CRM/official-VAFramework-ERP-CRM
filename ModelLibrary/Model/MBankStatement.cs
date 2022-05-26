@@ -662,12 +662,22 @@ namespace VAdvantage.Model
                     {
                         description += ", " + Msg.Translate(GetCtx(), "InterestAmt") + "=" + line.GetInterestAmt();
                     }
+                    if (line.GetTaxAmt().CompareTo(Env.ZERO) != 0)
+                    {
+                        description += ", " + Msg.Translate(GetCtx(), "TaxAmt") + "=" + line.GetTaxAmt();
+                    }
+                    if (Util.GetValueOfDecimal(line.Get_Value("SurchargeAmt")).CompareTo(Env.ZERO) != 0)
+                    {
+                        description += ", " + Msg.Translate(GetCtx(), "SurchargeAmt") + "=" + Util.GetValueOfDecimal(line.Get_Value("SurchargeAmt"));
+                    }   
                     description += ")";
                     line.AddDescription(description);
                     line.SetStmtAmt(Env.ZERO);
                     line.SetTrxAmt(Env.ZERO);
                     line.SetChargeAmt(Env.ZERO);
                     line.SetInterestAmt(Env.ZERO);
+                    line.SetTaxAmt(Env.ZERO);
+                    line.Set_Value("SurchargeAmt", Env.ZERO);
                     line.Save(Get_TrxName());
                     if (line.GetC_Payment_ID() != 0)
                     {
@@ -681,8 +691,6 @@ namespace VAdvantage.Model
             Decimal voidedDifference = GetStatementDifference();
             SetStatementDifference(Env.ZERO);
 
-            //VA009----------------------------------Anuj----------------------
-            //int _CountVA009 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
             if (Env.IsModuleInstalled("VA009_"))
             {
                 MBankStatementLine[] STlines = GetLines(false);
@@ -702,10 +710,6 @@ namespace VAdvantage.Model
                         payment.SetVA009_ExecutionStatus(status);
                         payment.Save(Get_TrxName());
 
-                        //MInvoicePaySchedule inp = new MInvoicePaySchedule(GetCtx(), payment.GetC_InvoicePaySchedule_ID(), Get_TrxName());
-                        //inp.SetVA009_ExecutionStatus(status);
-                        //inp.Save(Get_TrxName());
-
                         if (payment.GetDocStatus() == DOCSTATUS_Closed || payment.GetDocStatus() == DOCSTATUS_Completed)
                         {
                             // update execution status as InProgress on Invoice Schedule -  for those payment which are completed or closed
@@ -723,7 +727,6 @@ namespace VAdvantage.Model
                     }
                 }
             }
-            //END----------------------------------Anuj----------------------
 
             //	Update Bank Account
             MBankAccount ba = MBankAccount.Get(GetCtx(), GetC_BankAccount_ID());

@@ -283,6 +283,11 @@ namespace VAdvantage.Model
         public void SetActualQty(Decimal? ActualQty) { Set_Value("ActualQty", (Decimal?)ActualQty); }
         /** Get Actual Quantity.@return The actual quantity */
         public Decimal GetActualQty() { Object bd = Get_Value("ActualQty"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
+
+        /** Set Movement Date.@param MovementDate Date a product was moved in or out of inventory */
+        public void SetMovementDate(DateTime? MovementDate) { Set_Value("MovementDate", (DateTime?)MovementDate); }
+        /** Get Movement Date.@return Date a product was moved in or out of inventory */
+        public DateTime? GetMovementDate() { return (DateTime?)Get_Value("MovementDate"); }
     }
 
 }
