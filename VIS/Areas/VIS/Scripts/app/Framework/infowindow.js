@@ -685,6 +685,12 @@
                 }
 
             }
+
+            if (selectedIDs != null && selectedIDs.length > 0) {
+                sql += ", 'N' AS ordcol";
+            }
+
+
             // sql=sql.substring(0,sql.length-2)
             sql += " FROM " + info.FromClause;
 
@@ -822,7 +828,24 @@
                     }
                 }
 
+                var sqlUnion = " UNION " + sql;
+                sqlUnion = sqlUnion.replace("'N' AS ordcol", "'Y' AS ordcol");
+
+                if (selectedIDs != null && selectedIDs.length > 0) {
+                    if (sql.toUpperCase().indexOf("WHERE") > -1) {
+                        sql += " AND " + keyCol + " IN(" + selectedIDs + ")";
+                        sql += sqlUnion;
+                        sql += " AND " + keyCol + " NOT IN(" + selectedIDs + ")";
+                    }
+                    else {
+                        sql += " WHERE " + keyCol + " IN(" + selectedIDs + ")";
+                        sql += sqlUnion;
+                        sql += " AND " + keyCol + " NOT IN(" + selectedIDs + ")";
+                    }
+                }
+
                 if (info.OTHERCLAUSE != null) {
+
                     //if (String(info.OTHERCLAUSE).toUpperCase().indexOf("WHERE") == 0 && (whereClause.length > 1 || (validationCode != null && validationCode.length > 1))) {
                     //    info.OTHERCLAUSE = String(info.OTHERCLAUSE).replace("WHERE", "AND");
                     //}
@@ -850,7 +873,19 @@
                 else {
                     sql += " WHERE rownum=-1";
                 }
+
             }
+
+            if (selectedIDs != null && selectedIDs.length > 0) {
+                if (sql.toUpperCase().indexOf("ORDER BY") > -1) {
+                    sql = sql.toUpperCase().replace("ORDER BY", "ORDER BY ordcol ASC,");
+                }
+                else {
+                    sql += "ORDER BY ordcol ASC";
+                }
+            }
+
+
 
 
             if (!pNo) {
@@ -909,6 +944,8 @@
 
                     resizable: true
                 }
+                if (!schema[item])
+                    continue;
                 displayType = schema[item].AD_Reference_ID;
 
                 oColumn.caption = schema[item].Name;
