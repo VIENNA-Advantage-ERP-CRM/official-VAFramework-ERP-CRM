@@ -351,6 +351,7 @@
             var sql = "SELECT ";
             //var colName = null;
             //var cname = null;
+            var tabname = null;
             var displayType = 0;
             var count = $.makeArray(displayCols).length;
 
@@ -482,14 +483,14 @@
 
                 if (selectedIDs != null && selectedIDs.length > 0) {
                     if (sql.toUpperCase().indexOf("WHERE") > -1) {
-                        sql += " AND " + keyCol + " IN(" + selectedIDs + ")";
+                        sql += " AND " + tableName + "." + keyCol + " IN(" + selectedIDs + ")";
                         sql += sqlUnion;
-                        sql += " AND " + keyCol + " NOT IN(" + selectedIDs + ")";
+                        sql += " AND " + tableName + "." + keyCol + " NOT IN(" + selectedIDs + ")";
                     }
                     else {
-                        sql += " WHERE " + keyCol + " IN(" + selectedIDs + ")";
+                        sql += " WHERE " + tableName + "." + keyCol + " IN(" + selectedIDs + ")";
                         sql += sqlUnion;
-                        sql += " WHERE " + keyCol + " NOT IN(" + selectedIDs + ")";
+                        sql += " WHERE " + tableName + "." + keyCol + " NOT IN(" + selectedIDs + ")";
                     }
                 }
 

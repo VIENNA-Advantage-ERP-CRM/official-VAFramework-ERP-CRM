@@ -640,6 +640,8 @@
             disposeDataSec();
             var sql = "SELECT ";
             var colName = null;
+            var tabname = null;
+
             var cName = null;
             var displayType = 0;
             var count = $.makeArray(schema).length;
@@ -649,6 +651,7 @@
 
                 if (String(colName).indexOf('.') > -1) {
                     cName = (String(colName).substring(String(colName).lastIndexOf('.') + 1, String(colName).length));
+                    tabname = colName.substring(0, colName.indexOf("."));
                 }
                 else {
                     cName = colName;
@@ -833,14 +836,14 @@
 
                 if (selectedIDs != null && selectedIDs.length > 0) {
                     if (sql.toUpperCase().indexOf("WHERE") > -1) {
-                        sql += " AND " + keyCol + " IN(" + selectedIDs + ")";
+                        sql += " AND " + tabname+"."+ keyCol + " IN(" + selectedIDs + ")";
                         sql += sqlUnion;
-                        sql += " AND " + keyCol + " NOT IN(" + selectedIDs + ")";
+                        sql += " AND " + tabname + "." + keyCol + " NOT IN(" + selectedIDs + ")";
                     }
                     else {
-                        sql += " WHERE " + keyCol + " IN(" + selectedIDs + ")";
+                        sql += " WHERE " + tabname + "." + keyCol + " IN(" + selectedIDs + ")";
                         sql += sqlUnion;
-                        sql += " AND " + keyCol + " NOT IN(" + selectedIDs + ")";
+                        sql += " AND " + tabname + "." + keyCol + " NOT IN(" + selectedIDs + ")";
                     }
                 }
 
