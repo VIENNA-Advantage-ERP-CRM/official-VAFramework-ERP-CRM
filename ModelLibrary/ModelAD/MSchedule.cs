@@ -334,7 +334,7 @@ namespace VAdvantage.Model
                 int ct = 0;
                 if (X_R_RequestProcessor.FREQUENCYTYPE_Day.Equals(frequencyType))
                 {
-                    while ((ct < 8) && (!(validDays.Contains(((int)calNext.AddDays(((ct > 0) ? 1 : frequency)).DayOfWeek)))))
+                    while ((ct < 8) && (!(validDays.Contains(((int)calNext.AddDays(((ct > 0) ? 0 : frequency)).DayOfWeek)))))
                     {
                         //Add frequency to today and check next date is checked or not.
                         // if yes then set that day as next date otherwise add 1 day to new date and check if checked or not.
