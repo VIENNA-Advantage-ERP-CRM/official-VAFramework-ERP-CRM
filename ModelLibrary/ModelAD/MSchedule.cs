@@ -414,8 +414,8 @@ namespace VAdvantage.Model
 
                     if (increment)
                     {
-                        calNext = calNext.Subtract(new TimeSpan(0, calNext.Minute, 0));
-                        calNext = calNext.AddMinutes(minute);
+                        //calNext = calNext.Subtract(new TimeSpan(0, calNext.Minute, 0));
+                        //calNext = calNext.AddMinutes(minute);
                         calNext = calNext.AddHours(frequency);
                     }
                 }	//	Hour
