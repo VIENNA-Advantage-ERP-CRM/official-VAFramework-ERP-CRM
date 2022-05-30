@@ -831,42 +831,42 @@
                     }
                 }
 
-                var sqlUnion = " UNION " + sql;
-                sqlUnion = sqlUnion.replace("'N' AS ordcol", "'Y' AS ordcol");
 
-                if (selectedIDs != null && selectedIDs.length > 0) {
-                    if (sql.toUpperCase().indexOf("WHERE") > -1) {
-                        sql += " AND " + tabname+"."+ keyCol + " IN(" + selectedIDs + ")";
-                        sql += sqlUnion;
-                        sql += " AND " + tabname + "." + keyCol + " NOT IN(" + selectedIDs + ")";
-                    }
-                    else {
-                        sql += " WHERE " + tabname + "." + keyCol + " IN(" + selectedIDs + ")";
-                        sql += sqlUnion;
-                        sql += " AND " + tabname + "." + keyCol + " NOT IN(" + selectedIDs + ")";
-                    }
-                }
+
+
+              
+                var sqlOrderby = "";
 
                 if (info.OTHERCLAUSE != null) {
-
-                    //if (String(info.OTHERCLAUSE).toUpperCase().indexOf("WHERE") == 0 && (whereClause.length > 1 || (validationCode != null && validationCode.length > 1))) {
-                    //    info.OTHERCLAUSE = String(info.OTHERCLAUSE).replace("WHERE", "AND");
-                    //}
-                    //else if (sql.toUpperCase().indexOf("WHERE") == -1 && info.OTHERCLAUSE.toUpperCase().indexOf("AND") > -1) {
-                    //    //info.OTHERCLAUSE = String(info.OTHERCLAUSE).replace("AND", "WHERE");
-                    //}
-                    //sql += " " + info.OTHERCLAUSE;
-
-                    if (String(info.OTHERCLAUSE).toUpperCase().indexOf("WHERE") > -1) {
-                        if (info.FromClause.toUpperCase().indexOf("WHERE") > -1
-                            || whereClause.length > 1
-                            || (validationCode != null && validationCode.length > 1)) {
-                            info.OTHERCLAUSE = String(info.OTHERCLAUSE).replace("WHERE", "AND");
+                    if (selectedIDs != null && selectedIDs.length > 0) {
+                        var otherClause = "";
+                        if (info.OTHERCLAUSE.indexOf("ORDER BY") > -1) {
+                            otherClause = info.OTHERCLAUSE.substr(0, info.OTHERCLAUSE.indexOf("ORDER BY"));;
+                            sqlOrderby = info.OTHERCLAUSE.substr(info.OTHERCLAUSE.indexOf("ORDER BY"));
                         }
+                        if (otherClause)
 
+                            if (String(otherClause).toUpperCase().indexOf("WHERE") > -1) {
+                                if (info.FromClause.toUpperCase().indexOf("WHERE") > -1
+                                    || whereClause.length > 1
+                                    || (validationCode != null && validationCode.length > 1)) {
+                                    otherClause = String(otherClause).replace("WHERE", "AND");
+                                }
+
+                            }
+                        sql += " " + otherClause;
                     }
-                    sql += " " + info.OTHERCLAUSE;
+                    else {
+                        if (String(info.OTHERCLAUSE).toUpperCase().indexOf("WHERE") > -1) {
+                            if (info.FromClause.toUpperCase().indexOf("WHERE") > -1
+                                || whereClause.length > 1
+                                || (validationCode != null && validationCode.length > 1)) {
+                                info.OTHERCLAUSE = String(info.OTHERCLAUSE).replace("WHERE", "AND");
+                            }
 
+                        }
+                        sql += " " + info.OTHERCLAUSE;
+                    }
                 }
             }
             else {
@@ -879,13 +879,49 @@
 
             }
 
+           
+
             if (selectedIDs != null && selectedIDs.length > 0) {
-                if (sql.toUpperCase().indexOf("ORDER BY") > -1) {
-                    sql = sql.toUpperCase().replace("ORDER BY", "ORDER BY ordcol ASC,");
+                var sqlUnion = " UNION " + sql;
+                sqlUnion = sqlUnion.replace("'N' AS ordcol", "'Y' AS ordcol");
+
+                if (sql.toUpperCase().indexOf("WHERE") > -1) {
+                    sql += " AND " + tabname + "." + keyCol + " IN(" + selectedIDs + ")";
+                    sql += sqlUnion;
+                    sql += " AND " + tabname + "." + keyCol + " NOT IN(" + selectedIDs + ")";
+                }
+                //else {
+                //    sql += " WHERE " + tabname + "." + keyCol + " IN(" + selectedIDs + ")";
+                //    sql += sqlUnion;
+                //    sql += " AND " + tabname + "." + keyCol + " NOT IN(" + selectedIDs + ")";
+                //}
+                sql = "SELECT * FROM (" + sql + ") tblquery";
+            }
+
+
+            if (selectedIDs != null && selectedIDs.length > 0) {
+                if (sqlOrderby.toUpperCase().indexOf("ORDER BY") > -1) {
+                    sqlOrderby = sqlOrderby.toUpperCase().replace("ORDER BY", "ORDER BY ordcol ASC,");
+
+
+                    //sql = sql.substr(0, sql.indexOf("ORDER BY"));
+                    sqlOrderby = sqlOrderby.split(',');
+                    var finalorderBy = ' ORDER BY ';
+                    for (var l = 0; l < sqlOrderby.length; l++) {
+                        sqlOrderby[l] = sqlOrderby[l].replace('ORDER BY ', '');
+                        sqlOrderby[l] = sqlOrderby[l].replace(sqlOrderby[l].substr(0, sqlOrderby[l].indexOf(".") + 1), "tblquery.");
+                        if (l > 0)
+                            finalorderBy += ",";
+                        finalorderBy += sqlOrderby[l];
+                    }
+                    sql += finalorderBy;
                 }
                 else {
                     sql += "ORDER BY ordcol ASC";
                 }
+
+
+
             }
 
 
