@@ -651,7 +651,6 @@
 
                 if (String(colName).indexOf('.') > -1) {
                     cName = (String(colName).substring(String(colName).lastIndexOf('.') + 1, String(colName).length));
-                    tabname = colName.substring(0, colName.indexOf("."));
                 }
                 else {
                     cName = colName;
@@ -659,6 +658,7 @@
 
                 if (schema[item].IsKey) {
                     keyCol = cName.toUpperCase();
+                    tabname = keyCol.substring(0, keyCol.indexOf("_ID"));
                 }
                 displayType = schema[item].AD_Reference_ID;
                 if (displayType == VIS.DisplayType.YesNo) {
