@@ -629,7 +629,7 @@
 
         var displayData = function (requery, pNo) {
 
-            if (multiSelection && w2ui[grdname]) {
+            if (multiSelection && w2ui[grdname] && keyCol) {
                 var selection = w2ui[grdname].getSelection();
                 for (item in selection) {
                     if (multiValues.indexOf(w2ui[grdname].get(selection[item])[keyCol]) == -1) {
@@ -810,6 +810,8 @@
                     }
 
                 }
+
+                sql = VIS.MRole.addAccessSQL(sql, tabname, true, false);
 
                 if (whereClause.length > 1) {
                     if (info.FromClause.toUpperCase().indexOf("WHERE") > -1) {
