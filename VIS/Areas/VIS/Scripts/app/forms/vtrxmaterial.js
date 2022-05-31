@@ -168,12 +168,12 @@
             $divInfoinn.append($divMovementType);
 
             var $divLocator = $("<div class='vis-paymentselect-field'>");
-            $divLocator.append($divLocatorInputwrap);            
+            $divLocator.append($divLocatorInputwrap);
             $divLocatorCtrlwrap.append($("<label>" + VIS.Msg.translate(VIS.Env.getCtx(), "M_Locator_ID") + " </label>"));
             $divInfoinn.append($divLocator);
 
             var $divProduct = $("<div class='vis-paymentselect-field'>");
-            $divProduct.append($divProductInputwrap);  
+            $divProduct.append($divProductInputwrap);
             $divProductCtrlwrap.append($("<label>" + VIS.Msg.translate(VIS.Env.getCtx(), "Product") + " </label>"));
             //$divProduct.append(containerdivProduct);
             $divInfoinn.append($divProduct);
@@ -208,11 +208,11 @@
             $divGridPSelect = $("<div class='vis-pSelectIionGrid'>");
 
             var designPSelectProcess = " <div class='vis-pSelectProcess'>"  // div pSelectProcess starts here
-                                     + " <div class='vis-paymentselect-field'>"  // div  starts here    
-                                     + " <input id='VIS_btnCancel_" + $self.windowNo + "' class='vis-frm-btn' type='submit' value='" + VIS.Msg.getMsg("Cancel") + "' ></input>"
-                                     + " <input id='VIS_btnOK_" + $self.windowNo + "' class='vis-frm-btn' type='submit' value='" + VIS.Msg.getMsg("OK") + "' ></input>"
-                                     + " </div>" // div pSelectButons ends here 
-                                     + " </div>" // div pSelectProcess ends here 
+                + " <div class='vis-paymentselect-field'>"  // div  starts here    
+                + " <input id='VIS_btnCancel_" + $self.windowNo + "' class='vis-frm-btn' type='submit' value='" + VIS.Msg.getMsg("Cancel") + "' ></input>"
+                + " <input id='VIS_btnOK_" + $self.windowNo + "' class='vis-frm-btn' type='submit' value='" + VIS.Msg.getMsg("OK") + "' ></input>"
+                + " </div>" // div pSelectButons ends here 
+                + " </div>" // div pSelectProcess ends here 
             $divContainer.append($divInfo).append($divGridPSelect).append($(designPSelectProcess));
             $root.append($divContainer);
             findControls();
@@ -544,7 +544,9 @@
 
         this.refreshUI = function () {
             /*Refresh Grid on Focus*/
-            gridController.vTable.resize();            
+            if (gridController) {
+                gridController.vTable.resize();
+            }
         };
 
         //*******************
