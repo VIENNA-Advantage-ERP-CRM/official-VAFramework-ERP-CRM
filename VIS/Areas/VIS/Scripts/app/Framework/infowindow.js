@@ -814,7 +814,7 @@
                 sql = VIS.MRole.addAccessSQL(sql, tabname, true, false);
 
                 if (whereClause.length > 1) {
-                    if (info.FromClause.toUpperCase().indexOf("WHERE") > -1) {
+                    if (info.FromClause.toUpperCase().indexOf("WHERE") > -1 || sql.toUpperCase().indexOf("WHERE") > -1) {
                         sql += " AND " + whereClause;
                     }
                     else {
@@ -825,7 +825,7 @@
                     }
                 }
                 else if (validationCode != null && validationCode.length > 0) {
-                    if (info.FromClause.toUpperCase().indexOf("WHERE") > -1) {
+                    if (info.FromClause.toUpperCase().indexOf("WHERE") > -1 || sql.toUpperCase().indexOf("WHERE") > -1) {
                         sql += " AND " + validationCode;
                     }
                     else {
@@ -919,7 +919,7 @@
                     sql += finalorderBy;
                 }
                 else {
-                    sql += "ORDER BY ordcol ASC";
+                    sql += " ORDER BY ordcol ASC";
                 }
 
 
