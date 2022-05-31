@@ -569,7 +569,9 @@
 
         this.refreshUI = function () {
             /*Refresh Grid on Focus*/
-            dGrid.resize();
+            if (dGrid) {
+                dGrid.resize();
+            }
         };
 
         this.disposeComponent = function () {
