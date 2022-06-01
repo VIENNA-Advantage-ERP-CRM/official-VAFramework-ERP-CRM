@@ -5,10 +5,10 @@
  * Date           :     2-Aug-2014
   ******************************************************/
 ; (function (VIS, $) {
-    function InfoWindow(_AD_InfoWindow_ID, ctrlValue, windowNo, validationCode, multiSelection) {
+    function InfoWindow(_AD_InfoWindow_ID, ctrlValue, windowNo, validationCode, multiSelection, selectedIDs) {
 
         this.onClose = null;
-
+        this.selectedIDs = selectedIDs;
 
         var inforoot = $("<div class='vis-forms-container'>");
         var subroot = $("<div class='vis-info-subroot'>");
@@ -102,6 +102,11 @@
 
             inforoot.append(subroot);
             inforoot.append(bsyDiv);
+
+            if (multiSelection == true && self.selectedIDs != null && self.selectedIDs.length > 0) {
+                multiValues = self.selectedIDs.split(',').map(Number);
+                ctrlValue = null;
+            }
         };
 
         initializeComponent();
@@ -624,7 +629,7 @@
 
         var displayData = function (requery, pNo) {
 
-            if (multiSelection && w2ui[grdname]) {
+            if (multiSelection && w2ui[grdname] && keyCol) {
                 var selection = w2ui[grdname].getSelection();
                 for (item in selection) {
                     if (multiValues.indexOf(w2ui[grdname].get(selection[item])[keyCol]) == -1) {
@@ -635,6 +640,8 @@
             disposeDataSec();
             var sql = "SELECT ";
             var colName = null;
+            var tabname = null;
+
             var cName = null;
             var displayType = 0;
             var count = $.makeArray(schema).length;
@@ -651,6 +658,7 @@
 
                 if (schema[item].IsKey) {
                     keyCol = cName.toUpperCase();
+                    tabname = keyCol.substring(0, keyCol.indexOf("_ID"));
                 }
                 displayType = schema[item].AD_Reference_ID;
                 if (displayType == VIS.DisplayType.YesNo) {
@@ -680,6 +688,12 @@
                 }
 
             }
+
+            if (selectedIDs != null && selectedIDs.length > 0) {
+                sql += ", 'N' AS ordcol";
+            }
+
+
             // sql=sql.substring(0,sql.length-2)
             sql += " FROM " + info.FromClause;
 
@@ -797,8 +811,10 @@
 
                 }
 
+                sql = VIS.MRole.addAccessSQL(sql, tabname, true, false);
+
                 if (whereClause.length > 1) {
-                    if (info.FromClause.toUpperCase().indexOf("WHERE") > -1) {
+                    if (info.FromClause.toUpperCase().indexOf("WHERE") > -1 || sql.toUpperCase().indexOf("WHERE") > -1) {
                         sql += " AND " + whereClause;
                     }
                     else {
@@ -809,7 +825,7 @@
                     }
                 }
                 else if (validationCode != null && validationCode.length > 0) {
-                    if (info.FromClause.toUpperCase().indexOf("WHERE") > -1) {
+                    if (info.FromClause.toUpperCase().indexOf("WHERE") > -1 || sql.toUpperCase().indexOf("WHERE") > -1) {
                         sql += " AND " + validationCode;
                     }
                     else {
@@ -817,25 +833,42 @@
                     }
                 }
 
+
+
+
+              
+                var sqlOrderby = "";
+
                 if (info.OTHERCLAUSE != null) {
-                    //if (String(info.OTHERCLAUSE).toUpperCase().indexOf("WHERE") == 0 && (whereClause.length > 1 || (validationCode != null && validationCode.length > 1))) {
-                    //    info.OTHERCLAUSE = String(info.OTHERCLAUSE).replace("WHERE", "AND");
-                    //}
-                    //else if (sql.toUpperCase().indexOf("WHERE") == -1 && info.OTHERCLAUSE.toUpperCase().indexOf("AND") > -1) {
-                    //    //info.OTHERCLAUSE = String(info.OTHERCLAUSE).replace("AND", "WHERE");
-                    //}
-                    //sql += " " + info.OTHERCLAUSE;
-
-                    if (String(info.OTHERCLAUSE).toUpperCase().indexOf("WHERE") > -1) {
-                        if (info.FromClause.toUpperCase().indexOf("WHERE") > -1
-                            || whereClause.length > 1
-                            || (validationCode != null && validationCode.length > 1)) {
-                            info.OTHERCLAUSE = String(info.OTHERCLAUSE).replace("WHERE", "AND");
+                    if (selectedIDs != null && selectedIDs.length > 0) {
+                        var otherClause = "";
+                        if (info.OTHERCLAUSE.indexOf("ORDER BY") > -1) {
+                            otherClause = info.OTHERCLAUSE.substr(0, info.OTHERCLAUSE.indexOf("ORDER BY"));;
+                            sqlOrderby = info.OTHERCLAUSE.substr(info.OTHERCLAUSE.indexOf("ORDER BY"));
                         }
+                        if (otherClause)
 
+                            if (String(otherClause).toUpperCase().indexOf("WHERE") > -1) {
+                                if (info.FromClause.toUpperCase().indexOf("WHERE") > -1
+                                    || whereClause.length > 1
+                                    || (validationCode != null && validationCode.length > 1)) {
+                                    otherClause = String(otherClause).replace("WHERE", "AND");
+                                }
+
+                            }
+                        sql += " " + otherClause;
                     }
-                    sql += " " + info.OTHERCLAUSE;
+                    else {
+                        if (String(info.OTHERCLAUSE).toUpperCase().indexOf("WHERE") > -1) {
+                            if (info.FromClause.toUpperCase().indexOf("WHERE") > -1
+                                || whereClause.length > 1
+                                || (validationCode != null && validationCode.length > 1)) {
+                                info.OTHERCLAUSE = String(info.OTHERCLAUSE).replace("WHERE", "AND");
+                            }
 
+                        }
+                        sql += " " + info.OTHERCLAUSE;
+                    }
                 }
             }
             else {
@@ -845,7 +878,55 @@
                 else {
                     sql += " WHERE rownum=-1";
                 }
+
             }
+
+           
+
+            if (selectedIDs != null && selectedIDs.length > 0) {
+                var sqlUnion = " UNION " + sql;
+                sqlUnion = sqlUnion.replace("'N' AS ordcol", "'Y' AS ordcol");
+
+                if (sql.toUpperCase().indexOf("WHERE") > -1) {
+                    sql += " AND " + tabname + "." + keyCol + " IN(" + selectedIDs + ")";
+                    sql += sqlUnion;
+                    sql += " AND " + tabname + "." + keyCol + " NOT IN(" + selectedIDs + ")";
+                }
+                //else {
+                //    sql += " WHERE " + tabname + "." + keyCol + " IN(" + selectedIDs + ")";
+                //    sql += sqlUnion;
+                //    sql += " AND " + tabname + "." + keyCol + " NOT IN(" + selectedIDs + ")";
+                //}
+                sql = "SELECT * FROM (" + sql + ") tblquery";
+            }
+
+
+            if (selectedIDs != null && selectedIDs.length > 0) {
+                if (sqlOrderby.toUpperCase().indexOf("ORDER BY") > -1) {
+                    sqlOrderby = sqlOrderby.toUpperCase().replace("ORDER BY", "ORDER BY ordcol ASC,");
+
+
+                    //sql = sql.substr(0, sql.indexOf("ORDER BY"));
+                    sqlOrderby = sqlOrderby.split(',');
+                    var finalorderBy = ' ORDER BY ';
+                    for (var l = 0; l < sqlOrderby.length; l++) {
+                        sqlOrderby[l] = sqlOrderby[l].replace('ORDER BY ', '');
+                        sqlOrderby[l] = sqlOrderby[l].replace(sqlOrderby[l].substr(0, sqlOrderby[l].indexOf(".") + 1), "tblquery.");
+                        if (l > 0)
+                            finalorderBy += ",";
+                        finalorderBy += sqlOrderby[l];
+                    }
+                    sql += finalorderBy;
+                }
+                else {
+                    sql += " ORDER BY ordcol ASC";
+                }
+
+
+
+            }
+
+
 
 
             if (!pNo) {
@@ -904,6 +985,8 @@
 
                     resizable: true
                 }
+                if (!schema[item])
+                    continue;
                 displayType = schema[item].AD_Reference_ID;
 
                 oColumn.caption = schema[item].Name;

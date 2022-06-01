@@ -44,6 +44,7 @@ namespace ModelLibrary.Classes
         public bool isReversal = false;
         public DataSet dsAccountingSchema = null;
         public String isMatchFromForm = "N";
+        public DateTime? movementDate = null;
 
         /// <summary>
         /// Constructor
