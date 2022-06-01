@@ -477,7 +477,7 @@
                     sql += " WHERE " + validationCode;
                 }
 
-                sql = VIS.MRole.addAccessSQL(sql, tableName, true, true);
+                sql = VIS.MRole.addAccessSQL(sql, tableName, true, false);
                 var sqlUnion = " UNION " + sql;
                 sqlUnion = sqlUnion.replace("'N' AS ordcol", "'Y' AS ordcol");
 
