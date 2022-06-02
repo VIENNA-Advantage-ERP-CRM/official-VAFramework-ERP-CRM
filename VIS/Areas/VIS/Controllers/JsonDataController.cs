@@ -885,7 +885,7 @@ namespace VIS.Controllers
                     {
                         strMetaId = strDocIds[j].Split('-');
                         Ctx ctx = Session["ctx"] as Ctx;
-                        string sql1 = "Select count(dlink.VADMS_WindowDocLink_ID) FROM VADMS_WindowDocLink dlink INNER JOIN vadms_attachmetadata amd ON amd.VADMS_WindowDocLink_ID = dlink.VADMS_WindowDocLink_ID where dlink.AD_Table_ID=" + tableID + " AND dlink.record_ID=" + recID + " AND dlink.AD_Window_ID=" + winID + " AND dlink.VADMS_Document_ID=" + strMetaId[0] + " AND amd.VADMS_MetaData_ID=" + strMetaId[1];
+                        string sql1 = "Select count(dlink.VADMS_WindowDocLink_ID) FROM VADMS_WindowDocLink dlink INNER JOIN vadms_attachmetadata amd ON (amd.VADMS_WindowDocLink_ID = dlink.VADMS_WindowDocLink_ID) where dlink.AD_Table_ID=" + tableID + " AND dlink.record_ID=" + recID + " AND dlink.AD_Window_ID=" + winID + " AND dlink.VADMS_Document_ID=" + strMetaId[0] + " AND amd.VADMS_MetaData_ID=" + strMetaId[1];
                         int count = Convert.ToInt32(DB.ExecuteScalar(sql1));
                         if (count > 0)
                         {
