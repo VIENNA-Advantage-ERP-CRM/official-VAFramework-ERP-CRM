@@ -1249,13 +1249,13 @@ namespace VAdvantage.Model
                 if (EMail.SENT_OK.Equals(msg))
                 {
                     SaveMailAttachment(true, AD_Table_ID, Record_ID, message, subject, toEMail, GetRequestEMail());
-                    //log.info("Sent EMail " + subject + " to " + toEMail);
+                    log.Info("Sent EMail " + subject + " to " + toEMail);
                     return true;
                 }
                 else
                 {
                     SaveMailAttachment(false, AD_Table_ID, Record_ID, message, subject, toEMail, GetRequestEMail());
-                    //log.warning("Could NOT Send Email: " + subject + " to " + toEMail + ": " + msg + " (" + GetName() + ")");
+                    log.Warning("Could NOT Send Email: " + subject + " to " + toEMail + ": " + msg + " (" + GetName() + ")");
                     return false;
                 }
             }
