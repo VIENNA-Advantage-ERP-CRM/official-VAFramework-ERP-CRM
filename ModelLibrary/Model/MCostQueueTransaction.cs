@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ModelLibrary.Classes;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -36,7 +37,25 @@ namespace VAdvantage.Model
         /// <param name="cd">Cost Detail Reference</param>
         /// <param name="qty">qty</param>
         /// <returns>true, when success</returns>
-        public static bool CreateCostQueueTransaction(Ctx ctx, int AD_Client_ID, int AD_Org_ID, int M_CostQueue_ID, MCostDetail cd, decimal qty)
+        public static bool CreateCostQueueTransaction(Ctx ctx, int AD_Client_ID, int AD_Org_ID,
+            int M_CostQueue_ID, MCostDetail cd, decimal qty)
+        {
+            return CreateCostQueueTransaction(ctx, AD_Client_ID, AD_Org_ID, M_CostQueue_ID, cd, qty, null);
+        }
+
+        /// <summary>
+        /// This function will create child record of Cost Queue, which will contain transaction affects 
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="AD_Client_ID">Client ID</param>
+        /// <param name="AD_Org_ID">Organization ID</param>
+        /// <param name="M_CostQueue_ID">Cost Queue ID</param>
+        /// <param name="cd">Cost Detail Reference</param>
+        /// <param name="qty">qty</param>
+        /// <param name="CostingCheck">Costing Check</param>
+        /// <returns>true, when success</returns>
+        public static bool CreateCostQueueTransaction(Ctx ctx, int AD_Client_ID, int AD_Org_ID,
+            int M_CostQueue_ID, MCostDetail cd, decimal qty, CostingCheck costingCheck)
         {
             try
             {
@@ -50,7 +69,14 @@ namespace VAdvantage.Model
 
                 // date and qty 
                 ced.SetMovementQty(qty);
-                ced.SetMovementDate(DateTime.Now);
+                if (costingCheck != null && costingCheck.movementDate != null)
+                {
+                    ced.SetMovementDate(costingCheck.movementDate);
+                }
+                else
+                {
+                    ced.SetMovementDate(DateTime.Now);
+                }
 
                 //Refrences
                 ced.SetM_InOutLine_ID(cd.GetM_InOutLine_ID());

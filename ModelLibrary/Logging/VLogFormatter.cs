@@ -93,6 +93,7 @@ namespace VAdvantage.Logging
             /**	Class.method	**/
             if (!_shortFormat)
                 sb.Append(GetClassMethod(record)).Append(": ");
+            sb.Append("[" + System.Threading.Thread.CurrentThread.ManagedThreadId + "]");
 
             /**	Message			**/
             sb.Append(record.message);

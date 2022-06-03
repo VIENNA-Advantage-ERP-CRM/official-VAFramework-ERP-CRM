@@ -2175,7 +2175,7 @@ namespace VAdvantage.Process
                                                 try
                                                 {
                                                     // execute procedure for calculating cost
-                                                    SqlParameter[] param = new SqlParameter[7];
+                                                    SqlParameter[] param = new SqlParameter[8];
                                                     param[0] = new SqlParameter("p_M_Product_ID", Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_Product_ID"]));
                                                     param[0].SqlDbType = SqlDbType.Int;
                                                     param[0].Direction = ParameterDirection.Input;
@@ -2203,6 +2203,10 @@ namespace VAdvantage.Process
                                                     param[6] = new SqlParameter("p_M_Warehouse_ID", Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_Warehouse_ID"]));
                                                     param[6].SqlDbType = SqlDbType.Int;
                                                     param[6].Direction = ParameterDirection.Input;
+
+                                                    param[7] = new SqlParameter("p_movementdate", Util.GetValueOfDateTime(dsChildRecord.Tables[0].Rows[j]["MovementDate"]));
+                                                    param[7].SqlDbType = SqlDbType.Date;
+                                                    param[7].Direction = ParameterDirection.Input;
 
                                                     DB.ExecuteProcedure("createcostqueueNotFRPT", param, Get_Trx());
 

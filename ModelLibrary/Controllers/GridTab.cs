@@ -2056,7 +2056,7 @@ namespace VAdvantage.Model
             }
             if (_wVo.IsViewDocument)
             {
-                sql = " SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =" + _vo.AD_Table_ID;
+                sql = " SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON (wdl.VADMS_Document_ID  =doc.VADMS_Document_ID) WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =" + _vo.AD_Table_ID;
                 ds = DB.ExecuteDataset(sql);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {

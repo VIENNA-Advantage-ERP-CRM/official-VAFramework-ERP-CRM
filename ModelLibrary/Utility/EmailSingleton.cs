@@ -88,65 +88,78 @@ namespace ModelLibrary.Utility
 
 
                             string sql = "SELECT AD_WF_NODE_ID FROM AD_WF_Activity WHERE AD_WF_Activity_ID=" + AD_WF_Activity_ID;
-                            object nodeID = DB.ExecuteScalar(sql);
+                            int nodeID = Util.GetValueOfInt(DB.ExecuteScalar(sql));
                             X_AD_WF_Node node = null;
 
-                            if (nodeID != null && nodeID != DBNull.Value)
+                            // Check  node found from wf activity table for current email thread, if yes then get node data
+                            if (nodeID > 0)
                             {
                                 node = new X_AD_WF_Node(_ctx, Convert.ToInt32(nodeID), null);
                             }
-                            FileInfo pdf = null;
-                            MTable table = MTable.Get(_ctx, AD_Table_ID);
-                            PO po = table.GetPO(_ctx, Record_ID, null);
-                            if (node.IsAttachReport())
-                            {
-                                VAdvantage.Common.Common com = new Common();
-                                pdf = com.GetPdfReportForMail(_ctx, null, AD_Table_ID, Record_ID, AD_User_ID, AD_Client_ID,
-                                   "", 0, AD_WF_Activity_ID);
-                            }
-                            else if (po is VAdvantage.Process.DocAction)
-                            {
-                                VAdvantage.Process.DocAction doc = (VAdvantage.Process.DocAction)po;
-                                attachment = doc.CreatePDF();
-                            }
-                            // Check if there is m class for the record and table and fetch attachment from that class 
-                            //MTable table = MTable.Get(_ctx, AD_Table_ID);
-                            //PO po = table.GetPO(_ctx, Record_ID, null);
-
-                            //if (po is VAdvantage.Process.DocAction) // MClass Implement DocAction
-                            //{
-                            //VAdvantage.Process.DocAction doc = (VAdvantage.Process.DocAction)po;
-                            //attachment = doc.CreatePDF();
-                            //VAdvantage.Common.Common com = new Common();
-                            //FileInfo pdf = com.GetPdfReportForMail(_ctx, null, AD_Table_ID, Record_ID, AD_User_ID, AD_Client_ID,
-                            //   "", 0, AD_WF_Activity_ID);
-                            if (pdf != null)
-                            {
-                                array = File.ReadAllBytes(pdf.FullName);
-                                fileName = pdf.Name;
-                            }
-                            //}
-
-                            // Create Mclient object and send Email 
-                            MClient client = MClient.Get(_ctx, AD_Client_ID);
-                            bool mailsent = client.SendEMail(toEMail, toName, subject, message, attachment, isHtml, AD_Table_ID, Record_ID, array, fileName);
-
+                            
                             ViennaAdvantage.Model.X_AD_MailQueue mailQueue = new ViennaAdvantage.Model.X_AD_MailQueue(_ctx, AD_MailQueue_ID, null);
 
-                            if (mailsent)
+                            // Check if activity node is not null for current email thread
+                            if (node != null)
                             {
-                                mailQueue.SetMailStatus("S");
-                                int act1 = DB.ExecuteQuery("UPDATE AD_WF_Activity SET WFSTATE = 'CC' WHERE AD_WF_Activity_ID = " + AD_WF_Activity_ID);
-                                int aud1 = DB.ExecuteQuery("UPDATE AD_WF_EventAudit SET WFSTATE = 'CC' WHERE AD_WF_EventAudit_ID = " + AD_WF_EventAudit_ID);
-                                int wpro = DB.ExecuteQuery("UPDATE AD_WF_Process SET WFSTATE = 'CC' WHERE AD_WF_Process_ID = " + AD_WF_Process_ID + " AND WFState = 'BK' ");
+                                FileInfo pdf = null;
+                                MTable table = MTable.Get(_ctx, AD_Table_ID);
+                                PO po = table.GetPO(_ctx, Record_ID, null);
+                                if (node.IsAttachReport())
+                                {
+                                    VAdvantage.Common.Common com = new Common();
+                                    pdf = com.GetPdfReportForMail(_ctx, null, AD_Table_ID, Record_ID, AD_User_ID, AD_Client_ID,
+                                       "", 0, AD_WF_Activity_ID);
+                                }
+                                else if (po is VAdvantage.Process.DocAction)
+                                {
+                                    VAdvantage.Process.DocAction doc = (VAdvantage.Process.DocAction)po;
+                                    attachment = doc.CreatePDF();
+                                }
+                                // Check if there is m class for the record and table and fetch attachment from that class 
+                                //MTable table = MTable.Get(_ctx, AD_Table_ID);
+                                //PO po = table.GetPO(_ctx, Record_ID, null);
+
+                                //if (po is VAdvantage.Process.DocAction) // MClass Implement DocAction
+                                //{
+                                //VAdvantage.Process.DocAction doc = (VAdvantage.Process.DocAction)po;
+                                //attachment = doc.CreatePDF();
+                                //VAdvantage.Common.Common com = new Common();
+                                //FileInfo pdf = com.GetPdfReportForMail(_ctx, null, AD_Table_ID, Record_ID, AD_User_ID, AD_Client_ID,
+                                //   "", 0, AD_WF_Activity_ID);
+                                if (pdf != null)
+                                {
+                                    array = File.ReadAllBytes(pdf.FullName);
+                                    fileName = pdf.Name;
+                                }
+                                //}
+
+                                // Create Mclient object and send Email 
+                                MClient client = MClient.Get(_ctx, AD_Client_ID);
+                                bool mailsent = client.SendEMail(toEMail, toName, subject, message, attachment, isHtml, AD_Table_ID, Record_ID, array, fileName);
+
+                                if (mailsent)
+                                {
+                                    mailQueue.SetMailStatus("S");
+                                    int act1 = DB.ExecuteQuery("UPDATE AD_WF_Activity SET WFSTATE = 'CC' WHERE AD_WF_Activity_ID = " + AD_WF_Activity_ID);
+                                    int aud1 = DB.ExecuteQuery("UPDATE AD_WF_EventAudit SET WFSTATE = 'CC' WHERE AD_WF_EventAudit_ID = " + AD_WF_EventAudit_ID);
+                                    int wpro = DB.ExecuteQuery("UPDATE AD_WF_Process SET WFSTATE = 'CC' WHERE AD_WF_Process_ID = " + AD_WF_Process_ID + " AND WFState = 'BK' ");
+                                }
+                                else
+                                {
+                                    mailQueue.SetMailStatus("F");
+                                    VLogger.Get().Warning("Email not sent by singleton class, marking as failed");
+                                }
+
+                                bool mq = mailQueue.Save();
                             }
                             else
                             {
+                                // Mark mail record as failed if node/activity not found 
                                 mailQueue.SetMailStatus("F");
-                                VLogger.Get().Warning("Email not sent by singleton class, marking as failed");
+                                mailQueue.Save();
+                                VLogger.Get().Warning("Activity node not found for email, marking as failed");
                             }
-
-                            bool mq = mailQueue.Save();
 
                             // Sleep thread by 1 second to let memory work properly
                             Thread.Sleep(1000);
@@ -154,14 +167,14 @@ namespace ModelLibrary.Utility
                             // For testing thread abort problem 
                             //thread.Abort();
                         }
-                        int deleteoldmails = DB.ExecuteQuery("DELETE FROM AD_MailQueue WHERE (MailStatus = 'S' OR MailStatus = 'F') AND Created <=" + GlobalVariable.TO_DATE(DateTime.Now, false) + " - 7");
+                        
+                        int deleteoldmails = DB.ExecuteQuery("DELETE FROM AD_MailQueue WHERE (MailStatus = 'S') AND Created <=" + GlobalVariable.TO_DATE(DateTime.Now, false) + " - 7");
                     }
                     else
                     {
-                        // Sleep thread by 5 seconds if there is no record in mail queue table
+                        // Sleep thread by 5 minutes if there is no record in mail queue table
                         Thread.Sleep(60000 * 5);
                     }
-
                 }
             }
             catch (Exception e)

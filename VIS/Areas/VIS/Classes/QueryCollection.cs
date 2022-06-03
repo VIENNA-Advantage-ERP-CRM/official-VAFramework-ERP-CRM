@@ -385,7 +385,7 @@ namespace VIS.Classes
             queryList.VIS_109 = "SELECT CM_Subscribe_ID, Record_ID FROM CM_Subscribe WHERE AD_User_ID=@AD_User_ID AND AD_Table_ID=@AD_Table_ID";
 
             queryList.VIS_110 = "SELECT vadms_windowdoclink_id,record_id FROM vadms_windowdoclink wdl JOIN vadms_document doc "
-                 + " ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID  WHERE doc.vadms_docstatus!='DD' AND ad_table_id=@ad_table_id";
+                 + " ON (wdl.VADMS_Document_ID  =doc.VADMS_Document_ID)  WHERE doc.vadms_docstatus!='DD' AND ad_table_id=@ad_table_id";
 
             queryList.VIS_111 = "SELECT CM_Chat_ID, Record_ID FROM CM_Chat WHERE AD_Table_ID=@AD_Table_ID";
 

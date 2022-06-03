@@ -1575,6 +1575,12 @@
             return this.$root;
         };
 
+        this.refreshUI = function () {
+            /*Refresh Grid on Focus*/
+            this.vdgvInvoice.refresh();
+            this.vdgvReceipt.refresh();
+        };
+
         this.callConsolidate = function () {
             $.ajax({
                 url: VIS.Application.contextUrl + "Common/Consolidate",
@@ -1704,8 +1710,10 @@
         this.frame.getContentGrid().append(this.getRoot());
         this.display();
         this.callConsolidate();
+    };
 
-
+    VMatch.prototype.refresh = function () {
+        this.refreshUI();
     };
 
     //Must implement dispose
