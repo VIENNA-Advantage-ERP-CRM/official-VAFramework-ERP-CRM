@@ -46,11 +46,11 @@ namespace VIS.Models
             // If window is selected or search text is available..
             if (AD_Window_ID > 0 || (!string.IsNullOrEmpty(searchText) && searchText.Length > 0))
             {
-                sql = @"SELECT DISTINCT tabl.AD_table_ID,Tab.AD_Tab_ID FROM Ad_Window Wind Join Ad_Tab Tab 
-                    ON Wind.Ad_Window_Id=Tab.Ad_Window_Id JOIN  Ad_Table Tabl On Tab.Ad_Table_Id=Tabl.Ad_Table_Id 
+                sql = @"SELECT DISTINCT tabl.AD_table_ID,Tab.AD_Tab_ID FROM AD_Window Wind Join AD_Tab Tab 
+                    ON (Wind.AD_Window_Id=Tab.AD_Window_Id) JOIN  AD_Table Tabl On (Tab.AD_Table_Id=Tabl.AD_Table_Id) 
                     WHERE Tab.IsActive    ='Y'";
 
-                sql += " AND wind.AD_Window_ID=" + AD_Window_ID + " and tab.AD_table_ID IN (Select Distinct AD_Table_ID FROM AD_WF_Activity where AD_Window_ID=" + AD_Window_ID + ") ORDER BY Tab.AD_Tab_ID Asc";
+                sql += " AND wind.AD_Window_ID=" + AD_Window_ID + " AND tab.AD_table_ID IN (Select Distinct AD_Table_ID FROM AD_WF_Activity where AD_Window_ID=" + AD_Window_ID + ") ORDER BY Tab.AD_Tab_ID Asc";
 
                 //if window is selected then search for tables associated with window.
                 DataSet ds = DB.ExecuteDataset(sql);
@@ -98,7 +98,7 @@ FROM VADMS_Document
 WHERE VADMS_Document_ID = 
 (SELECT VADMS_Document_ID FROM VADMS_MetaData WHERE VADMS_MetaData_ID = a.Record_ID AND 
 (
-(SELECT count(VADMS_WindowDocLink_ID) FROM VADMS_WindowDocLink WHERE AD_Table_ID = a.AD_Table_ID AND Record_ID = a.Record_ID and (SELECT TableName FROM AD_Table WHERE AD_Table_ID = a.AD_Table_ID) = 'VADMS_MetaData') > 0 
+(SELECT COUNT(VADMS_WindowDocLink_ID) FROM VADMS_WindowDocLink WHERE AD_Table_ID = a.AD_Table_ID AND Record_ID = a.Record_ID AND (SELECT TableName FROM AD_Table WHERE AD_Table_ID = a.AD_Table_ID) = 'VADMS_MetaData') > 0 
 OR
 (SELECT TableName FROM AD_Table WHERE AD_Table_ID = a.AD_Table_ID) = 'VADMS_MetaData'
 ))
@@ -113,7 +113,7 @@ OR
                             WHERE a.Processed  ='N'
                             AND a.WFState      ='OS'
                             AND a.AD_Client_ID =" + AD_Client_ID + @" 
-                            AND ( (a.AD_User_ID=" + AD_User_ID + @" 
+                            AND ((a.AD_User_ID=" + AD_User_ID + @" 
                             OR a.AD_User_ID   IN
                               (SELECT AD_User_ID
                               FROM AD_User_Substitute
@@ -169,7 +169,7 @@ OR
                                 AND (sysdate    <=validto )
                                 ))
                               AND r.responsibletype !='H' AND r.responsibletype !='C'
-                              ) ) ";
+                              )) ";
 
             // if (AD_Window_ID > 0 || (!string.IsNullOrEmpty(searchText) && searchText.Length > 0))
             if (whereClause.Length > 7)
@@ -182,8 +182,8 @@ OR
                 sql += "  ORDER BY myTable.Priority DESC, myTable.Created DESC";
 
                 //LEFT OUTER Join 
-                //                           Ad_Wf_Activity Wf On Abc.Ad_Wf_Activity_Id=Wf.Ad_Wf_Activity_Id
-                //                           LEFT OUTER Join Ad_Wf_Node Wfn On Wfn.Ad_Wf_Node_Id=Wf.Ad_Wf_Node_Id
+                //                           AD_Wf_Activity Wf On Abc.AD_Wf_Activity_Id=Wf.AD_Wf_Activity_Id
+                //                           LEFT OUTER Join AD_WF_Node Wfn On Wfn.AD_WF_Node_Id=Wf.AD_WF_Node_Id
                 //                           WHERE upper(wfn.value) like Upper('%" + searchText + "%') OR upper(wfn.Name) like Upper('%" + searchText + @"%')
                 //                           ORDER BY Abc.Priority DESC, Abc.Created";
             }
@@ -202,7 +202,7 @@ OR
                 //SqlParameter[] param = new SqlParameter[2];
                 //param[0] = new SqlParameter("@clientid", AD_Client_ID);
                 //param[1] = new SqlParameter("@userid", AD_User_ID);
-                VLogger.Get().Log(Level.SEVERE, sql);
+                //VLogger.Get().Log(Level.SEVERE, sql);
                 DataSet ds = VIS.DBase.DB.ExecuteDatasetPaging(sql, pageNo, pageSize);
                 if (ds == null || ds.Tables[0].Rows.Count == 0)
                 {
@@ -255,18 +255,18 @@ OR
 
                 if (refresh)
                 {
-                    sql = "";
+                    //sql = "";
                     //if (AD_Window_ID > 0 || (!string.IsNullOrEmpty(searchText) && searchText.Length > 0))
                     //if (whereClause.Length > 7)
                     //{
-                    sql = @"SELECT count(*) FROM (";
+                    //sql = @"SELECT COUNT(*) FROM (";
                     //}
-                    sql += @" SELECT a.*
+                    sql += @"SELECT COUNT(a.AD_WF_Activity_ID)
                             FROM AD_WF_Activity a
                             WHERE a.Processed  ='N'
                             AND a.WFState      ='OS'
                             AND a.AD_Client_ID =" + ctx.GetAD_Client_ID() + @"
-                            AND ( (a.AD_User_ID=" + ctx.GetAD_User_ID() + @"
+                            AND ((a.AD_User_ID=" + ctx.GetAD_User_ID() + @"
                             OR a.AD_User_ID   IN
                               (SELECT AD_User_ID
                               FROM AD_User_Substitute
@@ -325,21 +325,21 @@ OR
                     if (whereClause.Length > 7)
                     {
                         // Applied Role access on workflow Activities
-                        sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "a", true, true) + @" )  MyTable ";
+                        sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "a", true, true); // + @" )  MyTable ";
 
                         sql += fromClause;
                         sql += whereClause;
 
                         //                        sql += @" )  Abc LEFT OUTER Join 
-                        //                           Ad_Wf_Activity Wf On Abc.Ad_Wf_Activity_Id=Wf.Ad_Wf_Activity_Id
-                        //                           LEFT OUTER Join Ad_Wf_Node Wfn On Wfn.Ad_Wf_Node_Id=Wf.Ad_Wf_Node_Id
+                        //                           AD_Wf_Activity Wf On Abc.AD_Wf_Activity_Id=Wf.AD_Wf_Activity_Id
+                        //                           LEFT OUTER Join AD_WF_Node Wfn On Wfn.AD_WF_Node_Id=Wf.AD_WF_Node_Id
                         //                           Where Upper(Wfn.Value) Like Upper('%" + searchText + "%') Or Upper(Wfn.Name) Like Upper('%" + searchText + @"%')
                         //                           ORDER BY Abc.Priority DESC,Abc.Created";
                     }
                     else
                     {
                         // Applied Role access on workflow Activities
-                        sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "a", true, true) + "  ) MyTable";
+                        sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "a", true, true); // + "  ) MyTable";
                     }
 
                     info.count = Util.GetValueOfInt(DB.ExecuteScalar(sql));
@@ -619,10 +619,10 @@ OR
                                   wfea.wfstate,
                                   wfea.TextMsg
                               FROM ad_wf_eventaudit wfea
-                                INNER JOIN Ad_WF_Node node
-                                ON (node.Ad_Wf_node_ID=wfea.AD_Wf_Node_id)
+                                INNER JOIN AD_WF_Node node
+                                ON (node.AD_Wf_node_ID=wfea.AD_Wf_Node_id)
                                 INNER JOIN AD_User usr
-                                ON (usr.Ad_User_ID         =wfea.ad_User_ID)
+                                ON (usr.AD_User_ID         =wfea.ad_User_ID)
                               WHERE wfea.AD_WF_Process_ID=" + wfProcessID + @"
                               Order By wfea.ad_wf_eventaudit_id desc";
                 DataSet ds = DB.ExecuteDataset(sql);
@@ -794,14 +794,14 @@ OR
                                     parentOrg_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Parent_Org_Id FROM ad_OrgInfo WHERE AD_Org_ID = " + activity.GetResponsibleOrg_ID()));
                                     superVisiorID = (new MOrgInfo(ctx, parentOrg_ID, null).GetSupervisor_ID());
                                     if (superVisiorID > 0)
-                                        setRespOrg = true;                                        
+                                        setRespOrg = true;
                                 }
                                 else
                                     superVisiorID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Supervisor_ID FROM AD_User WHERE IsActive='Y' AND AD_User_ID=" + activity.GetAD_User_ID()));
                                 //chkUserTxt = CheckUser(superVisiorID);
                                 //if (chkUserTxt != "")
                                 //    return chkUserTxt;
-                                if(setRespOrg)
+                                if (setRespOrg)
                                     activity.SetResponsibleOrg_ID(parentOrg_ID);
                                 if (superVisiorID == 0)//Approve
                                 {
@@ -962,13 +962,13 @@ OR
             string sql = "";
             if (baseLang)
             {
-                sql = @"SELECT DISTINCT AD_Window.AD_window_ID,  AD_Window.DisplayName  || ' (' || Ad_Wf_Node.Name || ')' As Name,AD_WF_NODE.AD_WF_NODE_ID FROM AD_WF_Activity AD_WF_Activity
-                            JOIN AD_Window AD_Window ON AD_WF_Activity.Ad_Window_Id = AD_Window.Ad_Window_Id
-                            JOIN AD_WF_NODE AD_WF_NODE ON AD_WF_NODE.AD_WF_NODE_ID=Ad_Wf_Activity.AD_WF_NODE_ID
-                            WHERE AD_Window.IsActive ='Y'  AND Ad_Wf_Activity.Processed = 'N'  AND Ad_Wf_Activity.WFState      ='OS' ";
-                sql += " AND Ad_Wf_Activity.AD_Client_ID =" + ctx.GetAD_Client_ID() + @" 
-                            AND  ((Ad_Wf_Activity.AD_User_ID=" + ctx.GetAD_User_ID() + @" 
-                            OR Ad_Wf_Activity.AD_User_ID   IN
+                sql = @"SELECT DISTINCT AD_Window.AD_window_ID,  AD_Window.DisplayName  || ' (' || AD_WF_Node.Name || ')' As Name,AD_WF_Node.AD_WF_Node_ID FROM AD_WF_Activity AD_WF_Activity
+                            INNER JOIN AD_Window AD_Window ON (AD_WF_Activity.AD_Window_ID = AD_Window.AD_Window_ID)
+                            INNER JOIN AD_WF_Node AD_WF_Node ON (AD_WF_Node.AD_WF_Node_ID=AD_Wf_Activity.AD_WF_Node_ID)
+                            WHERE AD_Window.IsActive ='Y'  AND AD_Wf_Activity.Processed = 'N'  AND AD_Wf_Activity.WFState      ='OS' ";
+                sql += " AND AD_Wf_Activity.AD_Client_ID =" + ctx.GetAD_Client_ID() + @" 
+                            AND  ((AD_Wf_Activity.AD_User_ID=" + ctx.GetAD_User_ID() + @" 
+                            OR AD_Wf_Activity.AD_User_ID   IN
                               (SELECT AD_User_ID
                               FROM AD_User_Substitute
                               WHERE IsActive   ='Y'
@@ -1026,20 +1026,20 @@ OR
             }
             else
             {
-                sql = @"SELECT DISTINCT Ad_Window.Ad_Window_Id,
-                        Ad_Window_Trl.Name || ' (' || Ad_Wf_Node.Name || ')' As Name,AD_WF_NODE.AD_WF_NODE_ID
-                        FROM Ad_Wf_Activity Ad_Wf_Activity
-                        JOIN AD_Window AD_Window
-                        ON Ad_Wf_Activity.Ad_Window_Id = Ad_Window.Ad_Window_Id
-                        JOIN AD_window_Trl AD_window_Trl
-                        ON AD_window_Trl.AD_Window_ID=AD_window.AD_window_ID
-                        JOIN AD_WF_NODE AD_WF_NODE ON AD_WF_NODE.AD_WF_NODE_ID=Ad_Wf_Activity.AD_WF_NODE_ID
+                sql = @"SELECT DISTINCT AD_Window.AD_Window_Id,
+                        AD_Window_Trl.Name || ' (' || AD_WF_Node.Name || ')' As Name,AD_WF_Node.AD_WF_Node_ID
+                        FROM AD_Wf_Activity AD_Wf_Activity
+                        INNER JOIN AD_Window AD_Window
+                        ON (AD_Wf_Activity.AD_Window_Id = AD_Window.AD_Window_Id)
+                        INNER JOIN AD_window_Trl AD_window_Trl
+                        ON (AD_window_Trl.AD_Window_ID=AD_window.AD_window_ID)
+                        INNER JOIN AD_WF_Node AD_WF_Node ON (AD_WF_Node.AD_WF_Node_ID=AD_Wf_Activity.AD_WF_Node_ID)
                         WHERE AD_Window.IsActive     ='Y'
-                        AND Ad_Wf_Activity.Processed = 'N'
-                        AND Ad_Wf_Activity.WFState   ='OS' AND AD_Language='" + Env.GetAD_Language(ctx) + "'";
-                sql += " AND Ad_Wf_Activity.AD_Client_ID =" + ctx.GetAD_Client_ID() + @" 
-                            AND  ((Ad_Wf_Activity.AD_User_ID=" + ctx.GetAD_User_ID() + @" 
-                            OR Ad_Wf_Activity.AD_User_ID   IN
+                        AND AD_Wf_Activity.Processed = 'N'
+                        AND AD_Wf_Activity.WFState   ='OS' AND AD_Language='" + Env.GetAD_Language(ctx) + "'";
+                sql += " AND AD_Wf_Activity.AD_Client_ID =" + ctx.GetAD_Client_ID() + @" 
+                            AND  ((AD_Wf_Activity.AD_User_ID=" + ctx.GetAD_User_ID() + @" 
+                            OR AD_Wf_Activity.AD_User_ID   IN
                               (SELECT AD_User_ID
                               FROM AD_User_Substitute
                               WHERE IsActive   ='Y'
@@ -1107,7 +1107,7 @@ OR
                     WorkflowWindowList wwl = new WorkflowWindowList();
                     wwl.WindowName = Convert.ToString(ds.Tables[0].Rows[i]["Name"]);
                     wwl.AD_Window_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Window_ID"]);
-                    wwl.AD_Node_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_WF_NODE_ID"]);
+                    wwl.AD_Node_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_WF_Node_ID"]);
                     list.Add(wwl);
                 }
             }

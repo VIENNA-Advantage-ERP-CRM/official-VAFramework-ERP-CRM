@@ -891,7 +891,7 @@
                     });
 
                     var formName = {
-                        FromName: 'VADMS_Document'
+                        FromName: 'VADMS_DMSWeb'
                     };
 
                     var formID = '';

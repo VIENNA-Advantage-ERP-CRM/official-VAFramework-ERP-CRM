@@ -29,7 +29,7 @@ namespace VIS.Helpers
             {
                 #region Request Count
                 //To Get Request count
-                strQuery = " SELECT  count(R_Request.r_request_id) FROM R_Request  inner join  r_requesttype rt on R_Request.r_requesttype_id=rt.r_requesttype_ID";
+                strQuery = " SELECT  count(R_Request.r_request_id) FROM R_Request  inner join  r_requesttype rt on (R_Request.r_requesttype_id=rt.r_requesttype_ID)";
                 strQuery = MRole.Get(ctx, ctx.GetAD_Role_ID()).AddAccessSQL(strQuery, "R_Request", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
                 strQuery += " AND ( R_Request.SalesRep_ID =" + ctx.GetAD_User_ID() + " OR R_Request.AD_Role_ID =" + ctx.GetAD_Role_ID() + ")"
                  + " AND R_Request.Processed ='N'"
@@ -159,14 +159,14 @@ namespace VIS.Helpers
                          .Append("  FROM cm_chatentry CE JOIN cm_chat CH ON (CE.cm_chat_id= CH.cm_chat_id) ")
                          .Append("  JOIN cm_subscribe CS  ON (CH.ad_table_id= CS.ad_table_id) AND (CH.record_id = CS.record_id)")
                          .Append("  WHERE cs.createdby=" + ctx.GetAD_User_ID() + " GROUP BY CH.cm_chat_id ORDER BY entryID )inn1) inn ")
-                         .Append("  JOIN cm_chatentry CH ON inn.ChatID= ch.cm_chat_id ")
+                         .Append("  JOIN cm_chatentry CH ON (inn.ChatID= ch.cm_chat_id) ")
                          .Append("  JOIN cm_chat CMH ON (cmh.cm_chat_id= inn.chatid)")
                          .Append("  JOIN cm_subscribe CS  ON (CMH.ad_table_id= CS.ad_table_id) AND (CMH.record_id = CS.record_id)")
-                         .Append(" JOIN ad_user Au ON au.ad_user_id= CH.createdBy")
+                         .Append(" JOIN ad_user Au ON (au.ad_user_id= CH.createdBy)")
                          .Append(" LEFT OUTER JOIN ad_image AI ON (ai.ad_image_id=au.ad_image_id)")
                          .Append("  JOIN ad_window AW ON (cs.ad_window_id= aw.ad_window_id) LEFT OUTER  JOIN ad_image adi ON (adi.ad_image_id= aw.ad_image_id)  WHERE cs.createdby=" + ctx.GetAD_User_ID())
                          .Append(" AND ch.cm_chatentry_ID =(SELECT max(cm_chatentry_ID) FROM cm_chatentry WHERE CM_Chat_ID= ch.cm_chat_id)");
-                       // .Append("  order by inn.EntryID desc,ch.cm_chatentry_id asc");
+                // .Append("  order by inn.EntryID desc,ch.cm_chatentry_id asc");
                 dsData = new DataSet();
                 dsData = DB.ExecuteDataset(SqlQuery.ToString());
                 int nTotalFollow = 0;
@@ -194,10 +194,10 @@ namespace VIS.Helpers
                 #region Appointments Count
 
                 strQuery = "SELECT AppointmentsInfo.Appointmentsinfo_id AS ID,AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID"
-                    //+ "  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N' AND  AppointmentsInfo.CreatedBy  !=" + ctx.GetAD_User_ID() + " AND AppointmentsInfo.AD_User_ID  = " + ctx.GetAD_User_ID() + ""
-                          + "  FROM AppointmentsInfo AppointmentsInfo JOIN AD_User AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.AD_User_ID  = " + ctx.GetAD_User_ID() + ""
-                         + "  UNION SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID from AppointmentsInfo AppointmentsInfo "
-                         + "  JOIN AD_User AD_User ON AD_User.AD_User_ID = AppointmentsInfo.CreatedBy  WHERE (AppointmentsInfo.IsRead ='Y'   AND AppointmentsInfo.AD_User_ID = " + ctx.GetAD_User_ID() + " )  AND AppointmentsInfo.istask ='N'  AND AppointmentsInfo.startDate BETWEEN to_date('";
+                          //+ "  FROM AppointmentsInfo JOIN AD_User ON AD_User.AD_User_ID =AppointmentsInfo.CreatedBy WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N' AND  AppointmentsInfo.CreatedBy  !=" + ctx.GetAD_User_ID() + " AND AppointmentsInfo.AD_User_ID  = " + ctx.GetAD_User_ID() + ""
+                          + " FROM AppointmentsInfo AppointmentsInfo INNER JOIN AD_User AD_User ON (AD_User.AD_User_ID =AppointmentsInfo.CreatedBy) WHERE AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='N' AND AppointmentsInfo.AD_User_ID  = " + ctx.GetAD_User_ID() + ""
+                         + " UNION (SELECT AppointmentsInfo.Appointmentsinfo_id AS ID, AppointmentsInfo.AD_Client_ID,AppointmentsInfo.AD_Org_ID FROM AppointmentsInfo AppointmentsInfo"
+                         + " INNER JOIN AD_User AD_User ON (AD_User.AD_User_ID = AppointmentsInfo.CreatedBy)  WHERE (AppointmentsInfo.IsRead ='Y' AND AppointmentsInfo.AD_User_ID = " + ctx.GetAD_User_ID() + " ) AND AppointmentsInfo.istask ='N' AND AppointmentsInfo.startDate BETWEEN to_date('";
                 //DateTime.Now.ToShortDateString()
                 strQuery += DateTime.Now.AddDays(-1).ToString("M/dd/yy");
                 // Use current time
@@ -205,11 +205,11 @@ namespace VIS.Helpers
                 strQuery += DateTime.Now.AddDays(7).ToString("M/dd/yy");
                 //DateTime.UtcNow.AddDays(1).ToShortDateString() 
                 strQuery += " 23.59','mm/dd/yy HH24:MI') "
-                          + "  OR  to_date('" + DateTime.Now.ToString("M/dd/yy") + "','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=" + ctx.GetAD_User_ID() + " AND AppointmentsInfo.AD_User_ID  = " + ctx.GetAD_User_ID() ;
+                          + "  OR  to_date('" + DateTime.Now.ToString("M/dd/yy") + "','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=" + ctx.GetAD_User_ID() + " AND AppointmentsInfo.AD_User_ID  = " + ctx.GetAD_User_ID() + ")";
                 strQuery = MRole.Get(ctx, ctx.GetAD_Role_ID()).AddAccessSQL(strQuery, "AppointmentsInfo", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
 
 
-                strQuery = "SELECT COUNT( AppointmentsInfo.ID)  FROM (" + strQuery + ") AppointmentsInfo";
+                strQuery = "SELECT COUNT( AppointmentsInfo.ID) FROM (" + strQuery + ") AppointmentsInfo";
                 dsData = new DataSet();
                 dsData = DB.ExecuteDataset(strQuery);
                 int nTotalAppnt = 0;
@@ -450,13 +450,13 @@ namespace VIS.Helpers
             SqlQuery.Append("select COUNT(inn.ChatID) As Count");
 
             SqlQuery.Append(" from (select * from (select CH.cm_chat_id as ChatID,  max(CE.cm_chatentry_id)as EntryID")
-                     .Append("  from cm_chatentry CE join cm_chat CH on CE.cm_chat_id= CH.cm_chat_id ")
+                     .Append("  from cm_chatentry CE join cm_chat CH on (CE.cm_chat_id= CH.cm_chat_id) ")
                      .Append("  JOIN cm_subscribe CS  ON (CH.ad_table_id= CS.ad_table_id) AND (CH.record_id = CS.record_id)")
                      .Append("  where cs.createdby=" + ctx.GetAD_User_ID() + " group by CH.cm_chat_id order by entryID )inn1) inn ")
-                     .Append("  JOIN cm_chatentry CH on inn.ChatID= ch.cm_chat_id ")
+                     .Append("  JOIN cm_chatentry CH on (inn.ChatID= ch.cm_chat_id) ")
                      .Append("  JOIN cm_chat CMH on (cmh.cm_chat_id= inn.chatid)")
                      .Append("  JOIN cm_subscribe CS  ON (CMH.ad_table_id= CS.ad_table_id) AND (CMH.record_id = CS.record_id)")
-                     .Append(" Join ad_user Au on au.ad_user_id= CH.createdBy")
+                     .Append(" Join ad_user Au on (au.ad_user_id= CH.createdBy)")
                      .Append(" left outer JOIN ad_image AI on(ai.ad_image_id=au.ad_image_id)")
                      .Append("  join ad_window AW on(cs.ad_window_id= aw.ad_window_id) left outer  JOIN ad_image adi on(adi.ad_image_id= aw.ad_image_id)  where cs.createdby=" + ctx.GetAD_User_ID())
                      .Append(" and ch.cm_chatentry_ID =(Select max(cm_chatentry_ID) from cm_chatentry where CM_Chat_ID= ch.cm_chat_id)")
@@ -495,14 +495,14 @@ namespace VIS.Helpers
                     SqlQuery.Append("aw.DisplayName as WINNAME,");
                 }
                 SqlQuery.Append("  At.TableName, aw.AD_Window_ID,cs.AD_Table_ID,cs.RECOrd_ID, aw.help,au.Name AS NAME,cs.cm_subscribe_ID, ch.created,ai.ad_image_id ,ai.binarydata as UsrImg,  adi.binarydata as WinImg,CH.createdby  from (select * from (select CH.cm_chat_id as ChatID,  max(CE.cm_chatentry_id)as EntryID")
-                        .Append("  from cm_chatentry CE join cm_chat CH on CE.cm_chat_id= CH.cm_chat_id ")
+                        .Append("  from cm_chatentry CE join cm_chat CH on (CE.cm_chat_id= CH.cm_chat_id) ")
                         .Append("  JOIN cm_subscribe CS  ON (CH.ad_table_id= CS.ad_table_id) AND (CH.record_id = CS.record_id)")
                         .Append("  where cs.createdby=" + ctx.GetAD_User_ID() + " group by CH.cm_chat_id order by entryID )inn1) inn ")
-                        .Append("  JOIN cm_chatentry CH on inn.ChatID= ch.cm_chat_id ")
+                        .Append("  JOIN cm_chatentry CH on (inn.ChatID= ch.cm_chat_id) ")
                         .Append("  JOIN cm_chat CMH on (cmh.cm_chat_id= inn.chatid)")
                         .Append("  JOIN cm_subscribe CS  ON (CMH.ad_table_id= CS.ad_table_id) AND (CMH.record_id = CS.record_id)")
-                        .Append("  Join ad_user Au on au.ad_user_id= CH.createdBy")
-                        .Append("  Join ad_Table At on at.ad_Table_id= CS.ad_table_id")
+                        .Append("  Join ad_user Au on (au.ad_user_id= CH.createdBy)")
+                        .Append("  Join ad_Table At on (at.ad_Table_id= CS.ad_table_id)")
                         .Append("  left outer JOIN ad_image AI on(ai.ad_image_id=au.ad_image_id)")
                         .Append("  join ad_window AW on(cs.ad_window_id= aw.ad_window_id) left outer  JOIN ad_image adi on(adi.ad_image_id= aw.ad_image_id)")
                         .Append("  where cs.createdby=" + ctx.GetAD_User_ID())
@@ -633,14 +633,14 @@ namespace VIS.Helpers
                     SqlQuery.Append("aw.DisplayName as WINNAME,");
                 }
                 SqlQuery.Append("  At.TableName, aw.AD_Window_ID,cs.AD_Table_ID,cs.RECOrd_ID, aw.help,au.Name AS NAME,cs.cm_subscribe_ID, ch.created,ai.ad_image_id ,ai.binarydata as UsrImg,  adi.binarydata as WinImg  from (select * from (select CH.cm_chat_id as ChatID,  max(CE.cm_chatentry_id)as EntryID")
-                        .Append("  from cm_chatentry CE join cm_chat CH on CE.cm_chat_id= CH.cm_chat_id ")
+                        .Append("  from cm_chatentry CE join cm_chat CH on (CE.cm_chat_id= CH.cm_chat_id) ")
                         .Append("  JOIN cm_subscribe CS  ON (CH.ad_table_id= CS.ad_table_id) AND (CH.record_id = CS.record_id)")
                         .Append("  where cs.createdby=" + ctx.GetAD_User_ID() + " group by CH.cm_chat_id order by entryID )inn1) inn ")
-                        .Append("  JOIN cm_chatentry CH on inn.ChatID= ch.cm_chat_id ")
+                        .Append("  JOIN cm_chatentry CH on (inn.ChatID= ch.cm_chat_id) ")
                         .Append("  JOIN cm_chat CMH on (cmh.cm_chat_id= inn.chatid)")
                         .Append("  JOIN cm_subscribe CS  ON (CMH.ad_table_id= CS.ad_table_id) AND (CMH.record_id = CS.record_id)")
-                        .Append("  Join ad_user Au on au.ad_user_id= CH.createdBy")
-                        .Append("  Join ad_Table At on at.ad_Table_id= CS.ad_table_id")
+                        .Append("  Join ad_user Au on (au.ad_user_id= CH.createdBy)")
+                        .Append("  Join ad_Table At on (at.ad_Table_id= CS.ad_table_id)")
                         .Append("  left outer JOIN ad_image AI on(ai.ad_image_id=au.ad_image_id)")
                         .Append("  join ad_window AW on(cs.ad_window_id= aw.ad_window_id) left outer  JOIN ad_image adi on(adi.ad_image_id= aw.ad_image_id)")
                         .Append("  where cs.createdby=" + ctx.GetAD_User_ID())
@@ -733,13 +733,13 @@ namespace VIS.Helpers
                 }
 
                 SqlQuery.Append("  aw.AD_Window_ID,cs.AD_Table_ID,cs.RECOrd_ID, aw.help,au.Name AS NAME,cs.cm_subscribe_ID, ch.created,ai.ad_image_id, ai.binarydata as UsrImg,  adi.binarydata as WinImg ,CH.createdby from (select * from (select CH.cm_chat_id as ChatID,  max(CE.cm_chatentry_id)as EntryID")
-                        .Append("  from cm_chatentry CE join cm_chat CH on CE.cm_chat_id= CH.cm_chat_id ")
+                        .Append("  from cm_chatentry CE join cm_chat CH on (CE.cm_chat_id= CH.cm_chat_id) ")
                         .Append("  JOIN cm_subscribe CS  ON (CH.ad_table_id= CS.ad_table_id) AND (CH.record_id = CS.record_id)")
                         .Append("  where cs.createdby=" + ctx.GetAD_User_ID() + " group by CH.cm_chat_id order by entryID )inn1 ) inn ")
-                        .Append("  JOIN cm_chatentry CH on inn.ChatID= ch.cm_chat_id ")
+                        .Append("  JOIN cm_chatentry CH on (inn.ChatID= ch.cm_chat_id) ")
                         .Append("  JOIN cm_chat CMH on (cmh.cm_chat_id= inn.chatid)")
-                        .Append("  JOIN cm_subscribe CS  ON (CMH.ad_table_id= CS.ad_table_id) AND (CMH.record_id = CS.record_id)")
-                        .Append("  Join ad_user Au on au.ad_user_id= CH.createdBy")
+                        .Append("  JOIN cm_subscribe CS ON (CMH.ad_table_id= CS.ad_table_id) AND (CMH.record_id = CS.record_id)")
+                        .Append("  Join ad_user Au on (au.ad_user_id= CH.createdBy)")
                         .Append("  left outer JOIN ad_image AI on(ai.ad_image_id=au.ad_image_id)")
                         .Append("  join ad_window AW on(cs.ad_window_id= aw.ad_window_id) left outer  JOIN ad_image adi on(adi.ad_image_id= aw.ad_image_id)  where cs.createdby=" + ctx.GetAD_User_ID())
                         .Append("  AND cmh.cm_chat_id=" + ChatID)
@@ -896,7 +896,7 @@ namespace VIS.Helpers
                               AD_Note.AD_Note_ID
                             FROM AD_Note
                             INNER JOIN AD_Message
-                            ON AD_Message.AD_Message_ID         =AD_Note.AD_Message_ID";
+                            ON (AD_Message.AD_Message_ID=AD_Note.AD_Message_ID)";
                 strQuery = MRole.Get(ctx, ctx.GetAD_Role_ID()).AddAccessSQL(strQuery, "AD_Note", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
 
                 strQuery += "  AND AD_Note.AD_User_ID IN (0," + ctx.GetAD_User_ID() + ")"
@@ -927,7 +927,7 @@ namespace VIS.Helpers
                         {
                             Alrt.Title = Regex.Replace(Alrt.Title, patternTitle, string.Empty);
                         }
-                            Alrt.TableName = dsData.Tables[0].Rows[i]["TableName"].ToString();
+                        Alrt.TableName = dsData.Tables[0].Rows[i]["TableName"].ToString();
                         if (PResultTableID == Alrt.AD_Table_ID)
                         {
                             Alrt.ProcessWindowID = Util.GetValueOfInt(windowID);
@@ -946,10 +946,10 @@ namespace VIS.Helpers
                         if (matchesDesc.Count > 0)
                         {
                             Alrt.Description = Regex.Replace(Alrt.Description, patternDesc, string.Empty);
-                         }
+                        }
 
 
-                            DateTime _createdDate = new DateTime();
+                        DateTime _createdDate = new DateTime();
                         if (dsData.Tables[0].Rows[i]["dbDate"].ToString() != null && dsData.Tables[0].Rows[i]["dbDate"].ToString() != "")
                         {
                             _createdDate = Convert.ToDateTime(dsData.Tables[0].Rows[i]["dbDate"].ToString());
@@ -995,15 +995,15 @@ namespace VIS.Helpers
                 //strQuery = " SELECT  count(R_Request.r_request_id) FROM R_Request  inner join  r_requesttype rt on R_Request.r_requesttype_id=rt.r_requesttype_ID";
                 strQuery = @" SELECT  count(R_Request.r_request_id) FROM R_Request
                         LEFT OUTER JOIN C_BPartner
-                        ON R_Request.C_BPartner_ID=C_BPartner.C_BPartner_ID
+                        ON (R_Request.C_BPartner_ID=C_BPartner.C_BPartner_ID)
                         LEFT OUTER JOIN r_requesttype rt
-                        ON R_Request.r_requesttype_id = rt.r_requesttype_ID
+                        ON (R_Request.r_requesttype_id = rt.r_requesttype_ID)
                         LEFT OUTER JOIN R_Status rs
-                        ON rs.R_Status_ID=R_request.R_Status_ID
+                        ON (rs.R_Status_ID=R_request.R_Status_ID)
                         LEFT OUTER JOIN ad_ref_list adl
-                        ON adl.Value=R_Request.Priority
+                        ON (adl.Value=R_Request.Priority)
                         JOIN AD_reference adr
-                        ON adr.AD_Reference_ID=adl.AD_Reference_ID ";
+                        ON (adr.AD_Reference_ID=adl.AD_Reference_ID) ";
 
                 strQuery = MRole.Get(ctx, ctx.GetAD_Role_ID()).AddAccessSQL(strQuery, "R_Request", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
                 strQuery += "  AND adr.Name='_PriorityRule'  AND ( R_Request.SalesRep_ID =" + ctx.GetAD_User_ID() + " OR R_Request.AD_Role_ID =" + ctx.GetAD_Role_ID() + ")"
@@ -1086,15 +1086,15 @@ namespace VIS.Helpers
                           ) AD_Window_ID
                         FROM R_Request
                         LEFT OUTER JOIN C_BPartner
-                        ON R_Request.C_BPartner_ID=C_BPartner.C_BPartner_ID
+                        ON (R_Request.C_BPartner_ID=C_BPartner.C_BPartner_ID)
                         LEFT OUTER JOIN r_requesttype rt
-                        ON R_Request.r_requesttype_id = rt.r_requesttype_ID
+                        ON (R_Request.r_requesttype_id = rt.r_requesttype_ID)
                         LEFT OUTER JOIN R_Status rs
-                        ON rs.R_Status_ID=R_request.R_Status_ID
+                        ON (rs.R_Status_ID=R_request.R_Status_ID)
                         LEFT OUTER JOIN ad_ref_list adl
-                        ON adl.Value=R_Request.Priority
+                        ON (dl.Value=R_Request.Priority)
                         JOIN AD_reference adr
-                        ON adr.AD_Reference_ID=adl.AD_Reference_ID ";
+                        ON (adr.AD_Reference_ID=adl.AD_Reference_ID) ";
 
 
 
@@ -1336,7 +1336,7 @@ namespace VIS.Helpers
                 {
                     long hid = DateTime.Now.Ticks;
                     ct.SetContext("#LogHandler", hid.ToString());
-                // VAdvantage.Logging.VLogMgt.Initialize(true, Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, (ct.GetAD_Org_Name() == "*" ? "Star" : ct.GetAD_Org_Name()) + "_" + ct.GetAD_User_Name()), Util.GetValueOfInt(traceLevel), hid, ct);
+                    // VAdvantage.Logging.VLogMgt.Initialize(true, Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, (ct.GetAD_Org_Name() == "*" ? "Star" : ct.GetAD_Org_Name()) + "_" + ct.GetAD_User_Name()), Util.GetValueOfInt(traceLevel), hid, ct);
                 }
             }
             else if (maintainAccording == "U")
@@ -1346,7 +1346,7 @@ namespace VIS.Helpers
                 {
                     long hid = DateTime.Now.Ticks;
                     ct.SetContext("#LogHandler", hid.ToString());
-              //   VAdvantage.Logging.VLogMgt.Initialize(true, Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, (ct.GetAD_Org_Name() == "*" ? "Star" : ct.GetAD_Org_Name()) + "_" + ct.GetAD_User_Name()), Util.GetValueOfInt(traceLevel), hid, ct);
+                    //   VAdvantage.Logging.VLogMgt.Initialize(true, Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, (ct.GetAD_Org_Name() == "*" ? "Star" : ct.GetAD_Org_Name()) + "_" + ct.GetAD_User_Name()), Util.GetValueOfInt(traceLevel), hid, ct);
                 }
             }
 
@@ -1377,7 +1377,7 @@ namespace VIS.Helpers
         public int FormID
         {
             get;
-            set; 
+            set;
 
         }
         public int ProcessID
