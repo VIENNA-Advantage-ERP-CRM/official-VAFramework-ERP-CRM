@@ -237,7 +237,8 @@
             var lookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), $self.windowNo, 2163, VIS.DisplayType.TableDir, "AD_Org_ID", 0, false, "AD_Org.AD_Org_ID <> 0 AND AD_Org.IsSummary='N' AND AD_Org.IsActive='Y' AND AD_Org.IsCostCenter='N' AND AD_Org.IsProfitCenter='N' ");
             $self.cmbOrg = new VIS.Controls.VComboBox("AD_Org_ID", true, false, true, lookup, 150, VIS.DisplayType.TableDir, 0);
 
-            var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), $self.windowNo, 2762, VIS.DisplayType.Search);
+            // VIS0060: Data was not coming in Business Partner Pop Up
+            var value = VIS.MLookupFactory.get(VIS.Env.getCtx(), $self.windowNo, 2762, VIS.DisplayType.Search, "C_BPartner_ID", 0, false, "C_BPartner.IsActive ='Y' And C_Bpartner.Issummary ='N'");
             $self.vSearchBPartner = new VIS.Controls.VTextBoxButton("C_BPartner_ID", true, false, true, VIS.DisplayType.Search, value, 0);
 
             // var orderShipmentvalue = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), $self.windowNo, 2161, VIS.DisplayType.Search);
