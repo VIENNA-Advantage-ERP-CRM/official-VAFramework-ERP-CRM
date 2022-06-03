@@ -567,6 +567,13 @@
             return $root;
         };
 
+        this.refreshUI = function () {
+            /*Refresh Grid on Focus*/
+            if (dGrid) {
+                dGrid.resize();
+            }
+        };
+
         this.disposeComponent = function () {
 
             if (btnCancel)
@@ -638,6 +645,10 @@
         this.Initialize();
         this.frame.getContentGrid().append(this.getRoot());
         this.display();
+    };
+
+    VCharge.prototype.refresh = function () {
+        this.refreshUI();
     };
 
     //Must implement dispose

@@ -35,7 +35,7 @@ namespace VAdvantage.Model
             int key = AD_Schedule_ID;
             MSchedule retValue = null;
 
-            if(s_cache.ContainsKey(key))
+            if (s_cache.ContainsKey(key))
                 retValue = (MSchedule)s_cache[key];
 
             if (retValue != null)
@@ -49,7 +49,7 @@ namespace VAdvantage.Model
         /**	Cache						*/
         private static CCache<int, MSchedule> s_cache = new CCache<int, MSchedule>("AD_Schedule", 20);
 
-       // int s = 0;
+        // int s = 0;
         /// <summary>
         /// Default Constructor
         /// </summary>
@@ -199,14 +199,14 @@ namespace VAdvantage.Model
         }	//	toString
 
 
-        public const int MONDAY = 2;
+        public const int MONDAY = 1;
 
-        public const int SUNDAY = 1;
-        public const int THURSDAY = 5;
-        public const int TUESDAY = 3;
-        public const int WEDNESDAY = 4;
-        public const int SATURDAY = 7;
-        public const int FRIDAY = 6;
+        public const int SUNDAY = 0;
+        public const int THURSDAY = 4;
+        public const int TUESDAY = 2;
+        public const int WEDNESDAY = 3;
+        public const int SATURDAY = 6;
+        public const int FRIDAY = 5;
 
 
         /// <summary>
@@ -261,7 +261,7 @@ namespace VAdvantage.Model
                         ip = addr[i].ToString();
                         log.Info("Host IP Address: " + ip);
                         break;
-                    }                    
+                    }
                 }
                 if (ipOnly.IndexOf(ip) == -1)
                 {
@@ -332,11 +332,62 @@ namespace VAdvantage.Model
 
                 bool increment = true;
                 int ct = 0;
-                while ((ct < 8) && !(validDays.Contains(((int)calNext.DayOfWeek) + 1)))
+                if (X_R_RequestProcessor.FREQUENCYTYPE_Day.Equals(frequencyType))
                 {
-                    calNext = calNext.AddDays(1);
-                    ct++;
-                    increment = false;
+                    while ((ct < 8) && (!(validDays.Contains(((int)calNext.AddDays(((ct > 0) ? 0 : frequency)).DayOfWeek)))))
+                    {
+                        //Add frequency to today and check next date is checked or not.
+                        // if yes then set that day as next date otherwise add 1 day to new date and check if checked or not.
+                        // check next date
+
+                        //{
+                        //Add frequency +1
+                        //Example:-- today is wednesday and frequency is 3. so saturday should be next day.
+                        // But saturday is not checked, so add frequency +1 to set next date sunday and check that one.
+                        calNext = calNext.AddDays(((ct > 0) ? 1 : frequency));
+                        //calNext = calNext.AddHours(-calNext.Hour).AddMinutes(-calNext.Minute).AddSeconds(-calNext.Second);
+                        calNext = calNext.Subtract(new TimeSpan(calNext.Hour, 0, 0));
+                        calNext = calNext.AddHours(hour);
+
+                        calNext = calNext.Subtract(new TimeSpan(0, calNext.Minute, 0));
+                        calNext = calNext.AddMinutes(minute);
+                        ct++;
+                        increment = false;
+                        //}
+                        //else
+                        //{
+                        //    // if nextday is checked, then set that day as next run time
+                        //    calNext = calNext.AddDays(((ct > 0) ? 1 : frequency));
+                        //    if (ct > 0)
+                        //    {
+                        //        calNext = calNext.AddHours(-calNext.Hour).AddMinutes(-calNext.Minute).AddSeconds(-calNext.Second);
+                        //    }
+                        //    increment = false;
+                        //    break;
+                        //}
+                    }
+                }
+                else if (X_R_RequestProcessor.FREQUENCYTYPE_Hour.Equals(frequencyType))
+                {
+                    //calNext = calNext.AddHours(frequency);
+                    while ((ct < 8) && !(validDays.Contains(((int)calNext.AddHours(frequency).DayOfWeek))))
+                    {
+                        calNext = calNext.AddHours(frequency).AddDays(1);
+                        calNext = calNext.AddHours(-calNext.Hour).AddMinutes(-calNext.Minute).AddSeconds(-calNext.Second);
+                        ct++;
+                        increment = false;
+                    }
+                }
+                else if (X_R_RequestProcessor.FREQUENCYTYPE_Minute.Equals(frequencyType))
+                {
+                    //calNext = calNext.AddMinutes(frequency);
+                    while ((ct < 8) && !(validDays.Contains(((int)calNext.AddMinutes(frequency).DayOfWeek))))
+                    {
+                        calNext = calNext.AddMinutes(frequency).AddDays(1);
+                        calNext = calNext.AddHours(-calNext.Hour).AddMinutes(-calNext.Minute).AddSeconds(-calNext.Second);
+                        ct++;
+                        increment = false;
+                    }
                 }
 
 
@@ -353,28 +404,27 @@ namespace VAdvantage.Model
                     calNext = calNext.Subtract(new TimeSpan(0, calNext.Minute, 0));
                     calNext = calNext.AddMinutes(minute);
                     if (increment)
-                    {
                         calNext = calNext.AddDays(frequency);
-                    }
+
                 }	//	Day
 
                 /*****	HOUR	******/
                 else if (X_R_RequestProcessor.FREQUENCYTYPE_Hour.Equals(frequencyType))
                 {
-                    //calNext.set(java.util.Calendar.MINUTE, minute);
-                    //calNext.add(java.util.Calendar.HOUR_OF_DAY, frequency);
 
-                    calNext = calNext.Subtract(new TimeSpan(0, calNext.Minute, 0));
-                    calNext = calNext.AddMinutes(minute);
-                    if(increment)
+                    if (increment)
+                    {
+                        //calNext = calNext.Subtract(new TimeSpan(0, calNext.Minute, 0));
+                        //calNext = calNext.AddMinutes(minute);
                         calNext = calNext.AddHours(frequency);
+                    }
                 }	//	Hour
 
                 /*****	MINUTE	******/
                 else if (X_R_RequestProcessor.FREQUENCYTYPE_Minute.Equals(frequencyType))
                 {
                     //calNext.add(java.util.Calendar.MINUTE, frequency);
-                    if(increment)
+                    if (increment)
                         calNext = calNext.AddMinutes(frequency);
                 }	//	Minute
             }
@@ -387,7 +437,7 @@ namespace VAdvantage.Model
                 calNext = calNext.Subtract(new TimeSpan(calNext.Hour, calNext.Minute, 0));
                 calNext = calNext.AddHours(hour);
                 calNext = calNext.AddMinutes(minute);
-                
+
                 //
                 int day = GetMonthDay();
                 int dd = calNext.Day; //.get(java.util.Calendar.DAY_OF_MONTH);
@@ -447,7 +497,7 @@ namespace VAdvantage.Model
                 else if (WEEKDAY_Sunday.Equals(weekDay))
                     dayOfWeek = SUNDAY;
 
-                calNext = calNext.Subtract(new TimeSpan(((int)calNext.DayOfWeek)+ 1, calNext.Hour, calNext.Minute, calNext.Second, calNext.Millisecond));
+                calNext = calNext.Subtract(new TimeSpan(((int)calNext.DayOfWeek) + 1, calNext.Hour, calNext.Minute, calNext.Second, calNext.Millisecond));
                 calNext = calNext.AddDays(dayOfWeek);
                 calNext = calNext.AddHours(hour);
                 calNext = calNext.AddMinutes(minute);
@@ -464,9 +514,9 @@ namespace VAdvantage.Model
                 {
                     calNext = calNext.AddDays(7);
                 }
-            }	//	week
+            }   //	week
 
-            
+
             long delta = CommonFunctions.CurrentTimeMillis(calNext) - CommonFunctions.CurrentTimeMillis(calNow);
             //long delta = calNext.getTimeInMillis() - calNow.getTimeInMillis();
             String info = "Now=" + calNow.ToString()

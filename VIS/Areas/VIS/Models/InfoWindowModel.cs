@@ -338,8 +338,8 @@ namespace VIS.Models
             {
                 sql = sql.Replace('●', '%');
                 sql = ParseContext(sql, ctx);
-                sql = MRole.GetDefault(ctx).AddAccessSQL(sql, tableName,
-                               MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+                //sql = MRole.GetDefault(ctx).AddAccessSQL(sql, tableName,
+                //               MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
 
                 
                 int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM ( "+sql+" ) t",null,null));

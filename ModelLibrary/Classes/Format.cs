@@ -128,12 +128,25 @@ namespace VAdvantage.Classes
         /// <returns>Formated Amount as String</returns>
         public string GetFormatAmount(object amount, string lang)
         {
+            return GetFormatAmount(amount, lang, 2);
+        }
+
+        /// <summary>
+        /// Get Formated Amount based on Client Culture
+        /// </summary>
+        /// <param name="amount">Amount</param>
+        /// <param name="lang">Client Culture</param>
+        /// <param name="precision">Precision</param>
+        /// <writer>VIS_0045</writer>
+        /// <returns>Formated Amount as String</returns>
+        public string GetFormatAmount(object amount, string lang, int precision)
+        {
             string _number;
             CultureInfo culture;
             try
             {
                 culture = new CultureInfo(lang);
-                _number = VAdvantage.Utility.Util.GetValueOfDouble(amount).ToString("N", culture);
+                _number = VAdvantage.Utility.Util.GetValueOfDouble(amount).ToString("N" + precision, culture);
                 return _number;
             }
             catch (Exception e)

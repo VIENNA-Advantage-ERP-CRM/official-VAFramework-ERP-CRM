@@ -34,7 +34,7 @@ namespace VAdvantage.Process
         /// <returns>Message to be translated</returns>
         protected override String DoIt()
         {
-            log.Info("");
+            log.Info("Cache Reset Executed");
             Env.Reset(false);	// not final            
             return "";
 

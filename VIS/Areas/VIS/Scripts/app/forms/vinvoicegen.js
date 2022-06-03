@@ -768,6 +768,11 @@
             return this.$root;
         };
 
+        this.refreshUI = function () {
+            /*Refresh Grid on Focus*/
+            this.dGrid.resize();
+        };
+
         this.disposeComponent = function () {
 
             if (this.okBtn)
@@ -841,6 +846,10 @@
         this.frame.getContentGrid().append(this.getRoot());
         this.display();
         this.cmbOrg.getControl().focus();
+    };
+
+    VInvoiceGen.prototype.refresh = function () {
+        this.refreshUI();
     };
 
     //Must implement dispose

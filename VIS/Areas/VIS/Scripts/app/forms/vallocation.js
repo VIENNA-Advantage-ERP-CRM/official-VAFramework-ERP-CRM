@@ -6303,7 +6303,7 @@
                 }
                 else {
                     if ($gridPayment.getChanges()[i].SelectRow == true) {
-                        var row = $gridPayment.records[$gridPayment.getChanges()[i].recid].Date1;
+                        var row = $gridPayment.records[$gridPayment.getChanges()[i].recid].DATEACCT;
                         _allDates.push(new Date(row));
                         var DATEACCT = $gridPayment.records[$gridPayment.getChanges()[i].recid].DATEACCT;
                         _dateAcct.push(new Date(DATEACCT));
@@ -6506,7 +6506,7 @@
                 }
                 else {
                     if ($gridPayment.getChanges()[i].SelectRow == true) {
-                        var row = $gridPayment.records[$gridPayment.getChanges()[i].recid].Date1;
+                        var row = $gridPayment.records[$gridPayment.getChanges()[i].recid].DATEACCT;
                         // check org matched or not 
                         if (isOrgMatched && parseInt($cmbOrg.val()) != parseInt($gridPayment.records[$gridPayment.getChanges()[i].recid].AD_Org_ID)) {
                             isOrgMatched = false;
@@ -7557,6 +7557,14 @@
         this.getRoot = function () {
             return $root;
         };
+
+        this.refreshUI = function () {
+            /*Refresh Grid on Focus*/
+            $gridPayment.resize();
+            $gridCashline.resize();
+            $gridInvoice.resize();
+            $glLineGrid.resize();
+        }
     };
 
     VAllocation.prototype.init = function (windowNo, frame) {
@@ -7564,6 +7572,10 @@
         this.windowNo = windowNo;
         this.Initialize();
         this.frame.getContentGrid().append(this.getRoot());
+    };
+
+    VAllocation.prototype.refresh = function () {
+        this.refreshUI();
     };
 
     VAllocation.prototype.dispose = function () {

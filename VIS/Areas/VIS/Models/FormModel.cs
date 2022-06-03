@@ -893,7 +893,7 @@ namespace VIS.Models
             }
             if (ServerValues.IsViewDocument)
             {
-                sqlArray.Add("SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =" + ServerValues.AD_Table_ID);
+                sqlArray.Add("SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON (wdl.VADMS_Document_ID  =doc.VADMS_Document_ID) WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =" + ServerValues.AD_Table_ID);
             }
 
             string sql = string.Join("~", sqlArray);
