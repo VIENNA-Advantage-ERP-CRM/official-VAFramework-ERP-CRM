@@ -186,5 +186,119 @@ namespace VIS.Models
             }
             return retDic;
         }
+
+        /// <summary>
+        /// when we change QtyEntered, UOM or Attribute
+        /// </summary>
+        /// <param name="ctx">Context</param>
+        /// <param name="param">List of Parameters</param>
+        /// <returns>Price Data</returns>
+        public Dictionary<String, Object> GetPricesOnChange(Ctx ctx, string param)
+        {
+            string[] paramValue = param.Split(',');
+            Dictionary<String, Object> retDic = new Dictionary<string, Object>();
+
+            //Assign parameter value
+            int _m_Product_Id = Util.GetValueOfInt(paramValue[0].ToString());
+            int _m_requisitionID = Util.GetValueOfInt(paramValue[1].ToString());
+            int _m_AttributeSetInstance_Id = Util.GetValueOfInt(paramValue[2].ToString());
+            int _c_Uom_Id = Util.GetValueOfInt(paramValue[3].ToString());
+            int _ad_Client_Id = Util.GetValueOfInt(paramValue[4].ToString());
+            int _c_BPartner_Id = Util.GetValueOfInt(paramValue[5].ToString());
+            decimal _qtyEntered = Util.GetValueOfInt(paramValue[6].ToString());
+            int _m_PriceList_ID = Util.GetValueOfInt(paramValue[7].ToString());
+            string _transactionDate = string.Empty;
+
+            //End Assign parameter value
+            StringBuilder sql = new StringBuilder();
+            decimal PriceEntered = 0;
+            decimal PriceList = 0;
+            decimal PriceLimit = 0;
+            int _priceListVersion_Id = 0;
+            int uomPrecision = 2;
+
+            StringBuilder sbparams = new StringBuilder();
+            sbparams.Append(Util.GetValueOfInt(_m_PriceList_ID));
+            if (Util.GetValueOfDateTime(_transactionDate) != null)
+                sbparams.Append(",").Append(Util.GetValueOfString(_transactionDate));
+            else
+                sbparams.Append(",").Append(Util.GetValueOfInt(_m_requisitionID));
+            sbparams.Append(",").Append(Util.GetValueOfInt(_m_Product_Id));
+            sbparams.Append(",").Append(Util.GetValueOfInt(_c_Uom_Id));
+            sbparams.Append(",").Append(Util.GetValueOfInt(_m_AttributeSetInstance_Id));
+
+            MPriceListVersionModel objPLV = new MPriceListVersionModel();
+
+            if (Util.GetValueOfDateTime(_transactionDate) != null)
+                _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID_On_Transaction_Date(ctx, sbparams.ToString());
+            else
+                _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, sbparams.ToString(), ScreenType.Requisition);
+            uomPrecision = MUOM.GetPrecision(ctx, _c_Uom_Id);
+            sql.Clear();
+            sql.Append("SELECT PriceStd , PriceList, PriceLimit FROM M_ProductPrice WHERE IsActive='Y' AND M_Product_ID = " + _m_Product_Id
+                            + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
+                            + " AND NVL(M_AttributeSetInstance_ID, 0)=" + _m_AttributeSetInstance_Id
+                            + "  AND C_UOM_ID=" + _c_Uom_Id);
+
+            DataSet ds1 = DB.ExecuteDataset(sql.ToString());
+            if (ds1 != null && ds1.Tables.Count > 0 && ds1.Tables[0].Rows.Count > 0)
+            {
+                PriceEntered = Util.GetValueOfDecimal(ds1.Tables[0].Rows[0]["PriceStd"]);
+                PriceList = Util.GetValueOfDecimal(ds1.Tables[0].Rows[0]["PriceList"]);
+                PriceLimit = Util.GetValueOfDecimal(ds1.Tables[0].Rows[0]["PriceLimit"]);
+            }
+            else
+            {
+                // get uom from product
+                var paramStr = _m_Product_Id.ToString();
+                MProductModel objProduct = new MProductModel();
+                var prodC_UOM_ID = objProduct.GetC_UOM_ID(ctx, paramStr);
+                sql.Clear();
+                sql.Append("SELECT PriceStd , PriceList, PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
+                            + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
+                            + " AND NVL(M_AttributeSetInstance_ID, 0)=" + _m_AttributeSetInstance_Id
+                            + " AND C_UOM_ID=" + prodC_UOM_ID);
+
+                DataSet ds = DB.ExecuteDataset(sql.ToString());
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    PriceEntered = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceStd"]);
+                    PriceList = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceList"]);
+                    PriceLimit = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceLimit"]);
+
+
+                    sql.Clear();
+                    sql.Append("SELECT con.DivideRate FROM C_UOM_Conversion con INNER JOIN C_UOM uom ON con.C_UOM_ID = uom.C_UOM_ID WHERE con.IsActive = 'Y' " +
+                                               " AND con.M_Product_ID = " + _m_Product_Id +
+                                               " AND con.C_UOM_ID = " + prodC_UOM_ID + " AND con.C_UOM_To_ID = " + _c_Uom_Id);
+                    var rate = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, null));
+                    if (rate == 0)
+                    {
+                        sql.Clear();
+                        sql.Append("SELECT con.DivideRate FROM C_UOM_Conversion con INNER JOIN C_UOM uom ON con.C_UOM_ID = uom.C_UOM_ID WHERE con.IsActive = 'Y'" +
+                              " AND con.C_UOM_ID = " + prodC_UOM_ID + " AND con.C_UOM_To_ID = " + _c_Uom_Id);
+                        rate = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, null));
+                    }
+
+                    if (rate == 0)
+                    {
+                        rate = 1;
+                    }
+
+                    PriceEntered = PriceEntered * rate;
+                    PriceList = PriceList * rate;
+                    PriceLimit = PriceLimit * rate;
+                }
+            }
+
+            retDic["PriceEntered"] = PriceEntered;
+            retDic["PriceList"] = PriceList;
+            retDic["PriceLimit"] = PriceLimit;
+            retDic["UOMPrecision"] = uomPrecision;
+            retDic["QtyOrdered"] = MUOMConversion.ConvertProductFrom(ctx, _m_Product_Id, _c_Uom_Id,
+                decimal.Round(_qtyEntered, uomPrecision, MidpointRounding.AwayFromZero));
+
+            return retDic;
+        }
     }
 }
