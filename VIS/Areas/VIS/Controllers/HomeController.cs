@@ -354,6 +354,7 @@ namespace VIS.Controllers
                         ModelLibrary.PushNotif.SSEManager.Get().AddMessage(ctx.GetAD_Session_ID(), Msg.GetMsg(ctx, "PlzLinkVAApp"));
 
                     VAdvantage.Classes.ThreadInstance.Get().Start();
+                    VLogger.Get().Info("-----Loggged in(" + ctx.GetAD_User_Name() + ")-----");
                 }
             }
 
