@@ -50,7 +50,7 @@ namespace VIS.Models
                     ON (Wind.AD_Window_Id=Tab.AD_Window_Id) JOIN  AD_Table Tabl On (Tab.AD_Table_Id=Tabl.AD_Table_Id) 
                     WHERE Tab.IsActive    ='Y'";
 
-                sql += " AND wind.AD_Window_ID=" + AD_Window_ID + " AND tab.AD_table_ID IN (Select Distinct AD_Table_ID FROM AD_WF_Activity where AD_Window_ID=" + AD_Window_ID + ") ORDER BY Tab.AD_Tab_ID Asc";
+                sql += " AND wind.AD_Window_ID=" + AD_Window_ID + " AND tab.AD_table_ID IN (SELECT Distinct AD_Table_ID FROM AD_WF_Activity WHERE AD_Window_ID=" + AD_Window_ID + ") ORDER BY Tab.AD_Tab_ID Asc";
 
                 //if window is selected then search for tables associated with window.
                 DataSet ds = DB.ExecuteDataset(sql);
@@ -184,7 +184,7 @@ OR
                 //LEFT OUTER Join 
                 //                           AD_Wf_Activity Wf On Abc.AD_Wf_Activity_Id=Wf.AD_Wf_Activity_Id
                 //                           LEFT OUTER Join AD_WF_Node Wfn On Wfn.AD_WF_Node_Id=Wf.AD_WF_Node_Id
-                //                           WHERE upper(wfn.value) like Upper('%" + searchText + "%') OR upper(wfn.Name) like Upper('%" + searchText + @"%')
+                //                           WHERE upper(wfn.value) LIKE UPPER('%" + searchText + "%') OR upper(wfn.Name) LIKE UPPER('%" + searchText + @"%')
                 //                           ORDER BY Abc.Priority DESC, Abc.Created";
             }
             else
@@ -333,7 +333,7 @@ OR
                         //                        sql += @" )  Abc LEFT OUTER Join 
                         //                           AD_Wf_Activity Wf On Abc.AD_Wf_Activity_Id=Wf.AD_Wf_Activity_Id
                         //                           LEFT OUTER Join AD_WF_Node Wfn On Wfn.AD_WF_Node_Id=Wf.AD_WF_Node_Id
-                        //                           Where Upper(Wfn.Value) Like Upper('%" + searchText + "%') Or Upper(Wfn.Name) Like Upper('%" + searchText + @"%')
+                        //                           Where UPPER(Wfn.Value) Like UPPER('%" + searchText + "%') Or UPPER(Wfn.Name) Like UPPER('%" + searchText + @"%')
                         //                           ORDER BY Abc.Priority DESC,Abc.Created";
                     }
                     else
@@ -485,20 +485,20 @@ OR
 
                 sb.Append(")");
 
-                whereClause += sb + " like upper('%" + searchText + "%')";
+                whereClause += sb + " LIKE UPPER('%" + searchText + "%')";
                 if (AD_Window_ID > 0)
                 {
-                    whereClause += " OR Upper(myTable.TextMsg) like Upper('%" + searchText + "%') OR Upper(myTable.Summary) like Upper('%" + searchText + "%'))";
+                    whereClause += " OR UPPER(myTable.TextMsg) LIKE UPPER('%" + searchText + "%') OR UPPER(myTable.Summary) LIKE UPPER('%" + searchText + "%'))";
                 }
                 else
                 {
                     if (whereClause.Length > 7)
                     {
-                        whereClause += " AND (Upper(myTable.TextMsg) like Upper('%" + searchText + "%') OR Upper(myTable.Summary) like Upper('%" + searchText + "%') )";
+                        whereClause += " AND (UPPER(myTable.TextMsg) LIKE UPPER('%" + searchText + "%') OR UPPER(myTable.Summary) LIKE UPPER('%" + searchText + "%') )";
                     }
                     else
                     {
-                        whereClause += " (Upper(myTable.TextMsg) like Upper('%" + searchText + "%') OR Upper(myTable.Summary) like Upper('%" + searchText + "%'))";
+                        whereClause += " (UPPER(myTable.TextMsg) LIKE UPPER('%" + searchText + "%') OR UPPER(myTable.Summary) LIKE UPPER('%" + searchText + "%'))";
                     }
                 }
 
@@ -507,11 +507,11 @@ OR
             {
                 if (whereClause.Length > 7)
                 {
-                    whereClause += " AND ( Upper(myTable.TextMsg) like Upper('%" + searchText + "%') OR Upper(myTable.Summary) like Upper('%" + searchText + "%'))";
+                    whereClause += " AND ( UPPER(myTable.TextMsg) LIKE UPPER('%" + searchText + "%') OR UPPER(myTable.Summary) LIKE UPPER('%" + searchText + "%'))";
                 }
                 else
                 {
-                    whereClause += " (Upper(myTable.TextMsg) like Upper('%" + searchText + "%') OR Upper(myTable.Summary) like Upper('%" + searchText + "%'))";
+                    whereClause += " (UPPER(myTable.TextMsg) LIKE UPPER('%" + searchText + "%') OR UPPER(myTable.Summary) LIKE UPPER('%" + searchText + "%'))";
                 }
             }
 
@@ -624,7 +624,7 @@ OR
                                 INNER JOIN AD_User usr
                                 ON (usr.AD_User_ID         =wfea.ad_User_ID)
                               WHERE wfea.AD_WF_Process_ID=" + wfProcessID + @"
-                              Order By wfea.ad_wf_eventaudit_id desc";
+                              ORDER BY wfea.ad_wf_eventaudit_id desc";
                 DataSet ds = DB.ExecuteDataset(sql);
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
@@ -754,7 +754,7 @@ OR
                             }
                         }
                         //Genral Attribute Instance
-                        //else if (column.GetColumnName().ToUpper().Equals("C_GENATTRIBUTESETINSTANCE_ID"))
+                        //else if (column.GetColumnName().ToUPPER().Equals("C_GENATTRIBUTESETINSTANCE_ID"))
                         //{
                         //    if (attrib == null)
                         //    {
