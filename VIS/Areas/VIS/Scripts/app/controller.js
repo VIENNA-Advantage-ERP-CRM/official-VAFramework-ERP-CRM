@@ -5674,6 +5674,9 @@
     GridField.prototype.getDisplayType = function () {
         return this.vo.displayType;
     };
+    GridField.prototype.getOrginalDisplayType = function () {
+        return this.vo.orginalDispaly;
+    };
 
     GridField.prototype.getOrginalDisplayType = function () {
         return this.vo.orginalDispaly;

@@ -155,7 +155,7 @@ namespace VIS.Controllers
                         //if (Session.Timeout < 2)
                         //{
                         SessionEventHandler.SessionEnd(ctx);
-                        Session.Timeout = 17;
+                        Session.Timeout = 20;
                         //}
                         Session["ctx"] = null;
 
@@ -811,6 +811,15 @@ namespace VIS.Controllers
                     nodes = ViewBag.Menu.GetBarNodes();
                 }
                 Session["barNodes"] = null;
+
+                if (nodes == null)
+                {
+                    Ctx ctx = Session["ctx"] as Ctx;
+                    //string diableMenu = ctx.GetContext("#DisableMenu");
+                    Helpers.MenuHelper mnuHelper = new Helpers.MenuHelper(ctx); // inilitilize menu class
+                    ViewBag.Menu = mnuHelper.GetMenuTree(); // create tree
+                    nodes = ViewBag.Menu.GetBarNodes();
+                }
                 return Json(new { result = homeHelper.GetBarNodes(nodes) }, JsonRequestBehavior.AllowGet);
             }
             catch

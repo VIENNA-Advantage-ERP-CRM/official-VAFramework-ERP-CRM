@@ -1500,6 +1500,60 @@ namespace VAdvantage.Model
                     return true;
                 }
 
+                // VIS264 - If file upload location is Azure Blob Storage
+                if (GetFileLocation() == FILELOCATION_AzureBlobStorage)
+                {
+                    try
+                    {
+                        SetFileLocation(FILELOCATION_AzureBlobStorage);
+
+                        if (cInfo == null)
+                        {
+                            if (AD_Client_ID > 0)
+                            {
+                                cInfo = new MClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                            }
+                            else
+                            {
+                                cInfo = new MClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                            }
+                        }
+
+                        if (string.IsNullOrEmpty(cInfo.GetAD_WebServiceURL()))
+                        {
+                            error.Append(Msg.GetMsg(GetCtx(), "VIS_AzureContainerUriEmpty"));
+                            return false;
+                        }
+
+                        // VIS264 - Get file information
+                        FileInfo fileInfo = new FileInfo(filePath + "\\" + folderKey + "\\" + fileName);
+
+                        string res = AzureBlobStorage.UploadFile(GetCtx(), cInfo.GetAD_WebServiceURL(), fileInfo.FullName, outputfileName);
+
+                        if (res != null)
+                        {
+                            error.Append(res);
+                            return false;
+                        }
+
+                        return true;
+                    }
+                    catch (Exception e)
+                    {
+                        log.Severe("AzureBlobStorage Location->" + e.Message);
+                        error.Append(e.Message);
+                        if (!Force)
+                        {
+                            return false;
+                        }
+                    }
+                    finally
+                    {
+                        CleanUp(filePath + "\\" + folderKey, filePath + "\\" + folderKey + "\\" + fileName, filePath + "\\" + fileName, null);
+                    }
+                    return true;
+                }
+
                 Directory.CreateDirectory(zipinput);
 
                 System.IO.File.Copy(filePath + "\\" + folderKey + "\\" + fileName, zipinput + "\\" + newFileName);
@@ -1974,7 +2028,7 @@ namespace VAdvantage.Model
 
                         if (!string.IsNullOrEmpty(containerUri))
                         {
-                            string downloadFullPath = Path.Combine(Path.Combine(filePath, "TempDownload", folder), filename);
+                            string downloadFullPath = Path.Combine(filePath, "TempDownload", folder, Util.GetValueOfString(ds.Tables[0].Rows[0]["FileName"]));
 
                             string res = AzureBlobStorage.DownloadFile(GetCtx(), containerUri, downloadFullPath, filename);
 

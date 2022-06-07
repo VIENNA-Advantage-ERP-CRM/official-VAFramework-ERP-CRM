@@ -543,8 +543,9 @@
                 return null;
             var columnName = mField.getColumnName();
             var isMandatory = mField.getIsMandatory(false);
-            var windowNo = mField.getWindowNo();//  no context check
+            var windowNo = mField.getWindowNo();//  no context check  
             var displayType = mField.getOrginalDisplayType();
+           
             var isReadOnly = mField.getIsReadOnly();
             var isUpdateable = mField.getIsEditable(false);
 
@@ -2350,6 +2351,7 @@
 
         if (this.displayType == VIS.DisplayType.Time) {
             d = new Date(0);
+            d.setYear(1990);
             var parts = val.match(/(\d+)\:(\d+)/);
             var hours = parseInt(parts[1], 10),
                 minutes = parseInt(parts[2], 10);

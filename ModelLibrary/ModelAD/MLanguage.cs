@@ -28,7 +28,6 @@ namespace VAdvantage.Model
         #region Private Variable
         //Logger
         private static VLogger s_log = VLogger.GetVLogger(typeof(MLanguage).FullName);
-
         //These tables has display column
         List<String> lstTableHasDisplayCol = new List<string>() { "AD_WINDOW", "AD_FORM", "AD_SHORTCUT" };
         //Locale
@@ -199,11 +198,11 @@ namespace VAdvantage.Model
         {
             String baseTable = tableName.Substring(0, tableName.Length - 4);
             String sql = "SELECT c.ColumnName "
-                + "FROM AD_Column c"
-                + " INNER JOIN AD_Table t ON (c.AD_Table_ID=t.AD_Table_ID) "
-                + "WHERE t.TableName='" + baseTable
-                + "'  AND c.IsTranslated='Y' AND c.IsActive='Y' "
-                + "ORDER BY 1";
+                    + "FROM AD_Column c"
+                    + " INNER JOIN AD_Table t ON (c.AD_Table_ID=t.AD_Table_ID) "
+                    + "WHERE t.TableName='" + baseTable
+                    + "'  AND c.IsTranslated='Y' AND c.IsActive='Y' "
+                    + "ORDER BY 1";
             List<String> columns = new List<string>(5);
             IDataReader dr = null;
             try
@@ -244,7 +243,6 @@ namespace VAdvantage.Model
             for (int i = 0; i < columns.Count; i++)
             {
                 cols.Append(",").Append(columns[i].ToString());
-
                 if (lstTableHasDisplayCol.Contains(baseTable.ToUpper()) && columns[i].ToString().ToUpper().Equals("NAME"))
                 {
                     // In case of Name we need to get value from DisplayName.

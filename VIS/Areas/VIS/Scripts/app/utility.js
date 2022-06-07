@@ -582,6 +582,7 @@
         function getObscureValue(type, value) {
             if (value) {
                 if (type == obscureTypes.DigitButLast4) {
+                   
                     return value.replace(/[^a-zA-Z0-9\.\-\@]/gi, '').replace(/[0-9](?=[\w\.\-\@]{4})/g, "*");
                 }
                 else if (type == obscureTypes.DigitButFirstLast4) {
@@ -590,23 +591,25 @@
                     var retVal = '';
                     for (var i = 0; i < len; i++) {
                         var cur = value[i];
-                        if ((i > 3 && i < len - 4) && !isNaN(cur))  // skip first four and last four 
-                            cur = '*'
+                        if ((i > 3 && i < len - 4) && !isNaN(cur)) // skip first four and last four
+                            cur = '*';
                         retVal += cur;
                     }
                     return retVal;
                 }
                 else if (type == obscureTypes.AlphanumButLast4) {
                     return value.replace(/[^a-zA-Z0-9\.\s\@\-]/gi, '').replace(/[a-zA-Z0-9\s\.\@\-](?=[a-zA-Z0-9\s\.\@\-]{4})/g, "*");
+                    
                 }
                 else if (type == obscureTypes.AlphaNumButFirstLast4) {
-                    value = value.replace(/[^a-zA-Z0-9\@\.\s\-]/gi, '');
+                   
+                    value = value.replace(/[^a-zA-Z0-9\.\-\@\s]/gi, '');
                     var len = value.length;
                     var retVal = '';
                     for (var i = 0; i < len; i++) {
                         var cur = value[i];
-                        if (i > 3 && i < len - 4)  // skip first four and last four 
-                            cur = '*'
+                        if (i > 3 && i < len - 4) // skip first four and last four
+                            cur = '*';
                         retVal += cur;
                     }
                     return retVal;
