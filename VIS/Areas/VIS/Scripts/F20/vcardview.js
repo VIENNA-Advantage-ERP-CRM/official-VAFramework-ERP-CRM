@@ -1306,14 +1306,14 @@
 
 
 
-                        
+
                         var $image = $('<img>');
                         var $imageSpan = $('<span>');
                         objctrls["img"] = $image;
                         var lType = null;
 
                         if (mField.lookup && mField.lookup.gethasImageIdentifier()) {
-                            
+
 
                             objctrls["imgspan"] = $imageSpan;
 
@@ -1367,26 +1367,26 @@
                             $containerDiv.append($div);
                             if (VIS.DisplayType.List == mField.lookup.displayType) {
                                 if (lType == "B") {
-                                    if ($divIcon.parent().length > 0)
-                                        $divIcon.append($divDBIconSpan);
-                                    else {
-                                        $divIcon.empty();
-                                        $div.append($divIcon);
-                                        $divIcon.append($divDBIconSpan);
-                                    }
+                                    //if ($divIcon.parent().length > 0)
+                                    $divIcon.append($divDBIconSpan);
+                                    //else {
+                                    //    $divIcon.empty();
+                                    //    $div.append($divIcon);
+                                    //    $divIcon.append($divDBIconSpan);
+                                    //}
                                     setValue(colValue, iControl, mField);
                                 }
                                 else if (lType == "T") {
                                     setValue(colValue, iControl, mField);
                                 }
                                 else if (lType == "I") {
-                                    if ($divIcon.parent().length > 0)
-                                        $divIcon.append($divDBIconSpan);
-                                    else {
-                                        $divIcon.empty();
-                                        $div.append($divIcon);
-                                        $divIcon.append($divDBIconSpan);
-                                    }
+                                    //if ($divIcon.parent().length > 0)
+                                    $divIcon.append($divDBIconSpan);
+                                    //else {
+                                    //    $divIcon.empty();
+                                    //    $div.append($divIcon);
+                                    //    $divIcon.append($divDBIconSpan);
+                                    //}
                                 }
                                 setFieldLayout(fieldValueStyle, $div, $divIcon, $divLabel, true);
                             }
@@ -1395,7 +1395,7 @@
                             }
                         }
                         else {
-                            setFieldLayout(fieldValueStyle, $div, $divIcon, $divLabel,false);
+                            setFieldLayout(fieldValueStyle, $div, $divIcon, $divLabel, false);
                             $spanIcon.addClass('vis-w-p-card-icon-fixed');
                             objctrls["imgspan"] = $spanIcon;
                             /*Set what do you want to show? Icon OR Label OR Both OR None*/
@@ -1510,7 +1510,7 @@
                         var $imageSpan = $('<span>');
                         var colValue = getFieldValue(field, record);
 
-                        setFieldLayout(field.cardFieldStyle, $div, $divIcon, $divLabel,true);
+                        setFieldLayout(field.cardFieldStyle, $div, $divIcon, $divLabel, true);
 
                         if (VIS.DisplayType.List == field.lookup.displayType) {
                             img = field.lookup.getLOVIconElement(record[field.getColumnName().toLower()], true);
@@ -1794,7 +1794,7 @@
             if (styleArr && styleArr.length > 0)
                 styleArr = styleArr.split("|");
 
-            if (styleArr && styleArr.length > 0 && setFieldStyle==true) {
+            if (styleArr && styleArr.length > 0 && setFieldStyle == true) {
                 for (var j = 0; j < styleArr.length; j++) {
                     if (styleArr[j].indexOf("@img::") > -1 || styleArr[j].indexOf("@span::") > -1) {
                         $div.append($divIcon);
@@ -1848,7 +1848,7 @@
                     $divLabel.append($lblControl);
             }
             else if (mField.isCardIconHide() && mField.isCardTextHide()) {
-                //$divIcon.hide();
+                $divIcon.empty();
                 $divIcon.remove();
             }
             else if (mField.isCardTextHide()) {
@@ -1864,6 +1864,7 @@
                 if ($lblControl && $lblControl.length > 0) {
                     $divLabel.append($lblControl);
                 }
+                $divIcon.empty();
                 $divIcon.remove();
             }
         };
