@@ -49,7 +49,7 @@ namespace VAdvantage.Logging
         /// <param name="isClient">client</param>
         /// 
 
-      //  [MethodImpl(MethodImplOptions.Synchronized)]
+        //  [MethodImpl(MethodImplOptions.Synchronized)]
         private void Initialize(String viennaHome, bool createLogDir, bool isClient)
         {
             lock (_lock)
@@ -193,7 +193,7 @@ namespace VAdvantage.Logging
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _file = null;
                 return false;
@@ -224,63 +224,95 @@ namespace VAdvantage.Logging
        // [MethodImpl(MethodImplOptions.Synchronized)]
         public override void Publish(LogRecord record)
         {
-            lock (_lock)
+            //lock (_lock)
+            //{
+            //if (DateTime.Now.Hour != Convert.ToDateTime(_lastFileDate).Hour) //Set Now Date
+            //{
+            //    Initialize(_viennaHome, true, true);
+            //}
+
+            //if (DateTime.Now > Convert.ToDateTime(_lastFileDate).AddHours(1)) //Set Now Date
+            //{
+            //    Initialize(_viennaHome, true, true);
+            //}
+
+            if (DateTime.Now > Convert.ToDateTime(_lastFileDate).AddMinutes(2)) //Set Now Date
             {
-                //if (DateTime.Now.Hour != Convert.ToDateTime(_lastFileDate).Hour) //Set Now Date
-                //{
-                //    Initialize(_viennaHome, true, true);
+                // Initialize(_viennaHome, true, true);
                 //}
 
-                if (DateTime.Now > Convert.ToDateTime(_lastFileDate).AddHours(1)) //Set Now Date
+                lock (_lock)
                 {
-                    Initialize(_viennaHome, true, true);
-                }
-
-                if (!IsLoggable(record) || _writer == null)
-                    return;
-
-                //	Format
-                String msg = null;
-                try
-                {
-                    msg = GetFormatter().Format(record);
-                }
-                catch
-                {
-                    return;
-                }
-
-                try
-                {
-                    if (!_doneHeader)
+                    if (DateTime.Now > Convert.ToDateTime(_lastFileDate).AddHours(1))
                     {
-                        _writer.WriteLine(GetFormatter().GetHead());
-                        //AllocConsole();
-                        //Console.WriteLine(GetFormatter().GetHead()); // outputs to console window
-                        _doneHeader = true;
+                        Initialize(_viennaHome, true, true);
+                        if (!_doneHeader)
+                        {
+                            _writer.WriteLine(GetFormatter().GetHead());
+                            //AllocConsole();
+                            //Console.WriteLine(GetFormatter().GetHead()); // outputs to console window
+                            _doneHeader = true;
+                        }
                     }
-                    _writer.WriteLine(msg);
-                    //AllocConsole();
-                    //Console.WriteLine(msg); // outputs to console window
-                    m_records++;
-
-                    //if (string.IsNullOrEmpty(record.message))
-                    //    record.message = "Executed";
-                    if (record.GetLevel() == Level.SEVERE
-                        || record.GetLevel() == Level.WARNING
-                        || m_records % 10 == 0)	//	flush every 10 records
-                        Flush();
-                    //print into file
-                    //_writer.WriteLine(this.Format(record));
-                    //_writer.Flush();   //finally flush the print
                 }
-                catch
-                {
+            }
 
-                    Close();
-                    _lastFileDate = null; //try next time when publish is called 
-                    //try again to initlize file 
-                }
+
+            if (!IsLoggable(record) || _writer == null)
+                return;
+
+            //	Format
+            String msg = null;
+            try
+            {
+                msg = GetFormatter().Format(record);
+            }
+            catch
+            {
+                return;
+            }
+
+            try
+            {
+                //if (!_doneHeader)
+                //{
+                //    _writer.WriteLine(GetFormatter().GetHead());
+                //    //AllocConsole();
+                //    //Console.WriteLine(GetFormatter().GetHead()); // outputs to console window
+                //    _doneHeader = true;
+                //}
+                //_writer.WriteLine(msg);
+                WriteLine(msg);
+                //AllocConsole();
+                //Console.WriteLine(msg); // outputs to console window
+                m_records++;
+
+                //if (string.IsNullOrEmpty(record.message))
+                //    record.message = "Executed";
+                if (record.GetLevel() == Level.SEVERE
+                    || record.GetLevel() == Level.WARNING
+                    || m_records % 10 == 0) //	flush every 10 records
+                    Flush();
+                //print into file
+                //_writer.WriteLine(this.Format(record));
+                //_writer.Flush();   //finally flush the print
+            }
+            catch
+            {
+
+                Close();
+                _lastFileDate = null; //try next time when publish is called 
+                                      //try again to initlize file 
+            }
+            //}
+        }
+
+
+        private void WriteLine(string msg)
+        {
+            lock (_lock)
+            {
+                _writer.WriteLine(msg);
             }
         }
 
@@ -295,9 +327,9 @@ namespace VAdvantage.Logging
             try
             {
                 if (!_doneHeader)
-                    _writer.WriteLine(GetFormatter().GetHead());
+                    WriteLine(GetFormatter().GetHead());
 
-                _writer.WriteLine(GetFormatter().GetTail());
+                WriteLine(GetFormatter().GetTail());
             }
             catch
             {
