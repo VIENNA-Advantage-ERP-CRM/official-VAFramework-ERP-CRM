@@ -1163,7 +1163,7 @@
                 var $div = null;
                 var $divIcon = null;
                 $divDBIconSpan = $('<span>');
-                $divDBLevel = $('<img>');
+                $divDBLevel = $('<span>');
                 var $divLabel = null;
                 var $label = null;
                 var iControl = null;
@@ -1313,8 +1313,6 @@
                         var lType = null;
 
                         if (mField.lookup && mField.lookup.gethasImageIdentifier()) {
-
-
                             objctrls["imgspan"] = $imageSpan;
 
                             var img = null;
@@ -1346,7 +1344,6 @@
 
                             }
 
-                            $divDBIconSpan.append($imageSpan).append($image)
 
                             $spanIcon.addClass('vis-w-p-card-icon-fixed');
                             objctrls["imgspan"] = $spanIcon;
@@ -1357,8 +1354,9 @@
 
                             /*Set what do you want to show? Icon OR Label OR Both OR None*/
                             setFieldVisibility(mField, imgSpan, $image, $imageSpan, $lblControl, $divLabel, $divIcon);
-
-                            $divLabel.append(iControl.getControl());
+                            $div.append($divIcon);
+                            $div.append($divLabel);
+                            $divDBLevel.append(iControl.getControl());
 
 
 
@@ -1368,27 +1366,35 @@
                             if (VIS.DisplayType.List == mField.lookup.displayType) {
                                 if (lType == "B") {
                                     //if ($divIcon.parent().length > 0)
-                                    $divIcon.append($divDBIconSpan);
+                                    //$divIcon.append($divDBIconSpan);
                                     //else {
                                     //    $divIcon.empty();
                                     //    $div.append($divIcon);
                                     //    $divIcon.append($divDBIconSpan);
                                     //}
+                                    $divDBIconSpan.append($imageSpan).append($image)
+
                                     setValue(colValue, iControl, mField);
+                                    $div.append($divDBIconSpan);
+                                    $div.append($divDBLevel);
                                 }
                                 else if (lType == "T") {
+                                    
+                                    $div.append($divDBLevel);
                                     setValue(colValue, iControl, mField);
                                 }
                                 else if (lType == "I") {
+                                    $divDBIconSpan.append($imageSpan).append($image)
+                                    $div.append($divDBIconSpan);
                                     //if ($divIcon.parent().length > 0)
-                                    $divIcon.append($divDBIconSpan);
+                                    //$divIcon.append($divDBIconSpan);
                                     //else {
                                     //    $divIcon.empty();
                                     //    $div.append($divIcon);
                                     //    $divIcon.append($divDBIconSpan);
                                     //}
                                 }
-                                setFieldLayout(fieldValueStyle, $div, $divIcon, $divLabel, true);
+                                setFieldLayout(fieldValueStyle, $div, $divDBIconSpan, $divDBLevel, true);
                             }
                             else {
                                 setValue(colValue, iControl, mField);
@@ -1407,9 +1413,10 @@
                             }
 
                             setValue(colValue, iControl, mField);
-                            /****END ******  Set what do you want to show? Icon OR Label OR Both OR None*/
+                        /****END ******  Set what do you want to show? Icon OR Label OR Both OR None*/
+                            $divLabel.append(iControl.getControl());
                         }
-                        $divLabel.append(iControl.getControl());
+                       // 
                         $containerDiv.append($div);
                         //$self.controls.push(objctrls);
                     }
