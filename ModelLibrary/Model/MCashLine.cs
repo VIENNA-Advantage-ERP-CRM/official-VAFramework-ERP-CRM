@@ -559,7 +559,7 @@ namespace VAdvantage.Model
                 }
 
                 //JID_0615_1 prevent saving record if conversion not found
-                if (Util.GetValueOfDecimal(Get_Value("ConvertedAmt")) == 0)
+                if (GetAmount() != 0 && Util.GetValueOfDecimal(Get_Value("ConvertedAmt")) == 0)
                 {
                     log.SaveError("NoConversion", "");
                     return false;
@@ -681,7 +681,7 @@ namespace VAdvantage.Model
             }
 
             // if conversion amount not found then not to save record
-            if (Util.GetValueOfDecimal(Get_Value("ConvertedAmt")) == 0)
+            if (GetAmount() != 0 && Util.GetValueOfDecimal(Get_Value("ConvertedAmt")) == 0)
             {
                 log.SaveError("NoConversion", "");
                 return false;
