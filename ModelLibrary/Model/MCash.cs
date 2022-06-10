@@ -977,7 +977,7 @@ namespace VAdvantage.Model
                     amt = MConversionRate.Convert(GetCtx(), line.GetAmount(),
                         line.GetC_Currency_ID(), C_Currency_ID, GetDateAcct(), line.GetC_ConversionType_ID(),
                         GetAD_Client_ID(), GetAD_Org_ID());
-                    if (amt == 0)
+                    if (line.GetAmount() != 0 && amt == 0)
                     {
                         //_processMsg = "No Conversion Rate found - @C_CashLine_ID@= " + line.GetLine();
 
@@ -1430,7 +1430,7 @@ namespace VAdvantage.Model
                         {    //Currency conversion in Case of different currencies
                             decimal? amt = Util.GetValueOfDecimal(MConversionRate.Convert(GetCtx(), line.GetAmount(), line.GetC_Currency_ID(), bankAcct.GetC_Currency_ID(), GetDateAcct(),
                                 line.GetC_ConversionType_ID(), line.GetAD_Client_ID(), line.GetAD_Org_ID()));
-                            if (amt == null || amt == 0)
+                            if (line.GetAmount() != 0 && amt == 0)
                             {
                                 //_processMsg = "Could not convert C_Currency_ID=" + line.GetC_Currency_ID()
                                 //    + " to Bank Account C_Currency_ID=" + bankAcct.GetC_Currency_ID();                                
