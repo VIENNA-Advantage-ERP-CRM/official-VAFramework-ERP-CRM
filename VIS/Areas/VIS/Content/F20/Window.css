@@ -1574,6 +1574,25 @@ li.vis-page-item-select {
 
 }
 
+
+.vis-w-p-card-DivLabel-f {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width:100%;
+}
+
+
+.vis-w-p-card-value-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+    .vis-w-p-card-value-container span {
+    min-height:auto;
+    }
+
+
     .vis-w-p-card-Label-f button {
         width: 100%;
         border: none;

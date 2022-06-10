@@ -1314,7 +1314,7 @@
 
                         if (mField.lookup && mField.lookup.gethasImageIdentifier()) {
                             objctrls["imgspan"] = $imageSpan;
-
+                            $divLabel = $('<div class="vis-w-p-card-DivLabel-f"></div>');
                             var img = null;
                             var imgSpan = null;
                             var styleArr = null;
@@ -1344,6 +1344,9 @@
 
                             }
 
+                            var $divIconContainer = $('<div>');
+                            var $divLabelValueContainer = $('<div class="vis-w-p-card-value-container">');
+
 
                             $spanIcon.addClass('vis-w-p-card-icon-fixed');
                             objctrls["imgspan"] = $spanIcon;
@@ -1354,11 +1357,11 @@
 
                             /*Set what do you want to show? Icon OR Label OR Both OR None*/
                             setFieldVisibility(mField, imgSpan, $image, $imageSpan, $lblControl, $divLabel, $divIcon);
-                            $div.append($divIcon);
-                            $div.append($divLabel);
+                            $divIconContainer.append($divIcon);
+                            $divLabelValueContainer.append($divLabel);
                             $divDBLevel.append(iControl.getControl());
 
-
+                            $div.append($divIconContainer).append($divLabelValueContainer);
 
                             //this.setIconsDisplay(mField, $divIcon, $spanIcon, icon, $lblControl, $divLabel);
                             //$div.append($divDBIconSpan);
@@ -1375,17 +1378,17 @@
                                     $divDBIconSpan.append($imageSpan).append($image)
 
                                     setValue(colValue, iControl, mField);
-                                    $div.append($divDBIconSpan);
-                                    $div.append($divDBLevel);
+                                    $divLabelValueContainer.append($divDBIconSpan);
+                                    $divLabelValueContainer.append($divDBLevel);
                                 }
                                 else if (lType == "T") {
                                     
-                                    $div.append($divDBLevel);
+                                    $divLabelValueContainer.append($divDBLevel);
                                     setValue(colValue, iControl, mField);
                                 }
                                 else if (lType == "I") {
                                     $divDBIconSpan.append($imageSpan).append($image)
-                                    $div.append($divDBIconSpan);
+                                    $divLabelValueContainer.append($divDBIconSpan);
                                     //if ($divIcon.parent().length > 0)
                                     //$divIcon.append($divDBIconSpan);
                                     //else {
@@ -1394,7 +1397,7 @@
                                     //    $divIcon.append($divDBIconSpan);
                                     //}
                                 }
-                                setFieldLayout(fieldValueStyle, $div, $divDBIconSpan, $divDBLevel, true);
+                                setFieldLayout(fieldValueStyle, $divLabelValueContainer, $divDBIconSpan, $divDBLevel, true);
                             }
                             else {
                                 setValue(colValue, iControl, mField);
