@@ -811,7 +811,8 @@
 
                 }
 
-                sql = VIS.MRole.addAccessSQL(sql, tabname, true, false);
+                // VIS0060: Handled case of alise name on Info window.
+                sql = VIS.MRole.addAccessSQL(sql, info.TableName, true, false);
 
                 if (whereClause.length > 1) {
                     if (info.FromClause.toUpperCase().indexOf("WHERE") > -1 || sql.toUpperCase().indexOf("WHERE") > -1) {
