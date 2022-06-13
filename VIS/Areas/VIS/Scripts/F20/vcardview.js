@@ -1148,6 +1148,7 @@
                 var hideFieldIcon = headerItem.HideFieldIcon;
                 var hideFieldText = headerItem.HideFieldText;
                 var fieldValueStyle = headerItem.FieldValueStyle;
+                var fieldLabelStyle = headerItem.FieldLabelStyle;
 
                 if (!backgroundColor) {
                     backgroundColor = '';
@@ -1265,6 +1266,8 @@
                             $divLabel.addClass(this.dynamicClassForImageJustyfy);
                         }
 
+
+
                         // Get Controls to be displayed in Header Panel
                         $label = VIS.VControlFactory.getHeaderLabel(mField, true);
                         iControl = VIS.VControlFactory.getReadOnlyControl(this.curTab, mField, false, false, false);
@@ -1273,6 +1276,18 @@
                             if (iControl != null)
                                 iControl.addActionListner(this);
                         }
+
+
+                        if (!this.fieldStyles[mField.getColumnName() + 'applyCustomUIForLabelValue'])
+                            this.fieldStyles[mField.getColumnName() + 'applyCustomUIForLabelValue'] = {};
+
+                        this.dynamicLabelValue = this.fieldStyles[mField.getColumnName() + 'applyCustomUIForLabelValue']['applyCustomUIForLabelValue'];
+                        if (!this.dynamicLabelValue) {
+                            this.dynamicLabelValue = this.applyCustomUIForLabelValue(headerSeqNo, startCol, startRow, mField, fieldLabelStyle);
+                            this.fieldStyles[mField.getColumnName() + 'applyCustomUIForLabelValue'] = { 'applyCustomUIForLabelValue': this.dynamicLabelValue };
+                        }
+                        if ($label)
+                            $label.getControl().addClass(this.dynamicLabelValue);
 
                         if (!this.fieldStyles[mField.getColumnName() + 'applyCustomUIForFieldValue'])
                             this.fieldStyles[mField.getColumnName() + 'applyCustomUIForFieldValue'] = {};
@@ -1382,7 +1397,7 @@
                                     $divLabelValueContainer.append($divDBLevel);
                                 }
                                 else if (lType == "T") {
-                                    
+
                                     $divLabelValueContainer.append($divDBLevel);
                                     setValue(colValue, iControl, mField);
                                 }
@@ -1416,10 +1431,10 @@
                             }
 
                             setValue(colValue, iControl, mField);
-                        /****END ******  Set what do you want to show? Icon OR Label OR Both OR None*/
+                            /****END ******  Set what do you want to show? Icon OR Label OR Both OR None*/
                             $divLabel.append(iControl.getControl());
                         }
-                       // 
+                        // 
                         $containerDiv.append($div);
                         //$self.controls.push(objctrls);
                     }
@@ -1472,6 +1487,9 @@
                     if (!padding) {
                         padding = '';
                     }
+
+
+
 
                     if (!this.fieldStyles[columns + '_' + rows + '_' + backColor + '_' + padding + '_' + gid])
                         this.fieldStyles[columns + '_' + rows + '_' + backColor + '_' + padding + '_' + gid] = {};
@@ -1912,6 +1930,27 @@
         this.dynamicStyle.push("." + dynamicClassName + "  {" + style + "} ");
         return dynamicClassName;
     };
+
+
+    /**
+     * Set Label style
+     * @param {any} headerSeqNo
+     * @param {any} startCol
+     * @param {any} startRow
+     * @param {any} mField
+     * @param {any} fieldValueStyle
+     */
+    VCard.prototype.applyCustomUIForLabelValue = function (headerSeqNo, startCol, startRow, mField, fieldValueStyle) {
+        var style = fieldValueStyle;
+        var dynamicClassName = "vis-hp-card-LabelValue_" + startRow + "_" + startCol + "_" + this.windowNo + "_" + headerSeqNo + "_" + mField.getAD_Column_ID();
+        if (style && style.toLower().indexOf("@value::") > -1) {
+            style = getStylefromCompositeValue(style, "@value::");
+        }
+
+        this.dynamicStyle.push("." + dynamicClassName + "  {" + style + "} ");
+        return dynamicClassName;
+    };
+
 
     /**
      * Set field style
