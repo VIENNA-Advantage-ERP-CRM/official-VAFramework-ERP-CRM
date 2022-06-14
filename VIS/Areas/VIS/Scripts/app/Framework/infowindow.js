@@ -889,9 +889,9 @@
                 sqlUnion = sqlUnion.replace("'N' AS ordcol", "'Y' AS ordcol");
 
                 if (sql.toUpperCase().indexOf("WHERE") > -1) {
-                    sql += " AND " + tabname + "." + keyCol + " IN(" + selectedIDs + ")";
+                    sql += " AND " + info.TableName + "." + keyCol + " IN(" + selectedIDs + ")";
                     sql += sqlUnion;
-                    sql += " AND " + tabname + "." + keyCol + " NOT IN(" + selectedIDs + ")";
+                    sql += " AND " + info.TableName + "." + keyCol + " NOT IN(" + selectedIDs + ")";
                 }
                 //else {
                 //    sql += " WHERE " + tabname + "." + keyCol + " IN(" + selectedIDs + ")";
