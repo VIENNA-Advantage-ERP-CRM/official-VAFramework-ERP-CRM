@@ -255,7 +255,7 @@ OR
 
                 if (refresh)
                 {
-                    //sql = "";
+                    sql = "";
                     //if (AD_Window_ID > 0 || (!string.IsNullOrEmpty(searchText) && searchText.Length > 0))
                     //if (whereClause.Length > 7)
                     //{
