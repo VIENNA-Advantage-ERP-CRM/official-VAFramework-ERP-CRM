@@ -638,16 +638,17 @@
                 }
             }
             disposeDataSec();
-            var sql = "SELECT ";
-            var colName = null;
-            var tabname = null;
+            //var sql = "SELECT ";
+            //var colName = null;
+            //var tabname = null;
 
-            var cName = null;
-            var displayType = 0;
-            var count = $.makeArray(schema).length;
-            //get Qry from InfoColumns
+            //var cName = null;
+            //var displayType = 0;
+            //var count = $.makeArray(schema).length;
+            ////get Qry from InfoColumns
             for (var item in schema) {
-                colName = schema[item].SelectClause;
+                if (schema[item].IsKey) {
+                    colName = schema[item].SelectClause;
 
                 if (String(colName).indexOf('.') > -1) {
                     cName = (String(colName).substring(String(colName).lastIndexOf('.') + 1, String(colName).length));
@@ -655,277 +656,292 @@
                 else {
                     cName = colName;
                 }
-
-                if (schema[item].IsKey) {
+                    colName = schema[item].SelectClause
                     keyCol = cName.toUpperCase();
-                    tabname = keyCol.substring(0, keyCol.indexOf("_ID"));
+                    break;
                 }
-                displayType = schema[item].AD_Reference_ID;
-                if (displayType == VIS.DisplayType.YesNo) {
-                    sql += " ( CASE " + colName + " WHEN 'Y' THEN  'True' ELSE 'False'  END ) AS " + (cName);
-                }
-                else if (displayType == VIS.DisplayType.List) {
-                    //    ValueNamePair[] values = MRefList.GetList(Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_REFERENCE_VALUE_ID"]), false);
-                    //    sql.Append(" CASE ");
-                    //    for (int j = 0; j < values.Length; j++)
-                    //    {
-                    //        sql.Append(" WHEN " + colName + "='" + values[j].Key.ToString() + "' THEN '" + values[j].Name.ToString() + "'");
-                    //    }
-                    //    sql.Append(" END AS " + cName);
-                    var refList = schema[item].RefList;
-                    sql += (" CASE ");
-                    for (var refListItem in refList) {
-                        sql += " WHEN " + colName + "='" + refList[refListItem].Key + "' THEN '" + refList[refListItem].Value + "'";
-                    }
-                    sql += " END AS " + cName;
-                    //sql += colName + " ";
-                }
-                else {
-                    sql += colName + " ";
-                }
-                if (!((count - 1) == item)) {
-                    sql += ', ';
-                }
-
             }
+            //    colName = schema[item].SelectClause;
 
-            if (selectedIDs != null && selectedIDs.length > 0) {
-                sql += ", 'N' AS ordcol";
-            }
+            //    if (String(colName).indexOf('.') > -1) {
+            //        cName = (String(colName).substring(String(colName).lastIndexOf('.') + 1, String(colName).length));
+            //    }
+            //    else {
+            //        cName = colName;
+            //    }
 
+            //    if (schema[item].IsKey) {
+            //        keyCol = cName.toUpperCase();
+            //        tabname = keyCol.substring(0, keyCol.indexOf("_ID"));
+            //    }
+            //    displayType = schema[item].AD_Reference_ID;
+            //    if (displayType == VIS.DisplayType.YesNo) {
+            //        sql += " ( CASE " + colName + " WHEN 'Y' THEN  'True' ELSE 'False'  END ) AS " + (cName);
+            //    }
+            //    else if (displayType == VIS.DisplayType.List) {
+            //        //    ValueNamePair[] values = MRefList.GetList(Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_REFERENCE_VALUE_ID"]), false);
+            //        //    sql.Append(" CASE ");
+            //        //    for (int j = 0; j < values.Length; j++)
+            //        //    {
+            //        //        sql.Append(" WHEN " + colName + "='" + values[j].Key.ToString() + "' THEN '" + values[j].Name.ToString() + "'");
+            //        //    }
+            //        //    sql.Append(" END AS " + cName);
+            //        var refList = schema[item].RefList;
+            //        sql += (" CASE ");
+            //        for (var refListItem in refList) {
+            //            sql += " WHEN " + colName + "='" + refList[refListItem].Key + "' THEN '" + refList[refListItem].Value + "'";
+            //        }
+            //        sql += " END AS " + cName;
+            //        //sql += colName + " ";
+            //    }
+            //    else {
+            //        sql += colName + " ";
+            //    }
+            //    if (!((count - 1) == item)) {
+            //        sql += ', ';
+            //    }
 
-            // sql=sql.substring(0,sql.length-2)
-            sql += " FROM " + info.FromClause;
+            //}
 
-            if (requery == true) {
-                //Get Where Clause From SearchControls
-                //  debugger;
-                var whereClause = " ";
-                var srchValue = null;
-                var appendAND = false;
-                for (var i = 0; i < srchCtrls.length; i++) {
-                    srchValue = srchCtrls[i].Ctrl.getValue();
-
-                    //JID_0905:  In Case of Date Range, if From Date is not selected then check if To Date is selected
-                    if (srchCtrls[i].AD_Reference_ID == VIS.DisplayType.Date && srchCtrls[i].IsRange) {
-                        if (srchValue == null) {
-                            srchValue = srchCtrls[i].CtrlTo.getValue();
-                        }
-                    }
-
-                    // Consider checkbox value only in case of true value
-                    if (srchValue == null || srchValue.length == 0 || (srchValue == 0 && srchCtrls[i].AD_Reference_ID != VIS.DisplayType.YesNo) || srchValue == -1 || !srchValue) {
-                        continue;
-                    }
-
-                    {
-                        if (appendAND == true) {
-                            whereClause += " AND ";
-                        }
-                        if (srchCtrls[i].AD_Reference_ID == VIS.DisplayType.String
-                            || srchCtrls[i].AD_Reference_ID == VIS.DisplayType.Text
-                            || srchCtrls[i].AD_Reference_ID == VIS.DisplayType.TextLong) {
-
-
-                            if (!(String(srchValue).indexOf("%") == 0)) {
-                                srchValue = "●" + srchValue;
-                            }
-                            else {
-                                srchValue = String(srchValue).replace("%", "●");
-                            }
-                            if (!((String(srchValue).lastIndexOf("●")) == (String(srchValue).length))) {
-                                srchValue = srchValue + "●";
-                            }
-                            srchValue = VIS.DB.to_string(srchValue);
-                            whereClause += "  UPPER(" + srchCtrls[i].SearchColumnName + ") LIKE " + srchValue.toUpperCase();
-                        }
-                        else if (srchCtrls[i].AD_Reference_ID == VIS.DisplayType.Date) {
-                            var fromValue = null;
-                            var toValue = null;
-                            var date = new Date(srchCtrls[i].Ctrl.getValue());
-                            fromValue = "TO_DATE( '" + (Number(date.getMonth()) + 1) + "-" + date.getDate() + "-" + date.getFullYear() + "', 'MM-DD-YYYY')";// GlobalVariable.TO_DATE(Util.GetValueOfDateTime(srchCtrls[i].Ctrl.getValue()), true);
-
-                            if (srchCtrls[i].IsRange) {
-                                // JID_0905: If To Date is empty, then select system date
-                                if (srchCtrls[i].CtrlTo.getValue() == null) {
-                                    date = new Date();
-                                }
-                                else {
-                                    date = new Date(srchCtrls[i].CtrlTo.getValue());
-                                }
-                                toValue = "TO_DATE( '" + (Number(date.getMonth()) + 1) + "-" + date.getDate() + "-" + date.getFullYear() + "', 'MM-DD-YYYY')";// GlobalVariable.TO_DATE(Util.GetValueOfDateTime(srchCtrls[i].Ctrl.getValue()), true);
-                                whereClause += " ( " + srchCtrls[i].SearchColumnName + " BETWEEN " + fromValue + " AND " + toValue + ")";
-                            }
-                            else {
-                                whereClause += srchCtrls[i].SearchColumnName + " =" + fromValue;
-                            }
-                        }
-                        else if (srchCtrls[i].AD_Reference_ID == VIS.DisplayType.DateTime) {
-                            var fromValue = null;
-                            var toValue = null;
-                            var date = new Date(srchCtrls[i].Ctrl.getValue());
-                            fromValue = "TO_DATE( '" + (Number(date.getMonth()) + 1) + "-" + date.getDate() + "-" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "', 'MM-DD-YYYY HH24:MI:SS')";// GlobalVariable.TO_DATE(Util.GetValueOfDateTime(srchCtrls[i].Ctrl.getValue()), true);
-
-                            if (srchCtrls[i].IsRange) {
-                                date = new Date(srchCtrls[i].CtrlTo.getValue());
-                                toValue = "TO_DATE( '" + (Number(date.getMonth()) + 1) + "-" + date.getDate() + "-" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "', 'MM-DD-YYYY HH24:MI:SS')";// GlobalVariable.TO_DATE(Util.GetValueOfDateTime(srchCtrls[i].Ctrl.getValue()), true);
-                                whereClause += " ( " + srchCtrls[i].SearchColumnName + " BETWEEN " + fromValue + " AND " + toValue + ")";
-                            }
-                            else {
-                                whereClause += srchCtrls[i].SearchColumnName + " =" + fromValue;
-                            }
-                        }
-
-                        else if (srchCtrls[i].AD_Reference_ID == VIS.DisplayType.YesNo) {
+            //if (selectedIDs != null && selectedIDs.length > 0) {
+            //    sql += ", 'N' AS ordcol";
+            //}
 
 
-                            srchValue = srchCtrls[i].Ctrl.getValue() == true ? "Y" : "N";
-                            whereClause += srchCtrls[i].SearchColumnName + " = '" + srchValue + "'";
-
-                        }
-                        else {
-                            var fromValue = null;
-                            var toValue = null;
-                            fromValue = srchCtrls[i].Ctrl.getValue();
-                            if (srchCtrls[i].IsRange) {
-                                if (srchCtrls[i].Ctrl.getValue()) {     // Consider checkbox value only in case of true value
-                                    srchValue = srchCtrls[i].Ctrl.getValue() == true ? "Y" : "";
-                                    whereClause += srchCtrls[i].SearchColumnName + " = '" + srchValue + "'";
-                                }
-                            }
-                            else {
-                                whereClause += " " + srchCtrls[i].SearchColumnName + " ='" + fromValue + "'";
-                            }
-
-
-                        }
+            //// sql=sql.substring(0,sql.length-2)
+            //sql += " FROM " + info.FromClause;
 
 
 
+            //if (requery == true) {
+            //    //Get Where Clause From SearchControls
+            //    //  debugger;
+            //    var whereClause = " ";
+            //    var srchValue = null;
+            //    var appendAND = false;
+            //    for (var i = 0; i < srchCtrls.length; i++) {
+            //        srchValue = srchCtrls[i].Ctrl.getValue();
+            //        srchCtrls[i]["Value"] = srchValue;
+            //        //JID_0905:  In Case of Date Range, if From Date is not selected then check if To Date is selected
+            //        if (srchCtrls[i].AD_Reference_ID == VIS.DisplayType.Date && srchCtrls[i].IsRange) {
+            //            if (srchValue == null) {
+            //                srchValue = srchCtrls[i].CtrlTo.getValue();
+            //                srchCtrls[i]["Value"] = srchValue;
+            //            }
+            //        }
 
-                        appendAND = true;
+            //        // Consider checkbox value only in case of true value
+            //        if (srchValue == null || srchValue.length == 0 || (srchValue == 0 && srchCtrls[i].AD_Reference_ID != VIS.DisplayType.YesNo) || srchValue == -1 || !srchValue) {
+            //            continue;
+            //        }
+
+            //        {
+            //            if (appendAND == true) {
+            //                whereClause += " AND ";
+            //            }
+            //            if (srchCtrls[i].AD_Reference_ID == VIS.DisplayType.String
+            //                || srchCtrls[i].AD_Reference_ID == VIS.DisplayType.Text
+            //                || srchCtrls[i].AD_Reference_ID == VIS.DisplayType.TextLong) {
 
 
+            //                if (!(String(srchValue).indexOf("%") == 0)) {
+            //                    srchValue = "●" + srchValue;
+            //                }
+            //                else {
+            //                    srchValue = String(srchValue).replace("%", "●");
+            //                }
+            //                if (!((String(srchValue).lastIndexOf("●")) == (String(srchValue).length))) {
+            //                    srchValue = srchValue + "●";
+            //                }
+            //                srchValue = VIS.DB.to_string(srchValue);
+            //                srchCtrls[i]["Value"] = srchValue;
+            //                whereClause += "  UPPER(" + srchCtrls[i].SearchColumnName + ") LIKE " + srchValue.toUpperCase();
+            //            }
+            //            else if (srchCtrls[i].AD_Reference_ID == VIS.DisplayType.Date) {
+            //                var fromValue = null;
+            //                var toValue = null;
+            //                var date = new Date(srchCtrls[i].Ctrl.getValue());
+            //                fromValue = "TO_DATE( '" + (Number(date.getMonth()) + 1) + "-" + date.getDate() + "-" + date.getFullYear() + "', 'MM-DD-YYYY')";// GlobalVariable.TO_DATE(Util.GetValueOfDateTime(srchCtrls[i].Ctrl.getValue()), true);
 
-                    }
+            //                if (srchCtrls[i].IsRange) {
+            //                    // JID_0905: If To Date is empty, then select system date
+            //                    if (srchCtrls[i].CtrlTo.getValue() == null) {
+            //                        date = new Date();
+            //                        srchCtrls[i]["ValueTo"] = new Date();
+            //                    }
+            //                    else {
+            //                       // date 
+            //                        srchCtrls[i]["ValueTo"]= new Date(srchCtrls[i].CtrlTo.getValue());
+            //                    }
+            //                    toValue = "TO_DATE( '" + (Number(date.getMonth()) + 1) + "-" + date.getDate() + "-" + date.getFullYear() + "', 'MM-DD-YYYY')";// GlobalVariable.TO_DATE(Util.GetValueOfDateTime(srchCtrls[i].Ctrl.getValue()), true);
+            //                    whereClause += " ( " + srchCtrls[i].SearchColumnName + " BETWEEN " + fromValue + " AND " + toValue + ")";
+            //                }
+            //                else {
+            //                    whereClause += srchCtrls[i].SearchColumnName + " =" + fromValue;
+            //                }
+            //            }
+            //            else if (srchCtrls[i].AD_Reference_ID == VIS.DisplayType.DateTime) {
+            //                var fromValue = null;
+            //                var toValue = null;
+            //                var date = new Date(srchCtrls[i].Ctrl.getValue());
+            //                srchCtrls[i]["Value"] = date;
+            //                fromValue = "TO_DATE( '" + (Number(date.getMonth()) + 1) + "-" + date.getDate() + "-" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "', 'MM-DD-YYYY HH24:MI:SS')";// GlobalVariable.TO_DATE(Util.GetValueOfDateTime(srchCtrls[i].Ctrl.getValue()), true);
 
-                }
+            //                if (srchCtrls[i].IsRange) {
+            //                    date = new Date(srchCtrls[i].CtrlTo.getValue());
+            //                    toValue = "TO_DATE( '" + (Number(date.getMonth()) + 1) + "-" + date.getDate() + "-" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "', 'MM-DD-YYYY HH24:MI:SS')";// GlobalVariable.TO_DATE(Util.GetValueOfDateTime(srchCtrls[i].Ctrl.getValue()), true);
+            //                    srchCtrls[i]["ValueTo"] = toValue;
+            //                    whereClause += " ( " + srchCtrls[i].SearchColumnName + " BETWEEN " + fromValue + " AND " + toValue + ")";
+            //                }
+            //                else {
+            //                    whereClause += srchCtrls[i].SearchColumnName + " =" + fromValue;
+            //                }
+            //            }
 
-                // VIS0060: Handled case of alise name on Info window.
-                sql = VIS.MRole.addAccessSQL(sql, info.TableName, true, false);
+            //            else if (srchCtrls[i].AD_Reference_ID == VIS.DisplayType.YesNo) {
 
-                if (whereClause.length > 1) {
-                    if (info.FromClause.toUpperCase().indexOf("WHERE") > -1 || sql.toUpperCase().indexOf("WHERE") > -1) {
-                        sql += " AND " + whereClause;
-                    }
-                    else {
-                        sql += " WHERE " + whereClause;
-                    }
-                    if (validationCode != null && validationCode.length > 0) {
-                        sql += " AND " + validationCode;
-                    }
-                }
-                else if (validationCode != null && validationCode.length > 0) {
-                    if (info.FromClause.toUpperCase().indexOf("WHERE") > -1 || sql.toUpperCase().indexOf("WHERE") > -1) {
-                        sql += " AND " + validationCode;
-                    }
-                    else {
-                        sql += " WHERE " + validationCode;
-                    }
-                }
+
+            //                srchValue = srchCtrls[i].Ctrl.getValue() == true ? "Y" : "N";
+            //                srchCtrls[i]["Value"] = srchValue;
+            //                whereClause += srchCtrls[i].SearchColumnName + " = '" + srchValue + "'";
+
+            //            }
+            //            else {
+            //                var fromValue = null;
+            //                var toValue = null;
+            //                fromValue = srchCtrls[i].Ctrl.getValue();
+            //                srchCtrls[i]["Value"] = fromValue;
+            //                if (srchCtrls[i].IsRange) {
+            //                    if (srchCtrls[i].Ctrl.getValue()) {     // Consider checkbox value only in case of true value
+            //                        srchValue = srchCtrls[i].Ctrl.getValue() == true ? "Y" : "";
+            //                        srchCtrls[i]["ValueTo"] = srchValue;
+            //                        whereClause += srchCtrls[i].SearchColumnName + " = '" + srchValue + "'";
+            //                    }
+            //                }
+            //                else {
+            //                    whereClause += " " + srchCtrls[i].SearchColumnName + " ='" + fromValue + "'";
+            //                }
+            //            }
+            //            appendAND = true;
+            //        }
+
+            //    }
+
+            //    // VIS0060: Handled case of alise name on Info window.
+            //    sql = VIS.MRole.addAccessSQL(sql, info.TableName, true, false);
+
+            //    if (whereClause.length > 1) {
+            //        if (info.FromClause.toUpperCase().indexOf("WHERE") > -1 || sql.toUpperCase().indexOf("WHERE") > -1) {
+            //            sql += " AND " + whereClause;
+            //        }
+            //        else {
+            //            sql += " WHERE " + whereClause;
+            //        }
+            //        if (validationCode != null && validationCode.length > 0) {
+            //            sql += " AND " + validationCode;
+            //        }
+            //    }
+            //    else if (validationCode != null && validationCode.length > 0) {
+            //        if (info.FromClause.toUpperCase().indexOf("WHERE") > -1 || sql.toUpperCase().indexOf("WHERE") > -1) {
+            //            sql += " AND " + validationCode;
+            //        }
+            //        else {
+            //            sql += " WHERE " + validationCode;
+            //        }
+            //    }
 
 
 
 
               
-                var sqlOrderby = "";
+            //    var sqlOrderby = "";
 
-                if (info.OTHERCLAUSE != null) {
-                    if (selectedIDs != null && selectedIDs.length > 0) {
-                        var otherClause = "";
-                        if (info.OTHERCLAUSE.indexOf("ORDER BY") > -1) {
-                            otherClause = info.OTHERCLAUSE.substr(0, info.OTHERCLAUSE.indexOf("ORDER BY"));;
-                            sqlOrderby = info.OTHERCLAUSE.substr(info.OTHERCLAUSE.indexOf("ORDER BY"));
-                        }
-                        if (otherClause)
+            //    if (info.OTHERCLAUSE != null) {
+            //        if (selectedIDs != null && selectedIDs.length > 0) {
+            //            var otherClause = "";
+            //            if (info.OTHERCLAUSE.indexOf("ORDER BY") > -1) {
+            //                otherClause = info.OTHERCLAUSE.substr(0, info.OTHERCLAUSE.indexOf("ORDER BY"));;
+            //                sqlOrderby = info.OTHERCLAUSE.substr(info.OTHERCLAUSE.indexOf("ORDER BY"));
+            //            }
+            //            if (otherClause)
 
-                            if (String(otherClause).toUpperCase().indexOf("WHERE") > -1) {
-                                if (info.FromClause.toUpperCase().indexOf("WHERE") > -1
-                                    || whereClause.length > 1
-                                    || (validationCode != null && validationCode.length > 1)) {
-                                    otherClause = String(otherClause).replace("WHERE", "AND");
-                                }
+            //                if (String(otherClause).toUpperCase().indexOf("WHERE") > -1) {
+            //                    if (info.FromClause.toUpperCase().indexOf("WHERE") > -1
+            //                        || whereClause.length > 1
+            //                        || (validationCode != null && validationCode.length > 1)) {
+            //                        otherClause = String(otherClause).replace("WHERE", "AND");
+            //                    }
 
-                            }
-                        sql += " " + otherClause;
-                    }
-                    else {
-                        if (String(info.OTHERCLAUSE).toUpperCase().indexOf("WHERE") > -1) {
-                            if (info.FromClause.toUpperCase().indexOf("WHERE") > -1
-                                || whereClause.length > 1
-                                || (validationCode != null && validationCode.length > 1)) {
-                                info.OTHERCLAUSE = String(info.OTHERCLAUSE).replace("WHERE", "AND");
-                            }
+            //                }
+            //            sql += " " + otherClause;
+            //        }
+            //        else {
+            //            if (String(info.OTHERCLAUSE).toUpperCase().indexOf("WHERE") > -1) {
+            //                if (info.FromClause.toUpperCase().indexOf("WHERE") > -1
+            //                    || whereClause.length > 1
+            //                    || (validationCode != null && validationCode.length > 1)) {
+            //                    info.OTHERCLAUSE = String(info.OTHERCLAUSE).replace("WHERE", "AND");
+            //                }
 
-                        }
-                        sql += " " + info.OTHERCLAUSE;
-                    }
-                }
-            }
-            else {
-                if (info.FromClause.toUpperCase().indexOf("WHERE") > -1) {
-                    sql += " AND rownum=-1";
-                }
-                else {
-                    sql += " WHERE rownum=-1";
-                }
+            //            }
+            //            sql += " " + info.OTHERCLAUSE;
+            //        }
+            //    }
+            //}
+            //else {
+            //    if (info.FromClause.toUpperCase().indexOf("WHERE") > -1) {
+            //        sql += " AND rownum=-1";
+            //    }
+            //    else {
+            //        sql += " WHERE rownum=-1";
+            //    }
 
-            }
+            //}
 
            
 
-            if (selectedIDs != null && selectedIDs.length > 0) {
-                var sqlUnion = " UNION " + sql;
-                sqlUnion = sqlUnion.replace("'N' AS ordcol", "'Y' AS ordcol");
+            //if (selectedIDs != null && selectedIDs.length > 0) {
+            //    var sqlUnion = " UNION " + sql;
+            //    sqlUnion = sqlUnion.replace("'N' AS ordcol", "'Y' AS ordcol");
 
-                if (sql.toUpperCase().indexOf("WHERE") > -1) {
-                    sql += " AND " + tabname + "." + keyCol + " IN(" + selectedIDs + ")";
-                    sql += sqlUnion;
-                    sql += " AND " + tabname + "." + keyCol + " NOT IN(" + selectedIDs + ")";
-                }
-                //else {
-                //    sql += " WHERE " + tabname + "." + keyCol + " IN(" + selectedIDs + ")";
-                //    sql += sqlUnion;
-                //    sql += " AND " + tabname + "." + keyCol + " NOT IN(" + selectedIDs + ")";
-                //}
-                sql = "SELECT * FROM (" + sql + ") tblquery";
-            }
-
-
-            if (selectedIDs != null && selectedIDs.length > 0) {
-                if (sqlOrderby.toUpperCase().indexOf("ORDER BY") > -1) {
-                    sqlOrderby = sqlOrderby.toUpperCase().replace("ORDER BY", "ORDER BY ordcol ASC,");
+            //    if (sql.toUpperCase().indexOf("WHERE") > -1) {
+            //        sql += " AND " + tabname + "." + keyCol + " IN(" + selectedIDs + ")";
+            //        sql += sqlUnion;
+            //        sql += " AND " + tabname + "." + keyCol + " NOT IN(" + selectedIDs + ")";
+            //    }
+            //    //else {
+            //    //    sql += " WHERE " + tabname + "." + keyCol + " IN(" + selectedIDs + ")";
+            //    //    sql += sqlUnion;
+            //    //    sql += " AND " + tabname + "." + keyCol + " NOT IN(" + selectedIDs + ")";
+            //    //}
+            //    sql = "SELECT * FROM (" + sql + ") tblquery";
+            //}
 
 
-                    //sql = sql.substr(0, sql.indexOf("ORDER BY"));
-                    sqlOrderby = sqlOrderby.split(',');
-                    var finalorderBy = ' ORDER BY ';
-                    for (var l = 0; l < sqlOrderby.length; l++) {
-                        sqlOrderby[l] = sqlOrderby[l].replace('ORDER BY ', '');
-                        sqlOrderby[l] = sqlOrderby[l].replace(sqlOrderby[l].substr(0, sqlOrderby[l].indexOf(".") + 1), "tblquery.");
-                        if (l > 0)
-                            finalorderBy += ",";
-                        finalorderBy += sqlOrderby[l];
-                    }
-                    sql += finalorderBy;
-                }
-                else {
-                    sql += " ORDER BY ordcol ASC";
-                }
+            //if (selectedIDs != null && selectedIDs.length > 0) {
+            //    if (sqlOrderby.toUpperCase().indexOf("ORDER BY") > -1) {
+            //        sqlOrderby = sqlOrderby.toUpperCase().replace("ORDER BY", "ORDER BY ordcol ASC,");
+
+
+            //        //sql = sql.substr(0, sql.indexOf("ORDER BY"));
+            //        sqlOrderby = sqlOrderby.split(',');
+            //        var finalorderBy = ' ORDER BY ';
+            //        for (var l = 0; l < sqlOrderby.length; l++) {
+            //            sqlOrderby[l] = sqlOrderby[l].replace('ORDER BY ', '');
+            //            sqlOrderby[l] = sqlOrderby[l].replace(sqlOrderby[l].substr(0, sqlOrderby[l].indexOf(".") + 1), "tblquery.");
+            //            if (l > 0)
+            //                finalorderBy += ",";
+            //            finalorderBy += sqlOrderby[l];
+            //        }
+            //        sql += finalorderBy;
+            //    }
+            //    else {
+            //        sql += " ORDER BY ordcol ASC";
+            //    }
 
 
 
-            }
+            //}
 
 
 
@@ -933,14 +949,33 @@
             if (!pNo) {
                 pNo = 1;
             }
+
+            var srhCtrls = [];
+            if (srchCtrls && Object.keys(srchCtrls).length > 0) {
+                for (var x = 0; x < Object.keys(srchCtrls).length; x++) {
+                    var vals = {};
+                    vals.AD_Reference_ID = srchCtrls[x].AD_Reference_ID;
+                    vals.ColumnName = srchCtrls[x].ColumnName;
+                    vals.IsRange = srchCtrls[x].IsRange;
+                    vals.SearchColumnName = srchCtrls[x].SearchColumnName;
+                    vals.Value = srchCtrls[x].Value;
+                    vals.ValueTo = srchCtrls[x].ValueTo;
+                    srhCtrls.push(vals);
+                }
+            }
+
             $.ajax({
                 url: VIS.Application.contextUrl + "InfoWindow/GetData",
                 dataType: "json",
                 type: "POST",
                 data: {
-                    sql: sql,
                     tableName: info.TableName,
-                    pageNo: pNo
+                    pageNo: pNo,
+                    SelectedIDs: selectedIDs,
+                    Requery: requery,
+                    Infos: JSON.stringify( info),
+                    ValidationCode: validationCode,
+                    SrchCtrls: JSON.stringify(srhCtrls)
                 },
                 error: function () {
                     alert(VIS.Msg.getMsg('ErrorWhileGettingData'));

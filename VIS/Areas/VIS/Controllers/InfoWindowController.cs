@@ -33,11 +33,15 @@ namespace VIS.Controllers
         [AjaxSessionFilterAttribute]
         [HttpPost]
         [ValidateInput(false)]
-        public JsonResult GetData(string sql,string tableName,int pageNo)
+        public JsonResult GetData(string tableName,int pageNo, string SelectedIDs
+            , bool Requery, string Infos, string ValidationCode, string SrchCtrls)
         {
             InfoWindowModel model = new InfoWindowModel();
+            Info inf = JsonConvert.DeserializeObject<Info>(Infos);
+            List<InfoSearchCol> SrchCtrl= JsonConvert.DeserializeObject<List<InfoSearchCol>>(SrchCtrls);
             //model.GetSchema(Ad_InfoWindow_ID);
-            return Json(JsonConvert.SerializeObject(model.GetData(sql, tableName,pageNo, Session["ctx"] as Ctx)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(model.GetData(tableName,pageNo, Session["ctx"] as Ctx,
+                SelectedIDs, Requery, inf, ValidationCode,SrchCtrl)), JsonRequestBehavior.AllowGet);
         }
 
         // Added by Mohit to get info window id on the basis of search key passed.
