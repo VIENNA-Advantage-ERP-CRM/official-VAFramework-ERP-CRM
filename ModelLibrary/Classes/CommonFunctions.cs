@@ -1155,7 +1155,7 @@ namespace VAdvantage.Classes
                     };
 
                     DataSet ds = DataBase.DB.ExecuteDataset("SELECT AlignItems,    ColumnSpan,   Justifyitems,   Rowspan,   Seqno,   Startcolumn,   Startrow," +
-                        " AD_GridLayoutItems_ID,BackgroundColor, FontColor, FontSize,padding, ColumnSql,HideFieldIcon, HideFieldText, FieldValueStyle FROM Ad_Gridlayoutitems WHERE IsActive ='Y' AND AD_GridLayout_ID=" + hGrid.AD_GridLayout_ID + " ORDER BY Seqno ");
+                        " AD_GridLayoutItems_ID, BackgroundColor, FontColor, FontSize, Padding, ColumnSql, HideFieldIcon, HideFieldText, FieldValueStyle, IsAlwaysExecute FROM AD_Gridlayoutitems WHERE IsActive ='Y' AND AD_GridLayout_ID=" + hGrid.AD_GridLayout_ID + " ORDER BY Seqno ");
                     if (ds != null && ds.Tables[0].Rows.Count > 0)
                     {
                         hGrid.HeaderItems = new Dictionary<int, object>();
@@ -1178,7 +1178,8 @@ namespace VAdvantage.Classes
                                 ColSql = Convert.ToString(row["ColumnSql"]),
                                 HideFieldIcon = Util.GetValueOfString(row["HideFieldIcon"]) == "Y",
                                 HideFieldText = Util.GetValueOfString(row["HideFieldtext"]) == "Y",
-                                FieldValueStyle = Convert.ToString(row["FieldValueStyle"])
+                                FieldValueStyle = Convert.ToString(row["FieldValueStyle"]),
+                                IsAlwaysExecute = Util.GetValueOfString(row["IsAlwaysExecute"]) == "Y"
                             };
                         }
                     }
