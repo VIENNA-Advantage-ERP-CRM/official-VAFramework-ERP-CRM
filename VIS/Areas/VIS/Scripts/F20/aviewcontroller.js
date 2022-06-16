@@ -1679,6 +1679,10 @@
         if (this.vHeaderPanel) {
             this.vHeaderPanel.navigate();
         }
+        else if (this.aPanel.vHeaderPanel) {
+            this.aPanel.vHeaderPanel.navigate(true);
+        }
+
         if (!e.getIsChanged() || col < 0)
             return;
 

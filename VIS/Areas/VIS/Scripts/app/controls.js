@@ -6459,10 +6459,11 @@
      *  @param value  The text to be displayed by the VSpan.
      *  @param name  name of control to bind VSpan with
      */
-    function VKeyText(colSql, windowNo, name) {
+    function VKeyText(colSql, windowNo, name, isExe) {
         this.colSql = colSql;
         this.windowNo = windowNo;
         this.cache = {};
+        this.isExe = isExe;
         // this.col = '';
         this.needtoParse = false;
 
@@ -6534,7 +6535,9 @@
                 }
                 else
                     self.ctrl.text("");
-                self.cache[where] = val;
+                if (!self.isExe) {
+                    self.cache[where] = val;
+                }
             });
         }
     };
