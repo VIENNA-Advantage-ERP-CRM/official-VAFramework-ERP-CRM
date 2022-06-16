@@ -463,7 +463,7 @@ namespace VIS.Models
                             string fromValue = null;
                             string toValue = null;
                             DateTime date = Convert.ToDateTime((srchCtrls[i].Value));
-                            fromValue = "TO_DATE( '" + ((date.Month) + 1) + "-" + date.Day + "-" + date.Year + "', 'MM-DD-YYYY')";// GlobalVariable.TO_DATE(Util.GetValueOfDateTime(srchCtrls[i].Ctrl.getValue()), true);
+                            fromValue = "TO_DATE( '" + ((date.Month)) + "-" + date.Day + "-" + date.Year + "', 'MM-DD-YYYY')";// GlobalVariable.TO_DATE(Util.GetValueOfDateTime(srchCtrls[i].Ctrl.getValue()), true);
 
                             if (srchCtrls[i].IsRange)
                             {
@@ -476,7 +476,7 @@ namespace VIS.Models
                                 {
                                     date = Convert.ToDateTime((srchCtrls[i].ValueTo));
                                 }
-                                toValue = "TO_DATE( '" + ((date.Month) + 1) + "-" + date.Day + "-" + date.Year + "', 'MM-DD-YYYY')";// GlobalVariable.TO_DATE(Util.GetValueOfDateTime(srchCtrls[i].Ctrl.getValue()), true);
+                                toValue = "TO_DATE( '" + ((date.Month)) + "-" + date.Day + "-" + date.Year + "', 'MM-DD-YYYY')";// GlobalVariable.TO_DATE(Util.GetValueOfDateTime(srchCtrls[i].Ctrl.getValue()), true);
                                 whereClause += " ( " + srchCtrls[i].SearchColumnName + " BETWEEN " + fromValue + " AND " + toValue + ")";
                             }
                             else
@@ -489,12 +489,12 @@ namespace VIS.Models
                             string fromValue = null;
                             string toValue = null;
                             var date = Convert.ToDateTime((srchCtrls[i].Value));
-                            fromValue = "TO_DATE( '" + ((date.Month) + 1) + "-" + date.Day + "-" + date.Year + " " + date.Hour + ":" + date.Minute + ":" + date.Second + "', 'MM-DD-YYYY HH24:MI:SS')";// GlobalVariable.TO_DATE(Util.GetValueOfDateTime(srchCtrls[i].Ctrl.getValue()), true);
+                            fromValue = "TO_DATE( '" + ((date.Month)) + "-" + date.Day + "-" + date.Year + " " + date.Hour + ":" + date.Minute + ":" + date.Second + "', 'MM-DD-YYYY HH24:MI:SS')";// GlobalVariable.TO_DATE(Util.GetValueOfDateTime(srchCtrls[i].Ctrl.getValue()), true);
 
                             if (srchCtrls[i].IsRange)
                             {
                                 date = Convert.ToDateTime((srchCtrls[i].ValueTo));
-                                toValue = "TO_DATE( '" + ((date.Month) + 1) + "-" + date.Day + "-" + date.Year + " " + date.Hour + ":" + date.Minute + ":" + date.Second + "', 'MM-DD-YYYY HH24:MI:SS')";// GlobalVariable.TO_DATE(Util.GetValueOfDateTime(srchCtrls[i].Ctrl.getValue()), true);
+                                toValue = "TO_DATE( '" + ((date.Month)) + "-" + date.Day + "-" + date.Year + " " + date.Hour + ":" + date.Minute + ":" + date.Second + "', 'MM-DD-YYYY HH24:MI:SS')";// GlobalVariable.TO_DATE(Util.GetValueOfDateTime(srchCtrls[i].Ctrl.getValue()), true);
                                 whereClause += " ( " + srchCtrls[i].SearchColumnName + " BETWEEN " + fromValue + " AND " + toValue + ")";
                             }
                             else
