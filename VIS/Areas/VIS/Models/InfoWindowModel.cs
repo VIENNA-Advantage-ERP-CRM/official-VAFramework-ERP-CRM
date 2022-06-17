@@ -457,7 +457,7 @@ namespace VIS.Models
                     }
 
                     // Consider checkbox value only in case of true value
-                    if (srchValue == null || srchValue.Length == 0 || (srchValue == "0" && srchCtrls[i].AD_Reference_ID != DisplayType.YesNo) || srchValue == "-1")
+                    if (srchValue == null || srchValue.Length == 0|| srchValue=="" || (srchValue == "0" && srchCtrls[i].AD_Reference_ID != DisplayType.YesNo) || srchValue == "-1")
                     {
                         continue;
                     }
@@ -948,6 +948,12 @@ namespace VIS.Models
         }
 
         public object ValueTo
+        {
+
+            get; set;
+        }
+
+        public bool IsTranslated
         {
 
             get; set;

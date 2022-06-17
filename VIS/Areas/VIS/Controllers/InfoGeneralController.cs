@@ -1,7 +1,10 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 using Newtonsoft.Json;
 using VAdvantage.Utility;
 using VIS.Filters;
+using VIS.Models;
+
 namespace VIS.Controllers
 {
     public class InfoGeneralController : Controller
@@ -41,11 +44,15 @@ namespace VIS.Controllers
         [AjaxSessionFilterAttribute]
         [HttpPost]
         [ValidateInput(false)]
-        public JsonResult GetData(string sql, string tableName, int pageNo)
+        public JsonResult GetData(string tableName, int AD_Table_ID, int pageNo, Ctx ctx, string keyCol, string selectedIDs,
+            bool requery, string srchCtrl, string validationCode)
         {
             VIS.Models.InfoGeneralModel model = new Models.InfoGeneralModel();
+
+            List<InfoSearchCol> srchCtrls = JsonConvert.DeserializeObject<List<InfoSearchCol>>(srchCtrl);
             //model.GetSchema(Ad_InfoWindow_ID);
-            return Json(JsonConvert.SerializeObject(model.GetData(sql, tableName,pageNo, Session["ctx"] as Ctx)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(model.GetData(tableName, AD_Table_ID, pageNo, Session["ctx"] as Ctx,  keyCol,  selectedIDs,
+             requery,srchCtrls,  validationCode)), JsonRequestBehavior.AllowGet);
         }
 
     }

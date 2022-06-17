@@ -348,77 +348,77 @@
                 }
             }
             disposeDataSec();
-            var sql = "SELECT ";
+            //var sql = "SELECT ";
             //var colName = null;
             //var cname = null;
-            var tabname = null;
-            var displayType = 0;
-            var count = $.makeArray(displayCols).length;
+            //var tabname = null;
+            //var displayType = 0;
+            //var count = $.makeArray(displayCols).length;
 
-            var isTrlColExist = false;
+            //var isTrlColExist = false;
 
             //get Qry from InfoColumns
-            for (var item in displayCols) {
+            //for (var item in displayCols) {
 
 
-                displayType = displayCols[item].AD_Reference_ID;
-                if (displayType == VIS.DisplayType.YesNo) {
-                    sql += " ( CASE " + tableName + "." + displayCols[item].ColumnName + " WHEN 'Y' THEN  'True' ELSE 'False'  END ) AS " + (displayCols[item].ColumnName);
-                }
-                else if (displayType == VIS.DisplayType.List) {
+            //    displayType = displayCols[item].AD_Reference_ID;
+            //    if (displayType == VIS.DisplayType.YesNo) {
+            //        sql += " ( CASE " + tableName + "." + displayCols[item].ColumnName + " WHEN 'Y' THEN  'True' ELSE 'False'  END ) AS " + (displayCols[item].ColumnName);
+            //    }
+            //    else if (displayType == VIS.DisplayType.List) {
 
-                    var refList = displayCols[item].RefList;
-                    sql += (" CASE ");
-                    for (var refListItem in refList) {
-                        sql += " WHEN " + tableName + "." + displayCols[item].ColumnName + "='" + refList[refListItem].Key + "' THEN '" + refList[refListItem].Value.replace("'", "''") + "'";
-                    }
-                    sql += " END AS " + displayCols[item].ColumnName;
+            //        var refList = displayCols[item].RefList;
+            //        sql += (" CASE ");
+            //        for (var refListItem in refList) {
+            //            sql += " WHEN " + tableName + "." + displayCols[item].ColumnName + "='" + refList[refListItem].Key + "' THEN '" + refList[refListItem].Value.replace("'", "''") + "'";
+            //        }
+            //        sql += " END AS " + displayCols[item].ColumnName;
 
-                }
-                else {
-                    // Change done by mohit asked by mukesh sir to show the data on info window from translated tab if logged in with langauge other than base language- 22/03/2018
-                    if (VIS.Env.isBaseLanguage(VIS.context)) {
-                        sql += tableName + "." + displayCols[item].ColumnName + " ";
-                    }
-                    else {
-                        if (displayCols[item].trlTableExist) {
-                            if (displayCols[item].IsTranslated) {
-                                sql += "trlTable." + displayCols[item].ColumnName + " ";
-                                isTrlColExist = true;
-                            }
-                            else {
-                                sql += tableName + "." + displayCols[item].ColumnName + " ";
-                            }
-                        }
-                        else {
-                            sql += tableName + "." + displayCols[item].ColumnName + " ";
-                        }
-                    }
+            //    }
+            //    else {
+            //        // Change done by mohit asked by mukesh sir to show the data on info window from translated tab if logged in with langauge other than base language- 22/03/2018
+            //        if (VIS.Env.isBaseLanguage(VIS.context)) {
+            //            sql += tableName + "." + displayCols[item].ColumnName + " ";
+            //        }
+            //        else {
+            //            if (displayCols[item].trlTableExist) {
+            //                if (displayCols[item].IsTranslated) {
+            //                    sql += "trlTable." + displayCols[item].ColumnName + " ";
+            //                    isTrlColExist = true;
+            //                }
+            //                else {
+            //                    sql += tableName + "." + displayCols[item].ColumnName + " ";
+            //                }
+            //            }
+            //            else {
+            //                sql += tableName + "." + displayCols[item].ColumnName + " ";
+            //            }
+            //        }
 
-                }
+            //    }
 
-                if (displayCols[item].IsKey) {
-                    keyCol = displayCols[item].ColumnName.toUpperCase();
-                }
-
-
-
-                if (!((count - 1) == item)) {
-                    sql += ', ';
-                }
-
-            }
-
-            if (selectedIDs != null && selectedIDs.length > 0) {
-                sql += ", 'N' AS ordcol";
-            }
+            //    if (displayCols[item].IsKey) {
+            //        keyCol = displayCols[item].ColumnName.toUpperCase();
+            //    }
 
 
-            sql += " FROM " + tableName + " " + tableName;
-            // Change done by mohit asked by mukesh sir to show the data on info window from translated tab if logged in with langauge other than base language- 22/03/2018
-            if (isTrlColExist) {
-                sql += " Inner join " + tableName + "_Trl trlTable on (" + tableName + "." + tableName + "_ID=trlTable." + tableName + "_ID  AND trlTable.AD_Language='" + VIS.context.getAD_Language() + "')";
-            }
+
+            //    if (!((count - 1) == item)) {
+            //        sql += ', ';
+            //    }
+
+            //}
+
+            //if (selectedIDs != null && selectedIDs.length > 0) {
+            //    sql += ", 'N' AS ordcol";
+            //}
+
+
+            //sql += " FROM " + tableName + " " + tableName;
+            //// Change done by mohit asked by mukesh sir to show the data on info window from translated tab if logged in with langauge other than base language- 22/03/2018
+            //if (isTrlColExist) {
+            //    sql += " Inner join " + tableName + "_Trl trlTable on (" + tableName + "." + tableName + "_ID=trlTable." + tableName + "_ID  AND trlTable.AD_Language='" + VIS.context.getAD_Language() + "')";
+            //}
 
             if (requery == true) {
                 var whereClause = " ";
@@ -430,9 +430,9 @@
                         continue;
                     }
 
-                    if (appendAND == true) {
-                        whereClause += " AND ";
-                    }
+                    //if (appendAND == true) {
+                    //    whereClause += " AND ";
+                    //}
 
                     if (!(String(srchValue).indexOf("%") == 0)) {
                         srchValue = "●" + srchValue;
@@ -443,76 +443,92 @@
                     if (!((String(srchValue).lastIndexOf("●")) == (String(srchValue).length))) {
                         srchValue = srchValue + "●";
                     }
+
+                    srchCtrls[i]["Value"] = srchValue;
                     // Change done by mohit asked by mukesh sir to show the data on info window from translated tab if logged in with langauge other than base language- 22/03/2018
-                    if (VIS.Env.isBaseLanguage(VIS.context)) {
-                        whereClause += "  UPPER(" + tableName + "." + srchCtrls[i].ColumnName + ") LIKE '" + srchValue.toUpperCase() + "' ";
-                    }
-                    else {
-                        if (isTrlColExist) {
-                            if (srchCtrls[i].IsTranslated) {
-                                whereClause += "  UPPER(trlTable." + srchCtrls[i].ColumnName + ") LIKE '" + srchValue.toUpperCase() + "' ";
-                                isTrlColExist = true;
-                            }
-                            else {
-                                whereClause += "  UPPER(" + tableName + "." + srchCtrls[i].ColumnName + ") LIKE '" + srchValue.toUpperCase() + "' ";
-                            }
-                        }
-                        else {
-                            whereClause += "  UPPER(" + tableName + "." + srchCtrls[i].ColumnName + ") LIKE '" + srchValue.toUpperCase() + "' ";
-                        }
-                    }
+                    //if (VIS.Env.isBaseLanguage(VIS.context)) {
+                    //    whereClause += "  UPPER(" + tableName + "." + srchCtrls[i].ColumnName + ") LIKE '" + srchValue.toUpperCase() + "' ";
+                    //}
+                    //else {
+                    //    if (isTrlColExist) {
+                    //        if (srchCtrls[i].IsTranslated) {
+                    //            whereClause += "  UPPER(trlTable." + srchCtrls[i].ColumnName + ") LIKE '" + srchValue.toUpperCase() + "' ";
+                    //            isTrlColExist = true;
+                    //        }
+                    //        else {
+                    //            whereClause += "  UPPER(" + tableName + "." + srchCtrls[i].ColumnName + ") LIKE '" + srchValue.toUpperCase() + "' ";
+                    //        }
+                    //    }
+                    //    else {
+                    //        whereClause += "  UPPER(" + tableName + "." + srchCtrls[i].ColumnName + ") LIKE '" + srchValue.toUpperCase() + "' ";
+                    //    }
+                    //}
                     appendAND = true;
                 }
 
 
 
 
-                if (whereClause.length > 1) {
-                    sql += " WHERE " + whereClause;
-                    if (validationCode != null && validationCode.length > 0) {
-                        sql += " AND " + validationCode;
-                    }
-                }
-                else if (validationCode != null && validationCode.length > 0) {
-                    sql += " WHERE " + validationCode;
-                }
+                //if (whereClause.length > 1) {
+                //    sql += " WHERE " + whereClause;
+                //    if (validationCode != null && validationCode.length > 0) {
+                //        sql += " AND " + validationCode;
+                //    }
+                //}
+                //else if (validationCode != null && validationCode.length > 0) {
+                //    sql += " WHERE " + validationCode;
+                //}
 
-                sql = VIS.MRole.addAccessSQL(sql, tableName, true, false);
-                var sqlUnion = " UNION " + sql;
-                sqlUnion = sqlUnion.replace("'N' AS ordcol", "'Y' AS ordcol");
+                //sql = VIS.MRole.addAccessSQL(sql, tableName, true, false);
+                //var sqlUnion = " UNION " + sql;
+                //sqlUnion = sqlUnion.replace("'N' AS ordcol", "'Y' AS ordcol");
 
-                if (selectedIDs != null && selectedIDs.length > 0) {
-                    if (sql.toUpperCase().indexOf("WHERE") > -1) {
-                        sql += " AND " + tableName + "." + keyCol + " IN(" + selectedIDs + ")";
-                        sql += sqlUnion;
-                        sql += " AND " + tableName + "." + keyCol + " NOT IN(" + selectedIDs + ")";
-                    }
-                    else {
-                        sql += " WHERE " + tableName + "." + keyCol + " IN(" + selectedIDs + ")";
-                        sql += sqlUnion;
-                        sql += " WHERE " + tableName + "." + keyCol + " NOT IN(" + selectedIDs + ")";
-                    }
-                }
+                //if (selectedIDs != null && selectedIDs.length > 0) {
+                //    if (sql.toUpperCase().indexOf("WHERE") > -1) {
+                //        sql += " AND " + tableName + "." + keyCol + " IN(" + selectedIDs + ")";
+                //        sql += sqlUnion;
+                //        sql += " AND " + tableName + "." + keyCol + " NOT IN(" + selectedIDs + ")";
+                //    }
+                //    else {
+                //        sql += " WHERE " + tableName + "." + keyCol + " IN(" + selectedIDs + ")";
+                //        sql += sqlUnion;
+                //        sql += " WHERE " + tableName + "." + keyCol + " NOT IN(" + selectedIDs + ")";
+                //    }
+                //}
 
             }
             else {
-                if (validationCode.length > 0 && validationCode.trim().toUpperCase().startsWith('WHERE')) {
-                    sql += " " + validationCode + " AND " + tableName + "_ID=-1";
-                }
-                else if (validationCode.length > 0) {
-                    sql += " WHERE " + tableName + "." + tableName + "_ID=-1 AND " + validationCode;
-                }
-                else {
-                    sql += " WHERE " + tableName + "." + tableName + "_ID=-1";
-                }
+                //if (validationCode.length > 0 && validationCode.trim().toUpperCase().startsWith('WHERE')) {
+                //    sql += " " + validationCode + " AND " + tableName + "_ID=-1";
+                //}
+                //else if (validationCode.length > 0) {
+                //    sql += " WHERE " + tableName + "." + tableName + "_ID=-1 AND " + validationCode;
+                //}
+                //else {
+                //    sql += " WHERE " + tableName + "." + tableName + "_ID=-1";
+                //}
             }
 
-            if (selectedIDs != null && selectedIDs.length > 0) {
-                if (sql.toUpperCase().indexOf("ORDER BY") > -1) {
-                    sql = sql.toUpperCase().replace("ORDER BY", "ORDER BY ordcol ASC,");
-                }
-                else {
-                    sql += " ORDER BY ordcol ASC";
+            //if (selectedIDs != null && selectedIDs.length > 0) {
+            //    if (sql.toUpperCase().indexOf("ORDER BY") > -1) {
+            //        sql = sql.toUpperCase().replace("ORDER BY", "ORDER BY ordcol ASC,");
+            //    }
+            //    else {
+            //        sql += " ORDER BY ordcol ASC";
+            //    }
+            //}
+
+
+            var srhCtrls = [];
+            if (srchCtrls && Object.keys(srchCtrls).length > 0) {
+                for (var x = 0; x < Object.keys(srchCtrls).length; x++) {
+                    var vals = {};
+                    vals.AD_Reference_ID = srchCtrls[x].AD_Reference_ID;
+                    vals.IsRange = srchCtrls[x].IsRange;
+                    vals.InfoColumnID = srchCtrls[x].InfoColumnID;
+                    vals.Value = srchCtrls[x].Value;
+                    vals.ValueTo = srchCtrls[x].ValueTo;
+                    srhCtrls.push(vals);
                 }
             }
 
