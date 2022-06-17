@@ -156,25 +156,11 @@ namespace VIS.Models
                 result["DiscountSchema"] = pp.IsDiscountSchema();
                 result["M_PriceList_Version_ID"] = M_PriceList_Version_ID;
 
-                // Price Conversion with Flat Discount
                 if (Util.GetValueOfInt(result["purchasingUom"]) > 0 && !inv.IsSOTrx())
                 {
-                    MBPartnerModel objBPartner = new MBPartnerModel();
-                    Dictionary<String, String> bpartner1 = objBPartner.GetBPartner(ctx, inv.GetC_BPartner_ID().ToString());
-                    if (Util.GetValueOfDecimal(result["PriceActual"]) != 0)
+                    // Set QtyInvoiced when purchasing UOM != Product Header UOM
+                    if (Util.GetValueOfInt(result["headerUom"]) != Util.GetValueOfInt(result["purchasingUom"]))
                     {
-                        // get Price of Purchasing UOM and Apply Discount
-                        if (Util.GetValueOfInt(bpartner1["M_DiscountSchema_ID"]) > 0)
-                        {
-                            MOrderLineModel objOrderLine = new MOrderLineModel();
-                            result["PriceActual"] = objOrderLine.FlatDiscount(_m_Product_Id, inv.GetAD_Client_ID(),
-                                Util.GetValueOfDecimal(result["PriceActual"]),
-                           Util.GetValueOfInt(bpartner1["M_DiscountSchema_ID"]),
-                           Util.GetValueOfDecimal(bpartner1["FlatDiscount"]), Qty);
-                            result["PriceEntered"] = result["PriceActual"];
-                            result["PriceStd"] = result["PriceActual"];
-                        }
-
                         sql.Clear();
                         sql.Append(@"SELECT con.DivideRate FROM C_UOM_Conversion con 
                             INNER JOIN C_UOM uom ON con.C_UOM_ID = uom.C_UOM_ID 
@@ -197,60 +183,6 @@ namespace VIS.Models
                             rate = 1;
                         }
                         result["QtyInvoiced"] = Decimal.Round((Qty * rate), Util.GetValueOfInt(result["UOMPrecision"]), MidpointRounding.AwayFromZero);
-                    }
-                    else if (Util.GetValueOfInt(result["purchasingUom"]) != Util.GetValueOfInt(result["headerUom"]))
-                    {
-                        // Get Price of Product UOM and Convert it into Purchasing UOM
-                        sql.Clear();
-                        sql.Append(@"SELECT PriceStd , PriceList, PriceLimit FROM M_ProductPrice 
-                                    WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
-                                    + " AND M_PriceList_Version_ID = " + M_PriceList_Version_ID
-                                    + " AND NVL(M_AttributeSetInstance_ID, 0)=" + M_AttributeSetInstance_ID
-                                    + " AND C_UOM_ID=" + Util.GetValueOfInt(result["headerUom"]));
-                        DataSet ds = DB.ExecuteDataset(sql.ToString());
-                        if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-                        {
-                            if (Util.GetValueOfInt(bpartner1["M_DiscountSchema_ID"]) > 0)
-                            {
-                                MOrderLineModel objOrderLine = new MOrderLineModel();
-                                result["PriceActual"] = objOrderLine.FlatDiscount(_m_Product_Id, inv.GetAD_Client_ID(),
-                                    Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceStd"]),
-                               Util.GetValueOfInt(bpartner1["M_DiscountSchema_ID"]),
-                               Util.GetValueOfDecimal(bpartner1["FlatDiscount"]), Qty);
-                                result["PriceEntered"] = result["PriceActual"];
-                                result["PriceStd"] = result["PriceActual"];
-                                result["PriceList"] = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceList"]);
-                                result["PriceLimit"] = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceLimit"]);
-                            }
-
-                            sql.Clear();
-                            sql.Append(@"SELECT con.DivideRate FROM C_UOM_Conversion con 
-                                        INNER JOIN C_UOM uom ON (con.C_UOM_ID = uom.C_UOM_ID)
-                                        WHERE con.IsActive = 'Y' " +
-                                        " AND con.M_Product_ID = " + _m_Product_Id +
-                                        " AND con.C_UOM_ID = " + Util.GetValueOfInt(result["headerUom"]) +
-                                        " AND con.C_UOM_To_ID = " + Util.GetValueOfInt(result["purchasingUom"]));
-                            Decimal rate = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, null));
-                            if (rate == 0)
-                            {
-                                sql.Clear();
-                                sql.Append(@"SELECT con.DivideRate FROM C_UOM_Conversion con 
-                                        INNER JOIN C_UOM uom ON con.C_UOM_ID = uom.C_UOM_ID WHERE con.IsActive = 'Y'" +
-                                      " AND con.C_UOM_ID = " + Util.GetValueOfInt(result["headerUom"]) +
-                                      " AND con.C_UOM_To_ID = " + Util.GetValueOfInt(result["purchasingUom"]));
-                                rate = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, null));
-                            }
-                            if (rate == 0)
-                            {
-                                rate = 1;
-                            }
-                            result["PriceActual"] = Util.GetValueOfDecimal(result["PriceActual"]) * rate;
-                            result["PriceEntered"] = result["PriceActual"];
-                            result["PriceStd"] = result["PriceActual"];
-                            result["PriceList"] = Util.GetValueOfDecimal(result["PriceList"]) * rate;
-                            result["PriceLimit"] = Util.GetValueOfDecimal(result["PriceLimit"]) * rate;
-                            result["QtyInvoiced"] = Decimal.Round((Qty * rate), Util.GetValueOfInt(result["UOMPrecision"]), MidpointRounding.AwayFromZero);
-                        }
                     }
                 }
 
@@ -1398,10 +1330,18 @@ namespace VIS.Models
             countVAPRC = Env.IsModuleInstalled("VAPRC_") ? 1 : 0;
             retDic["countVAPRC"] = countVAPRC.ToString();
 
+            retDic["IsDiscountApplied"] = "N";
+
             if (countEd011 > 0)
             {
                 MOrderLineModel objOrd = new MOrderLineModel();
-                _m_PriceList_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_PriceList_ID FROM C_Invoice WHERE C_Invoice_ID = " + _c_invoice_Id, null, null));
+                bool isSOtrx = false;
+                DataSet dsInvoice = DB.ExecuteDataset("SELECT M_PriceList_ID, IsSOTrx FROM C_Invoice WHERE C_Invoice_ID = " + _c_invoice_Id, null, null);
+                if (dsInvoice != null && dsInvoice.Tables.Count > 0 && dsInvoice.Tables[0].Rows.Count > 0)
+                {
+                    _m_PriceList_ID = Util.GetValueOfInt(dsInvoice.Tables[0].Rows[0]["M_PriceList_ID"]);
+                    isSOtrx = Util.GetValueOfString(dsInvoice.Tables[0].Rows[0]["IsSOTrx"]).Equals("Y");
+                }
 
                 /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
                 StringBuilder sbparams = new StringBuilder();
@@ -1417,7 +1357,14 @@ namespace VIS.Models
 
                 MBPartnerModel objBPartner = new MBPartnerModel();
                 Dictionary<String, String> bpartner1 = objBPartner.GetBPartner(ctx, _c_BPartner_Id.ToString());
-                _m_DiscountSchema_ID = Util.GetValueOfInt(bpartner1["M_DiscountSchema_ID"]);
+                if (isSOtrx)
+                {
+                    _m_DiscountSchema_ID = Util.GetValueOfInt(bpartner1["M_DiscountSchema_ID"]);
+                }
+                else
+                {
+                    _m_DiscountSchema_ID = Util.GetValueOfInt(bpartner1["PO_DiscountSchema_ID"]);
+                }
                 _flatDiscount = Util.GetValueOfInt(bpartner1["FlatDiscount"]);
 
                 if (_m_AttributeSetInstance_Id > 0)
@@ -1461,7 +1408,12 @@ namespace VIS.Models
                             //Flat Discount
                             PriceEntered = objOrd.FlatDiscount(_m_Product_Id, _ad_Client_Id, Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceStd"]),
                             _m_DiscountSchema_ID, _flatDiscount, _qtyEntered);
-                            //end
+                            // check is Discount Applied or not
+                            if (Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceStd"]) != 0 &&
+                                Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceStd"]) != PriceEntered)
+                            {
+                                retDic["IsDiscountApplied"] = "Y";
+                            }
                             PriceList = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceList"]);
                             PriceLimit = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceLimit"]);
                         }
@@ -1480,7 +1432,12 @@ namespace VIS.Models
                         //Flat Discount
                         PriceEntered = objOrd.FlatDiscount(_m_Product_Id, _ad_Client_Id, Util.GetValueOfDecimal(ds1.Tables[0].Rows[0]["PriceStd"]),
                        _m_DiscountSchema_ID, _flatDiscount, _qtyEntered);
-                        //End
+                        // check is Discount Applied or not
+                        if (Util.GetValueOfDecimal(ds1.Tables[0].Rows[0]["PriceStd"]) != 0 &&
+                            Util.GetValueOfDecimal(ds1.Tables[0].Rows[0]["PriceStd"]) != PriceEntered)
+                        {
+                            retDic["IsDiscountApplied"] = "Y";
+                        }
                         PriceList = Util.GetValueOfDecimal(ds1.Tables[0].Rows[0]["PriceList"]);
                         PriceLimit = Util.GetValueOfDecimal(ds1.Tables[0].Rows[0]["PriceLimit"]);
                     }
@@ -1513,7 +1470,12 @@ namespace VIS.Models
                                 //Flat Discount
                                 PriceEntered = objOrd.FlatDiscount(_m_Product_Id, _ad_Client_Id, Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceStd"]),
                                 _m_DiscountSchema_ID, _flatDiscount, _qtyEntered);
-                                //end
+                                // check is Discount Applied or not
+                                if (Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceStd"]) != 0 &&
+                                    Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceStd"]) != PriceEntered)
+                                {
+                                    retDic["IsDiscountApplied"] = "Y";
+                                }
                                 PriceList = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceList"]);
                                 PriceLimit = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceLimit"]);
                             }
@@ -1532,7 +1494,12 @@ namespace VIS.Models
                                         //Flat Discount
                                         PriceEntered = objOrd.FlatDiscount(_m_Product_Id, _ad_Client_Id, Util.GetValueOfDecimal(ds2.Tables[0].Rows[0]["PriceStd"]),
                                                                     _m_DiscountSchema_ID, _flatDiscount, _qtyEntered);
-                                        //End
+                                        // check is Discount Applied or not
+                                        if (Util.GetValueOfDecimal(ds2.Tables[0].Rows[0]["PriceStd"]) != 0 &&
+                                            Util.GetValueOfDecimal(ds2.Tables[0].Rows[0]["PriceStd"]) != PriceEntered)
+                                        {
+                                            retDic["IsDiscountApplied"] = "Y";
+                                        }
                                         PriceList = Util.GetValueOfDecimal(ds2.Tables[0].Rows[0]["PriceList"]);
                                         PriceLimit = Util.GetValueOfDecimal(ds2.Tables[0].Rows[0]["PriceLimit"]);
                                     }

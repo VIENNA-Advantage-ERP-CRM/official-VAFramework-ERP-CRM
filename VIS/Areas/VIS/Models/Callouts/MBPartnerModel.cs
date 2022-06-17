@@ -52,6 +52,17 @@ namespace VIS.Models
             {
                 retDic["FlatDiscount"] = "0";
             }
+
+            //VIS_0045: Get PO Discount Schema
+            if (bpartner.GetPO_DiscountSchema_ID() != 0)
+            {
+                retDic["PO_DiscountSchema_ID"] = bpartner.GetPO_DiscountSchema_ID().ToString();
+            }
+            else
+            {
+                retDic["PO_DiscountSchema_ID"] = "0";
+            }
+
             //30-4-2016
             //VA025
             //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE ISACTIVE = 'Y' AND  PREFIX='VA025_'")) > 0)

@@ -12539,6 +12539,7 @@
                         "," + C_UOM_To_ID.toString() + "," + ctx.getAD_Client_ID().toString() + "," + C_BPartner_ID.toString() +
                         "," + QtyEntered.toString());
                     var prices = VIS.dataContext.getJSONRecord("MInvoice/GetPrices", paramString);
+                    var isDiscountApplied = "N";
 
                     if (prices != null) {
                         // VIS_0045: Handle zero price issue on quantity change.
@@ -12550,6 +12551,7 @@
 
                         PriceEntered = prices["PriceEntered"];
                         DiscountSchema = Util.getValueOfString(prices["DiscountSchema"]);
+                        isDiscountApplied = Util.getValueOfString(prices["IsDiscountApplied"]);
 
                         // VIS_0045: Handle zero price issue on quantity change.
                         if (mField.getColumnName() == "M_Product_ID" ||
@@ -12566,7 +12568,10 @@
                     PriceActual = PriceEntered;
 
                     // VIS_0045: Handle zero price issue on quantity change.
-                    if (mField.getColumnName() == "M_Product_ID" || (PriceEntered != 0 && mTab.getValue("PriceEntered") == 0)) {
+                    // if Discount applied with Discount Schema  and price entered not ZERO then change price
+                    if (mField.getColumnName() == "M_Product_ID" ||
+                        (PriceEntered != 0 && mTab.getValue("PriceEntered") == 0) ||
+                        (isDiscountApplied.equals("Y") && PriceEntered != 0)) {
                         mTab.setValue("PriceActual", PriceActual);
                         mTab.setValue("PriceEntered", PriceEntered);
                     }
