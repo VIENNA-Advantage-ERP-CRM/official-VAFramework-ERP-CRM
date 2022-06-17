@@ -718,6 +718,9 @@ namespace VAdvantage.Model
                             decimal productCostsQty = MCostQueue.CheckQtyAvailablity(ctx, acctSchema, AD_Client_ID, AD_Org_ID, product, M_ASI_ID, loc.GetM_Warehouse_ID());
                             if (productCostsQty < Decimal.Negate(Qty))
                             {
+                                _log.Info("CostingEngine: Qty not available on Product Costs for window = " + windowName +
+                                    " Product Cost Qty = " + productCostsQty +
+                                    " Transaction Qty = " + Math.Abs(Qty));
                                 return false;
                             }
                         }
@@ -755,6 +758,9 @@ namespace VAdvantage.Model
                             decimal productCostsQty = MCostQueue.CheckQtyAvailablity(ctx, acctSchema, AD_Client_ID, (Qty > 0 ? AD_Org_ID : loc.GetAD_Org_ID()), product, M_ASI_ID, loc.GetM_Warehouse_ID());
                             if (productCostsQty < Math.Abs(Qty))
                             {
+                                _log.Info("CostingEngine: Qty not available on Product Cost for window = " + windowName +
+                                    " Product Cost Qty = " + productCostsQty +
+                                    " Transaction Qty = " + Math.Abs(Qty));
                                 return false;
                             }
                         }
@@ -775,6 +781,9 @@ namespace VAdvantage.Model
                                 }
                             }
                             M_Warehouse_Id = inout.GetM_Warehouse_ID();
+                            // Get Movement Date
+                            costingCheck.movementDate = inout.GetMovementDate();
+                            costingCheck.isReversal = inout.IsReversal();
                             if (inoutline.GetC_OrderLine_ID() > 0)
                             {
                                 if (costingCheck != null)
@@ -815,6 +824,8 @@ namespace VAdvantage.Model
                                             trxName.Rollback();
                                         }
                                         conversionNotFound = inout.GetDocumentNo();
+                                        _log.Info("CostingEngine: Price not available for window = " + windowName +
+                                                    " - Document No  = " + conversionNotFound);
                                         return false;
                                     }
                                 }
@@ -825,6 +836,8 @@ namespace VAdvantage.Model
                                         trxName.Rollback();
                                     }
                                     conversionNotFound = inout.GetDocumentNo();
+                                    _log.Info("CostingEngine: Price not available for window = " + windowName +
+                                                   " - Document No  = " + conversionNotFound);
                                     return false;
                                 }
                             }
@@ -890,6 +903,8 @@ namespace VAdvantage.Model
                                         trxName.Rollback();
                                     }
                                     conversionNotFound = inout.GetDocumentNo();
+                                    _log.Info("CostingEngine: Price not available for window = " + windowName +
+                                                   " - Document No  = " + conversionNotFound);
                                     return false;
                                 }
                             }
@@ -947,6 +962,8 @@ namespace VAdvantage.Model
                                     trxName.Rollback();
                                 }
                                 conversionNotFound = invoice.GetDocumentNo();
+                                _log.Info("CostingEngine: Price not available for window = " + windowName +
+                                                   " - Document No  = " + conversionNotFound);
                                 return false;
                             }
                             #endregion
@@ -1116,6 +1133,11 @@ namespace VAdvantage.Model
                                     costingCheck.inout = inout;
                                 }
                             }
+                            if (inout != null)
+                            {
+                                // Get Movement Date
+                                costingCheck.movementDate = inout.GetMovementDate();
+                            }
 
                             orderLineId = Util.GetValueOfInt(Price); // here price parametr contain Orderline id from controller
                             if (costingCheck != null)
@@ -1197,7 +1219,7 @@ namespace VAdvantage.Model
                                             trxName.Rollback();
                                         }
                                         ValueNamePair pp = VLogger.RetrieveError();
-                                        _log.Severe("Error occured during saving a record, M_InoutLine_Id = " + inoutline.GetM_InOutLine_ID() + " in Cost-Detail -> MatchPO. Error Value :  " + pp.GetValue() + " AND Error Name : " + pp.GetName());
+                                        _log.Severe("Error occured during saving a cost detail record, M_InoutLine_Id = " + inoutline.GetM_InOutLine_ID() + " in Cost-Detail -> MatchPO. Error Value :  " + pp.GetValue() + " AND Error Name : " + pp.GetName());
                                         return false;
                                     }
                                     continue;
@@ -1403,7 +1425,7 @@ namespace VAdvantage.Model
                                             trxName.Rollback();
                                         }
                                         ValueNamePair pp = VLogger.RetrieveError();
-                                        _log.Severe("Error occured during saving a record , M_inoutLine_ID = " + inoutline.GetM_InOutLine_ID() + " in cost detail -> MatchPO. Error Value :  " + pp.GetValue() + " AND Error Name : " + pp.GetName());
+                                        _log.Severe("Error occured during saving a Product costs record , M_inoutLine_ID = " + inoutline.GetM_InOutLine_ID() + " in cost detail -> MatchPO. Error Value :  " + pp.GetValue() + " AND Error Name : " + pp.GetName());
                                         return false;
                                     }
 
@@ -1417,7 +1439,7 @@ namespace VAdvantage.Model
                                             trxName.Rollback();
                                         }
                                         ValueNamePair pp = VLogger.RetrieveError();
-                                        _log.Severe("Error occured during saving a record, M_InoutLine_Id = " + inoutline.GetM_InOutLine_ID() + " in cost detail -> MatchPO. Error Value :  " + pp.GetValue() + " AND Error Name : " + pp.GetName());
+                                        _log.Severe("Error occured during saving a cost detail record, M_InoutLine_Id = " + inoutline.GetM_InOutLine_ID() + " in cost detail -> MatchPO. Error Value :  " + pp.GetValue() + " AND Error Name : " + pp.GetName());
                                         return false;
                                     }
 
@@ -1447,7 +1469,7 @@ namespace VAdvantage.Model
                                             trxName.Rollback();
                                         }
                                         ValueNamePair pp = VLogger.RetrieveError();
-                                        _log.Severe("Error occured during saving a record, M_InoutLine_ID = " + inoutline.GetM_InOutLine_ID() + " in M-Cost -> MatchPO. Error Value :  " + pp.GetValue() + " AND Error Name : " + pp.GetName());
+                                        _log.Severe("Error occured during saving a product costs record, M_InoutLine_ID = " + inoutline.GetM_InOutLine_ID() + " in M-Cost -> MatchPO. Error Value :  " + pp.GetValue() + " AND Error Name : " + pp.GetName());
                                         return false;
                                     }
                                     else
@@ -1571,7 +1593,7 @@ namespace VAdvantage.Model
                                             trxName.Rollback();
                                         }
                                         ValueNamePair pp = VLogger.RetrieveError();
-                                        _log.Severe("Error occured during saving a record, M_InoutLine_Id = " + inoutline.GetM_InOutLine_ID() + " in cost detail -> MatchPO. Error Value :  " + pp.GetValue() + " AND Error Name : " + pp.GetName());
+                                        _log.Severe("Error occured during saving a cost detail record, M_InoutLine_Id = " + inoutline.GetM_InOutLine_ID() + " in cost detail -> MatchPO. Error Value :  " + pp.GetValue() + " AND Error Name : " + pp.GetName());
                                         return false;
                                     }
 
@@ -1598,7 +1620,7 @@ namespace VAdvantage.Model
                                             trxName.Rollback();
                                         }
                                         ValueNamePair pp = VLogger.RetrieveError();
-                                        _log.Severe("Error occured during saving a record, M_InoutLine_ID = " + inoutline.GetM_InOutLine_ID() + " in M-Cost -> MatchPO. Error Value :  " + pp.GetValue() + " AND Error Name : " + pp.GetName());
+                                        _log.Severe("Error occured during saving a product costs record, M_InoutLine_ID = " + inoutline.GetM_InOutLine_ID() + " in M-Cost -> MatchPO. Error Value :  " + pp.GetValue() + " AND Error Name : " + pp.GetName());
                                         return false;
                                     }
                                     else
@@ -1634,7 +1656,7 @@ namespace VAdvantage.Model
                                         trxName.Rollback();
                                     }
                                     ValueNamePair pp = VLogger.RetrieveError();
-                                    _log.Severe("Error occured during saving a record, M_InoutLine_Id = " + inoutline.GetM_InOutLine_ID() + " in Cost-Detail -> MatchPO. Error Value :  " + pp.GetValue() + " AND Error Name : " + pp.GetName());
+                                    _log.Severe("Error occured during saving a cost detail record, M_InoutLine_Id = " + inoutline.GetM_InOutLine_ID() + " in Cost-Detail -> MatchPO. Error Value :  " + pp.GetValue() + " AND Error Name : " + pp.GetName());
                                     return false;
                                 }
 
@@ -1813,7 +1835,8 @@ namespace VAdvantage.Model
                             }
 
                             // Update Cost Queue Price
-                            if (!UpdateCostQueuePrice(0, MRPriceAvPo, Qty, Price, inoutline.GetM_InOutLine_ID(), acctSchema.GetCostingPrecision()))
+                            if (!UpdateCostQueuePrice(0, MRPriceAvPo, Qty, Price, inoutline.GetM_InOutLine_ID(),
+                                acctSchema.GetCostingPrecision()))
                             {
                                 _log.Severe("Cost Queue Cost not updated for GRN Line= " + inoutline.GetM_InOutLine_ID());
                                 return false;
@@ -2025,6 +2048,8 @@ namespace VAdvantage.Model
                                                     trxName.Rollback();
                                                 }
                                                 conversionNotFound = invoice.GetDocumentNo();
+                                                _log.Info("CostingEngine: Price not available for window = " + windowName +
+                                                   " - Document No  = " + conversionNotFound);
                                                 return false;
                                             }
                                             query.Clear();
@@ -2089,6 +2114,8 @@ namespace VAdvantage.Model
                                                         trxName.Rollback();
                                                     }
                                                     conversionNotFound = inv.GetDocumentNo();
+                                                    _log.Info("CostingEngine: Price not available for window = " + windowName +
+                                                   " - Document No  = " + conversionNotFound);
                                                     return false;
                                                 }
                                             }
@@ -2188,6 +2215,8 @@ namespace VAdvantage.Model
                                             trxName.Rollback();
                                         }
                                         conversionNotFound = invoice.GetDocumentNo();
+                                        _log.Info("CostingEngine: Price not available for window = " + windowName +
+                                                   " - Document No  = " + conversionNotFound);
                                         return false;
                                     }
                                 }
@@ -2322,6 +2351,8 @@ namespace VAdvantage.Model
                                                             trxName.Rollback();
                                                         }
                                                         conversionNotFound = inv.GetDocumentNo();
+                                                        _log.Info("CostingEngine: Price not available for window = " + windowName +
+                                                   " - Document No  = " + conversionNotFound);
                                                         return false;
                                                     }
                                                 }
@@ -2438,14 +2469,20 @@ namespace VAdvantage.Model
                             if (windowName == "Physical Inventory" || windowName == "Internal Use Inventory")
                             {
                                 M_Warehouse_Id = inventoryLine.GetParent().GetM_Warehouse_ID();
+                                costingCheck.movementDate = inventoryLine.GetParent().GetMovementDate();
+                                costingCheck.isReversal = inventoryLine.GetParent().IsReversal();
                             }
                             else if (windowName == "Inventory Move")
                             {
                                 M_Warehouse_Id = movementline.GetParent().GetDTD001_MWarehouseSource_ID();
+                                costingCheck.movementDate = movementline.GetParent().GetMovementDate();
+                                costingCheck.isReversal = movementline.GetParent().IsReversal();
                             }
                             else if (windowName == "AssetDisposal")
                             {
                                 M_Warehouse_Id = Util.GetValueOfInt(po.Get_Value("M_Warehouse_ID"));
+                                costingCheck.movementDate = Util.GetValueOfDateTime(po.Get_Value("DateAcct"));
+                                costingCheck.isReversal = Util.GetValueOfInt(po.Get_Value("ReversalDoc_ID")) > 0 ? true : false;
                             }
                             price = MCostQueue.CalculateCost(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, AD_Org_ID, M_Warehouse_Id);
                             cmPrice = price;
@@ -2569,6 +2606,8 @@ namespace VAdvantage.Model
                                 {
                                     conversionNotFound = Util.GetValueOfString(po.Get_Value("DocumentNo"));
                                 }
+                                _log.Info("CostingEngine: Price not available for window = " + windowName +
+                                                   " - Document No  = " + conversionNotFound);
                                 return false;
                             }
 
@@ -2588,6 +2627,8 @@ namespace VAdvantage.Model
                                             trxName.Rollback();
                                         }
                                         conversionNotFound = inventory.GetDocumentNo();
+                                        _log.Info("CostingEngine: Price not available for window = " + windowName +
+                                                   " - Document No  = " + conversionNotFound);
                                         return false;
                                     }
                                 }
@@ -2635,12 +2676,14 @@ namespace VAdvantage.Model
                             #region Get Price
                             //M_Warehouse_Id = Util.GetValueOfInt(po.Get_Value("M_Warehouse_ID"));
                             DateTime? VAMFG_DateAcct = null;
-                            DataSet dsProductDetail = DB.ExecuteDataset(@"SELECT VAMFG_DateAcct , M_Warehouse_ID FROM VAMFG_M_WrkOdrTransaction   
+                            DataSet dsProductDetail = DB.ExecuteDataset(@"SELECT VAMFG_DateAcct , M_Warehouse_ID, ReversalDoc_ID FROM VAMFG_M_WrkOdrTransaction   
                                                         WHERE VAMFG_M_WrkOdrTransaction_ID = " + po.Get_ValueAsInt("VAMFG_M_WrkOdrTransaction_ID"), null, trxName);
                             if (dsProductDetail != null && dsProductDetail.Tables.Count > 0 && dsProductDetail.Tables[0].Rows.Count > 0)
                             {
                                 M_Warehouse_Id = Util.GetValueOfInt(dsProductDetail.Tables[0].Rows[0]["M_Warehouse_ID"]);
                                 VAMFG_DateAcct = Util.GetValueOfDateTime(dsProductDetail.Tables[0].Rows[0]["VAMFG_DateAcct"]);
+                                costingCheck.movementDate = VAMFG_DateAcct;
+                                costingCheck.isReversal = Util.GetValueOfInt(dsProductDetail.Tables[0].Rows[0]["ReversalDoc_ID"]) > 0 ? true : false;
                             }
                             if (windowName.Equals("PE-FinishGood"))
                             {
@@ -2658,6 +2701,8 @@ namespace VAdvantage.Model
                                         trxName.Rollback();
                                     }
                                     conversionNotFound = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocumentNo from VAMFG_M_WrkOdrTransaction where VAMFG_M_WrkOdrTransaction_ID = " + Util.GetValueOfInt(po.Get_Value("VAMFG_M_WrkOdrTransaction_ID"))));
+                                    _log.Info("CostingEngine: Price not available for window = " + windowName +
+                                                   " - Document No  = " + conversionNotFound);
                                     return false;
                                 }
                             }
@@ -2678,6 +2723,8 @@ namespace VAdvantage.Model
                                 if (windowName == "Production Execution")
                                 {
                                     conversionNotFound = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocumentNo from VAMFG_M_WrkOdrTransaction where VAMFG_M_WrkOdrTransaction_ID = " + Util.GetValueOfInt(po.Get_Value("VAMFG_M_WrkOdrTransaction_ID"))));
+                                    _log.Info("CostingEngine: Price not available for window = " + windowName +
+                                                   " - Document No  = " + conversionNotFound);
                                 }
                                 return false;
                             }
@@ -2722,6 +2769,8 @@ namespace VAdvantage.Model
                                 }
                                 conversionNotFound = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT DocumentNo from 
                                 C_ProvisionalInvoice where C_ProvisionalInvoice_ID = " + Util.GetValueOfInt(po.Get_Value("C_ProvisionalInvoice_ID"))));
+                                _log.Info("CostingEngine: Price not available for window = " + windowName +
+                                                   " - Document No  = " + conversionNotFound);
                                 return false;
                             }
                         }
@@ -2826,6 +2875,8 @@ namespace VAdvantage.Model
                                                 trxName.Rollback();
                                             }
                                             conversionNotFound = Util.GetValueOfString(po.Get_Value("DocumentNo"));
+                                            _log.Info("CostingEngine: Price not available for window = " + windowName +
+                                                   " - Document No  = " + conversionNotFound);
                                             return false;
                                         }
                                     }
@@ -2968,6 +3019,8 @@ namespace VAdvantage.Model
                                                 trxName.Rollback();
                                             }
                                             conversionNotFound = IsPOCostingMethod ? inout.GetDocumentNo() : invoice.GetDocumentNo();
+                                            _log.Info("CostingEngine: Price not available for window = " + windowName +
+                                                   " - Document No  = " + conversionNotFound);
                                             return false;
                                         }
                                     }
@@ -3111,6 +3164,8 @@ namespace VAdvantage.Model
                                                 trxName.Rollback();
                                             }
                                             conversionNotFound = invoice.GetDocumentNo();
+                                            _log.Info("CostingEngine: Price not available for window = " + windowName +
+                                                   " - Document No  = " + conversionNotFound);
                                             return false;
                                         }
                                     }
@@ -3318,17 +3373,17 @@ namespace VAdvantage.Model
                                 {
                                     if (inventoryLine.GetReversalDoc_ID() > 0)
                                     {
-                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), costingCheck, out backwardCompatabilitySupport);
                                         if (backwardCompatabilitySupport)
                                         {
                                             result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, inventoryLine.GetAD_Org_ID(), Price / Qty, Qty, windowName,
-                                                  inventoryLine, inoutline, movementline, invoiceline, cd, trxName, out costQueuseIds);
+                                                  inventoryLine, inoutline, movementline, invoiceline, cd, trxName, costingCheck, out costQueuseIds);
                                         }
                                     }
                                     else
                                     {
                                         result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, inventoryLine.GetAD_Org_ID(), Price / Qty, Qty, windowName,
-                                              inventoryLine, inoutline, movementline, invoiceline, cd, trxName, out costQueuseIds);
+                                              inventoryLine, inoutline, movementline, invoiceline, cd, trxName, costingCheck, out costQueuseIds);
                                     }
                                     if (!result)
                                     {
@@ -3339,7 +3394,10 @@ namespace VAdvantage.Model
                                         else
                                         {
                                             DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
-                                            DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                            if (!String.IsNullOrEmpty(costQueuseIds))
+                                            {
+                                                DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                            }
                                         }
                                         _log.Severe("Error occured during CreateCostQueue for M_inventory_ID = " + inventoryLine.GetM_InventoryLine_ID());
                                         return false;
@@ -3355,7 +3413,7 @@ namespace VAdvantage.Model
                                         costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
                                         costElement = new MCostElement(ctx, costingElementId, null);
 
-                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), costingCheck, out backwardCompatabilitySupport);
                                         if (!result)
                                         {
                                             if (optionalstr != "window")
@@ -3365,7 +3423,10 @@ namespace VAdvantage.Model
                                             else
                                             {
                                                 DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
-                                                DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                                if (!String.IsNullOrEmpty(costQueuseIds))
+                                                {
+                                                    DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                                }
                                             }
                                             _log.Severe("Error occured during CreateCostQueue for M_inventory_ID = " + inventoryLine.GetM_InventoryLine_ID());
                                             return false;
@@ -3375,7 +3436,8 @@ namespace VAdvantage.Model
                                 else
                                 {
                                     //1st entry either of FIFO of LIFO 
-                                    updateCostQueue(product, M_ASI_ID, acctSchema, inventoryLine.GetAD_Org_ID(), costElement, Decimal.Negate(Qty), M_Warehouse_Id, cd);
+                                    updateCostQueue(product, M_ASI_ID, acctSchema, inventoryLine.GetAD_Org_ID(),
+                                        costElement, Decimal.Negate(Qty), costingCheck, M_Warehouse_Id, cd);
 
                                     //2nd either for Fifo or lifo opposite of 1st entry
                                     if (costElement.GetCostingMethod() == "F")
@@ -3390,7 +3452,8 @@ namespace VAdvantage.Model
                                     }
                                     costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
                                     costElement = new MCostElement(ctx, costingElementId, null);
-                                    updateCostQueue(product, M_ASI_ID, acctSchema, inventoryLine.GetAD_Org_ID(), costElement, Decimal.Negate(Qty), M_Warehouse_Id, cd);
+                                    updateCostQueue(product, M_ASI_ID, acctSchema, inventoryLine.GetAD_Org_ID(),
+                                        costElement, Decimal.Negate(Qty), costingCheck, M_Warehouse_Id, cd);
                                 }
                                 #endregion
                             }
@@ -3402,17 +3465,17 @@ namespace VAdvantage.Model
                                 {
                                     if (po.Get_ValueAsInt("ReversalDoc_ID") > 0)
                                     {
-                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), costingCheck, out backwardCompatabilitySupport);
                                         if (backwardCompatabilitySupport)
                                         {
                                             result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")), Price / Qty, Qty, windowName,
-                                             inventoryLine, inoutline, movementline, invoiceline, cd, trxName, out costQueuseIds);
+                                             inventoryLine, inoutline, movementline, invoiceline, cd, trxName, costingCheck, out costQueuseIds);
                                         }
                                     }
                                     else
                                     {
                                         result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")), Price / Qty, Qty, windowName,
-                                          inventoryLine, inoutline, movementline, invoiceline, cd, trxName, out costQueuseIds);
+                                          inventoryLine, inoutline, movementline, invoiceline, cd, trxName, costingCheck, out costQueuseIds);
                                     }
                                     if (!result)
                                     {
@@ -3423,7 +3486,10 @@ namespace VAdvantage.Model
                                         else
                                         {
                                             DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
-                                            DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                            if (!String.IsNullOrEmpty(costQueuseIds))
+                                            {
+                                                DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                            }
                                         }
                                         _log.Severe("Error occured during CreateCostQueue for VAFAM_AssetDisposal_ID = " + Util.GetValueOfInt(po.Get_Value("VAFAM_AssetDisposal_ID")));
                                         return false;
@@ -3439,7 +3505,7 @@ namespace VAdvantage.Model
                                         costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
                                         costElement = new MCostElement(ctx, costingElementId, null);
 
-                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), costingCheck, out backwardCompatabilitySupport);
                                         if (!result)
                                         {
                                             if (optionalstr != "window")
@@ -3449,7 +3515,10 @@ namespace VAdvantage.Model
                                             else
                                             {
                                                 DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
-                                                DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                                if (!String.IsNullOrEmpty(costQueuseIds))
+                                                {
+                                                    DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                                }
                                             }
                                             _log.Severe("Error occured during CreateCostQueue for VAFAM_AssetDisposal_ID = " + Util.GetValueOfInt(po.Get_Value("VAFAM_AssetDisposal_ID")));
                                             return false;
@@ -3459,7 +3528,8 @@ namespace VAdvantage.Model
                                 else
                                 {
                                     //1st entry either of FIFO of LIFO 
-                                    updateCostQueue(product, M_ASI_ID, acctSchema, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")), costElement, Decimal.Negate(Qty), M_Warehouse_Id, cd);
+                                    updateCostQueue(product, M_ASI_ID, acctSchema, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")),
+                                        costElement, Decimal.Negate(Qty), costingCheck, M_Warehouse_Id, cd);
 
                                     //2nd either for Fifo or lifo opposite of 1st entry
                                     if (costElement.GetCostingMethod() == "F")
@@ -3474,7 +3544,8 @@ namespace VAdvantage.Model
                                     }
                                     costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
                                     costElement = new MCostElement(ctx, costingElementId, null);
-                                    updateCostQueue(product, M_ASI_ID, acctSchema, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")), costElement, Decimal.Negate(Qty), M_Warehouse_Id, cd);
+                                    updateCostQueue(product, M_ASI_ID, acctSchema, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")),
+                                        costElement, Decimal.Negate(Qty), costingCheck, M_Warehouse_Id, cd);
                                 }
                                 #endregion
                             }
@@ -3486,17 +3557,17 @@ namespace VAdvantage.Model
                                 {
                                     if (po.Get_ValueAsInt("ReversalDoc_ID") > 0 || po.Get_ValueAsInt("VAMFG_OrigWrkOdrTrxLine_ID_1") > 0)
                                     {
-                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), costingCheck, out backwardCompatabilitySupport);
                                         if (backwardCompatabilitySupport)
                                         {
                                             result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")),
-                                        Price / Qty, Qty, windowName, inventoryLine, inoutline, movementline, invoiceline, cd, trxName, out costQueuseIds);
+                                        Price / Qty, Qty, windowName, inventoryLine, inoutline, movementline, invoiceline, cd, trxName, costingCheck, out costQueuseIds);
                                         }
                                     }
                                     else
                                     {
                                         result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")),
-                                        Price / Qty, Qty, windowName, inventoryLine, inoutline, movementline, invoiceline, cd, trxName, out costQueuseIds);
+                                        Price / Qty, Qty, windowName, inventoryLine, inoutline, movementline, invoiceline, cd, trxName, costingCheck, out costQueuseIds);
                                     }
                                     if (!result)
                                     {
@@ -3507,7 +3578,10 @@ namespace VAdvantage.Model
                                         else
                                         {
                                             DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
-                                            DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                            if (!String.IsNullOrEmpty(costQueuseIds))
+                                            {
+                                                DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                            }
                                         }
                                         _log.Severe("Error occured during CreateCostQueue for Production Execution line = " + Util.GetValueOfInt(po.Get_Value("VAMFG_M_WrkOdrTrnsctionLine_ID")));
                                         return false;
@@ -3523,7 +3597,7 @@ namespace VAdvantage.Model
                                         costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
                                         costElement = new MCostElement(ctx, costingElementId, null);
 
-                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), costingCheck, out backwardCompatabilitySupport);
                                         if (!result)
                                         {
                                             if (optionalstr == "process")
@@ -3546,7 +3620,7 @@ namespace VAdvantage.Model
                                     if (po.Get_ValueAsInt("ReversalDoc_ID") > 0 && !backwardCompatabilitySupport)
                                     {
                                         result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Decimal.Negate(Qty),
-                                                                                  true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                                                                  true, cd.GetM_Warehouse_ID(), costingCheck, out backwardCompatabilitySupport);
                                         if (backwardCompatabilitySupport)
                                         {
                                             goto backwardSupportPE;
@@ -3574,7 +3648,7 @@ namespace VAdvantage.Model
                                         costElement = new MCostElement(ctx, costingElementId, null);
 
                                         result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Decimal.Negate(Qty),
-                                                                                   true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                                                                   true, cd.GetM_Warehouse_ID(), costingCheck, out backwardCompatabilitySupport);
                                         if (!result)
                                         {
                                             if (optionalstr != "window")
@@ -3592,7 +3666,8 @@ namespace VAdvantage.Model
                                     else
                                     {
                                         //1st entry either of FIFO of LIFO 
-                                        updateCostQueue(product, M_ASI_ID, acctSchema, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")), costElement, Decimal.Negate(Qty), M_Warehouse_Id, cd);
+                                        updateCostQueue(product, M_ASI_ID, acctSchema, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")),
+                                            costElement, Decimal.Negate(Qty), costingCheck, M_Warehouse_Id, cd);
 
                                         //2nd either for Fifo or lifo opposite of 1st entry
                                         if (costElement.GetCostingMethod() == "F")
@@ -3607,7 +3682,8 @@ namespace VAdvantage.Model
                                         }
                                         costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
                                         costElement = new MCostElement(ctx, costingElementId, null);
-                                        updateCostQueue(product, M_ASI_ID, acctSchema, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")), costElement, Decimal.Negate(Qty), M_Warehouse_Id, cd);
+                                        updateCostQueue(product, M_ASI_ID, acctSchema, Util.GetValueOfInt(po.Get_Value("AD_Org_ID")),
+                                            costElement, Decimal.Negate(Qty), costingCheck, M_Warehouse_Id, cd);
                                     }
                                 }
                                 #endregion
@@ -3621,7 +3697,7 @@ namespace VAdvantage.Model
                                 if (Qty > 0)
                                 {
                                     result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, inoutline.GetAD_Org_ID(), Price / Qty, Qty, windowName,
-                                         inventoryLine, inoutline, movementline, invoiceline, cd, trxName, out costQueuseIds);
+                                         inventoryLine, inoutline, movementline, invoiceline, cd, trxName, costingCheck, out costQueuseIds);
                                     if (!result)
                                     {
                                         if (optionalstr != "window")
@@ -3631,7 +3707,10 @@ namespace VAdvantage.Model
                                         else
                                         {
                                             DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
-                                            DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                            if (!String.IsNullOrEmpty(costQueuseIds))
+                                            {
+                                                DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                            }
                                         }
                                         _log.Severe("Error occured during CreateCostQueue for M_Inout_ID = " + inoutline.GetM_InOutLine_ID());
                                         return false;
@@ -3640,7 +3719,8 @@ namespace VAdvantage.Model
                                 else
                                 {
                                     //1st entry either of FIFO of LIFO 
-                                    updateCostQueue(product, M_ASI_ID, acctSchema, inoutline.GetAD_Org_ID(), costElement, Decimal.Negate(Qty), M_Warehouse_Id, cd);
+                                    updateCostQueue(product, M_ASI_ID, acctSchema, inoutline.GetAD_Org_ID(), costElement,
+                                        Decimal.Negate(Qty), costingCheck, M_Warehouse_Id, cd);
 
                                     //2nd either for Fifo or lifo opposite of 1st entry
                                     if (costElement.GetCostingMethod() == "F")
@@ -3655,7 +3735,8 @@ namespace VAdvantage.Model
                                     }
                                     costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, null));
                                     costElement = MCostElement.Get(ctx, costingElementId);
-                                    updateCostQueue(product, M_ASI_ID, acctSchema, inoutline.GetAD_Org_ID(), costElement, Decimal.Negate(Qty), M_Warehouse_Id, cd);
+                                    updateCostQueue(product, M_ASI_ID, acctSchema, inoutline.GetAD_Org_ID(), costElement,
+                                        Decimal.Negate(Qty), costingCheck, M_Warehouse_Id, cd);
                                 }
                                 #endregion
                             }
@@ -3669,7 +3750,7 @@ namespace VAdvantage.Model
                                 if (Qty > 0)
                                 {
                                     result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty,
-                                             inoutline.GetReversalDoc_ID() != 0 ? true : false, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                             inoutline.GetReversalDoc_ID() != 0 ? true : false, cd.GetM_Warehouse_ID(), costingCheck, out backwardCompatabilitySupport);
                                     if (backwardCompatabilitySupport)
                                     {
                                         goto backwardInOut;
@@ -3683,7 +3764,10 @@ namespace VAdvantage.Model
                                         else
                                         {
                                             DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
-                                            DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                            if (!String.IsNullOrEmpty(costQueuseIds))
+                                            {
+                                                DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                            }
                                         }
                                         _log.Severe("Error occured during CreateCostQueue for M_Inout_ID = " + inoutline.GetM_InOutLine_ID());
                                         return false;
@@ -3698,7 +3782,7 @@ namespace VAdvantage.Model
                                     costElement = MCostElement.Get(ctx, costingElementId);
 
                                     result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty,
-                                                                                        inoutline.GetReversalDoc_ID() != 0 ? true : false, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                                                                        inoutline.GetReversalDoc_ID() != 0 ? true : false, cd.GetM_Warehouse_ID(), costingCheck, out backwardCompatabilitySupport);
                                     if (!result)
                                     {
                                         if (optionalstr != "window")
@@ -3708,7 +3792,10 @@ namespace VAdvantage.Model
                                         else
                                         {
                                             DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
-                                            DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                            if (!String.IsNullOrEmpty(costQueuseIds))
+                                            {
+                                                DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                            }
                                         }
                                         _log.Severe("Error occured during CreateCostQueue for M_Inout_ID = " + inoutline.GetM_InOutLine_ID());
                                         return false;
@@ -3718,7 +3805,7 @@ namespace VAdvantage.Model
                                 {
                                     //1st entry either of FIFO of LIFO 
                                     result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Decimal.Negate(Qty),
-                                                                                        inoutline.GetReversalDoc_ID() != 0 ? true : false, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                              inoutline.GetReversalDoc_ID() != 0 ? true : false, cd.GetM_Warehouse_ID(), costingCheck, out backwardCompatabilitySupport);
                                     if (backwardCompatabilitySupport)
                                     {
                                         goto backwardInOut;
@@ -3746,7 +3833,7 @@ namespace VAdvantage.Model
                                     costElement = MCostElement.Get(ctx, costingElementId);
 
                                     result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Decimal.Negate(Qty),
-                                                                                        inoutline.GetReversalDoc_ID() != 0 ? true : false, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                             inoutline.GetReversalDoc_ID() != 0 ? true : false, cd.GetM_Warehouse_ID(), costingCheck, out backwardCompatabilitySupport);
                                     if (!result)
                                     {
                                         if (optionalstr != "window")
@@ -3771,18 +3858,18 @@ namespace VAdvantage.Model
                                 {
                                     if (movementline.GetReversalDoc_ID() > 0)
                                     {
-                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), costingCheck, out backwardCompatabilitySupport);
                                         if (backwardCompatabilitySupport)
                                         {
                                             result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, AD_Org_ID, Price / Qty, Qty, windowName,
-                                             inventoryLine, inoutline, movementline, invoiceline, cd, trxName, out costQueuseIds);
+                                             inventoryLine, inoutline, movementline, invoiceline, cd, trxName, costingCheck, out costQueuseIds);
                                             backwardCompatabilitySupport = false;
                                         }
                                     }
                                     else
                                     {
                                         result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, AD_Org_ID, Price / Qty, Qty, windowName,
-                                         inventoryLine, inoutline, movementline, invoiceline, cd, trxName, out costQueuseIds);
+                                         inventoryLine, inoutline, movementline, invoiceline, cd, trxName, costingCheck, out costQueuseIds);
                                     }
                                     if (!result)
                                     {
@@ -3793,7 +3880,10 @@ namespace VAdvantage.Model
                                         else
                                         {
                                             DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
-                                            DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                            if (!String.IsNullOrEmpty(costQueuseIds))
+                                            {
+                                                DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                            }
                                         }
                                         _log.Severe("Error occured during CreateCostQueue for m_MovementLime_ID = " + movementline.GetM_MovementLine_ID());
                                         return false;
@@ -3802,15 +3892,18 @@ namespace VAdvantage.Model
                                     //1st entry either of FIFO of LIFO 
                                     if (movementline.GetReversalDoc_ID() > 0)
                                     {
-                                        result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Qty, true, SourceM_Warehouse_Id, out backwardCompatabilitySupport);
+                                        result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Qty, true,
+                                            SourceM_Warehouse_Id, costingCheck, out backwardCompatabilitySupport);
                                         if (backwardCompatabilitySupport)
                                         {
-                                            updateCostQueue(product, M_ASI_ID, acctSchema, movementline.GetAD_Org_ID(), costElement, Qty, SourceM_Warehouse_Id, cd);
+                                            updateCostQueue(product, M_ASI_ID, acctSchema, movementline.GetAD_Org_ID(), costElement,
+                                                Qty, costingCheck, SourceM_Warehouse_Id, cd);
                                         }
                                     }
                                     else
                                     {
-                                        updateCostQueue(product, M_ASI_ID, acctSchema, movementline.GetAD_Org_ID(), costElement, Qty, SourceM_Warehouse_Id, cd);
+                                        updateCostQueue(product, M_ASI_ID, acctSchema, movementline.GetAD_Org_ID(),
+                                            costElement, Qty, costingCheck, SourceM_Warehouse_Id, cd);
                                     }
 
                                     //2nd either for Fifo or lifo opposite of 1st entry
@@ -3829,13 +3922,16 @@ namespace VAdvantage.Model
 
                                     if (movementline.GetReversalDoc_ID() > 0)
                                     {
-                                        result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Qty, true, SourceM_Warehouse_Id, out backwardCompatabilitySupport);
+                                        result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Qty, true,
+                                            SourceM_Warehouse_Id, costingCheck, out backwardCompatabilitySupport);
                                         if (backwardCompatabilitySupport)
                                         {
-                                            updateCostQueue(product, M_ASI_ID, acctSchema, movementline.GetAD_Org_ID(), costElement, Qty, SourceM_Warehouse_Id, cd);
+                                            updateCostQueue(product, M_ASI_ID, acctSchema, movementline.GetAD_Org_ID(), costElement,
+                                                Qty, costingCheck, SourceM_Warehouse_Id, cd);
                                         }
 
-                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true, cd.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Qty, true,
+                                            cd.GetM_Warehouse_ID(), costingCheck, out backwardCompatabilitySupport);
                                         if (!result)
                                         {
                                             if (optionalstr != "window")
@@ -3845,7 +3941,10 @@ namespace VAdvantage.Model
                                             else
                                             {
                                                 DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
-                                                DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                                if (!String.IsNullOrEmpty(costQueuseIds))
+                                                {
+                                                    DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                                }
                                             }
                                             _log.Severe("Error occured during CreateCostQueue for m_MovementLime_ID = " + movementline.GetM_MovementLine_ID());
                                             return false;
@@ -3853,7 +3952,8 @@ namespace VAdvantage.Model
                                     }
                                     else
                                     {
-                                        updateCostQueue(product, M_ASI_ID, acctSchema, movementline.GetAD_Org_ID(), costElement, Qty, SourceM_Warehouse_Id, cd);
+                                        updateCostQueue(product, M_ASI_ID, acctSchema, movementline.GetAD_Org_ID(), costElement,
+                                            Qty, costingCheck, SourceM_Warehouse_Id, cd);
                                     }
                                 }
                                 else
@@ -3861,17 +3961,18 @@ namespace VAdvantage.Model
                                     // change refsrence from cd to cdSourceWarehouse -- bcz we are incresing stock in "Source Warehouse"
                                     if (movementline.GetReversalDoc_ID() > 0)
                                     {
-                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Decimal.Negate(Qty), true, cdSourceWarehouse.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Decimal.Negate(Qty), true,
+                                            cdSourceWarehouse.GetM_Warehouse_ID(), costingCheck, out backwardCompatabilitySupport);
                                         if (backwardCompatabilitySupport)
                                         {
                                             result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, movementline.GetAD_Org_ID(), Price / Qty, Decimal.Negate(Qty), windowName,
-                                           inventoryLine, inoutline, movementline, invoiceline, cdSourceWarehouse, trxName, out costQueuseIds);
+                                           inventoryLine, inoutline, movementline, invoiceline, cdSourceWarehouse, trxName, costingCheck, out costQueuseIds);
                                         }
                                     }
                                     else
                                     {
                                         result = CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, movementline.GetAD_Org_ID(), Price / Qty, Decimal.Negate(Qty), windowName,
-                                        inventoryLine, inoutline, movementline, invoiceline, cdSourceWarehouse, trxName, out costQueuseIds);
+                                        inventoryLine, inoutline, movementline, invoiceline, cdSourceWarehouse, trxName, costingCheck, out costQueuseIds);
                                     }
                                     if (!result)
                                     {
@@ -3882,7 +3983,10 @@ namespace VAdvantage.Model
                                         else
                                         {
                                             DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
-                                            DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                            if (!String.IsNullOrEmpty(costQueuseIds))
+                                            {
+                                                DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                            }
                                         }
                                         _log.Severe("Error occured during CreateCostQueue for M_MovementLine_ID = " + movementline.GetM_MovementLine_ID());
                                         return false;
@@ -3892,15 +3996,18 @@ namespace VAdvantage.Model
                                     //1st entry either of FIFO of LIFO   
                                     if (movementline.GetReversalDoc_ID() > 0)
                                     {
-                                        result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Decimal.Negate(Qty), true, M_Warehouse_Id, out backwardCompatabilitySupport);
+                                        result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Decimal.Negate(Qty),
+                                            true, M_Warehouse_Id, costingCheck, out backwardCompatabilitySupport);
                                         if (backwardCompatabilitySupport)
                                         {
-                                            updateCostQueue(product, M_ASI_ID, acctSchema, AD_Org_ID, costElement, Decimal.Negate(Qty), M_Warehouse_Id, cd);
+                                            updateCostQueue(product, M_ASI_ID, acctSchema, AD_Org_ID, costElement,
+                                                Decimal.Negate(Qty), costingCheck, M_Warehouse_Id, cd);
                                         }
                                     }
                                     else
                                     {
-                                        updateCostQueue(product, M_ASI_ID, acctSchema, AD_Org_ID, costElement, Decimal.Negate(Qty), M_Warehouse_Id, cd);
+                                        updateCostQueue(product, M_ASI_ID, acctSchema, AD_Org_ID, costElement,
+                                            Decimal.Negate(Qty), costingCheck, M_Warehouse_Id, cd);
                                     }
 
                                     //2nd either for Fifo or lifo opposite of 1st entry
@@ -3919,13 +4026,16 @@ namespace VAdvantage.Model
 
                                     if (movementline.GetReversalDoc_ID() > 0)
                                     {
-                                        result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Decimal.Negate(Qty), true, M_Warehouse_Id, out backwardCompatabilitySupport);
+                                        result = MCostQueue.ReturnStockReduceFromCostQueue(cd, windowName, costElement, Decimal.Negate(Qty),
+                                            true, M_Warehouse_Id, costingCheck, out backwardCompatabilitySupport);
                                         if (backwardCompatabilitySupport)
                                         {
-                                            updateCostQueue(product, M_ASI_ID, acctSchema, AD_Org_ID, costElement, Decimal.Negate(Qty), M_Warehouse_Id, cd);
+                                            updateCostQueue(product, M_ASI_ID, acctSchema, AD_Org_ID, costElement,
+                                                Decimal.Negate(Qty), costingCheck, M_Warehouse_Id, cd);
                                         }
 
-                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Decimal.Negate(Qty), true, cdSourceWarehouse.GetM_Warehouse_ID(), out backwardCompatabilitySupport);
+                                        result = MCostQueue.ReturnStockReAssignedToCostQueue(cd, windowName, costElement, Decimal.Negate(Qty),
+                                            true, cdSourceWarehouse.GetM_Warehouse_ID(), costingCheck, out backwardCompatabilitySupport);
                                         if (!result)
                                         {
                                             if (optionalstr != "window")
@@ -3935,7 +4045,10 @@ namespace VAdvantage.Model
                                             else
                                             {
                                                 DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
-                                                DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                                if (!String.IsNullOrEmpty(costQueuseIds))
+                                                {
+                                                    DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                                }
                                             }
                                             _log.Severe("Error occured during CreateCostQueue for M_MovementLine_ID = " + movementline.GetM_MovementLine_ID());
                                             return false;
@@ -3943,7 +4056,8 @@ namespace VAdvantage.Model
                                     }
                                     else
                                     {
-                                        updateCostQueue(product, M_ASI_ID, acctSchema, AD_Org_ID, costElement, Decimal.Negate(Qty), M_Warehouse_Id, cd);
+                                        updateCostQueue(product, M_ASI_ID, acctSchema, AD_Org_ID, costElement,
+                                            Decimal.Negate(Qty), costingCheck, M_Warehouse_Id, cd);
                                     }
                                 }
                                 #endregion
@@ -3999,7 +4113,10 @@ namespace VAdvantage.Model
                                     else
                                     {
                                         DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
-                                        DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                        if (!String.IsNullOrEmpty(costQueuseIds))
+                                        {
+                                            DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                        }
                                     }
                                     _log.Severe("Error occured during UpdateProductCost for M_InventoryLine_ID = " + inventoryLine.GetM_InventoryLine_ID());
                                     return false;
@@ -4017,7 +4134,10 @@ namespace VAdvantage.Model
                                     else
                                     {
                                         DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
-                                        DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                        if (!String.IsNullOrEmpty(costQueuseIds))
+                                        {
+                                            DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                        }
                                     }
                                     _log.Severe("Error occured during UpdateProductCost for VAFAM_AssetDisposal_ID = " + Util.GetValueOfInt(po.Get_Value("VAFAM_AssetDisposal_ID")));
                                     return false;
@@ -4035,7 +4155,10 @@ namespace VAdvantage.Model
                                     else
                                     {
                                         DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
-                                        DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                        if (!String.IsNullOrEmpty(costQueuseIds))
+                                        {
+                                            DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                        }
                                     }
                                     _log.Severe("Error occured during UpdateProductCost for M_InventoryLine_ID = " + inventoryLine.GetM_InventoryLine_ID());
                                     return false;
@@ -4053,7 +4176,10 @@ namespace VAdvantage.Model
                                     else
                                     {
                                         DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
-                                        DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                        if (!String.IsNullOrEmpty(costQueuseIds))
+                                        {
+                                            DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                        }
                                     }
                                     _log.Severe("Error occured during UpdateProductCost for M_InoutLine_ID = " + inoutline.GetM_InOutLine_ID());
                                     return false;
@@ -4099,7 +4225,10 @@ namespace VAdvantage.Model
                                         else
                                         {
                                             DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
-                                            DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                            if (!String.IsNullOrEmpty(costQueuseIds))
+                                            {
+                                                DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
+                                            }
                                         }
                                         _log.Severe("Error occured during UpdateProductCost fot M_MovementLine_ID = " + cd.GetM_MovementLine_ID());
                                         return false;
@@ -6439,6 +6568,15 @@ namespace VAdvantage.Model
                                string windowName, MInventoryLine inventoryLine, MInOutLine inoutline, MMovementLine movementline,
                                MInvoiceLine invoiceline, MCostDetail cd, Trx trxName, out string costQueueIds)
         {
+            return CreateCostQueue(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, AD_Org_ID, Price, Qty,
+                            windowName, inventoryLine, inoutline, movementline,
+                           invoiceline, cd, trxName, null, out costQueueIds);
+        }
+
+        private static bool CreateCostQueue(Ctx ctx, MAcctSchema acctSchema, MProduct product, int M_ASI_ID, int AD_Client_ID, int AD_Org_ID, Decimal Price, Decimal Qty,
+                           string windowName, MInventoryLine inventoryLine, MInOutLine inoutline, MMovementLine movementline,
+                           MInvoiceLine invoiceline, MCostDetail cd, Trx trxName, CostingCheck costingCheck, out string costQueueIds)
+        {
             costQueueIds = null;
             //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM ad_table WHERE lower(tablename) LIKE 't_temp_costdetail'")) <= 0)
             //{
@@ -6838,6 +6976,10 @@ namespace VAdvantage.Model
 
                 //end
                 costQueue.SetQueueDate(System.DateTime.Now.ToLocalTime());
+                if (costingCheck != null && costingCheck.movementDate != null)
+                {
+                    costQueue.SetMovementDate(costingCheck.movementDate);
+                }
                 if (!costQueue.Save())
                 {
                     ValueNamePair pp = VLogger.RetrieveError();
@@ -6847,7 +6989,8 @@ namespace VAdvantage.Model
                 else
                 {
                     // Create Cost Queue Transactional Record
-                    if (!MCostQueueTransaction.CreateCostQueueTransaction(ctx, AD_Client_ID, AD_Org_ID, costQueue.GetM_CostQueue_ID(), cd, Qty))
+                    if (!MCostQueueTransaction.CreateCostQueueTransaction(ctx, AD_Client_ID, AD_Org_ID,
+                        costQueue.GetM_CostQueue_ID(), cd, Qty, costingCheck))
                     {
                         return false;
                     }
@@ -6945,6 +7088,10 @@ namespace VAdvantage.Model
 
                 //end
                 costQueue.SetQueueDate(System.DateTime.Now.ToLocalTime());
+                if (costingCheck != null && costingCheck.movementDate != null)
+                {
+                    costQueue.SetMovementDate(costingCheck.movementDate);
+                }
                 if (!costQueue.Save())
                 {
                     // delete record if created 
@@ -6957,7 +7104,8 @@ namespace VAdvantage.Model
                 else
                 {
                     // Create Cost Queue Transactional Record
-                    if (!MCostQueueTransaction.CreateCostQueueTransaction(ctx, AD_Client_ID, AD_Org_ID, costQueue.GetM_CostQueue_ID(), cd, Qty))
+                    if (!MCostQueueTransaction.CreateCostQueueTransaction(ctx, AD_Client_ID, AD_Org_ID,
+                        costQueue.GetM_CostQueue_ID(), cd, Qty, costingCheck))
                     {
                         return false;
                     }
@@ -7169,6 +7317,13 @@ namespace VAdvantage.Model
         private static void updateCostQueue(MProduct product, int M_ASI_ID, MAcctSchema mas,
          int Org_ID, MCostElement ce, decimal movementQty, int M_Warehouse_ID = 0, MCostDetail cd = null)
         {
+            updateCostQueue(product, M_ASI_ID, mas, Org_ID, ce, movementQty, null, M_Warehouse_ID, cd);
+        }
+
+        private static void updateCostQueue(MProduct product, int M_ASI_ID, MAcctSchema mas,
+                                             int Org_ID, MCostElement ce, decimal movementQty, CostingCheck costingCheck,
+                                             int M_Warehouse_ID = 0, MCostDetail cd = null)
+        {
             Decimal qty = movementQty;
             Decimal QueueQtyAffected = 0;
             #region Org Specific
@@ -7214,7 +7369,7 @@ namespace VAdvantage.Model
                         else if (cd != null && QueueQtyAffected != 0)
                         {
                             // Create Cost Queue Transactional Record
-                            MCostQueueTransaction.CreateCostQueueTransaction(cd.GetCtx(), queue.GetAD_Client_ID(), queue.GetAD_Org_ID(), queue.GetM_CostQueue_ID(), cd, Decimal.Negate(QueueQtyAffected));
+                            MCostQueueTransaction.CreateCostQueueTransaction(cd.GetCtx(), queue.GetAD_Client_ID(), queue.GetAD_Org_ID(), queue.GetM_CostQueue_ID(), cd, Decimal.Negate(QueueQtyAffected), costingCheck);
                         }
                         qty = Decimal.Negate(qty);
                     }
@@ -7232,7 +7387,7 @@ namespace VAdvantage.Model
                         else if (cd != null && QueueQtyAffected != 0)
                         {
                             // Create Cost Queue Transactional Record
-                            MCostQueueTransaction.CreateCostQueueTransaction(cd.GetCtx(), queue.GetAD_Client_ID(), queue.GetAD_Org_ID(), queue.GetM_CostQueue_ID(), cd, Decimal.Negate(QueueQtyAffected));
+                            MCostQueueTransaction.CreateCostQueueTransaction(cd.GetCtx(), queue.GetAD_Client_ID(), queue.GetAD_Org_ID(), queue.GetM_CostQueue_ID(), cd, Decimal.Negate(QueueQtyAffected), costingCheck);
 
                         }
                     }
@@ -7262,7 +7417,7 @@ namespace VAdvantage.Model
         /// <param name="IsReversedDocument">Is Reversal Document</param>
         /// <param name="M_Warehouse_ID">Warehouse ID</param>
         /// <returns>True when success</returns>
-        public static bool ReturnStockReAssignedToCostQueue(MCostDetail cd, String windowName, MCostElement costElement, Decimal Qty, bool IsReversedDocument, int M_Warehouse_ID, out bool backwardCompatabilitySupport)
+        public static bool ReturnStockReAssignedToCostQueue(MCostDetail cd, String windowName, MCostElement costElement, Decimal Qty, bool IsReversedDocument, int M_Warehouse_ID, CostingCheck costingCheck, out bool backwardCompatabilitySupport)
         {
             String sql = "";
             backwardCompatabilitySupport = false;
@@ -7330,7 +7485,8 @@ namespace VAdvantage.Model
 
                         // Create Cost Queue Transactional Record
                         if (!MCostQueueTransaction.CreateCostQueueTransaction(cd.GetCtx(), cd.GetAD_Client_ID(),
-                            Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["AD_Org_ID"]), Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["M_CostQueue_ID"]), cd, Qty))
+                            Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["AD_Org_ID"]),
+                            Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["M_CostQueue_ID"]), cd, Qty, costingCheck))
                         {
                             return false;
                         }
@@ -7346,7 +7502,7 @@ namespace VAdvantage.Model
                         // Create Cost Queue Transactional Record
                         if (!MCostQueueTransaction.CreateCostQueueTransaction(cd.GetCtx(), cd.GetAD_Client_ID(),
                             Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["AD_Org_ID"]), Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["M_CostQueue_ID"]), cd,
-                            Math.Abs(Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["MovementQty"]))))
+                            Math.Abs(Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["MovementQty"])), costingCheck))
                         {
                             return false;
                         }
@@ -7373,7 +7529,8 @@ namespace VAdvantage.Model
         /// <param name="IsReversedDocument">Is Reversed Document or not</param>
         /// <param name="M_Warehouse_ID">Warehouse Id</param>
         /// <returns>true when success</returns>
-        public static bool ReturnStockReduceFromCostQueue(MCostDetail cd, String windowName, MCostElement costElement, Decimal Qty, bool IsReversedDocument, int M_Warehouse_ID, out bool backwardCompatabilitySupport)
+        public static bool ReturnStockReduceFromCostQueue(MCostDetail cd, String windowName, MCostElement costElement,
+            Decimal Qty, bool IsReversedDocument, int M_Warehouse_ID, CostingCheck costingCheck, out bool backwardCompatabilitySupport)
         {
             String sql = "";
             backwardCompatabilitySupport = false;
@@ -7439,8 +7596,9 @@ namespace VAdvantage.Model
 
                         // Create Cost Queue Transactional Record
                         if (!MCostQueueTransaction.CreateCostQueueTransaction(cd.GetCtx(), cd.GetAD_Client_ID(),
-                            Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["AD_Org_ID"]), Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["M_CostQueue_ID"]),
-                            cd, Decimal.Negate(Qty)))
+                            Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["AD_Org_ID"]),
+                            Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["M_CostQueue_ID"]),
+                            cd, Decimal.Negate(Qty), costingCheck))
                         {
                             return false;
                         }
@@ -7456,7 +7614,7 @@ namespace VAdvantage.Model
                         // Create Cost Queue Transactional Record
                         if (!MCostQueueTransaction.CreateCostQueueTransaction(cd.GetCtx(), cd.GetAD_Client_ID(),
                             Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["AD_Org_ID"]), Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["M_CostQueue_ID"]), cd,
-                            Decimal.Negate(Math.Abs(Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["MovementQty"])))))
+                            Decimal.Negate(Math.Abs(Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["MovementQty"]))), costingCheck))
                         {
                             return false;
                         }
