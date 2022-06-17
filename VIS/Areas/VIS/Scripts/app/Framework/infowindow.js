@@ -249,6 +249,7 @@
                     displayType = schema[item].AD_Reference_ID;
                     ctrl = getControl(schema[item].AD_Reference_ID, schema[item].ColumnName, schema[item].Name, schema[item].AD_Reference_Value_ID, schema[item].lookup);
                     srchCtrl.Ctrl = ctrl;
+                    srchCtrl.InfoColumnID = schema[item].InfoColumnID;
 
                     // check if there is some value needed to be set on this control.- Added by Mohit- 13 Feb 2019
                     if (schema[item].SetValue != null) {
@@ -952,9 +953,8 @@
                 for (var x = 0; x < Object.keys(srchCtrls).length; x++) {
                     var vals = {};
                     vals.AD_Reference_ID = srchCtrls[x].AD_Reference_ID;
-                    vals.ColumnName = srchCtrls[x].ColumnName;
                     vals.IsRange = srchCtrls[x].IsRange;
-                    vals.SearchColumnName = srchCtrls[x].SearchColumnName;
+                    vals.InfoColumnID = srchCtrls[x].InfoColumnID;
                     vals.Value = srchCtrls[x].Value;
                     vals.ValueTo = srchCtrls[x].ValueTo;
                     srhCtrls.push(vals);
@@ -970,7 +970,7 @@
                     pageNo: pNo,
                     SelectedIDs: selectedIDs,
                     Requery: requery,
-                    Infos: JSON.stringify( info),
+                    InfoID:_AD_InfoWindow_ID,
                     ValidationCode: validationCode,
                     SrchCtrls: JSON.stringify(srhCtrls)
                 },

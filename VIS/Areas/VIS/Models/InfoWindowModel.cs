@@ -85,7 +85,8 @@ namespace VIS.Models
                                             AD_InfoColumn.IsKey,                                           
                                             AD_InfoColumn.IsRange,
                                             AD_InfoColumn.ISIDENTIFIER,
-                                            infotable.TableName
+                                            infotable.TableName,
+                                            AD_InfoColumn.AD_InfoColumn_ID
                                             FROM AD_InfoColumn
                                             INNER JOIN AD_ELEMENT
                                             ON (AD_ELEMENT.AD_ELEMENT_ID =AD_InfoColumn.AD_ELEMENT_ID)
@@ -115,7 +116,8 @@ namespace VIS.Models
                                                               AD_InfoColumn.AD_Reference_Value_ID,
                                                               AD_InfoColumn.IsRange,
                                                               AD_InfoColumn.ISIDENTIFIER,
-                                                              infotable.TableName
+                                                              infotable.TableName,
+                                                              AD_InfoColumn.AD_InfoColumn_ID
                                                             FROM AD_InfoColumn
                                                             INNER JOIN AD_ELEMENT
                                                             ON (AD_ELEMENT.AD_ELEMENT_ID =AD_InfoColumn.AD_ELEMENT_ID)
@@ -183,7 +185,10 @@ namespace VIS.Models
                     }
                     info.WindowName = ds.Tables[0].Rows[i]["WindowName"].ToString();
                     info.TableName = ds.Tables[0].Rows[i]["TableName"].ToString();
+                    info.InfoColumnID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_InfoColumn_ID"].ToString());
+
                     schema.Name = ds.Tables[0].Rows[i]["Name"].ToString();
+                    schema.InfoColumnID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_InfoColumn_ID"].ToString());
 
                     if (ds.Tables[0].Rows[i]["AD_Reference_ID"] != null &&
                         ds.Tables[0].Rows[i]["AD_Reference_ID"] != DBNull.Value)
@@ -343,59 +348,59 @@ namespace VIS.Models
             int displayType = 0;
             List<InfoSchema> schema = info.Schema;
             if (schema != null)
-            { 
-            //get Qry from InfoColumns
-            for (int item = 0; item < schema.Count; item++)
             {
-                colName = schema[item].SelectClause;
-                if (colName.IndexOf('.') > -1)
+                //get Qry from InfoColumns
+                for (int item = 0; item < schema.Count; item++)
                 {
-                    cName = colName.Substring(colName.LastIndexOf('.') + 1);
-                }
-                else
-                {
-                    cName = colName;
-                }
-
-                if (schema[item].IsKey)
-                {
-                    keyCol = cName.ToUpper();
-                    tabname = keyCol.Substring(0, keyCol.IndexOf("_ID"));
-                }
-                displayType = schema[item].AD_Reference_ID;
-                if (displayType == DisplayType.YesNo)
-                {
-                    sql += " ( CASE " + colName + " WHEN 'Y' THEN  'True' ELSE 'False'  END ) AS " + (cName);
-                }
-                else if (displayType == DisplayType.List)
-                {
-                    //    ValueNamePair[] values = MRefList.GetList(Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_REFERENCE_VALUE_ID"]), false);
-                    //    sql.Append(" CASE ");
-                    //    for (int j = 0; j < values.Length; j++)
-                    //    {
-                    //        sql.Append(" WHEN " + colName + "='" + values[j].Key.ToString() + "' THEN '" + values[j].Name.ToString() + "'");
-                    //    }
-                    //    sql.Append(" END AS " + cName);
-                    var refList = schema[item].RefList;
-                    sql += (" CASE ");
-                    foreach (var refListItem in refList)
+                    colName = schema[item].SelectClause;
+                    if (colName.IndexOf('.') > -1)
                     {
-                        sql += " WHEN " + colName + "='" + refListItem.Key + "' THEN '" + refListItem.Value + "'";
+                        cName = colName.Substring(colName.LastIndexOf('.') + 1);
                     }
-                    sql += " END AS " + cName;
-                    //sql += colName + " ";
-                }
-                else
-                {
-                    sql += colName + " ";
-                }
-                if (!((schema.Count - 1) == item))
-                {
-                    sql += ", ";
-                }
+                    else
+                    {
+                        cName = colName;
+                    }
 
+                    if (schema[item].IsKey)
+                    {
+                        keyCol = cName.ToUpper();
+                        tabname = keyCol.Substring(0, keyCol.IndexOf("_ID"));
+                    }
+                    displayType = schema[item].AD_Reference_ID;
+                    if (displayType == DisplayType.YesNo)
+                    {
+                        sql += " ( CASE " + colName + " WHEN 'Y' THEN  'True' ELSE 'False'  END ) AS " + (cName);
+                    }
+                    else if (displayType == DisplayType.List)
+                    {
+                        //    ValueNamePair[] values = MRefList.GetList(Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_REFERENCE_VALUE_ID"]), false);
+                        //    sql.Append(" CASE ");
+                        //    for (int j = 0; j < values.Length; j++)
+                        //    {
+                        //        sql.Append(" WHEN " + colName + "='" + values[j].Key.ToString() + "' THEN '" + values[j].Name.ToString() + "'");
+                        //    }
+                        //    sql.Append(" END AS " + cName);
+                        var refList = schema[item].RefList;
+                        sql += (" CASE ");
+                        foreach (var refListItem in refList)
+                        {
+                            sql += " WHEN " + colName + "='" + refListItem.Key + "' THEN '" + refListItem.Value + "'";
+                        }
+                        sql += " END AS " + cName;
+                        //sql += colName + " ";
+                    }
+                    else
+                    {
+                        sql += colName + " ";
+                    }
+                    if (!((schema.Count - 1) == item))
+                    {
+                        sql += ", ";
+                    }
+
+                }
             }
-        }
 
             if (selectedIDs != null && selectedIDs.Length > 0)
             {
@@ -416,6 +421,13 @@ namespace VIS.Models
                 for (var i = 0; i < srchCtrls.Count; i++)
                 {
                     srchValue = Convert.ToString(srchCtrls[i].Value);
+
+                    string columName = info.Schema.Where(b => b.InfoColumnID == srchCtrls[i].InfoColumnID).Select(a => a.SelectClause).FirstOrDefault();
+                    if (columName.ToUpper().IndexOf(" AS ") > -1)
+                    {
+                        columName = columName.Substring(0, columName.ToUpper().IndexOf(" AS "));
+                    }
+                   
 
                     //JID_0905:  In Case of Date Range, if From Date is not selected then check if To Date is selected
                     if (srchCtrls[i].AD_Reference_ID == DisplayType.Date && srchCtrls[i].IsRange)
@@ -456,7 +468,7 @@ namespace VIS.Models
                                 srchValue = srchValue + "●";
                             }
                             srchValue = GlobalVariable.TO_STRING(srchValue);
-                            whereClause += "  UPPER(" + srchCtrls[i].SearchColumnName + ") LIKE " + srchValue.ToUpper();
+                            whereClause += "  UPPER(" + columName + ") LIKE " + srchValue.ToUpper();
                         }
                         else if (srchCtrls[i].AD_Reference_ID == DisplayType.Date)
                         {
@@ -477,11 +489,11 @@ namespace VIS.Models
                                     date = Convert.ToDateTime((srchCtrls[i].ValueTo));
                                 }
                                 toValue = "TO_DATE( '" + ((date.Month)) + "-" + date.Day + "-" + date.Year + "', 'MM-DD-YYYY')";// GlobalVariable.TO_DATE(Util.GetValueOfDateTime(srchCtrls[i].Ctrl.getValue()), true);
-                                whereClause += " ( " + srchCtrls[i].SearchColumnName + " BETWEEN " + fromValue + " AND " + toValue + ")";
+                                whereClause += " ( " + columName + " BETWEEN " + fromValue + " AND " + toValue + ")";
                             }
                             else
                             {
-                                whereClause += srchCtrls[i].SearchColumnName + " =" + fromValue;
+                                whereClause += columName + " =" + fromValue;
                             }
                         }
                         else if (srchCtrls[i].AD_Reference_ID == DisplayType.DateTime)
@@ -495,11 +507,11 @@ namespace VIS.Models
                             {
                                 date = Convert.ToDateTime((srchCtrls[i].ValueTo));
                                 toValue = "TO_DATE( '" + ((date.Month)) + "-" + date.Day + "-" + date.Year + " " + date.Hour + ":" + date.Minute + ":" + date.Second + "', 'MM-DD-YYYY HH24:MI:SS')";// GlobalVariable.TO_DATE(Util.GetValueOfDateTime(srchCtrls[i].Ctrl.getValue()), true);
-                                whereClause += " ( " + srchCtrls[i].SearchColumnName + " BETWEEN " + fromValue + " AND " + toValue + ")";
+                                whereClause += " ( " + columName + " BETWEEN " + fromValue + " AND " + toValue + ")";
                             }
                             else
                             {
-                                whereClause += srchCtrls[i].SearchColumnName + " =" + fromValue;
+                                whereClause += columName + " =" + fromValue;
                             }
                         }
 
@@ -508,7 +520,7 @@ namespace VIS.Models
 
 
                             srchValue = Convert.ToBoolean(srchCtrls[i].Value) == true ? "Y" : "N";
-                            whereClause += srchCtrls[i].SearchColumnName + " = '" + srchValue + "'";
+                            whereClause += columName + " = '" + srchValue + "'";
 
                         }
                         else
@@ -520,13 +532,13 @@ namespace VIS.Models
                             {
                                 //if (srchCtrls[i].Value)
                                 //{     // Consider checkbox value only in case of true value
-                                    srchValue = Convert.ToBoolean(srchCtrls[i].Value) == true ? "Y" : "";
-                                    whereClause += srchCtrls[i].SearchColumnName + " = '" + srchValue + "'";
+                                srchValue = Convert.ToBoolean(srchCtrls[i].Value) == true ? "Y" : "";
+                                whereClause += columName + " = '" + srchValue + "'";
                                 //}
                             }
                             else
                             {
-                                whereClause += " " + srchCtrls[i].SearchColumnName + " ='" + fromValue + "'";
+                                whereClause += " " + columName + " ='" + fromValue + "'";
                             }
 
 
@@ -678,8 +690,8 @@ namespace VIS.Models
                         {
                             sqlOrderbyArr[l] = "tblquery." + sqlOrderbyArr[l];
                         }
-                            
-                            if (l > 0)
+
+                        if (l > 0)
                             finalorderBy += ",";
                         finalorderBy += sqlOrderbyArr[l];
                     }
@@ -801,6 +813,12 @@ namespace VIS.Models
             set;
         }
 
+        public int InfoColumnID
+        {
+            get;
+            set;
+        }
+
         public bool IsQueryCriteria
         {
             get;
@@ -899,7 +917,7 @@ namespace VIS.Models
             set;
         }
 
-        public string SearchColumnName
+        public int InfoColumnID
         {
             get;
             set;
@@ -961,6 +979,13 @@ namespace VIS.Models
             get;
             set;
         }
+
+        public int InfoColumnID
+        {
+            get;
+            set;
+        }
+
 
         public string WindowName
         {
