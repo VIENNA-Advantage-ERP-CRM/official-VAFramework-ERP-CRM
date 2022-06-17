@@ -3317,7 +3317,7 @@ namespace VAdvantage.Model
 
                     //Added by Bharat on 11-April-2017 for Asset Expenses
                     #region Calculating Cost on Expenses
-                    if (Env.IsModuleInstalled("VAFAM_") && line.Get_ColumnIndex("VAFAM_IsAssetRelated") > 0)
+                    if (Env.IsModuleInstalled("VAFAM_") && line.Get_ColumnIndex("VAFAM_IsAssetRelated") > 0 && !IsReversal())
                     {
                         if (!IsSOTrx() && !IsReturnTrx() && Util.GetValueOfBool(line.Get_Value("VAFAM_IsAssetRelated")))
                         {
