@@ -43,6 +43,7 @@
         var $spanPageResult = null;
         var showText = VIS.Msg.getMsg("ShowingResult");
         var ofText = VIS.Msg.getMsg("of");
+        var AD_Table_ID = 0;
 
         function initializeComponent() {
             inforoot.css("width", "100%");
@@ -255,8 +256,9 @@
 
         var displaySearchCol = function () {
 
+            AD_Table_ID = schema[0].AD_Table_ID;
             //Change by mohit-to handle translation in general info. Added 2 new parametere- AD_Language, IsBaseLangage. Asked by mukesh sir - 09/03/2018
-            displayCols = (VIS.dataContext.getJSONData(VIS.Application.contextUrl + "InfoGeneral/GetDispalyColumns", { "AD_Table_ID": schema[0].AD_Table_ID, "AD_Language": VIS.context.getAD_Language(), "IsBaseLangage": VIS.Env.isBaseLanguage(VIS.context), "TableName": tableName })).result;
+            displayCols = (VIS.dataContext.getJSONData(VIS.Application.contextUrl + "InfoGeneral/GetDispalyColumns", { "AD_Table_ID": AD_Table_ID, "AD_Language": VIS.context.getAD_Language(), "IsBaseLangage": VIS.Env.isBaseLanguage(VIS.context), "TableName": tableName })).result;
 
             if (displayCols == null) {
                 alert(VIS.Msg.getMsg('ERRORGettingDisplayCols'));
@@ -358,9 +360,11 @@
             //var isTrlColExist = false;
 
             //get Qry from InfoColumns
-            //for (var item in displayCols) {
-
-
+            for (var item in displayCols) {
+                if (displayCols[item].IsKey) {
+                    keyCol = displayCols[item].ColumnName.toUpperCase();
+                }
+            }
             //    displayType = displayCols[item].AD_Reference_ID;
             //    if (displayType == VIS.DisplayType.YesNo) {
             //        sql += " ( CASE " + tableName + "." + displayCols[item].ColumnName + " WHEN 'Y' THEN  'True' ELSE 'False'  END ) AS " + (displayCols[item].ColumnName);
@@ -427,6 +431,7 @@
                 for (var i = 0; i < srchCtrls.length; i++) {
                     srchValue = srchCtrls[i].Ctrl.getValue();
                     if (srchValue == null || srchValue.length == 0 || srchValue == 0) {
+                        srchCtrls[i]["Value"] = null;
                         continue;
                     }
 
@@ -434,15 +439,15 @@
                     //    whereClause += " AND ";
                     //}
 
-                    if (!(String(srchValue).indexOf("%") == 0)) {
-                        srchValue = "●" + srchValue;
-                    }
-                    else {
-                        srchValue = String(srchValue).replace("%", "●");
-                    }
-                    if (!((String(srchValue).lastIndexOf("●")) == (String(srchValue).length))) {
-                        srchValue = srchValue + "●";
-                    }
+                    //if (!(String(srchValue).indexOf("%") == 0)) {
+                    //    srchValue = "●" + srchValue;
+                    //}
+                    //else {
+                    //    srchValue = String(srchValue).replace("%", "●");
+                    //}
+                    //if (!((String(srchValue).lastIndexOf("●")) == (String(srchValue).length))) {
+                    //    srchValue = srchValue + "●";
+                    //}
 
                     srchCtrls[i]["Value"] = srchValue;
                     // Change done by mohit asked by mukesh sir to show the data on info window from translated tab if logged in with langauge other than base language- 22/03/2018
@@ -523,11 +528,9 @@
             if (srchCtrls && Object.keys(srchCtrls).length > 0) {
                 for (var x = 0; x < Object.keys(srchCtrls).length; x++) {
                     var vals = {};
-                    vals.AD_Reference_ID = srchCtrls[x].AD_Reference_ID;
-                    vals.IsRange = srchCtrls[x].IsRange;
-                    vals.InfoColumnID = srchCtrls[x].InfoColumnID;
+                    vals.ColumnName = srchCtrls[x].ColumnName;
+                    vals.IsTranslated = srchCtrls[x].IsTranslated;
                     vals.Value = srchCtrls[x].Value;
-                    vals.ValueTo = srchCtrls[x].ValueTo;
                     srhCtrls.push(vals);
                 }
             }
@@ -543,9 +546,14 @@
                 type: "POST",
                 //async: false,
                 data: {
-                    sql: sql,
-                    tableName: tableName,
-                    pageNo: pNo
+                    TableName: tableName,
+                    AD_Table_ID: AD_Table_ID,
+                    PageNo: pNo,
+                    KeyCol: keyCol,
+                    SelectedIDs: selectedIDs,
+                    Requery: requery,
+                    SrchCtrl: JSON.stringify(srhCtrls),
+                    ValidationCode: validationCode
                 },
                 error: function () {
                     alert(VIS.Msg.getMsg('ErrorWhileGettingData'));

@@ -126,7 +126,8 @@ namespace VIS.Models
                               f.IsDisplayed,
                               c.AD_Reference_Value_ID,
                               c.ColumnSQL,
-                              C.IsTranslated
+                              C.IsTranslated,
+                              c.AD_Column_ID
                             FROM AD_Column c
                             INNER JOIN AD_Table t
                             ON (c.AD_Table_ID=t.AD_Table_ID)                            
@@ -150,7 +151,8 @@ namespace VIS.Models
                               f.IsDisplayed,
                               c.AD_Reference_Value_ID,
                               c.ColumnSQL,
-                              C.IsTranslated
+                              C.IsTranslated,
+                              c.AD_Column_ID
                             FROM AD_Column c
                             INNER JOIN AD_Table t
                             ON (c.AD_Table_ID=t.AD_Table_ID)
@@ -213,6 +215,7 @@ namespace VIS.Models
                     }
 
                     item.ColumnName = ds.Tables[0].Rows[i]["ColumnName"].ToString();
+                    item.AD_Column_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Column_ID"]);
                     item.Name = ds.Tables[0].Rows[i]["Name"].ToString();
                     item.AD_Reference_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Reference_ID"]);
                     item.IsKey = ds.Tables[0].Rows[i]["IsKey"].ToString() == "Y" ? true : false;
@@ -600,6 +603,13 @@ namespace VIS.Models
             get;
             set;
         }
+
+        public int AD_Column_ID
+        {
+            get;
+            set;
+        }
+
         public int AD_Reference_ID
         {
             get;
