@@ -276,25 +276,25 @@ namespace VIS.Models
 
                         if (srchCtrls[i].CtrlColumnName == "Value")
                         {
-                            whereClause += " AND UPPER(p." + srchCtrls[i].ColumnName + ") LIKE " + srchValue.ToUpper();
+                            whereClause += " AND UPPER(p." + srchCtrls[i].ColumnName + ") LIKE Upper('%" + srchValue.ToUpper()+"%')";
                         }
 
                         else if (srchCtrls[i].CtrlColumnName == "Name")
                         {
-                            whereClause += " AND UPPER(p." + srchCtrls[i].ColumnName + ") LIKE " + srchValue.ToUpper();
+                            whereClause += " AND UPPER(p." + srchCtrls[i].ColumnName + ") LIKE Upper('%" + srchValue.ToUpper() + "%')";
                         }
 
                         else if (srchCtrls[i].CtrlColumnName == "UPC")
                         {
                             upcSearch = true;
                             //s_productFrom += " LEFT OUTER JOIN M_manufacturer mr ON (p.M_Product_ID=mr.M_Product_ID) LEFT OUTER JOIN M_ProductAttributes patr ON (p.M_Product_ID=patr.M_Product_ID)"
-                            whereClause += " AND (UPPER(patr.UPC) LIKE " + srchValue.ToUpper() + " OR UPPER(p.UPC) LIKE " + srchValue.ToUpper()
-                                + " OR UPPER(mr.UPC) LIKE " + srchValue.ToUpper() + " OR UPPER(uc.UPC) LIKE " + srchValue.ToUpper() + ")";
+                            whereClause += " AND (UPPER(patr.UPC) LIKE Upper('%" + srchValue.ToUpper() + "%') OR UPPER(p.UPC) LIKE Upper('%" + srchValue.ToUpper() + "%')"
+                                + " OR UPPER(mr.UPC) LIKE Upper('%" + srchValue.ToUpper() + "%') OR UPPER(uc.UPC) LIKE Upper('%" + srchValue.ToUpper() + "%')";
                         }
 
                         else if (srchCtrls[i].CtrlColumnName == "SKU")
                         {
-                            whereClause += " AND UPPER(p." + srchCtrls[i].ColumnName + ") LIKE " + srchValue.ToUpper();
+                            whereClause += " AND UPPER(p." + srchCtrls[i].ColumnName + ") LIKE Upper('%" + srchValue.ToUpper() + "%')";
                         }
 
                         else if (srchCtrls[i].CtrlColumnName == "M_Warehouse_ID")
@@ -320,7 +320,7 @@ namespace VIS.Models
                         }
                         else if (srchCtrls[i].CtrlColumnName == "AttributeCode")
                         {
-                            whereClause += " AND p.M_Product_ID in (SELECT distinct M_Product_ID from M_ProductAttributes WHERE UPPER(UPC) LIKE '" + srchValue.ToUpper() + "')";
+                            whereClause += " AND p.M_Product_ID in (SELECT distinct M_Product_ID from M_ProductAttributes WHERE UPPER(UPC) LIKE '%" + srchValue.ToUpper() + "%')";
                         }
                     }
 

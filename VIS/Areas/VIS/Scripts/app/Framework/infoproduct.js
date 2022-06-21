@@ -573,14 +573,7 @@
             btnShowCart.hide();
         }
 
-        var s_productFrom =
-            "M_Product p"
-            + " LEFT OUTER JOIN M_ProductPrice pr ON (p.M_Product_ID=pr.M_Product_ID AND pr.IsActive='Y')"
-            + " LEFT OUTER JOIN M_PriceList_Version plv ON (pr.M_PriceList_Version_ID=plv.M_PriceList_Version_ID)"
-            + " LEFT OUTER JOIN M_AttributeSet pa ON (p.M_AttributeSet_ID=pa.M_AttributeSet_ID)"
-            + " LEFT OUTER JOIN C_UOM c ON (p.C_UOM_ID=c.C_UOM_ID)";
-        //+ " LEFT OUTER JOIN M_manufacturer mr ON (p.M_Product_ID=mr.M_Product_ID) LEFT OUTER JOIN M_ProductAttributes patr ON (p.M_Product_ID=patr.M_Product_ID)"
-
+       
         function bindEvent() {
             if (!VIS.Application.isMobile) {
                 inforoot.on('keyup', function (e) {
@@ -2050,6 +2043,7 @@
                 for (var i = 0; i < srchCtrls.length; i++) {
                     srchValue = srchCtrls[i].Ctrl.getValue();
                     if (srchValue == null || srchValue.length == 0 || srchValue == 0) {
+                        srchCtrls[i]["Value"] = "";
                         continue;
                     }
 
@@ -2137,17 +2131,17 @@
 
             }
             //else {
-                //sql += " FROM " + s_productFrom + " JOIN M_Warehouse w ON (1=1)";
+            //sql += " FROM " + s_productFrom + " JOIN M_Warehouse w ON (1=1)";
 
-                //if (validation != null && validation.length > 0 && validation.trim().toUpperCase().startsWith('WHERE')) {
-                //    sqlWhere += " " + validation.replace(/M_Product\./g, "p.") + " AND " + tableName + "_ID=-1";
-                //}
-                //else if (validation != null && validation.length > 0) {
-                //    sqlWhere += " WHERE p." + tableName + "_ID=-1 AND " + validation.replace(/M_Product\./g, "p.");
-                //}
-                //else {
-                //    sqlWhere += " WHERE p." + tableName + "_ID=-1";
-                //}
+            //if (validation != null && validation.length > 0 && validation.trim().toUpperCase().startsWith('WHERE')) {
+            //    sqlWhere += " " + validation.replace(/M_Product\./g, "p.") + " AND " + tableName + "_ID=-1";
+            //}
+            //else if (validation != null && validation.length > 0) {
+            //    sqlWhere += " WHERE p." + tableName + "_ID=-1 AND " + validation.replace(/M_Product\./g, "p.");
+            //}
+            //else {
+            //    sqlWhere += " WHERE p." + tableName + "_ID=-1";
+            //}
             //}
 
             if (!pNo) {
@@ -2158,7 +2152,6 @@
             if (srchCtrls && Object.keys(srchCtrls).length > 0) {
                 for (var x = 0; x < Object.keys(srchCtrls).length; x++) {
                     var vals = {};
-                    vals.ColumnName = srchCtrls[x].ColumnName;
                     vals.CtrlColumnName = srchCtrls[x].CtrlColumnName;
                     vals.Value = srchCtrls[x].Value;
                     srhCtrls.push(vals);
@@ -2180,7 +2173,7 @@
                     pageNo: pNo,
                     ForMobile: ismobile,
                     Requery: requery,
-                    SrchCtrl: srhCtrls,
+                    SrchCtrl: JSON.stringify(srhCtrls),
                     Validation: validation,
                     Window_ID: window_ID
                 },
