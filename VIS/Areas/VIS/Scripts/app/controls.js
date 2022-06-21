@@ -6459,13 +6459,18 @@
      *  @param value  The text to be displayed by the VSpan.
      *  @param name  name of control to bind VSpan with
      */
-    function VKeyText(colSql, windowNo, name, isExe) {
+    function VKeyText(colSql, windowNo, name, isExe,mField) {
         this.colSql = colSql;
         this.windowNo = windowNo;
         this.cache = {};
         this.isExe = isExe;
         // this.col = '';
         this.needtoParse = false;
+        this.frmat = null;
+        if (mField && VIS.DisplayType.IsNumeric(mField.getDisplayType())) {
+            this.frmat = VIS.DisplayType.GetNumberFormat(mField.getDisplayType());
+        }
+        
 
         if (colSql.contains('@')) {
             this.needtoParse = true;
@@ -6482,8 +6487,8 @@
         this.disposeComponent = function () {
             $ctrl = null;
             self = null;
-            if (this.format)
-                this.format.dispose();
+            if (this.frmat)
+                this.frmat.dispose();
             this.format = null;
             this.cache = {};
             this.cache = null;
@@ -6530,7 +6535,9 @@
 
             var self = this;
             executeScalarEn(validation, null, function (val) {
-                if (val) {
+                if (val || val == 0) {
+                    if (self.frmat)
+                        val = self.frmat.GetFormatAmount(self.frmat.GetFormatedValue(val), "init", VIS.Env.isDecimalPoint());
                     self.ctrl.text(val);
                 }
                 else
