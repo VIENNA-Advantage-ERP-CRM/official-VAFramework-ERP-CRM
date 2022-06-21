@@ -26,13 +26,16 @@ namespace VIS.Controllers
         [AjaxSessionFilterAttribute]
         [HttpPost]
         [ValidateInput(false)]
-        public JsonResult GetData(string sql, string where, string tableName, int pageNo, bool ForMobile)
+        public JsonResult GetData(string TableName, int PageNo, bool ForMobile,
+            bool Requery, string SrchCtrl, string Validation, int Window_ID)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             VIS.Models.InfoProductModel model = new Models.InfoProductModel();
-            sql = SecureEngineBridge.DecryptByClientKey(sql, ctx.GetSecureKey());
-            where = SecureEngineBridge.DecryptByClientKey(where, ctx.GetSecureKey());
-            return Json(JsonConvert.SerializeObject(model.GetData(sql, where, tableName, pageNo, ForMobile, ctx)), JsonRequestBehavior.AllowGet);
+
+            List<InfoSearchCol> srchCtrl = JsonConvert.DeserializeObject<List<InfoSearchCol>>(SrchCtrl);
+
+            return Json(JsonConvert.SerializeObject(model.GetData(TableName, PageNo, ForMobile, ctx,
+                Requery, srchCtrl, Validation, Window_ID)), JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetCart(string sql, int pageNo, bool isCart, int windowID, int WarehouseID, int WarehouseToID, int LocatorID, int LocatorToID)
@@ -104,13 +107,13 @@ namespace VIS.Controllers
             {
                 quantity = JsonConvert.DeserializeObject<List<string>>(qty);
             }
-            
+
             List<string> Locators = new List<string>();
             if (listLoc != null && listLoc.Trim().Length > 0)
             {
                 Locators = JsonConvert.DeserializeObject<List<string>>(listLoc);
             }
-            
+
             VIS.Models.InfoProductModel model = new Models.InfoProductModel();
             var value = model.SetProductQtyStockTrasfer(id, keyColumn, AD_Table_ID, prodID, uomID, Attributes, quantity, Locators, locatorTo, lineID, ContainerID, Session["ctx"] as Ctx);
             return Json(new { result = value }, JsonRequestBehavior.AllowGet);
@@ -140,8 +143,8 @@ namespace VIS.Controllers
 
         // Added by Bharat on 31 May 2017
         public JsonResult GetWindowID(string fields)
-        {            
-            VIS.Models.InfoProductModel model = new VIS.Models.InfoProductModel();           
+        {
+            VIS.Models.InfoProductModel model = new VIS.Models.InfoProductModel();
             return Json(JsonConvert.SerializeObject(model.GetWindowID(fields, Session["ctx"] as Ctx)), JsonRequestBehavior.AllowGet);
         }
 
