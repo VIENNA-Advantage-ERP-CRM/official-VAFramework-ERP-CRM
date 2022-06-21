@@ -911,6 +911,12 @@ namespace VIS.Models
             set;
         }
 
+        public string CtrlColumnName
+        {
+            get;
+            set;
+        }
+
         public bool IsRange
         {
             get;

@@ -190,19 +190,198 @@ namespace VIS.Models
             return s_productLayout;
         }
 
-        public InfoProductData GetData(string sql, string where, string tableName, int pageNo, bool isMobile, VAdvantage.Utility.Ctx ctx)
+        public InfoProductData GetData(string tableName, int pageNo, bool isMobile,
+            VAdvantage.Utility.Ctx ctx, bool requery, List<InfoSearchCol> srchCtrls, string Validation, int Window_ID)
         {
             InfoProductData _iData = new InfoProductData();
             try
             {
+                InfoColumn[] displayCols = GetInfoColumns(ctx);
+
+                var sql = "SELECT ";
+                string keyCol = "";
+                var sqlWhere = "";
+                string s_productFrom = "";
+                //var cname = null;
+                var displayType = 0;
+                //var count = $.makeArray(displayCols).length;
+                //get Qry from InfoColumns
+                int count = displayCols.Count();
+                for (int item = 0; item < count; item++)
+                {
+                    displayType = displayCols[item].AD_Reference_ID;
+                    if (displayType == DisplayType.YesNo)
+                    {
+                        sql += " ( CASE " + displayCols[item].ColumnSQL + " WHEN 'Y' THEN  'True' ELSE 'False'  END ) " + displayCols[item].ColumnName;
+                    }
+                    else
+                    {
+                        sql += displayCols[item].ColumnSQL + " ";
+                    }
+
+                    if (displayType == DisplayType.ID && displayCols[item].ColumnName.ToUpper() == "M_PRODUCT_ID")
+                    {
+                        keyCol = displayCols[item].ColumnName.ToUpper();
+                    }
+
+                    if (!((count - 1) == item))
+                    {
+                        sql += ", ";
+                    }
+                }
+
+                if (requery == true)
+                {
+                    //var whereClause = " rownum <= " + (ismobile ? 50 : 100);
+                    var whereClause = " w.AD_Client_ID = " + ctx.GetAD_Client_ID();
+                    var name = "";
+                    var value = "";
+                    var upc = "";
+                    var sku = "";
+                    string srchValue = null;
+                    bool upcSearch = false;
+                    s_productFrom =
+                        "M_Product p"
+                        + " LEFT OUTER JOIN M_ProductPrice pr ON (p.M_Product_ID=pr.M_Product_ID AND pr.IsActive='Y')"
+                        + " LEFT OUTER JOIN M_PriceList_Version plv ON (pr.M_PriceList_Version_ID=plv.M_PriceList_Version_ID)"
+                        + " LEFT OUTER JOIN M_AttributeSet pa ON (p.M_AttributeSet_ID=pa.M_AttributeSet_ID)"
+                        + " LEFT OUTER JOIN C_UOM c ON (p.C_UOM_ID=c.C_UOM_ID)";
+                    for (var i = 0; i < srchCtrls.Count(); i++)
+                    {
+                        srchValue = Convert.ToString(srchCtrls[i].Value);
+                        if (srchValue == null || srchValue.Length == 0 || srchValue == "0")
+                        {
+                            continue;
+                        }
+                        //if (whereClause.length > 0) {
+                        //    whereClause += " AND ";
+                        //}
+
+                        if (srchCtrls[i].AD_Reference_ID == 10)
+                        {
+                            if (!((srchValue).IndexOf("%") == 0))
+                            {
+                                srchValue = "●" + srchValue;
+                            }
+                            else
+                            {
+                                srchValue = (srchValue).Replace("%", "●");
+                            }
+                            if (!(((srchValue).LastIndexOf("●")) == ((srchValue).Length)))
+                            {
+                                srchValue = srchValue + "●";
+                            }
+                            srchValue = DB.TO_STRING(srchValue);
+                        }
+
+                        if (srchCtrls[i].CtrlColumnName == "Value")
+                        {
+                            whereClause += " AND UPPER(p." + srchCtrls[i].ColumnName + ") LIKE " + srchValue.ToUpper();
+                        }
+
+                        else if (srchCtrls[i].CtrlColumnName == "Name")
+                        {
+                            whereClause += " AND UPPER(p." + srchCtrls[i].ColumnName + ") LIKE " + srchValue.ToUpper();
+                        }
+
+                        else if (srchCtrls[i].CtrlColumnName == "UPC")
+                        {
+                            upcSearch = true;
+                            //s_productFrom += " LEFT OUTER JOIN M_manufacturer mr ON (p.M_Product_ID=mr.M_Product_ID) LEFT OUTER JOIN M_ProductAttributes patr ON (p.M_Product_ID=patr.M_Product_ID)"
+                            whereClause += " AND (UPPER(patr.UPC) LIKE " + srchValue.ToUpper() + " OR UPPER(p.UPC) LIKE " + srchValue.ToUpper()
+                                + " OR UPPER(mr.UPC) LIKE " + srchValue.ToUpper() + " OR UPPER(uc.UPC) LIKE " + srchValue.ToUpper() + ")";
+                        }
+
+                        else if (srchCtrls[i].CtrlColumnName == "SKU")
+                        {
+                            whereClause += " AND UPPER(p." + srchCtrls[i].ColumnName + ") LIKE " + srchValue.ToUpper();
+                        }
+
+                        else if (srchCtrls[i].CtrlColumnName == "M_Warehouse_ID")
+                        {
+                            if (Util.GetValueOfInt(srchValue) != 0)
+                            {
+                                whereClause += " AND w.M_Warehouse_ID=" + Util.GetValueOfInt(srchValue);
+                            }
+                        }
+                        else if (srchCtrls[i].CtrlColumnName == "M_PriceList_Version_ID")
+                        {
+                            if (Util.GetValueOfInt(srchValue) != 0)
+                            {
+                                whereClause += " AND pr.M_PriceList_Version_ID=" + Util.GetValueOfInt(srchValue);
+                            }
+                        }
+                        else if (srchCtrls[i].CtrlColumnName == "M_AttributeSet_ID")
+                        {
+                            if (Util.GetValueOfInt(srchValue) != 0)
+                            {
+                                whereClause += " AND p.M_AttributeSet_ID=" + Util.GetValueOfInt(srchValue);
+                            }
+                        }
+                        else if (srchCtrls[i].CtrlColumnName == "AttributeCode")
+                        {
+                            whereClause += " AND p.M_Product_ID in (SELECT distinct M_Product_ID from M_ProductAttributes WHERE UPPER(UPC) LIKE '" + srchValue.ToUpper() + "')";
+                        }
+                    }
+
+                    if (upcSearch)
+                    {
+                        s_productFrom += " LEFT OUTER JOIN M_manufacturer mr ON (p.M_Product_ID=mr.M_Product_ID) LEFT OUTER JOIN M_ProductAttributes patr ON (p.M_Product_ID=patr.M_Product_ID)" +
+                            " LEFT OUTER JOIN C_UOM_Conversion uc ON (p.M_Product_ID=uc.M_Product_ID)";
+                    }
+
+                    sql += " FROM " + s_productFrom + " JOIN M_Warehouse w ON (1=1)";
+
+                    if (Window_ID == 181)
+                    {
+                        if (Validation != null && Validation.Length > 0)
+                        {
+                            Validation += " AND (p.Discontinued = 'N' OR p.DiscontinuedBy > sysdate )";
+                        }
+                    }
+
+                    if (whereClause.Length > 1)
+                    {
+                        sqlWhere += " WHERE " + whereClause;
+                        if (Validation != null && Validation.Length > 0)
+                        {
+                            sqlWhere += " AND " + Validation.Replace("M_Product.", "p.");
+                            //sql += " AND " + validationCode;
+                        }
+                    }
+                    else if (Validation != null && Validation.Length > 0)
+                    {
+                        sqlWhere += " WHERE " + Validation.Replace("M_Product.", "p.");
+                    }
+
+                }
+                else
+                {
+                    sql += " FROM " + s_productFrom + " JOIN M_Warehouse w ON (1=1)";
+
+                    if (Validation != null && Validation.Length > 0 && Validation.Trim().ToUpper().StartsWith("WHERE"))
+                    {
+                        sqlWhere += " " + Validation.Replace("M_Product.", "p.") + " AND " + tableName + "_ID=-1";
+                    }
+                    else if (Validation != null && Validation.Length > 0)
+                    {
+                        sqlWhere += " WHERE p." + tableName + "_ID=-1 AND " + Validation.Replace("M_Product.", "p.");
+                    }
+                    else
+                    {
+                        sqlWhere += " WHERE p." + tableName + "_ID=-1";
+                    }
+                }
+
+
                 StringBuilder sbSql = new StringBuilder();
                 int noofRecords = isMobile ? 50 : 100;
-                where = where.Replace('●', '%');
-                string sqlWhere = sql + where;
-                sqlWhere = MRole.GetDefault(ctx).AddAccessSQL(sqlWhere, tableName,
+                sqlWhere = sqlWhere.Replace('●', '%');
+                string sqlWhere1 = sql + sqlWhere;
+                sqlWhere1 = MRole.GetDefault(ctx).AddAccessSQL(sqlWhere1, tableName,
                                 MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
                 //DataSet data = DBase.DB.ExecuteDataset(sql, null, null);
-                int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(p.M_Product_ID) " + sqlWhere.Substring(sqlWhere.IndexOf("FROM")), null, null));
+                int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(p.M_Product_ID) " + sqlWhere1.Substring(sqlWhere1.IndexOf("FROM")), null, null));
                 int pageSize = 50;
                 PageSetting pSetting = new PageSetting();
                 pSetting.CurrentPage = pageNo;
@@ -221,7 +400,7 @@ namespace VIS.Models
                         LEFT OUTER JOIN M_Manufacturer mr ON (p.M_Product_ID = mr.M_Product_ID)
                         LEFT OUTER JOIN M_ProductAttributes patr ON (p.M_Product_ID = patr.M_Product_ID)
                         LEFT OUTER JOIN C_UOM_Conversion uc ON (p.M_Product_ID = uc.M_Product_ID)
-                        , M_Warehouse w " + where + " ORDER BY p.M_Product_ID, M_PriceList_Version_ID, M_AttriButeSetInstance_ID, C_UOM_ID";
+                        , M_Warehouse w " + sqlWhere + " ORDER BY p.M_Product_ID, M_PriceList_Version_ID, M_AttriButeSetInstance_ID, C_UOM_ID";
                 sqlPaging = MRole.GetDefault(ctx).AddAccessSQL(sqlPaging, tableName, MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
                 sqlPaging = @"JOIN (SELECT row_num, M_Product_ID, M_AttriButeSetInstance_ID, C_UOM_ID, M_PriceList_Version_ID, M_Warehouse_ID FROM (SELECT prd.*, row_number() over (order by prd.M_Product_ID) AS row_num FROM 
                         (" + sqlPaging + @") prd) t WHERE row_num BETWEEN " + startPage + " AND " + endPage +
@@ -235,21 +414,21 @@ namespace VIS.Models
                 }
 
                 List<DataObject> dyndata = new List<DataObject>();
-                DataObject item = null;
+                DataObject items = null;
                 List<object> values = null;
                 for (int i = 0; i < data.Tables[0].Columns.Count; i++)  //columns
                 {
-                    item = new DataObject();
+                    items = new DataObject();
 
-                    item.ColumnName = data.Tables[0].Columns[i].ColumnName;
+                    items.ColumnName = data.Tables[0].Columns[i].ColumnName;
                     values = new List<object>();
                     for (int j = 0; j < data.Tables[0].Rows.Count; j++)  //rows
                     {
                         values.Add(data.Tables[0].Rows[j][data.Tables[0].Columns[i].ColumnName]);
                     }
-                    item.Values = values;
-                    item.RowCount = data.Tables[0].Rows.Count;
-                    dyndata.Add(item);
+                    items.Values = values;
+                    items.RowCount = data.Tables[0].Rows.Count;
+                    dyndata.Add(items);
                 }
                 _iData.data = dyndata;
                 return _iData;
@@ -628,7 +807,7 @@ namespace VIS.Models
                         error = Msg.GetMsg(ctx, "DefaultLocatorNotFound");
                     }
                 }
-                
+
 
                 // check applied for Locator 
                 if (Locator_ID > 0)
