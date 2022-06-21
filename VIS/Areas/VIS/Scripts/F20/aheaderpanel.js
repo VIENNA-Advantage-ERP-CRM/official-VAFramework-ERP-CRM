@@ -273,7 +273,7 @@
 
                             if (headerItem.ColSql.length > 0) {
                                 iControl = new VIS.Controls.VKeyText(headerItem.ColSql, $self.gTab.getWindowNo(),
-                                    $self.gTab.getWindowNo() + "_" + headerSeqNo, headerItem.IsAlwaysExecute);
+                                    $self.gTab.getWindowNo() + "_" + headerSeqNo, headerItem.IsAlwaysExecute, mField);
                             } else {
                                 iControl = VIS.VControlFactory.getReadOnlyControl(this.curTab, mField, false, false, false);
                             }
