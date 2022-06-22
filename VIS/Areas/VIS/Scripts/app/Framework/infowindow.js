@@ -837,7 +837,7 @@
 
 
 
-              
+
                 var sqlOrderby = "";
 
                 if (info.OTHERCLAUSE != null) {
@@ -850,22 +850,22 @@
                         if (otherClause)
 
                             if (String(otherClause).toUpperCase().indexOf("WHERE") > -1) {
-                                if (info.FromClause.toUpperCase().indexOf("WHERE") > -1
-                                    || whereClause.length > 1
-                                    || (validationCode != null && validationCode.length > 1)) {
-                                    otherClause = String(otherClause).replace("WHERE", "AND");
-                                }
+                                //if (info.FromClause.toUpperCase().indexOf("WHERE") > -1
+                                //    || whereClause.length > 1
+                                //    || (validationCode != null && validationCode.length > 1)) {
+                                otherClause = String(otherClause).replace("WHERE", "AND");
+                                //}
 
                             }
                         sql += " " + otherClause;
                     }
                     else {
                         if (String(info.OTHERCLAUSE).toUpperCase().indexOf("WHERE") > -1) {
-                            if (info.FromClause.toUpperCase().indexOf("WHERE") > -1
-                                || whereClause.length > 1
-                                || (validationCode != null && validationCode.length > 1)) {
-                                info.OTHERCLAUSE = String(info.OTHERCLAUSE).replace("WHERE", "AND");
-                            }
+                            //if (info.FromClause.toUpperCase().indexOf("WHERE") > -1
+                            //    || whereClause.length > 1
+                            //    || (validationCode != null && validationCode.length > 1)) {
+                            info.OTHERCLAUSE = String(info.OTHERCLAUSE).replace("WHERE", "AND");
+                            //}
 
                         }
                         sql += " " + info.OTHERCLAUSE;
@@ -882,7 +882,7 @@
 
             }
 
-           
+
 
             if (selectedIDs != null && selectedIDs.length > 0) {
                 var sqlUnion = " UNION " + sql;
