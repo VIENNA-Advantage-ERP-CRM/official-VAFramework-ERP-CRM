@@ -1232,8 +1232,9 @@
             }
         };
 
+        var invalidExtensions = [];
         var AppendFile = function (sender) {
-
+            invalidExtensions = [];
             for (var i = 0; i < sender.files.length; i++) {
                 file = sender.files[i];
                 if (file == undefined) {
@@ -1242,6 +1243,16 @@
                 if (file.size == 0) {
                     continue;
                 }
+
+                var allowedExtensions = VIS.context.getContext("#ALLOWED_FILE_EXTENSION");
+
+                if (allowedExtensions && allowedExtensions.length > 0) {
+                    if (allowedExtensions.split(',').indexOf('.' + file.name.split('.').pop()) == -1) {
+                        invalidExtensions.push(file.name);
+                        continue;
+                    }
+                }
+
 
                 for (var itm in lstLatestFiles) {
                     if (file.name == lstLatestFiles[itm].name) {
@@ -1399,6 +1410,23 @@
                     }
                 }
 
+            }
+
+
+            if (invalidExtensions && invalidExtensions.length > 0) {
+                var FileNames = '';
+                for (var item in invalidExtensions) {
+                    FileNames += invalidExtensions[item].toString() + ', ';
+                }
+
+                var resString = null;
+                if (invalidExtensions.length == 1) {
+                    resString += 'FileInvalidExtension';
+                }
+                else {
+                    resString += 'FilesInvalidExtension';
+                }
+                VIS.ADialog.warn(resString, true, FileNames);
             }
         };
 
