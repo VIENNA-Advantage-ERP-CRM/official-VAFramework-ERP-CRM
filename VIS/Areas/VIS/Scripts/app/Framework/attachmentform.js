@@ -514,13 +514,13 @@
                     fileBrowser.change(function () {
                         //VIS.ADialog.info('file Uploaded ');
                         AppendFile(this);
-                        
+
                     });
-                    fileBrowser.click(function () {                        
+                    fileBrowser.click(function () {
                         this.value = null;
                     });
 
-                   
+
                     var btnUpload = $("<a title='" + VIS.Msg.getMsg('SelectFile') + "' class='vis-attach-ico'><i class='fa fa-paperclip' aria-hidden='true'></i></a>");
                     // btnUpload.append($("<span class='plus-ico'>"));
                     // btnUpload.append(VIS.Msg.getMsg('Upload'));
@@ -528,7 +528,7 @@
                     dHeaderRight.append(btnUpload);
 
                     //open file dialog
-                    btnUpload.on("click", function () {                       
+                    btnUpload.on("click", function () {
                         fileBrowser.trigger('click');
                     });
 
@@ -766,11 +766,24 @@
 
         var AppendFile = function (sender) {
             var invalidFiles = [];
+            var invalidExtensions = [];
             for (var i = 0; i < sender.files.length; i++) {
                 file = sender.files[i];
                 if (file == undefined) {
                     return;
                 }
+
+                var allowedExtensions = VIS.context.getContext("#ALLOWED_FILE_EXTENSION");
+
+                if (allowedExtensions && allowedExtensions.length > 0) {
+                    if (allowedExtensions.split(',').indexOf('.' + file.name.split('.').pop()) == -1) {
+                        invalidExtensions.push(file.name);
+                        continue;
+                    }
+                }
+
+
+
                 if (file.name.indexOf('&') > -1 || file.name.indexOf('?') > -1 || file.name.indexOf('#') > -1 || file.name.indexOf('/') > -1 || file.name.indexOf('\\') > -1) {
 
                     invalidFiles.push(file.name);
@@ -897,6 +910,22 @@
                 }
                 resString += ' invalid name. Please change the file name and try again.';
                 VIS.ADialog.info(resString);
+            }
+
+            if (invalidExtensions && invalidExtensions.length > 0) {
+                var FileNames = '';
+                for (var item in invalidExtensions) {
+                    FileNames += invalidExtensions[item].toString() + ', ';
+                }
+
+                var resString = null;
+                if (invalidExtensions.length == 1) {
+                    resString += 'FileInvalidExtension';
+                }
+                else {
+                    resString += 'FilesInvalidExtension';
+                }
+                VIS.ADialog.warn(resString, true, FileNames);
             }
         };
 
@@ -1283,7 +1312,7 @@
             }
 
             var isRunning = false;
-            for (var i = 0; i < totalChunksSF ; i++) {
+            for (var i = 0; i < totalChunksSF; i++) {
                 if (i == totalChunksSF - 1) {
                     if (file.size % chunkSize > 0) {
                         chunkSize = file.size % chunkSize
