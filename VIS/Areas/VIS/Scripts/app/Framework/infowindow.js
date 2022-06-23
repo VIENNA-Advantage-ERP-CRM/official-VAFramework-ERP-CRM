@@ -849,7 +849,7 @@
                         }
                         if (otherClause)
 
-                            if (String(otherClause).toUpperCase().indexOf("WHERE") > -1) {
+                            if (String(otherClause).toUpperCase().trim().startsWith("WHERE") && String(otherClause).toUpperCase().indexOf("WHERE") > -1) {
                                 //if (info.FromClause.toUpperCase().indexOf("WHERE") > -1
                                 //    || whereClause.length > 1
                                 //    || (validationCode != null && validationCode.length > 1)) {
@@ -860,7 +860,7 @@
                         sql += " " + otherClause;
                     }
                     else {
-                        if (String(info.OTHERCLAUSE).toUpperCase().indexOf("WHERE") > -1) {
+                        if (String(info.OTHERCLAUSE).toUpperCase().trim().startsWith("WHERE") && String(info.OTHERCLAUSE).toUpperCase().indexOf("WHERE") > -1) {
                             //if (info.FromClause.toUpperCase().indexOf("WHERE") > -1
                             //    || whereClause.length > 1
                             //    || (validationCode != null && validationCode.length > 1)) {
