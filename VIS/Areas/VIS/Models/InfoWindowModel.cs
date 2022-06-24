@@ -57,9 +57,9 @@ namespace VIS.Models
         //{
         //    get;
         //    set;
-        //}
+        //}        
 
-        public Info GetSchema(int AD_InfoWindow_ID,Ctx ctx)
+        public Info GetSchema(int AD_InfoWindow_ID, Ctx ctx)
         {
             try
             {
@@ -132,7 +132,7 @@ namespace VIS.Models
                                                             AND AD_InfoColumn.AD_InfoWindow_ID=" + AD_InfoWindow_ID + " ORDER BY AD_InfoColumn.seqno";
                 }
                 DataSet ds = DBase.DB.ExecuteDataset(sql);
-                return GetSchema(ds,ctx);
+                return GetSchema(ds, ctx);
                 //lstContent = GetDisplayColList(ds);
                 //infoWinSelect = ds.Tables[0].Rows[0]["FromClause"].ToString();
                 //otherSql = ds.Tables[0].Rows[0]["OTHERCLAUSE"].ToString();
@@ -144,7 +144,7 @@ namespace VIS.Models
             }
         }
 
-        private Info GetSchema(DataSet ds,Ctx ctx)
+        private Info GetSchema(DataSet ds, Ctx ctx)
         {
             try
             {
@@ -161,6 +161,24 @@ namespace VIS.Models
 
                 InfoSchema schema = null;
                 string cName = string.Empty;
+                string tableName = Util.GetValueOfString(ds.Tables[0].Rows[0]["TableName"]);
+
+                // VIS0060: Get Alias name from info window from clause.
+                if (ds.Tables[0].Rows[0]["FromClause"] != null && ds.Tables[0].Rows[0]["FromClause"] != DBNull.Value)
+                {
+                    AccessSqlParser asp = new AccessSqlParser("SELECT * FROM " + Util.GetValueOfString(ds.Tables[0].Rows[0]["FromClause"]));
+                    AccessSqlParser.TableInfo[] ti = asp.GetTableInfo(asp.GetMainSqlIndex());
+
+                    if (ti != null && ti.Length > 0 &&
+                        (ti[0].GetTableName().Equals(tableName)
+                        || ti[0].GetSynonym().Equals(tableName)))
+                    {
+                        tableName = ti[0].GetSynonym();
+                        if (tableName.Length == 0)
+                            tableName = ti[0].GetTableName();
+                    }
+                }
+
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     schema = new InfoSchema();
@@ -181,16 +199,16 @@ namespace VIS.Models
                         schema.IsQueryCriteria = true;
                     }
                     info.WindowName = ds.Tables[0].Rows[i]["WindowName"].ToString();
-                    info.TableName = ds.Tables[0].Rows[i]["TableName"].ToString();
+                    info.TableName = tableName;
                     schema.Name = ds.Tables[0].Rows[i]["Name"].ToString();
-                    
+
                     if (ds.Tables[0].Rows[i]["AD_Reference_ID"] != null &&
                         ds.Tables[0].Rows[i]["AD_Reference_ID"] != DBNull.Value)
                     {
                         schema.AD_Reference_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Reference_ID"]);
                         if (schema.AD_Reference_ID == 17)//if reference is List
                         {
-                            schema.RefList = GetRefList(Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Reference_Value_ID"]),ctx);
+                            schema.RefList = GetRefList(Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Reference_Value_ID"]), ctx);
                         }
                     }
                     if (ds.Tables[0].Rows[i]["AD_Reference_Value_ID"] != null &&
@@ -291,46 +309,46 @@ namespace VIS.Models
             }
         }
 
-        private List<InfoRefList> GetRefList(int AD_Reference_ID,Ctx ctx)
+        private List<InfoRefList> GetRefList(int AD_Reference_ID, Ctx ctx)
         {
-          
-                //String sql = "SELECT Value, Name FROM AD_Ref_List "
-                //    + "WHERE AD_Reference_ID=" + AD_Reference_ID + " AND IsActive='Y' ORDER BY 1";
-                //DataSet ds = null;
-               
-                List<InfoRefList> list = new List<InfoRefList>();
-                try
+
+            //String sql = "SELECT Value, Name FROM AD_Ref_List "
+            //    + "WHERE AD_Reference_ID=" + AD_Reference_ID + " AND IsActive='Y' ORDER BY 1";
+            //DataSet ds = null;
+
+            List<InfoRefList> list = new List<InfoRefList>();
+            try
+            {
+                ValueNamePair[] refList = MRefList.GetList(AD_Reference_ID, true, ctx);
+                //ds = DB.ExecuteDataset(sql, null, null);
+                InfoRefList itm = null;// new InfoRefList();
+                                       // itm.Key = "";
+                                       // itm.Value = "";
+                                       // list.Add(itm);
+                for (int i = 0; i < refList.Length; i++)
                 {
-                    ValueNamePair[] refList = MRefList.GetList(AD_Reference_ID, true, ctx);
-                    //ds = DB.ExecuteDataset(sql, null, null);
-                    InfoRefList itm = null;// new InfoRefList();
-                   // itm.Key = "";
-                   // itm.Value = "";
-                   // list.Add(itm);
-                    for (int i = 0; i < refList.Length; i++)
-                    {
-                        itm = new InfoRefList();
-                        itm.Key = refList[i].GetKeyID().ToString();//["Value"].ToString();
-                        itm.Value = refList[i].GetValue();// ds.Tables[0].Rows[i]["Name"].ToString();
+                    itm = new InfoRefList();
+                    itm.Key = refList[i].GetKeyID().ToString();//["Value"].ToString();
+                    itm.Value = refList[i].GetValue();// ds.Tables[0].Rows[i]["Name"].ToString();
 
-                        list.Add(itm);
-                    }
-                    refList = null;
+                    list.Add(itm);
                 }
-                catch (Exception)
-                {
+                refList = null;
+            }
+            catch (Exception)
+            {
 
-                }
+            }
 
-                return list;
+            return list;
 
-           
+
         }
 
 
 
 
-        public InfoData GetData(string sql, string tableName, int pageNo,VAdvantage.Utility.Ctx ctx)
+        public InfoData GetData(string sql, string tableName, int pageNo, VAdvantage.Utility.Ctx ctx)
         {
 
             InfoData _iData = new InfoData();
@@ -341,8 +359,8 @@ namespace VIS.Models
                 //sql = MRole.GetDefault(ctx).AddAccessSQL(sql, tableName,
                 //               MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
 
-                
-                int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM ( "+sql+" ) t",null,null));
+
+                int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM ( " + sql + " ) t", null, null));
                 int pageSize = 50;
                 PageSetting pSetting = new PageSetting();
                 pSetting.CurrentPage = pageNo;
@@ -352,7 +370,7 @@ namespace VIS.Models
                 _iData.pSetting = pSetting;
 
                 DataSet data = DBase.DB.ExecuteDatasetPaging(sql, pageNo, pageSize);
-                if (data == null )
+                if (data == null)
                 {
                     return null;
                 }
@@ -377,14 +395,14 @@ namespace VIS.Models
                 _iData.data = dyndata;
                 return _iData;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _iData.Error = ex.Message;
                 return _iData;
             }
         }
 
-        private string ParseContext(string res,Ctx ctx)
+        private string ParseContext(string res, Ctx ctx)
         {
             string token = string.Empty;
             string value = string.Empty;
