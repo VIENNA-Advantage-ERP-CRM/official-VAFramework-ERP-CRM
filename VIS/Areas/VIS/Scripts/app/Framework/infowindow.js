@@ -811,7 +811,8 @@
 
                 }
 
-                sql = VIS.MRole.addAccessSQL(sql, tabname, true, false);
+                // VIS0060: Handled case of alise name on Info window.
+                sql = VIS.MRole.addAccessSQL(sql, info.TableName, true, false);
 
                 if (whereClause.length > 1) {
                     if (info.FromClause.toUpperCase().indexOf("WHERE") > -1 || sql.toUpperCase().indexOf("WHERE") > -1) {
@@ -836,7 +837,7 @@
 
 
 
-              
+
                 var sqlOrderby = "";
 
                 if (info.OTHERCLAUSE != null) {
@@ -848,23 +849,23 @@
                         }
                         if (otherClause)
 
-                            if (String(otherClause).toUpperCase().indexOf("WHERE") > -1) {
-                                if (info.FromClause.toUpperCase().indexOf("WHERE") > -1
-                                    || whereClause.length > 1
-                                    || (validationCode != null && validationCode.length > 1)) {
-                                    otherClause = String(otherClause).replace("WHERE", "AND");
-                                }
+                            if (String(otherClause).toUpperCase().trim().startsWith("WHERE") && String(otherClause).toUpperCase().indexOf("WHERE") > -1) {
+                                //if (info.FromClause.toUpperCase().indexOf("WHERE") > -1
+                                //    || whereClause.length > 1
+                                //    || (validationCode != null && validationCode.length > 1)) {
+                                otherClause = String(otherClause).replace("WHERE", "AND");
+                                //}
 
                             }
                         sql += " " + otherClause;
                     }
                     else {
-                        if (String(info.OTHERCLAUSE).toUpperCase().indexOf("WHERE") > -1) {
-                            if (info.FromClause.toUpperCase().indexOf("WHERE") > -1
-                                || whereClause.length > 1
-                                || (validationCode != null && validationCode.length > 1)) {
-                                info.OTHERCLAUSE = String(info.OTHERCLAUSE).replace("WHERE", "AND");
-                            }
+                        if (String(info.OTHERCLAUSE).toUpperCase().trim().startsWith("WHERE") && String(info.OTHERCLAUSE).toUpperCase().indexOf("WHERE") > -1) {
+                            //if (info.FromClause.toUpperCase().indexOf("WHERE") > -1
+                            //    || whereClause.length > 1
+                            //    || (validationCode != null && validationCode.length > 1)) {
+                            info.OTHERCLAUSE = String(info.OTHERCLAUSE).replace("WHERE", "AND");
+                            //}
 
                         }
                         sql += " " + info.OTHERCLAUSE;
@@ -881,16 +882,16 @@
 
             }
 
-           
+
 
             if (selectedIDs != null && selectedIDs.length > 0) {
                 var sqlUnion = " UNION " + sql;
                 sqlUnion = sqlUnion.replace("'N' AS ordcol", "'Y' AS ordcol");
 
                 if (sql.toUpperCase().indexOf("WHERE") > -1) {
-                    sql += " AND " + tabname + "." + keyCol + " IN(" + selectedIDs + ")";
+                    sql += " AND " + info.TableName + "." + keyCol + " IN(" + selectedIDs + ")";
                     sql += sqlUnion;
-                    sql += " AND " + tabname + "." + keyCol + " NOT IN(" + selectedIDs + ")";
+                    sql += " AND " + info.TableName + "." + keyCol + " NOT IN(" + selectedIDs + ")";
                 }
                 //else {
                 //    sql += " WHERE " + tabname + "." + keyCol + " IN(" + selectedIDs + ")";
