@@ -38,12 +38,14 @@ namespace VIS.Controllers
                 Requery, srchCtrl, Validation, Window_ID)), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetCart(string sql, int pageNo, bool isCart, int windowID, int WarehouseID, int WarehouseToID, int LocatorID, int LocatorToID)
+        public JsonResult GetCart(int pageNo, bool isCart, int windowID, int WarehouseID, int WarehouseToID, int LocatorID, 
+            int LocatorToID, int BPartnerID,string srchCtrl, bool requery)
         {
             Ctx ctx = Session["ctx"] as Ctx;
+            List<InfoSearchCol> srchCtrls= JsonConvert.DeserializeObject<List<InfoSearchCol>>(srchCtrl);
             VIS.Models.InfoProductModel model = new VIS.Models.InfoProductModel();
-            sql = SecureEngineBridge.DecryptByClientKey(sql, ctx.GetSecureKey());
-            return Json(JsonConvert.SerializeObject(model.GetCart(sql, pageNo, isCart, windowID, WarehouseID, WarehouseToID, LocatorID, LocatorToID, ctx)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(model.GetCart(pageNo, isCart, windowID, WarehouseID, WarehouseToID, LocatorID, LocatorToID,BPartnerID
+                ,ctx, srchCtrls,requery)), JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

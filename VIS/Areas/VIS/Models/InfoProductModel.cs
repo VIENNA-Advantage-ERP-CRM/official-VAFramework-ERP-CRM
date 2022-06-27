@@ -276,7 +276,7 @@ namespace VIS.Models
 
                         if (srchCtrls[i].CtrlColumnName == "Value")
                         {
-                            whereClause += " AND UPPER(p." + srchCtrls[i].ColumnName + ") LIKE Upper('%" + srchValue.ToUpper()+"%')";
+                            whereClause += " AND UPPER(p." + srchCtrls[i].ColumnName + ") LIKE Upper('%" + srchValue.ToUpper() + "%')";
                         }
 
                         else if (srchCtrls[i].CtrlColumnName == "Name")
@@ -440,12 +440,106 @@ namespace VIS.Models
             }
         }
 
-        public InfoCartData GetCart(string sql, int pageNo, bool isCart, int windowID, int WarehouseID, int WarehouseToID, int LocatorID, int LocatorToID, VAdvantage.Utility.Ctx ctx)
+        public InfoCartData GetCart(int pageNo, bool isCart, int window_ID, int WarehouseID, int WarehouseToID,
+            int LocatorID, int LocatorToID,int BPartnerID, VAdvantage.Utility.Ctx ctx, List<InfoSearchCol> srchCtrls, bool requery)
         {
+            string query = "";
+            int M_Warehouse_ID = 0;
+            int M_WarehouseTo_ID = 0;
+            int M_Locator_ID = 0;
+            int M_LocatorTo_ID = 0;
+            string sql = "";
+            if (requery == true)
+            {
+                //var name = "";
+                //var ref = "";
+                //var date = "";
+                string srchValue = null;
+                //var drInv = null;
+                //var data = [];
+                for (var i = 0; i < srchCtrls.Count(); i++)
+                {
+                    srchValue = Convert.ToString(srchCtrls[i].Value);
+                    if (srchValue == null || srchValue.Count() == 0 || srchValue == "0")
+                    {
+                        continue;
+                    }
+
+                    if (srchCtrls[i].CtrlColumnName == "Name")
+                    {
+                        query += " AND upper(VAICNT_ScanName) LIKE '%" + srchValue.ToUpper() + "%' ";
+                    }
+
+                    else if (srchCtrls[i].CtrlColumnName == "Reference")
+                    {
+                        query += " AND upper(VAICNT_ReferenceNo) LIKE '%" + srchValue.ToUpper() + "%' ";
+                    }
+
+                    else if (srchCtrls[i].CtrlColumnName == "TrxFromDate")
+                    {
+                        var date = GlobalVariable.TO_DATE(Util.GetValueOfDateTime(srchValue), true);
+                        query += " AND DateTrx >= " + date;
+                    }
+
+                    else if (srchCtrls[i].CtrlColumnName == "TrxToDate")
+                    {
+                        var date = GlobalVariable.TO_DATE(Util.GetValueOfDateTime(srchValue), true);
+                        query += " AND DateTrx <= " + date;
+                    }
+                }
+                if (isCart)
+                {
+                    query += " AND VAICNT_TransactionType = 'OT' ";
+                }
+                else
+                {
+                    if (window_ID == 184)
+                    {   // JID_1026: System is not checking the document status of Order and requisition while loading cart on M_inout and internal use move line respectively
+                        query += " AND VAICNT_TransactionType = 'MR' and VAICNT_ReferenceNo in (SELECT DocumentNo from C_Order WHERE C_BPartner_ID = " + Util.GetValueOfInt(BPartnerID) + " AND DocStatus IN ('CO', 'CL'))";
+                    }
+                    else if (window_ID == 319 || window_ID == 170)
+                    {
+                        query += " AND VAICNT_TransactionType = 'IM' ";
+                        // extra parameters only for these windows
+                        M_Locator_ID = LocatorID;
+                        M_LocatorTo_ID = LocatorToID;
+                        M_Warehouse_ID = WarehouseID;
+                        M_WarehouseTo_ID = WarehouseToID;
+                    }
+                    else if (window_ID == 168)
+                    {
+                        query += " AND VAICNT_TransactionType = 'PI' ";
+                        M_Warehouse_ID = WarehouseID;
+                    }
+                    else if (window_ID == 169)
+                    {
+                        query += " AND VAICNT_TransactionType = 'SH' and VAICNT_ReferenceNo in (SELECT DocumentNo from C_Order WHERE  C_BPartner_ID = " + BPartnerID + " AND DocStatus IN ('CO'))";
+                    }
+                    else if (window_ID == 341)
+                    {
+                        query += " AND VAICNT_TransactionType = 'IU' AND VAICNT_ReferenceNo IN (SELECT DocumentNo FROM M_Requisition WHERE IsActive = 'Y' AND M_Warehouse_ID = " + M_Warehouse_ID + " AND DocStatus IN ('CO'))";
+                    }
+                    else
+                    {
+                        query += " AND VAICNT_TransactionType = 'OT' ";
+                    }
+                }
+            }
+            else
+            {
+                query += " AND VAICNT_InventoryCount_ID = -1";
+            }
+
+            sql = "SELECT VAICNT_ScanName,VAICNT_ReferenceNo,DateTrx,VAICNT_InventoryCount_ID FROM VAICNT_InventoryCount WHERE IsActive='Y' AND AD_Client_ID = "
+                + Util.GetValueOfInt(ctx.GetAD_Client_ID()) + query;
+
+
+
+
             InfoCartData _iData = new InfoCartData();
             try
             {
-                if (!isCart && windowID == 170)
+                if (!isCart && window_ID == 170)
                 {
                     StringBuilder sqlWhere = new StringBuilder("");
                     if (WarehouseID > 0)
@@ -461,7 +555,7 @@ namespace VIS.Models
                     sql += " AND VAICNT_ReferenceNo IN (SELECT DocumentNo FROM M_Requisition WHERE AD_Client_ID = " + ctx.GetAD_Client_ID() + " AND IsActive = 'Y' AND DocStatus IN ('CO') "
                         + sqlWhere.ToString() + ")";
                 }
-                else if (!isCart && windowID == 168)  // JID_1030: on physical inventory system does not check that the locator is of selected warehouse on Physiacl inventory header or not.
+                else if (!isCart && window_ID == 168)  // JID_1030: on physical inventory system does not check that the locator is of selected warehouse on Physiacl inventory header or not.
                 {
                     if (WarehouseID > 0)
                         sql += " AND VAICNT_ReferenceNo IN (SELECT Value FROM M_Locator WHERE IsActive = 'Y' AND M_Warehouse_ID = " + WarehouseID + ")";
