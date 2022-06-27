@@ -1169,10 +1169,10 @@
                             }
 
 
+                            if (lstLatestFiles && lstLatestFiles.length > 0) {
 
-
-
-                            UploadFiles();
+                                UploadFiles();
+                            }
                         });
                     }
 
@@ -1643,25 +1643,55 @@
             var fd = new FormData();
             fd.append("file", lstLatestFiles[currentFile].slice(currentFileChunkNo * chunkSize, currentFileChunkNo * chunkSize + Number(chunkSize)));
             xhr.open("POST", VIS.Application.contextUrl + "Email/SaveAttachmentinTemp?filename=" + lstLatestFiles[currentFile].name + "&folderKey=" + folder, false);
+
+            xhr.onload = function () {
+                if (xhr.readyState === xhr.DONE) {
+                    if (xhr.status === 200) {
+                        if (xhr.responseText && xhr.responseText.indexOf("ERROR") > -1) {
+                            var response = xhr.responseText;
+                            response = response.replace("ERROR: ", "");
+                            for (var itm in lstLatestFiles) {
+                                if ((String(response).indexOf(lstLatestFiles[itm].name)) > -1) {
+                                    lstLatestFiles.splice(itm, 1);
+                                }
+                            }
+                            VIS.ADialog.warn("FilesInvalidExtension", true, xhr.responseText);
+
+                            // FilesInvalidExtension
+
+                            showProgress(false);
+                            IsBusy(false);
+                            return;
+                        }
+                        var response = xhr.responseText;
+                        response = response.replace("ERROR: ", "");
+                        currentchunk++;
+                        currentFileChunkNo++;
+                        var totalFileChunk = parseInt(lstLatestFiles[currentFile].size / chunkSize);
+                        if (lstLatestFiles[currentFile].size % chunkSize > 0) {
+                            totalFileChunk++;
+                        }
+
+                        if (currentFileChunkNo == totalFileChunk) {
+                            currentFile++;
+                            currentFileChunkNo = 0;
+                        }
+
+                        if (currentchunk <= totalChunks) {
+                            setProgressValue(parseInt((currentchunk / totalChunks) * 100));
+                        }
+                        window.setTimeout(function () {
+                            TransferFile();
+                        }, 2);
+                    }
+                }
+            }
+
+
+
+
             xhr.send(fd);
-            currentchunk++;
-            currentFileChunkNo++;
-            var totalFileChunk = parseInt(lstLatestFiles[currentFile].size / chunkSize);
-            if (lstLatestFiles[currentFile].size % chunkSize > 0) {
-                totalFileChunk++;
-            }
 
-            if (currentFileChunkNo == totalFileChunk) {
-                currentFile++;
-                currentFileChunkNo = 0;
-            }
-
-            if (currentchunk <= totalChunks) {
-                setProgressValue(parseInt((currentchunk / totalChunks) * 100));
-            }
-            window.setTimeout(function () {
-                TransferFile();
-            }, 2);
 
         };
 

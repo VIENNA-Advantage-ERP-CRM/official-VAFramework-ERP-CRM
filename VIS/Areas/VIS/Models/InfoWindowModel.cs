@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using VAdvantage.Classes;
 using VAdvantage.DataBase;
@@ -606,28 +607,32 @@ namespace VIS.Models
                         }
                         if (otherClause != null && otherClause.Length > 0)
 
-                            if ((otherClause).ToUpper().IndexOf("WHERE") > -1)
+                            if ((otherClause).ToUpper().Trim().StartsWith("WHERE") && (otherClause).ToUpper().IndexOf("WHERE") > -1)
                             {
-                                if (info.FromClause.ToUpper().IndexOf("WHERE") > -1
-                                    || whereClause.Length > 1
-                                    || (validationCode != null && validationCode.Length > 1))
-                                {
-                                    otherClause = (otherClause).Replace("WHERE", "AND");
-                                }
+                                //if (info.FromClause.ToUpper().IndexOf("WHERE") > -1
+                                //    || whereClause.Length > 1
+                                //    || (validationCode != null && validationCode.Length > 1))
+                                //{
+                                Regex regex = new Regex("WHERE");
+                                otherClause = regex.Replace(otherClause, "AND", 1);
+                                //otherClause = (otherClause).Replace("WHERE", "AND");
+                                //}
 
                             }
                         sql += " " + otherClause;
                     }
                     else
                     {
-                        if ((info.OTHERCLAUSE).ToUpper().IndexOf("WHERE") > -1)
+                        if ((info.OTHERCLAUSE).ToUpper().Trim().StartsWith("WHERE") && (info.OTHERCLAUSE).ToUpper().IndexOf("WHERE") > -1)
                         {
-                            if (info.FromClause.ToUpper().IndexOf("WHERE") > -1
-                                || whereClause.Length > 1
-                                || (validationCode != null && validationCode.Length > 1))
-                            {
-                                info.OTHERCLAUSE = (info.OTHERCLAUSE).Replace("WHERE", "AND");
-                            }
+                            //if (info.FromClause.ToUpper().IndexOf("WHERE") > -1
+                            //    || whereClause.Length > 1
+                            //    || (validationCode != null && validationCode.Length > 1))
+                            //{
+                            Regex regex = new Regex("WHERE");
+                            info.OTHERCLAUSE = regex.Replace(info.OTHERCLAUSE, "AND", 1);
+                            //info.OTHERCLAUSE = (info.OTHERCLAUSE).Replace("WHERE", "AND");
+                            //}
 
                         }
                         sql += " " + info.OTHERCLAUSE;

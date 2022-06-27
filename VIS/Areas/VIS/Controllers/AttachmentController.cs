@@ -59,6 +59,23 @@ namespace VIS.Controllers
                 //    folder = folderKey.ToString();
                 //}
 
+                Ctx ctx = Session["ctx"] as Ctx;
+
+
+                var allowedExtensions = ctx.GetContext("#ALLOWED_FILE_EXTENSION");
+
+                if (!string.IsNullOrEmpty(allowedExtensions) && allowedExtensions.Length > 0)
+                {
+                    List<string> extensions = allowedExtensions.Split(',').ToList();
+                    string fileExtension = fileName.Substring(fileName.LastIndexOf("."));
+
+
+                    if (extensions.IndexOf(fileExtension) == -1)
+                    {
+                        return Json("ERROR: "+ fileName, JsonRequestBehavior.AllowGet);
+                    }
+                }
+
                 if (!Directory.Exists(Path.Combine(Server.MapPath("~/TempDownload"), folderKey)))
                 {
                     Directory.CreateDirectory(Path.Combine(Server.MapPath("~/TempDownload"), folderKey));
@@ -111,6 +128,46 @@ namespace VIS.Controllers
         {
             List<AttFileInfo> _files = JsonConvert.DeserializeObject<List<AttFileInfo>>(files);
             Ctx ctx = Session["ctx"] as Ctx;
+
+
+
+            var allowedExtensions = ctx.GetContext("#ALLOWED_FILE_EXTENSION");
+
+            List<string> invalidFiles = new List<string>();
+            for (int i = 0; i < _files.Count; i++)
+            {
+                if (!string.IsNullOrEmpty(allowedExtensions) && allowedExtensions.Length > 0)
+                {
+                    string fileName = _files[i].Name;
+                    List<string> extensions = allowedExtensions.Split(',').ToList();
+                    string fileExtension = fileName.Substring(fileName.LastIndexOf("."));
+
+
+                    if (extensions.IndexOf(fileExtension) == -1)
+                    {
+                        invalidFiles.Add(fileName);
+
+                    }
+                }
+            }
+            if (invalidFiles.Count > 0)
+            {
+                AttachmentInfo info = new AttachmentInfo();
+
+
+                if (invalidFiles.Count == 1)
+                {
+                    info.Error ="ERROR: "+invalidFiles[0];
+                    return Json(new { result = info }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    info.Error = "ERROR: " + string.Join(",", invalidFiles);
+                    return Json(new { result = info }, JsonRequestBehavior.AllowGet);
+                }
+            }
+
+
             AttachmentModel am = new AttachmentModel();
             return Json(new { result = am.CreateAttachmentEntries(_files, AD_Attachment_ID, folderKey, ctx, AD_Table_ID, Record_ID, fileLocation, NewRecord_ID, IsDMSAttachment) }, JsonRequestBehavior.AllowGet);
         }
