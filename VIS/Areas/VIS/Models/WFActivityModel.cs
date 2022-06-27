@@ -259,9 +259,9 @@ OR
                     //if (AD_Window_ID > 0 || (!string.IsNullOrEmpty(searchText) && searchText.Length > 0))
                     //if (whereClause.Length > 7)
                     //{
-                    //sql = @"SELECT COUNT(*) FROM (";
+                    sql = @"SELECT COUNT(*) FROM (";
                     //}
-                    sql += @"SELECT COUNT(a.AD_WF_Activity_ID)
+                    sql += @" SELECT a.* 
                             FROM AD_WF_Activity a
                             WHERE a.Processed  ='N'
                             AND a.WFState      ='OS'
@@ -325,7 +325,7 @@ OR
                     if (whereClause.Length > 7)
                     {
                         // Applied Role access on workflow Activities
-                        sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "a", true, true); // + @" )  MyTable ";
+                        sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "a", true, true) + @" )  MyTable ";
 
                         sql += fromClause;
                         sql += whereClause;
@@ -339,7 +339,7 @@ OR
                     else
                     {
                         // Applied Role access on workflow Activities
-                        sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "a", true, true); // + "  ) MyTable";
+                        sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "a", true, true) + "  ) MyTable";
                     }
 
                     info.count = Util.GetValueOfInt(DB.ExecuteScalar(sql));
@@ -1098,7 +1098,7 @@ OR
 
 
 
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "AD_WF_Activity", true, true);
+            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "AD_WF_Activity", true, false);
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
