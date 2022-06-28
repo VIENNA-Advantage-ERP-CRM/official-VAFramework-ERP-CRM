@@ -87,6 +87,28 @@ namespace VIS.Controllers
         {
             try
             {
+
+
+
+                Ctx ctx = Session["ctx"] as Ctx;
+
+
+                var allowedExtensions = ctx.GetContext("#ALLOWED_FILE_EXTENSION");
+
+                if (!string.IsNullOrEmpty(allowedExtensions) && allowedExtensions.Length > 0)
+                {
+                    List<string> extensions = allowedExtensions.Split(',').ToList();
+                    string fileExtension = fileName.Substring(fileName.LastIndexOf("."));
+
+
+                    if (extensions.IndexOf(fileExtension) == -1)
+                    {
+                        return "ERROR: " + fileName;
+                    }
+                }
+
+
+
                 if (!Directory.Exists(Path.Combine(Server.MapPath("~/TempDownload"), folderKey)))
                 {
                     Directory.CreateDirectory(Path.Combine(Server.MapPath("~/TempDownload"), folderKey));
