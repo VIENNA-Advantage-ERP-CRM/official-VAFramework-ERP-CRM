@@ -2042,7 +2042,7 @@
                 //    + " LEFT OUTER JOIN C_UOM c ON (p.C_UOM_ID=c.C_UOM_ID)";
                 for (var i = 0; i < srchCtrls.length; i++) {
                     srchValue = srchCtrls[i].Ctrl.getValue();
-                    if (srchValue == null || srchValue.length == 0 || srchValue == 0) {
+                    if (srchValue == null || srchValue.length == 0 || srchValue == 0 || !srchValue) {
                         srchCtrls[i]["Value"] = "";
                         continue;
                     }
@@ -2153,6 +2153,7 @@
                 for (var x = 0; x < Object.keys(srchCtrls).length; x++) {
                     var vals = {};
                     vals.CtrlColumnName = srchCtrls[x].CtrlColumnName;
+                    vals.ColumnName = srchCtrls[x].ColumnName;
                     vals.Value = srchCtrls[x].Value;
                     srhCtrls.push(vals);
                 }
