@@ -722,6 +722,12 @@
                 var appendAND = false;
                 for (var i = 0; i < srchCtrls.length; i++) {
                     srchValue = srchCtrls[i].Ctrl.getValue();
+
+
+                    if (srchValue == null || srchValue.length == 0 || (srchValue == 0 && srchCtrls[i].AD_Reference_ID != VIS.DisplayType.YesNo) || srchValue == -1 || !srchValue) {
+                        srchCtrls[i]["Value"] = null;
+                        continue;
+                    }
                     srchCtrls[i]["Value"] = srchValue;
                     //JID_0905:  In Case of Date Range, if From Date is not selected then check if To Date is selected
                     if (srchCtrls[i].AD_Reference_ID == VIS.DisplayType.Date && srchCtrls[i].IsRange) {
@@ -732,9 +738,7 @@
                     }
 
                     // Consider checkbox value only in case of true value
-                    if (srchValue == null || srchValue.length == 0 || (srchValue == 0 && srchCtrls[i].AD_Reference_ID != VIS.DisplayType.YesNo) || srchValue == -1 || !srchValue) {
-                        continue;
-                    }
+                    
 
                     {
                         //if (appendAND == true) {

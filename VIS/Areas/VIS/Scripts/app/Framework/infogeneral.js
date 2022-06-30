@@ -430,7 +430,7 @@
                 var appendAND = false;
                 for (var i = 0; i < srchCtrls.length; i++) {
                     srchValue = srchCtrls[i].Ctrl.getValue();
-                    if (srchValue == null || srchValue.length == 0 || srchValue == 0) {
+                    if (srchValue == null || srchValue.length == 0 || srchValue == 0 || !srchValue) {
                         srchCtrls[i]["Value"] = null;
                         continue;
                     }
