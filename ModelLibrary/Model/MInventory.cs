@@ -991,10 +991,10 @@ namespace VAdvantage.Model
                             }
                             //	Storage
                             MStorage storage = MStorage.Get(GetCtx(), line.GetM_Locator_ID(),
-                                    line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_TrxName());
+                                    line.GetM_Product_ID(), ma.GetM_AttributeSetInstance_ID(), Get_TrxName());
                             if (storage == null)
                                 storage = MStorage.GetCreate(GetCtx(), line.GetM_Locator_ID(),
-                                        line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_TrxName());
+                                        line.GetM_Product_ID(), ma.GetM_AttributeSetInstance_ID(), Get_TrxName());
                             //Decimal qtyNew = Decimal.Add(storage.GetQtyOnHand(), qtyDiff);
                             Decimal qtyNew = Decimal.Add(storage.GetQtyOnHand(), (ma.GetMovementQty() < 0 ? Decimal.Negate(ma.GetMovementQty()) : ma.GetMovementQty()));
                             log.Fine("Diff=" + qtyDiff
@@ -1066,7 +1066,7 @@ namespace VAdvantage.Model
                             sql.Append(@"SELECT DISTINCT First_VALUE(t.CurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
                             INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
                                     " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND t.M_Locator_ID = " + line.GetM_Locator_ID() +
-                                " AND t.M_Product_ID = " + line.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + line.GetM_AttributeSetInstance_ID());
+                                " AND t.M_Product_ID = " + line.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + ma.GetM_AttributeSetInstance_ID());
                             trxQty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
 
                             if (isContainerApplicable && line.Get_ColumnIndex("M_ProductContainer_ID") >= 0)
@@ -1080,7 +1080,7 @@ namespace VAdvantage.Model
                             //	Transaction
                             trx = new MTransaction(GetCtx(), line.GetAD_Org_ID(),
                                 MTransaction.MOVEMENTTYPE_InventoryIn,
-                                    line.GetM_Locator_ID(), line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(),
+                                    line.GetM_Locator_ID(), line.GetM_Product_ID(), ma.GetM_AttributeSetInstance_ID(),
                                      //qtyDiff, GetMovementDate(), Get_TrxName());
                                      (ma.GetMovementQty() < 0 ? Decimal.Negate(ma.GetMovementQty()) : ma.GetMovementQty()), GetMovementDate(), Get_TrxName());
                             trx.SetM_InventoryLine_ID(line.GetM_InventoryLine_ID());
