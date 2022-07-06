@@ -82,22 +82,37 @@ namespace VAdvantage.Model
                 ced.SetM_InOutLine_ID(cd.GetM_InOutLine_ID());
                 if (ced.GetM_InOutLine_ID() > 0)
                 {
-                    DataSet ds = DB.ExecuteDataset(@"SELECT M_InOut.IsSOTrx, M_InOut.IsReturnTrx FROM M_InOutLine
+                    if (costingCheck.inout != null)
+                    {
+                        ced.SetIsSOTrx(costingCheck.inout.IsSOTrx());
+                        ced.SetIsReturnTrx(costingCheck.inout.IsReturnTrx());
+                    }
+                    else
+                    {
+                        DataSet ds = DB.ExecuteDataset(@"SELECT M_InOut.IsSOTrx, M_InOut.IsReturnTrx FROM M_InOutLine
                                     INNER JOIN M_InOut ON M_InOutLine.M_InOut_ID = M_InOut.M_InOut_ID 
                                     WHERE M_InOutLine.M_InOutLine_ID = " + ced.GetM_InOutLine_ID(), null, cd.Get_Trx());
-                    if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-                    {
-                        ced.SetIsSOTrx(Util.GetValueOfString(ds.Tables[0].Rows[0]["IsSOTrx"]).Equals("N") ? false : true);
-                        ced.SetIsReturnTrx(Util.GetValueOfString(ds.Tables[0].Rows[0]["IsReturnTrx"]).Equals("N") ? false : true);
+                        if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                        {
+                            ced.SetIsSOTrx(Util.GetValueOfString(ds.Tables[0].Rows[0]["IsSOTrx"]).Equals("N") ? false : true);
+                            ced.SetIsReturnTrx(Util.GetValueOfString(ds.Tables[0].Rows[0]["IsReturnTrx"]).Equals("N") ? false : true);
+                        }
                     }
                 }
                 ced.SetM_InventoryLine_ID(cd.GetM_InventoryLine_ID());
                 if (ced.GetM_InventoryLine_ID() > 0)
                 {
-                    bool isInternalUse = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT M_Inventory.IsInternalUse  FROM M_InventoryLine
+                    if (costingCheck.inventory != null)
+                    {
+                        ced.SetIsInternalUse(costingCheck.inventory.IsInternalUse());
+                    }
+                    else
+                    {
+                        bool isInternalUse = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT M_Inventory.IsInternalUse  FROM M_InventoryLine
                                     INNER JOIN M_Inventory ON M_InventoryLine.M_Inventory_ID = M_Inventory.M_Inventory_ID 
                                     WHERE M_InventoryLine.M_InventoryLine_ID = " + ced.GetM_InventoryLine_ID(), null, cd.Get_Trx())).Equals("N") ? false : true;
-                    ced.SetIsInternalUse(isInternalUse);
+                        ced.SetIsInternalUse(isInternalUse);
+                    }
                 }
                 ced.SetM_MovementLine_ID(cd.GetM_MovementLine_ID());
                 ced.SetC_ProjectIssue_ID(cd.GetC_ProjectIssue_ID());
@@ -131,12 +146,14 @@ namespace VAdvantage.Model
                         }
                     }
                     _log.Info("Costing Engine : Error Occured during saving a record on Cost Queue Transaction -> " + error);
+                    costingCheck.errorMessage += "Cost Queue Transaction not created, " + error;
                     return false;
                 }
             }
             catch (Exception ex)
             {
                 _log.Info("Costing Engine : Exception Occured during saving a record on Cost Queue Transaction " + ex.Message);
+                costingCheck.errorMessage += "Exception at Cost Queue Transaction, " + ex.Message;
                 return false;
             }
             return true;

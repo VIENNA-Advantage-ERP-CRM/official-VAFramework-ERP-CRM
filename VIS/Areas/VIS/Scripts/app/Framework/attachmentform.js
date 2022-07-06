@@ -514,13 +514,13 @@
                     fileBrowser.change(function () {
                         //VIS.ADialog.info('file Uploaded ');
                         AppendFile(this);
-                        
+
                     });
-                    fileBrowser.click(function () {                        
+                    fileBrowser.click(function () {
                         this.value = null;
                     });
 
-                   
+
                     var btnUpload = $("<a title='" + VIS.Msg.getMsg('SelectFile') + "' class='vis-attach-ico'><i class='fa fa-paperclip' aria-hidden='true'></i></a>");
                     // btnUpload.append($("<span class='plus-ico'>"));
                     // btnUpload.append(VIS.Msg.getMsg('Upload'));
@@ -528,7 +528,7 @@
                     dHeaderRight.append(btnUpload);
 
                     //open file dialog
-                    btnUpload.on("click", function () {                       
+                    btnUpload.on("click", function () {
                         fileBrowser.trigger('click');
                     });
 
@@ -766,11 +766,24 @@
 
         var AppendFile = function (sender) {
             var invalidFiles = [];
+            var invalidExtensions = [];
             for (var i = 0; i < sender.files.length; i++) {
                 file = sender.files[i];
                 if (file == undefined) {
                     return;
                 }
+
+                var allowedExtensions = VIS.context.getContext("#ALLOWED_FILE_EXTENSION");
+
+                if (allowedExtensions && allowedExtensions.length > 0) {
+                    if (allowedExtensions.split(',').indexOf('.' + file.name.split('.').pop()) == -1) {
+                        invalidExtensions.push(file.name);
+                        continue;
+                    }
+                }
+
+
+
                 if (file.name.indexOf('&') > -1 || file.name.indexOf('?') > -1 || file.name.indexOf('#') > -1 || file.name.indexOf('/') > -1 || file.name.indexOf('\\') > -1) {
 
                     invalidFiles.push(file.name);
@@ -897,6 +910,24 @@
                 }
                 resString += ' invalid name. Please change the file name and try again.';
                 VIS.ADialog.info(resString);
+            }
+
+            if (invalidExtensions && invalidExtensions.length > 0) {
+                var FileNames = '';
+                for (var item in invalidExtensions) {
+                    if (FileNames.length > 0)
+                        FileNames += ', ';
+                    FileNames += invalidExtensions[item].toString() ;
+                }
+
+                var resString = null;
+                if (invalidExtensions.length == 1) {
+                    resString += 'FileInvalidExtension';
+                }
+                else {
+                    resString += 'FilesInvalidExtension';
+                }
+                VIS.ADialog.warn(resString, true, FileNames);
             }
         };
 
@@ -1219,37 +1250,59 @@
             var fd = new FormData();
             fd.append("file", lstLatestFiles[currentFile].slice(currentFileChunkNo * chunkSize, currentFileChunkNo * chunkSize + Number(chunkSize)));
             xhr.open("POST", VIS.Application.contextUrl + "Attachment/SaveFileinTemp/?filename=" + lstLatestFiles[currentFile].name + "&folderKey=" + folder, false);
-            xhr.send(fd);
-            currentchunk++;
-            currentFileChunkNo++;
-            var totalFileChunk = parseInt(lstLatestFiles[currentFile].size / chunkSize);
-            if (lstLatestFiles[currentFile].size % chunkSize > 0) {
-                totalFileChunk++;
-            }
 
-            if (currentFileChunkNo == totalFileChunk) {
-                currentFile++;
-                currentFileChunkNo = 0;
-            }
-            if (currentchunk <= totalChunks) {
-                setProgressValue(parseInt((currentchunk / totalChunks) * 80));
-            }
-            window.setTimeout(function () {
-                TransferFile();
-            }, 2);
+            xhr.onload = function () {
+                if (xhr.readyState === xhr.DONE) {
+                    if (xhr.status === 200) {
+                        if (xhr.responseText && xhr.responseText.indexOf("ERROR") > -1) {
+                            var response = xhr.responseText;
+                            response = response.replace("ERROR: ", "");
+                            for (var itm in lstLatestFiles) {
+                                if ((String(response).indexOf(lstLatestFiles[itm].name)) > -1) {
+                                    lstLatestFiles.splice(itm, 1);
+                                }
+                            }
+                            VIS.ADialog.warn("FilesInvalidExtension", true, xhr.responseText);
 
+                           // FilesInvalidExtension
+
+                            showProgress(false);
+                            bsyDiv[0].style.visibility = "hidden";
+                            return;
+                        }
+
+
+
+                        currentchunk++;
+                        currentFileChunkNo++;
+                        var totalFileChunk = parseInt(lstLatestFiles[currentFile].size / chunkSize);
+                        if (lstLatestFiles[currentFile].size % chunkSize > 0) {
+                            totalFileChunk++;
+                        }
+
+                        if (currentFileChunkNo == totalFileChunk) {
+                            currentFile++;
+                            currentFileChunkNo = 0;
+                        }
+                        if (currentchunk <= totalChunks) {
+                            setProgressValue(parseInt((currentchunk / totalChunks) * 80));
+                        }
+                        window.setTimeout(function () {
+                            TransferFile();
+                        }, 2);
+
+                    }
+                }
+            };
 
             //xhr.onreadystatechange = function () {
-            //    debugger;
-            //    if (xhr.readyState == 4 && xhr.status == 200) {
-            //        //document.getElementById("myDiv").innerHTML = xmlhttp.responseText;
-            //        currentchunk++;
-            //        setProgressValue(parseInt((currentchunk / totalChunks) * 80));
-            //        TransferFile(chunkSize, totalChunks);
-
+            //    if (xhr.readyState === 4) {
+            //        callback(xhr.response);
             //    }
             //}
 
+            xhr.send(fd);
+            
 
         };
 
@@ -1283,7 +1336,7 @@
             }
 
             var isRunning = false;
-            for (var i = 0; i < totalChunksSF ; i++) {
+            for (var i = 0; i < totalChunksSF; i++) {
                 if (i == totalChunksSF - 1) {
                     if (file.size % chunkSize > 0) {
                         chunkSize = file.size % chunkSize

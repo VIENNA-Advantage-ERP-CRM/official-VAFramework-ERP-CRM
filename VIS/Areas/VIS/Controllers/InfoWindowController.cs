@@ -23,29 +23,35 @@ namespace VIS.Controllers
         [AjaxSessionFilterAttribute]
         public JsonResult GetSearchColumn(int Ad_InfoWindow_ID)
         {
-            Ctx ctx=Session["ctx"] as Ctx;
+            Ctx ctx = Session["ctx"] as Ctx;
             InfoWindowModel model = new InfoWindowModel();
             //model.GetSchema(Ad_InfoWindow_ID);
-            return Json(new { result =model.GetSchema(Ad_InfoWindow_ID,ctx )}, JsonRequestBehavior.AllowGet);
+            return Json(new { result = model.GetSchema(Ad_InfoWindow_ID, ctx) }, JsonRequestBehavior.AllowGet);
         }
 
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]
         [HttpPost]
         [ValidateInput(false)]
-        public JsonResult GetData(string sql,string tableName,int pageNo)
+        public JsonResult GetData(string tableName, int pageNo, string SelectedIDs
+            , bool Requery, int InfoID, string ValidationCode, string SrchCtrls)
         {
             InfoWindowModel model = new InfoWindowModel();
+            Ctx ctx = Session["ctx"] as Ctx;
+            //Info inf = JsonConvert.DeserializeObject<Info>(Infos);
+            Info inf = model.GetSchema(InfoID, ctx);
+            List<InfoSearchCol> SrchCtrl = JsonConvert.DeserializeObject<List<InfoSearchCol>>(SrchCtrls);
             //model.GetSchema(Ad_InfoWindow_ID);
-            return Json(JsonConvert.SerializeObject(model.GetData(sql, tableName,pageNo, Session["ctx"] as Ctx)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(model.GetData(tableName, pageNo, ctx,
+                SelectedIDs, Requery, inf, ValidationCode, SrchCtrl)), JsonRequestBehavior.AllowGet);
         }
 
         // Added by Mohit to get info window id on the basis of search key passed.
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]
         public JsonResult GetInfoWindowID(string InfoSearchKey)
-        {            
-            InfoWindowModel model = new InfoWindowModel();            
+        {
+            InfoWindowModel model = new InfoWindowModel();
             return Json(new { result = model.GetInfoWindowID(InfoSearchKey) }, JsonRequestBehavior.AllowGet);
         }
     }

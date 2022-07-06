@@ -1,7 +1,10 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 using Newtonsoft.Json;
 using VAdvantage.Utility;
 using VIS.Filters;
+using VIS.Models;
+
 namespace VIS.Controllers
 {
     public class InfoGeneralController : Controller
@@ -11,7 +14,7 @@ namespace VIS.Controllers
             return View();
         }
         [AjaxAuthorizeAttribute]
-        [AjaxSessionFilterAttribute]       
+        [AjaxSessionFilterAttribute]
         public JsonResult GetSearchColumns(string tableName, string ad_Language, bool isBaseLangage)
         {
             //Change by mohit-to handle translation in general info.
@@ -34,18 +37,22 @@ namespace VIS.Controllers
 
             VIS.Models.InfoGeneralModel model = new Models.InfoGeneralModel();
 
-            return Json(new { result = model.GetDisplayCol(AD_Table_ID, AD_Language,IsBaseLangage,TableName) }, JsonRequestBehavior.AllowGet);
+            return Json(new { result = model.GetDisplayCol(AD_Table_ID, AD_Language, IsBaseLangage, TableName) }, JsonRequestBehavior.AllowGet);
             //return Json(new { result = "ok" }, JsonRequestBehavior.AllowGet);
         }
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]
         [HttpPost]
         [ValidateInput(false)]
-        public JsonResult GetData(string sql, string tableName, int pageNo)
+        public JsonResult GetData(string TableName, int AD_Table_ID, int PageNo, string KeyCol, string SelectedIDs,
+            bool Requery, string SrchCtrl, string ValidationCode)
         {
             VIS.Models.InfoGeneralModel model = new Models.InfoGeneralModel();
+
+            List<InfoSearchCol> srchCtrls = JsonConvert.DeserializeObject<List<InfoSearchCol>>(SrchCtrl);
             //model.GetSchema(Ad_InfoWindow_ID);
-            return Json(JsonConvert.SerializeObject(model.GetData(sql, tableName,pageNo, Session["ctx"] as Ctx)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(model.GetData(TableName, AD_Table_ID, PageNo, Session["ctx"] as Ctx, KeyCol,
+                SelectedIDs, Requery, srchCtrls, ValidationCode)), JsonRequestBehavior.AllowGet);
         }
 
     }
