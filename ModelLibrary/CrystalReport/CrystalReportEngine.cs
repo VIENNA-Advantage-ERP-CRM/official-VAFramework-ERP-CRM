@@ -1177,7 +1177,8 @@ namespace VAdvantage.CrystalReport
                                                 }
                                             }
                                         }
-                                        else if (paramValue != null && paramValue.ToString().Contains(','))
+                                        else if ((paramValue != null && paramValue.ToString().Contains(','))
+                                          || Convert.ToInt32(dsPara.Tables[0].Rows[c]["AD_Reference_ID"]) == DisplayType.MultiKey)
                                         {
                                             sb.Append(paramName).Append(" IN (")
                                                 .Append(paramValue.ToString()).Append(")");
