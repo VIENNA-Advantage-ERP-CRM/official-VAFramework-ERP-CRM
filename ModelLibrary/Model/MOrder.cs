@@ -2225,7 +2225,7 @@ namespace VAdvantage.Model
                     list.Add(new MInOutLine(GetCtx(), dr, Get_TrxName()));
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
 
                 log.Log(Level.SEVERE, "MOrder" + sql, e);
@@ -4107,7 +4107,9 @@ namespace VAdvantage.Model
                         MInvoice invoice = CreateInvoice(dt, shipment, tSet);
                         if (invoice == null)
                         {
-                            Get_Trx().Rollback();
+                            // VIS0008 POS Checked if trx is null
+                            if (Get_Trx() != null)
+                                Get_Trx().Rollback();
                             return DocActionVariables.STATUS_INVALID;
                         }
 
@@ -4122,7 +4124,8 @@ namespace VAdvantage.Model
                             Info.Append(" (").Append(msg).Append(")");
 
                         // for POS Doctype we need to create payment with invoice
-                        if (invoice != null)
+                        // VIS0008 POS, additional check to not create payment as payments are created from POS
+                        if (invoice != null && (Util.GetValueOfInt(GetVAPOS_POSTerminal_ID()) == 0))
                         {
                             if (MDocType.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO))
                             {
@@ -5186,162 +5189,136 @@ namespace VAdvantage.Model
                 {
 
                     MOrderLine oLine = oLines[i];
-                    if (Util.GetValueOfInt(GetVAPOS_POSTerminal_ID()) > 0)
+                    #region POS Code Commented VIS0008 POS Removed check for POS orders from POS application, shipment creation according to standard logic
+                    //if (Util.GetValueOfInt(GetVAPOS_POSTerminal_ID()) > 0)
+                    //{
+                    //    #region POS Terminal > 0
+                    //    MInOutLine ioLine = new MInOutLine(shipment);
+                    //    //	Qty = Ordered - Delivered
+                    //    Decimal MovementQty = Decimal.Subtract(oLine.GetQtyOrdered(), oLine.GetQtyDelivered());
+                    //    //	Location
+                    //    int M_Locator_ID = MStorage.GetM_Locator_ID(oLine.GetM_Warehouse_ID(),
+                    //            oLine.GetM_Product_ID(), oLine.GetM_AttributeSetInstance_ID(),
+                    //            MovementQty, Get_TrxName());
+                    //    if (M_Locator_ID == 0)      //	Get default Location
+                    //    {
+                    //        MProduct product = ioLine.GetProduct();
+                    //        int M_Warehouse_ID = oLine.GetM_Warehouse_ID();
+                    //        M_Locator_ID = MProductLocator.GetFirstM_Locator_ID(product, M_Warehouse_ID);
+                    //        if (M_Locator_ID == 0)
+                    //        {
+                    //            wh = MWarehouse.Get(GetCtx(), M_Warehouse_ID);
+                    //            M_Locator_ID = wh.GetDefaultM_Locator_ID();
+                    //        }
+                    //    }
+                    //    //
+                    //    ioLine.SetOrderLine(oLine, M_Locator_ID, MovementQty);
+                    //    ioLine.SetQty(MovementQty);
+                    //    if (oLine.GetQtyEntered().CompareTo(oLine.GetQtyOrdered()) != 0)
+                    //    {
+                    //        ioLine.SetQtyEntered(Decimal.Multiply(MovementQty, (Decimal.Divide(oLine.GetQtyEntered(), (oLine.GetQtyOrdered())))));
+                    //    }
+                    //    if (!ioLine.Save(Get_TrxName()))
+                    //    {
+                    //        ValueNamePair pp = VLogger.RetrieveError();
+                    //        if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
+                    //            _processMsg = "Could not create Shipment Line. " + pp.GetName();
+                    //        else
+                    //            _processMsg = "Could not create Shipment Line";
+                    //        return null;
+                    //    }
+                    //    #endregion
+                    //}
+                    //else
+                    //{
+                    #endregion
+                    // when order line created with charge OR with Product which is not of "item type" then not to create shipment line against this.
+                    MProduct oproduct = oLine.GetProduct();
+                    string allowNonItem = Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem"));
+
+                    if (String.IsNullOrEmpty(allowNonItem))
                     {
-                        #region POS Terminal > 0
-                        MInOutLine ioLine = new MInOutLine(shipment);
-                        //	Qty = Ordered - Delivered
-                        Decimal MovementQty = Decimal.Subtract(oLine.GetQtyOrdered(), oLine.GetQtyDelivered());
-                        //	Location
-                        int M_Locator_ID = MStorage.GetM_Locator_ID(oLine.GetM_Warehouse_ID(),
-                                oLine.GetM_Product_ID(), oLine.GetM_AttributeSetInstance_ID(),
-                                MovementQty, Get_TrxName());
-                        if (M_Locator_ID == 0)      //	Get default Location
-                        {
-                            MProduct product = ioLine.GetProduct();
-                            int M_Warehouse_ID = oLine.GetM_Warehouse_ID();
-                            M_Locator_ID = MProductLocator.GetFirstM_Locator_ID(product, M_Warehouse_ID);
-                            if (M_Locator_ID == 0)
-                            {
-                                wh = MWarehouse.Get(GetCtx(), M_Warehouse_ID);
-                                M_Locator_ID = wh.GetDefaultM_Locator_ID();
-                            }
-                        }
-                        //
-                        ioLine.SetOrderLine(oLine, M_Locator_ID, MovementQty);
-                        ioLine.SetQty(MovementQty);
-                        if (oLine.GetQtyEntered().CompareTo(oLine.GetQtyOrdered()) != 0)
-                        {
-                            ioLine.SetQtyEntered(Decimal.Multiply(MovementQty, (Decimal.Divide(oLine.GetQtyEntered(), (oLine.GetQtyOrdered())))));
-                        }
-                        if (!ioLine.Save(Get_TrxName()))
-                        {
-                            ValueNamePair pp = VLogger.RetrieveError();
-                            if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
-                                _processMsg = "Could not create Shipment Line. " + pp.GetName();
-                            else
-                                _processMsg = "Could not create Shipment Line";
-                            return null;
-                        }
-                        #endregion
+                        allowNonItem = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsAllowNonItem FROM AD_Client WHERE AD_Client_ID = " + GetAD_Client_ID(), null, Get_Trx()));
                     }
-                    else
+
+                    //Create Lines for Charge / (Resource - Service - Expense) type product based on setting on Tenant to "Allow Non Item type".
+                    if ((oproduct == null || !(oproduct != null && oproduct.GetProductType() == MProduct.PRODUCTTYPE_Item))
+                        && (allowNonItem.Equals("N")))
+                        continue;
+
+                    //
+                    int M_Warehouse_ID = oLine.GetM_Warehouse_ID();
+                    wh = MWarehouse.Get(GetCtx(), M_Warehouse_ID);
+
+                    MInOutLine ioLine = new MInOutLine(shipment);
+
+                    //	Qty = Ordered - Delivered
+                    Decimal MovementQty = Decimal.Subtract(oLine.GetQtyOrdered(), oLine.GetQtyDelivered());
+
+                    //	Location
+                    int M_Locator_ID = MStorage.GetM_Locator_ID(oLine.GetM_Warehouse_ID(),
+                            oLine.GetM_Product_ID(), oLine.GetM_AttributeSetInstance_ID(),
+                            MovementQty, Get_TrxName());
+                    if (M_Locator_ID == 0)      //	Get default Location
                     {
-                        // when order line created with charge OR with Product which is not of "item type" then not to create shipment line against this.
-                        MProduct oproduct = oLine.GetProduct();
-                        string allowNonItem = Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem"));
-
-                        if (String.IsNullOrEmpty(allowNonItem))
+                        MProduct product = ioLine.GetProduct();
+                        M_Locator_ID = MProductLocator.GetFirstM_Locator_ID(product, M_Warehouse_ID);
+                        if (M_Locator_ID == 0)
                         {
-                            allowNonItem = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsAllowNonItem FROM AD_Client WHERE AD_Client_ID = " + GetAD_Client_ID(), null, Get_Trx()));
+                            //wh = MWarehouse.Get(GetCtx(), M_Warehouse_ID);
+                            M_Locator_ID = wh.GetDefaultM_Locator_ID();
                         }
+                    }
 
-                        //Create Lines for Charge / (Resource - Service - Expense) type product based on setting on Tenant to "Allow Non Item type".
-                        if ((oproduct == null || !(oproduct != null && oproduct.GetProductType() == MProduct.PRODUCTTYPE_Item))
-                            && (allowNonItem.Equals("N")))
-                            continue;
+                    Decimal? QtyAvail = MStorage.GetQtyAvailable(M_Warehouse_ID, oLine.GetM_Product_ID(), oLine.GetM_AttributeSetInstance_ID(), Get_Trx());
+                    if (MovementQty > 0)
+                        QtyAvail += MovementQty;
 
-                        //
-                        int M_Warehouse_ID = oLine.GetM_Warehouse_ID();
-                        wh = MWarehouse.Get(GetCtx(), M_Warehouse_ID);
-
-                        MInOutLine ioLine = new MInOutLine(shipment);
-
-                        //	Qty = Ordered - Delivered
-                        Decimal MovementQty = Decimal.Subtract(oLine.GetQtyOrdered(), oLine.GetQtyDelivered());
-
-                        //	Location
-                        int M_Locator_ID = MStorage.GetM_Locator_ID(oLine.GetM_Warehouse_ID(),
-                                oLine.GetM_Product_ID(), oLine.GetM_AttributeSetInstance_ID(),
-                                MovementQty, Get_TrxName());
-                        if (M_Locator_ID == 0)      //	Get default Location
+                    String sql = "SELECT SUM(QtyOnHand) FROM M_Storage s INNER JOIN M_Locator l ON (s.M_Locator_ID=l.M_Locator_ID) WHERE s.M_Product_ID=" + oLine.GetM_Product_ID() + " AND l.M_Warehouse_ID=" + M_Warehouse_ID;
+                    if (oLine.GetM_AttributeSetInstance_ID() != 0)
+                    {
+                        sql += " AND M_AttributeSetInstance_ID=" + oLine.GetM_AttributeSetInstance_ID();
+                    }
+                    // check onhand qty on specified locator
+                    if (M_Locator_ID > 0)
+                    {
+                        sql += " AND l.M_Locator_ID = " + M_Locator_ID;
+                    }
+                    OnHandQty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_Trx()));
+                    if (wh.IsDisallowNegativeInv())
+                    {
+                        if (oLine.GetQtyOrdered() > QtyAvail && (DocSubTypeSO == "WR" || DocSubTypeSO == "WP"))
                         {
-                            MProduct product = ioLine.GetProduct();
-                            M_Locator_ID = MProductLocator.GetFirstM_Locator_ID(product, M_Warehouse_ID);
-                            if (M_Locator_ID == 0)
+                            #region In Case of -- WR (WareHouse Order) / WP (POS Order)
+                            // when qty avialble on warehouse is less than qty ordered, at that time we can create shipment in Drafetd stage, to be completed mnually
+                            _processMsg = CreateShipmentLineContainer(shipment, ioLine, oLine, M_Locator_ID, MovementQty, wh.IsDisallowNegativeInv(), oproduct);
+
+                            // when OnHand qty is less than qtyOrdered then not to create shipment (need to be rollback)
+                            if (!String.IsNullOrEmpty(_processMsg) && OnHandQty < oLine.GetQtyOrdered())
                             {
-                                //wh = MWarehouse.Get(GetCtx(), M_Warehouse_ID);
-                                M_Locator_ID = wh.GetDefaultM_Locator_ID();
+                                return null;
                             }
-                        }
 
-                        Decimal? QtyAvail = MStorage.GetQtyAvailable(M_Warehouse_ID, oLine.GetM_Product_ID(), oLine.GetM_AttributeSetInstance_ID(), Get_Trx());
-                        if (MovementQty > 0)
-                            QtyAvail += MovementQty;
-
-                        String sql = "SELECT SUM(QtyOnHand) FROM M_Storage s INNER JOIN M_Locator l ON (s.M_Locator_ID=l.M_Locator_ID) WHERE s.M_Product_ID=" + oLine.GetM_Product_ID() + " AND l.M_Warehouse_ID=" + M_Warehouse_ID;
-                        if (oLine.GetM_AttributeSetInstance_ID() != 0)
-                        {
-                            sql += " AND M_AttributeSetInstance_ID=" + oLine.GetM_AttributeSetInstance_ID();
-                        }
-                        // check onhand qty on specified locator
-                        if (M_Locator_ID > 0)
-                        {
-                            sql += " AND l.M_Locator_ID = " + M_Locator_ID;
-                        }
-                        OnHandQty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_Trx()));
-                        if (wh.IsDisallowNegativeInv())
-                        {
-                            if (oLine.GetQtyOrdered() > QtyAvail && (DocSubTypeSO == "WR" || DocSubTypeSO == "WP"))
-                            {
-                                #region In Case of -- WR (WareHouse Order) / WP (POS Order)
-                                // when qty avialble on warehouse is less than qty ordered, at that time we can create shipment in Drafetd stage, to be completed mnually
-                                _processMsg = CreateShipmentLineContainer(shipment, ioLine, oLine, M_Locator_ID, MovementQty, wh.IsDisallowNegativeInv(), oproduct);
-
-                                // when OnHand qty is less than qtyOrdered then not to create shipment (need to be rollback)
-                                if (!String.IsNullOrEmpty(_processMsg) && OnHandQty < oLine.GetQtyOrdered())
-                                {
-                                    return null;
-                                }
-
-                                //ioLine.SetOrderLine(oLine, M_Locator_ID, MovementQty);
-                                //ioLine.SetQty(MovementQty);
-                                //if (oLine.GetQtyEntered().CompareTo(oLine.GetQtyOrdered()) != 0)
-                                //{
-                                //    //ioLine.SetQtyEntered(Decimal.Multiply(MovementQty,(oLine.getQtyEntered()).divide(oLine.getQtyOrdered(), 6, Decimal.ROUND_HALF_UP));
-                                //    ioLine.SetQtyEntered(Decimal.Multiply(MovementQty, (Decimal.Divide(oLine.GetQtyEntered(), (oLine.GetQtyOrdered())))));
-                                //}
-                                //if (!ioLine.Save(Get_TrxName()))
-                                //{
-                                //    //_processMsg = "Could not create Shipment Line";
-                                //    //return null;
-                                //}
-                                //	Manually Process Shipment
-                                IsDrafted = true;
-                                #endregion
-                            }
-                            else
-                            {
-                                #region In Case of -- Credit Order / PePay Order / WareHouse Order / POS Order
-
-                                _processMsg = CreateShipmentLineContainer(shipment, ioLine, oLine, M_Locator_ID, MovementQty, wh.IsDisallowNegativeInv(), oproduct);
-                                if (!String.IsNullOrEmpty(_processMsg))
-                                {
-                                    return null;
-                                }
-
-                                //ioLine.SetOrderLine(oLine, M_Locator_ID, MovementQty);
-                                //ioLine.SetQty(MovementQty);
-                                //if (oLine.GetQtyEntered().CompareTo(oLine.GetQtyOrdered()) != 0)
-                                //{
-                                //    //ioLine.SetQtyEntered(Decimal.Multiply(MovementQty,(oLine.getQtyEntered()).divide(oLine.getQtyOrdered(), 6, Decimal.ROUND_HALF_UP));
-                                //    ioLine.SetQtyEntered(Decimal.Multiply(MovementQty, (Decimal.Divide(oLine.GetQtyEntered(), (oLine.GetQtyOrdered())))));
-                                //}
-                                //if (!ioLine.Save(Get_TrxName()))
-                                //{
-                                //    ValueNamePair pp = VLogger.RetrieveError();
-                                //    if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
-                                //        _processMsg = "Could not create Shipment Line. " + pp.GetName();
-                                //    else
-                                //        _processMsg = "Could not create Shipment Line";
-                                //    return null;
-                                //}
-                                #endregion
-                            }
+                            //ioLine.SetOrderLine(oLine, M_Locator_ID, MovementQty);
+                            //ioLine.SetQty(MovementQty);
+                            //if (oLine.GetQtyEntered().CompareTo(oLine.GetQtyOrdered()) != 0)
+                            //{
+                            //    //ioLine.SetQtyEntered(Decimal.Multiply(MovementQty,(oLine.getQtyEntered()).divide(oLine.getQtyOrdered(), 6, Decimal.ROUND_HALF_UP));
+                            //    ioLine.SetQtyEntered(Decimal.Multiply(MovementQty, (Decimal.Divide(oLine.GetQtyEntered(), (oLine.GetQtyOrdered())))));
+                            //}
+                            //if (!ioLine.Save(Get_TrxName()))
+                            //{
+                            //    //_processMsg = "Could not create Shipment Line";
+                            //    //return null;
+                            //}
+                            //	Manually Process Shipment
+                            IsDrafted = true;
+                            #endregion
                         }
                         else
                         {
-                            #region when disallow is FALSE
+                            #region In Case of -- Credit Order / PePay Order / WareHouse Order / POS Order
+
                             _processMsg = CreateShipmentLineContainer(shipment, ioLine, oLine, M_Locator_ID, MovementQty, wh.IsDisallowNegativeInv(), oproduct);
                             if (!String.IsNullOrEmpty(_processMsg))
                             {
@@ -5367,6 +5344,34 @@ namespace VAdvantage.Model
                             #endregion
                         }
                     }
+                    else
+                    {
+                        #region when disallow is FALSE
+                        _processMsg = CreateShipmentLineContainer(shipment, ioLine, oLine, M_Locator_ID, MovementQty, wh.IsDisallowNegativeInv(), oproduct);
+                        if (!String.IsNullOrEmpty(_processMsg))
+                        {
+                            return null;
+                        }
+
+                        //ioLine.SetOrderLine(oLine, M_Locator_ID, MovementQty);
+                        //ioLine.SetQty(MovementQty);
+                        //if (oLine.GetQtyEntered().CompareTo(oLine.GetQtyOrdered()) != 0)
+                        //{
+                        //    //ioLine.SetQtyEntered(Decimal.Multiply(MovementQty,(oLine.getQtyEntered()).divide(oLine.getQtyOrdered(), 6, Decimal.ROUND_HALF_UP));
+                        //    ioLine.SetQtyEntered(Decimal.Multiply(MovementQty, (Decimal.Divide(oLine.GetQtyEntered(), (oLine.GetQtyOrdered())))));
+                        //}
+                        //if (!ioLine.Save(Get_TrxName()))
+                        //{
+                        //    ValueNamePair pp = VLogger.RetrieveError();
+                        //    if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
+                        //        _processMsg = "Could not create Shipment Line. " + pp.GetName();
+                        //    else
+                        //        _processMsg = "Could not create Shipment Line";
+                        //    return null;
+                        //}
+                        #endregion
+                    }
+                    //}
                 }
 
                 /// Change Here for Warehouse and Home Delivery Orders In case of POS Orders
@@ -5763,7 +5768,7 @@ namespace VAdvantage.Model
                                 iLine.SetQtyEntered(iLine.GetQtyInvoiced());
                             else
                                 iLine.SetQtyEntered(Decimal.Multiply(iLine.GetQtyInvoiced(), (Decimal.Divide(oLine.GetQtyEntered(), oLine.GetQtyOrdered()))));
-                            
+
                             //190 - Get Print description and set
                             if (iLine.Get_ColumnIndex("PrintDescription") >= 0 && oLine.Get_ColumnIndex("PrintDescription") >= 0)
                                 iLine.Set_Value("PrintDescription", oLine.Get_Value("PrintDescription"));
