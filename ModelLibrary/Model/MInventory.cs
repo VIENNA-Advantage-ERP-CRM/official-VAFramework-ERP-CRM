@@ -23,6 +23,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using VAdvantage.Logging;
+using ModelLibrary.Classes;
 
 namespace VAdvantage.Model
 {
@@ -42,13 +43,11 @@ namespace VAdvantage.Model
         private Decimal? trxQty = 0;
         private bool isGetFromStorage = false;
 
-        MAcctSchema acctSchema = null;
         MProduct product1 = null;
         decimal currentCostPrice = 0;
         string conversionNotFoundInOut = "";
         string conversionNotFoundInventory = "";
         string conversionNotFoundInventory1 = "";
-        MCostElement costElement = null;
         ValueNamePair pp = null;
 
         /**is container applicable */
@@ -56,7 +55,7 @@ namespace VAdvantage.Model
 
         /** Reversal Indicator			*/
         public const String REVERSE_INDICATOR = "^";
-       
+
         #endregion
 
 
@@ -875,6 +874,16 @@ namespace VAdvantage.Model
             // IsCostImmediate = true - calculate cost on completion
             MClient client = MClient.Get(GetCtx(), GetAD_Client_ID());
 
+            //VIS_0045: get all accountingtasetschema in which we have to calculate cost (for Optimization)
+            CostingCheck costingCheck = null;
+            if (client.IsCostImmediate())
+            {
+                costingCheck = new CostingCheck(GetCtx());
+                costingCheck.dsAccountingSchema = costingCheck.GetAccountingSchema(GetAD_Client_ID());
+                costingCheck.inventory = this;
+                costingCheck.isReversal = IsReversal();
+            }
+
             lines = GetLines(true);
             //log.Info("total Lines=" + lines.Count());
             //MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
@@ -923,6 +932,12 @@ namespace VAdvantage.Model
                         for (int j = 0; j < mas.Length; j++)
                         {
                             MInventoryLineMA ma = mas[j];
+
+                            //VIS_0045: Reset Class parameters
+                            if (costingCheck != null)
+                            {
+                                costingCheck.ResetProperty();
+                            }
 
                             // SI_0682_1 Need to update the reserved qty on requisition line by internal use line save aslo and should work as work in inventory move.
                             MRequisitionLine reqLine = null;
@@ -976,10 +991,10 @@ namespace VAdvantage.Model
                             }
                             //	Storage
                             MStorage storage = MStorage.Get(GetCtx(), line.GetM_Locator_ID(),
-                                    line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_TrxName());
+                                    line.GetM_Product_ID(), ma.GetM_AttributeSetInstance_ID(), Get_TrxName());
                             if (storage == null)
                                 storage = MStorage.GetCreate(GetCtx(), line.GetM_Locator_ID(),
-                                        line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_TrxName());
+                                        line.GetM_Product_ID(), ma.GetM_AttributeSetInstance_ID(), Get_TrxName());
                             //Decimal qtyNew = Decimal.Add(storage.GetQtyOnHand(), qtyDiff);
                             Decimal qtyNew = Decimal.Add(storage.GetQtyOnHand(), (ma.GetMovementQty() < 0 ? Decimal.Negate(ma.GetMovementQty()) : ma.GetMovementQty()));
                             log.Fine("Diff=" + qtyDiff
@@ -1051,7 +1066,7 @@ namespace VAdvantage.Model
                             sql.Append(@"SELECT DISTINCT First_VALUE(t.CurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
                             INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
                                     " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND t.M_Locator_ID = " + line.GetM_Locator_ID() +
-                                " AND t.M_Product_ID = " + line.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + line.GetM_AttributeSetInstance_ID());
+                                " AND t.M_Product_ID = " + line.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + ma.GetM_AttributeSetInstance_ID());
                             trxQty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
 
                             if (isContainerApplicable && line.Get_ColumnIndex("M_ProductContainer_ID") >= 0)
@@ -1065,7 +1080,7 @@ namespace VAdvantage.Model
                             //	Transaction
                             trx = new MTransaction(GetCtx(), line.GetAD_Org_ID(),
                                 MTransaction.MOVEMENTTYPE_InventoryIn,
-                                    line.GetM_Locator_ID(), line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(),
+                                    line.GetM_Locator_ID(), line.GetM_Product_ID(), ma.GetM_AttributeSetInstance_ID(),
                                      //qtyDiff, GetMovementDate(), Get_TrxName());
                                      (ma.GetMovementQty() < 0 ? Decimal.Negate(ma.GetMovementQty()) : ma.GetMovementQty()), GetMovementDate(), Get_TrxName());
                             trx.SetM_InventoryLine_ID(line.GetM_InventoryLine_ID());
@@ -1090,6 +1105,18 @@ namespace VAdvantage.Model
                                     _processMsg = "Transaction not inserted(1)";
                                 return DocActionVariables.STATUS_INVALID;
                             }
+                            else
+                            {
+                                //VIS_0045: Update Transaction ID on Material Policy Tab
+                                ma.Set_Value("M_Transaction_ID", trx.GetM_Transaction_ID());
+                                ma.Save();
+
+                                //VIS_0045: mainatin transaction id on Costing Check for updating ost Detail
+                                if (costingCheck != null)
+                                {
+                                    costingCheck.M_Transaction_ID = trx.GetM_Transaction_ID();
+                                }
+                            }
 
                             //Update Transaction for Current Quantity
                             Decimal currentQty = (ma.GetMovementQty() < 0 ? Decimal.Negate(ma.GetMovementQty()) : ma.GetMovementQty()) + trxQty.Value;
@@ -1108,6 +1135,19 @@ namespace VAdvantage.Model
                             }
                             //UpdateCurrentRecord(line, trx, qtyDiff);
                             #endregion
+
+                            if (client.IsCostImmediate())
+                            {
+                                // Stock In Case
+                                costingCheck.M_ASI_ID = ma.GetM_AttributeSetInstance_ID();
+                                costingCheck.M_Warehouse_ID = GetM_Warehouse_ID();
+                                costingCheck.AD_Org_ID = line.GetAD_Org_ID();
+                                costingCheck.inventoryLine = line;
+                                if (!CalculateCosting(client, line, costingCheck, Math.Abs(ma.GetMovementQty())))
+                                {
+                                    return DocActionVariables.STATUS_INVALID;
+                                }
+                            }
                         }
                     }
                     else	//	negative qty
@@ -1117,6 +1157,12 @@ namespace VAdvantage.Model
                         for (int j = 0; j < mas.Length; j++)
                         {
                             MInventoryLineMA ma = mas[j];
+
+                            //VIS_0045: Reset Class parameters
+                            if (costingCheck != null)
+                            {
+                                costingCheck.ResetProperty();
+                            }
 
                             // SI_0682_1 Need to update the reserved qty on requisition line by internal use line save aslo and should work as work in inventory move.
                             //MRequisition req = null;
@@ -1257,7 +1303,7 @@ namespace VAdvantage.Model
                             sql.Append(@"SELECT DISTINCT FIRST_VALUE(t.CurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
                             INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
                             " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND l.AD_Org_ID = " + GetAD_Org_ID() + " AND t.M_Locator_ID = " + line.GetM_Locator_ID() +
-                            " AND t.M_Product_ID = " + line.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + line.GetM_AttributeSetInstance_ID());
+                            " AND t.M_Product_ID = " + line.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + ma.GetM_AttributeSetInstance_ID());
                             trxQty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
 
                             if (isContainerApplicable && line.Get_ColumnIndex("M_ProductContainer_ID") >= 0)
@@ -1293,6 +1339,18 @@ namespace VAdvantage.Model
                                     _processMsg = "Transaction not inserted (MA)";
                                 return DocActionVariables.STATUS_INVALID;
                             }
+                            else
+                            {
+                                //VIS_0045: Update Transaction ID on Material Policy Tab
+                                ma.Set_Value("M_Transaction_ID", trx.GetM_Transaction_ID());
+                                ma.Save();
+
+                                //VIS_0045: mainatin transaction id on Costing Check for updating ost Detail
+                                if (costingCheck != null)
+                                {
+                                    costingCheck.M_Transaction_ID = trx.GetM_Transaction_ID();
+                                }
+                            }
 
                             //Update Transaction for Current Quantity
                             //Decimal currentQty = qtyDiff + trxQty.Value;
@@ -1312,6 +1370,18 @@ namespace VAdvantage.Model
                             }
                             //UpdateCurrentRecord(line, trx, qtyDiff);                           
                             #endregion
+
+                            if (client.IsCostImmediate())
+                            {
+                                costingCheck.M_ASI_ID = ma.GetM_AttributeSetInstance_ID();
+                                costingCheck.M_Warehouse_ID = GetM_Warehouse_ID();
+                                costingCheck.AD_Org_ID = line.GetAD_Org_ID();
+                                costingCheck.inventoryLine = line;
+                                if (!CalculateCosting(client, line, costingCheck, maxDiff))
+                                {
+                                    return DocActionVariables.STATUS_INVALID;
+                                }
+                            }
 
                             qtyDiff = Decimal.Subtract(qtyDiff, maxDiff);
                             if (Env.Signum(qtyDiff) == 0)
@@ -1682,115 +1752,13 @@ namespace VAdvantage.Model
                 }	//	Fallback
 
                 //By Amit for Cost Queue Management
-                if (client.IsCostImmediate())
-                {
-                    #region Costing Calculation
-
-                    // check costing method is LIFO or FIFO
-                    String costingMethod = MCostElement.CheckLifoOrFifoMethod(GetCtx(), GetAD_Client_ID(), line.GetM_Product_ID(), Get_Trx());
-
-                    product1 = new MProduct(GetCtx(), line.GetM_Product_ID(), Get_Trx());
-                    if (product1.GetProductType() == "I") // for Item Type product
-                    {
-                        #region get price from m_cost (Current Cost Price)
-                        if (GetDescription() != null && GetDescription().Contains("{->"))
-                        {
-                            // do not update current cost price during reversal, this time reverse doc contain same amount which are on original document
-                        }
-                        else
-                        {
-                            // get price from m_cost (Current Cost Price)
-                            currentCostPrice = 0;
-                            //if (IsInternalUse() || (!IsInternalUse() && Decimal.Subtract(line.GetQtyCount(), line.GetQtyBook()) < 0))
-                            //{
-                            currentCostPrice = MCost.GetproductCosts(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
-                                line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID());
-                            //}
-                            //else if (!IsInternalUse())
-                            //{
-                            //    // in Case of physical Inventory, when we increase stock - get price of costing method, which is defined into cost combination
-                            //    currentCostPrice = MCost.GetproductCostAndQtyMaterial(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
-                            //      line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID(), false);
-                            //}
-                            DB.ExecuteQuery("UPDATE M_InventoryLine SET CurrentCostPrice = " + currentCostPrice + @"
-                                                WHERE M_InventoryLine_ID = " + line.GetM_InventoryLine_ID(), null, Get_Trx());
-                        }
-                        #endregion
-
-                        decimal quantity = 0;
-                        if (!IsInternalUse()) // Physical Inventory
-                        {
-                            quantity = Decimal.Subtract(line.GetQtyCount(), line.GetQtyBook());
-                            if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
-                           "Physical Inventory", line, null, null, null, null, 0, quantity, Get_TrxName(), out conversionNotFoundInOut, optionalstr: "window"))
-                            {
-                                if (!conversionNotFoundInventory1.Contains(conversionNotFoundInventory))
-                                {
-                                    conversionNotFoundInventory1 += conversionNotFoundInventory + " , ";
-                                }
-                                _processMsg = Msg.GetMsg(GetCtx(), "VIS_CostNotCalculated");// "Could not create Product Costs";
-                                if (client.Get_ColumnIndex("IsCostMandatory") > 0 && client.IsCostMandatory())
-                                {
-                                    return DocActionVariables.STATUS_INVALID;
-                                }
-                            }
-                            else
-                            {
-                                if (costingMethod != "" && quantity < 0)
-                                {
-                                    currentCostPrice = MCost.GetLifoAndFifoCurrentCostFromCostQueueTransaction(GetCtx(), line.GetAD_Client_ID(), line.GetAD_Org_ID(),
-                                                       line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), 1, line.GetM_InventoryLine_ID(), costingMethod,
-                                                       GetM_Warehouse_ID(), true, Get_Trx());
-                                    DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice =  " + currentCostPrice +
-                                                     @"  , IsCostImmediate = 'Y' WHERE M_InoutLine_ID = " + line.GetM_InventoryLine_ID(), null, Get_Trx());
-                                }
-
-                                // Post Current Cost Price
-                                currentCostPrice = MCost.GetproductCosts(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
-                                                    line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID());
-                                DB.ExecuteQuery("UPDATE M_InventoryLine SET PostCurrentCostPrice = " + currentCostPrice + @" , IsCostImmediate = 'Y' 
-                                                WHERE M_InventoryLine_ID = " + line.GetM_InventoryLine_ID(), null, Get_Trx());
-
-                            }
-                        }
-                        else // Internal Use Inventory
-                        {
-                            quantity = Decimal.Negate(line.GetQtyInternalUse());
-                            if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
-                           "Internal Use Inventory", line, null, null, null, null, 0, quantity, Get_TrxName(), out conversionNotFoundInOut, optionalstr: "window"))
-                            {
-                                if (!conversionNotFoundInventory1.Contains(conversionNotFoundInventory))
-                                {
-                                    conversionNotFoundInventory1 += conversionNotFoundInventory + " , ";
-                                }
-                                _processMsg = Msg.GetMsg(GetCtx(), "VIS_CostNotCalculated");// "Could not create Product Costs";
-                                if (client.Get_ColumnIndex("IsCostMandatory") > 0 && client.IsCostMandatory())
-                                {
-                                    return DocActionVariables.STATUS_INVALID;
-                                }
-                            }
-                            else
-                            {
-                                if (costingMethod != "" && quantity < 0)
-                                {
-                                    currentCostPrice = MCost.GetLifoAndFifoCurrentCostFromCostQueueTransaction(GetCtx(), line.GetAD_Client_ID(), line.GetAD_Org_ID(),
-                                                           line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), 1, line.GetM_InventoryLine_ID(), costingMethod,
-                                                           GetM_Warehouse_ID(), true, Get_Trx());
-                                    DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice =  " + currentCostPrice +
-                                                     @"  , IsCostImmediate = 'Y' WHERE M_InoutLine_ID = " + line.GetM_InventoryLine_ID(), null, Get_Trx());
-                                }
-
-                                // Post Current Cost Price
-                                currentCostPrice = MCost.GetproductCosts(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
-                                                    line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID());
-                                DB.ExecuteQuery("UPDATE M_InventoryLine SET PostCurrentCostPrice = " + currentCostPrice + @" , IsCostImmediate = 'Y' 
-                                                WHERE M_InventoryLine_ID = " + line.GetM_InventoryLine_ID(), null, Get_Trx());
-
-                            }
-                        }
-                    }
-                    #endregion
-                }
+                //if (client.IsCostImmediate())
+                //{
+                //    if (!CalculateCosting(client, line, costingCheck))
+                //    {
+                //        return DocActionVariables.STATUS_INVALID;
+                //    }
+                //}
 
                 //by Amit -> For Obsolete Inventory (16-05-2016)
                 if (countVA024 > 0)
@@ -1911,6 +1879,168 @@ namespace VAdvantage.Model
             SetProcessed(true);
             SetDocAction(DOCACTION_Close);
             return DocActionVariables.STATUS_COMPLETED;
+        }
+
+        private bool CalculateCosting(MClient client, MInventoryLine line, CostingCheck costingCheck, Decimal Qty)
+        {
+            // check costing method is LIFO or FIFO
+            String costingMethod = MCostElement.CheckLifoOrFifoMethod(GetCtx(), GetAD_Client_ID(), line.GetM_Product_ID(), Get_Trx());
+
+            if (costingCheck == null)
+            {
+                costingCheck = new ModelLibrary.Classes.CostingCheck(GetCtx());
+            }
+
+            // Transaction Update Query
+            sql = "Update M_Transaction SET ";
+
+            product1 = new MProduct(GetCtx(), line.GetM_Product_ID(), Get_Trx());
+            costingCheck.product = product1;
+            if (product1.GetProductType() == "I") // for Item Type product
+            {
+                // Reset IsCostError
+                if (Convert.ToBoolean(line.Get_Value("IsCostError")))
+                {
+                    DB.ExecuteQuery("UPDATE M_InventoryLine SET IsCostError = 'N' WHERE M_InventoryLine_ID = " + line.GetM_InventoryLine_ID(), null, Get_Trx());
+                }
+
+                #region get price from m_cost (Current Cost Price)
+                if (IsReversal() || (GetDescription() != null && GetDescription().Contains("{->")))
+                {
+                    // do not update current cost price during reversal, this time reverse doc contain same amount which are on original document
+                }
+                else
+                {
+                    // get price from m_cost (Current Cost Price)
+                    currentCostPrice = 0;
+                    currentCostPrice = MCost.GetproductCosts(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
+                        line.GetM_Product_ID(), costingCheck.M_ASI_ID, Get_Trx(), GetM_Warehouse_ID());
+                    DB.ExecuteQuery("UPDATE M_InventoryLine SET CurrentCostPrice = " + currentCostPrice + @"
+                                                WHERE M_InventoryLine_ID = " + line.GetM_InventoryLine_ID(), null, Get_Trx());
+                }
+                #endregion
+
+                decimal quantity = 0;
+                if (!IsInternalUse()) // Physical Inventory
+                {
+                    quantity = Qty;
+                    if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, costingCheck.M_ASI_ID,
+                   "Physical Inventory", line, null, null, null, null, 0, quantity, Get_TrxName(), costingCheck, out conversionNotFoundInOut, optionalstr: "window"))
+                    {
+                        if (!conversionNotFoundInventory1.Contains(conversionNotFoundInventory))
+                        {
+                            conversionNotFoundInventory1 += conversionNotFoundInventory + " , ";
+                        }
+                        _processMsg = Msg.GetMsg(GetCtx(), "VIS_CostNotCalculated");
+                        if (!string.IsNullOrEmpty(costingCheck.errorMessage))
+                        {
+                            _processMsg += costingCheck.errorMessage;
+                        }
+                        // Update Error message on Line
+                        DB.ExecuteQuery("UPDATE M_InventoryLine SET IsCostError = 'Y', CostErrorDetails = CostErrorDetails || ', ' || "
+                                + GlobalVariable.TO_STRING(costingCheck.errorMessage)
+                                + " WHERE M_InventoryLine_ID = " + line.GetM_InventoryLine_ID(), null, Get_Trx());
+                        if (client.Get_ColumnIndex("IsCostMandatory") > 0 && client.IsCostMandatory())
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        if (costingMethod != "" && quantity < 0)
+                        {
+                            currentCostPrice = MCost.GetLifoAndFifoCurrentCostFromCostQueueTransaction(GetCtx(), line.GetAD_Client_ID(), line.GetAD_Org_ID(),
+                                               line.GetM_Product_ID(), costingCheck.M_ASI_ID, 1, line.GetM_InventoryLine_ID(), costingMethod,
+                                               GetM_Warehouse_ID(), true, Get_Trx());
+                            DB.ExecuteQuery("UPDATE M_InventoryLine SET CurrentCostPrice =  " + currentCostPrice +
+                                             @"  , IsCostImmediate = 'Y' WHERE M_InventoryLine_ID = " + line.GetM_InventoryLine_ID(), null, Get_Trx());
+                        }
+
+                        // Transaction Update Query
+                        sql += " ProductApproxCost = " + currentCostPrice;
+
+                        // Post Current Cost Price
+                        currentCostPrice = MCost.GetproductCosts(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
+                                            line.GetM_Product_ID(), costingCheck.M_ASI_ID, Get_Trx(), GetM_Warehouse_ID());
+                        DB.ExecuteQuery("UPDATE M_InventoryLine SET PostCurrentCostPrice = " + currentCostPrice + @" , IsCostImmediate = 'Y' 
+                                                WHERE M_InventoryLine_ID = " + line.GetM_InventoryLine_ID(), null, Get_Trx());
+
+                        // Transaction Update Query
+                        sql += " , ProductCost = " + currentCostPrice;
+                        sql += " , M_CostElement_ID = " + costingCheck.definedCostingElement;
+                        sql += " , CostingLevel = " + GlobalVariable.TO_STRING(costingCheck.costinglevel);
+                        sql += " WHERE M_Transaction_ID = " + costingCheck.M_Transaction_ID;
+                        DB.ExecuteQuery(sql, null, Get_Trx());
+                    }
+                }
+                else // Internal Use Inventory
+                {
+                    quantity = Qty;// Decimal.Negate(line.GetQtyInternalUse());
+                    if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, costingCheck.M_ASI_ID,
+                   "Internal Use Inventory", line, null, null, null, null, 0, quantity, Get_TrxName(), costingCheck, out conversionNotFoundInOut, optionalstr: "window"))
+                    {
+                        if (!conversionNotFoundInventory1.Contains(conversionNotFoundInventory))
+                        {
+                            conversionNotFoundInventory1 += conversionNotFoundInventory + " , ";
+                        }
+                        _processMsg = Msg.GetMsg(GetCtx(), "VIS_CostNotCalculated");
+                        if (!string.IsNullOrEmpty(costingCheck.errorMessage))
+                        {
+                            _processMsg += costingCheck.errorMessage;
+                        }
+                        // Update Error message on Line
+                        DB.ExecuteQuery("UPDATE M_InventoryLine SET IsCostError = 'Y', CostErrorDetails = CostErrorDetails || ', ' || "
+                            + GlobalVariable.TO_STRING(costingCheck.errorMessage)
+                            + " WHERE M_InventoryLine_ID = " + line.GetM_InventoryLine_ID(), null, Get_Trx());
+                        if (client.Get_ColumnIndex("IsCostMandatory") > 0 && client.IsCostMandatory())
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        if (!IsReversal())
+                        {
+                            if (costingMethod != "" && quantity < 0)
+                            {
+                                currentCostPrice = MCost.GetLifoAndFifoCurrentCostFromCostQueueTransaction(GetCtx(), line.GetAD_Client_ID(), line.GetAD_Org_ID(),
+                                                       line.GetM_Product_ID(), costingCheck.M_ASI_ID, 1, line.GetM_InventoryLine_ID(), costingMethod,
+                                                       GetM_Warehouse_ID(), true, Get_Trx());
+                                DB.ExecuteQuery("UPDATE M_InventoryLine SET CurrentCostPrice =  " + currentCostPrice +
+                                                 @"  , IsCostImmediate = 'Y' WHERE M_InventoryLine_ID = " + line.GetM_InventoryLine_ID(), null, Get_Trx());
+                            }
+
+                            // Transaction Update Query
+                            sql += " ProductApproxCost = " + currentCostPrice;
+
+                            // Post Current Cost Price
+                            currentCostPrice = MCost.GetproductCosts(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
+                                                line.GetM_Product_ID(), costingCheck.M_ASI_ID, Get_Trx(), GetM_Warehouse_ID());
+                            DB.ExecuteQuery("UPDATE M_InventoryLine SET PostCurrentCostPrice = " + currentCostPrice + @" , IsCostImmediate = 'Y' 
+                                                WHERE M_InventoryLine_ID = " + line.GetM_InventoryLine_ID(), null, Get_Trx());
+
+                            // Transaction Update Query
+                            sql += " , ProductCost = " + currentCostPrice;
+                            sql += " , M_CostElement_ID = " + costingCheck.definedCostingElement;
+                            sql += " , CostingLevel = " + GlobalVariable.TO_STRING(costingCheck.costinglevel);
+                            sql += " WHERE M_Transaction_ID = " + costingCheck.M_Transaction_ID;
+                            DB.ExecuteQuery(sql, null, Get_Trx());
+                        }
+                        else
+                        {
+                            // Transaction Update Query
+                            sql += " ProductApproxCost = " + line.GetCurrentCostPrice();
+                            sql += " , ProductCost = " + line.GetPostCurrentCostPrice();
+                            sql += " , M_CostElement_ID = " + costingCheck.definedCostingElement;
+                            sql += " , CostingLevel = " + GlobalVariable.TO_STRING(costingCheck.costinglevel);
+                            sql += " WHERE M_Transaction_ID = " + costingCheck.M_Transaction_ID;
+                            DB.ExecuteQuery(sql, null, Get_Trx());
+                        }
+
+                    }
+                }
+            }
+            return true;
         }
 
         /// <summary>
@@ -3028,6 +3158,11 @@ namespace VAdvantage.Model
                     rLine.SetReversalDoc_ID(oLine.GetM_InventoryLine_ID());
                 }
                 rLine.SetActualReqReserved(oLine.GetActualReqReserved());
+
+                //VIS_0045: Cost
+                rLine.SetCurrentCostPrice(oLine.GetCurrentCostPrice());
+                rLine.SetPostCurrentCostPrice(oLine.GetPostCurrentCostPrice());
+
                 if (!rLine.Save())
                 {
                     pp = VLogger.RetrieveError();
