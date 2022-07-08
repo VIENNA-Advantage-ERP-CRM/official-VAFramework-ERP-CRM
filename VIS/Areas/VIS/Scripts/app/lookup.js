@@ -861,15 +861,27 @@
 
             var self = this;
             self.loading = true;
-            executeDataReaderPaging(sql, 1, 1000, null, function (dr) {
-                self.readData(dr, isNumber);
-                if (checkCache) {
-
-                    VIS.MLookupCache.loadEnd(self.info, self);
+            $.ajax({
+                url: VIS.contextUrl.Application + "Lookup/GetLookupData",
+                data: {
+                    windowNo:
+                        AD_Window_ID,
+                    AD_Tab_ID,
+                    AD_Field_ID,
+                    values,
+                    paging:false
                 }
-                self.loading = false;;
-                self = null;
+
             });
+            //executeDataReaderPaging(sql, 1, 1000, null, function (dr) {
+            //    self.readData(dr, isNumber);
+            //    if (checkCache) {
+
+            //        VIS.MLookupCache.loadEnd(self.info, self);
+            //    }
+            //    self.loading = false;;
+            //    self = null;
+            //});
             return 0;
         }
 
@@ -969,7 +981,7 @@
             }
 
             if (dr.tables[0].columns.length > 4) {
-               /// p["ico"] = dr.getString(4);
+                /// p["ico"] = dr.getString(4);
                 var iconInfo = dr.getString(4);
                 if (iconInfo && iconInfo.length > 0) {
                     var ico = iconInfo.split('|');

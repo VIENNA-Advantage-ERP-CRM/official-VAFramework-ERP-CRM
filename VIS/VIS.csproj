@@ -814,6 +814,7 @@
     <Compile Include="Areas\VIS\Controllers\CallOut\MUOMConversionController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MWarehouseController.cs" />
     <Compile Include="Areas\VIS\Controllers\CardViewController.cs" />
+    <Compile Include="Areas\VIS\Controllers\LookupController.cs" />
     <Compile Include="Areas\VIS\Controllers\MessageController.cs" />
     <Compile Include="Areas\VIS\Controllers\Chat\ChatController.cs" />
     <Compile Include="Areas\VIS\Controllers\CommonController.cs" />
@@ -1035,6 +1036,7 @@
     <Folder Include="Areas\VIS\Views\GenerateXModel\" />
     <Folder Include="Areas\VIS\Views\GmailContacts\" />
     <Folder Include="Areas\VIS\Views\Group\" />
+    <Folder Include="Areas\VIS\Views\Lookup\" />
     <Folder Include="Areas\VIS\Views\MarkModule\" />
     <Folder Include="Areas\VIS\Views\ModulePrefix\" />
     <Folder Include="Areas\VIS\Views\MPeriod\" />
