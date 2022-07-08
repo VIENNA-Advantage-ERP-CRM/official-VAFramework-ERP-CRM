@@ -1421,7 +1421,7 @@
 
                 var resString = null;
                 if (invalidExtensions.length == 1) {
-                    resString += 'FileInvalidExtension';
+                    resString += 'FilesInvalidExtension';
                 }
                 else {
                     resString += 'FilesInvalidExtension';
